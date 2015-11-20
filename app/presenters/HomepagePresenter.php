@@ -5,6 +5,7 @@ namespace App\Presenters;
 use Nette;
 use App\Model;
 use Kdyby\RabbitMq;
+use Nette\Utils\Json;
 
 
 class HomepagePresenter extends BasePresenter
@@ -26,6 +27,7 @@ class HomepagePresenter extends BasePresenter
 	{
 		$form = new Nette\Application\UI\Form();
 		$form->addText('env', 'Environment');
+		$form->addUpload('source', 'Source code');
 		$form->addSubmit('submit', 'Submit');
 		$form->onSuccess[] = $this->submitFormSuccess;
 
@@ -37,7 +39,12 @@ class HomepagePresenter extends BasePresenter
 		$values = $form->getValues();
 		$producer = $this->rabbit->getProducer('tasks');
 
-		$producer->publish(sprintf("Hello from %s", $values->env), $values->env);
+		$message = [
+			'environment' => $values->env,
+			'source' => $values->source->getContents()
+		];
+
+		$producer->publish(Json::encode($message), $values->env);
 
 		$this->flashMessage('Submitted');
 		$this->redirect('this');
