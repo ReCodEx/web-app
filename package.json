@@ -21,7 +21,7 @@
     "deploy:dev": "better-npm-run deploy:dev",
     "deploy:prod": "better-npm-run deploy:prod",
     "codecov": "cat coverage/*/lcov.info | codecov",
-    "postinstall": "npm rebuild node-sass"
+    "postinstall": "npm rebuild"
   },
   "betterScripts": {
     "compile": {
