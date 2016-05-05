@@ -1,18 +1,38 @@
-import React from 'react';
-import { IndexLink, Link } from 'react-router';
-import classes from './Header.scss';
+import React, { PropTypes } from 'react';
+import { IndexLink } from 'react-router';
+import MediaQuery from 'react-responsive';
 
-export const Header = () => (
-  <div>
-    <h1>React Redux Starter Kit</h1>
-    <IndexLink to='/' activeClassName={classes.activeRoute}>
-      Home
+export const Header = ({
+  toggleSidebarSize,
+  toggleSidebarVisibility
+}) => (
+  <header className='main-header'>
+
+    <IndexLink to='/' className='logo'>
+      <span className='logo-mini'>Re<b>C</b></span>
+      <span className='logo-lg'>Re<b>CodEx</b></span>
     </IndexLink>
-    {' · '}
-    <Link to='/counter' activeClassName={classes.activeRoute}>
-      Counter
-    </Link>
-  </div>
+
+    <div className='navbar navbar-static-top' role='navigation'>
+      <MediaQuery maxWidth={767}>
+        <a href='#' className='sidebar-toggle' role='button' onClick={toggleSidebarVisibility}>
+          <span className='sr-only'>Toggle navigation</span>
+        </a>
+      </MediaQuery>
+      <MediaQuery minWidth={768}>
+        <a href='#' className='sidebar-toggle' role='button' onClick={toggleSidebarSize}>
+          <span className='sr-only'>Toggle navigation</span>
+        </a>
+      </MediaQuery>
+    </div>
+
+
+  </header>
 );
+
+Header.propTypes = {
+  toggleSidebarSize: PropTypes.func.isRequired,
+  toggleSidebarVisibility: PropTypes.func.isRequired
+};
 
 export default Header;
