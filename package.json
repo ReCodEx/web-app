@@ -1,12 +1,12 @@
 {
-  "name": "react-router-redux-example",
-  "description": "react-router-redux example with universal rendering",
-  "version": "1.0.1",
+  "name": "ReCodEx Web application",
+  "description": "Single page application for the ReCodEx project.",
+  "version": "0.0.2",
   "license": "MIT",
-  "author": "Steven Iseki <stevenisekimartin@gmail.com>",
+  "author": "Šimon Rozsíval <simon@rozsival.com>",
   "repository": {
     "type": "git",
-    "url": "https://github.com/StevenIseki/react-router-redux-example.git"
+    "url": "https://github.com/recodex/web-app.git"
   },
   "scripts": {
     "clean": "rm public/bundle.js && rm public/vendor.js || true",
