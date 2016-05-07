@@ -1,22 +1,59 @@
-import React from 'react'
-import { Link } from 'react-router'
-import styles from './Header.css'
+import React, { Component, PropTypes } from 'react';
+import { IndexLink } from 'react-router';
+import MediaQuery from 'react-responsive';
 
-function Header() {
-  return (
-    <header>
-      <Link to="/">
-      <div className={styles.header}>
-        <div className={styles.wrapper}>
-            <div className={styles.react}>
-              <div className={styles.inner}></div>
-              <div className={styles.innerdot}></div>
+class Header extends Component {
+
+  state = { canRenderClientOnly: false };
+
+  componentWillMount = () => {
+    if (typeof requestAnimationFrame !== 'undefined') {
+      requestAnimationFrame(() => {
+        this.setState({ canRenderClientOnly: true });
+      });
+    }
+  };
+
+  render() {
+    const { canRenderClientOnly } = this.state;
+
+    const {
+      toggleSidebarSize,
+      toggleSidebarVisibility
+    } = this.props;
+
+    return (
+      <header className='main-header'>
+
+        <IndexLink to='/' className='logo'>
+          <span className='logo-mini'>Re<b>C</b></span>
+          <span className='logo-lg'>Re<b>CodEx</b></span>
+        </IndexLink>
+
+        <div className='navbar navbar-static-top' role='navigation'>
+          {canRenderClientOnly && (
+            <div>
+              <MediaQuery maxWidth={767}>
+                <a href='#' className='sidebar-toggle' role='button' onClick={toggleSidebarVisibility}>
+                  <span className='sr-only'>Toggle navigation</span>
+                </a>
+              </MediaQuery>
+              <MediaQuery minWidth={768}>
+                <a href='#' className='sidebar-toggle' role='button' onClick={toggleSidebarSize}>
+                  <span className='sr-only'>Toggle navigation</span>
+                </a>
+              </MediaQuery>
             </div>
+          )}
         </div>
-      </div>
-      </Link>
-    </header>
-  )
+      </header>
+    );
+  }
 }
 
-export default Header
+Header.propTypes = {
+  toggleSidebarSize: PropTypes.func.isRequired,
+  toggleSidebarVisibility: PropTypes.func.isRequired
+};
+
+export default Header;

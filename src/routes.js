@@ -1,16 +1,14 @@
-import React from 'react'
-import { Route, IndexRoute, Link } from 'react-router'
+import React from 'react';
+import { Route, IndexRoute, Link } from 'react-router';
 
 /* container components */
-import App from './containers/App'
-import Home from './containers/Home/Home'
-import Package from './containers/Package/Package'
+import LayoutContainer from './containers/LayoutContainer';
+import Home from './pages/Home';
 
 const routes = (
-  <Route path="/" component={App}>
-    <IndexRoute component={Home}/>
-    <Route path="/package/:id/:name" component={Package}/>
+  <Route path='/' component={LayoutContainer}>
+    <IndexRoute component={Home} />
   </Route>
-)
+);
 
-export default routes
+export default routes;

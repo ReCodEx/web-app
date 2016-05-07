@@ -1,10 +1,66 @@
-require('babel-core/register');
-require('css-modules-require-hook/preset');
+import React from 'react';
+import { renderToString } from 'react-dom/server';
+import Express from 'express';
+import Promise from 'bluebird';
+import Helmet from 'react-helmet';
 
-var env = process.env.NODE_ENV || 'prod'
+import { RouterContext, match } from 'react-router';
+import { Provider } from 'react-redux';
+import { syncHistoryWithStore } from 'react-router-redux';
+import createHistory from 'react-router/lib/createMemoryHistory';
+import { configureStore } from './src/redux/store';
+import routes from './src/routes';
 
-if(env === 'prod'){
-	var app = require("./serverProd.js");
-} else {
-	var app = require("./serverDev.js");
-}
+let app = new Express();
+app.set('view engine', 'ejs');
+app.use(Express.static('public'));
+
+app.get('*', (req, res) => {
+  const memoryHistory = createHistory(req.originalUrl);
+  const store = configureStore(memoryHistory);
+  const history = syncHistoryWithStore(memoryHistory, store);
+  const location = req.originalUrl;
+
+  match({ history, routes, location }, (error, redirectLocation, renderProps) => {
+    if (redirectLocation) {
+      res.redirect(301, redirectLocation.pathname + redirectLocation.search);
+    } else if (error) {
+      res.status(500).send(error.message);
+    } else if (renderProps == null) {
+      res.status(404).send('Not found');
+    } else {
+      let reqUrl = location.pathname + location.search;
+
+      const getReduxPromise = () => {
+        let { query, params } = renderProps;
+        let comp = renderProps.components[renderProps.components.length - 1].WrappedComponent;
+        let promise = comp && comp.fetchData
+          ? comp.fetchData({ query, params, store, history })
+          : Promise.resolve();
+
+        return promise;
+      };
+
+      // getReduxPromise().then(() => {
+      let reduxState = JSON.stringify(store.getState());
+      let html = renderToString(
+        <Provider store={store}>
+          <RouterContext {...renderProps}/>
+        </Provider>
+      );
+      const head = Helmet.rewind();
+
+      res.render('index', {
+        html,
+        head,
+        reduxState,
+        bundle: 'http://localhost:8080/bundle.js'
+      });
+      // });
+    }
+  });
+});
+
+app.listen(8080, () => {
+  console.log('Server is running on port 8080');
+});

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+  <head <%- head.htmlAttributes.toString() %>>
+    <meta charset="utf-8">
+    <%- head.title.toString() %>
+    <%- head.meta.toString() %>
+    <%- head.link.toString() %>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/png" href="/public/favicon.ico" />
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <link rel="stylesheet" href="/css/AdminLTE.min.css">
+    <link rel="stylesheet" href="/css/skin-green.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.2/css/font-awesome.min.css">
+  </head>
+  <body class="skin-green">
+    <div id="root"><%- html %></div>
+    <% if (reduxState) { %>
+    <script>
+      window.__INITIAL_STATE__ = <%- reduxState  %>;
+    </script>
+    <% } %>
+    <script src="<%= bundle %>"></script>
+  </body>
+</html>

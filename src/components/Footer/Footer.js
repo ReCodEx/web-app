@@ -1,18 +1,18 @@
-import React, { Component, PropTypes } from 'react'
-import styles from './Footer.css'
+import React, { PropTypes } from 'react';
 
-export default class Footer extends Component {
+const Footer = ({
+  version = '0.0.0'
+}) => (
+  <footer className='main-footer'>
+    <div className='pull-right hidden-xs'>
+      <b>Version</b> {version}
+    </div>
+    <strong>Copyright © 2016 <a href='http://github.com/recodex'>ReCodEx</a>.</strong> All rights reserved.
+  </footer>
+);
 
-  render () {
-    return (
-    	<div className={styles.footer}>
-    		<span>made with </span>
-    		<div className={styles.heart}></div>
-    	</div>
-    )
-  }
+Footer.propTypes = {
+  version: PropTypes.string
+};
 
-  constructor (props) {
-    super(props)
-  }
-}
+export default Footer;

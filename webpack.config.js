@@ -1,46 +1,39 @@
 const path = require('path');
 const webpack = require('webpack');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const autoprefixer = require('autoprefixer');
+const strip = require('strip-loader');
 
 module.exports = {
-  entry: {
-    app: './client',
-    vendor: [
-      'isomorphic-fetch',
-      'react',
-      'react-dom',
-      'react-redux',
-      'react-router',
-      'react-router-redux',
-      'redux',
-      'redux-thunk'
-    ]
-  },
+  devtool: 'source-map',
+  entry: ['./client.js'],
   output: {
-    path: path.join(__dirname, 'public'),
     filename: 'bundle.js',
+    path: path.join(__dirname, 'public'),
     publicPath: '/public/'
   },
   module: {
     loaders: [
-      { test: /\.js$/, loader: 'babel-loader', exclude: /node_modules/ },
-      {
-        test: /\.css$/i,
-        loader: ExtractTextPlugin.extract('style',
-          `css?modules&localIdentName=[name]_[local]__[hash:base64:5]!postcss`),
-      }
+      { test: /\.jsx?$/, exclude: /node_modules/, loaders: [ 'babel' ] },
+      { test: /\.json$/, loader: 'json-loader' },
+      { test: /\.css$/, loader: 'style!css?modules&importLoaders=2&sourceMap!autoprefixer?browsers=last 2 version' },
+      { test: /\.less$/, loader: 'style!css?modules&importLoaders=2&sourceMap!autoprefixer?browsers=last 2 version!less?outputStyle=expanded&sourceMap=true&sourceMapContents=true' },
+      { test: /\.scss$/, loader: 'style!css?modules&importLoaders=2&sourceMap!autoprefixer?browsers=last 2 version!sass?outputStyle=expanded&sourceMap=true&sourceMapContents=true' },
+      { test: /\.woff(\?v=\d+\.\d+\.\d+)?$/, loader: 'url?limit=10000&mimetype=application/font-woff' },
+      { test: /\.woff2(\?v=\d+\.\d+\.\d+)?$/, loader: 'url?limit=10000&mimetype=application/font-woff' },
+      { test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/, loader: 'url?limit=10000&mimetype=application/octet-stream' },
+      { test: /\.eot(\?v=\d+\.\d+\.\d+)?$/, loader: 'file' },
+      { test: /\.svg(\?v=\d+\.\d+\.\d+)?$/, loader: 'url?limit=10000&mimetype=image/svg+xml' },
+      { test: /\.(jpg|png|gif)/, loader: 'url-loader?limit=10240' }
     ]
   },
-  postcss: [ 
-    autoprefixer({ browsers: ['last 2 versions'] }) 
+  postcss: [
+    autoprefixer({ browsers: ['last 2 versions'] })
   ],
   plugins: [
-    new ExtractTextPlugin('style.css', { allChunks: true }),
-    new webpack.DefinePlugin({ 'process.env.NODE_ENV': '"production"' }),
-    new webpack.optimize.DedupePlugin(),
-    new webpack.optimize.UglifyJsPlugin({minimize: true}),
-    new webpack.optimize.CommonsChunkPlugin('vendor', 'vendor.js')
+    new webpack.DefinePlugin({
+      'process.env': {
+        NODE_ENV: '\'' + process.env.NODE_ENV + '\''
+      }
+    })
   ]
-
-}
+};
