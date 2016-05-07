@@ -32,6 +32,7 @@
     "react-router-redux": "^4.0.2",
     "redux": "^3.5.1",
     "redux-actions": "^0.9.1",
+    "redux-async-connect": "^1.0.0-rc4",
     "redux-thunk": "^2.0.1"
   },
   "devDependencies": {
@@ -60,6 +61,7 @@
     "isomorphic-fetch": "^2.2.1",
     "jsdom": "^9.0.0",
     "json-loader": "^0.5.4",
+    "json-server": "^0.8.10",
     "less-loader": "^2.2.3",
     "marked": "^0.3.5",
     "mocha": "^2.4.5",

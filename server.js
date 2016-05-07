@@ -4,7 +4,8 @@ import Express from 'express';
 import Promise from 'bluebird';
 import Helmet from 'react-helmet';
 
-import { RouterContext, match } from 'react-router';
+import { match } from 'react-router';
+import { ReduxAsyncConnect, loadOnServer } from 'redux-async-connect';
 import { Provider } from 'react-redux';
 import { syncHistoryWithStore } from 'react-router-redux';
 import createHistory from 'react-router/lib/createMemoryHistory';
@@ -31,32 +32,22 @@ app.get('*', (req, res) => {
     } else {
       let reqUrl = location.pathname + location.search;
 
-      const getReduxPromise = () => {
-        let { query, params } = renderProps;
-        let comp = renderProps.components[renderProps.components.length - 1].WrappedComponent;
-        let promise = comp && comp.fetchData
-          ? comp.fetchData({ query, params, store, history })
-          : Promise.resolve();
+      loadOnServer(renderProps, store).then(() => {
+        let reduxState = JSON.stringify(store.getState());
+        let html = renderToString(
+          <Provider store={store}>
+            <ReduxAsyncConnect {...renderProps} />
+          </Provider>
+        );
+        const head = Helmet.rewind();
 
-        return promise;
-      };
-
-      // getReduxPromise().then(() => {
-      let reduxState = JSON.stringify(store.getState());
-      let html = renderToString(
-        <Provider store={store}>
-          <RouterContext {...renderProps}/>
-        </Provider>
-      );
-      const head = Helmet.rewind();
-
-      res.render('index', {
-        html,
-        head,
-        reduxState,
-        bundle: 'http://localhost:8080/bundle.js'
+        res.render('index', {
+          html,
+          head,
+          reduxState,
+          bundle: 'http://localhost:8080/bundle.js'
+        });
       });
-      // });
     }
   });
 });
