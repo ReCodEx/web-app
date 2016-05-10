@@ -1,5 +1,6 @@
 import React, { PropTypes } from 'react';
 import classNames from 'classnames';
+import Helmet from 'react-helmet';
 
 import Header from '../Header';
 import Sidebar from '../Sidebar';
@@ -17,6 +18,10 @@ export const Layout = ({
     'sidebar-collapse': sidebar.isCollapsed,
     'sidebar-open': sidebar.isOpen
   })}>
+    <Helmet
+      defaultTitle="ReCodEx"
+      titleTemplate="%s | ReCodEx" />
+
     <Header
       toggleSidebarSize={toggleSidebar.size}
       toggleSidebarVisibility={toggleSidebar.visibility} />
