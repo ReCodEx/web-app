@@ -3,12 +3,14 @@ import React from 'react';
 import { createStore, combineReducers, compose, applyMiddleware } from 'redux';
 import { routerReducer, routerMiddleware } from 'react-router-redux';
 import thunkMiddleware from 'redux-thunk';
+import { apiMiddleware } from 'redux-api-middleware';
 import reducer from './reducer';
 
 const dev = (history) =>
   compose(
     applyMiddleware(
       thunkMiddleware,
+      apiMiddleware,
       routerMiddleware(history)
     ),
     window.devToolsExtension()
@@ -18,6 +20,7 @@ const prod = (history) =>
   compose(
     applyMiddleware(
       thunkMiddleware,
+      apiMiddleware,
       routerMiddleware(history)
     )
   );

@@ -1,9 +1,11 @@
 import React, { PropTypes } from 'react';
 import Gravatar from 'react-gravatar';
+import Icon from 'react-fontawesome';
 
 const Badge = ({
   name,
-  email
+  email,
+  logout
 }) => (
   <div className='user-panel'>
     <div className='pull-left image'>
@@ -16,7 +18,7 @@ const Badge = ({
     </div>
     <div className='pull-left info'>
       <p>{name}</p>
-      <small>{email}</small>
+      <a href='#' onClick={logout}><Icon name='power-off' className='text-danger' /> Odhlásit se</a>
     </div>
   </div>
 );

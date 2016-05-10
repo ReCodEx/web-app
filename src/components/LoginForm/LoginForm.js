@@ -40,11 +40,11 @@ class LoginForm extends Component {
           <span>
             <FormGroup controlId="formControlsText">
               <ControlLabel>Emailová adresa</ControlLabel>
-              <FormControl type='email' placeholder='' onChange={e => this.changeLogin(e.target.value)} />
+              <FormControl type='email' onChange={e => this.changeLogin(e.target.value)} name='email' />
             </FormGroup>
             <FormGroup controlId="formControlsEmail">
               <ControlLabel>Heslo</ControlLabel>
-              <FormControl type='password' placeholder='' onChange={e => this.changePassword(e.target.value)} />
+              <FormControl type='password' onChange={e => this.changePassword(e.target.value)} name='password' />
             </FormGroup>
           </span>
         }

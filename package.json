@@ -14,8 +14,9 @@
     "lint": "eslint .",
     "test": "cross-env NODE_ENV=development mocha",
     "test:watch": "npm test -- --watch --reporter nyan",
-    "dev": "cross-env NODE_ENV=development babel-node dev",
-    "start": "npm run build && cross-env NODE_ENV=production babel-node server"
+    "dev": "cross-env NODE_ENV=development API_BASE=http://localhost:4000 babel-node dev",
+    "start": "npm run build && cross-env NODE_ENV=production babel-node server",
+    "mock-api-server": "json-server --port 4000 --watch tmp/db.json"
   },
   "dependencies": {
     "admin-lte": "^2.3.3",
@@ -24,6 +25,8 @@
     "cross-env": "^1.0.7",
     "ejs": "^2.4.1",
     "js-md5": "^0.4.1",
+    "jsonwebtoken": "^6.2.0",
+    "jwt-decode": "^2.0.1",
     "react": "^15.0.1",
     "react-avatar": "^0.7.3",
     "react-bootstrap": "^0.29.3",
@@ -37,6 +40,7 @@
     "react-router-redux": "^4.0.2",
     "redux": "^3.5.1",
     "redux-actions": "^0.9.1",
+    "redux-api-middleware": "^1.0.2",
     "redux-async-connect": "^1.0.0-rc4",
     "redux-thunk": "^2.0.1"
   },

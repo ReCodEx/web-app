@@ -10,6 +10,8 @@ import Footer from '../Footer';
 export const Layout = ({
   toggleSidebar,
   sidebar,
+  user,
+  logout,
   children
 }) => (
   <div className={classNames({
@@ -25,7 +27,9 @@ export const Layout = ({
     <Header
       toggleSidebarSize={toggleSidebar.size}
       toggleSidebarVisibility={toggleSidebar.visibility} />
-    <Sidebar />
+    <Sidebar
+      user={user}
+      logout={logout} />
     <PageContent
       title='Hlavní strana'
       description='Matematicko fyzikální faktulta UK v Praze - Informatická sekce'>
@@ -44,6 +48,8 @@ Layout.propTypes = {
     isCollapsed: PropTypes.bool,
     isOpen: PropTypes.bool
   }),
+  user: PropTypes.any.isRequired,
+  logout: PropTypes.func.isRequired,
   children: PropTypes.element.isRequired
 };
 

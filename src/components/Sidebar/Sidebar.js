@@ -6,16 +6,13 @@ import SidebarMenuItem from '../SidebarMenuItem/SidebarMenuItem';
 import SidebarMenuGroup from '../SidebarMenuGroup/SidebarMenuGroup';
 
 const Sidebar = ({
-  user = {
-    name: 'Simon Rozsival',
-    email: 'simon.rozsival@gmail.com',
-    institution: 'MFF UK v Praze'
-  },
+  user,
   groups = [
     { id: 1, name: 'Programování I', abbr: 'P1', color: '#123' },
     { id: 2, name: 'Programování II', abbr: 'P2', color: '#321', notificationsCount: 2 },
     { id: 3, name: 'Jazyk C# a programovani pro .NET', abbr: 'C#', color: '#222' }
   ],
+  logout,
   createSelectGroupLink = item => `/group/${item.id}`,
   isActive = link => link === '/'
 }) => (
@@ -23,9 +20,17 @@ const Sidebar = ({
     <section className='sidebar'>
       {user &&
         <Badge
-          name={user.name}
+          name={user.firstName + ' ' + user.lastName}
           email={user.email}
-          description={user.institution} />}
+          logout={logout} />}
+
+      {!user &&
+        <ul className='sidebar-menu'>
+          <SidebarMenuTitle title={'ReCodEx'} />
+          <SidebarMenuItem
+            title='Přihlásit se'
+            link='/login' />
+        </ul>}
 
       <ul className='sidebar-menu'>
         <SidebarMenuTitle title={'Menu'} />

@@ -1,0 +1,12 @@
+{
+  "login": [
+    {
+      "id": 1,
+      "email": "simon.rozsival@gmail.com",
+      "firstName": "Simon",
+      "lastName": "Rozsival",
+      "password": "blabla",
+      "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJzaW1vbi5yb3pzaXZhbEBnbWFpbC5jb20iLCJmaXJzdE5hbWUiOiJTaW1vbiIsImxhc3ROYW1lIjoiUm96c2l2YWwifQ.K4Vk1IWNS_yA3UCunsJAas231H5MsB43ADPYejDXYGM"
+    }
+  ]
+}
