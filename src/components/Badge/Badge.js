@@ -10,7 +10,7 @@ const Badge = ({
   <div className='user-panel'>
     <div className='pull-left image'>
       <Gravatar
-        email={email.trim().toLowerCase()}
+        email={email}
         https
         default='retro'
         className='img-circle'

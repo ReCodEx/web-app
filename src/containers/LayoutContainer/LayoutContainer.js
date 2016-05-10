@@ -17,7 +17,7 @@ const mapDispatchToProps = (dispatch, props) => ({
     visibility: () => dispatch(toggleVisibility()),
     size: () => dispatch(toggleSize())
   },
-  logout: () => dispatch(logout)
+  logout: () => dispatch(logout())
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Layout);

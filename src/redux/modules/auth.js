@@ -53,14 +53,23 @@ export default handleActions({
   [actionTypes.LOGIN_SUCCESS]: (state, action) => ({
     status: statusTypes.LOGGED_IN,
     accessToken: action.payload.accessToken,
-    user: getAccessTokenPayload(action.payload.accessToken)
+    user: {
+      id: action.payload.id,
+      firstName: action.payload.firstName,
+      lastName: action.payload.firstName,
+      email: action.payload.email
+    }
   }),
   [actionTypes.LOGIN_FAILED]: (state, action) => ({
     status: status.LOGIN_FAILED,
     accessToken: null,
     user: null
   }),
-  [actionTypes.LOGOUT]: (state, action) => initialState
+  [actionTypes.LOGOUT]: (state, action) => ({
+    status: status.LOGGED_OUT,
+    accessToken: null,
+    user: null
+  })
 }, initialState);
 
 export const logout = () => {

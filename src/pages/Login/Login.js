@@ -6,18 +6,21 @@ import { Row, Col } from 'react-bootstrap';
 import Box from '../../components/Box/Box';
 import LoginForm from '../../components/LoginForm/LoginForm';
 
-import { login } from '../../redux/modules/auth';
+import { statusTypes, login } from '../../redux/modules/auth';
 
 class Login extends Component {
 
   render() {
-    const { login } = this.props;
+    const { login, isLoggingIn, hasFailed } = this.props;
 
     return (
       <Row>
         <Helmet title='Přihlášení' />
         <Col sm={6} smOffset={3}>
-          <LoginForm tryLogin={login} />
+          <LoginForm
+            tryLogin={login}
+            isLoggingIn={isLoggingIn}
+            hasFailed={hasFailed} />
         </Col>
       </Row>
     );
@@ -26,7 +29,13 @@ class Login extends Component {
 }
 
 Login.propTypes = {
-  login: PropTypes.func.isRequired
+  login: PropTypes.func.isRequired,
+
 };
 
-export default connect(undefined, { login })(Login);
+export default connect((state) => ({
+  isLoggingIn: state.auth.status === statusTypes.LOGGING_IN,
+  hasFailed: state.auth.status === statusTypes.LOGIN_FAILED,
+}), {
+  login
+})(Login);

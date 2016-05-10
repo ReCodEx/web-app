@@ -48,7 +48,7 @@ Layout.propTypes = {
     isCollapsed: PropTypes.bool,
     isOpen: PropTypes.bool
   }),
-  user: PropTypes.any.isRequired,
+  user: PropTypes.any,
   logout: PropTypes.func.isRequired,
   children: PropTypes.element.isRequired
 };

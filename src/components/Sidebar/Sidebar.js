@@ -46,7 +46,7 @@ const Sidebar = ({
 
 Sidebar.propTypes = {
   user: PropTypes.shape({
-    name: PropTypes.string.isRequired,
+    name: PropTypes.string,
     avatarUrl: PropTypes.string,
     institution: PropTypes.string
   }),
