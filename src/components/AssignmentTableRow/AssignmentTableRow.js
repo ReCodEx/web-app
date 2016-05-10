@@ -1,23 +1,7 @@
 import React, { PropTypes } from 'react';
 import { Link } from 'react-router';
-import Icon from 'react-fontawesome';
 import classNames from 'classnames';
-
-export const getIcon = (status) => {
-  switch (status) {
-    case 'done':
-      return <Icon name='thumbs-o-up' className='text-green' />;
-
-    case 'work-in-progress':
-      return <Icon name='cogs' className='text-yellow' />;
-
-    case 'failed':
-      return <Icon name='thumbs-o-down' className='text-red' />;
-
-    default:
-      return <Icon name='circle' className='text-gray' />;
-  }
-};
+import AssignmentStatusIcon from '../AssignmentStatusIcon/AssignmentStatusIcon';
 
 const AssignmentTableRow = ({
   showGroup,
@@ -25,7 +9,7 @@ const AssignmentTableRow = ({
 }) => (
   <tr>
     <td className='text-center'>
-      {getIcon(status)}
+      <AssignmentStatusIcon status={status} />
     </td>
     <td>
       <Link to=''>{name}</Link>
