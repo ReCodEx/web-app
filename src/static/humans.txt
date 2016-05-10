@@ -1,9 +1,0 @@
-# Check it out: http://humanstxt.org/
-
-# TEAM
-
-    Šimon Rozsíval -- programmer -- @simonrozsival
-
-# THANKS
-
-    Martin Kruliš

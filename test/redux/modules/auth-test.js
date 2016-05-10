@@ -3,7 +3,7 @@ import { isValidRSAA, CALL_API } from 'redux-api-middleware';
 import { LOCAL_STORAGE_KEY, API_BASE } from '../../../src/redux/api';
 import reducer, { actionTypes, statusTypes, logout, login } from '../../../src/redux/modules/auth';
 
-describe.only('Authentication', () => {
+describe('Authentication', () => {
 
   beforeEach(function () {
     localStorage.removeItem(LOCAL_STORAGE_KEY);
