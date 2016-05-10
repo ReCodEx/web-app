@@ -23,7 +23,11 @@ const SidebarMenuItem = ({
           'text-yellow': notificationsCount > 0
         })
       } />
-      <span>{title}</span>
+      <span style={{
+        whiteSpace: 'normal'
+      }}>
+        {title}
+      </span>
       {notificationsCount > 0 &&
         <small className='label pull-right bg-yellow'>{notificationsCount}</small>}
     </Link>

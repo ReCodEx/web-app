@@ -23,7 +23,7 @@ class Header extends Component {
     } = this.props;
 
     return (
-      <header className='main-header'>
+      <header className='main-header fixed'>
 
         <IndexLink to='/' className='logo'>
           <span className='logo-mini'>Re<b>C</b></span>
