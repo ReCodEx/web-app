@@ -5,20 +5,23 @@ import { reducer as reduxAsyncConnect } from 'redux-async-connect';
 import auth from './modules/auth';
 import sidebar from './modules/sidebar';
 
-const recodexReducers = {
-  auth,
+const createRecodexReducers = (token) => ({
+  auth: auth(token),
   sidebar
-};
+});
 
 const librariesReducers = {
   routing: routerReducer,
   reduxAsyncConnect
 };
 
-export default combineReducers(
-  Object.assign(
-    {},
-    librariesReducers,
-    recodexReducers
-  )
-);
+const createReducer = (token) =>
+  combineReducers(
+    Object.assign(
+      {},
+      librariesReducers,
+      createRecodexReducers(token)
+    )
+  );
+
+export default createReducer;

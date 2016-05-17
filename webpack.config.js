@@ -5,7 +5,9 @@ const strip = require('strip-loader');
 
 module.exports = {
   devtool: 'source-map',
-  entry: ['./client.js'],
+  entry: [
+    './src/client.js'
+  ],
   output: {
     filename: 'bundle.js',
     path: path.join(__dirname, 'public'),

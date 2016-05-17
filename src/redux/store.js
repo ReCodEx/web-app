@@ -3,15 +3,21 @@ import React from 'react';
 import { createStore, combineReducers, compose, applyMiddleware } from 'redux';
 import { routerReducer, routerMiddleware } from 'react-router-redux';
 import thunkMiddleware from 'redux-thunk';
-import { apiMiddleware } from 'redux-api-middleware';
-import reducer from './reducer';
+import promiseMiddleware from 'redux-promise-middleware';
+import accessTokenMiddleware from './middleware/accessTokenMiddleware';
+import createReducer from './reducer';
+
+const getMiddleware = (history) => [
+  thunkMiddleware,
+  promiseMiddleware(),
+  accessTokenMiddleware,
+  routerMiddleware(history)
+];
 
 const dev = (history) =>
   compose(
     applyMiddleware(
-      thunkMiddleware,
-      apiMiddleware,
-      routerMiddleware(history)
+      ...getMiddleware(history)
     ),
     window.devToolsExtension()
   );
@@ -19,19 +25,16 @@ const dev = (history) =>
 const prod = (history) =>
   compose(
     applyMiddleware(
-      thunkMiddleware,
-      apiMiddleware,
-      routerMiddleware(history)
+      ...getMiddleware(history)
     )
   );
 
-export function configureStore(history, initialState) {
-  const isDev = process.env.NODE_ENV === 'development' && typeof window !== 'undefined';
-  const store = createStore(
-    reducer,
-    initialState,
-    isDev ? dev(history) : prod(history)
-  );
+const isDev = () =>
+  process.env.NODE_ENV === 'development' && typeof window !== 'undefined';
 
-  return store;
-}
+export const configureStore = (history, initialState, token) =>
+  createStore(
+    createReducer(token),
+    initialState,
+    (isDev() ? dev : prod)(history)
+  );

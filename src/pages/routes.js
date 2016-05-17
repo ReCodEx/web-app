@@ -2,9 +2,9 @@ import React from 'react';
 import { Route, IndexRoute, Link } from 'react-router';
 
 /* container components */
-import LayoutContainer from './containers/LayoutContainer';
-import Home from './pages/Home';
-import Login from './pages/Login';
+import LayoutContainer from '../containers/LayoutContainer';
+import Home from './Home';
+import Login from './Login';
 
 const routes = (
   <Route path='/' component={LayoutContainer}>
