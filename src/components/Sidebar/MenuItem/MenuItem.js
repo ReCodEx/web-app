@@ -2,12 +2,13 @@ import React, { PropTypes } from 'react';
 import classNames from 'classnames';
 import { Link } from 'react-router';
 
-const SidebarMenuItem = ({
+const MenuItem = ({
   title,
   icon = 'circle-o',
   link,
   notificationsCount = 0,
-  isActive
+  isActive,
+  inNewTab = false
 }) => (
   <li
     className={classNames({
@@ -15,7 +16,8 @@ const SidebarMenuItem = ({
     })}>
 
     <Link
-      to={link}>
+      to={link}
+      target={inNewTab ? '_blank' : undefined}>
       <i className={
         classNames({
           'fa': true,
@@ -34,7 +36,7 @@ const SidebarMenuItem = ({
   </li>
 );
 
-SidebarMenuItem.propTypes = {
+MenuItem.propTypes = {
   title: PropTypes.string.isRequired,
   icon: PropTypes.string,
   notificationsCount: PropTypes.number,
@@ -42,4 +44,4 @@ SidebarMenuItem.propTypes = {
   isActive: PropTypes.bool
 };
 
-export default SidebarMenuItem;
+export default MenuItem;

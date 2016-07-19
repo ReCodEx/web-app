@@ -1,13 +1,13 @@
 import React, { PropTypes } from 'react';
 
-const SidebarMenuTitle = ({
+const MenuTitle = ({
   title
 }) => (
   <li className='header'>{title.toUpperCase()}</li>
 );
 
-SidebarMenuTitle.propTypes = {
+MenuTitle.propTypes = {
   title: PropTypes.string.isRequired
 };
 
-export default SidebarMenuTitle;
+export default MenuTitle;

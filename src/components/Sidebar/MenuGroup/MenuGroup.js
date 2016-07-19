@@ -1,9 +1,9 @@
 import React, { Component, PropTypes } from 'react';
 import classNames from 'classnames';
 import { Link } from 'react-router';
-import SidebarMenuItem from '../SidebarMenuItem/SidebarMenuItem';
+import MenuItem from '../MenuItem';
 
-class SidebarMenuGroup extends Component {
+class MenuGroup extends Component {
   constructor(props, context) {
     super(props, context);
     this.state = {
@@ -43,7 +43,7 @@ class SidebarMenuGroup extends Component {
           className='treeview-menu'
           style={{ display: this.state.open ? 'block' : 'none' }}>
           {items.map((item, key) =>
-            <SidebarMenuItem
+            <MenuItem
               key={key}
               title={item.name}
               icon='circle-o'
@@ -55,11 +55,11 @@ class SidebarMenuGroup extends Component {
   }
 }
 
-SidebarMenuGroup.propTypes = {
+MenuGroup.propTypes = {
   title: PropTypes.string.isRequired,
   icon: PropTypes.string,
   link: PropTypes.string,
   isActive: PropTypes.bool
 };
 
-export default SidebarMenuGroup;
+export default MenuGroup;
