@@ -26,7 +26,7 @@ const middleware = state => next => action => {
   // manage access token storage
   switch (action.type) {
     case actionTypes.LOGIN_SUCCESS:
-      storeToken(action.payload[0].accessToken);
+      storeToken(action.payload[0].accessToken); // @todo finalize when the API server is ready 
     case actionTypes.LOGOUT:
       removeToken();
   }
