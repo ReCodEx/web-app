@@ -2,9 +2,7 @@ import { actionTypes } from '../modules/auth';
 
 export const LOCAL_STORAGE_KEY = 'recodex/accessToken';
 
-const storeToken = (payload) => {
-  // const accessToken = payload.accessToken;
-  const accessToken = payload[0].accessToken; // @todo change with the final API
+const storeToken = (accessToken) => {
   if (accessToken) {
     localStorage.setItem(LOCAL_STORAGE_KEY, accessToken);
     // this should be exclusive to browser, but be careful anyway!
@@ -28,7 +26,7 @@ const middleware = state => next => action => {
   // manage access token storage
   switch (action.type) {
     case actionTypes.LOGIN_SUCCESS:
-      storeToken(actionTypes.payload);
+      storeToken(action.payload[0].accessToken);
     case actionTypes.LOGOUT:
       removeToken();
   }

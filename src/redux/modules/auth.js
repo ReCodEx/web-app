@@ -4,9 +4,9 @@ import { apiCall } from '../api';
 
 export const actionTypes = {
   LOGIN: 'auth/LOGIN',
-  LOGIN_REQUEST: 'auth/LOGIN_REQUEST',
-  LOGIN_SUCCESS: 'auth/LOGIN_SUCCESS',
-  LOGIN_FAILIURE: 'auth/LOGIN_FAILIURE',
+  LOGIN_REQUEST: 'auth/LOGIN_PENDING',
+  LOGIN_SUCCESS: 'auth/LOGIN_FULFILLED',
+  LOGIN_FAILIURE: 'auth/LOGIN_REJECTED',
   LOGOUT: 'auth/LOGOUT'
 };
 
@@ -32,7 +32,7 @@ const getAccessTokenPayload = (token) => ({
 const auth = (accessToken) => {
   try {
     decodedToken = decodeJwt(accessToken);
-  } catch (e) { /* silen failiure */ }
+  } catch (e) { /* silent failiure */ }
 
   const initialState = accessToken && decodedToken
     ? {
@@ -54,12 +54,12 @@ const auth = (accessToken) => {
     }),
     [actionTypes.LOGIN_SUCCESS]: (state, action) => ({
       status: statusTypes.LOGGED_IN,
-      accessToken: action.payload.accessToken,
+      accessToken: action.payload[0].accessToken,
       user: {
-        id: action.payload.id,
-        firstName: action.payload.firstName,
-        lastName: action.payload.firstName,
-        email: action.payload.email
+        id: action.payload[0].id,
+        firstName: action.payload[0].firstName,
+        lastName: action.payload[0].lastName,
+        email: action.payload[0].email
       }
     }),
     [actionTypes.LOGIN_FAILED]: (state, action) => ({
@@ -85,10 +85,10 @@ export const login = (email, password) =>
   apiCall({
     type: actionTypes.LOGIN,
     // method: 'post',
-    method: 'get',
     // endpoint: '/login',
     // body: {
     //   email, password
     // }
+    method: 'get',
     endpoint: `/login?email=${email}&password=${password}`,
   });

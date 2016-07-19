@@ -36,7 +36,7 @@ export const apiCall = ({ type, method, endpoint, headers = {}, body = undefined
     return dispatch({
       type,
       payload: {
-        promise: createRequest(API_BASE + endpoint, method, headers, body),
+        promise: createRequest(API_BASE + endpoint, method, headers, body).then(res => res.json()),
         data: body
       }
     });

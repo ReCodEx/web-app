@@ -1,6 +1,6 @@
 import { createSelector } from 'reselect';
 
-const getUser = state => state.user;
+const getUser = state => state.auth;
 const getAccessToken = state => state.accessToken;
 
 /**
