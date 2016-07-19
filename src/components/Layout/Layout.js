@@ -21,8 +21,8 @@ export const Layout = ({
     'sidebar-open': sidebar.isOpen
   })}>
     <Helmet
-      defaultTitle="ReCodEx"
-      titleTemplate="%s | ReCodEx" />
+      defaultTitle='ReCodEx'
+      titleTemplate='%s | ReCodEx' />
 
     <Header
       toggleSidebarSize={toggleSidebar.size}
