@@ -10,7 +10,7 @@ import { apiCall, getExtraHeaders, API_BASE } from '../../src/redux/api';
 describe('API helper function', () => {
   it('must not add Authorization header unless the access token is in the store', () => {
     const state = {
-      user: {}
+      auth: {}
     };
 
     expect(getExtraHeaders(state)).to.eql({});
@@ -18,7 +18,7 @@ describe('API helper function', () => {
 
   it('must add Authorization header if the access token is in the store', () => {
     const state = {
-      user: {
+      auth: {
         accessToken: 'XYZ'
       }
     };
@@ -50,7 +50,7 @@ describe('API helper function', () => {
       spy(action);
       return action;
     };
-    const getState = () => ({ user: {} });
+    const getState = () => ({ auth: {} });
 
     const action = thunk(dispatch, getState);
     expect(action.type).to.equal(args.type);

@@ -39,7 +39,7 @@ const LoggedIn = ({
           title='Skupiny'
           items={groups}
           isActive={groups.some(item => isActive(GROUP_URI_FACTORY(item.id)))}
-          createLink={GROUP_URI_FACTORY} />
+          createLink={item => GROUP_URI_FACTORY(item.id)} />
         <MenuItem
           title='Zpětná vazba a hlášení chyb'
           isActive={false}

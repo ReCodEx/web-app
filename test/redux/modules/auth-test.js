@@ -27,6 +27,8 @@ describe('Authentication', () => {
       expect(thunk).to.be.a('function');
       expect(thunk.length).to.equal(2);
 
+      // ----------------\
+      // @todo update when the final API is ready
       const resp = {
         accessToken: 'xyz',
         user: {
@@ -35,12 +37,11 @@ describe('Authentication', () => {
           email: 'X@Y.Z'
         }
       };
-
-      // @todo update when the final API is ready
-      fetchMock.mock(`${API_BASE}/login?email=${email}&password=${password}`, 'GET', resp);
+      fetchMock.mock(`${API_BASE}/login?email=${email}&password=${password}`, 'GET', [resp]);
+      // ----------------/
 
       const dispatch = (action) => action;
-      const getState = () => ({ user: {} });
+      const getState = () => ({ auth: {} });
       const action = thunk(dispatch, getState);
 
       expect(action.type).to.equal(actionTypes.LOGIN);
@@ -49,7 +50,6 @@ describe('Authentication', () => {
       expect(action.payload.promise.then).to.be.a('function');
 
       action.payload.promise
-        .then(_resp => _resp.json())
         .then(json => {
           expect(json).to.eql(resp);
           done();

@@ -30,6 +30,7 @@ const getAccessTokenPayload = (token) => ({
  * @return {function} The initialised reducer
  */
 const auth = (accessToken) => {
+  let decodedToken = null;
   try {
     decodedToken = decodeJwt(accessToken);
   } catch (e) { /* silent failiure */ }
@@ -54,15 +55,15 @@ const auth = (accessToken) => {
     }),
     [actionTypes.LOGIN_SUCCESS]: (state, action) => ({
       status: statusTypes.LOGGED_IN,
-      accessToken: action.payload[0].accessToken,
+      accessToken: action.payload.accessToken,
       user: {
-        id: action.payload[0].id,
-        firstName: action.payload[0].firstName,
-        lastName: action.payload[0].lastName,
-        email: action.payload[0].email
+        id: action.payload.id,
+        firstName: action.payload.firstName,
+        lastName: action.payload.lastName,
+        email: action.payload.email
       }
     }),
-    [actionTypes.LOGIN_FAILED]: (state, action) => ({
+    [actionTypes.LOGIN_FAILIURE]: (state, action) => ({
       status: status.LOGIN_FAILED,
       accessToken: null,
       user: null
@@ -82,13 +83,23 @@ export const logout = () => ({
 });
 
 export const login = (email, password) =>
-  apiCall({
-    type: actionTypes.LOGIN,
-    // method: 'post',
-    // endpoint: '/login',
-    // body: {
-    //   email, password
-    // }
-    method: 'get',
-    endpoint: `/login?email=${email}&password=${password}`,
-  });
+  apiCall(
+    {
+      type: actionTypes.LOGIN,
+      // method: 'post',
+      // endpoint: '/login',
+      // body: {
+      //   email, password
+      // }
+      method: 'get',
+      endpoint: `/login?email=${email}&password=${password}`,
+    },
+    (data) => {
+      console.log(data);
+      if (data.length !== 1) {
+        throw new Error('Login failed');
+      }
+
+      return data[0];
+    }
+  );

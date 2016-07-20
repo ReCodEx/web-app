@@ -7,7 +7,9 @@ const storeToken = (accessToken) => {
     localStorage.setItem(LOCAL_STORAGE_KEY, accessToken);
     // this should be exclusive to browser, but be careful anyway!
     if (typeof document !== 'undefined') {
-      document.cookie = `accessToken=${accessToken}`
+      const now = new Date();
+      now.setTime(now.getTime() + 1 * 3600 * 1000); // cookie is valid for the next hour
+      document.cookie = `accessToken=${accessToken}; exipres=${now.toUTCString()}; path=/`;
     }
   }
 };
@@ -26,9 +28,11 @@ const middleware = state => next => action => {
   // manage access token storage
   switch (action.type) {
     case actionTypes.LOGIN_SUCCESS:
-      storeToken(action.payload[0].accessToken); // @todo finalize when the API server is ready 
+      storeToken(action.payload.accessToken);
+      break;
     case actionTypes.LOGOUT:
       removeToken();
+      break;
   }
 
   return next(action);

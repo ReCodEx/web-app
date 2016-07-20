@@ -17,7 +17,8 @@ const createRequest = (endpoint, method, headers, body) =>
     method,
     headers,
     body: createFormData(body)
-  });
+  })
+  .then(res => res.json()); // all API responses must be JSON
 
 export const getExtraHeaders = (state) => {
   const token = accessTokenSelector(state);
@@ -30,13 +31,13 @@ export const getExtraHeaders = (state) => {
   return {}; // nothing extra
 };
 
-export const apiCall = ({ type, method, endpoint, headers = {}, body = undefined }) =>
+export const apiCall = ({ type, method, endpoint, headers = {}, body = undefined }, validation = res => res) =>
   (dispatch, getState) => {
     headers = { headers, ...getExtraHeaders(getState()) };
     return dispatch({
       type,
       payload: {
-        promise: createRequest(API_BASE + endpoint, method, headers, body).then(res => res.json()),
+        promise: createRequest(API_BASE + endpoint, method, headers, body).then(validation),
         data: body
       }
     });

@@ -7,11 +7,26 @@ import Box from '../../components/Box/Box';
 import LoginForm from '../../components/LoginForm/LoginForm';
 
 import { statusTypes, login } from '../../redux/modules/auth';
+import { DASHBOARD_URI } from '../../links';
 
 class Login extends Component {
 
+  constructor(props, context) {
+    super(props, context);
+    this.checkIfIsLoggedIn(props);
+  }
+
+  componentWillReceiveProps = props => this.checkIfIsLoggedIn(props);
+
+  checkIfIsLoggedIn = props => {
+    const { hasSucceeded, goToDashboard } = props;
+    if (hasSucceeded) {
+      setTimeout(() => this.context.router.push(DASHBOARD_URI), 600);
+    }
+  };
+
   render() {
-    const { login, isLoggingIn, hasFailed } = this.props;
+    const { login, isLoggingIn, hasFailed, hasSucceeded } = this.props;
 
     return (
       <Row>
@@ -19,8 +34,9 @@ class Login extends Component {
         <Col sm={6} smOffset={3}>
           <LoginForm
             tryLogin={login}
-            isLoggingIn={isLoggingIn}
-            hasFailed={hasFailed} />
+            isTryingToLogin={isLoggingIn}
+            hasFailed={hasFailed}
+            hasSucceeded={hasSucceeded} />
         </Col>
       </Row>
     );
@@ -28,14 +44,24 @@ class Login extends Component {
 
 }
 
-Login.propTypes = {
-  login: PropTypes.func.isRequired,
-
+Login.contextTypes = {
+  router: PropTypes.object
 };
 
-export default connect((state) => ({
-  isLoggingIn: state.auth.status === statusTypes.LOGGING_IN,
-  hasFailed: state.auth.status === statusTypes.LOGIN_FAILED,
-}), {
-  login
-})(Login);
+Login.propTypes = {
+  login: PropTypes.func.isRequired,
+  isLoggingIn: PropTypes.bool.isRequired,
+  hasFailed: PropTypes.bool.isRequired,
+  hasSucceeded: PropTypes.bool.isRequired,
+};
+
+export default connect(
+  state => ({
+    isLoggingIn: state.auth.status === statusTypes.LOGGING_IN,
+    hasFailed: state.auth.status === statusTypes.LOGIN_FAILIURE,
+    hasSucceeded: state.auth.status === statusTypes.LOGGED_IN
+  }),
+  {
+    login
+  }
+)(Login);
