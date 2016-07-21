@@ -1,4 +1,5 @@
 import React, { PropTypes } from 'react';
+import Helmet from 'react-helmet';
 
 const PageContent = ({
   title,
@@ -6,6 +7,7 @@ const PageContent = ({
   children
 }) => (
   <div className='content-wrapper'>
+    <Helmet title={title} description={description} />
     <section className='content-header'>
       <h1>
         {title}

@@ -1,12 +1,13 @@
 import React, { Component, PropTypes } from 'react';
+import PageContent from '../../components/PageContent';
 
 class NotFound extends Component {
 
   render() {
     return (
-      <div>
-        <h1>Stránka nebyla nalezena</h1>
-      </div>
+      <PageContent title='Stránka nebyla nalezena'>
+        <p>Omlouváme se, ale pro dané vstupní slovo není definované slovo výstupní.</p>
+      </PageContent>
     );
   }
 

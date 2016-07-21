@@ -30,11 +30,7 @@ export const Layout = ({
     <Sidebar
       user={user}
       logout={logout} />
-    <PageContent
-      title='Hlavní strana'
-      description='Matematicko fyzikální faktulta UK v Praze - Informatická sekce'>
-      {children}
-    </PageContent>
+    {children}
     <Footer version='v0.1.0' />
   </div>
 );

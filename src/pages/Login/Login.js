@@ -3,8 +3,9 @@ import Helmet from 'react-helmet';
 import { connect } from 'react-redux';
 
 import { Row, Col } from 'react-bootstrap';
-import Box from '../../components/Box/Box';
-import LoginForm from '../../components/LoginForm/LoginForm';
+import PageContent from '../../components/PageContent';
+import Box from '../../components/Box';
+import LoginForm from '../../components/LoginForm';
 
 import { statusTypes, login } from '../../redux/modules/auth';
 import { DASHBOARD_URI } from '../../links';
@@ -29,16 +30,17 @@ class Login extends Component {
     const { login, isLoggingIn, hasFailed, hasSucceeded } = this.props;
 
     return (
-      <Row>
-        <Helmet title='Přihlášení' />
-        <Col sm={6} smOffset={3}>
-          <LoginForm
-            tryLogin={login}
-            isTryingToLogin={isLoggingIn}
-            hasFailed={hasFailed}
-            hasSucceeded={hasSucceeded} />
-        </Col>
-      </Row>
+      <PageContent title='Přihlášení'>
+        <Row>
+          <Col sm={6} smOffset={3}>
+            <LoginForm
+              tryLogin={login}
+              isTryingToLogin={isLoggingIn}
+              hasFailed={hasFailed}
+              hasSucceeded={hasSucceeded} />
+          </Col>
+        </Row>
+      </PageContent>
     );
   }
 

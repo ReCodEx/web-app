@@ -6,7 +6,8 @@ import MenuItem from '../MenuItem';
 import MenuGroup from '../MenuGroup';
 
 import {
-  LOGIN_URI
+  LOGIN_URI,
+  BUGS_URL
 } from '../../../links';
 
 const NotLoggedIn = () => (
@@ -16,7 +17,14 @@ const NotLoggedIn = () => (
         <MenuTitle title='ReCodEx' />
         <MenuItem
           title='Přihlásit se'
+          icon='sign-in'
           link={LOGIN_URI} />
+        <MenuItem
+          title='Zpětná vazba a hlášení chyb'
+          isActive={false}
+          icon='bug'
+          link={BUGS_URL}
+          inNewTab={true} />
       </ul>
     </section>
   </aside>

@@ -1,7 +1,9 @@
 import React, { Component, PropTypes } from 'react';
+import { connect } from 'react-redux';
 import Helmet from 'react-helmet';
 
-import Box from '../../components/Box/Box';
+import PageContent from '../../components/PageContent';
+import Box from '../../components/Box';
 import AssignmentsTable from '../../components/AssignmentsTable/AssignmentsTable';
 
 const assignments = [
@@ -60,19 +62,29 @@ const assignments = [
 class Home extends Component {
 
   render() {
+    const { user } = this.props;
+
     return (
-      <div>
-        <Helmet title='Úvodní strana' />
-        <Box title='Úlohy s blížícím se termínem odevzdání'
-          body={
-            <AssignmentsTable
-              assignments={assignments}
-              showGroup={true} />
-          } />
-      </div>
+      <PageContent
+        title='Celkový přehled'
+        description={`ReCodEx - ${user.firstName} ${user.lastName}`}>
+        <Box title='Úlohy s blížícím se termínem odevzdání'>
+          <AssignmentsTable
+            assignments={assignments}
+            showGroup={true} />
+        </Box>
+      </PageContent>
     );
   }
 
 }
 
-export default Home;
+Home.propTypes = {
+  user: PropTypes.object.isRequired
+};
+
+export default connect(state =>
+  ({
+    user: state.auth.user
+  })
+)(Home);
