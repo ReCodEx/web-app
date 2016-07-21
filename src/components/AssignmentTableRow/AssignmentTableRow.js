@@ -2,6 +2,7 @@ import React, { PropTypes } from 'react';
 import { Link } from 'react-router';
 import classNames from 'classnames';
 import AssignmentStatusIcon from '../AssignmentStatusIcon/AssignmentStatusIcon';
+import { FormattedDate } from 'react-intl';
 
 const AssignmentTableRow = ({
   showGroup,
@@ -17,8 +18,8 @@ const AssignmentTableRow = ({
     {showGroup &&
       <td>{group}</td>}
     <td>
-      {(new Date(deadline)).toLocaleDateString()}{', '}
-      {(new Date(deadline)).toLocaleTimeString()}
+      <FormattedDate value={new Date(deadline * 1000)} />{', '}
+      <FormattedDate value={new Date(deadline * 1000)} />
     </td>
     <td className='text-center'>
       {passingTests}/{totalTests}
