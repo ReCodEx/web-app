@@ -4,7 +4,7 @@ import classNames from 'classnames';
 const Box = ({
   title,
   noPadding = true,
-  body,
+  children,
   footer
 }) => (
   <div className='box'>
@@ -17,7 +17,7 @@ const Box = ({
         'no-padding': noPadding
       })
     }>
-      {body}
+      {children}
     </div>
     {footer &&
       <div className={'box-footer'}>

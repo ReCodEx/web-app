@@ -5,7 +5,7 @@ import { Form } from 'react-bootstrap';
 const FormBox = ({
   title,
   type,
-  body,
+  children,
   footer
 }) => (
   <div className={
@@ -19,7 +19,7 @@ const FormBox = ({
     </div>
     <Form>
       <div className='box-body'>
-        {body}
+        {children}
       </div>
       {footer &&
         <div className={'box-footer'}>
@@ -32,7 +32,6 @@ const FormBox = ({
 FormBox.propTypes = {
   title: PropTypes.string.isRequired,
   type: PropTypes.string,
-  body: PropTypes.element.isRequired,
   footer: PropTypes.element
 };
 
