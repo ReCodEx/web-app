@@ -3,6 +3,7 @@ import { Link } from 'react-router';
 import classNames from 'classnames';
 import AssignmentStatusIcon from '../AssignmentStatusIcon/AssignmentStatusIcon';
 import { FormattedDate } from 'react-intl';
+import { ASSIGNMENT_DETAIL_URI_FACTORY } from '../../links';
 
 const AssignmentTableRow = ({
   showGroup,
@@ -13,7 +14,7 @@ const AssignmentTableRow = ({
       <AssignmentStatusIcon status={status} />
     </td>
     <td>
-      <Link to=''>{name}</Link>
+      <Link to={ASSIGNMENT_DETAIL_URI_FACTORY(id)}>{name}</Link>
     </td>
     {showGroup &&
       <td>{group}</td>}
