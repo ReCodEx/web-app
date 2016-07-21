@@ -57,20 +57,6 @@ class LoginForm extends Component {
       <FormBox
         title='Zadejte své přihlašovací údaje'
         type={type}
-        body={
-          <span>
-            {hasFailed && <Alert bsStyle='danger'>Přihlášení se nezdařilo, zkontrolujte si své přihlašovací údaje.</Alert>}
-            <FormGroup controlId="loginEmail" validationState={hasFailed === true ? 'error' : undefined}>
-              <ControlLabel>Emailová adresa</ControlLabel>
-              <FormControl type='email' onChange={e => this.changeLogin(e.target.value)} name='email' disabled={isTryingToLogin || hasSucceeded} />
-            </FormGroup>
-            <FormGroup controlId="loginPwd" validationState={hasFailed === true ? 'error' : undefined}>
-              <ControlLabel>Heslo</ControlLabel>
-              <FormControl type='password' onChange={e => this.changePassword(e.target.value)} name='password' disabled={isTryingToLogin || hasSucceeded} />
-            </FormGroup>
-          </span>
-        }
-
         footer={
           <div className='text-center'>
             <Button
@@ -82,7 +68,19 @@ class LoginForm extends Component {
               {btnContent}
             </Button>
           </div>
-        } />
+        }>
+          <span>
+            {hasFailed && <Alert bsStyle='danger'>Přihlášení se nezdařilo, zkontrolujte si své přihlašovací údaje.</Alert>}
+            <FormGroup controlId="loginEmail" validationState={hasFailed === true ? 'error' : undefined}>
+              <ControlLabel>Emailová adresa</ControlLabel>
+              <FormControl type='email' onChange={e => this.changeLogin(e.target.value)} name='email' disabled={isTryingToLogin || hasSucceeded} />
+            </FormGroup>
+            <FormGroup controlId="loginPwd" validationState={hasFailed === true ? 'error' : undefined}>
+              <ControlLabel>Heslo</ControlLabel>
+              <FormControl type='password' onChange={e => this.changePassword(e.target.value)} name='password' disabled={isTryingToLogin || hasSucceeded} />
+            </FormGroup>
+          </span>
+        </FormBox>
     );
   }
 }
