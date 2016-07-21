@@ -10,6 +10,10 @@ import cookieParser from 'cookie-parser';
 
 import { match } from 'react-router';
 import { ReduxAsyncConnect, loadOnServer } from 'redux-async-connect';
+
+import { IntlProvider, addLocaleData } from 'react-intl';
+import cs from 'react-intl/locale-data/cs';
+
 import { Provider } from 'react-redux';
 import { syncHistoryWithStore } from 'react-router-redux';
 import createHistory from 'react-router/lib/createMemoryHistory';
@@ -17,6 +21,7 @@ import { configureStore } from './redux/store';
 import routes from './pages/routes';
 import { apiCall } from './redux/api';
 
+addLocaleData([ ...cs ]);
 
 /**
  * Init server-side rendering of the app using Express with
@@ -50,10 +55,14 @@ app.get('*', (req, res) => {
 
       loadOnServer(renderProps, store).then(() => {
         let reduxState = JSON.stringify(store.getState());
+
+        // @todo make locale changeable
         let html = renderToString(
-          <Provider store={store}>
-            <ReduxAsyncConnect {...renderProps} helpers={{ apiCall }} />
-          </Provider>
+          <IntlProvider locale={cs}>
+            <Provider store={store}>
+              <ReduxAsyncConnect {...renderProps} helpers={{ apiCall }} />
+            </Provider>
+          </IntlProvider>
         );
         const head = Helmet.rewind();
 

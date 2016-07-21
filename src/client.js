@@ -2,6 +2,10 @@ import 'isomorphic-fetch';
 
 import React from 'react';
 import { render } from 'react-dom';
+
+import { IntlProvider, addLocaleData } from 'react-intl';
+import cs from 'react-intl/locale-data/cs';
+
 import { Provider } from 'react-redux';
 import { Router, browserHistory, useRouterHistory } from 'react-router';
 import { ReduxAsyncConnect } from 'redux-async-connect';
@@ -21,13 +25,18 @@ const createScrollHistory = useScroll(createBrowserHistory);
 const appHistory = useRouterHistory(createScrollHistory)();
 const history = syncHistoryWithStore(appHistory, store);
 
+addLocaleData([ ...cs ]);
+
+// @todo make locale changeable
 render(
-  <Provider store={store}>
-    <Router
-      render={(props) =>
-        <ReduxAsyncConnect {...props} helpers={{ apiCall }} />}
-      history={history}
-      routes={routes} />
-  </Provider>,
+  <IntlProvider locale='cs'>
+    <Provider store={store}>
+      <Router
+        render={(props) =>
+          <ReduxAsyncConnect {...props} helpers={{ apiCall }} />}
+        history={history}
+        routes={routes} />
+    </Provider>
+  </IntlProvider>,
   document.getElementById('root')
 );
