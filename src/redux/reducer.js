@@ -1,13 +1,15 @@
 import { combineReducers } from 'redux';
 import { routerReducer } from 'react-router-redux';
-import { reducer as reduxAsyncConnect } from 'redux-async-connect';
+import { reducer as reduxAsyncConnect } from 'redux-connect';
 
 import auth from './modules/auth';
 import sidebar from './modules/sidebar';
+import submission from './modules/submission';
 
 const createRecodexReducers = (token) => ({
   auth: auth(token),
-  sidebar
+  sidebar,
+  submission
 });
 
 const librariesReducers = {
