@@ -57,7 +57,10 @@ class Assignment extends Component {
 
             <p className='text-center'>
               <SubmitSolutionButton assignmentId={assignment.id} onClick={this.showSubmissionModal} />
-              <SubmitSolutionContainer isOpen={isSubmitSolutionModalOpen} onCancel={this.hideSubmissionModal} />
+              <SubmitSolutionContainer
+                assignmentId={assignment.id}
+                isOpen={isSubmitSolutionModalOpen}
+                onCancel={this.hideSubmissionModal} />
             </p>
           </Col>
           <Col lg={6}>

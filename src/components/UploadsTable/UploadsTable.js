@@ -7,7 +7,10 @@ const UploadsTable = ({
   uploadingFiles = [],
   attachedFiles = [],
   failedFiles = [],
+  removedFiles = [],
   removeFile,
+  returnFile,
+  removeFailedFile,
   retryUploadFile
 }) => (
   <Table responsive>
@@ -29,7 +32,7 @@ const UploadsTable = ({
             <td>{file.name}</td>
             <td>{prettyBytes(file.size)}</td>
             <td>
-              <Button bsSize='xs' bsStyle='default' onClick={() => removeFile(file.name)}>
+              <Button bsSize='xs' bsStyle='default' onClick={() => removeFile(file)}>
                 <Icon name='trash' />
               </Button>
             </td>
@@ -58,10 +61,28 @@ const UploadsTable = ({
             <td>{prettyBytes(file.size)}</td>
             <td>
               <ButtonGroup>
-                <Button bsSize='xs' bsStyle='default' onClick={() => removeFile(file.name)}>
+                <Button bsSize='xs' bsStyle='default' onClick={() => removeFailedFile(file)}>
                   <Icon name='trash' />
                 </Button>
                 <Button bsSize='xs' bsStyle='default' onClick={() => retryUploadFile(file)}>
+                  <Icon name='refresh' />
+                </Button>
+              </ButtonGroup>
+            </td>
+          </tr>
+      )}
+
+      {removedFiles.map(
+        file =>
+          <tr key={file.name}>
+            <td>
+              <Icon name='trash' className='text-warning' />
+            </td>
+            <td>{file.name}</td>
+            <td>{prettyBytes(file.size)}</td>
+            <td>
+              <ButtonGroup>
+                <Button bsSize='xs' bsStyle='default' onClick={() => returnFile(file)}>
                   <Icon name='refresh' />
                 </Button>
               </ButtonGroup>
@@ -77,7 +98,9 @@ UploadsTable.propTypes = {
   attachedFiles: PropTypes.array.isRequired,
   failedFiles: PropTypes.array.isRequired,
   removeFile: PropTypes.func.isRequired,
-  retryUploadFile: PropTypes.func.isRequired
+  removeFailedFile: PropTypes.func.isRequired,
+  retryUploadFile: PropTypes.func.isRequired,
+  returnFile: PropTypes.func.isRequired
 };
 
 export default UploadsTable;
