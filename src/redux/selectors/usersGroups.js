@@ -1,10 +1,10 @@
 import { createSelector } from 'reselect';
 
 // all the groups in the state
-const allGroups = (state) => state.groups;
+export const allGroups = (state) => state.groups;
 
 // all the groups which
-const usersGroups = (state) => state.user.groups;
+export const usersGroups = (state) => state.user.groups;
 
 export default createSelector(
   [ allGroups, usersGroups ],

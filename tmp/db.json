@@ -6,7 +6,7 @@
       "firstName": "Simon",
       "lastName": "Rozsival",
       "password": "blabla",
-      "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJzaW1vbi5yb3pzaXZhbEBnbWFpbC5jb20iLCJmaXJzdE5hbWUiOiJTaW1vbiIsImxhc3ROYW1lIjoiUm96c2l2YWwifQ.K4Vk1IWNS_yA3UCunsJAas231H5MsB43ADPYejDXYGM"
+      "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImVtYWlsIjoic2ltb24ucm96c2l2YWxAZ21haWwuY29tIiwiZmlyc3ROYW1lIjoiU2ltb24iLCJsYXN0TmFtZSI6IlJvenNpdmFsIn0.v5npgq4xoc7k-8pqb7gCCgnBjkFUa-3voGVyfcpXUQk"
     }
   ]
 }
