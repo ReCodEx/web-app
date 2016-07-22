@@ -8,7 +8,7 @@ import cs from 'react-intl/locale-data/cs';
 
 import { Provider } from 'react-redux';
 import { Router, browserHistory, useRouterHistory } from 'react-router';
-import { ReduxAsyncConnect } from 'redux-async-connect';
+import { ReduxAsyncConnect } from 'redux-connect';
 import { syncHistoryWithStore } from 'react-router-redux';
 import useScroll from 'scroll-behavior/lib/useStandardScroll';
 import createBrowserHistory from 'history/lib/createBrowserHistory';

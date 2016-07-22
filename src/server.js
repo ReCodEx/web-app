@@ -9,7 +9,7 @@ import Helmet from 'react-helmet';
 import cookieParser from 'cookie-parser';
 
 import { match } from 'react-router';
-import { ReduxAsyncConnect, loadOnServer } from 'redux-async-connect';
+import { ReduxAsyncConnect, loadOnServer } from 'redux-connect';
 
 import { IntlProvider, addLocaleData } from 'react-intl';
 import cs from 'react-intl/locale-data/cs';

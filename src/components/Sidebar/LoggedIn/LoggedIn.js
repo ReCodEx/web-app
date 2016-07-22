@@ -1,4 +1,5 @@
 import React, { PropTypes } from 'react';
+import { asyncConnect } from 'redux-connect';
 
 import Badge from '../../Badge';
 import MenuTitle from '../MenuTitle';
@@ -67,4 +68,12 @@ LoggedIn.propTypes = {
   )
 };
 
-export default LoggedIn;
+export default asyncConnect([
+  {
+    key: 'groups',
+    promise: (params) => {
+      console.log(params);
+      return Promise.resolve();
+    }
+  }
+])(LoggedIn);
