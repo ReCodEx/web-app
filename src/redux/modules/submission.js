@@ -1,5 +1,6 @@
 import { fromJS, Map } from 'immutable';
 import { handleActions, createAction } from 'redux-actions';
+import { apiCall } from '../api';
 
 export const submissionStatus = {
   NONE: 'NONE',
@@ -12,12 +13,13 @@ export const submissionStatus = {
 export const actionTypes = {
   INIT: 'recodex/submission/INIT',
   CHANGE_NOTE: 'recodex/submission/CHANGE_NOTE',
-  ADD_FILE: 'recodex/submission/ADD_FILE',
+  UPLOAD: 'recodex/submission/UPLOAD',
+  UPLOAD_PENDING: 'recodex/submission/UPLOAD_PENDING',
+  UPLOAD_FULFILLED: 'recodex/submission/UPLOAD_FULFILLED',
+  UPLOAD_FAILED: 'recodex/submission/UPLOAD_REJECTED',
   REMOVE_FILE: 'recodex/submission/REMOVE_FILE',
   RETURN_FILE: 'recodex/submission/RETURN_FILE',
   REMOVE_FAILED_FILE: 'recodex/submission/REMOVE_FAILED_FILE',
-  MARK_FILE_UPLOADED: 'recodex/submission/MARK_FILE_UPLOADED',
-  MARK_FILE_FAILED: 'recodex/submission/MARK_FILE_FAILED',
   START_PROCESSING: 'recodex/submission/START_PROCESSING',
 };
 
@@ -48,24 +50,21 @@ export const init = createAction(
 export const changeNote = createAction(actionTypes.CHANGE_NOTE);
 
 export const uploadFile = file =>
-  dispatch => {
-    dispatch(addFile(file));
-    // @todo upload the file
-    setTimeout(function() {
-      if (Math.random() > 0.5) {
-        dispatch(uploadSuccessful(file));
-      } else {
-        dispatch(uploadFailed(file));
-      }
-    }, 200 + Math.random()*1000);
-  };
+  apiCall({
+    type: actionTypes.UPLOAD,
+    method: 'POST',
+    endpoint: '/uploaded-files/upload',
+    body: { [file.name]: file },
+    meta: file.name
+  });
 
-export const addFile = createAction(actionTypes.ADD_FILE);
+const wrapWithName = file => ({ [file.name]: file });
+export const addFile = createAction(actionTypes.UPLOAD_PENDING, wrapWithName);
 export const removeFile = createAction(actionTypes.REMOVE_FILE);
 export const returnFile = createAction(actionTypes.RETURN_FILE);
 export const removeFailedFile = createAction(actionTypes.REMOVE_FAILED_FILE);
-export const uploadSuccessful = createAction(actionTypes.MARK_FILE_UPLOADED);
-export const uploadFailed = createAction(actionTypes.MARK_FILE_FAILED);
+export const uploadSuccessful = createAction(actionTypes.UPLOAD_FULFILLED);
+export const uploadFailed = createAction(actionTypes.UPLOAD_FAILED, wrapWithName, file => file.name);
 
 export const submitSolution = () =>
   dispatch =>
@@ -85,34 +84,38 @@ const reducer = handleActions({
   [actionTypes.CHANGE_NOTE]: (state, { payload }) =>
     state.set('note', payload),
 
-  [actionTypes.ADD_FILE]: (state, { payload }) =>
-    state
-      .updateIn([ 'files', 'uploading' ], list => list.push(payload))
-      .updateIn([ 'files', 'failed' ], list => list.filter(item => item !== payload)),
+  [actionTypes.UPLOAD_PENDING]: (state, { payload }) => {
+    const fileName = Object.keys(payload).pop();
+    return state
+            .updateIn([ 'files', 'uploading' ], list => list.push({ name: fileName, file: payload[fileName] }))
+            .updateIn([ 'files', 'failed' ], list => list.filter(item => item.name !== payload.name));
+  },
 
   [actionTypes.REMOVE_FILE]: (state, { payload }) =>
     state
-      .updateIn([ 'files', 'uploaded' ], list => list.filter(item => item !== payload))
+      .updateIn([ 'files', 'uploaded' ], list => list.filter(item => item.name !== payload.name))
       .updateIn([ 'files', 'removed' ], list => list.push(payload)),
 
   [actionTypes.RETURN_FILE]: (state, { payload }) =>
     state
-      .updateIn([ 'files', 'removed' ], list => list.filter(item => item !== payload))
+      .updateIn([ 'files', 'removed' ], list => list.filter(item => item.name !== payload.name))
       .updateIn([ 'files', 'uploaded' ], list => list.push(payload)),
 
   [actionTypes.REMOVE_FAILED_FILE]: (state, { payload }) =>
     state
-      .updateIn([ 'files', 'failed' ], list => list.filter(item => item !== payload)),
+      .updateIn([ 'files', 'failed' ], list => list.filter(item => item.name !== payload.name)),
 
-  [actionTypes.MARK_FILE_UPLOADED]: (state, { payload }) =>
+  [actionTypes.UPLOAD_FULFILLED]: (state, { payload }) =>
     state
-      .updateIn([ 'files', 'uploading' ], list => list.filter(item => item !== payload))
-      .updateIn([ 'files', 'uploaded' ], list => list.push(payload)),
+      .updateIn([ 'files', 'uploading' ], list => list.filter(item => item.name !== payload.name))
+      .updateIn([ 'files', 'uploaded' ], list => list.push({ name: payload.name, file: payload })),
 
-  [actionTypes.MARK_FILE_FAILED]: (state, { payload }) =>
-    state
-      .updateIn([ 'files', 'uploading' ], list => list.filter(item => item !== payload))
-      .updateIn([ 'files', 'failed' ], list => list.push(payload))
+  [actionTypes.UPLOAD_FAILED]: (state, { meta }) => {
+    const file = state.getIn([ 'files', 'uploading' ]).find(item => item.name = meta);
+    return state
+      .updateIn([ 'files', 'uploading' ], list => list.filter(item => item.name !== meta))
+      .updateIn([ 'files', 'failed' ], list => list.push(file));
+  }
 
 }, initialState);
 

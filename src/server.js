@@ -18,7 +18,7 @@ import { Provider } from 'react-redux';
 import { syncHistoryWithStore } from 'react-router-redux';
 import createHistory from 'react-router/lib/createMemoryHistory';
 import { configureStore } from './redux/store';
-import routes from './pages/routes';
+import createRoutes from './pages/routes';
 import { apiCall } from './redux/api';
 
 addLocaleData([ ...cs ]);
@@ -41,7 +41,7 @@ app.get('*', (req, res) => {
   const history = syncHistoryWithStore(memoryHistory, store);
   const location = req.originalUrl;
 
-  match({ history, routes, location }, (error, redirectLocation, renderProps) => {
+  match({ history, routes: createRoutes(store.getState), location }, (error, redirectLocation, renderProps) => {
     if (redirectLocation) {
       res.redirect(301, redirectLocation.pathname + redirectLocation.search);
     } else if (error) {

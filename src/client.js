@@ -14,7 +14,7 @@ import useScroll from 'scroll-behavior/lib/useStandardScroll';
 import createBrowserHistory from 'history/lib/createBrowserHistory';
 
 import { configureStore } from './redux/store';
-import routes from './pages/routes';
+import createRoutes from './pages/routes';
 
 import { getToken } from './redux/middleware/accessTokenMiddleware';
 import { apiCall } from './redux/api';
@@ -35,7 +35,7 @@ render(
         render={(props) =>
           <ReduxAsyncConnect {...props} helpers={{ apiCall }} />}
         history={history}
-        routes={routes} />
+        routes={createRoutes(store.getState)} />
     </Provider>
   </IntlProvider>,
   document.getElementById('root')

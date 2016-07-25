@@ -29,9 +29,9 @@ class SubmitSolutionContainer extends Component {
   uploadFiles = (files) =>
     files.map(this.props.uploadFile);
 
-  retryUploadFile = file => {
-    this.props.removeFailedFile(file);
-    this.uploadFiles([ file ]);
+  retryUploadFile = (payload) => {
+    this.props.removeFailedFile(payload);
+    this.uploadFiles([ payload.file ]);
   };
 
   render = () => (

@@ -1,6 +1,10 @@
 import { createAction, handleActions } from 'redux-actions';
 import decodeJwt from 'jwt-decode';
 import { apiCall } from '../api';
+import { loadUserData } from './users';
+
+import { push } from 'react-router-redux';
+import { HOME_URI } from '../../links';
 
 export const actionTypes = {
   LOGIN: 'auth/LOGIN',
@@ -17,12 +21,7 @@ export const statusTypes = {
   LOGIN_FAILED: 'LOGIN_FAILED'
 };
 
-const getAccessTokenPayload = (token) => ({
-  id: token.sub,
-  firstName: token.firstName,
-  lastName: token.lastName,
-  email: token.email
-});
+const getUserId = (token) => token.sub;
 
 /**
  * Authentication reducer.
@@ -39,7 +38,7 @@ const auth = (accessToken) => {
     ? {
       status: statusTypes.LOGGED_IN,
       accessToken: accessToken,
-      user: getAccessTokenPayload(decodedToken)
+      user: getUserId(decodedToken)
     }
     : {
       status: statusTypes.LOGGED_OUT,
@@ -48,58 +47,52 @@ const auth = (accessToken) => {
     };
 
   return handleActions({
+
     [actionTypes.LOGIN_REQUEST]: (state, action) => ({
       status: statusTypes.LOGGING_IN,
       accessToken: null,
       user: null
     }),
+
     [actionTypes.LOGIN_SUCCESS]: (state, action) => ({
       status: statusTypes.LOGGED_IN,
-      accessToken: action.payload.accessToken,
-      user: {
-        id: action.payload.id,
-        firstName: action.payload.firstName,
-        lastName: action.payload.lastName,
-        email: action.payload.email
-      }
+      accessToken: action.payload,
+      user: getUserId(decodeJwt(action.payload.accessToken))
     }),
+
     [actionTypes.LOGIN_FAILIURE]: (state, action) => ({
       status: status.LOGIN_FAILED,
       accessToken: null,
       user: null
     }),
+
     [actionTypes.LOGOUT]: (state, action) => ({
       status: status.LOGGED_OUT,
       accessToken: null,
       user: null
     })
+
   }, initialState);
 };
 
 export default auth;
 
-export const logout = () => ({
-  type: actionTypes.LOGOUT
-});
+export const logout = () =>
+  (dispatch, getState) => {
+    dispatch(push(HOME_URI));
+    dispatch({
+      type: actionTypes.LOGOUT
+    });
+  };
 
-export const login = (email, password) =>
-  apiCall(
-    {
-      type: actionTypes.LOGIN,
-      // method: 'post',
-      // endpoint: '/login',
-      // body: {
-      //   email, password
-      // }
-      method: 'get',
-      endpoint: `/login?email=${email}&password=${password}`,
-    },
-    (data) => {
-      console.log(data);
-      if (data.length !== 1) {
-        throw new Error('Login failed');
-      }
-
-      return data[0];
-    }
-  );
+export const login = (username, password) =>
+  (dispatch, getState) =>
+    dispatch(apiCall(
+      {
+        type: actionTypes.LOGIN,
+        method: 'GET',
+        endpoint: '/login',
+        query: { username, password }
+      },
+      payload => dispatch(loadUserData(payload.user))
+    ));

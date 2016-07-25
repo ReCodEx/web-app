@@ -25,7 +25,7 @@ const LoggedIn = ({
   <aside className='main-sidebar'>
     <section className='sidebar'>
       <Badge
-        name={user.firstName + ' ' + user.lastName}
+        name={user.fullName}
         email={user.email}
         logout={logout} />
 
@@ -54,7 +54,7 @@ const LoggedIn = ({
 
 LoggedIn.propTypes = {
   user: PropTypes.shape({
-    name: PropTypes.string,
+    fullName: PropTypes.string,
     avatarUrl: PropTypes.string,
     institution: PropTypes.string
   }),

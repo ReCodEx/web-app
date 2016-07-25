@@ -30,7 +30,7 @@ const SubmitSolution = ({
   retryUploadFile
 }) => (
     <Modal show={isOpen} onHide={close} backdrop='static'>
-      <Modal.Header hideButton>
+      <Modal.Header closeButton>
         <Modal.Title>Odevzdat nové řešení</Modal.Title>
       </Modal.Header>
       <Modal.Body>
