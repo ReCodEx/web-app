@@ -17,7 +17,6 @@ import { configureStore } from './redux/store';
 import createRoutes from './pages/routes';
 
 import { getToken } from './redux/middleware/accessTokenMiddleware';
-import { apiCall } from './redux/api';
 
 let state = window.__INITIAL_STATE__ || undefined;
 const store = configureStore(browserHistory, state, getToken());
@@ -33,7 +32,7 @@ render(
     <Provider store={store}>
       <Router
         render={(props) =>
-          <ReduxAsyncConnect {...props} helpers={{ apiCall }} />}
+          <ReduxAsyncConnect {...props} />}
         history={history}
         routes={createRoutes(store.getState)} />
     </Provider>

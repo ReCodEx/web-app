@@ -5,12 +5,14 @@ import { routerReducer, routerMiddleware } from 'react-router-redux';
 import thunkMiddleware from 'redux-thunk';
 import promiseMiddleware from 'redux-promise-middleware';
 import accessTokenMiddleware from './middleware/accessTokenMiddleware';
+import apiMiddleware from './middleware/apiMiddleware';
 import createReducer from './reducer';
 
 const getMiddleware = (history) => [
   thunkMiddleware,
-  promiseMiddleware(),
   accessTokenMiddleware,
+  apiMiddleware,
+  promiseMiddleware(),
   routerMiddleware(history)
 ];
 

@@ -65,7 +65,7 @@ SubmitSolutionContainer.propTypes = {
 
 export default connect(
   state => ({
-    userId: state.auth.user.id,
+    userId: state.auth.userId,
     uploadingFiles: state.submission.getIn(['files', 'uploading']).toJS(),
     attachedFiles: state.submission.getIn(['files', 'uploaded']).toJS(),
     failedFiles: state.submission.getIn(['files', 'failed']).toJS(),

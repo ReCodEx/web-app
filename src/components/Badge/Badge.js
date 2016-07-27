@@ -3,8 +3,7 @@ import Gravatar from 'react-gravatar';
 import Icon from 'react-fontawesome';
 
 const Badge = ({
-  name,
-  email,
+  user: { fullName, email },
   logout
 }) => (
   <div className='user-panel'>
@@ -17,16 +16,18 @@ const Badge = ({
         size={45} />
     </div>
     <div className='pull-left info'>
-      <p>{name}</p>
+      <p>{fullName}</p>
       <a href='#' onClick={logout}><Icon name='power-off' className='text-danger' /> Odhlásit se</a>
     </div>
   </div>
 );
 
 Badge.propTypes = {
-  name: PropTypes.string.isRequired,
-  imageUrl: PropTypes.string,
-  description: PropTypes.string,
+  user: PropTypes.shape({
+    fullName: PropTypes.string.isRequired,
+    email: PropTypes.string.isRequired
+  }).isRequired,
+  logout: PropTypes.func,
 };
 
 export default Badge;

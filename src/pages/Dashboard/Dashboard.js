@@ -1,11 +1,15 @@
 import React, { PropTypes } from 'react';
-import { connect } from 'react-redux';
+import { asyncConnect } from 'redux-connect';
 
 import Helmet from 'react-helmet';
 
 import PageContent from '../../components/PageContent';
 import Box from '../../components/Box';
 import AssignmentsTable from '../../components/AssignmentsTable/AssignmentsTable';
+
+import { loggedInUserId } from '../../redux/selectors/auth';
+import { loggedInUserSelector } from '../../redux/selectors/users';
+import { fetchUserIfNeeded } from '../../redux/modules/users';
 
 const assignments = [
   {
@@ -65,7 +69,7 @@ const Dashboard = ({
 }) => (
   <PageContent
     title='Celkový přehled'
-    description={`ReCodEx - ${user.fullName}`}>
+    description={user ? `ReCodEx - ${user.fullName}` : 'ReCodEx'}>
     <Box title='Úlohy s blížícím se termínem odevzdání'>
       <AssignmentsTable
         assignments={assignments}
@@ -78,8 +82,9 @@ Dashboard.propTypes = {
   user: PropTypes.object
 };
 
-export default connect(state =>
-  ({
-    user: state.auth.user
+export default asyncConnect(
+  [],
+  state => ({
+    user: loggedInUserSelector(state)
   })
 )(Dashboard);

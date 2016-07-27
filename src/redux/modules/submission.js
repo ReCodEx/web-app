@@ -1,6 +1,6 @@
 import { fromJS, Map } from 'immutable';
 import { handleActions, createAction } from 'redux-actions';
-import { apiCall } from '../api';
+import { CALL_API } from '../middleware/apiMiddleware';
 
 export const submissionStatus = {
   NONE: 'NONE',
@@ -49,14 +49,18 @@ export const init = createAction(
 
 export const changeNote = createAction(actionTypes.CHANGE_NOTE);
 
-export const uploadFile = file =>
-  apiCall({
-    type: actionTypes.UPLOAD,
-    method: 'POST',
-    endpoint: '/uploaded-files/upload',
-    body: { [file.name]: file },
-    meta: file.name
-  });
+export const uploadFile = file => (
+  {
+    type: CALL_API,
+    request: {
+      type: actionTypes.UPLOAD,
+      method: 'POST',
+      endpoint: '/uploaded-files/upload',
+      body: { [file.name]: file },
+      meta: file.name
+    }
+  }
+);
 
 const wrapWithName = file => ({ [file.name]: file });
 export const addFile = createAction(actionTypes.UPLOAD_PENDING, wrapWithName);

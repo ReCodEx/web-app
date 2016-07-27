@@ -10,7 +10,7 @@ import Footer from '../Footer';
 export const Layout = ({
   toggleSidebar,
   sidebar,
-  user,
+  isLoggedIn,
   logout,
   children
 }) => (
@@ -28,7 +28,7 @@ export const Layout = ({
       toggleSidebarSize={toggleSidebar.size}
       toggleSidebarVisibility={toggleSidebar.visibility} />
     <Sidebar
-      user={user}
+      isLoggedIn={isLoggedIn}
       logout={logout} />
     {children}
     <Footer version='v0.1.0' />
@@ -44,7 +44,7 @@ Layout.propTypes = {
     isCollapsed: PropTypes.bool,
     isOpen: PropTypes.bool
   }),
-  user: PropTypes.any,
+  isLoggedIn: PropTypes.bool,
   logout: PropTypes.func.isRequired,
   children: PropTypes.element.isRequired
 };

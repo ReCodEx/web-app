@@ -1,34 +1,26 @@
-import { handleActions } from 'redux-actions';
-import equal from 'deep-equal';
-import { usersGroups, allGroups } from '../selectors/usersGroups';
+import { createAction, handleActions } from 'redux-actions';
+import { Map } from 'immutable';
 
-export const actionTypes = {
+import { usersSelector } from '../selectors/users';
+import factory from '../helpers/resourceManager';
 
-};
-
-export const initialState = {
-  isLoading: false,
-  userId: null,
-  groups: []
-};
-
-export default handleActions({
-
-}, initialState);
-
+const resourceName = 'groups';
+const {
+  actions,
+  reducer
+} = factory(resourceName, state => state.groups, id => `/groups/${id}`);
 
 /**
  * Actions
  */
 
-export const fetchGroupsForUser = (userId, forceFetch = false) =>
-  (dispatch, getState) => {
-    if (userId !== getState().groups.userId || forceFetch === true) {
-      const memberOf = usersGroups(getState());
-      const available = allGroups(getState());
-      const missing = memberOf.filter(group => available.indexOf(group) === -1);
+export const loadGroup = actions.pushResource;
+export const fetchGroupsIfNeeded = actions.fetchIfNeeded;
 
-      // @todo dispatch API call to fetch all the information of these groups for the user
-    }
-  };
+/**
+ * Reducer
+ */
 
+export const initialState = Map();
+
+export default reducer;

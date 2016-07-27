@@ -2,3 +2,4 @@
 --recursive
 --timeout 2000
 --require ./test/setup.js
+--require mock-local-storage

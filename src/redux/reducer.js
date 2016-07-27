@@ -2,8 +2,9 @@ import { combineReducers } from 'redux';
 import { routerReducer } from 'react-router-redux';
 import { reducer as reduxAsyncConnect } from 'redux-connect';
 
-import auth from './modules/auth';
+import auth, { actionTypes as authActionTypes } from './modules/auth';
 import users from './modules/users';
+import groups from './modules/groups';
 import sidebar from './modules/sidebar';
 import submission from './modules/submission';
 
@@ -11,7 +12,8 @@ const createRecodexReducers = (token) => ({
   auth: auth(token),
   sidebar,
   submission,
-  users
+  users,
+  groups
 });
 
 const librariesReducers = {
@@ -19,13 +21,22 @@ const librariesReducers = {
   reduxAsyncConnect
 };
 
-const createReducer = (token) =>
-  combineReducers(
+const createReducer = (token) => {
+  const appReducer = combineReducers(
     Object.assign(
       {},
       librariesReducers,
       createRecodexReducers(token)
     )
   );
+
+  return (state, action) => {
+    if (action.type === authActionTypes.LOGOUT) {
+      state = undefined;
+    }
+
+    return appReducer(state, action);
+  };
+}
 
 export default createReducer;

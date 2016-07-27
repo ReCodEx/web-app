@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import classNames from 'classnames';
 import { Link } from 'react-router';
 import MenuItem from '../MenuItem';
+import LoadingMenuItem from '../LoadingMenuItem';
 
 class MenuGroup extends Component {
   constructor(props, context) {
@@ -43,12 +44,15 @@ class MenuGroup extends Component {
           className='treeview-menu'
           style={{ display: this.state.open ? 'block' : 'none' }}>
           {items.map((item, key) =>
-            <MenuItem
-              key={key}
-              title={item.name}
-              icon='circle-o'
-              notificationsCount={item.notificationsCount}
-              link={createLink(item)} />)}
+            item.isFetching
+              ? <LoadingMenuItem key={key} />
+              : <MenuItem
+                  key={key}
+                  title={item.data.name}
+                  icon='circle-o'
+                  notificationsCount={item.data.notificationsCount}
+                  link={createLink(item)} />
+          )}
         </ul>
       </li>
     );

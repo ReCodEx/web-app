@@ -1,16 +1,17 @@
 import React, { PropTypes } from 'react';
 
-import Admin from '../Admin';
-import LoggedIn from '../LoggedIn';
+// import Admin from '../Admin';
+import LoggedIn from '../../../containers/LoggedInSidebarContainer';
 import NotLoggedIn from '../NotLoggedIn';
 
-const Sidebar = ({ user = null, ...props }) => {
-  if (!user) {
+const Sidebar = ({
+  isLoggedIn = false,
+  ...props
+}) => {
+  if (!isLoggedIn) {
     return <NotLoggedIn {...props} />;
-  } else if (user.isAdmin === true) {
-    return <Admin user={user} {...props} />;
   } else {
-    return <LoggedIn user={user} {...props} />;
+    return <LoggedIn {...props} />;
   }
 };
 

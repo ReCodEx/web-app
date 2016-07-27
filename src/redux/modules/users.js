@@ -1,27 +1,31 @@
 import { createAction, handleActions } from 'redux-actions';
 import { Map } from 'immutable';
-import { apiCall } from '../api';
+
+import { usersSelector } from '../selectors/users';
+import factory, { createRecord } from '../helpers/resourceManager';
+import { actionTypes as authActionTypes } from './auth';
+
+const resourceName = 'users';
+const {
+  actions,
+  reducer
+} = factory(
+  resourceName,
+  state => state.users,
+  id => `/users/${id}`,
+  {
+    // [authActionTypes.LOGIN_SUCCESS]: (state, { payload }) =>
+    'auth/LOGIN_FULFILLED': (state, { payload }) =>
+      state.set(payload.user.id, createRecord(false, false, false, payload.user))
+  }
+);
 
 /**
  * Actions
  */
 
-export const actionTypes = {
-  LOAD_DATA: 'user/LOAD_DATA',
-  LOAD_DATA_REQUEST: 'user/LOAD_DATA_PENDING',
-  LOAD_DATA_SUCCESS: 'user/LOAD_DATA_FULFILLED',
-  LOAD_DATA_FAILIURE: 'user/LOAD_DATA_REJECTED'
-};
-
-export const fetchUserData = (id) =>
-  apiCall({
-    type: actionTypes.LOAD_DATA,
-    method: 'GET',
-    endpoint: `/users/${id}`
-  });
-
-export const loadUserData = (user) =>
-  createAction(actionTypes.LOAD_DATA_SUCCESS, user);
+export const loadUserData = actions.pushResource;
+export const fetchUserIfNeeded = actions.fetchIfNeeded;
 
 /**
  * Reducer
@@ -29,28 +33,4 @@ export const loadUserData = (user) =>
 
 export const initialState = Map();
 
-const reducer = handleActions({
-
-  [actionTypes.LOAD_DATA_REQUEST]: (state, action) =>
-    state.set(action.payload.id, {
-      loading: true,
-      error: false,
-      data: null
-    }),
-
-  [actionTypes.LOAD_DATA_SUCCESS]: (state, action) =>
-    state.set(action.payload.id, {
-      loading: false,
-      error: false,
-      data: action.payload
-    }),
-
-  [actionTypes.LOAD_DATA_FAILIURE]: (state, action) =>
-    state.set(action.payload.id, {
-      loading: false,
-      error: true,
-      data: null
-    })
-
-}, initialState);
 export default reducer;

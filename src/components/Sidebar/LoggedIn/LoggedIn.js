@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import { asyncConnect } from 'redux-connect';
 
-import Badge from '../../Badge';
+import BadgeContainer from '../../../containers/BadgeContainer';
 import MenuTitle from '../MenuTitle';
 import MenuItem from '../MenuItem';
 import MenuGroup from '../MenuGroup';
@@ -14,33 +14,38 @@ import {
 
 const LoggedIn = ({
   user,
-  groups = [
-    { id: 1, name: 'Programování I', abbr: 'P1', color: '#123' },
-    { id: 2, name: 'Programování II', abbr: 'P2', color: '#321', notificationsCount: 2 },
-    { id: 3, name: 'Jazyk C# a programovani pro .NET', abbr: 'C#', color: '#222' }
-  ],
+  studentOf,
+  supervisorOf,
   logout,
   isActive = link => link === '/'
 }) => (
   <aside className='main-sidebar'>
     <section className='sidebar'>
-      <Badge
-        name={user.fullName}
-        email={user.email}
-        logout={logout} />
+      <BadgeContainer logout={logout} />
 
       <ul className='sidebar-menu'>
         <MenuTitle title={'Menu'} />
         <MenuItem
-          title='Dashboard'
+          title='Přehled'
           isActive={isActive(DASHBOARD_URI)}
           icon='dashboard'
           link={DASHBOARD_URI} />
-        <MenuGroup
-          title='Skupiny'
-          items={groups}
-          isActive={groups.some(item => isActive(GROUP_URI_FACTORY(item.id)))}
-          createLink={item => GROUP_URI_FACTORY(item.id)} />
+        {studentOf.length > 0 && (
+          <MenuGroup
+            title='Skupiny'
+            items={studentOf}
+            icon='puzzle-piece'
+            isActive={studentOf.some(item => item.data !== null && isActive(GROUP_URI_FACTORY(item.data.id)))}
+            createLink={item => GROUP_URI_FACTORY(item.data.id)} />
+        )}
+        {studentOf.length > 0 && (
+          <MenuGroup
+            title='Vedené skupiny'
+            items={supervisorOf}
+            icon='wrench'
+            isActive={supervisorOf.some(item => item.data !== null && isActive(GROUP_URI_FACTORY(item.data.id)))}
+            createLink={item => GROUP_URI_FACTORY(item.data.id)} />
+        )}
         <MenuItem
           title='Zpětná vazba a hlášení chyb'
           isActive={false}

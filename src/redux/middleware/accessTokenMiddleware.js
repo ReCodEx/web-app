@@ -1,8 +1,9 @@
 import { actionTypes } from '../modules/auth';
+import { CALL_API } from './apiMiddleware';
 
 export const LOCAL_STORAGE_KEY = 'recodex/accessToken';
 
-const storeToken = (accessToken) => {
+export const storeToken = (accessToken) => {
   if (accessToken) {
     localStorage.setItem(LOCAL_STORAGE_KEY, accessToken);
     // this should be exclusive to browser, but be careful anyway!
@@ -14,7 +15,7 @@ const storeToken = (accessToken) => {
   }
 };
 
-const removeToken = () => {
+export const removeToken = () => {
   localStorage.removeItem(LOCAL_STORAGE_KEY);
   if (typeof document !== 'undefined') {
     document.cookie = 'accessToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC';
@@ -32,6 +33,12 @@ const middleware = state => next => action => {
       break;
     case actionTypes.LOGOUT:
       removeToken();
+      break;
+    case CALL_API:
+      const token = getToken();
+      if (token) {
+        action.request.accessToken = token;
+      }
       break;
   }
 

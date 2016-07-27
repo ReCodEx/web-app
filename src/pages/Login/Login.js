@@ -60,7 +60,7 @@ Login.propTypes = {
 export default connect(
   state => ({
     isLoggingIn: state.auth.status === statusTypes.LOGGING_IN,
-    hasFailed: state.auth.status === statusTypes.LOGIN_FAILIURE,
+    hasFailed: state.auth.status === statusTypes.LOGIN_FAILED,
     hasSucceeded: state.auth.status === statusTypes.LOGGED_IN
   }),
   {

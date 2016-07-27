@@ -1,7 +1,7 @@
 
 // basic links
 export const HOME_URI = '/';
-export const DASHBOARD_URI = '/app/dashboard';
+export const DASHBOARD_URI = '/app';
 export const LOGIN_URI = '/login';
 export const LOGOUT_URI = '/logout';
 
