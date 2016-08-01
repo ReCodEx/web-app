@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import Icon from 'react-fontawesome';
-import FormBox from '../../components/FormBox/FormBox';
+import FormBox from '../../components/FormBox';
 import {
   FormGroup,
   FormControl,

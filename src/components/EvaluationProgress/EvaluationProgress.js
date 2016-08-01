@@ -1,18 +1,24 @@
 import React, { PropTypes } from 'react';
-import { ProgressBar, Well } from 'react-bootstrap';
+import { Modal, ProgressBar, Well } from 'react-bootstrap';
 
 const EvaluationProgress = ({
   messages = [],
-  progress = 0
+  progress = 0,
+  isOpen
 }) => (
-  <div>
-    <ProgressBar now={progress} active />
-    <Well>
-      <pre>
-        {messages.map(msg => <div>{msg}</div>)}
-      </pre>
-    </Well>
-  </div>
+  <Modal show={isOpen} onHide={close} backdrop='static'>
+    <Modal.Header closeButton>
+      <Modal.Title>Odevzdat nové řešení</Modal.Title>
+    </Modal.Header>
+    <Modal.Body>
+      <ProgressBar now={progress} active />
+      <Well>
+        <pre>
+          {messages.map((msg, i) => <div key={i}>{msg}</div>)}
+        </pre>
+      </Well>
+    </Modal.Body>
+  </Modal>
 );
 
 EvaluationProgress.propTypes = {

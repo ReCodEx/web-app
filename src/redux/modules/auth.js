@@ -7,11 +7,11 @@ import { push } from 'react-router-redux';
 import { HOME_URI } from '../../links';
 
 export const actionTypes = {
-  LOGIN: 'auth/LOGIN',
-  LOGIN_REQUEST: 'auth/LOGIN_PENDING',
-  LOGIN_SUCCESS: 'auth/LOGIN_FULFILLED',
-  LOGIN_FAILIURE: 'auth/LOGIN_REJECTED',
-  LOGOUT: 'auth/LOGOUT'
+  LOGIN: 'recodex/auth/LOGIN',
+  LOGIN_REQUEST: 'recodex/auth/LOGIN_PENDING',
+  LOGIN_SUCCESS: 'recodex/auth/LOGIN_FULFILLED',
+  LOGIN_FAILIURE: 'recodex/auth/LOGIN_REJECTED',
+  LOGOUT: 'recodex/auth/LOGOUT'
 };
 
 export const statusTypes = {
@@ -43,6 +43,9 @@ export const login = (username, password) =>
     query: { username, password }
   });
 
+export const isTokenValid = token =>
+  token.exp*1000 > Date.now();
+
 /**
  * Authentication reducer.
  * @param  {string} accessToken An access token to initialise the reducer
@@ -52,7 +55,12 @@ const auth = (accessToken) => {
   let decodedToken = null;
   try {
     decodedToken = decodeJwt(accessToken);
-  } catch (e) { /* silent failiure */ }
+    if (isTokenValid(decodedToken) === false) {
+      decodedToken = null;
+    }
+  } catch (e) {
+    decodedToken = null;
+  }
 
   const initialState = accessToken && decodedToken
     ? {

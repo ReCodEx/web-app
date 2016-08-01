@@ -67,6 +67,7 @@ describe('Submission of user\'s solution', () => {
           uploaded: List()
         }),
         status: submissionStatus.NONE,
+        webSocketChannel: null,
         warningMsg: null
       }));
     });
@@ -86,6 +87,7 @@ describe('Submission of user\'s solution', () => {
           uploaded: List()
         }),
         status: submissionStatus.CREATING,
+        webSocketChannel: null,
         warningMsg: null
       }));
     });
@@ -105,6 +107,7 @@ describe('Submission of user\'s solution', () => {
           uploaded: List()
         }),
         status: submissionStatus.PROCESSING,
+        webSocketChannel: null,
         warningMsg: 'This is not gonna end well!'
       });
 
@@ -121,6 +124,7 @@ describe('Submission of user\'s solution', () => {
           uploaded: List()
         }),
         status: submissionStatus.CREATING,
+        webSocketChannel: null,
         warningMsg: null
       }));
     });

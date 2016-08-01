@@ -1,6 +1,6 @@
 import { fromJS, Map } from 'immutable';
 import { handleActions, createAction } from 'redux-actions';
-import { CALL_API } from '../middleware/apiMiddleware';
+import { createApiAction } from '../middleware/apiMiddleware';
 
 export const submissionStatus = {
   NONE: 'NONE',
@@ -20,7 +20,10 @@ export const actionTypes = {
   REMOVE_FILE: 'recodex/submission/REMOVE_FILE',
   RETURN_FILE: 'recodex/submission/RETURN_FILE',
   REMOVE_FAILED_FILE: 'recodex/submission/REMOVE_FAILED_FILE',
-  START_PROCESSING: 'recodex/submission/START_PROCESSING',
+  SUBMIT: 'recodex/submission/SUBMIT',
+  SUBMIT_PENDING: 'recodex/submission/SUBMIT_PENDING',
+  SUBMIT_FULFILLED: 'recodex/submission/SUBMIT_FULFILLED',
+  SUBMIT_FAILED: 'recodex/submission/SUBMIT_FAILED',
 };
 
 export const initialState = fromJS({
@@ -35,6 +38,7 @@ export const initialState = fromJS({
     uploaded: []
   },
   status: submissionStatus.NONE,
+  webSocketChannel: null,
   warningMsg: null
 });
 
@@ -49,18 +53,14 @@ export const init = createAction(
 
 export const changeNote = createAction(actionTypes.CHANGE_NOTE);
 
-export const uploadFile = file => (
-  {
-    type: CALL_API,
-    request: {
-      type: actionTypes.UPLOAD,
-      method: 'POST',
-      endpoint: '/uploaded-files/upload',
-      body: { [file.name]: file },
-      meta: file.name
-    }
-  }
-);
+export const uploadFile = file =>
+  createApiAction({
+    type: actionTypes.UPLOAD,
+    method: 'POST',
+    endpoint: '/uploaded-files/upload',
+    body: { [file.name]: file },
+    meta: file.name
+  });
 
 const wrapWithName = file => ({ [file.name]: file });
 export const addFile = createAction(actionTypes.UPLOAD_PENDING, wrapWithName);
@@ -70,9 +70,13 @@ export const removeFailedFile = createAction(actionTypes.REMOVE_FAILED_FILE);
 export const uploadSuccessful = createAction(actionTypes.UPLOAD_FULFILLED);
 export const uploadFailed = createAction(actionTypes.UPLOAD_FAILED, wrapWithName, file => file.name);
 
-export const submitSolution = () =>
-  dispatch =>
-    createAction(actionTypes.START_PROCESSING);
+export const submitSolution = (assignmentId, note, files) =>
+  createApiAction({
+    type: actionTypes.SUBMIT,
+    method: 'POST',
+    endpoint: `/exercise-assignments/${assignmentId}/submit`,
+    body: { files: files.map(file => file.id), note }
+  });
 
 /**
  * Reducer takes mainly care about all the state of individual attachments
@@ -119,7 +123,18 @@ const reducer = handleActions({
     return state
       .updateIn([ 'files', 'uploading' ], list => list.filter(item => item.name !== meta))
       .updateIn([ 'files', 'failed' ], list => list.push(file));
-  }
+  },
+
+  [actionTypes.SUBMIT_PENDING]: (state) =>
+    state.update('status', () => submissionStatus.SENDING),
+
+  [actionTypes.SUBMIT_FAILED]: (state) =>
+    state.update('status', () => submissionStatus.CREATING),
+
+  [actionTypes.SUBMIT_FULFILLED]: (state, { payload }) =>
+    state
+      .update('status', () => submissionStatus.PROCESSING)
+      .update('webSocketChannel', () => payload.webSocketChannel)
 
 }, initialState);
 

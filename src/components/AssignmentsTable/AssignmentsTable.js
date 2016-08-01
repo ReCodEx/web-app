@@ -14,15 +14,18 @@ const AssignmentsTable = ({
         <th>Název úlohy</th>
         {showGroup && <th>Skupina</th>}
         <th>Termín odevzdání</th>
+        <th>Druhý termín odevzdání</th>
+        {/*
         <th>Počet procházejících testů</th>
         <th>Procentuelní úspěšnost</th>
+        */}
       </tr>
     </thead>
     <tbody>
       {assignments.length === 0 &&
         <tr>
-          <td colSpan={showGroup === true ? 4 : 3}>
-            Nejsou dostupná žádná data.
+          <td colSpan={showGroup === true ? 4 : 3} className='text-center'>
+            Nebyly dosud zadané žádné úlohy.
           </td>
         </tr>}
 

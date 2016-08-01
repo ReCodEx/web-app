@@ -1,16 +1,10 @@
 import React from 'react';
+import FakeGravatar from '../FakeGravatar';
 
-const fakeImgStyle = {
-  width: 45,
-  height: 45,
-  background: 'white',
-  borderRadius: 25
-};
-
-const FakeBadge = () => (
+const LoadingBadge = () => (
   <div className='user-panel'>
     <div className='pull-left image'>
-      <div style={fakeImgStyle} />
+      <FakeGravatar />
     </div>
     <div className='pull-left info'>
       <p>Načítám...</p>
@@ -18,4 +12,4 @@ const FakeBadge = () => (
   </div>
 );
 
-export default FakeBadge;
+export default LoadingBadge;

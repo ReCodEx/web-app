@@ -1,12 +1,16 @@
 import React, { PropTypes, Component } from 'react';
+import { connect } from 'react-redux';
 import Helmet from 'react-helmet';
 import { Grid, Col, Row } from 'react-bootstrap';
+
+import { submissionStatus } from '../../redux/modules/submission';
 
 import PageContent from '../../components/PageContent';
 import AssignmentDetails from '../../components/AssignmentDetails';
 import SubmitSolutionButton from '../../components/SubmitSolutionButton';
 import SubmissionsTable from '../../components/SubmissionsTable';
 import SubmitSolutionContainer from '../../containers/SubmitSolutionContainer';
+import EvaluationProgressContainer from '../../containers/EvaluationProgressContainer';
 
 // @todo fetch from the API server
 const assignment = {
@@ -45,7 +49,12 @@ class Assignment extends Component {
   hideSubmissionModal = () => this.setState({ isSubmitSolutionModalOpen: false });
 
   render() {
-    const { children, params: { assignmentId } } = this.props;
+    const {
+      children,
+      params: { assignmentId },
+      isProcessingModalOpen,
+      channelId
+    } = this.props;
     const { isSubmitSolutionModalOpen } = this.state;
 
     return (
@@ -56,11 +65,16 @@ class Assignment extends Component {
               assignment={assignment} />
 
             <p className='text-center'>
-              <SubmitSolutionButton assignmentId={assignment.id} onClick={this.showSubmissionModal} />
+              <SubmitSolutionButton assignmentId={assignmentId} onClick={this.showSubmissionModal} />
               <SubmitSolutionContainer
-                assignmentId={assignment.id}
-                isOpen={isSubmitSolutionModalOpen}
+                assignmentId={assignmentId}
+                isOpen={!isProcessingModalOpen && isSubmitSolutionModalOpen}
                 onCancel={this.hideSubmissionModal} />
+
+              {channelId &&
+                <EvaluationProgressContainer
+                  channelId={channelId}
+                  isOpen={isProcessingModalOpen} />}
             </p>
           </Col>
           <Col lg={6}>
@@ -74,4 +88,10 @@ class Assignment extends Component {
 
 }
 
-export default Assignment;
+export default connect(
+  state => ({
+    isProcessingModalOpen: state.submission.get('status') === submissionStatus.SENDING
+      || state.submission.get('status') === submissionStatus.PROCESSING,
+    channelId: state.submission.get('webSocketChannel')
+  })
+)(Assignment);

@@ -34,26 +34,44 @@ class SubmitSolutionContainer extends Component {
     this.uploadFiles([ payload.file ]);
   };
 
-  render = () => (
-    <SubmitSolution
-      canSubmit={this.props.attachedFiles.length > 0
-        && this.props.uploadingFiles.length === 0
-        && this.props.failedFiles.length === 0}
-      isOpen={this.props.isOpen}
-      reset={this.reset}
-      uploadFiles={this.uploadFiles}
-      saveNote={this.props.changeNote}
-      uploadingFiles={this.props.uploadingFiles}
-      attachedFiles={this.props.attachedFiles}
-      failedFiles={this.props.failedFiles}
-      removedFiles={this.props.removedFiles}
-      removeFailedFile={this.props.removeFailedFile}
-      removeFile={this.props.removeFile}
-      returnFile={this.props.returnFile}
-      retryUploadFile={this.retryUploadFile}
-      close={this.close}
-      submitSolution={this.props.submitSolution} />
-  );
+  render = () => {
+    const {
+      assignmentId,
+      attachedFiles,
+      uploadingFiles,
+      failedFiles,
+      removedFiles,
+      isOpen,
+      note,
+      changeNote,
+      removeFailedFile,
+      removeFile,
+      returnFile,
+      submitSolution
+    } = this.props;
+
+    return (
+      <SubmitSolution
+        canSubmit={attachedFiles.length > 0
+          && uploadingFiles.length === 0
+          && failedFiles.length === 0}
+        isOpen={isOpen}
+        reset={this.reset}
+        uploadFiles={this.uploadFiles}
+        saveNote={changeNote}
+        uploadingFiles={uploadingFiles}
+        attachedFiles={attachedFiles}
+        failedFiles={failedFiles}
+        removedFiles={removedFiles}
+        removeFailedFile={removeFailedFile}
+        removeFile={removeFile}
+        returnFile={returnFile}
+        retryUploadFile={this.retryUploadFile}
+        close={this.close}
+        submitSolution={() =>
+          submitSolution(assignmentId, note, attachedFiles.map(item => item.file))} />
+    );
+  };
 
 }
 
@@ -66,6 +84,7 @@ SubmitSolutionContainer.propTypes = {
 export default connect(
   state => ({
     userId: state.auth.userId,
+    note: state.submission.get('note'),
     uploadingFiles: state.submission.getIn(['files', 'uploading']).toJS(),
     attachedFiles: state.submission.getIn(['files', 'uploaded']).toJS(),
     failedFiles: state.submission.getIn(['files', 'failed']).toJS(),

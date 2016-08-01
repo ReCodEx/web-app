@@ -8,6 +8,9 @@ export const LOGOUT_URI = '/logout';
 // group details
 export const GROUP_URI_FACTORY = id => `/app/group/${id}`;
 
+// user details
+export const USER_URI_FACTORY = id => `/app/user/${id}`;
+
 // assignments and solution submissions
 export const ASSIGNMENT_DETAIL_URI_FACTORY = id => `/app/assignment/${id}`;
 export const SUBMISSION_DETAIL_URI_FACTORY =

@@ -6,7 +6,8 @@ const FormBox = ({
   title,
   type,
   children,
-  footer
+  footer,
+  overlay
 }) => (
   <div className={
     classNames({
@@ -18,13 +19,11 @@ const FormBox = ({
       <h3 className='box-title'>{title}</h3>
     </div>
     <Form>
-      <div className='box-body'>
-        {children}
-      </div>
+      <div className='box-body'>{children}</div>
       {footer &&
-        <div className={'box-footer'}>
-          {footer}
-        </div>}
+        <div className={'box-footer'}>{footer}</div>}
+      {!!overlay &&
+        <div className={'box-overlay'}>{overlay}</div>}
     </Form>
   </div>
 );

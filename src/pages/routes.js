@@ -5,8 +5,9 @@ import { DASHBOARD_URI, LOGIN_URI } from '../links';
 /* container components */
 import LayoutContainer from '../containers/LayoutContainer';
 import App from '../containers/App';
-import Home from './Home';
 import Dashboard from './Dashboard';
+import Home from './Home';
+import Group from './Group';
 import Login from './Login';
 import Assignment from './Assignment';
 import NotFound from './NotFound';
@@ -37,6 +38,7 @@ const createRoutes = (getState) => {
         <Route path='assignment/:assignmentId' component={Assignment}>
           <Route path='submission/:submissionId' component={SubmissionDetailContainer} />
         </Route>
+        <Route path='group/:groupId' component={Group} />
       </Route>
       <Route path='*' component={NotFound} />
     </Route>

@@ -7,10 +7,12 @@ import users from './modules/users';
 import groups from './modules/groups';
 import sidebar from './modules/sidebar';
 import submission from './modules/submission';
+import assignments from './modules/assignments';
 
 const createRecodexReducers = (token) => ({
   auth: auth(token),
   sidebar,
+  assignments,
   submission,
   users,
   groups

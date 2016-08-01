@@ -6,7 +6,7 @@ export const actionTypesFactory = resourceName => ({
   FETCH: `resource/${resourceName}/FETCH`,
   FETCH_PENDING: `resource/${resourceName}/FETCH_PENDING`,
   FETCH_FULFILLED: `resource/${resourceName}/FETCH_FULFILLED`,
-  FETCH_FAILE: `resource/${resourceName}/FETCH_FAILED`,
+  FETCH_FAILED: `resource/${resourceName}/FETCH_REJECTED`,
   INVALIDATE: `resource/${resourceName}/INVALIDATE`
 });
 
@@ -18,6 +18,10 @@ export const actionsFactory = (resourceName, selector, apiEndpointFactory) => {
    */
   const needsRefetching = (id, getState) => {
     const state = selector(getState());
+    if (!state) {
+      return true;
+    }
+
     const item = state.get(id);
     return !item || (
       item.isFetching === false && (
@@ -29,6 +33,12 @@ export const actionsFactory = (resourceName, selector, apiEndpointFactory) => {
   const fetchIfNeeded = (...ids) =>
     (dispatch, getState) =>
       ids.map(id => needsRefetching(id, getState) && dispatch(fetchResource(id)));
+
+  const fetchOneIfNeeded = id =>
+    (dispatch, getState) =>
+      needsRefetching(id, getState)
+        ? dispatch(fetchResource(id))
+        : Promise.resolve();
 
   const fetchResource = id =>
     createApiAction({
@@ -42,7 +52,7 @@ export const actionsFactory = (resourceName, selector, apiEndpointFactory) => {
 
   const invalidate = createAction(actionTypes.INVALIDATE);
 
-  return { fetchIfNeeded, fetchResource, invalidate, pushResource };
+  return { fetchIfNeeded, fetchOneIfNeeded, fetchResource, invalidate, pushResource };
 };
 
 
@@ -51,14 +61,14 @@ export const initialState = Map();
 export const createRecord = (isFetching, error, didInvalidate, data) =>
    ({ isFetching, error, didInvalidate, data });
 
-export const reducerFactory = (resourceName, extraActionHandlers = {}) => {
+export const reducerFactory = (resourceName) => {
   const actionTypes = actionTypesFactory(resourceName);
-  return handleActions(Object.assign({}, {
+  return {
     [actionTypes.FETCH_PENDING]: (state, { meta }) =>
       state.set(meta.id, createRecord(true, false, false, null)),
 
     [actionTypes.FETCH_FAILED]: (state, { meta }) =>
-      state.setIn(meta.id, createRecord(false, true, false, null)),
+      state.set(meta.id, createRecord(false, true, false, null)),
 
     [actionTypes.FETCH_FULFILLED]: (state, { meta, payload }) =>
       state.set(meta.id, createRecord(false, false, false, payload)),
@@ -66,10 +76,10 @@ export const reducerFactory = (resourceName, extraActionHandlers = {}) => {
     [actionTypes.INVALIDATE]: (state, { payload }) =>
       state.update(payload, item => Object.assign({}, item, { didInvalidate: true }))
 
-  }, extraActionHandlers), initialState);
+  }
 };
 
-export default (resourceName, slector, apiEndpointFactory, extraActionHandlers = {}) => ({
+export default (resourceName, slector, apiEndpointFactory) => ({
   actions: actionsFactory(resourceName, slector, apiEndpointFactory),
-  reducer: reducerFactory(resourceName, extraActionHandlers)
+  reduceActions: reducerFactory(resourceName)
 });
