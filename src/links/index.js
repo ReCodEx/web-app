@@ -13,8 +13,11 @@ export const USER_URI_FACTORY = id => `/app/user/${id}`;
 
 // assignments and solution submissions
 export const ASSIGNMENT_DETAIL_URI_FACTORY = id => `/app/assignment/${id}`;
-export const SUBMISSION_DETAIL_URI_FACTORY =
-  (assignmentId, submissionId) => `/app/assignment/${assignmentId}/submission/${submissionId}`;
+export const SUBMIT_SOLUTION_URI_FACTORY = id =>
+  ASSIGNMENT_DETAIL_URI_FACTORY(id) + '/submit';
+
+export const SUBMISSION_DETAIL_URI_FACTORY = (assignmentId, submissionId) =>
+  `/app/assignment/${assignmentId}/submission/${submissionId}`;
 
 // external links
 export const BUGS_URL = 'https://www.github.com/recodex/web-app/issues';

@@ -54,7 +54,7 @@ Login.propTypes = {
   login: PropTypes.func.isRequired,
   isLoggingIn: PropTypes.bool.isRequired,
   hasFailed: PropTypes.bool.isRequired,
-  hasSucceeded: PropTypes.bool.isRequired,
+  hasSucceeded: PropTypes.bool.isRequired
 };
 
 export default connect(

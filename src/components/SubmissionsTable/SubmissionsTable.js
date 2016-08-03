@@ -1,47 +1,53 @@
+
 import React, { PropTypes } from 'react';
 
-import { Link } from 'react-router';
 import { Table } from 'react-bootstrap';
-import { FormattedNumber, FormattedDate, FormattedTime } from 'react-intl';
 import Box from '../Box';
-import AssignmentStatusIcon from '../AssignmentStatusIcon';
 import { SUBMISSION_DETAIL_URI_FACTORY } from '../../links';
+
+import LoadingSubmissionTableRow from './LoadingSubmissionTableRow';
+import NoSolutionYetTableRow from './NoSolutionYetTableRow';
+import SuccessfulSubmissionTableRow from './SuccessfulSubmissionTableRow';
+import FailedSubmissionTableRow from './FailedSubmissionTableRow';
+import NotEvaluatedSubmissionTableRow from './NotEvaluatedSubmissionTableRow';
+import EvaluationFailedTableRow from './EvaluationFailedTableRow';
 
 const SubmissionsTable = ({
   assignmentId,
   submissions
 }) => (
-  <Box title='Odevzdaná řešení'>
-    <Table>
+  <Box title='Odevzdaná řešení' collapsable isOpen={true}>
+    <Table responsive>
       <thead>
         <tr>
           <th></th>
           <th>Datum odevzdání</th>
           <th className='text-center'>Úspěšnost řešení</th>
+          <th className='text-center'>Počet bodů</th>
           <th>Poznámka</th>
           <th />
         </tr>
       </thead>
       <tbody>
-        {submissions.map(submission => (
-          <tr key={submission.id}>
-            <td><AssignmentStatusIcon status={submission.percent === 1 ? 'done' : 'failed'} /></td>
-            <td>
-              <FormattedDate value={submission.date * 1000} />&nbsp;<FormattedTime value={submission.date * 1000} />
-            </td>
-            <td className='text-center'>
-              {submission.percent === 1
-                ? <strong className='text-success'><FormattedNumber style='percent' value={submission.percent} /></strong>
-                : <FormattedNumber style='percent' value={submission.percent} />}
-            </td>
-            <td>
-              {submission.description}
-            </td>
-            <td className='text-right'>
-              <Link to={SUBMISSION_DETAIL_URI_FACTORY(assignmentId, submission.id)} className='btn btn-flat btn-default btn-xs'>Zobrazit podrobnosti</Link>
-            </td>
-          </tr>
-        ))}
+        {!submissions && <LoadingSubmissionTableRow />}
+        {!!submissions && submissions.length > 0 &&
+          submissions.map(submission => {
+            const link = SUBMISSION_DETAIL_URI_FACTORY(assignmentId, submission.id);
+            if (!submission.evaluation) {
+              return <NotEvaluatedSubmissionTableRow {...submission} key={submission.id} link={link} />;
+            }
+
+            if (submission.evaluation.evaluationFailed === true) {
+              return <EvaluationFailedTableRow {...submission} key={submission.id} link={link} />;
+            }
+
+            if (submission.evaluation.isCorrect === true) {
+              return <SuccessfulSubmissionTableRow {...submission} key={submission.id} link={link} />;
+            }
+
+            return <FailedSubmissionTableRow {...submission} key={submission.id} link={link} />;
+          })}
+        {!!submissions && submissions.length === 0 && <NoSolutionYetTableRow />}
       </tbody>
     </Table>
   </Box>
@@ -49,7 +55,7 @@ const SubmissionsTable = ({
 
 SubmissionsTable.propTypes = {
   assignmentId: PropTypes.string.isRequired,
-  submissions: PropTypes.array.isRequired
+  submissions: PropTypes.array
 };
 
 export default SubmissionsTable;

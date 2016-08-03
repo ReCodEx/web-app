@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
-import { asyncConnect } from 'redux-connect';
 
+import { isReady } from '../../../redux/helpers/resourceManager';
 import BadgeContainer from '../../../containers/BadgeContainer';
 import MenuTitle from '../MenuTitle';
 import MenuItem from '../MenuItem';
@@ -35,7 +35,7 @@ const LoggedIn = ({
             title='Skupiny'
             items={studentOf}
             icon='puzzle-piece'
-            isActive={studentOf.some(item => item.data !== null && isActive(GROUP_URI_FACTORY(item.data.id)))}
+            isActive={studentOf.some(item => isReady(item) && isActive(GROUP_URI_FACTORY(item.data.id)))}
             createLink={item => GROUP_URI_FACTORY(item.data.id)} />
         )}
         {studentOf.length > 0 && (
@@ -43,7 +43,7 @@ const LoggedIn = ({
             title='Vedené skupiny'
             items={supervisorOf}
             icon='wrench'
-            isActive={supervisorOf.some(item => item.data !== null && isActive(GROUP_URI_FACTORY(item.data.id)))}
+            isActive={supervisorOf.some(item => isReady(item) && isActive(GROUP_URI_FACTORY(item.data.id)))}
             createLink={item => GROUP_URI_FACTORY(item.data.id)} />
         )}
         <MenuItem
@@ -68,17 +68,9 @@ LoggedIn.propTypes = {
       id: PropTypes.any.isRequired,
       name: PropTypes.string.isRequired,
       abbr: PropTypes.string.isRequired,
-      color: PropTypes.string.isRequired,
+      color: PropTypes.string.isRequired
     })
   )
 };
 
-export default asyncConnect([
-  {
-    key: 'groups',
-    promise: (params) => {
-      console.log(params);
-      return Promise.resolve();
-    }
-  }
-])(LoggedIn);
+export default LoggedIn;

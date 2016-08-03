@@ -1,2 +1,1 @@
-import LoggedIn from './LoggedIn';
-export default LoggedIn;
+export { default } from './LoggedIn';

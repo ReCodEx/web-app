@@ -11,8 +11,8 @@ import Group from './Group';
 import Login from './Login';
 import Assignment from './Assignment';
 import NotFound from './NotFound';
-import SubmissionDetailContainer from '../containers/SubmissionDetailContainer';
-
+import Submission from './Submission';
+import SubmissionsTableContainer from '../containers/SubmissionsTableContainer';
 
 const createRoutes = (getState) => {
   const requireAuth = (nextState, replace) => {
@@ -24,7 +24,7 @@ const createRoutes = (getState) => {
 
   const onlyUnauth = (nextState, replace) => {
     const auth = getState().auth;
-    if (!!auth.accessToken) {
+    if (auth.accessToken) {
       replace(DASHBOARD_URI);
     }
   };
@@ -35,8 +35,9 @@ const createRoutes = (getState) => {
       <Route path='login' component={Login} onEnter={onlyUnauth} />
       <Route path='app' onEnter={requireAuth} component={App}>
         <IndexRoute component={Dashboard} />
-        <Route path='assignment/:assignmentId' component={Assignment}>
-          <Route path='submission/:submissionId' component={SubmissionDetailContainer} />
+        <Route path='assignment/:assignmentId' component={Assignment} >
+          <IndexRoute component={SubmissionsTableContainer} />
+          <Route path='submission/:submissionId' component={Submission} />
         </Route>
         <Route path='group/:groupId' component={Group} />
       </Route>

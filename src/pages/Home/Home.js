@@ -6,7 +6,7 @@ import PageContent from '../../components/PageContent';
 const Home = () => (
   <PageContent
     title='ReCodEx - Code Examinator Reloaded'
-    description={`ReCodEx - úvodní strana`}>
+    description={'ReCodEx - úvodní strana'}>
     <h1>Vítejte v ReCodEx-u</h1>
   </PageContent>
 );

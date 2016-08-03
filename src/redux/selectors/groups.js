@@ -1,7 +1,7 @@
 import { createSelector } from 'reselect';
 import { studentOfGroupsIds, supervisorOfGroupsIds } from './users';
 
-const getGroups = state => state.groups;
+const getGroups = state => state.groups.get('resources');
 const filterGroups = (ids, groups) => ids.map(id => groups.get(id)).filter(group => !!group);
 
 /**

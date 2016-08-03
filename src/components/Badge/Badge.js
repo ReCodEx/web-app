@@ -27,7 +27,7 @@ Badge.propTypes = {
     fullName: PropTypes.string.isRequired,
     email: PropTypes.string.isRequired
   }).isRequired,
-  logout: PropTypes.func,
+  logout: PropTypes.func
 };
 
 export default Badge;

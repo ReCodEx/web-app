@@ -24,9 +24,11 @@ export const actionTypes = {
   SUBMIT_PENDING: 'recodex/submission/SUBMIT_PENDING',
   SUBMIT_FULFILLED: 'recodex/submission/SUBMIT_FULFILLED',
   SUBMIT_FAILED: 'recodex/submission/SUBMIT_FAILED',
+  PROCESSING_FINISHED: 'recodex/submission/PROCESSING_FINISHED'
 };
 
 export const initialState = fromJS({
+  submissionId: null,
   userId: null,
   assignmentId: null,
   submittedOn: null,
@@ -38,7 +40,6 @@ export const initialState = fromJS({
     uploaded: []
   },
   status: submissionStatus.NONE,
-  webSocketChannel: null,
   warningMsg: null
 });
 
@@ -77,6 +78,8 @@ export const submitSolution = (assignmentId, note, files) =>
     endpoint: `/exercise-assignments/${assignmentId}/submit`,
     body: { files: files.map(file => file.id), note }
   });
+
+export const finishProcessing = createAction(actionTypes.PROCESSING_FINISHED);
 
 /**
  * Reducer takes mainly care about all the state of individual attachments
@@ -126,15 +129,18 @@ const reducer = handleActions({
   },
 
   [actionTypes.SUBMIT_PENDING]: (state) =>
-    state.update('status', () => submissionStatus.SENDING),
+    state.set('status', submissionStatus.SENDING),
 
   [actionTypes.SUBMIT_FAILED]: (state) =>
-    state.update('status', () => submissionStatus.CREATING),
+    state.set('status', submissionStatus.CREATING),
 
   [actionTypes.SUBMIT_FULFILLED]: (state, { payload }) =>
     state
-      .update('status', () => submissionStatus.PROCESSING)
-      .update('webSocketChannel', () => payload.webSocketChannel)
+      .set('submissionId', payload.submission.id)
+      .set('status', submissionStatus.PROCESSING),
+
+  [actionTypes.PROCESSING_FINISHED]: (state, { payload }) =>
+    state.set('status', submissionStatus.FINISHED)
 
 }, initialState);
 

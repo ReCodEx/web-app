@@ -44,7 +44,7 @@ export const login = (username, password) =>
   });
 
 export const isTokenValid = token =>
-  token.exp*1000 > Date.now();
+  token.exp * 1000 > Date.now();
 
 /**
  * Authentication reducer.

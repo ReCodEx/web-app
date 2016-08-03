@@ -51,7 +51,7 @@ class LoginForm extends Component {
                         ? hasSucceeded
                           ? <span><Icon name='check' /> &nbsp; Přihlášení proběhlo úspěšně</span>
                           : 'Přihlásit se'
-                        : <span><Icon name='circle-o-notch' spin /> &nbsp; Probíhá přihlašování</span>
+                        : <span><Icon name='circle-o-notch' spin /> &nbsp; Probíhá přihlašování</span>;
 
     return (
       <FormBox

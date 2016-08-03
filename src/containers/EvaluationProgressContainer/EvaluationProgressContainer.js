@@ -1,51 +1,172 @@
 import React, { Component, PropTypes } from 'react';
+import { connect } from 'react-redux';
+
+import {
+  init,
+  addMessage,
+  completedTask,
+  skippedTask,
+  failedTask
+} from '../../redux/modules/evaluationProgress';
+import { finishProcessing } from '../../redux/modules/submission';
+
 import EvaluationProgress from '../../components/EvaluationProgress';
+import randomMessages, { lastMessage } from './randomMessages';
 
 class EvaluationProgressContainer extends Component {
-
-  state = { messages: [], progress: 0 };
 
   componentWillMount = () => this.init(this.props);
   componentWillReceiveProps = (props) => this.init(props);
 
   init = (props) => {
     const {
-      channelId,
+      submissionId,
       port = 4567,
       url = '195.113.17.8',
       isOpen
     } = props;
 
-    if (!this.socket && channelId !== null) {
+    if (!this.socket && submissionId !== null) {
       this.socket = new WebSocket(`ws://${url}:${port}`);
-      this.socket.onopen = () => this.socket.send(channelId);
-      this.socket.onmessage = ({ data }) =>
-        this.setState({
-          messages: [ ...this.state.messages, data ]
-        });
-      this.socket.onerror = () => this.finish(false);
-      this.socket.onclose = () => this.finish(true);
+      this.socket.onopen = () => this.socket.send(submissionId);
+      this.socket.onmessage = this.onMessage;
+      this.socket.onerror = () => this.onError();
+      this.socket.onclose = () => this.onConnectionClosed();
     }
   };
 
-  finish = (successful) => {
-    console.log('socket was closed', successful);
+  onMessage = (msg) => {
+    const data = JSON.parse(msg.data);
+    const { addMessage } = this.props;
+    addMessage(this.getMessage(data));
+
+    switch (data.command) {
+      case 'TASK':
+        this.updateProgress(data);
+        break;
+      case 'FINISHED':
+        this.finish();
+        break;
+    }
   };
 
-  render = () =>
-    <EvaluationProgress
-      isOpen={this.props.isOpen}
-      messages={this.state.messages}
-      progress={this.state.progress} />;
+  getMessage = ({ command, task_id = false, task_state = 'OK' }) => ({
+    wasSuccessful: command !== 'TASK' || task_state === 'COMPLETED',
+    text: this.getRandomMessage(),
+    status: this.getStatus(task_state)
+  });
+
+  getRandomMessage = () => {
+    if (!this.availableMessages || this.availableMessages.length === 0) {
+      this.availableMessages = Object.assign([], randomMessages);
+    }
+
+    const randomIndex = Math.floor(Math.random() * this.availableMessages.length);
+    return this.availableMessages.splice(randomIndex, 1).pop();
+  };
+
+  /** @todo Rewrite when localization is introduced */
+  getStatus = status => {
+    switch (status) {
+      case 'COMPLETED':
+        return 'HOTOVO';
+      case 'SKIPPED':
+        return 'PŘESKOČENO';
+      case 'FAILED':
+        return 'SELHALO';
+      default:
+        return 'OK';
+    }
+  };
+
+  updateProgress = task => {
+    const { completedTask, skippedTask, failedTask } = this.props;
+    switch (task.task_state) {
+      case 'COMPLETED':
+        completedTask();
+        break;
+      case 'SKIPPED':
+        skippedTask();
+        break;
+      case 'FAILED':
+        failedTask();
+        break;
+    }
+  };
+
+  finish = () => {
+    const {
+      addMessage,
+      goToEvaluationDetails
+    } = this.props;
+
+    this.socket.close();
+    addMessage({ wasSuccessful: true, status: 'OK', text: lastMessage });
+  };
+
+  // @todo Do something ??
+  onError = () => {
+    console.log('websocket connection failed');
+  };
+
+  // @todo Do something ??
+  onConnectionClosed = () => {
+    console.log('websocket connection was closed');
+  };
+
+  render = () => {
+    const {
+      isOpen,
+      expectedTasksCount,
+      messages,
+      progress,
+      isFinished,
+      link
+    } = this.props;
+
+    return (
+      <EvaluationProgress
+        isOpen={isOpen}
+        messages={messages}
+        completed={progress.completed}
+        skipped={progress.skipped}
+        failed={progress.failed}
+        finished={isFinished}
+        link={link} />
+    );
+  };
 
 }
 
 EvaluationProgressContainer.propTypes = {
-  channelId: PropTypes.string,
+  isOpen: PropTypes.bool.isRequired,
+  assignmentId: PropTypes.string,
+  submissionId: PropTypes.string,
   port: PropTypes.number,
   url: PropTypes.string,
-  isOpen: PropTypes.bool,
-  jobsCount: PropTypes.number
+  goToEvaluationDetails: PropTypes.func.isRequired,
+  link: PropTypes.string.isRequired
 };
 
-export default EvaluationProgressContainer;
+export default connect(
+  state => ({
+    expectedTasksCount: state.evaluationProgress.get('expectedTasksCount'),
+    progress: {
+      completed: state.evaluationProgress.getIn(['progress', 'completed']) / state.evaluationProgress.get('expectedTasksCount') * 100,
+      skipped: state.evaluationProgress.getIn(['progress', 'skipped']) / state.evaluationProgress.get('expectedTasksCount') * 100,
+      failed: state.evaluationProgress.getIn(['progress', 'failed']) / state.evaluationProgress.get('expectedTasksCount') * 100
+    },
+    isFinished: state.evaluationProgress.getIn(['progress', 'total']) === state.evaluationProgress.get('expectedTasksCount'),
+    messages: state.evaluationProgress.get('messages')
+  }),
+  (dispatch, props) => ({
+    goToEvaluationDetails: () =>
+      dispatch(finishProcessing())
+      && props.goToSubmissionDetail(props.submissionId),
+    completedTask: () => dispatch(completedTask()),
+    skippedTask: () => dispatch(skippedTask()),
+    failedTask: () => dispatch(failedTask()),
+    // addMessage: (message) => dispatch(addMessage(message))
+    addMessage: () => {}
+  })
+)(EvaluationProgressContainer);

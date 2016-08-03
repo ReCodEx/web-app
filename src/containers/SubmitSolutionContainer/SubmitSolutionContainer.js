@@ -1,9 +1,12 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
+import { push } from 'react-router-redux';
 import SubmitSolution from '../../components/SubmitSolution';
+import { submissionStatus } from '../../redux/modules/submission';
+import { SUBMISSION_DETAIL_URI_FACTORY, ASSIGNMENT_DETAIL_URI_FACTORY } from '../../links';
+import EvaluationProgressContainer from '../EvaluationProgressContainer';
 
 import {
-  init,
   changeNote,
   uploadFile,
   removeFile,
@@ -14,18 +17,6 @@ import {
 
 class SubmitSolutionContainer extends Component {
 
-  componentWillMount = () => this.reset();
-
-  reset = () => {
-    const { init, userId, assignmentId } = this.props;
-    init(userId, assignmentId);
-  };
-
-  close = () => {
-    console.log('cancel');
-    this.props.onCancel();
-  };
-
   uploadFiles = (files) =>
     files.map(this.props.uploadFile);
 
@@ -34,52 +25,70 @@ class SubmitSolutionContainer extends Component {
     this.uploadFiles([ payload.file ]);
   };
 
+  submit = () => {
+    const {
+      attachedFiles,
+      onSubmit,
+      note,
+      submitSolution
+    } = this.props;
+
+    submitSolution(note, attachedFiles.map(item => item.file));
+    !!onSubmit && onSubmit();
+  };
+
   render = () => {
     const {
+      isOpen,
+      onClose,
+      reset,
       assignmentId,
       attachedFiles,
       uploadingFiles,
       failedFiles,
       removedFiles,
-      isOpen,
       note,
       changeNote,
       removeFailedFile,
       removeFile,
       returnFile,
-      submitSolution
+      isProcessing,
+      submissionId,
+      submissionDetailLink
     } = this.props;
 
     return (
-      <SubmitSolution
-        canSubmit={attachedFiles.length > 0
-          && uploadingFiles.length === 0
-          && failedFiles.length === 0}
-        isOpen={isOpen}
-        reset={this.reset}
-        uploadFiles={this.uploadFiles}
-        saveNote={changeNote}
-        uploadingFiles={uploadingFiles}
-        attachedFiles={attachedFiles}
-        failedFiles={failedFiles}
-        removedFiles={removedFiles}
-        removeFailedFile={removeFailedFile}
-        removeFile={removeFile}
-        returnFile={returnFile}
-        retryUploadFile={this.retryUploadFile}
-        close={this.close}
-        submitSolution={() =>
-          submitSolution(assignmentId, note, attachedFiles.map(item => item.file))} />
+      <div>
+        <SubmitSolution
+          isOpen={isOpen && !isProcessing}
+          canSubmit={attachedFiles.length > 0
+            && uploadingFiles.length === 0
+            && failedFiles.length === 0}
+          reset={reset}
+          uploadFiles={this.uploadFiles}
+          saveNote={changeNote}
+          uploadingFiles={uploadingFiles}
+          attachedFiles={attachedFiles}
+          failedFiles={failedFiles}
+          removedFiles={removedFiles}
+          removeFailedFile={removeFailedFile}
+          removeFile={removeFile}
+          returnFile={returnFile}
+          retryUploadFile={this.retryUploadFile}
+          onClose={onClose}
+          submitSolution={this.submit} />
+
+        <EvaluationProgressContainer
+          isOpen={isOpen && isProcessing}
+          assignmentId={assignmentId}
+          submissionId={submissionId}
+          link={submissionDetailLink(submissionId)}
+        />
+      </div>
     );
   };
 
 }
-
-SubmitSolutionContainer.propTypes = {
-  isOpen: PropTypes.bool.isRequired,
-  onCancel: PropTypes.func.isRequired,
-  assignmentId: PropTypes.string.isRequired
-};
 
 export default connect(
   state => ({
@@ -89,13 +98,17 @@ export default connect(
     attachedFiles: state.submission.getIn(['files', 'uploaded']).toJS(),
     failedFiles: state.submission.getIn(['files', 'failed']).toJS(),
     removedFiles: state.submission.getIn(['files', 'removed']).toJS(),
-  }), {
-    init,
-    changeNote,
-    uploadFile,
-    removeFailedFile,
-    removeFile,
-    returnFile,
-    submitSolution
-  }
+    isProcessing: state.submission.get('status') === submissionStatus.PROCESSING,
+    submissionId: state.submission.get('submissionId')
+  }),
+  (dispatch, props) => ({
+    changeNote: (note) => dispatch(changeNote(note)),
+    uploadFile: (payload) => dispatch(uploadFile(payload)),
+    removeFailedFile: (payload) => dispatch(removeFailedFile(payload)),
+    removeFile: (payload) => dispatch(removeFile(payload)),
+    returnFile: (payload) => dispatch(returnFile(payload)),
+    submitSolution: (note, files) => dispatch(submitSolution(props.assignmentId, note, files)),
+    goToAssignment: () => dispatch(push(ASSIGNMENT_DETAIL_URI_FACTORY(props.assignmentId))),
+    submissionDetailLink: (submissionId) => SUBMISSION_DETAIL_URI_FACTORY(props.assignmentId, submissionId)
+  })
 )(SubmitSolutionContainer);

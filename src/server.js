@@ -19,7 +19,6 @@ import { syncHistoryWithStore } from 'react-router-redux';
 import createHistory from 'react-router/lib/createMemoryHistory';
 import { configureStore } from './redux/store';
 import createRoutes from './pages/routes';
-import { apiCall } from './redux/api';
 
 addLocaleData([ ...cs ]);
 
@@ -34,6 +33,7 @@ app.use(Express.static('public'));
 app.use(cookieParser());
 
 app.get('*', (req, res) => {
+  console.log('serving req');
   const memoryHistory = createHistory(req.originalUrl);
   // Extract the accessToken from the cookies for authenticated API requests from the server.
   const token = req.cookies.accessToken; // undefined === the user is not logged in
@@ -53,6 +53,7 @@ app.get('*', (req, res) => {
     } else {
       let reqUrl = location.pathname + location.search;
 
+      // @todo: DOES NOT EVER RESOLVE ?!!!
       loadOnServer(renderProps, store).then(() => {
         let reduxState = JSON.stringify(store.getState());
 
@@ -60,7 +61,7 @@ app.get('*', (req, res) => {
         let html = renderToString(
           <IntlProvider locale={cs}>
             <Provider store={store}>
-              <ReduxAsyncConnect {...renderProps} helpers={{ apiCall }} />
+              <ReduxAsyncConnect {...renderProps} />
             </Provider>
           </IntlProvider>
         );

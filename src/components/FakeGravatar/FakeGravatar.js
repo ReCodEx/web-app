@@ -8,7 +8,7 @@ const FakeGravatar = ({
     width: size,
     height: size,
     background: color,
-    borderRadius: Math.ceil(size/2)
+    borderRadius: Math.ceil(size / 2)
   }} />
 );
 

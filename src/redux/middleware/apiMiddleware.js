@@ -30,7 +30,7 @@ export const assembleEndpoint = (endpoint, query = {}) =>
   endpoint + maybeQuestionMark(endpoint, query) + generateQuery(query);
 
 const createRequest = (endpoint, query = {}, method, headers, body) =>
-  fetch(assembleEndpoint(endpoint, query), {
+  fetch(getUrl(assembleEndpoint(endpoint, query)), {
     method,
     headers,
     body: createFormData(body)
@@ -61,7 +61,7 @@ export const apiCall = ({
 }) => ({
   type,
   payload: {
-    promise: createRequest(API_BASE + endpoint, query, method, getHeaders(headers, accessToken), body),
+    promise: createRequest(endpoint, query, method, getHeaders(headers, accessToken), body),
     data: body
   },
   meta

@@ -1,27 +1,22 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import Badge from '../../components/Badge';
-import LoadingBadge from '../../components/LoadingBadge';
-import FailedBadge from '../../components/FailedBadge';
+import Badge, { LoadingBadge, FailedBadge } from '../../components/Badge';
+import { isLoading, isReady, hasFailed } from '../../redux/helpers/resourceManager';
 import { loggedInUserSelector } from '../../redux/selectors/users';
 
 const BadgeContainer = ({
-  user: {
-    isFetching = true,
-    error = false,
-    data
-  },
+  user,
   logout
 }) =>
-  isFetching
+  isLoading(user)
     ? <LoadingBadge />
-    : (error
+    : hasFailed(user)
       ? <FailedBadge color='black' />
-      : <Badge logout={logout} user={data} />);
+      : <Badge logout={logout} user={user.data} />;
 
 export default connect(
   state => ({
-    user: state.users.get(state.auth.userId)
+    user: state.users.getIn([ 'resources', state.auth.userId ])
   })
 )(BadgeContainer);

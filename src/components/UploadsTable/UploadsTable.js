@@ -26,7 +26,7 @@ const UploadsTable = ({
       {attachedFiles.map(
         payload =>
           <tr key={'attached-' + payload.name}>
-            <td>
+            <td className='text-center'>
               <Icon name='check' className='text-success text-bold' />
             </td>
             <td>{payload.name}</td>
@@ -42,7 +42,7 @@ const UploadsTable = ({
       {uploadingFiles.map(
         payload =>
           <tr key={'uploading-' + payload.name}>
-            <td>
+            <td className='text-center'>
               <Icon name='circle-o' spin />
             </td>
             <td>{payload.name}</td>
@@ -54,7 +54,7 @@ const UploadsTable = ({
       {failedFiles.map(
         payload =>
           <tr key={'failed-' + payload.name}>
-            <td>
+            <td className='text-center'>
               <Icon name='exclamation-triangle' className='text-danger' />
             </td>
             <td>{payload.name}</td>
@@ -75,7 +75,7 @@ const UploadsTable = ({
       {removedFiles.map(
         payload =>
           <tr key={'removed' + payload.name}>
-            <td>
+            <td className='text-center'>
               <Icon name='trash' className='text-warning' />
             </td>
             <td>{payload.name}</td>

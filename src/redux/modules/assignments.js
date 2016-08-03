@@ -2,15 +2,15 @@ import { createAction, handleActions } from 'redux-actions';
 import { Map } from 'immutable';
 
 import { usersSelector } from '../selectors/users';
-import factory, { initialState } from '../helpers/resourceManager';
+import factory, { initialState, createRecord } from '../helpers/resourceManager';
 import { createApiAction } from '../middleware/apiMiddleware';
+import { actionTypes as submissionsActionTypes } from './submissions';
 
 const resourceName = 'assignments';
 const {
   actions,
   reduceActions
-} = factory(resourceName, state => state.groups, id => `/assignments/${id}`);
-
+} = factory(resourceName, state => state.groups, id => `/exercise-assignments/${id}`);
 
 const actionTypes = {
   LOAD_GROUPS_ASSINGMENTS: 'recodex/assignments/LOAD_GROUPS_ASSINGMENTS',
@@ -28,17 +28,11 @@ export const fetchAssignmentssIfNeeded = actions.fetchIfNeeded;
 export const fetchAssignmentIfNeeded = actions.fetchOneIfNeeded;
 
 export const fetchAssignmentsForGroup = groupId =>
-  dispatch =>
-    dispatch(createApiAction({
-      type: actionTypes.LOAD_GROUPS_ASSINGMENTS,
-      endpoint: `/groups/${groupId}/assignments`,
-      method: 'GET'
-    }))
-    .then(({ value }) =>
-      value.map(assignment =>
-        dispatch(loadAssignment(assignment))));
-
-
+  createApiAction({
+    type: actionTypes.LOAD_GROUPS_ASSINGMENTS,
+    endpoint: `/groups/${groupId}/assignments`,
+    method: 'GET'
+  });
 
 /**
  * Reducer
@@ -46,10 +40,14 @@ export const fetchAssignmentsForGroup = groupId =>
 
 const reducer = handleActions(Object.assign({}, reduceActions, {
 
+  [actionTypes.LOAD_GROUPS_ASSINGMENTS_FULFILLED]: (state, { payload }) =>
+    payload.reduce((state, assignment) =>
+      state.setIn([ 'resources', assignment.id ], createRecord(false, false, false, assignment)), state),
 
+  [submissionsActionTypes.LOAD_USERS_SUBMISSIONS_FULFILLED]: (state, { payload, meta: { userId, assignmentId } }) =>
+    state.setIn([ 'submissions', assignmentId, userId ], payload.map(submission => submission.id))
 
 }), initialState);
 
 export default reducer;
-
 

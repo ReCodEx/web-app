@@ -9,7 +9,7 @@ const App = ({
 
 export default asyncConnect(
   [{
-      promise: ({ store: { dispatch, getState } }) =>
+    promise: ({ store: { dispatch, getState } }) =>
         dispatch(fetchUserIfNeeded(loggedInUserId(getState())))
   }]
 )(App);

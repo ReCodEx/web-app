@@ -1,7 +1,7 @@
 import { createSelector } from 'reselect';
 import { loggedInUserId } from './auth';
 
-const getUsers = state => state.users;
+const getUsers = state => state.users.get('resources');
 const getGroups = type => state => {
   if (state === null) {
     return [];
@@ -21,7 +21,7 @@ export const loggedInUserSelector = state => {
   return item ? item.data : null; // user's data might not be loaded yet
 };
 
-export const usersGroupsIds = state => {
+export const usersGroupsIds = (state) => {
   const user = loggedInUserSelector(state);
   return [ ...user.groups.studentOf, ...user.groups.supervisorOf ];
 };

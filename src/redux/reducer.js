@@ -7,6 +7,8 @@ import users from './modules/users';
 import groups from './modules/groups';
 import sidebar from './modules/sidebar';
 import submission from './modules/submission';
+import submissions from './modules/submissions';
+import evaluationProgress from './modules/evaluationProgress';
 import assignments from './modules/assignments';
 
 const createRecodexReducers = (token) => ({
@@ -14,6 +16,8 @@ const createRecodexReducers = (token) => ({
   sidebar,
   assignments,
   submission,
+  submissions,
+  evaluationProgress,
   users,
   groups
 });
@@ -39,6 +43,6 @@ const createReducer = (token) => {
 
     return appReducer(state, action);
   };
-}
+};
 
 export default createReducer;

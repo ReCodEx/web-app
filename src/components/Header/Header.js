@@ -24,7 +24,6 @@ class Header extends Component {
 
     return (
       <header className='main-header fixed'>
-
         <IndexLink to='/' className='logo'>
           <span className='logo-mini'>Re<b>C</b></span>
           <span className='logo-lg'>Re<b>CodEx</b></span>
@@ -35,12 +34,12 @@ class Header extends Component {
             <div>
               <MediaQuery maxWidth={767}>
                 <a href='#' className='sidebar-toggle' role='button' onClick={toggleSidebarVisibility}>
-                  <span className='sr-only'>Toggle navigation</span>
+                  <span className='sr-only'>Zobrazit/skrýt boční panel</span>
                 </a>
               </MediaQuery>
               <MediaQuery minWidth={768}>
                 <a href='#' className='sidebar-toggle' role='button' onClick={toggleSidebarSize}>
-                  <span className='sr-only'>Toggle navigation</span>
+                  <span className='sr-only'>Zvětšit/zmenšit boční panel</span>
                 </a>
               </MediaQuery>
             </div>

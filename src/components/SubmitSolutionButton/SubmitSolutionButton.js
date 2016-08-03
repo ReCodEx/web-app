@@ -10,7 +10,7 @@ const SubmitSolutionButton = ({
     className='btn-flat'
     disabled={disabled}
     onClick={onClick}>
-    Odevzdat řešení
+    Odevzdat nové řešení
   </Button>
 );
 
