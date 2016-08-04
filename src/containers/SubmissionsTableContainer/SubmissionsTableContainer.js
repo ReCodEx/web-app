@@ -11,15 +11,15 @@ class SubmissionsTableContainer extends Component {
   }
 
   componentWillReceiveProps(newProps) {
-    if (this.props.params.assignmentId !== newProps.params.assignmentId ||
-        this.props.userId !== newProps.params.userId) {
+    if (this.props.assignmentId !== newProps.assignmentId ||
+        this.props.userId !== newProps.userId) {
       SubmissionsTableContainer.loadData(newProps);
     }
   }
 
   static loadData = ({
     userId,
-    params: { assignmentId },
+    assignmentId,
     loadSubmissionsForUser
   }) => {
     loadSubmissionsForUser(userId, assignmentId);
@@ -27,14 +27,14 @@ class SubmissionsTableContainer extends Component {
 
   render() {
     const {
-      params,
+      assignmentId,
       submissions
     } = this.props;
 
     return (
       <SubmissionsTable
         submissions={submissions}
-        assignmentId={params.assignmentId} />
+        assignmentId={assignmentId} />
     );
   }
 
@@ -42,16 +42,14 @@ class SubmissionsTableContainer extends Component {
 
 SubmissionsTableContainer.propTypes = {
   userId: PropTypes.string.isRequired,
-  params: PropTypes.shape({
-    assignmentId: PropTypes.string.isRequired
-  }),
+  assignmentId: PropTypes.string.isRequired,
   submissions: PropTypes.array
 };
 
 export default connect(
   (state, props) => {
     const userId = state.auth.userId;
-    const submissionIds = state.assignments.getIn(['submissions', props.params.assignmentId, userId]);
+    const submissionIds = state.assignments.getIn(['submissions', props.assignmentId, userId]);
     return {
       userId,
       submissions: submissionIds ? submissionIds.map(id => state.submissions.getIn(['resources', id]).data) : null

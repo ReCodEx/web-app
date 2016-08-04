@@ -12,6 +12,7 @@ export const submissionStatus = {
 
 export const actionTypes = {
   INIT: 'recodex/submission/INIT',
+  CANCEL: 'recodex/submission/CANCEL',
   CHANGE_NOTE: 'recodex/submission/CHANGE_NOTE',
   UPLOAD: 'recodex/submission/UPLOAD',
   UPLOAD_PENDING: 'recodex/submission/UPLOAD_PENDING',
@@ -51,6 +52,7 @@ export const init = createAction(
   actionTypes.INIT,
   (userId, assignmentId) => ({ userId, assignmentId })
 );
+export const cancel = createAction(actionTypes.CANCEL);
 
 export const changeNote = createAction(actionTypes.CHANGE_NOTE);
 
@@ -122,7 +124,7 @@ const reducer = handleActions({
       .updateIn([ 'files', 'uploaded' ], list => list.push({ name: payload.name, file: payload })),
 
   [actionTypes.UPLOAD_FAILED]: (state, { meta }) => {
-    const file = state.getIn([ 'files', 'uploading' ]).find(item => item.name = meta);
+    const file = state.getIn([ 'files', 'uploading' ]).find(item => item.name === meta);
     return state
       .updateIn([ 'files', 'uploading' ], list => list.filter(item => item.name !== meta))
       .updateIn([ 'files', 'failed' ], list => list.push(file));
@@ -138,6 +140,9 @@ const reducer = handleActions({
     state
       .set('submissionId', payload.submission.id)
       .set('status', submissionStatus.PROCESSING),
+
+  [actionTypes.CANCEL]: (state, { payload }) =>
+    initialState,
 
   [actionTypes.PROCESSING_FINISHED]: (state, { payload }) =>
     state.set('status', submissionStatus.FINISHED)

@@ -15,6 +15,7 @@ import UploadsTable from '../UploadsTable';
 const SubmitSolution = ({
   isOpen,
   onClose,
+  reset,
   canSubmit,
   uploadFiles,
   saveNote,
@@ -26,7 +27,6 @@ const SubmitSolution = ({
   removeFile,
   returnFile,
   removeFailedFile,
-  reset,
   retryUploadFile
 }) => (
   <Modal show={isOpen} backdrop='static' onHide={onClose}>
@@ -96,6 +96,7 @@ const SubmitSolution = ({
 );
 
 SubmitSolution.propTypes = {
+  onClose: PropTypes.func.isRequired,
   reset: PropTypes.func.isRequired,
   uploadFiles: PropTypes.func.isRequired,
   canSubmit: PropTypes.bool.isRequired,

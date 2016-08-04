@@ -18,6 +18,8 @@ export const SUBMIT_SOLUTION_URI_FACTORY = id =>
 
 export const SUBMISSION_DETAIL_URI_FACTORY = (assignmentId, submissionId) =>
   `/app/assignment/${assignmentId}/submission/${submissionId}`;
+export const SOURCE_CODE_DETAIL_URI_FACTORY = (assignmentId, submissionId, fileId) =>
+  `/app/assignment/${assignmentId}/submission/${submissionId}/file/${fileId}`;
 
 // external links
 export const BUGS_URL = 'https://www.github.com/recodex/web-app/issues';

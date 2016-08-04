@@ -9,7 +9,7 @@ const resourceName = 'groups';
 const {
   actions,
   reduceActions
-} = factory(resourceName, state => state.groups, id => `/groups/${id}`);
+} = factory({ resourceName });
 
 /**
  * Actions

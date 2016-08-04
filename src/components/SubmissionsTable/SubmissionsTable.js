@@ -17,7 +17,7 @@ const SubmissionsTable = ({
   submissions
 }) => (
   <Box title='Odevzdaná řešení' collapsable isOpen={true}>
-    <Table responsive>
+    <Table>
       <thead>
         <tr>
           <th></th>
@@ -33,19 +33,18 @@ const SubmissionsTable = ({
         {!!submissions && submissions.length > 0 &&
           submissions.map(submission => {
             const link = SUBMISSION_DETAIL_URI_FACTORY(assignmentId, submission.id);
-            if (!submission.evaluation) {
-              return <NotEvaluatedSubmissionTableRow {...submission} key={submission.id} link={link} />;
+            switch (submission.evaluationStatus) {
+              case 'done':
+                return <SuccessfulSubmissionTableRow {...submission} key={submission.id} link={link} />;
+              case 'failed':
+                return <FailedSubmissionTableRow {...submission} key={submission.id} link={link} />;
+              case 'work-in-progress':
+                return <NotEvaluatedSubmissionTableRow {...submission} key={submission.id} link={link} />;
+              case 'evaluation-failed':
+                return <EvaluationFailedTableRow {...submission} key={submission.id} link={link} />;
+              default:
+                return null;
             }
-
-            if (submission.evaluation.evaluationFailed === true) {
-              return <EvaluationFailedTableRow {...submission} key={submission.id} link={link} />;
-            }
-
-            if (submission.evaluation.isCorrect === true) {
-              return <SuccessfulSubmissionTableRow {...submission} key={submission.id} link={link} />;
-            }
-
-            return <FailedSubmissionTableRow {...submission} key={submission.id} link={link} />;
           })}
         {!!submissions && submissions.length === 0 && <NoSolutionYetTableRow />}
       </tbody>

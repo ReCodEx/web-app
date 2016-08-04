@@ -1,30 +1,30 @@
 import { combineReducers } from 'redux';
 import { routerReducer } from 'react-router-redux';
-import { reducer as reduxAsyncConnect } from 'redux-connect';
 
 import auth, { actionTypes as authActionTypes } from './modules/auth';
-import users from './modules/users';
+import assignments from './modules/assignments';
+import evaluationProgress from './modules/evaluationProgress';
+import files from './modules/files';
 import groups from './modules/groups';
 import sidebar from './modules/sidebar';
 import submission from './modules/submission';
 import submissions from './modules/submissions';
-import evaluationProgress from './modules/evaluationProgress';
-import assignments from './modules/assignments';
+import users from './modules/users';
 
 const createRecodexReducers = (token) => ({
   auth: auth(token),
-  sidebar,
   assignments,
+  evaluationProgress,
+  files,
+  groups,
+  sidebar,
   submission,
   submissions,
-  evaluationProgress,
-  users,
-  groups
+  users
 });
 
 const librariesReducers = {
-  routing: routerReducer,
-  reduxAsyncConnect
+  routing: routerReducer
 };
 
 const createReducer = (token) => {

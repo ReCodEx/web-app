@@ -3,9 +3,8 @@ import { LoadingIcon } from '../Icons';
 
 const LoadingSubmissionTableRow = () => (
   <tr>
-    <td><LoadingIcon /></td>
-    <td colSpan={4} className='text-center'>
-      Načítám odevzdaná řešení ...
+    <td colSpan={5} className='text-center'>
+      <LoadingIcon />{' '}Načítám odevzdaná řešení ...
     </td>
   </tr>
 );

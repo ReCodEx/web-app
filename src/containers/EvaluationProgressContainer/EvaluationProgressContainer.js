@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
+import { push } from 'react-router-redux';
 
 import {
   init,
@@ -45,7 +46,7 @@ class EvaluationProgressContainer extends Component {
         this.updateProgress(data);
         break;
       case 'FINISHED':
-        this.finish();
+        this.closeSocket();
         break;
     }
   };
@@ -94,7 +95,7 @@ class EvaluationProgressContainer extends Component {
     }
   };
 
-  finish = () => {
+  closeSocket = () => {
     const {
       addMessage,
       goToEvaluationDetails
@@ -103,6 +104,7 @@ class EvaluationProgressContainer extends Component {
     this.socket.close();
     addMessage({ wasSuccessful: true, status: 'OK', text: lastMessage });
   };
+
 
   // @todo Do something ??
   onError = () => {
@@ -114,14 +116,20 @@ class EvaluationProgressContainer extends Component {
     console.log('websocket connection was closed');
   };
 
+  finish = () => {
+    const { link, finishProcessing } = this.props;
+    const { router } = this.context;
+    finishProcessing();
+    router.push(link);
+  };
+
   render = () => {
     const {
       isOpen,
       expectedTasksCount,
       messages,
       progress,
-      isFinished,
-      link
+      isFinished
     } = this.props;
 
     return (
@@ -132,7 +140,7 @@ class EvaluationProgressContainer extends Component {
         skipped={progress.skipped}
         failed={progress.failed}
         finished={isFinished}
-        link={link} />
+        finishProcessing={this.finish} />
     );
   };
 
@@ -144,8 +152,12 @@ EvaluationProgressContainer.propTypes = {
   submissionId: PropTypes.string,
   port: PropTypes.number,
   url: PropTypes.string,
-  goToEvaluationDetails: PropTypes.func.isRequired,
+  finishProcessing: PropTypes.func.isRequired,
   link: PropTypes.string.isRequired
+};
+
+EvaluationProgressContainer.contextTypes = {
+  router: React.PropTypes.object.isRequired
 };
 
 export default connect(
@@ -160,13 +172,10 @@ export default connect(
     messages: state.evaluationProgress.get('messages')
   }),
   (dispatch, props) => ({
-    goToEvaluationDetails: () =>
-      dispatch(finishProcessing())
-      && props.goToSubmissionDetail(props.submissionId),
+    finishProcessing: () => dispatch(finishProcessing()),
     completedTask: () => dispatch(completedTask()),
     skippedTask: () => dispatch(skippedTask()),
     failedTask: () => dispatch(failedTask()),
-    // addMessage: (message) => dispatch(addMessage(message))
-    addMessage: () => {}
+    addMessage: (message) => dispatch(addMessage(message))
   })
 )(EvaluationProgressContainer);

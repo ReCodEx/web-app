@@ -1,6 +1,5 @@
 import React, { PropTypes } from 'react';
 import Icon from 'react-fontawesome';
-import { Link } from 'react-router';
 import classnames from 'classnames';
 import { Button, Modal, ProgressBar, Table } from 'react-bootstrap';
 
@@ -11,7 +10,7 @@ const EvaluationProgress = ({
   completed = 0,
   skipped = 0,
   failed = 0,
-  link
+  finishProcessing
 }) => (
   <Modal show={isOpen} backdrop='static'>
     <Modal.Header>
@@ -46,17 +45,13 @@ const EvaluationProgress = ({
     </Modal.Body>
     <Modal.Footer>
       <p className='text-center'>
-        <Link
-          to={link}
-          className={classnames({
-            'btn': true,
-            'btn-default': !finished,
-            'btn-success': finished,
-            'btn-flat': true
-          })}
+        <Button
+          bsStyle={finished ? 'success' : 'default'}
+          className='btn-flat'
+          onClick={finishProcessing}
           disabled={!finished}>
           Pokračovat k vyhodnocení
-        </Link>
+        </Button>
       </p>
     </Modal.Footer>
   </Modal>
@@ -67,8 +62,7 @@ EvaluationProgress.propTypes = {
   messages: PropTypes.object.isRequired,
   completed: PropTypes.number.isRequired,
   skipped: PropTypes.number.isRequired,
-  failed: PropTypes.number.isRequired,
-  link: PropTypes.string.isRequired
+  failed: PropTypes.number.isRequired
 };
 
 export default EvaluationProgress;

@@ -9,7 +9,6 @@ import Helmet from 'react-helmet';
 import cookieParser from 'cookie-parser';
 
 import { match } from 'react-router';
-import { ReduxAsyncConnect, loadOnServer } from 'redux-connect';
 
 import { IntlProvider, addLocaleData } from 'react-intl';
 import cs from 'react-intl/locale-data/cs';
@@ -52,27 +51,23 @@ app.get('*', (req, res) => {
       res.status(404).send('Not found');
     } else {
       let reqUrl = location.pathname + location.search;
+      let reduxState = JSON.stringify(store.getState());
 
-      // @todo: DOES NOT EVER RESOLVE ?!!!
-      loadOnServer(renderProps, store).then(() => {
-        let reduxState = JSON.stringify(store.getState());
+      // @todo make locale changeable
+      let html = renderToString(
+        <IntlProvider locale={cs}>
+          <Provider store={store}>
+            <ReduxAsyncConnect {...renderProps} />
+          </Provider>
+        </IntlProvider>
+      );
+      const head = Helmet.rewind();
 
-        // @todo make locale changeable
-        let html = renderToString(
-          <IntlProvider locale={cs}>
-            <Provider store={store}>
-              <ReduxAsyncConnect {...renderProps} />
-            </Provider>
-          </IntlProvider>
-        );
-        const head = Helmet.rewind();
-
-        res.render('index', {
-          html,
-          head,
-          reduxState,
-          bundle: 'http://localhost:8080/bundle.js' // @todo change
-        });
+      res.render('index', {
+        html,
+        head,
+        reduxState,
+        bundle: 'http://localhost:8080/bundle.js' // @todo change
       });
     }
   });

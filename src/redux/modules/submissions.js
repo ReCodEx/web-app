@@ -4,24 +4,25 @@ import { Map } from 'immutable';
 import { createApiAction } from '../middleware/apiMiddleware';
 import factory, {
   createRecord,
-  initialState
+  initialState,
+  defaultNeedsRefetching
 } from '../helpers/resourceManager';
 
 const resourceName = 'submissions';
+const needsRefetching = (item) =>
+  defaultNeedsRefetching(item) || item.data.evaluationStatus === 'work-in-progress';
+
 const {
   actions,
+  actionTypes,
   reduceActions
-} = factory(
-  resourceName,
-  state => state.evaluations,
-  id => `/submissions/${id}`
-);
+} = factory({ resourceName, needsRefetching });
 
 /**
  * Actions
  */
 
-export const actionTypes = {
+export const additionalActionTypes = {
   LOAD_USERS_SUBMISSIONS: 'recodex/submissions/LOAD_USERS_SUBMISSIONS',
   LOAD_USERS_SUBMISSIONS_PENDING: 'recodex/submissions/LOAD_USERS_SUBMISSIONS_PENDING',
   LOAD_USERS_SUBMISSIONS_FULFILLED: 'recodex/submissions/LOAD_USERS_SUBMISSIONS_FULFILLED',
@@ -30,10 +31,11 @@ export const actionTypes = {
 
 export const loadSubmissionData = actions.pushResource;
 export const fetchSubmission = actions.fetchResource;
+export const fetchSubmissionIfNeeded = actions.fetchOneIfNeeded;
 
 export const fetchUsersSubmissions = (userId, assignmentId) =>
   createApiAction({
-    type: actionTypes.LOAD_USERS_SUBMISSIONS,
+    type: additionalActionTypes.LOAD_USERS_SUBMISSIONS,
     endpoint: `/exercise-assignments/${assignmentId}/users/${userId}/submissions`,
     method: 'GET',
     meta: {
@@ -48,7 +50,7 @@ export const fetchUsersSubmissions = (userId, assignmentId) =>
 
 const reducer = handleActions(Object.assign({}, reduceActions, {
 
-  [actionTypes.LOAD_USERS_SUBMISSIONS_FULFILLED]: (state, { payload }) => {
+  [additionalActionTypes.LOAD_USERS_SUBMISSIONS_FULFILLED]: (state, { payload }) => {
     const records = payload.map(submission => createRecord(false, false, false, submission));
     return records.reduce(
       (state, record) =>

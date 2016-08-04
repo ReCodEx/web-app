@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import { asyncConnect } from 'redux-connect';
+import { connect } from 'react-redux';
 
 import Helmet from 'react-helmet';
 
@@ -24,8 +24,7 @@ Dashboard.propTypes = {
   user: PropTypes.object
 };
 
-export default asyncConnect(
-  [],
+export default connect(
   state => ({
     user: loggedInUserSelector(state)
   })

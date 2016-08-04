@@ -8,7 +8,6 @@ import cs from 'react-intl/locale-data/cs';
 
 import { Provider } from 'react-redux';
 import { Router, browserHistory, useRouterHistory } from 'react-router';
-import { ReduxAsyncConnect } from 'redux-connect';
 import { syncHistoryWithStore } from 'react-router-redux';
 import useScroll from 'scroll-behavior/lib/useStandardScroll';
 import createBrowserHistory from 'history/lib/createBrowserHistory';
@@ -31,8 +30,6 @@ render(
   <IntlProvider locale='cs'>
     <Provider store={store}>
       <Router
-        render={(props) =>
-          <ReduxAsyncConnect {...props} />}
         history={history}
         routes={createRoutes(store.getState)} />
     </Provider>

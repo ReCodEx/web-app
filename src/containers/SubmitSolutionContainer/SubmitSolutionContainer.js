@@ -2,11 +2,11 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 import SubmitSolution from '../../components/SubmitSolution';
-import { submissionStatus } from '../../redux/modules/submission';
 import { SUBMISSION_DETAIL_URI_FACTORY, ASSIGNMENT_DETAIL_URI_FACTORY } from '../../links';
 import EvaluationProgressContainer from '../EvaluationProgressContainer';
 
 import {
+  submissionStatus,
   changeNote,
   uploadFile,
   removeFile,
@@ -60,10 +60,10 @@ class SubmitSolutionContainer extends Component {
     return (
       <div>
         <SubmitSolution
-          isOpen={isOpen && !isProcessing}
-          canSubmit={attachedFiles.length > 0
-            && uploadingFiles.length === 0
-            && failedFiles.length === 0}
+          isOpen={isOpen}
+          canSubmit={attachedFiles.length > 0 &&
+            uploadingFiles.length === 0 &&
+            failedFiles.length === 0}
           reset={reset}
           uploadFiles={this.uploadFiles}
           saveNote={changeNote}
@@ -79,7 +79,7 @@ class SubmitSolutionContainer extends Component {
           submitSolution={this.submit} />
 
         <EvaluationProgressContainer
-          isOpen={isOpen && isProcessing}
+          isOpen={isProcessing}
           assignmentId={assignmentId}
           submissionId={submissionId}
           link={submissionDetailLink(submissionId)}
@@ -108,7 +108,6 @@ export default connect(
     removeFile: (payload) => dispatch(removeFile(payload)),
     returnFile: (payload) => dispatch(returnFile(payload)),
     submitSolution: (note, files) => dispatch(submitSolution(props.assignmentId, note, files)),
-    goToAssignment: () => dispatch(push(ASSIGNMENT_DETAIL_URI_FACTORY(props.assignmentId))),
     submissionDetailLink: (submissionId) => SUBMISSION_DETAIL_URI_FACTORY(props.assignmentId, submissionId)
   })
 )(SubmitSolutionContainer);

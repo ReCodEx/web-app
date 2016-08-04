@@ -4,22 +4,28 @@ import Icon from 'react-fontawesome';
 import { Grid, Row, Col, Table } from 'react-bootstrap';
 import ReactMarkdown from 'react-markdown';
 import { FormattedDate, FormattedTime } from 'react-intl';
+import classnames from 'classnames';
 
 const AssignmentDetails = ({
   assignment,
-  isOpen
+  isOpen,
+  isAfterFirstDeadline,
+  isAfterSecondDeadline
 }) => (
   <Box
     title={'Zadání úlohy'}
-    noPadding={false}
+    noPadding={true}
     collapsable={true}
     isOpen={isOpen}>
     <Table responsive condensed>
       <tbody>
-        <tr>
-          <td>
+        <tr className={classnames({
+          'text-danger': isAfterFirstDeadline
+        })}>
+          <td className='text-center'>
             <strong>
-              <Icon name='clock-o' />
+              {!isAfterFirstDeadline && <Icon name='hourglass-start' />}
+              {isAfterFirstDeadline && <Icon name='hourglass-end'/>}
             </strong>
           </td>
           <td>Termín pro odevzdání:</td>
@@ -30,10 +36,13 @@ const AssignmentDetails = ({
           </td>
         </tr>
         {assignment.deadline.second && (
-          <tr>
-            <td>
-              <strong className='text-warning'>
-                <Icon name='clock-o' />
+          <tr className={classnames({
+            'text-danger': isAfterSecondDeadline
+          })}>
+            <td className='text-center'>
+              <strong>
+                {!isAfterSecondDeadline && <Icon name='hourglass-half' />}
+                {isAfterSecondDeadline && <Icon name='hourglass-end'/>}
               </strong>
             </td>
             <td>Druhý termín pro odevzdání:</td>
@@ -43,9 +52,19 @@ const AssignmentDetails = ({
               </strong>
             </td>
           </tr>)}
+        <tr>
+          <td className='text-center'>
+            <Icon name='cloud-upload' />
+          </td>
+          <td>Limit počtu odevzdání:</td>
+          <td>{assignment.submissionsCountLimit === null ? '-' : assignment.submissionsCountLimit}</td>
+        </tr>
       </tbody>
     </Table>
-    <ReactMarkdown source={assignment.description} />
+    <div style={{ paddingLeft: 20, paddingRight: 20, paddingBottom: 20 }}>
+      <ReactMarkdown
+        source={assignment.description} />
+    </div>
   </Box>
 );
 

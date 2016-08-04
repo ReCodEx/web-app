@@ -10,13 +10,11 @@ class Box extends Component {
     this.setState({ isOpen });
   }
 
-  componentWillReceiveProps(newProps) {
-    if (newProps !== this.props) {
-      this.setState({ isOpen: newProps.isOpen });
-    }
-  }
-
   toggleDetails = () => {
+    if (!this.props.collapsable) {
+      return;
+    }
+
     if (this.state.isOpen) {
       this.hideDetails();
     } else {
@@ -45,7 +43,7 @@ class Box extends Component {
           [`box-${type}`]: typeof type !== 'undefined'
         })
       }>
-        <div className='box-header with-border'>
+        <div className='box-header with-border' onClick={this.toggleDetails}>
           <h3 className='box-title'>{title}</h3>
           {collapsable && (
             <div className='box-tools pull-right'>

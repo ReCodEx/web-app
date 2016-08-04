@@ -7,3 +7,5 @@ const NoSolutionYetTableRow = () => (
     </td>
   </tr>
 );
+
+export default NoSolutionYetTableRow;

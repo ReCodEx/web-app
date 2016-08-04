@@ -20,7 +20,7 @@ const NotEvaluatedSubmissionTableRow = ({
     </td>
     <td className='text-right'>
       <Link to={link} className='btn btn-flat btn-default btn-xs'>
-        Zobrazit podrobnosti
+        Zjistit výsledek vyhodnocování
       </Link>
     </td>
   </tr>

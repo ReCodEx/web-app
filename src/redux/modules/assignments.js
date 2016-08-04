@@ -4,13 +4,16 @@ import { Map } from 'immutable';
 import { usersSelector } from '../selectors/users';
 import factory, { initialState, createRecord } from '../helpers/resourceManager';
 import { createApiAction } from '../middleware/apiMiddleware';
-import { actionTypes as submissionsActionTypes } from './submissions';
+import { additionalActionTypes as submissionsActionTypes } from './submissions';
 
 const resourceName = 'assignments';
 const {
   actions,
   reduceActions
-} = factory(resourceName, state => state.groups, id => `/exercise-assignments/${id}`);
+} = factory({
+  resourceName,
+  apiEndpointFactory: id => `/exercise-assignments/${id}`
+});
 
 const actionTypes = {
   LOAD_GROUPS_ASSINGMENTS: 'recodex/assignments/LOAD_GROUPS_ASSINGMENTS',
