@@ -8,7 +8,7 @@ import Promise from 'bluebird';
 import Helmet from 'react-helmet';
 import cookieParser from 'cookie-parser';
 
-import { match } from 'react-router';
+import { match, RouterContext } from 'react-router';
 
 import { IntlProvider, addLocaleData } from 'react-intl';
 import cs from 'react-intl/locale-data/cs';
@@ -57,7 +57,7 @@ app.get('*', (req, res) => {
       let html = renderToString(
         <IntlProvider locale={cs}>
           <Provider store={store}>
-            <ReduxAsyncConnect {...renderProps} />
+            <RouterContext {...renderProps} />
           </Provider>
         </IntlProvider>
       );

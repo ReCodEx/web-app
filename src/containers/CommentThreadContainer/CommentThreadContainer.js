@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 
 import { isLoading, hasFailed, isReady } from '../../redux/helpers/resourceManager';
-import { postComment, fetchThreadIfNeeded } from '../../redux/modules/comments';
+import { postComment, repostComment, fetchThreadIfNeeded } from '../../redux/modules/comments';
 import { loggedInUserId } from '../../redux/selectors/auth';
 import { loggedInUserSelector } from '../../redux/selectors/users';
 
@@ -31,7 +31,8 @@ class CommentThreadContainer extends Component {
     const {
       thread,
       user,
-      addComment
+      addComment,
+      repostComment
     } = this.props;
 
     if (isLoading(thread)) {
@@ -46,7 +47,8 @@ class CommentThreadContainer extends Component {
       <CommentThread
         comments={thread.data.comments}
         currentUserId={user.id}
-        addComment={user ? text => addComment(user, text) : null} />
+        addComment={user ? (text, isPrivate) => addComment(user, text, isPrivate) : null}
+        repostComment={repostComment} />
     );
   }
 
@@ -56,7 +58,8 @@ CommentThreadContainer.propTypes = {
   threadId: PropTypes.string.isRequired,
   thread: PropTypes.object,
   user: PropTypes.object,
-  addComment: PropTypes.func.isRequired
+  addComment: PropTypes.func.isRequired,
+  repost: PropTypes.func
 };
 
 export default connect(
@@ -65,7 +68,8 @@ export default connect(
     thread: state.comments.getIn(['resources', threadId])
   }),
   (dispatch, { threadId }) => ({
-    addComment: (user, text) => dispatch(postComment(user, threadId, text)),
+    addComment: (user, text, isPrivate) => dispatch(postComment(user, threadId, text, isPrivate)),
+    repostComment: (tmpId) => dispatch(repostComment(threadId, tmpId)),
     loadThreadIfNeeded: () => dispatch(fetchThreadIfNeeded(threadId))
   })
 )(CommentThreadContainer);

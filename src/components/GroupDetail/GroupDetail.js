@@ -19,7 +19,7 @@ const GroupDetail = ({
           <UsersList users={group.data.supervisors} fill />
         </Box>
         <Box title='Studenti' collapsable isOpen={false}>
-          <UsersList users={[]} fill />
+          <UsersList users={group.data.students} fill />
         </Box>
       </Col>
 

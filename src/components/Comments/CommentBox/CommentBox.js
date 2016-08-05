@@ -30,7 +30,7 @@ class CommentBox extends Component {
         noPadding={false}
         collapsable
         footer={footer}
-        className='direct-chat direct-chat-success'>
+        className='direct-chat'>
         <div className='direct-chat-messages' ref='commentsContainer'>
           {children}
         </div>

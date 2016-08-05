@@ -17,19 +17,19 @@ const {
 export const actionTypes = {
   POST_COMMENT: 'redux/comments/POST_COMMENT',
   POST_COMMENT_PENDING: 'redux/comments/POST_COMMENT_PENDING',
-  POST_COMMENT_FAILED: 'redux/comments/POST_COMMENT_FAILED',
+  POST_COMMENT_REJECTED: 'redux/comments/POST_COMMENT_REJECTED',
   POST_COMMENT_FULFILLED: 'redux/comments/POST_COMMENT_FULFILLED',
   REMOVE_COMMENT: 'redux/comment/REMOVE_COMMENT'
 };
 
 export const fetchThreadIfNeeded = actions.fetchOneIfNeeded;
 
-export const postComment = (user, threadId, text) =>
+export const postComment = (user, threadId, text, isPrivate) =>
   createApiAction({
     type: actionTypes.POST_COMMENT,
     endpoint: `/comments/${threadId}/add`,
     method: 'POST',
-    body: { text },
+    body: { text, isPrivate: isPrivate ? 'yes' : 'no' },
     meta: { threadId, user, tmpId: Math.random().toString() }
   });
 
@@ -38,7 +38,7 @@ export const repostComment = (threadId, tmpId) =>
     const comment = getState().comments.getIn([ 'resources', threadId ])
                       .data.comments.find(cmt => cmt.id === tmpId);
     dispatch({ type: actionTypes.REMOVE_COMMENT, payload: { threadId, id: tmpId } });
-    dispatch(postComment(comment.user, comment.threadId, comment.text));
+    dispatch(postComment(comment.user, threadId, comment.text, comment.isPrivate)).catch(() => {});
   };
 
 /**
@@ -47,9 +47,9 @@ export const repostComment = (threadId, tmpId) =>
 
 const reducer = handleActions(Object.assign({}, reduceActions, {
 
-  [actionTypes.POST_COMMENT_PENDING]: (state, { payload: { text }, meta: { tmpId, user, threadId } }) => {
+  [actionTypes.POST_COMMENT_PENDING]: (state, { payload: { text, isPrivate }, meta: { tmpId, user, threadId } }) => {
     const correctUserData = Object.assign({}, user, { name: user.fullName || user.name });
-    const resource = { id: tmpId, status: 'pending', text, user: correctUserData };
+    const resource = { id: tmpId, status: 'pending', text, user: correctUserData, isPrivate: isPrivate === 'yes' };
     return state.updateIn(
       ['resources', threadId],
       thread => {
@@ -74,7 +74,7 @@ const reducer = handleActions(Object.assign({}, reduceActions, {
     );
   },
 
-  [actionTypes.POST_COMMENT_FAILED]: (state, { meta: { threadId, tmpId } }) => {
+  [actionTypes.POST_COMMENT_REJECTED]: (state, { meta: { threadId, tmpId } }) => {
     return state.updateIn(
       ['resources', threadId],
       thread => {

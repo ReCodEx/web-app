@@ -7,15 +7,16 @@ import { UsersComment, SomebodyElsesComment } from '../Comment';
 const CommentThread = ({
   comments = [],
   currentUserId,
-  addComment
+  addComment,
+  repostComment
 }) => (
   <CommentBox
     commentsCount={comments.length}
     footer={addComment && <AddComment addComment={addComment} />}>
     <div>
       {comments.map((comment, i) =>
-        comment.user.id === currentUserId && i % 2 === 0
-          ? <UsersComment {...comment} key={comment.id} />
+        comment.user.id === currentUserId
+          ? <UsersComment {...comment} key={comment.id} repost={repostComment} />
           : <SomebodyElsesComment {...comment} key={comment.id} />)}
 
       {comments.length === 0 && (
@@ -28,7 +29,8 @@ const CommentThread = ({
 CommentThread.propTypes = {
   comments: PropTypes.array,
   currentUserId: PropTypes.string.isRequired,
-  addComment: PropTypes.func
+  addComment: PropTypes.func,
+  repostComment: PropTypes.func
 };
 
 export default CommentThread;
