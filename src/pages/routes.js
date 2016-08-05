@@ -12,6 +12,7 @@ import Login from './Login';
 import Assignment from './Assignment';
 import NotFound from './NotFound';
 import Submission from './Submission';
+import User from './User';
 
 import SourceCodeViewerContainer from '../containers/SourceCodeViewerContainer';
 
@@ -41,6 +42,7 @@ const createRoutes = (getState) => {
           <Route path='file/:fileId' component={SourceCodeViewerContainer} />
         </Route>
         <Route path='group/:groupId' component={Group} />
+        <Route path='user/:userId' component={User} />
       </Route>
       <Route path='*' component={NotFound} />
     </Route>

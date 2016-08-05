@@ -6,7 +6,7 @@ import SourceCodeViewer from '../../components/SourceCodeViewer';
 
 class SourceCodeViewerContainer extends Component {
 
-  state = { showLineNumbers: false };
+  state = { showLineNumbers: true };
 
   toggleLineNumbers = () => this.setState({ showLineNumbers: !this.state.showLineNumbers });
 

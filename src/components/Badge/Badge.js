@@ -1,31 +1,34 @@
 import React, { PropTypes } from 'react';
-import Gravatar from 'react-gravatar';
 import Icon from 'react-fontawesome';
+import { Link } from 'react-router';
+import { USER_URI_FACTORY } from '../../links';
 
 const Badge = ({
-  user: { fullName, email },
+  user: { id, fullName, avatarUrl },
   logout
 }) => (
   <div className='user-panel'>
     <div className='pull-left image'>
-      <Gravatar
-        email={email}
-        https
-        default='retro'
-        className='img-circle'
-        size={45} />
+      <img src={avatarUrl} alt={fullName} className='img-circle' />
     </div>
     <div className='pull-left info'>
-      <p>{fullName}</p>
-      <a href='#' onClick={logout}><Icon name='power-off' className='text-danger' /> Odhlásit se</a>
+      <p>
+        <Link to={USER_URI_FACTORY(id)}>
+          {fullName}
+        </Link>
+      </p>
+      <a href='#' onClick={logout}>
+        <Icon name='power-off' className='text-danger' /> Odhlásit se
+      </a>
     </div>
   </div>
 );
 
 Badge.propTypes = {
   user: PropTypes.shape({
+    id: PropTypes.string.isRequired,
     fullName: PropTypes.string.isRequired,
-    email: PropTypes.string.isRequired
+    avatarUrl: PropTypes.string.isRequired
   }).isRequired,
   logout: PropTypes.func
 };

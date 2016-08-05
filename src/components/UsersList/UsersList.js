@@ -11,7 +11,7 @@ const UsersList = ({
   <Table>
     <tbody>
     {users.map((user, i) => (
-      <UsersListItem user={user} key={i} />
+      <UsersListItem {...user} key={i} />
     ))}
 
     {users.length === 0 && (

@@ -49,13 +49,21 @@ class Submission extends Component {
       assignment,
       submission,
       evaluation,
-      params: { assignmentId },
+      params: { submissionId, assignmentId },
       children
     } = this.props;
 
-    const title = isReady(assignment) ? assignment.data.name : 'Načítám ...';
+    const assignmentName = isReady(assignment) ? assignment.data.name : null;
+    const title = assignmentName !== null ? assignmentName : 'Načítám ...';
+
     return (
-      <PageContent title={title} description='Vyhodnocení odevzdaného řešení'>
+      <PageContent
+        title={title}
+        description='Vyhodnocení odevzdaného řešení'
+        breadcrumbs={[
+          { text: 'Zadání úlohy', iconName: 'puzzle-piece', link: ASSIGNMENT_DETAIL_URI_FACTORY(assignmentId) },
+          { text: 'Odevzdané řešení' }
+        ]}>
         <div>
           {isLoading(submission) && <LoadingSubmissionDetail />}
           {hasFailed(submission) && <FailedSubmissionDetail />}

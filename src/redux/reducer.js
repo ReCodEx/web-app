@@ -3,6 +3,7 @@ import { routerReducer } from 'react-router-redux';
 
 import auth, { actionTypes as authActionTypes } from './modules/auth';
 import assignments from './modules/assignments';
+import comments from './modules/comments';
 import evaluationProgress from './modules/evaluationProgress';
 import files from './modules/files';
 import groups from './modules/groups';
@@ -14,6 +15,7 @@ import users from './modules/users';
 const createRecodexReducers = (token) => ({
   auth: auth(token),
   assignments,
+  comments,
   evaluationProgress,
   files,
   groups,

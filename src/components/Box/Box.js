@@ -32,7 +32,8 @@ class Box extends Component {
       noPadding = true,
       children,
       footer,
-      collapsable = false
+      collapsable = false,
+      className = ''
     } = this.props;
     const { isOpen = true } = this.state;
 
@@ -40,7 +41,8 @@ class Box extends Component {
       <div className={
         classNames({
           'box': true,
-          [`box-${type}`]: typeof type !== 'undefined'
+          [`box-${type}`]: typeof type !== 'undefined',
+          [className]: true
         })
       }>
         <div className='box-header with-border' onClick={this.toggleDetails}>
@@ -62,11 +64,11 @@ class Box extends Component {
           }>
             {children}
           </div>
+          {footer &&
+            <div className={'box-footer'}>
+              {footer}
+            </div>}
         </Collapse>
-        {footer &&
-          <div className={'box-footer'}>
-            {footer}
-          </div>}
       </div>
     );
   }

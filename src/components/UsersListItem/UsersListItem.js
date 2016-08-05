@@ -6,20 +6,13 @@ import { Link } from 'react-router';
 import { USER_URI_FACTORY } from '../../links';
 
 const UsersListItem = ({
-  user: {
-    id,
-    fullName,
-    email
-  }
+  id,
+  fullName,
+  avatarUrl
 }) => (
   <tr>
     <td className='text-center' width={80}>
-      <Gravatar
-        email={email}
-        https
-        default='retro'
-        className='img-circle'
-        size={45} />
+      <img src={avatarUrl} className='img-circle' width={45} />
     </td>
     <td>
       <p><strong>{fullName}</strong></p>
@@ -29,11 +22,9 @@ const UsersListItem = ({
 );
 
 UsersListItem.propTypes = {
-  user: PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    fullName: PropTypes.string.isRequired,
-    email: PropTypes.string.isRequired
-  }).isRequired
+  id: PropTypes.string.isRequired,
+  fullName: PropTypes.string.isRequired,
+  avatarUrl: PropTypes.string.isRequired
 };
 
 export default UsersListItem;

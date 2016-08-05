@@ -69,7 +69,12 @@ class Assignment extends Component {
                     : assignment.data.name;
 
     return (
-      <PageContent title={title} description={'Zadání úlohy'}>
+      <PageContent
+        title={title}
+        description={'Zadání úlohy'}
+        breadcrumbs={[
+          { text: 'Zadání úlohy', iconName: 'puzzle-piece' }
+        ]}>
         <Row>
           <Col md={6}>
             {isLoading(assignment) && <LoadingAssignmentDetails />}

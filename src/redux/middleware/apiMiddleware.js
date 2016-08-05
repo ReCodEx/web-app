@@ -1,3 +1,4 @@
+import statusCode from 'statuscode';
 import { accessTokenSelector } from '../selectors/auth';
 
 export const API_BASE = process.env.API_BASE || 'http://localhost:4000/v1';
@@ -34,9 +35,7 @@ const createRequest = (endpoint, query = {}, method, headers, body) =>
     method,
     headers,
     body: createFormData(body)
-  })
-  .then(res => res.json())
-  .then(json => json.payload);
+  });
 
 export const getHeaders = (headers, accessToken) => {
   if (accessToken) {
@@ -49,6 +48,20 @@ export const getHeaders = (headers, accessToken) => {
   return headers;
 };
 
+export const createPromise = (endpoint, query, method, headers, body, wasSuccessful) =>
+  createRequest(endpoint, query, method, headers, body)
+    .then(res => {
+      if (!wasSuccessful(res)) {
+        throw new Error('The API call was not successful.', wasSuccessful);
+      }
+
+      return res;
+    })
+    .then(res => res.json())
+    .then(json => json.payload);
+
+export const isTwoHundredCode = (res) => statusCode.accept(res.status, '2xx');
+
 export const apiCall = ({
   type,
   endpoint,
@@ -57,11 +70,20 @@ export const apiCall = ({
   headers = {},
   accessToken = undefined,
   body = undefined,
-  meta = undefined
+  meta = undefined,
+  wasSuccessful = isTwoHundredCode
 }) => ({
   type,
   payload: {
-    promise: createRequest(endpoint, query, method, getHeaders(headers, accessToken), body),
+    promise:
+      createPromise(
+        endpoint,
+        query,
+        method,
+        getHeaders(headers, accessToken),
+        body,
+        wasSuccessful
+      ),
     data: body
   },
   meta
