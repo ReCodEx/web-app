@@ -1,9 +1,11 @@
 import React, { PropTypes } from 'react';
 import Helmet from 'react-helmet';
+import Breadcrumbs from '../Breadcrumbs';
 
 const PageContent = ({
   title,
   description = '',
+  breadcrumbs = [],
   children
 }) => (
   <div className='content-wrapper'>
@@ -13,12 +15,7 @@ const PageContent = ({
         {title}
         <small>{description}</small>
       </h1>
-      {/*
-      <ol className='breadcrumb'>
-        <li><a href='#'><i class='fa fa-dashboard'></i> Level</a></li>
-        <li class='active'>Here</li>
-      </ol>
-      */}
+      {breadcrumbs.length > 0 && <Breadcrumbs items={breadcrumbs} />}
     </section>
     <section className='content'>
       {children}
@@ -29,6 +26,7 @@ const PageContent = ({
 PageContent.propTypes = {
   title: PropTypes.string.isRequired,
   description: PropTypes.string,
+  breadcrumbs: PropTypes.array,
   children: PropTypes.element
 };
 
