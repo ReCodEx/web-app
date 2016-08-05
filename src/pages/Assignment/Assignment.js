@@ -22,15 +22,15 @@ import SubmissionsTableContainer from '../../containers/SubmissionsTableContaine
 
 class Assignment extends Component {
 
+  updateTime = () => this.setState({ time: Date.now() });
+
   componentWillMount() {
     this.updateTime();
     this.deadlineUpdater = setInterval(this.updateTime, 5 * 1000); // once per five seconds
     Assignment.loadData(this.props);
   }
 
-  updateTime = () => this.setState({ time: Date.now() });
-
-  componentWillUnount() {
+  componentWillUnmount() {
     clearInterval(this.deadlineUpdater);
   }
 
