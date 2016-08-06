@@ -12,6 +12,7 @@ import { match, RouterContext } from 'react-router';
 
 import { IntlProvider, addLocaleData } from 'react-intl';
 import cs from 'react-intl/locale-data/cs';
+import messages from './locales/cs';
 
 import { Provider } from 'react-redux';
 import { syncHistoryWithStore } from 'react-router-redux';
@@ -32,7 +33,6 @@ app.use(Express.static('public'));
 app.use(cookieParser());
 
 app.get('*', (req, res) => {
-  console.log('serving req');
   const memoryHistory = createHistory(req.originalUrl);
   // Extract the accessToken from the cookies for authenticated API requests from the server.
   const token = req.cookies.accessToken; // undefined === the user is not logged in
@@ -55,7 +55,7 @@ app.get('*', (req, res) => {
 
       // @todo make locale changeable
       let html = renderToString(
-        <IntlProvider locale={cs}>
+        <IntlProvider locale='cs' messages={messages}>
           <Provider store={store}>
             <RouterContext {...renderProps} />
           </Provider>

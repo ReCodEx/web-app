@@ -9,12 +9,12 @@ const SourceCodeInfoBox = ({
   uploadedAt
 }) => (
   <div className='info-box'>
-    <span className="info-box-icon bg-yellow">
+    <span className='info-box-icon bg-yellow'>
       <Icon name='files-o' />
     </span>
     <div className='info-box-content'>
       <span className='info-box-text'>{name}</span>
-      <span className="info-box-number">{prettyBytes(size)}</span>
+      <span className='info-box-number'>{prettyBytes(size)}</span>
     </div>
   </div>
 );

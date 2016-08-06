@@ -1,5 +1,8 @@
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
+import { FormattedMessage } from 'react-intl';
+import { FormGroup, Checkbox } from 'react-bootstrap';
+
 import { fetchFileIfNeeded, fetchContentIfNeeded } from '../../redux/modules/files';
 import { isReady, isLoading, hasFailed } from '../../redux/helpers/resourceManager';
 import SourceCodeViewer from '../../components/SourceCodeViewer';
@@ -32,17 +35,17 @@ class SourceCodeViewerContainer extends Component {
     const { showLineNumbers } = this.state;
 
     if (isLoading(file)) {
-      return <p>Načítám zdrojový kód ...</p>;
+      return <p><FormattedMessage id='app.sourceCode.loading' defaultMessage='Loading source code ...' /></p>;
     } else if (hasFailed(file)) {
-      return <p>Chyba stahování zdrojového kódu.</p>;
+      return <p><FormattedMessage id='app.sourceCode.loadingFailed' defaultMessage='Cannot load the source code.' /></p>;
     } else {
       return (
         <div>
-          <div className='form-group'>
-            <label>
-              <input type='checkbox' onChange={this.toggleLineNumbers} checked={showLineNumbers} /> Číslování řádků
-            </label>
-          </div>
+          <FormGroup>
+            <Checkbox onChange={this.toggleLineNumbers} checked={showLineNumbers}>
+              <FormattedMessage id='app.sourceCode.showLineNumbers' defaultMessage='Show line numbers' />
+            </Checkbox>
+          </FormGroup>
           <SourceCodeViewer {...file.data} onCloseSourceViewer={this.close} lineNumbers={showLineNumbers} />
         </div>
       );

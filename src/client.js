@@ -4,7 +4,8 @@ import React from 'react';
 import { render } from 'react-dom';
 
 import { IntlProvider, addLocaleData } from 'react-intl';
-import cs from 'react-intl/locale-data/cs';
+import lang from 'react-intl/locale-data/en';
+import messages from './locales/en';
 
 import { Provider } from 'react-redux';
 import { Router, browserHistory, useRouterHistory } from 'react-router';
@@ -23,11 +24,10 @@ const createScrollHistory = useScroll(createBrowserHistory);
 const appHistory = useRouterHistory(createScrollHistory)();
 const history = syncHistoryWithStore(appHistory, store);
 
-addLocaleData([ ...cs ]);
+addLocaleData([ ...lang ]);
 
-// @todo make locale changeable
 render(
-  <IntlProvider locale='cs'>
+  <IntlProvider locale='en' messages={messages}>
     <Provider store={store}>
       <Router
         history={history}

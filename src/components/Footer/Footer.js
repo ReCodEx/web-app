@@ -1,18 +1,24 @@
 import React, { PropTypes } from 'react';
+import { FormattedHTMLMessage } from 'react-intl';
 
 const Footer = ({
-  version = '0.0.0'
+  version
 }) => (
   <footer className='main-footer'>
     <div className='pull-right hidden-xs'>
-      <b>Version</b> {version}
+      <FormattedHTMLMessage id='app.footer.version' defaultMessage='<strong>Version</strong> {version}' values={{ version }} />
     </div>
-    <strong>Copyright © 2016 <a href='http://github.com/recodex'>ReCodEx</a>.</strong> All rights reserved.
+    <FormattedHTMLMessage
+      id='app.footer.copyright'
+      defaultMessage='Copyright © 2016 <a href="{website}">ReCodEx</a>.</strong> All rights reserved.'
+      values={{
+        website: 'http://github.com/recodex'
+      }} />
   </footer>
 );
 
 Footer.propTypes = {
-  version: PropTypes.string
+  version: PropTypes.string.isRequired
 };
 
 export default Footer;

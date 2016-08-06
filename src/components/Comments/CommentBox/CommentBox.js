@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import { FormattedMessage } from 'react-intl';
 import Box from '../../Box';
 
 class CommentBox extends Component {
@@ -26,7 +27,7 @@ class CommentBox extends Component {
 
     return (
       <Box
-        title='Komentáře'
+        title={<FormattedMessage id='app.comments.title' defaultMessage='Comments and notes' />}
         noPadding={false}
         collapsable
         footer={footer}

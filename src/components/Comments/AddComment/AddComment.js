@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
-import { Button, Form, FormGroup, FormControl, InputGroup, HelpBlock } from 'react-bootstrap';
+import { FormattedMessage, FormattedHTMLMessage, injectIntl, intlShape } from 'react-intl';
+import { Row, Col, Button, Form, FormGroup, FormControl, InputGroup, HelpBlock } from 'react-bootstrap';
 import Icon from 'react-fontawesome';
 
 class AddComment extends Component {
@@ -19,38 +20,41 @@ class AddComment extends Component {
 
   render() {
     const { text, isPrivate } = this.state;
-    const { addComment } = this.props;
+    const { addComment, intl: { formatMessage } } = this.props;
 
     return (
       <Form>
-        <FormGroup bsSize='large'>
+        <FormGroup>
           <InputGroup>
-            <InputGroup.Addon>
-              <Button className='btn-flat' onClick={this.togglePrivate} bsSize='xs'>
-                {isPrivate ? <Icon name='lock' className='text-success' /> : <Icon name='unlock-alt' className='text-warning' />}
-              </Button>
-            </InputGroup.Addon>
             <FormControl
               type='text'
               onChange={e => this.changeText(e.target.value)}
-              placeholder='Váš komentář ...'
+              placeholder={formatMessage({ id: 'app.comments.commentPlaceholder', defaultMessage: 'Your comment ...' })}
               value={text} />
             <InputGroup.Button>
               <Button
                 type='submit'
                 bsStyle={isPrivate ? 'success' : 'primary'}
-                bsSize='large'
                 disabled={text.length === 0}
                 className='btn-flat'
                 onClick={this.addComment}>
-                Odeslat
+                <FormattedMessage id='app.comments.addComment' defaultMessage='Send' />
               </Button>
             </InputGroup.Button>
           </InputGroup>
-          {isPrivate &&
-            <HelpBlock>Tento komentář uvidíte pouze vy. Pokud chcete, aby byl veřejný, klikěte na tlačítko s ikonou zámku.</HelpBlock>}
-          {!isPrivate &&
-            <HelpBlock>Tento komentář <strong>uvidí všichni návštěvnící této stránky</strong>. Pokud chcete, aby byl soukromý, klikěte na tlačítko s ikonou zámku.</HelpBlock>}
+          <HelpBlock>
+            <Button className='btn-flat' onClick={this.togglePrivate}>
+              {isPrivate ? <Icon name='lock' className='text-success' /> : <Icon name='unlock-alt' className='text-warning' />}
+            </Button>{' '}
+            {isPrivate && (
+              <FormattedHTMLMessage
+                id='app.comments.warnings.isPrivate'
+                defaultMessage='<strong>Only you will see this comment.</strong>' />)}
+            {!isPrivate && (
+              <FormattedHTMLMessage
+                  id='app.comments.warnings.isPublic'
+                defaultMessage='<strong>Everyone on this page will see this comment.</strong>' />)}
+          </HelpBlock>
         </FormGroup>
       </Form>
     );
@@ -59,7 +63,8 @@ class AddComment extends Component {
 }
 
 AddComment.propTypes = {
-  addComment: PropTypes.func.isRequired
+  addComment: PropTypes.func.isRequired,
+  intl: intlShape.isRequired
 };
 
-export default AddComment;
+export default injectIntl(AddComment);

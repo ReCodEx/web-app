@@ -14,8 +14,12 @@ const Dashboard = ({
   user
 }) => (
   <PageContent
-    title='Celkový přehled'
-    description={user ? `ReCodEx - ${user.fullName}` : 'ReCodEx'}>
+    title={<FormattedMessage id='app.dashboard.title' defaultMessage='Dashboard' />}
+    description={
+      user
+        ? user.fullName
+        : <FormattedMessage id='app.dashboard.loading' defaultMessage='Loading ...' />
+    }>
 
   </PageContent>
 );

@@ -60,7 +60,7 @@ class MenuGroup extends Component {
 }
 
 MenuGroup.propTypes = {
-  title: PropTypes.string.isRequired,
+  title: PropTypes.oneOfType([ PropTypes.string, PropTypes.element ]).isRequired,
   icon: PropTypes.string,
   link: PropTypes.string,
   isActive: PropTypes.bool

@@ -3,20 +3,22 @@ import Box from '../../Box';
 import { FailedIcon } from '../../Icons';
 import { Grid, Row, Col, Table } from 'react-bootstrap';
 import ReactMarkdown from 'react-markdown';
-import { FormattedDate, FormattedTime } from 'react-intl';
+import { FormatedMessage } from 'react-intl';
 
 const FailedAssignmentDetails = () => (
   <Box
     title={(
       <span>
-        <FailedIcon /> Chyba načítání dat
+        <FailedIcon /> <FormattedMessage id='app.assignment.error' defaultMessage='Exercise assignment could not be loaded.' />
       </span>
     )}
     noPadding={false}
     collapsable={true}
     isOpen={false}>
     <p>
-      Zadání této úlohy se nepodařilo načíst. Ujistěte se, že jste připojen(a) k Internetu a opakujte prosíme akci o chvíli později.
+      <FormattedMessage
+        id='app.assignment.errorExplanation'
+        defaultMessage='The assignment of this exercise could not be loaded. Make sure you are connected to the Internet and try again later.' />
     </p>
   </Box>
 );

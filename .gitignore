@@ -3,3 +3,4 @@ node_modules/.bin/*
 .DS_Store
 public/bundle.js
 public/bundle.js.map
+build

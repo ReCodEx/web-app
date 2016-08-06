@@ -71,11 +71,11 @@ class LoginForm extends Component {
         }>
           <span>
             {hasFailed && <Alert bsStyle='danger'>Přihlášení se nezdařilo, zkontrolujte si své přihlašovací údaje.</Alert>}
-            <FormGroup controlId="loginEmail" validationState={hasFailed === true ? 'error' : undefined}>
+            <FormGroup validationState={hasFailed === true ? 'error' : undefined}>
               <ControlLabel>Emailová adresa</ControlLabel>
               <FormControl type='email' onChange={e => this.changeLogin(e.target.value)} name='email' disabled={isTryingToLogin || hasSucceeded} />
             </FormGroup>
-            <FormGroup controlId="loginPwd" validationState={hasFailed === true ? 'error' : undefined}>
+            <FormGroup validationState={hasFailed === true ? 'error' : undefined}>
               <ControlLabel>Heslo</ControlLabel>
               <FormControl type='password' onChange={e => this.changePassword(e.target.value)} name='password' disabled={isTryingToLogin || hasSucceeded} />
             </FormGroup>

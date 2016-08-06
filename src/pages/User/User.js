@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { FormattedMessage } from 'react-intl';
+
 import { fetchUserIfNeeded } from '../../redux/modules/users';
 import { isReady, isLoading, hasFailed } from '../../redux/helpers/resourceManager';
 import PageContent from '../../components/PageContent';
@@ -38,9 +40,9 @@ class User extends Component {
     return (
       <PageContent
         title={title}
-        description={'Uživatelský profil'}
+        description={<FormattedMessage id='app.user.title' defaultMessage="User's profile" />}
         breadcrumbs={[
-          { text: 'Uživatelský profil', iconName: 'user' }
+          { text: <FormattedMessage id='app.user.title' defaultMessage="User's profile" />, iconName: 'user' }
         ]}>
         <div>
           {isLoading(user) && <LoadingUserProfile />}

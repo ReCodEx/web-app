@@ -1,4 +1,5 @@
 import React, { PropTypes } from 'react';
+import { FormattedMessage } from 'react-intl';
 
 import CommentBox from '../CommentBox';
 import AddComment from '../AddComment';
@@ -20,7 +21,9 @@ const CommentThread = ({
           : <SomebodyElsesComment {...comment} key={comment.id} />)}
 
       {comments.length === 0 && (
-        <p className='text-center'>Zatím zde nejsou žádné komentáře.</p>
+        <p className='text-center'>
+          <FormattedMessage id='app.comments.noCommentsYet' defaultMessage='There are no comments in this thread yet.' />
+        </p>
       )}
     </div>
   </CommentBox>

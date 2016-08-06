@@ -37,7 +37,7 @@ const MenuItem = ({
 );
 
 MenuItem.propTypes = {
-  title: PropTypes.string,
+  title: PropTypes.oneOfType([ PropTypes.element, PropTypes.string ]),
   icon: PropTypes.string,
   notificationsCount: PropTypes.number,
   link: PropTypes.string,
