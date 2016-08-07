@@ -34,7 +34,7 @@ class Register extends Component {
       <PageContent
         title={<FormattedMessage id='app.registration.title' defaultMessage='Create a new ReCodEx account' />}>
         <Row>
-          <Col sm={6} smOffset={3}>
+          <Col md={6} mdOffset={3}>
             <RegistrationForm
               tryCreateAccount={createAccount}
               istTryingToCreateAccount={isCreatingAccount}

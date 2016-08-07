@@ -32,7 +32,7 @@ class Login extends Component {
     return (
       <PageContent title='Přihlášení'>
         <Row>
-          <Col sm={6} smOffset={3}>
+          <Col md={6} mdOffset={3}>
             <LoginForm
               tryLogin={login}
               isTryingToLogin={isLoggingIn}
