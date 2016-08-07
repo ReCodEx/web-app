@@ -1,4 +1,5 @@
 import { actionTypes } from '../modules/auth';
+import { actionTypes as registrationActionTypes } from '../modules/registration';
 import { CALL_API } from './apiMiddleware';
 
 export const LOCAL_STORAGE_KEY = 'recodex/accessToken';
@@ -45,6 +46,7 @@ const middleware = state => next => action => {
   // manage access token storage
   switch (action.type) {
     case actionTypes.LOGIN_SUCCESS:
+    case registrationActionTypes.CREATE_ACCOUNT_FULFILLED:
       storeToken(action.payload.accessToken);
       break;
     case actionTypes.LOGOUT:

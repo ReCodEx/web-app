@@ -10,6 +10,7 @@ import groups from './modules/groups';
 import sidebar from './modules/sidebar';
 import submission from './modules/submission';
 import submissions from './modules/submissions';
+import registration from './modules/registration';
 import users from './modules/users';
 
 const createRecodexReducers = (token) => ({
@@ -22,6 +23,7 @@ const createRecodexReducers = (token) => ({
   sidebar,
   submission,
   submissions,
+  registration,
   users
 });
 
