@@ -9,7 +9,7 @@ import Box from '../../components/Box';
 import RegistrationForm from '../../components/RegistrationForm';
 
 import { statusTypes, createAccount } from '../../redux/modules/registration';
-import { DASHBOARD_URI } from '../../links';
+import { HOME_URI, DASHBOARD_URI } from '../../links';
 
 class Register extends Component {
 
@@ -32,9 +32,13 @@ class Register extends Component {
 
     return (
       <PageContent
-        title={<FormattedMessage id='app.registration.title' defaultMessage='Create a new ReCodEx account' />}>
+        title={<FormattedMessage id='app.registration.title' defaultMessage='Create a new ReCodEx account' />}
+        breadcrumbs={[
+          { text: <FormattedMessage id='app.homepage.title' />, link: HOME_URI },
+          { text: <FormattedMessage id='app.registration.title' /> }
+        ]}>
         <Row>
-          <Col md={6} mdOffset={3}>
+          <Col md={6} mdOffset={3} sm={8} smOffset={2}>
             <RegistrationForm
               tryCreateAccount={createAccount}
               istTryingToCreateAccount={isCreatingAccount}

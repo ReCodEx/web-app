@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import Helmet from 'react-helmet';
+import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 
 import { Row, Col } from 'react-bootstrap';
@@ -8,7 +8,7 @@ import Box from '../../components/Box';
 import LoginForm from '../../components/LoginForm';
 
 import { statusTypes, login } from '../../redux/modules/auth';
-import { DASHBOARD_URI } from '../../links';
+import { HOME_URI, DASHBOARD_URI } from '../../links';
 
 class Login extends Component {
 
@@ -30,9 +30,14 @@ class Login extends Component {
     const { login, isLoggingIn, hasFailed, hasSucceeded } = this.props;
 
     return (
-      <PageContent title='Přihlášení'>
+      <PageContent
+        title={<FormattedMessage id='app.login.title' defaultMessage='Sign in' />}
+        breadcrumbs={[
+          { text: <FormattedMessage id='app.homepage.title' />, link: HOME_URI },
+          { text: <FormattedMessage id='app.login.title' /> }
+        ]}>
         <Row>
-          <Col md={6} mdOffset={3}>
+          <Col md={6} mdOffset={3} sm={8} smOffset={2}>
             <LoginForm
               tryLogin={login}
               isTryingToLogin={isLoggingIn}

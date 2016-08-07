@@ -25,8 +25,7 @@ const NotLoggedIn = () => (
           title={<FormattedMessage id='app.sidebar.createAccount' defaultMessage='Create account' />}
           isActive={false}
           icon='sign-up'
-          link={REGISTRATION_URI}
-          inNewTab={true} />
+          link={REGISTRATION_URI} />
         <MenuItem
           title={<FormattedMessage id='app.sidebar.bugsAndFeedback' defaultMessage='Bug reporting and your feedback' />}
           isActive={false}
