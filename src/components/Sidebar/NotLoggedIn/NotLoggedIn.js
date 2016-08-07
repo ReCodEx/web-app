@@ -1,4 +1,5 @@
 import React, { PropTypes } from 'react';
+import { FormattedMessage } from 'react-intl';
 
 import Badge from '../../Badge';
 import MenuTitle from '../MenuTitle';
@@ -7,6 +8,7 @@ import MenuGroup from '../MenuGroup';
 
 import {
   LOGIN_URI,
+  REGISTRATION_URI,
   BUGS_URL
 } from '../../../links';
 
@@ -16,11 +18,17 @@ const NotLoggedIn = () => (
       <ul className='sidebar-menu'>
         <MenuTitle title='ReCodEx' />
         <MenuItem
-          title='Přihlásit se'
+          title={<FormattedMessage id='app.sidebar.signIn' defaultMessage='Sign in' />}
           icon='sign-in'
           link={LOGIN_URI} />
         <MenuItem
-          title='Zpětná vazba a hlášení chyb'
+          title={<FormattedMessage id='app.sidebar.createAccount' defaultMessage='Create account' />}
+          isActive={false}
+          icon='sign-up'
+          link={REGISTRATION_URI}
+          inNewTab={true} />
+        <MenuItem
+          title={<FormattedMessage id='app.sidebar.bugsAndFeedback' defaultMessage='Bug reporting and your feedback' />}
           isActive={false}
           icon='bug'
           link={BUGS_URL}
