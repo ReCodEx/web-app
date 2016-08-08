@@ -22,7 +22,10 @@ const BreadcrumbItem = ({
 };
 
 BreadcrumbItem.propTypes = {
-  text: PropTypes.oneOfType([ PropTypes.string, PropTypes.instanceOf(FormattedMessage) ]).isRequired,
+  text: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) })
+  ]).isRequired,
   iconName: PropTypes.string,
   link: PropTypes.string,
   isActive: PropTypes.bool.isRequired

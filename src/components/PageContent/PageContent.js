@@ -32,9 +32,14 @@ const PageContent = ({
 );
 
 PageContent.propTypes = {
-  title: PropTypes.oneOfType([ PropTypes.string, PropTypes.instanceOf(FormattedMessage) ]).isRequired,
-  description: PropTypes.oneOfType([ PropTypes.string, PropTypes.instanceOf(FormattedMessage) ]).isRequired,
-  breadcrumbs: PropTypes.array,
+  title: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) })
+  ]).isRequired,
+  description: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) })
+  ]).isRequired,breadcrumbs: PropTypes.array,
   children: PropTypes.element,
   intl: intlShape.isRequired
 };
