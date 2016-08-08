@@ -28,6 +28,9 @@ module.exports = {
       { test: /\.(jpg|png|gif)/, loader: 'url-loader?limit=10240' }
     ]
   },
+  resolve: {
+    extensions: [ '', '.js', '.json' ]
+  },
   postcss: [
     autoprefixer({ browsers: ['last 2 versions'] })
   ],
