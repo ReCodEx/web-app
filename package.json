@@ -103,6 +103,7 @@
     "mocha": "^2.4.5",
     "mocha-lcov-reporter": "^1.2.0",
     "mock-local-storage": "^1.0.2",
+    "node-sass": "^3.8.0",
     "postcss-loader": "^0.8.2",
     "react-intl-translations-manager": "^3.1.0",
     "request": "^2.61.0",

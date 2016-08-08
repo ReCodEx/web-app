@@ -52,7 +52,7 @@ export default connect(
     const submissionIds = state.assignments.getIn(['submissions', props.assignmentId, userId]);
     return {
       userId,
-      submissions: submissionIds ? submissionIds.map(id => state.submissions.getIn(['resources', id]).data) : null
+      submissions: submissionIds ? submissionIds.map(id => state.submissions.getIn(['resources', id])) : null
     };
   },
   (dispatch, props) => ({

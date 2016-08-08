@@ -8,7 +8,8 @@ class CommentBox extends Component {
 
   componentDidUpdate() {
     if (this.state.prevCount < this.props.commentsCount) {
-      this.scrollToBottom();
+      this.setState({ prevCount: this.props.commentsCount });
+      setTimeout(this.scrollToBottom, 10); // @todo: find another workaround for late DOM rendering
     }
   }
 

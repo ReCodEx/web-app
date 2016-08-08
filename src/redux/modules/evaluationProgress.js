@@ -32,7 +32,7 @@ export const init = createAction(actionTypes.INIT, (webSocketChannelId, expected
 export const completedTask = createAction(actionTypes.COMPLETED_TASK);
 export const skippedTask = createAction(actionTypes.SKIPPED_TASK);
 export const failedTask = createAction(actionTypes.FAILED_TASK);
-export const addMessage = createAction(actionTypes.ADD_MESSAGE, message => ({ message }));
+export const addMessage = createAction(actionTypes.ADD_MESSAGE);
 
 /**
  * Reducer
@@ -64,7 +64,7 @@ export default handleActions({
   [actionTypes.SKIPPED_TASK]: (state, action) => increment(state, 'skipped', false),
   [actionTypes.FAILED_TASK]: (state, action) => increment(state, 'failed', false),
 
-  [actionTypes.ADD_MESSAGE]: (state, { payload: { message } }) =>
-    state.update('messages', messages => messages.push(message))
+  [actionTypes.ADD_MESSAGE]: (state, { payload }) =>
+    state.update('messages', messages => messages.push(payload))
 
 }, initialState);
