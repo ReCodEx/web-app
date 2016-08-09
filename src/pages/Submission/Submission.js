@@ -7,7 +7,7 @@ import PageContent from '../../components/PageContent';
 import SubmissionDetail, {
   LoadingSubmissionDetail,
   FailedSubmissionDetail
-} from '../../components/SubmissionDetail';
+} from '../../components/Submissions/SubmissionDetail';
 
 import {
   GROUP_URI_FACTORY,

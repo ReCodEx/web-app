@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import Helmet from 'react-helmet';
-import Breadcrumbs from '../Breadcrumbs';
 import { injectIntl, intlShape, FormattedMessage } from 'react-intl';
+import Breadcrumbs from '../AdminLTE/Breadcrumbs';
 
 const getMessage = (item, formatMessage) =>
   typeof item === 'string' ? item : formatMessage(item.props);
@@ -39,7 +39,8 @@ PageContent.propTypes = {
   description: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) })
-  ]).isRequired,breadcrumbs: PropTypes.array,
+  ]).isRequired,
+  breadcrumbs: PropTypes.array,
   children: PropTypes.element,
   intl: intlShape.isRequired
 };

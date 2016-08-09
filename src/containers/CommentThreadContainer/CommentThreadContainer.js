@@ -9,7 +9,7 @@ import { loggedInUserSelector } from '../../redux/selectors/users';
 import CommentThread, {
   LoadingCommentThread,
   FailedCommentThread
-} from '../../components/Comments/CommentThread';
+} from '../../components/AdminLTE/Comments/CommentThread';
 
 class CommentThreadContainer extends Component {
 

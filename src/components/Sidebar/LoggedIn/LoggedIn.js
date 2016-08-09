@@ -3,9 +3,9 @@ import { FormattedMessage } from 'react-intl';
 
 import { isReady } from '../../../redux/helpers/resourceManager';
 import BadgeContainer from '../../../containers/BadgeContainer';
-import MenuTitle from '../MenuTitle';
-import MenuItem from '../MenuItem';
-import MenuGroup from '../MenuGroup';
+import MenuTitle from '../../AdminLTE/Sidebar/MenuTitle';
+import MenuItem from '../../AdminLTE/Sidebar/MenuItem';
+import MenuGroup from '../../AdminLTE/Sidebar/MenuGroup';
 
 import {
   DASHBOARD_URI,

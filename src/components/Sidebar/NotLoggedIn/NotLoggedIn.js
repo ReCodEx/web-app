@@ -1,10 +1,10 @@
 import React, { PropTypes } from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import Badge from '../../Badge';
-import MenuTitle from '../MenuTitle';
-import MenuItem from '../MenuItem';
-import MenuGroup from '../MenuGroup';
+import Badge from '../../AdminLTE/Badge';
+import MenuTitle from '../../AdminLTE/Sidebar/MenuTitle';
+import MenuItem from '../../AdminLTE/Sidebar/MenuItem';
+import MenuGroup from '../../AdminLTE/Sidebar/MenuGroup';
 
 import {
   LOGIN_URI,

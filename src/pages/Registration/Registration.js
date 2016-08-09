@@ -5,8 +5,8 @@ import { connect } from 'react-redux';
 
 import { Row, Col } from 'react-bootstrap';
 import PageContent from '../../components/PageContent';
-import Box from '../../components/Box';
-import RegistrationForm from '../../components/RegistrationForm';
+import Box from '../../components/AdminLTE/Box';
+import RegistrationForm from '../../components/Public/RegistrationForm';
 
 import { statusTypes, createAccount } from '../../redux/modules/registration';
 import { HOME_URI, DASHBOARD_URI } from '../../links';

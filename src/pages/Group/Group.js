@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 
 import PageContent from '../../components/PageContent';
-import GroupDetail, { LoadingGroupDetail, FailedGroupDetail } from '../../components/GroupDetail';
+import GroupDetail, { LoadingGroupDetail, FailedGroupDetail } from '../../components/Groups/GroupDetail';
 
 import { isReady, isLoading, hasFailed } from '../../redux/helpers/resourceManager';
 import { fetchGroupIfNeeded } from '../../redux/modules/groups';

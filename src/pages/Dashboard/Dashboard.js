@@ -5,7 +5,6 @@ import { FormattedMessage } from 'react-intl';
 import Helmet from 'react-helmet';
 
 import PageContent from '../../components/PageContent';
-import Box from '../../components/Box';
 
 import { loggedInUserId } from '../../redux/selectors/auth';
 import { loggedInUserSelector } from '../../redux/selectors/users';

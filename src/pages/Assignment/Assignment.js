@@ -14,8 +14,8 @@ import PageContent from '../../components/PageContent';
 import AssignmentDetails, {
   LoadingAssignmentDetails,
   FailedAssignmentDetails
-} from '../../components/Assignment/AssignmentDetails';
-import SubmitSolutionButton from '../../components/SubmitSolutionButton';
+} from '../../components/Assignments/Assignment/AssignmentDetails';
+import SubmitSolutionButton from '../../components/Assignments/SubmitSolutionButton';
 import SubmitSolutionContainer from '../../containers/SubmitSolutionContainer';
 import EvaluationProgressContainer from '../../containers/EvaluationProgressContainer';
 import SubmissionsTableContainer from '../../containers/SubmissionsTableContainer';

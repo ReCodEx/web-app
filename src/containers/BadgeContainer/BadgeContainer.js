@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import Badge, { LoadingBadge, FailedBadge } from '../../components/Badge';
+import Badge, { LoadingBadge, FailedBadge } from '../../components/AdminLTE/Badge';
 import { isLoading, isReady, hasFailed } from '../../redux/helpers/resourceManager';
 import { loggedInUserSelector } from '../../redux/selectors/users';
 

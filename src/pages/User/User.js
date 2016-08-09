@@ -8,7 +8,7 @@ import PageContent from '../../components/PageContent';
 import UserProfile, {
   LoadingUserProfile,
   FailedUserProfile
-} from '../../components/UserProfile';
+} from '../../components/Users/UserProfile';
 
 class User extends Component {
 

@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 
 import { fetchUsersSubmissions } from '../../redux/modules/submissions';
-import SubmissionsTable from '../../components/SubmissionsTable';
+import SubmissionsTable from '../../components/Assignments/SubmissionsTable';
 
 class SubmissionsTableContainer extends Component {
 

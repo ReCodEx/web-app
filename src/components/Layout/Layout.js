@@ -3,10 +3,10 @@ import { FormattedMessage } from 'react-intl';
 import Helmet from 'react-helmet';
 import classNames from 'classnames';
 
-import Header from '../Header';
+import Header from '../AdminLTE/Header';
 import Sidebar from '../Sidebar';
 import PageContent from '../PageContent';
-import Footer from '../Footer';
+import Footer from '../AdminLTE/Footer';
 
 export const Layout = ({
   toggleSidebar,
