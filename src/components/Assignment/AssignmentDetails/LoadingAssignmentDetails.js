@@ -1,22 +1,23 @@
 import React, { PropTypes } from 'react';
-import Box from '../../Box';
-import { LoadingIcon } from '../../Icons';
+import { FormattedMessage, FormattedDate, FormattedTime } from 'react-intl';
 import { Grid, Row, Col, Table } from 'react-bootstrap';
 import ReactMarkdown from 'react-markdown';
-import { FormattedDate, FormattedTime } from 'react-intl';
+
+import Box from '../../Box';
+import { LoadingIcon } from '../../Icons';
 
 const LoadingAssignmentDetails = () => (
   <Box
     title={(
       <span>
-        <LoadingIcon /> Načítám zadání úlohy ...
+        <LoadingIcon /> <FormattedMessage id='app.assignment.loading' defaultMessage='Loading exercise assignment ...' />
       </span>
     )}
     noPadding={false}
     collapsable={true}
     isOpen={false}>
     <p>
-      Načítám zadání ...
+      <FormattedMessage id='app.assignment.loading' defaultMessage='Loading exercise assignment ...' />
     </p>
   </Box>
 );

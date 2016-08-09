@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react';
-import classNames from 'classnames';
+import { FormattedMessage } from 'react-intl';
 import Helmet from 'react-helmet';
+import classNames from 'classnames';
 
 import Header from '../Header';
 import Sidebar from '../Sidebar';
@@ -12,7 +13,8 @@ export const Layout = ({
   sidebar,
   isLoggedIn,
   logout,
-  children
+  children,
+  onContentClick
 }) => (
   <div className={classNames({
     'wrapper': true,
@@ -23,14 +25,15 @@ export const Layout = ({
     <Helmet
       defaultTitle='ReCodEx'
       titleTemplate='%s | ReCodEx' />
-
     <Header
       toggleSidebarSize={toggleSidebar.size}
       toggleSidebarVisibility={toggleSidebar.visibility} />
     <Sidebar
       isLoggedIn={isLoggedIn}
       logout={logout} />
-    {children}
+    <div onClick={onContentClick}>
+      {children}
+    </div>
     <Footer version='v0.1.0' />
   </div>
 );

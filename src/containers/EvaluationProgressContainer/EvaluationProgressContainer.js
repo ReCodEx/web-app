@@ -51,8 +51,8 @@ class EvaluationProgressContainer extends Component {
     }
   };
 
-  getMessage = ({ command, task_id = false, task_state = 'OK' }) => ({
-    wasSuccessful: command !== 'TASK' || task_state === 'COMPLETED',
+  getMessage = ({ command, task_id = false, task_state = 'OK' }) => ({    // eslint-disable-line camelcase
+    wasSuccessful: command !== 'TASK' || task_state === 'COMPLETED',      // eslint-disable-line camelcase
     text: this.getRandomMessage(),
     status: this.getStatus(task_state)
   });
@@ -104,7 +104,6 @@ class EvaluationProgressContainer extends Component {
     this.socket.close();
     addMessage({ wasSuccessful: true, status: 'OK', text: lastMessage });
   };
-
 
   // @todo Do something ??
   onError = () => {

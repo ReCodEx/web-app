@@ -12,6 +12,7 @@ import Login from './Login';
 import Assignment from './Assignment';
 import NotFound from './NotFound';
 import Submission from './Submission';
+import Registration from './Registration';
 import User from './User';
 
 import SourceCodeViewerContainer from '../containers/SourceCodeViewerContainer';
@@ -35,6 +36,7 @@ const createRoutes = (getState) => {
     <Route path='/' component={LayoutContainer}>
       <IndexRoute component={Home} />
       <Route path='login' component={Login} onEnter={onlyUnauth} />
+      <Route path='registration' component={Registration} onEnter={onlyUnauth} />
       <Route path='app' onEnter={requireAuth} component={App}>
         <IndexRoute component={Dashboard} />
         <Route path='assignment/:assignmentId' component={Assignment} />

@@ -3,7 +3,7 @@ import Box from '../../Box';
 import Icon from 'react-fontawesome';
 import { Grid, Row, Col, Table } from 'react-bootstrap';
 import ReactMarkdown from 'react-markdown';
-import { FormattedDate, FormattedTime } from 'react-intl';
+import { FormattedDate, FormattedTime, FormattedMessage } from 'react-intl';
 import classnames from 'classnames';
 
 const AssignmentDetails = ({
@@ -13,10 +13,14 @@ const AssignmentDetails = ({
   isAfterSecondDeadline
 }) => (
   <Box
-    title={'Zadání úlohy'}
+    title={<FormattedMessage id='app.assignment.title' defaultMessage='Exercise assignment' />}
     noPadding={true}
     collapsable={true}
     isOpen={isOpen}>
+    <div style={{ padding: 20 }}>
+      <ReactMarkdown
+        source={assignment.description} />
+    </div>
     <Table responsive condensed>
       <tbody>
         <tr className={classnames({
@@ -28,7 +32,9 @@ const AssignmentDetails = ({
               {isAfterFirstDeadline && <Icon name='hourglass-end'/>}
             </strong>
           </td>
-          <td>Termín pro odevzdání:</td>
+          <td>
+            <FormattedMessage id='app.assignment.deadline' defaultMessage='Deadline:' />
+          </td>
           <td>
             <strong>
               <FormattedDate value={new Date(assignment.deadline.first * 1000)} /> &nbsp; <FormattedTime value={new Date(assignment.deadline.first * 1000)} />
@@ -45,7 +51,9 @@ const AssignmentDetails = ({
                 {isAfterSecondDeadline && <Icon name='hourglass-end'/>}
               </strong>
             </td>
-            <td>Druhý termín pro odevzdání:</td>
+            <td>
+              <FormattedMessage id='app.assignment.secondDedline' defaultMessage='Second deadline:' />
+            </td>
             <td>
               <strong>
                 <FormattedDate value={new Date(assignment.deadline.second * 1000)} /> &nbsp; <FormattedTime value={new Date(assignment.deadline.second * 1000)} />
@@ -56,15 +64,13 @@ const AssignmentDetails = ({
           <td className='text-center'>
             <Icon name='cloud-upload' />
           </td>
-          <td>Limit počtu odevzdání:</td>
+          <td>
+            <FormattedMessage id='app.assignment.submissionsCountLimit' defaultMessage='Submission count limit:' />
+          </td>
           <td>{assignment.submissionsCountLimit === null ? '-' : assignment.submissionsCountLimit}</td>
         </tr>
       </tbody>
     </Table>
-    <div style={{ paddingLeft: 20, paddingRight: 20, paddingBottom: 20 }}>
-      <ReactMarkdown
-        source={assignment.description} />
-    </div>
   </Box>
 );
 

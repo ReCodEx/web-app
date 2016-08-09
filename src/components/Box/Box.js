@@ -1,4 +1,5 @@
 import React, { PropTypes, Component } from 'react';
+import { FormattedMessage } from 'react-intl';
 import Icon from 'react-fontawesome';
 import classNames from 'classnames';
 import Collapse from 'react-collapse';
@@ -76,7 +77,11 @@ class Box extends Component {
 }
 
 Box.propTypes = {
-  title: PropTypes.oneOfType([ PropTypes.string, PropTypes.object ]).isRequired,
+  title: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) }),
+    PropTypes.element
+  ]).isRequired,
   type: PropTypes.string,
   isOpen: PropTypes.bool,
   collapsable: PropTypes.bool

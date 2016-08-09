@@ -1,5 +1,6 @@
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
+import { FormattedMessage } from 'react-intl';
 import { Modal, Row, Col } from 'react-bootstrap';
 
 import PageContent from '../../components/PageContent';
@@ -9,6 +10,7 @@ import SubmissionDetail, {
 } from '../../components/SubmissionDetail';
 
 import {
+  GROUP_URI_FACTORY,
   ASSIGNMENT_DETAIL_URI_FACTORY,
   SUBMISSION_DETAIL_URI_FACTORY
 } from '../../links';
@@ -59,10 +61,11 @@ class Submission extends Component {
     return (
       <PageContent
         title={title}
-        description='Vyhodnocení odevzdaného řešení'
+        description={<FormattedMessage id='app.submission.evaluation.title' defaultMessage='Your solution evaluation' />}
         breadcrumbs={[
-          { text: 'Zadání úlohy', iconName: 'puzzle-piece', link: ASSIGNMENT_DETAIL_URI_FACTORY(assignmentId) },
-          { text: 'Odevzdané řešení' }
+          { text: <FormattedMessage id='app.group.title' defaultMessage='Group detail' />, iconName: 'user', link: isReady(assignment) ? GROUP_URI_FACTORY(assignment.data.groupId) : undefined },
+          { text: <FormattedMessage id='app.assignment.title' defaultMessage='Exercise assignment' />, iconName: 'puzzle-piece', link: ASSIGNMENT_DETAIL_URI_FACTORY(assignmentId) },
+          { text: <FormattedMessage id='app.submission.title' defaultMessage='Your solution' />, iconName: '' }
         ]}>
         <div>
           {isLoading(submission) && <LoadingSubmissionDetail />}

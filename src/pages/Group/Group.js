@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
+import { FormattedMessage } from 'react-intl';
 
 import PageContent from '../../components/PageContent';
 import GroupDetail, { LoadingGroupDetail, FailedGroupDetail } from '../../components/GroupDetail';
@@ -27,7 +28,9 @@ class Group extends Component {
   };
 
   getTitle = (group) =>
-    isReady(group) ? group.data.name : 'Načítám detail skupiny ...';
+    isReady(group)
+      ? group.data.name
+      : <FormattedMessage id='app.group.loading' defaultMessage="Loading group's detail ..." />;
 
   render() {
     const {
@@ -38,7 +41,7 @@ class Group extends Component {
     return (
       <PageContent
         title={this.getTitle(group)}
-        description='Přehled informací a výsledků'>
+        description={<FormattedMessage id='app.group.description' defaultMessage='Group overview and assignments' />}>
         <div>
           {isLoading(group) && <LoadingGroupDetail />}
           {hasFailed(group) && <FailedGroupDetail />}

@@ -1,8 +1,10 @@
 import React, { PropTypes } from 'react';
+import { FormattedMessage } from 'react-intl';
 import classNames from 'classnames';
 import Icon from 'react-fontawesome';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { Link } from 'react-router';
+
 import { USER_URI_FACTORY } from '../../../links';
 import { Posted, Posting, Failed } from './Status';
 
@@ -40,8 +42,12 @@ const Comment = ({
       <img className='direct-chat-img' src={user.avatarUrl} alt={user.name} />
       <div className='direct-chat-text'>
         {isPrivate &&
-          <OverlayTrigger placement="left" overlay={<Tooltip id={id}>Tento komentář vidíte pouze vy.</Tooltip>}>
-            <Icon name='lock' />
+          <OverlayTrigger placement='left' overlay={(
+            <Tooltip id={id}>
+              <FormattedMessage id='app.comments.onlyYouCanSeeThisComment' defaultMessage='Only you can see this comment' />
+            </Tooltip>
+          )}>
+            <Icon name='lock' className='pull-right' />
           </OverlayTrigger>}{' '}
         {text}
       </div>

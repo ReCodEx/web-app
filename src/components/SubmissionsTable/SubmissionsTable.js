@@ -4,11 +4,13 @@ import React, { PropTypes } from 'react';
 import { Table } from 'react-bootstrap';
 import Box from '../Box';
 import { SUBMISSION_DETAIL_URI_FACTORY } from '../../links';
+import { isReady, hasFailed, isLoading } from '../../redux/helpers/resourceManager';
 
 import LoadingSubmissionTableRow from './LoadingSubmissionTableRow';
 import NoSolutionYetTableRow from './NoSolutionYetTableRow';
 import SuccessfulSubmissionTableRow from './SuccessfulSubmissionTableRow';
 import FailedSubmissionTableRow from './FailedSubmissionTableRow';
+import FailedLoadingSubmissionTableRow from './FailedLoadingSubmissionTableRow';
 import NotEvaluatedSubmissionTableRow from './NotEvaluatedSubmissionTableRow';
 import EvaluationFailedTableRow from './EvaluationFailedTableRow';
 
@@ -31,17 +33,23 @@ const SubmissionsTable = ({
       <tbody>
         {!submissions && <LoadingSubmissionTableRow />}
         {!!submissions && submissions.length > 0 &&
-          submissions.map(submission => {
-            const link = SUBMISSION_DETAIL_URI_FACTORY(assignmentId, submission.id);
-            switch (submission.evaluationStatus) {
+          submissions.map((submission, i) => {
+            if (hasFailed(submission)) {
+              return <FailedLoadingSubmissionTableRow key={i} />;
+            } else if (isLoading(submission)) {
+              return <LoadingSubmissionTableRow key={i} />;
+            }
+
+            const link = SUBMISSION_DETAIL_URI_FACTORY(assignmentId, submission.data.id);
+            switch (submission.data.evaluationStatus) {
               case 'done':
-                return <SuccessfulSubmissionTableRow {...submission} key={submission.id} link={link} />;
+                return <SuccessfulSubmissionTableRow {...submission.data} key={submission.data.id} link={link} />;
               case 'failed':
-                return <FailedSubmissionTableRow {...submission} key={submission.id} link={link} />;
+                return <FailedSubmissionTableRow {...submission.data} key={submission.data.id} link={link} />;
               case 'work-in-progress':
-                return <NotEvaluatedSubmissionTableRow {...submission} key={submission.id} link={link} />;
+                return <NotEvaluatedSubmissionTableRow {...submission.data} key={submission.data.id} link={link} />;
               case 'evaluation-failed':
-                return <EvaluationFailedTableRow {...submission} key={submission.id} link={link} />;
+                return <EvaluationFailedTableRow {...submission.data} key={submission.data.id} link={link} />;
               default:
                 return null;
             }

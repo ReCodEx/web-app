@@ -21,6 +21,13 @@ class LayoutContainer extends Component {
     }
   }
 
+  maybeHideSidebar = () => {
+    const { sidebar, toggleSidebar } = this.props;
+    if (sidebar.isOpen) {
+      toggleSidebar.visibility();
+    }
+  };
+
   loadData = ({
     isLoggedIn,
     userId,
@@ -34,7 +41,7 @@ class LayoutContainer extends Component {
   };
 
   render() {
-    return <Layout {...this.props} />;
+    return <Layout {...this.props} onContentClick={this.maybeHideSidebar} />;
   }
 
 }

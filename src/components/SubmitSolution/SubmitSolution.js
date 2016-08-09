@@ -1,4 +1,5 @@
 import React, { PropTypes } from 'react';
+import { FormattedMessage } from 'react-intl';
 import {
   Modal,
   Button,
@@ -9,8 +10,8 @@ import {
 } from 'react-bootstrap';
 import Icon from 'react-fontawesome';
 import DropZone from 'react-dropzone';
-
 import UploadsTable from '../UploadsTable';
+import styles from './SubmitSolution.scss';
 
 const SubmitSolution = ({
   isOpen,
@@ -31,23 +32,19 @@ const SubmitSolution = ({
 }) => (
   <Modal show={isOpen} backdrop='static' onHide={onClose}>
     <Modal.Header closeButton>
-      <Modal.Title>Odevzdat nové řešení</Modal.Title>
+      <Modal.Title>
+        <FormattedMessage id='app.submitSolution.title' defaultMessage='Submit your solution' />
+      </Modal.Title>
     </Modal.Header>
     <Modal.Body>
-      <DropZone
-        onDrop={uploadFiles}
-        style={{
-          minHeight: 200,
-          borderWidth: 2,
-          borderColor: '#666',
-          borderStyle: 'dashed',
-          padding: 20,
-          margin: 20,
-          borderRadius: 5
-        }}>
-        <p style={{ padding: 20, fontSize: 20 }}>Sem přetáhněte soubory s řešením.</p>
+      <DropZone onDrop={uploadFiles} className={styles.submitSolutionDropZone}>
+        <p><FormattedMessage id='app.submitSolution.dragAndDrop' defaultMessage='Drag and drop files here.' /></p>
+        <p>
+          <Button bsStyle='primary' className='btn-flat'>
+            <Icon name='cloud-upload' />{' '}<FormattedMessage id='app.submitSolution.addFile' defaultMessage='Add a file' />
+          </Button>
+        </p>
       </DropZone>
-      <HelpBlock>Místo přetahování je možné kliknout na box a vybrat soubory klasicky.</HelpBlock>
 
       {(uploadingFiles.length > 0 || attachedFiles.length > 0 || failedFiles.length > 0 || removedFiles.length > 0) &&
         <UploadsTable
@@ -61,7 +58,9 @@ const SubmitSolution = ({
           retryUploadFile={retryUploadFile} />}
 
       <FormGroup>
-        <ControlLabel>Poznámka k řešení</ControlLabel>
+        <ControlLabel>
+          <FormattedMessage id='app.submitSolution.noteLabel' defaultMessage='Note for you and your supervisor(s)' />
+        </ControlLabel>
         <FormControl
           onChange={(e) => saveNote(e.target.value)}
           type='text'
@@ -75,22 +74,26 @@ const SubmitSolution = ({
         bsStyle={canSubmit ? 'success' : 'default'}
         className='btn-flat'
         onClick={submitSolution}>
-          Odevzdat
+          <FormattedMessage id='app.submitSolution.submitButton' defaultMessage='Submit your solution' />
       </Button>
       <Button
         bsStyle='default'
         className='btn-flat'
         onClick={reset}>
-          Resetovat formulář
+          <FormattedMessage id='app.submitSolution.resetFormButton' defaultMessage='Reset form' />
       </Button>
       <Button
         bsStyle='default'
         className='btn-flat'
         onClick={onClose}>
-          Zavřít okno
+          <FormattedMessage id='app.submitSolution.closeButton' defaultMessage='Close' />
       </Button>
-      {!canSubmit &&
-        <HelpBlock>Je třeba přiložit alespoň jeden soubor se zdrojovým kódem a počkat, až se nahrají všechny soubory na server. Pokud se nepodaří některý ze souborů nahrát na server, zkuste prosím soubor nahrát znovu nebo takový soubor smažte. Formulář není možné odeslat, dokud v něm je alespoň jeden soubor, který se nepodařilo na hrát na server.</HelpBlock>}
+      {!canSubmit && (
+        <HelpBlock>
+          <FormattedMessage
+            id='app.submistSolution.instructions'
+            defaultMessage='You must attach at least one file with source code and wait, until all your files are uploaded to the server. If there is a problem uploading any of the files, please try uploading it again or remove the file. This form cannot be submitted until there are any files which have not been successfully uploaded or which could not have been uploaded to the server.' />
+        </HelpBlock>)}
     </Modal.Footer>
   </Modal>
 );

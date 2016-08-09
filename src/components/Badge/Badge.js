@@ -1,4 +1,5 @@
 import React, { PropTypes } from 'react';
+import { FormattedMessage } from 'react-intl';
 import Icon from 'react-fontawesome';
 import { Link } from 'react-router';
 import { USER_URI_FACTORY } from '../../links';
@@ -18,7 +19,7 @@ const Badge = ({
         </Link>
       </p>
       <a href='#' onClick={logout}>
-        <Icon name='power-off' className='text-danger' /> Odhlásit se
+        <Icon name='power-off' className='text-danger' /> <FormattedMessage id='app.logout' defaultMessage='Logout' />
       </a>
     </div>
   </div>

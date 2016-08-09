@@ -1,10 +1,17 @@
 import React, { PropTypes } from 'react';
+import { FormattedMessage } from 'react-intl';
+
+import { Row, Col } from 'react-bootstrap';
 
 const UserProfile = ({
   id,
   fullName,
   role,
-  avatarUrl
+  avatarUrl,
+  groups: {
+    studentOf,
+    supervisorOf
+  }
 }) => (
   <div className='box box-widget widget-user'>
     <div className='widget-user-header bg-aqua-active'>
@@ -15,28 +22,30 @@ const UserProfile = ({
       <img className='img-circle' src={avatarUrl} alt={fullName} />
     </div>
     <div className='box-footer'>
-    {/*
-      <div className='row'>
-        <div className='col-sm-4 border-right'>
+      <Row>
+        <Col sm={4} className='border-right'>
           <div className='description-block'>
-            <h5 className='description-header'>3,200</h5>
-            <span className='description-text'>SALES</span>
+            <h5 className='description-header'>{studentOf.length}</h5>
+            <span className='description-text text-uppercase'>
+              <FormattedMessage id='app.user.profile.studentOf' defaultMessage='Member as student' />
+            </span>
           </div>
-        </div>
-        <div className='col-sm-4 border-right'>
+        </Col>
+        <Col sm={4} className='border-right'>
           <div className='description-block'>
-            <h5 className='description-header'>13,000</h5>
-            <span className='description-text'>FOLLOWERS</span>
+            <h5 className='description-header'>{supervisorOf.length}</h5>
+            <span className='description-text text-uppercase'>
+              <FormattedMessage id='app.user.profile.supervisorOf' defaultMessage='Member as supervisor' />
+            </span>
           </div>
-        </div>
-        <div className='col-sm-4'>
+        </Col>
+        <Col sm={4}>
           <div className='description-block'>
             <h5 className='description-header'>35</h5>
             <span className='description-text'>PRODUCTS</span>
           </div>
-        </div>
-      </div>
-    */}
+        </Col>
+      </Row>
     </div>
   </div>
 );

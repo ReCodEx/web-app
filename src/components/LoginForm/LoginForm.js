@@ -1,4 +1,6 @@
 import React, { Component, PropTypes } from 'react';
+import { FormattedMessage } from 'react-intl';
+
 import Icon from 'react-fontawesome';
 import FormBox from '../../components/FormBox';
 import {
@@ -49,13 +51,13 @@ class LoginForm extends Component {
 
     const btnContent = !isTryingToLogin
                         ? hasSucceeded
-                          ? <span><Icon name='check' /> &nbsp; Přihlášení proběhlo úspěšně</span>
-                          : 'Přihlásit se'
-                        : <span><Icon name='circle-o-notch' spin /> &nbsp; Probíhá přihlašování</span>;
+                          ? <span><Icon name='check' /> &nbsp; <FormattedMessage id='app.loginForm.success' defaultMessage='You are successfully signed in' /></span>
+                          : <FormattedMessage id='app.loginForm.login' defaultMessage='Sign in' />
+                        : <span><Icon name='circle-o-notch' spin /> &nbsp; <FormattedMessage id='app.loginForm.processing' defaultMessage='Signing in ...' /></span>;
 
     return (
       <FormBox
-        title='Zadejte své přihlašovací údaje'
+        title={<FormattedMessage id='app.loginForm.title' defaultMessage='Sign into ReCodEx' />}
         type={type}
         footer={
           <div className='text-center'>
@@ -63,20 +65,23 @@ class LoginForm extends Component {
               type='submit'
               bsStyle={hasFailed ? 'default' : 'success'}
               className='btn-flat'
-              disabled={isTryingToLogin || isEmpty || hasFailed || hasSucceeded}
+              disabled={isTryingToLogin || isEmpty || hasSucceeded}
               onClick={this.tryLogin}>
               {btnContent}
             </Button>
           </div>
         }>
           <span>
-            {hasFailed && <Alert bsStyle='danger'>Přihlášení se nezdařilo, zkontrolujte si své přihlašovací údaje.</Alert>}
-            <FormGroup controlId="loginEmail" validationState={hasFailed === true ? 'error' : undefined}>
-              <ControlLabel>Emailová adresa</ControlLabel>
+            {hasFailed && (
+              <Alert bsStyle='danger'>
+                <FormattedMessage id='app.loginForm.failed' defaultMessage='Login failed. Please check your credentials.' />
+              </Alert>)}
+            <FormGroup validationState={hasFailed === true ? 'error' : undefined}>
+              <ControlLabel><FormattedMessage id='app.loginForm.email' defaultMessage='E-mail address:' /></ControlLabel>
               <FormControl type='email' onChange={e => this.changeLogin(e.target.value)} name='email' disabled={isTryingToLogin || hasSucceeded} />
             </FormGroup>
-            <FormGroup controlId="loginPwd" validationState={hasFailed === true ? 'error' : undefined}>
-              <ControlLabel>Heslo</ControlLabel>
+            <FormGroup validationState={hasFailed === true ? 'error' : undefined}>
+              <ControlLabel><FormattedMessage id='app.loginForm.password' defaultMessage='Password:' /></ControlLabel>
               <FormControl type='password' onChange={e => this.changePassword(e.target.value)} name='password' disabled={isTryingToLogin || hasSucceeded} />
             </FormGroup>
           </span>

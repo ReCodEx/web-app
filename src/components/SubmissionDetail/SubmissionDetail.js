@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 import Box from '../Box';
 import Icon from 'react-fontawesome';
 import classnames from 'classnames';
-import { FormattedNumber, FormattedDate, FormattedTime } from 'react-intl';
+import { FormattedMessage, FormattedNumber, FormattedDate, FormattedTime } from 'react-intl';
 import { Modal, Table, Row, Col } from 'react-bootstrap';
 import { Link } from 'react-router';
 
@@ -32,140 +32,169 @@ const SubmissionDetail = ({
 }) => (
   <div>
     <Row>
-      <Col sm={6}>
-        <Box
-          title='Vaše řešení'
-          noPadding={true}
-          collapsable={true}
-          type={!evaluation ? undefined : (evaluation.isCorrect ? 'success' : 'danger')}
-          isOpen={true}>
-          <Table>
-            <tbody>
-              {note.length > 0 &&
-                <tr>
-                  <th>Poznámka:</th>
-                  <td>{note}</td>
-                </tr>
-              }
-              <tr>
-                <th>Datum a čas odevzdání:</th>
-                <td>
-                  <FormattedDate value={submittedAt * 1000} />&nbsp;<FormattedTime value={submittedAt * 1000} />
-                </td>
-              </tr>
-              <tr>
-                <th>Řešení je správné:</th>
-                <td>
-                  <strong>
-                    <AssignmentStatusIcon status={evaluationStatus} />{' '}
-                    {evaluationStatus === 'done' && 'Řešení splňuje nastavená kritéria.'}
-                    {evaluationStatus === 'work-in-progress' && 'Řešení zatím nebylo vyhodnoceno.'}
-                    {evaluationStatus === 'failed' && 'Řešení nesplňuje nastavená kritéria.'}
-                    {evaluationStatus === 'evaluation-failed' && 'Vyhodnocovací systém selhal a řešení se nepodařilo vyhodnotit. Odevzdání opakujte a pokud problémy přetrvají, kontaktujte prosím správce webu.'}
-                  </strong>
-                </td>
-              </tr>
-            </tbody>
-          </Table>
-        </Box>
-      </Col>
+      <Col lg={4}>
+        <Row>
+          <Col lg={12} md={6} sm={12}>
+            <Box
+              title={<FormattedMessage id='app.submission.title' defaultMessage='Your solution' />}
+              noPadding={true}
+              collapsable={true}
+              type={!evaluation ? undefined : (evaluation.isCorrect ? 'success' : 'danger')}
+              isOpen={true}>
+              <Table>
+                <tbody>
+                  {note.length > 0 &&
+                    <tr>
+                      <th><FormattedMessage id='app.submission.yourNote' defaultMessage='Your note:' /></th>
+                      <td>{note}</td>
+                    </tr>
+                  }
+                  <tr>
+                    <th><FormattedMessage id='app.submission.submittedAt' defaultMessage='Submitted at:' /></th>
+                    <td>
+                      <FormattedDate value={submittedAt * 1000} />&nbsp;<FormattedTime value={submittedAt * 1000} />
+                    </td>
+                  </tr>
+                  <tr>
+                    <th><FormattedMessage id='app.submission.isCorrect' defaultMessage='Your solution is correct:' /></th>
+                    <td>
+                      <strong>
+                        <AssignmentStatusIcon status={evaluationStatus} />{' '}
+                        {evaluationStatus === 'done' &&
+                          <FormattedMessage id='app.submission.evaluation.status.isCorrect' defaultMessage='Your solution is correct and meets all criteria.' />}
+                        {evaluationStatus === 'work-in-progress' &&
+                          <FormattedMessage id='app.submission.evaluation.status.workInProgress' defaultMessage='Your solution has not been evaluated yet.' />}
+                        {evaluationStatus === 'failed' &&
+                          <FormattedMessage id='app.submission.evaluation.status.failed' defaultMessage='Your solution does not meet the defined criteria.' />}
+                        {evaluationStatus === 'evaluation-failed' &&
+                          <FormattedMessage id='app.submission.evaluation.status.systemFailiure' defaultMessage={`Evaluation process had failed and your submission
+                            could not have been evaluated. Please submit your solution once more. If you keep receiving errors please contact the administrator of this project.`} />}
+                      </strong>
+                    </td>
+                  </tr>
+                </tbody>
+              </Table>
+            </Box>
+          </Col>
 
-      <Col sm={6}>
-        <Box
-          title='Detaily vyhodnocení'
-          noPadding={true}
-          collapsable={true}
-          isOpen={true}>
+          <Col lg={12} md={6} sm={12}>
+            <Box
+              title={<FormattedMessage id='app.submission.evaluation.title.details' defaultMessage='Evaluation details' />}
+              noPadding={true}
+              collapsable={true}
+              isOpen={true}>
 
-          <Table>
-          {!evaluation && (
-            <tbody>
-              <tr>
-                <td className='text-center' colSpan={2}>
-                  <LoadingIcon />{' '}Zjištuji podrobnosti ...
-                </td>
-              </tr>
-            </tbody>
-          )}
+              <Table>
+              {!evaluation && (
+                <tbody>
+                  <tr>
+                    <td className='text-center' colSpan={2}>
+                      <LoadingIcon />{' '} <FormattedMessage id='app.submission.evaluation.loading' defaultMessage="Loading results of your solution's evaluation" />}
+                    </td>
+                  </tr>
+                </tbody>
+              )}
 
-          {evaluation && (
-            <tbody>
-              <tr>
-                <th>Čas vyhodnocení:</th>
-                <td className={'text-center'}>
-                  <FormattedDate value={evaluation.evaluatedAt * 1000} />&nbsp;<FormattedTime value={evaluation.evaluatedAt * 1000} />
-                </td>
-              </tr>
+              {evaluation && (
+                <tbody>
+                  <tr>
+                    <th><FormattedMessage id='app.submission.evaluation.evaluatedAt' defaultMessage='Evaluated at:' /></th>
+                    <td className='text-center'>
+                      <FormattedDate value={evaluation.evaluatedAt * 1000} />&nbsp;<FormattedTime value={evaluation.evaluatedAt * 1000} />
+                    </td>
+                  </tr>
 
-              {/* @todo: Was submitted before the (second?) deadline? */}
+                  <tr>
+                    <th><FormattedMessage id='app.submission.evaluation.beforeFirstDeadline' defaultMessage='Was submitted before the deadline:' /></th>
+                    <td className='text-center'>
+                      {isReady(assignment) && (
+                        submittedAt < assignment.data.deadline.first
+                          ? <Icon name='check' className='text-success' />
+                          : <Icon name='times' className='text-danger' />
+                      )}
+                    </td>
+                  </tr>
 
-              <tr>
-                <th>Vyhodnocování proběhlo až do konce:</th>
-                <td className={
-                  classnames({
-                    'text-center': true,
-                    'text-danger': evaluation.evaluationFailed
-                  })
-                }>
-                  <Icon name={evaluation.evaluationFailed ? 'times' : 'check'} />
-                </td>
-              </tr>
-              <tr>
-                <th>Vyhodnocení je platné:</th>
-                <td className={
-                  classnames({
-                    'text-center': true,
-                    'text-danger': !evaluation.isValid
-                  })
-                }>
-                  <Icon name={evaluation.isValid ? 'check' : 'times'} />
-                </td>
-              </tr>
-              <tr>
-                <th>Hodnocení:</th>
-                <td className={
-                  classnames({
-                    'text-center': true,
-                    'text-danger': !evaluation.isCorrect,
-                    'text-success': evaluation.isCorrect
-                  })
-                }>
-                  <b><FormattedNumber style='percent' value={evaluation.score} /></b>
-                </td>
-              </tr>
-              <tr>
-                <th>Počet získaných bodů:</th>
-                <td className={
-                  classnames({
-                    'text-center': true,
-                    'text-danger': !evaluation.isCorrect,
-                    'text-success': evaluation.isCorrect
-                  })
-                }>
-                  <b>{evaluation.points}/{evaluation.maxPoints}</b>
-                </td>
-              </tr>
-            </tbody>
-          )}
-          </Table>
-        </Box>
-      </Col>
-    </Row>
+                  <tr>
+                    <th><FormattedMessage id='app.submission.evaluation.beforeSecondDeadline' defaultMessage='Was submitted before the second deadline:' /></th>
+                    <td className='text-center'>
+                      {isReady(assignment) && (
+                        submittedAt < assignment.data.deadline.second
+                          ? <Icon name='check' className='text-success' />
+                          : <Icon name='times' className='text-danger' />
+                      )}
+                    </td>
+                  </tr>
 
+                  <tr>
+                    <th><FormattedMessage id='app.submission.evaluation.hasFinished' defaultMessage='Evaluation process has finished:' /></th>
+                    <td className={
+                      classnames({
+                        'text-center': true,
+                        'text-danger': evaluation.evaluationFailed
+                      })
+                    }>
+                      <Icon name={evaluation.evaluationFailed ? 'times' : 'check'} />
+                    </td>
+                  </tr>
 
-    <Row>
-      <Col sm={6}>
+                  <tr>
+                    <th><FormattedMessage id='app.submission.evaluation.isValid' defaultMessage='Evaluation is valid:' /></th>
+                    <td className={
+                      classnames({
+                        'text-center': true,
+                        'text-danger': !evaluation.isValid
+                      })
+                    }>
+                      <Icon name={evaluation.isValid ? 'check' : 'times'} />
+                    </td>
+                  </tr>
+                  <tr>
+                    <th><FormattedMessage id='app.submission.evaluation.isCorrect' defaultMessage='Is correct:' /></th>
+                    <td className={
+                      classnames({
+                        'text-center': true,
+                        'text-danger': !evaluation.isCorrect,
+                        'text-success': evaluation.isCorrect
+                      })
+                    }>
+                      <b><FormattedNumber style='percent' value={evaluation.score} /></b>
+                    </td>
+                  </tr>
+                  <tr>
+                    <th><FormattedMessage id='app.submission.evaluation.score' defaultMessage='Score:' /></th>
+                    <td className={
+                      classnames({
+                        'text-center': true,
+                        'text-danger': !evaluation.isCorrect,
+                        'text-success': evaluation.isCorrect
+                      })
+                    }>
+                      <b>{evaluation.points}/{evaluation.maxPoints}</b>
+                    </td>
+                  </tr>
+                </tbody>
+              )}
+              </Table>
+            </Box>
+          </Col>
+        </Row>
         <Row>
         {files.map(file => (
-          <Col lg={6} key={file}>
+          <Col lg={12} md={6} key={file}>
             <Link to={SOURCE_CODE_DETAIL_URI_FACTORY(assignmentId, id, file.id)}>
               <SourceCodeInfoBox {...file} />
             </Link>
           </Col>
         ))}
         </Row>
+      </Col>
+      <Col lg={8}>
         <Row>
-          <Col xs={12}>
+          <Col sm={6}>
+            <CommentThreadContainer threadId={id} />
+          </Col>
+          <Col sm={6}>
             {isLoading(assignment) && <LoadingAssignmentDetails />}
             {hasFailed(assignment) && <FailedAssignmentDetails />}
             {isReady(assignment) && (
@@ -177,9 +206,6 @@ const SubmissionDetail = ({
             )}
           </Col>
         </Row>
-      </Col>
-      <Col sm={6}>
-        <CommentThreadContainer threadId={id} />
       </Col>
     </Row>
 

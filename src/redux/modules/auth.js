@@ -2,6 +2,7 @@ import { createAction, handleActions } from 'redux-actions';
 import decodeJwt from 'jwt-decode';
 import { createApiAction } from '../middleware/apiMiddleware';
 import { loadUserData } from './users';
+import { actionTypes as registrationActionTypes } from './registration';
 
 import { push } from 'react-router-redux';
 import { HOME_URI } from '../../links';
@@ -83,6 +84,12 @@ const auth = (accessToken) => {
     }),
 
     [actionTypes.LOGIN_SUCCESS]: (state, action) => ({
+      status: statusTypes.LOGGED_IN,
+      accessToken: action.payload.accessToken,
+      userId: getUserId(decodeJwt(action.payload.accessToken))
+    }),
+
+    [registrationActionTypes.CREATE_ACCOUNT_FULFILLED]: (state, action) => ({
       status: statusTypes.LOGGED_IN,
       accessToken: action.payload.accessToken,
       userId: getUserId(decodeJwt(action.payload.accessToken))

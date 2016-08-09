@@ -1,10 +1,10 @@
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
-import Helmet from 'react-helmet';
+import { FormattedMessage } from 'react-intl';
 import { Grid, Col, Row } from 'react-bootstrap';
 import { push } from 'react-router-redux';
 
-import { SUBMIT_SOLUTION_URI_FACTORY } from '../../links';
+import { GROUP_URI_FACTORY, SUBMIT_SOLUTION_URI_FACTORY } from '../../links';
 import { isReady, isLoading, hasFailed } from '../../redux/helpers/resourceManager';
 
 import { fetchAssignmentIfNeeded } from '../../redux/modules/assignments';
@@ -65,15 +65,16 @@ class Assignment extends Component {
     } = this.props;
 
     const title = isLoading(assignment)
-                    ? 'Načítám ...'
+                    ? <FormattedMessage id='app.loading' defaultMessage='Loading ...' />
                     : assignment.data.name;
 
     return (
       <PageContent
         title={title}
-        description={'Zadání úlohy'}
+        description={<FormattedMessage id='app.assignment.title' defaultMessage='Exercise assignment' />}
         breadcrumbs={[
-          { text: 'Zadání úlohy', iconName: 'puzzle-piece' }
+          { text: <FormattedMessage id='app.group.title' defaultMessage='Group detail' />, iconName: 'user', link: isReady(assignment) ? GROUP_URI_FACTORY(assignment.data.groupId) : undefined },
+          { text: <FormattedMessage id='app.assignment.title' defaultMessage='Exercise assignment' />, iconName: 'puzzle-piece' }
         ]}>
         <Row>
           <Col md={6}>

@@ -3,6 +3,7 @@
 export const HOME_URI = '/';
 export const DASHBOARD_URI = '/app';
 export const LOGIN_URI = '/login';
+export const REGISTRATION_URI = '/registration';
 export const LOGOUT_URI = '/logout';
 
 // group details
