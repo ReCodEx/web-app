@@ -5,12 +5,10 @@ const strip = require('strip-loader');
 
 module.exports = {
   devtool: 'source-map',
-  entry: [
-    './src/client.js'
-  ],
+  entry: path.join(__dirname, '..', 'src/client.js'),
   output: {
     filename: 'bundle.js',
-    path: path.join(__dirname, 'public'),
+    path: path.join(__dirname, '..', 'public'),
     publicPath: '/public/'
   },
   module: {

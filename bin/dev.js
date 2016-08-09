@@ -3,11 +3,11 @@ import Express from 'express';
 import webpack from 'webpack';
 import WebpackDevServer from 'webpack-dev-server';
 import path from 'path';
-import config from './webpack.config';
+import config from '../config/webpack.config';
 
 let app = new Express();
 app.set('view engine', 'ejs');
-app.use(Express.static('public'));
+app.use(Express.static(path.join(__dirname, '../public')));
 
 app.get('*', (req, res) => {
   res.render('index', {
@@ -24,7 +24,7 @@ app.get('*', (req, res) => {
 });
 
 var server = new WebpackDevServer(webpack(config), {
-  contentBase: path.join(__dirname, 'public'),
+  contentBase: path.join(__dirname, '..', 'public'),
   hot: true,
   quiet: false,
   noInfo: false,
