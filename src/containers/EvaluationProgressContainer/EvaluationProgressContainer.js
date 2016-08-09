@@ -9,6 +9,16 @@ import {
   skippedTask,
   failedTask
 } from '../../redux/modules/evaluationProgress';
+
+import {
+  getExpectedTasksCount,
+  getCompletedPercent,
+  getSkippedPercent,
+  getFailedPercent,
+  getMessages,
+  isFinished
+} from '../../redux/slectors/evaluationProgress';
+
 import { finishProcessing } from '../../redux/modules/submission';
 
 import EvaluationProgress from '../../components/EvaluationProgress';
@@ -161,14 +171,14 @@ EvaluationProgressContainer.contextTypes = {
 
 export default connect(
   state => ({
-    expectedTasksCount: state.evaluationProgress.get('expectedTasksCount'),
+    expectedTasksCount: getExpectedTasksCount(state),
     progress: {
-      completed: state.evaluationProgress.getIn(['progress', 'completed']) / state.evaluationProgress.get('expectedTasksCount') * 100,
-      skipped: state.evaluationProgress.getIn(['progress', 'skipped']) / state.evaluationProgress.get('expectedTasksCount') * 100,
-      failed: state.evaluationProgress.getIn(['progress', 'failed']) / state.evaluationProgress.get('expectedTasksCount') * 100
+      completed: getCompletedPercent(state),
+      skipped: getSkippedPercent(state),
+      failed: getFailedPercent(state)
     },
-    isFinished: state.evaluationProgress.getIn(['progress', 'total']) === state.evaluationProgress.get('expectedTasksCount'),
-    messages: state.evaluationProgress.get('messages')
+    isFinished: isFinished(state),
+    messages: getMessages(state)
   }),
   (dispatch, props) => ({
     finishProcessing: () => dispatch(finishProcessing()),

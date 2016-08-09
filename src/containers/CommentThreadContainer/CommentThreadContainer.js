@@ -64,8 +64,8 @@ CommentThreadContainer.propTypes = {
 
 export default connect(
   (state, { threadId }) => ({
-    user: loggedInUserSelector(state),
-    thread: state.comments.getIn(['resources', threadId])
+    user: loggedInUserSelector(state).toJS(),
+    thread: state.comments.getIn(['resources', threadId]).toJS()
   }),
   (dispatch, { threadId }) => ({
     addComment: (user, text, isPrivate) => dispatch(postComment(user, threadId, text, isPrivate)),

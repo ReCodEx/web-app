@@ -17,6 +17,6 @@ const BadgeContainer = ({
 
 export default connect(
   state => ({
-    user: state.users.getIn([ 'resources', state.auth.userId ])
+    user: state.users.getIn([ 'resources', state.auth.userId ]).toJS()
   })
 )(BadgeContainer);

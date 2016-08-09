@@ -2,6 +2,8 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 
 import { fetchUsersSubmissions } from '../../redux/modules/submissions';
+import { getLoggedInUserId } from '../../redux/selectors/auth';
+import { createGetUsersSubmissionsForAssignment } from '../../redux/selectors/assignments';
 import SubmissionsTable from '../../components/SubmissionsTable';
 
 class SubmissionsTableContainer extends Component {
@@ -48,11 +50,10 @@ SubmissionsTableContainer.propTypes = {
 
 export default connect(
   (state, props) => {
-    const userId = state.auth.userId;
-    const submissionIds = state.assignments.getIn(['submissions', props.assignmentId, userId]);
+    const getSubmissions = createGetUsersSubmissionsForAssignment();
     return {
-      userId,
-      submissions: submissionIds ? submissionIds.map(id => state.submissions.getIn(['resources', id])) : null
+      userId: getLoggedInUserId(state),
+      submissions: getSubmissions(state, getLoggedInUserId(state), props.params.assignmentId)
     };
   },
   (dispatch, props) => ({

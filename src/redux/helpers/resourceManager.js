@@ -1,4 +1,4 @@
-import { Map } from 'immutable';
+import { fromJS } from 'immutable';
 import { createAction, handleActions } from 'redux-actions';
 import { createApiAction } from '../middleware/apiMiddleware';
 
@@ -77,12 +77,10 @@ export const actionsFactory = ({
   };
 };
 
-export const initialState = Map({
-  resources: Map()
-});
+export const initialState = fromJS({ resources: {} });
 
 export const createRecord = (isFetching, error, didInvalidate, data) =>
-   ({ isFetching, error, didInvalidate, data, lastUpdate: Date.now() });
+   (fromJS({ isFetching, error, didInvalidate, data, lastUpdate: Date.now() }));
 
 export const reducerFactory = (resourceName) => {
   const actionTypes = actionTypesFactory(resourceName);

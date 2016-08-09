@@ -10,7 +10,7 @@
   },
   "scripts": {
     "clean": "rm -f public/bundle.js && rm -f public/bundle.js.min && rm -f bin/server.js",
-    "build": "npm run clean && cross-env NODE_ENV=production API_BASE=https://recodex.projekty.ms.mff.cuni.cz:4000/v1 webpack -p --config config/webpack.server.js && cross-env NODE_ENV=production API_BASE=https://recodex.projekty.ms.mff.cuni.cz:4000/v1 webpack -p --config config/webpack.config.js",
+    "build": "npm run clean && cross-env NODE_ENV=production API_BASE=https://recodex.projekty.ms.mff.cuni.cz:4000/v1 webpack --config config/webpack.server.js && cross-env NODE_ENV=production API_BASE=https://recodex.projekty.ms.mff.cuni.cz:4000/v1 webpack -p --config config/webpack.config.js",
     "lint": "eslint .",
     "test": "cross-env NODE_ENV=development mocha",
     "test:watch": "npm test -- --watch --reporter nyan",
@@ -89,6 +89,7 @@
     "fetch-mock": "^4.5.0",
     "file-loader": "^0.8.5",
     "isomorphic-fetch": "^2.2.1",
+    "isomorphic-style-loader": "^1.0.0",
     "isparta": "^4.0.0",
     "istanbul": "^0.4.3",
     "jsdom": "^9.0.0",

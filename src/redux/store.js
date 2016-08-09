@@ -21,7 +21,7 @@ const dev = (history) =>
     applyMiddleware(
       ...getMiddleware(history)
     ),
-    window.devToolsExtension ? window.devToolsExtension() : undefined // use the DEVtools if the extension is installed
+    window.devToolsExtension() // use the DEVtools if the extension is installed
   );
 
 const prod = (history) =>

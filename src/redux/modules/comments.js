@@ -1,5 +1,5 @@
 import { createAction, handleActions } from 'redux-actions';
-import { Map } from 'immutable';
+import { fromJS } from 'immutable';
 
 import { createApiAction } from '../middleware/apiMiddleware';
 import factory, { initialState, createRecord } from '../helpers/resourceManager';
@@ -35,10 +35,9 @@ export const postComment = (user, threadId, text, isPrivate) =>
 
 export const repostComment = (threadId, tmpId) =>
   (dispatch, getState) => {
-    const comment = getState().comments.getIn([ 'resources', threadId ])
-                      .data.comments.find(cmt => cmt.id === tmpId);
+    const comment = getState().comments.getIn([ 'resources', threadId, 'data', 'comments' ]).find(cmt => cmt.id === tmpId);
     dispatch({ type: actionTypes.REMOVE_COMMENT, payload: { threadId, id: tmpId } });
-    dispatch(postComment(comment.user, threadId, comment.text, comment.isPrivate)).catch(() => {});
+    dispatch(postComment(comment.get('user'), threadId, comment.get('text'), comment.get('isPrivate'))).catch(() => {});
   };
 
 export const togglePrivacy = (commentId) =>
@@ -56,52 +55,31 @@ const reducer = handleActions(Object.assign({}, reduceActions, {
 
   [actionTypes.POST_COMMENT_PENDING]: (state, { payload: { text, isPrivate }, meta: { tmpId, user, threadId } }) => {
     const correctUserData = Object.assign({}, user, { name: user.fullName || user.name });
-    const resource = { id: tmpId, status: 'pending', text, user: correctUserData, isPrivate: isPrivate === 'yes' };
+    const resource = fromJS({ id: tmpId, status: 'pending', text, user: correctUserData, isPrivate: isPrivate === 'yes' });
     return state.updateIn(
-      ['resources', threadId],
-      thread => {
-        const copy = Object.assign({}, thread);
-        copy.data = copy.data || { comments: [] };
-        copy.data.comments.push(resource);
-        return copy;
-      }
+      ['resources', threadId, 'data', 'comments'],
+      comments => comments.push(resource)
     );
   },
 
   [actionTypes.POST_COMMENT_FULFILLED]: (state, { payload, meta: { threadId, tmpId } }) => {
     return state.updateIn(
-      ['resources', threadId],
-      thread => {
-        const copy = Object.assign({}, thread);
-        copy.data.comments = thread.data.comments.map(
-          cmt => cmt.id !== tmpId ? cmt : payload
-        );
-        return copy;
-      }
+      ['resources', threadId, 'data', 'comments'],
+      comments => comments.map(comment => comment.get('id') === tmpId ? fromJS(payload) : comment)
     );
   },
 
   [actionTypes.POST_COMMENT_REJECTED]: (state, { meta: { threadId, tmpId } }) => {
     return state.updateIn(
-      ['resources', threadId],
-      thread => {
-        const copy = Object.assign({}, thread);
-        copy.data.comments = copy.data.comments.map(
-          cmt => cmt.id !== tmpId ? cmt : Object.assign({}, cmt, { status: 'failed' })
-        );
-        return copy;
-      }
+      ['resources', threadId, 'data', 'comments'],
+      comments => comments.map(comment => comment.get('id') === tmpId ? comment.set('status', 'failed') : comment)
     );
   },
 
   [actionTypes.REMOVE_COMMENT]: (state, { meta: { threadId, id } }) => {
     return state.updateIn(
-      ['resources', threadId],
-      thread => {
-        const copy = Object.assign({}, thread);
-        copy.data.comments = copy.data.comments.filter(cmt => cmt.id !== id);
-        return copy;
-      }
+      ['resources', threadId, 'data', 'comments'],
+      comments => comments.filter(cmt => cmt.get('id') !== id)
     );
   }
 

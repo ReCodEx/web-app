@@ -1,19 +1,19 @@
 import { createAction, handleActions } from 'redux-actions';
-import { Map, List } from 'immutable';
+import { fromJS } from 'immutable';
 import { actionTypes as submissionActionTypes } from './submission';
 
-export const initialState = Map({
+export const initialState = fromJS({
   webSocketChannelId: null,
   expectedTasksCount: 0,
   isFinished: false,
   soFarSoGood: true,
-  progress: Map({
+  progress: {
     total: 0,
     completed: 0,
     skipped: 0,
     failed: 0
-  }),
-  messages: List()
+  },
+  messages: []
 });
 
 /**
@@ -22,6 +22,7 @@ export const initialState = Map({
 
 export const actionTypes = {
   INIT: 'recodex/evaluationProgress/INIT',
+  FINISH: 'recodex/evaluationProgress/FINISH',
   COMPLETED_TASK: 'recodex/evaluationProgress/COMPLETED_TASK',
   SKIPPED_TASK: 'recodex/evaluationProgress/SKIPPED_TASK',
   FAILED_TASK: 'recodex/evaluationProgress/FAILED_TASK',
@@ -33,6 +34,7 @@ export const completedTask = createAction(actionTypes.COMPLETED_TASK);
 export const skippedTask = createAction(actionTypes.SKIPPED_TASK);
 export const failedTask = createAction(actionTypes.FAILED_TASK);
 export const addMessage = createAction(actionTypes.ADD_MESSAGE);
+export const finish = createAction(actionTypes.FINISH);
 
 /**
  * Reducer
@@ -65,6 +67,8 @@ export default handleActions({
   [actionTypes.FAILED_TASK]: (state, action) => increment(state, 'failed', false),
 
   [actionTypes.ADD_MESSAGE]: (state, { payload }) =>
-    state.update('messages', messages => messages.push(payload))
+    state.update('messages', messages => messages.push(payload)),
+
+  [actionTypes.FINISH]: state => state.set('isFinished', true)
 
 }, initialState);

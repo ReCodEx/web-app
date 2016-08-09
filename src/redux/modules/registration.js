@@ -1,4 +1,5 @@
 import { createAction, handleActions } from 'redux-actions';
+import { fromJS } from 'immutable';
 import { createApiAction } from '../middleware/apiMiddleware';
 import { login } from './auth';
 
@@ -32,23 +33,20 @@ export const createAccount = (firstName, lastName, email, password) =>
     body: { firstName, lastName, email, password }
   });
 
-const initialState = {
+const initialState = fromJS({
   status: statusTypes.IDLE
-};
+});
 
 const reducer = handleActions({
 
-  [actionTypes.CREATING_ACCOUNT_PENDING]: (state, action) => ({
-    status: statusTypes.CREATING_ACCOUNT
-  }),
+  [actionTypes.CREATING_ACCOUNT_PENDING]: (state, action) =>
+    state.set('status', statusTypes.CREATING_ACCOUNT),
 
-  [actionTypes.CREATE_ACCOUNT_FULFILLED]: (state, action) => ({
-    status: statusTypes.ACCOUNT_CREATED
-  }),
+  [actionTypes.CREATE_ACCOUNT_FULFILLED]: (state, action) =>
+    state.set('status', statusTypes.ACCOUNT_CREATED),
 
-  [actionTypes.CREATE_ACCOUNT_REJECTED]: (state, action) => ({
-    status: statusTypes.ACCOUNT_CREATING_FAILED
-  })
+  [actionTypes.CREATE_ACCOUNT_REJECTED]: (state, action) =>
+    state.set('status', statusTypes.ACCOUNT_CREATING_FAILED)
 
 }, initialState);
 
