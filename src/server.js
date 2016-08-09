@@ -27,6 +27,8 @@ addLocaleData([ ...cs ]);
  * some basic middleware for tempaltes and static file serving.
  */
 
+const BUNDLE = process.env.BUNDLE || '/bundle.js';
+
 let app = new Express();
 app.set('view engine', 'ejs');
 app.use(Express.static('public'));

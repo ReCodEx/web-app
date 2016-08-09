@@ -41,6 +41,13 @@ export const repostComment = (threadId, tmpId) =>
     dispatch(postComment(comment.user, threadId, comment.text, comment.isPrivate)).catch(() => {});
   };
 
+export const togglePrivacy = (commentId) =>
+  createApiAction({
+    type: actionTypes.TOGGLE_PRIVACY,
+    endpoint: `/comments/${commentId}/toggle`,
+    method: 'POST'
+  });
+
 /**
  * Reducer
  */
