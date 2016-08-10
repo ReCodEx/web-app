@@ -7,7 +7,8 @@ import PageContent from '../../components/PageContent';
 import Box from '../../components/Box';
 import LoginForm from '../../components/LoginForm';
 
-import { statusTypes, login } from '../../redux/modules/auth';
+import { login } from '../../redux/modules/auth';
+import { isLoggingIn, hasFailed, hasSucceeded } from '../../redux/selectors/auth';
 import { HOME_URI, DASHBOARD_URI } from '../../links';
 
 class Login extends Component {
@@ -64,9 +65,9 @@ Login.propTypes = {
 
 export default connect(
   state => ({
-    isLoggingIn: state.auth.status === statusTypes.LOGGING_IN,
-    hasFailed: state.auth.status === statusTypes.LOGIN_FAILED,
-    hasSucceeded: state.auth.status === statusTypes.LOGGED_IN
+    isLoggingIn: isLoggingIn(state),
+    hasFailed: hasFailed(state),
+    hasSucceeded: hasSucceeded(state)
   }),
   {
     login

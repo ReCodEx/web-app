@@ -3,6 +3,7 @@ import classNames from 'classnames';
 import { Link } from 'react-router';
 import MenuItem from '../MenuItem';
 import LoadingMenuItem from '../LoadingMenuItem';
+import { isLoading } from '../../../redux/helpers/resourceManager';
 
 class MenuGroup extends Component {
   constructor(props, context) {
@@ -26,7 +27,7 @@ class MenuGroup extends Component {
     } = this.props;
 
     const notificationsCount = items.reduce((acc, item) =>
-      acc + (item.notificationsCount > 0 ? 1 : 0), 0);
+      acc + (item.get('notificationsCount') > 0 ? 1 : 0), 0);
 
     return (
       <li
@@ -44,13 +45,13 @@ class MenuGroup extends Component {
           className='treeview-menu'
           style={{ display: this.state.open ? 'block' : 'none' }}>
           {items.map((item, key) =>
-            item.isFetching
+            isLoading(item)
               ? <LoadingMenuItem key={key} />
               : <MenuItem
                   key={key}
-                  title={item.data.name}
+                  title={item.getIn(['data', 'name'])}
                   icon='circle-o'
-                  notificationsCount={item.data.notificationsCount}
+                  notificationsCount={item.getIn(['data', 'notificationsCount'])}
                   link={createLink(item)} />
           )}
         </ul>

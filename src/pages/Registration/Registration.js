@@ -8,7 +8,8 @@ import PageContent from '../../components/PageContent';
 import Box from '../../components/Box';
 import RegistrationForm from '../../components/RegistrationForm';
 
-import { statusTypes, createAccount } from '../../redux/modules/registration';
+import { createAccount } from '../../redux/modules/registration';
+import { isCreating, hasFailed, hasSucceeded } from '../../redux/selectors/registration';
 import { HOME_URI, DASHBOARD_URI } from '../../links';
 
 class Register extends Component {
@@ -65,9 +66,9 @@ Register.propTypes = {
 
 export default connect(
   state => ({
-    isCreatingAccount: state.registration.status === statusTypes.CREATING_ACCOUNT,
-    hasFailed: state.registration.status === statusTypes.ACCOUNT_CREATING_FAILED,
-    hasSucceeded: state.registration.status === statusTypes.ACCOUNT_CREATED
+    isCreatingAccount: isCreating(state),
+    hasFailed: hasFailed(state),
+    hasSucceeded: hasSucceeded(state)
   }),
   {
     createAccount

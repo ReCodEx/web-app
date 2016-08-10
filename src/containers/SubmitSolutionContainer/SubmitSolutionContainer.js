@@ -15,7 +15,7 @@ import {
   getSubmissionId
 } from '../../redux/selectors/submission';
 
-import { getLoggedInUserId } from '../../redux/selectors/auth';
+import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 
 import {
   submissionStatus,
@@ -104,7 +104,7 @@ class SubmitSolutionContainer extends Component {
 
 export default connect(
   state => ({
-    userId: getLoggedInUserId(state),
+    userId: loggedInUserIdSelector(state),
     note: getNote(state),
     uploadingFiles: getUploadingFiles(state).toJS(),
     attachedFiles: getUploadedFiles(state).toJS(),

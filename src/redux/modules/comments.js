@@ -3,6 +3,7 @@ import { fromJS } from 'immutable';
 
 import { createApiAction } from '../middleware/apiMiddleware';
 import factory, { initialState, createRecord } from '../helpers/resourceManager';
+import { commentsSelector } from '../selectors/comments';
 
 const resourceName = 'comments';
 const {
@@ -35,9 +36,13 @@ export const postComment = (user, threadId, text, isPrivate) =>
 
 export const repostComment = (threadId, tmpId) =>
   (dispatch, getState) => {
-    const comment = getState().comments.getIn([ 'resources', threadId, 'data', 'comments' ]).find(cmt => cmt.id === tmpId);
-    dispatch({ type: actionTypes.REMOVE_COMMENT, payload: { threadId, id: tmpId } });
-    dispatch(postComment(comment.get('user'), threadId, comment.get('text'), comment.get('isPrivate'))).catch(() => {});
+    const comment = commentsSelector(getState(), threadId).find(cmt => cmt.get('id') === tmpId);
+    if (comment) {
+      dispatch({ type: actionTypes.REMOVE_COMMENT, payload: { threadId, id: tmpId } });
+      dispatch(
+        postComment(comment.get('user'), threadId, comment.get('text'), comment.get('isPrivate'))
+      ).catch(() => {});
+    }
   };
 
 export const togglePrivacy = (commentId) =>

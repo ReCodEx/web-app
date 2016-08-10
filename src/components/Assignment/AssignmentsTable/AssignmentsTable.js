@@ -1,4 +1,5 @@
 import React, { PropTypes } from 'react';
+import { List } from 'immutable';
 import { Table } from 'react-bootstrap';
 import Icon from 'react-fontawesome';
 
@@ -24,13 +25,13 @@ const AssignmentsTable = ({
       </tr>
     </thead>
     <tbody>
-      {assignments.filter(isLoading).length === 0 && assignments.length === 0 &&
+      {assignments.filter(isLoading).size === 0 && assignments.size === 0 &&
         <NoAssignmentTableRow />}
 
       {assignments.filter(isReady).map(assignment =>
         <AssignmentTableRow
           key={assignment}
-          item={assignment.data}
+          item={assignment.get('data').toJS()}
           showGroup={showGroup} />)}
 
       {assignments.some(isLoading) &&
@@ -40,7 +41,7 @@ const AssignmentsTable = ({
 );
 
 AssignmentsTable.propTypes = {
-  assignments: PropTypes.array.isRequired,
+  assignments: PropTypes.instanceOf(List).isRequired,
   showGroup: PropTypes.bool
 };
 

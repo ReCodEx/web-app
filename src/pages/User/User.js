@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 
 import { fetchUserIfNeeded } from '../../redux/modules/users';
+import { getUser } from '../../redux/selectors/users';
 import { isReady, isLoading, hasFailed } from '../../redux/helpers/resourceManager';
 import PageContent from '../../components/PageContent';
 import UserProfile, {
@@ -34,7 +35,7 @@ class User extends Component {
       user
     } = this.props;
 
-    const userName = isReady(user) ? user.data.fullName : null;
+    const userName = isReady(user) ? user.getIn(['data', 'fullName']) : null;
     const title = userName !== null ? userName : 'Načítám ...';
 
     return (
@@ -47,7 +48,7 @@ class User extends Component {
         <div>
           {isLoading(user) && <LoadingUserProfile />}
           {hasFailed(user) && <FailedUserProfile />}
-          {isReady(user) && <UserProfile {...user.data} />}
+          {isReady(user) && <UserProfile {...user.get('data').toJS()} />}
         </div>
       </PageContent>
     );
@@ -57,7 +58,7 @@ class User extends Component {
 
 export default connect(
   (state, props) => ({
-    user: state.users.getIn(['resources', props.params.userId])
+    user: getUser(state, props.params.userId)
   }),
   dispatch => ({
     loadUserIfNeeded: (userId) => dispatch(fetchUserIfNeeded(userId))

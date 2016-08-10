@@ -55,15 +55,16 @@ class Submission extends Component {
       children
     } = this.props;
 
-    const assignmentName = isReady(assignment) ? assignment.data.name : null;
-    const title = assignmentName !== null ? assignmentName : 'Načítám ...';
+    const assignmentData = isReady(assignment) ? assignment.get('data').toJS() : null;
+    const title = assignmentData !== null ? assignmentData.name : 'Načítám ...';
+    const data = isReady(submission) ? submission.get('data').toJS() : null;
 
     return (
       <PageContent
         title={title}
         description={<FormattedMessage id='app.submission.evaluation.title' defaultMessage='Your solution evaluation' />}
         breadcrumbs={[
-          { text: <FormattedMessage id='app.group.title' defaultMessage='Group detail' />, iconName: 'user', link: isReady(assignment) ? GROUP_URI_FACTORY(assignment.data.groupId) : undefined },
+          { text: <FormattedMessage id='app.group.title' defaultMessage='Group detail' />, iconName: 'user', link: isReady(assignment) ? GROUP_URI_FACTORY(assignmentData.groupId) : undefined },
           { text: <FormattedMessage id='app.assignment.title' defaultMessage='Exercise assignment' />, iconName: 'puzzle-piece', link: ASSIGNMENT_DETAIL_URI_FACTORY(assignmentId) },
           { text: <FormattedMessage id='app.submission.title' defaultMessage='Your solution' />, iconName: '' }
         ]}>
@@ -72,7 +73,7 @@ class Submission extends Component {
           {hasFailed(submission) && <FailedSubmissionDetail />}
           {isReady(submission) &&
             <SubmissionDetail
-              {...submission.data}
+              {...data}
               assignmentId={assignmentId}
               assignment={assignment}
               onCloseSourceViewer={this.closeSourceCodeViewer}>

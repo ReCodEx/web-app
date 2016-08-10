@@ -48,7 +48,7 @@ const increment = (state, type, isOK = true) =>
     .updateIn(['progress', 'total'], total => total + 1)
     .updateIn(['progress', type], val => val + 1)
     .update('soFarSoGood', soFarSoGood => soFarSoGood && isOK)
-    .update('isFinished', () => willBeFinishedAfterIncrementing(state));
+    .update('isFinished', isFinished => isFinished || willBeFinishedAfterIncrementing(state));
 
 export default handleActions({
 

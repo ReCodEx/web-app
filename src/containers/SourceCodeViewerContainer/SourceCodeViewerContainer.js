@@ -47,7 +47,7 @@ class SourceCodeViewerContainer extends Component {
               <FormattedMessage id='app.sourceCode.showLineNumbers' defaultMessage='Show line numbers' />
             </Checkbox>
           </FormGroup>
-          <SourceCodeViewer {...file.data} onCloseSourceViewer={this.close} lineNumbers={showLineNumbers} />
+          <SourceCodeViewer {...file.get('data').toJS()} onCloseSourceViewer={this.close} lineNumbers={showLineNumbers} />
         </div>
       );
     }

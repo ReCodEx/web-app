@@ -9,6 +9,9 @@ import { isReady, isLoading, hasFailed } from '../../redux/helpers/resourceManag
 
 import { fetchAssignmentIfNeeded } from '../../redux/modules/assignments';
 import { init, cancel, submissionStatus } from '../../redux/modules/submission';
+import { createAssignmentSelector } from '../../redux/selectors/assignments';
+import { isSubmitting } from '../../redux/selectors/submission';
+import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 
 import PageContent from '../../components/PageContent';
 import AssignmentDetails, {
@@ -66,15 +69,22 @@ class Assignment extends Component {
 
     const title = isLoading(assignment)
                     ? <FormattedMessage id='app.loading' defaultMessage='Loading ...' />
-                    : assignment.data.name;
+                    : assignment.getIn(['data', 'name']);
 
     return (
       <PageContent
         title={title}
         description={<FormattedMessage id='app.assignment.title' defaultMessage='Exercise assignment' />}
         breadcrumbs={[
-          { text: <FormattedMessage id='app.group.title' defaultMessage='Group detail' />, iconName: 'user', link: isReady(assignment) ? GROUP_URI_FACTORY(assignment.data.groupId) : undefined },
-          { text: <FormattedMessage id='app.assignment.title' defaultMessage='Exercise assignment' />, iconName: 'puzzle-piece' }
+          {
+            text: <FormattedMessage id='app.group.title' defaultMessage='Group detail' />,
+            iconName: 'user',
+            link: isReady(assignment) ? GROUP_URI_FACTORY(assignment.getIn(['data', 'groupId'])) : undefined
+          },
+          {
+            text: <FormattedMessage id='app.assignment.title' defaultMessage='Exercise assignment' />,
+            iconName: 'puzzle-piece'
+          }
         ]}>
         <Row>
           <Col md={6}>
@@ -83,15 +93,15 @@ class Assignment extends Component {
             {isReady(assignment) && (
               <div>
                 <AssignmentDetails
-                  assignment={assignment.data}
-                  isAfterFirstDeadline={assignment.data.deadline.first * 1000 < this.state.time}
-                  isAfterSecondDeadline={assignment.data.deadline.second * 1000 < this.state.time} />
+                  assignment={assignment.get('data').toJS()}
+                  isAfterFirstDeadline={assignment.getIn(['data', 'deadline', 'first']) * 1000 < this.state.time}
+                  isAfterSecondDeadline={assignment.getIn(['data', 'deadline', 'second']) * 1000 < this.state.time} />
                 <p className='text-center'>
                   <SubmitSolutionButton onClick={this.initSubmission} />
                 </p>
                 <SubmitSolutionContainer
                   reset={this.initSubmission}
-                  assignmentId={assignment.data.id}
+                  assignmentId={assignmentId}
                   isOpen={submitting}
                   onClose={this.hideSubmission} />
               </div>
@@ -120,11 +130,14 @@ Assignment.props = {
 };
 
 export default connect(
-  (state, props) => ({
-    assignment: state.assignments.getIn([ 'resources', props.params.assignmentId ]),
-    submitting: state.submission.get('status') === submissionStatus.CREATING || state.submission.get('status') === submissionStatus.SENDING,
-    userId: state.auth.userId
-  }),
+  (state, props) => {
+    const assignmentSelector = createAssignmentSelector();
+    return {
+      assignment: assignmentSelector(state, props.params.assignmentId),
+      submitting: isSubmitting(state),
+      userId: loggedInUserIdSelector(state)
+    };
+  },
   (dispatch, props) => ({
     init: (userId, assignmentId) => dispatch(init(userId, assignmentId)),
     cancel: (userId, assignmentId) => dispatch(cancel()),

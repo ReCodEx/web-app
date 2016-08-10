@@ -11,22 +11,22 @@ export const actionTypesFactory = (resourceName) => ({
 });
 
 export const isLoading = (item) =>
-    !item || item.isFetching === true;
+    !item || item.get('isFetching') === true;
 
 export const hasFailed = (item) =>
-    !!item && item.error === true;
+    !!item && item.get('error') === true;
 
 export const isReady = (item) =>
-    !!item && !!item.data;
+    !!item && !!item.get('data');
 
 export const isTooOld = (item) =>
-  Date.now() - item.lastUpdate > 10 * 60 * 1000; // 10 minutes - @todo: Make configurable
+  Date.now() - item.get('lastUpdate') > 10 * 60 * 1000; // 10 minutes - @todo: Make configurable
 
 /** Does the given item need refetching or is it already cached? */
 export const defaultNeedsRefetching = (item) =>
   !item || (
-    item.isFetching === false && (
-      item.error === true || item.didInvalidate === true
+    item.get('isFetching') === false && (
+      item.get('error') === true || item.get('didInvalidate') === true
     )
   ) ||
   isTooOld(item);
@@ -63,9 +63,10 @@ export const actionsFactory = ({
 
   const pushResource = createAction(
     actionTypes.FETCH_FULFILLED,
-    user => user,
-    user => ({ id: user.id })
+    resource => resource,
+    resource => ({ id: resource.get('id') })
   );
+
   const invalidate = createAction(actionTypes.INVALIDATE);
 
   return {

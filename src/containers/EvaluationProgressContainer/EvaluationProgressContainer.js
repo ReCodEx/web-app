@@ -17,7 +17,7 @@ import {
   getFailedPercent,
   getMessages,
   isFinished
-} from '../../redux/slectors/evaluationProgress';
+} from '../../redux/selectors/evaluationProgress';
 
 import { finishProcessing } from '../../redux/modules/submission';
 

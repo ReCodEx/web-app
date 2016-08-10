@@ -1,5 +1,6 @@
 import React, { PropTypes } from 'react';
 import { FormattedMessage } from 'react-intl';
+import { List } from 'immutable';
 
 import { isReady } from '../../../redux/helpers/resourceManager';
 import BadgeContainer from '../../../containers/BadgeContainer';
@@ -23,7 +24,6 @@ const LoggedIn = ({
   <aside className='main-sidebar'>
     <section className='sidebar'>
       <BadgeContainer logout={logout} />
-
       <ul className='sidebar-menu'>
         <MenuTitle title={<FormattedMessage id='app.sidebar.menu.title' defaultMessage='Menu' />} />
         <MenuItem
@@ -31,21 +31,21 @@ const LoggedIn = ({
           isActive={isActive(DASHBOARD_URI)}
           icon='dashboard'
           link={DASHBOARD_URI} />
-        {studentOf.length > 0 && (
+        {studentOf && studentOf.size > 0 && (
           <MenuGroup
             title={<FormattedMessage id='app.sidebar.menu.studentOf' defaultMessage='Groups - student' />}
             items={studentOf}
             icon='puzzle-piece'
-            isActive={studentOf.some(item => isReady(item) && isActive(GROUP_URI_FACTORY(item.data.id)))}
-            createLink={item => GROUP_URI_FACTORY(item.data.id)} />
+            isActive={studentOf.some(item => isReady(item) && isActive(GROUP_URI_FACTORY(item.getIn(['data', 'id']))))}
+            createLink={item => GROUP_URI_FACTORY(item.getIn(['data', 'id']))} />
         )}
-        {studentOf.length > 0 && (
+        {supervisorOf && supervisorOf.size > 0 && (
           <MenuGroup
             title={<FormattedMessage id='app.sidebar.menu.supervisorOf' defaultMessage='Groups - supervisor' />}
             items={supervisorOf}
             icon='wrench'
-            isActive={supervisorOf.some(item => isReady(item) && isActive(GROUP_URI_FACTORY(item.data.id)))}
-            createLink={item => GROUP_URI_FACTORY(item.data.id)} />
+            isActive={supervisorOf.some(item => isReady(item) && isActive(GROUP_URI_FACTORY(item.getIn(['data', 'id']))))}
+            createLink={item => GROUP_URI_FACTORY(item.getIn(['data', 'id']))} />
         )}
         <MenuItem
           title={<FormattedMessage id='app.sidebar.menu.feedbackAndBugs' defaultMessage='Feedback and bug reporting' />}
@@ -64,14 +64,10 @@ LoggedIn.propTypes = {
     avatarUrl: PropTypes.string,
     institution: PropTypes.string
   }),
-  groups: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.any.isRequired,
-      name: PropTypes.string.isRequired,
-      abbr: PropTypes.string.isRequired,
-      color: PropTypes.string.isRequired
-    })
-  )
+  supervisorOf: PropTypes.instanceOf(List),
+  studentOf: PropTypes.instanceOf(List),
+  logout: PropTypes.func.isRequired,
+  isActive: PropTypes.func
 };
 
 export default LoggedIn;

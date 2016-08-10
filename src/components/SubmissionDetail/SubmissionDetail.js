@@ -108,7 +108,7 @@ const SubmissionDetail = ({
                     <th><FormattedMessage id='app.submission.evaluation.beforeFirstDeadline' defaultMessage='Was submitted before the deadline:' /></th>
                     <td className='text-center'>
                       {isReady(assignment) && (
-                        submittedAt < assignment.data.deadline.first
+                        submittedAt < assignment.getIn(['data', 'deadline', 'first'])
                           ? <Icon name='check' className='text-success' />
                           : <Icon name='times' className='text-danger' />
                       )}
@@ -119,7 +119,7 @@ const SubmissionDetail = ({
                     <th><FormattedMessage id='app.submission.evaluation.beforeSecondDeadline' defaultMessage='Was submitted before the second deadline:' /></th>
                     <td className='text-center'>
                       {isReady(assignment) && (
-                        submittedAt < assignment.data.deadline.second
+                        submittedAt < assignment.getIn(['data', 'deadline', 'second'])
                           ? <Icon name='check' className='text-success' />
                           : <Icon name='times' className='text-danger' />
                       )}
@@ -199,9 +199,9 @@ const SubmissionDetail = ({
             {hasFailed(assignment) && <FailedAssignmentDetails />}
             {isReady(assignment) && (
               <AssignmentDetails
-                assignment={assignment.data}
-                isAfterFirstDeadline={assignment.data.deadline.first * 1000 < Date.now()}
-                isAfterSecondDeadline={assignment.data.deadline.second * 1000 < Date.now()}
+                assignment={assignment.get('data').toJS()}
+                isAfterFirstDeadline={assignment.getIn(['data', 'deadline', 'first']) * 1000 < Date.now()}
+                isAfterSecondDeadline={assignment.getIn(['data', 'deadline', 'second']) * 1000 < Date.now()}
                 isOpen={false} />
             )}
           </Col>

@@ -1,5 +1,5 @@
-
 import React, { PropTypes } from 'react';
+import { List } from 'immutable';
 
 import { Table } from 'react-bootstrap';
 import Box from '../Box';
@@ -32,7 +32,7 @@ const SubmissionsTable = ({
       </thead>
       <tbody>
         {!submissions && <LoadingSubmissionTableRow />}
-        {!!submissions && submissions.length > 0 &&
+        {!!submissions && submissions.size > 0 &&
           submissions.map((submission, i) => {
             if (hasFailed(submission)) {
               return <FailedLoadingSubmissionTableRow key={i} />;
@@ -40,21 +40,24 @@ const SubmissionsTable = ({
               return <LoadingSubmissionTableRow key={i} />;
             }
 
-            const link = SUBMISSION_DETAIL_URI_FACTORY(assignmentId, submission.data.id);
-            switch (submission.data.evaluationStatus) {
+            const data = submission.get('data').toJS();
+            const id = data.id;
+            const link = SUBMISSION_DETAIL_URI_FACTORY(assignmentId, id);
+
+            switch (data.evaluationStatus) {
               case 'done':
-                return <SuccessfulSubmissionTableRow {...submission.data} key={submission.data.id} link={link} />;
+                return <SuccessfulSubmissionTableRow {...data} key={id} link={link} />;
               case 'failed':
-                return <FailedSubmissionTableRow {...submission.data} key={submission.data.id} link={link} />;
+                return <FailedSubmissionTableRow {...data} key={id} link={link} />;
               case 'work-in-progress':
-                return <NotEvaluatedSubmissionTableRow {...submission.data} key={submission.data.id} link={link} />;
+                return <NotEvaluatedSubmissionTableRow {...data} key={id} link={link} />;
               case 'evaluation-failed':
-                return <EvaluationFailedTableRow {...submission.data} key={submission.data.id} link={link} />;
+                return <EvaluationFailedTableRow {...data} key={id} link={link} />;
               default:
                 return null;
             }
           })}
-        {!!submissions && submissions.length === 0 && <NoSolutionYetTableRow />}
+        {!!submissions && submissions.size === 0 && <NoSolutionYetTableRow />}
       </tbody>
     </Table>
   </Box>
@@ -62,7 +65,7 @@ const SubmissionsTable = ({
 
 SubmissionsTable.propTypes = {
   assignmentId: PropTypes.string.isRequired,
-  submissions: PropTypes.array
+  submissions: PropTypes.instanceOf(List)
 };
 
 export default SubmissionsTable;
