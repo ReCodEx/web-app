@@ -4,3 +4,4 @@ node_modules/.bin/*
 public/bundle.js
 public/bundle.js.map
 build
+npm-debug.log
