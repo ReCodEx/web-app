@@ -3,5 +3,7 @@ node_modules/.bin/*
 .DS_Store
 public/bundle.js
 public/bundle.js.map
+bin/server.js
+bin/server.js.map
 build
 npm-debug.log
