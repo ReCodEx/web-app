@@ -1,4 +1,5 @@
 import { expect } from 'chai';
+import { Map } from 'immutable';
 import reducer, { actionTypes, toggleSize, toggleVisibility } from '../../../src/redux/modules/sidebar';
 
 describe('Opening and closing the sidebar', () => {
@@ -23,28 +24,28 @@ describe('Opening and closing the sidebar', () => {
   describe('(Reducer)', () => {
     it('must create correct initial state', () => {
       const state = reducer(undefined, {});
-      expect(state).to.eql({
+      expect(state).to.eql(Map({
         visible: false,
         collapsed: false
-      });
+      }));
     });
 
     it('must create toggle visibility', () => {
       let state = reducer(undefined, {});
-      expect(state.visible).to.equal(false);
+      expect(state.get('visible')).to.equal(false);
       state = reducer(state, toggleVisibility());
-      expect(state.visible).to.equal(true);
+      expect(state.get('visible')).to.equal(true);
       state = reducer(state, toggleVisibility());
-      expect(state.visible).to.equal(false);
+      expect(state.get('visible')).to.equal(false);
     });
 
     it('must create toggle size', () => {
       let state = reducer(undefined, {});
-      expect(state.collapsed).to.equal(false);
+      expect(state.get('collapsed')).to.equal(false);
       state = reducer(state, toggleSize());
-      expect(state.collapsed).to.equal(true);
+      expect(state.get('collapsed')).to.equal(true);
       state = reducer(state, toggleSize());
-      expect(state.collapsed).to.equal(false);
+      expect(state.get('collapsed')).to.equal(false);
     });
   });
 });
