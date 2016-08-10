@@ -1,7 +1,9 @@
 import React, { PropTypes } from 'react';
 import { FormattedNumber, FormattedDate, FormattedTime } from 'react-intl';
 import { Link } from 'react-router';
+
 import AssignmentStatusIcon from '../Assignment/AssignmentStatusIcon';
+import BonusPoints from './BonusPoints';
 
 const SuccessfulSubmissionTableRow = ({
   link,
@@ -9,6 +11,7 @@ const SuccessfulSubmissionTableRow = ({
   submittedAt,
   evaluation: {
     score,
+    bonusPoints,
     points,
     maxPoints
   }
@@ -25,8 +28,11 @@ const SuccessfulSubmissionTableRow = ({
     </td>
     <td className='text-center'>
       <strong className='text-success'>
-        {points}{'/'}{maxPoints}
+        {points + bonusPoints}{'/'}{maxPoints}
       </strong>
+      {bonusPoints !== 0 && (
+        <span> == {points} <BonusPoints bonus={bonusPoints} /></span>
+      )}
     </td>
     <td>
       {note}

@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 import Icon from 'react-fontawesome';
 import classnames from 'classnames';
 import { FormattedMessage, FormattedNumber, FormattedDate, FormattedTime } from 'react-intl';
-import { Modal, Table, Row, Col } from 'react-bootstrap';
+import { Modal, Table, Row, Col, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { Link } from 'react-router';
 
 import { isReady, isLoading, hasFailed } from '../../../redux/helpers/resourceManager';
@@ -16,6 +16,8 @@ import AssignmentDetails, {
   FailedAssignmentDetails
 } from '../../Assignments/Assignment/AssignmentDetails';
 import AssignmentStatusIcon from '../../Assignments/Assignment/AssignmentStatusIcon';
+import TestResultsTable from '../TestResultsTable';
+import BonusPoints from '../../Assignments/SubmissionsTable/BonusPoints';
 import CommentThreadContainer from '../../../containers/CommentThreadContainer';
 
 const SubmissionDetail = ({
@@ -166,13 +168,38 @@ const SubmissionDetail = ({
                     <td className={
                       classnames({
                         'text-center': true,
-                        'text-danger': !evaluation.isCorrect,
-                        'text-success': evaluation.isCorrect
+                        'text-danger': !evaluation.isCorrect && evaluation.bonusPoints === 0,
+                        'text-success': evaluation.isCorrect && evaluation.bonusPoints === 0,
+                        'text-bold': evaluation.bonusPoints === 0
                       })
                     }>
-                      <b>{evaluation.points}/{evaluation.maxPoints}</b>
+                      {evaluation.points}/{evaluation.maxPoints}
                     </td>
                   </tr>
+                  {evaluation.bonusPoints !== 0 && (
+                    <tr>
+                      <th><FormattedMessage id='app.submission.evaluation.bonusPoints' defaultMessage='Bonus points:' /></th>
+                      <td className='text-center'>
+                        <BonusPoints bonus={evaluation.bonusPoints} />
+                      </td>
+                    </tr>
+                  )}
+                  {evaluation.bonusPoints !== 0 && (
+                    <tr>
+                      <th><FormattedMessage id='app.submission.evaluation.totalScore' defaultMessage='Total score:' /></th>
+                      <td className={
+                        classnames({
+                          'text-center': true,
+                          'text-danger': !evaluation.isCorrect,
+                          'text-success': evaluation.isCorrect
+                        })
+                      }>
+                        <b>
+                          {evaluation.points + evaluation.bonusPoints}/{evaluation.maxPoints}
+                        </b>
+                      </td>
+                    </tr>
+                  )}
                 </tbody>
               )}
               </Table>
@@ -192,6 +219,14 @@ const SubmissionDetail = ({
       <Col lg={8}>
         <Row>
           <Col sm={6}>
+            <Box
+              title={<FormattedMessage id='app.submission.evaluation.title.testResults' defaultMessage='Test results' />}
+              noPadding={true}
+              collapsable={true}
+              isOpen={true}>
+              <TestResultsTable results={evaluation.testResults} />
+            </Box>
+
             <CommentThreadContainer threadId={id} />
           </Col>
           <Col sm={6}>
@@ -201,8 +236,7 @@ const SubmissionDetail = ({
               <AssignmentDetails
                 assignment={assignment.get('data').toJS()}
                 isAfterFirstDeadline={assignment.getIn(['data', 'deadline', 'first']) * 1000 < Date.now()}
-                isAfterSecondDeadline={assignment.getIn(['data', 'deadline', 'second']) * 1000 < Date.now()}
-                isOpen={false} />
+                isAfterSecondDeadline={assignment.getIn(['data', 'deadline', 'second']) * 1000 < Date.now()} />
             )}
           </Col>
         </Row>
