@@ -29,7 +29,7 @@ export const createAccount = (firstName, lastName, email, password) =>
   createApiAction({
     type: actionTypes.CREATE_ACCOUNT,
     method: 'POST',
-    endpoint: '/users/create-account',
+    endpoint: '/users',
     body: { firstName, lastName, email, password }
   });
 

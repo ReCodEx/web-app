@@ -28,7 +28,7 @@ export const fetchThreadIfNeeded = actions.fetchOneIfNeeded;
 export const postComment = (user, threadId, text, isPrivate) =>
   createApiAction({
     type: actionTypes.POST_COMMENT,
-    endpoint: `/comments/${threadId}/add`,
+    endpoint: `/comments/${threadId}`,
     method: 'POST',
     body: { text, isPrivate: isPrivate ? 'yes' : 'no' },
     meta: { threadId, user, tmpId: Math.random().toString() }

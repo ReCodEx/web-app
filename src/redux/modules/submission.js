@@ -60,7 +60,7 @@ export const uploadFile = file =>
   createApiAction({
     type: actionTypes.UPLOAD,
     method: 'POST',
-    endpoint: '/uploaded-files/upload',
+    endpoint: '/uploaded-files',
     body: { [file.name]: file },
     meta: file.name
   });
