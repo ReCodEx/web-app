@@ -2,13 +2,14 @@ import React, { PropTypes } from 'react';
 import { FormattedMessage } from 'react-intl';
 import classNames from 'classnames';
 import Icon from 'react-fontawesome';
-import { OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { Link } from 'react-router';
 
 import { USER_URI_FACTORY } from '../../../../links';
 import { Posted, Posting, Failed } from './Status';
 
 const Comment = ({
+  isFromCurrentUser = false,
   id,
   right,
   status = 'posted',
@@ -16,7 +17,9 @@ const Comment = ({
   postedAt,
   isPrivate = false,
   text,
-  repost
+  repost,
+  isToggling = false,
+  togglePrivacy
 }) => (
   <div className={classNames({
     'direct-chat-success': isPrivate,
@@ -41,13 +44,20 @@ const Comment = ({
       </div>
       <img className='direct-chat-img' src={user.avatarUrl} alt={user.name} />
       <div className='direct-chat-text'>
-        {isPrivate &&
+        {isFromCurrentUser && togglePrivacy &&
           <OverlayTrigger placement='left' overlay={(
             <Tooltip id={id}>
-              <FormattedMessage id='app.comments.onlyYouCanSeeThisComment' defaultMessage='Only you can see this comment' />
+              {isPrivate
+                ? <FormattedMessage id='app.comments.onlyYouCanSeeThisComment' defaultMessage='Only you can see this comment' />
+                : <FormattedMessage id='app.comments.everyoneCanSeeThisComment' defaultMessage='This comment is visible to everyone.' />}
             </Tooltip>
           )}>
-            <Icon name='lock' className='pull-right' />
+            <Icon
+              name={isToggling ? 'circle-o-notch' : isPrivate ? 'lock' : 'unlock-alt'}
+              onClick={() => togglePrivacy(id)}
+              className='pull-right'
+              style={{ cursor: 'pointer' }}
+              spin={isToggling} />
           </OverlayTrigger>}{' '}
         {text}
       </div>
@@ -56,6 +66,7 @@ const Comment = ({
 );
 
 Comment.propTypes = {
+  isFromCurrentUser: PropTypes.bool,
   right: PropTypes.bool.isRequired,
   status: PropTypes.string,
   user: PropTypes.shape({
@@ -65,7 +76,9 @@ Comment.propTypes = {
   }).isRequired,
   postedAt: PropTypes.number,
   text: PropTypes.string.isRequired,
-  repost: PropTypes.func
+  repost: PropTypes.func,
+  isToggling: PropTypes.bool,
+  togglePrivacy: PropTypes.func
 };
 
 export default Comment;

@@ -43,7 +43,7 @@ class AddComment extends Component {
             </InputGroup.Button>
           </InputGroup>
           <HelpBlock>
-            <Button className='btn-flat' onClick={this.togglePrivate}>
+            <Button className='btn-flat' onClick={this.togglePrivate} bsSize='xs'>
               {isPrivate ? <Icon name='lock' className='text-success' /> : <Icon name='unlock-alt' className='text-warning' />}
             </Button>{' '}
             {isPrivate && (

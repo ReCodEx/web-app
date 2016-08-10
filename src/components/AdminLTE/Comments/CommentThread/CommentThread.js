@@ -9,7 +9,8 @@ const CommentThread = ({
   comments = [],
   currentUserId,
   addComment,
-  repostComment
+  repostComment,
+  togglePrivacy
 }) => (
   <CommentBox
     commentsCount={comments.length}
@@ -17,7 +18,7 @@ const CommentThread = ({
     <div>
       {comments.map((comment, i) =>
         comment.user.id === currentUserId
-          ? <UsersComment {...comment} key={comment.id} repost={repostComment} />
+          ? <UsersComment {...comment} key={comment.id} repost={repostComment} togglePrivacy={togglePrivacy} />
           : <SomebodyElsesComment {...comment} key={comment.id} />)}
 
       {comments.length === 0 && (

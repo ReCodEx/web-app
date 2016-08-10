@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 
 import { isLoading, hasFailed, isReady } from '../../redux/helpers/resourceManager';
-import { postComment, repostComment, fetchThreadIfNeeded } from '../../redux/modules/comments';
+import { postComment, repostComment, togglePrivacy, fetchThreadIfNeeded } from '../../redux/modules/comments';
 import { loggedInUserId } from '../../redux/selectors/auth';
 import { loggedInUserDataSelector } from '../../redux/selectors/users';
 import { commentsThreadSelector } from '../../redux/selectors/comments';
@@ -33,7 +33,8 @@ class CommentThreadContainer extends Component {
       thread,
       user,
       addComment,
-      repostComment
+      repostComment,
+      togglePrivacy
     } = this.props;
 
     if (isLoading(thread)) {
@@ -49,6 +50,7 @@ class CommentThreadContainer extends Component {
         comments={thread.getIn(['data', 'comments']).toJS()}
         currentUserId={user.id}
         addComment={user ? (text, isPrivate) => addComment(user, text, isPrivate) : null}
+        togglePrivacy={user ? (id) => togglePrivacy(id) : null}
         repostComment={repostComment} />
     );
   }
@@ -71,6 +73,7 @@ export default connect(
   (dispatch, { threadId }) => ({
     addComment: (user, text, isPrivate) => dispatch(postComment(user, threadId, text, isPrivate)),
     repostComment: (tmpId) => dispatch(repostComment(threadId, tmpId)),
+    togglePrivacy: (id) => dispatch(togglePrivacy(threadId, id)),
     loadThreadIfNeeded: () => dispatch(fetchThreadIfNeeded(threadId))
   })
 )(CommentThreadContainer);

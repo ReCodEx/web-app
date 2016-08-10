@@ -20,7 +20,11 @@ export const actionTypes = {
   POST_COMMENT_PENDING: 'redux/comments/POST_COMMENT_PENDING',
   POST_COMMENT_REJECTED: 'redux/comments/POST_COMMENT_REJECTED',
   POST_COMMENT_FULFILLED: 'redux/comments/POST_COMMENT_FULFILLED',
-  REMOVE_COMMENT: 'redux/comment/REMOVE_COMMENT'
+  REMOVE_COMMENT: 'redux/comment/REMOVE_COMMENT',
+  TOGGLE_PRIVACY: 'redux/comment/TOGGLE_PRIVACY',
+  TOGGLE_PRIVACY_PENDING: 'redux/comment/TOGGLE_PRIVACY_PENDING',
+  TOGGLE_PRIVACY_FULFILLED: 'redux/comment/TOGGLE_PRIVACY_FULFILLED',
+  TOGGLE_PRIVACY_REJECTED: 'redux/comment/TOGGLE_PRIVACY_REJECTED'
 };
 
 export const fetchThreadIfNeeded = actions.fetchOneIfNeeded;
@@ -45,11 +49,12 @@ export const repostComment = (threadId, tmpId) =>
     }
   };
 
-export const togglePrivacy = (commentId) =>
+export const togglePrivacy = (threadId, commentId) =>
   createApiAction({
     type: actionTypes.TOGGLE_PRIVACY,
-    endpoint: `/comments/${commentId}/toggle`,
-    method: 'POST'
+    endpoint: `/comments/${threadId}/comment/${commentId}/toggle`,
+    method: 'POST',
+    meta: { threadId, commentId }
   });
 
 /**
@@ -74,10 +79,32 @@ const reducer = handleActions(Object.assign({}, reduceActions, {
     );
   },
 
+
   [actionTypes.POST_COMMENT_REJECTED]: (state, { meta: { threadId, tmpId } }) => {
     return state.updateIn(
       ['resources', threadId, 'data', 'comments'],
       comments => comments.map(comment => comment.get('id') === tmpId ? comment.set('status', 'failed') : comment)
+    );
+  },
+
+  [actionTypes.TOGGLE_PRIVACY_PENDING]: (state, { payload, meta: { threadId, commentId } }) => {
+    return state.updateIn(
+      ['resources', threadId, 'data', 'comments'],
+      comments => comments.map(comment => comment.get('id') === commentId ? comment.set('isToggling', true) : comment)
+    );
+  },
+
+  [actionTypes.TOGGLE_PRIVACY_FULFILLED]: (state, { payload, meta: { threadId, commentId } }) => {
+    return state.updateIn(
+      ['resources', threadId, 'data', 'comments'],
+      comments => comments.map(comment => comment.get('id') === commentId ? fromJS(payload) : comment)
+    );
+  },
+
+  [actionTypes.TOGGLE_PRIVACY_REJECTED]: (state, { payload, meta: { threadId, commentId } }) => {
+    return state.updateIn(
+      ['resources', threadId, 'data', 'comments'],
+      comments => comments.map(comment => comment.get('id') === commentId ? comment.set('isToggling', false) : comment)
     );
   },
 
