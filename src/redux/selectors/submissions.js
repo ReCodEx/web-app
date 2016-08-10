@@ -1,2 +1,2 @@
 
-export const getSubmissions = state => state.submissions;
+export const getSubmissions = state => state.submissions.get('resources');

@@ -37,5 +37,5 @@ export const createGroupsAssignmentsSelector = () =>
   createSelector(
     [ groupsAssignmentsIdsSelector, getAssignments ],
     (groupsAssignmentsIds, assignments) =>
-      groupsAssignmentsIds.map(assignment => assignments.get(assignment.id))
+      groupsAssignmentsIds.map(id => assignments.getIn(['resources', id]))
   );
