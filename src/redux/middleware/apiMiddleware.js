@@ -1,5 +1,4 @@
 import statusCode from 'statuscode';
-import { accessTokenSelector } from '../selectors/auth';
 
 export const API_BASE = process.env.API_BASE || 'http://localhost:4000/v1';
 export const CALL_API = 'recodex-api/CALL';
