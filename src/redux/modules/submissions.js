@@ -1,5 +1,4 @@
 import { createAction, handleActions } from 'redux-actions';
-import { Map } from 'immutable';
 
 import { createApiAction } from '../middleware/apiMiddleware';
 import factory, {
@@ -10,7 +9,7 @@ import factory, {
 
 const resourceName = 'submissions';
 const needsRefetching = (item) =>
-  defaultNeedsRefetching(item) || item.data.evaluationStatus === 'work-in-progress';
+  defaultNeedsRefetching(item) || item.getIn(['data', 'evaluationStatus']) === 'work-in-progress';
 
 const {
   actions,
@@ -54,7 +53,7 @@ const reducer = handleActions(Object.assign({}, reduceActions, {
     const records = payload.map(submission => createRecord(false, false, false, submission));
     return records.reduce(
       (state, record) =>
-        state.setIn([ 'resources', record.data.id ], record),
+        state.setIn([ 'resources', record.getIn(['data', 'id']) ], record),
       state
     );
   }

@@ -4,7 +4,10 @@ import Icon from 'react-fontawesome';
 import classNames from 'classnames';
 import { Button, Modal, ProgressBar, Table } from 'react-bootstrap';
 
-import styles from './EvaluationProgress.scss';
+const messagesContainerStyle = {
+  maxHeight: 300,
+  overflowY: 'scroll'
+};
 
 class EvaluationProgress extends Component {
 
@@ -48,7 +51,7 @@ class EvaluationProgress extends Component {
             <ProgressBar now={skipped} bsStyle='warning' active={!finished} />
             <ProgressBar now={failed} bsStyle='danger' active={!finished} />
           </ProgressBar>
-          <div className={styles.evaluationProgressBody} ref='bodyContainer'>
+          <div style={messagesContainerStyle} ref='bodyContainer'>
             <Table responsive>
               <tbody>
               {messages.map(({ wasSuccessful, text, status }, i) =>

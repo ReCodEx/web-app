@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { loggedInUserId } from '../../redux/selectors/auth';
+import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import { fetchUserIfNeeded } from '../../redux/modules/users';
 
 class App extends Component {
@@ -30,7 +30,7 @@ class App extends Component {
 
 export default connect(
   state => ({
-    loggedInUserId: loggedInUserId(state)
+    loggedInUserId: loggedInUserIdSelector(state)
   }),
   dispatch => ({
     loadUser: (userId) => dispatch(fetchUserIfNeeded(userId))

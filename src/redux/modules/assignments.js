@@ -1,5 +1,5 @@
 import { createAction, handleActions } from 'redux-actions';
-import { Map } from 'immutable';
+import { fromJS } from 'immutable';
 
 import { usersSelector } from '../selectors/users';
 import factory, { initialState, createRecord } from '../helpers/resourceManager';
@@ -48,7 +48,7 @@ const reducer = handleActions(Object.assign({}, reduceActions, {
       state.setIn([ 'resources', assignment.id ], createRecord(false, false, false, assignment)), state),
 
   [submissionsActionTypes.LOAD_USERS_SUBMISSIONS_FULFILLED]: (state, { payload, meta: { userId, assignmentId } }) =>
-    state.setIn([ 'submissions', assignmentId, userId ], payload.map(submission => submission.id))
+    state.setIn([ 'submissions', assignmentId, userId ], fromJS(payload.map(submission => submission.id)))
 
 }), initialState);
 

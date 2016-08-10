@@ -4,7 +4,8 @@ import { connect } from 'react-redux';
 import { isLoading, hasFailed, isReady } from '../../redux/helpers/resourceManager';
 import { postComment, repostComment, fetchThreadIfNeeded } from '../../redux/modules/comments';
 import { loggedInUserId } from '../../redux/selectors/auth';
-import { loggedInUserSelector } from '../../redux/selectors/users';
+import { loggedInUserDataSelector } from '../../redux/selectors/users';
+import { commentsThreadSelector } from '../../redux/selectors/comments';
 
 import CommentThread, {
   LoadingCommentThread,
@@ -45,7 +46,7 @@ class CommentThreadContainer extends Component {
 
     return (
       <CommentThread
-        comments={thread.data.comments}
+        comments={thread.getIn(['data', 'comments']).toJS()}
         currentUserId={user.id}
         addComment={user ? (text, isPrivate) => addComment(user, text, isPrivate) : null}
         repostComment={repostComment} />
@@ -64,8 +65,8 @@ CommentThreadContainer.propTypes = {
 
 export default connect(
   (state, { threadId }) => ({
-    user: loggedInUserSelector(state),
-    thread: state.comments.getIn(['resources', threadId])
+    user: loggedInUserDataSelector(state).toJS(),
+    thread: commentsThreadSelector(state, threadId)
   }),
   (dispatch, { threadId }) => ({
     addComment: (user, text, isPrivate) => dispatch(postComment(user, threadId, text, isPrivate)),

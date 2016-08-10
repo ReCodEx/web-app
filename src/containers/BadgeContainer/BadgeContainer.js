@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 
 import Badge, { LoadingBadge, FailedBadge } from '../../components/AdminLTE/Badge';
 import { isLoading, isReady, hasFailed } from '../../redux/helpers/resourceManager';
-import { loggedInUserSelector } from '../../redux/selectors/users';
+import { loggedInUserDataSelector } from '../../redux/selectors/users';
 
 const BadgeContainer = ({
   user,
@@ -13,10 +13,10 @@ const BadgeContainer = ({
     ? <LoadingBadge />
     : hasFailed(user)
       ? <FailedBadge color='black' />
-      : <Badge logout={logout} user={user.data} />;
+      : <Badge logout={logout} user={user.toJS()} />;
 
 export default connect(
   state => ({
-    user: state.users.getIn([ 'resources', state.auth.userId ])
+    user: loggedInUserDataSelector(state)
   })
 )(BadgeContainer);

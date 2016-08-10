@@ -1,6 +1,7 @@
 import React from 'react';
 import { Route, IndexRoute, Link } from 'react-router';
 import { DASHBOARD_URI, LOGIN_URI } from '../links';
+import { isLoggedIn } from '../redux/selectors/auth';
 
 /* container components */
 import LayoutContainer from '../containers/LayoutContainer';
@@ -19,15 +20,13 @@ import SourceCodeViewerContainer from '../containers/SourceCodeViewerContainer';
 
 const createRoutes = (getState) => {
   const requireAuth = (nextState, replace) => {
-    const auth = getState().auth;
-    if (!auth.accessToken) {
+    if (!isLoggedIn(getState())) {
       replace(LOGIN_URI);
     }
   };
 
   const onlyUnauth = (nextState, replace) => {
-    const auth = getState().auth;
-    if (auth.accessToken) {
+    if (isLoggedIn(getState())) {
       replace(DASHBOARD_URI);
     }
   };

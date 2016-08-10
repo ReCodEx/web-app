@@ -11,7 +11,17 @@ import {
 import Icon from 'react-fontawesome';
 import DropZone from 'react-dropzone';
 import UploadsTable from '../UploadsTable';
-import styles from './SubmitSolution.scss';
+
+const dropZoneStyles = {
+  borderWidth: 2,
+  borderColor: '#666',
+  borderStyle: 'dashed',
+  padding: 40,
+  marginBottom: 20,
+  borderRadius: 5,
+  fontSize: 20,
+  textAlign: 'center'
+};
 
 const SubmitSolution = ({
   isOpen,
@@ -37,7 +47,7 @@ const SubmitSolution = ({
       </Modal.Title>
     </Modal.Header>
     <Modal.Body>
-      <DropZone onDrop={uploadFiles} className={styles.submitSolutionDropZone}>
+      <DropZone onDrop={uploadFiles} style={dropZoneStyles}>
         <p><FormattedMessage id='app.submitSolution.dragAndDrop' defaultMessage='Drag and drop files here.' /></p>
         <p>
           <Button bsStyle='primary' className='btn-flat'>

@@ -4,7 +4,8 @@ import Layout from '../../components/Layout';
 
 import { toggleSize, toggleVisibility } from '../../redux/modules/sidebar';
 import { logout } from '../../redux/modules/auth';
-import { loggedInUserId } from '../../redux/selectors/auth';
+import { isVisible, isCollapsed } from '../../redux/selectors/sidebar';
+import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import { usersGroupsIds } from '../../redux/selectors/users';
 import { fetchUserIfNeeded } from '../../redux/modules/users';
 import { fetchUsersGroupsIfNeeded } from '../../redux/modules/groups';
@@ -48,11 +49,11 @@ class LayoutContainer extends Component {
 
 const mapStateToProps = (state) => ({
   sidebar: {
-    isOpen: state.sidebar.visible,
-    isCollapsed: state.sidebar.collapsed
+    isOpen: isVisible(state),
+    isCollapsed: isCollapsed(state)
   },
-  isLoggedIn: !!loggedInUserId(state),
-  userId: loggedInUserId(state)
+  isLoggedIn: !!loggedInUserIdSelector(state),
+  userId: loggedInUserIdSelector(state)
 });
 
 const mapDispatchToProps = (dispatch, props) => ({

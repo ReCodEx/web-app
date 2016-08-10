@@ -1,4 +1,5 @@
 import { createAction, handleActions } from 'redux-actions';
+import { fromJS } from 'immutable';
 import decodeJwt from 'jwt-decode';
 import { createApiAction } from '../middleware/apiMiddleware';
 import { loadUserData } from './users';
@@ -64,48 +65,41 @@ const auth = (accessToken) => {
   }
 
   const initialState = accessToken && decodedToken
-    ? {
+    ? fromJS({
       status: statusTypes.LOGGED_IN,
       accessToken: accessToken,
       userId: getUserId(decodedToken)
-    }
-    : {
+    })
+    : fromJS({
       status: statusTypes.LOGGED_OUT,
       accessToken: null,
       userId: null
-    };
+    });
 
   return handleActions({
 
-    [actionTypes.LOGIN_REQUEST]: (state, action) => ({
-      status: statusTypes.LOGGING_IN,
-      accessToken: null,
-      userId: null
-    }),
+    [actionTypes.LOGIN_REQUEST]: (state, action) =>
+      state.set('status', statusTypes.LOGGING_IN),
 
-    [actionTypes.LOGIN_SUCCESS]: (state, action) => ({
-      status: statusTypes.LOGGED_IN,
-      accessToken: action.payload.accessToken,
-      userId: getUserId(decodeJwt(action.payload.accessToken))
-    }),
+    [actionTypes.LOGIN_SUCCESS]: (state, action) =>
+      state.set('status', statusTypes.LOGGED_IN)
+            .set('accessToken', action.payload.accessToken)
+            .set('userId', getUserId(decodeJwt(action.payload.accessToken))),
 
-    [registrationActionTypes.CREATE_ACCOUNT_FULFILLED]: (state, action) => ({
-      status: statusTypes.LOGGED_IN,
-      accessToken: action.payload.accessToken,
-      userId: getUserId(decodeJwt(action.payload.accessToken))
-    }),
+    [registrationActionTypes.CREATE_ACCOUNT_FULFILLED]: (state, action) =>
+      state.set('status', statusTypes.LOGGED_IN)
+            .set('accessToken', action.payload.accessToken)
+            .set('userId', getUserId(decodeJwt(action.payload.accessToken))),
 
-    [actionTypes.LOGIN_FAILIURE]: (state, action) => ({
-      status: statusTypes.LOGIN_FAILED,
-      accessToken: null,
-      userId: null
-    }),
+    [actionTypes.LOGIN_FAILIURE]: (state, action) =>
+      state.set('status', statusTypes.LOGIN_FAILED)
+            .set('accessToken', null)
+            .set('userId', null),
 
-    [actionTypes.LOGOUT]: (state, action) => ({
-      status: status.LOGGED_OUT,
-      accessToken: null,
-      userId: null
-    })
+    [actionTypes.LOGOUT]: (state, action) =>
+      state.set('status', statusTypes.LOGGED_OUT)
+            .set('accessToken', null)
+            .set('userId', null)
 
   }, initialState);
 };

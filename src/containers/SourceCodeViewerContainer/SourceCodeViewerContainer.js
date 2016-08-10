@@ -4,6 +4,7 @@ import { FormattedMessage } from 'react-intl';
 import { FormGroup, Checkbox } from 'react-bootstrap';
 
 import { fetchFileIfNeeded, fetchContentIfNeeded } from '../../redux/modules/files';
+import { getSourceCode } from '../../redux/selectors/files';
 import { isReady, isLoading, hasFailed } from '../../redux/helpers/resourceManager';
 import SourceCodeViewer from '../../components/SourceCodeViewer';
 
@@ -46,17 +47,13 @@ class SourceCodeViewerContainer extends Component {
               <FormattedMessage id='app.sourceCode.showLineNumbers' defaultMessage='Show line numbers' />
             </Checkbox>
           </FormGroup>
-          <SourceCodeViewer {...file.data} onCloseSourceViewer={this.close} lineNumbers={showLineNumbers} />
+          <SourceCodeViewer {...file.get('data').toJS()} onCloseSourceViewer={this.close} lineNumbers={showLineNumbers} />
         </div>
       );
     }
   }
 
 }
-
-SourceCodeViewerContainer.contextTypes = {
-  router: PropTypes.object.isRequired
-};
 
 SourceCodeViewerContainer.propTypes = {
   file: PropTypes.object,
@@ -70,7 +67,7 @@ SourceCodeViewerContainer.propTypes = {
 
 export default connect(
   (state, props) => ({
-    file: state.files.getIn(['resources', props.params.fileId])
+    file: getSourceCode(props.params.fileId)(state)
   }),
   dispatch => ({
     loadFile: (fileId) => {

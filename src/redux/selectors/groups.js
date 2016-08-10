@@ -1,21 +1,41 @@
 import { createSelector } from 'reselect';
-import { studentOfGroupsIds, supervisorOfGroupsIds } from './users';
+import { List } from 'immutable';
 
-const getGroups = state => state.groups.get('resources');
-const filterGroups = (ids, groups) => ids.map(id => groups.get(id)).filter(group => !!group);
+import { studentOfGroupsIdsSelector, supervisorOfGroupsIdsSelector } from './users';
+import { getAssignments } from './assignments';
+import { isReady } from '../helpers/resourceManager';
+
 
 /**
  * Select groups part of the state
  */
 
-export const studentOfSelector = state => {
-  const ids = studentOfGroupsIds(state);
-  const groups = getGroups(state);
-  return filterGroups(ids, groups);
-};
+const getGroups = state => state.groups.get('resources');
+const filterGroups = (ids, groups) => ids.map(id => groups.get(id)).filter(isReady);
 
-export const supervisorOfSelector = state => {
-  const ids = supervisorOfGroupsIds(state);
-  const groups = getGroups(state);
-  return filterGroups(ids, groups);
-};
+export const studentOfSelector = createSelector(
+  [ studentOfGroupsIdsSelector, getGroups ],
+  filterGroups
+);
+
+export const supervisorOfSelector = createSelector(
+  [ supervisorOfGroupsIdsSelector, getGroups ],
+  filterGroups
+);
+
+export const groupSelector = createSelector(
+  [ getGroups, (state, id) => id ],
+  (groups, id) => groups.get(id)
+);
+
+export const groupsAssignmentsIdsSelector = createSelector(
+  groupSelector,
+  group => group && isReady(group) ? group.getIn(['data', 'assignments']) : List()
+);
+
+export const createGroupsAssignmentsSelector = () =>
+  createSelector(
+    [ groupsAssignmentsIdsSelector, getAssignments ],
+    (groupsAssignmentsIds, assignments) =>
+      groupsAssignmentsIds.map(id => assignments.getIn(['resources', id]))
+  );

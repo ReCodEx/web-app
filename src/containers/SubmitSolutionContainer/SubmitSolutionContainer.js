@@ -6,6 +6,18 @@ import { SUBMISSION_DETAIL_URI_FACTORY, ASSIGNMENT_DETAIL_URI_FACTORY } from '..
 import EvaluationProgressContainer from '../EvaluationProgressContainer';
 
 import {
+  getNote,
+  getUploadingFiles,
+  getUploadedFiles,
+  getRemovedFiles,
+  getFailedFiles,
+  isProcessing,
+  getSubmissionId
+} from '../../redux/selectors/submission';
+
+import { loggedInUserIdSelector } from '../../redux/selectors/auth';
+
+import {
   submissionStatus,
   changeNote,
   uploadFile,
@@ -92,14 +104,14 @@ class SubmitSolutionContainer extends Component {
 
 export default connect(
   state => ({
-    userId: state.auth.userId,
-    note: state.submission.get('note'),
-    uploadingFiles: state.submission.getIn(['files', 'uploading']).toJS(),
-    attachedFiles: state.submission.getIn(['files', 'uploaded']).toJS(),
-    failedFiles: state.submission.getIn(['files', 'failed']).toJS(),
-    removedFiles: state.submission.getIn(['files', 'removed']).toJS(),
-    isProcessing: state.submission.get('status') === submissionStatus.PROCESSING,
-    submissionId: state.submission.get('submissionId')
+    userId: loggedInUserIdSelector(state),
+    note: getNote(state),
+    uploadingFiles: getUploadingFiles(state).toJS(),
+    attachedFiles: getUploadedFiles(state).toJS(),
+    failedFiles: getFailedFiles(state).toJS(),
+    removedFiles: getRemovedFiles(state).toJS(),
+    isProcessing: isProcessing(state),
+    submissionId: getSubmissionId(state)
   }),
   (dispatch, props) => ({
     changeNote: (note) => dispatch(changeNote(note)),

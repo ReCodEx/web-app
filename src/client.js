@@ -2,6 +2,7 @@ import 'isomorphic-fetch';
 
 import React from 'react';
 import { render } from 'react-dom';
+import { fromJS } from 'immutable';
 
 import { IntlProvider, addLocaleData } from 'react-intl';
 import lang from 'react-intl/locale-data/en';
@@ -18,7 +19,7 @@ import createRoutes from './pages/routes';
 
 import { getToken } from './redux/middleware/accessTokenMiddleware';
 
-let state = window.__INITIAL_STATE__ || undefined;
+let state = fromJS(window.__INITIAL_STATE__) || undefined; // @todo This ain't gonna be so simple as 'fromJS' :/
 const store = configureStore(browserHistory, state, getToken());
 const createScrollHistory = useScroll(createBrowserHistory);
 const appHistory = useRouterHistory(createScrollHistory)();
