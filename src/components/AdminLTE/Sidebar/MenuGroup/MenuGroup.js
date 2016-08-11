@@ -23,11 +23,12 @@ class MenuGroup extends Component {
       icon = 'th',
       items,
       createLink,
+      notifications,
       isActive = false
     } = this.props;
 
-    const notificationsCount = items.reduce((acc, item) =>
-      acc + (item.get('notificationsCount') > 0 ? 1 : 0), 0);
+    const itemsNotificationsCount = item => notifications[item.getIn(['data', 'id'])];
+    const notificationsCount = items.reduce((acc, item) => acc + itemsNotificationsCount(item), 0);
 
     return (
       <li
@@ -51,7 +52,7 @@ class MenuGroup extends Component {
                   key={key}
                   title={item.getIn(['data', 'name'])}
                   icon='circle-o'
-                  notificationsCount={item.getIn(['data', 'notificationsCount'])}
+                  notificationsCount={itemsNotificationsCount(item)}
                   link={createLink(item)} />
           )}
         </ul>

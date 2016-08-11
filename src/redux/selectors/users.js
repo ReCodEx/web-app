@@ -42,3 +42,13 @@ export const usersGroupsIds = createSelector(
   (student, supervisor) => student.concat(supervisor)
 );
 
+export const notificationsSelector = createSelector(
+  loggedInUserDataSelector,
+  userData =>
+    userData && userData.get('groupsStats')
+      ? userData.get('groupsStats').reduce(
+        (notifications, group) =>
+          Object.assign({}, notifications, { [group.id]: group.stats.assignments.total - group.stats.assignments.completed }),
+        {})
+      : {}
+);

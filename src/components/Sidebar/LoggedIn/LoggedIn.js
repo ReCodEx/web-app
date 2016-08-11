@@ -18,6 +18,7 @@ const LoggedIn = ({
   user,
   studentOf,
   supervisorOf,
+  notifications,
   logout,
   isActive = link => link === '/'
 }) => (
@@ -35,6 +36,7 @@ const LoggedIn = ({
           <MenuGroup
             title={<FormattedMessage id='app.sidebar.menu.studentOf' defaultMessage='Groups - student' />}
             items={studentOf}
+            notifications={notifications}
             icon='puzzle-piece'
             isActive={studentOf.some(item => isReady(item) && isActive(GROUP_URI_FACTORY(item.getIn(['data', 'id']))))}
             createLink={item => GROUP_URI_FACTORY(item.getIn(['data', 'id']))} />
@@ -43,6 +45,7 @@ const LoggedIn = ({
           <MenuGroup
             title={<FormattedMessage id='app.sidebar.menu.supervisorOf' defaultMessage='Groups - supervisor' />}
             items={supervisorOf}
+            notifications={notifications}
             icon='wrench'
             isActive={supervisorOf.some(item => isReady(item) && isActive(GROUP_URI_FACTORY(item.getIn(['data', 'id']))))}
             createLink={item => GROUP_URI_FACTORY(item.getIn(['data', 'id']))} />

@@ -30,7 +30,8 @@ export const fetchUsersGroups = (userId) =>
   createApiAction({
     type: actionTypes.LOAD_USERS_GROUPS,
     endpoint: `/users/${userId}/groups`,
-    method: 'GET'
+    method: 'GET',
+    meta: { userId }
   });
 
 export const fetchUsersGroupsIfNeeded = (userId) =>

@@ -16,7 +16,7 @@ const InfoBox = ({
     [`bg-${color}`]: true
   })}>
     <span className='info-box-icon'>
-      <Icon name='icon' />
+      <Icon name={icon} />
     </span>
     <div className='info-box-content'>
       <span className='info-box-text'>{title}</span>
@@ -39,7 +39,8 @@ InfoBox.propTypes = {
   value: PropTypes.oneOfType([
     PropTypes.number,
     PropTypes.string,
-    PropTypes.shape({ type: PropTypes.oneOf([FormattedNumber]) })
+    PropTypes.shape({ type: PropTypes.oneOf([FormattedNumber]) }),
+    PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) })
   ]),
   icon: PropTypes.string,
   description: PropTypes.oneOfType([

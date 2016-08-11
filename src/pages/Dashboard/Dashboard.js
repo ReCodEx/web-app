@@ -1,11 +1,14 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
+import { Row, Col } from 'react-bootstrap';
 
 import Helmet from 'react-helmet';
 
 import PageContent from '../../components/PageContent';
+import UsersStats from '../../components/Users/UsersStats';
 
+import { isReady } from '../../redux/helpers/resourceManager';
 import { loggedInUserId } from '../../redux/selectors/auth';
 import { loggedInUserDataSelector } from '../../redux/selectors/users';
 import { fetchUserIfNeeded } from '../../redux/modules/users';
@@ -20,6 +23,15 @@ const Dashboard = ({
         ? user.get('fullName')
         : <FormattedMessage id='app.dashboard.loading' defaultMessage='Loading ...' />
     }>
+
+    <Row>
+      {user && user.get('groupsStats') && user.get('groupsStats').map(
+        group => (
+          <Col xs={12} sm={6} lg={4} key={group.id}>
+            <UsersStats {...group} />
+          </Col>
+        ))}
+    </Row>
 
   </PageContent>
 );
