@@ -7,10 +7,14 @@ const UsersStats = ({
   name,
   stats: {
     assignments,
-    points
+    points,
+    hasLimit,
+    passesLimit
   }
 }) => (
   <InfoBox
+    color={!hasLimit ? 'blue' : passesLimit ? 'green' : 'red'}
+    icon={!hasLimit ? 'info' : passesLimit ? 'check' : 'exclamation-triangle'}
     title={name}
     value={
       <FormattedNumber value={points.total > 0 ? points.gained / points.total : 0} style='percent' />
