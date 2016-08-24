@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react';
 import { List } from 'immutable';
 import { Table } from 'react-bootstrap';
+import { FormattedMessage } from 'react-intl';
 import Icon from 'react-fontawesome';
 
 import { isReady, isLoading, hasFailed } from '../../../../redux/helpers/resourceManager';
@@ -14,14 +15,10 @@ const AssignmentsTable = ({
     <thead>
       <tr>
         <th></th>
-        <th>Název úlohy</th>
-        {showGroup && <th>Skupina</th>}
-        <th>Termín odevzdání</th>
-        <th>Druhý termín odevzdání</th>
-        {/*
-        <th>Počet procházejících testů</th>
-        <th>Procentuelní úspěšnost</th>
-        */}
+        <th><FormattedMessage id='app.assignments.name' defaultMessage='Assignment name' /></th>
+        {showGroup && <th><FormattedMessage id='app.assignments.group' defaultMessage='Group' /></th>}
+        <th><FormattedMessage id='app.assignments.deadline' defaultMessage='Deadline' /></th>
+        <th><FormattedMessage id='app.assignments.secondDeadline' defaultMessage='Second deadline' /></th>
       </tr>
     </thead>
     <tbody>
