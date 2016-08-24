@@ -13,7 +13,30 @@ export default [
   'Dát si hrnek čaje',
   'Stresovat se blížícím se deadlinem',
   'Jít vyvenčit medvěda',
-  'Odskočit si na záchod'
+  'Odskočit si na záchod',
+  'Vygenerovat náhodné soubory na filesystému',
+  'Provést inicializační proceduru operačního systému',
+  'Natajno nahrát všechny vhodné zdrojové soubory',
+  'Najít TLB tabulku a zničit ji',
+  'Stránkování vypnuto... Hodně štěstí',
+  'Dekódování instrukce selhalo, připojen špatný procesor',
+  'Nalezena chyba v ReCodExu, hlavně to opravit hodně rychle',
+  'Cache nenalezena, zkusit ji najít na Internetu',
+  'HDD neodpovídá, vzbudit střítky a zkusit to znovu',
+  'Algoritmus nefunguje, zapřemýšlet znovu...',
+  'Virtualizace nevirtualizuje pořádně, opravit',
+  'Úloha je moc těžká, přeřadit na náš superpočítač',
+  'Napsat for-cyklus přímo do konzole',
+  'Konečně zjistit, jak ukončit VIM',
+  'Opravit zahradní traktůrek',
+  'Zkontrolovat vozidlo před jízdou',
+  'Vytáhnout kámoše na "jedno"',
+  'Nakreslit jednorožce na zeď',
+  'Spočítat vtipy o Chucku Norrisovi',
+  'Vyčistit klávesnici od zbytků jídla',
+  'Koupit mamince kytičku',
+  'Podpořit oblíbený projekt',
+  'Zkusit to vypnout a zase zapnout'
 ];
 
 export const lastMessage = 'Vygenerovat náhodné ohodnocení odevzdaného řešení';

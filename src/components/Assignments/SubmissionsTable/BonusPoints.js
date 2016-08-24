@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 
-const BonusPoints = ({ bonus }) => (
+const BonusPoints = ({ bonus }) => bonus && (
   <OverlayTrigger placement='bottom' overlay={(
     <Tooltip id={Date.now()}>
       <FormattedMessage
@@ -17,7 +17,7 @@ const BonusPoints = ({ bonus }) => (
 );
 
 BonusPoints.propTypes = {
-  bonus: PropTypes.number.isRequired
+  bonus: PropTypes.number
 };
 
 export default BonusPoints;

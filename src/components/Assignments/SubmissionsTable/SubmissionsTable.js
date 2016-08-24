@@ -19,7 +19,7 @@ const SubmissionsTable = ({
   submissions
 }) => (
   <Box title='Odevzdaná řešení' collapsable isOpen={true}>
-    <Table>
+    <Table responsive>
       <thead>
         <tr>
           <th></th>

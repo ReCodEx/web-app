@@ -13,6 +13,19 @@ class EvaluationProgress extends Component {
 
   state = { messagesCount: 0 };
 
+  getStatusText = status => {
+    switch (status) {
+      case 'COMPLETED':
+        return <FormattedMessage id='app.evaluationProgress.status.completed' defaultMessage='COMPLETED' />;
+      case 'SKIPPED':
+        return <FormattedMessage id='app.evaluationProgress.status.skipped' defaultMessage='SKIPPED' />;
+      case 'FAILED':
+        return <FormattedMessage id='app.evaluationProgress.status.failed' defaultMessage='FAILED' />;
+      default:
+        return <FormattedMessage id='app.evaluationProgress.status.ok' defaultMessage='OK' />;
+    }
+  };
+
   componentDidUpdate() {
     if (this.state.messagesCount < this.props.messages.size) {
       this.setState({ messagesCount: this.props.messages.size });
@@ -31,6 +44,7 @@ class EvaluationProgress extends Component {
     const {
       isOpen,
       finished = false,
+      showContinueButton = false,
       messages = [],
       completed = 0,
       skipped = 0,
@@ -51,35 +65,36 @@ class EvaluationProgress extends Component {
             <ProgressBar now={skipped} bsStyle='warning' active={!finished} />
             <ProgressBar now={failed} bsStyle='danger' active={!finished} />
           </ProgressBar>
-          <div style={messagesContainerStyle} ref='bodyContainer'>
-            <Table responsive>
-              <tbody>
-              {messages.map(({ wasSuccessful, text, status }, i) =>
-                <tr key={i}>
-                  <td className={classNames({
-                    'text-center': true,
-                    'text-success': wasSuccessful,
-                    'text-danger': !wasSuccessful
-                  })}>
-                    <strong>
-                      <Icon name={wasSuccessful ? 'check-circle' : 'times-circle'} />
-                    </strong>
-                  </td>
-                  <td>
-                    {text}
-                  </td>
-                  <td className={classNames({
-                    'text-center': true,
-                    'text-success': wasSuccessful,
-                    'text-danger': !wasSuccessful,
-                    'text-bold': true
-                  })}>
-                    {status}
-                  </td>
-                </tr>)}
-              </tbody>
-            </Table>
-          </div>
+          {messages && (
+            <div style={messagesContainerStyle} ref='bodyContainer'>
+              <Table responsive>
+                <tbody>
+                {messages.map(({ wasSuccessful, text, status }, i) =>
+                  <tr key={i}>
+                    <td className={classNames({
+                      'text-center': true,
+                      'text-success': wasSuccessful,
+                      'text-danger': !wasSuccessful
+                    })}>
+                      <strong>
+                        <Icon name={wasSuccessful ? 'check-circle' : 'times-circle'} />
+                      </strong>
+                    </td>
+                    <td>
+                      {text}
+                    </td>
+                    <td className={classNames({
+                      'text-center': true,
+                      'text-success': wasSuccessful,
+                      'text-danger': !wasSuccessful,
+                      'text-bold': true
+                    })}>
+                      {this.getStatusText(status)}
+                    </td>
+                  </tr>)}
+                </tbody>
+              </Table>
+            </div>)}
         </Modal.Body>
         <Modal.Footer>
           <p className='text-center'>
@@ -87,8 +102,8 @@ class EvaluationProgress extends Component {
               bsStyle={finished ? 'success' : 'default'}
               className='btn-flat'
               onClick={finishProcessing}
-              disabled={!finished}>
-              Pokračovat k vyhodnocení
+              disabled={!showContinueButton}>
+              <FormattedMessage id='app.evaluationProgress.continue' defaultMessage='See the results' />
             </Button>
           </p>
         </Modal.Footer>
