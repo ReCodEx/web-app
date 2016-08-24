@@ -69,7 +69,7 @@ app.get('*', (req, res) => {
         html,
         head,
         reduxState,
-        bundle: 'http://localhost:8080/bundle.js' // @todo change
+        bundle: '/bundle.js'
       });
     }
   });
