@@ -1,7 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
-import { FormGroup, Checkbox } from 'react-bootstrap';
+import { Modal, FormGroup, Checkbox } from 'react-bootstrap';
 
 import { fetchFileIfNeeded, fetchContentIfNeeded } from '../../redux/modules/files';
 import { getSourceCode } from '../../redux/selectors/files';
@@ -31,7 +31,7 @@ class SourceCodeViewerContainer extends Component {
     loadFile(fileId);
   };
 
-  render() {
+  renderBody() {
     const { file } = this.props;
     const { showLineNumbers } = this.state;
 
@@ -51,6 +51,25 @@ class SourceCodeViewerContainer extends Component {
         </div>
       );
     }
+  }
+
+  render() {
+    const { show, onCloseSourceViewer, file } = this.props;
+    return (
+      <Modal
+        show={show}
+        onHide={onCloseSourceViewer}
+        bsSize='large'>
+        <Modal.Header closeButton>
+          <Modal.Title>
+            {isReady(file) ? file.getIn(['data', 'name']) : ''}
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {this.renderBody()}
+        </Modal.Body>
+      </Modal>
+    );
   }
 
 }

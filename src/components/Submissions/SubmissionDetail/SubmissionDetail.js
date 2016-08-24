@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 import Icon from 'react-fontawesome';
 import classnames from 'classnames';
 import { FormattedMessage, FormattedNumber, FormattedDate, FormattedTime } from 'react-intl';
-import { Modal, Table, Row, Col, OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { Table, Row, Col, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { Link } from 'react-router';
 
 import { isReady, isLoading, hasFailed } from '../../../redux/helpers/resourceManager';
@@ -208,7 +208,7 @@ const SubmissionDetail = ({
         </Row>
         <Row>
         {files.map(file => (
-          <Col lg={12} md={6} key={file}>
+          <Col lg={12} md={6} key={file.id}>
             <Link to={SOURCE_CODE_DETAIL_URI_FACTORY(assignmentId, id, file.id)}>
               <SourceCodeInfoBox {...file} />
             </Link>
@@ -244,17 +244,8 @@ const SubmissionDetail = ({
       </Col>
     </Row>
 
-    <Modal
-      show={!!children}
-      onHide={onCloseSourceViewer}
-      bsSize='large'>
-      <Modal.Header closeButton>
-        <Modal.Title>Odevzdaný zdrojový kód</Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
-        {children}
-      </Modal.Body>
-    </Modal>
+    {children &&
+      React.cloneElement(children, { show: !!children, onCloseSourceViewer })}
   </div>
 );
 
