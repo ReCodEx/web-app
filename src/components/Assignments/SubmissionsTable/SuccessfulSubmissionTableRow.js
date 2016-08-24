@@ -3,7 +3,7 @@ import { FormattedNumber, FormattedDate, FormattedTime } from 'react-intl';
 import { Link } from 'react-router';
 
 import AssignmentStatusIcon from '../Assignment/AssignmentStatusIcon';
-import BonusPoints from './BonusPoints';
+import Points from './Points';
 
 const SuccessfulSubmissionTableRow = ({
   link,
@@ -28,11 +28,8 @@ const SuccessfulSubmissionTableRow = ({
     </td>
     <td className='text-center'>
       <strong className='text-success'>
-        {points + bonusPoints}{'/'}{maxPoints}
+        <Points points={points} bonusPoints={bonusPoints} maxPoints={maxPoints} />
       </strong>
-      {bonusPoints !== 0 && (
-        <span> == {points} <BonusPoints bonus={bonusPoints} /></span>
-      )}
     </td>
     <td>
       {note}

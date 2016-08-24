@@ -2,6 +2,7 @@ import React, { PropTypes } from 'react';
 import { FormattedNumber, FormattedDate, FormattedTime } from 'react-intl';
 import { Link } from 'react-router';
 import AssignmentStatusIcon from '../Assignment/AssignmentStatusIcon';
+import Points from './Points';
 
 const FailedSubmissionTableRow = ({
   link,
@@ -10,6 +11,7 @@ const FailedSubmissionTableRow = ({
   evaluation: {
     score,
     points,
+    bonusPoints,
     maxPoints
   }
 }) => (
@@ -25,7 +27,7 @@ const FailedSubmissionTableRow = ({
     </td>
     <td className='text-center'>
       <span className='text-danger'>
-        {points}{'/'}{maxPoints}
+        <Points points={points} maxPoints={maxPoints} bonusPoints={bonusPoints} />
       </span>
     </td>
     <td>

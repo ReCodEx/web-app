@@ -218,17 +218,18 @@ const SubmissionDetail = ({
       </Col>
       <Col lg={8}>
         <Row>
-          <Col sm={6}>
-            <Box
-              title={<FormattedMessage id='app.submission.evaluation.title.testResults' defaultMessage='Test results' />}
-              noPadding={true}
-              collapsable={true}
-              isOpen={true}>
-              <TestResultsTable results={evaluation.testResults} />
-            </Box>
-
-            <CommentThreadContainer threadId={id} />
-          </Col>
+          {evaluation && (
+            <Col sm={6}>
+              <Box
+                title={<FormattedMessage id='app.submission.evaluation.title.testResults' defaultMessage='Test results' />}
+                noPadding={true}
+                collapsable={true}
+                isOpen={true}>
+                <TestResultsTable results={evaluation.testResults} />
+              </Box>
+              <CommentThreadContainer threadId={id} />
+            </Col>
+          )}
           <Col sm={6}>
             {isLoading(assignment) && <LoadingAssignmentDetails />}
             {hasFailed(assignment) && <FailedAssignmentDetails />}
