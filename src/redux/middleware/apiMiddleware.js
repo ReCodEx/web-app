@@ -12,8 +12,14 @@ const getUrl = endpoint =>
 const createFormData = (body) => {
   if (body) {
     const data = new FormData();
-    Object.keys(body).map(key =>
-      data.append(key, body[key]));
+    Object.keys(body).map(key => {
+      if (Array.isArray(body[key])) {
+        body[key].map(item =>
+          data.append(`${key}[]`, item));
+      } else {
+        data.append(key, body[key]);
+      }
+    });
     return data;
   }
 };
