@@ -208,7 +208,7 @@ const SubmissionDetail = ({
         </Row>
         <Row>
         {files.map(file => (
-          <Col lg={12} md={6} key={file.id}>
+          <Col lg={12} sm={6} key={file.id}>
             <Link to={SOURCE_CODE_DETAIL_URI_FACTORY(assignmentId, id, file.id)}>
               <SourceCodeInfoBox {...file} />
             </Link>
