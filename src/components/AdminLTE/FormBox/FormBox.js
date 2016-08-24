@@ -1,4 +1,5 @@
 import React, { PropTypes } from 'react';
+import { FormattedMessage } from 'react-intl';
 import classNames from 'classnames';
 import { Form } from 'react-bootstrap';
 
@@ -29,7 +30,11 @@ const FormBox = ({
 );
 
 FormBox.propTypes = {
-  title: PropTypes.string.isRequired,
+  title: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) }),
+    PropTypes.element
+  ]).isRequired,
   type: PropTypes.string,
   footer: PropTypes.element
 };
