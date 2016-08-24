@@ -25,12 +25,12 @@ const getUserId = (token) => token.sub.id;
  * Actions
  */
 
-export const createAccount = (firstName, lastName, email, password) =>
+export const createAccount = (firstName, lastName, email, password, instanceId) =>
   createApiAction({
     type: actionTypes.CREATE_ACCOUNT,
     method: 'POST',
     endpoint: '/users',
-    body: { firstName, lastName, email, password }
+    body: { firstName, lastName, email, password, instanceId }
   });
 
 const initialState = fromJS({

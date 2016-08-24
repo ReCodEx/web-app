@@ -9,17 +9,21 @@ import Box from '../../components/AdminLTE/Box';
 import RegistrationForm from '../../components/Public/RegistrationForm';
 
 import { createAccount } from '../../redux/modules/registration';
+import { fetchInstances } from '../../redux/modules/instances';
+import { instancesSelector } from '../../redux/selectors/instances';
 import { isCreating, hasFailed, hasSucceeded } from '../../redux/selectors/registration';
 import { HOME_URI, DASHBOARD_URI } from '../../links';
 
 class Register extends Component {
 
-  constructor(props, context) {
-    super(props, context);
-    this.checkIfIsDone(props);
-  }
+  componentWillMount = () => {
+    this.checkIfIsDone(this.props);
+    Register.loadData(this.props);
+  };
 
-  componentWillReceiveProps = props => this.checkIfIsDone(props);
+  componentWillReceiveProps = props => {
+    this.checkIfIsDone(props);
+  };
 
   checkIfIsDone = props => {
     const { hasSucceeded, goToDashboard } = props;
@@ -28,12 +32,17 @@ class Register extends Component {
     }
   };
 
+  static loadData = ({ fetchInstances }) => {
+    fetchInstances();
+  };
+
   render() {
-    const { createAccount, isCreatingAccount, hasFailed, hasSucceeded } = this.props;
+    const { instances, createAccount, isCreatingAccount, hasFailed, hasSucceeded } = this.props;
 
     return (
       <PageContent
         title={<FormattedMessage id='app.registration.title' defaultMessage='Create a new ReCodEx account' />}
+        description={<FormattedMessage id='app.registration.description' defaultMessage='Start using ReCodEx today' />}
         breadcrumbs={[
           { text: <FormattedMessage id='app.homepage.title' />, link: HOME_URI },
           { text: <FormattedMessage id='app.registration.title' /> }
@@ -41,6 +50,7 @@ class Register extends Component {
         <Row>
           <Col md={6} mdOffset={3} sm={8} smOffset={2}>
             <RegistrationForm
+              instances={instances}
               tryCreateAccount={createAccount}
               istTryingToCreateAccount={isCreatingAccount}
               hasFailed={hasFailed}
@@ -58,6 +68,8 @@ Register.contextTypes = {
 };
 
 Register.propTypes = {
+  instances: PropTypes.object.isRequired,
+  fetchInstances: PropTypes.func.isRequired,
   createAccount: PropTypes.func.isRequired,
   isCreatingAccount: PropTypes.bool.isRequired,
   hasFailed: PropTypes.bool.isRequired,
@@ -66,11 +78,13 @@ Register.propTypes = {
 
 export default connect(
   state => ({
+    instances: instancesSelector(state),
     isCreatingAccount: isCreating(state),
     hasFailed: hasFailed(state),
     hasSucceeded: hasSucceeded(state)
   }),
   {
-    createAccount
+    createAccount,
+    fetchInstances
   }
 )(Register);

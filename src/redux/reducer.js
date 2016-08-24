@@ -7,6 +7,7 @@ import comments from './modules/comments';
 import evaluationProgress from './modules/evaluationProgress';
 import files from './modules/files';
 import groups from './modules/groups';
+import instances from './modules/instances';
 import sidebar from './modules/sidebar';
 import submission from './modules/submission';
 import submissions from './modules/submissions';
@@ -20,6 +21,7 @@ const createRecodexReducers = (token) => ({
   evaluationProgress,
   files,
   groups,
+  instances,
   sidebar,
   submission,
   submissions,

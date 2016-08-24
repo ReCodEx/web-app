@@ -18,11 +18,15 @@ class RegistrationForm extends Component {
     lastName: '',
     email: '',
     password: '',
+    instanceId: '',
     hasFailed: false
   };
 
   componentWillReceiveProps = newProps => {
     this.setState({ hasFailed: newProps.hasFailed === true });
+    if (this.state.instanceId.length === 0 && newProps.instances.size > 0) {
+      this.setState({ instanceId: newProps.instances.toArray()[0].getIn(['data', 'id']) });
+    }
   };
 
   changeValue = (name, value) => {
@@ -32,14 +36,15 @@ class RegistrationForm extends Component {
   tryCreateAccount = e => {
     e.preventDefault();
     const { tryCreateAccount } = this.props;
-    const { firstName, lastName, email, password } = this.state;
-    tryCreateAccount(firstName, lastName, email, password);
+    const { firstName, lastName, email, password, instanceId } = this.state;
+    tryCreateAccount(firstName, lastName, email, password, instanceId);
   };
 
   render() {
     const {
       istTryingToCreateAccount = false,
-      hasSucceeded = false
+      hasSucceeded = false,
+      instances
     } = this.props;
 
     const {
@@ -82,7 +87,7 @@ class RegistrationForm extends Component {
           <span>
             {hasFailed && (
               <Alert bsStyle='danger'>
-                <FormattedMessage id='app.registrationForm.failed' defaultMessage='Login failed. Please check your credentials.' />
+                <FormattedMessage id='app.registrationForm.failed' defaultMessage='Registration failed. Please check your information.' />
               </Alert>)}
             <FormGroup validationState={hasFailed === true ? 'error' : undefined}>
               <ControlLabel><FormattedMessage id='app.registrationForm.firstName' defaultMessage='First name:' /></ControlLabel>
@@ -100,6 +105,16 @@ class RegistrationForm extends Component {
               <ControlLabel><FormattedMessage id='app.registrationForm.password' defaultMessage='Password:' /></ControlLabel>
               <FormControl type='password' onChange={e => this.changeValue('password', e.target.value)} disabled={istTryingToCreateAccount || hasSucceeded} />
             </FormGroup>
+            <FormGroup validationState={hasFailed === true ? 'error' : undefined}>
+              <ControlLabel><FormattedMessage id='app.registrationForm.instance' defaultMessage='Instance:' /></ControlLabel>
+              <FormControl componentClass='select' onChange={e => this.changeValue('instanceId', e.target.value)} disabled={istTryingToCreateAccount || hasSucceeded}>
+                {instances.toArray().map(instance =>
+                  <option value={instance.getIn(['data', 'id'])} key={instance.getIn(['data', 'id'])}>
+                    {instance.getIn(['data', 'name'])}
+                  </option>
+                )}
+              </FormControl>
+            </FormGroup>
           </span>
         </FormBox>
     );
@@ -107,6 +122,7 @@ class RegistrationForm extends Component {
 }
 
 RegistrationForm.propTypes = {
+  instances: PropTypes.object.isRequired,
   tryCreateAccount: PropTypes.func.isRequired,
   istTryingToCreateAccount: PropTypes.bool,
   hasFailed: PropTypes.bool,
