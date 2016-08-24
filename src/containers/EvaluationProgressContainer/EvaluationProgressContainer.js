@@ -107,6 +107,7 @@ class EvaluationProgressContainer extends Component {
     } = this.props;
 
     this.socket.close();
+    this.isClosed = true;
     addMessage({ wasSuccessful: true, status: 'OK', text: lastMessage });
   };
 
@@ -134,7 +135,7 @@ class EvaluationProgressContainer extends Component {
           skipped={progress.skipped}
           failed={progress.failed}
           finished={isFinished}
-          showContinueButton={isFinished}
+          showContinueButton={isFinished || this.isClosed}
           finishProcessing={this.finish} />
       : <EvaluationProgress
           isOpen={isOpen}
