@@ -1,7 +1,7 @@
 import React from 'react';
 import { FailedIcon } from '../../Icons';
 
-const LoadingGroupDetail = ({
+const FailedGroupDetail = ({
   group,
   assignments
 }) => (
@@ -12,4 +12,4 @@ const LoadingGroupDetail = ({
   </div>
 );
 
-export default LoadingGroupDetail;
+export default FailedGroupDetail;
