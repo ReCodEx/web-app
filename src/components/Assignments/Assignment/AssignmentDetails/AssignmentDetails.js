@@ -14,8 +14,8 @@ const AssignmentDetails = ({
 }) => (
   <Box
     title={<FormattedMessage id='app.assignment.title' defaultMessage='Exercise assignment' />}
-    noPadding={true}
-    collapsable={true}
+    noPadding
+    collapsable
     isOpen={isOpen}>
     <div style={{ padding: 20 }}>
       <ReactMarkdown
