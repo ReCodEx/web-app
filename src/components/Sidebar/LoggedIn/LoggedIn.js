@@ -20,7 +20,8 @@ const LoggedIn = ({
   supervisorOf,
   notifications,
   logout,
-  isActive = link => link === '/'
+  isActive = link => link === '/',
+  isCollapsed
 }) => (
   <aside className='main-sidebar'>
     <section className='sidebar'>
@@ -39,7 +40,8 @@ const LoggedIn = ({
             notifications={notifications}
             icon='puzzle-piece'
             isActive={studentOf.some(item => isReady(item) && isActive(GROUP_URI_FACTORY(item.getIn(['data', 'id']))))}
-            createLink={item => GROUP_URI_FACTORY(item.getIn(['data', 'id']))} />
+            createLink={item => GROUP_URI_FACTORY(item.getIn(['data', 'id']))}
+            forceOpen={isCollapsed} />
         )}
         {supervisorOf && supervisorOf.size > 0 && (
           <MenuGroup
@@ -48,7 +50,8 @@ const LoggedIn = ({
             notifications={notifications}
             icon='wrench'
             isActive={supervisorOf.some(item => isReady(item) && isActive(GROUP_URI_FACTORY(item.getIn(['data', 'id']))))}
-            createLink={item => GROUP_URI_FACTORY(item.getIn(['data', 'id']))} />
+            createLink={item => GROUP_URI_FACTORY(item.getIn(['data', 'id']))}
+            forceOpen={isCollapsed} />
         )}
         <MenuItem
           title={<FormattedMessage id='app.sidebar.menu.feedbackAndBugs' defaultMessage='Feedback and bug reporting' />}
@@ -70,7 +73,8 @@ LoggedIn.propTypes = {
   supervisorOf: PropTypes.instanceOf(List),
   studentOf: PropTypes.instanceOf(List),
   logout: PropTypes.func.isRequired,
-  isActive: PropTypes.func
+  isActive: PropTypes.func,
+  isCollapsed: PropTypes.bool
 };
 
 export default LoggedIn;

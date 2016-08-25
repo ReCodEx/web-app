@@ -30,7 +30,8 @@ export const Layout = ({
       toggleSidebarVisibility={toggleSidebar.visibility} />
     <Sidebar
       isLoggedIn={isLoggedIn}
-      logout={logout} />
+      logout={logout}
+      isCollapsed={sidebar.isCollapsed} />
     <div onClick={onContentClick}>
       {children}
     </div>
