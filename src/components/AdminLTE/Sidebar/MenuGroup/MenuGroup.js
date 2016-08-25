@@ -44,7 +44,13 @@ class MenuGroup extends Component {
         })}>
         <a href='#' onClick={this.toggle}>
           <i className={`fa fa-${icon}`} />
-          <span>{title}</span>
+          <span style={{
+            whiteSpace: 'normal',
+            display: 'inline-block',
+            verticalAlign: 'top'
+          }}>
+            {title}
+          </span>
           <span className='pull-right-container pull-right'>
             {notificationsCount > 0 &&
               <small className='label pull-right bg-red'>{notificationsCount}</small>}

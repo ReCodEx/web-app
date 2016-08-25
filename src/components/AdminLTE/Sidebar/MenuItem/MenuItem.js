@@ -26,7 +26,9 @@ const MenuItem = ({
         })
       } />
       <span style={{
-        whiteSpace: 'normal'
+        whiteSpace: 'normal',
+        display: 'inline-block',
+        verticalAlign: 'top'
       }}>
         {title}
       </span>
