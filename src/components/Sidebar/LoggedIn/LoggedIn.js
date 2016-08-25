@@ -11,11 +11,12 @@ import MenuGroup from '../../AdminLTE/Sidebar/MenuGroup';
 import {
   DASHBOARD_URI,
   GROUP_URI_FACTORY,
-  BUGS_URL
+  BUGS_URL,
+  INSTANCE_URI_FACTORY
 } from '../../../links';
 
 const LoggedIn = ({
-  user,
+  instances,
   studentOf,
   supervisorOf,
   notifications,
@@ -33,6 +34,18 @@ const LoggedIn = ({
           isActive={isActive(DASHBOARD_URI)}
           icon='dashboard'
           link={DASHBOARD_URI} />
+
+        {instances && instances.size > 0 && instances.toArray().map(
+          instance => isReady(instance) && (
+            <MenuItem
+              key={instance.getIn(['data', 'id'])}
+              title={instance.getIn([ 'data', 'name' ])}
+              isActive={isActive(INSTANCE_URI_FACTORY(instance.getIn([ 'data', 'id' ])))}
+              icon='university'
+              link={INSTANCE_URI_FACTORY(instance.getIn([ 'data', 'id' ]))} />
+          )
+        )}
+
         {studentOf && studentOf.size > 0 && (
           <MenuGroup
             title={<FormattedMessage id='app.sidebar.menu.studentOf' defaultMessage='Groups - student' />}
@@ -65,11 +78,6 @@ const LoggedIn = ({
 );
 
 LoggedIn.propTypes = {
-  user: PropTypes.shape({
-    fullName: PropTypes.string,
-    avatarUrl: PropTypes.string,
-    institution: PropTypes.string
-  }),
   supervisorOf: PropTypes.instanceOf(List),
   studentOf: PropTypes.instanceOf(List),
   logout: PropTypes.func.isRequired,

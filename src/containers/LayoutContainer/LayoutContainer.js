@@ -9,6 +9,7 @@ import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import { usersGroupsIds } from '../../redux/selectors/users';
 import { fetchUserIfNeeded } from '../../redux/modules/users';
 import { fetchUsersGroupsIfNeeded } from '../../redux/modules/groups';
+import { fetchUsersInstancesIfNeeded } from '../../redux/modules/instances';
 
 class LayoutContainer extends Component {
 
@@ -33,11 +34,13 @@ class LayoutContainer extends Component {
     isLoggedIn,
     userId,
     loadUserDataIfNeeded,
-    loadUsersGroupsIfNeeded
+    loadUsersGroupsIfNeeded,
+    loadUsersInstancesIfNeeded
   }) => {
     if (isLoggedIn === true) {
       loadUserDataIfNeeded(userId);
       loadUsersGroupsIfNeeded(userId);
+      loadUsersInstancesIfNeeded(userId);
     }
   };
 
@@ -63,7 +66,8 @@ const mapDispatchToProps = (dispatch, props) => ({
   },
   logout: () => dispatch(logout()),
   loadUserDataIfNeeded: (userId) => dispatch(fetchUserIfNeeded(userId)),
-  loadUsersGroupsIfNeeded: (userId) => dispatch(fetchUsersGroupsIfNeeded(userId))
+  loadUsersGroupsIfNeeded: (userId) => dispatch(fetchUsersGroupsIfNeeded(userId)),
+  loadUsersInstancesIfNeeded: (userId) => dispatch(fetchUsersInstancesIfNeeded(userId))
 });
 
 export default connect(
