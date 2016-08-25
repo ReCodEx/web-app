@@ -9,6 +9,7 @@ import App from '../containers/App';
 import Dashboard from './Dashboard';
 import Home from './Home';
 import Group from './Group';
+import instance from './Instance';
 import Login from './Login';
 import Assignment from './Assignment';
 import NotFound from './NotFound';
@@ -43,6 +44,7 @@ const createRoutes = (getState) => {
           <Route path='file/:fileId' component={SourceCodeViewerContainer} />
         </Route>
         <Route path='group/:groupId' component={Group} />
+        <Route path='instance/:instanceId' component={instance} />
         <Route path='user/:userId' component={User} />
       </Route>
       <Route path='*' component={NotFound} />
