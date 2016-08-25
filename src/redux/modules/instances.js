@@ -3,6 +3,7 @@ import { Map } from 'immutable';
 
 import { createApiAction } from '../middleware/apiMiddleware';
 import factory, { initialState, createRecord } from '../helpers/resourceManager';
+import { memberOfInstancesIdsSelector } from '../selectors/users';
 
 const resourceName = 'instances';
 const {
@@ -25,10 +26,17 @@ export const loadInstance = actions.pushResource;
 export const fetchInstancesIfNeeded = actions.fetchIfNeeded;
 export const fetchInstanceIfNeeded = actions.fetchOneIfNeeded;
 
-export const fetchInstances = (userId) =>
+export const fetchInstances = () =>
   createApiAction({
     type: actionTypes.LOAD_INSTANCES,
     endpoint: '/instances',
+    method: 'GET'
+  });
+
+export const fetchUsersInstancesIfNeeded = (userId) =>
+  createApiAction({
+    type: actionTypes.LOAD_INSTANCES,
+    endpoint: `/users/${userId}/instances`,
     method: 'GET'
   });
 

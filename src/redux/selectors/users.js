@@ -27,6 +27,11 @@ export const loggedInUserDataSelector = createSelector(
   (users, id) => users.getIn([id, 'data'])
 );
 
+export const memberOfInstancesIdsSelector = createSelector(
+  loggedInUserDataSelector,
+  user => user ? List([ user.getIn(['instanceId']) ]) : List() // @todo: Change when the user can be member of multiple instances
+);
+
 export const studentOfGroupsIdsSelector = createSelector(
   loggedInUserDataSelector,
   user => user ? user.getIn(['groups', 'studentOf']) : List()
