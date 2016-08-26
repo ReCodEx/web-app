@@ -14,7 +14,11 @@ export const initialState = fromJS({
 
 export const addNotification = createAction(
   actionTypes.ADD_NOTIFICATION,
-  (id, msg, successful = true, time = null) => {
+  (msg, successful = true, id = null, time = null) => {
+    if (id === null) {
+      id = Math.random();
+    }
+
     if (!time) {
       time = Date.now();
     }
