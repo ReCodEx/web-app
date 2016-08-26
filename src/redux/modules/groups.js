@@ -1,6 +1,7 @@
 import { createAction, handleActions } from 'redux-actions';
 import { fromJS, Map } from 'immutable';
 
+import { addNotification } from './notifications';
 import { usersSelector } from '../selectors/users';
 import { createApiAction } from '../middleware/apiMiddleware';
 import factory, { initialState, createRecord } from '../helpers/resourceManager';
@@ -73,36 +74,48 @@ export const fetchUsersGroupsIfNeeded = (userId) =>
   };
 
 export const joinGroup = (groupId, userId) =>
-  createApiAction({
-    type: actionTypes.JOIN_GROUP,
-    endpoint: `/groups/${groupId}/students/${userId}`,
-    method: 'POST',
-    meta: { groupId, userId }
-  });
+  dispatch =>
+    dispatch(
+      createApiAction({
+        type: actionTypes.JOIN_GROUP,
+        endpoint: `/groups/${groupId}/students/${userId}`,
+        method: 'POST',
+        meta: { groupId, userId }
+      })
+    ).catch(() => dispatch(addNotification('Cannot join group.', false))); // @todo: Make translatable
 
 export const leaveGroup = (groupId, userId) =>
-  createApiAction({
-    type: actionTypes.LEAVE_GROUP,
-    endpoint: `/groups/${groupId}/students/${userId}`,
-    method: 'DELETE',
-    meta: { groupId, userId }
-  });
+  dispatch =>
+    dispatch(
+      createApiAction({
+        type: actionTypes.LEAVE_GROUP,
+        endpoint: `/groups/${groupId}/students/${userId}`,
+        method: 'DELETE',
+        meta: { groupId, userId }
+      })
+    ).catch(() => dispatch(addNotification('Cannot leave group.', false))); // @todo: Make translatable
 
 export const makeSupervisor = (groupId, userId) =>
-  createApiAction({
-    type: actionTypes.MAKE_SUPERVISOR,
-    endpoint: `/groups/${groupId}/supervisors/${userId}`,
-    method: 'POST',
-    meta: { groupId, userId }
-  });
+  dispatch =>
+    dispatch(
+      createApiAction({
+        type: actionTypes.MAKE_SUPERVISOR,
+        endpoint: `/groups/${groupId}/supervisors/${userId}`,
+        method: 'POST',
+        meta: { groupId, userId }
+      })
+    ).catch(() => dispatch(addNotification('Cannot make this person supervisor of the group.', false))); // @todo: Make translatable
 
 export const removeSupervisor = (groupId, userId) =>
-  createApiAction({
-    type: actionTypes.REMOVE_SUPERVISOR,
-    endpoint: `/groups/${groupId}/supervisors/${userId}`,
-    method: 'DELETE',
-    meta: { groupId, userId }
-  });
+  dispatch =>
+    dispatch(
+      createApiAction({
+        type: actionTypes.REMOVE_SUPERVISOR,
+        endpoint: `/groups/${groupId}/supervisors/${userId}`,
+        method: 'DELETE',
+        meta: { groupId, userId }
+      })
+    ).catch(() => dispatch(addNotification('Cannot remove supervisor.', false))); // @todo: Make translatable
 
 /**
  * Reducer
