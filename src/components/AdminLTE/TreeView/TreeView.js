@@ -1,12 +1,15 @@
-import React from 'react';
-import { Table } from 'react-bootstrap';
+import React, { PropTypes } from 'react';
+import { Nav } from 'react-bootstrap';
 
 const TreeView = ({
   children
 }) => (
-  <ul>
+  <Nav stacked>
     {children}
-  </ul>
+  </Nav>
 );
+
+TreeView.propTypes = {
+};
 
 export default TreeView;
