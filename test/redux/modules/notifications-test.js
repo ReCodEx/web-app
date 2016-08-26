@@ -12,12 +12,13 @@ describe('App notifications', () => {
   describe('(Action creators)', () => {
     it('must create correct "add notification" action', () => {
       const time = Date.now();
-      const action = addNotification('abc', 'Hello world!!', time);
+      const action = addNotification('abc', 'Hello world!!', true, time);
       expect(action).to.eql({
         type: 'recodex/notifications/ADD_NOTIFICATION',
         payload: {
           id: 'abc',
           msg: 'Hello world!!',
+          successful: true,
           time
         }
       });
@@ -58,10 +59,10 @@ describe('App notifications', () => {
 
     it('must add a new notification', () => {
       const time = 123456;
-      const state = reducer(initialState, addNotification('abc', 'XYZ', time));
+      const state = reducer(initialState, addNotification('abc', 'XYZ', false, time));
       expect(state.get('hidden').size).to.equal(0);
       expect(state.get('visible').size).to.equal(1);
-      expect(state.get('visible').first()).to.eql({ id: 'abc', msg: 'XYZ', time });
+      expect(state.get('visible').first()).to.eql({ id: 'abc', msg: 'XYZ', successful: false, time });
     });
 
     it('must remove a notification', () => {

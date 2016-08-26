@@ -12,12 +12,15 @@ export const initialState = fromJS({
   hidden: []
 });
 
-export const addNotification = createAction(actionTypes.ADD_NOTIFICATION, (id, msg, time) => {
-  if (!time) {
-    time = Date.now();
+export const addNotification = createAction(
+  actionTypes.ADD_NOTIFICATION,
+  (id, msg, successful = true, time = null) => {
+    if (!time) {
+      time = Date.now();
+    }
+    return { id, msg, successful, time };
   }
-  return { id, msg, time };
-});
+);
 
 export const hideNotification = createAction(actionTypes.HIDE_NOTIFICATION, id => ({ id }));
 export const hideAll = createAction(actionTypes.HIDE_ALL);
