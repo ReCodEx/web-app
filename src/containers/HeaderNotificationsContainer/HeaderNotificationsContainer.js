@@ -23,7 +23,9 @@ class HeaderNotificationsContainer extends Component {
   toggleShowAll = () => this.setState({ showAll: !this.state.showAll });
 
   componentWillReceiveProps = (newProps) => {
-    // if there are new notifications, open the panel
+    if (this.props.newNotifications.size < newProps.newNotifications.size) {
+      this.setState({ isOpen: true }); // force open the notifications dropdown - there are some new notifications
+    }
   };
 
   render() {
