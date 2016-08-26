@@ -31,7 +31,25 @@ const reducer = handleActions(Object.assign({}, reduceActions, {
     state.setIn([ 'resources', payload.user.id ], createRecord(false, false, false, payload.user)),
 
   [groupsActionTypes.LOAD_USERS_GROUPS_FULFILLED]: (state, { payload: { stats }, meta: { userId } }) =>
-    state.setIn([ 'resources', userId, 'data', 'groupsStats' ], stats)
+    state.setIn([ 'resources', userId, 'data', 'groupsStats' ], stats),
+
+  [groupsActionTypes.JOIN_GROUP_PENDING]: (state, { meta: { groupId, userId } }) =>
+    state.updateIn(['resources', userId, 'data', 'groups', 'studentOf'], list => list.push(groupId)),
+
+  [groupsActionTypes.JOIN_GROUP_REJECTED]: (state, { meta: { groupId, userId } }) =>
+    state.updateIn(['resources', userId, 'data', 'groups', 'studentOf'], list => list.filter(id => id !== groupId)),
+
+  [groupsActionTypes.LEAVE_GROUP_PENDING]: (state, { meta: { groupId, userId } }) =>
+    state.updateIn(['resources', userId, 'data', 'groups', 'studentOf'], list => list.filter(id => id !== groupId)),
+
+  [groupsActionTypes.LEAVE_GROUP_REJECTED]: (state, { meta: { groupId, userId } }) =>
+    state.updateIn(['resources', userId, 'data', 'groups', 'studentOf'], list => list.push(groupId)),
+
+  [groupsActionTypes.MAKE_SUPERVISOR_PENDING]: (state, { meta: { groupId, userId } }) =>
+    state.updateIn(['resources', userId, 'data', 'groups', 'supervisorOf'], list => list.push(groupId)),
+
+  [groupsActionTypes.MAKE_SUPERVISOR_REJECTED]: (state, { meta: { groupId, userId } }) =>
+    state.updateIn(['resources', userId, 'data', 'groups', 'supervisorOf'], list => list.filter(id => id !== groupId))
 
 }), initialState);
 

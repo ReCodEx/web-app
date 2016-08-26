@@ -1,5 +1,5 @@
 import { createAction, handleActions } from 'redux-actions';
-import { Map } from 'immutable';
+import { fromJS, Map } from 'immutable';
 
 import { usersSelector } from '../selectors/users';
 import { createApiAction } from '../middleware/apiMiddleware';
@@ -75,44 +75,71 @@ export const fetchUsersGroupsIfNeeded = (userId) =>
 export const joinGroup = (groupId, userId) =>
   createApiAction({
     type: actionTypes.JOIN_GROUP,
-    url: `/groups/${groupId}/students/${userId}`,
-    method: 'POST'
+    endpoint: `/groups/${groupId}/students/${userId}`,
+    method: 'POST',
+    meta: { groupId, userId }
   });
 
 export const leaveGroup = (groupId, userId) =>
   createApiAction({
     type: actionTypes.LEAVE_GROUP,
-    url: `/groups/${groupId}/students/${userId}`,
-    method: 'DELETE'
+    endpoint: `/groups/${groupId}/students/${userId}`,
+    method: 'DELETE',
+    meta: { groupId, userId }
   });
 
 export const makeSupervisor = (groupId, userId) =>
   createApiAction({
     type: actionTypes.MAKE_SUPERVISOR,
-    url: `/groups/${groupId}/supervisors/${userId}`,
-    method: 'POST'
+    endpoint: `/groups/${groupId}/supervisors/${userId}`,
+    method: 'POST',
+    meta: { groupId, userId }
   });
 
 export const removeSupervisor = (groupId, userId) =>
   createApiAction({
     type: actionTypes.REMOVE_SUPERVISOR,
-    url: `/groups/${groupId}/supervisors/${userId}`,
-    method: 'DELETE'
+    endpoint: `/groups/${groupId}/supervisors/${userId}`,
+    method: 'DELETE',
+    meta: { groupId, userId }
   });
 
 /**
  * Reducer
  */
 
+const loadedGroupRecord = group => createRecord(false, false, false, group);
+
 const reducer = handleActions(Object.assign({}, reduceActions, {
 
-  [actionTypes.LOAD_GROUPS_FULFILLED]: (state, { payload }) => {
-    return payload.reduce((state, group) => state.setIn(['resources', group.id], createRecord(false, false, false, group)), state);
-  },
+  [actionTypes.JOIN_GROUP_FULFILLED]: (state, { payload, meta: { groupId, userId } }) =>
+    state.updateIn(['resources', groupId, 'data', 'students'], students =>
+      students.push(
+        fromJS(payload.students.find(user => user.id === userId))
+      )
+    ),
+
+  [actionTypes.LEAVE_GROUP_FULFILLED]: (state, { payload, meta: { groupId, userId } }) =>
+    state.updateIn(['resources', groupId, 'data', 'students'], students =>
+      students.filter(user => user.get('id') !== userId)),
+
+  [actionTypes.MAKE_SUPERVISOR_FULFILLED]: (state, { payload, meta: { groupId, userId } }) =>
+    state.updateIn(['resources', groupId, 'data', 'supervisors'], supervisors =>
+      supervisors.push(
+        fromJS(payload.supervisors.find(user => user.id === userId))
+      )
+    ),
+
+  [actionTypes.REMOVE_SUPERVISOR_FULFILLED]: (state, { payload, meta: { groupId, userId } }) =>
+    state.updateIn(['resources', groupId, 'data', 'supervisors'], supervisors =>
+      supervisors.filter(user => user.get('id') !== userId)),
+
+  [actionTypes.LOAD_GROUPS_FULFILLED]: (state, { payload }) =>
+    payload.reduce((state, group) => state.setIn(['resources', group.id], loadedGroupRecord(group)), state),
 
   [actionTypes.LOAD_USERS_GROUPS_FULFILLED]: (state, { payload }) => {
     const groups = [ ...payload.supervisor, ...payload.student ];
-    return groups.reduce((state, group) => state.setIn(['resources', group.id], createRecord(false, false, false, group)), state);
+    return groups.reduce((state, group) => state.setIn(['resources', group.id], loadedGroupRecord(group)), state);
   }
 
 }), initialState);
