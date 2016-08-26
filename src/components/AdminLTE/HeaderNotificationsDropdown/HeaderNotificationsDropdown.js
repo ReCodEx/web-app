@@ -1,0 +1,66 @@
+import React, { PropTypes } from 'react';
+import { FormattedMessage } from 'react-intl';
+import classNames from 'classnames';
+import { Button, Label } from 'react-bootstrap';
+import Icon from 'react-fontawesome';
+import HeaderNotification from '../HeaderNotification';
+
+const HeaderNotificationsDropdown = ({
+  isOpen,
+  showAll,
+  toggleOpen,
+  toggleShowAll,
+  newNotifications,
+  oldNotifications
+}) => (
+  <li className={classNames({
+    'notifications-menu': true,
+    'dropdown': true,
+    'open': isOpen
+  })}>
+    <a href='#' className='dropdown-toggle' onClick={toggleOpen}>
+      <Icon name='bell-o' />
+      {newNotifications.size > 0 && <Label bsStyle='primary'>{newNotifications.size}</Label>}
+    </a>
+    <ul className='dropdown-menu'>
+      <li className='header'>
+        <FormattedMessage
+          id='app.notifications.title'
+          defaultMessage={`You have {count, number} new {count, plural,
+            one {notification}
+            other {notifications}
+          }`}
+          values={{ count: newNotifications.size }} />
+      </li>
+      <li>
+        <ul className='menu'>
+          {newNotifications.map(notification =>
+            <HeaderNotification key={notification.id} {...notification} />)}
+          {showAll && oldNotifications.map(notification =>
+            <HeaderNotification key={notification.id} {...notification} />)}
+        </ul>
+      </li>
+      {oldNotifications.size > 0 && (
+        <li className='footer'>
+          <a href='#' onClick={toggleShowAll}>
+            {showAll
+              ? <FormattedMessage id='app.notifications.hideAll' defaultMessage='Only new notifications' />
+              : <FormattedMessage
+                  id='app.notifications.showAll'
+                  defaultMessage={`Show {count, plural,
+                    one {old notification}
+                    other {all # notifications}
+                  }`}
+                  values={{ count: newNotifications.size + oldNotifications.size }} />}
+          </a>
+        </li>
+      )}
+    </ul>
+  </li>
+);
+
+HeaderNotificationsDropdown.propTypes = {
+
+};
+
+export default HeaderNotificationsDropdown;
