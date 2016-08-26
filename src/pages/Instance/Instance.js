@@ -9,6 +9,9 @@ import InstanceDetail, { LoadingInstanceDetail, FailedInstanceDetail } from '../
 import { isReady, isLoading, hasFailed } from '../../redux/helpers/resourceManager';
 import { fetchInstanceIfNeeded } from '../../redux/modules/instances';
 import { instanceSelector } from '../../redux/selectors/instances';
+import { fetchInstanceGroupsIfNeeded } from '../../redux/modules/groups';
+import { groupsSelectors } from '../../redux/selectors/groups';
+import { isStudentOf, isSupervisorOf } from '../../redux/selectors/users';
 import { fetchAssignmentsForInstance } from '../../redux/modules/assignments';
 
 class Instance extends Component {
@@ -23,9 +26,13 @@ class Instance extends Component {
     }
   }
 
-  loadData = (props) => {
-    const { params: { instanceId }, loadInstanceIfNeeded } = props;
+  loadData = ({
+    params: { instanceId },
+    loadInstanceIfNeeded,
+    loadInstanceGroupsIfNeeded
+  }) => {
     loadInstanceIfNeeded(instanceId);
+    loadInstanceGroupsIfNeeded(instanceId);
   };
 
   getTitle = (instance) =>
@@ -36,7 +43,8 @@ class Instance extends Component {
   render() {
     const {
       instance,
-      groups
+      groups,
+      isMemberOf
     } = this.props;
 
     return (
@@ -47,7 +55,7 @@ class Instance extends Component {
           {isLoading(instance) && <LoadingInstanceDetail />}
           {hasFailed(instance) && <FailedInstanceDetail />}
           {isReady(instance) &&
-            <InstanceDetail instance={instance.toJS()} groups={groups} />}
+            <InstanceDetail {...instance.get('data').toJS()} groups={groups} isMemberOf={isMemberOf} />}
         </div>
       </PageContent>
     );
@@ -56,15 +64,15 @@ class Instance extends Component {
 }
 
 export default connect(
-  (state, { params: { instanceId } }) => {
-    const instance = instanceSelector(state, instanceId);
-    const groups = [];
-    return {
-      instance,
-      groups
-    };
-  },
+  (state, { params: { instanceId } }) => ({
+    instance: instanceSelector(state, instanceId),
+    groups: groupsSelectors(state),
+    isStudentOf: (groupId) => isStudentOf(groupId)(state),
+    isSupervisorOf: (groupId) => isSupervisorOf(groupId)(state),
+    isMemberOf: (groupId) => isStudentOf(groupId)(state) || isSupervisorOf(groupId)(state)
+  }),
   (dispatch) => ({
-    loadInstanceIfNeeded: (instanceId) => dispatch(fetchInstanceIfNeeded(instanceId))
+    loadInstanceIfNeeded: (instanceId) => dispatch(fetchInstanceIfNeeded(instanceId)),
+    loadInstanceGroupsIfNeeded: (instanceId) => dispatch(fetchInstanceGroupsIfNeeded(instanceId))
   })
 )(Instance);

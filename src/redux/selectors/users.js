@@ -37,6 +37,16 @@ export const studentOfGroupsIdsSelector = createSelector(
   user => user ? user.getIn(['groups', 'studentOf']) : List()
 );
 
+export const isStudentOf = groupId => createSelector(
+  studentOfGroupsIdsSelector,
+  ids => ids.some(id => id === groupId)
+);
+
+export const isSupervisorOf = groupId => createSelector(
+  supervisorOfGroupsIdsSelector,
+  ids => ids.some(id => id === groupId)
+);
+
 export const supervisorOfGroupsIdsSelector = createSelector(
   loggedInUserDataSelector,
   user => user ? user.getIn(['groups', 'supervisorOf']) : List()
