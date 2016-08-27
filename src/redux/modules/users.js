@@ -49,7 +49,13 @@ const reducer = handleActions(Object.assign({}, reduceActions, {
     state.updateIn(['resources', userId, 'data', 'groups', 'supervisorOf'], list => list.push(groupId)),
 
   [groupsActionTypes.MAKE_SUPERVISOR_REJECTED]: (state, { meta: { groupId, userId } }) =>
-    state.updateIn(['resources', userId, 'data', 'groups', 'supervisorOf'], list => list.filter(id => id !== groupId))
+    state.updateIn(['resources', userId, 'data', 'groups', 'supervisorOf'], list => list.filter(id => id !== groupId)),
+
+  [groupsActionTypes.REMOVE_SUPERVISOR_PENDING]: (state, { meta: { groupId, userId } }) =>
+    state.updateIn(['resources', userId, 'data', 'groups', 'supervisorOf'], list => list.filter(id => id !== groupId)),
+
+  [groupsActionTypes.REMOVE_SUPERVISOR_REJECTED]: (state, { meta: { groupId, userId } }) =>
+    state.updateIn(['resources', userId, 'data', 'groups', 'supervisorOf'], list => list.push(groupId))
 
 }), initialState);
 
