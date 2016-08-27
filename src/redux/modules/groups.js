@@ -17,10 +17,6 @@ const {
  */
 
 export const actionTypes = {
-  LOAD_GROUPS: 'recodex/groups/LOAD_GROUPS',
-  LOAD_GROUPS_PENDING: 'recodex/groups/LOAD_GROUPS_PENDING',
-  LOAD_GROUPS_FULFILLED: 'recodex/groups/LOAD_GROUPS_FULFILLED',
-  LOAD_GROUPS_REJECTED: 'recodex/groups/LOAD_GROUPS_REJECTED',
   LOAD_USERS_GROUPS: 'recodex/groups/LOAD_USERS_GROUPS',
   LOAD_USERS_GROUPS_PENDING: 'recodex/groups/LOAD_USERS_GROUPS_PENDING',
   LOAD_USERS_GROUPS_FULFILLED: 'recodex/groups/LOAD_USERS_GROUPS_FULFILLED',
@@ -56,11 +52,8 @@ export const fetchUsersGroups = (userId) =>
   });
 
 export const fetchInstanceGroupsIfNeeded = (instanceId) =>
-  // @todo: determine whether to load the list for the instance or not instead of loading it always
-  createApiAction({
-    type: actionTypes.LOAD_GROUPS,
+  actions.fetchMany({
     endpoint: `/instances/${instanceId}/groups`,
-    method: 'GET',
     meta: { instanceId }
   });
 
@@ -146,9 +139,6 @@ const reducer = handleActions(Object.assign({}, reduceActions, {
   [actionTypes.REMOVE_SUPERVISOR_FULFILLED]: (state, { payload, meta: { groupId, userId } }) =>
     state.updateIn(['resources', groupId, 'data', 'supervisors'], supervisors =>
       supervisors.filter(user => user.get('id') !== userId)),
-
-  [actionTypes.LOAD_GROUPS_FULFILLED]: (state, { payload }) =>
-    payload.reduce((state, group) => state.setIn(['resources', group.id], loadedGroupRecord(group)), state),
 
   [actionTypes.LOAD_USERS_GROUPS_FULFILLED]: (state, { payload }) => {
     const groups = [ ...payload.supervisor, ...payload.student ];
