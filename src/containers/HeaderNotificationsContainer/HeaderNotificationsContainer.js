@@ -16,11 +16,17 @@ class HeaderNotificationsContainer extends Component {
 
   componentWillMount = () => {
     this.lastClick = 0;
-    window.addEventListener('click', () => this.clickAnywhere());
+    // events only in the browser
+    if (typeof window !== 'undefined') {
+      window.addEventListener('click', () => this.clickAnywhere());
+    }
   };
 
   componentWillUnMount = () => {
-    window.removeEventListener(() => this.clickAnywhere());
+    // events only in the browser
+    if (typeof window !== 'undefined') {
+      window.removeEventListener(() => this.clickAnywhere());
+    }
   };
 
   clickAnywhere = () => {
@@ -47,7 +53,6 @@ class HeaderNotificationsContainer extends Component {
     this.props.hideAll();
   };
   open = () => this.setState({ isOpen: true });
-
 
   componentWillReceiveProps = (newProps) => {
     if (this.props.newNotifications.size < newProps.newNotifications.size) {
