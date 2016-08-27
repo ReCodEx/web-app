@@ -5,6 +5,7 @@ import UsersList from '../../Users/UsersList';
 import Box from '../../AdminLTE/Box';
 
 import LeaveJoinGroupButtonContainer from '../../../containers/LeaveJoinGroupButtonContainer';
+import MakeRemoveSupervisorButtonContainer from '../../../containers/MakeRemoveSupervisorButtonContainer';
 import AssignmentsTable from '../../Assignments/Assignment/AssignmentsTable';
 import { isReady, isLoading, hasFailed } from '../../../redux/helpers/resourceManager';
 
@@ -15,6 +16,7 @@ const GroupDetail = ({
   <div>
     <p>
       <LeaveJoinGroupButtonContainer groupId={group.data.id} />
+      <MakeRemoveSupervisorButtonContainer groupId={group.data.id} />
     </p>
     <ReactMarkdown source={group.data.description} />
     <Row>
