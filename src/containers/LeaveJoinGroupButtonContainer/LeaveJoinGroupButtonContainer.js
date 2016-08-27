@@ -1,35 +1,35 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { joinGroup, leaveGroup } from '../../redux/modules/groups';
-import { isMemberOf } from '../../redux/selectors/users';
+import { isStudentOf } from '../../redux/selectors/users';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 
 import JoinGroupButton from '../../components/Groups/JoinGroupButton';
 import LeaveGroupButton from '../../components/Groups/LeaveGroupButton';
 
 const LeaveJoinGroupButtonContainer = ({
-  isMember,
+  isStudent,
   userId,
   groupId,
   joinGroup,
   leaveGroup,
   ...props
 }) =>
-  isMember
+  isStudent
     ? <LeaveGroupButton {...props} onClick={() => leaveGroup(groupId, userId)} />
     : <JoinGroupButton {...props} onClick={() => joinGroup(groupId, userId)} />;
 
 LeaveJoinGroupButtonContainer.propTypes = {
   groupId: PropTypes.string.isRequired,
   userId: PropTypes.string.isRequired,
-  isMember: PropTypes.bool.isRequired,
+  isStudent: PropTypes.bool.isRequired,
   joinGroup: PropTypes.func.isRequired,
   leaveGroup: PropTypes.func.isRequired
 };
 
 const mapStateToProps = (state, props) => ({
   userId: loggedInUserIdSelector(state),
-  isMember: isMemberOf(props.groupId)(state)
+  isStudent: isStudentOf(props.groupId)(state)
 });
 
 const mapDispatchToProps = { joinGroup, leaveGroup };
