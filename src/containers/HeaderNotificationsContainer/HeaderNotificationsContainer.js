@@ -11,16 +11,43 @@ class HeaderNotificationsContainer extends Component {
 
   state = { isOpen: false, showAll: false };
 
-  toggleOpen = () => {
-    if (this.state.isOpen) {
-      this.setState({ isOpen: false, showAll: false });
-      this.props.hideAll();
-    } else {
-      this.setState({ isOpen: true });
-    }
-  }
+  //
+  // Monitor clicking and hide the notifications panel when the user clicks sideways
 
+  componentWillMount = () => {
+    this.lastClick = 0;
+    window.addEventListener('click', () => this.clickAnywhere());
+  };
+
+  componentWillUnMount = () => {
+    window.removeEventListener(() => this.clickAnywhere());
+  };
+
+  clickAnywhere = () => {
+    if (this.state.isOpen && Date.now() - this.lastClick > 10) { // 10ms tolerance
+      this.close();
+    }
+  };
+
+  markClick = () => {
+    this.lastClick = Date.now();
+  };
+
+  //
+  //
+
+  toggleOpen = () => {
+    this.state.isOpen ? this.close() : this.open();
+    this.markClick();
+  }
   toggleShowAll = () => this.setState({ showAll: !this.state.showAll });
+
+  close = () => {
+    this.setState({ isOpen: false, showAll: false });
+    this.props.hideAll();
+  };
+  open = () => this.setState({ isOpen: true });
+
 
   componentWillReceiveProps = (newProps) => {
     if (this.props.newNotifications.size < newProps.newNotifications.size) {
@@ -36,6 +63,7 @@ class HeaderNotificationsContainer extends Component {
       <HeaderNotificationsDropdown
         isOpen={isOpen}
         toggleOpen={this.toggleOpen}
+        markClick={this.markClick}
         showAll={showAll}
         toggleShowAll={this.toggleShowAll}
         oldNotifications={oldNotifications}

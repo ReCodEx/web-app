@@ -10,6 +10,7 @@ const HeaderNotificationsDropdown = ({
   showAll,
   toggleOpen,
   toggleShowAll,
+  markClick,
   newNotifications,
   oldNotifications
 }) => (
@@ -22,7 +23,7 @@ const HeaderNotificationsDropdown = ({
       <Icon name='bell-o' />
       {newNotifications.size > 0 && <Label bsStyle='primary'>{newNotifications.size}</Label>}
     </a>
-    <ul className='dropdown-menu'>
+    <ul className='dropdown-menu' onClick={markClick}>
       <li className='header'>
         <FormattedMessage
           id='app.notifications.title'
