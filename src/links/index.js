@@ -1,29 +1,35 @@
 
-// basic links
-export const HOME_URI = '/';
-export const DASHBOARD_URI = '/app';
-export const LOGIN_URI = '/login';
-export const REGISTRATION_URI = '/registration';
-export const LOGOUT_URI = '/logout';
+export const linksFactory = lang => {
+  const prefix = `/${lang}`;
 
-// instance detail
-export const INSTANCE_URI_FACTORY = id => `${DASHBOARD_URI}/instance/${id}`;
+  return {
+    // basic links
+    'HOME_URI': prefix,
+    'DASHBOARD_URI': `${prefix}/app`,
+    'LOGIN_URI': lang => `${prefix}/login`,
+    'REGISTRATION_URI': lang => `${prefix}/registration`,
+    'LOGOUT_URI': '/logout',
 
-// group details
-export const GROUP_URI_FACTORY = id => `${DASHBOARD_URI}/group/${id}`;
+    // instance detail
+    'INSTANCE_URI_FACTORY': (lang, id) => `${prefix}/app/instance/${id}`,
 
-// user details
-export const USER_URI_FACTORY = id => `${DASHBOARD_URI}/user/${id}`;
+    // group details
+    'GROUP_URI_FACTORY': id => `${prefix}/app/group/${id}`,
 
-// assignments and solution submissions
-export const ASSIGNMENT_DETAIL_URI_FACTORY = id => `${DASHBOARD_URI}/assignment/${id}`;
-export const SUBMIT_SOLUTION_URI_FACTORY = id =>
-  ASSIGNMENT_DETAIL_URI_FACTORY(id) + '/submit';
+    // user details
+    'USER_URI_FACTORY': id => `${prefix}/app/user/${id}`,
 
-export const SUBMISSION_DETAIL_URI_FACTORY = (assignmentId, submissionId) =>
-  `${DASHBOARD_URI}/assignment/${assignmentId}/submission/${submissionId}`;
-export const SOURCE_CODE_DETAIL_URI_FACTORY = (assignmentId, submissionId, fileId) =>
-  `${DASHBOARD_URI}/assignment/${assignmentId}/submission/${submissionId}/file/${fileId}`;
+    // assignments and solution submissions
+    'ASSIGNMENT_DETAIL_URI_FACTORY': id => `${prefix}/app/assignment/${id}`,
+    'SUBMIT_SOLUTION_URI_FACTORY': id =>
+      `${prefix}/app/assignment/${id}/submit`,
+    'SUBMISSION_DETAIL_URI_FACTORY': (assignmentId, submissionId) =>
+      `${prefix}/app/assignment/${assignmentId}/submission/${submissionId}`,
+    'SOURCE_CODE_DETAIL_URI_FACTORY': (assignmentId, submissionId, fileId) =>
+      `${prefix}/app/assignment/${assignmentId}/submission/${submissionId}/file/${fileId}`,
 
-// external links
-export const BUGS_URL = 'https://www.github.com/recodex/web-app/issues';
+    // external links
+    'BUGS_URL': 'https://www.github.com/recodex/web-app/issues'
+  };
+};
+

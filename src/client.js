@@ -4,10 +4,6 @@ import React from 'react';
 import { render } from 'react-dom';
 import { fromJS } from 'immutable';
 
-import { IntlProvider, addLocaleData } from 'react-intl';
-import lang from 'react-intl/locale-data/en';
-import messages from './locales/en';
-
 import { Provider } from 'react-redux';
 import { Router, browserHistory, useRouterHistory } from 'react-router';
 import { syncHistoryWithStore } from 'react-router-redux';
@@ -25,15 +21,11 @@ const createScrollHistory = useScroll(createBrowserHistory);
 const appHistory = useRouterHistory(createScrollHistory)();
 const history = syncHistoryWithStore(appHistory, store);
 
-addLocaleData([ ...lang ]);
-
 render(
-  <IntlProvider locale='en' messages={messages}>
-    <Provider store={store}>
-      <Router
-        history={history}
-        routes={createRoutes(store.getState)} />
-    </Provider>
-  </IntlProvider>,
+  <Provider store={store}>
+    <Router
+      history={history}
+      routes={createRoutes(store.getState)} />
+  </Provider>,
   document.getElementById('root')
 );

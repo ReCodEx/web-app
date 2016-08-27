@@ -1,5 +1,6 @@
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
+import { IntlProvider, addLocaleData } from 'react-intl';
 import Layout from '../../components/Layout';
 
 import { toggleSize, toggleVisibility } from '../../redux/modules/sidebar';
@@ -11,10 +12,21 @@ import { fetchUserIfNeeded } from '../../redux/modules/users';
 import { fetchUsersGroupsIfNeeded } from '../../redux/modules/groups';
 import { fetchUsersInstancesIfNeeded } from '../../redux/modules/instances';
 
+import en from 'react-intl/locale-data/en';
+import messagesEn from '../../locales/en';
+
+import cs from 'react-intl/locale-data/cs';
+import messagesCs from '../../locales/cs';
+
 class LayoutContainer extends Component {
 
   componentWillMount() {
     this.loadData(this.props);
+    this.messages = {
+      cs: messagesCs,
+      en: messagesEn
+    };
+    this.localeData = { cs, en };
   }
 
   componentWillReceiveProps(newProps) {
@@ -29,6 +41,12 @@ class LayoutContainer extends Component {
       toggleSidebar.visibility();
     }
   };
+
+  /**
+   * Get messages for the given language or the deafult - English
+   */
+  getMessages = lang => this.messages[lang] || this.messages['en'];
+  getLocaleData = lang => this.localeData[lang] || this.localeData['en'];
 
   loadData = ({
     isLoggedIn,
@@ -45,7 +63,16 @@ class LayoutContainer extends Component {
   };
 
   render() {
-    return <Layout {...this.props} onCloseSidebar={this.maybeHideSidebar} />;
+    const {
+      params: { lang },
+      children
+    } = this.props;
+    addLocaleData([ ...this.getLocaleData(lang) ]);
+    return (
+      <IntlProvider locale={lang} messages={this.getMessages(lang)}>
+        <Layout {...this.props} onCloseSidebar={this.maybeHideSidebar} />
+      </IntlProvider>
+    );
   }
 
 }

@@ -32,6 +32,8 @@ export const isReady = (item) =>
 export const isTooOld = (item) =>
   Date.now() - item.get('lastUpdate') > 10 * 60 * 1000; // 10 minutes - @todo: Make configurable
 
+export const defaultGetId = (item) => item.get('id');
+
 /** Does the given item need refetching or is it already cached? */
 export const defaultNeedsRefetching = (item) =>
   !item || (
@@ -45,7 +47,8 @@ export const actionsFactory = ({
   resourceName,
   selector,
   apiEndpointFactory,
-  needsRefetching = defaultNeedsRefetching
+  needsRefetching = defaultNeedsRefetching,
+  getId = defaultGetId
 }) => {
   const actionTypes = actionTypesFactory(resourceName);
   const getItem = (id, getState) => {
@@ -82,7 +85,7 @@ export const actionsFactory = ({
   const pushResource = createAction(
     actionTypes.FETCH_FULFILLED,
     resource => resource,
-    resource => ({ id: resource.get('id') })
+    resource => ({ id: getId(resource) })
   );
 
   const invalidate = createAction(actionTypes.INVALIDATE);
@@ -102,7 +105,7 @@ export const initialState = fromJS({ resources: {}, fetchManyStatus: {} });
 export const createRecord = (isFetching, error, didInvalidate, data) =>
    (fromJS({ isFetching, error, didInvalidate, data, lastUpdate: Date.now() }));
 
-export const reducerFactory = (resourceName) => {
+export const reducerFactory = (resourceName, getId = defaultGetId) => {
   const actionTypes = actionTypesFactory(resourceName);
   return {
     [actionTypes.FETCH_PENDING]: (state, { meta }) =>
@@ -134,9 +137,10 @@ export default ({
   resourceName,
   selector = (state) => state[resourceName],
   apiEndpointFactory = (id) => `/${resourceName}/${id}`,
-  needsRefetching
+  needsRefetching,
+  getId = defaultGetId
 }) => ({
   actionTypes: actionTypesFactory(resourceName),
-  actions: actionsFactory({ resourceName, selector, apiEndpointFactory, needsRefetching }),
+  actions: actionsFactory({ resourceName, selector, apiEndpointFactory, needsRefetching, getId }),
   reduceActions: reducerFactory(resourceName)
 });

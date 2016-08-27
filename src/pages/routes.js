@@ -33,7 +33,7 @@ const createRoutes = (getState) => {
   };
 
   return (
-    <Route path='/' component={LayoutContainer}>
+    <Route path='/:lang' component={LayoutContainer}>
       <IndexRoute component={Home} />
       <Route path='login' component={Login} onEnter={onlyUnauth} />
       <Route path='registration' component={Registration} onEnter={onlyUnauth} />

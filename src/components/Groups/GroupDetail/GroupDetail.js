@@ -2,6 +2,7 @@ import React, { PropTypes } from 'react';
 import { Row, Col } from 'react-bootstrap';
 import ReactMarkdown from 'react-markdown';
 import UsersList from '../../Users/UsersList';
+import UsersListItem from '../../Users/UsersListItem';
 import Box from '../../AdminLTE/Box';
 
 import LeaveJoinGroupButtonContainer from '../../../containers/LeaveJoinGroupButtonContainer';
@@ -11,14 +12,17 @@ import { isReady, isLoading, hasFailed } from '../../../redux/helpers/resourceMa
 
 const GroupDetail = ({
   group,
+  admin,
   assignments
 }) => (
   <div>
-    <p>
-      <LeaveJoinGroupButtonContainer groupId={group.data.id} />
-      <MakeRemoveSupervisorButtonContainer groupId={group.data.id} />
-    </p>
     <ReactMarkdown source={group.data.description} />
+    <Row>
+      <Col sm={6}>
+        <LeaveJoinGroupButtonContainer groupId={group.data.id} />
+        <MakeRemoveSupervisorButtonContainer groupId={group.data.id} />
+      </Col>
+    </Row>
     <Row>
       <Col lg={6}>
         <Box title='Cvičící' collapsable isOpen={true}>
