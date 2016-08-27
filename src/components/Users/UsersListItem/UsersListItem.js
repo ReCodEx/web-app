@@ -1,6 +1,5 @@
 import React, { PropTypes } from 'react';
 import { ListGroupItem, Clearfix } from 'react-bootstrap';
-import Gravatar from 'react-gravatar';
 import Icon from 'react-fontawesome';
 import { Link } from 'react-router';
 import { USER_URI_FACTORY } from '../../../links';
