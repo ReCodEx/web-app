@@ -91,7 +91,7 @@ export const apiCall = ({
       ),
     data: body
   },
-  meta
+  meta: { endpoint, ...meta }
 });
 
 const middleware = state => next => action => {
