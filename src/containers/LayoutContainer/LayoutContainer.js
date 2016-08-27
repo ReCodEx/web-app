@@ -45,7 +45,7 @@ class LayoutContainer extends Component {
   };
 
   render() {
-    return <Layout {...this.props} onContentClick={this.maybeHideSidebar} />;
+    return <Layout {...this.props} onCloseSidebar={this.maybeHideSidebar} />;
   }
 
 }

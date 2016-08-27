@@ -7,12 +7,13 @@ import NotLoggedIn from '../NotLoggedIn';
 const Sidebar = ({
   isLoggedIn = false,
   ...props
-}) => {
-  if (!isLoggedIn) {
-    return <NotLoggedIn {...props} />;
-  } else {
-    return <LoggedIn {...props} />;
-  }
+}) =>
+  !isLoggedIn
+    ? <NotLoggedIn {...props} />
+    : <LoggedIn {...props} />;
+
+Sidebar.propTypes = {
+  isLoggedIn: PropTypes.bool
 };
 
 export default Sidebar;
