@@ -16,6 +16,10 @@ describe('Resource manager', () => {
         FETCH_PENDING: `recodex/resource/${resourceName}/FETCH_PENDING`,
         FETCH_FULFILLED: `recodex/resource/${resourceName}/FETCH_FULFILLED`,
         FETCH_FAILED: `recodex/resource/${resourceName}/FETCH_REJECTED`,
+        FETCH_MANY: `recodex/resource/${resourceName}/FETCH_MANY`,
+        FETCH_MANY_PENDING: `recodex/resource/${resourceName}/FETCH_MANY_PENDING`,
+        FETCH_MANY_FULFILLED: `recodex/resource/${resourceName}/FETCH_MANY_FULFILLED`,
+        FETCH_MANY_FAILED: `recodex/resource/${resourceName}/FETCH_MANY_REJECTED`,
         INVALIDATE: `recodex/resource/${resourceName}/INVALIDATE`
       });
     });

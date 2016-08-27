@@ -1,4 +1,5 @@
 import React, { PropTypes, Component } from 'react';
+import { FormattedMessage } from 'react-intl';
 import Collapse from 'react-collapse';
 import Icon from 'react-fontawesome';
 import { Link } from 'react-router';
@@ -31,7 +32,10 @@ const TreeViewLeaf = ({
 );
 
 TreeViewLeaf.propTypes = {
-  title: PropTypes.string.isRequired,
+  title: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) })
+  ]).isRequired,
   icon: PropTypes.string,
   onClick: PropTypes.func,
   level: PropTypes.number.isRequired,

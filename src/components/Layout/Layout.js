@@ -14,14 +14,15 @@ export const Layout = ({
   isLoggedIn,
   logout,
   children,
-  onContentClick
+  onCloseSidebar
 }) => (
-  <div className={classNames({
-    'wrapper': true,
-    'sidebar-mini': true,
-    'sidebar-collapse': sidebar.isCollapsed,
-    'sidebar-open': sidebar.isOpen
-  })}>
+  <div
+    className={classNames({
+      'wrapper': true,
+      'sidebar-mini': true,
+      'sidebar-collapse': sidebar.isCollapsed,
+      'sidebar-open': sidebar.isOpen
+    })}>
     <Helmet
       defaultTitle='ReCodEx'
       titleTemplate='%s | ReCodEx' />
@@ -32,10 +33,10 @@ export const Layout = ({
       isLoggedIn={isLoggedIn}
       logout={logout}
       isCollapsed={sidebar.isCollapsed} />
-    <div onClick={onContentClick}>
+    <div onClick={onCloseSidebar}>
       {children}
+      <Footer version='v0.4.0' />
     </div>
-    <Footer version='v0.1.0' />
   </div>
 );
 
@@ -50,6 +51,7 @@ Layout.propTypes = {
   }),
   isLoggedIn: PropTypes.bool,
   logout: PropTypes.func.isRequired,
+  onCloseSidebar: PropTypes.func,
   children: PropTypes.element.isRequired
 };
 

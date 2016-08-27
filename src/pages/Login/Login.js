@@ -33,6 +33,7 @@ class Login extends Component {
     return (
       <PageContent
         title={<FormattedMessage id='app.login.title' defaultMessage='Sign in' />}
+        description={<FormattedMessage id='app.login.description' defaultMessage='Please fill your credentials' />}
         breadcrumbs={[
           { text: <FormattedMessage id='app.homepage.title' />, link: HOME_URI },
           { text: <FormattedMessage id='app.login.title' /> }

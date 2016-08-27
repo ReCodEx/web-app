@@ -10,21 +10,21 @@ import { isReady } from '../helpers/resourceManager';
  * Select groups part of the state
  */
 
-const getGroups = state => state.groups.get('resources');
+export const groupsSelectors = state => state.groups.get('resources');
 const filterGroups = (ids, groups) => ids.map(id => groups.get(id)).filter(isReady);
 
 export const studentOfSelector = createSelector(
-  [ studentOfGroupsIdsSelector, getGroups ],
+  [ studentOfGroupsIdsSelector, groupsSelectors ],
   filterGroups
 );
 
 export const supervisorOfSelector = createSelector(
-  [ supervisorOfGroupsIdsSelector, getGroups ],
+  [ supervisorOfGroupsIdsSelector, groupsSelectors ],
   filterGroups
 );
 
 export const groupSelector = createSelector(
-  [ getGroups, (state, id) => id ],
+  [ groupsSelectors, (state, id) => id ],
   (groups, id) => groups.get(id)
 );
 

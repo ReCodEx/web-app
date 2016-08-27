@@ -1,6 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import { IndexLink } from 'react-router';
+import { Navbar } from 'react-bootstrap';
 import MediaQuery from 'react-responsive';
+import HeaderNotificationsContainer from '../../../containers/HeaderNotificationsContainer';
 
 class Header extends Component {
 
@@ -44,6 +46,11 @@ class Header extends Component {
               </MediaQuery>
             </div>
           )}
+          <div className='navbar-custom-menu'>
+            <ul className='nav navbar-nav'>
+              <HeaderNotificationsContainer />
+            </ul>
+          </div>
         </div>
       </header>
     );

@@ -2,7 +2,6 @@ import React, { PropTypes, Component } from 'react';
 import Collapse from 'react-collapse';
 import Icon from 'react-fontawesome';
 import { Link } from 'react-router';
-import { Button, Nav, NavItem } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 import LevelGap from './LevelGap';
 import TreeView from './TreeView';
@@ -20,24 +19,20 @@ class TreeViewInnerNode extends Component {
 
   render() {
     const {
-      title,
-      actions,
-      level,
-      children
+      children,
+      ...props
     } = this.props;
 
     return (
-      <Nav stacked>
+      <ul className='nav nav-stacked'>
         <TreeViewLeaf
-          title={title}
-          actions={actions}
-          level={level}
+          {...props}
           onClick={this.toggleOpen}
           icon={this.isOpen() ? 'angle-down' : 'angle-right'} />
         <Collapse isOpened={this.isOpen()}>
           {children}
         </Collapse>
-      </Nav>
+      </ul>
     );
   }
 

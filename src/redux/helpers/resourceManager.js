@@ -7,8 +7,18 @@ export const actionTypesFactory = (resourceName) => ({
   FETCH_PENDING: `recodex/resource/${resourceName}/FETCH_PENDING`,
   FETCH_FULFILLED: `recodex/resource/${resourceName}/FETCH_FULFILLED`,
   FETCH_FAILED: `recodex/resource/${resourceName}/FETCH_REJECTED`,
+  FETCH_MANY: `recodex/resource/${resourceName}/FETCH_MANY`,
+  FETCH_MANY_PENDING: `recodex/resource/${resourceName}/FETCH_MANY_PENDING`,
+  FETCH_MANY_FULFILLED: `recodex/resource/${resourceName}/FETCH_MANY_FULFILLED`,
+  FETCH_MANY_FAILED: `recodex/resource/${resourceName}/FETCH_MANY_REJECTED`,
   INVALIDATE: `recodex/resource/${resourceName}/INVALIDATE`
 });
+
+export const status = {
+  LOADING: 'LOADING',
+  FAILED: 'FAILED',
+  LOADED: 'LOADED'
+};
 
 export const isLoading = (item) =>
     !item || item.get('isFetching') === true;
@@ -43,6 +53,14 @@ export const actionsFactory = ({
     return !state ? null : state.getIn(['resources', id]);
   };
 
+  const fetchMany = apiOptions =>
+    createApiAction({
+      type: actionTypes.FETCH_MANY,
+      method: 'GET',
+      endpoint: apiEndpointFactory(),
+      ...apiOptions
+    });
+
   const fetchIfNeeded = (...ids) =>
     (dispatch, getState) =>
       ids.map(id => needsRefetching(getItem(id, getState)) && dispatch(fetchResource(id)));
@@ -70,6 +88,7 @@ export const actionsFactory = ({
   const invalidate = createAction(actionTypes.INVALIDATE);
 
   return {
+    fetchMany,
     fetchIfNeeded,
     fetchOneIfNeeded,
     fetchResource,
@@ -78,7 +97,7 @@ export const actionsFactory = ({
   };
 };
 
-export const initialState = fromJS({ resources: {} });
+export const initialState = fromJS({ resources: {}, fetchManyStatus: {} });
 
 export const createRecord = (isFetching, error, didInvalidate, data) =>
    (fromJS({ isFetching, error, didInvalidate, data, lastUpdate: Date.now() }));
@@ -94,6 +113,16 @@ export const reducerFactory = (resourceName) => {
 
     [actionTypes.FETCH_FULFILLED]: (state, { meta, payload }) =>
       state.setIn([ 'resources', meta.id ], createRecord(false, false, false, payload)),
+
+    [actionTypes.FETCH_MANY_PENDING]: (state, { meta: { endpoint } }) =>
+      state.setIn([ 'fetchManyStatus', endpoint ], status.LOADING),
+
+    [actionTypes.FETCH_MANY_FAILED]: (state, { meta: { endpoint } }) =>
+      state.setIn([ 'fetchManyStatus', endpoint ], status.FAILED),
+
+    [actionTypes.FETCH_MANY_FULFILLED]: (state, { meta: { endpoint }, payload }) =>
+      payload.reduce((state, res) => state.setIn(['resources', res.id], createRecord(false, false, false, res)), state)
+        .setIn([ 'fetchManyStatus', endpoint ], status.LOADED),
 
     [actionTypes.INVALIDATE]: (state, { payload }) =>
       state.updateIn([ 'resources', payload ], item => Object.assign({}, item, { didInvalidate: true }))
