@@ -19,7 +19,8 @@
     "coverage": "babel-node ./node_modules/isparta/bin/isparta cover --root src --report text --report html ./node_modules/mocha/bin/_mocha -- --reporter dot ",
     "coveralls": "babel-node ./node_modules/isparta/bin/isparta cover --root src ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec && cat ./coverage/lcov.info | node ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage",
     "dev": "cross-env NODE_ENV=development API_BASE=http://127.0.0.1:4000/v1 babel-node bin/dev.js",
-    "start": "cross-env NODE_ENV=production node bin/server.js"
+    "start": "cross-env NODE_ENV=production node bin/server.js",
+    "exportStrings": "babel-node manageTranslations.js"
   },
   "dependencies": {
     "add-line-numbers": "^1.0.1",
