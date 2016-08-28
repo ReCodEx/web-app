@@ -11,22 +11,13 @@ import { usersGroupsIds } from '../../redux/selectors/users';
 import { fetchUserIfNeeded } from '../../redux/modules/users';
 import { fetchUsersGroupsIfNeeded } from '../../redux/modules/groups';
 import { fetchUsersInstancesIfNeeded } from '../../redux/modules/instances';
-
-import en from 'react-intl/locale-data/en';
-import messagesEn from '../../locales/en';
-
-import cs from 'react-intl/locale-data/cs';
-import messagesCs from '../../locales/cs';
+import { messages, localeData, defaultLanguage } from '../../locales';
+import { linksFactory } from '../../links';
 
 class LayoutContainer extends Component {
 
   componentWillMount() {
     this.loadData(this.props);
-    this.messages = {
-      cs: messagesCs,
-      en: messagesEn
-    };
-    this.localeData = { cs, en };
   }
 
   componentWillReceiveProps(newProps) {
@@ -34,6 +25,10 @@ class LayoutContainer extends Component {
       this.loadData(newProps);
     }
   }
+
+  getChildContext = () => ({
+    links: linksFactory(this.props.params.lang)
+  });
 
   maybeHideSidebar = () => {
     const { sidebar, toggleSidebar } = this.props;
@@ -45,8 +40,29 @@ class LayoutContainer extends Component {
   /**
    * Get messages for the given language or the deafult - English
    */
-  getMessages = lang => this.messages[lang] || this.messages['en'];
-  getLocaleData = lang => this.localeData[lang] || this.localeData['en'];
+
+  getDefaultLang = () => {
+    if (typeof window !== 'undefined') {
+      const lang = (window.navigator.userLanguage || window.navigator.language).substr(0, 2);
+      if (messages[lang]) {
+        return lang;
+      }
+    }
+
+    return defaultLanguage;
+  };
+
+  getLang = () => {
+    let lang = this.props.params.lang;
+    if (!lang) {
+      lang = this.getDefaultLang();
+    }
+
+    return lang;
+  };
+
+  getMessages = lang => messages[lang] || messages[this.getDefaultLang()];
+  getLocaleData = lang => localeData[lang] || localeData[this.getDefaultLang()];
 
   loadData = ({
     isLoggedIn,
@@ -63,19 +79,26 @@ class LayoutContainer extends Component {
   };
 
   render() {
-    const {
-      params: { lang },
-      children
-    } = this.props;
+    const { children, currentUrl } = this.props;
+    const lang = this.getLang();
     addLocaleData([ ...this.getLocaleData(lang) ]);
     return (
       <IntlProvider locale={lang} messages={this.getMessages(lang)}>
-        <Layout {...this.props} onCloseSidebar={this.maybeHideSidebar} />
+        <Layout
+          {...this.props}
+          onCloseSidebar={this.maybeHideSidebar}
+          lang={lang}
+          availableLangs={Object.keys(messages)}
+          currentUrl={currentUrl} />
       </IntlProvider>
     );
   }
 
 }
+
+LayoutContainer.childContextTypes = {
+  links: PropTypes.object
+};
 
 const mapStateToProps = (state) => ({
   sidebar: {
@@ -83,7 +106,8 @@ const mapStateToProps = (state) => ({
     isCollapsed: isCollapsed(state)
   },
   isLoggedIn: !!loggedInUserIdSelector(state),
-  userId: loggedInUserIdSelector(state)
+  userId: loggedInUserIdSelector(state),
+  currentUrl: state.routing.locationBeforeTransitions.pathname
 });
 
 const mapDispatchToProps = (dispatch, props) => ({
