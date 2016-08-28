@@ -14,6 +14,9 @@ export const Layout = ({
   isLoggedIn,
   logout,
   children,
+  lang,
+  currentUrl,
+  availableLangs,
   onCloseSidebar
 }) => (
   <div
@@ -28,7 +31,10 @@ export const Layout = ({
       titleTemplate='%s | ReCodEx' />
     <Header
       toggleSidebarSize={toggleSidebar.size}
-      toggleSidebarVisibility={toggleSidebar.visibility} />
+      toggleSidebarVisibility={toggleSidebar.visibility}
+      availableLangs={availableLangs}
+      currentLang={lang}
+      currentUrl={currentUrl} />
     <Sidebar
       isLoggedIn={isLoggedIn}
       logout={logout}

@@ -1,8 +1,10 @@
 import React, { Component, PropTypes } from 'react';
+import { FormattedMessage } from 'react-intl';
 import { IndexLink } from 'react-router';
 import { Navbar } from 'react-bootstrap';
 import MediaQuery from 'react-responsive';
 import HeaderNotificationsContainer from '../../../containers/HeaderNotificationsContainer';
+import HeaderLanguageSwitching from '../HeaderLanguageSwitching';
 
 class Header extends Component {
 
@@ -21,7 +23,10 @@ class Header extends Component {
 
     const {
       toggleSidebarSize,
-      toggleSidebarVisibility
+      toggleSidebarVisibility,
+      availableLangs = [],
+      currentLang,
+      currentUrl = ''
     } = this.props;
 
     return (
@@ -36,12 +41,16 @@ class Header extends Component {
             <div>
               <MediaQuery maxWidth={767}>
                 <a href='#' className='sidebar-toggle' role='button' onClick={toggleSidebarVisibility}>
-                  <span className='sr-only'>Zobrazit/skrýt boční panel</span>
+                  <span className='sr-only'>
+                    <FormattedMessage id='app.header.toggleSidebar' defaultMessage='Show/hide sidebar' />
+                  </span>
                 </a>
               </MediaQuery>
               <MediaQuery minWidth={768}>
                 <a href='#' className='sidebar-toggle' role='button' onClick={toggleSidebarSize}>
-                  <span className='sr-only'>Zvětšit/zmenšit boční panel</span>
+                  <span className='sr-only'>
+                    <FormattedMessage id='app.header.toggleSidebarSize' defaultMessage='Expand/minimize sidebar' />
+                  </span>
                 </a>
               </MediaQuery>
             </div>
@@ -49,6 +58,8 @@ class Header extends Component {
           <div className='navbar-custom-menu'>
             <ul className='nav navbar-nav'>
               <HeaderNotificationsContainer />
+              {availableLangs.map(lang =>
+                <HeaderLanguageSwitching lang={lang} active={currentLang === lang} key={lang} currentUrl={currentUrl} />)}
             </ul>
           </div>
         </div>
@@ -59,7 +70,10 @@ class Header extends Component {
 
 Header.propTypes = {
   toggleSidebarSize: PropTypes.func.isRequired,
-  toggleSidebarVisibility: PropTypes.func.isRequired
+  toggleSidebarVisibility: PropTypes.func.isRequired,
+  currentLang: PropTypes.string.isRequired,
+  availableLangs: PropTypes.array,
+  currentUrl: PropTypes.string
 };
 
 export default Header;
