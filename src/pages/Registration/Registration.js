@@ -12,7 +12,6 @@ import { createAccount } from '../../redux/modules/registration';
 import { fetchInstances } from '../../redux/modules/instances';
 import { instancesSelector } from '../../redux/selectors/instances';
 import { isCreating, hasFailed, hasSucceeded } from '../../redux/selectors/registration';
-import { HOME_URI, DASHBOARD_URI } from '../../links';
 
 class Register extends Component {
 
@@ -26,9 +25,10 @@ class Register extends Component {
   };
 
   checkIfIsDone = props => {
-    const { hasSucceeded, goToDashboard } = props;
+    const { hasSucceeded } = props;
     if (hasSucceeded) {
-      setTimeout(() => this.context.router.push(DASHBOARD_URI), 600);
+      const { router, links: { HOME_URI, DASHBOARD_URI } } = this.context;
+      setTimeout(() => router.push(DASHBOARD_URI), 600);
     }
   };
 
@@ -64,7 +64,8 @@ class Register extends Component {
 }
 
 Register.contextTypes = {
-  router: PropTypes.object
+  router: PropTypes.object,
+  links: PropTypes.object
 };
 
 Register.propTypes = {

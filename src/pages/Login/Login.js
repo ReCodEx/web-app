@@ -9,7 +9,6 @@ import LoginForm from '../../components/Public/LoginForm';
 
 import { login } from '../../redux/modules/auth';
 import { isLoggingIn, hasFailed, hasSucceeded } from '../../redux/selectors/auth';
-import { HOME_URI, DASHBOARD_URI } from '../../links';
 
 class Login extends Component {
 
@@ -29,6 +28,7 @@ class Login extends Component {
 
   render() {
     const { login, isLoggingIn, hasFailed, hasSucceeded } = this.props;
+    const { links: { HOME_URI, DASHBOARD_URI } } = this.context;
 
     return (
       <PageContent
@@ -54,7 +54,8 @@ class Login extends Component {
 }
 
 Login.contextTypes = {
-  router: PropTypes.object
+  router: PropTypes.object,
+  links: PropTypes.object
 };
 
 Login.propTypes = {

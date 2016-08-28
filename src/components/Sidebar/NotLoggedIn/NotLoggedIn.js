@@ -6,13 +6,13 @@ import MenuTitle from '../../AdminLTE/Sidebar/MenuTitle';
 import MenuItem from '../../AdminLTE/Sidebar/MenuItem';
 import MenuGroup from '../../AdminLTE/Sidebar/MenuGroup';
 
-import {
-  LOGIN_URI,
-  REGISTRATION_URI,
-  BUGS_URL
-} from '../../../links';
-
-const NotLoggedIn = () => (
+const NotLoggedIn = ({}, {
+  links: {
+    LOGIN_URI,
+    REGISTRATION_URI,
+    BUGS_URL
+  }
+}) => (
   <aside className='main-sidebar'>
     <section className='sidebar'>
       <ul className='sidebar-menu'>
@@ -38,6 +38,10 @@ const NotLoggedIn = () => (
 );
 
 NotLoggedIn.propTypes = {
+};
+
+NotLoggedIn.contextTypes = {
+  links: PropTypes.object
 };
 
 export default NotLoggedIn;

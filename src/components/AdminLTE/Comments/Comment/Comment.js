@@ -5,7 +5,6 @@ import Icon from 'react-fontawesome';
 import { Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { Link } from 'react-router';
 
-import { USER_URI_FACTORY } from '../../../../links';
 import { Posted, Posting, Failed } from './Status';
 
 const Comment = ({
@@ -20,6 +19,8 @@ const Comment = ({
   repost,
   isToggling = false,
   togglePrivacy
+}, {
+  links: { USER_URI_FACTORY }
 }) => (
   <div className={classNames({
     'direct-chat-success': isPrivate,
@@ -79,6 +80,10 @@ Comment.propTypes = {
   repost: PropTypes.func,
   isToggling: PropTypes.bool,
   togglePrivacy: PropTypes.func
+};
+
+Comment.contextTypes = {
+  links: PropTypes.object
 };
 
 export default Comment;

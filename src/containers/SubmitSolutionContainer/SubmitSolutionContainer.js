@@ -2,7 +2,6 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 import SubmitSolution from '../../components/Submissions/SubmitSolution';
-import { SUBMISSION_DETAIL_URI_FACTORY, ASSIGNMENT_DETAIL_URI_FACTORY } from '../../links';
 import EvaluationProgressContainer from '../EvaluationProgressContainer';
 
 import {
@@ -69,6 +68,10 @@ class SubmitSolutionContainer extends Component {
       submissionDetailLink
     } = this.props;
 
+    const {
+      links: { SUBMISSION_DETAIL_URI_FACTORY, ASSIGNMENT_DETAIL_URI_FACTORY }
+    } = this.context;
+
     return (
       <div>
         <SubmitSolution
@@ -101,6 +104,10 @@ class SubmitSolutionContainer extends Component {
   };
 
 }
+
+SubmitSolutionContainer.contextTypes = {
+  links: PropTypes.object
+};
 
 export default connect(
   state => ({

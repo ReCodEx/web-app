@@ -3,7 +3,6 @@ import { List } from 'immutable';
 
 import { Table } from 'react-bootstrap';
 import Box from '../../AdminLTE/Box';
-import { SUBMISSION_DETAIL_URI_FACTORY } from '../../../links';
 import { isReady, hasFailed, isLoading } from '../../../redux/helpers/resourceManager';
 
 import LoadingSubmissionTableRow from './LoadingSubmissionTableRow';
@@ -17,6 +16,8 @@ import EvaluationFailedTableRow from './EvaluationFailedTableRow';
 const SubmissionsTable = ({
   assignmentId,
   submissions
+}, {
+  links: { SUBMISSION_DETAIL_URI_FACTORY }
 }) => (
   <Box title='Odevzdaná řešení' collapsable isOpen={true}>
     <Table responsive>
@@ -66,6 +67,10 @@ const SubmissionsTable = ({
 SubmissionsTable.propTypes = {
   assignmentId: PropTypes.string.isRequired,
   submissions: PropTypes.instanceOf(List)
+};
+
+SubmissionsTable.contextTypes = {
+  links: PropTypes.object
 };
 
 export default SubmissionsTable;

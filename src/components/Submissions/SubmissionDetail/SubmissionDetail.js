@@ -6,7 +6,6 @@ import { Table, Row, Col, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { Link } from 'react-router';
 
 import { isReady, isLoading, hasFailed } from '../../../redux/helpers/resourceManager';
-import { SOURCE_CODE_DETAIL_URI_FACTORY } from '../../../links';
 
 import Box from '../../AdminLTE/Box';
 import { LoadingIcon } from '../../Icons';
@@ -31,6 +30,8 @@ const SubmissionDetail = ({
   files,
   onCloseSourceViewer,
   children
+}, {
+  links: { SOURCE_CODE_DETAIL_URI_FACTORY }
 }) => (
   <div>
     <Row>
@@ -254,6 +255,10 @@ SubmissionDetail.propTypes = {
   note: PropTypes.string,
   submittedAt: PropTypes.number.isRequired,
   evaluation: PropTypes.object
+};
+
+SubmissionDetail.contextTypes = {
+  links: PropTypes.object
 };
 
 export default SubmissionDetail;

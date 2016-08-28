@@ -8,13 +8,6 @@ import MenuTitle from '../../AdminLTE/Sidebar/MenuTitle';
 import MenuItem from '../../AdminLTE/Sidebar/MenuItem';
 import MenuGroup from '../../AdminLTE/Sidebar/MenuGroup';
 
-import {
-  DASHBOARD_URI,
-  GROUP_URI_FACTORY,
-  BUGS_URL,
-  INSTANCE_URI_FACTORY
-} from '../../../links';
-
 const LoggedIn = ({
   instances,
   studentOf,
@@ -23,6 +16,13 @@ const LoggedIn = ({
   logout,
   isActive = link => link === '/',
   isCollapsed
+}, {
+  links: {
+    DASHBOARD_URI,
+    GROUP_URI_FACTORY,
+    BUGS_URL,
+    INSTANCE_URI_FACTORY
+  }
 }) => (
   <aside className='main-sidebar'>
     <section className='sidebar'>
@@ -83,6 +83,10 @@ LoggedIn.propTypes = {
   logout: PropTypes.func.isRequired,
   isActive: PropTypes.func,
   isCollapsed: PropTypes.bool
+};
+
+LoggedIn.contextTypes = {
+  links: PropTypes.object
 };
 
 export default LoggedIn;

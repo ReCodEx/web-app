@@ -5,7 +5,6 @@ import { Row, Col } from 'react-bootstrap';
 import { Link } from 'react-router';
 import PageContent from '../../components/PageContent';
 import UsersStats from '../../components/Users/UsersStats';
-import { GROUP_URI_FACTORY } from '../../links';
 import { isReady } from '../../redux/helpers/resourceManager';
 import { loggedInUserId } from '../../redux/selectors/auth';
 import { loggedInUserDataSelector } from '../../redux/selectors/users';
@@ -13,6 +12,8 @@ import { fetchUserIfNeeded } from '../../redux/modules/users';
 
 const Dashboard = ({
   user
+}, {
+  links: { GROUP_URI_FACTORY }
 }) => (
   <PageContent
     title={<FormattedMessage id='app.dashboard.title' defaultMessage='Dashboard' />}
@@ -38,6 +39,10 @@ const Dashboard = ({
 
 Dashboard.propTypes = {
   user: PropTypes.object
+};
+
+Dashboard.contextTypes = {
+  links: PropTypes.object
 };
 
 export default connect(

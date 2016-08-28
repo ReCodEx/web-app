@@ -3,11 +3,12 @@ import { Link } from 'react-router';
 import classNames from 'classnames';
 import AssignmentStatusIcon from '../AssignmentStatusIcon/AssignmentStatusIcon';
 import { FormattedDate, FormattedTime } from 'react-intl';
-import { ASSIGNMENT_DETAIL_URI_FACTORY } from '../../../../links';
 
 const AssignmentTableRow = ({
   showGroup,
   item: { id, name, deadline, group }
+}, {
+  links: { ASSIGNMENT_DETAIL_URI_FACTORY }
 }) => (
   <tr>
     <td className='text-center'>
@@ -40,6 +41,10 @@ AssignmentTableRow.propTypes = {
     }),
     groupId: PropTypes.string
   })
+};
+
+AssignmentTableRow.contextTypes = {
+  links: PropTypes.object
 };
 
 export default AssignmentTableRow;

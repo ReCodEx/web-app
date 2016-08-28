@@ -53,7 +53,7 @@ class MenuGroup extends Component {
           </span>
           <span className='pull-right-container pull-right'>
             {notificationsCount > 0 &&
-              <small className='label pull-right bg-red'>{notificationsCount}</small>}
+              <small className='label pull-right bg-blue'>{notificationsCount}</small>}
             <Icon name='angle-left' className='pull-right' />
           </span>
         </a>

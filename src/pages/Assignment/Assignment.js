@@ -4,7 +4,6 @@ import { FormattedMessage } from 'react-intl';
 import { Grid, Col, Row } from 'react-bootstrap';
 import { push } from 'react-router-redux';
 
-import { GROUP_URI_FACTORY, SUBMIT_SOLUTION_URI_FACTORY } from '../../links';
 import { isReady, isLoading, hasFailed } from '../../redux/helpers/resourceManager';
 
 import { fetchAssignmentIfNeeded } from '../../redux/modules/assignments';
@@ -67,6 +66,10 @@ class Assignment extends Component {
       params: { assignmentId }
     } = this.props;
 
+    const {
+      links: { GROUP_URI_FACTORY, SUBMIT_SOLUTION_URI_FACTORY }
+    } = this.context;
+
     const title = isLoading(assignment)
                     ? <FormattedMessage id='app.loading' defaultMessage='Loading ...' />
                     : assignment.getIn(['data', 'name']);
@@ -117,7 +120,7 @@ class Assignment extends Component {
 
 }
 
-Assignment.props = {
+Assignment.propTypes = {
   userId: PropTypes.string.isRequired,
   params: PropTypes.shape({
     assignmentId: PropTypes.string.isRequired
@@ -127,6 +130,10 @@ Assignment.props = {
   init: PropTypes.func.isRequired,
   cancel: PropTypes.func.isRequired,
   loadAssignmentIfNeeded: PropTypes.func.isRequired
+};
+
+Assignment.contextTypes = {
+  links: PropTypes.object
 };
 
 export default connect(

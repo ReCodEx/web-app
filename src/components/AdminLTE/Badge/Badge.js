@@ -2,11 +2,12 @@ import React, { PropTypes } from 'react';
 import { FormattedMessage } from 'react-intl';
 import Icon from 'react-fontawesome';
 import { Link } from 'react-router';
-import { USER_URI_FACTORY } from '../../../links';
 
 const Badge = ({
   user: { id, fullName, avatarUrl },
   logout
+}, {
+  links: { USER_URI_FACTORY }
 }) => (
   <div className='user-panel'>
     <div className='pull-left image'>
@@ -32,6 +33,10 @@ Badge.propTypes = {
     avatarUrl: PropTypes.string.isRequired
   }).isRequired,
   logout: PropTypes.func
+};
+
+Badge.contextTypes = {
+  links: PropTypes.object
 };
 
 export default Badge;

@@ -6,7 +6,6 @@ import { loadUserData } from './users';
 import { actionTypes as registrationActionTypes } from './registration';
 
 import { push } from 'react-router-redux';
-import { HOME_URI } from '../../links';
 
 export const actionTypes = {
   LOGIN: 'recodex/auth/LOGIN',
@@ -29,13 +28,9 @@ const getUserId = (token) => token.sub.id;
  * Actions
  */
 
-export const logout = () =>
-  (dispatch, getState) => {
-    dispatch(push(HOME_URI));
-    dispatch({
-      type: actionTypes.LOGOUT
-    });
-  };
+export const logout = () => ({
+  type: actionTypes.LOGOUT
+});
 
 export const login = (username, password) =>
   createApiAction({

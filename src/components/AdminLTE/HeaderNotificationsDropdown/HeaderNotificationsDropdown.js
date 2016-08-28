@@ -50,6 +50,7 @@ const HeaderNotificationsDropdown = ({
                   id='app.notifications.showAll'
                   defaultMessage={`Show {count, plural,
                     one {old notification}
+                    two {two notifications}
                     other {all # notifications}
                   }`}
                   values={{ count: newNotifications.size + oldNotifications.size }} />}

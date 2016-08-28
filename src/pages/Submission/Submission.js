@@ -9,12 +9,6 @@ import SubmissionDetail, {
   FailedSubmissionDetail
 } from '../../components/Submissions/SubmissionDetail';
 
-import {
-  GROUP_URI_FACTORY,
-  ASSIGNMENT_DETAIL_URI_FACTORY,
-  SUBMISSION_DETAIL_URI_FACTORY
-} from '../../links';
-
 import { isReady, isLoading, hasFailed } from '../../redux/helpers/resourceManager';
 import { fetchAssignmentIfNeeded } from '../../redux/modules/assignments';
 import { fetchSubmissionIfNeeded } from '../../redux/modules/submissions';
@@ -42,6 +36,7 @@ class Submission extends Component {
 
   closeSourceCodeViewer = () => {
     const { assignmentId, submissionId } = this.props.params;
+    const { links: { SUBMISSION_DETAIL_URI_FACTORY } } = this.context;
     const link = SUBMISSION_DETAIL_URI_FACTORY(assignmentId, submissionId);
     this.context.router.push(link);
   };
@@ -54,6 +49,13 @@ class Submission extends Component {
       params: { submissionId, assignmentId },
       children
     } = this.props;
+
+    const {
+      links: {
+        GROUP_URI_FACTORY,
+        ASSIGNMENT_DETAIL_URI_FACTORY
+      }
+    } = this.context;
 
     const assignmentData = isReady(assignment) ? assignment.get('data').toJS() : null;
     const title = assignmentData !== null ? assignmentData.name : 'Načítám ...';
@@ -88,7 +90,8 @@ class Submission extends Component {
 }
 
 Submission.contextTypes = {
-  router: PropTypes.object.isRequired
+  router: PropTypes.object,
+  links: PropTypes.object
 };
 
 Submission.propTypes = {
