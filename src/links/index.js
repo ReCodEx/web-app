@@ -1,3 +1,4 @@
+
 export const linksFactory = lang => {
   const prefix = `/${lang}`;
 
@@ -35,6 +36,18 @@ export const linksFactory = lang => {
     ASSIGNMENT_DETAIL_URI_FACTORY, SUBMIT_SOLUTION_URI_FACTORY,
     SUBMISSION_DETAIL_URI_FACTORY, SOURCE_CODE_DETAIL_URI_FACTORY,
     BUGS_URL
-  }
+  };
 };
 
+const removeFirstSegment = url =>
+  url.substr(1).indexOf('/') === -1
+    ? '/'
+    : url.substr(url.substr(1).indexOf('/') + 1);
+
+export const changeLanguage = (url, lang) =>
+  `/${lang}${removeFirstSegment(url)}`;
+
+export const extractLanguageFromUrl = url => {
+  url = url.substr(0, 1) === '/' ? url.substr(1) : url; // trim leading slash
+  return url.substr(0, url.indexOf('/'));
+};

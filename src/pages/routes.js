@@ -1,7 +1,7 @@
 import React from 'react';
 import { Route, IndexRoute, IndexRedirect, Link } from 'react-router';
-import { linksFactory } from '../links';
-import { defaultLanguage } from '../locales';
+import { linksFactory, extractLanguageFromUrl, changeLanguage } from '../links';
+import { isAvailable, defaultLanguage } from '../locales';
 import { isLoggedIn } from '../redux/selectors/auth';
 
 /* container components */
@@ -36,9 +36,28 @@ const createRoutes = (getState) => {
     }
   };
 
+  const checkLanguage = (nextState, replace) => {
+    const url = nextState.location.pathname;
+    const lang = extractLanguageFromUrl(url);
+    if (!isAvailable(lang)) {
+      replace(changeLanguage(url, defaultLanguage));
+    }
+  };
+
+  const maybeWithoutLanguage = (nextState, replace) => {
+    const url = nextState.location.pathname;
+    const lang = extractLanguageFromUrl(url);
+    if (!isAvailable(lang)) {
+      // try to correct the url by adding the lang in the URL
+      // this surely won't cause a redirect loop even if the url
+      // still won't match any route, since it will now begin
+      // with an available language
+      replace(`/${defaultLanguage}${url}`);
+    }
+  };
+
   return (
-    <Route path='/'>
-      <IndexRedirect to={`/${defaultLanguage}`} />
+    <Route path='/' onEnter={checkLanguage}>
       <Route path='/:lang' component={LayoutContainer}>
         <IndexRoute component={Home} />
         <Route path='login' component={Login} onEnter={onlyUnauth} />

@@ -41,21 +41,10 @@ class LayoutContainer extends Component {
    * Get messages for the given language or the deafult - English
    */
 
-  getDefaultLang = () => {
-    if (typeof window !== 'undefined') {
-      const lang = (window.navigator.userLanguage || window.navigator.language).substr(0, 2);
-      if (messages[lang]) {
-        return lang;
-      }
-    }
-
-    return defaultLanguage;
-  };
-
   getLang = () => {
     let lang = this.props.params.lang;
     if (!lang) {
-      lang = this.getDefaultLang();
+      lang = defaultLanguage;
     }
 
     return lang;
