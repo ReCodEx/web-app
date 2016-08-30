@@ -47,6 +47,11 @@ export const isSupervisorOf = groupId => createSelector(
   ids => ids.some(id => id === groupId)
 );
 
+export const isAdminOf = groupId => createSelector(
+  [ loggedInUserIdSelector, state => state.groups.getIn(['resources', groupId, 'data', 'adminId']) ],
+  (userId, adminId) => adminId === userId
+);
+
 export const isMemberOf = groupId => {
   const studentOf = isStudentOf(groupId);
   const supervisorOf = isSupervisorOf(groupId);

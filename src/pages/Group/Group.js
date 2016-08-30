@@ -8,8 +8,10 @@ import GroupDetail, { LoadingGroupDetail, FailedGroupDetail } from '../../compon
 
 import { isReady, isLoading, hasFailed } from '../../redux/helpers/resourceManager';
 import { fetchGroupIfNeeded } from '../../redux/modules/groups';
-import { groupSelector, createGroupsAssignmentsSelector } from '../../redux/selectors/groups';
+import { fetchGroupsStatsIfNeeded } from '../../redux/modules/stats';
 import { fetchAssignmentsForGroup } from '../../redux/modules/assignments';
+import { groupSelector, createGroupsAssignmentsSelector } from '../../redux/selectors/groups';
+import { createGroupsStatsSelector } from '../../redux/selectors/stats';
 
 class Group extends Component {
 
@@ -24,8 +26,9 @@ class Group extends Component {
   }
 
   loadData = (props) => {
-    const { params: { groupId }, loadAssignmentsIfNeeded, loadGroupIfNeeded } = props;
+    const { params: { groupId }, loadAssignmentsIfNeeded, loadGroupIfNeeded, loadStatsIfNeeded } = props;
     loadAssignmentsIfNeeded(groupId);
+    loadStatsIfNeeded(groupId);
     loadGroupIfNeeded(groupId);
   };
 
@@ -37,7 +40,8 @@ class Group extends Component {
   render() {
     const {
       group,
-      assignments
+      assignments,
+      stats
     } = this.props;
 
     return (
@@ -48,7 +52,10 @@ class Group extends Component {
           {isLoading(group) && <LoadingGroupDetail />}
           {hasFailed(group) && <FailedGroupDetail />}
           {isReady(group) &&
-            <GroupDetail group={group.toJS()} assignments={assignments} />}
+            <GroupDetail
+              group={group.toJS()}
+              assignments={assignments}
+              stats={stats} />}
         </div>
       </PageContent>
     );
@@ -57,16 +64,14 @@ class Group extends Component {
 }
 
 export default connect(
-  (state, { params: { groupId } }) => {
-    const groupsAssignmentsSelector = createGroupsAssignmentsSelector();
-    const group = groupSelector(state, groupId);
-    return {
-      group,
-      assignments: groupsAssignmentsSelector(state, groupId)
-    };
-  },
+  (state, { params: { groupId } }) => ({
+    group: groupSelector(groupId)(state),
+    assignments: createGroupsAssignmentsSelector(groupId)(state),
+    stats: createGroupsStatsSelector(groupId)(state)
+  }),
   (dispatch) => ({
     loadGroupIfNeeded: (groupId) => dispatch(fetchGroupIfNeeded(groupId)),
+    loadStatsIfNeeded: (groupId) => dispatch(fetchGroupsStatsIfNeeded(groupId)),
     loadAssignmentsIfNeeded: (groupId) => dispatch(fetchAssignmentsForGroup(groupId))
   })
 )(Group);
