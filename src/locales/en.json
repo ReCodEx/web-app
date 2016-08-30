@@ -47,7 +47,7 @@
   "app.header.toggleSidebarSize": "Expand/minimize sidebar",
   "app.homepage.description": "ReCodEx - homepage",
   "app.homepage.greetings": "Welcome to ReCodEx",
-  "app.homepage.title": "ReCodEx - Code Examinator Reloaded",
+  "app.homepage.title": "ReCodEx - ReCodEx Code Examiner",
   "app.instance.description": "Instance overview",
   "app.instance.groups.noGroups": "There are no groups in this ReCodEx instance.",
   "app.instance.groupsTitle": "Groups hierarchy",
