@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { FormattedMessage } from 'react-intl';
 import Helmet from 'react-helmet';
 import { connect } from 'react-redux';
+import { push } from 'react-router-redux';
 
 import { Row, Col } from 'react-bootstrap';
 import PageContent from '../../components/PageContent';
@@ -25,10 +26,10 @@ class Register extends Component {
   };
 
   checkIfIsDone = props => {
-    const { hasSucceeded } = props;
+    const { hasSucceeded, push } = props;
     if (hasSucceeded) {
-      const { router, links: { HOME_URI, DASHBOARD_URI } } = this.context;
-      setTimeout(() => router.push(DASHBOARD_URI), 600);
+      const { links: { DASHBOARD_URI } } = this.context;
+      setTimeout(() => push(DASHBOARD_URI), 600);
     }
   };
 
@@ -37,6 +38,7 @@ class Register extends Component {
   };
 
   render() {
+    const { links: { HOME_URI } } = this.context;
     const { instances, createAccount, isCreatingAccount, hasFailed, hasSucceeded } = this.props;
 
     return (
@@ -64,7 +66,6 @@ class Register extends Component {
 }
 
 Register.contextTypes = {
-  router: PropTypes.object,
   links: PropTypes.object
 };
 
@@ -86,6 +87,7 @@ export default connect(
   }),
   {
     createAccount,
-    fetchInstances
+    fetchInstances,
+    push
   }
 )(Register);

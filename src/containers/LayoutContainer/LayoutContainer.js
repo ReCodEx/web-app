@@ -1,11 +1,9 @@
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { IntlProvider, addLocaleData } from 'react-intl';
-import { push } from 'react-router-redux';
 import Layout from '../../components/Layout';
 
 import { toggleSize, toggleVisibility } from '../../redux/modules/sidebar';
-import { logout } from '../../redux/modules/auth';
 import { isVisible, isCollapsed } from '../../redux/selectors/sidebar';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import { usersGroupsIds } from '../../redux/selectors/users';
@@ -13,7 +11,7 @@ import { fetchUserIfNeeded } from '../../redux/modules/users';
 import { fetchUsersGroupsIfNeeded } from '../../redux/modules/groups';
 import { fetchUsersInstancesIfNeeded } from '../../redux/modules/instances';
 import { messages, localeData, defaultLanguage } from '../../locales';
-import { linksFactory } from '../../links';
+import { linksFactory, isAbsolute } from '../../links';
 
 class LayoutContainer extends Component {
 
@@ -49,7 +47,8 @@ class LayoutContainer extends Component {
   };
 
   getChildContext = () => ({
-    links: this.state.links
+    links: this.state.links,
+    isActive: link => !isAbsolute(link) && this.context.router.isActive(link, true)
   });
 
   maybeHideSidebar = () => {
@@ -81,7 +80,7 @@ class LayoutContainer extends Component {
   };
 
   render() {
-    const { children, currentUrl, logout } = this.props;
+    const { children, location: { pathname } } = this.props;
     const { lang, links: { HOME_URI } } = this.state;
     addLocaleData([ ...this.getLocaleData(lang) ]);
     return (
@@ -91,8 +90,7 @@ class LayoutContainer extends Component {
           onCloseSidebar={this.maybeHideSidebar}
           lang={lang}
           availableLangs={Object.keys(messages)}
-          currentUrl={currentUrl}
-          logout={() => logout(HOME_URI)} />
+          currentUrl={pathname} />
       </IntlProvider>
     );
   }
@@ -100,7 +98,8 @@ class LayoutContainer extends Component {
 }
 
 LayoutContainer.childContextTypes = {
-  links: PropTypes.object
+  links: PropTypes.object,
+  isActive: PropTypes.func
 };
 
 LayoutContainer.contextTypes = {
@@ -113,18 +112,13 @@ const mapStateToProps = (state, props) => ({
     isCollapsed: isCollapsed(state)
   },
   isLoggedIn: !!loggedInUserIdSelector(state),
-  userId: loggedInUserIdSelector(state),
-  currentUrl: props.location.pathname
+  userId: loggedInUserIdSelector(state)
 });
 
 const mapDispatchToProps = (dispatch, props) => ({
   toggleSidebar: {
     visibility: () => dispatch(toggleVisibility()),
     size: () => dispatch(toggleSize())
-  },
-  logout: (redirectUrl) => {
-    dispatch(push(redirectUrl));
-    dispatch(logout());
   },
   loadUserDataIfNeeded: (userId) => dispatch(fetchUserIfNeeded(userId)),
   loadUsersGroupsIfNeeded: (userId) => dispatch(fetchUsersGroupsIfNeeded(userId)),

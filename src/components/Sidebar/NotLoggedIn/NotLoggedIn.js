@@ -6,7 +6,9 @@ import MenuTitle from '../../AdminLTE/Sidebar/MenuTitle';
 import MenuItem from '../../AdminLTE/Sidebar/MenuItem';
 import MenuGroup from '../../AdminLTE/Sidebar/MenuGroup';
 
-const NotLoggedIn = ({}, {
+const NotLoggedIn = ({
+  currentUrl
+}, {
   links: {
     LOGIN_URI,
     REGISTRATION_URI,
@@ -18,19 +20,22 @@ const NotLoggedIn = ({}, {
       <ul className='sidebar-menu'>
         <MenuTitle title='ReCodEx' />
         <MenuItem
-          title={<FormattedMessage id='app.sidebar.signIn' defaultMessage='Sign in' />}
+          title={<FormattedMessage id='app.sidebar.menu.signIn' defaultMessage='Sign in' />}
           icon='sign-in'
+          currentPath={currentUrl}
           link={LOGIN_URI} />
         <MenuItem
-          title={<FormattedMessage id='app.sidebar.createAccount' defaultMessage='Create account' />}
+          title={<FormattedMessage id='app.sidebar.menu.createAccount' defaultMessage='Create account' />}
           isActive={false}
           icon='user-plus'
+          currentPath={currentUrl}
           link={REGISTRATION_URI} />
         <MenuItem
-          title={<FormattedMessage id='app.sidebar.bugsAndFeedback' defaultMessage='Bug reporting and your feedback' />}
+          title={<FormattedMessage id='app.sidebar.menu.feedbackAndBugs' defaultMessage='Feedback and bug reporting' />}
           isActive={false}
           icon='bug'
           link={BUGS_URL}
+          currentPath={currentUrl}
           inNewTab={true} />
       </ul>
     </section>
@@ -38,6 +43,7 @@ const NotLoggedIn = ({}, {
 );
 
 NotLoggedIn.propTypes = {
+  currentUrl: PropTypes.string
 };
 
 NotLoggedIn.contextTypes = {

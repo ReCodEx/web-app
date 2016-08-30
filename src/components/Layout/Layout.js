@@ -12,7 +12,6 @@ export const Layout = ({
   toggleSidebar,
   sidebar,
   isLoggedIn,
-  logout,
   children,
   lang,
   currentUrl,
@@ -37,8 +36,8 @@ export const Layout = ({
       currentUrl={currentUrl} />
     <Sidebar
       isLoggedIn={isLoggedIn}
-      logout={logout}
-      isCollapsed={sidebar.isCollapsed} />
+      isCollapsed={sidebar.isCollapsed}
+      currentUrl={currentUrl} />
     <div onClick={onCloseSidebar}>
       {children}
       <Footer version='v0.4.0' />
@@ -56,7 +55,6 @@ Layout.propTypes = {
     isOpen: PropTypes.bool
   }),
   isLoggedIn: PropTypes.bool,
-  logout: PropTypes.func.isRequired,
   onCloseSidebar: PropTypes.func,
   children: PropTypes.element.isRequired
 };

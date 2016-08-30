@@ -6,15 +6,17 @@ const MenuItem = ({
   title,
   icon = 'circle-o',
   link,
+  currentPath,
   notificationsCount = 0,
-  isActive,
-  inNewTab = false
+  inNewTab = false,
+  onIsActive = isActive => isActive
+}, {
+  isActive
 }) => (
   <li
     className={classNames({
-      active: isActive
+      active: isActive(link)
     })}>
-
     <Link
       to={link}
       target={inNewTab ? '_blank' : undefined}>
@@ -41,9 +43,13 @@ const MenuItem = ({
 MenuItem.propTypes = {
   title: PropTypes.oneOfType([ PropTypes.element, PropTypes.string ]),
   icon: PropTypes.string,
+  currentPath: PropTypes.string,
   notificationsCount: PropTypes.number,
-  link: PropTypes.string,
-  isActive: PropTypes.bool
+  link: PropTypes.string
+};
+
+MenuItem.contextTypes = {
+  isActive: PropTypes.func
 };
 
 export default MenuItem;

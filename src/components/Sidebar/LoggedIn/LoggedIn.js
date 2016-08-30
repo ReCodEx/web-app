@@ -13,11 +13,11 @@ const LoggedIn = ({
   studentOf,
   supervisorOf,
   notifications,
-  logout,
-  isActive = link => link === '/',
-  isCollapsed
+  isCollapsed,
+  currentUrl
 }, {
   links: {
+    HOME_URI,
     DASHBOARD_URI,
     GROUP_URI_FACTORY,
     BUGS_URL,
@@ -26,13 +26,13 @@ const LoggedIn = ({
 }) => (
   <aside className='main-sidebar'>
     <section className='sidebar'>
-      <BadgeContainer logout={logout} />
+      <BadgeContainer />
       <ul className='sidebar-menu'>
         <MenuTitle title={<FormattedMessage id='app.sidebar.menu.title' defaultMessage='Menu' />} />
         <MenuItem
           title={<FormattedMessage id='app.sidebar.menu.dashboard' defaultMessage='Dashboard' />}
-          isActive={isActive(DASHBOARD_URI)}
           icon='dashboard'
+          currentPath={currentUrl}
           link={DASHBOARD_URI} />
 
         {instances && instances.size > 0 && instances.toArray().map(
@@ -40,8 +40,8 @@ const LoggedIn = ({
             <MenuItem
               key={instance.getIn(['data', 'id'])}
               title={instance.getIn([ 'data', 'name' ])}
-              isActive={isActive(INSTANCE_URI_FACTORY(instance.getIn([ 'data', 'id' ])))}
               icon='university'
+              currentPath={currentUrl}
               link={INSTANCE_URI_FACTORY(instance.getIn([ 'data', 'id' ]))} />
           )
         )}
@@ -52,7 +52,7 @@ const LoggedIn = ({
             items={studentOf}
             notifications={notifications}
             icon='puzzle-piece'
-            isActive={studentOf.some(item => isReady(item) && isActive(GROUP_URI_FACTORY(item.getIn(['data', 'id']))))}
+            currentPath={currentUrl}
             createLink={item => GROUP_URI_FACTORY(item.getIn(['data', 'id']))}
             forceOpen={isCollapsed} />
         )}
@@ -62,7 +62,7 @@ const LoggedIn = ({
             items={supervisorOf}
             notifications={notifications}
             icon='wrench'
-            isActive={supervisorOf.some(item => isReady(item) && isActive(GROUP_URI_FACTORY(item.getIn(['data', 'id']))))}
+            currentPath={currentUrl}
             createLink={item => GROUP_URI_FACTORY(item.getIn(['data', 'id']))}
             forceOpen={isCollapsed} />
         )}
@@ -71,6 +71,7 @@ const LoggedIn = ({
           isActive={false}
           icon='bug'
           link={BUGS_URL}
+          currentPath={currentUrl}
           inNewTab={true} />
       </ul>
     </section>
@@ -80,13 +81,12 @@ const LoggedIn = ({
 LoggedIn.propTypes = {
   supervisorOf: PropTypes.instanceOf(List),
   studentOf: PropTypes.instanceOf(List),
-  logout: PropTypes.func.isRequired,
-  isActive: PropTypes.func,
   isCollapsed: PropTypes.bool
 };
 
 LoggedIn.contextTypes = {
-  links: PropTypes.object
+  links: PropTypes.object,
+  location: PropTypes.object
 };
 
 export default LoggedIn;

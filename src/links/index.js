@@ -51,3 +51,5 @@ export const extractLanguageFromUrl = url => {
   url = url.substr(0, 1) === '/' ? url.substr(1) : url; // trim leading slash
   return url.substr(0, url.indexOf('/'));
 };
+
+export const isAbsolute = url => url.match('^(https?:)?//.+');

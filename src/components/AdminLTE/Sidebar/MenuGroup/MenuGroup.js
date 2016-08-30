@@ -7,39 +7,40 @@ import MenuItem from '../MenuItem';
 import LoadingMenuItem from '../LoadingMenuItem';
 import { isLoading } from '../../../../redux/helpers/resourceManager';
 
-
 class MenuGroup extends Component {
-  constructor(props, context) {
-    super(props, context);
-    this.state = {
-      open: props.isActive === true
-    };
-  }
+  componentWillMount = () =>
+    this.setState({
+      open: this.props.isActive === true
+    });
 
-  toggle = () => {
-    this.setState({ open: !this.state.open });
+  toggle = e => {
+    e.preventDefault();
+    this.setState({
+      open: !this.state.open
+    });
   };
 
   render() {
+    const { open } = this.state;
+    const { isActive } = this.context;
     const {
       title,
       icon = 'th',
       items,
       createLink,
+      currentPath,
       notifications,
-      isActive = false,
       forceOpen = false
     } = this.props;
 
-    const { open } = this.state;
-
     const itemsNotificationsCount = item => notifications[item.getIn(['data', 'id'])];
     const notificationsCount = items.reduce((acc, item) => acc + itemsNotificationsCount(item), 0);
+    const someChildIsActive = items.find(item => isActive(createLink(item)));
 
     return (
       <li
         className={classNames({
-          active: isActive || open,
+          active: someChildIsActive || open || forceOpen,
           treeview: true
         })}>
         <a href='#' onClick={this.toggle}>
@@ -57,20 +58,19 @@ class MenuGroup extends Component {
             <Icon name='angle-left' className='pull-right' />
           </span>
         </a>
-        {(open || forceOpen) && (
-          <ul className='treeview-menu'>
-            {items.map((item, key) =>
-              isLoading(item)
-                ? <LoadingMenuItem key={key} />
-                : <MenuItem
-                    key={key}
-                    title={item.getIn(['data', 'name'])}
-                    icon='circle-o'
-                    notificationsCount={itemsNotificationsCount(item)}
-                    link={createLink(item)} />
-            )}
-          </ul>
-        )}
+        <ul className='treeview-menu'>
+          {items.map((item, key) =>
+            isLoading(item)
+              ? <LoadingMenuItem key={key} />
+              : <MenuItem
+                  key={key}
+                  title={item.getIn(['data', 'name'])}
+                  icon='circle-o'
+                  currentPath={currentPath}
+                  notificationsCount={itemsNotificationsCount(item)}
+                  link={createLink(item)} />
+          )}
+        </ul>
       </li>
     );
   }
@@ -80,8 +80,13 @@ MenuGroup.propTypes = {
   title: PropTypes.oneOfType([ PropTypes.string, PropTypes.element ]).isRequired,
   icon: PropTypes.string,
   link: PropTypes.string,
+  currentPath: PropTypes.string,
   isActive: PropTypes.bool,
   forceOpen: PropTypes.bool
+};
+
+MenuGroup.contextTypes = {
+  isActive: PropTypes.func
 };
 
 export default MenuGroup;
