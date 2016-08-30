@@ -10,6 +10,7 @@ import { isReady, isLoading, hasFailed } from '../../redux/helpers/resourceManag
 import { fetchGroupIfNeeded } from '../../redux/modules/groups';
 import { fetchGroupsStatsIfNeeded } from '../../redux/modules/stats';
 import { fetchAssignmentsForGroup } from '../../redux/modules/assignments';
+import { isSupervisorOf, isAdminOf } from '../../redux/selectors/users';
 import { groupSelector, createGroupsAssignmentsSelector } from '../../redux/selectors/groups';
 import { createGroupsStatsSelector } from '../../redux/selectors/stats';
 
@@ -41,7 +42,9 @@ class Group extends Component {
     const {
       group,
       assignments,
-      stats
+      stats,
+      isAdmin,
+      isSupervisor
     } = this.props;
 
     return (
@@ -55,7 +58,9 @@ class Group extends Component {
             <GroupDetail
               group={group.toJS()}
               assignments={assignments}
-              stats={stats} />}
+              stats={stats}
+              isSupervisor={true}
+              isAdmin={true} />}
         </div>
       </PageContent>
     );
@@ -67,7 +72,9 @@ export default connect(
   (state, { params: { groupId } }) => ({
     group: groupSelector(groupId)(state),
     assignments: createGroupsAssignmentsSelector(groupId)(state),
-    stats: createGroupsStatsSelector(groupId)(state)
+    stats: createGroupsStatsSelector(groupId)(state),
+    isSupervisor: isSupervisorOf(groupId)(state),
+    isAdmin: isAdminOf(groupId)(state)
   }),
   (dispatch) => ({
     loadGroupIfNeeded: (groupId) => dispatch(fetchGroupIfNeeded(groupId)),

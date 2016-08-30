@@ -12,12 +12,13 @@ import LeaveJoinGroupButtonContainer from '../../../containers/LeaveJoinGroupBut
 import MakeRemoveSupervisorButtonContainer from '../../../containers/MakeRemoveSupervisorButtonContainer';
 import AssignmentsTable from '../../Assignments/Assignment/AssignmentsTable';
 import { isReady, isLoading, hasFailed } from '../../../redux/helpers/resourceManager';
-import { isSupervisorOf, isAdminOf } from '../../../redux/selectors/users';
 
 const GroupDetail = ({
   group: { data },
   admin,
   assignments,
+  isSupervisor,
+  isAdmin,
   stats
 }) => (
   <div>
@@ -25,7 +26,7 @@ const GroupDetail = ({
     <Row>
       <Col sm={6}>
         <p>
-          {(isSupervisorOf(data.id) || isAdminOf(data.id))
+          {(isSupervisor || isAdmin)
             ? (
               <Button className='btn-flat'>
                 <Icon name='plus' /> <FormattedMessage id='app.createAssignment.title' defaultMessage='Create new assignment' />
@@ -41,10 +42,10 @@ const GroupDetail = ({
           title={<FormattedMessage id='app.groupDetail.supervisors' defaultMessage='Supervisors' />}
           collapsable
           isOpen>
-          <SupervisorsList users={data.supervisors} fill isAdmin={isAdminOf(data.id)} />
+          <SupervisorsList users={data.supervisors} fill isAdmin={isAdmin} groupId={data.id} />
         </Box>
 
-        {(isSupervisorOf(data.id) || isAdminOf(data.id)) && (
+        {(isSupervisor || isAdmin) && (
           <Box
             title={<FormattedMessage id='app.groupDetail.students' defaultMessage='Students' />}
             collapsable

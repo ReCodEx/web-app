@@ -9,7 +9,8 @@ const StudentsListItem = ({
   isAdmin,
   id,
   fullName,
-  avatarUrl
+  avatarUrl,
+  groupId
 }, {
   links: { USER_URI_FACTORY }
 }) => (
@@ -23,7 +24,7 @@ const StudentsListItem = ({
     </td>
     {isAdmin && (
       <td width={150}>
-        <MakeRemoveSupervisorButtonContainer userId={id} />
+        <MakeRemoveSupervisorButtonContainer userId={id} groupId={groupId} />
       </td>
     )}
   </tr>

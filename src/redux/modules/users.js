@@ -33,29 +33,69 @@ const reducer = handleActions(Object.assign({}, reduceActions, {
   [groupsActionTypes.LOAD_USERS_GROUPS_FULFILLED]: (state, { payload: { stats }, meta: { userId } }) =>
     state.setIn([ 'resources', userId, 'data', 'groupsStats' ], stats),
 
-  [groupsActionTypes.JOIN_GROUP_PENDING]: (state, { meta: { groupId, userId } }) =>
-    state.updateIn(['resources', userId, 'data', 'groups', 'studentOf'], list => list.push(groupId)),
+  [groupsActionTypes.JOIN_GROUP_PENDING]: (state, { meta: { groupId, userId } }) => {
+    if (!state.getIn(['resources', userId])) {
+      return state;
+    }
 
-  [groupsActionTypes.JOIN_GROUP_REJECTED]: (state, { meta: { groupId, userId } }) =>
-    state.updateIn(['resources', userId, 'data', 'groups', 'studentOf'], list => list.filter(id => id !== groupId)),
+    return state.updateIn(['resources', userId, 'data', 'groups', 'studentOf'], list => list.push(groupId));
+  },
 
-  [groupsActionTypes.LEAVE_GROUP_PENDING]: (state, { meta: { groupId, userId } }) =>
-    state.updateIn(['resources', userId, 'data', 'groups', 'studentOf'], list => list.filter(id => id !== groupId)),
+  [groupsActionTypes.JOIN_GROUP_REJECTED]: (state, { meta: { groupId, userId } }) => {
+    if (!state.getIn(['resources', userId])) {
+      return state;
+    }
 
-  [groupsActionTypes.LEAVE_GROUP_REJECTED]: (state, { meta: { groupId, userId } }) =>
-    state.updateIn(['resources', userId, 'data', 'groups', 'studentOf'], list => list.push(groupId)),
+    return state.updateIn(['resources', userId, 'data', 'groups', 'studentOf'], list => list.filter(id => id !== groupId));
+  },
 
-  [groupsActionTypes.MAKE_SUPERVISOR_PENDING]: (state, { meta: { groupId, userId } }) =>
-    state.updateIn(['resources', userId, 'data', 'groups', 'supervisorOf'], list => list.push(groupId)),
+  [groupsActionTypes.LEAVE_GROUP_PENDING]: (state, { meta: { groupId, userId } }) => {
+    if (!state.getIn(['resources', userId])) {
+      return state;
+    }
 
-  [groupsActionTypes.MAKE_SUPERVISOR_REJECTED]: (state, { meta: { groupId, userId } }) =>
-    state.updateIn(['resources', userId, 'data', 'groups', 'supervisorOf'], list => list.filter(id => id !== groupId)),
+    return state.updateIn(['resources', userId, 'data', 'groups', 'studentOf'], list => list.filter(id => id !== groupId));
+  },
 
-  [groupsActionTypes.REMOVE_SUPERVISOR_PENDING]: (state, { meta: { groupId, userId } }) =>
-    state.updateIn(['resources', userId, 'data', 'groups', 'supervisorOf'], list => list.filter(id => id !== groupId)),
+  [groupsActionTypes.LEAVE_GROUP_REJECTED]: (state, { meta: { groupId, userId } }) => {
+    if (!state.getIn(['resources', userId])) {
+      return state;
+    }
 
-  [groupsActionTypes.REMOVE_SUPERVISOR_REJECTED]: (state, { meta: { groupId, userId } }) =>
-    state.updateIn(['resources', userId, 'data', 'groups', 'supervisorOf'], list => list.push(groupId))
+    return state.updateIn(['resources', userId, 'data', 'groups', 'studentOf'], list => list.push(groupId));
+  },
+
+  [groupsActionTypes.MAKE_SUPERVISOR_PENDING]: (state, { meta: { groupId, userId } }) => {
+    if (!state.getIn(['resources', userId])) {
+      return state;
+    }
+
+    return state.updateIn(['resources', userId, 'data', 'groups', 'supervisorOf'], list => list.push(groupId));
+  },
+
+  [groupsActionTypes.MAKE_SUPERVISOR_REJECTED]: (state, { meta: { groupId, userId } }) => {
+    if (!state.getIn(['resources', userId])) {
+      return state;
+    }
+
+    return state.updateIn(['resources', userId, 'data', 'groups', 'supervisorOf'], list => list.filter(id => id !== groupId));
+  },
+
+  [groupsActionTypes.REMOVE_SUPERVISOR_PENDING]: (state, { meta: { groupId, userId } }) => {
+    if (!state.getIn(['resources', userId])) {
+      return state;
+    }
+
+    return state.updateIn(['resources', userId, 'data', 'groups', 'supervisorOf'], list => list.filter(id => id !== groupId));
+  },
+
+  [groupsActionTypes.REMOVE_SUPERVISOR_REJECTED]: (state, { meta: { groupId, userId } }) => {
+    if (!state.getIn(['resources', userId])) {
+      return state;
+    }
+
+    return state.updateIn(['resources', userId, 'data', 'groups', 'supervisorOf'], list => list.push(groupId));
+  }
 
 }), initialState);
 

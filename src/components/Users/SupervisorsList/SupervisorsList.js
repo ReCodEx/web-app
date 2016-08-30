@@ -1,16 +1,21 @@
 import React, { PropTypes } from 'react';
 import { Table } from 'react-bootstrap';
 import { FormattedMessage } from 'react-intl';
-import UsersListItem from '../UsersListItem';
+import SupervisorsListItem from '../SupervisorsListItem';
 
 const SupervisorsList = ({
+  groupId,
   users,
   isAdmin
 }) => (
   <Table>
     <tbody>
     {users.map((user, i) => (
-      <UsersListItem {...user} isAdmin={isAdmin} key={i} />
+      <SupervisorsListItem
+        key={i}
+        {...user}
+        groupId={groupId}
+        isAdmin={isAdmin} />
     ))}
 
     {users.length === 0 && (

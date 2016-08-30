@@ -16,8 +16,8 @@ const MakeRemoveSupervisorButtonContainer = ({
   ...props
 }) =>
   isSupervisor
-    ? <RemoveSupervisorButton {...props} onClick={() => removeSupervisor(groupId, userId)} />
-    : <MakeSupervisorButton {...props} onClick={() => makeSupervisor(groupId, userId)} />;
+    ? <RemoveSupervisorButton {...props} onClick={() => removeSupervisor(groupId, userId)} bsSize='xs' />
+    : <MakeSupervisorButton {...props} onClick={() => makeSupervisor(groupId, userId)} bsSize='xs' />;
 
 MakeRemoveSupervisorButtonContainer.propTypes = {
   groupId: PropTypes.string.isRequired,
@@ -27,11 +27,14 @@ MakeRemoveSupervisorButtonContainer.propTypes = {
   removeSupervisor: PropTypes.func.isRequired
 };
 
-const mapStateToProps = (state, { groupId, userId }) => ({
-  isSupervisor: groupSelector(groupId)(state)
-                  .getIn(['data', 'supervisors'])
-                  .find(supervisor => supervisor.get('id') === userId)
-});
+const mapStateToProps = (state, { groupId, userId }) => {
+  const group = groupSelector(groupId)(state);
+  return {
+    isSupervisor: group && !!group
+                              .getIn(['data', 'supervisors'])
+                              .find(supervisor => supervisor.get('id') === userId)
+  };
+};
 
 const mapDispatchToProps = { makeSupervisor, removeSupervisor };
 
