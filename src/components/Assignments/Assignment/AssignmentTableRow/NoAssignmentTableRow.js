@@ -1,11 +1,12 @@
 import React, { PropTypes } from 'react';
+import { FormattedMessage } from 'react-intl';
 
 const NoAssignmentTableRow = ({
   showGroup = false
 }) => (
   <tr>
     <td className='text-center' colSpan={showGroup ? 5 : 4}>
-      Nebyly dosud zadané žádné úlohy.
+      <FormattedMessage id='app.assignmentsTable.noAssignments' id='There are no assignments.' />
     </td>
   </tr>
 );
