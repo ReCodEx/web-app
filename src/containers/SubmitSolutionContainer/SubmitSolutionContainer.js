@@ -97,7 +97,7 @@ class SubmitSolutionContainer extends Component {
           isOpen={isProcessing}
           assignmentId={assignmentId}
           submissionId={submissionId}
-          link={submissionDetailLink(submissionId)}
+          link={SUBMISSION_DETAIL_URI_FACTORY(assignmentId, submissionId)}
         />
       </div>
     );
@@ -126,7 +126,6 @@ export default connect(
     removeFailedFile: (payload) => dispatch(removeFailedFile(payload)),
     removeFile: (payload) => dispatch(removeFile(payload)),
     returnFile: (payload) => dispatch(returnFile(payload)),
-    submitSolution: (note, files) => dispatch(submitSolution(props.assignmentId, note, files)),
-    submissionDetailLink: (submissionId) => SUBMISSION_DETAIL_URI_FACTORY(props.assignmentId, submissionId)
+    submitSolution: (note, files) => dispatch(submitSolution(props.assignmentId, note, files))
   })
 )(SubmitSolutionContainer);
