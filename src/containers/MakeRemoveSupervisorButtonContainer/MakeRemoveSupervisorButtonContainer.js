@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { makeSupervisor, removeSupervisor } from '../../redux/modules/groups';
-import { isSupervisorOf } from '../../redux/selectors/users';
+import { groupSelector } from '../../redux/selectors/groups';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 
 import MakeSupervisorButton from '../../components/Groups/MakeSupervisorButton';
@@ -27,9 +27,10 @@ MakeRemoveSupervisorButtonContainer.propTypes = {
   removeSupervisor: PropTypes.func.isRequired
 };
 
-const mapStateToProps = (state, props) => ({
-  userId: loggedInUserIdSelector(state),
-  isSupervisor: isSupervisorOf(props.groupId)(state)
+const mapStateToProps = (state, { groupId, userId }) => ({
+  isSupervisor: groupSelector(groupId)(state)
+                  .getIn(['data', 'supervisors'])
+                  .find(supervisor => supervisor.get('id') === userId)
 });
 
 const mapDispatchToProps = { makeSupervisor, removeSupervisor };
