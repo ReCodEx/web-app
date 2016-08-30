@@ -24,7 +24,7 @@ const LoadingGroupDetail = ({
           isOpen
           noPadding={false}>
           <p>
-            <LoadingIcon /> <FormattedMessage id='app.groupDetail.loadingSupervisorsList' defaultMessage='Loading list of supervisors ...' />
+            <FormattedMessage id='app.groupDetail.loadingSupervisorsList' defaultMessage='Loading list of supervisors ...' />
           </p>
         </Box>
         <Box
@@ -37,7 +37,7 @@ const LoadingGroupDetail = ({
           isOpen={false}
           noPadding={false}>
           <p>
-            <LoadingIcon /> <FormattedMessage id='app.groupDetail.loadingStudentsList' defaultMessage='Loading list of students ...' />
+            <FormattedMessage id='app.groupDetail.loadingStudentsList' defaultMessage='Loading list of students ...' />
           </p>
         </Box>
       </Col>
@@ -52,7 +52,9 @@ const LoadingGroupDetail = ({
           collapsable
           isOpen={true}
           noPadding={false}>
-          <p><LoadingIcon /> <FormattedMessage id='app.groupDetail.loadingAssignmentsList' defaultMessage='Loading list of assignments ...' /></p>
+          <p>
+            <FormattedMessage id='app.groupDetail.loadingAssignmentsList' defaultMessage='Loading list of assignments ...' />
+          </p>
         </Box>
       </Col>
     </Row>
