@@ -22,13 +22,13 @@ class Login extends Component {
   checkIfIsLoggedIn = props => {
     const { hasSucceeded, goToDashboard } = props;
     if (hasSucceeded) {
-      setTimeout(() => this.context.router.push(DASHBOARD_URI), 600);
+      setTimeout(() => this.context.router.push(this.context.links.DASHBOARD_URI), 600);
     }
   };
 
   render() {
     const { login, isLoggingIn, hasFailed, hasSucceeded } = this.props;
-    const { links: { HOME_URI, DASHBOARD_URI } } = this.context;
+    const { links: { HOME_URI } } = this.context;
 
     return (
       <PageContent

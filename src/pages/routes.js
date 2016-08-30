@@ -21,7 +21,7 @@ import User from './User';
 import SourceCodeViewerContainer from '../containers/SourceCodeViewerContainer';
 
 const createRoutes = (getState) => {
-  const getLang = state => state.router.params.lang;
+  const getLang = state => state.params.lang;
   const getLinks = state => linksFactory(getLang(state));
 
   const requireAuth = (nextState, replace) => {

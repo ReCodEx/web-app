@@ -20,6 +20,7 @@ class Header extends Component {
 
   render() {
     const { canRenderClientOnly } = this.state;
+    const { links: {HOME_URI} } = this.context;
 
     const {
       toggleSidebarSize,
@@ -31,7 +32,7 @@ class Header extends Component {
 
     return (
       <header className='main-header fixed'>
-        <IndexLink to='/' className='logo'>
+        <IndexLink to={HOME_URI} className='logo'>
           <span className='logo-mini'>Re<b>C</b></span>
           <span className='logo-lg'>Re<b>CodEx</b></span>
         </IndexLink>
@@ -74,6 +75,10 @@ Header.propTypes = {
   currentLang: PropTypes.string.isRequired,
   availableLangs: PropTypes.array,
   currentUrl: PropTypes.string
+};
+
+Header.contextTypes = {
+  links: PropTypes.object
 };
 
 export default Header;

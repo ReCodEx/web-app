@@ -1,6 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { IntlProvider, addLocaleData } from 'react-intl';
+import { push } from 'react-router-redux';
 import Layout from '../../components/Layout';
 
 import { toggleSize, toggleVisibility } from '../../redux/modules/sidebar';
@@ -16,18 +17,39 @@ import { linksFactory } from '../../links';
 
 class LayoutContainer extends Component {
 
+  state = { links: null };
+
   componentWillMount() {
     this.loadData(this.props);
+    this.changeLang(this.props);
   }
 
   componentWillReceiveProps(newProps) {
     if (this.props.userId !== newProps.userId) {
       this.loadData(newProps);
     }
+
+    if (this.props.params.lang !== newProps.params.lang) {
+      this.changeLang(newProps);
+    }
   }
 
+  getLang = props => {
+    let lang = props.params.lang;
+    if (!lang) {
+      lang = defaultLanguage;
+    }
+
+    return lang;
+  };
+
+  changeLang = props => {
+    const lang = this.getLang(props);
+    this.setState({ lang, links: linksFactory(lang) });
+  };
+
   getChildContext = () => ({
-    links: linksFactory(this.props.params.lang)
+    links: this.state.links
   });
 
   maybeHideSidebar = () => {
@@ -40,15 +62,6 @@ class LayoutContainer extends Component {
   /**
    * Get messages for the given language or the deafult - English
    */
-
-  getLang = () => {
-    let lang = this.props.params.lang;
-    if (!lang) {
-      lang = defaultLanguage;
-    }
-
-    return lang;
-  };
 
   getMessages = lang => messages[lang] || messages[this.getDefaultLang()];
   getLocaleData = lang => localeData[lang] || localeData[this.getDefaultLang()];
@@ -68,8 +81,8 @@ class LayoutContainer extends Component {
   };
 
   render() {
-    const { children, currentUrl } = this.props;
-    const lang = this.getLang();
+    const { children, currentUrl, logout } = this.props;
+    const { lang, links: { HOME_URI } } = this.state;
     addLocaleData([ ...this.getLocaleData(lang) ]);
     return (
       <IntlProvider locale={lang} messages={this.getMessages(lang)}>
@@ -78,7 +91,8 @@ class LayoutContainer extends Component {
           onCloseSidebar={this.maybeHideSidebar}
           lang={lang}
           availableLangs={Object.keys(messages)}
-          currentUrl={currentUrl} />
+          currentUrl={currentUrl}
+          logout={() => logout(HOME_URI)} />
       </IntlProvider>
     );
   }
@@ -89,14 +103,18 @@ LayoutContainer.childContextTypes = {
   links: PropTypes.object
 };
 
-const mapStateToProps = (state) => ({
+LayoutContainer.contextTypes = {
+  router: PropTypes.object
+};
+
+const mapStateToProps = (state, props) => ({
   sidebar: {
     isOpen: isVisible(state),
     isCollapsed: isCollapsed(state)
   },
   isLoggedIn: !!loggedInUserIdSelector(state),
   userId: loggedInUserIdSelector(state),
-  currentUrl: state.routing.locationBeforeTransitions.pathname
+  currentUrl: props.location.pathname
 });
 
 const mapDispatchToProps = (dispatch, props) => ({
@@ -104,7 +122,10 @@ const mapDispatchToProps = (dispatch, props) => ({
     visibility: () => dispatch(toggleVisibility()),
     size: () => dispatch(toggleSize())
   },
-  logout: () => dispatch(logout()),
+  logout: (redirectUrl) => {
+    dispatch(push(redirectUrl));
+    dispatch(logout());
+  },
   loadUserDataIfNeeded: (userId) => dispatch(fetchUserIfNeeded(userId)),
   loadUsersGroupsIfNeeded: (userId) => dispatch(fetchUsersGroupsIfNeeded(userId)),
   loadUsersInstancesIfNeeded: (userId) => dispatch(fetchUsersInstancesIfNeeded(userId))
