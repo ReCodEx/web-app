@@ -50,13 +50,16 @@ export const isTokenValid = token =>
  */
 const auth = (accessToken) => {
   let decodedToken = null;
-  try {
-    decodedToken = decodeJwt(accessToken);
-    if (isTokenValid(decodedToken) === false) {
+
+  if (accessToken) {
+    try {
+      decodedToken = decodeJwt(accessToken);
+      if (isTokenValid(decodedToken) === false) {
+        decodedToken = null;
+      }
+    } catch (e) {
       decodedToken = null;
     }
-  } catch (e) {
-    decodedToken = null;
   }
 
   const initialState = accessToken && decodedToken
