@@ -58,13 +58,13 @@ class EvaluationProgressContainer extends Component {
   onMessage = (msg) => {
     const data = JSON.parse(msg.data);
     const { addMessage } = this.props;
-    addMessage(this.formatMessage(data));
 
     switch (data.command) {
       case 'TASK':
         this.updateProgress(data);
         break;
       case 'FINISHED':
+        addMessage(this.formatMessage(data));
         this.closeSocket();
         break;
     }
@@ -87,15 +87,16 @@ class EvaluationProgressContainer extends Component {
 
   updateProgress = task => {
     const { completedTask, skippedTask, failedTask } = this.props;
+    const msg = this.formatMessage(task);
     switch (task.task_state) {
       case 'COMPLETED':
-        completedTask();
+        completedTask(msg);
         break;
       case 'SKIPPED':
-        skippedTask();
+        skippedTask(msg);
         break;
       case 'FAILED':
-        failedTask();
+        failedTask(msg);
         break;
     }
   };
@@ -139,6 +140,12 @@ class EvaluationProgressContainer extends Component {
           finishProcessing={this.finish} />
       : <EvaluationProgress
           isOpen={isOpen}
+          completed={0}
+          skipped={100}
+          failed={0}
+          finished={false}
+          showContinueButton={true}
+          finishProcessing={this.finish}
           messages={List([
             this.formatMessage({
               command: 'TASK',
@@ -147,13 +154,7 @@ class EvaluationProgressContainer extends Component {
                       id='app.evaluationProgress.noWebSockets'
                       defaultMessage='Your browser does not support realtime progress monitoring or the connection to the server could not be estabelished or was lost. The evaluation has already started and you will be able to see the results soon.' />
             })
-          ])}
-          completed={0}
-          skipped={100}
-          failed={0}
-          finished={false}
-          showContinueButton={true}
-          finishProcessing={this.finish} />;
+          ])} />;
   };
 
 }
@@ -184,11 +185,11 @@ export default connect(
     isFinished: isFinished(state),
     messages: getMessages(state)
   }),
-  (dispatch, props) => ({
-    finishProcessing: () => dispatch(finishProcessing()),
-    completedTask: () => dispatch(completedTask()),
-    skippedTask: () => dispatch(skippedTask()),
-    failedTask: () => dispatch(failedTask()),
-    addMessage: (message) => dispatch(addMessage(message))
-  })
+  {
+    finishProcessing,
+    completedTask,
+    skippedTask,
+    failedTask,
+    addMessage
+  }
 )(EvaluationProgressContainer);
