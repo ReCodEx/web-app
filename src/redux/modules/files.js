@@ -1,5 +1,5 @@
 import { createAction, handleActions } from 'redux-actions';
-import factory, { initialState, createRecord, defaultNeedsRefetching } from '../helpers/resourceManager';
+import factory, { initialState, createRecord, status, defaultNeedsRefetching } from '../helpers/resourceManager';
 import { actionTypes as submissionActionTypes } from './submissions';
 import { createApiAction } from '../middleware/apiMiddleware';
 
@@ -51,13 +51,13 @@ export const fetchContentIfNeeded = (id) =>
 const reducer = handleActions(Object.assign({}, reduceActions, {
 
   [additionalActionTypes.LOAD_CONTENT_PENDING]: (state, { meta: { id } }) =>
-    state.setIn(['content', id], createRecord(true, false, false, null)),
+    state.setIn(['content', id], createRecord()),
 
   [additionalActionTypes.LOAD_CONTENT_FAILED]: (state, { meta: { id } }) =>
-    state.setIn(['content', id], createRecord(false, true, false, null)),
+    state.setIn(['content', id], createRecord({ status: status.FAILED })),
 
-  [additionalActionTypes.LOAD_CONTENT_FULFILLED]: (state, { payload, meta: { id } }) =>
-    state.setIn(['content', id], createRecord(false, false, false, payload))
+  [additionalActionTypes.LOAD_CONTENT_FULFILLED]: (state, { payload: data, meta: { id } }) =>
+    state.setIn(['content', id], createRecord({ status: status.FULFILLED, data }))
 
 }), initialState);
 

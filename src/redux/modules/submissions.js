@@ -33,10 +33,9 @@ export const fetchSubmission = actions.fetchResource;
 export const fetchSubmissionIfNeeded = actions.fetchOneIfNeeded;
 
 export const fetchUsersSubmissions = (userId, assignmentId) =>
-  createApiAction({
+  actions.fetchMany({
     type: additionalActionTypes.LOAD_USERS_SUBMISSIONS,
     endpoint: `/exercise-assignments/${assignmentId}/users/${userId}/submissions`,
-    method: 'GET',
     meta: {
       assignmentId,
       userId
@@ -48,16 +47,7 @@ export const fetchUsersSubmissions = (userId, assignmentId) =>
  */
 
 const reducer = handleActions(Object.assign({}, reduceActions, {
-
-  [additionalActionTypes.LOAD_USERS_SUBMISSIONS_FULFILLED]: (state, { payload }) => {
-    const records = payload.map(submission => createRecord(false, false, false, submission));
-    return records.reduce(
-      (state, record) =>
-        state.setIn([ 'resources', record.getIn(['data', 'id']) ], record),
-      state
-    );
-  }
-
+  [additionalActionTypes.LOAD_USERS_SUBMISSIONS_FULFILLED]: reduceActions[actionTypes.FETCH_MANY_FULFILLED]
 }), initialState);
 
 export default reducer;

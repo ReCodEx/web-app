@@ -2,7 +2,7 @@ import { createAction, handleActions } from 'redux-actions';
 import { fromJS } from 'immutable';
 
 import { createApiAction } from '../middleware/apiMiddleware';
-import factory, { initialState, createRecord } from '../helpers/resourceManager';
+import factory, { initialState } from '../helpers/resourceManager';
 import { commentsSelector } from '../selectors/comments';
 
 const resourceName = 'comments';
@@ -78,7 +78,6 @@ const reducer = handleActions(Object.assign({}, reduceActions, {
       comments => comments.map(comment => comment.get('id') === tmpId ? fromJS(payload) : comment)
     );
   },
-
 
   [actionTypes.POST_COMMENT_REJECTED]: (state, { meta: { threadId, tmpId } }) => {
     return state.updateIn(

@@ -2,32 +2,44 @@ import { fromJS } from 'immutable';
 import { createAction, handleActions } from 'redux-actions';
 import { createApiAction } from '../middleware/apiMiddleware';
 
-export const actionTypesFactory = (resourceName) => ({
-  FETCH: `recodex/resource/${resourceName}/FETCH`,
-  FETCH_PENDING: `recodex/resource/${resourceName}/FETCH_PENDING`,
-  FETCH_FULFILLED: `recodex/resource/${resourceName}/FETCH_FULFILLED`,
-  FETCH_FAILED: `recodex/resource/${resourceName}/FETCH_REJECTED`,
-  FETCH_MANY: `recodex/resource/${resourceName}/FETCH_MANY`,
-  FETCH_MANY_PENDING: `recodex/resource/${resourceName}/FETCH_MANY_PENDING`,
-  FETCH_MANY_FULFILLED: `recodex/resource/${resourceName}/FETCH_MANY_FULFILLED`,
-  FETCH_MANY_FAILED: `recodex/resource/${resourceName}/FETCH_MANY_REJECTED`,
-  INVALIDATE: `recodex/resource/${resourceName}/INVALIDATE`
-});
+export const actionTypesFactory = (resourceName) => {
+  const twoPhaseActions = [ 'ADD', 'UPDATE', 'REMOVE', 'FETCH', 'FETCH_MANY' ];
+  const onePhaseActions = [ 'INVALIDATE' ];
 
-export const status = {
-  LOADING: 'LOADING',
+  return Object.assign(
+    {},
+    twoPhaseActions.reduce(
+      (acc, action) => Object.assign({}, acc, {
+        [action]: `recodex/resource/${resourceName}/${action}`,
+        [`${action}_PENDING`]: `recodex/resource/${resourceName}/${action}_PENDING`,
+        [`${action}_FULFILLED`]: `recodex/resource/${resourceName}/${action}_FULFILLED`,
+        [`${action}_FAILED`]: `recodex/resource/${resourceName}/${action}_FAILED`
+      }),
+      {}
+    ),
+    onePhaseActions.reduce(
+      (acc, action) => Object.assign({}, acc, {
+        [action]: `recodex/resource/${resourceName}/${action}`
+      }),
+      {}
+    )
+  );
+};
+
+const resourceStatus = {
+  PENDING: 'PENDING',
   FAILED: 'FAILED',
-  LOADED: 'LOADED'
+  FULFILLED: 'FULFILLED'
 };
 
 export const isLoading = (item) =>
-    !item || item.get('isFetching') === true;
+    !item || item.get('state') === resourceStatus.PENDING;
 
 export const hasFailed = (item) =>
-    !!item && item.get('error') === true;
+    !!item && item.get('state') === resourceStatus.FAILED;
 
 export const isReady = (item) =>
-    !!item && !!item.get('data');
+    !!item && item.get('state') === resourceStatus.FULFILLED && !!item.get('data');
 
 export const isTooOld = (item) =>
   Date.now() - item.get('lastUpdate') > 10 * 60 * 1000; // 10 minutes - @todo: Make configurable
@@ -88,6 +100,27 @@ export const actionsFactory = ({
     resource => ({ id: getId(resource) })
   );
 
+  const addResource = data => createApiAction({
+    type: actionTypes.ADD,
+    method: 'POST',
+    endpoint: apiEndpointFactory(),
+    meta: { tmpId: Math.random().toString() }
+  });
+
+  const updateResource = (id, data) => createApiAction({
+    type: actionTypes.UPDATE,
+    method: 'PUT',
+    endpoint: apiEndpointFactory(),
+    meta: { tmpId: Math.random().toString() }
+  });
+
+  const removeResource = id => createApiAction({
+    type: actionTypes.REMOVE,
+    method: 'DELETE',
+    endpoint: apiEndpointFactory(id),
+    meta: { id }
+  });
+
   const invalidate = createAction(actionTypes.INVALIDATE);
 
   return {
@@ -95,6 +128,8 @@ export const actionsFactory = ({
     fetchIfNeeded,
     fetchOneIfNeeded,
     fetchResource,
+    addResource,
+    removeResource,
     invalidate,
     pushResource
   };
@@ -102,30 +137,41 @@ export const actionsFactory = ({
 
 export const initialState = fromJS({ resources: {}, fetchManyStatus: {} });
 
-export const createRecord = (isFetching, error, didInvalidate, data) =>
-   (fromJS({ isFetching, error, didInvalidate, data, lastUpdate: Date.now() }));
+export const createRecord = ({
+  data = null,
+  state = resourceStatus.PENDING,
+  didInvalidate = false
+} = {}) => fromJS({
+  state,
+  data,
+  didInvalidate: false,
+  lastUpdate: Date.now()
+});
 
 export const reducerFactory = (resourceName, getId = defaultGetId) => {
   const actionTypes = actionTypesFactory(resourceName);
   return {
     [actionTypes.FETCH_PENDING]: (state, { meta }) =>
-      state.setIn([ 'resources', meta.id ], createRecord(true, false, false, null)),
+      state.setIn([ 'resources', meta.id ], createRecord()),
 
     [actionTypes.FETCH_FAILED]: (state, { meta }) =>
-      state.setIn([ 'resources', meta.id ], createRecord(false, true, false, null)),
+      state.setIn([ 'resources', meta.id ], createRecord({ state: resourceStatus.FAILED })),
 
-    [actionTypes.FETCH_FULFILLED]: (state, { meta, payload }) =>
-      state.setIn([ 'resources', meta.id ], createRecord(false, false, false, payload)),
+    [actionTypes.FETCH_FULFILLED]: (state, { meta, payload: data }) =>
+      state.setIn([ 'resources', meta.id ], createRecord({ state: resourceStatus.FULFILLED, data })),
 
-    [actionTypes.FETCH_MANY_PENDING]: (state, { meta: { endpoint } }) =>
-      state.setIn([ 'fetchManyStatus', endpoint ], status.LOADING),
+    [actionTypes.FETCH_MANY_PENDING]: (state, { meta: {endpoint} }) =>
+      state.setIn([ 'fetchManyStatus', endpoint ], resourceStatus.PENDING),
 
-    [actionTypes.FETCH_MANY_FAILED]: (state, { meta: { endpoint } }) =>
-      state.setIn([ 'fetchManyStatus', endpoint ], status.FAILED),
+    [actionTypes.FETCH_MANY_FAILED]: (state, { meta: {endpoint} }) =>
+      state.setIn([ 'fetchManyStatus', endpoint ], resourceStatus.FAILED),
 
-    [actionTypes.FETCH_MANY_FULFILLED]: (state, { meta: { endpoint }, payload }) =>
-      payload.reduce((state, res) => state.setIn(['resources', res.id], createRecord(false, false, false, res)), state)
-        .setIn([ 'fetchManyStatus', endpoint ], status.LOADED),
+    [actionTypes.FETCH_MANY_FULFILLED]: (state, { meta: {endpoint}, payload }) =>
+      payload.reduce(
+        (state, data) =>
+          state.setIn(['resources', data.id], createRecord({ state: resourceStatus.FULFILLED, data })),
+        state
+      ).setIn([ 'fetchManyStatus', endpoint ], resourceStatus.LOADED),
 
     [actionTypes.INVALIDATE]: (state, { payload }) =>
       state.updateIn([ 'resources', payload ], item => Object.assign({}, item, { didInvalidate: true }))
