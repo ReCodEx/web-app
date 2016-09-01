@@ -15,6 +15,8 @@ import { isReady, isLoading, hasFailed } from '../../../redux/helpers/resourceMa
 
 const GroupDetail = ({
   group: { data },
+  supervisors,
+  students,
   admin,
   assignments,
   isSupervisor,
@@ -42,7 +44,7 @@ const GroupDetail = ({
           title={<FormattedMessage id='app.groupDetail.supervisors' defaultMessage='Supervisors' />}
           collapsable
           isOpen>
-          <SupervisorsList users={data.supervisors} fill isAdmin={isAdmin} groupId={data.id} />
+          <SupervisorsList users={supervisors} fill isAdmin={isAdmin} groupId={data.id} />
         </Box>
 
         {(isSupervisor || isAdmin) && (
@@ -50,7 +52,7 @@ const GroupDetail = ({
             title={<FormattedMessage id='app.groupDetail.students' defaultMessage='Students' />}
             collapsable
             isOpen={false}>
-            <StudentsList users={data.students} stats={stats} fill />
+            <StudentsList users={students} stats={stats} fill />
           </Box>
         )}
       </Col>

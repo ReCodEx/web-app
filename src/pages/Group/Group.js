@@ -41,7 +41,9 @@ class Group extends Component {
   render() {
     const {
       group,
-      assignments,
+      students,
+      supervisors = List(),
+      assignments = List(),
       stats,
       isAdmin,
       isSupervisor
@@ -57,6 +59,8 @@ class Group extends Component {
           {isReady(group) &&
             <GroupDetail
               group={group.toJS()}
+              students={students}
+              supervisors={supervisors}
               assignments={assignments}
               stats={stats}
               isSupervisor={true}
@@ -69,13 +73,18 @@ class Group extends Component {
 }
 
 export default connect(
-  (state, { params: { groupId } }) => ({
-    group: groupSelector(groupId)(state),
-    assignments: createGroupsAssignmentsSelector(groupId)(state),
-    stats: createGroupsStatsSelector(groupId)(state),
-    isSupervisor: isSupervisorOf(groupId)(state),
-    isAdmin: isAdminOf(groupId)(state)
-  }),
+  (state, { params: { groupId } }) => {
+    const group = groupSelector(groupId)(state);
+    return {
+      group,
+      // supervisors: // @todo select from the state, // @todo "fetchIfNeeded" ??
+      // students: // @todo select from the state, // @todo "fetchIfNeeded" ??
+      assignments: createGroupsAssignmentsSelector(groupId)(state),
+      stats: createGroupsStatsSelector(groupId)(state),
+      isSupervisor: isSupervisorOf(groupId)(state),
+      isAdmin: isAdminOf(groupId)(state)
+    };
+  },
   (dispatch) => ({
     loadGroupIfNeeded: (groupId) => dispatch(fetchGroupIfNeeded(groupId)),
     loadStatsIfNeeded: (groupId) => dispatch(fetchGroupsStatsIfNeeded(groupId)),
