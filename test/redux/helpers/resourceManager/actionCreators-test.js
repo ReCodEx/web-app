@@ -138,7 +138,7 @@ describe('Resource manager', () => {
         });
       });
 
-      it.only('must generate random temporary ID', () => {
+      it('must generate random temporary ID', () => {
         const { addResource } = actionCreators;
         addResource({ foo: 'bar' });
         const tmpId = createApiAction.__spy.calls[0][0].meta.tmpId; // first argument of first call of the spy
