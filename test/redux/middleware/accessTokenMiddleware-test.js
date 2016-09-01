@@ -13,8 +13,8 @@ import middleware, {
 describe('Middleware for access token storage and injecting to HTTP requests', () => {
 
   afterEach(() => {
-      localStorage.clear();
-      localStorage.itemInsertionCallback = null;
+    localStorage.clear();
+    localStorage.itemInsertionCallback = null;
   });
 
   describe('(Local storage manipulation)', () => {
