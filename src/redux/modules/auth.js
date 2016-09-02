@@ -3,7 +3,6 @@ import { push } from 'react-router-redux';
 import { fromJS } from 'immutable';
 import decodeJwt from 'jwt-decode';
 import { createApiAction } from '../middleware/apiMiddleware';
-import { loadUserData } from './users';
 import { actionTypes as registrationActionTypes } from './registration';
 
 export const actionTypes = {
