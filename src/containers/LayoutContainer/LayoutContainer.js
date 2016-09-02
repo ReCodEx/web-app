@@ -5,10 +5,11 @@ import Layout from '../../components/Layout';
 
 import { toggleSize, toggleVisibility } from '../../redux/modules/sidebar';
 import { isVisible, isCollapsed } from '../../redux/selectors/sidebar';
-import { loggedInUserIdSelector } from '../../redux/selectors/auth';
+import { loggedInUserIdSelector, accessTokenSelector } from '../../redux/selectors/auth';
 import { usersGroupsIds } from '../../redux/selectors/users';
 import { fetchUserIfNeeded } from '../../redux/modules/users';
 import { fetchUsersGroupsIfNeeded } from '../../redux/modules/groups';
+import { logout, refresh, willExpireSoon, isTokenValid } from '../../redux/modules/auth';
 import { fetchUsersInstancesIfNeeded } from '../../redux/modules/instances';
 import { messages, localeData, defaultLanguage } from '../../locales';
 import { linksFactory, isAbsolute } from '../../links';
@@ -20,6 +21,7 @@ class LayoutContainer extends Component {
   componentWillMount() {
     this.loadData(this.props);
     this.changeLang(this.props);
+    this.checkAuthentication();
   }
 
   componentWillReceiveProps(newProps) {
@@ -30,7 +32,20 @@ class LayoutContainer extends Component {
     if (this.props.params.lang !== newProps.params.lang) {
       this.changeLang(newProps);
     }
+
+    this.checkAuthentication();
   }
+
+  checkAuthentication = () => {
+    const { isLoggedIn, accessToken, refreshToken, logout } = this.props;
+    if (isLoggedIn) {
+      if (!isTokenValid(accessToken)) {
+        logout();
+      } else if (willExpireSoon(accessToken)) {
+        refreshToken();
+      }
+    }
+  };
 
   getLang = props => {
     let lang = props.params.lang;
@@ -111,6 +126,7 @@ const mapStateToProps = (state, props) => ({
     isOpen: isVisible(state),
     isCollapsed: isCollapsed(state)
   },
+  accessToken: accessTokenSelector(state),
   isLoggedIn: !!loggedInUserIdSelector(state),
   userId: loggedInUserIdSelector(state)
 });
@@ -122,7 +138,9 @@ const mapDispatchToProps = (dispatch, props) => ({
   },
   loadUserDataIfNeeded: (userId) => dispatch(fetchUserIfNeeded(userId)),
   loadUsersGroupsIfNeeded: (userId) => dispatch(fetchUsersGroupsIfNeeded(userId)),
-  loadUsersInstancesIfNeeded: (userId) => dispatch(fetchUsersInstancesIfNeeded(userId))
+  loadUsersInstancesIfNeeded: (userId) => dispatch(fetchUsersInstancesIfNeeded(userId)),
+  refreshToken: (accessToken) => dispatch(refresh(accessToken)),
+  logout: (accessToken) => dispatch(logout())
 });
 
 export default connect(
