@@ -1,17 +1,19 @@
 import { actionTypes } from '../modules/auth';
 import { actionTypes as registrationActionTypes } from '../modules/registration';
 import { CALL_API } from './apiMiddleware';
+import cookies from 'browser-cookies';
 
 export const LOCAL_STORAGE_KEY = 'recodex/accessToken';
+export const COOKIES_KEY = 'recodex_accessToken';
 
 export const storeToken = (accessToken) => {
   if (accessToken && typeof localStorage !== 'undefined') {
     localStorage.setItem(LOCAL_STORAGE_KEY, accessToken);
   }
+
   if (typeof document !== 'undefined') {
-    const now = new Date();
-    now.setTime(now.getTime() + 1 * 3600 * 1000); // cookie is valid for the next hour
-    document.cookie = `accessToken=${accessToken}; exipres=${now.toUTCString()}; path=/`;
+    // @todo: expire after 'exp' in the token
+    cookies.set(COOKIES_KEY, accessToken, { expires: 14 }); // expires after 14 days
   }
 };
 
@@ -21,7 +23,7 @@ export const removeToken = () => {
   }
 
   if (typeof document !== 'undefined') {
-    document.cookie = 'accessToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC';
+    cookies.erase(COOKIES_KEY);
   }
 };
 
@@ -31,12 +33,7 @@ export const getToken = () => {
   }
 
   if (typeof document !== 'undefined') {
-    const pos = document.cookie.indexOf('accessToken=');
-    if (pos >= 0) {
-      const token = document.cookie.substr(pos + 'accessToken='.length);
-      const semicolon = token.indexOf(';');
-      return token.substr(0, semicolon >= 0 ? semicolon : undefined);
-    }
+    cookies.get(COOKIES_KEY);
   }
 
   return null;

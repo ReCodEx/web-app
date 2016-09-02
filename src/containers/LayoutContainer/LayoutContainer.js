@@ -40,7 +40,7 @@ class LayoutContainer extends Component {
     const { isLoggedIn, accessToken, refreshToken, logout } = this.props;
     if (isLoggedIn) {
       if (!isTokenValid(accessToken)) {
-        logout();
+        logout(this.state.links.HOME_URI);
       } else if (willExpireSoon(accessToken)) {
         refreshToken();
       }

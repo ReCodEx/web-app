@@ -1,11 +1,10 @@
 import { createAction, handleActions } from 'redux-actions';
+import { push } from 'react-router-redux';
 import { fromJS } from 'immutable';
 import decodeJwt from 'jwt-decode';
 import { createApiAction } from '../middleware/apiMiddleware';
 import { loadUserData } from './users';
 import { actionTypes as registrationActionTypes } from './registration';
-
-import { push } from 'react-router-redux';
 
 export const actionTypes = {
   LOGIN: 'recodex/auth/LOGIN',
@@ -22,15 +21,19 @@ export const statusTypes = {
   LOGIN_FAILED: 'LOGIN_FAILED'
 };
 
-const getUserId = (token) => token.sub.id;
+const getUserId = (token) => token.getIn(['sub', 'id']);
 
 /**
  * Actions
  */
 
-export const logout = () => ({
-  type: actionTypes.LOGOUT
-});
+export const logout = redirectUrl =>
+  dispatch => {
+    dispatch(push(redirectUrl));
+    dispatch({
+      type: actionTypes.LOGOUT
+    });
+  };
 
 export const login = (username, password) =>
   createApiAction({
@@ -48,16 +51,16 @@ export const refresh = () =>
   });
 
 export const isTokenValid = token =>
-  token && token.exp * 1000 > Date.now();
+  token && token.get('exp') * 1000 > Date.now();
 
 export const willExpireSoon = token =>
-  token && token.exp - (Date.now() / 1000) < (token.exp - token.iat) / 3; // last third of the validity period
+  token && token.get('exp') - (Date.now() / 1000) < (token.get('exp') - token.get('iat')) / 3; // last third of the validity period
 
 export const decodeAccessToken = token => {
   let decodedToken = null;
   if (token) {
     try {
-      decodedToken = decodeJwt(token);
+      decodedToken = fromJS(decodeJwt(token));
       if (isTokenValid(decodedToken) === false) {
         decodedToken = null;
       }
@@ -96,12 +99,12 @@ const auth = (accessToken) => {
     [actionTypes.LOGIN_SUCCESS]: (state, action) =>
       state.set('status', statusTypes.LOGGED_IN)
             .set('accessToken', decodeAccessToken(action.payload.accessToken))
-            .set('userId', getUserId(decodeJwt(action.payload.accessToken))),
+            .set('userId', getUserId(decodeAccessToken(action.payload.accessToken))),
 
     [registrationActionTypes.CREATE_ACCOUNT_FULFILLED]: (state, action) =>
       state.set('status', statusTypes.LOGGED_IN)
             .set('accessToken', decodeAccessToken(action.payload.accessToken))
-            .set('userId', getUserId(decodeJwt(action.payload.accessToken))),
+            .set('userId', getUserId(decodeAccessToken(action.payload.accessToken))),
 
     [actionTypes.LOGIN_FAILIURE]: (state, action) =>
       state.set('status', statusTypes.LOGIN_FAILED)
