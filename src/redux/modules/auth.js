@@ -1,11 +1,10 @@
 import { createAction, handleActions } from 'redux-actions';
+import { push } from 'react-router-redux';
 import { fromJS } from 'immutable';
 import decodeJwt from 'jwt-decode';
 import { createApiAction } from '../middleware/apiMiddleware';
 import { loadUserData } from './users';
 import { actionTypes as registrationActionTypes } from './registration';
-
-import { push } from 'react-router-redux';
 
 export const actionTypes = {
   LOGIN: 'recodex/auth/LOGIN',
@@ -22,15 +21,19 @@ export const statusTypes = {
   LOGIN_FAILED: 'LOGIN_FAILED'
 };
 
-const getUserId = (token) => token.sub.id;
+const getUserId = (token) => token.getIn(['sub', 'id']);
 
 /**
  * Actions
  */
 
-export const logout = () => ({
-  type: actionTypes.LOGOUT
-});
+export const logout = redirectUrl =>
+  dispatch => {
+    dispatch(push(redirectUrl));
+    dispatch({
+      type: actionTypes.LOGOUT
+    });
+  };
 
 export const login = (username, password) =>
   createApiAction({
@@ -40,8 +43,34 @@ export const login = (username, password) =>
     query: { username, password }
   });
 
+export const refresh = () =>
+  createApiAction({
+    type: actionTypes.LOGIN,
+    method: 'GET',
+    endpoint: '/login/refresh'
+  });
+
 export const isTokenValid = token =>
-  token.exp * 1000 > Date.now();
+  token && token.get('exp') * 1000 > Date.now();
+
+export const willExpireSoon = token =>
+  token && token.get('exp') - (Date.now() / 1000) < (token.get('exp') - token.get('iat')) / 3; // last third of the validity period
+
+export const decodeAccessToken = token => {
+  let decodedToken = null;
+  if (token) {
+    try {
+      decodedToken = fromJS(decodeJwt(token));
+      if (isTokenValid(decodedToken) === false) {
+        decodedToken = null;
+      }
+    } catch (e) {
+      // silent error
+    }
+  }
+
+  return decodedToken;
+};
 
 /**
  * Authentication reducer.
@@ -49,20 +78,11 @@ export const isTokenValid = token =>
  * @return {function} The initialised reducer
  */
 const auth = (accessToken) => {
-  let decodedToken = null;
-  try {
-    decodedToken = decodeJwt(accessToken);
-    if (isTokenValid(decodedToken) === false) {
-      decodedToken = null;
-    }
-  } catch (e) {
-    decodedToken = null;
-  }
-
+  const decodedToken = decodeAccessToken(accessToken);
   const initialState = accessToken && decodedToken
     ? fromJS({
       status: statusTypes.LOGGED_IN,
-      accessToken: accessToken,
+      accessToken: decodedToken,
       userId: getUserId(decodedToken)
     })
     : fromJS({
@@ -78,13 +98,13 @@ const auth = (accessToken) => {
 
     [actionTypes.LOGIN_SUCCESS]: (state, action) =>
       state.set('status', statusTypes.LOGGED_IN)
-            .set('accessToken', action.payload.accessToken)
-            .set('userId', getUserId(decodeJwt(action.payload.accessToken))),
+            .set('accessToken', decodeAccessToken(action.payload.accessToken))
+            .set('userId', getUserId(decodeAccessToken(action.payload.accessToken))),
 
     [registrationActionTypes.CREATE_ACCOUNT_FULFILLED]: (state, action) =>
       state.set('status', statusTypes.LOGGED_IN)
-            .set('accessToken', action.payload.accessToken)
-            .set('userId', getUserId(decodeJwt(action.payload.accessToken))),
+            .set('accessToken', decodeAccessToken(action.payload.accessToken))
+            .set('userId', getUserId(decodeAccessToken(action.payload.accessToken))),
 
     [actionTypes.LOGIN_FAILIURE]: (state, action) =>
       state.set('status', statusTypes.LOGIN_FAILED)

@@ -8,8 +8,11 @@ import GroupDetail, { LoadingGroupDetail, FailedGroupDetail } from '../../compon
 
 import { isReady, isLoading, hasFailed } from '../../redux/helpers/resourceManager';
 import { fetchGroupIfNeeded } from '../../redux/modules/groups';
-import { groupSelector, createGroupsAssignmentsSelector } from '../../redux/selectors/groups';
+import { fetchGroupsStatsIfNeeded } from '../../redux/modules/stats';
 import { fetchAssignmentsForGroup } from '../../redux/modules/assignments';
+import { isSupervisorOf, isAdminOf } from '../../redux/selectors/users';
+import { groupSelector, createGroupsAssignmentsSelector } from '../../redux/selectors/groups';
+import { createGroupsStatsSelector } from '../../redux/selectors/stats';
 
 class Group extends Component {
 
@@ -24,8 +27,9 @@ class Group extends Component {
   }
 
   loadData = (props) => {
-    const { params: { groupId }, loadAssignmentsIfNeeded, loadGroupIfNeeded } = props;
+    const { params: { groupId }, loadAssignmentsIfNeeded, loadGroupIfNeeded, loadStatsIfNeeded } = props;
     loadAssignmentsIfNeeded(groupId);
+    loadStatsIfNeeded(groupId);
     loadGroupIfNeeded(groupId);
   };
 
@@ -37,7 +41,12 @@ class Group extends Component {
   render() {
     const {
       group,
-      assignments
+      students,
+      supervisors = List(),
+      assignments = List(),
+      stats,
+      isAdmin,
+      isSupervisor
     } = this.props;
 
     return (
@@ -48,7 +57,14 @@ class Group extends Component {
           {isLoading(group) && <LoadingGroupDetail />}
           {hasFailed(group) && <FailedGroupDetail />}
           {isReady(group) &&
-            <GroupDetail group={group.toJS()} assignments={assignments} />}
+            <GroupDetail
+              group={group.toJS()}
+              students={students}
+              supervisors={supervisors}
+              assignments={assignments}
+              stats={stats}
+              isSupervisor={true}
+              isAdmin={true} />}
         </div>
       </PageContent>
     );
@@ -58,15 +74,20 @@ class Group extends Component {
 
 export default connect(
   (state, { params: { groupId } }) => {
-    const groupsAssignmentsSelector = createGroupsAssignmentsSelector();
-    const group = groupSelector(state, groupId);
+    const group = groupSelector(groupId)(state);
     return {
       group,
-      assignments: groupsAssignmentsSelector(state, groupId)
+      // supervisors: // @todo select from the state, // @todo "fetchIfNeeded" ??
+      // students: // @todo select from the state, // @todo "fetchIfNeeded" ??
+      assignments: createGroupsAssignmentsSelector(groupId)(state),
+      stats: createGroupsStatsSelector(groupId)(state),
+      isSupervisor: isSupervisorOf(groupId)(state),
+      isAdmin: isAdminOf(groupId)(state)
     };
   },
   (dispatch) => ({
     loadGroupIfNeeded: (groupId) => dispatch(fetchGroupIfNeeded(groupId)),
+    loadStatsIfNeeded: (groupId) => dispatch(fetchGroupsStatsIfNeeded(groupId)),
     loadAssignmentsIfNeeded: (groupId) => dispatch(fetchAssignmentsForGroup(groupId))
   })
 )(Group);

@@ -23,19 +23,19 @@ export const supervisorOfSelector = createSelector(
   filterGroups
 );
 
-export const groupSelector = createSelector(
-  [ groupsSelectors, (state, id) => id ],
-  (groups, id) => groups.get(id)
+export const groupSelector = id => createSelector(
+  groupsSelectors,
+  groups => groups.get(id)
 );
 
-export const groupsAssignmentsIdsSelector = createSelector(
-  groupSelector,
+export const groupsAssignmentsIdsSelector = id => createSelector(
+  groupSelector(id),
   group => group && isReady(group) ? group.getIn(['data', 'assignments']) : List()
 );
 
-export const createGroupsAssignmentsSelector = () =>
+export const createGroupsAssignmentsSelector = id =>
   createSelector(
-    [ groupsAssignmentsIdsSelector, getAssignments ],
+    [ groupsAssignmentsIdsSelector(id), getAssignments ],
     (groupsAssignmentsIds, assignments) =>
       groupsAssignmentsIds.map(id => assignments.getIn(['resources', id]))
   );

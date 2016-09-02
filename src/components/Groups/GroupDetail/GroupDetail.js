@@ -1,8 +1,11 @@
 import React, { PropTypes } from 'react';
-import { Row, Col } from 'react-bootstrap';
+import Icon from 'react-fontawesome';
+import { FormattedMessage } from 'react-intl';
+import { Row, Col, Button } from 'react-bootstrap';
 import ReactMarkdown from 'react-markdown';
 import UsersList from '../../Users/UsersList';
-import UsersListItem from '../../Users/UsersListItem';
+import SupervisorsList from '../../Users/SupervisorsList';
+import StudentsList from '../../Users/StudentsList';
 import Box from '../../AdminLTE/Box';
 
 import LeaveJoinGroupButtonContainer from '../../../containers/LeaveJoinGroupButtonContainer';
@@ -11,30 +14,54 @@ import AssignmentsTable from '../../Assignments/Assignment/AssignmentsTable';
 import { isReady, isLoading, hasFailed } from '../../../redux/helpers/resourceManager';
 
 const GroupDetail = ({
-  group,
+  group: { data },
+  supervisors,
+  students,
   admin,
-  assignments
+  assignments,
+  isSupervisor,
+  isAdmin,
+  stats
 }) => (
   <div>
-    <ReactMarkdown source={group.data.description} />
+    <ReactMarkdown source={data.description} />
     <Row>
       <Col sm={6}>
-        <LeaveJoinGroupButtonContainer groupId={group.data.id} />
-        <MakeRemoveSupervisorButtonContainer groupId={group.data.id} />
+        <p>
+          {(isSupervisor || isAdmin)
+            ? (
+              <Button className='btn-flat'>
+                <Icon name='plus' /> <FormattedMessage id='app.createAssignment.title' defaultMessage='Create new assignment' />
+              </Button>
+            )
+            : <LeaveJoinGroupButtonContainer groupId={data.id} />}
+        </p>
       </Col>
     </Row>
     <Row>
       <Col lg={6}>
-        <Box title='Cvičící' collapsable isOpen={true}>
-          <UsersList users={group.data.supervisors} fill />
+        <Box
+          title={<FormattedMessage id='app.groupDetail.supervisors' defaultMessage='Supervisors' />}
+          collapsable
+          isOpen>
+          <SupervisorsList users={supervisors} fill isAdmin={isAdmin} groupId={data.id} />
         </Box>
-        <Box title='Studenti' collapsable isOpen={false}>
-          <UsersList users={group.data.students} fill />
-        </Box>
+
+        {(isSupervisor || isAdmin) && (
+          <Box
+            title={<FormattedMessage id='app.groupDetail.students' defaultMessage='Students' />}
+            collapsable
+            isOpen={false}>
+            <StudentsList users={students} stats={stats} fill />
+          </Box>
+        )}
       </Col>
 
       <Col lg={6}>
-        <Box title='Zadané úlohy' collapsable isOpen={true}>
+        <Box
+          title={<FormattedMessage id='app.groupDetail.assignments' defaultMessage='Assignments' />}
+          collapsable
+          isOpen>
           <AssignmentsTable
             assignments={assignments}
             showGroup={false} />

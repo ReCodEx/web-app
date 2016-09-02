@@ -1,6 +1,8 @@
-import chai, { expect } from 'chai';
+import chai from 'chai';
 import chaiImmutable from 'chai-immutable';
 chai.use(chaiImmutable);
+
+const expect = chai.expect;
 
 import reducer, {
   submissionStatus,
@@ -22,9 +24,9 @@ import { Map, List } from 'immutable';
 
 describe('Submission of user\'s solution', () => {
   describe('(Action creators)', () => {
-
     it('must initialize the submission', () => {
-      const userId = 'abcdefg', assignmentId = 'yzsdalkj';
+      const userId = 'abcdefg';
+      const assignmentId = 'yzsdalkj';
       expect(init(userId, assignmentId)).to.eql({
         type: actionTypes.INIT,
         payload: { userId, assignmentId }
@@ -46,9 +48,7 @@ describe('Submission of user\'s solution', () => {
         payload: file
       });
     });
-
   });
-
 
   describe('(Reducer)', () => {
     it('must have correct initial state', () => {
@@ -74,7 +74,8 @@ describe('Submission of user\'s solution', () => {
     });
 
     it('must initialize the state with user and assignment IDs', () => {
-      const userId = 'asdad123', assignmentId = 'asdajhaskjh45655';
+      const userId = 'asdad123';
+      const assignmentId = 'asdajhaskjh45655';
       const state = reducer(initialState, init(userId, assignmentId));
       expect(state).to.equal(Map({
         submissionId: null,
@@ -93,9 +94,9 @@ describe('Submission of user\'s solution', () => {
       }));
     });
 
-
     it('must initialize the state with user and assignment IDs even when the state is not the initial state', () => {
-      const userId = 'asdad123', assignmentId = 'asdajhaskjh45655';
+      const userId = 'asdad123';
+      const assignmentId = 'asdajhaskjh45655';
       const oldState = Map({
         submissionId: null,
         userId,
@@ -131,14 +132,14 @@ describe('Submission of user\'s solution', () => {
     });
 
     it('must change the note of the state and nothing else', () => {
-      const note = 'bla bla bla', action = changeNote(note);
+      const note = 'bla bla bla';
+      const action = changeNote(note);
       const state = reducer(initialState, action);
       expect(state.get('note')).to.equal(note);
       expect(state.set('note', '')).to.equal(initialState);
     });
 
     describe('file uploading', () => {
-
       it('must add file among other files for upload', () => {
         const file = { name: 'XYZ.jpg', size: 123456789 };
         const action = {

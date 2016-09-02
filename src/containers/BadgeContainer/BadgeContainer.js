@@ -1,6 +1,5 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { push } from 'react-router-redux';
 import { logout } from '../../redux/modules/auth';
 
 import Badge, { LoadingBadge, FailedBadge } from '../../components/AdminLTE/Badge';
@@ -27,10 +26,7 @@ export default connect(
   state => ({
     user: loggedInUserDataSelector(state)
   }),
-  dispatch => ({
-    logout: (redirectUrl) => {
-      dispatch(push(redirectUrl));
-      dispatch(logout());
-    }
-  })
+  {
+    logout
+  }
 )(BadgeContainer);

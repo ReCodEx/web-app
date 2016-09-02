@@ -50,6 +50,11 @@ const increment = (state, type, isOK = true) =>
     .update('soFarSoGood', soFarSoGood => soFarSoGood && isOK)
     .update('isFinished', isFinished => isFinished || willBeFinishedAfterIncrementing(state));
 
+const pushMessage = (state, msg) =>
+  msg
+    ? state.update('messages', messages => messages.push(msg))
+    : state;
+
 export default handleActions({
 
   [actionTypes.INIT]: (state, { payload: { webSocketChannelId, expectedTasksCount } }) =>
@@ -57,17 +62,30 @@ export default handleActions({
       .update('webSocketChannelId', () => webSocketChannelId)
       .update('expectedTasksCount', () => expectedTasksCount),
 
-  [submissionActionTypes.SUBMIT_FULFILLED]: (state, { payload }) =>
+  [submissionActionTypes.SUBMIT_FULFILLED]: (state, { payload: { webSocketChannel } }) =>
     initialState
-      .update('webSocketChannelId', () => payload.webSocketChannel.id)
-      .update('expectedTasksCount', () => payload.webSocketChannel.expectedTasksCount),
+      .update('webSocketChannelId', () => webSocketChannel.id)
+      .update('expectedTasksCount', () => webSocketChannel.expectedTasksCount),
 
-  [actionTypes.COMPLETED_TASK]: (state, action) => increment(state, 'completed'),
-  [actionTypes.SKIPPED_TASK]: (state, action) => increment(state, 'skipped', false),
-  [actionTypes.FAILED_TASK]: (state, action) => increment(state, 'failed', false),
+  [actionTypes.COMPLETED_TASK]: (state, { payload: msg }) =>
+    pushMessage(
+      increment(state, 'completed'),
+      msg
+    ),
 
-  [actionTypes.ADD_MESSAGE]: (state, { payload }) =>
-    state.update('messages', messages => messages.push(payload)),
+  [actionTypes.SKIPPED_TASK]: (state, { payload: msg }) =>
+    pushMessage(
+      increment(state, 'skipped', false),
+      msg
+    ),
+
+  [actionTypes.FAILED_TASK]: (state, { payload: msg }) =>
+    pushMessage(
+      increment(state, 'failed', false),
+      msg
+    ),
+
+  [actionTypes.ADD_MESSAGE]: (state, { payload: msg }) => pushMessage(state, msg),
 
   [actionTypes.FINISH]: state => state.set('isFinished', true)
 

@@ -4,11 +4,12 @@ import { fromJS, Map } from 'immutable';
 import { addNotification } from './notifications';
 import { usersSelector } from '../selectors/users';
 import { createApiAction } from '../middleware/apiMiddleware';
-import factory, { initialState, createRecord } from '../helpers/resourceManager';
+import factory, { initialState, status, createRecord } from '../helpers/resourceManager';
 
 const resourceName = 'groups';
 const {
   actions,
+  actionTypes,
   reduceActions
 } = factory({ resourceName });
 
@@ -16,7 +17,7 @@ const {
  * Actions
  */
 
-export const actionTypes = {
+export const additionalActionTypes = {
   LOAD_USERS_GROUPS: 'recodex/groups/LOAD_USERS_GROUPS',
   LOAD_USERS_GROUPS_PENDING: 'recodex/groups/LOAD_USERS_GROUPS_PENDING',
   LOAD_USERS_GROUPS_FULFILLED: 'recodex/groups/LOAD_USERS_GROUPS_FULFILLED',
@@ -45,7 +46,7 @@ export const fetchGroupIfNeeded = actions.fetchOneIfNeeded;
 
 export const fetchUsersGroups = (userId) =>
   createApiAction({
-    type: actionTypes.LOAD_USERS_GROUPS,
+    type: additionalActionTypes.LOAD_USERS_GROUPS,
     endpoint: `/users/${userId}/groups`,
     method: 'GET',
     meta: { userId }
@@ -70,7 +71,7 @@ export const joinGroup = (groupId, userId) =>
   dispatch =>
     dispatch(
       createApiAction({
-        type: actionTypes.JOIN_GROUP,
+        type: additionalActionTypes.JOIN_GROUP,
         endpoint: `/groups/${groupId}/students/${userId}`,
         method: 'POST',
         meta: { groupId, userId }
@@ -81,7 +82,7 @@ export const leaveGroup = (groupId, userId) =>
   dispatch =>
     dispatch(
       createApiAction({
-        type: actionTypes.LEAVE_GROUP,
+        type: additionalActionTypes.LEAVE_GROUP,
         endpoint: `/groups/${groupId}/students/${userId}`,
         method: 'DELETE',
         meta: { groupId, userId }
@@ -92,7 +93,7 @@ export const makeSupervisor = (groupId, userId) =>
   dispatch =>
     dispatch(
       createApiAction({
-        type: actionTypes.MAKE_SUPERVISOR,
+        type: additionalActionTypes.MAKE_SUPERVISOR,
         endpoint: `/groups/${groupId}/supervisors/${userId}`,
         method: 'POST',
         meta: { groupId, userId }
@@ -103,7 +104,7 @@ export const removeSupervisor = (groupId, userId) =>
   dispatch =>
     dispatch(
       createApiAction({
-        type: actionTypes.REMOVE_SUPERVISOR,
+        type: additionalActionTypes.REMOVE_SUPERVISOR,
         endpoint: `/groups/${groupId}/supervisors/${userId}`,
         method: 'DELETE',
         meta: { groupId, userId }
@@ -114,35 +115,33 @@ export const removeSupervisor = (groupId, userId) =>
  * Reducer
  */
 
-const loadedGroupRecord = group => createRecord(false, false, false, group);
-
 const reducer = handleActions(Object.assign({}, reduceActions, {
 
-  [actionTypes.JOIN_GROUP_FULFILLED]: (state, { payload, meta: { groupId, userId } }) =>
+  [additionalActionTypes.JOIN_GROUP_FULFILLED]: (state, { payload, meta: { groupId, userId } }) =>
     state.updateIn(['resources', groupId, 'data', 'students'], students =>
       students.push(
         fromJS(payload.students.find(user => user.id === userId))
       )
     ),
 
-  [actionTypes.LEAVE_GROUP_FULFILLED]: (state, { payload, meta: { groupId, userId } }) =>
+  [additionalActionTypes.LEAVE_GROUP_FULFILLED]: (state, { payload, meta: { groupId, userId } }) =>
     state.updateIn(['resources', groupId, 'data', 'students'], students =>
       students.filter(user => user.get('id') !== userId)),
 
-  [actionTypes.MAKE_SUPERVISOR_FULFILLED]: (state, { payload, meta: { groupId, userId } }) =>
+  [additionalActionTypes.MAKE_SUPERVISOR_FULFILLED]: (state, { payload, meta: { groupId, userId } }) =>
     state.updateIn(['resources', groupId, 'data', 'supervisors'], supervisors =>
       supervisors.push(
         fromJS(payload.supervisors.find(user => user.id === userId))
       )
     ),
 
-  [actionTypes.REMOVE_SUPERVISOR_FULFILLED]: (state, { payload, meta: { groupId, userId } }) =>
+  [additionalActionTypes.REMOVE_SUPERVISOR_FULFILLED]: (state, { payload, meta: { groupId, userId } }) =>
     state.updateIn(['resources', groupId, 'data', 'supervisors'], supervisors =>
       supervisors.filter(user => user.get('id') !== userId)),
 
-  [actionTypes.LOAD_USERS_GROUPS_FULFILLED]: (state, { payload }) => {
+  [additionalActionTypes.LOAD_USERS_GROUPS_FULFILLED]: (state, { payload, ...rest }) => {
     const groups = [ ...payload.supervisor, ...payload.student ];
-    return groups.reduce((state, group) => state.setIn(['resources', group.id], loadedGroupRecord(group)), state);
+    return reduceActions[actionTypes.FETCH_MANY_FULFILLED](state, { ...rest, payload: groups });
   }
 
 }), initialState);
