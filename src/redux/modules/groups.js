@@ -4,7 +4,7 @@ import { fromJS, Map } from 'immutable';
 import { addNotification } from './notifications';
 import { usersSelector } from '../selectors/users';
 import { createApiAction } from '../middleware/apiMiddleware';
-import factory, { initialState, status, createRecord } from '../helpers/resourceManager';
+import factory, { initialState } from '../helpers/resourceManager';
 
 const resourceName = 'groups';
 const {

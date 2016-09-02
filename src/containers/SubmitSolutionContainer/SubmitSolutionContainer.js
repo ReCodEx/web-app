@@ -11,7 +11,8 @@ import {
   getRemovedFiles,
   getFailedFiles,
   isProcessing,
-  getSubmissionId
+  getSubmissionId,
+  getMonitorParams
 } from '../../redux/selectors/submission';
 
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
@@ -65,7 +66,7 @@ class SubmitSolutionContainer extends Component {
       returnFile,
       isProcessing,
       submissionId,
-      submissionDetailLink
+      monitor
     } = this.props;
 
     const {
@@ -95,8 +96,7 @@ class SubmitSolutionContainer extends Component {
 
         <EvaluationProgressContainer
           isOpen={isProcessing}
-          assignmentId={assignmentId}
-          submissionId={submissionId}
+          monitor={monitor}
           link={SUBMISSION_DETAIL_URI_FACTORY(assignmentId, submissionId)}
         />
       </div>
@@ -118,7 +118,8 @@ export default connect(
     failedFiles: getFailedFiles(state).toJS(),
     removedFiles: getRemovedFiles(state).toJS(),
     isProcessing: isProcessing(state),
-    submissionId: getSubmissionId(state)
+    submissionId: getSubmissionId(state),
+    monitor: getMonitorParams(state)
   }),
   (dispatch, props) => ({
     changeNote: (note) => dispatch(changeNote(note)),

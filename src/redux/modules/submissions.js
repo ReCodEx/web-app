@@ -2,7 +2,6 @@ import { createAction, handleActions } from 'redux-actions';
 
 import { createApiAction } from '../middleware/apiMiddleware';
 import factory, {
-  createRecord,
   initialState,
   defaultNeedsRefetching
 } from '../helpers/resourceManager';

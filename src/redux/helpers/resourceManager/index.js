@@ -4,7 +4,17 @@ import { createApiAction } from '../../middleware/apiMiddleware';
 import actionTypesFactory from './actionTypesFactory';
 import actionCreatorsFactory from './actionCreatorsFactory';
 import reducerFactory, { initialState } from './reducerFactory';
-import { resourceStatus, isLoading, hasFailed, didInvalidate, isTooOld, afterTenMinutesIsTooOld, isReady } from './status';
+import createRecord from './recordFactory';
+
+import {
+  resourceStatus,
+  isLoading,
+  hasFailed,
+  didInvalidate,
+  isTooOld,
+  afterTenMinutesIsTooOld,
+  isReady
+} from './status';
 
 import {
   defaultApiEndpointFactory,
@@ -24,7 +34,8 @@ export {
   isTooOld,
   afterTenMinutesIsTooOld,
   isReady,
-  defaultNeedsRefetching
+  defaultNeedsRefetching,
+  createRecord
 };
 
 /**

@@ -68,6 +68,7 @@ describe('Submission of user\'s solution', () => {
           removed: List(),
           uploaded: List()
         }),
+        monitor: null,
         status: submissionStatus.NONE,
         warningMsg: null
       }));
@@ -89,6 +90,7 @@ describe('Submission of user\'s solution', () => {
           removed: List(),
           uploaded: List()
         }),
+        monitor: null,
         status: submissionStatus.CREATING,
         warningMsg: null
       }));
@@ -109,6 +111,7 @@ describe('Submission of user\'s solution', () => {
           removed: List(),
           uploaded: List()
         }),
+        monitor: null,
         status: submissionStatus.PROCESSING,
         warningMsg: 'This is not gonna end well!'
       });
@@ -126,6 +129,7 @@ describe('Submission of user\'s solution', () => {
           removed: List(),
           uploaded: List()
         }),
+        monitor: null,
         status: submissionStatus.CREATING,
         warningMsg: null
       }));
@@ -250,7 +254,7 @@ describe('Submission of user\'s solution', () => {
         state = reducer(state, { type: actionTypes.SUBMIT_PENDING });
         expect(state.get('status')).to.equal(submissionStatus.SENDING);
 
-        state = reducer(state, { type: actionTypes.SUBMIT_FULFILLED, payload: { submission: { id: '123' } } });
+        state = reducer(state, { type: actionTypes.SUBMIT_FULFILLED, payload: { submission: { id: '123' }, webSocketChannel: { monitorUrl: 'ws://xyz.cz' } } });
         expect(state.get('status')).to.equal(submissionStatus.PROCESSING);
         expect(state.get('submissionId')).to.equal('123');
 

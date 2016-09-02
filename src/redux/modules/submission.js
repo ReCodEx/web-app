@@ -40,6 +40,7 @@ export const initialState = fromJS({
     removed: [],
     uploaded: []
   },
+  monitor: null,
   status: submissionStatus.NONE,
   warningMsg: null
 });
@@ -139,6 +140,10 @@ const reducer = handleActions({
   [actionTypes.SUBMIT_FULFILLED]: (state, { payload }) =>
     state
       .set('submissionId', payload.submission.id)
+      .set('monitor', {
+        url: payload.webSocketChannel.monitorUrl,
+        id: payload.submission.id
+      })
       .set('status', submissionStatus.PROCESSING),
 
   [actionTypes.CANCEL]: (state, { payload }) =>
