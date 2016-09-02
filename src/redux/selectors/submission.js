@@ -14,4 +14,13 @@ export const getRemovedFiles = state => getFiles(state).get('removed');
 export const getStatus = state => getSubmission(state).get('status');
 export const isProcessing = state => getStatus(state) === submissionStatus.PROCESSING;
 export const isSubmitting = state => getStatus(state) === CREATING || getStatus(state) === SENDING;
-export const getSubmissionId = state => getSubmission(state).get('submissionId');
+
+export const getSubmissionId = createSelector(
+  getSubmission,
+  submission => submission.get('submissionId')
+);
+
+export const getMonitorParams = createSelector(
+  getSubmission,
+  submission => submission.get('monitor')
+);

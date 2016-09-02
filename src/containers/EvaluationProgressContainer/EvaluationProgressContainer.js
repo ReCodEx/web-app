@@ -34,19 +34,14 @@ class EvaluationProgressContainer extends Component {
 
   init = (props) => {
     const {
-      submissionId,
-      port = 443,
-      url = 'recodex.projekty.ms.mff.cuni.cz',
-      path = 'ws',
-      isOpen,
-      secure = true
+      monitor,
+      isOpen
     } = props;
 
-    if (!this.socket && submissionId !== null) {
+    if (!this.socket && monitor !== null) {
       if (typeof WebSocket === 'function') {
-        const schema = secure ? 'wss' : 'ws';
-        this.socket = new WebSocket(`${schema}://${url}:${port}/${path}/`);
-        this.socket.onopen = () => this.socket.send(submissionId);
+        this.socket = new WebSocket(monitor.url);
+        this.socket.onopen = () => this.socket.send(monitor.id);
         this.socket.onmessage = this.onMessage;
         this.socket.onerror = () => this.setState({ realTimeProcessing: false });
       } else {
@@ -161,7 +156,6 @@ class EvaluationProgressContainer extends Component {
 
 EvaluationProgressContainer.propTypes = {
   isOpen: PropTypes.bool.isRequired,
-  assignmentId: PropTypes.string,
   submissionId: PropTypes.string,
   port: PropTypes.number,
   url: PropTypes.string,
