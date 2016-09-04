@@ -118,16 +118,18 @@ const SubmissionDetail = ({
                     </td>
                   </tr>
 
-                  <tr>
-                    <th><FormattedMessage id='app.submission.evaluation.beforeSecondDeadline' defaultMessage='Was submitted before the second deadline:' /></th>
-                    <td className='text-center'>
-                      {isReady(assignment) && (
-                        submittedAt < assignment.getIn(['data', 'deadline', 'second'])
-                          ? <Icon name='check' className='text-success' />
-                          : <Icon name='times' className='text-danger' />
-                      )}
-                    </td>
-                  </tr>
+                  {isReady(assignment) && submittedAt >= assignment.getIn(['data', 'deadline', 'first']) && (
+                    <tr>
+                      <th><FormattedMessage id='app.submission.evaluation.beforeSecondDeadline' defaultMessage='Was submitted before the second deadline:' /></th>
+                      <td className='text-center'>
+                        {isReady(assignment) && (
+                          submittedAt < assignment.getIn(['data', 'deadline', 'second'])
+                            ? <Icon name='check' className='text-success' />
+                            : <Icon name='times' className='text-danger' />
+                        )}
+                      </td>
+                    </tr>
+                  )}
 
                   <tr>
                     <th><FormattedMessage id='app.submission.evaluation.hasFinished' defaultMessage='Evaluation process has finished:' /></th>

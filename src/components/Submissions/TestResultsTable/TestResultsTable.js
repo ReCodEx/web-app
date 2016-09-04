@@ -20,11 +20,28 @@ const TestResultsTable = ({ results }) => (
   <Table responsive>
     <thead>
       <tr>
-        <th></th>
+        <th className='text-center'>
+          <OverlayTrigger placement='top' overlay={
+            <Tooltip id='status'>
+              <FormattedMessage id='app.submissions.testResultsTable.overallTestResult' defaultMessage='Overall test result' />
+            </Tooltip>
+          }>
+            <span><Icon name='check' />/<Icon name='times' /></span>
+          </OverlayTrigger>
+        </th>
         <th><FormattedMessage id='app.submissions.testResultsTable.testName' defaultMessage='Test name' /></th>
         <th></th>
         <th className='text-center'>
-          <OverlayTrigger placement='bottom' overlay={
+          <OverlayTrigger placement='top' overlay={
+            <Tooltip id='status'>
+              <FormattedMessage id='app.submissions.testResultsTable.status' defaultMessage='Evaluation status' />
+            </Tooltip>
+          }>
+            <Icon name='question' />
+          </OverlayTrigger>
+        </th>
+        <th className='text-center'>
+          <OverlayTrigger placement='top' overlay={
             <Tooltip id='memoryExceeded'>
               <FormattedMessage id='app.submissions.testResultsTable.memoryExceeded' defaultMessage='Memory limit' />
             </Tooltip>
@@ -33,20 +50,22 @@ const TestResultsTable = ({ results }) => (
           </OverlayTrigger>
         </th>
         <th className='text-center'>
-          <OverlayTrigger placement='bottom' overlay={
+          <OverlayTrigger placement='top' overlay={
             <Tooltip id='timeExceeded'>
               <FormattedMessage id='app.submissions.testResultsTable.timeExceeded' defaultMessage='Time limit' />
             </Tooltip>
           }>
-            <span><Icon name='clock-o' /> <Icon name='rocket' /></span>
+            <Icon name='rocket' />
           </OverlayTrigger>
         </th>
       </tr>
     </thead>
     <tbody>
     {results.map(({
+      id,
       testName,
       score,
+      status,
       memoryExceeded,
       timeExceeded,
       message
@@ -58,6 +77,35 @@ const TestResultsTable = ({ results }) => (
         </td>
         <td className='text-center'>
           <FormattedNumber value={score} style='percent' />
+        </td>
+        <td className='text-center'>
+          {status === 'OK' && (
+            <OverlayTrigger placement='bottom' overlay={
+              <Tooltip id={`status-${id}`}>
+                <FormattedMessage id='app.submissions.testResultsTable.statusOK' defaultMessage='OK' />
+              </Tooltip>
+            }>
+              <Icon name='smile-o' />
+            </OverlayTrigger>
+          )}
+          {status === 'SKIPPED' && (
+            <OverlayTrigger placement='bottom' overlay={
+              <Tooltip id={`status-${id}`}>
+                <FormattedMessage id='app.submissions.testResultsTable.statusSkipped' defaultMessage='Skipped' />
+              </Tooltip>
+            }>
+              <Icon name='meh-o' />
+            </OverlayTrigger>
+          )}
+          {status === 'FAILED' && (
+            <OverlayTrigger placement='bottom' overlay={
+              <Tooltip id={`status-${id}`}>
+                <FormattedMessage id='app.submissions.testResultsTable.statusFailed' defaultMessage='Failed' />
+              </Tooltip>
+            }>
+              <Icon name='frown-o' />
+            </OverlayTrigger>
+          )}
         </td>
         {getTickORCheckTableCell(memoryExceeded === false)}
         {getTickORCheckTableCell(timeExceeded === false)}
