@@ -99,14 +99,14 @@ class Assignment extends Component {
                   assignment={assignment.get('data').toJS()}
                   isAfterFirstDeadline={assignment.getIn(['data', 'deadline', 'first']) * 1000 < this.state.time}
                   isAfterSecondDeadline={assignment.getIn(['data', 'deadline', 'second']) * 1000 < this.state.time} />
-                <p className='text-center'>
-                  <SubmitSolutionButton onClick={this.initSubmission} />
-                </p>
-                <SubmitSolutionContainer
-                  reset={this.initSubmission}
-                  assignmentId={assignmentId}
-                  isOpen={submitting}
-                  onClose={this.hideSubmission} />
+                  <p className='text-center'>
+                    <SubmitSolutionButton onClick={this.initSubmission} disabled={!assignment.getIn(['data', 'canReceiveSubmissions'])} />
+                  </p>
+                  <SubmitSolutionContainer
+                    reset={this.initSubmission}
+                    assignmentId={assignmentId}
+                    isOpen={submitting}
+                    onClose={this.hideSubmission} />
               </div>
             )}
           </Col>
