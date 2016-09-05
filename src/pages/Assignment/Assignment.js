@@ -11,6 +11,7 @@ import { init, cancel, submissionStatus } from '../../redux/modules/submission';
 import { createAssignmentSelector } from '../../redux/selectors/assignments';
 import { isSubmitting } from '../../redux/selectors/submission';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
+import { isStudentOf } from '../../redux/selectors/users';
 
 import PageContent from '../../components/PageContent';
 import AssignmentDetails, {
@@ -63,7 +64,8 @@ class Assignment extends Component {
     const {
       assignment,
       submitting,
-      params: { assignmentId }
+      params: { assignmentId },
+      isStudentOf
     } = this.props;
 
     const {
@@ -89,31 +91,38 @@ class Assignment extends Component {
             iconName: 'puzzle-piece'
           }
         ]}>
-        <Row>
-          <Col md={6}>
-            {isLoading(assignment) && <LoadingAssignmentDetails />}
-            {hasFailed(assignment) && <FailedAssignmentDetails />}
-            {isReady(assignment) && (
-              <div>
-                <AssignmentDetails
-                  assignment={assignment.get('data').toJS()}
-                  isAfterFirstDeadline={assignment.getIn(['data', 'deadline', 'first']) * 1000 < this.state.time}
-                  isAfterSecondDeadline={assignment.getIn(['data', 'deadline', 'second']) * 1000 < this.state.time} />
-                  <p className='text-center'>
-                    <SubmitSolutionButton onClick={this.initSubmission} disabled={!assignment.getIn(['data', 'canReceiveSubmissions'])} />
-                  </p>
-                  <SubmitSolutionContainer
-                    reset={this.initSubmission}
-                    assignmentId={assignmentId}
-                    isOpen={submitting}
-                    onClose={this.hideSubmission} />
+          {isLoading(assignment) && <LoadingAssignmentDetails />}
+          {hasFailed(assignment) && <FailedAssignmentDetails />}
+          {isReady(assignment) && (
+            <Row>
+              <Col md={6}>
+                <div>
+                  <AssignmentDetails
+                    assignment={assignment.get('data').toJS()}
+                    isAfterFirstDeadline={assignment.getIn(['data', 'deadline', 'first']) * 1000 < this.state.time}
+                    isAfterSecondDeadline={assignment.getIn(['data', 'deadline', 'second']) * 1000 < this.state.time} />
+
+                  {isStudentOf(assignment.getIn(['data', 'groupId'])) && (
+                    <div>
+                      <p className='text-center'>
+                        <SubmitSolutionButton onClick={this.initSubmission} disabled={!assignment.getIn(['data', 'canReceiveSubmissions'])} />
+                      </p>
+                      <SubmitSolutionContainer
+                        reset={this.initSubmission}
+                        assignmentId={assignmentId}
+                        isOpen={submitting}
+                        onClose={this.hideSubmission} />
+                    </div>
+                  )}
               </div>
-            )}
-          </Col>
-          <Col md={6}>
-            <SubmissionsTableContainer assignmentId={assignmentId} />
-          </Col>
-        </Row>
+            </Col>
+            <Col md={6}>
+              {isStudentOf(assignment.getIn(['data', 'groupId'])) && (
+                <SubmissionsTableContainer assignmentId={assignmentId} />
+              )}
+            </Col>
+          </Row>
+        )}
       </PageContent>
     );
   }
@@ -142,7 +151,8 @@ export default connect(
     return {
       assignment: assignmentSelector(state, props.params.assignmentId),
       submitting: isSubmitting(state),
-      userId: loggedInUserIdSelector(state)
+      userId: loggedInUserIdSelector(state),
+      isStudentOf: (groupId) => isStudentOf(groupId)(state)
     };
   },
   (dispatch, props) => ({
