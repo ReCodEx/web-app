@@ -120,24 +120,24 @@ const reducer = handleActions(Object.assign({}, reduceActions, {
   [additionalActionTypes.JOIN_GROUP_FULFILLED]: (state, { payload, meta: { groupId, userId } }) =>
     state.updateIn(['resources', groupId, 'data', 'students'], students =>
       students.push(
-        fromJS(payload.students.find(user => user.id === userId))
+        fromJS(payload.students.find(id => id === userId))
       )
     ),
 
   [additionalActionTypes.LEAVE_GROUP_FULFILLED]: (state, { payload, meta: { groupId, userId } }) =>
     state.updateIn(['resources', groupId, 'data', 'students'], students =>
-      students.filter(user => user.get('id') !== userId)),
+      students.filter(id => id !== userId)),
 
   [additionalActionTypes.MAKE_SUPERVISOR_FULFILLED]: (state, { payload, meta: { groupId, userId } }) =>
     state.updateIn(['resources', groupId, 'data', 'supervisors'], supervisors =>
       supervisors.push(
-        fromJS(payload.supervisors.find(user => user.id === userId))
+        fromJS(payload.supervisors.find(id => id === userId))
       )
     ),
 
   [additionalActionTypes.REMOVE_SUPERVISOR_FULFILLED]: (state, { payload, meta: { groupId, userId } }) =>
     state.updateIn(['resources', groupId, 'data', 'supervisors'], supervisors =>
-      supervisors.filter(user => user.get('id') !== userId)),
+      supervisors.filter(id => id !== userId)),
 
   [additionalActionTypes.LOAD_USERS_GROUPS_FULFILLED]: (state, { payload, ...rest }) => {
     const groups = [ ...payload.supervisor, ...payload.student ];

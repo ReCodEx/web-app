@@ -74,7 +74,7 @@ export const notificationsSelector = createSelector(
     userData && userData.get('groupsStats')
       ? userData.get('groupsStats').reduce(
         (notifications, group) =>
-          Object.assign({}, notifications, { [group.id]: group.stats.assignments.total - group.stats.assignments.completed }),
+          Object.assign({}, notifications, { [group.id]: group.stats.assignments.total - group.stats.assignments.completed - group.stats.assignments.missed }),
         {})
       : {}
 );
