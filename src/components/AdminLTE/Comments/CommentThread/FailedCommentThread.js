@@ -3,7 +3,7 @@ import { FormattedMessage } from 'react-intl';
 
 import CommentBox from '../CommentBox';
 import AddComment from '../AddComment';
-import { FailedIcon } from '../../../Icons';
+import { WarningIcon } from '../../../Icons';
 
 const LoadingCommentThread = () => (
   <CommentBox
@@ -11,7 +11,7 @@ const LoadingCommentThread = () => (
     footer={<AddComment />}>
     <div>
       <p className='text-center'>
-        <FailedIcon /> <FormattedMessage id='app.comments.loadingCommentThread' defaultMessage='The comment thread could not have been loaded.' />
+        <WarningIcon /> <FormattedMessage id='app.comments.loadingCommentThread' defaultMessage='The comment thread could not have been loaded.' />
       </p>
     </div>
   </CommentBox>

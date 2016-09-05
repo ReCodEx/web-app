@@ -1,12 +1,12 @@
 import React from 'react';
 import Box from '../../AdminLTE/Box';
-import { FailedIcon } from '../../Icons';
+import { WarningIcon } from '../../Icons';
 
 const FailedSubmissionDetail = () => (
   <Box
     title={
       <span>
-        <FailedIcon /> Vyhodnocení tohoto řešení se nepodařilo načíst.
+        <WarningIcon /> Vyhodnocení tohoto řešení se nepodařilo načíst.
       </span>
     }
     noPadding={false}

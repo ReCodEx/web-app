@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import Box from '../../../AdminLTE/Box';
-import { FailedIcon } from '../../../Icons';
+import { WarningIcon } from '../../../Icons';
 import { Grid, Row, Col, Table } from 'react-bootstrap';
 import ReactMarkdown from 'react-markdown';
 import { FormatedMessage } from 'react-intl';
@@ -9,7 +9,7 @@ const FailedAssignmentDetails = () => (
   <Box
     title={(
       <span>
-        <FailedIcon /> <FormattedMessage id='app.assignment.error' defaultMessage='Exercise assignment could not be loaded.' />
+        <WarningIcon /> <FormattedMessage id='app.assignment.error' defaultMessage='Exercise assignment could not be loaded.' />
       </span>
     )}
     noPadding={false}

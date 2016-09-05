@@ -1,6 +1,6 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
-import { FailedIcon } from '../../Icons';
+import { WarningIcon } from '../../Icons';
 
 const FailedInstanceDetail = ({
   group,
@@ -8,7 +8,7 @@ const FailedInstanceDetail = ({
 }) => (
   <div>
     <p>
-      <FailedIcon />
+      <WarningIcon />{' '}
       <FormattedMessage
         id='app.instances.failedDetail'
         defaultMessage='Loading the details of the instance failed. Please make sure you are connected to the Internet and try again later.' />

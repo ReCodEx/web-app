@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import classNames from 'classnames';
-import { FailedIcon } from '../../../../Icons';
+import { WarningIcon } from '../../../../Icons';
 
 const Failed = ({
   right,
@@ -13,7 +13,7 @@ const Failed = ({
       'pull-left': !right
     })}
     onClick={repost}>
-    <FailedIcon /> Publikování selhalo.
+    <WarningIcon /> Publikování selhalo.
   </span>
 );
 

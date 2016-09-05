@@ -2,8 +2,8 @@ import React from 'react';
 import Icon from 'react-fontawesome';
 
 const FailedIcon = (props) =>
-  <strong className='text-warning'>
-    <Icon {...props} name='exclamation-triangle' />
+  <strong className='text-danger'>
+    <Icon {...props} name='times' />
   </strong>;
 
 export default FailedIcon;

@@ -1,5 +1,5 @@
 import React from 'react';
-import { FailedIcon } from '../../Icons';
+import { WarningIcon } from '../../Icons';
 
 const FailedGroupDetail = ({
   group,
@@ -7,7 +7,7 @@ const FailedGroupDetail = ({
 }) => (
   <div>
     <p>
-      <FailedIcon /> Chyba načítání dat. Popis této skupiny se nepodařilo načíst. Ujistěte se, že jste připojen(a) k Internetu a opakujte prosíme akci o chvíli později.
+      <WarningIcon /> Chyba načítání dat. Popis této skupiny se nepodařilo načíst. Ujistěte se, že jste připojen(a) k Internetu a opakujte prosíme akci o chvíli později.
     </p>
   </div>
 );

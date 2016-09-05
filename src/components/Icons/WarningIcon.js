@@ -2,6 +2,8 @@ import React from 'react';
 import Icon from 'react-fontawesome';
 
 const WarningIcon = (props) =>
-  <Icon {...props} name='exclamation-triangle' />;
+  <strong className='text-warning'>
+    <Icon {...props} name='exclamation-triangle' />
+  </strong>;
 
 export default WarningIcon;
