@@ -1,5 +1,5 @@
 import { createAction, handleActions } from 'redux-actions';
-import factory, { initialState, createRecord, status, defaultNeedsRefetching } from '../helpers/resourceManager';
+import factory, { initialState, createRecord, resourceStatus, defaultNeedsRefetching } from '../helpers/resourceManager';
 import { actionTypes as submissionActionTypes } from './submissions';
 import { createApiAction } from '../middleware/apiMiddleware';
 
@@ -54,10 +54,10 @@ const reducer = handleActions(Object.assign({}, reduceActions, {
     state.setIn(['content', id], createRecord()),
 
   [additionalActionTypes.LOAD_CONTENT_FAILED]: (state, { meta: { id } }) =>
-    state.setIn(['content', id], createRecord({ status: status.FAILED })),
+    state.setIn(['content', id], createRecord({ status: resourceStatus.FAILED })),
 
   [additionalActionTypes.LOAD_CONTENT_FULFILLED]: (state, { payload: data, meta: { id } }) =>
-    state.setIn(['content', id], createRecord({ status: status.FULFILLED, data }))
+    state.setIn(['content', id], createRecord({ status: resourceStatus.FULFILLED, data }))
 
 }), initialState);
 
