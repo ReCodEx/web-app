@@ -28,6 +28,7 @@ class AddComment extends Component {
           <InputGroup>
             <FormControl
               type='text'
+              disabled={!addComment}
               onChange={e => this.changeText(e.target.value)}
               placeholder={formatMessage({ id: 'app.comments.commentPlaceholder', defaultMessage: 'Your comment ...' })}
               value={text} />
@@ -35,7 +36,7 @@ class AddComment extends Component {
               <Button
                 type='submit'
                 bsStyle={isPrivate ? 'success' : 'primary'}
-                disabled={text.length === 0}
+                disabled={text.length === 0 || !addComment}
                 className='btn-flat'
                 onClick={this.addComment}>
                 <FormattedMessage id='app.comments.addComment' defaultMessage='Send' />
@@ -43,7 +44,7 @@ class AddComment extends Component {
             </InputGroup.Button>
           </InputGroup>
           <HelpBlock>
-            <Button className='btn-flat' onClick={this.togglePrivate} bsSize='xs'>
+            <Button className='btn-flat' onClick={this.togglePrivate} bsSize='xs' disabled={!addComment}>
               {isPrivate ? <Icon name='lock' className='text-success' /> : <Icon name='unlock-alt' className='text-warning' />}
             </Button>{' '}
             {isPrivate && (
@@ -63,7 +64,7 @@ class AddComment extends Component {
 }
 
 AddComment.propTypes = {
-  addComment: PropTypes.func.isRequired,
+  addComment: PropTypes.func,
   intl: intlShape.isRequired
 };
 

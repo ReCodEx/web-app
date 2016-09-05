@@ -38,11 +38,11 @@ class CommentThreadContainer extends Component {
     } = this.props;
 
     if (isLoading(thread)) {
-      return null; // @todo Loading component
+      return <LoadingCommentThread />;
     }
 
     if (hasFailed(thread)) {
-      return null; // @todo Failed component
+      return <FailedCommentThread />;
     }
 
     return (
