@@ -8,7 +8,7 @@ import { Link } from 'react-router';
 import { isReady, isLoading, hasFailed } from '../../../redux/helpers/resourceManager';
 
 import Box from '../../AdminLTE/Box';
-import { LoadingIcon } from '../../Icons';
+import { LoadingIcon, MaybeSucceededIcon } from '../../Icons';
 import SourceCodeInfoBox from '../../SourceCodeInfoBox';
 import AssignmentDetails, {
   LoadingAssignmentDetails,
@@ -123,9 +123,7 @@ const SubmissionDetail = ({
                       <th><FormattedMessage id='app.submission.evaluation.beforeSecondDeadline' defaultMessage='Was submitted before the second deadline:' /></th>
                       <td className='text-center'>
                         {isReady(assignment) && (
-                          submittedAt < assignment.getIn(['data', 'deadline', 'second'])
-                            ? <Icon name='check' className='text-success' />
-                            : <Icon name='times' className='text-danger' />
+                          <MaybeSucceededIcon success={submittedAt < assignment.getIn(['data', 'deadline', 'second'])} />
                         )}
                       </td>
                     </tr>
@@ -133,27 +131,25 @@ const SubmissionDetail = ({
 
                   <tr>
                     <th><FormattedMessage id='app.submission.evaluation.hasFinished' defaultMessage='Evaluation process has finished:' /></th>
-                    <td className={
-                      classnames({
-                        'text-center': true,
-                        'text-danger': evaluation.evaluationFailed
-                      })
-                    }>
-                      <Icon name={evaluation.evaluationFailed ? 'times' : 'check'} />
+                    <td className='text-center'>
+                      <MaybeSucceededIcon name={evaluation.evaluationFailed} />
                     </td>
                   </tr>
 
                   <tr>
                     <th><FormattedMessage id='app.submission.evaluation.isValid' defaultMessage='Evaluation is valid:' /></th>
-                    <td className={
-                      classnames({
-                        'text-center': true,
-                        'text-danger': !evaluation.isValid
-                      })
-                    }>
-                      <Icon name={evaluation.isValid ? 'check' : 'times'} />
+                    <td className='text-center'>
+                      <MaybeSucceededIcon success={evaluation.isValid} />
                     </td>
                   </tr>
+
+                  <tr>
+                    <th><FormattedMessage id='app.submission.evaluation.buildSucceeded' defaultMessage='Build succeeded:' /></th>
+                    <td className='text-center'>
+                      <MaybeSucceededIcon success={!evaluation.initFailed} />
+                    </td>
+                  </tr>
+
                   <tr>
                     <th><FormattedMessage id='app.submission.evaluation.isCorrect' defaultMessage='Is correct:' /></th>
                     <td className={
