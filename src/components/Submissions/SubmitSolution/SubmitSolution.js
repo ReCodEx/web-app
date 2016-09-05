@@ -52,26 +52,17 @@ const SubmitSolution = ({
         </Button>
       )}
 
-      {hasFailed && (
-        <Button
-          type='submit'
-          disabled
-          bsStyle='danger'
-          className='btn-flat'>
-            <WarningIcon /> <FormattedMessage id='app.submitSolution.submissionFailsButtonText' defaultMessage='Submit your solution' />
-        </Button>
-      )}
-
-      {!isSending && !hasFailed && (
+      {!isSending && (
         <Button
           type='submit'
           disabled={!canSubmit}
-          bsStyle={canSubmit ? 'success' : 'default'}
+          bsStyle={hasFailed ? 'danger' : canSubmit ? 'success' : 'default'}
           className='btn-flat'
           onClick={submitSolution}>
-            <SendIcon /> <FormattedMessage id='app.submitSolution.submitButton' defaultMessage='Submit your solution' />
+            {hasFailed ? <WarningIcon /> : <SendIcon />} <FormattedMessage id='app.submitSolution.submitButton' defaultMessage='Submit your solution' />
         </Button>
       )}
+
       <Button
         bsStyle='default'
         className='btn-flat'
