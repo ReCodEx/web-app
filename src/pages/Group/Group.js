@@ -63,8 +63,8 @@ class Group extends Component {
               supervisors={supervisors}
               assignments={assignments}
               stats={stats}
-              isSupervisor={true}
-              isAdmin={true} />}
+              isSupervisor={isSupervisor}
+              isAdmin={isAdmin} />}
         </div>
       </PageContent>
     );
