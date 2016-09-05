@@ -55,6 +55,7 @@ const pushMessage = (state, msg) =>
     ? state.update('messages', messages => messages.push(msg))
     : state;
 
+
 export default handleActions({
 
   [actionTypes.INIT]: (state, { payload: { webSocketChannelId, expectedTasksCount } }) =>
@@ -87,6 +88,9 @@ export default handleActions({
 
   [actionTypes.ADD_MESSAGE]: (state, { payload: msg }) => pushMessage(state, msg),
 
-  [actionTypes.FINISH]: state => state.set('isFinished', true)
+  [actionTypes.FINISH]: state =>
+    state
+      .set('isFinished', true)
+      .set('expectedTasksCount', state.getIn(['progress', 'total'])) // maybe all the expected tasks did not arrive, stretch the progress to 100%
 
 }, initialState);

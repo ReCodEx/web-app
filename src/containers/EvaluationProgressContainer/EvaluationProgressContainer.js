@@ -9,7 +9,8 @@ import {
   addMessage,
   completedTask,
   skippedTask,
-  failedTask
+  failedTask,
+  finish
 } from '../../redux/modules/evaluationProgress';
 
 import {
@@ -98,6 +99,7 @@ class EvaluationProgressContainer extends Component {
 
   closeSocket = () => {
     const {
+      finish,
       addMessage,
       goToEvaluationDetails
     } = this.props;
@@ -105,6 +107,9 @@ class EvaluationProgressContainer extends Component {
     this.socket.close();
     this.isClosed = true;
     addMessage({ wasSuccessful: true, status: 'OK', text: lastMessage });
+    if (finish) {
+      finish();
+    }
   };
 
   finish = () => {
@@ -160,6 +165,7 @@ EvaluationProgressContainer.propTypes = {
   port: PropTypes.number,
   url: PropTypes.string,
   path: PropTypes.string,
+  finish: PropTypes.func,
   finishProcessing: PropTypes.func.isRequired,
   link: PropTypes.string.isRequired
 };
@@ -180,6 +186,7 @@ export default connect(
     messages: getMessages(state)
   }),
   {
+    finish,
     finishProcessing,
     completedTask,
     skippedTask,
