@@ -151,7 +151,8 @@ describe('Submission of user\'s solution', () => {
           type: actionTypes.UPLOAD_PENDING,
           payload: {
             [file.name]: file
-          }
+          },
+          meta: { fileName: file.name }
         };
         const state = reducer(initialState, action);
         const filesToUpload = state.getIn(['files', 'uploading']);

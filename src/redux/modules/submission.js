@@ -68,12 +68,12 @@ export const uploadFile = file =>
   });
 
 const wrapWithName = file => ({ [file.name]: file });
-export const addFile = createAction(actionTypes.UPLOAD_PENDING, wrapWithName);
+export const addFile = createAction(actionTypes.UPLOAD_PENDING, wrapWithName, file => ({ fileName: file.name }));
 export const removeFile = createAction(actionTypes.REMOVE_FILE);
 export const returnFile = createAction(actionTypes.RETURN_FILE);
 export const removeFailedFile = createAction(actionTypes.REMOVE_FAILED_FILE);
 export const uploadSuccessful = createAction(actionTypes.UPLOAD_FULFILLED);
-export const uploadFailed = createAction(actionTypes.UPLOAD_FAILED, wrapWithName, file => file.name);
+export const uploadFailed = createAction(actionTypes.UPLOAD_FAILED, wrapWithName, file => ({ fileName: file.name }));
 
 export const submitSolution = (assignmentId, note, files) =>
   createApiAction({
