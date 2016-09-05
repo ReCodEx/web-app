@@ -17,7 +17,6 @@ import reducer, {
 import { actionTypes as submissionActionTypes } from '../../../src/redux/modules/submission';
 
 describe('Evaluation progress', () => {
-
   it('must have correct initial state', () => {
     const state = reducer(undefined, {});
     expect(state).to.eql(initialState);
@@ -38,7 +37,6 @@ describe('Evaluation progress', () => {
   });
 
   describe('(Action creators)', () => {
-
     it('must init the process with default values', () => {
       expect(init('abcdefgh', 5)).to.eql({
         type: actionTypes.INIT,
@@ -69,11 +67,9 @@ describe('Evaluation progress', () => {
         payload: undefined
       });
     });
-
   });
 
   describe('(Reducer)', () => {
-
     it('must return correct initial state', () => {
       expect(reducer(undefined, {})).to.equal(initialState);
     });
@@ -270,7 +266,5 @@ describe('Evaluation progress', () => {
       expect(state.getIn(['progress', 'skipped'])).to.equal(1);
       expect(state.getIn(['progress', 'failed'])).to.equal(0);
     });
-
   });
-
 });

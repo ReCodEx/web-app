@@ -135,12 +135,13 @@ describe('Submission of user\'s solution', () => {
       }));
     });
 
-    it('must change the note of the state and nothing else', () => {
+    it('must change the note of the state and the state to creating', () => {
       const note = 'bla bla bla';
       const action = changeNote(note);
       const state = reducer(initialState, action);
       expect(state.get('note')).to.equal(note);
-      expect(state.set('note', '')).to.equal(initialState);
+      expect(state.get('status')).to.equal(submissionStatus.CREATING);
+      expect(state.set('note', '').set('status', submissionStatus.NONE)).to.equal(initialState);
     });
 
     describe('file uploading', () => {
@@ -249,7 +250,7 @@ describe('Submission of user\'s solution', () => {
         expect(state.get('status')).to.equal(submissionStatus.SENDING);
 
         state = reducer(state, { type: actionTypes.SUBMIT_REJECTED });
-        expect(state.get('status')).to.equal(submissionStatus.CREATING);
+        expect(state.get('status')).to.equal(submissionStatus.FAILED);
 
         state = reducer(state, { type: actionTypes.SUBMIT_PENDING });
         expect(state.get('status')).to.equal(submissionStatus.SENDING);
