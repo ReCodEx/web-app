@@ -64,7 +64,7 @@ export const uploadFile = file =>
     method: 'POST',
     endpoint: '/uploaded-files',
     body: { [file.name]: file },
-    meta: file.name
+    meta: { fileName: file.name }
   });
 
 const wrapWithName = file => ({ [file.name]: file });
@@ -99,13 +99,13 @@ const reducer = handleActions({
   [actionTypes.CHANGE_NOTE]: (state, { payload }) =>
     state.set('note', payload).set('status', submissionStatus.CREATING),
 
-  [actionTypes.UPLOAD_PENDING]: (state, { payload }) => {
-    const fileName = Object.keys(payload).pop();
-    return state
-            .set('status', submissionStatus.CREATING)
-            .updateIn([ 'files', 'uploading' ], list => list.push({ name: fileName, file: payload[fileName] }))
-            .updateIn([ 'files', 'failed' ], list => list.filter(item => item.name !== payload.name));
-  },
+  [actionTypes.UPLOAD_PENDING]: (state, { payload, meta: { fileName } }) =>
+    state
+      .set('status', submissionStatus.CREATING)
+      .updateIn([ 'files', 'uploading' ], list => list.push({ name: fileName, file: payload[fileName] }))
+      .updateIn([ 'files', 'failed' ], list => list.filter(item => item.name !== payload.name))
+      .updateIn([ 'files', 'removed' ], list => list.filter(item => item.name !== payload.name))
+      .updateIn([ 'files', 'uploaded' ], list => list.filter(item => item.name !== payload.name)),
 
   [actionTypes.REMOVE_FILE]: (state, { payload }) =>
     state
@@ -129,11 +129,11 @@ const reducer = handleActions({
       .updateIn([ 'files', 'uploading' ], list => list.filter(item => item.name !== payload.name))
       .updateIn([ 'files', 'uploaded' ], list => list.push({ name: payload.name, file: payload })),
 
-  [actionTypes.UPLOAD_FAILED]: (state, { meta }) => {
-    const file = state.getIn([ 'files', 'uploading' ]).find(item => item.name === meta);
+  [actionTypes.UPLOAD_FAILED]: (state, { meta: { fileName } }) => {
+    const file = state.getIn([ 'files', 'uploading' ]).find(item => item.name === fileName);
     return state
       .set('status', submissionStatus.FAILED)
-      .updateIn([ 'files', 'uploading' ], list => list.filter(item => item.name !== meta))
+      .updateIn([ 'files', 'uploading' ], list => list.filter(item => item.name !== fileName))
       .updateIn([ 'files', 'failed' ], list => list.push(file));
   },
 
