@@ -6,6 +6,7 @@ export const submissionStatus = {
   NONE: 'NONE',
   CREATING: 'CREATING',
   SENDING: 'SENDING',
+  FAILED: 'FAILED',
   PROCESSING: 'PROCESSING',
   FINISHED: 'FINISHED'
 };
@@ -24,7 +25,7 @@ export const actionTypes = {
   SUBMIT: 'recodex/submission/SUBMIT',
   SUBMIT_PENDING: 'recodex/submission/SUBMIT_PENDING',
   SUBMIT_FULFILLED: 'recodex/submission/SUBMIT_FULFILLED',
-  SUBMIT_FAILED: 'recodex/submission/SUBMIT_FAILED',
+  SUBMIT_REJECTED: 'recodex/submission/SUBMIT_REJECTED',
   PROCESSING_FINISHED: 'recodex/submission/PROCESSING_FINISHED'
 };
 
@@ -96,27 +97,31 @@ const reducer = handleActions({
       .set('status', submissionStatus.CREATING),
 
   [actionTypes.CHANGE_NOTE]: (state, { payload }) =>
-    state.set('note', payload),
+    state.set('note', payload).set('status', submissionStatus.CREATING),
 
   [actionTypes.UPLOAD_PENDING]: (state, { payload }) => {
     const fileName = Object.keys(payload).pop();
     return state
+            .set('status', submissionStatus.CREATING)
             .updateIn([ 'files', 'uploading' ], list => list.push({ name: fileName, file: payload[fileName] }))
             .updateIn([ 'files', 'failed' ], list => list.filter(item => item.name !== payload.name));
   },
 
   [actionTypes.REMOVE_FILE]: (state, { payload }) =>
     state
+      .set('status', submissionStatus.CREATING)
       .updateIn([ 'files', 'uploaded' ], list => list.filter(item => item.name !== payload.name))
       .updateIn([ 'files', 'removed' ], list => list.push(payload)),
 
   [actionTypes.RETURN_FILE]: (state, { payload }) =>
     state
+      .set('status', submissionStatus.CREATING)
       .updateIn([ 'files', 'removed' ], list => list.filter(item => item.name !== payload.name))
       .updateIn([ 'files', 'uploaded' ], list => list.push(payload)),
 
   [actionTypes.REMOVE_FAILED_FILE]: (state, { payload }) =>
     state
+      .set('status', submissionStatus.CREATING)
       .updateIn([ 'files', 'failed' ], list => list.filter(item => item.name !== payload.name)),
 
   [actionTypes.UPLOAD_FULFILLED]: (state, { payload }) =>
@@ -127,6 +132,7 @@ const reducer = handleActions({
   [actionTypes.UPLOAD_FAILED]: (state, { meta }) => {
     const file = state.getIn([ 'files', 'uploading' ]).find(item => item.name === meta);
     return state
+      .set('status', submissionStatus.FAILED)
       .updateIn([ 'files', 'uploading' ], list => list.filter(item => item.name !== meta))
       .updateIn([ 'files', 'failed' ], list => list.push(file));
   },
@@ -134,8 +140,8 @@ const reducer = handleActions({
   [actionTypes.SUBMIT_PENDING]: (state) =>
     state.set('status', submissionStatus.SENDING),
 
-  [actionTypes.SUBMIT_FAILED]: (state) =>
-    state.set('status', submissionStatus.CREATING),
+  [actionTypes.SUBMIT_REJECTED]: (state) =>
+    state.set('status', submissionStatus.FAILED),
 
   [actionTypes.SUBMIT_FULFILLED]: (state, { payload }) =>
     state

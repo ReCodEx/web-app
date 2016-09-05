@@ -60,7 +60,7 @@ export default handleActions({
   [actionTypes.INIT]: (state, { payload: { webSocketChannelId, expectedTasksCount } }) =>
     initialState
       .update('webSocketChannelId', () => webSocketChannelId)
-      .update('expectedTasksCount', () => expectedTasksCount),
+      .update('expectedTasksCount', () => expectedTasksCount + 1), // @todo remove the '+ 1' when the worker is corrected
 
   [submissionActionTypes.SUBMIT_FULFILLED]: (state, { payload: { webSocketChannel } }) =>
     initialState

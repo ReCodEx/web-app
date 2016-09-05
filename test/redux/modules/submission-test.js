@@ -248,7 +248,7 @@ describe('Submission of user\'s solution', () => {
         state = reducer(state, { type: actionTypes.SUBMIT_PENDING });
         expect(state.get('status')).to.equal(submissionStatus.SENDING);
 
-        state = reducer(state, { type: actionTypes.SUBMIT_FAILED });
+        state = reducer(state, { type: actionTypes.SUBMIT_REJECTED });
         expect(state.get('status')).to.equal(submissionStatus.CREATING);
 
         state = reducer(state, { type: actionTypes.SUBMIT_PENDING });

@@ -8,37 +8,19 @@ import {
   FormControl,
   HelpBlock
 } from 'react-bootstrap';
-import Icon from 'react-fontawesome';
-import DropZone from 'react-dropzone';
-import UploadsTable from '../UploadsTable';
-
-const dropZoneStyles = {
-  borderWidth: 2,
-  borderColor: '#666',
-  borderStyle: 'dashed',
-  padding: 40,
-  marginBottom: 20,
-  borderRadius: 5,
-  fontSize: 20,
-  textAlign: 'center'
-};
+import { LoadingIcon, WarningIcon, SendIcon } from '../../Icons';
+import UploadContainer from '../../../containers/UploadContainer';
 
 const SubmitSolution = ({
   isOpen,
   onClose,
   reset,
   canSubmit,
-  uploadFiles,
+  isSubmitting,
+  isSending,
+  hasFailed,
   saveNote,
-  submitSolution,
-  uploadingFiles = [],
-  attachedFiles = [],
-  failedFiles = [],
-  removedFiles = [],
-  removeFile,
-  returnFile,
-  removeFailedFile,
-  retryUploadFile
+  submitSolution
 }) => (
   <Modal show={isOpen} backdrop='static' onHide={onClose}>
     <Modal.Header closeButton>
@@ -47,25 +29,7 @@ const SubmitSolution = ({
       </Modal.Title>
     </Modal.Header>
     <Modal.Body>
-      <DropZone onDrop={uploadFiles} style={dropZoneStyles}>
-        <p><FormattedMessage id='app.submitSolution.dragAndDrop' defaultMessage='Drag and drop files here.' /></p>
-        <p>
-          <Button bsStyle='primary' className='btn-flat'>
-            <Icon name='cloud-upload' />{' '}<FormattedMessage id='app.submitSolution.addFile' defaultMessage='Add a file' />
-          </Button>
-        </p>
-      </DropZone>
-
-      {(uploadingFiles.length > 0 || attachedFiles.length > 0 || failedFiles.length > 0 || removedFiles.length > 0) &&
-        <UploadsTable
-          uploadingFiles={uploadingFiles}
-          attachedFiles={attachedFiles}
-          failedFiles={failedFiles}
-          removedFiles={removedFiles}
-          removeFile={removeFile}
-          returnFile={returnFile}
-          removeFailedFile={removeFailedFile}
-          retryUploadFile={retryUploadFile} />}
+      <UploadContainer />
 
       <FormGroup>
         <ControlLabel>
@@ -78,14 +42,36 @@ const SubmitSolution = ({
       </FormGroup>
     </Modal.Body>
     <Modal.Footer>
-      <Button
-        type='submit'
-        disabled={!canSubmit}
-        bsStyle={canSubmit ? 'success' : 'default'}
-        className='btn-flat'
-        onClick={submitSolution}>
-          <FormattedMessage id='app.submitSolution.submitButton' defaultMessage='Submit your solution' />
-      </Button>
+      {isSending && (
+        <Button
+          type='submit'
+          disabled={true}
+          bsStyle='success'
+          className='btn-flat'>
+            <LoadingIcon /> <FormattedMessage id='app.submitSolution.submittingButtonText' defaultMessage='Submitting your solution ...' />
+        </Button>
+      )}
+
+      {hasFailed && (
+        <Button
+          type='submit'
+          disabled
+          bsStyle='danger'
+          className='btn-flat'>
+            <WarningIcon /> <FormattedMessage id='app.submitSolution.submissionFailsButtonText' defaultMessage='Submit your solution' />
+        </Button>
+      )}
+
+      {!isSending && !hasFailed && (
+        <Button
+          type='submit'
+          disabled={!canSubmit}
+          bsStyle={canSubmit ? 'success' : 'default'}
+          className='btn-flat'
+          onClick={submitSolution}>
+            <SendIcon /> <FormattedMessage id='app.submitSolution.submitButton' defaultMessage='Submit your solution' />
+        </Button>
+      )}
       <Button
         bsStyle='default'
         className='btn-flat'
@@ -111,13 +97,8 @@ const SubmitSolution = ({
 SubmitSolution.propTypes = {
   onClose: PropTypes.func.isRequired,
   reset: PropTypes.func.isRequired,
-  uploadFiles: PropTypes.func.isRequired,
   canSubmit: PropTypes.bool.isRequired,
-  submitSolution: PropTypes.func.isRequired,
-  uploadingFiles: PropTypes.array.isRequired,
-  attachedFiles: PropTypes.array.isRequired,
-  removeFile: PropTypes.func.isRequired,
-  retryUploadFile: PropTypes.func.isRequired
+  submitSolution: PropTypes.func.isRequired
 };
 
 export default SubmitSolution;

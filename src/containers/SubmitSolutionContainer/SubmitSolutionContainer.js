@@ -11,6 +11,10 @@ import {
   getRemovedFiles,
   getFailedFiles,
   isProcessing,
+  isSubmitting,
+  isSending,
+  hasFailed,
+  canSubmit,
   getSubmissionId,
   getMonitorParams
 } from '../../redux/selectors/submission';
@@ -28,14 +32,6 @@ import {
 } from '../../redux/modules/submission';
 
 class SubmitSolutionContainer extends Component {
-
-  uploadFiles = (files) =>
-    files.map(this.props.uploadFile);
-
-  retryUploadFile = (payload) => {
-    this.props.removeFailedFile(payload);
-    this.uploadFiles([ payload.file ]);
-  };
 
   submit = () => {
     const {
@@ -55,16 +51,12 @@ class SubmitSolutionContainer extends Component {
       onClose,
       reset,
       assignmentId,
-      attachedFiles,
-      uploadingFiles,
-      failedFiles,
-      removedFiles,
       note,
       changeNote,
-      removeFailedFile,
-      removeFile,
-      returnFile,
+      canSubmit,
+      hasFailed,
       isProcessing,
+      isSending,
       submissionId,
       monitor
     } = this.props;
@@ -77,20 +69,12 @@ class SubmitSolutionContainer extends Component {
       <div>
         <SubmitSolution
           isOpen={isOpen}
-          canSubmit={attachedFiles.length > 0 &&
-            uploadingFiles.length === 0 &&
-            failedFiles.length === 0}
+          canSubmit={canSubmit}
+          isSubmitting={isSubmitting}
+          isSending={isSending}
+          hasFailed={hasFailed}
           reset={reset}
-          uploadFiles={this.uploadFiles}
           saveNote={changeNote}
-          uploadingFiles={uploadingFiles}
-          attachedFiles={attachedFiles}
-          failedFiles={failedFiles}
-          removedFiles={removedFiles}
-          removeFailedFile={removeFailedFile}
-          removeFile={removeFile}
-          returnFile={returnFile}
-          retryUploadFile={this.retryUploadFile}
           onClose={onClose}
           submitSolution={this.submit} />
 
@@ -113,20 +97,17 @@ export default connect(
   state => ({
     userId: loggedInUserIdSelector(state),
     note: getNote(state),
-    uploadingFiles: getUploadingFiles(state).toJS(),
     attachedFiles: getUploadedFiles(state).toJS(),
-    failedFiles: getFailedFiles(state).toJS(),
-    removedFiles: getRemovedFiles(state).toJS(),
     isProcessing: isProcessing(state),
+    isSubmitting: isSubmitting(state),
+    isSending: isSending(state),
+    hasFailed: hasFailed(state),
+    canSubmit: canSubmit(state),
     submissionId: getSubmissionId(state),
     monitor: getMonitorParams(state)
   }),
   (dispatch, props) => ({
     changeNote: (note) => dispatch(changeNote(note)),
-    uploadFile: (payload) => dispatch(uploadFile(payload)),
-    removeFailedFile: (payload) => dispatch(removeFailedFile(payload)),
-    removeFile: (payload) => dispatch(removeFile(payload)),
-    returnFile: (payload) => dispatch(returnFile(payload)),
     submitSolution: (note, files) => dispatch(submitSolution(props.assignmentId, note, files))
   })
 )(SubmitSolutionContainer);
