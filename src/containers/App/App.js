@@ -19,7 +19,9 @@ class App extends Component {
     loggedInUserId,
     loadUser
   }) => {
-    loadUser(loggedInUserId);
+    if (loggedInUserId !== null) {
+      loadUser(loggedInUserId);
+    }
   };
 
   render() {

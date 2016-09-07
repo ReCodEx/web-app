@@ -22,7 +22,6 @@ const Dashboard = ({
         ? user.get('fullName')
         : <FormattedMessage id='app.dashboard.loading' defaultMessage='Loading ...' />
     }>
-
     <Row>
       {user && user.get('groupsStats') && user.get('groupsStats').map(
         group => (
@@ -33,7 +32,6 @@ const Dashboard = ({
           </Col>
         ))}
     </Row>
-
   </PageContent>
 );
 
