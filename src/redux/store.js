@@ -20,8 +20,8 @@ const dev = (history) =>
   compose(
     applyMiddleware(
       ...getMiddleware(history)
-    ),
-    window.devToolsExtension() // use the DEVtools if the extension is installed
+    )// ,
+    // window.devToolsExtension && window.devToolsExtension() // use the DEVtools if the extension is installed
   );
 
 const prod = (history) =>

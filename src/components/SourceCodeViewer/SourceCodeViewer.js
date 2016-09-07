@@ -1,4 +1,5 @@
 import React, { PropTypes } from 'react';
+// import Highlight from 'react-highlight/lib/optimized';
 import Highlight from 'react-highlight';
 import addLineNumbers from 'add-line-numbers';
 

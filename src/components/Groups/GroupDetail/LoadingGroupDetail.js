@@ -8,57 +8,15 @@ const LoadingGroupDetail = ({
   group,
   assignments
 }) => (
-  <div>
-    <p>
-      <LoadingIcon /> <FormattedMessage id='app.groupDetail.loading' defaultMessage="Loading group's description ..." />
-    </p>
-    <Row>
-      <Col lg={6}>
-        <Box
-          title={
-            <span>
-              <LoadingIcon /> <FormattedMessage id='app.groupDetail.loadingSupervisorsList' defaultMessage='Loading list of supervisors ...' />
-            </span>
-          }
-          collapsable
-          isOpen
-          noPadding={false}>
-          <p>
-            <FormattedMessage id='app.groupDetail.loadingSupervisorsList' defaultMessage='Loading list of supervisors ...' />
-          </p>
-        </Box>
-        <Box
-          title={
-            <span>
-              <LoadingIcon /> <FormattedMessage id='app.groupDetail.loadingStudentsList' defaultMessage='Loading list of students ...' />
-            </span>
-          }
-          collapsable
-          isOpen={false}
-          noPadding={false}>
-          <p>
-            <FormattedMessage id='app.groupDetail.loadingStudentsList' defaultMessage='Loading list of students ...' />
-          </p>
-        </Box>
-      </Col>
-
-      <Col lg={6}>
-        <Box
-          title={
-            <span>
-              <LoadingIcon /> <FormattedMessage id='app.groupDetail.loadingAssignmentsList' defaultMessage='Loading list of assignments ...' />
-            </span>
-          }
-          collapsable
-          isOpen={true}
-          noPadding={false}>
-          <p>
-            <FormattedMessage id='app.groupDetail.loadingAssignmentsList' defaultMessage='Loading list of assignments ...' />
-          </p>
-        </Box>
-      </Col>
-    </Row>
-  </div>
+  <Box
+    noPadding={false}
+    title={(
+      <span>
+        <LoadingIcon /> <FormattedMessage id='app.groupDetail.loading' defaultMessage="Loading group's description ..." />
+      </span>
+    )}>
+    <FormattedMessage id='app.groupDetail.loading' defaultMessage="Loading group's description ..." />
+  </Box>
 );
 
 export default LoadingGroupDetail;

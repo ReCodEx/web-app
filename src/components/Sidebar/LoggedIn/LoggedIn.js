@@ -60,7 +60,7 @@ const LoggedIn = ({
           <MenuGroup
             title={<FormattedMessage id='app.sidebar.menu.supervisorOf' defaultMessage='Groups - supervisor' />}
             items={supervisorOf}
-            notifications={notifications}
+            notifications={0}
             icon='wrench'
             currentPath={currentUrl}
             createLink={item => GROUP_URI_FACTORY(item.getIn(['data', 'id']))}
