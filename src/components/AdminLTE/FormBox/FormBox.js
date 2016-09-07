@@ -8,7 +8,8 @@ const FormBox = ({
   type,
   children,
   footer,
-  overlay
+  overlay,
+  onSubmit
 }) => (
   <div className={
     classNames({
@@ -19,7 +20,7 @@ const FormBox = ({
     <div className='box-header with-border'>
       <h3 className='box-title'>{title}</h3>
     </div>
-    <Form>
+    <Form onSubmit={onSubmit}>
       <div className='box-body'>{children}</div>
       {footer &&
         <div className={'box-footer'}>{footer}</div>}
@@ -35,6 +36,7 @@ FormBox.propTypes = {
     PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) }),
     PropTypes.element
   ]).isRequired,
+  onSubmit: PropTypes.func,
   type: PropTypes.string,
   footer: PropTypes.element
 };

@@ -36,7 +36,7 @@ const createRecodexReducers = (token) => ({
 
 const librariesReducers = {
   routing: routerReducer,
-  formReducer
+  form: formReducer
 };
 
 const createReducer = (token) => {
