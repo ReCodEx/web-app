@@ -1,5 +1,6 @@
 import { combineReducers } from 'redux';
 import { routerReducer } from 'react-router-redux';
+import { reducer as formReducer } from 'redux-form';
 
 import auth, { actionTypes as authActionTypes } from './modules/auth';
 import assignments from './modules/assignments';
@@ -34,7 +35,8 @@ const createRecodexReducers = (token) => ({
 });
 
 const librariesReducers = {
-  routing: routerReducer
+  routing: routerReducer,
+  form: formReducer
 };
 
 const createReducer = (token) => {

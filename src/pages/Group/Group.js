@@ -2,15 +2,20 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import { List } from 'immutable';
+import { Row, Col } from 'react-bootstrap';
 
 import PageContent from '../../components/PageContent';
+
 import GroupDetail, { LoadingGroupDetail, FailedGroupDetail } from '../../components/Groups/GroupDetail';
+import AdminsView from '../../components/Groups/AdminsView';
+import SupervisorsView from '../../components/Groups/SupervisorsView';
+import StudentsView from '../../components/Groups/StudentsView';
 
 import { isReady, isLoading, hasFailed } from '../../redux/helpers/resourceManager';
 import { fetchGroupIfNeeded } from '../../redux/modules/groups';
 import { fetchGroupsStatsIfNeeded } from '../../redux/modules/stats';
 import { fetchAssignmentsForGroup } from '../../redux/modules/assignments';
-import { isSupervisorOf, isAdminOf } from '../../redux/selectors/users';
+import { isStudentOf, isSupervisorOf, isAdminOf } from '../../redux/selectors/users';
 import { groupSelector, createGroupsAssignmentsSelector } from '../../redux/selectors/groups';
 import { createGroupsStatsSelector } from '../../redux/selectors/stats';
 
@@ -45,9 +50,12 @@ class Group extends Component {
       supervisors = List(),
       assignments = List(),
       stats,
+      isStudent,
       isAdmin,
       isSupervisor
     } = this.props;
+
+    const groupData = isReady(group) ? group.toJS().data : null;
 
     return (
       <PageContent
@@ -56,15 +64,54 @@ class Group extends Component {
         <div>
           {isLoading(group) && <LoadingGroupDetail />}
           {hasFailed(group) && <FailedGroupDetail />}
-          {isReady(group) &&
+
+          {isReady(group) && (
             <GroupDetail
-              group={group.toJS()}
-              students={students}
-              supervisors={supervisors}
-              assignments={assignments}
-              stats={stats}
-              isSupervisor={isSupervisor}
-              isAdmin={isAdmin} />}
+              group={groupData} />
+          )}
+
+          {isReady(group) && isAdmin && (
+            <Row>
+              <Col xs={12}>
+                <h3>
+                  <FormattedMessage id='app.group.adminsView.title' defaultMessage='Administrator controls of {groupName}' values={{ groupName: group.getIn(['data', 'name']) }} />
+                </h3>
+                <AdminsView
+                  group={groupData}
+                  supervisors={supervisors}
+                  addSubgroup={this.addSubgroup} />
+              </Col>
+            </Row>
+          )}
+
+          {isReady(group) && isSupervisor && (
+            <Row>
+              <Col xs={12}>
+                <h3>
+                  <FormattedMessage id='app.group.supervisorsView.title' defaultMessage="Supervisor's controls of {groupName}" values={{ groupName: group.getIn(['data', 'name']) }} />
+                </h3>
+                <SupervisorsView
+                  group={groupData}
+                  stats={stats}
+                  supervisors={supervisors}
+                  students={students}
+                  assignments={assignments} />
+              </Col>
+            </Row>
+          )}
+
+          {isReady(group) && isStudent && (
+            <Row>
+              <Col xs={12}>
+                <h3>
+                  <FormattedMessage id='app.group.studentsView.title' defaultMessage="Student's dashboard for {groupName}" values={{ groupName: group.getIn(['data', 'name']) }} />
+                </h3>
+                <StudentsView
+                  group={groupData}
+                  assignments={assignments} />
+              </Col>
+            </Row>
+          )}
         </div>
       </PageContent>
     );
@@ -81,6 +128,7 @@ export default connect(
       // students: // @todo select from the state, // @todo "fetchIfNeeded" ??
       assignments: createGroupsAssignmentsSelector(groupId)(state),
       stats: createGroupsStatsSelector(groupId)(state),
+      isStudent: isStudentOf(groupId)(state),
       isSupervisor: isSupervisorOf(groupId)(state),
       isAdmin: isAdminOf(groupId)(state)
     };

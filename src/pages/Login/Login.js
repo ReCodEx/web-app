@@ -41,7 +41,7 @@ class Login extends Component {
         <Row>
           <Col md={6} mdOffset={3} sm={8} smOffset={2}>
             <LoginForm
-              tryLogin={login}
+              onSubmit={login}
               isTryingToLogin={isLoggingIn}
               hasFailed={hasFailed}
               hasSucceeded={hasSucceeded} />
@@ -71,7 +71,7 @@ export default connect(
     hasFailed: hasFailed(state),
     hasSucceeded: hasSucceeded(state)
   }),
-  {
-    login
-  }
+  dispatch => ({
+    login: ({ email, password }) => dispatch(login(email, password))
+  })
 )(Login);
