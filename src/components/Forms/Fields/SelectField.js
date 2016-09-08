@@ -8,24 +8,28 @@ import {
   HelpBlock
 } from 'react-bootstrap';
 
-const TextField = ({
+const SelectField = ({
   input,
   meta: {
     touched,
     error
   },
-  type = 'text',
   label,
+  options,
   ...props
 }) => (
   <FormGroup validationState={touched && error ? 'error' : undefined}>
     <ControlLabel htmlFor={name}>{label}</ControlLabel>
-    <FormControl {...input} {...props} type={type} />
+    <FormControl {...input} {...props} componentClass='select'>
+      {options.map(({ key, name }) =>
+        <option value={key} key={key}>{name}</option>
+      )}
+    </FormControl>
     {touched && error && <HelpBlock>{error}</HelpBlock>}
   </FormGroup>
 );
 
-TextField.propTypes = {
+SelectField.propTypes = {
   name: PropTypes.string.isRequired,
   type: PropTypes.string,
   label: PropTypes.oneOfType([
@@ -34,4 +38,4 @@ TextField.propTypes = {
   ]).isRequired
 };
 
-export default TextField;
+export default SelectField;
