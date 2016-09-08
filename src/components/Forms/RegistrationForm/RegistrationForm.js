@@ -19,12 +19,12 @@ const RegistrationForm = ({
 }) => (
   <FormBox
     title={<FormattedMessage id='app.registrationForm.title' defaultMessage='Create ReCodEx account' />}
-    onSubmit={handleSubmit}
     type={hasSucceeded ? 'success' : undefined}
     footer={
       <div className='text-center'>
         <Button
           type='submit'
+          onClick={handleSubmit}
           bsStyle='success'
           className='btn-flat'
           disabled={invalid || submitting || hasSucceeded}>
@@ -36,26 +36,24 @@ const RegistrationForm = ({
         </Button>
       </div>
     }>
-      <span>
-        {hasFailed && (
-          <Alert bsStyle='danger'>
-            <FormattedMessage id='app.registrationForm.failed' defaultMessage='Registration failed. Please check your information.' />
-          </Alert>)}
+    {hasFailed && (
+    <Alert bsStyle='danger'>
+      <FormattedMessage id='app.registrationForm.failed' defaultMessage='Registration failed. Please check your information.' />
+    </Alert>)}
 
-        <Field name='firstName' required component={TextField} label={<FormattedMessage id='app.registrationForm.firstName' defaultMessage='First name:' />} />
-        <Field name='lastName' required component={TextField} label={<FormattedMessage id='app.registrationForm.lastName' defaultMessage='Last name:' />} />
-        <Field name='email' required component={EmailField} label={<FormattedMessage id='app.registrationForm.email' defaultMessage='E-mail address:' />} />
-        <Field name='password' required component={PasswordField} label={<FormattedMessage id='app.registrationForm.password' defaultMessage='Password:' />} />
-        <Field
-          name='instanceId'
-          required
-          component={SelectField}
-          label={<FormattedMessage id='app.registrationForm.instance' defaultMessage='Instance:' />}
-          options={instances.map(
-            instance => ({ key: instance.getIn(['data', 'id']), name: instance.getIn(['data', 'name']) })
-          ).toArray()} />
-      </span>
-    </FormBox>
+    <Field name='firstName' required component={TextField} label={<FormattedMessage id='app.registrationForm.firstName' defaultMessage='First name:' />} />
+    <Field name='lastName' required component={TextField} label={<FormattedMessage id='app.registrationForm.lastName' defaultMessage='Last name:' />} />
+    <Field name='email' required component={EmailField} label={<FormattedMessage id='app.registrationForm.email' defaultMessage='E-mail address:' />} />
+    <Field name='password' required component={PasswordField} label={<FormattedMessage id='app.registrationForm.password' defaultMessage='Password:' />} />
+    <Field
+      name='instanceId'
+      required
+      component={SelectField}
+      label={<FormattedMessage id='app.registrationForm.instance' defaultMessage='Instance:' />}
+      options={instances.map(
+        instance => ({ key: instance.getIn(['data', 'id']), name: instance.getIn(['data', 'name']) })
+      ).toArray()} />
+  </FormBox>
 );
 
 RegistrationForm.propTypes = {
