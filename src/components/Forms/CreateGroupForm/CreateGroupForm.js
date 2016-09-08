@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 import { FormattedMessage } from 'react-intl';
 import FormBox from '../../AdminLTE/FormBox';
 import { Form, FormGroup, Label, FormControl } from 'react-bootstrap';
-import { Field } from 'redux-form';
+import { TextField } from '../Fields';
 import { LoadingIcon, SendIcon } from '../../Icons';
 
 const CreateGroupForm = ({
@@ -10,7 +10,7 @@ const CreateGroupForm = ({
   invalid = false,
   submitting = false
 }) => (
-  <Form onSubmit={handleSubmit}>
+  <FormBox onSubmit={handleSubmit}>
     <FormGroup>
       <Label><FormattedMessage id='app.createGroup.groupName' defaultMessage='Name:' /></Label>
       <FormControl type='input' name='name' />
@@ -28,7 +28,7 @@ const CreateGroupForm = ({
         )}
       </Button>
     </FormGroup>
-  </Form>
+  </FormBox>
 );
 
 CreateGroupForm.propTypes = {
