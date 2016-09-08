@@ -18,8 +18,10 @@ const TextAreaField = ({
   label,
   ...props
 }) => (
-  <FormGroup validationState={touched && error ? 'error' : undefined}>
-    <ControlLabel htmlFor={name}>{label}</ControlLabel>
+  <FormGroup
+    controlId={name}
+    validationState={touched && error ? 'error' : undefined}>
+    <ControlLabel>{label}</ControlLabel>
     <FormControl {...input} {...props} componentClass='textarea' />
     {touched && error && <HelpBlock>{error}</HelpBlock>}
   </FormGroup>

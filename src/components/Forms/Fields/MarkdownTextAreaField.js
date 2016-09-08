@@ -42,7 +42,7 @@ class MarkdownTextAreaField extends Component {
 
 MarkdownTextAreaField.propTypes = {
   ...TextAreaField.propTypes,
-  showPreview: PropTypes.string.isRequired
+  showPreview: PropTypes.string
 };
 
 export default MarkdownTextAreaField;
