@@ -23,13 +23,13 @@ const LoginForm = ({
   <FormBox
     title={<FormattedMessage id='app.loginForm.title' defaultMessage='Sign into ReCodEx' />}
     type={hasSucceeded ? 'success' : undefined}
-    onSubmit={handleSubmit}
     footer={
       <div className='text-center'>
         <Button
           type='submit'
           bsStyle='success'
           className='btn-flat'
+          onClick={handleSubmit}
           disabled={invalid || submitting || hasSucceeded}>
           {!submitting
             ? hasSucceeded
