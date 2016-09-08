@@ -44,8 +44,8 @@ const LoginForm = ({
         <FormattedMessage id='app.loginForm.failed' defaultMessage='Login failed. Please check your credentials.' />
       </Alert>)}
 
-    <Field name='email' component={EmailField} label={<FormattedMessage id='app.loginForm.email' defaultMessage='E-mail address:' />} />
-    <Field name='password' component={PasswordField} label={<FormattedMessage id='app.loginForm.password' defaultMessage='Password:' />} />
+    <Field name='email' required component={EmailField} label={<FormattedMessage id='app.loginForm.email' defaultMessage='E-mail address:' />} />
+    <Field name='password' required component={PasswordField} label={<FormattedMessage id='app.loginForm.password' defaultMessage='Password:' />} />
   </FormBox>
 );
 
