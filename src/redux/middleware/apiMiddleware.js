@@ -53,7 +53,14 @@ export const getHeaders = (headers, accessToken) => {
   return headers;
 };
 
-export const createPromise = (endpoint, query, method, headers, body, wasSuccessful) =>
+export const createApiCallPromise = ({
+  endpoint,
+  query = {},
+  method = 'GET',
+  headers = {},
+  body = undefined,
+  wasSuccessful = () => true
+}) =>
   createRequest(endpoint, query, method, headers, body)
     .then(res => {
       if (!wasSuccessful(res)) {
@@ -81,14 +88,14 @@ export const apiCall = ({
   type,
   payload: {
     promise:
-      createPromise(
+      createApiCallPromise({
         endpoint,
         query,
         method,
-        getHeaders(headers, accessToken),
+        headers: getHeaders(headers, accessToken),
         body,
         wasSuccessful
-      ),
+      }),
     data: body
   },
   meta: { endpoint, ...meta }

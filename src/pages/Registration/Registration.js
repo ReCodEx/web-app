@@ -7,7 +7,7 @@ import { push } from 'react-router-redux';
 import { Row, Col } from 'react-bootstrap';
 import PageContent from '../../components/PageContent';
 import Box from '../../components/AdminLTE/Box';
-import RegistrationForm from '../../components/Public/RegistrationForm';
+import RegistrationForm from '../../components/Forms/RegistrationForm';
 
 import { createAccount } from '../../redux/modules/registration';
 import { fetchInstances } from '../../redux/modules/instances';
@@ -53,7 +53,7 @@ class Register extends Component {
           <Col md={6} mdOffset={3} sm={8} smOffset={2}>
             <RegistrationForm
               instances={instances}
-              tryCreateAccount={createAccount}
+              onSubmit={createAccount}
               istTryingToCreateAccount={isCreatingAccount}
               hasFailed={hasFailed}
               hasSucceeded={hasSucceeded} />
@@ -85,9 +85,10 @@ export default connect(
     hasFailed: hasFailed(state),
     hasSucceeded: hasSucceeded(state)
   }),
-  {
-    createAccount,
-    fetchInstances,
-    push
-  }
+  dispatch => ({
+    createAccount: ({ firstName, lastName, email, password, instanceId }) =>
+      dispatch(createAccount(firstName, lastName, email, password, instanceId)),
+    fetchInstances: () => dispatch(fetchInstances()),
+    push: (url) => dispatch(push(url))
+  })
 )(Register);
