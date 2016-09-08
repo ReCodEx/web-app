@@ -6,7 +6,7 @@ import isEmail from 'validator/lib/isEmail';
 
 import Icon from 'react-fontawesome';
 import FormBox from '../../AdminLTE/FormBox';
-import { EmailField, PasswordField } from '../../Forms/Fields';
+import { EmailField, PasswordField } from '../Fields';
 
 import {
   Button,
@@ -22,6 +22,7 @@ const LoginForm = ({
 }) => (
   <FormBox
     title={<FormattedMessage id='app.loginForm.title' defaultMessage='Sign into ReCodEx' />}
+    type={hasSucceeded ? 'success' : undefined}
     onSubmit={handleSubmit}
     footer={
       <div className='text-center'>
@@ -51,7 +52,6 @@ const LoginForm = ({
 LoginForm.propTypes = {
   onSubmit: PropTypes.func.isRequired,
   handleSubmit: PropTypes.func.isRequired,
-  isTryingLogin: PropTypes.bool,
   hasFailed: PropTypes.bool,
   hasSucceeded: PropTypes.bool,
   invalid: PropTypes.bool
@@ -72,9 +72,7 @@ const validate = ({ email, password }) => {
   return errors;
 };
 
-export default connect(state => ({
-  emailValue: state.fromReducer ? state.fromReducer.login.values.email : ''
-}))(reduxForm({
+export default reduxForm({
   form: 'login',
   validate
-})(LoginForm));
+})(LoginForm);

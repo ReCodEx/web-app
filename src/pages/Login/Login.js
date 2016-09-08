@@ -1,28 +1,28 @@
 import React, { Component, PropTypes } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
+import { push } from 'react-router-redux';
 
 import { Row, Col } from 'react-bootstrap';
 import PageContent from '../../components/PageContent';
 import Box from '../../components/AdminLTE/Box';
-import LoginForm from '../../components/Public/LoginForm';
+import LoginForm from '../../components/Forms/LoginForm';
 
 import { login } from '../../redux/modules/auth';
 import { isLoggingIn, hasFailed, hasSucceeded } from '../../redux/selectors/auth';
 
 class Login extends Component {
 
-  constructor(props, context) {
-    super(props, context);
-    this.checkIfIsLoggedIn(props);
+  componentWillMount = () => {
+    this.checkIfIsLoggedIn(this.props);
   }
 
   componentWillReceiveProps = props => this.checkIfIsLoggedIn(props);
 
   checkIfIsLoggedIn = props => {
-    const { hasSucceeded, goToDashboard } = props;
+    const { hasSucceeded, push } = props;
     if (hasSucceeded) {
-      setTimeout(() => this.context.router.push(this.context.links.DASHBOARD_URI), 600);
+      setTimeout(() => push(this.context.links.DASHBOARD_URI), 600);
     }
   };
 
@@ -54,7 +54,6 @@ class Login extends Component {
 }
 
 Login.contextTypes = {
-  router: PropTypes.object,
   links: PropTypes.object
 };
 
@@ -72,6 +71,7 @@ export default connect(
     hasSucceeded: hasSucceeded(state)
   }),
   dispatch => ({
-    login: ({ email, password }) => dispatch(login(email, password))
+    login: ({ email, password }) => dispatch(login(email, password)),
+    push: (url) => dispatch(push(url))
   })
 )(Login);
