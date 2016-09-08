@@ -133,8 +133,8 @@ const mapStateToProps = (state, props) => ({
 
 const mapDispatchToProps = (dispatch, props) => ({
   toggleSidebar: {
-    visibility: () => dispatch(toggleVisibility()),
-    size: () => dispatch(toggleSize())
+    visibility: (e) => { e.preventDefault(); return dispatch(toggleVisibility()); },
+    size: (e) => { e.preventDefault(); return dispatch(toggleSize()); }
   },
   loadUserDataIfNeeded: (userId) => dispatch(fetchUserIfNeeded(userId)),
   loadUsersGroupsIfNeeded: (userId) => dispatch(fetchUsersGroupsIfNeeded(userId)),
