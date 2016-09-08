@@ -66,7 +66,8 @@ class LayoutContainer extends Component {
     isActive: link => !isAbsolute(link) && this.context.router.isActive(link, true)
   });
 
-  maybeHideSidebar = () => {
+  maybeHideSidebar = e => {
+    e.preventDefault();
     const { sidebar, toggleSidebar } = this.props;
     if (sidebar.isOpen) {
       toggleSidebar.visibility();
@@ -133,8 +134,8 @@ const mapStateToProps = (state, props) => ({
 
 const mapDispatchToProps = (dispatch, props) => ({
   toggleSidebar: {
-    visibility: (e) => { e.preventDefault(); return dispatch(toggleVisibility()); },
-    size: (e) => { e.preventDefault(); return dispatch(toggleSize()); }
+    visibility: () => dispatch(toggleVisibility()),
+    size: () => dispatch(toggleSize())
   },
   loadUserDataIfNeeded: (userId) => dispatch(fetchUserIfNeeded(userId)),
   loadUsersGroupsIfNeeded: (userId) => dispatch(fetchUsersGroupsIfNeeded(userId)),
