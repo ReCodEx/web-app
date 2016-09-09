@@ -3,6 +3,7 @@ import { Map } from 'immutable';
 
 import { usersSelector } from '../selectors/users';
 import factory, { initialState } from '../helpers/resourceManager';
+import { createApiAction } from '../middleware/apiMiddleware';
 
 import { actionTypes as authActionTypes } from './auth';
 import { additionalActionTypes as groupsActionTypes } from './groups';
@@ -20,6 +21,13 @@ const {
 
 export const loadUserData = actions.pushResource;
 export const fetchUserIfNeeded = actions.fetchIfNeeded;
+export const validateRegistrationData = (email, password) =>
+  createApiAction({
+    type: 'VALIDATE_REGISTRATION_DATA',
+    endpoint: '/users/validate-registration-data',
+    method: 'POST',
+    body: { email, password }
+  });
 
 /**
  * Reducer

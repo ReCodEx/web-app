@@ -7,7 +7,7 @@ import isEmail from 'validator/lib/isEmail';
 import Icon from 'react-fontawesome';
 import FormBox from '../../AdminLTE/FormBox';
 import { EmailField, TextField, PasswordField, SelectField } from '../Fields';
-import { createApiCallPromise } from '../../../redux/middleware/apiMiddleware';
+import { validateRegistrationData } from '../../../redux/modules/users';
 
 const RegistrationForm = ({
   submitting,
@@ -89,25 +89,23 @@ const validate = ({ firstName, lastName, email, password }) => {
   return errors;
 };
 
-const asyncValidate = ({ email = '', password = '' }) =>
-  createApiCallPromise({
-    endpoint: '/users/validate-registration-data',
-    method: 'POST',
-    body: { email, password }
-  }).then(({ usernameIsFree, passwordScore }) => {
-    const errors = {};
-    if (usernameIsFree === false) {
-      errors['email'] = <FormattedMessage id='app.registrationForm.validation.emailAlreadyTaken' defaultMessage='This email address is already taken by another user.' />;
-    }
+const asyncValidate = ({ email = '', password = '' }, dispatch) =>
+  dispatch(validateRegistrationData(email, password))
+    .then(res => res.value)
+    .then(({ usernameIsFree, passwordScore }) => {
+      var errors = {};
+      if (usernameIsFree === false) {
+        errors['email'] = <FormattedMessage id='app.registrationForm.validation.emailAlreadyTaken' defaultMessage='This email address is already taken by another user.' />;
+      }
 
-    if (passwordScore <= 0) {
-      errors['password'] = <FormattedMessage id='app.registrationForm.validation.passwordTooWeak' defaultMessage='The password you chose is too weak, please choose a different one.' />;
-    }
+      if (passwordScore <= 0) {
+        errors['password'] = <FormattedMessage id='app.registrationForm.validation.passwordTooWeak' defaultMessage='The password you chose is too weak, please choose a different one.' />;
+      }
 
-    if (Object.keys(errors).length > 0) {
-      throw errors;
-    }
-  });
+      if (Object.keys(errors).length > 0) {
+        throw errors;
+      }
+    });
 
 export default reduxForm({
   form: 'registration',
