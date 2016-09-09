@@ -2,12 +2,14 @@ import React, { PropTypes, Component } from 'react';
 import { FormattedMessage } from 'react-intl';
 import Collapse from 'react-collapse';
 import Icon from 'react-fontawesome';
+import { LoadingIcon } from '../../Icons';
 import { Link } from 'react-router';
 import { Button, Nav, NavItem } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 import LevelGap from './LevelGap';
 
 const TreeViewLeaf = ({
+  loading = false,
   title,
   icon = 'circle-o',
   onClick,
@@ -22,7 +24,7 @@ const TreeViewLeaf = ({
     }}>
     <LevelGap level={level} />
     <span style={{ width: 30, textAlign: 'center', display: 'inline-block' }}>
-      <Icon name={icon} />
+      {loading ? <LoadingIcon /> : <Icon name={icon} />}
     </span>
     {title}
     <span className='pull-right'>
@@ -32,6 +34,7 @@ const TreeViewLeaf = ({
 );
 
 TreeViewLeaf.propTypes = {
+  loading: PropTypes.bool,
   title: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) })

@@ -19,6 +19,7 @@ class TreeViewInnerNode extends Component {
 
   render() {
     const {
+      loading,
       children,
       ...props
     } = this.props;
@@ -27,6 +28,7 @@ class TreeViewInnerNode extends Component {
       <ul className='nav nav-stacked'>
         <TreeViewLeaf
           {...props}
+          loading={loading}
           onClick={this.toggleOpen}
           icon={this.isOpen() ? 'angle-down' : 'angle-right'} />
         <Collapse isOpened={this.isOpen()}>
@@ -39,7 +41,7 @@ class TreeViewInnerNode extends Component {
 }
 
 TreeViewInnerNode.propTypes = {
-
+  loading: PropTypes.bool
 };
 
 export default TreeViewInnerNode;
