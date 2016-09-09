@@ -8,7 +8,7 @@ const reducerFactory = (actionTypes) => ({
   [actionTypes.FETCH_PENDING]: (state, { meta }) =>
     state.setIn([ 'resources', meta.id ], createRecord()),
 
-  [actionTypes.FETCH_FAILED]: (state, { meta }) =>
+  [actionTypes.FETCH_REJECTED]: (state, { meta }) =>
     state.setIn([ 'resources', meta.id ], createRecord({ state: resourceStatus.FAILED })),
 
   [actionTypes.FETCH_FULFILLED]: (state, { meta, payload: data }) =>
@@ -17,7 +17,7 @@ const reducerFactory = (actionTypes) => ({
   [actionTypes.FETCH_MANY_PENDING]: (state, { meta: {endpoint} }) =>
     state.setIn([ 'fetchManyStatus', endpoint ], resourceStatus.PENDING),
 
-  [actionTypes.FETCH_MANY_FAILED]: (state, { meta: {endpoint} }) =>
+  [actionTypes.FETCH_MANY_REJECTED]: (state, { meta: {endpoint} }) =>
     state.setIn([ 'fetchManyStatus', endpoint ], resourceStatus.FAILED),
 
   [actionTypes.FETCH_MANY_FULFILLED]: (state, { meta: {endpoint}, payload }) =>
