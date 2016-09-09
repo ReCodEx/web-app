@@ -12,12 +12,14 @@ import SupervisorsView from '../../components/Groups/SupervisorsView';
 import StudentsView from '../../components/Groups/StudentsView';
 
 import { isReady, isLoading, hasFailed } from '../../redux/helpers/resourceManager';
-import { fetchGroupIfNeeded } from '../../redux/modules/groups';
+import { createGroup, fetchSubgroups, fetchGroupIfNeeded } from '../../redux/modules/groups';
 import { fetchGroupsStatsIfNeeded } from '../../redux/modules/stats';
 import { fetchAssignmentsForGroup } from '../../redux/modules/assignments';
 import { isStudentOf, isSupervisorOf, isAdminOf } from '../../redux/selectors/users';
-import { groupSelector, createGroupsAssignmentsSelector } from '../../redux/selectors/groups';
+import { groupSelector, groupsSelectors, createGroupsAssignmentsSelector } from '../../redux/selectors/groups';
 import { createGroupsStatsSelector } from '../../redux/selectors/stats';
+import { fetchInstanceIfNeeded } from '../../redux/modules/instances';
+import { instanceSelector } from '../../redux/selectors/instances';
 
 class Group extends Component {
 
@@ -31,11 +33,17 @@ class Group extends Component {
     }
   }
 
-  loadData = (props) => {
-    const { params: { groupId }, loadAssignmentsIfNeeded, loadGroupIfNeeded, loadStatsIfNeeded } = props;
-    loadAssignmentsIfNeeded(groupId);
-    loadStatsIfNeeded(groupId);
-    loadGroupIfNeeded(groupId);
+  loadData = ({
+    params: { groupId },
+    load,
+    group,
+    parentGroup
+  }) => {
+    load.groupIfNeeded(groupId);
+    load.statsIfNeeded();
+    isReady(group) && !parentGroup && load.groupIfNeeded(group.getIn(['data', 'parentGroupId']));
+    isReady(group) && load.instanceIfNeeded(group.getIn(['data', 'instanceId']));
+    load.subgroups();
   };
 
   getTitle = (group) =>
@@ -43,24 +51,60 @@ class Group extends Component {
       ? group.getIn(['data', 'name'])
       : <FormattedMessage id='app.group.loading' defaultMessage="Loading group's detail ..." />;
 
+  getBreadcrumbs = () => {
+    const { group, instance, parentGroup } = this.props;
+    const { links: { INSTANCE_URI_FACTORY, GROUP_URI_FACTORY } } = this.context;
+    const breadcrumbs = [];
+
+    if (isReady(instance)) {
+      breadcrumbs.push({
+        iconName: 'university',
+        link: INSTANCE_URI_FACTORY(instance.getIn(['data', 'id'])),
+        text: instance.getIn(['data', 'name'])
+      });
+    }
+
+    if (parentGroup !== null && isReady(parentGroup)) {
+      breadcrumbs.push({
+        iconName: 'level-up',
+        link: GROUP_URI_FACTORY(parentGroup.getIn(['data', 'id'])),
+        text: parentGroup.getIn(['data', 'name'])
+      });
+    }
+
+    // it doesn't make sense to add current group to the breadcrumbs
+    // unless the instance or the parent group is loaded first
+    if (breadcrumbs.length > 0 && isReady(group)) {
+      breadcrumbs.push({
+        iconName: 'group',
+        text: group.getIn(['data', 'name'])
+      });
+    }
+
+    return breadcrumbs;
+  };
+
   render() {
     const {
       group,
+      parentGroup,
+      groups,
       students,
       supervisors = List(),
       assignments = List(),
       stats,
       isStudent,
       isAdmin,
-      isSupervisor
+      isSupervisor,
+      addSubgroup
     } = this.props;
 
     const groupData = isReady(group) ? group.toJS().data : null;
-
     return (
       <PageContent
         title={this.getTitle(group)}
-        description={<FormattedMessage id='app.group.description' defaultMessage='Group overview and assignments' />}>
+        description={<FormattedMessage id='app.group.description' defaultMessage='Group overview and assignments' />}
+        breadcrumbs={this.getBreadcrumbs()}>
         <div>
           {isLoading(group) && <LoadingGroupDetail />}
           {hasFailed(group) && <FailedGroupDetail />}
@@ -78,8 +122,9 @@ class Group extends Component {
                 </h3>
                 <AdminsView
                   group={groupData}
+                  groups={groups}
                   supervisors={supervisors}
-                  addSubgroup={this.addSubgroup} />
+                  addSubgroup={addSubgroup(groupData.instanceId)} />
               </Col>
             </Row>
           )}
@@ -119,6 +164,10 @@ class Group extends Component {
 
 }
 
+Group.contextTypes = {
+  links: PropTypes.object
+};
+
 export default connect(
   (state, { params: { groupId } }) => {
     const group = groupSelector(groupId)(state);
@@ -126,6 +175,9 @@ export default connect(
       group,
       // supervisors: // @todo select from the state, // @todo "fetchIfNeeded" ??
       // students: // @todo select from the state, // @todo "fetchIfNeeded" ??
+      instance: isReady(group) ? instanceSelector(state, group.getIn(['data', 'instanceId'])) : null,
+      parentGroup: isReady(group) ? groupSelector(group.getIn(['data', 'parentGroupId']))(state) : null,
+      groups: groupsSelectors(state),
       assignments: createGroupsAssignmentsSelector(groupId)(state),
       stats: createGroupsStatsSelector(groupId)(state),
       isStudent: isStudentOf(groupId)(state),
@@ -133,9 +185,14 @@ export default connect(
       isAdmin: isAdminOf(groupId)(state)
     };
   },
-  (dispatch) => ({
-    loadGroupIfNeeded: (groupId) => dispatch(fetchGroupIfNeeded(groupId)),
-    loadStatsIfNeeded: (groupId) => dispatch(fetchGroupsStatsIfNeeded(groupId)),
-    loadAssignmentsIfNeeded: (groupId) => dispatch(fetchAssignmentsForGroup(groupId))
+  (dispatch, { params: { groupId } }) => ({
+    addSubgroup: (instanceId) => ({ name, description }) => dispatch(createGroup({ instanceId, name, description, parentGroupId: groupId })),
+    load: {
+      instanceIfNeeded: (id) => dispatch(fetchInstanceIfNeeded(id)),
+      groupIfNeeded: (id) => dispatch(fetchGroupIfNeeded(groupId)),
+      statsIfNeeded: () => dispatch(fetchGroupsStatsIfNeeded(groupId)),
+      assignmentsIfNeeded: () => dispatch(fetchAssignmentsForGroup(groupId)),
+      subgroups: () => dispatch(fetchSubgroups(groupId))
+    }
   })
 )(Group);
