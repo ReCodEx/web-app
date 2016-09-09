@@ -1,39 +1,61 @@
 import React, { Component, PropTypes } from 'react';
 import { FormattedMessage } from 'react-intl';
 import Collapse from 'react-collapse';
-import ReactMarkdown from 'react-markdown';
-import { Button } from 'react-bootstrap';
+import RichTextEditor, { createEmptyValue } from 'react-rte';
+import { Row, Col, Checkbox, FormGroup } from 'react-bootstrap';
 import TextAreaField from './TextAreaField';
 
 class MarkdownTextAreaField extends Component {
 
-  componentWillMount() {
-    const { showPreview = true } = this.props;
-    this.setState({ showPreview });
+  componentWillMount = () => {
+    const { viewSource = false } = this.props;
+    this.setState({
+      viewSource,
+      value: createEmptyValue()
+    });
   }
 
-  toggleDetails = () => this.setState({ showPreview: !this.state.showPreview });
+  componentWillReceiveProps = (newProps) => {
+    const { viewSource } = this.state;
+    if (viewSource && newProps.input.value !== this.props.input.value) {
+      const markdown = newProps.input.value;
+      this.setState({
+        value: this.state.value.setContentFromString(markdown, 'markdown')
+      });
+    }
+  };
+
+  toggleViewSource = (e) => {
+    this.setState({ viewSource: !this.state.viewSource });
+  };
+
+  onChange = (value) => {
+    const { onChange, input } = this.props;
+    const markdown = value.toString('markdown');
+    this.setState({ value });
+    input.onChange(markdown);
+    onChange && onChange(markdown);
+  };
 
   render() {
-    const { showPreview } = this.state;
-    const value = this.props.input.value;
+    const { disabled = false } = this.props;
+    const { viewSource, value } = this.state;
     return (
       <div>
-        <TextAreaField {...this.props} />
-        {value && (
-          <span>
-            <p className='text-center'>
-              <Button bsStyle='link' onClick={this.toggleDetails} bsSize='xs'>
-                {!showPreview && <FormattedMessage id='app.markdownTextArea.showPreview' defaultMessage='Show preview' />}
-                {showPreview && <FormattedMessage id='app.markdownTextArea.hidePreview' defaultMessage='Hide preview' />}
-              </Button>
-            </p>
-            <Collapse isOpened={showPreview}>
-              <ReactMarkdown source={value} />
-              <hr />
-            </Collapse>
-          </span>
-        )}
+        {viewSource && (
+          <TextAreaField {...this.props} />)}
+        {!viewSource && (
+          <RichTextEditor
+            value={value}
+            className=''
+            editorClassName='recodex-editor'
+            onChange={e => this.onChange(e)}
+            readonly={disabled} />)}
+        <FormGroup controlId='togglePreview' className='text-center'>
+          <Checkbox checked={viewSource} onChange={() => this.toggleViewSource()}>
+            <FormattedMessage id='app.markdownTextArea.showMarkdown' defaultMessage='Show markdown source' />
+          </Checkbox>
+        </FormGroup>
       </div>
     );
   }
