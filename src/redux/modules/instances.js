@@ -4,6 +4,7 @@ import { Map } from 'immutable';
 import { createApiAction } from '../middleware/apiMiddleware';
 import factory, { initialState } from '../helpers/resourceManager';
 import { memberOfInstancesIdsSelector } from '../selectors/users';
+import { actionTypes as groupsActionTypes } from './groups';
 
 const resourceName = 'instances';
 const {
@@ -34,6 +35,19 @@ export const fetchUsersInstancesIfNeeded = (userId) =>
  */
 
 const reducer = handleActions(Object.assign({}, reduceActions, {
+
+  [groupsActionTypes.ADD_FULFILLED]: (state, { payload: group }) => {
+    const instance = state.getIn([ 'resources', group.instanceId ]);
+    if (!instance || group.parentGroupId !== null) {
+      return state;
+    }
+
+    return state.updateIn(
+      [ 'resources', group.instanceId, 'data' ],
+      instance => instance.update('topLevelGroups', groups => groups.push(group.id))
+    );
+  }
+
 }), initialState);
 
 export default reducer;

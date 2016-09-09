@@ -17,6 +17,8 @@ const {
  * Actions
  */
 
+export { actionTypes };
+
 export const additionalActionTypes = {
   LOAD_USERS_GROUPS: 'recodex/groups/LOAD_USERS_GROUPS',
   LOAD_USERS_GROUPS_PENDING: 'recodex/groups/LOAD_USERS_GROUPS_PENDING',
@@ -43,6 +45,22 @@ export const additionalActionTypes = {
 export const loadGroup = actions.pushResource;
 export const fetchGroupsIfNeeded = actions.fetchIfNeeded;
 export const fetchGroupIfNeeded = actions.fetchOneIfNeeded;
+
+export const createGroup = actions.addResource;
+
+export const validateAddGroup = (name, instanceId, parentGroupId = null) =>
+  createApiAction({
+    type: 'VALIDATE_ADD_GROUP_DATA',
+    endpoint: '/groups/validate-add-group-data',
+    method: 'POST',
+    body: parentGroupId === null ? { name, instanceId } : { name, instanceId, parentGroupId }
+  });
+
+export const fetchSubgroups = (groupId) =>
+  actions.fetchMany({
+    endpoint: `/groups/${groupId}/subgroups`,
+    meta: { groupId }
+  });
 
 export const fetchUsersGroups = (userId) =>
   createApiAction({
@@ -116,6 +134,20 @@ export const removeSupervisor = (groupId, userId) =>
  */
 
 const reducer = handleActions(Object.assign({}, reduceActions, {
+
+  [actionTypes.ADD_FULFILLED]: (state, action) => {
+    if (reduceActions[actionTypes.ADD_FULFILLED]) {
+      state = reduceActions[actionTypes.ADD_FULFILLED](state, action);
+    }
+
+    // update the new hierarchy inside the local state
+    const { payload: group } = action;
+    if (group.parentGroupId === null || !state.getIn([ 'resources', group.parentGroupId ])) {
+      return state;
+    }
+
+    return state.updateIn([ 'resources', group.parentGroupId, 'data', 'childGroups' ], children => children.push(group.id));
+  },
 
   [additionalActionTypes.JOIN_GROUP_FULFILLED]: (state, { payload, meta: { groupId, userId } }) =>
     state.updateIn(['resources', groupId, 'data', 'students'], students =>
