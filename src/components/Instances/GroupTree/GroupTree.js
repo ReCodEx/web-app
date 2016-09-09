@@ -13,6 +13,7 @@ class GroupTree extends Component {
     <TreeView>
       <TreeViewItem
         level={level}
+        loading
         title={<FormattedMessage id='app.groupTree.loading' defaultMessage='Loading ...' />} />
     </TreeView>
   );
