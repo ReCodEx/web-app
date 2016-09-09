@@ -16,11 +16,14 @@ class MarkdownTextAreaField extends Component {
   }
 
   componentWillReceiveProps = (newProps) => {
-    const { viewSource } = this.state;
-    if (viewSource && newProps.input.value !== this.props.input.value) {
-      const markdown = newProps.input.value;
+    const { viewSource, value } = this.state;
+    const inputVal = newProps.input.value;
+    const sourceEditedDirectly = viewSource && inputVal !== this.props.input.value;
+    const formWasReset = !viewSource && inputVal !== value.toString('markdown') && inputVal.length === 0;
+
+    if (sourceEditedDirectly || formWasReset) {
       this.setState({
-        value: this.state.value.setContentFromString(markdown, 'markdown')
+        value: this.state.value.setContentFromString(inputVal, 'markdown')
       });
     }
   };
