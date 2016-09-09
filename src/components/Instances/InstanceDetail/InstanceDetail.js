@@ -4,8 +4,7 @@ import { FormattedMessage } from 'react-intl';
 import ReactMarkdown from 'react-markdown';
 import UsersList from '../../Users/UsersList';
 import Box from '../../AdminLTE/Box';
-import TreeView from '../../AdminLTE/TreeView';
-import GroupTree from '../GroupTree';
+import GroupTree from '../../Groups/GroupTree';
 
 import { isReady, isLoading, hasFailed } from '../../../redux/helpers/resourceManager';
 
