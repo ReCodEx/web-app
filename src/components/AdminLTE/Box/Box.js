@@ -30,7 +30,7 @@ class Box extends Component {
     const {
       title,
       type,
-      noPadding = true,
+      noPadding = false,
       children,
       footer,
       collapsable = false,
