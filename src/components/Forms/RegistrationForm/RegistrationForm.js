@@ -4,7 +4,7 @@ import { FormattedMessage } from 'react-intl';
 import { Button, Alert } from 'react-bootstrap';
 import isEmail from 'validator/lib/isEmail';
 
-import Icon from 'react-fontawesome';
+import { LoadingIcon } from '../../Icons';
 import FormBox from '../../AdminLTE/FormBox';
 import { EmailField, TextField, PasswordField, SelectField } from '../Fields';
 import { validateRegistrationData } from '../../../redux/modules/users';
@@ -32,7 +32,7 @@ const RegistrationForm = ({
             ? hasSucceeded
               ? <span><Icon name='check' /> &nbsp; <FormattedMessage id='app.registrationForm.success' defaultMessage='Your account has been created.' /></span>
               : <FormattedMessage id='app.registrationForm.createAccount' defaultMessage='Create account' />
-            : <span><Icon name='circle-o-notch' spin /> &nbsp; <FormattedMessage id='app.registrationForm.processing' defaultMessage='Creating account ...' /></span>}
+            : <span><LoadingIcon /> &nbsp; <FormattedMessage id='app.registrationForm.processing' defaultMessage='Creating account ...' /></span>}
         </Button>
       </div>
     }>

@@ -1,10 +1,10 @@
 import React from 'react';
-import Icon from 'react-fontawesome';
+import { LoginIcon } from '../../../Icons';
 
 const LoadingMenuItem = () => (
   <li>
     <a>
-      <Icon name='circle-o-notch' />
+      <LoadingIcon />
       <span style={{
         whiteSpace: 'normal'
       }}>
