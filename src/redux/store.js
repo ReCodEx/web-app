@@ -9,10 +9,10 @@ import apiMiddleware from './middleware/apiMiddleware';
 import createReducer from './reducer';
 
 const getMiddleware = (history) => [
-  thunkMiddleware,
   accessTokenMiddleware,
   apiMiddleware,
   promiseMiddleware(),
+  thunkMiddleware,
   routerMiddleware(history)
 ];
 

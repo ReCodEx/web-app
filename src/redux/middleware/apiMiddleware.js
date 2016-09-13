@@ -1,4 +1,5 @@
 import statusCode from 'statuscode';
+import { addNotification } from '../modules/notifications';
 
 export const API_BASE = process.env.API_BASE || 'http://localhost:4000/v1';
 export const CALL_API = 'recodex-api/CALL';
@@ -54,6 +55,7 @@ export const getHeaders = (headers, accessToken) => {
 };
 
 export const createApiCallPromise = ({
+  dispatch,
   endpoint,
   query = {},
   method = 'GET',
@@ -62,8 +64,21 @@ export const createApiCallPromise = ({
   wasSuccessful = () => true
 }) =>
   createRequest(endpoint, query, method, headers, body)
+    .catch(err => {
+      if (err.message && err.message === 'Failed to fetch') {
+        dispatch(
+          addNotification('The API server is unreachable. Please check your Internet connection.', false)
+        );
+      } else {
+        throw err;
+      }
+    })
     .then(res => {
-      if (!wasSuccessful(res)) {
+      if (isServerError(res)) {
+        dispatch(
+          addNotification('There was a problem on the server. Please try again later.', false)
+        );
+      } else if (!wasSuccessful(res)) {
         throw new Error('The API call was not successful.', wasSuccessful);
       }
 
@@ -73,6 +88,7 @@ export const createApiCallPromise = ({
     .then(json => json.payload);
 
 export const isTwoHundredCode = (res) => statusCode.accept(res.status, '2xx');
+export const isServerError = (res) => statusCode.accept(res.status, '5xx');
 
 export const apiCall = ({
   type,
@@ -84,22 +100,25 @@ export const apiCall = ({
   body = undefined,
   meta = undefined,
   wasSuccessful = isTwoHundredCode
-}) => ({
-  type,
-  payload: {
-    promise:
-      createApiCallPromise({
-        endpoint,
-        query,
-        method,
-        headers: getHeaders(headers, accessToken),
-        body,
-        wasSuccessful
-      }),
-    data: body
-  },
-  meta: { endpoint, ...meta }
-});
+}) =>
+  dispatch =>
+    dispatch({
+      type,
+      payload: {
+        promise:
+          createApiCallPromise({
+            dispatch,
+            endpoint,
+            query,
+            method,
+            headers: getHeaders(headers, accessToken),
+            body,
+            wasSuccessful
+          }),
+        data: body
+      },
+      meta: { endpoint, ...meta }
+    });
 
 const middleware = state => next => action => {
   switch (action.type) {

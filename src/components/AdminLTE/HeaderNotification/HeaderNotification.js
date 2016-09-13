@@ -11,8 +11,6 @@ const HeaderNotification = ({
 }) => (
   <li>
     <a>
-      {successful && <Icon name='check' className='text-success' />}
-      {!successful && <Icon name='times' className='text-warning' />}
       <OverlayTrigger
         placement='bottom'
         overlay={
@@ -23,8 +21,11 @@ const HeaderNotification = ({
             </span>
           </Tooltip>
         }>
-        <span>{msg}</span>
+        {successful
+          ? <Icon name='check' className='text-success' />
+          : <Icon name='times' className='text-warning' />}
       </OverlayTrigger>
+      <span title={msg}>{msg}</span>
     </a>
   </li>
 );
