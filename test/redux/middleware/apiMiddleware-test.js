@@ -39,7 +39,7 @@ describe('API middleware and helper functions', () => {
       expect(assembleEndpoint('http://www.blabla.com/abcd', { x: 'y', a: 'b', c: 'd' })).to.equal('http://www.blabla.com/abcd?x=y&a=b&c=d');
       expect(assembleEndpoint('http://www.blabla.com/abcd', {})).to.equal('http://www.blabla.com/abcd');
       expect(assembleEndpoint('http://www.blabla.com/abcd')).to.equal('http://www.blabla.com/abcd');
-    })
+    });
 
     // @todo: Test conversion of body to FormData
   });
@@ -64,23 +64,31 @@ describe('API middleware and helper functions', () => {
       const endpoint = `${API_BASE}/abc`;
       fetchMock.mock(endpoint, { success: true });
 
-      middleware(null)(next)(action)
-        .payload.promise.then(resp => {
-          // examine the HTTP request
-          expect(fetchMock.calls().matched.length).to.equal(1);
-          expect(fetchMock.calls().unmatched.length).to.equal(0);
-          const [ url, req ] = fetchMock.calls().matched.pop();
-          expect(url).to.equal(endpoint);
-          expect(req.method.toLowerCase()).to.equal('get');
-          fetchMock.restore();
+      const alteredAction = middleware(null)(next)(action);
+      const thunkSpy = chai.spy();
+      const mockDispatch = action => { thunkSpy(); return action; };
 
-          // examine the NEXT call
-          expect(spy).to.have.been.called();
-          expect(spy).to.have.been.called.once();
+      // mock function
+      expect(alteredAction).to.be.a('function');
+      const request = alteredAction(mockDispatch);
+      expect(thunkSpy).to.have.been.called.once();
 
-          fetchMock.restore();
-          done();
-        });
+      request.payload.promise.then(resp => {
+        // examine the HTTP request
+        expect(fetchMock.calls().matched.length).to.equal(1);
+        expect(fetchMock.calls().unmatched.length).to.equal(0);
+        const [ url, req ] = fetchMock.calls().matched.pop();
+        expect(url).to.equal(endpoint);
+        expect(req.method.toLowerCase()).to.equal('get');
+        fetchMock.restore();
+
+        // examine the NEXT call
+        expect(spy).to.have.been.called();
+        expect(spy).to.have.been.called.once();
+
+        fetchMock.restore();
+        done();
+      });
     });
   });
 });
