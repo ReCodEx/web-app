@@ -10,6 +10,7 @@ import files from './modules/files';
 import groups from './modules/groups';
 import instances from './modules/instances';
 import notifications from './modules/notifications';
+import search from './modules/search';
 import sidebar from './modules/sidebar';
 import stats from './modules/stats';
 import submission from './modules/submission';
@@ -26,6 +27,7 @@ const createRecodexReducers = (token) => ({
   groups,
   instances,
   notifications,
+  search,
   sidebar,
   stats,
   submission,

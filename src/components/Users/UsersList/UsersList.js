@@ -7,12 +7,13 @@ import UsersListItem from '../UsersListItem';
 
 const UsersList = ({
   users = [],
+  createActions,
   ...rest
 }) => (
   <Table>
     <tbody>
     {users.map((user, i) => (
-      <UsersListItem {...user} key={i} />
+      <UsersListItem {...user} createActions={createActions} key={i} />
     ))}
 
     {users.length === 0 && (
@@ -22,7 +23,6 @@ const UsersList = ({
         </td>
       </tr>
     )}
-
     </tbody>
   </Table>
 );

@@ -6,7 +6,8 @@ import { Link } from 'react-router';
 const UsersListItem = ({
   id,
   fullName,
-  avatarUrl
+  avatarUrl,
+  createActions
 }, {
   links: { USER_URI_FACTORY }
 }) => (
@@ -18,6 +19,11 @@ const UsersListItem = ({
       <p><strong>{fullName}</strong></p>
       <small><Link to={USER_URI_FACTORY(id)}>{id}</Link></small>
     </td>
+    {createActions && (
+      <td>
+        {createActions(id)}
+      </td>
+    )}
   </tr>
 );
 
