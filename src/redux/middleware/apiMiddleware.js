@@ -55,14 +55,13 @@ export const getHeaders = (headers, accessToken) => {
 };
 
 export const createApiCallPromise = ({
-  dispatch,
   endpoint,
   query = {},
   method = 'GET',
   headers = {},
   body = undefined,
   wasSuccessful = () => true
-}) =>
+}, dispatch = undefined) =>
   createRequest(endpoint, query, method, headers, body)
     .catch(err => {
       if (err.message && err.message === 'Failed to fetch') {
@@ -75,9 +74,8 @@ export const createApiCallPromise = ({
     })
     .then(res => {
       if (isServerError(res)) {
-        dispatch(
-          addNotification('There was a problem on the server. Please try again later.', false)
-        );
+        dispatch &&
+          dispatch(addNotification('There was a problem on the server. Please try again later.', false));
       } else if (!wasSuccessful(res)) {
         throw new Error('The API call was not successful.', wasSuccessful);
       }
@@ -100,34 +98,31 @@ export const apiCall = ({
   body = undefined,
   meta = undefined,
   wasSuccessful = isTwoHundredCode
-}) =>
-  dispatch =>
-    dispatch({
-      type,
-      payload: {
-        promise:
-          createApiCallPromise({
-            dispatch,
-            endpoint,
-            query,
-            method,
-            headers: getHeaders(headers, accessToken),
-            body,
-            wasSuccessful
-          }),
-        data: body
-      },
-      meta: { endpoint, ...meta }
-    });
+}, dispatch = undefined) => ({
+  type,
+  payload: {
+    promise:
+      createApiCallPromise({
+        endpoint,
+        query,
+        method,
+        headers: getHeaders(headers, accessToken),
+        body,
+        wasSuccessful
+      }, dispatch),
+    data: body
+  },
+  meta: { endpoint, ...meta }
+});
 
-const middleware = state => next => action => {
+const middleware = ({ dispatch }) => next => action => {
   switch (action.type) {
     case CALL_API:
       if (!action.request) {
         throw new Error('API middleware requires request data in the action');
       }
 
-      action = apiCall(action.request);
+      action = apiCall(action.request, dispatch);
       break;
   }
 

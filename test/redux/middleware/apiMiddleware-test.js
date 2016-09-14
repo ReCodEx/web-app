@@ -64,16 +64,14 @@ describe('API middleware and helper functions', () => {
       const endpoint = `${API_BASE}/abc`;
       fetchMock.mock(endpoint, { success: true });
 
-      const alteredAction = middleware(null)(next)(action);
-      const thunkSpy = chai.spy();
-      const mockDispatch = action => { thunkSpy(); return action; };
+      const dispatchSpy = chai.spy();
+      const dispatch = (action) => { dispatchSpy(); return action; };
 
-      // mock function
-      expect(alteredAction).to.be.a('function');
-      const request = alteredAction(mockDispatch);
-      expect(thunkSpy).to.have.been.called.once();
+      const alteredAction = middleware({ dispatch })(next)(action);
+      alteredAction.payload.promise.then(resp => {
+        // no errors, no dispatch call
+        expect(dispatchSpy).to.not.have.been.called();
 
-      request.payload.promise.then(resp => {
         // examine the HTTP request
         expect(fetchMock.calls().matched.length).to.equal(1);
         expect(fetchMock.calls().unmatched.length).to.equal(0);
