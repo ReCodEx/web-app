@@ -4,7 +4,7 @@ import { reduxForm, Field } from 'redux-form';
 import { FormattedMessage } from 'react-intl';
 import isEmail from 'validator/lib/isEmail';
 
-import { LoadingIcon } from '../../Icons';
+import { SuccessIcon, LoadingIcon } from '../../Icons';
 import FormBox from '../../AdminLTE/FormBox';
 import { EmailField, PasswordField } from '../Fields';
 
@@ -33,7 +33,7 @@ const LoginForm = ({
           disabled={invalid || submitting || hasSucceeded}>
           {!submitting
             ? hasSucceeded
-              ? <span><Icon name='check' /> &nbsp; <FormattedMessage id='app.loginForm.success' defaultMessage='You are successfully signed in' /></span>
+              ? <span><SuccessIcon /> &nbsp; <FormattedMessage id='app.loginForm.success' defaultMessage='You are successfully signed in' /></span>
               : <FormattedMessage id='app.loginForm.login' defaultMessage='Sign in' />
             : <span><LoadingIcon /> &nbsp; <FormattedMessage id='app.loginForm.processing' defaultMessage='Signing in ...' /></span>}
         </Button>
