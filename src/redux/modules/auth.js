@@ -20,7 +20,7 @@ export const statusTypes = {
   LOGIN_FAILED: 'LOGIN_FAILED'
 };
 
-const getUserId = (token) => token.getIn(['sub', 'id']);
+const getUserId = (token) => token.get('sub');
 
 /**
  * Actions

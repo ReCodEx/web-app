@@ -5,7 +5,6 @@ import { usersSelector } from '../selectors/users';
 import factory, { initialState } from '../helpers/resourceManager';
 import { createApiAction } from '../middleware/apiMiddleware';
 
-import { actionTypes as authActionTypes } from './auth';
 import { additionalActionTypes as groupsActionTypes } from './groups';
 
 const resourceName = 'users';
@@ -34,10 +33,6 @@ export const validateRegistrationData = (email, password) =>
  */
 
 const reducer = handleActions(Object.assign({}, reduceActions, {
-
-  // [authActionTypes.LOGIN_SUCCESS]: reduceActions[actionTypes.FETCH_FULLFILLED],
-  'recodex/auth/LOGIN_FULFILLED': (state, { payload: { user } }) =>
-    reduceActions[actionTypes.FETCH_FULFILLED](state, { payload: user, meta: { id: user.id } }),
 
   [groupsActionTypes.LOAD_USERS_GROUPS_FULFILLED]: (state, { payload: { stats }, meta: { userId } }) =>
     state.setIn([ 'resources', userId, 'data', 'groupsStats' ], stats),
