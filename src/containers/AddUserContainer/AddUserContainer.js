@@ -8,31 +8,27 @@ import { getSearchStatus, getSearchResults, getSearchQuery } from '../../redux/s
 import LeaveJoinGroupButtonContainer from '../LeaveJoinGroupButtonContainer';
 import SearchUsers from '../../components/Users/SearchUsers';
 
-const getId = groupId => `add-student-${groupId}`;
-
-const AddStudentContainer = ({
+const AddUserContainer = ({
+  id,
   groupId,
   query,
   search,
   status,
-  users
+  users,
+  createActions
 }) => (
   <SearchUsers
-    id={getId(groupId)}
+    id={id}
     users={users}
     query={query}
     isReady={status === searchStatus.READY}
     isLoading={status === searchStatus.PENDING}
     hasFailed={status === searchStatus.FAILED}
     onChange={search}
-    createActions={id => (
-      <LeaveJoinGroupButtonContainer
-        userId={id}
-        groupId={groupId} />
-    )} />
+    createActions={createActions} />
 );
 
-AddStudentContainer.propTypes = {
+AddUserContainer.propTypes = {
   instanceId: PropTypes.string.isRequired,
   groupId: PropTypes.string.isRequired,
   search: PropTypes.func.isRequired,
@@ -41,14 +37,14 @@ AddStudentContainer.propTypes = {
   users: ImmutablePropTypes.list.isRequired
 };
 
-const mapStateToProps = (state, { groupId }) => ({
-  status: getSearchStatus(getId(groupId))(state),
-  query: getSearchQuery(getId(groupId))(state),
-  users: getSearchResults(getId(groupId))(state)
+const mapStateToProps = (state, { id }) => ({
+  status: getSearchStatus(id)(state),
+  query: getSearchQuery(id)(state),
+  users: getSearchResults(id)(state)
 });
 
-const mapDispatchToProps = (dispatch, { instanceId, groupId }) => ({
-  search: (query) => dispatch(searchPeople(instanceId)(getId(groupId), query))
+const mapDispatchToProps = (dispatch, { instanceId, id }) => ({
+  search: (query) => dispatch(searchPeople(instanceId)(id, query))
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(AddStudentContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(AddUserContainer);

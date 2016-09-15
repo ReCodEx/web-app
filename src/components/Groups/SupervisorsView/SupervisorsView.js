@@ -4,7 +4,7 @@ import { FormattedMessage } from 'react-intl';
 import { Row, Col } from 'react-bootstrap';
 
 import Box from '../../AdminLTE/Box';
-import AddStudentContainer from '../../../containers/AddStudentContainer';
+import AddStudent from '../AddStudent';
 import StudentsList from '../../Users/StudentsList';
 
 const SupervisorsView = ({
@@ -26,7 +26,7 @@ const SupervisorsView = ({
         title={<FormattedMessage id='app.groupDetail.addStudent' defaultMessage='Add student' />}
         collapsable
         isOpen>
-        <AddStudentContainer instanceId={group.instanceId} groupId={group.id} />
+        <AddStudent instanceId={group.instanceId} groupId={group.id} />
       </Box>
     </Col>
   </Row>
