@@ -91,6 +91,7 @@ class Assignment extends Component {
             iconName: 'puzzle-piece'
           }
         ]}>
+        <div>
           {isLoading(assignment) && <LoadingAssignmentDetails />}
           {hasFailed(assignment) && <FailedAssignmentDetails />}
           {isReady(assignment) && (
@@ -122,7 +123,8 @@ class Assignment extends Component {
               )}
             </Col>
           </Row>
-        )}
+          )}
+        </div>
       </PageContent>
     );
   }
