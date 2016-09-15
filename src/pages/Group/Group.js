@@ -15,10 +15,19 @@ import StudentsView from '../../components/Groups/StudentsView';
 import { isReady, isLoading, hasFailed } from '../../redux/helpers/resourceManager';
 import { createGroup, fetchSubgroups, fetchGroupIfNeeded } from '../../redux/modules/groups';
 import { fetchGroupsStatsIfNeeded } from '../../redux/modules/stats';
+import { fetchSupervisors, fetchStudents } from '../../redux/modules/users';
 import { fetchAssignmentsForGroup } from '../../redux/modules/assignments';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
-import { isStudentOf, isSupervisorOf, isAdminOf } from '../../redux/selectors/users';
-import { groupSelector, groupsSelectors, createGroupsAssignmentsSelector } from '../../redux/selectors/groups';
+import { usersSelector, isStudentOf, isSupervisorOf, isAdminOf } from '../../redux/selectors/users';
+
+import {
+  groupSelector,
+  groupsSelectors,
+  groupsAssignmentsSelector,
+  studentsOfGroup,
+  supervisorsOfGroup
+} from '../../redux/selectors/groups';
+
 import { createGroupsStatsSelector } from '../../redux/selectors/stats';
 import { fetchInstanceIfNeeded } from '../../redux/modules/instances';
 import { instanceSelector } from '../../redux/selectors/instances';
@@ -30,7 +39,7 @@ class Group extends Component {
   }
 
   componentWillReceiveProps(newProps) {
-    if (this.props.params.groupId !== newProps.params.groupId) {
+    if (this.props.group !== newProps.group) {
       this.loadData(newProps);
     }
   }
@@ -39,13 +48,17 @@ class Group extends Component {
     params: { groupId },
     load,
     group,
-    parentGroup
+    parentGroup,
+    isSupervisor
   }) => {
     load.groupIfNeeded(groupId);
     load.statsIfNeeded();
     isReady(group) && !parentGroup && load.groupIfNeeded(group.getIn(['data', 'parentGroupId']));
     isReady(group) && load.instanceIfNeeded(group.getIn(['data', 'instanceId']));
+    load.assignmentsIfNeeded();
     load.subgroups();
+    load.supervisors();
+    isSupervisor && load.students();
   };
 
   getTitle = (group) =>
@@ -147,9 +160,7 @@ class Group extends Component {
                 <SupervisorsView
                   group={groupData}
                   stats={stats}
-                  supervisors={supervisors}
-                  students={students}
-                  assignments={assignments} />
+                  students={students} />
               </Col>
             </Row>
           )}
@@ -181,20 +192,28 @@ export default connect(
   (state, { params: { groupId } }) => {
     const group = groupSelector(groupId)(state);
     const userId = loggedInUserIdSelector(state);
+    const isStudent = isStudentOf(userId, groupId)(state);
+    const isSupervisor = isSupervisorOf(userId, groupId)(state);
+    const isAdmin = isAdminOf(userId, groupId)(state);
+    const supervisorsIds = supervisorsOfGroup(groupId)(state);
+    const studentsIds = (isSupervisor || isAdmin) ? studentsOfGroup(groupId)(state) : List();
+    const readyUsers = usersSelector(state).toList().filter(isReady);
+    const supervisors = readyUsers.filter(user => supervisorsIds.includes(user.getIn(['data', 'id']))).map(user => user.get('data').toJS());
+    const students = readyUsers.filter(isReady).filter(user => studentsIds.includes(user.getIn(['data', 'id']))).map(user => user.get('data').toJS());
 
     return {
       group,
       userId,
-      // supervisors: // @todo select from the state, // @todo "fetchIfNeeded" ??
-      // students: // @todo select from the state, // @todo "fetchIfNeeded" ??
       instance: isReady(group) ? instanceSelector(state, group.getIn(['data', 'instanceId'])) : null,
       parentGroup: isReady(group) ? groupSelector(group.getIn(['data', 'parentGroupId']))(state) : null,
       groups: groupsSelectors(state),
-      assignments: createGroupsAssignmentsSelector(groupId)(state),
+      assignments: groupsAssignmentsSelector(groupId)(state),
       stats: createGroupsStatsSelector(groupId)(state),
-      isStudent: isStudentOf(userId, groupId)(state),
-      isSupervisor: isSupervisorOf(userId, groupId)(state),
-      isAdmin: isAdminOf(userId, groupId)(state)
+      students,
+      supervisors,
+      isStudent,
+      isSupervisor,
+      isAdmin
     };
   },
   (dispatch, { params: { groupId } }) => ({
@@ -204,7 +223,9 @@ export default connect(
       groupIfNeeded: (id) => dispatch(fetchGroupIfNeeded(groupId)),
       statsIfNeeded: () => dispatch(fetchGroupsStatsIfNeeded(groupId)),
       assignmentsIfNeeded: () => dispatch(fetchAssignmentsForGroup(groupId)),
-      subgroups: () => dispatch(fetchSubgroups(groupId))
+      subgroups: () => dispatch(fetchSubgroups(groupId)),
+      supervisors: () => dispatch(fetchSupervisors(groupId)),
+      students: () => dispatch(fetchStudents(groupId))
     }
   })
 )(Group);

@@ -46,7 +46,7 @@ export const groupsAssignmentsIdsSelector = id =>
     group => group && isReady(group) ? group.getIn(['data', 'assignments']) : List()
   );
 
-export const createGroupsAssignmentsSelector = id =>
+export const groupsAssignmentsSelector = id =>
   createSelector(
     [ groupsAssignmentsIdsSelector(id), getAssignments ],
     (groupsAssignmentsIds, assignments) =>

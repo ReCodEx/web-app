@@ -17,8 +17,9 @@ const SupervisorsView = ({
       <Box
         title={<FormattedMessage id='app.groupDetail.students' defaultMessage='Students' />}
         collapsable
+        noPadding
         isOpen={false}>
-        <StudentsList users={students} stats={stats} fill />
+        <StudentsList users={students.toJS()} stats={stats} fill />
       </Box>
     </Col>
     <Col lg={6}>

@@ -15,6 +15,7 @@ const StudentsView = ({
       <Box
         title={<FormattedMessage id='app.groupDetail.assignments' defaultMessage='Assignments' />}
         collapsable
+        noPadding
         isOpen>
         <AssignmentsTable
           assignments={assignments}

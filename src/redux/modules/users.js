@@ -28,6 +28,16 @@ export const validateRegistrationData = (email, password) =>
     body: { email, password }
   });
 
+export const fetchSupervisors = groupId =>
+  actions.fetchMany({
+    endpoint: `/groups/${groupId}/supervisors`
+  });
+
+export const fetchStudents = groupId =>
+  actions.fetchMany({
+    endpoint: `/groups/${groupId}/students`
+  });
+
 /**
  * Reducer
  */

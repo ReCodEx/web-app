@@ -20,7 +20,7 @@ const UsersListItem = ({
       <small><Link to={USER_URI_FACTORY(id)}>{id}</Link></small>
     </td>
     {createActions && (
-      <td>
+      <td className='text-right'>
         {createActions(id)}
       </td>
     )}

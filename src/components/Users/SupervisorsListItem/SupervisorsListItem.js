@@ -5,7 +5,7 @@ import Icon from 'react-fontawesome';
 import { Link } from 'react-router';
 import MakeRemoveSupervisorButtonContainer from '../../../containers/MakeRemoveSupervisorButtonContainer';
 
-const StudentsListItem = ({
+const SupervisorsListItem = ({
   isAdmin,
   id,
   fullName,
@@ -30,15 +30,15 @@ const StudentsListItem = ({
   </tr>
 );
 
-StudentsListItem.propTypes = {
+SupervisorsListItem.propTypes = {
   isAdmin: PropTypes.bool.isRequired,
   id: PropTypes.string.isRequired,
   fullName: PropTypes.string.isRequired,
   avatarUrl: PropTypes.string.isRequired
 };
 
-StudentsListItem.contextTypes = {
+SupervisorsListItem.contextTypes = {
   links: PropTypes.object
 };
 
-export default StudentsListItem;
+export default SupervisorsListItem;

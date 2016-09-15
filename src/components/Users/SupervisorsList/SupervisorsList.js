@@ -10,9 +10,9 @@ const SupervisorsList = ({
 }) => (
   <Table>
     <tbody>
-    {users.map((user, i) => (
+    {users.map(user => (
       <SupervisorsListItem
-        key={i}
+        key={user.id}
         {...user}
         groupId={groupId}
         isAdmin={isAdmin} />
