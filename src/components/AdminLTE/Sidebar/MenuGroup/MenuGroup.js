@@ -10,14 +10,28 @@ import { isLoading } from '../../../../redux/helpers/resourceManager';
 class MenuGroup extends Component {
   componentWillMount = () =>
     this.setState({
-      open: this.props.isActive === true
+      open: this.isActive(this.props)
     });
+
+  componentWillReceiveProps = newProps => {
+    if (this.isActive(this.props) !== this.isActive(newProps)) {
+      this.setState({
+        open: this.isActive(newProps)
+      });
+    }
+  };
 
   toggle = e => {
     e.preventDefault();
     this.setState({
       open: !this.state.open
     });
+  };
+
+  isActive = (props) => {
+    const { isActive } = this.context;
+    const { items, createLink } = props;
+    return items.find(item => isActive(createLink(item)));
   };
 
   render() {
@@ -33,14 +47,19 @@ class MenuGroup extends Component {
       forceOpen = false
     } = this.props;
 
+    const dropdownStyles = {
+      maxHeight: 200,
+      overflowY: 'auto',
+      overflowX: 'hidden'
+    };
+
     const itemsNotificationsCount = item => notifications[item.getIn(['data', 'id'])];
     const notificationsCount = items.reduce((acc, item) => acc + itemsNotificationsCount(item), 0);
-    const someChildIsActive = items.find(item => isActive(createLink(item)));
 
     return (
       <li
         className={classNames({
-          active: someChildIsActive || open || forceOpen,
+          active: open || forceOpen,
           treeview: true
         })}>
         <a href='#' onClick={this.toggle}>
@@ -58,7 +77,7 @@ class MenuGroup extends Component {
             <Icon name='angle-left' className='pull-right' />
           </span>
         </a>
-        <ul className='treeview-menu'>
+        <ul className='treeview-menu' style={dropdownStyles}>
           {items.map((item, key) =>
             isLoading(item)
               ? <LoadingMenuItem key={key} />
@@ -81,7 +100,6 @@ MenuGroup.propTypes = {
   icon: PropTypes.string,
   link: PropTypes.string,
   currentPath: PropTypes.string,
-  isActive: PropTypes.bool,
   forceOpen: PropTypes.bool
 };
 
