@@ -16,9 +16,9 @@ import {
 const LoginForm = ({
   invalid,
   handleSubmit,
-  hasFailed,
+  submitFailed: hasFailed,
   submitting,
-  hasSucceeded = false
+  hasSucceeded
 }) => (
   <FormBox
     title={<FormattedMessage id='app.loginForm.title' defaultMessage='Sign into ReCodEx' />}
@@ -51,10 +51,7 @@ const LoginForm = ({
 
 LoginForm.propTypes = {
   onSubmit: PropTypes.func.isRequired,
-  handleSubmit: PropTypes.func.isRequired,
-  hasFailed: PropTypes.bool,
-  hasSucceeded: PropTypes.bool,
-  invalid: PropTypes.bool
+  handleSubmit: PropTypes.func.isRequired
 };
 
 const validate = ({ email, password }) => {

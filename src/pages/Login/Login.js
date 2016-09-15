@@ -7,8 +7,9 @@ import { Row, Col } from 'react-bootstrap';
 import PageContent from '../../components/PageContent';
 import Box from '../../components/AdminLTE/Box';
 import LoginForm from '../../components/Forms/LoginForm';
+import LoginCASForm from '../../components/Forms/LoginCASForm';
 
-import { login } from '../../redux/modules/auth';
+import { login, loginCAS } from '../../redux/modules/auth';
 import { isLoggingIn, hasFailed, hasSucceeded } from '../../redux/selectors/auth';
 
 class Login extends Component {
@@ -27,7 +28,7 @@ class Login extends Component {
   };
 
   render() {
-    const { login, isLoggingIn, hasFailed, hasSucceeded } = this.props;
+    const { login, loginCAS, hasSucceeded } = this.props;
     const { links: { HOME_URI } } = this.context;
 
     return (
@@ -39,12 +40,11 @@ class Login extends Component {
           { text: <FormattedMessage id='app.login.title' /> }
         ]}>
         <Row>
-          <Col md={6} mdOffset={3} sm={8} smOffset={2}>
-            <LoginForm
-              onSubmit={login}
-              isTryingToLogin={isLoggingIn}
-              hasFailed={hasFailed}
-              hasSucceeded={hasSucceeded} />
+          <Col md={6} mdOffset={0} sm={8} smOffset={2}>
+            <LoginForm onSubmit={login} hasSucceeded={hasSucceeded} />
+          </Col>
+          <Col md={6} mdOffset={0} sm={8} smOffset={2}>
+            <LoginCASForm onSubmit={loginCAS} hasSucceeded={hasSucceeded} />
           </Col>
         </Row>
       </PageContent>
@@ -59,19 +59,16 @@ Login.contextTypes = {
 
 Login.propTypes = {
   login: PropTypes.func.isRequired,
-  isLoggingIn: PropTypes.bool.isRequired,
-  hasFailed: PropTypes.bool.isRequired,
   hasSucceeded: PropTypes.bool.isRequired
 };
 
 export default connect(
   state => ({
-    isLoggingIn: isLoggingIn(state),
-    hasFailed: hasFailed(state),
     hasSucceeded: hasSucceeded(state)
   }),
   dispatch => ({
     login: ({ email, password }) => dispatch(login(email, password)),
+    loginCAS: ({ ukco, password }) => dispatch(loginCAS(ukco, password)),
     push: (url) => dispatch(push(url))
   })
 )(Login);

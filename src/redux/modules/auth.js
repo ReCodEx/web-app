@@ -42,6 +42,16 @@ export const login = (username, password) =>
     query: { username, password }
   });
 
+export const externalLogin = serviceId => (username, password) =>
+  createApiAction({
+    type: actionTypes.LOGIN,
+    method: 'GET',
+    endpoint: `/login/${serviceId}`,
+    query: { username, password }
+  });
+
+export const loginCAS = externalLogin('cas-uk');
+
 export const refresh = () =>
   createApiAction({
     type: actionTypes.LOGIN,
