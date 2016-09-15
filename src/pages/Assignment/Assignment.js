@@ -148,11 +148,12 @@ Assignment.contextTypes = {
 export default connect(
   (state, props) => {
     const assignmentSelector = createAssignmentSelector();
+    const userId = loggedInUserIdSelector(state);
     return {
       assignment: assignmentSelector(state, props.params.assignmentId),
       submitting: isSubmitting(state),
-      userId: loggedInUserIdSelector(state),
-      isStudentOf: (groupId) => isStudentOf(groupId)(state)
+      userId,
+      isStudentOf: (groupId) => isStudentOf(userId, groupId)(state)
     };
   },
   (dispatch, props) => ({

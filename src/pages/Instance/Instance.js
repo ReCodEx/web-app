@@ -13,7 +13,8 @@ import { fetchInstanceIfNeeded } from '../../redux/modules/instances';
 import { instanceSelector } from '../../redux/selectors/instances';
 import { createGroup, fetchInstanceGroupsIfNeeded } from '../../redux/modules/groups';
 import { groupsSelectors } from '../../redux/selectors/groups';
-import { isStudentOf, isSupervisorOf, isAdminOf } from '../../redux/selectors/users';
+import { loggedInUserIdSelector } from '../../redux/selectors/auth';
+import { isStudentOf, isSupervisorOf, isAdminOf, isMemberOf } from '../../redux/selectors/users';
 import { fetchAssignmentsForInstance } from '../../redux/modules/assignments';
 
 class Instance extends Component {
@@ -75,14 +76,17 @@ class Instance extends Component {
 }
 
 export default connect(
-  (state, { params: { instanceId } }) => ({
-    instance: instanceSelector(state, instanceId),
-    groups: groupsSelectors(state),
-    isStudentOf: (groupId) => isStudentOf(groupId)(state),
-    isAdminOf: (groupId) => isAdminOf(groupId)(state),
-    isSupervisorOf: (groupId) => isSupervisorOf(groupId)(state),
-    isMemberOf: (groupId) => isStudentOf(groupId)(state) || isSupervisorOf(groupId)(state)
-  }),
+  (state, { params: { instanceId } }) => {
+    const userId = loggedInUserIdSelector(state);
+    return {
+      instance: instanceSelector(state, instanceId),
+      groups: groupsSelectors(state),
+      isStudentOf: (groupId) => isStudentOf(userId, groupId)(state),
+      isAdminOf: (groupId) => isAdminOf(userId, groupId)(state),
+      isSupervisorOf: (groupId) => isSupervisorOf(groupId)(state),
+      isMemberOf: (groupId) => isMemberOf(userId, groupId)(state)
+    };
+  },
   (dispatch, { params: { instanceId: id } }) => ({
     fetchInstanceIfNeeded: () => dispatch(fetchInstanceIfNeeded(id)),
     fetchInstanceGroupsIfNeeded: () => dispatch(fetchInstanceGroupsIfNeeded(id)),

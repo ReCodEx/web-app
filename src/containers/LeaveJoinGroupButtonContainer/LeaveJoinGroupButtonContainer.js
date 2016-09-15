@@ -16,8 +16,8 @@ const LeaveJoinGroupButtonContainer = ({
   ...props
 }) =>
   isStudent
-    ? <LeaveGroupButton {...props} onClick={() => leaveGroup(groupId, userId)} />
-    : <JoinGroupButton {...props} onClick={() => joinGroup(groupId, userId)} />;
+    ? <LeaveGroupButton {...props} onClick={() => leaveGroup(groupId, userId)} bsSize='xs' />
+    : <JoinGroupButton {...props} onClick={() => joinGroup(groupId, userId)} bsSize='xs' />;
 
 LeaveJoinGroupButtonContainer.propTypes = {
   groupId: PropTypes.string.isRequired,
@@ -27,9 +27,8 @@ LeaveJoinGroupButtonContainer.propTypes = {
   leaveGroup: PropTypes.func.isRequired
 };
 
-const mapStateToProps = (state, props) => ({
-  userId: loggedInUserIdSelector(state),
-  isStudent: isStudentOf(props.groupId)(state)
+const mapStateToProps = (state, { userId, groupId }) => ({
+  isStudent: isStudentOf(userId, groupId)(state)
 });
 
 const mapDispatchToProps = { joinGroup, leaveGroup };

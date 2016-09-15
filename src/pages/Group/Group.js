@@ -7,6 +7,7 @@ import { Row, Col } from 'react-bootstrap';
 import PageContent from '../../components/PageContent';
 
 import GroupDetail, { LoadingGroupDetail, FailedGroupDetail } from '../../components/Groups/GroupDetail';
+import LeaveJoinGroupButtonContainer from '../../containers/LeaveJoinGroupButtonContainer';
 import AdminsView from '../../components/Groups/AdminsView';
 import SupervisorsView from '../../components/Groups/SupervisorsView';
 import StudentsView from '../../components/Groups/StudentsView';
@@ -15,6 +16,7 @@ import { isReady, isLoading, hasFailed } from '../../redux/helpers/resourceManag
 import { createGroup, fetchSubgroups, fetchGroupIfNeeded } from '../../redux/modules/groups';
 import { fetchGroupsStatsIfNeeded } from '../../redux/modules/stats';
 import { fetchAssignmentsForGroup } from '../../redux/modules/assignments';
+import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import { isStudentOf, isSupervisorOf, isAdminOf } from '../../redux/selectors/users';
 import { groupSelector, groupsSelectors, createGroupsAssignmentsSelector } from '../../redux/selectors/groups';
 import { createGroupsStatsSelector } from '../../redux/selectors/stats';
@@ -87,6 +89,7 @@ class Group extends Component {
   render() {
     const {
       group,
+      userId,
       parentGroup,
       groups,
       students,
@@ -110,8 +113,14 @@ class Group extends Component {
           {hasFailed(group) && <FailedGroupDetail />}
 
           {isReady(group) && (
-            <GroupDetail
-              group={groupData} />
+            <div>
+              <GroupDetail {...groupData} />
+              {!isAdmin && !isSupervisor && (
+                <p className='text-center'>
+                  <LeaveJoinGroupButtonContainer userId={userId} groupId={group.getIn(['data', 'id'])} />
+                </p>
+              )}
+            </div>
           )}
 
           {isReady(group) && isAdmin && (
@@ -171,8 +180,11 @@ Group.contextTypes = {
 export default connect(
   (state, { params: { groupId } }) => {
     const group = groupSelector(groupId)(state);
+    const userId = loggedInUserIdSelector(state);
+
     return {
       group,
+      userId,
       // supervisors: // @todo select from the state, // @todo "fetchIfNeeded" ??
       // students: // @todo select from the state, // @todo "fetchIfNeeded" ??
       instance: isReady(group) ? instanceSelector(state, group.getIn(['data', 'instanceId'])) : null,
@@ -180,9 +192,9 @@ export default connect(
       groups: groupsSelectors(state),
       assignments: createGroupsAssignmentsSelector(groupId)(state),
       stats: createGroupsStatsSelector(groupId)(state),
-      isStudent: isStudentOf(groupId)(state),
-      isSupervisor: isSupervisorOf(groupId)(state),
-      isAdmin: isAdminOf(groupId)(state)
+      isStudent: isStudentOf(userId, groupId)(state),
+      isSupervisor: isSupervisorOf(userId, groupId)(state),
+      isAdmin: isAdminOf(userId, groupId)(state)
     };
   },
   (dispatch, { params: { groupId } }) => ({
