@@ -13,25 +13,38 @@ import { isReady } from '../helpers/resourceManager';
 export const groupsSelectors = state => state.groups.get('resources');
 const filterGroups = (ids, groups) => ids.map(id => groups.get(id)).filter(isReady);
 
-export const studentOfSelector = createSelector(
-  [ studentOfGroupsIdsSelector, groupsSelectors ],
-  filterGroups
-);
+export const studentOfSelector = userId =>
+  createSelector(
+    [ studentOfGroupsIdsSelector(userId), groupsSelectors ],
+    filterGroups
+  );
 
-export const supervisorOfSelector = createSelector(
-  [ supervisorOfGroupsIdsSelector, groupsSelectors ],
-  filterGroups
-);
+export const supervisorOfSelector = userId =>
+  createSelector(
+    [ supervisorOfGroupsIdsSelector(userId), groupsSelectors ],
+    filterGroups
+  );
 
-export const groupSelector = id => createSelector(
-  groupsSelectors,
-  groups => groups.get(id)
-);
+const usersOfGroup = (type, groupId) =>
+  createSelector(
+    groupSelector(groupId),
+    group => group && isReady(group) ? group.getIn(['data', type]) : List()
+  );
 
-export const groupsAssignmentsIdsSelector = id => createSelector(
-  groupSelector(id),
-  group => group && isReady(group) ? group.getIn(['data', 'assignments']) : List()
-);
+export const studentsOfGroup = groupId => usersOfGroup('students', groupId);
+export const supervisorsOfGroup = groupId => usersOfGroup('supervisors', groupId);
+
+export const groupSelector = id =>
+  createSelector(
+    groupsSelectors,
+    groups => groups.get(id)
+  );
+
+export const groupsAssignmentsIdsSelector = id =>
+  createSelector(
+    groupSelector(id),
+    group => group && isReady(group) ? group.getIn(['data', 'assignments']) : List()
+  );
 
 export const createGroupsAssignmentsSelector = id =>
   createSelector(

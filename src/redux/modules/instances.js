@@ -3,7 +3,6 @@ import { Map } from 'immutable';
 
 import { createApiAction } from '../middleware/apiMiddleware';
 import factory, { initialState } from '../helpers/resourceManager';
-import { memberOfInstancesIdsSelector } from '../selectors/users';
 import { actionTypes as groupsActionTypes } from './groups';
 
 const resourceName = 'instances';

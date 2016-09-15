@@ -11,7 +11,8 @@ export const instanceSelector = createSelector(
   (instances, id) => instances.get(id)
 );
 
-export const memberOfInstances = createSelector(
-  [ memberOfInstancesIdsSelector, instancesSelector ],
-  (ids, instances) => ids.map(id => instances.get(id)).filter(isReady)
-);
+export const memberOfInstances = userId =>
+  createSelector(
+    [ memberOfInstancesIdsSelector(userId), instancesSelector ],
+    (ids, instances) => ids.map(id => instances.get(id)).filter(isReady)
+  );
