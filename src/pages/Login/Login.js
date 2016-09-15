@@ -40,10 +40,10 @@ class Login extends Component {
           { text: <FormattedMessage id='app.login.title' /> }
         ]}>
         <Row>
-          <Col md={6} mdOffset={0} sm={8} smOffset={2}>
+          <Col lg={4} lgOffset={1} md={6} mdOffset={0} sm={8} smOffset={2}>
             <LoginForm onSubmit={login} hasSucceeded={hasSucceeded} />
           </Col>
-          <Col md={6} mdOffset={0} sm={8} smOffset={2}>
+          <Col lg={4} lgOffset={1} md={6} mdOffset={0} sm={8} smOffset={2}>
             <LoginCASForm onSubmit={loginCAS} hasSucceeded={hasSucceeded} />
           </Col>
         </Row>
