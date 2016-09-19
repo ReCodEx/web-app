@@ -73,10 +73,11 @@ export const createApiCallPromise = ({
       }
     })
     .then(res => {
-      if (isServerError(res)) {
-        dispatch &&
-          dispatch(addNotification('There was a problem on the server. Please try again later.', false));
-      } else if (!wasSuccessful(res)) {
+      if (isServerError(res) && dispatch) {
+        dispatch(addNotification('There was a problem on the server. Please try again later.', false));
+      }
+
+      if (!wasSuccessful(res)) {
         throw new Error('The API call was not successful.', wasSuccessful);
       }
 
