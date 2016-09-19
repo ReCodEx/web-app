@@ -39,6 +39,7 @@ class CreateGroupForm extends Component {
               bsStyle='success'
               className='btn-flat'
               onClick={handleSubmit}
+              tabIndex={3}
               disabled={invalid || submitting || submitSucceeded}>
               {!submitting
                 ? submitSucceeded
@@ -53,8 +54,20 @@ class CreateGroupForm extends Component {
             <FormattedMessage id='app.createGroupForm.failed' defaultMessage="We are sorry but we weren't able to create a new group." />
           </Alert>)}
 
-        <Field name='name' required component={TextField} label={<FormattedMessage id='app.createGroup.groupName' defaultMessage='Name:' />} />
-        <Field name='description' required component={MarkdownTextAreaField} label={<FormattedMessage id='app.createGroup.groupDescription' defaultMessage='Description:' />} />
+        <Field
+          name='name'
+          tabIndex={1}
+          component={TextField}
+          required
+          label={<FormattedMessage id='app.createGroup.groupName' defaultMessage='Name:' />}
+        />
+        <Field
+          name='description'
+          tabIndex={2}
+          component={MarkdownTextAreaField}
+          required
+          label={<FormattedMessage id='app.createGroup.groupDescription' defaultMessage='Description:' />}
+        />
       </FormBox>
     );
   }

@@ -1,64 +1,40 @@
 import React, { Component, PropTypes } from 'react';
 import { FormattedMessage } from 'react-intl';
 import Collapse from 'react-collapse';
-import RichTextEditor, { createEmptyValue } from 'react-rte';
+import ReactMarkdown from 'react-markdown';
 import { Row, Col, Checkbox, FormGroup } from 'react-bootstrap';
 import TextAreaField from './TextAreaField';
 
 class MarkdownTextAreaField extends Component {
 
   componentWillMount = () => {
-    const { viewSource = false } = this.props;
+    const { showPreview = false } = this.props;
     this.setState({
-      viewSource,
-      value: createEmptyValue()
+      showPreview
     });
   }
 
-  componentWillReceiveProps = (newProps) => {
-    const { viewSource, value } = this.state;
-    const inputVal = newProps.input.value;
-    const sourceEditedDirectly = viewSource && inputVal !== this.props.input.value;
-    const formWasReset = !viewSource && inputVal !== value.toString('markdown') && inputVal.length === 0;
-
-    if (sourceEditedDirectly || formWasReset) {
-      this.setState({
-        value: this.state.value.setContentFromString(inputVal, 'markdown')
-      });
-    }
-  };
-
-  toggleViewSource = (e) => {
-    this.setState({ viewSource: !this.state.viewSource });
-  };
-
-  onChange = (value) => {
-    const { onChange, input } = this.props;
-    const markdown = value.toString('markdown');
-    this.setState({ value });
-    input.onChange(markdown);
-    onChange && onChange(markdown);
+  toggleShowPreview = (e) => {
+    this.setState({ showPreview: !this.state.showPreview });
   };
 
   render() {
-    const { disabled = false } = this.props;
-    const { viewSource, value } = this.state;
+    const { disabled = false, input: { value } } = this.props;
+    const { showPreview } = this.state;
     return (
       <div>
-        {viewSource && (
-          <TextAreaField {...this.props} />)}
-        {!viewSource && (
-          <RichTextEditor
-            value={value}
-            className=''
-            editorClassName='recodex-editor'
-            onChange={e => this.onChange(e)}
-            readonly={disabled} />)}
+        <TextAreaField {...this.props} />
         <FormGroup controlId='togglePreview' className='text-center'>
-          <Checkbox checked={viewSource} onChange={() => this.toggleViewSource()}>
-            <FormattedMessage id='app.markdownTextArea.showMarkdown' defaultMessage='Show markdown source' />
+          <Checkbox checked={showPreview} onChange={() => this.toggleShowPreview()}>
+            <FormattedMessage id='app.markdownTextArea.showPreview' defaultMessage='Show preview' />
           </Checkbox>
         </FormGroup>
+        {showPreview && value.length > 0 && (
+          <div>
+            <h4><FormattedMessage id='app.markdownTextArea.preview' defaultMessage='Preview:' /></h4>
+            <ReactMarkdown source={value} />
+          </div>
+        )}
       </div>
     );
   }
@@ -66,7 +42,6 @@ class MarkdownTextAreaField extends Component {
 }
 
 MarkdownTextAreaField.propTypes = {
-  ...TextAreaField.propTypes,
   showPreview: PropTypes.string
 };
 
