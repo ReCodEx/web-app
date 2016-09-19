@@ -15,6 +15,11 @@ const {
   apiEndpointFactory: id => `/exercise-assignments/${id}`
 });
 
+export const additionalActionTypes = {
+  CAN_SUBMIT: 'recodex/assignments/CAN_SUBMIT',
+  CAN_SUBMIT_FULFILLED: 'recodex/assignments/CAN_SUBMIT_FULFILLED'
+};
+
 /**
  * Actions
  */
@@ -28,6 +33,13 @@ export const fetchAssignmentsForGroup = groupId =>
     endpoint: `/groups/${groupId}/assignments`
   });
 
+export const canSubmit = (assignmentId) =>
+  createApiAction({
+    type: additionalActionTypes.CAN_SUBMIT,
+    endpoint: `/exercise-assignments/${assignmentId}/can-submit`,
+    meta: { assignmentId }
+  });
+
 /**
  * Reducer
  */
@@ -35,7 +47,10 @@ export const fetchAssignmentsForGroup = groupId =>
 const reducer = handleActions(Object.assign({}, reduceActions, {
 
   [submissionsActionTypes.LOAD_USERS_SUBMISSIONS_FULFILLED]: (state, { payload, meta: { userId, assignmentId } }) =>
-    state.setIn([ 'submissions', assignmentId, userId ], fromJS(payload.map(submission => submission.id)))
+    state.setIn([ 'submissions', assignmentId, userId ], fromJS(payload.map(submission => submission.id))),
+
+  [additionalActionTypes.CAN_SUBMIT_FULFILLED]: (state, { payload: canSubmit, meta: { assignmentId } }) =>
+    state.setIn([ 'resources', assignmentId, 'data', 'canReceiveSubmissions' ], canSubmit)
 
 }), initialState);
 

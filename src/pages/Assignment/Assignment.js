@@ -6,9 +6,9 @@ import { push } from 'react-router-redux';
 
 import { isReady, isLoading, hasFailed } from '../../redux/helpers/resourceManager';
 
-import { fetchAssignmentIfNeeded } from '../../redux/modules/assignments';
+import { fetchAssignmentIfNeeded, canSubmit } from '../../redux/modules/assignments';
 import { init, cancel, submissionStatus } from '../../redux/modules/submission';
-import { createAssignmentSelector } from '../../redux/selectors/assignments';
+import { getAssignment, canSubmitSolution } from '../../redux/selectors/assignments';
 import { isSubmitting } from '../../redux/selectors/submission';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import { isStudentOf } from '../../redux/selectors/users';
@@ -44,10 +44,11 @@ class Assignment extends Component {
   }
 
   static loadData = ({
-    params: { assignmentId },
-    loadAssignmentIfNeeded
+    loadAssignmentIfNeeded,
+    lookIfCanSubmit
   }) => {
-    loadAssignmentIfNeeded(assignmentId);
+    loadAssignmentIfNeeded();
+    lookIfCanSubmit();
   };
 
   initSubmission = () => {
@@ -65,7 +66,8 @@ class Assignment extends Component {
       assignment,
       submitting,
       params: { assignmentId },
-      isStudentOf
+      isStudentOf,
+      canSubmit = false
     } = this.props;
 
     const {
@@ -106,7 +108,7 @@ class Assignment extends Component {
                   {isStudentOf(assignment.getIn(['data', 'groupId'])) && (
                     <div>
                       <p className='text-center'>
-                        <SubmitSolutionButton onClick={this.initSubmission} disabled={!assignment.getIn(['data', 'canReceiveSubmissions'])} />
+                        <SubmitSolutionButton onClick={this.initSubmission} disabled={!canSubmit} />
                       </p>
                       <SubmitSolutionContainer
                         reset={this.initSubmission}
@@ -137,6 +139,7 @@ Assignment.propTypes = {
     assignmentId: PropTypes.string.isRequired
   }),
   assignment: PropTypes.object,
+  canSubmit: PropTypes.bool,
   submitting: PropTypes.bool.isRequired,
   init: PropTypes.func.isRequired,
   cancel: PropTypes.func.isRequired,
@@ -148,19 +151,21 @@ Assignment.contextTypes = {
 };
 
 export default connect(
-  (state, props) => {
-    const assignmentSelector = createAssignmentSelector();
+  (state, { params: { assignmentId } }) => {
+    const assignmentSelector = getAssignment(assignmentId);
     const userId = loggedInUserIdSelector(state);
     return {
-      assignment: assignmentSelector(state, props.params.assignmentId),
+      assignment: assignmentSelector(state),
       submitting: isSubmitting(state),
       userId,
-      isStudentOf: (groupId) => isStudentOf(userId, groupId)(state)
+      isStudentOf: (groupId) => isStudentOf(userId, groupId)(state),
+      canSubmit: canSubmitSolution(assignmentId)(state)
     };
   },
-  (dispatch, props) => ({
-    init: (userId, assignmentId) => dispatch(init(userId, assignmentId)),
-    cancel: (userId, assignmentId) => dispatch(cancel()),
-    loadAssignmentIfNeeded: (assignmentId) => dispatch(fetchAssignmentIfNeeded(assignmentId))
+  (dispatch, { params: { assignmentId } }) => ({
+    init: (userId) => dispatch(init(userId, assignmentId)),
+    cancel: (userId) => dispatch(cancel()),
+    loadAssignmentIfNeeded: () => dispatch(fetchAssignmentIfNeeded(assignmentId)),
+    lookIfCanSubmit: () => dispatch(canSubmit(assignmentId))
   })
 )(Assignment);

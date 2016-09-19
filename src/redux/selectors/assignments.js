@@ -9,6 +9,12 @@ export const createAssignmentSelector = () =>
     (assignments, id) => assignments.getIn(['resources', id])
   );
 
+export const getAssignment = id =>
+  createSelector(
+    getAssignments,
+    assignments => assignments.getIn([ 'resources', id ])
+  );
+
 export const getUsersSubmissionIds = (state, userId, assignmentId) => {
   const submissions = getAssignments(state).getIn(['submissions', assignmentId, userId]);
   if (!submissions) {
@@ -22,4 +28,10 @@ export const createGetUsersSubmissionsForAssignment = () =>
   createSelector(
     [ getUsersSubmissionIds, getSubmissions ],
     (submissionIds, submissions) => submissionIds.map(id => submissions.get(id))
+  );
+
+export const canSubmitSolution = (assignmentId) =>
+  createSelector(
+    getAssignment(assignmentId),
+    assignment => assignment && assignment.getIn([ 'data', 'canReceiveSubmissions' ]) === true
   );
