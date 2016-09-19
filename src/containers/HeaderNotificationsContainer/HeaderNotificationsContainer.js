@@ -1,4 +1,5 @@
 import React, { PropTypes, Component } from 'react';
+import { canUseDOM } from 'exenv';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { defineMessage } from 'react-intl';
@@ -16,21 +17,19 @@ class HeaderNotificationsContainer extends Component {
 
   componentWillMount = () => {
     this.lastClick = 0;
-    // events only in the browser
-    if (typeof window !== 'undefined') {
+    if (canUseDOM) {
       window.addEventListener('click', () => this.clickAnywhere());
     }
   };
 
   componentWillUnMount = () => {
-    // events only in the browser
-    if (typeof window !== 'undefined') {
+    if (canUseDOM) {
       window.removeEventListener(() => this.clickAnywhere());
     }
   };
 
   clickAnywhere = () => {
-    if (this.state.isOpen && Date.now() - this.lastClick > 10) { // 10ms tolerance
+    if (this.state.isOpen === true && this.isClickingSomewhereElse()) {
       this.close();
     }
   };
@@ -38,6 +37,13 @@ class HeaderNotificationsContainer extends Component {
   markClick = () => {
     this.lastClick = Date.now();
   };
+
+  /**
+   * Determines, whether this click is on the container or not - a 10ms tolerance
+   * between now and the time of last click on the container is defined.
+   */
+  isClickingSomewhereElse = () =>
+    Date.now() - this.lastClick > 10;
 
   //
   //
@@ -55,9 +61,9 @@ class HeaderNotificationsContainer extends Component {
   open = () => this.setState({ isOpen: true });
 
   componentWillReceiveProps = (newProps) => {
-    if (this.props.newNotifications.size < newProps.newNotifications.size) {
-      this.setState({ isOpen: true }); // force open the notifications dropdown - there are some new notifications
-    }
+    // if (this.props.newNotifications.size < newProps.newNotifications.size) {
+    //   this.setState({ isOpen: true }); // force open the notifications dropdown - there are some new notifications
+    // }
   };
 
   render() {
