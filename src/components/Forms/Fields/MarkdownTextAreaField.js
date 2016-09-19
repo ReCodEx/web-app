@@ -5,6 +5,11 @@ import ReactMarkdown from 'react-markdown';
 import { Row, Col, Checkbox, FormGroup } from 'react-bootstrap';
 import TextAreaField from './TextAreaField';
 
+const previewStyle = {
+  padding: 5,
+  background: '#fefefe'
+};
+
 class MarkdownTextAreaField extends Component {
 
   componentWillMount = () => {
@@ -32,7 +37,9 @@ class MarkdownTextAreaField extends Component {
         {showPreview && value.length > 0 && (
           <div>
             <h4><FormattedMessage id='app.markdownTextArea.preview' defaultMessage='Preview:' /></h4>
-            <ReactMarkdown source={value} />
+            <div style={previewStyle}>
+              <ReactMarkdown source={value} />
+            </div>
           </div>
         )}
       </div>
