@@ -44,11 +44,22 @@ class EvaluationProgressContainer extends Component {
         this.socket = new WebSocket(monitor.url);
         this.socket.onopen = () => this.socket.send(monitor.id);
         this.socket.onmessage = this.onMessage;
-        this.socket.onerror = () => this.setState({ realTimeProcessing: false });
+        this.socket.onerror = (err) => this.onError(err);
       } else {
         this.setState({ realTimeProcessing: false });
       }
     }
+  };
+
+  onError = (err) => {
+    const { addMessage } = this.props;
+    console.warn('communication over websocket failed', err);
+    addMessage({
+      wasSuccessful: false,
+      status: 'SKIPPED',
+      text: err // @todo: Translatable error msg
+    });
+    this.closeSocket();
   };
 
   onMessage = (msg) => {
@@ -62,11 +73,12 @@ class EvaluationProgressContainer extends Component {
       case 'FINISHED':
         addMessage(this.formatMessage(data));
         this.closeSocket();
+        addMessage({ wasSuccessful: true, status: 'OK', text: lastMessage });
         break;
     }
   };
 
-  formatMessage = ({ command, task_id = false, task_state = 'OK', text = null }) => ({    // eslint-disable-line camelcase
+  formatMessage = ({ command, task_state = 'OK', text = null }) => ({    // eslint-disable-line camelcase
     wasSuccessful: command !== 'TASK' || task_state === 'COMPLETED',      // eslint-disable-line camelcase
     text: text || this.getRandomMessage(),
     status: task_state // eslint-disable-line camelcase
@@ -100,16 +112,14 @@ class EvaluationProgressContainer extends Component {
   closeSocket = () => {
     const {
       finish,
-      addMessage,
       goToEvaluationDetails
     } = this.props;
 
     this.socket.close();
     this.isClosed = true;
-    addMessage({ wasSuccessful: true, status: 'OK', text: lastMessage });
-    if (finish) {
-      finish();
-    }
+
+    // fire a callback if any
+    finish && finish();
   };
 
   finish = () => {
