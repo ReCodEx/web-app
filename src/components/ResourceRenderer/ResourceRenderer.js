@@ -21,7 +21,7 @@ const ResourceRenderer = ({
   children: ready,
   resource
 }) =>
-  isLoading(resource)
+  (!resource || isLoading(resource))
     ? loading
     : hasFailed(resource)
       ? failed
@@ -33,7 +33,7 @@ ResourceRenderer.propTypes = {
   loading: PropTypes.element,
   failed: PropTypes.element,
   children: PropTypes.oneOfType([ PropTypes.func, PropTypes.element ]).isRequired,
-  resource: PropTypes.object.isRequired
+  resource: PropTypes.object
 };
 
 export default ResourceRenderer;
