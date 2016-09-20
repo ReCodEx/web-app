@@ -4,7 +4,7 @@ import { createApiAction } from '../../middleware/apiMiddleware';
 import actionTypesFactory from './actionTypesFactory';
 import actionCreatorsFactory from './actionCreatorsFactory';
 import reducerFactory, { initialState } from './reducerFactory';
-import createRecord from './recordFactory';
+import createRecord, { getData, getJsData } from './recordFactory';
 
 import {
   resourceStatus,
@@ -34,6 +34,8 @@ export {
   isTooOld,
   afterTenMinutesIsTooOld,
   isReady,
+  getData,
+  getJsData,
   defaultNeedsRefetching,
   createRecord
 };

@@ -32,3 +32,18 @@ const createRecord = ({
 });
 
 export default createRecord;
+
+/**
+ * @param   {object}      resource  Resource's data
+ * @return  {object|null}
+ */
+export const getData = resource => resource.get('data');
+
+/**
+ * @param   {object}      resource  Resource's data
+ * @return  {Immutable.Map|null}
+ */
+export const getJsData = resource => {
+  const data = getData(resource);
+  return data === null ? null : data.toJS();
+};
