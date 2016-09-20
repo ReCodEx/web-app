@@ -1,4 +1,5 @@
 import React from 'react';
+import { FormattedMessage } from 'react-intl';
 import LoadingAvatar from '../LoadingAvatar';
 
 const LoadingBadge = () => (
@@ -7,7 +8,12 @@ const LoadingBadge = () => (
       <LoadingAvatar />
     </div>
     <div className='pull-left info'>
-      <p>Načítám...</p>
+      <p>
+        <a>
+          <FormattedMessage id='app.badge.loading' defaultMessage='Loading ...' />
+        </a>
+      </p>
+      <a></a>
     </div>
   </div>
 );

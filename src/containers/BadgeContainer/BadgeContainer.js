@@ -3,20 +3,30 @@ import { connect } from 'react-redux';
 import { logout } from '../../redux/modules/auth';
 
 import Badge, { LoadingBadge, FailedBadge } from '../../components/AdminLTE/Badge';
-import { isLoading, isReady, hasFailed } from '../../redux/helpers/resourceManager';
-import { loggedInUserDataSelector } from '../../redux/selectors/users';
+import ResourceRenderer from '../../components/ResourceRenderer';
+import { loggedInUserSelector } from '../../redux/selectors/users';
+import { accessTokenExpiration } from '../../redux/selectors/auth';
 
 const BadgeContainer = ({
   user,
+  expiration,
   logout
 }, {
   links: { HOME_URI }
-}) =>
-  isLoading(user)
-    ? <LoadingBadge />
-    : hasFailed(user)
-      ? <FailedBadge color='black' />
-      : <Badge logout={() => logout(HOME_URI)} user={user.toJS()} />;
+}) => (
+  <ResourceRenderer
+    loading={<LoadingBadge />}
+    failed={<FailedBadge color='black' />}
+    resource={user}>
+    <Badge logout={() => logout(HOME_URI)} expiration={expiration} />
+  </ResourceRenderer>
+);
+
+BadgeContainer.propTypes = {
+  user: PropTypes.object.isRequired,
+  expiration: PropTypes.number.isRequired,
+  logout: PropTypes.func.isRequired
+};
 
 BadgeContainer.contextTypes = {
   links: PropTypes.object
@@ -24,7 +34,8 @@ BadgeContainer.contextTypes = {
 
 export default connect(
   state => ({
-    user: loggedInUserDataSelector(state)
+    user: loggedInUserSelector(state),
+    expiration: accessTokenExpiration(state)
   }),
   {
     logout

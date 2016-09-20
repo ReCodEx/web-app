@@ -1,10 +1,14 @@
-import React, { PropTypes } from 'react';
-import { FormattedMessage } from 'react-intl';
+import React, { PropTypes, cloneElement } from 'react';
+import { FormattedMessage, FormattedRelative } from 'react-intl';
 import Icon from 'react-fontawesome';
 import { Link } from 'react-router';
+import { Tooltip, OverlayTrigger } from 'react-bootstrap';
 
 const Badge = ({
-  user: { id, fullName, avatarUrl },
+  id,
+  fullName,
+  avatarUrl,
+  expiration,
   logout
 }, {
   links: { USER_URI_FACTORY }
@@ -19,19 +23,27 @@ const Badge = ({
           {fullName}
         </Link>
       </p>
-      <a href='#' onClick={logout}>
-        <Icon name='power-off' className='text-danger' /> <FormattedMessage id='app.logout' defaultMessage='Logout' />
-      </a>
+      <OverlayTrigger
+        placement='right'
+        overlay={(
+          <Tooltip id='tokenExpiration'>
+            <FormattedMessage id='app.badge.sessionExpiration' defaultMessage='Session expiration:' />{' '}
+            <FormattedRelative value={expiration} />
+          </Tooltip>
+        )}>
+        <a href='#' onClick={logout}>
+          <Icon name='sign-out' className='text-danger' /> <FormattedMessage id='app.logout' defaultMessage='Logout' />
+        </a>
+      </OverlayTrigger>
     </div>
   </div>
 );
 
 Badge.propTypes = {
-  user: PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    fullName: PropTypes.string.isRequired,
-    avatarUrl: PropTypes.string.isRequired
-  }).isRequired,
+  id: PropTypes.string.isRequired,
+  fullName: PropTypes.string.isRequired,
+  avatarUrl: PropTypes.string.isRequired,
+  expiration: PropTypes.number.isRequired,
   logout: PropTypes.func
 };
 

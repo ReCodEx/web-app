@@ -10,7 +10,7 @@ const LoadingAvatar = ({
     textAlign: 'center',
     width: size,
     height: size,
-    lineHeight: size,
+    lineHeight: `${size}px`,
     borderRadius: Math.ceil(size / 2)
   }}>
     <LoadingIcon />
