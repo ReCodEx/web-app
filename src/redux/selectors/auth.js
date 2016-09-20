@@ -10,6 +10,7 @@ const getStatus = auth => auth.get('status');
  * Select access token from the state.
  */
 export const accessTokenSelector = createSelector(getAuth, getAccessToken);
+export const accessTokenExpiration = createSelector(accessTokenSelector, token => token ? token.get('exp') * 1000 : 0);
 export const loggedInUserIdSelector = createSelector(getAuth, getLoggedInUserId);
 export const statusSelector = createSelector(getAuth, getStatus);
 export const isLoggingIn = createSelector(statusSelector, state => state === statusTypes.LOGGING_IN);

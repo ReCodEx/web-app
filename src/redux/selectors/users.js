@@ -18,9 +18,14 @@ export const getUser = userId =>
     users => users.get(userId)
   );
 
-export const loggedInUserDataSelector = createSelector(
+export const loggedInUserSelector = createSelector(
   [ usersSelector, loggedInUserIdSelector ],
-  (users, id) => users.getIn([id, 'data'])
+  (users, id) => users.get(id)
+);
+
+export const loggedInUserDataSelector = createSelector(
+  loggedInUserSelector,
+  user => user.get('data')
 );
 
 export const memberOfInstancesIdsSelector = userId =>
