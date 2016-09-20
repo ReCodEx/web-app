@@ -18,7 +18,7 @@ const BadgeContainer = ({
     loading={<LoadingBadge />}
     failed={<FailedBadge color='black' />}
     resource={user}>
-    <Badge logout={() => logout(HOME_URI)} expiration={expiration} />
+    {data => <Badge {...data} logout={() => logout(HOME_URI)} expiration={expiration} />}
   </ResourceRenderer>
 );
 
