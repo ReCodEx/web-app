@@ -11,8 +11,9 @@ import LeaveJoinGroupButtonContainer from '../../containers/LeaveJoinGroupButton
 import AdminsView from '../../components/Groups/AdminsView';
 import SupervisorsView from '../../components/Groups/SupervisorsView';
 import StudentsView from '../../components/Groups/StudentsView';
+import ResourceRenderer from '../../components/ResourceRenderer';
 
-import { isReady, isLoading, hasFailed } from '../../redux/helpers/resourceManager';
+import { isReady, isLoading, hasFailed, getData, getJsData } from '../../redux/helpers/resourceManager';
 import { createGroup, fetchSubgroups, fetchGroupIfNeeded } from '../../redux/modules/groups';
 import { fetchGroupsStatsIfNeeded } from '../../redux/modules/stats';
 import { fetchSupervisors, fetchStudents } from '../../redux/modules/users';
@@ -74,7 +75,7 @@ class Group extends Component {
     if (isReady(instance)) {
       breadcrumbs.push({
         iconName: 'university',
-        link: INSTANCE_URI_FACTORY(instance.getIn(['data', 'id'])),
+        link: INSTANCE_URI_FACTORY(getData(instance).get('id')),
         text: instance.getIn(['data', 'name'])
       });
     }
@@ -82,8 +83,8 @@ class Group extends Component {
     if (parentGroup !== null && isReady(parentGroup)) {
       breadcrumbs.push({
         iconName: 'level-up',
-        link: GROUP_URI_FACTORY(parentGroup.getIn(['data', 'id'])),
-        text: parentGroup.getIn(['data', 'name'])
+        link: GROUP_URI_FACTORY(getData(parentGroup).get('id')),
+        text: getData(parentGroup).get('name')
       });
     }
 
@@ -92,7 +93,7 @@ class Group extends Component {
     if (breadcrumbs.length > 0 && isReady(group)) {
       breadcrumbs.push({
         iconName: 'group',
-        text: group.getIn(['data', 'name'])
+        text: getData(group).get('name')
       });
     }
 
@@ -115,32 +116,34 @@ class Group extends Component {
       addSubgroup
     } = this.props;
 
-    const groupData = isReady(group) ? group.toJS().data : null;
+    const groupData = getJsData(group);
     return (
       <PageContent
         title={this.getTitle(group)}
         description={<FormattedMessage id='app.group.description' defaultMessage='Group overview and assignments' />}
         breadcrumbs={this.getBreadcrumbs()}>
         <div>
-          {isLoading(group) && <LoadingGroupDetail />}
-          {hasFailed(group) && <FailedGroupDetail />}
-
-          {isReady(group) && (
-            <div>
-              <GroupDetail {...groupData} />
-              {!isAdmin && !isSupervisor && (
-                <p className='text-center'>
-                  <LeaveJoinGroupButtonContainer userId={userId} groupId={group.getIn(['data', 'id'])} />
-                </p>
-              )}
-            </div>
-          )}
+          <ResourceRenderer
+            loading={<LoadingGroupDetail />}
+            failed={<FailedGroupDetail />}
+            resource={group}>
+            {data => (
+              <div>
+                <GroupDetail {...data} />
+                {!isAdmin && !isSupervisor && (
+                  <p className='text-center'>
+                    <LeaveJoinGroupButtonContainer userId={userId} groupId={data.id} />
+                  </p>
+                )}
+              </div>
+            )}
+          </ResourceRenderer>
 
           {isReady(group) && isAdmin && (
             <Row>
               <Col xs={12}>
                 <h3>
-                  <FormattedMessage id='app.group.adminsView.title' defaultMessage='Administrator controls of {groupName}' values={{ groupName: group.getIn(['data', 'name']) }} />
+                  <FormattedMessage id='app.group.adminsView.title' defaultMessage='Administrator controls of {groupName}' values={{ groupName: groupData.name }} />
                 </h3>
                 <AdminsView
                   group={groupData}
@@ -155,7 +158,7 @@ class Group extends Component {
             <Row>
               <Col xs={12}>
                 <h3>
-                  <FormattedMessage id='app.group.supervisorsView.title' defaultMessage="Supervisor's controls of {groupName}" values={{ groupName: group.getIn(['data', 'name']) }} />
+                  <FormattedMessage id='app.group.supervisorsView.title' defaultMessage="Supervisor's controls of {groupName}" values={{ groupName: groupData.name }} />
                 </h3>
                 <SupervisorsView
                   group={groupData}
@@ -169,7 +172,7 @@ class Group extends Component {
             <Row>
               <Col xs={12}>
                 <h3>
-                  <FormattedMessage id='app.group.studentsView.title' defaultMessage="Student's dashboard for {groupName}" values={{ groupName: group.getIn(['data', 'name']) }} />
+                  <FormattedMessage id='app.group.studentsView.title' defaultMessage="Student's dashboard for {groupName}" values={{ groupName: groupData.name }} />
                 </h3>
                 <StudentsView
                   group={groupData}
@@ -198,14 +201,14 @@ export default connect(
     const supervisorsIds = supervisorsOfGroup(groupId)(state);
     const studentsIds = (isSupervisor || isAdmin) ? studentsOfGroup(groupId)(state) : List();
     const readyUsers = usersSelector(state).toList().filter(isReady);
-    const supervisors = readyUsers.filter(user => supervisorsIds.includes(user.getIn(['data', 'id']))).map(user => user.get('data').toJS());
-    const students = readyUsers.filter(isReady).filter(user => studentsIds.includes(user.getIn(['data', 'id']))).map(user => user.get('data').toJS());
+    const supervisors = readyUsers.filter(user => supervisorsIds.includes(getData(user).get('id'))).map(getJsData);
+    const students = readyUsers.filter(isReady).filter(user => studentsIds.includes(getData(user).get('id'))).map(getJsData);
 
     return {
       group,
       userId,
-      instance: isReady(group) ? instanceSelector(state, group.getIn(['data', 'instanceId'])) : null,
-      parentGroup: isReady(group) ? groupSelector(group.getIn(['data', 'parentGroupId']))(state) : null,
+      instance: isReady(group) ? instanceSelector(state, getData(group).get('instanceId')) : null,
+      parentGroup: isReady(group) ? groupSelector(getData(group).get('parentGroupId'))(state) : null,
       groups: groupsSelectors(state),
       assignments: groupsAssignmentsSelector(groupId)(state),
       stats: createGroupsStatsSelector(groupId)(state),
