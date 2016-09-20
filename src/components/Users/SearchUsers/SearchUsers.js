@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { FormattedMessage } from 'react-intl';
 import { FormGroup, ControlLabel, FormControl, InputGroup } from 'react-bootstrap';
-import { Throttle } from 'react-throttle';
+import { Debounce } from 'react-throttle';
 
 import UsersList from '../UsersList';
 import { LoadingIcon, SearchIcon, WarningIcon } from '../../Icons';
@@ -12,6 +12,8 @@ const usersListStyles = {
   overflowY: 'auto',
   overflowX: 'hidden'
 };
+
+const getId = id => `search-${id}`;
 
 const SearchUsers = ({
   id = '',
@@ -25,7 +27,7 @@ const SearchUsers = ({
 }) => (
   <div>
     <FormGroup>
-      <ControlLabel htmlFor={`search-${id}`}>
+      <ControlLabel htmlFor={getId(id)}>
         <FormattedMessage id='app.search.searchUser' defaultMessage='Search:' />
       </ControlLabel>
       <InputGroup>
@@ -34,9 +36,9 @@ const SearchUsers = ({
           {hasFailed && <WarningIcon />}
           {!isLoading && !hasFailed && <SearchIcon />}
         </InputGroup.Addon>
-        <Throttle time={300} handler='onChange'>
-          <FormControl id={`search-${id}`} onChange={e => onChange(e.target.value)} />
-        </Throttle>
+        <Debounce time={300} handler='onChange'>
+          <FormControl id={getId(id)} onChange={e => onChange(id, e.target.value)} />
+        </Debounce>
       </InputGroup>
     </FormGroup>
     {query && query.length > 0 && (

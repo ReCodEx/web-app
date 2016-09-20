@@ -43,8 +43,8 @@ const mapStateToProps = (state, { id }) => ({
   users: getSearchResults(id)(state)
 });
 
-const mapDispatchToProps = (dispatch, { instanceId, id }) => ({
-  search: (query) => dispatch(searchPeople(instanceId)(id, query))
+const mapDispatchToProps = (dispatch, { instanceId }) => ({
+  search: (id, query) => dispatch(searchPeople(instanceId)(id, query))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddUserContainer);
