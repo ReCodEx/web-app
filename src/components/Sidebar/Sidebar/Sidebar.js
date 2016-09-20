@@ -2,15 +2,25 @@ import React, { PropTypes } from 'react';
 
 // import Admin from '../Admin';
 import LoggedIn from '../../../containers/LoggedInSidebarContainer';
-import NotLoggedIn from '../NotLoggedIn';
+import Public from '../Public';
+import BadgeContainer from '../../../containers/BadgeContainer';
 
 const Sidebar = ({
   isLoggedIn = false,
   ...props
-}) =>
-  !isLoggedIn
-    ? <NotLoggedIn {...props} />
-    : <LoggedIn {...props} />;
+}) => (
+  <aside className='main-sidebar'>
+    <section className='sidebar'>
+      {isLoggedIn && (
+        <div>
+          <BadgeContainer />
+          <LoggedIn {...props} />
+        </div>
+      )}
+      <Public {...props} isLoggedIn={isLoggedIn} />
+    </section>
+  </aside>
+);
 
 Sidebar.propTypes = {
   isLoggedIn: PropTypes.bool
