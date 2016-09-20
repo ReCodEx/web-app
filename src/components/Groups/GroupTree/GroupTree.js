@@ -4,7 +4,7 @@ import Icon from 'react-fontawesome';
 import { ButtonGroup, Button } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 import { TreeView, TreeViewItem } from '../../AdminLTE/TreeView';
-import { isReady } from '../../../redux/helpers/resourceManager';
+import { isReady, getJsData } from '../../../redux/helpers/resourceManager';
 import LeaveJoinGroupButtonContainer from '../../../containers/LeaveJoinGroupButtonContainer';
 
 class GroupTree extends Component {
@@ -32,8 +32,8 @@ class GroupTree extends Component {
     const {
       id,
       level = 0,
-      groups,
-      isMemberOf
+      isOpen,
+      groups
     } = this.props;
 
     const {
@@ -45,12 +45,13 @@ class GroupTree extends Component {
       return this.renderLoading(level);
     }
 
-    const { name, childGroups } = group.get('data').toJS();
+    const { name, childGroups } = getJsData(group);
     return (
       <TreeView>
         <TreeViewItem
           title={name}
           level={level}
+          isOpen={isOpen}
           actions={this.renderButtons(GROUP_URI_FACTORY(id))}>
           {childGroups.map(id =>
             <GroupTree {...this.props} key={id} id={id} level={level + 1} />)}

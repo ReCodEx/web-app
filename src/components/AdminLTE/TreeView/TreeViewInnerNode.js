@@ -9,7 +9,11 @@ import TreeViewLeaf from './TreeViewLeaf';
 
 class TreeViewInnerNode extends Component {
 
-  state = { isOpen: true };
+  componentWillMount() {
+    const { isOpen = false } = this.props;
+    this.setState({ isOpen });
+  }
+
   toggleOpen = e => {
     e.preventDefault();
     this.setState({ isOpen: !this.state.isOpen });
@@ -41,7 +45,8 @@ class TreeViewInnerNode extends Component {
 }
 
 TreeViewInnerNode.propTypes = {
-  loading: PropTypes.bool
+  loading: PropTypes.bool,
+  isOpen: PropTypes.bool
 };
 
 export default TreeViewInnerNode;

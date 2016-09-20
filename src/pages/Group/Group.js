@@ -82,7 +82,7 @@ class Group extends Component {
 
     if (parentGroup !== null && isReady(parentGroup)) {
       breadcrumbs.push({
-        iconName: 'level-up',
+        iconName: 'group',
         link: GROUP_URI_FACTORY(getData(parentGroup).get('id')),
         text: getData(parentGroup).get('name')
       });
@@ -129,7 +129,7 @@ class Group extends Component {
             resource={group}>
             {data => (
               <div>
-                <GroupDetail {...data} />
+                <GroupDetail {...data} groups={groups} />
                 {!isAdmin && !isSupervisor && (
                   <p className='text-center'>
                     <LeaveJoinGroupButtonContainer userId={userId} groupId={data.id} />
@@ -147,7 +147,6 @@ class Group extends Component {
                 </h3>
                 <AdminsView
                   group={groupData}
-                  groups={groups}
                   supervisors={supervisors}
                   addSubgroup={addSubgroup(groupData.instanceId)} />
               </Col>

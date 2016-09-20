@@ -5,8 +5,8 @@ const LoadingAvatar = ({
   size = 45
 }) => (
   <div style={{
-    background: 'white',
-    color: 'black',
+    background: 'black',
+    color: 'gray',
     textAlign: 'center',
     width: size,
     height: size,
