@@ -11,7 +11,7 @@ import LevelGap from './LevelGap';
 const TreeViewLeaf = ({
   loading = false,
   title,
-  icon = 'circle-o',
+  icon = 'square-o',
   onClick,
   level,
   actions
