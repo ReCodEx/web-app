@@ -6,6 +6,7 @@ import { fetchUserIfNeeded } from '../../redux/modules/users';
 import { getUser } from '../../redux/selectors/users';
 import { isReady, isLoading, hasFailed } from '../../redux/helpers/resourceManager';
 import PageContent from '../../components/PageContent';
+import ResourceRenderer from '../../components/ResourceRenderer';
 import UserProfile, {
   LoadingUserProfile,
   FailedUserProfile
@@ -45,11 +46,12 @@ class User extends Component {
         breadcrumbs={[
           { text: <FormattedMessage id='app.user.title' defaultMessage="User's profile" />, iconName: 'user' }
         ]}>
-        <div>
-          {isLoading(user) && <LoadingUserProfile />}
-          {hasFailed(user) && <FailedUserProfile />}
-          {isReady(user) && <UserProfile {...user.get('data').toJS()} />}
-        </div>
+        <ResourceRenderer
+          resource={user}
+          loading={<LoadingUserProfile />}
+          failed={<FailedUserProfile />}>
+          {data => <UserProfile {...data} />}
+        </ResourceRenderer>
       </PageContent>
     );
   }
@@ -58,7 +60,7 @@ class User extends Component {
 
 export default connect(
   (state, props) => ({
-    user: getUser(state, props.params.userId)
+    user: getUser(props.params.userId)(state)
   }),
   dispatch => ({
     loadUserIfNeeded: (userId) => dispatch(fetchUserIfNeeded(userId))
