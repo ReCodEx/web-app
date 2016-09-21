@@ -1,11 +1,12 @@
 import React, { PropTypes } from 'react';
 import { Table } from 'react-bootstrap';
 import { FormattedMessage } from 'react-intl';
-import SupervisorsListItem from '../SupervisorsListItem';
+import SupervisorsListItem, { LoadingSupervisorsListItem } from '../SupervisorsListItem';
 
 const SupervisorsList = ({
   groupId,
   users,
+  isLoaded = true,
   isAdmin
 }) => (
   <Table>
@@ -18,12 +19,16 @@ const SupervisorsList = ({
         isAdmin={isAdmin} />
     ))}
 
-    {users.length === 0 && (
+    {users.length === 0 && isLoaded && (
       <tr>
         <td className='text-center'>
           <FormattedMessage id='app.userList.noSupervisors' defaultMessage='There are no supervisors in this list.' />
         </td>
       </tr>
+    )}
+
+    {!isLoaded && (
+      <LoadingSupervisorsListItem />
     )}
     </tbody>
   </Table>

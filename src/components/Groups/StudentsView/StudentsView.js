@@ -5,15 +5,18 @@ import { Row, Col } from 'react-bootstrap';
 
 import Box from '../../AdminLTE/Box';
 import AssignmentsTable from '../../Assignments/Assignment/AssignmentsTable';
+import StudentsList from '../../Users/StudentsList';
 
 const StudentsView = ({
   group,
+  students,
+  stats,
   assignments
 }) => (
   <Row>
-    <Col xs={12}>
+    <Col lg={students && stats ? 6 : 12}>
       <Box
-        title={<FormattedMessage id='app.groupDetail.assignments' defaultMessage='Assignments' />}
+        title={<FormattedMessage id='app.studentsView.assignments' defaultMessage='Assignments' />}
         collapsable
         noPadding
         isOpen>
@@ -22,6 +25,21 @@ const StudentsView = ({
           showGroup={false} />
       </Box>
     </Col>
+    {students && stats && (
+      <Col lg={6}>
+        <Box
+          title={<FormattedMessage id='app.studentsView.students' defaultMessage='Students' />}
+          collapsable
+          noPadding
+          isOpen>
+          <StudentsList
+            users={students.toJS()}
+            isLoaded={students.size === group.students.length}
+            stats={stats}
+            fill />
+        </Box>
+      </Col>
+    )}
   </Row>
 );
 

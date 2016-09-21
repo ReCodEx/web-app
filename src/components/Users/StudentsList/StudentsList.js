@@ -2,11 +2,12 @@ import React from 'react';
 import { Table } from 'react-bootstrap';
 import { FormattedMessage } from 'react-intl';
 
-import { isReady } from '../../../redux/helpers/resourceManager';
-import StudentsListItem from '../StudentsListItem';
+import { isReady, getJsData } from '../../../redux/helpers/resourceManager';
+import StudentsListItem, { LoadingStudentsListItem } from '../StudentsListItem';
 
 const StudentsList = ({
   users = [],
+  isLoaded = true,
   stats,
   ...rest
 }) => (
@@ -18,12 +19,12 @@ const StudentsList = ({
         {...user}
         stats={
           isReady(stats)
-            ? stats.get('data').toJS().find(item => item.userId === user.id)
+            ? getJsData(stats).find(item => item.userId === user.id)
             : null
         } />
     ))}
 
-    {users.length === 0 && (
+    {users.length === 0 && isLoaded && (
       <tr>
         <td className='text-center'>
           <FormattedMessage id='app.studentsList.noStudents' defaultMessage='There are no students in this list.' />
@@ -31,6 +32,9 @@ const StudentsList = ({
       </tr>
     )}
 
+    {!isLoaded && (
+      <LoadingStudentsListItem />
+    )}
     </tbody>
   </Table>
 );

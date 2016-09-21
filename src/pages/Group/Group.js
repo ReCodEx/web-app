@@ -53,13 +53,20 @@ class Group extends Component {
     isSupervisor
   }) => {
     load.groupIfNeeded(groupId);
-    load.statsIfNeeded();
-    isReady(group) && !parentGroup && load.groupIfNeeded(group.getIn(['data', 'parentGroupId']));
-    isReady(group) && load.instanceIfNeeded(group.getIn(['data', 'instanceId']));
     load.assignmentsIfNeeded();
     load.subgroups();
     load.supervisors();
-    isSupervisor && load.students();
+
+    if (group && isReady(group)) {
+      const groupData = getData(group);
+      load.instanceIfNeeded(groupData.get('instanceId'));
+      !parentGroup && load.groupIfNeeded(groupData.get('parentGroupId'));
+
+      if (isSupervisor || groupData.publicStats) {
+        load.statsIfNeeded();
+        load.students();
+      }
+    }
   };
 
   getTitle = (group) =>
@@ -175,6 +182,8 @@ class Group extends Component {
                 </h3>
                 <StudentsView
                   group={groupData}
+                  students={students}
+                  stats={stats}
                   assignments={assignments} />
               </Col>
             </Row>

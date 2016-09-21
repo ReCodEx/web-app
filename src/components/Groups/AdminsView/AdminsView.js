@@ -21,7 +21,12 @@ const AdminsView = ({
         collapsable
         noPadding
         isOpen>
-        <SupervisorsList users={supervisors.toJS()} fill isAdmin={true} groupId={group.id} />
+        <SupervisorsList
+          users={supervisors.toJS()}
+          isLoaded={supervisors.size === group.supervisors.length}
+          isAdmin={true}
+          groupId={group.id}
+          fill />
       </Box>
       <Box
         title={<FormattedMessage id='app.group.adminsView.addSupervisor' defaultMessage='Add supervisor' />}>

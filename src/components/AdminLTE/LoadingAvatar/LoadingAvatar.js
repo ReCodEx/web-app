@@ -5,6 +5,7 @@ const LoadingAvatar = ({
   size = 45
 }) => (
   <div style={{
+    display: 'inline-block',
     background: 'black',
     color: 'gray',
     textAlign: 'center',

@@ -25,7 +25,7 @@ const GroupDetail = ({
     </Col>
     {childGroups.length > 0 && (
       <Col md={4}>
-        <Box title={<FormattedMessage id='app.groupDetail.groupsTitle' defaultMessage='Groups hierarchy' />}>
+        <Box title={<FormattedMessage id='app.groupDetail.groupsTitle' defaultMessage='Groups hierarchy' />} noPadding>
           <GroupTree id={id} groups={groups} />
         </Box>
       </Col>
