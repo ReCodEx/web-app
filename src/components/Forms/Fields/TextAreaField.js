@@ -16,6 +16,7 @@ const TextAreaField = ({
   },
   type = 'text',
   label,
+  children,
   ...props
 }) => (
   <FormGroup
@@ -24,6 +25,7 @@ const TextAreaField = ({
     <ControlLabel>{label}</ControlLabel>
     <FormControl {...input} {...props} componentClass='textarea' />
     {touched && error && <HelpBlock>{error}</HelpBlock>}
+    {children}
   </FormGroup>
 );
 

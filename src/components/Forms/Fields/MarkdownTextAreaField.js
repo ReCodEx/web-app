@@ -2,12 +2,15 @@ import React, { Component, PropTypes } from 'react';
 import { FormattedMessage } from 'react-intl';
 import Collapse from 'react-collapse';
 import ReactMarkdown from 'react-markdown';
-import { Row, Col, Checkbox, FormGroup } from 'react-bootstrap';
+import { Row, Col, FormGroup } from 'react-bootstrap';
 import TextAreaField from './TextAreaField';
+import Checkbox from '../Checkbox';
 
 const previewStyle = {
   padding: 5,
-  background: '#fefefe'
+  background: '#eee',
+  marginBottom: 20,
+  borderBottom: '2px solid #ddd'
 };
 
 class MarkdownTextAreaField extends Component {
@@ -19,6 +22,10 @@ class MarkdownTextAreaField extends Component {
     });
   }
 
+  shouldComponentUpdate() {
+    return true;
+  }
+
   toggleShowPreview = (e) => {
     this.setState({ showPreview: !this.state.showPreview });
   };
@@ -28,16 +35,16 @@ class MarkdownTextAreaField extends Component {
     const { showPreview } = this.state;
     return (
       <div>
-        <TextAreaField {...this.props} />
-        <FormGroup controlId='togglePreview' className='text-center'>
-          <Checkbox checked={showPreview} onChange={() => this.toggleShowPreview()}>
-            <FormattedMessage id='app.markdownTextArea.showPreview' defaultMessage='Show preview' />
+        <TextAreaField {...this.props}>
+          <Checkbox onOff controlId='togglePreview' checked={showPreview} onChange={() => this.toggleShowPreview()}>
+            <FormattedMessage id='app.markdownTextArea.showPreview' defaultMessage='Preview' />
           </Checkbox>
-        </FormGroup>
-        {showPreview && value.length > 0 && (
+        </TextAreaField>
+        {showPreview && (
           <div>
             <h4><FormattedMessage id='app.markdownTextArea.preview' defaultMessage='Preview:' /></h4>
             <div style={previewStyle}>
+              {value.length === 0 && (<p><small>(<FormattedMessage id='app.markdownTextArea.empty' defaultMessage='Empty' />)</small></p>)}
               <ReactMarkdown source={value} />
             </div>
           </div>
