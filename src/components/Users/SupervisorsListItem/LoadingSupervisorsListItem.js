@@ -5,7 +5,7 @@ import LoadingAvatar from '../../AdminLTE/LoadingAvatar';
 const LoadingSupervisorsListItem = ({ isAdmin }) => (
   <tr>
     <td className='text-center' width={80}>
-      <LoadingAvatar />
+      <LoadingAvatar light />
     </td>
     <td colSpan={isAdmin ? 2 : 1}>
       <div><FormattedMessage id='app.supervisorsList.loading' defaultMessage='Loading ...' /></div>

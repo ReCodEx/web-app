@@ -28,7 +28,7 @@ const SupervisorsList = ({
     )}
 
     {!isLoaded && (
-      <LoadingSupervisorsListItem />
+      <LoadingSupervisorsListItem isAdmin={isAdmin} />
     )}
     </tbody>
   </Table>
