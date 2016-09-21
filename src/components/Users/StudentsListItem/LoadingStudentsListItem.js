@@ -5,7 +5,7 @@ import LoadingAvatar from '../../AdminLTE/LoadingAvatar';
 const LoadingStudentsListItem = () => (
   <tr>
     <td className='text-center' width={80}>
-      <LoadingAvatar />
+      <LoadingAvatar light />
     </td>
     <td colSpan={3}>
       <div><FormattedMessage id='app.studentsList.loading' defaultMessage='Loading ...' /></div>
