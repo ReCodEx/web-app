@@ -2,8 +2,8 @@ import React, { Component, PropTypes } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { reduxForm, Field } from 'redux-form';
 import FormBox from '../../AdminLTE/FormBox';
-import { Alert, Button } from 'react-bootstrap';
-import { TextField, MarkdownTextAreaField } from '../Fields';
+import { Alert, Button, ControlLabel } from 'react-bootstrap';
+import { TextField, MarkdownTextAreaField, CheckboxField } from '../Fields';
 import { LoadingIcon, SuccessIcon, SendIcon } from '../../Icons';
 import { validateAddGroup } from '../../../redux/modules/groups';
 
@@ -68,6 +68,13 @@ class CreateGroupForm extends Component {
           required
           label={<FormattedMessage id='app.createGroup.groupDescription' defaultMessage='Description:' />}
         />
+
+        <Field
+          name='publicStats'
+          tabIndex={3}
+          component={CheckboxField}
+          label={<FormattedMessage id='app.createGroup.publicStats' defaultMessage='Students can see statistics of each other' />}
+          required />
       </FormBox>
     );
   }
