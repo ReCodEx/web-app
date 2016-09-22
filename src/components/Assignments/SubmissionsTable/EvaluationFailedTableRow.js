@@ -3,15 +3,10 @@ import { FormattedNumber, FormattedDate, FormattedTime } from 'react-intl';
 import { Link } from 'react-router';
 import AssignmentStatusIcon from '../Assignment/AssignmentStatusIcon';
 
-const FailedSubmissionTableRow = ({
+const EvaluationFailedTableRow = ({
   link,
   note,
-  submittedAt,
-  evaluation: {
-    score,
-    points,
-    maxPoints
-  }
+  submittedAt
 }) => (
   <tr>
     <td><AssignmentStatusIcon status={'evaluation-failed'} /></td>
@@ -20,12 +15,12 @@ const FailedSubmissionTableRow = ({
     </td>
     <td className='text-center'>
       <span className='text-danger'>
-        <FormattedNumber style='percent' value={score} />
+        -
       </span>
     </td>
     <td className='text-center'>
       <span className='text-danger'>
-        {points}{'/'}{maxPoints}
+        -
       </span>
     </td>
     <td>
@@ -39,15 +34,10 @@ const FailedSubmissionTableRow = ({
   </tr>
 );
 
-FailedSubmissionTableRow.propTypes = {
+EvaluationFailedTableRow.propTypes = {
   link: PropTypes.string.isRequired,
   submittedAt: PropTypes.number.isRequired,
-  note: PropTypes.string.isRequired,
-  evaluation: PropTypes.shape({
-    score: PropTypes.number.isRequired,
-    points: PropTypes.number.isRequired,
-    maxPoints: PropTypes.number.isRequired
-  }).isRequired
+  note: PropTypes.string.isRequired
 };
 
-export default FailedSubmissionTableRow;
+export default EvaluationFailedTableRow;

@@ -1,6 +1,8 @@
 import React, { PropTypes } from 'react';
 import Icon from 'react-fontawesome';
 
+// @todo: Add a popover tooltip with textual description of the icon
+
 const AssignmentStatusIcon = ({
   status
 }) => {
