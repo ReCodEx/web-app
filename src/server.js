@@ -52,23 +52,17 @@ app.get('*', (req, res) => {
       // this should never happen but just for sure - if router failed
       res.status(404).send('Not found');
     } else {
-      let reqUrl = location.pathname + location.search;
-      let reduxState = JSON.stringify(store.getState());
-
-      // @todo make locale changeable
       let html = renderToString(
-        <IntlProvider locale='cs' messages={messages}>
-          <Provider store={store}>
-            <RouterContext {...renderProps} />
-          </Provider>
-        </IntlProvider>
+        <Provider store={store}>
+          <RouterContext {...renderProps} />
+        </Provider>
       );
       const head = Helmet.rewind();
 
       res.render('index', {
         html,
         head,
-        reduxState,
+        reduxState: JSON.stringify(store.getState()),
         bundle: '/bundle.js'
       });
     }
