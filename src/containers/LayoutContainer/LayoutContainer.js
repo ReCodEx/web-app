@@ -41,8 +41,13 @@ class LayoutContainer extends Component {
     if (isLoggedIn) {
       if (!isTokenValid(accessToken)) {
         logout(this.state.links.HOME_URI);
-      } else if (willExpireSoon(accessToken)) {
-        refreshToken();
+      } else if (willExpireSoon(accessToken) && !this.isRefreshingToken) {
+        this.isRefreshingToken = true;
+        refreshToken()
+          .catch(() => logout(this.state.links.HOME_URI))
+          .then(() => {
+            this.isRefreshingToken = false;
+          });
       }
     }
   };
