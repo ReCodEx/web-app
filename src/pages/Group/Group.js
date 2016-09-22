@@ -62,7 +62,7 @@ class Group extends Component {
       load.instanceIfNeeded(groupData.get('instanceId'));
       !parentGroup && load.groupIfNeeded(groupData.get('parentGroupId'));
 
-      if (isSupervisor || groupData.publicStats) {
+      if (isSupervisor || groupData.get('publicStats')) {
         load.statsIfNeeded();
         load.students();
       }
