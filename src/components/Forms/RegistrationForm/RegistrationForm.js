@@ -1,12 +1,12 @@
 import React, { PropTypes } from 'react';
-import { reduxForm, Field } from 'redux-form';
+import { reduxForm, Field, change } from 'redux-form';
 import { FormattedMessage } from 'react-intl';
 import { Button, Alert } from 'react-bootstrap';
 import isEmail from 'validator/lib/isEmail';
 
 import { LoadingIcon } from '../../Icons';
 import FormBox from '../../AdminLTE/FormBox';
-import { EmailField, TextField, PasswordField, SelectField } from '../Fields';
+import { EmailField, TextField, PasswordField, PasswordStrength, SelectField } from '../Fields';
 import { validateRegistrationData } from '../../../redux/modules/users';
 
 const RegistrationForm = ({
@@ -45,6 +45,7 @@ const RegistrationForm = ({
     <Field name='lastName' required component={TextField} label={<FormattedMessage id='app.registrationForm.lastName' defaultMessage='Last name:' />} />
     <Field name='email' required component={EmailField} label={<FormattedMessage id='app.registrationForm.email' defaultMessage='E-mail address:' />} />
     <Field name='password' required component={PasswordField} label={<FormattedMessage id='app.registrationForm.password' defaultMessage='Password:' />} />
+    <Field name='passwordStrength' component={PasswordStrength} label={<FormattedMessage id='app.registrationForm.passwordStrength' defaultMessage='Password strength:' />} />
     <Field
       name='instanceId'
       required
@@ -101,6 +102,7 @@ const asyncValidate = ({ email = '', password = '' }, dispatch) =>
       if (passwordScore <= 0) {
         errors['password'] = <FormattedMessage id='app.registrationForm.validation.passwordTooWeak' defaultMessage='The password you chose is too weak, please choose a different one.' />;
       }
+      dispatch(change('registration', 'passwordStrength', passwordScore));
 
       if (Object.keys(errors).length > 0) {
         throw errors;
