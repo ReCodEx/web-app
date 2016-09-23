@@ -31,8 +31,11 @@ const PasswordStrength = ({
   label
 }) => (
   <FormGroup controlId={name}>
-    <ControlLabel>{label}</ControlLabel>
-    <ProgressBar bsStyle={getStyle(level)} now={getPercent(level)} />
+    <ProgressBar
+      bsStyle={getStyle(level)}
+      now={getPercent(level)}
+      striped={level === 0}
+      active={level === 0} />
   </FormGroup>
 );
 
