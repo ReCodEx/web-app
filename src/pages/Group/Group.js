@@ -50,21 +50,29 @@ class Group extends Component {
     load,
     group,
     parentGroup,
-    isSupervisor
+    isAdmin,
+    isSupervisor,
+    isStudent
   }) => {
     load.groupIfNeeded(groupId);
     load.assignmentsIfNeeded();
     load.subgroups();
-    load.supervisors();
 
     if (group && isReady(group)) {
       const groupData = getData(group);
       load.instanceIfNeeded(groupData.get('instanceId'));
       !parentGroup && load.groupIfNeeded(groupData.get('parentGroupId'));
 
-      if (isSupervisor || groupData.get('publicStats')) {
+      if (isAdmin) {
+        load.supervisors();
+      } else if (isSupervisor) {
+        load.supervisors();
         load.statsIfNeeded();
+      } else if (isStudent) {
         load.students();
+        if (groupData.get('publicStats')) {
+          load.statsIfNeeded();
+        }
       }
     }
   };
@@ -207,7 +215,7 @@ export default connect(
     const isSupervisor = isSupervisorOf(userId, groupId)(state);
     const isAdmin = isAdminOf(userId, groupId)(state);
     const supervisorsIds = supervisorsOfGroup(groupId)(state);
-    const studentsIds = (isSupervisor || isAdmin) ? studentsOfGroup(groupId)(state) : List();
+    const studentsIds = studentsOfGroup(groupId)(state);
     const readyUsers = usersSelector(state).toList().filter(isReady);
     const supervisors = readyUsers.filter(user => supervisorsIds.includes(getData(user).get('id'))).map(getJsData);
     const students = readyUsers.filter(isReady).filter(user => studentsIds.includes(getData(user).get('id'))).map(getJsData);
