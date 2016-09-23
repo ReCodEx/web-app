@@ -63,16 +63,15 @@ class Group extends Component {
       load.instanceIfNeeded(groupData.get('instanceId'));
       !parentGroup && load.groupIfNeeded(groupData.get('parentGroupId'));
 
-      if (isAdmin) {
-        load.supervisors();
-      } else if (isSupervisor) {
-        load.supervisors();
-        load.statsIfNeeded();
-      } else if (isStudent) {
+      if (isAdmin || isSupervisor || isStudent) {
         load.students();
         if (groupData.get('publicStats')) {
           load.statsIfNeeded();
         }
+      }
+      if (isAdmin || isSupervisor) {
+        load.supervisors();
+        load.statsIfNeeded();
       }
     }
   };
