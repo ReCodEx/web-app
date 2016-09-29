@@ -46,3 +46,6 @@ export const search = endpoint => (id, query) =>
 
 export const searchPeople = instanceId =>
   search(`/instances/${instanceId}/users`);
+
+export const searchExercises = () =>
+  search('/exercises');
