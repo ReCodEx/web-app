@@ -3,32 +3,29 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import { FormattedMessage } from 'react-intl';
 import { FormGroup, ControlLabel, FormControl, InputGroup } from 'react-bootstrap';
 import { Debounce } from 'react-throttle';
+import { LoadingIcon, SearchIcon, WarningIcon } from '../Icons';
 
-import UsersList from '../UsersList';
-import { LoadingIcon, SearchIcon, WarningIcon } from '../../Icons';
-
-const usersListStyles = {
+const listStyles = {
   maxHeight: 500,
   overflowY: 'auto',
   overflowX: 'hidden'
 };
 
-const getId = id => `search-${id}`;
-
-const SearchUsers = ({
+const Search = ({
   id = '',
+  type = 'general',
   onChange,
   isLoading,
   hasFailed,
   isReady,
   query,
-  users = [],
-  createActions
+  foundItems,
+  renderList
 }) => (
   <div>
     <FormGroup>
-      <ControlLabel htmlFor={getId(id)}>
-        <FormattedMessage id='app.search.searchUser' defaultMessage='Search:' />
+      <ControlLabel htmlFor={id}>
+        <FormattedMessage id='app.search.title' defaultMessage='Search:' />
       </ControlLabel>
       <InputGroup>
         <InputGroup.Addon>
@@ -37,7 +34,7 @@ const SearchUsers = ({
           {!isLoading && !hasFailed && <SearchIcon />}
         </InputGroup.Addon>
         <Debounce time={300} handler='onChange'>
-          <FormControl id={getId(id)} onChange={e => onChange(id, e.target.value)} />
+          <FormControl id={id} onChange={e => onChange(id, e.target.value)} />
         </Debounce>
       </InputGroup>
     </FormGroup>
@@ -48,11 +45,9 @@ const SearchUsers = ({
           <strong><em>"{query}"</em></strong>
         </p>
 
-        {(!isLoading || users.size > 0) && (
-          <div style={usersListStyles}>
-            <UsersList
-              users={users.toJS()}
-              createActions={createActions} />
+        {(!isLoading || foundItems.size > 0) && (
+          <div style={listStyles}>
+            {renderList(foundItems.toJS())}
           </div>
         )}
       </div>
@@ -60,11 +55,11 @@ const SearchUsers = ({
   </div>
 );
 
-SearchUsers.propTypes = {
+Search.propTypes = {
   id: PropTypes.string,
   onChange: PropTypes.func.isRequired,
-  createActions: PropTypes.func,
-  users: ImmutablePropTypes.list.isRequired
+  renderList: PropTypes.func,
+  foundItems: ImmutablePropTypes.list.isRequired
 };
 
-export default SearchUsers;
+export default Search;

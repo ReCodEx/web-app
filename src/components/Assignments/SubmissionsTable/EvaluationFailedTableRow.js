@@ -28,7 +28,7 @@ const EvaluationFailedTableRow = ({
     </td>
     <td className='text-right'>
       <Link to={link} className='btn btn-flat btn-default btn-xs'>
-        Zobrazit podrobnosti
+        <FormattedMessage id='app.evaluationTable.showDetails' defaultMessage='Show details' />
       </Link>
     </td>
   </tr>

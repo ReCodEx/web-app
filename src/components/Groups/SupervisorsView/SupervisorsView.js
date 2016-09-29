@@ -5,6 +5,7 @@ import { Row, Col } from 'react-bootstrap';
 
 import Box from '../../AdminLTE/Box';
 import AddStudent from '../AddStudent';
+import AddAssignment from '../AddAssignment';
 import StudentsList from '../../Users/StudentsList';
 
 const SupervisorsView = ({
@@ -21,13 +22,19 @@ const SupervisorsView = ({
         isOpen={false}>
         <StudentsList users={students.toJS()} stats={stats} fill />
       </Box>
-    </Col>
-    <Col lg={6}>
       <Box
         title={<FormattedMessage id='app.groupDetail.addStudent' defaultMessage='Add student' />}
         collapsable
         isOpen>
         <AddStudent instanceId={group.instanceId} groupId={group.id} />
+      </Box>
+    </Col>
+    <Col lg={6}>
+      <Box
+        title={<FormattedMessage id='app.groupDetail.addAssignment' defaultMessage='Add assignment' />}
+        collapsable
+        isOpen>
+        <AddAssignment groupId={group.id} />
       </Box>
     </Col>
   </Row>
