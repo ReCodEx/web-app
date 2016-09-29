@@ -18,6 +18,9 @@ export const linksFactory = lang => {
   // user details
   const USER_URI_FACTORY = id => `${prefix}/app/user/${id}`;
 
+  // exercise details
+  const EXERCISE_URI_FACTORY = id => `${prefix}/app/exercise/${id}`;
+
   // assignments and solution submissions
   const ASSIGNMENT_DETAIL_URI_FACTORY = id => `${prefix}/app/assignment/${id}`;
   const SUBMIT_SOLUTION_URI_FACTORY = id =>
@@ -33,6 +36,7 @@ export const linksFactory = lang => {
   return {
     HOME_URI, DASHBOARD_URI, LOGIN_URI, REGISTRATION_URI, LOGOUT_URI,
     INSTANCE_URI_FACTORY, GROUP_URI_FACTORY, USER_URI_FACTORY,
+    EXERCISE_URI_FACTORY,
     ASSIGNMENT_DETAIL_URI_FACTORY, SUBMIT_SOLUTION_URI_FACTORY,
     SUBMISSION_DETAIL_URI_FACTORY, SOURCE_CODE_DETAIL_URI_FACTORY,
     BUGS_URL

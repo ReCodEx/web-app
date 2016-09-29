@@ -1,9 +1,4 @@
 import React, { PropTypes } from 'react';
-import ImmutablePropTypes from 'react-immutable-proptypes';
-import { connect } from 'react-redux';
-
-import { searchPeople, searchStatus } from '../../../redux/modules/search';
-import { getSearchStatus, getSearchResults, getSearchQuery } from '../../../redux/selectors/search';
 
 import LeaveJoinGroupButtonContainer from '../../../containers/LeaveJoinGroupButtonContainer';
 import AddUserContainer from '../../../containers/AddUserContainer';
