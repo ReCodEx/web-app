@@ -9,6 +9,7 @@ import LayoutContainer from '../containers/LayoutContainer';
 import App from '../containers/App';
 import Dashboard from './Dashboard';
 import Home from './Home';
+import Exercise from './Exercise';
 import Group from './Group';
 import instance from './Instance';
 import Login from './Login';
@@ -68,6 +69,7 @@ const createRoutes = (getState) => {
           <Route path='assignment/:assignmentId/submission/:submissionId' component={Submission}>
             <Route path='file/:fileId' component={SourceCodeViewerContainer} />
           </Route>
+          <Route path='exercise/:exerciseId' component={Exercise} />
           <Route path='group/:groupId' component={Group} />
           <Route path='instance/:instanceId' component={instance} />
           <Route path='user/:userId' component={User} />
