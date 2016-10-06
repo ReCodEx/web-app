@@ -6,6 +6,7 @@ import auth, { actionTypes as authActionTypes } from './modules/auth';
 import assignments from './modules/assignments';
 import comments from './modules/comments';
 import evaluationProgress from './modules/evaluationProgress';
+import exercises from './modules/exercises';
 import files from './modules/files';
 import groups from './modules/groups';
 import instances from './modules/instances';
@@ -23,6 +24,7 @@ const createRecodexReducers = (token) => ({
   assignments,
   comments,
   evaluationProgress,
+  exercises,
   files,
   groups,
   instances,
