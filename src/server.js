@@ -1,6 +1,7 @@
-// necessary polyfill for both
+// necessary polyfill for both browser and server
 import 'isomorphic-fetch';
 
+// server setup
 import React from 'react';
 import { renderToString } from 'react-dom/server';
 import Express from 'express';

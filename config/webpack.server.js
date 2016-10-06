@@ -4,6 +4,9 @@ const strip = require('strip-loader');
 const autoprefixer = require('autoprefixer');
 const fs = require('fs');
 
+// load variables from .env
+require('dotenv').config();
+
 var nodeModules = {};
 fs.readdirSync('node_modules')
   .filter(function(x) {

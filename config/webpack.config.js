@@ -3,6 +3,9 @@ const webpack = require('webpack');
 const autoprefixer = require('autoprefixer');
 const strip = require('strip-loader');
 
+// load variables from .env
+require('dotenv').config();
+
 module.exports = {
   devtool: 'source-map',
   entry: path.join(__dirname, '..', 'src/client.js'),

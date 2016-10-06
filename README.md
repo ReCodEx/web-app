@@ -2,6 +2,19 @@
 
 [![Build Status](https://travis-ci.org/ReCodEx/web-app.svg?branch=master)](https://travis-ci.org/ReCodEx/web-app) [![Coverage Status](https://coveralls.io/repos/github/ReCodEx/web-app/badge.svg?branch=master)](https://coveralls.io/github/ReCodEx/web-app?branch=master)
 
+## Environment variables
+
+Create a `.env` file in the root directory and put environment variables into this file. Look at `.env-sample` file for an example settings. The `.env` file should not be published in the git repository.
+
+### Supported variables and their default values
+
+```
+NODE_ENV=development
+API_BASE=http://localhost:4000/v1
+PORT=8080
+WEBPACK_DEV_SERVER_PORT=8081
+```
+
 ## Run Dev
 
 * webpack dev server, client side only, no server rendering

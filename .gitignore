@@ -7,3 +7,4 @@ bin/server.js
 bin/server.js.map
 build
 npm-debug.log
+.env

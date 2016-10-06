@@ -4,10 +4,15 @@ import webpack from 'webpack';
 import WebpackDevServer from 'webpack-dev-server';
 import path from 'path';
 import config from '../config/webpack.config';
+import colors from 'colors';
+
+const PORT = process.env.PORT || 8080;
+const WEBPACK_DEV_SERVER_PORT = process.env.WEBPACK_DEV_SERVER_PORT || 8081;
 
 let app = new Express();
 app.set('view engine', 'ejs');
 app.use(Express.static(path.join(__dirname, '../public')));
+
 
 app.get('*', (req, res) => {
   res.render('index', {
@@ -19,7 +24,7 @@ app.get('*', (req, res) => {
       link: ''
     },
     reduxState: undefined,
-    bundle: 'http://localhost:8081/bundle.js'
+    bundle: `http://localhost:${WEBPACK_DEV_SERVER_PORT}/bundle.js`
   });
 });
 
@@ -32,10 +37,10 @@ var server = new WebpackDevServer(webpack(config), {
   stats: { colors: true }
 });
 
-server.listen(8081, 'localhost', () => {
-  console.log('Webpack is running on port 8081');
+server.listen(WEBPACK_DEV_SERVER_PORT, 'localhost', () => {
+  console.log(`${colors.yellow('WebpackDevServer')} is running on ${colors.underline(`http://localhost:${WEBPACK_DEV_SERVER_PORT}`)}`);
 });
 
-app.listen(8080, () => {
-  console.log('Server is running on port 8080');
+app.listen(PORT, () => {
+  console.log(`${colors.green('WebApp')} is running on ${colors.underline(`http://localhost:${PORT}`)}`);
 });
