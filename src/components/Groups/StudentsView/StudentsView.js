@@ -11,6 +11,7 @@ const StudentsView = ({
   group,
   students,
   stats,
+  statuses,
   assignments
 }) => (
   <Row>
@@ -22,7 +23,8 @@ const StudentsView = ({
         isOpen>
         <AssignmentsTable
           assignments={assignments}
-          showGroup={false} />
+          showGroup={false}
+          statuses={statuses} />
       </Box>
     </Col>
     {students && stats && (
@@ -45,7 +47,8 @@ const StudentsView = ({
 
 StudentsView.propTypes = {
   group: PropTypes.object.isRequired,
-  assignments: ImmutablePropTypes.list.isRequired
+  assignments: ImmutablePropTypes.list.isRequired,
+  statuses: PropTypes.object
 };
 
 export default StudentsView;

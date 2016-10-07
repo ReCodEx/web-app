@@ -6,13 +6,14 @@ import { FormattedDate, FormattedTime } from 'react-intl';
 
 const AssignmentTableRow = ({
   showGroup,
-  item: { id, name, deadline, group }
+  item: { id, name, deadline, group },
+  status
 }, {
   links: { ASSIGNMENT_DETAIL_URI_FACTORY }
 }) => (
   <tr>
     <td className='text-center'>
-      <AssignmentStatusIcon status={'unknown'} />
+      {status && <AssignmentStatusIcon status={status} />}
     </td>
     <td>
       <Link to={ASSIGNMENT_DETAIL_URI_FACTORY(id)}>{name}</Link>
@@ -40,7 +41,8 @@ AssignmentTableRow.propTypes = {
       second: PropTypes.number.isRequired
     }),
     groupId: PropTypes.string
-  })
+  }),
+  status: PropTypes.string
 };
 
 AssignmentTableRow.contextTypes = {

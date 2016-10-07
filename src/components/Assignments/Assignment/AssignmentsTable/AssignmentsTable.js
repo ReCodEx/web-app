@@ -4,11 +4,12 @@ import { Table } from 'react-bootstrap';
 import { FormattedMessage } from 'react-intl';
 import Icon from 'react-fontawesome';
 
-import { isReady, isLoading, hasFailed } from '../../../../redux/helpers/resourceManager';
+import { isReady, isLoading, hasFailed, getJsData } from '../../../../redux/helpers/resourceManager';
 import AssignmentTableRow, { NoAssignmentTableRow, LoadingAssignmentTableRow } from '../AssignmentTableRow';
 
 const AssignmentsTable = ({
   assignments = [],
+  statuses = {},
   showGroup = true
 }) => (
   <Table hover>
@@ -25,11 +26,12 @@ const AssignmentsTable = ({
       {assignments.filter(isLoading).size === 0 && assignments.size === 0 &&
         <NoAssignmentTableRow />}
 
-      {assignments.filter(isReady).map(assignment =>
+      {assignments.filter(isReady).map(getJsData).map(assignment =>
         <AssignmentTableRow
-          key={assignment}
-          item={assignment.get('data').toJS()}
-          showGroup={showGroup} />)}
+          key={assignment.id}
+          item={assignment}
+          showGroup={showGroup}
+          status={statuses[assignment.id]} />)}
 
       {assignments.some(isLoading) &&
         <LoadingAssignmentTableRow />}
