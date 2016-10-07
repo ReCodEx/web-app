@@ -45,3 +45,11 @@ export const getData = resource => resource.get('data');
  */
 export const getJsData = resource =>
   isReady(resource) ? getData(resource).toJS() : null;
+
+
+/**
+ * @param   {object}      resource  Resource's data
+ * @return  {string|null}
+ */
+export const getId = resource =>
+  isReady(resource) ? getJsData(resource).id : null;

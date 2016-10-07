@@ -28,7 +28,7 @@ export const getStatuses = (groupId, userId) =>
   createSelector(
     getGroupsStatsData(groupId),
     groupsStats => {
-      const stats = groupsStats !== null ? groupsStats.find(stats => stats.userId === userId) : {};
+      const stats = groupsStats !== null ? groupsStats.find(stats => stats.userId === userId) || {} : {};
       const {
         statuses = {}
       } = stats;

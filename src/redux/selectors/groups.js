@@ -3,7 +3,7 @@ import { List } from 'immutable';
 
 import { studentOfGroupsIdsSelector, supervisorOfGroupsIdsSelector } from './users';
 import { getAssignments } from './assignments';
-import { isReady } from '../helpers/resourceManager';
+import { isReady, getId } from '../helpers/resourceManager';
 
 
 /**
@@ -11,7 +11,7 @@ import { isReady } from '../helpers/resourceManager';
  */
 
 export const groupsSelectors = state => state.groups.get('resources');
-const filterGroups = (ids, groups) => ids.map(id => groups.get(id)).filter(isReady);
+const filterGroups = (ids, groups) => groups.filter(isReady).filter(group => ids.contains(getId(group)) >= 0);
 
 export const studentOfSelector = userId =>
   createSelector(
