@@ -1,8 +1,8 @@
 import React, { PropTypes } from 'react';
 import { FormattedMessage } from 'react-intl';
-import { List } from 'immutable';
+import { Map } from 'immutable';
 
-import { isReady } from '../../../redux/helpers/resourceManager';
+import { isReady, getJsData, getId } from '../../../redux/helpers/resourceManager';
 import MenuTitle from '../../AdminLTE/Sidebar/MenuTitle';
 import MenuItem from '../../AdminLTE/Sidebar/MenuItem';
 import MenuGroup from '../../AdminLTE/Sidebar/MenuGroup';
@@ -31,16 +31,21 @@ const LoggedIn = ({
       currentPath={currentUrl}
       link={DASHBOARD_URI} />
 
-    {instances && instances.size > 0 && instances.toArray().map(
-      instance => isReady(instance) && (
-        <MenuItem
-          key={instance.getIn(['data', 'id'])}
-          title={instance.getIn([ 'data', 'name' ])}
-          icon='university'
-          currentPath={currentUrl}
-          link={INSTANCE_URI_FACTORY(instance.getIn([ 'data', 'id' ]))} />
-      )
-    )}
+    {instances && instances.size > 0 &&
+      instances
+        .toArray()
+        .filter(isReady)
+        .map(getJsData)
+        .map(
+          ({ id, name }) => (
+            <MenuItem
+              key={id}
+              title={name}
+              icon='university'
+              currentPath={currentUrl}
+              link={INSTANCE_URI_FACTORY(id)} />
+          )
+        )}
 
     {studentOf && studentOf.size > 0 && (
       <MenuGroup
@@ -49,7 +54,7 @@ const LoggedIn = ({
         notifications={notifications}
         icon='puzzle-piece'
         currentPath={currentUrl}
-        createLink={item => GROUP_URI_FACTORY(item.getIn(['data', 'id']))}
+        createLink={item => GROUP_URI_FACTORY(getId(item))}
         forceOpen={isCollapsed} />
     )}
     {supervisorOf && supervisorOf.size > 0 && (
@@ -59,15 +64,15 @@ const LoggedIn = ({
         notifications={0}
         icon='wrench'
         currentPath={currentUrl}
-        createLink={item => GROUP_URI_FACTORY(item.getIn(['data', 'id']))}
+        createLink={item => GROUP_URI_FACTORY(getId(item))}
         forceOpen={isCollapsed} />
     )}
   </ul>
 );
 
 LoggedIn.propTypes = {
-  supervisorOf: PropTypes.instanceOf(List),
-  studentOf: PropTypes.instanceOf(List),
+  supervisorOf: PropTypes.instanceOf(Map),
+  studentOf: PropTypes.instanceOf(Map),
   isCollapsed: PropTypes.bool
 };
 

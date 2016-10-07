@@ -7,6 +7,8 @@ import { Row, Col } from 'react-bootstrap';
 import PageContent from '../../components/PageContent';
 import ExerciseDetail, { LoadingExerciseDetail, FailedExerciseDetail } from '../../components/Exercises/ExerciseDetail';
 import ResourceRenderer from '../../components/ResourceRenderer';
+import GroupsList from '../../components/Groups/GroupsList';
+import Box from '../../components/AdminLTE/Box';
 
 import { isReady, isLoading, hasFailed, getJsData } from '../../redux/helpers/resourceManager';
 import { fetchExerciseIfNeeded } from '../../redux/modules/exercises';
@@ -61,12 +63,9 @@ class Exercise extends Component {
           </Col>
 
           <Col sm={6}>
-            @todo: assign to one of supervised groups
-            <ul>
-              {supervisedGroups.map(getJsData).map(({ id, name }) => (
-                <li key={id}>{name}</li>
-              ))}
-            </ul>
+            <Box title={'Groups'} noPadding>
+              <GroupsList groups={supervisedGroups} />
+            </Box>
           </Col>
         </Row>
       </PageContent>
