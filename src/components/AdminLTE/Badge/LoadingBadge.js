@@ -1,6 +1,6 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
-import LoadingAvatar from '../LoadingAvatar';
+import { LoadingAvatar } from '../Avatar';
 
 const LoadingBadge = () => (
   <div className='user-panel'>

@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import { ListGroupItem } from 'react-bootstrap';
-import LoadingAvatar from '../../AdminLTE/LoadingAvatar';
+import { LoadingAvatar } from '../../AdminLTE/Avatar';
 
 const LoadingUsersListItem = () => (
   <ListGroupItem>

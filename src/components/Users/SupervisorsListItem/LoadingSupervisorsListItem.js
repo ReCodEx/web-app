@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import { FormattedMessage } from 'react-intl';
-import LoadingAvatar from '../../AdminLTE/LoadingAvatar';
+import { LoadingAvatar } from '../../AdminLTE/Avatar';
 
 const LoadingSupervisorsListItem = ({ isAdmin }) => (
   <tr>
