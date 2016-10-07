@@ -29,7 +29,7 @@ import {
   supervisorsOfGroup
 } from '../../redux/selectors/groups';
 
-import { createGroupsStatsSelector } from '../../redux/selectors/stats';
+import { createGroupsStatsSelector, getStatuses } from '../../redux/selectors/stats';
 import { fetchInstanceIfNeeded } from '../../redux/modules/instances';
 import { instanceSelector } from '../../redux/selectors/instances';
 
@@ -124,6 +124,7 @@ class Group extends Component {
       supervisors = List(),
       assignments = List(),
       stats,
+      statuses,
       isStudent,
       isAdmin,
       isSupervisor,
@@ -191,6 +192,7 @@ class Group extends Component {
                   group={groupData}
                   students={students}
                   stats={stats}
+                  statuses={statuses}
                   assignments={assignments} />
               </Col>
             </Row>
@@ -218,6 +220,7 @@ export default connect(
     const readyUsers = usersSelector(state).toList().filter(isReady);
     const supervisors = readyUsers.filter(user => supervisorsIds.includes(getData(user).get('id'))).map(getJsData);
     const students = readyUsers.filter(isReady).filter(user => studentsIds.includes(getData(user).get('id'))).map(getJsData);
+    const statuses = getStatuses(groupId, userId)(state);
 
     return {
       group,
@@ -227,6 +230,7 @@ export default connect(
       groups: groupsSelectors(state),
       assignments: groupsAssignmentsSelector(groupId)(state),
       stats: createGroupsStatsSelector(groupId)(state),
+      statuses,
       students,
       supervisors,
       isStudent,
