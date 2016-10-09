@@ -37,7 +37,8 @@ export default createRecord;
  * @param   {object}      resource  Resource's data
  * @return  {object|null}
  */
-export const getData = resource => resource.get('data');
+export const getData = resource =>
+  isReady(resource) ? resource.get('data') : null;
 
 /**
  * @param   {object}      resource  Resource's data

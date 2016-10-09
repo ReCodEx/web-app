@@ -50,7 +50,7 @@ const LoggedIn = ({
     {studentOf && studentOf.size > 0 && (
       <MenuGroup
         title={<FormattedMessage id='app.sidebar.menu.studentOf' defaultMessage='Groups - student' />}
-        items={studentOf}
+        items={studentOf.toList()}
         notifications={notifications}
         icon='puzzle-piece'
         currentPath={currentUrl}
@@ -60,7 +60,7 @@ const LoggedIn = ({
     {supervisorOf && supervisorOf.size > 0 && (
       <MenuGroup
         title={<FormattedMessage id='app.sidebar.menu.supervisorOf' defaultMessage='Groups - supervisor' />}
-        items={supervisorOf}
+        items={supervisorOf.toList()}
         notifications={0}
         icon='wrench'
         currentPath={currentUrl}
