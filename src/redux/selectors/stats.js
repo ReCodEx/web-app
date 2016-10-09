@@ -34,7 +34,7 @@ export const getStatuses = (groupId, userId) =>
   createSelector(
     getGroupsStatsData(groupId),
     groupsStats => {
-      const stats = groupsStats !== null ? groupsStats.toArray().find(stats => stats.userId === userId) || {} : {};
+      const stats = groupsStats !== null ? groupsStats.toJS().find(stats => stats.userId === userId) || {} : {};
       const {
         statuses = {}
       } = stats;
