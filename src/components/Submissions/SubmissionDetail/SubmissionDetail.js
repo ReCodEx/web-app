@@ -80,112 +80,79 @@ const SubmissionDetail = ({
             </Box>
           </Col>
 
-          <Col lg={12} md={6} sm={12}>
-            <Box
-              title={<FormattedMessage id='app.submission.evaluation.title.details' defaultMessage='Evaluation details' />}
-              noPadding={true}
-              collapsable={true}
-              isOpen={true}>
+          {evaluationStatus !== 'work-in-progress' && (
+            <Col lg={12} md={6} sm={12}>
+              <Box
+                title={<FormattedMessage id='app.submission.evaluation.title.details' defaultMessage='Evaluation details' />}
+                noPadding={true}
+                collapsable={true}
+                isOpen={true}>
 
-              <Table>
-              {!evaluation && (
-                <tbody>
-                  <tr>
-                    <td className='text-center' colSpan={2}>
-                      <LoadingIcon />{' '} <FormattedMessage id='app.submission.evaluation.loading' defaultMessage="Loading results of your solution's evaluation" />}
-                    </td>
-                  </tr>
-                </tbody>
-              )}
-
-              {evaluation && (
-                <tbody>
-                  <tr>
-                    <th><FormattedMessage id='app.submission.evaluation.evaluatedAt' defaultMessage='Evaluated at:' /></th>
-                    <td className='text-center'>
-                      <FormattedDate value={evaluation.evaluatedAt * 1000} />&nbsp;<FormattedTime value={evaluation.evaluatedAt * 1000} />
-                    </td>
-                  </tr>
-
-                  <tr>
-                    <th><FormattedMessage id='app.submission.evaluation.beforeFirstDeadline' defaultMessage='Was submitted before the deadline:' /></th>
-                    <td className='text-center'>
-                      {isReady(assignment) && (
-                        submittedAt < assignment.getIn(['data', 'deadline', 'first'])
-                          ? <Icon name='check' className='text-success' />
-                          : <Icon name='times' className='text-danger' />
-                      )}
-                    </td>
-                  </tr>
-
-                  {isReady(assignment) && submittedAt >= assignment.getIn(['data', 'deadline', 'first']) && (
+                <Table>
+                {!evaluation && (
+                  <tbody>
                     <tr>
-                      <th><FormattedMessage id='app.submission.evaluation.beforeSecondDeadline' defaultMessage='Was submitted before the second deadline:' /></th>
+                      <td className='text-center' colSpan={2}>
+                        <LoadingIcon />{' '} <FormattedMessage id='app.submission.evaluation.loading' defaultMessage="Loading results of your solution's evaluation" />}
+                      </td>
+                    </tr>
+                  </tbody>
+                )}
+
+                {evaluation && (
+                  <tbody>
+                    <tr>
+                      <th><FormattedMessage id='app.submission.evaluation.evaluatedAt' defaultMessage='Evaluated at:' /></th>
+                      <td className='text-center'>
+                        <FormattedDate value={evaluation.evaluatedAt * 1000} />&nbsp;<FormattedTime value={evaluation.evaluatedAt * 1000} />
+                      </td>
+                    </tr>
+
+                    <tr>
+                      <th><FormattedMessage id='app.submission.evaluation.beforeFirstDeadline' defaultMessage='Was submitted before the deadline:' /></th>
                       <td className='text-center'>
                         {isReady(assignment) && (
-                          <MaybeSucceededIcon success={submittedAt < assignment.getIn(['data', 'deadline', 'second'])} />
+                          submittedAt < assignment.getIn(['data', 'deadline', 'first'])
+                            ? <Icon name='check' className='text-success' />
+                            : <Icon name='times' className='text-danger' />
                         )}
                       </td>
                     </tr>
-                  )}
 
-                  <tr>
-                    <th><FormattedMessage id='app.submission.evaluation.hasFinished' defaultMessage='Evaluation process has finished:' /></th>
-                    <td className='text-center'>
-                      <MaybeSucceededIcon name={evaluation.evaluationFailed} />
-                    </td>
-                  </tr>
+                    {isReady(assignment) && submittedAt >= assignment.getIn(['data', 'deadline', 'first']) && (
+                      <tr>
+                        <th><FormattedMessage id='app.submission.evaluation.beforeSecondDeadline' defaultMessage='Was submitted before the second deadline:' /></th>
+                        <td className='text-center'>
+                          {isReady(assignment) && (
+                            <MaybeSucceededIcon success={submittedAt < assignment.getIn(['data', 'deadline', 'second'])} />
+                          )}
+                        </td>
+                      </tr>
+                    )}
 
-                  <tr>
-                    <th><FormattedMessage id='app.submission.evaluation.isValid' defaultMessage='Evaluation is valid:' /></th>
-                    <td className='text-center'>
-                      <MaybeSucceededIcon success={evaluation.isValid} />
-                    </td>
-                  </tr>
-
-                  <tr>
-                    <th><FormattedMessage id='app.submission.evaluation.buildSucceeded' defaultMessage='Build succeeded:' /></th>
-                    <td className='text-center'>
-                      <MaybeSucceededIcon success={!evaluation.initFailed} />
-                    </td>
-                  </tr>
-
-                  <tr>
-                    <th><FormattedMessage id='app.submission.evaluation.isCorrect' defaultMessage='Is correct:' /></th>
-                    <td className={
-                      classnames({
-                        'text-center': true,
-                        'text-danger': !evaluation.isCorrect,
-                        'text-success': evaluation.isCorrect
-                      })
-                    }>
-                      <b><FormattedNumber style='percent' value={evaluation.score} /></b>
-                    </td>
-                  </tr>
-                  <tr>
-                    <th><FormattedMessage id='app.submission.evaluation.score' defaultMessage='Score:' /></th>
-                    <td className={
-                      classnames({
-                        'text-center': true,
-                        'text-danger': !evaluation.isCorrect && evaluation.bonusPoints === 0,
-                        'text-success': evaluation.isCorrect && evaluation.bonusPoints === 0,
-                        'text-bold': evaluation.bonusPoints === 0
-                      })
-                    }>
-                      {evaluation.points}/{evaluation.maxPoints}
-                    </td>
-                  </tr>
-                  {evaluation.bonusPoints !== 0 && (
                     <tr>
-                      <th><FormattedMessage id='app.submission.evaluation.bonusPoints' defaultMessage='Bonus points:' /></th>
+                      <th><FormattedMessage id='app.submission.evaluation.hasFinished' defaultMessage='Evaluation process has finished:' /></th>
                       <td className='text-center'>
-                        <BonusPoints bonus={evaluation.bonusPoints} />
+                        <MaybeSucceededIcon name={evaluation.evaluationFailed} />
                       </td>
                     </tr>
-                  )}
-                  {evaluation.bonusPoints !== 0 && (
+
                     <tr>
-                      <th><FormattedMessage id='app.submission.evaluation.totalScore' defaultMessage='Total score:' /></th>
+                      <th><FormattedMessage id='app.submission.evaluation.isValid' defaultMessage='Evaluation is valid:' /></th>
+                      <td className='text-center'>
+                        <MaybeSucceededIcon success={evaluation.isValid} />
+                      </td>
+                    </tr>
+
+                    <tr>
+                      <th><FormattedMessage id='app.submission.evaluation.buildSucceeded' defaultMessage='Build succeeded:' /></th>
+                      <td className='text-center'>
+                        <MaybeSucceededIcon success={!evaluation.initFailed} />
+                      </td>
+                    </tr>
+
+                    <tr>
+                      <th><FormattedMessage id='app.submission.evaluation.isCorrect' defaultMessage='Is correct:' /></th>
                       <td className={
                         classnames({
                           'text-center': true,
@@ -193,17 +160,52 @@ const SubmissionDetail = ({
                           'text-success': evaluation.isCorrect
                         })
                       }>
-                        <b>
-                          {evaluation.points + evaluation.bonusPoints}/{evaluation.maxPoints}
-                        </b>
+                        <b><FormattedNumber style='percent' value={evaluation.score} /></b>
                       </td>
                     </tr>
-                  )}
-                </tbody>
-              )}
-              </Table>
-            </Box>
-          </Col>
+                    <tr>
+                      <th><FormattedMessage id='app.submission.evaluation.score' defaultMessage='Score:' /></th>
+                      <td className={
+                        classnames({
+                          'text-center': true,
+                          'text-danger': !evaluation.isCorrect && evaluation.bonusPoints === 0,
+                          'text-success': evaluation.isCorrect && evaluation.bonusPoints === 0,
+                          'text-bold': evaluation.bonusPoints === 0
+                        })
+                      }>
+                        {evaluation.points}/{evaluation.maxPoints}
+                      </td>
+                    </tr>
+                    {evaluation.bonusPoints !== 0 && (
+                      <tr>
+                        <th><FormattedMessage id='app.submission.evaluation.bonusPoints' defaultMessage='Bonus points:' /></th>
+                        <td className='text-center'>
+                          <BonusPoints bonus={evaluation.bonusPoints} />
+                        </td>
+                      </tr>
+                    )}
+                    {evaluation.bonusPoints !== 0 && (
+                      <tr>
+                        <th><FormattedMessage id='app.submission.evaluation.totalScore' defaultMessage='Total score:' /></th>
+                        <td className={
+                          classnames({
+                            'text-center': true,
+                            'text-danger': !evaluation.isCorrect,
+                            'text-success': evaluation.isCorrect
+                          })
+                        }>
+                          <b>
+                            {evaluation.points + evaluation.bonusPoints}/{evaluation.maxPoints}
+                          </b>
+                        </td>
+                      </tr>
+                    )}
+                  </tbody>
+                )}
+                </Table>
+              </Box>
+            </Col>
+          )}
         </Row>
         <Row>
         {files.map(file => (

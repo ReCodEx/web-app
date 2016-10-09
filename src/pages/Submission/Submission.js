@@ -4,12 +4,13 @@ import { FormattedMessage } from 'react-intl';
 import { Modal, Row, Col } from 'react-bootstrap';
 
 import PageContent from '../../components/PageContent';
+import ResourceRenderer from '../../components/ResourceRenderer';
 import SubmissionDetail, {
   LoadingSubmissionDetail,
   FailedSubmissionDetail
 } from '../../components/Submissions/SubmissionDetail';
 
-import { isReady, isLoading, hasFailed } from '../../redux/helpers/resourceManager';
+import { isReady, getData } from '../../redux/helpers/resourceManager';
 import { fetchAssignmentIfNeeded } from '../../redux/modules/assignments';
 import { fetchSubmissionIfNeeded } from '../../redux/modules/submissions';
 
@@ -57,23 +58,26 @@ class Submission extends Component {
       }
     } = this.context;
 
-    const assignmentData = isReady(assignment) ? assignment.get('data').toJS() : null;
-    const title = assignmentData !== null ? assignmentData.name : 'Načítám ...';
-    const data = isReady(submission) ? submission.get('data').toJS() : null;
+    const title = (
+      <ResourceRenderer resource={assignment}>
+        {assignmentData => <span>{assignmentData.name}</span>}
+      </ResourceRenderer>
+    );
 
     return (
       <PageContent
         title={title}
         description={<FormattedMessage id='app.submission.evaluation.title' defaultMessage='Your solution evaluation' />}
         breadcrumbs={[
-          { text: <FormattedMessage id='app.group.title' defaultMessage='Group detail' />, iconName: 'user', link: isReady(assignment) ? GROUP_URI_FACTORY(assignmentData.groupId) : undefined },
+          { text: <FormattedMessage id='app.group.title' defaultMessage='Group detail' />, iconName: 'user', link: isReady(assignment) ? GROUP_URI_FACTORY(getData(assignment).groupId) : undefined },
           { text: <FormattedMessage id='app.assignment.title' defaultMessage='Exercise assignment' />, iconName: 'puzzle-piece', link: ASSIGNMENT_DETAIL_URI_FACTORY(assignmentId) },
           { text: <FormattedMessage id='app.submission.title' defaultMessage='Your solution' />, iconName: '' }
         ]}>
-        <div>
-          {isLoading(submission) && <LoadingSubmissionDetail />}
-          {hasFailed(submission) && <FailedSubmissionDetail />}
-          {isReady(submission) &&
+        <ResourceRenderer
+          loading={<LoadingSubmissionDetail />}
+          failed={<FailedSubmissionDetail />}
+          resource={submission}>
+          {data => (
             <SubmissionDetail
               {...data}
               assignmentId={assignmentId}
@@ -81,8 +85,8 @@ class Submission extends Component {
               onCloseSourceViewer={this.closeSourceCodeViewer}>
               {children}
             </SubmissionDetail>
-          }
-        </div>
+          )}
+        </ResourceRenderer>
       </PageContent>
     );
   }
