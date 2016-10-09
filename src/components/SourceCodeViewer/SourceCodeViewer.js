@@ -12,7 +12,7 @@ const SourceCodeViewer = ({
     tabSize: 2
   }}>
     <Highlight className={name.split('.').pop()}>
-      {lineNumbers
+      {content && lineNumbers
         ? addLineNumbers(content, 1, '|\t')
         : content}
     </Highlight>
