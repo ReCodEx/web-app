@@ -3,7 +3,7 @@ import Box from '../../../AdminLTE/Box';
 import { WarningIcon } from '../../../Icons';
 import { Grid, Row, Col, Table } from 'react-bootstrap';
 import ReactMarkdown from 'react-markdown';
-import { FormatedMessage } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 
 const FailedAssignmentDetails = () => (
   <Box
