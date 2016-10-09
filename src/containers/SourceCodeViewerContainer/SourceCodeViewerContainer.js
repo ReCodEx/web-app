@@ -5,7 +5,8 @@ import { Modal, FormGroup, Checkbox } from 'react-bootstrap';
 
 import { fetchFileIfNeeded, fetchContentIfNeeded } from '../../redux/modules/files';
 import { getSourceCode } from '../../redux/selectors/files';
-import { isReady, isLoading, hasFailed } from '../../redux/helpers/resourceManager';
+import { isReady, isLoading, hasFailed, getJsData } from '../../redux/helpers/resourceManager';
+import ResourceRenderer from '../../components/ResourceRenderer';
 import SourceCodeViewer from '../../components/SourceCodeViewer';
 
 class SourceCodeViewerContainer extends Component {
@@ -35,22 +36,23 @@ class SourceCodeViewerContainer extends Component {
     const { file } = this.props;
     const { showLineNumbers } = this.state;
 
-    if (isLoading(file)) {
-      return <p><FormattedMessage id='app.sourceCode.loading' defaultMessage='Loading source code ...' /></p>;
-    } else if (hasFailed(file)) {
-      return <p><FormattedMessage id='app.sourceCode.loadingFailed' defaultMessage='Cannot load the source code.' /></p>;
-    } else {
-      return (
-        <div>
-          <FormGroup>
-            <Checkbox onChange={this.toggleLineNumbers} checked={showLineNumbers}>
-              <FormattedMessage id='app.sourceCode.showLineNumbers' defaultMessage='Show line numbers' />
-            </Checkbox>
-          </FormGroup>
-          <SourceCodeViewer {...file.get('data').toJS()} onCloseSourceViewer={this.close} lineNumbers={showLineNumbers} />
-        </div>
-      );
-    }
+    return (
+      <ResourceRenderer
+        resource={file}
+        loading={<p><FormattedMessage id='app.sourceCode.loading' defaultMessage='Loading source code ...' /></p>}
+        failed={<p><FormattedMessage id='app.sourceCode.loadingFailed' defaultMessage='Cannot load the source code.' /></p>}>
+        {file => (
+          <div>
+            <FormGroup>
+              <Checkbox onChange={this.toggleLineNumbers} checked={showLineNumbers}>
+                <FormattedMessage id='app.sourceCode.showLineNumbers' defaultMessage='Show line numbers' />
+              </Checkbox>
+            </FormGroup>
+            <SourceCodeViewer {...file} onCloseSourceViewer={this.close} lineNumbers={showLineNumbers} />
+          </div>
+        )}
+      </ResourceRenderer>
+    );
   }
 
   render() {
