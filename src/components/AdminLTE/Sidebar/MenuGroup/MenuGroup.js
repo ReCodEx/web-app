@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 import classNames from 'classnames';
 import Icon from 'react-fontawesome';
 import Collapse from 'react-collapse';
@@ -99,6 +100,7 @@ MenuGroup.propTypes = {
   title: PropTypes.oneOfType([ PropTypes.string, PropTypes.element ]).isRequired,
   icon: PropTypes.string,
   link: PropTypes.string,
+  items: ImmutablePropTypes.list,
   currentPath: PropTypes.string,
   forceOpen: PropTypes.bool
 };
