@@ -14,6 +14,7 @@ import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import { isStudentOf } from '../../redux/selectors/users';
 
 import PageContent from '../../components/PageContent';
+import ResourceRenderer from '../../components/ResourceRenderer';
 import AssignmentDetails, {
   LoadingAssignmentDetails,
   FailedAssignmentDetails
@@ -74,9 +75,11 @@ class Assignment extends Component {
       links: { GROUP_URI_FACTORY, SUBMIT_SOLUTION_URI_FACTORY }
     } = this.context;
 
-    const title = isLoading(assignment)
-                    ? <FormattedMessage id='app.loading' defaultMessage='Loading ...' />
-                    : assignment.getIn(['data', 'name']);
+    const title = (
+      <ResourceRenderer resource={assignment}>
+        {assignment => <span>{assignment.name}</span>}
+      </ResourceRenderer>
+    );
 
     return (
       <PageContent
@@ -93,19 +96,20 @@ class Assignment extends Component {
             iconName: 'puzzle-piece'
           }
         ]}>
-        <div>
-          {isLoading(assignment) && <LoadingAssignmentDetails />}
-          {hasFailed(assignment) && <FailedAssignmentDetails />}
-          {isReady(assignment) && (
+        <ResourceRenderer
+          loading={<LoadingAssignmentDetails />}
+          failed={<FailedAssignmentDetails />}
+          resource={assignment}>
+          {assignment => (
             <Row>
               <Col md={6}>
                 <div>
                   <AssignmentDetails
-                    assignment={assignment.get('data').toJS()}
-                    isAfterFirstDeadline={assignment.getIn(['data', 'deadline', 'first']) * 1000 < this.state.time}
-                    isAfterSecondDeadline={assignment.getIn(['data', 'deadline', 'second']) * 1000 < this.state.time} />
+                    assignment={assignment}
+                    isAfterFirstDeadline={assignment.deadline.first * 1000 < this.state.time}
+                    isAfterSecondDeadline={assignment.deadline.second * 1000 < this.state.time} />
 
-                  {isStudentOf(assignment.getIn(['data', 'groupId'])) && (
+                  {isStudentOf(assignment.groupId) && (
                     <div>
                       <p className='text-center'>
                         <SubmitSolutionButton onClick={this.initSubmission} disabled={!canSubmit} />
@@ -117,16 +121,16 @@ class Assignment extends Component {
                         onClose={this.hideSubmission} />
                     </div>
                   )}
-              </div>
-            </Col>
-            <Col md={6}>
-              {isStudentOf(assignment.getIn(['data', 'groupId'])) && (
-                <SubmissionsTableContainer assignmentId={assignmentId} />
-              )}
-            </Col>
-          </Row>
+                </div>
+              </Col>
+              <Col md={6}>
+                {isStudentOf(assignment.groupId) && (
+                  <SubmissionsTableContainer assignmentId={assignmentId} />
+                )}
+              </Col>
+            </Row>
           )}
-        </div>
+        </ResourceRenderer>
       </PageContent>
     );
   }
