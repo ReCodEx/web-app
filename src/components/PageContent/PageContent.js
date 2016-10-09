@@ -2,9 +2,16 @@ import React, { PropTypes } from 'react';
 import Helmet from 'react-helmet';
 import { injectIntl, intlShape, FormattedMessage } from 'react-intl';
 import Breadcrumbs from '../AdminLTE/Breadcrumbs';
+import ResourceRenderer from '../ResourceRenderer';
 
 const getMessage = (item, formatMessage) =>
-  typeof item === 'string' ? item : formatMessage(item.props);
+  !item
+    ? ''
+    : typeof item === 'string'
+      ? item
+      : item.Component === FormattedMessage
+        ? formatMessage(item.props)
+        : getMessage(item.children);
 
 const PageContent = ({
   intl: { formatMessage },
@@ -34,11 +41,11 @@ const PageContent = ({
 PageContent.propTypes = {
   title: PropTypes.oneOfType([
     PropTypes.string,
-    PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) })
+    PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage, ResourceRenderer]) })
   ]).isRequired,
   description: PropTypes.oneOfType([
     PropTypes.string,
-    PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) })
+    PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage, ResourceRenderer]) })
   ]).isRequired,
   breadcrumbs: PropTypes.array,
   children: PropTypes.element,
