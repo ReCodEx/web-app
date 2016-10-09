@@ -5,7 +5,7 @@ import addLineNumbers from 'add-line-numbers';
 
 const SourceCodeViewer = ({
   name,
-  content,
+  content = '',
   lineNumbers = true
 }) => (
   <div style={{
