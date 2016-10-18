@@ -37,17 +37,17 @@ export const logout = redirectUrl =>
 export const login = (username, password) =>
   createApiAction({
     type: actionTypes.LOGIN,
-    method: 'GET',
+    method: 'POST',
     endpoint: '/login',
-    query: { username, password }
+    body: { username, password }
   });
 
 export const externalLogin = serviceId => (username, password) =>
   createApiAction({
     type: actionTypes.LOGIN,
-    method: 'GET',
+    method: 'POST',
     endpoint: `/login/${serviceId}`,
-    query: { username, password }
+    body: { username, password }
   });
 
 export const loginCAS = externalLogin('cas-uk');
