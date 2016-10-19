@@ -42,7 +42,7 @@
     "pretty-bytes": "^3.0.1",
     "react": "^15.0.1",
     "react-avatar": "^0.7.3",
-    "react-bootstrap": "latest",
+    "react-bootstrap": "^0.30.5",
     "react-collapse": "^2.3.1",
     "react-dom": "^15.0.1",
     "react-dropzone": "^3.5.3",
