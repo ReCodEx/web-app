@@ -10,6 +10,14 @@ export const actionTypes = {
   LOGIN_REQUEST: 'recodex/auth/LOGIN_PENDING',
   LOGIN_SUCCESS: 'recodex/auth/LOGIN_FULFILLED',
   LOGIN_FAILIURE: 'recodex/auth/LOGIN_REJECTED',
+  RESET_PASSWORD: 'recodex/auth/RESET_PASSWORD',
+  RESET_PASSWORD_PENDING: 'recodex/auth/RESET_PASSWORD_PENDING',
+  RESET_PASSWORD_FULFILLED: 'recodex/auth/RESET_PASSWORD_FULFILLED',
+  RESET_PASSWORD_REJECTED: 'recodex/auth/RESET_PASSWORD_REJECTED',
+  CHANGE_PASSWORD: 'recodex/auth/CHANGE_PASSWORD',
+  CHANGE_PASSWORD_PENDING: 'recodex/auth/CHANGE_PASSWORD_PENDING',
+  CHANGE_PASSWORD_FULFILLED: 'recodex/auth/CHANGE_PASSWORD_FULFILLED',
+  CHANGE_PASSWORD_REJECTED: 'recodex/auth/CHANGE_PASSWORD_REJECTED',
   LOGOUT: 'recodex/auth/LOGOUT'
 };
 
@@ -40,6 +48,31 @@ export const login = (username, password) =>
     method: 'POST',
     endpoint: '/login',
     body: { username, password }
+  });
+
+export const resetPassword = (username) =>
+  createApiAction({
+    type: actionTypes.RESET_PASSWORD,
+    method: 'POST',
+    endpoint: '/forgotten-password',
+    body: { username }
+  });
+
+export const changePassword = (password, accessToken) =>
+  createApiAction({
+    type: actionTypes.RESET_PASSWORD,
+    method: 'POST',
+    endpoint: '/forgotten-password/change',
+    headers: { 'Authorization': `Bearer ${accessToken}` },
+    body: { password }
+  });
+
+export const validatePasswordStrength = (password) =>
+  createApiAction({
+    type: 'VALIDATE_PASSWORD_STRENGTH',
+    endpoint: '/forgotten-password/validate-password-strength',
+    method: 'POST',
+    body: { password }
   });
 
 export const externalLogin = serviceId => (username, password) =>
@@ -123,7 +156,25 @@ const auth = (accessToken) => {
     [actionTypes.LOGOUT]: (state, action) =>
       state.set('status', statusTypes.LOGGED_OUT)
             .set('accessToken', null)
-            .set('userId', null)
+            .set('userId', null),
+
+    [actionTypes.CHANGE_PASSWORD_PENDING]: (state, action) =>
+      state.set('changePasswordStatus', 'PENDING'),
+
+    [actionTypes.CHANGE_PASSWORD_FAILED]: (state, action) =>
+      state.set('changePasswordStatus', 'FAILED'),
+
+    [actionTypes.CHANGE_PASSWORD_FULFILLED]: (state, action) =>
+      state.set('changePasswordStatus', 'FULFILLED'),
+
+    [actionTypes.RESET_PASSWORD_PENDING]: (state, action) =>
+      state.set('resetPasswordStatus', 'PENDING'),
+
+    [actionTypes.RESET_PASSWORD_FAILED]: (state, action) =>
+      state.set('resetPasswordStatus', 'FAILED'),
+
+    [actionTypes.RESET_PASSWORD_FULFILLED]: (state, action) =>
+      state.set('resetPasswordStatus', 'FULFILLED')
 
   }, initialState);
 };
