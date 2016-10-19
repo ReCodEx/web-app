@@ -19,9 +19,10 @@ const ResourceRenderer = ({
   loading = defaultLoading,
   failed = defaultFailed,
   children: ready,
-  resource
+  resource,
+  forceLoading = false
 }) =>
-  (!resource || isLoading(resource))
+  (!resource || isLoading(resource) || forceLoading)
     ? loading
     : hasFailed(resource)
       ? failed
