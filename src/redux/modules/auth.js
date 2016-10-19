@@ -55,7 +55,7 @@ export const loginCAS = externalLogin('cas-uk');
 export const refresh = () =>
   createApiAction({
     type: actionTypes.LOGIN,
-    method: 'GET',
+    method: 'POST',
     endpoint: '/login/refresh'
   });
 
