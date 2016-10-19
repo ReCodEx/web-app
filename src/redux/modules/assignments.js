@@ -9,6 +9,7 @@ import { additionalActionTypes as submissionsActionTypes } from './submissions';
 const resourceName = 'assignments';
 const {
   actions,
+  actionTypes,
   reduceActions
 } = factory({
   resourceName,
@@ -17,7 +18,11 @@ const {
 
 export const additionalActionTypes = {
   CAN_SUBMIT: 'recodex/assignments/CAN_SUBMIT',
-  CAN_SUBMIT_FULFILLED: 'recodex/assignments/CAN_SUBMIT_FULFILLED'
+  CAN_SUBMIT_FULFILLED: 'recodex/assignments/CAN_SUBMIT_FULFILLED',
+  CREATE_ASSIGNMENT: 'recodex/assignments/CREATE_ASSIGNMENT',
+  CREATE_ASSIGNMENT_PENDING: 'recodex/assignments/CREATE_ASSIGNMENT_PENDING',
+  CREATE_ASSIGNMENT_FAILED: 'recodex/assignments/CREATE_ASSIGNMENT_FAILED',
+  CREATE_ASSIGNMENT_FULFILLED: 'recodex/assignments/CREATE_ASSIGNMENT_FULFILLED'
 };
 
 /**
@@ -40,6 +45,14 @@ export const canSubmit = (assignmentId) =>
     meta: { assignmentId }
   });
 
+export const create = (groupId, exerciseId) =>
+  createApiAction({
+    type: additionalActionTypes.CREATE_ASSIGNMENT,
+    endpoint: '/exercise-assignments',
+    method: 'POST',
+    body: { groupId, exerciseId }
+  });
+
 /**
  * Reducer
  */
@@ -50,7 +63,15 @@ const reducer = handleActions(Object.assign({}, reduceActions, {
     state.setIn([ 'submissions', assignmentId, userId ], fromJS(payload.map(submission => submission.id))),
 
   [additionalActionTypes.CAN_SUBMIT_FULFILLED]: (state, { payload: canSubmit, meta: { assignmentId } }) =>
-    state.setIn([ 'resources', assignmentId, 'data', 'canReceiveSubmissions' ], canSubmit)
+    state.setIn([ 'resources', assignmentId, 'data', 'canReceiveSubmissions' ], canSubmit),
+
+  [additionalActionTypes.CREATE_ASSIGNMENT_PENDING]: (state, { meta: { groupId } }) =>
+    state,
+
+  [additionalActionTypes.CREATE_ASSIGNMENT_FAILED]: (state, { meta: { groupId } }) =>
+    state,
+
+  [additionalActionTypes.CREATE_ASSIGNMENT_FULFILLED]: reduceActions[actionTypes.FETCH_FULFILLED]
 
 }), initialState);
 

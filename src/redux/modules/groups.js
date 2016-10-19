@@ -1,10 +1,12 @@
 import { createAction, handleActions } from 'redux-actions';
-import { fromJS, Map } from 'immutable';
+import { fromJS, Map, List } from 'immutable';
 
 import { addNotification } from './notifications';
 import { usersSelector } from '../selectors/users';
 import { createApiAction } from '../middleware/apiMiddleware';
 import factory, { initialState } from '../helpers/resourceManager';
+
+import { additionalActionTypes as assignmentsActionTypes } from './assignments';
 
 const resourceName = 'groups';
 const {
@@ -174,7 +176,15 @@ const reducer = handleActions(Object.assign({}, reduceActions, {
   [additionalActionTypes.LOAD_USERS_GROUPS_FULFILLED]: (state, { payload, ...rest }) => {
     const groups = [ ...payload.supervisor, ...payload.student ];
     return reduceActions[actionTypes.FETCH_MANY_FULFILLED](state, { ...rest, payload: groups });
-  }
+  },
+
+  [assignmentsActionTypes.CREATE_ASSIGNMENT_FULFILLED]: (state, { payload: { id: assignmentId }, meta: { groupId } }) =>
+    state.updateIn([ 'resources', groupId, 'data', 'assignments' ], assignments => {
+      if (!assignments) {
+        assignments = List();
+      }
+      return assignments.push(assignmentId);
+    })
 
 }), initialState);
 
