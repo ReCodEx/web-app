@@ -43,7 +43,8 @@ class Box extends Component {
         classNames({
           'box': true,
           [`box-${type}`]: typeof type !== 'undefined',
-          [className]: true
+          'panel': true,
+          [className]: className.length > 0
         })
       }>
         <div className='box-header with-border' onClick={this.toggleDetails}>
