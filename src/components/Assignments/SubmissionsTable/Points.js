@@ -7,13 +7,13 @@ const Points = ({
   bonusPoints
 }) => (
   <span>
-    {points}{bonusPoints && <BonusPoints bonus={bonusPoints} />}{'/'}{maxPoints}
+    {points}{bonusPoints != 0 && <BonusPoints bonus={bonusPoints} />}{'/'}{maxPoints}
   </span>
 );
 
 Points.propTypes = {
   points: PropTypes.number.isRequired,
-  bonusPoints: PropTypes.number,
+  bonusPoints: PropTypes.number.isRequired,
   maxPoints: PropTypes.number.isRequired
 };
 

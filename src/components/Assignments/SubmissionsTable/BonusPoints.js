@@ -12,7 +12,7 @@ const BonusPoints = ({ bonus }) => bonus && (
   )}>
     {bonus > 0
       ? <b className='text-success'>+{bonus}</b>
-      : <b className='text-danger'>{bonus}</b>}
+      : <b className='text-danger'>-{bonus}</b>}
   </OverlayTrigger>
 );
 
