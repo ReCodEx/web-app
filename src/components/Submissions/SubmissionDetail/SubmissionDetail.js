@@ -134,7 +134,7 @@ const SubmissionDetail = ({
                     <tr>
                       <th><FormattedMessage id='app.submission.evaluation.hasFinished' defaultMessage='Evaluation process has finished:' /></th>
                       <td className='text-center'>
-                        <MaybeSucceededIcon name={evaluation.evaluationFailed} />
+                        <MaybeSucceededIcon success={!evaluation.evaluationFailed} />
                       </td>
                     </tr>
 
@@ -148,7 +148,7 @@ const SubmissionDetail = ({
                     <tr>
                       <th><FormattedMessage id='app.submission.evaluation.buildSucceeded' defaultMessage='Build succeeded:' /></th>
                       <td className='text-center'>
-                        <MaybeSucceededIcon success={!evaluation.initFailed} />
+                        <MaybeSucceededIcon success={evaluation.initFailed} />
                       </td>
                     </tr>
 
