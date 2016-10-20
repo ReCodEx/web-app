@@ -26,6 +26,7 @@ const SubmissionDetail = ({
   evaluationStatus,
   submittedAt,
   evaluation,
+  maxPoints,
   assignment,
   files,
   onCloseSourceViewer,
@@ -173,7 +174,7 @@ const SubmissionDetail = ({
                           'text-bold': evaluation.bonusPoints === 0
                         })
                       }>
-                        {evaluation.points}/{evaluation.maxPoints}
+                        {evaluation.points}/{maxPoints}
                       </td>
                     </tr>
                     {evaluation.bonusPoints !== 0 && (
@@ -195,7 +196,7 @@ const SubmissionDetail = ({
                           })
                         }>
                           <b>
-                            {evaluation.points + evaluation.bonusPoints}/{evaluation.maxPoints}
+                            {evaluation.points + evaluation.bonusPoints}/{maxPoints}
                           </b>
                         </td>
                       </tr>
@@ -254,7 +255,8 @@ SubmissionDetail.propTypes = {
   id: PropTypes.string.isRequired,
   note: PropTypes.string,
   submittedAt: PropTypes.number.isRequired,
-  evaluation: PropTypes.object
+  evaluation: PropTypes.object,
+  maxPoints: PropTypes.number.isRequired
 };
 
 SubmissionDetail.contextTypes = {

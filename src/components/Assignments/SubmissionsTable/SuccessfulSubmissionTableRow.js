@@ -9,11 +9,11 @@ const SuccessfulSubmissionTableRow = ({
   link,
   note,
   submittedAt,
+  maxPoints,
   evaluation: {
     score,
     bonusPoints,
-    points,
-    maxPoints
+    points
   }
 }) => (
   <tr>
@@ -46,10 +46,10 @@ SuccessfulSubmissionTableRow.propTypes = {
   link: PropTypes.string.isRequired,
   submittedAt: PropTypes.number.isRequired,
   note: PropTypes.string.isRequired,
+  maxPoints: PropTypes.number.isRequired,
   evaluation: PropTypes.shape({
     score: PropTypes.number.isRequired,
-    points: PropTypes.number.isRequired,
-    maxPoints: PropTypes.number.isRequired
+    points: PropTypes.number.isRequired
   }).isRequired
 };
 

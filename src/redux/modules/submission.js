@@ -148,7 +148,7 @@ const reducer = handleActions({
       .set('submissionId', payload.submission.id)
       .set('monitor', {
         url: payload.webSocketChannel.monitorUrl,
-        id: payload.submission.id
+        id: payload.webSocketChannel.id
       })
       .set('status', submissionStatus.PROCESSING),
 
