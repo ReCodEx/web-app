@@ -19,6 +19,9 @@ import Submission from './Submission';
 import Registration from './Registration';
 import User from './User';
 
+import ChangePassword from './ChangePassword';
+import ResetPassword from './ResetPassword';
+
 import SourceCodeViewerContainer from '../containers/SourceCodeViewerContainer';
 
 const createRoutes = (getState) => {
@@ -73,6 +76,10 @@ const createRoutes = (getState) => {
           <Route path='group/:groupId' component={Group} />
           <Route path='instance/:instanceId' component={instance} />
           <Route path='user/:userId' component={User} />
+        </Route>
+        <Route path='forgotten-password'>
+          <IndexRoute component={ResetPassword} />
+          <Route path='change' component={ChangePassword} />
         </Route>
         <Route path='*' component={NotFound} />
       </Route>

@@ -9,7 +9,8 @@ import { loggedInUserIdSelector, accessTokenSelector } from '../../redux/selecto
 import { usersGroupsIds } from '../../redux/selectors/users';
 import { fetchUserIfNeeded } from '../../redux/modules/users';
 import { fetchUsersGroupsIfNeeded } from '../../redux/modules/groups';
-import { logout, refresh, willExpireSoon, isTokenValid } from '../../redux/modules/auth';
+import { logout, refresh } from '../../redux/modules/auth';
+import { isTokenValid, willExpireSoon } from '../../redux/helpers/token';
 import { fetchUsersInstancesIfNeeded } from '../../redux/modules/instances';
 import { messages, localeData, defaultLanguage } from '../../locales';
 import { linksFactory, isAbsolute } from '../../links';
@@ -38,10 +39,11 @@ class LayoutContainer extends Component {
 
   checkAuthentication = () => {
     const { isLoggedIn, accessToken, refreshToken, logout } = this.props;
+    const token = accessToken ? accessToken.toJS() : null;
     if (isLoggedIn) {
-      if (!isTokenValid(accessToken)) {
+      if (!isTokenValid(token)) {
         logout(this.state.links.HOME_URI);
-      } else if (willExpireSoon(accessToken) && !this.isRefreshingToken) {
+      } else if (willExpireSoon(token) && !this.isRefreshingToken) {
         this.isRefreshingToken = true;
         refreshToken()
           .catch(() => logout(this.state.links.HOME_URI))
