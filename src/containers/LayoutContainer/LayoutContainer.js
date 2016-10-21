@@ -1,6 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { IntlProvider, addLocaleData } from 'react-intl';
+import moment from 'moment';
 import Layout from '../../components/Layout';
 
 import { toggleSize, toggleVisibility } from '../../redux/modules/sidebar';
@@ -70,6 +71,7 @@ class LayoutContainer extends Component {
 
   getChildContext = () => ({
     links: this.state.links,
+    lang: this.state.lang,
     isActive: link => !isAbsolute(link) && this.context.router.isActive(link, true)
   });
 
@@ -106,6 +108,8 @@ class LayoutContainer extends Component {
     const { children, location: { pathname } } = this.props;
     const { lang, links: { HOME_URI } } = this.state;
     addLocaleData([ ...this.getLocaleData(lang) ]);
+    moment.locale(lang);
+
     return (
       <IntlProvider locale={lang} messages={this.getMessages(lang)}>
         <Layout
@@ -121,6 +125,7 @@ class LayoutContainer extends Component {
 }
 
 LayoutContainer.childContextTypes = {
+  lang: PropTypes.string,
   links: PropTypes.object,
   isActive: PropTypes.func
 };
