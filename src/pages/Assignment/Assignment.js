@@ -4,7 +4,7 @@ import { FormattedMessage } from 'react-intl';
 import { Grid, Col, Row } from 'react-bootstrap';
 import { push } from 'react-router-redux';
 
-import { isReady, isLoading, hasFailed } from '../../redux/helpers/resourceManager';
+import { isReady, isLoading, hasFailed, getJsData } from '../../redux/helpers/resourceManager';
 
 import { fetchAssignmentIfNeeded, canSubmit } from '../../redux/modules/assignments';
 import { init, cancel, submissionStatus } from '../../redux/modules/submission';
@@ -62,6 +62,10 @@ class Assignment extends Component {
     cancel();
   };
 
+  isAfter = (unixTime) => {
+    return unixTime * 1000 < this.state.time;
+  }
+
   render() {
     const {
       assignment,
@@ -89,7 +93,7 @@ class Assignment extends Component {
           {
             text: <FormattedMessage id='app.group.title' defaultMessage='Group detail' />,
             iconName: 'user',
-            link: isReady(assignment) ? GROUP_URI_FACTORY(assignment.getIn(['data', 'groupId'])) : undefined
+            link: isReady(assignment) ? GROUP_URI_FACTORY(getJsData(assignment).groupId) : undefined
           },
           {
             text: <FormattedMessage id='app.assignment.title' defaultMessage='Exercise assignment' />,
@@ -106,8 +110,9 @@ class Assignment extends Component {
                 <div>
                   <AssignmentDetails
                     assignment={assignment}
-                    isAfterFirstDeadline={assignment.deadline.first * 1000 < this.state.time}
-                    isAfterSecondDeadline={assignment.deadline.second * 1000 < this.state.time} />
+                    isAfterFirstDeadline={this.isAfter(assignment.deadline.first)}
+                    isAfterSecondDeadline={this.isAfter(assignment.deadline.second)}
+                    canSubmit={canSubmit} />
 
                   {isStudentOf(assignment.groupId) && (
                     <div>

@@ -29,8 +29,6 @@ class Register extends Component {
     const { hasSucceeded, push } = props;
     if (hasSucceeded) {
       const { links: { DASHBOARD_URI } } = this.context;
-      console.log(push);
-      console.log(DASHBOARD_URI);
       setTimeout(() => push(DASHBOARD_URI), 600);
     }
   };

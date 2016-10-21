@@ -1,16 +1,18 @@
 import React, { PropTypes } from 'react';
-import Box from '../../../AdminLTE/Box';
 import Icon from 'react-fontawesome';
 import { Grid, Row, Col, Table } from 'react-bootstrap';
 import ReactMarkdown from 'react-markdown';
 import { FormattedDate, FormattedTime, FormattedMessage } from 'react-intl';
 import classnames from 'classnames';
+import { MaybeSucceededIcon } from '../../../icons';
+import Box from '../../../AdminLTE/Box';
 
 const AssignmentDetails = ({
   assignment,
   isOpen,
   isAfterFirstDeadline,
-  isAfterSecondDeadline
+  isAfterSecondDeadline,
+  canSubmit
 }) => (
   <Box
     title={<FormattedMessage id='app.assignment.title' defaultMessage='Exercise assignment' />}
@@ -68,6 +70,17 @@ const AssignmentDetails = ({
             <FormattedMessage id='app.assignment.submissionsCountLimit' defaultMessage='Submission count limit:' />
           </td>
           <td>{assignment.submissionsCountLimit === null ? '-' : assignment.submissionsCountLimit}</td>
+        </tr>
+        <tr>
+          <td className='text-center'>
+            <Icon name='unlock-alt' />
+          </td>
+          <td>
+            <FormattedMessage id='app.assignment.canSubmit' defaultMessage='You can submit more solutions:' />
+          </td>
+          <td>
+            <MaybeSucceededIcon success={canSubmit} />
+          </td>
         </tr>
       </tbody>
     </Table>

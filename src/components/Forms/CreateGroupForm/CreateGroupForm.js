@@ -11,7 +11,6 @@ class CreateGroupForm extends Component {
 
   componentWillReceiveProps(newProps) {
     if (!this.props.submitSucceeded && newProps.submitSucceeded === true) {
-      console.log(newProps);
       setTimeout(newProps.reset, 600);
     }
   }

@@ -24,7 +24,10 @@ export const Layout = ({
       'sidebar-mini': true,
       'sidebar-collapse': sidebar.isCollapsed,
       'sidebar-open': sidebar.isOpen
-    })}>
+    })}
+    style={{
+      overflow: 'visible'
+    }}>
     <Helmet
       defaultTitle='ReCodEx'
       titleTemplate='%s | ReCodEx' />
