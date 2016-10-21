@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
+import { Link } from 'react-router';
 import { push } from 'react-router-redux';
 
 import { Row, Col } from 'react-bootstrap';
@@ -29,7 +30,7 @@ class Login extends Component {
 
   render() {
     const { login, loginCAS, hasSucceeded } = this.props;
-    const { links: { HOME_URI } } = this.context;
+    const { links: { HOME_URI, RESET_PASSWORD_URI } } = this.context;
 
     return (
       <PageContent
@@ -42,6 +43,9 @@ class Login extends Component {
         <Row>
           <Col lg={4} lgOffset={1} md={6} mdOffset={0} sm={8} smOffset={2}>
             <LoginForm onSubmit={login} hasSucceeded={hasSucceeded} />
+            <p className='text-center'>
+              <FormattedMessage id='app.login.cannotRememberPassword' defaultMessage='You cannot remember what your password was?' />{' '}<Link to={RESET_PASSWORD_URI}><FormattedMessage id='app.login.resetPassword' defaultMessage='Reset your password.' /></Link>
+            </p>
           </Col>
           <Col lg={4} lgOffset={1} md={6} mdOffset={0} sm={8} smOffset={2}>
             <LoginCASForm onSubmit={loginCAS} hasSucceeded={hasSucceeded} />

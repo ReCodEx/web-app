@@ -50,10 +50,11 @@ const middleware = state => next => action => {
       removeToken();
       break;
     case CALL_API:
-      action.request.accessToken = getToken();
       if (!action.request.accessToken) {
-        // the access token is redundant
-        delete action.request.accessToken;
+        const token = getToken();
+        if (token) {
+          action.request.accessToken = token;
+        }
       }
 
       break;

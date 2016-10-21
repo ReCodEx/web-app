@@ -1,55 +1,60 @@
 import React, { Component, PropTypes } from 'react';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, FormattedRelative } from 'react-intl';
 import Helmet from 'react-helmet';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
-import decodeJwt from 'jwt-decode';
+import { reset } from 'redux-form';
 
-import { Row, Col } from 'react-bootstrap';
+import { Row, Col, Alert } from 'react-bootstrap';
 import PageContent from '../../components/PageContent';
 import Box from '../../components/AdminLTE/Box';
 import ChangePasswordForm from '../../components/Forms/ChangePasswordForm';
 
+import { decode, isTokenValid, isInScope } from '../../redux/helpers/token';
 import { changePassword } from '../../redux/modules/auth';
 import {
   isChanging,
-  hasChaingingFailed as hasFailed,
-  hasChaingingSucceded as hasSucceeded
+  hasChangingFailed as hasFailed,
+  hasChangingSucceeded as hasSucceeded
 } from '../../redux/selectors/auth';
 
-export const isTokenValid = token =>
-  token && token.get('exp') * 1000 > Date.now();
-
-const isValidAndHasCorrectScope = (token) => {
-  if (token) {
-    try {
-      const decodedToken = decodeJwt(token);
-      return isTokenValid(decodedToken) &&
-        decodedToken.scopes &&
-        decodedToken.scopes.indexOf('change-password') >= 0;
-    } catch (e) {
-      return false;
-    }
-  }
-
-  return false;
-};
-
+/**
+ * Component for changing old password for a new one for a user with a specific
+ * token provided in the URL - user goes to this page using a link from an email.
+ *
+ * @class ChangePassword
+ * @extends {Component}
+ */
 class ChangePassword extends Component {
 
-  state = { token: null };
+  state = { token: null, decodedToken: null };
 
+  /**
+   * This method looks for a token in the hash part of the URL
+   * -> this component needs the token to be present and valid,
+   * so it must be validated properly and user redirected or warned
+   * when there is something wrong.
+   */
   componentWillMount = () => {
     this.checkIfIsDone(this.props);
 
     if (typeof window !== 'undefined' && typeof window.location.hash === 'string') {
-      const token = window.location.hash.substr(1);
+      const hash = window.location.hash;
+      if (hash.length === 0) {
+        const { push } = this.props;
+        const { links: { RESET_PASSWORD_URI } } = this.context;
+        push(RESET_PASSWORD_URI); // no hash -> redirect to the reset form
+      } else {
+        let token = window.location.hash.substr(1);
+        let decodedToken = decode(token);
 
-      if (!isValidAndHasCorrectScope(token)) {
-        // @todo: Redirect the user somewhere...
+        if (!isTokenValid(decodedToken) || !isInScope(decodedToken, 'change-password')) {
+          token = null;
+          decodedToken = null;
+        }
+
+        this.setState({ token, decodedToken });
       }
-
-      this.setState({ token });
     }
   };
 
@@ -58,19 +63,21 @@ class ChangePassword extends Component {
   };
 
   checkIfIsDone = props => {
-    const { hasSucceeded, push } = props;
+    const { hasSucceeded } = props;
     if (hasSucceeded) {
-      const { links: { DASHBOARD_URI } } = this.context;
-      console.log(push);
-      console.log(DASHBOARD_URI);
-      setTimeout(() => push(DASHBOARD_URI), 600);
+      setTimeout(() => {
+        const { push, reset } = this.props;
+        const { links: { DASHBOARD_URI } } = this.context;
+        reset();
+        push(DASHBOARD_URI);
+      }, 1500);
     }
   };
 
   render() {
     const { links: { HOME_URI } } = this.context;
-    const { instances, createAccount, isChanging, hasFailed, hasSucceeded } = this.props;
-    const { token } = this.state;
+    const { instances, changePassword, isChanging, hasFailed, hasSucceeded } = this.props;
+    const { decodedToken, token } = this.state;
 
     return (
       <PageContent
@@ -82,11 +89,22 @@ class ChangePassword extends Component {
         ]}>
         <Row>
           <Col md={6} mdOffset={3} sm={8} smOffset={2}>
-            <ChangePasswordForm
-              onSubmit={({ password }) => changePassword(password, token)}
-              isChanging={isChanging}
-              hasFailed={hasFailed}
-              hasSucceeded={hasSucceeded} />
+            {!token && !decodedToken && (
+              <Alert bsStyle='warning'>
+                <strong><FormattedMessage id='app.changePassword.tokenExpired' defaultMessage='You cannot reset your now - your token has probably expired or the URL is broken.' /></strong>{' '}
+                <FormattedMessage id='app.changePassword.requestAnotherLink' defaultMessage='Please request (another) link with an unique token.' />
+              </Alert>
+            )}
+            {decodedToken && (
+              <div>
+                <ChangePasswordForm
+                  onSubmit={({ password }) => changePassword(password, token)}
+                  isChanging={isChanging}
+                  hasFailed={hasFailed}
+                  hasSucceeded={hasSucceeded} />
+                <p><FormattedMessage id='app.changePassword.tokenExpiresIn' defaultMessage='Token expires: ' /> <FormattedRelative value={decodedToken.exp * 1000} /></p>
+              </div>
+            )}
           </Col>
         </Row>
       </PageContent>
@@ -114,6 +132,7 @@ export default connect(
   dispatch => ({
     changePassword: (password, accessToken) =>
       dispatch(changePassword(password, accessToken)),
-    push: (url) => dispatch(push(url))
+    push: (url) => dispatch(push(url)),
+    reset: () => dispatch(reset('changePassword'))
   })
 )(ChangePassword);

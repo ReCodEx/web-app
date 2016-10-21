@@ -8,6 +8,7 @@ export const linksFactory = lang => {
   const LOGIN_URI = `${prefix}/login`;
   const REGISTRATION_URI = `${prefix}/registration`;
   const LOGOUT_URI = '/logout';
+  const RESET_PASSWORD_URI = `${prefix}/forgotten-password`;
 
   // instance detail
   const INSTANCE_URI_FACTORY = id => `${prefix}/app/instance/${id}`;
@@ -35,7 +36,7 @@ export const linksFactory = lang => {
   const BUGS_URL = 'https://www.github.com/recodex/web-app/issues';
 
   return {
-    HOME_URI, DASHBOARD_URI, LOGIN_URI, REGISTRATION_URI, LOGOUT_URI,
+    HOME_URI, DASHBOARD_URI, LOGIN_URI, REGISTRATION_URI, LOGOUT_URI, RESET_PASSWORD_URI,
     INSTANCE_URI_FACTORY, GROUP_URI_FACTORY, USER_URI_FACTORY,
     EXERCISE_URI_FACTORY,
     ASSIGNMENT_EDIT_URI_FACTORY, ASSIGNMENT_DETAIL_URI_FACTORY, SUBMIT_SOLUTION_URI_FACTORY,

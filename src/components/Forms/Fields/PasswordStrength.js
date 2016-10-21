@@ -21,7 +21,32 @@ const getStyle = (level) => {
   }
 };
 
-const getPercent = (level) => 20 + 20 * level;
+const minLevel = 0;
+const maxLevel = 4;
+const percentPerLevel = 100 / (maxLevel + 1);
+
+const getPercent = (level) => percentPerLevel * (level + 1);
+const getTitle = (level) => {
+  switch (level) {
+    case 0:
+      return <FormattedMessage id='app.passwordStrength.worst' defaultMessage='Unsatisfactory' />;
+
+    case 1:
+      return <FormattedMessage id='app.passwordStrength.bad' defaultMessage='' />;
+
+    case 2:
+      return <FormattedMessage id='app.passwordStrength.somewhatOk' defaultMessage='' />;
+
+    case 3:
+      return <FormattedMessage id='app.passwordStrength.ok' defaultMessage='OK' />;
+
+    case 4:
+      return <FormattedMessage id='app.passwordStrength.good' defaultMessage='Good' />;
+
+    default:
+      return <FormattedMessage id='app.passwordStrength.unknown' defaultMessage='' />;
+  }
+}
 
 const PasswordStrength = ({
   input: {

@@ -4,7 +4,7 @@ import { FormattedMessage } from 'react-intl';
 import { Button, Alert } from 'react-bootstrap';
 import isEmail from 'validator/lib/isEmail';
 
-import { LoadingIcon } from '../../Icons';
+import { SuccessIcon, LoadingIcon } from '../../Icons';
 import FormBox from '../../AdminLTE/FormBox';
 import { EmailField } from '../Fields';
 
@@ -28,7 +28,7 @@ const ResetPasswordForm = ({
           disabled={invalid || submitting || hasSucceeded}>
           {!submitting
             ? hasSucceeded
-              ? <span><Icon name='check' /> &nbsp; <FormattedMessage id='app.resetPassword.success' defaultMessage='Processing was finished.' /></span>
+              ? <span><SuccessIcon /> &nbsp; <FormattedMessage id='app.resetPassword.success' defaultMessage='Processing was finished.' /></span>
               : <FormattedMessage id='app.resetPassword.resetPassword' defaultMessage='Reset password' />
             : <span><LoadingIcon /> &nbsp; <FormattedMessage id='app.resetPassword.processing' defaultMessage='Resting your password ...' /></span>}
         </Button>
