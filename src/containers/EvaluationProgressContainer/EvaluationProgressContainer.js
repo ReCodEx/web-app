@@ -32,6 +32,11 @@ class EvaluationProgressContainer extends Component {
   state = { realTimeProcessing: true };
   componentWillMount = () => this.init(this.props);
   componentWillReceiveProps = (props) => this.init(props);
+  componentWillUnmount = () => {
+    if (this.socket) {
+      this.socket.close();
+    }
+  };
 
   init = (props) => {
     const {
