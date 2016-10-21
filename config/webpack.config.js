@@ -17,7 +17,8 @@ module.exports = {
   module: {
     loaders: [
       { test: /\.jsx?$/, exclude: /node_modules/, loaders: [ 'babel' ] },
-      { test: /\.json$/, loader: 'json-loader' }
+      { test: /\.json$/, loader: 'json-loader' },
+      { test: /\.css$/, loaders: [ 'style', 'css' ] }
     ]
   },
   resolve: {
