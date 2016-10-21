@@ -23,8 +23,8 @@ export const linksFactory = lang => {
   const EXERCISE_URI_FACTORY = id => `${prefix}/app/exercise/${id}`;
 
   // assignments and solution submissions
-  const ASSIGNMENT_EDIT_URI_FACTORY = id => `${prefix}/app/assignment/${id}`; // @todo
   const ASSIGNMENT_DETAIL_URI_FACTORY = id => `${prefix}/app/assignment/${id}`;
+  const ASSIGNMENT_EDIT_URI_FACTORY = id => `${ASSIGNMENT_DETAIL_URI_FACTORY(id)}/edit`;
   const SUBMIT_SOLUTION_URI_FACTORY = id =>
     `${prefix}/app/assignment/${id}/submit`;
   const SUBMISSION_DETAIL_URI_FACTORY = (assignmentId, submissionId) =>

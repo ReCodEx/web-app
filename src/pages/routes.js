@@ -14,6 +14,7 @@ import Group from './Group';
 import instance from './Instance';
 import Login from './Login';
 import Assignment from './Assignment';
+import EditAssignment from './EditAssignment';
 import NotFound from './NotFound';
 import Submission from './Submission';
 import Registration from './Registration';
@@ -68,9 +69,12 @@ const createRoutes = (getState) => {
         <Route path='registration' component={Registration} onEnter={onlyUnauth} />
         <Route path='app' onEnter={requireAuth} component={App}>
           <IndexRoute component={Dashboard} />
-          <Route path='assignment/:assignmentId' component={Assignment} />
-          <Route path='assignment/:assignmentId/submission/:submissionId' component={Submission}>
-            <Route path='file/:fileId' component={SourceCodeViewerContainer} />
+          <Route path='assignment/:assignmentId'>
+            <IndexRoute component={Assignment} />
+            <Route path='edit' component={EditAssignment} />
+            <Route path='submission/:submissionId' component={Submission}>
+              <Route path='file/:fileId' component={SourceCodeViewerContainer} />
+            </Route>
           </Route>
           <Route path='exercise/:exerciseId' component={Exercise} />
           <Route path='group/:groupId' component={Group} />
