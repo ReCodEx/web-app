@@ -53,6 +53,10 @@ export const create = (groupId, exerciseId) =>
     body: { groupId, exerciseId }
   });
 
+export const editAssignment = (payload) => {
+  return { type: '@TODO_EDIT_ASSIGNMENT_ACTION', payload };
+};
+
 /**
  * Reducer
  */
