@@ -16,8 +16,14 @@ const AdminsView = ({
 }) => (
   <Row>
     <Col sm={6}>
+      <h3>
+        <FormattedMessage
+          id='app.group.adminsView.title'
+          defaultMessage='Administrator controls of {groupName}'
+          values={{ groupName: group.name }} />
+      </h3>
       <Box
-        title={<FormattedMessage id='app.groupDetail.supervisors' defaultMessage='Supervisors' />}
+        title={<FormattedMessage id='app.group.adminsView.supervisors' defaultMessage='Supervisors' />}
         collapsable
         noPadding
         isOpen>

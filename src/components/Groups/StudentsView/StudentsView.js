@@ -16,6 +16,12 @@ const StudentsView = ({
 }) => (
   <Row>
     <Col lg={students && stats ? 6 : 12}>
+      <h3>
+        <FormattedMessage
+          id='app.group.studentsView.title'
+          defaultMessage="Student's dashboard for {groupName}"
+          values={{ groupName: group.name }} />
+      </h3>
       <Box
         title={<FormattedMessage id='app.studentsView.assignments' defaultMessage='Assignments' />}
         collapsable

@@ -13,7 +13,7 @@ import SupervisorsView from '../../components/Groups/SupervisorsView';
 import StudentsView from '../../components/Groups/StudentsView';
 import ResourceRenderer from '../../components/ResourceRenderer';
 
-import { isReady, isLoading, hasFailed, getData, getJsData } from '../../redux/helpers/resourceManager';
+import { isReady, isLoading, hasFailed, getData, getJsData, getId } from '../../redux/helpers/resourceManager';
 import { createGroup, fetchSubgroups, fetchGroupIfNeeded } from '../../redux/modules/groups';
 import { fetchGroupsStatsIfNeeded } from '../../redux/modules/stats';
 import { fetchSupervisors, fetchStudents } from '../../redux/modules/users';
@@ -137,71 +137,43 @@ class Group extends Component {
         title={this.getTitle(group)}
         description={<FormattedMessage id='app.group.description' defaultMessage='Group overview and assignments' />}
         breadcrumbs={this.getBreadcrumbs()}>
-        <div>
-          <ResourceRenderer
-            loading={<LoadingGroupDetail />}
-            failed={<FailedGroupDetail />}
-            resource={group}>
-            {data => (
-              <div>
-                <GroupDetail {...data} groups={groups} />
-                {!isAdmin && !isSupervisor && (
-                  <p className='text-center'>
-                    <LeaveJoinGroupButtonContainer userId={userId} groupId={data.id} />
-                  </p>
-                )}
-              </div>
-            )}
-          </ResourceRenderer>
+        <ResourceRenderer
+          loading={<LoadingGroupDetail />}
+          failed={<FailedGroupDetail />}
+          resource={group}>
+          {data => (
+            <div>
+              <GroupDetail {...data} groups={groups} />
+              {!isAdmin && !isSupervisor && (
+                <p className='text-center'>
+                  <LeaveJoinGroupButtonContainer userId={userId} groupId={data.id} />
+                </p>)}
 
-          {isReady(group) && isAdmin && (
-            <Row>
-              <Col xs={12}>
-                <h3>
-                  <FormattedMessage id='app.group.adminsView.title' defaultMessage='Administrator controls of {groupName}' values={{ groupName: groupData.name }} />
-                </h3>
+              {isAdmin && (
                 <AdminsView
-                  group={groupData}
+                  group={data}
                   supervisors={supervisors}
-                  addSubgroup={addSubgroup(groupData.instanceId)} />
-              </Col>
-            </Row>
-          )}
+                  addSubgroup={addSubgroup(groupData.instanceId)} />)}
 
-          {isReady(group) && isSupervisor && (
-            <Row>
-              <Col xs={12}>
-                <h3>
-                  <FormattedMessage id='app.group.supervisorsView.title' defaultMessage="Supervisor's controls of {groupName}" values={{ groupName: groupData.name }} />
-                </h3>
+              {isSupervisor && (
                 <SupervisorsView
                   group={groupData}
                   stats={stats}
-                  students={students} />
-              </Col>
-            </Row>
-          )}
+                  students={students} />)}
 
-          {isReady(group) && isStudent && (
-            <Row>
-              <Col xs={12}>
-                <h3>
-                  <FormattedMessage id='app.group.studentsView.title' defaultMessage="Student's dashboard for {groupName}" values={{ groupName: groupData.name }} />
-                </h3>
+              {isStudent && (
                 <StudentsView
                   group={groupData}
                   students={students}
                   stats={stats}
                   statuses={statuses}
-                  assignments={assignments} />
-              </Col>
-            </Row>
+                  assignments={assignments} />)}
+            </div>
           )}
-        </div>
+        </ResourceRenderer>
       </PageContent>
     );
   }
-
 }
 
 Group.contextTypes = {
@@ -212,15 +184,9 @@ export default connect(
   (state, { params: { groupId } }) => {
     const group = groupSelector(groupId)(state);
     const userId = loggedInUserIdSelector(state);
-    const isStudent = isStudentOf(userId, groupId)(state);
-    const isSupervisor = isSupervisorOf(userId, groupId)(state);
-    const isAdmin = isAdminOf(userId, groupId)(state);
     const supervisorsIds = supervisorsOfGroup(groupId)(state);
     const studentsIds = studentsOfGroup(groupId)(state);
     const readyUsers = usersSelector(state).toList().filter(isReady);
-    const supervisors = readyUsers.filter(user => supervisorsIds.includes(getData(user).get('id'))).map(getJsData);
-    const students = readyUsers.filter(isReady).filter(user => studentsIds.includes(getData(user).get('id'))).map(getJsData);
-    const statuses = getStatuses(groupId, userId)(state);
 
     return {
       group,
@@ -230,12 +196,12 @@ export default connect(
       groups: groupsSelectors(state),
       assignments: groupsAssignmentsSelector(groupId)(state),
       stats: createGroupsStatsSelector(groupId)(state),
-      statuses,
-      students,
-      supervisors,
-      isStudent,
-      isSupervisor,
-      isAdmin
+      statuses: getStatuses(groupId, userId)(state),
+      students: readyUsers.filter(isReady).filter(user => studentsIds.includes(getId(user))).map(getJsData),
+      supervisors: readyUsers.filter(user => supervisorsIds.includes(getId(user))).map(getJsData),
+      isStudent: isStudentOf(userId, groupId)(state),
+      isSupervisor: isSupervisorOf(userId, groupId)(state),
+      isAdmin: isAdminOf(userId, groupId)(state)
     };
   },
   (dispatch, { params: { groupId } }) => ({

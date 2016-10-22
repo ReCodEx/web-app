@@ -15,15 +15,21 @@ const SupervisorsView = ({
 }) => (
   <Row>
     <Col lg={6}>
+      <h3>
+        <FormattedMessage
+          id='app.group.supervisorsView.title'
+          defaultMessage="Supervisor's controls of {groupName}"
+          values={{ groupName: group.name }} />
+      </h3>
       <Box
-        title={<FormattedMessage id='app.groupDetail.students' defaultMessage='Students' />}
+        title={<FormattedMessage id='app.group.spervisorsView.students' defaultMessage='Students' />}
         collapsable
         noPadding
         isOpen={false}>
         <StudentsList users={students.toJS()} stats={stats} fill />
       </Box>
       <Box
-        title={<FormattedMessage id='app.groupDetail.addStudent' defaultMessage='Add student' />}
+        title={<FormattedMessage id='app.group.spervisorsView.addStudent' defaultMessage='Add student' />}
         collapsable
         isOpen>
         <AddStudent instanceId={group.instanceId} groupId={group.id} />
@@ -31,7 +37,7 @@ const SupervisorsView = ({
     </Col>
     <Col lg={6}>
       <Box
-        title={<FormattedMessage id='app.groupDetail.addAssignment' defaultMessage='Add assignment' />}
+        title={<FormattedMessage id='app.group.spervisorsView.addAssignment' defaultMessage='Add assignment' />}
         collapsable
         isOpen>
         <AddAssignment groupId={group.id} />
