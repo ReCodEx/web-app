@@ -36,45 +36,14 @@ import { instanceSelector } from '../../redux/selectors/instances';
 class Group extends Component {
 
   componentWillMount() {
-    this.loadData(this.props);
+    this.props.loadAsync();
   }
 
   componentWillReceiveProps(newProps) {
     if (this.props.group !== newProps.group) {
-      this.loadData(newProps);
+      newProps.loadAsync();
     }
   }
-
-  loadData = ({
-    params: { groupId },
-    load,
-    group,
-    parentGroup,
-    isAdmin,
-    isSupervisor,
-    isStudent
-  }) => {
-    load.groupIfNeeded(groupId);
-    load.assignmentsIfNeeded();
-    load.subgroups();
-
-    if (group && isReady(group)) {
-      const groupData = getData(group);
-      load.instanceIfNeeded(groupData.get('instanceId'));
-      !parentGroup && load.groupIfNeeded(groupData.get('parentGroupId'));
-
-      if (isAdmin || isSupervisor || isStudent) {
-        load.students();
-        if (groupData.get('publicStats')) {
-          load.statsIfNeeded();
-        }
-      }
-      if (isAdmin || isSupervisor) {
-        load.supervisors();
-        load.statsIfNeeded();
-      }
-    }
-  };
 
   getTitle = (group) =>
     isReady(group)
@@ -180,40 +149,72 @@ Group.contextTypes = {
   links: PropTypes.object
 };
 
-export default connect(
-  (state, { params: { groupId } }) => {
-    const group = groupSelector(groupId)(state);
-    const userId = loggedInUserIdSelector(state);
-    const supervisorsIds = supervisorsOfGroup(groupId)(state);
-    const studentsIds = studentsOfGroup(groupId)(state);
-    const readyUsers = usersSelector(state).toList().filter(isReady);
+const mapStateToProps = (
+  state,
+  { params: { groupId } }
+) => {
+  const group = groupSelector(groupId)(state);
+  const userId = loggedInUserIdSelector(state);
+  const supervisorsIds = supervisorsOfGroup(groupId)(state);
+  const studentsIds = studentsOfGroup(groupId)(state);
+  const readyUsers = usersSelector(state).toList().filter(isReady);
 
-    return {
-      group,
-      userId,
-      instance: isReady(group) ? instanceSelector(state, getData(group).get('instanceId')) : null,
-      parentGroup: isReady(group) ? groupSelector(getData(group).get('parentGroupId'))(state) : null,
-      groups: groupsSelectors(state),
-      assignments: groupsAssignmentsSelector(groupId)(state),
-      stats: createGroupsStatsSelector(groupId)(state),
-      statuses: getStatuses(groupId, userId)(state),
-      students: readyUsers.filter(isReady).filter(user => studentsIds.includes(getId(user))).map(getJsData),
-      supervisors: readyUsers.filter(user => supervisorsIds.includes(getId(user))).map(getJsData),
-      isStudent: isStudentOf(userId, groupId)(state),
-      isSupervisor: isSupervisorOf(userId, groupId)(state),
-      isAdmin: isAdminOf(userId, groupId)(state)
-    };
-  },
-  (dispatch, { params: { groupId } }) => ({
-    addSubgroup: (instanceId) => ({ name, description }) => dispatch(createGroup({ instanceId, name, description, parentGroupId: groupId })),
-    load: {
-      instanceIfNeeded: (id) => dispatch(fetchInstanceIfNeeded(id)),
-      groupIfNeeded: (id) => dispatch(fetchGroupIfNeeded(groupId)),
-      statsIfNeeded: () => dispatch(fetchGroupsStatsIfNeeded(groupId)),
-      assignmentsIfNeeded: () => dispatch(fetchAssignmentsForGroup(groupId)),
-      subgroups: () => dispatch(fetchSubgroups(groupId)),
-      supervisors: () => dispatch(fetchSupervisors(groupId)),
-      students: () => dispatch(fetchStudents(groupId))
-    }
-  })
-)(Group);
+  return {
+    group,
+    userId,
+    instance: isReady(group) ? instanceSelector(state, getData(group).get('instanceId')) : null,
+    parentGroup: isReady(group) ? groupSelector(getData(group).get('parentGroupId'))(state) : null,
+    groups: groupsSelectors(state),
+    assignments: groupsAssignmentsSelector(groupId)(state),
+    stats: createGroupsStatsSelector(groupId)(state),
+    statuses: getStatuses(groupId, userId)(state),
+    students: readyUsers.filter(isReady).filter(user => studentsIds.includes(getId(user))).map(getJsData),
+    supervisors: readyUsers.filter(user => supervisorsIds.includes(getId(user))).map(getJsData),
+    isStudent: isStudentOf(userId, groupId)(state),
+    isSupervisor: isSupervisorOf(userId, groupId)(state),
+    isAdmin: isAdminOf(userId, groupId)(state)
+  };
+};
+
+const mapDispatchToProps = (
+  dispatch,
+  {
+    params: { groupId },
+    isStudent,
+    isSupervisor,
+    isAdmin
+  }
+) => ({
+  addSubgroup: (instanceId) =>
+    ({ name, description }) =>
+      dispatch(createGroup({ instanceId, name, description, parentGroupId: groupId })),
+  loadAsync: () => Promise.all([
+    dispatch(fetchAssignmentsForGroup(groupId)),
+    dispatch(fetchSubgroups(groupId)),
+    dispatch(fetchSupervisors(groupId)),
+    isAdmin || isSupervisor
+      ? Promise.all([
+        dispatch(fetchGroupsStatsIfNeeded(groupId)),
+        dispatch(fetchStudents(groupId))
+      ])
+      : Promise.resolve(),
+    dispatch(fetchGroupIfNeeded(groupId))
+      .then((res) => res.value)
+      .then(group => Promise.all([
+        dispatch(fetchInstanceIfNeeded(group.instanceId)),
+        group.parentGroupId
+          ? dispatch(fetchGroupIfNeeded(group.parentGroupId))
+          : Promise.resolve(),
+        isStudent
+          ? Promise.all([
+            dispatch(fetchStudents(groupId)),
+            group.publicStats
+              ? fetchGroupsStatsIfNeeded(groupId)
+              : Promise.resolve()
+          ])
+          : Promise.resolve()
+      ]))
+  ])
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Group);

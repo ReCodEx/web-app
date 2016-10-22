@@ -13,27 +13,20 @@ import SubmissionDetail, {
 import { isReady, getData } from '../../redux/helpers/resourceManager';
 import { fetchAssignmentIfNeeded } from '../../redux/modules/assignments';
 import { fetchSubmissionIfNeeded } from '../../redux/modules/submissions';
+import { getSubmission } from '../../redux/selectors/submissions';
+import { getAssignment } from '../../redux/selectors/assignments';
 
 class Submission extends Component {
 
   componentWillMount() {
-    Submission.loadData(this.props);
+    this.props.loadAsync();
   }
 
   componentWillReceiveProps(newProps) {
     if (this.props.params.submissionId !== newProps.params.submissionId) {
-      Submission.loadData(newProps);
+      newProps.loadAsync();
     }
   }
-
-  static loadData = ({
-    params: { submissionId, assignmentId },
-    loadSubmission,
-    loadAssignment
-  }) => {
-    loadSubmission(submissionId);
-    loadAssignment(assignmentId);
-  };
 
   closeSourceCodeViewer = () => {
     const { assignmentId, submissionId } = this.props.params;
@@ -104,17 +97,18 @@ Submission.propTypes = {
     submissionId: PropTypes.string.isRequired
   }).isRequired,
   submission: PropTypes.object,
-  loadSubmission: PropTypes.func.isRequired,
-  loadAssignment: PropTypes.func.isRequired
+  loadAsync: PropTypes.func.isRequired
 };
 
 export default connect(
-  (state, props) => ({
-    submission: state.submissions.getIn([ 'resources', props.params.submissionId ]),
-    assignment: state.assignments.getIn([ 'resources', props.params.assignmentId ])
+  (state, { params: { submissionId, assignmentId } }) => ({
+    submission: getSubmission(submissionId)(state),
+    assignment: getAssignment(assignmentId)(state)
   }),
-  (dispatch) => ({
-    loadSubmission: (submissionId) => dispatch(fetchSubmissionIfNeeded(submissionId)),
-    loadAssignment: (assignmentId) => dispatch(fetchAssignmentIfNeeded(assignmentId))
+  (dispatch, { params: { submissionId, assignmentId } }) => ({
+    loadAsync: () => Promise.all([
+      dispatch(fetchSubmissionIfNeeded(submissionId)),
+      dispatch(fetchAssignmentIfNeeded(assignmentId))
+    ])
   })
 )(Submission);

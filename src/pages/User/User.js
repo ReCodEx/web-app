@@ -4,7 +4,7 @@ import { FormattedMessage } from 'react-intl';
 
 import { fetchUserIfNeeded } from '../../redux/modules/users';
 import { getUser } from '../../redux/selectors/users';
-import { isReady, isLoading, hasFailed } from '../../redux/helpers/resourceManager';
+import { isReady, getJsData } from '../../redux/helpers/resourceManager';
 import PageContent from '../../components/PageContent';
 import ResourceRenderer from '../../components/ResourceRenderer';
 import UserProfile, {
@@ -15,29 +15,20 @@ import UserProfile, {
 class User extends Component {
 
   componentWillMount() {
-    User.loadData(this.props);
+    this.props.loadAsync();
   }
 
   componentWillReceiveProps(newProps) {
     if (this.props.params.userId !== newProps.params.userId) {
-      User.loadData(newProps);
+      newProps.loadAsync();
     }
   }
 
-  static loadData = ({
-    params: { userId },
-    loadUserIfNeeded
-  }) => {
-    loadUserIfNeeded(userId);
-  };
-
   render() {
-    const {
-      user
-    } = this.props;
-
-    const userName = isReady(user) ? user.getIn(['data', 'fullName']) : null;
-    const title = userName !== null ? userName : 'Načítám ...';
+    const { user } = this.props;
+    const title = isReady(user)
+      ? getJsData(user).fullName
+      : <FormattedMessage id='app.user.loading' defaultMessage="Loading user's profile" />;
 
     return (
       <PageContent
@@ -59,10 +50,12 @@ class User extends Component {
 }
 
 export default connect(
-  (state, props) => ({
-    user: getUser(props.params.userId)(state)
+  (state, { params: { userId } }) => ({
+    user: getUser(userId)(state)
   }),
-  dispatch => ({
-    loadUserIfNeeded: (userId) => dispatch(fetchUserIfNeeded(userId))
+  (dispatch, { params: { userId } }) => ({
+    loadAsync: () => Promise.all([
+      dispatch(fetchUserIfNeeded(userId))
+    ])
   })
 )(User);

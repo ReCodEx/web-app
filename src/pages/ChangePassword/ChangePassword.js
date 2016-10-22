@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import { canUseDOM } from 'exenv';
 import { FormattedMessage, FormattedRelative } from 'react-intl';
 import Helmet from 'react-helmet';
 import { connect } from 'react-redux';
@@ -38,7 +39,7 @@ class ChangePassword extends Component {
   componentWillMount = () => {
     this.checkIfIsDone(this.props);
 
-    if (typeof window !== 'undefined' && typeof window.location.hash === 'string') {
+    if (canUseDOM) {
       const hash = window.location.hash;
       if (hash.length === 0) {
         const { push } = this.props;
@@ -62,6 +63,9 @@ class ChangePassword extends Component {
     this.checkIfIsDone(props);
   };
 
+  /**
+   * Check if the operation was not carried out successfuly and redirect the user to the next step if so.
+   */
   checkIfIsDone = props => {
     const { hasSucceeded } = props;
     if (hasSucceeded) {

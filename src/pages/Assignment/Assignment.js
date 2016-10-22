@@ -31,7 +31,7 @@ class Assignment extends Component {
   componentWillMount() {
     this.updateTime();
     this.deadlineUpdater = setInterval(this.updateTime, 5 * 1000); // once per five seconds
-    Assignment.loadData(this.props);
+    this.props.loadAsync();
   }
 
   componentWillUnmount() {
@@ -40,17 +40,9 @@ class Assignment extends Component {
 
   componentWillReceiveProps(newProps) {
     if (this.props.params.assignmentId !== newProps.params.assignmentId) {
-      Assignment.loadData(newProps);
+      newProps.loadAsync();
     }
   }
-
-  static loadData = ({
-    loadAssignmentIfNeeded,
-    lookIfCanSubmit
-  }) => {
-    loadAssignmentIfNeeded();
-    lookIfCanSubmit();
-  };
 
   initSubmission = () => {
     const { init, userId } = this.props;
@@ -152,7 +144,7 @@ Assignment.propTypes = {
   submitting: PropTypes.bool.isRequired,
   init: PropTypes.func.isRequired,
   cancel: PropTypes.func.isRequired,
-  loadAssignmentIfNeeded: PropTypes.func.isRequired
+  loadAsync: PropTypes.func.isRequired
 };
 
 Assignment.contextTypes = {
@@ -174,7 +166,9 @@ export default connect(
   (dispatch, { params: { assignmentId } }) => ({
     init: (userId) => dispatch(init(userId, assignmentId)),
     cancel: (userId) => dispatch(cancel()),
-    loadAssignmentIfNeeded: () => dispatch(fetchAssignmentIfNeeded(assignmentId)),
-    lookIfCanSubmit: () => dispatch(canSubmit(assignmentId))
+    loadAsync: () => Promise.all([
+      dispatch(fetchAssignmentIfNeeded(assignmentId)),
+      dispatch(canSubmit(assignmentId))
+    ])
   })
 )(Assignment);

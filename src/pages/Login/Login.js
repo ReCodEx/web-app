@@ -19,9 +19,13 @@ class Login extends Component {
     this.checkIfIsLoggedIn(this.props);
   }
 
-  componentWillReceiveProps = props => this.checkIfIsLoggedIn(props);
+  componentWillReceiveProps = (props) =>
+    this.checkIfIsLoggedIn(props);
 
-  checkIfIsLoggedIn = props => {
+  /**
+   * Redirect all logged in users to the dashboard as soon as they are visually informed about success.
+   */
+  checkIfIsLoggedIn = (props) => {
     const { hasSucceeded, push } = props;
     if (hasSucceeded) {
       setTimeout(() => push(this.context.links.DASHBOARD_URI), 600);

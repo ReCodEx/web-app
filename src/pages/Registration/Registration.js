@@ -18,12 +18,11 @@ class Register extends Component {
 
   componentWillMount = () => {
     this.checkIfIsDone(this.props);
-    Register.loadData(this.props);
+    this.props.loadAsync();
   };
 
-  componentWillReceiveProps = props => {
+  componentWillReceiveProps = (props) =>
     this.checkIfIsDone(props);
-  };
 
   checkIfIsDone = props => {
     const { hasSucceeded, push } = props;
@@ -31,10 +30,6 @@ class Register extends Component {
       const { links: { DASHBOARD_URI } } = this.context;
       setTimeout(() => push(DASHBOARD_URI), 600);
     }
-  };
-
-  static loadData = ({ fetchInstances }) => {
-    fetchInstances();
   };
 
   render() {
@@ -71,7 +66,7 @@ Register.contextTypes = {
 
 Register.propTypes = {
   instances: PropTypes.object.isRequired,
-  fetchInstances: PropTypes.func.isRequired,
+  loadAsync: PropTypes.func.isRequired,
   createAccount: PropTypes.func.isRequired,
   isCreatingAccount: PropTypes.bool.isRequired,
   hasFailed: PropTypes.bool.isRequired,
@@ -86,9 +81,11 @@ export default connect(
     hasSucceeded: hasSucceeded(state)
   }),
   dispatch => ({
+    loadAsync: () => Promise.all([
+      dispatch(fetchInstances())
+    ]),
     createAccount: ({ firstName, lastName, email, password, instanceId }) =>
       dispatch(createAccount(firstName, lastName, email, password, instanceId)),
-    fetchInstances: () => dispatch(fetchInstances()),
     push: (url) => dispatch(push(url))
   })
 )(Register);
