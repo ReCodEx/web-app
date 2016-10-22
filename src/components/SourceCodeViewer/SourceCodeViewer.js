@@ -1,7 +1,8 @@
 import React, { PropTypes } from 'react';
-// import Highlight from 'react-highlight/lib/optimized';
-import Highlight from 'react-highlight';
-import addLineNumbers from 'add-line-numbers';
+
+import CodeMirror from 'react-codemirror';
+import 'codemirror/lib/codemirror.css';
+import 'codemirror/theme/monokai.css';
 
 const SourceCodeViewer = ({
   name,
@@ -11,11 +12,14 @@ const SourceCodeViewer = ({
   <div style={{
     tabSize: 2
   }}>
-    <Highlight className={name.split('.').pop()}>
-      {content && lineNumbers
-        ? addLineNumbers(content, 1, '|\t')
-        : content}
-    </Highlight>
+    <CodeMirror
+      value={content}
+      disabled
+      className='cm-s-monokai'
+      options={{
+        lineNumbers,
+        mode: name.split('.').pop()
+      }} />
   </div>
 );
 

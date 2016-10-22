@@ -1,5 +1,9 @@
 import React, { PropTypes } from 'react';
 import { FormattedMessage } from 'react-intl';
+import CodeMirror from 'react-codemirror';
+
+import 'codemirror/lib/codemirror.css';
+import 'codemirror/theme/monokai.css';
 
 import {
   FormGroup,
@@ -8,8 +12,9 @@ import {
   HelpBlock
 } from 'react-bootstrap';
 
-const TextAreaField = ({
+const SourceCodeField = ({
   input,
+  mode,
   meta: {
     touched,
     error
@@ -23,13 +28,14 @@ const TextAreaField = ({
     controlId={name}
     validationState={touched && error ? 'error' : undefined}>
     <ControlLabel>{label}</ControlLabel>
-    <FormControl {...input} {...props} componentClass='textarea' rows={8} />
+    <CodeMirror {...input} options={{ lineNumbers: true, mode, theme: 'monokai' }} />
     {touched && error && <HelpBlock>{error}</HelpBlock>}
     {children}
   </FormGroup>
 );
 
-TextAreaField.propTypes = {
+SourceCodeField.propTypes = {
+  mode: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   type: PropTypes.string,
   label: PropTypes.oneOfType([
@@ -38,4 +44,4 @@ TextAreaField.propTypes = {
   ]).isRequired
 };
 
-export default TextAreaField;
+export default SourceCodeField;
