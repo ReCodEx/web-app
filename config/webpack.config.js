@@ -20,11 +20,11 @@ module.exports = {
       { test: /\.json$/, loader: 'json-loader' },
       {
         test: /\.css$/,
-        loaders: [ 'style', 'css' ]
+        loaders: [ 'isomorphic-style', 'css' ]
       },
       {
         test: /\.less$/,
-        loaders: [ 'style', 'css?modules', 'less' ]
+        loaders: [ 'isomorphic-style', 'css?modules', 'less' ]
       }
     ]
   },

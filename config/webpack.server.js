@@ -7,6 +7,8 @@ const fs = require('fs');
 // load variables from .env
 require('dotenv').config();
 
+const clientConfig = require('./webpack.config.js');
+
 var nodeModules = {};
 fs.readdirSync('node_modules')
   .filter(function(x) {
@@ -23,25 +25,12 @@ module.exports = {
     filename: 'server.js',
     path: path.join(__dirname, '..', 'bin')
   },
-  module: {
-    loaders: [
-      { test: /\.jsx?$/, exclude: /node_modules/, loaders: [ 'babel' ] },
-      { test: /\.json$/, loader: 'json-loader' },
-      {
-        test: /\.module.css$/,
-        loaders: [ 'style', 'css?module' ]
-      },
-      {
-        test: /\.css$/,
-        loaders: [ 'style', 'css' ]
-      }
-    ]
-  },
+  module: clientConfig.module,
   externals: nodeModules,
   plugins: [
     new webpack.DefinePlugin({
       'process.env': {
-        NODE_ENV: '\'' + process.env.NODE_ENV + '\'',
+        NODE_ENV: '\'production\'',
         API_BASE: '\'' + process.env.API_BASE + '\''
       }
     })
