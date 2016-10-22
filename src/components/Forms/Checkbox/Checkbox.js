@@ -1,5 +1,8 @@
 import React, { PropTypes, Component } from 'react';
 import Icon from 'react-fontawesome';
+import classNames from 'classnames';
+
+import styles from './Checkbox.less';
 
 class Checkbox extends Component {
 
@@ -29,18 +32,25 @@ class Checkbox extends Component {
     if (!repeat && (key === 'Enter' || key === ' ')) {
       this.toggle();
     }
+  };
+
+  renderInput() {
+    const { disabled, checked } = this.props;
+    return !disabled
+      ? <Icon name={checked ? 'check-square-o' : 'square-o'} />
+      : <Icon name={checked ? 'check-square' : 'square'} />;
   }
 
   render() {
-    const { checked } = this.props;
     const {
+      checked,
       tabIndex = 0,
-      onOff = false,
       disabled = false,
       onBlur,
       onFocus,
       children,
-      ...props
+      colored = false,
+      className
     } = this.props;
 
     return (
@@ -49,26 +59,23 @@ class Checkbox extends Component {
         onBlur={onBlur}
         onFocus={onFocus}
         onKeyDown={this.onKeyDown}
-        style={{
-          cursor: disabled ? 'not-allowed' : 'pointer',
-          color: disabled ? 'gray' : ''
-        }}>
+        className={classNames({
+          [className]: className && className.length > 0,
+          [styles.labelDisabled]: disabled,
+          [styles.label]: !disabled
+        })}>
         <span
           tabIndex={disabled ? -1 : tabIndex}
-          style={{
-            display: 'inline-block',
-            textAlign: 'left',
-            minWidth: 25,
-            padding: '0 3px'
-          }}>
-          {!onOff && (
-            !disabled
-              ? <Icon name={checked ? 'check-square-o' : 'square-o'} />
-              : <Icon name={checked ? 'check-square' : 'square'} />
-          )}
-          {onOff && <Icon name={checked ? 'toggle-on' : 'toggle-off'} />}
+          className={classNames({
+            [styles.inputWrapper]: true,
+            'text-success': colored && checked,
+            'text-danger': colored && !checked
+          })}>
+          {this.renderInput()}
         </span>
-        {children}
+        <span className={styles.labelText}>
+          {children}
+        </span>
       </label>
     );
   }
