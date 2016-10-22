@@ -32,10 +32,10 @@ const getTitle = (level) => {
       return <FormattedMessage id='app.passwordStrength.worst' defaultMessage='Unsatisfactory' />;
 
     case 1:
-      return <FormattedMessage id='app.passwordStrength.bad' defaultMessage='' />;
+      return <FormattedMessage id='app.passwordStrength.bad' defaultMessage='Bad' />;
 
     case 2:
-      return <FormattedMessage id='app.passwordStrength.somewhatOk' defaultMessage='' />;
+      return <FormattedMessage id='app.passwordStrength.somewhatOk' defaultMessage='Should be better' />;
 
     case 3:
       return <FormattedMessage id='app.passwordStrength.ok' defaultMessage='OK' />;
@@ -44,7 +44,7 @@ const getTitle = (level) => {
       return <FormattedMessage id='app.passwordStrength.good' defaultMessage='Good' />;
 
     default:
-      return <FormattedMessage id='app.passwordStrength.unknown' defaultMessage='' />;
+      return <FormattedMessage id='app.passwordStrength.unknown' defaultMessage='Unknown' />;
   }
 }
 
