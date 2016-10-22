@@ -29,7 +29,13 @@ const actionCreatorsFactory = ({
 
   const fetchIfNeeded = (...ids) =>
     (dispatch, getState) =>
-      ids.map(id => needsRefetching(getItem(id, getState)) && dispatch(fetchResource(id)));
+      Promise.all(
+        ids.map(id =>
+          needsRefetching(getItem(id, getState))
+            ? dispatch(fetchResource(id))
+            : Promise.resolve()
+        )
+      );
 
   const fetchOneIfNeeded = (id) =>
     (dispatch, getState) =>

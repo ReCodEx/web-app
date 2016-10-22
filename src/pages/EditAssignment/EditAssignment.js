@@ -12,7 +12,8 @@ import ResourceRenderer from '../../components/ResourceRenderer';
 import EditAssignmentForm from '../../components/Forms/EditAssignmentForm';
 import EditAssignmentLimitsForm from '../../components/Forms/EditAssignmentLimitsForm';
 
-import { fetchAssignmentIfNeeded, editAssignment, editAssignmentLimits } from '../../redux/modules/assignments';
+import { fetchAssignmentIfNeeded, editAssignment } from '../../redux/modules/assignments';
+import { fetchLimitsIfNeeded, editAssignmentLimits } from '../../redux/modules/limits';
 import { getAssignment, canSubmitSolution } from '../../redux/selectors/assignments';
 import { isSubmitting } from '../../redux/selectors/submission';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
@@ -21,33 +22,25 @@ import { isSupervisorOf } from '../../redux/selectors/users';
 class EditAssignment extends Component {
 
   componentWillMount = () => {
-    EditAssignment.loadData(this.props);
+    this.props.loadAsync();
     this.checkIfIsDone(this.props);
   };
 
-  componentWillReceiveProps = props => {
+  componentWillReceiveProps = (props) => {
     if (this.props.params.assignmentId !== props.params.assignmentId) {
       props.reset();
-      EditAssignment.loadData(props);
+      props.loadAsync();
     }
 
     this.checkIfIsDone(props);
   };
 
-  static loadData = ({
-    loadAssignmentIfNeeded
-  }) => {
-    loadAssignmentIfNeeded();
-  };
-
   checkIfIsDone = (props) => {
-    const { hasSucceeded } = props;
-    if (hasSucceeded) {
+    if (props.hasSucceeded) {
       setTimeout(() => {
         const { push, reset, params: { assignmentId } } = props;
-        const { links: { ASSIGNMENT_EDIT_URI_FACTORY } } = this.context;
         reset();
-        push(ASSIGNMENT_EDIT_URI_FACTORY(assignmentId));
+        push(this.context.links.ASSIGNMENT_EDIT_URI_FACTORY(assignmentId));
       }, 1500);
     }
   };
@@ -118,7 +111,10 @@ export default connect(
   (dispatch, { params: { assignmentId } }) => ({
     push: (url) => dispatch(push(url)),
     reset: () => dispatch(reset('editAssignment')),
-    loadAssignmentIfNeeded: () => dispatch(fetchAssignmentIfNeeded(assignmentId)),
+    loadAsync: () => Promise.all([
+      dispatch(fetchAssignmentIfNeeded(assignmentId)),
+      dispatch(fetchLimitsIfNeeded(assignmentId))
+    ]),
     editAssignment: (data) => dispatch(editAssignment(data)),
     editAssignmentLimits: (data) => dispatch(editAssignmentLimits(data))
   })
