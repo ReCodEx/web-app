@@ -4,7 +4,7 @@
  */
 
 import { resourceStatus, isLoading, hasFailed, didInvalidate } from './status';
-
+import { getJsData } from './recordFactory';
 
 const actionCreatorsFactory = ({
   actionTypes,
@@ -14,6 +14,8 @@ const actionCreatorsFactory = ({
   createAction,
   createApiAction
 }) => {
+  const archivedPromises = {};
+
   const getItem = (id, getState) => {
     const state = selector(getState());
     return !state ? null : state.getIn(['resources', id]);
@@ -27,21 +29,27 @@ const actionCreatorsFactory = ({
       ...apiOptions
     });
 
+  const fakeResult = (item) => ({
+    value: getJsData(item)
+  });
+
   const fetchIfNeeded = (...ids) =>
     (dispatch, getState) =>
       Promise.all(
-        ids.map(id =>
-          needsRefetching(getItem(id, getState))
-            ? dispatch(fetchResource(id))
-            : Promise.resolve()
-        )
+        ids.map(id => dispatch(fetchOneIfNeeded(id)))
       );
 
   const fetchOneIfNeeded = (id) =>
-    (dispatch, getState) =>
-      needsRefetching(getItem(id, getState))
-        ? dispatch(fetchResource(id))
-        : Promise.resolve();
+    (dispatch, getState) => {
+      if (needsRefetching(getItem(id, getState))) {
+        archivedPromises[id] = dispatch(fetchResource(id));
+      }
+
+      const item = getItem(id, getState);
+      return isLoading(item)
+        ? archivedPromises[id]
+        : Promise.resolve(fakeResult(item));
+    };
 
   const fetchResource = (id) =>
     createApiAction({
