@@ -6,8 +6,13 @@ import { Row, Col, FormGroup, HelpBlock } from 'react-bootstrap';
 
 import SourceCodeField from './SourceCodeField';
 import OnOffCheckbox from '../OnOffCheckbox';
-import 'codemirror/mode/markdown/markdown';
 import styles from './MarkdownTextAreaField.less';
+
+
+import { canUseDOM } from 'exenv';
+if (canUseDOM) {
+  require('codemirror/mode/markdown/markdown');
+}
 
 class MarkdownTextAreaField extends Component {
 

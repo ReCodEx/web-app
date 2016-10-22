@@ -11,7 +11,10 @@ import SubmitButton from '../SubmitButton';
 import { validateRegistrationData } from '../../../redux/modules/users';
 import { getJsData } from '../../../redux/helpers/resourceManager';
 
-import 'codemirror/mode/yaml/yaml';
+import { canUseDOM } from 'exenv';
+if (canUseDOM) {
+  require('codemirror/mode/yaml/yaml');
+}
 
 const EditAssignmentLimitsForm = ({
   assignment,

@@ -1,26 +1,27 @@
 import React, { PropTypes } from 'react';
+import { CanUseDOM } from 'exenv';
 
-import CodeMirror from 'react-codemirror';
-import 'codemirror/lib/codemirror.css';
-import 'codemirror/theme/monokai.css';
+if (CanUseDOM) {
+  var CodeMirror = require('react-codemirror');
+  require('codemirror/lib/codemirror.css');
+  require('codemirror/theme/monokai.css');
+}
 
 const SourceCodeViewer = ({
   name,
   content = '',
   lineNumbers = true
-}) => (
-  <div style={{
-    tabSize: 2
-  }}>
-    <CodeMirror
-      value={content}
-      disabled
-      className='cm-s-monokai'
-      options={{
-        lineNumbers,
-        mode: name.split('.').pop()
-      }} />
-  </div>
-);
+}) =>
+  CodeMirror
+    ? (
+      <CodeMirror
+        value={content}
+        disabled
+        options={{
+          lineNumbers,
+          mode: name.split('.').pop()
+        }} />
+    )
+  : null;
 
 export default SourceCodeViewer;

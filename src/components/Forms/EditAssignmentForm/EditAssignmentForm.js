@@ -1,4 +1,5 @@
 import React, { PropTypes } from 'react';
+import { canUseDOM } from 'exenv';
 import { reduxForm, Field, change } from 'redux-form';
 import { FormattedMessage } from 'react-intl';
 import { Button, Alert, HelpBlock } from 'react-bootstrap';
@@ -11,7 +12,9 @@ import SubmitButton from '../SubmitButton';
 import { validateRegistrationData } from '../../../redux/modules/users';
 import { getJsData } from '../../../redux/helpers/resourceManager';
 
-import 'codemirror/mode/yaml/yaml';
+if (canUseDOM) {
+  require('codemirror/mode/yaml/yaml');
+}
 
 const EditAssignmentForm = ({
   initialValues: assignment,

@@ -1,9 +1,6 @@
 import React, { PropTypes } from 'react';
 import { FormattedMessage } from 'react-intl';
-import CodeMirror from 'react-codemirror';
-
-import 'codemirror/lib/codemirror.css';
-import 'codemirror/theme/monokai.css';
+import { CanUseDOM } from 'exenv';
 
 import {
   FormGroup,
@@ -11,6 +8,12 @@ import {
   ControlLabel,
   HelpBlock
 } from 'react-bootstrap';
+
+if (CanUseDOM) {
+  var CodeMirror = require('react-codemirror');
+  require('codemirror/lib/codemirror.css');
+  require('codemirror/theme/monokai.css');
+}
 
 const SourceCodeField = ({
   input,
@@ -28,7 +31,7 @@ const SourceCodeField = ({
     controlId={name}
     validationState={touched && error ? 'error' : undefined}>
     <ControlLabel>{label}</ControlLabel>
-    <CodeMirror {...input} options={{ lineNumbers: true, mode, theme: 'monokai' }} />
+    {CodeMirror && <CodeMirror {...input} options={{ lineNumbers: true, mode, theme: 'monokai' }} />}
     {touched && error && <HelpBlock>{error}</HelpBlock>}
     {children}
   </FormGroup>
