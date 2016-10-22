@@ -3,15 +3,16 @@ import { FormattedMessage, FormattedRelative } from 'react-intl';
 import Helmet from 'react-helmet';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
-import { reset } from 'redux-form';
+import { reset, getFormValues } from 'redux-form';
 
 import { Row, Col, Alert } from 'react-bootstrap';
 import PageContent from '../../components/PageContent';
 
 import ResourceRenderer from '../../components/ResourceRenderer';
 import EditAssignmentForm from '../../components/Forms/EditAssignmentForm';
+import EditAssignmentLimitsForm from '../../components/Forms/EditAssignmentLimitsForm';
 
-import { fetchAssignmentIfNeeded, editAssignment } from '../../redux/modules/assignments';
+import { fetchAssignmentIfNeeded, editAssignment, editAssignmentLimits } from '../../redux/modules/assignments';
 import { getAssignment, canSubmitSolution } from '../../redux/selectors/assignments';
 import { isSubmitting } from '../../redux/selectors/submission';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
@@ -56,7 +57,8 @@ class EditAssignment extends Component {
     const {
       params: { assignmentId },
       assignment,
-      editAssignment
+      editAssignment,
+      formValues
     } = this.props;
 
     return (
@@ -76,9 +78,15 @@ class EditAssignment extends Component {
         ]}>
         <ResourceRenderer resource={assignment}>
           {assignment => (
-            <EditAssignmentForm
-              initialValues={assignment}
-              handleSubmit={editAssignment} />
+            <div>
+              <EditAssignmentForm
+                initialValues={assignment}
+                handleSubmit={editAssignment}
+                formValues={formValues} />
+              <EditAssignmentLimitsForm
+                assignment={assignment}
+                initialValues={{}} />
+            </div>
           )}
         </ResourceRenderer>
       </PageContent>
@@ -103,13 +111,15 @@ export default connect(
       submitting: isSubmitting(state),
       userId,
       isStudentOf: (groupId) => isSupervisorOf(userId, groupId)(state),
-      canSubmit: canSubmitSolution(assignmentId)(state)
+      canSubmit: canSubmitSolution(assignmentId)(state),
+      formValues: getFormValues('editAssignment')(state)
     };
   },
   (dispatch, { params: { assignmentId } }) => ({
     push: (url) => dispatch(push(url)),
     reset: () => dispatch(reset('editAssignment')),
     loadAssignmentIfNeeded: () => dispatch(fetchAssignmentIfNeeded(assignmentId)),
-    editAssignment: (data) => dispatch(editAssignment(data))
+    editAssignment: (data) => dispatch(editAssignment(data)),
+    editAssignmentLimits: (data) => dispatch(editAssignmentLimits(data))
   })
 )(EditAssignment);
