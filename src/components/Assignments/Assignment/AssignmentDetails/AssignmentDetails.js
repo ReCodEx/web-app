@@ -4,7 +4,7 @@ import { Grid, Row, Col, Table } from 'react-bootstrap';
 import ReactMarkdown from 'react-markdown';
 import { FormattedDate, FormattedTime, FormattedMessage } from 'react-intl';
 import classnames from 'classnames';
-import { MaybeSucceededIcon } from '../../../icons';
+import { MaybeSucceededIcon } from '../../../Icons';
 import Box from '../../../AdminLTE/Box';
 
 const AssignmentDetails = ({
