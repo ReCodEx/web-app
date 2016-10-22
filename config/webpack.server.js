@@ -26,12 +26,17 @@ module.exports = {
   module: {
     loaders: [
       { test: /\.jsx?$/, exclude: /node_modules/, loaders: [ 'babel' ] },
-      { test: /\.json$/, loader: 'json-loader' }
+      { test: /\.json$/, loader: 'json-loader' },
+      {
+        test: /\.module.css$/,
+        loaders: [ 'style', 'css?module' ]
+      },
+      {
+        test: /\.css$/,
+        loaders: [ 'style', 'css' ]
+      }
     ]
   },
-  postcss: [
-    autoprefixer({ browsers: ['last 2 versions'] })
-  ],
   externals: nodeModules,
   plugins: [
     new webpack.DefinePlugin({

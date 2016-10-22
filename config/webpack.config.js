@@ -7,7 +7,7 @@ const strip = require('strip-loader');
 require('dotenv').config();
 
 module.exports = {
-  devtool: 'source-map',
+  devtool: process.env.NODE_ENV === 'DEVELOPMENT' ? 'source-map' : 'none',
   entry: path.join(__dirname, '..', 'src/client.js'),
   output: {
     filename: 'bundle.js',
@@ -18,15 +18,16 @@ module.exports = {
     loaders: [
       { test: /\.jsx?$/, exclude: /node_modules/, loaders: [ 'babel' ] },
       { test: /\.json$/, loader: 'json-loader' },
-      { test: /\.css$/, loaders: [ 'style', 'css' ] }
+      {
+        test: /\.css$/,
+        loaders: [ 'style', 'css' ]
+      },
+      {
+        test: /\.less$/,
+        loaders: [ 'style', 'css?modules', 'less' ]
+      }
     ]
   },
-  resolve: {
-    extensions: [ '', '.js', '.json' ]
-  },
-  postcss: [
-    autoprefixer({ browsers: ['last 2 versions'] })
-  ],
   plugins: [
     new webpack.DefinePlugin({
       'process.env': {
