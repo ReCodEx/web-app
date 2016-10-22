@@ -18,8 +18,10 @@ class DatetimeField extends Component {
    * strict shoudComponentUpdate implementation of redux-form).
    */
   onFocus() {
-    const { input: { value, onChange } } = this.props;
-    onChange(value);
+    const { disabled, input: { value, onChange } } = this.props;
+    if (!disabled) {
+      onChange(value);
+    }
   }
 
   render() {
@@ -30,6 +32,7 @@ class DatetimeField extends Component {
         visited,
         error
       },
+      disabled,
       defaultValue = '',
       label,
       ...props
@@ -42,7 +45,7 @@ class DatetimeField extends Component {
     return (
       <FormGroup controlId={input.name} validationState={touched && error ? 'error' : undefined}>
         <ControlLabel>{label}</ControlLabel>
-        <Datetime {...input} {...props} locale={lang} onFocus={() => this.onFocus()} />
+        <Datetime {...input} {...props} locale={lang} onFocus={() => this.onFocus()} inputProps={{ disabled }} />
         {touched && error && <HelpBlock>{error}</HelpBlock>}
       </FormGroup>
     );
