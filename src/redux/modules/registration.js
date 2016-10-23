@@ -30,6 +30,14 @@ export const createAccount = (firstName, lastName, email, password, instanceId) 
     body: { firstName, lastName, email, password, instanceId }
   });
 
+export const createExternalAccount = (username, password, instanceId, serviceId) =>
+  createApiAction({
+    type: actionTypes.CREATE_ACCOUNT,
+    method: 'POST',
+    endpoint: '/users/ext',
+    body: { username, password, instanceId, serviceId }
+  });
+
 const initialState = fromJS({
   status: statusTypes.IDLE
 });
