@@ -22,7 +22,11 @@ export const additionalActionTypes = {
   CREATE_ASSIGNMENT: 'recodex/assignments/CREATE_ASSIGNMENT',
   CREATE_ASSIGNMENT_PENDING: 'recodex/assignments/CREATE_ASSIGNMENT_PENDING',
   CREATE_ASSIGNMENT_FAILED: 'recodex/assignments/CREATE_ASSIGNMENT_FAILED',
-  CREATE_ASSIGNMENT_FULFILLED: 'recodex/assignments/CREATE_ASSIGNMENT_FULFILLED'
+  CREATE_ASSIGNMENT_FULFILLED: 'recodex/assignments/CREATE_ASSIGNMENT_FULFILLED',
+  UPDATE_ASSIGNMENT: 'recodex/assignments/UPDATE_ASSIGNMENT',
+  UPDATE_ASSIGNMENT_PENDING: 'recodex/assignments/UPDATE_ASSIGNMENT_PENDING',
+  UPDATE_ASSIGNMENT_FAILED: 'recodex/assignments/UPDATE_ASSIGNMENT_FAILED',
+  UPDATE_ASSIGNMENT_FULFILLED: 'recodex/assignments/UPDATE_ASSIGNMENT_FULFILLED'
 };
 
 /**
@@ -53,9 +57,14 @@ export const create = (groupId, exerciseId) =>
     body: { groupId, exerciseId }
   });
 
-export const editAssignment = (payload) => {
-  return { type: '@TODO_EDIT_ASSIGNMENT_ACTION', payload };
-};
+export const editAssignment = (assignmentId, body) =>
+  createApiAction({
+    type: additionalActionTypes.UPDATE_ASSIGNMENT,
+    endpoint: `/exercise-assignments/${assignmentId}`,
+    method: 'POST',
+    meta: { id: assignmentId, payload: body },
+    body
+  });
 
 /**
  * Reducer
@@ -69,13 +78,11 @@ const reducer = handleActions(Object.assign({}, reduceActions, {
   [additionalActionTypes.CAN_SUBMIT_FULFILLED]: (state, { payload: canSubmit, meta: { assignmentId } }) =>
     state.setIn([ 'resources', assignmentId, 'data', 'canReceiveSubmissions' ], canSubmit),
 
-  [additionalActionTypes.CREATE_ASSIGNMENT_PENDING]: (state, { meta: { groupId } }) =>
-    state,
+  [additionalActionTypes.CREATE_ASSIGNMENT_PENDING]: (state, { meta: { groupId } }) => state,
+  [additionalActionTypes.CREATE_ASSIGNMENT_FAILED]: (state, { meta: { groupId } }) => state,
+  [additionalActionTypes.CREATE_ASSIGNMENT_FULFILLED]: reduceActions[actionTypes.FETCH_FULFILLED],
 
-  [additionalActionTypes.CREATE_ASSIGNMENT_FAILED]: (state, { meta: { groupId } }) =>
-    state,
-
-  [additionalActionTypes.CREATE_ASSIGNMENT_FULFILLED]: reduceActions[actionTypes.FETCH_FULFILLED]
+  [additionalActionTypes.UPDATE_ASSIGNMENT_FULFILLED]: reduceActions[actionTypes.FETCH_FULFILLED]
 
 }), initialState);
 

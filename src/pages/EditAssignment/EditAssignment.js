@@ -21,32 +21,16 @@ import { isSupervisorOf } from '../../redux/selectors/users';
 
 class EditAssignment extends Component {
 
-  componentWillMount = () => {
-    this.props.loadAsync();
-    this.checkIfIsDone(this.props);
-  };
-
+  componentWillMount = () => this.props.loadAsync();
   componentWillReceiveProps = (props) => {
     if (this.props.params.assignmentId !== props.params.assignmentId) {
       props.reset();
       props.loadAsync();
     }
-
-    this.checkIfIsDone(props);
-  };
-
-  checkIfIsDone = (props) => {
-    if (props.hasSucceeded) {
-      setTimeout(() => {
-        const { push, reset, params: { assignmentId } } = props;
-        reset();
-        push(this.context.links.ASSIGNMENT_EDIT_URI_FACTORY(assignmentId));
-      }, 1500);
-    }
   };
 
   render() {
-    const { links: { ASSIGNMENT_EDIT_URI_FACTORY } } = this.context;
+    const { links: { ASSIGNMENT_DETAIL_URI_FACTORY } } = this.context;
     const {
       params: { assignmentId },
       assignment,
@@ -62,7 +46,7 @@ class EditAssignment extends Component {
           {
             text: <FormattedMessage id='app.assignment.title' />,
             iconName: 'puzzle-piece',
-            link: ASSIGNMENT_EDIT_URI_FACTORY(assignmentId)
+            link: ASSIGNMENT_DETAIL_URI_FACTORY(assignmentId)
           },
           {
             text: <FormattedMessage id='app.editAssignment.title' />,
@@ -74,7 +58,7 @@ class EditAssignment extends Component {
             <div>
               <EditAssignmentForm
                 initialValues={assignment}
-                handleSubmit={editAssignment}
+                onSubmit={editAssignment}
                 formValues={formValues} />
               <EditAssignmentLimitsForm
                 assignment={assignment}
@@ -115,7 +99,16 @@ export default connect(
       dispatch(fetchAssignmentIfNeeded(assignmentId)),
       dispatch(fetchLimitsIfNeeded(assignmentId))
     ]),
-    editAssignment: (data) => dispatch(editAssignment(data)),
-    editAssignmentLimits: (data) => dispatch(editAssignmentLimits(data))
+    editAssignment: (data) => {
+      // convert deadline times to timestamps
+      data.firstDeadline = data.firstDeadline.unix();
+      if (data.secondDeadline) {
+        data.secondDeadline = data.secondDeadline.unix();
+      }
+
+      return dispatch(editAssignment(assignmentId, data));
+    },
+    editAssignmentLimits: (data) =>
+      dispatch(editAssignmentLimits(data))
   })
 )(EditAssignment);

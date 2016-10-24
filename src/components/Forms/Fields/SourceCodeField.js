@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import { FormattedMessage } from 'react-intl';
-import { CanUseDOM } from 'exenv';
+import { canUseDOM } from 'exenv';
 
 import {
   FormGroup,
@@ -9,8 +9,10 @@ import {
   HelpBlock
 } from 'react-bootstrap';
 
-if (CanUseDOM) {
-  var CodeMirror = require('react-codemirror');
+let CodeMirror = null;
+
+if (canUseDOM) {
+  CodeMirror = require('react-codemirror');
   require('codemirror/lib/codemirror.css');
   require('codemirror/theme/monokai.css');
 }

@@ -20,8 +20,8 @@ const EditAssignmentForm = ({
   initialValues: assignment,
   submitting,
   handleSubmit,
-  hasFailed = false,
-  hasSucceeded = false,
+  submitFailed: hasFailed,
+  submitSucceeded: hasSucceeded,
   invalid,
   formValues: {
     firstDeadline,

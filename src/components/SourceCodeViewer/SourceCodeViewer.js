@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
-import { CanUseDOM } from 'exenv';
+import { canUseDOM } from 'exenv';
 
-if (CanUseDOM) {
+if (canUseDOM) {
   var CodeMirror = require('react-codemirror');
   require('codemirror/lib/codemirror.css');
   require('codemirror/theme/monokai.css');
