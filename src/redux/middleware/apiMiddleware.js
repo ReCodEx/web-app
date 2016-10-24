@@ -72,22 +72,31 @@ export const createApiCallPromise = ({
         throw err;
       }
     })
-    .then(res => {
-      if (isServerError(res) && dispatch) {
-        dispatch(addNotification('There was a problem on the server. Please try again later.', false));
-      }
-
-      if (!wasSuccessful(res)) {
-        throw new Error('The API call was not successful.', wasSuccessful);
-      }
-
-      return res;
-    })
     .then(res => res.json())
-    .then(json => json.payload);
+    .then(({
+      success = true,
+      code,
+      msg = '',
+      payload = {}
+     }) => {
+      if (!success && dispatch) {
+        if (isServerError(code)) {
+          dispatch(addNotification(`There was a problem on the server. ${msg}`, false));
+        } else {
+          dispatch(addNotification(msg, false));
+        }
+      }
 
-export const isTwoHundredCode = (res) => statusCode.accept(res.status, '2xx');
-export const isServerError = (res) => statusCode.accept(res.status, '5xx');
+      if (!success) {
+        return Promise.reject('The API call was not successful.');
+      }
+
+      return Promise.resolve(payload);
+    });
+
+export const isTwoHundredCode = (status) => statusCode.accept(status, '2xx');
+export const isServerError = (status) => statusCode.accept(status, '5xx');
+export const isUnauthorized = (status) => status === 403;
 
 export const apiCall = ({
   type,
