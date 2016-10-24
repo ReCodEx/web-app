@@ -65,7 +65,7 @@ export const createApiCallPromise = ({
   createRequest(endpoint, query, method, headers, body)
     .catch(err => {
       if (err.message && err.message === 'Failed to fetch') {
-        dispatch(
+        return dispatch(
           addNotification('The API server is unreachable. Please check your Internet connection.', false)
         );
       } else {

@@ -26,4 +26,4 @@ export const defaultSelectorFactory = resourceName =>
  * @return {boolean}  The item needs to be reloaded from the server
  */
 export const defaultNeedsRefetching = (item) =>
-  !item || hasFailed(item) || didInvalidate(item);
+  !item || didInvalidate(item);
