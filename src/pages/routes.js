@@ -62,7 +62,7 @@ const createRoutes = (getState) => {
   };
 
   return (
-    <Route path='/' onEnter={checkLanguage}>
+    <Route path='/' component={App} onEnter={checkLanguage}>
       <Route path='/:lang' component={LayoutContainer}>
         <IndexRoute component={Home} />
         <Route path='login' component={Login} onEnter={onlyUnauth} />

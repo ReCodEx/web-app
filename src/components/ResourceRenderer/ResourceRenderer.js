@@ -21,20 +21,22 @@ const ResourceRenderer = ({
   children: ready,
   resource,
   forceLoading = false
-}) =>
-  (!resource || isLoading(resource) || forceLoading)
+}) => {
+  const resources = Array.isArray(resource) ? resource : [resource];
+  return (!resource || resources.some(isLoading) || forceLoading)
     ? loading
-    : hasFailed(resource)
+    : resources.some(hasFailed)
       ? failed
       : typeof ready === 'function'
-        ? ready(getJsData(resource))
-        : React.cloneElement(ready, getJsData(resource));
+        ? ready(...resources.map(getJsData))
+        : React.cloneElement(ready, resources.map(getJsData));
+};
 
 ResourceRenderer.propTypes = {
   loading: PropTypes.element,
   failed: PropTypes.element,
   children: PropTypes.oneOfType([ PropTypes.func, PropTypes.element ]).isRequired,
-  resource: PropTypes.object
+  resource: PropTypes.oneOfType([ PropTypes.object, PropTypes.array ])
 };
 
 export default ResourceRenderer;

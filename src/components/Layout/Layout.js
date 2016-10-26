@@ -9,7 +9,8 @@ import PageContent from '../PageContent';
 import Footer from '../AdminLTE/Footer';
 
 export const Layout = ({
-  toggleSidebar,
+  toggleSize,
+  toggleVisibility,
   sidebar,
   isLoggedIn,
   children,
@@ -32,8 +33,8 @@ export const Layout = ({
       defaultTitle='ReCodEx'
       titleTemplate='%s | ReCodEx' />
     <Header
-      toggleSidebarSize={toggleSidebar.size}
-      toggleSidebarVisibility={toggleSidebar.visibility}
+      toggleSidebarSize={toggleSize}
+      toggleSidebarVisibility={toggleVisibility}
       availableLangs={availableLangs}
       currentLang={lang}
       currentUrl={currentUrl} />
@@ -49,17 +50,15 @@ export const Layout = ({
 );
 
 Layout.propTypes = {
-  toggleSidebar: PropTypes.shape({
-    size: PropTypes.func,
-    visibility: PropTypes.func
-  }),
+  toggleSize: PropTypes.func,
+  toggleVisibility: PropTypes.func,
   sidebar: PropTypes.shape({
     isCollapsed: PropTypes.bool,
     isOpen: PropTypes.bool
   }),
   isLoggedIn: PropTypes.bool,
   onCloseSidebar: PropTypes.func,
-  children: PropTypes.element.isRequired
+  children: PropTypes.element
 };
 
 export default Layout;

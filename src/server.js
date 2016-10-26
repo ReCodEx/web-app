@@ -64,7 +64,8 @@ app.get('*', (req, res) => {
         html,
         head,
         reduxState: JSON.stringify(store.getState()),
-        bundle: '/bundle.js'
+        bundle: '/bundle.js',
+        style: '/style.css'
       });
     }
   });

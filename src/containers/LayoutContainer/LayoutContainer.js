@@ -4,56 +4,36 @@ import { IntlProvider, addLocaleData } from 'react-intl';
 import moment from 'moment';
 import Layout from '../../components/Layout';
 
+import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import { toggleSize, toggleVisibility } from '../../redux/modules/sidebar';
 import { isVisible, isCollapsed } from '../../redux/selectors/sidebar';
-import { loggedInUserIdSelector, accessTokenSelector } from '../../redux/selectors/auth';
-import { usersGroupsIds } from '../../redux/selectors/users';
-import { fetchUserIfNeeded } from '../../redux/modules/users';
-import { fetchUsersGroupsIfNeeded } from '../../redux/modules/groups';
-import { logout, refresh } from '../../redux/modules/auth';
-import { isTokenValid, willExpireSoon } from '../../redux/helpers/token';
-import { fetchUsersInstancesIfNeeded } from '../../redux/modules/instances';
 import { messages, localeData, defaultLanguage } from '../../locales';
 import { linksFactory, isAbsolute } from '../../links';
 
+import 'admin-lte/dist/css/AdminLTE.min.css';
+import 'admin-lte/dist/css/skins/skin-green.min.css';
+// import 'admin-lte/dist/css/skins/skin-purple.min.css';
+
+/**
+ * This component is intended to be used as the root component and should wrap
+ * the whole tree of components in the ReCodEx application as it provides crutial
+ * functionality like localized links dependency injection to its subtree.
+ * @class LayoutContainer
+ * @extends {Component}
+ */
 class LayoutContainer extends Component {
 
   state = { links: null };
 
   componentWillMount() {
-    this.loadData(this.props);
     this.changeLang(this.props);
-    this.checkAuthentication();
   }
 
   componentWillReceiveProps(newProps) {
-    if (this.props.userId !== newProps.userId) {
-      this.loadData(newProps);
-    }
-
     if (this.props.params.lang !== newProps.params.lang) {
       this.changeLang(newProps);
     }
-
-    this.checkAuthentication();
   }
-
-  checkAuthentication = () => {
-    const { isLoggedIn, accessToken, refreshToken, logout } = this.props;
-    const token = accessToken ? accessToken.toJS() : null;
-    if (isLoggedIn) {
-      if (!isTokenValid(token)) {
-        logout(this.state.links.HOME_URI);
-      } else if (willExpireSoon(token) && !this.isRefreshingToken) {
-        this.isRefreshingToken = true;
-        refreshToken()
-          .catch(() => logout(this.state.links.HOME_URI))
-          .then(() => {
-            this.isRefreshingToken = false;
-          });
-      }
-    }
-  };
 
   getLang = props => {
     let lang = props.params.lang;
@@ -69,6 +49,10 @@ class LayoutContainer extends Component {
     this.setState({ lang, links: linksFactory(lang) });
   };
 
+  /**
+   * Child components should be able to access current language settings
+   * and up-to-date links (with respect to the given language).
+   */
   getChildContext = () => ({
     links: this.state.links,
     lang: this.state.lang,
@@ -77,9 +61,9 @@ class LayoutContainer extends Component {
 
   maybeHideSidebar = e => {
     e.preventDefault();
-    const { sidebar, toggleSidebar } = this.props;
+    const { sidebar, toggleVisibility } = this.props;
     if (sidebar.isOpen) {
-      toggleSidebar.visibility();
+      toggleVisibility();
     }
   };
 
@@ -90,22 +74,16 @@ class LayoutContainer extends Component {
   getMessages = lang => messages[lang] || messages[this.getDefaultLang()];
   getLocaleData = lang => localeData[lang] || localeData[this.getDefaultLang()];
 
-  loadData = ({
-    isLoggedIn,
-    userId,
-    loadUserDataIfNeeded,
-    loadUsersGroupsIfNeeded,
-    loadUsersInstancesIfNeeded
-  }) => {
-    if (isLoggedIn === true) {
-      loadUserDataIfNeeded(userId);
-      loadUsersGroupsIfNeeded(userId);
-      loadUsersInstancesIfNeeded(userId);
-    }
-  };
-
   render() {
-    const { children, location: { pathname } } = this.props;
+    const {
+      children,
+      location: { pathname },
+      sidebar,
+      toggleSize,
+      toggleVisibility,
+      isLoggedIn
+    } = this.props;
+
     const { lang, links: { HOME_URI } } = this.state;
     addLocaleData([ ...this.getLocaleData(lang) ]);
     moment.locale(lang);
@@ -113,11 +91,16 @@ class LayoutContainer extends Component {
     return (
       <IntlProvider locale={lang} messages={this.getMessages(lang)}>
         <Layout
-          {...this.props}
+          sidebar={sidebar}
+          isLoggedIn={isLoggedIn}
+          toggleSize={toggleSize}
+          toggleVisibility={toggleVisibility}
           onCloseSidebar={this.maybeHideSidebar}
           lang={lang}
           availableLangs={Object.keys(messages)}
-          currentUrl={pathname} />
+          currentUrl={pathname}>
+          {children}
+        </Layout>
       </IntlProvider>
     );
   }
@@ -139,21 +122,12 @@ const mapStateToProps = (state, props) => ({
     isOpen: isVisible(state),
     isCollapsed: isCollapsed(state)
   },
-  accessToken: accessTokenSelector(state),
-  isLoggedIn: !!loggedInUserIdSelector(state),
-  userId: loggedInUserIdSelector(state)
+  isLoggedIn: !!loggedInUserIdSelector(state)
 });
 
 const mapDispatchToProps = (dispatch, props) => ({
-  toggleSidebar: {
-    visibility: () => dispatch(toggleVisibility()),
-    size: () => dispatch(toggleSize())
-  },
-  loadUserDataIfNeeded: (userId) => dispatch(fetchUserIfNeeded(userId)),
-  loadUsersGroupsIfNeeded: (userId) => dispatch(fetchUsersGroupsIfNeeded(userId)),
-  loadUsersInstancesIfNeeded: (userId) => dispatch(fetchUsersInstancesIfNeeded(userId)),
-  refreshToken: (accessToken) => dispatch(refresh(accessToken)),
-  logout: (accessToken) => dispatch(logout())
+  toggleVisibility: () => dispatch(toggleVisibility()),
+  toggleSize: () => dispatch(toggleSize())
 });
 
 export default connect(

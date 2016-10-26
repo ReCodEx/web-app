@@ -2,12 +2,15 @@ const path = require('path');
 const webpack = require('webpack');
 const autoprefixer = require('autoprefixer');
 const strip = require('strip-loader');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 // load variables from .env
 require('dotenv').config();
 
+const extractCss = new ExtractTextPlugin('style.css');
+
 module.exports = {
-  devtool: process.env.NODE_ENV === 'DEVELOPMENT' ? 'source-map' : 'none',
+  devtool: process.env.NODE_ENV === 'development' ? 'source-map' : 'none',
   entry: path.join(__dirname, '..', 'src/client.js'),
   output: {
     filename: 'bundle.js',
@@ -20,19 +23,44 @@ module.exports = {
       { test: /\.json$/, loader: 'json-loader' },
       {
         test: /\.css$/,
-        loaders: [ 'style', 'css' ]
+        loader: extractCss.extract(['css'])
       },
       {
         test: /\.less$/,
-        loaders: [ 'style', 'css?modules', 'less' ]
+        loader: extractCss.extract(['css?modules', 'less'])
+      },
+      {
+        test: /.*\.(gif|png|jpe?g|svg)$/i,
+        loaders: [
+          'file?hash=sha512&digest=hex&name=[hash].[ext]',
+          'image-webpack'
+        ]
       }
     ]
   },
   plugins: [
+    extractCss,
     new webpack.DefinePlugin({
       'process.env': {
         NODE_ENV: '\'' + process.env.NODE_ENV + '\'',
         API_BASE: '\'' + process.env.API_BASE + '\''
+      }
+    }),
+    new webpack.LoaderOptionsPlugin({
+      imageWebpackLoader: {
+        mozjpeg: {
+          quality: 65
+        },
+        pngquant: {
+          quality: '65-90',
+          speed: 4
+        },
+        svgo: {
+          plugins: [
+            { removeViewBox: false },
+            { removeEmptyAttrs: true }
+          ]
+        }
       }
     })
   ]

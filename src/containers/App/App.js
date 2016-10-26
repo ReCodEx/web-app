@@ -1,7 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { loggedInUserIdSelector } from '../../redux/selectors/auth';
+import { loggedInUserIdSelector, accessTokenSelector } from '../../redux/selectors/auth';
 import { fetchUserIfNeeded } from '../../redux/modules/users';
+import { isTokenValid, willExpireSoon } from '../../redux/helpers/token';
+import { fetchUsersInstancesIfNeeded } from '../../redux/modules/instances';
+import { fetchUsersGroupsIfNeeded } from '../../redux/modules/groups';
+import { logout, refresh } from '../../redux/modules/auth';
 
 class App extends Component {
 
@@ -15,12 +19,32 @@ class App extends Component {
     }
   }
 
-  static loadData = ({
-    loggedInUserId,
-    loadUser
-  }) => {
-    if (loggedInUserId !== null) {
-      loadUser(loggedInUserId);
+  static loadData = ({ isLoggedIn, userId, loadAsync }) => {
+    if (isLoggedIn) {
+      return loadAsync(userId);
+    } else {
+      return Promise.resolve();
+    }
+  };
+
+  /**
+   * The validation in react-router does not cover all cases - validity of the token
+   * must be checked more often.
+   */
+  checkAuthentication = () => {
+    const { isLoggedIn, accessToken, refreshToken, logout } = this.props;
+    const token = accessToken ? accessToken.toJS() : null;
+    if (isLoggedIn) {
+      if (!isTokenValid(token)) {
+        logout(this.state.links.HOME_URI);
+      } else if (willExpireSoon(token) && !this.isRefreshingToken) {
+        this.isRefreshingToken = true;
+        refreshToken()
+          .catch(() => logout(this.state.links.HOME_URI))
+          .then(() => {
+            this.isRefreshingToken = false;
+          });
+      }
     }
   };
 
@@ -32,9 +56,17 @@ class App extends Component {
 
 export default connect(
   state => ({
-    loggedInUserId: loggedInUserIdSelector(state)
+    accessToken: accessTokenSelector(state),
+    userId: loggedInUserIdSelector(state),
+    isLoggedIn: !!loggedInUserIdSelector(state)
   }),
   dispatch => ({
-    loadUser: (userId) => dispatch(fetchUserIfNeeded(userId))
+    loadAsync: (userId) => Promise.all([
+      dispatch(fetchUserIfNeeded(userId)),
+      dispatch(fetchUsersGroupsIfNeeded(userId)),
+      dispatch(fetchUsersInstancesIfNeeded(userId))
+    ]),
+    refreshToken: (accessToken) => dispatch(refresh(accessToken)),
+    logout: (accessToken) => dispatch(logout())
   })
 )(App);
