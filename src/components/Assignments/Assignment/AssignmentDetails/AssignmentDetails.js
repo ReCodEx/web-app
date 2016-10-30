@@ -1,28 +1,28 @@
 import React, { PropTypes } from 'react';
 import Icon from 'react-fontawesome';
 import { Grid, Row, Col, Table } from 'react-bootstrap';
-import ReactMarkdown from 'react-markdown';
 import { FormattedDate, FormattedTime, FormattedMessage } from 'react-intl';
 import classnames from 'classnames';
 import { MaybeSucceededIcon } from '../../../Icons';
 import Box from '../../../AdminLTE/Box';
 
 const AssignmentDetails = ({
-  assignment,
-  isOpen,
+  isOpen = true,
+  submissionsCountLimit,
+  localizedAssignments,
+  description,
+  firstDeadline,
+  secondDeadline,
+  allowSecondDeadline,
   isAfterFirstDeadline,
   isAfterSecondDeadline,
   canSubmit
 }) => (
   <Box
-    title={<FormattedMessage id='app.assignment.title' defaultMessage='Exercise assignment' />}
+    title={<FormattedMessage id='app.assignment.title' defaultMessage='Details' />}
     noPadding
     collapsable
     isOpen={isOpen}>
-    <div style={{ padding: 20 }}>
-      <ReactMarkdown
-        source={assignment.description} />
-    </div>
     <Table responsive condensed>
       <tbody>
         <tr className={classnames({
@@ -39,11 +39,11 @@ const AssignmentDetails = ({
           </td>
           <td>
             <strong>
-              <FormattedDate value={new Date(assignment.deadline.first * 1000)} /> &nbsp; <FormattedTime value={new Date(assignment.deadline.first * 1000)} />
+              <FormattedDate value={new Date(firstDeadline * 1000)} /> &nbsp; <FormattedTime value={new Date(firstDeadline * 1000)} />
             </strong>
           </td>
         </tr>
-        {assignment.deadline.second && (
+        {allowSecondDeadline && (
           <tr className={classnames({
             'text-danger': isAfterSecondDeadline
           })}>
@@ -58,7 +58,7 @@ const AssignmentDetails = ({
             </td>
             <td>
               <strong>
-                <FormattedDate value={new Date(assignment.deadline.second * 1000)} /> &nbsp; <FormattedTime value={new Date(assignment.deadline.second * 1000)} />
+                <FormattedDate value={new Date(secondDeadline * 1000)} /> &nbsp; <FormattedTime value={new Date(secondDeadline * 1000)} />
               </strong>
             </td>
           </tr>)}
@@ -69,7 +69,7 @@ const AssignmentDetails = ({
           <td>
             <FormattedMessage id='app.assignment.submissionsCountLimit' defaultMessage='Submission count limit:' />
           </td>
-          <td>{assignment.submissionsCountLimit === null ? '-' : assignment.submissionsCountLimit}</td>
+          <td>{submissionsCountLimit === null ? '-' : submissionsCountLimit}</td>
         </tr>
         <tr>
           <td className='text-center'>
@@ -88,7 +88,14 @@ const AssignmentDetails = ({
 );
 
 AssignmentDetails.propTypes = {
-  assignment: PropTypes.object.isRequired
+  isOpen: PropTypes.bool,
+  submissionsCountLimit: PropTypes.number.isRequired,
+  firstDeadline: PropTypes.number.isRequired,
+  secondDeadline: PropTypes.number,
+  allowSecondDeadline: PropTypes.bool.isRequired,
+  isAfterFirstDeadline: PropTypes.bool.isRequired,
+  isAfterSecondDeadline: PropTypes.bool.isRequired,
+  canSubmit: PropTypes.bool.isRequired
 };
 
 export default AssignmentDetails;

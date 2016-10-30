@@ -19,6 +19,7 @@ import AssignmentDetails, {
   LoadingAssignmentDetails,
   FailedAssignmentDetails
 } from '../../components/Assignments/Assignment/AssignmentDetails';
+import LocalizedAssignments from '../../components/Assignments/Assignment/LocalizedAssignments';
 import SubmitSolutionButton from '../../components/Assignments/SubmitSolutionButton';
 import SubmitSolutionContainer from '../../containers/SubmitSolutionContainer';
 import EvaluationProgressContainer from '../../containers/EvaluationProgressContainer';
@@ -100,10 +101,13 @@ class Assignment extends Component {
             <Row>
               <Col md={6}>
                 <div>
+                  {assignment.localizedAssignments.length > 0 &&
+                    <LocalizedAssignments locales={assignment.localizedAssignments} />}
+
                   <AssignmentDetails
-                    assignment={assignment}
-                    isAfterFirstDeadline={this.isAfter(assignment.deadline.first)}
-                    isAfterSecondDeadline={this.isAfter(assignment.deadline.second)}
+                    {...assignment}
+                    isAfterFirstDeadline={this.isAfter(assignment.firstDeadline)}
+                    isAfterSecondDeadline={this.isAfter(assignment.secondDeadline)}
                     canSubmit={canSubmit} />
 
                   {isStudentOf(assignment.groupId) && (
