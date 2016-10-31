@@ -3,6 +3,7 @@ const webpack = require('webpack');
 const strip = require('strip-loader');
 const autoprefixer = require('autoprefixer');
 const fs = require('fs');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 // load variables from .env
 require('dotenv').config();
@@ -28,6 +29,7 @@ module.exports = {
   module: clientConfig.module,
   externals: nodeModules,
   plugins: [
+    new ExtractTextPlugin('style.css'),
     new webpack.DefinePlugin({
       'process.env': {
         NODE_ENV: '\'production\'',
