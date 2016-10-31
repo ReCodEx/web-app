@@ -1,16 +1,37 @@
 import React, { PropTypes } from 'react';
 import { canUseDOM } from 'exenv';
 
+let CodeMirror = null;
+
 if (canUseDOM) {
-  var CodeMirror = require('react-codemirror');
+  CodeMirror = require('react-codemirror');
+  require('codemirror/mode/clike/clike');
+  require('codemirror/mode/pascal/pascal');
   require('codemirror/lib/codemirror.css');
   require('codemirror/theme/monokai.css');
 }
 
+const getMode = ext => {
+  switch (ext) {
+    case 'c':
+    case 'cpp':
+    case 'h':
+    case 'hpp':
+    case 'java':
+    case 'cs':
+      return 'clike';
+
+    default:
+      return ext;
+  }
+};
+
+
 const SourceCodeViewer = ({
   name,
   content = '',
-  lineNumbers = true
+  lineNumbers = true,
+  lines = 20
 }) =>
   CodeMirror
     ? (
@@ -19,7 +40,8 @@ const SourceCodeViewer = ({
         disabled
         options={{
           lineNumbers,
-          mode: name.split('.').pop()
+          mode: getMode(name.split('.').pop()),
+          viewportMargin: lines
         }} />
     )
   : null;
