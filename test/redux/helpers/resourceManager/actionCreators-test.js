@@ -75,7 +75,7 @@ describe('Resource manager', () => {
 
         expect(dispatch).to.not.have.been.called();
         expect(thunkResult.then).to.be.a('function');
-        thunkResult.then(done); // must be resolved right away
+        thunkResult.then(() => done()); // must be resolved right away
       });
 
       it('must create fetch action which checks if the resource is not already cached and if it is not, then dispatch fetchResource action', () => {
