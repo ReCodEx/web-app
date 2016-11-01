@@ -19,6 +19,16 @@ import { isSubmitting } from '../../redux/selectors/submission';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import { isSupervisorOf } from '../../redux/selectors/users';
 
+const getInitialValues = ({
+  firstDeadline,
+  secondDeadline,
+  ...rest
+}) => ({
+  firstDeadline: firstDeadline * 1000,
+  secondDeadline: secondDeadline * 1000,
+  ...rest
+});
+
 class EditAssignment extends Component {
 
   componentWillMount = () => this.props.loadAsync();
@@ -57,7 +67,7 @@ class EditAssignment extends Component {
           {assignment => (
             <div>
               <EditAssignmentForm
-                initialValues={assignment}
+                initialValues={getInitialValues(assignment)}
                 onSubmit={editAssignment}
                 formValues={formValues} />
               <EditAssignmentLimitsForm
@@ -101,10 +111,13 @@ export default connect(
     ]),
     editAssignment: (data) => {
       // convert deadline times to timestamps
-      data.firstDeadline = data.firstDeadline.unix();
-      if (data.secondDeadline) {
-        data.secondDeadline = data.secondDeadline.unix();
-      }
+      data.firstDeadline = typeof data.firstDeadline === 'number'
+        ? (isNaN(data.firstDeadline) ? 0 : data.firstDeadline)
+        : data.firstDeadline.unix();
+
+      data.secondDeadline = typeof data.secondDeadline === 'number'
+        ? (isNaN(data.secondDeadline) ? 0 : data.secondDeadline)
+        : data.secondDeadline.unix();
 
       return dispatch(editAssignment(assignmentId, data));
     },

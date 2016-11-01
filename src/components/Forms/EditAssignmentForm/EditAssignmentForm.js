@@ -1,13 +1,14 @@
-import React, { PropTypes } from 'react';
+import React, { PropTypes, Component } from 'react';
 import { canUseDOM } from 'exenv';
-import { reduxForm, Field, change } from 'redux-form';
+import { reduxForm, Field, FieldArray, change } from 'redux-form';
 import { FormattedMessage } from 'react-intl';
-import { Button, Alert, HelpBlock } from 'react-bootstrap';
+import { Button, Alert, HelpBlock, Tabs, Tab } from 'react-bootstrap';
 import isNumeric from 'validator/lib/isNumeric';
 
-import { LoadingIcon, SuccessIcon } from '../../Icons';
+import { LoadingIcon, SuccessIcon, AddIcon, WarningIcon } from '../../Icons';
 import FormBox from '../../AdminLTE/FormBox';
-import { DatetimeField, TextField, TextAreaField, MarkdownTextAreaField, CheckboxField, SourceCodeField } from '../Fields';
+import { DatetimeField, TextField, TextAreaField, MarkdownTextAreaField, CheckboxField, SourceCodeField, LanguageSelectField } from '../Fields';
+import LocalizedAssignmentsFormField from '../LocalizedAssignmentsFormField';
 import SubmitButton from '../SubmitButton';
 import { validateRegistrationData } from '../../../redux/modules/users';
 import { getJsData } from '../../../redux/helpers/resourceManager';
@@ -25,96 +26,100 @@ const EditAssignmentForm = ({
   invalid,
   formValues: {
     firstDeadline,
-    allowSecondDeadline
+    allowSecondDeadline,
+    localizedAssignments
   } = {}
 }) => (
-  <FormBox
-    title={<FormattedMessage id='app.editAssignmentForm.title' defaultMessage='Edit assignment {name}' values={{ name: assignment.name }} />}
-    type={hasSucceeded ? 'success' : undefined}
-    footer={
-      <div className='text-center'>
-        <SubmitButton
-          invalid={invalid}
-          submitting={submitting}
-          hasSucceeded={hasSucceeded}
-          hasFailed={hasFailed}
-          handleSubmit={handleSubmit}
-          messages={{
-            submit: <FormattedMessage id='app.editAssignmentForm.submit' defaultMessage='Edit settings' />,
-            submitting: <FormattedMessage id='app.editAssignmentForm.submitting' defaultMessage='Saving changes ...' />,
-            success: <FormattedMessage id='app.editAssignmentForm.success' defaultMessage='Settings were saved.' />
-          }} />
-      </div>
-    }>
-    {hasFailed && (
-      <Alert bsStyle='danger'>
-        <FormattedMessage id='app.editAssignmentForm.failed' defaultMessage='Saving failed. Please try again later.' />
-      </Alert>)}
+  <div>
+    <FieldArray
+      name='localizedAssignments'
+      localizedAssignments={localizedAssignments}
+      component={LocalizedAssignmentsFormField} />
 
-    <Field
-      name='name'
-      component={TextField}
-      label={<FormattedMessage id='app.editAssignmentForm.name' defaultMessage='Assignment name:' />} />
+    <FormBox
+      title={<FormattedMessage id='app.editAssignmentForm.title' defaultMessage='Edit assignment {name}' values={{ name: assignment.name }} />}
+      type={hasSucceeded ? 'success' : undefined}
+      footer={
+        <div className='text-center'>
+          <SubmitButton
+            invalid={invalid}
+            submitting={submitting}
+            hasSucceeded={hasSucceeded}
+            hasFailed={hasFailed}
+            handleSubmit={handleSubmit}
+            messages={{
+              submit: <FormattedMessage id='app.editAssignmentForm.submit' defaultMessage='Edit settings' />,
+              submitting: <FormattedMessage id='app.editAssignmentForm.submitting' defaultMessage='Saving changes ...' />,
+              success: <FormattedMessage id='app.editAssignmentForm.success' defaultMessage='Settings were saved.' />
+            }} />
+        </div>
+      }>
 
-    <Field
-      name='isPublic'
-      component={CheckboxField}
-      onOff
-      colored
-      label={<FormattedMessage id='app.editAssignmentForm.isPublic' defaultMessage='Visible to students' />} />
+      {hasFailed && (
+        <Alert bsStyle='danger'>
+          <FormattedMessage id='app.editAssignmentForm.failed' defaultMessage='Saving failed. Please try again later.' />
+        </Alert>)}
 
-    <Field
-      name='description'
-      component={MarkdownTextAreaField}
-      label={<FormattedMessage id='app.editAssignmentForm.assignment' defaultMessage='Assignment and description for the students:' />} />
+      <Field
+        name='name'
+        component={TextField}
+        label={<FormattedMessage id='app.editAssignmentForm.name' defaultMessage='Assignment default name:' />} />
 
-    <Field
-      name='scoreConfig'
-      component={SourceCodeField}
-      mode='yaml'
-      label={<FormattedMessage id='app.editAssignmentForm.scoreConfig' defaultMessage='Score configuration:' />} />
-    <HelpBlock>Read more about <a href='/@todo'>score configuration</a> syntax.</HelpBlock>
+      <Field
+        name='isPublic'
+        component={CheckboxField}
+        onOff
+        colored
+        label={<FormattedMessage id='app.editAssignmentForm.isPublic' defaultMessage='Visible to students' />} />
 
-    <Field
-      name='firstDeadline'
-      component={DatetimeField}
-      label={<FormattedMessage id='app.editAssignmentForm.firstDeadline' defaultMessage='First deadline:' />} />
+      <Field
+        name='scoreConfig'
+        component={SourceCodeField}
+        mode='yaml'
+        label={<FormattedMessage id='app.editAssignmentForm.scoreConfig' defaultMessage='Score configuration:' />} />
+      <HelpBlock>Read more about <a href='/@todo'>score configuration</a> syntax.</HelpBlock>
 
-    <Field
-      name="maxPointsBeforeFirstDeadline"
-      component={TextField}
-      label={<FormattedMessage id='app.editAssignmentForm.maxPointsBeforeFirstDeadline' defaultMessage='Maximum amount of points received when submitted before the deadline:' />} />
+      <Field
+        name='firstDeadline'
+        component={DatetimeField}
+        label={<FormattedMessage id='app.editAssignmentForm.firstDeadline' defaultMessage='First deadline:' />} />
 
-    <Field
-      name="allowSecondDeadline"
-      component={CheckboxField}
-      onOff
-      label={<FormattedMessage id='app.editAssignmentForm.allowSecondDeadline' defaultMessage='Allow second deadline.' />} />
+      <Field
+        name="maxPointsBeforeFirstDeadline"
+        component={TextField}
+        label={<FormattedMessage id='app.editAssignmentForm.maxPointsBeforeFirstDeadline' defaultMessage='Maximum amount of points received when submitted before the deadline:' />} />
 
-    <Field
-      name='secondDeadline'
-      disabled={!firstDeadline || allowSecondDeadline !== true}
-      isValidDate={(date) => date.isSameOrAfter(firstDeadline)}
-      component={DatetimeField}
-      label={<FormattedMessage id='app.editAssignmentForm.secondDeadline' defaultMessage='Second deadline:' />} />
-    {allowSecondDeadline && !firstDeadline && (
-      <HelpBlock>
-        <FormattedMessage id='app.editAssignmentForm.chooseFirstDeadlineBeforeSecondDeadline' defaultMessage='You must select the date of the first deadline before selecting the date of the second deadline.' />
-      </HelpBlock>
-    )}
+      <Field
+        name="allowSecondDeadline"
+        component={CheckboxField}
+        onOff
+        label={<FormattedMessage id='app.editAssignmentForm.allowSecondDeadline' defaultMessage='Allow second deadline.' />} />
 
-    <Field
-      name="maxPointsBeforeSecondDeadline"
-      disabled={allowSecondDeadline !== true}
-      component={TextField}
-      label={<FormattedMessage id='app.editAssignmentForm.maxPointsBeforeSecondDeadline' defaultMessage='Maximum amount of points received when submitted before the second deadline:' />} />
+      <Field
+        name='secondDeadline'
+        disabled={!firstDeadline || allowSecondDeadline !== true}
+        isValidDate={(date) => date.isSameOrAfter(firstDeadline)}
+        component={DatetimeField}
+        label={<FormattedMessage id='app.editAssignmentForm.secondDeadline' defaultMessage='Second deadline:' />} />
+      {allowSecondDeadline && !firstDeadline && (
+        <HelpBlock>
+          <FormattedMessage id='app.editAssignmentForm.chooseFirstDeadlineBeforeSecondDeadline' defaultMessage='You must select the date of the first deadline before selecting the date of the second deadline.' />
+        </HelpBlock>
+      )}
 
-    <Field
-      name="submissionsCountLimit"
-      component={TextField}
-      label={<FormattedMessage id='app.editAssignmentForm.submissionsCountLimit' defaultMessage='Submissions count limit:' />} />
+      <Field
+        name="maxPointsBeforeSecondDeadline"
+        disabled={allowSecondDeadline !== true}
+        component={TextField}
+        label={<FormattedMessage id='app.editAssignmentForm.maxPointsBeforeSecondDeadline' defaultMessage='Maximum amount of points received when submitted before the second deadline:' />} />
 
-  </FormBox>
+      <Field
+        name="submissionsCountLimit"
+        component={TextField}
+        label={<FormattedMessage id='app.editAssignmentForm.submissionsCountLimit' defaultMessage='Submissions count limit:' />} />
+
+    </FormBox>
+  </div>
 );
 
 EditAssignmentForm.propTypes = {
@@ -172,6 +177,6 @@ const validate = ({
 };
 
 export default reduxForm({
-  form: 'editAssignment',
-  validate
+  form: 'editAssignment'
+  // validate
 })(EditAssignmentForm);

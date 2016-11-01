@@ -4,6 +4,7 @@ export { default as DatetimeField } from './DatetimeField';
 export { default as MarkdownTextAreaField } from './MarkdownTextAreaField';
 export { default as PasswordField } from './PasswordField';
 export { default as PasswordStrength } from './PasswordStrength';
+export { default as LanguageSelectField } from './LanguageSelectField';
 export { default as SelectField } from './SelectField';
 export { default as SingleUploadField } from './SingleUploadField';
 export { default as SourceCodeField } from './SourceCodeField';

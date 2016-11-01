@@ -1,5 +1,6 @@
 import statusCode from 'statuscode';
 import { addNotification } from '../modules/notifications';
+import flatten from 'flat';
 
 export const API_BASE = process.env.API_BASE || 'http://localhost:4000/v1';
 export const CALL_API = 'recodex-api/CALL';
@@ -13,13 +14,10 @@ const getUrl = endpoint =>
 const createFormData = (body) => {
   if (body) {
     const data = new FormData();
-    Object.keys(body).map(key => {
-      if (Array.isArray(body[key])) {
-        body[key].map(item =>
-          data.append(`${key}[]`, item));
-      } else {
-        data.append(key, body[key]);
-      }
+    const flattened = flatten(body);
+    Object.keys(flattened).map(key => {
+      const bracketedKey = key.replace(/\.([^.$]+)/g, '[$1]'); // 'a.b.c.d' => 'a[b][c][d]'
+      data.append(bracketedKey, flattened[key]);
     });
     return data;
   }

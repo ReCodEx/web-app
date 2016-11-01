@@ -1,3 +1,4 @@
+export { default as AddIcon } from './AddIcon';
 export { default as LoadingIcon } from './LoadingIcon';
 export { default as FailedIcon } from './FailedIcon';
 export { default as WarningIcon } from './WarningIcon';
