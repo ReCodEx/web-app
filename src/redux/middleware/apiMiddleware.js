@@ -14,9 +14,9 @@ const getUrl = endpoint =>
 const createFormData = (body) => {
   if (body) {
     const data = new FormData();
-    const flattened = flatten(body);
+    const flattened = flatten(body, { delimiter: ":" });
     Object.keys(flattened).map(key => {
-      const bracketedKey = key.replace(/\.([^.$]+)/g, '[$1]'); // 'a.b.c.d' => 'a[b][c][d]'
+      const bracketedKey = key.replace(/\:([^:$]+)/g, '[$1]'); // 'a:b:c:d' => 'a[b][c][d]'
       data.append(bracketedKey, flattened[key]);
     });
     return data;
