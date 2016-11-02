@@ -29,6 +29,7 @@
     "browser-cookies": "^1.0.8",
     "chai-immutable": "^1.6.0",
     "classnames": "^2.2.5",
+    "codemirror": "^5.20.2",
     "cookie-parser": "^1.4.1",
     "css-loader": "^0.23.1",
     "deep-equal": "^1.0.1",
