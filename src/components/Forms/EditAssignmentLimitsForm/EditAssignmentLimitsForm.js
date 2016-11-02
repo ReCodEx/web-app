@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import { reduxForm, Field, change } from 'redux-form';
+import { reduxForm, Field, FieldArray, change } from 'redux-form';
 import { FormattedMessage } from 'react-intl';
 import { Button, Alert, HelpBlock } from 'react-bootstrap';
 import isNumeric from 'validator/lib/isNumeric';
@@ -7,27 +7,18 @@ import isNumeric from 'validator/lib/isNumeric';
 import { LoadingIcon, SuccessIcon } from '../../Icons';
 import FormBox from '../../AdminLTE/FormBox';
 import { DatetimeField, TextField, TextAreaField, MarkdownTextAreaField, CheckboxField, SourceCodeField } from '../Fields';
+import EditEnvironmentLimitsForm from '../EditEnvironmentLimitsForm';
 import SubmitButton from '../SubmitButton';
-import { validateRegistrationData } from '../../../redux/modules/users';
 import { getJsData } from '../../../redux/helpers/resourceManager';
-
-import { canUseDOM } from 'exenv';
-if (canUseDOM) {
-  require('codemirror/mode/yaml/yaml');
-}
 
 const EditAssignmentLimitsForm = ({
   assignment,
-  initialValues: limits,
+  initialValues,
   submitting,
   handleSubmit,
   hasFailed = false,
   hasSucceeded = false,
-  invalid,
-  formValues: {
-    firstDeadline,
-    allowSecondDeadline
-  } = {}
+  invalid
 }) => (
   <FormBox
     title={<FormattedMessage id='app.editAssignmentLimitsForm.title' defaultMessage='Edit limits of {name}' values={{ name: assignment.name }} />}
@@ -52,12 +43,16 @@ const EditAssignmentLimitsForm = ({
         <FormattedMessage id='app.editAssignmentLimitsForm.failed' defaultMessage='Saving failed. Please try again later.' />
       </Alert>)}
 
+    <FieldArray
+      name='environments'
+      environments={initialValues.environments}
+      component={EditEnvironmentLimitsForm} />
   </FormBox>
 );
 
 EditAssignmentLimitsForm.propTypes = {
   initialValues: PropTypes.object.isRequired,
-  values: PropTypes.object,
+  values: PropTypes.array,
   handleSubmit: PropTypes.func.isRequired
 };
 

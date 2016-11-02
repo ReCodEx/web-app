@@ -20,7 +20,7 @@ const SubmitButton = ({
     onClick={handleSubmit}
     bsStyle={hasFailed ? 'danger' : 'success'}
     className='btn-flat'
-    disabled={invalid || submitting || hasSucceeded}>
+    disabled={invalid || submitting}>
     {!submitting
       ? hasSucceeded
         ? <span><SuccessIcon /> &nbsp; {successMsg}</span>

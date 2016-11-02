@@ -95,23 +95,26 @@ const EditAssignmentForm = ({
         onOff
         label={<FormattedMessage id='app.editAssignmentForm.allowSecondDeadline' defaultMessage='Allow second deadline.' />} />
 
-      <Field
-        name='secondDeadline'
-        disabled={!firstDeadline || allowSecondDeadline !== true}
-        isValidDate={(date) => date.isSameOrAfter(firstDeadline)}
-        component={DatetimeField}
-        label={<FormattedMessage id='app.editAssignmentForm.secondDeadline' defaultMessage='Second deadline:' />} />
+      {allowSecondDeadline && (
+        <Field
+          name='secondDeadline'
+          disabled={!firstDeadline || allowSecondDeadline !== true}
+          isValidDate={(date) => date.isSameOrAfter(firstDeadline)}
+          component={DatetimeField}
+          label={<FormattedMessage id='app.editAssignmentForm.secondDeadline' defaultMessage='Second deadline:' />} />
+      )}
       {allowSecondDeadline && !firstDeadline && (
         <HelpBlock>
           <FormattedMessage id='app.editAssignmentForm.chooseFirstDeadlineBeforeSecondDeadline' defaultMessage='You must select the date of the first deadline before selecting the date of the second deadline.' />
         </HelpBlock>
       )}
-
-      <Field
-        name="maxPointsBeforeSecondDeadline"
-        disabled={allowSecondDeadline !== true}
-        component={TextField}
-        label={<FormattedMessage id='app.editAssignmentForm.maxPointsBeforeSecondDeadline' defaultMessage='Maximum amount of points received when submitted before the second deadline:' />} />
+      {allowSecondDeadline && (
+        <Field
+          name="maxPointsBeforeSecondDeadline"
+          disabled={allowSecondDeadline !== true}
+          component={TextField}
+          label={<FormattedMessage id='app.editAssignmentForm.maxPointsBeforeSecondDeadline' defaultMessage='Maximum amount of points received when submitted before the second deadline:' />} />
+      )}
 
       <Field
         name="submissionsCountLimit"
@@ -177,6 +180,6 @@ const validate = ({
 };
 
 export default reduxForm({
-  form: 'editAssignment'
-  // validate
+  form: 'editAssignment',
+  validate
 })(EditAssignmentForm);
