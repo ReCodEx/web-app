@@ -76,6 +76,7 @@ const createRoutes = (getState) => {
               <Route path='file/:fileId' component={SourceCodeViewerContainer} />
             </Route>
           </Route>
+		  <Route path='edit-assignment/:assignmentId' component={EditAssignment} />
           <Route path='exercise/:exerciseId' component={Exercise} />
           <Route path='group/:groupId' component={Group} />
           <Route path='instance/:instanceId' component={instance} />
