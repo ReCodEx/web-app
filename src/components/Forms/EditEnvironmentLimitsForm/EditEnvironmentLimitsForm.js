@@ -27,7 +27,6 @@ const EditEnvironmentLimitsForm = ({
     ContentComponent={EditEnvironmentLimitsFields}
     removeQuestion={<FormattedMessage id='app.editEnvironmentLimitsForm.localized.noEnvironment' defaultMessage='There is currently no environment specified for this assignment.' />}
     id='environment-limits'
-    add
     remove />
 );
 

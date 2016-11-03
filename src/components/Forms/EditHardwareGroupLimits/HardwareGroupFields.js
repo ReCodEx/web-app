@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { Field } from 'redux-form';
+import { Row, Col } from 'react-bootstrap';
 import { AddIcon, WarningIcon } from '../../Icons';
 import {
   TextField,
@@ -10,27 +11,39 @@ import {
 } from '../Fields';
 
 const HardwareGroupFields = ({ prefix, i, limits }) => {
-  const {
-    hardwareGroup,
-    tests
-  } = limits[i];
-
+  const { tests } = limits[i];
   return (
-    <div>
-      <Field
-        name={`${prefix}.hardwareGroup`}
-        component={TextField}
-        label={<FormattedMessage id='app.editHardwareGroupLimits.localized.name' defaultMessage='Hardware group name:' />} />
-
+    <Row>
       {Object.keys(tests).map((testName, j) => (
-        <div key={j}>
-          <h3>{testName}</h3>
+        <Col lg={6} key={j}>
+          <h4>
+            <FormattedMessage id='app.hardwareGroupFields.test' defaultMessage='Test:' />{' '}<b>{testName}</b>
+          </h4>
           {Object.keys(tests[testName]).map((taskId, k) => (
-            <h4>{taskId}</h4>
+            <div key={k}>
+              <Field
+                name={`${prefix}.tests.${testName}.${taskId}.time`}
+                component={TextField}
+                label={
+                  <FormattedMessage
+                    id='app.hardwareGroupFields.timeLimit'
+                    defaultMessage='Time limit for "{taskId}":'
+                    values={{ taskId }} />
+                } />
+              <Field
+                name={`${prefix}.tests.${testName}.${taskId}.memory`}
+                component={TextField}
+                label={
+                  <FormattedMessage
+                    id='app.hardwareGroupFields.memoryLimit'
+                    defaultMessage='Memory limit for "{taskId}":'
+                    values={{ taskId }} />
+                } />
+            </div>
           ))}
-        </div>
+        </Col>
       ))}
-    </div>
+    </Row>
   );
 };
 

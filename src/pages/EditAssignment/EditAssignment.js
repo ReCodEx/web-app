@@ -14,9 +14,9 @@ import EditAssignmentForm from '../../components/Forms/EditAssignmentForm';
 import EditAssignmentLimitsForm from '../../components/Forms/EditAssignmentLimitsForm';
 
 import { fetchAssignmentIfNeeded, editAssignment } from '../../redux/modules/assignments';
-import { fetchLimitsIfNeeded, editAssignmentLimits } from '../../redux/modules/limits';
+import { fetchLimitsIfNeeded, editLimits } from '../../redux/modules/limits';
 import { getAssignment, canSubmitSolution } from '../../redux/selectors/assignments';
-import { getLimits } from '../../redux/selectors/limits';
+import { getEnvironmentsLimits } from '../../redux/selectors/limits';
 import { isSubmitting } from '../../redux/selectors/submission';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import { isSupervisorOf } from '../../redux/selectors/users';
@@ -46,8 +46,9 @@ class EditAssignment extends Component {
     const {
       params: { assignmentId },
       assignment,
-      limits,
+      environments,
       editAssignment,
+      editLimits,
       formValues
     } = this.props;
 
@@ -73,11 +74,12 @@ class EditAssignment extends Component {
                 initialValues={getInitialValues(assignment)}
                 onSubmit={editAssignment}
                 formValues={formValues} />
-              <ResourceRenderer resource={limits}>
-                {limits => (
+              <ResourceRenderer resource={environments}>
+                {environments => (
                   <EditAssignmentLimitsForm
-                    initialValues={{ environments: limits }}
-                    assignment={assignment} />
+                    initialValues={environments}
+                    assignment={assignment}
+                    onSubmit={editLimits} />
                 )}
               </ResourceRenderer>
             </div>
@@ -99,11 +101,11 @@ EditAssignment.propTypes = {
 export default connect(
   (state, { params: { assignmentId } }) => {
     const assignmentSelector = getAssignment(assignmentId);
-    const limitsSelector = getLimits(assignmentId);
+    const environmentsSelector = getEnvironmentsLimits(assignmentId);
     const userId = loggedInUserIdSelector(state);
     return {
       assignment: assignmentSelector(state),
-      limits: limitsSelector(state),
+      environments: environmentsSelector(state),
       submitting: isSubmitting(state),
       userId,
       isStudentOf: (groupId) => isSupervisorOf(userId, groupId)(state),
@@ -124,7 +126,6 @@ export default connect(
       data.secondDeadline = moment(data.secondDeadline).unix();
       return dispatch(editAssignment(assignmentId, data));
     },
-    editAssignmentLimits: (data) =>
-      dispatch(editAssignmentLimits(data))
+    editLimits: (data) => dispatch(editLimits(assignmentId, data))
   })
 )(EditAssignment);

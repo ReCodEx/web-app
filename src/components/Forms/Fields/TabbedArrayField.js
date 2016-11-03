@@ -26,9 +26,10 @@ class TabbedArrayField extends Component {
       ContentComponent,
       getTitle = (i) => i,
       emptyMessage = <FormattedMessage id='app.tabbedArrayField.empty' defaultMessage='There is currently no item.' />,
+      addMessage = <FormattedMessage id='app.tabbedArrayField.add' defaultMessage='Add another' />,
       removeQuestion = <FormattedMessage id='app.tabbedArrayField.reallyRemoveQuestion' defaultMessage='Do you really want to delete this item?' />,
-      add = true,
-      remove = true,
+      add = false,
+      remove = false,
       fields,
       meta: { error, ...meta } = {},
       ...props
@@ -39,7 +40,7 @@ class TabbedArrayField extends Component {
         {add && (
           <p>
             <Button bsStyle='success' className='btn-flat' bsSize='sm' onClick={() => this.add()}>
-              <AddIcon /> <FormattedMessage id='app.editAssignmentForm.addLanguage' defaultMessage='Add language variant' />
+              <AddIcon /> {addMessage}
             </Button>
           </p>
         )}

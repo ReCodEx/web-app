@@ -50,7 +50,7 @@ const EditEnvironmentLimitsFields = ({ prefix, i, environments }) => {
 EditEnvironmentLimitsFields.propTypes = {
   prefix: PropTypes.string.isRequired,
   i: PropTypes.number,
-  limits: PropTypes.array.isRequired
+  environments: PropTypes.array.isRequired
 };
 
 export default EditEnvironmentLimitsFields;

@@ -75,9 +75,10 @@ const actionCreatorsFactory = ({
 
   const updateResource = (id, data) => createApiAction({
     type: actionTypes.UPDATE,
-    method: 'PUT',
-    endpoint: apiEndpointFactory(),
-    meta: { tmpId: Math.random().toString() }
+    method: 'POST',
+    endpoint: apiEndpointFactory(id),
+    body: data,
+    meta: { id, body: data }
   });
 
   const removeResource = id => createApiAction({
@@ -96,6 +97,7 @@ const actionCreatorsFactory = ({
     fetchResource,
     addResource,
     removeResource,
+    updateResource,
     invalidate,
     pushResource
   };

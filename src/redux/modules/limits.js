@@ -22,10 +22,7 @@ const {
 
 export const loadLimits = actions.pushResource;
 export const fetchLimitsIfNeeded = actions.fetchOneIfNeeded;
-
-export const editLimits = (assignmentId, payload) => {
-  return { type: '@TODO_EDIT_ASSIGNMENT_LIMITS_ACTION', payload };
-};
+export const editLimits = actions.updateResource;
 
 /**
  * Reducer

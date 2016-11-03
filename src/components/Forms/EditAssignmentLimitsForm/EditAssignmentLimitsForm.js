@@ -20,24 +20,7 @@ const EditAssignmentLimitsForm = ({
   hasSucceeded = false,
   invalid
 }) => (
-  <FormBox
-    title={<FormattedMessage id='app.editAssignmentLimitsForm.title' defaultMessage='Edit limits of {name}' values={{ name: assignment.name }} />}
-    type={hasSucceeded ? 'success' : undefined}
-    footer={
-      <div className='text-center'>
-        <SubmitButton
-          invalid={invalid}
-          submitting={submitting}
-          hasSucceeded={hasSucceeded}
-          hasFailed={hasFailed}
-          handleSubmit={handleSubmit}
-          messages={{
-            submit: <FormattedMessage id='app.editAssignmentLimitsForm.submit' defaultMessage='Change limits' />,
-            submitting: <FormattedMessage id='app.editAssignmentLimitsForm.submitting' defaultMessage='Saving limits ...' />,
-            success: <FormattedMessage id='app.editAssignmentLimitsForm.success' defaultMessage='Limits were saved.' />
-          }} />
-      </div>
-    }>
+  <div>
     {hasFailed && (
       <Alert bsStyle='danger'>
         <FormattedMessage id='app.editAssignmentLimitsForm.failed' defaultMessage='Saving failed. Please try again later.' />
@@ -47,7 +30,21 @@ const EditAssignmentLimitsForm = ({
       name='environments'
       environments={initialValues.environments}
       component={EditEnvironmentLimitsForm} />
-  </FormBox>
+
+    <div className='text-center'>
+      <SubmitButton
+        invalid={invalid}
+        submitting={submitting}
+        hasSucceeded={hasSucceeded}
+        hasFailed={hasFailed}
+        handleSubmit={handleSubmit}
+        messages={{
+          submit: <FormattedMessage id='app.editAssignmentLimitsForm.submit' defaultMessage='Change limits' />,
+          submitting: <FormattedMessage id='app.editAssignmentLimitsForm.submitting' defaultMessage='Saving limits ...' />,
+          success: <FormattedMessage id='app.editAssignmentLimitsForm.success' defaultMessage='Limits were saved.' />
+        }} />
+    </div>
+  </div>
 );
 
 EditAssignmentLimitsForm.propTypes = {
