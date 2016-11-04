@@ -29,13 +29,6 @@ class Submission extends Component {
     }
   }
 
-  closeSourceCodeViewer = () => {
-    const { assignmentId, submissionId } = this.props.params;
-    const { links: { SUBMISSION_DETAIL_URI_FACTORY } } = this.context;
-    const link = SUBMISSION_DETAIL_URI_FACTORY(assignmentId, submissionId);
-    this.context.router.push(link);
-  };
-
   render() {
     const {
       assignment,
@@ -75,12 +68,7 @@ class Submission extends Component {
           failed={<FailedSubmissionDetail />}
           resource={[ submission, assignment ]}>
           {(submission, assignment) => (
-            <SubmissionDetail
-              submission={submission}
-              assignment={assignment}
-              onCloseSourceViewer={this.closeSourceCodeViewer}>
-              {children}
-            </SubmissionDetail>
+            <SubmissionDetail submission={submission} assignment={assignment} />
           )}
         </ResourceRenderer>
       </PageContent>

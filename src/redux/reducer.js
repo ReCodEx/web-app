@@ -9,6 +9,7 @@ import comments from './modules/comments';
 import evaluationProgress from './modules/evaluationProgress';
 import exercises from './modules/exercises';
 import files from './modules/files';
+import filesContent from './modules/filesContent';
 import groups from './modules/groups';
 import instances from './modules/instances';
 import limits from './modules/limits';
@@ -29,6 +30,7 @@ const createRecodexReducers = (token) => ({
   evaluationProgress,
   exercises,
   files,
+  filesContent,
   groups,
   instances,
   limits,

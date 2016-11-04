@@ -72,9 +72,7 @@ const createRoutes = (getState) => {
           <Route path='assignment/:assignmentId'>
             <IndexRoute component={Assignment} />
             <Route path='edit' component={EditAssignment} />
-            <Route path='submission/:submissionId' component={Submission}>
-              <Route path='file/:fileId' component={SourceCodeViewerContainer} />
-            </Route>
+            <Route path='submission/:submissionId' component={Submission} />
           </Route>
 		  <Route path='edit-assignment/:assignmentId' component={EditAssignment} />
           <Route path='exercise/:exerciseId' component={Exercise} />

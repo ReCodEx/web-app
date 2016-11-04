@@ -6,9 +6,10 @@ const SourceCodeInfoBox = ({
   id,
   name,
   size,
-  uploadedAt
+  uploadedAt,
+  onClick
 }) => (
-  <div className='info-box'>
+  <div className='info-box' onClick={onClick}>
     <span className='info-box-icon bg-yellow'>
       <Icon name='files-o' />
     </span>
