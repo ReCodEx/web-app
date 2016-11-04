@@ -47,7 +47,13 @@ class Instance extends Component {
     return (
       <PageContent
         title={this.getTitle(instance)}
-        description={<FormattedMessage id='app.instance.description' defaultMessage='Instance overview' />}>
+        description={<FormattedMessage id='app.instance.description' defaultMessage='Instance overview' />}
+        breadcrumbs={[
+          {
+            text: <FormattedMessage id='app.instance.description' defaultMessage="Instance overview" />,
+            iconName: 'info-circle'
+          }
+        ]}>
         <ResourceRenderer resource={instance}>
           {data => (
             <Row>

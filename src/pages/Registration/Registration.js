@@ -41,8 +41,15 @@ class Register extends Component {
         title={<FormattedMessage id='app.registration.title' defaultMessage='Create a new ReCodEx account' />}
         description={<FormattedMessage id='app.registration.description' defaultMessage='Start using ReCodEx today' />}
         breadcrumbs={[
-          { text: <FormattedMessage id='app.homepage.title' />, link: HOME_URI },
-          { text: <FormattedMessage id='app.registration.title' /> }
+          {
+            text: <FormattedMessage id='app.homepage.title' />,
+            link: HOME_URI,
+            iconName: 'home'
+          },
+          {
+            text: <FormattedMessage id='app.registration.title' />,
+            iconName: 'user-plus'
+          }
         ]}>
         <Row>
           <Col md={6} mdOffset={3} sm={8} smOffset={2}>

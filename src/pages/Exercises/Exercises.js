@@ -32,7 +32,13 @@ class Exercises extends Component {
     return (
       <PageContent
         title={<FormattedMessage id='app.exercises.title' defaultMessage='Exercises list' />}
-        description={<FormattedMessage id='app.instance.description' defaultMessage='List and assign exercises to your groups.' />}>
+        description={<FormattedMessage id='app.instance.description' defaultMessage='List and assign exercises to your groups.' />}
+        breadcrumbs={[
+          {
+            text: <FormattedMessage id='app.exercises.title' defaultMessage="Exercises list" />,
+            iconName: 'folder-open'
+          }
+        ]}>
         {/* @todo */}
       </PageContent>
     );
