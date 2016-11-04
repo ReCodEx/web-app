@@ -1,7 +1,6 @@
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
-import { Modal, Row, Col } from 'react-bootstrap';
 
 import PageContent from '../../components/PageContent';
 import ResourceRenderer from '../../components/ResourceRenderer';
@@ -39,32 +38,36 @@ class Submission extends Component {
     const {
       assignment,
       submission,
-      evaluation,
-      params: { submissionId, assignmentId },
+      params: { assignmentId },
       children
     } = this.props;
 
-    const {
-      links: {
-        GROUP_URI_FACTORY,
-        ASSIGNMENT_DETAIL_URI_FACTORY
-      }
-    } = this.context;
-
-    const title = (
-      <ResourceRenderer resource={assignment}>
-        {assignmentData => <span>{assignmentData.name}</span>}
-      </ResourceRenderer>
-    );
-
     return (
       <PageContent
-        title={title}
+        title={(
+          <ResourceRenderer resource={assignment}>
+            {assignmentData => <span>{assignmentData.name}</span>}
+          </ResourceRenderer>
+        )}
         description={<FormattedMessage id='app.submission.evaluation.title' defaultMessage='Your solution evaluation' />}
         breadcrumbs={[
-          { text: <FormattedMessage id='app.group.title' defaultMessage='Group detail' />, iconName: 'user', link: isReady(assignment) ? GROUP_URI_FACTORY(getData(assignment).groupId) : undefined },
-          { text: <FormattedMessage id='app.assignment.title' defaultMessage='Exercise assignment' />, iconName: 'puzzle-piece', link: ASSIGNMENT_DETAIL_URI_FACTORY(assignmentId) },
-          { text: <FormattedMessage id='app.submission.title' defaultMessage='Your solution' />, iconName: '' }
+          {
+            resource: assignment,
+            iconName: 'group',
+            breadcrumb: (assignment) => ({
+              text: <FormattedMessage id='app.group.title' defaultMessage='Group detail' />,
+              link: ({ GROUP_URI_FACTORY }) => GROUP_URI_FACTORY(assignment.groupId)
+            })
+          },
+          {
+            text: <FormattedMessage id='app.assignment.title' defaultMessage='Exercise assignment' />,
+            iconName: 'puzzle-piece',
+            link: ({ ASSIGNMENT_DETAIL_URI_FACTORY }) => ASSIGNMENT_DETAIL_URI_FACTORY(assignmentId)
+          },
+          {
+            text: <FormattedMessage id='app.submission.title' defaultMessage='Your solution' />,
+            iconName: 'user'
+          }
         ]}>
         <ResourceRenderer
           loading={<LoadingSubmissionDetail />}
@@ -96,6 +99,8 @@ Submission.propTypes = {
     assignmentId: PropTypes.string.isRequired,
     submissionId: PropTypes.string.isRequired
   }).isRequired,
+  assignment: PropTypes.object,
+  children: PropTypes.element,
   submission: PropTypes.object,
   loadAsync: PropTypes.func.isRequired
 };

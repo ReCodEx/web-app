@@ -30,8 +30,3 @@ export const createGetUsersSubmissionsForAssignment = () =>
     (submissionIds, submissions) => submissionIds.map(id => submissions.get(id))
   );
 
-export const canSubmitSolution = (assignmentId) =>
-  createSelector(
-    getAssignment(assignmentId),
-    assignment => assignment && assignment.getIn([ 'data', 'canReceiveSubmissions' ]) === true
-  );

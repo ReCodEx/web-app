@@ -5,15 +5,17 @@ import factory, { initialState } from '../helpers/resourceManager';
  * Create actions & reducer
  */
 
-const resourceName = 'stats';
+const resourceName = 'canSubmit';
 const {
   actions,
   reduceActions
 } = factory({
   resourceName,
-  apiEndpointFactory: groupId => `/groups/${groupId}/students/stats`
+  apiEndpointFactory: (assignmentId) =>
+    `/exercise-assignments/${assignmentId}/can-submit`
 });
 
-export const fetchGroupsStatsIfNeeded = actions.fetchOneIfNeeded;
+export const canSubmit = actions.fetchOneIfNeeded;
+
 const reducer = handleActions(reduceActions, initialState);
 export default reducer;

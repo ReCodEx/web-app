@@ -42,13 +42,6 @@ export const fetchAssignmentsForGroup = groupId =>
     endpoint: `/groups/${groupId}/assignments`
   });
 
-export const canSubmit = (assignmentId) =>
-  createApiAction({
-    type: additionalActionTypes.CAN_SUBMIT,
-    endpoint: `/exercise-assignments/${assignmentId}/can-submit`,
-    meta: { assignmentId }
-  });
-
 export const create = (groupId, exerciseId) =>
   createApiAction({
     type: additionalActionTypes.CREATE_ASSIGNMENT,
@@ -74,9 +67,6 @@ const reducer = handleActions(Object.assign({}, reduceActions, {
 
   [submissionsActionTypes.LOAD_USERS_SUBMISSIONS_FULFILLED]: (state, { payload, meta: { userId, assignmentId } }) =>
     state.setIn([ 'submissions', assignmentId, userId ], fromJS(payload.map(submission => submission.id))),
-
-  [additionalActionTypes.CAN_SUBMIT_FULFILLED]: (state, { payload: canSubmit, meta: { assignmentId } }) =>
-    state.setIn([ 'resources', assignmentId, 'data', 'canReceiveSubmissions' ], canSubmit),
 
   [additionalActionTypes.CREATE_ASSIGNMENT_PENDING]: (state, { meta: { groupId } }) => state,
   [additionalActionTypes.CREATE_ASSIGNMENT_FAILED]: (state, { meta: { groupId } }) => state,

@@ -1,16 +1,16 @@
 import React, { PropTypes } from 'react';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 import Icon from 'react-fontawesome';
-import { Grid, Row, Col, Table } from 'react-bootstrap';
-import { FormattedDate, FormattedTime, FormattedMessage } from 'react-intl';
+import { Table } from 'react-bootstrap';
+import { FormattedDate, FormattedTime, FormattedMessage, FormattedRelative } from 'react-intl';
 import classnames from 'classnames';
+import ResourceRenderer from '../../../ResourceRenderer';
 import { MaybeSucceededIcon } from '../../../Icons';
 import Box from '../../../AdminLTE/Box';
 
 const AssignmentDetails = ({
   isOpen = true,
   submissionsCountLimit,
-  localizedAssignments,
-  description,
   firstDeadline,
   secondDeadline,
   allowSecondDeadline,
@@ -41,6 +41,7 @@ const AssignmentDetails = ({
             <strong>
               <FormattedDate value={new Date(firstDeadline * 1000)} /> &nbsp; <FormattedTime value={new Date(firstDeadline * 1000)} />
             </strong>
+            {' '}(<FormattedRelative value={new Date(firstDeadline * 1000)} />)
           </td>
         </tr>
         {allowSecondDeadline && (
@@ -60,6 +61,7 @@ const AssignmentDetails = ({
               <strong>
                 <FormattedDate value={new Date(secondDeadline * 1000)} /> &nbsp; <FormattedTime value={new Date(secondDeadline * 1000)} />
               </strong>
+              {' '}(<FormattedRelative value={new Date(secondDeadline * 1000)} />)
             </td>
           </tr>)}
         <tr>
@@ -79,7 +81,9 @@ const AssignmentDetails = ({
             <FormattedMessage id='app.assignment.canSubmit' defaultMessage='You can submit more solutions:' />
           </td>
           <td>
-            <MaybeSucceededIcon success={canSubmit} />
+            <ResourceRenderer resource={canSubmit}>
+              {canSubmit => <MaybeSucceededIcon success={canSubmit} />}
+            </ResourceRenderer>
           </td>
         </tr>
       </tbody>
@@ -95,7 +99,7 @@ AssignmentDetails.propTypes = {
   allowSecondDeadline: PropTypes.bool.isRequired,
   isAfterFirstDeadline: PropTypes.bool.isRequired,
   isAfterSecondDeadline: PropTypes.bool.isRequired,
-  canSubmit: PropTypes.bool.isRequired
+  canSubmit: ImmutablePropTypes.map.isRequired
 };
 
 export default AssignmentDetails;

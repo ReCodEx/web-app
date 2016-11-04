@@ -35,6 +35,27 @@ import { instanceSelector } from '../../redux/selectors/instances';
 
 class Group extends Component {
 
+  static loadAsync = (
+    { groupId },
+    dispatch
+  ) => Promise.all([
+    dispatch(fetchAssignmentsForGroup(groupId)),
+    dispatch(fetchSubgroups(groupId)),
+    dispatch(fetchSupervisors(groupId)),
+    dispatch(fetchStudents(groupId)),
+    dispatch(fetchGroupIfNeeded(groupId))
+      .then((res) => res.value)
+      .then(group => Promise.all([
+        dispatch(fetchInstanceIfNeeded(group.instanceId)),
+        group.parentGroupId
+          ? dispatch(fetchGroupIfNeeded(group.parentGroupId))
+          : Promise.resolve(),
+        group.publicStats === true
+          ? dispatch(fetchGroupsStatsIfNeeded(groupId))
+          : Promise.resolve()
+      ]))
+  ])
+
   componentWillMount() {
     this.props.loadAsync();
   }
@@ -52,34 +73,29 @@ class Group extends Component {
 
   getBreadcrumbs = () => {
     const { group, instance, parentGroup } = this.props;
-    const { links: { INSTANCE_URI_FACTORY, GROUP_URI_FACTORY } } = this.context;
-    const breadcrumbs = [];
-
-    if (isReady(instance)) {
-      breadcrumbs.push({
-        iconName: 'university',
-        link: INSTANCE_URI_FACTORY(getData(instance).get('id')),
-        text: instance.getIn(['data', 'name'])
-      });
-    }
-
-    if (parentGroup !== null && isReady(parentGroup)) {
-      breadcrumbs.push({
-        iconName: 'group',
-        link: GROUP_URI_FACTORY(getData(parentGroup).get('id')),
-        text: getData(parentGroup).get('name')
-      });
-    }
-
-    // it doesn't make sense to add current group to the breadcrumbs
-    // unless the instance or the parent group is loaded first
-    if (breadcrumbs.length > 0 && isReady(group)) {
-      breadcrumbs.push({
-        iconName: 'group',
-        text: getData(group).get('name')
-      });
-    }
-
+    const breadcrumbs = [{
+      resource: instance,
+      iconName: 'university',
+      breadcrumb: (data) => ({
+        link: ({ INSTANCE_URI_FACTORY }) => INSTANCE_URI_FACTORY(data.id),
+        text: data.name,
+        resource: instance
+      })
+    }, {
+      resource: parentGroup,
+      iconName: 'group',
+      hidden: parentGroup === null,
+      breadcrumb: (data) => ({
+        link: ({ GROUP_URI_FACTORY }) => GROUP_URI_FACTORY(data.id),
+        text: data.name
+      })
+    }, {
+      resource: group,
+      iconName: 'group',
+      breadcrumb: (data) => ({
+        text: data.name
+      })
+    }];
     return breadcrumbs;
   };
 
@@ -87,7 +103,6 @@ class Group extends Component {
     const {
       group,
       userId,
-      parentGroup,
       groups,
       students,
       supervisors = List(),
@@ -145,15 +160,12 @@ class Group extends Component {
   }
 }
 
-Group.contextTypes = {
-  links: PropTypes.object
-};
-
 const mapStateToProps = (
   state,
   { params: { groupId } }
 ) => {
   const group = groupSelector(groupId)(state);
+  const groupData = getJsData(group);
   const userId = loggedInUserIdSelector(state);
   const supervisorsIds = supervisorsOfGroup(groupId)(state);
   const studentsIds = studentsOfGroup(groupId)(state);
@@ -162,8 +174,10 @@ const mapStateToProps = (
   return {
     group,
     userId,
-    instance: isReady(group) ? instanceSelector(state, getData(group).get('instanceId')) : null,
-    parentGroup: isReady(group) ? groupSelector(getData(group).get('parentGroupId'))(state) : null,
+    instance: isReady(group) ? instanceSelector(state, groupData.instanceId) : null,
+    parentGroup: isReady(group) && groupData.parentGroupId !== null
+      ? groupSelector(groupData.parentGroupId)(state)
+      : null,
     groups: groupsSelectors(state),
     assignments: groupsAssignmentsSelector(groupId)(state),
     stats: createGroupsStatsSelector(groupId)(state),
@@ -179,42 +193,20 @@ const mapStateToProps = (
 const mapDispatchToProps = (
   dispatch,
   {
-    params: { groupId },
+    params,
     isStudent,
     isSupervisor,
     isAdmin
   }
 ) => ({
-  addSubgroup: (instanceId) =>
-    ({ name, description }) =>
-      dispatch(createGroup({ instanceId, name, description, parentGroupId: groupId })),
-  loadAsync: () => Promise.all([
-    dispatch(fetchAssignmentsForGroup(groupId)),
-    dispatch(fetchSubgroups(groupId)),
-    dispatch(fetchSupervisors(groupId)),
-    isAdmin || isSupervisor
-      ? Promise.all([
-        dispatch(fetchGroupsStatsIfNeeded(groupId)),
-        dispatch(fetchStudents(groupId))
-      ])
-      : Promise.resolve(),
-    dispatch(fetchGroupIfNeeded(groupId))
-      .then((res) => res.value)
-      .then(group => Promise.all([
-        dispatch(fetchInstanceIfNeeded(group.instanceId)),
-        group.parentGroupId
-          ? dispatch(fetchGroupIfNeeded(group.parentGroupId))
-          : Promise.resolve(),
-        isStudent
-          ? Promise.all([
-            dispatch(fetchStudents(groupId)),
-            group.publicStats
-              ? fetchGroupsStatsIfNeeded(groupId)
-              : Promise.resolve()
-          ])
-          : Promise.resolve()
-      ]))
-  ])
+  addSubgroup: (instanceId) => ({ name, description }) =>
+    dispatch(createGroup({
+      instanceId,
+      name,
+      description,
+      parentGroupId: params.groupId
+    })),
+  loadAsync: () => Group.loadAsync(params, dispatch)
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Group);

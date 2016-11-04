@@ -37,7 +37,7 @@ BreadcrumbItem.propTypes = {
     FormattedMessage
   ]).isRequired,
   iconName: PropTypes.string,
-  link: PropTypes.string,
+  link: PropTypes.oneOfType([ PropTypes.string, PropTypes.func ]),
   isActive: PropTypes.bool.isRequired
 };
 
