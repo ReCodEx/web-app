@@ -39,11 +39,11 @@ class SourceCodeViewerContainer extends Component {
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <ResourceRenderer resource={code}>
-            {code => { console.log(code); return (
+          <ResourceRenderer resource={[file, code]}>
+            {(file, code) => { console.log(code); return (
               <SourceCodeViewer
                 content={code}
-                show={show}
+                name={file.name}
                 lineNumbers={true} />
             );}}
           </ResourceRenderer>
