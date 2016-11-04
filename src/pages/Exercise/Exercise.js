@@ -57,7 +57,13 @@ class Exercise extends Component {
     return (
       <PageContent
         title={this.getTitle(exercise)}
-        description={<FormattedMessage id='app.exercise.description' defaultMessage='Exercise overview' />}>
+        description={<FormattedMessage id='app.exercise.description' defaultMessage='Exercise overview' />}
+        breadcrumbs={[
+          {
+            text: <FormattedMessage id='app.exercise.description' defaultMessage="Exercise overview" />,
+            iconName: 'lightbulb-o'
+          }
+        ]}>
         <Row>
           <Col sm={6}>
             <ResourceRenderer

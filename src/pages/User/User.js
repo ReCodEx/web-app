@@ -35,7 +35,10 @@ class User extends Component {
         title={title}
         description={<FormattedMessage id='app.user.title' defaultMessage="User's profile" />}
         breadcrumbs={[
-          { text: <FormattedMessage id='app.user.title' defaultMessage="User's profile" />, iconName: 'user' }
+          {
+            text: <FormattedMessage id='app.user.title' defaultMessage="User's profile" />,
+            iconName: 'user'
+          }
         ]}>
         <ResourceRenderer
           resource={user}

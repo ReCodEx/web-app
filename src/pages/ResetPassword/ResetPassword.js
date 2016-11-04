@@ -32,8 +32,15 @@ const ResetPassword = ({
     title={<FormattedMessage id='app.resetPassword.title' defaultMessage='Reset password' />}
     description={<FormattedMessage id='app.resetPassword.description' defaultMessage='Change your password if you have forgotten your old one.' />}
     breadcrumbs={[
-      { text: <FormattedMessage id='app.homepage.title' />, link: HOME_URI },
-      { text: <FormattedMessage id='app.resetPassword.title' /> }
+      {
+        text: <FormattedMessage id='app.homepage.title' />,
+        link: HOME_URI,
+        iconName: 'home'
+      },
+      {
+        text: <FormattedMessage id='app.resetPassword.title' />,
+        iconName: 'key'
+      }
     ]}>
     <Row>
       <Col md={6} mdOffset={3} sm={8} smOffset={2}>

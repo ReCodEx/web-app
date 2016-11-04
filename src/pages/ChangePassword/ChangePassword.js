@@ -88,8 +88,15 @@ class ChangePassword extends Component {
         title={<FormattedMessage id='app.changePassword.title' defaultMessage='Change forgotten password' />}
         description={<FormattedMessage id='app.changePassword.description' defaultMessage='You can change your forgotten password in this form' />}
         breadcrumbs={[
-          { text: <FormattedMessage id='app.homepage.title' />, link: HOME_URI },
-          { text: <FormattedMessage id='app.changePassword.title' /> }
+          {
+            text: <FormattedMessage id='app.homepage.title' />,
+            link: HOME_URI,
+            iconName: 'home'
+          },
+          {
+            text: <FormattedMessage id='app.changePassword.title' />,
+            iconName: 'shield'
+          }
         ]}>
         <Row>
           <Col md={6} mdOffset={3} sm={8} smOffset={2}>

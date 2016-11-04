@@ -41,8 +41,15 @@ class Login extends Component {
         title={<FormattedMessage id='app.login.title' defaultMessage='Sign in' />}
         description={<FormattedMessage id='app.login.description' defaultMessage='Please fill your credentials' />}
         breadcrumbs={[
-          { text: <FormattedMessage id='app.homepage.title' />, link: HOME_URI },
-          { text: <FormattedMessage id='app.login.title' /> }
+          {
+            text: <FormattedMessage id='app.homepage.title' />,
+            link: HOME_URI,
+            iconName: 'home'
+          },
+          {
+            text: <FormattedMessage id='app.login.title' />,
+            iconName: 'sign-in'
+          }
         ]}>
         <Row>
           <Col lg={4} lgOffset={1} md={6} mdOffset={0} sm={8} smOffset={2}>
