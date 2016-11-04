@@ -1,23 +1,24 @@
 import React, { PropTypes } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { LoadingIcon, WarningIcon } from '../Icons';
-import { isLoading, isReady, hasFailed, getJsData } from '../../redux/helpers/resourceManager';
+import { isLoading, hasFailed, getJsData } from '../../redux/helpers/resourceManager';
 
-const defaultLoading = (
+const defaultLoading = (noIcons) => (
   <span>
-    <LoadingIcon /> <FormattedMessage id='app.resourceRenderer.loading' defaultMessage='Loading ...' />
+    {!noIcons && <LoadingIcon />} <FormattedMessage id='app.resourceRenderer.loading' defaultMessage='Loading ...' />
   </span>
 );
 
-const defaultFailed = (
+const defaultFailed = (noIcons) => (
   <span>
-    <WarningIcon /> <FormattedMessage id='app.resourceRenderer.loadingFailed' defaultMessage='Loading failed.' />
+    {!noIcons && <WarningIcon />} <FormattedMessage id='app.resourceRenderer.loadingFailed' defaultMessage='Loading failed.' />
   </span>
 );
 
 const ResourceRenderer = ({
-  loading = defaultLoading,
-  failed = defaultFailed,
+  noIcons = false,
+  loading = defaultLoading(noIcons),
+  failed = defaultFailed(noIcons),
   children: ready,
   resource,
   hiddenUntilReady = false,
@@ -37,7 +38,8 @@ ResourceRenderer.propTypes = {
   children: PropTypes.func.isRequired,
   resource: PropTypes.oneOfType([ PropTypes.object, PropTypes.array ]),
   hiddenUntilReady: PropTypes.bool,
-  forceLoading: PropTypes.bool
+  forceLoading: PropTypes.bool,
+  noIcons: PropTypes.bool
 };
 
 export default ResourceRenderer;

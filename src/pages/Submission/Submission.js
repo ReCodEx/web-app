@@ -4,18 +4,20 @@ import { FormattedMessage } from 'react-intl';
 
 import PageContent from '../../components/PageContent';
 import ResourceRenderer from '../../components/ResourceRenderer';
-import SubmissionDetail, {
-  LoadingSubmissionDetail,
-  FailedSubmissionDetail
-} from '../../components/Submissions/SubmissionDetail';
+import SubmissionDetail, { FailedSubmissionDetail } from '../../components/Submissions/SubmissionDetail';
 
-import { isReady, getData } from '../../redux/helpers/resourceManager';
 import { fetchAssignmentIfNeeded } from '../../redux/modules/assignments';
 import { fetchSubmissionIfNeeded } from '../../redux/modules/submissions';
 import { getSubmission } from '../../redux/selectors/submissions';
 import { getAssignment } from '../../redux/selectors/assignments';
 
 class Submission extends Component {
+
+  static loadAsync = ({ submissionId, assignmentId }, dispatch) =>
+    Promise.all([
+      dispatch(fetchSubmissionIfNeeded(submissionId)),
+      dispatch(fetchAssignmentIfNeeded(assignmentId))
+    ]);
 
   componentWillMount() {
     this.props.loadAsync();
@@ -45,7 +47,7 @@ class Submission extends Component {
     return (
       <PageContent
         title={(
-          <ResourceRenderer resource={assignment}>
+          <ResourceRenderer resource={assignment} noIcons>
             {assignmentData => <span>{assignmentData.name}</span>}
           </ResourceRenderer>
         )}
@@ -70,13 +72,11 @@ class Submission extends Component {
           }
         ]}>
         <ResourceRenderer
-          loading={<LoadingSubmissionDetail />}
           failed={<FailedSubmissionDetail />}
-          resource={submission}>
-          {data => (
+          resource={[ submission, assignment ]}>
+          {(submission, assignment) => (
             <SubmissionDetail
-              {...data}
-              assignmentId={assignmentId}
+              submission={submission}
               assignment={assignment}
               onCloseSourceViewer={this.closeSourceCodeViewer}>
               {children}
@@ -110,10 +110,7 @@ export default connect(
     submission: getSubmission(submissionId)(state),
     assignment: getAssignment(assignmentId)(state)
   }),
-  (dispatch, { params: { submissionId, assignmentId } }) => ({
-    loadAsync: () => Promise.all([
-      dispatch(fetchSubmissionIfNeeded(submissionId)),
-      dispatch(fetchAssignmentIfNeeded(assignmentId))
-    ])
+  (dispatch, { params }) => ({
+    loadAsync: () => Submission.loadAsync(params, dispatch)
   })
 )(Submission);
