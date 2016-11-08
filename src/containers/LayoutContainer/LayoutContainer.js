@@ -35,7 +35,7 @@ class LayoutContainer extends Component {
     }
   }
 
-  getLang = props => {
+  getLang = (props) => {
     let lang = props.params.lang;
     if (!lang) {
       lang = defaultLanguage;
@@ -44,7 +44,7 @@ class LayoutContainer extends Component {
     return lang;
   };
 
-  changeLang = props => {
+  changeLang = (props) => {
     const lang = this.getLang(props);
     this.setState({ lang, links: linksFactory(lang) });
   };
@@ -59,7 +59,7 @@ class LayoutContainer extends Component {
     isActive: link => !isAbsolute(link) && this.context.router.isActive(link, true)
   });
 
-  maybeHideSidebar = e => {
+  maybeHideSidebar = (e) => {
     e.preventDefault();
     const { sidebar, toggleVisibility } = this.props;
     if (sidebar.isOpen) {
@@ -71,8 +71,8 @@ class LayoutContainer extends Component {
    * Get messages for the given language or the deafult - English
    */
 
-  getMessages = lang => messages[lang] || messages[this.getDefaultLang()];
-  getLocaleData = lang => localeData[lang] || localeData[this.getDefaultLang()];
+  getMessages = (lang) => messages[lang] || messages[this.getDefaultLang()];
+  getLocaleData = (lang) => localeData[lang] || localeData[this.getDefaultLang()];
 
   render() {
     const {
@@ -84,7 +84,7 @@ class LayoutContainer extends Component {
       isLoggedIn
     } = this.props;
 
-    const { lang, links: { HOME_URI } } = this.state;
+    const { lang } = this.state;
     addLocaleData([ ...this.getLocaleData(lang) ]);
     moment.locale(lang);
 
@@ -115,6 +115,20 @@ LayoutContainer.childContextTypes = {
 
 LayoutContainer.contextTypes = {
   router: PropTypes.object
+};
+
+LayoutContainer.propTypes = {
+  params: PropTypes.shape({
+    lang: PropTypes.string
+  }),
+  toggleSize: PropTypes.func.isRequired,
+  toggleVisibility: PropTypes.func.isRequired,
+  isLoggedIn: PropTypes.bool,
+  sidebar: PropTypes.object,
+  location: PropTypes.shape({
+    pathname: PropTypes.string.isRequired
+  }).isRequired,
+  children: PropTypes.element
 };
 
 const mapStateToProps = (state, props) => ({

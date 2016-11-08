@@ -17,6 +17,11 @@ module.exports = {
     path: path.join(__dirname, '..', 'public'),
     publicPath: '/public/'
   },
+  resolve: {
+    alias: {
+      moment: 'moment/moment.js'
+    }
+  },
   module: {
     loaders: [
       { test: /\.jsx?$/, exclude: /node_modules/, loaders: [ 'babel' ] },

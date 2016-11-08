@@ -1,7 +1,5 @@
 const path = require('path');
 const webpack = require('webpack');
-const strip = require('strip-loader');
-const autoprefixer = require('autoprefixer');
 const fs = require('fs');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
@@ -25,6 +23,11 @@ module.exports = {
   output: {
     filename: 'server.js',
     path: path.join(__dirname, '..', 'bin')
+  },
+  resolve: {
+    alias: {
+      moment: 'moment/moment.js'
+    }
   },
   module: clientConfig.module,
   externals: nodeModules,
