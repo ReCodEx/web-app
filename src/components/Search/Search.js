@@ -5,11 +5,8 @@ import { FormGroup, ControlLabel, FormControl, InputGroup } from 'react-bootstra
 import { Debounce } from 'react-throttle';
 import { LoadingIcon, SearchIcon, WarningIcon } from '../Icons';
 
-const listStyles = {
-  maxHeight: 500,
-  overflowY: 'auto',
-  overflowX: 'hidden'
-};
+// some additional styling for a scrolable vertical box
+import styles from './search.less';
 
 const Search = ({
   id = '',
@@ -46,7 +43,7 @@ const Search = ({
         </p>
 
         {(!isLoading || foundItems.size > 0) && (
-          <div style={listStyles}>
+          <div className={styles.list}>
             {renderList(foundItems.toJS())}
           </div>
         )}
@@ -57,9 +54,14 @@ const Search = ({
 
 Search.propTypes = {
   id: PropTypes.string,
+  query: PropTypes.string,
+  type: PropTypes.string,
   onChange: PropTypes.func.isRequired,
   renderList: PropTypes.func,
-  foundItems: ImmutablePropTypes.list.isRequired
+  foundItems: ImmutablePropTypes.list.isRequired,
+  isLoading: PropTypes.bool,
+  hasFailed: PropTypes.bool,
+  isReady: PropTypes.bool
 };
 
 export default Search;
