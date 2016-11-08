@@ -2,7 +2,8 @@ import React, { PropTypes, Component } from 'react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
-import { Col, Row } from 'react-bootstrap';
+import { Col, Row, Button } from 'react-bootstrap';
+import { LinkContainer } from 'react-router-bootstrap';
 
 import { fetchAssignmentIfNeeded } from '../../redux/modules/assignments';
 import { canSubmit } from '../../redux/modules/canSubmit';
@@ -19,6 +20,7 @@ import AssignmentDetails, {
   LoadingAssignmentDetails,
   FailedAssignmentDetails
 } from '../../components/Assignments/Assignment/AssignmentDetails';
+import { EditIcon } from '../../components/Icons';
 import LocalizedAssignments from '../../components/Assignments/Assignment/LocalizedAssignments';
 import SubmitSolutionButton from '../../components/Assignments/SubmitSolutionButton';
 import SubmitSolutionContainer from '../../containers/SubmitSolutionContainer';
@@ -53,8 +55,13 @@ class Assignment extends Component {
       userId,
       init,
       isStudentOf,
+      isSupervisorOf,
       canSubmit
     } = this.props;
+
+    const {
+      links: { ASSIGNMENT_EDIT_URI_FACTORY }
+    } = this.context;
 
     return (
       <PageContent
@@ -89,32 +96,42 @@ class Assignment extends Component {
                   {assignment.localizedAssignments.length > 0 &&
                     <LocalizedAssignments locales={assignment.localizedAssignments} />}
 
-                  <AssignmentDetails
-                    {...assignment}
-                    isAfterFirstDeadline={this.isAfter(assignment.firstDeadline)}
-                    isAfterSecondDeadline={this.isAfter(assignment.secondDeadline)}
-                    canSubmit={canSubmit} />
-
-                  {isStudentOf(assignment.groupId) && (
-                    <div>
-                      <p className='text-center'>
-                        <ResourceRenderer
-                          loading={<SubmitSolutionButton disabled={true} />}
-                          resource={canSubmit}>
-                          {canSubmit => <SubmitSolutionButton onClick={init(userId)} disabled={!canSubmit} />}
-                        </ResourceRenderer>
-                      </p>
-                      <SubmitSolutionContainer
-                        reset={init(userId)}
-                        assignmentId={assignment.id}
-                        isOpen={submitting} />
-                    </div>
+                  {isSupervisorOf(assignment.groupId) && (
+                    <p className='text-center'>
+                      <LinkContainer to={ASSIGNMENT_EDIT_URI_FACTORY(assignment.id)}>
+                        <Button bsStyle='warning' className='btn-flat'>
+                          <EditIcon /> <FormattedMessage id='app.assignment.editSettings' defaultMessage='Edit assignment settings' />
+                        </Button>
+                      </LinkContainer>
+                    </p>
                   )}
+
+
                 </div>
               </Col>
               <Col md={6}>
+                <AssignmentDetails
+                  {...assignment}
+                  isAfterFirstDeadline={this.isAfter(assignment.firstDeadline)}
+                  isAfterSecondDeadline={this.isAfter(assignment.secondDeadline)}
+                  canSubmit={canSubmit} />
+
                 {isStudentOf(assignment.groupId) && (
-                  <SubmissionsTableContainer assignmentId={assignment.id} />
+                  <div>
+                    <p className='text-center'>
+                      <ResourceRenderer
+                        loading={<SubmitSolutionButton disabled={true} />}
+                        resource={canSubmit}>
+                        {canSubmit => <SubmitSolutionButton onClick={init(userId)} disabled={!canSubmit} />}
+                      </ResourceRenderer>
+                    </p>
+                    <SubmitSolutionContainer
+                      reset={init(userId)}
+                      assignmentId={assignment.id}
+                      isOpen={submitting} />
+
+                    <SubmissionsTableContainer assignmentId={assignment.id} />
+                  </div>
                 )}
               </Col>
             </Row>
@@ -125,6 +142,10 @@ class Assignment extends Component {
   }
 
 }
+
+Assignment.contextTypes = {
+  links: PropTypes.object
+};
 
 Assignment.propTypes = {
   userId: PropTypes.string.isRequired,
