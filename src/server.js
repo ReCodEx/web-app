@@ -28,12 +28,29 @@ addLocaleData([ ...cs ]);
  * some basic middleware for tempaltes and static file serving.
  */
 
-const BUNDLE = process.env.BUNDLE || '/bundle.js';
+const bundle = process.env.BUNDLE || '/bundle.js';
 
 let app = new Express();
 app.set('view engine', 'ejs');
 app.use(Express.static('public'));
 app.use(cookieParser());
+
+const renderPage = (res, store, renderProps) => {
+  let html = renderToString(
+    <Provider store={store}>
+      <RouterContext {...renderProps} />
+    </Provider>
+  );
+  const head = Helmet.rewind();
+
+  res.render('index', {
+    html,
+    head,
+    reduxState: JSON.stringify(store.getState()),
+    bundle,
+    style: '/style.css'
+  });
+};
 
 app.get('*', (req, res) => {
   const memoryHistory = createHistory(req.originalUrl);
@@ -53,24 +70,20 @@ app.get('*', (req, res) => {
       // this should never happen but just for sure - if router failed
       res.status(404).send('Not found');
     } else {
-      let html = renderToString(
-        <Provider store={store}>
-          <RouterContext {...renderProps} />
-        </Provider>
-      );
-      const head = Helmet.rewind();
+      const loadAsync = renderProps.components
+        .filter(component => component.WrappedComponent && component.WrappedComponent.loadAsync)
+        .map(component => component.WrappedComponent.loadAsync)
+        .map(load => load(renderProps.params, store.dispatch));
 
-      res.render('index', {
-        html,
-        head,
-        reduxState: JSON.stringify(store.getState()),
-        bundle: '/bundle.js'
-      });
+      const oldStore = Object.assign({}, store);
+      Promise.all(loadAsync)
+        .then(() => renderPage(res, store, renderProps))
+        .catch(() => renderPage(res, oldStore, renderProps));
     }
   });
 });
 
-const PORT = process.env.PORT || 8080;
-app.listen(PORT, () => {
-  console.log('Server is running on port ' + PORT);
+const port = process.env.PORT || 8080;
+app.listen(port, () => {
+  console.log('Server is running on port ' + port);
 });
