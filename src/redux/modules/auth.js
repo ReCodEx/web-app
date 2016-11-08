@@ -1,7 +1,7 @@
-import { createAction, handleActions } from 'redux-actions';
+import { handleActions } from 'redux-actions';
 import { push } from 'react-router-redux';
 import { fromJS } from 'immutable';
-import { decode, isTokenValid, willExpireSoon } from '../helpers/token';
+import { decode, isTokenValid } from '../helpers/token';
 import { createApiAction } from '../middleware/apiMiddleware';
 import { actionTypes as registrationActionTypes } from './registration';
 
@@ -34,9 +34,9 @@ const getUserId = (token) => token.get('sub');
  * Actions
  */
 
-export const logout = redirectUrl =>
-  dispatch => {
-    dispatch(push(redirectUrl));
+export const logout = (redirectUrl) =>
+  (dispatch) => {
+    if (redirectUrl) { dispatch(push(redirectUrl)); }
     dispatch({
       type: actionTypes.LOGOUT
     });
@@ -75,7 +75,7 @@ export const validatePasswordStrength = (password) =>
     body: { password }
   });
 
-export const externalLogin = serviceId => (username, password) =>
+export const externalLogin = (serviceId) => (username, password) =>
   createApiAction({
     type: actionTypes.LOGIN,
     method: 'POST',
@@ -118,11 +118,13 @@ const auth = (accessToken) => {
   const initialState = accessToken && decodedToken
     ? fromJS({
       status: statusTypes.LOGGED_IN,
+      jwt: accessToken,
       accessToken: decodedToken,
       userId: getUserId(decodedToken)
     })
     : fromJS({
       status: statusTypes.LOGGED_OUT,
+      jwt: null,
       accessToken: null,
       userId: null
     });
@@ -134,21 +136,25 @@ const auth = (accessToken) => {
 
     [actionTypes.LOGIN_SUCCESS]: (state, {payload: { accessToken }}) =>
       state.set('status', statusTypes.LOGGED_IN)
+            .set('jwt', accessToken)
             .set('accessToken', decodeAndValidateAccessToken(accessToken))
             .set('userId', getUserId(decodeAndValidateAccessToken(accessToken))),
 
     [registrationActionTypes.CREATE_ACCOUNT_FULFILLED]: (state, {payload: { accessToken }}) =>
       state.set('status', statusTypes.LOGGED_IN)
+            .set('jwt', accessToken)
             .set('accessToken', decodeAndValidateAccessToken(accessToken))
             .set('userId', getUserId(decodeAndValidateAccessToken(accessToken))),
 
     [actionTypes.LOGIN_FAILIURE]: (state, action) =>
       state.set('status', statusTypes.LOGIN_FAILED)
+            .set('jwt', null)
             .set('accessToken', null)
             .set('userId', null),
 
     [actionTypes.LOGOUT]: (state, action) =>
       state.set('status', statusTypes.LOGGED_OUT)
+            .set('jwt', null)
             .set('accessToken', null)
             .set('userId', null),
 

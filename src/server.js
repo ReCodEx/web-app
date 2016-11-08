@@ -69,11 +69,8 @@ app.get('*', (req, res) => {
       // this should never happen but just for sure - if router failed
       res.status(404).send('Not found');
     } else {
-      // const loadAsync = renderProps.components
-
-
       const loadAsync = renderProps.components
-        .filter(component => component.WrappedComponent && component.WrappedComponent.loadAsync)
+        .filter(component => component && component.WrappedComponent && component.WrappedComponent.loadAsync)
         .map(component => component.WrappedComponent.loadAsync)
         .map(load => load(renderProps.params, store.dispatch));
 

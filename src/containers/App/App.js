@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { loggedInUserIdSelector, accessTokenSelector } from '../../redux/selectors/auth';
 import { fetchUserIfNeeded } from '../../redux/modules/users';
@@ -36,11 +36,11 @@ class App extends Component {
     const token = accessToken ? accessToken.toJS() : null;
     if (isLoggedIn) {
       if (!isTokenValid(token)) {
-        logout(this.state.links.HOME_URI);
+        logout(this.context.links.HOME_URI);
       } else if (willExpireSoon(token) && !this.isRefreshingToken) {
         this.isRefreshingToken = true;
         refreshToken()
-          .catch(() => logout(this.state.links.HOME_URI))
+          .catch(() => logout(this.context.links.HOME_URI))
           .then(() => {
             this.isRefreshingToken = false;
           });
@@ -54,6 +54,19 @@ class App extends Component {
 
 }
 
+App.contextTypes = {
+  links: PropTypes.object
+};
+
+App.propTypes = {
+  isLoggedIn: PropTypes.bool.isRequired,
+  loggedInUserId: PropTypes.string,
+  accessToken: PropTypes.object,
+  refreshToken: PropTypes.func,
+  logout: PropTypes.func,
+  children: PropTypes.element
+};
+
 export default connect(
   state => ({
     accessToken: accessTokenSelector(state),
@@ -66,7 +79,7 @@ export default connect(
       dispatch(fetchUsersGroupsIfNeeded(userId)),
       dispatch(fetchUsersInstancesIfNeeded(userId))
     ]),
-    refreshToken: (accessToken) => dispatch(refresh(accessToken)),
-    logout: (accessToken) => dispatch(logout())
+    refreshToken: () => dispatch(refresh()),
+    logout: (url) => dispatch(logout(url))
   })
 )(App);

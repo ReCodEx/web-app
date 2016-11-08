@@ -1,4 +1,5 @@
 import { actionTypes } from '../modules/auth';
+import { jwtSelector } from '../selectors/auth';
 import { actionTypes as registrationActionTypes } from '../modules/registration';
 import { CALL_API } from './apiMiddleware';
 import cookies from 'browser-cookies';
@@ -28,21 +29,7 @@ export const removeToken = () => {
   }
 };
 
-export const getToken = () => {
-  if (typeof localStorage !== 'undefined') {
-    const token = localStorage.getItem(LOCAL_STORAGE_KEY);
-    storeToken(token); // make sure the token is stored in cookies for page refreshes
-    return token;
-  }
-
-  if (typeof document !== 'undefined') {
-    cookies.get(COOKIES_KEY);
-  }
-
-  return null;
-};
-
-const middleware = state => next => action => {
+const middleware = store => next => action => {
   // manage access token storage
   switch (action.type) {
     case actionTypes.LOGIN_SUCCESS:
@@ -54,8 +41,8 @@ const middleware = state => next => action => {
       break;
     case CALL_API:
       if (!action.request.accessToken) {
-        const token = getToken();
-        if (token) {
+        const token = jwtSelector(store.getState());
+        if (token) { // do not override the token if it was set explicitely and there is none in the state
           action.request.accessToken = token;
         }
       }

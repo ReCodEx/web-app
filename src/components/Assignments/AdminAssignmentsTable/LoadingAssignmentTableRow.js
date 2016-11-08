@@ -4,7 +4,7 @@ import { LoadingIcon } from '../../Icons';
 
 const LoadingAssignmentTableRow = () => (
   <tr>
-    <td className='text-center' colSpan={6}>
+    <td className='text-center' colSpan={5}>
       <LoadingIcon /> <FormattedMessage id='app.adminAssignmentsTableRow.loading' defaultMessage='Loading assignments ...' />
     </td>
   </tr>

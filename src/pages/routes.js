@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, IndexRoute, IndexRedirect, Link } from 'react-router';
+import { Route, IndexRoute } from 'react-router';
 import { linksFactory, extractLanguageFromUrl, changeLanguage } from '../links';
 import { isAvailable, defaultLanguage } from '../locales';
 import { isLoggedIn } from '../redux/selectors/auth';
@@ -22,8 +22,6 @@ import User from './User';
 
 import ChangePassword from './ChangePassword';
 import ResetPassword from './ResetPassword';
-
-import SourceCodeViewerContainer from '../containers/SourceCodeViewerContainer';
 
 const createRoutes = (getState) => {
   const getLang = state => state.params.lang;
@@ -62,19 +60,19 @@ const createRoutes = (getState) => {
   };
 
   return (
-    <Route path='/' component={App} onEnter={checkLanguage}>
+    <Route path='/' onEnter={checkLanguage}>
       <Route path='/:lang' component={LayoutContainer}>
         <IndexRoute component={Home} />
         <Route path='login' component={Login} onEnter={onlyUnauth} />
         <Route path='registration' component={Registration} onEnter={onlyUnauth} />
-        <Route path='app' onEnter={requireAuth} component={App}>
+        <Route path='app' component={App} onEnter={requireAuth}>
           <IndexRoute component={Dashboard} />
           <Route path='assignment/:assignmentId'>
             <IndexRoute component={Assignment} />
             <Route path='edit' component={EditAssignment} />
             <Route path='submission/:submissionId' component={Submission} />
           </Route>
-		  <Route path='edit-assignment/:assignmentId' component={EditAssignment} />
+          <Route path='edit-assignment/:assignmentId' component={EditAssignment} />
           <Route path='exercise/:exerciseId' component={Exercise} />
           <Route path='group/:groupId' component={Group} />
           <Route path='instance/:instanceId' component={instance} />

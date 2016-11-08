@@ -1,8 +1,8 @@
 import React from 'react';
 import { canUseDOM } from 'exenv';
 
-import { createStore, combineReducers, compose, applyMiddleware } from 'redux';
-import { routerReducer, routerMiddleware } from 'react-router-redux';
+import { createStore, compose, applyMiddleware } from 'redux';
+import { routerMiddleware } from 'react-router-redux';
 import thunkMiddleware from 'redux-thunk';
 import promiseMiddleware from 'redux-promise-middleware';
 import accessTokenMiddleware from './middleware/accessTokenMiddleware';

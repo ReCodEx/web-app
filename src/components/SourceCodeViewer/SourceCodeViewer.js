@@ -46,4 +46,11 @@ const SourceCodeViewer = ({
     )
   : null;
 
+SourceCodeViewer.propTypes = {
+  name: PropTypes.string.isRequired,
+  content: PropTypes.string,
+  lineNumbers: PropTypes.bool,
+  lines: PropTypes.number
+};
+
 export default SourceCodeViewer;

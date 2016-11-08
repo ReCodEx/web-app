@@ -11,6 +11,7 @@ const getResetPasswordStatus = createSelector(getAuth, auth => auth.get('resetPa
 /**
  * Select access token from the state.
  */
+export const jwtSelector = createSelector(getAuth, auth => auth.get('jwt'));
 export const accessTokenSelector = createSelector(getAuth, getAccessToken);
 export const accessTokenExpiration = createSelector(accessTokenSelector, token => token ? token.get('exp') * 1000 : 0);
 export const loggedInUserIdSelector = createSelector(getAuth, getLoggedInUserId);
