@@ -33,8 +33,7 @@ class Submission extends Component {
     const {
       assignment,
       submission,
-      params: { assignmentId },
-      children
+      params: { assignmentId }
     } = this.props;
 
     return (
