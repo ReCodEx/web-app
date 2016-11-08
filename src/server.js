@@ -5,6 +5,7 @@ import 'isomorphic-fetch';
 import React from 'react';
 import { renderToString } from 'react-dom/server';
 import Express from 'express';
+import Promise from 'bluebird';
 import Helmet from 'react-helmet';
 import cookieParser from 'cookie-parser';
 
@@ -33,6 +34,23 @@ app.set('view engine', 'ejs');
 app.use(Express.static('public'));
 app.use(cookieParser());
 
+const renderPage = (res, store, renderProps) => {
+  let html = renderToString(
+    <Provider store={store}>
+      <RouterContext {...renderProps} />
+    </Provider>
+  );
+  const head = Helmet.rewind();
+
+  res.render('index', {
+    html,
+    head,
+    reduxState: JSON.stringify(store.getState()),
+    bundle,
+    style: '/style.css'
+  });
+};
+
 app.get('*', (req, res) => {
   const memoryHistory = createHistory(req.originalUrl);
   // Extract the accessToken from the cookies for authenticated API requests from the server.
@@ -54,25 +72,20 @@ app.get('*', (req, res) => {
       // const loadAsync = renderProps.components
 
 
-      let html = renderToString(
-        <Provider store={store}>
-          <RouterContext {...renderProps} />
-        </Provider>
-      );
-      const head = Helmet.rewind();
+      const loadAsync = renderProps.components
+        .filter(component => component.WrappedComponent && component.WrappedComponent.loadAsync)
+        .map(component => component.WrappedComponent.loadAsync)
+        .map(load => load(renderProps.params, store.dispatch));
 
-      res.render('index', {
-        html,
-        head,
-        reduxState: JSON.stringify(store.getState()),
-        bundle,
-        style: '/style.css'
-      });
+      const oldStore = Object.assign({}, store);
+      Promise.all(loadAsync)
+        .then(() => renderPage(res, store, renderProps))
+        .catch(() => renderPage(res, oldStore, renderProps));
     }
   });
 });
 
-const PORT = process.env.PORT || 8080;
-app.listen(PORT, () => {
-  console.log('Server is running on port ' + PORT);
+const port = process.env.PORT || 8080;
+app.listen(port, () => {
+  console.log('Server is running on port ' + port);
 });
