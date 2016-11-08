@@ -1,15 +1,10 @@
 import React, { PropTypes } from 'react';
-import { reduxForm, Field, FieldArray, change } from 'redux-form';
+import { reduxForm, FieldArray } from 'redux-form';
 import { FormattedMessage } from 'react-intl';
-import { Button, Alert, HelpBlock } from 'react-bootstrap';
-import isNumeric from 'validator/lib/isNumeric';
+import { Alert } from 'react-bootstrap';
 
-import { LoadingIcon, SuccessIcon } from '../../Icons';
-import FormBox from '../../AdminLTE/FormBox';
-import { DatetimeField, TextField, TextAreaField, MarkdownTextAreaField, CheckboxField, SourceCodeField } from '../Fields';
 import EditEnvironmentLimitsForm from '../EditEnvironmentLimitsForm';
 import SubmitButton from '../SubmitButton';
-import { getJsData } from '../../../redux/helpers/resourceManager';
 
 const EditAssignmentLimitsForm = ({
   assignment,
@@ -50,13 +45,56 @@ const EditAssignmentLimitsForm = ({
 EditAssignmentLimitsForm.propTypes = {
   initialValues: PropTypes.object.isRequired,
   values: PropTypes.array,
-  handleSubmit: PropTypes.func.isRequired
+  handleSubmit: PropTypes.func.isRequired,
+  assignment: PropTypes.object,
+  submitting: PropTypes.bool,
+  hasFailed: PropTypes.bool,
+  hasSucceeded: PropTypes.bool,
+  invalid: PropTypes.bool
 };
 
-const validate = ({
-}) => {
-  const errors = {};
-  return errors;
+const validate = ({ environments }) => {
+  // traverse through all the runtime environments
+  const environmentsErrors = [];
+  environments.forEach((env, i) => {
+    const envErrors = { environment: {}, limits: [] };
+    if (env.environment.name.length === 0) {
+      envErrors.environment.name = <FormattedMessage id='app.editAssignmentLimitsForm.validation.envName' defaultMessage='Please fill environment name.' />;
+    }
+
+    // validate limits for all hardware groups
+    env.limits.forEach((hwGroup, j) => {
+      const hwGroupErrors = {};
+      for (let testName of Object.keys(hwGroup.tests)) {
+        const testErrors = {};
+        for (let taskId of Object.keys(hwGroup.tests[testName])) {
+          const taskErrors = {};
+          let { time, memory } = hwGroup.tests[testName][taskId];
+
+          if (time.toString().indexOf(',') >= 0) {
+            // the czech and some other number systems use decimal comas in real numbers
+            taskErrors.time = <FormattedMessage id='app.editAssignmentLimitsForm.validation.useDotDecimalSeparator' defaultMessage='Please use a dot as a decimal separator instead of the comma.' />;
+          } else if (parseFloat(time) !== Number(time)) {
+            taskErrors.time = <FormattedMessage id='app.editAssignmentLimitsForm.validation.timeIsNotNumer' defaultMessage='Time limit must be a real number.' />;
+          } else if (Number(time) <= 0) {
+            taskErrors.time = <FormattedMessage id='app.editAssignmentLimitsForm.validation.timeLimit' defaultMessage='Time limit must be a positive real number.' />;
+          }
+
+          if (parseInt(memory) !== Number(memory)) {
+            taskErrors.memory = <FormattedMessage id='app.editAssignmentLimitsForm.validation.memoryIsNotNumer' defaultMessage='Memory limit must be an integer.' />;
+          } else if (Number(memory) <= 0) {
+            taskErrors.memory = <FormattedMessage id='app.editAssignmentLimitsForm.validation.memoryLimit' defaultMessage='Memory limit must be a positive integer.' />;
+          }
+          testErrors[taskId] = taskErrors;
+        }
+        hwGroupErrors[testName] = testErrors;
+      }
+      envErrors.limits[j] = { tests: hwGroupErrors };
+    });
+    environmentsErrors[i] = envErrors;
+  });
+
+  return { environments: environmentsErrors };
 };
 
 export default reduxForm({

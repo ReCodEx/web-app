@@ -20,4 +20,12 @@ const SourceCodeInfoBox = ({
   </div>
 );
 
+SourceCodeInfoBox.propTypes = {
+  id: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
+  size: PropTypes.number.isRequired,
+  uploadedAt: PropTypes.string.isRequired,
+  onClick: PropTypes.func
+};
+
 export default SourceCodeInfoBox;

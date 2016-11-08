@@ -1,12 +1,10 @@
 import React, { Component, PropTypes } from 'react';
-import { FormattedMessage, FormattedRelative } from 'react-intl';
-import Helmet from 'react-helmet';
+import ImmutablePropTypes from 'react-immutable-proptypes';
+import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 import { reset, getFormValues } from 'redux-form';
 import moment from 'moment';
-
-import { Row, Col, Alert } from 'react-bootstrap';
 import PageContent from '../../components/PageContent';
 
 import ResourceRenderer from '../../components/ResourceRenderer';
@@ -15,17 +13,14 @@ import EditAssignmentLimitsForm from '../../components/Forms/EditAssignmentLimit
 
 import { fetchAssignmentIfNeeded, editAssignment } from '../../redux/modules/assignments';
 import { fetchLimitsIfNeeded, editLimits } from '../../redux/modules/limits';
-import { getAssignment, canSubmitSolution } from '../../redux/selectors/assignments';
+import { getAssignment } from '../../redux/selectors/assignments';
+import { canSubmitSolution } from '../../redux/selectors/canSubmit';
 import { getEnvironmentsLimits } from '../../redux/selectors/limits';
 import { isSubmitting } from '../../redux/selectors/submission';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import { isSupervisorOf } from '../../redux/selectors/users';
 
-const getInitialValues = ({
-  firstDeadline,
-  secondDeadline,
-  ...rest
-}) => ({
+const getInitialValues = ({ firstDeadline, secondDeadline, ...rest }) => ({
   firstDeadline: moment(firstDeadline * 1000),
   secondDeadline: moment(secondDeadline * 1000),
   ...rest
@@ -96,6 +91,15 @@ EditAssignment.contextTypes = {
 };
 
 EditAssignment.propTypes = {
+  loadAsync: PropTypes.func.isRequired,
+  params: PropTypes.shape({
+    assignmentId: PropTypes.string.isRequired
+  }).isRequired,
+  assignment: ImmutablePropTypes.map,
+  environments: ImmutablePropTypes.map,
+  editAssignment: PropTypes.func.isRequired,
+  editLimits: PropTypes.func.isRequired,
+  formValues: PropTypes.object
 };
 
 export default connect(

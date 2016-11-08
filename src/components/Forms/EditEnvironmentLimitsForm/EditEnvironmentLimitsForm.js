@@ -1,19 +1,10 @@
-import React, { Component } from 'react';
+import React, { PropTypes } from 'react';
 import { FormattedMessage } from 'react-intl';
-import { Field, FieldArray } from 'redux-form';
-import { Alert, Button, Tabs, Tab } from 'react-bootstrap';
-import Confirm from '../Confirm';
-import { AddIcon, WarningIcon } from '../../Icons';
-import {
-  TextField,
-  CheckboxField,
-  SelectField,
-  TabbedArrayField
-} from '../Fields';
+import { TabbedArrayField } from '../Fields';
 import EditEnvironmentLimitsFields from './EditEnvironmentLimitsFields';
 
 const EditEnvironmentLimitsForm = ({
-  environments,
+  environments = [],
   ...props
 }) => (
   <TabbedArrayField
@@ -29,5 +20,9 @@ const EditEnvironmentLimitsForm = ({
     id='environment-limits'
     remove />
 );
+
+EditEnvironmentLimitsForm.propTypes = {
+  environments: PropTypes.array
+};
 
 export default EditEnvironmentLimitsForm;

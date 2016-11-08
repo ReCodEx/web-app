@@ -1,20 +1,12 @@
 import React, { PropTypes } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { Field, FieldArray } from 'redux-form';
-import { AddIcon, WarningIcon } from '../../Icons';
-import { Table } from 'react-bootstrap';
-import {
-  TextField,
-  CheckboxField,
-  SelectField,
-  TabbedArrayField
-} from '../Fields';
+import { TextField } from '../Fields';
 import EditHardwareGroupLimits from '../EditHardwareGroupLimits';
 
 const EditEnvironmentLimitsFields = ({ prefix, i, environments }) => {
   const {
     environment,
-    hardwareGroups,
     limits
   } = environments[i];
   const { runtimeEnvironment: runtime } = environment;
@@ -32,12 +24,6 @@ const EditEnvironmentLimitsFields = ({ prefix, i, environments }) => {
         name={`${prefix}.environment.name`}
         component={TextField}
         label={<FormattedMessage id='app.editEnvironmentLimitsForm.localized.name' defaultMessage='Environment name:' />} />
-
-      <Field
-        name={`${prefix}.environment.hardwareGroup`}
-        component={SelectField}
-        options={hardwareGroups.map(group => ({ key: group, name: group }))}
-        label={<FormattedMessage id='app.editEnvironmentLimitsForm.localized.hardwareGroup' defaultMessage='Hardware group:' />} />
 
       <FieldArray
         name={`${prefix}.limits`}

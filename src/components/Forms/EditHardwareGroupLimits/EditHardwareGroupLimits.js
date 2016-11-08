@@ -1,15 +1,5 @@
-import React, { Component } from 'react';
-import { FormattedMessage } from 'react-intl';
-import { Field } from 'redux-form';
-import { Alert, Button, Tabs, Tab } from 'react-bootstrap';
-import Confirm from '../Confirm';
-import { AddIcon, WarningIcon } from '../../Icons';
-import {
-  TextField,
-  CheckboxField,
-  SelectField,
-  TabbedArrayField
-} from '../Fields';
+import React, { PropTypes } from 'react';
+import { TabbedArrayField } from '../Fields';
 
 import HardwareGroupFields from './HardwareGroupFields';
 
@@ -26,5 +16,9 @@ const EditHardwareGroupLimits = ({
     remove={false}
     ContentComponent={HardwareGroupFields} />
 );
+
+EditHardwareGroupLimits.propTypes = {
+  limits: PropTypes.array
+};
 
 export default EditHardwareGroupLimits;

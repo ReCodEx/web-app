@@ -2,13 +2,7 @@ import React, { PropTypes } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { Field } from 'redux-form';
 import { Row, Col } from 'react-bootstrap';
-import { AddIcon, WarningIcon } from '../../Icons';
-import {
-  TextField,
-  CheckboxField,
-  SelectField,
-  TabbedArrayField
-} from '../Fields';
+import { BytesTextField, SecondsTextField } from '../Fields';
 
 const HardwareGroupFields = ({ prefix, i, limits }) => {
   const { tests } = limits[i];
@@ -23,7 +17,7 @@ const HardwareGroupFields = ({ prefix, i, limits }) => {
             <div key={k}>
               <Field
                 name={`${prefix}.tests.${testName}.${taskId}.time`}
-                component={TextField}
+                component={SecondsTextField}
                 label={
                   <FormattedMessage
                     id='app.hardwareGroupFields.timeLimit'
@@ -32,7 +26,7 @@ const HardwareGroupFields = ({ prefix, i, limits }) => {
                 } />
               <Field
                 name={`${prefix}.tests.${testName}.${taskId}.memory`}
-                component={TextField}
+                component={BytesTextField}
                 label={
                   <FormattedMessage
                     id='app.hardwareGroupFields.memoryLimit'

@@ -1,17 +1,14 @@
-import React, { PropTypes, Component } from 'react';
+import React, { PropTypes } from 'react';
 import { canUseDOM } from 'exenv';
-import { reduxForm, Field, FieldArray, change } from 'redux-form';
+import { reduxForm, Field, FieldArray } from 'redux-form';
 import { FormattedMessage } from 'react-intl';
-import { Button, Alert, HelpBlock, Tabs, Tab } from 'react-bootstrap';
+import { Alert, HelpBlock } from 'react-bootstrap';
 import isNumeric from 'validator/lib/isNumeric';
 
-import { LoadingIcon, SuccessIcon, AddIcon, WarningIcon } from '../../Icons';
 import FormBox from '../../AdminLTE/FormBox';
-import { DatetimeField, TextField, TextAreaField, MarkdownTextAreaField, CheckboxField, SourceCodeField, LanguageSelectField } from '../Fields';
+import { DatetimeField, TextField, CheckboxField, SourceCodeField } from '../Fields';
 import LocalizedAssignmentsFormField from '../LocalizedAssignmentsFormField';
 import SubmitButton from '../SubmitButton';
-import { validateRegistrationData } from '../../../redux/modules/users';
-import { getJsData } from '../../../redux/helpers/resourceManager';
 
 if (canUseDOM) {
   require('codemirror/mode/yaml/yaml');
@@ -128,7 +125,16 @@ const EditAssignmentForm = ({
 EditAssignmentForm.propTypes = {
   initialValues: PropTypes.object.isRequired,
   values: PropTypes.object,
-  handleSubmit: PropTypes.func.isRequired
+  handleSubmit: PropTypes.func.isRequired,
+  submitting: PropTypes.bool,
+  submitFailed: PropTypes.bool,
+  submitSucceeded: PropTypes.bool,
+  invalid: PropTypes.bool,
+  formValues: PropTypes.shape({
+    firstDeadline: PropTypes.oneOfType([ PropTypes.number, PropTypes.object ]), // object == moment.js instance
+    allowSecondDeadline: PropTypes.bool,
+    localizedAssignments: PropTypes.array
+  })
 };
 
 const isNonNegativeInteger = (n) =>
