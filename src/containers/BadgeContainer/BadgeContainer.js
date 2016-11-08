@@ -23,7 +23,7 @@ const BadgeContainer = ({
 );
 
 BadgeContainer.propTypes = {
-  user: PropTypes.object.isRequired,
+  user: PropTypes.object,
   expiration: PropTypes.number.isRequired,
   logout: PropTypes.func.isRequired
 };
@@ -37,7 +37,5 @@ export default connect(
     user: loggedInUserSelector(state),
     expiration: accessTokenExpiration(state)
   }),
-  {
-    logout
-  }
+  { logout }
 )(BadgeContainer);

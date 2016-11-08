@@ -6,9 +6,10 @@ const SourceCodeInfoBox = ({
   id,
   name,
   size,
-  uploadedAt
+  uploadedAt,
+  onClick
 }) => (
-  <div className='info-box'>
+  <div className='info-box' onClick={onClick}>
     <span className='info-box-icon bg-yellow'>
       <Icon name='files-o' />
     </span>
@@ -18,5 +19,13 @@ const SourceCodeInfoBox = ({
     </div>
   </div>
 );
+
+SourceCodeInfoBox.propTypes = {
+  id: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
+  size: PropTypes.number.isRequired,
+  uploadedAt: PropTypes.string.isRequired,
+  onClick: PropTypes.func
+};
 
 export default SourceCodeInfoBox;

@@ -5,15 +5,13 @@ import 'isomorphic-fetch';
 import React from 'react';
 import { renderToString } from 'react-dom/server';
 import Express from 'express';
-import Promise from 'bluebird';
 import Helmet from 'react-helmet';
 import cookieParser from 'cookie-parser';
 
 import { match, RouterContext } from 'react-router';
 
-import { IntlProvider, addLocaleData } from 'react-intl';
+import { addLocaleData } from 'react-intl';
 import cs from 'react-intl/locale-data/cs';
-import messages from './locales/cs';
 
 import { Provider } from 'react-redux';
 import { syncHistoryWithStore } from 'react-router-redux';
@@ -28,7 +26,7 @@ addLocaleData([ ...cs ]);
  * some basic middleware for tempaltes and static file serving.
  */
 
-const BUNDLE = process.env.BUNDLE || '/bundle.js';
+const bundle = process.env.BUNDLE || '/bundle.js';
 
 let app = new Express();
 app.set('view engine', 'ejs');
@@ -38,7 +36,7 @@ app.use(cookieParser());
 app.get('*', (req, res) => {
   const memoryHistory = createHistory(req.originalUrl);
   // Extract the accessToken from the cookies for authenticated API requests from the server.
-  const token = req.cookies.accessToken; // undefined === the user is not logged in
+  const token = req.cookies.recodex_accessToken; // undefined === the user is not logged in
   const store = configureStore(memoryHistory, undefined, token);
   const history = syncHistoryWithStore(memoryHistory, store);
   const location = req.originalUrl;
@@ -53,6 +51,9 @@ app.get('*', (req, res) => {
       // this should never happen but just for sure - if router failed
       res.status(404).send('Not found');
     } else {
+      // const loadAsync = renderProps.components
+
+
       let html = renderToString(
         <Provider store={store}>
           <RouterContext {...renderProps} />
@@ -64,7 +65,8 @@ app.get('*', (req, res) => {
         html,
         head,
         reduxState: JSON.stringify(store.getState()),
-        bundle: '/bundle.js'
+        bundle,
+        style: '/style.css'
       });
     }
   });

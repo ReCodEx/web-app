@@ -1,17 +1,12 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { push } from 'react-router-redux';
 import SubmitSolution from '../../components/Submissions/SubmitSolution';
 import EvaluationProgressContainer from '../EvaluationProgressContainer';
 
 import {
   getNote,
-  getUploadingFiles,
   getUploadedFiles,
-  getRemovedFiles,
-  getFailedFiles,
   isProcessing,
-  isSubmitting,
   isSending,
   hasFailed,
   canSubmit,
@@ -20,16 +15,7 @@ import {
 } from '../../redux/selectors/submission';
 
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
-
-import {
-  submissionStatus,
-  changeNote,
-  uploadFile,
-  removeFile,
-  returnFile,
-  removeFailedFile,
-  submitSolution
-} from '../../redux/modules/submission';
+import { cancel, changeNote, submitSolution } from '../../redux/modules/submission';
 
 class SubmitSolutionContainer extends Component {
 
@@ -47,11 +33,10 @@ class SubmitSolutionContainer extends Component {
 
   render = () => {
     const {
-      isOpen,
-      onClose,
+      isOpen = false,
+      cancel,
       reset,
       assignmentId,
-      note,
       changeNote,
       canSubmit,
       hasFailed,
@@ -62,7 +47,7 @@ class SubmitSolutionContainer extends Component {
     } = this.props;
 
     const {
-      links: { SUBMISSION_DETAIL_URI_FACTORY, ASSIGNMENT_DETAIL_URI_FACTORY }
+      links: { SUBMISSION_DETAIL_URI_FACTORY }
     } = this.context;
 
     return (
@@ -70,12 +55,11 @@ class SubmitSolutionContainer extends Component {
         <SubmitSolution
           isOpen={isOpen}
           canSubmit={canSubmit}
-          isSubmitting={isSubmitting}
           isSending={isSending}
           hasFailed={hasFailed}
           reset={reset}
           saveNote={changeNote}
-          onClose={onClose}
+          onClose={cancel}
           submitSolution={this.submit} />
 
         <EvaluationProgressContainer
@@ -93,13 +77,30 @@ SubmitSolutionContainer.contextTypes = {
   links: PropTypes.object
 };
 
+SubmitSolutionContainer.propTypes = {
+  reset: PropTypes.func.isRequired,
+  isOpen: PropTypes.bool,
+  cancel: PropTypes.func.isRequired,
+  note: PropTypes.string,
+  assignmentId: PropTypes.string.isRequired,
+  changeNote: PropTypes.func.isRequired,
+  canSubmit: PropTypes.bool,
+  hasFailed: PropTypes.bool,
+  isProcessing: PropTypes.bool,
+  isSending: PropTypes.bool,
+  submissionId: PropTypes.string,
+  monitor: PropTypes.object,
+  onSubmit: PropTypes.func,
+  submitSolution: PropTypes.func.isRequired,
+  attachedFiles: PropTypes.array
+};
+
 export default connect(
   state => ({
     userId: loggedInUserIdSelector(state),
     note: getNote(state),
     attachedFiles: getUploadedFiles(state).toJS(),
     isProcessing: isProcessing(state),
-    isSubmitting: isSubmitting(state),
     isSending: isSending(state),
     hasFailed: hasFailed(state),
     canSubmit: canSubmit(state),
@@ -108,6 +109,7 @@ export default connect(
   }),
   (dispatch, props) => ({
     changeNote: (note) => dispatch(changeNote(note)),
+    cancel: () => dispatch(cancel()),
     submitSolution: (note, files) => dispatch(submitSolution(props.assignmentId, note, files))
   })
 )(SubmitSolutionContainer);

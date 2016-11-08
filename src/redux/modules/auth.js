@@ -132,15 +132,15 @@ const auth = (accessToken) => {
     [actionTypes.LOGIN_REQUEST]: (state, action) =>
       state.set('status', statusTypes.LOGGING_IN),
 
-    [actionTypes.LOGIN_SUCCESS]: (state, action) =>
+    [actionTypes.LOGIN_SUCCESS]: (state, {payload: { accessToken }}) =>
       state.set('status', statusTypes.LOGGED_IN)
-            .set('accessToken', decodeAndValidateAccessToken(action.payload.accessToken))
-            .set('userId', getUserId(decodeAndValidateAccessToken(action.payload.accessToken))),
+            .set('accessToken', decodeAndValidateAccessToken(accessToken))
+            .set('userId', getUserId(decodeAndValidateAccessToken(accessToken))),
 
-    [registrationActionTypes.CREATE_ACCOUNT_FULFILLED]: (state, action) =>
+    [registrationActionTypes.CREATE_ACCOUNT_FULFILLED]: (state, {payload: { accessToken }}) =>
       state.set('status', statusTypes.LOGGED_IN)
-            .set('accessToken', decodeAndValidateAccessToken(action.payload.accessToken))
-            .set('userId', getUserId(decodeAndValidateAccessToken(action.payload.accessToken))),
+            .set('accessToken', decodeAndValidateAccessToken(accessToken))
+            .set('userId', getUserId(decodeAndValidateAccessToken(accessToken))),
 
     [actionTypes.LOGIN_FAILIURE]: (state, action) =>
       state.set('status', statusTypes.LOGIN_FAILED)

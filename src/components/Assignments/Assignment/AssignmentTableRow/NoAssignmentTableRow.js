@@ -6,7 +6,7 @@ const NoAssignmentTableRow = ({
 }) => (
   <tr>
     <td className='text-center' colSpan={showGroup ? 5 : 4}>
-      <FormattedMessage id='app.assignmentsTable.noAssignments' id='There are no assignments.' />
+      <FormattedMessage id='app.assignmentsTable.noAssignments' defaultMessage='There are no assignments.' />
     </td>
   </tr>
 );

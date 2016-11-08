@@ -4,13 +4,15 @@ import { connect } from 'react-redux';
 import { isLoading, hasFailed, isReady } from '../../redux/helpers/resourceManager';
 import { postComment, repostComment, togglePrivacy, fetchThreadIfNeeded } from '../../redux/modules/comments';
 import { loggedInUserId } from '../../redux/selectors/auth';
-import { loggedInUserDataSelector } from '../../redux/selectors/users';
+import { loggedInUserSelector } from '../../redux/selectors/users';
 import { commentsThreadSelector } from '../../redux/selectors/comments';
 
 import CommentThread, {
   LoadingCommentThread,
   FailedCommentThread
 } from '../../components/AdminLTE/Comments/CommentThread';
+
+import ResourceRenderer from '../../components/ResourceRenderer';
 
 class CommentThreadContainer extends Component {
 
@@ -37,21 +39,20 @@ class CommentThreadContainer extends Component {
       togglePrivacy
     } = this.props;
 
-    if (isLoading(thread)) {
-      return <LoadingCommentThread />;
-    }
-
-    if (hasFailed(thread)) {
-      return <FailedCommentThread />;
-    }
-
     return (
-      <CommentThread
-        comments={thread.getIn(['data', 'comments']).toJS()}
-        currentUserId={user.id}
-        addComment={user ? (text, isPrivate) => addComment(user, text, isPrivate) : null}
-        togglePrivacy={user ? (id) => togglePrivacy(id) : null}
-        repostComment={repostComment} />
+      <ResourceRenderer
+        resource={[ thread, user ]}
+        loading={<LoadingCommentThread />}
+        failed={<FailedCommentThread />}>
+        {(thread, user) => (
+          <CommentThread
+            comments={thread.comments}
+            currentUserId={user.id}
+            addComment={(text, isPrivate) => addComment(user, text, isPrivate)}
+            togglePrivacy={togglePrivacy}
+            repostComment={repostComment} />
+        )}
+      </ResourceRenderer>
     );
   }
 
@@ -67,7 +68,7 @@ CommentThreadContainer.propTypes = {
 
 export default connect(
   (state, { threadId }) => ({
-    user: loggedInUserDataSelector(state).toJS(),
+    user: loggedInUserSelector(state),
     thread: commentsThreadSelector(state, threadId)
   }),
   (dispatch, { threadId }) => ({

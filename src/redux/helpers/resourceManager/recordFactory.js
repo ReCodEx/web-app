@@ -44,9 +44,10 @@ export const getData = resource =>
  * @param   {object}      resource  Resource's data
  * @return  {Immutable.Map|null}
  */
-export const getJsData = resource =>
-  isReady(resource) ? getData(resource).toJS() : null;
-
+export const getJsData = resource => {
+  const data = isReady(resource) ? getData(resource) : null;
+  return (data && data.toJS) ? data.toJS() : data;
+};
 
 /**
  * @param   {object}      resource  Resource's data

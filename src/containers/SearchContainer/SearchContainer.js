@@ -2,11 +2,10 @@ import React, { PropTypes } from 'react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 
-import { searchExercises, searchStatus } from '../../redux/modules/search';
-import { getSearchStatus, getSearchResults, getSearchQuery } from '../../redux/selectors/search';
-
-import LeaveJoinGroupButtonContainer from '../LeaveJoinGroupButtonContainer';
 import Search from '../../components/Search';
+
+import { searchStatus } from '../../redux/modules/search';
+import { getSearchStatus, getSearchResults, getSearchQuery } from '../../redux/selectors/search';
 
 const SearchContainer = ({
   id,
@@ -29,10 +28,12 @@ const SearchContainer = ({
 );
 
 SearchContainer.propTypes = {
+  id: PropTypes.string.isRequired,
   search: PropTypes.func.isRequired,
   query: PropTypes.string,
   status: PropTypes.string,
-  exercises: ImmutablePropTypes.list.isRequired
+  exercises: ImmutablePropTypes.list.isRequired,
+  renderList: PropTypes.func.isRequired
 };
 
 const mapStateToProps = (state, { id }) => ({

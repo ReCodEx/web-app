@@ -32,10 +32,10 @@ const getTitle = (level) => {
       return <FormattedMessage id='app.passwordStrength.worst' defaultMessage='Unsatisfactory' />;
 
     case 1:
-      return <FormattedMessage id='app.passwordStrength.bad' defaultMessage='Bad' />;
+      return <FormattedMessage id='app.passwordStrength.bad' defaultMessage='Are you sure?' />;
 
     case 2:
-      return <FormattedMessage id='app.passwordStrength.somewhatOk' defaultMessage='Should be better' />;
+      return <FormattedMessage id='app.passwordStrength.somewhatOk' defaultMessage='You can do better.' />;
 
     case 3:
       return <FormattedMessage id='app.passwordStrength.ok' defaultMessage='OK' />;
@@ -44,9 +44,9 @@ const getTitle = (level) => {
       return <FormattedMessage id='app.passwordStrength.good' defaultMessage='Good' />;
 
     default:
-      return <FormattedMessage id='app.passwordStrength.unknown' defaultMessage='Unknown' />;
+      return <FormattedMessage id='app.passwordStrength.unknown' defaultMessage='...' />;
   }
-}
+};
 
 const PasswordStrength = ({
   input: {
@@ -59,6 +59,7 @@ const PasswordStrength = ({
     <ProgressBar
       bsStyle={getStyle(level)}
       now={getPercent(level)}
+      label={getTitle(level)}
       striped={level === 0}
       active={level === 0} />
   </FormGroup>

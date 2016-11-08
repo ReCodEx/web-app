@@ -6,6 +6,7 @@ import factory, { initialState } from '../helpers/resourceManager';
 import { createApiAction } from '../middleware/apiMiddleware';
 
 import { additionalActionTypes as groupsActionTypes } from './groups';
+import { actionTypes as authActionTypes } from './auth';
 
 const resourceName = 'users';
 var {

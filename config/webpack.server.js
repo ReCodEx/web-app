@@ -1,11 +1,12 @@
 const path = require('path');
 const webpack = require('webpack');
-const strip = require('strip-loader');
-const autoprefixer = require('autoprefixer');
 const fs = require('fs');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 // load variables from .env
 require('dotenv').config();
+
+const clientConfig = require('./webpack.config.js');
 
 var nodeModules = {};
 fs.readdirSync('node_modules')
@@ -23,20 +24,18 @@ module.exports = {
     filename: 'server.js',
     path: path.join(__dirname, '..', 'bin')
   },
-  module: {
-    loaders: [
-      { test: /\.jsx?$/, exclude: /node_modules/, loaders: [ 'babel' ] },
-      { test: /\.json$/, loader: 'json-loader' }
-    ]
+  resolve: {
+    alias: {
+      moment: 'moment/moment.js'
+    }
   },
-  postcss: [
-    autoprefixer({ browsers: ['last 2 versions'] })
-  ],
+  module: clientConfig.module,
   externals: nodeModules,
   plugins: [
+    new ExtractTextPlugin('style.css'),
     new webpack.DefinePlugin({
       'process.env': {
-        NODE_ENV: '\'' + process.env.NODE_ENV + '\'',
+        NODE_ENV: '\'production\'',
         API_BASE: '\'' + process.env.API_BASE + '\''
       }
     })

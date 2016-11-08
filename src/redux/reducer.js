@@ -4,12 +4,15 @@ import { reducer as formReducer } from 'redux-form';
 
 import auth, { actionTypes as authActionTypes } from './modules/auth';
 import assignments from './modules/assignments';
+import canSubmit from './modules/canSubmit';
 import comments from './modules/comments';
 import evaluationProgress from './modules/evaluationProgress';
 import exercises from './modules/exercises';
 import files from './modules/files';
+import filesContent from './modules/filesContent';
 import groups from './modules/groups';
 import instances from './modules/instances';
+import limits from './modules/limits';
 import notifications from './modules/notifications';
 import search from './modules/search';
 import sidebar from './modules/sidebar';
@@ -22,12 +25,15 @@ import users from './modules/users';
 const createRecodexReducers = (token) => ({
   auth: auth(token),
   assignments,
+  canSubmit,
   comments,
   evaluationProgress,
   exercises,
   files,
+  filesContent,
   groups,
   instances,
+  limits,
   notifications,
   search,
   sidebar,

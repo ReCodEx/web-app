@@ -19,25 +19,18 @@ class Register extends Component {
 
   componentWillMount = () => {
     this.checkIfIsDone(this.props);
-    Register.loadData(this.props);
+    this.props.loadAsync();
   };
 
-  componentWillReceiveProps = props => {
+  componentWillReceiveProps = (props) =>
     this.checkIfIsDone(props);
-  };
 
   checkIfIsDone = props => {
     const { hasSucceeded, push } = props;
     if (hasSucceeded) {
       const { links: { DASHBOARD_URI } } = this.context;
-      console.log(push);
-      console.log(DASHBOARD_URI);
       setTimeout(() => push(DASHBOARD_URI), 600);
     }
-  };
-
-  static loadData = ({ fetchInstances }) => {
-    fetchInstances();
   };
 
   render() {
@@ -49,8 +42,15 @@ class Register extends Component {
         title={<FormattedMessage id='app.registration.title' defaultMessage='Create a new ReCodEx account' />}
         description={<FormattedMessage id='app.registration.description' defaultMessage='Start using ReCodEx today' />}
         breadcrumbs={[
-          { text: <FormattedMessage id='app.homepage.title' />, link: HOME_URI },
-          { text: <FormattedMessage id='app.registration.title' /> }
+          {
+            text: <FormattedMessage id='app.homepage.title' />,
+            link: HOME_URI,
+            iconName: 'home'
+          },
+          {
+            text: <FormattedMessage id='app.registration.title' />,
+            iconName: 'user-plus'
+          }
         ]}>
         <Row>
           <Col lg={4} lgOffset={1} md={6} mdOffset={0} sm={8} smOffset={2}>
@@ -82,7 +82,7 @@ Register.contextTypes = {
 
 Register.propTypes = {
   instances: PropTypes.object.isRequired,
-  fetchInstances: PropTypes.func.isRequired,
+  loadAsync: PropTypes.func.isRequired,
   createAccount: PropTypes.func.isRequired,
   createExternalAccount: PropTypes.func.isRequired,
   isCreatingAccount: PropTypes.bool.isRequired,
@@ -98,11 +98,13 @@ export default connect(
     hasSucceeded: hasSucceeded(state)
   }),
   dispatch => ({
+    loadAsync: () => Promise.all([
+      dispatch(fetchInstances())
+    ]),
     createAccount: ({ firstName, lastName, email, password, instanceId }) =>
       dispatch(createAccount(firstName, lastName, email, password, instanceId)),
     createExternalAccount: ({ username, password, instanceId, serviceId}) =>
       dispatch(createExternalAccount(username, password, instanceId, serviceId)),
-    fetchInstances: () => dispatch(fetchInstances()),
     push: (url) => dispatch(push(url))
   })
 )(Register);

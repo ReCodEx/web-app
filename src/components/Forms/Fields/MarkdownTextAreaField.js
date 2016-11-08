@@ -2,16 +2,17 @@ import React, { Component, PropTypes } from 'react';
 import { FormattedMessage } from 'react-intl';
 import Collapse from 'react-collapse';
 import ReactMarkdown from 'react-markdown';
-import { Row, Col, FormGroup } from 'react-bootstrap';
-import TextAreaField from './TextAreaField';
-import Checkbox from '../Checkbox';
+import { Row, Col, FormGroup, HelpBlock } from 'react-bootstrap';
 
-const previewStyle = {
-  padding: 5,
-  background: '#eee',
-  marginBottom: 20,
-  borderBottom: '2px solid #ddd'
-};
+import SourceCodeField from './SourceCodeField';
+import OnOffCheckbox from '../OnOffCheckbox';
+import styles from './MarkdownTextAreaField.less';
+
+
+import { canUseDOM } from 'exenv';
+if (canUseDOM) {
+  require('codemirror/mode/markdown/markdown');
+}
 
 class MarkdownTextAreaField extends Component {
 
@@ -35,15 +36,24 @@ class MarkdownTextAreaField extends Component {
     const { showPreview } = this.state;
     return (
       <div>
-        <TextAreaField {...this.props}>
-          <Checkbox onOff controlId='togglePreview' checked={showPreview} onChange={() => this.toggleShowPreview()}>
-            <FormattedMessage id='app.markdownTextArea.showPreview' defaultMessage='Preview' />
-          </Checkbox>
-        </TextAreaField>
+        <SourceCodeField {...this.props} mode='markdown'>
+          <Row>
+            <Col sm={4}>
+              <OnOffCheckbox controlId='togglePreview' checked={showPreview} onChange={() => this.toggleShowPreview()}>
+                <FormattedMessage id='app.markdownTextArea.showPreview' defaultMessage='Preview' />
+              </OnOffCheckbox>
+            </Col>
+            <Col sm={8}>
+              <HelpBlock className='text-right'>
+                <FormattedMessage id='app.markdownTextArea.canUseMarkdown' defaultMessage='You can use markdown syntax in this field.' />
+              </HelpBlock>
+            </Col>
+          </Row>
+        </SourceCodeField>
         {showPreview && (
           <div>
             <h4><FormattedMessage id='app.markdownTextArea.preview' defaultMessage='Preview:' /></h4>
-            <div style={previewStyle}>
+            <div className={styles.preview}>
               {value.length === 0 && (<p><small>(<FormattedMessage id='app.markdownTextArea.empty' defaultMessage='Empty' />)</small></p>)}
               <ReactMarkdown source={value} />
             </div>

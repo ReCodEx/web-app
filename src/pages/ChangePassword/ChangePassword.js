@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import { canUseDOM } from 'exenv';
 import { FormattedMessage, FormattedRelative } from 'react-intl';
 import Helmet from 'react-helmet';
 import { connect } from 'react-redux';
@@ -38,7 +39,7 @@ class ChangePassword extends Component {
   componentWillMount = () => {
     this.checkIfIsDone(this.props);
 
-    if (typeof window !== 'undefined' && typeof window.location.hash === 'string') {
+    if (canUseDOM) {
       const hash = window.location.hash;
       if (hash.length === 0) {
         const { push } = this.props;
@@ -62,6 +63,9 @@ class ChangePassword extends Component {
     this.checkIfIsDone(props);
   };
 
+  /**
+   * Check if the operation was not carried out successfuly and redirect the user to the next step if so.
+   */
   checkIfIsDone = props => {
     const { hasSucceeded } = props;
     if (hasSucceeded) {
@@ -84,8 +88,15 @@ class ChangePassword extends Component {
         title={<FormattedMessage id='app.changePassword.title' defaultMessage='Change forgotten password' />}
         description={<FormattedMessage id='app.changePassword.description' defaultMessage='You can change your forgotten password in this form' />}
         breadcrumbs={[
-          { text: <FormattedMessage id='app.homepage.title' />, link: HOME_URI },
-          { text: <FormattedMessage id='app.changePassword.title' /> }
+          {
+            text: <FormattedMessage id='app.homepage.title' />,
+            link: HOME_URI,
+            iconName: 'home'
+          },
+          {
+            text: <FormattedMessage id='app.changePassword.title' />,
+            iconName: 'shield'
+          }
         ]}>
         <Row>
           <Col md={6} mdOffset={3} sm={8} smOffset={2}>

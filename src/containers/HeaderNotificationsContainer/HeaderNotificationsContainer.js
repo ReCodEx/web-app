@@ -29,7 +29,8 @@ class HeaderNotificationsContainer extends Component {
   };
 
   clickAnywhere = () => {
-    if (this.state.isOpen === true && this.isClickingSomewhereElse()) {
+    if (this.state.isOpen === true &&
+      this.isClickingSomewhereElse()) {
       this.close();
     }
   };
@@ -43,7 +44,7 @@ class HeaderNotificationsContainer extends Component {
    * between now and the time of last click on the container is defined.
    */
   isClickingSomewhereElse = () =>
-    Date.now() - this.lastClick > 10;
+    Date.now() - this.lastClick > 50;
 
   //
   //
@@ -51,19 +52,25 @@ class HeaderNotificationsContainer extends Component {
   toggleOpen = () => {
     this.state.isOpen ? this.close() : this.open();
     this.markClick();
-  }
-  toggleShowAll = () => this.setState({ showAll: !this.state.showAll });
+  };
+
+  toggleShowAll = (e) => {
+    e.preventDefault();
+    this.markClick();
+    this.setState({ showAll: !this.state.showAll });
+  };
 
   close = () => {
     this.setState({ isOpen: false, showAll: false });
     this.props.hideAll();
   };
+
   open = () => this.setState({ isOpen: true });
 
   componentWillReceiveProps = (newProps) => {
-    // if (this.props.newNotifications.size < newProps.newNotifications.size) {
-    //   this.setState({ isOpen: true }); // force open the notifications dropdown - there are some new notifications
-    // }
+    if (this.props.newNotifications.size === newProps.newNotifications.size - 1) {
+      this.setState({ isOpen: true }); // force open the notifications dropdown - there are some new notifications
+    }
   };
 
   render() {

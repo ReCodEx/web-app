@@ -23,20 +23,14 @@ import { supervisorOfSelector } from '../../redux/selectors/groups';
 class Exercise extends Component {
 
   componentWillMount() {
-    this.loadData(this.props);
+    this.props.loadAsync();
   }
 
   componentWillReceiveProps(newProps) {
     if (this.props.params.instanceId !== newProps.params.instanceId) {
-      this.loadData(newProps);
+      newProps.loadAsync();
     }
   }
-
-  loadData = ({
-    fetchExerciseIfNeeded
-  }) => {
-    fetchExerciseIfNeeded();
-  };
 
   getTitle = (exercise) =>
     isReady(exercise)
@@ -63,7 +57,13 @@ class Exercise extends Component {
     return (
       <PageContent
         title={this.getTitle(exercise)}
-        description={<FormattedMessage id='app.exercise.description' defaultMessage='Exercise overview' />}>
+        description={<FormattedMessage id='app.exercise.description' defaultMessage='Exercise overview' />}
+        breadcrumbs={[
+          {
+            text: <FormattedMessage id='app.exercise.description' defaultMessage="Exercise overview" />,
+            iconName: 'lightbulb-o'
+          }
+        ]}>
         <Row>
           <Col sm={6}>
             <ResourceRenderer
@@ -117,7 +117,9 @@ export default connect(
     };
   },
   (dispatch, { params: { exerciseId: id } }) => ({
-    fetchExerciseIfNeeded: () => dispatch(fetchExerciseIfNeeded(id)),
+    loadAsync: () => Promise.all([
+      dispatch(fetchExerciseIfNeeded(id))
+    ]),
     assignExercise: (groupId) => dispatch(assignExercise(groupId, id)),
     push: (url) => dispatch(push(url))
   })

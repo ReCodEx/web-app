@@ -1,22 +1,49 @@
 import React, { PropTypes } from 'react';
-// import Highlight from 'react-highlight/lib/optimized';
-import Highlight from 'react-highlight';
-import addLineNumbers from 'add-line-numbers';
+import { canUseDOM } from 'exenv';
+
+let CodeMirror = null;
+
+if (canUseDOM) {
+  CodeMirror = require('react-codemirror');
+  require('codemirror/mode/clike/clike');
+  require('codemirror/mode/pascal/pascal');
+  require('codemirror/lib/codemirror.css');
+  require('codemirror/theme/monokai.css');
+}
+
+const getMode = ext => {
+  switch (ext) {
+    case 'c':
+    case 'cpp':
+    case 'h':
+    case 'hpp':
+    case 'java':
+    case 'cs':
+      return 'clike';
+
+    default:
+      return ext;
+  }
+};
+
 
 const SourceCodeViewer = ({
   name,
   content = '',
-  lineNumbers = true
-}) => (
-  <div style={{
-    tabSize: 2
-  }}>
-    <Highlight className={name.split('.').pop()}>
-      {content && lineNumbers
-        ? addLineNumbers(content, 1, '|\t')
-        : content}
-    </Highlight>
-  </div>
-);
+  lineNumbers = true,
+  lines = 20
+}) =>
+  CodeMirror
+    ? (
+      <CodeMirror
+        value={content}
+        disabled
+        options={{
+          lineNumbers,
+          mode: getMode(name.split('.').pop()),
+          viewportMargin: lines
+        }} />
+    )
+  : null;
 
 export default SourceCodeViewer;

@@ -9,15 +9,10 @@ export const getFile = id =>
     files => files.getIn(['resources', id])
   );
 
-export const getContent = id =>
-  createSelector(
-    getFiles,
-    files => files.getIn(['content', id, 'data'])
-  );
+const getContent = state => state.filesContent;
 
-
-export const getSourceCode = id =>
+export const getFilesContent  = id =>
   createSelector(
-    [ getFile(id), getContent(id) ],
-    (file, content) => isReady(file) ? file.setIn(['data', 'content'], content) : null
+    getContent,
+    files => files.getIn(['resources', id])
   );

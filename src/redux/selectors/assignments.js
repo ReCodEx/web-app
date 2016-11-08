@@ -2,14 +2,14 @@ import { createSelector } from 'reselect';
 import { List } from 'immutable';
 import { getSubmissions } from './submissions';
 
-export const getAssignments = state => state.assignments;
+export const getAssignments = (state) => state.assignments;
 export const createAssignmentSelector = () =>
   createSelector(
     [ getAssignments, (state, id) => id ],
     (assignments, id) => assignments.getIn(['resources', id])
   );
 
-export const getAssignment = id =>
+export const getAssignment = (id) =>
   createSelector(
     getAssignments,
     assignments => assignments.getIn([ 'resources', id ])
@@ -30,8 +30,3 @@ export const createGetUsersSubmissionsForAssignment = () =>
     (submissionIds, submissions) => submissionIds.map(id => submissions.get(id))
   );
 
-export const canSubmitSolution = (assignmentId) =>
-  createSelector(
-    getAssignment(assignmentId),
-    assignment => assignment && assignment.getIn([ 'data', 'canReceiveSubmissions' ]) === true
-  );

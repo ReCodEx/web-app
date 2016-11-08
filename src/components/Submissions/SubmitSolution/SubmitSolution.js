@@ -16,7 +16,6 @@ const SubmitSolution = ({
   onClose,
   reset,
   canSubmit,
-  isSubmitting,
   isSending,
   hasFailed,
   saveNote,
@@ -89,7 +88,12 @@ SubmitSolution.propTypes = {
   onClose: PropTypes.func.isRequired,
   reset: PropTypes.func.isRequired,
   canSubmit: PropTypes.bool.isRequired,
-  submitSolution: PropTypes.func.isRequired
+  submitSolution: PropTypes.func.isRequired,
+  isOpen: PropTypes.bool,
+  saveNote: PropTypes.func.isRequired,
+  hasFailed: PropTypes.bool,
+  isProcessing: PropTypes.bool,
+  isSending: PropTypes.bool
 };
 
 export default SubmitSolution;

@@ -1,40 +1,45 @@
 import React, { PropTypes } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { LoadingIcon, WarningIcon } from '../Icons';
-import { isLoading, isReady, hasFailed, getJsData } from '../../redux/helpers/resourceManager';
+import { isLoading, hasFailed, getJsData } from '../../redux/helpers/resourceManager';
 
-const defaultLoading = (
+const defaultLoading = (noIcons) => (
   <span>
-    <LoadingIcon /> <FormattedMessage id='app.resourceRenderer.loading' defaultMessage='Loading ...' />
+    {!noIcons && <LoadingIcon />} <FormattedMessage id='app.resourceRenderer.loading' defaultMessage='Loading ...' />
   </span>
 );
 
-const defaultFailed = (
+const defaultFailed = (noIcons) => (
   <span>
-    <WarningIcon /> <FormattedMessage id='app.resourceRenderer.loadingFailed' defaultMessage='Loading failed.' />
+    {!noIcons && <WarningIcon />} <FormattedMessage id='app.resourceRenderer.loadingFailed' defaultMessage='Loading failed.' />
   </span>
 );
 
 const ResourceRenderer = ({
-  loading = defaultLoading,
-  failed = defaultFailed,
+  noIcons = false,
+  loading = defaultLoading(noIcons),
+  failed = defaultFailed(noIcons),
   children: ready,
   resource,
+  hiddenUntilReady = false,
   forceLoading = false
-}) =>
-  (!resource || isLoading(resource) || forceLoading)
-    ? loading
-    : hasFailed(resource)
-      ? failed
-      : typeof ready === 'function'
-        ? ready(getJsData(resource))
-        : React.cloneElement(ready, getJsData(resource));
+}) => {
+  const resources = Array.isArray(resource) ? resource : [resource];
+  return (!resource || resources.some(isLoading) || forceLoading)
+    ? hiddenUntilReady ? null : loading
+    : resources.some(hasFailed)
+      ? hiddenUntilReady ? null : failed
+      : ready(...resources.map(getJsData));
+};
 
 ResourceRenderer.propTypes = {
   loading: PropTypes.element,
   failed: PropTypes.element,
-  children: PropTypes.oneOfType([ PropTypes.func, PropTypes.element ]).isRequired,
-  resource: PropTypes.object
+  children: PropTypes.func.isRequired,
+  resource: PropTypes.oneOfType([ PropTypes.object, PropTypes.array ]),
+  hiddenUntilReady: PropTypes.bool,
+  forceLoading: PropTypes.bool,
+  noIcons: PropTypes.bool
 };
 
 export default ResourceRenderer;

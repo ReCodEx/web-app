@@ -23,11 +23,6 @@ export const loggedInUserSelector = createSelector(
   (users, id) => users.get(id)
 );
 
-export const loggedInUserDataSelector = createSelector(
-  loggedInUserSelector,
-  user => user.get('data')
-);
-
 export const memberOfInstancesIdsSelector = userId =>
   createSelector(
     getUser(userId),
@@ -77,10 +72,10 @@ export const usersGroupsIds = userId =>
   );
 
 export const notificationsSelector = createSelector(
-  loggedInUserDataSelector,
-  userData =>
-    userData && userData.get('groupsStats')
-      ? userData.get('groupsStats').reduce(
+  loggedInUserSelector,
+  user =>
+    user && user.get('data') && user.getIn(['data', 'groupsStats'])
+      ? user.getIn(['data', 'groupsStats']).reduce(
         (notifications, group) =>
           Object.assign({}, notifications, { [group.id]: group.stats.assignments.total - group.stats.assignments.completed - group.stats.assignments.missed }),
         {})

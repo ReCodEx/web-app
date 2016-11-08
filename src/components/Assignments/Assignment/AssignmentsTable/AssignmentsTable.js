@@ -1,10 +1,9 @@
 import React, { PropTypes } from 'react';
-import { List } from 'immutable';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 import { Table } from 'react-bootstrap';
 import { FormattedMessage } from 'react-intl';
-import Icon from 'react-fontawesome';
 
-import { isReady, isLoading, hasFailed, getJsData } from '../../../../redux/helpers/resourceManager';
+import { isReady, isLoading, getJsData } from '../../../../redux/helpers/resourceManager';
 import AssignmentTableRow, { NoAssignmentTableRow, LoadingAssignmentTableRow } from '../AssignmentTableRow';
 
 const AssignmentsTable = ({
@@ -40,8 +39,9 @@ const AssignmentsTable = ({
 );
 
 AssignmentsTable.propTypes = {
-  assignments: PropTypes.instanceOf(List).isRequired,
-  showGroup: PropTypes.bool
+  assignments: ImmutablePropTypes.list.isRequired,
+  showGroup: PropTypes.bool,
+  statuses: PropTypes.object
 };
 
 export default AssignmentsTable;

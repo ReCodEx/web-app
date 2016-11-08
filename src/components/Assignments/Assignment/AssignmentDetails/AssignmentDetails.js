@@ -1,26 +1,28 @@
 import React, { PropTypes } from 'react';
-import Box from '../../../AdminLTE/Box';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 import Icon from 'react-fontawesome';
-import { Grid, Row, Col, Table } from 'react-bootstrap';
-import ReactMarkdown from 'react-markdown';
-import { FormattedDate, FormattedTime, FormattedMessage } from 'react-intl';
+import { Table } from 'react-bootstrap';
+import { FormattedDate, FormattedTime, FormattedMessage, FormattedRelative } from 'react-intl';
 import classnames from 'classnames';
+import ResourceRenderer from '../../../ResourceRenderer';
+import { MaybeSucceededIcon } from '../../../Icons';
+import Box from '../../../AdminLTE/Box';
 
 const AssignmentDetails = ({
-  assignment,
-  isOpen,
+  isOpen = true,
+  submissionsCountLimit,
+  firstDeadline,
+  secondDeadline,
+  allowSecondDeadline,
   isAfterFirstDeadline,
-  isAfterSecondDeadline
+  isAfterSecondDeadline,
+  canSubmit
 }) => (
   <Box
-    title={<FormattedMessage id='app.assignment.title' defaultMessage='Exercise assignment' />}
+    title={<FormattedMessage id='app.assignment.title' defaultMessage='Details' />}
     noPadding
     collapsable
     isOpen={isOpen}>
-    <div style={{ padding: 20 }}>
-      <ReactMarkdown
-        source={assignment.description} />
-    </div>
     <Table responsive condensed>
       <tbody>
         <tr className={classnames({
@@ -37,11 +39,12 @@ const AssignmentDetails = ({
           </td>
           <td>
             <strong>
-              <FormattedDate value={new Date(assignment.deadline.first * 1000)} /> &nbsp; <FormattedTime value={new Date(assignment.deadline.first * 1000)} />
+              <FormattedDate value={new Date(firstDeadline * 1000)} /> &nbsp; <FormattedTime value={new Date(firstDeadline * 1000)} />
             </strong>
+            {' '}(<FormattedRelative value={new Date(firstDeadline * 1000)} />)
           </td>
         </tr>
-        {assignment.deadline.second && (
+        {allowSecondDeadline && (
           <tr className={classnames({
             'text-danger': isAfterSecondDeadline
           })}>
@@ -56,8 +59,9 @@ const AssignmentDetails = ({
             </td>
             <td>
               <strong>
-                <FormattedDate value={new Date(assignment.deadline.second * 1000)} /> &nbsp; <FormattedTime value={new Date(assignment.deadline.second * 1000)} />
+                <FormattedDate value={new Date(secondDeadline * 1000)} /> &nbsp; <FormattedTime value={new Date(secondDeadline * 1000)} />
               </strong>
+              {' '}(<FormattedRelative value={new Date(secondDeadline * 1000)} />)
             </td>
           </tr>)}
         <tr>
@@ -67,7 +71,20 @@ const AssignmentDetails = ({
           <td>
             <FormattedMessage id='app.assignment.submissionsCountLimit' defaultMessage='Submission count limit:' />
           </td>
-          <td>{assignment.submissionsCountLimit === null ? '-' : assignment.submissionsCountLimit}</td>
+          <td>{submissionsCountLimit === null ? '-' : submissionsCountLimit}</td>
+        </tr>
+        <tr>
+          <td className='text-center'>
+            <Icon name='unlock-alt' />
+          </td>
+          <td>
+            <FormattedMessage id='app.assignment.canSubmit' defaultMessage='You can submit more solutions:' />
+          </td>
+          <td>
+            <ResourceRenderer resource={canSubmit}>
+              {canSubmit => <MaybeSucceededIcon success={canSubmit} />}
+            </ResourceRenderer>
+          </td>
         </tr>
       </tbody>
     </Table>
@@ -75,7 +92,14 @@ const AssignmentDetails = ({
 );
 
 AssignmentDetails.propTypes = {
-  assignment: PropTypes.object.isRequired
+  isOpen: PropTypes.bool,
+  submissionsCountLimit: PropTypes.number.isRequired,
+  firstDeadline: PropTypes.number.isRequired,
+  secondDeadline: PropTypes.number,
+  allowSecondDeadline: PropTypes.bool.isRequired,
+  isAfterFirstDeadline: PropTypes.bool.isRequired,
+  isAfterSecondDeadline: PropTypes.bool.isRequired,
+  canSubmit: ImmutablePropTypes.map.isRequired
 };
 
 export default AssignmentDetails;
