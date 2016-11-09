@@ -29,6 +29,20 @@ export const removeToken = () => {
   }
 };
 
+export const getToken = () => {
+  if (typeof localStorage !== 'undefined') {
+    const token = localStorage.getItem(LOCAL_STORAGE_KEY);
+    storeToken(token); // make sure the token is stored in cookies for page refreshes
+    return token;
+  }
+
+  if (typeof document !== 'undefined') {
+    cookies.get(COOKIES_KEY);
+  }
+
+  return null;
+};
+
 const middleware = store => next => action => {
   // manage access token storage
   switch (action.type) {
