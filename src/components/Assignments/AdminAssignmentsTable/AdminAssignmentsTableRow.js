@@ -4,7 +4,7 @@ import { FormattedDate, FormattedTime, FormattedMessage } from 'react-intl';
 import { Button } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 
-import { EditIcon, MaybeSucceededIcon } from '../../Icons';
+import { EditIcon, MaybePublicIcon } from '../../Icons';
 
 const AdminAssignmentTableRow = ({
   id,
@@ -15,13 +15,13 @@ const AdminAssignmentTableRow = ({
   secondDeadline
 }, {
   links: {
-    ASSIGNMENT_DETAIL_URI_FACTORYL: detail,
+    ASSIGNMENT_DETAIL_URI_FACTORY: detail,
     ASSIGNMENT_EDIT_URI_FACTORY: edit
   }
 }) => (
   <tr>
     <td className='text-center'>
-      <MaybeSucceededIcon success={isPublic} />
+      <MaybePublicIcon id={id} isPublic={isPublic} />
     </td>
     <td>
       <Link to={detail(id)}>{name}</Link>

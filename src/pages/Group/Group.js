@@ -159,7 +159,9 @@ class Group extends Component {
                 <SupervisorsView
                   group={data}
                   stats={stats}
-                  students={students} />)}
+                  students={students}
+                  statuses={statuses}
+                  assignments={assignments} />)}
 
               {isStudent && (
                 <StudentsView

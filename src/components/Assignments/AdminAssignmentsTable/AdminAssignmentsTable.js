@@ -1,4 +1,5 @@
 import React, { PropTypes } from 'react';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 import { List } from 'immutable';
 import { Table } from 'react-bootstrap';
 import { FormattedMessage } from 'react-intl';
@@ -9,7 +10,7 @@ import LoadingAssignmentTableRow from './LoadingAssignmentTableRow';
 import ResourceRenderer from '../../ResourceRenderer';
 
 const AdminAssignmentsTable = ({
-  assignments = []
+  assignments = List()
 }) => (
   <Table hover>
     <thead>
@@ -21,21 +22,23 @@ const AdminAssignmentsTable = ({
         <th><FormattedMessage id='app.adminAssignments.actions' defaultMessage='Actions' /></th>
       </tr>
     </thead>
-    <tbody>
-      <ResourceRenderer
-        resource={assignments}
-        loading={<LoadingAssignmentTableRow />}>
-        {assigments =>
-          assigments.length === 0
-            ? <NoAssignmentsTableRow />
-            : assigments.map(assignment => <AdminAssignmentsTableRow key={assignment.id} item={assignment} />)}
-      </ResourceRenderer>
-    </tbody>
+    <ResourceRenderer
+      resource={assignments.toArray()}
+      loading={<LoadingAssignmentTableRow />}>
+      {(...assignments) =>
+        assignments.length === 0
+          ? <tbody><NoAssignmentsTableRow /></tbody>
+          : (
+            <tbody>
+              {assignments.map(assignment => <AdminAssignmentsTableRow key={assignment.id} {...assignment} />)}
+            </tbody>
+          )}
+    </ResourceRenderer>
   </Table>
 );
 
 AdminAssignmentsTable.propTypes = {
-  assignments: PropTypes.instanceOf(List).isRequired,
+  assignments: ImmutablePropTypes.list.isRequired,
   showGroup: PropTypes.bool,
   statuses: PropTypes.object
 };
