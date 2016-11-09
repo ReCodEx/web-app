@@ -8,7 +8,7 @@ import AssignmentTableRow, { NoAssignmentTableRow, LoadingAssignmentTableRow } f
 
 const AssignmentsTable = ({
   assignments = [],
-  statuses = {},
+  statuses = [],
   showGroup = true
 }) => (
   <Table hover>
@@ -41,7 +41,7 @@ const AssignmentsTable = ({
 AssignmentsTable.propTypes = {
   assignments: ImmutablePropTypes.list.isRequired,
   showGroup: PropTypes.bool,
-  statuses: PropTypes.object
+  statuses: PropTypes.array
 };
 
 export default AssignmentsTable;

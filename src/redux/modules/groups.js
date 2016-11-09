@@ -1,8 +1,7 @@
-import { createAction, handleActions } from 'redux-actions';
-import { fromJS, Map, List } from 'immutable';
+import { handleActions } from 'redux-actions';
+import { fromJS, List } from 'immutable';
 
 import { addNotification } from './notifications';
-import { usersSelector } from '../selectors/users';
 import { createApiAction } from '../middleware/apiMiddleware';
 import factory, { initialState } from '../helpers/resourceManager';
 
@@ -151,12 +150,19 @@ const reducer = handleActions(Object.assign({}, reduceActions, {
     return state.updateIn([ 'resources', group.parentGroupId, 'data', 'childGroups' ], children => children.push(group.id));
   },
 
-  [additionalActionTypes.JOIN_GROUP_FULFILLED]: (state, { payload, meta: { groupId, userId } }) =>
-    state.updateIn(['resources', groupId, 'data', 'students'], students =>
-      students.push(
-        fromJS(payload.students.find(id => id === userId))
-      )
-    ),
+  [additionalActionTypes.JOIN_GROUP_PENDING]: (state, { payload, meta: { groupId, userId } }) =>
+    state.hasIn(['resources', groupId, 'data'])
+      ? state.updateIn(
+        ['resources', groupId, 'data', 'students'],
+        students => students.push(userId)
+      ) : state,
+
+  [additionalActionTypes.JOIN_GROUP_REJECTED]: (state, { payload, meta: { groupId, userId } }) =>
+    state.hasIn(['resources', groupId, 'data'])
+      ? state.updateIn(
+        ['resources', groupId, 'data', 'students'],
+        students => students.filter(id => id !== userId)
+      ) : state,
 
   [additionalActionTypes.LEAVE_GROUP_FULFILLED]: (state, { payload, meta: { groupId, userId } }) =>
     state.updateIn(['resources', groupId, 'data', 'students'], students =>

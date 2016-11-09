@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect';
-import { isReady, getData, getJsData } from '../helpers/resourceManager';
+import { getJsData } from '../helpers/resourceManager';
 
 const getStats = state => state.stats;
 
@@ -21,12 +21,6 @@ export const createGroupsStatsSelector = groupId =>
 const getGroupsStatsData = groupId =>
   createSelector(
     createGroupsStatsSelector(groupId),
-    getData
-  );
-
-const getGroupsStatsJsData = groupId =>
-  createSelector(
-    createGroupsStatsSelector(groupId),
     getJsData
   );
 
@@ -34,10 +28,8 @@ export const getStatuses = (groupId, userId) =>
   createSelector(
     getGroupsStatsData(groupId),
     groupsStats => {
-      const stats = groupsStats !== null ? groupsStats.toJS().find(stats => stats.userId === userId) || {} : {};
-      const {
-        statuses = {}
-      } = stats;
+      const stats = groupsStats !== null ? groupsStats.find(stats => stats.userId === userId) || {} : {};
+      const { statuses = [] } = stats;
       return statuses;
     },
   );
