@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { FormattedMessage } from 'react-intl';
+import { injectIntl, FormattedMessage } from 'react-intl';
 import { List } from 'immutable';
 import { connect } from 'react-redux';
 
@@ -79,13 +79,13 @@ class EvaluationProgressContainer extends Component {
 
   formatMessage = ({ command, task_state = 'OK', text = null }) => ({    // eslint-disable-line camelcase
     wasSuccessful: command !== 'TASK' || task_state === 'COMPLETED',      // eslint-disable-line camelcase
-    text: text || this.getRandomMessage(),
+    text: text || this.props.intl.formatMessage(this.getRandomMessage()),
     status: task_state // eslint-disable-line camelcase
   });
 
   getRandomMessage = () => {
     if (!this.availableMessages || this.availableMessages.length === 0) {
-      this.availableMessages = Object.assign([], randomMessages);
+      this.availableMessages = Object.assign([], Object.values(randomMessages));
     }
 
     const randomIndex = Math.floor(Math.random() * this.availableMessages.length);
@@ -168,7 +168,7 @@ EvaluationProgressContainer.propTypes = {
   monitor: PropTypes.shape({
     id: PropTypes.string.isRequired,
     url: PropTypes.string.isRequired
-  }).isRequired,
+  }),
   isFinished: PropTypes.bool.isRequired,
   submissionId: PropTypes.string,
   port: PropTypes.number,
@@ -179,12 +179,17 @@ EvaluationProgressContainer.propTypes = {
   link: PropTypes.string.isRequired,
   addMessage: PropTypes.func.isRequired,
   expectedTasksCount: PropTypes.number.isRequired,
-  progress: PropTypes.number.isRequired,
+  progress: PropTypes.shape({
+    completed: PropTypes.number.isRequired,
+    skipped: PropTypes.number.isRequired,
+    failed: PropTypes.number.isRequired
+  }),
   completedTask: PropTypes.func.isRequired,
   skippedTask: PropTypes.func.isRequired,
   failedTask: PropTypes.func.isRequired,
-  goToEvaluationDetails: PropTypes.func.isRequired,
-  messages: PropTypes.array
+  goToEvaluationDetails: PropTypes.func,
+  messages: PropTypes.object,
+  intl: PropTypes.object.isRequired
 };
 
 EvaluationProgressContainer.contextTypes = {
@@ -210,4 +215,6 @@ export default connect(
     failedTask,
     addMessage
   }
-)(EvaluationProgressContainer);
+)(
+  injectIntl(EvaluationProgressContainer)
+);
