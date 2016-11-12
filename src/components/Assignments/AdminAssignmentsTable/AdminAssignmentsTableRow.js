@@ -7,15 +7,17 @@ import { LinkContainer } from 'react-router-bootstrap';
 import { EditIcon, MaybeSucceededIcon } from '../../Icons';
 
 const AdminAssignmentTableRow = ({
-  id,
-  isPublic,
-  name,
-  allowSecondDeadline,
-  firstDeadline,
-  secondDeadline
+  item: {
+    id,
+    isPublic,
+    name,
+    allowSecondDeadline,
+    firstDeadline,
+    secondDeadline
+  }
 }, {
   links: {
-    ASSIGNMENT_DETAIL_URI_FACTORYL: detail,
+    ASSIGNMENT_DETAIL_URI_FACTORY: detail,
     ASSIGNMENT_EDIT_URI_FACTORY: edit
   }
 }) => (
@@ -50,13 +52,15 @@ const AdminAssignmentTableRow = ({
 );
 
 AdminAssignmentTableRow.propTypes = {
-  id: PropTypes.any.isRequired,
-  isPublic: PropTypes.bool.isRequired,
-  name: PropTypes.string.isRequired,
-  firstDeadline: PropTypes.number.isRequired,
-  allowSecondDeadline: PropTypes.bool.isRequired,
-  secondDeadline: PropTypes.number.isRequired,
-  groupId: PropTypes.string
+  item: PropTypes.shape({
+    id: PropTypes.any.isRequired,
+    isPublic: PropTypes.bool.isRequired,
+    name: PropTypes.string.isRequired,
+    firstDeadline: PropTypes.number.isRequired,
+    allowSecondDeadline: PropTypes.bool.isRequired,
+    secondDeadline: PropTypes.number.isRequired,
+    groupId: PropTypes.string
+  })
 };
 
 AdminAssignmentTableRow.contextTypes = {

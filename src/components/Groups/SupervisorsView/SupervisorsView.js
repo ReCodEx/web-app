@@ -54,7 +54,7 @@ SupervisorsView.propTypes = {
   group: PropTypes.object.isRequired,
   students: ImmutablePropTypes.list,
   stats: ImmutablePropTypes.map,
-  assignments: ImmutablePropTypes.list
+  assignments: ImmutablePropTypes.list.isRequired
 };
 
 export default SupervisorsView;
