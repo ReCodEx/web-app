@@ -16,6 +16,24 @@ const getTickORCheckTableCell = isOK => (
   </td>
 );
 
+const getTickORCheckTableCellOverlay = (isOK, ratio) => (
+  <td className={
+    classNames({
+      'text-center': true,
+      'text-success': isOK,
+      'text-danger': !isOK
+    })
+  }>
+    <OverlayTrigger placement='top' overlay={
+      <Tooltip id='ratio'>
+        <FormattedMessage id='app.submissions.testResultsTable.ratioTooltip' defaultMessage='Ratio:' /> {ratio}
+      </Tooltip>
+    }>
+      <Icon name={isOK ? 'check' : 'times'} />
+    </OverlayTrigger>
+  </td>
+);
+
 const TestResultsTable = ({ results }) => (
   <Table responsive>
     <thead>
@@ -68,7 +86,9 @@ const TestResultsTable = ({ results }) => (
       status,
       memoryExceeded,
       timeExceeded,
-      message
+      message,
+      timeRatio,
+      memoryRatio
     }) => (
       <tr key={testName}>
         {getTickORCheckTableCell(score === 1)}
@@ -107,8 +127,8 @@ const TestResultsTable = ({ results }) => (
             </OverlayTrigger>
           )}
         </td>
-        {getTickORCheckTableCell(memoryExceeded === false)}
-        {getTickORCheckTableCell(timeExceeded === false)}
+        {memoryRatio !== null ? getTickORCheckTableCellOverlay(memoryExceeded === false, memoryRatio) : getTickORCheckTableCell(memoryExceeded === false)}
+        {timeRatio !== null ? getTickORCheckTableCellOverlay(timeExceeded === false, timeRatio) : getTickORCheckTableCell(timeExceeded === false)}
       </tr>
     ))}
     </tbody>
