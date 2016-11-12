@@ -37,9 +37,15 @@ const SupervisorsView = ({
       </Box>
     </Col>
     <Col lg={6}>
-      <AdminAssignmentsTable
-        assignments={assignments}
-        showGroup={false} />
+      <Box
+        title={<FormattedMessage id='app.group.supervisorsView.assignments' defaultMessage='Assignments' />}
+        collapsable
+        noPadding
+        isOpen>
+        <AdminAssignmentsTable
+          assignments={assignments}
+          showGroup={false} />
+      </Box>
       <Box
         title={<FormattedMessage id='app.group.spervisorsView.addAssignment' defaultMessage='Add assignment' />}
         collapsable
