@@ -71,15 +71,14 @@ EditExercise.contextTypes = {
 };
 
 EditExercise.propTypes = {
-  exercise: ImmutablePropTypes.map.isRequired
 };
 
 export default connect(
   (state, { params: { exerciseId } }) => {
-    const assignmentSelector = getExercise(exerciseId);
+    const exerciseSelector = getExercise(exerciseId);
     const userId = loggedInUserIdSelector(state);
     return {
-      assignment: assignmentSelector(state),
+      exercise: exerciseSelector(state),
       submitting: isSubmitting(state),
       userId,
       isStudentOf: (groupId) => isSupervisorOf(userId, groupId)(state),
@@ -90,8 +89,7 @@ export default connect(
     push: (url) => dispatch(push(url)),
     reset: () => dispatch(reset('editExercise')),
     loadAsync: () => Promise.all([
-      dispatch(fetchExerciseIfNeeded(exerciseId)),
-      dispatch(fetchLimitsIfNeeded(exerciseId))
+      dispatch(fetchExerciseIfNeeded(exerciseId))
     ]),
     editExercise: (data) => {
       // convert deadline times to timestamps
@@ -101,8 +99,6 @@ export default connect(
       }
 
       return dispatch(editExercise(exerciseId, data));
-    },
-    editExerciseLimits: (data) =>
-      dispatch(editExerciseLimits(data))
+    }
   })
 )(EditExercise);

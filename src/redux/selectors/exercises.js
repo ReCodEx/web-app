@@ -11,3 +11,9 @@ export const exerciseSelector = exerciseId =>
     exercisesSelector,
     exercises => exercises.find(exercise => exercise.getIn(['data', 'id']) === exerciseId)
   );
+
+export const getExercise = (id) =>
+  createSelector(
+    getExercises,
+    exercises => exercises.getIn([ 'resources', id ])
+  );

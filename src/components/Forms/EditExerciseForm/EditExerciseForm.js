@@ -66,34 +66,17 @@ const EditExerciseForm = ({
       colored
       label={<FormattedMessage id='app.editExerciseForm.isPublic' defaultMessage='Supervisors can assign this exercise to students' />} />
 
-    <Field
-      name='description'
-      component={MarkdownTextAreaField}
-      label={<FormattedMessage id='app.editExerciseForm.assignment' defaultMessage='Assignment and description for the students:' />} />
-
-    <Field
-      name='assignment'
-      component={MarkdownTextAreaField}
-      label={<FormattedMessage id='app.editExerciseForm.assignment' defaultMessage='Assignment and description for the students:' />} />
-
-    <Field
-      name='scoreConfig'
-      component={SourceCodeField}
-      mode='yaml'
-      label={<FormattedMessage id='app.editExerciseForm.scoreConfig' defaultMessage='Score configuration:' />} />
-    <HelpBlock>Read more about <a href='/@todo'>score configuration</a> syntax.</HelpBlock>
-
     {/* */}
-
-    <Field
-      name='jobConfig'
-      component={SingleUploadField}
-      label={<FormattedMessage id='app.editExerciseForm.jobConfigFile' defaultMessage='Job configuration file' />} />
 
     <Field
       name='difficulty'
       component={SelectField}
-      label={<FormattedMessage id='app.editExerciseForm.jobConfigFile' defaultMessage='Job configuration file' />} />
+      options={[
+        { key: "easy", name: "Easy" },
+        { key: "medium", name: "Medium" },
+        { key: "hard", name: "Hard" },
+        ]}
+      label={<FormattedMessage id='app.editExerciseForm.difficulty' defaultMessage='Difficulty' />} />
 
   </FormBox>
 );
@@ -105,27 +88,12 @@ EditExerciseForm.propTypes = {
 };
 
 const validate = ({
-  name,
-  description,
-  assignment,
-  jobConfig
+  name
 }) => {
   const errors = {};
 
   if (!name) {
     errors['name'] = <FormattedMessage id='app.editExerciseForm.validation.emptyName' defaultMessage='Please fill the name of the assignment.' />;
-  }
-
-  if (!description) {
-    errors['description'] = <FormattedMessage id='app.editExerciseForm.validation.description' defaultMessage='Please fill the description of the assignment.' />;
-  }
-
-  if (!assignment) {
-    errors['assignment'] = <FormattedMessage id='app.editExerciseForm.validation.assignemt' defaultMessage='Please fill the assignment.' />;
-  }
-
-  if (!jobConfig) {
-    errors['jobConfig'] = <FormattedMessage id='app.editExerciseForm.validation.jobConfig' defaultMessage='Please add a job config file.' />;
   }
 
   return errors;
