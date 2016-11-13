@@ -21,6 +21,7 @@ export const linksFactory = lang => {
 
   // exercise details
   const EXERCISE_URI_FACTORY = id => `${prefix}/app/exercise/${id}`;
+  const EXERCISE_EDIT_URI_FACTORY = id => `${EXERCISE_URI_FACTORY(id)}/edit`;
 
   // assignments and solution submissions
   const ASSIGNMENT_DETAIL_URI_FACTORY = id => `${prefix}/app/assignment/${id}`;
@@ -38,7 +39,7 @@ export const linksFactory = lang => {
   return {
     HOME_URI, DASHBOARD_URI, LOGIN_URI, REGISTRATION_URI, LOGOUT_URI, RESET_PASSWORD_URI,
     INSTANCE_URI_FACTORY, GROUP_URI_FACTORY, USER_URI_FACTORY,
-    EXERCISE_URI_FACTORY,
+    EXERCISE_URI_FACTORY, EXERCISE_EDIT_URI_FACTORY,
     ASSIGNMENT_EDIT_URI_FACTORY, ASSIGNMENT_DETAIL_URI_FACTORY, SUBMIT_SOLUTION_URI_FACTORY,
     SUBMISSION_DETAIL_URI_FACTORY, SOURCE_CODE_DETAIL_URI_FACTORY,
     BUGS_URL

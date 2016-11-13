@@ -136,6 +136,7 @@
   "app.exercise.detailTitle": "Exercise description",
   "app.exercise.difficulty": "Difficulty",
   "app.exercise.loading": "Loading exercise's detail ...",
+  "app.exercise.editSettings": "Edit exercise settings",
   "app.exercises.difficultyIcon.easy": "Easy",
   "app.exercises.difficultyIcon.hard": "Hard",
   "app.exercises.difficultyIcon.medium": "Medium",

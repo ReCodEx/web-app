@@ -136,6 +136,7 @@
   "app.exercise.detailTitle": "Popis úlohy",
   "app.exercise.difficulty": "Obtížnost",
   "app.exercise.loading": "Načítají se detaily úlohy ...",
+  "app.exercise.editSettings": "Upravit nastavení úlohy",
   "app.exercises.difficultyIcon.easy": "Snadné",
   "app.exercises.difficultyIcon.hard": "Obtížné",
   "app.exercises.difficultyIcon.medium": "Průměrné",
