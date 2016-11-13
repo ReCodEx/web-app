@@ -20,7 +20,7 @@ import AssignmentDetails, {
   LoadingAssignmentDetails,
   FailedAssignmentDetails
 } from '../../components/Assignments/Assignment/AssignmentDetails';
-import { EditIcon } from '../../components/Icons';
+import { EditIcon, ResultsIcon } from '../../components/Icons';
 import LocalizedAssignments from '../../components/Assignments/Assignment/LocalizedAssignments';
 import SubmitSolutionButton from '../../components/Assignments/SubmitSolutionButton';
 import SubmitSolutionContainer from '../../containers/SubmitSolutionContainer';
@@ -60,7 +60,7 @@ class Assignment extends Component {
     } = this.props;
 
     const {
-      links: { ASSIGNMENT_EDIT_URI_FACTORY }
+      links: { ASSIGNMENT_EDIT_URI_FACTORY, SUPERVISOR_STATS_URI_FACTORY }
     } = this.context;
 
     return (
@@ -103,9 +103,13 @@ class Assignment extends Component {
                           <EditIcon /> <FormattedMessage id='app.assignment.editSettings' defaultMessage='Edit assignment settings' />
                         </Button>
                       </LinkContainer>
+                      <LinkContainer to={SUPERVISOR_STATS_URI_FACTORY(assignment.id)}>
+                        <Button bsStyle='primary' className='btn-flat'>
+                          <ResultsIcon /> <FormattedMessage id='app.assignment.viewResults' defaultMessage='View student results' />
+                        </Button>
+                      </LinkContainer>
                     </p>
                   )}
-
 
                 </div>
               </Col>
