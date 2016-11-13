@@ -52,11 +52,12 @@ class EditExercise extends Component {
           }
         ]}>
         <ResourceRenderer resource={exercise}>
-          {assignment => (
+          {exercise => (
             <div>
               <EditExerciseForm
                 initialValues={exercise}
-                onSubmit={editExercise} />
+                onSubmit={editExercise}
+                formValues={formValues}/>
             </div>
           )}
         </ResourceRenderer>
@@ -92,12 +93,6 @@ export default connect(
       dispatch(fetchExerciseIfNeeded(exerciseId))
     ]),
     editExercise: (data) => {
-      // convert deadline times to timestamps
-      data.firstDeadline = data.firstDeadline.unix();
-      if (data.secondDeadline) {
-        data.secondDeadline = data.secondDeadline.unix();
-      }
-
       return dispatch(editExercise(exerciseId, data));
     }
   })
