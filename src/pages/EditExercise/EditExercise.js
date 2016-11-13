@@ -11,8 +11,9 @@ import PageContent from '../../components/PageContent';
 
 import ResourceRenderer from '../../components/ResourceRenderer';
 import EditExerciseForm from '../../components/Forms/EditExerciseForm';
+import EditExerciseRuntimeConfigsForm from '../../components/Forms/EditExerciseRuntimeConfigsForm';
 
-import { fetchExerciseIfNeeded, editExercise } from '../../redux/modules/exercises';
+import { fetchExerciseIfNeeded, editExercise, editRuntimeConfigs } from '../../redux/modules/exercises';
 import { getExercise } from '../../redux/selectors/exercises';
 import { isSubmitting } from '../../redux/selectors/submission';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
@@ -33,6 +34,7 @@ class EditExercise extends Component {
       params: { exerciseId },
       exercise,
       editExercise,
+      editSolutionRuntimeConfigs,
       formValues
     } = this.props;
 
@@ -57,7 +59,10 @@ class EditExercise extends Component {
               <EditExerciseForm
                 initialValues={exercise}
                 onSubmit={editExercise}
-                formValues={formValues}/>
+                formValues={formValues} />
+              <EditExerciseRuntimeConfigsForm
+                initialValues={{runtimeConfigs: exercise.solutionRuntimeConfigs}}
+                onSubmit={editSolutionRuntimeConfigs} />
             </div>
           )}
         </ResourceRenderer>
@@ -71,7 +76,9 @@ EditExercise.contextTypes = {
   links: PropTypes.object
 };
 
-EditExercise.propTypes = {
+EditExercise.PropTypes = {
+  editExercise: PropTypes.func.isRequired,
+  editSolutionRuntimeConfigs: PropTypes.func.isRequired
 };
 
 export default connect(
@@ -94,6 +101,9 @@ export default connect(
     ]),
     editExercise: (data) => {
       return dispatch(editExercise(exerciseId, data));
+    },
+    editSolutionRuntimeConfigs: (data) => {
+      return dispatch(editRuntimeConfigs(exerciseId, data));
     }
   })
 )(EditExercise);

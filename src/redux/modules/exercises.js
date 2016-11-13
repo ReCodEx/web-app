@@ -51,6 +51,15 @@ export const editExercise = (exerciseId, body) =>
     body
   });
 
+export const editRuntimeConfigs = (exerciseId, body) =>
+  createApiAction({
+    type: additionalActionTypes.UPDATE_EXERCISE,
+    endpoint: `/exercises/${exerciseId}/runtime-configs`,
+    method: 'POST',
+    meta: { id: exerciseId, payload: body },
+    body
+  });
+
 /**
  * Reducer
  */
