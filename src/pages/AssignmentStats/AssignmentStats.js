@@ -89,12 +89,13 @@ class AssignmentStats extends Component {
       </PageContent>
     );
   }
-
 }
 
 
 AssignmentStats.propTypes = {
-  // @todo: Add types of properties
+  assignmentId: PropTypes.string.isRequired,
+  assignment: PropTypes.object,
+  students: ImmutablePropTypes.list.isRequired
 };
 
 export default connect(
