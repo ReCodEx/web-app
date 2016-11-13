@@ -4,13 +4,13 @@ import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import { Col, Row, Button } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
-import { usersSelector, isStudentOf, isSupervisorOf } from '../../redux/selectors/users';
+import { usersSelector } from '../../redux/selectors/users';
 import { studentsOfGroup } from '../../redux/selectors/groups';
 import { getAssignment } from '../../redux/selectors/assignments';
-import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import { fetchSupervisors, fetchStudents } from '../../redux/modules/users';
 import { isReady, isLoading, hasFailed, getData, getJsData, getId } from '../../redux/helpers/resourceManager';
 import SubmissionsTableContainer from '../../containers/SubmissionsTableContainer';
+import { fetchAssignmentIfNeeded } from '../../redux/modules/assignments';
 
 import PageContent from '../../components/PageContent';
 import ResourceRenderer from '../../components/ResourceRenderer';
@@ -22,7 +22,11 @@ class AssignmentStats extends Component {
     { assignmentId },
     dispatch
   ) => Promise.all([
-    dispatch(fetchStudents(getAssignment(assignmentId).groupId))
+    dispatch(fetchAssignmentIfNeeded(assignmentId))
+      .then((res) => res.value)
+      .then(assignment => Promise.all([
+        dispatch(fetchStudents(assignment.groupId))
+      ]))
   ])
 
   componentWillMount() {
@@ -39,7 +43,6 @@ class AssignmentStats extends Component {
     const {
       assignmentId,
       assignment,
-      userId,
       students
     } = this.props;
 
@@ -61,8 +64,12 @@ class AssignmentStats extends Component {
             })
           },
           {
-            text: <FormattedMessage id='app.assignment.title' defaultMessage='Exercise assignment' />,
-            iconName: 'puzzle-piece'
+            resource: assignment,
+            iconName: 'puzzle-piece',
+            breadcrumb: (assignment) => ({
+              text: <FormattedMessage id='app.assignment.title' defaultMessage='Exercise assignment' />,
+              link: ({ ASSIGNMENT_DETAIL_URI_FACTORY }) => ASSIGNMENT_DETAIL_URI_FACTORY(assignment.id)
+            })
           },
           {
             text: <FormattedMessage id='app.assignmentStats.title' defaultMessage='Assignment statistics' />,
@@ -87,27 +94,22 @@ class AssignmentStats extends Component {
 
 
 AssignmentStats.propTypes = {
-
+  // @todo: Add types of properties
 };
 
 export default connect(
   (state, { params: { assignmentId } }) => {
     const assignmentSelector = getAssignment(assignmentId);
-    const userId = loggedInUserIdSelector(state);
     const studentsIds = studentsOfGroup("a23ff9d9-5e42-11e6-a34f-180373206d10")(state);  // @todo: Get 'groupId' property from assignment
     const readyUsers = usersSelector(state).toList().filter(isReady);
 
     return {
       assignmentId,
       assignment: assignmentSelector(state),
-      userId,
       students: readyUsers.filter(isReady).filter(user => studentsIds.includes(getId(user))).map(getJsData),
-      isStudentOf: (groupId) => isStudentOf(userId, groupId)(state),
-      isSupervisorOf: (groupId) => isSupervisorOf(userId, groupId)(state),
     };
   },
   (dispatch, { params: { assignmentId } }) => ({
-    init: (userId) => () => dispatch(init(userId, assignmentId)),
     loadAsync: () => AssignmentStats.loadAsync({ assignmentId }, dispatch)
   })
 )(AssignmentStats);
