@@ -30,6 +30,8 @@ export const linksFactory = lang => {
     `${prefix}/app/assignment/${id}/submit`;
   const SUBMISSION_DETAIL_URI_FACTORY = (assignmentId, submissionId) =>
     `${prefix}/app/assignment/${assignmentId}/submission/${submissionId}`;
+  const SUPERVISOR_STATS_URI_FACTORY = assignmentId =>
+    `${prefix}/app/assignment/${assignmentId}/stats`;
   const SOURCE_CODE_DETAIL_URI_FACTORY = (assignmentId, submissionId, fileId) =>
     `${prefix}/app/assignment/${assignmentId}/submission/${submissionId}/file/${fileId}`;
 
@@ -41,7 +43,7 @@ export const linksFactory = lang => {
     INSTANCE_URI_FACTORY, GROUP_URI_FACTORY, USER_URI_FACTORY,
     EXERCISE_URI_FACTORY, EXERCISE_EDIT_URI_FACTORY,
     ASSIGNMENT_EDIT_URI_FACTORY, ASSIGNMENT_DETAIL_URI_FACTORY, SUBMIT_SOLUTION_URI_FACTORY,
-    SUBMISSION_DETAIL_URI_FACTORY, SOURCE_CODE_DETAIL_URI_FACTORY,
+    SUBMISSION_DETAIL_URI_FACTORY, SUPERVISOR_STATS_URI_FACTORY, SOURCE_CODE_DETAIL_URI_FACTORY,
     BUGS_URL
   };
 };

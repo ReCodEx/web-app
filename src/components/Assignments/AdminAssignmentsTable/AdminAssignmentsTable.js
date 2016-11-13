@@ -4,7 +4,7 @@ import { Table } from 'react-bootstrap';
 import { FormattedMessage } from 'react-intl';
 
 import AdminAssignmentsTableRow from './AdminAssignmentsTableRow';
-import NoAssignmentsTableRow from './NoAssignmentsTableRow';
+import NoAssignmentTableRow from './NoAssignmentsTableRow';
 import LoadingAssignmentTableRow from './LoadingAssignmentTableRow';
 import { isReady, isLoading, getJsData } from '../../../redux/helpers/resourceManager';
 
