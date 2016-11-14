@@ -1,24 +1,27 @@
 import React, { Component, PropTypes } from 'react';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
-import { List } from 'immutable';
 import { Row, Col } from 'react-bootstrap';
 
 import PageContent from '../../components/PageContent';
 import ResourceRenderer from '../../components/ResourceRenderer';
-import InstanceDetail, { LoadingInstanceDetail, FailedInstanceDetail } from '../../components/Instances/InstanceDetail';
+import InstanceDetail from '../../components/Instances/InstanceDetail';
 import CreateGroupForm from '../../components/Forms/CreateGroupForm';
 
-import { isReady } from '../../redux/helpers/resourceManager';
 import { fetchInstanceIfNeeded } from '../../redux/modules/instances';
 import { instanceSelector } from '../../redux/selectors/instances';
 import { createGroup, fetchInstanceGroupsIfNeeded } from '../../redux/modules/groups';
 import { groupsSelectors } from '../../redux/selectors/groups';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import { isStudentOf, isSupervisorOf, isAdminOf, isMemberOf } from '../../redux/selectors/users';
-import { fetchAssignmentsForInstance } from '../../redux/modules/assignments';
 
 class Instance extends Component {
+
+  static loadAsync = ({ instanceId }, dispatch) => Promise.all([
+    dispatch(fetchInstanceIfNeeded(instanceId)),
+    dispatch(fetchInstanceGroupsIfNeeded(instanceId))
+  ]);
 
   componentWillMount() {
     this.props.loadAsync();
@@ -29,11 +32,6 @@ class Instance extends Component {
       newProps.loadAsync();
     }
   }
-
-  getTitle = (instance) =>
-    isReady(instance)
-      ? instance.getIn(['data', 'name'])
-      : <FormattedMessage id='app.instance.loading' defaultMessage="Loading instance's detail ..." />;
 
   render() {
     const {
@@ -46,7 +44,11 @@ class Instance extends Component {
 
     return (
       <PageContent
-        title={this.getTitle(instance)}
+        title={(
+          <ResourceRenderer resource={instance}>
+            {instance => <span>{instance.name}</span>}
+          </ResourceRenderer>
+        )}
         description={<FormattedMessage id='app.instance.description' defaultMessage='Instance overview' />}
         breadcrumbs={[
           {
@@ -76,7 +78,14 @@ class Instance extends Component {
 }
 
 Instance.propTypes = {
-  loadAsync: PropTypes.func.isRequired
+  loadAsync: PropTypes.func.isRequired,
+  params: PropTypes.shape({
+    instanceId: PropTypes.string.isRequired
+  }).isRequired,
+  instance: ImmutablePropTypes.map,
+  groups: ImmutablePropTypes.list,
+  createGroup: PropTypes.func.isRequired,
+  isMemberOf: PropTypes.func.isRequired
 };
 
 export default connect(
@@ -94,9 +103,6 @@ export default connect(
   (dispatch, { params: { instanceId } }) => ({
     createGroup: ({ name, description }) =>
       dispatch(createGroup({ instanceId, name, description })),
-    loadAsync: () => Promise.all([
-      dispatch(fetchInstanceIfNeeded(instanceId)),
-      dispatch(fetchInstanceGroupsIfNeeded(instanceId))
-    ])
+    loadAsync: () => Instance.loadAsync({ instanceId }, dispatch)
   })
 )(Instance);

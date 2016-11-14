@@ -1,1 +1,1 @@
-export { default } from './AdminAssignmentsTable';
+export default from './AdminAssignmentsTable';
