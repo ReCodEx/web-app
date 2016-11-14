@@ -24,7 +24,7 @@ SourceCodeInfoBox.propTypes = {
   id: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   size: PropTypes.number.isRequired,
-  uploadedAt: PropTypes.string.isRequired,
+  uploadedAt: PropTypes.number.isRequired,
   onClick: PropTypes.func
 };
 

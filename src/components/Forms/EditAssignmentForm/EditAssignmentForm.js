@@ -118,6 +118,13 @@ const EditAssignmentForm = ({
         component={TextField}
         label={<FormattedMessage id='app.editAssignmentForm.submissionsCountLimit' defaultMessage='Submissions count limit:' />} />
 
+      <Field
+        name='canViewLimitRatios'
+        component={CheckboxField}
+        onOff
+        colored
+        label={<FormattedMessage id='app.editAssignmentForm.canViewLimitRatios' defaultMessage='Visibility of memory and time ratios' />} />
+
     </FormBox>
   </div>
 );

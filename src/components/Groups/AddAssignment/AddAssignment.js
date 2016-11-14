@@ -1,5 +1,6 @@
 import React, { PropTypes } from 'react';
 import { Button } from 'react-bootstrap';
+import { FormattedMessage } from 'react-intl';
 
 import { SendIcon } from '../../Icons';
 import SelectExerciseContainer from '../../../containers/SelectExerciseContainer';
@@ -12,7 +13,7 @@ const AddAssignment = ({
     id={`add-assignment-${groupId}`}
     createActions={exerciseId => (
       <Button>
-        <SendIcon /> Assign this exercise
+        <SendIcon /> <FormattedMessage id='app.exercise.assign' defaultMessage='Assign this exercise' />
       </Button>
     )} />
 );

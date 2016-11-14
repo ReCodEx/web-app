@@ -1,6 +1,7 @@
 export { default as AddIcon } from './AddIcon';
 export { default as EditIcon } from './EditIcon';
 export { default as LoadingIcon } from './LoadingIcon';
+export { default as ResultsIcon } from './ResultsIcon';
 export { default as FailedIcon } from './FailedIcon';
 export { default as WarningIcon } from './WarningIcon';
 export { default as SearchIcon } from './SearchIcon';

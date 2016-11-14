@@ -10,11 +10,13 @@ import App from '../containers/App';
 import Dashboard from './Dashboard';
 import Home from './Home';
 import Exercise from './Exercise';
+import EditExercise from './EditExercise';
 import Group from './Group';
 import instance from './Instance';
 import Login from './Login';
 import Assignment from './Assignment';
 import EditAssignment from './EditAssignment';
+import AssignmentStats from './AssignmentStats';
 import NotFound from './NotFound';
 import Submission from './Submission';
 import Registration from './Registration';
@@ -70,10 +72,13 @@ const createRoutes = (getState) => {
           <Route path='assignment/:assignmentId'>
             <IndexRoute component={Assignment} />
             <Route path='edit' component={EditAssignment} />
+            <Route path='stats' component={AssignmentStats} />
             <Route path='submission/:submissionId' component={Submission} />
           </Route>
-          <Route path='edit-assignment/:assignmentId' component={EditAssignment} />
-          <Route path='exercise/:exerciseId' component={Exercise} />
+          <Route path='exercise/:exerciseId'>
+            <IndexRoute component={Exercise} />
+            <Route path='edit' component={EditExercise} />
+          </Route>
           <Route path='group/:groupId' component={Group} />
           <Route path='instance/:instanceId' component={instance} />
           <Route path='user/:userId' component={User} />

@@ -3,6 +3,8 @@ node_modules/.bin/*
 .DS_Store
 public/bundle.js
 public/bundle.js.map
+public/
+bin/*.jpg
 bin/server.js
 bin/server.js.map
 build

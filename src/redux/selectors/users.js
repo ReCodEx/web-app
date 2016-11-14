@@ -3,6 +3,7 @@ import { List } from 'immutable';
 
 import { loggedInUserIdSelector } from './auth';
 import { groupSelector, studentsOfGroup, supervisorsOfGroup } from './groups';
+import { exerciseSelector } from './exercises';
 import { isReady } from '../helpers/resourceManager';
 
 const getUsers = state => state.users.get('resources');
@@ -69,6 +70,12 @@ export const usersGroupsIds = userId =>
   createSelector(
     [ studentOfGroupsIdsSelector(userId), supervisorOfGroupsIdsSelector(userId) ],
     (student, supervisor) => student.concat(supervisor)
+  );
+
+export const isAuthorOfExercise = (userId, exerciseId) =>
+  createSelector(
+    exerciseSelector(exerciseId),
+    exercise => exercise && isReady(exercise) && exercise.getIn(['data', 'authorId']) === userId
   );
 
 export const notificationsSelector = createSelector(

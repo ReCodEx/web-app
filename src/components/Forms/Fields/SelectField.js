@@ -37,7 +37,8 @@ SelectField.propTypes = {
   label: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) })
-  ]).isRequired
+  ]).isRequired,
+  options: PropTypes.array.isRequired
 };
 
 export default SelectField;

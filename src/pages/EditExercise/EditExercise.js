@@ -11,8 +11,9 @@ import PageContent from '../../components/PageContent';
 
 import ResourceRenderer from '../../components/ResourceRenderer';
 import EditExerciseForm from '../../components/Forms/EditExerciseForm';
+import EditExerciseRuntimeConfigsForm from '../../components/Forms/EditExerciseRuntimeConfigsForm';
 
-import { fetchExerciseIfNeeded, editExercise } from '../../redux/modules/exercises';
+import { fetchExerciseIfNeeded, editExercise, editRuntimeConfigs } from '../../redux/modules/exercises';
 import { getExercise } from '../../redux/selectors/exercises';
 import { isSubmitting } from '../../redux/selectors/submission';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
@@ -33,6 +34,7 @@ class EditExercise extends Component {
       params: { exerciseId },
       exercise,
       editExercise,
+      editSolutionRuntimeConfigs,
       formValues
     } = this.props;
 
@@ -52,11 +54,15 @@ class EditExercise extends Component {
           }
         ]}>
         <ResourceRenderer resource={exercise}>
-          {assignment => (
+          {exercise => (
             <div>
               <EditExerciseForm
                 initialValues={exercise}
-                onSubmit={editExercise} />
+                onSubmit={editExercise}
+                formValues={formValues} />
+              <EditExerciseRuntimeConfigsForm
+                initialValues={{runtimeConfigs: exercise.solutionRuntimeConfigs}}
+                onSubmit={editSolutionRuntimeConfigs} />
             </div>
           )}
         </ResourceRenderer>
@@ -70,16 +76,17 @@ EditExercise.contextTypes = {
   links: PropTypes.object
 };
 
-EditExercise.propTypes = {
-  exercise: ImmutablePropTypes.map.isRequired
+EditExercise.PropTypes = {
+  editExercise: PropTypes.func.isRequired,
+  editSolutionRuntimeConfigs: PropTypes.func.isRequired
 };
 
 export default connect(
   (state, { params: { exerciseId } }) => {
-    const assignmentSelector = getExercise(exerciseId);
+    const exerciseSelector = getExercise(exerciseId);
     const userId = loggedInUserIdSelector(state);
     return {
-      assignment: assignmentSelector(state),
+      exercise: exerciseSelector(state),
       submitting: isSubmitting(state),
       userId,
       isStudentOf: (groupId) => isSupervisorOf(userId, groupId)(state),
@@ -90,19 +97,13 @@ export default connect(
     push: (url) => dispatch(push(url)),
     reset: () => dispatch(reset('editExercise')),
     loadAsync: () => Promise.all([
-      dispatch(fetchExerciseIfNeeded(exerciseId)),
-      dispatch(fetchLimitsIfNeeded(exerciseId))
+      dispatch(fetchExerciseIfNeeded(exerciseId))
     ]),
     editExercise: (data) => {
-      // convert deadline times to timestamps
-      data.firstDeadline = data.firstDeadline.unix();
-      if (data.secondDeadline) {
-        data.secondDeadline = data.secondDeadline.unix();
-      }
-
       return dispatch(editExercise(exerciseId, data));
     },
-    editExerciseLimits: (data) =>
-      dispatch(editExerciseLimits(data))
+    editSolutionRuntimeConfigs: (data) => {
+      return dispatch(editRuntimeConfigs(exerciseId, data));
+    }
   })
 )(EditExercise);
