@@ -73,6 +73,10 @@ export const createApiCallPromise = ({
       }
     })
     .then(res => {
+      if (!res) {
+        throw new Error('Invalid response received.');
+      }
+
       if (isServerError(res) && dispatch) {
         dispatch(addNotification('There was a problem on the server. Please try again later.', false));
       }
