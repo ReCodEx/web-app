@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
+import { push } from 'react-router-redux';
 import { FormattedMessage } from 'react-intl';
 import { List } from 'immutable';
 
@@ -17,7 +18,7 @@ import { isReady, getJsData, getId } from '../../redux/helpers/resourceManager';
 import { createGroup, fetchSubgroups, fetchGroupIfNeeded } from '../../redux/modules/groups';
 import { fetchGroupsStatsIfNeeded } from '../../redux/modules/stats';
 import { fetchSupervisors, fetchStudents } from '../../redux/modules/users';
-import { fetchAssignmentsForGroup } from '../../redux/modules/assignments';
+import { fetchAssignmentsForGroup, create as assignExercise } from '../../redux/modules/assignments';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import { usersSelector, isStudentOf, isSupervisorOf, isAdminOf } from '../../redux/selectors/users';
 
@@ -112,6 +113,15 @@ class Group extends Component {
     return breadcrumbs;
   };
 
+  createExercise = (exerciseId) => {
+    const { assignExercise, push } = this.props;
+
+    const { links: { ASSIGNMENT_EDIT_URI_FACTORY } } = this.context;
+
+    assignExercise(exerciseId)
+      .then(({ value: assigment }) => push(ASSIGNMENT_EDIT_URI_FACTORY(assigment.id)));
+  };
+
   render() {
     const {
       group,
@@ -161,7 +171,8 @@ class Group extends Component {
                   stats={stats}
                   students={students}
                   statuses={statuses}
-                  assignments={assignments} />)}
+                  assignments={assignments}
+                  assignFunc={this.createExercise} />)}
 
               {isStudent && (
                 <StudentsView
@@ -195,6 +206,10 @@ Group.propTypes = {
   loadAsync: PropTypes.func,
   stats: PropTypes.object,
   statuses: PropTypes.array
+};
+
+Group.contextTypes = {
+  links: PropTypes.object
 };
 
 const mapStateToProps = (
@@ -235,7 +250,9 @@ const mapDispatchToProps = (dispatch, { params }) => ({
         description,
         parentGroupId: params.groupId
       })),
-  loadAsync: (userId) => Group.loadAsync(params, dispatch, userId)
+  loadAsync: (userId) => Group.loadAsync(params, dispatch, userId),
+  assignExercise: (exerciseId) => dispatch(assignExercise(params.groupId, exerciseId)),
+  push: (url) => dispatch(push(url))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Group);
