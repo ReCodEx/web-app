@@ -10,7 +10,7 @@ const EditRuntimeConfigFields = ({ prefix, i, runtimeConfigs }) => {
   return (
     <div>
       <Field
-        name={`${prefix}.customName`}
+        name={`${prefix}.name`}
         component={TextField}
         label={<FormattedMessage id='app.editRuntimeConfigForm.configName' defaultMessage='Name of Configuration:' />} />
 

@@ -12,7 +12,7 @@ const EditRuntimeConfigForm = ({
     runtimeConfigs={runtimeConfigs}
     getTitle={
       (i) => (runtimeConfigs && runtimeConfigs[i])
-        ? runtimeConfigs[i].customName
+        ? runtimeConfigs[i].name
         : <FormattedMessage id='app.editRuntimeConfigForm.newConfig' defaultMessage='New configuration' />
     }
     ContentComponent={EditRuntimeConfigFields}
