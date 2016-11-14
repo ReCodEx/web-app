@@ -1,14 +1,13 @@
 import React, { PropTypes, Component } from 'react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
+import { List } from 'immutable';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
-import { Col, Row, Button } from 'react-bootstrap';
-import { LinkContainer } from 'react-router-bootstrap';
 import { usersSelector } from '../../redux/selectors/users';
 import { studentsOfGroup } from '../../redux/selectors/groups';
 import { getAssignment } from '../../redux/selectors/assignments';
-import { fetchSupervisors, fetchStudents } from '../../redux/modules/users';
-import { isReady, isLoading, hasFailed, getData, getJsData, getId } from '../../redux/helpers/resourceManager';
+import { fetchStudents } from '../../redux/modules/users';
+import { isReady, getJsData, getId } from '../../redux/helpers/resourceManager';
 import SubmissionsTableContainer from '../../containers/SubmissionsTableContainer';
 import { fetchAssignmentIfNeeded } from '../../redux/modules/assignments';
 
@@ -95,19 +94,20 @@ class AssignmentStats extends Component {
 AssignmentStats.propTypes = {
   assignmentId: PropTypes.string.isRequired,
   assignment: PropTypes.object,
-  students: ImmutablePropTypes.list.isRequired
+  students: ImmutablePropTypes.list.isRequired,
+  loadAsync: PropTypes.func.isRequired
 };
 
 export default connect(
   (state, { params: { assignmentId } }) => {
-    const assignmentSelector = getAssignment(assignmentId);
-    const studentsIds = studentsOfGroup("a23ff9d9-5e42-11e6-a34f-180373206d10")(state);  // @todo: Get 'groupId' property from assignment
+    const assignment = getAssignment(assignmentId)(state);
+    const studentsIds = isReady(assignment) ? studentsOfGroup(getJsData(assignment).groupId)(state) : List();
     const readyUsers = usersSelector(state).toList().filter(isReady);
 
     return {
       assignmentId,
-      assignment: assignmentSelector(state),
-      students: readyUsers.filter(isReady).filter(user => studentsIds.includes(getId(user))).map(getJsData),
+      assignment,
+      students: readyUsers.filter(isReady).filter(user => studentsIds.includes(getId(user))).map(getJsData)
     };
   },
   (dispatch, { params: { assignmentId } }) => ({

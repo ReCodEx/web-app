@@ -24,7 +24,11 @@ const AdminAssignmentsTable = ({
     </thead>
     <ResourceRenderer
       resource={assignments.toArray()}
-      loading={<LoadingAssignmentTableRow />}>
+      loading={(
+        <tbody>
+          <LoadingAssignmentTableRow />
+        </tbody>
+      )}>
       {(...assignments) =>
         assignments.length === 0
           ? <tbody><NoAssignmentsTableRow /></tbody>
