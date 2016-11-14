@@ -3,7 +3,7 @@ import { FormattedMessage } from 'react-intl';
 import { Field, FieldArray } from 'redux-form';
 import { TextField, SourceCodeField, SelectField } from '../Fields';
 
-const EditRuntimeConfigFields = ({ prefix, i, runtimeConfigs }) => {
+const EditRuntimeConfigFields = ({ prefix, i, runtimeConfigs, runtimeEnvironments }) => {
 
   const runtimeConfig = runtimeConfigs[i];
 
@@ -17,7 +17,10 @@ const EditRuntimeConfigFields = ({ prefix, i, runtimeConfigs }) => {
       <Field
         name={`${prefix}.runtimeEnvironmentId`}
         component={SelectField}
-        options={[]} // TODO: get environments from api
+        options={runtimeEnvironments.map(
+          environment => ({ key: environment.getIn(['data', 'id']), name: environment.getIn(['data', 'name']) })
+        ).toArray()}
+        selected={runtimeConfig['runtimeEnvironment']['id']} // TODO: make this somehow work
         label={<FormattedMessage id='app.editRuntimeConfigForm.runtimeEnvironment' defaultMessage='Select runtime environment:' />} />
 
       <Field
@@ -32,7 +35,8 @@ const EditRuntimeConfigFields = ({ prefix, i, runtimeConfigs }) => {
 EditRuntimeConfigFields.propTypes = {
   prefix: PropTypes.string.isRequired,
   i: PropTypes.number,
-  runtimeConfigs: PropTypes.array.isRequired
+  runtimeConfigs: PropTypes.array.isRequired,
+  runtimeEnvironments: PropTypes.object.isRequired
 };
 
 export default EditRuntimeConfigFields;

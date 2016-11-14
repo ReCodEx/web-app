@@ -5,11 +5,13 @@ import EditRuntimeConfigFields from './EditRuntimeConfigFields';
 
 const EditRuntimeConfigForm = ({
   runtimeConfigs = [],
+  runtimeEnvironments,
   ...props
 }) => (
   <TabbedArrayField
     {...props}
     runtimeConfigs={runtimeConfigs}
+    runtimeEnvironments={runtimeEnvironments}
     getTitle={
       (i) => (runtimeConfigs && runtimeConfigs[i])
         ? runtimeConfigs[i].name
@@ -22,7 +24,8 @@ const EditRuntimeConfigForm = ({
 );
 
 EditRuntimeConfigForm.propTypes = {
-  runtimeConfigs: PropTypes.array
+  runtimeConfigs: PropTypes.array,
+  runtimeEnvironments: PropTypes.object.isRequired
 };
 
 export default EditRuntimeConfigForm;

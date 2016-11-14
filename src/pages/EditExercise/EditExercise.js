@@ -17,6 +17,8 @@ import { fetchExerciseIfNeeded, editExercise, editRuntimeConfigs } from '../../r
 import { getExercise } from '../../redux/selectors/exercises';
 import { isSubmitting } from '../../redux/selectors/submission';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
+import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments';
+import { runtimeEnvironmentsSelector } from '../../redux/selectors/runtimeEnvironments';
 
 class EditExercise extends Component {
 
@@ -35,6 +37,7 @@ class EditExercise extends Component {
       exercise,
       editExercise,
       editSolutionRuntimeConfigs,
+      runtimeEnvironments,
       formValues
     } = this.props;
 
@@ -61,6 +64,7 @@ class EditExercise extends Component {
                 onSubmit={editExercise}
                 formValues={formValues} />
               <EditExerciseRuntimeConfigsForm
+                runtimeEnvironments={runtimeEnvironments}
                 initialValues={{runtimeConfigs: exercise.solutionRuntimeConfigs}}
                 onSubmit={editSolutionRuntimeConfigs} />
             </div>
@@ -77,6 +81,7 @@ EditExercise.contextTypes = {
 };
 
 EditExercise.PropTypes = {
+  runtimeEnvironments: PropTypes.object.isRequired,
   editExercise: PropTypes.func.isRequired,
   editSolutionRuntimeConfigs: PropTypes.func.isRequired
 };
@@ -90,14 +95,16 @@ export default connect(
       submitting: isSubmitting(state),
       userId,
       isStudentOf: (groupId) => isSupervisorOf(userId, groupId)(state),
-      formValues: getFormValues('editExercise')(state)
+      formValues: getFormValues('editExercise')(state),
+      runtimeEnvironments: runtimeEnvironmentsSelector(state)
     };
   },
   (dispatch, { params: { exerciseId } }) => ({
     push: (url) => dispatch(push(url)),
     reset: () => dispatch(reset('editExercise')),
     loadAsync: () => Promise.all([
-      dispatch(fetchExerciseIfNeeded(exerciseId))
+      dispatch(fetchExerciseIfNeeded(exerciseId)),
+      dispatch(fetchRuntimeEnvironments())
     ]),
     editExercise: (data) => {
       return dispatch(editExercise(exerciseId, data));

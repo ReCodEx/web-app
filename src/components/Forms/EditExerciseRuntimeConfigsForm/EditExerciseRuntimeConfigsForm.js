@@ -12,6 +12,7 @@ if (canUseDOM) {
 }
 
 const EditExerciseRuntimeConfigsForm = ({
+  runtimeEnvironments,
   initialValues,
   submitting,
   handleSubmit,
@@ -27,6 +28,7 @@ const EditExerciseRuntimeConfigsForm = ({
 
     <FieldArray
       name='runtimeConfigs'
+      runtimeEnvironments={runtimeEnvironments}
       runtimeConfigs={initialValues.runtimeConfigs}
       component={EditRuntimeConfigForm} />
 
@@ -48,7 +50,8 @@ const EditExerciseRuntimeConfigsForm = ({
 
 EditExerciseRuntimeConfigsForm.propTypes = {
   initialValues: PropTypes.object.isRequired,
-  handleSubmit: PropTypes.func.isRequired
+  handleSubmit: PropTypes.func.isRequired,
+  runtimeEnvironments: PropTypes.object.isRequired
 };
 
 const validate = ({ runtimeConfigs }) => {
