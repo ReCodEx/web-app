@@ -11,7 +11,7 @@ const StudentsView = ({
   group,
   students,
   stats,
-  statuses,
+  statuses = [],
   assignments
 }) => (
   <Row>
@@ -54,7 +54,9 @@ const StudentsView = ({
 StudentsView.propTypes = {
   group: PropTypes.object.isRequired,
   assignments: ImmutablePropTypes.list.isRequired,
-  statuses: PropTypes.object
+  stats: PropTypes.object,
+  students: PropTypes.object.isRequired,
+  statuses: PropTypes.array
 };
 
 export default StudentsView;

@@ -18,6 +18,7 @@ import { Provider } from 'react-redux';
 import { syncHistoryWithStore } from 'react-router-redux';
 import createHistory from 'react-router/lib/createMemoryHistory';
 import { configureStore } from './redux/store';
+import { loggedInUserIdSelector } from './redux/selectors/auth';
 import createRoutes from './pages/routes';
 
 addLocaleData([ ...cs ]);
@@ -69,10 +70,11 @@ app.get('*', (req, res) => {
       // this should never happen but just for sure - if router failed
       res.status(404).send('Not found');
     } else {
+      const userId = loggedInUserIdSelector(store.getState()); // try to get the user ID from the token (if any)
       const loadAsync = renderProps.components
         .filter(component => component && component.WrappedComponent && component.WrappedComponent.loadAsync)
         .map(component => component.WrappedComponent.loadAsync)
-        .map(load => load(renderProps.params, store.dispatch));
+        .map(load => load(renderProps.params, store.dispatch, userId));
 
       const oldStore = Object.assign({}, store);
       Promise.all(loadAsync)

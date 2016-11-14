@@ -1,8 +1,8 @@
 import React, { Component, PropTypes } from 'react';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import { List } from 'immutable';
-import { Row, Col } from 'react-bootstrap';
 
 import PageContent from '../../components/PageContent';
 
@@ -13,7 +13,7 @@ import SupervisorsView from '../../components/Groups/SupervisorsView';
 import StudentsView from '../../components/Groups/StudentsView';
 import ResourceRenderer from '../../components/ResourceRenderer';
 
-import { isReady, isLoading, hasFailed, getData, getJsData, getId } from '../../redux/helpers/resourceManager';
+import { isReady, getJsData, getId } from '../../redux/helpers/resourceManager';
 import { createGroup, fetchSubgroups, fetchGroupIfNeeded } from '../../redux/modules/groups';
 import { fetchGroupsStatsIfNeeded } from '../../redux/modules/stats';
 import { fetchSupervisors, fetchStudents } from '../../redux/modules/users';
@@ -35,41 +35,54 @@ import { instanceSelector } from '../../redux/selectors/instances';
 
 class Group extends Component {
 
-  static loadAsync = (
-    { groupId },
-    dispatch
-  ) => Promise.all([
-    dispatch(fetchAssignmentsForGroup(groupId)),
-    dispatch(fetchSubgroups(groupId)),
-    dispatch(fetchSupervisors(groupId)),
-    dispatch(fetchStudents(groupId)),
-    dispatch(fetchGroupIfNeeded(groupId))
-      .then((res) => res.value)
-      .then(group => Promise.all([
-        dispatch(fetchInstanceIfNeeded(group.instanceId)),
-        group.parentGroupId
-          ? dispatch(fetchGroupIfNeeded(group.parentGroupId))
-          : Promise.resolve(),
-        group.publicStats === true
-          ? dispatch(fetchGroupsStatsIfNeeded(groupId))
-          : Promise.resolve()
-      ]))
-  ])
+  static isMemberOf = (group, userId) =>
+    group.admins.indexOf(userId) >= 0 ||
+    group.supervisors.indexOf(userId) >= 0 ||
+    group.students.indexOf(userId) >= 0;
+
+  static loadAsync = ({ groupId }, dispatch, userId) =>
+    Promise.all([
+      dispatch(fetchAssignmentsForGroup(groupId)),
+      dispatch(fetchSubgroups(groupId)),
+      dispatch(fetchGroupIfNeeded(groupId))
+        .then((res) => res.value)
+        .then(group => Promise.all([
+          dispatch(fetchInstanceIfNeeded(group.instanceId)),
+          Group.isMemberOf(group, userId)
+            ? Promise.all([
+              dispatch(fetchSupervisors(groupId)),
+              dispatch(fetchStudents(groupId))
+            ])
+            : Promise.resolve(),
+          group.parentGroupId
+            ? dispatch(fetchGroupIfNeeded(group.parentGroupId))
+            : Promise.resolve(),
+          group.publicStats === true
+            ? dispatch(fetchGroupsStatsIfNeeded(groupId))
+            : Promise.resolve()
+        ]))
+    ]);
 
   componentWillMount() {
-    this.props.loadAsync();
+    const { loadAsync, userId } = this.props;
+    loadAsync(userId);
   }
 
   componentWillReceiveProps(newProps) {
-    if (this.props.group !== newProps.group) {
-      newProps.loadAsync();
+    const {
+      params: { groupId },
+      isAdmin,
+      isSupervisor,
+      isStudent
+    } = this.props;
+
+    if (groupId !== newProps.params.groupId || (
+      !(isStudent || isSupervisor || isAdmin) &&
+      (newProps.isStudent || newProps.isSupervisor || newProps.isAdmin)
+    )) {
+      newProps.loadAsync(newProps.userId);
     }
   }
-
-  getTitle = (group) =>
-    isReady(group)
-      ? group.getIn(['data', 'name'])
-      : <FormattedMessage id='app.group.loading' defaultMessage="Loading group's detail ..." />;
 
   getBreadcrumbs = () => {
     const { group, instance, parentGroup } = this.props;
@@ -115,10 +128,13 @@ class Group extends Component {
       addSubgroup
     } = this.props;
 
-    const groupData = getJsData(group);
     return (
       <PageContent
-        title={this.getTitle(group)}
+        title={(
+          <ResourceRenderer resource={group}>
+            {group => <span>{group.name}</span>}
+          </ResourceRenderer>
+        )}
         description={<FormattedMessage id='app.group.description' defaultMessage='Group overview and assignments' />}
         breadcrumbs={this.getBreadcrumbs()}>
         <ResourceRenderer
@@ -137,18 +153,19 @@ class Group extends Component {
                 <AdminsView
                   group={data}
                   supervisors={supervisors}
-                  addSubgroup={addSubgroup(groupData.instanceId)} />)}
+                  addSubgroup={addSubgroup(data.instanceId)} />)}
 
               {isSupervisor && (
                 <SupervisorsView
-                  group={groupData}
+                  group={data}
                   stats={stats}
                   students={students}
+                  statuses={statuses}
                   assignments={assignments} />)}
 
               {isStudent && (
                 <StudentsView
-                  group={groupData}
+                  group={data}
                   students={students}
                   stats={stats}
                   statuses={statuses}
@@ -161,9 +178,27 @@ class Group extends Component {
   }
 }
 
+Group.propTypes = {
+  params: PropTypes.shape({ groupId: PropTypes.string.isRequired }).isRequired,
+  userId: PropTypes.string.isRequired,
+  group: ImmutablePropTypes.map,
+  instance: ImmutablePropTypes.map,
+  parentGroup: ImmutablePropTypes.map,
+  students: ImmutablePropTypes.list,
+  supervisors: ImmutablePropTypes.list,
+  assignments: ImmutablePropTypes.list,
+  groups: ImmutablePropTypes.map,
+  isStudent: PropTypes.bool,
+  isAdmin: PropTypes.bool,
+  isSupervisor: PropTypes.bool,
+  addSubgroup: PropTypes.func,
+  loadAsync: PropTypes.func,
+  stats: PropTypes.object,
+  statuses: PropTypes.array
+};
+
 const mapStateToProps = (
-  state,
-  { params: { groupId } }
+  state, { params: { groupId } }
 ) => {
   const group = groupSelector(groupId)(state);
   const groupData = getJsData(group);
@@ -191,23 +226,16 @@ const mapStateToProps = (
   };
 };
 
-const mapDispatchToProps = (
-  dispatch,
-  {
-    params,
-    isStudent,
-    isSupervisor,
-    isAdmin
-  }
-) => ({
-  addSubgroup: (instanceId) => ({ name, description }) =>
-    dispatch(createGroup({
-      instanceId,
-      name,
-      description,
-      parentGroupId: params.groupId
-    })),
-  loadAsync: () => Group.loadAsync(params, dispatch)
+const mapDispatchToProps = (dispatch, { params }) => ({
+  addSubgroup: (instanceId) =>
+    ({ name, description }) =>
+      dispatch(createGroup({
+        instanceId,
+        name,
+        description,
+        parentGroupId: params.groupId
+      })),
+  loadAsync: (userId) => Group.loadAsync(params, dispatch, userId)
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Group);

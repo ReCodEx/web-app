@@ -1,15 +1,16 @@
 import React, { PropTypes } from 'react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
+import { List } from 'immutable';
 import { Table } from 'react-bootstrap';
 import { FormattedMessage } from 'react-intl';
 
 import AdminAssignmentsTableRow from './AdminAssignmentsTableRow';
-import NoAssignmentTableRow from './NoAssignmentsTableRow';
+import NoAssignmentsTableRow from './NoAssignmentsTableRow';
 import LoadingAssignmentTableRow from './LoadingAssignmentTableRow';
-import { isReady, isLoading, getJsData } from '../../../redux/helpers/resourceManager';
+import ResourceRenderer from '../../ResourceRenderer';
 
 const AdminAssignmentsTable = ({
-  assignments = []
+  assignments = List()
 }) => (
   <Table hover>
     <thead>
@@ -21,19 +22,18 @@ const AdminAssignmentsTable = ({
         <th><FormattedMessage id='app.adminAssignments.actions' defaultMessage='Actions' /></th>
       </tr>
     </thead>
-    <tbody>
-      {assignments.filter(isLoading).size === 0 && assignments.size === 0 &&
-        <NoAssignmentTableRow />}
-
-      {assignments.filter(isReady).map(getJsData).map(assignment =>
-        <AdminAssignmentsTableRow
-          key={assignment.id}
-          item={assignment} />)}
-
-      {assignments.some(isLoading) &&
-        <LoadingAssignmentTableRow />}
-
-    </tbody>
+    <ResourceRenderer
+      resource={assignments.toArray()}
+      loading={<LoadingAssignmentTableRow />}>
+      {(...assignments) =>
+        assignments.length === 0
+          ? <tbody><NoAssignmentsTableRow /></tbody>
+          : (
+            <tbody>
+              {assignments.map(assignment => <AdminAssignmentsTableRow key={assignment.id} {...assignment} />)}
+            </tbody>
+          )}
+    </ResourceRenderer>
   </Table>
 );
 

@@ -15,45 +15,49 @@ const SupervisorsView = ({
   stats,
   assignments
 }) => (
-  <Row>
-    <Col lg={6}>
-      <h3>
-        <FormattedMessage
-          id='app.group.supervisorsView.title'
-          defaultMessage="Supervisor's controls of {groupName}"
-          values={{ groupName: group.name }} />
-      </h3>
-      <Box
-        title={<FormattedMessage id='app.group.spervisorsView.students' defaultMessage='Students' />}
-        collapsable
-        noPadding>
-        <StudentsList users={students.toJS()} stats={stats} fill />
-      </Box>
-      <Box
-        title={<FormattedMessage id='app.group.spervisorsView.addStudent' defaultMessage='Add student' />}
-        collapsable
-        isOpen>
-        <AddStudent instanceId={group.instanceId} groupId={group.id} />
-      </Box>
-    </Col>
-    <Col lg={6}>
-      <Box
-        title={<FormattedMessage id='app.group.supervisorsView.assignments' defaultMessage='Assignments' />}
-        collapsable
-        noPadding
-        isOpen>
-        <AdminAssignmentsTable
-          assignments={assignments}
-          showGroup={false} />
-      </Box>
-      <Box
-        title={<FormattedMessage id='app.group.spervisorsView.addAssignment' defaultMessage='Add assignment' />}
-        collapsable
-        isOpen>
-        <AddAssignment groupId={group.id} />
-      </Box>
-    </Col>
-  </Row>
+  <div>
+    <Row>
+      <Col lg={12}>
+        <h3 className='page-header'>
+          <FormattedMessage
+            id='app.group.supervisorsView.title'
+            defaultMessage="Supervisor's controls of {groupName}"
+            values={{ groupName: group.name }} />
+        </h3>
+      </Col>
+    </Row>
+    <Row>
+      <Col lg={6}>
+        <Box
+          title={<FormattedMessage id='app.group.spervisorsView.students' defaultMessage='Students' />}
+          collapsable
+          noPadding>
+          <StudentsList users={students.toJS()} stats={stats} fill />
+        </Box>
+        <Box
+          title={<FormattedMessage id='app.group.spervisorsView.addStudent' defaultMessage='Add student' />}
+          collapsable
+          isOpen>
+          <AddStudent instanceId={group.instanceId} groupId={group.id} />
+        </Box>
+      </Col>
+      <Col lg={6}>
+        <Box
+          title={<FormattedMessage id='app.group.spervisorsView.assignments' defaultMessage='Assignments' />}
+          collapsable
+          noPadding
+          isOpen>
+          <AdminAssignmentsTable assignments={assignments} />
+        </Box>
+        <Box
+          title={<FormattedMessage id='app.group.spervisorsView.addAssignment' defaultMessage='Add assignment' />}
+          collapsable
+          isOpen>
+          <AddAssignment groupId={group.id} />
+        </Box>
+      </Col>
+    </Row>
+  </div>
 );
 
 SupervisorsView.propTypes = {

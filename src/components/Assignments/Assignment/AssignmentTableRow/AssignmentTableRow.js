@@ -19,7 +19,7 @@ const AssignmentTableRow = ({
 }) => (
   <tr>
     <td className='text-center'>
-      {status && <AssignmentStatusIcon status={status} />}
+      <AssignmentStatusIcon status={status} />
     </td>
     <td>
       <Link to={ASSIGNMENT_DETAIL_URI_FACTORY(id)}>{name}</Link>

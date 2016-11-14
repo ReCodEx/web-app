@@ -1,11 +1,9 @@
 import React, { Component, PropTypes } from 'react';
-import { FormattedMessage } from 'react-intl';
+import { injectIntl, FormattedMessage } from 'react-intl';
 import { List } from 'immutable';
 import { connect } from 'react-redux';
-import { push } from 'react-router-redux';
 
 import {
-  init,
   addMessage,
   completedTask,
   skippedTask,
@@ -39,11 +37,7 @@ class EvaluationProgressContainer extends Component {
   };
 
   init = (props) => {
-    const {
-      monitor,
-      isOpen
-    } = props;
-
+    const { monitor } = props;
     if (!this.socket && monitor !== null) {
       if (typeof WebSocket === 'function') {
         this.socket = new WebSocket(monitor.url);
@@ -85,13 +79,13 @@ class EvaluationProgressContainer extends Component {
 
   formatMessage = ({ command, task_state = 'OK', text = null }) => ({    // eslint-disable-line camelcase
     wasSuccessful: command !== 'TASK' || task_state === 'COMPLETED',      // eslint-disable-line camelcase
-    text: text || this.getRandomMessage(),
+    text: text || this.props.intl.formatMessage(this.getRandomMessage()),
     status: task_state // eslint-disable-line camelcase
   });
 
   getRandomMessage = () => {
     if (!this.availableMessages || this.availableMessages.length === 0) {
-      this.availableMessages = Object.assign([], randomMessages);
+      this.availableMessages = Object.assign([], Object.values(randomMessages));
     }
 
     const randomIndex = Math.floor(Math.random() * this.availableMessages.length);
@@ -115,15 +109,11 @@ class EvaluationProgressContainer extends Component {
   };
 
   closeSocket = () => {
-    const {
-      finish,
-      goToEvaluationDetails
-    } = this.props;
-
     this.socket.close();
     this.isClosed = true;
 
     // fire a callback if any
+    const { finish } = this.props;
     finish && finish();
   };
 
@@ -137,7 +127,6 @@ class EvaluationProgressContainer extends Component {
   render = () => {
     const {
       isOpen,
-      expectedTasksCount,
       messages,
       progress,
       isFinished
@@ -176,13 +165,31 @@ class EvaluationProgressContainer extends Component {
 
 EvaluationProgressContainer.propTypes = {
   isOpen: PropTypes.bool.isRequired,
+  monitor: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    url: PropTypes.string.isRequired
+  }),
+  isFinished: PropTypes.bool.isRequired,
   submissionId: PropTypes.string,
   port: PropTypes.number,
   url: PropTypes.string,
   path: PropTypes.string,
   finish: PropTypes.func,
   finishProcessing: PropTypes.func.isRequired,
-  link: PropTypes.string.isRequired
+  link: PropTypes.string.isRequired,
+  addMessage: PropTypes.func.isRequired,
+  expectedTasksCount: PropTypes.number.isRequired,
+  progress: PropTypes.shape({
+    completed: PropTypes.number.isRequired,
+    skipped: PropTypes.number.isRequired,
+    failed: PropTypes.number.isRequired
+  }),
+  completedTask: PropTypes.func.isRequired,
+  skippedTask: PropTypes.func.isRequired,
+  failedTask: PropTypes.func.isRequired,
+  goToEvaluationDetails: PropTypes.func,
+  messages: PropTypes.object,
+  intl: PropTypes.object.isRequired
 };
 
 EvaluationProgressContainer.contextTypes = {
@@ -208,4 +215,6 @@ export default connect(
     failedTask,
     addMessage
   }
-)(EvaluationProgressContainer);
+)(
+  injectIntl(EvaluationProgressContainer)
+);
