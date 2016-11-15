@@ -18,9 +18,12 @@ const EditRuntimeConfigForm = ({
         : <FormattedMessage id='app.editRuntimeConfigForm.newConfig' defaultMessage='New configuration' />
     }
     ContentComponent={EditRuntimeConfigFields}
-    removeQuestion={<FormattedMessage id='app.editRuntimeConfigForm.noConfiguration' defaultMessage='There is currently no runtime configuration specified for this exercise.' />}
+    emptyMessage = {<FormattedMessage id='app.editRuntimeConfigForm.emptyConfigTabs' defaultMessage='There is currently no runtime configuration.' />}
+    addMessage={<FormattedMessage id='app.editRuntimeConfigForm.addConfigTab' defaultMessage='Add new runtime configuration' />}
+    removeQuestion = {<FormattedMessage id='app.editRuntimeConfigForm.reallyRemoveQuestion' defaultMessage='Do you really want to delete this runtime configuration?' />}
     id='runtime-configuration'
-    remove />
+    remove
+    add />
 );
 
 EditRuntimeConfigForm.propTypes = {
