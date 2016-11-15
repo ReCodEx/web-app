@@ -236,7 +236,7 @@
   "app.loginForm.validation.emptyEmail": "E-mailová adresa nemůže být prázdná.",
   "app.loginForm.validation.emptyPassword": "Heslo nemůže být prázdné.",
   "app.logout": "Odhlásit se",
-  "app.markdownTextArea.canUseMarkdown": "V tomto poli není povoleno používat syntaxi markdown.",
+  "app.markdownTextArea.canUseMarkdown": "V tomto poli je povoleno používat syntaxi markdown.",
   "app.markdownTextArea.empty": "Prázdné",
   "app.markdownTextArea.preview": "Náhled:",
   "app.markdownTextArea.showPreview": "Ukaž náhled",
