@@ -1,51 +1,90 @@
-import React, { PropTypes } from 'react';
+import React, { PropTypes, Component } from 'react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
+import { List } from 'immutable';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import { Row, Col } from 'react-bootstrap';
+import Box from '../../components/AdminLTE/Box';
 import { Link } from 'react-router';
 import Page from '../../components/Page';
 import ResourceRenderer from '../../components/ResourceRenderer';
 import UsersStats from '../../components/Users/UsersStats';
-import { isReady } from '../../redux/helpers/resourceManager';
+import { isReady, getJsData } from '../../redux/helpers/resourceManager';
 import { loggedInUserId } from '../../redux/selectors/auth';
-import { loggedInUserSelector } from '../../redux/selectors/users';
+import { loggedInUserSelector, studentOfGroupsIdsSelector } from '../../redux/selectors/users';
+import { groupSelector, groupsAssignmentsSelector, fetchGroupIfNeeded } from '../../redux/selectors/groups';
 import { fetchUserIfNeeded } from '../../redux/modules/users';
+import PageContent from '../../components/PageContent';
+import AssignmentsTable from '../../components/Assignments/Assignment/AssignmentsTable';
+import { getStatuses } from '../../redux/selectors/stats';
 
-const Dashboard = ({
-  user
-}, {
-  links: { GROUP_URI_FACTORY }
-}) => (
-  <Page
-    resource={user}
-    title={() => <FormattedMessage id='app.dashboard.title' defaultMessage='Dashboard' />}
-    description={(user) => user.fullName}>
-    {user => (
-      <Row>
-        {user.groupsStats && user.groupsStats.map(
-          group => (
-            <Col xs={12} sm={6} lg={4} key={group.id}>
-              <Link to={GROUP_URI_FACTORY(group.id)}>
-                <UsersStats {...group} />
-              </Link>
+
+class Dashboard extends Component {
+
+  render() {
+    const {
+      user,
+      groups,
+      groupAssignments,
+      groupStatuses,
+      getGroupData
+    } = this.props;
+
+    return (
+      <PageContent
+        title={<FormattedMessage id='app.dashboard.title' defaultMessage='Dashboard' />}
+        description={<FormattedMessage id='app.dashboard.description' defaultMessage='Dashboard' />}
+        breadcrumbs={[
+          {
+            iconName: 'home',
+            text: <FormattedMessage id='app.dashboard.title' defaultMessage='Dashboard' />
+          }
+        ]}>
+
+        <div>
+        {groups && groups.map(groupId =>
+          <Row key={`row-${groupId}`}>
+            <Col sm={6} key={`col1-${groupId}`}>
+              <UsersStats {...getGroupData(groupId)} key={`badge=${groupId}`} />
             </Col>
-          ))}
-      </Row>
-    )}
-  </Page>
-);
+            <Col sm={6} key={`col2-${groupId}`}>
+              <Box key={`box-${groupId}`}
+                title={<FormattedMessage id='app.dashboard.group' defaultMessage='Group {groupName}' values={{ groupName: groupId }} />}
+                collapsable
+                noPadding
+                isOpen>
+                <AssignmentsTable
+                  assignments={groupAssignments(groupId)}
+                  showGroup={false}
+                  statuses={groupStatuses(groupId)} />
+              </Box>
+            </Col>
+          </Row>
+        )}
+        </div>
+
+      </PageContent>
+    );
+  }
+
+}
 
 Dashboard.propTypes = {
-  user: ImmutablePropTypes.map
-};
 
-Dashboard.contextTypes = {
-  links: PropTypes.object
 };
 
 export default connect(
-  state => ({
-    user: loggedInUserSelector(state)
+  state => {
+    const user = loggedInUserSelector(state);
+    return {
+      user,
+      groups: isReady(user) ? studentOfGroupsIdsSelector(getJsData(user).id)(state) : List(),
+      groupAssignments: (groupId) => groupsAssignmentsSelector(groupId)(state),
+      groupStatuses: (groupId) => isReady(user) ? getStatuses(groupId, getJsData(user).id)(state) : List(),
+      getGroupData: (groupId) => groupSelector(groupId)
+    }
+  },
+  (dispatch, { params }) => ({
+
   })
 )(Dashboard);
