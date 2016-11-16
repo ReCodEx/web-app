@@ -1,5 +1,6 @@
 import React, { PropTypes } from 'react';
 import { List } from 'immutable';
+import { FormattedMessage } from 'react-intl';
 
 import { Table } from 'react-bootstrap';
 import Box from '../../AdminLTE/Box';
@@ -24,10 +25,10 @@ const SubmissionsTable = ({
       <thead>
         <tr>
           <th></th>
-          <th>Datum odevzdání</th>
-          <th className='text-center'>Úspěšnost řešení</th>
-          <th className='text-center'>Počet bodů</th>
-          <th>Poznámka</th>
+          <th><FormattedMessage id='app.submissionsTable.submissionDate' defaultMessage='Date of submission' /></th>
+          <th className='text-center'><FormattedMessage id='app.submissionsTable.solutionValidity' defaultMessage='Solution validity' /></th>
+          <th className='text-center'><FormattedMessage id='app.submissionsTable.receivedPoints' defaultMessage='Received points' /></th>
+          <th><FormattedMessage id='app.submissionsTable.note' defaultMessage='Note' /></th>
           <th />
         </tr>
       </thead>
