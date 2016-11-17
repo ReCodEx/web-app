@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
+import { FormattedMessage } from 'react-intl';
 import { List } from 'immutable';
 
 import { fetchUsersSubmissions } from '../../redux/modules/submissions';
@@ -35,17 +36,21 @@ class SubmissionsTableContainer extends Component {
         var bTimestamp = b.get('data').get('submittedAt');
         return aTimestamp - bTimestamp;
       }
-    )
-  };
+    );
+  }
 
   render() {
     const {
+      userId,
       assignmentId,
-      submissions
+      submissions,
+      title = <FormattedMessage id='app.submissionsTableContainer.title' defaultMessage='Submitted solutions' />
     } = this.props;
 
     return (
       <SubmissionsTable
+        title={title}
+        userId={userId}
         submissions={this.sortSubmissions(submissions)}
         assignmentId={assignmentId} />
     );
@@ -55,6 +60,7 @@ class SubmissionsTableContainer extends Component {
 
 SubmissionsTableContainer.propTypes = {
   userId: PropTypes.string.isRequired,
+  title: PropTypes.string,
   assignmentId: PropTypes.string.isRequired,
   submissions: PropTypes.instanceOf(List)
 };
@@ -62,7 +68,7 @@ SubmissionsTableContainer.propTypes = {
 export default connect(
   (state, props) => {
     const getSubmissions = createGetUsersSubmissionsForAssignment();
-    const myUserId = !!props.userId ? props.userId : loggedInUserIdSelector(state);
+    const myUserId = props.userId ? props.userId : loggedInUserIdSelector(state);
     return {
       userId: myUserId,
       submissions: getSubmissions(state, myUserId, props.assignmentId)
