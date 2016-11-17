@@ -1,7 +1,5 @@
 const path = require('path');
 const webpack = require('webpack');
-const autoprefixer = require('autoprefixer');
-const strip = require('strip-loader');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 // load variables from .env
@@ -24,21 +22,21 @@ module.exports = {
   },
   module: {
     loaders: [
-      { test: /\.jsx?$/, exclude: /node_modules/, loaders: [ 'babel' ] },
+      { test: /\.jsx?$/, exclude: /node_modules/, loaders: [ 'babel-loader' ] },
       { test: /\.json$/, loader: 'json-loader' },
       {
         test: /\.css$/,
-        loader: extractCss.extract(['css'])
+        loader: extractCss.extract(['css-loader'])
       },
       {
         test: /\.less$/,
-        loader: extractCss.extract(['css?modules', 'less'])
+        loader: extractCss.extract(['css-loader?modules', 'less-loader'])
       },
       {
         test: /.*\.(gif|png|jpe?g|svg)$/i,
         loaders: [
-          'file?hash=sha512&digest=hex&name=[hash].[ext]',
-          'image-webpack'
+          'file-loader?hash=sha512&digest=hex&name=[hash].[ext]',
+          'image-webpack-loader'
         ]
       }
     ]
