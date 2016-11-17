@@ -22,7 +22,7 @@ class SubmissionsTableContainer extends Component {
   }
 
   static loadData = ({
-    userId,
+  userId,
     assignmentId,
     loadSubmissionsForUser
   }) => {

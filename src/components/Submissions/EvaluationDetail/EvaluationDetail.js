@@ -111,8 +111,8 @@ const EvaluationDetail = ({
             <td className={
               classnames({
                 'text-center': true,
-                'text-danger': !evaluation.isCorrect,
-                'text-success': evaluation.isCorrect
+                'text-danger': !evaluation.isCorrect || evaluation.points + evaluation.bonusPoints <= 0,
+                'text-success': evaluation.isCorrect && evaluation.points + evaluation.bonusPoints > 0
               })
             }>
               <b>

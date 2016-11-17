@@ -80,8 +80,6 @@ export const createApiCallPromise = ({
       if (!success && dispatch) {
         if (isServerError(code)) {
           dispatch(addNotification(`There was a problem on the server. ${msg}`, false));
-        } else {
-          dispatch(addNotification(msg, false));
         }
       }
 

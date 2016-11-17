@@ -1,12 +1,12 @@
 import React, { Component, PropTypes } from 'react';
 import { FormattedMessage } from 'react-intl';
-import { Row, Col, Button } from 'react-bootstrap';
-import { Link } from 'react-router';
+import { Row, Col } from 'react-bootstrap';
 
 import SubmissionStatus from '../SubmissionStatus';
 import SourceCodeInfoBox from '../../SourceCodeInfoBox';
 import LocalizedAssignments from '../../Assignments/Assignment/LocalizedAssignments';
 import TestResults from '../TestResults';
+import BonusPointsContainer from '../../../containers/BonusPointsContainer';
 import CommentThreadContainer from '../../../containers/CommentThreadContainer';
 import SourceCodeViewerContainer from '../../../containers/SourceCodeViewerContainer';
 
@@ -29,8 +29,7 @@ class SubmissionDetail extends Component {
         files,
         evaluation
       },
-      assignment,
-      children
+      assignment
     } = this.props;
     const { openFileId } = this.state;
 
@@ -52,6 +51,7 @@ class SubmissionDetail extends Component {
                 evaluation={evaluation}
                 submittedAt={submittedAt}
                 maxPoints={maxPoints} />
+              <BonusPointsContainer submissionId={id} evaluation={evaluation} />
               <TestResults evaluation={evaluation} />
             </Col>
           )}
@@ -99,8 +99,7 @@ SubmissionDetail.propTypes = {
     maxPoints: PropTypes.number.isRequired,
     files: PropTypes.array
   }).isRequired,
-  assignment: PropTypes.object.isRequired,
-  children: PropTypes.element
+  assignment: PropTypes.object.isRequired
 };
 
 SubmissionDetail.contextTypes = {
