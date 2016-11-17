@@ -30,7 +30,16 @@ const SubmitButton = ({
 );
 
 SubmitButton.propTypes = {
-
+  handleSubmit: PropTypes.func.isRequired,
+  submitting: PropTypes.bool,
+  hasSucceeded: PropTypes.bool,
+  hasFailed: PropTypes.bool,
+  invalid: PropTypes.bool,
+  messages: PropTypes.shape({
+    submit: PropTypes.oneOfType([ PropTypes.string, PropTypes.element ]),
+    success: PropTypes.oneOfType([ PropTypes.string, PropTypes.element ]),
+    submitting: PropTypes.oneOfType([ PropTypes.string, PropTypes.element ])
+  })
 };
 
 export default SubmitButton;
