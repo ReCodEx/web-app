@@ -8,23 +8,28 @@ import {
 } from 'react-bootstrap';
 
 import Checkbox from '../Checkbox';
+import OnOffCheckbox from '../OnOffCheckbox';
 
 const CheckboxField = ({
   input,
+  onOff = false,
   meta: {
     touched,
     error
   },
   label,
   ...props
-}) => (
-  <FormGroup validationState={touched && error ? 'error' : undefined}>
-    <Checkbox {...props} {...input} controlId={input.name} checked={input.value}>
-      {label}
-    </Checkbox>
-    {touched && error && <HelpBlock>{error}</HelpBlock>}
-  </FormGroup>
-);
+}) => {
+  const Component = onOff ? OnOffCheckbox : Checkbox;
+  return (
+    <FormGroup validationState={touched && error ? 'error' : undefined}>
+      <Component {...props} {...input} controlId={input.name} checked={input.value}>
+        {label}
+      </Component>
+      {touched && error && <HelpBlock>{error}</HelpBlock>}
+    </FormGroup>
+  );
+};
 
 CheckboxField.propTypes = {
   name: PropTypes.string.isRequired,

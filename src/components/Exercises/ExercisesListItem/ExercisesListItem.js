@@ -7,7 +7,6 @@ import { Link } from 'react-router';
 const ExercisesListItem = ({
   id,
   name,
-  description,
   createActions
 }, {
   links: { EXERCISE_URI_FACTORY }
@@ -16,9 +15,6 @@ const ExercisesListItem = ({
     <td>
       <p><strong>{name}</strong></p>
       <small><Link to={EXERCISE_URI_FACTORY(id)}>{id}</Link></small>
-    </td>
-    <td>
-      <ReactMarkdown source={description} />
     </td>
     {createActions && (
       <td className='text-right'>
@@ -30,8 +26,7 @@ const ExercisesListItem = ({
 
 ExercisesListItem.propTypes = {
   id: PropTypes.string.isRequired,
-  name: PropTypes.string.isRequired,
-  description: PropTypes.string.isRequired
+  name: PropTypes.string.isRequired
 };
 
 ExercisesListItem.contextTypes = {

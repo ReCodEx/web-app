@@ -1,46 +1,37 @@
 import React, { Component, PropTypes } from 'react';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
-import { List } from 'immutable';
 import { Row, Col } from 'react-bootstrap';
 
 import PageContent from '../../components/PageContent';
-import InstanceDetail, { LoadingInstanceDetail, FailedInstanceDetail } from '../../components/Instances/InstanceDetail';
+import ResourceRenderer from '../../components/ResourceRenderer';
+import InstanceDetail from '../../components/Instances/InstanceDetail';
 import CreateGroupForm from '../../components/Forms/CreateGroupForm';
 
-import { isReady, isLoading, hasFailed } from '../../redux/helpers/resourceManager';
 import { fetchInstanceIfNeeded } from '../../redux/modules/instances';
 import { instanceSelector } from '../../redux/selectors/instances';
 import { createGroup, fetchInstanceGroupsIfNeeded } from '../../redux/modules/groups';
 import { groupsSelectors } from '../../redux/selectors/groups';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import { isStudentOf, isSupervisorOf, isAdminOf, isMemberOf } from '../../redux/selectors/users';
-import { fetchAssignmentsForInstance } from '../../redux/modules/assignments';
 
 class Instance extends Component {
 
+  static loadAsync = ({ instanceId }, dispatch) => Promise.all([
+    dispatch(fetchInstanceIfNeeded(instanceId)),
+    dispatch(fetchInstanceGroupsIfNeeded(instanceId))
+  ]);
+
   componentWillMount() {
-    this.loadData(this.props);
+    this.props.loadAsync();
   }
 
   componentWillReceiveProps(newProps) {
     if (this.props.params.instanceId !== newProps.params.instanceId) {
-      this.loadData(newProps);
+      newProps.loadAsync();
     }
   }
-
-  loadData = ({
-    fetchInstanceIfNeeded,
-    fetchInstanceGroupsIfNeeded
-  }) => {
-    fetchInstanceIfNeeded();
-    fetchInstanceGroupsIfNeeded();
-  };
-
-  getTitle = (instance) =>
-    isReady(instance)
-      ? instance.getIn(['data', 'name'])
-      : <FormattedMessage id='app.instance.loading' defaultMessage="Loading instance's detail ..." />;
 
   render() {
     const {
@@ -53,27 +44,49 @@ class Instance extends Component {
 
     return (
       <PageContent
-        title={this.getTitle(instance)}
-        description={<FormattedMessage id='app.instance.description' defaultMessage='Instance overview' />}>
-        <Row>
-          <Col sm={6}>
-            {isLoading(instance) && <LoadingInstanceDetail />}
-            {hasFailed(instance) && <FailedInstanceDetail />}
-            {isReady(instance) &&
-              <InstanceDetail {...instance.get('data').toJS()} groups={groups} isMemberOf={isMemberOf} />}
-          </Col>
+        title={(
+          <ResourceRenderer resource={instance}>
+            {instance => <span>{instance.name}</span>}
+          </ResourceRenderer>
+        )}
+        description={<FormattedMessage id='app.instance.description' defaultMessage='Instance overview' />}
+        breadcrumbs={[
+          {
+            text: <FormattedMessage id='app.instance.description' defaultMessage="Instance overview" />,
+            iconName: 'info-circle'
+          }
+        ]}>
+        <ResourceRenderer resource={instance}>
+          {data => (
+            <Row>
+              <Col sm={6}>
+                <InstanceDetail {...data} groups={groups} isMemberOf={isMemberOf} />
+              </Col>
 
-          <Col sm={6}>
-            <CreateGroupForm
-              onSubmit={createGroup}
-              instanceId={instanceId} />
-          </Col>
-        </Row>
+              <Col sm={6}>
+                <CreateGroupForm
+                  onSubmit={createGroup}
+                  instanceId={instanceId} />
+              </Col>
+            </Row>
+          )}
+        </ResourceRenderer>
       </PageContent>
     );
   }
 
 }
+
+Instance.propTypes = {
+  loadAsync: PropTypes.func.isRequired,
+  params: PropTypes.shape({
+    instanceId: PropTypes.string.isRequired
+  }).isRequired,
+  instance: ImmutablePropTypes.map,
+  groups: ImmutablePropTypes.list,
+  createGroup: PropTypes.func.isRequired,
+  isMemberOf: PropTypes.func.isRequired
+};
 
 export default connect(
   (state, { params: { instanceId } }) => {
@@ -87,9 +100,9 @@ export default connect(
       isMemberOf: (groupId) => isMemberOf(userId, groupId)(state)
     };
   },
-  (dispatch, { params: { instanceId: id } }) => ({
-    fetchInstanceIfNeeded: () => dispatch(fetchInstanceIfNeeded(id)),
-    fetchInstanceGroupsIfNeeded: () => dispatch(fetchInstanceGroupsIfNeeded(id)),
-    createGroup: ({ name, description }) => dispatch(createGroup({ instanceId: id, name, description }))
+  (dispatch, { params: { instanceId } }) => ({
+    createGroup: ({ name, description }) =>
+      dispatch(createGroup({ instanceId, name, description })),
+    loadAsync: () => Instance.loadAsync({ instanceId }, dispatch)
   })
 )(Instance);

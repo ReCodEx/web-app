@@ -6,6 +6,7 @@ import factory, { initialState } from '../helpers/resourceManager';
 import { createApiAction } from '../middleware/apiMiddleware';
 
 import { additionalActionTypes as groupsActionTypes } from './groups';
+import { actionTypes as authActionTypes } from './auth';
 
 const resourceName = 'users';
 var {
@@ -45,7 +46,9 @@ export const fetchStudents = groupId =>
 const reducer = handleActions(Object.assign({}, reduceActions, {
 
   [groupsActionTypes.LOAD_USERS_GROUPS_FULFILLED]: (state, { payload: { stats }, meta: { userId } }) =>
-    state.setIn([ 'resources', userId, 'data', 'groupsStats' ], stats),
+    state.hasIn([ 'resources', userId, 'data', 'groupsStats' ])
+      ? state.setIn([ 'resources', userId, 'data', 'groupsStats' ], stats)
+      : state,
 
   [groupsActionTypes.JOIN_GROUP_PENDING]: (state, { meta: { groupId, userId } }) => {
     if (!state.getIn(['resources', userId])) {

@@ -1,10 +1,9 @@
 import { createAction, handleActions } from 'redux-actions';
-import { Map } from 'immutable';
-
 import factory, { initialState } from '../helpers/resourceManager';
-import { createApiAction } from '../middleware/apiMiddleware';
 
-import { additionalActionTypes as groupsActionTypes } from './groups';
+/**
+ * Create actions & reducer
+ */
 
 const resourceName = 'stats';
 const {
@@ -15,18 +14,6 @@ const {
   apiEndpointFactory: groupId => `/groups/${groupId}/students/stats`
 });
 
-/**
- * Actions
- */
-
 export const fetchGroupsStatsIfNeeded = actions.fetchOneIfNeeded;
-
-/**
- * Reducer
- */
-
-const reducer = handleActions(Object.assign({}, reduceActions, {
-
-}), initialState);
-
+const reducer = handleActions(reduceActions, initialState);
 export default reducer;

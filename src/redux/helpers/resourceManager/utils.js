@@ -3,7 +3,7 @@
  * @module utils
  */
 
-import { hasFailed, didInvalidate } from './status';
+import { didInvalidate } from './status';
 
 /**
  * Create a simple default factory: id => "/<resourceName>/[<id>]"
@@ -26,4 +26,4 @@ export const defaultSelectorFactory = resourceName =>
  * @return {boolean}  The item needs to be reloaded from the server
  */
 export const defaultNeedsRefetching = (item) =>
-  !item || hasFailed(item) || didInvalidate(item);
+  !item || didInvalidate(item);

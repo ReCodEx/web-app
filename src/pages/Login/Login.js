@@ -19,9 +19,13 @@ class Login extends Component {
     this.checkIfIsLoggedIn(this.props);
   }
 
-  componentWillReceiveProps = props => this.checkIfIsLoggedIn(props);
+  componentWillReceiveProps = (props) =>
+    this.checkIfIsLoggedIn(props);
 
-  checkIfIsLoggedIn = props => {
+  /**
+   * Redirect all logged in users to the dashboard as soon as they are visually informed about success.
+   */
+  checkIfIsLoggedIn = (props) => {
     const { hasSucceeded, push } = props;
     if (hasSucceeded) {
       setTimeout(() => push(this.context.links.DASHBOARD_URI), 600);
@@ -37,8 +41,15 @@ class Login extends Component {
         title={<FormattedMessage id='app.login.title' defaultMessage='Sign in' />}
         description={<FormattedMessage id='app.login.description' defaultMessage='Please fill your credentials' />}
         breadcrumbs={[
-          { text: <FormattedMessage id='app.homepage.title' />, link: HOME_URI },
-          { text: <FormattedMessage id='app.login.title' /> }
+          {
+            text: <FormattedMessage id='app.homepage.title' />,
+            link: HOME_URI,
+            iconName: 'home'
+          },
+          {
+            text: <FormattedMessage id='app.login.title' />,
+            iconName: 'sign-in'
+          }
         ]}>
         <Row>
           <Col lg={4} lgOffset={1} md={6} mdOffset={0} sm={8} smOffset={2}>

@@ -1,3 +1,5 @@
+import { canUseDOM } from 'exenv';
+
 import messagesCs from './cs';
 import messagesEn from './en';
 
@@ -9,7 +11,7 @@ export const isAvailable = lang => Object.keys(messages).indexOf(lang) !== -1;
 export const localeData = { cs, en };
 
 export const getDefaultLang = () => {
-  if (typeof window !== 'undefined' && typeof window.navigator !== 'undefined') {
+  if (canUseDOM) {
     const lang = (window.navigator.userLanguage || window.navigator.language).substr(0, 2);
     if (messages[lang]) {
       return lang;

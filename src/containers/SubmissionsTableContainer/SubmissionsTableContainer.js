@@ -52,9 +52,10 @@ SubmissionsTableContainer.propTypes = {
 export default connect(
   (state, props) => {
     const getSubmissions = createGetUsersSubmissionsForAssignment();
+    const myUserId = !!props.userId ? props.userId : loggedInUserIdSelector(state);
     return {
-      userId: loggedInUserIdSelector(state),
-      submissions: getSubmissions(state, loggedInUserIdSelector(state), props.assignmentId)
+      userId: myUserId,
+      submissions: getSubmissions(state, myUserId, props.assignmentId)
     };
   },
   (dispatch, props) => ({

@@ -11,14 +11,14 @@ import cookieParser from 'cookie-parser';
 
 import { match, RouterContext } from 'react-router';
 
-import { IntlProvider, addLocaleData } from 'react-intl';
+import { addLocaleData } from 'react-intl';
 import cs from 'react-intl/locale-data/cs';
-import messages from './locales/cs';
 
 import { Provider } from 'react-redux';
 import { syncHistoryWithStore } from 'react-router-redux';
 import createHistory from 'react-router/lib/createMemoryHistory';
 import { configureStore } from './redux/store';
+import { loggedInUserIdSelector } from './redux/selectors/auth';
 import createRoutes from './pages/routes';
 
 addLocaleData([ ...cs ]);
@@ -28,17 +28,34 @@ addLocaleData([ ...cs ]);
  * some basic middleware for tempaltes and static file serving.
  */
 
-const BUNDLE = process.env.BUNDLE || '/bundle.js';
+const bundle = process.env.BUNDLE || '/bundle.js';
 
 let app = new Express();
 app.set('view engine', 'ejs');
 app.use(Express.static('public'));
 app.use(cookieParser());
 
+const renderPage = (res, store, renderProps) => {
+  let html = renderToString(
+    <Provider store={store}>
+      <RouterContext {...renderProps} />
+    </Provider>
+  );
+  const head = Helmet.rewind();
+
+  res.render('index', {
+    html,
+    head,
+    reduxState: JSON.stringify(store.getState()),
+    bundle,
+    style: '/style.css'
+  });
+};
+
 app.get('*', (req, res) => {
   const memoryHistory = createHistory(req.originalUrl);
   // Extract the accessToken from the cookies for authenticated API requests from the server.
-  const token = req.cookies.accessToken; // undefined === the user is not logged in
+  const token = req.cookies.recodex_accessToken; // undefined === the user is not logged in
   const store = configureStore(memoryHistory, undefined, token);
   const history = syncHistoryWithStore(memoryHistory, store);
   const location = req.originalUrl;
@@ -53,24 +70,21 @@ app.get('*', (req, res) => {
       // this should never happen but just for sure - if router failed
       res.status(404).send('Not found');
     } else {
-      let html = renderToString(
-        <Provider store={store}>
-          <RouterContext {...renderProps} />
-        </Provider>
-      );
-      const head = Helmet.rewind();
+      const userId = loggedInUserIdSelector(store.getState()); // try to get the user ID from the token (if any)
+      const loadAsync = renderProps.components
+        .filter(component => component && component.WrappedComponent && component.WrappedComponent.loadAsync)
+        .map(component => component.WrappedComponent.loadAsync)
+        .map(load => load(renderProps.params, store.dispatch, userId));
 
-      res.render('index', {
-        html,
-        head,
-        reduxState: JSON.stringify(store.getState()),
-        bundle: '/bundle.js'
-      });
+      const oldStore = Object.assign({}, store);
+      Promise.all(loadAsync)
+        .then(() => renderPage(res, store, renderProps))
+        .catch(() => renderPage(res, oldStore, renderProps));
     }
   });
 });
 
-const PORT = process.env.PORT || 8080;
-app.listen(PORT, () => {
-  console.log('Server is running on port ' + PORT);
+const port = process.env.PORT || 8080;
+app.listen(port, () => {
+  console.log('Server is running on port ' + port);
 });

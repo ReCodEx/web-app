@@ -1,17 +1,19 @@
 import { actionTypes } from '../modules/auth';
+import { jwtSelector } from '../selectors/auth';
 import { actionTypes as registrationActionTypes } from '../modules/registration';
 import { CALL_API } from './apiMiddleware';
 import cookies from 'browser-cookies';
+import { canUseDOM } from 'exenv';
 
 export const LOCAL_STORAGE_KEY = 'recodex/accessToken';
 export const COOKIES_KEY = 'recodex_accessToken';
 
 export const storeToken = (accessToken) => {
-  if (accessToken && typeof localStorage !== 'undefined') {
-    localStorage.setItem(LOCAL_STORAGE_KEY, accessToken);
-  }
+  if (canUseDOM && accessToken) {
+    if (typeof localStorage !== 'undefined') {
+      localStorage.setItem(LOCAL_STORAGE_KEY, accessToken);
+    }
 
-  if (typeof document !== 'undefined') {
     // @todo: expire after 'exp' in the token
     cookies.set(COOKIES_KEY, accessToken, { expires: 14 }); // expires after 14 days
   }
@@ -29,7 +31,9 @@ export const removeToken = () => {
 
 export const getToken = () => {
   if (typeof localStorage !== 'undefined') {
-    return localStorage.getItem(LOCAL_STORAGE_KEY);
+    const token = localStorage.getItem(LOCAL_STORAGE_KEY);
+    storeToken(token); // make sure the token is stored in cookies for page refreshes
+    return token;
   }
 
   if (typeof document !== 'undefined') {
@@ -39,7 +43,7 @@ export const getToken = () => {
   return null;
 };
 
-const middleware = state => next => action => {
+const middleware = store => next => action => {
   // manage access token storage
   switch (action.type) {
     case actionTypes.LOGIN_SUCCESS:
@@ -51,8 +55,8 @@ const middleware = state => next => action => {
       break;
     case CALL_API:
       if (!action.request.accessToken) {
-        const token = getToken();
-        if (token) {
+        const token = jwtSelector(store.getState());
+        if (token) { // do not override the token if it was set explicitely and there is none in the state
           action.request.accessToken = token;
         }
       }

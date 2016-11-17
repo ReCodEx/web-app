@@ -8,8 +8,9 @@ import { Row, Col } from 'react-bootstrap';
 import PageContent from '../../components/PageContent';
 import Box from '../../components/AdminLTE/Box';
 import RegistrationForm from '../../components/Forms/RegistrationForm';
+import ExternalRegistrationForm from '../../components/Forms/ExternalRegistrationForm';
 
-import { createAccount } from '../../redux/modules/registration';
+import { createAccount, createExternalAccount } from '../../redux/modules/registration';
 import { fetchInstances } from '../../redux/modules/instances';
 import { instancesSelector } from '../../redux/selectors/instances';
 import { isCreating, hasFailed, hasSucceeded } from '../../redux/selectors/registration';
@@ -18,44 +19,52 @@ class Register extends Component {
 
   componentWillMount = () => {
     this.checkIfIsDone(this.props);
-    Register.loadData(this.props);
+    this.props.loadAsync();
   };
 
-  componentWillReceiveProps = props => {
+  componentWillReceiveProps = (props) =>
     this.checkIfIsDone(props);
-  };
 
   checkIfIsDone = props => {
     const { hasSucceeded, push } = props;
     if (hasSucceeded) {
       const { links: { DASHBOARD_URI } } = this.context;
-      console.log(push);
-      console.log(DASHBOARD_URI);
       setTimeout(() => push(DASHBOARD_URI), 600);
     }
   };
 
-  static loadData = ({ fetchInstances }) => {
-    fetchInstances();
-  };
-
   render() {
     const { links: { HOME_URI } } = this.context;
-    const { instances, createAccount, isCreatingAccount, hasFailed, hasSucceeded } = this.props;
+    const { instances, createAccount, createExternalAccount, isCreatingAccount, hasFailed, hasSucceeded } = this.props;
 
     return (
       <PageContent
         title={<FormattedMessage id='app.registration.title' defaultMessage='Create a new ReCodEx account' />}
         description={<FormattedMessage id='app.registration.description' defaultMessage='Start using ReCodEx today' />}
         breadcrumbs={[
-          { text: <FormattedMessage id='app.homepage.title' />, link: HOME_URI },
-          { text: <FormattedMessage id='app.registration.title' /> }
+          {
+            text: <FormattedMessage id='app.homepage.title' />,
+            link: HOME_URI,
+            iconName: 'home'
+          },
+          {
+            text: <FormattedMessage id='app.registration.title' />,
+            iconName: 'user-plus'
+          }
         ]}>
         <Row>
-          <Col md={6} mdOffset={3} sm={8} smOffset={2}>
+          <Col lg={4} lgOffset={1} md={6} mdOffset={0} sm={8} smOffset={2}>
             <RegistrationForm
               instances={instances}
               onSubmit={createAccount}
+              istTryingToCreateAccount={isCreatingAccount}
+              hasFailed={hasFailed}
+              hasSucceeded={hasSucceeded} />
+          </Col>
+          <Col lg={4} lgOffset={1} md={6} mdOffset={0} sm={8} smOffset={2}>
+            <ExternalRegistrationForm
+              instances={instances}
+              onSubmit={createExternalAccount}
               istTryingToCreateAccount={isCreatingAccount}
               hasFailed={hasFailed}
               hasSucceeded={hasSucceeded} />
@@ -73,8 +82,9 @@ Register.contextTypes = {
 
 Register.propTypes = {
   instances: PropTypes.object.isRequired,
-  fetchInstances: PropTypes.func.isRequired,
+  loadAsync: PropTypes.func.isRequired,
   createAccount: PropTypes.func.isRequired,
+  createExternalAccount: PropTypes.func.isRequired,
   isCreatingAccount: PropTypes.bool.isRequired,
   hasFailed: PropTypes.bool.isRequired,
   hasSucceeded: PropTypes.bool.isRequired
@@ -88,9 +98,13 @@ export default connect(
     hasSucceeded: hasSucceeded(state)
   }),
   dispatch => ({
+    loadAsync: () => Promise.all([
+      dispatch(fetchInstances())
+    ]),
     createAccount: ({ firstName, lastName, email, password, instanceId }) =>
       dispatch(createAccount(firstName, lastName, email, password, instanceId)),
-    fetchInstances: () => dispatch(fetchInstances()),
+    createExternalAccount: ({ username, password, instanceId, serviceId}) =>
+      dispatch(createExternalAccount(username, password, instanceId, serviceId)),
     push: (url) => dispatch(push(url))
   })
 )(Register);

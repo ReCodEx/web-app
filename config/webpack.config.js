@@ -2,35 +2,70 @@ const path = require('path');
 const webpack = require('webpack');
 const autoprefixer = require('autoprefixer');
 const strip = require('strip-loader');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 // load variables from .env
 require('dotenv').config();
 
+const extractCss = new ExtractTextPlugin('style.css');
+
 module.exports = {
-  devtool: 'source-map',
+  devtool: process.env.NODE_ENV === 'development' ? 'source-map' : 'none',
   entry: path.join(__dirname, '..', 'src/client.js'),
   output: {
     filename: 'bundle.js',
     path: path.join(__dirname, '..', 'public'),
     publicPath: '/public/'
   },
+  resolve: {
+    alias: {
+      moment: 'moment/moment.js'
+    }
+  },
   module: {
     loaders: [
       { test: /\.jsx?$/, exclude: /node_modules/, loaders: [ 'babel' ] },
-      { test: /\.json$/, loader: 'json-loader' }
+      { test: /\.json$/, loader: 'json-loader' },
+      {
+        test: /\.css$/,
+        loader: extractCss.extract(['css'])
+      },
+      {
+        test: /\.less$/,
+        loader: extractCss.extract(['css?modules', 'less'])
+      },
+      {
+        test: /.*\.(gif|png|jpe?g|svg)$/i,
+        loaders: [
+          'file?hash=sha512&digest=hex&name=[hash].[ext]',
+          'image-webpack'
+        ]
+      }
     ]
   },
-  resolve: {
-    extensions: [ '', '.js', '.json' ]
-  },
-  postcss: [
-    autoprefixer({ browsers: ['last 2 versions'] })
-  ],
   plugins: [
+    extractCss,
     new webpack.DefinePlugin({
       'process.env': {
         NODE_ENV: '\'' + process.env.NODE_ENV + '\'',
         API_BASE: '\'' + process.env.API_BASE + '\''
+      }
+    }),
+    new webpack.LoaderOptionsPlugin({
+      imageWebpackLoader: {
+        mozjpeg: {
+          quality: 65
+        },
+        pngquant: {
+          quality: '65-90',
+          speed: 4
+        },
+        svgo: {
+          plugins: [
+            { removeViewBox: false },
+            { removeEmptyAttrs: true }
+          ]
+        }
       }
     })
   ]

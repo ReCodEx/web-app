@@ -11,11 +11,11 @@ import UsersNameContainer from '../../../containers/UsersNameContainer';
 import { isReady, isLoading, hasFailed } from '../../../redux/helpers/resourceManager';
 
 const ExerciseDetail = ({
+  id,
   name,
-  description,
-  assignment,
   authorId,
-  difficulty
+  difficulty,
+  localizedAssignments
 }) => (
   <div>
     <Box title={name}>
@@ -32,21 +32,14 @@ const ExerciseDetail = ({
         </tbody>
       </Table>
     </Box>
-    <Box title={<FormattedMessage id='app.exercise.detailTitle' defaultMessage='Exercise description' />}>
-      <ReactMarkdown source={description} />
-    </Box>
-    <Box title={<FormattedMessage id='app.exercise.assignment' defaultMessage='Assignmnent' />}>
-      <ReactMarkdown source={assignment} />
-    </Box>
   </div>
-);
+)
 
 ExerciseDetail.propTypes = {
   id: PropTypes.string.isRequired,
   authorId: PropTypes.string.isRequired,
   difficulty: PropTypes.string.isRequired,
-  description: PropTypes.string.isRequired,
-  assignment: PropTypes.string.isRequired
+  localizedAssignments: PropTypes.array.isRequired
 };
 
 export default ExerciseDetail;

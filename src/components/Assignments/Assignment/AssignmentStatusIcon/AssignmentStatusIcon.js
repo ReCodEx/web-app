@@ -20,7 +20,7 @@ const AssignmentStatusIcon = ({
       return <Icon name='exclamation-triangle' className='text-yellow' />;
 
     default:
-      return <Icon name='circle' className='text-gray' />;
+      return <Icon name='code' className='text-gray' />;
   }
 };
 

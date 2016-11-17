@@ -11,7 +11,7 @@ import { isReady, getId } from '../helpers/resourceManager';
  */
 
 export const groupsSelectors = state => state.groups.get('resources');
-const filterGroups = (ids, groups) => groups.filter(isReady).filter(group => ids.contains(getId(group)) >= 0);
+const filterGroups = (ids, groups) => groups.filter(isReady).filter(group => ids.contains(getId(group)));
 
 export const studentOfSelector = userId =>
   createSelector(

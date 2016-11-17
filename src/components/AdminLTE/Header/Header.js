@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import { canUseDOM } from 'exenv';
 import { FormattedMessage } from 'react-intl';
 import { IndexLink } from 'react-router';
 import { Navbar } from 'react-bootstrap';
@@ -7,14 +8,6 @@ import HeaderNotificationsContainer from '../../../containers/HeaderNotification
 import HeaderLanguageSwitching from '../HeaderLanguageSwitching';
 
 class Header extends Component {
-
-  state = { browser: false };
-
-  componentWillMount = () => {
-    if (typeof window !== 'undefined') {
-      this.setState({ browser: true });
-    }
-  };
 
   toggleSidebarSize = (e) => {
     e.preventDefault();
@@ -27,7 +20,6 @@ class Header extends Component {
   }
 
   render() {
-    const { browser } = this.state;
     const { links: {HOME_URI} } = this.context;
 
     const {
@@ -44,7 +36,7 @@ class Header extends Component {
         </IndexLink>
 
         <div className='navbar navbar-static-top' role='navigation'>
-          {browser && (
+          {canUseDOM && (
             <div>
               <MediaQuery maxWidth={767}>
                 <a href='#' className='sidebar-toggle' role='button' onClick={this.toggleSidebarVisibility}>

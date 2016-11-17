@@ -3,6 +3,7 @@ import { List } from 'immutable';
 
 import { loggedInUserIdSelector } from './auth';
 import { groupSelector, studentsOfGroup, supervisorsOfGroup } from './groups';
+import { exerciseSelector } from './exercises';
 import { isReady } from '../helpers/resourceManager';
 
 const getUsers = state => state.users.get('resources');
@@ -21,11 +22,6 @@ export const getUser = userId =>
 export const loggedInUserSelector = createSelector(
   [ usersSelector, loggedInUserIdSelector ],
   (users, id) => users.get(id)
-);
-
-export const loggedInUserDataSelector = createSelector(
-  loggedInUserSelector,
-  user => user.get('data')
 );
 
 export const memberOfInstancesIdsSelector = userId =>
@@ -76,11 +72,17 @@ export const usersGroupsIds = userId =>
     (student, supervisor) => student.concat(supervisor)
   );
 
+export const isAuthorOfExercise = (userId, exerciseId) =>
+  createSelector(
+    exerciseSelector(exerciseId),
+    exercise => exercise && isReady(exercise) && exercise.getIn(['data', 'authorId']) === userId
+  );
+
 export const notificationsSelector = createSelector(
-  loggedInUserDataSelector,
-  userData =>
-    userData && userData.get('groupsStats')
-      ? userData.get('groupsStats').reduce(
+  loggedInUserSelector,
+  user =>
+    user && user.get('data') && user.getIn(['data', 'groupsStats'])
+      ? user.getIn(['data', 'groupsStats']).reduce(
         (notifications, group) =>
           Object.assign({}, notifications, { [group.id]: group.stats.assignments.total - group.stats.assignments.completed - group.stats.assignments.missed }),
         {})
