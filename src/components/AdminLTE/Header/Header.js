@@ -1,5 +1,4 @@
 import React, { Component, PropTypes } from 'react';
-import { canUseDOM } from 'exenv';
 import { FormattedMessage } from 'react-intl';
 import { IndexLink } from 'react-router';
 import MediaQuery from 'react-responsive';
@@ -35,24 +34,20 @@ class Header extends Component {
         </IndexLink>
 
         <div className='navbar navbar-static-top' role='navigation'>
-          {canUseDOM && (
-            <div>
-              <MediaQuery maxWidth={767}>
-                <a href='#' className='sidebar-toggle' role='button' onClick={this.toggleSidebarVisibility}>
-                  <span className='sr-only'>
-                    <FormattedMessage id='app.header.toggleSidebar' defaultMessage='Show/hide sidebar' />
-                  </span>
-                </a>
-              </MediaQuery>
-              <MediaQuery minWidth={768}>
-                <a href='#' className='sidebar-toggle' role='button' onClick={this.toggleSidebarSize}>
-                  <span className='sr-only'>
-                    <FormattedMessage id='app.header.toggleSidebarSize' defaultMessage='Expand/minimize sidebar' />
-                  </span>
-                </a>
-              </MediaQuery>
-            </div>
-          )}
+          <MediaQuery maxWidth={767} values={{ deviceWidth: 1368 }}>
+            <a href='#' className='sidebar-toggle' role='button' onClick={this.toggleSidebarVisibility}>
+              <span className='sr-only'>
+                <FormattedMessage id='app.header.toggleSidebar' defaultMessage='Show/hide sidebar' />
+              </span>
+            </a>
+          </MediaQuery>
+          <MediaQuery minWidth={768} values={{ deviceWidth: 1368 }}>
+            <a href='#' className='sidebar-toggle' role='button' onClick={this.toggleSidebarSize}>
+              <span className='sr-only'>
+                <FormattedMessage id='app.header.toggleSidebarSize' defaultMessage='Expand/minimize sidebar' />
+              </span>
+            </a>
+          </MediaQuery>
           <div className='navbar-custom-menu'>
             <ul className='nav navbar-nav'>
               <HeaderNotificationsContainer />

@@ -1,4 +1,4 @@
-import React, { PropTypes, Component } from 'react';
+import { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { loggedInUserIdSelector, accessTokenSelector } from '../../redux/selectors/auth';
 import { fetchUserIfNeeded } from '../../redux/modules/users';
@@ -10,22 +10,22 @@ import { logout, refresh } from '../../redux/modules/auth';
 class App extends Component {
 
   componentWillMount() {
-    App.loadData(this.props);
+    this.props.loadAsync(this.props.userId);
   }
 
   componentWillReceiveProps(newProps) {
-    if (this.props.loggedInUserId !== newProps.loggedInUserId) {
-      App.loadData(newProps);
+    if (this.props.userId !== newProps.userId) {
+      newProps.loadAsync(newProps.userId);
     }
   }
 
-  static loadData = ({ isLoggedIn, userId, loadAsync }) => {
-    if (isLoggedIn) {
-      return loadAsync(userId);
-    } else {
-      return Promise.resolve();
-    }
-  };
+  static loadAsync = (params, dispatch, userId) =>
+    userId
+      ? Promise.all([
+        dispatch(fetchUserIfNeeded(userId)),
+        dispatch(fetchUsersGroupsIfNeeded(userId)),
+        dispatch(fetchUsersInstancesIfNeeded(userId))
+      ]) : Promise.resolve();
 
   /**
    * The validation in react-router does not cover all cases - validity of the token
@@ -60,11 +60,12 @@ App.contextTypes = {
 
 App.propTypes = {
   isLoggedIn: PropTypes.bool.isRequired,
-  loggedInUserId: PropTypes.string,
+  userId: PropTypes.string,
   accessToken: PropTypes.object,
   refreshToken: PropTypes.func,
   logout: PropTypes.func,
-  children: PropTypes.element
+  children: PropTypes.element,
+  loadAsync: PropTypes.func
 };
 
 export default connect(
@@ -74,11 +75,7 @@ export default connect(
     isLoggedIn: !!loggedInUserIdSelector(state)
   }),
   dispatch => ({
-    loadAsync: (userId) => Promise.all([
-      dispatch(fetchUserIfNeeded(userId)),
-      dispatch(fetchUsersGroupsIfNeeded(userId)),
-      dispatch(fetchUsersInstancesIfNeeded(userId))
-    ]),
+    loadAsync: (userId) => App.loadAsync({}, dispatch, userId),
     refreshToken: () => dispatch(refresh()),
     logout: (url) => dispatch(logout(url))
   })

@@ -49,25 +49,13 @@ const createRoutes = (getState) => {
     }
   };
 
-  const maybeWithoutLanguage = (nextState, replace) => {
-    const url = nextState.location.pathname;
-    const lang = extractLanguageFromUrl(url);
-    if (!isAvailable(lang)) {
-      // try to correct the url by adding the lang in the URL
-      // this surely won't cause a redirect loop even if the url
-      // still won't match any route, since it will now begin
-      // with an available language
-      replace(`/${defaultLanguage}${url}`);
-    }
-  };
-
   return (
-    <Route path='/' onEnter={checkLanguage}>
+    <Route path='/' component={App} onEnter={checkLanguage}>
       <Route path='/:lang' component={LayoutContainer}>
         <IndexRoute component={Home} />
         <Route path='login' component={Login} onEnter={onlyUnauth} />
         <Route path='registration' component={Registration} onEnter={onlyUnauth} />
-        <Route path='app' component={App} onEnter={requireAuth}>
+        <Route path='app' onEnter={requireAuth}>
           <IndexRoute component={Dashboard} />
           <Route path='assignment/:assignmentId'>
             <IndexRoute component={Assignment} />
