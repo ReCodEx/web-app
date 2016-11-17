@@ -1,45 +1,43 @@
 import React, { PropTypes } from 'react';
-import { reduxForm, Field, change } from 'redux-form';
+import { reduxForm, Field } from 'redux-form';
 import { FormattedMessage } from 'react-intl';
-import { Button, Alert } from 'react-bootstrap';
-import isEmail from 'validator/lib/isEmail';
+import { Alert } from 'react-bootstrap';
 
-import { LoadingIcon } from '../../Icons';
+import { LoadingIcon, SuccessIcon } from '../../Icons';
 import FormBox from '../../AdminLTE/FormBox';
 import { TextField, PasswordField, SelectField } from '../Fields';
-import { validateRegistrationData } from '../../../redux/modules/users';
+import SubmitButton from '../SubmitButton';
 
 const ExternalRegistrationForm = ({
   submitting,
   handleSubmit,
-  hasFailed = false,
-  hasSucceeded = false,
+  submitSucceeded,
+  submitFailed,
   instances,
   invalid
 }) => (
   <FormBox
     title={<FormattedMessage id='app.externalRegistrationForm.title' defaultMessage='Create ReCodEx account using CAS' />}
-    type={hasSucceeded ? 'success' : undefined}
+    type={submitSucceeded ? 'success' : undefined}
     footer={
       <div className='text-center'>
-        <Button
-          type='submit'
-          onClick={handleSubmit}
-          bsStyle='success'
-          className='btn-flat'
-          disabled={invalid || submitting || hasSucceeded}>
-          {!submitting
-            ? hasSucceeded
-              ? <span><Icon name='check' /> &nbsp; <FormattedMessage id='app.externalRegistrationForm.success' defaultMessage='Your account has been created.' /></span>
-              : <FormattedMessage id='app.externalRegistrationForm.createAccount' defaultMessage='Create account' />
-            : <span><LoadingIcon /> &nbsp; <FormattedMessage id='app.externalRegistrationForm.processing' defaultMessage='Creating account ...' /></span>}
-        </Button>
+        <SubmitButton
+          handleSubmit={handleSubmit}
+          submitting={submitting}
+          hasSucceeded={submitSucceeded}
+          hasFailed={submitFailed}
+          invalid={invalid}
+          messages={{
+            submit: <FormattedMessage id='app.registrationForm.createAccount' defaultMessage='Create account' />,
+            submitting: <span><LoadingIcon /> &nbsp; <FormattedMessage id='app.registrationForm.processing' defaultMessage='Creating account ...' /></span>,
+            success: <span><SuccessIcon /> &nbsp; <FormattedMessage id='app.registrationForm.success' defaultMessage='Your account has been created.' /></span>
+          }} />
       </div>
     }>
-    {hasFailed && (
-    <Alert bsStyle='danger'>
-      <FormattedMessage id='app.externalRegistrationForm.failed' defaultMessage='Registration failed. Please check your information.' />
-    </Alert>)}
+    {submitFailed && (
+      <Alert bsStyle='danger'>
+        <FormattedMessage id='app.externalRegistrationForm.failed' defaultMessage='Registration failed. Please check your information.' />
+      </Alert>)}
 
     <Field name='username' required component={TextField} label={<FormattedMessage id='app.externalRegistrationForm.username' defaultMessage='CAS login (UKČO):' />} />
     <Field name='password' required component={PasswordField} label={<FormattedMessage id='app.externalRegistrationForm.password' defaultMessage='Password:' />} />
@@ -59,8 +57,10 @@ ExternalRegistrationForm.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
   istTryingToCreateAccount: PropTypes.bool,
-  hasFailed: PropTypes.bool,
-  hasSucceeded: PropTypes.bool
+  submitFailed: PropTypes.bool,
+  submitSucceeded: PropTypes.bool,
+  submitting: PropTypes.bool,
+  invalid: PropTypes.bool
 };
 
 const validate = ({ username, password }) => {

@@ -4,8 +4,8 @@ import { FormattedMessage } from 'react-intl';
 
 import { Table } from 'react-bootstrap';
 import Box from '../../AdminLTE/Box';
-import { isReady, hasFailed, isLoading } from '../../../redux/helpers/resourceManager';
 
+import ResourceRenderer from '../../ResourceRenderer';
 import LoadingSubmissionTableRow from './LoadingSubmissionTableRow';
 import NoSolutionYetTableRow from './NoSolutionYetTableRow';
 import SuccessfulSubmissionTableRow from './SuccessfulSubmissionTableRow';
@@ -15,12 +15,13 @@ import NotEvaluatedSubmissionTableRow from './NotEvaluatedSubmissionTableRow';
 import EvaluationFailedTableRow from './EvaluationFailedTableRow';
 
 const SubmissionsTable = ({
+  title,
   assignmentId,
   submissions
 }, {
   links: { SUBMISSION_DETAIL_URI_FACTORY }
 }) => (
-  <Box title='Odevzdaná řešení' collapsable isOpen={true}>
+  <Box title={title} collapsable isOpen noPadding>
     <Table responsive>
       <thead>
         <tr>
@@ -32,40 +33,41 @@ const SubmissionsTable = ({
           <th />
         </tr>
       </thead>
-      <tbody>
-        {!submissions && <LoadingSubmissionTableRow />}
-        {!!submissions && submissions.size > 0 &&
-          submissions.map((submission, i) => {
-            if (hasFailed(submission)) {
-              return <FailedLoadingSubmissionTableRow key={i} />;
-            } else if (isLoading(submission)) {
-              return <LoadingSubmissionTableRow key={i} />;
-            }
+        <ResourceRenderer
+          resource={submissions.toArray()}
+          loading={<LoadingSubmissionTableRow />}
+          failed={<FailedLoadingSubmissionTableRow />}>
+          {(...submissions) => (
+            <tbody>
+              {submissions.map((data, i) => {
+                const id = data.id;
+                const link = SUBMISSION_DETAIL_URI_FACTORY(assignmentId, id);
 
-            const data = submission.get('data').toJS();
-            const id = data.id;
-            const link = SUBMISSION_DETAIL_URI_FACTORY(assignmentId, id);
-
-            switch (data.evaluationStatus) {
-              case 'done':
-                return <SuccessfulSubmissionTableRow {...data} key={id} link={link} />;
-              case 'failed':
-                return <FailedSubmissionTableRow {...data} key={id} link={link} />;
-              case 'work-in-progress':
-                return <NotEvaluatedSubmissionTableRow {...data} key={id} link={link} />;
-              case 'evaluation-failed':
-                return <EvaluationFailedTableRow {...data} key={id} link={link} />;
-              default:
-                return null;
-            }
-          })}
-        {!!submissions && submissions.size === 0 && <NoSolutionYetTableRow />}
-      </tbody>
+                switch (data.evaluationStatus) {
+                  case 'done':
+                    return <SuccessfulSubmissionTableRow {...data} key={id} link={link} />;
+                  case 'failed':
+                    return <FailedSubmissionTableRow {...data} key={id} link={link} />;
+                  case 'work-in-progress':
+                    return <NotEvaluatedSubmissionTableRow {...data} key={id} link={link} />;
+                  case 'evaluation-failed':
+                    return <EvaluationFailedTableRow {...data} key={id} link={link} />;
+                  default:
+                    return null;
+                }
+              })}
+            </tbody>
+          )}
+        </ResourceRenderer>
+        {submissions.size === 0 && (
+          <tbody><NoSolutionYetTableRow /></tbody>
+        )}
     </Table>
   </Box>
 );
 
 SubmissionsTable.propTypes = {
+  title: PropTypes.string.isRequired,
   assignmentId: PropTypes.string.isRequired,
   submissions: PropTypes.instanceOf(List)
 };

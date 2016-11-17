@@ -1,19 +1,17 @@
 import React, { Component, PropTypes } from 'react';
 import { FormattedMessage } from 'react-intl';
-import Helmet from 'react-helmet';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 
 import { Row, Col } from 'react-bootstrap';
 import PageContent from '../../components/PageContent';
-import Box from '../../components/AdminLTE/Box';
 import RegistrationForm from '../../components/Forms/RegistrationForm';
 import ExternalRegistrationForm from '../../components/Forms/ExternalRegistrationForm';
 
 import { createAccount, createExternalAccount } from '../../redux/modules/registration';
 import { fetchInstances } from '../../redux/modules/instances';
 import { instancesSelector } from '../../redux/selectors/instances';
-import { isCreating, hasFailed, hasSucceeded } from '../../redux/selectors/registration';
+import { hasSucceeded } from '../../redux/selectors/registration';
 
 class Register extends Component {
 
@@ -35,7 +33,7 @@ class Register extends Component {
 
   render() {
     const { links: { HOME_URI } } = this.context;
-    const { instances, createAccount, createExternalAccount, isCreatingAccount, hasFailed, hasSucceeded } = this.props;
+    const { instances, createAccount, createExternalAccount } = this.props;
 
     return (
       <PageContent
@@ -54,20 +52,10 @@ class Register extends Component {
         ]}>
         <Row>
           <Col lg={4} lgOffset={1} md={6} mdOffset={0} sm={8} smOffset={2}>
-            <RegistrationForm
-              instances={instances}
-              onSubmit={createAccount}
-              istTryingToCreateAccount={isCreatingAccount}
-              hasFailed={hasFailed}
-              hasSucceeded={hasSucceeded} />
+            <RegistrationForm instances={instances} onSubmit={createAccount} />
           </Col>
           <Col lg={4} lgOffset={1} md={6} mdOffset={0} sm={8} smOffset={2}>
-            <ExternalRegistrationForm
-              instances={instances}
-              onSubmit={createExternalAccount}
-              istTryingToCreateAccount={isCreatingAccount}
-              hasFailed={hasFailed}
-              hasSucceeded={hasSucceeded} />
+            <ExternalRegistrationForm instances={instances} onSubmit={createExternalAccount} />
           </Col>
         </Row>
       </PageContent>
@@ -85,16 +73,13 @@ Register.propTypes = {
   loadAsync: PropTypes.func.isRequired,
   createAccount: PropTypes.func.isRequired,
   createExternalAccount: PropTypes.func.isRequired,
-  isCreatingAccount: PropTypes.bool.isRequired,
-  hasFailed: PropTypes.bool.isRequired,
-  hasSucceeded: PropTypes.bool.isRequired
+  hasSucceeded: PropTypes.bool,
+  push: PropTypes.func.isRequired
 };
 
 export default connect(
   state => ({
     instances: instancesSelector(state),
-    isCreatingAccount: isCreating(state),
-    hasFailed: hasFailed(state),
     hasSucceeded: hasSucceeded(state)
   }),
   dispatch => ({
@@ -103,7 +88,7 @@ export default connect(
     ]),
     createAccount: ({ firstName, lastName, email, password, instanceId }) =>
       dispatch(createAccount(firstName, lastName, email, password, instanceId)),
-    createExternalAccount: ({ username, password, instanceId, serviceId}) =>
+    createExternalAccount: ({ username, password, instanceId, serviceId }) =>
       dispatch(createExternalAccount(username, password, instanceId, serviceId)),
     push: (url) => dispatch(push(url))
   })

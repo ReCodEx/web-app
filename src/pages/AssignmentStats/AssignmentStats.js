@@ -14,7 +14,6 @@ import { fetchAssignmentIfNeeded } from '../../redux/modules/assignments';
 import PageContent from '../../components/PageContent';
 import ResourceRenderer from '../../components/ResourceRenderer';
 
-
 class AssignmentStats extends Component {
 
   static loadAsync = (
@@ -75,21 +74,13 @@ class AssignmentStats extends Component {
             iconName: 'line-chart'
           }
         ]}>
-
         <div>
-          {students.map(user => (
-            <div key={user.id}>
-              <strong>{user.fullName}</strong>
-              <SubmissionsTableContainer userId={user.id} assignmentId={assignmentId} />
-            </div>
-          ))}
+          {students.map(user => <SubmissionsTableContainer key={user.id} title={user.fullName} userId={user.id} assignmentId={assignmentId} />)}
         </div>
-
       </PageContent>
     );
   }
 }
-
 
 AssignmentStats.propTypes = {
   assignmentId: PropTypes.string.isRequired,

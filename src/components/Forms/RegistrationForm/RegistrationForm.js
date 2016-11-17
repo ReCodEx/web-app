@@ -1,45 +1,45 @@
 import React, { PropTypes } from 'react';
 import { reduxForm, Field, change } from 'redux-form';
 import { FormattedMessage } from 'react-intl';
-import { Button, Alert } from 'react-bootstrap';
+import { Alert } from 'react-bootstrap';
 import isEmail from 'validator/lib/isEmail';
 
 import { LoadingIcon, SuccessIcon } from '../../Icons';
 import FormBox from '../../AdminLTE/FormBox';
 import { EmailField, TextField, PasswordField, PasswordStrength, SelectField } from '../Fields';
 import { validateRegistrationData } from '../../../redux/modules/users';
+import SubmitButton from '../SubmitButton';
 
 const RegistrationForm = ({
   submitting,
   handleSubmit,
-  hasFailed = false,
-  hasSucceeded = false,
+  submitFailed = false,
+  submitSucceeded = false,
   instances,
   invalid
 }) => (
   <FormBox
     title={<FormattedMessage id='app.registrationForm.title' defaultMessage='Create ReCodEx account' />}
-    type={hasSucceeded ? 'success' : undefined}
+    type={submitSucceeded ? 'success' : undefined}
     footer={
       <div className='text-center'>
-        <Button
-          type='submit'
-          onClick={handleSubmit}
-          bsStyle='success'
-          className='btn-flat'
-          disabled={invalid || submitting || hasSucceeded}>
-          {!submitting
-            ? hasSucceeded
-              ? <span><SuccessIcon /> &nbsp; <FormattedMessage id='app.registrationForm.success' defaultMessage='Your account has been created.' /></span>
-              : <FormattedMessage id='app.registrationForm.createAccount' defaultMessage='Create account' />
-            : <span><LoadingIcon /> &nbsp; <FormattedMessage id='app.registrationForm.processing' defaultMessage='Creating account ...' /></span>}
-        </Button>
+        <SubmitButton
+          handleSubmit={handleSubmit}
+          submitting={submitting}
+          hasSucceeded={submitSucceeded}
+          hasFailed={submitFailed}
+          invalid={invalid}
+          messages={{
+            submit: <FormattedMessage id='app.registrationForm.createAccount' defaultMessage='Create account' />,
+            submitting: <span><LoadingIcon /> &nbsp; <FormattedMessage id='app.registrationForm.processing' defaultMessage='Creating account ...' /></span>,
+            success: <span><SuccessIcon /> &nbsp; <FormattedMessage id='app.registrationForm.success' defaultMessage='Your account has been created.' /></span>
+          }} />
       </div>
     }>
-    {hasFailed && (
-    <Alert bsStyle='danger'>
-      <FormattedMessage id='app.registrationForm.failed' defaultMessage='Registration failed. Please check your information.' />
-    </Alert>)}
+    {submitFailed && (
+      <Alert bsStyle='danger'>
+        <FormattedMessage id='app.registrationForm.failed' defaultMessage='Registration failed. Please check your information.' />
+      </Alert>)}
 
     <Field name='firstName' required component={TextField} label={<FormattedMessage id='app.registrationForm.firstName' defaultMessage='First name:' />} />
     <Field name='lastName' required component={TextField} label={<FormattedMessage id='app.registrationForm.lastName' defaultMessage='Last name:' />} />
@@ -62,8 +62,8 @@ RegistrationForm.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
   istTryingToCreateAccount: PropTypes.bool,
-  hasFailed: PropTypes.bool,
-  hasSucceeded: PropTypes.bool,
+  submitFailed: PropTypes.bool,
+  submitSucceeded: PropTypes.bool,
   submitting: PropTypes.bool,
   invalid: PropTypes.bool
 };
