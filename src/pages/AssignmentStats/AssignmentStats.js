@@ -1,6 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { List } from 'immutable';
+import { Row, Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import { usersSelector } from '../../redux/selectors/users';
@@ -74,9 +75,13 @@ class AssignmentStats extends Component {
             iconName: 'line-chart'
           }
         ]}>
-        <div>
-          {students.map(user => <SubmissionsTableContainer key={user.id} title={user.fullName} userId={user.id} assignmentId={assignmentId} />)}
-        </div>
+        <Row>
+          {students.map(user => (
+            <Col md={6} key={user.id}>
+              <SubmissionsTableContainer title={user.fullName} userId={user.id} assignmentId={assignmentId} />
+            </Col>
+          ))}
+        </Row>
       </PageContent>
     );
   }
