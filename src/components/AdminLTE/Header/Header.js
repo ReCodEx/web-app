@@ -2,7 +2,6 @@ import React, { Component, PropTypes } from 'react';
 import { canUseDOM } from 'exenv';
 import { FormattedMessage } from 'react-intl';
 import { IndexLink } from 'react-router';
-import { Navbar } from 'react-bootstrap';
 import MediaQuery from 'react-responsive';
 import HeaderNotificationsContainer from '../../../containers/HeaderNotificationsContainer';
 import HeaderLanguageSwitching from '../HeaderLanguageSwitching';

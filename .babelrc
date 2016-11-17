@@ -4,6 +4,7 @@
     ["react-intl", {
         "messagesDir": "./build/messages/",
         "enforceDescriptions": false
-    }]
+    }],
+    "transform-object-assign"
   ]
 }
