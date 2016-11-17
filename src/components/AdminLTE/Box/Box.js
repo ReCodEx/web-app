@@ -85,7 +85,11 @@ Box.propTypes = {
   ]).isRequired,
   type: PropTypes.string,
   isOpen: PropTypes.bool,
-  collapsable: PropTypes.bool
+  collapsable: PropTypes.bool,
+  noPadding: PropTypes.bool,
+  footer: PropTypes.element,
+  children: PropTypes.element,
+  className: PropTypes.string
 };
 
 export default Box;

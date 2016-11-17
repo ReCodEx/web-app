@@ -63,7 +63,9 @@ RegistrationForm.propTypes = {
   onSubmit: PropTypes.func.isRequired,
   istTryingToCreateAccount: PropTypes.bool,
   hasFailed: PropTypes.bool,
-  hasSucceeded: PropTypes.bool
+  hasSucceeded: PropTypes.bool,
+  submitting: PropTypes.bool,
+  invalid: PropTypes.bool
 };
 
 const validate = ({ firstName, lastName, email, password }) => {
