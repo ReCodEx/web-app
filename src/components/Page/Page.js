@@ -45,6 +45,7 @@ const stringOrFormattedMessage = PropTypes.oneOfType([
 ]);
 
 Page.propTypes = {
+  resource: PropTypes.oneOfType([ PropTypes.array, PropTypes.object ]),
   loadingTitle: stringOrFormattedMessage,
   loadingDescription: stringOrFormattedMessage,
   failedTitle: stringOrFormattedMessage,

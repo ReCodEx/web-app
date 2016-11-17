@@ -1,8 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { FormattedMessage } from 'react-intl';
-import Collapse from 'react-collapse';
 import ReactMarkdown from 'react-markdown';
-import { Row, Col, FormGroup, HelpBlock } from 'react-bootstrap';
+import { Row, Col, HelpBlock } from 'react-bootstrap';
 
 import SourceCodeField from './SourceCodeField';
 import OnOffCheckbox from '../OnOffCheckbox';
@@ -11,7 +10,7 @@ import styles from './MarkdownTextAreaField.less';
 
 import { canUseDOM } from 'exenv';
 if (canUseDOM) {
-  require('codemirror/mode/markdown/markdown');
+  require('brace/mode/markdown');
 }
 
 class MarkdownTextAreaField extends Component {
@@ -32,7 +31,7 @@ class MarkdownTextAreaField extends Component {
   };
 
   render() {
-    const { disabled = false, input: { value } } = this.props;
+    const { input: { value } } = this.props;
     const { showPreview } = this.state;
     return (
       <div>
@@ -66,7 +65,8 @@ class MarkdownTextAreaField extends Component {
 }
 
 MarkdownTextAreaField.propTypes = {
-  showPreview: PropTypes.string
+  showPreview: PropTypes.string,
+  input: PropTypes.shape({ value: PropTypes.string }).isRequired
 };
 
 export default MarkdownTextAreaField;

@@ -12,6 +12,7 @@ import Home from './Home';
 import Exercise from './Exercise';
 import EditExercise from './EditExercise';
 import Group from './Group';
+import EditGroup from './EditGroup';
 import instance from './Instance';
 import Login from './Login';
 import Assignment from './Assignment';
@@ -67,7 +68,10 @@ const createRoutes = (getState) => {
             <IndexRoute component={Exercise} />
             <Route path='edit' component={EditExercise} />
           </Route>
-          <Route path='group/:groupId' component={Group} />
+          <Route path='group/:groupId'>
+            <IndexRoute component={Group} />
+            <Route path='edit' component={EditGroup} />
+          </Route>
           <Route path='instance/:instanceId' component={instance} />
           <Route path='user/:userId' component={User} />
         </Route>

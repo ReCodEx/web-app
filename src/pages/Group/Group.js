@@ -2,6 +2,8 @@ import React, { Component, PropTypes } from 'react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
+import { LinkContainer } from 'react-router-bootstrap';
+import { Button } from 'react-bootstrap';
 import { FormattedMessage } from 'react-intl';
 import { List } from 'immutable';
 
@@ -13,6 +15,7 @@ import AdminsView from '../../components/Groups/AdminsView';
 import SupervisorsView from '../../components/Groups/SupervisorsView';
 import StudentsView from '../../components/Groups/StudentsView';
 import ResourceRenderer from '../../components/ResourceRenderer';
+import { EditIcon } from '../../components/Icons';
 
 import { isReady, getJsData, getId } from '../../redux/helpers/resourceManager';
 import { createGroup, fetchSubgroups, fetchGroupIfNeeded } from '../../redux/modules/groups';
@@ -135,6 +138,7 @@ class Group extends Component {
       isSupervisor,
       addSubgroup
     } = this.props;
+    const { links: { GROUP_EDIT_URI_FACTORY } } = this.context;
 
     return (
       <PageContent
@@ -152,10 +156,21 @@ class Group extends Component {
           {data => (
             <div>
               <GroupDetail {...data} groups={groups} />
+
               {!isAdmin && !isSupervisor && (
                 <p className='text-center'>
                   <LeaveJoinGroupButtonContainer userId={userId} groupId={data.id} />
                 </p>)}
+
+              {(isAdmin || isSupervisor) && (
+                <p className='text-center'>
+                  <LinkContainer to={GROUP_EDIT_URI_FACTORY(data.id)}>
+                    <Button className='btn-flat'>
+                      <EditIcon /> <FormattedMessage id='app.group.edit' defaultMessage='Edit group settings' />
+                    </Button>
+                  </LinkContainer>
+                </p>
+              )}
 
               {isAdmin && (
                 <AdminsView

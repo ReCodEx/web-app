@@ -40,7 +40,11 @@ export const additionalActionTypes = {
   REMOVE_SUPERVISOR: 'recodex/groups/REMOVE_SUPERVISOR',
   REMOVE_SUPERVISOR_PENDING: 'recodex/groups/REMOVE_SUPERVISOR_PENDING',
   REMOVE_SUPERVISOR_FULFILLED: 'recodex/groups/REMOVE_SUPERVISOR_FULFILLED',
-  REMOVE_SUPERVISOR_REJECTED: 'recodex/groups/REMOVE_SUPERVISOR_REJECTED'
+  REMOVE_SUPERVISOR_REJECTED: 'recodex/groups/REMOVE_SUPERVISOR_REJECTED',
+  UPDATE_GROUP: 'recodex/groups/UPDATE_GROUP',
+  UPDATE_GROUP_PENDING: 'recodex/groups/UPDATE_GROUP_PENDING',
+  UPDATE_GROUP_FULFILLED: 'recodex/groups/UPDATE_GROUP_FULFILLED',
+  UPDATE_GROUP_REJECTED: 'recodex/groups/UPDATE_GROUP_REJECTED'
 };
 
 export const loadGroup = actions.pushResource;
@@ -84,6 +88,16 @@ export const fetchUsersGroupsIfNeeded = (userId) =>
       dispatch(fetchUsersGroups(userId));
     }
   };
+
+export const editGroup = (groupId, body) =>
+  createApiAction({
+    type: additionalActionTypes.UPDATE_GROUP,
+    endpoint: `/groups/${groupId}`,
+    method: 'POST',
+    meta: { id: groupId, payload: body },
+    body
+  });
+
 
 export const joinGroup = (groupId, userId) =>
   dispatch =>

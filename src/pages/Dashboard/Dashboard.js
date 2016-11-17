@@ -12,6 +12,7 @@ import { fetchAssignmentsForGroup } from '../../redux/modules/assignments';
 import Page from '../../components/Page';
 import AssignmentsTable from '../../components/Assignments/Assignment/AssignmentsTable';
 import { getStatuses } from '../../redux/selectors/stats';
+import { fetchGroupsStatsIfNeeded } from '../../redux/modules/stats';
 
 class Dashboard extends Component {
 
@@ -26,11 +27,14 @@ class Dashboard extends Component {
     loadStats,
     loadAssignments,
     loadUsersGroups,
+    loadGroupsStats,
     userId
-  }) => {
+  }) =>
     loadUsersGroups(userId)
-      .then(res => loadAssignments(res.value.student));
-  }
+      .then(({ value: { student, supervisor } }) => Promise.all([
+        loadAssignments(student),
+        ...student.map(({ id }) => loadGroupsStats(id))
+      ]));
 
   render() {
     const {
@@ -111,6 +115,7 @@ export default connect(
   },
   (dispatch) => ({
     loadAssignments: (groups) => groups.map((group) => dispatch(fetchAssignmentsForGroup(group.id))),
-    loadUsersGroups: (userId) => dispatch(fetchUsersGroups(userId))
+    loadUsersGroups: (userId) => dispatch(fetchUsersGroups(userId)),
+    loadGroupsStats: (groupId) => dispatch(fetchGroupsStatsIfNeeded(groupId))
   })
 )(Dashboard);

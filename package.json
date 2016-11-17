@@ -45,6 +45,7 @@
     "pretty-bytes": "^3.0.1",
     "pretty-ms": "^2.1.0",
     "react": "^15.3.2",
+    "react-ace": "^4.0.0",
     "react-bootstrap": "^0.30.5",
     "react-codemirror": "^0.2.6",
     "react-collapse": "^2.3.1",

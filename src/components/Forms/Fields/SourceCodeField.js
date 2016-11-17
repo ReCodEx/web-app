@@ -4,33 +4,33 @@ import { canUseDOM } from 'exenv';
 
 import {
   FormGroup,
-  FormControl,
   ControlLabel,
   HelpBlock
 } from 'react-bootstrap';
 
-let CodeMirror = null;
-
-if (canUseDOM) {
-  CodeMirror = require('react-codemirror');
-  require('codemirror/mode/clike/clike');
-  require('codemirror/mode/pascal/pascal');
-  require('codemirror/lib/codemirror.css');
-  require('codemirror/theme/monokai.css');
-}
+import AceEditor from 'react-ace';
+import 'brace/theme/monokai';
+import 'brace/mode/c_cpp';
+import 'brace/mode/java';
+import 'brace/mode/csharp';
+import 'brace/keybinding/vim';
 
 const getMode = ext => {
   switch (ext) {
+    case 'java':
+      return 'java';
+
+    case 'cs':
+      return 'csharp';
+
     case 'c':
     case 'cpp':
     case 'h':
     case 'hpp':
-    case 'java':
-    case 'cs':
-      return 'clike';
+      return 'c_cpp';
 
     default:
-      return 'clike';
+      return 'c_cpp';
   }
 };
 
@@ -51,7 +51,16 @@ const SourceCodeField = ({
     controlId={name}
     validationState={touched && error ? 'error' : undefined}>
     <ControlLabel>{label}</ControlLabel>
-    {CodeMirror && <CodeMirror {...input} options={{ lineNumbers: true, mode: getMode(mode), theme: 'monokai', tabIndex }} />}
+    {canUseDOM && (
+      <AceEditor
+        {...input}
+        mode={getMode(mode)}
+        theme='monokai'
+        name={input.id}
+        tabIndex={tabIndex}
+        keyboardHandler='vim'
+        width='100%'
+        editorProps={{$blockScrolling: true}} />)}
     {touched && error && <HelpBlock>{error}</HelpBlock>}
     {children}
   </FormGroup>

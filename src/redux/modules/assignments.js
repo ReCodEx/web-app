@@ -1,7 +1,6 @@
-import { createAction, handleActions } from 'redux-actions';
+import { handleActions } from 'redux-actions';
 import { fromJS } from 'immutable';
 
-import { usersSelector } from '../selectors/users';
 import factory, { initialState } from '../helpers/resourceManager';
 import { createApiAction } from '../middleware/apiMiddleware';
 import { additionalActionTypes as submissionsActionTypes } from './submissions';

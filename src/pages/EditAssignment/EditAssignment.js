@@ -18,7 +18,6 @@ import { canSubmitSolution } from '../../redux/selectors/canSubmit';
 import { getEnvironmentsLimits } from '../../redux/selectors/limits';
 import { isSubmitting } from '../../redux/selectors/submission';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
-import { isSupervisorOf } from '../../redux/selectors/users';
 
 const getInitialValues = ({ firstDeadline, secondDeadline, ...rest }) => ({
   firstDeadline: moment(firstDeadline * 1000),
@@ -112,7 +111,6 @@ export default connect(
       environments: environmentsSelector(state),
       submitting: isSubmitting(state),
       userId,
-      isStudentOf: (groupId) => isSupervisorOf(userId, groupId)(state),
       canSubmit: canSubmitSolution(assignmentId)(state),
       formValues: getFormValues('editAssignment')(state)
     };

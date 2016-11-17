@@ -29,7 +29,11 @@ export const getStatuses = (groupId, userId) =>
     getGroupsStatsData(groupId),
     groupsStats => {
       const stats = groupsStats !== null ? groupsStats.find(stats => stats.userId === userId) || {} : {};
-      const { statuses = {} } = stats;
+      let { statuses = {} } = stats;
+      if (statuses.length === 0) {
+        statuses = {};
+      }
+
       return statuses;
     },
   );
