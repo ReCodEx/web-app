@@ -4,11 +4,17 @@ import { Field } from 'redux-form';
 import { Row, Col } from 'react-bootstrap';
 import { BytesTextField, SecondsTextField } from '../Fields';
 
+const sortTests = (tests) => {
+  return tests.sort(
+    (a, b) => a.localeCompare(b)
+  )
+};
+
 const HardwareGroupFields = ({ prefix, i, limits }) => {
   const { tests } = limits[i];
   return (
     <Row>
-      {Object.keys(tests).map((testName, j) => (
+      {sortTests(Object.keys(tests)).map((testName, j) => (
         <Col lg={6} key={j}>
           <h4>
             <FormattedMessage id='app.hardwareGroupFields.test' defaultMessage='Test:' />{' '}<b>{testName}</b>
