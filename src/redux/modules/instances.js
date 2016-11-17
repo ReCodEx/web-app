@@ -30,6 +30,17 @@ export const fetchUsersInstancesIfNeeded = (userId) =>
  * Reducer
  */
 
+const addGroup = (state, group) => {
+  if (group.parentGroupId === null && state.hasIn(['resources', group.instanceId])) {
+    return state.updateIn(
+      ['resources', group.instanceId, 'data', 'topLevelGroups'],
+      groups => groups.push(group.id).toSet().toList()
+    );
+  }
+
+  return state;
+};
+
 const reducer = handleActions(Object.assign({}, reduceActions, {
 
   [groupsActionTypes.ADD_FULFILLED]: (state, { payload: group }) => {
@@ -42,7 +53,10 @@ const reducer = handleActions(Object.assign({}, reduceActions, {
       [ 'resources', group.instanceId, 'data' ],
       instance => instance.update('topLevelGroups', groups => groups.push(group.id))
     );
-  }
+  },
+
+  [groupsActionTypes.FETCH_FULFILLED]: (state, { payload: group }) => addGroup(state, group),
+  [groupsActionTypes.FETCH_MANY_FULFILLED]: (state, { payload: groups }) => groups.reduce(addGroup, state)
 
 }), initialState);
 
