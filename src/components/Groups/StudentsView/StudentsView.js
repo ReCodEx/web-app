@@ -56,7 +56,7 @@ StudentsView.propTypes = {
   assignments: ImmutablePropTypes.list.isRequired,
   stats: PropTypes.object,
   students: PropTypes.object.isRequired,
-  statuses: PropTypes.array
+  statuses: PropTypes.object
 };
 
 export default StudentsView;

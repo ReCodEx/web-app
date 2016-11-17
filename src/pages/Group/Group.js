@@ -115,9 +115,7 @@ class Group extends Component {
 
   createExercise = (exerciseId) => {
     const { assignExercise, push } = this.props;
-
     const { links: { ASSIGNMENT_EDIT_URI_FACTORY } } = this.context;
-
     assignExercise(exerciseId)
       .then(({ value: assigment }) => push(ASSIGNMENT_EDIT_URI_FACTORY(assigment.id)));
   };
@@ -205,7 +203,9 @@ Group.propTypes = {
   addSubgroup: PropTypes.func,
   loadAsync: PropTypes.func,
   stats: PropTypes.object,
-  statuses: PropTypes.array
+  statuses: PropTypes.object,
+  assignExercise: PropTypes.func.isRequired,
+  push: PropTypes.func.isRequired
 };
 
 Group.contextTypes = {

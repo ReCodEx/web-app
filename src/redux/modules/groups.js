@@ -81,7 +81,6 @@ export const fetchUsersGroupsIfNeeded = (userId) =>
   (dispatch, getState) => {
     const user = getState().users.getIn(['resources', userId]);
     if (user) {
-      // @todo: better caching!!
       dispatch(fetchUsersGroups(userId));
     }
   };
