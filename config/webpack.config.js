@@ -1,7 +1,5 @@
 const path = require('path');
 const webpack = require('webpack');
-const autoprefixer = require('autoprefixer');
-const strip = require('strip-loader');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 // load variables from .env
