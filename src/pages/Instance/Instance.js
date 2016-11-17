@@ -10,11 +10,11 @@ import InstanceDetail from '../../components/Instances/InstanceDetail';
 import CreateGroupForm from '../../components/Forms/CreateGroupForm';
 
 import { fetchInstanceIfNeeded } from '../../redux/modules/instances';
-import { instanceSelector } from '../../redux/selectors/instances';
+import { instanceSelector, isAdminOfInstance } from '../../redux/selectors/instances';
 import { createGroup, fetchInstanceGroupsIfNeeded } from '../../redux/modules/groups';
 import { groupsSelectors } from '../../redux/selectors/groups';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
-import { isStudentOf, isSupervisorOf, isAdminOf, isMemberOf } from '../../redux/selectors/users';
+import { isMemberOf } from '../../redux/selectors/users';
 
 class Instance extends Component {
 
@@ -39,7 +39,8 @@ class Instance extends Component {
       instance,
       groups,
       createGroup,
-      isMemberOf
+      isMemberOf,
+      isAdmin
     } = this.props;
 
     return (
@@ -64,9 +65,10 @@ class Instance extends Component {
               </Col>
 
               <Col sm={6}>
-                <CreateGroupForm
-                  onSubmit={createGroup}
-                  instanceId={instanceId} />
+                {isAdmin &&
+                  <CreateGroupForm
+                    onSubmit={createGroup}
+                    instanceId={instanceId} />}
               </Col>
             </Row>
           )}
@@ -83,9 +85,10 @@ Instance.propTypes = {
     instanceId: PropTypes.string.isRequired
   }).isRequired,
   instance: ImmutablePropTypes.map,
-  groups: ImmutablePropTypes.list,
+  groups: ImmutablePropTypes.map,
   createGroup: PropTypes.func.isRequired,
-  isMemberOf: PropTypes.func.isRequired
+  isMemberOf: PropTypes.func.isRequired,
+  isAdmin: PropTypes.bool.isRequired
 };
 
 export default connect(
@@ -94,10 +97,8 @@ export default connect(
     return {
       instance: instanceSelector(state, instanceId),
       groups: groupsSelectors(state),
-      isStudentOf: (groupId) => isStudentOf(userId, groupId)(state),
-      isAdminOf: (groupId) => isAdminOf(userId, groupId)(state),
-      isSupervisorOf: (groupId) => isSupervisorOf(groupId)(state),
-      isMemberOf: (groupId) => isMemberOf(userId, groupId)(state)
+      isMemberOf: (groupId) => isMemberOf(userId, groupId)(state),
+      isAdmin: isAdminOfInstance(userId, instanceId)(state)
     };
   },
   (dispatch, { params: { instanceId } }) => ({

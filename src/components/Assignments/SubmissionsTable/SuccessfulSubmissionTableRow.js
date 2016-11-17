@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import { FormattedNumber, FormattedDate, FormattedTime } from 'react-intl';
+import { FormattedNumber, FormattedDate, FormattedTime, FormattedMessage } from 'react-intl';
 import { Link } from 'react-router';
 
 import AssignmentStatusIcon from '../Assignment/AssignmentStatusIcon';
@@ -36,7 +36,7 @@ const SuccessfulSubmissionTableRow = ({
     </td>
     <td className='text-right'>
       <Link to={link} className='btn btn-flat btn-default btn-xs'>
-        Zobrazit podrobnosti
+        <FormattedMessage id='app.submissionsTable.showDetails' defaultMessage='Show details' />
       </Link>
     </td>
   </tr>

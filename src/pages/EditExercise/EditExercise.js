@@ -47,12 +47,12 @@ class EditExercise extends Component {
         description={<FormattedMessage id='app.editExercise.description' defaultMessage='Change exercise settings' />}
         breadcrumbs={[
           {
-            text: <FormattedMessage id='app.exercise.title' />,
+            text: <FormattedMessage id='app.exercise.title' defaultMessage='Exercise' />,
             iconName: 'puzzle-piece',
             link: EXERCISE_URI_FACTORY(exerciseId)
           },
           {
-            text: <FormattedMessage id='app.editExercise.title' />,
+            text: <FormattedMessage id='app.editExercise.title' defaultMessage='Edit exercise' />,
             iconName: 'pencil'
           }
         ]}>

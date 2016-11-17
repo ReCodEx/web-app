@@ -34,7 +34,9 @@ const getTickORCheckTableCellOverlay = (isOK, ratio, tooltipId) => (
   </td>
 );
 
-const TestResultsTable = ({ results }) => (
+const TestResultsTable = ({
+  results
+}) => (
   <Table responsive>
     <thead>
       <tr>

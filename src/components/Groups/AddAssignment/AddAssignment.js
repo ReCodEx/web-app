@@ -6,20 +6,22 @@ import { SendIcon } from '../../Icons';
 import SelectExerciseContainer from '../../../containers/SelectExerciseContainer';
 
 const AddAssignment = ({
-  groupId
+  groupId,
+  assignFunc
 }) => (
   <SelectExerciseContainer
     groupId={groupId}
     id={`add-assignment-${groupId}`}
     createActions={exerciseId => (
-      <Button>
+      <Button onClick={() => assignFunc(exerciseId)}>
         <SendIcon /> <FormattedMessage id='app.exercise.assign' defaultMessage='Assign this exercise' />
       </Button>
     )} />
 );
 
 AddAssignment.propTypes = {
-  groupId: PropTypes.string.isRequired
+  groupId: PropTypes.string.isRequired,
+  assignFunc: PropTypes.func.isRequired
 };
 
 export default AddAssignment;

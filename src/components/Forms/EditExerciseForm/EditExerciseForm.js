@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import { canUseDOM } from 'exenv';
 import { reduxForm, Field, FieldArray, change } from 'redux-form';
-import { FormattedMessage } from 'react-intl';
+import { injectIntl, intlShape, FormattedMessage, defineMessages } from 'react-intl';
 import { Button, Alert, HelpBlock } from 'react-bootstrap';
 import isNumeric from 'validator/lib/isNumeric';
 
@@ -24,6 +24,21 @@ if (canUseDOM) {
   require('codemirror/mode/yaml/yaml');
 }
 
+const messages = defineMessages({
+    easy: {
+        id: 'app.editExerciseForm.easy',
+        defaultMessage: 'Easy',
+    },
+    medium: {
+        id: 'app.editExerciseForm.medium',
+        defaultMessage: 'Medium',
+    },
+    hard: {
+        id: 'app.editExerciseForm.hard',
+        defaultMessage: 'Hard',
+    }
+});
+
 const EditExerciseForm = ({
   initialValues: exercise,
   submitting,
@@ -33,7 +48,8 @@ const EditExerciseForm = ({
   invalid,
   formValues: {
     localizedAssignments
-  } = {}
+  } = {},
+  intl: { formatMessage }
 }) => (
   <div>
     <FieldArray
@@ -73,9 +89,9 @@ const EditExerciseForm = ({
         name='difficulty'
         component={SelectField}
         options={[
-          { key: "easy", name: "Easy" }, // TODO: retrieve this somehow from intl
-          { key: "medium", name: "Medium" },
-          { key: "hard", name: "Hard" },
+          { key: "easy", name: formatMessage(messages.easy)},
+          { key: "medium", name: formatMessage(messages.medium)},
+          { key: "hard", name: formatMessage(messages.hard)}
           ]}
         label={<FormattedMessage id='app.editExerciseForm.difficulty' defaultMessage='Difficulty' />} />
 
@@ -86,7 +102,8 @@ const EditExerciseForm = ({
 EditExerciseForm.propTypes = {
   initialValues: PropTypes.object.isRequired,
   values: PropTypes.object,
-  handleSubmit: PropTypes.func.isRequired
+  handleSubmit: PropTypes.func.isRequired,
+  intl: intlShape.isRequired
 };
 
 const validate = ({
@@ -101,7 +118,7 @@ const validate = ({
   return errors;
 };
 
-export default reduxForm({
+export default injectIntl(reduxForm({
   form: 'editExercise',
   validate
-})(EditExerciseForm);
+})(EditExerciseForm));

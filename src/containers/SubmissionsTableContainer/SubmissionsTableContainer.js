@@ -28,6 +28,16 @@ class SubmissionsTableContainer extends Component {
     loadSubmissionsForUser(userId, assignmentId);
   };
 
+  sortSubmissions(submissions) {
+    return submissions.sort(
+      (a, b) => {
+        var aTimestamp = a.get('data').get('submittedAt');
+        var bTimestamp = b.get('data').get('submittedAt');
+        return aTimestamp - bTimestamp;
+      }
+    )
+  };
+
   render() {
     const {
       assignmentId,
@@ -36,7 +46,7 @@ class SubmissionsTableContainer extends Component {
 
     return (
       <SubmissionsTable
-        submissions={submissions}
+        submissions={this.sortSubmissions(submissions)}
         assignmentId={assignmentId} />
     );
   }

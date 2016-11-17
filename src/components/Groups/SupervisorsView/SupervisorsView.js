@@ -13,7 +13,8 @@ const SupervisorsView = ({
   group,
   students,
   stats,
-  assignments
+  assignments,
+  assignFunc
 }) => (
   <div>
     <Row>
@@ -53,7 +54,7 @@ const SupervisorsView = ({
           title={<FormattedMessage id='app.group.spervisorsView.addAssignment' defaultMessage='Add assignment' />}
           collapsable
           isOpen>
-          <AddAssignment groupId={group.id} />
+          <AddAssignment groupId={group.id} assignFunc={assignFunc} />
         </Box>
       </Col>
     </Row>
@@ -64,7 +65,8 @@ SupervisorsView.propTypes = {
   group: PropTypes.object.isRequired,
   students: ImmutablePropTypes.list,
   stats: ImmutablePropTypes.map,
-  assignments: ImmutablePropTypes.list.isRequired
+  assignments: ImmutablePropTypes.list.isRequired,
+  assignFunc: PropTypes.func.isRequired
 };
 
 export default SupervisorsView;
