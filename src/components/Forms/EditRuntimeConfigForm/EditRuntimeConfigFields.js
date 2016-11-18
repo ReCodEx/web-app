@@ -19,7 +19,7 @@ const EditRuntimeConfigFields = ({ prefix, i, runtimeConfigs, runtimeEnvironment
         options={runtimeEnvironments.map(
           environment => ({ key: environment.getIn(['data', 'id']), name: environment.getIn(['data', 'name']) })
         ).toArray()}
-        selected={runtimeConfig['runtimeEnvironment']['id']} // TODO: make this somehow work
+        // TODO: make somehow work selecting default value
         label={<FormattedMessage id='app.editRuntimeConfigForm.runtimeEnvironment' defaultMessage='Select runtime environment:' />} />
 
       <Field
