@@ -22,6 +22,7 @@ import submissions from './modules/submissions';
 import registration from './modules/registration';
 import users from './modules/users';
 import runtimeEnvironments from './modules/runtimeEnvironments';
+import supplementaryFiles from './modules/supplementaryFiles';
 
 const createRecodexReducers = (token) => ({
   auth: auth(token),
@@ -43,7 +44,8 @@ const createRecodexReducers = (token) => ({
   submissions,
   registration,
   users,
-  runtimeEnvironments
+  runtimeEnvironments,
+  supplementaryFiles
 });
 
 const librariesReducers = {

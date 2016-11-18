@@ -12,6 +12,7 @@ import PageContent from '../../components/PageContent';
 import ResourceRenderer from '../../components/ResourceRenderer';
 import EditExerciseForm from '../../components/Forms/EditExerciseForm';
 import EditExerciseRuntimeConfigsForm from '../../components/Forms/EditExerciseRuntimeConfigsForm';
+import SupplementaryFilesTableContainer from '../../containers/SupplementaryFilesTableContainer';
 
 import { fetchExerciseIfNeeded, editExercise, editRuntimeConfigs } from '../../redux/modules/exercises';
 import { getExercise } from '../../redux/selectors/exercises';
@@ -63,6 +64,12 @@ class EditExercise extends Component {
                 initialValues={exercise}
                 onSubmit={editExercise}
                 formValues={formValues} />
+
+              <div>
+                <SupplementaryFilesTableContainer
+                  exerciseId={exerciseId} />
+              </div>
+
               <EditExerciseRuntimeConfigsForm
                 runtimeEnvironments={runtimeEnvironments}
                 initialValues={{runtimeConfigs: exercise.solutionRuntimeConfigs}}
