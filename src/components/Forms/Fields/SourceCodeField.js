@@ -8,12 +8,15 @@ import {
   HelpBlock
 } from 'react-bootstrap';
 
-import AceEditor from 'react-ace';
-import 'brace/theme/monokai';
-import 'brace/mode/c_cpp';
-import 'brace/mode/java';
-import 'brace/mode/csharp';
-import 'brace/keybinding/vim';
+var AceEditor = null;
+if (canUseDOM) {
+  AceEditor = require('react-ace').default;
+  require('brace/theme/monokai');
+  require('brace/mode/c_cpp');
+  require('brace/mode/java');
+  require('brace/mode/csharp');
+  require('brace/keybinding/vim');
+}
 
 const getMode = ext => {
   switch (ext) {
