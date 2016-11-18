@@ -35,7 +35,13 @@ TextAreaField.propTypes = {
   label: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) })
-  ]).isRequired
+  ]).isRequired,
+  children: PropTypes.any,
+  meta: PropTypes.shape({
+    touched: PropTypes.bool,
+    error: PropTypes.oneOfType([ PropTypes.string, FormattedMessage ])
+  }),
+  input: PropTypes.object.isRequired
 };
 
 export default TextAreaField;

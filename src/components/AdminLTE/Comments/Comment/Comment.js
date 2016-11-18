@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 import { FormattedMessage } from 'react-intl';
 import classNames from 'classnames';
 import Icon from 'react-fontawesome';
-import { Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { Link } from 'react-router';
 
 import { Posted, Posting, Failed } from './Status';
@@ -76,8 +76,10 @@ Comment.propTypes = {
     avatarUrl: PropTypes.string.isRequired
   }).isRequired,
   postedAt: PropTypes.number,
+  id: PropTypes.string.isRequired,
   text: PropTypes.string.isRequired,
   repost: PropTypes.func,
+  isPrivate: PropTypes.bool,
   isToggling: PropTypes.bool,
   togglePrivacy: PropTypes.func
 };

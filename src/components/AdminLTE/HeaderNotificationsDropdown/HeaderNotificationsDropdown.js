@@ -1,7 +1,8 @@
 import React, { PropTypes } from 'react';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 import { FormattedMessage } from 'react-intl';
 import classNames from 'classnames';
-import { Button, Label } from 'react-bootstrap';
+import { Label } from 'react-bootstrap';
 import Icon from 'react-fontawesome';
 import HeaderNotification from '../HeaderNotification';
 
@@ -62,7 +63,13 @@ const HeaderNotificationsDropdown = ({
 );
 
 HeaderNotificationsDropdown.propTypes = {
-
+  isOpen: PropTypes.bool,
+  showAll: PropTypes.bool,
+  toggleOpen: PropTypes.func.isRequired,
+  toggleShowAll: PropTypes.func.isRequired,
+  markClick: PropTypes.func.isRequired,
+  newNotifications: ImmutablePropTypes.list,
+  oldNotifications: ImmutablePropTypes.list
 };
 
 export default HeaderNotificationsDropdown;

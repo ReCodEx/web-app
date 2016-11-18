@@ -1,9 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 
-import { isLoading, hasFailed, isReady } from '../../redux/helpers/resourceManager';
 import { postComment, repostComment, togglePrivacy, fetchThreadIfNeeded } from '../../redux/modules/comments';
-import { loggedInUserId } from '../../redux/selectors/auth';
 import { loggedInUserSelector } from '../../redux/selectors/users';
 import { commentsThreadSelector } from '../../redux/selectors/comments';
 
@@ -63,7 +61,8 @@ CommentThreadContainer.propTypes = {
   thread: PropTypes.object,
   user: PropTypes.object,
   addComment: PropTypes.func.isRequired,
-  repost: PropTypes.func
+  repostComment: PropTypes.func,
+  togglePrivacy: PropTypes.func
 };
 
 export default connect(

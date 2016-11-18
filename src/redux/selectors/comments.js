@@ -1,7 +1,4 @@
 import { createSelector } from 'reselect';
-import { List } from 'immutable';
-import { isReady } from '../helpers/resourceManager';
-
 
 /**
  * Select groups part of the state

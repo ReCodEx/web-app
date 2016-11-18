@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { FormattedMessage, FormattedHTMLMessage, injectIntl, intlShape } from 'react-intl';
-import { Row, Col, Button, Form, FormGroup, FormControl, InputGroup, HelpBlock } from 'react-bootstrap';
+import { Button, Form, FormGroup, FormControl, InputGroup, HelpBlock } from 'react-bootstrap';
 import Icon from 'react-fontawesome';
 
 class AddComment extends Component {
@@ -37,7 +37,7 @@ class AddComment extends Component {
                 type='submit'
                 bsStyle={isPrivate ? 'success' : 'primary'}
                 disabled={text.length === 0 || !addComment}
-                className='btn-flat'
+              className='btn-flat'
                 onClick={this.addComment}>
                 <FormattedMessage id='app.comments.addComment' defaultMessage='Send' />
               </Button>

@@ -1,5 +1,4 @@
 import { createSelector } from 'reselect';
-import { isReady } from '../helpers/resourceManager';
 
 export const getFiles = state => state.files;
 
@@ -11,7 +10,7 @@ export const getFile = id =>
 
 const getContent = state => state.filesContent;
 
-export const getFilesContent  = id =>
+export const getFilesContent = id =>
   createSelector(
     getContent,
     files => files.getIn(['resources', id])

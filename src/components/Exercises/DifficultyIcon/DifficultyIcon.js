@@ -30,8 +30,6 @@ const DifficultyIcon = ({
     default:
       break;
   }
-
-
 };
 
 DifficultyIcon.propTypes = {

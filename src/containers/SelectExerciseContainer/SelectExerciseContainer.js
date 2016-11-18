@@ -1,9 +1,7 @@
 import React, { PropTypes } from 'react';
-import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 
 import { searchExercises } from '../../redux/modules/search';
-import LeaveJoinGroupButtonContainer from '../LeaveJoinGroupButtonContainer';
 import SearchContainer from '../SearchContainer';
 import ExercisesList from '../../components/Exercises/ExercisesList';
 
@@ -23,7 +21,8 @@ const SelectExerciseContainer = ({
 
 SelectExerciseContainer.propTypes = {
   groupId: PropTypes.string.isRequired,
-  search: PropTypes.func.isRequired
+  search: PropTypes.func.isRequired,
+  createActions: PropTypes.func
 };
 
 const mapDispatchToProps = (dispatch) => ({

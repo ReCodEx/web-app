@@ -1,12 +1,10 @@
 import React, { PropTypes } from 'react';
 import { FormattedMessage } from 'react-intl';
-import Helmet from 'react-helmet';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 
 import { Row, Col } from 'react-bootstrap';
 import PageContent from '../../components/PageContent';
-import Box from '../../components/AdminLTE/Box';
 import ResetPasswordForm from '../../components/Forms/ResetPasswordForm';
 
 import { resetPassword } from '../../redux/modules/auth';
@@ -20,7 +18,6 @@ import {
  * This component enables the user to request reseting password for his/her email address.
  */
 const ResetPassword = ({
-  instances,
   resetPassword,
   isReseting,
   hasFailed,

@@ -23,4 +23,10 @@ const LoadingAvatar = ({
   </div>
 );
 
+LoadingAvatar.propTypes = {
+  size: PropTypes.number,
+  borderWidth: PropTypes.number,
+  light: PropTypes.bool
+};
+
 export default LoadingAvatar;

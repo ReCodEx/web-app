@@ -1,18 +1,18 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 
 import { fetchUserIfNeeded } from '../../redux/modules/users';
 import { getUser } from '../../redux/selectors/users';
-import { isReady, getJsData } from '../../redux/helpers/resourceManager';
-import PageContent from '../../components/PageContent';
-import ResourceRenderer from '../../components/ResourceRenderer';
-import UserProfile, {
-  LoadingUserProfile,
-  FailedUserProfile
-} from '../../components/Users/UserProfile';
+import Page from '../../components/Page';
+import UserProfile from '../../components/Users/UserProfile';
 
 class User extends Component {
+
+  static loadAsync = ({ userId }, dispatch) => Promise.all([
+    dispatch(fetchUserIfNeeded(userId))
+  ]);
 
   componentWillMount() {
     this.props.loadAsync();
@@ -26,13 +26,10 @@ class User extends Component {
 
   render() {
     const { user } = this.props;
-    const title = isReady(user)
-      ? getJsData(user).fullName
-      : <FormattedMessage id='app.user.loading' defaultMessage="Loading user's profile" />;
-
     return (
-      <PageContent
-        title={title}
+      <Page
+        resource={user}>
+        title={(user) => user.fullName}
         description={<FormattedMessage id='app.user.title' defaultMessage="User's profile" />}
         breadcrumbs={[
           {
@@ -40,25 +37,24 @@ class User extends Component {
             iconName: 'user'
           }
         ]}>
-        <ResourceRenderer
-          resource={user}
-          loading={<LoadingUserProfile />}
-          failed={<FailedUserProfile />}>
-          {data => <UserProfile {...data} />}
-        </ResourceRenderer>
-      </PageContent>
+        {data => <UserProfile {...data} />}
+      </Page>
     );
   }
 
 }
 
+User.propTypes = {
+  user: ImmutablePropTypes.map,
+  params: PropTypes.shape({ userId: PropTypes.string.isRequired }).isRequired,
+  loadAsync: PropTypes.func.isRequired
+};
+
 export default connect(
   (state, { params: { userId } }) => ({
     user: getUser(userId)(state)
   }),
-  (dispatch, { params: { userId } }) => ({
-    loadAsync: () => Promise.all([
-      dispatch(fetchUserIfNeeded(userId))
-    ])
+  (dispatch, { params }) => ({
+    loadAsync: () => User.loadAsync(params, dispatch)
   })
 )(User);

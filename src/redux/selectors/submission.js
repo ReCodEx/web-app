@@ -1,6 +1,6 @@
 import { createSelector } from 'reselect';
 import { submissionStatus } from '../modules/submission';
-const { PROCESSING, CREATING, SENDING, FAILED } = submissionStatus;
+const { CREATING, SENDING, FAILED } = submissionStatus;
 
 export const getSubmission = state => state.submission;
 export const getNote = createSelector(getSubmission, state => state.get('note'));

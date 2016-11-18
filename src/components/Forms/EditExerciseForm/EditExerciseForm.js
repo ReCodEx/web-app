@@ -1,23 +1,15 @@
 import React, { PropTypes } from 'react';
 import { canUseDOM } from 'exenv';
-import { reduxForm, Field, FieldArray, change } from 'redux-form';
+import { reduxForm, Field, FieldArray } from 'redux-form';
 import { injectIntl, intlShape, FormattedMessage, defineMessages } from 'react-intl';
-import { Button, Alert, HelpBlock } from 'react-bootstrap';
-import isNumeric from 'validator/lib/isNumeric';
+import { Alert } from 'react-bootstrap';
 
-import { LoadingIcon, SuccessIcon } from '../../Icons';
 import FormBox from '../../AdminLTE/FormBox';
 import {
   TextField,
-  MarkdownTextAreaField,
-  CheckboxField,
-  SelectField,
-  SourceCodeField,
-  SingleUploadField
+  SelectField
 } from '../Fields';
 import SubmitButton from '../SubmitButton';
-import { validateRegistrationData } from '../../../redux/modules/users';
-import { getJsData } from '../../../redux/helpers/resourceManager';
 import LocalizedAssignmentsFormField from '../LocalizedAssignmentsFormField';
 
 if (canUseDOM) {
@@ -25,18 +17,18 @@ if (canUseDOM) {
 }
 
 const messages = defineMessages({
-    easy: {
-        id: 'app.editExerciseForm.easy',
-        defaultMessage: 'Easy',
-    },
-    medium: {
-        id: 'app.editExerciseForm.medium',
-        defaultMessage: 'Medium',
-    },
-    hard: {
-        id: 'app.editExerciseForm.hard',
-        defaultMessage: 'Hard',
-    }
+  easy: {
+    id: 'app.editExerciseForm.easy',
+    defaultMessage: 'Easy'
+  },
+  medium: {
+    id: 'app.editExerciseForm.medium',
+    defaultMessage: 'Medium'
+  },
+  hard: {
+    id: 'app.editExerciseForm.hard',
+    defaultMessage: 'Hard'
+  }
 });
 
 const EditExerciseForm = ({
@@ -89,10 +81,10 @@ const EditExerciseForm = ({
         name='difficulty'
         component={SelectField}
         options={[
-          { key: "easy", name: formatMessage(messages.easy)},
-          { key: "medium", name: formatMessage(messages.medium)},
-          { key: "hard", name: formatMessage(messages.hard)}
-          ]}
+          { key: 'easy', name: formatMessage(messages.easy) },
+          { key: 'medium', name: formatMessage(messages.medium) },
+          { key: 'hard', name: formatMessage(messages.hard) }
+        ]}
         label={<FormattedMessage id='app.editExerciseForm.difficulty' defaultMessage='Difficulty' />} />
 
     </FormBox>
@@ -103,7 +95,14 @@ EditExerciseForm.propTypes = {
   initialValues: PropTypes.object.isRequired,
   values: PropTypes.object,
   handleSubmit: PropTypes.func.isRequired,
-  intl: intlShape.isRequired
+  intl: intlShape.isRequired,
+  submitting: PropTypes.bool,
+  submitFailed: PropTypes.bool,
+  submitSucceeded: PropTypes.bool,
+  invalid: PropTypes.bool,
+  formValues: PropTypes.shape({
+    localizedAssignments: PropTypes.array
+  })
 };
 
 const validate = ({
@@ -112,7 +111,7 @@ const validate = ({
   const errors = {};
 
   if (!name) {
-    errors['name'] = <FormattedMessage id='app.editExerciseForm.validation.emptyName' defaultMessage='Please fill the name of the assignment.' />;
+    errors['name'] = <FormattedMessage id='app.editExerciseForm.validation.emptyName' defaultMessage='Please fill the name of the exercise.' />;
   }
 
   return errors;

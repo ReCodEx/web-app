@@ -67,8 +67,12 @@ const SourceCodeField = ({
 );
 
 SourceCodeField.propTypes = {
+  input: PropTypes.object.isRequired,
   mode: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
+  children: PropTypes.any,
+  meta: PropTypes.shape({ error: PropTypes.string, touched: PropTypes.bool }),
+  tabIndex: PropTypes.number,
   type: PropTypes.string,
   label: PropTypes.oneOfType([
     PropTypes.string,

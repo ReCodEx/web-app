@@ -1,4 +1,3 @@
-import React from 'react';
 import { connect } from 'react-redux';
 import LoggedIn from '../../components/Sidebar/LoggedIn';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';

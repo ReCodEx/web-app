@@ -1,8 +1,8 @@
 import React, { Component, PropTypes } from 'react';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 import { FormattedMessage } from 'react-intl';
-import { List } from 'immutable';
 import { Row, Col, Button } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 
@@ -12,10 +12,9 @@ import LocalizedAssignments from '../../components/Assignments/Assignment/Locali
 import ResourceRenderer from '../../components/ResourceRenderer';
 import GroupsList from '../../components/Groups/GroupsList';
 import Box from '../../components/AdminLTE/Box';
-import { SendIcon } from '../../components/Icons';
-import { EditIcon } from '../../components/Icons';
+import { EditIcon, SendIcon } from '../../components/Icons';
 
-import { isReady, isLoading, hasFailed, getJsData } from '../../redux/helpers/resourceManager';
+import { isReady, getJsData } from '../../redux/helpers/resourceManager';
 import { fetchExerciseIfNeeded } from '../../redux/modules/exercises';
 import { create as assignExercise } from '../../redux/modules/assignments';
 import { exerciseSelector } from '../../redux/selectors/exercises';
@@ -26,12 +25,16 @@ import { supervisorOfSelector } from '../../redux/selectors/groups';
 
 class Exercise extends Component {
 
+  static loadAsync = ({ exerciseId }, dispatch) => Promise.all([
+    dispatch(fetchExerciseIfNeeded(exerciseId))
+  ]);
+
   componentWillMount() {
     this.props.loadAsync();
   }
 
   componentWillReceiveProps(newProps) {
-    if (this.props.params.instanceId !== newProps.params.instanceId) {
+    if (this.props.params.exerciseId !== newProps.params.exerciseId) {
       newProps.loadAsync();
     }
   }
@@ -43,7 +46,6 @@ class Exercise extends Component {
 
   createExercise = (groupId) => {
     const { assignExercise, push } = this.props;
-
     const { links: { ASSIGNMENT_EDIT_URI_FACTORY } } = this.context;
 
     assignExercise(groupId)
@@ -52,7 +54,6 @@ class Exercise extends Component {
 
   render() {
     const {
-      params: { instanceId },
       exercise,
       supervisedGroups,
       isAuthorOfExercise
@@ -137,11 +138,13 @@ Exercise.contextTypes = {
 };
 
 Exercise.propTypes = {
-  params: PropTypes.shape({
-    exerciseId: PropTypes.string.isRequired
-  }),
+  params: PropTypes.shape({ exerciseId: PropTypes.string.isRequired }).isRequired,
   loadAsync: PropTypes.func.isRequired,
-  isAuthorOfExercise: PropTypes.func.isRequired,
+  assignExercise: PropTypes.func.isRequired,
+  push: PropTypes.func.isRequired,
+  exercise: ImmutablePropTypes.map,
+  supervisedGroups: PropTypes.array,
+  isAuthorOfExercise: PropTypes.func.isRequired
 };
 
 export default connect(
@@ -153,11 +156,9 @@ export default connect(
       isAuthorOfExercise: (exerciseId) => isAuthorOfExercise(userId, exerciseId)(state)
     };
   },
-  (dispatch, { params: { exerciseId: id } }) => ({
-    loadAsync: () => Promise.all([
-      dispatch(fetchExerciseIfNeeded(id))
-    ]),
-    assignExercise: (groupId) => dispatch(assignExercise(groupId, id)),
+  (dispatch, { params: { exerciseId } }) => ({
+    loadAsync: () => Exercise.loadAsync({ exerciseId }, dispatch),
+    assignExercise: (groupId) => dispatch(assignExercise(groupId, exerciseId)),
     push: (url) => dispatch(push(url))
   })
 )(Exercise);

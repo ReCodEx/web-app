@@ -6,12 +6,11 @@ import { push } from 'react-router-redux';
 
 import { Row, Col } from 'react-bootstrap';
 import PageContent from '../../components/PageContent';
-import Box from '../../components/AdminLTE/Box';
 import LoginForm from '../../components/Forms/LoginForm';
 import LoginCASForm from '../../components/Forms/LoginCASForm';
 
 import { login, loginCAS } from '../../redux/modules/auth';
-import { isLoggingIn, hasFailed, hasSucceeded } from '../../redux/selectors/auth';
+import { hasSucceeded } from '../../redux/selectors/auth';
 
 class Login extends Component {
 
@@ -74,7 +73,9 @@ Login.contextTypes = {
 
 Login.propTypes = {
   login: PropTypes.func.isRequired,
-  hasSucceeded: PropTypes.bool.isRequired
+  hasSucceeded: PropTypes.bool.isRequired,
+  push: PropTypes.func.isRequired,
+  loginCAS: PropTypes.func.isRequired
 };
 
 export default connect(

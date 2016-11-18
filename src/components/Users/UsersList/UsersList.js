@@ -1,8 +1,6 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import { Table } from 'react-bootstrap';
 import { FormattedMessage } from 'react-intl';
-
-import LoadingUsersListItem from '../LoadingUsersListItem';
 import UsersListItem from '../UsersListItem';
 
 const UsersList = ({
@@ -26,5 +24,10 @@ const UsersList = ({
     </tbody>
   </Table>
 );
+
+UsersList.propTypes = {
+  users: PropTypes.array,
+  createActions: PropTypes.func
+};
 
 export default UsersList;

@@ -4,7 +4,6 @@ import { Field, FieldArray } from 'redux-form';
 import { TextField, SourceCodeField, SelectField } from '../Fields';
 
 const EditRuntimeConfigFields = ({ prefix, i, runtimeConfigs, runtimeEnvironments }) => {
-
   const runtimeConfig = runtimeConfigs[i];
 
   return (

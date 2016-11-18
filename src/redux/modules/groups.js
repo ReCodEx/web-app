@@ -98,7 +98,6 @@ export const editGroup = (groupId, body) =>
     body
   });
 
-
 export const joinGroup = (groupId, userId) =>
   dispatch =>
     dispatch(

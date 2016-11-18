@@ -7,7 +7,7 @@ import { BytesTextField, SecondsTextField } from '../Fields';
 const sortTests = (tests) => {
   return tests.sort(
     (a, b) => a.localeCompare(b)
-  )
+  );
 };
 
 const HardwareGroupFields = ({ prefix, i, limits }) => {

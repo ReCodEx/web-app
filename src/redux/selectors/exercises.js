@@ -1,6 +1,4 @@
 import { createSelector } from 'reselect';
-import { isReady } from '../helpers/resourceManager';
-import { memberOfInstancesIdsSelector } from './users';
 
 const getExercises = state => state.exercises;
 const getResources = exercises => exercises.get('resources');

@@ -1,4 +1,3 @@
-import React from 'react';
 import { canUseDOM } from 'exenv';
 
 import { createStore, compose, applyMiddleware } from 'redux';

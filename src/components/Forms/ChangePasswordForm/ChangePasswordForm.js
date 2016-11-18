@@ -2,11 +2,10 @@ import React, { PropTypes } from 'react';
 import { reduxForm, Field, change } from 'redux-form';
 import { FormattedMessage } from 'react-intl';
 import { Button, Alert } from 'react-bootstrap';
-import isEmail from 'validator/lib/isEmail';
 
 import { SuccessIcon, LoadingIcon } from '../../Icons';
 import FormBox from '../../AdminLTE/FormBox';
-import { EmailField, TextField, PasswordField, PasswordStrength, SelectField } from '../Fields';
+import { PasswordField, PasswordStrength } from '../Fields';
 import { validatePasswordStrength } from '../../../redux/modules/auth';
 
 const ChangePasswordForm = ({
@@ -56,7 +55,9 @@ ChangePasswordForm.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
   hasFailed: PropTypes.bool,
-  hasSucceeded: PropTypes.bool
+  hasSucceeded: PropTypes.bool,
+  submitting: PropTypes.bool,
+  invalid: PropTypes.bool
 };
 
 const validate = ({ password, passwordCheck }) => {

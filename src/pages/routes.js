@@ -10,6 +10,7 @@ import App from '../containers/App';
 import Dashboard from './Dashboard';
 import Home from './Home';
 import Exercise from './Exercise';
+import Exercises from './Exercises';
 import EditExercise from './EditExercise';
 import Group from './Group';
 import EditGroup from './EditGroup';
@@ -64,9 +65,12 @@ const createRoutes = (getState) => {
             <Route path='stats' component={AssignmentStats} />
             <Route path='submission/:submissionId' component={Submission} />
           </Route>
-          <Route path='exercise/:exerciseId'>
-            <IndexRoute component={Exercise} />
-            <Route path='edit' component={EditExercise} />
+          <Route path='exercises'>
+            <IndexRoute component={Exercises} />
+            <Route path=':exerciseId'>
+              <IndexRoute component={Exercise} />
+              <Route path='edit' component={EditExercise} />
+            </Route>
           </Route>
           <Route path='group/:groupId'>
             <IndexRoute component={Group} />

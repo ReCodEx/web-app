@@ -2,8 +2,6 @@ import React, { PropTypes, Component } from 'react';
 import { canUseDOM } from 'exenv';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
-import { defineMessage } from 'react-intl';
-import { List } from 'immutable';
 import HeaderNotificationsDropdown from '../../components/AdminLTE/HeaderNotificationsDropdown';
 import { hideAll } from '../../redux/modules/notifications';
 import { newNotificationsSelector, oldNotificationsSelector } from '../../redux/selectors/notifications';

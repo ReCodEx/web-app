@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { LoadingAvatar } from '../../AdminLTE/Avatar';
 
@@ -16,5 +16,9 @@ const LoadingUsersName = ({
     </div>
   </div>
 );
+
+LoadingUsersName.propTypes = {
+  size: PropTypes.number
+};
 
 export default LoadingUsersName;

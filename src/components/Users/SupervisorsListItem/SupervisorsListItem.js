@@ -1,7 +1,4 @@
 import React, { PropTypes } from 'react';
-import { FormattedMessage } from 'react-intl';
-import { Label, ProgressBar, ListGroupItem, Clearfix } from 'react-bootstrap';
-import Icon from 'react-fontawesome';
 import { Link } from 'react-router';
 import MakeRemoveSupervisorButtonContainer from '../../../containers/MakeRemoveSupervisorButtonContainer';
 
@@ -31,8 +28,9 @@ const SupervisorsListItem = ({
 );
 
 SupervisorsListItem.propTypes = {
-  isAdmin: PropTypes.bool.isRequired,
   id: PropTypes.string.isRequired,
+  isAdmin: PropTypes.bool.isRequired,
+  groupId: PropTypes.string.isRequired,
   fullName: PropTypes.string.isRequired,
   avatarUrl: PropTypes.string.isRequired
 };

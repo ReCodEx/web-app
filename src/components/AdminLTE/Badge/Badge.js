@@ -1,4 +1,4 @@
-import React, { PropTypes, cloneElement } from 'react';
+import React, { PropTypes } from 'react';
 import { FormattedMessage, FormattedRelative } from 'react-intl';
 import Icon from 'react-fontawesome';
 import { Link } from 'react-router';

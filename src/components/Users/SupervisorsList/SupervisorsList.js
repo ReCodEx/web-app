@@ -35,7 +35,10 @@ const SupervisorsList = ({
 );
 
 SupervisorsList.propTypes = {
-  users: PropTypes.array.isRequired
+  users: PropTypes.array.isRequired,
+  groupId: PropTypes.string.isRequired,
+  isLoaded: PropTypes.bool,
+  isAdmin: PropTypes.bool
 };
 
 export default SupervisorsList;

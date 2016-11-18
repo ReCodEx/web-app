@@ -1,7 +1,6 @@
 import React, { PropTypes } from 'react';
 import { FormattedMessage } from 'react-intl';
-import { Label, ProgressBar, ListGroupItem, Clearfix } from 'react-bootstrap';
-import Icon from 'react-fontawesome';
+import { ProgressBar } from 'react-bootstrap';
 import { Link } from 'react-router';
 
 const StudentsListItem = ({

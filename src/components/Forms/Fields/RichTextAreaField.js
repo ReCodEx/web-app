@@ -1,8 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { FormattedMessage } from 'react-intl';
-import Collapse from 'react-collapse';
 import RichTextEditor, { createEmptyValue } from 'react-rte';
-import { Row, Col, Checkbox, FormGroup } from 'react-bootstrap';
+import { Checkbox, FormGroup } from 'react-bootstrap';
 import TextAreaField from './TextAreaField';
 
 class RichTextAreaField extends Component {

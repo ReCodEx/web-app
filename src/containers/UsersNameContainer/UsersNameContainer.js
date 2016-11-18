@@ -1,4 +1,5 @@
 import React, { PropTypes, Component } from 'react';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 
 import { fetchUserIfNeeded } from '../../redux/modules/users';
@@ -37,7 +38,8 @@ class UsersNameContainer extends Component {
 }
 
 UsersNameContainer.propTypes = {
-  userId: PropTypes.string.isRequired
+  userId: PropTypes.string.isRequired,
+  user: ImmutablePropTypes.map
 };
 
 export default connect(

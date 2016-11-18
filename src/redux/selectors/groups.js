@@ -5,7 +5,6 @@ import { studentOfGroupsIdsSelector, supervisorOfGroupsIdsSelector } from './use
 import { getAssignments } from './assignments';
 import { isReady, getId } from '../helpers/resourceManager';
 
-
 /**
  * Select groups part of the state
  */

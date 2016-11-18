@@ -1,6 +1,4 @@
 import React, { PropTypes } from 'react';
-import { ListGroupItem, Clearfix } from 'react-bootstrap';
-import Icon from 'react-fontawesome';
 import { Link } from 'react-router';
 
 const UsersListItem = ({
@@ -15,7 +13,7 @@ const UsersListItem = ({
     <td className='text-center' width={80}>
       <img src={avatarUrl} className='img-circle' width={45} />
     </td>
-    <td>
+    <td>``
       <p><strong>{fullName}</strong></p>
       <small><Link to={USER_URI_FACTORY(id)}>{id}</Link></small>
     </td>
@@ -30,7 +28,8 @@ const UsersListItem = ({
 UsersListItem.propTypes = {
   id: PropTypes.string.isRequired,
   fullName: PropTypes.string.isRequired,
-  avatarUrl: PropTypes.string.isRequired
+  avatarUrl: PropTypes.string.isRequired,
+  createActions: PropTypes.func
 };
 
 UsersListItem.contextTypes = {

@@ -97,6 +97,7 @@ UploadsTable.propTypes = {
   uploadingFiles: PropTypes.array.isRequired,
   attachedFiles: PropTypes.array.isRequired,
   failedFiles: PropTypes.array.isRequired,
+  removedFiles: PropTypes.array.isRequired,
   removeFile: PropTypes.func.isRequired,
   removeFailedFile: PropTypes.func.isRequired,
   retryUploadFile: PropTypes.func.isRequired,

@@ -1,5 +1,4 @@
 import { createSelector } from 'reselect';
-import { isReady } from '../helpers/resourceManager';
 
 const getRuntimeEnvironments = state => state.runtimeEnvironments;
 const getResources = runtimeEnvironments => runtimeEnvironments.get('resources');

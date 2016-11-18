@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import { Table } from 'react-bootstrap';
 import { FormattedMessage } from 'react-intl';
 
@@ -40,6 +40,9 @@ const StudentsList = ({
 );
 
 StudentsList.propTypes = {
+  users: PropTypes.array,
+  isLoaded: PropTypes.bool,
+  stats: PropTypes.object
 };
 
 export default StudentsList;

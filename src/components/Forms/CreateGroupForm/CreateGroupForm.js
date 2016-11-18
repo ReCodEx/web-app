@@ -2,10 +2,10 @@ import React, { Component, PropTypes } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { reduxForm, Field } from 'redux-form';
 import FormBox from '../../AdminLTE/FormBox';
-import { Alert, Button, ControlLabel } from 'react-bootstrap';
+import { Alert } from 'react-bootstrap';
 import { TextField, MarkdownTextAreaField, CheckboxField } from '../Fields';
-import { LoadingIcon, SuccessIcon, SendIcon } from '../../Icons';
 import { validateAddGroup } from '../../../redux/modules/groups';
+import SubmitButton from '../SubmitButton';
 
 class CreateGroupForm extends Component {
 
@@ -19,13 +19,10 @@ class CreateGroupForm extends Component {
     const {
       title = <FormattedMessage id='app.createGroupForm.title' defaultMessage='Create new group' />,
       handleSubmit,
-      reset,
       submitSucceeded = false,
       submitFailed = false,
       invalid = false,
-      submitting = false,
-      instanceId,
-      parentGroupId = undefined
+      submitting = false
     } = this.props;
     return (
       <FormBox
@@ -33,19 +30,18 @@ class CreateGroupForm extends Component {
         type={submitSucceeded ? 'success' : undefined}
         footer={
           <div className='text-center'>
-            <Button
-              type='submit'
-              bsStyle='success'
-              className='btn-flat'
-              onClick={handleSubmit}
+            <SubmitButton
+              handleSubmit={handleSubmit}
               tabIndex={3}
-              disabled={invalid || submitting || submitSucceeded}>
-              {!submitting
-                ? submitSucceeded
-                  ? <span><SuccessIcon /> &nbsp; <FormattedMessage id='app.createGroupForm.success' defaultMessage='Group has been created' /></span>
-                  : <FormattedMessage id='app.createGroupForm.createGroup' defaultMessage='Create new group' />
-                : <span><LoadingIcon /> &nbsp; <FormattedMessage id='app.createGroupForm.processing' defaultMessage='Group is being created ...' /></span>}
-            </Button>
+              submitting={submitting}
+              invalid={invalid}
+              hasFailed={submitFailed}
+              hasSuceeded={submitSucceeded}
+              messages={{
+                success: <FormattedMessage id='app.createGroupForm.success' defaultMessage='Group has been created' />,
+                submit: <FormattedMessage id='app.createGroupForm.createGroup' defaultMessage='Create new group' />,
+                submitting: <FormattedMessage id='app.createGroupForm.processing' defaultMessage='Group is being created ...' />
+              }} />
           </div>
         }>
         {submitFailed && (
@@ -89,8 +85,8 @@ CreateGroupForm.propTypes = {
   reset: PropTypes.func.isRequired,
   submitFailed: PropTypes.bool,
   submitSucceeded: PropTypes.bool,
+  invalid: PropTypes.bool,
   submitting: PropTypes.bool,
-  instanceId: PropTypes.string.isRequired,
   parentGroupId: PropTypes.string
 };
 

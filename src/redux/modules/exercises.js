@@ -1,5 +1,4 @@
-import { createAction, handleActions } from 'redux-actions';
-import { Map } from 'immutable';
+import { handleActions } from 'redux-actions';
 
 import { createApiAction } from '../middleware/apiMiddleware';
 import factory, { initialState } from '../helpers/resourceManager';

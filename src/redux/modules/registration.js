@@ -1,4 +1,4 @@
-import { createAction, handleActions } from 'redux-actions';
+import { handleActions } from 'redux-actions';
 import { fromJS } from 'immutable';
 import { createApiAction } from '../middleware/apiMiddleware';
 
@@ -15,8 +15,6 @@ export const statusTypes = {
   ACCOUNT_CREATING_FAILED: 'ACCOUNT_CREATING_FAILED',
   ACCOUNT_CREATED: 'ACCOUNT_CREATED'
 };
-
-const getUserId = (token) => token.sub.id;
 
 /**
  * Actions

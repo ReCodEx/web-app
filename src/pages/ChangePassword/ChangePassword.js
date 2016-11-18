@@ -1,14 +1,12 @@
 import React, { Component, PropTypes } from 'react';
 import { canUseDOM } from 'exenv';
 import { FormattedMessage, FormattedRelative } from 'react-intl';
-import Helmet from 'react-helmet';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 import { reset } from 'redux-form';
 
 import { Row, Col, Alert } from 'react-bootstrap';
 import PageContent from '../../components/PageContent';
-import Box from '../../components/AdminLTE/Box';
 import ChangePasswordForm from '../../components/Forms/ChangePasswordForm';
 
 import { decode, isTokenValid, isInScope } from '../../redux/helpers/token';
@@ -80,7 +78,7 @@ class ChangePassword extends Component {
 
   render() {
     const { links: { HOME_URI } } = this.context;
-    const { instances, changePassword, isChanging, hasFailed, hasSucceeded } = this.props;
+    const { changePassword, isChanging, hasFailed, hasSucceeded } = this.props;
     const { decodedToken, token } = this.state;
 
     return (
@@ -129,7 +127,10 @@ ChangePassword.contextTypes = {
 };
 
 ChangePassword.propTypes = {
+  isChanging: PropTypes.bool,
   changePassword: PropTypes.func.isRequired,
+  push: PropTypes.func.isRequired,
+  reset: PropTypes.func.isRequired,
   hasFailed: PropTypes.bool.isRequired,
   hasSucceeded: PropTypes.bool.isRequired
 };

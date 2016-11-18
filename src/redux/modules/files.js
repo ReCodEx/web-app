@@ -1,12 +1,5 @@
-import { createAction, handleActions } from 'redux-actions';
-import factory, {
-  initialState,
-  createRecord,
-  resourceStatus,
-  defaultNeedsRefetching
-} from '../helpers/resourceManager';
-import { actionTypes as submissionActionTypes } from './submissions';
-import { createApiAction } from '../middleware/apiMiddleware';
+import { handleActions } from 'redux-actions';
+import factory, { initialState } from '../helpers/resourceManager';
 
 const resourceName = 'files';
 const {

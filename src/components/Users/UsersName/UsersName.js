@@ -1,4 +1,4 @@
-import React, { PropTypes, cloneElement } from 'react';
+import React, { PropTypes } from 'react';
 import { Link } from 'react-router';
 import Avatar from '../../AdminLTE/Avatar';
 
@@ -27,7 +27,8 @@ const UsersName = ({
 UsersName.propTypes = {
   id: PropTypes.string.isRequired,
   fullName: PropTypes.string.isRequired,
-  avatarUrl: PropTypes.string.isRequired
+  avatarUrl: PropTypes.string.isRequired,
+  size: PropTypes.number
 };
 
 UsersName.contextTypes = {

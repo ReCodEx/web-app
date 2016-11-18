@@ -1,5 +1,4 @@
 import React, { PropTypes } from 'react';
-import { FormattedMessage } from 'react-intl';
 import SelectField from './SelectField';
 
 const LanguageSelectField = ({ options = [], ...props }) => (
@@ -12,5 +11,9 @@ const LanguageSelectField = ({ options = [], ...props }) => (
       ...options
     ]} />
 );
+
+LanguageSelectField.propTypes = {
+  options: PropTypes.array
+};
 
 export default LanguageSelectField;

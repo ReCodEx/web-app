@@ -55,7 +55,6 @@ const pushMessage = (state, msg) =>
     ? state.update('messages', messages => messages.push(msg))
     : state;
 
-
 export default handleActions({
 
   [actionTypes.INIT]: (state, { payload: { webSocketChannelId, expectedTasksCount } }) =>

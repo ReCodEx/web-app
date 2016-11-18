@@ -1,8 +1,7 @@
-import React, { Component, PropTypes } from 'react';
+import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { joinGroup, leaveGroup } from '../../redux/modules/groups';
 import { isStudentOf } from '../../redux/selectors/users';
-import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 
 import JoinGroupButton from '../../components/Groups/JoinGroupButton';
 import LeaveGroupButton from '../../components/Groups/LeaveGroupButton';

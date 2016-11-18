@@ -53,6 +53,17 @@ class UploadContainer extends Component {
 
 }
 
+UploadContainer.propTypes = {
+  attachedFiles: PropTypes.array,
+  uploadingFiles: PropTypes.array,
+  failedFiles: PropTypes.array,
+  removedFiles: PropTypes.array,
+  removeFailedFile: PropTypes.func.isRequired,
+  removeFile: PropTypes.func.isRequired,
+  returnFile: PropTypes.func.isRequired,
+  uploadFile: PropTypes.func.isRequired
+};
+
 export default connect(
   state => ({
     uploadingFiles: getUploadingFiles(state).toJS(),

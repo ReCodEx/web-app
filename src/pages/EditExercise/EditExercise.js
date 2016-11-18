@@ -1,12 +1,10 @@
 import React, { Component, PropTypes } from 'react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import { FormattedMessage, FormattedRelative } from 'react-intl';
-import Helmet from 'react-helmet';
+import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 import { reset, getFormValues } from 'redux-form';
 
-import { Row, Col, Alert } from 'react-bootstrap';
 import PageContent from '../../components/PageContent';
 
 import ResourceRenderer from '../../components/ResourceRenderer';
@@ -21,6 +19,11 @@ import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironment
 import { runtimeEnvironmentsSelector } from '../../redux/selectors/runtimeEnvironments';
 
 class EditExercise extends Component {
+
+  static loadAsync = ({ exerciseId }, dispatch) => Promise.all([
+    dispatch(fetchExerciseIfNeeded(exerciseId)),
+    dispatch(fetchRuntimeEnvironments())
+  ]);
 
   componentWillMount = () => this.props.loadAsync();
   componentWillReceiveProps = (props) => {
@@ -80,10 +83,14 @@ EditExercise.contextTypes = {
   links: PropTypes.object
 };
 
-EditExercise.PropTypes = {
+EditExercise.propTypes = {
+  exercise: ImmutablePropTypes.map,
   runtimeEnvironments: PropTypes.object.isRequired,
+  loadAsync: PropTypes.func.isRequired,
   editExercise: PropTypes.func.isRequired,
-  editSolutionRuntimeConfigs: PropTypes.func.isRequired
+  editSolutionRuntimeConfigs: PropTypes.func.isRequired,
+  params: PropTypes.shape({ exerciseId: PropTypes.string.isRequired }).isRequired,
+  formValues: PropTypes.object
 };
 
 export default connect(
@@ -94,7 +101,6 @@ export default connect(
       exercise: exerciseSelector(state),
       submitting: isSubmitting(state),
       userId,
-      isStudentOf: (groupId) => isSupervisorOf(userId, groupId)(state),
       formValues: getFormValues('editExercise')(state),
       runtimeEnvironments: runtimeEnvironmentsSelector(state)
     };
@@ -102,15 +108,8 @@ export default connect(
   (dispatch, { params: { exerciseId } }) => ({
     push: (url) => dispatch(push(url)),
     reset: () => dispatch(reset('editExercise')),
-    loadAsync: () => Promise.all([
-      dispatch(fetchExerciseIfNeeded(exerciseId)),
-      dispatch(fetchRuntimeEnvironments())
-    ]),
-    editExercise: (data) => {
-      return dispatch(editExercise(exerciseId, data));
-    },
-    editSolutionRuntimeConfigs: (data) => {
-      return dispatch(editRuntimeConfigs(exerciseId, data));
-    }
+    loadAsync: () => EditExercise.loadAsync({ exerciseId }, dispatch),
+    editExercise: (data) => dispatch(editExercise(exerciseId, data)),
+    editSolutionRuntimeConfigs: (data) => dispatch(editRuntimeConfigs(exerciseId, data))
   })
 )(EditExercise);

@@ -44,7 +44,8 @@ class CommentBox extends Component {
 
 CommentBox.propTypes = {
   commentsCount: PropTypes.number.isRequired,
-  footer: PropTypes.element
+  footer: PropTypes.element,
+  children: PropTypes.element
 };
 
 export default CommentBox;

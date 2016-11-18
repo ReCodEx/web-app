@@ -1,9 +1,7 @@
 import React, { PropTypes } from 'react';
-import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 
 import { searchPeople } from '../../redux/modules/search';
-import LeaveJoinGroupButtonContainer from '../LeaveJoinGroupButtonContainer';
 import SearchContainer from '../SearchContainer';
 import UsersList from '../../components/Users/UsersList';
 
@@ -23,9 +21,10 @@ const AddUserContainer = ({
 );
 
 AddUserContainer.propTypes = {
-  instanceId: PropTypes.string.isRequired,
+  id: PropTypes.string.isRequired,
   groupId: PropTypes.string.isRequired,
-  search: PropTypes.func.isRequired
+  search: PropTypes.func.isRequired,
+  createActions: PropTypes.func
 };
 
 const mapDispatchToProps = (dispatch, { instanceId }) => ({

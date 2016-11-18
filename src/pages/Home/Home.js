@@ -1,5 +1,4 @@
-import React, { Component, PropTypes } from 'react';
-import Helmet from 'react-helmet';
+import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import PageContent from '../../components/PageContent';
@@ -24,6 +23,9 @@ const Home = () => (
         defaultMessage='Welcome to ReCodEx'
         description='Homepage greetings of the user' />
     </h1>
+    <p>
+      @todo: Please guys, put some content from the GitHub wiki here ;-) Thanks!
+    </p>
   </PageContent>
 );
 

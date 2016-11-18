@@ -1,36 +1,29 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
-import { List } from 'immutable';
-import { Row, Col } from 'react-bootstrap';
 
-import PageContent from '../../components/PageContent';
-import ResourceRenderer from '../../components/ResourceRenderer';
+import Page from '../../components/Page';
+import { exercisesSelector } from '../../redux/selectors/exercises';
 import { fetchExercisesIfNeeded } from '../../redux/modules/exercises';
 
 class Exercises extends Component {
+
+  static loadAsync = (params, dispatch) => Promise.all([
+    dispatch(fetchExercisesIfNeeded())
+  ]);
 
   componentWillMount() {
     this.props.loadAsync();
   }
 
-  componentWillReceiveProps(newProps) {
-    if (this.props.params.instanceId !== newProps.params.instanceId) {
-      newProps.loadAsync();
-    }
-  }
-
   render() {
     const {
-      params: { instanceId },
-      instance,
-      groups,
-      createGroup,
-      isMemberOf
+      exercises
     } = this.props;
 
     return (
-      <PageContent
+      <Page
+        resource={exercises.toArray()}
         title={<FormattedMessage id='app.exercises.title' defaultMessage='Exercises list' />}
         description={<FormattedMessage id='app.instance.description' defaultMessage='List and assign exercises to your groups.' />}
         breadcrumbs={[
@@ -39,22 +32,23 @@ class Exercises extends Component {
             iconName: 'folder-open'
           }
         ]}>
-        {/* @todo */}
-      </PageContent>
+        {(...exercises) => <span>@todo: list of {exercises.length} exercises</span>}
+      </Page>
     );
   }
 
 }
 
 Exercises.propTypes = {
-  loadAsync: PropTypes.func.isRequired
+  loadAsync: PropTypes.func.isRequired,
+  exercises: PropTypes.array
 };
 
 export default connect(
   (state) => ({
+    exercises: exercisesSelector(state)
   }),
   (dispatch) => ({
-    loadAsync: () => Promise.all([
-    ])
+    loadAsync: () => Exercises.loadAsync({}, dispatch)
   })
 )(Exercises);

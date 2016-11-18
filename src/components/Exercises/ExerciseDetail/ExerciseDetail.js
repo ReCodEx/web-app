@@ -33,7 +33,7 @@ const ExerciseDetail = ({
       </Table>
     </Box>
   </div>
-)
+);
 
 ExerciseDetail.propTypes = {
   id: PropTypes.string.isRequired,

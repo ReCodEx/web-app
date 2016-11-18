@@ -1,10 +1,5 @@
 import React, { PropTypes, Component } from 'react';
 import Collapse from 'react-collapse';
-import Icon from 'react-fontawesome';
-import { Link } from 'react-router';
-import { LinkContainer } from 'react-router-bootstrap';
-import LevelGap from './LevelGap';
-import TreeView from './TreeView';
 import TreeViewLeaf from './TreeViewLeaf';
 
 class TreeViewInnerNode extends Component {
@@ -14,12 +9,12 @@ class TreeViewInnerNode extends Component {
     this.setState({ isOpen });
   }
 
-  toggleOpen = e => {
+  toggleOpen = (e) => {
     e.preventDefault();
     this.setState({ isOpen: !this.state.isOpen });
   };
-  isOpen = () =>
-    this.props.forceOpen || this.state.isOpen;
+
+  isOpen = () => this.props.forceOpen || this.state.isOpen;
 
   render() {
     const {
@@ -46,7 +41,9 @@ class TreeViewInnerNode extends Component {
 
 TreeViewInnerNode.propTypes = {
   loading: PropTypes.bool,
-  isOpen: PropTypes.bool
+  isOpen: PropTypes.bool,
+  forceOpen: PropTypes.bool,
+  children: PropTypes.any
 };
 
 export default TreeViewInnerNode;

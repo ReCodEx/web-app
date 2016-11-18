@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import { FailedIcon } from '../../Icons';
 
 const FailedAvatar = ({
@@ -22,5 +22,11 @@ const FailedAvatar = ({
     <FailedIcon />
   </div>
 );
+
+FailedAvatar.propTypes = {
+  size: PropTypes.number,
+  borderWidth: PropTypes.number,
+  light: PropTypes.bool
+};
 
 export default FailedAvatar;

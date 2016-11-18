@@ -1,5 +1,4 @@
-import React, { Component, PropTypes } from 'react';
-import { connect } from 'react-redux';
+import React, { PropTypes } from 'react';
 import { reduxForm, Field } from 'redux-form';
 import { FormattedMessage } from 'react-intl';
 import isEmail from 'validator/lib/isEmail';
@@ -51,7 +50,11 @@ const LoginForm = ({
 
 LoginForm.propTypes = {
   onSubmit: PropTypes.func.isRequired,
-  handleSubmit: PropTypes.func.isRequired
+  handleSubmit: PropTypes.func.isRequired,
+  invalid: PropTypes.bool,
+  submitting: PropTypes.bool,
+  hasSucceeded: PropTypes.bool,
+  submitFailed: PropTypes.bool
 };
 
 const validate = ({ email, password }) => {

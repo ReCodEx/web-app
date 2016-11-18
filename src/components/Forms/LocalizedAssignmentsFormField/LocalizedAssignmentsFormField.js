@@ -1,16 +1,12 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { Field } from 'redux-form';
 import { Alert, Button, Tabs, Tab } from 'react-bootstrap';
 import Confirm from '../Confirm';
 import { AddIcon, WarningIcon } from '../../Icons';
 import {
-  DatetimeField,
   TextField,
-  TextAreaField,
   MarkdownTextAreaField,
-  CheckboxField,
-  SourceCodeField,
   LanguageSelectField
 } from '../Fields';
 
@@ -22,8 +18,7 @@ class LocalizedAssignmentsFormField extends Component {
   render() {
     const {
       fields,
-      localizedAssignments,
-      meta: { error, ...meta }
+      localizedAssignments
     } = this.props;
 
     return (
@@ -85,5 +80,10 @@ class LocalizedAssignmentsFormField extends Component {
     );
   }
 }
+
+LocalizedAssignmentsFormField.propTypes = {
+  fields: PropTypes.array.isRequired,
+  localizedAssignments: PropTypes.array.isRequired
+};
 
 export default LocalizedAssignmentsFormField;

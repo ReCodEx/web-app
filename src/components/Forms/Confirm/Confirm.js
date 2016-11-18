@@ -74,7 +74,8 @@ Confirm.propTypes = {
   disabled: PropTypes.bool,
   question: stringOrFormattedMessage.isRequired,
   yes: stringOrFormattedMessage,
-  no: stringOrFormattedMessage
+  no: stringOrFormattedMessage,
+  children: PropTypes.element.isRequired
 };
 
 export default Confirm;

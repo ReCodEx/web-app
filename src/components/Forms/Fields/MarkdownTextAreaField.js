@@ -7,7 +7,6 @@ import SourceCodeField from './SourceCodeField';
 import OnOffCheckbox from '../OnOffCheckbox';
 import styles from './MarkdownTextAreaField.less';
 
-
 import { canUseDOM } from 'exenv';
 if (canUseDOM) {
   require('brace/mode/markdown');

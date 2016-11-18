@@ -17,7 +17,7 @@
     "import/namespace": 2,
     "import/no-deprecated": 2,
     "import/no-unresolved": 2,
-    "import/no-named-as-default": 2,
+    "import/no-named-as-default": 0,
     "indent": [2, 2, {"SwitchCase": 1}],
     "no-console": 1,
     "no-unused-vars": 2,

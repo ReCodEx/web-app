@@ -5,7 +5,6 @@ import { ButtonGroup, Button } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 import { TreeView, TreeViewItem } from '../../AdminLTE/TreeView';
 import { isReady, getJsData } from '../../../redux/helpers/resourceManager';
-import LeaveJoinGroupButtonContainer from '../../../containers/LeaveJoinGroupButtonContainer';
 
 class GroupTree extends Component {
 
@@ -64,7 +63,9 @@ class GroupTree extends Component {
 
 GroupTree.propTypes = {
   id: PropTypes.string.isRequired,
-  groups: PropTypes.object.isRequired
+  groups: PropTypes.object.isRequired,
+  level: PropTypes.number,
+  isOpen: PropTypes.bool
 };
 
 GroupTree.contextTypes = {

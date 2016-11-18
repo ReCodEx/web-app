@@ -30,8 +30,10 @@ const ResourceDependentBreadcrumbItem = ({
 
 ResourceDependentBreadcrumbItem.propTypes = {
   resource: PropTypes.object,
+  iconName: PropTypes.string,
   isActive: PropTypes.bool,
-  hiddenUntilReady: PropTypes.bool
+  hiddenUntilReady: PropTypes.bool,
+  breadcrumb: PropTypes.func.isRequired
 };
 
 export default ResourceDependentBreadcrumbItem;

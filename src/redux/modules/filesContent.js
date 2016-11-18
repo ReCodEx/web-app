@@ -1,4 +1,4 @@
-import { createAction, handleActions } from 'redux-actions';
+import { handleActions } from 'redux-actions';
 import factory, { initialState } from '../helpers/resourceManager';
 
 /**
@@ -11,7 +11,7 @@ const {
   reduceActions
 } = factory({
   resourceName,
-  apiEndpointFactory: (id) => `/uploaded-files/${id}/content`,
+  apiEndpointFactory: (id) => `/uploaded-files/${id}/content`
 });
 
 export const fetchContentIfNeeded = actions.fetchOneIfNeeded;

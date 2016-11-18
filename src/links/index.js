@@ -21,7 +21,8 @@ export const linksFactory = lang => {
   const USER_URI_FACTORY = id => `${prefix}/app/user/${id}`;
 
   // exercise details
-  const EXERCISE_URI_FACTORY = id => `${prefix}/app/exercise/${id}`;
+  const EXERCISES_URI_FACTORY = () => `${prefix}/app/exercises`;
+  const EXERCISE_URI_FACTORY = (id) => `${EXERCISES_URI_FACTORY()}/${id}`;
   const EXERCISE_EDIT_URI_FACTORY = id => `${EXERCISE_URI_FACTORY(id)}/edit`;
 
   // assignments and solution submissions
@@ -49,7 +50,7 @@ export const linksFactory = lang => {
   };
 };
 
-const removeFirstSegment = url =>
+const removeFirstSegment = (url) =>
   url.substr(1).indexOf('/') === -1
     ? '/'
     : url.substr(url.substr(1).indexOf('/') + 1);
@@ -57,9 +58,9 @@ const removeFirstSegment = url =>
 export const changeLanguage = (url, lang) =>
   `/${lang}${removeFirstSegment(url)}`;
 
-export const extractLanguageFromUrl = url => {
+export const extractLanguageFromUrl = (url) => {
   url = url.substr(0, 1) === '/' ? url.substr(1) : url; // trim leading slash
   return url.substr(0, url.indexOf('/'));
 };
 
-export const isAbsolute = url => url.match('^(https?:)?//.+');
+export const isAbsolute = (url) => url.match('^(https?:)?//.+');

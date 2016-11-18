@@ -87,7 +87,11 @@ Checkbox.propTypes = {
   disabled: PropTypes.bool,
   onChange: PropTypes.func,
   onFocus: PropTypes.func,
-  onBlur: PropTypes.func
+  onBlur: PropTypes.func,
+  tabIndex: PropTypes.number,
+  children: PropTypes.any,
+  colored: PropTypes.bool,
+  className: PropTypes.string
 };
 
 export default Checkbox;

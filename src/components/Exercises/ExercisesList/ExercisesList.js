@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import { Table } from 'react-bootstrap';
 import { FormattedMessage } from 'react-intl';
 
-import ExercisesListItem, { LoadingExercisesListItem } from '../ExercisesListItem';
+import ExercisesListItem from '../ExercisesListItem';
 
 const ExercisesList = ({
   exercises = [],
@@ -25,5 +25,10 @@ const ExercisesList = ({
     </tbody>
   </Table>
 );
+
+ExercisesList.propTypes = {
+  exercises: PropTypes.array,
+  createActions: PropTypes.func
+};
 
 export default ExercisesList;

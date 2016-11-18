@@ -1,4 +1,4 @@
-import React, { Component, PropTypes } from 'react';
+import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import PageContent from '../../components/PageContent';
 

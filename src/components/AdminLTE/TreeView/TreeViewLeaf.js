@@ -1,11 +1,7 @@
-import React, { PropTypes, Component } from 'react';
+import React, { PropTypes } from 'react';
 import { FormattedMessage } from 'react-intl';
-import Collapse from 'react-collapse';
 import Icon from 'react-fontawesome';
 import { LoadingIcon } from '../../Icons';
-import { Link } from 'react-router';
-import { Button, Nav, NavItem } from 'react-bootstrap';
-import { LinkContainer } from 'react-router-bootstrap';
 import LevelGap from './LevelGap';
 
 const TreeViewLeaf = ({

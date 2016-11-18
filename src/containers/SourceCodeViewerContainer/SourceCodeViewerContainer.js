@@ -1,6 +1,5 @@
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
-import { FormattedMessage } from 'react-intl';
 import { Modal } from 'react-bootstrap';
 
 import { fetchFileIfNeeded } from '../../redux/modules/files';
@@ -40,12 +39,12 @@ class SourceCodeViewerContainer extends Component {
         </Modal.Header>
         <Modal.Body>
           <ResourceRenderer resource={[file, code]}>
-            {(file, code) => { console.log(code); return (
+            {(file, code) => (
               <SourceCodeViewer
                 content={code}
                 name={file.name}
                 lineNumbers={true} />
-            );}}
+            )}
           </ResourceRenderer>
         </Modal.Body>
       </Modal>
@@ -59,7 +58,8 @@ SourceCodeViewerContainer.propTypes = {
   file: PropTypes.object,
   show: PropTypes.bool,
   onHide: PropTypes.func.isRequired,
-  loadAsync: PropTypes.func.isRequired
+  loadAsync: PropTypes.func.isRequired,
+  code: PropTypes.strign
 };
 
 export default connect(

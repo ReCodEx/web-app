@@ -1,14 +1,8 @@
 import React, { PropTypes, Component } from 'react';
 import { FormattedMessage } from 'react-intl';
-import { Field } from 'redux-form';
 import { Alert, Button, Tabs, Tab } from 'react-bootstrap';
 import Confirm from '../Confirm';
 import { AddIcon, WarningIcon } from '../../Icons';
-import {
-  TextField,
-  CheckboxField,
-  SelectField
-} from '../Fields';
 
 class TabbedArrayField extends Component {
 
@@ -31,7 +25,6 @@ class TabbedArrayField extends Component {
       add = false,
       remove = false,
       fields,
-      meta: { error, ...meta } = {},
       ...props
     } = this.props;
 
@@ -84,7 +77,12 @@ TabbedArrayField.propTypes = {
   id: PropTypes.string.isRequired,
   getTitle: PropTypes.func,
   add: PropTypes.bool,
-  remove: PropTypes.bool
+  remove: PropTypes.bool,
+  fields: PropTypes.array,
+  ContentComponent: PropTypes.element,
+  emptyMessage: PropTypes.oneOfType([ PropTypes.string, FormattedMessage ]),
+  addMessage: PropTypes.oneOfType([ PropTypes.string, FormattedMessage ]),
+  removeQuestion: PropTypes.oneOfType([ PropTypes.string, FormattedMessage ])
 };
 
 export default TabbedArrayField;

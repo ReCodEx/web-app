@@ -1,4 +1,4 @@
-import { createAction, handleActions } from 'redux-actions';
+import { handleActions } from 'redux-actions';
 import { fromJS } from 'immutable';
 
 import { createApiAction } from '../middleware/apiMiddleware';

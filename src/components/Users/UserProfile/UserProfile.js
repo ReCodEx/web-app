@@ -50,4 +50,15 @@ const UserProfile = ({
   </div>
 );
 
+UserProfile.propTypes = {
+  id: PropTypes.string.isRequired,
+  fullName: PropTypes.string.isRequired,
+  role: PropTypes.string.isRequired,
+  avatarUrl: PropTypes.string.isRequired,
+  groups: PropTypes.shape({
+    studentOf: PropTypes.array,
+    supervisorOf: PropTypes.array
+  }).isRequired
+};
+
 export default UserProfile;
