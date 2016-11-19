@@ -28,7 +28,7 @@ class User extends Component {
     const { user } = this.props;
     return (
       <Page
-        resource={user}>
+        resource={user}
         title={(user) => user.fullName}
         description={<FormattedMessage id='app.user.title' defaultMessage="User's profile" />}
         breadcrumbs={[

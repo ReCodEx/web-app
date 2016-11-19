@@ -14,6 +14,7 @@ const DifficultyIcon = ({
       );
 
     case 'medium':
+    case 'moderate':
       return (
         <span className='text-warning'>
           <Icon name='meh-o' /> <FormattedMessage id='app.exercises.difficultyIcon.medium' defaultMessage='Medium' />
@@ -28,7 +29,7 @@ const DifficultyIcon = ({
       );
 
     default:
-      break;
+      return null;
   }
 };
 

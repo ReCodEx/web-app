@@ -1,10 +1,16 @@
 import React, { PropTypes } from 'react';
 import { FormattedMessage } from 'react-intl';
-import { Field, FieldArray } from 'redux-form';
+import { Field } from 'redux-form';
 import { TextField, SourceCodeField, SelectField } from '../Fields';
+import { getJsData } from '../../../redux/helpers/resourceManager';
 
-const EditRuntimeConfigFields = ({ prefix, i, runtimeConfigs, runtimeEnvironments }) => {
-  const runtimeConfig = runtimeConfigs[i];
+const EditRuntimeConfigFields = ({
+  prefix,
+  i,
+  runtimeConfigs,
+  runtimeEnvironments
+}) => {
+  // const runtimeConfig = runtimeConfigs[i];
 
   return (
     <div>
@@ -16,10 +22,7 @@ const EditRuntimeConfigFields = ({ prefix, i, runtimeConfigs, runtimeEnvironment
       <Field
         name={`${prefix}.runtimeEnvironmentId`}
         component={SelectField}
-        options={runtimeEnvironments.map(
-          environment => ({ key: environment.getIn(['data', 'id']), name: environment.getIn(['data', 'name']) })
-        ).toArray()}
-        // TODO: make somehow work selecting default value
+        options={runtimeEnvironments.map(getJsData).map(env => ({ key: env.id, name: env.name })).toArray()}
         label={<FormattedMessage id='app.editRuntimeConfigForm.runtimeEnvironment' defaultMessage='Select runtime environment:' />} />
 
       <Field

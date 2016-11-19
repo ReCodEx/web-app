@@ -1,22 +1,28 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
+import { List } from 'immutable';
 import Upload from '../../components/Submissions/Upload';
 
 import {
-  getUploadingFiles,
-  getUploadedFiles,
-  getRemovedFiles,
-  getFailedFiles
-} from '../../redux/selectors/submission';
+  createGetUploadingFiles,
+  createGetUploadedFiles,
+  createGetRemovedFiles,
+  createGetFailedFiles
+} from '../../redux/selectors/upload';
 
 import {
+  init,
   uploadFile,
   removeFile,
   returnFile,
   removeFailedFile
-} from '../../redux/modules/submission';
+} from '../../redux/modules/upload';
 
 class UploadContainer extends Component {
+
+  componentWillMount() {
+    this.props.init();
+  }
 
   uploadFiles = (files) =>
     files.map(this.props.uploadFile);
@@ -54,6 +60,8 @@ class UploadContainer extends Component {
 }
 
 UploadContainer.propTypes = {
+  id: PropTypes.string.isRequired,
+  init: PropTypes.func.isRequired,
   attachedFiles: PropTypes.array,
   uploadingFiles: PropTypes.array,
   failedFiles: PropTypes.array,
@@ -65,16 +73,17 @@ UploadContainer.propTypes = {
 };
 
 export default connect(
-  state => ({
-    uploadingFiles: getUploadingFiles(state).toJS(),
-    attachedFiles: getUploadedFiles(state).toJS(),
-    failedFiles: getFailedFiles(state).toJS(),
-    removedFiles: getRemovedFiles(state).toJS()
+  (state, { id }) => ({
+    uploadingFiles: (createGetUploadingFiles(id)(state) || List()).toJS(),
+    attachedFiles: (createGetUploadedFiles(id)(state) || List()).toJS(),
+    failedFiles: (createGetFailedFiles(id)(state) || List()).toJS(),
+    removedFiles: (createGetRemovedFiles(id)(state) || List()).toJS()
   }),
-  (dispatch, props) => ({
-    uploadFile: (payload) => dispatch(uploadFile(payload)),
-    removeFailedFile: (payload) => dispatch(removeFailedFile(payload)),
-    removeFile: (payload) => dispatch(removeFile(payload)),
-    returnFile: (payload) => dispatch(returnFile(payload))
+  (dispatch, { id }) => ({
+    init: () => dispatch(init(id)),
+    uploadFile: (payload) => dispatch(uploadFile(id, payload)),
+    removeFailedFile: (payload) => dispatch(removeFailedFile(id, payload)),
+    removeFile: (payload) => dispatch(removeFile(id, payload)),
+    returnFile: (payload) => dispatch(returnFile(id, payload))
   })
 )(UploadContainer);

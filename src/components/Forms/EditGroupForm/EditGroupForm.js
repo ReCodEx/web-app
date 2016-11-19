@@ -99,6 +99,6 @@ const validate = ({ name, description }) => {
 };
 
 export default reduxForm({
-  form: 'bonus-points',
+  form: 'edit-group',
   validate
 })(EditGroupForm);

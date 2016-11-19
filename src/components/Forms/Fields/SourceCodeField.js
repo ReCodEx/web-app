@@ -8,12 +8,18 @@ import {
   HelpBlock
 } from 'react-bootstrap';
 
-import AceEditor from 'react-ace';
-import 'brace/theme/monokai';
-import 'brace/mode/c_cpp';
-import 'brace/mode/java';
-import 'brace/mode/csharp';
-import 'brace/keybinding/vim';
+// load the ACE editor only when rendering in the browser
+let AceEditor = null;
+if (canUseDOM) {
+  AceEditor = require('react-ace').default;
+  require('brace/theme/monokai');
+  require('brace/mode/c_cpp');
+  require('brace/mode/java');
+  require('brace/mode/csharp');
+  require('brace/keybinding/vim');
+}
+
+import ClientOnly from '../../ClientOnly';
 
 const getMode = ext => {
   switch (ext) {
@@ -46,12 +52,17 @@ const SourceCodeField = ({
   children,
   tabIndex,
   ...props
+}, {
+  userSettings: {
+    vimMode = false,
+    darkTheme = false
+  }
 }) => (
   <FormGroup
     controlId={name}
     validationState={touched && error ? 'error' : undefined}>
     <ControlLabel>{label}</ControlLabel>
-    {canUseDOM && (
+    <ClientOnly>
       <AceEditor
         {...input}
         mode={getMode(mode)}
@@ -60,7 +71,8 @@ const SourceCodeField = ({
         tabIndex={tabIndex}
         keyboardHandler='vim'
         width='100%'
-        editorProps={{$blockScrolling: true}} />)}
+        editorProps={{$blockScrolling: true}} />
+    </ClientOnly>
     {touched && error && <HelpBlock>{error}</HelpBlock>}
     {children}
   </FormGroup>
@@ -78,6 +90,10 @@ SourceCodeField.propTypes = {
     PropTypes.string,
     PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) })
   ]).isRequired
+};
+
+SourceCodeField.contextTypes = {
+  userSettings: PropTypes.object
 };
 
 export default SourceCodeField;

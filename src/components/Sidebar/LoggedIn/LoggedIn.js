@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 import { FormattedMessage } from 'react-intl';
-import { Map } from 'immutable';
 
 import { isReady, getJsData, getId } from '../../../redux/helpers/resourceManager';
 import MenuTitle from '../../AdminLTE/Sidebar/MenuTitle';
@@ -20,7 +20,8 @@ const LoggedIn = ({
     DASHBOARD_URI,
     GROUP_URI_FACTORY,
     BUGS_URL,
-    INSTANCE_URI_FACTORY
+    INSTANCE_URI_FACTORY,
+    EXERCISES_URI_FACTORY
   }
 }) => (
   <ul className='sidebar-menu'>
@@ -57,6 +58,7 @@ const LoggedIn = ({
         createLink={item => GROUP_URI_FACTORY(getId(item))}
         forceOpen={isCollapsed} />
     )}
+
     {supervisorOf && supervisorOf.size > 0 && (
       <MenuGroup
         title={<FormattedMessage id='app.sidebar.menu.supervisorOf' defaultMessage='Groups - supervisor' />}
@@ -67,13 +69,24 @@ const LoggedIn = ({
         createLink={item => GROUP_URI_FACTORY(getId(item))}
         forceOpen={isCollapsed} />
     )}
+
+    {supervisorOf && supervisorOf.size > 0 && (
+      <MenuItem
+        title={<FormattedMessage id='app.sidebar.menu.exercises' defaultMessage='Exercises' />}
+        icon='puzzle-piece'
+        currentPath={currentUrl}
+        link={EXERCISES_URI_FACTORY()} />
+    )}
   </ul>
 );
 
 LoggedIn.propTypes = {
-  supervisorOf: PropTypes.instanceOf(Map),
-  studentOf: PropTypes.instanceOf(Map),
-  isCollapsed: PropTypes.bool
+  supervisorOf: ImmutablePropTypes.map,
+  studentOf: ImmutablePropTypes.map,
+  instances: ImmutablePropTypes.list,
+  notifications: PropTypes.object,
+  isCollapsed: PropTypes.bool,
+  currentUrl: PropTypes.string.isRequired
 };
 
 LoggedIn.contextTypes = {

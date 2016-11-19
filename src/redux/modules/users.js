@@ -5,6 +5,21 @@ import { createApiAction } from '../middleware/apiMiddleware';
 
 import { additionalActionTypes as groupsActionTypes } from './groups';
 
+export const actionTypes = {
+  VALIDATE_REGISTRATION_DATA: 'recodex/users/VALIDATE_REGISTRATION_DATA',
+  VALIDATE_REGISTRATION_DATA_PENDING: 'recodex/users/VALIDATE_REGISTRATION_DATA_PENDING',
+  VALIDATE_REGISTRATION_DATA_FULFILLED: 'recodex/users/VALIDATE_REGISTRATION_DATA_FULFILLED',
+  VALIDATE_REGISTRATION_DATA_FAILED: 'recodex/users/VALIDATE_REGISTRATION_DATA_FAILED',
+  UPDATE_PROFILE: 'recodex/users/UPDATE_PROFILE',
+  UPDATE_PROFILE_PENDING: 'recodex/users/UPDATE_PROFILE_PENDING',
+  UPDATE_PROFILE_FULFILLED: 'recodex/users/UPDATE_PROFILE_FULFILLED',
+  UPDATE_PROFILE_FAILED: 'recodex/users/UPDATE_PROFILE_FAILED',
+  UPDATE_SETTINGS: 'recodex/users/UPDATE_SETTINGS',
+  UPDATE_SETTINGS_PENDING: 'recodex/users/UPDATE_SETTINGS_PENDING',
+  UPDATE_SETTINGS_FULFILLED: 'recodex/users/UPDATE_SETTINGS_FULFILLED',
+  UPDATE_SETTINGS_FAILED: 'recodex/users/UPDATE_SETTINGS_FAILED'
+};
+
 const resourceName = 'users';
 var {
   actions,
@@ -19,10 +34,28 @@ export const loadUserData = actions.pushResource;
 export const fetchUserIfNeeded = actions.fetchIfNeeded;
 export const validateRegistrationData = (email, password) =>
   createApiAction({
-    type: 'VALIDATE_REGISTRATION_DATA',
+    type: actionTypes.VALIDATE_REGISTRATION_DATA,
     endpoint: '/users/validate-registration-data',
     method: 'POST',
     body: { email, password }
+  });
+
+export const updateProfile = (userId, body) =>
+  createApiAction({
+    type: actionTypes.UPDATE_PROFILE,
+    endpoint: `/users/${userId}/detail`,
+    method: 'POST',
+    body,
+    meta: { userId }
+  });
+
+export const updateSettings = (userId, body) =>
+  createApiAction({
+    type: actionTypes.UPDATE_SETTINGS,
+    endpoint: `/users/${userId}/detail/settings`,
+    method: 'POST',
+    body,
+    meta: { userId }
   });
 
 export const fetchSupervisors = groupId =>
@@ -40,6 +73,12 @@ export const fetchStudents = groupId =>
  */
 
 const reducer = handleActions(Object.assign({}, reduceActions, {
+
+  [actionTypes.UPDATE_PROFILE_FULFILLED]: (state, { payload, meta: { userId } }) =>
+    state.setIn(['resources', userId, 'data'], payload),
+
+  [actionTypes.UPDATE_SETTINGS_FULFILLED]: (state, { payload, meta: { userId } }) =>
+    state.setIn(['resources', userId, 'data', 'settings'], payload),
 
   [groupsActionTypes.JOIN_GROUP_PENDING]: (state, { meta: { groupId, userId } }) => {
     if (!state.getIn(['resources', userId])) {

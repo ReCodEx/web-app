@@ -19,6 +19,13 @@ export const getUser = userId =>
     users => users.get(userId)
   );
 
+export const getUserSettings = (userId) =>
+  createSelector(
+    getUser,
+    // user => user.settings
+    user => ({ vimMode: false, darkTheme: true })
+  );
+
 export const loggedInUserSelector = createSelector(
   [ usersSelector, loggedInUserIdSelector ],
   (users, id) => users.get(id)

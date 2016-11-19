@@ -1,15 +1,18 @@
 import React, { Component, PropTypes } from 'react';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 
 import Page from '../../components/Page';
+import Box from '../../components/AdminLTE/Box';
 import { exercisesSelector } from '../../redux/selectors/exercises';
-import { fetchExercisesIfNeeded } from '../../redux/modules/exercises';
+import { fetchExercises } from '../../redux/modules/exercises';
+import ExercisesList from '../../components/Exercises/ExercisesList';
 
 class Exercises extends Component {
 
   static loadAsync = (params, dispatch) => Promise.all([
-    dispatch(fetchExercisesIfNeeded())
+    dispatch(fetchExercises())
   ]);
 
   componentWillMount() {
@@ -29,10 +32,16 @@ class Exercises extends Component {
         breadcrumbs={[
           {
             text: <FormattedMessage id='app.exercises.title' defaultMessage="Exercises list" />,
-            iconName: 'folder-open'
+            iconName: 'puzzle-piece'
           }
         ]}>
-        {(...exercises) => <span>@todo: list of {exercises.length} exercises</span>}
+        {(...exercises) => (
+          <Box
+            title={<FormattedMessage id='app.exercises.listTitle' defaultMessage='Exercises' />}
+            noPadding>
+            <ExercisesList exercises={exercises} />
+          </Box>
+        )}
       </Page>
     );
   }
@@ -41,7 +50,7 @@ class Exercises extends Component {
 
 Exercises.propTypes = {
   loadAsync: PropTypes.func.isRequired,
-  exercises: PropTypes.array
+  exercises: ImmutablePropTypes.map
 };
 
 export default connect(

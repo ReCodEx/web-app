@@ -3,7 +3,7 @@
  * @module actionCreatorsFactory
  */
 
-import { resourceStatus, isLoading, hasFailed, didInvalidate } from './status';
+import { isLoading } from './status';
 import { getJsData } from './recordFactory';
 
 const actionCreatorsFactory = ({

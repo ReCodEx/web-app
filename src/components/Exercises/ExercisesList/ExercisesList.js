@@ -11,8 +11,8 @@ const ExercisesList = ({
 }) => (
   <Table>
     <tbody>
-    {exercises.map(user => (
-      <ExercisesListItem {...user} createActions={createActions} key={user.id} />
+    {exercises.map(exercise => (
+      <ExercisesListItem {...exercise} createActions={createActions} key={exercise.id} />
     ))}
 
     {exercises.length === 0 && (

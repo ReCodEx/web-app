@@ -5,14 +5,14 @@ import EvaluationProgressContainer from '../EvaluationProgressContainer';
 
 import {
   getNote,
-  getUploadedFiles,
   isProcessing,
   isSending,
   hasFailed,
-  canSubmit,
   getSubmissionId,
   getMonitorParams
 } from '../../redux/selectors/submission';
+
+import { getUploadedFiles, allUploaded } from '../../redux/selectors/upload';
 
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import { cancel, changeNote, submitSolution } from '../../redux/modules/submission';
@@ -21,7 +21,7 @@ class SubmitSolutionContainer extends Component {
 
   submit = () => {
     const {
-      attachedFiles,
+    attachedFiles,
       onSubmit,
       note,
       submitSolution
@@ -103,7 +103,7 @@ export default connect(
     isProcessing: isProcessing(state),
     isSending: isSending(state),
     hasFailed: hasFailed(state),
-    canSubmit: canSubmit(state),
+    canSubmit: allUploaded(state),
     submissionId: getSubmissionId(state),
     monitor: getMonitorParams(state)
   }),

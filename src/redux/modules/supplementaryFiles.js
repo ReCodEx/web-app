@@ -1,5 +1,6 @@
 import { handleActions } from 'redux-actions';
 import factory, { initialState } from '../helpers/resourceManager';
+import { createApiAction } from '../middleware/apiMiddleware';
 
 const resourceName = 'supplementaryFiles';
 const {
@@ -11,9 +12,25 @@ const {
  * Actions
  */
 
+export const actionTypes = {
+  ADD_FILES: 'recodex/supplementaryFiles/ADD_FILES',
+  ADD_FILES_PENDING: 'recodex/supplementaryFiles/ADD_FILES_PENDING',
+  ADD_FILES_FULFILLED: 'recodex/supplementaryFiles/ADD_FILES_FULFILLED',
+  ADD_FILES_FAILED: 'recodex/supplementaryFiles/ADD_FILES_REJECTED'
+};
+
 export const fetchSupplementaryFilesForExercise = (exerciseId) =>
   actions.fetchMany({
     endpoint: `/exercises/${exerciseId}/supplementary-files`
+  });
+
+export const addSupplementaryFiles = (exerciseId, files) =>
+  createApiAction({
+    type: actionTypes.ADD_FILES,
+    endpoint: `/exercises/${exerciseId}/supplementary-files`,
+    method: 'POST',
+    body: { files },
+    meta: { exerciseId, files }
   });
 
 /**

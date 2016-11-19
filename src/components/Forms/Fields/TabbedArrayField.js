@@ -45,7 +45,7 @@ class TabbedArrayField extends Component {
             onSelect={this.changeTab}>
             {fields.map((prefix, i) => (
               <Tab key={i} eventKey={i} title={getTitle(i)}>
-                <ContentComponent {...props} i={i} prefix={prefix} />
+                {React.cloneElement(ContentComponent, {...props, i, prefix})}
                 {remove && (
                   <p className='text-center'>
                     <Confirm
@@ -78,8 +78,8 @@ TabbedArrayField.propTypes = {
   getTitle: PropTypes.func,
   add: PropTypes.bool,
   remove: PropTypes.bool,
-  fields: PropTypes.array,
-  ContentComponent: PropTypes.element,
+  fields: PropTypes.object,
+  ContentComponent: PropTypes.any,
   emptyMessage: PropTypes.oneOfType([ PropTypes.string, FormattedMessage ]),
   addMessage: PropTypes.oneOfType([ PropTypes.string, FormattedMessage ]),
   removeQuestion: PropTypes.oneOfType([ PropTypes.string, FormattedMessage ])

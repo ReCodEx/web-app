@@ -20,6 +20,7 @@ import stats from './modules/stats';
 import submission from './modules/submission';
 import submissions from './modules/submissions';
 import registration from './modules/registration';
+import upload from './modules/upload';
 import users from './modules/users';
 import runtimeEnvironments from './modules/runtimeEnvironments';
 import supplementaryFiles from './modules/supplementaryFiles';
@@ -44,6 +45,7 @@ const createRecodexReducers = (token) => ({
   submissions,
   registration,
   users,
+  upload,
   runtimeEnvironments,
   supplementaryFiles
 });

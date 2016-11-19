@@ -23,6 +23,7 @@ import NotFound from './NotFound';
 import Submission from './Submission';
 import Registration from './Registration';
 import User from './User';
+import EditUser from './EditUser';
 
 import ChangePassword from './ChangePassword';
 import ResetPassword from './ResetPassword';
@@ -77,7 +78,10 @@ const createRoutes = (getState) => {
             <Route path='edit' component={EditGroup} />
           </Route>
           <Route path='instance/:instanceId' component={instance} />
-          <Route path='user/:userId' component={User} />
+          <Route path='user/:userId'>
+            <IndexRoute component={User} />
+            <Route path='edit' component={EditUser} />
+          </Route>
         </Route>
         <Route path='forgotten-password'>
           <IndexRoute component={ResetPassword} />

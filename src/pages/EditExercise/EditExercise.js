@@ -69,8 +69,7 @@ class EditExercise extends Component {
                 formValues={formValues} />
 
               <div>
-                <SupplementaryFilesTableContainer
-                  exerciseId={exerciseId} />
+                <SupplementaryFilesTableContainer exerciseId={exerciseId} />
               </div>
 
               <EditExerciseRuntimeConfigsForm

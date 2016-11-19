@@ -18,7 +18,7 @@ class LocalizedAssignmentsFormField extends Component {
   render() {
     const {
       fields,
-      localizedAssignments
+      localizedAssignments = []
     } = this.props;
 
     return (
@@ -82,8 +82,8 @@ class LocalizedAssignmentsFormField extends Component {
 }
 
 LocalizedAssignmentsFormField.propTypes = {
-  fields: PropTypes.array.isRequired,
-  localizedAssignments: PropTypes.array.isRequired
+  fields: PropTypes.object,
+  localizedAssignments: PropTypes.array
 };
 
 export default LocalizedAssignmentsFormField;

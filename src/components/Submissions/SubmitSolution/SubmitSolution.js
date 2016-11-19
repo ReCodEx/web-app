@@ -28,7 +28,7 @@ const SubmitSolution = ({
       </Modal.Title>
     </Modal.Header>
     <Modal.Body>
-      <UploadContainer />
+      <UploadContainer id='submit-solution' />
 
       <FormGroup>
         <ControlLabel>

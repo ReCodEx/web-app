@@ -4,7 +4,7 @@ import { FormattedMessage } from 'react-intl';
 import { FormGroup, ProgressBar } from 'react-bootstrap';
 
 const getStyle = (level) => {
-  switch (level) {
+  switch (Number(level)) {
     case 0:
       return 'danger';
     case 1:
@@ -20,9 +20,9 @@ const getStyle = (level) => {
 const maxLevel = 4;
 const percentPerLevel = 100 / (maxLevel + 1);
 
-const getPercent = (level) => percentPerLevel * (level + 1);
+const getPercent = (level) => percentPerLevel * (Number(level) + 1);
 const getTitle = (level) => {
-  switch (level) {
+  switch (Number(level)) {
     case 0:
       return <FormattedMessage id='app.passwordStrength.worst' defaultMessage='Unsatisfactory' />;
 
@@ -67,7 +67,7 @@ PasswordStrength.propTypes = {
   ]).isRequired,
   input: PropTypes.shape({
     name: PropTypes.string.isRequired,
-    value: PropTypes.number.isRequired
+    value: PropTypes.oneOfType([ PropTypes.string, PropTypes.number ]).isRequired
   }).isRequired
 };
 
