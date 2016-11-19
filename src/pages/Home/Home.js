@@ -17,15 +17,17 @@ const Home = () => (
         defaultMessage='ReCodEx - homepage'
         description='Homepage description' />
   }>
-    <h1>
-      <FormattedMessage
-        id='app.homepage.greetings'
-        defaultMessage='Welcome to ReCodEx'
-        description='Homepage greetings of the user' />
-    </h1>
-    <p>
-      @todo: Please guys, put some content from the GitHub wiki here ;-) Thanks!
-    </p>
+    <div>
+      <h1>
+        <FormattedMessage
+          id='app.homepage.greetings'
+          defaultMessage='Welcome to ReCodEx'
+          description='Homepage greetings of the user' />
+      </h1>
+      <p>
+        @todo: Please guys, put some content from the GitHub wiki here ;-) Thanks!
+      </p>
+    </div>
   </PageContent>
 );
 

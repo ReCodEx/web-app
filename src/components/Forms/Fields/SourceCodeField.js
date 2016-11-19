@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { canUseDOM } from 'exenv';
+import ClientOnly from '../../ClientOnly';
 
 import {
   FormGroup,
@@ -18,8 +19,6 @@ if (canUseDOM) {
   require('brace/mode/csharp');
   require('brace/keybinding/vim');
 }
-
-import ClientOnly from '../../ClientOnly';
 
 const getMode = ext => {
   switch (ext) {
