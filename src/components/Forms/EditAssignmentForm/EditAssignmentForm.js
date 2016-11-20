@@ -74,7 +74,7 @@ const EditAssignmentForm = ({
         component={SourceCodeField}
         mode='yaml'
         label={<FormattedMessage id='app.editAssignmentForm.scoreConfig' defaultMessage='Score configuration:' />} />
-      <HelpBlock>Read more about <a href='/@todo'>score configuration</a> syntax.</HelpBlock>
+      <HelpBlock>Read more about <a href='https://github.com/ReCodEx/wiki/wiki/Assignments#scoring'>score configuration</a> syntax.</HelpBlock>
 
       <Field
         name='firstDeadline'

@@ -1,5 +1,6 @@
 import React from 'react';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, FormattedHTMLMessage } from 'react-intl';
+import { Row, Col, Image } from 'react-bootstrap';
 
 import PageContent from '../../components/PageContent';
 
@@ -18,15 +19,31 @@ const Home = () => (
         description='Homepage description' />
   }>
     <div>
-      <h1>
-        <FormattedMessage
-          id='app.homepage.greetings'
-          defaultMessage='Welcome to ReCodEx'
-          description='Homepage greetings of the user' />
-      </h1>
-      <p>
-        @todo: Please guys, put some content from the GitHub wiki here ;-) Thanks!
-      </p>
+      <Row style={{'marginTop': '80px'}}>
+        <Col sm={6}>
+          <Image src={'/public/logo.png'} className='img-responsive center-block' />
+        </Col>
+        <Col sm={6}>
+          <h2><FormattedMessage id='app.homepage.whatIsRecodex' defaultMessage='What is ReCodEx?' /></h2>
+          <p>
+            <FormattedMessage id='app.homepage.whatIsRecodexContent' defaultMessage='ReCodEx is a system for dynamic analysis and evaluation of programming exercises. It is a set of components, which allows assigning practical programming problems to students by theit supervisors throught web interface. After solving the problem students upload their solution to the system and ReCodEx automaticaly evaluates them (typically checking corectness of program output) and assigns corresponding amount of points. Students have quick feedback about their solution and supervisors does not have to manually check each solution for basic coretness (like that the program compiles and gives correct results in reasonable time).' />
+          </p>
+        </Col>
+      </Row>
+      <Row style={{'marginTop': '40px'}}>
+        <Col sm={6}>
+          <h2><FormattedMessage id='app.homepage.aboutTitle' defaultMessage='About' /></h2>
+          <p>
+            <FormattedHTMLMessage id='app.homepage.aboutContentP1' defaultMessage='ReCodEx was born in 2016 as final work for <i>Software project</i> class. It is replacement for old system CodEx used at MFF UK since 2006. The project is opensource under <a href="https://opensource.org/licenses/MIT">MIT</a> licence hosted on <a href="https://github.com/ReCodEx">GitHub</a>. More detailed info is on <a href="https://github.com/ReCodEx/wiki/wiki">Wiki</a> page of the project.' />
+          </p>
+          <p>
+            <FormattedHTMLMessage id='app.homepage.aboutContentP2' defaultMessage='During development was found number of <a href="https://github.com/ReCodEx/wiki/wiki/Conclusion#further-improvements">topics</a> for following student works of differend kinds. In case of interest in make this project more awesome, please contact one of the <a href="https://github.com/orgs/ReCodEx/people">authors</a> or teachers.' />
+          </p>
+        </Col>
+        <Col sm={6}>
+
+        </Col>
+      </Row>
     </div>
   </PageContent>
 );
