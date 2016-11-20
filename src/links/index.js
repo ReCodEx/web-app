@@ -11,11 +11,11 @@ export const linksFactory = lang => {
   const RESET_PASSWORD_URI = `${prefix}/forgotten-password`;
 
   // instance detail
-  const INSTANCE_URI_FACTORY = id => `${prefix}/app/instance/${id}`;
+  const INSTANCE_URI_FACTORY = (id) => `${prefix}/app/instance/${id}`;
 
   // group details
-  const GROUP_URI_FACTORY = id => `${prefix}/app/group/${id}`;
-  const GROUP_EDIT_URI_FACTORY = id => `${GROUP_URI_FACTORY(id)}/edit`;
+  const GROUP_URI_FACTORY = (id) => `${prefix}/app/group/${id}`;
+  const GROUP_EDIT_URI_FACTORY = (id) => `${GROUP_URI_FACTORY(id)}/edit`;
 
   // user details
   const USER_URI_FACTORY = (id) => `${prefix}/app/user/${id}`;
@@ -23,17 +23,18 @@ export const linksFactory = lang => {
 
   // exercise details
   const EXERCISES_URI_FACTORY = () => `${prefix}/app/exercises`;
+  const EXERCISE_CREATE_URI_FACTORY = () => `${EXERCISES_URI_FACTORY()}`;
   const EXERCISE_URI_FACTORY = (id) => `${EXERCISES_URI_FACTORY()}/${id}`;
-  const EXERCISE_EDIT_URI_FACTORY = id => `${EXERCISE_URI_FACTORY(id)}/edit`;
+  const EXERCISE_EDIT_URI_FACTORY = (id) => `${EXERCISE_URI_FACTORY(id)}/edit`;
 
   // assignments and solution submissions
-  const ASSIGNMENT_DETAIL_URI_FACTORY = id => `${prefix}/app/assignment/${id}`;
-  const ASSIGNMENT_EDIT_URI_FACTORY = id => `${ASSIGNMENT_DETAIL_URI_FACTORY(id)}/edit`;
-  const SUBMIT_SOLUTION_URI_FACTORY = id =>
+  const ASSIGNMENT_DETAIL_URI_FACTORY = (id) => `${prefix}/app/assignment/${id}`;
+  const ASSIGNMENT_EDIT_URI_FACTORY = (id) => `${ASSIGNMENT_DETAIL_URI_FACTORY(id)}/edit`;
+  const SUBMIT_SOLUTION_URI_FACTORY = (id) =>
     `${prefix}/app/assignment/${id}/submit`;
   const SUBMISSION_DETAIL_URI_FACTORY = (assignmentId, submissionId) =>
     `${prefix}/app/assignment/${assignmentId}/submission/${submissionId}`;
-  const SUPERVISOR_STATS_URI_FACTORY = assignmentId =>
+  const SUPERVISOR_STATS_URI_FACTORY = (assignmentId) =>
     `${prefix}/app/assignment/${assignmentId}/stats`;
   const SOURCE_CODE_DETAIL_URI_FACTORY = (assignmentId, submissionId, fileId) =>
     `${prefix}/app/assignment/${assignmentId}/submission/${submissionId}/file/${fileId}`;
