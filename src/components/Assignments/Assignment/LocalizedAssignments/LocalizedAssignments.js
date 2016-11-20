@@ -34,7 +34,7 @@ LocalizedAssignments.contextTypes = {
 };
 
 LocalizedAssignments.propTypes = {
-  localizedAssignments: PropTypes.arrayOf(
+  locales: PropTypes.arrayOf(
     PropTypes.shape({
       locale: PropTypes.string.isRequried,
       name: PropTypes.string.isRequried,
