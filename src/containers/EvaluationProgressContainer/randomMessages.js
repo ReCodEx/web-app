@@ -40,9 +40,13 @@ export default defineMessages({
   m37: { id: 'app.randomMessages.m37', defaultMessage: 'Nakreslit jednorožce na zeď' }
 });
 
-export const lastMessage = defineMessages({
+export const extraMessages = defineMessages({
   last: {
     id: 'app.randomMessages.last',
     defaultMessage: 'Vygenerovat náhodné ohodnocení odevzdaného řešení'
+  },
+  error: {
+    id: 'app.randomMessages.error',
+    defaultMessage: 'Nastala chyba při komunikaci se serverem a bohužel Vám nemůžeme ukázat, jaký ja aktuální průběh, ale nic hrozného se neděje. Výsledky budou dostupné tak jako tak již brzy po skončení vyhodnocení.'
   }
 });

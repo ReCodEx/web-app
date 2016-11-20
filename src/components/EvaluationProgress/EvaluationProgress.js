@@ -3,6 +3,7 @@ import { FormattedMessage } from 'react-intl';
 import Icon from 'react-fontawesome';
 import classNames from 'classnames';
 import { Button, Modal, ProgressBar, Table } from 'react-bootstrap';
+import EvaluationStatusText from './EvaluationStatusText';
 
 const messagesContainerStyle = {
   maxHeight: 300,
@@ -13,23 +14,10 @@ class EvaluationProgress extends Component {
 
   state = { messagesCount: 0 };
 
-  getStatusText = status => {
-    switch (status) {
-      case 'COMPLETED':
-        return <FormattedMessage id='app.evaluationProgress.status.completed' defaultMessage='COMPLETED' />;
-      case 'SKIPPED':
-        return <FormattedMessage id='app.evaluationProgress.status.skipped' defaultMessage='SKIPPED' />;
-      case 'FAILED':
-        return <FormattedMessage id='app.evaluationProgress.status.failed' defaultMessage='FAILED' />;
-      default:
-        return <FormattedMessage id='app.evaluationProgress.status.ok' defaultMessage='OK' />;
-    }
-  };
-
   componentDidUpdate() {
     if (this.state.messagesCount < this.props.messages.size) {
       this.setState({ messagesCount: this.props.messages.size });
-      setTimeout(this.scrollToBottom, 10); // @todo: find another workaround for late DOM rendering
+      setTimeout(this.scrollToBottom, 10);
     }
   }
 
@@ -89,7 +77,7 @@ class EvaluationProgress extends Component {
                       'text-danger': !wasSuccessful,
                       'text-bold': true
                     })}>
-                      {this.getStatusText(status)}
+                      <EvaluationStatusText status={status} />
                     </td>
                   </tr>)}
                 </tbody>
@@ -114,11 +102,14 @@ class EvaluationProgress extends Component {
 }
 
 EvaluationProgress.propTypes = {
+  isOpen: PropTypes.bool,
+  showContinueButton: PropTypes.bool,
   finished: PropTypes.bool.isRequired,
   messages: PropTypes.object.isRequired,
   completed: PropTypes.number.isRequired,
   skipped: PropTypes.number.isRequired,
-  failed: PropTypes.number.isRequired
+  failed: PropTypes.number.isRequired,
+  finishProcessing: PropTypes.func.isRequired
 };
 
 export default EvaluationProgress;

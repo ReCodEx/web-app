@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import { List } from 'immutable';
 import { connect } from 'react-redux';
 import SubmitSolution from '../../components/Submissions/SubmitSolution';
 import EvaluationProgressContainer from '../EvaluationProgressContainer';
@@ -12,7 +13,7 @@ import {
   getMonitorParams
 } from '../../redux/selectors/submission';
 
-import { getUploadedFiles, allUploaded } from '../../redux/selectors/upload';
+import { createGetUploadedFiles, createAllUploaded } from '../../redux/selectors/upload';
 
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import { cancel, changeNote, submitSolution } from '../../redux/modules/submission';
@@ -57,6 +58,7 @@ class SubmitSolutionContainer extends Component {
           canSubmit={canSubmit}
           isSending={isSending}
           hasFailed={hasFailed}
+          uploadId={assignmentId}
           reset={reset}
           saveNote={changeNote}
           onClose={cancel}
@@ -96,17 +98,21 @@ SubmitSolutionContainer.propTypes = {
 };
 
 export default connect(
-  state => ({
-    userId: loggedInUserIdSelector(state),
-    note: getNote(state),
-    attachedFiles: getUploadedFiles(state).toJS(),
-    isProcessing: isProcessing(state),
-    isSending: isSending(state),
-    hasFailed: hasFailed(state),
-    canSubmit: allUploaded(state),
-    submissionId: getSubmissionId(state),
-    monitor: getMonitorParams(state)
-  }),
+  (state, { assignmentId }) => {
+    const getUploadedFiles = createGetUploadedFiles(assignmentId);
+    const allUploaded = createAllUploaded(assignmentId);
+    return {
+      userId: loggedInUserIdSelector(state),
+      note: getNote(state),
+      attachedFiles: (getUploadedFiles(state) || List()).toJS(),
+      isProcessing: isProcessing(state),
+      isSending: isSending(state),
+      hasFailed: hasFailed(state),
+      canSubmit: allUploaded(state) || false,
+      submissionId: getSubmissionId(state),
+      monitor: getMonitorParams(state)
+    };
+  },
   (dispatch, props) => ({
     changeNote: (note) => dispatch(changeNote(note)),
     cancel: () => dispatch(cancel()),

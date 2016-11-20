@@ -58,9 +58,10 @@ export const createApiCallPromise = ({
   method = 'GET',
   headers = {},
   body = undefined,
-  wasSuccessful = () => true
-}, dispatch = undefined) =>
-  createRequest(endpoint, query, method, headers, body)
+  wasSuccessful = () => true,
+  doNotProcess = false
+}, dispatch = undefined) => {
+  let call = createRequest(endpoint, query, method, headers, body)
     .catch(err => {
       if (err.message && err.message === 'Failed to fetch') {
         return dispatch(
@@ -69,26 +70,33 @@ export const createApiCallPromise = ({
       } else {
         throw err;
       }
-    })
-    .then(res => res.json())
-    .then(({
-      success = true,
-      code,
-      msg = '',
-      payload = {}
-     }) => {
-      if (!success && dispatch) {
-        if (isServerError(code)) {
-          dispatch(addNotification(`There was a problem on the server. ${msg}`, false));
-        }
-      }
-
-      if (!success) {
-        return Promise.reject('The API call was not successful.');
-      }
-
-      return Promise.resolve(payload);
     });
+
+  // this processing can be manually skipped
+  if (doNotProcess !== true) {
+    call = call.then(res => res.json())
+      .then(({
+        success = true,
+        code,
+        msg = '',
+        payload = {}
+      }) => {
+        if (!success && dispatch) {
+          if (isServerError(code)) {
+            dispatch(addNotification(`There was a problem on the server. ${msg}`, false));
+          }
+        }
+
+        if (!success) {
+          return Promise.reject('The API call was not successful.');
+        }
+
+        return Promise.resolve(payload);
+      });
+  }
+
+  return call;
+};
 
 export const isTwoHundredCode = (status) => statusCode.accept(status, '2xx');
 export const isServerError = (status) => statusCode.accept(status, '5xx');
@@ -103,7 +111,8 @@ export const apiCall = ({
   accessToken = undefined,
   body = undefined,
   meta = undefined,
-  wasSuccessful = isTwoHundredCode
+  wasSuccessful = isTwoHundredCode,
+  doNotProcess = false
 }, dispatch = undefined) => ({
   type,
   payload: {
@@ -114,7 +123,8 @@ export const apiCall = ({
         method,
         headers: getHeaders(headers, accessToken),
         body,
-        wasSuccessful
+        wasSuccessful,
+        doNotProcess
       }, dispatch),
     data: body
   },
@@ -135,6 +145,6 @@ const middleware = ({ dispatch }) => next => action => {
   return next(action);
 };
 
-export const createApiAction = request => ({ type: CALL_API, request });
+export const createApiAction = (request) => ({ type: CALL_API, request });
 
 export default middleware;

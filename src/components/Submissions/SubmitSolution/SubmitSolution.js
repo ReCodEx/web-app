@@ -15,6 +15,7 @@ const SubmitSolution = ({
   isOpen,
   onClose,
   reset,
+  uploadId,
   canSubmit,
   isSending,
   hasFailed,
@@ -28,7 +29,7 @@ const SubmitSolution = ({
       </Modal.Title>
     </Modal.Header>
     <Modal.Body>
-      <UploadContainer id='submit-solution' />
+      <UploadContainer id={uploadId} />
 
       <FormGroup>
         <ControlLabel>
@@ -87,6 +88,7 @@ const SubmitSolution = ({
 SubmitSolution.propTypes = {
   onClose: PropTypes.func.isRequired,
   reset: PropTypes.func.isRequired,
+  uploadId: PropTypes.string.isRequired,
   canSubmit: PropTypes.bool.isRequired,
   submitSolution: PropTypes.func.isRequired,
   isOpen: PropTypes.bool,

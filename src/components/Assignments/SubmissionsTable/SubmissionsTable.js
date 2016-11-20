@@ -67,7 +67,11 @@ const SubmissionsTable = ({
 );
 
 SubmissionsTable.propTypes = {
-  title: PropTypes.string.isRequired,
+  title: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) }),
+    PropTypes.element
+  ]).isRequired,
   assignmentId: PropTypes.string.isRequired,
   submissions: PropTypes.instanceOf(List)
 };

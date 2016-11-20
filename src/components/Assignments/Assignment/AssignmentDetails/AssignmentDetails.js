@@ -99,7 +99,7 @@ AssignmentDetails.propTypes = {
   allowSecondDeadline: PropTypes.bool.isRequired,
   isAfterFirstDeadline: PropTypes.bool.isRequired,
   isAfterSecondDeadline: PropTypes.bool.isRequired,
-  canSubmit: ImmutablePropTypes.map.isRequired
+  canSubmit: ImmutablePropTypes.map
 };
 
 export default AssignmentDetails;

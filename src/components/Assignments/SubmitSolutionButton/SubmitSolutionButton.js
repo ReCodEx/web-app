@@ -1,4 +1,5 @@
-import React, { PropTypes, Component } from 'react';
+import React, { PropTypes } from 'react';
+import Icon from 'react-fontawesome';
 import { Button } from 'react-bootstrap';
 import { FormattedMessage } from 'react-intl';
 
@@ -11,7 +12,7 @@ const SubmitSolutionButton = ({
     className='btn-flat'
     disabled={disabled}
     onClick={onClick}>
-      <FormattedMessage id='app.submissionsTable.submitNewSolution' defaultMessage='Submit new solution' />
+      <Icon name='bug' /> <FormattedMessage id='app.submissionsTable.submitNewSolution' defaultMessage='Submit new solution' />
   </Button>
 );
 

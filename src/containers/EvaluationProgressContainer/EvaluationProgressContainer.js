@@ -23,7 +23,7 @@ import {
 import { finishProcessing } from '../../redux/modules/submission';
 
 import EvaluationProgress from '../../components/EvaluationProgress';
-import randomMessages, { lastMessage } from './randomMessages';
+import randomMessages, { extraMessages } from './randomMessages';
 
 class EvaluationProgressContainer extends Component {
 
@@ -33,6 +33,7 @@ class EvaluationProgressContainer extends Component {
   componentWillUnmount = () => {
     if (this.socket) {
       this.socket.close();
+      this.socket = null;
     }
   };
 
@@ -50,20 +51,25 @@ class EvaluationProgressContainer extends Component {
     }
   };
 
-  onError = (err) => {
-    const { addMessage } = this.props;
-    console.warn('communication over websocket failed', err);
+  onError = () => {
+    const {
+      addMessage,
+      intl: { formatMessage }
+    } = this.props;
     addMessage({
       wasSuccessful: false,
       status: 'SKIPPED',
-      text: err // @todo: Translatable error msg
+      text: formatMessage(extraMessages.error)
     });
     this.closeSocket();
   };
 
   onMessage = (msg) => {
     const data = JSON.parse(msg.data);
-    const { addMessage } = this.props;
+    const {
+      addMessage,
+      intl: { formatMessage }
+    } = this.props;
 
     switch (data.command) {
       case 'TASK':
@@ -72,7 +78,7 @@ class EvaluationProgressContainer extends Component {
       case 'FINISHED':
         addMessage(this.formatMessage(data));
         this.closeSocket();
-        addMessage({ wasSuccessful: true, status: 'OK', text: lastMessage });
+        addMessage({ wasSuccessful: true, status: 'OK', text: formatMessage(extraMessages.last) });
         break;
     }
   };
@@ -92,7 +98,7 @@ class EvaluationProgressContainer extends Component {
     return this.availableMessages.splice(randomIndex, 1).pop();
   };
 
-  updateProgress = task => {
+  updateProgress = (task) => {
     const { completedTask, skippedTask, failedTask } = this.props;
     const msg = this.formatMessage(task);
     switch (task.task_state) {

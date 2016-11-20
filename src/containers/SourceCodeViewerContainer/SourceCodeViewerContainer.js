@@ -1,8 +1,11 @@
 import React, { PropTypes, Component } from 'react';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
-import { Modal } from 'react-bootstrap';
+import { FormattedMessage } from 'react-intl';
+import { Button, Modal } from 'react-bootstrap';
+import { DownloadIcon, LoadingIcon } from '../../components/Icons';
 
-import { fetchFileIfNeeded } from '../../redux/modules/files';
+import { fetchFileIfNeeded, download } from '../../redux/modules/files';
 import { fetchContentIfNeeded } from '../../redux/modules/filesContent';
 import { getFile, getFilesContent } from '../../redux/selectors/files';
 import ResourceRenderer from '../../components/ResourceRenderer';
@@ -24,30 +27,49 @@ class SourceCodeViewerContainer extends Component {
   }
 
   render() {
-    const { show, onHide, file, code } = this.props;
+    const { show, onHide, download, file, code } = this.props;
     return (
-      <Modal
-        show={show}
-        onHide={onHide}
-        bsSize='large'>
-        <Modal.Header closeButton>
-          <Modal.Title>
-            <ResourceRenderer resource={file}>
-              {file => <span>{file.name}</span>}
-            </ResourceRenderer>
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <ResourceRenderer resource={[file, code]}>
-            {(file, code) => (
-              <SourceCodeViewer
-                content={code}
-                name={file.name}
-                lineNumbers={true} />
-            )}
-          </ResourceRenderer>
-        </Modal.Body>
-      </Modal>
+      <ResourceRenderer
+        loading={(
+          <Modal
+            show={show}
+            onHide={onHide}
+            bsSize='large'>
+            <Modal.Header closeButton>
+              <Modal.Title>
+                <LoadingIcon /> <FormattedMessage id='app.sourceCodeViewer.loading' defaultMessage='Loading ...' />
+              </Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <SourceCodeViewer content='' name='' />
+            </Modal.Body>
+            <Modal.Footer>
+              <Button disabled className='btn-flat'>
+                <DownloadIcon /> <FormattedMessage id='app.sourceCodeViewer.downloadButton' defaultMessage='Download file' />
+              </Button>
+            </Modal.Footer>
+          </Modal>
+        )}
+        resource={[file, code]}>
+        {(file, code) => (
+          <Modal
+            show={show}
+            onHide={onHide}
+            bsSize='large'>
+            <Modal.Header closeButton>
+              <Modal.Title>{file.name}</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <SourceCodeViewer content={code} name={file.name} />
+            </Modal.Body>
+            <Modal.Footer>
+              <Button onClick={() => download(file.id)} className='btn-flat'>
+                <DownloadIcon /> <FormattedMessage id='app.sourceCodeViewer.downloadButton' defaultMessage='Download file' />
+              </Button>
+            </Modal.Footer>
+          </Modal>
+        )}
+      </ResourceRenderer>
     );
   }
 
@@ -55,11 +77,12 @@ class SourceCodeViewerContainer extends Component {
 
 SourceCodeViewerContainer.propTypes = {
   fileId: PropTypes.string,
-  file: PropTypes.object,
+  file: ImmutablePropTypes.map,
   show: PropTypes.bool,
   onHide: PropTypes.func.isRequired,
   loadAsync: PropTypes.func.isRequired,
-  code: PropTypes.strign
+  download: PropTypes.func.isRequired,
+  code: ImmutablePropTypes.map
 };
 
 export default connect(
@@ -71,6 +94,7 @@ export default connect(
     loadAsync: () => Promise.all([
       dispatch(fetchFileIfNeeded(fileId)),
       dispatch(fetchContentIfNeeded(fileId))
-    ])
+    ]),
+    download: (id) => dispatch(download(id))
   })
 )(SourceCodeViewerContainer);

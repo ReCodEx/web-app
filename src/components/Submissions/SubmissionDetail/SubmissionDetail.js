@@ -74,7 +74,9 @@ class SubmissionDetail extends Component {
         <Row>
           {files.map(file => (
           <Col lg={4} sm={6} key={file.id}>
-            <SourceCodeInfoBox {...file} onClick={() => this.openFile(file.id)} />
+            <a href='#' onClick={() => this.openFile(file.id)}>
+              <SourceCodeInfoBox {...file} />
+            </a>
           </Col>
           ))}
         </Row>
