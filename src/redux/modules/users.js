@@ -1,4 +1,5 @@
 import { handleActions } from 'redux-actions';
+import { fromJS } from 'immutable';
 
 import factory, { initialState } from '../helpers/resourceManager';
 import { createApiAction } from '../middleware/apiMiddleware';
@@ -75,10 +76,10 @@ export const fetchStudents = groupId =>
 const reducer = handleActions(Object.assign({}, reduceActions, {
 
   [actionTypes.UPDATE_PROFILE_FULFILLED]: (state, { payload, meta: { userId } }) =>
-    state.setIn(['resources', userId, 'data'], payload),
+    state.setIn(['resources', userId, 'data'], fromJS(payload)),
 
   [actionTypes.UPDATE_SETTINGS_FULFILLED]: (state, { payload, meta: { userId } }) =>
-    state.setIn(['resources', userId, 'data', 'settings'], payload),
+    state.setIn(['resources', userId, 'data', 'settings'], fromJS(payload)),
 
   [groupsActionTypes.JOIN_GROUP_PENDING]: (state, { meta: { groupId, userId } }) => {
     if (!state.getIn(['resources', userId])) {

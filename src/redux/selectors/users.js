@@ -13,7 +13,7 @@ const getUsers = state => state.users.get('resources');
  */
 export const usersSelector = getUsers;
 
-export const getUser = userId =>
+export const getUser = (userId) =>
   createSelector(
     usersSelector,
     users => users.get(userId)
@@ -21,9 +21,8 @@ export const getUser = userId =>
 
 export const getUserSettings = (userId) =>
   createSelector(
-    getUser,
-    // user => user.settings
-    user => ({ vimMode: false, darkTheme: true })
+    getUser(userId),
+    user => isReady(user) ? user.getIn(['data', 'settings']).toJS() : {}
   );
 
 export const loggedInUserSelector = createSelector(
@@ -31,19 +30,19 @@ export const loggedInUserSelector = createSelector(
   (users, id) => users.get(id)
 );
 
-export const memberOfInstancesIdsSelector = userId =>
+export const memberOfInstancesIdsSelector = (userId) =>
   createSelector(
     getUser(userId),
     user => user && isReady(user) ? List([ user.getIn(['data', 'instanceId']) ]) : List() // @todo: Change when the user can be member of multiple instances
   );
 
-export const studentOfGroupsIdsSelector = userId =>
+export const studentOfGroupsIdsSelector = (userId) =>
   createSelector(
     getUser(userId),
     user => user && isReady(user) ? user.getIn(['data', 'groups', 'studentOf']) : List()
   );
 
-export const supervisorOfGroupsIdsSelector = userId =>
+export const supervisorOfGroupsIdsSelector = (userId) =>
   createSelector(
     getUser(userId),
     user => user && isReady(user) ? user.getIn(['data', 'groups', 'supervisorOf']) : List()
@@ -73,7 +72,7 @@ export const isMemberOf = (userId, groupId) =>
     (student, supervisor, admin) => student || supervisor || admin
   );
 
-export const usersGroupsIds = userId =>
+export const usersGroupsIds = (userId) =>
   createSelector(
     [ studentOfGroupsIdsSelector(userId), supervisorOfGroupsIdsSelector(userId) ],
     (student, supervisor) => student.concat(supervisor)

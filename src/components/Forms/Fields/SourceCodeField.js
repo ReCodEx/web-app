@@ -14,6 +14,7 @@ let AceEditor = null;
 if (canUseDOM) {
   AceEditor = require('react-ace').default;
   require('brace/theme/monokai');
+  require('brace/theme/github');
   require('brace/mode/c_cpp');
   require('brace/mode/java');
   require('brace/mode/csharp');
@@ -65,10 +66,10 @@ const SourceCodeField = ({
       <AceEditor
         {...input}
         mode={getMode(mode)}
-        theme='monokai'
+        theme={darkTheme ? 'monokai' : 'github'}
         name={input.id}
         tabIndex={tabIndex}
-        keyboardHandler='vim'
+        keyboardHandler={vimMode ? 'vim' : undefined}
         width='100%'
         editorProps={{$blockScrolling: true}} />
     </ClientOnly>

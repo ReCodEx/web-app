@@ -20,7 +20,7 @@ const BreadcrumbItem = ({
 
   return link !== null
     ? (
-      <LinkContainer to={typeof link === 'function' ? link(links) : link}>
+      <LinkContainer to={typeof link === 'function' ? link(links) : link} active={isActive}>
         {content}
       </LinkContainer>
     ) : content;
