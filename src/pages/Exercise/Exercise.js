@@ -74,53 +74,56 @@ class Exercise extends Component {
           }
         ]}>
         {exercise => (
-          <Row>
-            <Col md={6}>
-              <div>
-                {exercise.localizedAssignments.length > 0 && <LocalizedAssignments locales={exercise.localizedAssignments} />}
-              </div>
-            </Col>
-
-            <Col sm={6}>
-              <ExerciseDetail {...exercise} />
-            </Col>
-
-            <Col>
-              {isAuthorOfExercise(exercise.id) && (
-                <p className='text-center'>
-                  <LinkContainer to={EXERCISE_EDIT_URI_FACTORY(exercise.id)}>
-                    <Button bsStyle='warning' className='btn-flat'>
-                      <EditIcon /> <FormattedMessage id='app.exercise.editSettings' defaultMessage='Edit exercise settings' />
-                    </Button>
-                  </LinkContainer>
-                </p>
-              )}
-            </Col>
-
-            <Col sm={6}>
-              <Box title={'Groups'}>
-                <ResourceRenderer
-                  forceLoading={supervisedGroups.length === 0}
-                  resource={supervisedGroups}>
-                  {() =>
-                    <div>
-                      <p>
-                        <FormattedMessage id='app.exercise.assignToGroup' defaultMessage='You can assign this exercise to one of the groups you supervise.' />
-                      </p>
-                      <GroupsList
-                        fill
-                        groups={supervisedGroups}
-                        renderButtons={groupId => (
-                          <Button bsSize='xs' onClick={() => this.createExercise(groupId)}>
-                            <SendIcon /> <FormattedMessage id='app.exercise.assign' defaultMessage='Assign' />
-                          </Button>
-                        )} />
-                    </div>}
-                  </ResourceRenderer>
-                </Box>
+          <div>
+            <Row>
+              <Col md={6}>
+                <div>
+                  {exercise.localizedAssignments.length > 0 && <LocalizedAssignments locales={exercise.localizedAssignments} />}
+                </div>
+              </Col>
+              <Col md={6}>
+                <ExerciseDetail {...exercise} />
               </Col>
             </Row>
-        )}
+            <Row>
+              <Col sm={12}>
+                {isAuthorOfExercise(exercise.id) && (
+                  <p className='text-center'>
+                    <LinkContainer to={EXERCISE_EDIT_URI_FACTORY(exercise.id)}>
+                      <Button bsStyle='warning' className='btn-flat'>
+                        <EditIcon /> <FormattedMessage id='app.exercise.editSettings' defaultMessage='Edit exercise settings' />
+                      </Button>
+                    </LinkContainer>
+                  </p>
+                )}
+              </Col>
+            </Row>
+            <Row>
+              <Col md={6}>
+                <Box title={'Groups'}>
+                  <ResourceRenderer
+                    forceLoading={supervisedGroups.length === 0}
+                    resource={supervisedGroups}>
+                    {() =>
+                      <div>
+                        <p>
+                          <FormattedMessage id='app.exercise.assignToGroup' defaultMessage='You can assign this exercise to one of the groups you supervise.' />
+                        </p>
+                        <GroupsList
+                          fill
+                          groups={supervisedGroups}
+                          renderButtons={groupId => (
+                            <Button bsSize='xs' onClick={() => this.createExercise(groupId)}>
+                              <SendIcon /> <FormattedMessage id='app.exercise.assign' defaultMessage='Assign' />
+                            </Button>
+                          )} />
+                      </div>}
+                    </ResourceRenderer>
+                  </Box>
+                </Col>
+              </Row>
+            </div>
+          )}
         </Page>
     );
   }

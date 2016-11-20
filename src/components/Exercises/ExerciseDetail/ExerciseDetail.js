@@ -13,7 +13,7 @@ const ExerciseDetail = ({
   difficulty,
   localizedAssignments
 }) => (
-  <Box title={name} noPaddding>
+  <Box title={name} noPadding>
     <Table>
       <tbody>
         <tr>

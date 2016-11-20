@@ -72,10 +72,11 @@ class EditExercise extends Component {
                 <SupplementaryFilesTableContainer exerciseId={exerciseId} />
               </div>
 
+              {/*
               <EditExerciseRuntimeConfigsForm
                 runtimeEnvironments={runtimeEnvironments}
                 initialValues={{runtimeConfigs: exercise.solutionRuntimeConfigs}}
-                onSubmit={editSolutionRuntimeConfigs} />
+                onSubmit={editSolutionRuntimeConfigs} /> */}
             </div>
           )}
         </ResourceRenderer>
