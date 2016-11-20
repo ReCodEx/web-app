@@ -27,7 +27,7 @@ class EditUser extends Component {
   }
 
   render() {
-    const { user } = this.props;
+    const { user, updateProfile, updateSettings } = this.props;
     return (
       <Page
         resource={user}
@@ -66,14 +66,18 @@ class EditUser extends Component {
 EditUser.propTypes = {
   user: ImmutablePropTypes.map,
   params: PropTypes.shape({ userId: PropTypes.string.isRequired }).isRequired,
-  loadAsync: PropTypes.func.isRequired
+  loadAsync: PropTypes.func.isRequired,
+  updateProfile: PropTypes.func.isRequired,
+  updateSettings: PropTypes.func.isRequired
 };
 
 export default connect(
   (state, { params: { userId } }) => ({
     user: getUser(userId)(state)
   }),
-  (dispatch, { params }) => ({
-    loadAsync: () => EditUser.loadAsync(params, dispatch)
+  (dispatch, { params: { userId } }) => ({
+    loadAsync: () => EditUser.loadAsync({ userId }, dispatch),
+    updateSettings: (data) => dispatch(updateSettings(userId, data)),
+    updateProfile: ({ name, data }) => dispatch(updateProfile(userId, { ...name, ...data }))
   })
 )(EditUser);

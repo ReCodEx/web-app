@@ -43,7 +43,7 @@ export const validateRegistrationData = (email, password) =>
 export const updateProfile = (userId, body) =>
   createApiAction({
     type: actionTypes.UPDATE_PROFILE,
-    endpoint: `/users/${userId}/detail`,
+    endpoint: `/users/${userId}`,
     method: 'POST',
     body,
     meta: { userId }
@@ -52,7 +52,7 @@ export const updateProfile = (userId, body) =>
 export const updateSettings = (userId, body) =>
   createApiAction({
     type: actionTypes.UPDATE_SETTINGS,
-    endpoint: `/users/${userId}/detail/settings`,
+    endpoint: `/users/${userId}/settings`,
     method: 'POST',
     body,
     meta: { userId }
