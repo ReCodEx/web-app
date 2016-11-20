@@ -10,6 +10,14 @@ const ExercisesList = ({
   ...rest
 }) => (
   <Table>
+    <thead>
+      <tr>
+        <th></th>
+        <th><FormattedMessage id='app.exercisesList.name' defaultMessage='Name' /></th>
+        <th><FormattedMessage id='app.exercisesList.difficulty' defaultMessage='Difficulty' /></th>
+        <th><FormattedMessage id='app.exercisesList.author' defaultMessage='Author' /></th>
+      </tr>
+    </thead>
     <tbody>
     {exercises.map(exercise => (
       <ExercisesListItem {...exercise} createActions={createActions} key={exercise.id} />

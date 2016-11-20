@@ -11,18 +11,26 @@ const Badge = ({
   expiration,
   logout
 }, {
-  links: { USER_URI_FACTORY }
+  links: {
+    USER_URI_FACTORY,
+    EDIT_USER_URI_FACTORY
+  }
 }) => (
   <div className='user-panel'>
     <div className='pull-left image'>
       <img src={avatarUrl} alt={fullName} className='img-circle' />
     </div>
-    <div className='pull-left info'>
+    <div className='info'>
       <p>
         <Link to={USER_URI_FACTORY(id)}>
           {fullName}
         </Link>
       </p>
+      <Link to={EDIT_USER_URI_FACTORY(id)}>
+        <Icon name='edit' />
+        <FormattedMessage id='app.badge.settings' defaultMessage='Settings' />
+      </Link>
+      &nbsp;
       <OverlayTrigger
         placement='right'
         overlay={(

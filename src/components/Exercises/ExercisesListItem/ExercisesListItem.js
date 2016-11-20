@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
-import classNames from 'classnames';
 import Icon from 'react-fontawesome';
+import DifficultyIcon from '../DifficultyIcon';
 import UsersNameContainer from '../../../containers/UsersNameContainer';
 import { Link } from 'react-router';
 
@@ -14,16 +14,14 @@ const ExercisesListItem = ({
   links: { EXERCISE_URI_FACTORY }
 }) => (
   <tr>
-    <td className={classNames({
-      'text-center': true,
-      'text-success': difficulty === 'easy',
-      'text-warning': difficulty === 'moderate',
-      'text-danger': difficulty === 'hard'
-    })}>
-      <Icon name='puzzle-piece' />
+    <td className='text-center'>
+      <Icon name='code' />
     </td>
     <td>
       <strong><Link to={EXERCISE_URI_FACTORY(id)}>{name}</Link></strong>
+    </td>
+    <td>
+      <DifficultyIcon difficulty={difficulty} />
     </td>
     <td>
       <UsersNameContainer userId={authorId} />
