@@ -4,7 +4,7 @@ import { FormattedMessage } from 'react-intl';
 import { Alert } from 'react-bootstrap';
 import isEmail from 'validator/lib/isEmail';
 
-import { LoadingIcon, SuccessIcon } from '../../Icons';
+import ResourceRenderer from '../../ResourceRenderer';
 import FormBox from '../../AdminLTE/FormBox';
 import { EmailField, TextField, PasswordField, PasswordStrength, SelectField } from '../Fields';
 import { validateRegistrationData } from '../../../redux/modules/users';
@@ -28,11 +28,11 @@ const RegistrationForm = ({
           submitting={submitting}
           hasSucceeded={submitSucceeded}
           hasFailed={submitFailed}
-          invalid={invalid}
+          invalid={invalid || instances.size === 0}
           messages={{
             submit: <FormattedMessage id='app.registrationForm.createAccount' defaultMessage='Create account' />,
-            submitting: <span><LoadingIcon /> &nbsp; <FormattedMessage id='app.registrationForm.processing' defaultMessage='Creating account ...' /></span>,
-            success: <span><SuccessIcon /> &nbsp; <FormattedMessage id='app.registrationForm.success' defaultMessage='Your account has been created.' /></span>
+            submitting: <FormattedMessage id='app.registrationForm.processing' defaultMessage='Creating account ...' />,
+            success: <FormattedMessage id='app.registrationForm.success' defaultMessage='Your account has been created.' />
           }} />
       </div>
     }>
@@ -46,14 +46,19 @@ const RegistrationForm = ({
     <Field name='email' required component={EmailField} label={<FormattedMessage id='app.registrationForm.email' defaultMessage='E-mail address:' />} />
     <Field name='password' required component={PasswordField} label={<FormattedMessage id='app.registrationForm.password' defaultMessage='Password:' />} />
     <Field name='passwordStrength' component={PasswordStrength} label={<FormattedMessage id='app.registrationForm.passwordStrength' defaultMessage='Password strength:' />} />
-    <Field
-      name='instanceId'
-      required
-      component={SelectField}
-      label={<FormattedMessage id='app.registrationForm.instance' defaultMessage='Instance:' />}
-      options={instances.map(
-        instance => ({ key: instance.getIn(['data', 'id']), name: instance.getIn(['data', 'name']) })
-      ).toArray()} />
+    <ResourceRenderer resource={instances.toArray()}>
+      {(...instances) => (
+        <Field
+          name='instanceId'
+          required
+          component={SelectField}
+          label={<FormattedMessage id='app.externalRegistrationForm.instance' defaultMessage='Instance:' />}
+          options={[
+            { key: '', name: '...' },
+            ...instances.map(({ id: key, name }) => ({ key, name }))
+          ]} />
+      )}
+    </ResourceRenderer>
   </FormBox>
 );
 
@@ -68,7 +73,7 @@ RegistrationForm.propTypes = {
   invalid: PropTypes.bool
 };
 
-const validate = ({ firstName, lastName, email, password }) => {
+const validate = ({ firstName, lastName, email, password, instanceId }) => {
   const errors = {};
 
   if (!firstName) {
@@ -87,6 +92,10 @@ const validate = ({ firstName, lastName, email, password }) => {
 
   if (!password) {
     errors['password'] = <FormattedMessage id='app.registrationForm.validation.emptyPassword' defaultMessage='Password cannot be empty.' />;
+  }
+
+  if (!instanceId) {
+    errors['instanceId'] = <FormattedMessage id='app.externalRegistrationForm.validation.instanceId' defaultMessage='Please select one of the instances.' />;
   }
 
   return errors;

@@ -1,9 +1,11 @@
 import React, { PropTypes } from 'react';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 import { reduxForm, Field } from 'redux-form';
+import { Map } from 'immutable';
 import { FormattedMessage } from 'react-intl';
 import { Alert } from 'react-bootstrap';
 
-import { LoadingIcon, SuccessIcon } from '../../Icons';
+import ResourceRenderer from '../../ResourceRenderer';
 import FormBox from '../../AdminLTE/FormBox';
 import { TextField, PasswordField, SelectField } from '../Fields';
 import SubmitButton from '../SubmitButton';
@@ -13,7 +15,7 @@ const ExternalRegistrationForm = ({
   handleSubmit,
   submitSucceeded,
   submitFailed,
-  instances,
+  instances = Map(),
   invalid
 }) => (
   <FormBox
@@ -26,11 +28,11 @@ const ExternalRegistrationForm = ({
           submitting={submitting}
           hasSucceeded={submitSucceeded}
           hasFailed={submitFailed}
-          invalid={invalid}
+          invalid={invalid || instances.size === 0}
           messages={{
             submit: <FormattedMessage id='app.registrationForm.createAccount' defaultMessage='Create account' />,
-            submitting: <span><LoadingIcon /> &nbsp; <FormattedMessage id='app.registrationForm.processing' defaultMessage='Creating account ...' /></span>,
-            success: <span><SuccessIcon /> &nbsp; <FormattedMessage id='app.registrationForm.success' defaultMessage='Your account has been created.' /></span>
+            submitting: <FormattedMessage id='app.registrationForm.processing' defaultMessage='Creating account ...' />,
+            success: <FormattedMessage id='app.registrationForm.success' defaultMessage='Your account has been created.' />
           }} />
       </div>
     }>
@@ -41,19 +43,25 @@ const ExternalRegistrationForm = ({
 
     <Field name='username' required component={TextField} label={<FormattedMessage id='app.externalRegistrationForm.username' defaultMessage='CAS login (UKČO):' />} />
     <Field name='password' required component={PasswordField} label={<FormattedMessage id='app.externalRegistrationForm.password' defaultMessage='Password:' />} />
-    <Field
-      name='instanceId'
-      required
-      component={SelectField}
-      label={<FormattedMessage id='app.externalRegistrationForm.instance' defaultMessage='Instance:' />}
-      options={instances.map(
-        instance => ({ key: instance.getIn(['data', 'id']), name: instance.getIn(['data', 'name']) })
-      ).toArray()} />
+
+    <ResourceRenderer resource={instances.toArray()}>
+      {(...instances) => (
+        <Field
+          name='instanceId'
+          required
+          component={SelectField}
+          label={<FormattedMessage id='app.externalRegistrationForm.instance' defaultMessage='Instance:' />}
+          options={[
+            { key: '', name: '...' },
+            ...instances.map(({ id: key, name }) => ({ key, name }))
+          ]} />
+      )}
+    </ResourceRenderer>
   </FormBox>
 );
 
 ExternalRegistrationForm.propTypes = {
-  instances: PropTypes.object.isRequired,
+  instances: ImmutablePropTypes.map.isRequired,
   handleSubmit: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
   istTryingToCreateAccount: PropTypes.bool,
@@ -63,7 +71,7 @@ ExternalRegistrationForm.propTypes = {
   invalid: PropTypes.bool
 };
 
-const validate = ({ username, password }) => {
+const validate = ({ username, password, instanceId }) => {
   const errors = {};
 
   if (!username) {
@@ -72,6 +80,10 @@ const validate = ({ username, password }) => {
 
   if (!password) {
     errors['password'] = <FormattedMessage id='app.externalRegistrationForm.validation.emptyPassword' defaultMessage='Password cannot be empty.' />;
+  }
+
+  if (!instanceId) {
+    errors['instanceId'] = <FormattedMessage id='app.externalRegistrationForm.validation.instanceId' defaultMessage='Please select one of the instances.' />;
   }
 
   return errors;
