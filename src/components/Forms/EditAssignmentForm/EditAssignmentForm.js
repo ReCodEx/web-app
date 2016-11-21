@@ -66,7 +66,6 @@ const EditAssignmentForm = ({
         name='isPublic'
         component={CheckboxField}
         onOff
-        colored
         label={<FormattedMessage id='app.editAssignmentForm.isPublic' defaultMessage='Visible to students' />} />
 
       <Field
@@ -122,7 +121,6 @@ const EditAssignmentForm = ({
         name='canViewLimitRatios'
         component={CheckboxField}
         onOff
-        colored
         label={<FormattedMessage id='app.editAssignmentForm.canViewLimitRatios' defaultMessage='Visibility of memory and time ratios' />} />
 
     </FormBox>
