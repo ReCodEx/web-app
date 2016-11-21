@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
+import { Row, Col } from 'react-bootstrap';
 
 import { fetchUserIfNeeded, updateProfile, updateSettings } from '../../redux/modules/users';
 import { getUser } from '../../redux/selectors/users';
@@ -48,14 +49,18 @@ class EditUser extends Component {
           }
         ]}>
         {data => (
-          <div>
-            <EditUserProfileForm
-              onSubmit={updateProfile}
-              initialValues={data} />
-            <EditUserSettingsForm
-              onSubmit={updateSettings}
-              initialValues={data.settings} />
-          </div>
+          <Row>
+            <Col lg={6}>
+              <EditUserProfileForm
+                onSubmit={updateProfile}
+                initialValues={data} />
+            </Col>
+            <Col lg={6}>
+              <EditUserSettingsForm
+                onSubmit={updateSettings}
+                initialValues={data.settings} />
+            </Col>
+          </Row>
         )}
       </Page>
     );

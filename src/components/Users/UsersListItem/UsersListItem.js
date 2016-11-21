@@ -13,7 +13,7 @@ const UsersListItem = ({
     <td className='text-center' width={80}>
       <img src={avatarUrl} className='img-circle' width={45} />
     </td>
-    <td>``
+    <td>
       <p><strong>{fullName}</strong></p>
       <small><Link to={USER_URI_FACTORY(id)}>{id}</Link></small>
     </td>
