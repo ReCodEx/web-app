@@ -5,9 +5,7 @@ import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 import { reset, getFormValues } from 'redux-form';
 
-import PageContent from '../../components/PageContent';
-
-import ResourceRenderer from '../../components/ResourceRenderer';
+import Page from '../../components/Page';
 import EditExerciseForm from '../../components/Forms/EditExerciseForm';
 import EditExerciseRuntimeConfigsForm from '../../components/Forms/EditExerciseRuntimeConfigsForm';
 import SupplementaryFilesTableContainer from '../../containers/SupplementaryFilesTableContainer';
@@ -46,8 +44,9 @@ class EditExercise extends Component {
     } = this.props;
 
     return (
-      <PageContent
-        title={<FormattedMessage id='app.editExercise.title' defaultMessage='Edit exercise' />}
+      <Page
+        resource={exercise}
+        title={exercise => exercise.name}
         description={<FormattedMessage id='app.editExercise.description' defaultMessage='Change exercise settings' />}
         breadcrumbs={[
           {
@@ -60,24 +59,22 @@ class EditExercise extends Component {
             iconName: 'pencil'
           }
         ]}>
-        <ResourceRenderer resource={exercise}>
-          {exercise => (
-            <div>
-              <EditExerciseForm
-                initialValues={exercise}
-                onSubmit={editExercise}
-                formValues={formValues} />
+        {exercise => (
+          <div>
+            <EditExerciseForm
+              initialValues={exercise}
+              onSubmit={editExercise}
+              formValues={formValues} />
 
-              <SupplementaryFilesTableContainer exerciseId={exerciseId} />
+            <SupplementaryFilesTableContainer exerciseId={exerciseId} />
 
-              <EditExerciseRuntimeConfigsForm
-                runtimeEnvironments={runtimeEnvironments}
-                initialValues={{runtimeConfigs: exercise.solutionRuntimeConfigs}}
-                onSubmit={editSolutionRuntimeConfigs} />
-            </div>
-          )}
-        </ResourceRenderer>
-      </PageContent>
+            <EditExerciseRuntimeConfigsForm
+              runtimeEnvironments={runtimeEnvironments}
+              initialValues={{runtimeConfigs: exercise.solutionRuntimeConfigs}}
+              onSubmit={editSolutionRuntimeConfigs} />
+          </div>
+        )}
+      </Page>
     );
   }
 
