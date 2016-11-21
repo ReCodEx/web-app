@@ -1,8 +1,6 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
 import Box from '../../../AdminLTE/Box';
 import { WarningIcon } from '../../../Icons';
-import { Grid, Row, Col, Table } from 'react-bootstrap';
-import ReactMarkdown from 'react-markdown';
 import { FormattedMessage } from 'react-intl';
 
 const FailedAssignmentDetails = () => (
@@ -13,8 +11,7 @@ const FailedAssignmentDetails = () => (
       </span>
     )}
     noPadding={false}
-    collapsable={true}
-    isOpen={false}>
+    collapsable={true}>
     <p>
       <FormattedMessage
         id='app.assignment.errorExplanation'
