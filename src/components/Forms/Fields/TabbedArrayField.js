@@ -10,7 +10,7 @@ class TabbedArrayField extends Component {
   changeTab = (n) => this.setState({ activeTab: n });
   add = () => {
     const { fields } = this.props;
-    fields.push();
+    fields.push(); // add an empty item
     this.changeTab(fields.length);
   };
 
@@ -45,7 +45,7 @@ class TabbedArrayField extends Component {
             onSelect={this.changeTab}>
             {fields.map((prefix, i) => (
               <Tab key={i} eventKey={i} title={getTitle(i)}>
-                {React.cloneElement(ContentComponent, {...props, i, prefix})}
+                <ContentComponent {...props} i={i} prefix={prefix} />
                 {remove && (
                   <p className='text-center'>
                     <Confirm
@@ -80,9 +80,9 @@ TabbedArrayField.propTypes = {
   remove: PropTypes.bool,
   fields: PropTypes.object,
   ContentComponent: PropTypes.any,
-  emptyMessage: PropTypes.oneOfType([ PropTypes.string, FormattedMessage ]),
-  addMessage: PropTypes.oneOfType([ PropTypes.string, FormattedMessage ]),
-  removeQuestion: PropTypes.oneOfType([ PropTypes.string, FormattedMessage ])
+  emptyMessage: PropTypes.oneOfType([ PropTypes.string, PropTypes.element ]),
+  addMessage: PropTypes.oneOfType([ PropTypes.string, PropTypes.element ]),
+  removeQuestion: PropTypes.oneOfType([ PropTypes.string, PropTypes.element ])
 };
 
 export default TabbedArrayField;

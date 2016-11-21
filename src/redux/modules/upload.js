@@ -68,6 +68,7 @@ const reducer = handleActions({
   [actionTypes.UPLOAD_FULFILLED]: (state, { payload, meta: { id } }) =>
     state
       .updateIn([ id, 'uploading' ], list => list.filter(item => item.name !== payload.name))
+      .updateIn([ id, 'uploaded' ], list => list.filter(item => item.name !== payload.name)) // overwrite file with the same name
       .updateIn([ id, 'uploaded' ], list => list.push({ name: payload.name, file: payload })),
 
   [actionTypes.UPLOAD_FAILED]: (state, { meta: { id, fileName } }) => {
