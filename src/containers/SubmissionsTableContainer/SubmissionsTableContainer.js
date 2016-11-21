@@ -34,7 +34,7 @@ class SubmissionsTableContainer extends Component {
       (a, b) => {
         var aTimestamp = a.get('data').get('submittedAt');
         var bTimestamp = b.get('data').get('submittedAt');
-        return aTimestamp - bTimestamp;
+        return bTimestamp - aTimestamp;
       }
     );
   }

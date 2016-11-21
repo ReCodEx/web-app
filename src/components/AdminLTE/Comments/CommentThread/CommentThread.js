@@ -34,7 +34,8 @@ CommentThread.propTypes = {
   comments: PropTypes.array,
   currentUserId: PropTypes.string.isRequired,
   addComment: PropTypes.func,
-  repostComment: PropTypes.func
+  repostComment: PropTypes.func,
+  togglePrivacy: PropTypes.func
 };
 
 export default CommentThread;

@@ -4,6 +4,8 @@ import Icon from 'react-fontawesome';
 import classNames from 'classnames';
 import Collapse from 'react-collapse';
 
+import styles from './Box.less';
+
 class Box extends Component {
 
   componentWillMount() {
@@ -34,6 +36,7 @@ class Box extends Component {
       children,
       footer,
       collapsable = false,
+      unlimitedHeight = false,
       className = ''
     } = this.props;
     const { isOpen = true } = this.state;
@@ -61,7 +64,9 @@ class Box extends Component {
           <div className={
             classNames({
               'box-body': true,
-              'no-padding': noPadding
+              'no-padding': noPadding,
+              [styles.limited]: !unlimitedHeight,
+              [styles.unlimited]: unlimitedHeight
             })
           }>
             {children}
@@ -86,6 +91,7 @@ Box.propTypes = {
   type: PropTypes.string,
   isOpen: PropTypes.bool,
   collapsable: PropTypes.bool,
+  unlimitedHeight: PropTypes.bool,
   noPadding: PropTypes.bool,
   footer: PropTypes.element,
   children: PropTypes.element,

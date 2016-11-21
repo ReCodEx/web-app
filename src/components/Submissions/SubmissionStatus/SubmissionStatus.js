@@ -4,10 +4,12 @@ import Icon from 'react-fontawesome';
 import { FormattedDate, FormattedTime, FormattedMessage } from 'react-intl';
 import Box from '../../AdminLTE/Box';
 import AssignmentStatusIcon from '../../Assignments/Assignment/AssignmentStatusIcon';
+import UsersNameContainer from '../../../containers/UsersNameContainer';
 
 const SubmissionStatus = ({
   evaluationStatus,
   submittedAt,
+  submittedBy,
   note
 }) => (
   <Box
@@ -35,6 +37,17 @@ const SubmissionStatus = ({
             <FormattedDate value={submittedAt * 1000} />&nbsp;<FormattedTime value={submittedAt * 1000} />
           </td>
         </tr>
+        {submittedBy && (
+          <tr>
+            <td className='text-center'>
+              <Icon name='user' />
+            </td>
+            <th><FormattedMessage id='app.submission.submittedBy' defaultMessage='Submitted by:' /></th>
+            <td>
+              <UsersNameContainer userId={submittedBy} />
+            </td>
+          </tr>
+        )}
         <tr>
           <td className='text-center'>
             <b><AssignmentStatusIcon status={evaluationStatus} /></b>
@@ -62,6 +75,7 @@ const SubmissionStatus = ({
 SubmissionStatus.propTypes = {
   evaluationStatus: PropTypes.string.isRequired,
   submittedAt: PropTypes.number.isRequired,
+  submittedBy: PropTypes.string,
   note: PropTypes.string
 };
 
