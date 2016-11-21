@@ -60,7 +60,6 @@ class LayoutContainer extends Component {
   });
 
   maybeHideSidebar = (e) => {
-    e.preventDefault();
     const { sidebar, toggleVisibility } = this.props;
     if (sidebar.isOpen) {
       toggleVisibility();

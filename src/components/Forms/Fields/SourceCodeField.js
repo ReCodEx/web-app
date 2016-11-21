@@ -35,6 +35,13 @@ const getMode = ext => {
     case 'hpp':
       return 'c_cpp';
 
+    case 'md':
+    case 'markdown':
+      return 'markdown';
+
+    case '':
+      return 'makefile';
+
     default:
       return 'c_cpp';
   }

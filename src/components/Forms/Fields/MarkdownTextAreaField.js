@@ -30,14 +30,14 @@ class MarkdownTextAreaField extends Component {
   };
 
   render() {
-    const { input: { value } } = this.props;
+    const { input: { name, value } } = this.props;
     const { showPreview } = this.state;
     return (
       <div>
         <SourceCodeField {...this.props} mode='markdown'>
           <Row>
             <Col sm={4}>
-              <OnOffCheckbox controlId='togglePreview' checked={showPreview} onChange={() => this.toggleShowPreview()}>
+              <OnOffCheckbox controlId={`${name}.togglePreview`} checked={showPreview} onChange={() => this.toggleShowPreview()}>
                 <FormattedMessage id='app.markdownTextArea.showPreview' defaultMessage='Preview' />
               </OnOffCheckbox>
             </Col>
@@ -65,7 +65,10 @@ class MarkdownTextAreaField extends Component {
 
 MarkdownTextAreaField.propTypes = {
   showPreview: PropTypes.string,
-  input: PropTypes.shape({ value: PropTypes.string }).isRequired
+  input: PropTypes.shape({
+    name: PropTypes.string,
+    value: PropTypes.string
+  }).isRequired
 };
 
 export default MarkdownTextAreaField;

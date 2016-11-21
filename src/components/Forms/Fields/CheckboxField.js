@@ -3,11 +3,10 @@ import { FormattedMessage } from 'react-intl';
 
 import {
   FormGroup,
-  ControlLabel,
-  HelpBlock
+  HelpBlock,
+  Checkbox
 } from 'react-bootstrap';
 
-import Checkbox from '../Checkbox';
 import OnOffCheckbox from '../OnOffCheckbox';
 
 const CheckboxField = ({
@@ -32,8 +31,11 @@ const CheckboxField = ({
 };
 
 CheckboxField.propTypes = {
+  input: PropTypes.object.isRequired,
+  meta: PropTypes.object.isRequired,
   name: PropTypes.string.isRequired,
   type: PropTypes.string,
+  onOff: PropTypes.bool,
   label: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) })

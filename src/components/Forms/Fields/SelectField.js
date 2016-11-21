@@ -19,7 +19,7 @@ const SelectField = ({
   ...props
 }) => (
   <FormGroup
-    controlId={name}
+    controlId={input.name}
     validationState={touched && error ? 'error' : undefined}>
     <ControlLabel>{label}</ControlLabel>
     <FormControl {...input} {...props} componentClass='select'>
