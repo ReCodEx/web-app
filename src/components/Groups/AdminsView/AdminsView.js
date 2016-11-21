@@ -7,7 +7,6 @@ import Box from '../../AdminLTE/Box';
 import AddSupervisor from '../AddSupervisor';
 import SupervisorsList from '../../Users/SupervisorsList';
 import CreateGroupForm from '../../Forms/CreateGroupForm'; // @todo replace with it's' container
-import MakeRemoveSupervisorButtonContainer from '../../../containers/MakeRemoveSupervisorButtonContainer';
 
 const AdminsView = ({
   group,
@@ -44,6 +43,7 @@ const AdminsView = ({
         title={<FormattedMessage id='app.group.adminsView.addSubgroup' defaultMessage='Add subgroup' />}
         onSubmit={addSubgroup}
         instanceId={group.instanceId}
+        initialValues={{ publicStats: true }}
         parentGroupId={group.id} />
     </Col>
   </Row>

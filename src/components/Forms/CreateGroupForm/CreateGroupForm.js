@@ -68,8 +68,7 @@ class CreateGroupForm extends Component {
           name='publicStats'
           tabIndex={3}
           component={CheckboxField}
-          label={<FormattedMessage id='app.createGroup.publicStats' defaultMessage='Students can see statistics of each other' />}
-          required />
+          label={<FormattedMessage id='app.createGroup.publicStats' defaultMessage='Students can see statistics of each other' />} />
       </FormBox>
     );
   }
