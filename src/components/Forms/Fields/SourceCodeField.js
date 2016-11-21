@@ -66,7 +66,7 @@ const SourceCodeField = ({
   }
 }) => (
   <FormGroup
-    controlId={name}
+    controlId={input.name}
     validationState={touched && error ? 'error' : undefined}>
     <ControlLabel>{label}</ControlLabel>
     <ClientOnly>

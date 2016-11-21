@@ -24,7 +24,7 @@ const OnOffCheckbox = ({
       [styles.label]: !disabled
     })}>
     <span className={styles.inputWrapper}>
-      <Toggle {...props} value={value ? 'yes' : 'no'} id={controlId} disabled={disabled} />
+      <Toggle {...props} id={controlId} value={value ? 'yes' : 'no'} disabled={disabled} />
     </span>
     <span className={styles.labelText}>
       {children}

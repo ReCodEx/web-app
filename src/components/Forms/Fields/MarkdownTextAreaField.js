@@ -34,20 +34,19 @@ class MarkdownTextAreaField extends Component {
     const { showPreview } = this.state;
     return (
       <div>
-        <SourceCodeField {...this.props} mode='markdown'>
-          <Row>
-            <Col sm={4}>
-              <OnOffCheckbox controlId={`${name}.togglePreview`} checked={showPreview} onChange={() => this.toggleShowPreview()}>
-                <FormattedMessage id='app.markdownTextArea.showPreview' defaultMessage='Preview' />
-              </OnOffCheckbox>
-            </Col>
-            <Col sm={8}>
-              <HelpBlock className='text-right'>
-                <FormattedMessage id='app.markdownTextArea.canUseMarkdown' defaultMessage='You can use markdown syntax in this field.' />
-              </HelpBlock>
-            </Col>
-          </Row>
-        </SourceCodeField>
+        <SourceCodeField {...this.props} mode='markdown' />
+        <Row>
+          <Col sm={4}>
+            <OnOffCheckbox controlId={`${name}.togglePreview`} checked={showPreview} onChange={() => this.toggleShowPreview()}>
+              <FormattedMessage id='app.markdownTextArea.showPreview' defaultMessage='Preview' />
+            </OnOffCheckbox>
+          </Col>
+          <Col sm={8}>
+            <HelpBlock className='text-right'>
+              <FormattedMessage id='app.markdownTextArea.canUseMarkdown' defaultMessage='You can use markdown syntax in this field.' />
+            </HelpBlock>
+          </Col>
+        </Row>
         {showPreview && (
           <div>
             <h4><FormattedMessage id='app.markdownTextArea.preview' defaultMessage='Preview:' /></h4>
