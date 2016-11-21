@@ -52,7 +52,9 @@ const SupplementaryFilesTable = ({
                   </tr>
                 </thead>
                 <tbody>
-                  {supplementaryFiles.map((data, i) => <SupplementaryFilesTableRow {...data} key={data.id} />)}
+                  {supplementaryFiles
+                    .sort((a, b) => b.uploadedAt - a.uploadedAt) // sort from the newest to the oldest
+                    .map((data, i) => <SupplementaryFilesTableRow {...data} key={data.id} />)}
                 </tbody>
               </Table>
             )}

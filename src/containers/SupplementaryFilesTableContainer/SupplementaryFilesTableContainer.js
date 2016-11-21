@@ -7,6 +7,7 @@ import SupplementaryFilesTable from '../../components/Exercises/SupplementaryFil
 import { fetchSupplementaryFilesForExercise, addSupplementaryFiles } from '../../redux/modules/supplementaryFiles';
 import { createGetSupplementaryFilesForExercise } from '../../redux/selectors/supplementaryFiles';
 
+import { reset } from '../../redux/modules/upload';
 import { createGetUploadedFiles, createAllUploaded } from '../../redux/selectors/upload';
 
 
@@ -71,6 +72,8 @@ export default connect(
   },
   (dispatch, { exerciseId }) => ({
     loadSupplementaryFilesForExercise: () => dispatch(fetchSupplementaryFilesForExercise(exerciseId)),
-    addSupplementaryFiles: (files) => dispatch(addSupplementaryFiles(exerciseId, files.toJS().map(uploaded => uploaded.file.id)))
+    addSupplementaryFiles: (files) =>
+      dispatch(addSupplementaryFiles(exerciseId, files.toJS()))
+        .then(dispatch(reset(SupplementaryFilesTableContainer.getUploadId(exerciseId))))
   })
 )(SupplementaryFilesTableContainer);

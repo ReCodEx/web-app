@@ -1,5 +1,5 @@
 import { handleActions } from 'redux-actions';
-import factory, { initialState } from '../helpers/resourceManager';
+import factory, { initialState, createRecord, resourceStatus } from '../helpers/resourceManager';
 import { createApiAction } from '../middleware/apiMiddleware';
 
 const resourceName = 'supplementaryFiles';
@@ -29,8 +29,16 @@ export const addSupplementaryFiles = (exerciseId, files) =>
     type: actionTypes.ADD_FILES,
     endpoint: `/exercises/${exerciseId}/supplementary-files`,
     method: 'POST',
-    body: { files },
-    meta: { exerciseId, files }
+    body: {
+      files: files.map(uploaded => uploaded.file.id)
+    },
+    meta: {
+      exerciseId,
+      files: files.map(uploaded => ({
+        tmpId: Math.random().toString(),
+        file: uploaded.file
+      }))
+    }
   });
 
 /**
@@ -38,6 +46,18 @@ export const addSupplementaryFiles = (exerciseId, files) =>
  */
 
 const reducer = handleActions(Object.assign({}, reduceActions, {
+
+  [actionTypes.ADD_FILES_FULFILLED]: (
+    state, { payload, meta: { files } }
+  ) =>
+    payload.reduce(
+      (state, data) => state.setIn(
+        ['resources', data.id],
+        createRecord({ data, state: resourceStatus.FULFILLED })
+      ),
+      state
+    )
+
 }), initialState);
 
 export default reducer;

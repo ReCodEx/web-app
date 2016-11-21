@@ -26,6 +26,7 @@ export const uploadFile = (id, file, endpoint = '/uploaded-files') =>
 
 const wrapWithName = (id, file) => ({ [file.name]: file });
 export const init = createAction(actionTypes.INIT, (id) => id);
+export const reset = init;
 export const addFile = createAction(actionTypes.UPLOAD_PENDING, wrapWithName, (id, file) => ({ id, fileName: file.name }));
 export const removeFile = createAction(actionTypes.REMOVE_FILE, (id, payload) => payload, (id) => ({ id }));
 export const returnFile = createAction(actionTypes.RETURN_FILE, (id, payload) => payload, (id) => ({ id }));
