@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
+import { reset } from 'redux-form';
 
 import { Row, Col } from 'react-bootstrap';
 import PageContent from '../../components/PageContent';
@@ -24,10 +25,13 @@ class Register extends Component {
     this.checkIfIsDone(props);
 
   checkIfIsDone = props => {
-    const { hasSucceeded, push } = props;
+    const { hasSucceeded, push, reset } = props;
     if (hasSucceeded) {
       const { links: { DASHBOARD_URI } } = this.context;
-      setTimeout(() => push(DASHBOARD_URI), 600);
+      setTimeout(() => {
+        push(DASHBOARD_URI);
+        reset();
+      }, 600);
     }
   };
 
@@ -74,7 +78,8 @@ Register.propTypes = {
   createAccount: PropTypes.func.isRequired,
   createExternalAccount: PropTypes.func.isRequired,
   hasSucceeded: PropTypes.bool,
-  push: PropTypes.func.isRequired
+  push: PropTypes.func.isRequired,
+  reset: PropTypes.func.isRequired
 };
 
 export default connect(
@@ -90,6 +95,10 @@ export default connect(
       dispatch(createAccount(firstName, lastName, email, password, instanceId)),
     createExternalAccount: ({ username, password, instanceId, serviceId }) =>
       dispatch(createExternalAccount(username, password, instanceId, serviceId)),
-    push: (url) => dispatch(push(url))
+    push: (url) => dispatch(push(url)),
+    reset: () => {
+      dispatch(reset('registration'));
+      dispatch(reset('external-registration'));
+    }
   })
 )(Register);

@@ -3,6 +3,7 @@ import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import { push } from 'react-router-redux';
+import { reset } from 'redux-form';
 
 import { Row, Col } from 'react-bootstrap';
 import PageContent from '../../components/PageContent';
@@ -25,9 +26,12 @@ class Login extends Component {
    * Redirect all logged in users to the dashboard as soon as they are visually informed about success.
    */
   checkIfIsLoggedIn = (props) => {
-    const { hasSucceeded, push } = props;
+    const { hasSucceeded, push, reset } = props;
     if (hasSucceeded) {
-      setTimeout(() => push(this.context.links.DASHBOARD_URI), 600);
+      setTimeout(() => {
+        push(this.context.links.DASHBOARD_URI);
+        reset();
+      }, 600);
     }
   };
 
@@ -75,7 +79,8 @@ Login.propTypes = {
   login: PropTypes.func.isRequired,
   hasSucceeded: PropTypes.bool.isRequired,
   push: PropTypes.func.isRequired,
-  loginCAS: PropTypes.func.isRequired
+  loginCAS: PropTypes.func.isRequired,
+  reset: PropTypes.func.isRequired
 };
 
 export default connect(
@@ -85,6 +90,10 @@ export default connect(
   dispatch => ({
     login: ({ email, password }) => dispatch(login(email, password)),
     loginCAS: ({ ukco, password }) => dispatch(loginCAS(ukco, password)),
-    push: (url) => dispatch(push(url))
+    push: (url) => dispatch(push(url)),
+    reset: () => {
+      dispatch(reset('login'));
+      dispatch(reset('login-cas'));
+    }
   })
 )(Login);
