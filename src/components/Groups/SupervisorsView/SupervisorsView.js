@@ -6,7 +6,7 @@ import { Row, Col } from 'react-bootstrap';
 import Box from '../../AdminLTE/Box';
 import AddStudent from '../AddStudent';
 import AddAssignment from '../AddAssignment';
-import StudentsList from '../../Users/StudentsList';
+import SupervisorsStudentsList from '../SupervisorsStudentsList';
 import AdminAssignmentsTable from '../../Assignments/AdminAssignmentsTable';
 
 const SupervisorsView = ({
@@ -33,7 +33,12 @@ const SupervisorsView = ({
           title={<FormattedMessage id='app.group.spervisorsView.students' defaultMessage='Students' />}
           collapsable
           noPadding>
-          <StudentsList users={students.toJS()} stats={stats} fill />
+          <SupervisorsStudentsList
+            groupId={group.id}
+            users={students}
+            isLoaded={students.length === group.students.length}
+            stats={stats}
+            fill />
         </Box>
         <Box
           title={<FormattedMessage id='app.group.spervisorsView.addStudent' defaultMessage='Add student' />}
@@ -63,7 +68,7 @@ const SupervisorsView = ({
 
 SupervisorsView.propTypes = {
   group: PropTypes.object.isRequired,
-  students: ImmutablePropTypes.list,
+  students: PropTypes.array,
   stats: ImmutablePropTypes.map,
   assignments: ImmutablePropTypes.list.isRequired,
   assignFunc: PropTypes.func.isRequired

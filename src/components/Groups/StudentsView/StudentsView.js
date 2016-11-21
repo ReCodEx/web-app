@@ -14,48 +14,54 @@ const StudentsView = ({
   statuses = [],
   assignments
 }) => (
-  <Row>
-    <Col lg={students && stats ? 6 : 12}>
-      <h3>
-        <FormattedMessage
-          id='app.group.studentsView.title'
-          defaultMessage="Student's dashboard for {groupName}"
-          values={{ groupName: group.name }} />
-      </h3>
-      <Box
-        title={<FormattedMessage id='app.studentsView.assignments' defaultMessage='Assignments' />}
-        collapsable
-        noPadding
-        isOpen>
-        <AssignmentsTable
-          assignments={assignments}
-          showGroup={false}
-          statuses={statuses} />
-      </Box>
-    </Col>
-    {students && stats && (
-      <Col lg={6}>
+  <div>
+    <Row>
+      <Col sm={12}>
+        <h3>
+          <FormattedMessage
+            id='app.group.studentsView.title'
+            defaultMessage="Student's dashboard for {groupName}"
+            values={{ groupName: group.name }} />
+        </h3>
+      </Col>
+    </Row>
+    <Row>
+      <Col lg={students && stats ? 6 : 12}>
         <Box
-          title={<FormattedMessage id='app.studentsView.students' defaultMessage='Students' />}
+          title={<FormattedMessage id='app.studentsView.assignments' defaultMessage='Assignments' />}
           collapsable
           noPadding
           isOpen>
-          <StudentsList
-            users={students.toJS()}
-            isLoaded={students.size === group.students.length}
-            stats={stats}
-            fill />
+          <AssignmentsTable
+            assignments={assignments}
+            showGroup={false}
+            statuses={statuses} />
         </Box>
       </Col>
-    )}
-  </Row>
+      {students && stats && (
+        <Col lg={6}>
+          <Box
+            title={<FormattedMessage id='app.studentsView.students' defaultMessage='Students' />}
+            collapsable
+            noPadding
+            isOpen>
+            <StudentsList
+              users={students}
+              isLoaded={students.length === group.students.length}
+              stats={stats}
+              fill />
+          </Box>
+        </Col>
+      )}
+    </Row>
+  </div>
 );
 
 StudentsView.propTypes = {
   group: PropTypes.object.isRequired,
   assignments: ImmutablePropTypes.list.isRequired,
   stats: PropTypes.object,
-  students: PropTypes.object.isRequired,
+  students: PropTypes.array.isRequired,
   statuses: PropTypes.object
 };
 

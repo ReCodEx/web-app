@@ -11,7 +11,7 @@ const GroupDetail = ({
   id,
   description,
   threshold,
-  isPublic,
+  isPublic = false,
   childGroups,
   groups
 }) => (
@@ -30,10 +30,12 @@ const GroupDetail = ({
                 <th><FormattedMessage id='app.groupDetail.isPublic' defaultMessage='Is public:' /></th>
                 <td><MaybeSucceededIcon success={isPublic} /></td>
               </tr>
-              <tr>
-                <th><FormattedMessage id='app.groupDetail.threshold' defaultMessage='Minimum percent of the total points count needed to complete the course:' /></th>
-                <td><FormattedNumber value={threshold} style='percent' /></td>
-              </tr>
+              {threshold !== null && (
+                <tr>
+                  <th><FormattedMessage id='app.groupDetail.threshold' defaultMessage='Minimum percent of the total points count needed to complete the course:' /></th>
+                  <td><FormattedNumber value={threshold} style='percent' /></td>
+                </tr>
+              )}
             </tbody>
           </Table>
         </div>

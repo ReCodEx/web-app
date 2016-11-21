@@ -208,8 +208,8 @@ Group.propTypes = {
   group: ImmutablePropTypes.map,
   instance: ImmutablePropTypes.map,
   parentGroup: ImmutablePropTypes.map,
-  students: ImmutablePropTypes.list,
-  supervisors: ImmutablePropTypes.list,
+  students: PropTypes.array,
+  supervisors: PropTypes.array,
   assignments: ImmutablePropTypes.list,
   groups: ImmutablePropTypes.map,
   isStudent: PropTypes.bool,
@@ -235,7 +235,18 @@ const mapStateToProps = (
   const userId = loggedInUserIdSelector(state);
   const supervisorsIds = supervisorsOfGroup(groupId)(state);
   const studentsIds = studentsOfGroup(groupId)(state);
-  const readyUsers = usersSelector(state).toList().filter(isReady);
+  const readyUsers = usersSelector(state)
+    .toList()
+    .filter(isReady)
+    .map(getJsData)
+    .sort((a, b) => {
+      if (a.name.lastName < b.name.lastName) return -1;
+      if (a.name.lastName > b.name.lastName) return 1;
+      if (a.name.firstName < b.name.firstName) return -1;
+      if (a.name.firstName > b.name.firstName) return 1;
+      return 0;
+    })
+    .toArray();
 
   return {
     group,
@@ -248,8 +259,8 @@ const mapStateToProps = (
     assignments: groupsAssignmentsSelector(groupId)(state),
     stats: createGroupsStatsSelector(groupId)(state),
     statuses: getStatuses(groupId, userId)(state),
-    students: readyUsers.filter(isReady).filter(user => studentsIds.includes(getId(user))).map(getJsData),
-    supervisors: readyUsers.filter(user => supervisorsIds.includes(getId(user))).map(getJsData),
+    students: readyUsers.filter(user => studentsIds.includes(user.id)),
+    supervisors: readyUsers.filter(user => supervisorsIds.includes(user.id)),
     isStudent: isStudentOf(userId, groupId)(state),
     isSupervisor: isSupervisorOf(userId, groupId)(state),
     isAdmin: isAdminOf(userId, groupId)(state)
