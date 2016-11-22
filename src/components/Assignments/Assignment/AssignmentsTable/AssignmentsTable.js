@@ -1,4 +1,5 @@
 import React, { PropTypes } from 'react';
+import { List } from 'immutable';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { Table } from 'react-bootstrap';
 import { FormattedMessage } from 'react-intl';
@@ -7,7 +8,7 @@ import { isReady, isLoading, getJsData } from '../../../../redux/helpers/resourc
 import AssignmentTableRow, { NoAssignmentTableRow, LoadingAssignmentTableRow } from '../AssignmentTableRow';
 
 const AssignmentsTable = ({
-  assignments = [],
+  assignments = List(),
   statuses = [],
   showGroup = true
 }) => (
@@ -22,18 +23,21 @@ const AssignmentsTable = ({
       </tr>
     </thead>
     <tbody>
-      {assignments.filter(isLoading).size === 0 && assignments.size === 0 &&
+      {assignments.size === 0 &&
         <NoAssignmentTableRow />}
-
-      {assignments.filter(isReady).map(getJsData).map(assignment =>
-        <AssignmentTableRow
-          key={assignment.id}
-          item={assignment}
-          showGroup={showGroup}
-          status={statuses[assignment.id]} />)}
 
       {assignments.some(isLoading) &&
         <LoadingAssignmentTableRow />}
+
+      {assignments.filter(isReady)
+        .map(getJsData)
+        .map((assignment) => (
+          <AssignmentTableRow
+            key={assignment.id}
+            item={assignment}
+            showGroup={showGroup}
+            status={statuses[assignment.id]} />
+        ))}
     </tbody>
   </Table>
 );

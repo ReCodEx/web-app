@@ -36,7 +36,7 @@ export const loadAssignment = actions.pushResource;
 export const fetchAssignmentssIfNeeded = actions.fetchIfNeeded;
 export const fetchAssignmentIfNeeded = actions.fetchOneIfNeeded;
 
-export const fetchAssignmentsForGroup = groupId =>
+export const fetchAssignmentsForGroup = (groupId) =>
   actions.fetchMany({
     endpoint: `/groups/${groupId}/assignments`
   });

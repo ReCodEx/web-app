@@ -6,8 +6,9 @@ import { Row, Col } from 'react-bootstrap';
 import Box from '../../AdminLTE/Box';
 import AddStudent from '../AddStudent';
 import AddAssignment from '../AddAssignment';
-import SupervisorsStudentsList from '../SupervisorsStudentsList';
+import StudentsList from '../../Users/StudentsList';
 import AdminAssignmentsTable from '../../Assignments/AdminAssignmentsTable';
+import LeaveJoinGroupButtonContainer from '../../../containers/LeaveJoinGroupButtonContainer';
 
 const SupervisorsView = ({
   group,
@@ -33,8 +34,8 @@ const SupervisorsView = ({
           title={<FormattedMessage id='app.group.spervisorsView.students' defaultMessage='Students' />}
           collapsable
           noPadding>
-          <SupervisorsStudentsList
-            groupId={group.id}
+          <StudentsList
+            renderActions={userId => <LeaveJoinGroupButtonContainer userId={userId} groupId={group.id} />}
             users={students}
             isLoaded={students.length === group.students.length}
             stats={stats}

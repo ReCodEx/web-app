@@ -41,11 +41,11 @@ const PageContent = ({
 PageContent.propTypes = {
   title: PropTypes.oneOfType([
     PropTypes.string,
-    PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage, ResourceRenderer]) })
+    PropTypes.element
   ]).isRequired,
   description: PropTypes.oneOfType([
     PropTypes.string,
-    PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage, ResourceRenderer]) })
+    PropTypes.element
   ]).isRequired,
   breadcrumbs: PropTypes.array,
   children: PropTypes.element,

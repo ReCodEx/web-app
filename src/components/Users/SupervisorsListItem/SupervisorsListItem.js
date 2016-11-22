@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
-import { Link } from 'react-router';
 import MakeRemoveSupervisorButtonContainer from '../../../containers/MakeRemoveSupervisorButtonContainer';
+import UsersNameContainer from '../../../containers/UsersNameContainer';
 
 const SupervisorsListItem = ({
   isAdmin,
@@ -8,16 +8,10 @@ const SupervisorsListItem = ({
   fullName,
   avatarUrl,
   groupId
-}, {
-  links: { USER_URI_FACTORY }
 }) => (
   <tr>
-    <td className='text-center' width={80}>
-      <img src={avatarUrl} className='img-circle' width={45} />
-    </td>
     <td>
-      <div><strong>{fullName}</strong></div>
-      <small><Link to={USER_URI_FACTORY(id)}>{id}</Link></small>
+      <UsersNameContainer userId={id} />
     </td>
     {isAdmin && (
       <td width={150}>

@@ -1,23 +1,18 @@
 import React, { PropTypes } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { ProgressBar } from 'react-bootstrap';
-import { Link } from 'react-router';
+import UsersNameContainer from '../../../containers/UsersNameContainer';
 
 const StudentsListItem = ({
   id,
   fullName,
   avatarUrl,
-  stats
-}, {
-  links: { USER_URI_FACTORY }
+  stats,
+  renderActions
 }) => (
   <tr>
-    <td className='text-center' width={80}>
-      <img src={avatarUrl} className='img-circle' width={45} />
-    </td>
     <td>
-      <div><strong>{fullName}</strong></div>
-      <small><Link to={USER_URI_FACTORY(id)}>{id}</Link></small>
+      <UsersNameContainer userId={id} />
     </td>
     <td width={150}>
       {stats && (
@@ -35,6 +30,9 @@ const StudentsListItem = ({
           values={{ ...stats.points }} />
       )}
     </td>
+    {renderActions && (
+      <td>{renderActions(id)}</td>
+    )}
   </tr>
 );
 
@@ -51,11 +49,8 @@ StudentsListItem.propTypes = {
       total: PropTypes.number.isRequired,
       gained: PropTypes.number.isRequired
     })
-  })
-};
-
-StudentsListItem.contextTypes = {
-  links: PropTypes.object
+  }),
+  renderActions: PropTypes.func
 };
 
 export default StudentsListItem;

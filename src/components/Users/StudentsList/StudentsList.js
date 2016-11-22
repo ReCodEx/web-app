@@ -9,14 +9,16 @@ const StudentsList = ({
   users = [],
   isLoaded = true,
   stats,
+  renderActions,
   ...rest
 }) => (
-  <Table>
+  <Table hover>
     <tbody>
     {users.map((user, i) => (
       <StudentsListItem
         key={i}
         {...user}
+        renderActions={renderActions}
         stats={
           isReady(stats)
             ? getJsData(stats).find(item => item.userId === user.id)
@@ -33,7 +35,7 @@ const StudentsList = ({
     )}
 
     {!isLoaded && (
-      <LoadingStudentsListItem />
+      <LoadingStudentsListItem withActions={Boolean(renderActions)} />
     )}
     </tbody>
   </Table>
@@ -42,7 +44,8 @@ const StudentsList = ({
 StudentsList.propTypes = {
   users: PropTypes.array,
   isLoaded: PropTypes.bool,
-  stats: PropTypes.object
+  stats: PropTypes.object,
+  renderActions: PropTypes.func
 };
 
 export default StudentsList;

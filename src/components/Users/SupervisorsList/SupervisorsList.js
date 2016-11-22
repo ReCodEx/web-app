@@ -9,7 +9,7 @@ const SupervisorsList = ({
   isLoaded = true,
   isAdmin
 }) => (
-  <Table>
+  <Table hover>
     <tbody>
     {users.map(user => (
       <SupervisorsListItem

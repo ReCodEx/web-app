@@ -7,17 +7,15 @@ import { Button } from 'react-bootstrap';
 import { FormattedMessage } from 'react-intl';
 import { List } from 'immutable';
 
-import PageContent from '../../components/PageContent';
-
+import Page from '../../components/Page';
 import GroupDetail, { LoadingGroupDetail, FailedGroupDetail } from '../../components/Groups/GroupDetail';
 import LeaveJoinGroupButtonContainer from '../../containers/LeaveJoinGroupButtonContainer';
 import AdminsView from '../../components/Groups/AdminsView';
 import SupervisorsView from '../../components/Groups/SupervisorsView';
 import StudentsView from '../../components/Groups/StudentsView';
-import ResourceRenderer from '../../components/ResourceRenderer';
 import { EditIcon } from '../../components/Icons';
 
-import { isReady, getJsData, getId } from '../../redux/helpers/resourceManager';
+import { isReady, getJsData } from '../../redux/helpers/resourceManager';
 import { createGroup, fetchSubgroups, fetchGroupIfNeeded } from '../../redux/modules/groups';
 import { fetchGroupsStatsIfNeeded } from '../../redux/modules/stats';
 import { fetchSupervisors, fetchStudents } from '../../redux/modules/users';
@@ -46,7 +44,6 @@ class Group extends Component {
 
   static loadAsync = ({ groupId }, dispatch, userId) =>
     Promise.all([
-      dispatch(fetchAssignmentsForGroup(groupId)),
       dispatch(fetchSubgroups(groupId)),
       dispatch(fetchGroupIfNeeded(groupId))
         .then((res) => res.value)
@@ -54,6 +51,7 @@ class Group extends Component {
           dispatch(fetchInstanceIfNeeded(group.instanceId)),
           Group.isMemberOf(group, userId)
             ? Promise.all([
+              dispatch(fetchAssignmentsForGroup(groupId)),
               dispatch(fetchSupervisors(groupId)),
               dispatch(fetchStudents(groupId))
             ])
@@ -130,7 +128,8 @@ class Group extends Component {
       groups,
       students,
       supervisors = List(),
-      assignments = List(),
+      allAssignments = List(),
+      publicAssignments = List(),
       stats,
       statuses,
       isStudent,
@@ -141,63 +140,61 @@ class Group extends Component {
     const { links: { GROUP_EDIT_URI_FACTORY } } = this.context;
 
     return (
-      <PageContent
-        title={(
-          <ResourceRenderer resource={group}>
-            {group => <span>{group.name}</span>}
-          </ResourceRenderer>
-        )}
+      <Page
+        resource={group}
+        title={group => group.name}
         description={<FormattedMessage id='app.group.description' defaultMessage='Group overview and assignments' />}
-        breadcrumbs={this.getBreadcrumbs()}>
-        <ResourceRenderer
-          loading={<LoadingGroupDetail />}
-          failed={<FailedGroupDetail />}
-          resource={group}>
-          {data => (
-            <div>
-              <GroupDetail {...data} groups={groups} />
+        breadcrumbs={this.getBreadcrumbs()}
+        loading={<LoadingGroupDetail />}
+        failed={<FailedGroupDetail />}>
+        {data => (
+          <div>
+            <GroupDetail
+              group={data}
+              supervisors={supervisors}
+              isAdmin={isAdmin}
+              groups={groups} />
 
-              {!isAdmin && !isSupervisor && (
-                <p className='text-center'>
-                  <LeaveJoinGroupButtonContainer userId={userId} groupId={data.id} />
-                </p>)}
+            {!isAdmin && !isSupervisor && (
+              <p className='text-center'>
+                <LeaveJoinGroupButtonContainer userId={userId} groupId={data.id} />
+              </p>)}
 
-              {(isAdmin || isSupervisor) && (
-                <p className='text-center'>
-                  <LinkContainer to={GROUP_EDIT_URI_FACTORY(data.id)}>
-                    <Button className='btn-flat'>
-                      <EditIcon /> <FormattedMessage id='app.group.edit' defaultMessage='Edit group settings' />
-                    </Button>
-                  </LinkContainer>
-                </p>
-              )}
+            {(isAdmin || isSupervisor) && (
+              <p className='text-center'>
+                <LinkContainer to={GROUP_EDIT_URI_FACTORY(data.id)}>
+                  <Button className='btn-flat'>
+                    <EditIcon /> <FormattedMessage id='app.group.edit' defaultMessage='Edit group settings' />
+                  </Button>
+                </LinkContainer>
+              </p>
+            )}
 
-              {isAdmin && (
-                <AdminsView
-                  group={data}
-                  supervisors={supervisors}
-                  addSubgroup={addSubgroup(data.instanceId)} />)}
+            {isAdmin && (
+              <AdminsView
+                group={data}
+                supervisors={supervisors}
+                addSubgroup={addSubgroup(data.instanceId)} />)}
 
-              {isSupervisor && (
-                <SupervisorsView
-                  group={data}
-                  stats={stats}
-                  students={students}
-                  statuses={statuses}
-                  assignments={assignments}
-                  assignFunc={this.createExercise} />)}
+            {isSupervisor && (
+              <SupervisorsView
+                group={data}
+                stats={stats}
+                students={students}
+                statuses={statuses}
+                assignments={allAssignments}
+                assignFunc={this.createExercise} />)}
 
-              {isStudent && (
-                <StudentsView
-                  group={data}
-                  students={students}
-                  stats={stats}
-                  statuses={statuses}
-                  assignments={assignments} />)}
-            </div>
-          )}
-        </ResourceRenderer>
-      </PageContent>
+            {isStudent && (
+              <StudentsView
+                group={data}
+                students={students}
+                stats={stats}
+                statuses={statuses}
+                assignments={publicAssignments} />)}
+          </div>
+        )}
+      </Page>
     );
   }
 }
@@ -210,7 +207,8 @@ Group.propTypes = {
   parentGroup: ImmutablePropTypes.map,
   students: PropTypes.array,
   supervisors: PropTypes.array,
-  assignments: ImmutablePropTypes.list,
+  allAssignments: ImmutablePropTypes.list,
+  publicAssignments: ImmutablePropTypes.list,
   groups: ImmutablePropTypes.map,
   isStudent: PropTypes.bool,
   isAdmin: PropTypes.bool,
@@ -256,7 +254,8 @@ const mapStateToProps = (
       ? groupSelector(groupData.parentGroupId)(state)
       : null,
     groups: groupsSelectors(state),
-    assignments: groupsAssignmentsSelector(groupId)(state),
+    publicAssignments: groupsAssignmentsSelector(groupId, 'public')(state),
+    allAssignments: groupsAssignmentsSelector(groupId, 'all')(state),
     stats: createGroupsStatsSelector(groupId)(state),
     statuses: getStatuses(groupId, userId)(state),
     students: readyUsers.filter(user => studentsIds.includes(user.id)),
