@@ -9,7 +9,8 @@ const UsersName = ({
   fullName,
   avatarUrl,
   size = 25,
-  large = false
+  large = false,
+  noLink
 }, {
   links: { USER_URI_FACTORY }
 }) => (
@@ -19,11 +20,14 @@ const UsersName = ({
     </span>
     <span className={styles.name} style={{
       lineHeight: `${size}px`,
-      fontSize: large ? (size / 2) : 'inherit'
+      fontSize: large ? (size / 2) : 'inherit',
+      marginLeft: large ? 10 : 5
     }}>
-      <Link to={USER_URI_FACTORY(id)}>
-        {fullName}
-      </Link>
+      {!noLink && (
+        <Link to={USER_URI_FACTORY(id)}>
+          {fullName}
+        </Link>)}
+      {noLink && <span>{fullName}</span>}
     </span>
   </span>
 );
@@ -33,7 +37,8 @@ UsersName.propTypes = {
   fullName: PropTypes.string.isRequired,
   avatarUrl: PropTypes.string.isRequired,
   size: PropTypes.number,
-  large: PropTypes.bool
+  large: PropTypes.bool,
+  noLink: PropTypes.bool
 };
 
 UsersName.contextTypes = {

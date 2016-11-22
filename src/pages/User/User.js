@@ -4,6 +4,7 @@ import { Set } from 'immutable';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import { Row, Col, Button } from 'react-bootstrap';
+import { Link } from 'react-router';
 import { LinkContainer } from 'react-router-bootstrap';
 
 import Page from '../../components/Page';
@@ -96,7 +97,7 @@ class User extends Component {
             <Row>
               <Col xs={12}>
                 <p>
-                  <UsersNameContainer userId={user.id} large />
+                  <UsersNameContainer userId={user.id} large noLink />
                 </p>
                 {user.id === loggedInUserId && (
                   <p>
@@ -128,7 +129,9 @@ class User extends Component {
                           {(statistics) => (
                             <Row>
                               <Col lg={4}>
-                                <UsersStats {...group} stats={usersStatistics(statistics)} />
+                                <Link to={GROUP_URI_FACTORY(group.id)}>
+                                  <UsersStats {...group} stats={usersStatistics(statistics)} />
+                                </Link>
                               </Col>
                               <Col lg={8}>
                                 <Box
@@ -168,7 +171,7 @@ class User extends Component {
               <FormattedMessage
                 id='app.user.noCommonGroups'
                 defaultMessage="You are not a supervisor of any group of which is {name} a member and so you don't see any of his results."
-                values={{ name: user.name.fullName }} />
+                values={{ name: user.fullName }} />
             </div>
           )}
 

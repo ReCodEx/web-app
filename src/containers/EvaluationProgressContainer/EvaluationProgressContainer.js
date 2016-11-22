@@ -30,12 +30,7 @@ class EvaluationProgressContainer extends Component {
   state = { realTimeProcessing: true };
   componentWillMount = () => this.init(this.props);
   componentWillReceiveProps = (props) => this.init(props);
-  componentWillUnmount = () => {
-    if (this.socket) {
-      this.socket.close();
-      this.socket = null;
-    }
-  };
+  componentWillUnmount = () => this.closeSocket();
 
   init = (props) => {
     const { monitor } = props;
@@ -115,7 +110,10 @@ class EvaluationProgressContainer extends Component {
   };
 
   closeSocket = () => {
-    this.socket.close();
+    if (this.socket) {
+      this.socket.close();
+      this.socket = null;
+    }
     this.isClosed = true;
 
     // fire a callback if any

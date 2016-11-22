@@ -4,7 +4,7 @@ import { FormattedMessage, FormattedNumber } from 'react-intl';
 import { Table, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import Icon from 'react-fontawesome';
 
-const getTickORCheckTableCell = isOK => (
+const tickOrCross = (isOK, ratio, tooltipId) => (
   <td className={
     classNames({
       'text-center': true,
@@ -12,25 +12,7 @@ const getTickORCheckTableCell = isOK => (
       'text-danger': !isOK
     })
   }>
-    <Icon name={isOK ? 'check' : 'times'} />
-  </td>
-);
-
-const getTickORCheckTableCellOverlay = (isOK, ratio, tooltipId) => (
-  <td className={
-    classNames({
-      'text-center': true,
-      'text-success': isOK,
-      'text-danger': !isOK
-    })
-  }>
-    <OverlayTrigger placement='top' overlay={
-      <Tooltip id={tooltipId}>
-        <FormattedMessage id='app.submissions.testResultsTable.ratioTooltip' defaultMessage='Ratio:' /> {(ratio * 100).toFixed(1)}%
-      </Tooltip>
-    }>
-      <Icon name={isOK ? 'check' : 'times'} />
-    </OverlayTrigger>
+    <Icon name={isOK ? 'check' : 'times'} /> {ratio && <small>(<FormattedNumber value={ratio} style='percent' minimumFractionDigits={1} maximumFactionDigits={3} />)</small>}
   </td>
 );
 
@@ -93,7 +75,7 @@ const TestResultsTable = ({
       memoryRatio
     }) => (
       <tr key={testName}>
-        {getTickORCheckTableCell(score === 1)}
+        {tickOrCross(score === 1)}
         <td>
           {testName}
         </td>
@@ -129,10 +111,9 @@ const TestResultsTable = ({
             </OverlayTrigger>
           )}
         </td>
-        {memoryRatio !== null ? getTickORCheckTableCellOverlay(memoryExceeded === false, memoryRatio, `memory-ratio-${id}`)
-          : getTickORCheckTableCell(memoryExceeded === false)}
-        {timeRatio !== null ? getTickORCheckTableCellOverlay(timeExceeded === false, timeRatio, `time-ratio-${id}`)
-          : getTickORCheckTableCell(timeExceeded === false)}
+
+        {tickOrCross(memoryExceeded === false, memoryRatio)}
+        {tickOrCross(timeExceeded === false, timeRatio)}
       </tr>
     ))}
     </tbody>

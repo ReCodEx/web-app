@@ -68,7 +68,6 @@ const reducer = handleActions(Object.assign({}, reduceActions, {
   [additionalActionTypes.CREATE_EXERCISE_PENDING]: (state) => state,
   [additionalActionTypes.CREATE_EXERCISE_FAILED]: (state) => state,
   [additionalActionTypes.CREATE_EXERCISE_FULFILLED]: reduceActions[actionTypes.FETCH_FULFILLED],
-
   [additionalActionTypes.UPDATE_EXERCISE_FULFILLED]: reduceActions[actionTypes.FETCH_FULFILLED]
 
 }), initialState);

@@ -30,7 +30,8 @@ class SubmissionDetail extends Component {
         files,
         evaluation
       },
-      assignment
+      assignment,
+      isSupervisor
     } = this.props;
     const { openFileId } = this.state;
 
@@ -53,7 +54,10 @@ class SubmissionDetail extends Component {
                 evaluation={evaluation}
                 submittedAt={submittedAt}
                 maxPoints={maxPoints} />
-              <BonusPointsContainer submissionId={id} evaluation={evaluation} />
+
+              {isSupervisor && (
+                <BonusPointsContainer submissionId={id} evaluation={evaluation} />
+              )}
               <TestResults evaluation={evaluation} />
             </Col>
           )}
@@ -104,7 +108,8 @@ SubmissionDetail.propTypes = {
     maxPoints: PropTypes.number.isRequired,
     files: PropTypes.array
   }).isRequired,
-  assignment: PropTypes.object.isRequired
+  assignment: PropTypes.object.isRequired,
+  isSupervisor: PropTypes.bool
 };
 
 SubmissionDetail.contextTypes = {

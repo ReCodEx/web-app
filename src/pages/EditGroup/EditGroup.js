@@ -85,6 +85,11 @@ export default connect(
     push: (url) => dispatch(push(url)),
     reset: () => dispatch(reset('editGroup')),
     loadAsync: () => dispatch(fetchGroupIfNeeded(groupId)),
-    editGroup: (data) => dispatch(editGroup(groupId, data))
+    editGroup: (data) => {
+      if (data.threshold === null) {
+        delete data.threshold;
+      }
+      return dispatch(editGroup(groupId, data));
+    }
   })
 )(EditGroup);

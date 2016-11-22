@@ -96,11 +96,13 @@ const validate = ({ name, description, threshold }) => {
     errors['description'] = <FormattedMessage id='app.createGroup.validation.emptyDescription' defaultMessage='Group description cannot be empty.' />;
   }
 
-  const numericThreshold = Number(threshold);
-  if (threshold !== Math.round(numericThreshold).toString()) {
-    errors['threshold'] = <FormattedMessage id='app.createGroup.validation.thresholdMustBeInteger' defaultMessage='Threshold must be an integer.' />;
-  } else if (numericThreshold < 0 || numericThreshold > 100) {
-    errors['threshold'] = <FormattedMessage id='app.createGroup.validation.thresholdBetweenZeroHundred' defaultMessage='Threshold must be an integer in between 0 and 100.' />;
+  if (threshold) {
+    const numericThreshold = Number(threshold);
+    if (threshold !== Math.round(numericThreshold).toString()) {
+      errors['threshold'] = <FormattedMessage id='app.createGroup.validation.thresholdMustBeInteger' defaultMessage='Threshold must be an integer.' />;
+    } else if (numericThreshold < 0 || numericThreshold > 100) {
+      errors['threshold'] = <FormattedMessage id='app.createGroup.validation.thresholdBetweenZeroHundred' defaultMessage='Threshold must be an integer in between 0 and 100.' />;
+    }
   }
 
   return errors;

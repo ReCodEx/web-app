@@ -1,8 +1,9 @@
 import React, { PropTypes } from 'react';
 import { Link } from 'react-router';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import { ListGroup, ListGroupItem } from 'react-bootstrap';
+import { Table } from 'react-bootstrap';
 import ResourceRenderer from '../../ResourceRenderer';
+import Icon from 'react-fontawesome';
 
 const GroupsList = ({
   groups = [],
@@ -13,13 +14,23 @@ const GroupsList = ({
 }) => (
   <ResourceRenderer resource={groups.toArray()}>
     {(...groups) => (
-      <ListGroup {...props}>
-        {groups.map(({ id, name }) => (
-            <ListGroupItem key={id}>
-              <Link to={GROUP_URI_FACTORY(id)}>{name}</Link> <span className='pull-right'>{renderButtons(id)}</span>
-            </ListGroupItem>
+      <Table hover {...props}>
+        <tbody>
+          {groups.map(({ id, name }) => (
+            <tr key={id}>
+              <td className='text-center'>
+                <Icon name='group' />
+              </td>
+              <td>
+                <Link to={GROUP_URI_FACTORY(id)}>{name}</Link>
+              </td>
+              <td className='text-right'>
+                {renderButtons(id)}
+              </td>
+            </tr>
           ))}
-      </ListGroup>
+        </tbody>
+      </Table>
     )}
   </ResourceRenderer>
 );

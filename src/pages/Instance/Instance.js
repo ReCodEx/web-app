@@ -59,19 +59,23 @@ class Instance extends Component {
         ]}>
         <ResourceRenderer resource={instance}>
           {data => (
-            <Row>
-              <Col sm={isAdmin ? 6 : 12}>
-                <InstanceDetail {...data} groups={groups} isMemberOf={isMemberOf} />
-              </Col>
+            <div>
+              <Row>
+                <Col sm={12}>
+                  <InstanceDetail {...data} groups={groups} isMemberOf={isMemberOf} />
+                </Col>
+              </Row>
 
               {isAdmin && (
-                <Col sm={6}>
-                  <CreateGroupForm
-                    onSubmit={createGroup}
-                    instanceId={instanceId} />
-                </Col>
+                <Row>
+                  <Col sm={6}>
+                    <CreateGroupForm
+                      onSubmit={createGroup}
+                      instanceId={instanceId} />
+                  </Col>
+                </Row>
               )}
-            </Row>
+            </div>
           )}
         </ResourceRenderer>
       </PageContent>

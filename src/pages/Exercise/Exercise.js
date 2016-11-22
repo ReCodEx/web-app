@@ -76,6 +76,19 @@ class Exercise extends Component {
         {exercise => (
           <div>
             <Row>
+              <Col sm={12}>
+                {isAuthorOfExercise(exercise.id) && (
+                  <p>
+                    <LinkContainer to={EXERCISE_EDIT_URI_FACTORY(exercise.id)}>
+                      <Button bsStyle='warning' className='btn-flat' bsSize='sm'>
+                        <EditIcon />&nbsp;<FormattedMessage id='app.exercise.editSettings' defaultMessage='Edit exercise settings' />
+                      </Button>
+                    </LinkContainer>
+                  </p>
+                )}
+              </Col>
+            </Row>
+            <Row>
               <Col md={6}>
                 <div>
                   {exercise.localizedAssignments.length > 0 && <LocalizedAssignments locales={exercise.localizedAssignments} />}
@@ -83,19 +96,6 @@ class Exercise extends Component {
               </Col>
               <Col md={6}>
                 <ExerciseDetail {...exercise} />
-              </Col>
-            </Row>
-            <Row>
-              <Col sm={12}>
-                {isAuthorOfExercise(exercise.id) && (
-                  <p className='text-center'>
-                    <LinkContainer to={EXERCISE_EDIT_URI_FACTORY(exercise.id)}>
-                      <Button bsStyle='warning' className='btn-flat'>
-                        <EditIcon /> <FormattedMessage id='app.exercise.editSettings' defaultMessage='Edit exercise settings' />
-                      </Button>
-                    </LinkContainer>
-                  </p>
-                )}
               </Col>
             </Row>
             <Row>

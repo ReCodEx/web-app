@@ -159,8 +159,21 @@ const reducer = handleActions(Object.assign({}, reduceActions, {
       return state;
     }
 
-    return state.updateIn([ 'resources', group.parentGroupId, 'data', 'childGroups' ], children => children.push(group.id));
+    return state.updateIn([ 'resources', group.parentGroupId, 'data', 'childGroups', 'all' ], children => children.push(group.id));
   },
+
+  [additionalActionTypes.UPDATE_GROUP_FULFILLED]:
+    (
+      state, {
+        payload: { parentGroupId, isPublic },
+        meta: { groupId, userId }
+      }
+    ) =>
+    state.hasIn(['resources', parentGroupId, 'data'])
+      ? state.updateIn(
+        ['resources', parentGroupId, 'data', 'childGroups', 'public'],
+        groups => isPublic ? groups.push(groupId).toSet().toList() : groups.filter(id => id !== groupId)
+      ) : state,
 
   [additionalActionTypes.JOIN_GROUP_PENDING]: (state, { payload, meta: { groupId, userId } }) =>
     state.hasIn(['resources', groupId, 'data'])
