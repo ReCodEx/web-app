@@ -16,25 +16,23 @@ import { fetchGroupsStatsIfNeeded } from '../../redux/modules/stats';
 
 class Dashboard extends Component {
 
-  componentWillMount = () => this.loadData(this.props);
+  componentWillMount = () => this.props.loadAsync(this.props.userId);
   componentWillReceiveProps = (newProps) => {
     if (this.props.userId !== newProps.userId) {
-      this.loadData(newProps);
+      newProps.loadAsync(newProps.userId);
     }
   };
 
-  loadData = ({
-    loadStats,
-    loadAssignments,
-    loadUsersGroups,
-    loadGroupsStats,
-    userId
-  }) =>
-    loadUsersGroups(userId)
-      .then(({ value: { student, supervisor } }) => Promise.all([
-        loadAssignments(student),
-        ...student.map(({ id }) => loadGroupsStats(id))
-      ]));
+  loadData = (params, dispatch, userId) =>
+    dispatch(fetchUsersGroups(userId))
+      .then(({ value: { student } }) => Promise.all(
+        student.map(
+          ({ id }) => Promise.all([
+            dispatch(fetchAssignmentsForGroup(id)),
+            dispatch(fetchGroupsStatsIfNeeded(id))
+          ])
+        )
+      ));
 
   render() {
     const {
@@ -92,8 +90,7 @@ Dashboard.propTypes = {
   groups: PropTypes.array,
   groupAssignments: PropTypes.func.isRequired,
   groupStatuses: PropTypes.func.isRequired,
-  loadAssignments: PropTypes.func.isRequired,
-  loadUsersGroups: PropTypes.func.isRequired
+  loadAsync: PropTypes.func.isRequired
 };
 
 Dashboard.contextTypes = {
@@ -114,8 +111,6 @@ export default connect(
     };
   },
   (dispatch) => ({
-    loadAssignments: (groups) => groups.map((group) => dispatch(fetchAssignmentsForGroup(group.id))),
-    loadUsersGroups: (userId) => dispatch(fetchUsersGroups(userId)),
-    loadGroupsStats: (groupId) => dispatch(fetchGroupsStatsIfNeeded(groupId))
+    loadAsync: (userId) => Dashboard.loadAsync({}, dispatch, userId),
   })
 )(Dashboard);

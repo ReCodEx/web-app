@@ -8,7 +8,7 @@ const FormBox = ({
   ...props
 }) => (
   <Form onSubmit={onSubmit}>
-    <Box {...props}>
+    <Box {...props} unlimitedHeight>
       <div>{children}</div>
     </Box>
   </Form>

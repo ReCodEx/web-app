@@ -36,6 +36,7 @@ const EditAssignmentForm = ({
     <FormBox
       title={<FormattedMessage id='app.editAssignmentForm.title' defaultMessage='Edit assignment {name}' values={{ name: assignment.name }} />}
       type={hasSucceeded ? 'success' : undefined}
+      unlimitedHeight
       footer={
         <div className='text-center'>
           <SubmitButton

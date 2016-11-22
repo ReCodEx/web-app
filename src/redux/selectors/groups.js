@@ -39,16 +39,16 @@ export const groupSelector = id =>
     (groups) => groups.get(id)
   );
 
-export const groupsAssignmentsIdsSelector = (id, type) =>
+export const groupsAssignmentsIdsSelector = (id, type = 'public') =>
   createSelector(
     groupSelector(id),
     (group) =>
       (group && isReady(group))
-        ? group.getIn(['data', 'assignments', type])
+        ? group.getIn(['data', 'assignments', type]) || List()
         : List()
   );
 
-export const groupsAssignmentsSelector = (id, type) =>
+export const groupsAssignmentsSelector = (id, type = 'public') =>
   createSelector(
     [ groupsAssignmentsIdsSelector(id, type), getAssignments ],
     (groupsAssignmentsIds, assignments) =>

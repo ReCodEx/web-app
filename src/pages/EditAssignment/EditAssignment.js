@@ -126,6 +126,7 @@ export default connect(
       // convert deadline times to timestamps
       data.firstDeadline = moment(data.firstDeadline).unix();
       data.secondDeadline = moment(data.secondDeadline).unix();
+      data.submissionsCountLimit = Number(data.submissionsCountLimit);
       return dispatch(editAssignment(assignmentId, data));
     },
     editLimits: (data) => dispatch(editLimits(assignmentId, data))

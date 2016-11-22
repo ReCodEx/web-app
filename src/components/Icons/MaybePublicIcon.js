@@ -1,8 +1,7 @@
 import React, { PropTypes } from 'react';
 import { FormattedMessage } from 'react-intl';
+import Icon from 'react-fontawesome';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
-import FailedIcon from './FailedIcon';
-import SuccessIcon from './SuccessIcon';
 
 const MaybePublicIcon = ({ id, isPublic, ...props }) => (
   <OverlayTrigger placement='right' overlay={(
@@ -13,8 +12,8 @@ const MaybePublicIcon = ({ id, isPublic, ...props }) => (
       </Tooltip>
     )}>
     {isPublic
-      ? <SuccessIcon {...props} />
-      : <FailedIcon {...props} />}
+      ? <Icon {...props} name='circle' className='text-success' />
+      : <Icon {...props} name='ban' />}
   </OverlayTrigger>
 );
 

@@ -93,7 +93,7 @@ const AssignmentDetails = ({
 
 AssignmentDetails.propTypes = {
   isOpen: PropTypes.bool,
-  submissionsCountLimit: PropTypes.number.isRequired,
+  submissionsCountLimit: PropTypes.any.isRequired,
   firstDeadline: PropTypes.number.isRequired,
   secondDeadline: PropTypes.number,
   allowSecondDeadline: PropTypes.bool.isRequired,

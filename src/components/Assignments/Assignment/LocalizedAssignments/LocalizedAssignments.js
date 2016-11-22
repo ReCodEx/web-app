@@ -16,8 +16,8 @@ const LocalizedAssignments = ({
     }
     className='nav-tabs-custom'
     id='localized-assignments'>
-    {locales.map(({ locale, name, description }) => (
-      <Tab key={locale} eventKey={locale} title={name}>
+    {locales.map(({ locale, name, description }, i) => (
+      <Tab key={i} eventKey={locale} title={name}>
         <ReactMarkdown source={description} />
       </Tab>
     ))}
