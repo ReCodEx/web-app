@@ -62,7 +62,7 @@ StudentsView.propTypes = {
   assignments: ImmutablePropTypes.list.isRequired,
   stats: PropTypes.object,
   students: PropTypes.array.isRequired,
-  statuses: PropTypes.object
+  statuses: PropTypes.oneOfType([ PropTypes.object, PropTypes.array ])
 };
 
 export default StudentsView;

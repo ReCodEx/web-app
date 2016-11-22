@@ -24,13 +24,14 @@ class UsersNameContainer extends Component {
   }
 
   render() {
-    const { user } = this.props;
+    const { user, large } = this.props;
+    const size = large ? 45 : 22;
     return (
       <ResourceRenderer
         resource={user}
-        loading={<LoadingUsersName size={22} />}
-        failed={<FailedUsersName size={22} />}>
-        {(user) => <UsersName {...user} size={22} />}
+        loading={<LoadingUsersName size={size} />}
+        failed={<FailedUsersName size={size} />}>
+        {(user) => <UsersName {...user} size={size} />}
       </ResourceRenderer>
     );
   }
@@ -39,6 +40,7 @@ class UsersNameContainer extends Component {
 
 UsersNameContainer.propTypes = {
   userId: PropTypes.string.isRequired,
+  large: PropTypes.bool,
   user: ImmutablePropTypes.map
 };
 

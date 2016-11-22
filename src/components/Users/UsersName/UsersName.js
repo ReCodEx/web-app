@@ -8,27 +8,32 @@ const UsersName = ({
   id,
   fullName,
   avatarUrl,
-  size = 25
+  size = 25,
+  large = false
 }, {
   links: { USER_URI_FACTORY }
 }) => (
-  <div>
-    <div className={styles.avatar}>
+  <span className={styles.wrapper}>
+    <span className={styles.avatar}>
       <Avatar size={size} src={avatarUrl} title={fullName} />
-    </div>
-    <div className={styles.name} style={{ lineHeight: `${size}px` }}>
+    </span>
+    <span className={styles.name} style={{
+      lineHeight: `${size}px`,
+      fontSize: large ? (size / 2) : 'inherit'
+    }}>
       <Link to={USER_URI_FACTORY(id)}>
         {fullName}
       </Link>
-    </div>
-  </div>
+    </span>
+  </span>
 );
 
 UsersName.propTypes = {
   id: PropTypes.string.isRequired,
   fullName: PropTypes.string.isRequired,
   avatarUrl: PropTypes.string.isRequired,
-  size: PropTypes.number
+  size: PropTypes.number,
+  large: PropTypes.bool
 };
 
 UsersName.contextTypes = {

@@ -2,7 +2,6 @@ import React, { PropTypes } from 'react';
 import Helmet from 'react-helmet';
 import { injectIntl, intlShape, FormattedMessage } from 'react-intl';
 import Breadcrumbs from '../AdminLTE/Breadcrumbs';
-import ResourceRenderer from '../ResourceRenderer';
 
 const getMessage = (item, formatMessage) =>
   !item

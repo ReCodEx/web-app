@@ -7,6 +7,7 @@ const InfoBox = ({
   title,
   value,
   icon = 'info',
+  spin = false,
   progress,
   description = '',
   color = 'green'
@@ -16,7 +17,7 @@ const InfoBox = ({
     [`bg-${color}`]: true
   })}>
     <span className='info-box-icon'>
-      <Icon name={icon} />
+      <Icon name={icon} spin={spin} />
     </span>
     <div className='info-box-content'>
       <span className='info-box-text'>{title}</span>
@@ -43,6 +44,7 @@ InfoBox.propTypes = {
     PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) })
   ]),
   icon: PropTypes.string,
+  spin: PropTypes.bool,
   description: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) })

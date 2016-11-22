@@ -1,7 +1,5 @@
-import React, { PropTypes } from 'react';
-import { FormattedMessage, FormattedDate, FormattedTime } from 'react-intl';
-import { Grid, Row, Col, Table } from 'react-bootstrap';
-import ReactMarkdown from 'react-markdown';
+import React from 'react';
+import { FormattedMessage } from 'react-intl';
 
 import Box from '../../../AdminLTE/Box';
 import { LoadingIcon } from '../../../Icons';

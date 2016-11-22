@@ -45,7 +45,7 @@ const AssignmentsTable = ({
 AssignmentsTable.propTypes = {
   assignments: ImmutablePropTypes.list.isRequired,
   showGroup: PropTypes.bool,
-  statuses: PropTypes.object
+  statuses: PropTypes.oneOfType([ PropTypes.object, PropTypes.array ])
 };
 
 export default AssignmentsTable;

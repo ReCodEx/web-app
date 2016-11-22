@@ -7,14 +7,14 @@ import styles from './usersName.less';
 const FailedUsersName = ({
   size = 25
 }) => (
-  <div>
-    <div className={styles.avatar}>
+  <span className={styles.wrapper}>
+    <span className={styles.avatar}>
       <FailedAvatar size={size} />
-    </div>
-    <div className={styles.name} style={{ lineHeight: `${size}px` }}>
+    </span>
+    <span className={styles.name} style={{ lineHeight: `${size}px` }}>
       <FormattedMessage id='app.usersName.loading' defaultMessage='Loading ...' />
-    </div>
-  </div>
+    </span>
+  </span>
 );
 
 FailedUsersName.propTypes = {

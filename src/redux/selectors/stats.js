@@ -24,16 +24,14 @@ const getGroupsStatsData = groupId =>
     getJsData
   );
 
-export const getStatuses = (groupId, userId) =>
+export const getUsersStatistics = (groupId, userId) =>
   createSelector(
     getGroupsStatsData(groupId),
-    groupsStats => {
-      const stats = groupsStats !== null ? groupsStats.find(stats => stats.userId === userId) || {} : {};
-      let { statuses = {} } = stats;
-      if (statuses.length === 0) {
-        statuses = {};
-      }
+    (group) => group !== null ? group.find(stats => stats.userId === userId) : null
+  );
 
-      return statuses;
-    },
+export const getStatuses = (groupId, userId) =>
+  createSelector(
+    getUsersStatistics(groupId, userId),
+    (stats) => stats ? stats.statuses : {}
   );

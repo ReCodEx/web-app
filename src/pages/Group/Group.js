@@ -216,7 +216,7 @@ Group.propTypes = {
   addSubgroup: PropTypes.func,
   loadAsync: PropTypes.func,
   stats: PropTypes.object,
-  statuses: PropTypes.object,
+  statuses: PropTypes.oneOfType([ PropTypes.object, PropTypes.array ]),
   assignExercise: PropTypes.func.isRequired,
   push: PropTypes.func.isRequired
 };
