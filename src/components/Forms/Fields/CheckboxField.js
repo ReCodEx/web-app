@@ -21,8 +21,13 @@ const CheckboxField = ({
 }) => {
   const Component = onOff ? OnOffCheckbox : Checkbox;
   return (
-    <FormGroup validationState={touched && error ? 'error' : undefined}>
-      <Component {...props} {...input} controlId={input.name} checked={input.value}>
+    <FormGroup
+        validationState={touched && error ? 'error' : undefined}
+        controlId={input.name}>
+      <Component
+        {...props}
+        {...input}
+        checked={input.value}>
         {label}
       </Component>
       {touched && error && <HelpBlock>{error}</HelpBlock>}

@@ -60,16 +60,17 @@ class Instance extends Component {
         <ResourceRenderer resource={instance}>
           {data => (
             <Row>
-              <Col sm={6}>
+              <Col sm={isAdmin ? 6 : 12}>
                 <InstanceDetail {...data} groups={groups} isMemberOf={isMemberOf} />
               </Col>
 
-              <Col sm={6}>
-                {isAdmin &&
+              {isAdmin && (
+                <Col sm={6}>
                   <CreateGroupForm
                     onSubmit={createGroup}
-                    instanceId={instanceId} />}
-              </Col>
+                    instanceId={instanceId} />
+                </Col>
+              )}
             </Row>
           )}
         </ResourceRenderer>

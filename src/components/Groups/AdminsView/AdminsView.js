@@ -1,17 +1,14 @@
 import React, { PropTypes } from 'react';
-import ImmutablePropTypes from 'react-immutable-proptypes';
 import { FormattedMessage } from 'react-intl';
 import { Row, Col } from 'react-bootstrap';
 
 import Box from '../../AdminLTE/Box';
 import AddSupervisor from '../AddSupervisor';
-import SupervisorsList from '../../Users/SupervisorsList';
 import CreateGroupForm from '../../Forms/CreateGroupForm'; // @todo replace with it's' container
 
 const AdminsView = ({
   group,
-  addSubgroup,
-  supervisors
+  addSubgroup
 }) => (
   <div>
     <Row>
@@ -25,25 +22,13 @@ const AdminsView = ({
       </Col>
     </Row>
     <Row>
-      <Col sm={6}>
-        <Box
-          title={<FormattedMessage id='app.group.adminsView.supervisors' defaultMessage='Supervisors' />}
-          collapsable
-          noPadding
-          isOpen>
-          <SupervisorsList
-            users={supervisors.toJS()}
-            isLoaded={supervisors.size === group.supervisors.length}
-            isAdmin={true}
-            groupId={group.id}
-            fill />
-        </Box>
+      <Col md={6}>
         <Box
           title={<FormattedMessage id='app.group.adminsView.addSupervisor' defaultMessage='Add supervisor' />}>
           <AddSupervisor instanceId={group.instanceId} groupId={group.id} />
         </Box>
       </Col>
-      <Col sm={6}>
+      <Col md={6}>
         <CreateGroupForm
           title={<FormattedMessage id='app.group.adminsView.addSubgroup' defaultMessage='Add subgroup' />}
           onSubmit={addSubgroup}
@@ -57,8 +42,7 @@ const AdminsView = ({
 
 AdminsView.propTypes = {
   group: PropTypes.object.isRequired,
-  addSubgroup: PropTypes.func.isRequired,
-  supervisors: ImmutablePropTypes.list
+  addSubgroup: PropTypes.func.isRequired
 };
 
 export default AdminsView;

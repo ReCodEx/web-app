@@ -85,7 +85,7 @@ EditGroupForm.propTypes = {
   invalid: PropTypes.bool
 };
 
-const validate = ({ name, description }) => {
+const validate = ({ name, description, threshold }) => {
   const errors = {};
 
   if (!name || name.length === 0) {
@@ -95,6 +95,14 @@ const validate = ({ name, description }) => {
   if (!description || description.length === 0) {
     errors['description'] = <FormattedMessage id='app.createGroup.validation.emptyDescription' defaultMessage='Group description cannot be empty.' />;
   }
+
+  const numericThreshold = Number(threshold);
+  if (threshold !== Math.round(numericThreshold).toString()) {
+    errors['threshold'] = <FormattedMessage id='app.createGroup.validation.thresholdMustBeInteger' defaultMessage='Threshold must be an integer.' />;
+  } else if (numericThreshold < 0 || numericThreshold > 100) {
+    errors['threshold'] = <FormattedMessage id='app.createGroup.validation.thresholdBetweenZeroHundred' defaultMessage='Threshold must be an integer in between 0 and 100.' />;
+  }
+
   return errors;
 };
 

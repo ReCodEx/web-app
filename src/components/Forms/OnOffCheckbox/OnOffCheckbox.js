@@ -10,21 +10,21 @@ import './OnOffCheckbox.css'; // eslint-disable-line import/no-deprecated
 
 const OnOffCheckbox = ({
   children,
-  controlId,
+  name,
   className,
   disabled,
   value,
   ...props
 }) => (
   <ControlLabel
-    htmlFor={controlId}
+    htmlFor={name}
     className={classNames({
       [className]: className && className.length > 0,
       [styles.labelDisabled]: disabled,
       [styles.label]: !disabled
     })}>
     <span className={styles.inputWrapper}>
-      <Toggle {...props} id={controlId} value={value ? 'yes' : 'no'} disabled={disabled} />
+      <Toggle {...props} name={name} id={name} value={value ? 'yes' : 'no'} disabled={disabled} />
     </span>
     <span className={styles.labelText}>
       {children}
@@ -36,7 +36,7 @@ OnOffCheckbox.propTypes = {
   value: PropTypes.bool,
   children: PropTypes.any,
   disabled: PropTypes.bool,
-  controlId: PropTypes.any,
+  name: PropTypes.string,
   className: PropTypes.string
 };
 

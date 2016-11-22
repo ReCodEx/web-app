@@ -37,7 +37,7 @@ class MarkdownTextAreaField extends Component {
         <SourceCodeField {...this.props} mode='markdown' />
         <Row>
           <Col sm={4}>
-            <OnOffCheckbox controlId={`${name}.togglePreview`} checked={showPreview} onChange={() => this.toggleShowPreview()}>
+            <OnOffCheckbox name={`${name}.togglePreview`} checked={showPreview} onChange={() => this.toggleShowPreview()}>
               <FormattedMessage id='app.markdownTextArea.showPreview' defaultMessage='Preview' />
             </OnOffCheckbox>
           </Col>

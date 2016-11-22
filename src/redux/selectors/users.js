@@ -19,6 +19,12 @@ export const getUser = (userId) =>
     users => users.get(userId)
   );
 
+export const isSuperAdmin = (userId) =>
+  createSelector(
+    getUser(userId),
+    user => user.getIn(['data', 'role']) === 'superadmin'
+  );
+
 export const getUserSettings = (userId) =>
   createSelector(
     getUser(userId),
@@ -62,8 +68,10 @@ export const isSupervisorOf = (userId, groupId) =>
 
 export const isAdminOf = (userId, groupId) =>
   createSelector(
-    groupSelector(groupId),
-    group => group && isReady(group) && group.getIn(['data', 'adminId']) === userId
+    [ groupSelector(groupId), isSuperAdmin(userId) ],
+    (group, isSuperAdmin) =>
+      (isSuperAdmin === true) ||
+      (group && isReady(group) && group.getIn(['data', 'adminId']) === userId)
   );
 
 export const isMemberOf = (userId, groupId) =>

@@ -90,7 +90,7 @@ SourceCodeField.propTypes = {
   mode: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   children: PropTypes.any,
-  meta: PropTypes.shape({ error: PropTypes.string, touched: PropTypes.bool }),
+  meta: PropTypes.shape({ error: PropTypes.any, touched: PropTypes.bool }),
   tabIndex: PropTypes.number,
   type: PropTypes.string,
   label: PropTypes.oneOfType([
