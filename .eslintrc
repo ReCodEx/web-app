@@ -19,6 +19,7 @@
     "import/no-unresolved": 2,
     "import/no-named-as-default": 0,
     "react/no-did-update-set-state": 0,
+    "react/display-name": 0,
     "indent": [2, 2, {"SwitchCase": 1}],
     "no-console": 1,
     "no-unused-vars": 2,

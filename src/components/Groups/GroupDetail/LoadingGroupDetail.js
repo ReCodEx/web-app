@@ -1,13 +1,9 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
-import { Row, Col } from 'react-bootstrap';
 import { LoadingIcon } from '../../Icons';
 import Box from '../../AdminLTE/Box';
 
-const LoadingGroupDetail = ({
-  group,
-  assignments
-}) => (
+const LoadingGroupDetail = () => (
   <Box
     noPadding={false}
     title={(

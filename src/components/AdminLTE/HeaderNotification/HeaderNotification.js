@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import { Tooltip, OverlayTrigger } from 'react-bootstrap';
-import { FormattedMessage, FormattedDate, FormattedTime } from 'react-intl';
+import { FormattedDate, FormattedTime } from 'react-intl';
 import Icon from 'react-fontawesome';
 
 const HeaderNotification = ({
@@ -31,6 +31,10 @@ const HeaderNotification = ({
 );
 
 HeaderNotification.propTypes = {
+  id: PropTypes.string.isRequired,
+  successful: PropTypes.bool,
+  msg: PropTypes.string.isRequired,
+  time: PropTypes.number.isRequired
 };
 
 export default HeaderNotification;

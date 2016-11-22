@@ -13,7 +13,7 @@
     "build:server": "webpack -p --config config/webpack.server.js",
     "build:client": "webpack -p --config config/webpack.config.js",
     "build": "npm run clean && npm run build:server && npm run build:client",
-    "lint": "eslint .",
+    "lint": "eslint src",
     "test": "mocha",
     "test:watch": "npm test -- --watch --reporter nyan",
     "coverage": "babel-node ./node_modules/isparta/bin/isparta cover --root src --report text --report html ./node_modules/mocha/bin/_mocha -- --reporter dot ",

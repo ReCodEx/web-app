@@ -1,7 +1,7 @@
 import { canUseDOM } from 'exenv';
 
-import messagesCs from './cs';
-import messagesEn from './en';
+import messagesCs from './cs'; // eslint-disable-line
+import messagesEn from './en'; // eslint-disable-line
 
 import en from 'react-intl/locale-data/en';
 import cs from 'react-intl/locale-data/cs';

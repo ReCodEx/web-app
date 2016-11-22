@@ -2,10 +2,7 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { WarningIcon } from '../../Icons';
 
-const FailedExerciseDetail = ({
-  group,
-  assignments
-}) => (
+const FailedExerciseDetail = () => (
   <div>
     <p>
       <WarningIcon />{' '}

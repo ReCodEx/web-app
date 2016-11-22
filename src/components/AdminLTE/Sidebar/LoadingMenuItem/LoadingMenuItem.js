@@ -1,5 +1,5 @@
 import React from 'react';
-import { LoginIcon } from '../../../Icons';
+import { LoadingIcon } from '../../../Icons';
 
 const LoadingMenuItem = () => (
   <li>

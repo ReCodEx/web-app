@@ -51,7 +51,11 @@ const EditExerciseRuntimeConfigsForm = ({
 EditExerciseRuntimeConfigsForm.propTypes = {
   initialValues: PropTypes.object.isRequired,
   handleSubmit: PropTypes.func.isRequired,
-  runtimeEnvironments: PropTypes.object.isRequired
+  runtimeEnvironments: PropTypes.object.isRequired,
+  submitting: PropTypes.bool,
+  submitFailed: PropTypes.bool,
+  submitSucceeded: PropTypes.bool,
+  invalid: PropTypes.bool
 };
 
 const validate = ({ runtimeConfigs }) => {

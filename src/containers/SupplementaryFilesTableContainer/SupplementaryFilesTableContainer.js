@@ -10,7 +10,6 @@ import { createGetSupplementaryFilesForExercise } from '../../redux/selectors/su
 import { reset } from '../../redux/modules/upload';
 import { createGetUploadedFiles, createAllUploaded } from '../../redux/selectors/upload';
 
-
 class SupplementaryFilesTableContainer extends Component {
 
   static getUploadId = (exerciseId) => `supplementary-files-${exerciseId}`;

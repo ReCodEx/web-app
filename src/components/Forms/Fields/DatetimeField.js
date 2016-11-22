@@ -5,7 +5,6 @@ import 'react-datetime/css/react-datetime.css';
 
 import {
   FormGroup,
-  FormControl,
   ControlLabel,
   HelpBlock
 } from 'react-bootstrap';
@@ -29,11 +28,9 @@ class DatetimeField extends Component {
       input,
       meta: {
         touched,
-        visited,
         error
       },
       disabled,
-      defaultValue = '',
       label,
       ...props
     } = this.props;
@@ -62,7 +59,18 @@ DatetimeField.propTypes = {
   label: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) })
-  ]).isRequired
+  ]).isRequired,
+  input: PropTypes.shape({
+    value: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.number
+    ]).isRequired
+  }).isRequired,
+  meta: PropTypes.shape({
+    touched: PropTypes.bool,
+    error: PropTypes.any
+  }).isRequired,
+  disabled: PropTypes.bool
 };
 
 export default DatetimeField;

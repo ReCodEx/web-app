@@ -7,7 +7,7 @@ const Points = ({
   bonusPoints
 }) => (
   <span>
-    {points}{bonusPoints != 0 && <BonusPoints bonus={bonusPoints} />}{'/'}{maxPoints}
+    {points}{bonusPoints !== 0 && <BonusPoints bonus={bonusPoints} />}{'/'}{maxPoints}
   </span>
 );
 

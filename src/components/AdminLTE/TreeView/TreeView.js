@@ -10,6 +10,7 @@ const TreeView = ({
 );
 
 TreeView.propTypes = {
+  children: PropTypes.any.isRequired
 };
 
 export default TreeView;

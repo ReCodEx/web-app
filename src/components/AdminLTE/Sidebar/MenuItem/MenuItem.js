@@ -45,7 +45,9 @@ MenuItem.propTypes = {
   icon: PropTypes.string,
   currentPath: PropTypes.string,
   notificationsCount: PropTypes.number,
-  link: PropTypes.string
+  link: PropTypes.string,
+  inNewTab: PropTypes.bool,
+  onIsActive: PropTypes.func
 };
 
 MenuItem.contextTypes = {

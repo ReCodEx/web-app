@@ -1,4 +1,4 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
 import { ListGroupItem } from 'react-bootstrap';
 import { LoadingAvatar } from '../../AdminLTE/Avatar';
 

@@ -2,8 +2,6 @@ import React, { Component, PropTypes } from 'react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import classNames from 'classnames';
 import Icon from 'react-fontawesome';
-import Collapse from 'react-collapse';
-import { Link } from 'react-router';
 import MenuItem from '../MenuItem';
 import LoadingMenuItem from '../LoadingMenuItem';
 import { isLoading } from '../../../../redux/helpers/resourceManager';
@@ -37,7 +35,6 @@ class MenuGroup extends Component {
 
   render() {
     const { open } = this.state;
-    const { isActive } = this.context;
     const {
       title,
       icon = 'th',
@@ -102,7 +99,9 @@ MenuGroup.propTypes = {
   link: PropTypes.string,
   items: ImmutablePropTypes.list,
   currentPath: PropTypes.string,
-  forceOpen: PropTypes.bool
+  forceOpen: PropTypes.bool,
+  createLink: PropTypes.func.isRequired,
+  notifications: PropTypes.object
 };
 
 MenuGroup.contextTypes = {

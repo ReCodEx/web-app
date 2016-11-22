@@ -52,6 +52,7 @@ LoginCASForm.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
   submitFailed: PropTypes.bool,
   submitting: PropTypes.bool,
+  hasSucceeded: PropTypes.bool,
   invalid: PropTypes.bool
 };
 

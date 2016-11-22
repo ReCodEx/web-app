@@ -1,13 +1,11 @@
 import React from 'react';
+import { FormattedMessage } from 'react-intl';
 import { WarningIcon } from '../../Icons';
 
-const FailedGroupDetail = ({
-  group,
-  assignments
-}) => (
+const FailedGroupDetail = () => (
   <div>
     <p>
-      <WarningIcon /> Chyba načítání dat. Popis této skupiny se nepodařilo načíst. Ujistěte se, že jste připojen(a) k Internetu a opakujte prosíme akci o chvíli později.
+      <WarningIcon /> <FormattedMessage id='app.failedGroupDetail.msg' defaultMessage='Cannot load group detail. Please try again later.' />
     </p>
   </div>
 );

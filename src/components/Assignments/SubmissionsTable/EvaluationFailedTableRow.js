@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import { FormattedNumber, FormattedDate, FormattedTime, FormattedMessage } from 'react-intl';
+import { FormattedDate, FormattedTime, FormattedMessage } from 'react-intl';
 import { Link } from 'react-router';
 import AssignmentStatusIcon from '../Assignment/AssignmentStatusIcon';
 
