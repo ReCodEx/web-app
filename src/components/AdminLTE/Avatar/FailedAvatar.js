@@ -16,8 +16,9 @@ const FailedAvatar = ({
     borderStyle: 'solid',
     borderWidth,
     borderColor: !light ? 'transparent' : 'gray',
-    lineHeight: `${size}px`,
-    borderRadius: Math.ceil(size / 2)
+    lineHeight: `${size - 2 * borderWidth}px`,
+    borderRadius: Math.ceil(size / 2),
+    fontSize: Math.floor(size / 2)
   }}>
     <FailedIcon />
   </div>

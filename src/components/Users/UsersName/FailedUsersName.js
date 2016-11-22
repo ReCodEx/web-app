@@ -1,21 +1,18 @@
 import React, { PropTypes } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { FailedAvatar } from '../../AdminLTE/Avatar';
-import { Link } from 'react-router';
+
+import styles from './usersName.less';
 
 const FailedUsersName = ({
   size = 25
 }) => (
-  <div className='user-panel'>
-    <div className='pull-left image'>
+  <div>
+    <div className={styles.avatar}>
       <FailedAvatar size={size} />
     </div>
-    <div className='pull-left info'>
-      <p>
-        <Link to='#'>
-          <FormattedMessage id='app.usersName.loading' defaultMessage='Loading ...' />
-        </Link>
-      </p>
+    <div className={styles.name} style={{ lineHeight: `${size}px` }}>
+      <FormattedMessage id='app.usersName.loading' defaultMessage='Loading ...' />
     </div>
   </div>
 );
