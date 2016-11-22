@@ -14,6 +14,7 @@ const GroupDetail = ({
     name,
     description,
     threshold,
+    parentGroupId,
     isPublic = false,
     childGroups,
     ...group
@@ -51,7 +52,7 @@ const GroupDetail = ({
       </Col>
     </Row>
     <Row>
-      <Col md={childGroups.length === 0 ? 12 : 8}>
+      <Col md={6}>
         <Box
           noPadding
           collapsable
@@ -63,13 +64,11 @@ const GroupDetail = ({
             isLoaded={supervisors.length === group.supervisors.length} />
         </Box>
       </Col>
-      {childGroups.length > 0 && (
-        <Col md={4}>
-          <Box title={<FormattedMessage id='app.groupDetail.groupsTitle' defaultMessage='Groups hierarchy' />} noPadding>
-            <GroupTree id={id} groups={groups} />
-          </Box>
-        </Col>
-      )}
+      <Col md={6}>
+        <Box title={<FormattedMessage id='app.groupDetail.groupsTitle' defaultMessage='Groups hierarchy' />} noPadding>
+          <GroupTree id={parentGroupId || id} currentGroupId={id} groups={groups} isOpen />
+        </Box>
+      </Col>
     </Row>
   </div>
 );
@@ -79,7 +78,11 @@ GroupDetail.propTypes = {
     id: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
     description: PropTypes.string.isRequired,
-    childGroups: PropTypes.array,
+    parentGroupId: PropTypes.string,
+    childGroups: PropTypes.shape({
+      all: PropTypes.array,
+      public: PropTypes.array.isRequired
+    }),
     threshold: PropTypes.number,
     isPublic: PropTypes.bool,
     supervisors: PropTypes.array.isRequired

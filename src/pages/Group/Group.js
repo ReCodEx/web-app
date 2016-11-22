@@ -160,7 +160,7 @@ class Group extends Component {
                 <LeaveJoinGroupButtonContainer userId={userId} groupId={data.id} />
               </p>)}
 
-            {(isAdmin || isSupervisor) && (
+            {isAdmin && (
               <p className='text-center'>
                 <LinkContainer to={GROUP_EDIT_URI_FACTORY(data.id)}>
                   <Button className='btn-flat'>

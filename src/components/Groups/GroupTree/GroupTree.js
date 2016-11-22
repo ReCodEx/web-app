@@ -8,7 +8,7 @@ import { isReady, getJsData } from '../../../redux/helpers/resourceManager';
 
 class GroupTree extends Component {
 
-  renderLoading = level => (
+  renderLoading = (level) => (
     <TreeView>
       <TreeViewItem
         level={level}
@@ -17,7 +17,7 @@ class GroupTree extends Component {
     </TreeView>
   );
 
-  renderButtons = link => (
+  renderButtons = (link) => (
     <ButtonGroup>
       <LinkContainer to={link}>
         <Button bsStyle='primary' bsSize='xs' className='btn-flat'>
@@ -32,7 +32,9 @@ class GroupTree extends Component {
       id,
       level = 0,
       isOpen,
-      groups
+      isPublic = true,
+      groups,
+      currentGroupId = null
     } = this.props;
 
     const {
@@ -41,19 +43,31 @@ class GroupTree extends Component {
 
     const group = groups.get(id);
     if (!group || !isReady(group)) {
-      return this.renderLoading(level);
+      return isPublic ? this.renderLoading(level) : null;
     }
 
-    const { name, childGroups } = getJsData(group);
+    const {
+      name,
+      childGroups: {
+        all: allChildGroups,
+        public: publicChildGroups
+      }
+    } = getJsData(group);
+
     return (
       <TreeView>
         <TreeViewItem
           title={name}
           level={level}
-          isOpen={isOpen}
-          actions={this.renderButtons(GROUP_URI_FACTORY(id))}>
-          {childGroups.map(id =>
-            <GroupTree {...this.props} key={id} id={id} level={level + 1} />)}
+          isOpen={currentGroupId === id || isOpen}
+          actions={currentGroupId !== id ? this.renderButtons(GROUP_URI_FACTORY(id)) : undefined}>
+          {allChildGroups.map(id =>
+            <GroupTree
+              {...this.props}
+              key={id}
+              id={id}
+              level={level + 1}
+              isPublic={publicChildGroups.indexOf(id) >= 0} />)}
         </TreeViewItem>
       </TreeView>
     );
@@ -65,7 +79,9 @@ GroupTree.propTypes = {
   id: PropTypes.string.isRequired,
   groups: PropTypes.object.isRequired,
   level: PropTypes.number,
-  isOpen: PropTypes.bool
+  isOpen: PropTypes.bool,
+  isPublic: PropTypes.bool,
+  currentGroupId: PropTypes.string
 };
 
 GroupTree.contextTypes = {
