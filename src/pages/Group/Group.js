@@ -155,7 +155,7 @@ class Group extends Component {
               isAdmin={isAdmin}
               groups={groups} />
 
-            {!isAdmin && !isSupervisor && (
+            {!isAdmin && !isSupervisor && data.isPublic && (
               <p className='text-center'>
                 <LeaveJoinGroupButtonContainer userId={userId} groupId={data.id} />
               </p>)}

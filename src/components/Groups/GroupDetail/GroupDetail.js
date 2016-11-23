@@ -42,7 +42,7 @@ const GroupDetail = ({
                     <td><pre><code>{externalId}</code></pre></td>
                   </tr>)}
                 <tr>
-                  <th><FormattedMessage id='app.groupDetail.isPublic' defaultMessage='Is public:' /></th>
+                  <th><FormattedMessage id='app.groupDetail.isPublic' defaultMessage='Students can join this group themselves:' /></th>
                   <td><MaybeSucceededIcon success={isPublic} /></td>
                 </tr>
                 {threshold !== null && (
