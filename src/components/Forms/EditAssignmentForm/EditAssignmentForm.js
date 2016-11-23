@@ -78,7 +78,7 @@ const EditAssignmentForm = ({
         <FormattedHTMLMessage
           id='app.editAssignmentForm.moreAboutScoreConfig'
           defaultMessage="Read more about <a href='https://github.com/ReCodEx/wiki/wiki/Assignments#scoring'>score configuration</a> syntax." />
-        </HelpBlock>
+      </HelpBlock>
 
       <Field
         name='firstDeadline'
