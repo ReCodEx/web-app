@@ -12,7 +12,7 @@ const tickOrCross = (isOK, ratio, tooltipId) => (
       'text-danger': !isOK
     })
   }>
-    <Icon name={isOK ? 'check' : 'times'} /> {ratio && <small>(<FormattedNumber value={ratio} style='percent' minimumFractionDigits={1} maximumFactionDigits={3} />)</small>}
+    <Icon name={isOK ? 'check' : 'times'} /> {ratio !== undefined && <small>(<FormattedNumber value={ratio} style='percent' minimumFractionDigits={1} maximumFactionDigits={3} />)</small>}
   </td>
 );
 
