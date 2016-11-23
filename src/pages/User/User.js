@@ -149,6 +149,7 @@ class User extends Component {
                                     </p>
                                   )}>
                                   <AssignmentsTable
+                                  userId={user.id}
                                     assignments={groupAssignments(group.id)}
                                     showGroup={false}
                                     statuses={usersStatistics(statistics).statuses} />

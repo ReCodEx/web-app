@@ -16,6 +16,7 @@ import { isStudentOf, isSupervisorOf } from '../../redux/selectors/users';
 
 import PageContent from '../../components/PageContent';
 import ResourceRenderer from '../../components/ResourceRenderer';
+import UsersNameContainer from '../../containers/UsersNameContainer';
 import AssignmentDetails, {
   LoadingAssignmentDetails,
   FailedAssignmentDetails
@@ -53,6 +54,7 @@ class Assignment extends Component {
       assignment,
       submitting,
       userId,
+      loggedInUserId,
       init,
       isStudentOf,
       isSupervisorOf,
@@ -92,6 +94,11 @@ class Assignment extends Component {
           {assignment => (
             <Row>
               <Col md={6}>
+                {loggedInUserId !== userId && (
+                  <div>
+                    <UsersNameContainer userId={userId} />
+                  </div>
+                )}
                 <div>
                   {assignment.localizedAssignments.length > 0 &&
                     <LocalizedAssignments locales={assignment.localizedAssignments} />}
@@ -130,11 +137,12 @@ class Assignment extends Component {
                       </ResourceRenderer>
                     </p>
                     <SubmitSolutionContainer
+                      userId={userId}
                       reset={init(userId)}
                       assignmentId={assignment.id}
                       isOpen={submitting} />
 
-                    <SubmissionsTableContainer assignmentId={assignment.id} />
+                    <SubmissionsTableContainer userId={userId} assignmentId={assignment.id} />
                   </div>
                 )}
               </Col>
@@ -153,6 +161,7 @@ Assignment.contextTypes = {
 
 Assignment.propTypes = {
   userId: PropTypes.string.isRequired,
+  loggedInUserId: PropTypes.string.isRequired,
   params: PropTypes.shape({
     assignmentId: PropTypes.string.isRequired
   }),
@@ -166,13 +175,14 @@ Assignment.propTypes = {
 };
 
 export default connect(
-  (state, { params: { assignmentId } }) => {
+  (state, { params: { assignmentId, userId } }) => {
     const assignmentSelector = getAssignment(assignmentId);
-    const userId = loggedInUserIdSelector(state);
+    userId = userId || loggedInUserIdSelector(state);
     return {
       assignment: assignmentSelector(state),
       submitting: isSubmitting(state),
       userId,
+      loggeInUserId: loggedInUserIdSelector(state),
       isStudentOf: (groupId) => isStudentOf(userId, groupId)(state),
       isSupervisorOf: (groupId) => isSupervisorOf(userId, groupId)(state),
       canSubmit: canSubmitSolution(assignmentId)(state)

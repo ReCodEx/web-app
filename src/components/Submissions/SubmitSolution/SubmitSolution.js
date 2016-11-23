@@ -10,8 +10,10 @@ import {
 } from 'react-bootstrap';
 import { LoadingIcon, WarningIcon, SendIcon } from '../../Icons';
 import UploadContainer from '../../../containers/UploadContainer';
+import UsersNameContainer from '../../../containers/UsersNameContainer';
 
 const SubmitSolution = ({
+  userId,
   isOpen,
   onClose,
   reset,
@@ -29,6 +31,9 @@ const SubmitSolution = ({
       </Modal.Title>
     </Modal.Header>
     <Modal.Body>
+      <div>
+        <UsersNameContainer userId={userId} />
+      </div>
       <UploadContainer id={uploadId} />
 
       <FormGroup>
@@ -86,6 +91,7 @@ const SubmitSolution = ({
 );
 
 SubmitSolution.propTypes = {
+  userId: PropTypes.string.isRequired,
   onClose: PropTypes.func.isRequired,
   reset: PropTypes.func.isRequired,
   uploadId: PropTypes.string.isRequired,

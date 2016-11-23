@@ -10,7 +10,8 @@ import AssignmentTableRow, { NoAssignmentTableRow, LoadingAssignmentTableRow } f
 const AssignmentsTable = ({
   assignments = List(),
   statuses = [],
-  showGroup = true
+  showGroup = true,
+  userId = null
 }) => (
   <Table hover>
     <thead>
@@ -35,6 +36,7 @@ const AssignmentsTable = ({
           <AssignmentTableRow
             key={assignment.id}
             item={assignment}
+            userId={userId}
             showGroup={showGroup}
             status={statuses[assignment.id]} />
         ))}
@@ -45,7 +47,8 @@ const AssignmentsTable = ({
 AssignmentsTable.propTypes = {
   assignments: ImmutablePropTypes.list.isRequired,
   showGroup: PropTypes.bool,
-  statuses: PropTypes.oneOfType([ PropTypes.object, PropTypes.array ])
+  statuses: PropTypes.oneOfType([ PropTypes.object, PropTypes.array ]),
+  userId: PropTypes.string
 };
 
 export default AssignmentsTable;

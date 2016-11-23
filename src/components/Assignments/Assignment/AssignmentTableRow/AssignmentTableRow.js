@@ -13,16 +13,26 @@ const AssignmentTableRow = ({
     firstDeadline,
     secondDeadline
   },
-  status
+  status,
+  userId
 }, {
-  links: { ASSIGNMENT_DETAIL_URI_FACTORY }
+  links: {
+    ASSIGNMENT_DETAIL_URI_FACTORY,
+    ASSIGNMENT_DETAIL_SPECIFIC_USER_URI_FACTORY
+  }
 }) => (
   <tr>
     <td className='text-center'>
       <AssignmentStatusIcon status={status} />
     </td>
     <td>
-      <Link to={ASSIGNMENT_DETAIL_URI_FACTORY(id)}>{name}</Link>
+      <Link to={
+        userId
+          ? ASSIGNMENT_DETAIL_SPECIFIC_USER_URI_FACTORY(id, userId)
+          : ASSIGNMENT_DETAIL_URI_FACTORY(id)
+        }>
+        {name}
+      </Link>
     </td>
     {showGroup && <td>{group}</td>}
     <td>
@@ -50,7 +60,8 @@ AssignmentTableRow.propTypes = {
     secondDeadline: PropTypes.number.isRequired,
     groupId: PropTypes.string
   }),
-  status: PropTypes.string
+  status: PropTypes.string,
+  userId: PropTypes.string
 };
 
 AssignmentTableRow.contextTypes = {

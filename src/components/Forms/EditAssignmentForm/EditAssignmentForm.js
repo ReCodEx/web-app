@@ -28,11 +28,6 @@ const EditAssignmentForm = ({
   } = {}
 }) => (
   <div>
-    <FieldArray
-      name='localizedAssignments'
-      localizedAssignments={localizedAssignments}
-      component={LocalizedAssignmentsFormField} />
-
     <FormBox
       title={<FormattedMessage id='app.editAssignmentForm.title' defaultMessage='Edit assignment {name}' values={{ name: assignment.name }} />}
       type={hasSucceeded ? 'success' : undefined}
@@ -68,6 +63,11 @@ const EditAssignmentForm = ({
         component={CheckboxField}
         onOff
         label={<FormattedMessage id='app.editAssignmentForm.isPublic' defaultMessage='Visible to students' />} />
+
+      <FieldArray
+        name='localizedAssignments'
+        localizedAssignments={localizedAssignments}
+        component={LocalizedAssignmentsFormField} />
 
       <Field
         name='scoreConfig'
@@ -151,6 +151,7 @@ const isPositiveInteger = (n) =>
 
 const validate = ({
   name,
+  localizedAssignments,
   submissionsCountLimit,
   firstDeadline,
   secondDeadline,
@@ -163,6 +164,30 @@ const validate = ({
   if (!name) {
     errors['name'] = <FormattedMessage id='app.editAssignmentForm.validation.emptyName' defaultMessage='Please fill the name of the assignment.' />;
   }
+
+  const localizedAssignmentsErrors = {};
+  for (let i = 0; i < localizedAssignments.length; ++i) {
+    const localeErros = {};
+    if (!localizedAssignments[i]) {
+      localeErros['locale'] = <FormattedMessage id='app.editAssignmentForm.validation.localizedAssignment' defaultMessage='Please fill localized information.' />;
+    } else {
+      if (!localizedAssignments[i].locale) {
+        localeErros['locale'] = <FormattedMessage id='app.editAssignmentForm.validation.localizedAssignment.locale' defaultMessage='Please select the language.' />;
+      }
+
+      if (!localizedAssignments[i].name) {
+        localeErros['name'] = <FormattedMessage id='app.editAssignmentForm.validation.localizedAssignment.name' defaultMessage='Please choose a name of the assignment in this language.' />;
+      }
+
+      if (!localizedAssignments[i].description) {
+        localeErros['description'] = <FormattedMessage id='app.editAssignmentForm.validation.localizedAssignment.description' defaultMessage='Please fill the assignment in this language.' />;
+      }
+    }
+
+    localizedAssignmentsErrors[i] = localeErros;
+  }
+
+  errors['localizedAssignments'] = localizedAssignmentsErrors;
 
   if (!firstDeadline) {
     errors['firstDeadline'] = <FormattedMessage id='app.editAssignmentForm.validation.emptyDeadline' defaultMessage='Please fill the date and time of the deadline.' />;

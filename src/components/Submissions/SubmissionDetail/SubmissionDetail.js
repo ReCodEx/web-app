@@ -25,6 +25,7 @@ class SubmissionDetail extends Component {
         note = '',
         evaluationStatus,
         submittedAt,
+        userId,
         submittedBy,
         maxPoints,
         files,
@@ -42,6 +43,7 @@ class SubmissionDetail extends Component {
             <SubmissionStatus
               evaluationStatus={evaluationStatus}
               submittedAt={submittedAt}
+              userId={userId}
               submittedBy={submittedBy}
               note={note} />
             <CommentThreadContainer threadId={id} />
@@ -103,6 +105,7 @@ SubmissionDetail.propTypes = {
     evaluationStatus: PropTypes.string.isRequired,
     note: PropTypes.string,
     submittedAt: PropTypes.number.isRequired,
+    userId: PropTypes.string.isRequired,
     submittedBy: PropTypes.string,
     evaluation: PropTypes.object,
     maxPoints: PropTypes.number.isRequired,

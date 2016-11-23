@@ -35,7 +35,8 @@ class Submission extends Component {
     const {
       assignment,
       submission,
-      params: { assignmentId }
+      params: { assignmentId },
+      isSupervisorOf
     } = this.props;
 
     return (

@@ -22,7 +22,7 @@ class SubmissionsTableContainer extends Component {
   }
 
   static loadData = ({
-  userId,
+    userId,
     assignmentId,
     loadSubmissionsForUser
   }) => {
@@ -68,10 +68,10 @@ SubmissionsTableContainer.propTypes = {
 export default connect(
   (state, props) => {
     const getSubmissions = createGetUsersSubmissionsForAssignment();
-    const myUserId = props.userId ? props.userId : loggedInUserIdSelector(state);
+    const userId = props.userId ? props.userId : loggedInUserIdSelector(state);
     return {
-      userId: myUserId,
-      submissions: getSubmissions(state, myUserId, props.assignmentId)
+      userId,
+      submissions: getSubmissions(state, userId, props.assignmentId)
     };
   },
   (dispatch, props) => ({

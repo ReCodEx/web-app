@@ -24,17 +24,19 @@ class SubmitSolutionContainer extends Component {
     const {
     attachedFiles,
       onSubmit,
+      userId,
       note,
       submitSolution
     } = this.props;
 
-    submitSolution(note, attachedFiles.map(item => item.file));
+    submitSolution(userId, note, attachedFiles.map(item => item.file));
     !!onSubmit && onSubmit();
   };
 
   render = () => {
     const {
       isOpen = false,
+      userId,
       cancel,
       reset,
       assignmentId,
@@ -54,6 +56,7 @@ class SubmitSolutionContainer extends Component {
     return (
       <div>
         <SubmitSolution
+          userId={userId}
           isOpen={isOpen}
           canSubmit={canSubmit}
           isSending={isSending}
@@ -80,6 +83,7 @@ SubmitSolutionContainer.contextTypes = {
 };
 
 SubmitSolutionContainer.propTypes = {
+  userId: PropTypes.string.isRequired,
   reset: PropTypes.func.isRequired,
   isOpen: PropTypes.bool,
   cancel: PropTypes.func.isRequired,
@@ -98,11 +102,11 @@ SubmitSolutionContainer.propTypes = {
 };
 
 export default connect(
-  (state, { assignmentId }) => {
+  (state, { assignmentId, userId }) => {
     const getUploadedFiles = createGetUploadedFiles(assignmentId);
     const allUploaded = createAllUploaded(assignmentId);
     return {
-      userId: loggedInUserIdSelector(state),
+      userId: userId || loggedInUserIdSelector(state),
       note: getNote(state),
       attachedFiles: (getUploadedFiles(state) || List()).toJS(),
       isProcessing: isProcessing(state),
@@ -116,6 +120,6 @@ export default connect(
   (dispatch, props) => ({
     changeNote: (note) => dispatch(changeNote(note)),
     cancel: () => dispatch(cancel()),
-    submitSolution: (note, files) => dispatch(submitSolution(props.assignmentId, note, files))
+    submitSolution: (userId, note, files) => dispatch(submitSolution(userId, props.assignmentId, note, files))
   })
 )(SubmitSolutionContainer);

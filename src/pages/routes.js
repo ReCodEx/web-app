@@ -62,6 +62,7 @@ const createRoutes = (getState) => {
           <IndexRoute component={Dashboard} />
           <Route path='assignment/:assignmentId'>
             <IndexRoute component={Assignment} />
+            <Route path='user/:userId' component={Assignment} />
             <Route path='edit' component={EditAssignment} />
             <Route path='stats' component={AssignmentStats} />
             <Route path='submission/:submissionId' component={Submission} />

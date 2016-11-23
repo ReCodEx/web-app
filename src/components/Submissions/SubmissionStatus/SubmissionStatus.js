@@ -9,6 +9,7 @@ import UsersNameContainer from '../../../containers/UsersNameContainer';
 const SubmissionStatus = ({
   evaluationStatus,
   submittedAt,
+  userId,
   submittedBy,
   note
 }) => (
@@ -37,7 +38,16 @@ const SubmissionStatus = ({
             <FormattedDate value={submittedAt * 1000} />&nbsp;<FormattedTime value={submittedAt * 1000} />
           </td>
         </tr>
-        {submittedBy && (
+        <tr>
+          <td className='text-center'>
+            <Icon name='user' />
+          </td>
+          <th><FormattedMessage id='app.submission.author' defaultMessage='Author:' /></th>
+          <td>
+            <UsersNameContainer userId={userId} />
+          </td>
+        </tr>
+        {submittedBy && submittedBy !== userId && (
           <tr>
             <td className='text-center'>
               <Icon name='user' />
@@ -75,6 +85,7 @@ const SubmissionStatus = ({
 SubmissionStatus.propTypes = {
   evaluationStatus: PropTypes.string.isRequired,
   submittedAt: PropTypes.number.isRequired,
+  userId: PropTypes.string.isRequired,
   submittedBy: PropTypes.string,
   note: PropTypes.string
 };
