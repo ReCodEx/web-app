@@ -21,12 +21,6 @@ import { isSubmitting } from '../../redux/selectors/submission';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments';
 
-const getInitialValues = ({ firstDeadline, secondDeadline, ...rest }) => ({
-  firstDeadline: moment(firstDeadline * 1000),
-  secondDeadline: moment(secondDeadline * 1000),
-  ...rest
-});
-
 class EditAssignment extends Component {
 
   componentWillMount = () => this.props.loadAsync();
@@ -42,6 +36,12 @@ class EditAssignment extends Component {
     dispatch(fetchLimitsIfNeeded(assignmentId)),
     dispatch(fetchRuntimeEnvironments())
   ]);
+
+  getInitialValues = ({ firstDeadline, secondDeadline, ...rest }) => ({
+    firstDeadline: moment(firstDeadline * 1000),
+    secondDeadline: moment(secondDeadline * 1000),
+    ...rest
+  });
 
   render() {
     const { links: { ASSIGNMENT_DETAIL_URI_FACTORY } } = this.context;
@@ -74,7 +74,7 @@ class EditAssignment extends Component {
           {assignment => (
             <div>
               <EditAssignmentForm
-                initialValues={getInitialValues(assignment)}
+                initialValues={this.getInitialValues(assignment)}
                 onSubmit={editAssignment}
                 formValues={formValues} />
               <ResourceRenderer resource={environments}>
