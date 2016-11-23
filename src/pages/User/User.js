@@ -17,7 +17,7 @@ import UsersStats from '../../components/Users/UsersStats';
 import { fetchAssignmentsForGroup } from '../../redux/modules/assignments';
 import { fetchUserIfNeeded } from '../../redux/modules/users';
 import { fetchGroupsIfNeeded } from '../../redux/modules/groups';
-import { getUser } from '../../redux/selectors/users';
+import { getUser, studentOfGroupsIdsSelector } from '../../redux/selectors/users';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import { fetchGroupsStatsIfNeeded } from '../../redux/modules/stats';
 import { createGroupsStatsSelector } from '../../redux/selectors/stats';
@@ -70,6 +70,7 @@ class User extends Component {
   render() {
     const {
       user,
+      studentOfGroupsIds,
       commonGroups,
       loggedInUserId,
       groupAssignments,
@@ -179,7 +180,7 @@ class User extends Component {
           {commonGroups.length === 0 && user.id === loggedInUserId && (
             <Row>
               <Col sm={12}>
-                <div className='callout callout-success'>
+                <div className='callout callout-default'>
                   <h4>
                     <InfoIcon /> <FormattedMessage id='app.user.welcomeTitle' defaultMessage='Welcome to ReCodEx' />
                   </h4>
@@ -211,6 +212,7 @@ class User extends Component {
 User.propTypes = {
   user: ImmutablePropTypes.map,
   commonGroups: PropTypes.array,
+  studentOfGroupsIds: PropTypes.array,
   params: PropTypes.shape({ userId: PropTypes.string.isRequired }).isRequired,
   loadAsync: PropTypes.func.isRequired,
   loggedInUserId: PropTypes.string,
@@ -235,6 +237,7 @@ export default connect(
     return {
       loggedInUserId,
       user: getUser(userId)(state),
+      studentOfGroupsIds: studentOfGroupsIdsSelector(userId)(state).toArray(),
       groupAssignments: (groupId) => groupsAssignmentsSelector(groupId)(state),
       groupStatistics: (groupId) => createGroupsStatsSelector(groupId)(state),
       usersStatistics: (statistics) => statistics.find(stat => stat.userId === userId) || {},
