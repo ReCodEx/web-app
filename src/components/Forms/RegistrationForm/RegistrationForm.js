@@ -16,7 +16,7 @@ const RegistrationForm = ({
   handleSubmit,
   submitFailed = false,
   submitSucceeded = false,
-  triggerAsyncValidation,
+  asyncValidate,
   instances,
   invalid
 }) => (
@@ -51,7 +51,7 @@ const RegistrationForm = ({
       <Field
         name='password'
         component={PasswordField}
-        onKeyPress={() => triggerAsyncValidation()}
+        onKeyPress={() => asyncValidate()}
         label={<FormattedMessage id='app.registrationForm.password' defaultMessage='Password:' />} />
     </Throttle>
 
@@ -78,7 +78,7 @@ RegistrationForm.propTypes = {
   onSubmit: PropTypes.func.isRequired,
   istTryingToCreateAccount: PropTypes.bool,
   submitFailed: PropTypes.bool,
-  triggerAsyncValidation: PropTypes.func.isRequired,
+  asyncValidate: PropTypes.func.isRequired,
   submitSucceeded: PropTypes.bool,
   submitting: PropTypes.bool,
   invalid: PropTypes.bool

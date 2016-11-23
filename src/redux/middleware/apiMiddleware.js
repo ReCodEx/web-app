@@ -44,8 +44,9 @@ const createRequest = (endpoint, query = {}, method, headers, body) =>
 export const getHeaders = (headers, accessToken) => {
   if (accessToken) {
     return {
-      ...headers,
-      'Authorization': `Bearer ${accessToken}`
+      'Authorization': `Bearer ${accessToken}`,
+      'Contennt-Type': 'multipart/form-data',
+      ...headers
     };
   }
 
