@@ -83,6 +83,6 @@ export default connect(
   (dispatch, { params: { userId } }) => ({
     loadAsync: () => EditUser.loadAsync({ userId }, dispatch),
     updateSettings: (data) => dispatch(updateSettings(userId, data)),
-    updateProfile: ({ name, data }) => dispatch(updateProfile(userId, { ...name, ...data }))
+    updateProfile: ({ name, ...data }) => dispatch(updateProfile(userId, { ...name, ...data }))
   })
 )(EditUser);
