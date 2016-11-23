@@ -45,7 +45,6 @@ export const getHeaders = (headers, accessToken) => {
   if (accessToken) {
     return {
       'Authorization': `Bearer ${accessToken}`,
-      'Contennt-Type': 'multipart/form-data',
       ...headers
     };
   }
