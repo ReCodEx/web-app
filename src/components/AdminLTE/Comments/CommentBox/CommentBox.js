@@ -6,6 +6,10 @@ class CommentBox extends Component {
 
   state = { prevCount: 0 };
 
+  componentDidMount() {
+    setTimeout(() => this.scrollToBottom(), 10);
+  }
+
   componentDidUpdate() {
     if (this.state.prevCount < this.props.commentsCount) {
       this.setState({ prevCount: this.props.commentsCount });

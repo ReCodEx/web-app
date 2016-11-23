@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 
-import { postComment, repostComment, togglePrivacy, fetchThreadIfNeeded } from '../../redux/modules/comments';
+import { postComment, repostComment, togglePrivacy, fetchThreadIfNeeded, updateThread } from '../../redux/modules/comments';
 import { loggedInUserSelector } from '../../redux/selectors/users';
 import { commentsThreadSelector } from '../../redux/selectors/comments';
 
@@ -16,12 +16,24 @@ class CommentThreadContainer extends Component {
 
   componentWillMount() {
     CommentThreadContainer.loadData(this.props);
+    this.pollInterval = setInterval(() => this.poll(), 5000);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.pollInterval);
   }
 
   componentWillReceiveProps(newProps) {
     if (this.props.threadId !== newProps.threadId) {
       CommentThreadContainer.loadData(newProps);
     }
+  }
+
+  /**
+   * Periodically ask for new comments.
+   */
+  poll() {
+    this.props.poll();
   }
 
   static loadData = ({ loadThreadIfNeeded }) => {
@@ -44,7 +56,7 @@ class CommentThreadContainer extends Component {
         failed={<FailedCommentThread />}>
         {(thread, user) => (
           <CommentThread
-            comments={thread.comments}
+            comments={thread.comments.sort((a, b) => a.postedAt - b.postedAt)}
             currentUserId={user.id}
             addComment={(text, isPrivate) => addComment(user, text, isPrivate)}
             togglePrivacy={togglePrivacy}
@@ -62,7 +74,8 @@ CommentThreadContainer.propTypes = {
   user: PropTypes.object,
   addComment: PropTypes.func.isRequired,
   repostComment: PropTypes.func,
-  togglePrivacy: PropTypes.func
+  togglePrivacy: PropTypes.func,
+  poll: PropTypes.func.isRequired
 };
 
 export default connect(
@@ -74,6 +87,7 @@ export default connect(
     addComment: (user, text, isPrivate) => dispatch(postComment(user, threadId, text, isPrivate)),
     repostComment: (tmpId) => dispatch(repostComment(threadId, tmpId)),
     togglePrivacy: (id) => dispatch(togglePrivacy(threadId, id)),
-    loadThreadIfNeeded: () => dispatch(fetchThreadIfNeeded(threadId))
+    loadThreadIfNeeded: () => dispatch(fetchThreadIfNeeded(threadId)),
+    poll: () => dispatch(updateThread(threadId))
   })
 )(CommentThreadContainer);

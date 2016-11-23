@@ -5,7 +5,7 @@ import Icon from 'react-fontawesome';
 
 class AddComment extends Component {
 
-  state = { text: '', isPrivate: true };
+  state = { text: '', isPrivate: false };
 
   changeText = (text) => this.setState({ text });
   togglePrivate = () => this.setState({ isPrivate: !this.state.isPrivate });

@@ -8,14 +8,20 @@ import { commentsSelector } from '../selectors/comments';
 const resourceName = 'comments';
 const {
   actions,
+  actionTypes: resourceActionTypes,
   reduceActions
-} = factory({ resourceName });
+} = factory({
+  resourceName,
+  needsRefetching: () => true // always look for newer comments
+});
 
 /**
  * Actions
  */
 
 export const actionTypes = {
+  UPDATE: 'redux/comments/UPDATE',
+  UPDATE_FULFILLED: 'redux/comments/UPDATE_FULFILLED',
   POST_COMMENT: 'redux/comments/POST_COMMENT',
   POST_COMMENT_PENDING: 'redux/comments/POST_COMMENT_PENDING',
   POST_COMMENT_REJECTED: 'redux/comments/POST_COMMENT_REJECTED',
@@ -28,6 +34,13 @@ export const actionTypes = {
 };
 
 export const fetchThreadIfNeeded = actions.fetchOneIfNeeded;
+
+export const updateThread = (id) =>
+  createApiAction({
+    type: actionTypes.UPDATE,
+    endpoint: `/comments/${id}`,
+    meta: { id }
+  });
 
 export const postComment = (user, threadId, text, isPrivate) =>
   createApiAction({
@@ -62,6 +75,8 @@ export const togglePrivacy = (threadId, commentId) =>
  */
 
 const reducer = handleActions(Object.assign({}, reduceActions, {
+
+  [actionTypes.UPDATE_FULFILLED]: reduceActions[resourceActionTypes.FETCH_FULFILLED],
 
   [actionTypes.POST_COMMENT_PENDING]: (state, { payload: { text, isPrivate }, meta: { tmpId, user, threadId } }) => {
     const correctUserData = Object.assign({}, user, { name: user.fullName || user.name });
