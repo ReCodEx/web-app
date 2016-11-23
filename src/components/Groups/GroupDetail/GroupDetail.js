@@ -11,6 +11,7 @@ import { MaybeSucceededIcon } from '../../Icons';
 const GroupDetail = ({
   group: {
     id,
+    externalId,
     name,
     description,
     threshold,
@@ -35,6 +36,11 @@ const GroupDetail = ({
             <ReactMarkdown source={description} />
             <Table>
               <tbody>
+                {externalId && (
+                  <tr>
+                    <th><FormattedMessage id='app.groupDetail.externalId' defaultMessage='External identification of the group:' /></th>
+                    <td><pre><code>{externalId}</code></pre></td>
+                  </tr>)}
                 <tr>
                   <th><FormattedMessage id='app.groupDetail.isPublic' defaultMessage='Is public:' /></th>
                   <td><MaybeSucceededIcon success={isPublic} /></td>

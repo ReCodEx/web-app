@@ -45,15 +45,22 @@ const EditGroupForm = ({
         label={<FormattedMessage id='app.createGroup.groupName' defaultMessage='Name:' />} />
 
       <Field
-        name='description'
+        name='externalId'
         tabIndex={2}
+        component={TextField}
+        required
+        label={<FormattedMessage id='app.createGroup.externalId' defaultMessage='External ID of the group (e. g. ID of the group in the school IS):' />} />
+
+      <Field
+        name='description'
+        tabIndex={3}
         component={MarkdownTextAreaField}
         required
         label={<FormattedMessage id='app.createGroup.groupDescription' defaultMessage='Description:' />} />
 
       <Field
         name='isPublic'
-        tabIndex={3}
+        tabIndex={4}
         component={CheckboxField}
         onOff
         label={<FormattedMessage id='app.createGroup.isPublic' defaultMessage='Students can join the group themselves' />}
@@ -61,7 +68,7 @@ const EditGroupForm = ({
 
       <Field
         name='publicStats'
-        tabIndex={3}
+        tabIndex={5}
         component={CheckboxField}
         onOff
         label={<FormattedMessage id='app.createGroup.publicStats' defaultMessage='Students can see statistics of each other' />}
@@ -69,7 +76,7 @@ const EditGroupForm = ({
 
       <Field
         name='threshold'
-        tabIndex={4}
+        tabIndex={6}
         component={TextField}
         label={<FormattedMessage id='app.createGroup.threshold' defaultMessage='Minimum percent of the total points count needed to complete the course:' />} />
   </FormBox>

@@ -57,9 +57,18 @@ class CreateGroupForm extends Component {
           required
           label={<FormattedMessage id='app.createGroup.groupName' defaultMessage='Name:' />}
         />
+
+        <Field
+          name='externalId'
+          tabIndex={2}
+          component={TextField}
+          required
+          label={<FormattedMessage id='app.createGroup.externalId' defaultMessage='External ID (e. g. ID of the group in the school IS):' />}
+        />
+
         <Field
           name='description'
-          tabIndex={2}
+          tabIndex={3}
           component={MarkdownTextAreaField}
           required
           label={<FormattedMessage id='app.createGroup.groupDescription' defaultMessage='Description:' />}
@@ -67,7 +76,7 @@ class CreateGroupForm extends Component {
 
         <Field
           name='publicStats'
-          tabIndex={3}
+          tabIndex={4}
           component={CheckboxField}
           label={<FormattedMessage id='app.createGroup.publicStats' defaultMessage='Students can see statistics of each other' />} />
       </FormBox>

@@ -10,7 +10,7 @@ const InstanceDetail = ({
   description,
   topLevelGroups,
   groups,
-  isMemberOf
+  isAdmin
 }) => (
   <Row>
     <Col md={6}>
@@ -25,7 +25,7 @@ const InstanceDetail = ({
             <GroupTree
               key={id}
               id={id}
-              isMemberOf={isMemberOf}
+              isAdmin={isAdmin}
               groups={groups} />)}
 
           {topLevelGroups.length === 0 && (
@@ -41,7 +41,7 @@ InstanceDetail.propTypes = {
   description: PropTypes.string.isRequired,
   topLevelGroups: PropTypes.array.isRequired,
   groups: ImmutablePropTypes.map.isRequired,
-  isMemberOf: PropTypes.func
+  isAdmin: PropTypes.bool
 };
 
 export default InstanceDetail;

@@ -3,7 +3,7 @@ import { fromJS, List } from 'immutable';
 
 import { addNotification } from './notifications';
 import { createApiAction } from '../middleware/apiMiddleware';
-import factory, { initialState } from '../helpers/resourceManager';
+import factory, { initialState, resourceStatus } from '../helpers/resourceManager';
 
 import { additionalActionTypes as assignmentsActionTypes } from './assignments';
 
@@ -44,7 +44,11 @@ export const additionalActionTypes = {
   UPDATE_GROUP: 'recodex/groups/UPDATE_GROUP',
   UPDATE_GROUP_PENDING: 'recodex/groups/UPDATE_GROUP_PENDING',
   UPDATE_GROUP_FULFILLED: 'recodex/groups/UPDATE_GROUP_FULFILLED',
-  UPDATE_GROUP_REJECTED: 'recodex/groups/UPDATE_GROUP_REJECTED'
+  UPDATE_GROUP_REJECTED: 'recodex/groups/UPDATE_GROUP_REJECTED',
+  DELETE_GROUP: 'recodex/groups/DELETE_GROUP',
+  DELETE_GROUP_PENDING: 'recodex/groups/DELETE_GROUP_PENDING',
+  DELETE_GROUP_FULFILLED: 'recodex/groups/DELETE_GROUP_FULFILLED',
+  DELETE_GROUP_REJECTED: 'recodex/groups/DELETE_GROUP_REJECTED'
 };
 
 export const loadGroup = actions.pushResource;
@@ -96,6 +100,14 @@ export const editGroup = (groupId, body) =>
     method: 'POST',
     meta: { id: groupId, payload: body },
     body
+  });
+
+export const deleteGroup = (groupId) =>
+  createApiAction({
+    type: additionalActionTypes.DELETE_GROUP,
+    endpoint: `/groups/${groupId}`,
+    method: 'DELETE',
+    meta: { id: groupId }
   });
 
 export const joinGroup = (groupId, userId) =>
@@ -215,7 +227,16 @@ const reducer = handleActions(Object.assign({}, reduceActions, {
         assignments = List();
       }
       return assignments.push(assignmentId);
-    })
+    }),
+
+  [additionalActionTypes.DELETE_GROUP_PENDING]: (state, { meta: { id } }) =>
+    state.setIn(['resources', id, 'state'], resourceStatus.PENDING),
+
+  [additionalActionTypes.DELETE_GROUP_FAILED]: (state, { meta: { id } }) =>
+    state.setIn(['resources', id, 'state'], resourceStatus.FAILED),
+
+  [additionalActionTypes.DELETE_GROUP_FULFILLED]: (state, { meta: { id } }) =>
+    state.removeIn(['resources', id])
 
 }), initialState);
 

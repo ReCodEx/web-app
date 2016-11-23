@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import { canUseDOM } from 'exenv';
 import { reduxForm, Field, FieldArray } from 'redux-form';
-import { FormattedMessage } from 'react-intl';
+import { FormattedHTMLMessage, FormattedMessage } from 'react-intl';
 import { Alert, HelpBlock } from 'react-bootstrap';
 import isNumeric from 'validator/lib/isNumeric';
 
@@ -74,7 +74,11 @@ const EditAssignmentForm = ({
         component={SourceCodeField}
         mode='yaml'
         label={<FormattedMessage id='app.editAssignmentForm.scoreConfig' defaultMessage='Score configuration:' />} />
-      <HelpBlock>Read more about <a href='https://github.com/ReCodEx/wiki/wiki/Assignments#scoring'>score configuration</a> syntax.</HelpBlock>
+      <HelpBlock>
+        <FormattedHTMLMessage
+          id='app.editAssignmentForm.moreAboutScoreConfig'
+          defaultMessage="Read more about <a href='https://github.com/ReCodEx/wiki/wiki/Assignments#scoring'>score configuration</a> syntax." />
+        </HelpBlock>
 
       <Field
         name='firstDeadline'
@@ -100,11 +104,13 @@ const EditAssignmentForm = ({
           component={DatetimeField}
           label={<FormattedMessage id='app.editAssignmentForm.secondDeadline' defaultMessage='Second deadline:' />} />
       )}
+
       {allowSecondDeadline && !firstDeadline && (
         <HelpBlock>
           <FormattedMessage id='app.editAssignmentForm.chooseFirstDeadlineBeforeSecondDeadline' defaultMessage='You must select the date of the first deadline before selecting the date of the second deadline.' />
         </HelpBlock>
       )}
+
       {allowSecondDeadline && (
         <Field
           name="maxPointsBeforeSecondDeadline"

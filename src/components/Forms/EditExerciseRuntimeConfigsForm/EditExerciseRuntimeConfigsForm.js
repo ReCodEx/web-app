@@ -61,7 +61,25 @@ EditExerciseRuntimeConfigsForm.propTypes = {
 const validate = ({ runtimeConfigs }) => {
   const errors = {};
 
-  // TODO: validation
+  const runtimeConfigsErrors = {};
+  for (let i = 0; i < runtimeConfigs.length; ++i) {
+    const runtimeConfigErrors = {};
+
+    if (!runtimeConfigs[i].name || runtimeConfigs[i].name.length === 0) {
+      runtimeConfigsErrors['name'] = <FormattedMessage id='app.editExerciseRuntimeConfigsForm.validation.name' defaultMessage='Please fill the display name of the runtime environment.' />;
+    }
+
+    if (!runtimeConfigs[i].runtimeEnvironmentId || runtimeConfigs[i].runtimeEnvironmentId.length === 0) {
+      runtimeConfigsErrors['runtimeEnvironmentId'] = <FormattedMessage id='app.editExerciseRuntimeConfigsForm.validation.runtimeEnvironmentId' defaultMessage='Please select a runtime environment.' />;
+    }
+
+    if (!runtimeConfigs[i].jobConfig || runtimeConfigs[i].jobConfig.length === 0) {
+      runtimeConfigsErrors['jobConfig'] = <FormattedMessage id='app.editExerciseRuntimeConfigsForm.validation.jobConfig' defaultMessage='Please fill the job configuration of the runtime environment.' />;
+    }
+
+    runtimeConfigsErrors[i] = runtimeConfigErrors;
+  }
+  errors['runtimeConfigs'] = runtimeConfigsErrors;
 
   return errors;
 };
