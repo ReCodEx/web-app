@@ -68,6 +68,11 @@ class LayoutContainer extends Component {
    * Get messages for the given language or the deafult - English
    */
 
+  getDefaultLang = () => {
+    const { userSettings } = this.context;
+    return userSettings && userSettings.defaultLanguage ? userSettings.defaultLanguage : 'en';
+  };
+
   getMessages = (lang) => messages[lang] || messages[this.getDefaultLang()];
   getLocaleData = (lang) => localeData[lang] || localeData[this.getDefaultLang()];
 
@@ -111,7 +116,8 @@ LayoutContainer.childContextTypes = {
 };
 
 LayoutContainer.contextTypes = {
-  router: PropTypes.object
+  router: PropTypes.object,
+  userSettings: PropTypes.object
 };
 
 LayoutContainer.propTypes = {

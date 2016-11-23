@@ -31,7 +31,7 @@ class Login extends Component {
     if (hasSucceeded) {
       setTimeout(() => {
         const { userSettings } = this.context;
-        const link = changeLanguage(this.context.links.DASHBOARD_URI, userSettings.defaultLang);
+        const link = changeLanguage(this.context.links.DASHBOARD_URI, userSettings.defaultLanguage);
         reset();
         push(link);
       }, 600);
