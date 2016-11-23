@@ -268,11 +268,10 @@ const mapStateToProps = (
 
 const mapDispatchToProps = (dispatch, { params }) => ({
   addSubgroup: (instanceId) =>
-    ({ name, description }) =>
+    (data) =>
       dispatch(createGroup({
+        ...data,
         instanceId,
-        name,
-        description,
         parentGroupId: params.groupId
       })),
   loadAsync: (userId) => Group.loadAsync(params, dispatch, userId),
