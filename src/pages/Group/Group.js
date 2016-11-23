@@ -149,6 +149,16 @@ class Group extends Component {
         failed={<FailedGroupDetail />}>
         {data => (
           <div>
+            {isAdmin && (
+              <p>
+                <LinkContainer to={GROUP_EDIT_URI_FACTORY(data.id)}>
+                  <Button className='btn-flat'>
+                    <EditIcon /> <FormattedMessage id='app.group.edit' defaultMessage='Edit group settings' />
+                  </Button>
+                </LinkContainer>
+              </p>
+            )}
+
             <GroupDetail
               group={data}
               supervisors={supervisors}
@@ -159,16 +169,6 @@ class Group extends Component {
               <p className='text-center'>
                 <LeaveJoinGroupButtonContainer userId={userId} groupId={data.id} />
               </p>)}
-
-            {isAdmin && (
-              <p className='text-center'>
-                <LinkContainer to={GROUP_EDIT_URI_FACTORY(data.id)}>
-                  <Button className='btn-flat'>
-                    <EditIcon /> <FormattedMessage id='app.group.edit' defaultMessage='Edit group settings' />
-                  </Button>
-                </LinkContainer>
-              </p>
-            )}
 
             {isAdmin && (
               <AdminsView
