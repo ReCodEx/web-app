@@ -15,11 +15,9 @@ import 'admin-lte/dist/css/skins/skin-green.min.css';
 // import 'admin-lte/dist/css/skins/skin-purple.min.css';
 
 /**
- * This component is intended to be used as the root component and should wrap
- * the whole tree of components in the ReCodEx application as it provides crutial
- * functionality like localized links dependency injection to its subtree.
- * @class LayoutContainer
- * @extends {Component}
+ * This component is intended to be used as the root component of the layout
+ * as it provides crutial functionality like localized links dependency
+ * injection to its subtree.
  */
 class LayoutContainer extends Component {
 

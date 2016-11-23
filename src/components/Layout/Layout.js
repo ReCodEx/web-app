@@ -42,7 +42,7 @@ export const Layout = ({
       currentUrl={currentUrl} />
     <div onClick={onCloseSidebar}>
       {children}
-      <Footer version='v0.4.0' />
+      <Footer version='v1.0.0' />
     </div>
   </div>
 );
