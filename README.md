@@ -23,8 +23,8 @@ WEBPACK_DEV_SERVER_PORT=8081
 
 ```
 npm install
-npm run start:dev
-open http://127.0.0.1:3000
+npm run dev
+open http://127.0.0.1:8080
 ```
 
 ## License
