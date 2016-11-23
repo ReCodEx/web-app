@@ -7,7 +7,8 @@ import Box from '../../AdminLTE/Box';
 
 const ReferenceSolutionsEvaluationsResults = ({
   results,
-  testId
+  testId,
+  taskId
 }) => (
   <Box
     isOpen={false}
@@ -21,23 +22,39 @@ const ReferenceSolutionsEvaluationsResults = ({
         <tr>
           <th><FormattedMessage id='app.referenceSolutionsEvaluations.description' defaultMessage='Description' /></th>
           <th><FormattedMessage id='app.referenceSolutionsEvaluations.evaluatedAt' defaultMessage='Evaluated on' /></th>
-          <th><FormattedMessage id='app.referenceSolutionsEvaluations.memory' defaultMessage='Measured memory' /></th>
-          <th><FormattedMessage id='app.referenceSolutionsEvaluations.time' defaultMessage='Measured time' /></th>
+          <th><FormattedMessage id='app.referenceSolutionsEvaluations.memory' defaultMessage='Memory' /></th>
+          <th><FormattedMessage id='app.referenceSolutionsEvaluations.time' defaultMessage='Time' /></th>
         </tr>
       </thead>
       <tbody>
-        {results.map((result, i) => {
-          const testStats = result.evaluation.testResults.find(test => test.id === testId);
-          // @todo: use task stats of the test
-          return (
-            <tr key={i}>
-              <td>{result.referenceSolution.description}</td>
-              <td><FormattedDate value={result.evaluation.evaluatedAt * 1000} /></td>
-              <td>{prettyBytes(-1)}</td>
-              <td>{prettyMs(-1)}</td>
-            </tr>
-          );
-        })}
+        {results
+          .filter((result) => result.evaluationStatus === 'done')
+          .map((result, i) => {
+            if (!result.evaluation) {
+              return null;
+            }
+
+            // find the specific test
+            const testStats = result.evaluation.testResults.find(test => test.testName === testId);
+            if (!testStats) {
+              return null;
+            }
+
+            // find the specific task of the test
+            const taskStats = testStats.tasks.find(task => task.id === taskId);
+            if (!taskStats) {
+              return null;
+            }
+
+            return (
+              <tr key={i}>
+                <td>{result.referenceSolution.description}</td>
+                <td><FormattedDate value={result.evaluation.evaluatedAt * 1000} /></td>
+                <td>{prettyBytes(taskStats.usedMemory)}</td>
+                <td>{prettyMs(taskStats.usedTime * 1000)}</td>
+              </tr>
+            );
+          })}
       </tbody>
     </Table>
   </Box>

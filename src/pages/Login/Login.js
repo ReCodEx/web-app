@@ -12,7 +12,6 @@ import LoginCASForm from '../../components/Forms/LoginCASForm';
 
 import { login, loginCAS } from '../../redux/modules/auth';
 import { hasSucceeded } from '../../redux/selectors/auth';
-import { changeLanguage } from '../../links';
 
 class Login extends Component {
 
@@ -30,10 +29,8 @@ class Login extends Component {
     const { hasSucceeded, push, reset } = props;
     if (hasSucceeded) {
       setTimeout(() => {
-        const { userSettings } = this.context;
-        const link = changeLanguage(this.context.links.DASHBOARD_URI, userSettings.defaultLanguage);
+        push(this.context.links.DASHBOARD_URI);
         reset();
-        push(link);
       }, 600);
     }
   };
@@ -75,8 +72,7 @@ class Login extends Component {
 }
 
 Login.contextTypes = {
-  links: PropTypes.object,
-  userSettings: PropTypes.object
+  links: PropTypes.object
 };
 
 Login.propTypes = {
