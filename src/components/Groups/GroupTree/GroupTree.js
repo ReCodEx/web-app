@@ -50,7 +50,6 @@ class GroupTree extends Component {
       links: { GROUP_URI_FACTORY }
     } = this.context;
 
-
     const group = groups.get(id);
     if (!group || !isReady(group)) {
       return isPublic ? this.renderLoading(level) : null;
