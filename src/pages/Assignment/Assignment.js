@@ -161,7 +161,7 @@ Assignment.contextTypes = {
 
 Assignment.propTypes = {
   userId: PropTypes.string.isRequired,
-  loggedInUserId: PropTypes.string.isRequired,
+  loggedInUserId: PropTypes.string,
   params: PropTypes.shape({
     assignmentId: PropTypes.string.isRequired
   }),
