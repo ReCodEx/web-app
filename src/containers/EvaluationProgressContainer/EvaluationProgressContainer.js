@@ -27,19 +27,23 @@ import randomMessages, { extraMessages } from './randomMessages';
 
 class EvaluationProgressContainer extends Component {
 
-  state = { realTimeProcessing: true };
+  state = { realTimeProcessing: true, monitor: null };
   componentWillMount = () => this.init(this.props);
   componentWillReceiveProps = (props) => this.init(props);
-  componentWillUnmount = () => this.closeSocket();
+  componentWillUnmount = () => {
+    this.closeSocket();
+    this.socket = null;
+  };
 
   init = (props) => {
     const { monitor } = props;
-    if (!this.socket && monitor !== null) {
+    if (!this.socket && monitor !== null && monitor !== this.state.monitor) {
       if (typeof WebSocket === 'function') {
         this.socket = new WebSocket(monitor.url);
         this.socket.onopen = () => this.socket.send(monitor.id);
         this.socket.onmessage = this.onMessage;
         this.socket.onerror = (err) => this.onError(err);
+        this.setState({ monitor });
       } else {
         this.setState({ realTimeProcessing: false });
       }
@@ -110,11 +114,10 @@ class EvaluationProgressContainer extends Component {
   };
 
   closeSocket = () => {
+    this.isClosed = true;
     if (this.socket) {
       this.socket.close();
-      this.socket = null;
     }
-    this.isClosed = true;
 
     // fire a callback if any
     const { finish } = this.props;
