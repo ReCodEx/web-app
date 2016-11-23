@@ -2,6 +2,8 @@
 
 [![Build Status](https://travis-ci.org/ReCodEx/web-app.svg?branch=master)](https://travis-ci.org/ReCodEx/web-app) [![Coverage Status](https://coveralls.io/repos/github/ReCodEx/web-app/badge.svg?branch=master)](https://coveralls.io/github/ReCodEx/web-app?branch=master)
 
+The descriptin and documentation of the project is placed in the [global wiki](https://github.com/ReCodEx/wiki/wiki/Web-application) of the ReCodEx project.
+
 ## Environment variables
 
 Create a `.env` file in the root directory and put environment variables into this file. Look at `.env-sample` file for an example settings. The `.env` file should not be published in the git repository.
