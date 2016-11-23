@@ -53,7 +53,7 @@ const EditExerciseForm = ({
     </Col>
     <Col lg={6}>
       <FormBox
-        title={<FormattedMessage id='app.editExerciseForm.title' defaultMessage='Edit assignment {name}' values={{ name: exercise.name }} />}
+        title={<FormattedMessage id='app.editExerciseForm.title' defaultMessage='Edit exercise {name}' values={{ name: exercise.name }} />}
         type={hasSucceeded ? 'success' : undefined}
         footer={
           <div className='text-center'>
@@ -78,7 +78,7 @@ const EditExerciseForm = ({
         <Field
           name='name'
           component={TextField}
-          label={<FormattedMessage id='app.editExerciseForm.name' defaultMessage='Assignment name:' />} />
+          label={<FormattedMessage id='app.editExerciseForm.name' defaultMessage='Exercise name:' />} />
 
         <Field
           name='difficulty'
