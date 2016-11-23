@@ -177,7 +177,7 @@ class User extends Component {
             </div>
           )}
 
-          {commonGroups.length === 0 && user.id === loggedInUserId && (
+          {studentOfGroupsIds.length === 0 && user.id === loggedInUserId && (
             <Row>
               <Col sm={12}>
                 <div className='callout callout-default'>
