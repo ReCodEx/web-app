@@ -29,7 +29,7 @@ const ExerciseDetail = ({
         </tr>
         <tr>
           <th><FormattedMessage id='app.exercise.updatedAt' defaultMessage='Last updateded at:' /></th>
-          <td><FormattedDate value={createdAt * 1000} /> <FormattedTime value={createdAt * 1000} /></td>
+          <td><FormattedDate value={updatedAt * 1000} /> <FormattedTime value={updatedAt * 1000} /></td>
         </tr>
         <tr>
           <th><FormattedMessage id='app.exercise.version' defaultMessage='Version:' /></th>
