@@ -5,6 +5,7 @@ const LanguageSelectField = ({ options = [], ...props }) => (
   <SelectField
     {...props}
     options={[
+      { key: '', name: '...' },
       { key: 'en', name: 'English' },
       { key: 'cs', name: 'Čeština' },
       { key: 'de', name: 'Deutsch' },

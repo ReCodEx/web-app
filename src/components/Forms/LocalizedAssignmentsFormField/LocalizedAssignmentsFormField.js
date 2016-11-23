@@ -36,7 +36,7 @@ class LocalizedAssignmentsFormField extends Component {
             onSelect={this.changeTab}>
             {fields.map((localized, i) => (
               <Tab key={i} eventKey={i} title={
-                (localizedAssignments && localizedAssignments[i])
+                (localizedAssignments && localizedAssignments[i] && localizedAssignments[i].locale)
                   ? localizedAssignments[i].locale
                   : <FormattedMessage id='app.editAssignmentForm.newLocale' defaultMessage='New language' />
               }>
