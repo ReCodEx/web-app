@@ -1,8 +1,9 @@
 import React, { PropTypes } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { Field } from 'redux-form';
-import { Row, Col } from 'react-bootstrap';
+import { Row, Col, HelpBlock } from 'react-bootstrap';
 import { BytesTextField, SecondsTextField } from '../Fields';
+import ReferenceSolutionsEvaluationsResults from '../../Submissions/ReferenceSolutionsEvaluationsResults';
 
 const sortTests = (tests) => {
   return tests.sort(
@@ -10,8 +11,14 @@ const sortTests = (tests) => {
   );
 };
 
-const HardwareGroupFields = ({ prefix, i, limits }) => {
-  const { tests } = limits[i];
+const HardwareGroupFields = ({
+  prefix,
+  i,
+  limits,
+  referenceSolutionsEvaluations
+}) => {
+  const { hardwareGroup, tests } = limits[i];
+  const referenceSolutionsEvaluationsResults = referenceSolutionsEvaluations[hardwareGroup];
   return (
     <Row>
       {sortTests(Object.keys(tests)).map((testName, j) => (
@@ -39,6 +46,22 @@ const HardwareGroupFields = ({ prefix, i, limits }) => {
                     defaultMessage='Memory limit for "{taskId}":'
                     values={{ taskId }} />
                 } />
+
+                {referenceSolutionsEvaluationsResults && (
+                  <ReferenceSolutionsEvaluationsResults
+                    testId={testName}
+                    taskId={taskId}
+                    results={referenceSolutionsEvaluationsResults} />
+                )}
+
+                {!referenceSolutionsEvaluationsResults && (
+                  <HelpBlock>
+                    <FormattedMessage
+                      id='app.hardwareGroupFields.noReferenceSolutions'
+                      defaultMessage="There are no reference solutions' evaluations' for test '{testName}' and its task '{taskId}'."
+                      values={{ testName, taskId }} />
+                  </HelpBlock>
+                )}
             </div>
           ))}
         </Col>
@@ -50,7 +73,8 @@ const HardwareGroupFields = ({ prefix, i, limits }) => {
 HardwareGroupFields.propTypes = {
   prefix: PropTypes.string.isRequired,
   i: PropTypes.number,
-  limits: PropTypes.array.isRequired
+  limits: PropTypes.array.isRequired,
+  referenceSolutionsEvaluations: PropTypes.object
 };
 
 export default HardwareGroupFields;

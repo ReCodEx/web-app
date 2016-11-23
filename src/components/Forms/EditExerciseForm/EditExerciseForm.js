@@ -85,6 +85,7 @@ const EditExerciseForm = ({
           name='difficulty'
           component={SelectField}
           options={[
+            { key: '', name: '...' },
             { key: 'easy', name: formatMessage(messages.easy) },
             { key: 'medium', name: formatMessage(messages.medium) },
             { key: 'hard', name: formatMessage(messages.hard) }
@@ -99,7 +100,8 @@ const EditExerciseForm = ({
         <Field
           name='isPublic'
           component={CheckboxField}
-          label={<FormattedMessage id='app.editExerciseForm.isPublic' defaultMessage='Exercise is public and can be assigned to students.' />} />
+          onOff
+          label={<FormattedMessage id='app.editExerciseForm.isPublic' defaultMessage='Exercise is public and can be assigned to students by their supervisors.' />} />
 
       </FormBox>
     </Col>
@@ -121,12 +123,22 @@ EditExerciseForm.propTypes = {
 };
 
 const validate = ({
-  name
+  name,
+  description,
+  difficulty
 }) => {
   const errors = {};
 
   if (!name) {
     errors['name'] = <FormattedMessage id='app.editExerciseForm.validation.emptyName' defaultMessage='Please fill the name of the exercise.' />;
+  }
+
+  if (!difficulty) {
+    errors['difficulty'] = <FormattedMessage id='app.editExerciseForm.validation.difficulty' defaultMessage='Please select the difficulty of the exercise.' />;
+  }
+
+  if (!description) {
+    errors['description'] = <FormattedMessage id='app.editExerciseForm.validation.description' defaultMessage='Please fill the description of the exercise.' />;
   }
 
   return errors;

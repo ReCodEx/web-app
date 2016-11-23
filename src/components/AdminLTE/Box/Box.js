@@ -31,10 +31,11 @@ class Box extends Component {
   render() {
     const {
       title,
-      type,
+      type = 'default',
       noPadding = false,
       children,
       footer,
+      solid = false,
       collapsable = false,
       unlimitedHeight = false,
       className = ''
@@ -47,6 +48,7 @@ class Box extends Component {
           'box': true,
           [`box-${type}`]: typeof type !== 'undefined',
           'panel': true,
+          'box-solid': solid,
           [className]: className.length > 0
         })
       }>
@@ -93,6 +95,7 @@ Box.propTypes = {
   collapsable: PropTypes.bool,
   unlimitedHeight: PropTypes.bool,
   noPadding: PropTypes.bool,
+  solid: PropTypes.bool,
   footer: PropTypes.element,
   children: PropTypes.element,
   className: PropTypes.string

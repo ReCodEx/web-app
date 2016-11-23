@@ -1,10 +1,12 @@
 import React, { PropTypes } from 'react';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 import { FormattedMessage } from 'react-intl';
 import { TabbedArrayField } from '../Fields';
 import EditEnvironmentLimitsFields from './EditEnvironmentLimitsFields';
 
 const EditEnvironmentLimitsForm = ({
   environments = [],
+  runtimeEnvironments,
   ...props
 }) => (
   <TabbedArrayField
@@ -16,13 +18,15 @@ const EditEnvironmentLimitsForm = ({
         : <FormattedMessage id='app.editEnvironmentLimitsForm.newLocale' defaultMessage='New environment' />
     }
     ContentComponent={EditEnvironmentLimitsFields}
+    runtimeEnvironments={runtimeEnvironments}
     removeQuestion={<FormattedMessage id='app.editEnvironmentLimitsForm.localized.noEnvironment' defaultMessage='There is currently no environment specified for this assignment.' />}
     id='environment-limits'
     remove />
 );
 
 EditEnvironmentLimitsForm.propTypes = {
-  environments: PropTypes.array
+  environments: PropTypes.array,
+  runtimeEnvironments: ImmutablePropTypes.map
 };
 
 export default EditEnvironmentLimitsForm;

@@ -19,11 +19,6 @@ import { runtimeEnvironmentsSelector } from '../../redux/selectors/runtimeEnviro
 
 class EditExercise extends Component {
 
-  static loadAsync = ({ exerciseId }, dispatch) => Promise.all([
-    dispatch(fetchExerciseIfNeeded(exerciseId)),
-    dispatch(fetchRuntimeEnvironments())
-  ]);
-
   componentWillMount = () => this.props.loadAsync();
   componentWillReceiveProps = (props) => {
     if (this.props.params.exerciseId !== props.params.exerciseId) {
@@ -31,6 +26,11 @@ class EditExercise extends Component {
       props.loadAsync();
     }
   };
+
+  static loadAsync = ({ exerciseId }, dispatch) => Promise.all([
+    dispatch(fetchExerciseIfNeeded(exerciseId)),
+    dispatch(fetchRuntimeEnvironments())
+  ]);
 
   render() {
     const { links: { EXERCISE_URI_FACTORY } } = this.context;

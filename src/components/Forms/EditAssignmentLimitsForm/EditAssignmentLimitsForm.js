@@ -8,6 +8,7 @@ import SubmitButton from '../SubmitButton';
 
 const EditAssignmentLimitsForm = ({
   assignment,
+  runtimeEnvironments,
   initialValues,
   submitting,
   handleSubmit,
@@ -24,6 +25,7 @@ const EditAssignmentLimitsForm = ({
     <FieldArray
       name='environments'
       environments={initialValues.environments}
+      runtimeEnvironments={runtimeEnvironments}
       component={EditEnvironmentLimitsForm} />
 
     <div className='text-center'>
@@ -44,6 +46,7 @@ const EditAssignmentLimitsForm = ({
 
 EditAssignmentLimitsForm.propTypes = {
   initialValues: PropTypes.object.isRequired,
+  runtimeEnvironments: PropTypes.object.isRequired,
   values: PropTypes.array,
   handleSubmit: PropTypes.func.isRequired,
   assignment: PropTypes.object,
