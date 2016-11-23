@@ -8,6 +8,7 @@ import FormBox from '../../AdminLTE/FormBox';
 import {
   TextField,
   SelectField,
+  CheckboxField,
   MarkdownTextAreaField
 } from '../Fields';
 import SubmitButton from '../SubmitButton';
@@ -94,6 +95,11 @@ const EditExerciseForm = ({
           name='description'
           component={MarkdownTextAreaField}
           label={<FormattedMessage id='app.editExerciseForm.description' defaultMessage='Description for supervisors:' />} />
+
+        <Field
+          name='isPublic'
+          component={CheckboxField}
+          label={<FormattedMessage id='app.editExerciseForm.isPublic' defaultMessage='Exercise is public and can be assigned to students.' />} />
 
       </FormBox>
     </Col>
