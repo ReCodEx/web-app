@@ -8,7 +8,7 @@ import {
   FormControl,
   HelpBlock
 } from 'react-bootstrap';
-import { LoadingIcon, WarningIcon, SendIcon } from '../../Icons';
+import { LoadingIcon, WarningIcon, SendIcon, DeleteIcon, CloseIcon } from '../../Icons';
 import UploadContainer from '../../../containers/UploadContainer';
 import UsersNameContainer from '../../../containers/UsersNameContainer';
 
@@ -31,9 +31,9 @@ const SubmitSolution = ({
       </Modal.Title>
     </Modal.Header>
     <Modal.Body>
-      <div>
+      <p>
         <UsersNameContainer userId={userId} />
-      </div>
+      </p>
       <UploadContainer id={uploadId} />
 
       <FormGroup>
@@ -45,6 +45,14 @@ const SubmitSolution = ({
           type='text'
           placeholder='Poznámka pro Vás a cvičícího' />
       </FormGroup>
+
+      {hasFailed && (
+        <p className='text-left callout callout-danger'>
+          <FormattedMessage
+            id='app.submistSolution.submitFailed'
+            defaultMessage='Submission was rejected by the server. This usually means you have uploaded incorrect files - do your files have proper file type extensions? If you cannot submit your solution and there is no obvious reason, contact your supervisor to sort things out.' />
+        </p>
+      )}
     </Modal.Body>
     <Modal.Footer>
       {isSending && (
@@ -72,20 +80,23 @@ const SubmitSolution = ({
         bsStyle='default'
         className='btn-flat'
         onClick={reset}>
-          <FormattedMessage id='app.submitSolution.resetFormButton' defaultMessage='Reset form' />
+          <DeleteIcon /> <FormattedMessage id='app.submitSolution.resetFormButton' defaultMessage='Reset form' />
       </Button>
+
       <Button
         bsStyle='default'
         className='btn-flat'
         onClick={onClose}>
-          <FormattedMessage id='app.submitSolution.closeButton' defaultMessage='Close' />
+          <CloseIcon /> <FormattedMessage id='app.submitSolution.closeButton' defaultMessage='Close' />
       </Button>
+
       {!canSubmit && (
         <HelpBlock>
           <FormattedMessage
             id='app.submistSolution.instructions'
             defaultMessage='You must attach at least one file with source code and wait, until all your files are uploaded to the server. If there is a problem uploading any of the files, please try uploading it again or remove the file. This form cannot be submitted until there are any files which have not been successfully uploaded or which could not have been uploaded to the server.' />
-        </HelpBlock>)}
+        </HelpBlock>
+      )}
     </Modal.Footer>
   </Modal>
 );

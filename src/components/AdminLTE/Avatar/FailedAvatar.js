@@ -6,7 +6,7 @@ const FailedAvatar = ({
   borderWidth = 2,
   light = false
 }) => (
-  <div style={{
+  <span style={{
     display: 'inline-block',
     background: !light ? 'black' : 'white',
     color: 'gray',
@@ -21,7 +21,7 @@ const FailedAvatar = ({
     fontSize: Math.floor(size / 2)
   }}>
     <FailedIcon />
-  </div>
+  </span>
 );
 
 FailedAvatar.propTypes = {

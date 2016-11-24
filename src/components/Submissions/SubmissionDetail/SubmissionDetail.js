@@ -46,6 +46,15 @@ class SubmissionDetail extends Component {
               userId={userId}
               submittedBy={submittedBy}
               note={note} />
+            <Row>
+              {files.map(file => (
+              <Col sm={6} key={file.id}>
+                <a href='#' onClick={() => this.openFile(file.id)}>
+                  <SourceCodeInfoBox {...file} />
+                </a>
+              </Col>
+              ))}
+            </Row>
             <CommentThreadContainer threadId={id} />
           </Col>
 
@@ -64,29 +73,9 @@ class SubmissionDetail extends Component {
             </Col>
           )}
 
-          <Col lg={4} md={6} sm={12}>
+          <Col lg={4} md={12} sm={12}>
             <LocalizedAssignments locales={assignment.localizedAssignments} />
           </Col>
-        </Row>
-
-        {/*
-          Source codes
-          */}
-        <Row>
-          <Col xs={12}>
-            <h2>
-              <FormattedMessage id='app.submission.files.title' defaultMessage='Submitted files' />
-            </h2>
-          </Col>
-        </Row>
-        <Row>
-          {files.map(file => (
-          <Col lg={4} sm={6} key={file.id}>
-            <a href='#' onClick={() => this.openFile(file.id)}>
-              <SourceCodeInfoBox {...file} />
-            </a>
-          </Col>
-          ))}
         </Row>
 
         <SourceCodeViewerContainer

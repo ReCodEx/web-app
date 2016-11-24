@@ -93,34 +93,34 @@ class Assignment extends Component {
           resource={assignment}>
           {assignment => (
             <Row>
-              <Col md={6}>
+              <Col xs={12}>
                 {loggedInUserId !== userId && (
-                  <div>
+                  <p>
                     <UsersNameContainer userId={userId} />
-                  </div>
+                  </p>
                 )}
+                {isSupervisorOf(assignment.groupId) && (
+                  <p>
+                    <LinkContainer to={ASSIGNMENT_EDIT_URI_FACTORY(assignment.id)}>
+                      <Button bsStyle='warning' className='btn-flat'>
+                        <EditIcon /> <FormattedMessage id='app.assignment.editSettings' defaultMessage='Edit assignment settings' />
+                      </Button>
+                    </LinkContainer>
+                    <LinkContainer to={SUPERVISOR_STATS_URI_FACTORY(assignment.id)}>
+                      <Button bsStyle='primary' className='btn-flat'>
+                        <ResultsIcon /> <FormattedMessage id='app.assignment.viewResults' defaultMessage='View student results' />
+                      </Button>
+                    </LinkContainer>
+                  </p>
+                )}
+              </Col>
+              <Col lg={6}>
                 <div>
                   {assignment.localizedAssignments.length > 0 &&
                     <LocalizedAssignments locales={assignment.localizedAssignments} />}
-
-                  {isSupervisorOf(assignment.groupId) && (
-                    <p className='text-center'>
-                      <LinkContainer to={ASSIGNMENT_EDIT_URI_FACTORY(assignment.id)}>
-                        <Button bsStyle='warning' className='btn-flat'>
-                          <EditIcon /> <FormattedMessage id='app.assignment.editSettings' defaultMessage='Edit assignment settings' />
-                        </Button>
-                      </LinkContainer>
-                      <LinkContainer to={SUPERVISOR_STATS_URI_FACTORY(assignment.id)}>
-                        <Button bsStyle='primary' className='btn-flat'>
-                          <ResultsIcon /> <FormattedMessage id='app.assignment.viewResults' defaultMessage='View student results' />
-                        </Button>
-                      </LinkContainer>
-                    </p>
-                  )}
-
                 </div>
               </Col>
-              <Col md={6}>
+              <Col lg={6}>
                 <AssignmentDetails
                   {...assignment}
                   isAfterFirstDeadline={this.isAfter(assignment.firstDeadline)}

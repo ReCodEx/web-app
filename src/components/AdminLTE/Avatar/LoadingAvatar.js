@@ -6,7 +6,7 @@ const LoadingAvatar = ({
   borderWidth = 2,
   light = false
 }) => (
-  <div style={{
+  <span style={{
     display: 'inline-block',
     background: !light ? 'black' : 'white',
     color: 'gray',
@@ -21,7 +21,7 @@ const LoadingAvatar = ({
     fontSize: Math.floor(size / 2)
   }}>
     <LoadingIcon />
-  </div>
+  </span>
 );
 
 LoadingAvatar.propTypes = {
