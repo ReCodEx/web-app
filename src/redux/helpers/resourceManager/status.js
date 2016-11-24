@@ -6,7 +6,10 @@
 export const resourceStatus = {
   PENDING: 'PENDING',
   FAILED: 'FAILED',
-  FULFILLED: 'FULFILLED'
+  FULFILLED: 'FULFILLED',
+  POSTING: 'POSTING',
+  DELETING: 'DELETING',
+  DELETED: 'DELETED'
 };
 
 /**
@@ -15,6 +18,20 @@ export const resourceStatus = {
  */
 export const isLoading = (item) =>
     !item || item.get('state') === resourceStatus.PENDING;
+
+/**
+ * @param {Object} item The item
+ * @return {boolean} True when the item is being deleted.
+ */
+export const isDeleting = (item) =>
+    !item || item.get('state') === resourceStatus.DELETING;
+
+/**
+ * @param {Object} item The item
+ * @return {boolean} True when the item is being deleted.
+ */
+export const isDeleted = (item) =>
+    !item || item.get('state') === resourceStatus.DELETED;
 
 /**
  * @param {Object} item The item

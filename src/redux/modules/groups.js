@@ -3,9 +3,9 @@ import { fromJS, List } from 'immutable';
 
 import { addNotification } from './notifications';
 import { createApiAction } from '../middleware/apiMiddleware';
-import factory, { initialState, resourceStatus } from '../helpers/resourceManager';
+import factory, { initialState } from '../helpers/resourceManager';
 
-import { additionalActionTypes as assignmentsActionTypes } from './assignments';
+import { actionTypes as assignmentsActionTypes } from './assignments';
 
 const resourceName = 'groups';
 const {
@@ -44,11 +44,7 @@ export const additionalActionTypes = {
   UPDATE_GROUP: 'recodex/groups/UPDATE_GROUP',
   UPDATE_GROUP_PENDING: 'recodex/groups/UPDATE_GROUP_PENDING',
   UPDATE_GROUP_FULFILLED: 'recodex/groups/UPDATE_GROUP_FULFILLED',
-  UPDATE_GROUP_REJECTED: 'recodex/groups/UPDATE_GROUP_REJECTED',
-  DELETE_GROUP: 'recodex/groups/DELETE_GROUP',
-  DELETE_GROUP_PENDING: 'recodex/groups/DELETE_GROUP_PENDING',
-  DELETE_GROUP_FULFILLED: 'recodex/groups/DELETE_GROUP_FULFILLED',
-  DELETE_GROUP_REJECTED: 'recodex/groups/DELETE_GROUP_REJECTED'
+  UPDATE_GROUP_REJECTED: 'recodex/groups/UPDATE_GROUP_REJECTED'
 };
 
 export const loadGroup = actions.pushResource;
@@ -102,13 +98,7 @@ export const editGroup = (groupId, body) =>
     body
   });
 
-export const deleteGroup = (groupId) =>
-  createApiAction({
-    type: additionalActionTypes.DELETE_GROUP,
-    endpoint: `/groups/${groupId}`,
-    method: 'DELETE',
-    meta: { id: groupId }
-  });
+export const deleteGroup = actions.removeResource;
 
 export const joinGroup = (groupId, userId) =>
   dispatch =>
@@ -223,20 +213,29 @@ const reducer = handleActions(Object.assign({}, reduceActions, {
 
   [assignmentsActionTypes.CREATE_ASSIGNMENT_FULFILLED]: (state, { payload: { id: assignmentId }, meta: { groupId } }) =>
     state.updateIn([ 'resources', groupId, 'data', 'assignments' ], assignments => {
-      if (!assignments) {
+      if (!assignments || assignments.size === 0) {
         assignments = List();
       }
       return assignments.push(assignmentId);
     }),
 
-  [additionalActionTypes.DELETE_GROUP_PENDING]: (state, { meta: { id } }) =>
-    state.setIn(['resources', id, 'state'], resourceStatus.PENDING),
+  [assignmentsActionTypes.ADD_FULFILLED]: (state, { payload: { id: assignmentId }, meta: { body: { groupId } } }) =>
+    state.updateIn([ 'resources', groupId, 'data', 'assignments' ], assignments => {
+      if (!assignments || assignments.size === 0) {
+        assignments = List();
+      }
+      return assignments.push(assignmentId);
+    }),
 
-  [additionalActionTypes.DELETE_GROUP_FAILED]: (state, { meta: { id } }) =>
-    state.setIn(['resources', id, 'state'], resourceStatus.FAILED),
-
-  [additionalActionTypes.DELETE_GROUP_FULFILLED]: (state, { meta: { id } }) =>
-    state.removeIn(['resources', id])
+  [assignmentsActionTypes.REMOVE_FULFILLED]: (state, { meta: { id: assignmentId } }) =>
+    state.update('resources', groups => groups.map(
+      group => group.updateIn(
+        ['data', 'assignments'],
+        assignments =>
+          assignments
+            .update('all', ids => ids.filter(id => id !== assignmentId))
+            .update('public', ids => ids.filter(id => id !== assignmentId)))
+    ))
 
 }), initialState);
 

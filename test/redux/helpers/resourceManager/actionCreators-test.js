@@ -90,7 +90,7 @@ describe('Resource manager', () => {
 
         globalNeedsRefetching = true;
         const dispatch = chai.spy();
-        const thunkResult = thunk(dispatch, getState);
+        thunk(dispatch, getState); // we don't care about the resulting state in this test
 
         expect(dispatch).to.have.been.called.once();
         expect(dispatch).to.have.been.called.with(fetchResource('abc'));
@@ -120,11 +120,9 @@ describe('Resource manager', () => {
       it('must create an "add resource" action creator', () => {
         const { addResource } = actionCreators;
 
-        // fetchResource must be a function with one parameter
         expect(addResource).to.be.a('function');
         expect(addResource.length).to.equal(1);
 
-        // calling fetchResource will create an action through the 'createApiAction' function
         const body = { 'foo': 'bar', 'abc': 'xyz' };
         const tmpId = 'random-tmp-id';
         addResource(body, tmpId);
@@ -134,7 +132,7 @@ describe('Resource manager', () => {
           method: 'POST',
           endpoint: 'url/',
           body,
-          meta: { tmpId }
+          meta: { tmpId, body }
         });
       });
 
@@ -144,6 +142,46 @@ describe('Resource manager', () => {
         const tmpId = createApiAction.__spy.calls[0][0].meta.tmpId; // first argument of first call of the spy
         expect(tmpId).to.be.a('string');
         expect(tmpId.length).to.be.at.least(5); // 5 was chosen quite arbitrarily, but should be good-enough meassure for this purpose
+      });
+    });
+
+    describe('UPDATE RESOURCE', () => {
+      it('must create an "update resource" action creator', () => {
+        const { updateResource } = actionCreators;
+
+        expect(updateResource).to.be.a('function');
+        expect(updateResource.length).to.equal(2);
+
+        const body = { 'foo': 'bar', 'abc': 'xyz' };
+        const id = 'some-id';
+        updateResource(id, body);
+        expect(createApiAction).to.have.been.called.once();
+        expect(createApiAction).to.have.been.called.with({
+          type: actionTypes.UPDATE,
+          method: 'POST',
+          endpoint: `url/${id}`,
+          body,
+          meta: { id, body }
+        });
+      });
+    });
+
+    describe('REMOVE RESOURCE', () => {
+      it('must create an "remove resource" action creator', () => {
+        const { removeResource } = actionCreators;
+
+        expect(removeResource).to.be.a('function');
+        expect(removeResource.length).to.equal(1);
+
+        const id = 'some-id';
+        removeResource(id);
+        expect(createApiAction).to.have.been.called.once();
+        expect(createApiAction).to.have.been.called.with({
+          type: actionTypes.REMOVE,
+          method: 'DELETE',
+          endpoint: `url/${id}`,
+          meta: { id }
+        });
       });
     });
   });

@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { LoadingIcon, WarningIcon } from '../Icons';
-import { isLoading, hasFailed, getJsData } from '../../redux/helpers/resourceManager';
+import { isLoading, hasFailed, isDeleting, isDeleted, getJsData } from '../../redux/helpers/resourceManager';
 
 const defaultLoading = (noIcons) => (
   <span>
@@ -44,7 +44,7 @@ const ResourceRenderer = ({
     ? hiddenUntilReady ? null : loading
     : resources.some(hasFailed)
       ? hiddenUntilReady ? null : failed
-      : ready(...resources.map(getJsData));
+      : ready(...resources.filter((res) => !isDeleting(res) && !isDeleted(res)).map(getJsData)); // display all rady items
 };
 
 ResourceRenderer.propTypes = {

@@ -31,7 +31,7 @@ const HeaderNotification = ({
 );
 
 HeaderNotification.propTypes = {
-  id: PropTypes.string.isRequired,
+  id: PropTypes.any.isRequired,
   successful: PropTypes.bool,
   msg: PropTypes.string.isRequired,
   time: PropTypes.number.isRequired

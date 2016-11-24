@@ -10,6 +10,8 @@ import PageContent from '../../components/PageContent';
 import ResourceRenderer from '../../components/ResourceRenderer';
 import EditAssignmentForm from '../../components/Forms/EditAssignmentForm';
 import EditAssignmentLimitsForm from '../../components/Forms/EditAssignmentLimitsForm';
+import DeleteAssignmentButtonContainer from '../../containers/DeleteAssignmentButtonContainer';
+import Box from '../../components/AdminLTE/Box';
 
 import { fetchAssignmentIfNeeded, editAssignment } from '../../redux/modules/assignments';
 import { fetchLimitsIfNeeded, editLimits } from '../../redux/modules/limits';
@@ -20,6 +22,7 @@ import { runtimeEnvironmentsSelector } from '../../redux/selectors/runtimeEnviro
 import { isSubmitting } from '../../redux/selectors/submission';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments';
+import { isReady, getJsData } from '../../redux/helpers/resourceManager';
 
 class EditAssignment extends Component {
 
@@ -28,6 +31,10 @@ class EditAssignment extends Component {
     if (this.props.params.assignmentId !== props.params.assignmentId) {
       props.reset();
       props.loadAsync();
+    }
+
+    if (isReady(props.assignment)) {
+      this.groupId = getJsData(props.assignment).groupId;
     }
   };
 
@@ -44,9 +51,12 @@ class EditAssignment extends Component {
   });
 
   render() {
-    const { links: { ASSIGNMENT_DETAIL_URI_FACTORY } } = this.context;
+    const {
+      links: { ASSIGNMENT_DETAIL_URI_FACTORY, GROUP_URI_FACTORY }
+    } = this.context;
     const {
       params: { assignmentId },
+      push,
       assignment,
       environments,
       runtimeEnvironments,
@@ -70,25 +80,40 @@ class EditAssignment extends Component {
             iconName: 'pencil'
           }
         ]}>
-        <ResourceRenderer resource={assignment}>
-          {assignment => (
+        <div>
+          <ResourceRenderer resource={assignment}>
+            {data => (
+              <div>
+                <EditAssignmentForm
+                  initialValues={data ? this.getInitialValues(data) : {}}
+                  onSubmit={editAssignment}
+                  formValues={formValues} />
+                <ResourceRenderer resource={environments}>
+                  {environments => (
+                    <EditAssignmentLimitsForm
+                      initialValues={environments}
+                      runtimeEnvironments={runtimeEnvironments}
+                      assignment={data}
+                      onSubmit={editLimits} />
+                  )}
+                </ResourceRenderer>
+              </div>
+            )}
+          </ResourceRenderer>
+          <br />
+          <Box
+            type='danger'
+            title={<FormattedMessage id='app.editAssignment.deleteAssignment' defaultMessage='Delete the assignment' />}>
             <div>
-              <EditAssignmentForm
-                initialValues={this.getInitialValues(assignment)}
-                onSubmit={editAssignment}
-                formValues={formValues} />
-              <ResourceRenderer resource={environments}>
-                {environments => (
-                  <EditAssignmentLimitsForm
-                    initialValues={environments}
-                    runtimeEnvironments={runtimeEnvironments}
-                    assignment={assignment}
-                    onSubmit={editLimits} />
-                )}
-              </ResourceRenderer>
+              <p>
+                <FormattedMessage id='app.editAssgintent.deleteAssignmentWarning' defaultMessage='Deleting an assignment will remove all the students submissions and you will have to contact the administrator of ReCodEx if you wanted to restore the assignment in the future.' />
+              </p>
+              <p className='text-center'>
+                <DeleteAssignmentButtonContainer id={assignmentId} onDeleted={() => push(GROUP_URI_FACTORY(this.groupId))} />
+              </p>
             </div>
-          )}
-        </ResourceRenderer>
+          </Box>
+        </div>
       </PageContent>
     );
   }
@@ -101,6 +126,7 @@ EditAssignment.contextTypes = {
 
 EditAssignment.propTypes = {
   loadAsync: PropTypes.func.isRequired,
+  push: PropTypes.func.isRequired,
   params: PropTypes.shape({
     assignmentId: PropTypes.string.isRequired
   }).isRequired,

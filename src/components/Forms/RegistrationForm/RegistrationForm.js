@@ -47,11 +47,11 @@ const RegistrationForm = ({
     <Field name='lastName' component={TextField} label={<FormattedMessage id='app.registrationForm.lastName' defaultMessage='Last name:' />} />
     <Field name='email' component={EmailField} label={<FormattedMessage id='app.registrationForm.email' defaultMessage='E-mail address:' />} />
 
-    <Throttle time={500} handler='onKeyPress'>
+    <Throttle time={500} handler='onKeyDown'>
       <Field
         name='password'
         component={PasswordField}
-        onKeyPress={() => asyncValidate()}
+        onKeyDown={() => asyncValidate()}
         label={<FormattedMessage id='app.registrationForm.password' defaultMessage='Password:' />} />
     </Throttle>
 

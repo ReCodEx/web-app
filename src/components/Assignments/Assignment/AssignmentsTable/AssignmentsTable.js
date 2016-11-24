@@ -32,6 +32,7 @@ const AssignmentsTable = ({
 
       {assignments.filter(isReady)
         .map(getJsData)
+        .sort((a, b) => a.firstDeadline - b.firstDeadline)
         .map((assignment) => (
           <AssignmentTableRow
             key={assignment.id}

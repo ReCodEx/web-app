@@ -1,5 +1,4 @@
 import { handleActions } from 'redux-actions';
-import { fromJS } from 'immutable';
 
 import factory, { initialState } from '../helpers/resourceManager';
 import { createApiAction } from '../middleware/apiMiddleware';
@@ -41,23 +40,8 @@ export const validateRegistrationData = (email, password) =>
     body: { email, password }
   });
 
-export const updateProfile = (userId, body) =>
-  createApiAction({
-    type: actionTypes.UPDATE_PROFILE,
-    endpoint: `/users/${userId}`,
-    method: 'POST',
-    body,
-    meta: { userId }
-  });
-
-export const updateSettings = (userId, body) =>
-  createApiAction({
-    type: actionTypes.UPDATE_SETTINGS,
-    endpoint: `/users/${userId}/settings`,
-    method: 'POST',
-    body,
-    meta: { userId }
-  });
+export const updateProfile = actions.updateResource;
+export const updateSettings = (id, body) => actions.updateResource(id, body, `/users/${id}/settings`);
 
 export const fetchSupervisors = groupId =>
   actions.fetchMany({
@@ -74,12 +58,6 @@ export const fetchStudents = groupId =>
  */
 
 const reducer = handleActions(Object.assign({}, reduceActions, {
-
-  [actionTypes.UPDATE_PROFILE_FULFILLED]: (state, { payload, meta: { userId } }) =>
-    state.setIn(['resources', userId, 'data'], fromJS(payload)),
-
-  [actionTypes.UPDATE_SETTINGS_FULFILLED]: (state, { payload, meta: { userId } }) =>
-    state.setIn(['resources', userId, 'data', 'settings'], fromJS(payload)),
 
   [groupsActionTypes.JOIN_GROUP_PENDING]: (state, { meta: { groupId, userId } }) => {
     if (!state.getIn(['resources', userId])) {

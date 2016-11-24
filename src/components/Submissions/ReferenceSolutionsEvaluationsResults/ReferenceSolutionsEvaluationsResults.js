@@ -28,12 +28,8 @@ const ReferenceSolutionsEvaluationsResults = ({
       </thead>
       <tbody>
         {results
-          .filter((result) => result.evaluationStatus === 'done')
+          .filter((result) => result.evaluationStatus === 'done' && result.evaluation)
           .map((result, i) => {
-            if (!result.evaluation) {
-              return null;
-            }
-
             // find the specific test
             const testStats = result.evaluation.testResults.find(test => test.testName === testId);
             if (!testStats) {
