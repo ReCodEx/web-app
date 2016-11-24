@@ -92,61 +92,65 @@ class Assignment extends Component {
           failed={<FailedAssignmentDetails />}
           resource={assignment}>
           {assignment => (
-            <Row>
-              <Col xs={12}>
-                {loggedInUserId !== userId && (
-                  <p>
-                    <UsersNameContainer userId={userId} />
-                  </p>
-                )}
-                {isSupervisorOf(assignment.groupId) && (
-                  <p>
-                    <LinkContainer to={ASSIGNMENT_EDIT_URI_FACTORY(assignment.id)}>
-                      <Button bsStyle='warning' className='btn-flat'>
-                        <EditIcon /> <FormattedMessage id='app.assignment.editSettings' defaultMessage='Edit assignment settings' />
-                      </Button>
-                    </LinkContainer>
-                    <LinkContainer to={SUPERVISOR_STATS_URI_FACTORY(assignment.id)}>
-                      <Button bsStyle='primary' className='btn-flat'>
-                        <ResultsIcon /> <FormattedMessage id='app.assignment.viewResults' defaultMessage='View student results' />
-                      </Button>
-                    </LinkContainer>
-                  </p>
-                )}
-              </Col>
-              <Col lg={6}>
-                <div>
-                  {assignment.localizedAssignments.length > 0 &&
-                    <LocalizedAssignments locales={assignment.localizedAssignments} />}
-                </div>
-              </Col>
-              <Col lg={6}>
-                <AssignmentDetails
-                  {...assignment}
-                  isAfterFirstDeadline={this.isAfter(assignment.firstDeadline)}
-                  isAfterSecondDeadline={this.isAfter(assignment.secondDeadline)}
-                  canSubmit={canSubmit} />
-
-                {isStudentOf(assignment.groupId) && (
-                  <div>
-                    <p className='text-center'>
-                      <ResourceRenderer
-                        loading={<SubmitSolutionButton disabled={true} />}
-                        resource={canSubmit}>
-                        {canSubmit => <SubmitSolutionButton onClick={init(userId)} disabled={!canSubmit} />}
-                      </ResourceRenderer>
+            <div>
+              <Row>
+                <Col xs={12}>
+                  {loggedInUserId !== userId && (
+                    <p>
+                      <UsersNameContainer userId={userId} />
                     </p>
-                    <SubmitSolutionContainer
-                      userId={userId}
-                      reset={init(userId)}
-                      assignmentId={assignment.id}
-                      isOpen={submitting} />
-
-                    <SubmissionsTableContainer userId={userId} assignmentId={assignment.id} />
+                  )}
+                  {isSupervisorOf(assignment.groupId) && (
+                    <p>
+                      <LinkContainer to={ASSIGNMENT_EDIT_URI_FACTORY(assignment.id)}>
+                        <Button bsStyle='warning' className='btn-flat'>
+                          <EditIcon /> <FormattedMessage id='app.assignment.editSettings' defaultMessage='Edit assignment settings' />
+                        </Button>
+                      </LinkContainer>
+                      <LinkContainer to={SUPERVISOR_STATS_URI_FACTORY(assignment.id)}>
+                        <Button bsStyle='primary' className='btn-flat'>
+                          <ResultsIcon /> <FormattedMessage id='app.assignment.viewResults' defaultMessage='View student results' />
+                        </Button>
+                      </LinkContainer>
+                    </p>
+                  )}
+                </Col>
+              </Row>
+              <Row>
+                <Col lg={6}>
+                  <div>
+                    {assignment.localizedAssignments.length > 0 &&
+                      <LocalizedAssignments locales={assignment.localizedAssignments} />}
                   </div>
-                )}
-              </Col>
-            </Row>
+                </Col>
+                <Col lg={6}>
+                  <AssignmentDetails
+                    {...assignment}
+                    isAfterFirstDeadline={this.isAfter(assignment.firstDeadline)}
+                    isAfterSecondDeadline={this.isAfter(assignment.secondDeadline)}
+                    canSubmit={canSubmit} />
+
+                  {isStudentOf(assignment.groupId) && (
+                    <div>
+                      <p className='text-center'>
+                        <ResourceRenderer
+                          loading={<SubmitSolutionButton disabled={true} />}
+                          resource={canSubmit}>
+                          {canSubmit => <SubmitSolutionButton onClick={init(userId)} disabled={!canSubmit} />}
+                        </ResourceRenderer>
+                      </p>
+                      <SubmitSolutionContainer
+                        userId={userId}
+                        reset={init(userId)}
+                        assignmentId={assignment.id}
+                        isOpen={submitting} />
+
+                      <SubmissionsTableContainer userId={userId} assignmentId={assignment.id} />
+                    </div>
+                  )}
+                </Col>
+              </Row>
+            </div>
           )}
         </ResourceRenderer>
       </PageContent>

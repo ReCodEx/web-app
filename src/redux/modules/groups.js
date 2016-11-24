@@ -211,10 +211,13 @@ const reducer = handleActions(Object.assign({}, reduceActions, {
     return reduceActions[actionTypes.FETCH_MANY_FULFILLED](state, { ...rest, payload: groups });
   },
 
-  [assignmentsActionTypes.CREATE_ASSIGNMENT_FULFILLED]: (state, { payload: { id: assignmentId }, meta: { groupId } }) =>
-    state.updateIn([ 'resources', groupId, 'data', 'assignments', 'all' ], assignments => {
-      if (!assignments) { assignments = List(); }
-      return assignments.push(assignmentId);
+  [assignmentsActionTypes.UPDATE_FULFILLED]: (state, { payload: { id: assignmentId, isPublic, groupId } }) =>
+    state.updateIn([ 'resources', groupId, 'data', 'assignments', 'public' ], assignments => {
+      if (isPublic) {
+        return assignments.push(assignmentId).toSet().toList();
+      } else {
+        return assignments.filter(id => id !== assignmentId).toSet().toList();
+      }
     }),
 
   [assignmentsActionTypes.ADD_FULFILLED]: (state, { payload: { id: assignmentId }, meta: { body: { groupId } } }) =>
