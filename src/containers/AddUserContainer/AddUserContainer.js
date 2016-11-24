@@ -22,13 +22,14 @@ const AddUserContainer = ({
 
 AddUserContainer.propTypes = {
   id: PropTypes.string.isRequired,
+  instanceId: PropTypes.string.isRequired,
   groupId: PropTypes.string.isRequired,
   search: PropTypes.func.isRequired,
   createActions: PropTypes.func
 };
 
-const mapDispatchToProps = (dispatch, { instanceId }) => ({
-  search: (id, query) => dispatch(searchPeople(instanceId)(id, query))
+const mapDispatchToProps = (dispatch, props) => ({
+  search: (query) => dispatch(searchPeople(props.instanceId)(props.id, query))
 });
 
 export default connect(undefined, mapDispatchToProps)(AddUserContainer);

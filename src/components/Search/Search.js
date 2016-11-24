@@ -1,56 +1,62 @@
-import React, { PropTypes } from 'react';
+import React, { PropTypes, Component } from 'react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { FormattedMessage } from 'react-intl';
-import { FormGroup, ControlLabel, FormControl, InputGroup } from 'react-bootstrap';
-import { Debounce } from 'react-throttle';
+import { Button, FormGroup, ControlLabel, FormControl, InputGroup } from 'react-bootstrap';
 import { LoadingIcon, SearchIcon, WarningIcon } from '../Icons';
 
 // some additional styling for a scrolable vertical box
 import styles from './search.less';
 
-const Search = ({
-  id = '',
-  type = 'general',
-  onChange,
-  isLoading,
-  hasFailed,
-  isReady,
-  query,
-  foundItems,
-  renderList
-}) => (
-  <div>
-    <FormGroup>
-      <ControlLabel htmlFor={id}>
-        <FormattedMessage id='app.search.title' defaultMessage='Search:' />
-      </ControlLabel>
-      <InputGroup>
-        <InputGroup.Addon>
-          {isLoading && <LoadingIcon />}
-          {hasFailed && <WarningIcon />}
-          {!isLoading && !hasFailed && <SearchIcon />}
-        </InputGroup.Addon>
-        <Debounce time={300} handler='onChange'>
-          <FormControl id={id} onChange={e => onChange(id, e.target.value)} />
-        </Debounce>
-      </InputGroup>
-    </FormGroup>
-    {query && query.length > 0 && (
-      <div>
-        <p>
-          {' '}<FormattedMessage id='app.search.query' defaultMessage='Searched query: ' />
-          <strong><em>"{query}"</em></strong>
-        </p>
+class Search extends Component {
 
-        {(!isLoading || foundItems.size > 0) && (
-          <div className={styles.list}>
-            {renderList(foundItems.toJS())}
+  render() {
+    const {
+      id = '',
+      onChange,
+      isLoading,
+      hasFailed,
+      query,
+      foundItems,
+      renderList
+    } = this.props;
+
+    return (
+      <div>
+        <FormGroup>
+          <ControlLabel htmlFor={id}>
+            <FormattedMessage id='app.search.title' defaultMessage='Search:' />
+          </ControlLabel>
+          <InputGroup>
+            <FormControl id={id} onChange={e => { this.query = e.target.value; }} />
+            <InputGroup.Button>
+              <Button
+                onClick={() => onChange(this.query)}
+                disabled={false && !isLoading && !hasFailed}>
+                {isLoading && <LoadingIcon />}
+                {hasFailed && <WarningIcon />}
+                {!isLoading && !hasFailed && <SearchIcon />}
+              </Button>
+            </InputGroup.Button>
+          </InputGroup>
+        </FormGroup>
+        {query && query.length > 0 && (
+          <div>
+            <p>
+              {' '}<FormattedMessage id='app.search.query' defaultMessage='Searched query: ' />
+              <strong><em>"{query}"</em></strong>
+            </p>
+
+            {(!isLoading || foundItems.size > 0) && (
+              <div className={styles.list}>
+                {renderList(foundItems.toJS())}
+              </div>
+            )}
           </div>
         )}
       </div>
-    )}
-  </div>
-);
+    );
+  }
+}
 
 Search.propTypes = {
   id: PropTypes.string,

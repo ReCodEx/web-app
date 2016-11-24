@@ -9,16 +9,17 @@ import { getSearchStatus, getSearchResults, getSearchQuery } from '../../redux/s
 
 const SearchContainer = ({
   id,
+  type = 'search',
   query,
   search,
   status,
-  exercises,
+  foundItems,
   renderList
 }) => (
   <Search
-    type='exercises'
+    type={type}
     id={id}
-    foundItems={exercises}
+    foundItems={foundItems}
     query={query}
     isReady={status === searchStatus.READY}
     isLoading={status === searchStatus.PENDING}
@@ -29,17 +30,20 @@ const SearchContainer = ({
 
 SearchContainer.propTypes = {
   id: PropTypes.string.isRequired,
+  type: PropTypes.string,
   search: PropTypes.func.isRequired,
   query: PropTypes.string,
   status: PropTypes.string,
-  exercises: ImmutablePropTypes.list.isRequired,
+  foundItems: ImmutablePropTypes.list.isRequired,
   renderList: PropTypes.func.isRequired
 };
 
-const mapStateToProps = (state, { id }) => ({
-  status: getSearchStatus(id)(state),
-  query: getSearchQuery(id)(state),
-  exercises: getSearchResults(id)(state)
-});
+const mapStateToProps = (state, { id }) => {
+  return {
+    status: getSearchStatus(id)(state),
+    query: getSearchQuery(id)(state),
+    foundItems: getSearchResults(id)(state)
+  };
+};
 
 export default connect(mapStateToProps)(SearchContainer);
