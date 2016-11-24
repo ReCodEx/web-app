@@ -1,21 +1,17 @@
-import React, { PropTypes, Component } from 'react';
+import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import BonusPointsForm from '../../components/Forms/BonusPointsForm';
 
 import { setPoints } from '../../redux/modules/submissions';
 
-class BonusPointsContainer extends Component {
-
-  render() {
-    const { evaluation, setPoints } = this.props;
-    return (
-      <BonusPointsForm
-        onSubmit={setPoints}
-        initialvalues={{ points: evaluation.bonusPoints }} />
-    );
-  }
-
-}
+const BonusPointsContainer = ({
+  evaluation,
+  setPoints
+}) => (
+  <BonusPointsForm
+    onSubmit={setPoints}
+    initialvalues={{ points: evaluation.bonusPoints }} />
+);
 
 BonusPointsContainer.propTypes = {
   submissionId: PropTypes.string.isRequired,

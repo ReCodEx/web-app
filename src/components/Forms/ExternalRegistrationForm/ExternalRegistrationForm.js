@@ -64,7 +64,6 @@ ExternalRegistrationForm.propTypes = {
   instances: ImmutablePropTypes.map.isRequired,
   handleSubmit: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
-  istTryingToCreateAccount: PropTypes.bool,
   submitFailed: PropTypes.bool,
   submitSucceeded: PropTypes.bool,
   submitting: PropTypes.bool,

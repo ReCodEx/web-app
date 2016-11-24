@@ -30,7 +30,7 @@ class GroupTree extends Component {
         </LinkContainer>
 
         {isAdmin && (
-          <DeleteGroupButtonContainer groupId={groupId} bsSize='xs' className='btn-flat' />
+          <DeleteGroupButtonContainer id={groupId} bsSize='xs' className='btn-flat' />
         )}
       </ButtonGroup>
     );

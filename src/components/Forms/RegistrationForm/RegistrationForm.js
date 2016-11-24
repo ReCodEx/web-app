@@ -76,7 +76,6 @@ RegistrationForm.propTypes = {
   instances: PropTypes.object.isRequired,
   handleSubmit: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
-  istTryingToCreateAccount: PropTypes.bool,
   submitFailed: PropTypes.bool,
   asyncValidate: PropTypes.func.isRequired,
   submitSucceeded: PropTypes.bool,

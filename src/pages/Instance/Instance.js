@@ -6,6 +6,8 @@ import { Row, Col } from 'react-bootstrap';
 
 import Page from '../../components/Page';
 import InstanceDetail from '../../components/Instances/InstanceDetail';
+import LicencesTableContainer from '../../containers/LicencesTableContainer';
+import AddLicenceFormContainer from '../../containers/AddLicenceFormContainer';
 import CreateGroupForm from '../../components/Forms/CreateGroupForm';
 
 import { fetchInstanceIfNeeded } from '../../redux/modules/instances';
@@ -13,6 +15,7 @@ import { instanceSelector, isAdminOfInstance } from '../../redux/selectors/insta
 import { createGroup, fetchInstanceGroupsIfNeeded } from '../../redux/modules/groups';
 import { groupsSelectors } from '../../redux/selectors/groups';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
+import { isSuperAdmin } from '../../redux/selectors/users';
 
 class Instance extends Component {
 
@@ -37,7 +40,8 @@ class Instance extends Component {
       instance,
       groups,
       createGroup,
-      isAdmin
+      isAdmin,
+      isSuperAdmin
     } = this.props;
 
     return (
@@ -66,6 +70,12 @@ class Instance extends Component {
                     onSubmit={createGroup}
                     instanceId={instanceId} />
                 </Col>
+                <Col sm={6}>
+                  <LicencesTableContainer instance={data} />
+                  {isSuperAdmin && (
+                    <AddLicenceFormContainer instanceId={data.id} />
+                  )}
+                </Col>
               </Row>
             )}
           </div>
@@ -84,7 +94,8 @@ Instance.propTypes = {
   instance: ImmutablePropTypes.map,
   groups: ImmutablePropTypes.map,
   createGroup: PropTypes.func.isRequired,
-  isAdmin: PropTypes.bool.isRequired
+  isAdmin: PropTypes.bool.isRequired,
+  isSuperAdmin: PropTypes.bool.isRequired
 };
 
 export default connect(
@@ -93,7 +104,8 @@ export default connect(
     return {
       instance: instanceSelector(state, instanceId),
       groups: groupsSelectors(state),
-      isAdmin: isAdminOfInstance(userId, instanceId)(state)
+      isAdmin: isAdminOfInstance(userId, instanceId)(state),
+      isSuperAdmin: isSuperAdmin(userId)(state)
     };
   },
   (dispatch, { params: { instanceId } }) => ({

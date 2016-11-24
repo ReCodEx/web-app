@@ -1,5 +1,6 @@
 export { default as AddIcon } from './AddIcon';
 export { default as DownloadIcon } from './DownloadIcon';
+export { default as CloseIcon } from './CloseIcon';
 export { default as EditIcon } from './EditIcon';
 export { default as DeleteIcon } from './DeleteIcon';
 export { default as InfoIcon } from './InfoIcon';

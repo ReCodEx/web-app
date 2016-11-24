@@ -40,14 +40,13 @@ const BonusPointsForm = ({
         <FormattedMessage id='app.bonusPointsForm.failed' defaultMessage='Cannot save the bonus points.' />
       </Alert>)}
 
-    <Field name='bonusPoints' required component={TextField} label={<FormattedMessage id='app.bonusPointsForm.bonusPoints' defaultMessage='Bonus points:' />} />
+    <Field name='bonusPoints' component={TextField} label={<FormattedMessage id='app.bonusPointsForm.bonusPoints' defaultMessage='Bonus points:' />} />
   </FormBox>
 );
 
 BonusPointsForm.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
-  istTryingToCreateAccount: PropTypes.bool,
   submitFailed: PropTypes.bool,
   submitSucceeded: PropTypes.bool,
   submitting: PropTypes.bool,

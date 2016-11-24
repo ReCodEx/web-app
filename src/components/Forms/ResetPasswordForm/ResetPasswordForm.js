@@ -51,7 +51,6 @@ const ResetPasswordForm = ({
 ResetPasswordForm.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
-  istTryingToCreateAccount: PropTypes.bool,
   hasFailed: PropTypes.bool,
   hasSucceeded: PropTypes.bool,
   submitting: PropTypes.bool,

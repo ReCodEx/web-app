@@ -212,18 +212,14 @@ const reducer = handleActions(Object.assign({}, reduceActions, {
   },
 
   [assignmentsActionTypes.CREATE_ASSIGNMENT_FULFILLED]: (state, { payload: { id: assignmentId }, meta: { groupId } }) =>
-    state.updateIn([ 'resources', groupId, 'data', 'assignments' ], assignments => {
-      if (!assignments || assignments.size === 0) {
-        assignments = List();
-      }
+    state.updateIn([ 'resources', groupId, 'data', 'assignments', 'all' ], assignments => {
+      if (!assignments) { assignments = List(); }
       return assignments.push(assignmentId);
     }),
 
   [assignmentsActionTypes.ADD_FULFILLED]: (state, { payload: { id: assignmentId }, meta: { body: { groupId } } }) =>
-    state.updateIn([ 'resources', groupId, 'data', 'assignments' ], assignments => {
-      if (!assignments || assignments.size === 0) {
-        assignments = List();
-      }
+    state.updateIn([ 'resources', groupId, 'data', 'assignments', 'all' ], assignments => {
+      if (!assignments) { assignments = List(); }
       return assignments.push(assignmentId);
     }),
 
