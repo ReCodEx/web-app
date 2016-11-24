@@ -26,7 +26,7 @@ const GroupDetail = ({
 }) => (
   <div>
     <Row>
-      <Col sm={12}>
+      <Col lg={6} sm={12}>
         <Box
           title={<FormattedMessage id='app.groupDetail.description' defaultMessage='Group description' />}
           type='primary'
@@ -39,7 +39,7 @@ const GroupDetail = ({
                 {externalId && (
                   <tr>
                     <th><FormattedMessage id='app.groupDetail.externalId' defaultMessage='External identification of the group:' /></th>
-                    <td><pre><code>{externalId}</code></pre></td>
+                    <td><code>{externalId}</code></td>
                   </tr>)}
                 <tr>
                   <th><FormattedMessage id='app.groupDetail.isPublic' defaultMessage='Students can join this group themselves:' /></th>
@@ -56,9 +56,7 @@ const GroupDetail = ({
           </div>
         </Box>
       </Col>
-    </Row>
-    <Row>
-      <Col md={6}>
+      <Col lg={3} sm={6}>
         <Box
           noPadding
           collapsable
@@ -70,7 +68,7 @@ const GroupDetail = ({
             isLoaded={supervisors.length === group.supervisors.length} />
         </Box>
       </Col>
-      <Col md={6}>
+      <Col lg={3} sm={6}>
         <Box title={<FormattedMessage id='app.groupDetail.groupsTitle' defaultMessage='Groups hierarchy' />} noPadding>
           <GroupTree id={parentGroupId || id} currentGroupId={id} groups={groups} isOpen />
         </Box>
