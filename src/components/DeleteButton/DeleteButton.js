@@ -4,7 +4,7 @@ import ConfirmDeleteButton from './ConfirmDeleteButton';
 import DeletingButton from './DeletingButton';
 import DeletedButton from './DeletedButton';
 import DeletingFailedButton from './DeletingFailedButton';
-import { getId, isReady, isLoading, isDeleting, isDeleted } from '../../redux/helpers/resourceManager';
+import { getJsData, isReady, isLoading, isDeleting, isDeleted } from '../../redux/helpers/resourceManager';
 
 const DeleteButton = ({
   resource,
@@ -20,7 +20,7 @@ const DeleteButton = ({
   }
 
   if (isReady(resource)) {
-    return <ConfirmDeleteButton {...props} id={getId(resource)} onClick={deleteResource} />;
+    return <ConfirmDeleteButton {...props} {...getJsData(resource)} onClick={deleteResource} />;
   }
 
   if (isDeleting(resource)) {
