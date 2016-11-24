@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { Popover, Overlay, ButtonGroup, Button } from 'react-bootstrap';
-import { SuccessIcon } from '../../Icons';
+import { SuccessIcon, CloseIcon } from '../../Icons';
 
 class Confirm extends Component {
 
@@ -31,7 +31,7 @@ class Confirm extends Component {
       question,
       id,
       yes = <span><SuccessIcon /> <FormattedMessage id='app.confirm.yes' defaultMessage='Yes' /></span>,
-      no = <FormattedMessage id='app.confirm.no' defaultMessage='No' />
+      no = <span><CloseIcon /> <FormattedMessage id='app.confirm.no' defaultMessage='No' /></span>
     } = this.props;
     const { target, showPopup } = this.state;
 
@@ -40,11 +40,13 @@ class Confirm extends Component {
         show={showPopup}
         target={target}
         placement='bottom'>
-        <Popover id={id} title={question} className='text-center'>
-          <ButtonGroup bsSize='sm'>
-            <Button onClick={e => this.confirm(e)}>{yes}</Button>
-            <Button onClick={e => this.dismiss(e)}>{no}</Button>
-          </ButtonGroup>
+        <Popover id={id} title={question}>
+          <div className='text-center'>
+            <ButtonGroup bsSize='sm'>
+              <Button onClick={e => this.confirm(e)}>{yes}</Button>
+              <Button onClick={e => this.dismiss(e)}>{no}</Button>
+            </ButtonGroup>
+          </div>
         </Popover>
       </Overlay>
     );
