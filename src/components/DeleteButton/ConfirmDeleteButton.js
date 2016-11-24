@@ -6,7 +6,6 @@ import Confirm from '../Forms/Confirm';
 
 const ConfirmDeleteButton = ({
   id,
-  childGroups,
   onClick,
   disabled,
   question = <FormattedMessage id='app.deleteButton.confirm' defaultMessage='Are you sure you want to delete the resource? This cannot be undone.' />,
@@ -16,7 +15,7 @@ const ConfirmDeleteButton = ({
     id={id}
     onConfirmed={onClick}
     question={question}>
-    <Button disabled={disabled || !id || childGroups.all.length > 0} bsStyle='danger' bsSize='sm' className='btn-flat' {...props}>
+    <Button disabled={disabled || !id} bsStyle='danger' bsSize='sm' className='btn-flat' {...props}>
       <DeleteIcon /> <FormattedMessage id='app.deleteButton.delete' defaultMessage='Delete' />
     </Button>
   </Confirm>
@@ -24,8 +23,7 @@ const ConfirmDeleteButton = ({
 
 ConfirmDeleteButton.propTypes = {
   onClick: PropTypes.func,
-  id: PropTypes.string.isRequired,
-  childGroups: PropTypes.object.isRequired,
+  id: PropTypes.string,
   question: PropTypes.any,
   disabled: PropTypes.bool
 };

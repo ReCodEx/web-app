@@ -20,7 +20,8 @@ const DeleteButton = ({
   }
 
   if (isReady(resource)) {
-    return <ConfirmDeleteButton {...props} {...getJsData(resource)} onClick={deleteResource} />;
+    const { id, childGroups } = getJsData(resource);
+    return <ConfirmDeleteButton {...props} id={id} disabled={childGroups && childGroups.length > 0} onClick={deleteResource} />;
   }
 
   if (isDeleting(resource)) {
