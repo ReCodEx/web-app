@@ -79,7 +79,7 @@
   "app.createGroupForm.success": "Skupina byla vytvořena",
   "app.createGroupForm.title": "Vytvořit novou skupinu",
   "app.deleteGroupButton.confirm": "Do you really want to delete group {name}? This cannot be undone.",
-  "app.deleteGroupButton.delete": "Smayat skupinu",
+  "app.deleteGroupButton.delete": "Smazat skupinu",
   "app.deleteGroupButton.deleted": "Skupina je právě mazána ...",
   "app.deleteGroupButton.deleting": "Skupina byla smazána",
   "app.editAssignment.description": "Změnit nastavení zadání úlohy včetně jejích limitů",
