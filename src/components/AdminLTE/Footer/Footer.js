@@ -10,7 +10,7 @@ const Footer = ({
     </div>
     <FormattedHTMLMessage
       id='app.footer.copyright'
-      defaultMessage='Copyright © 2016 <a href="{website}">ReCodEx</a>.</strong> All rights reserved.'
+      defaultMessage='Copyright © 2016 <a href="{website}">ReCodEx</a>. All rights reserved.'
       values={{
         website: 'http://github.com/recodex'
       }} />

@@ -15,11 +15,8 @@ import 'admin-lte/dist/css/skins/skin-green.min.css';
 // import 'admin-lte/dist/css/skins/skin-purple.min.css';
 
 /**
- * This component is intended to be used as the root component and should wrap
- * the whole tree of components in the ReCodEx application as it provides crutial
- * functionality like localized links dependency injection to its subtree.
- * @class LayoutContainer
- * @extends {Component}
+ * Handles the dependency injection of the localized links based on the current language stated in the URL.
+ * Also controls the state of the sidebar - collapsing and showing the sidebar.
  */
 class LayoutContainer extends Component {
 
@@ -70,6 +67,11 @@ class LayoutContainer extends Component {
    * Get messages for the given language or the deafult - English
    */
 
+  getDefaultLang = () => {
+    const { userSettings } = this.context;
+    return userSettings && userSettings.defaultLanguage ? userSettings.defaultLanguage : 'en';
+  };
+
   getMessages = (lang) => messages[lang] || messages[this.getDefaultLang()];
   getLocaleData = (lang) => localeData[lang] || localeData[this.getDefaultLang()];
 
@@ -113,7 +115,8 @@ LayoutContainer.childContextTypes = {
 };
 
 LayoutContainer.contextTypes = {
-  router: PropTypes.object
+  router: PropTypes.object,
+  userSettings: PropTypes.object
 };
 
 LayoutContainer.propTypes = {

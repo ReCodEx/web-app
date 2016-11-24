@@ -23,6 +23,11 @@ class EditGroup extends Component {
     }
   };
 
+  getInitialValues = ({ threshold, ...group }) => ({
+    ...group,
+    threshold: threshold * 100
+  });
+
   render() {
     const { links: { GROUP_URI_FACTORY } } = this.context;
     const {
@@ -49,7 +54,7 @@ class EditGroup extends Component {
         ]}>
         {group => (
           <EditGroupForm
-            initialValues={group}
+            initialValues={this.getInitialValues(group)}
             onSubmit={editGroup} />
         )}
       </Page>

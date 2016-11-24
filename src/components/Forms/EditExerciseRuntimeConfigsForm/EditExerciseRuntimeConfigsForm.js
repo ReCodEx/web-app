@@ -13,6 +13,7 @@ if (canUseDOM) {
 
 const EditExerciseRuntimeConfigsForm = ({
   runtimeEnvironments,
+  runtimeConfigs,
   initialValues,
   submitting,
   handleSubmit,
@@ -29,7 +30,7 @@ const EditExerciseRuntimeConfigsForm = ({
     <FieldArray
       name='runtimeConfigs'
       runtimeEnvironments={runtimeEnvironments}
-      runtimeConfigs={initialValues.runtimeConfigs}
+      runtimeConfigs={runtimeConfigs}
       component={EditRuntimeConfigForm} />
 
     <div className='text-center'>
@@ -50,6 +51,7 @@ const EditExerciseRuntimeConfigsForm = ({
 
 EditExerciseRuntimeConfigsForm.propTypes = {
   initialValues: PropTypes.object.isRequired,
+  runtimeConfigs: PropTypes.object.isRequired,
   handleSubmit: PropTypes.func.isRequired,
   runtimeEnvironments: PropTypes.object.isRequired,
   submitting: PropTypes.bool,
@@ -65,19 +67,23 @@ const validate = ({ runtimeConfigs }) => {
   for (let i = 0; i < runtimeConfigs.length; ++i) {
     const runtimeConfigErrors = {};
 
-    if (!runtimeConfigs[i].name || runtimeConfigs[i].name.length === 0) {
-      runtimeConfigsErrors['name'] = <FormattedMessage id='app.editExerciseRuntimeConfigsForm.validation.name' defaultMessage='Please fill the display name of the runtime environment.' />;
-    }
+    if (!runtimeConfigs[i]) {
+      runtimeConfigErrors['name'] = <FormattedMessage id='app.editExerciseRuntimeConfigsForm.validation.empty' defaultMessage='Please fill the runtime environment information.' />;
+    } else {
+      if (!runtimeConfigs[i].name || runtimeConfigs[i].name.length === 0) {
+        runtimeConfigErrors['name'] = <FormattedMessage id='app.editExerciseRuntimeConfigsForm.validation.name' defaultMessage='Please fill the display name of the runtime environment.' />;
+      }
 
-    if (!runtimeConfigs[i].runtimeEnvironmentId || runtimeConfigs[i].runtimeEnvironmentId.length === 0) {
-      runtimeConfigsErrors['runtimeEnvironmentId'] = <FormattedMessage id='app.editExerciseRuntimeConfigsForm.validation.runtimeEnvironmentId' defaultMessage='Please select a runtime environment.' />;
-    }
+      if (!runtimeConfigs[i].runtimeEnvironmentId || runtimeConfigs[i].runtimeEnvironmentId.length === 0) {
+        runtimeConfigErrors['runtimeEnvironmentId'] = <FormattedMessage id='app.editExerciseRuntimeConfigsForm.validation.runtimeEnvironmentId' defaultMessage='Please select a runtime environment.' />;
+      }
 
-    if (!runtimeConfigs[i].jobConfig || runtimeConfigs[i].jobConfig.length === 0) {
-      runtimeConfigsErrors['jobConfig'] = <FormattedMessage id='app.editExerciseRuntimeConfigsForm.validation.jobConfig' defaultMessage='Please fill the job configuration of the runtime environment.' />;
-    }
+      if (!runtimeConfigs[i].jobConfig || runtimeConfigs[i].jobConfig.length === 0) {
+        runtimeConfigErrors['jobConfig'] = <FormattedMessage id='app.editExerciseRuntimeConfigsForm.validation.jobConfig' defaultMessage='Please fill the job configuration of the runtime environment.' />;
+      }
 
-    runtimeConfigsErrors[i] = runtimeConfigErrors;
+      runtimeConfigsErrors[i] = runtimeConfigErrors;
+    }
   }
   errors['runtimeConfigs'] = runtimeConfigsErrors;
 

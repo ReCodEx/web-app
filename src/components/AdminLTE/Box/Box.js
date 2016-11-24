@@ -6,6 +6,11 @@ import Collapse from 'react-collapse';
 
 import styles from './Box.less';
 
+/**
+ * component for bounding other components like text paragraphs or tables inside.
+ * It is in fact a re-styled Panel component from Bootstrap. It can be collapsable
+ * and can be displayed in different colors and types.
+ */
 class Box extends Component {
 
   componentWillMount() {
@@ -31,10 +36,11 @@ class Box extends Component {
   render() {
     const {
       title,
-      type,
+      type = 'default',
       noPadding = false,
       children,
       footer,
+      solid = false,
       collapsable = false,
       unlimitedHeight = false,
       className = ''
@@ -47,6 +53,7 @@ class Box extends Component {
           'box': true,
           [`box-${type}`]: typeof type !== 'undefined',
           'panel': true,
+          'box-solid': solid,
           [className]: className.length > 0
         })
       }>
@@ -93,6 +100,7 @@ Box.propTypes = {
   collapsable: PropTypes.bool,
   unlimitedHeight: PropTypes.bool,
   noPadding: PropTypes.bool,
+  solid: PropTypes.bool,
   footer: PropTypes.element,
   children: PropTypes.element,
   className: PropTypes.string

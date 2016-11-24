@@ -19,11 +19,6 @@ import { runtimeEnvironmentsSelector } from '../../redux/selectors/runtimeEnviro
 
 class EditExercise extends Component {
 
-  static loadAsync = ({ exerciseId }, dispatch) => Promise.all([
-    dispatch(fetchExerciseIfNeeded(exerciseId)),
-    dispatch(fetchRuntimeEnvironments())
-  ]);
-
   componentWillMount = () => this.props.loadAsync();
   componentWillReceiveProps = (props) => {
     if (this.props.params.exerciseId !== props.params.exerciseId) {
@@ -31,6 +26,11 @@ class EditExercise extends Component {
       props.loadAsync();
     }
   };
+
+  static loadAsync = ({ exerciseId }, dispatch) => Promise.all([
+    dispatch(fetchExerciseIfNeeded(exerciseId)),
+    dispatch(fetchRuntimeEnvironments())
+  ]);
 
   render() {
     const { links: { EXERCISE_URI_FACTORY } } = this.context;
@@ -40,7 +40,8 @@ class EditExercise extends Component {
       editExercise,
       editSolutionRuntimeConfigs,
       runtimeEnvironments,
-      formValues
+      formValues,
+      runtimesFormValues
     } = this.props;
 
     return (
@@ -70,6 +71,7 @@ class EditExercise extends Component {
 
             <EditExerciseRuntimeConfigsForm
               runtimeEnvironments={runtimeEnvironments}
+              runtimeConfigs={runtimesFormValues ? runtimesFormValues.runtimeConfigs : {}}
               initialValues={{runtimeConfigs: exercise.solutionRuntimeConfigs}}
               onSubmit={editSolutionRuntimeConfigs} />
           </div>
@@ -91,7 +93,8 @@ EditExercise.propTypes = {
   editExercise: PropTypes.func.isRequired,
   editSolutionRuntimeConfigs: PropTypes.func.isRequired,
   params: PropTypes.shape({ exerciseId: PropTypes.string.isRequired }).isRequired,
-  formValues: PropTypes.object
+  formValues: PropTypes.object,
+  runtimesFormValues: PropTypes.object
 };
 
 export default connect(
@@ -103,6 +106,7 @@ export default connect(
       submitting: isSubmitting(state),
       userId,
       formValues: getFormValues('editExercise')(state),
+      runtimesFormValues: getFormValues('editExerciseRuntimeConfigs')(state),
       runtimeEnvironments: runtimeEnvironmentsSelector(state)
     };
   },

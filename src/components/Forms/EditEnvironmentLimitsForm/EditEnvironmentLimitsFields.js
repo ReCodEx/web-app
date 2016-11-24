@@ -1,24 +1,40 @@
 import React, { PropTypes } from 'react';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 import { FormattedMessage } from 'react-intl';
 import { Field, FieldArray } from 'redux-form';
 import { TextField } from '../Fields';
 import EditHardwareGroupLimits from '../EditHardwareGroupLimits';
+import ResourceRenderer from '../../ResourceRenderer';
 
-const EditEnvironmentLimitsFields = ({ prefix, i, environments }) => {
+const EditEnvironmentLimitsFields = ({
+  prefix,
+  i,
+  environments,
+  runtimeEnvironments
+}) => {
   const {
     environment,
-    limits
+    limits,
+    referenceSolutionsEvaluations
   } = environments[i];
-  const { runtimeEnvironment: runtime } = environment;
+  const runtime = runtimeEnvironments
+    ? runtimeEnvironments.get(environment.runtimeEnvironmentId)
+    : null;
 
   return (
     <div>
-      <h4>{runtime.name}</h4>
-      <ul>
-        <li>{runtime.language}</li>
-        <li>{runtime.platform}</li>
-        <li>{runtime.description}</li>
-      </ul>
+      <ResourceRenderer resource={runtime}>
+        {(runtime) => (
+          <div>
+            <h4>{runtime.name}</h4>
+            <ul>
+              <li>{runtime.language}</li>
+              <li>{runtime.platform}</li>
+              <li>{runtime.description}</li>
+            </ul>
+          </div>
+        )}
+      </ResourceRenderer>
 
       <Field
         name={`${prefix}.environment.name`}
@@ -28,6 +44,7 @@ const EditEnvironmentLimitsFields = ({ prefix, i, environments }) => {
       <FieldArray
         name={`${prefix}.limits`}
         limits={limits}
+        referenceSolutionsEvaluations={referenceSolutionsEvaluations}
         component={EditHardwareGroupLimits} />
     </div>
   );
@@ -36,7 +53,12 @@ const EditEnvironmentLimitsFields = ({ prefix, i, environments }) => {
 EditEnvironmentLimitsFields.propTypes = {
   prefix: PropTypes.string.isRequired,
   i: PropTypes.number,
-  environments: PropTypes.array.isRequired
+  runtimeEnvironments: ImmutablePropTypes.map,
+  environments: PropTypes.arrayOf(
+    PropTypes.shape({
+      referenceSolutionsEvaluations: PropTypes.object
+    })
+  ).isRequired
 };
 
 export default EditEnvironmentLimitsFields;

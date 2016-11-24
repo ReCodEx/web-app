@@ -28,8 +28,6 @@ class App extends Component {
     }
   }
 
-  /**
-   */
   getChildContext = () => ({
     userSettings: this.props.userSettings
   });

@@ -1,4 +1,4 @@
-import { Component, PropTypes } from 'react';
+import React, { Component, PropTypes } from 'react';
 
 class ClientOnly extends Component {
 
@@ -10,16 +10,18 @@ class ClientOnly extends Component {
 
   render() {
     if (this.state.isBrowser) {
-      return this.props.children;
+      return (
+        <span>{this.props.children}</span>
+      );
     } else {
-      return null;
+      return <span></span>;
     }
   }
 
 }
 
 ClientOnly.propTypes = {
-  children: PropTypes.element.isRequired
+  children: PropTypes.any
 };
 
 export default ClientOnly;

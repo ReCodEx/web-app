@@ -4,6 +4,7 @@ import { IndexLink } from 'react-router';
 import MediaQuery from 'react-responsive';
 import HeaderNotificationsContainer from '../../../containers/HeaderNotificationsContainer';
 import HeaderLanguageSwitching from '../HeaderLanguageSwitching';
+import ClientOnly from '../../ClientOnly';
 
 class Header extends Component {
 
@@ -34,20 +35,22 @@ class Header extends Component {
         </IndexLink>
 
         <div className='navbar navbar-static-top' role='navigation'>
-          <MediaQuery maxWidth={767} values={{ deviceWidth: 1368 }}>
-            <a href='#' className='sidebar-toggle' role='button' onClick={this.toggleSidebarVisibility}>
-              <span className='sr-only'>
-                <FormattedMessage id='app.header.toggleSidebar' defaultMessage='Show/hide sidebar' />
-              </span>
-            </a>
-          </MediaQuery>
-          <MediaQuery minWidth={768} values={{ deviceWidth: 1368 }}>
-            <a href='#' className='sidebar-toggle' role='button' onClick={this.toggleSidebarSize}>
-              <span className='sr-only'>
-                <FormattedMessage id='app.header.toggleSidebarSize' defaultMessage='Expand/minimize sidebar' />
-              </span>
-            </a>
-          </MediaQuery>
+          <ClientOnly>
+            <MediaQuery maxWidth={767} values={{ deviceWidth: 1368 }}>
+              <a href='#' className='sidebar-toggle' role='button' onClick={this.toggleSidebarVisibility}>
+                <span className='sr-only'>
+                  <FormattedMessage id='app.header.toggleSidebar' defaultMessage='Show/hide sidebar' />
+                </span>
+              </a>
+            </MediaQuery>
+            <MediaQuery minWidth={768} values={{ deviceWidth: 1368 }}>
+              <a href='#' className='sidebar-toggle' role='button' onClick={this.toggleSidebarSize}>
+                <span className='sr-only'>
+                  <FormattedMessage id='app.header.toggleSidebarSize' defaultMessage='Expand/minimize sidebar' />
+                </span>
+              </a>
+            </MediaQuery>
+          </ClientOnly>
           <div className='navbar-custom-menu'>
             <ul className='nav navbar-nav'>
               <HeaderNotificationsContainer />

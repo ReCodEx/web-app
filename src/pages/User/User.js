@@ -22,7 +22,7 @@ import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import { fetchGroupsStatsIfNeeded } from '../../redux/modules/stats';
 import { createGroupsStatsSelector } from '../../redux/selectors/stats';
 import { groupsAssignmentsSelector, studentOfSelector, supervisorOfSelector } from '../../redux/selectors/groups';
-import { EditIcon, InfoIcon } from '../../components/Icons';
+import { InfoIcon } from '../../components/Icons';
 import { getJsData } from '../../redux/helpers/resourceManager';
 
 class User extends Component {
@@ -79,7 +79,7 @@ class User extends Component {
     } = this.props;
 
     const {
-      links: { EDIT_USER_URI_FACTORY, GROUP_URI_FACTORY, INSTANCE_URI_FACTORY }
+      links: { GROUP_URI_FACTORY, INSTANCE_URI_FACTORY }
     } = this.context;
 
     return (
@@ -95,22 +95,9 @@ class User extends Component {
         ]}>
         {user => (
           <div>
-            <Row>
-              <Col xs={12}>
-                <p>
-                  <UsersNameContainer userId={user.id} large noLink />
-                </p>
-                {user.id === loggedInUserId && (
-                  <p>
-                    <LinkContainer to={EDIT_USER_URI_FACTORY(user.id)}>
-                      <Button bsStyle='default' className='btn-flat'>
-                        <EditIcon /> <FormattedMessage id='app.user.editUser' defaultMessage='Edit profile information' />
-                      </Button>
-                    </LinkContainer>
-                  </p>
-                )}
-              </Col>
-            </Row>
+            <p>
+              <UsersNameContainer userId={user.id} large noLink />
+            </p>
 
             {commonGroups.length > 0 && (
               <ResourceRenderer resource={commonGroups}>

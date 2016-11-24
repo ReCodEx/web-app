@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react';
 import { FormattedMessage, FormattedNumber, FormattedTime, FormattedDate } from 'react-intl';
 import { Table } from 'react-bootstrap';
+import ReactMarkdown from 'react-markdown';
 import Box from '../../AdminLTE/Box';
 import DifficultyIcon from '../DifficultyIcon';
 
@@ -10,6 +11,7 @@ const ExerciseDetail = ({
   id,
   name,
   authorId,
+  description = '',
   difficulty,
   createdAt,
   updatedAt,
@@ -22,6 +24,10 @@ const ExerciseDetail = ({
         <tr>
           <th><FormattedMessage id='app.exercise.difficulty' defaultMessage='Difficulty:' /></th>
           <td><DifficultyIcon difficulty={difficulty} /></td>
+        </tr>
+        <tr>
+          <th><FormattedMessage id='app.exercise.description' defaultMessage="Author's description:" /></th>
+          <td><ReactMarkdown source={description} /></td>
         </tr>
         <tr>
           <th><FormattedMessage id='app.exercise.createdAt' defaultMessage='Created at:' /></th>
@@ -49,6 +55,7 @@ ExerciseDetail.propTypes = {
   name: PropTypes.string.isRequired,
   authorId: PropTypes.string.isRequired,
   difficulty: PropTypes.string.isRequired,
+  description: PropTypes.string,
   createdAt: PropTypes.number.isRequired,
   updatedAt: PropTypes.number.isRequired,
   version: PropTypes.number.isRequired,

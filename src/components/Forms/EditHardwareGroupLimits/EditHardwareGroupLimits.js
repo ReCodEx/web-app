@@ -5,6 +5,7 @@ import HardwareGroupFields from './HardwareGroupFields';
 
 const EditHardwareGroupLimits = ({
   limits,
+  referenceSolutionsEvaluations,
   ...props
 }) => (
   <TabbedArrayField
@@ -14,11 +15,13 @@ const EditHardwareGroupLimits = ({
     id='edit-hardware-group-limits'
     add={false}
     remove={false}
+    referenceSolutionsEvaluations={referenceSolutionsEvaluations}
     ContentComponent={HardwareGroupFields} />
 );
 
 EditHardwareGroupLimits.propTypes = {
-  limits: PropTypes.array
+  limits: PropTypes.array,
+  referenceSolutionsEvaluations: PropTypes.object
 };
 
 export default EditHardwareGroupLimits;

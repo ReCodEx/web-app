@@ -9,12 +9,14 @@ import FormBox from '../../AdminLTE/FormBox';
 import { EmailField, TextField, PasswordField, PasswordStrength, SelectField } from '../Fields';
 import { validateRegistrationData } from '../../../redux/modules/users';
 import SubmitButton from '../SubmitButton';
+import { Throttle } from 'react-throttle';
 
 const RegistrationForm = ({
   submitting,
   handleSubmit,
   submitFailed = false,
   submitSucceeded = false,
+  asyncValidate,
   instances,
   invalid
 }) => (
@@ -41,10 +43,18 @@ const RegistrationForm = ({
         <FormattedMessage id='app.registrationForm.failed' defaultMessage='Registration failed. Please check your information.' />
       </Alert>)}
 
-    <Field name='firstName' required component={TextField} label={<FormattedMessage id='app.registrationForm.firstName' defaultMessage='First name:' />} />
-    <Field name='lastName' required component={TextField} label={<FormattedMessage id='app.registrationForm.lastName' defaultMessage='Last name:' />} />
-    <Field name='email' required component={EmailField} label={<FormattedMessage id='app.registrationForm.email' defaultMessage='E-mail address:' />} />
-    <Field name='password' required component={PasswordField} label={<FormattedMessage id='app.registrationForm.password' defaultMessage='Password:' />} />
+    <Field name='firstName' component={TextField} label={<FormattedMessage id='app.registrationForm.firstName' defaultMessage='First name:' />} />
+    <Field name='lastName' component={TextField} label={<FormattedMessage id='app.registrationForm.lastName' defaultMessage='Last name:' />} />
+    <Field name='email' component={EmailField} label={<FormattedMessage id='app.registrationForm.email' defaultMessage='E-mail address:' />} />
+
+    <Throttle time={500} handler='onKeyPress'>
+      <Field
+        name='password'
+        component={PasswordField}
+        onKeyPress={() => asyncValidate()}
+        label={<FormattedMessage id='app.registrationForm.password' defaultMessage='Password:' />} />
+    </Throttle>
+
     <Field name='passwordStrength' component={PasswordStrength} label={<FormattedMessage id='app.registrationForm.passwordStrength' defaultMessage='Password strength:' />} />
     <ResourceRenderer resource={instances.toArray()}>
       {(...instances) => (
@@ -68,6 +78,7 @@ RegistrationForm.propTypes = {
   onSubmit: PropTypes.func.isRequired,
   istTryingToCreateAccount: PropTypes.bool,
   submitFailed: PropTypes.bool,
+  asyncValidate: PropTypes.func.isRequired,
   submitSucceeded: PropTypes.bool,
   submitting: PropTypes.bool,
   invalid: PropTypes.bool

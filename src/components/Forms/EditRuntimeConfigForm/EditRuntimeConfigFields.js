@@ -20,7 +20,7 @@ const EditRuntimeConfigFields = ({
     <Field
       name={`${prefix}.runtimeEnvironmentId`}
       component={SelectField}
-      options={[ { key: '', value: '...' }, ...runtimeEnvironments.map(getJsData).map(env => ({ key: env.id, name: env.name })).toArray() ]}
+      options={[ { key: '', name: '...' }, ...runtimeEnvironments.map(getJsData).map(env => ({ key: env.id, name: env.name })).toArray() ]}
       label={<FormattedMessage id='app.editRuntimeConfigForm.runtimeEnvironment' defaultMessage='Select runtime environment:' />} />
 
     <Field
@@ -31,7 +31,7 @@ const EditRuntimeConfigFields = ({
     <HelpBlock>
       <FormattedHTMLMessage
         id='app.editRuntimeConfigForm.moreAboutJobConfig'
-        defaultMessage="Read more about <a href='https://github.com/ReCodEx/wiki/wiki/Assignments#job-configuration'>job configuration</a> syntax." />
+        defaultMessage="Read more about <a href='https://github.com/ReCodEx/wiki/wiki/Assignments#job-configuration' target='_blank'>job configuration</a> syntax." />
     </HelpBlock>
   </div>
 );

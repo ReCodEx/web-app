@@ -12,6 +12,12 @@ const getMessage = (item, formatMessage) =>
         ? formatMessage(item.props)
         : getMessage(item.children);
 
+/**
+ * Holds the main content of a page with the common structure for
+ * all pages - the title, description, breadcrumbs, content.
+ * The component passes the title and description to the Helmet library
+ * which reflects these into the <head> section of the HTML document.
+ */
 const PageContent = ({
   intl: { formatMessage },
   title,

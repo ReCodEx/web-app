@@ -15,7 +15,16 @@ import createRoutes from './pages/routes';
 
 import { getToken } from './redux/middleware/accessTokenMiddleware';
 
-let state = fromJS(window.__INITIAL_STATE__) || undefined; // @todo This ain't gonna be so simple as 'fromJS' :/
+// load the initial state form the server - if any
+let state;
+const ini = window.__INITIAL_STATE__;
+if (ini) {
+  state = {};
+  Object.keys(ini).map((key) => {
+    state[key] = fromJS(ini[key]);
+  });
+}
+
 const createScrollHistory = useScroll(createBrowserHistory);
 const appHistory = useRouterHistory(createScrollHistory)();
 const store = configureStore(appHistory, state, getToken());

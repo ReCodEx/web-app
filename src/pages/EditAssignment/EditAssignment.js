@@ -16,14 +16,10 @@ import { fetchLimitsIfNeeded, editLimits } from '../../redux/modules/limits';
 import { getAssignment } from '../../redux/selectors/assignments';
 import { canSubmitSolution } from '../../redux/selectors/canSubmit';
 import { getEnvironmentsLimits } from '../../redux/selectors/limits';
+import { runtimeEnvironmentsSelector } from '../../redux/selectors/runtimeEnvironments';
 import { isSubmitting } from '../../redux/selectors/submission';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
-
-const getInitialValues = ({ firstDeadline, secondDeadline, ...rest }) => ({
-  firstDeadline: moment(firstDeadline * 1000),
-  secondDeadline: moment(secondDeadline * 1000),
-  ...rest
-});
+import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments';
 
 class EditAssignment extends Component {
 
@@ -35,12 +31,25 @@ class EditAssignment extends Component {
     }
   };
 
+  static loadAsync = ({ assignmentId }, dispatch) => Promise.all([
+    dispatch(fetchAssignmentIfNeeded(assignmentId)),
+    dispatch(fetchLimitsIfNeeded(assignmentId)),
+    dispatch(fetchRuntimeEnvironments())
+  ]);
+
+  getInitialValues = ({ firstDeadline, secondDeadline, ...rest }) => ({
+    firstDeadline: moment(firstDeadline * 1000),
+    secondDeadline: moment(secondDeadline * 1000),
+    ...rest
+  });
+
   render() {
     const { links: { ASSIGNMENT_DETAIL_URI_FACTORY } } = this.context;
     const {
       params: { assignmentId },
       assignment,
       environments,
+      runtimeEnvironments,
       editAssignment,
       editLimits,
       formValues
@@ -65,13 +74,14 @@ class EditAssignment extends Component {
           {assignment => (
             <div>
               <EditAssignmentForm
-                initialValues={getInitialValues(assignment)}
+                initialValues={this.getInitialValues(assignment)}
                 onSubmit={editAssignment}
                 formValues={formValues} />
               <ResourceRenderer resource={environments}>
                 {environments => (
                   <EditAssignmentLimitsForm
                     initialValues={environments}
+                    runtimeEnvironments={runtimeEnvironments}
                     assignment={assignment}
                     onSubmit={editLimits} />
                 )}
@@ -96,6 +106,7 @@ EditAssignment.propTypes = {
   }).isRequired,
   assignment: ImmutablePropTypes.map,
   environments: ImmutablePropTypes.map,
+  runtimeEnvironments: ImmutablePropTypes.map,
   editAssignment: PropTypes.func.isRequired,
   editLimits: PropTypes.func.isRequired,
   formValues: PropTypes.object
@@ -109,6 +120,7 @@ export default connect(
     return {
       assignment: assignmentSelector(state),
       environments: environmentsSelector(state),
+      runtimeEnvironments: runtimeEnvironmentsSelector(state),
       submitting: isSubmitting(state),
       userId,
       canSubmit: canSubmitSolution(assignmentId)(state),
@@ -118,10 +130,7 @@ export default connect(
   (dispatch, { params: { assignmentId } }) => ({
     push: (url) => dispatch(push(url)),
     reset: () => dispatch(reset('editAssignment')),
-    loadAsync: () => Promise.all([
-      dispatch(fetchAssignmentIfNeeded(assignmentId)),
-      dispatch(fetchLimitsIfNeeded(assignmentId))
-    ]),
+    loadAsync: () => EditAssignment.loadAsync({ assignmentId }, dispatch),
     editAssignment: (data) => {
       // convert deadline times to timestamps
       data.firstDeadline = moment(data.firstDeadline).unix();

@@ -63,8 +63,9 @@ DatetimeField.propTypes = {
   input: PropTypes.shape({
     value: PropTypes.oneOfType([
       PropTypes.string,
-      PropTypes.number
-    ]).isRequired
+      PropTypes.number,
+      PropTypes.object
+    ])
   }).isRequired,
   meta: PropTypes.shape({
     touched: PropTypes.bool,

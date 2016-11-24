@@ -89,12 +89,12 @@ class Exercise extends Component {
               </Col>
             </Row>
             <Row>
-              <Col md={6}>
+              <Col lg={6}>
                 <div>
                   {exercise.localizedAssignments.length > 0 && <LocalizedAssignments locales={exercise.localizedAssignments} />}
                 </div>
               </Col>
-              <Col md={6}>
+              <Col lg={6}>
                 <ExerciseDetail {...exercise} />
               </Col>
             </Row>

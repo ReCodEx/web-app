@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
-import { reset } from 'redux-form';
+import { reset, startAsyncValidation } from 'redux-form';
 
 import { Row, Col } from 'react-bootstrap';
 import PageContent from '../../components/PageContent';
@@ -79,7 +79,8 @@ Register.propTypes = {
   createExternalAccount: PropTypes.func.isRequired,
   hasSucceeded: PropTypes.bool,
   push: PropTypes.func.isRequired,
-  reset: PropTypes.func.isRequired
+  reset: PropTypes.func.isRequired,
+  triggerAsyncValidation: PropTypes.func.isRequired
 };
 
 export default connect(
@@ -96,6 +97,7 @@ export default connect(
     createExternalAccount: ({ username, password, instanceId, serviceId }) =>
       dispatch(createExternalAccount(username, password, instanceId, serviceId)),
     push: (url) => dispatch(push(url)),
+    triggerAsyncValidation: () => dispatch(startAsyncValidation('registration')),
     reset: () => {
       dispatch(reset('registration'));
       dispatch(reset('external-registration'));
