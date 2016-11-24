@@ -58,6 +58,8 @@ export const editAssignment = (assignmentId, body) =>
     body
   });
 
+export const deleteAssignment = actions.deleteResource;
+
 /**
  * Reducer
  */

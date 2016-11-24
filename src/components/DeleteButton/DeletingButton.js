@@ -1,7 +1,7 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { Button } from 'react-bootstrap';
-import { LoadingIcon } from '../../Icons';
+import { LoadingIcon } from '../Icons';
 
 const DeletingGroupButton = (props) => (
   <Button bsStyle='default' bsSize='sm' {...props}>

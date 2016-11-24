@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { Button } from 'react-bootstrap';
-import { FailedIcon } from '../../Icons';
+import { FailedIcon } from '../Icons';
 
 const DeletingGroupFailedButton = ({ onClick, ...props }) => (
   <Button bsStyle='default' bsSize='sm' onClick={onClick} {...props} disabled>

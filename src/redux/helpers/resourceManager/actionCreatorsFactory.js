@@ -21,7 +21,7 @@ const actionCreatorsFactory = ({
     return !state ? null : state.getIn(['resources', id]);
   };
 
-  const fetchMany = apiOptions =>
+  const fetchMany = (apiOptions) =>
     createApiAction({
       type: actionTypes.FETCH_MANY,
       method: 'GET',
@@ -65,28 +65,31 @@ const actionCreatorsFactory = ({
     resource => ({ id: resource.get('id') })
   );
 
-  const addResource = (data, tmpId = Math.random().toString()) => createApiAction({
-    type: actionTypes.ADD,
-    method: 'POST',
-    endpoint: apiEndpointFactory(),
-    body: data,
-    meta: { tmpId }
-  });
+  const addResource = (body, tmpId = Math.random().toString(), endpoint = apiEndpointFactory()) =>
+    createApiAction({
+      type: actionTypes.ADD,
+      method: 'POST',
+      endpoint,
+      body,
+      meta: { tmpId, body }
+    });
 
-  const updateResource = (id, data) => createApiAction({
-    type: actionTypes.UPDATE,
-    method: 'POST',
-    endpoint: apiEndpointFactory(id),
-    body: data,
-    meta: { id, body: data }
-  });
+  const updateResource = (id, body, endpoint = apiEndpointFactory(id)) =>
+    createApiAction({
+      type: actionTypes.UPDATE,
+      method: 'POST',
+      endpoint,
+      body,
+      meta: { id, body }
+    });
 
-  const removeResource = id => createApiAction({
-    type: actionTypes.REMOVE,
-    method: 'DELETE',
-    endpoint: apiEndpointFactory(id),
-    meta: { id }
-  });
+  const removeResource = id =>
+    createApiAction({
+      type: actionTypes.REMOVE,
+      method: 'DELETE',
+      endpoint: apiEndpointFactory(id),
+      meta: { id }
+    });
 
   const invalidate = createAction(actionTypes.INVALIDATE);
 

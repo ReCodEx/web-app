@@ -1,18 +1,20 @@
 import React, { PropTypes } from 'react';
 import { FormattedMessage } from 'react-intl';
-import { reduxForm, Field } from 'redux-form';
+import { reduxForm, Field, change } from 'redux-form';
 import { Alert } from 'react-bootstrap';
 import FormBox from '../../AdminLTE/FormBox';
 import SubmitButton from '../SubmitButton';
 import isEmail from 'validator/lib/isEmail';
+import { validateRegistrationData } from '../../../redux/modules/users';
 
-import { TextField, EmailField, PasswordField } from '../Fields';
+import { TextField, EmailField, PasswordField, PasswordStrength } from '../Fields';
 
 const EditUserProfileForm = ({
   submitting,
   handleSubmit,
   submitFailed = false,
   submitSucceeded = false,
+  pristine,
   invalid
 }) => (
   <FormBox
@@ -25,7 +27,7 @@ const EditUserProfileForm = ({
           submitting={submitting}
           hasSucceeded={submitSucceeded}
           hasFailed={submitFailed}
-          invalid={invalid}
+          invalid={pristine || invalid}
           tabIndex={9}
           messages={{
             submit: <FormattedMessage id='app.editUserProfileForm.set' defaultMessage='Save changes' />,
@@ -67,20 +69,13 @@ const EditUserProfileForm = ({
         required
         label={<FormattedMessage id='app.editUserProfile.degreesAfterName' defaultMessage='Degrees after name:' />} />
 
-      <Field
-        name='email'
-        tabIndex={5}
-        component={EmailField}
-        required
-        label={<FormattedMessage id='app.editUserProfile.email' defaultMessage='Email:' />} />
-
       <h3><FormattedMessage id='app.editUserProfile.passwordTitle' defaultMessage='Change your password' /></h3>
       <p><FormattedMessage id='app.editUserProfile.passwordInstructions' defaultMessage="If you don't want to change your password leave these inputs blank" /></p>
 
       <Field name='password' tabIndex={6} component={PasswordField} label={<FormattedMessage id='app.changePasswordForm.oldPassword' defaultMessage='Old password:' />} />
       <Field name='newPassword' tabIndex={7} component={PasswordField} label={<FormattedMessage id='app.changePasswordForm.password' defaultMessage='New password:' />} />
       <Field name='passwordCheck' tabIndex={8} component={PasswordField} label={<FormattedMessage id='app.changePasswordForm.passwordCheck' defaultMessage='Repeat your password to prevent typos:' />} />
-      {/* <Field name='passwordStrength' component={PasswordStrength} label={<FormattedMessage id='app.changePasswordForm.passwordStrength' defaultMessage='Password strength:' />} /> */}
+      <Field name='passwordStrength' component={PasswordStrength} label={<FormattedMessage id='app.changePasswordForm.passwordStrength' defaultMessage='Password strength:' />} />
 
   </FormBox>
 );
@@ -92,7 +87,8 @@ EditUserProfileForm.propTypes = {
   submitFailed: PropTypes.bool,
   submitSucceeded: PropTypes.bool,
   submitting: PropTypes.bool,
-  invalid: PropTypes.bool
+  invalid: PropTypes.bool,
+  pristine: PropTypes.bool
 };
 
 const validate = ({ firstName, lastName, email, password, newPassword, passwordCheck }) => {
@@ -104,10 +100,6 @@ const validate = ({ firstName, lastName, email, password, newPassword, passwordC
 
   if (!lastName || lastName.length === 0) {
     errors['lastName'] = <FormattedMessage id='app.editUserProfile.validation.emptyLastName' defaultMessage='Last name cannot be empty.' />;
-  }
-
-  if (email && email.length > 0 && !isEmail(email)) {
-    errors['email'] = <FormattedMessage id='app.editUserProfile.validation.invalidEmail' defaultMessage='Email address is not valid.' />;
   }
 
   if (password || newPassword || passwordCheck) {
@@ -122,12 +114,33 @@ const validate = ({ firstName, lastName, email, password, newPassword, passwordC
     if (newPassword !== passwordCheck) {
       errors['passwordCheck'] = <FormattedMessage id='app.editUserProfile.validation.passwordsDontMatch' defaultMessage="Passwords don't match." />;
     }
+
+    if (newPassword && newPassword.length > 0 && newPassword === password) {
+      errors['newPassword'] = <FormattedMessage id='app.editUserProfile.validation.samePasswords' defaultMessage='Changing your password to the same password does not make any sense.' />;
+    }
   }
 
   return errors;
 };
 
+const asyncValidate = ({ newPassword = '' }, dispatch) =>
+  dispatch(validateRegistrationData('', newPassword)) // ignore email
+    .then(res => res.value)
+    .then(({ usernameIsFree, passwordScore }) => {
+      var errors = {};
+      if (newPassword.lenght > 0 && passwordScore <= 0) { // changing new password is optional
+        errors['newPassword'] = <FormattedMessage id='app.editUserProfile.validation.passwordTooWeak' defaultMessage='The password you chose is too weak, please choose a different one.' />;
+      }
+      dispatch(change('edit-user-profile', 'passwordStrength', passwordScore));
+
+      if (Object.keys(errors).length > 0) {
+        throw errors;
+      }
+    });
+
 export default reduxForm({
   form: 'edit-user-profile',
-  validate
+  validate,
+  asyncValidate,
+  asyncBlurFields: [ 'email', 'newPassword' ]
 })(EditUserProfileForm);
