@@ -4,16 +4,17 @@ import { reduxForm, Field, change } from 'redux-form';
 import { Alert } from 'react-bootstrap';
 import FormBox from '../../AdminLTE/FormBox';
 import SubmitButton from '../SubmitButton';
-import isEmail from 'validator/lib/isEmail';
+import { Throttle } from 'react-throttle';
 import { validateRegistrationData } from '../../../redux/modules/users';
 
-import { TextField, EmailField, PasswordField, PasswordStrength } from '../Fields';
+import { TextField, PasswordField, PasswordStrength } from '../Fields';
 
 const EditUserProfileForm = ({
   submitting,
   handleSubmit,
   submitFailed = false,
   submitSucceeded = false,
+  asyncValidate,
   pristine,
   invalid
 }) => (
@@ -73,7 +74,16 @@ const EditUserProfileForm = ({
       <p><FormattedMessage id='app.editUserProfile.passwordInstructions' defaultMessage="If you don't want to change your password leave these inputs blank" /></p>
 
       <Field name='password' tabIndex={6} component={PasswordField} label={<FormattedMessage id='app.changePasswordForm.oldPassword' defaultMessage='Old password:' />} />
-      <Field name='newPassword' tabIndex={7} component={PasswordField} label={<FormattedMessage id='app.changePasswordForm.password' defaultMessage='New password:' />} />
+
+      <Throttle time={500} handler='onKeyDown'>
+        <Field
+          name='newPassword'
+          component={PasswordField}
+          tabIndex={7}
+          onKeyDown={() => asyncValidate()}
+          label={<FormattedMessage id='app.changePasswordForm.password' defaultMessage='New password:' />} />
+      </Throttle>
+
       <Field name='passwordCheck' tabIndex={8} component={PasswordField} label={<FormattedMessage id='app.changePasswordForm.passwordCheck' defaultMessage='Repeat your password to prevent typos:' />} />
       <Field name='passwordStrength' component={PasswordStrength} label={<FormattedMessage id='app.changePasswordForm.passwordStrength' defaultMessage='Password strength:' />} />
 
@@ -83,7 +93,7 @@ const EditUserProfileForm = ({
 EditUserProfileForm.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
-  istTryingToCreateAccount: PropTypes.bool,
+  asyncValidate: PropTypes.func.isRequired,
   submitFailed: PropTypes.bool,
   submitSucceeded: PropTypes.bool,
   submitting: PropTypes.bool,

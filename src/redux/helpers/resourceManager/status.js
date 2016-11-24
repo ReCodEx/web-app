@@ -8,7 +8,8 @@ export const resourceStatus = {
   FAILED: 'FAILED',
   FULFILLED: 'FULFILLED',
   POSTING: 'POSTING',
-  DELETING: 'DELETING'
+  DELETING: 'DELETING',
+  DELETED: 'DELETED'
 };
 
 /**
@@ -27,10 +28,10 @@ export const isDeleting = (item) =>
 
 /**
  * @param {Object} item The item
- * @return {boolean} True when the item is being posted.
+ * @return {boolean} True when the item is being deleted.
  */
-export const isPosting = (item) =>
-    !item || item.get('state') === resourceStatus.POSTING;
+export const isDeleted = (item) =>
+    !item || item.get('state') === resourceStatus.DELETED;
 
 /**
  * @param {Object} item The item

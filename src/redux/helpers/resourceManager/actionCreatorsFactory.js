@@ -65,7 +65,7 @@ const actionCreatorsFactory = ({
     resource => ({ id: resource.get('id') })
   );
 
-  const addResource = (body, tmpId = Math.random().toString(), endpoint = apiEndpointFactory()) =>
+  const addResource = (body, tmpId = Math.random().toString(), endpoint = apiEndpointFactory('')) =>
     createApiAction({
       type: actionTypes.ADD,
       method: 'POST',
@@ -83,11 +83,11 @@ const actionCreatorsFactory = ({
       meta: { id, body }
     });
 
-  const removeResource = id =>
+  const removeResource = (id, endpoint = apiEndpointFactory(id)) =>
     createApiAction({
       type: actionTypes.REMOVE,
       method: 'DELETE',
-      endpoint: apiEndpointFactory(id),
+      endpoint,
       meta: { id }
     });
 

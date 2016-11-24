@@ -15,8 +15,8 @@ const ConfirmDeleteButton = ({
     id={id}
     onConfirmed={onClick}
     question={question}>
-    <Button disabled={disabled || !id} bsStyle='danger' bsSize='sm' {...props}>
-      <DeleteIcon /> <FormattedMessage id='app.deleteGroupButton.delete' defaultMessage='Delete' />
+    <Button disabled={disabled || !id} bsStyle='danger' bsSize='sm' className='btn-flat' {...props}>
+      <DeleteIcon /> <FormattedMessage id='app.deleteButton.delete' defaultMessage='Delete' />
     </Button>
   </Confirm>
 );

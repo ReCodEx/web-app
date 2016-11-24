@@ -7,13 +7,13 @@ import SelectExerciseContainer from '../../../containers/SelectExerciseContainer
 
 const AddAssignment = ({
   groupId,
-  assignFunc
+  assignExercise
 }) => (
   <SelectExerciseContainer
     groupId={groupId}
     id={`add-assignment-${groupId}`}
     createActions={exerciseId => (
-      <Button onClick={() => assignFunc(exerciseId)}>
+      <Button onClick={() => assignExercise(exerciseId)} bsSize='xs' className='btn-flat'>
         <SendIcon /> <FormattedMessage id='app.exercise.assign' defaultMessage='Assign this exercise' />
       </Button>
     )} />
@@ -21,7 +21,7 @@ const AddAssignment = ({
 
 AddAssignment.propTypes = {
   groupId: PropTypes.string.isRequired,
-  assignFunc: PropTypes.func.isRequired
+  assignExercise: PropTypes.func.isRequired
 };
 
 export default AddAssignment;

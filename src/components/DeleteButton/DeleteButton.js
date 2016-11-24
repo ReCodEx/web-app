@@ -4,19 +4,19 @@ import ConfirmDeleteButton from './ConfirmDeleteButton';
 import DeletingButton from './DeletingButton';
 import DeletedButton from './DeletedButton';
 import DeletingFailedButton from './DeletingFailedButton';
-import { getId, isReady, isLoading, isDeleting } from '../../redux/helpers/resourceManager';
+import { getId, isReady, isLoading, isDeleting, isDeleted } from '../../redux/helpers/resourceManager';
 
 const DeleteButton = ({
   resource,
   deleteResource,
   ...props
 }) => {
-  if (!resource) {
+  if (isDeleted(resource)) {
     return <DeletedButton {...props} />;
   }
 
   if (isLoading(resource)) {
-    return <ConfirmDeleteButton {...props} />;
+    return <ConfirmDeleteButton {...props} onClick={() => {}} />;
   }
 
   if (isReady(resource)) {
@@ -32,8 +32,6 @@ const DeleteButton = ({
 
 DeleteButton.propTypes = {
   resource: ImmutablePropTypes.map,
-  id: PropTypes.string.isRequired,
-  deleteActionCreator: PropTypes.func.isRequired,
   deleteResource: PropTypes.func.isRequired
 };
 

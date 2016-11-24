@@ -31,6 +31,7 @@ const StudentsView = ({
           title={<FormattedMessage id='app.studentsView.assignments' defaultMessage='Assignments' />}
           collapsable
           noPadding
+          unlimitedHeight
           isOpen>
           <AssignmentsTable
             assignments={assignments}

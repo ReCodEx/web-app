@@ -4,8 +4,8 @@ import { Button } from 'react-bootstrap';
 import { LoadingIcon } from '../Icons';
 
 const DeletingGroupButton = (props) => (
-  <Button bsStyle='default' bsSize='sm' {...props}>
-    <LoadingIcon /> <FormattedMessage id='app.deleteGroupButton.deleting' defaultMessage='Group was deleted' />
+  <Button bsStyle='default' bsSize='sm' className='btn-flat' {...props}>
+    <LoadingIcon /> <FormattedMessage id='app.deleteButton.deleting' defaultMessage='Deleting ...' />
   </Button>
 );
 

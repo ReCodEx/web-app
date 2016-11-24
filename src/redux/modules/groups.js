@@ -3,9 +3,9 @@ import { fromJS, List } from 'immutable';
 
 import { addNotification } from './notifications';
 import { createApiAction } from '../middleware/apiMiddleware';
-import factory, { initialState, resourceStatus } from '../helpers/resourceManager';
+import factory, { initialState } from '../helpers/resourceManager';
 
-import { additionalActionTypes as assignmentsActionTypes } from './assignments';
+import { actionTypes as assignmentsActionTypes } from './assignments';
 
 const resourceName = 'groups';
 const {
@@ -213,11 +213,29 @@ const reducer = handleActions(Object.assign({}, reduceActions, {
 
   [assignmentsActionTypes.CREATE_ASSIGNMENT_FULFILLED]: (state, { payload: { id: assignmentId }, meta: { groupId } }) =>
     state.updateIn([ 'resources', groupId, 'data', 'assignments' ], assignments => {
-      if (!assignments) {
+      if (!assignments || assignments.size === 0) {
         assignments = List();
       }
       return assignments.push(assignmentId);
-    })
+    }),
+
+  [assignmentsActionTypes.ADD_FULFILLED]: (state, { payload: { id: assignmentId }, meta: { body: { groupId } } }) =>
+    state.updateIn([ 'resources', groupId, 'data', 'assignments' ], assignments => {
+      if (!assignments || assignments.size === 0) {
+        assignments = List();
+      }
+      return assignments.push(assignmentId);
+    }),
+
+  [assignmentsActionTypes.REMOVE_FULFILLED]: (state, { meta: { id: assignmentId } }) =>
+    state.update('resources', groups => groups.map(
+      group => group.updateIn(
+        ['data', 'assignments'],
+        assignments =>
+          assignments
+            .update('all', ids => ids.filter(id => id !== assignmentId))
+            .update('public', ids => ids.filter(id => id !== assignmentId)))
+    ))
 
 }), initialState);
 

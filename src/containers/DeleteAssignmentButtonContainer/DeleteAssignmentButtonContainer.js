@@ -8,6 +8,7 @@ import { getAssignment } from '../../redux/selectors/assignments';
 const DeleteAssignmentButtonContainer = ({
   assignment,
   deleteAssignment,
+  onDeleted,
   ...props
 }) => (
   <DeleteButton {...props} resource={assignment} deleteResource={deleteAssignment} />
@@ -16,14 +17,15 @@ const DeleteAssignmentButtonContainer = ({
 DeleteAssignmentButtonContainer.propTypes = {
   id: PropTypes.string.isRequired,
   assignment: ImmutablePropTypes.map,
-  deleteAssignment: PropTypes.func.isRequired
+  deleteAssignment: PropTypes.func.isRequired,
+  onDeleted: PropTypes.func
 };
 
 export default connect(
   (state, { id }) => ({
     assignment: getAssignment(id)(state)
   }),
-  (dispatch, { id }) => ({
-    deleteAssignment: () => dispatch(deleteAssignment(id))
+  (dispatch, { id, onDeleted }) => ({
+    deleteAssignment: () => dispatch(deleteAssignment(id)).then(() => onDeleted && onDeleted())
   })
 )(DeleteAssignmentButtonContainer);

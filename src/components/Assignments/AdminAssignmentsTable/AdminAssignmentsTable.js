@@ -34,7 +34,9 @@ const AdminAssignmentsTable = ({
           ? <tbody><NoAssignmentsTableRow /></tbody>
           : (
             <tbody>
-              {assignments.map(assignment => <AdminAssignmentsTableRow key={assignment.id} {...assignment} />)}
+              {assignments
+                .sort((a, b) => a.firstDeadline - b.firstDeadline)
+                .map(assignment => <AdminAssignmentsTableRow key={assignment.id} {...assignment} />)}
             </tbody>
           )}
     </ResourceRenderer>

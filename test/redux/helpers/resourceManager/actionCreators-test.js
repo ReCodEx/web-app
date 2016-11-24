@@ -132,7 +132,7 @@ describe('Resource manager', () => {
           method: 'POST',
           endpoint: 'url/',
           body,
-          meta: { tmpId }
+          meta: { tmpId, body }
         });
       });
 

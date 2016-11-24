@@ -8,6 +8,7 @@ import { groupSelector } from '../../redux/selectors/groups';
 const DeleteGroupButtonContainer = ({
   group,
   deleteGroup,
+  onDeleted,
   ...props
 }) => (
   <DeleteButton {...props} resource={group} deleteResource={deleteGroup} />
@@ -16,14 +17,15 @@ const DeleteGroupButtonContainer = ({
 DeleteGroupButtonContainer.propTypes = {
   id: PropTypes.string.isRequired,
   group: ImmutablePropTypes.map,
-  deleteGroup: PropTypes.func.isRequired
+  deleteGroup: PropTypes.func.isRequired,
+  onDeleted: PropTypes.func
 };
 
 export default connect(
   (state, { id }) => ({
     group: groupSelector(id)(state)
   }),
-  (dispatch, { id }) => ({
-    deleteGroup: () => dispatch(deleteGroup(id))
+  (dispatch, { id, onDeleted }) => ({
+    deleteGroup: () => dispatch(deleteGroup(id)).then(() => onDeleted && onDeleted())
   })
 )(DeleteGroupButtonContainer);

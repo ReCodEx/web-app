@@ -183,7 +183,7 @@ class Group extends Component {
                 students={students}
                 statuses={statuses}
                 assignments={allAssignments}
-                assignFunc={this.createExercise} />)}
+                assignExercise={(id) => this.createExercise(id)} />)}
 
             {isStudent && (
               <StudentsView
