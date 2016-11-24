@@ -2,6 +2,9 @@ import React, { PropTypes } from 'react';
 import { Form } from 'react-bootstrap';
 import Box from '../Box';
 
+/**
+ * A wrapper of Box adjusted for holding forms inside of the body.
+ */
 const FormBox = ({
   onSubmit,
   children,

@@ -15,9 +15,8 @@ import 'admin-lte/dist/css/skins/skin-green.min.css';
 // import 'admin-lte/dist/css/skins/skin-purple.min.css';
 
 /**
- * This component is intended to be used as the root component of the layout
- * as it provides crutial functionality like localized links dependency
- * injection to its subtree.
+ * Handles the dependency injection of the localized links based on the current language stated in the URL.
+ * Also controls the state of the sidebar - collapsing and showing the sidebar.
  */
 class LayoutContainer extends Component {
 

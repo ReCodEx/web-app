@@ -12,6 +12,11 @@ import CommentThread, {
 
 import ResourceRenderer from '../../components/ResourceRenderer';
 
+/**
+ * Used  to create a discussion thread. A unique identification must be
+ * assigned to every thread so the comments in the distinct threads do
+ * not interleave.
+ */
 class CommentThreadContainer extends Component {
 
   componentWillMount() {
