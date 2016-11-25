@@ -22,7 +22,7 @@ export const getUser = (userId) =>
 export const isSuperAdmin = (userId) =>
   createSelector(
     getUser(userId),
-    user => user.getIn(['data', 'role']) === 'superadmin'
+    user => user && user.getIn(['data', 'role']) === 'superadmin'
   );
 
 export const getUserSettings = (userId) =>
