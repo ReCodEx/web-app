@@ -1,5 +1,6 @@
 import { handleActions } from 'redux-actions';
 import factory, { initialState } from '../helpers/resourceManager';
+import { actionTypes as assignmentActionTypes } from './assignments';
 
 /**
  * Create actions & reducer
@@ -17,5 +18,12 @@ const {
 
 export const canSubmit = actions.fetchOneIfNeeded;
 
-const reducer = handleActions(reduceActions, initialState);
+const reducer = handleActions(Object.assign({}, reduceActions, {
+
+  [assignmentActionTypes.UPDATE_FULFILLED]: (state, { meta: { id } }) => {
+    return state.removeIn(['resources', id]);
+  }
+
+}), initialState);
+
 export default reducer;
