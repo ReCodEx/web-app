@@ -31,7 +31,10 @@ class EditInstance extends Component {
   });
 
   render() {
-    const { links: { INSTANCE_URI_FACTORY } } = this.context;
+    const {
+      links: { INSTANCE_URI_FACTORY }
+    } = this.context;
+
     const {
       params: { instanceId },
       instance,
@@ -45,7 +48,7 @@ class EditInstance extends Component {
         description={<FormattedMessage id='app.editInstance.description' defaultMessage='Change instance settings' />}
         breadcrumbs={[
           {
-            text: <FormattedMessage id='app.instance.title' default='Instance' />,
+            text: <FormattedMessage id='app.instance.title' defaultMessage='Instance' />,
             iconName: 'university',
             link: INSTANCE_URI_FACTORY(instanceId)
           },

@@ -26,7 +26,7 @@ export const fetchUsersInstancesIfNeeded = (userId) =>
     endpoint: `/users/${userId}/instances`
   });
 
-export const editInstance = actions.editResource;
+export const editInstance = actions.updateResource;
 
 /**
  * Reducer

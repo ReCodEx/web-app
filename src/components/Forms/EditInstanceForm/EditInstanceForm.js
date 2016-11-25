@@ -5,7 +5,7 @@ import { Alert } from 'react-bootstrap';
 import FormBox from '../../AdminLTE/FormBox';
 import SubmitButton from '../SubmitButton';
 
-import { TextField, MarkdownTextAreaField } from '../Fields';
+import { TextField, MarkdownTextAreaField, CheckboxField } from '../Fields';
 
 const EditInstanceForm = ({
   submitting,
@@ -41,6 +41,7 @@ const EditInstanceForm = ({
 
     <Field name='name' component={TextField} label={<FormattedMessage id='app.editInstanceForm.name' defaultMessage='Name:' />} />
     <Field name='description' component={MarkdownTextAreaField} label={<FormattedMessage id='app.editInstanceForm.description' defaultMessage='Description:' />} />
+    <Field name='isOpen' component={CheckboxField} label={<FormattedMessage id='app.editInstanceForm.isOpen' defaultMessage='Is open' />} />
   </FormBox>
 );
 
