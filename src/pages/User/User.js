@@ -17,7 +17,7 @@ import UsersStats from '../../components/Users/UsersStats';
 import { fetchAssignmentsForGroup } from '../../redux/modules/assignments';
 import { fetchUserIfNeeded } from '../../redux/modules/users';
 import { fetchGroupsIfNeeded } from '../../redux/modules/groups';
-import { getUser, studentOfGroupsIdsSelector } from '../../redux/selectors/users';
+import { getUser, studentOfGroupsIdsSelector, isStudent } from '../../redux/selectors/users';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import { fetchGroupsStatsIfNeeded } from '../../redux/modules/stats';
 import { createGroupsStatsSelector } from '../../redux/selectors/stats';
@@ -70,6 +70,7 @@ class User extends Component {
   render() {
     const {
       user,
+      student,
       studentOfGroupsIds,
       commonGroups,
       loggedInUserId,
@@ -164,7 +165,7 @@ class User extends Component {
             </div>
           )}
 
-          {studentOfGroupsIds.length === 0 && user.id === loggedInUserId && (
+          {student && studentOfGroupsIds.length === 0 && user.id === loggedInUserId && (
             <Row>
               <Col sm={12}>
                 <div className='callout callout-default'>
@@ -202,6 +203,7 @@ User.propTypes = {
   studentOfGroupsIds: PropTypes.array,
   params: PropTypes.shape({ userId: PropTypes.string.isRequired }).isRequired,
   loadAsync: PropTypes.func.isRequired,
+  student: PropTypes.bool,
   loggedInUserId: PropTypes.string,
   groupAssignments: PropTypes.func.isRequired,
   groupStatistics: PropTypes.func.isRequired,
@@ -215,6 +217,7 @@ User.contextTypes = {
 export default connect(
   (state, { params: { userId } }) => {
     const loggedInUserId = loggedInUserIdSelector(state);
+    const student = isStudent(userId)(state);
     const studentOf = studentOfSelector(userId)(state).toList().toSet();
     const supervisorOf = supervisorOfSelector(loggedInUserId)(state).toList().toSet();
     const commonGroups = userId === loggedInUserId
@@ -223,6 +226,7 @@ export default connect(
 
     return {
       loggedInUserId,
+      student,
       user: getUser(userId)(state),
       studentOfGroupsIds: studentOfGroupsIdsSelector(userId)(state).toArray(),
       groupAssignments: (groupId) => groupsAssignmentsSelector(groupId)(state),

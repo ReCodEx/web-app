@@ -19,10 +19,28 @@ export const getUser = (userId) =>
     users => users.get(userId)
   );
 
-export const isSuperAdmin = (userId) =>
+export const getRole = (userId) =>
   createSelector(
     getUser(userId),
-    user => user && user.getIn(['data', 'role']) === 'superadmin'
+    user => user ? user.getIn(['data', 'role']) : null
+  );
+
+export const isStudent = (userId) =>
+  createSelector(
+    getRole(userId),
+    role => role === 'student'
+  );
+
+export const isSupervisor = (userId) =>
+  createSelector(
+    getRole(userId),
+    role => role === 'supervisor'
+  );
+
+export const isSuperAdmin = (userId) =>
+  createSelector(
+    getRole(userId),
+    role => role === 'superadmin'
   );
 
 export const getUserSettings = (userId) =>
