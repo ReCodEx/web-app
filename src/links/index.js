@@ -43,6 +43,11 @@ export const linksFactory = lang => {
   // external links
   const BUGS_URL = 'https://www.github.com/recodex/web-app/issues';
 
+  // administration
+  const ADMIN_URI = `${prefix}/admin`;
+  const ADMIN_INSTANCES_URI = `${ADMIN_URI}/instances`;
+  const ADMIN_EDIT_INSTANCE_URI_FACTORY = (instanceId) => `${ADMIN_INSTANCES_URI}/${instanceId}/edit`;
+
   return {
     HOME_URI, DASHBOARD_URI, LOGIN_URI, REGISTRATION_URI, LOGOUT_URI, RESET_PASSWORD_URI,
     INSTANCE_URI_FACTORY, GROUP_URI_FACTORY, GROUP_EDIT_URI_FACTORY,
@@ -51,7 +56,8 @@ export const linksFactory = lang => {
     ASSIGNMENT_EDIT_URI_FACTORY, ASSIGNMENT_DETAIL_URI_FACTORY, ASSIGNMENT_DETAIL_SPECIFIC_USER_URI_FACTORY,
     SUBMIT_SOLUTION_URI_FACTORY,
     SUBMISSION_DETAIL_URI_FACTORY, SUPERVISOR_STATS_URI_FACTORY, SOURCE_CODE_DETAIL_URI_FACTORY,
-    BUGS_URL
+    BUGS_URL,
+    ADMIN_INSTANCES_URI, ADMIN_EDIT_INSTANCE_URI_FACTORY
   };
 };
 

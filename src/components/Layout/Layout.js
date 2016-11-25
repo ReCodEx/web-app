@@ -3,7 +3,7 @@ import Helmet from 'react-helmet';
 import classNames from 'classnames';
 
 import Header from '../AdminLTE/Header';
-import Sidebar from '../Sidebar';
+import SidebarContainer from '../../containers/SidebarContainer';
 import Footer from '../AdminLTE/Footer';
 
 export const Layout = ({
@@ -36,9 +36,10 @@ export const Layout = ({
       availableLangs={availableLangs}
       currentLang={lang}
       currentUrl={currentUrl} />
-    <Sidebar
+    <SidebarContainer
       isLoggedIn={isLoggedIn}
       isCollapsed={sidebar.isCollapsed}
+      small={!sidebar.isOpen && sidebar.isCollapsed} // does not always work, but is good enough
       currentUrl={currentUrl} />
     <div onClick={onCloseSidebar}>
       {children}

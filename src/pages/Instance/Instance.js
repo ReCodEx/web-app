@@ -2,13 +2,15 @@ import React, { Component, PropTypes } from 'react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
-import { Row, Col } from 'react-bootstrap';
+import { Row, Col, Button } from 'react-bootstrap';
+import { LinkContainer } from 'react-router-bootstrap';
 
 import Page from '../../components/Page';
 import InstanceDetail from '../../components/Instances/InstanceDetail';
 import LicencesTableContainer from '../../containers/LicencesTableContainer';
 import AddLicenceFormContainer from '../../containers/AddLicenceFormContainer';
 import CreateGroupForm from '../../components/Forms/CreateGroupForm';
+import { EditIcon } from '../../components/Icons';
 
 import { fetchInstanceIfNeeded } from '../../redux/modules/instances';
 import { instanceSelector, isAdminOfInstance } from '../../redux/selectors/instances';
@@ -44,6 +46,10 @@ class Instance extends Component {
       isSuperAdmin
     } = this.props;
 
+    const {
+      links: { ADMIN_EDIT_INSTANCE_URI_FACTORY }
+    } = this.context;
+
     return (
       <Page
         resource={instance}
@@ -51,12 +57,26 @@ class Instance extends Component {
         description={<FormattedMessage id='app.instance.description' defaultMessage='Instance overview' />}
         breadcrumbs={[
           {
-            text: <FormattedMessage id='app.instance.description' defaultMessage="Instance overview" />,
+            text: <FormattedMessage id='app.instance.description' />,
             iconName: 'info-circle'
           }
         ]}>
         {data => (
           <div>
+            {isSuperAdmin && (
+              <Row>
+                <Col sm={12}>
+                  <p>
+                    <LinkContainer to={ADMIN_EDIT_INSTANCE_URI_FACTORY(instanceId)}>
+                      <Button bsStyle='warning' className='btn-flat'>
+                        <EditIcon /> <FormattedMessage id='app.instance.edit' defaultMessage='Edit instance' />
+                      </Button>
+                    </LinkContainer>
+                  </p>
+                </Col>
+              </Row>
+            )}
+
             <Row>
               <Col sm={12}>
                 <InstanceDetail {...data} groups={groups} isAdmin={isAdmin} />
@@ -96,6 +116,10 @@ Instance.propTypes = {
   createGroup: PropTypes.func.isRequired,
   isAdmin: PropTypes.bool.isRequired,
   isSuperAdmin: PropTypes.bool.isRequired
+};
+
+Instance.contextTypes = {
+  links: PropTypes.object
 };
 
 export default connect(

@@ -44,7 +44,7 @@ class Group extends Component {
 
   static loadAsync = ({ groupId }, dispatch, userId) =>
     Promise.all([
-      dispatch(fetchGroupIfNeeded(groupId))
+      dispatch(fetchInstanceIfNeeded(groupId))
         .then((res) => res.value)
         .then(group => Promise.all([
           dispatch(fetchInstanceIfNeeded(group.instanceId)),
@@ -57,7 +57,7 @@ class Group extends Component {
             : Promise.resolve(),
           group.parentGroupId
             ? Promise.all([
-              dispatch(fetchGroupIfNeeded(group.parentGroupId)),
+              dispatch(fetchInstanceIfNeeded(group.parentGroupId)),
               dispatch(fetchSubgroups(group.parentGroupId))
             ])
             : dispatch(fetchSubgroups(group.id)),

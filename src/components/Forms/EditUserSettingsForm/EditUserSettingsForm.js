@@ -52,6 +52,13 @@ const EditUserSettingsForm = ({
         label={<FormattedMessage id='app.editUserSettings.darkTheme' defaultMessage='Use a dark theme for the source code viewers and editors.' />} />
 
       <Field
+        name='openedSidebar'
+        tabIndex={1}
+        component={CheckboxField}
+        onOff
+        label={<FormattedMessage id='app.editUserSettings.openedSidebar' defaultMessage='Sidebar is unfolded by default.' />} />
+
+      <Field
         name='defaultLanguage'
         tabIndex={1}
         component={LanguageSelectField}

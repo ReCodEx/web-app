@@ -5,7 +5,7 @@ import moment from 'moment';
 import Layout from '../../components/Layout';
 
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
-import { toggleSize, toggleVisibility } from '../../redux/modules/sidebar';
+import { toggleSize, toggleVisibility, collapse, unroll } from '../../redux/modules/sidebar';
 import { isVisible, isCollapsed } from '../../redux/selectors/sidebar';
 import { messages, localeData, defaultLanguage } from '../../locales';
 import { linksFactory, isAbsolute } from '../../links';
@@ -23,14 +23,31 @@ class LayoutContainer extends Component {
   state = { links: null };
 
   componentWillMount() {
-    this.changeLang(this.props);
+    this.changeLang(this.props, this.context);
   }
 
-  componentWillReceiveProps(newProps) {
+  componentWillReceiveProps(newProps, newContext) {
+    if ((typeof this.context.userSettings.openedSidebar === 'undefined' && typeof newContext.userSettings.openedSidebar !== 'undefined') ||
+      (typeof this.context.userSettings.openedSidebar !== 'undefined' && this.context.userSettings.openedSidebar !== newContext.userSettings.openedSidebar)) {
+      this.resizeSidebarToDefault(newProps, newContext);
+    }
+
     if (this.props.params.lang !== newProps.params.lang) {
       this.changeLang(newProps);
     }
   }
+
+  resizeSidebarToDefault(props, context) {
+    // open or hide the sidebar based on user's settings
+    const { collapse, unroll } = props;
+    const shouldBeOpen = this.getDefaultOpenedSidebar(context);
+    shouldBeOpen ? unroll() : collapse();
+  }
+
+  getDefaultOpenedSidebar = ({ userSettings }) =>
+    userSettings && typeof userSettings.openedSidebar !== 'undefined'
+      ? userSettings.openedSidebar
+      : true;
 
   getLang = (props) => {
     let lang = props.params.lang;
@@ -125,6 +142,8 @@ LayoutContainer.propTypes = {
   }),
   toggleSize: PropTypes.func.isRequired,
   toggleVisibility: PropTypes.func.isRequired,
+  collapse: PropTypes.func.isRequired,
+  unroll: PropTypes.func.isRequired,
   isLoggedIn: PropTypes.bool,
   sidebar: PropTypes.object,
   location: PropTypes.shape({
@@ -141,10 +160,7 @@ const mapStateToProps = (state, props) => ({
   isLoggedIn: !!loggedInUserIdSelector(state)
 });
 
-const mapDispatchToProps = (dispatch, props) => ({
-  toggleVisibility: () => dispatch(toggleVisibility()),
-  toggleSize: () => dispatch(toggleSize())
-});
+const mapDispatchToProps = ({ toggleVisibility, toggleSize, collapse, unroll });
 
 export default connect(
   mapStateToProps,
