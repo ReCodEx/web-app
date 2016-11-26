@@ -84,7 +84,7 @@ export const fetchUsersGroupsIfNeeded = (userId) =>
   };
 
 export const createGroup = actions.addResource;
-export const editInstance = actions.updateResource;
+export const editGroup = actions.updateResource;
 export const deleteGroup = actions.removeResource;
 
 export const joinGroup = (groupId, userId) =>
