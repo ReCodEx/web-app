@@ -22,23 +22,26 @@ class Search extends Component {
 
     return (
       <div>
-        <FormGroup>
-          <ControlLabel htmlFor={id}>
-            <FormattedMessage id='app.search.title' defaultMessage='Search:' />
-          </ControlLabel>
-          <InputGroup>
-            <FormControl id={id} onChange={e => { this.query = e.target.value; }} />
-            <InputGroup.Button>
-              <Button
-                onClick={() => onChange(this.query)}
-                disabled={false && !isLoading && !hasFailed}>
-                {isLoading && <LoadingIcon />}
-                {hasFailed && <WarningIcon />}
-                {!isLoading && !hasFailed && <SearchIcon />}
-              </Button>
-            </InputGroup.Button>
-          </InputGroup>
-        </FormGroup>
+        <form>
+          <FormGroup>
+            <ControlLabel htmlFor={id}>
+              <FormattedMessage id='app.search.title' defaultMessage='Search:' />
+            </ControlLabel>
+            <InputGroup>
+              <FormControl id={id} onChange={e => { this.query = e.target.value; }} />
+              <InputGroup.Button>
+                <Button
+                  type='submit'
+                  onClick={(e) => { e.preventDefault(); onChange(this.query); }}
+                  disabled={false && !isLoading && !hasFailed}>
+                  {isLoading && <LoadingIcon />}
+                  {hasFailed && <WarningIcon />}
+                  {!isLoading && !hasFailed && <SearchIcon />}
+                </Button>
+              </InputGroup.Button>
+            </InputGroup>
+          </FormGroup>
+        </form>
         {query && query.length > 0 && (
           <div>
             <p>
