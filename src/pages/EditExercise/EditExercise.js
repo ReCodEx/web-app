@@ -6,9 +6,11 @@ import { push } from 'react-router-redux';
 import { reset, getFormValues } from 'redux-form';
 
 import Page from '../../components/Page';
+import Box from '../../components/AdminLTE/Box';
 import EditExerciseForm from '../../components/Forms/EditExerciseForm';
 import EditExerciseRuntimeConfigsForm from '../../components/Forms/EditExerciseRuntimeConfigsForm';
 import SupplementaryFilesTableContainer from '../../containers/SupplementaryFilesTableContainer';
+import DeleteExerciseButtonContainer from '../../containers/DeleteExerciseButtonContainer';
 
 import { fetchExerciseIfNeeded, editExercise, editRuntimeConfigs } from '../../redux/modules/exercises';
 import { getExercise } from '../../redux/selectors/exercises';
@@ -33,7 +35,7 @@ class EditExercise extends Component {
   ]);
 
   render() {
-    const { links: { EXERCISE_URI_FACTORY } } = this.context;
+    const { links: { EXERCISES_URI, EXERCISE_URI_FACTORY } } = this.context;
     const {
       params: { exerciseId },
       exercise,
@@ -74,6 +76,19 @@ class EditExercise extends Component {
               runtimeConfigs={runtimesFormValues ? runtimesFormValues.runtimeConfigs : {}}
               initialValues={{runtimeConfigs: exercise.solutionRuntimeConfigs}}
               onSubmit={editSolutionRuntimeConfigs} />
+            <br />
+            <Box
+              type='danger'
+              title={<FormattedMessage id='app.editAssignment.deleteAssignment' defaultMessage='Delete the assignment' />}>
+              <div>
+                <p>
+                  <FormattedMessage id='app.editAssgintent.deleteAssignmentWarning' defaultMessage='Deleting an assignment will remove all the students submissions and you will have to contact the administrator of ReCodEx if you wanted to restore the assignment in the future.' />
+                </p>
+                <p className='text-center'>
+                  <DeleteExerciseButtonContainer id={exercise.id} onDeleted={() => push(EXERCISES_URI)} />
+                </p>
+              </div>
+            </Box>
           </div>
         )}
       </Page>

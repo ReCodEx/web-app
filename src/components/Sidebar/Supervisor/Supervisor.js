@@ -13,7 +13,7 @@ const Supervisor = ({
   isCollapsed,
   notifications
 }, {
-  links: { GROUP_URI_FACTORY, EXERCISES_URI_FACTORY }
+  links: { GROUP_URI_FACTORY, EXERCISES_URI }
 }) => (
   <ul className='sidebar-menu'>
     <MenuTitle title={<FormattedMessage id='app.sudebar.menu.supervisor.title' defaultMessage='Supervisor' />} />
@@ -29,7 +29,7 @@ const Supervisor = ({
       title={<FormattedMessage id='app.sidebar.menu.exercises' defaultMessage='Exercises' />}
       icon='puzzle-piece'
       currentPath={currentUrl}
-      link={EXERCISES_URI_FACTORY()} />
+      link={EXERCISES_URI} />
   </ul>
 );
 

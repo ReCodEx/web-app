@@ -47,14 +47,6 @@ const createRoutes = (getState) => {
     }
   };
 
-  const onlyAdmin = (nextState, replace) => {
-    const state = getState();
-    const userId = loggedInUserIdSelector(state);
-    if (!isSuperAdmin(userId)(state)) {
-      replace(getLinks(nextState).DASHBOARD_URI);
-    }
-  };
-
   const checkLanguage = (nextState, replace) => {
     const url = nextState.location.pathname;
     const lang = extractLanguageFromUrl(url);

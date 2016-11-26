@@ -23,6 +23,7 @@ export const fetchExercises = () =>
 export const create = actions.addResource;
 export const editExercise = actions.updateResource;
 export const editRuntimeConfigs = (id, body) => actions.updateResource(id, body, `/exercises/${id}/runtime-configs`);
+export const deleteExercise = actions.removeResource;
 
 /**
  * Reducer
