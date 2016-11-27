@@ -110,7 +110,6 @@ class Exercise extends Component {
                           <FormattedMessage id='app.exercise.assignToGroup' defaultMessage='You can assign this exercise to one of the groups you supervise.' />
                         </p>
                         <GroupsList
-                          fill
                           groups={supervisedGroups}
                           renderButtons={groupId => (
                             <Button bsSize='xs' onClick={() => this.createExercise(groupId)}>

@@ -9,31 +9,33 @@ import { getJsData, isReady, isLoading, isDeleting, isDeleted } from '../../redu
 const DeleteButton = ({
   resource,
   deleteResource,
+  disabled,
   ...props
 }) => {
   if (isDeleted(resource)) {
-    return <DeletedButton {...props} />;
+    return <DeletedButton {...props} disabled={disabled} />;
   }
 
   if (isLoading(resource)) {
-    return <ConfirmDeleteButton {...props} onClick={() => {}} />;
+    return <ConfirmDeleteButton {...props} disabled={disabled} onClick={() => {}} />;
   }
 
   if (isReady(resource)) {
     const { id, childGroups } = getJsData(resource);
-    return <ConfirmDeleteButton {...props} id={id} disabled={childGroups && childGroups.length > 0} onClick={deleteResource} />;
+    return <ConfirmDeleteButton {...props} id={id} disabled={disabled || (childGroups && childGroups.length > 0)} onClick={deleteResource} />;
   }
 
   if (isDeleting(resource)) {
-    return <DeletingButton {...props} />;
+    return <DeletingButton {...props} disabled={disabled} />;
   }
 
-  return <DeletingFailedButton {...props} onClick={deleteResource} />;
+  return <DeletingFailedButton {...props} onClick={deleteResource} disabled={disabled} />;
 };
 
 DeleteButton.propTypes = {
   resource: ImmutablePropTypes.map,
-  deleteResource: PropTypes.func.isRequired
+  deleteResource: PropTypes.func.isRequired,
+  disabled: PropTypes.bool
 };
 
 export default DeleteButton;
