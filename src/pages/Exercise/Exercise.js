@@ -54,7 +54,7 @@ class Exercise extends Component {
     } = this.props;
 
     const {
-      links: { EXERCISES_URI_FACTORY, EXERCISE_EDIT_URI_FACTORY }
+      links: { EXERCISES_URI, EXERCISE_EDIT_URI_FACTORY }
     } = this.context;
 
     return (
@@ -66,7 +66,7 @@ class Exercise extends Component {
           {
             text: <FormattedMessage id='app.exercises.title' defaultMessage="Exercises" />,
             iconName: 'puzzle-piece',
-            link: EXERCISES_URI_FACTORY()
+            link: EXERCISES_URI
           },
           {
             text: <FormattedMessage id='app.exercise.description' defaultMessage="Exercise overview" />,
