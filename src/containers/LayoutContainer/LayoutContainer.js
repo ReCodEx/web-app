@@ -23,7 +23,8 @@ class LayoutContainer extends Component {
   state = { links: null };
 
   componentWillMount() {
-    this.changeLang(this.props, this.context);
+    this.changeLang(this.props);
+    this.resizeSidebarToDefault(this.props, this.context);
   }
 
   componentWillReceiveProps(newProps, newContext) {
