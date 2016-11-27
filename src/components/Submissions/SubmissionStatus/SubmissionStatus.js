@@ -60,7 +60,7 @@ const SubmissionStatus = ({
         )}
         <tr>
           <td className='text-center'>
-            <b><AssignmentStatusIcon status={evaluationStatus} /></b>
+            <b><AssignmentStatusIcon id={submittedAt} status={evaluationStatus} /></b>
           </td>
           <th><FormattedMessage id='app.submission.isCorrect' defaultMessage='Solution is correct:' /></th>
           <td>

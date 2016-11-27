@@ -17,7 +17,7 @@ const SuccessfulSubmissionTableRow = ({
   }
 }) => (
   <tr>
-    <td><AssignmentStatusIcon status={'done'} /></td>
+    <td><AssignmentStatusIcon id={link} status='done' /></td>
     <td>
       <FormattedDate value={submittedAt * 1000} />&nbsp;<FormattedTime value={submittedAt * 1000} />
     </td>

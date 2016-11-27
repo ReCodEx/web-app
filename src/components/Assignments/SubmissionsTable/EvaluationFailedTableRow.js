@@ -9,7 +9,7 @@ const EvaluationFailedTableRow = ({
   submittedAt
 }) => (
   <tr>
-    <td><AssignmentStatusIcon status={'evaluation-failed'} /></td>
+    <td><AssignmentStatusIcon id={link} status='evaluation-failed' /></td>
     <td>
       <FormattedDate value={submittedAt * 1000} />&nbsp;<FormattedTime value={submittedAt * 1000} />
     </td>
