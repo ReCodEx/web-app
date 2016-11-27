@@ -2,8 +2,7 @@ import React from 'react';
 import { Route, IndexRoute } from 'react-router';
 import { linksFactory, extractLanguageFromUrl, changeLanguage } from '../links';
 import { isAvailable, defaultLanguage } from '../locales';
-import { isLoggedIn, loggedInUserIdSelector } from '../redux/selectors/auth';
-import { isSuperAdmin } from '../redux/selectors/users';
+import { isLoggedIn } from '../redux/selectors/auth';
 
 /* container components */
 import LayoutContainer from '../containers/LayoutContainer';
