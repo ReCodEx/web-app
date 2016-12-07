@@ -115,13 +115,6 @@ class Group extends Component {
     return breadcrumbs;
   };
 
-  createExercise = (exerciseId) => {
-    const { assignExercise, push } = this.props;
-    const { links: { ASSIGNMENT_EDIT_URI_FACTORY } } = this.context;
-    assignExercise(exerciseId)
-      .then(({ value: assigment }) => push(ASSIGNMENT_EDIT_URI_FACTORY(assigment.id)));
-  };
-
   render() {
     const {
       group,
@@ -181,8 +174,7 @@ class Group extends Component {
               <SupervisorsView
                 group={data}
                 statuses={statuses}
-                assignments={allAssignments}
-                assignExercise={(id) => this.createExercise(id)} />)}
+                assignments={allAssignments} />)}
 
             {isStudent && (
               <StudentsView

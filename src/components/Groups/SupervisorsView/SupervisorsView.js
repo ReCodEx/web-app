@@ -5,7 +5,7 @@ import { Row, Col } from 'react-bootstrap';
 
 import Box from '../../AdminLTE/Box';
 import AddStudent from '../AddStudent';
-import AddAssignment from '../AddAssignment';
+import SearchExercise from '../SearchExercise';
 import StudentsListContainer from '../../../containers/StudentsListContainer';
 import AdminAssignmentsTable from '../../Assignments/AdminAssignmentsTable';
 import LeaveJoinGroupButtonContainer from '../../../containers/LeaveJoinGroupButtonContainer';
@@ -53,10 +53,10 @@ const SupervisorsView = ({
           <AdminAssignmentsTable assignments={assignments} />
         </Box>
         <Box
-          title={<FormattedMessage id='app.group.spervisorsView.addAssignment' defaultMessage='Add assignment' />}
+          title={<FormattedMessage id='app.group.spervisorsView.searchExercise' defaultMessage='Find an exercise' />}
           collapsable
           isOpen>
-          <AddAssignment groupId={group.id} assignExercise={assignExercise} />
+          <SearchExercise groupId={group.id} />
         </Box>
       </Col>
     </Row>

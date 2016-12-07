@@ -25,7 +25,7 @@ const ExercisesList = ({
 
     {exercises.length === 0 && (
       <tr>
-        <td className='text-center'>
+        <td className='text-center' colSpan={4}>
           <FormattedMessage id='app.exercisesList.empty' defaultMessage='There are no exercises in this list.' />
         </td>
       </tr>
