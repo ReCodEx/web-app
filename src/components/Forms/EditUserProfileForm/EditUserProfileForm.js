@@ -72,6 +72,8 @@ const EditUserProfileForm = ({
         required
         label={<FormattedMessage id='app.editUserProfile.degreesAfterName' defaultMessage='Degrees after name:' />} />
 
+      <Field name='email' tabIndex={6} component={TextField} label={<FormattedMessage id='app.changePasswordForm.email' defaultMessage='Email:' />} />
+
       <h3><FormattedMessage id='app.editUserProfile.passwordTitle' defaultMessage='Change your password' /></h3>
       <p><FormattedMessage id='app.editUserProfile.passwordInstructions' defaultMessage="If you don't want to change your password leave these inputs blank" /></p>
 
@@ -136,15 +138,19 @@ const validate = ({ firstName, lastName, email, password, newPassword, passwordC
   return errors;
 };
 
-const asyncValidate = ({ newPassword = '' }, dispatch) =>
-  dispatch(validateRegistrationData('', newPassword)) // ignore email
+const asyncValidate = ({ email, newPassword = '' }, dispatch) =>
+  dispatch(validateRegistrationData(email, newPassword))
     .then(res => res.value)
     .then(({ usernameIsFree, passwordScore }) => {
       var errors = {};
+      if (!usernameIsFree) {
+        errors['email'] = <FormattedMessage id='app.editUserProfile.validation.emailTaken' defaultMessage='This email address is already taken by someone else or it is equal to your old email address.' />;
+      }
+
       if (newPassword.lenght > 0 && passwordScore <= 0) { // changing new password is optional
         errors['newPassword'] = <FormattedMessage id='app.editUserProfile.validation.passwordTooWeak' defaultMessage='The password you chose is too weak, please choose a different one.' />;
+        dispatch(change('edit-user-profile', 'passwordStrength', passwordScore));
       }
-      dispatch(change('edit-user-profile', 'passwordStrength', passwordScore));
 
       if (Object.keys(errors).length > 0) {
         throw errors;
