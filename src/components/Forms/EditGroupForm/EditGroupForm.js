@@ -10,6 +10,7 @@ import { TextField, CheckboxField, MarkdownTextAreaField } from '../Fields';
 const EditGroupForm = ({
   submitting,
   handleSubmit,
+  anyTouched,
   submitFailed = false,
   submitSucceeded = false,
   invalid
@@ -22,6 +23,7 @@ const EditGroupForm = ({
         <SubmitButton
           handleSubmit={handleSubmit}
           submitting={submitting}
+          dirty={anyTouched}
           hasSucceeded={submitSucceeded}
           hasFailed={submitFailed}
           invalid={invalid}
@@ -85,6 +87,7 @@ const EditGroupForm = ({
 EditGroupForm.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
+  anyTouched: PropTypes.bool,
   submitFailed: PropTypes.bool,
   submitSucceeded: PropTypes.bool,
   submitting: PropTypes.bool,

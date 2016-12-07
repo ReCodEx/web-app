@@ -11,6 +11,7 @@ import { TextField } from '../Fields';
 const BonusPointsForm = ({
   submitting,
   handleSubmit,
+  anyTouched,
   submitFailed = false,
   submitSucceeded = false,
   invalid
@@ -25,6 +26,7 @@ const BonusPointsForm = ({
         <SubmitButton
           handleSubmit={handleSubmit}
           submitting={submitting}
+          dirty={anyTouched}
           hasSucceeded={submitSucceeded}
           hasFailed={submitFailed}
           invalid={invalid}
@@ -48,6 +50,7 @@ BonusPointsForm.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
   submitFailed: PropTypes.bool,
+  anyTouched: PropTypes.bool,
   submitSucceeded: PropTypes.bool,
   submitting: PropTypes.bool,
   invalid: PropTypes.bool

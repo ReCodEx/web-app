@@ -10,6 +10,7 @@ const EditAssignmentLimitsForm = ({
   assignment,
   runtimeEnvironments,
   initialValues,
+  anyTouched,
   submitting,
   handleSubmit,
   hasFailed = false,
@@ -33,6 +34,7 @@ const EditAssignmentLimitsForm = ({
         invalid={invalid}
         submitting={submitting}
         hasSucceeded={hasSucceeded}
+        dirty={anyTouched}
         hasFailed={hasFailed}
         handleSubmit={handleSubmit}
         messages={{
@@ -49,6 +51,7 @@ EditAssignmentLimitsForm.propTypes = {
   runtimeEnvironments: PropTypes.object.isRequired,
   values: PropTypes.array,
   handleSubmit: PropTypes.func.isRequired,
+  anyTouched: PropTypes.bool,
   assignment: PropTypes.object,
   submitting: PropTypes.bool,
   hasFailed: PropTypes.bool,

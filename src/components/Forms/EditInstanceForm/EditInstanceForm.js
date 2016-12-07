@@ -10,6 +10,7 @@ import { TextField, MarkdownTextAreaField, CheckboxField } from '../Fields';
 const EditInstanceForm = ({
   submitting,
   handleSubmit,
+  anyTouched,
   submitFailed = false,
   submitSucceeded = false,
   invalid
@@ -25,6 +26,7 @@ const EditInstanceForm = ({
           handleSubmit={handleSubmit}
           submitting={submitting}
           hasSucceeded={submitSucceeded}
+          dirty={anyTouched}
           hasFailed={submitFailed}
           invalid={invalid}
           messages={{
@@ -48,6 +50,7 @@ const EditInstanceForm = ({
 EditInstanceForm.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
+  anyTouched: PropTypes.bool,
   submitFailed: PropTypes.bool,
   submitSucceeded: PropTypes.bool,
   submitting: PropTypes.bool,

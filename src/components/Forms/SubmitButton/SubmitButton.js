@@ -6,6 +6,7 @@ import { SendIcon, LoadingIcon, SuccessIcon } from '../../Icons';
 const SubmitButton = ({
   handleSubmit,
   submitting,
+  dirty,
   hasSucceeded,
   hasFailed,
   invalid,
@@ -18,7 +19,7 @@ const SubmitButton = ({
   <Button
     type='submit'
     onClick={handleSubmit}
-    bsStyle={hasFailed ? 'danger' : 'success'}
+    bsStyle={hasFailed ? 'danger' : (dirty ? 'warning' : 'success')}
     className='btn-flat'
     disabled={invalid || submitting}>
     {!submitting
@@ -31,6 +32,7 @@ const SubmitButton = ({
 
 SubmitButton.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
+  dirty: PropTypes.bool,
   submitting: PropTypes.bool,
   hasSucceeded: PropTypes.bool,
   hasFailed: PropTypes.bool,

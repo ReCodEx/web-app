@@ -35,6 +35,7 @@ const messages = defineMessages({
 
 const EditExerciseForm = ({
   initialValues: exercise,
+  anyTouched,
   submitting,
   handleSubmit,
   submitFailed: hasFailed,
@@ -47,12 +48,14 @@ const EditExerciseForm = ({
 }) => (
   <FormBox
     title={<FormattedMessage id='app.editExerciseForm.title' defaultMessage='Edit exercise {name}' values={{ name: exercise.name }} />}
-    type={hasSucceeded ? 'success' : undefined}
+    succeeded={hasSucceeded}
+    dirty={anyTouched}
     footer={
       <div className='text-center'>
         <SubmitButton
           invalid={invalid}
           submitting={submitting}
+          dirty={anyTouched}
           hasSucceeded={hasSucceeded}
           hasFailed={hasFailed}
           handleSubmit={handleSubmit}
@@ -107,6 +110,7 @@ EditExerciseForm.propTypes = {
   values: PropTypes.object,
   handleSubmit: PropTypes.func.isRequired,
   intl: intlShape.isRequired,
+  anyTouched: PropTypes.bool,
   submitting: PropTypes.bool,
   submitFailed: PropTypes.bool,
   submitSucceeded: PropTypes.bool,

@@ -12,6 +12,7 @@ import { TextField, PasswordField, PasswordStrength } from '../Fields';
 const EditUserProfileForm = ({
   submitting,
   handleSubmit,
+  anyTouched,
   submitFailed = false,
   submitSucceeded = false,
   asyncValidate,
@@ -26,6 +27,7 @@ const EditUserProfileForm = ({
         <SubmitButton
           handleSubmit={handleSubmit}
           submitting={submitting}
+          dirty={anyTouched}
           hasSucceeded={submitSucceeded}
           hasFailed={submitFailed}
           invalid={pristine || invalid}
@@ -96,6 +98,7 @@ EditUserProfileForm.propTypes = {
   asyncValidate: PropTypes.func.isRequired,
   submitFailed: PropTypes.bool,
   submitSucceeded: PropTypes.bool,
+  anyTouched: PropTypes.bool,
   submitting: PropTypes.bool,
   invalid: PropTypes.bool,
   pristine: PropTypes.bool
