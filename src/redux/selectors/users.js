@@ -19,7 +19,6 @@ export const getUser = (userId) =>
     users => users.get(userId)
   );
 
-
 export const readyUsersDataSelector =
   createSelector(
     usersSelector,

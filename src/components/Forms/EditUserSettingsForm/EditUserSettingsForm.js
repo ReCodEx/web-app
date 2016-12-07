@@ -12,6 +12,7 @@ const EditUserSettingsForm = ({
   handleSubmit,
   submitFailed = false,
   submitSucceeded = false,
+  anyTouched,
   invalid
 }) => (
   <FormBox
@@ -25,6 +26,7 @@ const EditUserSettingsForm = ({
           hasSucceeded={submitSucceeded}
           hasFailed={submitFailed}
           invalid={invalid}
+          dirty={anyTouched}
           messages={{
             submit: <FormattedMessage id='app.editUserSettings.set' defaultMessage='Save changes' />,
             submitting: <FormattedMessage id='app.editUserSettings.processing' defaultMessage='Saving ...' />,
@@ -73,6 +75,7 @@ EditUserSettingsForm.propTypes = {
   submitFailed: PropTypes.bool,
   submitSucceeded: PropTypes.bool,
   submitting: PropTypes.bool,
+  anyTouched: PropTypes.bool,
   invalid: PropTypes.bool
 };
 

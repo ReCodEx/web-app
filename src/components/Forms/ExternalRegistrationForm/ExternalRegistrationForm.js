@@ -15,6 +15,7 @@ const ExternalRegistrationForm = ({
   handleSubmit,
   submitSucceeded,
   submitFailed,
+  anyTouched,
   instances = Map(),
   invalid
 }) => (
@@ -28,6 +29,7 @@ const ExternalRegistrationForm = ({
           submitting={submitting}
           hasSucceeded={submitSucceeded}
           hasFailed={submitFailed}
+          dirty={anyTouched}
           invalid={invalid || instances.size === 0}
           messages={{
             submit: <FormattedMessage id='app.registrationForm.createAccount' defaultMessage='Create account' />,
@@ -67,6 +69,7 @@ ExternalRegistrationForm.propTypes = {
   submitFailed: PropTypes.bool,
   submitSucceeded: PropTypes.bool,
   submitting: PropTypes.bool,
+  anyTouched: PropTypes.bool,
   invalid: PropTypes.bool
 };
 

@@ -23,7 +23,7 @@ const SubmitButton = ({
     className='btn-flat'
     disabled={invalid || submitting}>
     {!submitting
-      ? hasSucceeded
+      ? (hasSucceeded && !dirty)
         ? <span><SuccessIcon /> &nbsp; {successMsg}</span>
         : <span><SendIcon /> &nbsp; {submitMsg}</span>
       : <span><LoadingIcon /> &nbsp; {submittingMsg}</span>}
@@ -32,7 +32,7 @@ const SubmitButton = ({
 
 SubmitButton.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
-  dirty: PropTypes.bool,
+  dirty: PropTypes.bool.isRequired,
   submitting: PropTypes.bool,
   hasSucceeded: PropTypes.bool,
   hasFailed: PropTypes.bool,
