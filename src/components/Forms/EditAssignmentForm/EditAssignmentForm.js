@@ -226,7 +226,22 @@ const validate = ({
   return errors;
 };
 
+const asyncValidate = ({ id, version }, dispatch) =>
+  dispatch(validateAssignment(id, version))
+    .then(res => res.value)
+    .then(({ versionIsUpToDate }) => {
+      var errors = {};
+      if (versionIsUpToDate === false) {
+        errors['name'] = <FormattedMessage id='app.editExerciseForm.validation.versionDiffers' defaultMessage='Somebody has changed the exercise while you have been editing it. Please reload the page and apply your changes once more.' />;
+      }
+
+      if (Object.keys(errors).length > 0) {
+        throw errors;
+      }
+    });
+
 export default reduxForm({
   form: 'editAssignment',
-  validate
+  validate,
+  asyncValidate
 })(EditAssignmentForm);

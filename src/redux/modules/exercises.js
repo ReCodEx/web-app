@@ -1,5 +1,6 @@
 import { handleActions } from 'redux-actions';
 import factory, { initialState } from '../helpers/resourceManager';
+import { createApiAction } from '../middleware/apiMiddleware';
 
 const resourceName = 'exercises';
 const {
@@ -25,6 +26,14 @@ export const create = actions.addResource;
 export const editExercise = actions.updateResource;
 export const editRuntimeConfigs = (id, body) => actions.updateResource(id, body, `/exercises/${id}/runtime-configs`);
 export const deleteExercise = actions.removeResource;
+
+export const validateExercise = (id, version) =>
+  createApiAction({
+    type: 'VALIDATE_EXERCISE',
+    endpoint: `/exercises/${id}/validate`,
+    method: 'POST',
+    body: { version }
+  });
 
 /**
  * Reducer

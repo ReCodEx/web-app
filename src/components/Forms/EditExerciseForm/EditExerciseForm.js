@@ -4,15 +4,18 @@ import { reduxForm, Field, FieldArray } from 'redux-form';
 import { injectIntl, intlShape, FormattedMessage, defineMessages } from 'react-intl';
 import { Alert } from 'react-bootstrap';
 
-import FormBox from '../../AdminLTE/FormBox';
 import {
   TextField,
   SelectField,
   CheckboxField,
   MarkdownTextAreaField
 } from '../Fields';
+
+import FormBox from '../../AdminLTE/FormBox';
 import SubmitButton from '../SubmitButton';
 import LocalizedAssignmentsFormField from '../LocalizedAssignmentsFormField';
+
+import { validateExercise } from '../../../redux/modules/exercises';
 
 if (canUseDOM) {
   require('codemirror/mode/yaml/yaml');
@@ -142,7 +145,22 @@ const validate = ({
   return errors;
 };
 
+const asyncValidate = ({ id, version }, dispatch) =>
+  dispatch(validateExercise(id, version))
+    .then(res => res.value)
+    .then(({ versionIsUpToDate }) => {
+      var errors = {};
+      if (versionIsUpToDate === false) {
+        errors['name'] = <FormattedMessage id='app.editExerciseForm.validation.versionDiffers' defaultMessage='Somebody has changed the exercise while you have been editing it. Please reload the page and apply your changes once more.' />;
+      }
+
+      if (Object.keys(errors).length > 0) {
+        throw errors;
+      }
+    });
+
 export default injectIntl(reduxForm({
   form: 'editExercise',
-  validate
+  validate,
+  asyncValidate
 })(EditExerciseForm));

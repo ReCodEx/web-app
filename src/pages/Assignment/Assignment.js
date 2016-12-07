@@ -12,7 +12,7 @@ import { getAssignment } from '../../redux/selectors/assignments';
 import { canSubmitSolution } from '../../redux/selectors/canSubmit';
 import { isSubmitting } from '../../redux/selectors/submission';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
-import { isStudentOf, isSupervisorOf } from '../../redux/selectors/users';
+import { isSuperAdmin, isStudentOf, isSupervisorOf } from '../../redux/selectors/users';
 
 import PageContent from '../../components/PageContent';
 import ResourceRenderer from '../../components/ResourceRenderer';
@@ -21,6 +21,7 @@ import AssignmentDetails, {
   LoadingAssignmentDetails,
   FailedAssignmentDetails
 } from '../../components/Assignments/Assignment/AssignmentDetails';
+
 import { EditIcon, ResultsIcon } from '../../components/Icons';
 import LocalizedAssignments from '../../components/Assignments/Assignment/LocalizedAssignments';
 import SubmitSolutionButton from '../../components/Assignments/SubmitSolutionButton';
@@ -56,6 +57,7 @@ class Assignment extends Component {
       userId,
       loggedInUserId,
       init,
+      isSuperAdmin,
       isStudentOf,
       isSupervisorOf,
       canSubmit
@@ -100,13 +102,14 @@ class Assignment extends Component {
                       <UsersNameContainer userId={userId} />
                     </p>
                   )}
-                  {isSupervisorOf(assignment.groupId) && (
+                  {(isSuperAdmin || isSupervisorOf(assignment.groupId)) && (
                     <p>
                       <LinkContainer to={ASSIGNMENT_EDIT_URI_FACTORY(assignment.id)}>
                         <Button bsStyle='warning' className='btn-flat'>
                           <EditIcon /> <FormattedMessage id='app.assignment.editSettings' defaultMessage='Edit assignment settings' />
                         </Button>
                       </LinkContainer>
+                      {' '}
                       <LinkContainer to={SUPERVISOR_STATS_URI_FACTORY(assignment.id)}>
                         <Button bsStyle='primary' className='btn-flat'>
                           <ResultsIcon /> <FormattedMessage id='app.assignment.viewResults' defaultMessage='View student results' />
@@ -169,6 +172,7 @@ Assignment.propTypes = {
   params: PropTypes.shape({
     assignmentId: PropTypes.string.isRequired
   }),
+  isSuperAdmin: PropTypes.bool,
   isStudentOf: PropTypes.func.isRequired,
   isSupervisorOf: PropTypes.func.isRequired,
   assignment: PropTypes.object,
@@ -187,6 +191,7 @@ export default connect(
       submitting: isSubmitting(state),
       userId,
       loggeInUserId: loggedInUserIdSelector(state),
+      isSuperAdmin: isSuperAdmin(userId)(state),
       isStudentOf: (groupId) => isStudentOf(userId, groupId)(state),
       isSupervisorOf: (groupId) => isSupervisorOf(userId, groupId)(state),
       canSubmit: canSubmitSolution(assignmentId)(state)
