@@ -3,7 +3,7 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
-import { reset, getFormValues } from 'redux-form';
+import { reset, getFormValues, initialize } from 'redux-form';
 import moment from 'moment';
 import PageContent from '../../components/PageContent';
 
@@ -159,10 +159,13 @@ export default connect(
     loadAsync: () => EditAssignment.loadAsync({ assignmentId }, dispatch),
     editAssignment: (data) => {
       // convert deadline times to timestamps
-      data.firstDeadline = moment(data.firstDeadline).unix();
-      data.secondDeadline = moment(data.secondDeadline).unix();
-      data.submissionsCountLimit = Number(data.submissionsCountLimit);
-      return dispatch(editAssignment(assignmentId, data));
+      const processedData = Object.assign({}, data, {
+        firstDeadline: moment(data.firstDeadline).unix(),
+        secondDeadline: moment(data.secondDeadline).unix(),
+        submissionsCountLimit: Number(data.submissionsCountLimit)
+      });
+      return dispatch(editAssignment(assignmentId, processedData))
+        .then(() => dispatch(initialize('editAssignment', data)));
     },
     editLimits: (data) => dispatch(editLimits(assignmentId, data))
   })
