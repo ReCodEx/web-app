@@ -21,17 +21,16 @@ import { fetchGroupsStatsIfNeeded } from '../../redux/modules/stats';
 import { fetchSupervisors, fetchStudents } from '../../redux/modules/users';
 import { fetchAssignmentsForGroup, create as assignExercise } from '../../redux/modules/assignments';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
-import { usersSelector, isStudentOf, isSupervisorOf, isAdminOf } from '../../redux/selectors/users';
+import { readyUsersDataSelector, isStudentOf, isSupervisorOf, isAdminOf } from '../../redux/selectors/users';
 
 import {
   groupSelector,
   groupsSelectors,
   groupsAssignmentsSelector,
-  studentsOfGroup,
   supervisorsOfGroup
 } from '../../redux/selectors/groups';
 
-import { createGroupsStatsSelector, getStatuses } from '../../redux/selectors/stats';
+import { getStatuses } from '../../redux/selectors/stats';
 import { fetchInstanceIfNeeded } from '../../redux/modules/instances';
 import { instanceSelector } from '../../redux/selectors/instances';
 
@@ -181,8 +180,6 @@ class Group extends Component {
             {isSupervisor && (
               <SupervisorsView
                 group={data}
-                stats={stats}
-                students={students}
                 statuses={statuses}
                 assignments={allAssignments}
                 assignExercise={(id) => this.createExercise(id)} />)}
@@ -234,19 +231,7 @@ const mapStateToProps = (
   const groupData = getJsData(group);
   const userId = loggedInUserIdSelector(state);
   const supervisorsIds = supervisorsOfGroup(groupId)(state);
-  const studentsIds = studentsOfGroup(groupId)(state);
-  const readyUsers = usersSelector(state)
-    .toList()
-    .filter(isReady)
-    .map(getJsData)
-    .sort((a, b) => {
-      if (a.name.lastName < b.name.lastName) return -1;
-      if (a.name.lastName > b.name.lastName) return 1;
-      if (a.name.firstName < b.name.firstName) return -1;
-      if (a.name.firstName > b.name.firstName) return 1;
-      return 0;
-    })
-    .toArray();
+  const readyUsers = readyUsersDataSelector(state);
 
   return {
     group,
@@ -258,9 +243,7 @@ const mapStateToProps = (
     groups: groupsSelectors(state),
     publicAssignments: groupsAssignmentsSelector(groupId, 'public')(state),
     allAssignments: groupsAssignmentsSelector(groupId, 'all')(state),
-    stats: createGroupsStatsSelector(groupId)(state),
     statuses: getStatuses(groupId, userId)(state),
-    students: readyUsers.filter(user => studentsIds.includes(user.id)),
     supervisors: readyUsers.filter(user => supervisorsIds.includes(user.id)),
     isStudent: isStudentOf(userId, groupId)(state),
     isSupervisor: isSupervisorOf(userId, groupId)(state),

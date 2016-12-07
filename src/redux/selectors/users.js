@@ -4,7 +4,7 @@ import { List } from 'immutable';
 import { loggedInUserIdSelector } from './auth';
 import { groupSelector, studentsOfGroup, supervisorsOfGroup } from './groups';
 import { exerciseSelector } from './exercises';
-import { isReady } from '../helpers/resourceManager';
+import { isReady, getJsData } from '../helpers/resourceManager';
 
 const getUsers = state => state.users.get('resources');
 
@@ -17,6 +17,24 @@ export const getUser = (userId) =>
   createSelector(
     usersSelector,
     users => users.get(userId)
+  );
+
+
+export const readyUsersDataSelector =
+  createSelector(
+    usersSelector,
+    users => users
+      .toList()
+      .filter(isReady)
+      .map(getJsData)
+      .sort((a, b) => {
+        if (a.name.lastName < b.name.lastName) return -1;
+        if (a.name.lastName > b.name.lastName) return 1;
+        if (a.name.firstName < b.name.firstName) return -1;
+        if (a.name.firstName > b.name.firstName) return 1;
+        return 0;
+      })
+      .toArray()
   );
 
 export const getRole = (userId) =>

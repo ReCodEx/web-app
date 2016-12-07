@@ -157,7 +157,7 @@ class User extends Component {
 
           {commonGroups.length === 0 && user.id !== loggedInUserId && (
             <div className='callout callout-warning'>
-              <h4><InfoIcon />{' '}<FormattedMessage id='app.user.nothingInCommon.title' defaultMessage='You are not a supervisor' /></h4>
+              <h4><InfoIcon />{' '}<FormattedMessage id='app.user.nothingInCommon.title' defaultMessage='You are not a supervisor of {name}' values={{ name: user.fullName }} /></h4>
               <FormattedMessage
                 id='app.user.noCommonGroups'
                 defaultMessage="You are not a supervisor of any group of which is {name} a member and so you don't see any of his results."
@@ -168,7 +168,7 @@ class User extends Component {
           {student && studentOfGroupsIds.length === 0 && user.id === loggedInUserId && (
             <Row>
               <Col sm={12}>
-                <div className='callout callout-default'>
+                <div className='callout callout-success'>
                   <h4>
                     <InfoIcon /> <FormattedMessage id='app.user.welcomeTitle' defaultMessage='Welcome to ReCodEx' />
                   </h4>
@@ -217,7 +217,6 @@ User.contextTypes = {
 export default connect(
   (state, { params: { userId } }) => {
     const loggedInUserId = loggedInUserIdSelector(state);
-    const student = isStudent(userId)(state);
     const studentOf = studentOfSelector(userId)(state).toList().toSet();
     const supervisorOf = supervisorOfSelector(loggedInUserId)(state).toList().toSet();
     const commonGroups = userId === loggedInUserId
@@ -226,7 +225,7 @@ export default connect(
 
     return {
       loggedInUserId,
-      student,
+      student: isStudent(userId)(state),
       user: getUser(userId)(state),
       studentOfGroupsIds: studentOfGroupsIdsSelector(userId)(state).toArray(),
       groupAssignments: (groupId) => groupsAssignmentsSelector(groupId)(state),
