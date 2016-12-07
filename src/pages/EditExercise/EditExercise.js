@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { FormattedMessage } from 'react-intl';
+import { Row, Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 import { reset, getFormValues } from 'redux-form';
@@ -64,18 +65,23 @@ class EditExercise extends Component {
         ]}>
         {exercise => (
           <div>
-            <EditExerciseForm
-              initialValues={exercise}
-              onSubmit={editExercise}
-              formValues={formValues} />
+            <Row>
+              <Col lg={6}>
+                <EditExerciseForm
+                  initialValues={exercise}
+                  onSubmit={editExercise}
+                  formValues={formValues} />
+              </Col>
+              <Col lg={6}>
+                <SupplementaryFilesTableContainer exerciseId={exerciseId} />
 
-            <SupplementaryFilesTableContainer exerciseId={exerciseId} />
-
-            <EditExerciseRuntimeConfigsForm
-              runtimeEnvironments={runtimeEnvironments}
-              runtimeConfigs={runtimesFormValues ? runtimesFormValues.runtimeConfigs : {}}
-              initialValues={{runtimeConfigs: exercise.solutionRuntimeConfigs}}
-              onSubmit={editSolutionRuntimeConfigs} />
+                <EditExerciseRuntimeConfigsForm
+                  runtimeEnvironments={runtimeEnvironments}
+                  runtimeConfigs={runtimesFormValues ? runtimesFormValues.runtimeConfigs : {}}
+                  initialValues={{runtimeConfigs: exercise.solutionRuntimeConfigs}}
+                  onSubmit={editSolutionRuntimeConfigs} />
+              </Col>
+            </Row>
             <br />
             <Box
               type='danger'
