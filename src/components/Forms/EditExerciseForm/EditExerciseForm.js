@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import { canUseDOM } from 'exenv';
-import { reduxForm, Field, FieldArray } from 'redux-form';
+import { reduxForm, Field, FieldArray, touch } from 'redux-form';
 import { injectIntl, intlShape, FormattedMessage, defineMessages } from 'react-intl';
 import { Alert } from 'react-bootstrap';
 
@@ -152,6 +152,7 @@ const asyncValidate = ({ id, version }, dispatch) =>
       var errors = {};
       if (versionIsUpToDate === false) {
         errors['name'] = <FormattedMessage id='app.editExerciseForm.validation.versionDiffers' defaultMessage='Somebody has changed the exercise while you have been editing it. Please reload the page and apply your changes once more.' />;
+        dispatch(touch('editExercise', 'name'));
       }
 
       if (Object.keys(errors).length > 0) {

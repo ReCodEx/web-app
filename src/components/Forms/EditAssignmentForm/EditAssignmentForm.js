@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import { canUseDOM } from 'exenv';
-import { reduxForm, Field, FieldArray } from 'redux-form';
+import { reduxForm, Field, FieldArray, touch } from 'redux-form';
 import { FormattedHTMLMessage, FormattedMessage } from 'react-intl';
 import { Alert, HelpBlock } from 'react-bootstrap';
 import isNumeric from 'validator/lib/isNumeric';
@@ -9,6 +9,8 @@ import FormBox from '../../AdminLTE/FormBox';
 import { DatetimeField, TextField, CheckboxField, SourceCodeField } from '../Fields';
 import LocalizedAssignmentsFormField from '../LocalizedAssignmentsFormField';
 import SubmitButton from '../SubmitButton';
+
+import { validateAssignment } from '../../../redux/modules/assignments';
 
 if (canUseDOM) {
   require('codemirror/mode/yaml/yaml');
@@ -233,6 +235,7 @@ const asyncValidate = ({ id, version }, dispatch) =>
       var errors = {};
       if (versionIsUpToDate === false) {
         errors['name'] = <FormattedMessage id='app.editExerciseForm.validation.versionDiffers' defaultMessage='Somebody has changed the exercise while you have been editing it. Please reload the page and apply your changes once more.' />;
+        dispatch(touch('editAssignment', 'name'));
       }
 
       if (Object.keys(errors).length > 0) {
