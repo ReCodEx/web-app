@@ -1,9 +1,10 @@
 import React, { PropTypes } from 'react';
 import { FormattedMessage, FormattedNumber, FormattedTime, FormattedDate } from 'react-intl';
-import { Table } from 'react-bootstrap';
+import { Table, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import ReactMarkdown from 'react-markdown';
 import Box from '../../AdminLTE/Box';
 import DifficultyIcon from '../DifficultyIcon';
+import { MaybeSucceededIcon } from '../../Icons';
 
 import UsersNameContainer from '../../../containers/UsersNameContainer';
 
@@ -16,11 +17,16 @@ const ExerciseDetail = ({
   createdAt,
   updatedAt,
   version,
-  localizedAssignments
+  localizedAssignments,
+  solutionRuntimeConfigs
 }) => (
   <Box title={name} noPadding>
     <Table>
       <tbody>
+        <tr>
+          <th><FormattedMessage id='app.exercise.author' defaultMessage='Author:' /></th>
+          <td><UsersNameContainer userId={authorId} /></td>
+        </tr>
         <tr>
           <th><FormattedMessage id='app.exercise.difficulty' defaultMessage='Difficulty:' /></th>
           <td><DifficultyIcon difficulty={difficulty} /></td>
@@ -42,8 +48,24 @@ const ExerciseDetail = ({
           <td><FormattedNumber value={version} /></td>
         </tr>
         <tr>
-          <th><FormattedMessage id='app.exercise.author' defaultMessage='Author:' /></th>
-          <td><UsersNameContainer userId={authorId} /></td>
+          <th><FormattedMessage id='app.exercise.runtimes' defaultMessage='Supported runtime environments:' /></th>
+          <td>
+            {solutionRuntimeConfigs.map(({ id, name, isValid }) => (
+              <p key={id}>
+                <OverlayTrigger
+                  placement='left'
+                  overlay={(
+                    <Tooltip id={id}>
+                      {isValid
+                        ? <FormattedMessage id='app.exercise.runtimes.isValid' defaultMessage='Configuration is valid' />
+                        : <FormattedMessage id='app.exercise.runtimes.isNotValid' defaultMessage='Configuration is not valid' />}
+                    </Tooltip>
+                  )}>
+                  <span><MaybeSucceededIcon success={isValid} />&nbsp;{name}</span>
+                </OverlayTrigger>
+              </p>
+            ))}
+          </td>
         </tr>
       </tbody>
     </Table>
@@ -59,7 +81,8 @@ ExerciseDetail.propTypes = {
   createdAt: PropTypes.number.isRequired,
   updatedAt: PropTypes.number.isRequired,
   version: PropTypes.number.isRequired,
-  localizedAssignments: PropTypes.array.isRequired
+  localizedAssignments: PropTypes.array.isRequired,
+  solutionRuntimeConfigs: PropTypes.array.isRequired
 };
 
 export default ExerciseDetail;
