@@ -29,6 +29,8 @@ class CreateGroupForm extends Component {
         title={title}
         type={submitSucceeded ? 'success' : undefined}
         unlimitedHeight
+        collapsable
+        isOpen={false}
         footer={
           <div className='text-center'>
             <SubmitButton
