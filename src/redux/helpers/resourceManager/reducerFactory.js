@@ -15,7 +15,7 @@ const reducerFactory = (actionTypes) => ({
     state.setIn([ 'resources', meta.id ], createRecord({ state: resourceStatus.FULFILLED, data })),
 
   [actionTypes.ADD_PENDING]: (state, { meta: { tmpId }, payload }) =>
-    state.setIn([ 'resources', tmpId ], createRecord({ state: resourceStatus.FULFILLED, payload })),
+    state.setIn([ 'resources', tmpId ], createRecord({ state: resourceStatus.POSTING, payload })),
 
   [actionTypes.ADD_REJECTED]: (state, { meta: { tmpId } }) =>
     state.removeIn([ 'resources', tmpId ]),
@@ -35,6 +35,9 @@ const reducerFactory = (actionTypes) => ({
         state.setIn(['resources', data.id], createRecord({ state: resourceStatus.FULFILLED, data })),
       state
     ).setIn([ 'fetchManyStatus', endpoint ], resourceStatus.LOADED),
+
+  [actionTypes.UPDATE_FULFILLED]: (state, { payload, meta: { id } }) =>
+    state.setIn(['resources', id, 'data'], fromJS(payload)),
 
   [actionTypes.REMOVE_PENDING]: (state, { meta: { id } }) =>
     state.setIn(['resources', id, 'state'], resourceStatus.DELETING),

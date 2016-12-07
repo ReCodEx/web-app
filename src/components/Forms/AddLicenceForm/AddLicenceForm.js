@@ -10,6 +10,7 @@ import { TextField, DatetimeField } from '../Fields';
 
 const AddLicenceForm = ({
   submitting,
+  anyTouched,
   handleSubmit,
   submitFailed = false,
   submitSucceeded = false,
@@ -24,6 +25,7 @@ const AddLicenceForm = ({
       <div className='text-center'>
         <SubmitButton
           handleSubmit={handleSubmit}
+          dirty={anyTouched}
           submitting={submitting}
           hasSucceeded={submitSucceeded}
           hasFailed={submitFailed}
@@ -48,6 +50,7 @@ const AddLicenceForm = ({
 AddLicenceForm.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
+  anyTouched: PropTypes.bool,
   submitFailed: PropTypes.bool,
   submitSucceeded: PropTypes.bool,
   submitting: PropTypes.bool,

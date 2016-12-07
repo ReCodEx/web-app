@@ -6,14 +6,12 @@ import { Row, Col } from 'react-bootstrap';
 import Box from '../../AdminLTE/Box';
 import AddStudent from '../AddStudent';
 import AddAssignment from '../AddAssignment';
-import StudentsList from '../../Users/StudentsList';
+import StudentsListContainer from '../../../containers/StudentsListContainer';
 import AdminAssignmentsTable from '../../Assignments/AdminAssignmentsTable';
 import LeaveJoinGroupButtonContainer from '../../../containers/LeaveJoinGroupButtonContainer';
 
 const SupervisorsView = ({
   group,
-  students,
-  stats,
   assignments,
   assignExercise
 }) => (
@@ -34,11 +32,9 @@ const SupervisorsView = ({
           title={<FormattedMessage id='app.group.spervisorsView.students' defaultMessage='Students' />}
           collapsable
           noPadding>
-          <StudentsList
+          <StudentsListContainer
+            groupId={group.id}
             renderActions={userId => <LeaveJoinGroupButtonContainer userId={userId} groupId={group.id} />}
-            users={students}
-            isLoaded={students.length === group.students.length}
-            stats={stats}
             fill />
         </Box>
         <Box
@@ -68,9 +64,7 @@ const SupervisorsView = ({
 );
 
 SupervisorsView.propTypes = {
-  group: PropTypes.object.isRequired,
-  students: PropTypes.array,
-  stats: ImmutablePropTypes.map,
+  group: PropTypes.object,
   assignments: ImmutablePropTypes.list.isRequired,
   assignExercise: PropTypes.func.isRequired
 };

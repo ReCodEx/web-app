@@ -14,7 +14,9 @@ import Exercises from './Exercises';
 import EditExercise from './EditExercise';
 import Group from './Group';
 import EditGroup from './EditGroup';
-import instance from './Instance';
+import Instance from './Instance';
+import Instances from './Instances';
+import EditInstances from './EditInstance';
 import Login from './Login';
 import Assignment from './Assignment';
 import EditAssignment from './EditAssignment';
@@ -78,7 +80,7 @@ const createRoutes = (getState) => {
             <IndexRoute component={Group} />
             <Route path='edit' component={EditGroup} />
           </Route>
-          <Route path='instance/:instanceId' component={instance} />
+          <Route path='instance/:instanceId' component={Instance} />
           <Route path='user/:userId'>
             <IndexRoute component={User} />
             <Route path='edit' component={EditUser} />
@@ -87,6 +89,14 @@ const createRoutes = (getState) => {
         <Route path='forgotten-password'>
           <IndexRoute component={ResetPassword} />
           <Route path='change' component={ChangePassword} />
+        </Route>
+        <Route path='admin'>
+          <Route path='instances'>
+            <IndexRoute component={Instances} />
+            <Route path=':instanceId'>
+              <Route path='edit' component={EditInstances} />
+            </Route>
+          </Route>
         </Route>
         <Route path='*' component={NotFound} />
       </Route>

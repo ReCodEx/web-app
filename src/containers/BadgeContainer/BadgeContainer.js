@@ -10,22 +10,24 @@ import { accessTokenExpiration } from '../../redux/selectors/auth';
 const BadgeContainer = ({
   user,
   expiration,
-  logout
+  logout,
+  small = false
 }, {
   links: { HOME_URI }
 }) => (
   <ResourceRenderer
-    loading={<LoadingBadge />}
-    failed={<FailedBadge color='black' />}
+    loading={<LoadingBadge small={small} />}
+    failed={<FailedBadge color='black' small={small} />}
     resource={user}>
-    {data => <Badge {...data} logout={() => logout(HOME_URI)} expiration={expiration} />}
+    {data => <Badge {...data} logout={() => logout(HOME_URI)} expiration={expiration} small={small} />}
   </ResourceRenderer>
 );
 
 BadgeContainer.propTypes = {
   user: PropTypes.object,
   expiration: PropTypes.number.isRequired,
-  logout: PropTypes.func.isRequired
+  logout: PropTypes.func.isRequired,
+  small: PropTypes.bool
 };
 
 BadgeContainer.contextTypes = {

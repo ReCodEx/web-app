@@ -3,7 +3,7 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
-import { reset, getFormValues } from 'redux-form';
+import { reset, getFormValues, initialize } from 'redux-form';
 import moment from 'moment';
 import PageContent from '../../components/PageContent';
 
@@ -12,9 +12,10 @@ import EditAssignmentForm from '../../components/Forms/EditAssignmentForm';
 import EditAssignmentLimitsForm from '../../components/Forms/EditAssignmentLimitsForm';
 import DeleteAssignmentButtonContainer from '../../containers/DeleteAssignmentButtonContainer';
 import Box from '../../components/AdminLTE/Box';
+import { LoadingIcon, WarningIcon } from '../../components/Icons';
 
-import { fetchAssignmentIfNeeded, editAssignment } from '../../redux/modules/assignments';
-import { fetchLimitsIfNeeded, editLimits } from '../../redux/modules/limits';
+import { fetchAssignment, editAssignment } from '../../redux/modules/assignments';
+import { fetchLimits, editLimits } from '../../redux/modules/limits';
 import { getAssignment } from '../../redux/selectors/assignments';
 import { canSubmitSolution } from '../../redux/selectors/canSubmit';
 import { getEnvironmentsLimits } from '../../redux/selectors/limits';
@@ -39,8 +40,8 @@ class EditAssignment extends Component {
   };
 
   static loadAsync = ({ assignmentId }, dispatch) => Promise.all([
-    dispatch(fetchAssignmentIfNeeded(assignmentId)),
-    dispatch(fetchLimitsIfNeeded(assignmentId)),
+    dispatch(fetchAssignment(assignmentId)),
+    dispatch(fetchLimits(assignmentId)),
     dispatch(fetchRuntimeEnvironments())
   ]);
 
@@ -81,7 +82,22 @@ class EditAssignment extends Component {
           }
         ]}>
         <div>
-          <ResourceRenderer resource={assignment}>
+          <ResourceRenderer
+            loading={(
+              <Box title={<FormattedMessage id='app.editAssignment.loading' defaultMessage='Loading ...' />}>
+                <p>
+                  <LoadingIcon /> <FormattedMessage id='app.editAssignment.loadingDescription' defaultMessage='Loading latest assignment settings ...' />
+                </p>
+              </Box>
+            )}
+            failed={(
+              <Box title={<FormattedMessage id='app.editAssignment.failed' defaultMessage='Failed loading assignment settings' />}>
+                <p>
+                  <WarningIcon /> <FormattedMessage id='app.editAssignment.failedDescription' defaultMessage='Assignment settings could not have been loaded.' />
+                </p>
+              </Box>
+            )}
+            resource={assignment}>
             {data => (
               <div>
                 <EditAssignmentForm
@@ -159,10 +175,13 @@ export default connect(
     loadAsync: () => EditAssignment.loadAsync({ assignmentId }, dispatch),
     editAssignment: (data) => {
       // convert deadline times to timestamps
-      data.firstDeadline = moment(data.firstDeadline).unix();
-      data.secondDeadline = moment(data.secondDeadline).unix();
-      data.submissionsCountLimit = Number(data.submissionsCountLimit);
-      return dispatch(editAssignment(assignmentId, data));
+      const processedData = Object.assign({}, data, {
+        firstDeadline: moment(data.firstDeadline).unix(),
+        secondDeadline: moment(data.secondDeadline).unix(),
+        submissionsCountLimit: Number(data.submissionsCountLimit)
+      });
+      return dispatch(editAssignment(assignmentId, processedData))
+        .then(() => dispatch(initialize('editAssignment', data)));
     },
     editLimits: (data) => dispatch(editLimits(assignmentId, data))
   })

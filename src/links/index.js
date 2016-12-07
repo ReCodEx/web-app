@@ -22,9 +22,9 @@ export const linksFactory = lang => {
   const EDIT_USER_URI_FACTORY = (id) => `${USER_URI_FACTORY(id)}/edit`;
 
   // exercise details
-  const EXERCISES_URI_FACTORY = () => `${prefix}/app/exercises`;
-  const EXERCISE_CREATE_URI_FACTORY = () => `${EXERCISES_URI_FACTORY()}`;
-  const EXERCISE_URI_FACTORY = (id) => `${EXERCISES_URI_FACTORY()}/${id}`;
+  const EXERCISES_URI = `${prefix}/app/exercises`;
+  const EXERCISE_CREATE_URI_FACTORY = () => `${EXERCISES_URI}`;
+  const EXERCISE_URI_FACTORY = (id) => `${EXERCISES_URI}/${id}`;
   const EXERCISE_EDIT_URI_FACTORY = (id) => `${EXERCISE_URI_FACTORY(id)}/edit`;
 
   // assignments and solution submissions
@@ -43,15 +43,21 @@ export const linksFactory = lang => {
   // external links
   const BUGS_URL = 'https://www.github.com/recodex/web-app/issues';
 
+  // administration
+  const ADMIN_URI = `${prefix}/admin`;
+  const ADMIN_INSTANCES_URI = `${ADMIN_URI}/instances`;
+  const ADMIN_EDIT_INSTANCE_URI_FACTORY = (instanceId) => `${ADMIN_INSTANCES_URI}/${instanceId}/edit`;
+
   return {
     HOME_URI, DASHBOARD_URI, LOGIN_URI, REGISTRATION_URI, LOGOUT_URI, RESET_PASSWORD_URI,
     INSTANCE_URI_FACTORY, GROUP_URI_FACTORY, GROUP_EDIT_URI_FACTORY,
     USER_URI_FACTORY, EDIT_USER_URI_FACTORY,
-    EXERCISES_URI_FACTORY, EXERCISE_URI_FACTORY, EXERCISE_EDIT_URI_FACTORY, EXERCISE_CREATE_URI_FACTORY,
+    EXERCISES_URI, EXERCISE_URI_FACTORY, EXERCISE_EDIT_URI_FACTORY, EXERCISE_CREATE_URI_FACTORY,
     ASSIGNMENT_EDIT_URI_FACTORY, ASSIGNMENT_DETAIL_URI_FACTORY, ASSIGNMENT_DETAIL_SPECIFIC_USER_URI_FACTORY,
     SUBMIT_SOLUTION_URI_FACTORY,
     SUBMISSION_DETAIL_URI_FACTORY, SUPERVISOR_STATS_URI_FACTORY, SOURCE_CODE_DETAIL_URI_FACTORY,
-    BUGS_URL
+    BUGS_URL,
+    ADMIN_INSTANCES_URI, ADMIN_EDIT_INSTANCE_URI_FACTORY
   };
 };
 

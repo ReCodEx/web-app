@@ -4,7 +4,7 @@ import { List } from 'immutable';
 import { loggedInUserIdSelector } from './auth';
 import { groupSelector, studentsOfGroup, supervisorsOfGroup } from './groups';
 import { exerciseSelector } from './exercises';
-import { isReady } from '../helpers/resourceManager';
+import { isReady, getJsData } from '../helpers/resourceManager';
 
 const getUsers = state => state.users.get('resources');
 
@@ -19,10 +19,45 @@ export const getUser = (userId) =>
     users => users.get(userId)
   );
 
-export const isSuperAdmin = (userId) =>
+export const readyUsersDataSelector =
+  createSelector(
+    usersSelector,
+    users => users
+      .toList()
+      .filter(isReady)
+      .map(getJsData)
+      .sort((a, b) => {
+        if (a.name.lastName < b.name.lastName) return -1;
+        if (a.name.lastName > b.name.lastName) return 1;
+        if (a.name.firstName < b.name.firstName) return -1;
+        if (a.name.firstName > b.name.firstName) return 1;
+        return 0;
+      })
+      .toArray()
+  );
+
+export const getRole = (userId) =>
   createSelector(
     getUser(userId),
-    user => user.getIn(['data', 'role']) === 'superadmin'
+    user => user ? user.getIn(['data', 'role']) : null
+  );
+
+export const isStudent = (userId) =>
+  createSelector(
+    getRole(userId),
+    role => role === 'student'
+  );
+
+export const isSupervisor = (userId) =>
+  createSelector(
+    getRole(userId),
+    role => role === 'supervisor'
+  );
+
+export const isSuperAdmin = (userId) =>
+  createSelector(
+    getRole(userId),
+    role => role === 'superadmin'
   );
 
 export const getUserSettings = (userId) =>
@@ -86,10 +121,10 @@ export const usersGroupsIds = (userId) =>
     (student, supervisor) => student.concat(supervisor)
   );
 
-export const isAuthorOfExercise = (userId, exerciseId) =>
+export const canEditExercise = (userId, exerciseId) =>
   createSelector(
-    exerciseSelector(exerciseId),
-    exercise => exercise && isReady(exercise) && exercise.getIn(['data', 'authorId']) === userId
+    [ exerciseSelector(exerciseId), isSuperAdmin(userId) ],
+    (exercise, isSuperAdmin) => isSuperAdmin || exercise && isReady(exercise) && exercise.getIn(['data', 'authorId']) === userId
   );
 
 export const notificationsSelector = createSelector(

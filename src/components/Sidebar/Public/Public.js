@@ -16,28 +16,24 @@ const Public = ({
 }) => (
   <ul className='sidebar-menu'>
     <MenuTitle title='ReCodEx' />
-    {!isLoggedIn && (
-      <MenuItem
-        title={<FormattedMessage id='app.sidebar.menu.signIn' defaultMessage='Sign in' />}
-        icon='sign-in'
-        currentPath={currentUrl}
-        link={LOGIN_URI} />
-    )}
-    {!isLoggedIn && (
-      <MenuItem
-        title={<FormattedMessage id='app.sidebar.menu.createAccount' defaultMessage='Create account' />}
-        isActive={false}
-        icon='user-plus'
-        currentPath={currentUrl}
-        link={REGISTRATION_URI} />
-    )}
     <MenuItem
-      title={<FormattedMessage id='app.sidebar.menu.feedbackAndBugs' defaultMessage='Feedback and bug reporting' />}
-      isActive={false}
-      icon='bug'
-      link={BUGS_URL}
+      title={<FormattedMessage id='app.sidebar.menu.signIn' defaultMessage='Sign in' />}
+      icon='sign-in'
       currentPath={currentUrl}
-      inNewTab={true} />
+      link={LOGIN_URI} />
+    <MenuItem
+      title={<FormattedMessage id='app.sidebar.menu.createAccount' defaultMessage='Create account' />}
+      isActive={false}
+      icon='user-plus'
+      currentPath={currentUrl}
+      link={REGISTRATION_URI} />
+    <MenuItem
+        title={<FormattedMessage id='app.sidebar.menu.feedbackAndBugs' defaultMessage='Feedback and bug reporting' />}
+        isActive={false}
+        icon='bug'
+        link={BUGS_URL}
+        currentPath={currentUrl}
+        inNewTab={true} />
   </ul>
 );
 

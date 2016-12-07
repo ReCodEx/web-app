@@ -12,7 +12,7 @@ const StudentsList = ({
   renderActions,
   ...rest
 }) => (
-  <Table hover>
+  <Table hover responsive>
     <tbody>
     {users.map((user, i) => (
       <StudentsListItem

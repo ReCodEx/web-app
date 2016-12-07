@@ -21,6 +21,7 @@ class CreateGroupForm extends Component {
       handleSubmit,
       submitSucceeded = false,
       submitFailed = false,
+      anyTouched = false,
       invalid = false,
       submitting = false
     } = this.props;
@@ -29,6 +30,8 @@ class CreateGroupForm extends Component {
         title={title}
         type={submitSucceeded ? 'success' : undefined}
         unlimitedHeight
+        collapsable
+        isOpen={false}
         footer={
           <div className='text-center'>
             <SubmitButton
@@ -36,6 +39,7 @@ class CreateGroupForm extends Component {
               tabIndex={3}
               submitting={submitting}
               invalid={invalid}
+              dirty={anyTouched}
               hasFailed={submitFailed}
               hasSuceeded={submitSucceeded}
               messages={{
@@ -94,6 +98,7 @@ CreateGroupForm.propTypes = {
   reset: PropTypes.func.isRequired,
   submitFailed: PropTypes.bool,
   submitSucceeded: PropTypes.bool,
+  anyTouched: PropTypes.bool,
   invalid: PropTypes.bool,
   submitting: PropTypes.bool,
   parentGroupId: PropTypes.string

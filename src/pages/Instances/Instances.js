@@ -1,0 +1,36 @@
+import React, { PropTypes, Component } from 'react';
+import ImmutablePropTypes from 'react-immutable-proptypes';
+import { connect } from 'react-redux';
+import { fetchInstances } from '../../redux/modules/instances';
+import { instancesSelector } from '../../redux/selectors/instances';
+
+import InstancesManagement from '../../components/Instances/InstancesManagement';
+
+class Instances extends Component {
+
+  static loadAsync = (params, dispatch) => Promise.all([
+    dispatch(fetchInstances())
+  ]);
+
+  componentWillMount = () => this.props.loadAsync();
+
+  render() {
+    const { instances } = this.props;
+    return <InstancesManagement instances={instances} />;
+  }
+
+}
+
+Instances.propTypes = {
+  loadAsync: PropTypes.func.isRequired,
+  instances: ImmutablePropTypes.map
+};
+
+export default connect(
+  (state) => ({
+    instances: instancesSelector(state)
+  }),
+  (dispatch) => ({
+    loadAsync: () => Instances.loadAsync({}, dispatch)
+  })
+)(Instances);

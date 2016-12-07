@@ -31,8 +31,9 @@ export default handleActions({
   [actionTypes.SEARCH_REJECTED]: (state, { meta: { id } }) =>
     state.update(id, search => search.set('status', searchStatus.FAILED)),
 
-  [actionTypes.SEARCH_FULFILLED]: (state, { payload: results, meta: { id } }) =>
-    state.update(id, search => search.set('status', searchStatus.READY).set('results', fromJS(results)))
+  [actionTypes.SEARCH_FULFILLED]: (state, { payload: results, meta: { id } }) => {
+    return state.update(id, search => search.set('status', searchStatus.READY).set('results', fromJS(results)));
+  }
 
 }, initialState);
 

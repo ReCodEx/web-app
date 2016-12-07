@@ -16,6 +16,7 @@ if (canUseDOM) {
 
 const EditAssignmentForm = ({
   initialValues: assignment,
+  anyTouched,
   submitting,
   handleSubmit,
   submitFailed: hasFailed,
@@ -30,18 +31,20 @@ const EditAssignmentForm = ({
   <div>
     <FormBox
       title={<FormattedMessage id='app.editAssignmentForm.title' defaultMessage='Edit assignment {name}' values={{ name: assignment.name }} />}
-      type={hasSucceeded ? 'success' : undefined}
+      successful={hasSucceeded}
+      dirty={anyTouched}
       unlimitedHeight
       footer={
         <div className='text-center'>
           <SubmitButton
             invalid={invalid}
             submitting={submitting}
+            dirty={anyTouched}
             hasSucceeded={hasSucceeded}
             hasFailed={hasFailed}
             handleSubmit={handleSubmit}
             messages={{
-              submit: <FormattedMessage id='app.editAssignmentForm.submit' defaultMessage='Edit settings' />,
+              submit: <FormattedMessage id='app.editAssignmentForm.submit' defaultMessage='Save settings' />,
               submitting: <FormattedMessage id='app.editAssignmentForm.submitting' defaultMessage='Saving changes ...' />,
               success: <FormattedMessage id='app.editAssignmentForm.success' defaultMessage='Settings were saved.' />
             }} />
@@ -138,6 +141,7 @@ EditAssignmentForm.propTypes = {
   initialValues: PropTypes.object.isRequired,
   values: PropTypes.object,
   handleSubmit: PropTypes.func.isRequired,
+  anyTouched: PropTypes.bool,
   submitting: PropTypes.bool,
   submitFailed: PropTypes.bool,
   submitSucceeded: PropTypes.bool,
@@ -222,7 +226,22 @@ const validate = ({
   return errors;
 };
 
+const asyncValidate = ({ id, version }, dispatch) =>
+  dispatch(validateAssignment(id, version))
+    .then(res => res.value)
+    .then(({ versionIsUpToDate }) => {
+      var errors = {};
+      if (versionIsUpToDate === false) {
+        errors['name'] = <FormattedMessage id='app.editExerciseForm.validation.versionDiffers' defaultMessage='Somebody has changed the exercise while you have been editing it. Please reload the page and apply your changes once more.' />;
+      }
+
+      if (Object.keys(errors).length > 0) {
+        throw errors;
+      }
+    });
+
 export default reduxForm({
   form: 'editAssignment',
-  validate
+  validate,
+  asyncValidate
 })(EditAssignmentForm);

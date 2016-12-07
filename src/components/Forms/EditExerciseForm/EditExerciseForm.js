@@ -2,17 +2,20 @@ import React, { PropTypes } from 'react';
 import { canUseDOM } from 'exenv';
 import { reduxForm, Field, FieldArray } from 'redux-form';
 import { injectIntl, intlShape, FormattedMessage, defineMessages } from 'react-intl';
-import { Row, Col, Alert } from 'react-bootstrap';
+import { Alert } from 'react-bootstrap';
 
-import FormBox from '../../AdminLTE/FormBox';
 import {
   TextField,
   SelectField,
   CheckboxField,
   MarkdownTextAreaField
 } from '../Fields';
+
+import FormBox from '../../AdminLTE/FormBox';
 import SubmitButton from '../SubmitButton';
 import LocalizedAssignmentsFormField from '../LocalizedAssignmentsFormField';
+
+import { validateExercise } from '../../../redux/modules/exercises';
 
 if (canUseDOM) {
   require('codemirror/mode/yaml/yaml');
@@ -35,6 +38,7 @@ const messages = defineMessages({
 
 const EditExerciseForm = ({
   initialValues: exercise,
+  anyTouched,
   submitting,
   handleSubmit,
   submitFailed: hasFailed,
@@ -45,67 +49,63 @@ const EditExerciseForm = ({
   } = {},
   intl: { formatMessage }
 }) => (
-  <Row>
-    <Col lg={6}>
-      <FieldArray
-        name='localizedAssignments'
-        localizedAssignments={localizedAssignments}
-        component={LocalizedAssignmentsFormField} />
-    </Col>
-    <Col lg={6}>
-      <FormBox
-        title={<FormattedMessage id='app.editExerciseForm.title' defaultMessage='Edit exercise {name}' values={{ name: exercise.name }} />}
-        type={hasSucceeded ? 'success' : undefined}
-        footer={
-          <div className='text-center'>
-            <SubmitButton
-              invalid={invalid}
-              submitting={submitting}
-              hasSucceeded={hasSucceeded}
-              hasFailed={hasFailed}
-              handleSubmit={handleSubmit}
-              messages={{
-                submit: <FormattedMessage id='app.editExerciseForm.submit' defaultMessage='Edit settings' />,
-                submitting: <FormattedMessage id='app.editExerciseForm.submitting' defaultMessage='Saving changes ...' />,
-                success: <FormattedMessage id='app.editExerciseForm.success' defaultMessage='Settings were saved.' />
-              }} />
-          </div>
-        }>
-        {hasFailed && (
-          <Alert bsStyle='danger'>
-            <FormattedMessage id='app.editExerciseForm.failed' defaultMessage='Saving failed. Please try again later.' />
-          </Alert>)}
+  <FormBox
+    title={<FormattedMessage id='app.editExerciseForm.title' defaultMessage='Edit exercise {name}' values={{ name: exercise.name }} />}
+    succeeded={hasSucceeded}
+    dirty={anyTouched}
+    footer={
+      <div className='text-center'>
+        <SubmitButton
+          invalid={invalid}
+          submitting={submitting}
+          dirty={anyTouched}
+          hasSucceeded={hasSucceeded}
+          hasFailed={hasFailed}
+          handleSubmit={handleSubmit}
+          messages={{
+            submit: <FormattedMessage id='app.editExerciseForm.submit' defaultMessage='Save changes' />,
+            submitting: <FormattedMessage id='app.editExerciseForm.submitting' defaultMessage='Saving changes ...' />,
+            success: <FormattedMessage id='app.editExerciseForm.success' defaultMessage='Settings were saved.' />
+          }} />
+      </div>
+    }>
+    {hasFailed && (
+      <Alert bsStyle='danger'>
+        <FormattedMessage id='app.editExerciseForm.failed' defaultMessage='Saving failed. Please try again later.' />
+      </Alert>)}
 
-        <Field
-          name='name'
-          component={TextField}
-          label={<FormattedMessage id='app.editExerciseForm.name' defaultMessage='Exercise name:' />} />
+    <Field
+      name='name'
+      component={TextField}
+      label={<FormattedMessage id='app.editExerciseForm.name' defaultMessage='Exercise name:' />} />
 
-        <Field
-          name='difficulty'
-          component={SelectField}
-          options={[
-            { key: '', name: '...' },
-            { key: 'easy', name: formatMessage(messages.easy) },
-            { key: 'medium', name: formatMessage(messages.medium) },
-            { key: 'hard', name: formatMessage(messages.hard) }
-          ]}
-          label={<FormattedMessage id='app.editExerciseForm.difficulty' defaultMessage='Difficulty' />} />
+    <Field
+      name='difficulty'
+      component={SelectField}
+      options={[
+        { key: '', name: '...' },
+        { key: 'easy', name: formatMessage(messages.easy) },
+        { key: 'medium', name: formatMessage(messages.medium) },
+        { key: 'hard', name: formatMessage(messages.hard) }
+      ]}
+      label={<FormattedMessage id='app.editExerciseForm.difficulty' defaultMessage='Difficulty' />} />
 
-        <Field
-          name='description'
-          component={MarkdownTextAreaField}
-          label={<FormattedMessage id='app.editExerciseForm.description' defaultMessage='Description for supervisors:' />} />
+    <Field
+      name='description'
+      component={MarkdownTextAreaField}
+      label={<FormattedMessage id='app.editExerciseForm.description' defaultMessage='Description for supervisors:' />} />
 
-        <Field
-          name='isPublic'
-          component={CheckboxField}
-          onOff
-          label={<FormattedMessage id='app.editExerciseForm.isPublic' defaultMessage='Exercise is public and can be assigned to students by their supervisors.' />} />
+    <Field
+      name='isPublic'
+      component={CheckboxField}
+      onOff
+      label={<FormattedMessage id='app.editExerciseForm.isPublic' defaultMessage='Exercise is public and can be assigned to students by their supervisors.' />} />
 
-      </FormBox>
-    </Col>
-  </Row>
+    <FieldArray
+      name='localizedAssignments'
+      localizedAssignments={localizedAssignments}
+      component={LocalizedAssignmentsFormField} />
+  </FormBox>
 );
 
 EditExerciseForm.propTypes = {
@@ -113,6 +113,7 @@ EditExerciseForm.propTypes = {
   values: PropTypes.object,
   handleSubmit: PropTypes.func.isRequired,
   intl: intlShape.isRequired,
+  anyTouched: PropTypes.bool,
   submitting: PropTypes.bool,
   submitFailed: PropTypes.bool,
   submitSucceeded: PropTypes.bool,
@@ -144,7 +145,22 @@ const validate = ({
   return errors;
 };
 
+const asyncValidate = ({ id, version }, dispatch) =>
+  dispatch(validateExercise(id, version))
+    .then(res => res.value)
+    .then(({ versionIsUpToDate }) => {
+      var errors = {};
+      if (versionIsUpToDate === false) {
+        errors['name'] = <FormattedMessage id='app.editExerciseForm.validation.versionDiffers' defaultMessage='Somebody has changed the exercise while you have been editing it. Please reload the page and apply your changes once more.' />;
+      }
+
+      if (Object.keys(errors).length > 0) {
+        throw errors;
+      }
+    });
+
 export default injectIntl(reduxForm({
   form: 'editExercise',
-  validate
+  validate,
+  asyncValidate
 })(EditExerciseForm));

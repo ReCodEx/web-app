@@ -9,7 +9,7 @@ const NotEvaluatedSubmissionTableRow = ({
   submittedAt
 }) => (
   <tr>
-    <td><AssignmentStatusIcon status={'work-in-progress'} /></td>
+    <td><AssignmentStatusIcon id={link} status='work-in-progress' /></td>
     <td>
       <FormattedDate value={submittedAt * 1000} />&nbsp;<FormattedTime value={submittedAt * 1000} />
     </td>

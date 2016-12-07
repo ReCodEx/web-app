@@ -17,7 +17,7 @@ import UsersStats from '../../components/Users/UsersStats';
 import { fetchAssignmentsForGroup } from '../../redux/modules/assignments';
 import { fetchUserIfNeeded } from '../../redux/modules/users';
 import { fetchGroupsIfNeeded } from '../../redux/modules/groups';
-import { getUser, studentOfGroupsIdsSelector } from '../../redux/selectors/users';
+import { getUser, studentOfGroupsIdsSelector, isStudent } from '../../redux/selectors/users';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import { fetchGroupsStatsIfNeeded } from '../../redux/modules/stats';
 import { createGroupsStatsSelector } from '../../redux/selectors/stats';
@@ -70,6 +70,7 @@ class User extends Component {
   render() {
     const {
       user,
+      student,
       studentOfGroupsIds,
       commonGroups,
       loggedInUserId,
@@ -156,7 +157,7 @@ class User extends Component {
 
           {commonGroups.length === 0 && user.id !== loggedInUserId && (
             <div className='callout callout-warning'>
-              <h4><InfoIcon />{' '}<FormattedMessage id='app.user.nothingInCommon.title' defaultMessage='You are not a supervisor' /></h4>
+              <h4><InfoIcon />{' '}<FormattedMessage id='app.user.nothingInCommon.title' defaultMessage='You are not a supervisor of {name}' values={{ name: user.fullName }} /></h4>
               <FormattedMessage
                 id='app.user.noCommonGroups'
                 defaultMessage="You are not a supervisor of any group of which is {name} a member and so you don't see any of his results."
@@ -164,10 +165,10 @@ class User extends Component {
             </div>
           )}
 
-          {studentOfGroupsIds.length === 0 && user.id === loggedInUserId && (
+          {student && studentOfGroupsIds.length === 0 && user.id === loggedInUserId && (
             <Row>
               <Col sm={12}>
-                <div className='callout callout-default'>
+                <div className='callout callout-success'>
                   <h4>
                     <InfoIcon /> <FormattedMessage id='app.user.welcomeTitle' defaultMessage='Welcome to ReCodEx' />
                   </h4>
@@ -202,6 +203,7 @@ User.propTypes = {
   studentOfGroupsIds: PropTypes.array,
   params: PropTypes.shape({ userId: PropTypes.string.isRequired }).isRequired,
   loadAsync: PropTypes.func.isRequired,
+  student: PropTypes.bool,
   loggedInUserId: PropTypes.string,
   groupAssignments: PropTypes.func.isRequired,
   groupStatistics: PropTypes.func.isRequired,
@@ -223,6 +225,7 @@ export default connect(
 
     return {
       loggedInUserId,
+      student: isStudent(userId)(state),
       user: getUser(userId)(state),
       studentOfGroupsIds: studentOfGroupsIdsSelector(userId)(state).toArray(),
       groupAssignments: (groupId) => groupsAssignmentsSelector(groupId)(state),

@@ -17,6 +17,7 @@ const RegistrationForm = ({
   submitFailed = false,
   submitSucceeded = false,
   asyncValidate,
+  anyTouched,
   instances,
   invalid
 }) => (
@@ -30,6 +31,7 @@ const RegistrationForm = ({
           submitting={submitting}
           hasSucceeded={submitSucceeded}
           hasFailed={submitFailed}
+          dirty={anyTouched}
           invalid={invalid || instances.size === 0}
           messages={{
             submit: <FormattedMessage id='app.registrationForm.createAccount' defaultMessage='Create account' />,
@@ -80,6 +82,7 @@ RegistrationForm.propTypes = {
   asyncValidate: PropTypes.func.isRequired,
   submitSucceeded: PropTypes.bool,
   submitting: PropTypes.bool,
+  anyTouched: PropTypes.bool,
   invalid: PropTypes.bool
 };
 

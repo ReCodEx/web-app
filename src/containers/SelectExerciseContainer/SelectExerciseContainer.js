@@ -6,7 +6,7 @@ import SearchContainer from '../SearchContainer';
 import ExercisesList from '../../components/Exercises/ExercisesList';
 
 const SelectExerciseContainer = ({
-  groupId: id,
+  id,
   search,
   createActions
 }) => (
@@ -20,13 +20,13 @@ const SelectExerciseContainer = ({
 );
 
 SelectExerciseContainer.propTypes = {
-  groupId: PropTypes.string.isRequired,
+  id: PropTypes.string.isRequired,
   search: PropTypes.func.isRequired,
   createActions: PropTypes.func
 };
 
-const mapDispatchToProps = (dispatch) => ({
-  search: (id, query) => dispatch(searchExercises()(id, query))
+const mapDispatchToProps = (dispatch, { id }) => ({
+  search: (query) => dispatch(searchExercises()(id, query))
 });
 
 export default connect(undefined, mapDispatchToProps)(SelectExerciseContainer);

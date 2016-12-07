@@ -2,26 +2,19 @@ import React, { PropTypes } from 'react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { FormattedMessage } from 'react-intl';
 
-import { isReady, getJsData, getId } from '../../../redux/helpers/resourceManager';
+import { isReady, getJsData } from '../../../redux/helpers/resourceManager';
 import MenuTitle from '../../AdminLTE/Sidebar/MenuTitle';
 import MenuItem from '../../AdminLTE/Sidebar/MenuItem';
-import MenuGroup from '../../AdminLTE/Sidebar/MenuGroup';
 
 const LoggedIn = ({
   instances,
-  studentOf,
-  supervisorOf,
-  notifications,
   isCollapsed,
   currentUrl
 }, {
   links: {
-    HOME_URI,
     DASHBOARD_URI,
-    GROUP_URI_FACTORY,
-    BUGS_URL,
     INSTANCE_URI_FACTORY,
-    EXERCISES_URI_FACTORY
+    BUGS_URL
   }
 }) => (
   <ul className='sidebar-menu'>
@@ -48,50 +41,24 @@ const LoggedIn = ({
           )
         )}
 
-    {studentOf && studentOf.size > 0 && (
-      <MenuGroup
-        title={<FormattedMessage id='app.sidebar.menu.studentOf' defaultMessage='Groups - student' />}
-        items={studentOf.toList()}
-        notifications={notifications}
-        icon='puzzle-piece'
-        currentPath={currentUrl}
-        createLink={item => GROUP_URI_FACTORY(getId(item))}
-        forceOpen={isCollapsed} />
-    )}
-
-    {supervisorOf && supervisorOf.size > 0 && (
-      <MenuGroup
-        title={<FormattedMessage id='app.sidebar.menu.supervisorOf' defaultMessage='Groups - supervisor' />}
-        items={supervisorOf.toList()}
-        notifications={{}}
-        icon='wrench'
-        currentPath={currentUrl}
-        createLink={item => GROUP_URI_FACTORY(getId(item))}
-        forceOpen={isCollapsed} />
-    )}
-
-    {supervisorOf && supervisorOf.size > 0 && (
-      <MenuItem
-        title={<FormattedMessage id='app.sidebar.menu.exercises' defaultMessage='Exercises' />}
-        icon='puzzle-piece'
-        currentPath={currentUrl}
-        link={EXERCISES_URI_FACTORY()} />
-    )}
+    <MenuItem
+      title={<FormattedMessage id='app.sidebar.menu.feedbackAndBugs' defaultMessage='Feedback and bug reporting' />}
+      isActive={false}
+      icon='bug'
+      link={BUGS_URL}
+      currentPath={currentUrl}
+      inNewTab={true} />
   </ul>
 );
 
 LoggedIn.propTypes = {
-  supervisorOf: ImmutablePropTypes.map,
-  studentOf: ImmutablePropTypes.map,
   instances: ImmutablePropTypes.list,
-  notifications: PropTypes.object,
   isCollapsed: PropTypes.bool,
   currentUrl: PropTypes.string.isRequired
 };
 
 LoggedIn.contextTypes = {
-  links: PropTypes.object,
-  location: PropTypes.object
+  links: PropTypes.object
 };
 
 export default LoggedIn;

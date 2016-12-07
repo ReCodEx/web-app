@@ -7,11 +7,16 @@ import Box from '../Box';
  */
 const FormBox = ({
   onSubmit,
+  succeeded = false,
+  dirty = false,
   children,
   ...props
 }) => (
   <Form onSubmit={onSubmit}>
-    <Box {...props} unlimitedHeight>
+    <Box
+      type={succeeded ? 'success' : (dirty ? 'warning' : 'default')}
+      {...props}
+      unlimitedHeight>
       <div>{children}</div>
     </Box>
   </Form>
@@ -19,6 +24,8 @@ const FormBox = ({
 
 FormBox.propTypes = {
   onSubmit: PropTypes.func,
+  succeeded: PropTypes.bool,
+  dirty: PropTypes.bool,
   children: PropTypes.any
 };
 

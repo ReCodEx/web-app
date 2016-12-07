@@ -17,7 +17,7 @@ import { EditIcon, SendIcon } from '../../components/Icons';
 import { fetchExerciseIfNeeded } from '../../redux/modules/exercises';
 import { create as assignExercise } from '../../redux/modules/assignments';
 import { exerciseSelector } from '../../redux/selectors/exercises';
-import { isAuthorOfExercise } from '../../redux/selectors/users';
+import { canEditExercise } from '../../redux/selectors/users';
 
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import { supervisorOfSelector } from '../../redux/selectors/groups';
@@ -54,7 +54,7 @@ class Exercise extends Component {
     } = this.props;
 
     const {
-      links: { EXERCISES_URI_FACTORY, EXERCISE_EDIT_URI_FACTORY }
+      links: { EXERCISES_URI, EXERCISE_EDIT_URI_FACTORY }
     } = this.context;
 
     return (
@@ -66,7 +66,7 @@ class Exercise extends Component {
           {
             text: <FormattedMessage id='app.exercises.title' defaultMessage="Exercises" />,
             iconName: 'puzzle-piece',
-            link: EXERCISES_URI_FACTORY()
+            link: EXERCISES_URI
           },
           {
             text: <FormattedMessage id='app.exercise.description' defaultMessage="Exercise overview" />,
@@ -110,7 +110,6 @@ class Exercise extends Component {
                           <FormattedMessage id='app.exercise.assignToGroup' defaultMessage='You can assign this exercise to one of the groups you supervise.' />
                         </p>
                         <GroupsList
-                          fill
                           groups={supervisedGroups}
                           renderButtons={groupId => (
                             <Button bsSize='xs' onClick={() => this.createExercise(groupId)}>
@@ -150,7 +149,7 @@ export default connect(
     return {
       exercise: exerciseSelector(exerciseId)(state),
       supervisedGroups: supervisorOfSelector(userId)(state),
-      isAuthorOfExercise: (exerciseId) => isAuthorOfExercise(userId, exerciseId)(state)
+      isAuthorOfExercise: (exerciseId) => canEditExercise(userId, exerciseId)(state)
     };
   },
   (dispatch, { params: { exerciseId } }) => ({

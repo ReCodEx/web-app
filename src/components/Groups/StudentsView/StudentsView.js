@@ -5,12 +5,10 @@ import { Row, Col } from 'react-bootstrap';
 
 import Box from '../../AdminLTE/Box';
 import AssignmentsTable from '../../Assignments/Assignment/AssignmentsTable';
-import StudentsList from '../../Users/StudentsList';
+import StudentsListContainer from '../../../containers/StudentsListContainer';
 
 const StudentsView = ({
   group,
-  students,
-  stats,
   statuses = [],
   assignments
 }) => (
@@ -26,7 +24,7 @@ const StudentsView = ({
       </Col>
     </Row>
     <Row>
-      <Col lg={students && stats ? 6 : 12}>
+      <Col lg={6}>
         <Box
           title={<FormattedMessage id='app.studentsView.assignments' defaultMessage='Assignments' />}
           collapsable
@@ -39,21 +37,15 @@ const StudentsView = ({
             statuses={statuses} />
         </Box>
       </Col>
-      {students && stats && (
-        <Col lg={6}>
-          <Box
-            title={<FormattedMessage id='app.studentsView.students' defaultMessage='Students' />}
-            collapsable
-            noPadding
-            isOpen>
-            <StudentsList
-              users={students}
-              isLoaded={students.length === group.students.length}
-              stats={stats}
-              fill />
-          </Box>
-        </Col>
-      )}
+      <Col lg={6}>
+        <Box
+          title={<FormattedMessage id='app.studentsView.students' defaultMessage='Students' />}
+          collapsable
+          noPadding
+          isOpen>
+          <StudentsListContainer groupId={group.id} fill />
+        </Box>
+      </Col>
     </Row>
   </div>
 );
@@ -61,8 +53,6 @@ const StudentsView = ({
 StudentsView.propTypes = {
   group: PropTypes.object.isRequired,
   assignments: ImmutablePropTypes.list.isRequired,
-  stats: PropTypes.object,
-  students: PropTypes.array.isRequired,
   statuses: PropTypes.oneOfType([ PropTypes.object, PropTypes.array ])
 };
 

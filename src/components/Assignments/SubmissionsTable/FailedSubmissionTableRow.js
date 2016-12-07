@@ -16,7 +16,7 @@ const FailedSubmissionTableRow = ({
   }
 }) => (
   <tr>
-    <td><AssignmentStatusIcon status={'failed'} /></td>
+    <td><AssignmentStatusIcon id={link} status='failed' /></td>
     <td>
       <FormattedDate value={submittedAt * 1000} />&nbsp;<FormattedTime value={submittedAt * 1000} />
     </td>

@@ -21,6 +21,13 @@ export const isLoading = (item) =>
 
 /**
  * @param {Object} item The item
+ * @return {boolean} True when the item is being posted.
+ */
+export const isPosting = (item) =>
+    !item || item.get('state') === resourceStatus.POSTING;
+
+/**
+ * @param {Object} item The item
  * @return {boolean} True when the item is being deleted.
  */
 export const isDeleting = (item) =>
