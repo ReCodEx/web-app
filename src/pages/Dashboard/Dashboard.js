@@ -174,9 +174,9 @@ class Dashboard extends Component {
                     <div>
                       {groups.map((group) => (
                         <Row key={group.id}>
-                          <ResourceRenderer resource={groupStatistics(group.id)}>
-                            {(statistics) => (
-                              <Col lg={12}>
+                          <Col lg={12}>
+                            <ResourceRenderer resource={groupStatistics(group.id)}>
+                              {(statistics) => (
                                 <Box
                                   title={group.name}
                                   collapsable
@@ -193,9 +193,9 @@ class Dashboard extends Component {
                                   )}>
                                   <StudentsListContainer groupId={group.id} />
                                 </Box>
-                              </Col>
-                            )}
-                          </ResourceRenderer>
+                              )}
+                            </ResourceRenderer>
+                          </Col>
                         </Row>
                       ))}
                     </div>
