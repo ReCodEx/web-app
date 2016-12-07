@@ -35,10 +35,10 @@ export const create = (groupId, exerciseId) => actions.addResource({ groupId, ex
 export const editAssignment = actions.updateResource;
 export const deleteAssignment = actions.removeResource;
 
-export const validateExercise = (id, version) =>
+export const validateAssignment = (id, version) =>
   createApiAction({
     type: 'VALIDATE_ASSIGNMENT',
-    endpoint: `/assignments/${id}/validate`,
+    endpoint: `/exercise-assignments/${id}/validate`,
     method: 'POST',
     body: { version }
   });
