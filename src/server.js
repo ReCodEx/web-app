@@ -4,6 +4,7 @@ import 'isomorphic-fetch';
 // server setup
 import React from 'react';
 import { renderToString } from 'react-dom/server';
+import serialize from 'serialize-javascript';
 import Express from 'express';
 import Promise from 'bluebird';
 import Helmet from 'react-helmet';
@@ -46,7 +47,7 @@ const renderPage = (res, store, renderProps) => {
   res.render('index', {
     html,
     head,
-    reduxState: JSON.stringify(store.getState()),
+    reduxState: serialize(store.getState(), { isJSON: true }),
     bundle,
     style: '/style.css'
   });
