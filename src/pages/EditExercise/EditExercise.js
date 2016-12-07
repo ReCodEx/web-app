@@ -13,7 +13,7 @@ import EditExerciseRuntimeConfigsForm from '../../components/Forms/EditExerciseR
 import SupplementaryFilesTableContainer from '../../containers/SupplementaryFilesTableContainer';
 import DeleteExerciseButtonContainer from '../../containers/DeleteExerciseButtonContainer';
 
-import { fetchExerciseIfNeeded, editExercise, editRuntimeConfigs } from '../../redux/modules/exercises';
+import { fetchExercise, editExercise, editRuntimeConfigs } from '../../redux/modules/exercises';
 import { getExercise } from '../../redux/selectors/exercises';
 import { isSubmitting } from '../../redux/selectors/submission';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
@@ -31,7 +31,7 @@ class EditExercise extends Component {
   };
 
   static loadAsync = ({ exerciseId }, dispatch) => Promise.all([
-    dispatch(fetchExerciseIfNeeded(exerciseId)),
+    dispatch(fetchExercise(exerciseId)),
     dispatch(fetchRuntimeEnvironments())
   ]);
 

@@ -22,6 +22,7 @@ export { actionTypes };
 
 export const loadAssignment = actions.pushResource;
 export const fetchAssignmentssIfNeeded = actions.fetchIfNeeded;
+export const fetchAssignment = actions.fetchResource;
 export const fetchAssignmentIfNeeded = actions.fetchOneIfNeeded;
 
 export const fetchAssignmentsForGroup = (groupId) =>

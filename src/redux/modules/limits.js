@@ -15,6 +15,7 @@ const {
  */
 
 export const loadLimits = actions.pushResource;
+export const fetchLimits = actions.fetchResource;
 export const fetchLimitsIfNeeded = actions.fetchOneIfNeeded;
 export const editLimits = actions.updateResource;
 
