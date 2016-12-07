@@ -121,10 +121,10 @@ export const usersGroupsIds = (userId) =>
     (student, supervisor) => student.concat(supervisor)
   );
 
-export const isAuthorOfExercise = (userId, exerciseId) =>
+export const canEditExercise = (userId, exerciseId) =>
   createSelector(
-    exerciseSelector(exerciseId),
-    exercise => exercise && isReady(exercise) && exercise.getIn(['data', 'authorId']) === userId
+    [ exerciseSelector(exerciseId), isSuperAdmin(userId) ],
+    (exercise, isSuperAdmin) => isSuperAdmin || exercise && isReady(exercise) && exercise.getIn(['data', 'authorId']) === userId
   );
 
 export const notificationsSelector = createSelector(

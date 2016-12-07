@@ -17,7 +17,7 @@ import { EditIcon, SendIcon } from '../../components/Icons';
 import { fetchExerciseIfNeeded } from '../../redux/modules/exercises';
 import { create as assignExercise } from '../../redux/modules/assignments';
 import { exerciseSelector } from '../../redux/selectors/exercises';
-import { isAuthorOfExercise } from '../../redux/selectors/users';
+import { canEditExercise } from '../../redux/selectors/users';
 
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import { supervisorOfSelector } from '../../redux/selectors/groups';
@@ -149,7 +149,7 @@ export default connect(
     return {
       exercise: exerciseSelector(exerciseId)(state),
       supervisedGroups: supervisorOfSelector(userId)(state),
-      isAuthorOfExercise: (exerciseId) => isAuthorOfExercise(userId, exerciseId)(state)
+      isAuthorOfExercise: (exerciseId) => canEditExercise(userId, exerciseId)(state)
     };
   },
   (dispatch, { params: { exerciseId } }) => ({
