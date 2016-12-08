@@ -82,12 +82,10 @@ export const createApiCallPromise = ({
         payload = {}
       }) => {
         if (!success && dispatch) {
-          if (isServerError(code)) {
+          if (dispatch) {
             dispatch(addNotification(`There was a problem on the server. ${msg}`, false));
           }
-        }
 
-        if (!success) {
           return Promise.reject('The API call was not successful.');
         }
 
