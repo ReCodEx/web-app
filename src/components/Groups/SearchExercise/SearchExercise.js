@@ -8,8 +8,7 @@ const SearchExercise = ({ groupId }) => (
 );
 
 SearchExercise.propTypes = {
-  groupId: PropTypes.string.isRequired,
-  assignExercise: PropTypes.func.isRequired
+  groupId: PropTypes.string.isRequired
 };
 
 export default SearchExercise;

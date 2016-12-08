@@ -81,7 +81,7 @@ export const createApiCallPromise = ({
         msg = '',
         payload = {}
       }) => {
-        if (!success && dispatch) {
+        if (!success) {
           if (dispatch) {
             dispatch(addNotification(`Server response: ${msg}`, false));
           }

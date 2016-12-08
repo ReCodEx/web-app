@@ -145,7 +145,7 @@ const validate = ({
   return errors;
 };
 
-const asyncValidate = ({ id, version }, dispatch) =>
+const asyncValidate = (values, dispatch, { exercise: { id, version } }) =>
   dispatch(validateExercise(id, version))
     .then(res => res.value)
     .then(({ versionIsUpToDate }) => {

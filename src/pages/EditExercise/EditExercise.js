@@ -68,8 +68,9 @@ class EditExercise extends Component {
             <Row>
               <Col lg={6}>
                 <EditExerciseForm
+                  exercise={exercise}
                   initialValues={exercise}
-                  onSubmit={editExercise}
+                  onSubmit={(formData) => editExercise(exercise.version, formData)}
                   formValues={formValues} />
               </Col>
               <Col lg={6}>
@@ -135,7 +136,7 @@ export default connect(
     push: (url) => dispatch(push(url)),
     reset: () => dispatch(reset('editExercise')),
     loadAsync: () => EditExercise.loadAsync({ exerciseId }, dispatch),
-    editExercise: (data) => dispatch(editExercise(exerciseId, data)),
+    editExercise: (version, data) => dispatch(editExercise(exerciseId, { ...data, version })),
     editSolutionRuntimeConfigs: (data) => dispatch(editRuntimeConfigs(exerciseId, data))
   })
 )(EditExercise);

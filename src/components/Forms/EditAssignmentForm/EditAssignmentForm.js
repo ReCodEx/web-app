@@ -228,7 +228,7 @@ const validate = ({
   return errors;
 };
 
-const asyncValidate = ({ id, version }, dispatch) =>
+const asyncValidate = (values, dispatch, { assignment: { id, version } }) =>
   dispatch(validateAssignment(id, version))
     .then(res => res.value)
     .then(({ versionIsUpToDate }) => {

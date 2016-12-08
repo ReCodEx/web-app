@@ -101,8 +101,9 @@ class EditAssignment extends Component {
             {data => (
               <div>
                 <EditAssignmentForm
+                  assignment={data}
                   initialValues={data ? this.getInitialValues(data) : {}}
-                  onSubmit={editAssignment}
+                  onSubmit={(formData) => editAssignment(data.version, formData)}
                   formValues={formValues} />
                 <ResourceRenderer resource={environments}>
                   {environments => (
@@ -173,15 +174,16 @@ export default connect(
     push: (url) => dispatch(push(url)),
     reset: () => dispatch(reset('editAssignment')),
     loadAsync: () => EditAssignment.loadAsync({ assignmentId }, dispatch),
-    editAssignment: (data) => {
+    editAssignment: (version, data) => {
       // convert deadline times to timestamps
       const processedData = Object.assign({}, data, {
         firstDeadline: moment(data.firstDeadline).unix(),
         secondDeadline: moment(data.secondDeadline).unix(),
-        submissionsCountLimit: Number(data.submissionsCountLimit)
+        submissionsCountLimit: Number(data.submissionsCountLimit),
+        version
       });
       return dispatch(editAssignment(assignmentId, processedData))
-        .then(() => dispatch(initialize('editAssignment', data)));
+        .then(() => dispatch(initialize('editAssignment', { ...data, version: version + 1 })));
     },
     editLimits: (data) => dispatch(editLimits(assignmentId, data))
   })
