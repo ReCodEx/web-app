@@ -10,23 +10,24 @@ const HeaderNotification = ({
   time
 }) => (
   <li>
-    <a>
-      <OverlayTrigger
-        placement='bottom'
-        overlay={
-          <Tooltip id={`notification-${id}-tooltip`}>
-            <span>
-              <FormattedDate value={time * 1000} />{' '}
-              <FormattedTime value={time * 1000} />
-            </span>
-          </Tooltip>
-        }>
+    <OverlayTrigger
+      placement='bottom'
+      overlay={
+        <Tooltip id={`notification-${id}-tooltip`}>
+          <span>
+            <FormattedDate value={time * 1000} />{' '}
+            <FormattedTime value={time * 1000} /><br />
+            {msg}
+          </span>
+        </Tooltip>
+      }>
+      <a>
         {successful
           ? <Icon name='check' className='text-success' />
           : <Icon name='times' className='text-warning' />}
-      </OverlayTrigger>
-      <span title={msg}>{msg}</span>
-    </a>
+        <span>{msg}</span>
+      </a>
+    </OverlayTrigger>
   </li>
 );
 
