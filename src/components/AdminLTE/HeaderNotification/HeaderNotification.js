@@ -15,8 +15,8 @@ const HeaderNotification = ({
       overlay={
         <Tooltip id={`notification-${id}-tooltip`}>
           <span>
-            <FormattedDate value={time * 1000} />{' '}
-            <FormattedTime value={time * 1000} /><br />
+            <FormattedDate value={time} />{' '}
+            <FormattedTime value={time} /><br />
             {msg}
           </span>
         </Tooltip>
