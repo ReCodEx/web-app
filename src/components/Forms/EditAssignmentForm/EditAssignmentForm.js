@@ -135,6 +135,17 @@ const EditAssignmentForm = ({
         onOff
         label={<FormattedMessage id='app.editAssignmentForm.canViewLimitRatios' defaultMessage='Visibility of memory and time ratios' />} />
 
+      <Field
+        name='pointsPercentualThreshold'
+        component={TextField}
+        label={<FormattedMessage id='app.editAssignmentForm.pointsPercentualThreshold' defaultMessage='Minimum percentage of points which submissions have to gain:' />} />
+
+      <Field
+        name='isBonus'
+        component={CheckboxField}
+        onOff
+        label={<FormattedMessage id='app.editAssignmentForm.isBonus' defaultMessage='Assignment is bonus one and points from it are not included in students overall score' />} />
+
     </FormBox>
   </div>
 );
