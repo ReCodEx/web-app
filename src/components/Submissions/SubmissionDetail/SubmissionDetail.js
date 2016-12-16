@@ -3,7 +3,7 @@ import { Row, Col } from 'react-bootstrap';
 
 import SubmissionStatus from '../SubmissionStatus';
 import SourceCodeInfoBox from '../../SourceCodeInfoBox';
-import LocalizedAssignments from '../../Assignments/Assignment/LocalizedAssignments';
+import LocalizedTexts from '../../LocalizedTexts';
 import TestResults from '../TestResults';
 import BonusPointsContainer from '../../../containers/BonusPointsContainer';
 import CommentThreadContainer from '../../../containers/CommentThreadContainer';
@@ -73,7 +73,7 @@ class SubmissionDetail extends Component {
           )}
 
           <Col lg={4} md={12} sm={12}>
-            <LocalizedAssignments locales={assignment.localizedAssignments} />
+            <LocalizedTexts locales={assignment.localizedTexts} />
           </Col>
         </Row>
 

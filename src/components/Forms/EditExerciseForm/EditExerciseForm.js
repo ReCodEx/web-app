@@ -13,7 +13,7 @@ import {
 
 import FormBox from '../../AdminLTE/FormBox';
 import SubmitButton from '../SubmitButton';
-import LocalizedAssignmentsFormField from '../LocalizedAssignmentsFormField';
+import LocalizedTextsFormField from '../LocalizedTextsFormField';
 
 import { validateExercise } from '../../../redux/modules/exercises';
 
@@ -45,7 +45,7 @@ const EditExerciseForm = ({
   submitSucceeded: hasSucceeded,
   invalid,
   formValues: {
-    localizedAssignments
+    localizedTexts
   } = {},
   intl: { formatMessage }
 }) => (
@@ -102,9 +102,9 @@ const EditExerciseForm = ({
       label={<FormattedMessage id='app.editExerciseForm.isPublic' defaultMessage='Exercise is public and can be assigned to students by their supervisors.' />} />
 
     <FieldArray
-      name='localizedAssignments'
-      localizedAssignments={localizedAssignments}
-      component={LocalizedAssignmentsFormField} />
+      name='localizedTexts'
+      localizedTexts={localizedTexts}
+      component={LocalizedTextsFormField} />
   </FormBox>
 );
 
@@ -119,7 +119,7 @@ EditExerciseForm.propTypes = {
   submitSucceeded: PropTypes.bool,
   invalid: PropTypes.bool,
   formValues: PropTypes.shape({
-    localizedAssignments: PropTypes.array
+    localizedTexts: PropTypes.array
   })
 };
 

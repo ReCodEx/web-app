@@ -8,7 +8,7 @@ import { LinkContainer } from 'react-router-bootstrap';
 
 import Page from '../../components/Page';
 import ExerciseDetail from '../../components/Exercises/ExerciseDetail';
-import LocalizedAssignments from '../../components/Assignments/Assignment/LocalizedAssignments';
+import LocalizedTexts from '../../components/LocalizedTexts';
 import ResourceRenderer from '../../components/ResourceRenderer';
 import GroupsList from '../../components/Groups/GroupsList';
 import Box from '../../components/AdminLTE/Box';
@@ -91,7 +91,7 @@ class Exercise extends Component {
             <Row>
               <Col lg={6}>
                 <div>
-                  {exercise.localizedAssignments.length > 0 && <LocalizedAssignments locales={exercise.localizedAssignments} />}
+                  {exercise.localizedTexts.length > 0 && <LocalizedTexts locales={exercise.localizedTexts} />}
                 </div>
               </Col>
               <Col lg={6}>

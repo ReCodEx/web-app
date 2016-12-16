@@ -7,7 +7,7 @@ import isNumeric from 'validator/lib/isNumeric';
 
 import FormBox from '../../AdminLTE/FormBox';
 import { DatetimeField, TextField, CheckboxField, SourceCodeField } from '../Fields';
-import LocalizedAssignmentsFormField from '../LocalizedAssignmentsFormField';
+import LocalizedTextsFormField from '../LocalizedTextsFormField';
 import SubmitButton from '../SubmitButton';
 
 import { validateAssignment } from '../../../redux/modules/assignments';
@@ -27,7 +27,7 @@ const EditAssignmentForm = ({
   formValues: {
     firstDeadline,
     allowSecondDeadline,
-    localizedAssignments
+    localizedTexts
   } = {}
 }) => (
   <div>
@@ -70,9 +70,9 @@ const EditAssignmentForm = ({
         label={<FormattedMessage id='app.editAssignmentForm.isPublic' defaultMessage='Visible to students' />} />
 
       <FieldArray
-        name='localizedAssignments'
-        localizedAssignments={localizedAssignments}
-        component={LocalizedAssignmentsFormField} />
+        name='localizedTexts'
+        localizedTexts={localizedTexts}
+        component={LocalizedTextsFormField} />
 
       <Field
         name='scoreConfig'
@@ -162,7 +162,7 @@ EditAssignmentForm.propTypes = {
   formValues: PropTypes.shape({
     firstDeadline: PropTypes.oneOfType([ PropTypes.number, PropTypes.object ]), // object == moment.js instance
     allowSecondDeadline: PropTypes.bool,
-    localizedAssignments: PropTypes.array
+    localizedTexts: PropTypes.array
   })
 };
 
@@ -174,7 +174,7 @@ const isPositiveInteger = (n) =>
 
 const validate = ({
   name,
-  localizedAssignments,
+  localizedTexts,
   submissionsCountLimit,
   firstDeadline,
   secondDeadline,
@@ -188,29 +188,25 @@ const validate = ({
     errors['name'] = <FormattedMessage id='app.editAssignmentForm.validation.emptyName' defaultMessage='Please fill the name of the assignment.' />;
   }
 
-  const localizedAssignmentsErrors = {};
-  for (let i = 0; i < localizedAssignments.length; ++i) {
+  const localizedTextsErrors = {};
+  for (let i = 0; i < localizedTexts.length; ++i) {
     const localeErros = {};
-    if (!localizedAssignments[i]) {
-      localeErros['locale'] = <FormattedMessage id='app.editAssignmentForm.validation.localizedAssignment' defaultMessage='Please fill localized information.' />;
+    if (!localizedTexts[i]) {
+      localeErros['locale'] = <FormattedMessage id='app.editAssignmentForm.validation.localizedText' defaultMessage='Please fill localized information.' />;
     } else {
-      if (!localizedAssignments[i].locale) {
-        localeErros['locale'] = <FormattedMessage id='app.editAssignmentForm.validation.localizedAssignment.locale' defaultMessage='Please select the language.' />;
+      if (!localizedTexts[i].locale) {
+        localeErros['locale'] = <FormattedMessage id='app.editAssignmentForm.validation.localizedText.locale' defaultMessage='Please select the language.' />;
       }
 
-      if (!localizedAssignments[i].name) {
-        localeErros['name'] = <FormattedMessage id='app.editAssignmentForm.validation.localizedAssignment.name' defaultMessage='Please choose a name of the assignment in this language.' />;
-      }
-
-      if (!localizedAssignments[i].description) {
-        localeErros['description'] = <FormattedMessage id='app.editAssignmentForm.validation.localizedAssignment.description' defaultMessage='Please fill the assignment in this language.' />;
+      if (!localizedTexts[i].text) {
+        localeErros['text'] = <FormattedMessage id='app.editAssignmentForm.validation.localizedText.text' defaultMessage='Please fill the description in this language.' />;
       }
     }
 
-    localizedAssignmentsErrors[i] = localeErros;
+    localizedTextsErrors[i] = localeErros;
   }
 
-  errors['localizedAssignments'] = localizedAssignmentsErrors;
+  errors['localizedTexts'] = localizedTextsErrors;
 
   if (!firstDeadline) {
     errors['firstDeadline'] = <FormattedMessage id='app.editAssignmentForm.validation.emptyDeadline' defaultMessage='Please fill the date and time of the deadline.' />;

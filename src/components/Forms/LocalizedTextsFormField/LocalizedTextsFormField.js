@@ -10,7 +10,7 @@ import {
   LanguageSelectField
 } from '../Fields';
 
-class LocalizedAssignmentsFormField extends Component {
+class LocalizedTextsFormField extends Component {
 
   state = { localeTab: 0 };
   changeTab = (n) => this.setState({ localeTab: n });
@@ -18,7 +18,7 @@ class LocalizedAssignmentsFormField extends Component {
   render() {
     const {
       fields,
-      localizedAssignments = []
+      localizedTexts = []
     } = this.props;
 
     return (
@@ -36,8 +36,8 @@ class LocalizedAssignmentsFormField extends Component {
             onSelect={this.changeTab}>
             {fields.map((localized, i) => (
               <Tab key={i} eventKey={i} title={
-                (localizedAssignments && localizedAssignments[i] && localizedAssignments[i].locale)
-                  ? localizedAssignments[i].locale
+                (localizedTexts && localizedTexts[i] && localizedTexts[i].locale)
+                  ? localizedTexts[i].locale
                   : <FormattedMessage id='app.editAssignmentForm.newLocale' defaultMessage='New language' />
               }>
                 <Field
@@ -46,14 +46,9 @@ class LocalizedAssignmentsFormField extends Component {
                   label={<FormattedMessage id='app.editAssignmentForm.localized.locale' defaultMessage='The language:' />} />
 
                 <Field
-                  name={`${localized}.name`}
-                  component={TextField}
-                  label={<FormattedMessage id='app.editAssignmentForm.localized.name' defaultMessage='Assignment name:' />} />
-
-                <Field
-                  name={`${localized}.description`}
+                  name={`${localized}.text`}
                   component={MarkdownTextAreaField}
-                  label={<FormattedMessage id='app.editAssignmentForm.localized.assignment' defaultMessage='Assignment and description for the students:' />} />
+                  label={<FormattedMessage id='app.editAssignmentForm.localized.assignment' defaultMessage='Description for the students:' />} />
 
                 <hr />
                 <p className='text-center'>
@@ -81,9 +76,9 @@ class LocalizedAssignmentsFormField extends Component {
   }
 }
 
-LocalizedAssignmentsFormField.propTypes = {
+LocalizedTextsFormField.propTypes = {
   fields: PropTypes.object,
-  localizedAssignments: PropTypes.array
+  localizedTexts: PropTypes.array
 };
 
-export default LocalizedAssignmentsFormField;
+export default LocalizedTextsFormField;

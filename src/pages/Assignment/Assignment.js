@@ -23,7 +23,7 @@ import AssignmentDetails, {
 } from '../../components/Assignments/Assignment/AssignmentDetails';
 
 import { EditIcon, ResultsIcon } from '../../components/Icons';
-import LocalizedAssignments from '../../components/Assignments/Assignment/LocalizedAssignments';
+import LocalizedTexts from '../../components/LocalizedTexts';
 import SubmitSolutionButton from '../../components/Assignments/SubmitSolutionButton';
 import SubmitSolutionContainer from '../../containers/SubmitSolutionContainer';
 import SubmissionsTableContainer from '../../containers/SubmissionsTableContainer';
@@ -122,8 +122,8 @@ class Assignment extends Component {
               <Row>
                 <Col lg={6}>
                   <div>
-                    {assignment.localizedAssignments.length > 0 &&
-                      <LocalizedAssignments locales={assignment.localizedAssignments} />}
+                    {assignment.localizedTexts.length > 0 &&
+                      <LocalizedTexts locales={assignment.localizedTexts} />}
                   </div>
                 </Col>
                 <Col lg={6}>

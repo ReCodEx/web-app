@@ -17,7 +17,7 @@ const ExerciseDetail = ({
   createdAt,
   updatedAt,
   version,
-  localizedAssignments,
+  localizedTexts,
   solutionRuntimeConfigs
 }) => (
   <Box title={name} noPadding>
@@ -81,7 +81,7 @@ ExerciseDetail.propTypes = {
   createdAt: PropTypes.number.isRequired,
   updatedAt: PropTypes.number.isRequired,
   version: PropTypes.number.isRequired,
-  localizedAssignments: PropTypes.array.isRequired,
+  localizedTexts: PropTypes.array.isRequired,
   solutionRuntimeConfigs: PropTypes.array.isRequired
 };
 

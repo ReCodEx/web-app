@@ -3,7 +3,7 @@ import { FormattedMessage } from 'react-intl';
 import { Tabs, Tab } from 'react-bootstrap';
 import ReactMarkdown from 'react-markdown';
 
-const LocalizedAssignments = ({
+const LocalizedTexts = ({
   locales = []
 }, {
   lang = 'en'
@@ -15,32 +15,31 @@ const LocalizedAssignments = ({
         : locales[0].locale
     }
     className='nav-tabs-custom'
-    id='localized-assignments'>
-    {locales.map(({ locale, name, description }, i) => (
-      <Tab key={i} eventKey={locale} title={name}>
-        <ReactMarkdown source={description} />
+    id='localized-texts'>
+    {locales.map(({ locale, text }, i) => (
+      <Tab key={i} eventKey={locale} title={locale}>
+        <ReactMarkdown source={text} />
       </Tab>
     ))}
     {locales.length === 0 && (
       <Tab eventKey={lang} title={lang}>
-        <FormattedMessage id='app.localizedAssignments.missingDescription' defaultMessage='Assignment text has not been published yet.' />
+        <FormattedMessage id='app.localizedTexts.missingText' defaultMessage='Localized text has not been published yet.' />
       </Tab>
     )}
   </Tabs>
 );
 
-LocalizedAssignments.contextTypes = {
+LocalizedTexts.contextTypes = {
   lang: PropTypes.string
 };
 
-LocalizedAssignments.propTypes = {
+LocalizedTexts.propTypes = {
   locales: PropTypes.arrayOf(
     PropTypes.shape({
       locale: PropTypes.string.isRequried,
-      name: PropTypes.string.isRequried,
-      description: PropTypes.string.isRequried
+      text: PropTypes.string.isRequried
     })
   )
 };
 
-export default LocalizedAssignments;
+export default LocalizedTexts;
