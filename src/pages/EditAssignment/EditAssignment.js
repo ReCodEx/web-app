@@ -45,9 +45,10 @@ class EditAssignment extends Component {
     dispatch(fetchRuntimeEnvironments())
   ]);
 
-  getInitialValues = ({ firstDeadline, secondDeadline, ...rest }) => ({
+  getInitialValues = ({ firstDeadline, secondDeadline, pointsPercentualThreshold, ...rest }) => ({
     firstDeadline: moment(firstDeadline * 1000),
     secondDeadline: moment(secondDeadline * 1000),
+    pointsPercentualThreshold: pointsPercentualThreshold * 100,
     ...rest
   });
 

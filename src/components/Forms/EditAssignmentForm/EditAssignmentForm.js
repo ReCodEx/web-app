@@ -180,7 +180,8 @@ const validate = ({
   secondDeadline,
   allowSecondDeadline,
   maxPointsBeforeFirstDeadline,
-  maxPointsBeforeSecondDeadline
+  maxPointsBeforeSecondDeadline,
+  pointsPercentualThreshold
 }) => {
   const errors = {};
 
@@ -230,6 +231,15 @@ const validate = ({
 
   if (allowSecondDeadline && !isNonNegativeInteger(maxPointsBeforeSecondDeadline)) {
     errors['maxPointsBeforeSecondDeadline'] = <FormattedMessage id='app.editAssignmentForm.validation.maxPointsBeforeSecondDeadline' defaultMessage='Please fill the number of maximu points received after the first and before the second deadline with a nonnegative integer or remove the second deadline.' />;
+  }
+
+  if (pointsPercentualThreshold) {
+    const numericThreshold = Number(pointsPercentualThreshold);
+    if (pointsPercentualThreshold !== Math.round(numericThreshold).toString()) {
+      errors['pointsPercentualThreshold'] = <FormattedMessage id='app.editAssignmentForm.validation.pointsPercentualThresholdMustBeInteger' defaultMessage='Points percentual threshold must be an integer.' />;
+    } else if (numericThreshold < 0 || numericThreshold > 100) {
+      errors['pointsPercentualThreshold'] = <FormattedMessage id='app.editAssignmentForm.validation.pointsPercentualThresholdBetweenZeroHundred' defaultMessage='Points percentual threshold must be an integer in between 0 and 100.' />;
+    }
   }
 
   return errors;
