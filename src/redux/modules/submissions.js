@@ -3,8 +3,11 @@ import { handleActions } from 'redux-actions';
 import { createApiAction } from '../middleware/apiMiddleware';
 import factory, {
   initialState,
-  defaultNeedsRefetching
+  defaultNeedsRefetching,
+  getJsData
 } from '../helpers/resourceManager';
+import { getSubmission } from '../selectors/submissions';
+import { saveAs } from 'file-saver';
 
 const resourceName = 'submissions';
 const needsRefetching = (item) =>
@@ -28,7 +31,8 @@ export const additionalActionTypes = {
   SET_BONUS_POINTS: 'recodex/submissions/SET_BONUS_POINTS',
   SET_BONUS_POINTS_PENDING: 'recodex/submissions/SET_BONUS_POINTS_PENDING',
   SET_BONUS_POINTS_FULFILLED: 'recodex/submissions/SET_BONUS_POINTS_FULFILLED',
-  SET_BONUS_POINTS_FAILED: 'recodex/submissions/SET_BONUS_POINTS_FAILED'
+  SET_BONUS_POINTS_FAILED: 'recodex/submissions/SET_BONUS_POINTS_FAILED',
+  DOWNLOAD_RESULT_ARCHIVE: 'recodex/files/DOWNLOAD_RESULT_ARCHIVE'
 };
 
 export const loadSubmissionData = actions.pushResource;
@@ -53,6 +57,23 @@ export const fetchUsersSubmissions = (userId, assignmentId) =>
       userId
     }
   });
+
+export const downloadResultArchive = (submissionId) =>
+  (dispatch, getState) =>
+    dispatch(fetchSubmissionIfNeeded(submissionId))
+      .then(() =>
+        dispatch(createApiAction({
+          type: additionalActionTypes.DOWNLOAD_RESULT_ARCHIVE,
+          method: 'GET',
+          endpoint: `/submissions/${submissionId}/download-result`,
+          doNotProcess: true // the response is not (does not have to be) a JSON
+        })))
+      .then(({ value }) => value.blob())
+      .then((blob) => {
+        const submission = getJsData(getSubmission(submissionId)(getState())); // the file is 100% loaded at this time
+        saveAs(blob, submission.id + '.zip'); // TODO: solve this better... proper file name should be given during downloading... so use it
+        return Promise.resolve();
+      });
 
 /**
  * Reducer

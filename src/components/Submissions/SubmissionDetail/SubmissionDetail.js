@@ -6,6 +6,7 @@ import SourceCodeInfoBox from '../../SourceCodeInfoBox';
 import LocalizedTexts from '../../LocalizedTexts';
 import TestResults from '../TestResults';
 import BonusPointsContainer from '../../../containers/BonusPointsContainer';
+import DownloadResultArchiveContainer from '../../../containers/DownloadResultArchiveContainer';
 import CommentThreadContainer from '../../../containers/CommentThreadContainer';
 import SourceCodeViewerContainer from '../../../containers/SourceCodeViewerContainer';
 
@@ -68,6 +69,11 @@ class SubmissionDetail extends Component {
               {isSupervisor && (
                 <BonusPointsContainer submissionId={id} evaluation={evaluation} />
               )}
+
+              {isSupervisor && (
+                <DownloadResultArchiveContainer submissionId={id} />
+              )}
+
               <TestResults evaluation={evaluation} />
             </Col>
           )}
