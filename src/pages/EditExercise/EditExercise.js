@@ -41,7 +41,7 @@ class EditExercise extends Component {
       params: { exerciseId },
       exercise,
       editExercise,
-      editSolutionRuntimeConfigs,
+      editRuntimeConfigs,
       runtimeEnvironments,
       formValues,
       runtimesFormValues
@@ -79,8 +79,8 @@ class EditExercise extends Component {
                 <EditExerciseRuntimeConfigsForm
                   runtimeEnvironments={runtimeEnvironments}
                   runtimeConfigs={runtimesFormValues ? runtimesFormValues.runtimeConfigs : {}}
-                  initialValues={{runtimeConfigs: exercise.solutionRuntimeConfigs}}
-                  onSubmit={editSolutionRuntimeConfigs} />
+                  initialValues={{runtimeConfigs: exercise.runtimeConfigs}}
+                  onSubmit={editRuntimeConfigs} />
               </Col>
             </Row>
             <br />
@@ -113,7 +113,7 @@ EditExercise.propTypes = {
   runtimeEnvironments: PropTypes.object.isRequired,
   loadAsync: PropTypes.func.isRequired,
   editExercise: PropTypes.func.isRequired,
-  editSolutionRuntimeConfigs: PropTypes.func.isRequired,
+  editRuntimeConfigs: PropTypes.func.isRequired,
   params: PropTypes.shape({ exerciseId: PropTypes.string.isRequired }).isRequired,
   formValues: PropTypes.object,
   runtimesFormValues: PropTypes.object
@@ -137,6 +137,6 @@ export default connect(
     reset: () => dispatch(reset('editExercise')),
     loadAsync: () => EditExercise.loadAsync({ exerciseId }, dispatch),
     editExercise: (version, data) => dispatch(editExercise(exerciseId, { ...data, version })),
-    editSolutionRuntimeConfigs: (data) => dispatch(editRuntimeConfigs(exerciseId, data))
+    editRuntimeConfigs: (data) => dispatch(editRuntimeConfigs(exerciseId, data))
   })
 )(EditExercise);

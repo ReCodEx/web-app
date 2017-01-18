@@ -18,7 +18,7 @@ const ExerciseDetail = ({
   updatedAt,
   version,
   localizedTexts,
-  solutionRuntimeConfigs
+  runtimeConfigs
 }) => (
   <Box title={name} noPadding>
     <Table>
@@ -50,7 +50,7 @@ const ExerciseDetail = ({
         <tr>
           <th><FormattedMessage id='app.exercise.runtimes' defaultMessage='Supported runtime environments:' /></th>
           <td>
-            {solutionRuntimeConfigs.map(({ id, name, isValid }) => (
+            {runtimeConfigs.map(({ id, name, isValid }) => (
               <p key={id}>
                 <OverlayTrigger
                   placement='left'
@@ -82,7 +82,7 @@ ExerciseDetail.propTypes = {
   updatedAt: PropTypes.number.isRequired,
   version: PropTypes.number.isRequired,
   localizedTexts: PropTypes.array.isRequired,
-  solutionRuntimeConfigs: PropTypes.array.isRequired
+  runtimeConfigs: PropTypes.array.isRequired
 };
 
 export default ExerciseDetail;
