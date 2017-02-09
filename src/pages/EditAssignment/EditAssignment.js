@@ -124,7 +124,7 @@ class EditAssignment extends Component {
             title={<FormattedMessage id='app.editAssignment.deleteAssignment' defaultMessage='Delete the assignment' />}>
             <div>
               <p>
-                <FormattedMessage id='app.editAssgintent.deleteAssignmentWarning' defaultMessage='Deleting an assignment will remove all the students submissions and you will have to contact the administrator of ReCodEx if you wanted to restore the assignment in the future.' />
+                <FormattedMessage id='app.editAssignment.deleteAssignmentWarning' defaultMessage='Deleting an assignment will remove all the students submissions and you will have to contact the administrator of ReCodEx if you wanted to restore the assignment in the future.' />
               </p>
               <p className='text-center'>
                 <DeleteAssignmentButtonContainer id={assignmentId} onDeleted={() => push(GROUP_URI_FACTORY(this.groupId))} />

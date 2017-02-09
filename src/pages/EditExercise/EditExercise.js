@@ -86,10 +86,10 @@ class EditExercise extends Component {
             <br />
             <Box
               type='danger'
-              title={<FormattedMessage id='app.editAssignment.deleteAssignment' defaultMessage='Delete the assignment' />}>
+              title={<FormattedMessage id='app.editExercise.deleteExercise' defaultMessage='Delete the exercise' />}>
               <div>
                 <p>
-                  <FormattedMessage id='app.editAssgintent.deleteAssignmentWarning' defaultMessage='Deleting an assignment will remove all the students submissions and you will have to contact the administrator of ReCodEx if you wanted to restore the assignment in the future.' />
+                  <FormattedMessage id='app.editExercise.deleteExerciseWarning' defaultMessage='Deleting an exercise will remove all the students submissions and all assignments.' />
                 </p>
                 <p className='text-center'>
                   <DeleteExerciseButtonContainer id={exercise.id} onDeleted={() => push(EXERCISES_URI)} />
