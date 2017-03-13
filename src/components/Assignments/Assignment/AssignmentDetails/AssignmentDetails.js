@@ -1,11 +1,11 @@
 import React, { PropTypes } from 'react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import Icon from 'react-fontawesome';
-import { Table } from 'react-bootstrap';
+import { Table, Label } from 'react-bootstrap';
 import { FormattedDate, FormattedTime, FormattedMessage, FormattedRelative } from 'react-intl';
 import classnames from 'classnames';
 import ResourceRenderer from '../../../ResourceRenderer';
-import { MaybeSucceededIcon } from '../../../Icons';
+import { SuccessIcon, MaybeSucceededIcon } from '../../../Icons';
 import Box from '../../../AdminLTE/Box';
 
 const AssignmentDetails = ({
@@ -16,6 +16,8 @@ const AssignmentDetails = ({
   allowSecondDeadline,
   isAfterFirstDeadline,
   isAfterSecondDeadline,
+  isBonus,
+  runtimeEnvironmentsIds,
   canSubmit
 }) => (
   <Box
@@ -86,6 +88,32 @@ const AssignmentDetails = ({
             </ResourceRenderer>
           </td>
         </tr>
+        {isBonus && (
+          <tr>
+            <td className='text-center'>
+              <Icon name='plus-circle' />
+            </td>
+            <td>
+              <FormattedMessage id='app.assignment.isBonus' defaultMessage='Bonus assignment: ' />
+            </td>
+            <td>
+              <SuccessIcon />
+            </td>
+          </tr>
+        )}
+        <tr>
+          <td className='text-center'>
+            <Icon name='code' />
+          </td>
+          <td>
+            <FormattedMessage id='app.assignment.runtimeEnvironmentsIds' defaultMessage='Allowed languages/frameworks/technologies: ' />
+          </td>
+          <td>
+            {runtimeEnvironmentsIds.map(env => (
+              <Label>{env}</Label>
+            ))}
+          </td>
+        </tr>
       </tbody>
     </Table>
   </Box>
@@ -99,6 +127,8 @@ AssignmentDetails.propTypes = {
   allowSecondDeadline: PropTypes.bool.isRequired,
   isAfterFirstDeadline: PropTypes.bool.isRequired,
   isAfterSecondDeadline: PropTypes.bool.isRequired,
+  isBonus: PropTypes.bool,
+  runtimeEnvironmentsIds: PropTypes.array,
   canSubmit: ImmutablePropTypes.map
 };
 
