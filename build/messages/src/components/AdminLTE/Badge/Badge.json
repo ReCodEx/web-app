@@ -1,0 +1,14 @@
+[
+  {
+    "id": "app.badge.settings",
+    "defaultMessage": "Settings"
+  },
+  {
+    "id": "app.badge.sessionExpiration",
+    "defaultMessage": "Session expiration:"
+  },
+  {
+    "id": "app.logout",
+    "defaultMessage": "Logout"
+  }
+]

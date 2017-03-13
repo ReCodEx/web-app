@@ -1,0 +1,30 @@
+[
+  {
+    "id": "app.bonusPointsForm.title",
+    "defaultMessage": "Set bonus points"
+  },
+  {
+    "id": "app.bonusPointsForm.set",
+    "defaultMessage": "Set bonus points"
+  },
+  {
+    "id": "app.bonusPointsForm.processing",
+    "defaultMessage": "Saving ..."
+  },
+  {
+    "id": "app.bonusPointsForm.success",
+    "defaultMessage": "Bonus points were set."
+  },
+  {
+    "id": "app.bonusPointsForm.failed",
+    "defaultMessage": "Cannot save the bonus points."
+  },
+  {
+    "id": "app.bonusPointsForm.bonusPoints",
+    "defaultMessage": "Bonus points:"
+  },
+  {
+    "id": "app.bonusPointsForm.validation.points",
+    "defaultMessage": "The bonus must be an integer."
+  }
+]

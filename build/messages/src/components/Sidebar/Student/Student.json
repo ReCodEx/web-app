@@ -1,0 +1,10 @@
+[
+  {
+    "id": "app.sudebar.menu.student.title",
+    "defaultMessage": "Student"
+  },
+  {
+    "id": "app.sidebar.menu.studentOf",
+    "defaultMessage": "Groups"
+  }
+]

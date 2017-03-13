@@ -1,0 +1,10 @@
+[
+  {
+    "id": "app.editEnvironmentLimitsForm.newEnvironment",
+    "defaultMessage": "New environment"
+  },
+  {
+    "id": "app.editEnvironmentLimitsForm.environment.noEnvironment",
+    "defaultMessage": "There is currently no environment specified for this assignment."
+  }
+]

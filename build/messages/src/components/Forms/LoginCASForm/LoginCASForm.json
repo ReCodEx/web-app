@@ -1,0 +1,38 @@
+[
+  {
+    "id": "app.loginCASForm.title",
+    "defaultMessage": "Sign into ReCodEx using CAS UK"
+  },
+  {
+    "id": "app.loginCASForm.success",
+    "defaultMessage": "You are successfully signed in"
+  },
+  {
+    "id": "app.loginCASForm.login",
+    "defaultMessage": "Sign in"
+  },
+  {
+    "id": "app.loginCASForm.processing",
+    "defaultMessage": "Signing in ..."
+  },
+  {
+    "id": "app.loginCASForm.failed",
+    "defaultMessage": "Login failed. Please check your credentials."
+  },
+  {
+    "id": "app.loginCASForm.ukco",
+    "defaultMessage": "UKCO (student's number):"
+  },
+  {
+    "id": "app.loginCASForm.password",
+    "defaultMessage": "Password:"
+  },
+  {
+    "id": "app.loginCASForm.validation.emptyUKCO",
+    "defaultMessage": "UKCO address cannot be empty."
+  },
+  {
+    "id": "app.loginCASForm.validation.emptyPassword",
+    "defaultMessage": "Password cannot be empty."
+  }
+]

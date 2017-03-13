@@ -71,7 +71,11 @@ class SubmissionDetail extends Component {
               )}
 
               {isSupervisor && (
-                <DownloadResultArchiveContainer submissionId={id} />
+                <Row>
+                  <Col sm={6}>
+                    <DownloadResultArchiveContainer submissionId={id} />
+                  </Col>
+                </Row>
               )}
 
               <TestResults evaluation={evaluation} />

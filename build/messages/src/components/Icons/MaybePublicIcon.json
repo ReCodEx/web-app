@@ -1,0 +1,10 @@
+[
+  {
+    "id": "app.maybePublicIcon.isPublic",
+    "defaultMessage": "Is public"
+  },
+  {
+    "id": "app.maybePublicIcon.isNotPublic",
+    "defaultMessage": "Is not public"
+  }
+]

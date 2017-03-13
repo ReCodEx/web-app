@@ -1,0 +1,6 @@
+[
+  {
+    "id": "app.failedGroupDetail.msg",
+    "defaultMessage": "Cannot load group detail. Please try again later."
+  }
+]

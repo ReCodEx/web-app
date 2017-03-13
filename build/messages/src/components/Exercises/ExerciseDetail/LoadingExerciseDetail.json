@@ -1,0 +1,10 @@
+[
+  {
+    "id": "app.exercise.detailTitle",
+    "defaultMessage": "Exercise description"
+  },
+  {
+    "id": "app.exercises.loadingDetail",
+    "defaultMessage": "Loading exercise's detail"
+  }
+]

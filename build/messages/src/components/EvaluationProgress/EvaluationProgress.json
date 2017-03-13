@@ -1,0 +1,10 @@
+[
+  {
+    "id": "app.evaluationProgress.title",
+    "defaultMessage": "Your solution is being evaluated"
+  },
+  {
+    "id": "app.evaluationProgress.continue",
+    "defaultMessage": "See the results"
+  }
+]

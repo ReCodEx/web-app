@@ -1,0 +1,34 @@
+[
+  {
+    "id": "app.submissions.testResultsTable.overallTestResult",
+    "defaultMessage": "Overall test result"
+  },
+  {
+    "id": "app.submissions.testResultsTable.testName",
+    "defaultMessage": "Test name"
+  },
+  {
+    "id": "app.submissions.testResultsTable.status",
+    "defaultMessage": "Evaluation status"
+  },
+  {
+    "id": "app.submissions.testResultsTable.memoryExceeded",
+    "defaultMessage": "Memory limit"
+  },
+  {
+    "id": "app.submissions.testResultsTable.timeExceeded",
+    "defaultMessage": "Time limit"
+  },
+  {
+    "id": "app.submissions.testResultsTable.statusOK",
+    "defaultMessage": "OK"
+  },
+  {
+    "id": "app.submissions.testResultsTable.statusSkipped",
+    "defaultMessage": "Skipped"
+  },
+  {
+    "id": "app.submissions.testResultsTable.statusFailed",
+    "defaultMessage": "Failed"
+  }
+]

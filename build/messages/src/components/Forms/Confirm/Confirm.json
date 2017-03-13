@@ -1,0 +1,10 @@
+[
+  {
+    "id": "app.confirm.yes",
+    "defaultMessage": "Yes"
+  },
+  {
+    "id": "app.confirm.no",
+    "defaultMessage": "No"
+  }
+]

@@ -1,0 +1,18 @@
+[
+  {
+    "id": "app.markdownTextArea.showPreview",
+    "defaultMessage": "Preview"
+  },
+  {
+    "id": "app.markdownTextArea.canUseMarkdown",
+    "defaultMessage": "You can use markdown syntax in this field."
+  },
+  {
+    "id": "app.markdownTextArea.preview",
+    "defaultMessage": "Preview:"
+  },
+  {
+    "id": "app.markdownTextArea.empty",
+    "defaultMessage": "Empty"
+  }
+]

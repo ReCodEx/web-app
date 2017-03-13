@@ -1,0 +1,10 @@
+[
+  {
+    "id": "app.sudebar.menu.admin.title",
+    "defaultMessage": "Administration"
+  },
+  {
+    "id": "app.sidebar.menu.admin.instances",
+    "defaultMessage": "Instances"
+  }
+]

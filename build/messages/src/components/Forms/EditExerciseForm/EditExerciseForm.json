@@ -1,0 +1,66 @@
+[
+  {
+    "id": "app.editExerciseForm.easy",
+    "defaultMessage": "Easy"
+  },
+  {
+    "id": "app.editExerciseForm.medium",
+    "defaultMessage": "Medium"
+  },
+  {
+    "id": "app.editExerciseForm.hard",
+    "defaultMessage": "Hard"
+  },
+  {
+    "id": "app.editExerciseForm.title",
+    "defaultMessage": "Edit exercise {name}"
+  },
+  {
+    "id": "app.editExerciseForm.submit",
+    "defaultMessage": "Save changes"
+  },
+  {
+    "id": "app.editExerciseForm.submitting",
+    "defaultMessage": "Saving changes ..."
+  },
+  {
+    "id": "app.editExerciseForm.success",
+    "defaultMessage": "Settings were saved."
+  },
+  {
+    "id": "app.editExerciseForm.failed",
+    "defaultMessage": "Saving failed. Please try again later."
+  },
+  {
+    "id": "app.editExerciseForm.name",
+    "defaultMessage": "Exercise name:"
+  },
+  {
+    "id": "app.editExerciseForm.difficulty",
+    "defaultMessage": "Difficulty"
+  },
+  {
+    "id": "app.editExerciseForm.description",
+    "defaultMessage": "Description for supervisors:"
+  },
+  {
+    "id": "app.editExerciseForm.isPublic",
+    "defaultMessage": "Exercise is public and can be assigned to students by their supervisors."
+  },
+  {
+    "id": "app.editExerciseForm.validation.emptyName",
+    "defaultMessage": "Please fill the name of the exercise."
+  },
+  {
+    "id": "app.editExerciseForm.validation.difficulty",
+    "defaultMessage": "Please select the difficulty of the exercise."
+  },
+  {
+    "id": "app.editExerciseForm.validation.description",
+    "defaultMessage": "Please fill the description of the exercise."
+  },
+  {
+    "id": "app.editExerciseForm.validation.versionDiffers",
+    "defaultMessage": "Somebody has changed the exercise while you have been editing it. Please reload the page and apply your changes once more."
+  }
+]

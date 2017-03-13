@@ -1,0 +1,42 @@
+[
+  {
+    "id": "app.loginForm.title",
+    "defaultMessage": "Sign into ReCodEx"
+  },
+  {
+    "id": "app.loginForm.success",
+    "defaultMessage": "You are successfully signed in"
+  },
+  {
+    "id": "app.loginForm.login",
+    "defaultMessage": "Sign in"
+  },
+  {
+    "id": "app.loginForm.processing",
+    "defaultMessage": "Signing in ..."
+  },
+  {
+    "id": "app.loginForm.failed",
+    "defaultMessage": "Login failed. Please check your credentials."
+  },
+  {
+    "id": "app.loginForm.email",
+    "defaultMessage": "E-mail address:"
+  },
+  {
+    "id": "app.loginForm.password",
+    "defaultMessage": "Password:"
+  },
+  {
+    "id": "app.loginForm.validation.emailIsNotAnEmail",
+    "defaultMessage": "E-mail address is not valid."
+  },
+  {
+    "id": "app.loginForm.validation.emptyEmail",
+    "defaultMessage": "E-mail address cannot be empty."
+  },
+  {
+    "id": "app.loginForm.validation.emptyPassword",
+    "defaultMessage": "Password cannot be empty."
+  }
+]

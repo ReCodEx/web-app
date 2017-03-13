@@ -1,17 +1,14 @@
 import React, { PropTypes } from 'react';
-import Icon from 'react-fontawesome';
+import { FormattedMessage } from 'react-intl';
+import { SimpleInfoBox } from '../../AdminLTE/InfoBox';
 
 const ResultArchiveInfoBox = ({
   submissionId
 }) => (
-  <div className='info-box'>
-    <span className='info-box-icon bg-yellow'>
-      <Icon name='files-o' />
-    </span>
-    <div className='info-box-content'>
-      <span className='info-box-text'>Result archive</span>
-    </div>
-  </div>
+  <SimpleInfoBox
+    icon='file-archive-o'
+    title={<FormattedMessage id='app.resultsArchiveInfoBox.title' defaultMessage='Results archive' />}
+    description={<FormattedMessage id='app.resultsArchiveInfoBox.description' defaultMessage='Detailed logs and dumps' />} />
 );
 
 ResultArchiveInfoBox.propTypes = {

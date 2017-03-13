@@ -1,0 +1,14 @@
+[
+  {
+    "id": "app.group.adminsView.title",
+    "defaultMessage": "Administrator controls of {groupName}"
+  },
+  {
+    "id": "app.group.adminsView.addSupervisor",
+    "defaultMessage": "Add supervisor"
+  },
+  {
+    "id": "app.group.adminsView.addSubgroup",
+    "defaultMessage": "Add subgroup"
+  }
+]

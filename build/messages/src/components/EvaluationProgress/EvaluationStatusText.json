@@ -1,0 +1,18 @@
+[
+  {
+    "id": "app.evaluationProgressStatus.completed",
+    "defaultMessage": "COMPLETED"
+  },
+  {
+    "id": "app.evaluationProgressStatus.skipped",
+    "defaultMessage": "SKIPPED"
+  },
+  {
+    "id": "app.evaluationProgressStatus.failed",
+    "defaultMessage": "FAILED"
+  },
+  {
+    "id": "app.evaluationProgressStatus.ok",
+    "defaultMessage": "OK"
+  }
+]

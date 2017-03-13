@@ -1,0 +1,130 @@
+[
+  {
+    "id": "app.editAssignmentForm.title",
+    "defaultMessage": "Edit assignment {name}"
+  },
+  {
+    "id": "app.editAssignmentForm.submit",
+    "defaultMessage": "Save settings"
+  },
+  {
+    "id": "app.editAssignmentForm.submitting",
+    "defaultMessage": "Saving changes ..."
+  },
+  {
+    "id": "app.editAssignmentForm.success",
+    "defaultMessage": "Settings were saved."
+  },
+  {
+    "id": "app.editAssignmentForm.failed",
+    "defaultMessage": "Saving failed. Please try again later."
+  },
+  {
+    "id": "app.editAssignmentForm.name",
+    "defaultMessage": "Assignment default name:"
+  },
+  {
+    "id": "app.editAssignmentForm.isPublic",
+    "defaultMessage": "Visible to students"
+  },
+  {
+    "id": "app.editAssignmentForm.scoreConfig",
+    "defaultMessage": "Score configuration:"
+  },
+  {
+    "id": "app.editAssignmentForm.moreAboutScoreConfig",
+    "defaultMessage": "Read more about <a href='https://github.com/ReCodEx/wiki/wiki/Assignments#scoring'>score configuration</a> syntax."
+  },
+  {
+    "id": "app.editAssignmentForm.firstDeadline",
+    "defaultMessage": "First deadline:"
+  },
+  {
+    "id": "app.editAssignmentForm.maxPointsBeforeFirstDeadline",
+    "defaultMessage": "Maximum amount of points received when submitted before the deadline:"
+  },
+  {
+    "id": "app.editAssignmentForm.allowSecondDeadline",
+    "defaultMessage": "Allow second deadline."
+  },
+  {
+    "id": "app.editAssignmentForm.secondDeadline",
+    "defaultMessage": "Second deadline:"
+  },
+  {
+    "id": "app.editAssignmentForm.chooseFirstDeadlineBeforeSecondDeadline",
+    "defaultMessage": "You must select the date of the first deadline before selecting the date of the second deadline."
+  },
+  {
+    "id": "app.editAssignmentForm.maxPointsBeforeSecondDeadline",
+    "defaultMessage": "Maximum amount of points received when submitted before the second deadline:"
+  },
+  {
+    "id": "app.editAssignmentForm.submissionsCountLimit",
+    "defaultMessage": "Submissions count limit:"
+  },
+  {
+    "id": "app.editAssignmentForm.canViewLimitRatios",
+    "defaultMessage": "Visibility of memory and time ratios"
+  },
+  {
+    "id": "app.editAssignmentForm.pointsPercentualThreshold",
+    "defaultMessage": "Minimum percentage of points which submissions have to gain:"
+  },
+  {
+    "id": "app.editAssignmentForm.isBonus",
+    "defaultMessage": "Assignment is bonus one and points from it are not included in students overall score"
+  },
+  {
+    "id": "app.editAssignmentForm.validation.emptyName",
+    "defaultMessage": "Please fill the name of the assignment."
+  },
+  {
+    "id": "app.editAssignmentForm.validation.localizedText",
+    "defaultMessage": "Please fill localized information."
+  },
+  {
+    "id": "app.editAssignmentForm.validation.localizedText.locale",
+    "defaultMessage": "Please select the language."
+  },
+  {
+    "id": "app.editAssignmentForm.validation.localizedText.text",
+    "defaultMessage": "Please fill the description in this language."
+  },
+  {
+    "id": "app.editAssignmentForm.validation.emptyDeadline",
+    "defaultMessage": "Please fill the date and time of the deadline."
+  },
+  {
+    "id": "app.editAssignmentForm.validation.submissionsCountLimit",
+    "defaultMessage": "Please fill the submissions count limit field with a positive integer."
+  },
+  {
+    "id": "app.editAssignmentForm.validation.maxPointsBeforeFirstDeadline",
+    "defaultMessage": "Please fill the maximum number of points received when submitted before the deadline with a nonnegative integer."
+  },
+  {
+    "id": "app.editAssignmentForm.validation.secondDeadline",
+    "defaultMessage": "Please fill the date and time of the second deadline."
+  },
+  {
+    "id": "app.editAssignmentForm.validation.secondDeadlineBeforeFirstDeadline",
+    "defaultMessage": "Please fill the date and time of the second deadline with a value which is after {firstDeadline, date} {firstDeadline, time, short}."
+  },
+  {
+    "id": "app.editAssignmentForm.validation.maxPointsBeforeSecondDeadline",
+    "defaultMessage": "Please fill the number of maximu points received after the first and before the second deadline with a nonnegative integer or remove the second deadline."
+  },
+  {
+    "id": "app.editAssignmentForm.validation.pointsPercentualThresholdMustBeInteger",
+    "defaultMessage": "Points percentual threshold must be an integer."
+  },
+  {
+    "id": "app.editAssignmentForm.validation.pointsPercentualThresholdBetweenZeroHundred",
+    "defaultMessage": "Points percentual threshold must be an integer in between 0 and 100."
+  },
+  {
+    "id": "app.editExerciseForm.validation.versionDiffers",
+    "defaultMessage": "Somebody has changed the exercise while you have been editing it. Please reload the page and apply your changes once more."
+  }
+]

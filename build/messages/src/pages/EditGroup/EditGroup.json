@@ -1,0 +1,10 @@
+[
+  {
+    "id": "app.editGroup.description",
+    "defaultMessage": "Change group settings"
+  },
+  {
+    "id": "app.editGroup.title",
+    "defaultMessage": "Edit group"
+  }
+]

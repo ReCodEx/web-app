@@ -1,0 +1,18 @@
+[
+  {
+    "id": "app.hardwareGroupFields.test",
+    "defaultMessage": "Test:"
+  },
+  {
+    "id": "app.hardwareGroupFields.timeLimit",
+    "defaultMessage": "Time limit for \"{taskId}\":"
+  },
+  {
+    "id": "app.hardwareGroupFields.memoryLimit",
+    "defaultMessage": "Memory limit for \"{taskId}\":"
+  },
+  {
+    "id": "app.hardwareGroupFields.noReferenceSolutions",
+    "defaultMessage": "There are no reference solutions' evaluations' for test '{testName}' and its task '{taskId}'."
+  }
+]

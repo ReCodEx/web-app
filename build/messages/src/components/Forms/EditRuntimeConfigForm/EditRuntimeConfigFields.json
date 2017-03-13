@@ -1,0 +1,18 @@
+[
+  {
+    "id": "app.editRuntimeConfigForm.configName",
+    "defaultMessage": "Name of Configuration:"
+  },
+  {
+    "id": "app.editRuntimeConfigForm.runtimeEnvironment",
+    "defaultMessage": "Select runtime environment:"
+  },
+  {
+    "id": "app.editRuntimeConfigForm.jobConfig",
+    "defaultMessage": "Job Configuration:"
+  },
+  {
+    "id": "app.editRuntimeConfigForm.moreAboutJobConfig",
+    "defaultMessage": "Read more about <a href='https://github.com/ReCodEx/wiki/wiki/Assignments#job-configuration' target='_blank'>job configuration</a> syntax."
+  }
+]

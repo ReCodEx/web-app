@@ -1,0 +1,18 @@
+[
+  {
+    "id": "app.assignments.name",
+    "defaultMessage": "Assignment name"
+  },
+  {
+    "id": "app.assignments.group",
+    "defaultMessage": "Group"
+  },
+  {
+    "id": "app.assignments.deadline",
+    "defaultMessage": "Deadline"
+  },
+  {
+    "id": "app.assignments.secondDeadline",
+    "defaultMessage": "Second deadline"
+  }
+]

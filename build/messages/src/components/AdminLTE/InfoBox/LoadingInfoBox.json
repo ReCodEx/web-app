@@ -1,0 +1,10 @@
+[
+  {
+    "id": "app.loadingInfoBox.title",
+    "defaultMessage": "Loading ..."
+  },
+  {
+    "id": "app.loadingInfoBox.description",
+    "defaultMessage": "Loading ..."
+  }
+]

@@ -1,0 +1,10 @@
+[
+  {
+    "id": "app.editUser.description",
+    "defaultMessage": "Edit user's profile"
+  },
+  {
+    "id": "app.editUser.title",
+    "defaultMessage": "Edit user's profile"
+  }
+]

@@ -1,0 +1,34 @@
+[
+  {
+    "id": "app.editInstanceForm.title",
+    "defaultMessage": "Edit instance"
+  },
+  {
+    "id": "app.editInstanceForm.set",
+    "defaultMessage": "Update instance"
+  },
+  {
+    "id": "app.editInstanceForm.processing",
+    "defaultMessage": "Saving ..."
+  },
+  {
+    "id": "app.editInstanceForm.success",
+    "defaultMessage": "Instance was updated."
+  },
+  {
+    "id": "app.editInstanceForm.failed",
+    "defaultMessage": "Cannot update instance."
+  },
+  {
+    "id": "app.editInstanceForm.name",
+    "defaultMessage": "Name:"
+  },
+  {
+    "id": "app.editInstanceForm.description",
+    "defaultMessage": "Description:"
+  },
+  {
+    "id": "app.editInstanceForm.isOpen",
+    "defaultMessage": "Is open"
+  }
+]

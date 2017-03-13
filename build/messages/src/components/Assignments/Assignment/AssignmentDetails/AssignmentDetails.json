@@ -1,0 +1,22 @@
+[
+  {
+    "id": "app.assignment.title",
+    "defaultMessage": "Details"
+  },
+  {
+    "id": "app.assignment.deadline",
+    "defaultMessage": "Deadline:"
+  },
+  {
+    "id": "app.assignment.secondDedline",
+    "defaultMessage": "Second deadline:"
+  },
+  {
+    "id": "app.assignment.submissionsCountLimit",
+    "defaultMessage": "Submission count limit:"
+  },
+  {
+    "id": "app.assignment.canSubmit",
+    "defaultMessage": "You can submit more solutions:"
+  }
+]

@@ -1,0 +1,14 @@
+[
+  {
+    "id": "app.instance.detailTitle",
+    "defaultMessage": "Instance description"
+  },
+  {
+    "id": "app.instance.groupsTitle",
+    "defaultMessage": "Groups hierarchy"
+  },
+  {
+    "id": "app.instance.groups.noGroups",
+    "defaultMessage": "There are no groups in this ReCodEx instance."
+  }
+]

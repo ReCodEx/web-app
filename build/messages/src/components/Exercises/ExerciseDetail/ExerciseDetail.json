@@ -1,0 +1,38 @@
+[
+  {
+    "id": "app.exercise.author",
+    "defaultMessage": "Author:"
+  },
+  {
+    "id": "app.exercise.difficulty",
+    "defaultMessage": "Difficulty:"
+  },
+  {
+    "id": "app.exercise.description",
+    "defaultMessage": "Author's description:"
+  },
+  {
+    "id": "app.exercise.createdAt",
+    "defaultMessage": "Created at:"
+  },
+  {
+    "id": "app.exercise.updatedAt",
+    "defaultMessage": "Last updateded at:"
+  },
+  {
+    "id": "app.exercise.version",
+    "defaultMessage": "Version:"
+  },
+  {
+    "id": "app.exercise.runtimes",
+    "defaultMessage": "Supported runtime environments:"
+  },
+  {
+    "id": "app.exercise.runtimes.isValid",
+    "defaultMessage": "Configuration is valid"
+  },
+  {
+    "id": "app.exercise.runtimes.isNotValid",
+    "defaultMessage": "Configuration is not valid"
+  }
+]

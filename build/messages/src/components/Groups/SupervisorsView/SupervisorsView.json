@@ -1,0 +1,22 @@
+[
+  {
+    "id": "app.group.supervisorsView.title",
+    "defaultMessage": "Supervisor's controls of {groupName}"
+  },
+  {
+    "id": "app.group.spervisorsView.students",
+    "defaultMessage": "Students"
+  },
+  {
+    "id": "app.group.spervisorsView.addStudent",
+    "defaultMessage": "Add student"
+  },
+  {
+    "id": "app.group.spervisorsView.assignments",
+    "defaultMessage": "Assignments"
+  },
+  {
+    "id": "app.group.spervisorsView.searchExercise",
+    "defaultMessage": "Find an exercise"
+  }
+]

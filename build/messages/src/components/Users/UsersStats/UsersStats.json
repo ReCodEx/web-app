@@ -1,0 +1,6 @@
+[
+  {
+    "id": "app.usersStats.description",
+    "defaultMessage": "Points gained from {name}."
+  }
+]

@@ -1,0 +1,10 @@
+[
+  {
+    "id": "app.search.title",
+    "defaultMessage": "Search:"
+  },
+  {
+    "id": "app.search.query",
+    "defaultMessage": "Searched query:"
+  }
+]

@@ -1,0 +1,18 @@
+[
+  {
+    "id": "app.adminAssignments.name",
+    "defaultMessage": "Assignment name"
+  },
+  {
+    "id": "app.adminAssignments.deadline",
+    "defaultMessage": "Deadline"
+  },
+  {
+    "id": "app.adminAssignments.secondDeadline",
+    "defaultMessage": "Second deadline"
+  },
+  {
+    "id": "app.adminAssignments.actions",
+    "defaultMessage": "Actions"
+  }
+]

@@ -1,0 +1,14 @@
+[
+  {
+    "id": "app.exercises.difficultyIcon.easy",
+    "defaultMessage": "Easy"
+  },
+  {
+    "id": "app.exercises.difficultyIcon.medium",
+    "defaultMessage": "Medium"
+  },
+  {
+    "id": "app.exercises.difficultyIcon.hard",
+    "defaultMessage": "Hard"
+  }
+]

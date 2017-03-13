@@ -1,0 +1,10 @@
+[
+  {
+    "id": "app.instance.description",
+    "defaultMessage": "Instance overview"
+  },
+  {
+    "id": "app.instance.edit",
+    "defaultMessage": "Edit instance"
+  }
+]

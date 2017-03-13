@@ -1,0 +1,38 @@
+[
+  {
+    "id": "app.editUserSettings.title",
+    "defaultMessage": "Edit settings"
+  },
+  {
+    "id": "app.editUserSettings.set",
+    "defaultMessage": "Save changes"
+  },
+  {
+    "id": "app.editUserSettings.processing",
+    "defaultMessage": "Saving ..."
+  },
+  {
+    "id": "app.editUserSettings.success",
+    "defaultMessage": "Account settings has been saved."
+  },
+  {
+    "id": "app.editUserSettings.failed",
+    "defaultMessage": "Cannot save profile settings."
+  },
+  {
+    "id": "app.editUserSettings.vimMode",
+    "defaultMessage": "Use Vim mode in source code editors."
+  },
+  {
+    "id": "app.editUserSettings.darkTheme",
+    "defaultMessage": "Use a dark theme for the source code viewers and editors."
+  },
+  {
+    "id": "app.editUserSettings.openedSidebar",
+    "defaultMessage": "Sidebar is unfolded by default."
+  },
+  {
+    "id": "app.editUserSettings.defaultLanguage",
+    "defaultMessage": "Default language:"
+  }
+]

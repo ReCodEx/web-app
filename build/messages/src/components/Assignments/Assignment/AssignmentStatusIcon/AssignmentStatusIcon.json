@@ -1,0 +1,22 @@
+[
+  {
+    "id": "app.assignemntStatusIcon.ok",
+    "defaultMessage": "Assignment is successfully completed."
+  },
+  {
+    "id": "app.assignemntStatusIcon.inProgress",
+    "defaultMessage": "Assignment solution is being evaluated."
+  },
+  {
+    "id": "app.assignemntStatusIcon.failed",
+    "defaultMessage": "No correct solution was submitted yet."
+  },
+  {
+    "id": "app.assignemntStatusIcon.evaluationFailed",
+    "defaultMessage": "No solution was evaluated correctly by ReCodEx."
+  },
+  {
+    "id": "app.assignemntStatusIcon.none",
+    "defaultMessage": "No solutions were submmitted so far."
+  }
+]

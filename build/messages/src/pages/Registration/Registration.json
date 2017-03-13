@@ -1,0 +1,10 @@
+[
+  {
+    "id": "app.registration.title",
+    "defaultMessage": "Create a new ReCodEx account"
+  },
+  {
+    "id": "app.registration.description",
+    "defaultMessage": "Start using ReCodEx today"
+  }
+]

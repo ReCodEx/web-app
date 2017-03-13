@@ -1,0 +1,10 @@
+[
+  {
+    "id": "app.submitSolution.dragAndDrop",
+    "defaultMessage": "Drag and drop files here."
+  },
+  {
+    "id": "app.submitSolution.addFile",
+    "defaultMessage": "Add a file"
+  }
+]

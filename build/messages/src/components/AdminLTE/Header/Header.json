@@ -1,0 +1,10 @@
+[
+  {
+    "id": "app.header.toggleSidebar",
+    "defaultMessage": "Show/hide sidebar"
+  },
+  {
+    "id": "app.header.toggleSidebarSize",
+    "defaultMessage": "Expand/minimize sidebar"
+  }
+]

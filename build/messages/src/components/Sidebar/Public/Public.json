@@ -1,0 +1,14 @@
+[
+  {
+    "id": "app.sidebar.menu.signIn",
+    "defaultMessage": "Sign in"
+  },
+  {
+    "id": "app.sidebar.menu.createAccount",
+    "defaultMessage": "Create account"
+  },
+  {
+    "id": "app.sidebar.menu.feedbackAndBugs",
+    "defaultMessage": "Feedback and bug reporting"
+  }
+]

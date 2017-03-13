@@ -1,0 +1,14 @@
+[
+  {
+    "id": "app.notifications.title",
+    "defaultMessage": "You have {count, number} new {count, plural, one {notification} other {notifications}}"
+  },
+  {
+    "id": "app.notifications.hideAll",
+    "defaultMessage": "Only new notifications"
+  },
+  {
+    "id": "app.notifications.showAll",
+    "defaultMessage": "Show {count, plural, one {old notification} two {two notifications} other {all # notifications}}"
+  }
+]

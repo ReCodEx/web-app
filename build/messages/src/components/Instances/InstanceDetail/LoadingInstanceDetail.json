@@ -1,0 +1,10 @@
+[
+  {
+    "id": "app.instance.detailTitle",
+    "defaultMessage": "Instance description"
+  },
+  {
+    "id": "app.instances.loadingDetail",
+    "defaultMessage": "Loading instance's detail"
+  }
+]

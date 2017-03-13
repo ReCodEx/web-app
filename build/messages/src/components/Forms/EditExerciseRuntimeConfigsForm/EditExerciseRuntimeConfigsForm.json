@@ -1,0 +1,34 @@
+[
+  {
+    "id": "app.editExerciseRuntimeConfigsForm.failed",
+    "defaultMessage": "Saving failed. Please try again later."
+  },
+  {
+    "id": "app.editExerciseRuntimeConfigsForm.submit",
+    "defaultMessage": "Change runtime configurations"
+  },
+  {
+    "id": "app.editExerciseRuntimeConfigsForm.submitting",
+    "defaultMessage": "Saving runtime configurations ..."
+  },
+  {
+    "id": "app.editExerciseRuntimeConfigsForm.success",
+    "defaultMessage": "Runtime configurations were saved."
+  },
+  {
+    "id": "app.editExerciseRuntimeConfigsForm.validation.empty",
+    "defaultMessage": "Please fill the runtime environment information."
+  },
+  {
+    "id": "app.editExerciseRuntimeConfigsForm.validation.name",
+    "defaultMessage": "Please fill the display name of the runtime environment."
+  },
+  {
+    "id": "app.editExerciseRuntimeConfigsForm.validation.runtimeEnvironmentId",
+    "defaultMessage": "Please select a runtime environment."
+  },
+  {
+    "id": "app.editExerciseRuntimeConfigsForm.validation.jobConfig",
+    "defaultMessage": "Please fill the job configuration of the runtime environment."
+  }
+]

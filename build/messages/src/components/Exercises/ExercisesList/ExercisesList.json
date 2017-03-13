@@ -1,0 +1,18 @@
+[
+  {
+    "id": "app.exercisesList.name",
+    "defaultMessage": "Name"
+  },
+  {
+    "id": "app.exercisesList.difficulty",
+    "defaultMessage": "Difficulty"
+  },
+  {
+    "id": "app.exercisesList.author",
+    "defaultMessage": "Author"
+  },
+  {
+    "id": "app.exercisesList.empty",
+    "defaultMessage": "There are no exercises in this list."
+  }
+]

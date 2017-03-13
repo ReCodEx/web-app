@@ -1,0 +1,22 @@
+[
+  {
+    "id": "app.referenceSolutionsEvaluations.title",
+    "defaultMessage": "Reference solutions' evaluations"
+  },
+  {
+    "id": "app.referenceSolutionsEvaluations.description",
+    "defaultMessage": "Description"
+  },
+  {
+    "id": "app.referenceSolutionsEvaluations.evaluatedAt",
+    "defaultMessage": "Evaluated on"
+  },
+  {
+    "id": "app.referenceSolutionsEvaluations.memory",
+    "defaultMessage": "Memory"
+  },
+  {
+    "id": "app.referenceSolutionsEvaluations.time",
+    "defaultMessage": "Time"
+  }
+]

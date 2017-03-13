@@ -1,0 +1,14 @@
+[
+  {
+    "id": "app.sidebar.menu.title",
+    "defaultMessage": "Menu"
+  },
+  {
+    "id": "app.sidebar.menu.dashboard",
+    "defaultMessage": "Dashboard"
+  },
+  {
+    "id": "app.sidebar.menu.feedbackAndBugs",
+    "defaultMessage": "Feedback and bug reporting"
+  }
+]

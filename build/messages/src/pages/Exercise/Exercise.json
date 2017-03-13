@@ -1,0 +1,22 @@
+[
+  {
+    "id": "app.exercise.description",
+    "defaultMessage": "Exercise overview"
+  },
+  {
+    "id": "app.exercises.title",
+    "defaultMessage": "Exercises"
+  },
+  {
+    "id": "app.exercise.editSettings",
+    "defaultMessage": "Edit exercise settings"
+  },
+  {
+    "id": "app.exercise.assignToGroup",
+    "defaultMessage": "You can assign this exercise to one of the groups you supervise."
+  },
+  {
+    "id": "app.exercise.assign",
+    "defaultMessage": "Assign"
+  }
+]

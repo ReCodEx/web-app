@@ -1,0 +1,10 @@
+[
+  {
+    "id": "app.resourceRenderer.loading",
+    "defaultMessage": "Loading ..."
+  },
+  {
+    "id": "app.resourceRenderer.loadingFailed",
+    "defaultMessage": "Loading failed."
+  }
+]

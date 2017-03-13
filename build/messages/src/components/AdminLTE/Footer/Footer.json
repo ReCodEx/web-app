@@ -1,0 +1,10 @@
+[
+  {
+    "id": "app.footer.version",
+    "defaultMessage": "<strong>Version</strong> {version}"
+  },
+  {
+    "id": "app.footer.copyright",
+    "defaultMessage": "Copyright © 2016 <a href=\"{website}\">ReCodEx</a>. All rights reserved."
+  }
+]

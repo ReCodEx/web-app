@@ -1,0 +1,14 @@
+[
+  {
+    "id": "app.editInstance.description",
+    "defaultMessage": "Change instance settings"
+  },
+  {
+    "id": "app.instance.title",
+    "defaultMessage": "Instance"
+  },
+  {
+    "id": "app.editInstance.title",
+    "defaultMessage": "Edit instance"
+  }
+]

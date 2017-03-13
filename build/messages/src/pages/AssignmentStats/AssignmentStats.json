@@ -1,0 +1,14 @@
+[
+  {
+    "id": "app.assignmentStats.title",
+    "defaultMessage": "Assignment statistics"
+  },
+  {
+    "id": "app.group.title",
+    "defaultMessage": "Group detail"
+  },
+  {
+    "id": "app.assignment.title",
+    "defaultMessage": "Exercise assignment"
+  }
+]

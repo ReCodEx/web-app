@@ -1,0 +1,10 @@
+[
+  {
+    "id": "app.groupTree.loading",
+    "defaultMessage": "Loading ..."
+  },
+  {
+    "id": "app.groupTree.detailButton",
+    "defaultMessage": "See group's page"
+  }
+]

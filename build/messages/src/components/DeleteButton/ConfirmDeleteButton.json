@@ -1,0 +1,10 @@
+[
+  {
+    "id": "app.deleteButton.confirm",
+    "defaultMessage": "Are you sure you want to delete the resource? This cannot be undone."
+  },
+  {
+    "id": "app.deleteButton.delete",
+    "defaultMessage": "Delete"
+  }
+]

@@ -1,0 +1,34 @@
+[
+  {
+    "id": "app.submitSolution.title",
+    "defaultMessage": "Submit your solution"
+  },
+  {
+    "id": "app.submitSolution.noteLabel",
+    "defaultMessage": "Note for you and your supervisor(s)"
+  },
+  {
+    "id": "app.submistSolution.submitFailed",
+    "defaultMessage": "Submission was rejected by the server. This usually means you have uploaded incorrect files - do your files have proper file type extensions? If you cannot submit your solution and there is no obvious reason, contact your supervisor to sort things out."
+  },
+  {
+    "id": "app.submitSolution.submittingButtonText",
+    "defaultMessage": "Submitting your solution ..."
+  },
+  {
+    "id": "app.submitSolution.submitButton",
+    "defaultMessage": "Submit your solution"
+  },
+  {
+    "id": "app.submitSolution.resetFormButton",
+    "defaultMessage": "Reset form"
+  },
+  {
+    "id": "app.submitSolution.closeButton",
+    "defaultMessage": "Close"
+  },
+  {
+    "id": "app.submistSolution.instructions",
+    "defaultMessage": "You must attach at least one file with source code and wait, until all your files are uploaded to the server. If there is a problem uploading any of the files, please try uploading it again or remove the file. This form cannot be submitted until there are any files which have not been successfully uploaded or which could not have been uploaded to the server."
+  }
+]

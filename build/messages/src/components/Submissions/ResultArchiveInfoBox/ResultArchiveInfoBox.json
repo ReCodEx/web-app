@@ -1,0 +1,10 @@
+[
+  {
+    "id": "app.resultsArchiveInfoBox.title",
+    "defaultMessage": "Results archive"
+  },
+  {
+    "id": "app.resultsArchiveInfoBox.description",
+    "defaultMessage": "Detailed logs and dumps"
+  }
+]
