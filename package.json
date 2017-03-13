@@ -20,7 +20,7 @@
     "coveralls": "babel-node ./node_modules/isparta/bin/isparta cover --root src ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec && cat ./coverage/lcov.info | node ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage",
     "dev": "babel-node bin/dev.js",
     "start": "node bin/server.js",
-    "exportStrings": "babel-node manageTranslations.js"
+    "exportStrings": "babel-node bin/manageTranslations.js"
   },
   "dependencies": {
     "admin-lte": "2.3.5",

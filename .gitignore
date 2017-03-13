@@ -7,7 +7,7 @@ public/
 bin/*.jpg
 bin/server.js
 bin/server.js.map
-build
+tmp
 npm-debug.log
 .env
 .vscode
