@@ -74,7 +74,7 @@ const SourceCodeField = ({
         {...input}
         mode={getMode(mode)}
         theme={darkTheme ? 'monokai' : 'github'}
-        name={input.id}
+        name={input.name}
         tabIndex={tabIndex}
         keyboardHandler={vimMode ? 'vim' : undefined}
         width='100%'
@@ -86,9 +86,10 @@ const SourceCodeField = ({
 );
 
 SourceCodeField.propTypes = {
-  input: PropTypes.object.isRequired,
+  input: PropTypes.shape({
+    name: PropTypes.string.isRequired
+  }).isRequired,
   mode: PropTypes.string.isRequired,
-  name: PropTypes.string.isRequired,
   children: PropTypes.any,
   meta: PropTypes.shape({ error: PropTypes.any, touched: PropTypes.bool }),
   tabIndex: PropTypes.number,

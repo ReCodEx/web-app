@@ -36,9 +36,11 @@ const CheckboxField = ({
 };
 
 CheckboxField.propTypes = {
-  input: PropTypes.object.isRequired,
+  input: PropTypes.shape({
+    name: PropTypes.string.isRequired,
+    value: PropTypes.bool
+  }).isRequired,
   meta: PropTypes.object.isRequired,
-  name: PropTypes.string.isRequired,
   type: PropTypes.string,
   onOff: PropTypes.bool,
   label: PropTypes.oneOfType([

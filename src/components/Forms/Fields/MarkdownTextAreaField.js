@@ -65,8 +65,8 @@ class MarkdownTextAreaField extends Component {
 MarkdownTextAreaField.propTypes = {
   showPreview: PropTypes.string,
   input: PropTypes.shape({
-    name: PropTypes.string,
-    value: PropTypes.string
+    name: PropTypes.string.isRequired,
+    value: PropTypes.string.isRequired
   }).isRequired
 };
 

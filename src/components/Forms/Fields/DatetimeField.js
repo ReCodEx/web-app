@@ -54,13 +54,13 @@ DatetimeField.contextTypes = {
 };
 
 DatetimeField.propTypes = {
-  name: PropTypes.string.isRequired,
   type: PropTypes.string,
   label: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) })
   ]).isRequired,
   input: PropTypes.shape({
+    name: PropTypes.string.isRequired,
     value: PropTypes.oneOfType([
       PropTypes.string,
       PropTypes.number,

@@ -32,9 +32,10 @@ const SelectField = ({
 );
 
 SelectField.propTypes = {
-  input: PropTypes.object.isRequired,
+  input: PropTypes.shape({
+    name: PropTypes.string.isRequired
+  }).isRequired,
   meta: PropTypes.shape({ error: PropTypes.any, touched: PropTypes.bool }),
-  name: PropTypes.string.isRequired,
   type: PropTypes.string,
   label: PropTypes.oneOfType([
     PropTypes.string,

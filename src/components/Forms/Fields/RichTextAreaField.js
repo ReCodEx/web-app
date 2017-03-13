@@ -66,6 +66,10 @@ class RichTextAreaField extends Component {
 
 RichTextAreaField.propTypes = {
   ...TextAreaField.propTypes,
+  input: PropTypes.shape({
+    name: PropTypes.string.isRequired,
+    onChange: PropTypes.func.isRequired
+  }).isRequired,
   viewSource: PropTypes.string
 };
 

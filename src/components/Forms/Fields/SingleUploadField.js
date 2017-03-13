@@ -25,9 +25,10 @@ const SingleUploadField = ({
 );
 
 SingleUploadField.propTypes = {
-  input: PropTypes.object.isRequired,
+  input: PropTypes.shape({
+    name: PropTypes.string.isRequired
+  }).isRequired,
   meta: PropTypes.shape({ error: PropTypes.string, touched: PropTypes.bool }),
-  name: PropTypes.string.isRequired,
   label: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) })

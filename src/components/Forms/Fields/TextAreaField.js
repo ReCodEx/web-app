@@ -20,7 +20,7 @@ const TextAreaField = ({
   ...props
 }) => (
   <FormGroup
-    controlId={name}
+    controlId={input.name}
     validationState={touched && error ? 'error' : undefined}>
     <ControlLabel>{label}</ControlLabel>
     <FormControl {...input} {...props} componentClass='textarea' rows={8} />
@@ -30,8 +30,10 @@ const TextAreaField = ({
 );
 
 TextAreaField.propTypes = {
-  name: PropTypes.string.isRequired,
   type: PropTypes.string,
+  input: PropTypes.shape({
+    name: PropTypes.string.isRequired
+  }).isRequired,
   label: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) })
@@ -40,8 +42,7 @@ TextAreaField.propTypes = {
   meta: PropTypes.shape({
     touched: PropTypes.bool,
     error: PropTypes.oneOfType([ PropTypes.string, FormattedMessage ])
-  }),
-  input: PropTypes.object.isRequired
+  })
 };
 
 export default TextAreaField;

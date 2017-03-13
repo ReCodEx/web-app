@@ -26,7 +26,6 @@ const TextField = ({
 );
 
 TextField.propTypes = {
-  name: PropTypes.string.isRequired,
   type: PropTypes.string,
   input: PropTypes.shape({
     value: PropTypes.oneOfType([
