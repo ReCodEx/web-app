@@ -21,6 +21,7 @@ const SubmitSolution = ({
   canSubmit,
   isSending,
   hasFailed,
+  note = '',
   saveNote,
   submitSolution
 }) => (
@@ -42,6 +43,7 @@ const SubmitSolution = ({
         </ControlLabel>
         <FormControl
           onChange={(e) => saveNote(e.target.value)}
+          value={note}
           type='text'
           placeholder='Poznámka pro Vás a cvičícího' />
       </FormGroup>
@@ -109,6 +111,7 @@ SubmitSolution.propTypes = {
   canSubmit: PropTypes.bool.isRequired,
   submitSolution: PropTypes.func.isRequired,
   isOpen: PropTypes.bool,
+  note: PropTypes.string,
   saveNote: PropTypes.func.isRequired,
   hasFailed: PropTypes.bool,
   isProcessing: PropTypes.bool,

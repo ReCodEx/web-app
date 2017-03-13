@@ -139,12 +139,11 @@ class Assignment extends Component {
                         <ResourceRenderer
                           loading={<SubmitSolutionButton disabled={true} />}
                           resource={canSubmit}>
-                          {canSubmit => <SubmitSolutionButton onClick={init(userId)} disabled={!canSubmit} />}
+                          {canSubmit => <SubmitSolutionButton onClick={init(assignment.id)} disabled={!canSubmit} />}
                         </ResourceRenderer>
                       </p>
                       <SubmitSolutionContainer
                         userId={userId}
-                        reset={init(userId)}
                         assignmentId={assignment.id}
                         isOpen={submitting} />
 

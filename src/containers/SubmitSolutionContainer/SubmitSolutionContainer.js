@@ -16,7 +16,8 @@ import {
 import { createGetUploadedFiles, createAllUploaded } from '../../redux/selectors/upload';
 
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
-import { cancel, changeNote, submitSolution } from '../../redux/modules/submission';
+import { init as resetSubmission, cancel, changeNote, submitSolution } from '../../redux/modules/submission';
+import { reset as resetUpload } from '../../redux/modules/upload';
 
 class SubmitSolutionContainer extends Component {
 
@@ -24,12 +25,11 @@ class SubmitSolutionContainer extends Component {
     const {
     attachedFiles,
       onSubmit,
-      userId,
       note,
       submitSolution
     } = this.props;
 
-    submitSolution(userId, note, attachedFiles.map(item => item.file));
+    submitSolution(note, attachedFiles.map(item => item.file));
     !!onSubmit && onSubmit();
   };
 
@@ -37,8 +37,8 @@ class SubmitSolutionContainer extends Component {
     const {
       isOpen = false,
       userId,
+      note,
       cancel,
-      reset,
       assignmentId,
       changeNote,
       canSubmit,
@@ -46,7 +46,8 @@ class SubmitSolutionContainer extends Component {
       isProcessing,
       isSending,
       submissionId,
-      monitor
+      monitor,
+      reset
     } = this.props;
 
     const {
@@ -63,6 +64,7 @@ class SubmitSolutionContainer extends Component {
           hasFailed={hasFailed}
           uploadId={assignmentId}
           reset={reset}
+          note={note}
           saveNote={changeNote}
           onClose={cancel}
           submitSolution={this.submit} />
@@ -84,7 +86,6 @@ SubmitSolutionContainer.contextTypes = {
 
 SubmitSolutionContainer.propTypes = {
   userId: PropTypes.string.isRequired,
-  reset: PropTypes.func.isRequired,
   isOpen: PropTypes.bool,
   cancel: PropTypes.func.isRequired,
   note: PropTypes.string,
@@ -98,7 +99,8 @@ SubmitSolutionContainer.propTypes = {
   monitor: PropTypes.object,
   onSubmit: PropTypes.func,
   submitSolution: PropTypes.func.isRequired,
-  attachedFiles: PropTypes.array
+  attachedFiles: PropTypes.array,
+  reset: PropTypes.func.isRequired
 };
 
 export default connect(
@@ -117,9 +119,10 @@ export default connect(
       monitor: getMonitorParams(state)
     };
   },
-  (dispatch, props) => ({
+  (dispatch, { userId, assignmentId }) => ({
     changeNote: (note) => dispatch(changeNote(note)),
     cancel: () => dispatch(cancel()),
-    submitSolution: (userId, note, files) => dispatch(submitSolution(userId, props.assignmentId, note, files))
+    submitSolution: (note, files) => dispatch(submitSolution(userId, assignmentId, note, files)),
+    reset: () => dispatch(resetUpload(assignmentId)) && dispatch(resetSubmission(userId, assignmentId))
   })
 )(SubmitSolutionContainer);
