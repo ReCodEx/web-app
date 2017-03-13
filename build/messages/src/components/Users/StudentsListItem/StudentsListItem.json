@@ -1,6 +1,0 @@
-[
-  {
-    "id": "app.studentsList.gainedPointsOf",
-    "defaultMessage": "{gained, number} of {total, number}"
-  }
-]

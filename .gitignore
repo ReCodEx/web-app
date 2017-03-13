@@ -8,6 +8,7 @@ bin/*.jpg
 bin/server.js
 bin/server.js.map
 tmp
+build
 npm-debug.log
 .env
 .vscode
