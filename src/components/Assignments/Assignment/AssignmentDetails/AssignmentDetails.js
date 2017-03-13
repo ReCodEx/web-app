@@ -14,6 +14,8 @@ const AssignmentDetails = ({
   firstDeadline,
   secondDeadline,
   allowSecondDeadline,
+  maxPointsBeforeFirstDeadline,
+  maxPointsBeforeSecondDeadline,
   isAfterFirstDeadline,
   isAfterSecondDeadline,
   isBonus,
@@ -57,7 +59,7 @@ const AssignmentDetails = ({
               </strong>
             </td>
             <td>
-              <FormattedMessage id='app.assignment.secondDedline' defaultMessage='Second deadline:' />
+              <FormattedMessage id='app.assignment.secondDeadline' defaultMessage='Second deadline:' />
             </td>
             <td>
               <strong>
@@ -66,6 +68,17 @@ const AssignmentDetails = ({
               {' '}(<FormattedRelative value={new Date(secondDeadline * 1000)} />)
             </td>
           </tr>)}
+        <tr>
+          <td className='text-center'>
+            <Icon name='cloud-upload' />
+          </td>
+          <td>
+            <FormattedMessage id='app.assignment.maxPoints' defaultMessage='Maximum number of points for a correct solution:' />
+          </td>
+          <td>
+            {!isAfterFirstDeadline ? maxPointsBeforeFirstDeadline : (!isAfterSecondDeadline && allowSecondDeadline ? maxPointsBeforeSecondDeadline : 0)}
+          </td>
+        </tr>
         <tr>
           <td className='text-center'>
             <Icon name='cloud-upload' />
@@ -125,6 +138,8 @@ AssignmentDetails.propTypes = {
   firstDeadline: PropTypes.number.isRequired,
   secondDeadline: PropTypes.number,
   allowSecondDeadline: PropTypes.bool.isRequired,
+  maxPointsBeforeFirstDeadline: PropTypes.number.isRequired,
+  maxPointsBeforeSecondDeadline: PropTypes.number,
   isAfterFirstDeadline: PropTypes.bool.isRequired,
   isAfterSecondDeadline: PropTypes.bool.isRequired,
   isBonus: PropTypes.bool,
