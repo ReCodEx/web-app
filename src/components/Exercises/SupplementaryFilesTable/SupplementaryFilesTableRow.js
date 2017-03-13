@@ -10,7 +10,7 @@ const SupplementaryFilesTableRow = ({
 }) => (
   <tr>
     <td>{name}</td>
-    <td>{hashName}</td>
+    <td><code>{hashName}</code></td>
     <td>{prettyBytes(size)}</td>
     <td>
       <FormattedDate value={uploadedAt * 1000} />&nbsp;<FormattedTime value={uploadedAt * 1000} />
