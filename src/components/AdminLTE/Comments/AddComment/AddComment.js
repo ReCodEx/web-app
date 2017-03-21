@@ -1,7 +1,14 @@
 import React, { Component, PropTypes } from 'react';
-import { FormattedMessage, FormattedHTMLMessage, injectIntl, intlShape } from 'react-intl';
+import { FormattedMessage, FormattedHTMLMessage, injectIntl, intlShape, defineMessages } from 'react-intl';
 import { Button, Form, FormGroup, FormControl, InputGroup, HelpBlock } from 'react-bootstrap';
 import Icon from 'react-fontawesome';
+
+const messages = defineMessages({
+  placeholder: {
+    id: 'app.comments.commentPlaceholder',
+    defaultMessage: 'Your comment ...'
+  }
+});
 
 class AddComment extends Component {
 
@@ -30,7 +37,7 @@ class AddComment extends Component {
               type='text'
               disabled={!addComment}
               onChange={e => this.changeText(e.target.value)}
-              placeholder={formatMessage({ id: 'app.comments.commentPlaceholder', defaultMessage: 'Your comment ...' })}
+              placeholder={formatMessage(messages.placeholder)}
               value={text} />
             <InputGroup.Button>
               <Button

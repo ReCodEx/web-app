@@ -56,7 +56,9 @@ class SubmissionDetail extends Component {
               </Col>
               ))}
             </Row>
-            <CompilationLogs initiationOutputs={evaluation.initiationOutputs} />
+            {evaluation && (
+              <CompilationLogs initiationOutputs={evaluation.initiationOutputs} />
+            )}
             <CommentThreadContainer threadId={id} />
           </Col>
 

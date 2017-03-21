@@ -57,6 +57,7 @@ class GroupTree extends Component {
 
     const {
       name,
+      externalId,
       childGroups: {
         all: allChildGroups,
         public: publicChildGroups
@@ -68,6 +69,7 @@ class GroupTree extends Component {
         <TreeViewItem
           title={name}
           level={level}
+          externalId={externalId}
           isOpen={currentGroupId === id || isOpen}
           actions={currentGroupId !== id ? this.renderButtons(id, GROUP_URI_FACTORY(id), isAdmin) : undefined}>
           {allChildGroups.map(id =>

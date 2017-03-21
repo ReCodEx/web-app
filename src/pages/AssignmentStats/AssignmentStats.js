@@ -75,13 +75,15 @@ class AssignmentStats extends Component {
             iconName: 'line-chart'
           }
         ]}>
-        {students.map(user => (
-          <Row key={user.id}>
-            <Col sm={12}>
-              <SubmissionsTableContainer title={user.fullName} userId={user.id} assignmentId={assignmentId} />
-            </Col>
-          </Row>
-        ))}
+        <div>
+          {students.map(user => (
+            <Row key={user.id}>
+              <Col sm={12}>
+                <SubmissionsTableContainer title={user.fullName} userId={user.id} assignmentId={assignmentId} />
+              </Col>
+            </Row>
+          ))}
+        </div>
       </PageContent>
     );
   }

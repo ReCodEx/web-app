@@ -7,6 +7,7 @@ import LevelGap from './LevelGap';
 const TreeViewLeaf = ({
   loading = false,
   title,
+  externalId,
   icon = 'square-o',
   onClick,
   level,
@@ -23,6 +24,11 @@ const TreeViewLeaf = ({
       {loading ? <LoadingIcon /> : <Icon name={icon} />}
     </span>
     {title}
+    {externalId && externalId != "" && (
+      <span> (
+        <code>{externalId}</code>
+      )</span>
+    )}
     <span className='pull-right'>
       {actions}
     </span>

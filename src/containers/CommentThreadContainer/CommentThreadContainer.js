@@ -21,7 +21,7 @@ class CommentThreadContainer extends Component {
 
   componentWillMount() {
     CommentThreadContainer.loadData(this.props);
-    this.pollInterval = setInterval(() => this.poll(), 5000);
+    this.pollInterval = setInterval(() => this.poll(), 60000); // once a minute
   }
 
   componentWillUnmount() {

@@ -12,8 +12,7 @@ import LeaveJoinGroupButtonContainer from '../../../containers/LeaveJoinGroupBut
 
 const SupervisorsView = ({
   group,
-  assignments,
-  assignExercise
+  assignments
 }) => (
   <div>
     <Row>
@@ -65,8 +64,7 @@ const SupervisorsView = ({
 
 SupervisorsView.propTypes = {
   group: PropTypes.object,
-  assignments: ImmutablePropTypes.list.isRequired,
-  assignExercise: PropTypes.func.isRequired
+  assignments: ImmutablePropTypes.list.isRequired
 };
 
 export default SupervisorsView;

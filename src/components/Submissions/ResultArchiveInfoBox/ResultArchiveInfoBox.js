@@ -1,18 +1,30 @@
 import React, { PropTypes } from 'react';
-import { FormattedMessage } from 'react-intl';
+import { injectIntl, defineMessages } from 'react-intl';
 import { SimpleInfoBox } from '../../AdminLTE/InfoBox';
 
+const messages = defineMessages({
+  title: {
+    id: 'app.resultsArchiveInfoBox.title',
+    defaultMessage: 'Results archive'
+  },
+  description: {
+    id: 'app.resultsArchiveInfoBox.description',
+    defaultMessage: 'Detailed logs and dumps'
+  }
+});
+
 const ResultArchiveInfoBox = ({
-  submissionId
+  submissionId,
+  intl: { formatMessage }
 }) => (
   <SimpleInfoBox
     icon='file-archive-o'
-    title={<FormattedMessage id='app.resultsArchiveInfoBox.title' defaultMessage='Results archive' />}
-    description={<FormattedMessage id='app.resultsArchiveInfoBox.description' defaultMessage='Detailed logs and dumps' />} />
+    title={formatMessage(messages.title)}
+    description={formatMessage(messages.description)} />
 );
 
 ResultArchiveInfoBox.propTypes = {
   submissionId: PropTypes.string.isRequired
 };
 
-export default ResultArchiveInfoBox;
+export default injectIntl(ResultArchiveInfoBox);
