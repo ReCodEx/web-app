@@ -11,6 +11,7 @@ import CommentThreadContainer from '../../../containers/CommentThreadContainer';
 import SourceCodeViewerContainer from '../../../containers/SourceCodeViewerContainer';
 
 import EvaluationDetail from '../EvaluationDetail';
+import CompilationLogs from '../CompilationLogs';
 
 class SubmissionDetail extends Component {
 
@@ -55,6 +56,7 @@ class SubmissionDetail extends Component {
               </Col>
               ))}
             </Row>
+            <CompilationLogs initiationOutputs={evaluation.initiationOutputs} />
             <CommentThreadContainer threadId={id} />
           </Col>
 
