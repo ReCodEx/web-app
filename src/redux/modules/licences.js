@@ -35,8 +35,8 @@ const reducer = handleActions(Object.assign({}, reduceActions, {
   [actionTypes.ADD_FAILED]: (state, { meta: { tmpId: instanceId } }) =>
     state.updateIn([ 'resources', instanceId, 'data' ], licences => licences.filter(licence => licence.get('id') !== instanceId)),
 
-  [actionTypes.ADD_FULLFILLED]: (state, { payload: licence, meta: { tmpId: instanceId } }) =>
-    state.updateIn([ 'resources', instanceId, 'data' ], licences => licences.filter(licence => licence.get('id') !== instanceId)).push(fromJS(licence))
+  [actionTypes.ADD_FULFILLED]: (state, { payload, meta: { tmpId: instanceId } }) =>
+    state.updateIn([ 'resources', instanceId, 'data' ], licences => licences.filter(licence => licence.get('id') !== instanceId).push(fromJS(payload)))
 
 }), initialState);
 

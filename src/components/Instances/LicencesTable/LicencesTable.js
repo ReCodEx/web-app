@@ -22,7 +22,9 @@ const LicencesTable = ({
           </tr>
         </thead>
         <tbody>
-          {licences.map(({ id, validUntil, isValid, note }) => (
+          {licences
+            .sort((a, b) => a.validUntil < b.validUntil ? 1 : -1)
+            .map(({ id, validUntil, isValid, note }) => (
             <tr key={id}>
               <td>{note}</td>
               <td className='text-center'><MaybeSucceededIcon success={isValid} /></td>
