@@ -38,7 +38,7 @@ const CheckboxField = ({
 CheckboxField.propTypes = {
   input: PropTypes.shape({
     name: PropTypes.string.isRequired,
-    value: PropTypes.bool
+    value: PropTypes.oneOfType([ PropTypes.bool, PropTypes.string ])
   }).isRequired,
   meta: PropTypes.object.isRequired,
   type: PropTypes.string,
