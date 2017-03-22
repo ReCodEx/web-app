@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { FormattedMessage } from 'react-intl';
 import Icon from 'react-fontawesome';
-import { ButtonGroup, Button } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 import { TreeView, TreeViewItem } from '../../AdminLTE/TreeView';
 import { isReady, getJsData } from '../../../redux/helpers/resourceManager';
@@ -22,7 +22,7 @@ class GroupTree extends Component {
     const { isAdmin } = this.props;
     const { links: { GROUP_URI_FACTORY } } = this.context;
     return (
-      <ButtonGroup>
+      <span>
         <LinkContainer to={GROUP_URI_FACTORY(groupId)}>
           <Button bsStyle='primary' bsSize='xs' className='btn-flat'>
             <Icon name='group' /> <FormattedMessage id='app.groupTree.detailButton' defaultMessage="See group's page" />
@@ -32,7 +32,7 @@ class GroupTree extends Component {
         {isAdmin && (
           <DeleteGroupButtonContainer id={groupId} bsSize='xs' className='btn-flat' />
         )}
-      </ButtonGroup>
+      </span>
     );
   }
 
@@ -78,6 +78,7 @@ class GroupTree extends Component {
               key={id}
               id={id}
               isAdmin={isAdmin}
+              deletable={true}
               level={level + 1}
               isPublic={publicChildGroups.indexOf(id) >= 0} />)}
         </TreeViewItem>
@@ -94,6 +95,7 @@ GroupTree.propTypes = {
   isAdmin: PropTypes.bool,
   isOpen: PropTypes.bool,
   isPublic: PropTypes.bool,
+  deletable: PropTypes.bool,
   currentGroupId: PropTypes.string
 };
 
