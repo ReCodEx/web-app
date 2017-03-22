@@ -151,6 +151,18 @@ const reducer = handleActions(Object.assign({}, reduceActions, {
     return state.updateIn([ 'resources', group.parentGroupId, 'data', 'childGroups', 'all' ], children => children.push(group.id));
   },
 
+  [actionTypes.REMOVE_FULFILLED]: (state, action) =>
+    reduceActions[actionTypes.REMOVE_FULFILLED](state, action)
+      .update('resources', groups =>
+        groups.map(
+          group => group.get('data') !== null
+            ? group.updateIn(
+                ['data', 'childGroups', 'all'],
+                all => all.filter(groupId => groupId !== action.meta.id)
+              )
+            : null
+          )),
+
   [additionalActionTypes.UPDATE_GROUP_FULFILLED]:
     (
       state, {

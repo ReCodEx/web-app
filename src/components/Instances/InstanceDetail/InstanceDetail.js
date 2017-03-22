@@ -8,7 +8,7 @@ import GroupTree from '../../Groups/GroupTree';
 
 const InstanceDetail = ({
   description,
-  topLevelGroups,
+  rootGroupId,
   groups,
   isAdmin
 }) => (
@@ -19,16 +19,19 @@ const InstanceDetail = ({
       </Box>
     </Col>
     <Col md={6}>
-      <Box title={<FormattedMessage id='app.instance.groupsTitle' defaultMessage='Groups hierarchy' />}>
+      <Box
+        title={<FormattedMessage id='app.instance.groupsTitle' defaultMessage='Groups hierarchy' />}
+        noPadding>
         <div>
-          {topLevelGroups.map(id =>
+          {rootGroupId !== null && (
             <GroupTree
-              key={id}
-              id={id}
+              id={rootGroupId}
+              deletable={false}
               isAdmin={isAdmin}
-              groups={groups} />)}
+              groups={groups} />
+          )}
 
-          {topLevelGroups.length === 0 && (
+          {rootGroupId === null && (
             <FormattedMessage id='app.instance.groups.noGroups' defaultMessage='There are no groups in this ReCodEx instance.' />
           )}
         </div>
@@ -39,7 +42,7 @@ const InstanceDetail = ({
 
 InstanceDetail.propTypes = {
   description: PropTypes.string.isRequired,
-  topLevelGroups: PropTypes.array.isRequired,
+  rootGroupId: PropTypes.string,
   groups: ImmutablePropTypes.map.isRequired,
   isAdmin: PropTypes.bool
 };
