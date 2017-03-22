@@ -56,7 +56,7 @@ class Group extends Component {
             : Promise.resolve(),
           group.parentGroupId
             ? Promise.all([
-              dispatch(fetchInstanceIfNeeded(group.parentGroupId)),
+              dispatch(fetchGroupIfNeeded(group.parentGroupId)),
               dispatch(fetchSubgroups(group.parentGroupId))
             ])
             : dispatch(fetchSubgroups(group.id)),
