@@ -14,7 +14,7 @@ import {
 } from '../../redux/selectors/submission';
 
 import { createGetUploadedFiles, createAllUploaded } from '../../redux/selectors/upload';
-
+import { runtimeEnvironmentsSelector } from '../../redux/selectors/assignments';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import { init as resetSubmission, cancel, changeNote, submitSolution } from '../../redux/modules/submission';
 import { reset as resetUpload } from '../../redux/modules/upload';
@@ -40,6 +40,7 @@ class SubmitSolutionContainer extends Component {
       note,
       cancel,
       assignmentId,
+      runtimeEnvironmentIds,
       changeNote,
       canSubmit,
       hasFailed,
@@ -67,6 +68,7 @@ class SubmitSolutionContainer extends Component {
           note={note}
           saveNote={changeNote}
           onClose={cancel}
+          runtimeEnvironmentIds={runtimeEnvironmentIds}
           submitSolution={this.submit} />
 
         <EvaluationProgressContainer
@@ -100,6 +102,7 @@ SubmitSolutionContainer.propTypes = {
   onSubmit: PropTypes.func,
   submitSolution: PropTypes.func.isRequired,
   attachedFiles: PropTypes.array,
+  runtimeEnvironmentIds: PropTypes.array,
   reset: PropTypes.func.isRequired
 };
 
@@ -107,8 +110,10 @@ export default connect(
   (state, { assignmentId, userId }) => {
     const getUploadedFiles = createGetUploadedFiles(assignmentId);
     const allUploaded = createAllUploaded(assignmentId);
+    const environments = runtimeEnvironmentsSelector(assignmentId);
     return {
       userId: userId || loggedInUserIdSelector(state),
+      runtimeEnvironmentIds: environments(state).toJS(),
       note: getNote(state),
       attachedFiles: (getUploadedFiles(state) || List()).toJS(),
       isProcessing: isProcessing(state),
@@ -122,7 +127,7 @@ export default connect(
   (dispatch, { userId, assignmentId }) => ({
     changeNote: (note) => dispatch(changeNote(note)),
     cancel: () => dispatch(cancel()),
-    submitSolution: (note, files) => dispatch(submitSolution(userId, assignmentId, note, files)),
+    submitSolution: (note, files, runtimeEnvironmentId = null) => dispatch(submitSolution(userId, assignmentId, note, files, runtimeEnvironmentId)),
     reset: () => dispatch(resetUpload(assignmentId)) && dispatch(resetSubmission(userId, assignmentId))
   })
 )(SubmitSolutionContainer);

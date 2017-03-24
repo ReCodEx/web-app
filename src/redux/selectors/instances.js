@@ -10,6 +10,12 @@ export const instanceSelector = createSelector(
   [ instancesSelector, (state, id) => id ],
   (instances, id) => instances.get(id)
 );
+
+export const publicInstancesSelector = createSelector(
+  instancesSelector,
+  instances => instances.filter(instance => instance.getIn([ 'data', 'isOpen' ]) === true)
+);
+
 export const instanceByIdSelector = instanceId =>
   createSelector(
     [instancesSelector],

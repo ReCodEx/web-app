@@ -22,6 +22,7 @@ const SubmitSolution = ({
   isSending,
   hasFailed,
   note = '',
+  runtimeEnvironmentIds,
   saveNote,
   submitSolution
 }) => (
@@ -37,6 +38,23 @@ const SubmitSolution = ({
       </p>
       <UploadContainer id={uploadId} />
 
+      {runtimeEnvironmentIds.length > 0 && (
+        <FormGroup>
+          <ControlLabel>
+            <FormattedMessage id='app.submitSolution.runtimeEnvironment' defaultMessage='Select programming language/tool type/runtime environemnt:' />
+          </ControlLabel>
+          <FormControl
+            onChange={(e) => changeRuntimeEnvironment(e.target.value)}
+            value={runtimeEnvironmentIds}
+            componentClass='select'>
+            <option value={null} selected><FormattedMessage id='app.submitSolution.autodetect' defaultMessage='Automatically detect' /></option>
+            {runtimeEnvironmentIds.map(rte => (
+              <option value={rte}><code>{rte}</code></option>
+            ))}
+          </FormControl>
+        </FormGroup>
+      )}
+
       <FormGroup>
         <ControlLabel>
           <FormattedMessage id='app.submitSolution.noteLabel' defaultMessage='Note for you and your supervisor(s)' />
@@ -45,7 +63,7 @@ const SubmitSolution = ({
           onChange={(e) => saveNote(e.target.value)}
           value={note}
           type='text'
-          placeholder='Poznámka pro Vás a cvičícího' />
+          placeholder='Poznámka pro Vás a cvičícího' /> {/* @todo Translatable */}
       </FormGroup>
 
       {hasFailed && (

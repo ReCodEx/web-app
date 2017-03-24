@@ -11,7 +11,7 @@ import ExternalRegistrationForm from '../../components/Forms/ExternalRegistratio
 
 import { createAccount, createExternalAccount } from '../../redux/modules/registration';
 import { fetchInstances } from '../../redux/modules/instances';
-import { instancesSelector } from '../../redux/selectors/instances';
+import { publicInstancesSelector } from '../../redux/selectors/instances';
 import { hasSucceeded } from '../../redux/selectors/registration';
 
 class Register extends Component {
@@ -85,7 +85,7 @@ Register.propTypes = {
 
 export default connect(
   state => ({
-    instances: instancesSelector(state),
+    instances: publicInstancesSelector(state),
     hasSucceeded: hasSucceeded(state)
   }),
   dispatch => ({
