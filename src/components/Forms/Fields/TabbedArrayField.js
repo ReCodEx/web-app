@@ -52,7 +52,7 @@ class TabbedArrayField extends Component {
                       id={`${id}-remove-${i}`}
                       question={removeQuestion}
                       onConfirmed={() => { fields.remove(i); this.changeTab(Math.min(i, fields.length - 2)); }}>
-                      <Button bsStyle='default'>
+                      <Button bsStyle='default' className='btn-flat'>
                         <WarningIcon /> <FormattedMessage id='app.tabbedArrayField.remove' defaultMessage='Remove' />
                       </Button>
                     </Confirm>

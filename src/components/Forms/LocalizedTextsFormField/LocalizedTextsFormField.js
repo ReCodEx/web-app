@@ -56,7 +56,7 @@ class LocalizedTextsFormField extends Component {
                     id={`remove-locale-${i}`}
                     question={<FormattedMessage id='app.editAssignmentForm.localized.reallyRemoveQuestion' defaultMessage='Do you really want to delete the assignmenet in this language?' />}
                     onConfirmed={() => { fields.remove(i); this.changeTab(Math.min(i, fields.length - 2)); }}>
-                    <Button bsStyle='default'>
+                    <Button bsStyle='default' className='btn-flat'>
                       <WarningIcon /> <FormattedMessage id='app.editAssignmentForm.localized.remove' defaultMessage='Remove this language' />
                     </Button>
                   </Confirm>

@@ -26,7 +26,10 @@ const LicencesTable = ({
             .sort((a, b) => a.validUntil < b.validUntil ? 1 : -1)
             .map(({ id, validUntil, isValid, note }) => (
             <tr key={id}>
-              <td>{note}</td>
+              {validUntil * 1000 < Date.now() ?
+                <td><strike>{note}</strike></td> :
+                <td>{note}</td>
+              }
               <td className='text-center'><MaybeSucceededIcon success={isValid} /></td>
               <td><FormattedDate value={validUntil * 1000} /> (<FormattedRelative value={validUntil * 1000} />)</td>
             </tr>

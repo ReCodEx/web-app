@@ -112,7 +112,7 @@ class Exercise extends Component {
                         <GroupsList
                           groups={supervisedGroups}
                           renderButtons={groupId => (
-                            <Button bsSize='xs' onClick={() => this.createExercise(groupId)}>
+                            <Button bsSize='xs' className='btn-flat' onClick={() => this.createExercise(groupId)}>
                               <SendIcon /> <FormattedMessage id='app.exercise.assign' defaultMessage='Assign' />
                             </Button>
                           )} />

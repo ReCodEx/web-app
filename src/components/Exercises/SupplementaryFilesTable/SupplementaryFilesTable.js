@@ -53,7 +53,7 @@ const SupplementaryFilesTable = ({
                 </thead>
                 <tbody>
                   {supplementaryFiles
-                    .sort((a, b) => b.uploadedAt - a.uploadedAt) // sort from the newest to the oldest
+                    .sort((a, b) => a.name < b.name ? -1 : +(a.name > b.name)) // sort lexicographicaly
                     .map((data, i) => <SupplementaryFilesTableRow {...data} key={data.id} />)}
                 </tbody>
               </Table>

@@ -78,7 +78,7 @@ class EditExercise extends Component {
 
                 <EditExerciseRuntimeConfigsForm
                   runtimeEnvironments={runtimeEnvironments}
-                  runtimeConfigs={runtimesFormValues ? runtimesFormValues.runtimeConfigs : {}}
+                  runtimeConfigs={runtimesFormValues ? runtimesFormValues.runtimeConfigs : [{}]}
                   initialValues={{runtimeConfigs: exercise.runtimeConfigs}}
                   onSubmit={editRuntimeConfigs} />
               </Col>

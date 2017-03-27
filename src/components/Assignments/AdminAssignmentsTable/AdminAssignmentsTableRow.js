@@ -43,7 +43,7 @@ const AdminAssignmentTableRow = ({
     <td>
       <ButtonGroup>
         <LinkContainer to={edit(id)}>
-          <Button bsSize='xs'>
+          <Button bsSize='xs' className='btn-flat'>
             <EditIcon /> <FormattedMessage id='app.adminAssignmentsTableRow.edit' defaultMessage='Edit' />
           </Button>
         </LinkContainer>

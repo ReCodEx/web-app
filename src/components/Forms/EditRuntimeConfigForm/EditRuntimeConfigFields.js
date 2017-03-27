@@ -31,7 +31,7 @@ const EditRuntimeConfigFields = ({
     <HelpBlock>
       <FormattedHTMLMessage
         id='app.editRuntimeConfigForm.moreAboutJobConfig'
-        defaultMessage="Read more about <a href='https://github.com/ReCodEx/wiki/wiki/Assignments#job-configuration' target='_blank'>job configuration</a> syntax." />
+        defaultMessage="Read more about <a href='https://github.com/ReCodEx/wiki/wiki/Job-configuration' target='_blank'>job configuration</a> syntax." />
     </HelpBlock>
   </div>
 );

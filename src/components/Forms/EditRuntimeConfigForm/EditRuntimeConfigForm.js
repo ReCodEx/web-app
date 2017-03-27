@@ -27,7 +27,7 @@ const EditRuntimeConfigForm = ({
 );
 
 EditRuntimeConfigForm.propTypes = {
-  runtimeConfigs: PropTypes.oneOfType([ PropTypes.object, PropTypes.array ]),
+  runtimeConfigs: PropTypes.array.isRequired,
   runtimeEnvironments: PropTypes.object.isRequired
 };
 
