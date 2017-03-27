@@ -146,7 +146,7 @@ class Group extends Component {
             {isAdmin && (
               <p>
                 <LinkContainer to={GROUP_EDIT_URI_FACTORY(data.id)}>
-                  <Button className='btn-flat'>
+                  <Button bsStyle='warning' className='btn-flat'>
                     <EditIcon /> <FormattedMessage id='app.group.edit' defaultMessage='Edit group settings' />
                   </Button>
                 </LinkContainer>

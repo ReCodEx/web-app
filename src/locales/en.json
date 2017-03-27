@@ -328,6 +328,7 @@
   "app.groupTree.loading": "Loading ...",
   "app.groups.joinGroupButton": "Join group",
   "app.groups.leaveGroupButton": "Leave group",
+  "app.groups.makeGroupAdminButton": "Make group admin",
   "app.groups.makeSupervisorButton": "Make supervisor",
   "app.groups.removeSupervisorButton": "Remove supervisor",
   "app.hardwareGroupFields.memoryLimit": "Memory limit for \"{taskId}\":",

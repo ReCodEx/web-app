@@ -328,6 +328,7 @@
   "app.groupTree.loading": "Načítání...",
   "app.groups.joinGroupButton": "Stát se členem",
   "app.groups.leaveGroupButton": "Opustit skupinu",
+  "app.groups.makeGroupAdminButton": "Změnit na správce skupiny",
   "app.groups.makeSupervisorButton": "Přidat cvičícího",
   "app.groups.removeSupervisorButton": "Odebrat cvičícího",
   "app.hardwareGroupFields.memoryLimit": "Paměťový limit pro \"{taskId}\":",

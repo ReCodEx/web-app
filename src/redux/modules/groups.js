@@ -40,7 +40,11 @@ export const additionalActionTypes = {
   REMOVE_SUPERVISOR: 'recodex/groups/REMOVE_SUPERVISOR',
   REMOVE_SUPERVISOR_PENDING: 'recodex/groups/REMOVE_SUPERVISOR_PENDING',
   REMOVE_SUPERVISOR_FULFILLED: 'recodex/groups/REMOVE_SUPERVISOR_FULFILLED',
-  REMOVE_SUPERVISOR_REJECTED: 'recodex/groups/REMOVE_SUPERVISOR_REJECTED'
+  REMOVE_SUPERVISOR_REJECTED: 'recodex/groups/REMOVE_SUPERVISOR_REJECTED',
+  MAKE_ADMIN: 'recodex/groups/MAKE_ADMIN',
+  MAKE_ADMIN_PENDING: 'recodex/groups/MAKE_ADMIN_PENDING',
+  MAKE_ADMIN_FULFILLED: 'recodex/groups/MAKE_ADMIN_FULFILLED',
+  MAKE_ADMIN_REJECTED: 'recodex/groups/MAKE_ADMIN_REJECTED'
 };
 
 export const loadGroup = actions.pushResource;
@@ -131,6 +135,18 @@ export const removeSupervisor = (groupId, userId) =>
       })
     ).catch(() => dispatch(addNotification('Cannot remove supervisor.', false))); // @todo: Make translatable
 
+export const makeAdmin = (groupId, userId) =>
+  dispatch =>
+    dispatch(
+      createApiAction({
+        type: additionalActionTypes.MAKE_ADMIN,
+        endpoint: `/groups/${groupId}/admin`,
+        method: 'POST',
+        meta: { groupId },
+        body: { userId }
+      })
+    ).catch(() => dispatch(addNotification('Cannot make this person admin of the group.', false))); // @todo: Make translatable
+
 /**
  * Reducer
  */
@@ -204,6 +220,15 @@ const reducer = handleActions(Object.assign({}, reduceActions, {
   [additionalActionTypes.REMOVE_SUPERVISOR_FULFILLED]: (state, { payload, meta: { groupId, userId } }) =>
     state.updateIn(['resources', groupId, 'data', 'supervisors'], supervisors =>
       supervisors.filter(id => id !== userId)),
+
+  [additionalActionTypes.MAKE_ADMIN_FULFILLED]: (state, { payload, meta: { groupId } }) => {
+    state.updateIn(['resources', groupId, 'data', 'adminId'], adminId =>
+      adminId = payload.adminId
+    ),
+    state.updateIn(['resources', groupId, 'data', 'admins'], admins =>
+      admins = fromJS(payload.admins)
+    )
+  },
 
   [additionalActionTypes.LOAD_USERS_GROUPS_FULFILLED]: (state, { payload, ...rest }) => {
     const groups = [ ...payload.supervisor, ...payload.student ];
