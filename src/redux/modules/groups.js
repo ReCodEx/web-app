@@ -142,7 +142,7 @@ export const makeAdmin = (groupId, userId) =>
         type: additionalActionTypes.MAKE_ADMIN,
         endpoint: `/groups/${groupId}/admin`,
         method: 'POST',
-        meta: { groupId },
+        meta: { groupId, userId },
         body: { userId }
       })
     ).catch(() => dispatch(addNotification('Cannot make this person admin of the group.', false))); // @todo: Make translatable
@@ -221,14 +221,29 @@ const reducer = handleActions(Object.assign({}, reduceActions, {
     state.updateIn(['resources', groupId, 'data', 'supervisors'], supervisors =>
       supervisors.filter(id => id !== userId)),
 
-  [additionalActionTypes.MAKE_ADMIN_FULFILLED]: (state, { payload, meta: { groupId } }) => {
-    state.updateIn(['resources', groupId, 'data', 'adminId'], adminId =>
-      adminId = payload.adminId
+
+  [additionalActionTypes.MAKE_ADMIN_PENDING]: (state, { payload: { userId }, meta: { groupId } }) =>
+    state.updateIn(['resources', groupId, 'data'], group =>
+      group
+        .set('oldAdminId', group.get('adminId'))
+        .update('admins', admins => admins.filter(id => id !== userId).push(userId))
+        .set('adminId', userId)
     ),
-    state.updateIn(['resources', groupId, 'data', 'admins'], admins =>
-      admins = fromJS(payload.admins)
-    )
-  },
+
+  [additionalActionTypes.MAKE_ADMIN_FAILED]: (state, { payload: { userId }, meta: { groupId } }) =>
+    state.updateIn(['resources', groupId, 'data'], group =>
+      group
+        .update('admins', admins => admins.filter(id => id !== group.get('adminId')).push(userId))
+        .set('adminId', group.get('oldAdminId'))
+        .remove('oldAdminId')
+    ),
+
+  [additionalActionTypes.MAKE_ADMIN_FULFILLED]: (state, { payload: { adminId, admins }, meta: { groupId } }) =>
+    state.updateIn(['resources', groupId, 'data'], group =>
+      group
+        .remove('oldAdminId')
+        .set('admins', List(admins)).set('adminId', adminId)
+    ),
 
   [additionalActionTypes.LOAD_USERS_GROUPS_FULFILLED]: (state, { payload, ...rest }) => {
     const groups = [ ...payload.supervisor, ...payload.student ];

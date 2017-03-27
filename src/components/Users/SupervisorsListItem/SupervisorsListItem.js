@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import MakeRemoveSupervisorButtonContainer from '../../../containers/MakeRemoveSupervisorButtonContainer';
 import MakeGroupAdminButton from '../../Groups/MakeGroupAdminButton';
 import { makeAdmin } from '../../../redux/modules/groups';
+import { adminsOfGroup } from '../../../redux/selectors/groups';
 import UsersNameContainer from '../../../containers/UsersNameContainer';
 
 const SupervisorsListItem = ({
@@ -11,6 +12,7 @@ const SupervisorsListItem = ({
   fullName,
   avatarUrl,
   groupId,
+  groupAdmins,
   makeAdmin
 }) => (
   <tr>
@@ -18,9 +20,9 @@ const SupervisorsListItem = ({
       <UsersNameContainer userId={id} />
     </td>
     {isAdmin && (
-      <td width={300}>
+      <td>
         <MakeRemoveSupervisorButtonContainer userId={id} groupId={groupId} />
-        <MakeGroupAdminButton onClick={() => makeAdmin(groupId, id)} bsSize='xs' />
+        {groupAdmins.indexOf(id) < 0 && <MakeGroupAdminButton onClick={() => makeAdmin(groupId, id)} bsSize='xs' />}
       </td>
     )}
   </tr>
@@ -32,6 +34,7 @@ SupervisorsListItem.propTypes = {
   groupId: PropTypes.string.isRequired,
   fullName: PropTypes.string.isRequired,
   avatarUrl: PropTypes.string.isRequired,
+  groupAdmins: PropTypes.array.isRequired,
   makeAdmin: PropTypes.func.isRequired
 };
 
@@ -39,6 +42,12 @@ SupervisorsListItem.contextTypes = {
   links: PropTypes.object
 };
 
-const mapDispatchToProps = { makeAdmin };
+const mapStateToProps = (state, { groupId }) => ({
+  groupAdmins: adminsOfGroup(groupId)(state).toJS()
+});
 
-export default connect(undefined, mapDispatchToProps)(SupervisorsListItem);
+const mapDispatchToProps = {
+  makeAdmin
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(SupervisorsListItem);

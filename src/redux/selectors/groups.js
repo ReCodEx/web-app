@@ -32,6 +32,10 @@ const usersOfGroup = (type, groupId) =>
 
 export const studentsOfGroup = (groupId) => usersOfGroup('students', groupId);
 export const supervisorsOfGroup = (groupId) => usersOfGroup('supervisors', groupId);
+export const adminsOfGroup = (groupId) => createSelector(
+  groupSelector(groupId),
+  group => group.getIn(['data', 'admins'])
+);
 
 export const groupSelector = id =>
   createSelector(
