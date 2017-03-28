@@ -60,9 +60,7 @@ class Group extends Component {
               dispatch(fetchSubgroups(group.parentGroupId))
             ])
             : dispatch(fetchSubgroups(group.id)),
-          group.publicStats === true
-            ? dispatch(fetchGroupsStatsIfNeeded(groupId))
-            : Promise.resolve()
+          dispatch(fetchGroupsStatsIfNeeded(groupId))
         ]))
     ]);
 
