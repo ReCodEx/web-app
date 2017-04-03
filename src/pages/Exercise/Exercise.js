@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, defineMessages, intlShape, injectIntl } from 'react-intl';
 import { Row, Col, Button } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 
@@ -11,21 +11,38 @@ import ExerciseDetail from '../../components/Exercises/ExerciseDetail';
 import LocalizedTexts from '../../components/LocalizedTexts';
 import ResourceRenderer from '../../components/ResourceRenderer';
 import GroupsList from '../../components/Groups/GroupsList';
+import ReferenceSolutionsList from '../../components/Exercises/ReferenceSolutionsList';
 import Box from '../../components/AdminLTE/Box';
 import { EditIcon, SendIcon } from '../../components/Icons';
 
 import { fetchExerciseIfNeeded } from '../../redux/modules/exercises';
+import { fetchReferenceSolutionsIfNeeded, evaluateReferenceSolution } from '../../redux/modules/referenceSolutions';
+import { fetchHardwareGroups } from '../../redux/modules/hwGroups';
 import { create as assignExercise } from '../../redux/modules/assignments';
 import { exerciseSelector } from '../../redux/selectors/exercises';
+import { referenceSolutionsSelector } from '../../redux/selectors/referenceSolutions';
 import { canEditExercise } from '../../redux/selectors/users';
 
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import { supervisorOfSelector } from '../../redux/selectors/groups';
 
+
+const messages = defineMessages({
+  groupsBox: {
+    id: 'app.exercise.groupsBox',
+    defaultMessage: 'Groups'
+  },
+  referenceSolutionsBox: {
+    id: 'app.exercise.referenceSolutionsBox',
+    defaultMessage: 'Reference solutions'
+  }
+});
+
 class Exercise extends Component {
 
   static loadAsync = ({ exerciseId }, dispatch) => Promise.all([
-    dispatch(fetchExerciseIfNeeded(exerciseId))
+    dispatch(fetchExerciseIfNeeded(exerciseId)),
+    dispatch(fetchReferenceSolutionsIfNeeded(exerciseId))
   ]);
 
   componentWillMount() {
@@ -46,11 +63,24 @@ class Exercise extends Component {
       .then(({ value: assigment }) => push(ASSIGNMENT_EDIT_URI_FACTORY(assigment.id)));
   };
 
+  evaluateSolution = (solutionId) => {
+    const { evaluateReferenceSolution, fetchHardwareGroupsIfNeeded } = this.props;
+
+    fetchHardwareGroupsIfNeeded()
+      .then(({value}) => {
+        value.map(({id}) =>
+          evaluateReferenceSolution(solutionId, id)
+        )
+      });
+  };
+
   render() {
     const {
       exercise,
       supervisedGroups,
-      isAuthorOfExercise
+      isAuthorOfExercise,
+      referenceSolutions,
+      intl: { formatMessage }
     } = this.props;
 
     const {
@@ -100,7 +130,7 @@ class Exercise extends Component {
             </Row>
             <Row>
               <Col md={6}>
-                <Box title={'Groups'}>
+                <Box title={formatMessage(messages.groupsBox)}>
                   <ResourceRenderer
                     forceLoading={supervisedGroups.length === 0}
                     resource={supervisedGroups}>
@@ -119,6 +149,21 @@ class Exercise extends Component {
                       </div>}
                     </ResourceRenderer>
                   </Box>
+                </Col>
+                <Col md={6}>
+                  <ResourceRenderer resource={referenceSolutions}>
+                    {referenceSolutions => (
+                      <Box title={formatMessage(messages.referenceSolutionsBox)}>
+                        <ReferenceSolutionsList
+                          referenceSolutions={referenceSolutions}
+                          renderButtons={referenceSolutionId => (
+                            <Button bsSize='xs' className='btn-flat' onClick={() => this.evaluateSolution(referenceSolutionId)} >
+                              <SendIcon /> <FormattedMessage id='app.exercise.evaluateReferenceSolution' defaultMessage='Evaluate' />
+                            </Button>
+                          )} />
+                      </Box>
+                    )}
+                  </ResourceRenderer>
                 </Col>
               </Row>
             </div>
@@ -140,21 +185,28 @@ Exercise.propTypes = {
   push: PropTypes.func.isRequired,
   exercise: ImmutablePropTypes.map,
   supervisedGroups: PropTypes.object,
-  isAuthorOfExercise: PropTypes.func.isRequired
+  isAuthorOfExercise: PropTypes.func.isRequired,
+  referenceSolutions: ImmutablePropTypes.map,
+  evaluateReferenceSolution: PropTypes.func.isRequired,
+  fetchHardwareGroupsIfNeeded: PropTypes.func.isRequired,
+  intl: intlShape.isRequired
 };
 
-export default connect(
+export default injectIntl(connect(
   (state, { params: { exerciseId } }) => {
     const userId = loggedInUserIdSelector(state);
     return {
       exercise: exerciseSelector(exerciseId)(state),
       supervisedGroups: supervisorOfSelector(userId)(state),
-      isAuthorOfExercise: (exerciseId) => canEditExercise(userId, exerciseId)(state)
+      isAuthorOfExercise: (exerciseId) => canEditExercise(userId, exerciseId)(state),
+      referenceSolutions: referenceSolutionsSelector(exerciseId)(state)
     };
   },
   (dispatch, { params: { exerciseId } }) => ({
     loadAsync: () => Exercise.loadAsync({ exerciseId }, dispatch),
     assignExercise: (groupId) => dispatch(assignExercise(groupId, exerciseId)),
-    push: (url) => dispatch(push(url))
+    push: (url) => dispatch(push(url)),
+    evaluateReferenceSolution: (solutionId, hwGroup) => dispatch(evaluateReferenceSolution(exerciseId, solutionId, hwGroup)),
+    fetchHardwareGroupsIfNeeded: () => dispatch(fetchHardwareGroups())
   })
-)(Exercise);
+)(Exercise));
