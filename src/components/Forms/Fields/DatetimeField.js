@@ -42,7 +42,7 @@ class DatetimeField extends Component {
     return (
       <FormGroup controlId={input.name} validationState={touched && error ? 'error' : undefined}>
         <ControlLabel>{label}</ControlLabel>
-        <Datetime {...input} {...props} locale={lang} onFocus={() => this.onFocus()} inputProps={{ disabled }} />
+        <Datetime {...input} {...props} locale={lang} utc={true} onFocus={() => this.onFocus()} inputProps={{ disabled }} />
         {touched && error && <HelpBlock>{error}</HelpBlock>}
       </FormGroup>
     );
