@@ -40,7 +40,7 @@ class SubmissionDetail extends Component {
     return (
       <div>
         <Row>
-          <Col lg={4} md={6} sm={12}>
+          <Col md={6} sm={12}>
             <SubmissionStatus
               evaluationStatus={evaluationStatus}
               submittedAt={submittedAt}
@@ -49,7 +49,7 @@ class SubmissionDetail extends Component {
               note={note} />
             <Row>
               {files.map(file => (
-              <Col sm={6} key={file.id}>
+              <Col lg={6} md={12} key={file.id}>
                 <a href='#' onClick={() => this.openFile(file.id)}>
                   <SourceCodeInfoBox {...file} />
                 </a>
@@ -63,7 +63,7 @@ class SubmissionDetail extends Component {
           </Col>
 
           {evaluation && (
-            <Col lg={4} md={6} sm={12}>
+            <Col md={6} sm={12}>
               <EvaluationDetail
                 assignment={assignment}
                 evaluation={evaluation}
@@ -76,7 +76,7 @@ class SubmissionDetail extends Component {
 
               {isSupervisor && (
                 <Row>
-                  <Col sm={6}>
+                  <Col lg={6} md={12}>
                     <DownloadResultArchiveContainer submissionId={id} />
                   </Col>
                 </Row>
@@ -85,10 +85,6 @@ class SubmissionDetail extends Component {
               <TestResults evaluation={evaluation} />
             </Col>
           )}
-
-          <Col lg={4} md={12} sm={12}>
-            <LocalizedTexts locales={assignment.localizedTexts} />
-          </Col>
         </Row>
 
         <SourceCodeViewerContainer
