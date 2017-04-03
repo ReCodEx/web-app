@@ -46,7 +46,7 @@ class Submission extends Component {
             {assignmentData => <span>{assignmentData.name}</span>}
           </ResourceRenderer>
         )}
-        description={<FormattedMessage id='app.submission.evaluation.title' defaultMessage='Your solution evaluation' />}
+        description={<FormattedMessage id='app.submission.evaluation.title' defaultMessage='Solution evaluation' />}
         breadcrumbs={[
           {
             resource: assignment,
@@ -62,7 +62,7 @@ class Submission extends Component {
             link: ({ ASSIGNMENT_DETAIL_URI_FACTORY }) => ASSIGNMENT_DETAIL_URI_FACTORY(assignmentId)
           },
           {
-            text: <FormattedMessage id='app.submission.title' defaultMessage='Your solution' />,
+            text: <FormattedMessage id='app.submission.title' defaultMessage='Solution' />,
             iconName: 'user'
           }
         ]}>

@@ -28,7 +28,7 @@ const SubmitSolution = ({
   <Modal show={isOpen} backdrop='static' onHide={onClose}>
     <Modal.Header closeButton>
       <Modal.Title>
-        <FormattedMessage id='app.submitSolution.title' defaultMessage='Submit your solution' />
+        <FormattedMessage id='app.submitSolution.title' defaultMessage='Submit the solution' />
       </Modal.Title>
     </Modal.Header>
     <Modal.Body>
@@ -39,7 +39,7 @@ const SubmitSolution = ({
 
       <FormGroup>
         <ControlLabel>
-          <FormattedMessage id='app.submitSolution.noteLabel' defaultMessage='Note for you and your supervisor(s)' />
+          <FormattedMessage id='app.submitSolution.noteLabel' defaultMessage='Note for you and the supervisor(s)' />
         </ControlLabel>
         <FormControl
           onChange={(e) => saveNote(e.target.value)}
@@ -52,7 +52,7 @@ const SubmitSolution = ({
         <p className='text-left callout callout-danger'>
           <FormattedMessage
             id='app.submistSolution.submitFailed'
-            defaultMessage='Submission was rejected by the server. This usually means you have uploaded incorrect files - do your files have proper file type extensions? If you cannot submit your solution and there is no obvious reason, contact your supervisor to sort things out.' />
+            defaultMessage='Submission was rejected by the server. This usually means you have uploaded incorrect files - do your files have proper file type extensions? If you cannot submit the solution and there is no obvious reason, contact your supervisor to sort things out.' />
         </p>
       )}
     </Modal.Body>
@@ -63,7 +63,7 @@ const SubmitSolution = ({
           disabled={true}
           bsStyle='success'
           className='btn-flat'>
-            <LoadingIcon /> <FormattedMessage id='app.submitSolution.submittingButtonText' defaultMessage='Submitting your solution ...' />
+            <LoadingIcon /> <FormattedMessage id='app.submitSolution.submittingButtonText' defaultMessage='Submitting the solution ...' />
         </Button>
       )}
 
@@ -74,7 +74,7 @@ const SubmitSolution = ({
           bsStyle={hasFailed ? 'danger' : canSubmit ? 'success' : 'default'}
           className='btn-flat'
           onClick={submitSolution}>
-            {hasFailed ? <WarningIcon /> : <SendIcon />} <FormattedMessage id='app.submitSolution.submitButton' defaultMessage='Submit your solution' />
+            {hasFailed ? <WarningIcon /> : <SendIcon />} <FormattedMessage id='app.submitSolution.submitButton' defaultMessage='Submit the solution' />
         </Button>
       )}
 

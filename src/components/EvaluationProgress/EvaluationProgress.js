@@ -44,7 +44,7 @@ class EvaluationProgress extends Component {
       <Modal show={isOpen} backdrop='static'>
         <Modal.Header>
           <Modal.Title>
-            <FormattedMessage id='app.evaluationProgress.title' defaultMessage='Your solution is being evaluated' />
+            <FormattedMessage id='app.evaluationProgress.title' defaultMessage='Solution is being evaluated' />
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>

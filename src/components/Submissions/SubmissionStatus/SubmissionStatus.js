@@ -72,7 +72,7 @@ const SubmissionStatus = ({
               {evaluationStatus === 'failed' &&
                 <FormattedMessage id='app.submission.evaluation.status.failed' defaultMessage='Solution does not meet the defined criteria.' />}
               {evaluationStatus === 'evaluation-failed' &&
-                <FormattedMessage id='app.submission.evaluation.status.systemFailiure' defaultMessage='Evaluation process had failed and your submission could not have been evaluated. Please submit your solution once more. If you keep receiving errors please contact the administrator of this project.' />}
+                <FormattedMessage id='app.submission.evaluation.status.systemFailiure' defaultMessage='Evaluation process had failed and your submission could not have been evaluated. Please submit the solution once more. If you keep receiving errors please contact the administrator of this project.' />}
             </strong>
           </td>
         </tr>
