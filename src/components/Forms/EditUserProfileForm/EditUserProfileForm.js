@@ -17,6 +17,7 @@ const EditUserProfileForm = ({
   submitSucceeded = false,
   asyncValidate,
   pristine,
+  asyncValidating,
   invalid
 }) => (
   <FormBox
@@ -25,11 +26,13 @@ const EditUserProfileForm = ({
     footer={
       <div className='text-center'>
         <SubmitButton
+          id='editUserProfile'
           handleSubmit={handleSubmit}
           submitting={submitting}
           dirty={anyTouched}
           hasSucceeded={submitSucceeded}
           hasFailed={submitFailed}
+          asyncValidating={asyncValidating}
           invalid={pristine || invalid}
           tabIndex={9}
           messages={{
@@ -102,6 +105,7 @@ EditUserProfileForm.propTypes = {
   submitSucceeded: PropTypes.bool,
   anyTouched: PropTypes.bool,
   submitting: PropTypes.bool,
+  asyncValidating: PropTypes.oneOfType([ PropTypes.bool, PropTypes.string ]),
   invalid: PropTypes.bool,
   pristine: PropTypes.bool
 };

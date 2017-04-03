@@ -3,7 +3,7 @@ import { canUseDOM } from 'exenv';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import HeaderNotificationsDropdown from '../../components/AdminLTE/HeaderNotificationsDropdown';
-import { hideAll } from '../../redux/modules/notifications';
+import { hideNotification } from '../../redux/modules/notifications';
 import { newNotificationsSelector, oldNotificationsSelector } from '../../redux/selectors/notifications';
 
 class HeaderNotificationsContainer extends Component {
@@ -60,19 +60,20 @@ class HeaderNotificationsContainer extends Component {
 
   close = () => {
     this.setState({ isOpen: false, showAll: false });
-    this.props.hideAll();
   };
 
   open = () => this.setState({ isOpen: true });
 
   componentWillReceiveProps = (newProps) => {
-    if (this.props.newNotifications.size === newProps.newNotifications.size - 1) {
+    const oldVisible = this.props.newNotifications.reduce((acc, notification) => acc + notification.count, 0);
+    const newVisible = newProps.newNotifications.reduce((acc, notification) => acc + notification.count, 0);
+    if (oldVisible !== newVisible) {
       this.setState({ isOpen: true }); // force open the notifications dropdown - there are some new notifications
     }
   };
 
   render() {
-    const { newNotifications, oldNotifications } = this.props;
+    const { newNotifications, oldNotifications, hideNotification } = this.props;
     const { isOpen, showAll } = this.state;
 
     return (
@@ -82,6 +83,7 @@ class HeaderNotificationsContainer extends Component {
         markClick={this.markClick}
         showAll={showAll}
         toggleShowAll={this.toggleShowAll}
+        hideNotification={hideNotification}
         oldNotifications={oldNotifications}
         newNotifications={newNotifications} />
     );
@@ -92,7 +94,7 @@ class HeaderNotificationsContainer extends Component {
 HeaderNotificationsContainer.propTypes = {
   newNotifications: ImmutablePropTypes.list.isRequired,
   oldNotifications: ImmutablePropTypes.list.isRequired,
-  hideAll: PropTypes.func.isRequired
+  hideNotification: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
@@ -100,6 +102,6 @@ const mapStateToProps = state => ({
   oldNotifications: oldNotificationsSelector(state)
 });
 
-const mapDispatchToProps = { hideAll };
+const mapDispatchToProps = { hideNotification };
 
 export default connect(mapStateToProps, mapDispatchToProps)(HeaderNotificationsContainer);

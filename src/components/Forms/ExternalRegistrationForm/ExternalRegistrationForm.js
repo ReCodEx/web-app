@@ -25,6 +25,7 @@ const ExternalRegistrationForm = ({
     footer={
       <div className='text-center'>
         <SubmitButton
+          id='externalRegistrationForm'
           handleSubmit={handleSubmit}
           submitting={submitting}
           hasSucceeded={submitSucceeded}

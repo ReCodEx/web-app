@@ -8,17 +8,22 @@ import { reset, getFormValues } from 'redux-form';
 
 import Page from '../../components/Page';
 import Box from '../../components/AdminLTE/Box';
+import ResourceRenderer from '../../components/ResourceRenderer';
+
 import EditExerciseForm from '../../components/Forms/EditExerciseForm';
 import EditExerciseRuntimeConfigsForm from '../../components/Forms/EditExerciseRuntimeConfigsForm';
+import EditExerciseLimitsForm from '../../components/Forms/EditExerciseLimitsForm';
 import SupplementaryFilesTableContainer from '../../containers/SupplementaryFilesTableContainer';
 import DeleteExerciseButtonContainer from '../../containers/DeleteExerciseButtonContainer';
 
 import { fetchExercise, editExercise, editRuntimeConfigs } from '../../redux/modules/exercises';
+import { fetchLimits, editLimits } from '../../redux/modules/limits';
 import { getExercise } from '../../redux/selectors/exercises';
 import { isSubmitting } from '../../redux/selectors/submission';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments';
 import { runtimeEnvironmentsSelector } from '../../redux/selectors/runtimeEnvironments';
+import { getEnvironmentsLimits } from '../../redux/selectors/limits';
 
 class EditExercise extends Component {
 
@@ -32,6 +37,7 @@ class EditExercise extends Component {
 
   static loadAsync = ({ exerciseId }, dispatch) => Promise.all([
     dispatch(fetchExercise(exerciseId)),
+    dispatch(fetchLimits(exerciseId)),
     dispatch(fetchRuntimeEnvironments())
   ]);
 
@@ -43,6 +49,8 @@ class EditExercise extends Component {
       editExercise,
       editRuntimeConfigs,
       runtimeEnvironments,
+      environments,
+      editLimits,
       formValues,
       runtimesFormValues
     } = this.props;
@@ -75,12 +83,21 @@ class EditExercise extends Component {
               </Col>
               <Col lg={6}>
                 <SupplementaryFilesTableContainer exerciseId={exerciseId} />
-
                 <EditExerciseRuntimeConfigsForm
                   runtimeEnvironments={runtimeEnvironments}
                   runtimeConfigs={runtimesFormValues ? runtimesFormValues.runtimeConfigs : [{}]}
                   initialValues={{runtimeConfigs: exercise.runtimeConfigs}}
                   onSubmit={editRuntimeConfigs} />
+
+                <ResourceRenderer resource={environments}>
+                  {environments => (
+                    <EditExerciseLimitsForm
+                      initialValues={environments}
+                      runtimeEnvironments={runtimeEnvironments}
+                      exercise={exercise}
+                      onSubmit={editLimits} />
+                  )}
+                </ResourceRenderer>
               </Col>
             </Row>
             <br />
@@ -115,6 +132,8 @@ EditExercise.propTypes = {
   editExercise: PropTypes.func.isRequired,
   editRuntimeConfigs: PropTypes.func.isRequired,
   params: PropTypes.shape({ exerciseId: PropTypes.string.isRequired }).isRequired,
+  environments: ImmutablePropTypes.map,
+  editLimits: PropTypes.func.isRequired,
   formValues: PropTypes.object,
   runtimesFormValues: PropTypes.object
 };
@@ -122,6 +141,7 @@ EditExercise.propTypes = {
 export default connect(
   (state, { params: { exerciseId } }) => {
     const exerciseSelector = getExercise(exerciseId);
+    const environmentsSelector = getEnvironmentsLimits(exerciseId);
     const userId = loggedInUserIdSelector(state);
     return {
       exercise: exerciseSelector(state),
@@ -129,7 +149,8 @@ export default connect(
       userId,
       formValues: getFormValues('editExercise')(state),
       runtimesFormValues: getFormValues('editExerciseRuntimeConfigs')(state),
-      runtimeEnvironments: runtimeEnvironmentsSelector(state)
+      runtimeEnvironments: runtimeEnvironmentsSelector(state),
+      environments: environmentsSelector(state)
     };
   },
   (dispatch, { params: { exerciseId } }) => ({
@@ -137,6 +158,7 @@ export default connect(
     reset: () => dispatch(reset('editExercise')),
     loadAsync: () => EditExercise.loadAsync({ exerciseId }, dispatch),
     editExercise: (version, data) => dispatch(editExercise(exerciseId, { ...data, version })),
-    editRuntimeConfigs: (data) => dispatch(editRuntimeConfigs(exerciseId, data))
+    editRuntimeConfigs: (data) => dispatch(editRuntimeConfigs(exerciseId, data)),
+    editLimits: (data) => dispatch(editLimits(exerciseId, data))
   })
 )(EditExercise);

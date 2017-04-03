@@ -2,7 +2,6 @@ import { expect } from 'chai';
 import { Map, List } from 'immutable';
 import reducer, {
   initialState,
-  actionTypes,
   addNotification,
   hideNotification,
   hideAll
@@ -62,7 +61,16 @@ describe('App notifications', () => {
       const state = reducer(initialState, addNotification('XYZ', false, 'abc', time));
       expect(state.get('hidden').size).to.equal(0);
       expect(state.get('visible').size).to.equal(1);
-      expect(state.get('visible').first()).to.eql({ id: 'abc', msg: 'XYZ', successful: false, time });
+      expect(state.get('visible').first()).to.eql({ id: 'abc', msg: 'XYZ', successful: false, time, count: 1 });
+    });
+
+    it('must group notifications with same messages', () => {
+      const time = 123456;
+      let state = reducer(initialState, addNotification('XYZ', false, 'abc', time));
+      state = reducer(state, addNotification('XYZ', false, 'cba', time));
+      expect(state.get('hidden').size).to.equal(0);
+      expect(state.get('visible').size).to.equal(1);
+      expect(state.get('visible').first()).to.eql({ id: 'abc', msg: 'XYZ', successful: false, time, count: 2 });
     });
 
     it('must remove a notification', () => {

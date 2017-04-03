@@ -32,7 +32,12 @@ export const hideAll = createAction(actionTypes.HIDE_ALL);
 const reducer = handleActions({
 
   [actionTypes.ADD_NOTIFICATION]: (state, { payload }) => {
-    return state.update('visible', visible => visible.push(payload));
+    const index = state.get('visible').findIndex(visible => visible.msg === payload.msg);
+    if (index < 0) {
+      return state.update('visible', visible => visible.push({ ...payload, count: 1 }));
+    } else {
+      return state.updateIn(['visible', index], oldMsg => ({ ...oldMsg, count: oldMsg.count + 1 }));
+    }
   },
 
   [actionTypes.HIDE_NOTIFICATION]: (state, { payload: { id } }) =>

@@ -14,6 +14,7 @@ const AddLicenceForm = ({
   handleSubmit,
   submitFailed = false,
   submitSucceeded = false,
+  asyncValidating,
   invalid
 }) => (
   <FormBox
@@ -24,12 +25,14 @@ const AddLicenceForm = ({
     footer={
       <div className='text-center'>
         <SubmitButton
+          id='addLicence'
           handleSubmit={handleSubmit}
           dirty={anyTouched}
           submitting={submitting}
           hasSucceeded={submitSucceeded}
           hasFailed={submitFailed}
           invalid={invalid}
+          asyncValidating={asyncValidating}
           messages={{
             submit: <FormattedMessage id='app.addLicence.set' defaultMessage='Add licence' />,
             submitting: <FormattedMessage id='app.addLicence.processing' defaultMessage='Adding ...' />,
@@ -54,7 +57,8 @@ AddLicenceForm.propTypes = {
   submitFailed: PropTypes.bool,
   submitSucceeded: PropTypes.bool,
   submitting: PropTypes.bool,
-  invalid: PropTypes.bool
+  invalid: PropTypes.bool,
+  asyncValidating: PropTypes.oneOfType([ PropTypes.bool, PropTypes.string ])
 };
 
 const validate = ({ note, validUntil }) => {

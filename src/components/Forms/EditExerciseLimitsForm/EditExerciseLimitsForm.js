@@ -6,8 +6,8 @@ import { Alert } from 'react-bootstrap';
 import EditEnvironmentLimitsForm from '../EditEnvironmentLimitsForm';
 import SubmitButton from '../SubmitButton';
 
-const EditAssignmentLimitsForm = ({
-  assignment,
+const EditExerciseLimitsForm = ({
+  exercise,
   runtimeEnvironments,
   initialValues,
   anyTouched,
@@ -20,7 +20,7 @@ const EditAssignmentLimitsForm = ({
   <div>
     {hasFailed && (
       <Alert bsStyle='danger'>
-        <FormattedMessage id='app.editAssignmentLimitsForm.failed' defaultMessage='Saving failed. Please try again later.' />
+        <FormattedMessage id='app.editExerciseLimitsForm.failed' defaultMessage='Saving failed. Please try again later.' />
       </Alert>)}
 
     <FieldArray
@@ -31,6 +31,7 @@ const EditAssignmentLimitsForm = ({
 
     <div className='text-center'>
       <SubmitButton
+        id='editExerciseLimits'
         invalid={invalid}
         submitting={submitting}
         hasSucceeded={hasSucceeded}
@@ -38,21 +39,21 @@ const EditAssignmentLimitsForm = ({
         hasFailed={hasFailed}
         handleSubmit={handleSubmit}
         messages={{
-          submit: <FormattedMessage id='app.editAssignmentLimitsForm.submit' defaultMessage='Change limits' />,
-          submitting: <FormattedMessage id='app.editAssignmentLimitsForm.submitting' defaultMessage='Saving limits ...' />,
-          success: <FormattedMessage id='app.editAssignmentLimitsForm.success' defaultMessage='Limits were saved.' />
+          submit: <FormattedMessage id='app.editExerciseLimitsForm.submit' defaultMessage='Change limits' />,
+          submitting: <FormattedMessage id='app.editExerciseLimitsForm.submitting' defaultMessage='Saving limits ...' />,
+          success: <FormattedMessage id='app.editExerciseLimitsForm.success' defaultMessage='Limits were saved.' />
         }} />
     </div>
   </div>
 );
 
-EditAssignmentLimitsForm.propTypes = {
+EditExerciseLimitsForm.propTypes = {
   initialValues: PropTypes.object.isRequired,
   runtimeEnvironments: PropTypes.object.isRequired,
   values: PropTypes.array,
   handleSubmit: PropTypes.func.isRequired,
   anyTouched: PropTypes.bool,
-  assignment: PropTypes.object,
+  exercise: PropTypes.object,
   submitting: PropTypes.bool,
   hasFailed: PropTypes.bool,
   hasSucceeded: PropTypes.bool,
@@ -65,7 +66,7 @@ const validate = ({ environments }) => {
   environments.forEach((env, i) => {
     const envErrors = { environment: {}, limits: [] };
     if (env.environment.name.length === 0) {
-      envErrors.environment.name = <FormattedMessage id='app.editAssignmentLimitsForm.validation.envName' defaultMessage='Please fill environment name.' />;
+      envErrors.environment.name = <FormattedMessage id='app.editExerciseLimitsForm.validation.envName' defaultMessage='Please fill environment name.' />;
     }
 
     // validate limits for all hardware groups
@@ -79,17 +80,17 @@ const validate = ({ environments }) => {
 
           if (time.toString().indexOf(',') >= 0) {
             // the czech and some other number systems use decimal comas in real numbers
-            taskErrors.time = <FormattedMessage id='app.editAssignmentLimitsForm.validation.useDotDecimalSeparator' defaultMessage='Please use a dot as a decimal separator instead of the comma.' />;
+            taskErrors.time = <FormattedMessage id='app.editExerciseLimitsForm.validation.useDotDecimalSeparator' defaultMessage='Please use a dot as a decimal separator instead of the comma.' />;
           } else if (parseFloat(time) !== Number(time)) {
-            taskErrors.time = <FormattedMessage id='app.editAssignmentLimitsForm.validation.timeIsNotNumer' defaultMessage='Time limit must be a real number.' />;
+            taskErrors.time = <FormattedMessage id='app.editExerciseLimitsForm.validation.timeIsNotNumer' defaultMessage='Time limit must be a real number.' />;
           } else if (Number(time) <= 0) {
-            taskErrors.time = <FormattedMessage id='app.editAssignmentLimitsForm.validation.timeLimit' defaultMessage='Time limit must be a positive real number.' />;
+            taskErrors.time = <FormattedMessage id='app.editExerciseLimitsForm.validation.timeLimit' defaultMessage='Time limit must be a positive real number.' />;
           }
 
           if (parseInt(memory) !== Number(memory)) {
-            taskErrors.memory = <FormattedMessage id='app.editAssignmentLimitsForm.validation.memoryIsNotNumer' defaultMessage='Memory limit must be an integer.' />;
+            taskErrors.memory = <FormattedMessage id='app.editExerciseLimitsForm.validation.memoryIsNotNumer' defaultMessage='Memory limit must be an integer.' />;
           } else if (Number(memory) <= 0) {
-            taskErrors.memory = <FormattedMessage id='app.editAssignmentLimitsForm.validation.memoryLimit' defaultMessage='Memory limit must be a positive integer.' />;
+            taskErrors.memory = <FormattedMessage id='app.editExerciseLimitsForm.validation.memoryLimit' defaultMessage='Memory limit must be a positive integer.' />;
           }
           testErrors[taskId] = taskErrors;
         }
@@ -104,6 +105,6 @@ const validate = ({ environments }) => {
 };
 
 export default reduxForm({
-  form: 'editAssignmentLimits',
+  form: 'editExerciseLimits',
   validate
-})(EditAssignmentLimitsForm);
+})(EditExerciseLimitsForm);

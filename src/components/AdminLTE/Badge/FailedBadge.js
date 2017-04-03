@@ -1,4 +1,5 @@
 import React from 'react';
+import { FormattedMessage } from 'react-intl';
 import { FailedAvatar } from '../Avatar';
 
 const FailedBadge = (props) => (
@@ -7,7 +8,10 @@ const FailedBadge = (props) => (
       <FailedAvatar {...props} />
     </div>
     <div className='pull-left info'>
-      <p>Chyba načítání dat :-(</p>
+      <p><FormattedMessage id='app.badge.failedLoading' defaultMessage='Failed to load the data' /></p>
+      <p>
+        <FormattedMessage id='app.badge.failedLoadingInfo' defaultMessage='Please check your Internet connection.' />
+      </p>
     </div>
   </div>
 );

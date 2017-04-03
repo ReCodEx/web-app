@@ -24,6 +24,7 @@ const BonusPointsForm = ({
     footer={
       <div className='text-center'>
         <SubmitButton
+          id='bonus-points'
           handleSubmit={handleSubmit}
           submitting={submitting}
           dirty={anyTouched}

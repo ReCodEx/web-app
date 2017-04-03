@@ -64,17 +64,27 @@ export const createApiCallPromise = ({
   let call = createRequest(endpoint, query, method, headers, body)
     .catch(err => {
       if (err.message && err.message === 'Failed to fetch') {
-        return dispatch(
+        dispatch(
           addNotification('The API server is unreachable. Please check your Internet connection.', false)
         );
       } else {
         throw err;
       }
+    })
+    .then(res => {
+      if (!res || typeof res.json !== 'function') {
+        if (process.env.NODE_ENV === 'development' && dispatch) {
+          dispatch(addNotification('Server response is not a JSON.', false));
+        }
+      } else {
+        return res;
+      }
     });
 
   // this processing can be manually skipped
   if (doNotProcess !== true) {
-    call = call.then(res => res.json())
+    call = call
+      .then(res => res.json())
       .then(({
         success = true,
         code,
