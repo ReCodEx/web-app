@@ -7,11 +7,17 @@ export const exercisesSelector = createSelector(getExercises, getResources);
 export const exerciseSelector = exerciseId =>
   createSelector(
     exercisesSelector,
-    exercises => exercises.find(exercise => exercise.getIn(['data', 'id']) === exerciseId)
+    exercises => exercises.get(exerciseId)
   );
 
 export const getExercise = (id) =>
   createSelector(
     getExercises,
-    exercises => exercises.getIn([ 'resources', id, ])
+    exercises => exercises.getIn([ 'resources', id ])
+  );
+
+export const getFork = (id, forkId) =>
+  createSelector(
+    getExercise(id),
+    exercise => exercise.getIn([ 'data', 'forks', forkId ])
   );

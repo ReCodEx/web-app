@@ -2,6 +2,7 @@ import React, { PropTypes } from 'react';
 import { FormattedMessage, FormattedNumber, FormattedTime, FormattedDate } from 'react-intl';
 import { Table, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import ReactMarkdown from 'react-markdown';
+import { Link } from 'react-router';
 import Box from '../../AdminLTE/Box';
 import DifficultyIcon from '../DifficultyIcon';
 import { MaybeSucceededIcon } from '../../Icons';
@@ -17,8 +18,11 @@ const ExerciseDetail = ({
   createdAt,
   updatedAt,
   version,
+  forkedFrom = null,
   localizedTexts,
   runtimeConfigs
+}, {
+  links: { EXERCISE_URI_FACTORY }
 }) => (
   <Box title={name} noPadding>
     <Table>
@@ -45,8 +49,18 @@ const ExerciseDetail = ({
         </tr>
         <tr>
           <th><FormattedMessage id='app.exercise.version' defaultMessage='Version:' /></th>
-          <td><FormattedNumber value={version} /></td>
+          <td>v<FormattedNumber value={version} /></td>
         </tr>
+        {forkedFrom && (
+          <tr>
+            <th><FormattedMessage id='app.exercise.forked' defaultMessage='Forked from:' /></th>
+            <td>
+              <Link to={EXERCISE_URI_FACTORY(forkedFrom.id)}>
+                {forkedFrom.name} (v<FormattedNumber value={forkedFrom.version} />)
+              </Link>
+            </td>
+          </tr>
+        )}
         <tr>
           <th><FormattedMessage id='app.exercise.runtimes' defaultMessage='Supported runtime environments:' /></th>
           <td>
@@ -81,8 +95,13 @@ ExerciseDetail.propTypes = {
   createdAt: PropTypes.number.isRequired,
   updatedAt: PropTypes.number.isRequired,
   version: PropTypes.number.isRequired,
+  forkedFrom: PropTypes.object,
   localizedTexts: PropTypes.array.isRequired,
   runtimeConfigs: PropTypes.array.isRequired
+};
+
+ExerciseDetail.contextTypes = {
+  links: PropTypes.object
 };
 
 export default ExerciseDetail;

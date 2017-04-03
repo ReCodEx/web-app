@@ -1,4 +1,5 @@
 import { handleActions } from 'redux-actions';
+import { Map } from 'immutable';
 import factory, { initialState } from '../helpers/resourceManager';
 import { createApiAction } from '../middleware/apiMiddleware';
 
@@ -13,11 +14,11 @@ const {
  */
 
 export const additionalActionTypes = {
-  VALIDATE_EXERCISE: 'VALIDATE_EXERCISE',
-  FORK_EXERCISE: 'FORK_EXERCISE',
-  FORK_EXERCISE_PENDING: 'FORK_EXERCISE_PENDING',
-  FORK_EXERCISE_REJECTED: 'FORK_EXERCISE_REJECTED',
-  FORK_EXERCISE_FULFILLED: 'FORK_EXERCISE_FULFILLED'
+  VALIDATE_EXERCISE: 'recodex/exercises/VALIDATE_EXERCISE',
+  FORK_EXERCISE: 'recodex/exercises/FORK_EXERCISE',
+  FORK_EXERCISE_PENDING: 'recodex/exercises/FORK_EXERCISE_PENDING',
+  FORK_EXERCISE_REJECTED: 'recodex/exercises/FORK_EXERCISE_REJECTED',
+  FORK_EXERCISE_FULFILLED: 'recodex/exercises/FORK_EXERCISE_FULFILLED'
 };
 
 export const loadExercise = actions.pushResource;
@@ -33,7 +34,7 @@ export const fetchExercises = () =>
 export const forkStatuses = {
   PENDING: 'PENDING',
   REJECTED: 'REJECTED',
-  FULFILLED: 'FULLFILLED'
+  FULFILLED: 'FULFILLED'
 };
 
 export const forkExercise = (id, forkId) =>
@@ -51,9 +52,9 @@ export const deleteExercise = actions.removeResource;
 
 export const validateExercise = (id, version) =>
   createApiAction({
-    type: 'VALIDATE_EXERCISE',
+    type: additionalActionTypes.VALIDATE_EXERCISE,
     endpoint: `/exercises/${id}/validate`,
-    method: 'POST',
+    method: 'GET',
     body: { version }
   });
 
@@ -66,10 +67,10 @@ const reducer = handleActions(Object.assign({}, reduceActions, {
   [additionalActionTypes.FORK_EXERCISE_PENDING]: (state, { meta: {id, forkId} }) =>
     state.updateIn(['resources', id, 'data'], exercise => {
       if (!exercise.has('forks')) {
-        exercise = exercise.set('forks', new Map());
+        exercise = exercise.set('forks', Map());
       }
 
-      return exercise.update('forks', fork => fork.set(forkId, { status: forkStatuses.PENDING }));
+      return exercise.update('forks', forks => forks.set(forkId, { status: forkStatuses.PENDING }));
     }),
 
   [additionalActionTypes.FORK_EXERCISE_REJECTED]: (state, { meta: {id, forkId} }) =>

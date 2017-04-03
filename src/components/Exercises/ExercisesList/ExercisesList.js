@@ -14,14 +14,17 @@ const ExercisesList = ({
       <tr>
         <th></th>
         <th><FormattedMessage id='app.exercisesList.name' defaultMessage='Name' /></th>
-        <th><FormattedMessage id='app.exercisesList.difficulty' defaultMessage='Difficulty' /></th>
         <th><FormattedMessage id='app.exercisesList.author' defaultMessage='Author' /></th>
+        <th><FormattedMessage id='app.exercisesList.difficulty' defaultMessage='Difficulty' /></th>
+        <th><FormattedMessage id='app.exercisesList.created' defaultMessage='Created' /></th>
       </tr>
     </thead>
     <tbody>
-    {exercises.map(exercise => (
-      <ExercisesListItem {...exercise} createActions={createActions} key={exercise.id} />
-    ))}
+    {exercises
+      .sort((a, b) => a.name < b.name ? -1 : b.name < a.name ? 1 : b.createdAt - a.createdAt)
+      .map(exercise => (
+        <ExercisesListItem {...exercise} createActions={createActions} key={exercise.id} />
+      ))}
 
     {exercises.length === 0 && (
       <tr>
