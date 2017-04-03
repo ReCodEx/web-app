@@ -4,7 +4,7 @@ import { fromJS } from 'immutable';
 import reducer, { additionalActionTypes, forkExercise, forkStatuses } from '../../../src/redux/modules/exercises';
 
 describe('exercises', () => {
-  describe.only('forking', () => {
+  describe('forking', () => {
     const id = 'abcde';
     const forkId = 'edcba';
     const initialState = fromJS({
