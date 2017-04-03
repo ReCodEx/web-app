@@ -44,6 +44,7 @@ const EditExerciseForm = ({
   submitFailed: hasFailed,
   submitSucceeded: hasSucceeded,
   invalid,
+  asyncValidating,
   formValues: {
     localizedTexts
   } = {},
@@ -56,16 +57,19 @@ const EditExerciseForm = ({
     footer={
       <div className='text-center'>
         <SubmitButton
+          id='editExercise'
           invalid={invalid}
           submitting={submitting}
           dirty={anyTouched}
           hasSucceeded={hasSucceeded}
           hasFailed={hasFailed}
           handleSubmit={handleSubmit}
+          asyncValidating={asyncValidating}
           messages={{
             submit: <FormattedMessage id='app.editExerciseForm.submit' defaultMessage='Save changes' />,
             submitting: <FormattedMessage id='app.editExerciseForm.submitting' defaultMessage='Saving changes ...' />,
-            success: <FormattedMessage id='app.editExerciseForm.success' defaultMessage='Settings were saved.' />
+            success: <FormattedMessage id='app.editExerciseForm.success' defaultMessage='Settings were saved.' />,
+            validating: <FormattedMessage id='app.editExerciseForm.validating' defaultMessage='Validating...' />
           }} />
       </div>
     }>
@@ -118,6 +122,7 @@ EditExerciseForm.propTypes = {
   submitFailed: PropTypes.bool,
   submitSucceeded: PropTypes.bool,
   invalid: PropTypes.bool,
+  asyncValidating: PropTypes.oneOfType([ PropTypes.bool, PropTypes.string ]),
   formValues: PropTypes.shape({
     localizedTexts: PropTypes.array
   })

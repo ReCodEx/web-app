@@ -22,6 +22,7 @@ class CreateGroupForm extends Component {
       submitSucceeded = false,
       submitFailed = false,
       anyTouched = false,
+      asyncValidating = false,
       invalid = false,
       submitting = false
     } = this.props;
@@ -35,6 +36,7 @@ class CreateGroupForm extends Component {
         footer={
           <div className='text-center'>
             <SubmitButton
+              id='createGroup'
               handleSubmit={handleSubmit}
               tabIndex={3}
               submitting={submitting}
@@ -42,6 +44,7 @@ class CreateGroupForm extends Component {
               dirty={anyTouched}
               hasFailed={submitFailed}
               hasSuceeded={submitSucceeded}
+              asyncValidating={asyncValidating}
               messages={{
                 success: <FormattedMessage id='app.createGroupForm.success' defaultMessage='Group has been created' />,
                 submit: <FormattedMessage id='app.createGroupForm.createGroup' defaultMessage='Create new group' />,
@@ -99,6 +102,7 @@ CreateGroupForm.propTypes = {
   submitFailed: PropTypes.bool,
   submitSucceeded: PropTypes.bool,
   anyTouched: PropTypes.bool,
+  asyncValidating: PropTypes.oneOfType([ PropTypes.bool, PropTypes.string ]),
   invalid: PropTypes.bool,
   submitting: PropTypes.bool,
   parentGroupId: PropTypes.string

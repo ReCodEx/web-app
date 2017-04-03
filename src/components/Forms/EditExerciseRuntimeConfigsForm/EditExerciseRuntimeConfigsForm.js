@@ -36,6 +36,7 @@ const EditExerciseRuntimeConfigsForm = ({
 
     <div className='text-center'>
       <SubmitButton
+        id='editExerciseRuntimConfigs'
         invalid={invalid}
         submitting={submitting}
         dirty={anyTouched}

@@ -21,6 +21,7 @@ const EditUserSettingsForm = ({
     footer={
       <div className='text-center'>
         <SubmitButton
+          id='editUserSettings'
           handleSubmit={handleSubmit}
           submitting={submitting}
           hasSucceeded={submitSucceeded}

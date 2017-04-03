@@ -23,6 +23,7 @@ const EditInstanceForm = ({
     footer={
       <div className='text-center'>
         <SubmitButton
+          id='editInstance'
           handleSubmit={handleSubmit}
           submitting={submitting}
           hasSucceeded={submitSucceeded}

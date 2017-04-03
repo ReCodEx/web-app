@@ -23,6 +23,7 @@ const EditAssignmentForm = ({
   handleSubmit,
   submitFailed: hasFailed,
   submitSucceeded: hasSucceeded,
+  asyncValidating,
   invalid,
   formValues: {
     firstDeadline,
@@ -39,12 +40,14 @@ const EditAssignmentForm = ({
       footer={
         <div className='text-center'>
           <SubmitButton
+            id='editAssignmentForm'
             invalid={invalid}
             submitting={submitting}
             dirty={anyTouched}
             hasSucceeded={hasSucceeded}
             hasFailed={hasFailed}
             handleSubmit={handleSubmit}
+            asyncValidating={asyncValidating}
             messages={{
               submit: <FormattedMessage id='app.editAssignmentForm.submit' defaultMessage='Save settings' />,
               submitting: <FormattedMessage id='app.editAssignmentForm.submitting' defaultMessage='Saving changes ...' />,
@@ -158,6 +161,7 @@ EditAssignmentForm.propTypes = {
   submitting: PropTypes.bool,
   submitFailed: PropTypes.bool,
   submitSucceeded: PropTypes.bool,
+  asyncValidating: PropTypes.oneOfType([ PropTypes.bool, PropTypes.string ]),
   invalid: PropTypes.bool,
   formValues: PropTypes.shape({
     firstDeadline: PropTypes.oneOfType([ PropTypes.number, PropTypes.object ]), // object == moment.js instance

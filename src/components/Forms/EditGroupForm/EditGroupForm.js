@@ -21,6 +21,7 @@ const EditGroupForm = ({
     footer={
       <div className='text-center'>
         <SubmitButton
+          id='editGroup'
           handleSubmit={handleSubmit}
           submitting={submitting}
           dirty={anyTouched}
