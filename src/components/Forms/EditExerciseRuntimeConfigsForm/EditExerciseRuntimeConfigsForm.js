@@ -34,7 +34,7 @@ const EditExerciseRuntimeConfigsForm = ({
       runtimeConfigs={runtimeConfigs}
       component={EditRuntimeConfigForm} />
 
-    <div className='text-center'>
+    <p className='text-center'>
       <SubmitButton
         id='editExerciseRuntimConfigs'
         invalid={invalid}
@@ -48,7 +48,7 @@ const EditExerciseRuntimeConfigsForm = ({
           submitting: <FormattedMessage id='app.editExerciseRuntimeConfigsForm.submitting' defaultMessage='Saving runtime configurations ...' />,
           success: <FormattedMessage id='app.editExerciseRuntimeConfigsForm.success' defaultMessage='Runtime configurations were saved.' />
         }} />
-    </div>
+    </p>
   </div>
 );
 

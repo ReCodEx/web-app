@@ -82,22 +82,33 @@ class EditExercise extends Component {
                   formValues={formValues} />
               </Col>
               <Col lg={6}>
-                <SupplementaryFilesTableContainer exerciseId={exerciseId} />
-                <EditExerciseRuntimeConfigsForm
-                  runtimeEnvironments={runtimeEnvironments}
-                  runtimeConfigs={runtimesFormValues ? runtimesFormValues.runtimeConfigs : [{}]}
-                  initialValues={{runtimeConfigs: exercise.runtimeConfigs}}
-                  onSubmit={editRuntimeConfigs} />
-
-                <ResourceRenderer resource={environments}>
-                  {environments => (
-                    <EditExerciseLimitsForm
-                      initialValues={environments}
+                <Row>
+                  <Col lg={12}>
+                    <SupplementaryFilesTableContainer exerciseId={exerciseId} />
+                  </Col>
+                </Row>
+                <Row>
+                  <Col lg={12}>
+                    <EditExerciseRuntimeConfigsForm
                       runtimeEnvironments={runtimeEnvironments}
-                      exercise={exercise}
-                      onSubmit={editLimits} />
-                  )}
-                </ResourceRenderer>
+                      runtimeConfigs={runtimesFormValues ? runtimesFormValues.runtimeConfigs : [{}]}
+                      initialValues={{runtimeConfigs: exercise.runtimeConfigs}}
+                      onSubmit={editRuntimeConfigs} />
+                  </Col>
+                </Row>
+                <Row>
+                  <Col lg={12}>
+                    <ResourceRenderer resource={environments}>
+                      {environments => (
+                        <EditExerciseLimitsForm
+                          initialValues={environments}
+                          runtimeEnvironments={runtimeEnvironments}
+                          exercise={exercise}
+                          onSubmit={editLimits} />
+                      )}
+                    </ResourceRenderer>
+                  </Col>
+                </Row>
               </Col>
             </Row>
             <br />

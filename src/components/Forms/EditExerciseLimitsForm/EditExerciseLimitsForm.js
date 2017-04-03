@@ -29,7 +29,7 @@ const EditExerciseLimitsForm = ({
       runtimeEnvironments={runtimeEnvironments}
       component={EditEnvironmentLimitsForm} />
 
-    <div className='text-center'>
+    <p className='text-center'>
       <SubmitButton
         id='editExerciseLimits'
         invalid={invalid}
@@ -43,7 +43,7 @@ const EditExerciseLimitsForm = ({
           submitting: <FormattedMessage id='app.editExerciseLimitsForm.submitting' defaultMessage='Saving limits ...' />,
           success: <FormattedMessage id='app.editExerciseLimitsForm.success' defaultMessage='Limits were saved.' />
         }} />
-    </div>
+    </p>
   </div>
 );
 
