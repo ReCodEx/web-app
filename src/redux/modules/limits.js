@@ -7,7 +7,7 @@ const {
   reduceActions
 } = factory({
   resourceName,
-  apiEndpointFactory: id => `/exercise-assignments/${id}/limits`
+  apiEndpointFactory: id => `/exercises/${id}/limits`
 });
 
 /**
