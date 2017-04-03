@@ -19,6 +19,14 @@ export const fetchReferenceSolution = actions.fetchResource;
 export const fetchReferenceSolutionIfNeeded = actions.fetchOneIfNeeded;
 export const fetchReferenceSolutionsIfNeeded = actions.fetchIfNeeded;
 
+export const evaluateReferenceSolution = (exerciseId, solutionId, hwGroup) =>
+  createApiAction({
+    endpoint: `/reference-solutions/${exerciseId}/evaluate/${solutionId}`,
+    method: 'POST',
+    meta: { exerciseId, solutionId },
+    body: { hwGroup }
+  });
+
 
 /**
  * Reducer

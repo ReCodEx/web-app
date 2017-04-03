@@ -16,7 +16,8 @@ import Box from '../../components/AdminLTE/Box';
 import { EditIcon, SendIcon } from '../../components/Icons';
 
 import { fetchExerciseIfNeeded } from '../../redux/modules/exercises';
-import { fetchReferenceSolutionsIfNeeded } from '../../redux/modules/referenceSolutions';
+import { fetchReferenceSolutionsIfNeeded, evaluateReferenceSolution } from '../../redux/modules/referenceSolutions';
+import { fetchHardwareGroups } from '../../redux/modules/hwGroups';
 import { create as assignExercise } from '../../redux/modules/assignments';
 import { exerciseSelector } from '../../redux/selectors/exercises';
 import { referenceSolutionsSelector } from '../../redux/selectors/referenceSolutions';
@@ -60,6 +61,17 @@ class Exercise extends Component {
 
     assignExercise(groupId)
       .then(({ value: assigment }) => push(ASSIGNMENT_EDIT_URI_FACTORY(assigment.id)));
+  };
+
+  evaluateSolution = (solutionId) => {
+    const { evaluateReferenceSolution, fetchHardwareGroupsIfNeeded } = this.props;
+
+    fetchHardwareGroupsIfNeeded()
+      .then(({value}) => {
+        value.map(({id}) =>
+          evaluateReferenceSolution(solutionId, id)
+        )
+      });
   };
 
   render() {
@@ -145,7 +157,7 @@ class Exercise extends Component {
                         <ReferenceSolutionsList
                           referenceSolutions={referenceSolutions}
                           renderButtons={referenceSolutionId => (
-                            <Button bsSize='xs' className='btn-flat' onClick={() => {}}>
+                            <Button bsSize='xs' className='btn-flat' onClick={() => this.evaluateSolution(referenceSolutionId)} >
                               <SendIcon /> <FormattedMessage id='app.exercise.evaluateReferenceSolution' defaultMessage='Evaluate' />
                             </Button>
                           )} />
@@ -175,6 +187,8 @@ Exercise.propTypes = {
   supervisedGroups: PropTypes.object,
   isAuthorOfExercise: PropTypes.func.isRequired,
   referenceSolutions: ImmutablePropTypes.map,
+  evaluateReferenceSolution: PropTypes.func.isRequired,
+  fetchHardwareGroupsIfNeeded: PropTypes.func.isRequired,
   intl: intlShape.isRequired
 };
 
@@ -191,6 +205,8 @@ export default injectIntl(connect(
   (dispatch, { params: { exerciseId } }) => ({
     loadAsync: () => Exercise.loadAsync({ exerciseId }, dispatch),
     assignExercise: (groupId) => dispatch(assignExercise(groupId, exerciseId)),
-    push: (url) => dispatch(push(url))
+    push: (url) => dispatch(push(url)),
+    evaluateReferenceSolution: (solutionId, hwGroup) => dispatch(evaluateReferenceSolution(exerciseId, solutionId, hwGroup)),
+    fetchHardwareGroupsIfNeeded: () => dispatch(fetchHardwareGroups())
   })
 )(Exercise));
