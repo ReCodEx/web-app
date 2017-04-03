@@ -36,6 +36,7 @@ class Box extends Component {
   render() {
     const {
       title,
+      description = null,
       type = 'default',
       noPadding = false,
       children,
@@ -68,6 +69,9 @@ class Box extends Component {
           )}
         </div>
         <Collapse isOpened={isOpen}>
+          {description && (
+            <div className={styles.description}>{description}</div>
+          )}
           <div className={
             classNames({
               'box-body': true,
@@ -95,6 +99,11 @@ Box.propTypes = {
     PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) }),
     PropTypes.element
   ]).isRequired,
+  description: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) }),
+    PropTypes.element
+  ]),
   type: PropTypes.string,
   isOpen: PropTypes.bool,
   collapsable: PropTypes.bool,
