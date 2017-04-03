@@ -21,6 +21,7 @@ export const fetchReferenceSolutionsIfNeeded = actions.fetchIfNeeded;
 
 export const evaluateReferenceSolution = (exerciseId, solutionId, hwGroup) =>
   createApiAction({
+    type: 'SUBMIT_REFERENCE_SOLUTION',
     endpoint: `/reference-solutions/${exerciseId}/evaluate/${solutionId}`,
     method: 'POST',
     meta: { exerciseId, solutionId },

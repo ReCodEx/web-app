@@ -1,6 +1,5 @@
 import { handleActions } from 'redux-actions';
 import factory, { initialState } from '../helpers/resourceManager';
-import { createApiAction } from '../middleware/apiMiddleware';
 
 const resourceName = 'hwGroups';
 const {
@@ -12,7 +11,6 @@ const {
  * Actions
  */
 
-export const fetchHardwareGroupsIfNeeded = actions.fetchIfNeeded;
 export const fetchHardwareGroup = actions.fetchResource;
 export const fetchHardwareGroupIfNeeded = actions.fetchOneIfNeeded;
 
