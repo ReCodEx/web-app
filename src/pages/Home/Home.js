@@ -41,7 +41,15 @@ const Home = () => (
           </p>
         </Col>
         <Col sm={6}>
-
+          <h2><FormattedMessage id='app.homepage.androidApp' defaultMessage='Android App' /></h2>
+          <p>
+            <FormattedHTMLMessage id='app.homepage.aboutAndroidApp' defaultMessage='We have also developed a simple Android app which can help you check new assignments and your statistics while you are on a tram or a bus.' />
+          </p>
+          <p>
+            <a href='https://play.google.com/store/apps/details?id=io.github.recodex.android&amp;pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'>
+              <img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png' width={181} />
+            </a>
+          </p>
         </Col>
       </Row>
     </div>
