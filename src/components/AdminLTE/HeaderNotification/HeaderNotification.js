@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { Tooltip, OverlayTrigger } from 'react-bootstrap';
+import { Tooltip, OverlayTrigger, Badge } from 'react-bootstrap';
 import { FormattedDate, FormattedTime } from 'react-intl';
 import { SuccessIcon, WarningIcon, DeleteIcon } from '../../Icons';
 
@@ -13,7 +13,8 @@ class HeaderNotification extends Component {
       successful = true,
       msg,
       hide = null,
-      time
+      time,
+      count
     } = this.props;
 
     const deleteOnClick = hide && this.state.hovering;
@@ -41,7 +42,10 @@ class HeaderNotification extends Component {
               : successful
                 ? <SuccessIcon />
                 : <WarningIcon />}
-            <span>{msg}</span>
+            <span>
+              {count > 1 && <Badge pullRight>{count}</Badge>}
+              {msg}
+            </span>
           </a>
         </OverlayTrigger>
       </li>
@@ -55,6 +59,7 @@ HeaderNotification.propTypes = {
   successful: PropTypes.bool,
   msg: PropTypes.string.isRequired,
   time: PropTypes.number.isRequired,
+  count: PropTypes.number.isRequired,
   hide: PropTypes.func
 };
 

@@ -65,7 +65,9 @@ class HeaderNotificationsContainer extends Component {
   open = () => this.setState({ isOpen: true });
 
   componentWillReceiveProps = (newProps) => {
-    if (this.props.newNotifications.size === newProps.newNotifications.size - 1) {
+    const oldVisible = this.props.newNotifications.reduce((acc, notification) => acc + notification.count, 0);
+    const newVisible = newProps.newNotifications.reduce((acc, notification) => acc + notification.count, 0);
+    if (oldVisible !== newVisible) {
       this.setState({ isOpen: true }); // force open the notifications dropdown - there are some new notifications
     }
   };
