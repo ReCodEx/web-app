@@ -24,7 +24,7 @@ class SubmitButton extends Component {
       dirty,
       hasFailed,
       invalid,
-      asyncValidating,
+      asyncValidating = false,
       messages: {
         submit: submitMsg = <FormattedMessage id='app.editExerciseForm.submit' defaultMessage='Submit' />,
         success: successMsg = <FormattedMessage id='app.editExerciseForm.success' defaultMessage='Successfully submitted' />,
