@@ -18,7 +18,7 @@ import { EditIcon, SendIcon } from '../../components/Icons';
 import ForkExerciseButtonContainer from '../../containers/ForkExerciseButtonContainer';
 
 import { fetchExerciseIfNeeded } from '../../redux/modules/exercises';
-import { fetchReferenceSolutionsIfNeeded, evaluateReferenceSolution } from '../../redux/modules/referenceSolutions';
+import { fetchReferenceSolutionsIfNeeded } from '../../redux/modules/referenceSolutions';
 import { fetchHardwareGroups } from '../../redux/modules/hwGroups';
 import { create as assignExercise } from '../../redux/modules/assignments';
 import { exerciseSelector } from '../../redux/selectors/exercises';
@@ -76,10 +76,6 @@ class Exercise extends Component {
       .then(({ value: assigment }) => push(ASSIGNMENT_EDIT_URI_FACTORY(assigment.id)));
   };
 
-  evaluateSolution = (solutionId) => {
-    const { evaluateReferenceSolution, hardwareGroupsIds } = this.props;
-    hardwareGroupsIds.map(id => evaluateReferenceSolution(solutionId, id));
-  };
 
   render() {
     const {
@@ -87,7 +83,8 @@ class Exercise extends Component {
       supervisedGroups,
       isAuthorOfExercise,
       referenceSolutions,
-      intl: { formatMessage }
+      intl: { formatMessage },
+      push
     } = this.props;
 
     const {
@@ -95,7 +92,7 @@ class Exercise extends Component {
     } = this.state;
 
     const {
-      links: { EXERCISES_URI, EXERCISE_EDIT_URI_FACTORY }
+      links: { EXERCISES_URI, EXERCISE_EDIT_URI_FACTORY, EXERCISE_REFERENCE_SOLUTION_URI_FACTORY }
     } = this.context;
 
     return (
@@ -167,8 +164,8 @@ class Exercise extends Component {
                         <ReferenceSolutionsList
                           referenceSolutions={referenceSolutions}
                           renderButtons={referenceSolutionId => (
-                            <Button bsSize='xs' className='btn-flat' onClick={() => this.evaluateSolution(referenceSolutionId)} >
-                              <SendIcon /> <FormattedMessage id='app.exercise.evaluateReferenceSolution' defaultMessage='Evaluate' />
+                            <Button bsSize='xs' className='btn-flat' onClick={() => push(EXERCISE_REFERENCE_SOLUTION_URI_FACTORY(exercise.id, referenceSolutionId))} >
+                              <SendIcon /> <FormattedMessage id='app.exercise.referenceSolutionDetail' defaultMessage='View detail' />
                             </Button>
                           )} />
                       </Box>
@@ -197,7 +194,6 @@ Exercise.propTypes = {
   supervisedGroups: PropTypes.object,
   isAuthorOfExercise: PropTypes.func.isRequired,
   referenceSolutions: ImmutablePropTypes.map,
-  evaluateReferenceSolution: PropTypes.func.isRequired,
   hardwareGroupsIds: PropTypes.array,
   intl: intlShape.isRequired
 };
@@ -216,7 +212,6 @@ export default injectIntl(connect(
   (dispatch, { params: { exerciseId } }) => ({
     loadAsync: () => Exercise.loadAsync({ exerciseId }, dispatch),
     assignExercise: (groupId) => dispatch(assignExercise(groupId, exerciseId)),
-    push: (url) => dispatch(push(url)),
-    evaluateReferenceSolution: (solutionId, hwGroup) => dispatch(evaluateReferenceSolution(exerciseId, solutionId, hwGroup))
+    push: (url) => dispatch(push(url))
   })
 )(Exercise));
