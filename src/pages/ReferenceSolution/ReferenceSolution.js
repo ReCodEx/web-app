@@ -1,7 +1,11 @@
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { FormattedMessage, defineMessages, intlShape, injectIntl } from 'react-intl';
-import PageContent from '../../components/PageContent';
+import ImmutablePropTypes from 'react-immutable-proptypes';
+import Page from '../../components/Page';
+
+import { fetchReferenceSolutionsIfNeeded } from '../../redux/modules/referenceSolutions';
+import { referenceSolutionsSelector } from '../../redux/selectors/referenceSolutions';
 
 
 const messages = defineMessages({
@@ -13,23 +17,24 @@ const messages = defineMessages({
 
 class ReferenceSolution extends Component {
 
-  static loadAsync = ({  }, dispatch) => {
-
-  }
+  static loadAsync = ({ exerciseId }, dispatch) => Promise.all([
+    dispatch(fetchReferenceSolutionsIfNeeded(exerciseId))
+  ]);
 
   componentWillMount() {
     this.props.loadAsync();
   }
 
   componentWillReceiveProps(newProps) {
-    //if (this.props.params.submissionId !== newProps.params.submissionId) {
+    if (this.props.params.referenceSolutionId !== newProps.params.referenceSolutionId) {
       newProps.loadAsync();
-    //}
+    }
   }
 
   render() {
     const {
-      params: { exerciseId },
+      referenceSolutions,
+      params: { exerciseId, referenceSolutionId },
       intl: { formatMessage }
     } = this.props;
 
@@ -38,8 +43,9 @@ class ReferenceSolution extends Component {
     } = this.context;
 
     return (
-      <PageContent
+      <Page
         title={formatMessage(messages.title)}
+        resource={referenceSolutions}
         description={<FormattedMessage id='app.exercise.description' defaultMessage='Exercise overview' />}
         breadcrumbs={[
           {
@@ -57,8 +63,11 @@ class ReferenceSolution extends Component {
             iconName: 'diamond'
           }
         ]}>
-
-      </PageContent>
+          {referenceSolutions => {
+            const referenceSolution = referenceSolutions.find(solution => solution.id === referenceSolutionId);
+            return (<div>{referenceSolution.description}</div>)
+          }}
+      </Page>
     );
   }
 
@@ -74,11 +83,13 @@ ReferenceSolution.propTypes = {
   params: PropTypes.shape({
     exerciseId: PropTypes.string.isRequired,
     referenceSolutionId: PropTypes.string.isRequired
-  }).isRequired
+  }).isRequired,
+  referenceSolutions: ImmutablePropTypes.map
 };
 
 export default injectIntl(connect(
   (state, { params: { exerciseId, referenceSolutionId } }) => ({
+    referenceSolutions: referenceSolutionsSelector(exerciseId)(state)
   }),
   (dispatch, { params }) => ({
     loadAsync: () => ReferenceSolution.loadAsync(params, dispatch)

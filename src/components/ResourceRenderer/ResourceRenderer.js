@@ -50,7 +50,7 @@ const ResourceRenderer = ({
             .filter((res) => !isDeleted(res))
             .filter((res) => !isPosting(res))
             .map(getJsData)
-        ); // display all rady items
+        ); // display all ready items
 };
 
 ResourceRenderer.propTypes = {

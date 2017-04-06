@@ -15,9 +15,8 @@ const {
  * Actions
  */
 
-export const fetchReferenceSolution = actions.fetchResource;
-export const fetchReferenceSolutionIfNeeded = actions.fetchOneIfNeeded;
-export const fetchReferenceSolutionsIfNeeded = actions.fetchIfNeeded;
+export const fetchReferenceSolutions = actions.fetchResource;
+export const fetchReferenceSolutionsIfNeeded = actions.fetchOneIfNeeded; // fetch solutions for one exercise
 
 export const evaluateReferenceSolution = (exerciseId, solutionId, hwGroup) =>
   createApiAction({
