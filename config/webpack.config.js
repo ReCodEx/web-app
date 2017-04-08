@@ -5,6 +5,13 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 // load variables from .env
 require('dotenv').config();
 
+// fix Widnows 10 Ubuntu issues with less loader:
+try {
+  require('os').networkInterfaces();
+} catch (e) {
+  require('os').networkInterfaces = () => ({});
+}
+
 const extractCss = new ExtractTextPlugin('style.css');
 
 module.exports = {
@@ -22,7 +29,7 @@ module.exports = {
   },
   module: {
     loaders: [
-      { test: /\.jsx?$/, exclude: /node_modules/, loaders: [ 'babel-loader' ] },
+      { test: /\.jsx?$/, exclude: /node_modules/, loaders: ['babel-loader'] },
       { test: /\.json$/, loader: 'json-loader' },
       {
         test: /\.css$/,
@@ -35,8 +42,22 @@ module.exports = {
       {
         test: /.*\.(gif|png|jpe?g|svg)$/i,
         loaders: [
-          'file-loader?hash=sha512&digest=hex&name=[hash].[ext]',
-          'image-webpack-loader'
+          'file-loader',
+          {
+            loader: 'image-webpack-loader',
+            query: {
+              mozjpeg: {
+                quality: 65
+              },
+              pngquant: {
+                quality: '65-90',
+                speed: 4
+              },
+              svgo: {
+                plugins: [{ removeViewBox: false }, { removeEmptyAttrs: true }]
+              }
+            }
+          }
         ]
       }
     ]
@@ -45,25 +66,8 @@ module.exports = {
     extractCss,
     new webpack.DefinePlugin({
       'process.env': {
-        NODE_ENV: '\'' + process.env.NODE_ENV + '\'',
-        API_BASE: '\'' + process.env.API_BASE + '\''
-      }
-    }),
-    new webpack.LoaderOptionsPlugin({
-      imageWebpackLoader: {
-        mozjpeg: {
-          quality: 65
-        },
-        pngquant: {
-          quality: '65-90',
-          speed: 4
-        },
-        svgo: {
-          plugins: [
-            { removeViewBox: false },
-            { removeEmptyAttrs: true }
-          ]
-        }
+        NODE_ENV: "'" + process.env.NODE_ENV + "'",
+        API_BASE: "'" + process.env.API_BASE + "'"
       }
     })
   ]
