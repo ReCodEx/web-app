@@ -17,7 +17,7 @@ import {
   createGetUploadedFiles,
   createAllUploaded
 } from '../../redux/selectors/upload';
-
+import { runtimeEnvironmentsSelector } from '../../redux/selectors/assignments';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import {
   init as resetSubmission,
@@ -30,6 +30,10 @@ import { reset as resetUpload } from '../../redux/modules/upload';
 import withLinks from '../../hoc/withLinks';
 
 class SubmitSolutionContainer extends Component {
+  state = {
+    runtimeEnvrionment: null
+  };
+
   submit = () => {
     const {
       attachedFiles,
@@ -38,8 +42,18 @@ class SubmitSolutionContainer extends Component {
       submitSolution
     } = this.props;
 
-    submitSolution(note, attachedFiles.map(item => item.file));
+    const { runtimeEnvironment } = this.state;
+
+    submitSolution(
+      note,
+      attachedFiles.map(item => item.file),
+      runtimeEnvironment
+    );
     !!onSubmit && onSubmit();
+  };
+
+  changeRuntimeEnvironment = runtimeEnvironment => {
+    this.setState({ runtimeEnvironment });
   };
 
   render = () => {
@@ -49,6 +63,7 @@ class SubmitSolutionContainer extends Component {
       note,
       cancel,
       assignmentId,
+      runtimeEnvironmentIds,
       changeNote,
       canSubmit,
       hasFailed,
@@ -73,6 +88,7 @@ class SubmitSolutionContainer extends Component {
           note={note}
           saveNote={changeNote}
           onClose={cancel}
+          runtimeEnvironmentIds={runtimeEnvironmentIds}
           submitSolution={this.submit}
         />
 
@@ -103,7 +119,8 @@ SubmitSolutionContainer.propTypes = {
   submitSolution: PropTypes.func.isRequired,
   attachedFiles: PropTypes.array,
   reset: PropTypes.func.isRequired,
-  links: PropTypes.object.isRequired
+  links: PropTypes.object.isRequired,
+  runtimeEnvironmentIds: PropTypes.array
 };
 
 export default withLinks(
@@ -111,8 +128,10 @@ export default withLinks(
     (state, { assignmentId, userId }) => {
       const getUploadedFiles = createGetUploadedFiles(assignmentId);
       const allUploaded = createAllUploaded(assignmentId);
+      const environments = runtimeEnvironmentsSelector(assignmentId);
       return {
         userId: userId || loggedInUserIdSelector(state),
+        runtimeEnvironmentIds: environments(state).toJS(),
         note: getNote(state),
         attachedFiles: (getUploadedFiles(state) || List()).toJS(),
         isProcessing: isProcessing(state),
@@ -126,8 +145,16 @@ export default withLinks(
     (dispatch, { userId, assignmentId }) => ({
       changeNote: note => dispatch(changeNote(note)),
       cancel: () => dispatch(cancel()),
-      submitSolution: (note, files) =>
-        dispatch(submitSolution(userId, assignmentId, note, files)),
+      submitSolution: (note, files, runtimeEnvironmentId = null) =>
+        dispatch(
+          submitSolution(
+            userId,
+            assignmentId,
+            note,
+            files,
+            runtimeEnvironmentId
+          )
+        ),
       reset: () =>
         dispatch(resetUpload(assignmentId)) &&
         dispatch(resetSubmission(userId, assignmentId))

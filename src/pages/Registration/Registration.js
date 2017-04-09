@@ -15,7 +15,7 @@ import {
   createExternalAccount
 } from '../../redux/modules/registration';
 import { fetchInstances } from '../../redux/modules/instances';
-import { instancesSelector } from '../../redux/selectors/instances';
+import { publicInstancesSelector } from '../../redux/selectors/instances';
 import { hasSucceeded } from '../../redux/selectors/registration';
 
 import withLinks from '../../hoc/withLinks';
@@ -105,7 +105,7 @@ Register.propTypes = {
 export default withLinks(
   connect(
     state => ({
-      instances: instancesSelector(state),
+      instances: publicInstancesSelector(state),
       hasSucceeded: hasSucceeded(state)
     }),
     dispatch => ({

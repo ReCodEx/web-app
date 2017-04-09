@@ -12,7 +12,13 @@ export const createAssignmentSelector = () =>
 export const getAssignment = (id) =>
   createSelector(
     getAssignments,
-    assignments => assignments.getIn([ 'resources', id ])
+    assignments => assignments.getIn(['resources', id])
+  );
+
+export const runtimeEnvironmentsSelector = (id) =>
+  createSelector(
+    getAssignment(id),
+    assignment => assignment.getIn(['data', 'runtimeEnvironmentsIds'])
   );
 
 export const getUsersSubmissionIds = (state, userId, assignmentId) => {
