@@ -56,16 +56,18 @@ export const validateAddGroup = (name, instanceId, parentGroupId = null) =>
     type: 'VALIDATE_ADD_GROUP_DATA',
     endpoint: '/groups/validate-add-group-data',
     method: 'POST',
-    body: parentGroupId === null ? { name, instanceId } : { name, instanceId, parentGroupId }
+    body: parentGroupId === null
+      ? { name, instanceId }
+      : { name, instanceId, parentGroupId }
   });
 
-export const fetchSubgroups = (groupId) =>
+export const fetchSubgroups = groupId =>
   actions.fetchMany({
     endpoint: `/groups/${groupId}/subgroups`,
     meta: { groupId }
   });
 
-export const fetchUsersGroups = (userId) =>
+export const fetchUsersGroups = userId =>
   createApiAction({
     type: additionalActionTypes.LOAD_USERS_GROUPS,
     endpoint: `/users/${userId}/groups`,
@@ -73,13 +75,13 @@ export const fetchUsersGroups = (userId) =>
     meta: { userId }
   });
 
-export const fetchInstanceGroupsIfNeeded = (instanceId) =>
+export const fetchInstanceGroupsIfNeeded = instanceId =>
   actions.fetchMany({
     endpoint: `/instances/${instanceId}/groups`,
     meta: { instanceId }
   });
 
-export const fetchUsersGroupsIfNeeded = (userId) =>
+export const fetchUsersGroupsIfNeeded = userId =>
   (dispatch, getState) => {
     const user = getState().users.getIn(['resources', userId]);
     if (user) {
@@ -122,7 +124,13 @@ export const makeSupervisor = (groupId, userId) =>
         method: 'POST',
         meta: { groupId, userId }
       })
-    ).catch(() => dispatch(addNotification('Cannot make this person supervisor of the group.', false))); // @todo: Make translatable
+    ).catch(() =>
+      dispatch(
+        addNotification(
+          'Cannot make this person supervisor of the group.',
+          false
+        )
+      )); // @todo: Make translatable
 
 export const removeSupervisor = (groupId, userId) =>
   dispatch =>
@@ -133,7 +141,8 @@ export const removeSupervisor = (groupId, userId) =>
         method: 'DELETE',
         meta: { groupId, userId }
       })
-    ).catch(() => dispatch(addNotification('Cannot remove supervisor.', false))); // @todo: Make translatable
+    ).catch(() =>
+      dispatch(addNotification('Cannot remove supervisor.', false))); // @todo: Make translatable
 
 export const makeAdmin = (groupId, userId) =>
   dispatch =>
@@ -145,136 +154,199 @@ export const makeAdmin = (groupId, userId) =>
         meta: { groupId, userId },
         body: { userId }
       })
-    ).catch(() => dispatch(addNotification('Cannot make this person admin of the group.', false))); // @todo: Make translatable
+    ).catch(() =>
+      dispatch(
+        addNotification('Cannot make this person admin of the group.', false)
+      )); // @todo: Make translatable
 
 /**
  * Reducer
  */
 
-const reducer = handleActions(Object.assign({}, reduceActions, {
+const reducer = handleActions(
+  Object.assign({}, reduceActions, {
+    [actionTypes.ADD_FULFILLED]: (state, action) => {
+      if (reduceActions[actionTypes.ADD_FULFILLED]) {
+        state = reduceActions[actionTypes.ADD_FULFILLED](state, action);
+      }
 
-  [actionTypes.ADD_FULFILLED]: (state, action) => {
-    if (reduceActions[actionTypes.ADD_FULFILLED]) {
-      state = reduceActions[actionTypes.ADD_FULFILLED](state, action);
-    }
+      // update the new hierarchy inside the local state
+      const { payload: group } = action;
+      if (
+        group.parentGroupId === null ||
+        !state.getIn(['resources', group.parentGroupId])
+      ) {
+        return state;
+      }
 
-    // update the new hierarchy inside the local state
-    const { payload: group } = action;
-    if (group.parentGroupId === null || !state.getIn([ 'resources', group.parentGroupId ])) {
-      return state;
-    }
+      return state.updateIn(
+        ['resources', group.parentGroupId, 'data', 'childGroups', 'all'],
+        children => children.push(group.id)
+      );
+    },
 
-    return state.updateIn([ 'resources', group.parentGroupId, 'data', 'childGroups', 'all' ], children => children.push(group.id));
-  },
-
-  [actionTypes.REMOVE_FULFILLED]: (state, action) =>
-    reduceActions[actionTypes.REMOVE_FULFILLED](state, action)
-      .update('resources', groups =>
+    [actionTypes.REMOVE_FULFILLED]: (state, action) => {
+      const removeFulfilled = reduceActions[actionTypes.REMOVE_FULFILLED];
+      return removeFulfilled(state, action).update('resources', groups =>
         groups.map(
-          group => group.get('data') !== null
-            ? group.updateIn(
-                ['data', 'childGroups', 'all'],
-                all => all.filter(groupId => groupId !== action.meta.id)
-              )
-            : null
-          )),
+          group =>
+            group.get('data') !== null
+              ? group.updateIn(['data', 'childGroups', 'all'], all =>
+                  all.filter(groupId => groupId !== action.meta.id))
+              : null
+        ));
+    },
 
-  [additionalActionTypes.UPDATE_GROUP_FULFILLED]:
-    (
-      state, {
+    [additionalActionTypes.UPDATE_GROUP_FULFILLED]: (
+      state,
+      {
         payload: { parentGroupId, isPublic },
         meta: { groupId, userId }
       }
     ) =>
-    state.hasIn(['resources', parentGroupId, 'data'])
-      ? state.updateIn(
-        ['resources', parentGroupId, 'data', 'childGroups', 'public'],
-        groups => isPublic ? groups.push(groupId).toSet().toList() : groups.filter(id => id !== groupId)
-      ) : state,
+      state.hasIn(['resources', parentGroupId, 'data'])
+        ? state.updateIn(
+            ['resources', parentGroupId, 'data', 'childGroups', 'public'],
+            groups =>
+              isPublic
+                ? groups.push(groupId).toSet().toList()
+                : groups.filter(id => id !== groupId)
+          )
+        : state,
 
-  [additionalActionTypes.JOIN_GROUP_PENDING]: (state, { payload, meta: { groupId, userId } }) =>
-    state.hasIn(['resources', groupId, 'data'])
-      ? state.updateIn(
-        ['resources', groupId, 'data', 'students'],
-        students => students.push(userId)
-      ) : state,
+    [additionalActionTypes.JOIN_GROUP_PENDING]: (
+      state,
+      { payload, meta: { groupId, userId } }
+    ) =>
+      state.hasIn(['resources', groupId, 'data'])
+        ? state.updateIn(['resources', groupId, 'data', 'students'], students =>
+            students.push(userId))
+        : state,
 
-  [additionalActionTypes.JOIN_GROUP_REJECTED]: (state, { payload, meta: { groupId, userId } }) =>
-    state.hasIn(['resources', groupId, 'data'])
-      ? state.updateIn(
-        ['resources', groupId, 'data', 'students'],
-        students => students.filter(id => id !== userId)
-      ) : state,
+    [additionalActionTypes.JOIN_GROUP_REJECTED]: (
+      state,
+      { payload, meta: { groupId, userId } }
+    ) =>
+      state.hasIn(['resources', groupId, 'data'])
+        ? state.updateIn(['resources', groupId, 'data', 'students'], students =>
+            students.filter(id => id !== userId))
+        : state,
 
-  [additionalActionTypes.LEAVE_GROUP_FULFILLED]: (state, { payload, meta: { groupId, userId } }) =>
-    state.updateIn(['resources', groupId, 'data', 'students'], students =>
-      students.filter(id => id !== userId)),
+    [additionalActionTypes.LEAVE_GROUP_FULFILLED]: (
+      state,
+      { payload, meta: { groupId, userId } }
+    ) =>
+      state.updateIn(['resources', groupId, 'data', 'students'], students =>
+        students.filter(id => id !== userId)),
 
-  [additionalActionTypes.MAKE_SUPERVISOR_FULFILLED]: (state, { payload, meta: { groupId, userId } }) =>
-    state.updateIn(['resources', groupId, 'data', 'supervisors'], supervisors =>
-      supervisors.push(
-        fromJS(payload.supervisors.find(id => id === userId))
-      )
-    ),
+    [additionalActionTypes.MAKE_SUPERVISOR_FULFILLED]: (
+      state,
+      { payload, meta: { groupId, userId } }
+    ) =>
+      state.updateIn(
+        ['resources', groupId, 'data', 'supervisors'],
+        supervisors =>
+          supervisors.push(
+            fromJS(payload.supervisors.find(id => id === userId))
+          )
+      ),
 
-  [additionalActionTypes.REMOVE_SUPERVISOR_FULFILLED]: (state, { payload, meta: { groupId, userId } }) =>
-    state.updateIn(['resources', groupId, 'data', 'supervisors'], supervisors =>
-      supervisors.filter(id => id !== userId)),
+    [additionalActionTypes.REMOVE_SUPERVISOR_FULFILLED]: (
+      state,
+      { payload, meta: { groupId, userId } }
+    ) =>
+      state.updateIn(
+        ['resources', groupId, 'data', 'supervisors'],
+        supervisors => supervisors.filter(id => id !== userId)
+      ),
 
+    [additionalActionTypes.MAKE_ADMIN_PENDING]: (
+      state,
+      { payload: { userId }, meta: { groupId } }
+    ) =>
+      state.updateIn(['resources', groupId, 'data'], group =>
+        group
+          .set('oldAdminId', group.get('adminId'))
+          .update('admins', admins =>
+            admins.filter(id => id !== userId).push(userId))
+          .set('adminId', userId)),
 
-  [additionalActionTypes.MAKE_ADMIN_PENDING]: (state, { payload: { userId }, meta: { groupId } }) =>
-    state.updateIn(['resources', groupId, 'data'], group =>
-      group
-        .set('oldAdminId', group.get('adminId'))
-        .update('admins', admins => admins.filter(id => id !== userId).push(userId))
-        .set('adminId', userId)
-    ),
+    [additionalActionTypes.MAKE_ADMIN_FAILED]: (
+      state,
+      { payload: { userId }, meta: { groupId } }
+    ) =>
+      state.updateIn(['resources', groupId, 'data'], group =>
+        group
+          .update('admins', admins =>
+            admins.filter(id => id !== group.get('adminId')).push(userId))
+          .set('adminId', group.get('oldAdminId'))
+          .remove('oldAdminId')),
 
-  [additionalActionTypes.MAKE_ADMIN_FAILED]: (state, { payload: { userId }, meta: { groupId } }) =>
-    state.updateIn(['resources', groupId, 'data'], group =>
-      group
-        .update('admins', admins => admins.filter(id => id !== group.get('adminId')).push(userId))
-        .set('adminId', group.get('oldAdminId'))
-        .remove('oldAdminId')
-    ),
+    [additionalActionTypes.MAKE_ADMIN_FULFILLED]: (
+      state,
+      { payload: { adminId, admins }, meta: { groupId } }
+    ) =>
+      state.updateIn(['resources', groupId, 'data'], group =>
+        group
+          .remove('oldAdminId')
+          .set('admins', List(admins))
+          .set('adminId', adminId)),
 
-  [additionalActionTypes.MAKE_ADMIN_FULFILLED]: (state, { payload: { adminId, admins }, meta: { groupId } }) =>
-    state.updateIn(['resources', groupId, 'data'], group =>
-      group
-        .remove('oldAdminId')
-        .set('admins', List(admins)).set('adminId', adminId)
-    ),
+    [additionalActionTypes.LOAD_USERS_GROUPS_FULFILLED]: (
+      state,
+      { payload, ...rest }
+    ) => {
+      const groups = [...payload.supervisor, ...payload.student];
+      return reduceActions[actionTypes.FETCH_MANY_FULFILLED](state, {
+        ...rest,
+        payload: groups
+      });
+    },
 
-  [additionalActionTypes.LOAD_USERS_GROUPS_FULFILLED]: (state, { payload, ...rest }) => {
-    const groups = [ ...payload.supervisor, ...payload.student ];
-    return reduceActions[actionTypes.FETCH_MANY_FULFILLED](state, { ...rest, payload: groups });
-  },
+    [assignmentsActionTypes.UPDATE_FULFILLED]: (
+      state,
+      { payload: { id: assignmentId, isPublic, groupId } }
+    ) =>
+      state.updateIn(
+        ['resources', groupId, 'data', 'assignments', 'public'],
+        assignments => {
+          if (isPublic) {
+            return assignments.push(assignmentId).toSet().toList();
+          } else {
+            return assignments
+              .filter(id => id !== assignmentId)
+              .toSet()
+              .toList();
+          }
+        }
+      ),
 
-  [assignmentsActionTypes.UPDATE_FULFILLED]: (state, { payload: { id: assignmentId, isPublic, groupId } }) =>
-    state.updateIn([ 'resources', groupId, 'data', 'assignments', 'public' ], assignments => {
-      if (isPublic) {
-        return assignments.push(assignmentId).toSet().toList();
-      } else {
-        return assignments.filter(id => id !== assignmentId).toSet().toList();
-      }
-    }),
+    [assignmentsActionTypes.ADD_FULFILLED]: (
+      state,
+      { payload: { id: assignmentId }, meta: { body: { groupId } } }
+    ) =>
+      state.updateIn(
+        ['resources', groupId, 'data', 'assignments', 'all'],
+        assignments => {
+          if (!assignments) {
+            assignments = List();
+          }
+          return assignments.push(assignmentId);
+        }
+      ),
 
-  [assignmentsActionTypes.ADD_FULFILLED]: (state, { payload: { id: assignmentId }, meta: { body: { groupId } } }) =>
-    state.updateIn([ 'resources', groupId, 'data', 'assignments', 'all' ], assignments => {
-      if (!assignments) { assignments = List(); }
-      return assignments.push(assignmentId);
-    }),
-
-  [assignmentsActionTypes.REMOVE_FULFILLED]: (state, { meta: { id: assignmentId } }) =>
-    state.update('resources', groups => groups.map(
-      group => group.updateIn(
-        ['data', 'assignments'],
-        assignments =>
-          assignments
-            .update('all', ids => ids.filter(id => id !== assignmentId))
-            .update('public', ids => ids.filter(id => id !== assignmentId)))
-    ))
-
-}), initialState);
+    [assignmentsActionTypes.REMOVE_FULFILLED]: (
+      state,
+      { meta: { id: assignmentId } }
+    ) =>
+      state.update('resources', groups =>
+        groups.map(group =>
+          group.updateIn(['data', 'assignments'], assignments =>
+            assignments
+              .update('all', ids => ids.filter(id => id !== assignmentId))
+              .update('public', ids => ids.filter(id => id !== assignmentId)))))
+  }),
+  initialState
+);
 
 export default reducer;
