@@ -1,27 +1,32 @@
 import React, { PropTypes } from 'react';
 import { Link } from 'react-router';
 import { FormattedDate, FormattedTime, FormattedMessage } from 'react-intl';
-import { Button, ButtonGroup } from 'react-bootstrap';
+import { ButtonGroup } from 'react-bootstrap';
+import Button from '../../AdminLTE/FlatButton';
 import { LinkContainer } from 'react-router-bootstrap';
-import DeleteAssignmentButtonContainer from '../../../containers/DeleteAssignmentButtonContainer';
+import DeleteAssignmentButtonContainer
+  from '../../../containers/DeleteAssignmentButtonContainer';
 
 import { EditIcon, MaybePublicIcon } from '../../Icons';
 
-const AdminAssignmentTableRow = ({
-  id,
-  isPublic,
-  name,
-  allowSecondDeadline,
-  firstDeadline,
-  secondDeadline
-}, {
-  links: {
-    ASSIGNMENT_DETAIL_URI_FACTORY: detail,
-    ASSIGNMENT_EDIT_URI_FACTORY: edit
+const AdminAssignmentTableRow = (
+  {
+    id,
+    isPublic,
+    name,
+    allowSecondDeadline,
+    firstDeadline,
+    secondDeadline
+  },
+  {
+    links: {
+      ASSIGNMENT_DETAIL_URI_FACTORY: detail,
+      ASSIGNMENT_EDIT_URI_FACTORY: edit
+    }
   }
-}) => (
+) => (
   <tr>
-    <td className='text-center'>
+    <td className="text-center">
       <MaybePublicIcon id={id} isPublic={isPublic} />
     </td>
     <td>
@@ -33,21 +38,25 @@ const AdminAssignmentTableRow = ({
     </td>
     <td>
       {allowSecondDeadline
-        ? (
-          <span>
+        ? <span>
             <FormattedDate value={new Date(secondDeadline * 1000)} />{', '}
             <FormattedTime value={new Date(secondDeadline * 1000)} />
           </span>
-        ) : <span>-</span>}
+        : <span>-</span>}
     </td>
     <td>
       <ButtonGroup>
         <LinkContainer to={edit(id)}>
-          <Button bsSize='xs' className='btn-flat'>
-            <EditIcon /> <FormattedMessage id='app.adminAssignmentsTableRow.edit' defaultMessage='Edit' />
+          <Button bsSize="xs">
+            <EditIcon />
+            {' '}
+            <FormattedMessage
+              id="app.adminAssignmentsTableRow.edit"
+              defaultMessage="Edit"
+            />
           </Button>
         </LinkContainer>
-        <DeleteAssignmentButtonContainer id={id} bsSize='xs' />
+        <DeleteAssignmentButtonContainer id={id} bsSize="xs" />
       </ButtonGroup>
     </td>
   </tr>

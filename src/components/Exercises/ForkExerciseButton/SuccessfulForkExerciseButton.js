@@ -1,14 +1,27 @@
 import React, { PropTypes } from 'react';
 import { FormattedMessage } from 'react-intl';
-import { Button } from 'react-bootstrap';
+import Button from '../../AdminLTE/FlatButton';
 import { SuccessIcon } from '../../Icons';
 
-const SuccessfulForkExerciseButton = ({
-  onClick,
-  ...props
-}) => (
-  <Button bsStyle='success' bsSize='sm' className='btn-flat' onClick={onClick} {...props}>
-    <SuccessIcon /> <FormattedMessage id='app.forkExerciseButton.success' defaultMessage='Show the forked exercise' />
+const SuccessfulForkExerciseButton = (
+  {
+    onClick,
+    ...props
+  }
+) => (
+  <Button
+    bsStyle="success"
+    bsSize="sm"
+    className="btn-flat"
+    onClick={onClick}
+    {...props}
+  >
+    <SuccessIcon />
+    {' '}
+    <FormattedMessage
+      id="app.forkExerciseButton.success"
+      defaultMessage="Show the forked exercise"
+    />
   </Button>
 );
 

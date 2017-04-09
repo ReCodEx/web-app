@@ -2,7 +2,8 @@ import React, { Component, PropTypes } from 'react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
-import { Row, Col, Button } from 'react-bootstrap';
+import { Row, Col } from 'react-bootstrap';
+import Button from '../../components/AdminLTE/FlatButton';
 import { LinkContainer } from 'react-router-bootstrap';
 
 import Page from '../../components/Page';
@@ -13,18 +14,24 @@ import CreateGroupForm from '../../components/Forms/CreateGroupForm';
 import { EditIcon } from '../../components/Icons';
 
 import { fetchInstanceIfNeeded } from '../../redux/modules/instances';
-import { instanceSelector, isAdminOfInstance } from '../../redux/selectors/instances';
-import { createGroup, fetchInstanceGroupsIfNeeded } from '../../redux/modules/groups';
+import {
+  instanceSelector,
+  isAdminOfInstance
+} from '../../redux/selectors/instances';
+import {
+  createGroup,
+  fetchInstanceGroupsIfNeeded
+} from '../../redux/modules/groups';
 import { groupsSelectors } from '../../redux/selectors/groups';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import { isSuperAdmin } from '../../redux/selectors/users';
 
 class Instance extends Component {
-
-  static loadAsync = ({ instanceId }, dispatch) => Promise.all([
-    dispatch(fetchInstanceIfNeeded(instanceId)),
-    dispatch(fetchInstanceGroupsIfNeeded(instanceId))
-  ]);
+  static loadAsync = ({ instanceId }, dispatch) =>
+    Promise.all([
+      dispatch(fetchInstanceIfNeeded(instanceId)),
+      dispatch(fetchInstanceGroupsIfNeeded(instanceId))
+    ]);
 
   componentWillMount() {
     this.props.loadAsync();
@@ -54,28 +61,40 @@ class Instance extends Component {
       <Page
         resource={instance}
         title={instance => instance.name}
-        description={<FormattedMessage id='app.instance.description' defaultMessage='Instance overview' />}
+        description={
+          <FormattedMessage
+            id="app.instance.description"
+            defaultMessage="Instance overview"
+          />
+        }
         breadcrumbs={[
           {
-            text: <FormattedMessage id='app.instance.description' />,
+            text: <FormattedMessage id="app.instance.description" />,
             iconName: 'info-circle'
           }
-        ]}>
+        ]}
+      >
         {data => (
           <div>
-            {isSuperAdmin && (
+            {isSuperAdmin &&
               <Row>
                 <Col sm={12}>
                   <p>
-                    <LinkContainer to={ADMIN_EDIT_INSTANCE_URI_FACTORY(instanceId)}>
-                      <Button bsStyle='warning' className='btn-flat'>
-                        <EditIcon /> <FormattedMessage id='app.instance.edit' defaultMessage='Edit instance' />
+                    <LinkContainer
+                      to={ADMIN_EDIT_INSTANCE_URI_FACTORY(instanceId)}
+                    >
+                      <Button bsStyle="warning">
+                        <EditIcon />
+                        {' '}
+                        <FormattedMessage
+                          id="app.instance.edit"
+                          defaultMessage="Edit instance"
+                        />
                       </Button>
                     </LinkContainer>
                   </p>
                 </Col>
-              </Row>
-            )}
+              </Row>}
 
             <Row>
               <Col sm={12}>
@@ -83,27 +102,25 @@ class Instance extends Component {
               </Col>
             </Row>
 
-            {isAdmin && (
+            {isAdmin &&
               <Row>
                 <Col sm={6}>
                   <CreateGroupForm
                     onSubmit={createGroup}
-                    instanceId={instanceId} />
+                    instanceId={instanceId}
+                  />
                 </Col>
                 <Col sm={6}>
                   <LicencesTableContainer instance={data} />
-                  {isSuperAdmin && (
-                    <AddLicenceFormContainer instanceId={data.id} />
-                  )}
+                  {isSuperAdmin &&
+                    <AddLicenceFormContainer instanceId={data.id} />}
                 </Col>
-              </Row>
-            )}
+              </Row>}
           </div>
         )}
       </Page>
     );
   }
-
 }
 
 Instance.propTypes = {
@@ -133,8 +150,7 @@ export default connect(
     };
   },
   (dispatch, { params: { instanceId } }) => ({
-    createGroup: (data) =>
-      dispatch(createGroup({ instanceId, ...data })),
+    createGroup: data => dispatch(createGroup({ instanceId, ...data })),
     loadAsync: () => Instance.loadAsync({ instanceId }, dispatch)
   })
 )(Instance);

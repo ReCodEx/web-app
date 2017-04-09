@@ -2,7 +2,8 @@ import React, { PropTypes, Component } from 'react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
-import { Button, Modal } from 'react-bootstrap';
+import { Modal } from 'react-bootstrap';
+import Button from '../../components/AdminLTE/FlatButton';
 import { DownloadIcon, LoadingIcon } from '../../components/Icons';
 
 import { fetchFileIfNeeded, download } from '../../redux/modules/files';
@@ -12,7 +13,6 @@ import ResourceRenderer from '../../components/ResourceRenderer';
 import SourceCodeViewer from '../../components/SourceCodeViewer';
 
 class SourceCodeViewerContainer extends Component {
-
   componentWillMount() {
     const { fileId, loadAsync } = this.props;
     if (fileId !== null) {
@@ -30,32 +30,37 @@ class SourceCodeViewerContainer extends Component {
     const { show, onHide, download, file, code } = this.props;
     return (
       <ResourceRenderer
-        loading={(
-          <Modal
-            show={show}
-            onHide={onHide}
-            bsSize='large'>
+        loading={
+          <Modal show={show} onHide={onHide} bsSize="large">
             <Modal.Header closeButton>
               <Modal.Title>
-                <LoadingIcon /> <FormattedMessage id='app.sourceCodeViewer.loading' defaultMessage='Loading ...' />
+                <LoadingIcon />
+                {' '}
+                <FormattedMessage
+                  id="app.sourceCodeViewer.loading"
+                  defaultMessage="Loading ..."
+                />
               </Modal.Title>
             </Modal.Header>
             <Modal.Body>
-              <SourceCodeViewer content='' name='' />
+              <SourceCodeViewer content="" name="" />
             </Modal.Body>
             <Modal.Footer>
-              <Button disabled className='btn-flat'>
-                <DownloadIcon /> <FormattedMessage id='app.sourceCodeViewer.downloadButton' defaultMessage='Download file' />
+              <Button disabled>
+                <DownloadIcon />
+                {' '}
+                <FormattedMessage
+                  id="app.sourceCodeViewer.downloadButton"
+                  defaultMessage="Download file"
+                />
               </Button>
             </Modal.Footer>
           </Modal>
-        )}
-        resource={[file, code]}>
+        }
+        resource={[file, code]}
+      >
         {(file, code) => (
-          <Modal
-            show={show}
-            onHide={onHide}
-            bsSize='large'>
+          <Modal show={show} onHide={onHide} bsSize="large">
             <Modal.Header closeButton>
               <Modal.Title>{file.name}</Modal.Title>
             </Modal.Header>
@@ -63,8 +68,13 @@ class SourceCodeViewerContainer extends Component {
               <SourceCodeViewer content={code} name={file.name} />
             </Modal.Body>
             <Modal.Footer>
-              <Button onClick={() => download(file.id)} className='btn-flat'>
-                <DownloadIcon /> <FormattedMessage id='app.sourceCodeViewer.downloadButton' defaultMessage='Download file' />
+              <Button onClick={() => download(file.id)}>
+                <DownloadIcon />
+                {' '}
+                <FormattedMessage
+                  id="app.sourceCodeViewer.downloadButton"
+                  defaultMessage="Download file"
+                />
               </Button>
             </Modal.Footer>
           </Modal>
@@ -72,7 +82,6 @@ class SourceCodeViewerContainer extends Component {
       </ResourceRenderer>
     );
   }
-
 }
 
 SourceCodeViewerContainer.propTypes = {
@@ -91,10 +100,11 @@ export default connect(
     code: getFilesContent(fileId)(state)
   }),
   (dispatch, { fileId }) => ({
-    loadAsync: () => Promise.all([
-      dispatch(fetchFileIfNeeded(fileId)),
-      dispatch(fetchContentIfNeeded(fileId))
-    ]),
-    download: (id) => dispatch(download(id))
+    loadAsync: () =>
+      Promise.all([
+        dispatch(fetchFileIfNeeded(fileId)),
+        dispatch(fetchContentIfNeeded(fileId))
+      ]),
+    download: id => dispatch(download(id))
   })
 )(SourceCodeViewerContainer);

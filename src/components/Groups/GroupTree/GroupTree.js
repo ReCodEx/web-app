@@ -1,40 +1,54 @@
 import React, { Component, PropTypes } from 'react';
 import { FormattedMessage } from 'react-intl';
 import Icon from 'react-fontawesome';
-import { Button } from 'react-bootstrap';
+import Button from '../../AdminLTE/FlatButton';
 import { LinkContainer } from 'react-router-bootstrap';
 import { TreeView, TreeViewItem } from '../../AdminLTE/TreeView';
 import { isReady, getJsData } from '../../../redux/helpers/resourceManager';
-import DeleteGroupButtonContainer from '../../../containers/DeleteGroupButtonContainer';
+import DeleteGroupButtonContainer
+  from '../../../containers/DeleteGroupButtonContainer';
 
 class GroupTree extends Component {
-
-  renderLoading = (level) => (
+  renderLoading = level => (
     <TreeView>
       <TreeViewItem
         level={level}
         loading
-        title={<FormattedMessage id='app.groupTree.loading' defaultMessage='Loading ...' />} />
+        title={
+          <FormattedMessage
+            id="app.groupTree.loading"
+            defaultMessage="Loading ..."
+          />
+        }
+      />
     </TreeView>
   );
 
-  renderButtons = (groupId) => {
+  renderButtons = groupId => {
     const { isAdmin } = this.props;
     const { links: { GROUP_URI_FACTORY } } = this.context;
     return (
       <span>
         <LinkContainer to={GROUP_URI_FACTORY(groupId)}>
-          <Button bsStyle='primary' bsSize='xs' className='btn-flat'>
-            <Icon name='group' /> <FormattedMessage id='app.groupTree.detailButton' defaultMessage="See group's page" />
+          <Button bsStyle="primary" bsSize="xs" className="btn-flat">
+            <Icon name="group" />
+            {' '}
+            <FormattedMessage
+              id="app.groupTree.detailButton"
+              defaultMessage="See group's page"
+            />
           </Button>
         </LinkContainer>
 
-        {isAdmin && (
-          <DeleteGroupButtonContainer id={groupId} bsSize='xs' className='btn-flat' />
-        )}
+        {isAdmin &&
+          <DeleteGroupButtonContainer
+            id={groupId}
+            bsSize="xs"
+            className="btn-flat"
+          />}
       </span>
     );
-  }
+  };
 
   render() {
     const {
@@ -71,8 +85,13 @@ class GroupTree extends Component {
           level={level}
           externalId={externalId}
           isOpen={currentGroupId === id || isOpen}
-          actions={currentGroupId !== id ? this.renderButtons(id, GROUP_URI_FACTORY(id), isAdmin) : undefined}>
-          {allChildGroups.map(id =>
+          actions={
+            currentGroupId !== id
+              ? this.renderButtons(id, GROUP_URI_FACTORY(id), isAdmin)
+              : undefined
+          }
+        >
+          {allChildGroups.map(id => (
             <GroupTree
               {...this.props}
               key={id}
@@ -80,12 +99,13 @@ class GroupTree extends Component {
               isAdmin={isAdmin}
               deletable={true}
               level={level + 1}
-              isPublic={publicChildGroups.indexOf(id) >= 0} />)}
+              isPublic={publicChildGroups.indexOf(id) >= 0}
+            />
+          ))}
         </TreeViewItem>
       </TreeView>
     );
   }
-
 }
 
 GroupTree.propTypes = {

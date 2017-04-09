@@ -1,18 +1,26 @@
 import React, { PropTypes } from 'react';
 import Icon from 'react-fontawesome';
-import { Button } from 'react-bootstrap';
+import Button from '../../AdminLTE/FlatButton';
 import { FormattedMessage } from 'react-intl';
 
-const SubmitSolutionButton = ({
-  disabled = false,
-  onClick
-}) => (
+const SubmitSolutionButton = (
+  {
+    disabled = false,
+    onClick
+  }
+) => (
   <Button
-    bsStyle='success'
-    className='btn-flat'
+    bsStyle="success"
+    className="btn-flat"
     disabled={disabled}
-    onClick={onClick}>
-      <Icon name='bug' /> <FormattedMessage id='app.submissionsTable.submitNewSolution' defaultMessage='Submit new solution' />
+    onClick={onClick}
+  >
+    <Icon name="bug" />
+    {' '}
+    <FormattedMessage
+      id="app.submissionsTable.submitNewSolution"
+      defaultMessage="Submit new solution"
+    />
   </Button>
 );
 

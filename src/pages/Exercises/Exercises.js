@@ -2,21 +2,22 @@ import React, { Component, PropTypes } from 'react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
-import { Button } from 'react-bootstrap';
+import Button from '../../components/AdminLTE/FlatButton';
 import { push } from 'react-router-redux';
 
 import Page from '../../components/Page';
 import Box from '../../components/AdminLTE/Box';
 import { AddIcon } from '../../components/Icons';
 import { exercisesSelector } from '../../redux/selectors/exercises';
-import { fetchExercises, create as createExercise } from '../../redux/modules/exercises';
+import {
+  fetchExercises,
+  create as createExercise
+} from '../../redux/modules/exercises';
 import ExercisesList from '../../components/Exercises/ExercisesList';
 
 class Exercises extends Component {
-
-  static loadAsync = (params, dispatch) => Promise.all([
-    dispatch(fetchExercises())
-  ]);
+  static loadAsync = (params, dispatch) =>
+    Promise.all([dispatch(fetchExercises())]);
 
   componentWillMount() {
     this.props.loadAsync();
@@ -25,8 +26,8 @@ class Exercises extends Component {
   newExercise = () => {
     const { createExercise, push } = this.props;
     const { links: { EXERCISE_EDIT_URI_FACTORY } } = this.context;
-    createExercise()
-      .then(({ value: exercise }) => push(EXERCISE_EDIT_URI_FACTORY(exercise.id)));
+    createExercise().then(({ value: exercise }) =>
+      push(EXERCISE_EDIT_URI_FACTORY(exercise.id)));
   };
 
   render() {
@@ -37,32 +38,65 @@ class Exercises extends Component {
     return (
       <Page
         resource={exercises.toArray()}
-        title={<FormattedMessage id='app.exercises.title' defaultMessage='Exercises list' />}
-        description={<FormattedMessage id='app.instance.description' defaultMessage='List and assign exercises to your groups.' />}
+        title={
+          <FormattedMessage
+            id="app.exercises.title"
+            defaultMessage="Exercises list"
+          />
+        }
+        description={
+          <FormattedMessage
+            id="app.instance.description"
+            defaultMessage="List and assign exercises to your groups."
+          />
+        }
         breadcrumbs={[
           {
-            text: <FormattedMessage id='app.exercises.title' defaultMessage="Exercises list" />,
+            text: (
+              <FormattedMessage
+                id="app.exercises.title"
+                defaultMessage="Exercises list"
+              />
+            ),
             iconName: 'puzzle-piece'
           }
-        ]}>
-          {(...exercises) => (
-            <div>
-              <Box
-                title={<FormattedMessage id='app.exercises.listTitle' defaultMessage='Exercises' />}
-                noPadding>
-                <ExercisesList exercises={exercises} />
-              </Box>
-              <p>
-                <Button bsStyle='success' className='btn-flat' bsSize='sm' onClick={() => { this.newExercise(); }}>
-                  <AddIcon /> <FormattedMessage id='app.exercises.add' defaultMessage='Add exercise' />
-                </Button>
-              </p>
-            </div>
-          )}
+        ]}
+      >
+        {(...exercises) => (
+          <div>
+            <Box
+              title={
+                <FormattedMessage
+                  id="app.exercises.listTitle"
+                  defaultMessage="Exercises"
+                />
+              }
+              noPadding
+            >
+              <ExercisesList exercises={exercises} />
+            </Box>
+            <p>
+              <Button
+                bsStyle="success"
+                className="btn-flat"
+                bsSize="sm"
+                onClick={() => {
+                  this.newExercise();
+                }}
+              >
+                <AddIcon />
+                {' '}
+                <FormattedMessage
+                  id="app.exercises.add"
+                  defaultMessage="Add exercise"
+                />
+              </Button>
+            </p>
+          </div>
+        )}
       </Page>
     );
   }
-
 }
 
 Exercises.propTypes = {
@@ -77,11 +111,11 @@ Exercises.contextTypes = {
 };
 
 export default connect(
-  (state) => ({
+  state => ({
     exercises: exercisesSelector(state)
   }),
-  (dispatch) => ({
-    push: (url) => dispatch(push(url)),
+  dispatch => ({
+    push: url => dispatch(push(url)),
     createExercise: () => dispatch(createExercise()),
     loadAsync: () => Exercises.loadAsync({}, dispatch)
   })

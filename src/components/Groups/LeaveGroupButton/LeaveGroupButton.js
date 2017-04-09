@@ -1,11 +1,16 @@
 import React, { PropTypes } from 'react';
 import { FormattedMessage } from 'react-intl';
-import { Button } from 'react-bootstrap';
+import Button from '../../AdminLTE/FlatButton';
 import Icon from 'react-fontawesome';
 
 const LeaveGroupButton = ({ onClick, ...props }) => (
-  <Button {...props} onClick={onClick} bsStyle='warning' className='btn-flat'>
-    <Icon name='user-times' /> <FormattedMessage id='app.groups.leaveGroupButton' defaultMessage='Leave group' />
+  <Button {...props} onClick={onClick} bsStyle="warning" className="btn-flat">
+    <Icon name="user-times" />
+    {' '}
+    <FormattedMessage
+      id="app.groups.leaveGroupButton"
+      defaultMessage="Leave group"
+    />
   </Button>
 );
 

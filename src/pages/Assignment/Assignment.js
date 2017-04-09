@@ -2,7 +2,8 @@ import React, { PropTypes, Component } from 'react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
-import { Col, Row, Button } from 'react-bootstrap';
+import { Col, Row } from 'react-bootstrap';
+import Button from '../../components/AdminLTE/FlatButton';
 import { LinkContainer } from 'react-router-bootstrap';
 
 import { fetchAssignmentIfNeeded } from '../../redux/modules/assignments';
@@ -12,7 +13,11 @@ import { getAssignment } from '../../redux/selectors/assignments';
 import { canSubmitSolution } from '../../redux/selectors/canSubmit';
 import { isSubmitting } from '../../redux/selectors/submission';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
-import { isSuperAdmin, isStudentOf, isSupervisorOf } from '../../redux/selectors/users';
+import {
+  isSuperAdmin,
+  isStudentOf,
+  isSupervisorOf
+} from '../../redux/selectors/users';
 
 import PageContent from '../../components/PageContent';
 import ResourceRenderer from '../../components/ResourceRenderer';
@@ -24,12 +29,13 @@ import AssignmentDetails, {
 
 import { EditIcon, ResultsIcon } from '../../components/Icons';
 import LocalizedTexts from '../../components/LocalizedTexts';
-import SubmitSolutionButton from '../../components/Assignments/SubmitSolutionButton';
+import SubmitSolutionButton
+  from '../../components/Assignments/SubmitSolutionButton';
 import SubmitSolutionContainer from '../../containers/SubmitSolutionContainer';
-import SubmissionsTableContainer from '../../containers/SubmissionsTableContainer';
+import SubmissionsTableContainer
+  from '../../containers/SubmissionsTableContainer';
 
 class Assignment extends Component {
-
   static loadAsync = ({ assignmentId }, dispatch) =>
     Promise.all([
       dispatch(fetchAssignmentIfNeeded(assignmentId)),
@@ -46,7 +52,7 @@ class Assignment extends Component {
     }
   }
 
-  isAfter = (unixTime) => {
+  isAfter = unixTime => {
     return unixTime * 1000 < Date.now();
   };
 
@@ -69,54 +75,84 @@ class Assignment extends Component {
 
     return (
       <PageContent
-        title={(
+        title={
           <ResourceRenderer resource={assignment}>
             {assignment => <span>{assignment.name}</span>}
           </ResourceRenderer>
-        )}
-        description={<FormattedMessage id='app.assignment.title' defaultMessage='Exercise assignment' />}
+        }
+        description={
+          <FormattedMessage
+            id="app.assignment.title"
+            defaultMessage="Exercise assignment"
+          />
+        }
         breadcrumbs={[
           {
             resource: assignment,
             iconName: 'group',
-            breadcrumb: (assignment) => ({
-              text: <FormattedMessage id='app.group.title' defaultMessage='Group detail' />,
-              link: ({ GROUP_URI_FACTORY }) => GROUP_URI_FACTORY(assignment.groupId)
+            breadcrumb: assignment => ({
+              text: (
+                <FormattedMessage
+                  id="app.group.title"
+                  defaultMessage="Group detail"
+                />
+              ),
+              link: ({ GROUP_URI_FACTORY }) =>
+                GROUP_URI_FACTORY(assignment.groupId)
             })
           },
           {
-            text: <FormattedMessage id='app.assignment.title' defaultMessage='Exercise assignment' />,
+            text: (
+              <FormattedMessage
+                id="app.assignment.title"
+                defaultMessage="Exercise assignment"
+              />
+            ),
             iconName: 'puzzle-piece'
           }
-        ]}>
+        ]}
+      >
         <ResourceRenderer
           loading={<LoadingAssignmentDetails />}
           failed={<FailedAssignmentDetails />}
-          resource={assignment}>
+          resource={assignment}
+        >
           {assignment => (
             <div>
               <Row>
                 <Col xs={12}>
-                  {loggedInUserId !== userId && (
+                  {loggedInUserId !== userId &&
                     <p>
                       <UsersNameContainer userId={userId} />
-                    </p>
-                  )}
-                  {(isSuperAdmin || isSupervisorOf(assignment.groupId)) && (
+                    </p>}
+                  {(isSuperAdmin || isSupervisorOf(assignment.groupId)) &&
                     <p>
-                      <LinkContainer to={ASSIGNMENT_EDIT_URI_FACTORY(assignment.id)}>
-                        <Button bsStyle='warning' className='btn-flat'>
-                          <EditIcon /> <FormattedMessage id='app.assignment.editSettings' defaultMessage='Edit assignment settings' />
+                      <LinkContainer
+                        to={ASSIGNMENT_EDIT_URI_FACTORY(assignment.id)}
+                      >
+                        <Button bsStyle="warning">
+                          <EditIcon />
+                          {' '}
+                          <FormattedMessage
+                            id="app.assignment.editSettings"
+                            defaultMessage="Edit assignment settings"
+                          />
                         </Button>
                       </LinkContainer>
                       {' '}
-                      <LinkContainer to={SUPERVISOR_STATS_URI_FACTORY(assignment.id)}>
-                        <Button bsStyle='primary' className='btn-flat'>
-                          <ResultsIcon /> <FormattedMessage id='app.assignment.viewResults' defaultMessage='View student results' />
+                      <LinkContainer
+                        to={SUPERVISOR_STATS_URI_FACTORY(assignment.id)}
+                      >
+                        <Button bsStyle="primary">
+                          <ResultsIcon />
+                          {' '}
+                          <FormattedMessage
+                            id="app.assignment.viewResults"
+                            defaultMessage="View student results"
+                          />
                         </Button>
                       </LinkContainer>
-                    </p>
-                  )}
+                    </p>}
                 </Col>
               </Row>
               <Row>
@@ -129,27 +165,41 @@ class Assignment extends Component {
                 <Col lg={6}>
                   <AssignmentDetails
                     {...assignment}
-                    isAfterFirstDeadline={this.isAfter(assignment.firstDeadline)}
-                    isAfterSecondDeadline={this.isAfter(assignment.secondDeadline)}
-                    canSubmit={canSubmit} />
+                    isAfterFirstDeadline={this.isAfter(
+                      assignment.firstDeadline
+                    )}
+                    isAfterSecondDeadline={this.isAfter(
+                      assignment.secondDeadline
+                    )}
+                    canSubmit={canSubmit}
+                  />
 
-                  {isStudentOf(assignment.groupId) && (
+                  {isStudentOf(assignment.groupId) &&
                     <div>
-                      <p className='text-center'>
+                      <p className="text-center">
                         <ResourceRenderer
                           loading={<SubmitSolutionButton disabled={true} />}
-                          resource={canSubmit}>
-                          {canSubmit => <SubmitSolutionButton onClick={init(assignment.id)} disabled={!canSubmit} />}
+                          resource={canSubmit}
+                        >
+                          {canSubmit => (
+                            <SubmitSolutionButton
+                              onClick={init(assignment.id)}
+                              disabled={!canSubmit}
+                            />
+                          )}
                         </ResourceRenderer>
                       </p>
                       <SubmitSolutionContainer
                         userId={userId}
                         assignmentId={assignment.id}
-                        isOpen={submitting} />
+                        isOpen={submitting}
+                      />
 
-                      <SubmissionsTableContainer userId={userId} assignmentId={assignment.id} />
-                    </div>
-                  )}
+                      <SubmissionsTableContainer
+                        userId={userId}
+                        assignmentId={assignment.id}
+                      />
+                    </div>}
                 </Col>
               </Row>
             </div>
@@ -158,7 +208,6 @@ class Assignment extends Component {
       </PageContent>
     );
   }
-
 }
 
 Assignment.contextTypes = {
@@ -191,13 +240,13 @@ export default connect(
       userId,
       loggeInUserId: loggedInUserIdSelector(state),
       isSuperAdmin: isSuperAdmin(userId)(state),
-      isStudentOf: (groupId) => isStudentOf(userId, groupId)(state),
-      isSupervisorOf: (groupId) => isSupervisorOf(userId, groupId)(state),
+      isStudentOf: groupId => isStudentOf(userId, groupId)(state),
+      isSupervisorOf: groupId => isSupervisorOf(userId, groupId)(state),
       canSubmit: canSubmitSolution(assignmentId)(state)
     };
   },
   (dispatch, { params: { assignmentId } }) => ({
-    init: (userId) => () => dispatch(init(userId, assignmentId)),
+    init: userId => () => dispatch(init(userId, assignmentId)),
     loadAsync: () => Assignment.loadAsync({ assignmentId }, dispatch)
   })
 )(Assignment);

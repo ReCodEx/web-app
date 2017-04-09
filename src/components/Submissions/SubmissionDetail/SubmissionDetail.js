@@ -3,20 +3,20 @@ import { Row, Col } from 'react-bootstrap';
 
 import SubmissionStatus from '../SubmissionStatus';
 import SourceCodeInfoBox from '../../SourceCodeInfoBox';
-import LocalizedTexts from '../../LocalizedTexts';
 import TestResults from '../TestResults';
 import BonusPointsContainer from '../../../containers/BonusPointsContainer';
-import DownloadResultArchiveContainer from '../../../containers/DownloadResultArchiveContainer';
+import DownloadResultArchiveContainer
+  from '../../../containers/DownloadResultArchiveContainer';
 import CommentThreadContainer from '../../../containers/CommentThreadContainer';
-import SourceCodeViewerContainer from '../../../containers/SourceCodeViewerContainer';
+import SourceCodeViewerContainer
+  from '../../../containers/SourceCodeViewerContainer';
 
 import EvaluationDetail from '../EvaluationDetail';
 import CompilationLogs from '../CompilationLogs';
 
 class SubmissionDetail extends Component {
-
   state = { openFileId: null };
-  openFile = (id) => this.setState({ openFileId: id });
+  openFile = id => this.setState({ openFileId: id });
   hideFile = () => this.setState({ openFileId: null });
 
   render() {
@@ -46,55 +46,58 @@ class SubmissionDetail extends Component {
               submittedAt={submittedAt}
               userId={userId}
               submittedBy={submittedBy}
-              note={note} />
+              note={note}
+            />
             <Row>
               {files.map(file => (
-              <Col lg={6} md={12} key={file.id}>
-                <a href='#' onClick={() => this.openFile(file.id)}>
-                  <SourceCodeInfoBox {...file} />
-                </a>
-              </Col>
+                <Col lg={6} md={12} key={file.id}>
+                  <a href="#" onClick={() => this.openFile(file.id)}>
+                    <SourceCodeInfoBox {...file} />
+                  </a>
+                </Col>
               ))}
             </Row>
-            {evaluation && (
-              <CompilationLogs initiationOutputs={evaluation.initiationOutputs} />
-            )}
+            {evaluation &&
+              <CompilationLogs
+                initiationOutputs={evaluation.initiationOutputs}
+              />}
             <CommentThreadContainer threadId={id} />
           </Col>
 
-          {evaluation && (
+          {evaluation &&
             <Col md={6} sm={12}>
               <EvaluationDetail
                 assignment={assignment}
                 evaluation={evaluation}
                 submittedAt={submittedAt}
-                maxPoints={maxPoints} />
+                maxPoints={maxPoints}
+              />
 
-              {isSupervisor && (
-                <BonusPointsContainer submissionId={id} evaluation={evaluation} />
-              )}
+              {isSupervisor &&
+                <BonusPointsContainer
+                  submissionId={id}
+                  evaluation={evaluation}
+                />}
 
-              {isSupervisor && (
+              {isSupervisor &&
                 <Row>
                   <Col lg={6} md={12}>
                     <DownloadResultArchiveContainer submissionId={id} />
                   </Col>
-                </Row>
-              )}
+                </Row>}
 
               <TestResults evaluation={evaluation} />
-            </Col>
-          )}
+            </Col>}
         </Row>
 
         <SourceCodeViewerContainer
           show={openFileId !== null}
           fileId={openFileId}
-          onHide={() => this.hideFile()} />
+          onHide={() => this.hideFile()}
+        />
       </div>
     );
   }
-
 }
 
 SubmissionDetail.propTypes = {

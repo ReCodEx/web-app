@@ -1,6 +1,6 @@
 {
-  "parser"  : "babel-eslint",
-  "extends" : [
+  "parser": "babel-eslint",
+  "extends": [
     "eslint:recommended",
     "standard",
     "plugin:react/recommended"
@@ -20,23 +20,43 @@
     "import/no-named-as-default": 0,
     "react/no-did-update-set-state": 0,
     "react/display-name": 0,
-    "indent": [2, 2, {"SwitchCase": 1}],
+    "indent": [
+      2,
+      2,
+      {
+        "SwitchCase": 1
+      }
+    ],
+    "quotes": [
+      2,
+      "single"
+    ],
     "no-console": 1,
     "no-unused-vars": 2,
     "no-alert": 2,
     "no-labels": 2,
-    "semi": [2, "always"],
+    "semi": [
+      2,
+      "always"
+    ],
     "space-before-function-paren": 0
   },
   "plugins": [
-    "react", "import"
+    "react",
+    "import"
   ],
   "settings": {
     "import/parser": "babel-eslint",
     "import/resolve": {
-      "moduleDirectory": ["node_modules", "src"]
+      "moduleDirectory": [
+        "node_modules",
+        "src"
+      ]
     },
-    "import/ignore": ["node_modules", ".less$"]
+    "import/ignore": [
+      "node_modules",
+      ".less$"
+    ]
   },
   "globals": {
     "__DEVELOPMENT__": true,
