@@ -17,6 +17,8 @@ import {
   hasChangingSucceeded as hasSucceeded
 } from '../../redux/selectors/auth';
 
+import withLinks from '../../hoc/withLinks';
+
 /**
  * Component for changing old password for a new one for a user with a specific
  * token provided in the URL - user goes to this page using a link from an email.
@@ -25,7 +27,6 @@ import {
  * @extends {Component}
  */
 class ChangePassword extends Component {
-
   state = { token: null, decodedToken: null };
 
   /**
@@ -40,14 +41,19 @@ class ChangePassword extends Component {
     if (canUseDOM) {
       const hash = window.location.hash;
       if (hash.length === 0) {
-        const { push } = this.props;
-        const { links: { RESET_PASSWORD_URI } } = this.context;
+        const {
+          push,
+          links: { RESET_PASSWORD_URI }
+        } = this.props;
         push(RESET_PASSWORD_URI); // no hash -> redirect to the reset form
       } else {
         let token = window.location.hash.substr(1);
         let decodedToken = decode(token);
 
-        if (!isTokenValid(decodedToken) || !isInScope(decodedToken, 'change-password')) {
+        if (
+          !isTokenValid(decodedToken) ||
+          !isInScope(decodedToken, 'change-password')
+        ) {
           token = null;
           decodedToken = null;
         }
@@ -67,64 +73,104 @@ class ChangePassword extends Component {
   checkIfIsDone = props => {
     const { hasSucceeded } = props;
     if (hasSucceeded) {
-      setTimeout(() => {
-        const { push, reset } = this.props;
-        const { links: { DASHBOARD_URI } } = this.context;
-        reset();
-        push(DASHBOARD_URI);
-      }, 1500);
+      this.timeout = setTimeout(
+        () => {
+          const {
+            push,
+            reset,
+            links: { DASHBOARD_URI }
+          } = this.props;
+          this.timeout = null;
+          reset();
+          push(DASHBOARD_URI);
+        },
+        1500
+      );
     }
   };
 
+  componentWillUnmount() {
+    if (this.timeout) {
+      clearTimeout(this.timeout);
+    }
+  }
+
   render() {
-    const { links: { HOME_URI } } = this.context;
-    const { changePassword, isChanging, hasFailed, hasSucceeded } = this.props;
+    const {
+      links: { HOME_URI },
+      changePassword,
+      isChanging,
+      hasFailed,
+      hasSucceeded
+    } = this.props;
     const { decodedToken, token } = this.state;
 
     return (
       <PageContent
-        title={<FormattedMessage id='app.changePassword.title' defaultMessage='Change forgotten password' />}
-        description={<FormattedMessage id='app.changePassword.description' defaultMessage='You can change your forgotten password in this form' />}
+        title={
+          <FormattedMessage
+            id="app.changePassword.title"
+            defaultMessage="Change forgotten password"
+          />
+        }
+        description={
+          <FormattedMessage
+            id="app.changePassword.description"
+            defaultMessage="You can change your forgotten password in this form"
+          />
+        }
         breadcrumbs={[
           {
-            text: <FormattedMessage id='app.homepage.title' />,
+            text: <FormattedMessage id="app.homepage.title" />,
             link: HOME_URI,
             iconName: 'home'
           },
           {
-            text: <FormattedMessage id='app.changePassword.title' />,
+            text: <FormattedMessage id="app.changePassword.title" />,
             iconName: 'shield'
           }
-        ]}>
+        ]}
+      >
         <Row>
           <Col md={6} mdOffset={3} sm={8} smOffset={2}>
-            {!token && !decodedToken && (
-              <Alert bsStyle='warning'>
-                <strong><FormattedMessage id='app.changePassword.tokenExpired' defaultMessage='You cannot reset your now - your token has probably expired or the URL is broken.' /></strong>{' '}
-                <FormattedMessage id='app.changePassword.requestAnotherLink' defaultMessage='Please request (another) link with an unique token.' />
-              </Alert>
-            )}
-            {decodedToken && (
+            {!token &&
+              !decodedToken &&
+              <Alert bsStyle="warning">
+                <strong>
+                  <FormattedMessage
+                    id="app.changePassword.tokenExpired"
+                    defaultMessage="You cannot reset your now - your token has probably expired or the URL is broken."
+                  />
+                </strong>
+                {' '}
+                <FormattedMessage
+                  id="app.changePassword.requestAnotherLink"
+                  defaultMessage="Please request (another) link with an unique token."
+                />
+              </Alert>}
+            {decodedToken &&
               <div>
                 <ChangePasswordForm
                   onSubmit={({ password }) => changePassword(password, token)}
                   isChanging={isChanging}
                   hasFailed={hasFailed}
-                  hasSucceeded={hasSucceeded} />
-                <p><FormattedMessage id='app.changePassword.tokenExpiresIn' defaultMessage='Token expires: ' /> <FormattedRelative value={decodedToken.exp * 1000} /></p>
-              </div>
-            )}
+                  hasSucceeded={hasSucceeded}
+                />
+                <p>
+                  <FormattedMessage
+                    id="app.changePassword.tokenExpiresIn"
+                    defaultMessage="Token expires: "
+                  />
+                  {' '}
+                  <FormattedRelative value={decodedToken.exp * 1000} />
+                </p>
+              </div>}
           </Col>
         </Row>
       </PageContent>
     );
   }
-
 }
-
-ChangePassword.contextTypes = {
-  links: PropTypes.object
-};
 
 ChangePassword.propTypes = {
   isChanging: PropTypes.bool,
@@ -132,19 +178,22 @@ ChangePassword.propTypes = {
   push: PropTypes.func.isRequired,
   reset: PropTypes.func.isRequired,
   hasFailed: PropTypes.bool.isRequired,
-  hasSucceeded: PropTypes.bool.isRequired
+  hasSucceeded: PropTypes.bool.isRequired,
+  links: PropTypes.object
 };
 
-export default connect(
-  state => ({
-    isChanging: isChanging(state),
-    hasFailed: hasFailed(state),
-    hasSucceeded: hasSucceeded(state)
-  }),
-  dispatch => ({
-    changePassword: (password, accessToken) =>
-      dispatch(changePassword(password, accessToken)),
-    push: (url) => dispatch(push(url)),
-    reset: () => dispatch(reset('changePassword'))
-  })
-)(ChangePassword);
+export default withLinks(
+  connect(
+    state => ({
+      isChanging: isChanging(state),
+      hasFailed: hasFailed(state),
+      hasSucceeded: hasSucceeded(state)
+    }),
+    dispatch => ({
+      changePassword: (password, accessToken) =>
+        dispatch(changePassword(password, accessToken)),
+      push: url => dispatch(push(url)),
+      reset: () => dispatch(reset('changePassword'))
+    })
+  )(ChangePassword)
+);

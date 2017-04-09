@@ -3,15 +3,17 @@ import { FormattedMessage } from 'react-intl';
 import Icon from 'react-fontawesome';
 import { LinkContainer } from 'react-router-bootstrap';
 import { Breadcrumb } from 'react-bootstrap';
+import withLinks from '../../../hoc/withLinks';
 
-const BreadcrumbItem = ({
-  text,
-  link = null,
-  iconName = null,
-  isActive = false
-}, {
-  links
-}) => {
+const BreadcrumbItem = (
+  {
+    text,
+    link = null,
+    iconName = null,
+    isActive = false,
+    links
+  }
+) => {
   const content = (
     <Breadcrumb.Item active={isActive}>
       {!!iconName && <Icon name={iconName} />} {text}
@@ -19,15 +21,13 @@ const BreadcrumbItem = ({
   );
 
   return link !== null
-    ? (
-      <LinkContainer to={typeof link === 'function' ? link(links) : link} active={isActive}>
+    ? <LinkContainer
+        to={typeof link === 'function' ? link(links) : link}
+        active={isActive}
+      >
         {content}
       </LinkContainer>
-    ) : content;
-};
-
-BreadcrumbItem.contextTypes = {
-  links: PropTypes.object
+    : content;
 };
 
 BreadcrumbItem.propTypes = {
@@ -37,8 +37,9 @@ BreadcrumbItem.propTypes = {
     FormattedMessage
   ]).isRequired,
   iconName: PropTypes.string,
-  link: PropTypes.oneOfType([ PropTypes.string, PropTypes.func ]),
-  isActive: PropTypes.bool.isRequired
+  link: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
+  isActive: PropTypes.bool.isRequired,
+  links: PropTypes.object
 };
 
-export default BreadcrumbItem;
+export default withLinks(BreadcrumbItem);

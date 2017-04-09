@@ -13,18 +13,26 @@ import CreateGroupForm from '../../components/Forms/CreateGroupForm';
 import { EditIcon } from '../../components/Icons';
 
 import { fetchInstanceIfNeeded } from '../../redux/modules/instances';
-import { instanceSelector, isAdminOfInstance } from '../../redux/selectors/instances';
-import { createGroup, fetchInstanceGroupsIfNeeded } from '../../redux/modules/groups';
+import {
+  instanceSelector,
+  isAdminOfInstance
+} from '../../redux/selectors/instances';
+import {
+  createGroup,
+  fetchInstanceGroupsIfNeeded
+} from '../../redux/modules/groups';
 import { groupsSelectors } from '../../redux/selectors/groups';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import { isSuperAdmin } from '../../redux/selectors/users';
 
-class Instance extends Component {
+import withLinks from '../../hoc/withLinks';
 
-  static loadAsync = ({ instanceId }, dispatch) => Promise.all([
-    dispatch(fetchInstanceIfNeeded(instanceId)),
-    dispatch(fetchInstanceGroupsIfNeeded(instanceId))
-  ]);
+class Instance extends Component {
+  static loadAsync = ({ instanceId }, dispatch) =>
+    Promise.all([
+      dispatch(fetchInstanceIfNeeded(instanceId)),
+      dispatch(fetchInstanceGroupsIfNeeded(instanceId))
+    ]);
 
   componentWillMount() {
     this.props.loadAsync();
@@ -43,39 +51,48 @@ class Instance extends Component {
       groups,
       createGroup,
       isAdmin,
-      isSuperAdmin
-    } = this.props;
-
-    const {
+      isSuperAdmin,
       links: { ADMIN_EDIT_INSTANCE_URI_FACTORY }
-    } = this.context;
+    } = this.props;
 
     return (
       <Page
         resource={instance}
         title={instance => instance.name}
-        description={<FormattedMessage id='app.instance.description' defaultMessage='Instance overview' />}
+        description={
+          <FormattedMessage
+            id="app.instance.description"
+            defaultMessage="Instance overview"
+          />
+        }
         breadcrumbs={[
           {
-            text: <FormattedMessage id='app.instance.description' />,
+            text: <FormattedMessage id="app.instance.description" />,
             iconName: 'info-circle'
           }
-        ]}>
+        ]}
+      >
         {data => (
           <div>
-            {isSuperAdmin && (
+            {isSuperAdmin &&
               <Row>
                 <Col sm={12}>
                   <p>
-                    <LinkContainer to={ADMIN_EDIT_INSTANCE_URI_FACTORY(instanceId)}>
-                      <Button bsStyle='warning' className='btn-flat'>
-                        <EditIcon /> <FormattedMessage id='app.instance.edit' defaultMessage='Edit instance' />
+                    <LinkContainer
+                      to={ADMIN_EDIT_INSTANCE_URI_FACTORY(instanceId)}
+                    >
+                      <Button bsStyle="warning" className="btn-flat">
+                        <EditIcon />
+                        {' '}
+                        <FormattedMessage
+                          id="app.instance.edit"
+                          defaultMessage="Edit instance"
+                        />
                       </Button>
                     </LinkContainer>
                   </p>
                 </Col>
-              </Row>
-            )}
+              </Row>}
 
             <Row>
               <Col sm={12}>
@@ -83,27 +100,25 @@ class Instance extends Component {
               </Col>
             </Row>
 
-            {isAdmin && (
+            {isAdmin &&
               <Row>
                 <Col sm={6}>
                   <CreateGroupForm
                     onSubmit={createGroup}
-                    instanceId={instanceId} />
+                    instanceId={instanceId}
+                  />
                 </Col>
                 <Col sm={6}>
                   <LicencesTableContainer instance={data} />
-                  {isSuperAdmin && (
-                    <AddLicenceFormContainer instanceId={data.id} />
-                  )}
+                  {isSuperAdmin &&
+                    <AddLicenceFormContainer instanceId={data.id} />}
                 </Col>
-              </Row>
-            )}
+              </Row>}
           </div>
         )}
       </Page>
     );
   }
-
 }
 
 Instance.propTypes = {
@@ -115,26 +130,24 @@ Instance.propTypes = {
   groups: ImmutablePropTypes.map,
   createGroup: PropTypes.func.isRequired,
   isAdmin: PropTypes.bool.isRequired,
-  isSuperAdmin: PropTypes.bool.isRequired
+  isSuperAdmin: PropTypes.bool.isRequired,
+  links: PropTypes.object.isRequired
 };
 
-Instance.contextTypes = {
-  links: PropTypes.object
-};
-
-export default connect(
-  (state, { params: { instanceId } }) => {
-    const userId = loggedInUserIdSelector(state);
-    return {
-      instance: instanceSelector(state, instanceId),
-      groups: groupsSelectors(state),
-      isAdmin: isAdminOfInstance(userId, instanceId)(state),
-      isSuperAdmin: isSuperAdmin(userId)(state)
-    };
-  },
-  (dispatch, { params: { instanceId } }) => ({
-    createGroup: (data) =>
-      dispatch(createGroup({ instanceId, ...data })),
-    loadAsync: () => Instance.loadAsync({ instanceId }, dispatch)
-  })
-)(Instance);
+export default withLinks(
+  connect(
+    (state, { params: { instanceId } }) => {
+      const userId = loggedInUserIdSelector(state);
+      return {
+        instance: instanceSelector(state, instanceId),
+        groups: groupsSelectors(state),
+        isAdmin: isAdminOfInstance(userId, instanceId)(state),
+        isSuperAdmin: isSuperAdmin(userId)(state)
+      };
+    },
+    (dispatch, { params: { instanceId } }) => ({
+      createGroup: data => dispatch(createGroup({ instanceId, ...data })),
+      loadAsync: () => Instance.loadAsync({ instanceId }, dispatch)
+    })
+  )(Instance)
+);

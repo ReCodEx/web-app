@@ -27,7 +27,7 @@ class MenuGroup extends Component {
     });
   };
 
-  isActive = (props) => {
+  isActive = props => {
     const { isActive } = this.context;
     const { items, createLink } = props;
     return items.find(item => isActive(createLink(item)));
@@ -51,41 +51,52 @@ class MenuGroup extends Component {
       overflowX: 'hidden'
     };
 
-    const itemsNotificationsCount = item => notifications[item.getIn(['data', 'id'])];
-    const notificationsCount = items.reduce((acc, item) => acc + itemsNotificationsCount(item), 0);
+    const itemsNotificationsCount = item =>
+      notifications[item.getIn(['data', 'id'])];
+    const notificationsCount = items.reduce(
+      (acc, item) => acc + itemsNotificationsCount(item),
+      0
+    );
 
     return (
       <li
         className={classNames({
           active: open || forceOpen,
           treeview: true
-        })}>
-        <a href='#' onClick={this.toggle}>
+        })}
+      >
+        <a href="#" onClick={this.toggle}>
           <i className={`fa fa-${icon}`} />
-          <span style={{
-            whiteSpace: 'normal',
-            display: 'inline-block',
-            verticalAlign: 'top'
-          }}>
+          <span
+            style={{
+              whiteSpace: 'normal',
+              display: 'inline-block',
+              verticalAlign: 'top'
+            }}
+          >
             {title}
           </span>
-          <span className='pull-right-container pull-right'>
+          <span className="pull-right-container pull-right">
             {notificationsCount > 0 &&
-              <small className='label pull-right bg-blue'>{notificationsCount}</small>}
-            <Icon name='angle-left' className='pull-right' />
+              <small className="label pull-right bg-blue">
+                {notificationsCount}
+              </small>}
+            <Icon name="angle-left" className="pull-right" />
           </span>
         </a>
-        <ul className='treeview-menu' style={dropdownStyles}>
-          {items.map((item, key) =>
-            isLoading(item)
-              ? <LoadingMenuItem key={key} />
-              : <MenuItem
-                  key={key}
-                  title={item.getIn(['data', 'name'])}
-                  icon='circle-o'
-                  currentPath={currentPath}
-                  notificationsCount={itemsNotificationsCount(item)}
-                  link={createLink(item)} />
+        <ul className="treeview-menu" style={dropdownStyles}>
+          {items.map(
+            (item, key) =>
+              isLoading(item)
+                ? <LoadingMenuItem key={key} />
+                : <MenuItem
+                    key={key}
+                    title={item.getIn(['data', 'name'])}
+                    icon="circle-o"
+                    currentPath={currentPath}
+                    notificationsCount={itemsNotificationsCount(item)}
+                    link={createLink(item)}
+                  />
           )}
         </ul>
       </li>
@@ -94,7 +105,7 @@ class MenuGroup extends Component {
 }
 
 MenuGroup.propTypes = {
-  title: PropTypes.oneOfType([ PropTypes.string, PropTypes.element ]).isRequired,
+  title: PropTypes.oneOfType([PropTypes.string, PropTypes.element]).isRequired,
   icon: PropTypes.string,
   link: PropTypes.string,
   items: ImmutablePropTypes.list,

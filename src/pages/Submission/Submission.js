@@ -4,7 +4,9 @@ import { FormattedMessage } from 'react-intl';
 
 import PageContent from '../../components/PageContent';
 import ResourceRenderer from '../../components/ResourceRenderer';
-import SubmissionDetail, { FailedSubmissionDetail } from '../../components/Submissions/SubmissionDetail';
+import SubmissionDetail, {
+  FailedSubmissionDetail
+} from '../../components/Submissions/SubmissionDetail';
 
 import { fetchAssignmentIfNeeded } from '../../redux/modules/assignments';
 import { fetchSubmissionIfNeeded } from '../../redux/modules/submissions';
@@ -14,7 +16,6 @@ import { isSupervisorOf } from '../../redux/selectors/users';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 
 class Submission extends Component {
-
   static loadAsync = ({ submissionId, assignmentId }, dispatch) =>
     Promise.all([
       dispatch(fetchSubmissionIfNeeded(submissionId)),
@@ -41,51 +42,70 @@ class Submission extends Component {
 
     return (
       <PageContent
-        title={(
+        title={
           <ResourceRenderer resource={assignment} noIcons>
             {assignmentData => <span>{assignmentData.name}</span>}
           </ResourceRenderer>
-        )}
-        description={<FormattedMessage id='app.submission.evaluation.title' defaultMessage='Solution evaluation' />}
+        }
+        description={
+          <FormattedMessage
+            id="app.submission.evaluation.title"
+            defaultMessage="Solution evaluation"
+          />
+        }
         breadcrumbs={[
           {
             resource: assignment,
             iconName: 'group',
-            breadcrumb: (assignment) => ({
-              text: <FormattedMessage id='app.group.title' defaultMessage='Group detail' />,
-              link: ({ GROUP_URI_FACTORY }) => GROUP_URI_FACTORY(assignment.groupId)
+            breadcrumb: assignment => ({
+              text: (
+                <FormattedMessage
+                  id="app.group.title"
+                  defaultMessage="Group detail"
+                />
+              ),
+              link: ({ GROUP_URI_FACTORY }) =>
+                GROUP_URI_FACTORY(assignment.groupId)
             })
           },
           {
-            text: <FormattedMessage id='app.assignment.title' defaultMessage='Exercise assignment' />,
+            text: (
+              <FormattedMessage
+                id="app.assignment.title"
+                defaultMessage="Exercise assignment"
+              />
+            ),
             iconName: 'puzzle-piece',
-            link: ({ ASSIGNMENT_DETAIL_URI_FACTORY }) => ASSIGNMENT_DETAIL_URI_FACTORY(assignmentId)
+            link: ({ ASSIGNMENT_DETAIL_URI_FACTORY }) =>
+              ASSIGNMENT_DETAIL_URI_FACTORY(assignmentId)
           },
           {
-            text: <FormattedMessage id='app.submission.title' defaultMessage='Solution' />,
+            text: (
+              <FormattedMessage
+                id="app.submission.title"
+                defaultMessage="Solution"
+              />
+            ),
             iconName: 'user'
           }
-        ]}>
+        ]}
+      >
         <ResourceRenderer
           failed={<FailedSubmissionDetail />}
-          resource={[ submission, assignment ]}>
+          resource={[submission, assignment]}
+        >
           {(submission, assignment) => (
             <SubmissionDetail
               submission={submission}
               assignment={assignment}
-              isSupervisor={isSupervisorOf(assignment.groupId)} />
+              isSupervisor={isSupervisorOf(assignment.groupId)}
+            />
           )}
         </ResourceRenderer>
       </PageContent>
     );
   }
-
 }
-
-Submission.contextTypes = {
-  router: PropTypes.object,
-  links: PropTypes.object
-};
 
 Submission.propTypes = {
   params: PropTypes.shape({
@@ -103,7 +123,7 @@ export default connect(
   (state, { params: { submissionId, assignmentId } }) => ({
     submission: getSubmission(submissionId)(state),
     assignment: getAssignment(assignmentId)(state),
-    isSupervisorOf: (groupId) =>
+    isSupervisorOf: groupId =>
       isSupervisorOf(loggedInUserIdSelector(state), groupId)(state)
   }),
   (dispatch, { params }) => ({

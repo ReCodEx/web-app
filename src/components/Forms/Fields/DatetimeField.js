@@ -3,14 +3,11 @@ import { FormattedMessage } from 'react-intl';
 import Datetime from 'react-datetime';
 import 'react-datetime/css/react-datetime.css';
 
-import {
-  FormGroup,
-  ControlLabel,
-  HelpBlock
-} from 'react-bootstrap';
+import { FormGroup, ControlLabel, HelpBlock } from 'react-bootstrap';
+
+import withLinks from '../../../hoc/withLinks';
 
 class DatetimeField extends Component {
-
   /**
    * This hack forces redux-form to open the calendar each time
    * the input is focused (it opens every other time otherwise thanks to
@@ -40,20 +37,27 @@ class DatetimeField extends Component {
     } = this.context;
 
     return (
-      <FormGroup controlId={input.name} validationState={touched && error ? 'error' : undefined}>
+      <FormGroup
+        controlId={input.name}
+        validationState={touched && error ? 'error' : undefined}
+      >
         <ControlLabel>{label}</ControlLabel>
-        <Datetime {...input} {...props} locale={lang} utc={true} onFocus={() => this.onFocus()} inputProps={{ disabled }} />
+        <Datetime
+          {...input}
+          {...props}
+          locale={lang}
+          utc={true}
+          onFocus={() => this.onFocus()}
+          inputProps={{ disabled }}
+        />
         {touched && error && <HelpBlock>{error}</HelpBlock>}
       </FormGroup>
     );
   }
 }
 
-DatetimeField.contextTypes = {
-  lang: PropTypes.string
-};
-
 DatetimeField.propTypes = {
+  lang: PropTypes.string,
   type: PropTypes.string,
   label: PropTypes.oneOfType([
     PropTypes.string,
@@ -74,4 +78,4 @@ DatetimeField.propTypes = {
   disabled: PropTypes.bool
 };
 
-export default DatetimeField;
+export default withLinks(DatetimeField);

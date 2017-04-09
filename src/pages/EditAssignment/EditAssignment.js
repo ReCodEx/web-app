@@ -9,23 +9,32 @@ import PageContent from '../../components/PageContent';
 
 import ResourceRenderer from '../../components/ResourceRenderer';
 import EditAssignmentForm from '../../components/Forms/EditAssignmentForm';
-import DeleteAssignmentButtonContainer from '../../containers/DeleteAssignmentButtonContainer';
+import DeleteAssignmentButtonContainer
+  from '../../containers/DeleteAssignmentButtonContainer';
 import Box from '../../components/AdminLTE/Box';
 import { LoadingIcon, WarningIcon } from '../../components/Icons';
 
-import { fetchAssignment, editAssignment } from '../../redux/modules/assignments';
+import {
+  fetchAssignment,
+  editAssignment
+} from '../../redux/modules/assignments';
 import { getAssignment } from '../../redux/selectors/assignments';
 import { canSubmitSolution } from '../../redux/selectors/canSubmit';
-import { runtimeEnvironmentsSelector } from '../../redux/selectors/runtimeEnvironments';
+import {
+  runtimeEnvironmentsSelector
+} from '../../redux/selectors/runtimeEnvironments';
 import { isSubmitting } from '../../redux/selectors/submission';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
-import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments';
+import {
+  fetchRuntimeEnvironments
+} from '../../redux/modules/runtimeEnvironments';
 import { isReady, getJsData } from '../../redux/helpers/resourceManager';
 
-class EditAssignment extends Component {
+import withLinks from '../../hoc/withLinks';
 
+class EditAssignment extends Component {
   componentWillMount = () => this.props.loadAsync();
-  componentWillReceiveProps = (props) => {
+  componentWillReceiveProps = props => {
     if (this.props.params.assignmentId !== props.params.assignmentId) {
       props.reset();
       props.loadAsync();
@@ -36,12 +45,15 @@ class EditAssignment extends Component {
     }
   };
 
-  static loadAsync = ({ assignmentId }, dispatch) => Promise.all([
-    dispatch(fetchAssignment(assignmentId)),
-    dispatch(fetchRuntimeEnvironments())
-  ]);
+  static loadAsync = ({ assignmentId }, dispatch) =>
+    Promise.all([
+      dispatch(fetchAssignment(assignmentId)),
+      dispatch(fetchRuntimeEnvironments())
+    ]);
 
-  getInitialValues = ({ firstDeadline, secondDeadline, pointsPercentualThreshold, ...rest }) => ({
+  getInitialValues = (
+    { firstDeadline, secondDeadline, pointsPercentualThreshold, ...rest }
+  ) => ({
     firstDeadline: moment(firstDeadline * 1000),
     secondDeadline: moment(secondDeadline * 1000),
     pointsPercentualThreshold: pointsPercentualThreshold * 100,
@@ -50,9 +62,7 @@ class EditAssignment extends Component {
 
   render() {
     const {
-      links: { ASSIGNMENT_DETAIL_URI_FACTORY, GROUP_URI_FACTORY }
-    } = this.context;
-    const {
+      links: { ASSIGNMENT_DETAIL_URI_FACTORY, GROUP_URI_FACTORY },
       params: { assignmentId },
       push,
       assignment,
@@ -62,56 +72,105 @@ class EditAssignment extends Component {
 
     return (
       <PageContent
-        title={<FormattedMessage id='app.editAssignment.title' defaultMessage='Edit assignment settings' />}
-        description={<FormattedMessage id='app.editAssignment.description' defaultMessage='Change assignment settings and limits' />}
+        title={
+          <FormattedMessage
+            id="app.editAssignment.title"
+            defaultMessage="Edit assignment settings"
+          />
+        }
+        description={
+          <FormattedMessage
+            id="app.editAssignment.description"
+            defaultMessage="Change assignment settings and limits"
+          />
+        }
         breadcrumbs={[
           {
-            text: <FormattedMessage id='app.assignment.title' />,
+            text: <FormattedMessage id="app.assignment.title" />,
             iconName: 'puzzle-piece',
             link: ASSIGNMENT_DETAIL_URI_FACTORY(assignmentId)
           },
           {
-            text: <FormattedMessage id='app.editAssignment.title' />,
+            text: <FormattedMessage id="app.editAssignment.title" />,
             iconName: 'pencil'
           }
-        ]}>
+        ]}
+      >
         <div>
           <ResourceRenderer
-            loading={(
-              <Box title={<FormattedMessage id='app.editAssignment.loading' defaultMessage='Loading ...' />}>
+            loading={
+              <Box
+                title={
+                  <FormattedMessage
+                    id="app.editAssignment.loading"
+                    defaultMessage="Loading ..."
+                  />
+                }
+              >
                 <p>
-                  <LoadingIcon /> <FormattedMessage id='app.editAssignment.loadingDescription' defaultMessage='Loading latest assignment settings ...' />
+                  <LoadingIcon />
+                  {' '}
+                  <FormattedMessage
+                    id="app.editAssignment.loadingDescription"
+                    defaultMessage="Loading latest assignment settings ..."
+                  />
                 </p>
               </Box>
-            )}
-            failed={(
-              <Box title={<FormattedMessage id='app.editAssignment.failed' defaultMessage='Failed loading assignment settings' />}>
+            }
+            failed={
+              <Box
+                title={
+                  <FormattedMessage
+                    id="app.editAssignment.failed"
+                    defaultMessage="Failed loading assignment settings"
+                  />
+                }
+              >
                 <p>
-                  <WarningIcon /> <FormattedMessage id='app.editAssignment.failedDescription' defaultMessage='Assignment settings could not have been loaded.' />
+                  <WarningIcon />
+                  {' '}
+                  <FormattedMessage
+                    id="app.editAssignment.failedDescription"
+                    defaultMessage="Assignment settings could not have been loaded."
+                  />
                 </p>
               </Box>
-            )}
-            resource={assignment}>
+            }
+            resource={assignment}
+          >
             {data => (
               <div>
                 <EditAssignmentForm
                   assignment={data}
                   initialValues={data ? this.getInitialValues(data) : {}}
-                  onSubmit={(formData) => editAssignment(data.version, formData)}
-                  formValues={formValues} />
+                  onSubmit={formData => editAssignment(data.version, formData)}
+                  formValues={formValues}
+                />
               </div>
             )}
           </ResourceRenderer>
           <br />
           <Box
-            type='danger'
-            title={<FormattedMessage id='app.editAssignment.deleteAssignment' defaultMessage='Delete the assignment' />}>
+            type="danger"
+            title={
+              <FormattedMessage
+                id="app.editAssignment.deleteAssignment"
+                defaultMessage="Delete the assignment"
+              />
+            }
+          >
             <div>
               <p>
-                <FormattedMessage id='app.editAssignment.deleteAssignmentWarning' defaultMessage='Deleting an assignment will remove all the students submissions and you will have to contact the administrator of ReCodEx if you wanted to restore the assignment in the future.' />
+                <FormattedMessage
+                  id="app.editAssignment.deleteAssignmentWarning"
+                  defaultMessage="Deleting an assignment will remove all the students submissions and you will have to contact the administrator of ReCodEx if you wanted to restore the assignment in the future."
+                />
               </p>
-              <p className='text-center'>
-                <DeleteAssignmentButtonContainer id={assignmentId} onDeleted={() => push(GROUP_URI_FACTORY(this.groupId))} />
+              <p className="text-center">
+                <DeleteAssignmentButtonContainer
+                  id={assignmentId}
+                  onDeleted={() => push(GROUP_URI_FACTORY(this.groupId))}
+                />
               </p>
             </div>
           </Box>
@@ -119,12 +178,7 @@ class EditAssignment extends Component {
       </PageContent>
     );
   }
-
 }
-
-EditAssignment.contextTypes = {
-  links: PropTypes.object
-};
 
 EditAssignment.propTypes = {
   loadAsync: PropTypes.func.isRequired,
@@ -135,36 +189,41 @@ EditAssignment.propTypes = {
   assignment: ImmutablePropTypes.map,
   runtimeEnvironments: ImmutablePropTypes.map,
   editAssignment: PropTypes.func.isRequired,
-  formValues: PropTypes.object
+  formValues: PropTypes.object,
+  links: PropTypes.object
 };
 
-export default connect(
-  (state, { params: { assignmentId } }) => {
-    const assignmentSelector = getAssignment(assignmentId);
-    const userId = loggedInUserIdSelector(state);
-    return {
-      assignment: assignmentSelector(state),
-      runtimeEnvironments: runtimeEnvironmentsSelector(state),
-      submitting: isSubmitting(state),
-      userId,
-      canSubmit: canSubmitSolution(assignmentId)(state),
-      formValues: getFormValues('editAssignment')(state)
-    };
-  },
-  (dispatch, { params: { assignmentId } }) => ({
-    push: (url) => dispatch(push(url)),
-    reset: () => dispatch(reset('editAssignment')),
-    loadAsync: () => EditAssignment.loadAsync({ assignmentId }, dispatch),
-    editAssignment: (version, data) => {
-      // convert deadline times to timestamps
-      const processedData = Object.assign({}, data, {
-        firstDeadline: moment(data.firstDeadline).unix(),
-        secondDeadline: moment(data.secondDeadline).unix(),
-        submissionsCountLimit: Number(data.submissionsCountLimit),
-        version
-      });
-      return dispatch(editAssignment(assignmentId, processedData))
-        .then(() => dispatch(initialize('editAssignment', { ...data, version: version + 1 })));
-    }
-  })
-)(EditAssignment);
+export default withLinks(
+  connect(
+    (state, { params: { assignmentId } }) => {
+      const assignmentSelector = getAssignment(assignmentId);
+      const userId = loggedInUserIdSelector(state);
+      return {
+        assignment: assignmentSelector(state),
+        runtimeEnvironments: runtimeEnvironmentsSelector(state),
+        submitting: isSubmitting(state),
+        userId,
+        canSubmit: canSubmitSolution(assignmentId)(state),
+        formValues: getFormValues('editAssignment')(state)
+      };
+    },
+    (dispatch, { params: { assignmentId } }) => ({
+      push: url => dispatch(push(url)),
+      reset: () => dispatch(reset('editAssignment')),
+      loadAsync: () => EditAssignment.loadAsync({ assignmentId }, dispatch),
+      editAssignment: (version, data) => {
+        // convert deadline times to timestamps
+        const processedData = Object.assign({}, data, {
+          firstDeadline: moment(data.firstDeadline).unix(),
+          secondDeadline: moment(data.secondDeadline).unix(),
+          submissionsCountLimit: Number(data.submissionsCountLimit),
+          version
+        });
+        return dispatch(editAssignment(assignmentId, processedData)).then(() =>
+          dispatch(
+            initialize('editAssignment', { ...data, version: version + 1 })
+          ));
+      }
+    })
+  )(EditAssignment)
+);

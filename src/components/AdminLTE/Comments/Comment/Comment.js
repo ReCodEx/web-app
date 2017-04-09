@@ -4,61 +4,85 @@ import classNames from 'classnames';
 import Icon from 'react-fontawesome';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { Link } from 'react-router';
+import withLinks from '../../../../hoc/withLinks';
 
 import { Posted, Posting, Failed } from './Status';
 
-const Comment = ({
-  isFromCurrentUser = false,
-  id,
-  right,
-  status = 'posted',
-  user,
-  postedAt,
-  isPrivate = false,
-  text,
-  repost,
-  isToggling = false,
-  togglePrivacy
-}, {
-  links: { USER_URI_FACTORY }
-}) => (
-  <div className={classNames({
-    'direct-chat-success': isPrivate,
-    'direct-chat-primary': !isPrivate
-  })}>
-    <div className={classNames({
-      'direct-chat-msg': true,
-      'right': right
-    })}>
-      <div className='direct-chat-info clearfix'>
-        <span className={classNames({
-          'direct-chat-name': true,
-          'pull-right': right
-        })}>
+const Comment = (
+  {
+    isFromCurrentUser = false,
+    id,
+    right,
+    status = 'posted',
+    user,
+    postedAt,
+    isPrivate = false,
+    text,
+    repost,
+    isToggling = false,
+    togglePrivacy,
+    links: { USER_URI_FACTORY }
+  }
+) => (
+  <div
+    className={classNames({
+      'direct-chat-success': isPrivate,
+      'direct-chat-primary': !isPrivate
+    })}
+  >
+    <div
+      className={classNames({
+        'direct-chat-msg': true,
+        right: right
+      })}
+    >
+      <div className="direct-chat-info clearfix">
+        <span
+          className={classNames({
+            'direct-chat-name': true,
+            'pull-right': right
+          })}
+        >
           <Link to={USER_URI_FACTORY(user.id)}>
             {user.name}
           </Link>
         </span>
         {status === 'posted' && <Posted right={!right} postedAt={postedAt} />}
-        {status === 'failed' && <Failed right={!right} repost={() => repost && repost(id)} />}
+        {status === 'failed' &&
+          <Failed right={!right} repost={() => repost && repost(id)} />}
         {status === 'pending' && <Posting right={!right} />}
       </div>
-      <img className='direct-chat-img' src={user.avatarUrl} alt={user.name} />
-      <div className='direct-chat-text'>
-        {isFromCurrentUser && togglePrivacy &&
-          <OverlayTrigger placement='left' overlay={(
-            <Tooltip id={id}>
-              {isPrivate
-                ? <FormattedMessage id='app.comments.onlyYouCanSeeThisComment' defaultMessage='Only you can see this comment' />
-                : <FormattedMessage id='app.comments.everyoneCanSeeThisComment' defaultMessage='This comment is visible to everyone.' />}
-            </Tooltip>
-          )}>
+      <img className="direct-chat-img" src={user.avatarUrl} alt={user.name} />
+      <div className="direct-chat-text">
+        {isFromCurrentUser &&
+          togglePrivacy &&
+          <OverlayTrigger
+            placement="left"
+            overlay={
+              <Tooltip id={id}>
+                {isPrivate
+                  ? <FormattedMessage
+                      id="app.comments.onlyYouCanSeeThisComment"
+                      defaultMessage="Only you can see this comment"
+                    />
+                  : <FormattedMessage
+                      id="app.comments.everyoneCanSeeThisComment"
+                      defaultMessage="This comment is visible to everyone."
+                    />}
+              </Tooltip>
+            }
+          >
             <Icon
-              name={isToggling ? 'circle-o-notch' : isPrivate ? 'lock' : 'unlock-alt'}
+              name={
+                isToggling
+                  ? 'circle-o-notch'
+                  : isPrivate ? 'lock' : 'unlock-alt'
+              }
               onClick={() => togglePrivacy(id)}
-              className='pull-right'
+              className="pull-right"
               style={{ cursor: 'pointer' }}
-              spin={isToggling} />
+              spin={isToggling}
+            />
           </OverlayTrigger>}{' '}
         {text}
       </div>
@@ -81,11 +105,8 @@ Comment.propTypes = {
   repost: PropTypes.func,
   isPrivate: PropTypes.bool,
   isToggling: PropTypes.bool,
-  togglePrivacy: PropTypes.func
-};
-
-Comment.contextTypes = {
+  togglePrivacy: PropTypes.func,
   links: PropTypes.object
 };
 
-export default Comment;
+export default withLinks(Comment);

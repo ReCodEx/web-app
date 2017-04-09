@@ -11,39 +11,53 @@ import Box from '../../components/AdminLTE/Box';
 import ResourceRenderer from '../../components/ResourceRenderer';
 
 import EditExerciseForm from '../../components/Forms/EditExerciseForm';
-import EditExerciseRuntimeConfigsForm from '../../components/Forms/EditExerciseRuntimeConfigsForm';
-import EditExerciseLimitsForm from '../../components/Forms/EditExerciseLimitsForm';
-import SupplementaryFilesTableContainer from '../../containers/SupplementaryFilesTableContainer';
-import DeleteExerciseButtonContainer from '../../containers/DeleteExerciseButtonContainer';
+import EditExerciseRuntimeConfigsForm
+  from '../../components/Forms/EditExerciseRuntimeConfigsForm';
+import EditExerciseLimitsForm
+  from '../../components/Forms/EditExerciseLimitsForm';
+import SupplementaryFilesTableContainer
+  from '../../containers/SupplementaryFilesTableContainer';
+import DeleteExerciseButtonContainer
+  from '../../containers/DeleteExerciseButtonContainer';
 
-import { fetchExercise, editExercise, editRuntimeConfigs } from '../../redux/modules/exercises';
+import {
+  fetchExercise,
+  editExercise,
+  editRuntimeConfigs
+} from '../../redux/modules/exercises';
 import { fetchLimits, editLimits } from '../../redux/modules/limits';
 import { getExercise } from '../../redux/selectors/exercises';
 import { isSubmitting } from '../../redux/selectors/submission';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
-import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments';
-import { runtimeEnvironmentsSelector } from '../../redux/selectors/runtimeEnvironments';
+import {
+  fetchRuntimeEnvironments
+} from '../../redux/modules/runtimeEnvironments';
+import {
+  runtimeEnvironmentsSelector
+} from '../../redux/selectors/runtimeEnvironments';
 import { getEnvironmentsLimits } from '../../redux/selectors/limits';
 
-class EditExercise extends Component {
+import withLinks from '../../hoc/withLinks';
 
+class EditExercise extends Component {
   componentWillMount = () => this.props.loadAsync();
-  componentWillReceiveProps = (props) => {
+  componentWillReceiveProps = props => {
     if (this.props.params.exerciseId !== props.params.exerciseId) {
       props.reset();
       props.loadAsync();
     }
   };
 
-  static loadAsync = ({ exerciseId }, dispatch) => Promise.all([
-    dispatch(fetchExercise(exerciseId)),
-    dispatch(fetchLimits(exerciseId)),
-    dispatch(fetchRuntimeEnvironments())
-  ]);
+  static loadAsync = ({ exerciseId }, dispatch) =>
+    Promise.all([
+      dispatch(fetchExercise(exerciseId)),
+      dispatch(fetchLimits(exerciseId)),
+      dispatch(fetchRuntimeEnvironments())
+    ]);
 
   render() {
-    const { links: { EXERCISES_URI, EXERCISE_URI_FACTORY } } = this.context;
     const {
+      links: { EXERCISES_URI, EXERCISE_URI_FACTORY },
       params: { exerciseId },
       exercise,
       editExercise,
@@ -59,18 +73,34 @@ class EditExercise extends Component {
       <Page
         resource={exercise}
         title={exercise => exercise.name}
-        description={<FormattedMessage id='app.editExercise.description' defaultMessage='Change exercise settings' />}
+        description={
+          <FormattedMessage
+            id="app.editExercise.description"
+            defaultMessage="Change exercise settings"
+          />
+        }
         breadcrumbs={[
           {
-            text: <FormattedMessage id='app.exercise.title' defaultMessage='Exercise' />,
+            text: (
+              <FormattedMessage
+                id="app.exercise.title"
+                defaultMessage="Exercise"
+              />
+            ),
             iconName: 'puzzle-piece',
             link: EXERCISE_URI_FACTORY(exerciseId)
           },
           {
-            text: <FormattedMessage id='app.editExercise.title' defaultMessage='Edit exercise' />,
+            text: (
+              <FormattedMessage
+                id="app.editExercise.title"
+                defaultMessage="Edit exercise"
+              />
+            ),
             iconName: 'pencil'
           }
-        ]}>
+        ]}
+      >
         {exercise => (
           <div>
             <Row>
@@ -78,8 +108,10 @@ class EditExercise extends Component {
                 <EditExerciseForm
                   exercise={exercise}
                   initialValues={exercise}
-                  onSubmit={(formData) => editExercise(exercise.version, formData)}
-                  formValues={formValues} />
+                  onSubmit={formData =>
+                    editExercise(exercise.version, formData)}
+                  formValues={formValues}
+                />
               </Col>
               <Col lg={6}>
                 <Row>
@@ -91,9 +123,16 @@ class EditExercise extends Component {
                   <Col lg={12}>
                     <EditExerciseRuntimeConfigsForm
                       runtimeEnvironments={runtimeEnvironments}
-                      runtimeConfigs={runtimesFormValues ? runtimesFormValues.runtimeConfigs : [{}]}
-                      initialValues={{runtimeConfigs: exercise.runtimeConfigs}}
-                      onSubmit={editRuntimeConfigs} />
+                      runtimeConfigs={
+                        runtimesFormValues
+                          ? runtimesFormValues.runtimeConfigs
+                          : [{}]
+                      }
+                      initialValues={{
+                        runtimeConfigs: exercise.runtimeConfigs
+                      }}
+                      onSubmit={editRuntimeConfigs}
+                    />
                   </Col>
                 </Row>
                 <Row>
@@ -104,7 +143,8 @@ class EditExercise extends Component {
                           initialValues={environments}
                           runtimeEnvironments={runtimeEnvironments}
                           exercise={exercise}
-                          onSubmit={editLimits} />
+                          onSubmit={editLimits}
+                        />
                       )}
                     </ResourceRenderer>
                   </Col>
@@ -113,14 +153,26 @@ class EditExercise extends Component {
             </Row>
             <br />
             <Box
-              type='danger'
-              title={<FormattedMessage id='app.editExercise.deleteExercise' defaultMessage='Delete the exercise' />}>
+              type="danger"
+              title={
+                <FormattedMessage
+                  id="app.editExercise.deleteExercise"
+                  defaultMessage="Delete the exercise"
+                />
+              }
+            >
               <div>
                 <p>
-                  <FormattedMessage id='app.editExercise.deleteExerciseWarning' defaultMessage='Deleting an exercise will remove all the students submissions and all assignments.' />
+                  <FormattedMessage
+                    id="app.editExercise.deleteExerciseWarning"
+                    defaultMessage="Deleting an exercise will remove all the students submissions and all assignments."
+                  />
                 </p>
-                <p className='text-center'>
-                  <DeleteExerciseButtonContainer id={exercise.id} onDeleted={() => push(EXERCISES_URI)} />
+                <p className="text-center">
+                  <DeleteExerciseButtonContainer
+                    id={exercise.id}
+                    onDeleted={() => push(EXERCISES_URI)}
+                  />
                 </p>
               </div>
             </Box>
@@ -129,12 +181,7 @@ class EditExercise extends Component {
       </Page>
     );
   }
-
 }
-
-EditExercise.contextTypes = {
-  links: PropTypes.object
-};
 
 EditExercise.propTypes = {
   exercise: ImmutablePropTypes.map,
@@ -142,34 +189,41 @@ EditExercise.propTypes = {
   loadAsync: PropTypes.func.isRequired,
   editExercise: PropTypes.func.isRequired,
   editRuntimeConfigs: PropTypes.func.isRequired,
-  params: PropTypes.shape({ exerciseId: PropTypes.string.isRequired }).isRequired,
+  params: PropTypes.shape({
+    exerciseId: PropTypes.string.isRequired
+  }).isRequired,
   environments: ImmutablePropTypes.map,
   editLimits: PropTypes.func.isRequired,
   formValues: PropTypes.object,
-  runtimesFormValues: PropTypes.object
+  runtimesFormValues: PropTypes.object,
+  links: PropTypes.object.isRequired
 };
 
-export default connect(
-  (state, { params: { exerciseId } }) => {
-    const exerciseSelector = getExercise(exerciseId);
-    const environmentsSelector = getEnvironmentsLimits(exerciseId);
-    const userId = loggedInUserIdSelector(state);
-    return {
-      exercise: exerciseSelector(state),
-      submitting: isSubmitting(state),
-      userId,
-      formValues: getFormValues('editExercise')(state),
-      runtimesFormValues: getFormValues('editExerciseRuntimeConfigs')(state),
-      runtimeEnvironments: runtimeEnvironmentsSelector(state),
-      environments: environmentsSelector(state)
-    };
-  },
-  (dispatch, { params: { exerciseId } }) => ({
-    push: (url) => dispatch(push(url)),
-    reset: () => dispatch(reset('editExercise')),
-    loadAsync: () => EditExercise.loadAsync({ exerciseId }, dispatch),
-    editExercise: (version, data) => dispatch(editExercise(exerciseId, { ...data, version })),
-    editRuntimeConfigs: (data) => dispatch(editRuntimeConfigs(exerciseId, data)),
-    editLimits: (data) => dispatch(editLimits(exerciseId, data))
-  })
-)(EditExercise);
+export default withLinks(
+  connect(
+    (state, { params: { exerciseId } }) => {
+      const exerciseSelector = getExercise(exerciseId);
+      const environmentsSelector = getEnvironmentsLimits(exerciseId);
+      const userId = loggedInUserIdSelector(state);
+      return {
+        exercise: exerciseSelector(state),
+        submitting: isSubmitting(state),
+        userId,
+        formValues: getFormValues('editExercise')(state),
+        runtimesFormValues: getFormValues('editExerciseRuntimeConfigs')(state),
+        runtimeEnvironments: runtimeEnvironmentsSelector(state),
+        environments: environmentsSelector(state)
+      };
+    },
+    (dispatch, { params: { exerciseId } }) => ({
+      push: url => dispatch(push(url)),
+      reset: () => dispatch(reset('editExercise')),
+      loadAsync: () => EditExercise.loadAsync({ exerciseId }, dispatch),
+      editExercise: (version, data) =>
+        dispatch(editExercise(exerciseId, { ...data, version })),
+      editRuntimeConfigs: data =>
+        dispatch(editRuntimeConfigs(exerciseId, data)),
+      editLimits: data => dispatch(editLimits(exerciseId, data))
+    })
+  )(EditExercise)
+);

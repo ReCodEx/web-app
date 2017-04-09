@@ -5,19 +5,24 @@ import DifficultyIcon from '../DifficultyIcon';
 import UsersNameContainer from '../../../containers/UsersNameContainer';
 import { Link } from 'react-router';
 
-const ExercisesListItem = ({
-  id,
-  name,
-  difficulty,
-  authorId,
-  createdAt,
-  createActions
-}, {
-  links: { EXERCISE_URI_FACTORY }
-}) => (
+import withLinks from '../../../hoc/withLinks';
+
+const ExercisesListItem = (
+  {
+    id,
+    name,
+    difficulty,
+    authorId,
+    createdAt,
+    createActions
+  },
+  {
+    links: { EXERCISE_URI_FACTORY }
+  }
+) => (
   <tr>
-    <td className='text-center'>
-      <Icon name='code' />
+    <td className="text-center">
+      <Icon name="code" />
     </td>
     <td>
       <strong><Link to={EXERCISE_URI_FACTORY(id)}>{name}</Link></strong>
@@ -29,13 +34,14 @@ const ExercisesListItem = ({
       <DifficultyIcon difficulty={difficulty} />
     </td>
     <td>
-      <FormattedDate value={createdAt * 1000} /> <FormattedTime value={createdAt * 1000} />
+      <FormattedDate value={createdAt * 1000} />
+      {' '}
+      <FormattedTime value={createdAt * 1000} />
     </td>
-    {createActions && (
-      <td className='text-right'>
+    {createActions &&
+      <td className="text-right">
         {createActions(id)}
-      </td>
-    )}
+      </td>}
   </tr>
 );
 
@@ -45,11 +51,8 @@ ExercisesListItem.propTypes = {
   name: PropTypes.string.isRequired,
   difficulty: PropTypes.string.isRequired,
   createdAt: PropTypes.number.isRequired,
-  createActions: PropTypes.func
-};
-
-ExercisesListItem.contextTypes = {
+  createActions: PropTypes.func,
   links: PropTypes.object
 };
 
-export default ExercisesListItem;
+export default withLinks(ExercisesListItem);

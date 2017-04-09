@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { injectIntl, FormattedMessage } from 'react-intl';
 import { List } from 'immutable';
 import { connect } from 'react-redux';
+import { push } from 'react-router-redux';
 
 import {
   addMessage,
@@ -26,24 +27,25 @@ import EvaluationProgress from '../../components/EvaluationProgress';
 import randomMessages, { extraMessages } from './randomMessages';
 
 class EvaluationProgressContainer extends Component {
-
   state = { realTimeProcessing: true, monitor: null };
   socket = null;
   componentWillMount = () => this.init(this.props);
-  componentWillReceiveProps = (props) => this.init(props);
+  componentWillReceiveProps = props => this.init(props);
   componentWillUnmount = () => {
     this.closeSocket();
     this.socket = null;
   };
 
-  init = (props) => {
+  init = props => {
     const { monitor } = props;
-    if (this.socket == null && monitor !== null && monitor !== this.state.monitor) {
+    if (
+      this.socket == null && monitor !== null && monitor !== this.state.monitor
+    ) {
       if (typeof WebSocket === 'function') {
         this.socket = new WebSocket(monitor.url);
         this.socket.onopen = () => this.socket.send(monitor.id);
         this.socket.onmessage = this.onMessage;
-        this.socket.onerror = (err) => this.onError(err);
+        this.socket.onerror = err => this.onError(err);
         this.setState({ monitor });
       } else {
         this.setState({ realTimeProcessing: false });
@@ -64,7 +66,7 @@ class EvaluationProgressContainer extends Component {
     this.closeSocket();
   };
 
-  onMessage = (msg) => {
+  onMessage = msg => {
     const data = JSON.parse(msg.data);
     const {
       addMessage,
@@ -78,13 +80,18 @@ class EvaluationProgressContainer extends Component {
       case 'FINISHED':
         addMessage(this.formatMessage(data));
         this.closeSocket();
-        addMessage({ wasSuccessful: true, status: 'OK', text: formatMessage(extraMessages.last) });
+        addMessage({
+          wasSuccessful: true,
+          status: 'OK',
+          text: formatMessage(extraMessages.last)
+        });
         break;
     }
   };
 
-  formatMessage = ({ command, task_state = 'OK', text = null }) => ({    // eslint-disable-line camelcase
-    wasSuccessful: command !== 'TASK' || task_state === 'COMPLETED',      // eslint-disable-line camelcase
+  formatMessage = ({ command, task_state = 'OK', text = null }) => ({
+    // eslint-disable-line camelcase
+    wasSuccessful: command !== 'TASK' || task_state === 'COMPLETED', // eslint-disable-line camelcase
     text: text || this.props.intl.formatMessage(this.getRandomMessage()),
     status: task_state // eslint-disable-line camelcase
   });
@@ -94,11 +101,13 @@ class EvaluationProgressContainer extends Component {
       this.availableMessages = Object.assign([], Object.values(randomMessages));
     }
 
-    const randomIndex = Math.floor(Math.random() * this.availableMessages.length);
+    const randomIndex = Math.floor(
+      Math.random() * this.availableMessages.length
+    );
     return this.availableMessages.splice(randomIndex, 1).pop();
   };
 
-  updateProgress = (task) => {
+  updateProgress = task => {
     const { completedTask, skippedTask, failedTask } = this.props;
     const msg = this.formatMessage(task);
     switch (task.task_state) {
@@ -127,10 +136,9 @@ class EvaluationProgressContainer extends Component {
   };
 
   finish = () => {
-    const { link, finishProcessing } = this.props;
-    const { router } = this.context;
+    const { push, link, finishProcessing } = this.props;
     finishProcessing();
-    router.push(link);
+    push(link);
   };
 
   render = () => {
@@ -150,7 +158,8 @@ class EvaluationProgressContainer extends Component {
           failed={progress.failed}
           finished={isFinished}
           showContinueButton={isFinished || this.isClosed}
-          finishProcessing={this.finish} />
+          finishProcessing={this.finish}
+        />
       : <EvaluationProgress
           isOpen={isOpen}
           completed={0}
@@ -163,13 +172,16 @@ class EvaluationProgressContainer extends Component {
             this.formatMessage({
               command: 'TASK',
               task_state: 'SKIPPED',
-              text: <FormattedMessage
-                      id='app.evaluationProgress.noWebSockets'
-                      defaultMessage='Your browser does not support realtime progress monitoring or the connection to the server could not be estabelished or was lost. The evaluation has already started and you will be able to see the results soon.' />
+              text: (
+                <FormattedMessage
+                  id="app.evaluationProgress.noWebSockets"
+                  defaultMessage="Your browser does not support realtime progress monitoring or the connection to the server could not be estabelished or was lost. The evaluation has already started and you will be able to see the results soon."
+                />
+              )
             })
-          ])} />;
+          ])}
+        />;
   };
-
 }
 
 EvaluationProgressContainer.propTypes = {
@@ -198,11 +210,8 @@ EvaluationProgressContainer.propTypes = {
   failedTask: PropTypes.func.isRequired,
   goToEvaluationDetails: PropTypes.func,
   messages: PropTypes.object,
-  intl: PropTypes.object.isRequired
-};
-
-EvaluationProgressContainer.contextTypes = {
-  router: React.PropTypes.object.isRequired
+  intl: PropTypes.object.isRequired,
+  push: PropTypes.func.isRequired
 };
 
 export default connect(
@@ -222,8 +231,7 @@ export default connect(
     completedTask,
     skippedTask,
     failedTask,
-    addMessage
+    addMessage,
+    push
   }
-)(
-  injectIntl(EvaluationProgressContainer)
-);
+)(injectIntl(EvaluationProgressContainer));

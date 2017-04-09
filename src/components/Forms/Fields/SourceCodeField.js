@@ -3,11 +3,7 @@ import { FormattedMessage } from 'react-intl';
 import { canUseDOM } from 'exenv';
 import ClientOnly from '../../ClientOnly';
 
-import {
-  FormGroup,
-  ControlLabel,
-  HelpBlock
-} from 'react-bootstrap';
+import { FormGroup, ControlLabel, HelpBlock } from 'react-bootstrap';
 
 // load the ACE editor only when rendering in the browser
 let AceEditor = null;
@@ -47,27 +43,31 @@ const getMode = ext => {
   }
 };
 
-const SourceCodeField = ({
-  input,
-  mode,
-  meta: {
-    touched,
-    error
+const SourceCodeField = (
+  {
+    input,
+    mode,
+    meta: {
+      touched,
+      error
+    },
+    type = 'text',
+    label,
+    children,
+    tabIndex,
+    ...props
   },
-  type = 'text',
-  label,
-  children,
-  tabIndex,
-  ...props
-}, {
-  userSettings: {
-    vimMode = false,
-    darkTheme = false
+  {
+    userSettings: {
+      vimMode = false,
+      darkTheme = false
+    }
   }
-}) => (
+) => (
   <FormGroup
     controlId={input.name}
-    validationState={touched && error ? 'error' : undefined}>
+    validationState={touched && error ? 'error' : undefined}
+  >
     <ControlLabel>{label}</ControlLabel>
     <ClientOnly>
       <AceEditor
@@ -77,8 +77,9 @@ const SourceCodeField = ({
         name={input.name}
         tabIndex={tabIndex}
         keyboardHandler={vimMode ? 'vim' : undefined}
-        width='100%'
-        editorProps={{$blockScrolling: true}} />
+        width="100%"
+        editorProps={{ $blockScrolling: true }}
+      />
     </ClientOnly>
     {touched && error && <HelpBlock>{error}</HelpBlock>}
     {children}

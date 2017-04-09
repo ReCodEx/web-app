@@ -6,59 +6,75 @@ import { isReady, getJsData } from '../../../redux/helpers/resourceManager';
 import MenuTitle from '../../AdminLTE/Sidebar/MenuTitle';
 import MenuItem from '../../AdminLTE/Sidebar/MenuItem';
 
-const LoggedIn = ({
-  instances,
-  isCollapsed,
-  currentUrl
-}, {
-  links: {
-    DASHBOARD_URI,
-    INSTANCE_URI_FACTORY,
-    BUGS_URL
-  }
-}) => (
-  <ul className='sidebar-menu'>
-    <MenuTitle title={<FormattedMessage id='app.sidebar.menu.title' defaultMessage='Menu' />} />
-    <MenuItem
-      title={<FormattedMessage id='app.sidebar.menu.dashboard' defaultMessage='Dashboard' />}
-      icon='dashboard'
-      currentPath={currentUrl}
-      link={DASHBOARD_URI} />
+import withLinks from '../../../hoc/withLinks';
 
-    {instances && instances.size > 0 &&
+const LoggedIn = (
+  {
+    instances,
+    isCollapsed,
+    currentUrl,
+    links: {
+      DASHBOARD_URI,
+      INSTANCE_URI_FACTORY,
+      BUGS_URL
+    }
+  }
+) => (
+  <ul className="sidebar-menu">
+    <MenuTitle
+      title={
+        <FormattedMessage id="app.sidebar.menu.title" defaultMessage="Menu" />
+      }
+    />
+    <MenuItem
+      title={
+        <FormattedMessage
+          id="app.sidebar.menu.dashboard"
+          defaultMessage="Dashboard"
+        />
+      }
+      icon="dashboard"
+      currentPath={currentUrl}
+      link={DASHBOARD_URI}
+    />
+
+    {instances &&
+      instances.size > 0 &&
       instances
         .toArray()
         .filter(isReady)
         .map(getJsData)
-        .map(
-          ({ id, name }) => (
-            <MenuItem
-              key={id}
-              title={name}
-              icon='university'
-              currentPath={currentUrl}
-              link={INSTANCE_URI_FACTORY(id)} />
-          )
-        )}
+        .map(({ id, name }) => (
+          <MenuItem
+            key={id}
+            title={name}
+            icon="university"
+            currentPath={currentUrl}
+            link={INSTANCE_URI_FACTORY(id)}
+          />
+        ))}
 
     <MenuItem
-      title={<FormattedMessage id='app.sidebar.menu.feedbackAndBugs' defaultMessage='Feedback and bug reporting' />}
+      title={
+        <FormattedMessage
+          id="app.sidebar.menu.feedbackAndBugs"
+          defaultMessage="Feedback and bug reporting"
+        />
+      }
       isActive={false}
-      icon='bug'
+      icon="bug"
       link={BUGS_URL}
       currentPath={currentUrl}
-      inNewTab={true} />
+      inNewTab={true}
+    />
   </ul>
 );
 
 LoggedIn.propTypes = {
   instances: ImmutablePropTypes.list,
   isCollapsed: PropTypes.bool,
-  currentUrl: PropTypes.string.isRequired
-};
-
-LoggedIn.contextTypes = {
+  currentUrl: PropTypes.string.isRequired,
   links: PropTypes.object
 };
 
-export default LoggedIn;
+export default withLinks(LoggedIn);

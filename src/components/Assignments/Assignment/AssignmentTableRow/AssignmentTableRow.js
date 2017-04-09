@@ -3,34 +3,39 @@ import { Link } from 'react-router';
 import AssignmentStatusIcon from '../AssignmentStatusIcon/AssignmentStatusIcon';
 import { FormattedDate, FormattedTime } from 'react-intl';
 
-const AssignmentTableRow = ({
-  showGroup,
-  item: {
-    id,
-    name,
-    group,
-    allowSecondDeadline,
-    firstDeadline,
-    secondDeadline
-  },
-  status,
-  userId
-}, {
-  links: {
-    ASSIGNMENT_DETAIL_URI_FACTORY,
-    ASSIGNMENT_DETAIL_SPECIFIC_USER_URI_FACTORY
+import withLinks from '../../../../hoc/withLinks';
+
+const AssignmentTableRow = (
+  {
+    showGroup,
+    item: {
+      id,
+      name,
+      group,
+      allowSecondDeadline,
+      firstDeadline,
+      secondDeadline
+    },
+    status,
+    userId,
+    links: {
+      ASSIGNMENT_DETAIL_URI_FACTORY,
+      ASSIGNMENT_DETAIL_SPECIFIC_USER_URI_FACTORY
+    }
   }
-}) => (
+) => (
   <tr>
-    <td className='text-center'>
+    <td className="text-center">
       <AssignmentStatusIcon id={id} status={status} />
     </td>
     <td>
-      <Link to={
-        userId
-          ? ASSIGNMENT_DETAIL_SPECIFIC_USER_URI_FACTORY(id, userId)
-          : ASSIGNMENT_DETAIL_URI_FACTORY(id)
-        }>
+      <Link
+        to={
+          userId
+            ? ASSIGNMENT_DETAIL_SPECIFIC_USER_URI_FACTORY(id, userId)
+            : ASSIGNMENT_DETAIL_URI_FACTORY(id)
+        }
+      >
         {name}
       </Link>
     </td>
@@ -41,12 +46,11 @@ const AssignmentTableRow = ({
     </td>
     <td>
       {allowSecondDeadline
-        ? (
-          <span>
+        ? <span>
             <FormattedDate value={new Date(secondDeadline * 1000)} />{', '}
             <FormattedTime value={new Date(secondDeadline * 1000)} />
           </span>
-        ) : <span>-</span>}
+        : <span>-</span>}
     </td>
   </tr>
 );
@@ -61,11 +65,8 @@ AssignmentTableRow.propTypes = {
     groupId: PropTypes.string
   }),
   status: PropTypes.string,
-  userId: PropTypes.string
-};
-
-AssignmentTableRow.contextTypes = {
+  userId: PropTypes.string,
   links: PropTypes.object
 };
 
-export default AssignmentTableRow;
+export default withLinks(AssignmentTableRow);

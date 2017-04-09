@@ -14,10 +14,11 @@ import { groupSelector } from '../../redux/selectors/groups';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import { isSupervisorOf } from '../../redux/selectors/users';
 
-class EditGroup extends Component {
+import withLinks from '../../hoc/withLinks';
 
+class EditGroup extends Component {
   componentWillMount = () => this.props.loadAsync();
-  componentWillReceiveProps = (props) => {
+  componentWillReceiveProps = props => {
     if (this.props.params.groupId !== props.params.groupId) {
       props.reset();
       props.loadAsync();
@@ -30,45 +31,53 @@ class EditGroup extends Component {
   });
 
   render() {
-    const { links: { GROUP_URI_FACTORY } } = this.context;
     const {
       params: { groupId },
       group,
+      links: { GROUP_URI_FACTORY },
       editGroup
     } = this.props;
 
     return (
       <Page
         resource={group}
-        title={(group) => group.name}
-        description={<FormattedMessage id='app.editGroup.description' defaultMessage='Change group settings' />}
+        title={group => group.name}
+        description={
+          <FormattedMessage
+            id="app.editGroup.description"
+            defaultMessage="Change group settings"
+          />
+        }
         breadcrumbs={[
           {
-            text: <FormattedMessage id='app.group.title' />,
+            text: <FormattedMessage id="app.group.title" />,
             iconName: 'group',
             link: GROUP_URI_FACTORY(groupId)
           },
           {
-            text: <FormattedMessage id='app.editGroup.title' defaultMessage='Edit group' />,
+            text: (
+              <FormattedMessage
+                id="app.editGroup.title"
+                defaultMessage="Edit group"
+              />
+            ),
             iconName: 'pencil'
           }
-        ]}>
+        ]}
+      >
         {group => (
           <EditGroupForm
             initialValues={this.getInitialValues(group)}
-            onSubmit={editGroup} />
+            onSubmit={editGroup}
+          />
         )}
       </Page>
     );
   }
-
 }
 
-EditGroup.contextTypes = {
-  links: PropTypes.object
-};
-
 EditGroup.propTypes = {
+  links: PropTypes.object.isRequired,
   loadAsync: PropTypes.func.isRequired,
   params: PropTypes.shape({
     groupId: PropTypes.string.isRequired
@@ -77,25 +86,27 @@ EditGroup.propTypes = {
   editGroup: PropTypes.func.isRequired
 };
 
-export default connect(
-  (state, { params: { groupId } }) => {
-    const selectGroup = groupSelector(groupId);
-    const userId = loggedInUserIdSelector(state);
-    return {
-      group: selectGroup(state),
-      userId,
-      isStudentOf: (groupId) => isSupervisorOf(userId, groupId)(state)
-    };
-  },
-  (dispatch, { params: { groupId } }) => ({
-    push: (url) => dispatch(push(url)),
-    reset: () => dispatch(reset('editGroup')),
-    loadAsync: () => dispatch(fetchGroupIfNeeded(groupId)),
-    editGroup: (data) => {
-      if (data.threshold === null) {
-        delete data.threshold;
+export default withLinks(
+  connect(
+    (state, { params: { groupId } }) => {
+      const selectGroup = groupSelector(groupId);
+      const userId = loggedInUserIdSelector(state);
+      return {
+        group: selectGroup(state),
+        userId,
+        isStudentOf: groupId => isSupervisorOf(userId, groupId)(state)
+      };
+    },
+    (dispatch, { params: { groupId } }) => ({
+      push: url => dispatch(push(url)),
+      reset: () => dispatch(reset('editGroup')),
+      loadAsync: () => dispatch(fetchGroupIfNeeded(groupId)),
+      editGroup: data => {
+        if (data.threshold === null) {
+          delete data.threshold;
+        }
+        return dispatch(editGroup(groupId, data));
       }
-      return dispatch(editGroup(groupId, data));
-    }
-  })
-)(EditGroup);
+    })
+  )(EditGroup)
+);

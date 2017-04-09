@@ -2,60 +2,83 @@ import React, { Component, PropTypes } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { IndexLink } from 'react-router';
 import MediaQuery from 'react-responsive';
-import HeaderNotificationsContainer from '../../../containers/HeaderNotificationsContainer';
+import HeaderNotificationsContainer
+  from '../../../containers/HeaderNotificationsContainer';
 import HeaderLanguageSwitching from '../HeaderLanguageSwitching';
 import ClientOnly from '../../ClientOnly';
 
-class Header extends Component {
+import withLinks from '../../../hoc/withLinks';
 
-  toggleSidebarSize = (e) => {
+class Header extends Component {
+  toggleSidebarSize = e => {
     e.preventDefault();
     this.props.toggleSidebarSize();
-  }
+  };
 
-  toggleSidebarVisibility = (e) => {
+  toggleSidebarVisibility = e => {
     e.preventDefault();
     this.props.toggleSidebarVisibility();
-  }
+  };
 
   render() {
-    const { links: {HOME_URI} } = this.context;
-
     const {
       availableLangs = [],
       currentLang,
-      currentUrl = ''
+      currentUrl = '',
+      links: { HOME_URI }
     } = this.props;
 
     return (
-      <header className='main-header fixed'>
-        <IndexLink to={HOME_URI} className='logo'>
-          <span className='logo-mini'>Re<b>C</b></span>
-          <span className='logo-lg'>Re<b>CodEx</b></span>
+      <header className="main-header fixed">
+        <IndexLink to={HOME_URI} className="logo">
+          <span className="logo-mini">Re<b>C</b></span>
+          <span className="logo-lg">Re<b>CodEx</b></span>
         </IndexLink>
 
-        <div className='navbar navbar-static-top' role='navigation'>
+        <div className="navbar navbar-static-top" role="navigation">
           <ClientOnly>
             <MediaQuery maxWidth={767} values={{ deviceWidth: 1368 }}>
-              <a href='#' className='sidebar-toggle' role='button' onClick={this.toggleSidebarVisibility}>
-                <span className='sr-only'>
-                  <FormattedMessage id='app.header.toggleSidebar' defaultMessage='Show/hide sidebar' />
+              <a
+                href="#"
+                className="sidebar-toggle"
+                role="button"
+                onClick={this.toggleSidebarVisibility}
+              >
+                <span className="sr-only">
+                  <FormattedMessage
+                    id="app.header.toggleSidebar"
+                    defaultMessage="Show/hide sidebar"
+                  />
                 </span>
               </a>
             </MediaQuery>
             <MediaQuery minWidth={768} values={{ deviceWidth: 1368 }}>
-              <a href='#' className='sidebar-toggle' role='button' onClick={this.toggleSidebarSize}>
-                <span className='sr-only'>
-                  <FormattedMessage id='app.header.toggleSidebarSize' defaultMessage='Expand/minimize sidebar' />
+              <a
+                href="#"
+                className="sidebar-toggle"
+                role="button"
+                onClick={this.toggleSidebarSize}
+              >
+                <span className="sr-only">
+                  <FormattedMessage
+                    id="app.header.toggleSidebarSize"
+                    defaultMessage="Expand/minimize sidebar"
+                  />
                 </span>
               </a>
             </MediaQuery>
           </ClientOnly>
-          <div className='navbar-custom-menu'>
-            <ul className='nav navbar-nav'>
+          <div className="navbar-custom-menu">
+            <ul className="nav navbar-nav">
               <HeaderNotificationsContainer />
-              {availableLangs.map(lang =>
-                <HeaderLanguageSwitching lang={lang} active={currentLang === lang} key={lang} currentUrl={currentUrl} />)}
+              {availableLangs.map(lang => (
+                <HeaderLanguageSwitching
+                  lang={lang}
+                  active={currentLang === lang}
+                  key={lang}
+                  currentUrl={currentUrl}
+                />
+              ))}
             </ul>
           </div>
         </div>
@@ -69,11 +92,8 @@ Header.propTypes = {
   toggleSidebarVisibility: PropTypes.func.isRequired,
   currentLang: PropTypes.string.isRequired,
   availableLangs: PropTypes.array,
-  currentUrl: PropTypes.string
-};
-
-Header.contextTypes = {
+  currentUrl: PropTypes.string,
   links: PropTypes.object
 };
 
-export default Header;
+export default withLinks(Header);

@@ -8,6 +8,7 @@
     "type": "git",
     "url": "https://github.com/recodex/web-app.git"
   },
+  "private": true,
   "scripts": {
     "clean": "rm -f public/bundle.js && rm -f public/bundle.js.min && rm -f bin/server.js",
     "build:server": "webpack -p --config config/webpack.server.js",

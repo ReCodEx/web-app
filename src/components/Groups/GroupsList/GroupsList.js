@@ -5,26 +5,29 @@ import { Table } from 'react-bootstrap';
 import ResourceRenderer from '../../ResourceRenderer';
 import Icon from 'react-fontawesome';
 
-const GroupsList = ({
-  groups = [],
-  renderButtons = () => null,
-  ...props
-}, {
-  links: { GROUP_URI_FACTORY }
-}) => (
+import withLinks from '../../../hoc/withLinks';
+
+const GroupsList = (
+  {
+    groups = [],
+    renderButtons = () => null,
+    ...props,
+    links: { GROUP_URI_FACTORY }
+  }
+) => (
   <ResourceRenderer resource={groups.toArray()}>
     {(...groups) => (
       <Table hover {...props}>
         <tbody>
           {groups.map(({ id, name }) => (
             <tr key={id}>
-              <td className='text-center'>
-                <Icon name='group' />
+              <td className="text-center">
+                <Icon name="group" />
               </td>
               <td>
                 <Link to={GROUP_URI_FACTORY(id)}>{name}</Link>
               </td>
-              <td className='text-right'>
+              <td className="text-right">
                 {renderButtons(id)}
               </td>
             </tr>
@@ -37,10 +40,8 @@ const GroupsList = ({
 
 GroupsList.propTypes = {
   groups: ImmutablePropTypes.map.isRequired,
-  renderButtons: PropTypes.func};
-
-GroupsList.contextTypes = {
+  renderButtons: PropTypes.func,
   links: PropTypes.object
 };
 
-export default GroupsList;
+export default withLinks(GroupsList);

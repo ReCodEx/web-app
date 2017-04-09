@@ -5,7 +5,12 @@ import moment from 'moment';
 import Layout from '../../components/Layout';
 
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
-import { toggleSize, toggleVisibility, collapse, unroll } from '../../redux/modules/sidebar';
+import {
+  toggleSize,
+  toggleVisibility,
+  collapse,
+  unroll
+} from '../../redux/modules/sidebar';
 import { isVisible, isCollapsed } from '../../redux/selectors/sidebar';
 import { messages, localeData, defaultLanguage } from '../../locales';
 import { linksFactory, isAbsolute } from '../../links';
@@ -19,7 +24,6 @@ import 'admin-lte/dist/css/skins/skin-green.min.css';
  * Also controls the state of the sidebar - collapsing and showing the sidebar.
  */
 class LayoutContainer extends Component {
-
   state = { links: null };
 
   componentWillMount() {
@@ -28,8 +32,13 @@ class LayoutContainer extends Component {
   }
 
   componentWillReceiveProps(newProps, newContext) {
-    if ((typeof this.context.userSettings.openedSidebar === 'undefined' && typeof newContext.userSettings.openedSidebar !== 'undefined') ||
-      (typeof this.context.userSettings.openedSidebar !== 'undefined' && this.context.userSettings.openedSidebar !== newContext.userSettings.openedSidebar)) {
+    if (
+      (typeof this.context.userSettings.openedSidebar === 'undefined' &&
+        typeof newContext.userSettings.openedSidebar !== 'undefined') ||
+      (typeof this.context.userSettings.openedSidebar !== 'undefined' &&
+        this.context.userSettings.openedSidebar !==
+          newContext.userSettings.openedSidebar)
+    ) {
       this.resizeSidebarToDefault(newProps, newContext);
     }
 
@@ -50,7 +59,7 @@ class LayoutContainer extends Component {
       ? userSettings.openedSidebar
       : true;
 
-  getLang = (props) => {
+  getLang = props => {
     let lang = props.params.lang;
     if (!lang) {
       lang = defaultLanguage;
@@ -59,7 +68,7 @@ class LayoutContainer extends Component {
     return lang;
   };
 
-  changeLang = (props) => {
+  changeLang = props => {
     const lang = this.getLang(props);
     this.setState({ lang, links: linksFactory(lang) });
   };
@@ -71,10 +80,11 @@ class LayoutContainer extends Component {
   getChildContext = () => ({
     links: this.state.links,
     lang: this.state.lang,
-    isActive: link => !isAbsolute(link) && this.context.router.isActive(link, true)
+    isActive: link =>
+      !isAbsolute(link) && this.context.router.isActive(link, true)
   });
 
-  maybeHideSidebar = (e) => {
+  maybeHideSidebar = e => {
     const { sidebar, toggleVisibility } = this.props;
     if (sidebar.isOpen) {
       toggleVisibility();
@@ -87,11 +97,13 @@ class LayoutContainer extends Component {
 
   getDefaultLang = () => {
     const { userSettings } = this.context;
-    return userSettings && userSettings.defaultLanguage ? userSettings.defaultLanguage : 'en';
+    return userSettings && userSettings.defaultLanguage
+      ? userSettings.defaultLanguage
+      : 'en';
   };
 
-  getMessages = (lang) => messages[lang] || messages[this.getDefaultLang()];
-  getLocaleData = (lang) => localeData[lang] || localeData[this.getDefaultLang()];
+  getMessages = lang => messages[lang] || messages[this.getDefaultLang()];
+  getLocaleData = lang => localeData[lang] || localeData[this.getDefaultLang()];
 
   render() {
     const {
@@ -104,7 +116,7 @@ class LayoutContainer extends Component {
     } = this.props;
 
     const { lang } = this.state;
-    addLocaleData([ ...this.getLocaleData(lang) ]);
+    addLocaleData([...this.getLocaleData(lang)]);
     moment.locale(lang);
 
     return (
@@ -117,13 +129,13 @@ class LayoutContainer extends Component {
           onCloseSidebar={this.maybeHideSidebar}
           lang={lang}
           availableLangs={Object.keys(messages)}
-          currentUrl={pathname}>
+          currentUrl={pathname}
+        >
           {children}
         </Layout>
       </IntlProvider>
     );
   }
-
 }
 
 LayoutContainer.childContextTypes = {
@@ -161,9 +173,6 @@ const mapStateToProps = (state, props) => ({
   isLoggedIn: !!loggedInUserIdSelector(state)
 });
 
-const mapDispatchToProps = ({ toggleVisibility, toggleSize, collapse, unroll });
+const mapDispatchToProps = { toggleVisibility, toggleSize, collapse, unroll };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(LayoutContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(LayoutContainer);

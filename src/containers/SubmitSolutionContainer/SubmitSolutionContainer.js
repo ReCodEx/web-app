@@ -13,17 +13,26 @@ import {
   getMonitorParams
 } from '../../redux/selectors/submission';
 
-import { createGetUploadedFiles, createAllUploaded } from '../../redux/selectors/upload';
+import {
+  createGetUploadedFiles,
+  createAllUploaded
+} from '../../redux/selectors/upload';
 
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
-import { init as resetSubmission, cancel, changeNote, submitSolution } from '../../redux/modules/submission';
+import {
+  init as resetSubmission,
+  cancel,
+  changeNote,
+  submitSolution
+} from '../../redux/modules/submission';
 import { reset as resetUpload } from '../../redux/modules/upload';
 
-class SubmitSolutionContainer extends Component {
+import withLinks from '../../hoc/withLinks';
 
+class SubmitSolutionContainer extends Component {
   submit = () => {
     const {
-    attachedFiles,
+      attachedFiles,
       onSubmit,
       note,
       submitSolution
@@ -47,12 +56,9 @@ class SubmitSolutionContainer extends Component {
       isSending,
       submissionId,
       monitor,
-      reset
-    } = this.props;
-
-    const {
+      reset,
       links: { SUBMISSION_DETAIL_URI_FACTORY }
-    } = this.context;
+    } = this.props;
 
     return (
       <div>
@@ -67,7 +73,8 @@ class SubmitSolutionContainer extends Component {
           note={note}
           saveNote={changeNote}
           onClose={cancel}
-          submitSolution={this.submit} />
+          submitSolution={this.submit}
+        />
 
         <EvaluationProgressContainer
           isOpen={isProcessing}
@@ -77,12 +84,7 @@ class SubmitSolutionContainer extends Component {
       </div>
     );
   };
-
 }
-
-SubmitSolutionContainer.contextTypes = {
-  links: PropTypes.object
-};
 
 SubmitSolutionContainer.propTypes = {
   userId: PropTypes.string.isRequired,
@@ -100,29 +102,35 @@ SubmitSolutionContainer.propTypes = {
   onSubmit: PropTypes.func,
   submitSolution: PropTypes.func.isRequired,
   attachedFiles: PropTypes.array,
-  reset: PropTypes.func.isRequired
+  reset: PropTypes.func.isRequired,
+  links: PropTypes.object.isRequired
 };
 
-export default connect(
-  (state, { assignmentId, userId }) => {
-    const getUploadedFiles = createGetUploadedFiles(assignmentId);
-    const allUploaded = createAllUploaded(assignmentId);
-    return {
-      userId: userId || loggedInUserIdSelector(state),
-      note: getNote(state),
-      attachedFiles: (getUploadedFiles(state) || List()).toJS(),
-      isProcessing: isProcessing(state),
-      isSending: isSending(state),
-      hasFailed: hasFailed(state),
-      canSubmit: allUploaded(state) || false,
-      submissionId: getSubmissionId(state),
-      monitor: getMonitorParams(state)
-    };
-  },
-  (dispatch, { userId, assignmentId }) => ({
-    changeNote: (note) => dispatch(changeNote(note)),
-    cancel: () => dispatch(cancel()),
-    submitSolution: (note, files) => dispatch(submitSolution(userId, assignmentId, note, files)),
-    reset: () => dispatch(resetUpload(assignmentId)) && dispatch(resetSubmission(userId, assignmentId))
-  })
-)(SubmitSolutionContainer);
+export default withLinks(
+  connect(
+    (state, { assignmentId, userId }) => {
+      const getUploadedFiles = createGetUploadedFiles(assignmentId);
+      const allUploaded = createAllUploaded(assignmentId);
+      return {
+        userId: userId || loggedInUserIdSelector(state),
+        note: getNote(state),
+        attachedFiles: (getUploadedFiles(state) || List()).toJS(),
+        isProcessing: isProcessing(state),
+        isSending: isSending(state),
+        hasFailed: hasFailed(state),
+        canSubmit: allUploaded(state) || false,
+        submissionId: getSubmissionId(state),
+        monitor: getMonitorParams(state)
+      };
+    },
+    (dispatch, { userId, assignmentId }) => ({
+      changeNote: note => dispatch(changeNote(note)),
+      cancel: () => dispatch(cancel()),
+      submitSolution: (note, files) =>
+        dispatch(submitSolution(userId, assignmentId, note, files)),
+      reset: () =>
+        dispatch(resetUpload(assignmentId)) &&
+        dispatch(resetSubmission(userId, assignmentId))
+    })
+  )(SubmitSolutionContainer)
+);
