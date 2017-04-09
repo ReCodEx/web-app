@@ -18,13 +18,13 @@ const GroupsList = ({
         <tbody>
           {groups.map(({ id, name }) => (
             <tr key={id}>
-              <td className='text-center'>
-                <Icon name='group' />
+              <td className="text-center">
+                <Icon name="group" />
               </td>
               <td>
                 <Link to={GROUP_URI_FACTORY(id)}>{name}</Link>
               </td>
-              <td className='text-right'>
+              <td className="text-right">
                 {renderButtons(id)}
               </td>
             </tr>

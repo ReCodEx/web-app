@@ -52,13 +52,13 @@ class AssignmentStats extends Component {
             {assignment => <span>{assignment.name}</span>}
           </ResourceRenderer>
         )}
-        description={<FormattedMessage id='app.assignmentStats.title' defaultMessage='Assignment statistics' />}
+        description={<FormattedMessage id="app.assignmentStats.title" defaultMessage="Assignment statistics" />}
         breadcrumbs={[
           {
             resource: assignment,
             iconName: 'group',
             breadcrumb: (assignment) => ({
-              text: <FormattedMessage id='app.group.title' defaultMessage='Group detail' />,
+              text: <FormattedMessage id="app.group.title" defaultMessage="Group detail" />,
               link: ({ GROUP_URI_FACTORY }) => GROUP_URI_FACTORY(assignment.groupId)
             })
           },
@@ -66,12 +66,12 @@ class AssignmentStats extends Component {
             resource: assignment,
             iconName: 'puzzle-piece',
             breadcrumb: (assignment) => ({
-              text: <FormattedMessage id='app.assignment.title' defaultMessage='Exercise assignment' />,
+              text: <FormattedMessage id="app.assignment.title" defaultMessage="Exercise assignment" />,
               link: ({ ASSIGNMENT_DETAIL_URI_FACTORY }) => ASSIGNMENT_DETAIL_URI_FACTORY(assignment.id)
             })
           },
           {
-            text: <FormattedMessage id='app.assignmentStats.title' defaultMessage='Assignment statistics' />,
+            text: <FormattedMessage id="app.assignmentStats.title" defaultMessage="Assignment statistics" />,
             iconName: 'line-chart'
           }
         ]}>

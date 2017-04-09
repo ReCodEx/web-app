@@ -20,60 +20,60 @@ const EvaluationDetail = ({
   maxPoints
 }) => (
   <Box
-    title={<FormattedMessage id='app.evaluationDetail.title.details' defaultMessage='Evaluation details' />}
+    title={<FormattedMessage id="app.evaluationDetail.title.details" defaultMessage="Evaluation details" />}
     noPadding={true}
     collapsable={true}
     isOpen={true}>
     <Table>
       <tbody>
         <tr>
-          <th><FormattedMessage id='app.evaluationDetail.evaluatedAt' defaultMessage='Evaluated at:' /></th>
-          <td className='text-center'>
+          <th><FormattedMessage id="app.evaluationDetail.evaluatedAt" defaultMessage="Evaluated at:" /></th>
+          <td className="text-center">
             <FormattedDate value={evaluation.evaluatedAt * 1000} />&nbsp;<FormattedTime value={evaluation.evaluatedAt * 1000} />
           </td>
         </tr>
 
         <tr>
-          <th><FormattedMessage id='app.evaluationDetail.beforeFirstDeadline' defaultMessage='Was submitted before the deadline:' /></th>
-          <td className='text-center'>
+          <th><FormattedMessage id="app.evaluationDetail.beforeFirstDeadline" defaultMessage="Was submitted before the deadline:" /></th>
+          <td className="text-center">
             {submittedAt < firstDeadline
-              ? <Icon name='check' className='text-success' />
-              : <Icon name='times' className='text-danger' />}
+              ? <Icon name="check" className="text-success" />
+              : <Icon name="times" className="text-danger" />}
           </td>
         </tr>
 
         {submittedAt >= firstDeadline && allowSecondDeadline === true && (
           <tr>
-            <th><FormattedMessage id='app.evaluationDetail.beforeSecondDeadline' defaultMessage='Was submitted before the second deadline:' /></th>
-            <td className='text-center'>
+            <th><FormattedMessage id="app.evaluationDetail.beforeSecondDeadline" defaultMessage="Was submitted before the second deadline:" /></th>
+            <td className="text-center">
               <MaybeSucceededIcon success={submittedAt < secondDeadline} />
             </td>
           </tr>
         )}
 
         <tr>
-          <th><FormattedMessage id='app.evaluationDetail.hasFinished' defaultMessage='Evaluation process has finished:' /></th>
-          <td className='text-center'>
+          <th><FormattedMessage id="app.evaluationDetail.hasFinished" defaultMessage="Evaluation process has finished:" /></th>
+          <td className="text-center">
             <MaybeSucceededIcon success={!evaluation.evaluationFailed} />
           </td>
         </tr>
 
         <tr>
-          <th><FormattedMessage id='app.evaluationDetail.isValid' defaultMessage='Evaluation is valid:' /></th>
-          <td className='text-center'>
+          <th><FormattedMessage id="app.evaluationDetail.isValid" defaultMessage="Evaluation is valid:" /></th>
+          <td className="text-center">
             <MaybeSucceededIcon success={evaluation.isValid} />
           </td>
         </tr>
 
         <tr>
-          <th><FormattedMessage id='app.evaluationDetail.buildSucceeded' defaultMessage='Build succeeded:' /></th>
-          <td className='text-center'>
+          <th><FormattedMessage id="app.evaluationDetail.buildSucceeded" defaultMessage="Build succeeded:" /></th>
+          <td className="text-center">
             <MaybeSucceededIcon success={!evaluation.initFailed} />
           </td>
         </tr>
 
         <tr>
-          <th><FormattedMessage id='app.evaluationDetail.isCorrect' defaultMessage='Is correct:' /></th>
+          <th><FormattedMessage id="app.evaluationDetail.isCorrect" defaultMessage="Is correct:" /></th>
           <td className={
             classnames({
               'text-center': true,
@@ -81,11 +81,11 @@ const EvaluationDetail = ({
               'text-success': evaluation.isCorrect
             })
           }>
-            <b><FormattedNumber style='percent' value={evaluation.score} /></b>
+            <b><FormattedNumber style="percent" value={evaluation.score} /></b>
           </td>
         </tr>
         <tr>
-          <th><FormattedMessage id='app.evaluationDetail.score' defaultMessage='Score:' /></th>
+          <th><FormattedMessage id="app.evaluationDetail.score" defaultMessage="Score:" /></th>
           <td className={
             classnames({
               'text-center': true,
@@ -99,15 +99,15 @@ const EvaluationDetail = ({
         </tr>
         {evaluation.bonusPoints !== 0 && (
           <tr>
-            <th><FormattedMessage id='app.evaluationDetail.bonusPoints' defaultMessage='Bonus points:' /></th>
-            <td className='text-center'>
+            <th><FormattedMessage id="app.evaluationDetail.bonusPoints" defaultMessage="Bonus points:" /></th>
+            <td className="text-center">
               <BonusPoints bonus={evaluation.bonusPoints} />
             </td>
           </tr>
         )}
         {evaluation.bonusPoints !== 0 && (
           <tr>
-            <th><FormattedMessage id='app.evaluationDetail.totalScore' defaultMessage='Total score:' /></th>
+            <th><FormattedMessage id="app.evaluationDetail.totalScore" defaultMessage="Total score:" /></th>
             <td className={
               classnames({
                 'text-center': true,

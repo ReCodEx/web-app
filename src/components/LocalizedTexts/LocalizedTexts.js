@@ -14,8 +14,8 @@ const LocalizedTexts = ({
         ? lang
         : locales[0].locale
     }
-    className='nav-tabs-custom'
-    id='localized-texts'>
+    className="nav-tabs-custom"
+    id="localized-texts">
     {locales.map(({ locale, text }, i) => (
       <Tab key={i} eventKey={locale} title={locale}>
         <ReactMarkdown source={text} />
@@ -23,7 +23,7 @@ const LocalizedTexts = ({
     ))}
     {locales.length === 0 && (
       <Tab eventKey={lang} title={lang}>
-        <FormattedMessage id='app.localizedTexts.missingText' defaultMessage='Localized text has not been published yet.' />
+        <FormattedMessage id="app.localizedTexts.missingText" defaultMessage="Localized text has not been published yet." />
       </Tab>
     )}
   </Tabs>

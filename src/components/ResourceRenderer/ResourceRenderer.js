@@ -5,13 +5,13 @@ import { isLoading, hasFailed, isPosting, isDeleting, isDeleted, getJsData } fro
 
 const defaultLoading = (noIcons) => (
   <span>
-    {!noIcons && <LoadingIcon />} <FormattedMessage id='app.resourceRenderer.loading' defaultMessage='Loading ...' />
+    {!noIcons && <LoadingIcon />} <FormattedMessage id="app.resourceRenderer.loading" defaultMessage="Loading ..." />
   </span>
 );
 
 const defaultFailed = (noIcons) => (
   <span>
-    {!noIcons && <WarningIcon />} <FormattedMessage id='app.resourceRenderer.loadingFailed' defaultMessage='Loading failed.' />
+    {!noIcons && <WarningIcon />} <FormattedMessage id="app.resourceRenderer.loadingFailed" defaultMessage="Loading failed." />
   </span>
 );
 

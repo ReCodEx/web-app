@@ -7,8 +7,8 @@ const FailedExerciseDetail = () => (
     <p>
       <WarningIcon />{' '}
       <FormattedMessage
-        id='app.exercises.failedDetail'
-        defaultMessage='Loading the details of the exercise failed. Please make sure you are connected to the Internet and try again later.' />
+        id="app.exercises.failedDetail"
+        defaultMessage="Loading the details of the exercise failed. Please make sure you are connected to the Internet and try again later." />
     </p>
   </div>
 );

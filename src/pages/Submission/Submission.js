@@ -46,23 +46,23 @@ class Submission extends Component {
             {assignmentData => <span>{assignmentData.name}</span>}
           </ResourceRenderer>
         )}
-        description={<FormattedMessage id='app.submission.evaluation.title' defaultMessage='Solution evaluation' />}
+        description={<FormattedMessage id="app.submission.evaluation.title" defaultMessage="Solution evaluation" />}
         breadcrumbs={[
           {
             resource: assignment,
             iconName: 'group',
             breadcrumb: (assignment) => ({
-              text: <FormattedMessage id='app.group.title' defaultMessage='Group detail' />,
+              text: <FormattedMessage id="app.group.title" defaultMessage="Group detail" />,
               link: ({ GROUP_URI_FACTORY }) => GROUP_URI_FACTORY(assignment.groupId)
             })
           },
           {
-            text: <FormattedMessage id='app.assignment.title' defaultMessage='Exercise assignment' />,
+            text: <FormattedMessage id="app.assignment.title" defaultMessage="Exercise assignment" />,
             iconName: 'puzzle-piece',
             link: ({ ASSIGNMENT_DETAIL_URI_FACTORY }) => ASSIGNMENT_DETAIL_URI_FACTORY(assignmentId)
           },
           {
-            text: <FormattedMessage id='app.submission.title' defaultMessage='Solution' />,
+            text: <FormattedMessage id="app.submission.title" defaultMessage="Solution" />,
             iconName: 'user'
           }
         ]}>

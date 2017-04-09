@@ -9,26 +9,26 @@ const EvaluationFailedTableRow = ({
   submittedAt
 }) => (
   <tr>
-    <td><AssignmentStatusIcon id={link} status='evaluation-failed' /></td>
+    <td><AssignmentStatusIcon id={link} status="evaluation-failed" /></td>
     <td>
       <FormattedDate value={submittedAt * 1000} />&nbsp;<FormattedTime value={submittedAt * 1000} />
     </td>
-    <td className='text-center'>
-      <span className='text-danger'>
+    <td className="text-center">
+      <span className="text-danger">
         -
       </span>
     </td>
-    <td className='text-center'>
-      <span className='text-danger'>
+    <td className="text-center">
+      <span className="text-danger">
         -
       </span>
     </td>
     <td>
       {note}
     </td>
-    <td className='text-right'>
-      <Link to={link} className='btn btn-flat btn-default btn-xs'>
-        <FormattedMessage id='app.evaluationTable.showDetails' defaultMessage='Show details' />
+    <td className="text-right">
+      <Link to={link} className="btn btn-flat btn-default btn-xs">
+        <FormattedMessage id="app.evaluationTable.showDetails" defaultMessage="Show details" />
       </Link>
     </td>
   </tr>

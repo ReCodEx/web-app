@@ -16,31 +16,31 @@ const Badge = ({
     EDIT_USER_URI_FACTORY
   }
 }) => (
-  <div className='user-panel'>
-    <div className='pull-left image'>
-      <img src={avatarUrl} alt={fullName} className='img-circle' />
+  <div className="user-panel">
+    <div className="pull-left image">
+      <img src={avatarUrl} alt={fullName} className="img-circle" />
     </div>
-    <div className='info'>
+    <div className="info">
       <p>
         <Link to={USER_URI_FACTORY(id)}>
           {fullName}
         </Link>
       </p>
       <Link to={EDIT_USER_URI_FACTORY(id)}>
-        <Icon name='edit' />
-        <FormattedMessage id='app.badge.settings' defaultMessage='Settings' />
+        <Icon name="edit" />
+        <FormattedMessage id="app.badge.settings" defaultMessage="Settings" />
       </Link>
       &nbsp;
       <OverlayTrigger
-        placement='right'
+        placement="right"
         overlay={(
-          <Tooltip id='tokenExpiration'>
-            <FormattedMessage id='app.badge.sessionExpiration' defaultMessage='Session expiration:' />{' '}
+          <Tooltip id="tokenExpiration">
+            <FormattedMessage id="app.badge.sessionExpiration" defaultMessage="Session expiration:" />{' '}
             <FormattedRelative value={expiration} />
           </Tooltip>
         )}>
-        <a href='#' onClick={logout}>
-          <Icon name='sign-out' className='text-danger' /> <FormattedMessage id='app.logout' defaultMessage='Logout' />
+        <a href="#" onClick={logout}>
+          <Icon name="sign-out" className="text-danger" /> <FormattedMessage id="app.logout" defaultMessage="Logout" />
         </a>
       </OverlayTrigger>
     </div>

@@ -5,7 +5,7 @@ import { WarningIcon } from '../../Icons';
 const FailedGroupDetail = () => (
   <div>
     <p>
-      <WarningIcon /> <FormattedMessage id='app.failedGroupDetail.msg' defaultMessage='Cannot load group detail. Please try again later.' />
+      <WarningIcon /> <FormattedMessage id="app.failedGroupDetail.msg" defaultMessage="Cannot load group detail. Please try again later." />
     </p>
   </div>
 );

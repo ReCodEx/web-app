@@ -15,12 +15,12 @@ const EditEnvironmentLimitsForm = ({
     getTitle={
       (i) => (environments && environments[i])
         ? environments[i].environment.name
-        : <FormattedMessage id='app.editEnvironmentLimitsForm.newEnvironment' defaultMessage='New environment' />
+        : <FormattedMessage id="app.editEnvironmentLimitsForm.newEnvironment" defaultMessage="New environment" />
     }
     ContentComponent={EditEnvironmentLimitsFields}
     runtimeEnvironments={runtimeEnvironments}
-    removeQuestion={<FormattedMessage id='app.editEnvironmentLimitsForm.environment.noEnvironment' defaultMessage='There is currently no environment specified for this assignment.' />}
-    id='environment-limits'
+    removeQuestion={<FormattedMessage id="app.editEnvironmentLimitsForm.environment.noEnvironment" defaultMessage="There is currently no environment specified for this assignment." />}
+    id="environment-limits"
     remove />
 );
 

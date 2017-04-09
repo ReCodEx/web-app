@@ -28,31 +28,31 @@ class Header extends Component {
     } = this.props;
 
     return (
-      <header className='main-header fixed'>
-        <IndexLink to={HOME_URI} className='logo'>
-          <span className='logo-mini'>Re<b>C</b></span>
-          <span className='logo-lg'>Re<b>CodEx</b></span>
+      <header className="main-header fixed">
+        <IndexLink to={HOME_URI} className="logo">
+          <span className="logo-mini">Re<b>C</b></span>
+          <span className="logo-lg">Re<b>CodEx</b></span>
         </IndexLink>
 
-        <div className='navbar navbar-static-top' role='navigation'>
+        <div className="navbar navbar-static-top" role="navigation">
           <ClientOnly>
             <MediaQuery maxWidth={767} values={{ deviceWidth: 1368 }}>
-              <a href='#' className='sidebar-toggle' role='button' onClick={this.toggleSidebarVisibility}>
-                <span className='sr-only'>
-                  <FormattedMessage id='app.header.toggleSidebar' defaultMessage='Show/hide sidebar' />
+              <a href="#" className="sidebar-toggle" role="button" onClick={this.toggleSidebarVisibility}>
+                <span className="sr-only">
+                  <FormattedMessage id="app.header.toggleSidebar" defaultMessage="Show/hide sidebar" />
                 </span>
               </a>
             </MediaQuery>
             <MediaQuery minWidth={768} values={{ deviceWidth: 1368 }}>
-              <a href='#' className='sidebar-toggle' role='button' onClick={this.toggleSidebarSize}>
-                <span className='sr-only'>
-                  <FormattedMessage id='app.header.toggleSidebarSize' defaultMessage='Expand/minimize sidebar' />
+              <a href="#" className="sidebar-toggle" role="button" onClick={this.toggleSidebarSize}>
+                <span className="sr-only">
+                  <FormattedMessage id="app.header.toggleSidebarSize" defaultMessage="Expand/minimize sidebar" />
                 </span>
               </a>
             </MediaQuery>
           </ClientOnly>
-          <div className='navbar-custom-menu'>
-            <ul className='nav navbar-nav'>
+          <div className="navbar-custom-menu">
+            <ul className="nav navbar-nav">
               <HeaderNotificationsContainer />
               {availableLangs.map(lang =>
                 <HeaderLanguageSwitching lang={lang} active={currentLang === lang} key={lang} currentUrl={currentUrl} />)}

@@ -28,8 +28,8 @@ const StudentsList = ({
 
     {users.length === 0 && isLoaded && (
       <tr>
-        <td className='text-center'>
-          <FormattedMessage id='app.studentsList.noStudents' defaultMessage='There are no students in this list.' />
+        <td className="text-center">
+          <FormattedMessage id="app.studentsList.noStudents" defaultMessage="There are no students in this list." />
         </td>
       </tr>
     )}

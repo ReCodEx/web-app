@@ -33,18 +33,18 @@ class EditUser extends Component {
       <Page
         resource={user}
         title={(user) => user.fullName}
-        description={<FormattedMessage id='app.editUser.description' defaultMessage="Edit user's profile" />}
+        description={<FormattedMessage id="app.editUser.description" defaultMessage="Edit user's profile" />}
         breadcrumbs={[
           {
             resource: user,
             iconName: 'user',
             breadcrumb: (user) => ({
-              text: <FormattedMessage id='app.user.title' />,
+              text: <FormattedMessage id="app.user.title" />,
               link: ({ USER_URI_FACTORY }) => USER_URI_FACTORY(user.id)
             })
           },
           {
-            text: <FormattedMessage id='app.editUser.title' defaultMessage="Edit user's profile" />,
+            text: <FormattedMessage id="app.editUser.title" defaultMessage="Edit user's profile" />,
             iconName: 'pencil'
           }
         ]}>

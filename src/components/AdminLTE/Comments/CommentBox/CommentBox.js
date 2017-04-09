@@ -32,12 +32,12 @@ class CommentBox extends Component {
 
     return (
       <Box
-        title={<FormattedMessage id='app.comments.title' defaultMessage='Comments and notes' />}
+        title={<FormattedMessage id="app.comments.title" defaultMessage="Comments and notes" />}
         noPadding={false}
         collapsable
         footer={footer}
-        className='direct-chat'>
-        <div className='direct-chat-messages' ref='commentsContainer'>
+        className="direct-chat">
+        <div className="direct-chat-messages" ref="commentsContainer">
           {children}
         </div>
       </Box>

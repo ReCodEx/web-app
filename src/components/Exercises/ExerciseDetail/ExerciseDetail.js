@@ -28,32 +28,32 @@ const ExerciseDetail = ({
     <Table>
       <tbody>
         <tr>
-          <th><FormattedMessage id='app.exercise.author' defaultMessage='Author:' /></th>
+          <th><FormattedMessage id="app.exercise.author" defaultMessage="Author:" /></th>
           <td><UsersNameContainer userId={authorId} /></td>
         </tr>
         <tr>
-          <th><FormattedMessage id='app.exercise.difficulty' defaultMessage='Difficulty:' /></th>
+          <th><FormattedMessage id="app.exercise.difficulty" defaultMessage="Difficulty:" /></th>
           <td><DifficultyIcon difficulty={difficulty} /></td>
         </tr>
         <tr>
-          <th><FormattedMessage id='app.exercise.description' defaultMessage="Author's description:" /></th>
+          <th><FormattedMessage id="app.exercise.description" defaultMessage="Author's description:" /></th>
           <td><ReactMarkdown source={description} /></td>
         </tr>
         <tr>
-          <th><FormattedMessage id='app.exercise.createdAt' defaultMessage='Created at:' /></th>
+          <th><FormattedMessage id="app.exercise.createdAt" defaultMessage="Created at:" /></th>
           <td><FormattedDate value={createdAt * 1000} /> <FormattedTime value={createdAt * 1000} /></td>
         </tr>
         <tr>
-          <th><FormattedMessage id='app.exercise.updatedAt' defaultMessage='Last updateded at:' /></th>
+          <th><FormattedMessage id="app.exercise.updatedAt" defaultMessage="Last updateded at:" /></th>
           <td><FormattedDate value={updatedAt * 1000} /> <FormattedTime value={updatedAt * 1000} /></td>
         </tr>
         <tr>
-          <th><FormattedMessage id='app.exercise.version' defaultMessage='Version:' /></th>
+          <th><FormattedMessage id="app.exercise.version" defaultMessage="Version:" /></th>
           <td>v<FormattedNumber value={version} /></td>
         </tr>
         {forkedFrom && (
           <tr>
-            <th><FormattedMessage id='app.exercise.forked' defaultMessage='Forked from:' /></th>
+            <th><FormattedMessage id="app.exercise.forked" defaultMessage="Forked from:" /></th>
             <td>
               <Link to={EXERCISE_URI_FACTORY(forkedFrom.id)}>
                 {forkedFrom.name} (v<FormattedNumber value={forkedFrom.version} />)
@@ -62,17 +62,17 @@ const ExerciseDetail = ({
           </tr>
         )}
         <tr>
-          <th><FormattedMessage id='app.exercise.runtimes' defaultMessage='Supported runtime environments:' /></th>
+          <th><FormattedMessage id="app.exercise.runtimes" defaultMessage="Supported runtime environments:" /></th>
           <td>
             {runtimeConfigs.map(({ id, name, isValid }) => (
               <p key={id}>
                 <OverlayTrigger
-                  placement='left'
+                  placement="left"
                   overlay={(
                     <Tooltip id={id}>
                       {isValid
-                        ? <FormattedMessage id='app.exercise.runtimes.isValid' defaultMessage='Configuration is valid' />
-                        : <FormattedMessage id='app.exercise.runtimes.isNotValid' defaultMessage='Configuration is not valid' />}
+                        ? <FormattedMessage id="app.exercise.runtimes.isValid" defaultMessage="Configuration is valid" />
+                        : <FormattedMessage id="app.exercise.runtimes.isNotValid" defaultMessage="Configuration is not valid" />}
                     </Tooltip>
                   )}>
                   <span><MaybeSucceededIcon success={isValid} />&nbsp;{name}</span>

@@ -60,7 +60,7 @@ class MenuGroup extends Component {
           active: open || forceOpen,
           treeview: true
         })}>
-        <a href='#' onClick={this.toggle}>
+        <a href="#" onClick={this.toggle}>
           <i className={`fa fa-${icon}`} />
           <span style={{
             whiteSpace: 'normal',
@@ -69,20 +69,20 @@ class MenuGroup extends Component {
           }}>
             {title}
           </span>
-          <span className='pull-right-container pull-right'>
+          <span className="pull-right-container pull-right">
             {notificationsCount > 0 &&
-              <small className='label pull-right bg-blue'>{notificationsCount}</small>}
-            <Icon name='angle-left' className='pull-right' />
+              <small className="label pull-right bg-blue">{notificationsCount}</small>}
+            <Icon name="angle-left" className="pull-right" />
           </span>
         </a>
-        <ul className='treeview-menu' style={dropdownStyles}>
+        <ul className="treeview-menu" style={dropdownStyles}>
           {items.map((item, key) =>
             isLoading(item)
               ? <LoadingMenuItem key={key} />
               : <MenuItem
                   key={key}
                   title={item.getIn(['data', 'name'])}
-                  icon='circle-o'
+                  icon="circle-o"
                   currentPath={currentPath}
                   notificationsCount={itemsNotificationsCount(item)}
                   link={createLink(item)} />

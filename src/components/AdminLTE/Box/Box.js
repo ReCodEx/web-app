@@ -58,11 +58,11 @@ class Box extends Component {
           [className]: className.length > 0
         })
       }>
-        <div className='box-header with-border' onClick={this.toggleDetails}>
-          <h3 className='box-title'>{title}</h3>
+        <div className="box-header with-border" onClick={this.toggleDetails}>
+          <h3 className="box-title">{title}</h3>
           {collapsable && (
-            <div className='box-tools pull-right'>
-              <button type='button' className='btn btn-box-tool' onClick={this.toggleDetails}>
+            <div className="box-tools pull-right">
+              <button type="button" className="btn btn-box-tool" onClick={this.toggleDetails}>
                 <Icon name={isOpen ? 'minus' : 'plus'} />
               </button>
             </div>

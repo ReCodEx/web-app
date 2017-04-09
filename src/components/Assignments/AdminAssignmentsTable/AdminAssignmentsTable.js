@@ -16,10 +16,10 @@ const AdminAssignmentsTable = ({
     <thead>
       <tr>
         <th></th>
-        <th><FormattedMessage id='app.adminAssignments.name' defaultMessage='Assignment name' /></th>
-        <th><FormattedMessage id='app.adminAssignments.deadline' defaultMessage='Deadline' /></th>
-        <th><FormattedMessage id='app.adminAssignments.secondDeadline' defaultMessage='Second deadline' /></th>
-        <th><FormattedMessage id='app.adminAssignments.actions' defaultMessage='Actions' /></th>
+        <th><FormattedMessage id="app.adminAssignments.name" defaultMessage="Assignment name" /></th>
+        <th><FormattedMessage id="app.adminAssignments.deadline" defaultMessage="Deadline" /></th>
+        <th><FormattedMessage id="app.adminAssignments.secondDeadline" defaultMessage="Second deadline" /></th>
+        <th><FormattedMessage id="app.adminAssignments.actions" defaultMessage="Actions" /></th>
       </tr>
     </thead>
     <ResourceRenderer

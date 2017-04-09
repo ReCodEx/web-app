@@ -45,15 +45,15 @@ class EditInstance extends Component {
       <Page
         resource={instance}
         title={(instance) => instance.name}
-        description={<FormattedMessage id='app.editInstance.description' defaultMessage='Change instance settings' />}
+        description={<FormattedMessage id="app.editInstance.description" defaultMessage="Change instance settings" />}
         breadcrumbs={[
           {
-            text: <FormattedMessage id='app.instance.title' defaultMessage='Instance' />,
+            text: <FormattedMessage id="app.instance.title" defaultMessage="Instance" />,
             iconName: 'university',
             link: INSTANCE_URI_FACTORY(instanceId)
           },
           {
-            text: <FormattedMessage id='app.editInstance.title' defaultMessage='Edit instance' />,
+            text: <FormattedMessage id="app.editInstance.title" defaultMessage="Edit instance" />,
             iconName: 'pencil'
           }
         ]}>

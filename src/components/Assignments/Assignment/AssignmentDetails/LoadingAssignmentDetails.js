@@ -8,14 +8,14 @@ const LoadingAssignmentDetails = () => (
   <Box
     title={(
       <span>
-        <LoadingIcon /> <FormattedMessage id='app.assignment.loading' defaultMessage='Loading exercise assignment ...' />
+        <LoadingIcon /> <FormattedMessage id="app.assignment.loading" defaultMessage="Loading exercise assignment ..." />
       </span>
     )}
     noPadding={false}
     collapsable={true}
     isOpen={false}>
     <p>
-      <FormattedMessage id='app.assignment.loading' defaultMessage='Loading exercise assignment ...' />
+      <FormattedMessage id="app.assignment.loading" defaultMessage="Loading exercise assignment ..." />
     </p>
   </Box>
 );

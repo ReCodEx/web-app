@@ -7,7 +7,7 @@ const TestResults = ({
   evaluation
 }) => (
   <Box
-    title={<FormattedMessage id='app.submission.evaluation.title.testResults' defaultMessage='Test results' />}
+    title={<FormattedMessage id="app.submission.evaluation.title.testResults" defaultMessage="Test results" />}
     noPadding={true}
     collapsable={true}
     isOpen={true}>

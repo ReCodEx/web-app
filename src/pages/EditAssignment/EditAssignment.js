@@ -62,32 +62,32 @@ class EditAssignment extends Component {
 
     return (
       <PageContent
-        title={<FormattedMessage id='app.editAssignment.title' defaultMessage='Edit assignment settings' />}
-        description={<FormattedMessage id='app.editAssignment.description' defaultMessage='Change assignment settings and limits' />}
+        title={<FormattedMessage id="app.editAssignment.title" defaultMessage="Edit assignment settings" />}
+        description={<FormattedMessage id="app.editAssignment.description" defaultMessage="Change assignment settings and limits" />}
         breadcrumbs={[
           {
-            text: <FormattedMessage id='app.assignment.title' />,
+            text: <FormattedMessage id="app.assignment.title" />,
             iconName: 'puzzle-piece',
             link: ASSIGNMENT_DETAIL_URI_FACTORY(assignmentId)
           },
           {
-            text: <FormattedMessage id='app.editAssignment.title' />,
+            text: <FormattedMessage id="app.editAssignment.title" />,
             iconName: 'pencil'
           }
         ]}>
         <div>
           <ResourceRenderer
             loading={(
-              <Box title={<FormattedMessage id='app.editAssignment.loading' defaultMessage='Loading ...' />}>
+              <Box title={<FormattedMessage id="app.editAssignment.loading" defaultMessage="Loading ..." />}>
                 <p>
-                  <LoadingIcon /> <FormattedMessage id='app.editAssignment.loadingDescription' defaultMessage='Loading latest assignment settings ...' />
+                  <LoadingIcon /> <FormattedMessage id="app.editAssignment.loadingDescription" defaultMessage="Loading latest assignment settings ..." />
                 </p>
               </Box>
             )}
             failed={(
-              <Box title={<FormattedMessage id='app.editAssignment.failed' defaultMessage='Failed loading assignment settings' />}>
+              <Box title={<FormattedMessage id="app.editAssignment.failed" defaultMessage="Failed loading assignment settings" />}>
                 <p>
-                  <WarningIcon /> <FormattedMessage id='app.editAssignment.failedDescription' defaultMessage='Assignment settings could not have been loaded.' />
+                  <WarningIcon /> <FormattedMessage id="app.editAssignment.failedDescription" defaultMessage="Assignment settings could not have been loaded." />
                 </p>
               </Box>
             )}
@@ -104,13 +104,13 @@ class EditAssignment extends Component {
           </ResourceRenderer>
           <br />
           <Box
-            type='danger'
-            title={<FormattedMessage id='app.editAssignment.deleteAssignment' defaultMessage='Delete the assignment' />}>
+            type="danger"
+            title={<FormattedMessage id="app.editAssignment.deleteAssignment" defaultMessage="Delete the assignment" />}>
             <div>
               <p>
-                <FormattedMessage id='app.editAssignment.deleteAssignmentWarning' defaultMessage='Deleting an assignment will remove all the students submissions and you will have to contact the administrator of ReCodEx if you wanted to restore the assignment in the future.' />
+                <FormattedMessage id="app.editAssignment.deleteAssignmentWarning" defaultMessage="Deleting an assignment will remove all the students submissions and you will have to contact the administrator of ReCodEx if you wanted to restore the assignment in the future." />
               </p>
-              <p className='text-center'>
+              <p className="text-center">
                 <DeleteAssignmentButtonContainer id={assignmentId} onDeleted={() => push(GROUP_URI_FACTORY(this.groupId))} />
               </p>
             </div>

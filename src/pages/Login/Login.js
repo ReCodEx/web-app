@@ -41,24 +41,24 @@ class Login extends Component {
 
     return (
       <PageContent
-        title={<FormattedMessage id='app.login.title' defaultMessage='Sign in' />}
-        description={<FormattedMessage id='app.login.description' defaultMessage='Please fill your credentials' />}
+        title={<FormattedMessage id="app.login.title" defaultMessage="Sign in" />}
+        description={<FormattedMessage id="app.login.description" defaultMessage="Please fill your credentials" />}
         breadcrumbs={[
           {
-            text: <FormattedMessage id='app.homepage.title' />,
+            text: <FormattedMessage id="app.homepage.title" />,
             link: HOME_URI,
             iconName: 'home'
           },
           {
-            text: <FormattedMessage id='app.login.title' />,
+            text: <FormattedMessage id="app.login.title" />,
             iconName: 'sign-in'
           }
         ]}>
         <Row>
           <Col lg={4} lgOffset={1} md={6} mdOffset={0} sm={8} smOffset={2}>
             <LoginForm onSubmit={login} hasSucceeded={hasSucceeded} />
-            <p className='text-center'>
-              <FormattedMessage id='app.login.cannotRememberPassword' defaultMessage='You cannot remember what your password was?' />{' '}<Link to={RESET_PASSWORD_URI}><FormattedMessage id='app.login.resetPassword' defaultMessage='Reset your password.' /></Link>
+            <p className="text-center">
+              <FormattedMessage id="app.login.cannotRememberPassword" defaultMessage="You cannot remember what your password was?" />{' '}<Link to={RESET_PASSWORD_URI}><FormattedMessage id="app.login.resetPassword" defaultMessage="Reset your password." /></Link>
             </p>
           </Col>
           <Col lg={4} lgOffset={1} md={6} mdOffset={0} sm={8} smOffset={2}>

@@ -8,7 +8,7 @@ const DownloadResultArchiveContainer = ({
   submissionId,
   downloadResultArchive
 }) => (
-  <a href='#' onClick={downloadResultArchive}>
+  <a href="#" onClick={downloadResultArchive}>
     <ResultArchiveInfoBox submissionId={submissionId} />
   </a>
 );

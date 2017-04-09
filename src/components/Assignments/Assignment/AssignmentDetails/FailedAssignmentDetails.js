@@ -7,15 +7,15 @@ const FailedAssignmentDetails = () => (
   <Box
     title={(
       <span>
-        <WarningIcon /> <FormattedMessage id='app.assignment.error' defaultMessage='Exercise assignment could not be loaded.' />
+        <WarningIcon /> <FormattedMessage id="app.assignment.error" defaultMessage="Exercise assignment could not be loaded." />
       </span>
     )}
     noPadding={false}
     collapsable={true}>
     <p>
       <FormattedMessage
-        id='app.assignment.errorExplanation'
-        defaultMessage='The assignment of this exercise could not be loaded. Make sure you are connected to the Internet and try again later.' />
+        id="app.assignment.errorExplanation"
+        defaultMessage="The assignment of this exercise could not be loaded. Make sure you are connected to the Internet and try again later." />
     </p>
   </Box>
 );

@@ -12,8 +12,8 @@ const BytesTextField = ({
       <TextField {...props} input={input} />
       <HelpBlock>
         <FormattedMessage
-          id='app.bytesTextField.humanReadable'
-          defaultMessage='Human readable variant:' />
+          id="app.bytesTextField.humanReadable"
+          defaultMessage="Human readable variant:" />
         {' '}<b>{prettyBytes(Number(input.value))}</b>
       </HelpBlock>
   </div>

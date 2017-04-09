@@ -17,26 +17,26 @@ const SuccessfulSubmissionTableRow = ({
   }
 }) => (
   <tr>
-    <td><AssignmentStatusIcon id={link} status='done' /></td>
+    <td><AssignmentStatusIcon id={link} status="done" /></td>
     <td>
       <FormattedDate value={submittedAt * 1000} />&nbsp;<FormattedTime value={submittedAt * 1000} />
     </td>
-    <td className='text-center'>
-      <strong className='text-success'>
-        <FormattedNumber style='percent' value={score} />
+    <td className="text-center">
+      <strong className="text-success">
+        <FormattedNumber style="percent" value={score} />
       </strong>
     </td>
-    <td className='text-center'>
-      <strong className='text-success'>
+    <td className="text-center">
+      <strong className="text-success">
         <Points points={points} bonusPoints={bonusPoints} maxPoints={maxPoints} />
       </strong>
     </td>
     <td>
       {note}
     </td>
-    <td className='text-right'>
-      <Link to={link} className='btn btn-flat btn-default btn-xs'>
-        <FormattedMessage id='app.submissionsTable.showDetails' defaultMessage='Show details' />
+    <td className="text-right">
+      <Link to={link} className="btn btn-flat btn-default btn-xs">
+        <FormattedMessage id="app.submissionsTable.showDetails" defaultMessage="Show details" />
       </Link>
     </td>
   </tr>

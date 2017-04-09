@@ -77,7 +77,7 @@ const SourceCodeField = ({
         name={input.name}
         tabIndex={tabIndex}
         keyboardHandler={vimMode ? 'vim' : undefined}
-        width='100%'
+        width="100%"
         editorProps={{$blockScrolling: true}} />
     </ClientOnly>
     {touched && error && <HelpBlock>{error}</HelpBlock>}

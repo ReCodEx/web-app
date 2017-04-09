@@ -9,11 +9,11 @@ const Admin = ({
 }, {
   links: { ADMIN_INSTANCES_URI }
 }) => (
-  <ul className='sidebar-menu'>
-    <MenuTitle title={<FormattedMessage id='app.sudebar.menu.admin.title' defaultMessage='Administration' />} />
+  <ul className="sidebar-menu">
+    <MenuTitle title={<FormattedMessage id="app.sudebar.menu.admin.title" defaultMessage="Administration" />} />
     <MenuItem
-      icon='university'
-      title={<FormattedMessage id='app.sidebar.menu.admin.instances' defaultMessage='Instances' />}
+      icon="university"
+      title={<FormattedMessage id="app.sidebar.menu.admin.instances" defaultMessage="Instances" />}
       currentPath={currentUrl}
       link={ADMIN_INSTANCES_URI} />
   </ul>

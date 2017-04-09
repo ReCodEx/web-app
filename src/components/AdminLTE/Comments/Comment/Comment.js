@@ -30,7 +30,7 @@ const Comment = ({
       'direct-chat-msg': true,
       'right': right
     })}>
-      <div className='direct-chat-info clearfix'>
+      <div className="direct-chat-info clearfix">
         <span className={classNames({
           'direct-chat-name': true,
           'pull-right': right
@@ -43,20 +43,20 @@ const Comment = ({
         {status === 'failed' && <Failed right={!right} repost={() => repost && repost(id)} />}
         {status === 'pending' && <Posting right={!right} />}
       </div>
-      <img className='direct-chat-img' src={user.avatarUrl} alt={user.name} />
-      <div className='direct-chat-text'>
+      <img className="direct-chat-img" src={user.avatarUrl} alt={user.name} />
+      <div className="direct-chat-text">
         {isFromCurrentUser && togglePrivacy &&
-          <OverlayTrigger placement='left' overlay={(
+          <OverlayTrigger placement="left" overlay={(
             <Tooltip id={id}>
               {isPrivate
-                ? <FormattedMessage id='app.comments.onlyYouCanSeeThisComment' defaultMessage='Only you can see this comment' />
-                : <FormattedMessage id='app.comments.everyoneCanSeeThisComment' defaultMessage='This comment is visible to everyone.' />}
+                ? <FormattedMessage id="app.comments.onlyYouCanSeeThisComment" defaultMessage="Only you can see this comment" />
+                : <FormattedMessage id="app.comments.everyoneCanSeeThisComment" defaultMessage="This comment is visible to everyone." />}
             </Tooltip>
           )}>
             <Icon
               name={isToggling ? 'circle-o-notch' : isPrivate ? 'lock' : 'unlock-alt'}
               onClick={() => togglePrivacy(id)}
-              className='pull-right'
+              className="pull-right"
               style={{ cursor: 'pointer' }}
               spin={isToggling} />
           </OverlayTrigger>}{' '}

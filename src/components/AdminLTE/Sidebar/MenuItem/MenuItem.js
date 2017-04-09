@@ -35,7 +35,7 @@ const MenuItem = ({
         {title}
       </span>
       {notificationsCount > 0 &&
-        <small className='label pull-right bg-yellow'>{notificationsCount}</small>}
+        <small className="label pull-right bg-yellow">{notificationsCount}</small>}
     </Link>
   </li>
 );

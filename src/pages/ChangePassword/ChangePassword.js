@@ -83,25 +83,25 @@ class ChangePassword extends Component {
 
     return (
       <PageContent
-        title={<FormattedMessage id='app.changePassword.title' defaultMessage='Change forgotten password' />}
-        description={<FormattedMessage id='app.changePassword.description' defaultMessage='You can change your forgotten password in this form' />}
+        title={<FormattedMessage id="app.changePassword.title" defaultMessage="Change forgotten password" />}
+        description={<FormattedMessage id="app.changePassword.description" defaultMessage="You can change your forgotten password in this form" />}
         breadcrumbs={[
           {
-            text: <FormattedMessage id='app.homepage.title' />,
+            text: <FormattedMessage id="app.homepage.title" />,
             link: HOME_URI,
             iconName: 'home'
           },
           {
-            text: <FormattedMessage id='app.changePassword.title' />,
+            text: <FormattedMessage id="app.changePassword.title" />,
             iconName: 'shield'
           }
         ]}>
         <Row>
           <Col md={6} mdOffset={3} sm={8} smOffset={2}>
             {!token && !decodedToken && (
-              <Alert bsStyle='warning'>
-                <strong><FormattedMessage id='app.changePassword.tokenExpired' defaultMessage='You cannot reset your now - your token has probably expired or the URL is broken.' /></strong>{' '}
-                <FormattedMessage id='app.changePassword.requestAnotherLink' defaultMessage='Please request (another) link with an unique token.' />
+              <Alert bsStyle="warning">
+                <strong><FormattedMessage id="app.changePassword.tokenExpired" defaultMessage="You cannot reset your now - your token has probably expired or the URL is broken." /></strong>{' '}
+                <FormattedMessage id="app.changePassword.requestAnotherLink" defaultMessage="Please request (another) link with an unique token." />
               </Alert>
             )}
             {decodedToken && (
@@ -111,7 +111,7 @@ class ChangePassword extends Component {
                   isChanging={isChanging}
                   hasFailed={hasFailed}
                   hasSucceeded={hasSucceeded} />
-                <p><FormattedMessage id='app.changePassword.tokenExpiresIn' defaultMessage='Token expires: ' /> <FormattedRelative value={decodedToken.exp * 1000} /></p>
+                <p><FormattedMessage id="app.changePassword.tokenExpiresIn" defaultMessage="Token expires: " /> <FormattedRelative value={decodedToken.exp * 1000} /></p>
               </div>
             )}
           </Col>

@@ -41,9 +41,9 @@ const SourceCodeViewer = ({
       value={content}
       disabled
       mode={getMode(name.split('.').pop())}
-      theme='monokai'
-      name='source-code-viewer'
-      width='100%'
+      theme="monokai"
+      name="source-code-viewer"
+      width="100%"
       editorProps={{$blockScrolling: true}} />
   ) : null;
 

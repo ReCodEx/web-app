@@ -18,7 +18,7 @@ const ResourceDependentBreadcrumbItem = ({
         text={(
           <span>
             {iconName !== null ? <Icon name={iconName} /> : <LoadingIcon />}
-            {' '}<FormattedMessage id='app.resourceDependendBreadcrumbItem.loading' defaultMessage='Loading ...' />
+            {' '}<FormattedMessage id="app.resourceDependendBreadcrumbItem.loading" defaultMessage="Loading ..." />
           </span>
         )}
         isActive={isActive} />

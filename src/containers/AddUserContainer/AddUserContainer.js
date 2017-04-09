@@ -12,7 +12,7 @@ const AddUserContainer = ({
   createActions
 }) => (
   <SearchContainer
-    type='users'
+    type="users"
     id={id}
     search={search}
     renderList={

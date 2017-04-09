@@ -49,13 +49,13 @@ class RichTextAreaField extends Component {
         {!viewSource && (
           <RichTextEditor
             value={value}
-            editorClassName='recodex-editor'
+            editorClassName="recodex-editor"
             onChange={e => this.onChange(e)}
             readonly={disabled}
             useDefaultStyles={false} />)}
-        <FormGroup controlId='toggleViewSource'>
+        <FormGroup controlId="toggleViewSource">
           <Checkbox checked={viewSource} onChange={() => this.toggleViewSource()}>
-            <FormattedMessage id='app.markdownTextArea.showMarkdown' defaultMessage='Show markdown source' />
+            <FormattedMessage id="app.markdownTextArea.showMarkdown" defaultMessage="Show markdown source" />
           </Checkbox>
         </FormGroup>
       </div>

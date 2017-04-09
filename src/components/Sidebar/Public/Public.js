@@ -14,23 +14,23 @@ const Public = ({
     BUGS_URL
   }
 }) => (
-  <ul className='sidebar-menu'>
-    <MenuTitle title='ReCodEx' />
+  <ul className="sidebar-menu">
+    <MenuTitle title="ReCodEx" />
     <MenuItem
-      title={<FormattedMessage id='app.sidebar.menu.signIn' defaultMessage='Sign in' />}
-      icon='sign-in'
+      title={<FormattedMessage id="app.sidebar.menu.signIn" defaultMessage="Sign in" />}
+      icon="sign-in"
       currentPath={currentUrl}
       link={LOGIN_URI} />
     <MenuItem
-      title={<FormattedMessage id='app.sidebar.menu.createAccount' defaultMessage='Create account' />}
+      title={<FormattedMessage id="app.sidebar.menu.createAccount" defaultMessage="Create account" />}
       isActive={false}
-      icon='user-plus'
+      icon="user-plus"
       currentPath={currentUrl}
       link={REGISTRATION_URI} />
     <MenuItem
-        title={<FormattedMessage id='app.sidebar.menu.feedbackAndBugs' defaultMessage='Feedback and bug reporting' />}
+        title={<FormattedMessage id="app.sidebar.menu.feedbackAndBugs" defaultMessage="Feedback and bug reporting" />}
         isActive={false}
-        icon='bug'
+        icon="bug"
         link={BUGS_URL}
         currentPath={currentUrl}
         inNewTab={true} />

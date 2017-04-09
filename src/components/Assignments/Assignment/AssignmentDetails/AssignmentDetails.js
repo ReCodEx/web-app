@@ -23,7 +23,7 @@ const AssignmentDetails = ({
   canSubmit
 }) => (
   <Box
-    title={<FormattedMessage id='app.assignment.title' defaultMessage='Details' />}
+    title={<FormattedMessage id="app.assignment.title" defaultMessage="Details" />}
     noPadding
     collapsable
     isOpen={isOpen}>
@@ -32,14 +32,14 @@ const AssignmentDetails = ({
         <tr className={classnames({
           'text-danger': isAfterFirstDeadline
         })}>
-          <td className='text-center'>
+          <td className="text-center">
             <strong>
-              {!isAfterFirstDeadline && <Icon name='hourglass-start' />}
-              {isAfterFirstDeadline && <Icon name='hourglass-end'/>}
+              {!isAfterFirstDeadline && <Icon name="hourglass-start" />}
+              {isAfterFirstDeadline && <Icon name="hourglass-end"/>}
             </strong>
           </td>
           <td>
-            <FormattedMessage id='app.assignment.deadline' defaultMessage='Deadline:' />
+            <FormattedMessage id="app.assignment.deadline" defaultMessage="Deadline:" />
           </td>
           <td>
             <strong>
@@ -52,14 +52,14 @@ const AssignmentDetails = ({
           <tr className={classnames({
             'text-danger': isAfterSecondDeadline
           })}>
-            <td className='text-center'>
+            <td className="text-center">
               <strong>
-                {!isAfterSecondDeadline && <Icon name='hourglass-half' />}
-                {isAfterSecondDeadline && <Icon name='hourglass-end'/>}
+                {!isAfterSecondDeadline && <Icon name="hourglass-half" />}
+                {isAfterSecondDeadline && <Icon name="hourglass-end"/>}
               </strong>
             </td>
             <td>
-              <FormattedMessage id='app.assignment.secondDeadline' defaultMessage='Second deadline:' />
+              <FormattedMessage id="app.assignment.secondDeadline" defaultMessage="Second deadline:" />
             </td>
             <td>
               <strong>
@@ -69,31 +69,31 @@ const AssignmentDetails = ({
             </td>
           </tr>)}
         <tr>
-          <td className='text-center'>
-            <Icon name='cloud-upload' />
+          <td className="text-center">
+            <Icon name="cloud-upload" />
           </td>
           <td>
-            <FormattedMessage id='app.assignment.maxPoints' defaultMessage='Maximum number of points for a correct solution:' />
+            <FormattedMessage id="app.assignment.maxPoints" defaultMessage="Maximum number of points for a correct solution:" />
           </td>
           <td>
             {!isAfterFirstDeadline ? maxPointsBeforeFirstDeadline : (!isAfterSecondDeadline && allowSecondDeadline ? maxPointsBeforeSecondDeadline : 0)}
           </td>
         </tr>
         <tr>
-          <td className='text-center'>
-            <Icon name='cloud-upload' />
+          <td className="text-center">
+            <Icon name="cloud-upload" />
           </td>
           <td>
-            <FormattedMessage id='app.assignment.submissionsCountLimit' defaultMessage='Submission count limit:' />
+            <FormattedMessage id="app.assignment.submissionsCountLimit" defaultMessage="Submission count limit:" />
           </td>
           <td>{submissionsCountLimit === null ? '-' : submissionsCountLimit}</td>
         </tr>
         <tr>
-          <td className='text-center'>
-            <Icon name='unlock-alt' />
+          <td className="text-center">
+            <Icon name="unlock-alt" />
           </td>
           <td>
-            <FormattedMessage id='app.assignment.canSubmit' defaultMessage='You can submit more solutions:' />
+            <FormattedMessage id="app.assignment.canSubmit" defaultMessage="You can submit more solutions:" />
           </td>
           <td>
             <ResourceRenderer resource={canSubmit}>
@@ -103,11 +103,11 @@ const AssignmentDetails = ({
         </tr>
         {isBonus && (
           <tr>
-            <td className='text-center'>
-              <Icon name='plus-circle' />
+            <td className="text-center">
+              <Icon name="plus-circle" />
             </td>
             <td>
-              <FormattedMessage id='app.assignment.isBonus' defaultMessage='Bonus assignment: ' />
+              <FormattedMessage id="app.assignment.isBonus" defaultMessage="Bonus assignment: " />
             </td>
             <td>
               <SuccessIcon />
@@ -115,11 +115,11 @@ const AssignmentDetails = ({
           </tr>
         )}
         <tr>
-          <td className='text-center'>
-            <Icon name='code' />
+          <td className="text-center">
+            <Icon name="code" />
           </td>
           <td>
-            <FormattedMessage id='app.assignment.runtimeEnvironmentsIds' defaultMessage='Allowed languages/frameworks/technologies: ' />
+            <FormattedMessage id="app.assignment.runtimeEnvironmentsIds" defaultMessage="Allowed languages/frameworks/technologies: " />
           </td>
           <td>
             {runtimeEnvironmentsIds.map(env => (

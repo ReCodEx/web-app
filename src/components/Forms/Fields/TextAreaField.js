@@ -23,7 +23,7 @@ const TextAreaField = ({
     controlId={input.name}
     validationState={touched && error ? 'error' : undefined}>
     <ControlLabel>{label}</ControlLabel>
-    <FormControl {...input} {...props} componentClass='textarea' rows={8} />
+    <FormControl {...input} {...props} componentClass="textarea" rows={8} />
     {touched && error && <HelpBlock>{error}</HelpBlock>}
     {children}
   </FormGroup>

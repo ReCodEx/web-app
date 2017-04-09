@@ -41,15 +41,15 @@ class EditGroup extends Component {
       <Page
         resource={group}
         title={(group) => group.name}
-        description={<FormattedMessage id='app.editGroup.description' defaultMessage='Change group settings' />}
+        description={<FormattedMessage id="app.editGroup.description" defaultMessage="Change group settings" />}
         breadcrumbs={[
           {
-            text: <FormattedMessage id='app.group.title' />,
+            text: <FormattedMessage id="app.group.title" />,
             iconName: 'group',
             link: GROUP_URI_FACTORY(groupId)
           },
           {
-            text: <FormattedMessage id='app.editGroup.title' defaultMessage='Edit group' />,
+            text: <FormattedMessage id="app.editGroup.title" defaultMessage="Edit group" />,
             iconName: 'pencil'
           }
         ]}>

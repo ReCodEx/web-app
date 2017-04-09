@@ -22,7 +22,7 @@ const AssignmentTableRow = ({
   }
 }) => (
   <tr>
-    <td className='text-center'>
+    <td className="text-center">
       <AssignmentStatusIcon id={id} status={status} />
     </td>
     <td>

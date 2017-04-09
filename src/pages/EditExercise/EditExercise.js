@@ -59,15 +59,15 @@ class EditExercise extends Component {
       <Page
         resource={exercise}
         title={exercise => exercise.name}
-        description={<FormattedMessage id='app.editExercise.description' defaultMessage='Change exercise settings' />}
+        description={<FormattedMessage id="app.editExercise.description" defaultMessage="Change exercise settings" />}
         breadcrumbs={[
           {
-            text: <FormattedMessage id='app.exercise.title' defaultMessage='Exercise' />,
+            text: <FormattedMessage id="app.exercise.title" defaultMessage="Exercise" />,
             iconName: 'puzzle-piece',
             link: EXERCISE_URI_FACTORY(exerciseId)
           },
           {
-            text: <FormattedMessage id='app.editExercise.title' defaultMessage='Edit exercise' />,
+            text: <FormattedMessage id="app.editExercise.title" defaultMessage="Edit exercise" />,
             iconName: 'pencil'
           }
         ]}>
@@ -113,13 +113,13 @@ class EditExercise extends Component {
             </Row>
             <br />
             <Box
-              type='danger'
-              title={<FormattedMessage id='app.editExercise.deleteExercise' defaultMessage='Delete the exercise' />}>
+              type="danger"
+              title={<FormattedMessage id="app.editExercise.deleteExercise" defaultMessage="Delete the exercise" />}>
               <div>
                 <p>
-                  <FormattedMessage id='app.editExercise.deleteExerciseWarning' defaultMessage='Deleting an exercise will remove all the students submissions and all assignments.' />
+                  <FormattedMessage id="app.editExercise.deleteExerciseWarning" defaultMessage="Deleting an exercise will remove all the students submissions and all assignments." />
                 </p>
-                <p className='text-center'>
+                <p className="text-center">
                   <DeleteExerciseButtonContainer id={exercise.id} onDeleted={() => push(EXERCISES_URI)} />
                 </p>
               </div>

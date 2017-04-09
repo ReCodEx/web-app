@@ -17,7 +17,7 @@ const StudentsView = ({
       <Col sm={12}>
         <h3>
           <FormattedMessage
-            id='app.group.studentsView.title'
+            id="app.group.studentsView.title"
             defaultMessage="Student's dashboard for {groupName}"
             values={{ groupName: group.name }} />
         </h3>
@@ -26,7 +26,7 @@ const StudentsView = ({
     <Row>
       <Col lg={6}>
         <Box
-          title={<FormattedMessage id='app.studentsView.assignments' defaultMessage='Assignments' />}
+          title={<FormattedMessage id="app.studentsView.assignments" defaultMessage="Assignments" />}
           collapsable
           noPadding
           unlimitedHeight
@@ -39,7 +39,7 @@ const StudentsView = ({
       </Col>
       <Col lg={6}>
         <Box
-          title={<FormattedMessage id='app.studentsView.students' defaultMessage='Students' />}
+          title={<FormattedMessage id="app.studentsView.students" defaultMessage="Students" />}
           collapsable
           noPadding
           isOpen>

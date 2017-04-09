@@ -44,7 +44,7 @@ class SubmissionsTableContainer extends Component {
       userId,
       assignmentId,
       submissions,
-      title = <FormattedMessage id='app.submissionsTableContainer.title' defaultMessage='Submitted solutions' />
+      title = <FormattedMessage id="app.submissionsTableContainer.title" defaultMessage="Submitted solutions" />
     } = this.props;
 
     return (

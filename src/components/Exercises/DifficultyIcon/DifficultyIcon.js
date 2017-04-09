@@ -8,23 +8,23 @@ const DifficultyIcon = ({
   switch (difficulty) {
     case 'easy':
       return (
-        <span className='text-success'>
-          <Icon name='smile-o' /> <FormattedMessage id='app.exercises.difficultyIcon.easy' defaultMessage='Easy' />
+        <span className="text-success">
+          <Icon name="smile-o" /> <FormattedMessage id="app.exercises.difficultyIcon.easy" defaultMessage="Easy" />
         </span>
       );
 
     case 'medium':
     case 'moderate':
       return (
-        <span className='text-warning'>
-          <Icon name='meh-o' /> <FormattedMessage id='app.exercises.difficultyIcon.medium' defaultMessage='Medium' />
+        <span className="text-warning">
+          <Icon name="meh-o" /> <FormattedMessage id="app.exercises.difficultyIcon.medium" defaultMessage="Medium" />
         </span>
       );
 
     case 'hard':
       return (
-        <span className='text-danger'>
-          <Icon name='frown-o' /> <FormattedMessage id='app.exercises.difficultyIcon.hard' defaultMessage='Hard' />
+        <span className="text-danger">
+          <Icon name="frown-o" /> <FormattedMessage id="app.exercises.difficultyIcon.hard" defaultMessage="Hard" />
         </span>
       );
 

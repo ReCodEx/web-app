@@ -14,13 +14,13 @@ const Student = ({
 }, {
   links: { GROUP_URI_FACTORY }
 }) => (
-  <ul className='sidebar-menu'>
-    <MenuTitle title={<FormattedMessage id='app.sudebar.menu.student.title' defaultMessage='Student' />} />
+  <ul className="sidebar-menu">
+    <MenuTitle title={<FormattedMessage id="app.sudebar.menu.student.title" defaultMessage="Student" />} />
     <MenuGroup
-      title={<FormattedMessage id='app.sidebar.menu.studentOf' defaultMessage='Groups' />}
+      title={<FormattedMessage id="app.sidebar.menu.studentOf" defaultMessage="Groups" />}
       items={studentOf.toList()}
       notifications={notifications}
-      icon='puzzle-piece'
+      icon="puzzle-piece"
       currentPath={currentUrl}
       createLink={item => GROUP_URI_FACTORY(getId(item))}
       forceOpen={isCollapsed} />

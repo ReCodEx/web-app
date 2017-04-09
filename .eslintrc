@@ -31,6 +31,10 @@
       2,
       "single"
     ],
+    "jsx-quotes": [
+      2,
+      "prefer-double"
+    ],
     "no-console": 1,
     "no-unused-vars": 2,
     "no-alert": 2,

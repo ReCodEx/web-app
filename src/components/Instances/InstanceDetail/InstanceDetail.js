@@ -14,13 +14,13 @@ const InstanceDetail = ({
 }) => (
   <Row>
     <Col md={6}>
-      <Box title={<FormattedMessage id='app.instance.detailTitle' defaultMessage='Instance description' />}>
+      <Box title={<FormattedMessage id="app.instance.detailTitle" defaultMessage="Instance description" />}>
         <ReactMarkdown source={description} />
       </Box>
     </Col>
     <Col md={6}>
       <Box
-        title={<FormattedMessage id='app.instance.groupsTitle' defaultMessage='Groups hierarchy' />}
+        title={<FormattedMessage id="app.instance.groupsTitle" defaultMessage="Groups hierarchy" />}
         noPadding>
         <div>
           {rootGroupId !== null && (
@@ -32,7 +32,7 @@ const InstanceDetail = ({
           )}
 
           {rootGroupId === null && (
-            <FormattedMessage id='app.instance.groups.noGroups' defaultMessage='There are no groups in this ReCodEx instance.' />
+            <FormattedMessage id="app.instance.groups.noGroups" defaultMessage="There are no groups in this ReCodEx instance." />
           )}
         </div>
       </Box>

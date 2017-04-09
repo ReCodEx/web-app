@@ -17,11 +17,11 @@ const LoggedIn = ({
     BUGS_URL
   }
 }) => (
-  <ul className='sidebar-menu'>
-    <MenuTitle title={<FormattedMessage id='app.sidebar.menu.title' defaultMessage='Menu' />} />
+  <ul className="sidebar-menu">
+    <MenuTitle title={<FormattedMessage id="app.sidebar.menu.title" defaultMessage="Menu" />} />
     <MenuItem
-      title={<FormattedMessage id='app.sidebar.menu.dashboard' defaultMessage='Dashboard' />}
-      icon='dashboard'
+      title={<FormattedMessage id="app.sidebar.menu.dashboard" defaultMessage="Dashboard" />}
+      icon="dashboard"
       currentPath={currentUrl}
       link={DASHBOARD_URI} />
 
@@ -35,16 +35,16 @@ const LoggedIn = ({
             <MenuItem
               key={id}
               title={name}
-              icon='university'
+              icon="university"
               currentPath={currentUrl}
               link={INSTANCE_URI_FACTORY(id)} />
           )
         )}
 
     <MenuItem
-      title={<FormattedMessage id='app.sidebar.menu.feedbackAndBugs' defaultMessage='Feedback and bug reporting' />}
+      title={<FormattedMessage id="app.sidebar.menu.feedbackAndBugs" defaultMessage="Feedback and bug reporting" />}
       isActive={false}
-      icon='bug'
+      icon="bug"
       link={BUGS_URL}
       currentPath={currentUrl}
       inNewTab={true} />

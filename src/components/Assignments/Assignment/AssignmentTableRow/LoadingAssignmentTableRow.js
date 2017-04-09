@@ -6,8 +6,8 @@ const LoadingAssignmentTableRow = ({
   showGroup = false
 }) => (
   <tr>
-    <td className='text-center' colSpan={showGroup ? 5 : 4}>
-      <LoadingIcon /> <FormattedMessage id='app.assignmentsTableRow.loading' defaultMessage='Loading assignments ...' />
+    <td className="text-center" colSpan={showGroup ? 5 : 4}>
+      <LoadingIcon /> <FormattedMessage id="app.assignmentsTableRow.loading" defaultMessage="Loading assignments ..." />
     </td>
   </tr>
 );

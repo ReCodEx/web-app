@@ -25,13 +25,13 @@ class Search extends Component {
         <form>
           <FormGroup>
             <ControlLabel htmlFor={id}>
-              <FormattedMessage id='app.search.title' defaultMessage='Search:' />
+              <FormattedMessage id="app.search.title" defaultMessage="Search:" />
             </ControlLabel>
             <InputGroup>
               <FormControl id={id} onChange={e => { this.query = e.target.value; }} />
               <InputGroup.Button>
                 <Button
-                  type='submit'
+                  type="submit"
                   onClick={(e) => { e.preventDefault(); onChange(this.query); }}
                   disabled={false && !isLoading && !hasFailed}>
                   {isLoading && <LoadingIcon />}
@@ -45,7 +45,7 @@ class Search extends Component {
         {query && query.length > 0 && (
           <div>
             <p>
-              {' '}<FormattedMessage id='app.search.query' defaultMessage='Searched query: ' />
+              {' '}<FormattedMessage id="app.search.query" defaultMessage="Searched query: " />
               <strong><em>"{query}"</em></strong>
             </p>
 

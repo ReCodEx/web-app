@@ -17,11 +17,11 @@ const UsersStats = ({
     icon={!hasLimit ? 'info' : passesLimit ? 'check' : 'exclamation-triangle'}
     title={name}
     value={
-      <FormattedNumber value={points.total > 0 ? points.gained / points.total : 0} style='percent' />
+      <FormattedNumber value={points.total > 0 ? points.gained / points.total : 0} style="percent" />
     }
     progress={points.total > 0 ? Math.min(1, points.gained / points.total) : 0}
     description={
-      <FormattedMessage id='app.usersStats.description' defaultMessage='Points gained from {name}.' values={{ name }} />
+      <FormattedMessage id="app.usersStats.description" defaultMessage="Points gained from {name}." values={{ name }} />
     } />
 );
 

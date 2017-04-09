@@ -22,7 +22,7 @@ const SupervisorsListItem = ({
     {isAdmin && (
       <td>
         <MakeRemoveSupervisorButtonContainer userId={id} groupId={groupId} />
-        {groupAdmins.indexOf(id) < 0 && <MakeGroupAdminButton onClick={() => makeAdmin(groupId, id)} bsSize='xs' />}
+        {groupAdmins.indexOf(id) < 0 && <MakeGroupAdminButton onClick={() => makeAdmin(groupId, id)} bsSize="xs" />}
       </td>
     )}
   </tr>

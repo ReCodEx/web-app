@@ -26,10 +26,10 @@ const SubmissionsTable = ({
       <thead>
         <tr>
           <th></th>
-          <th><FormattedMessage id='app.submissionsTable.submissionDate' defaultMessage='Date of submission' /></th>
-          <th className='text-center'><FormattedMessage id='app.submissionsTable.solutionValidity' defaultMessage='Solution validity' /></th>
-          <th className='text-center'><FormattedMessage id='app.submissionsTable.receivedPoints' defaultMessage='Received points' /></th>
-          <th><FormattedMessage id='app.submissionsTable.note' defaultMessage='Note' /></th>
+          <th><FormattedMessage id="app.submissionsTable.submissionDate" defaultMessage="Date of submission" /></th>
+          <th className="text-center"><FormattedMessage id="app.submissionsTable.solutionValidity" defaultMessage="Solution validity" /></th>
+          <th className="text-center"><FormattedMessage id="app.submissionsTable.receivedPoints" defaultMessage="Received points" /></th>
+          <th><FormattedMessage id="app.submissionsTable.note" defaultMessage="Note" /></th>
           <th />
         </tr>
       </thead>

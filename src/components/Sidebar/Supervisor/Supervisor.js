@@ -15,19 +15,19 @@ const Supervisor = ({
 }, {
   links: { GROUP_URI_FACTORY, EXERCISES_URI }
 }) => (
-  <ul className='sidebar-menu'>
-    <MenuTitle title={<FormattedMessage id='app.sudebar.menu.supervisor.title' defaultMessage='Supervisor' />} />
+  <ul className="sidebar-menu">
+    <MenuTitle title={<FormattedMessage id="app.sudebar.menu.supervisor.title" defaultMessage="Supervisor" />} />
     <MenuGroup
-      title={<FormattedMessage id='app.sidebar.menu.supervisorOf' defaultMessage='Groups - supervisor' />}
+      title={<FormattedMessage id="app.sidebar.menu.supervisorOf" defaultMessage="Groups - supervisor" />}
       items={supervisorOf.toList()}
       notifications={{}}
-      icon='wrench'
+      icon="wrench"
       currentPath={currentUrl}
       createLink={item => GROUP_URI_FACTORY(getId(item))}
       forceOpen={isCollapsed} />
     <MenuItem
-      title={<FormattedMessage id='app.sidebar.menu.exercises' defaultMessage='Exercises' />}
-      icon='puzzle-piece'
+      title={<FormattedMessage id="app.sidebar.menu.exercises" defaultMessage="Exercises" />}
+      icon="puzzle-piece"
       currentPath={currentUrl}
       link={EXERCISES_URI} />
   </ul>

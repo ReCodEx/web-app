@@ -17,7 +17,7 @@ class CreateGroupForm extends Component {
 
   render() {
     const {
-      title = <FormattedMessage id='app.createGroupForm.title' defaultMessage='Create new group' />,
+      title = <FormattedMessage id="app.createGroupForm.title" defaultMessage="Create new group" />,
       handleSubmit,
       submitSucceeded = false,
       submitFailed = false,
@@ -34,9 +34,9 @@ class CreateGroupForm extends Component {
         collapsable
         isOpen={false}
         footer={
-          <div className='text-center'>
+          <div className="text-center">
             <SubmitButton
-              id='createGroup'
+              id="createGroup"
               handleSubmit={handleSubmit}
               tabIndex={3}
               submitting={submitting}
@@ -46,46 +46,46 @@ class CreateGroupForm extends Component {
               hasSuceeded={submitSucceeded}
               asyncValidating={asyncValidating}
               messages={{
-                success: <FormattedMessage id='app.createGroupForm.success' defaultMessage='Group has been created' />,
-                submit: <FormattedMessage id='app.createGroupForm.createGroup' defaultMessage='Create new group' />,
-                submitting: <FormattedMessage id='app.createGroupForm.processing' defaultMessage='Group is being created ...' />
+                success: <FormattedMessage id="app.createGroupForm.success" defaultMessage="Group has been created" />,
+                submit: <FormattedMessage id="app.createGroupForm.createGroup" defaultMessage="Create new group" />,
+                submitting: <FormattedMessage id="app.createGroupForm.processing" defaultMessage="Group is being created ..." />
               }} />
           </div>
         }>
         {submitFailed && (
-          <Alert bsStyle='danger'>
-            <FormattedMessage id='app.createGroupForm.failed' defaultMessage="We are sorry but we weren't able to create a new group." />
+          <Alert bsStyle="danger">
+            <FormattedMessage id="app.createGroupForm.failed" defaultMessage="We are sorry but we weren't able to create a new group." />
           </Alert>)}
 
         <Field
-          name='name'
+          name="name"
           tabIndex={1}
           component={TextField}
           required
-          label={<FormattedMessage id='app.createGroup.groupName' defaultMessage='Name:' />}
+          label={<FormattedMessage id="app.createGroup.groupName" defaultMessage="Name:" />}
         />
 
         <Field
-          name='externalId'
+          name="externalId"
           tabIndex={2}
           component={TextField}
           required
-          label={<FormattedMessage id='app.createGroup.externalId' defaultMessage='External ID (e. g. ID of the group in the school IS):' />}
+          label={<FormattedMessage id="app.createGroup.externalId" defaultMessage="External ID (e. g. ID of the group in the school IS):" />}
         />
 
         <Field
-          name='description'
+          name="description"
           tabIndex={3}
           component={MarkdownTextAreaField}
           required
-          label={<FormattedMessage id='app.createGroup.groupDescription' defaultMessage='Description:' />}
+          label={<FormattedMessage id="app.createGroup.groupDescription" defaultMessage="Description:" />}
         />
 
         <Field
-          name='publicStats'
+          name="publicStats"
           tabIndex={4}
           component={CheckboxField}
-          label={<FormattedMessage id='app.createGroup.publicStats' defaultMessage='Students can see statistics of each other' />} />
+          label={<FormattedMessage id="app.createGroup.publicStats" defaultMessage="Students can see statistics of each other" />} />
       </FormBox>
     );
   }
@@ -112,11 +112,11 @@ const validate = ({ name, description }) => {
   const errors = {};
 
   if (!name || name.length === 0) {
-    errors['name'] = <FormattedMessage id='app.createGroup.validation.emptyName' defaultMessage='Group name cannot be empty.' />;
+    errors['name'] = <FormattedMessage id="app.createGroup.validation.emptyName" defaultMessage="Group name cannot be empty." />;
   }
 
   if (!description || description.length === 0) {
-    errors['description'] = <FormattedMessage id='app.createGroup.validation.emptyDescription' defaultMessage='Group description cannot be empty.' />;
+    errors['description'] = <FormattedMessage id="app.createGroup.validation.emptyDescription" defaultMessage="Group description cannot be empty." />;
   }
 
   return errors;
@@ -129,7 +129,7 @@ const asyncValidate = ({ name }, dispatch, { instanceId, parentGroupId = undefin
       var errors = {};
 
       if (!groupNameIsFree) {
-        errors['name'] = <FormattedMessage id='app.createGroup.validation.nameCollision' defaultMessage='The name "{name}" is already used, please choose a different one.' values={{ name }} />;
+        errors['name'] = <FormattedMessage id="app.createGroup.validation.nameCollision" defaultMessage='The name "{name}" is already used, please choose a different one.' values={{ name }} />;
       }
 
       if (Object.keys(errors).length > 0) {

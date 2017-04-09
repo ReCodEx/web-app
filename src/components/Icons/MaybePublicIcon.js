@@ -4,16 +4,16 @@ import Icon from 'react-fontawesome';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 
 const MaybePublicIcon = ({ id, isPublic, ...props }) => (
-  <OverlayTrigger placement='right' overlay={(
+  <OverlayTrigger placement="right" overlay={(
       <Tooltip id={id}>
         {isPublic
-          ? <FormattedMessage id='app.maybePublicIcon.isPublic' defaultMessage='Is public' />
-          : <FormattedMessage id='app.maybePublicIcon.isNotPublic' defaultMessage='Is not public' />}
+          ? <FormattedMessage id="app.maybePublicIcon.isPublic" defaultMessage="Is public" />
+          : <FormattedMessage id="app.maybePublicIcon.isNotPublic" defaultMessage="Is not public" />}
       </Tooltip>
     )}>
     {isPublic
-      ? <Icon {...props} name='circle' className='text-success' />
-      : <Icon {...props} name='ban' />}
+      ? <Icon {...props} name="circle" className="text-success" />
+      : <Icon {...props} name="ban" />}
   </OverlayTrigger>
 );
 

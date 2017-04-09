@@ -16,8 +16,8 @@ const ExercisesListItem = ({
   links: { EXERCISE_URI_FACTORY }
 }) => (
   <tr>
-    <td className='text-center'>
-      <Icon name='code' />
+    <td className="text-center">
+      <Icon name="code" />
     </td>
     <td>
       <strong><Link to={EXERCISE_URI_FACTORY(id)}>{name}</Link></strong>
@@ -32,7 +32,7 @@ const ExercisesListItem = ({
       <FormattedDate value={createdAt * 1000} /> <FormattedTime value={createdAt * 1000} />
     </td>
     {createActions && (
-      <td className='text-right'>
+      <td className="text-right">
         {createActions(id)}
       </td>
     )}

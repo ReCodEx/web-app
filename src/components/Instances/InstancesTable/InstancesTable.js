@@ -13,9 +13,9 @@ const InstancesTable = ({
   <Table hover>
     <thead>
       <tr>
-        <th><FormattedMessage id='app.instancesTable.name' defaultMessage='Name' /></th>
-        <th><FormattedMessage id='app.instancesTable.admin' defaultMessage='Admin' /></th>
-        <th><FormattedMessage id='app.instancesTable.validLicence' defaultMessage='Has valid licence' /></th>
+        <th><FormattedMessage id="app.instancesTable.name" defaultMessage="Name" /></th>
+        <th><FormattedMessage id="app.instancesTable.admin" defaultMessage="Admin" /></th>
+        <th><FormattedMessage id="app.instancesTable.validLicence" defaultMessage="Has valid licence" /></th>
       </tr>
     </thead>
     <tbody>

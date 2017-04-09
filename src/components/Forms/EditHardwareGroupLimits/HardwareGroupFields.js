@@ -24,7 +24,7 @@ const HardwareGroupFields = ({
       {sortTests(Object.keys(tests)).map((testName, j) => (
         <Col lg={6} key={j}>
           <h4>
-            <FormattedMessage id='app.hardwareGroupFields.test' defaultMessage='Test:' />{' '}<b>{testName}</b>
+            <FormattedMessage id="app.hardwareGroupFields.test" defaultMessage="Test:" />{' '}<b>{testName}</b>
           </h4>
           {Object.keys(tests[testName]).map((taskId, k) => (
             <div key={k}>
@@ -33,7 +33,7 @@ const HardwareGroupFields = ({
                 component={SecondsTextField}
                 label={
                   <FormattedMessage
-                    id='app.hardwareGroupFields.timeLimit'
+                    id="app.hardwareGroupFields.timeLimit"
                     defaultMessage='Time limit for "{taskId}":'
                     values={{ taskId }} />
                 } />
@@ -42,7 +42,7 @@ const HardwareGroupFields = ({
                 component={BytesTextField}
                 label={
                   <FormattedMessage
-                    id='app.hardwareGroupFields.memoryLimit'
+                    id="app.hardwareGroupFields.memoryLimit"
                     defaultMessage='Memory limit for "{taskId}":'
                     values={{ taskId }} />
                 } />
@@ -57,7 +57,7 @@ const HardwareGroupFields = ({
                 {!referenceSolutionsEvaluationsResults && (
                   <HelpBlock>
                     <FormattedMessage
-                      id='app.hardwareGroupFields.noReferenceSolutions'
+                      id="app.hardwareGroupFields.noReferenceSolutions"
                       defaultMessage="There are no reference solutions' evaluations' for test '{testName}' and its task '{taskId}'."
                       values={{ testName, taskId }} />
                   </HelpBlock>

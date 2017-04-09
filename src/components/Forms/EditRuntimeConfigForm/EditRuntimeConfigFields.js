@@ -15,22 +15,22 @@ const EditRuntimeConfigFields = ({
     <Field
       name={`${prefix}.name`}
       component={TextField}
-      label={<FormattedMessage id='app.editRuntimeConfigForm.configName' defaultMessage='Name of Configuration:' />} />
+      label={<FormattedMessage id="app.editRuntimeConfigForm.configName" defaultMessage="Name of Configuration:" />} />
 
     <Field
       name={`${prefix}.runtimeEnvironmentId`}
       component={SelectField}
       options={[ { key: '', name: '...' }, ...runtimeEnvironments.map(getJsData).map(env => ({ key: env.id, name: env.name })).toArray() ]}
-      label={<FormattedMessage id='app.editRuntimeConfigForm.runtimeEnvironment' defaultMessage='Select runtime environment:' />} />
+      label={<FormattedMessage id="app.editRuntimeConfigForm.runtimeEnvironment" defaultMessage="Select runtime environment:" />} />
 
     <Field
       name={`${prefix}.jobConfig`}
       component={SourceCodeField}
-      mode='yaml'
-      label={<FormattedMessage id='app.editRuntimeConfigForm.jobConfig' defaultMessage='Job Configuration:' />} />
+      mode="yaml"
+      label={<FormattedMessage id="app.editRuntimeConfigForm.jobConfig" defaultMessage="Job Configuration:" />} />
     <HelpBlock>
       <FormattedHTMLMessage
-        id='app.editRuntimeConfigForm.moreAboutJobConfig'
+        id="app.editRuntimeConfigForm.moreAboutJobConfig"
         defaultMessage="Read more about <a href='https://github.com/ReCodEx/wiki/wiki/Job-configuration' target='_blank'>job configuration</a> syntax." />
     </HelpBlock>
   </div>

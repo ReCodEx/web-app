@@ -18,14 +18,14 @@ const AddLicenceForm = ({
   invalid
 }) => (
   <FormBox
-    title={<FormattedMessage id='app.addLicence.addLicenceTitle' defaultMessage='Add new licence' />}
+    title={<FormattedMessage id="app.addLicence.addLicenceTitle" defaultMessage="Add new licence" />}
     type={submitSucceeded ? 'success' : undefined}
     isOpen={false}
     collapsable={true}
     footer={
-      <div className='text-center'>
+      <div className="text-center">
         <SubmitButton
-          id='addLicence'
+          id="addLicence"
           handleSubmit={handleSubmit}
           dirty={anyTouched}
           submitting={submitting}
@@ -34,19 +34,19 @@ const AddLicenceForm = ({
           invalid={invalid}
           asyncValidating={asyncValidating}
           messages={{
-            submit: <FormattedMessage id='app.addLicence.set' defaultMessage='Add licence' />,
-            submitting: <FormattedMessage id='app.addLicence.processing' defaultMessage='Adding ...' />,
-            success: <FormattedMessage id='app.addLicence.success' defaultMessage='Licence was added.' />
+            submit: <FormattedMessage id="app.addLicence.set" defaultMessage="Add licence" />,
+            submitting: <FormattedMessage id="app.addLicence.processing" defaultMessage="Adding ..." />,
+            success: <FormattedMessage id="app.addLicence.success" defaultMessage="Licence was added." />
           }} />
       </div>
     }>
     {submitFailed && (
-      <Alert bsStyle='danger'>
-        <FormattedMessage id='app.addLicence.failed' defaultMessage='Cannot add the licence.' />
+      <Alert bsStyle="danger">
+        <FormattedMessage id="app.addLicence.failed" defaultMessage="Cannot add the licence." />
       </Alert>)}
 
-    <Field name='note' component={TextField} label={<FormattedMessage id='app.addLicence.note' defaultMessage='Note:' />} />
-    <Field name='validUntil' component={DatetimeField} label={<FormattedMessage id='app.addLicence.validUntil' defaultMessage='Valid until:' />} />
+    <Field name="note" component={TextField} label={<FormattedMessage id="app.addLicence.note" defaultMessage="Note:" />} />
+    <Field name="validUntil" component={DatetimeField} label={<FormattedMessage id="app.addLicence.validUntil" defaultMessage="Valid until:" />} />
   </FormBox>
 );
 
@@ -65,13 +65,13 @@ const validate = ({ note, validUntil }) => {
   const errors = {};
 
   if (!note || note.length === 0) {
-    errors['note'] = <FormattedMessage id='app.addLicence.validation.note' defaultMessage='Note cannot be empty.' />;
+    errors['note'] = <FormattedMessage id="app.addLicence.validation.note" defaultMessage="Note cannot be empty." />;
   }
 
   if (!validUntil) {
-    errors['validUntil'] = <FormattedMessage id='app.addLicence.validation.validUntilEmpty' defaultMessage="End of licence's valid period must be set." />;
+    errors['validUntil'] = <FormattedMessage id="app.addLicence.validation.validUntilEmpty" defaultMessage="End of licence's valid period must be set." />;
   } else if (validUntil.isBefore(Date.now())) {
-    errors['validUntil'] = <FormattedMessage id='app.addLicence.validation.validUntilInThePast' defaultMessage="End of licence's valid period must be in the future." />;
+    errors['validUntil'] = <FormattedMessage id="app.addLicence.validation.validUntilInThePast" defaultMessage="End of licence's valid period must be in the future." />;
   }
 
   return errors;
