@@ -12,7 +12,7 @@ const EditHardwareGroupLimits = ({
     {...props}
     limits={limits}
     getTitle={i => limits[i].hardwareGroup}
-    id='edit-hardware-group-limits'
+    id="edit-hardware-group-limits"
     add={false}
     remove={false}
     referenceSolutionsEvaluations={referenceSolutionsEvaluations}

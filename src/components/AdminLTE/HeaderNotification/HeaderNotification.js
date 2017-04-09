@@ -22,7 +22,7 @@ class HeaderNotification extends Component {
     return (
       <li>
         <OverlayTrigger
-          placement='bottom'
+          placement="bottom"
           overlay={
             <Tooltip id={`notification-${id}-tooltip`}>
               <span>

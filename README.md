@@ -1,6 +1,7 @@
 # ReCodEx
 
-[![Build Status](https://travis-ci.org/ReCodEx/web-app.svg?branch=master)](https://travis-ci.org/ReCodEx/web-app) [![Coverage Status](https://coveralls.io/repos/github/ReCodEx/web-app/badge.svg?branch=master)](https://coveralls.io/github/ReCodEx/web-app?branch=master)
+[![Build Status](https://travis-ci.org/ReCodEx/web-app.svg?branch=master)](https://travis-ci.org/ReCodEx/web-app)
+[![styled with prettier](https://img.shields.io/badge/styled_with-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
 
 The descriptin and documentation of the project is placed in the [global wiki](https://github.com/ReCodEx/wiki/wiki/Web-application) of the ReCodEx project.
 

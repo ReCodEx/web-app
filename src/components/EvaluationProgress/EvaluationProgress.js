@@ -2,7 +2,8 @@ import React, { PropTypes, Component } from 'react';
 import { FormattedMessage } from 'react-intl';
 import Icon from 'react-fontawesome';
 import classNames from 'classnames';
-import { Button, Modal, ProgressBar, Table } from 'react-bootstrap';
+import { Modal, ProgressBar, Table } from 'react-bootstrap';
+import Button from '../AdminLTE/FlatButton';
 import EvaluationStatusText from './EvaluationStatusText';
 
 const messagesContainerStyle = {
@@ -11,7 +12,6 @@ const messagesContainerStyle = {
 };
 
 class EvaluationProgress extends Component {
-
   state = { messagesCount: 0 };
 
   componentDidUpdate() {
@@ -23,7 +23,8 @@ class EvaluationProgress extends Component {
 
   scrollToBottom = () => {
     const el = this.refs.bodyContainer;
-    if (el) { // the element is not available when the box is collapsed
+    if (el) {
+      // the element is not available when the box is collapsed
       el.scrollTop = el.scrollHeight;
     }
   };
@@ -41,64 +42,78 @@ class EvaluationProgress extends Component {
     } = this.props;
 
     return (
-      <Modal show={isOpen} backdrop='static'>
+      <Modal show={isOpen} backdrop="static">
         <Modal.Header>
           <Modal.Title>
-            <FormattedMessage id='app.evaluationProgress.title' defaultMessage='Solution is being evaluated' />
+            <FormattedMessage
+              id="app.evaluationProgress.title"
+              defaultMessage="Solution is being evaluated"
+            />
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <ProgressBar>
-            <ProgressBar now={completed} bsStyle='success' active={!finished} />
-            <ProgressBar now={skipped} bsStyle='warning' active={!finished} />
-            <ProgressBar now={failed} bsStyle='danger' active={!finished} />
+            <ProgressBar now={completed} bsStyle="success" active={!finished} />
+            <ProgressBar now={skipped} bsStyle="warning" active={!finished} />
+            <ProgressBar now={failed} bsStyle="danger" active={!finished} />
           </ProgressBar>
-          {messages && (
-            <div style={messagesContainerStyle} ref='bodyContainer'>
+          {messages &&
+            <div style={messagesContainerStyle} ref="bodyContainer">
               <Table responsive>
                 <tbody>
-                {messages.map(({ wasSuccessful, text, status }, i) =>
-                  <tr key={i}>
-                    <td className={classNames({
-                      'text-center': true,
-                      'text-success': wasSuccessful,
-                      'text-danger': !wasSuccessful
-                    })}>
-                      <strong>
-                        <Icon name={wasSuccessful ? 'check-circle' : 'times-circle'} />
-                      </strong>
-                    </td>
-                    <td>
-                      {text}
-                    </td>
-                    <td className={classNames({
-                      'text-center': true,
-                      'text-success': wasSuccessful,
-                      'text-danger': !wasSuccessful,
-                      'text-bold': true
-                    })}>
-                      <EvaluationStatusText status={status} />
-                    </td>
-                  </tr>)}
+                  {messages.map(({ wasSuccessful, text, status }, i) => (
+                    <tr key={i}>
+                      <td
+                        className={classNames({
+                          'text-center': true,
+                          'text-success': wasSuccessful,
+                          'text-danger': !wasSuccessful
+                        })}
+                      >
+                        <strong>
+                          <Icon
+                            name={
+                              wasSuccessful ? 'check-circle' : 'times-circle'
+                            }
+                          />
+                        </strong>
+                      </td>
+                      <td>
+                        {text}
+                      </td>
+                      <td
+                        className={classNames({
+                          'text-center': true,
+                          'text-success': wasSuccessful,
+                          'text-danger': !wasSuccessful,
+                          'text-bold': true
+                        })}
+                      >
+                        <EvaluationStatusText status={status} />
+                      </td>
+                    </tr>
+                  ))}
                 </tbody>
               </Table>
-            </div>)}
+            </div>}
         </Modal.Body>
         <Modal.Footer>
-          <p className='text-center'>
+          <p className="text-center">
             <Button
               bsStyle={finished ? 'success' : 'default'}
-              className='btn-flat'
               onClick={finishProcessing}
-              disabled={!showContinueButton}>
-              <FormattedMessage id='app.evaluationProgress.continue' defaultMessage='See the results' />
+              disabled={!showContinueButton}
+            >
+              <FormattedMessage
+                id="app.evaluationProgress.continue"
+                defaultMessage="See the results"
+              />
             </Button>
           </p>
         </Modal.Footer>
       </Modal>
     );
   }
-
 }
 
 EvaluationProgress.propTypes = {

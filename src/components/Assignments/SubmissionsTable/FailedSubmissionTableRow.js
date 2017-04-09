@@ -16,26 +16,26 @@ const FailedSubmissionTableRow = ({
   }
 }) => (
   <tr>
-    <td><AssignmentStatusIcon id={link} status='failed' /></td>
+    <td><AssignmentStatusIcon id={link} status="failed" /></td>
     <td>
       <FormattedDate value={submittedAt * 1000} />&nbsp;<FormattedTime value={submittedAt * 1000} />
     </td>
-    <td className='text-center'>
-      <span className='text-danger'>
-        <FormattedNumber style='percent' value={score} />
+    <td className="text-center">
+      <span className="text-danger">
+        <FormattedNumber style="percent" value={score} />
       </span>
     </td>
-    <td className='text-center'>
-      <span className='text-danger'>
+    <td className="text-center">
+      <span className="text-danger">
         <Points points={points} maxPoints={maxPoints} bonusPoints={bonusPoints} />
       </span>
     </td>
     <td>
       {note}
     </td>
-    <td className='text-right'>
-      <Link to={link} className='btn btn-flat btn-default btn-xs'>
-        <FormattedMessage id='app.submissionsTable.showDetails' defaultMessage='Show details' />
+    <td className="text-right">
+      <Link to={link} className="btn btn-flat btn-default btn-xs">
+        <FormattedMessage id="app.submissionsTable.showDetails" defaultMessage="Show details" />
       </Link>
     </td>
   </tr>

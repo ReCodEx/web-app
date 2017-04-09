@@ -21,12 +21,12 @@ const EditUserProfileForm = ({
   invalid
 }) => (
   <FormBox
-    title={<FormattedMessage id='app.editUserProfileForm.title' defaultMessage='Edit profile' />}
+    title={<FormattedMessage id="app.editUserProfileForm.title" defaultMessage="Edit profile" />}
     type={submitSucceeded ? 'success' : undefined}
     footer={
-      <div className='text-center'>
+      <div className="text-center">
         <SubmitButton
-          id='editUserProfile'
+          id="editUserProfile"
           handleSubmit={handleSubmit}
           submitting={submitting}
           dirty={anyTouched}
@@ -36,63 +36,63 @@ const EditUserProfileForm = ({
           invalid={pristine || invalid}
           tabIndex={9}
           messages={{
-            submit: <FormattedMessage id='app.editUserProfileForm.set' defaultMessage='Save changes' />,
-            submitting: <FormattedMessage id='app.editUserProfileForm.processing' defaultMessage='Saving ...' />,
-            success: <FormattedMessage id='app.editUserProfileForm.success' defaultMessage='Profile settings has been saved.' />
+            submit: <FormattedMessage id="app.editUserProfileForm.set" defaultMessage="Save changes" />,
+            submitting: <FormattedMessage id="app.editUserProfileForm.processing" defaultMessage="Saving ..." />,
+            success: <FormattedMessage id="app.editUserProfileForm.success" defaultMessage="Profile settings has been saved." />
           }} />
       </div>
     }>
     {submitFailed && (
-      <Alert bsStyle='danger'>
-        <FormattedMessage id='app.editUserProfileForm.failed' defaultMessage="Cannot save profile settings." />
+      <Alert bsStyle="danger">
+        <FormattedMessage id="app.editUserProfileForm.failed" defaultMessage="Cannot save profile settings." />
       </Alert>)}
 
       <Field
-        name='name.firstName'
+        name="name.firstName"
         tabIndex={1}
         component={TextField}
         required
-        label={<FormattedMessage id='app.editUserProfile.firstName' defaultMessage='First name:' />} />
+        label={<FormattedMessage id="app.editUserProfile.firstName" defaultMessage="First name:" />} />
 
       <Field
-        name='name.lastName'
+        name="name.lastName"
         tabIndex={2}
         component={TextField}
         required
-        label={<FormattedMessage id='app.editUserProfile.lastName' defaultMessage='Last name:' />} />
+        label={<FormattedMessage id="app.editUserProfile.lastName" defaultMessage="Last name:" />} />
 
       <Field
-        name='name.degreesBeforeName'
+        name="name.degreesBeforeName"
         tabIndex={3}
         component={TextField}
         required
-        label={<FormattedMessage id='app.editUserProfile.degreesBeforeName' defaultMessage='Degrees before name:' />} />
+        label={<FormattedMessage id="app.editUserProfile.degreesBeforeName" defaultMessage="Degrees before name:" />} />
 
       <Field
-        name='name.degreesAfterName'
+        name="name.degreesAfterName"
         tabIndex={4}
         component={TextField}
         required
-        label={<FormattedMessage id='app.editUserProfile.degreesAfterName' defaultMessage='Degrees after name:' />} />
+        label={<FormattedMessage id="app.editUserProfile.degreesAfterName" defaultMessage="Degrees after name:" />} />
 
-      <Field name='email' tabIndex={6} component={TextField} label={<FormattedMessage id='app.changePasswordForm.email' defaultMessage='Email:' />} />
+      <Field name="email" tabIndex={6} component={TextField} label={<FormattedMessage id="app.changePasswordForm.email" defaultMessage="Email:" />} />
 
-      <h3><FormattedMessage id='app.editUserProfile.passwordTitle' defaultMessage='Change your password' /></h3>
-      <p><FormattedMessage id='app.editUserProfile.passwordInstructions' defaultMessage="If you don't want to change your password leave these inputs blank" /></p>
+      <h3><FormattedMessage id="app.editUserProfile.passwordTitle" defaultMessage="Change your password" /></h3>
+      <p><FormattedMessage id="app.editUserProfile.passwordInstructions" defaultMessage="If you don't want to change your password leave these inputs blank" /></p>
 
-      <Field name='password' tabIndex={6} component={PasswordField} label={<FormattedMessage id='app.changePasswordForm.oldPassword' defaultMessage='Old password:' />} />
+      <Field name="password" tabIndex={6} component={PasswordField} label={<FormattedMessage id="app.changePasswordForm.oldPassword" defaultMessage="Old password:" />} />
 
-      <Throttle time={500} handler='onKeyDown'>
+      <Throttle time={500} handler="onKeyDown">
         <Field
-          name='newPassword'
+          name="newPassword"
           component={PasswordField}
           tabIndex={7}
           onKeyDown={() => asyncValidate()}
-          label={<FormattedMessage id='app.changePasswordForm.password' defaultMessage='New password:' />} />
+          label={<FormattedMessage id="app.changePasswordForm.password" defaultMessage="New password:" />} />
       </Throttle>
 
-      <Field name='passwordCheck' tabIndex={8} component={PasswordField} label={<FormattedMessage id='app.changePasswordForm.passwordCheck' defaultMessage='Repeat your password to prevent typos:' />} />
-      <Field name='passwordStrength' component={PasswordStrength} label={<FormattedMessage id='app.changePasswordForm.passwordStrength' defaultMessage='Password strength:' />} />
+      <Field name="passwordCheck" tabIndex={8} component={PasswordField} label={<FormattedMessage id="app.changePasswordForm.passwordCheck" defaultMessage="Repeat your password to prevent typos:" />} />
+      <Field name="passwordStrength" component={PasswordStrength} label={<FormattedMessage id="app.changePasswordForm.passwordStrength" defaultMessage="Password strength:" />} />
 
   </FormBox>
 );
@@ -114,28 +114,28 @@ const validate = ({ firstName, lastName, email, password, newPassword, passwordC
   const errors = {};
 
   if (!firstName || firstName.length === 0) {
-    errors['firstName'] = <FormattedMessage id='app.editUserProfile.validation.emptyFirstName' defaultMessage='First name cannot be empty.' />;
+    errors['firstName'] = <FormattedMessage id="app.editUserProfile.validation.emptyFirstName" defaultMessage="First name cannot be empty." />;
   }
 
   if (!lastName || lastName.length === 0) {
-    errors['lastName'] = <FormattedMessage id='app.editUserProfile.validation.emptyLastName' defaultMessage='Last name cannot be empty.' />;
+    errors['lastName'] = <FormattedMessage id="app.editUserProfile.validation.emptyLastName" defaultMessage="Last name cannot be empty." />;
   }
 
   if (password || newPassword || passwordCheck) {
     if (!password || password.length === 0) {
-      errors['password'] = <FormattedMessage id='app.editUserProfile.validation.emptyOldPassword' defaultMessage='Old password cannot be empty if you want to change your password.' />;
+      errors['password'] = <FormattedMessage id="app.editUserProfile.validation.emptyOldPassword" defaultMessage="Old password cannot be empty if you want to change your password." />;
     }
 
     if (!newPassword || newPassword.length === 0) {
-      errors['newPassword'] = <FormattedMessage id='app.editUserProfile.validation.emptyNewPassword' defaultMessage='New password cannot be empty if you want to change your password.' />;
+      errors['newPassword'] = <FormattedMessage id="app.editUserProfile.validation.emptyNewPassword" defaultMessage="New password cannot be empty if you want to change your password." />;
     }
 
     if (newPassword !== passwordCheck) {
-      errors['passwordCheck'] = <FormattedMessage id='app.editUserProfile.validation.passwordsDontMatch' defaultMessage="Passwords don't match." />;
+      errors['passwordCheck'] = <FormattedMessage id="app.editUserProfile.validation.passwordsDontMatch" defaultMessage="Passwords don't match." />;
     }
 
     if (newPassword && newPassword.length > 0 && newPassword === password) {
-      errors['newPassword'] = <FormattedMessage id='app.editUserProfile.validation.samePasswords' defaultMessage='Changing your password to the same password does not make any sense.' />;
+      errors['newPassword'] = <FormattedMessage id="app.editUserProfile.validation.samePasswords" defaultMessage="Changing your password to the same password does not make any sense." />;
     }
   }
 
@@ -148,11 +148,11 @@ const asyncValidate = ({ email, newPassword = '' }, dispatch) =>
     .then(({ usernameIsFree, passwordScore }) => {
       var errors = {};
       if (!usernameIsFree) {
-        errors['email'] = <FormattedMessage id='app.editUserProfile.validation.emailTaken' defaultMessage='This email address is already taken by someone else or it is equal to your old email address.' />;
+        errors['email'] = <FormattedMessage id="app.editUserProfile.validation.emailTaken" defaultMessage="This email address is already taken by someone else or it is equal to your old email address." />;
       }
 
       if (newPassword.lenght > 0 && passwordScore <= 0) { // changing new password is optional
-        errors['newPassword'] = <FormattedMessage id='app.editUserProfile.validation.passwordTooWeak' defaultMessage='The password you chose is too weak, please choose a different one.' />;
+        errors['newPassword'] = <FormattedMessage id="app.editUserProfile.validation.passwordTooWeak" defaultMessage="The password you chose is too weak, please choose a different one." />;
         dispatch(change('edit-user-profile', 'passwordStrength', passwordScore));
       }
 

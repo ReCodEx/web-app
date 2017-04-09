@@ -17,10 +17,10 @@ const AssignmentsTable = ({
     <thead>
       <tr>
         <th></th>
-        <th><FormattedMessage id='app.assignments.name' defaultMessage='Assignment name' /></th>
-        {showGroup && <th><FormattedMessage id='app.assignments.group' defaultMessage='Group' /></th>}
-        <th><FormattedMessage id='app.assignments.deadline' defaultMessage='Deadline' /></th>
-        <th><FormattedMessage id='app.assignments.secondDeadline' defaultMessage='Second deadline' /></th>
+        <th><FormattedMessage id="app.assignments.name" defaultMessage="Assignment name" /></th>
+        {showGroup && <th><FormattedMessage id="app.assignments.group" defaultMessage="Group" /></th>}
+        <th><FormattedMessage id="app.assignments.deadline" defaultMessage="Deadline" /></th>
+        <th><FormattedMessage id="app.assignments.secondDeadline" defaultMessage="Second deadline" /></th>
       </tr>
     </thead>
     <tbody>

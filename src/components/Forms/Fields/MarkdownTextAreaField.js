@@ -34,24 +34,24 @@ class MarkdownTextAreaField extends Component {
     const { showPreview } = this.state;
     return (
       <div>
-        <SourceCodeField {...this.props} mode='markdown' />
+        <SourceCodeField {...this.props} mode="markdown" />
         <Row>
           <Col sm={4}>
             <OnOffCheckbox name={`${name}.togglePreview`} checked={showPreview} onChange={() => this.toggleShowPreview()}>
-              <FormattedMessage id='app.markdownTextArea.showPreview' defaultMessage='Preview' />
+              <FormattedMessage id="app.markdownTextArea.showPreview" defaultMessage="Preview" />
             </OnOffCheckbox>
           </Col>
           <Col sm={8}>
-            <HelpBlock className='text-right'>
-              <FormattedMessage id='app.markdownTextArea.canUseMarkdown' defaultMessage='You can use markdown syntax in this field.' />
+            <HelpBlock className="text-right">
+              <FormattedMessage id="app.markdownTextArea.canUseMarkdown" defaultMessage="You can use markdown syntax in this field." />
             </HelpBlock>
           </Col>
         </Row>
         {showPreview && (
           <div>
-            <h4><FormattedMessage id='app.markdownTextArea.preview' defaultMessage='Preview:' /></h4>
+            <h4><FormattedMessage id="app.markdownTextArea.preview" defaultMessage="Preview:" /></h4>
             <div className={styles.preview}>
-              {value.length === 0 && (<p><small>(<FormattedMessage id='app.markdownTextArea.empty' defaultMessage='Empty' />)</small></p>)}
+              {value.length === 0 && (<p><small>(<FormattedMessage id="app.markdownTextArea.empty" defaultMessage="Empty" />)</small></p>)}
               <ReactMarkdown source={value} />
             </div>
           </div>

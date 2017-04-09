@@ -2,6 +2,6 @@ import React from 'react';
 import Icon from 'react-fontawesome';
 
 const InfoIcon = (props) =>
-  <Icon {...props} name='info' />;
+  <Icon {...props} name="info" />;
 
 export default InfoIcon;

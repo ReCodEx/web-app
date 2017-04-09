@@ -55,50 +55,50 @@ const createRoutes = (getState) => {
   };
 
   return (
-    <Route path='/' component={App} onEnter={checkLanguage}>
-      <Route path='/:lang' component={LayoutContainer}>
+    <Route path="/" component={App} onEnter={checkLanguage}>
+      <Route path="/:lang" component={LayoutContainer}>
         <IndexRoute component={Home} />
-        <Route path='login' component={Login} onEnter={onlyUnauth} />
-        <Route path='registration' component={Registration} onEnter={onlyUnauth} />
-        <Route path='app' onEnter={requireAuth}>
+        <Route path="login" component={Login} onEnter={onlyUnauth} />
+        <Route path="registration" component={Registration} onEnter={onlyUnauth} />
+        <Route path="app" onEnter={requireAuth}>
           <IndexRoute component={Dashboard} />
-          <Route path='assignment/:assignmentId'>
+          <Route path="assignment/:assignmentId">
             <IndexRoute component={Assignment} />
-            <Route path='user/:userId' component={Assignment} />
-            <Route path='edit' component={EditAssignment} />
-            <Route path='stats' component={AssignmentStats} />
-            <Route path='submission/:submissionId' component={Submission} />
+            <Route path="user/:userId" component={Assignment} />
+            <Route path="edit" component={EditAssignment} />
+            <Route path="stats" component={AssignmentStats} />
+            <Route path="submission/:submissionId" component={Submission} />
           </Route>
-          <Route path='exercises'>
+          <Route path="exercises">
             <IndexRoute component={Exercises} />
-            <Route path=':exerciseId'>
+            <Route path=":exerciseId">
               <IndexRoute component={Exercise} />
-              <Route path='edit' component={EditExercise} />
+              <Route path="edit" component={EditExercise} />
             </Route>
           </Route>
-          <Route path='group/:groupId'>
+          <Route path="group/:groupId">
             <IndexRoute component={Group} />
-            <Route path='edit' component={EditGroup} />
+            <Route path="edit" component={EditGroup} />
           </Route>
-          <Route path='instance/:instanceId' component={Instance} />
-          <Route path='user/:userId'>
+          <Route path="instance/:instanceId" component={Instance} />
+          <Route path="user/:userId">
             <IndexRoute component={User} />
-            <Route path='edit' component={EditUser} />
+            <Route path="edit" component={EditUser} />
           </Route>
         </Route>
-        <Route path='forgotten-password'>
+        <Route path="forgotten-password">
           <IndexRoute component={ResetPassword} />
-          <Route path='change' component={ChangePassword} />
+          <Route path="change" component={ChangePassword} />
         </Route>
-        <Route path='admin'>
-          <Route path='instances'>
+        <Route path="admin">
+          <Route path="instances">
             <IndexRoute component={Instances} />
-            <Route path=':instanceId'>
-              <Route path='edit' component={EditInstances} />
+            <Route path=":instanceId">
+              <Route path="edit" component={EditInstances} />
             </Route>
           </Route>
         </Route>
-        <Route path='*' component={NotFound} />
+        <Route path="*" component={NotFound} />
       </Route>
     </Route>
   );

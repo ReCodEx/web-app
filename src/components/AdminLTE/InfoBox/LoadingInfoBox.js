@@ -3,16 +3,16 @@ import { FormattedMessage } from 'react-intl';
 import InfoBox from './InfoBox';
 
 const LoadingInfoBox = ({
-  title = <FormattedMessage id='app.loadingInfoBox.title' defaultMessage='Loading ...' />,
-  description = <FormattedMessage id='app.loadingInfoBox.description' defaultMessage='Loading ...' />,
+  title = <FormattedMessage id="app.loadingInfoBox.title" defaultMessage="Loading ..." />,
+  description = <FormattedMessage id="app.loadingInfoBox.description" defaultMessage="Loading ..." />,
   ...props
 }) => (
   <InfoBox
-    icon='rotate-right'
+    icon="rotate-right"
     spin
     title={title}
     description={description}
-    color='gray'
+    color="gray"
     {...props} />
 );
 

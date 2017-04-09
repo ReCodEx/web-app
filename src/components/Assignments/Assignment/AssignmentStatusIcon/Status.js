@@ -3,7 +3,7 @@ import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 
 const Status = ({ id, message, icon }) => (
   <OverlayTrigger
-    placement='bottom'
+    placement="bottom"
     overlay={(
       <Tooltip id={id}>
         {message}

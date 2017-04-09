@@ -17,8 +17,8 @@ const Sidebar = ({
   small = false,
   ...props
 }) => (
-  <aside className='main-sidebar'>
-    <section className='sidebar'>
+  <aside className="main-sidebar">
+    <section className="sidebar">
       {isLoggedIn && <BadgeContainer small={small} />}
       {isLoggedIn && <LoggedIn {...props} />}
 

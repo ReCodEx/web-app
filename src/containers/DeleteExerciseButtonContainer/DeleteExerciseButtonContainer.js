@@ -12,7 +12,7 @@ const DeleteExerciseButtonContainer = ({
   ...props
 }) => (
   /* The button is temporarily disabled - becouse the API is not implemented yet.  */
-  <DeleteButton {...props} resource={exercise} deleteResource={deleteExercise} disabled title='Deleting exercises is not implemented yet.' />
+  <DeleteButton {...props} resource={exercise} deleteResource={deleteExercise} disabled title="Deleting exercises is not implemented yet." />
 );
 
 DeleteExerciseButtonContainer.propTypes = {

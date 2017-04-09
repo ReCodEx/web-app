@@ -22,8 +22,8 @@ const CommentThread = ({
           : <SomebodyElsesComment {...comment} key={comment.id} />)}
 
       {comments.length === 0 && (
-        <p className='text-center'>
-          <FormattedMessage id='app.comments.noCommentsYet' defaultMessage='There are no comments in this thread yet.' />
+        <p className="text-center">
+          <FormattedMessage id="app.comments.noCommentsYet" defaultMessage="There are no comments in this thread yet." />
         </p>
       )}
     </div>

@@ -2,7 +2,8 @@ import React, { Component, PropTypes } from 'react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
-import { Row, Col, Button } from 'react-bootstrap';
+import { Row, Col } from 'react-bootstrap';
+import Button from '../../components/AdminLTE/FlatButton';
 import { LinkContainer } from 'react-router-bootstrap';
 
 import Page from '../../components/Page';
@@ -81,7 +82,7 @@ class Instance extends Component {
                     <LinkContainer
                       to={ADMIN_EDIT_INSTANCE_URI_FACTORY(instanceId)}
                     >
-                      <Button bsStyle="warning" className="btn-flat">
+                      <Button bsStyle="warning">
                         <EditIcon />
                         {' '}
                         <FormattedMessage

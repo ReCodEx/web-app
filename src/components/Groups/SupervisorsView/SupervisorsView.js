@@ -17,9 +17,9 @@ const SupervisorsView = ({
   <div>
     <Row>
       <Col lg={12}>
-        <h3 className='page-header'>
+        <h3 className="page-header">
           <FormattedMessage
-            id='app.group.supervisorsView.title'
+            id="app.group.supervisorsView.title"
             defaultMessage="Supervisor's controls of {groupName}"
             values={{ groupName: group.name }} />
         </h3>
@@ -28,7 +28,7 @@ const SupervisorsView = ({
     <Row>
       <Col lg={6}>
         <Box
-          title={<FormattedMessage id='app.group.spervisorsView.students' defaultMessage='Students' />}
+          title={<FormattedMessage id="app.group.spervisorsView.students" defaultMessage="Students" />}
           collapsable
           noPadding>
           <StudentsListContainer
@@ -37,7 +37,7 @@ const SupervisorsView = ({
             fill />
         </Box>
         <Box
-          title={<FormattedMessage id='app.group.spervisorsView.addStudent' defaultMessage='Add student' />}
+          title={<FormattedMessage id="app.group.spervisorsView.addStudent" defaultMessage="Add student" />}
           collapsable
           isOpen>
           <AddStudent instanceId={group.instanceId} groupId={group.id} />
@@ -45,14 +45,14 @@ const SupervisorsView = ({
       </Col>
       <Col lg={6}>
         <Box
-          title={<FormattedMessage id='app.group.spervisorsView.assignments' defaultMessage='Assignments' />}
+          title={<FormattedMessage id="app.group.spervisorsView.assignments" defaultMessage="Assignments" />}
           collapsable
           noPadding
           isOpen>
           <AdminAssignmentsTable assignments={assignments} />
         </Box>
         <Box
-          title={<FormattedMessage id='app.group.spervisorsView.searchExercise' defaultMessage='Find an exercise' />}
+          title={<FormattedMessage id="app.group.spervisorsView.searchExercise" defaultMessage="Find an exercise" />}
           collapsable
           isOpen>
           <SearchExercise groupId={group.id} />

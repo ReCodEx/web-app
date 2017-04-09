@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import { FormattedMessage } from 'react-intl';
 import DropZone from 'react-dropzone';
-import { Button } from 'react-bootstrap';
+import Button from '../../AdminLTE/FlatButton';
 import UploadsTable from '../UploadsTable';
 import { UploadIcon } from '../../Icons';
 
@@ -16,28 +16,43 @@ const dropZoneStyles = {
   textAlign: 'center'
 };
 
-const Upload = ({
-  uploadFiles,
-  uploadingFiles,
-  attachedFiles,
-  failedFiles,
-  removedFiles,
-  removeFile,
-  returnFile,
-  removeFailedFile,
-  retryUploadFile
-}) => (
+const Upload = (
+  {
+    uploadFiles,
+    uploadingFiles,
+    attachedFiles,
+    failedFiles,
+    removedFiles,
+    removeFile,
+    returnFile,
+    removeFailedFile,
+    retryUploadFile
+  }
+) => (
   <div>
     <DropZone onDrop={uploadFiles} style={dropZoneStyles}>
-      <p><FormattedMessage id='app.submitSolution.dragAndDrop' defaultMessage='Drag and drop files here.' /></p>
       <p>
-        <Button bsStyle='primary' className='btn-flat'>
-          <UploadIcon />{' '}<FormattedMessage id='app.submitSolution.addFile' defaultMessage='Add a file' />
+        <FormattedMessage
+          id="app.submitSolution.dragAndDrop"
+          defaultMessage="Drag and drop files here."
+        />
+      </p>
+      <p>
+        <Button bsStyle="primary">
+          <UploadIcon />
+          {' '}
+          <FormattedMessage
+            id="app.submitSolution.addFile"
+            defaultMessage="Add a file"
+          />
         </Button>
       </p>
     </DropZone>
 
-    {(uploadingFiles.length > 0 || attachedFiles.length > 0 || failedFiles.length > 0 || removedFiles.length > 0) &&
+    {(uploadingFiles.length > 0 ||
+      attachedFiles.length > 0 ||
+      failedFiles.length > 0 ||
+      removedFiles.length > 0) &&
       <UploadsTable
         uploadingFiles={uploadingFiles}
         attachedFiles={attachedFiles}
@@ -46,7 +61,8 @@ const Upload = ({
         removeFile={removeFile}
         returnFile={returnFile}
         removeFailedFile={removeFailedFile}
-        retryUploadFile={retryUploadFile} />}
+        retryUploadFile={retryUploadFile}
+      />}
   </div>
 );
 

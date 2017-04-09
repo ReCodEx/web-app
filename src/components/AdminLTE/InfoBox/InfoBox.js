@@ -16,16 +16,16 @@ const InfoBox = ({
     'info-box': true,
     [`bg-${color}`]: true
   })}>
-    <span className='info-box-icon'>
+    <span className="info-box-icon">
       <Icon name={icon} spin={spin} />
     </span>
-    <div className='info-box-content'>
-      <span className='info-box-text'>{title}</span>
-      <span className='info-box-number'>{value}</span>
-      <div className='progress'>
-        <div className='progress-bar' style={{ width: `${progress * 100}%` }}></div>
+    <div className="info-box-content">
+      <span className="info-box-text">{title}</span>
+      <span className="info-box-number">{value}</span>
+      <div className="progress">
+        <div className="progress-bar" style={{ width: `${progress * 100}%` }}></div>
       </div>
-      <span className='progress-description'>
+      <span className="progress-description">
         {description}
       </span>
     </div>

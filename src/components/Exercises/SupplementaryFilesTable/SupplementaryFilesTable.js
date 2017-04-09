@@ -3,7 +3,8 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import { FormattedMessage } from 'react-intl';
 
 import Icon from 'react-fontawesome';
-import { Button, Table } from 'react-bootstrap';
+import { Table } from 'react-bootstrap';
+import Button from '../../AdminLTE/FlatButton';
 import Box from '../../AdminLTE/Box';
 import { SendIcon } from '../../Icons';
 
@@ -12,57 +13,99 @@ import UploadContainer from '../../../containers/UploadContainer';
 import ResourceRenderer from '../../ResourceRenderer';
 import SupplementaryFilesTableRow from './SupplementaryFilesTableRow';
 
-const SupplementaryFilesTable = ({
-  supplementaryFiles,
-  canSubmit,
-  newFiles,
-  addSupplementaryFiles,
-  uploadId
-}) => (
-  <Box title={<FormattedMessage id='app.supplementaryFilesTable.title' defaultMessage='Supplementary Files' />} collapsable isOpen>
+const SupplementaryFilesTable = (
+  {
+    supplementaryFiles,
+    canSubmit,
+    newFiles,
+    addSupplementaryFiles,
+    uploadId
+  }
+) => (
+  <Box
+    title={
+      <FormattedMessage
+        id="app.supplementaryFilesTable.title"
+        defaultMessage="Supplementary Files"
+      />
+    }
+    collapsable
+    isOpen
+  >
     <div>
       <p>
-        <FormattedMessage id='app.supplementaryFilesTable.description' defaultMessage='Supplementary files are files which can be used in job configuration.' />
+        <FormattedMessage
+          id="app.supplementaryFilesTable.description"
+          defaultMessage="Supplementary files are files which can be used in job configuration."
+        />
       </p>
       <UploadContainer id={uploadId} />
-      {newFiles.size > 0 && (
-        <p className='text-center'>
+      {newFiles.size > 0 &&
+        <p className="text-center">
           <Button
-            bsStyle='success'
+            bsStyle="success"
             disabled={!canSubmit}
-            className='btn-flat'
-            onClick={() => addSupplementaryFiles(newFiles)}>
-            <SendIcon /> <FormattedMessage id='app.supplementaryFilesTable.addFiles' defaultMessage='Save supplementary files' />
+            onClick={() => addSupplementaryFiles(newFiles)}
+          >
+            <SendIcon />
+            {' '}
+            <FormattedMessage
+              id="app.supplementaryFilesTable.addFiles"
+              defaultMessage="Save supplementary files"
+            />
           </Button>
-        </p>
-      )}
+        </p>}
 
-      <ResourceRenderer
-        resource={supplementaryFiles.toArray()} >
+      <ResourceRenderer resource={supplementaryFiles.toArray()}>
         {(...supplementaryFiles) => (
           <div>
-            {supplementaryFiles.length > 0 && (
+            {supplementaryFiles.length > 0 &&
               <Table responsive>
                 <thead>
                   <tr>
-                    <th><FormattedMessage id='app.supplementaryFilesTable.fileName' defaultMessage='Original filename' /></th>
-                    <th><FormattedMessage id='app.supplementaryFilesTable.fileHashName' defaultMessage='Hash Name' /></th>
-                    <th><FormattedMessage id='app.supplementaryFilesTable.fileSize' defaultMessage='Filesize' /></th>
-                    <th><FormattedMessage id='app.supplementaryFilesTable.fileUploadedAt' defaultMessage='Uploaded at' /></th>
+                    <th>
+                      <FormattedMessage
+                        id="app.supplementaryFilesTable.fileName"
+                        defaultMessage="Original filename"
+                      />
+                    </th>
+                    <th>
+                      <FormattedMessage
+                        id="app.supplementaryFilesTable.fileHashName"
+                        defaultMessage="Hash Name"
+                      />
+                    </th>
+                    <th>
+                      <FormattedMessage
+                        id="app.supplementaryFilesTable.fileSize"
+                        defaultMessage="Filesize"
+                      />
+                    </th>
+                    <th>
+                      <FormattedMessage
+                        id="app.supplementaryFilesTable.fileUploadedAt"
+                        defaultMessage="Uploaded at"
+                      />
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
                   {supplementaryFiles
                     .sort((a, b) => a.name < b.name ? -1 : +(a.name > b.name)) // sort lexicographicaly
-                    .map((data, i) => <SupplementaryFilesTableRow {...data} key={data.id} />)}
+                    .map((data, i) => (
+                      <SupplementaryFilesTableRow {...data} key={data.id} />
+                    ))}
                 </tbody>
-              </Table>
-            )}
-            {supplementaryFiles.length === 0 && (
-              <p className='text-center'>
-                <Icon name='folder-open-o' /> <FormattedMessage id='app.supplementaryFilesTable.empty' defaultMessage='There are no supplementary files attached to this exercise yet.' />
-              </p>
-            )}
+              </Table>}
+            {supplementaryFiles.length === 0 &&
+              <p className="text-center">
+                <Icon name="folder-open-o" />
+                {' '}
+                <FormattedMessage
+                  id="app.supplementaryFilesTable.empty"
+                  defaultMessage="There are no supplementary files attached to this exercise yet."
+                />
+              </p>}
           </div>
         )}
       </ResourceRenderer>

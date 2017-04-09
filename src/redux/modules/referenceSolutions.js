@@ -8,7 +8,7 @@ const {
   reduceActions
 } = factory({
   resourceName,
-  apiEndpointFactory: (exerciseId) => `/reference-solutions/${exerciseId}`
+  apiEndpointFactory: exerciseId => `/reference-solutions/${exerciseId}`
 });
 
 /**
@@ -28,12 +28,13 @@ export const evaluateReferenceSolution = (exerciseId, solutionId, hwGroup) =>
     body: { hwGroup }
   });
 
-
 /**
  * Reducer
  */
 
-const reducer = handleActions(Object.assign({}, reduceActions, {
-}), initialState);
+const reducer = handleActions(
+  Object.assign({}, reduceActions, {}),
+  initialState
+);
 
 export default reducer;

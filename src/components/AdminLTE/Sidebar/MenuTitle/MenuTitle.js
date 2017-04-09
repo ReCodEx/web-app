@@ -3,7 +3,7 @@ import React, { PropTypes } from 'react';
 const MenuTitle = ({
   title
 }) => (
-  <li className='header text-uppercase'>
+  <li className="header text-uppercase">
     {title}
   </li>
 );

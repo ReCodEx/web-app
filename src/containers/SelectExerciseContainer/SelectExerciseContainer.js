@@ -11,7 +11,7 @@ const SelectExerciseContainer = ({
   createActions
 }) => (
   <SearchContainer
-    type='exercises'
+    type="exercises"
     id={id}
     search={search}
     renderList={

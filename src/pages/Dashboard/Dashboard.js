@@ -2,7 +2,8 @@ import React, { Component, PropTypes } from 'react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
-import { Row, Col, Button } from 'react-bootstrap';
+import { Row, Col } from 'react-bootstrap';
+import Button from '../../components/AdminLTE/FlatButton';
 import { Link } from 'react-router';
 import { LinkContainer } from 'react-router-bootstrap';
 
@@ -167,10 +168,7 @@ class Dashboard extends Component {
                                       <LinkContainer
                                         to={GROUP_URI_FACTORY(group.id)}
                                       >
-                                        <Button
-                                          bsSize="sm"
-                                          className="btn-flat"
-                                        >
+                                        <Button bsSize="sm">
                                           <FormattedMessage
                                             id="app.user.groupDetail"
                                             defaultMessage="Show group's detail"
@@ -229,10 +227,7 @@ class Dashboard extends Component {
                                         <LinkContainer
                                           to={GROUP_URI_FACTORY(group.id)}
                                         >
-                                          <Button
-                                            bsSize="sm"
-                                            className="btn-flat"
-                                          >
+                                          <Button bsSize="sm">
                                             <FormattedMessage
                                               id="app.user.groupDetail"
                                               defaultMessage="Show group's detail"
@@ -277,7 +272,7 @@ class Dashboard extends Component {
                     </p>
                     <p className="text-center">
                       <LinkContainer to={INSTANCE_URI_FACTORY(user.instanceId)}>
-                        <Button bsStyle="success" className="btn-flat">
+                        <Button bsStyle="success">
                           <FormattedMessage
                             id="app.user.examineGroupsInstance"
                             defaultMessage="Find your groups"

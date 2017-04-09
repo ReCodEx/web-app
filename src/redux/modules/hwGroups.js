@@ -19,12 +19,13 @@ export const fetchHardwareGroups = () =>
     endpoint: '/hardware-groups'
   });
 
-
 /**
  * Reducer
  */
 
-const reducer = handleActions(Object.assign({}, reduceActions, {
-}), initialState);
+const reducer = handleActions(
+  Object.assign({}, reduceActions, {}),
+  initialState
+);
 
 export default reducer;

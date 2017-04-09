@@ -21,14 +21,14 @@ const HeaderNotificationsDropdown = ({
     'dropdown': true,
     'open': isOpen
   })}>
-    <a href='#' className='dropdown-toggle' onClick={toggleOpen}>
-      <Icon name='bell-o' />
-      {newNotifications.size > 0 && <Label bsStyle='primary'>{newNotifications.reduce((acc, n) => acc + n.count, 0)}</Label>}
+    <a href="#" className="dropdown-toggle" onClick={toggleOpen}>
+      <Icon name="bell-o" />
+      {newNotifications.size > 0 && <Label bsStyle="primary">{newNotifications.reduce((acc, n) => acc + n.count, 0)}</Label>}
     </a>
-    <ul className='dropdown-menu' onClick={markClick}>
-      <li className='header'>
+    <ul className="dropdown-menu" onClick={markClick}>
+      <li className="header">
         <FormattedMessage
-          id='app.notifications.title'
+          id="app.notifications.title"
           defaultMessage={`You have {count, number} new {count, plural,
             one {notification}
             other {notifications}
@@ -36,7 +36,7 @@ const HeaderNotificationsDropdown = ({
           values={{ count: newNotifications.size }} />
       </li>
       <li>
-        <ul className='menu'>
+        <ul className="menu">
           {newNotifications.map(notification =>
             <HeaderNotification key={notification.id} hide={hideNotification} {...notification} />)}
           {showAll && oldNotifications.map(notification =>
@@ -44,12 +44,12 @@ const HeaderNotificationsDropdown = ({
         </ul>
       </li>
       {oldNotifications.size > 0 && (
-        <li className='footer'>
-          <a href='#' onClick={toggleShowAll}>
+        <li className="footer">
+          <a href="#" onClick={toggleShowAll}>
             {showAll
-              ? <FormattedMessage id='app.notifications.hideAll' defaultMessage='Only new notifications' />
+              ? <FormattedMessage id="app.notifications.hideAll" defaultMessage="Only new notifications" />
               : <FormattedMessage
-                  id='app.notifications.showAll'
+                  id="app.notifications.showAll"
                   defaultMessage={`Show {count, plural,
                     one {old notification}
                     two {two notifications}

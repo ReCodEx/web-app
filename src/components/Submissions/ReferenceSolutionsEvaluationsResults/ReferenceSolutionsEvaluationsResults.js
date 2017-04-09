@@ -15,15 +15,15 @@ const ReferenceSolutionsEvaluationsResults = ({
     collapsable
     solid
     noPadding
-    type='warning'
-    title={<FormattedMessage id='app.referenceSolutionsEvaluations.title' defaultMessage="Reference solutions' evaluations" />}>
+    type="warning"
+    title={<FormattedMessage id="app.referenceSolutionsEvaluations.title" defaultMessage="Reference solutions' evaluations" />}>
     <Table condensed hover responsive striped>
       <thead>
         <tr>
-          <th><FormattedMessage id='app.referenceSolutionsEvaluations.description' defaultMessage='Description' /></th>
-          <th><FormattedMessage id='app.referenceSolutionsEvaluations.evaluatedAt' defaultMessage='Evaluated on' /></th>
-          <th><FormattedMessage id='app.referenceSolutionsEvaluations.memory' defaultMessage='Memory' /></th>
-          <th><FormattedMessage id='app.referenceSolutionsEvaluations.time' defaultMessage='Time' /></th>
+          <th><FormattedMessage id="app.referenceSolutionsEvaluations.description" defaultMessage="Description" /></th>
+          <th><FormattedMessage id="app.referenceSolutionsEvaluations.evaluatedAt" defaultMessage="Evaluated on" /></th>
+          <th><FormattedMessage id="app.referenceSolutionsEvaluations.memory" defaultMessage="Memory" /></th>
+          <th><FormattedMessage id="app.referenceSolutionsEvaluations.time" defaultMessage="Time" /></th>
         </tr>
       </thead>
       <tbody>

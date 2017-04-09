@@ -15,8 +15,8 @@ const AdminsView = ({
       <Col sm={12}>
         <h3>
           <FormattedMessage
-            id='app.group.adminsView.title'
-            defaultMessage='Administrator controls of {groupName}'
+            id="app.group.adminsView.title"
+            defaultMessage="Administrator controls of {groupName}"
             values={{ groupName: group.name }} />
         </h3>
       </Col>
@@ -24,13 +24,13 @@ const AdminsView = ({
     <Row>
       <Col md={6}>
         <Box
-          title={<FormattedMessage id='app.group.adminsView.addSupervisor' defaultMessage='Add supervisor' />}>
+          title={<FormattedMessage id="app.group.adminsView.addSupervisor" defaultMessage="Add supervisor" />}>
           <AddSupervisor instanceId={group.instanceId} groupId={group.id} />
         </Box>
       </Col>
       <Col md={6}>
         <CreateGroupForm
-          title={<FormattedMessage id='app.group.adminsView.addSubgroup' defaultMessage='Add subgroup' />}
+          title={<FormattedMessage id="app.group.adminsView.addSubgroup" defaultMessage="Add subgroup" />}
           onSubmit={addSubgroup}
           instanceId={group.instanceId}
           initialValues={{ publicStats: true }}

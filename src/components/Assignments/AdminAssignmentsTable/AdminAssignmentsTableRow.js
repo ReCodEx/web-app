@@ -1,7 +1,8 @@
 import React, { PropTypes } from 'react';
 import { Link } from 'react-router';
 import { FormattedDate, FormattedTime, FormattedMessage } from 'react-intl';
-import { Button, ButtonGroup } from 'react-bootstrap';
+import { ButtonGroup } from 'react-bootstrap';
+import Button from '../../AdminLTE/FlatButton';
 import { LinkContainer } from 'react-router-bootstrap';
 import DeleteAssignmentButtonContainer
   from '../../../containers/DeleteAssignmentButtonContainer';
@@ -45,7 +46,7 @@ const AdminAssignmentTableRow = (
     <td>
       <ButtonGroup>
         <LinkContainer to={edit(id)}>
-          <Button bsSize="xs" className="btn-flat">
+          <Button bsSize="xs">
             <EditIcon />
             {' '}
             <FormattedMessage

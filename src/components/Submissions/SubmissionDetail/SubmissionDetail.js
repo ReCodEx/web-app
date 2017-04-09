@@ -3,7 +3,6 @@ import { Row, Col } from 'react-bootstrap';
 
 import SubmissionStatus from '../SubmissionStatus';
 import SourceCodeInfoBox from '../../SourceCodeInfoBox';
-import LocalizedTexts from '../../LocalizedTexts';
 import TestResults from '../TestResults';
 import BonusPointsContainer from '../../../containers/BonusPointsContainer';
 import DownloadResultArchiveContainer

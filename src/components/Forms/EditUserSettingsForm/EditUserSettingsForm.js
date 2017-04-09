@@ -16,12 +16,12 @@ const EditUserSettingsForm = ({
   invalid
 }) => (
   <FormBox
-    title={<FormattedMessage id='app.editUserSettings.title' defaultMessage='Edit settings' />}
+    title={<FormattedMessage id="app.editUserSettings.title" defaultMessage="Edit settings" />}
     type={submitSucceeded ? 'success' : undefined}
     footer={
-      <div className='text-center'>
+      <div className="text-center">
         <SubmitButton
-          id='editUserSettings'
+          id="editUserSettings"
           handleSubmit={handleSubmit}
           submitting={submitting}
           hasSucceeded={submitSucceeded}
@@ -29,43 +29,43 @@ const EditUserSettingsForm = ({
           invalid={invalid}
           dirty={anyTouched}
           messages={{
-            submit: <FormattedMessage id='app.editUserSettings.set' defaultMessage='Save changes' />,
-            submitting: <FormattedMessage id='app.editUserSettings.processing' defaultMessage='Saving ...' />,
-            success: <FormattedMessage id='app.editUserSettings.success' defaultMessage='Account settings has been saved.' />
+            submit: <FormattedMessage id="app.editUserSettings.set" defaultMessage="Save changes" />,
+            submitting: <FormattedMessage id="app.editUserSettings.processing" defaultMessage="Saving ..." />,
+            success: <FormattedMessage id="app.editUserSettings.success" defaultMessage="Account settings has been saved." />
           }} />
       </div>
     }>
     {submitFailed && (
-      <Alert bsStyle='danger'>
-        <FormattedMessage id='app.editUserSettings.failed' defaultMessage="Cannot save profile settings." />
+      <Alert bsStyle="danger">
+        <FormattedMessage id="app.editUserSettings.failed" defaultMessage="Cannot save profile settings." />
       </Alert>)}
 
       <Field
-        name='vimMode'
+        name="vimMode"
         tabIndex={1}
         component={CheckboxField}
         onOff
-        label={<FormattedMessage id='app.editUserSettings.vimMode' defaultMessage='Use Vim mode in source code editors.' />} />
+        label={<FormattedMessage id="app.editUserSettings.vimMode" defaultMessage="Use Vim mode in source code editors." />} />
 
       <Field
-        name='darkTheme'
+        name="darkTheme"
         tabIndex={1}
         component={CheckboxField}
         onOff
-        label={<FormattedMessage id='app.editUserSettings.darkTheme' defaultMessage='Use a dark theme for the source code viewers and editors.' />} />
+        label={<FormattedMessage id="app.editUserSettings.darkTheme" defaultMessage="Use a dark theme for the source code viewers and editors." />} />
 
       <Field
-        name='openedSidebar'
+        name="openedSidebar"
         tabIndex={1}
         component={CheckboxField}
         onOff
-        label={<FormattedMessage id='app.editUserSettings.openedSidebar' defaultMessage='Sidebar is unfolded by default.' />} />
+        label={<FormattedMessage id="app.editUserSettings.openedSidebar" defaultMessage="Sidebar is unfolded by default." />} />
 
       <Field
-        name='defaultLanguage'
+        name="defaultLanguage"
         tabIndex={1}
         component={LanguageSelectField}
-        label={<FormattedMessage id='app.editUserSettings.defaultLanguage' defaultMessage='Default language:' />} />
+        label={<FormattedMessage id="app.editUserSettings.defaultLanguage" defaultMessage="Default language:" />} />
 
   </FormBox>
 );

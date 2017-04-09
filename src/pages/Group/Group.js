@@ -3,7 +3,7 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 import { LinkContainer } from 'react-router-bootstrap';
-import { Button } from 'react-bootstrap';
+import Button from '../../components/AdminLTE/FlatButton';
 import { FormattedMessage } from 'react-intl';
 import { List } from 'immutable';
 
@@ -67,16 +67,16 @@ class Group extends Component {
             dispatch(fetchInstanceIfNeeded(group.instanceId)),
             Group.isMemberOf(group, userId)
               ? Promise.all([
-                  dispatch(fetchAssignmentsForGroup(groupId)),
-                  dispatch(fetchSupervisors(groupId)),
-                  dispatch(fetchStudents(groupId))
-                ])
+                dispatch(fetchAssignmentsForGroup(groupId)),
+                dispatch(fetchSupervisors(groupId)),
+                dispatch(fetchStudents(groupId))
+              ])
               : Promise.resolve(),
             group.parentGroupId
               ? Promise.all([
-                  dispatch(fetchGroupIfNeeded(group.parentGroupId)),
-                  dispatch(fetchSubgroups(group.parentGroupId))
-                ])
+                dispatch(fetchGroupIfNeeded(group.parentGroupId)),
+                dispatch(fetchSubgroups(group.parentGroupId))
+              ])
               : dispatch(fetchSubgroups(group.id)),
             dispatch(fetchGroupsStatsIfNeeded(groupId))
           ]))
@@ -173,7 +173,7 @@ class Group extends Component {
             {isAdmin &&
               <p>
                 <LinkContainer to={GROUP_EDIT_URI_FACTORY(data.id)}>
-                  <Button bsStyle="warning" className="btn-flat">
+                  <Button bsStyle="warning">
                     <EditIcon />
                     {' '}
                     <FormattedMessage

@@ -22,7 +22,7 @@ const SelectField = ({
     controlId={input.name}
     validationState={touched && error ? 'error' : undefined}>
     <ControlLabel>{label}</ControlLabel>
-    <FormControl {...input} {...props} componentClass='select'>
+    <FormControl {...input} {...props} componentClass="select">
       {options.map(({ key, name }) =>
         <option value={key} key={key}>{name}</option>
       )}

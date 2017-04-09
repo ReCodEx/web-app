@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { FormattedMessage } from 'react-intl';
 import Icon from 'react-fontawesome';
-import { Button } from 'react-bootstrap';
+import Button from '../../AdminLTE/FlatButton';
 import { LinkContainer } from 'react-router-bootstrap';
 import { TreeView, TreeViewItem } from '../../AdminLTE/TreeView';
 import { isReady, getJsData } from '../../../redux/helpers/resourceManager';

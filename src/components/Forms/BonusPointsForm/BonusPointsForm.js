@@ -17,14 +17,14 @@ const BonusPointsForm = ({
   invalid
 }) => (
   <FormBox
-    title={<FormattedMessage id='app.bonusPointsForm.title' defaultMessage='Set bonus points' />}
+    title={<FormattedMessage id="app.bonusPointsForm.title" defaultMessage="Set bonus points" />}
     type={submitSucceeded ? 'success' : undefined}
     isOpen={false}
     collapsable={true}
     footer={
-      <div className='text-center'>
+      <div className="text-center">
         <SubmitButton
-          id='bonus-points'
+          id="bonus-points"
           handleSubmit={handleSubmit}
           submitting={submitting}
           dirty={anyTouched}
@@ -32,18 +32,18 @@ const BonusPointsForm = ({
           hasFailed={submitFailed}
           invalid={invalid}
           messages={{
-            submit: <FormattedMessage id='app.bonusPointsForm.set' defaultMessage='Set bonus points' />,
-            submitting: <FormattedMessage id='app.bonusPointsForm.processing' defaultMessage='Saving ...' />,
-            success: <FormattedMessage id='app.bonusPointsForm.success' defaultMessage='Bonus points were set.' />
+            submit: <FormattedMessage id="app.bonusPointsForm.set" defaultMessage="Set bonus points" />,
+            submitting: <FormattedMessage id="app.bonusPointsForm.processing" defaultMessage="Saving ..." />,
+            success: <FormattedMessage id="app.bonusPointsForm.success" defaultMessage="Bonus points were set." />
           }} />
       </div>
     }>
     {submitFailed && (
-      <Alert bsStyle='danger'>
-        <FormattedMessage id='app.bonusPointsForm.failed' defaultMessage='Cannot save the bonus points.' />
+      <Alert bsStyle="danger">
+        <FormattedMessage id="app.bonusPointsForm.failed" defaultMessage="Cannot save the bonus points." />
       </Alert>)}
 
-    <Field name='bonusPoints' component={TextField} label={<FormattedMessage id='app.bonusPointsForm.bonusPoints' defaultMessage='Bonus points:' />} />
+    <Field name="bonusPoints" component={TextField} label={<FormattedMessage id="app.bonusPointsForm.bonusPoints" defaultMessage="Bonus points:" />} />
   </FormBox>
 );
 
@@ -60,7 +60,7 @@ BonusPointsForm.propTypes = {
 const validate = ({ bonusPoints }) => {
   const errors = {};
   if (!isInt(String(bonusPoints))) {
-    errors['bonusPoints'] = <FormattedMessage id='app.bonusPointsForm.validation.points' defaultMessage='The bonus must be an integer.' />;
+    errors['bonusPoints'] = <FormattedMessage id="app.bonusPointsForm.validation.points" defaultMessage="The bonus must be an integer." />;
   }
 
   return errors;

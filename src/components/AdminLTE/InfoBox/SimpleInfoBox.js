@@ -7,13 +7,13 @@ const SimpleInfoBox = ({
   icon = 'info',
   color = 'yellow'
 }) => (
-  <div className='info-box'>
+  <div className="info-box">
     <span className={'info-box-icon bg-' + color}>
       <Icon name={icon} />
     </span>
-    <div className='info-box-content'>
-      <span className='info-box-text'>{title}</span>
-      <span className='info-box-number'>{description}</span>
+    <div className="info-box-content">
+      <span className="info-box-text">{title}</span>
+      <span className="info-box-number">{description}</span>
     </div>
   </div>
 );

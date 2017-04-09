@@ -1,13 +1,13 @@
 import React, { PropTypes, Component } from 'react';
 import { FormattedMessage } from 'react-intl';
-import { Alert, Button, Tabs, Tab } from 'react-bootstrap';
+import { Alert, Tabs, Tab } from 'react-bootstrap';
+import Button from '../../AdminLTE/FlatButton';
 import Confirm from '../Confirm';
 import { AddIcon, WarningIcon } from '../../Icons';
 
 class TabbedArrayField extends Component {
-
   state = { activeTab: 0 };
-  changeTab = (n) => this.setState({ activeTab: n });
+  changeTab = n => this.setState({ activeTab: n });
   add = () => {
     const { fields } = this.props;
     fields.push(); // add an empty item
@@ -18,10 +18,25 @@ class TabbedArrayField extends Component {
     const {
       id,
       ContentComponent,
-      getTitle = (i) => i,
-      emptyMessage = <FormattedMessage id='app.tabbedArrayField.empty' defaultMessage='There is currently no item.' />,
-      addMessage = <FormattedMessage id='app.tabbedArrayField.add' defaultMessage='Add another' />,
-      removeQuestion = <FormattedMessage id='app.tabbedArrayField.reallyRemoveQuestion' defaultMessage='Do you really want to delete this item?' />,
+      getTitle = i => i,
+      emptyMessage = (
+        <FormattedMessage
+          id="app.tabbedArrayField.empty"
+          defaultMessage="There is currently no item."
+        />
+      ),
+      addMessage = (
+        <FormattedMessage
+          id="app.tabbedArrayField.add"
+          defaultMessage="Add another"
+        />
+      ),
+      removeQuestion = (
+        <FormattedMessage
+          id="app.tabbedArrayField.reallyRemoveQuestion"
+          defaultMessage="Do you really want to delete this item?"
+        />
+      ),
       add = false,
       remove = false,
       fields,
@@ -30,44 +45,50 @@ class TabbedArrayField extends Component {
 
     return (
       <div>
-        {add && (
+        {add &&
           <p>
-            <Button bsStyle='success' className='btn-flat' bsSize='sm' onClick={() => this.add()}>
+            <Button bsStyle="success" bsSize="sm" onClick={() => this.add()}>
               <AddIcon /> {addMessage}
             </Button>
-          </p>
-        )}
-        {fields.length > 0 && (
+          </p>}
+        {fields.length > 0 &&
           <Tabs
             id={id}
-            className='nav-tabs-custom'
+            className="nav-tabs-custom"
             activeKey={this.state.activeTab}
-            onSelect={this.changeTab}>
+            onSelect={this.changeTab}
+          >
             {fields.map((prefix, i) => (
               <Tab key={i} eventKey={i} title={getTitle(i)}>
                 <ContentComponent {...props} i={i} prefix={prefix} />
-                {remove && (
-                  <p className='text-center'>
+                {remove &&
+                  <p className="text-center">
                     <Confirm
                       id={`${id}-remove-${i}`}
                       question={removeQuestion}
-                      onConfirmed={() => { fields.remove(i); this.changeTab(Math.min(i, fields.length - 2)); }}>
-                      <Button bsStyle='default' className='btn-flat'>
-                        <WarningIcon /> <FormattedMessage id='app.tabbedArrayField.remove' defaultMessage='Remove' />
+                      onConfirmed={() => {
+                        fields.remove(i);
+                        this.changeTab(Math.min(i, fields.length - 2));
+                      }}
+                    >
+                      <Button bsStyle="default">
+                        <WarningIcon />
+                        {' '}
+                        <FormattedMessage
+                          id="app.tabbedArrayField.remove"
+                          defaultMessage="Remove"
+                        />
                       </Button>
                     </Confirm>
-                  </p>
-                )}
+                  </p>}
               </Tab>
             ))}
-          </Tabs>
-        )}
+          </Tabs>}
 
-        {fields.length === 0 && (
-          <Alert bsStyle='warning'>
+        {fields.length === 0 &&
+          <Alert bsStyle="warning">
             {emptyMessage}
-          </Alert>
-        )}
+          </Alert>}
       </div>
     );
   }
@@ -80,9 +101,9 @@ TabbedArrayField.propTypes = {
   remove: PropTypes.bool,
   fields: PropTypes.object,
   ContentComponent: PropTypes.any,
-  emptyMessage: PropTypes.oneOfType([ PropTypes.string, PropTypes.element ]),
-  addMessage: PropTypes.oneOfType([ PropTypes.string, PropTypes.element ]),
-  removeQuestion: PropTypes.oneOfType([ PropTypes.string, PropTypes.element ])
+  emptyMessage: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
+  addMessage: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
+  removeQuestion: PropTypes.oneOfType([PropTypes.string, PropTypes.element])
 };
 
 export default TabbedArrayField;

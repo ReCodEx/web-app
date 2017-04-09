@@ -11,7 +11,7 @@ const SourceCodeInfoBox = ({
   <SimpleInfoBox
     title={name}
     description={prettyBytes(size)}
-    icon='file-code-o' />
+    icon="file-code-o" />
 );
 
 SourceCodeInfoBox.propTypes = {

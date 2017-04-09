@@ -16,8 +16,8 @@ const UsersList = ({
 
     {users.length === 0 && (
       <tr>
-        <td className='text-center'>
-          <FormattedMessage id='app.userList.noUsers' defaultMessage='There are no users in this list.' />
+        <td className="text-center">
+          <FormattedMessage id="app.userList.noUsers" defaultMessage="There are no users in this list." />
         </td>
       </tr>
     )}

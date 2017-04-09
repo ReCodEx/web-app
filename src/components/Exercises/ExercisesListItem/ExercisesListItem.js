@@ -14,9 +14,7 @@ const ExercisesListItem = (
     difficulty,
     authorId,
     createdAt,
-    createActions
-  },
-  {
+    createActions,
     links: { EXERCISE_URI_FACTORY }
   }
 ) => (

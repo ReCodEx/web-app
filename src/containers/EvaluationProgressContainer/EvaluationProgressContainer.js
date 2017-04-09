@@ -89,8 +89,13 @@ class EvaluationProgressContainer extends Component {
     }
   };
 
-  formatMessage = ({ command, task_state = 'OK', text = null }) => ({
-    // eslint-disable-line camelcase
+  formatMessage = (
+    {
+      command,
+      task_state = 'OK', // eslint-disable-line camelcase
+      text = null
+    }
+  ) => ({
     wasSuccessful: command !== 'TASK' || task_state === 'COMPLETED', // eslint-disable-line camelcase
     text: text || this.props.intl.formatMessage(this.getRandomMessage()),
     status: task_state // eslint-disable-line camelcase

@@ -9,18 +9,18 @@ const NotEvaluatedSubmissionTableRow = ({
   submittedAt
 }) => (
   <tr>
-    <td><AssignmentStatusIcon id={link} status='work-in-progress' /></td>
+    <td><AssignmentStatusIcon id={link} status="work-in-progress" /></td>
     <td>
       <FormattedDate value={submittedAt * 1000} />&nbsp;<FormattedTime value={submittedAt * 1000} />
     </td>
-    <td className='text-center'>-</td>
-    <td className='text-center'>- / -</td>
+    <td className="text-center">-</td>
+    <td className="text-center">- / -</td>
     <td>
       {note}
     </td>
-    <td className='text-right'>
-      <Link to={link} className='btn btn-flat btn-default btn-xs'>
-        <FormattedMessage id='app.submissionsTable.findOutResult' defaultMessage='Find out results of evaluation' />
+    <td className="text-right">
+      <Link to={link} className="btn btn-flat btn-default btn-xs">
+        <FormattedMessage id="app.submissionsTable.findOutResult" defaultMessage="Find out results of evaluation" />
       </Link>
     </td>
   </tr>

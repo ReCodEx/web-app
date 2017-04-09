@@ -30,8 +30,8 @@ class Confirm extends Component {
     const {
       question,
       id,
-      yes = <span><SuccessIcon /> <FormattedMessage id='app.confirm.yes' defaultMessage='Yes' /></span>,
-      no = <span><CloseIcon /> <FormattedMessage id='app.confirm.no' defaultMessage='No' /></span>
+      yes = <span><SuccessIcon /> <FormattedMessage id="app.confirm.yes" defaultMessage="Yes" /></span>,
+      no = <span><CloseIcon /> <FormattedMessage id="app.confirm.no" defaultMessage="No" /></span>
     } = this.props;
     const { target, showPopup } = this.state;
 
@@ -39,10 +39,10 @@ class Confirm extends Component {
       <Overlay
         show={showPopup}
         target={target}
-        placement='bottom'>
+        placement="bottom">
         <Popover id={id} title={question}>
-          <div className='text-center'>
-            <ButtonGroup bsSize='sm'>
+          <div className="text-center">
+            <ButtonGroup bsSize="sm">
               <Button onClick={e => this.confirm(e)}>{yes}</Button>
               <Button onClick={e => this.dismiss(e)}>{no}</Button>
             </ButtonGroup>

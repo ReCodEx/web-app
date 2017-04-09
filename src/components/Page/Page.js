@@ -7,10 +7,10 @@ const Page = ({
   title,
   description,
   resource,
-  loadingTitle = <FormattedMessage id='app.page.loading' defaultMessage='Loading ...' />,
-  loadingDescription = <FormattedMessage id='app.page.loadingDescription' defaultMessage='Please wait while we are getting things ready.' />,
-  failedTitle = <FormattedMessage id='app.page.failed' defaultMessage='Cannot load the page' />,
-  failedDescription = <FormattedMessage id='app.page.failedDescription' defaultMessage='We are sorry for the inconvenience, please try again later.' />,
+  loadingTitle = <FormattedMessage id="app.page.loading" defaultMessage="Loading ..." />,
+  loadingDescription = <FormattedMessage id="app.page.loadingDescription" defaultMessage="Please wait while we are getting things ready." />,
+  failedTitle = <FormattedMessage id="app.page.failed" defaultMessage="Cannot load the page" />,
+  failedDescription = <FormattedMessage id="app.page.failedDescription" defaultMessage="We are sorry for the inconvenience, please try again later." />,
   children,
   ...props
 }) => (

@@ -7,44 +7,94 @@ import { SuccessIcon, LoadingIcon } from '../../Icons';
 import FormBox from '../../AdminLTE/FormBox';
 import { EmailField, PasswordField } from '../Fields';
 
-import {
-  Button,
-  Alert
-} from 'react-bootstrap';
+import { Alert } from 'react-bootstrap';
+import Button from '../../AdminLTE/FlatButton';
 
-const LoginForm = ({
-  invalid,
-  handleSubmit,
-  submitFailed: hasFailed,
-  submitting,
-  hasSucceeded
-}) => (
+const LoginForm = (
+  {
+    invalid,
+    handleSubmit,
+    submitFailed: hasFailed,
+    submitting,
+    hasSucceeded
+  }
+) => (
   <FormBox
-    title={<FormattedMessage id='app.loginForm.title' defaultMessage='Sign into ReCodEx' />}
+    title={
+      <FormattedMessage
+        id="app.loginForm.title"
+        defaultMessage="Sign into ReCodEx"
+      />
+    }
     type={hasSucceeded ? 'success' : undefined}
     footer={
-      <div className='text-center'>
+      <div className="text-center">
         <Button
-          type='submit'
-          bsStyle='success'
-          className='btn-flat'
+          type="submit"
+          bsStyle="success"
           onClick={handleSubmit}
-          disabled={invalid || submitting || hasSucceeded}>
+          disabled={invalid || submitting || hasSucceeded}
+        >
           {!submitting
             ? hasSucceeded
-              ? <span><SuccessIcon /> &nbsp; <FormattedMessage id='app.loginForm.success' defaultMessage='You are successfully signed in' /></span>
-              : <FormattedMessage id='app.loginForm.login' defaultMessage='Sign in' />
-            : <span><LoadingIcon /> &nbsp; <FormattedMessage id='app.loginForm.processing' defaultMessage='Signing in ...' /></span>}
+                ? <span>
+                    <SuccessIcon />
+                    {' '}
+                    &nbsp;
+                    {' '}
+                    <FormattedMessage
+                      id="app.loginForm.success"
+                      defaultMessage="You are successfully signed in"
+                    />
+                  </span>
+                : <FormattedMessage
+                    id="app.loginForm.login"
+                    defaultMessage="Sign in"
+                  />
+            : <span>
+                <LoadingIcon />
+                {' '}
+                &nbsp;
+                {' '}
+                <FormattedMessage
+                  id="app.loginForm.processing"
+                  defaultMessage="Signing in ..."
+                />
+              </span>}
         </Button>
       </div>
-    }>
-    {hasFailed && (
-      <Alert bsStyle='danger'>
-        <FormattedMessage id='app.loginForm.failed' defaultMessage='Login failed. Please check your credentials.' />
-      </Alert>)}
+    }
+  >
+    {hasFailed &&
+      <Alert bsStyle="danger">
+        <FormattedMessage
+          id="app.loginForm.failed"
+          defaultMessage="Login failed. Please check your credentials."
+        />
+      </Alert>}
 
-    <Field name='email' required component={EmailField} label={<FormattedMessage id='app.loginForm.email' defaultMessage='E-mail address:' />} />
-    <Field name='password' required component={PasswordField} label={<FormattedMessage id='app.loginForm.password' defaultMessage='Password:' />} />
+    <Field
+      name="email"
+      required
+      component={EmailField}
+      label={
+        <FormattedMessage
+          id="app.loginForm.email"
+          defaultMessage="E-mail address:"
+        />
+      }
+    />
+    <Field
+      name="password"
+      required
+      component={PasswordField}
+      label={
+        <FormattedMessage
+          id="app.loginForm.password"
+          defaultMessage="Password:"
+        />
+      }
+    />
   </FormBox>
 );
 
@@ -60,13 +110,28 @@ LoginForm.propTypes = {
 const validate = ({ email, password }) => {
   const errors = {};
   if (email && isEmail(email) === false) {
-    errors['email'] = <FormattedMessage id='app.loginForm.validation.emailIsNotAnEmail' defaultMessage='E-mail address is not valid.' />;
+    errors['email'] = (
+      <FormattedMessage
+        id="app.loginForm.validation.emailIsNotAnEmail"
+        defaultMessage="E-mail address is not valid."
+      />
+    );
   } else if (!email) {
-    errors['email'] = <FormattedMessage id='app.loginForm.validation.emptyEmail' defaultMessage='E-mail address cannot be empty.' />;
+    errors['email'] = (
+      <FormattedMessage
+        id="app.loginForm.validation.emptyEmail"
+        defaultMessage="E-mail address cannot be empty."
+      />
+    );
   }
 
   if (!password) {
-    errors['password'] = <FormattedMessage id='app.loginForm.validation.emptyPassword' defaultMessage='Password cannot be empty.' />;
+    errors['password'] = (
+      <FormattedMessage
+        id="app.loginForm.validation.emptyPassword"
+        defaultMessage="Password cannot be empty."
+      />
+    );
   }
 
   return errors;

@@ -1,5 +1,5 @@
 // @flow
-import React, { PropTypes, Component } from 'react';
+import React, { PropTypes } from 'react';
 
 const withLinks = (Inner: *) => {
   const ComponentWithLinks = (props: any, { links }: { links: any }) => (

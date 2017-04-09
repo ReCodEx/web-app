@@ -12,7 +12,7 @@ const LoadingUsersName = ({
       <LoadingAvatar light size={size} />
     </span>
     <span className={styles.name} style={{ lineHeight: `${size}px` }}>
-      <FormattedMessage id='app.usersName.loading' defaultMessage='Loading ...' />
+      <FormattedMessage id="app.usersName.loading" defaultMessage="Loading ..." />
     </span>
   </span>
 );

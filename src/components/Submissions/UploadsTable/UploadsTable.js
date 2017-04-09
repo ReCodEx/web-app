@@ -26,14 +26,14 @@ const UploadsTable = ({
       {attachedFiles.map(
         payload =>
           <tr key={'attached-' + payload.name}>
-            <td className='text-center'>
-              <Icon name='check' className='text-success text-bold' />
+            <td className="text-center">
+              <Icon name="check" className="text-success text-bold" />
             </td>
             <td>{payload.name}</td>
             <td>{prettyBytes(payload.file.size)}</td>
             <td>
-              <Button bsSize='xs' bsStyle='default' onClick={() => removeFile(payload)}>
-                <Icon name='trash' />
+              <Button bsSize="xs" bsStyle="default" onClick={() => removeFile(payload)}>
+                <Icon name="trash" />
               </Button>
             </td>
           </tr>
@@ -42,8 +42,8 @@ const UploadsTable = ({
       {uploadingFiles.map(
         payload =>
           <tr key={'uploading-' + payload.name}>
-            <td className='text-center'>
-              <Icon name='circle-o' spin />
+            <td className="text-center">
+              <Icon name="circle-o" spin />
             </td>
             <td>{payload.name}</td>
             <td>{prettyBytes(payload.file.size)}</td>
@@ -54,18 +54,18 @@ const UploadsTable = ({
       {failedFiles.map(
         payload =>
           <tr key={'failed-' + payload.name}>
-            <td className='text-center'>
-              <Icon name='exclamation-triangle' className='text-danger' />
+            <td className="text-center">
+              <Icon name="exclamation-triangle" className="text-danger" />
             </td>
             <td>{payload.name}</td>
             <td>{prettyBytes(payload.file.size)}</td>
             <td>
               <ButtonGroup>
-                <Button bsSize='xs' bsStyle='default' onClick={() => removeFailedFile(payload)}>
-                  <Icon name='trash' />
+                <Button bsSize="xs" bsStyle="default" onClick={() => removeFailedFile(payload)}>
+                  <Icon name="trash" />
                 </Button>
-                <Button bsSize='xs' bsStyle='default' onClick={() => retryUploadFile(payload)}>
-                  <Icon name='refresh' />
+                <Button bsSize="xs" bsStyle="default" onClick={() => retryUploadFile(payload)}>
+                  <Icon name="refresh" />
                 </Button>
               </ButtonGroup>
             </td>
@@ -75,15 +75,15 @@ const UploadsTable = ({
       {removedFiles.map(
         payload =>
           <tr key={'removed' + payload.name}>
-            <td className='text-center'>
-              <Icon name='trash' className='text-warning' />
+            <td className="text-center">
+              <Icon name="trash" className="text-warning" />
             </td>
             <td>{payload.name}</td>
             <td>{prettyBytes(payload.file.size)}</td>
             <td>
               <ButtonGroup>
-                <Button bsSize='xs' bsStyle='default' onClick={() => returnFile(payload)}>
-                  <Icon name='refresh' />
+                <Button bsSize="xs" bsStyle="default" onClick={() => returnFile(payload)}>
+                  <Icon name="refresh" />
                 </Button>
               </ButtonGroup>
             </td>

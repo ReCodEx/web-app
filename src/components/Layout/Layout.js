@@ -28,8 +28,8 @@ export const Layout = ({
       overflow: 'visible'
     }}>
     <Helmet
-      defaultTitle='ReCodEx'
-      titleTemplate='%s | ReCodEx' />
+      defaultTitle="ReCodEx"
+      titleTemplate="%s | ReCodEx" />
     <Header
       toggleSidebarSize={toggleSize}
       toggleSidebarVisibility={toggleVisibility}
@@ -43,7 +43,7 @@ export const Layout = ({
       currentUrl={currentUrl} />
     <div onClick={onCloseSidebar}>
       {children}
-      <Footer version='v1.0.0' />
+      <Footer version="v1.0.0" />
     </div>
   </div>
 );

@@ -13,10 +13,10 @@ const ExercisesList = ({
     <thead>
       <tr>
         <th></th>
-        <th><FormattedMessage id='app.exercisesList.name' defaultMessage='Name' /></th>
-        <th><FormattedMessage id='app.exercisesList.author' defaultMessage='Author' /></th>
-        <th><FormattedMessage id='app.exercisesList.difficulty' defaultMessage='Difficulty' /></th>
-        <th><FormattedMessage id='app.exercisesList.created' defaultMessage='Created' /></th>
+        <th><FormattedMessage id="app.exercisesList.name" defaultMessage="Name" /></th>
+        <th><FormattedMessage id="app.exercisesList.author" defaultMessage="Author" /></th>
+        <th><FormattedMessage id="app.exercisesList.difficulty" defaultMessage="Difficulty" /></th>
+        <th><FormattedMessage id="app.exercisesList.created" defaultMessage="Created" /></th>
       </tr>
     </thead>
     <tbody>
@@ -28,8 +28,8 @@ const ExercisesList = ({
 
     {exercises.length === 0 && (
       <tr>
-        <td className='text-center' colSpan={4}>
-          <FormattedMessage id='app.exercisesList.empty' defaultMessage='There are no exercises in this list.' />
+        <td className="text-center" colSpan={4}>
+          <FormattedMessage id="app.exercisesList.empty" defaultMessage="There are no exercises in this list." />
         </td>
       </tr>
     )}

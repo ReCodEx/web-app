@@ -12,40 +12,40 @@ const AssignmentStatusIcon = ({
       return (
         <Staus
           id={id}
-          icon={<Icon name='thumbs-o-up' className='text-green' />}
-          message={<FormattedMessage id='app.assignemntStatusIcon.ok' defaultMessage='Assignment is successfully completed.' />} />
+          icon={<Icon name="thumbs-o-up" className="text-green" />}
+          message={<FormattedMessage id="app.assignemntStatusIcon.ok" defaultMessage="Assignment is successfully completed." />} />
       );
 
     case 'work-in-progress':
       return (
         <Staus
           id={id}
-          icon={<Icon name='cogs' className='text-yellow' />}
-          message={<FormattedMessage id='app.assignemntStatusIcon.inProgress' defaultMessage='Assignment solution is being evaluated.' />} />
+          icon={<Icon name="cogs" className="text-yellow" />}
+          message={<FormattedMessage id="app.assignemntStatusIcon.inProgress" defaultMessage="Assignment solution is being evaluated." />} />
       );
 
     case 'failed':
       return (
         <Staus
           id={id}
-          icon={<Icon name='thumbs-o-down' className='text-red' />}
-          message={<FormattedMessage id='app.assignemntStatusIcon.failed' defaultMessage='No correct solution was submitted yet.' />} />
+          icon={<Icon name="thumbs-o-down" className="text-red" />}
+          message={<FormattedMessage id="app.assignemntStatusIcon.failed" defaultMessage="No correct solution was submitted yet." />} />
       );
 
     case 'evaluation-failed':
       return (
         <Staus
           id={id}
-          icon={<Icon name='exclamation-triangle' className='text-yellow' />}
-          message={<FormattedMessage id='app.assignemntStatusIcon.evaluationFailed' defaultMessage='No solution was evaluated correctly by ReCodEx.' />} />
+          icon={<Icon name="exclamation-triangle" className="text-yellow" />}
+          message={<FormattedMessage id="app.assignemntStatusIcon.evaluationFailed" defaultMessage="No solution was evaluated correctly by ReCodEx." />} />
       );
 
     default:
       return (
         <Staus
           id={id}
-          icon={<Icon name='code' className='text-gray' />}
-          message={<FormattedMessage id='app.assignemntStatusIcon.none' defaultMessage='No solutions were submmitted so far.' />} />
+          icon={<Icon name="code" className="text-gray" />}
+          message={<FormattedMessage id="app.assignemntStatusIcon.none" defaultMessage="No solutions were submmitted so far." />} />
       );
   }
 };

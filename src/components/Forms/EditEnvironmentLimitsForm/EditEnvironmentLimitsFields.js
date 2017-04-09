@@ -39,7 +39,7 @@ const EditEnvironmentLimitsFields = ({
       <Field
         name={`${prefix}.environment.name`}
         component={TextField}
-        label={<FormattedMessage id='app.editEnvironmentLimitsForm.environment.name' defaultMessage='Environment name:' />} />
+        label={<FormattedMessage id="app.editEnvironmentLimitsForm.environment.name" defaultMessage="Environment name:" />} />
 
       <FieldArray
         name={`${prefix}.limits`}

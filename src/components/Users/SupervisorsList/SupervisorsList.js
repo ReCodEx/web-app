@@ -21,8 +21,8 @@ const SupervisorsList = ({
 
     {users.length === 0 && isLoaded && (
       <tr>
-        <td className='text-center'>
-          <FormattedMessage id='app.userList.noSupervisors' defaultMessage='There are no supervisors in this list.' />
+        <td className="text-center">
+          <FormattedMessage id="app.userList.noSupervisors" defaultMessage="There are no supervisors in this list." />
         </td>
       </tr>
     )}

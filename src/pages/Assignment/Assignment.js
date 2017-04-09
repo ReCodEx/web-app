@@ -2,7 +2,8 @@ import React, { PropTypes, Component } from 'react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
-import { Col, Row, Button } from 'react-bootstrap';
+import { Col, Row } from 'react-bootstrap';
+import Button from '../../components/AdminLTE/FlatButton';
 import { LinkContainer } from 'react-router-bootstrap';
 
 import { fetchAssignmentIfNeeded } from '../../redux/modules/assignments';
@@ -128,7 +129,8 @@ class Assignment extends Component {
                       <LinkContainer
                         to={ASSIGNMENT_EDIT_URI_FACTORY(assignment.id)}
                       >
-                        <Button bsStyle="warning" className="btn-flat">
+                        /
+                        <Button bsStyle="warning">
                           <EditIcon />
                           {' '}
                           <FormattedMessage
@@ -141,7 +143,7 @@ class Assignment extends Component {
                       <LinkContainer
                         to={SUPERVISOR_STATS_URI_FACTORY(assignment.id)}
                       >
-                        <Button bsStyle="primary" className="btn-flat">
+                        <Button bsStyle="primary">
                           <ResultsIcon />
                           {' '}
                           <FormattedMessage

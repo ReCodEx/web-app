@@ -12,7 +12,7 @@ const UsersListItem = ({
       <UsersNameContainer userId={id} />
     </td>
     {createActions && (
-      <td className='text-right'>
+      <td className="text-right">
         {createActions(id)}
       </td>
     )}

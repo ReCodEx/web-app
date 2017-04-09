@@ -25,11 +25,11 @@ const PageContent = ({
   breadcrumbs = [],
   children
 }) => (
-  <div className='content-wrapper'>
+  <div className="content-wrapper">
     <Helmet
       title={getMessage(title, formatMessage)}
       description={getMessage(description, formatMessage)} />
-    <section className='content-header'>
+    <section className="content-header">
       <h1>
         {title}
         <small>{description}</small>
@@ -37,7 +37,7 @@ const PageContent = ({
       {breadcrumbs.length > 0 &&
         <Breadcrumbs items={breadcrumbs} />}
     </section>
-    <section className='content'>
+    <section className="content">
       {children}
     </section>
   </div>
