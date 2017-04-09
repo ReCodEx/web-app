@@ -17,7 +17,7 @@
     "import/namespace": 2,
     "import/no-deprecated": 2,
     "import/no-unresolved": 2,
-    "import/no-named-as-default": 0,
+    "import/no-named-as-default": 2,
     "react/no-did-update-set-state": 0,
     "react/display-name": 0,
     "indent": [
