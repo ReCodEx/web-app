@@ -194,7 +194,6 @@ Exercise.propTypes = {
   supervisedGroups: PropTypes.object,
   isAuthorOfExercise: PropTypes.func.isRequired,
   referenceSolutions: ImmutablePropTypes.map,
-  hardwareGroupsIds: PropTypes.array,
   intl: intlShape.isRequired
 };
 
@@ -205,7 +204,6 @@ export default injectIntl(connect(
       exercise: exerciseSelector(exerciseId)(state),
       supervisedGroups: supervisorOfSelector(userId)(state),
       isAuthorOfExercise: (exerciseId) => canEditExercise(userId, exerciseId)(state),
-      hardwareGroupsIds: hardwareGroupsIdsSelector(state),
       referenceSolutions: referenceSolutionsSelector(exerciseId)(state)
     };
   },
