@@ -8,67 +8,110 @@ import GroupTree from '../GroupTree';
 import SupervisorsList from '../../Users/SupervisorsList';
 import { MaybeSucceededIcon } from '../../Icons';
 
-const GroupDetail = ({
-  group: {
-    id,
-    externalId,
-    name,
-    description,
-    threshold,
-    parentGroupId,
-    isPublic = false,
-    childGroups,
-    ...group
-  },
-  groups,
-  supervisors,
-  isAdmin
-}) => (
+const GroupDetail = (
+  {
+    group: {
+      id,
+      externalId,
+      name,
+      description,
+      threshold,
+      parentGroupId,
+      isPublic = false,
+      childGroups,
+      ...group
+    },
+    groups,
+    supervisors,
+    isAdmin
+  }
+) => (
   <div>
     <Row>
       <Col lg={6} sm={12}>
         <Box
-          title={<FormattedMessage id="app.groupDetail.description" defaultMessage="Group description" />}
+          title={
+            <FormattedMessage
+              id="app.groupDetail.description"
+              defaultMessage="Group description"
+            />
+          }
           description={<ReactMarkdown source={description} />}
           type="primary"
           collapsable
-          noPadding>
+          noPadding
+        >
           <Table>
             <tbody>
-              {externalId && (
+              {externalId &&
                 <tr>
-                  <th><FormattedMessage id="app.groupDetail.externalId" defaultMessage="External identification of the group:" /></th>
+                  <th>
+                    <FormattedMessage
+                      id="app.groupDetail.externalId"
+                      defaultMessage="External identification of the group:"
+                    />
+                  </th>
                   <td><code>{externalId}</code></td>
-                </tr>)}
+                </tr>}
               <tr>
-                <th><FormattedMessage id="app.groupDetail.isPublic" defaultMessage="Students can join this group themselves:" /></th>
+                <th>
+                  <FormattedMessage
+                    id="app.groupDetail.isPublic"
+                    defaultMessage="Students can join this group themselves:"
+                  />
+                </th>
                 <td><MaybeSucceededIcon success={isPublic} /></td>
               </tr>
-              {threshold !== null && (
+              {threshold !== null &&
                 <tr>
-                  <th><FormattedMessage id="app.groupDetail.threshold" defaultMessage="Minimum percent of the total points count needed to complete the course:" /></th>
+                  <th>
+                    <FormattedMessage
+                      id="app.groupDetail.threshold"
+                      defaultMessage="Minimum percent of the total points count needed to complete the course:"
+                    />
+                  </th>
                   <td><FormattedNumber value={threshold} style="percent" /></td>
-                </tr>
-              )}
+                </tr>}
             </tbody>
           </Table>
         </Box>
       </Col>
-      <Col lg={3} sm={6}>
+      <Col lg={6} sm={12}>
+        <Box
+          title={
+            <FormattedMessage
+              id="app.groupDetail.groupsTitle"
+              defaultMessage="Groups hierarchy"
+            />
+          }
+          noPadding
+        >
+          <GroupTree
+            id={parentGroupId || id}
+            currentGroupId={id}
+            groups={groups}
+            isOpen
+          />
+        </Box>
+      </Col>
+      <Col lg={6} sm={12}>
         <Box
           noPadding
           collapsable
-          title={<FormattedMessage id="app.groupDetail.supervisors" defaultMessage="Supervisors of {groupName}" values={{ groupName: name }} />}>
+          title={
+            <FormattedMessage
+              id="app.groupDetail.supervisors"
+              defaultMessage="Supervisors of {groupName}"
+              values={{ groupName: name }}
+            />
+          }
+        >
           <SupervisorsList
             groupId={id}
             users={supervisors}
             isAdmin={isAdmin}
-            isLoaded={supervisors.length === group.supervisors.length} />
-        </Box>
-      </Col>
-      <Col lg={3} sm={6}>
-        <Box title={<FormattedMessage id="app.groupDetail.groupsTitle" defaultMessage="Groups hierarchy" />} noPadding>
-          <GroupTree id={parentGroupId || id} currentGroupId={id} groups={groups} isOpen />
+            isLoaded={supervisors.length === group.supervisors.length}
+          />
         </Box>
       </Col>
     </Row>
