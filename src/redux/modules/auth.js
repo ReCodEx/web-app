@@ -28,29 +28,33 @@ export const statusTypes = {
   LOGIN_FAILED: 'LOGIN_FAILED'
 };
 
-const getUserId = (token) => token.get('sub');
+const getUserId = token => token.get('sub');
 
 /**
  * Actions
  */
 
-export const logout = (redirectUrl) =>
-  (dispatch) => {
-    if (redirectUrl) { dispatch(push(redirectUrl)); }
+export const logout = redirectUrl =>
+  dispatch => {
+    if (redirectUrl) {
+      dispatch(push(redirectUrl));
+    }
     dispatch({
       type: actionTypes.LOGOUT
     });
   };
 
+export const LOCAL_LOGIN = 'recodex-local-login';
 export const login = (username, password) =>
   createApiAction({
     type: actionTypes.LOGIN,
     method: 'POST',
     endpoint: '/login',
-    body: { username, password }
+    body: { username, password },
+    meta: { service: LOCAL_LOGIN }
   });
 
-export const resetPassword = (username) =>
+export const resetPassword = username =>
   createApiAction({
     type: actionTypes.RESET_PASSWORD,
     method: 'POST',
@@ -67,7 +71,7 @@ export const changePassword = (password, accessToken) =>
     body: { password }
   });
 
-export const validatePasswordStrength = (password) =>
+export const validatePasswordStrength = password =>
   createApiAction({
     type: 'VALIDATE_PASSWORD_STRENGTH',
     endpoint: '/forgotten-password/validate-password-strength',
@@ -75,15 +79,23 @@ export const validatePasswordStrength = (password) =>
     body: { password }
   });
 
-export const externalLogin = (serviceId) => (username, password) =>
-  createApiAction({
-    type: actionTypes.LOGIN,
-    method: 'POST',
-    endpoint: `/login/${serviceId}`,
-    body: { username, password }
-  });
+export const externalLogin = service =>
+  credentials =>
+    createApiAction({
+      type: actionTypes.LOGIN,
+      method: 'POST',
+      endpoint: `/login/${service}`,
+      body: credentials,
+      meta: { service }
+    });
 
-export const loginCAS = externalLogin('cas-uk');
+export const loginServices = {
+  local: LOCAL_LOGIN,
+  external: {
+    CAS_UK: 'cas-uk',
+    CAS_UK_TICKET: 'cas-uk-ticket'
+  }
+};
 
 export const refresh = () =>
   createApiAction({
@@ -92,12 +104,12 @@ export const refresh = () =>
     endpoint: '/login/refresh'
   });
 
-export const decodeAndValidateAccessToken = token => {
+export const decodeAndValidateAccessToken = (token, now = Date.now()) => {
   let decodedToken = null;
   if (token) {
     try {
       decodedToken = decode(token);
-      if (isTokenValid(decodedToken) === false) {
+      if (isTokenValid(decodedToken, now) === false) {
         decodedToken = null;
       }
     } catch (e) {
@@ -113,70 +125,82 @@ export const decodeAndValidateAccessToken = token => {
  * @param  {string} accessToken An access token to initialise the reducer
  * @return {function} The initialised reducer
  */
-const auth = (accessToken) => {
-  const decodedToken = decodeAndValidateAccessToken(accessToken);
+const auth = (accessToken, now = Date.now()) => {
+  const decodedToken = decodeAndValidateAccessToken(accessToken, now);
   const initialState = accessToken && decodedToken
     ? fromJS({
-      status: statusTypes.LOGGED_IN,
+      status: {},
       jwt: accessToken,
       accessToken: decodedToken,
       userId: getUserId(decodedToken)
     })
     : fromJS({
-      status: statusTypes.LOGGED_OUT,
+      status: {},
       jwt: null,
       accessToken: null,
       userId: null
     });
 
-  return handleActions({
+  return handleActions(
+    {
+      [actionTypes.LOGIN_REQUEST]: (state, { meta: { service } }) =>
+        state.setIn(['status', service], statusTypes.LOGGING_IN),
 
-    [actionTypes.LOGIN_REQUEST]: (state, action) =>
-      state.set('status', statusTypes.LOGGING_IN),
+      [actionTypes.LOGIN_SUCCESS]: (
+        state,
+        { payload: { accessToken }, meta: { service } }
+      ) =>
+        state
+          .setIn(['status', service], statusTypes.LOGGED_IN)
+          .set('jwt', accessToken)
+          .set('accessToken', decodeAndValidateAccessToken(accessToken))
+          .set('userId', getUserId(decodeAndValidateAccessToken(accessToken))),
 
-    [actionTypes.LOGIN_SUCCESS]: (state, {payload: { accessToken }}) =>
-      state.set('status', statusTypes.LOGGED_IN)
-            .set('jwt', accessToken)
-            .set('accessToken', decodeAndValidateAccessToken(accessToken))
-            .set('userId', getUserId(decodeAndValidateAccessToken(accessToken))),
+      [actionTypes.LOGIN_FAILIURE]: (state, { meta: { service } }) =>
+        state
+          .setIn(['status', service], statusTypes.LOGIN_FAILED)
+          .set('jwt', null)
+          .set('accessToken', null)
+          .set('userId', null),
 
-    [registrationActionTypes.CREATE_ACCOUNT_FULFILLED]: (state, {payload: { accessToken }}) =>
-      state.set('status', statusTypes.LOGGED_IN)
-            .set('jwt', accessToken)
-            .set('accessToken', decodeAndValidateAccessToken(accessToken))
-            .set('userId', getUserId(decodeAndValidateAccessToken(accessToken))),
+      [registrationActionTypes.CREATE_ACCOUNT_FULFILLED]: (
+        state,
+        { payload: { accessToken }, meta: { service } }
+      ) =>
+        state
+          .setIn(['status', service], statusTypes.LOGGED_IN)
+          .set('jwt', accessToken)
+          .set('accessToken', decodeAndValidateAccessToken(accessToken))
+          .set('userId', getUserId(decodeAndValidateAccessToken(accessToken))),
 
-    [actionTypes.LOGIN_FAILIURE]: (state, action) =>
-      state.set('status', statusTypes.LOGIN_FAILED)
-            .set('jwt', null)
-            .set('accessToken', null)
-            .set('userId', null),
+      [actionTypes.LOGOUT]: (state, action) =>
+        state
+          .update('status', services =>
+            services.map(() => statusTypes.LOGGED_OUT))
+          .set('jwt', null)
+          .set('accessToken', null)
+          .set('userId', null),
 
-    [actionTypes.LOGOUT]: (state, action) =>
-      state.set('status', statusTypes.LOGGED_OUT)
-            .set('jwt', null)
-            .set('accessToken', null)
-            .set('userId', null),
+      [actionTypes.CHANGE_PASSWORD_PENDING]: (state, action) =>
+        state.set('changePasswordStatus', 'PENDING'),
 
-    [actionTypes.CHANGE_PASSWORD_PENDING]: (state, action) =>
-      state.set('changePasswordStatus', 'PENDING'),
+      [actionTypes.CHANGE_PASSWORD_FAILED]: (state, action) =>
+        state.set('changePasswordStatus', 'FAILED'),
 
-    [actionTypes.CHANGE_PASSWORD_FAILED]: (state, action) =>
-      state.set('changePasswordStatus', 'FAILED'),
+      [actionTypes.CHANGE_PASSWORD_FULFILLED]: (state, action) =>
+        state.set('changePasswordStatus', 'FULFILLED'),
 
-    [actionTypes.CHANGE_PASSWORD_FULFILLED]: (state, action) =>
-      state.set('changePasswordStatus', 'FULFILLED'),
+      [actionTypes.RESET_PASSWORD_PENDING]: (state, action) =>
+        state.set('resetPasswordStatus', 'PENDING'),
 
-    [actionTypes.RESET_PASSWORD_PENDING]: (state, action) =>
-      state.set('resetPasswordStatus', 'PENDING'),
+      [actionTypes.RESET_PASSWORD_FAILED]: (state, action) =>
+        state.set('resetPasswordStatus', 'FAILED'),
 
-    [actionTypes.RESET_PASSWORD_FAILED]: (state, action) =>
-      state.set('resetPasswordStatus', 'FAILED'),
-
-    [actionTypes.RESET_PASSWORD_FULFILLED]: (state, action) =>
-      state.set('resetPasswordStatus', 'FULFILLED')
-
-  }, initialState);
+      [actionTypes.RESET_PASSWORD_FULFILLED]: (state, action) =>
+        state.set('resetPasswordStatus', 'FULFILLED')
+    },
+    initialState
+  );
 };
 
 export default auth;

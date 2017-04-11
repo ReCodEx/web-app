@@ -8,11 +8,11 @@ export const decode = token => {
   }
 };
 
-export const isTokenValid = token =>
-  token && token.exp * 1000 > Date.now();
+export const isTokenValid = (token, now = Date.now()) =>
+  token && token.exp * 1000 > now;
 
-export const willExpireSoon = token =>
-  token && token.exp - (Date.now() / 1000) < (token.exp - token.iat) / 3; // last third of the validity period
+export const willExpireSoon = (token, now = Date.now()) =>
+  token && token.exp - now / 1000 < (token.exp - token.iat) / 3; // last third of the validity period
 
 export const isInScope = (token, scope) =>
   token.scopes && token.scopes.indexOf(scope) >= 0;

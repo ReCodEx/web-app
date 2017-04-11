@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import { createCASLoginUrl, getTicketFromUrl } from '../../src/helpers/cas';
 
-describe.only('helpers', () => {
+describe('helpers', () => {
   describe('CAS authentication helper', () => {
     it('must create the URL of the CAS system', () => {
       expect(createCASLoginUrl('a')).to.equal(
