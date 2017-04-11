@@ -18,8 +18,8 @@ import ResourceRenderer from '../../components/ResourceRenderer';
 import GroupsList from '../../components/Groups/GroupsList';
 import ReferenceSolutionsList
   from '../../components/Exercises/ReferenceSolutionsList';
-import UploadReferenceSolution
-  from '../../components/Exercises/UploadReferenceSolution';
+import UploadReferenceSolutionContainer
+  from '../../containers/UploadReferenceSolutionContainer';
 import Box from '../../components/AdminLTE/Box';
 import { EditIcon, SendIcon } from '../../components/Icons';
 
@@ -93,6 +93,7 @@ class Exercise extends Component {
 
   render() {
     const {
+      userId,
       exercise,
       supervisedGroups,
       isAuthorOfExercise,
@@ -262,9 +263,11 @@ class Exercise extends Component {
                   title={formatMessage(messages.uploadReferenceSolutionBox)}
                   collapsable={true}
                   isOpen={false}
-                  noPadding
                 >
-                  <UploadReferenceSolution />
+                  <UploadReferenceSolutionContainer
+                    userId={userId}
+                    exercise={exercise}
+                  />
                 </Box>
               </Col>
             </Row>
@@ -280,6 +283,7 @@ Exercise.contextTypes = {
 };
 
 Exercise.propTypes = {
+  userId: PropTypes.string.isRequired,
   params: PropTypes.shape({
     exerciseId: PropTypes.string.isRequired
   }).isRequired,
@@ -298,6 +302,7 @@ export default injectIntl(
     (state, { params: { exerciseId } }) => {
       const userId = loggedInUserIdSelector(state);
       return {
+        userId,
         exercise: exerciseSelector(exerciseId)(state),
         supervisedGroups: supervisorOfSelector(userId)(state),
         isAuthorOfExercise: exerciseId =>

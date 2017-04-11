@@ -26,9 +26,10 @@ import users from './modules/users';
 import runtimeEnvironments from './modules/runtimeEnvironments';
 import supplementaryFiles from './modules/supplementaryFiles';
 import referenceSolutions from './modules/referenceSolutions';
+import referenceSolution from './modules/referenceSolution';
 import hwGroups from './modules/hwGroups';
 
-const createRecodexReducers = (token) => ({
+const createRecodexReducers = token => ({
   auth: auth(token),
   assignments,
   canSubmit,
@@ -53,7 +54,8 @@ const createRecodexReducers = (token) => ({
   runtimeEnvironments,
   supplementaryFiles,
   referenceSolutions,
-  hwGroups
+  hwGroups,
+  referenceSolution
 });
 
 const librariesReducers = {
@@ -61,13 +63,9 @@ const librariesReducers = {
   form: formReducer
 };
 
-const createReducer = (token) => {
+const createReducer = token => {
   const appReducer = combineReducers(
-    Object.assign(
-      {},
-      librariesReducers,
-      createRecodexReducers(token)
-    )
+    Object.assign({}, librariesReducers, createRecodexReducers(token))
   );
 
   return (state, action) => {
