@@ -4,6 +4,7 @@ import { FormattedMessage } from 'react-intl';
 import isEmail from 'validator/lib/isEmail';
 
 import { SuccessIcon, LoadingIcon } from '../../Icons';
+import Icon from 'react-fontawesome';
 import FormBox from '../../AdminLTE/FormBox';
 import { EmailField, PasswordField } from '../Fields';
 
@@ -40,21 +41,21 @@ const LoginForm = (
                 ? <span>
                     <SuccessIcon />
                     {' '}
-                    &nbsp;
-                    {' '}
                     <FormattedMessage
                       id="app.loginForm.success"
                       defaultMessage="You are successfully signed in"
                     />
                   </span>
-                : <FormattedMessage
-                    id="app.loginForm.login"
-                    defaultMessage="Sign in"
-                  />
+                : <span>
+                    <Icon name="sign-in" />
+                    {' '}
+                    <FormattedMessage
+                      id="app.loginForm.login"
+                      defaultMessage="Sign in"
+                    />
+                  </span>
             : <span>
                 <LoadingIcon />
-                {' '}
-                &nbsp;
                 {' '}
                 <FormattedMessage
                   id="app.loginForm.processing"
