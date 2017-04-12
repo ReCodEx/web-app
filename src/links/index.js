@@ -79,20 +79,30 @@ export const linksFactory = lang => {
   };
 };
 
-const removeFirstSegment = url =>
-  url.substr(1).indexOf('/') === -1
-    ? '/'
-    : url.substr(url.substr(1).indexOf('/') + 1);
+export const removeFirstSegment = url => {
+  if (url.length === 0) {
+    return '';
+  }
 
+  const lang = extractLanguageFromUrl(url);
+  const firstSlash = url[0] === '/' ? 1 : 0;
+  const langPartLength = firstSlash + lang.length;
+  return url.substr(langPartLength);
+};
 export const changeLanguage = (url, lang) =>
   `/${lang}${removeFirstSegment(url)}`;
 
 export const extractLanguageFromUrl = url => {
-  url = url.substr(0, 1) === '/' ? url.substr(1) : url; // trim leading slash
-  return url.substr(0, url.indexOf('/'));
+  if (url.length === 0) {
+    return null;
+  }
+
+  url = url[0] === '/' ? url.substr(1) : url; // trim leading slash
+  const separator = url.match(/[/?]/);
+  return separator !== null ? url.substr(0, separator.index) : url;
 };
 
-export const isAbsolute = url => url.match('^(https?:)?//.+');
+export const isAbsolute = url => url.match('^(https?:)?//.+') !== null;
 
 export const makeAbsolute = url =>
   typeof window === 'undefined'
