@@ -5,10 +5,10 @@ describe('helpers', () => {
   describe('CAS authentication helper', () => {
     it('must create the URL of the CAS system', () => {
       expect(createCASLoginUrl('a')).to.equal(
-        'https://idp.cuni.cz/cas?service=a'
+        'https://idp.cuni.cz/cas/login?service=a&renew=true'
       );
       expect(createCASLoginUrl('https://www.abc.def?auth')).to.equal(
-        'https://idp.cuni.cz/cas?service=https://www.abc.def?auth'
+        `https://idp.cuni.cz/cas/login?service=${encodeURIComponent('https://www.abc.def?auth')}&renew=true`
       );
     });
 

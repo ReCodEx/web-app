@@ -3,12 +3,17 @@ import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import LoginButton from '../../components/CAS/LoginButton';
 import Box from '../../components/AdminLTE/Box';
-import { externalLogin, loginServices } from '../../redux/modules/auth';
+import {
+  externalLogin,
+  externalLoginFailed,
+  loginServices
+} from '../../redux/modules/auth';
 import { statusSelector } from '../../redux/selectors/auth';
 
 const LoginBox = (
   {
     login,
+    fail,
     status
   }
 ) => (
@@ -21,7 +26,7 @@ const LoginBox = (
     }
     footer={
       <div className="text-center">
-        <LoginButton onLogin={login} loginStatus={status} />
+        <LoginButton onLogin={login} onFailed={fail} loginStatus={status} />
       </div>
     }
   >
@@ -34,6 +39,7 @@ const LoginBox = (
 
 LoginBox.propTypes = {
   login: PropTypes.func.isRequired,
+  fail: PropTypes.func.isRequired,
   status: PropTypes.string
 };
 
@@ -42,6 +48,8 @@ export default connect(
     status: statusSelector(loginServices.external.CAS_UK_TICKET)(state)
   }),
   dispatch => ({
+    fail: () =>
+      dispatch(externalLoginFailed(loginServices.external.CAS_UK_TICKET)),
     login: ticket => {
       const login = externalLogin(loginServices.external.CAS_UK_TICKET);
       return dispatch(login({ ticket }));
