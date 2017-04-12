@@ -3,11 +3,10 @@ import {
   extractLanguageFromUrl,
   removeFirstSegment,
   changeLanguage,
-  isAbsolute,
-  absolute
+  isAbsolute
 } from '../src/links';
 
-describe.only('Links functions', () => {
+describe('Links functions', () => {
   it('must extract current language from the url (first segment)', () => {
     expect(extractLanguageFromUrl('xyz')).to.equal('xyz');
     expect(extractLanguageFromUrl('/xyz')).to.equal('xyz');

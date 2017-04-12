@@ -1,10 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { Authenticate, LoginFailed } from '../../components/CAS';
-import {
-  openCASWindow,
-  validateServiceTicket,
-  getTicketFromUrl
-} from '../../helpers/cas';
+import { openCASWindow, getTicketFromUrl } from '../../helpers/cas';
 import withLinks from '../../hoc/withLinks';
 import { absolute } from '../../links';
 
@@ -32,6 +28,7 @@ class AuthenticationButtonContainer extends Component {
   };
 
   pollTicket = () => {
+    const { onTicketObtained } = this.props;
     if (this.casWindow === null || this.casWindow.closed === true) {
       // the user has closed the window manually or the window was closed
       // programatically, but the interval was cleared too late
@@ -42,29 +39,12 @@ class AuthenticationButtonContainer extends Component {
         if (ticket !== null) {
           // cancel the window and the interval
           this.dispose();
-          this.processServiceTicket(ticket);
+          onTicketObtained(ticket);
         }
       } catch (e) {
         // silent error - not redirected yet
       }
     }
-  };
-
-  processServiceTicket = ticket => {
-    // now validate this token and exchage it for the
-    const {
-      onTicketObtained,
-      onFailed,
-      links: { HOME_URI, API_BASE }
-    } = this.props;
-
-    validateServiceTicket(
-      ticket,
-      absolute(HOME_URI),
-      absolute(API_BASE),
-      onTicketObtained,
-      onFailed
-    );
   };
 
   /**
