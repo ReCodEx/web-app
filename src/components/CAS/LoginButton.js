@@ -6,7 +6,7 @@ import AuthenticationButtonContainer
 
 import { statusTypes } from '../../redux/modules/auth';
 
-const LoginButton = ({ loginStatus, onLogin }) => {
+const LoginButton = ({ loginStatus, onLogin, onFailed }) => {
   switch (loginStatus) {
     case statusTypes.LOGGING_IN:
       return <LoggingIn />;
@@ -17,6 +17,7 @@ const LoginButton = ({ loginStatus, onLogin }) => {
         <AuthenticationButtonContainer
           retry={loginStatus === statusTypes.LOGIN_FAILED}
           onTicketObtained={onLogin}
+          onFailed={onFailed}
         />
       );
   }
@@ -24,7 +25,8 @@ const LoginButton = ({ loginStatus, onLogin }) => {
 
 LoginButton.propTypes = {
   loginStatus: PropTypes.string,
-  onLogin: PropTypes.func.isRequired
+  onLogin: PropTypes.func.isRequired,
+  onFailed: PropTypes.func.isRequired
 };
 
 export default LoginButton;

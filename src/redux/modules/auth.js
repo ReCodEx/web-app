@@ -89,6 +89,11 @@ export const externalLogin = service =>
       meta: { service }
     });
 
+export const externalLoginFailed = service => ({
+  type: actionTypes.LOGIN_FAILIURE,
+  meta: { service }
+});
+
 export const loginServices = {
   local: LOCAL_LOGIN,
   external: {
