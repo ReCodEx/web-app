@@ -1,3 +1,5 @@
+import { API_BASE } from '../redux/middleware/apiMiddleware';
+
 export const linksFactory = lang => {
   const prefix = `/${lang}`;
 
@@ -51,6 +53,7 @@ export const linksFactory = lang => {
     `${ADMIN_INSTANCES_URI}/${instanceId}/edit`;
 
   return {
+    API_BASE,
     HOME_URI,
     DASHBOARD_URI,
     LOGIN_URI,
