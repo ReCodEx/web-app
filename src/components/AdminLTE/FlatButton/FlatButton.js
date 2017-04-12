@@ -1,8 +1,15 @@
 import React, { PropTypes } from 'react';
 import { Button } from 'react-bootstrap';
+import classnames from 'classnames';
 
-const FlatButton = ({ className, ...props }) => (
-  <Button className={`btn-flat ${className}`} {...props} />
+const FlatButton = ({ className = '', ...props }) => (
+  <Button
+    className={classnames({
+      'btn-flat': true,
+      [className]: className.length > 0
+    })}
+    {...props}
+  />
 );
 
 FlatButton.propTypes = {

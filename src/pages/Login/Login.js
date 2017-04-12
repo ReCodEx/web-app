@@ -8,10 +8,10 @@ import { reset } from 'redux-form';
 import { Row, Col } from 'react-bootstrap';
 import PageContent from '../../components/PageContent';
 import LoginForm from '../../components/Forms/LoginForm';
-import LoginCASForm from '../../components/Forms/LoginCASForm';
+import CASLoginBox from '../../containers/CAS';
 
-import { login, loginCAS } from '../../redux/modules/auth';
-import { hasSucceeded } from '../../redux/selectors/auth';
+import { login } from '../../redux/modules/auth';
+import { isLoggedIn } from '../../redux/selectors/auth';
 
 import withLinks from '../../hoc/withLinks';
 
@@ -26,9 +26,9 @@ class Login extends Component {
    * Redirect all logged in users to the dashboard as soon as they are visually informed about success.
    */
   checkIfIsLoggedIn = (
-    { hasSucceeded, push, reset, links: { DASHBOARD_URI } }
+    { isLoggedIn, push, reset, links: { DASHBOARD_URI } }
   ) => {
-    if (hasSucceeded) {
+    if (isLoggedIn) {
       this.timeout = setTimeout(
         () => {
           this.timeout = null;
@@ -49,8 +49,6 @@ class Login extends Component {
   render() {
     const {
       login,
-      loginCAS,
-      hasSucceeded,
       links: { HOME_URI, RESET_PASSWORD_URI }
     } = this.props;
 
@@ -79,7 +77,7 @@ class Login extends Component {
       >
         <Row>
           <Col lg={4} lgOffset={1} md={6} mdOffset={0} sm={8} smOffset={2}>
-            <LoginForm onSubmit={login} hasSucceeded={hasSucceeded} />
+            <LoginForm onSubmit={login} />
             <p className="text-center">
               <FormattedMessage
                 id="app.login.cannotRememberPassword"
@@ -95,7 +93,7 @@ class Login extends Component {
             </p>
           </Col>
           <Col lg={4} lgOffset={1} md={6} mdOffset={0} sm={8} smOffset={2}>
-            <LoginCASForm onSubmit={loginCAS} hasSucceeded={hasSucceeded} />
+            <CASLoginBox />
           </Col>
         </Row>
       </PageContent>
@@ -105,9 +103,8 @@ class Login extends Component {
 
 Login.propTypes = {
   login: PropTypes.func.isRequired,
-  hasSucceeded: PropTypes.bool.isRequired,
+  isLoggedIn: PropTypes.bool.isRequired,
   push: PropTypes.func.isRequired,
-  loginCAS: PropTypes.func.isRequired,
   reset: PropTypes.func.isRequired,
   links: PropTypes.object.isRequired
 };
@@ -115,15 +112,13 @@ Login.propTypes = {
 export default withLinks(
   connect(
     state => ({
-      hasSucceeded: hasSucceeded(state)
+      isLoggedIn: isLoggedIn(state)
     }),
     dispatch => ({
       login: ({ email, password }) => dispatch(login(email, password)),
-      loginCAS: ({ ukco, password }) => dispatch(loginCAS(ukco, password)),
       push: url => dispatch(push(url)),
       reset: () => {
         dispatch(reset('login'));
-        dispatch(reset('login-cas'));
       }
     })
   )(Login)
