@@ -1,6 +1,10 @@
 import React, { Component, PropTypes } from 'react';
 import { Authenticate, LoginFailed } from '../../components/CAS';
-import { createCASLoginUrl, getTicketFromUrl } from '../../helpers/cas';
+import {
+  openCASWindow,
+  validateServiceTicket,
+  getTicketFromUrl
+} from '../../helpers/cas';
 import withLinks from '../../hoc/withLinks';
 import { absolute } from '../../links';
 
@@ -12,39 +16,55 @@ class AuthenticationButtonContainer extends Component {
   }
 
   onClick = () => {
-    if (typeof window !== 'undefined') {
-      if (this.casWindow === null) {
-        const { links } = this.props;
-        const returnUrl = absolute(links.HOME_URI);
-        this.casWindow = window.open(
-          createCASLoginUrl(returnUrl),
-          'CAS',
-          'modal=true,width=1024,height=850'
-        );
-        this.pollCASLogin = setInterval(this.detectTicket, 100);
+    if (this.casWindow === null) {
+      const { links, onFailed } = this.props;
+      const returnUrl = absolute(links.HOME_URI);
+      this.casWindow = openCASWindow(returnUrl);
+      if (!this.casWindow) {
+        onFailed(); // not in browser or for some reason the window could not have been opened
       } else {
-        this.casWindow.focus(); // no need to create the window again
+        // the window is open, now periodically check if the user has already logged in
+        this.pollCASLogin = setInterval(this.pollTicket, 100);
+      }
+    } else {
+      this.casWindow.focus(); // no need to create the window again
+    }
+  };
+
+  pollTicket = () => {
+    if (this.casWindow === null || this.casWindow.closed === true) {
+      // the user has closed the window manually or the window was closed
+      // programatically, but the interval was cleared too late
+      this.dispose();
+    } else {
+      try {
+        const ticket = getTicketFromUrl(this.casWindow.location.href);
+        if (ticket !== null) {
+          // cancel the window and the interval
+          this.dispose();
+          this.processServiceTicket(ticket);
+        }
+      } catch (e) {
+        // silent error - not redirected yet
       }
     }
   };
 
-  detectTicket = () => {
-    const { onTicketObtained } = this.props;
-    if (this.casWindow === null || this.casWindow.closed === true) {
-      this.dispose();
-    } else {
-      try {
-        const url = this.casWindow.location.href;
-        const ticket = getTicketFromUrl(url);
-        if (ticket !== null) {
-          this.dispose();
-          onTicketObtained(ticket); // dispatch an action to verify the token
-        }
-      } catch (e) {
-        // silent error - not redirected yet
-        return;
-      }
-    }
+  processServiceTicket = ticket => {
+    // now validate this token and exchage it for the
+    const {
+      onTicketObtained,
+      onFailed,
+      links: { HOME_URI, API_BASE }
+    } = this.props;
+
+    validateServiceTicket(
+      ticket,
+      absolute(HOME_URI),
+      absolute(API_BASE),
+      onTicketObtained,
+      onFailed
+    );
   };
 
   /**
@@ -62,7 +82,11 @@ class AuthenticationButtonContainer extends Component {
     }
   };
 
+  /**
+   * Avoid memory leaks if the user leaves the page before the popup window is closed.
+   */
   componentWillUnmount = this.dispose;
+
   render = () => {
     const { retry } = this.props;
     const Button = retry ? LoginFailed : Authenticate;
@@ -73,7 +97,8 @@ class AuthenticationButtonContainer extends Component {
 AuthenticationButtonContainer.propTypes = {
   links: PropTypes.object.isRequired,
   retry: PropTypes.bool,
-  onTicketObtained: PropTypes.func.isRequired
+  onTicketObtained: PropTypes.func.isRequired,
+  onFailed: PropTypes.func.isRequired
 };
 
 export default withLinks(AuthenticationButtonContainer);
