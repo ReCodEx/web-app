@@ -41,24 +41,7 @@ module.exports = {
       },
       {
         test: /.*\.(gif|png|jpe?g|svg)$/i,
-        loaders: [
-          'file-loader',
-          {
-            loader: 'image-webpack-loader',
-            query: {
-              mozjpeg: {
-                quality: 65
-              },
-              pngquant: {
-                quality: '65-90',
-                speed: 4
-              },
-              svgo: {
-                plugins: [{ removeViewBox: false }, { removeEmptyAttrs: true }]
-              }
-            }
-          }
-        ]
+        loaders: ['file-loader']
       }
     ]
   },
@@ -66,8 +49,8 @@ module.exports = {
     extractCss,
     new webpack.DefinePlugin({
       'process.env': {
-        NODE_ENV: "'" + process.env.NODE_ENV + "'",
-        API_BASE: "'" + process.env.API_BASE + "'"
+        NODE_ENV: '\'' + process.env.NODE_ENV + '\'',
+        API_BASE: '\'' + process.env.API_BASE + '\''
       }
     })
   ]
