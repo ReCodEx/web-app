@@ -8,7 +8,8 @@ const {
   reduceActions
 } = factory({
   resourceName,
-  apiEndpointFactory: (exerciseId) => `/reference-solutions/${exerciseId}`
+  apiEndpointFactory: exerciseId =>
+    `/reference-solutions/exercise/${exerciseId}`
 });
 
 /**
@@ -21,18 +22,19 @@ export const fetchReferenceSolutionsIfNeeded = actions.fetchOneIfNeeded; // fetc
 export const evaluateReferenceSolution = (exerciseId, solutionId, hwGroup) =>
   createApiAction({
     type: 'SUBMIT_REFERENCE_SOLUTION',
-    endpoint: `/reference-solutions/${exerciseId}/evaluate/${solutionId}`,
+    endpoint: `/reference-solutions/exercise/${exerciseId}/evaluate/${solutionId}`,
     method: 'POST',
     meta: { exerciseId, solutionId },
     body: { hwGroup }
   });
 
-
 /**
  * Reducer
  */
 
-const reducer = handleActions(Object.assign({}, reduceActions, {
-}), initialState);
+const reducer = handleActions(
+  Object.assign({}, reduceActions, {}),
+  initialState
+);
 
 export default reducer;
