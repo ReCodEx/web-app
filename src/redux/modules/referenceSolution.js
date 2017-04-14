@@ -15,7 +15,6 @@ export const referenceSolutionStatus = {
 export const actionTypes = {
   INIT: 'recodex/referenceSolution/INIT',
   CANCEL: 'recodex/referenceSolution/CANCEL',
-  CHANGE_NOTE: 'recodex/referenceSolution/CHANGE_NOTE',
   SUBMIT: 'recodex/referenceSolution/SUBMIT',
   SUBMIT_PENDING: 'recodex/referenceSolution/SUBMIT_PENDING',
   SUBMIT_FULFILLED: 'recodex/referenceSolution/SUBMIT_FULFILLED',
@@ -42,12 +41,18 @@ export const init = createAction(actionTypes.INIT, (userId, exerciseId) => ({
   exerciseId
 }));
 
-export const submitReferenceSolution = (userId, exerciseId, note, files) =>
+export const createReferenceSolution = (
+  userId,
+  exerciseId,
+  note,
+  files,
+  runtime
+) =>
   createApiAction({
     type: actionTypes.SUBMIT,
     method: 'POST',
-    endpoint: `/reference-solutions/${exerciseId}/submit`,
-    body: { userId, files: files.map(file => file.id), note }
+    endpoint: `/reference-solutions/exercise/${exerciseId}`,
+    body: { userId, files: files.map(file => file.id), note, runtime }
   });
 
 export const finishProcessing = createAction(actionTypes.PROCESSING_FINISHED);
@@ -62,11 +67,6 @@ const reducer = handleActions(
       initialState
         .set('userId', userId)
         .set('exerciseId', exerciseId)
-        .set('status', referenceSolutionStatus.CREATING),
-
-    [actionTypes.CHANGE_NOTE]: (state, { payload }) =>
-      state
-        .set('note', payload)
         .set('status', referenceSolutionStatus.CREATING),
 
     [actionTypes.SUBMIT_PENDING]: state =>

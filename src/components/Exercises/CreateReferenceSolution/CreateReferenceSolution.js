@@ -18,16 +18,18 @@ import {
   CloseIcon
 } from '../../Icons';
 import UploadContainer from '../../../containers/UploadContainer';
+import { SelectField } from '../../Forms/Fields';
 
-const UploadReferenceSolution = (
+const CreateReferenceSolution = (
   {
     exercise,
     note = '',
+    runtime = '',
     canSubmit,
     reset,
     isSending,
     hasFailed,
-    submitReferenceSolution,
+    createReferenceSolution,
     ...props
   }
 ) => (
@@ -47,8 +49,8 @@ const UploadReferenceSolution = (
     {hasFailed &&
       <p className="text-left callout callout-danger">
         <FormattedMessage
-          id="app.exercise.uploadReferenceSolution.submitFailed"
-          defaultMessage="Submission was rejected by the server. This usually means you have uploaded incorrect files - do your files have proper file type extensions? If you cannot submit the solution and there is no obvious reason, contact your supervisor to sort things out."
+          id="app.exercise.uploadReferenceSolution.creationFailed"
+          defaultMessage="Solution was rejected by the server."
         />
       </p>}
 
@@ -62,8 +64,8 @@ const UploadReferenceSolution = (
         <LoadingIcon />
         {' '}
         <FormattedMessage
-          id="app.exercise.uploadReferenceSolution.submittingButtonText"
-          defaultMessage="Submitting the solution ..."
+          id="app.exercise.uploadReferenceSolution.creatingButtonText"
+          defaultMessage="Creating solution ..."
         />
       </Button>}
 
@@ -73,13 +75,13 @@ const UploadReferenceSolution = (
         disabled={!canSubmit}
         bsStyle={hasFailed ? 'danger' : canSubmit ? 'success' : 'default'}
         className="btn-flat"
-        onClick={submitReferenceSolution}
+        onClick={createReferenceSolution}
       >
         {hasFailed ? <WarningIcon /> : <SendIcon />}
         {' '}
         <FormattedMessage
-          id="app.exercise.uploadReferenceSolution.submitButton"
-          defaultMessage="Submit the solution"
+          id="app.exercise.uploadReferenceSolution.createButton"
+          defaultMessage="Create solution"
         />
       </Button>}
 
@@ -102,15 +104,15 @@ const UploadReferenceSolution = (
   </div>
 );
 
-UploadReferenceSolution.propTypes = {
+CreateReferenceSolution.propTypes = {
   exercise: PropTypes.object.isRequired,
   note: PropTypes.string,
+  runtime: PropTypes.string,
   reset: PropTypes.func.isRequired,
   canSubmit: PropTypes.bool.isRequired,
-  submitReferenceSolution: PropTypes.func.isRequired,
-  note: PropTypes.string,
+  createReferenceSolution: PropTypes.func.isRequired,
   hasFailed: PropTypes.bool,
   isSending: PropTypes.bool
 };
 
-export default UploadReferenceSolution;
+export default CreateReferenceSolution;

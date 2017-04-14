@@ -1,8 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import { List } from 'immutable';
 import { connect } from 'react-redux';
-import UploadReferenceSolution
-  from '../../components/Exercises/UploadReferenceSolution';
+import CreateReferenceSolution
+  from '../../components/Exercises/CreateReferenceSolution';
 
 import {
   createGetUploadedFiles,
@@ -17,19 +17,24 @@ import {
 } from '../../redux/selectors/referenceSolution';
 import {
   init as resetSubmit,
-  submitReferenceSolution
+  createReferenceSolution
 } from '../../redux/modules/referenceSolution';
 
-class UploadReferenceSolutionContainer extends Component {
+class CreateReferenceSolutionContainer extends Component {
   submit = () => {
     const {
       attachedFiles,
       onSubmit,
       note,
-      submitReferenceSolution
+      runtime,
+      createReferenceSolution
     } = this.props;
 
-    submitReferenceSolution(note, attachedFiles.map(item => item.file));
+    createReferenceSolution(
+      note,
+      attachedFiles.map(item => item.file),
+      runtime
+    );
     !!onSubmit && onSubmit();
   };
 
@@ -38,6 +43,7 @@ class UploadReferenceSolutionContainer extends Component {
       userId,
       exercise,
       note,
+      runtime,
       canSubmit,
       hasFailed,
       isProcessing,
@@ -47,7 +53,7 @@ class UploadReferenceSolutionContainer extends Component {
 
     return (
       <div>
-        <UploadReferenceSolution
+        <CreateReferenceSolution
           userId={userId}
           exercise={exercise}
           canSubmit={canSubmit}
@@ -55,23 +61,25 @@ class UploadReferenceSolutionContainer extends Component {
           hasFailed={hasFailed}
           reset={reset}
           note={note}
-          submitReferenceSolution={this.submit}
+          runtime={runtime}
+          createReferenceSolution={this.submit}
         />
       </div>
     );
   };
 }
 
-UploadReferenceSolutionContainer.propTypes = {
+CreateReferenceSolutionContainer.propTypes = {
   userId: PropTypes.string.isRequired,
   exercise: PropTypes.object.isRequired,
   note: PropTypes.string,
+  runtime: PropTypes.string,
   canSubmit: PropTypes.bool,
   hasFailed: PropTypes.bool,
   isProcessing: PropTypes.bool,
   isSending: PropTypes.bool,
   onSubmit: PropTypes.func,
-  submitReferenceSolution: PropTypes.func.isRequired,
+  createReferenceSolution: PropTypes.func.isRequired,
   attachedFiles: PropTypes.array.isRequired,
   reset: PropTypes.func.isRequired
 };
@@ -83,6 +91,8 @@ export default connect(
     return {
       userId,
       exercise: exercise,
+      note: '',
+      runtime: '',
       attachedFiles: (getUploadedFiles(state) || List()).toJS(),
       isProcessing: isProcessing(state),
       isSending: isSending(state),
@@ -91,10 +101,12 @@ export default connect(
     };
   },
   (dispatch, { userId, exercise }) => ({
-    submitReferenceSolution: (note, files) =>
-      dispatch(submitReferenceSolution(userId, exercise.id, note, files)),
+    createReferenceSolution: (note, files, runtime) =>
+      dispatch(
+        createReferenceSolution(userId, exercise.id, note, files, runtime)
+      ),
     reset: () =>
       dispatch(resetUpload(exercise.id)) &&
       dispatch(resetSubmit(userId, exercise.id))
   })
-)(UploadReferenceSolutionContainer);
+)(CreateReferenceSolutionContainer);

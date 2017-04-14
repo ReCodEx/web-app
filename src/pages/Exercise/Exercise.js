@@ -18,8 +18,8 @@ import ResourceRenderer from '../../components/ResourceRenderer';
 import GroupsList from '../../components/Groups/GroupsList';
 import ReferenceSolutionsList
   from '../../components/Exercises/ReferenceSolutionsList';
-import UploadReferenceSolutionContainer
-  from '../../containers/UploadReferenceSolutionContainer';
+import CreateReferenceSolutionContainer
+  from '../../containers/CreateReferenceSolutionContainer';
 import Box from '../../components/AdminLTE/Box';
 import { EditIcon, SendIcon } from '../../components/Icons';
 
@@ -51,9 +51,9 @@ const messages = defineMessages({
     id: 'app.exercise.referenceSolutionsBox',
     defaultMessage: 'Reference solutions'
   },
-  uploadReferenceSolutionBox: {
+  createReferenceSolutionBox: {
     id: 'app.exercise.uploadReferenceSolutionBox',
-    defaultMessage: 'Upload reference solution'
+    defaultMessage: 'Create reference solution'
   }
 });
 
@@ -260,11 +260,11 @@ class Exercise extends Component {
               </Col>
               <Col md={6}>
                 <Box
-                  title={formatMessage(messages.uploadReferenceSolutionBox)}
+                  title={formatMessage(messages.createReferenceSolutionBox)}
                   collapsable={true}
                   isOpen={false}
                 >
-                  <UploadReferenceSolutionContainer
+                  <CreateReferenceSolutionContainer
                     userId={userId}
                     exercise={exercise}
                   />
