@@ -9,6 +9,7 @@ import PageContent from '../../components/PageContent';
 import RegistrationForm from '../../components/Forms/RegistrationForm';
 import ExternalRegistrationForm
   from '../../components/Forms/ExternalRegistrationForm';
+import RegistrationCASOauth from '../../components/Forms/RegistrationCASOauth';
 
 import {
   createAccount,
@@ -75,13 +76,19 @@ class Register extends Component {
         ]}
       >
         <Row>
-          <Col lg={4} lgOffset={1} md={6} mdOffset={0} sm={8} smOffset={2}>
+          <Col lg={4} md={6} mdOffset={0} sm={8} smOffset={2}>
             <RegistrationForm instances={instances} onSubmit={createAccount} />
           </Col>
-          <Col lg={4} lgOffset={1} md={6} mdOffset={0} sm={8} smOffset={2}>
+          <Col lg={4} md={6} mdOffset={0} sm={8} smOffset={2}>
             <ExternalRegistrationForm
               instances={instances}
-              onSubmit={createExternalAccount}
+              onSubmit={createExternalAccount()}
+            />
+          </Col>
+          <Col lg={4} md={6} mdOffset={0} sm={8} smOffset={2}>
+            <RegistrationCASOauth
+              instances={instances}
+              onSubmit={createExternalAccount('oauth')}
             />
           </Col>
         </Row>
@@ -114,10 +121,11 @@ export default withLinks(
         dispatch(
           createAccount(firstName, lastName, email, password, instanceId)
         ),
-      createExternalAccount: ({ username, password, instanceId, serviceId }) =>
-        dispatch(
-          createExternalAccount(username, password, instanceId, serviceId)
-        ),
+      createExternalAccount: (authType = 'default') =>
+        ({ instanceId, serviceId, ...credentials }) =>
+          dispatch(
+            createExternalAccount(instanceId, serviceId, credentials, authType)
+          ),
       push: url => dispatch(push(url)),
       triggerAsyncValidation: () =>
         dispatch(startAsyncValidation('registration')),
