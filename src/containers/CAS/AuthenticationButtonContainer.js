@@ -28,7 +28,7 @@ class AuthenticationButtonContainer extends Component {
   };
 
   pollTicket = () => {
-    const { onTicketObtained } = this.props;
+    const { onTicketObtained, links } = this.props;
     if (this.casWindow === null || this.casWindow.closed === true) {
       // the user has closed the window manually or the window was closed
       // programatically, but the interval was cleared too late
@@ -39,7 +39,8 @@ class AuthenticationButtonContainer extends Component {
         if (ticket !== null) {
           // cancel the window and the interval
           this.dispose();
-          onTicketObtained(ticket);
+          const clientUrl = absolute(links.HOME_URI);
+          onTicketObtained(ticket, clientUrl);
         }
       } catch (e) {
         // silent error - not redirected yet

@@ -50,9 +50,9 @@ export default connect(
   dispatch => ({
     fail: () =>
       dispatch(externalLoginFailed(loginServices.external.CAS_UK_TICKET)),
-    login: ticket => {
+    login: (ticket, clientUrl) => {
       const login = externalLogin(loginServices.external.CAS_UK_TICKET);
-      return dispatch(login({ ticket }));
+      return dispatch(login({ ticket, clientUrl }));
     }
   })
 )(LoginBox);
