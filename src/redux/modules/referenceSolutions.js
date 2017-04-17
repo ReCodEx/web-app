@@ -21,13 +21,12 @@ export const additionalActionTypes = {
 export const fetchReferenceSolutions = actions.fetchResource;
 export const fetchReferenceSolutionsIfNeeded = actions.fetchOneIfNeeded; // fetch solutions for one exercise
 
-export const evaluateReferenceSolution = (exerciseId, solutionId, hwGroup) =>
+export const evaluateReferenceSolution = solutionId =>
   createApiAction({
     type: 'SUBMIT_REFERENCE_SOLUTION',
-    endpoint: `/reference-solutions/exercise/${exerciseId}/evaluate/${solutionId}`,
+    endpoint: `/reference-solutions/${solutionId}/evaluate`,
     method: 'POST',
-    meta: { exerciseId, solutionId },
-    body: { hwGroup }
+    meta: { solutionId }
   });
 
 export const downloadEvaluationArchive = evaluationId => (dispatch, getState) =>

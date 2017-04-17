@@ -13,7 +13,9 @@ import Box from '../../components/AdminLTE/Box';
 import ResourceRenderer from '../../components/ResourceRenderer';
 
 import {
-  fetchReferenceSolutionsIfNeeded
+  fetchReferenceSolutionsIfNeeded,
+  downloadEvaluationArchive,
+  evaluateReferenceSolution
 } from '../../redux/modules/referenceSolutions';
 import {
   referenceSolutionsSelector
@@ -26,11 +28,8 @@ import SourceCodeInfoBox from '../../components/SourceCodeInfoBox';
 import SourceCodeViewerContainer
   from '../../containers/SourceCodeViewerContainer';
 import { fetchLimits } from '../../redux/modules/limits';
-import {
-  downloadEvaluationArchive
-} from '../../redux/modules/referenceSolutions';
 import { getEnvironmentsLimits } from '../../redux/selectors/limits';
-import { DownloadIcon } from '../../components/Icons';
+import { DownloadIcon, RefreshIcon, SendIcon } from '../../components/Icons';
 
 const messages = defineMessages({
   title: {
@@ -69,6 +68,8 @@ class ReferenceSolution extends Component {
       environments,
       params: { exerciseId, referenceSolutionId },
       downloadEvaluationArchive,
+      fetchEvaluations,
+      evaluateReferenceSolution,
       intl: { formatMessage }
     } = this.props;
     const { openFileId } = this.state;
@@ -137,6 +138,37 @@ class ReferenceSolution extends Component {
                   </Row>
                 </Col>
                 <Col lg={6}>
+                  <Row>
+                    <Col xs={12}>
+                      <p>
+                        <Button
+                          bsStyle="default"
+                          className="btn-flat"
+                          onClick={fetchEvaluations}
+                        >
+                          <RefreshIcon />
+                          {' '}
+                          <FormattedMessage
+                            id="app.referenceSolutionDetail.refreshEvaluations"
+                            defaultMessage="Refresh"
+                          />
+                        </Button>
+                        {' '}
+                        <Button
+                          bsStyle="success"
+                          className="btn-flat"
+                          onClick={evaluateReferenceSolution}
+                        >
+                          <SendIcon />
+                          {' '}
+                          <FormattedMessage
+                            id="app.referenceSolutionDetail.resubmit"
+                            defaultMessage="Resubmit"
+                          />
+                        </Button>
+                      </p>
+                    </Col>
+                  </Row>
                   <ResourceRenderer resource={environments}>
                     {environments => (
                       <div>
@@ -207,7 +239,10 @@ export default injectIntl(
     (dispatch, { params }) => ({
       loadAsync: () => ReferenceSolution.loadAsync(params, dispatch),
       downloadEvaluationArchive: evaluationId =>
-        dispatch(downloadEvaluationArchive(evaluationId))
+        dispatch(downloadEvaluationArchive(evaluationId)),
+      fetchEvaluations: () => dispatch(fetchLimits(params.exerciseId)),
+      evaluateReferenceSolution: () =>
+        dispatch(evaluateReferenceSolution(params.referenceSolutionId))
     })
   )(ReferenceSolution)
 );

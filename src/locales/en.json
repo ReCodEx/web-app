@@ -491,6 +491,8 @@
   "app.randomMessages.m9": "Draw hippopotamus",
   "app.referenceSolution.author": "Author:",
   "app.referenceSolutionDetail.description": "Description",
+  "app.referenceSolutionDetail.refreshEvaluations": "Refresh",
+  "app.referenceSolutionDetail.resubmit": "Resubmit",
   "app.referenceSolutionDetail.title.details": "Reference solution detail",
   "app.referenceSolutionDetail.uploadedAt": "Uploaded at:",
   "app.referenceSolutionEvaluation.downloadResults": "Download results",

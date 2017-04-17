@@ -491,6 +491,8 @@
   "app.randomMessages.m9": "Nakreslit hrocha",
   "app.referenceSolution.author": "Autor:",
   "app.referenceSolutionDetail.description": "Popis",
+  "app.referenceSolutionDetail.refreshEvaluations": "Obnovit",
+  "app.referenceSolutionDetail.resubmit": "Znovu vyhodnotit",
   "app.referenceSolutionDetail.title.details": "Detail referenčního řešení",
   "app.referenceSolutionDetail.uploadedAt": "Nahráno:",
   "app.referenceSolutionEvaluation.downloadResults": "Stáhnout výsledky",
