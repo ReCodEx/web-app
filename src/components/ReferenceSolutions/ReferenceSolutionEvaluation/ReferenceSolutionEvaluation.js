@@ -26,6 +26,7 @@ class ReferenceSolutionEvaluation extends Component {
       environment,
       evaluations,
       referenceSolutionId,
+      renderButtons,
       intl: { formatMessage }
     } = this.props;
 
@@ -51,6 +52,7 @@ class ReferenceSolutionEvaluation extends Component {
               <EvaluationTable
                 evaluations={evaluations[hwGroup]}
                 referenceSolutionId={referenceSolutionId}
+                renderButtons={renderButtons}
               />
             </Tab>
           ))}
@@ -63,7 +65,8 @@ class ReferenceSolutionEvaluation extends Component {
 ReferenceSolutionEvaluation.propTypes = {
   environment: PropTypes.object.isRequired,
   evaluations: PropTypes.object,
-  referenceSolutionId: PropTypes.string.isRequired
+  referenceSolutionId: PropTypes.string.isRequired,
+  renderButtons: PropTypes.func
 };
 
 ReferenceSolutionEvaluation.contextTypes = {

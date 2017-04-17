@@ -13,12 +13,11 @@ import BonusPoints from '../../Assignments/SubmissionsTable/BonusPoints';
 import AssignmentStatusIcon
   from '../../Assignments/Assignment/AssignmentStatusIcon';
 
-const EvaluationTable = (
-  {
-    evaluations,
-    referenceSolutionId
-  }
-) => (
+const EvaluationTable = ({
+  evaluations,
+  referenceSolutionId,
+  renderButtons = () => null
+}) => (
   <Table>
     <thead>
       <tr>
@@ -29,6 +28,7 @@ const EvaluationTable = (
             defaultMessage="Evaluated at:"
           />
         </th>
+        <th />
       </tr>
     </thead>
     <tbody>
@@ -50,6 +50,9 @@ const EvaluationTable = (
               &nbsp;
               <FormattedTime value={evaluation.evaluation.evaluatedAt * 1000} />
             </td>
+            <td className="text-right">
+              {renderButtons(evaluation.id)}
+            </td>
           </tr>
         ))}
     </tbody>
@@ -58,7 +61,8 @@ const EvaluationTable = (
 
 EvaluationTable.propTypes = {
   evaluations: PropTypes.array.isRequired,
-  referenceSolutionId: PropTypes.string.isRequired
+  referenceSolutionId: PropTypes.string.isRequired,
+  renderButtons: PropTypes.func
 };
 
 export default EvaluationTable;

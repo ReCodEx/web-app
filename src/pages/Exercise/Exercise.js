@@ -88,7 +88,8 @@ class Exercise extends Component {
     const { links: { ASSIGNMENT_EDIT_URI_FACTORY } } = this.context;
 
     assignExercise(groupId).then(({ value: assigment }) =>
-      push(ASSIGNMENT_EDIT_URI_FACTORY(assigment.id)));
+      push(ASSIGNMENT_EDIT_URI_FACTORY(assigment.id))
+    );
   };
 
   render() {
@@ -102,9 +103,7 @@ class Exercise extends Component {
       push
     } = this.props;
 
-    const {
-      forkId
-    } = this.state;
+    const { forkId } = this.state;
 
     const {
       links: {
@@ -233,7 +232,7 @@ class Exercise extends Component {
                     >
                       <ReferenceSolutionsList
                         referenceSolutions={referenceSolutions}
-                        renderButtons={referenceSolutionId => (
+                        renderButtons={evaluationId => (
                           <Button
                             bsSize="xs"
                             className="btn-flat"
@@ -241,7 +240,7 @@ class Exercise extends Component {
                               push(
                                 EXERCISE_REFERENCE_SOLUTION_URI_FACTORY(
                                   exercise.id,
-                                  referenceSolutionId
+                                  evaluationId
                                 )
                               )}
                           >

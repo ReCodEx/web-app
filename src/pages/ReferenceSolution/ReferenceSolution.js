@@ -26,7 +26,11 @@ import SourceCodeInfoBox from '../../components/SourceCodeInfoBox';
 import SourceCodeViewerContainer
   from '../../containers/SourceCodeViewerContainer';
 import { fetchLimits } from '../../redux/modules/limits';
+import {
+  downloadEvaluationArchive
+} from '../../redux/modules/referenceSolutions';
 import { getEnvironmentsLimits } from '../../redux/selectors/limits';
+import { DownloadIcon } from '../../components/Icons';
 
 const messages = defineMessages({
   title: {
@@ -64,13 +68,12 @@ class ReferenceSolution extends Component {
       referenceSolutions,
       environments,
       params: { exerciseId, referenceSolutionId },
+      downloadEvaluationArchive,
       intl: { formatMessage }
     } = this.props;
     const { openFileId } = this.state;
 
-    const {
-      links: { EXERCISES_URI, EXERCISE_URI_FACTORY }
-    } = this.context;
+    const { links: { EXERCISES_URI, EXERCISE_URI_FACTORY } } = this.context;
 
     return (
       <Page
@@ -143,6 +146,21 @@ class ReferenceSolution extends Component {
                             referenceSolutionId={referenceSolutionId}
                             environment={env.environment}
                             evaluations={env.referenceSolutionsEvaluations}
+                            renderButtons={evaluationId => (
+                              <Button
+                                bsSize="xs"
+                                className="btn-flat"
+                                onClick={() =>
+                                  downloadEvaluationArchive(evaluationId)}
+                              >
+                                <DownloadIcon />
+                                {' '}
+                                <FormattedMessage
+                                  id="app.referenceSolutionEvaluation.downloadResults"
+                                  defaultMessage="Download results"
+                                />
+                              </Button>
+                            )}
                           />
                         ))}
                       </div>
@@ -176,7 +194,8 @@ ReferenceSolution.propTypes = {
     referenceSolutionId: PropTypes.string.isRequired
   }).isRequired,
   referenceSolutions: ImmutablePropTypes.map,
-  environments: ImmutablePropTypes.map
+  environments: ImmutablePropTypes.map,
+  downloadEvaluationArchive: PropTypes.func.isRequired
 };
 
 export default injectIntl(
@@ -186,7 +205,9 @@ export default injectIntl(
       environments: getEnvironmentsLimits(exerciseId)(state)
     }),
     (dispatch, { params }) => ({
-      loadAsync: () => ReferenceSolution.loadAsync(params, dispatch)
+      loadAsync: () => ReferenceSolution.loadAsync(params, dispatch),
+      downloadEvaluationArchive: evaluationId =>
+        dispatch(downloadEvaluationArchive(evaluationId))
     })
   )(ReferenceSolution)
 );
