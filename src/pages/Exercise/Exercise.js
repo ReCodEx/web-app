@@ -88,8 +88,7 @@ class Exercise extends Component {
     const { links: { ASSIGNMENT_EDIT_URI_FACTORY } } = this.context;
 
     assignExercise(groupId).then(({ value: assigment }) =>
-      push(ASSIGNMENT_EDIT_URI_FACTORY(assigment.id))
-    );
+      push(ASSIGNMENT_EDIT_URI_FACTORY(assigment.id)));
   };
 
   render() {

@@ -42,8 +42,6 @@ class CreateReferenceSolutionContainer extends Component {
     const {
       userId,
       exercise,
-      note,
-      runtime,
       canSubmit,
       hasFailed,
       isProcessing,
@@ -60,8 +58,6 @@ class CreateReferenceSolutionContainer extends Component {
           isSending={isSending}
           hasFailed={hasFailed}
           reset={reset}
-          note={note}
-          runtime={runtime}
           createReferenceSolution={this.submit}
         />
       </div>
@@ -72,8 +68,6 @@ class CreateReferenceSolutionContainer extends Component {
 CreateReferenceSolutionContainer.propTypes = {
   userId: PropTypes.string.isRequired,
   exercise: PropTypes.object.isRequired,
-  note: PropTypes.string,
-  runtime: PropTypes.string,
   canSubmit: PropTypes.bool,
   hasFailed: PropTypes.bool,
   isProcessing: PropTypes.bool,
@@ -91,8 +85,6 @@ export default connect(
     return {
       userId,
       exercise: exercise,
-      note: '',
-      runtime: '',
       attachedFiles: (getUploadedFiles(state) || List()).toJS(),
       isProcessing: isProcessing(state),
       isSending: isSending(state),
