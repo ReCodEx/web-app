@@ -8,8 +8,15 @@ import { LinkContainer } from 'react-router-bootstrap';
 
 import { fetchAssignmentIfNeeded } from '../../redux/modules/assignments';
 import { canSubmit } from '../../redux/modules/canSubmit';
-import { init } from '../../redux/modules/submission';
-import { getAssignment } from '../../redux/selectors/assignments';
+import {
+  init,
+  submitAssignmentSolution as submitSolution
+} from '../../redux/modules/submission';
+
+import {
+  getAssignment,
+  runtimeEnvironmentsSelector
+} from '../../redux/selectors/assignments';
 import { canSubmitSolution } from '../../redux/selectors/canSubmit';
 import { isSubmitting } from '../../redux/selectors/submission';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
@@ -69,6 +76,7 @@ class Assignment extends Component {
       isStudentOf,
       isSupervisorOf,
       canSubmit,
+      runtimeEnvironmentIds,
       links: { ASSIGNMENT_EDIT_URI_FACTORY, SUPERVISOR_STATS_URI_FACTORY }
     } = this.props;
 
@@ -191,8 +199,11 @@ class Assignment extends Component {
                       </p>
                       <SubmitSolutionContainer
                         userId={userId}
-                        assignmentId={assignment.id}
+                        id={assignment.id}
+                        onSubmit={submitSolution}
+                        onReset={init}
                         isOpen={submitting}
+                        runtimeEnvironmentIds={runtimeEnvironmentIds}
                       />
 
                       <SubmissionsTableContainer
@@ -224,17 +235,20 @@ Assignment.propTypes = {
   submitting: PropTypes.bool.isRequired,
   init: PropTypes.func.isRequired,
   loadAsync: PropTypes.func.isRequired,
-  links: PropTypes.object.isRequired
+  links: PropTypes.object.isRequired,
+  runtimeEnvironmentIds: PropTypes.array
 };
 
 export default withLinks(
   connect(
     (state, { params: { assignmentId, userId } }) => {
       const assignmentSelector = getAssignment(assignmentId);
+      const environments = runtimeEnvironmentsSelector(assignmentId);
       userId = userId || loggedInUserIdSelector(state);
       return {
         assignment: assignmentSelector(state),
         submitting: isSubmitting(state),
+        runtimeEnvironmentIds: environments(state).toJS(),
         userId,
         loggeInUserId: loggedInUserIdSelector(state),
         isSuperAdmin: isSuperAdmin(userId)(state),

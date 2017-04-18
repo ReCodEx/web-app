@@ -17,14 +17,9 @@ import {
   createGetUploadedFiles,
   createAllUploaded
 } from '../../redux/selectors/upload';
-import { runtimeEnvironmentsSelector } from '../../redux/selectors/assignments';
+
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
-import {
-  init as resetSubmission,
-  cancel,
-  changeNote,
-  submitSolution
-} from '../../redux/modules/submission';
+import { cancel, changeNote } from '../../redux/modules/submission';
 import { reset as resetUpload } from '../../redux/modules/upload';
 
 import withLinks from '../../hoc/withLinks';
@@ -37,7 +32,6 @@ class SubmitSolutionContainer extends Component {
   submit = () => {
     const {
       attachedFiles,
-      onSubmit,
       note,
       submitSolution
     } = this.props;
@@ -49,7 +43,6 @@ class SubmitSolutionContainer extends Component {
       attachedFiles.map(item => item.file),
       runtimeEnvironment
     );
-    !!onSubmit && onSubmit();
   };
 
   changeRuntimeEnvironment = runtimeEnvironment => {
@@ -62,7 +55,7 @@ class SubmitSolutionContainer extends Component {
       userId,
       note,
       cancel,
-      assignmentId,
+      id,
       runtimeEnvironmentIds,
       changeNote,
       canSubmit,
@@ -83,19 +76,20 @@ class SubmitSolutionContainer extends Component {
           canSubmit={canSubmit}
           isSending={isSending}
           hasFailed={hasFailed}
-          uploadId={assignmentId}
+          uploadId={id}
           reset={reset}
           note={note}
           saveNote={changeNote}
           onClose={cancel}
           runtimeEnvironmentIds={runtimeEnvironmentIds}
+          changeRuntimeEnvironment={this.changeRuntimeEnvironment}
           submitSolution={this.submit}
         />
 
         <EvaluationProgressContainer
           isOpen={isProcessing}
           monitor={monitor}
-          link={SUBMISSION_DETAIL_URI_FACTORY(assignmentId, submissionId)}
+          link={SUBMISSION_DETAIL_URI_FACTORY(id, submissionId)}
         />
       </div>
     );
@@ -103,11 +97,13 @@ class SubmitSolutionContainer extends Component {
 }
 
 SubmitSolutionContainer.propTypes = {
+  id: PropTypes.string.isRequired,
+  onSubmit: PropTypes.func,
+  onReset: PropTypes.func,
   userId: PropTypes.string.isRequired,
   isOpen: PropTypes.bool,
   cancel: PropTypes.func.isRequired,
   note: PropTypes.string,
-  assignmentId: PropTypes.string.isRequired,
   changeNote: PropTypes.func.isRequired,
   canSubmit: PropTypes.bool,
   hasFailed: PropTypes.bool,
@@ -115,7 +111,6 @@ SubmitSolutionContainer.propTypes = {
   isSending: PropTypes.bool,
   submissionId: PropTypes.string,
   monitor: PropTypes.object,
-  onSubmit: PropTypes.func,
   submitSolution: PropTypes.func.isRequired,
   attachedFiles: PropTypes.array,
   reset: PropTypes.func.isRequired,
@@ -125,13 +120,11 @@ SubmitSolutionContainer.propTypes = {
 
 export default withLinks(
   connect(
-    (state, { assignmentId, userId }) => {
-      const getUploadedFiles = createGetUploadedFiles(assignmentId);
-      const allUploaded = createAllUploaded(assignmentId);
-      const environments = runtimeEnvironmentsSelector(assignmentId);
+    (state, { id, userId }) => {
+      const getUploadedFiles = createGetUploadedFiles(id);
+      const allUploaded = createAllUploaded(id);
       return {
         userId: userId || loggedInUserIdSelector(state),
-        runtimeEnvironmentIds: environments(state).toJS(),
         note: getNote(state),
         attachedFiles: (getUploadedFiles(state) || List()).toJS(),
         isProcessing: isProcessing(state),
@@ -142,22 +135,12 @@ export default withLinks(
         monitor: getMonitorParams(state)
       };
     },
-    (dispatch, { userId, assignmentId }) => ({
+    (dispatch, { id, userId, onSubmit, onReset }) => ({
       changeNote: note => dispatch(changeNote(note)),
       cancel: () => dispatch(cancel()),
       submitSolution: (note, files, runtimeEnvironmentId = null) =>
-        dispatch(
-          submitSolution(
-            userId,
-            assignmentId,
-            note,
-            files,
-            runtimeEnvironmentId
-          )
-        ),
-      reset: () =>
-        dispatch(resetUpload(assignmentId)) &&
-        dispatch(resetSubmission(userId, assignmentId))
+        dispatch(onSubmit(userId, id, note, files, runtimeEnvironmentId)),
+      reset: () => dispatch(resetUpload(id)) && dispatch(onReset(userId, id))
     })
   )(SubmitSolutionContainer)
 );

@@ -8,8 +8,9 @@ import {
   intlShape,
   injectIntl
 } from 'react-intl';
-import { Row, Col, Button } from 'react-bootstrap';
+import { Row, Col } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
+import Button from '../../components/AdminLTE/FlatButton';
 
 import Page from '../../components/Page';
 import ExerciseDetail from '../../components/Exercises/ExerciseDetail';
@@ -18,18 +19,19 @@ import ResourceRenderer from '../../components/ResourceRenderer';
 import GroupsList from '../../components/Groups/GroupsList';
 import ReferenceSolutionsList
   from '../../components/Exercises/ReferenceSolutionsList';
-import CreateReferenceSolutionContainer
-  from '../../containers/CreateReferenceSolutionContainer';
+import SubmitSolutionContainer from '../../containers/SubmitSolutionContainer';
 import Box from '../../components/AdminLTE/Box';
 import { EditIcon, SendIcon } from '../../components/Icons';
 
 import ForkExerciseButtonContainer
   from '../../containers/ForkExerciseButtonContainer';
 
+import { isSubmitting } from '../../redux/selectors/submission';
 import { fetchExerciseIfNeeded } from '../../redux/modules/exercises';
 import {
   fetchReferenceSolutionsIfNeeded
 } from '../../redux/modules/referenceSolutions';
+import { createReferenceSolution, init } from '../../redux/modules/submission';
 import { fetchHardwareGroups } from '../../redux/modules/hwGroups';
 import { create as assignExercise } from '../../redux/modules/assignments';
 import { exerciseSelector } from '../../redux/selectors/exercises';
@@ -94,10 +96,12 @@ class Exercise extends Component {
     const {
       userId,
       exercise,
+      submitting,
       supervisedGroups,
       isAuthorOfExercise,
       referenceSolutions,
       intl: { formatMessage },
+      initCreateReferenceSolution,
       push
     } = this.props;
 
@@ -150,11 +154,7 @@ class Exercise extends Component {
                 {isAuthorOfExercise(exercise.id) &&
                   <p>
                     <LinkContainer to={EXERCISE_EDIT_URI_FACTORY(exercise.id)}>
-                      <Button
-                        bsStyle="warning"
-                        className="btn-flat"
-                        bsSize="sm"
-                      >
+                      <Button bsStyle="warning" bsSize="sm">
                         <EditIcon />
                         &nbsp;
                         <FormattedMessage
@@ -205,7 +205,6 @@ class Exercise extends Component {
                         renderButtons={groupId => (
                           <Button
                             bsSize="xs"
-                            className="btn-flat"
                             onClick={() => this.createExercise(groupId)}
                           >
                             <SendIcon />
@@ -222,50 +221,66 @@ class Exercise extends Component {
                 </Box>
               </Col>
               <Col md={6}>
-                <ResourceRenderer resource={referenceSolutions}>
-                  {referenceSolutions => (
-                    <Box
-                      title={formatMessage(messages.referenceSolutionsBox)}
-                      noPadding
-                    >
-                      <ReferenceSolutionsList
-                        referenceSolutions={referenceSolutions}
-                        renderButtons={evaluationId => (
-                          <Button
-                            bsSize="xs"
-                            className="btn-flat"
-                            onClick={() =>
-                              push(
-                                EXERCISE_REFERENCE_SOLUTION_URI_FACTORY(
-                                  exercise.id,
-                                  evaluationId
-                                )
-                              )}
-                          >
-                            <SendIcon />
-                            {' '}
-                            <FormattedMessage
-                              id="app.exercise.referenceSolutionDetail"
-                              defaultMessage="View detail"
-                            />
-                          </Button>
-                        )}
-                      />
-                    </Box>
-                  )}
-                </ResourceRenderer>
-              </Col>
-              <Col md={6}>
                 <Box
-                  title={formatMessage(messages.createReferenceSolutionBox)}
-                  collapsable={true}
-                  isOpen={false}
+                  title={formatMessage(messages.referenceSolutionsBox)}
+                  noPadding
+                  footer={
+                    <p className="text-center">
+                      <Button
+                        bsStyle="success"
+                        onClick={() => initCreateReferenceSolution(userId)}
+                      >
+                        <FormattedMessage
+                          id="app.exercise.createReferenceSoution"
+                          defaultMessage="Create reference solution"
+                        />
+                      </Button>
+                    </p>
+                  }
                 >
-                  <CreateReferenceSolutionContainer
-                    userId={userId}
-                    exercise={exercise}
-                  />
+                  <ResourceRenderer resource={referenceSolutions}>
+                    {referenceSolutions =>
+                      referenceSolutions.length > 0
+                        ? <ReferenceSolutionsList
+                            referenceSolutions={referenceSolutions}
+                            renderButtons={evaluationId => (
+                              <Button
+                                bsSize="xs"
+                                onClick={() =>
+                                  push(
+                                    EXERCISE_REFERENCE_SOLUTION_URI_FACTORY(
+                                      exercise.id,
+                                      evaluationId
+                                    )
+                                  )}
+                              >
+                                <SendIcon />
+                                {' '}
+                                <FormattedMessage
+                                  id="app.exercise.referenceSolutionDetail"
+                                  defaultMessage="View detail"
+                                />
+                              </Button>
+                            )}
+                          />
+                        : <p className="text-center">
+                            <FormattedMessage
+                              id="app.exercise.noReferenceSolutions"
+                              defaultMessage="There are no reference solutions for this exercise yet."
+                            />
+                          </p>}
+                  </ResourceRenderer>
                 </Box>
+                <SubmitSolutionContainer
+                  userId={userId}
+                  id={exercise.id}
+                  onSubmit={createReferenceSolution}
+                  onReset={init}
+                  isOpen={submitting}
+                  runtimeEnvironmentIds={exercise.runtimeConfigs.map(
+                    cfg => cfg.runtimeEnvironmentId
+                  )}
+                />
               </Col>
             </Row>
           </div>
@@ -291,16 +306,20 @@ Exercise.propTypes = {
   supervisedGroups: PropTypes.object,
   isAuthorOfExercise: PropTypes.func.isRequired,
   referenceSolutions: ImmutablePropTypes.map,
-  intl: intlShape.isRequired
+  intl: intlShape.isRequired,
+  submitting: PropTypes.bool,
+  initCreateReferenceSolution: PropTypes.func.isRequired
 };
 
 export default injectIntl(
   connect(
     (state, { params: { exerciseId } }) => {
       const userId = loggedInUserIdSelector(state);
+
       return {
         userId,
         exercise: exerciseSelector(exerciseId)(state),
+        submitting: isSubmitting(state),
         supervisedGroups: supervisorOfSelector(userId)(state),
         isAuthorOfExercise: exerciseId =>
           canEditExercise(userId, exerciseId)(state),
@@ -310,7 +329,8 @@ export default injectIntl(
     (dispatch, { params: { exerciseId } }) => ({
       loadAsync: () => Exercise.loadAsync({ exerciseId }, dispatch),
       assignExercise: groupId => dispatch(assignExercise(groupId, exerciseId)),
-      push: url => dispatch(push(url))
+      push: url => dispatch(push(url)),
+      initCreateReferenceSolution: userId => dispatch(init(userId, exerciseId))
     })
   )(Exercise)
 );

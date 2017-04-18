@@ -26,7 +26,7 @@ export const actionTypes = {
 export const initialState = fromJS({
   submissionId: null,
   userId: null,
-  assignmentId: null,
+  id: null,
   submittedOn: null,
   note: '',
   monitor: null,
@@ -38,21 +38,35 @@ export const initialState = fromJS({
  * Actions
  */
 
-export const init = createAction(
-  actionTypes.INIT,
-  (userId, assignmentId) => ({ userId, assignmentId })
-);
+export const init = createAction(actionTypes.INIT, (userId, id) => ({
+  userId,
+  id
+}));
 export const cancel = createAction(actionTypes.CANCEL);
 
 export const changeNote = createAction(actionTypes.CHANGE_NOTE);
 
-export const submitSolution = (userId, assignmentId, note, files, runtimeEnvironmentId = null) =>
-  createApiAction({
-    type: actionTypes.SUBMIT,
-    method: 'POST',
-    endpoint: `/exercise-assignments/${assignmentId}/submit`,
-    body: { userId, files: files.map(file => file.id), note, runtimeEnvironmentId }
-  });
+const submit = endpoint =>
+  (userId, id, note, files, runtimeEnvironmentId = null) =>
+    createApiAction({
+      type: actionTypes.SUBMIT,
+      method: 'POST',
+      endpoint: endpoint(id),
+      body: {
+        userId,
+        files: files.map(file => file.id),
+        note,
+        runtimeEnvironmentId
+      }
+    });
+
+export const submitAssignmentSolution = submit(
+  id => `/exercise-assignments/${id}/submit`
+);
+
+export const createReferenceSolution = submit(
+  id => `/reference-solutions/exercise/${id}`
+);
 
 export const finishProcessing = createAction(actionTypes.PROCESSING_FINISHED);
 
@@ -60,53 +74,56 @@ export const finishProcessing = createAction(actionTypes.PROCESSING_FINISHED);
  * Reducer takes mainly care about all the state of individual attachments
  */
 
-const reducer = handleActions({
-  [actionTypes.INIT]: (state, { payload: { userId, assignmentId } }) =>
-    initialState
-      .set('userId', userId)
-      .set('assignmentId', assignmentId)
-      .set('status', submissionStatus.CREATING),
+const reducer = handleActions(
+  {
+    [actionTypes.INIT]: (state, { payload: { userId, id } }) =>
+      initialState
+        .set('userId', userId)
+        .set('id', id)
+        .set('status', submissionStatus.CREATING),
 
-  [actionTypes.CHANGE_NOTE]: (state, { payload }) =>
-    state.set('note', payload).set('status', submissionStatus.CREATING),
+    [actionTypes.CHANGE_NOTE]: (state, { payload }) =>
+      state.set('note', payload).set('status', submissionStatus.CREATING),
 
-  [actionTypes.SUBMIT_PENDING]: (state) =>
-    state.set('status', submissionStatus.SENDING),
+    [actionTypes.SUBMIT_PENDING]: state =>
+      state.set('status', submissionStatus.SENDING),
 
-  [actionTypes.SUBMIT_REJECTED]: (state) =>
-    state.set('status', submissionStatus.FAILED),
+    [actionTypes.SUBMIT_REJECTED]: state =>
+      state.set('status', submissionStatus.FAILED),
 
-  [actionTypes.SUBMIT_FULFILLED]: (state, { payload }) =>
-    state
-      .set('submissionId', payload.submission.id)
-      .set('monitor', {
-        url: payload.webSocketChannel.monitorUrl,
-        id: payload.webSocketChannel.id
-      })
-      .set('status', submissionStatus.PROCESSING),
+    [actionTypes.SUBMIT_FULFILLED]: (state, { payload }) =>
+      state
+        .set('submissionId', payload.submission.id)
+        .set('monitor', {
+          url: payload.webSocketChannel.monitorUrl,
+          id: payload.webSocketChannel.id
+        })
+        .set('status', submissionStatus.PROCESSING),
 
-  [actionTypes.CANCEL]: (state, { payload }) =>
-    initialState,
+    [actionTypes.CANCEL]: (state, { payload }) => initialState,
 
-  [actionTypes.PROCESSING_FINISHED]: (state, { payload }) =>
-    state.set('status', submissionStatus.FINISHED),
+    [actionTypes.PROCESSING_FINISHED]: (state, { payload }) =>
+      state.set('status', submissionStatus.FINISHED),
 
-  // wait until all the files are uploaded successfully:
-  [uploadActionTypes.UPLOAD_PENDING]: (state, { payload, meta: { fileName } }) =>
-    state.set('status', submissionStatus.CREATING),
+    // wait until all the files are uploaded successfully:
+    [uploadActionTypes.UPLOAD_PENDING]: (
+      state,
+      { payload, meta: { fileName } }
+    ) => state.set('status', submissionStatus.CREATING),
 
-  [uploadActionTypes.REMOVE_FILE]: (state, { payload }) =>
-    state.set('status', submissionStatus.CREATING),
+    [uploadActionTypes.REMOVE_FILE]: (state, { payload }) =>
+      state.set('status', submissionStatus.CREATING),
 
-  [uploadActionTypes.RETURN_FILE]: (state, { payload }) =>
-    state.set('status', submissionStatus.CREATING),
+    [uploadActionTypes.RETURN_FILE]: (state, { payload }) =>
+      state.set('status', submissionStatus.CREATING),
 
-  [uploadActionTypes.REMOVE_FAILED_FILE]: (state, { payload }) =>
-    state.set('status', submissionStatus.CREATING),
+    [uploadActionTypes.REMOVE_FAILED_FILE]: (state, { payload }) =>
+      state.set('status', submissionStatus.CREATING),
 
-  [uploadActionTypes.UPLOAD_FAILED]: (state, { meta: { fileName } }) =>
-    state.set('status', submissionStatus.FAILED)
-
-}, initialState);
+    [uploadActionTypes.UPLOAD_FAILED]: (state, { meta: { fileName } }) =>
+      state.set('status', submissionStatus.FAILED)
+  },
+  initialState
+);
 
 export default reducer;

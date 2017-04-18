@@ -8,7 +8,6 @@ import reducer, {
   submissionStatus,
   actionTypes,
   initialState,
-
   init,
   changeNote,
   finishProcessing
@@ -20,10 +19,10 @@ describe('Submission of user\'s solution', () => {
   describe('(Action creators)', () => {
     it('must initialize the submission', () => {
       const userId = 'abcdefg';
-      const assignmentId = 'yzsdalkj';
-      expect(init(userId, assignmentId)).to.eql({
+      const id = 'yzsdalkj';
+      expect(init(userId, id)).to.eql({
         type: actionTypes.INIT,
-        payload: { userId, assignmentId }
+        payload: { userId, id }
       });
     });
 
@@ -42,41 +41,45 @@ describe('Submission of user\'s solution', () => {
       expect(state).to.equal(initialState);
       expect(state).to.be.an('object');
       expect(state).to.be.an.instanceof(Map);
-      expect(state).to.equal(Map({
-        submissionId: null,
-        userId: null,
-        assignmentId: null,
-        submittedOn: null,
-        note: '',
-        monitor: null,
-        status: submissionStatus.NONE,
-        warningMsg: null
-      }));
+      expect(state).to.equal(
+        Map({
+          submissionId: null,
+          userId: null,
+          id: null,
+          submittedOn: null,
+          note: '',
+          monitor: null,
+          status: submissionStatus.NONE,
+          warningMsg: null
+        })
+      );
     });
 
     it('must initialize the state with user and assignment IDs', () => {
       const userId = 'asdad123';
-      const assignmentId = 'asdajhaskjh45655';
-      const state = reducer(initialState, init(userId, assignmentId));
-      expect(state).to.equal(Map({
-        submissionId: null,
-        userId,
-        assignmentId,
-        submittedOn: null,
-        note: '',
-        monitor: null,
-        status: submissionStatus.CREATING,
-        warningMsg: null
-      }));
+      const id = 'asdajhaskjh45655';
+      const state = reducer(initialState, init(userId, id));
+      expect(state).to.equal(
+        Map({
+          submissionId: null,
+          userId,
+          id,
+          submittedOn: null,
+          note: '',
+          monitor: null,
+          status: submissionStatus.CREATING,
+          warningMsg: null
+        })
+      );
     });
 
     it('must initialize the state with user and assignment IDs even when the state is not the initial state', () => {
       const userId = 'asdad123';
-      const assignmentId = 'asdajhaskjh45655';
+      const id = 'asdajhaskjh45655';
       const oldState = Map({
         submissionId: null,
         userId,
-        assignmentId,
+        id,
         submittedOn: null,
         note: '',
         monitor: null,
@@ -84,17 +87,19 @@ describe('Submission of user\'s solution', () => {
         warningMsg: 'This is not gonna end well!'
       });
 
-      const state = reducer(oldState, init(userId, assignmentId));
-      expect(state).to.equal(Map({
-        submissionId: null,
-        userId,
-        assignmentId,
-        submittedOn: null,
-        note: '',
-        monitor: null,
-        status: submissionStatus.CREATING,
-        warningMsg: null
-      }));
+      const state = reducer(oldState, init(userId, id));
+      expect(state).to.equal(
+        Map({
+          submissionId: null,
+          userId,
+          id,
+          submittedOn: null,
+          note: '',
+          monitor: null,
+          status: submissionStatus.CREATING,
+          warningMsg: null
+        })
+      );
     });
 
     it('must change the note of the state and the state to creating', () => {
@@ -103,7 +108,9 @@ describe('Submission of user\'s solution', () => {
       const state = reducer(initialState, action);
       expect(state.get('note')).to.equal(note);
       expect(state.get('status')).to.equal(submissionStatus.CREATING);
-      expect(state.set('note', '').set('status', submissionStatus.NONE)).to.equal(initialState);
+      expect(
+        state.set('note', '').set('status', submissionStatus.NONE)
+      ).to.equal(initialState);
     });
 
     describe('solution submission', () => {
@@ -120,7 +127,13 @@ describe('Submission of user\'s solution', () => {
         state = reducer(state, { type: actionTypes.SUBMIT_PENDING });
         expect(state.get('status')).to.equal(submissionStatus.SENDING);
 
-        state = reducer(state, { type: actionTypes.SUBMIT_FULFILLED, payload: { submission: { id: '123' }, webSocketChannel: { monitorUrl: 'ws://xyz.cz' } } });
+        state = reducer(state, {
+          type: actionTypes.SUBMIT_FULFILLED,
+          payload: {
+            submission: { id: '123' },
+            webSocketChannel: { monitorUrl: 'ws://xyz.cz' }
+          }
+        });
         expect(state.get('status')).to.equal(submissionStatus.PROCESSING);
         expect(state.get('submissionId')).to.equal('123');
 

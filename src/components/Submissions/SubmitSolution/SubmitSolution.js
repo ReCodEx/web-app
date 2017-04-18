@@ -1,5 +1,10 @@
 import React, { PropTypes } from 'react';
-import { FormattedMessage } from 'react-intl';
+import {
+  injectIntl,
+  intlShape,
+  defineMessages,
+  FormattedMessage
+} from 'react-intl';
 import {
   Modal,
   Button,
@@ -18,6 +23,13 @@ import {
 import UploadContainer from '../../../containers/UploadContainer';
 import UsersNameContainer from '../../../containers/UsersNameContainer';
 
+const messages = defineMessages({
+  detectRte: {
+    id: 'app.submitSolution.autodetect',
+    defaultMessage: 'Automatically detect'
+  }
+});
+
 const SubmitSolution = (
   {
     userId,
@@ -32,7 +44,8 @@ const SubmitSolution = (
     runtimeEnvironmentIds,
     changeRuntimeEnvironment,
     saveNote,
-    submitSolution
+    submitSolution,
+    intl: { formatMessage }
   }
 ) => (
   <Modal show={isOpen} backdrop="static" onHide={onClose}>
@@ -60,17 +73,14 @@ const SubmitSolution = (
           </ControlLabel>
           <FormControl
             onChange={e => changeRuntimeEnvironment(e.target.value)}
-            value={runtimeEnvironmentIds}
             componentClass="select"
+            defaultValue={null}
           >
-            <option value={null} selected>
-              <FormattedMessage
-                id="app.submitSolution.autodetect"
-                defaultMessage="Automatically detect"
-              />
+            <option value={null}>
+              {formatMessage(messages.detectRte)}
             </option>
             {runtimeEnvironmentIds.map(rte => (
-              <option value={rte}><code>{rte}</code></option>
+              <option key={rte} value={rte}>{rte}</option>
             ))}
           </FormControl>
         </FormGroup>}
@@ -79,14 +89,13 @@ const SubmitSolution = (
         <ControlLabel>
           <FormattedMessage
             id="app.submitSolution.noteLabel"
-            defaultMessage="Note for you and the supervisor(s)"
+            defaultMessage="Short description (optional):"
           />
         </ControlLabel>
         <FormControl
           onChange={e => saveNote(e.target.value)}
           value={note}
           type="text"
-          placeholder="Poznámka pro Vás a cvičícího"
         />
       </FormGroup>
 
@@ -149,7 +158,7 @@ const SubmitSolution = (
       </Button>
 
       {!canSubmit &&
-        <HelpBlock>
+        <HelpBlock className="text-left">
           <FormattedMessage
             id="app.submistSolution.instructions"
             defaultMessage="You must attach at least one file with source code and wait, until all your files are uploaded to the server. If there is a problem uploading any of the files, please try uploading it again or remove the file. This form cannot be submitted until there are any files which have not been successfully uploaded or which could not have been uploaded to the server."
@@ -173,7 +182,8 @@ SubmitSolution.propTypes = {
   isProcessing: PropTypes.bool,
   isSending: PropTypes.bool,
   runtimeEnvironmentIds: PropTypes.array,
-  changeRuntimeEnvironment: PropTypes.func.isRequired
+  changeRuntimeEnvironment: PropTypes.func.isRequired,
+  intl: intlShape.isRequired
 };
 
-export default SubmitSolution;
+export default injectIntl(SubmitSolution);
