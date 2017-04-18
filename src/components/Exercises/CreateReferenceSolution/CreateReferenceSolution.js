@@ -1,32 +1,11 @@
 import React, { PropTypes } from 'react';
-import { FormattedMessage, FormattedDate, FormattedTime } from 'react-intl';
-import { Table } from 'react-bootstrap';
-import ResourceRenderer from '../../ResourceRenderer';
-import FormBox from '../../AdminLTE/FormBox';
-import Icon from 'react-fontawesome';
+import { FormattedMessage } from 'react-intl';
 import { reduxForm, Field } from 'redux-form';
-import {
-  EmailField,
-  TextField,
-  PasswordField,
-  PasswordStrength,
-  SelectField
-} from '../../Forms/Fields';
+import { TextField, SelectField } from '../../Forms/Fields';
 import SubmitButton from '../../Forms/SubmitButton';
-import {
-  Button,
-  FormGroup,
-  ControlLabel,
-  FormControl,
-  HelpBlock
-} from 'react-bootstrap';
-import {
-  LoadingIcon,
-  WarningIcon,
-  SendIcon,
-  DeleteIcon,
-  CloseIcon
-} from '../../Icons';
+import { HelpBlock } from 'react-bootstrap';
+import { DeleteIcon } from '../../Icons';
+import Button from '../../AdminLTE/FlatButton';
 import UploadContainer from '../../../containers/UploadContainer';
 
 const CreateReferenceSolution = (

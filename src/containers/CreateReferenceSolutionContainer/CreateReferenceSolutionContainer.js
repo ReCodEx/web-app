@@ -44,7 +44,6 @@ class CreateReferenceSolutionContainer extends Component {
       exercise,
       canSubmit,
       hasFailed,
-      isProcessing,
       isSending,
       reset
     } = this.props;
@@ -70,6 +69,8 @@ CreateReferenceSolutionContainer.propTypes = {
   exercise: PropTypes.object.isRequired,
   canSubmit: PropTypes.bool,
   hasFailed: PropTypes.bool,
+  note: PropTypes.string,
+  runtime: PropTypes.string,
   isProcessing: PropTypes.bool,
   isSending: PropTypes.bool,
   onSubmit: PropTypes.func,

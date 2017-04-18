@@ -9,7 +9,6 @@ import {
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { Row, Col, Button } from 'react-bootstrap';
 import Page from '../../components/Page';
-import Box from '../../components/AdminLTE/Box';
 import ResourceRenderer from '../../components/ResourceRenderer';
 
 import {
@@ -215,9 +214,7 @@ class ReferenceSolution extends Component {
 }
 
 ReferenceSolution.contextTypes = {
-  router: PropTypes.object,
-  links: PropTypes.object,
-  intl: intlShape.isRequired
+  router: PropTypes.object
 };
 
 ReferenceSolution.propTypes = {
@@ -225,9 +222,14 @@ ReferenceSolution.propTypes = {
     exerciseId: PropTypes.string.isRequired,
     referenceSolutionId: PropTypes.string.isRequired
   }).isRequired,
+  loadAsync: PropTypes.func.isRequired,
+  fetchEvaluations: PropTypes.func.isRequired,
+  evaluateReferenceSolution: PropTypes.func.isRequired,
   referenceSolutions: ImmutablePropTypes.map,
   environments: ImmutablePropTypes.map,
-  downloadEvaluationArchive: PropTypes.func.isRequired
+  downloadEvaluationArchive: PropTypes.func.isRequired,
+  intl: intlShape.isRequired,
+  links: PropTypes.object
 };
 
 export default injectIntl(

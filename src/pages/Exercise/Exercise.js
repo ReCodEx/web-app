@@ -37,7 +37,6 @@ import {
   referenceSolutionsSelector
 } from '../../redux/selectors/referenceSolutions';
 import { canEditExercise } from '../../redux/selectors/users';
-import { hardwareGroupsIdsSelector } from '../../redux/selectors/hwGroups';
 
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import { supervisorOfSelector } from '../../redux/selectors/groups';

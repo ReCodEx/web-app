@@ -1,10 +1,5 @@
 import React, { PropTypes, Component } from 'react';
-import {
-  FormattedMessage,
-  defineMessages,
-  intlShape,
-  injectIntl
-} from 'react-intl';
+import { defineMessages, intlShape, injectIntl } from 'react-intl';
 import { Tabs, Tab } from 'react-bootstrap';
 
 import Box from '../../AdminLTE/Box';
@@ -66,10 +61,7 @@ ReferenceSolutionEvaluation.propTypes = {
   environment: PropTypes.object.isRequired,
   evaluations: PropTypes.object,
   referenceSolutionId: PropTypes.string.isRequired,
-  renderButtons: PropTypes.func
-};
-
-ReferenceSolutionEvaluation.contextTypes = {
+  renderButtons: PropTypes.func,
   intl: intlShape.isRequired
 };
 

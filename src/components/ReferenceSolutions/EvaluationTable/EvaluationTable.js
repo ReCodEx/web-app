@@ -1,23 +1,17 @@
 import React, { PropTypes } from 'react';
-import Icon from 'react-fontawesome';
-import classnames from 'classnames';
-import {
-  FormattedMessage,
-  FormattedNumber,
-  FormattedDate,
-  FormattedTime
-} from 'react-intl';
+import { FormattedMessage, FormattedDate, FormattedTime } from 'react-intl';
 import { Table } from 'react-bootstrap';
 
-import BonusPoints from '../../Assignments/SubmissionsTable/BonusPoints';
 import AssignmentStatusIcon
   from '../../Assignments/Assignment/AssignmentStatusIcon';
 
-const EvaluationTable = ({
-  evaluations,
-  referenceSolutionId,
-  renderButtons = () => null
-}) => (
+const EvaluationTable = (
+  {
+    evaluations,
+    referenceSolutionId,
+    renderButtons = () => null
+  }
+) => (
   <Table>
     <thead>
       <tr>
