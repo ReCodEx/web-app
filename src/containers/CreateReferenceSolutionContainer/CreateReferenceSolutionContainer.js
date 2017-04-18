@@ -21,19 +21,13 @@ import {
 } from '../../redux/modules/referenceSolution';
 
 class CreateReferenceSolutionContainer extends Component {
-  submit = () => {
-    const {
-      attachedFiles,
-      onSubmit,
-      note,
-      runtime,
-      createReferenceSolution
-    } = this.props;
+  submit = (note, runtimeId) => {
+    const { attachedFiles, onSubmit, createReferenceSolution } = this.props;
 
     createReferenceSolution(
       note,
       attachedFiles.map(item => item.file),
-      runtime
+      runtimeId
     );
     !!onSubmit && onSubmit();
   };
@@ -69,8 +63,6 @@ CreateReferenceSolutionContainer.propTypes = {
   exercise: PropTypes.object.isRequired,
   canSubmit: PropTypes.bool,
   hasFailed: PropTypes.bool,
-  note: PropTypes.string,
-  runtime: PropTypes.string,
   isProcessing: PropTypes.bool,
   isSending: PropTypes.bool,
   onSubmit: PropTypes.func,
@@ -94,9 +86,9 @@ export default connect(
     };
   },
   (dispatch, { userId, exercise }) => ({
-    createReferenceSolution: (note, files, runtime) =>
+    createReferenceSolution: (note, files, runtimeId) =>
       dispatch(
-        createReferenceSolution(userId, exercise.id, note, files, runtime)
+        createReferenceSolution(userId, exercise.id, note, files, runtimeId)
       ),
     reset: () =>
       dispatch(resetUpload(exercise.id)) &&

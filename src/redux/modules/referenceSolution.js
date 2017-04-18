@@ -46,13 +46,13 @@ export const createReferenceSolution = (
   exerciseId,
   note,
   files,
-  runtime
+  runtimeId
 ) =>
   createApiAction({
     type: actionTypes.SUBMIT,
     method: 'POST',
     endpoint: `/reference-solutions/exercise/${exerciseId}`,
-    body: { userId, files: files.map(file => file.id), note, runtime }
+    body: { userId, files: files.map(file => file.id), note, runtimeId }
   });
 
 export const finishProcessing = createAction(actionTypes.PROCESSING_FINISHED);
