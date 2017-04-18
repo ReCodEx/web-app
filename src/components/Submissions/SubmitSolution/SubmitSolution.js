@@ -2,12 +2,12 @@ import React, { PropTypes } from 'react';
 import { FormattedMessage } from 'react-intl';
 import {
   Modal,
+  Button,
   FormGroup,
   ControlLabel,
   FormControl,
   HelpBlock
 } from 'react-bootstrap';
-import Button from '../../AdminLTE/FlatButton';
 import {
   LoadingIcon,
   WarningIcon,
@@ -88,8 +88,6 @@ const SubmitSolution = (
           type="text"
           placeholder="Poznámka pro Vás a cvičícího"
         />
-        {' '}
-        {/* @todo Translatable */}
       </FormGroup>
 
       {hasFailed &&
@@ -102,7 +100,12 @@ const SubmitSolution = (
     </Modal.Body>
     <Modal.Footer>
       {isSending &&
-        <Button type="submit" disabled={true} bsStyle="success">
+        <Button
+          type="submit"
+          disabled={true}
+          bsStyle="success"
+          className="btn-flat"
+        >
           <LoadingIcon />
           {' '}
           <FormattedMessage
@@ -116,6 +119,7 @@ const SubmitSolution = (
           type="submit"
           disabled={!canSubmit}
           bsStyle={hasFailed ? 'danger' : canSubmit ? 'success' : 'default'}
+          className="btn-flat"
           onClick={submitSolution}
         >
           {hasFailed ? <WarningIcon /> : <SendIcon />}
@@ -126,7 +130,7 @@ const SubmitSolution = (
           />
         </Button>}
 
-      <Button bsStyle="default" onClick={reset}>
+      <Button bsStyle="default" className="btn-flat" onClick={reset}>
         <DeleteIcon />
         {' '}
         <FormattedMessage
@@ -135,7 +139,7 @@ const SubmitSolution = (
         />
       </Button>
 
-      <Button bsStyle="default" onClick={onClose}>
+      <Button bsStyle="default" className="btn-flat" onClick={onClose}>
         <CloseIcon />
         {' '}
         <FormattedMessage

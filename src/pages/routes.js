@@ -26,6 +26,7 @@ import Submission from './Submission';
 import Registration from './Registration';
 import User from './User';
 import EditUser from './EditUser';
+import ReferenceSolution from './ReferenceSolution';
 
 import ChangePassword from './ChangePassword';
 import ResetPassword from './ResetPassword';
@@ -74,6 +75,7 @@ const createRoutes = (getState) => {
             <Route path=":exerciseId">
               <IndexRoute component={Exercise} />
               <Route path="edit" component={EditExercise} />
+              <Route path="reference-solution/:referenceSolutionId" component={ReferenceSolution} />
             </Route>
           </Route>
           <Route path="group/:groupId">

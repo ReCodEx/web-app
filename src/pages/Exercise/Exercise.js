@@ -18,6 +18,8 @@ import ResourceRenderer from '../../components/ResourceRenderer';
 import GroupsList from '../../components/Groups/GroupsList';
 import ReferenceSolutionsList
   from '../../components/Exercises/ReferenceSolutionsList';
+import CreateReferenceSolutionContainer
+  from '../../containers/CreateReferenceSolutionContainer';
 import Box from '../../components/AdminLTE/Box';
 import { EditIcon, SendIcon } from '../../components/Icons';
 
@@ -26,8 +28,7 @@ import ForkExerciseButtonContainer
 
 import { fetchExerciseIfNeeded } from '../../redux/modules/exercises';
 import {
-  fetchReferenceSolutionsIfNeeded,
-  evaluateReferenceSolution
+  fetchReferenceSolutionsIfNeeded
 } from '../../redux/modules/referenceSolutions';
 import { fetchHardwareGroups } from '../../redux/modules/hwGroups';
 import { create as assignExercise } from '../../redux/modules/assignments';
@@ -41,8 +42,6 @@ import { hardwareGroupsIdsSelector } from '../../redux/selectors/hwGroups';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import { supervisorOfSelector } from '../../redux/selectors/groups';
 
-import withLinks from '../../hoc/withLinks';
-
 const messages = defineMessages({
   groupsBox: {
     id: 'app.exercise.groupsBox',
@@ -51,6 +50,10 @@ const messages = defineMessages({
   referenceSolutionsBox: {
     id: 'app.exercise.referenceSolutionsBox',
     defaultMessage: 'Reference solutions'
+  },
+  createReferenceSolutionBox: {
+    id: 'app.exercise.uploadReferenceSolutionBox',
+    defaultMessage: 'Create reference solution'
   }
 });
 
@@ -81,34 +84,33 @@ class Exercise extends Component {
   }
 
   createExercise = groupId => {
-    const {
-      assignExercise,
-      push,
-      links: { ASSIGNMENT_EDIT_URI_FACTORY }
-    } = this.props;
+    const { assignExercise, push } = this.props;
+    const { links: { ASSIGNMENT_EDIT_URI_FACTORY } } = this.context;
 
     assignExercise(groupId).then(({ value: assigment }) =>
       push(ASSIGNMENT_EDIT_URI_FACTORY(assigment.id)));
   };
 
-  evaluateSolution = solutionId => {
-    const { evaluateReferenceSolution, hardwareGroupsIds } = this.props;
-    hardwareGroupsIds.map(id => evaluateReferenceSolution(solutionId, id));
-  };
-
   render() {
     const {
+      userId,
       exercise,
       supervisedGroups,
       isAuthorOfExercise,
       referenceSolutions,
       intl: { formatMessage },
-      links: { EXERCISES_URI, EXERCISE_EDIT_URI_FACTORY }
+      push
     } = this.props;
 
+    const { forkId } = this.state;
+
     const {
-      forkId
-    } = this.state;
+      links: {
+        EXERCISES_URI,
+        EXERCISE_EDIT_URI_FACTORY,
+        EXERCISE_REFERENCE_SOLUTION_URI_FACTORY
+      }
+    } = this.context;
 
     return (
       <Page
@@ -229,18 +231,23 @@ class Exercise extends Component {
                     >
                       <ReferenceSolutionsList
                         referenceSolutions={referenceSolutions}
-                        renderButtons={referenceSolutionId => (
+                        renderButtons={evaluationId => (
                           <Button
                             bsSize="xs"
                             className="btn-flat"
                             onClick={() =>
-                              this.evaluateSolution(referenceSolutionId)}
+                              push(
+                                EXERCISE_REFERENCE_SOLUTION_URI_FACTORY(
+                                  exercise.id,
+                                  evaluationId
+                                )
+                              )}
                           >
                             <SendIcon />
                             {' '}
                             <FormattedMessage
-                              id="app.exercise.evaluateReferenceSolution"
-                              defaultMessage="Evaluate"
+                              id="app.exercise.referenceSolutionDetail"
+                              defaultMessage="View detail"
                             />
                           </Button>
                         )}
@@ -248,6 +255,18 @@ class Exercise extends Component {
                     </Box>
                   )}
                 </ResourceRenderer>
+              </Col>
+              <Col md={6}>
+                <Box
+                  title={formatMessage(messages.createReferenceSolutionBox)}
+                  collapsable={true}
+                  isOpen={false}
+                >
+                  <CreateReferenceSolutionContainer
+                    userId={userId}
+                    exercise={exercise}
+                  />
+                </Box>
               </Col>
             </Row>
           </div>
@@ -257,7 +276,12 @@ class Exercise extends Component {
   }
 }
 
+Exercise.contextTypes = {
+  links: PropTypes.object
+};
+
 Exercise.propTypes = {
+  userId: PropTypes.string.isRequired,
   params: PropTypes.shape({
     exerciseId: PropTypes.string.isRequired
   }).isRequired,
@@ -268,34 +292,26 @@ Exercise.propTypes = {
   supervisedGroups: PropTypes.object,
   isAuthorOfExercise: PropTypes.func.isRequired,
   referenceSolutions: ImmutablePropTypes.map,
-  evaluateReferenceSolution: PropTypes.func.isRequired,
-  hardwareGroupsIds: PropTypes.array,
-  intl: intlShape.isRequired,
-  links: PropTypes.object.isRequired
+  intl: intlShape.isRequired
 };
 
-export default withLinks(
-  injectIntl(
-    connect(
-      (state, { params: { exerciseId } }) => {
-        const userId = loggedInUserIdSelector(state);
-        return {
-          exercise: exerciseSelector(exerciseId)(state),
-          supervisedGroups: supervisorOfSelector(userId)(state),
-          isAuthorOfExercise: exerciseId =>
-            canEditExercise(userId, exerciseId)(state),
-          hardwareGroupsIds: hardwareGroupsIdsSelector(state),
-          referenceSolutions: referenceSolutionsSelector(exerciseId)(state)
-        };
-      },
-      (dispatch, { params: { exerciseId } }) => ({
-        loadAsync: () => Exercise.loadAsync({ exerciseId }, dispatch),
-        assignExercise: groupId =>
-          dispatch(assignExercise(groupId, exerciseId)),
-        push: url => dispatch(push(url)),
-        evaluateReferenceSolution: (solutionId, hwGroup) =>
-          dispatch(evaluateReferenceSolution(exerciseId, solutionId, hwGroup))
-      })
-    )(Exercise)
-  )
+export default injectIntl(
+  connect(
+    (state, { params: { exerciseId } }) => {
+      const userId = loggedInUserIdSelector(state);
+      return {
+        userId,
+        exercise: exerciseSelector(exerciseId)(state),
+        supervisedGroups: supervisorOfSelector(userId)(state),
+        isAuthorOfExercise: exerciseId =>
+          canEditExercise(userId, exerciseId)(state),
+        referenceSolutions: referenceSolutionsSelector(exerciseId)(state)
+      };
+    },
+    (dispatch, { params: { exerciseId } }) => ({
+      loadAsync: () => Exercise.loadAsync({ exerciseId }, dispatch),
+      assignExercise: groupId => dispatch(assignExercise(groupId, exerciseId)),
+      push: url => dispatch(push(url))
+    })
+  )(Exercise)
 );

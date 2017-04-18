@@ -7,14 +7,12 @@ import Icon from 'react-fontawesome';
 
 import withLinks from '../../../hoc/withLinks';
 
-const GroupsList = (
-  {
-    groups = [],
-    renderButtons = () => null,
-    ...props,
-    links: { GROUP_URI_FACTORY }
-  }
-) => (
+const GroupsList = ({
+  groups = [],
+  renderButtons = () => null,
+  links: { GROUP_URI_FACTORY },
+  ...props
+}) => (
   <ResourceRenderer resource={groups.toArray()}>
     {(...groups) => (
       <Table hover {...props}>

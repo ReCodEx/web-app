@@ -27,6 +27,8 @@ export const linksFactory = lang => {
   const EXERCISE_CREATE_URI_FACTORY = () => `${EXERCISES_URI}`;
   const EXERCISE_URI_FACTORY = id => `${EXERCISES_URI}/${id}`;
   const EXERCISE_EDIT_URI_FACTORY = id => `${EXERCISE_URI_FACTORY(id)}/edit`;
+  const EXERCISE_REFERENCE_SOLUTION_URI_FACTORY = (exerciseId, referenceSolutionId) =>
+    `${EXERCISE_URI_FACTORY(exerciseId)}/reference-solution/${referenceSolutionId}`
 
   // assignments and solution submissions
   const ASSIGNMENT_DETAIL_URI_FACTORY = id => `${prefix}/app/assignment/${id}`;
@@ -69,6 +71,7 @@ export const linksFactory = lang => {
     EXERCISE_URI_FACTORY,
     EXERCISE_EDIT_URI_FACTORY,
     EXERCISE_CREATE_URI_FACTORY,
+    EXERCISE_REFERENCE_SOLUTION_URI_FACTORY,
     ASSIGNMENT_EDIT_URI_FACTORY,
     ASSIGNMENT_DETAIL_URI_FACTORY,
     ASSIGNMENT_DETAIL_SPECIFIC_USER_URI_FACTORY,
