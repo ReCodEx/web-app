@@ -26,7 +26,6 @@ import users from './modules/users';
 import runtimeEnvironments from './modules/runtimeEnvironments';
 import supplementaryFiles from './modules/supplementaryFiles';
 import referenceSolutions from './modules/referenceSolutions';
-import referenceSolution from './modules/referenceSolution';
 import hwGroups from './modules/hwGroups';
 
 const createRecodexReducers = token => ({
@@ -54,8 +53,7 @@ const createRecodexReducers = token => ({
   runtimeEnvironments,
   supplementaryFiles,
   referenceSolutions,
-  hwGroups,
-  referenceSolution
+  hwGroups
 });
 
 const librariesReducers = {
