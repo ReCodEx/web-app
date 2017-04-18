@@ -29,20 +29,21 @@ export const evaluateReferenceSolution = solutionId =>
     meta: { solutionId }
   });
 
-export const downloadEvaluationArchive = evaluationId => (dispatch, getState) =>
-  dispatch(
-    createApiAction({
-      type: additionalActionTypes.DOWNLOAD_EVALUATION_ARCHIVE,
-      method: 'GET',
-      endpoint: `/reference-solutions/evaluation/${evaluationId}/download-result`,
-      doNotProcess: true // the response is not (does not have to be) a JSON
-    })
-  )
-    .then(({ value }) => value.blob())
-    .then(blob => {
-      saveAs(blob, evaluationId + '.zip');
-      return Promise.resolve();
-    });
+export const downloadEvaluationArchive = evaluationId =>
+  (dispatch, getState) =>
+    dispatch(
+      createApiAction({
+        type: additionalActionTypes.DOWNLOAD_EVALUATION_ARCHIVE,
+        method: 'GET',
+        endpoint: `/reference-solutions/evaluation/${evaluationId}/download-result`,
+        doNotProcess: true // the response is not (does not have to be) a JSON
+      })
+    )
+      .then(({ value }) => value.blob())
+      .then(blob => {
+        saveAs(blob, evaluationId + '.zip');
+        return Promise.resolve();
+      });
 
 /**
  * Reducer

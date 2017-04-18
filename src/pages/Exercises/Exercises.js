@@ -76,27 +76,29 @@ class Exercises extends Component {
                   defaultMessage="Exercises"
                 />
               }
+              footer={
+                <p className="text-center">
+                  <Button
+                    bsStyle="success"
+                    className="btn-flat"
+                    bsSize="sm"
+                    onClick={() => {
+                      this.newExercise();
+                    }}
+                  >
+                    <AddIcon />
+                    {' '}
+                    <FormattedMessage
+                      id="app.exercises.add"
+                      defaultMessage="Add exercise"
+                    />
+                  </Button>
+                </p>
+              }
               noPadding
             >
               <ExercisesList exercises={exercises} />
             </Box>
-            <p>
-              <Button
-                bsStyle="success"
-                className="btn-flat"
-                bsSize="sm"
-                onClick={() => {
-                  this.newExercise();
-                }}
-              >
-                <AddIcon />
-                {' '}
-                <FormattedMessage
-                  id="app.exercises.add"
-                  defaultMessage="Add exercise"
-                />
-              </Button>
-            </p>
           </div>
         )}
       </Page>
