@@ -5,12 +5,12 @@ import { fromJS } from 'immutable';
 chai.use(spies);
 const expect = chai.expect;
 
-import fetchMock from 'fetch-mock';
 import reducerFactory, {
   actionTypes,
   statusTypes,
   logout,
   login,
+  externalLogin,
   loginServices
 } from '../../../src/redux/modules/auth';
 import {
@@ -19,14 +19,55 @@ import {
   hasFailed,
   statusSelector
 } from '../../../src/redux/selectors/auth';
+import { push } from 'react-router-redux';
 
 import decodeJwt from 'jwt-decode';
 
 describe('Authentication', () => {
-  describe.skip('(Action creators)', () => {
-    it('must create a valid logout action and remove the stored access token', () => {});
+  describe('(Action creators)', () => {
+    it('must create a valid logout action', () => {
+      const action = logout('https://anywhere');
+      expect(action).to.be.a('function');
+      expect(action.length).to.equal(1);
 
-    it('must create correct login request action', () => {});
+      const dispatchSpy = chai.spy();
+      action(dispatchSpy);
+
+      expect(dispatchSpy).to.have.been.called.twice();
+      expect(dispatchSpy).to.have.been.called.with(push('https://anywhere'));
+      expect(dispatchSpy).to.have.been.called.with({
+        type: actionTypes.LOGOUT
+      });
+    });
+
+    it('must create correct login request action', () => {
+      const action = login('usr', 'pwd');
+      expect(action.request).to.eql({
+        type: actionTypes.LOGIN,
+        method: 'POST',
+        endpoint: '/login',
+        body: { username: 'usr', password: 'pwd' },
+        meta: { service: loginServices.local }
+      });
+    });
+
+    it('must create correct external login request action', () => {
+      const serviceId = 'some-ext-service';
+      const action = externalLogin(serviceId)({
+        serviceToken: 'xyz',
+        otherData: 'uvw'
+      });
+      expect(action.request).to.eql({
+        type: actionTypes.LOGIN,
+        method: 'POST',
+        endpoint: `/login/${serviceId}`,
+        body: {
+          serviceToken: 'xyz',
+          otherData: 'uvw'
+        },
+        meta: { service: serviceId }
+      });
+    });
   });
 
   describe('(Reducer)', () => {
