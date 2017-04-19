@@ -1,4 +1,4 @@
-import { API_BASE } from '../redux/middleware/apiMiddleware';
+import { API_BASE } from '../redux/helpers/api/tools';
 
 export const linksFactory = lang => {
   const prefix = `/${lang}`;
@@ -27,7 +27,10 @@ export const linksFactory = lang => {
   const EXERCISE_CREATE_URI_FACTORY = () => `${EXERCISES_URI}`;
   const EXERCISE_URI_FACTORY = id => `${EXERCISES_URI}/${id}`;
   const EXERCISE_EDIT_URI_FACTORY = id => `${EXERCISE_URI_FACTORY(id)}/edit`;
-  const EXERCISE_REFERENCE_SOLUTION_URI_FACTORY = (exerciseId, referenceSolutionId) =>
+  const EXERCISE_REFERENCE_SOLUTION_URI_FACTORY = (
+    exerciseId,
+    referenceSolutionId
+  ) =>
     `${EXERCISE_URI_FACTORY(exerciseId)}/reference-solution/${referenceSolutionId}`;
 
   // assignments and solution submissions

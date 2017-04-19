@@ -6,42 +6,21 @@ const expect = chai.expect;
 
 import fetchMock from 'fetch-mock';
 import middleware, {
-  createApiAction,
-  apiCall,
-  getHeaders,
-  assembleEndpoint,
-  API_BASE,
-  CALL_API
+  CALL_API,
+  createApiAction
 } from '../../../src/redux/middleware/apiMiddleware';
+import { API_BASE } from '../../../src/redux/helpers/api/tools';
 
 describe('API middleware and helper functions', () => {
-  describe('(Helper functions)', () => {
-    it('must create correct api call action', () => {
-      const action = createApiAction({ type: 'TYPE', payload: 'payload' });
-      expect(action).to.eql({
-        type: CALL_API,
-        request: {
-          type: 'TYPE',
-          payload: 'payload'
-        }
-      });
+  it('must create correct api call action', () => {
+    const action = createApiAction({ type: 'TYPE', payload: 'payload' });
+    expect(action).to.eql({
+      type: CALL_API,
+      request: {
+        type: 'TYPE',
+        payload: 'payload'
+      }
     });
-
-    it('must add access token to the headers', () => {
-      expect(getHeaders({ a: 'b' }, 'abcd')).to.eql({
-        a: 'b',
-        'Authorization': 'Bearer abcd'
-      });
-    });
-
-    it('must create proper URL from the params', () => {
-      expect(assembleEndpoint('http://www.blabla.com/abcd?x=y', { a: 'b', c: 'd' })).to.equal('http://www.blabla.com/abcd?x=y&a=b&c=d');
-      expect(assembleEndpoint('http://www.blabla.com/abcd', { x: 'y', a: 'b', c: 'd' })).to.equal('http://www.blabla.com/abcd?x=y&a=b&c=d');
-      expect(assembleEndpoint('http://www.blabla.com/abcd', {})).to.equal('http://www.blabla.com/abcd');
-      expect(assembleEndpoint('http://www.blabla.com/abcd')).to.equal('http://www.blabla.com/abcd');
-    });
-
-    // @todo: Test conversion of body to FormData
   });
 
   describe('(Middleware)', () => {
@@ -50,7 +29,7 @@ describe('API middleware and helper functions', () => {
       expect(() => middleware(null)(null)(action)).to.throw();
     });
 
-    it('must intersect API call actions and create request', (done) => {
+    it('must intersect API call actions and create request', done => {
       const requestInfo = { type: 'A', endpoint: '/abc' };
       let action = createApiAction(requestInfo);
       const spy = chai.spy();
@@ -65,7 +44,10 @@ describe('API middleware and helper functions', () => {
       fetchMock.mock(endpoint, { success: true });
 
       const dispatchSpy = chai.spy();
-      const dispatch = (action) => { dispatchSpy(); return action; };
+      const dispatch = action => {
+        dispatchSpy();
+        return action;
+      };
 
       const alteredAction = middleware({ dispatch })(next)(action);
       alteredAction.payload.promise.then(resp => {
@@ -75,7 +57,7 @@ describe('API middleware and helper functions', () => {
         // examine the HTTP request
         expect(fetchMock.calls().matched.length).to.equal(1);
         expect(fetchMock.calls().unmatched.length).to.equal(0);
-        const [ url, req ] = fetchMock.calls().matched.pop();
+        const [url, req] = fetchMock.calls().matched.pop();
         expect(url).to.equal(endpoint);
         expect(req.method.toLowerCase()).to.equal('get');
         fetchMock.restore();
