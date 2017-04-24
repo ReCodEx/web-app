@@ -3,36 +3,46 @@ import { connect } from 'react-redux';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { List } from 'immutable';
 
-import SupplementaryFilesTable from '../../components/Exercises/SupplementaryFilesTable';
-import { fetchSupplementaryFilesForExercise, addSupplementaryFiles } from '../../redux/modules/supplementaryFiles';
-import { createGetSupplementaryFilesForExercise } from '../../redux/selectors/supplementaryFiles';
+import SupplementaryFilesTable
+  from '../../components/Exercises/SupplementaryFilesTable';
+import {
+  fetchSupplementaryFilesForExercise,
+  addSupplementaryFiles
+} from '../../redux/modules/supplementaryFiles';
+import {
+  createGetSupplementaryFiles
+} from '../../redux/selectors/supplementaryFiles';
 
 import { reset } from '../../redux/modules/upload';
-import { createGetUploadedFiles, createAllUploaded } from '../../redux/selectors/upload';
+import {
+  createGetUploadedFiles,
+  createAllUploaded
+} from '../../redux/selectors/upload';
 
 class SupplementaryFilesTableContainer extends Component {
-
-  static getUploadId = (exerciseId) => `supplementary-files-${exerciseId}`;
+  static getUploadId = exerciseId => `supplementary-files-${exerciseId}`;
 
   componentWillMount() {
     SupplementaryFilesTableContainer.loadData(this.props);
   }
 
   componentWillReceiveProps(newProps) {
-    if (this.props.exerciseId !== newProps.exerciseId) {
+    if (this.props.exercise.id !== newProps.exercise.id) {
       SupplementaryFilesTableContainer.loadData(newProps);
     }
   }
 
-  static loadData = ({
-    loadSupplementaryFilesForExercise
-  }) => {
+  static loadData = (
+    {
+      loadSupplementaryFilesForExercise
+    }
+  ) => {
     loadSupplementaryFilesForExercise();
   };
 
   render() {
     const {
-      exerciseId,
+      exercise,
       supplementaryFiles,
       newFiles,
       allUploaded,
@@ -41,18 +51,21 @@ class SupplementaryFilesTableContainer extends Component {
 
     return (
       <SupplementaryFilesTable
-        uploadId={SupplementaryFilesTableContainer.getUploadId(exerciseId)}
+        uploadId={SupplementaryFilesTableContainer.getUploadId(exercise.id)}
         newFiles={newFiles}
         canSubmit={allUploaded}
         addSupplementaryFiles={addSupplementaryFiles}
-        supplementaryFiles={supplementaryFiles} />
+        supplementaryFiles={supplementaryFiles}
+      />
     );
   }
-
 }
 
 SupplementaryFilesTableContainer.propTypes = {
-  exerciseId: PropTypes.string.isRequired,
+  exercise: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    supplementaryFilesIds: PropTypes.array.isRequired
+  }).isRequired,
   supplementaryFiles: ImmutablePropTypes.map,
   newFiles: ImmutablePropTypes.list,
   allUploaded: PropTypes.bool,
@@ -60,19 +73,25 @@ SupplementaryFilesTableContainer.propTypes = {
 };
 
 export default connect(
-  (state, { exerciseId }) => {
-    const getSupplementaryFilesForExercise = createGetSupplementaryFilesForExercise(exerciseId);
-    const uploadId = SupplementaryFilesTableContainer.getUploadId(exerciseId);
+  (state, { exercise }) => {
+    const getSupplementaryFilesForExercise = createGetSupplementaryFiles(
+      exercise.supplementaryFilesIds
+    );
+    const uploadId = SupplementaryFilesTableContainer.getUploadId(exercise.id);
     return {
       supplementaryFiles: getSupplementaryFilesForExercise(state),
       newFiles: createGetUploadedFiles(uploadId)(state) || List(),
       allUploaded: createAllUploaded(uploadId)(state)
     };
   },
-  (dispatch, { exerciseId }) => ({
-    loadSupplementaryFilesForExercise: () => dispatch(fetchSupplementaryFilesForExercise(exerciseId)),
-    addSupplementaryFiles: (files) =>
-      dispatch(addSupplementaryFiles(exerciseId, files.toJS()))
-        .then(dispatch(reset(SupplementaryFilesTableContainer.getUploadId(exerciseId))))
+  (dispatch, { exercise }) => ({
+    loadSupplementaryFilesForExercise: () =>
+      dispatch(fetchSupplementaryFilesForExercise(exercise.id)),
+    addSupplementaryFiles: files =>
+      dispatch(addSupplementaryFiles(exercise.id, files.toJS())).then(
+        dispatch(
+          reset(SupplementaryFilesTableContainer.getUploadId(exercise.id))
+        )
+      )
   })
 )(SupplementaryFilesTableContainer);
