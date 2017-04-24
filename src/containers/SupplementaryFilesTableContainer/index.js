@@ -1,2 +1,1 @@
-import SupplementaryFilesTableContainer from './SupplementaryFilesTableContainer';
-export default SupplementaryFilesTableContainer;
+export default from './SupplementaryFilesTableContainer';
