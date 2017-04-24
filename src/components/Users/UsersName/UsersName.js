@@ -12,7 +12,6 @@ const UsersName = (
     avatarUrl,
     size = 25,
     large = false,
-    isVerified,
     noLink,
     links: { USER_URI_FACTORY }
   }
@@ -42,7 +41,6 @@ UsersName.propTypes = {
   id: PropTypes.string.isRequired,
   fullName: PropTypes.string.isRequired,
   avatarUrl: PropTypes.string.isRequired,
-  isVerified: PropTypes.bool.isRequired,
   size: PropTypes.number,
   large: PropTypes.bool,
   noLink: PropTypes.bool,
