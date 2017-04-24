@@ -137,7 +137,6 @@ class Assignment extends Component {
                       <LinkContainer
                         to={ASSIGNMENT_EDIT_URI_FACTORY(assignment.id)}
                       >
-                        /
                         <Button bsStyle="warning">
                           <EditIcon />
                           {' '}
