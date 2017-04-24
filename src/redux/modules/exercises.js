@@ -7,6 +7,10 @@ import {
   actionTypes as supplementaryFilesActionTypes
 } from './supplementaryFiles';
 
+import {
+  actionTypes as additionalFilesActionTypes
+} from './additionalExerciseFiles';
+
 const resourceName = 'exercises';
 const {
   actions,
@@ -104,13 +108,22 @@ const reducer = handleActions(
       { payload: files, meta: { exerciseId } }
     ) =>
       state.hasIn(['resources', exerciseId])
-        ? state.updateIn(
-            ['resources', exerciseId, 'data', 'supplementaryFilesIds'],
-            list => list.push(...files.map(file => file.id))
-          )
+        ? addFiles(state, exerciseId, files, 'supplementaryFilesIds')
+        : state,
+
+    [additionalFilesActionTypes.ADD_FILES_FULFILLED]: (
+      state,
+      { payload: files, meta: { exerciseId } }
+    ) =>
+      state.hasIn(['resources', exerciseId])
+        ? addFiles(state, exerciseId, files, 'additionalExerciseFilesIds')
         : state
   }),
   initialState
 );
+
+const addFiles = (state, exerciseId, files, field) =>
+  state.updateIn(['resources', exerciseId, 'data', field], list =>
+    list.push(...files.map(file => file.id)));
 
 export default reducer;
