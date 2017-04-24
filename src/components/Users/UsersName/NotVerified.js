@@ -7,7 +7,7 @@ import Button from '../../AdminLTE/FlatButton';
 const NotVerified = ({ userId, currentUserId }) => {
   return (
     <OverlayTrigger
-      trigger="hover"
+      trigger={['hover', 'focus']}
       overlay={
         <Popover
           id={userId}
