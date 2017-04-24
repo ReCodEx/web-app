@@ -63,7 +63,7 @@ export const validateExercise = (id, version) =>
   createApiAction({
     type: additionalActionTypes.VALIDATE_EXERCISE,
     endpoint: `/exercises/${id}/validate`,
-    method: 'GET',
+    method: 'POST',
     body: { version }
   });
 
