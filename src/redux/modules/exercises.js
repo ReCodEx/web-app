@@ -3,6 +3,10 @@ import { Map } from 'immutable';
 import factory, { initialState } from '../helpers/resourceManager';
 import { createApiAction } from '../middleware/apiMiddleware';
 
+import {
+  actionTypes as supplementaryFilesActionTypes
+} from './supplementaryFiles';
+
 const resourceName = 'exercises';
 const {
   actions,
@@ -47,7 +51,8 @@ export const forkExercise = (id, forkId) =>
 
 export const create = actions.addResource;
 export const editExercise = actions.updateResource;
-export const editRuntimeConfigs = (id, body) => actions.updateResource(id, body, `/exercises/${id}/runtime-configs`);
+export const editRuntimeConfigs = (id, body) =>
+  actions.updateResource(id, body, `/exercises/${id}/runtime-configs`);
 export const deleteExercise = actions.removeResource;
 
 export const validateExercise = (id, version) =>
@@ -62,23 +67,50 @@ export const validateExercise = (id, version) =>
  * Reducer
  */
 
-const reducer = handleActions(Object.assign({}, reduceActions, {
+const reducer = handleActions(
+  Object.assign({}, reduceActions, {
+    [additionalActionTypes.FORK_EXERCISE_PENDING]: (
+      state,
+      { meta: { id, forkId } }
+    ) =>
+      state.updateIn(['resources', id, 'data'], exercise => {
+        if (!exercise.has('forks')) {
+          exercise = exercise.set('forks', Map());
+        }
 
-  [additionalActionTypes.FORK_EXERCISE_PENDING]: (state, { meta: {id, forkId} }) =>
-    state.updateIn(['resources', id, 'data'], exercise => {
-      if (!exercise.has('forks')) {
-        exercise = exercise.set('forks', Map());
-      }
+        return exercise.update('forks', forks =>
+          forks.set(forkId, { status: forkStatuses.PENDING }));
+      }),
 
-      return exercise.update('forks', forks => forks.set(forkId, { status: forkStatuses.PENDING }));
-    }),
+    [additionalActionTypes.FORK_EXERCISE_REJECTED]: (
+      state,
+      { meta: { id, forkId } }
+    ) =>
+      state.setIn(['resources', id, 'data', 'forks', forkId], {
+        status: forkStatuses.REJECTED
+      }),
 
-  [additionalActionTypes.FORK_EXERCISE_REJECTED]: (state, { meta: {id, forkId} }) =>
-    state.setIn([ 'resources', id, 'data', 'forks', forkId ], { status: forkStatuses.REJECTED }),
+    [additionalActionTypes.FORK_EXERCISE_FULFILLED]: (
+      state,
+      { payload: { id: exerciseId }, meta: { id, forkId } }
+    ) =>
+      state.setIn(['resources', id, 'data', 'forks', forkId], {
+        status: forkStatuses.FULFILLED,
+        exerciseId
+      }),
 
-  [additionalActionTypes.FORK_EXERCISE_FULFILLED]: (state, { payload: {id: exerciseId}, meta: {id, forkId} }) =>
-    state.setIn([ 'resources', id, 'data', 'forks', forkId ], { status: forkStatuses.FULFILLED, exerciseId })
-
-}), initialState);
+    [supplementaryFilesActionTypes.ADD_FILES_FULFILLED]: (
+      state,
+      { payload: files, meta: { exerciseId } }
+    ) =>
+      state.hasIn(['resources', exerciseId])
+        ? state.updateIn(
+            ['resources', exerciseId, 'data', 'supplementaryFilesIds'],
+            list => list.push(...files.map(file => file.id))
+          )
+        : state
+  }),
+  initialState
+);
 
 export default reducer;

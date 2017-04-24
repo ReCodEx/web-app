@@ -1,65 +1,45 @@
-import React, { Component, PropTypes } from 'react';
+import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import { List } from 'immutable';
+import { FormattedMessage } from 'react-intl';
 
-import SupplementaryFilesTable
-  from '../../components/Exercises/SupplementaryFilesTable';
+import AttachedFilesTableContainer from '../AttachedFilesTableContainer';
 import {
   fetchSupplementaryFilesForExercise,
   addSupplementaryFiles
 } from '../../redux/modules/supplementaryFiles';
+
 import {
   createGetSupplementaryFiles
 } from '../../redux/selectors/supplementaryFiles';
 
-import { reset } from '../../redux/modules/upload';
-import {
-  createGetUploadedFiles,
-  createAllUploaded
-} from '../../redux/selectors/upload';
-
-class SupplementaryFilesTableContainer extends Component {
-  static getUploadId = exerciseId => `supplementary-files-${exerciseId}`;
-
-  componentWillMount() {
-    SupplementaryFilesTableContainer.loadData(this.props);
+const SupplementaryFilesTableContainer = (
+  {
+    exercise,
+    supplementaryFiles,
+    loadFiles,
+    addFiles
   }
-
-  componentWillReceiveProps(newProps) {
-    if (this.props.exercise.id !== newProps.exercise.id) {
-      SupplementaryFilesTableContainer.loadData(newProps);
-    }
-  }
-
-  static loadData = (
-    {
-      loadSupplementaryFilesForExercise
-    }
-  ) => {
-    loadSupplementaryFilesForExercise();
-  };
-
-  render() {
-    const {
-      exercise,
-      supplementaryFiles,
-      newFiles,
-      allUploaded,
-      addSupplementaryFiles
-    } = this.props;
-
-    return (
-      <SupplementaryFilesTable
-        uploadId={SupplementaryFilesTableContainer.getUploadId(exercise.id)}
-        newFiles={newFiles}
-        canSubmit={allUploaded}
-        addSupplementaryFiles={addSupplementaryFiles}
-        supplementaryFiles={supplementaryFiles}
+) => (
+  <AttachedFilesTableContainer
+    uploadId={`supplementary-files-${exercise.id}`}
+    attachments={supplementaryFiles}
+    loadFiles={loadFiles}
+    addFiles={addFiles}
+    title={
+      <FormattedMessage
+        id="app.supplementaryFilesTable.title"
+        defaultMessage="Supplementary files"
       />
-    );
-  }
-}
+    }
+    description={
+      <FormattedMessage
+        id="app.supplementaryFilesTable.description"
+        defaultMessage="Supplementary files are files which can be used in job configuration."
+      />
+    }
+  />
+);
 
 SupplementaryFilesTableContainer.propTypes = {
   exercise: PropTypes.shape({
@@ -67,9 +47,8 @@ SupplementaryFilesTableContainer.propTypes = {
     supplementaryFilesIds: PropTypes.array.isRequired
   }).isRequired,
   supplementaryFiles: ImmutablePropTypes.map,
-  newFiles: ImmutablePropTypes.list,
-  allUploaded: PropTypes.bool,
-  addSupplementaryFiles: PropTypes.func
+  loadFiles: PropTypes.func.isRequired,
+  addFiles: PropTypes.func.isRequired
 };
 
 export default connect(
@@ -77,21 +56,12 @@ export default connect(
     const getSupplementaryFilesForExercise = createGetSupplementaryFiles(
       exercise.supplementaryFilesIds
     );
-    const uploadId = SupplementaryFilesTableContainer.getUploadId(exercise.id);
     return {
-      supplementaryFiles: getSupplementaryFilesForExercise(state),
-      newFiles: createGetUploadedFiles(uploadId)(state) || List(),
-      allUploaded: createAllUploaded(uploadId)(state)
+      supplementaryFiles: getSupplementaryFilesForExercise(state)
     };
   },
   (dispatch, { exercise }) => ({
-    loadSupplementaryFilesForExercise: () =>
-      dispatch(fetchSupplementaryFilesForExercise(exercise.id)),
-    addSupplementaryFiles: files =>
-      dispatch(addSupplementaryFiles(exercise.id, files.toJS())).then(
-        dispatch(
-          reset(SupplementaryFilesTableContainer.getUploadId(exercise.id))
-        )
-      )
+    loadFiles: () => dispatch(fetchSupplementaryFilesForExercise(exercise.id)),
+    addFiles: files => dispatch(addSupplementaryFiles(exercise.id, files))
   })
 )(SupplementaryFilesTableContainer);
