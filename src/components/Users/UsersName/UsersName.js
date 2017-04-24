@@ -1,5 +1,6 @@
 import React, { PropTypes } from 'react';
 import { Link } from 'react-router';
+import NotVerified from './NotVerified';
 import Avatar from '../../widgets/Avatar';
 import withLinks from '../../../hoc/withLinks';
 
@@ -12,6 +13,7 @@ const UsersName = (
     avatarUrl,
     size = 25,
     large = false,
+    isVerified,
     noLink,
     links: { USER_URI_FACTORY }
   }
@@ -33,6 +35,7 @@ const UsersName = (
           {fullName}
         </Link>}
       {noLink && <span>{fullName}</span>}
+      {!isVerified && <NotVerified userId={id} currentUserId={id} />}
     </span>
   </span>
 );
@@ -41,6 +44,7 @@ UsersName.propTypes = {
   id: PropTypes.string.isRequired,
   fullName: PropTypes.string.isRequired,
   avatarUrl: PropTypes.string.isRequired,
+  isVerified: PropTypes.bool.isRequired,
   size: PropTypes.number,
   large: PropTypes.bool,
   noLink: PropTypes.bool,
