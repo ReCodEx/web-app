@@ -1,6 +1,5 @@
 import React, { PropTypes } from 'react';
 import { Link } from 'react-router';
-import NotVerified from './NotVerified';
 import Avatar from '../../AdminLTE/Avatar';
 import withLinks from '../../../hoc/withLinks';
 
@@ -35,7 +34,6 @@ const UsersName = (
           {fullName}
         </Link>}
       {noLink && <span>{fullName}</span>}
-      {!isVerified && <NotVerified userId={id} currentUserId={id} />}
     </span>
   </span>
 );
