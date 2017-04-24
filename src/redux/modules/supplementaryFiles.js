@@ -1,5 +1,9 @@
 import { handleActions } from 'redux-actions';
-import factory, { initialState, createRecord, resourceStatus } from '../helpers/resourceManager';
+import factory, {
+  initialState,
+  createRecord,
+  resourceStatus
+} from '../helpers/resourceManager';
 import { createApiAction } from '../middleware/apiMiddleware';
 
 const resourceName = 'supplementaryFiles';
@@ -19,7 +23,7 @@ export const actionTypes = {
   ADD_FILES_FAILED: 'recodex/supplementaryFiles/ADD_FILES_REJECTED'
 };
 
-export const fetchSupplementaryFilesForExercise = (exerciseId) =>
+export const fetchSupplementaryFilesForExercise = exerciseId =>
   actions.fetchMany({
     endpoint: `/exercises/${exerciseId}/supplementary-files`
   });
@@ -45,19 +49,19 @@ export const addSupplementaryFiles = (exerciseId, files) =>
  * Reducer
  */
 
-const reducer = handleActions(Object.assign({}, reduceActions, {
-
-  [actionTypes.ADD_FILES_FULFILLED]: (
-    state, { payload, meta: { files } }
-  ) =>
-    payload.reduce(
-      (state, data) => state.setIn(
-        ['resources', data.id],
-        createRecord({ data, state: resourceStatus.FULFILLED })
-      ),
-      state
-    )
-
-}), initialState);
+const reducer = handleActions(
+  Object.assign({}, reduceActions, {
+    [actionTypes.ADD_FILES_FULFILLED]: (state, { payload, meta: { files } }) =>
+      payload.reduce(
+        (state, data) =>
+          state.setIn(
+            ['resources', data.id],
+            createRecord({ data, state: resourceStatus.FULFILLED })
+          ),
+        state
+      )
+  }),
+  initialState
+);
 
 export default reducer;
