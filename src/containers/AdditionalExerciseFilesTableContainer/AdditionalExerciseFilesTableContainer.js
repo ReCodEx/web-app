@@ -5,6 +5,11 @@ import { FormattedMessage } from 'react-intl';
 
 import AttachedFilesTableContainer from '../AttachedFilesTableContainer';
 import {
+  AdditionalFilesTableRow,
+  AdditionalFilesTableHeaderRow
+} from '../../components/Exercises/AttachedFilesTable';
+
+import {
   fetchAdditionalExerciseFiles,
   addAdditionalExerciseFiles
 } from '../../redux/modules/additionalExerciseFiles';
@@ -13,12 +18,14 @@ import {
   createGetAdditionalExerciseFiles
 } from '../../redux/selectors/additionalExerciseFiles';
 
-const AdditionalExerciseFilesTableContainer = ({
-  exercise,
-  additionalExerciseFiles,
-  loadFiles,
-  addFiles
-}) => (
+const AdditionalExerciseFilesTableContainer = (
+  {
+    exercise,
+    additionalExerciseFiles,
+    loadFiles,
+    addFiles
+  }
+) => (
   <AttachedFilesTableContainer
     uploadId={`additional-exercise-files-${exercise.id}`}
     attachments={additionalExerciseFiles}
@@ -36,6 +43,8 @@ const AdditionalExerciseFilesTableContainer = ({
         defaultMessage="Additional exercise files are files which can be used within exercise description using links provided below. Additional files can be viewed or downloaded by students."
       />
     }
+    HeaderComponent={AdditionalFilesTableHeaderRow}
+    RowComponent={AdditionalFilesTableRow}
   />
 );
 
