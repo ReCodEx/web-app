@@ -6,7 +6,7 @@ import factory, {
 } from '../helpers/resourceManager';
 import { createApiAction } from '../middleware/apiMiddleware';
 
-const resourceName = 'supplementaryFiles';
+const resourceName = 'additionalExerciseFiles';
 const { actions, reduceActions } = factory({ resourceName });
 
 /**
@@ -14,21 +14,21 @@ const { actions, reduceActions } = factory({ resourceName });
  */
 
 export const actionTypes = {
-  ADD_FILES: 'recodex/supplementaryFiles/ADD_FILES',
-  ADD_FILES_PENDING: 'recodex/supplementaryFiles/ADD_FILES_PENDING',
-  ADD_FILES_FULFILLED: 'recodex/supplementaryFiles/ADD_FILES_FULFILLED',
-  ADD_FILES_FAILED: 'recodex/supplementaryFiles/ADD_FILES_REJECTED'
+  ADD_FILES: 'recodex/additionalExerciseFiles/ADD_FILES',
+  ADD_FILES_PENDING: 'recodex/additionalExerciseFiles/ADD_FILES_PENDING',
+  ADD_FILES_FULFILLED: 'recodex/additionalExerciseFiles/ADD_FILES_FULFILLED',
+  ADD_FILES_FAILED: 'recodex/additionalExerciseFiles/ADD_FILES_REJECTED'
 };
 
-export const fetchSupplementaryFilesForExercise = exerciseId =>
+export const fetchAdditionalExerciseFiles = exerciseId =>
   actions.fetchMany({
-    endpoint: `/exercises/${exerciseId}/supplementary-files`
+    endpoint: `/exercises/${exerciseId}/additional-files`
   });
 
-export const addSupplementaryFiles = (exerciseId, files) =>
+export const addAdditionalExerciseFiles = (exerciseId, files) =>
   createApiAction({
     type: actionTypes.ADD_FILES,
-    endpoint: `/exercises/${exerciseId}/supplementary-files`,
+    endpoint: `/exercises/${exerciseId}/additional-files`,
     method: 'POST',
     body: {
       files: files.map(uploaded => uploaded.file.id)
