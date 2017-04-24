@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react';
 import { Link } from 'react-router';
 import NotVerified from './NotVerified';
+import NotVerified from './NotVerified';
 import Avatar from '../../widgets/Avatar';
 import withLinks from '../../../hoc/withLinks';
 
