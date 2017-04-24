@@ -1,18 +1,20 @@
 import React, { PropTypes } from 'react';
 import prettyBytes from 'pretty-bytes';
 import { FormattedDate, FormattedTime } from 'react-intl';
+import withLinks from '../../../hoc/withLinks';
 
-const SupplementaryFilesTableRow = (
+const AdditionalFilesTableRow = (
   {
+    id,
     name,
-    hashName,
     size,
-    uploadedAt
+    uploadedAt,
+    links: { DOWNLOAD }
   }
 ) => (
   <tr>
     <td>{name}</td>
-    <td><code>{hashName}</code></td>
+    <td><a href={DOWNLOAD(id)} target="_blank">{DOWNLOAD(id)}</a></td>
     <td>{prettyBytes(size)}</td>
     <td>
       <FormattedDate value={uploadedAt * 1000} />
@@ -22,11 +24,12 @@ const SupplementaryFilesTableRow = (
   </tr>
 );
 
-SupplementaryFilesTableRow.propTypes = {
+AdditionalFilesTableRow.propTypes = {
+  id: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
-  hashName: PropTypes.string.isRequired,
   size: PropTypes.number.isRequired,
-  uploadedAt: PropTypes.number.isRequired
+  uploadedAt: PropTypes.number.isRequired,
+  links: PropTypes.object.isRequired
 };
 
-export default SupplementaryFilesTableRow;
+export default withLinks(AdditionalFilesTableRow);

@@ -17,6 +17,8 @@ import EditExerciseLimitsForm
   from '../../components/Forms/EditExerciseLimitsForm';
 import SupplementaryFilesTableContainer
   from '../../containers/SupplementaryFilesTableContainer';
+import AdditionalExerciseFilesTableContainer
+  from '../../containers/AdditionalExerciseFilesTableContainer';
 import DeleteExerciseButtonContainer
   from '../../containers/DeleteExerciseButtonContainer';
 
@@ -105,13 +107,22 @@ class EditExercise extends Component {
           <div>
             <Row>
               <Col lg={6}>
-                <EditExerciseForm
-                  exercise={exercise}
-                  initialValues={exercise}
-                  onSubmit={formData =>
-                    editExercise(exercise.version, formData)}
-                  formValues={formValues}
-                />
+                <Row>
+                  <Col lg={12}>
+                    <EditExerciseForm
+                      exercise={exercise}
+                      initialValues={exercise}
+                      onSubmit={formData =>
+                        editExercise(exercise.version, formData)}
+                      formValues={formValues}
+                    />
+                  </Col>
+                  <Col lg={12}>
+                    <AdditionalExerciseFilesTableContainer
+                      exercise={exercise}
+                    />
+                  </Col>
+                </Row>
               </Col>
               <Col lg={6}>
                 <Row>

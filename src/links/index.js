@@ -57,6 +57,9 @@ export const linksFactory = lang => {
   const ADMIN_EDIT_INSTANCE_URI_FACTORY = instanceId =>
     `${ADMIN_INSTANCES_URI}/${instanceId}/edit`;
 
+  // download files
+  const DOWNLOAD = fileId => `${API_BASE}/uploaded-files/${fileId}/download`;
+
   return {
     API_BASE,
     HOME_URI,
@@ -84,7 +87,8 @@ export const linksFactory = lang => {
     SOURCE_CODE_DETAIL_URI_FACTORY,
     BUGS_URL,
     ADMIN_INSTANCES_URI,
-    ADMIN_EDIT_INSTANCE_URI_FACTORY
+    ADMIN_EDIT_INSTANCE_URI_FACTORY,
+    DOWNLOAD
   };
 };
 

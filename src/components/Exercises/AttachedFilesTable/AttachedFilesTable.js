@@ -9,9 +9,7 @@ import Box from '../../AdminLTE/Box';
 import { SendIcon } from '../../Icons';
 
 import UploadContainer from '../../../containers/UploadContainer';
-
 import ResourceRenderer from '../../ResourceRenderer';
-import SupplementaryFilesTableRow from './SupplementaryFilesTableRow';
 
 const AttachedFilesTable = (
   {
@@ -26,7 +24,9 @@ const AttachedFilesTable = (
     canSubmit,
     newFiles,
     addFiles,
-    uploadId
+    uploadId,
+    HeaderComponent,
+    RowComponent
   }
 ) => (
   <Box title={title} collapsable isOpen>
@@ -47,7 +47,7 @@ const AttachedFilesTable = (
             {' '}
             <FormattedMessage
               id="app.attachedFilesTable.addFiles"
-              defaultMessage="Save supplementary files"
+              defaultMessage="Save files"
             />
           </Button>
         </p>}
@@ -58,39 +58,12 @@ const AttachedFilesTable = (
             {attachments.length > 0 &&
               <Table responsive>
                 <thead>
-                  <tr>
-                    <th>
-                      <FormattedMessage
-                        id="app.attachedFilesTable.fileName"
-                        defaultMessage="Original filename"
-                      />
-                    </th>
-                    <th>
-                      <FormattedMessage
-                        id="app.attachedFilesTable.fileHashName"
-                        defaultMessage="Hash Name"
-                      />
-                    </th>
-                    <th>
-                      <FormattedMessage
-                        id="app.attachedFilesTable.fileSize"
-                        defaultMessage="Filesize"
-                      />
-                    </th>
-                    <th>
-                      <FormattedMessage
-                        id="app.attachedFilesTable.fileUploadedAt"
-                        defaultMessage="Uploaded at"
-                      />
-                    </th>
-                  </tr>
+                  <HeaderComponent />
                 </thead>
                 <tbody>
                   {attachments
                     .sort((a, b) => a.name < b.name ? -1 : +(a.name > b.name)) // sort lexicographicaly
-                    .map((data, i) => (
-                      <SupplementaryFilesTableRow {...data} key={data.id} />
-                    ))}
+                    .map((data, i) => <RowComponent {...data} key={data.id} />)}
                 </tbody>
               </Table>}
             {attachments.length === 0 &&
@@ -99,7 +72,7 @@ const AttachedFilesTable = (
                 {' '}
                 <FormattedMessage
                   id="app.attachedFilesTable.empty"
-                  defaultMessage="There are no supplementary files attached to this exercise yet."
+                  defaultMessage="There are no uploaded files yet."
                 />
               </p>}
           </div>
@@ -124,7 +97,9 @@ AttachedFilesTable.propTypes = {
   attachments: ImmutablePropTypes.map,
   canSubmit: PropTypes.bool,
   newFiles: ImmutablePropTypes.list,
-  addFiles: PropTypes.func
+  addFiles: PropTypes.func,
+  HeaderComponent: PropTypes.func.isRequired,
+  RowComponent: PropTypes.func.isRequired
 };
 
 export default AttachedFilesTable;

@@ -5,6 +5,11 @@ import { FormattedMessage } from 'react-intl';
 
 import AttachedFilesTableContainer from '../AttachedFilesTableContainer';
 import {
+  SupplementaryFilesTableHeaderRow,
+  SupplementaryFilesTableRow
+} from '../../components/Exercises/AttachedFilesTable';
+
+import {
   fetchSupplementaryFilesForExercise,
   addSupplementaryFiles
 } from '../../redux/modules/supplementaryFiles';
@@ -38,6 +43,8 @@ const SupplementaryFilesTableContainer = (
         defaultMessage="Supplementary files are files which can be used in job configuration."
       />
     }
+    HeaderComponent={SupplementaryFilesTableHeaderRow}
+    RowComponent={SupplementaryFilesTableRow}
   />
 );
 
