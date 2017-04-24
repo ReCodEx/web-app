@@ -13,96 +13,92 @@ import UploadContainer from '../../../containers/UploadContainer';
 import ResourceRenderer from '../../ResourceRenderer';
 import SupplementaryFilesTableRow from './SupplementaryFilesTableRow';
 
-const SupplementaryFilesTable = (
+const AttachedFilesTable = (
   {
-    supplementaryFiles,
+    title = (
+      <FormattedMessage
+        id="app.attachedFilesTable.title"
+        defaultMessage="Attached files"
+      />
+    ),
+    description = null,
+    attachments,
     canSubmit,
     newFiles,
-    addSupplementaryFiles,
+    addFiles,
     uploadId
   }
 ) => (
-  <Box
-    title={
-      <FormattedMessage
-        id="app.supplementaryFilesTable.title"
-        defaultMessage="Supplementary Files"
-      />
-    }
-    collapsable
-    isOpen
-  >
+  <Box title={title} collapsable isOpen>
     <div>
-      <p>
-        <FormattedMessage
-          id="app.supplementaryFilesTable.description"
-          defaultMessage="Supplementary files are files which can be used in job configuration."
-        />
-      </p>
+      {description &&
+        <p>
+          {description}
+        </p>}
       <UploadContainer id={uploadId} />
       {newFiles.size > 0 &&
         <p className="text-center">
           <Button
             bsStyle="success"
             disabled={!canSubmit}
-            onClick={() => addSupplementaryFiles(newFiles)}
+            onClick={() => addFiles(newFiles)}
           >
             <SendIcon />
             {' '}
             <FormattedMessage
-              id="app.supplementaryFilesTable.addFiles"
+              id="app.attachedFilesTable.addFiles"
               defaultMessage="Save supplementary files"
             />
           </Button>
         </p>}
 
-      <ResourceRenderer resource={supplementaryFiles.toArray()}>
-        {(...supplementaryFiles) => (
+      <ResourceRenderer resource={attachments.toArray()}>
+        {(...attachments) => (
           <div>
-            {supplementaryFiles.length > 0 &&
+            {attachments.length > 0 &&
               <Table responsive>
                 <thead>
                   <tr>
                     <th>
                       <FormattedMessage
-                        id="app.supplementaryFilesTable.fileName"
+                        id="app.attachedFilesTable.fileName"
                         defaultMessage="Original filename"
                       />
                     </th>
                     <th>
                       <FormattedMessage
-                        id="app.supplementaryFilesTable.fileHashName"
+                        id="app.attachedFilesTable.fileHashName"
                         defaultMessage="Hash Name"
                       />
                     </th>
                     <th>
                       <FormattedMessage
-                        id="app.supplementaryFilesTable.fileSize"
+                        id="app.attachedFilesTable.fileSize"
                         defaultMessage="Filesize"
                       />
                     </th>
                     <th>
                       <FormattedMessage
-                        id="app.supplementaryFilesTable.fileUploadedAt"
+                        id="app.attachedFilesTable.fileUploadedAt"
                         defaultMessage="Uploaded at"
                       />
                     </th>
                   </tr>
                 </thead>
                 <tbody>
-                  {supplementaryFiles
+                  {attachments
                     .sort((a, b) => a.name < b.name ? -1 : +(a.name > b.name)) // sort lexicographicaly
                     .map((data, i) => (
                       <SupplementaryFilesTableRow {...data} key={data.id} />
                     ))}
                 </tbody>
               </Table>}
-            {supplementaryFiles.length === 0 &&
+            {attachments.length === 0 &&
               <p className="text-center">
                 <Icon name="folder-open-o" />
                 {' '}
                 <FormattedMessage
-                  id="app.supplementaryFilesTable.empty"
+                  id="app.attachedFilesTable.empty"
                   defaultMessage="There are no supplementary files attached to this exercise yet."
                 />
               </p>}
@@ -113,12 +109,22 @@ const SupplementaryFilesTable = (
   </Box>
 );
 
-SupplementaryFilesTable.propTypes = {
+AttachedFilesTable.propTypes = {
+  title: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) }),
+    PropTypes.element
+  ]),
+  description: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) }),
+    PropTypes.element
+  ]),
   uploadId: PropTypes.string.isRequired,
-  supplementaryFiles: ImmutablePropTypes.map,
+  attachments: ImmutablePropTypes.map,
   canSubmit: PropTypes.bool,
   newFiles: ImmutablePropTypes.list,
-  addSupplementaryFiles: PropTypes.func
+  addFiles: PropTypes.func
 };
 
-export default SupplementaryFilesTable;
+export default AttachedFilesTable;
