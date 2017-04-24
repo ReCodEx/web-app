@@ -116,7 +116,7 @@ class EditExercise extends Component {
               <Col lg={6}>
                 <Row>
                   <Col lg={12}>
-                    <SupplementaryFilesTableContainer exerciseId={exerciseId} />
+                    <SupplementaryFilesTableContainer exercise={exercise} />
                   </Col>
                 </Row>
                 <Row>
