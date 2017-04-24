@@ -1,0 +1,65 @@
+import React, { PropTypes } from 'react';
+import { connect } from 'react-redux';
+import ImmutablePropTypes from 'react-immutable-proptypes';
+import { FormattedMessage } from 'react-intl';
+
+import AttachedFilesTableContainer from '../AttachedFilesTableContainer';
+import {
+  fetchAdditionalExerciseFiles,
+  addAdditionalExerciseFiles
+} from '../../redux/modules/additionalExerciseFiles';
+
+import {
+  createGetAdditionalExerciseFiles
+} from '../../redux/selectors/additionalExerciseFiles';
+
+const AdditionalExerciseFilesTableContainer = ({
+  exercise,
+  additionalExerciseFiles,
+  loadFiles,
+  addFiles
+}) => (
+  <AttachedFilesTableContainer
+    uploadId={`additional-exercise-files-${exercise.id}`}
+    attachments={additionalExerciseFiles}
+    loadFiles={loadFiles}
+    addFiles={addFiles}
+    title={
+      <FormattedMessage
+        id="app.additionalExerciseFilesTable.title"
+        defaultMessage="Additional exercise files"
+      />
+    }
+    description={
+      <FormattedMessage
+        id="app.additionalExerciseFilesTable.description"
+        defaultMessage="Additional exercise files are files which can be used within exercise description using links provided below. Additional files can be viewed or downloaded by students."
+      />
+    }
+  />
+);
+
+AdditionalExerciseFilesTableContainer.propTypes = {
+  exercise: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    additionalExerciseFilesIds: PropTypes.array.isRequired
+  }).isRequired,
+  additionalExerciseFiles: ImmutablePropTypes.map,
+  loadFiles: PropTypes.func.isRequired,
+  addFiles: PropTypes.func.isRequired
+};
+
+export default connect(
+  (state, { exercise }) => {
+    const getAdditionalExerciseFiles = createGetAdditionalExerciseFiles(
+      exercise.additionalExerciseFilesIds
+    );
+    return {
+      additionalExerciseFiles: getAdditionalExerciseFiles(state)
+    };
+  },
+  (dispatch, { exercise }) => ({
+    loadFiles: () => dispatch(fetchAdditionalExerciseFiles(exercise.id)),
+    addFiles: files => dispatch(addAdditionalExerciseFiles(exercise.id, files))
+  })
+)(AdditionalExerciseFilesTableContainer);

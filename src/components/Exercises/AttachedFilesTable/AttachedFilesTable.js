@@ -13,22 +13,20 @@ import UploadContainer from '../../../containers/UploadContainer';
 import ResourceRenderer from '../../ResourceRenderer';
 import SupplementaryFilesTableRow from './SupplementaryFilesTableRow';
 
-const AttachedFilesTable = (
-  {
-    title = (
-      <FormattedMessage
-        id="app.attachedFilesTable.title"
-        defaultMessage="Attached files"
-      />
-    ),
-    description = null,
-    attachments,
-    canSubmit,
-    newFiles,
-    addFiles,
-    uploadId
-  }
-) => (
+const AttachedFilesTable = ({
+  title = (
+    <FormattedMessage
+      id="app.attachedFilesTable.title"
+      defaultMessage="Attached files"
+    />
+  ),
+  description = null,
+  attachments,
+  canSubmit,
+  newFiles,
+  addFiles,
+  uploadId
+}) => (
   <Box title={title} collapsable isOpen>
     <div>
       {description &&
@@ -47,7 +45,7 @@ const AttachedFilesTable = (
             {' '}
             <FormattedMessage
               id="app.attachedFilesTable.addFiles"
-              defaultMessage="Save supplementary files"
+              defaultMessage="Save files"
             />
           </Button>
         </p>}
@@ -87,7 +85,7 @@ const AttachedFilesTable = (
                 </thead>
                 <tbody>
                   {attachments
-                    .sort((a, b) => a.name < b.name ? -1 : +(a.name > b.name)) // sort lexicographicaly
+                    .sort((a, b) => (a.name < b.name ? -1 : +(a.name > b.name))) // sort lexicographicaly
                     .map((data, i) => (
                       <SupplementaryFilesTableRow {...data} key={data.id} />
                     ))}
@@ -99,7 +97,7 @@ const AttachedFilesTable = (
                 {' '}
                 <FormattedMessage
                   id="app.attachedFilesTable.empty"
-                  defaultMessage="There are no supplementary files attached to this exercise yet."
+                  defaultMessage="There are no uploaded files yet."
                 />
               </p>}
           </div>

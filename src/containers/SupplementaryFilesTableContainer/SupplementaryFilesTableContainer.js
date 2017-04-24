@@ -13,14 +13,12 @@ import {
   createGetSupplementaryFiles
 } from '../../redux/selectors/supplementaryFiles';
 
-const SupplementaryFilesTableContainer = (
-  {
-    exercise,
-    supplementaryFiles,
-    loadFiles,
-    addFiles
-  }
-) => (
+const SupplementaryFilesTableContainer = ({
+  exercise,
+  supplementaryFiles,
+  loadFiles,
+  addFiles
+}) => (
   <AttachedFilesTableContainer
     uploadId={`supplementary-files-${exercise.id}`}
     attachments={supplementaryFiles}
