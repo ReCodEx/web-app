@@ -7,7 +7,7 @@ import { reset, getFormValues, initialize } from 'redux-form';
 import moment from 'moment';
 import PageContent from '../../components/layout/PageContent';
 
-import ResourceRenderer from '../../components/ResourceRenderer';
+import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import EditAssignmentForm from '../../components/forms/EditAssignmentForm';
 import DeleteAssignmentButtonContainer
   from '../../containers/DeleteAssignmentButtonContainer';

@@ -16,7 +16,7 @@ import CommentThread, {
   FailedCommentThread
 } from '../../components/widgets/Comments/CommentThread';
 
-import ResourceRenderer from '../../components/ResourceRenderer';
+import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 
 /**
  * Used  to create a discussion thread. A unique identification must be

@@ -14,7 +14,7 @@ import SubmissionsTableContainer
 import { fetchAssignmentIfNeeded } from '../../redux/modules/assignments';
 
 import PageContent from '../../components/layout/PageContent';
-import ResourceRenderer from '../../components/ResourceRenderer';
+import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 
 class AssignmentStats extends Component {
   static loadAsync = ({ assignmentId }, dispatch) =>

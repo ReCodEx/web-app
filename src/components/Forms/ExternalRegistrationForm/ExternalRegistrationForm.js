@@ -5,7 +5,7 @@ import { Map } from 'immutable';
 import { FormattedMessage } from 'react-intl';
 import { Alert } from 'react-bootstrap';
 
-import ResourceRenderer from '../../ResourceRenderer';
+import ResourceRenderer from '../../helpers/ResourceRenderer';
 import FormBox from '../../widgets/FormBox';
 import { TextField, PasswordField, SelectField } from '../Fields';
 import SubmitButton from '../SubmitButton';

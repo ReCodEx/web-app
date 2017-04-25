@@ -10,7 +10,7 @@ import { LinkContainer } from 'react-router-bootstrap';
 import Page from '../../components/layout/Page';
 import Box from '../../components/widgets/Box';
 import { LoadingInfoBox } from '../../components/widgets/InfoBox';
-import ResourceRenderer from '../../components/ResourceRenderer';
+import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import UsersNameContainer from '../../containers/UsersNameContainer';
 import StudentsListContainer from '../../containers/StudentsListContainer';
 import AssignmentsTable

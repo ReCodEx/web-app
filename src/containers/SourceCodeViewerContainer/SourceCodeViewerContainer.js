@@ -9,7 +9,7 @@ import { DownloadIcon, LoadingIcon } from '../../components/icons';
 import { fetchFileIfNeeded, download } from '../../redux/modules/files';
 import { fetchContentIfNeeded } from '../../redux/modules/filesContent';
 import { getFile, getFilesContent } from '../../redux/selectors/files';
-import ResourceRenderer from '../../components/ResourceRenderer';
+import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import SourceCodeViewer from '../../components/helpers/SourceCodeViewer';
 
 class SourceCodeViewerContainer extends Component {

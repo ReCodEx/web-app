@@ -4,14 +4,16 @@ import { FormattedMessage } from 'react-intl';
 import { Field, FieldArray } from 'redux-form';
 import { TextField } from '../Fields';
 import EditHardwareGroupLimits from '../EditHardwareGroupLimits';
-import ResourceRenderer from '../../ResourceRenderer';
+import ResourceRenderer from '../../helpers/ResourceRenderer';
 
-const EditEnvironmentLimitsFields = ({
-  prefix,
-  i,
-  environments,
-  runtimeEnvironments
-}) => {
+const EditEnvironmentLimitsFields = (
+  {
+    prefix,
+    i,
+    environments,
+    runtimeEnvironments
+  }
+) => {
   const {
     environment,
     limits,
@@ -24,7 +26,7 @@ const EditEnvironmentLimitsFields = ({
   return (
     <div>
       <ResourceRenderer resource={runtime}>
-        {(runtime) => (
+        {runtime => (
           <div>
             <h4>{runtime.name}</h4>
             <ul>
@@ -39,13 +41,20 @@ const EditEnvironmentLimitsFields = ({
       <Field
         name={`${prefix}.environment.name`}
         component={TextField}
-        label={<FormattedMessage id="app.editEnvironmentLimitsForm.environment.name" defaultMessage="Environment name:" />} />
+        label={
+          <FormattedMessage
+            id="app.editEnvironmentLimitsForm.environment.name"
+            defaultMessage="Environment name:"
+          />
+        }
+      />
 
       <FieldArray
         name={`${prefix}.limits`}
         limits={limits}
         referenceSolutionsEvaluations={referenceSolutionsEvaluations}
-        component={EditHardwareGroupLimits} />
+        component={EditHardwareGroupLimits}
+      />
     </div>
   );
 };

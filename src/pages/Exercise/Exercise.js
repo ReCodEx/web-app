@@ -15,7 +15,7 @@ import Button from '../../components/widgets/FlatButton';
 import Page from '../../components/layout/Page';
 import ExerciseDetail from '../../components/Exercises/ExerciseDetail';
 import LocalizedTexts from '../../components/LocalizedTexts';
-import ResourceRenderer from '../../components/ResourceRenderer';
+import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import GroupsList from '../../components/Groups/GroupsList';
 import ReferenceSolutionsList
   from '../../components/Exercises/ReferenceSolutionsList';

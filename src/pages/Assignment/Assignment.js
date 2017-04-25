@@ -27,7 +27,7 @@ import {
 } from '../../redux/selectors/users';
 
 import PageContent from '../../components/layout/PageContent';
-import ResourceRenderer from '../../components/ResourceRenderer';
+import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import UsersNameContainer from '../../containers/UsersNameContainer';
 import AssignmentDetails, {
   LoadingAssignmentDetails,

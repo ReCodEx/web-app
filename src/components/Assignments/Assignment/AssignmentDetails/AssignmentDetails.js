@@ -9,7 +9,7 @@ import {
   FormattedRelative
 } from 'react-intl';
 import classnames from 'classnames';
-import ResourceRenderer from '../../../ResourceRenderer';
+import ResourceRenderer from '../../../helpers/ResourceRenderer';
 import { SuccessIcon, MaybeSucceededIcon } from '../../../icons';
 import Box from '../../../widgets/Box';
 

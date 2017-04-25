@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import { FormattedMessage } from 'react-intl';
-import { LoadingIcon, WarningIcon } from '../icons';
+import { LoadingIcon, WarningIcon } from '../../icons';
 import {
   isLoading,
   hasFailed,
@@ -8,7 +8,7 @@ import {
   isDeleting,
   isDeleted,
   getJsData
-} from '../../redux/helpers/resourceManager';
+} from '../../../redux/helpers/resourceManager';
 
 const defaultLoading = noIcons => (
   <span>

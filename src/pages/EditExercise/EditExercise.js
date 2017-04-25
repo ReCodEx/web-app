@@ -8,7 +8,7 @@ import { reset, getFormValues } from 'redux-form';
 
 import Page from '../../components/layout/Page';
 import Box from '../../components/widgets/Box';
-import ResourceRenderer from '../../components/ResourceRenderer';
+import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 
 import EditExerciseForm from '../../components/forms/EditExerciseForm';
 import EditExerciseRuntimeConfigsForm

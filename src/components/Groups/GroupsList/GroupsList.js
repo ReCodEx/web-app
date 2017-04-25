@@ -2,17 +2,19 @@ import React, { PropTypes } from 'react';
 import { Link } from 'react-router';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { Table } from 'react-bootstrap';
-import ResourceRenderer from '../../ResourceRenderer';
+import ResourceRenderer from '../../helpers/ResourceRenderer';
 import Icon from 'react-fontawesome';
 
 import withLinks from '../../../hoc/withLinks';
 
-const GroupsList = ({
-  groups = [],
-  renderButtons = () => null,
-  links: { GROUP_URI_FACTORY },
-  ...props
-}) => (
+const GroupsList = (
+  {
+    groups = [],
+    renderButtons = () => null,
+    links: { GROUP_URI_FACTORY },
+    ...props
+  }
+) => (
   <ResourceRenderer resource={groups.toArray()}>
     {(...groups) => (
       <Table hover {...props}>

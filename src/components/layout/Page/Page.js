@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import { FormattedMessage } from 'react-intl';
 import PageContent from '../PageContent';
-import ResourceRenderer from '../../ResourceRenderer';
+import ResourceRenderer from '../../helpers/ResourceRenderer';
 
 const Page = (
   {

@@ -9,7 +9,7 @@ import Box from '../../widgets/Box';
 import { SendIcon } from '../../icons';
 
 import UploadContainer from '../../../containers/UploadContainer';
-import ResourceRenderer from '../../ResourceRenderer';
+import ResourceRenderer from '../../helpers/ResourceRenderer';
 
 const AttachedFilesTable = (
   {

@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import { FormattedMessage } from 'react-intl';
 import Icon from 'react-fontawesome';
-import ResourceRenderer from '../../ResourceRenderer';
+import ResourceRenderer from '../../helpers/ResourceRenderer';
 import { LoadingIcon } from '../../icons';
 import BreadcrumbItem from './BreadcrumbItem';
 

@@ -6,7 +6,7 @@ import Badge, {
   LoadingBadge,
   FailedBadge
 } from '../../components/widgets/Badge';
-import ResourceRenderer from '../../components/ResourceRenderer';
+import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import { loggedInUserSelector } from '../../redux/selectors/users';
 import { accessTokenExpiration } from '../../redux/selectors/auth';
 

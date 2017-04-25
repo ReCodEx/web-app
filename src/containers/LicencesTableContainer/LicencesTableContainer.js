@@ -2,20 +2,18 @@ import React, { Component, PropTypes } from 'react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 
-import ResourceRenderer from '../../components/ResourceRenderer';
+import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import LicencesTable from '../../components/Instances/LicencesTable';
 
 import { fetchInstanceLincences } from '../../redux/modules/licences';
 import { getLicencesOfInstance } from '../../redux/selectors/licences';
 
 class LicencesTableContainer extends Component {
-
-  static loadAsync = ({ instanceId }, dispatch) => Promise.all([
-    dispatch(fetchInstanceLincences(instanceId))
-  ]);
+  static loadAsync = ({ instanceId }, dispatch) =>
+    Promise.all([dispatch(fetchInstanceLincences(instanceId))]);
 
   componentWillMount = () => this.props.loadAsync();
-  componentWillReceiveProps = (newProps) => {
+  componentWillReceiveProps = newProps => {
     if (this.props.instance.id !== newProps.instance.id) {
       newProps.loadAsync();
     }
@@ -29,7 +27,6 @@ class LicencesTableContainer extends Component {
       </ResourceRenderer>
     );
   }
-
 }
 
 LicencesTableContainer.propTypes = {
@@ -43,6 +40,7 @@ export default connect(
     licences: getLicencesOfInstance(instance.id)(state)
   }),
   (dispatch, { instance }) => ({
-    loadAsync: () => LicencesTableContainer.loadAsync({ instanceId: instance.id }, dispatch)
+    loadAsync: () =>
+      LicencesTableContainer.loadAsync({ instanceId: instance.id }, dispatch)
   })
 )(LicencesTableContainer);
