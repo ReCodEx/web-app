@@ -8,7 +8,7 @@ import moment from 'moment';
 import PageContent from '../../components/PageContent';
 
 import ResourceRenderer from '../../components/ResourceRenderer';
-import EditAssignmentForm from '../../components/Forms/EditAssignmentForm';
+import EditAssignmentForm from '../../components/forms/EditAssignmentForm';
 import DeleteAssignmentButtonContainer
   from '../../containers/DeleteAssignmentButtonContainer';
 import Box from '../../components/widgets/Box';

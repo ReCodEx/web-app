@@ -4,7 +4,7 @@ import { Row, Col } from 'react-bootstrap';
 
 import Box from '../../widgets/Box';
 import AddSupervisor from '../AddSupervisor';
-import CreateGroupForm from '../../Forms/CreateGroupForm'; // @todo replace with it's' container
+import CreateGroupForm from '../../forms/CreateGroupForm'; // @todo replace with it's' container
 
 const AdminsView = (
   {

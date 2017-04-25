@@ -6,7 +6,7 @@ import { push } from 'react-router-redux';
 import { reset } from 'redux-form';
 
 import Page from '../../components/Page';
-import EditInstanceForm from '../../components/Forms/EditInstanceForm';
+import EditInstanceForm from '../../components/forms/EditInstanceForm';
 
 import {
   fetchInstanceIfNeeded,

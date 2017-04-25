@@ -5,7 +5,7 @@ import { push } from 'react-router-redux';
 
 import { Row, Col } from 'react-bootstrap';
 import PageContent from '../../components/PageContent';
-import ResetPasswordForm from '../../components/Forms/ResetPasswordForm';
+import ResetPasswordForm from '../../components/forms/ResetPasswordForm';
 
 import { resetPassword } from '../../redux/modules/auth';
 import {

@@ -10,7 +10,7 @@ import Page from '../../components/Page';
 import InstanceDetail from '../../components/Instances/InstanceDetail';
 import LicencesTableContainer from '../../containers/LicencesTableContainer';
 import AddLicenceFormContainer from '../../containers/AddLicenceFormContainer';
-import CreateGroupForm from '../../components/Forms/CreateGroupForm';
+import CreateGroupForm from '../../components/forms/CreateGroupForm';
 import { EditIcon } from '../../components/icons';
 
 import { fetchInstanceIfNeeded } from '../../redux/modules/instances';

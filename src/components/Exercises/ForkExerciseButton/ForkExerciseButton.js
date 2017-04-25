@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 import { FormattedMessage } from 'react-intl';
 import Button from '../../widgets/FlatButton';
 import Icon from 'react-fontawesome';
-import Confirm from '../../Forms/Confirm';
+import Confirm from '../../forms/Confirm';
 
 const ForkExerciseButton = (
   {
