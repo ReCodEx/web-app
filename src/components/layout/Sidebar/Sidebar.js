@@ -2,12 +2,12 @@ import React, { PropTypes } from 'react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 
 // import Admin from '../Admin';
-import Public from '../Public';
-import LoggedIn from '../LoggedIn';
-import Admin from '../Admin';
-import Student from '../Student';
-import Supervisor from '../Supervisor';
-import BadgeContainer from '../../../../containers/BadgeContainer';
+import Public from './Public';
+import LoggedIn from './LoggedIn';
+import Admin from './Admin';
+import Student from './Student';
+import Supervisor from './Supervisor';
+import BadgeContainer from '../../../containers/BadgeContainer';
 
 const Sidebar = (
   {
