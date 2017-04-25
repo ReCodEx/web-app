@@ -35,7 +35,7 @@ import AssignmentDetails, {
 } from '../../components/Assignments/Assignment/AssignmentDetails';
 
 import { EditIcon, ResultsIcon } from '../../components/icons';
-import LocalizedTexts from '../../components/LocalizedTexts';
+import LocalizedTexts from '../../components/helpers/LocalizedTexts';
 import SubmitSolutionButton
   from '../../components/Assignments/SubmitSolutionButton';
 import SubmitSolutionContainer from '../../containers/SubmitSolutionContainer';
