@@ -2,20 +2,26 @@ import React, { PropTypes } from 'react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 
-import Search from '../../components/Search';
+import Search from '../../components/helpers/Search';
 
 import { searchStatus } from '../../redux/modules/search';
-import { getSearchStatus, getSearchResults, getSearchQuery } from '../../redux/selectors/search';
+import {
+  getSearchStatus,
+  getSearchResults,
+  getSearchQuery
+} from '../../redux/selectors/search';
 
-const SearchContainer = ({
-  id,
-  type = 'search',
-  query,
-  search,
-  status,
-  foundItems,
-  renderList
-}) => (
+const SearchContainer = (
+  {
+    id,
+    type = 'search',
+    query,
+    search,
+    status,
+    foundItems,
+    renderList
+  }
+) => (
   <Search
     type={type}
     id={id}
@@ -25,7 +31,8 @@ const SearchContainer = ({
     isLoading={status === searchStatus.PENDING}
     hasFailed={status === searchStatus.FAILED}
     onChange={search}
-    renderList={renderList} />
+    renderList={renderList}
+  />
 );
 
 SearchContainer.propTypes = {
