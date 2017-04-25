@@ -10,7 +10,7 @@ import { fetchFileIfNeeded, download } from '../../redux/modules/files';
 import { fetchContentIfNeeded } from '../../redux/modules/filesContent';
 import { getFile, getFilesContent } from '../../redux/selectors/files';
 import ResourceRenderer from '../../components/ResourceRenderer';
-import SourceCodeViewer from '../../components/SourceCodeViewer';
+import SourceCodeViewer from '../../components/helpers/SourceCodeViewer';
 
 class SourceCodeViewerContainer extends Component {
   componentWillMount() {

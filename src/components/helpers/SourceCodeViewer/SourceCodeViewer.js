@@ -1,5 +1,6 @@
 import React, { PropTypes } from 'react';
 import { canUseDOM } from 'exenv';
+import ClientOnly from '../ClientOnly';
 
 var AceEditor = null;
 if (canUseDOM) {
@@ -30,13 +31,15 @@ const getMode = ext => {
   }
 };
 
-const SourceCodeViewer = ({
-  name,
-  content = '',
-  lineNumbers = true,
-  lines = 20
-}) =>
-  canUseDOM ? (
+const SourceCodeViewer = (
+  {
+    name,
+    content = '',
+    lineNumbers = true,
+    lines = 20
+  }
+) => (
+  <ClientOnly>
     <AceEditor
       value={content}
       disabled
@@ -44,8 +47,10 @@ const SourceCodeViewer = ({
       theme="monokai"
       name="source-code-viewer"
       width="100%"
-      editorProps={{$blockScrolling: true}} />
-  ) : null;
+      editorProps={{ $blockScrolling: true }}
+    />
+  </ClientOnly>
+);
 
 SourceCodeViewer.propTypes = {
   name: PropTypes.string.isRequired,
