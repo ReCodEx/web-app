@@ -12,7 +12,7 @@ import { Row, Col } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 import Button from '../../components/widgets/FlatButton';
 
-import Page from '../../components/Page';
+import Page from '../../components/layout/Page';
 import ExerciseDetail from '../../components/Exercises/ExerciseDetail';
 import LocalizedTexts from '../../components/LocalizedTexts';
 import ResourceRenderer from '../../components/ResourceRenderer';

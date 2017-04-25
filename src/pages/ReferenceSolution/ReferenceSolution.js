@@ -8,7 +8,7 @@ import {
 } from 'react-intl';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { Row, Col, Button } from 'react-bootstrap';
-import Page from '../../components/Page';
+import Page from '../../components/layout/Page';
 import ResourceRenderer from '../../components/ResourceRenderer';
 
 import {

@@ -7,7 +7,7 @@ import Button from '../../components/widgets/FlatButton';
 import { FormattedMessage } from 'react-intl';
 import { List } from 'immutable';
 
-import Page from '../../components/Page';
+import Page from '../../components/layout/Page';
 import GroupDetail, {
   LoadingGroupDetail,
   FailedGroupDetail

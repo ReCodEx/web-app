@@ -2,7 +2,7 @@ import React from 'react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { FormattedMessage } from 'react-intl';
 import { Row, Col } from 'react-bootstrap';
-import Page from '../../Page';
+import Page from '../../layout/Page';
 import Box from '../../widgets/Box';
 import InstancesTable from '../InstancesTable';
 

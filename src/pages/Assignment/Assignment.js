@@ -26,7 +26,7 @@ import {
   isSupervisorOf
 } from '../../redux/selectors/users';
 
-import PageContent from '../../components/PageContent';
+import PageContent from '../../components/layout/PageContent';
 import ResourceRenderer from '../../components/ResourceRenderer';
 import UsersNameContainer from '../../containers/UsersNameContainer';
 import AssignmentDetails, {

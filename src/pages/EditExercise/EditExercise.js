@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 import { reset, getFormValues } from 'redux-form';
 
-import Page from '../../components/Page';
+import Page from '../../components/layout/Page';
 import Box from '../../components/widgets/Box';
 import ResourceRenderer from '../../components/ResourceRenderer';
 

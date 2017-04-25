@@ -8,7 +8,7 @@ import Button from '../../components/widgets/FlatButton';
 import { Link } from 'react-router';
 import { LinkContainer } from 'react-router-bootstrap';
 
-import Page from '../../components/Page';
+import Page from '../../components/layout/Page';
 import Box from '../../components/widgets/Box';
 import { LoadingInfoBox } from '../../components/widgets/InfoBox';
 import ResourceRenderer from '../../components/ResourceRenderer';

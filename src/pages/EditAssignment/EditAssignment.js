@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 import { reset, getFormValues, initialize } from 'redux-form';
 import moment from 'moment';
-import PageContent from '../../components/PageContent';
+import PageContent from '../../components/layout/PageContent';
 
 import ResourceRenderer from '../../components/ResourceRenderer';
 import EditAssignmentForm from '../../components/forms/EditAssignmentForm';

@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import Helmet from 'react-helmet';
 import { injectIntl, intlShape, FormattedMessage } from 'react-intl';
-import Breadcrumbs from '../widgets/Breadcrumbs';
+import Breadcrumbs from '../../widgets/Breadcrumbs';
 
 const getMessage = (item, formatMessage) =>
   !item

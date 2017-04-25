@@ -6,7 +6,7 @@ import { Row, Col } from 'react-bootstrap';
 import Button from '../../components/widgets/FlatButton';
 import { LinkContainer } from 'react-router-bootstrap';
 
-import Page from '../../components/Page';
+import Page from '../../components/layout/Page';
 import InstanceDetail from '../../components/Instances/InstanceDetail';
 import LicencesTableContainer from '../../containers/LicencesTableContainer';
 import AddLicenceFormContainer from '../../containers/AddLicenceFormContainer';

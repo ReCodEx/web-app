@@ -10,7 +10,7 @@ import {
   updateSettings
 } from '../../redux/modules/users';
 import { getUser } from '../../redux/selectors/users';
-import Page from '../../components/Page';
+import Page from '../../components/layout/Page';
 
 import EditUserProfileForm from '../../components/forms/EditUserProfileForm';
 import EditUserSettingsForm from '../../components/forms/EditUserSettingsForm';

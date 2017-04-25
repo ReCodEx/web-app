@@ -6,7 +6,7 @@ import { push } from 'react-router-redux';
 import { reset } from 'redux-form';
 
 import { Row, Col } from 'react-bootstrap';
-import PageContent from '../../components/PageContent';
+import PageContent from '../../components/layout/PageContent';
 import LoginForm from '../../components/forms/LoginForm';
 import CASLoginBox from '../../containers/CAS';
 

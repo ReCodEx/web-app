@@ -2,11 +2,11 @@ import React, { PropTypes } from 'react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { FormattedMessage } from 'react-intl';
 
-import { isReady, getJsData } from '../../../redux/helpers/resourceManager';
-import MenuTitle from '../../widgets/Sidebar/MenuTitle';
-import MenuItem from '../../widgets/Sidebar/MenuItem';
+import { isReady, getJsData } from '../../../../redux/helpers/resourceManager';
+import MenuTitle from '../../../widgets/Sidebar/MenuTitle';
+import MenuItem from '../../../widgets/Sidebar/MenuItem';
 
-import withLinks from '../../../hoc/withLinks';
+import withLinks from '../../../../hoc/withLinks';
 
 const LoggedIn = (
   {

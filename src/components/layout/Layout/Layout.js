@@ -2,9 +2,10 @@ import React, { PropTypes } from 'react';
 import Helmet from 'react-helmet';
 import classNames from 'classnames';
 
-import Header from '../widgets/Header';
-import SidebarContainer from '../../containers/SidebarContainer';
-import Footer from '../widgets/Footer';
+import Header from '../../widgets/Header';
+import Footer from '../../widgets/Footer';
+
+import SidebarContainer from '../../../containers/SidebarContainer';
 
 export const Layout = (
   {

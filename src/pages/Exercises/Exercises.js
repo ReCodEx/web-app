@@ -5,7 +5,7 @@ import { FormattedMessage } from 'react-intl';
 import Button from '../../components/widgets/FlatButton';
 import { push } from 'react-router-redux';
 
-import Page from '../../components/Page';
+import Page from '../../components/layout/Page';
 import Box from '../../components/widgets/Box';
 import { AddIcon } from '../../components/icons';
 import { exercisesSelector } from '../../redux/selectors/exercises';

@@ -7,32 +7,32 @@ import LoggedIn from '../LoggedIn';
 import Admin from '../Admin';
 import Student from '../Student';
 import Supervisor from '../Supervisor';
-import BadgeContainer from '../../../containers/BadgeContainer';
+import BadgeContainer from '../../../../containers/BadgeContainer';
 
-const Sidebar = ({
-  isLoggedIn = false,
-  studentOf,
-  supervisorOf,
-  isAdmin,
-  small = false,
-  ...props
-}) => (
+const Sidebar = (
+  {
+    isLoggedIn = false,
+    studentOf,
+    supervisorOf,
+    isAdmin,
+    small = false,
+    ...props
+  }
+) => (
   <aside className="main-sidebar">
     <section className="sidebar">
       {isLoggedIn && <BadgeContainer small={small} />}
       {isLoggedIn && <LoggedIn {...props} />}
 
-      {studentOf && studentOf.size > 0 && (
-        <Student {...props} studentOf={studentOf} />
-      )}
+      {studentOf &&
+        studentOf.size > 0 &&
+        <Student {...props} studentOf={studentOf} />}
 
-      {supervisorOf && supervisorOf.size > 0 && (
-        <Supervisor {...props} supervisorOf={supervisorOf} />
-      )}
+      {supervisorOf &&
+        supervisorOf.size > 0 &&
+        <Supervisor {...props} supervisorOf={supervisorOf} />}
 
-      {isAdmin && (
-        <Admin {...props} />
-      )}
+      {isAdmin && <Admin {...props} />}
 
       {!isLoggedIn && <Public {...props} />}
     </section>
