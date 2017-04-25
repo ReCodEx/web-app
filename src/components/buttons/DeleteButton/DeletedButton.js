@@ -1,7 +1,7 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
-import Button from '../widgets/FlatButton';
-import { SuccessIcon } from '../Icons';
+import Button from '../../widgets/FlatButton';
+import { SuccessIcon } from '../../Icons';
 
 const DeletedGroupButton = props => (
   <Button bsStyle="default" bsSize="sm" {...props}>

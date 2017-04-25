@@ -1,9 +1,9 @@
 import React, { PropTypes } from 'react';
 import { FormattedMessage } from 'react-intl';
-import Button from '../widgets/FlatButton';
-import { FailedIcon } from '../Icons';
+import Button from '../../widgets/FlatButton';
+import { FailedIcon } from '../../Icons';
 
-const DeletingGroupFailedButton = ({ onClick, ...props }) => (
+const DeletingFailedButton = ({ onClick, ...props }) => (
   <Button
     bsStyle="default"
     bsSize="sm"
@@ -20,8 +20,8 @@ const DeletingGroupFailedButton = ({ onClick, ...props }) => (
   </Button>
 );
 
-DeletingGroupFailedButton.propTypes = {
+DeletingFailedButton.propTypes = {
   onClick: PropTypes.func
 };
 
-export default DeletingGroupFailedButton;
+export default DeletingFailedButton;
