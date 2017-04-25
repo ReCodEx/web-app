@@ -2,29 +2,43 @@ import React, { PropTypes } from 'react';
 import { FormattedMessage } from 'react-intl';
 import Icon from 'react-fontawesome';
 import ResourceRenderer from '../../ResourceRenderer';
-import { LoadingIcon } from '../../Icons';
+import { LoadingIcon } from '../../icons';
 import BreadcrumbItem from './BreadcrumbItem';
 
-const ResourceDependentBreadcrumbItem = ({
-  resource,
-  iconName,
-  isActive,
-  breadcrumb
-}) => (
+const ResourceDependentBreadcrumbItem = (
+  {
+    resource,
+    iconName,
+    isActive,
+    breadcrumb
+  }
+) => (
   <ResourceRenderer
     resource={resource}
-    loading={(
+    loading={
       <BreadcrumbItem
-        text={(
+        text={
           <span>
             {iconName !== null ? <Icon name={iconName} /> : <LoadingIcon />}
-            {' '}<FormattedMessage id="app.resourceDependendBreadcrumbItem.loading" defaultMessage="Loading ..." />
+            {' '}
+            <FormattedMessage
+              id="app.resourceDependendBreadcrumbItem.loading"
+              defaultMessage="Loading ..."
+            />
           </span>
-        )}
-        isActive={isActive} />
+        }
+        isActive={isActive}
+      />
+    }
+    failed={null}
+  >
+    {data => (
+      <BreadcrumbItem
+        iconName={iconName}
+        {...breadcrumb(data)}
+        isActive={isActive}
+      />
     )}
-    failed={null}>
-    {(data) => <BreadcrumbItem iconName={iconName} {...breadcrumb(data)} isActive={isActive} />}
   </ResourceRenderer>
 );
 

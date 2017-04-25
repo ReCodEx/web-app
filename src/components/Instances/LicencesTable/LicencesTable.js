@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import { FormattedMessage, FormattedDate, FormattedRelative } from 'react-intl';
 import { Table } from 'react-bootstrap';
-import { MaybeSucceededIcon } from '../../Icons';
+import { MaybeSucceededIcon } from '../../icons';
 import Box from '../../widgets/Box';
 
 const LicencesTable = (

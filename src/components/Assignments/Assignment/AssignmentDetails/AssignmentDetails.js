@@ -10,7 +10,7 @@ import {
 } from 'react-intl';
 import classnames from 'classnames';
 import ResourceRenderer from '../../../ResourceRenderer';
-import { SuccessIcon, MaybeSucceededIcon } from '../../../Icons';
+import { SuccessIcon, MaybeSucceededIcon } from '../../../icons';
 import Box from '../../../widgets/Box';
 
 const AssignmentDetails = (

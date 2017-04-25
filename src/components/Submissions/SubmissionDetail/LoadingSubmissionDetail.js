@@ -1,6 +1,6 @@
 import React from 'react';
 import Box from '../../widgets/Box';
-import { LoadingIcon } from '../../Icons';
+import { LoadingIcon } from '../../icons';
 
 const LoadingSubmissionDetail = () => (
   <Box

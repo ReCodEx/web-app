@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import { FormattedMessage } from 'react-intl';
 import Button from '../../widgets/FlatButton';
-import { SuccessIcon } from '../../Icons';
+import { SuccessIcon } from '../../icons';
 
 const SuccessfulForkExerciseButton = (
   {

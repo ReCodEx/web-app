@@ -1,10 +1,9 @@
 import React, { Component, PropTypes } from 'react';
 import { Tooltip, OverlayTrigger, Badge } from 'react-bootstrap';
 import { FormattedDate, FormattedTime } from 'react-intl';
-import { SuccessIcon, WarningIcon, DeleteIcon } from '../../Icons';
+import { SuccessIcon, WarningIcon, DeleteIcon } from '../../icons';
 
 class HeaderNotification extends Component {
-
   state = { hovering: false };
 
   render() {
@@ -31,17 +30,20 @@ class HeaderNotification extends Component {
                 {msg}
               </span>
             </Tooltip>
-          }>
+          }
+        >
           <a
             href={hide ? '#' : undefined}
-            onClick={(e) => { e.preventDefault(); hide && hide(id); }}
+            onClick={e => {
+              e.preventDefault();
+              hide && hide(id);
+            }}
             onMouseOver={() => this.setState({ hovering: true })}
-            onMouseOut={() => this.setState({ hovering: false })}>
+            onMouseOut={() => this.setState({ hovering: false })}
+          >
             {deleteOnClick
               ? <DeleteIcon />
-              : successful
-                ? <SuccessIcon />
-                : <WarningIcon />}
+              : successful ? <SuccessIcon /> : <WarningIcon />}
             <span>
               {count > 1 && <Badge pullRight>{count}</Badge>}
               {msg}
@@ -51,7 +53,6 @@ class HeaderNotification extends Component {
       </li>
     );
   }
-
 }
 
 HeaderNotification.propTypes = {

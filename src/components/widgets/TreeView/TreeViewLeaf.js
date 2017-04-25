@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import { FormattedMessage } from 'react-intl';
 import Icon from 'react-fontawesome';
-import { LoadingIcon } from '../../Icons';
+import { LoadingIcon } from '../../icons';
 import LevelGap from './LevelGap';
 
 const TreeViewLeaf = (

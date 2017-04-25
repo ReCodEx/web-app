@@ -3,7 +3,7 @@ import { FormattedMessage } from 'react-intl';
 import { Alert, Tabs, Tab } from 'react-bootstrap';
 import Button from '../../widgets/FlatButton';
 import Confirm from '../Confirm';
-import { AddIcon, WarningIcon } from '../../Icons';
+import { AddIcon, WarningIcon } from '../../icons';
 
 class TabbedArrayField extends Component {
   state = { activeTab: 0 };

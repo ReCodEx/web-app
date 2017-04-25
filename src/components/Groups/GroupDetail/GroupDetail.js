@@ -6,7 +6,7 @@ import ReactMarkdown from 'react-markdown';
 import Box from '../../widgets/Box';
 import GroupTree from '../GroupTree';
 import SupervisorsList from '../../Users/SupervisorsList';
-import { MaybeSucceededIcon } from '../../Icons';
+import { MaybeSucceededIcon } from '../../icons';
 
 const GroupDetail = (
   {

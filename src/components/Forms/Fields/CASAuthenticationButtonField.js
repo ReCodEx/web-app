@@ -3,7 +3,7 @@ import { FormattedMessage } from 'react-intl';
 import { change } from 'redux-form';
 
 import { FormGroup } from 'react-bootstrap';
-import { MaybeSucceededIcon } from '../../Icons';
+import { MaybeSucceededIcon } from '../../icons';
 import AuthentictionButtonContianer
   from '../../../containers/CAS/AuthenticationButtonContainer';
 

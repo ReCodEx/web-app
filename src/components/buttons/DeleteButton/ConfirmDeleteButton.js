@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import { FormattedMessage } from 'react-intl';
 import Button from '../../widgets/FlatButton';
-import { DeleteIcon } from '../../Icons';
+import { DeleteIcon } from '../../icons';
 import Confirm from '../../Forms/Confirm';
 
 const ConfirmDeleteButton = (

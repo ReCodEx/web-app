@@ -5,7 +5,7 @@ import { Alert } from 'react-bootstrap';
 import Button from '../../widgets/FlatButton';
 import isEmail from 'validator/lib/isEmail';
 
-import { SuccessIcon, LoadingIcon } from '../../Icons';
+import { SuccessIcon, LoadingIcon } from '../../icons';
 import FormBox from '../../widgets/FormBox';
 import { EmailField } from '../Fields';
 

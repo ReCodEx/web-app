@@ -1,17 +1,34 @@
 import React, { PropTypes } from 'react';
 import { FormattedMessage } from 'react-intl';
-import { LoadingIcon, WarningIcon } from '../Icons';
-import { isLoading, hasFailed, isPosting, isDeleting, isDeleted, getJsData } from '../../redux/helpers/resourceManager';
+import { LoadingIcon, WarningIcon } from '../icons';
+import {
+  isLoading,
+  hasFailed,
+  isPosting,
+  isDeleting,
+  isDeleted,
+  getJsData
+} from '../../redux/helpers/resourceManager';
 
-const defaultLoading = (noIcons) => (
+const defaultLoading = noIcons => (
   <span>
-    {!noIcons && <LoadingIcon />} <FormattedMessage id="app.resourceRenderer.loading" defaultMessage="Loading ..." />
+    {!noIcons && <LoadingIcon />}
+    {' '}
+    <FormattedMessage
+      id="app.resourceRenderer.loading"
+      defaultMessage="Loading ..."
+    />
   </span>
 );
 
-const defaultFailed = (noIcons) => (
+const defaultFailed = noIcons => (
   <span>
-    {!noIcons && <WarningIcon />} <FormattedMessage id="app.resourceRenderer.loadingFailed" defaultMessage="Loading failed." />
+    {!noIcons && <WarningIcon />}
+    {' '}
+    <FormattedMessage
+      id="app.resourceRenderer.loadingFailed"
+      defaultMessage="Loading failed."
+    />
   </span>
 );
 
@@ -30,34 +47,36 @@ const defaultFailed = (noIcons) => (
  * When all the files are fully loaded then the component displays the content
  * for the loaded state.
  */
-const ResourceRenderer = ({
-  noIcons = false,
-  loading = defaultLoading(noIcons),
-  failed = defaultFailed(noIcons),
-  children: ready,
-  resource,
-  hiddenUntilReady = false,
-  forceLoading = false
-}) => {
+const ResourceRenderer = (
+  {
+    noIcons = false,
+    loading = defaultLoading(noIcons),
+    failed = defaultFailed(noIcons),
+    children: ready,
+    resource,
+    hiddenUntilReady = false,
+    forceLoading = false
+  }
+) => {
   const resources = Array.isArray(resource) ? resource : [resource];
-  return (!resource || resources.some(isLoading) || forceLoading)
+  return !resource || resources.some(isLoading) || forceLoading
     ? hiddenUntilReady ? null : loading
     : resources.some(hasFailed)
-      ? hiddenUntilReady ? null : failed
-      : ready(
-          ...resources
-            .filter((res) => !isDeleting(res))
-            .filter((res) => !isDeleted(res))
-            .filter((res) => !isPosting(res))
-            .map(getJsData)
-        ); // display all ready items
+        ? hiddenUntilReady ? null : failed
+        : ready(
+            ...resources
+              .filter(res => !isDeleting(res))
+              .filter(res => !isDeleted(res))
+              .filter(res => !isPosting(res))
+              .map(getJsData)
+          ); // display all ready items
 };
 
 ResourceRenderer.propTypes = {
   loading: PropTypes.element,
   failed: PropTypes.element,
   children: PropTypes.func.isRequired,
-  resource: PropTypes.oneOfType([ PropTypes.object, PropTypes.array ]),
+  resource: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
   hiddenUntilReady: PropTypes.bool,
   forceLoading: PropTypes.bool,
   noIcons: PropTypes.bool

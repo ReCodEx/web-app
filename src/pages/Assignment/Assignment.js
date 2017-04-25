@@ -34,7 +34,7 @@ import AssignmentDetails, {
   FailedAssignmentDetails
 } from '../../components/Assignments/Assignment/AssignmentDetails';
 
-import { EditIcon, ResultsIcon } from '../../components/Icons';
+import { EditIcon, ResultsIcon } from '../../components/icons';
 import LocalizedTexts from '../../components/LocalizedTexts';
 import SubmitSolutionButton
   from '../../components/Assignments/SubmitSolutionButton';

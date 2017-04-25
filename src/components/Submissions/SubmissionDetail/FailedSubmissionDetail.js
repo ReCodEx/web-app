@@ -1,7 +1,7 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import Box from '../../widgets/Box';
-import { WarningIcon } from '../../Icons';
+import { WarningIcon } from '../../icons';
 
 const FailedSubmissionDetail = () => (
   <Box

@@ -21,7 +21,7 @@ import ReferenceSolutionsList
   from '../../components/Exercises/ReferenceSolutionsList';
 import SubmitSolutionContainer from '../../containers/SubmitSolutionContainer';
 import Box from '../../components/widgets/Box';
-import { EditIcon, SendIcon } from '../../components/Icons';
+import { EditIcon, SendIcon } from '../../components/icons';
 
 import ForkExerciseButtonContainer
   from '../../containers/ForkExerciseButtonContainer';

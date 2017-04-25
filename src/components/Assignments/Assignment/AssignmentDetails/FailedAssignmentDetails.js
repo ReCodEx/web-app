@@ -1,6 +1,6 @@
 import React from 'react';
 import Box from '../../../widgets/Box';
-import { WarningIcon } from '../../../Icons';
+import { WarningIcon } from '../../../icons';
 import { FormattedMessage } from 'react-intl';
 
 const FailedAssignmentDetails = () => (

@@ -2,7 +2,7 @@ import React, { PropTypes, Component } from 'react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { FormattedMessage } from 'react-intl';
 import { Button, FormGroup, ControlLabel, FormControl, InputGroup } from 'react-bootstrap';
-import { LoadingIcon, SearchIcon, WarningIcon } from '../Icons';
+import { LoadingIcon, SearchIcon, WarningIcon } from '../icons';
 
 // some additional styling for a scrolable vertical box
 import styles from './search.less';

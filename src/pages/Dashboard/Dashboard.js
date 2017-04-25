@@ -37,7 +37,7 @@ import {
   supervisorOfSelector,
   studentOfSelector
 } from '../../redux/selectors/groups';
-import { InfoIcon } from '../../components/Icons';
+import { InfoIcon } from '../../components/icons';
 import { getJsData } from '../../redux/helpers/resourceManager';
 
 import withLinks from '../../hoc/withLinks';

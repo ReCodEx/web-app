@@ -1,8 +1,8 @@
 import React from 'react';
-import { FailedIcon } from '../../Icons';
+import { FailedIcon } from '../../icons';
 import FakeAvatar from './FakeAvatar';
 
-const FailedAvatar = (props) => (
+const FailedAvatar = props => (
   <FakeAvatar {...props}>
     <FailedIcon />
   </FakeAvatar>

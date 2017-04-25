@@ -4,7 +4,7 @@ import { Field } from 'redux-form';
 import { Alert, Tabs, Tab } from 'react-bootstrap';
 import Button from '../../widgets/FlatButton';
 import Confirm from '../Confirm';
-import { AddIcon, WarningIcon } from '../../Icons';
+import { AddIcon, WarningIcon } from '../../icons';
 import { MarkdownTextAreaField, LanguageSelectField } from '../Fields';
 
 class LocalizedTextsFormField extends Component {

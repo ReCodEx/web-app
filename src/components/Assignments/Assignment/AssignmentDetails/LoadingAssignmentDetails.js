@@ -2,7 +2,7 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import Box from '../../../widgets/Box';
-import { LoadingIcon } from '../../../Icons';
+import { LoadingIcon } from '../../../icons';
 
 const LoadingAssignmentDetails = () => (
   <Box

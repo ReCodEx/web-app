@@ -1,13 +1,15 @@
 import React from 'react';
-import { LoadingIcon } from '../../../Icons';
+import { LoadingIcon } from '../../../icons';
 
 const LoadingMenuItem = () => (
   <li>
     <a>
       <LoadingIcon />
-      <span style={{
-        whiteSpace: 'normal'
-      }}>
+      <span
+        style={{
+          whiteSpace: 'normal'
+        }}
+      >
         Načítám ...
       </span>
     </a>

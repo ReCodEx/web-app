@@ -10,7 +10,7 @@ import {
 import { Table } from 'react-bootstrap';
 
 import Box from '../../widgets/Box';
-import { MaybeSucceededIcon } from '../../Icons';
+import { MaybeSucceededIcon } from '../../icons';
 import BonusPoints from '../../Assignments/SubmissionsTable/BonusPoints';
 
 const EvaluationDetail = (

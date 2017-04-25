@@ -1,6 +1,6 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
-import { LoadingIcon } from '../../Icons';
+import { LoadingIcon } from '../../icons';
 import Box from '../../widgets/Box';
 
 const LoadingExerciseDetail = () => (

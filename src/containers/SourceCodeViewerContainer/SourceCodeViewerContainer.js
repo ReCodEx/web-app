@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import { Modal } from 'react-bootstrap';
 import Button from '../../components/widgets/FlatButton';
-import { DownloadIcon, LoadingIcon } from '../../components/Icons';
+import { DownloadIcon, LoadingIcon } from '../../components/icons';
 
 import { fetchFileIfNeeded, download } from '../../redux/modules/files';
 import { fetchContentIfNeeded } from '../../redux/modules/filesContent';

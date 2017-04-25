@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import { FormattedMessage } from 'react-intl';
 import Button from '../../widgets/FlatButton';
-import { FailedIcon } from '../../Icons';
+import { FailedIcon } from '../../icons';
 
 const DeletingFailedButton = ({ onClick, ...props }) => (
   <Button

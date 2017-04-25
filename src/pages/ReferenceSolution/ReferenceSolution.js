@@ -28,7 +28,7 @@ import SourceCodeViewerContainer
   from '../../containers/SourceCodeViewerContainer';
 import { fetchLimits } from '../../redux/modules/limits';
 import { getEnvironmentsLimits } from '../../redux/selectors/limits';
-import { DownloadIcon, RefreshIcon, SendIcon } from '../../components/Icons';
+import { DownloadIcon, RefreshIcon, SendIcon } from '../../components/icons';
 
 const messages = defineMessages({
   title: {

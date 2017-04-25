@@ -8,7 +8,7 @@ import DeleteAssignmentButtonContainer
   from '../../../containers/DeleteAssignmentButtonContainer';
 
 import withLinks from '../../../hoc/withLinks';
-import { EditIcon, MaybePublicIcon } from '../../Icons';
+import { EditIcon, MaybePublicIcon } from '../../icons';
 
 const AdminAssignmentTableRow = (
   {

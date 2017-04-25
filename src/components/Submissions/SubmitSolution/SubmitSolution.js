@@ -19,7 +19,7 @@ import {
   SendIcon,
   DeleteIcon,
   CloseIcon
-} from '../../Icons';
+} from '../../icons';
 import UploadContainer from '../../../containers/UploadContainer';
 import UsersNameContainer from '../../../containers/UsersNameContainer';
 

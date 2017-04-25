@@ -17,7 +17,7 @@ import LeaveJoinGroupButtonContainer
 import AdminsView from '../../components/Groups/AdminsView';
 import SupervisorsView from '../../components/Groups/SupervisorsView';
 import StudentsView from '../../components/Groups/StudentsView';
-import { EditIcon } from '../../components/Icons';
+import { EditIcon } from '../../components/icons';
 
 import { isReady, getJsData } from '../../redux/helpers/resourceManager';
 import {

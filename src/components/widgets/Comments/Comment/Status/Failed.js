@@ -1,18 +1,21 @@
 import React, { PropTypes } from 'react';
 import classNames from 'classnames';
-import { WarningIcon } from '../../../../Icons';
+import { WarningIcon } from '../../../../icons';
 
-const Failed = ({
-  right,
-  repost
-}) => (
-  <span className={
-    classNames({
+const Failed = (
+  {
+    right,
+    repost
+  }
+) => (
+  <span
+    className={classNames({
       'direct-chat-timestamp': true,
       'pull-right': right,
       'pull-left': !right
     })}
-    onClick={repost}>
+    onClick={repost}
+  >
     <WarningIcon /> Publikování selhalo.
   </span>
 );

@@ -4,7 +4,7 @@ import { FormattedMessage } from 'react-intl';
 import { Alert } from 'react-bootstrap';
 import Button from '../../widgets/FlatButton';
 
-import { SuccessIcon, LoadingIcon } from '../../Icons';
+import { SuccessIcon, LoadingIcon } from '../../icons';
 import FormBox from '../../widgets/FormBox';
 import { PasswordField, PasswordStrength } from '../Fields';
 import { validatePasswordStrength } from '../../../redux/modules/auth';

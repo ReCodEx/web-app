@@ -3,7 +3,7 @@ import { reduxForm, Field } from 'redux-form';
 import { FormattedMessage } from 'react-intl';
 import isEmail from 'validator/lib/isEmail';
 
-import { SuccessIcon, LoadingIcon } from '../../Icons';
+import { SuccessIcon, LoadingIcon } from '../../icons';
 import Icon from 'react-fontawesome';
 import FormBox from '../../widgets/FormBox';
 import { EmailField, PasswordField } from '../Fields';

@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 import { reduxForm, Field } from 'redux-form';
 import { FormattedMessage } from 'react-intl';
 
-import { SuccessIcon, LoadingIcon } from '../../Icons';
+import { SuccessIcon, LoadingIcon } from '../../icons';
 import FormBox from '../../widgets/FormBox';
 import { TextField, PasswordField } from '../Fields';
 

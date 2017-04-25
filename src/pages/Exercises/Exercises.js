@@ -7,7 +7,7 @@ import { push } from 'react-router-redux';
 
 import Page from '../../components/Page';
 import Box from '../../components/widgets/Box';
-import { AddIcon } from '../../components/Icons';
+import { AddIcon } from '../../components/icons';
 import { exercisesSelector } from '../../redux/selectors/exercises';
 import {
   fetchExercises,

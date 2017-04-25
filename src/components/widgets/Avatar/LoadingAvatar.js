@@ -1,8 +1,8 @@
 import React from 'react';
-import { LoadingIcon } from '../../Icons';
+import { LoadingIcon } from '../../icons';
 import FakeAvatar from './FakeAvatar';
 
-const LoadingAvatar = (props) => (
+const LoadingAvatar = props => (
   <FakeAvatar {...props}>
     <LoadingIcon />
   </FakeAvatar>
