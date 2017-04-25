@@ -5,7 +5,7 @@ import MediaQuery from 'react-responsive';
 import HeaderNotificationsContainer
   from '../../../containers/HeaderNotificationsContainer';
 import HeaderLanguageSwitching from '../HeaderLanguageSwitching';
-import ClientOnly from '../../ClientOnly';
+import ClientOnly from '../../helpers/ClientOnly';
 
 import withLinks from '../../../hoc/withLinks';
 

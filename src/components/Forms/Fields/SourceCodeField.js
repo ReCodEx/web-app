@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { canUseDOM } from 'exenv';
-import ClientOnly from '../../ClientOnly';
+import ClientOnly from '../../helpers/ClientOnly';
 
 import { FormGroup, ControlLabel, HelpBlock } from 'react-bootstrap';
 
