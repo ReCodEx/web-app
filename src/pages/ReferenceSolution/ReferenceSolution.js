@@ -23,7 +23,7 @@ import ReferenceSolutionDetail
   from '../../components/ReferenceSolutions/ReferenceSolutionDetail';
 import ReferenceSolutionEvaluation
   from '../../components/ReferenceSolutions/ReferenceSolutionEvaluation';
-import SourceCodeInfoBox from '../../components/SourceCodeInfoBox';
+import SourceCodeInfoBox from '../../components/widgets/SourceCodeInfoBox';
 import SourceCodeViewerContainer
   from '../../containers/SourceCodeViewerContainer';
 import { fetchLimits } from '../../redux/modules/limits';

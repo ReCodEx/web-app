@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import { SimpleInfoBox } from '../widgets/InfoBox';
+import { SimpleInfoBox } from '../InfoBox';
 import prettyBytes from 'pretty-bytes';
 
 const SourceCodeInfoBox = (

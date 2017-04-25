@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { Row, Col } from 'react-bootstrap';
 
 import SubmissionStatus from '../SubmissionStatus';
-import SourceCodeInfoBox from '../../SourceCodeInfoBox';
+import SourceCodeInfoBox from '../../widgets/SourceCodeInfoBox';
 import TestResults from '../TestResults';
 import BonusPointsContainer from '../../../containers/BonusPointsContainer';
 import DownloadResultArchiveContainer
