@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { Authenticate, LoginFailed } from '../../components/CAS';
+import { Authenticate, LoginFailed } from '../../components/buttons/CAS';
 import { openCASWindow, getTicketFromUrl } from '../../helpers/cas';
 import withLinks from '../../hoc/withLinks';
 import { absolute } from '../../links';

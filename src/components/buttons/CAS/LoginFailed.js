@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import { FormattedMessage } from 'react-intl';
-import Button from '../widgets/FlatButton';
-import { WarningIcon } from '../Icons';
+import Button from '../../widgets/FlatButton';
+import { WarningIcon } from '../../Icons';
 
 const LoginFailed = ({ onClick }) => (
   <Button bsStyle="danger" onClick={onClick}>

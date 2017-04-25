@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import { FormattedMessage } from 'react-intl';
-import Button from '../widgets/FlatButton';
+import Button from '../../widgets/FlatButton';
 import Icon from 'react-fontawesome';
 
 const Login = ({ onClick }) => (

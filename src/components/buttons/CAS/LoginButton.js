@@ -2,9 +2,9 @@ import React, { PropTypes } from 'react';
 import LoginSuccessful from './LoginSuccessful';
 import LoggingIn from './LoggingIn';
 import AuthenticationButtonContainer
-  from '../../containers/CAS/AuthenticationButtonContainer';
+  from '../../../containers/CAS/AuthenticationButtonContainer';
 
-import { statusTypes } from '../../redux/modules/auth';
+import { statusTypes } from '../../../redux/modules/auth';
 
 const LoginButton = ({ loginStatus, onLogin, onFailed }) => {
   switch (loginStatus) {
