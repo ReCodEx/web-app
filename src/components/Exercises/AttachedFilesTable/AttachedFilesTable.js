@@ -4,8 +4,8 @@ import { FormattedMessage } from 'react-intl';
 
 import Icon from 'react-fontawesome';
 import { Table } from 'react-bootstrap';
-import Button from '../../AdminLTE/FlatButton';
-import Box from '../../AdminLTE/Box';
+import Button from '../../widgets/FlatButton';
+import Box from '../../widgets/Box';
 import { SendIcon } from '../../Icons';
 
 import UploadContainer from '../../../containers/UploadContainer';

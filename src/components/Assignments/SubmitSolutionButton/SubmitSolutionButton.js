@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import Icon from 'react-fontawesome';
-import Button from '../../AdminLTE/FlatButton';
+import Button from '../../widgets/FlatButton';
 import { FormattedMessage } from 'react-intl';
 
 const SubmitSolutionButton = (

@@ -3,8 +3,8 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import { FormattedMessage } from 'react-intl';
 
 import { isReady, getJsData } from '../../../redux/helpers/resourceManager';
-import MenuTitle from '../../AdminLTE/Sidebar/MenuTitle';
-import MenuItem from '../../AdminLTE/Sidebar/MenuItem';
+import MenuTitle from '../../widgets/Sidebar/MenuTitle';
+import MenuItem from '../../widgets/Sidebar/MenuItem';
 
 import withLinks from '../../../hoc/withLinks';
 

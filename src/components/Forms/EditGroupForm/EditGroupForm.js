@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { reduxForm, Field } from 'redux-form';
 import { Alert } from 'react-bootstrap';
-import FormBox from '../../AdminLTE/FormBox';
+import FormBox from '../../widgets/FormBox';
 import SubmitButton from '../SubmitButton';
 
 import { TextField, CheckboxField, MarkdownTextAreaField } from '../Fields';

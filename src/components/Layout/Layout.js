@@ -2,45 +2,48 @@ import React, { PropTypes } from 'react';
 import Helmet from 'react-helmet';
 import classNames from 'classnames';
 
-import Header from '../AdminLTE/Header';
+import Header from '../widgets/Header';
 import SidebarContainer from '../../containers/SidebarContainer';
-import Footer from '../AdminLTE/Footer';
+import Footer from '../widgets/Footer';
 
-export const Layout = ({
-  toggleSize,
-  toggleVisibility,
-  sidebar,
-  isLoggedIn,
-  children,
-  lang,
-  currentUrl,
-  availableLangs,
-  onCloseSidebar
-}) => (
+export const Layout = (
+  {
+    toggleSize,
+    toggleVisibility,
+    sidebar,
+    isLoggedIn,
+    children,
+    lang,
+    currentUrl,
+    availableLangs,
+    onCloseSidebar
+  }
+) => (
   <div
     className={classNames({
-      'wrapper': true,
+      wrapper: true,
       'sidebar-mini': true,
       'sidebar-collapse': sidebar.isCollapsed,
       'sidebar-open': sidebar.isOpen
     })}
     style={{
       overflow: 'visible'
-    }}>
-    <Helmet
-      defaultTitle="ReCodEx"
-      titleTemplate="%s | ReCodEx" />
+    }}
+  >
+    <Helmet defaultTitle="ReCodEx" titleTemplate="%s | ReCodEx" />
     <Header
       toggleSidebarSize={toggleSize}
       toggleSidebarVisibility={toggleVisibility}
       availableLangs={availableLangs}
       currentLang={lang}
-      currentUrl={currentUrl} />
+      currentUrl={currentUrl}
+    />
     <SidebarContainer
       isLoggedIn={isLoggedIn}
       isCollapsed={sidebar.isCollapsed}
       small={!sidebar.isOpen && sidebar.isCollapsed} // does not always work, but is good enough
-      currentUrl={currentUrl} />
+      currentUrl={currentUrl}
+    />
     <div onClick={onCloseSidebar}>
       {children}
       <Footer version="v1.0.0" />

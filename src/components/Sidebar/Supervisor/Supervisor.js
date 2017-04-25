@@ -2,9 +2,9 @@ import React, { PropTypes } from 'react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { FormattedMessage } from 'react-intl';
 
-import MenuTitle from '../../AdminLTE/Sidebar/MenuTitle';
-import MenuGroup from '../../AdminLTE/Sidebar/MenuGroup';
-import MenuItem from '../../AdminLTE/Sidebar/MenuItem';
+import MenuTitle from '../../widgets/Sidebar/MenuTitle';
+import MenuGroup from '../../widgets/Sidebar/MenuGroup';
+import MenuItem from '../../widgets/Sidebar/MenuItem';
 import { getId } from '../../../redux/helpers/resourceManager';
 
 import withLinks from '../../../hoc/withLinks';

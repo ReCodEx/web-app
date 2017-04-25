@@ -3,37 +3,54 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import { FormattedMessage } from 'react-intl';
 import { Row, Col } from 'react-bootstrap';
 import ReactMarkdown from 'react-markdown';
-import Box from '../../AdminLTE/Box';
+import Box from '../../widgets/Box';
 import GroupTree from '../../Groups/GroupTree';
 
-const InstanceDetail = ({
-  description,
-  rootGroupId,
-  groups,
-  isAdmin
-}) => (
+const InstanceDetail = (
+  {
+    description,
+    rootGroupId,
+    groups,
+    isAdmin
+  }
+) => (
   <Row>
     <Col md={6}>
-      <Box title={<FormattedMessage id="app.instance.detailTitle" defaultMessage="Instance description" />}>
+      <Box
+        title={
+          <FormattedMessage
+            id="app.instance.detailTitle"
+            defaultMessage="Instance description"
+          />
+        }
+      >
         <ReactMarkdown source={description} />
       </Box>
     </Col>
     <Col md={6}>
       <Box
-        title={<FormattedMessage id="app.instance.groupsTitle" defaultMessage="Groups hierarchy" />}
-        noPadding>
+        title={
+          <FormattedMessage
+            id="app.instance.groupsTitle"
+            defaultMessage="Groups hierarchy"
+          />
+        }
+        noPadding
+      >
         <div>
-          {rootGroupId !== null && (
+          {rootGroupId !== null &&
             <GroupTree
               id={rootGroupId}
               deletable={false}
               isAdmin={isAdmin}
-              groups={groups} />
-          )}
+              groups={groups}
+            />}
 
-          {rootGroupId === null && (
-            <FormattedMessage id="app.instance.groups.noGroups" defaultMessage="There are no groups in this ReCodEx instance." />
-          )}
+          {rootGroupId === null &&
+            <FormattedMessage
+              id="app.instance.groups.noGroups"
+              defaultMessage="There are no groups in this ReCodEx instance."
+            />}
         </div>
       </Box>
     </Col>

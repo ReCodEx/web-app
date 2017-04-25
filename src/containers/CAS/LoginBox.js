@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import LoginButton from '../../components/CAS/LoginButton';
-import Box from '../../components/AdminLTE/Box';
+import Box from '../../components/widgets/Box';
 import {
   externalLogin,
   externalLoginFailed,

@@ -5,7 +5,7 @@ import { FormattedHTMLMessage, FormattedMessage } from 'react-intl';
 import { Alert, HelpBlock } from 'react-bootstrap';
 import isNumeric from 'validator/lib/isNumeric';
 
-import FormBox from '../../AdminLTE/FormBox';
+import FormBox from '../../widgets/FormBox';
 import { DatetimeField, TextField, CheckboxField, SourceCodeField } from '../Fields';
 import LocalizedTextsFormField from '../LocalizedTextsFormField';
 import SubmitButton from '../SubmitButton';

@@ -2,12 +2,15 @@ import React, { PropTypes, Component } from 'react';
 import { canUseDOM } from 'exenv';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
-import HeaderNotificationsDropdown from '../../components/AdminLTE/HeaderNotificationsDropdown';
+import HeaderNotificationsDropdown
+  from '../../components/widgets/HeaderNotificationsDropdown';
 import { hideNotification } from '../../redux/modules/notifications';
-import { newNotificationsSelector, oldNotificationsSelector } from '../../redux/selectors/notifications';
+import {
+  newNotificationsSelector,
+  oldNotificationsSelector
+} from '../../redux/selectors/notifications';
 
 class HeaderNotificationsContainer extends Component {
-
   state = { isOpen: false, showAll: false };
 
   //
@@ -27,8 +30,7 @@ class HeaderNotificationsContainer extends Component {
   };
 
   clickAnywhere = () => {
-    if (this.state.isOpen === true &&
-      this.isClickingSomewhereElse()) {
+    if (this.state.isOpen === true && this.isClickingSomewhereElse()) {
       this.close();
     }
   };
@@ -41,8 +43,7 @@ class HeaderNotificationsContainer extends Component {
    * Determines, whether this click is on the container or not - a 10ms tolerance
    * between now and the time of last click on the container is defined.
    */
-  isClickingSomewhereElse = () =>
-    Date.now() - this.lastClick > 50;
+  isClickingSomewhereElse = () => Date.now() - this.lastClick > 50;
 
   //
   //
@@ -52,7 +53,7 @@ class HeaderNotificationsContainer extends Component {
     this.markClick();
   };
 
-  toggleShowAll = (e) => {
+  toggleShowAll = e => {
     e.preventDefault();
     this.markClick();
     this.setState({ showAll: !this.state.showAll });
@@ -64,9 +65,15 @@ class HeaderNotificationsContainer extends Component {
 
   open = () => this.setState({ isOpen: true });
 
-  componentWillReceiveProps = (newProps) => {
-    const oldVisible = this.props.newNotifications.reduce((acc, notification) => acc + notification.count, 0);
-    const newVisible = newProps.newNotifications.reduce((acc, notification) => acc + notification.count, 0);
+  componentWillReceiveProps = newProps => {
+    const oldVisible = this.props.newNotifications.reduce(
+      (acc, notification) => acc + notification.count,
+      0
+    );
+    const newVisible = newProps.newNotifications.reduce(
+      (acc, notification) => acc + notification.count,
+      0
+    );
     if (oldVisible !== newVisible) {
       this.setState({ isOpen: true }); // force open the notifications dropdown - there are some new notifications
     }
@@ -85,10 +92,10 @@ class HeaderNotificationsContainer extends Component {
         toggleShowAll={this.toggleShowAll}
         hideNotification={hideNotification}
         oldNotifications={oldNotifications}
-        newNotifications={newNotifications} />
+        newNotifications={newNotifications}
+      />
     );
   }
-
 }
 
 HeaderNotificationsContainer.propTypes = {
@@ -104,4 +111,6 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = { hideNotification };
 
-export default connect(mapStateToProps, mapDispatchToProps)(HeaderNotificationsContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(
+  HeaderNotificationsContainer
+);

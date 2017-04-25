@@ -5,11 +5,11 @@ import isEmail from 'validator/lib/isEmail';
 
 import { SuccessIcon, LoadingIcon } from '../../Icons';
 import Icon from 'react-fontawesome';
-import FormBox from '../../AdminLTE/FormBox';
+import FormBox from '../../widgets/FormBox';
 import { EmailField, PasswordField } from '../Fields';
 
 import { Alert } from 'react-bootstrap';
-import Button from '../../AdminLTE/FlatButton';
+import Button from '../../widgets/FlatButton';
 
 const LoginForm = (
   {

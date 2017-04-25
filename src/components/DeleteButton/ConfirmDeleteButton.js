@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import { FormattedMessage } from 'react-intl';
-import Button from '../AdminLTE/FlatButton';
+import Button from '../widgets/FlatButton';
 import { DeleteIcon } from '../Icons';
 import Confirm from '../Forms/Confirm';
 

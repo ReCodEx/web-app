@@ -1,7 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { Alert, Tabs, Tab } from 'react-bootstrap';
-import Button from '../../AdminLTE/FlatButton';
+import Button from '../../widgets/FlatButton';
 import Confirm from '../Confirm';
 import { AddIcon, WarningIcon } from '../../Icons';
 

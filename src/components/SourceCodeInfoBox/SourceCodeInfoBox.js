@@ -1,17 +1,20 @@
 import React, { PropTypes } from 'react';
-import { SimpleInfoBox } from '../AdminLTE/InfoBox';
+import { SimpleInfoBox } from '../widgets/InfoBox';
 import prettyBytes from 'pretty-bytes';
 
-const SourceCodeInfoBox = ({
-  id,
-  name,
-  size,
-  uploadedAt
-}) => (
+const SourceCodeInfoBox = (
+  {
+    id,
+    name,
+    size,
+    uploadedAt
+  }
+) => (
   <SimpleInfoBox
     title={name}
     description={prettyBytes(size)}
-    icon="file-code-o" />
+    icon="file-code-o"
+  />
 );
 
 SourceCodeInfoBox.propTypes = {

@@ -10,7 +10,7 @@ import {
 } from 'react-intl';
 import { Row, Col } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
-import Button from '../../components/AdminLTE/FlatButton';
+import Button from '../../components/widgets/FlatButton';
 
 import Page from '../../components/Page';
 import ExerciseDetail from '../../components/Exercises/ExerciseDetail';
@@ -20,7 +20,7 @@ import GroupsList from '../../components/Groups/GroupsList';
 import ReferenceSolutionsList
   from '../../components/Exercises/ReferenceSolutionsList';
 import SubmitSolutionContainer from '../../containers/SubmitSolutionContainer';
-import Box from '../../components/AdminLTE/Box';
+import Box from '../../components/widgets/Box';
 import { EditIcon, SendIcon } from '../../components/Icons';
 
 import ForkExerciseButtonContainer

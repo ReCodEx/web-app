@@ -5,7 +5,7 @@ import { Alert } from 'react-bootstrap';
 import isEmail from 'validator/lib/isEmail';
 
 import ResourceRenderer from '../../ResourceRenderer';
-import FormBox from '../../AdminLTE/FormBox';
+import FormBox from '../../widgets/FormBox';
 import {
   EmailField,
   TextField,

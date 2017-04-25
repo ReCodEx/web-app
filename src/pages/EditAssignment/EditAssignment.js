@@ -11,7 +11,7 @@ import ResourceRenderer from '../../components/ResourceRenderer';
 import EditAssignmentForm from '../../components/Forms/EditAssignmentForm';
 import DeleteAssignmentButtonContainer
   from '../../containers/DeleteAssignmentButtonContainer';
-import Box from '../../components/AdminLTE/Box';
+import Box from '../../components/widgets/Box';
 import { LoadingIcon, WarningIcon } from '../../components/Icons';
 
 import {

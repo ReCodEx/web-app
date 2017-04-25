@@ -1,14 +1,20 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 
-import { postComment, repostComment, togglePrivacy, fetchThreadIfNeeded, updateThread } from '../../redux/modules/comments';
+import {
+  postComment,
+  repostComment,
+  togglePrivacy,
+  fetchThreadIfNeeded,
+  updateThread
+} from '../../redux/modules/comments';
 import { loggedInUserSelector } from '../../redux/selectors/users';
 import { commentsThreadSelector } from '../../redux/selectors/comments';
 
 import CommentThread, {
   LoadingCommentThread,
   FailedCommentThread
-} from '../../components/AdminLTE/Comments/CommentThread';
+} from '../../components/widgets/Comments/CommentThread';
 
 import ResourceRenderer from '../../components/ResourceRenderer';
 
@@ -18,7 +24,6 @@ import ResourceRenderer from '../../components/ResourceRenderer';
  * not interleave.
  */
 class CommentThreadContainer extends Component {
-
   componentWillMount() {
     CommentThreadContainer.loadData(this.props);
     this.pollInterval = setInterval(() => this.poll(), 60000); // once a minute
@@ -56,21 +61,22 @@ class CommentThreadContainer extends Component {
 
     return (
       <ResourceRenderer
-        resource={[ thread, user ]}
+        resource={[thread, user]}
         loading={<LoadingCommentThread />}
-        failed={<FailedCommentThread />}>
+        failed={<FailedCommentThread />}
+      >
         {(thread, user) => (
           <CommentThread
             comments={thread.comments.sort((a, b) => a.postedAt - b.postedAt)}
             currentUserId={user.id}
             addComment={(text, isPrivate) => addComment(user, text, isPrivate)}
             togglePrivacy={togglePrivacy}
-            repostComment={repostComment} />
+            repostComment={repostComment}
+          />
         )}
       </ResourceRenderer>
     );
   }
-
 }
 
 CommentThreadContainer.propTypes = {
@@ -89,9 +95,10 @@ export default connect(
     thread: commentsThreadSelector(state, threadId)
   }),
   (dispatch, { threadId }) => ({
-    addComment: (user, text, isPrivate) => dispatch(postComment(user, threadId, text, isPrivate)),
-    repostComment: (tmpId) => dispatch(repostComment(threadId, tmpId)),
-    togglePrivacy: (id) => dispatch(togglePrivacy(threadId, id)),
+    addComment: (user, text, isPrivate) =>
+      dispatch(postComment(user, threadId, text, isPrivate)),
+    repostComment: tmpId => dispatch(repostComment(threadId, tmpId)),
+    togglePrivacy: id => dispatch(togglePrivacy(threadId, id)),
     loadThreadIfNeeded: () => dispatch(fetchThreadIfNeeded(threadId)),
     poll: () => dispatch(updateThread(threadId))
   })

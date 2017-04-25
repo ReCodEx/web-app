@@ -2,11 +2,11 @@ import React, { Component, PropTypes } from 'react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
-import Button from '../../components/AdminLTE/FlatButton';
+import Button from '../../components/widgets/FlatButton';
 import { push } from 'react-router-redux';
 
 import Page from '../../components/Page';
-import Box from '../../components/AdminLTE/Box';
+import Box from '../../components/widgets/Box';
 import { AddIcon } from '../../components/Icons';
 import { exercisesSelector } from '../../redux/selectors/exercises';
 import {

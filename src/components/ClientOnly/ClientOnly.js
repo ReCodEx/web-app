@@ -1,7 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 
 class ClientOnly extends Component {
-
   state = { isBrowser: false };
 
   componentDidMount() {
@@ -10,14 +9,11 @@ class ClientOnly extends Component {
 
   render() {
     if (this.state.isBrowser) {
-      return (
-        <span>{this.props.children}</span>
-      );
+      return <span>{this.props.children}</span>;
     } else {
-      return <span></span>;
+      return <span />;
     }
   }
-
 }
 
 ClientOnly.propTypes = {

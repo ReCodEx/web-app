@@ -3,7 +3,7 @@ import { List } from 'immutable';
 import { FormattedMessage } from 'react-intl';
 
 import { Table } from 'react-bootstrap';
-import Box from '../../AdminLTE/Box';
+import Box from '../../widgets/Box';
 
 import withLinks from '../../../hoc/withLinks';
 

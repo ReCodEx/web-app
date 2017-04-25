@@ -2,10 +2,10 @@ import React, { PropTypes } from 'react';
 import { reduxForm, Field, change } from 'redux-form';
 import { FormattedMessage } from 'react-intl';
 import { Alert } from 'react-bootstrap';
-import Button from '../../AdminLTE/FlatButton';
+import Button from '../../widgets/FlatButton';
 
 import { SuccessIcon, LoadingIcon } from '../../Icons';
-import FormBox from '../../AdminLTE/FormBox';
+import FormBox from '../../widgets/FormBox';
 import { PasswordField, PasswordStrength } from '../Fields';
 import { validatePasswordStrength } from '../../../redux/modules/auth';
 

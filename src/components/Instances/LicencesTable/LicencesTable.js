@@ -2,45 +2,90 @@ import React, { PropTypes } from 'react';
 import { FormattedMessage, FormattedDate, FormattedRelative } from 'react-intl';
 import { Table } from 'react-bootstrap';
 import { MaybeSucceededIcon } from '../../Icons';
-import Box from '../../AdminLTE/Box';
+import Box from '../../widgets/Box';
 
-const LicencesTable = ({
-  instance,
-  licences
-}) => (
-  <Box title={<FormattedMessage id="app.instance.licencesTitle" defaultMessage="Licences" />}>
+const LicencesTable = (
+  {
+    instance,
+    licences
+  }
+) => (
+  <Box
+    title={
+      <FormattedMessage
+        id="app.instance.licencesTitle"
+        defaultMessage="Licences"
+      />
+    }
+  >
     <div>
       <p>
-        <FormattedMessage id="app.instance.hasValidLicence" defaultMessage="{name} has a valid licence: " values={{ name: instance.name }} />&nbsp;<MaybeSucceededIcon success={instance.hasValidLicence} />
+        <FormattedMessage
+          id="app.instance.hasValidLicence"
+          defaultMessage="{name} has a valid licence: "
+          values={{ name: instance.name }}
+        />
+        &nbsp;
+        <MaybeSucceededIcon success={instance.hasValidLicence} />
       </p>
       <Table condensed hover>
         <thead>
           <tr>
-            <th><FormattedMessage id="app.licencesTable.note" defaultMessage="Note" /></th>
-            <th><FormattedMessage id="app.licencesTable.isValid" defaultMessage="Is valid" /></th>
-            <th><FormattedMessage id="app.licencesTable.validUntil" defaultMessage="Valid until" /></th>
+            <th>
+              <FormattedMessage
+                id="app.licencesTable.note"
+                defaultMessage="Note"
+              />
+            </th>
+            <th>
+              <FormattedMessage
+                id="app.licencesTable.isValid"
+                defaultMessage="Is valid"
+              />
+            </th>
+            <th>
+              <FormattedMessage
+                id="app.licencesTable.validUntil"
+                defaultMessage="Valid until"
+              />
+            </th>
           </tr>
         </thead>
         <tbody>
-          {licences
-            .sort((a, b) => a.validUntil < b.validUntil ? 1 : -1)
-            .map(({ id, validUntil, isValid, note }) => (
+          {licences.sort((a, b) => a.validUntil < b.validUntil ? 1 : -1).map(({
+            id,
+            validUntil,
+            isValid,
+            note
+          }) => (
             <tr key={id}>
               <td>
-                {!isValid || validUntil * 1000 < Date.now() ? (<strike>{note}</strike>) : note}
+                {!isValid || validUntil * 1000 < Date.now()
+                  ? <strike>{note}</strike>
+                  : note}
               </td>
-              <td className="text-center"><MaybeSucceededIcon success={isValid} /></td>
-              <td><FormattedDate value={validUntil * 1000} /> (<FormattedRelative value={validUntil * 1000} />)</td>
+              <td className="text-center">
+                <MaybeSucceededIcon success={isValid} />
+              </td>
+              <td>
+                <FormattedDate value={validUntil * 1000} />
+                {' '}
+                (
+                <FormattedRelative value={validUntil * 1000} />
+                )
+              </td>
             </tr>
           ))}
 
-          {licences.length === 0 && (
+          {licences.length === 0 &&
             <tr>
               <td colSpan={3}>
-                <FormattedMessage id="app.licencesTable.noLicences" defaultMessage="There are no licences." />
+                <FormattedMessage
+                  id="app.licencesTable.noLicences"
+                  defaultMessage="There are no licences."
+                />
               </td>
-            </tr>
-          )}
+            </tr>}
         </tbody>
       </Table>
     </div>

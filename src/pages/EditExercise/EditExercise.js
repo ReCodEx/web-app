@@ -7,7 +7,7 @@ import { push } from 'react-router-redux';
 import { reset, getFormValues } from 'redux-form';
 
 import Page from '../../components/Page';
-import Box from '../../components/AdminLTE/Box';
+import Box from '../../components/widgets/Box';
 import ResourceRenderer from '../../components/ResourceRenderer';
 
 import EditExerciseForm from '../../components/Forms/EditExerciseForm';

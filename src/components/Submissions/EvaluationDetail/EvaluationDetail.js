@@ -9,7 +9,7 @@ import {
 } from 'react-intl';
 import { Table } from 'react-bootstrap';
 
-import Box from '../../AdminLTE/Box';
+import Box from '../../widgets/Box';
 import { MaybeSucceededIcon } from '../../Icons';
 import BonusPoints from '../../Assignments/SubmissionsTable/BonusPoints';
 

@@ -3,7 +3,7 @@ import { FormattedMessage } from 'react-intl';
 import Icon from 'react-fontawesome';
 import classNames from 'classnames';
 import { Modal, ProgressBar, Table } from 'react-bootstrap';
-import Button from '../AdminLTE/FlatButton';
+import Button from '../widgets/FlatButton';
 import EvaluationStatusText from './EvaluationStatusText';
 
 const messagesContainerStyle = {

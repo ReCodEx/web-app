@@ -1,16 +1,24 @@
 import React, { PropTypes } from 'react';
 import { FormattedMessage } from 'react-intl';
-import Box from '../../AdminLTE/Box';
+import Box from '../../widgets/Box';
 import TestResultsTable from '../TestResultsTable';
 
-const TestResults = ({
-  evaluation
-}) => (
+const TestResults = (
+  {
+    evaluation
+  }
+) => (
   <Box
-    title={<FormattedMessage id="app.submission.evaluation.title.testResults" defaultMessage="Test results" />}
+    title={
+      <FormattedMessage
+        id="app.submission.evaluation.title.testResults"
+        defaultMessage="Test results"
+      />
+    }
     noPadding={true}
     collapsable={true}
-    isOpen={true}>
+    isOpen={true}
+  >
     <TestResultsTable results={evaluation.testResults} />
   </Box>
 );

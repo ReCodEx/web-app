@@ -15,7 +15,7 @@ import { isVisible, isCollapsed } from '../../redux/selectors/sidebar';
 import { messages, localeData, defaultLanguage } from '../../locales';
 import { linksFactory, isAbsolute } from '../../links';
 
-import 'admin-lte/dist/css/AdminLTE.min.css';
+import 'admin-lte/dist/css/widgets.min.css';
 import 'admin-lte/dist/css/skins/skin-green.min.css';
 // import 'admin-lte/dist/css/skins/skin-purple.min.css';
 

@@ -6,7 +6,7 @@ import { FormattedMessage } from 'react-intl';
 import { Alert } from 'react-bootstrap';
 
 import ResourceRenderer from '../../ResourceRenderer';
-import FormBox from '../../AdminLTE/FormBox';
+import FormBox from '../../widgets/FormBox';
 import { CASAuthenticationButtonField, SelectField } from '../Fields';
 import SubmitButton from '../SubmitButton';
 
