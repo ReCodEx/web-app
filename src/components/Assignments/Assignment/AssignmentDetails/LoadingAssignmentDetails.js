@@ -1,21 +1,30 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import Box from '../../../AdminLTE/Box';
-import { LoadingIcon } from '../../../Icons';
+import Box from '../../../widgets/Box';
+import { LoadingIcon } from '../../../icons';
 
 const LoadingAssignmentDetails = () => (
   <Box
-    title={(
+    title={
       <span>
-        <LoadingIcon /> <FormattedMessage id="app.assignment.loading" defaultMessage="Loading exercise assignment ..." />
+        <LoadingIcon />
+        {' '}
+        <FormattedMessage
+          id="app.assignment.loading"
+          defaultMessage="Loading exercise assignment ..."
+        />
       </span>
-    )}
+    }
     noPadding={false}
     collapsable={true}
-    isOpen={false}>
+    isOpen={false}
+  >
     <p>
-      <FormattedMessage id="app.assignment.loading" defaultMessage="Loading exercise assignment ..." />
+      <FormattedMessage
+        id="app.assignment.loading"
+        defaultMessage="Loading exercise assignment ..."
+      />
     </p>
   </Box>
 );

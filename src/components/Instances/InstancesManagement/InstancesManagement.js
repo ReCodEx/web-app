@@ -2,23 +2,39 @@ import React from 'react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { FormattedMessage } from 'react-intl';
 import { Row, Col } from 'react-bootstrap';
-import Page from '../../Page';
-import Box from '../../AdminLTE/Box';
+import Page from '../../layout/Page';
+import Box from '../../widgets/Box';
 import InstancesTable from '../InstancesTable';
 
-const InstancesManagement = ({
-  instances
-}) => (
+const InstancesManagement = (
+  {
+    instances
+  }
+) => (
   <Page
-    title={<FormattedMessage id="app.instances.title" defaultMessage="Instances" />}
-    description={<FormattedMessage id="app.instances.description" defaultMessage="Management of all instances" />}
-    resource={instances.toArray()}>
+    title={
+      <FormattedMessage id="app.instances.title" defaultMessage="Instances" />
+    }
+    description={
+      <FormattedMessage
+        id="app.instances.description"
+        defaultMessage="Management of all instances"
+      />
+    }
+    resource={instances.toArray()}
+  >
     {(...instances) => (
       <Row>
         <Col lg={6}>
           <Box
-            title={<FormattedMessage id="app.instances.listTitle" defaultMessage="List of instances" />}
-            noPadding>
+            title={
+              <FormattedMessage
+                id="app.instances.listTitle"
+                defaultMessage="List of instances"
+              />
+            }
+            noPadding
+          >
             <InstancesTable instances={instances} />
           </Box>
         </Col>

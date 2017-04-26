@@ -3,7 +3,7 @@ import Icon from 'react-fontawesome';
 import { FormattedMessage, FormattedDate, FormattedTime } from 'react-intl';
 import { Table } from 'react-bootstrap';
 
-import Box from '../../AdminLTE/Box';
+import Box from '../../widgets/Box';
 import UsersNameContainer from '../../../containers/UsersNameContainer';
 
 const ReferenceSolutionDetail = (

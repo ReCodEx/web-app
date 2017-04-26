@@ -1,11 +1,16 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
-import { WarningIcon } from '../../Icons';
+import { WarningIcon } from '../../icons';
 
 const FailedGroupDetail = () => (
   <div>
     <p>
-      <WarningIcon /> <FormattedMessage id="app.failedGroupDetail.msg" defaultMessage="Cannot load group detail. Please try again later." />
+      <WarningIcon />
+      {' '}
+      <FormattedMessage
+        id="app.failedGroupDetail.msg"
+        defaultMessage="Cannot load group detail. Please try again later."
+      />
     </p>
   </div>
 );

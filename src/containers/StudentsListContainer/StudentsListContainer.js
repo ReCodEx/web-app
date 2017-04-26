@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 
-import ResourceRenderer from '../../components/ResourceRenderer';
+import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import StudentsList from '../../components/Users/StudentsList';
 
 import { readyUsersDataSelector } from '../../redux/selectors/users';
@@ -12,9 +12,8 @@ import { fetchGroupIfNeeded } from '../../redux/modules/groups';
 import { fetchStudents } from '../../redux/modules/users';
 
 class StudentsListContainer extends Component {
-
   componentWillMount = () => this.props.loadAsync();
-  componentWillReceiveProps = (newProps) => {
+  componentWillReceiveProps = newProps => {
     if (newProps.groupId !== this.props.groupId) {
       newProps.loadAsync();
     }
@@ -24,12 +23,13 @@ class StudentsListContainer extends Component {
     const { group, students, stats, ...props } = this.props;
     return (
       <ResourceRenderer resource={group}>
-        {(group) => (
+        {group => (
           <StudentsList
             {...props}
             users={students}
             isLoaded={students.length === group.students.length}
-            stats={stats} />
+            stats={stats}
+          />
         )}
       </ResourceRenderer>
     );
@@ -58,9 +58,10 @@ export default connect(
     };
   },
   (dispatch, { groupId }) => ({
-    loadAsync: () => Promise.all([
-      dispatch(fetchGroupIfNeeded(groupId)),
-      dispatch(fetchStudents(groupId))
-    ])
+    loadAsync: () =>
+      Promise.all([
+        dispatch(fetchGroupIfNeeded(groupId)),
+        dispatch(fetchStudents(groupId))
+      ])
   })
 )(StudentsListContainer);

@@ -2,13 +2,13 @@ import React, { PropTypes } from 'react';
 import { Link } from 'react-router';
 import { FormattedDate, FormattedTime, FormattedMessage } from 'react-intl';
 import { ButtonGroup } from 'react-bootstrap';
-import Button from '../../AdminLTE/FlatButton';
+import Button from '../../widgets/FlatButton';
 import { LinkContainer } from 'react-router-bootstrap';
 import DeleteAssignmentButtonContainer
   from '../../../containers/DeleteAssignmentButtonContainer';
 
 import withLinks from '../../../hoc/withLinks';
-import { EditIcon, MaybePublicIcon } from '../../Icons';
+import { EditIcon, MaybePublicIcon } from '../../icons';
 
 const AdminAssignmentTableRow = (
   {

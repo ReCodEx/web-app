@@ -7,38 +7,64 @@ import { FormattedMessage } from 'react-intl';
 import AdminAssignmentsTableRow from './AdminAssignmentsTableRow';
 import NoAssignmentsTableRow from './NoAssignmentsTableRow';
 import LoadingAssignmentTableRow from './LoadingAssignmentTableRow';
-import ResourceRenderer from '../../ResourceRenderer';
+import ResourceRenderer from '../../helpers/ResourceRenderer';
 
-const AdminAssignmentsTable = ({
-  assignments = List()
-}) => (
+const AdminAssignmentsTable = (
+  {
+    assignments = List()
+  }
+) => (
   <Table hover>
     <thead>
       <tr>
-        <th></th>
-        <th><FormattedMessage id="app.adminAssignments.name" defaultMessage="Assignment name" /></th>
-        <th><FormattedMessage id="app.adminAssignments.deadline" defaultMessage="Deadline" /></th>
-        <th><FormattedMessage id="app.adminAssignments.secondDeadline" defaultMessage="Second deadline" /></th>
-        <th><FormattedMessage id="app.adminAssignments.actions" defaultMessage="Actions" /></th>
+        <th />
+        <th>
+          <FormattedMessage
+            id="app.adminAssignments.name"
+            defaultMessage="Assignment name"
+          />
+        </th>
+        <th>
+          <FormattedMessage
+            id="app.adminAssignments.deadline"
+            defaultMessage="Deadline"
+          />
+        </th>
+        <th>
+          <FormattedMessage
+            id="app.adminAssignments.secondDeadline"
+            defaultMessage="Second deadline"
+          />
+        </th>
+        <th>
+          <FormattedMessage
+            id="app.adminAssignments.actions"
+            defaultMessage="Actions"
+          />
+        </th>
       </tr>
     </thead>
     <ResourceRenderer
       resource={assignments.toArray()}
-      loading={(
+      loading={
         <tbody>
           <LoadingAssignmentTableRow />
         </tbody>
-      )}>
+      }
+    >
       {(...assignments) =>
         assignments.length === 0
           ? <tbody><NoAssignmentsTableRow /></tbody>
-          : (
-            <tbody>
+          : <tbody>
               {assignments
                 .sort((a, b) => a.firstDeadline - b.firstDeadline)
-                .map(assignment => <AdminAssignmentsTableRow key={assignment.id} {...assignment} />)}
-            </tbody>
-          )}
+                .map(assignment => (
+                  <AdminAssignmentsTableRow
+                    key={assignment.id}
+                    {...assignment}
+                  />
+                ))}
+            </tbody>}
     </ResourceRenderer>
   </Table>
 );

@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import { FormattedMessage } from 'react-intl';
-import Button from '../../AdminLTE/FlatButton';
-import { FailedIcon } from '../../Icons';
+import Button from '../../widgets/FlatButton';
+import { FailedIcon } from '../../icons';
 
 const FailedForkExerciseButton = (
   {

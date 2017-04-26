@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import { injectIntl, defineMessages } from 'react-intl';
-import { SimpleInfoBox } from '../../AdminLTE/InfoBox';
+import { SimpleInfoBox } from '../../widgets/InfoBox';
 
 const messages = defineMessages({
   title: {

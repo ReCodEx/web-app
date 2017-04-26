@@ -1,6 +1,6 @@
 import React from 'react';
 import { ListGroupItem } from 'react-bootstrap';
-import { LoadingAvatar } from '../../AdminLTE/Avatar';
+import { LoadingAvatar } from '../../widgets/Avatar';
 
 const LoadingUsersListItem = () => (
   <ListGroupItem>

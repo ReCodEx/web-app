@@ -2,8 +2,8 @@ import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 
-import PageContent from '../../components/PageContent';
-import ResourceRenderer from '../../components/ResourceRenderer';
+import PageContent from '../../components/layout/PageContent';
+import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import SubmissionDetail, {
   FailedSubmissionDetail
 } from '../../components/Submissions/SubmissionDetail';

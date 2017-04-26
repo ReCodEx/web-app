@@ -5,11 +5,11 @@ import { push } from 'react-router-redux';
 import { reset, startAsyncValidation } from 'redux-form';
 
 import { Row, Col } from 'react-bootstrap';
-import PageContent from '../../components/PageContent';
-import RegistrationForm from '../../components/Forms/RegistrationForm';
+import PageContent from '../../components/layout/PageContent';
+import RegistrationForm from '../../components/forms/RegistrationForm';
 import ExternalRegistrationForm
-  from '../../components/Forms/ExternalRegistrationForm';
-import RegistrationCASOauth from '../../components/Forms/RegistrationCASOauth';
+  from '../../components/forms/ExternalRegistrationForm';
+import RegistrationCASOauth from '../../components/forms/RegistrationCASOauth';
 
 import {
   createAccount,

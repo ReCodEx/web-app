@@ -1,7 +1,7 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
-import Button from '../../AdminLTE/FlatButton';
-import { LoadingIcon } from '../../Icons';
+import Button from '../../widgets/FlatButton';
+import { LoadingIcon } from '../../icons';
 
 const PendingForkExerciseButton = props => (
   <Button

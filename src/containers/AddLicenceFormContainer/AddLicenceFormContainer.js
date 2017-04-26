@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { reset } from 'redux-form';
 
-import AddLicenceForm from '../../components/Forms/AddLicenceForm';
+import AddLicenceForm from '../../components/forms/AddLicenceForm';
 import { addLicence } from '../../redux/modules/licences';
 
 const AddLicenceFormContainer = ({

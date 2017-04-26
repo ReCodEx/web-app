@@ -4,18 +4,20 @@ import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import { Row, Col } from 'react-bootstrap';
 
-import { fetchUserIfNeeded, updateProfile, updateSettings } from '../../redux/modules/users';
+import {
+  fetchUserIfNeeded,
+  updateProfile,
+  updateSettings
+} from '../../redux/modules/users';
 import { getUser } from '../../redux/selectors/users';
-import Page from '../../components/Page';
+import Page from '../../components/layout/Page';
 
-import EditUserProfileForm from '../../components/Forms/EditUserProfileForm';
-import EditUserSettingsForm from '../../components/Forms/EditUserSettingsForm';
+import EditUserProfileForm from '../../components/forms/EditUserProfileForm';
+import EditUserSettingsForm from '../../components/forms/EditUserSettingsForm';
 
 class EditUser extends Component {
-
-  static loadAsync = ({ userId }, dispatch) => Promise.all([
-    dispatch(fetchUserIfNeeded(userId))
-  ]);
+  static loadAsync = ({ userId }, dispatch) =>
+    Promise.all([dispatch(fetchUserIfNeeded(userId))]);
 
   componentWillMount() {
     this.props.loadAsync();
@@ -32,40 +34,52 @@ class EditUser extends Component {
     return (
       <Page
         resource={user}
-        title={(user) => user.fullName}
-        description={<FormattedMessage id="app.editUser.description" defaultMessage="Edit user's profile" />}
+        title={user => user.fullName}
+        description={
+          <FormattedMessage
+            id="app.editUser.description"
+            defaultMessage="Edit user's profile"
+          />
+        }
         breadcrumbs={[
           {
             resource: user,
             iconName: 'user',
-            breadcrumb: (user) => ({
+            breadcrumb: user => ({
               text: <FormattedMessage id="app.user.title" />,
               link: ({ USER_URI_FACTORY }) => USER_URI_FACTORY(user.id)
             })
           },
           {
-            text: <FormattedMessage id="app.editUser.title" defaultMessage="Edit user's profile" />,
+            text: (
+              <FormattedMessage
+                id="app.editUser.title"
+                defaultMessage="Edit user's profile"
+              />
+            ),
             iconName: 'pencil'
           }
-        ]}>
+        ]}
+      >
         {data => (
           <Row>
             <Col lg={6}>
               <EditUserProfileForm
                 onSubmit={updateProfile}
-                initialValues={data} />
+                initialValues={data}
+              />
             </Col>
             <Col lg={6}>
               <EditUserSettingsForm
                 onSubmit={updateSettings}
-                initialValues={data.settings} />
+                initialValues={data.settings}
+              />
             </Col>
           </Row>
         )}
       </Page>
     );
   }
-
 }
 
 EditUser.propTypes = {
@@ -82,7 +96,8 @@ export default connect(
   }),
   (dispatch, { params: { userId } }) => ({
     loadAsync: () => EditUser.loadAsync({ userId }, dispatch),
-    updateSettings: (data) => dispatch(updateSettings(userId, data)),
-    updateProfile: ({ name, ...data }) => dispatch(updateProfile(userId, { ...name, ...data }))
+    updateSettings: data => dispatch(updateSettings(userId, data)),
+    updateProfile: ({ name, ...data }) =>
+      dispatch(updateProfile(userId, { ...name, ...data }))
   })
 )(EditUser);

@@ -3,10 +3,10 @@ import { FormattedMessage, FormattedNumber } from 'react-intl';
 import { Row, Col, Table } from 'react-bootstrap';
 import ReactMarkdown from 'react-markdown';
 
-import Box from '../../AdminLTE/Box';
+import Box from '../../widgets/Box';
 import GroupTree from '../GroupTree';
 import SupervisorsList from '../../Users/SupervisorsList';
-import { MaybeSucceededIcon } from '../../Icons';
+import { MaybeSucceededIcon } from '../../icons';
 
 const GroupDetail = (
   {

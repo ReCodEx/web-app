@@ -9,8 +9,8 @@ import {
 } from 'react-intl';
 import { Table } from 'react-bootstrap';
 
-import Box from '../../AdminLTE/Box';
-import { MaybeSucceededIcon } from '../../Icons';
+import Box from '../../widgets/Box';
+import { MaybeSucceededIcon } from '../../icons';
 import BonusPoints from '../../Assignments/SubmissionsTable/BonusPoints';
 
 const EvaluationDetail = (

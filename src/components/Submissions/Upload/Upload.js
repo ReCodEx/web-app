@@ -1,9 +1,9 @@
 import React, { PropTypes } from 'react';
 import { FormattedMessage } from 'react-intl';
 import DropZone from 'react-dropzone';
-import Button from '../../AdminLTE/FlatButton';
+import Button from '../../widgets/FlatButton';
 import UploadsTable from '../UploadsTable';
-import { UploadIcon } from '../../Icons';
+import { UploadIcon } from '../../icons';
 
 const dropZoneStyles = {
   borderWidth: 2,

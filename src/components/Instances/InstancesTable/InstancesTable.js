@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { Table } from 'react-bootstrap';
 import { Link } from 'react-router';
-import { MaybeSucceededIcon } from '../../Icons';
+import { MaybeSucceededIcon } from '../../icons';
 import UsersNameContainer from '../../../containers/UsersNameContainer';
 
 import withLinks from '../../../hoc/withLinks';

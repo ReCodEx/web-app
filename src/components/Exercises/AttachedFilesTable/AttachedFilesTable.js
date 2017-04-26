@@ -4,12 +4,12 @@ import { FormattedMessage } from 'react-intl';
 
 import Icon from 'react-fontawesome';
 import { Table } from 'react-bootstrap';
-import Button from '../../AdminLTE/FlatButton';
-import Box from '../../AdminLTE/Box';
-import { SendIcon } from '../../Icons';
+import Button from '../../widgets/FlatButton';
+import Box from '../../widgets/Box';
+import { SendIcon } from '../../icons';
 
 import UploadContainer from '../../../containers/UploadContainer';
-import ResourceRenderer from '../../ResourceRenderer';
+import ResourceRenderer from '../../helpers/ResourceRenderer';
 
 const AttachedFilesTable = (
   {

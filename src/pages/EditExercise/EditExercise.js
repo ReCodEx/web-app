@@ -6,15 +6,15 @@ import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 import { reset, getFormValues } from 'redux-form';
 
-import Page from '../../components/Page';
-import Box from '../../components/AdminLTE/Box';
-import ResourceRenderer from '../../components/ResourceRenderer';
+import Page from '../../components/layout/Page';
+import Box from '../../components/widgets/Box';
+import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 
-import EditExerciseForm from '../../components/Forms/EditExerciseForm';
+import EditExerciseForm from '../../components/forms/EditExerciseForm';
 import EditExerciseRuntimeConfigsForm
-  from '../../components/Forms/EditExerciseRuntimeConfigsForm';
+  from '../../components/forms/EditExerciseRuntimeConfigsForm';
 import EditExerciseLimitsForm
-  from '../../components/Forms/EditExerciseLimitsForm';
+  from '../../components/forms/EditExerciseLimitsForm';
 import SupplementaryFilesTableContainer
   from '../../containers/SupplementaryFilesTableContainer';
 import AdditionalExerciseFilesTableContainer

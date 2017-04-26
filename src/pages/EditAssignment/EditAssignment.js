@@ -5,14 +5,14 @@ import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 import { reset, getFormValues, initialize } from 'redux-form';
 import moment from 'moment';
-import PageContent from '../../components/PageContent';
+import PageContent from '../../components/layout/PageContent';
 
-import ResourceRenderer from '../../components/ResourceRenderer';
-import EditAssignmentForm from '../../components/Forms/EditAssignmentForm';
+import ResourceRenderer from '../../components/helpers/ResourceRenderer';
+import EditAssignmentForm from '../../components/forms/EditAssignmentForm';
 import DeleteAssignmentButtonContainer
   from '../../containers/DeleteAssignmentButtonContainer';
-import Box from '../../components/AdminLTE/Box';
-import { LoadingIcon, WarningIcon } from '../../components/Icons';
+import Box from '../../components/widgets/Box';
+import { LoadingIcon, WarningIcon } from '../../components/icons';
 
 import {
   fetchAssignment,

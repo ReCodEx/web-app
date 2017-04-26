@@ -8,8 +8,8 @@ import {
 } from 'react-intl';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { Row, Col, Button } from 'react-bootstrap';
-import Page from '../../components/Page';
-import ResourceRenderer from '../../components/ResourceRenderer';
+import Page from '../../components/layout/Page';
+import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 
 import {
   fetchReferenceSolutionsIfNeeded,
@@ -23,12 +23,12 @@ import ReferenceSolutionDetail
   from '../../components/ReferenceSolutions/ReferenceSolutionDetail';
 import ReferenceSolutionEvaluation
   from '../../components/ReferenceSolutions/ReferenceSolutionEvaluation';
-import SourceCodeInfoBox from '../../components/SourceCodeInfoBox';
+import SourceCodeInfoBox from '../../components/widgets/SourceCodeInfoBox';
 import SourceCodeViewerContainer
   from '../../containers/SourceCodeViewerContainer';
 import { fetchLimits } from '../../redux/modules/limits';
 import { getEnvironmentsLimits } from '../../redux/selectors/limits';
-import { DownloadIcon, RefreshIcon, SendIcon } from '../../components/Icons';
+import { DownloadIcon, RefreshIcon, SendIcon } from '../../components/icons';
 
 const messages = defineMessages({
   title: {

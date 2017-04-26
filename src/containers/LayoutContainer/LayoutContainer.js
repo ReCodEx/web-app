@@ -2,7 +2,7 @@ import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { IntlProvider, addLocaleData } from 'react-intl';
 import moment from 'moment';
-import Layout from '../../components/Layout';
+import Layout from '../../components/layout/Layout';
 
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import {

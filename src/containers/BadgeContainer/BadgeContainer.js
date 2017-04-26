@@ -5,8 +5,8 @@ import { logout } from '../../redux/modules/auth';
 import Badge, {
   LoadingBadge,
   FailedBadge
-} from '../../components/AdminLTE/Badge';
-import ResourceRenderer from '../../components/ResourceRenderer';
+} from '../../components/widgets/Badge';
+import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import { loggedInUserSelector } from '../../redux/selectors/users';
 import { accessTokenExpiration } from '../../redux/selectors/auth';
 

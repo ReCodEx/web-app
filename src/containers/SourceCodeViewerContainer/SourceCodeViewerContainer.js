@@ -3,14 +3,14 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import { Modal } from 'react-bootstrap';
-import Button from '../../components/AdminLTE/FlatButton';
-import { DownloadIcon, LoadingIcon } from '../../components/Icons';
+import Button from '../../components/widgets/FlatButton';
+import { DownloadIcon, LoadingIcon } from '../../components/icons';
 
 import { fetchFileIfNeeded, download } from '../../redux/modules/files';
 import { fetchContentIfNeeded } from '../../redux/modules/filesContent';
 import { getFile, getFilesContent } from '../../redux/selectors/files';
-import ResourceRenderer from '../../components/ResourceRenderer';
-import SourceCodeViewer from '../../components/SourceCodeViewer';
+import ResourceRenderer from '../../components/helpers/ResourceRenderer';
+import SourceCodeViewer from '../../components/helpers/SourceCodeViewer';
 
 class SourceCodeViewerContainer extends Component {
   componentWillMount() {

@@ -4,11 +4,13 @@ import { connect } from 'react-redux';
 
 import { fetchUserIfNeeded } from '../../redux/modules/users';
 import { getUser } from '../../redux/selectors/users';
-import ResourceRenderer from '../../components/ResourceRenderer';
-import UsersName, { LoadingUsersName, FailedUsersName } from '../../components/Users/UsersName';
+import ResourceRenderer from '../../components/helpers/ResourceRenderer';
+import UsersName, {
+  LoadingUsersName,
+  FailedUsersName
+} from '../../components/Users/UsersName';
 
 class UsersNameContainer extends Component {
-
   componentWillMount() {
     UsersNameContainer.loadData(this.props);
   }
@@ -21,7 +23,7 @@ class UsersNameContainer extends Component {
 
   static loadData = ({ loadUserIfNeeded }) => {
     loadUserIfNeeded();
-  }
+  };
 
   render() {
     const { user, large, noLink } = this.props;
@@ -30,12 +32,14 @@ class UsersNameContainer extends Component {
       <ResourceRenderer
         resource={user}
         loading={<LoadingUsersName size={size} />}
-        failed={<FailedUsersName size={size} />}>
-        {(user) => <UsersName {...user} large={large} size={size} noLink={noLink} />}
+        failed={<FailedUsersName size={size} />}
+      >
+        {user => (
+          <UsersName {...user} large={large} size={size} noLink={noLink} />
+        )}
       </ResourceRenderer>
     );
   }
-
 }
 
 UsersNameContainer.propTypes = {

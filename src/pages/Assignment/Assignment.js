@@ -3,7 +3,7 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import { Col, Row } from 'react-bootstrap';
-import Button from '../../components/AdminLTE/FlatButton';
+import Button from '../../components/widgets/FlatButton';
 import { LinkContainer } from 'react-router-bootstrap';
 
 import { fetchAssignmentIfNeeded } from '../../redux/modules/assignments';
@@ -26,16 +26,16 @@ import {
   isSupervisorOf
 } from '../../redux/selectors/users';
 
-import PageContent from '../../components/PageContent';
-import ResourceRenderer from '../../components/ResourceRenderer';
+import PageContent from '../../components/layout/PageContent';
+import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import UsersNameContainer from '../../containers/UsersNameContainer';
 import AssignmentDetails, {
   LoadingAssignmentDetails,
   FailedAssignmentDetails
 } from '../../components/Assignments/Assignment/AssignmentDetails';
 
-import { EditIcon, ResultsIcon } from '../../components/Icons';
-import LocalizedTexts from '../../components/LocalizedTexts';
+import { EditIcon, ResultsIcon } from '../../components/icons';
+import LocalizedTexts from '../../components/helpers/LocalizedTexts';
 import SubmitSolutionButton
   from '../../components/Assignments/SubmitSolutionButton';
 import SubmitSolutionContainer from '../../containers/SubmitSolutionContainer';

@@ -1,16 +1,19 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import BonusPointsForm from '../../components/Forms/BonusPointsForm';
+import BonusPointsForm from '../../components/forms/BonusPointsForm';
 
 import { setPoints } from '../../redux/modules/submissions';
 
-const BonusPointsContainer = ({
-  evaluation,
-  setPoints
-}) => (
+const BonusPointsContainer = (
+  {
+    evaluation,
+    setPoints
+  }
+) => (
   <BonusPointsForm
     onSubmit={setPoints}
-    initialvalues={{ points: evaluation.bonusPoints }} />
+    initialvalues={{ points: evaluation.bonusPoints }}
+  />
 );
 
 BonusPointsContainer.propTypes = {
@@ -24,6 +27,7 @@ BonusPointsContainer.propTypes = {
 export default connect(
   (state, props) => ({}),
   (dispatch, { submissionId }) => ({
-    setPoints: ({ bonusPoints }) => dispatch(setPoints(submissionId, bonusPoints))
+    setPoints: ({ bonusPoints }) =>
+      dispatch(setPoints(submissionId, bonusPoints))
   })
 )(BonusPointsContainer);

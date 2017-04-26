@@ -10,18 +10,18 @@ import {
 } from 'react-intl';
 import { Row, Col } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
-import Button from '../../components/AdminLTE/FlatButton';
+import Button from '../../components/widgets/FlatButton';
 
-import Page from '../../components/Page';
+import Page from '../../components/layout/Page';
 import ExerciseDetail from '../../components/Exercises/ExerciseDetail';
-import LocalizedTexts from '../../components/LocalizedTexts';
-import ResourceRenderer from '../../components/ResourceRenderer';
+import LocalizedTexts from '../../components/helpers/LocalizedTexts';
+import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import GroupsList from '../../components/Groups/GroupsList';
 import ReferenceSolutionsList
   from '../../components/Exercises/ReferenceSolutionsList';
 import SubmitSolutionContainer from '../../containers/SubmitSolutionContainer';
-import Box from '../../components/AdminLTE/Box';
-import { EditIcon, SendIcon } from '../../components/Icons';
+import Box from '../../components/widgets/Box';
+import { EditIcon, SendIcon } from '../../components/icons';
 
 import ForkExerciseButtonContainer
   from '../../containers/ForkExerciseButtonContainer';

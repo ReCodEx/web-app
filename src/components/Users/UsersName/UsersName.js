@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import { Link } from 'react-router';
-import Avatar from '../../AdminLTE/Avatar';
+import Avatar from '../../widgets/Avatar';
 import withLinks from '../../../hoc/withLinks';
 
 import styles from './usersName.less';

@@ -4,14 +4,14 @@ import { Set } from 'immutable';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import { Row, Col } from 'react-bootstrap';
-import Button from '../../components/AdminLTE/FlatButton';
+import Button from '../../components/widgets/FlatButton';
 import { Link } from 'react-router';
 import { LinkContainer } from 'react-router-bootstrap';
 
-import Page from '../../components/Page';
-import Box from '../../components/AdminLTE/Box';
-import { LoadingInfoBox } from '../../components/AdminLTE/InfoBox';
-import ResourceRenderer from '../../components/ResourceRenderer';
+import Page from '../../components/layout/Page';
+import Box from '../../components/widgets/Box';
+import { LoadingInfoBox } from '../../components/widgets/InfoBox';
+import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import UsersNameContainer from '../../containers/UsersNameContainer';
 import AssignmentsTable
   from '../../components/Assignments/Assignment/AssignmentsTable';
@@ -32,7 +32,7 @@ import {
   studentOfSelector,
   supervisorOfSelector
 } from '../../redux/selectors/groups';
-import { InfoIcon } from '../../components/Icons';
+import { InfoIcon } from '../../components/icons';
 import { getJsData } from '../../redux/helpers/resourceManager';
 
 import withLinks from '../../hoc/withLinks';

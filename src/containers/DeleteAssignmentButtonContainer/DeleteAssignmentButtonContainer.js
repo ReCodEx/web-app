@@ -1,17 +1,23 @@
 import React, { PropTypes } from 'react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
-import DeleteButton from '../../components/DeleteButton';
+import DeleteButton from '../../components/buttons/DeleteButton';
 import { deleteAssignment } from '../../redux/modules/assignments';
 import { getAssignment } from '../../redux/selectors/assignments';
 
-const DeleteAssignmentButtonContainer = ({
-  assignment,
-  deleteAssignment,
-  onDeleted,
-  ...props
-}) => (
-  <DeleteButton {...props} resource={assignment} deleteResource={deleteAssignment} />
+const DeleteAssignmentButtonContainer = (
+  {
+    assignment,
+    deleteAssignment,
+    onDeleted,
+    ...props
+  }
+) => (
+  <DeleteButton
+    {...props}
+    resource={assignment}
+    deleteResource={deleteAssignment}
+  />
 );
 
 DeleteAssignmentButtonContainer.propTypes = {
@@ -26,6 +32,7 @@ export default connect(
     assignment: getAssignment(id)(state)
   }),
   (dispatch, { id, onDeleted }) => ({
-    deleteAssignment: () => dispatch(deleteAssignment(id)).then(() => onDeleted && onDeleted())
+    deleteAssignment: () =>
+      dispatch(deleteAssignment(id)).then(() => onDeleted && onDeleted())
   })
 )(DeleteAssignmentButtonContainer);

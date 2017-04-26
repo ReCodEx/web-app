@@ -1,9 +1,9 @@
 import React, { Component, PropTypes } from 'react';
 import { FormattedMessage } from 'react-intl';
 import Icon from 'react-fontawesome';
-import Button from '../../AdminLTE/FlatButton';
+import Button from '../../widgets/FlatButton';
 import { LinkContainer } from 'react-router-bootstrap';
-import { TreeView, TreeViewItem } from '../../AdminLTE/TreeView';
+import { TreeView, TreeViewItem } from '../../widgets/TreeView';
 import { isReady, getJsData } from '../../../redux/helpers/resourceManager';
 import DeleteGroupButtonContainer
   from '../../../containers/DeleteGroupButtonContainer';

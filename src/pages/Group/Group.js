@@ -3,11 +3,11 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 import { LinkContainer } from 'react-router-bootstrap';
-import Button from '../../components/AdminLTE/FlatButton';
+import Button from '../../components/widgets/FlatButton';
 import { FormattedMessage } from 'react-intl';
 import { List } from 'immutable';
 
-import Page from '../../components/Page';
+import Page from '../../components/layout/Page';
 import GroupDetail, {
   LoadingGroupDetail,
   FailedGroupDetail
@@ -17,7 +17,7 @@ import LeaveJoinGroupButtonContainer
 import AdminsView from '../../components/Groups/AdminsView';
 import SupervisorsView from '../../components/Groups/SupervisorsView';
 import StudentsView from '../../components/Groups/StudentsView';
-import { EditIcon } from '../../components/Icons';
+import { EditIcon } from '../../components/icons';
 
 import { isReady, getJsData } from '../../redux/helpers/resourceManager';
 import {

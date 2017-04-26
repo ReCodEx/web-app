@@ -6,8 +6,8 @@ import { push } from 'react-router-redux';
 import { reset } from 'redux-form';
 
 import { Row, Col, Alert } from 'react-bootstrap';
-import PageContent from '../../components/PageContent';
-import ChangePasswordForm from '../../components/Forms/ChangePasswordForm';
+import PageContent from '../../components/layout/PageContent';
+import ChangePasswordForm from '../../components/forms/ChangePasswordForm';
 
 import { decode, isTokenValid, isInScope } from '../../redux/helpers/token';
 import { changePassword } from '../../redux/modules/auth';

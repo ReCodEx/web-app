@@ -2,7 +2,7 @@ import React, { PropTypes, Component } from 'react';
 import { defineMessages, intlShape, injectIntl } from 'react-intl';
 import { Tabs, Tab } from 'react-bootstrap';
 
-import Box from '../../AdminLTE/Box';
+import Box from '../../widgets/Box';
 import EvaluationTable from '../EvaluationTable';
 
 const messages = defineMessages({

@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import { FormattedMessage } from 'react-intl';
-import Box from '../../AdminLTE/Box';
+import Box from '../../widgets/Box';
 
 const CompilationLogs = (
   {

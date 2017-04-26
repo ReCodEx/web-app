@@ -6,8 +6,8 @@ import { push } from 'react-router-redux';
 import { reset } from 'redux-form';
 
 import { Row, Col } from 'react-bootstrap';
-import PageContent from '../../components/PageContent';
-import LoginForm from '../../components/Forms/LoginForm';
+import PageContent from '../../components/layout/PageContent';
+import LoginForm from '../../components/forms/LoginForm';
 import CASLoginBox from '../../containers/CAS';
 
 import { login } from '../../redux/modules/auth';

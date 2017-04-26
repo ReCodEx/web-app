@@ -5,8 +5,8 @@ import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 import { reset } from 'redux-form';
 
-import Page from '../../components/Page';
-import EditGroupForm from '../../components/Forms/EditGroupForm';
+import Page from '../../components/layout/Page';
+import EditGroupForm from '../../components/forms/EditGroupForm';
 // import DeleteGroupButtonContainer from '../../containers/DeleteGroupButtonContainer';
 
 import { fetchGroupIfNeeded, editGroup } from '../../redux/modules/groups';

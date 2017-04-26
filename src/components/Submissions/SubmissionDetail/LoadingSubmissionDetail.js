@@ -1,6 +1,6 @@
 import React from 'react';
-import Box from '../../AdminLTE/Box';
-import { LoadingIcon } from '../../Icons';
+import Box from '../../widgets/Box';
+import { LoadingIcon } from '../../icons';
 
 const LoadingSubmissionDetail = () => (
   <Box
@@ -10,7 +10,8 @@ const LoadingSubmissionDetail = () => (
       </span>
     }
     noPadding={false}
-    isOpen={true}>
+    isOpen={true}
+  >
     Načítám výsledky ...
   </Box>
 );
