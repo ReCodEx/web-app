@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 
 import { fetchUserIfNeeded } from '../../redux/modules/users';
 import { getUser } from '../../redux/selectors/users';
+import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import UsersName, {
   LoadingUsersName,
@@ -27,7 +28,7 @@ class UsersNameContainer extends Component {
   };
 
   render() {
-    const { user, large, noLink } = this.props;
+    const { user, large, noLink, currentUserId } = this.props;
     const size = large ? 45 : 22;
     return (
       <ResourceRenderer
@@ -36,7 +37,13 @@ class UsersNameContainer extends Component {
         failed={<FailedUsersName size={size} />}
       >
         {user => (
-          <UsersName {...user} large={large} size={size} noLink={noLink} />
+          <UsersName
+            {...user}
+            large={large}
+            size={size}
+            noLink={noLink}
+            currentUserId={currentUserId}
+          />
         )}
       </ResourceRenderer>
     );
@@ -45,6 +52,7 @@ class UsersNameContainer extends Component {
 
 UsersNameContainer.propTypes = {
   userId: PropTypes.string.isRequired,
+  currentUserId: PropTypes.string,
   large: PropTypes.bool,
   user: ImmutablePropTypes.map,
   noLink: PropTypes.bool
@@ -52,7 +60,8 @@ UsersNameContainer.propTypes = {
 
 export default connect(
   (state, { userId }) => ({
-    user: getUser(userId)(state)
+    user: getUser(userId)(state),
+    currentUserId: loggedInUserIdSelector(state)
   }),
   (dispatch, { userId }) => ({
     loadUserIfNeeded: () => dispatch(fetchUserIfNeeded(userId))

@@ -15,7 +15,8 @@ const UsersName = ({
   large = false,
   isVerified,
   noLink,
-  links: { USER_URI_FACTORY }
+  links: { USER_URI_FACTORY },
+  currentUserId
 }) => (
   <span className={styles.wrapper}>
     <span className={styles.avatar}>
@@ -35,7 +36,8 @@ const UsersName = ({
         </Link>}
       {noLink && <span>{fullName}</span>}
       <span className={styles.notVerified}>
-        {!isVerified && <NotVerified userId={id} currentUserId={id} />}
+        {!isVerified &&
+          <NotVerified userId={id} currentUserId={currentUserId} />}
       </span>
     </span>
   </span>
@@ -49,6 +51,7 @@ UsersName.propTypes = {
   size: PropTypes.number,
   large: PropTypes.bool,
   noLink: PropTypes.bool,
+  currentUserId: PropTypes.string.isRequired,
   links: PropTypes.object
 };
 
