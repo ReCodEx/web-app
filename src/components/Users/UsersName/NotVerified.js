@@ -1,8 +1,9 @@
 import React, { PropTypes } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { OverlayTrigger, Popover } from 'react-bootstrap';
-import { WarningIcon, RefreshIcon } from '../../icons';
-import Button from '../../widgets/FlatButton';
+import { WarningIcon } from '../../icons';
+import ResendVerificationEmail
+  from '../../../containers/ResendVerificationEmailContainer';
 
 const NotVerified = ({ userId, currentUserId }) => {
   return (
@@ -27,14 +28,7 @@ const NotVerified = ({ userId, currentUserId }) => {
           </p>
           {userId === currentUserId &&
             <p className="text-center">
-              <Button bsSize="sm">
-                <RefreshIcon />
-                {' '}
-                <FormattedMessage
-                  id="app.usersName.notVerified.resend"
-                  defaultMessage="Re-send the activation link"
-                />
-              </Button>
+              <ResendVerificationEmail userId={userId} />
             </p>}
         </Popover>
       }
