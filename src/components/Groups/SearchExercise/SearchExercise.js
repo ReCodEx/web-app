@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import SelectExerciseContainer from '../../../containers/SelectExerciseContainer';
 
 const SearchExercise = ({ groupId }) => (

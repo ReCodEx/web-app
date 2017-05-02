@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 
 import LeaveJoinGroupButtonContainer from '../../../containers/LeaveJoinGroupButtonContainer';
 import AddUserContainer from '../../../containers/AddUserContainer';

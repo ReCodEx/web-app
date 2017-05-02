@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { reduxForm, Field, change } from 'redux-form';
 import { FormattedMessage } from 'react-intl';
 import { Alert } from 'react-bootstrap';

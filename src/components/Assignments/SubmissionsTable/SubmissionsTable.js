@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { List } from 'immutable';
 import { FormattedMessage } from 'react-intl';
 

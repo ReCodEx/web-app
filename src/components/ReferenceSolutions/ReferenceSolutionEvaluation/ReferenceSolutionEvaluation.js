@@ -1,4 +1,5 @@
-import React, { PropTypes, Component } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { defineMessages, intlShape, injectIntl } from 'react-intl';
 import { Tabs, Tab } from 'react-bootstrap';
 

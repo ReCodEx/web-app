@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Authenticate, LoginFailed } from '../../components/buttons/CAS';
 import { openCASWindow, getTicketFromUrl } from '../../helpers/cas';
 import withLinks from '../../hoc/withLinks';

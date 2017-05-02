@@ -1,6 +1,10 @@
-import { PropTypes, Component } from 'react';
+import { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { loggedInUserIdSelector, accessTokenSelector } from '../../redux/selectors/auth';
+import {
+  loggedInUserIdSelector,
+  accessTokenSelector
+} from '../../redux/selectors/auth';
 import { fetchUserIfNeeded } from '../../redux/modules/users';
 import { getUserSettings } from '../../redux/selectors/users';
 import { isTokenValid, willExpireSoon } from '../../redux/helpers/token';
@@ -9,14 +13,14 @@ import { fetchUsersGroupsIfNeeded } from '../../redux/modules/groups';
 import { logout, refresh } from '../../redux/modules/auth';
 
 class App extends Component {
-
   static loadAsync = (params, dispatch, userId) =>
-    userId
+    (userId
       ? Promise.all([
         dispatch(fetchUserIfNeeded(userId)),
         dispatch(fetchUsersGroupsIfNeeded(userId)),
         dispatch(fetchUsersInstancesIfNeeded(userId))
-      ]) : Promise.resolve();
+      ])
+      : Promise.resolve());
 
   componentWillMount() {
     this.props.loadAsync(this.props.userId);
@@ -44,11 +48,9 @@ class App extends Component {
         logout();
       } else if (willExpireSoon(token) && !this.isRefreshingToken) {
         this.isRefreshingToken = true;
-        refreshToken()
-          .catch(() => logout())
-          .then(() => {
-            this.isRefreshingToken = false;
-          });
+        refreshToken().catch(() => logout()).then(() => {
+          this.isRefreshingToken = false;
+        });
       }
     }
   };
@@ -56,7 +58,6 @@ class App extends Component {
   render() {
     return this.props.children;
   }
-
 }
 
 App.propTypes = {
@@ -85,7 +86,7 @@ export default connect(
     };
   },
   dispatch => ({
-    loadAsync: (userId) => App.loadAsync({}, dispatch, userId),
+    loadAsync: userId => App.loadAsync({}, dispatch, userId),
     refreshToken: () => dispatch(refresh()),
     logout: () => dispatch(logout('/'))
   })

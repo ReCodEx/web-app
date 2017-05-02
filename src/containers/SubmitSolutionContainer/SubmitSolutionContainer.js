@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { List } from 'immutable';
 import { connect } from 'react-redux';
 import SubmitSolution from '../../components/Submissions/SubmitSolution';

@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import prettyBytes from 'pretty-bytes';
 import Icon from 'react-fontawesome';
 import { Table, Button, ButtonGroup } from 'react-bootstrap';

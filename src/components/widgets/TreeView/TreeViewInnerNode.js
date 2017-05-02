@@ -1,15 +1,15 @@
-import React, { PropTypes, Component } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import Collapse from 'react-collapse';
 import TreeViewLeaf from './TreeViewLeaf';
 
 class TreeViewInnerNode extends Component {
-
   componentWillMount() {
     const { isOpen = false } = this.props;
     this.setState({ isOpen });
   }
 
-  toggleOpen = (e) => {
+  toggleOpen = e => {
     e.preventDefault();
     this.setState({ isOpen: !this.state.isOpen });
   };
@@ -29,14 +29,14 @@ class TreeViewInnerNode extends Component {
           {...props}
           loading={loading}
           onClick={this.toggleOpen}
-          icon={this.isOpen() ? 'square' : 'plus-square'} />
+          icon={this.isOpen() ? 'square' : 'plus-square'}
+        />
         <Collapse isOpened={this.isOpen()}>
           {children}
         </Collapse>
       </ul>
     );
   }
-
 }
 
 TreeViewInnerNode.propTypes = {
