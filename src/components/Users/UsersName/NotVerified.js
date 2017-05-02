@@ -8,7 +8,7 @@ const NotVerified = ({ userId, currentUserId }) => {
   return (
     <OverlayTrigger
       trigger="click"
-      rootClose="true"
+      rootClose={true}
       overlay={
         <Popover
           id={userId}
