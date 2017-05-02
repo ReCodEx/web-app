@@ -1,8 +1,8 @@
 import React, { PropTypes } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { OverlayTrigger, Popover } from 'react-bootstrap';
-import { WarningIcon } from '../../Icons';
-import Button from '../../AdminLTE/FlatButton';
+import { WarningIcon } from '../../icons';
+import Button from '../../widgets/FlatButton';
 
 const NotVerified = ({ userId, currentUserId }) => {
   return (
