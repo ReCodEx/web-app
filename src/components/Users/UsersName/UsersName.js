@@ -2,21 +2,22 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router';
 import Avatar from '../../widgets/Avatar';
+import NotVerified from './NotVerified';
 import withLinks from '../../../hoc/withLinks';
 
 import styles from './usersName.less';
 
-const UsersName = (
-  {
-    id,
-    fullName,
-    avatarUrl,
-    size = 25,
-    large = false,
-    noLink,
-    links: { USER_URI_FACTORY }
-  }
-) => (
+const UsersName = ({
+  id,
+  fullName,
+  avatarUrl,
+  size = 25,
+  large = false,
+  isVerified,
+  noLink,
+  links: { USER_URI_FACTORY },
+  currentUserId
+}) => (
   <span className={styles.wrapper}>
     <span className={styles.avatar}>
       <Avatar size={size} src={avatarUrl} title={fullName} />
@@ -34,6 +35,10 @@ const UsersName = (
           {fullName}
         </Link>}
       {noLink && <span>{fullName}</span>}
+      <span className={styles.notVerified}>
+        {!isVerified &&
+          <NotVerified userId={id} currentUserId={currentUserId} />}
+      </span>
     </span>
   </span>
 );
@@ -42,9 +47,11 @@ UsersName.propTypes = {
   id: PropTypes.string.isRequired,
   fullName: PropTypes.string.isRequired,
   avatarUrl: PropTypes.string.isRequired,
+  isVerified: PropTypes.bool.isRequired,
   size: PropTypes.number,
   large: PropTypes.bool,
   noLink: PropTypes.bool,
+  currentUserId: PropTypes.string.isRequired,
   links: PropTypes.object
 };
 
