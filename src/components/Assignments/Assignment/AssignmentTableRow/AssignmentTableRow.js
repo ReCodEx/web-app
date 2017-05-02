@@ -5,31 +5,32 @@ import AssignmentStatusIcon from '../AssignmentStatusIcon/AssignmentStatusIcon';
 import { FormattedDate, FormattedTime } from 'react-intl';
 
 import withLinks from '../../../../hoc/withLinks';
+import { MaybeBonusAssignmentIcon } from '../../../icons';
 
-const AssignmentTableRow = (
-  {
-    showGroup,
-    item: {
-      id,
-      name,
-      group,
-      allowSecondDeadline,
-      firstDeadline,
-      secondDeadline
-    },
-    status,
-    userId,
-    links: {
-      ASSIGNMENT_DETAIL_URI_FACTORY,
-      ASSIGNMENT_DETAIL_SPECIFIC_USER_URI_FACTORY
-    }
+const AssignmentTableRow = ({
+  showGroup,
+  item: {
+    id,
+    name,
+    group,
+    allowSecondDeadline,
+    firstDeadline,
+    secondDeadline,
+    isBonus
+  },
+  status,
+  userId,
+  links: {
+    ASSIGNMENT_DETAIL_URI_FACTORY,
+    ASSIGNMENT_DETAIL_SPECIFIC_USER_URI_FACTORY
   }
-) => (
+}) => (
   <tr>
     <td className="text-center">
       <AssignmentStatusIcon id={id} status={status} />
     </td>
     <td>
+      <MaybeBonusAssignmentIcon id={id} isBonus={isBonus} />
       <Link
         to={
           userId
