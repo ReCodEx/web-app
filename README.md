@@ -23,10 +23,21 @@ WEBPACK_DEV_SERVER_PORT=8081
 * webpack dev server, client side only, no server rendering
 
 ```
-npm install
-npm run dev
+yarn
+yarn dev
 open http://127.0.0.1:8080
 ```
+
+## Run in production
+
+```
+yarn
+yarn test
+yarn build
+yarn start
+```
+
+Consider using [PM2](http://pm2.keymetrics.io/) or similar tool to run the `yarn start` command to prevent crashes of the web service.
 
 ## License
 
