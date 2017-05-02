@@ -9,27 +9,31 @@ import DeleteAssignmentButtonContainer
   from '../../../containers/DeleteAssignmentButtonContainer';
 
 import withLinks from '../../../hoc/withLinks';
-import { EditIcon, MaybePublicIcon } from '../../icons';
+import {
+  EditIcon,
+  MaybePublicIcon,
+  MaybeBonusAssignmentIcon
+} from '../../icons';
 
-const AdminAssignmentTableRow = (
-  {
-    id,
-    isPublic,
-    name,
-    allowSecondDeadline,
-    firstDeadline,
-    secondDeadline,
-    links: {
-      ASSIGNMENT_DETAIL_URI_FACTORY: detail,
-      ASSIGNMENT_EDIT_URI_FACTORY: edit
-    }
+const AdminAssignmentTableRow = ({
+  id,
+  isPublic,
+  name,
+  allowSecondDeadline,
+  firstDeadline,
+  secondDeadline,
+  isBonus,
+  links: {
+    ASSIGNMENT_DETAIL_URI_FACTORY: detail,
+    ASSIGNMENT_EDIT_URI_FACTORY: edit
   }
-) => (
+}) => (
   <tr>
     <td className="text-center">
       <MaybePublicIcon id={id} isPublic={isPublic} />
     </td>
     <td>
+      <MaybeBonusAssignmentIcon id={id} isBonus={isBonus} />
       <Link to={detail(id)}>{name}</Link>
     </td>
     <td>
@@ -65,6 +69,7 @@ const AdminAssignmentTableRow = (
 AdminAssignmentTableRow.propTypes = {
   id: PropTypes.any.isRequired,
   isPublic: PropTypes.bool.isRequired,
+  isBonus: PropTypes.bool.isRequired,
   name: PropTypes.string.isRequired,
   firstDeadline: PropTypes.number.isRequired,
   allowSecondDeadline: PropTypes.bool.isRequired,

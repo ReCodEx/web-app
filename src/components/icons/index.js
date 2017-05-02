@@ -15,3 +15,6 @@ export { default as SuccessIcon } from './SuccessIcon';
 export { default as MaybeSucceededIcon } from './MaybeSucceededIcon';
 export { default as MaybePublicIcon } from './MaybePublicIcon';
 export { default as RefreshIcon } from './RefreshIcon';
+export {
+  default as MaybeBonusAssignmentIcon
+} from './MaybeBonusAssignmentIcon';
