@@ -4,6 +4,9 @@ import factory, { initialState } from '../helpers/resourceManager';
 import { createApiAction } from '../middleware/apiMiddleware';
 
 import { additionalActionTypes as groupsActionTypes } from './groups';
+import {
+  actionTypes as emailVerificationActionTypes
+} from './emailVerification';
 
 export const actionTypes = {
   VALIDATE_REGISTRATION_DATA: 'recodex/users/VALIDATE_REGISTRATION_DATA',
@@ -21,10 +24,7 @@ export const actionTypes = {
 };
 
 const resourceName = 'users';
-var {
-  actions,
-  reduceActions
-} = factory({ resourceName });
+var { actions, reduceActions } = factory({ resourceName });
 
 /**
  * Actions
@@ -41,7 +41,8 @@ export const validateRegistrationData = (email, password) =>
   });
 
 export const updateProfile = actions.updateResource;
-export const updateSettings = (id, body) => actions.updateResource(id, body, `/users/${id}/settings`);
+export const updateSettings = (id, body) =>
+  actions.updateResource(id, body, `/users/${id}/settings`);
 
 export const fetchSupervisors = groupId =>
   actions.fetchMany({
@@ -57,72 +58,131 @@ export const fetchStudents = groupId =>
  * Reducer
  */
 
-const reducer = handleActions(Object.assign({}, reduceActions, {
+const reducer = handleActions(
+  Object.assign({}, reduceActions, {
+    [emailVerificationActionTypes.EMAIL_VERIFICATION_FULFILLED]: (
+      state,
+      { meta: { userId } }
+    ) =>
+      state.updateIn(
+        ['resources', userId, 'data'],
+        userData =>
+          (userData === null ? null : userData.set('isVerified', true))
+      ),
 
-  [groupsActionTypes.JOIN_GROUP_PENDING]: (state, { meta: { groupId, userId } }) => {
-    if (!state.getIn(['resources', userId])) {
-      return state;
+    [groupsActionTypes.JOIN_GROUP_PENDING]: (
+      state,
+      { meta: { groupId, userId } }
+    ) => {
+      if (!state.getIn(['resources', userId])) {
+        return state;
+      }
+
+      return state.updateIn(
+        ['resources', userId, 'data', 'groups', 'studentOf'],
+        list => list.push(groupId)
+      );
+    },
+
+    [groupsActionTypes.JOIN_GROUP_REJECTED]: (
+      state,
+      { meta: { groupId, userId } }
+    ) => {
+      if (!state.getIn(['resources', userId])) {
+        return state;
+      }
+
+      return state.updateIn(
+        ['resources', userId, 'data', 'groups', 'studentOf'],
+        list => list.filter(id => id !== groupId)
+      );
+    },
+
+    [groupsActionTypes.LEAVE_GROUP_PENDING]: (
+      state,
+      { meta: { groupId, userId } }
+    ) => {
+      if (!state.getIn(['resources', userId])) {
+        return state;
+      }
+
+      return state.updateIn(
+        ['resources', userId, 'data', 'groups', 'studentOf'],
+        list => list.filter(id => id !== groupId)
+      );
+    },
+
+    [groupsActionTypes.LEAVE_GROUP_REJECTED]: (
+      state,
+      { meta: { groupId, userId } }
+    ) => {
+      if (!state.getIn(['resources', userId])) {
+        return state;
+      }
+
+      return state.updateIn(
+        ['resources', userId, 'data', 'groups', 'studentOf'],
+        list => list.push(groupId)
+      );
+    },
+
+    [groupsActionTypes.MAKE_SUPERVISOR_PENDING]: (
+      state,
+      { meta: { groupId, userId } }
+    ) => {
+      if (!state.getIn(['resources', userId])) {
+        return state;
+      }
+
+      return state.updateIn(
+        ['resources', userId, 'data', 'groups', 'supervisorOf'],
+        list => list.push(groupId)
+      );
+    },
+
+    [groupsActionTypes.MAKE_SUPERVISOR_REJECTED]: (
+      state,
+      { meta: { groupId, userId } }
+    ) => {
+      if (!state.getIn(['resources', userId])) {
+        return state;
+      }
+
+      return state.updateIn(
+        ['resources', userId, 'data', 'groups', 'supervisorOf'],
+        list => list.filter(id => id !== groupId)
+      );
+    },
+
+    [groupsActionTypes.REMOVE_SUPERVISOR_PENDING]: (
+      state,
+      { meta: { groupId, userId } }
+    ) => {
+      if (!state.getIn(['resources', userId])) {
+        return state;
+      }
+
+      return state.updateIn(
+        ['resources', userId, 'data', 'groups', 'supervisorOf'],
+        list => list.filter(id => id !== groupId)
+      );
+    },
+
+    [groupsActionTypes.REMOVE_SUPERVISOR_REJECTED]: (
+      state,
+      { meta: { groupId, userId } }
+    ) => {
+      if (!state.getIn(['resources', userId])) {
+        return state;
+      }
+
+      return state.updateIn(
+        ['resources', userId, 'data', 'groups', 'supervisorOf'],
+        list => list.push(groupId)
+      );
     }
-
-    return state.updateIn(['resources', userId, 'data', 'groups', 'studentOf'], list => list.push(groupId));
-  },
-
-  [groupsActionTypes.JOIN_GROUP_REJECTED]: (state, { meta: { groupId, userId } }) => {
-    if (!state.getIn(['resources', userId])) {
-      return state;
-    }
-
-    return state.updateIn(['resources', userId, 'data', 'groups', 'studentOf'], list => list.filter(id => id !== groupId));
-  },
-
-  [groupsActionTypes.LEAVE_GROUP_PENDING]: (state, { meta: { groupId, userId } }) => {
-    if (!state.getIn(['resources', userId])) {
-      return state;
-    }
-
-    return state.updateIn(['resources', userId, 'data', 'groups', 'studentOf'], list => list.filter(id => id !== groupId));
-  },
-
-  [groupsActionTypes.LEAVE_GROUP_REJECTED]: (state, { meta: { groupId, userId } }) => {
-    if (!state.getIn(['resources', userId])) {
-      return state;
-    }
-
-    return state.updateIn(['resources', userId, 'data', 'groups', 'studentOf'], list => list.push(groupId));
-  },
-
-  [groupsActionTypes.MAKE_SUPERVISOR_PENDING]: (state, { meta: { groupId, userId } }) => {
-    if (!state.getIn(['resources', userId])) {
-      return state;
-    }
-
-    return state.updateIn(['resources', userId, 'data', 'groups', 'supervisorOf'], list => list.push(groupId));
-  },
-
-  [groupsActionTypes.MAKE_SUPERVISOR_REJECTED]: (state, { meta: { groupId, userId } }) => {
-    if (!state.getIn(['resources', userId])) {
-      return state;
-    }
-
-    return state.updateIn(['resources', userId, 'data', 'groups', 'supervisorOf'], list => list.filter(id => id !== groupId));
-  },
-
-  [groupsActionTypes.REMOVE_SUPERVISOR_PENDING]: (state, { meta: { groupId, userId } }) => {
-    if (!state.getIn(['resources', userId])) {
-      return state;
-    }
-
-    return state.updateIn(['resources', userId, 'data', 'groups', 'supervisorOf'], list => list.filter(id => id !== groupId));
-  },
-
-  [groupsActionTypes.REMOVE_SUPERVISOR_REJECTED]: (state, { meta: { groupId, userId } }) => {
-    if (!state.getIn(['resources', userId])) {
-      return state;
-    }
-
-    return state.updateIn(['resources', userId, 'data', 'groups', 'supervisorOf'], list => list.push(groupId));
-  }
-
-}), initialState);
+  }),
+  initialState
+);
 
 export default reducer;

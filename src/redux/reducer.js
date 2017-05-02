@@ -6,6 +6,7 @@ import auth, { actionTypes as authActionTypes } from './modules/auth';
 import assignments from './modules/assignments';
 import { default as canSubmit } from './modules/canSubmit'; // because of a named export 'canSubmit'
 import comments from './modules/comments';
+import emailVerification from './modules/emailVerification';
 import evaluationProgress from './modules/evaluationProgress';
 import exercises from './modules/exercises';
 import files from './modules/files';
@@ -34,6 +35,7 @@ const createRecodexReducers = token => ({
   assignments,
   canSubmit,
   comments,
+  emailVerification,
   evaluationProgress,
   exercises,
   files,
