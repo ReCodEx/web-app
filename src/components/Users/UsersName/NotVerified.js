@@ -1,13 +1,13 @@
 import React, { PropTypes } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { OverlayTrigger, Popover } from 'react-bootstrap';
-import { WarningIcon } from '../../icons';
+import { WarningIcon, RefreshIcon } from '../../icons';
 import Button from '../../widgets/FlatButton';
 
 const NotVerified = ({ userId, currentUserId }) => {
   return (
     <OverlayTrigger
-      trigger={['hover', 'focus', 'click']}
+      trigger="click"
       rootClose={true}
       overlay={
         <Popover
@@ -27,7 +27,9 @@ const NotVerified = ({ userId, currentUserId }) => {
           </p>
           {userId === currentUserId &&
             <p className="text-center">
-              <Button>
+              <Button bsSize="sm">
+                <RefreshIcon />
+                {' '}
                 <FormattedMessage
                   id="app.usersName.notVerified.resend"
                   defaultMessage="Re-send the activation link"
