@@ -34,7 +34,9 @@ const UsersName = ({
           {fullName}
         </Link>}
       {noLink && <span>{fullName}</span>}
-      {!isVerified && <NotVerified userId={id} currentUserId={id} />}
+      <span className={styles.notVerified}>
+        {!isVerified && <NotVerified userId={id} currentUserId={id} />}
+      </span>
     </span>
   </span>
 );

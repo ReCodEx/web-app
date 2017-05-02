@@ -7,7 +7,8 @@ import Button from '../../widgets/FlatButton';
 const NotVerified = ({ userId, currentUserId }) => {
   return (
     <OverlayTrigger
-      trigger={['hover', 'focus']}
+      trigger={['hover', 'focus', 'click']}
+      rootClose={true}
       overlay={
         <Popover
           id={userId}
