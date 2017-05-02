@@ -9,6 +9,7 @@ import LayoutContainer from '../containers/LayoutContainer';
 import App from '../containers/App';
 import Dashboard from './Dashboard';
 import Home from './Home';
+import EmailVerification from './EmailVerification';
 import Exercise from './Exercise';
 import Exercises from './Exercises';
 import EditExercise from './EditExercise';
@@ -31,7 +32,7 @@ import ReferenceSolution from './ReferenceSolution';
 import ChangePassword from './ChangePassword';
 import ResetPassword from './ResetPassword';
 
-const createRoutes = (getState) => {
+const createRoutes = getState => {
   const getLang = state => state.params.lang;
   const getLinks = state => linksFactory(getLang(state));
 
@@ -60,7 +61,12 @@ const createRoutes = (getState) => {
       <Route path="/:lang" component={LayoutContainer}>
         <IndexRoute component={Home} />
         <Route path="login" component={Login} onEnter={onlyUnauth} />
-        <Route path="registration" component={Registration} onEnter={onlyUnauth} />
+        <Route
+          path="registration"
+          component={Registration}
+          onEnter={onlyUnauth}
+        />
+        <Route path="email-verification" component={EmailVerification} />
         <Route path="app" onEnter={requireAuth}>
           <IndexRoute component={Dashboard} />
           <Route path="assignment/:assignmentId">
@@ -75,7 +81,10 @@ const createRoutes = (getState) => {
             <Route path=":exerciseId">
               <IndexRoute component={Exercise} />
               <Route path="edit" component={EditExercise} />
-              <Route path="reference-solution/:referenceSolutionId" component={ReferenceSolution} />
+              <Route
+                path="reference-solution/:referenceSolutionId"
+                component={ReferenceSolution}
+              />
             </Route>
           </Route>
           <Route path="group/:groupId">
