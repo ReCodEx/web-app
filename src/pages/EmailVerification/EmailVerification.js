@@ -88,7 +88,8 @@ class EmailVerification extends Component {
       >
         <Row>
           <Col sm={8} smOffset={2} md={6} mdOffset={3} lg={4} lgOffset={4}>
-            {!token &&
+            {canUseDOM &&
+              !token &&
               !decodedToken &&
               <div>
                 <Alert bsStyle="warning">
