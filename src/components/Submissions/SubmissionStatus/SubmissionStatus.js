@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { Table } from 'react-bootstrap';
 import Icon from 'react-fontawesome';
 import { FormattedDate, FormattedTime, FormattedMessage } from 'react-intl';

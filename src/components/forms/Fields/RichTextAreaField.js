@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import RichTextEditor, { createEmptyValue } from 'react-rte';
 import { Checkbox, FormGroup } from 'react-bootstrap';

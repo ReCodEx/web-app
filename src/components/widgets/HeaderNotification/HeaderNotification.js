@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Tooltip, OverlayTrigger, Badge } from 'react-bootstrap';
 import { FormattedDate, FormattedTime } from 'react-intl';
 import { SuccessIcon, WarningIcon, DeleteIcon } from '../../icons';

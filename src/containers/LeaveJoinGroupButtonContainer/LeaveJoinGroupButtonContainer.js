@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { joinGroup, leaveGroup } from '../../redux/modules/groups';
 import { isStudentOf } from '../../redux/selectors/users';

@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import ConfirmDeleteButton from './ConfirmDeleteButton';
 import DeletingButton from './DeletingButton';

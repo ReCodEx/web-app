@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import { injectIntl, intlShape, FormattedMessage } from 'react-intl';
 import Breadcrumbs from '../../widgets/Breadcrumbs';

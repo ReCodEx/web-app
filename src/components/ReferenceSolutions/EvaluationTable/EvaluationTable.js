@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { FormattedMessage, FormattedDate, FormattedTime } from 'react-intl';
 import { Table } from 'react-bootstrap';
 

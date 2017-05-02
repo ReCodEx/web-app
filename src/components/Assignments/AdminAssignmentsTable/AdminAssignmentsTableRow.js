@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router';
 import { FormattedDate, FormattedTime, FormattedMessage } from 'react-intl';
 import { ButtonGroup } from 'react-bootstrap';

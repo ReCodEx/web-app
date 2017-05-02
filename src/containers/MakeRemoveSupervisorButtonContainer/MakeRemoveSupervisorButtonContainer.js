@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { makeSupervisor, removeSupervisor } from '../../redux/modules/groups';
 import { isSupervisorOf } from '../../redux/selectors/users';

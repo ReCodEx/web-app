@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { Breadcrumb } from 'react-bootstrap';
 import BreadcrumbItem from './BreadcrumbItem';
 import ResourceDependentBreadcrumbItem from './ResourceDependentBreadcrumbItem';

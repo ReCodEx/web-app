@@ -1,16 +1,16 @@
-import React, { PropTypes, Component } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { fetchInstances } from '../../redux/modules/instances';
 import { instancesSelector } from '../../redux/selectors/instances';
 
-import InstancesManagement from '../../components/Instances/InstancesManagement';
+import InstancesManagement
+  from '../../components/Instances/InstancesManagement';
 
 class Instances extends Component {
-
-  static loadAsync = (params, dispatch) => Promise.all([
-    dispatch(fetchInstances())
-  ]);
+  static loadAsync = (params, dispatch) =>
+    Promise.all([dispatch(fetchInstances())]);
 
   componentWillMount = () => this.props.loadAsync();
 
@@ -18,7 +18,6 @@ class Instances extends Component {
     const { instances } = this.props;
     return <InstancesManagement instances={instances} />;
   }
-
 }
 
 Instances.propTypes = {
@@ -27,10 +26,10 @@ Instances.propTypes = {
 };
 
 export default connect(
-  (state) => ({
+  state => ({
     instances: instancesSelector(state)
   }),
-  (dispatch) => ({
+  dispatch => ({
     loadAsync: () => Instances.loadAsync({}, dispatch)
   })
 )(Instances);
