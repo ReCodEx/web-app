@@ -58,7 +58,7 @@ describe('Submissions', () => {
       ).to.equal(true);
     });
 
-    it.only('must remove all other accepted flags when it succeeds', () => {
+    it('must remove all other accepted flags when it succeeds', () => {
       const id = 'abcde123';
       const id2 = `__${id}`;
       const id3 = `__${id2}`;
