@@ -2,13 +2,16 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { FormattedMessage } from 'react-intl';
+import { HelpBlock } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 import { reset } from 'redux-form';
 
 import Page from '../../components/layout/Page';
 import EditGroupForm from '../../components/forms/EditGroupForm';
-// import DeleteGroupButtonContainer from '../../containers/DeleteGroupButtonContainer';
+import DeleteGroupButtonContainer
+  from '../../containers/DeleteGroupButtonContainer';
+import Box from '../../components/widgets/Box';
 
 import { fetchGroupIfNeeded, editGroup } from '../../redux/modules/groups';
 import { groupSelector } from '../../redux/selectors/groups';
@@ -36,7 +39,8 @@ class EditGroup extends Component {
       params: { groupId },
       group,
       links: { GROUP_URI_FACTORY },
-      editGroup
+      editGroup,
+      push
     } = this.props;
 
     return (
@@ -67,10 +71,47 @@ class EditGroup extends Component {
         ]}
       >
         {group => (
-          <EditGroupForm
-            initialValues={this.getInitialValues(group)}
-            onSubmit={editGroup}
-          />
+          <div>
+            <EditGroupForm
+              initialValues={this.getInitialValues(group)}
+              onSubmit={editGroup}
+            />
+
+            <Box
+              type="danger"
+              title={
+                <FormattedMessage
+                  id="app.editGroup.deleteGroup"
+                  defaultMessage="Delete the group"
+                />
+              }
+            >
+              <div>
+                <p>
+                  <FormattedMessage
+                    id="app.editGroup.deleteGroupWarning"
+                    defaultMessage="Deleting a group will remove all the subgroups, the students submissions and all the assignments and the submissions of the students."
+                  />
+                </p>
+                <p className="text-center">
+                  <DeleteGroupButtonContainer
+                    id={group.id}
+                    disabled={group.parentGroupId === null}
+                    onDeleted={() =>
+                      push(GROUP_URI_FACTORY(group.parentGroupId))}
+                  />
+
+                  {group.parentGroupId === null &&
+                    <HelpBlock>
+                      <FormattedMessage
+                        id="app.editGroup.cannotDeleteRootGroup"
+                        defaultMessage="This is a so-called root group and it cannot be deleted."
+                      />
+                    </HelpBlock>}
+                </p>
+              </div>
+            </Box>
+          </div>
         )}
       </Page>
     );
@@ -84,7 +125,8 @@ EditGroup.propTypes = {
     groupId: PropTypes.string.isRequired
   }).isRequired,
   group: ImmutablePropTypes.map,
-  editGroup: PropTypes.func.isRequired
+  editGroup: PropTypes.func.isRequired,
+  push: PropTypes.func.isRequired
 };
 
 export default withLinks(
