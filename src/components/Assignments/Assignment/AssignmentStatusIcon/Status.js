@@ -6,29 +6,33 @@ import { FormattedMessage } from 'react-intl';
 
 const Status = ({ id, message, icon, accepted = false }) => (
   <span>
-    <OverlayTrigger
-      placement="bottom"
-      overlay={
-        <Tooltip id={id}>
-          {message}
-        </Tooltip>
-      }
-    >
-      {icon}
-    </OverlayTrigger>
+    {!accepted &&
+      <OverlayTrigger
+        placement="bottom"
+        overlay={
+          <Tooltip id={id}>
+            {message}
+          </Tooltip>
+        }
+      >
+        {icon}
+      </OverlayTrigger>}
     {accepted &&
       <OverlayTrigger
         placement="bottom"
         overlay={
           <Tooltip id={id}>
-            <FormattedMessage
-              id="app.submissionStatus.accepted"
-              defaultMessage="This solution was marked by one of the supervisors as accepted."
-            />
+            <span>
+              {message}
+              <FormattedMessage
+                id="app.submissionStatus.accepted"
+                defaultMessage="This solution was marked by one of the supervisors as accepted."
+              />
+            </span>
           </Tooltip>
         }
       >
-        <Icon name="check-circle-o" className="text-green" />
+        <Icon name="check-circle" className="text-green" />
       </OverlayTrigger>}
   </span>
 );
