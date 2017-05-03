@@ -6,14 +6,12 @@ import DeleteButton from '../../components/buttons/DeleteButton';
 import { deleteGroup } from '../../redux/modules/groups';
 import { groupSelector } from '../../redux/selectors/groups';
 
-const DeleteGroupButtonContainer = (
-  {
-    group,
-    deleteGroup,
-    onDeleted,
-    ...props
-  }
-) => <DeleteButton {...props} resource={group} deleteResource={deleteGroup} />;
+const DeleteGroupButtonContainer = ({
+  group,
+  deleteGroup,
+  onDeleted,
+  ...props
+}) => <DeleteButton {...props} resource={group} deleteResource={deleteGroup} />;
 
 DeleteGroupButtonContainer.propTypes = {
   id: PropTypes.string.isRequired,
@@ -27,7 +25,9 @@ export default connect(
     group: groupSelector(id)(state)
   }),
   (dispatch, { id, onDeleted }) => ({
-    deleteGroup: () =>
-      dispatch(deleteGroup(id)).then(() => onDeleted && onDeleted())
+    deleteGroup: () => {
+      onDeleted && onDeleted();
+      return dispatch(deleteGroup(id));
+    }
   })
 )(DeleteGroupButtonContainer);
