@@ -4,17 +4,21 @@ import { FormattedMessage } from 'react-intl';
 import Icon from 'react-fontawesome';
 import Staus from './Status';
 
-const AssignmentStatusIcon = ({
-  id,
-  status
-}) => {
+const AssignmentStatusIcon = ({ id, status, accepted = false }) => {
   switch (status) {
     case 'done':
       return (
         <Staus
           id={id}
+          accepted={accepted}
           icon={<Icon name="thumbs-o-up" className="text-green" />}
-          message={<FormattedMessage id="app.assignemntStatusIcon.ok" defaultMessage="Assignment is successfully completed." />} />
+          message={
+            <FormattedMessage
+              id="app.assignemntStatusIcon.ok"
+              defaultMessage="Assignment is successfully completed."
+            />
+          }
+        />
       );
 
     case 'work-in-progress':
@@ -22,7 +26,13 @@ const AssignmentStatusIcon = ({
         <Staus
           id={id}
           icon={<Icon name="cogs" className="text-yellow" />}
-          message={<FormattedMessage id="app.assignemntStatusIcon.inProgress" defaultMessage="Assignment solution is being evaluated." />} />
+          message={
+            <FormattedMessage
+              id="app.assignemntStatusIcon.inProgress"
+              defaultMessage="Assignment solution is being evaluated."
+            />
+          }
+        />
       );
 
     case 'failed':
@@ -30,7 +40,13 @@ const AssignmentStatusIcon = ({
         <Staus
           id={id}
           icon={<Icon name="thumbs-o-down" className="text-red" />}
-          message={<FormattedMessage id="app.assignemntStatusIcon.failed" defaultMessage="No correct solution was submitted yet." />} />
+          message={
+            <FormattedMessage
+              id="app.assignemntStatusIcon.failed"
+              defaultMessage="No correct solution was submitted yet."
+            />
+          }
+        />
       );
 
     case 'evaluation-failed':
@@ -38,7 +54,13 @@ const AssignmentStatusIcon = ({
         <Staus
           id={id}
           icon={<Icon name="exclamation-triangle" className="text-yellow" />}
-          message={<FormattedMessage id="app.assignemntStatusIcon.evaluationFailed" defaultMessage="No solution was evaluated correctly by ReCodEx." />} />
+          message={
+            <FormattedMessage
+              id="app.assignemntStatusIcon.evaluationFailed"
+              defaultMessage="No solution was evaluated correctly by ReCodEx."
+            />
+          }
+        />
       );
 
     default:
@@ -46,14 +68,21 @@ const AssignmentStatusIcon = ({
         <Staus
           id={id}
           icon={<Icon name="code" className="text-gray" />}
-          message={<FormattedMessage id="app.assignemntStatusIcon.none" defaultMessage="No solutions were submmitted so far." />} />
+          message={
+            <FormattedMessage
+              id="app.assignemntStatusIcon.none"
+              defaultMessage="No solutions were submmitted so far."
+            />
+          }
+        />
       );
   }
 };
 
 AssignmentStatusIcon.propTypes = {
   id: PropTypes.string.isRequired,
-  status: PropTypes.string
+  status: PropTypes.string,
+  accepted: PropTypes.bool
 };
 
 export default AssignmentStatusIcon;

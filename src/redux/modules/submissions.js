@@ -10,14 +10,14 @@ import { getSubmission } from '../selectors/submissions';
 import { saveAs } from 'file-saver';
 
 const resourceName = 'submissions';
-const needsRefetching = (item) =>
-  defaultNeedsRefetching(item) || item.getIn(['data', 'evaluationStatus']) === 'work-in-progress';
+const needsRefetching = item =>
+  defaultNeedsRefetching(item) ||
+  item.getIn(['data', 'evaluationStatus']) === 'work-in-progress';
 
-const {
-  actions,
-  actionTypes,
-  reduceActions
-} = factory({ resourceName, needsRefetching });
+const { actions, actionTypes, reduceActions } = factory({
+  resourceName,
+  needsRefetching
+});
 
 /**
  * Actions
@@ -32,6 +32,10 @@ export const additionalActionTypes = {
   SET_BONUS_POINTS_PENDING: 'recodex/submissions/SET_BONUS_POINTS_PENDING',
   SET_BONUS_POINTS_FULFILLED: 'recodex/submissions/SET_BONUS_POINTS_FULFILLED',
   SET_BONUS_POINTS_FAILED: 'recodex/submissions/SET_BONUS_POINTS_FAILED',
+  ACCEPT: 'recodex/submissions/ACCEPT',
+  ACCEPT_PENDING: 'recodex/submissions/ACCEPT_PENDING',
+  ACCEPT_FULFILLED: 'recodex/submissions/ACCEPT_FULFILLED',
+  ACCEPT_FAILED: 'recodex/submissions/ACCEPT_FAILED',
   DOWNLOAD_RESULT_ARCHIVE: 'recodex/files/DOWNLOAD_RESULT_ARCHIVE'
 };
 
@@ -48,6 +52,14 @@ export const setPoints = (submissionId, bonusPoints) =>
     meta: { submissionId, bonusPoints }
   });
 
+export const acceptSubmission = id =>
+  createApiAction({
+    type: additionalActionTypes.ACCEPT,
+    method: 'GET',
+    endpoint: `/submissions/${id}/set-accepted`,
+    meta: { id }
+  });
+
 export const fetchUsersSubmissions = (userId, assignmentId) =>
   actions.fetchMany({
     type: additionalActionTypes.LOAD_USERS_SUBMISSIONS,
@@ -58,34 +70,67 @@ export const fetchUsersSubmissions = (userId, assignmentId) =>
     }
   });
 
-export const downloadResultArchive = (submissionId) =>
-  (dispatch, getState) =>
-    dispatch(fetchSubmissionIfNeeded(submissionId))
-      .then(() =>
-        dispatch(createApiAction({
+export const downloadResultArchive = submissionId => (dispatch, getState) =>
+  dispatch(fetchSubmissionIfNeeded(submissionId))
+    .then(() =>
+      dispatch(
+        createApiAction({
           type: additionalActionTypes.DOWNLOAD_RESULT_ARCHIVE,
           method: 'GET',
           endpoint: `/submissions/${submissionId}/download-result`,
           doNotProcess: true // the response is not (does not have to be) a JSON
-        })))
-      .then(({ value }) => value.blob())
-      .then((blob) => {
-        const submission = getJsData(getSubmission(submissionId)(getState())); // the file is 100% loaded at this time
-        saveAs(blob, submission.id + '.zip'); // TODO: solve this better... proper file name should be given during downloading... so use it
-        return Promise.resolve();
-      });
+        })
+      )
+    )
+    .then(({ value }) => value.blob())
+    .then(blob => {
+      const submission = getJsData(getSubmission(submissionId)(getState())); // the file is 100% loaded at this time
+      saveAs(blob, submission.id + '.zip'); // TODO: solve this better... proper file name should be given during downloading... so use it
+      return Promise.resolve();
+    });
 
 /**
  * Reducer
  */
 
-const reducer = handleActions(Object.assign({}, reduceActions, {
+const reducer = handleActions(
+  Object.assign({}, reduceActions, {
+    [additionalActionTypes.LOAD_USERS_SUBMISSIONS_FULFILLED]: reduceActions[
+      actionTypes.FETCH_MANY_FULFILLED
+    ],
 
-  [additionalActionTypes.LOAD_USERS_SUBMISSIONS_FULFILLED]: reduceActions[actionTypes.FETCH_MANY_FULFILLED],
+    [additionalActionTypes.SET_BONUS_POINTS_FULFILLED]: (
+      state,
+      { meta: { submissionId, bonusPoints } }
+    ) =>
+      state.setIn(
+        ['resources', submissionId, 'data', 'evaluation', 'bonusPoints'],
+        Number(bonusPoints)
+      ),
 
-  [additionalActionTypes.SET_BONUS_POINTS_FULFILLED]: (state, { meta: { submissionId, bonusPoints } }) =>
-    state.setIn(['resources', submissionId, 'data', 'evaluation', 'bonusPoints'], Number(bonusPoints))
+    [additionalActionTypes.ACCEPT_PENDING]: (state, { meta: { id } }) =>
+      state.setIn(['resources', id, 'data', 'accepted'], true),
 
-}), initialState);
+    [additionalActionTypes.ACCEPT_FAILED]: (state, { meta: { id } }) =>
+      state.setIn(['resources', id, 'data', 'accepted'], false),
+
+    [additionalActionTypes.ACCEPT_FULFILLED]: (state, { meta: { id } }) =>
+      state.update('resources', resources =>
+        resources.map(
+          (item, itemId) =>
+            (item.get('data') !== null
+              ? item.update(
+                  'data',
+                  data =>
+                    (itemId === id
+                      ? data.set('accepted', true)
+                      : data.set('accepted', false))
+                )
+              : item)
+        )
+      )
+  }),
+  initialState
+);
 
 export default reducer;

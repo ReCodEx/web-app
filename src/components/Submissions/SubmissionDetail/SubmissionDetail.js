@@ -31,7 +31,8 @@ class SubmissionDetail extends Component {
         submittedBy,
         maxPoints,
         files,
-        evaluation
+        evaluation,
+        accepted
       },
       assignment,
       isSupervisor
@@ -48,6 +49,7 @@ class SubmissionDetail extends Component {
               userId={userId}
               submittedBy={submittedBy}
               note={note}
+              accepted={accepted}
             />
             <Row>
               {files.map(file => (

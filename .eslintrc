@@ -43,6 +43,7 @@
       2,
       "always"
     ],
+    "standard/computed-property-even-spacing": 0,
     "space-before-function-paren": 0
   },
   "plugins": [

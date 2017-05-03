@@ -8,15 +8,14 @@ import AssignmentStatusIcon
   from '../../Assignments/Assignment/AssignmentStatusIcon';
 import UsersNameContainer from '../../../containers/UsersNameContainer';
 
-const SubmissionStatus = (
-  {
-    evaluationStatus,
-    submittedAt,
-    userId,
-    submittedBy,
-    note
-  }
-) => (
+const SubmissionStatus = ({
+  evaluationStatus,
+  submittedAt,
+  userId,
+  submittedBy,
+  note,
+  accepted
+}) => (
   <Box
     title={
       <FormattedMessage id="app.submission.title" defaultMessage="Solution" />
@@ -92,6 +91,7 @@ const SubmissionStatus = (
               <AssignmentStatusIcon
                 id={String(submittedAt)}
                 status={evaluationStatus}
+                accepted={accepted}
               />
             </b>
           </td>
@@ -136,7 +136,8 @@ SubmissionStatus.propTypes = {
   submittedAt: PropTypes.number.isRequired,
   userId: PropTypes.string.isRequired,
   submittedBy: PropTypes.string,
-  note: PropTypes.string
+  note: PropTypes.string,
+  accepted: PropTypes.bool
 };
 
 export default SubmissionStatus;

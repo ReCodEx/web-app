@@ -8,6 +8,7 @@ import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import SubmissionDetail, {
   FailedSubmissionDetail
 } from '../../components/Submissions/SubmissionDetail';
+import AcceptSolutionContainer from '../../containers/AcceptSolutionContainer';
 
 import { fetchAssignmentIfNeeded } from '../../redux/modules/assignments';
 import { fetchSubmissionIfNeeded } from '../../redux/modules/submissions';
@@ -96,11 +97,17 @@ class Submission extends Component {
           resource={[submission, assignment]}
         >
           {(submission, assignment) => (
-            <SubmissionDetail
-              submission={submission}
-              assignment={assignment}
-              isSupervisor={isSupervisorOf(assignment.groupId)}
-            />
+            <div>
+              {isSupervisorOf(assignment.groupId) &&
+                <p>
+                  <AcceptSolutionContainer id={submission.id} />
+                </p>}
+              <SubmissionDetail
+                submission={submission}
+                assignment={assignment}
+                isSupervisor={isSupervisorOf(assignment.groupId)}
+              />
+            </div>
           )}
         </ResourceRenderer>
       </PageContent>
