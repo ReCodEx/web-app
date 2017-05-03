@@ -185,6 +185,15 @@ class Group extends Component {
                 </LinkContainer>
               </p>}
 
+            {isStudent &&
+              <StudentsView
+                group={data}
+                students={students}
+                stats={stats}
+                statuses={statuses}
+                assignments={publicAssignments}
+              />}
+
             <GroupDetail
               group={data}
               supervisors={supervisors}
@@ -214,15 +223,6 @@ class Group extends Component {
                 group={data}
                 statuses={statuses}
                 assignments={allAssignments}
-              />}
-
-            {isStudent &&
-              <StudentsView
-                group={data}
-                students={students}
-                stats={stats}
-                statuses={statuses}
-                assignments={publicAssignments}
               />}
           </div>
         )}
