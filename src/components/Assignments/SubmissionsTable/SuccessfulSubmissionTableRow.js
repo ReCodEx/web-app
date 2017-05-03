@@ -1,6 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FormattedNumber, FormattedDate, FormattedTime, FormattedMessage } from 'react-intl';
+import {
+  FormattedNumber,
+  FormattedDate,
+  FormattedTime,
+  FormattedMessage
+} from 'react-intl';
 import { Link } from 'react-router';
 
 import AssignmentStatusIcon from '../Assignment/AssignmentStatusIcon';
@@ -11,16 +16,17 @@ const SuccessfulSubmissionTableRow = ({
   note,
   submittedAt,
   maxPoints,
-  evaluation: {
-    score,
-    bonusPoints,
-    points
-  }
+  evaluation: { score, bonusPoints, points },
+  accepted
 }) => (
   <tr>
-    <td><AssignmentStatusIcon id={link} status="done" /></td>
     <td>
-      <FormattedDate value={submittedAt * 1000} />&nbsp;<FormattedTime value={submittedAt * 1000} />
+      <AssignmentStatusIcon id={link} status="done" accepted={accepted} />
+    </td>
+    <td>
+      <FormattedDate value={submittedAt * 1000} />
+      &nbsp;
+      <FormattedTime value={submittedAt * 1000} />
     </td>
     <td className="text-center">
       <strong className="text-success">
@@ -29,7 +35,11 @@ const SuccessfulSubmissionTableRow = ({
     </td>
     <td className="text-center">
       <strong className="text-success">
-        <Points points={points} bonusPoints={bonusPoints} maxPoints={maxPoints} />
+        <Points
+          points={points}
+          bonusPoints={bonusPoints}
+          maxPoints={maxPoints}
+        />
       </strong>
     </td>
     <td>
@@ -37,7 +47,10 @@ const SuccessfulSubmissionTableRow = ({
     </td>
     <td className="text-right">
       <Link to={link} className="btn btn-flat btn-default btn-xs">
-        <FormattedMessage id="app.submissionsTable.showDetails" defaultMessage="Show details" />
+        <FormattedMessage
+          id="app.submissionsTable.showDetails"
+          defaultMessage="Show details"
+        />
       </Link>
     </td>
   </tr>
@@ -51,7 +64,8 @@ SuccessfulSubmissionTableRow.propTypes = {
   evaluation: PropTypes.shape({
     score: PropTypes.number.isRequired,
     points: PropTypes.number.isRequired
-  }).isRequired
+  }).isRequired,
+  accepted: PropTypes.bool
 };
 
 export default SuccessfulSubmissionTableRow;

@@ -6,13 +6,11 @@ import { Table } from 'react-bootstrap';
 import AssignmentStatusIcon
   from '../../Assignments/Assignment/AssignmentStatusIcon';
 
-const EvaluationTable = (
-  {
-    evaluations,
-    referenceSolutionId,
-    renderButtons = () => null
-  }
-) => (
+const EvaluationTable = ({
+  evaluations,
+  referenceSolutionId,
+  renderButtons = () => null
+}) => (
   <Table>
     <thead>
       <tr>
@@ -32,21 +30,26 @@ const EvaluationTable = (
           evaluation => evaluation.referenceSolution.id === referenceSolutionId
         )
         .sort((a, b) => b.evaluation.evaluatedAt - a.evaluation.evaluatedAt)
-        .map(evaluation => (
-          <tr key={evaluation.id}>
+        .map(({
+          evaluation: { id, evaluatedAt },
+          evaluationStatus,
+          accepted
+        }) => (
+          <tr key={id}>
             <td>
               <AssignmentStatusIcon
-                id={evaluation.evaluation.id}
-                status={evaluation.evaluationStatus}
+                id={id}
+                status={evaluationStatus}
+                accepted={accepted}
               />
             </td>
             <td>
-              <FormattedDate value={evaluation.evaluation.evaluatedAt * 1000} />
+              <FormattedDate value={evaluatedAt * 1000} />
               &nbsp;
-              <FormattedTime value={evaluation.evaluation.evaluatedAt * 1000} />
+              <FormattedTime value={evaluatedAt * 1000} />
             </td>
             <td className="text-right">
-              {renderButtons(evaluation.id)}
+              {renderButtons(id)}
             </td>
           </tr>
         ))}

@@ -16,7 +16,8 @@ const AssignmentTableRow = ({
     allowSecondDeadline,
     firstDeadline,
     secondDeadline,
-    isBonus
+    isBonus,
+    accepted
   },
   status,
   userId,
@@ -27,7 +28,7 @@ const AssignmentTableRow = ({
 }) => (
   <tr>
     <td className="text-center">
-      <AssignmentStatusIcon id={id} status={status} />
+      <AssignmentStatusIcon id={id} status={status} accepted={accepted} />
     </td>
     <td>
       <MaybeBonusAssignmentIcon id={id} isBonus={isBonus} />
