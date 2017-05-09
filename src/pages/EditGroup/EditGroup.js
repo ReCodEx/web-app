@@ -96,7 +96,10 @@ class EditGroup extends Component {
                 <p className="text-center">
                   <DeleteGroupButtonContainer
                     id={group.id}
-                    disabled={group.parentGroupId === null}
+                    disabled={
+                      group.parentGroupId === null ||
+                        (group.childGroups && group.childGroups.length > 0)
+                    }
                     onDeleted={() =>
                       push(GROUP_URI_FACTORY(group.parentGroupId))}
                   />

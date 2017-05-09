@@ -5,11 +5,13 @@ import { getSubmissions } from './submissions';
 export const getAssignments = state => state.assignments;
 export const createAssignmentSelector = () =>
   createSelector([getAssignments, (state, id) => id], (assignments, id) =>
-    assignments.getIn(['resources', id]));
+    assignments.getIn(['resources', id])
+  );
 
 export const getAssignment = id =>
   createSelector(getAssignments, assignments =>
-    assignments.getIn(['resources', id]));
+    assignments.getIn(['resources', id])
+  );
 
 export const runtimeEnvironmentsSelector = id =>
   createSelector(

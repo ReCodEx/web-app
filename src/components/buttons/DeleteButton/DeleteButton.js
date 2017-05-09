@@ -13,14 +13,7 @@ import {
   isDeleted
 } from '../../../redux/helpers/resourceManager';
 
-const DeleteButton = (
-  {
-    resource,
-    deleteResource,
-    disabled,
-    ...props
-  }
-) => {
+const DeleteButton = ({ resource, deleteResource, disabled, ...props }) => {
   if (isDeleted(resource)) {
     return <DeletedButton {...props} disabled={disabled} />;
   }
@@ -32,12 +25,10 @@ const DeleteButton = (
   }
 
   if (isReady(resource)) {
-    const { id, childGroups } = getJsData(resource);
     return (
       <ConfirmDeleteButton
         {...props}
-        id={id}
-        disabled={disabled || (childGroups && childGroups.length > 0)}
+        disabled={disabled}
         onClick={deleteResource}
       />
     );
