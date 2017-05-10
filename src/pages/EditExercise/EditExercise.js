@@ -69,7 +69,8 @@ class EditExercise extends Component {
       environments,
       editLimits,
       formValues,
-      runtimesFormValues
+      runtimesFormValues,
+      push
     } = this.props;
 
     return (
@@ -208,7 +209,8 @@ EditExercise.propTypes = {
   editLimits: PropTypes.func.isRequired,
   formValues: PropTypes.object,
   runtimesFormValues: PropTypes.object,
-  links: PropTypes.object.isRequired
+  links: PropTypes.object.isRequired,
+  push: PropTypes.func.isRequired
 };
 
 export default withLinks(
