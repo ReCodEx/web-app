@@ -6,7 +6,6 @@ import DeletingButton from './DeletingButton';
 import DeletedButton from './DeletedButton';
 import DeletingFailedButton from './DeletingFailedButton';
 import {
-  getJsData,
   isReady,
   isLoading,
   isDeleting,
