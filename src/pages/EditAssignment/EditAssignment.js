@@ -52,9 +52,12 @@ class EditAssignment extends Component {
       dispatch(fetchRuntimeEnvironments())
     ]);
 
-  getInitialValues = (
-    { firstDeadline, secondDeadline, pointsPercentualThreshold, ...rest }
-  ) => ({
+  getInitialValues = ({
+    firstDeadline,
+    secondDeadline,
+    pointsPercentualThreshold,
+    ...rest
+  }) => ({
     firstDeadline: moment(firstDeadline * 1000),
     secondDeadline: moment(secondDeadline * 1000),
     pointsPercentualThreshold: pointsPercentualThreshold * 100,
@@ -183,6 +186,7 @@ class EditAssignment extends Component {
 
 EditAssignment.propTypes = {
   loadAsync: PropTypes.func.isRequired,
+  reset: PropTypes.func.isRequired,
   push: PropTypes.func.isRequired,
   params: PropTypes.shape({
     assignmentId: PropTypes.string.isRequired
@@ -223,7 +227,8 @@ export default withLinks(
         return dispatch(editAssignment(assignmentId, processedData)).then(() =>
           dispatch(
             initialize('editAssignment', { ...data, version: version + 1 })
-          ));
+          )
+        );
       }
     })
   )(EditAssignment)

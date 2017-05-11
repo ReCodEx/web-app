@@ -200,6 +200,7 @@ EditExercise.propTypes = {
   exercise: ImmutablePropTypes.map,
   runtimeEnvironments: PropTypes.object.isRequired,
   loadAsync: PropTypes.func.isRequired,
+  reset: PropTypes.func.isRequired,
   editExercise: PropTypes.func.isRequired,
   editRuntimeConfigs: PropTypes.func.isRequired,
   params: PropTypes.shape({

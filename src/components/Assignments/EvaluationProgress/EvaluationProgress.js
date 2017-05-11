@@ -23,7 +23,7 @@ class EvaluationProgress extends Component {
   }
 
   scrollToBottom = () => {
-    const el = this.refs.bodyContainer;
+    const el = this.bodyContainer;
     if (el) {
       // the element is not available when the box is collapsed
       el.scrollTop = el.scrollHeight;
@@ -59,7 +59,12 @@ class EvaluationProgress extends Component {
             <ProgressBar now={failed} bsStyle="danger" active={!finished} />
           </ProgressBar>
           {messages &&
-            <div style={messagesContainerStyle} ref="bodyContainer">
+            <div
+              style={messagesContainerStyle}
+              ref={c => {
+                this.bodyContainer = c;
+              }}
+            >
               <Table responsive>
                 <tbody>
                   {messages.map(({ wasSuccessful, text, status }, i) => (

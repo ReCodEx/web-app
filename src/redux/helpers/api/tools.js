@@ -8,7 +8,7 @@ export const isUnauthorized = status => status === 403;
 
 export const API_BASE = process.env.API_BASE || 'http://localhost:4000/v1';
 
-const maybeShash = endpoint => endpoint.indexOf('/') === 0 ? '' : '/';
+const maybeShash = endpoint => (endpoint.indexOf('/') === 0 ? '' : '/');
 const getUrl = endpoint => API_BASE + maybeShash(endpoint) + endpoint;
 
 export const flattenBody = body => {
@@ -80,7 +80,8 @@ export const createApiCallPromise = (
   dispatch = undefined
 ) => {
   let call = createRequest(endpoint, query, method, headers, body).catch(err =>
-    detectUnreachableServer(err, dispatch));
+    detectUnreachableServer(err, dispatch)
+  );
 
   // this processing can be manually skipped
   return doNotProcess === true ? call : processResponse(call, dispatch);
@@ -110,16 +111,14 @@ const detectUnreachableServer = (err, dispatch) => {
  * @param {Function} dispatch
  * @returns {Promise}
  */
-const processResponse = (call, dispatch) => call.then(res => res.json()).then(({
-    success = true,
-    code,
-    msg = '',
-    payload = {}
-  }) => {
-  if (!success) {
-    dispatch && dispatch(addNotification(`Server response: ${msg}`, false));
-    return Promise.reject('The API call was not successful.');
-  } else {
-    return Promise.resolve(payload);
-  }
-});
+const processResponse = (call, dispatch) =>
+  call
+    .then(res => res.json())
+    .then(({ success = true, code, msg = '', payload = {} }) => {
+      if (!success) {
+        dispatch && dispatch(addNotification(`Server response: ${msg}`, false));
+        return Promise.reject(new Error('The API call was not successful.'));
+      } else {
+        return Promise.resolve(payload);
+      }
+    });

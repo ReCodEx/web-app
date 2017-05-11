@@ -13,7 +13,6 @@ import styles from './Box.less';
  * and can be displayed in different colors and types.
  */
 class Box extends Component {
-
   componentWillMount() {
     const { isOpen = true } = this.props;
     this.setState({ isOpen });
@@ -50,37 +49,39 @@ class Box extends Component {
     const { isOpen = true } = this.state;
 
     return (
-      <div className={
-        classNames({
-          'box': true,
+      <div
+        className={classNames({
+          box: true,
           [`box-${type}`]: typeof type !== 'undefined',
-          'panel': true,
+          panel: true,
           'box-solid': solid,
           [className]: className.length > 0
-        })
-      }>
+        })}
+      >
         <div className="box-header with-border" onClick={this.toggleDetails}>
           <h3 className="box-title">{title}</h3>
-          {collapsable && (
+          {collapsable &&
             <div className="box-tools pull-right">
-              <button type="button" className="btn btn-box-tool" onClick={this.toggleDetails}>
+              <button
+                type="button"
+                className="btn btn-box-tool"
+                onClick={this.toggleDetails}
+              >
                 <Icon name={isOpen ? 'minus' : 'plus'} />
               </button>
-            </div>
-          )}
+            </div>}
         </div>
         <Collapse isOpened={isOpen}>
-          {description && (
-            <div className={styles.description}>{description}</div>
-          )}
-          <div className={
-            classNames({
+          {description &&
+            <div className={styles.description}>{description}</div>}
+          <div
+            className={classNames({
               'box-body': true,
               'no-padding': noPadding,
               [styles.limited]: !unlimitedHeight,
               [styles.unlimited]: unlimitedHeight
-            })
-          }>
+            })}
+          >
             {children}
           </div>
           {footer &&
@@ -91,7 +92,6 @@ class Box extends Component {
       </div>
     );
   }
-
 }
 
 Box.propTypes = {

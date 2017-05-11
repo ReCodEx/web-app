@@ -7,37 +7,34 @@ import { List } from 'immutable';
 import { fetchUsersSubmissions } from '../../redux/modules/submissions';
 import SubmissionsTable from '../../components/Assignments/SubmissionsTable';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
-import { createGetUsersSubmissionsForAssignment } from '../../redux/selectors/assignments';
+import {
+  createGetUsersSubmissionsForAssignment
+} from '../../redux/selectors/assignments';
 
 class SubmissionsTableContainer extends Component {
-
   componentWillMount() {
     SubmissionsTableContainer.loadData(this.props);
   }
 
   componentWillReceiveProps(newProps) {
-    if (this.props.assignmentId !== newProps.assignmentId ||
-        this.props.userId !== newProps.userId) {
+    if (
+      this.props.assignmentId !== newProps.assignmentId ||
+      this.props.userId !== newProps.userId
+    ) {
       SubmissionsTableContainer.loadData(newProps);
     }
   }
 
-  static loadData = ({
-    userId,
-    assignmentId,
-    loadSubmissionsForUser
-  }) => {
+  static loadData = ({ userId, assignmentId, loadSubmissionsForUser }) => {
     loadSubmissionsForUser(userId, assignmentId);
   };
 
   sortSubmissions(submissions) {
-    return submissions.sort(
-      (a, b) => {
-        var aTimestamp = a.get('data').get('submittedAt');
-        var bTimestamp = b.get('data').get('submittedAt');
-        return bTimestamp - aTimestamp;
-      }
-    );
+    return submissions.sort((a, b) => {
+      var aTimestamp = a.get('data').get('submittedAt');
+      var bTimestamp = b.get('data').get('submittedAt');
+      return bTimestamp - aTimestamp;
+    });
   }
 
   render() {
@@ -45,7 +42,12 @@ class SubmissionsTableContainer extends Component {
       userId,
       assignmentId,
       submissions,
-      title = <FormattedMessage id="app.submissionsTableContainer.title" defaultMessage="Submitted solutions" />
+      title = (
+        <FormattedMessage
+          id="app.submissionsTableContainer.title"
+          defaultMessage="Submitted solutions"
+        />
+      )
     } = this.props;
 
     return (
@@ -53,10 +55,10 @@ class SubmissionsTableContainer extends Component {
         title={title}
         userId={userId}
         submissions={this.sortSubmissions(submissions)}
-        assignmentId={assignmentId} />
+        assignmentId={assignmentId}
+      />
     );
   }
-
 }
 
 SubmissionsTableContainer.propTypes = {
@@ -76,6 +78,7 @@ export default connect(
     };
   },
   (dispatch, props) => ({
-    loadSubmissionsForUser: (userId, assignmentId) => dispatch(fetchUsersSubmissions(userId, assignmentId))
+    loadSubmissionsForUser: (userId, assignmentId) =>
+      dispatch(fetchUsersSubmissions(userId, assignmentId))
   })
 )(SubmissionsTableContainer);

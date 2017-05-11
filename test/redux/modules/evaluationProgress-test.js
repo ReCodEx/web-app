@@ -14,26 +14,30 @@ import reducer, {
   failedTask
 } from '../../../src/redux/modules/evaluationProgress';
 
-import { actionTypes as submissionActionTypes } from '../../../src/redux/modules/submission';
+import {
+  actionTypes as submissionActionTypes
+} from '../../../src/redux/modules/submission';
 
 describe('Evaluation progress', () => {
   it('must have correct initial state', () => {
     const state = reducer(undefined, {});
     expect(state).to.eql(initialState);
     expect(initialState).to.be.an.instanceof(Map);
-    expect(initialState).to.equal(Map({
-      webSocketChannelId: null,
-      expectedTasksCount: 0,
-      isFinished: false,
-      soFarSoGood: true,
-      progress: Map({
-        total: 0,
-        completed: 0,
-        skipped: 0,
-        failed: 0
-      }),
-      messages: List()
-    }));
+    expect(initialState).to.equal(
+      Map({
+        webSocketChannelId: null,
+        expectedTasksCount: 0,
+        isFinished: false,
+        soFarSoGood: true,
+        progress: Map({
+          total: 0,
+          completed: 0,
+          skipped: 0,
+          failed: 0
+        }),
+        messages: List()
+      })
+    );
   });
 
   describe('(Action creators)', () => {
@@ -49,22 +53,19 @@ describe('Evaluation progress', () => {
 
     it('must create action for completed task', () => {
       expect(completedTask()).to.eql({
-        type: actionTypes.COMPLETED_TASK,
-        payload: undefined
+        type: actionTypes.COMPLETED_TASK
       });
     });
 
     it('must create action for skipped task', () => {
       expect(skippedTask()).to.eql({
-        type: actionTypes.SKIPPED_TASK,
-        payload: undefined
+        type: actionTypes.SKIPPED_TASK
       });
     });
 
     it('must create action for failed task', () => {
       expect(failedTask()).to.eql({
-        type: actionTypes.FAILED_TASK,
-        payload: undefined
+        type: actionTypes.FAILED_TASK
       });
     });
   });

@@ -41,8 +41,7 @@ describe('App notifications', () => {
     it('must create correct "hide all" action', () => {
       const action = hideAll();
       expect(action).to.eql({
-        type: 'recodex/notifications/HIDE_ALL',
-        payload: undefined
+        type: 'recodex/notifications/HIDE_ALL'
       });
     });
   });
@@ -50,34 +49,52 @@ describe('App notifications', () => {
   describe('(Reducer)', () => {
     it('must create correct initial state', () => {
       const state = reducer(undefined, {});
-      expect(state).to.eql(Map({
-        visible: List(),
-        hidden: List()
-      }));
+      expect(state).to.eql(
+        Map({
+          visible: List(),
+          hidden: List()
+        })
+      );
     });
 
     it('must add a new notification', () => {
       const time = 123456;
-      const state = reducer(initialState, addNotification('XYZ', false, 'abc', time));
+      const state = reducer(
+        initialState,
+        addNotification('XYZ', false, 'abc', time)
+      );
       expect(state.get('hidden').size).to.equal(0);
       expect(state.get('visible').size).to.equal(1);
-      expect(state.get('visible').first()).to.eql({ id: 'abc', msg: 'XYZ', successful: false, time, count: 1 });
+      expect(state.get('visible').first()).to.eql({
+        id: 'abc',
+        msg: 'XYZ',
+        successful: false,
+        time,
+        count: 1
+      });
     });
 
     it('must group notifications with same messages', () => {
       const time = 123456;
-      let state = reducer(initialState, addNotification('XYZ', false, 'abc', time));
+      let state = reducer(
+        initialState,
+        addNotification('XYZ', false, 'abc', time)
+      );
       state = reducer(state, addNotification('XYZ', false, 'cba', time));
       expect(state.get('hidden').size).to.equal(0);
       expect(state.get('visible').size).to.equal(1);
-      expect(state.get('visible').first()).to.eql({ id: 'abc', msg: 'XYZ', successful: false, time, count: 2 });
+      expect(state.get('visible').first()).to.eql({
+        id: 'abc',
+        msg: 'XYZ',
+        successful: false,
+        time,
+        count: 2
+      });
     });
 
     it('must remove a notification', () => {
       let state = Map({
-        visible: List([
-          { id: 'abc' }
-        ]),
+        visible: List([{ id: 'abc' }]),
         hidden: List()
       });
 
@@ -89,10 +106,7 @@ describe('App notifications', () => {
 
     it('must remove all notifications', () => {
       let state = Map({
-        visible: List([
-          { id: 'abc' },
-          { id: 'def' }
-        ]),
+        visible: List([{ id: 'abc' }, { id: 'def' }]),
         hidden: List()
       });
 

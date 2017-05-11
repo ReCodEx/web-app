@@ -4,18 +4,20 @@ import prettyBytes from 'pretty-bytes';
 import { FormattedDate, FormattedTime } from 'react-intl';
 import withLinks from '../../../hoc/withLinks';
 
-const AdditionalFilesTableRow = (
-  {
-    id,
-    name,
-    size,
-    uploadedAt,
-    links: { DOWNLOAD }
-  }
-) => (
+const AdditionalFilesTableRow = ({
+  id,
+  name,
+  size,
+  uploadedAt,
+  links: { DOWNLOAD }
+}) => (
   <tr>
     <td>{name}</td>
-    <td><a href={DOWNLOAD(id)} target="_blank">{DOWNLOAD(id)}</a></td>
+    <td>
+      <a href={DOWNLOAD(id)} target="_blank" rel="noopener noreferrer">
+        {DOWNLOAD(id)}
+      </a>
+    </td>
     <td>{prettyBytes(size)}</td>
     <td>
       <FormattedDate value={uploadedAt * 1000} />

@@ -69,7 +69,7 @@ class Search extends Component {
                 id="app.search.query"
                 defaultMessage="Searched query: "
               />
-              <strong><em>"{query}"</em></strong>
+              <strong><em>{'"'}{query}{'"'}</em></strong>
             </p>
 
             {(!isLoading || foundItems.size > 0) &&
