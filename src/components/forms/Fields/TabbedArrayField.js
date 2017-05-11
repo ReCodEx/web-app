@@ -1,4 +1,5 @@
-import React, { PropTypes, Component } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { Alert, Tabs, Tab } from 'react-bootstrap';
 import Button from '../../widgets/FlatButton';

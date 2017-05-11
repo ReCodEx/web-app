@@ -1,4 +1,5 @@
-import React, { PropTypes, Component } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import Button from '../../widgets/FlatButton';
 import { SendIcon, LoadingIcon, SuccessIcon, WarningIcon } from '../../icons';
@@ -57,9 +58,7 @@ class SubmitButton extends Component {
       }
     } = this.props;
 
-    const {
-      saved: hasSucceeded
-    } = this.state;
+    const { saved: hasSucceeded } = this.state;
 
     return (
       <Button
