@@ -24,7 +24,7 @@ import DeleteExerciseButtonContainer
   from '../../containers/DeleteExerciseButtonContainer';
 
 import {
-  fetchExercise,
+  fetchExerciseIfNeeded,
   editExercise,
   editRuntimeConfigs
 } from '../../redux/modules/exercises';
@@ -53,7 +53,7 @@ class EditExercise extends Component {
 
   static loadAsync = ({ exerciseId }, dispatch) =>
     Promise.all([
-      dispatch(fetchExercise(exerciseId)),
+      dispatch(fetchExerciseIfNeeded(exerciseId)),
       dispatch(fetchLimits(exerciseId)),
       dispatch(fetchRuntimeEnvironments())
     ]);
@@ -69,7 +69,8 @@ class EditExercise extends Component {
       environments,
       editLimits,
       formValues,
-      runtimesFormValues
+      runtimesFormValues,
+      push
     } = this.props;
 
     return (
@@ -208,7 +209,8 @@ EditExercise.propTypes = {
   editLimits: PropTypes.func.isRequired,
   formValues: PropTypes.object,
   runtimesFormValues: PropTypes.object,
-  links: PropTypes.object.isRequired
+  links: PropTypes.object.isRequired,
+  push: PropTypes.func.isRequired
 };
 
 export default withLinks(
