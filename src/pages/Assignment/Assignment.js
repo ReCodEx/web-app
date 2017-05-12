@@ -147,7 +147,6 @@ class Assignment extends Component {
                           />
                         </Button>
                       </LinkContainer>
-                      {' '}
                       <LinkContainer
                         to={SUPERVISOR_STATS_URI_FACTORY(assignment.id)}
                       >
