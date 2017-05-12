@@ -46,19 +46,28 @@ export const cancel = createAction(actionTypes.CANCEL);
 
 export const changeNote = createAction(actionTypes.CHANGE_NOTE);
 
-const submit = endpoint =>
-  (userId, id, note, files, runtimeEnvironmentId = null) =>
-    createApiAction({
-      type: actionTypes.SUBMIT,
-      method: 'POST',
-      endpoint: endpoint(id),
-      body: {
-        userId,
-        files: files.map(file => file.id),
-        note,
-        runtimeEnvironmentId
-      }
-    });
+const submit = endpoint => (
+  userId,
+  id,
+  note,
+  files,
+  runtimeEnvironmentId = null
+) => {
+  var submitBody = {
+    userId,
+    files: files.map(file => file.id),
+    note
+  };
+  if (runtimeEnvironmentId != null) {
+    submitBody.runtimeEnvironmentId = runtimeEnvironmentId;
+  }
+  return createApiAction({
+    type: actionTypes.SUBMIT,
+    method: 'POST',
+    endpoint: endpoint(id),
+    body: submitBody
+  });
+};
 
 export const submitAssignmentSolution = submit(
   id => `/exercise-assignments/${id}/submit`
