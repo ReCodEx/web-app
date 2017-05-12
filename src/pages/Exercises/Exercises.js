@@ -33,13 +33,12 @@ class Exercises extends Component {
       links: { EXERCISE_EDIT_URI_FACTORY }
     } = this.props;
     createExercise().then(({ value: exercise }) =>
-      push(EXERCISE_EDIT_URI_FACTORY(exercise.id)));
+      push(EXERCISE_EDIT_URI_FACTORY(exercise.id))
+    );
   };
 
   render() {
-    const {
-      exercises
-    } = this.props;
+    const { exercises } = this.props;
 
     return (
       <Page
@@ -97,6 +96,7 @@ class Exercises extends Component {
                 </p>
               }
               noPadding
+              unlimitedHeight
             >
               <ExercisesList exercises={exercises} />
             </Box>
