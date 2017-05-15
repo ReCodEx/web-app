@@ -80,7 +80,8 @@ class Group extends Component {
               ])
               : dispatch(fetchSubgroups(group.id)),
             dispatch(fetchGroupsStatsIfNeeded(groupId))
-          ]))
+          ])
+        )
     ]);
 
   componentWillMount() {
@@ -218,7 +219,7 @@ class Group extends Component {
                 addSubgroup={addSubgroup(data.instanceId)}
               />}
 
-            {isSupervisor &&
+            {(isAdmin || isSupervisor) &&
               <SupervisorsView
                 group={data}
                 statuses={statuses}
@@ -282,15 +283,14 @@ const mapStateToProps = (state, { params: { groupId } }) => {
 };
 
 const mapDispatchToProps = (dispatch, { params }) => ({
-  addSubgroup: instanceId =>
-    data =>
-      dispatch(
-        createGroup({
-          ...data,
-          instanceId,
-          parentGroupId: params.groupId
-        })
-      ),
+  addSubgroup: instanceId => data =>
+    dispatch(
+      createGroup({
+        ...data,
+        instanceId,
+        parentGroupId: params.groupId
+      })
+    ),
   loadAsync: userId => Group.loadAsync(params, dispatch, userId),
   assignExercise: exerciseId =>
     dispatch(assignExercise(params.groupId, exerciseId)),
