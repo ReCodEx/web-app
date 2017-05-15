@@ -66,10 +66,10 @@ class Group extends Component {
         .then(group =>
           Promise.all([
             dispatch(fetchInstanceIfNeeded(group.instanceId)),
+            dispatch(fetchSupervisors(groupId)),
             Group.isMemberOf(group, userId)
               ? Promise.all([
                 dispatch(fetchAssignmentsForGroup(groupId)),
-                dispatch(fetchSupervisors(groupId)),
                 dispatch(fetchStudents(groupId))
               ])
               : Promise.resolve(),
