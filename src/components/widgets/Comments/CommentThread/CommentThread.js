@@ -15,18 +15,28 @@ const CommentThread = ({
 }) => (
   <CommentBox
     commentsCount={comments.length}
-    footer={addComment && <AddComment addComment={addComment} />}>
+    footer={addComment && <AddComment addComment={addComment} />}
+  >
     <div>
-      {comments.map((comment, i) =>
-        comment.user.id === currentUserId
-          ? <UsersComment {...comment} key={comment.id} repost={repostComment} togglePrivacy={togglePrivacy} />
-          : <SomebodyElsesComment {...comment} key={comment.id} />)}
-
-      {comments.length === 0 && (
-        <p className="text-center">
-          <FormattedMessage id="app.comments.noCommentsYet" defaultMessage="There are no comments in this thread yet." />
-        </p>
+      {comments.map(
+        (comment, i) =>
+          comment.user.id === currentUserId
+            ? <UsersComment
+                {...comment}
+                key={comment.id}
+                repost={repostComment}
+                togglePrivacy={togglePrivacy}
+              />
+            : <SomebodyElsesComment {...comment} key={comment.id} />
       )}
+
+      {comments.length === 0 &&
+        <p className="text-center">
+          <FormattedMessage
+            id="app.comments.noCommentsYet"
+            defaultMessage="There are no comments in this thread yet."
+          />
+        </p>}
     </div>
   </CommentBox>
 );
@@ -40,4 +50,3 @@ CommentThread.propTypes = {
 };
 
 export default CommentThread;
-

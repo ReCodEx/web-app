@@ -1,22 +1,24 @@
 import { expect } from 'chai';
 import { Map } from 'immutable';
-import reducer, { actionTypes, toggleSize, toggleVisibility } from '../../../src/redux/modules/sidebar';
+import reducer, {
+  actionTypes,
+  toggleSize,
+  toggleVisibility
+} from '../../../src/redux/modules/sidebar';
 
 describe('Opening and closing the sidebar', () => {
   describe('(Action creators)', () => {
     it('must create correct toggle size action', () => {
       const action = toggleSize();
       expect(action).to.eql({
-        type: actionTypes.TOGGLE_SIZE,
-        payload: undefined
+        type: actionTypes.TOGGLE_SIZE
       });
     });
 
     it('must create correct toggle visibility action', () => {
       const action = toggleVisibility();
       expect(action).to.eql({
-        type: actionTypes.TOGGLE_VISIBILITY,
-        payload: undefined
+        type: actionTypes.TOGGLE_VISIBILITY
       });
     });
   });
@@ -24,10 +26,12 @@ describe('Opening and closing the sidebar', () => {
   describe('(Reducer)', () => {
     it('must create correct initial state', () => {
       const state = reducer(undefined, {});
-      expect(state).to.eql(Map({
-        visible: false,
-        collapsed: false
-      }));
+      expect(state).to.eql(
+        Map({
+          visible: false,
+          collapsed: false
+        })
+      );
     });
 
     it('must create toggle visibility', () => {

@@ -6,20 +6,23 @@ import { Checkbox, FormGroup } from 'react-bootstrap';
 import TextAreaField from './TextAreaField';
 
 class RichTextAreaField extends Component {
-
   componentWillMount = () => {
     const { viewSource = false } = this.props;
     this.setState({
       viewSource,
       value: createEmptyValue()
     });
-  }
+  };
 
-  componentWillReceiveProps = (newProps) => {
+  componentWillReceiveProps = newProps => {
     const { viewSource, value } = this.state;
     const inputVal = newProps.input.value;
-    const sourceEditedDirectly = viewSource && inputVal !== this.props.input.value;
-    const formWasReset = !viewSource && inputVal !== value.toString('markdown') && inputVal.length === 0;
+    const sourceEditedDirectly =
+      viewSource && inputVal !== this.props.input.value;
+    const formWasReset =
+      !viewSource &&
+      inputVal !== value.toString('markdown') &&
+      inputVal.length === 0;
 
     if (sourceEditedDirectly || formWasReset) {
       this.setState({
@@ -28,11 +31,11 @@ class RichTextAreaField extends Component {
     }
   };
 
-  toggleViewSource = (e) => {
+  toggleViewSource = e => {
     this.setState({ viewSource: !this.state.viewSource });
   };
 
-  onChange = (value) => {
+  onChange = value => {
     const { onChange, input } = this.props;
     const markdown = value.toString('markdown');
     this.setState({ value });
@@ -45,24 +48,29 @@ class RichTextAreaField extends Component {
     const { viewSource, value } = this.state;
     return (
       <div>
-        {viewSource && (
-          <TextAreaField {...this.props} />)}
-        {!viewSource && (
+        {viewSource && <TextAreaField {...this.props} />}
+        {!viewSource &&
           <RichTextEditor
             value={value}
             editorClassName="recodex-editor"
             onChange={e => this.onChange(e)}
             readonly={disabled}
-            useDefaultStyles={false} />)}
+            useDefaultStyles={false}
+          />}
         <FormGroup controlId="toggleViewSource">
-          <Checkbox checked={viewSource} onChange={() => this.toggleViewSource()}>
-            <FormattedMessage id="app.markdownTextArea.showMarkdown" defaultMessage="Show markdown source" />
+          <Checkbox
+            checked={viewSource}
+            onChange={() => this.toggleViewSource()}
+          >
+            <FormattedMessage
+              id="app.markdownTextArea.showMarkdown"
+              defaultMessage="Show markdown source"
+            />
           </Checkbox>
         </FormGroup>
       </div>
     );
   }
-
 }
 
 RichTextAreaField.propTypes = {

@@ -8,13 +8,7 @@ import Box from '../../widgets/Box';
 import AssignmentsTable from '../../Assignments/Assignment/AssignmentsTable';
 import StudentsListContainer from '../../../containers/StudentsListContainer';
 
-const StudentsView = (
-  {
-    group,
-    statuses = [],
-    assignments
-  }
-) => (
+const StudentsView = ({ group, statuses = [], assignments }) => (
   <div>
     <Row>
       <Col sm={12}>
@@ -58,6 +52,7 @@ const StudentsView = (
           }
           collapsable
           noPadding
+          unlimitedHeight
           isOpen
         >
           <StudentsListContainer groupId={group.id} fill />

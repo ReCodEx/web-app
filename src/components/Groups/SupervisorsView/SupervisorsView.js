@@ -12,12 +12,7 @@ import AdminAssignmentsTable from '../../Assignments/AdminAssignmentsTable';
 import LeaveJoinGroupButtonContainer
   from '../../../containers/LeaveJoinGroupButtonContainer';
 
-const SupervisorsView = (
-  {
-    group,
-    assignments
-  }
-) => (
+const SupervisorsView = ({ group, assignments }) => (
   <div>
     <Row>
       <Col lg={12}>
@@ -40,6 +35,7 @@ const SupervisorsView = (
             />
           }
           collapsable
+          unlimitedHeight
           noPadding
         >
           <StudentsListContainer
@@ -76,6 +72,7 @@ const SupervisorsView = (
           }
           collapsable
           noPadding
+          unlimitedHeight
           isOpen
         >
           <AdminAssignmentsTable assignments={assignments} />

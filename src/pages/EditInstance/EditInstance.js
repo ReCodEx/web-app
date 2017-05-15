@@ -88,6 +88,7 @@ class EditInstance extends Component {
 EditInstance.propTypes = {
   links: PropTypes.object.isRequired,
   loadAsync: PropTypes.func.isRequired,
+  reset: PropTypes.func.isRequired,
   params: PropTypes.shape({
     instanceId: PropTypes.string.isRequired
   }).isRequired,

@@ -124,6 +124,7 @@ class EditGroup extends Component {
 EditGroup.propTypes = {
   links: PropTypes.object.isRequired,
   loadAsync: PropTypes.func.isRequired,
+  reset: PropTypes.func.isRequired,
   params: PropTypes.shape({
     groupId: PropTypes.string.isRequired
   }).isRequired,

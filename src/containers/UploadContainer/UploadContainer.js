@@ -20,17 +20,15 @@ import {
 } from '../../redux/modules/upload';
 
 class UploadContainer extends Component {
-
   componentWillMount() {
     this.props.init();
   }
 
-  uploadFiles = (files) =>
-    files.map(this.props.uploadFile);
+  uploadFiles = files => files.map(this.props.uploadFile);
 
-  retryUploadFile = (payload) => {
+  retryUploadFile = payload => {
     this.props.removeFailedFile(payload);
-    this.uploadFiles([ payload.file ]);
+    this.uploadFiles([payload.file]);
   };
 
   render = () => {
@@ -54,10 +52,10 @@ class UploadContainer extends Component {
         removeFailedFile={removeFailedFile}
         removeFile={removeFile}
         returnFile={returnFile}
-        retryUploadFile={this.retryUploadFile} />
+        retryUploadFile={this.retryUploadFile}
+      />
     );
   };
-
 }
 
 UploadContainer.propTypes = {
@@ -82,9 +80,9 @@ export default connect(
   }),
   (dispatch, { id }) => ({
     init: () => dispatch(init(id)),
-    uploadFile: (payload) => dispatch(uploadFile(id, payload)),
-    removeFailedFile: (payload) => dispatch(removeFailedFile(id, payload)),
-    removeFile: (payload) => dispatch(removeFile(id, payload)),
-    returnFile: (payload) => dispatch(returnFile(id, payload))
+    uploadFile: payload => dispatch(uploadFile(id, payload)),
+    removeFailedFile: payload => dispatch(removeFailedFile(id, payload)),
+    removeFile: payload => dispatch(removeFile(id, payload)),
+    returnFile: payload => dispatch(returnFile(id, payload))
   })
 )(UploadContainer);
