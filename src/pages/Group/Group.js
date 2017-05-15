@@ -66,10 +66,10 @@ class Group extends Component {
         .then(group =>
           Promise.all([
             dispatch(fetchInstanceIfNeeded(group.instanceId)),
+            dispatch(fetchSupervisors(groupId)),
             Group.isMemberOf(group, userId)
               ? Promise.all([
                 dispatch(fetchAssignmentsForGroup(groupId)),
-                dispatch(fetchSupervisors(groupId)),
                 dispatch(fetchStudents(groupId))
               ])
               : Promise.resolve(),
@@ -80,7 +80,8 @@ class Group extends Component {
               ])
               : dispatch(fetchSubgroups(group.id)),
             dispatch(fetchGroupsStatsIfNeeded(groupId))
-          ]))
+          ])
+        )
     ]);
 
   componentWillMount() {
@@ -282,15 +283,14 @@ const mapStateToProps = (state, { params: { groupId } }) => {
 };
 
 const mapDispatchToProps = (dispatch, { params }) => ({
-  addSubgroup: instanceId =>
-    data =>
-      dispatch(
-        createGroup({
-          ...data,
-          instanceId,
-          parentGroupId: params.groupId
-        })
-      ),
+  addSubgroup: instanceId => data =>
+    dispatch(
+      createGroup({
+        ...data,
+        instanceId,
+        parentGroupId: params.groupId
+      })
+    ),
   loadAsync: userId => Group.loadAsync(params, dispatch, userId),
   assignExercise: exerciseId =>
     dispatch(assignExercise(params.groupId, exerciseId)),
