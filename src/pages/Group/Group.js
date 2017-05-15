@@ -219,7 +219,7 @@ class Group extends Component {
                 addSubgroup={addSubgroup(data.instanceId)}
               />}
 
-            {isSupervisor &&
+            {(isAdmin || isSupervisor) &&
               <SupervisorsView
                 group={data}
                 statuses={statuses}
