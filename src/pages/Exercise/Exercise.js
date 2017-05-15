@@ -90,7 +90,8 @@ class Exercise extends Component {
     const { links: { ASSIGNMENT_EDIT_URI_FACTORY } } = this.context;
 
     assignExercise(groupId).then(({ value: assigment }) =>
-      push(ASSIGNMENT_EDIT_URI_FACTORY(assigment.id)));
+      push(ASSIGNMENT_EDIT_URI_FACTORY(assigment.id))
+    );
   };
 
   render() {
@@ -152,8 +153,8 @@ class Exercise extends Component {
           <div>
             <Row>
               <Col sm={12}>
-                {isAuthorOfExercise(exercise.id) &&
-                  <p>
+                <p>
+                  {isAuthorOfExercise(exercise.id) &&
                     <LinkContainer to={EXERCISE_EDIT_URI_FACTORY(exercise.id)}>
                       <Button bsStyle="warning" bsSize="sm">
                         <EditIcon />
@@ -163,12 +164,12 @@ class Exercise extends Component {
                           defaultMessage="Edit exercise settings"
                         />
                       </Button>
-                    </LinkContainer>
-                    <ForkExerciseButtonContainer
-                      exerciseId={exercise.id}
-                      forkId={forkId}
-                    />
-                  </p>}
+                    </LinkContainer>}
+                  <ForkExerciseButtonContainer
+                    exerciseId={exercise.id}
+                    forkId={forkId}
+                  />
+                </p>
               </Col>
             </Row>
             <Row>
@@ -241,7 +242,7 @@ class Exercise extends Component {
                 >
                   <ResourceRenderer resource={referenceSolutions}>
                     {referenceSolutions =>
-                      referenceSolutions.length > 0
+                      (referenceSolutions.length > 0
                         ? <ReferenceSolutionsList
                             referenceSolutions={referenceSolutions}
                             renderButtons={evaluationId => (
@@ -269,7 +270,7 @@ class Exercise extends Component {
                               id="app.exercise.noReferenceSolutions"
                               defaultMessage="There are no reference solutions for this exercise yet."
                             />
-                          </p>}
+                          </p>)}
                   </ResourceRenderer>
                 </Box>
                 <SubmitSolutionContainer
