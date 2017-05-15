@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { reduxForm, Field } from 'redux-form';
@@ -8,134 +8,125 @@ import { TextField, MarkdownTextAreaField, CheckboxField } from '../Fields';
 import { validateAddGroup } from '../../../redux/modules/groups';
 import SubmitButton from '../SubmitButton';
 
-class CreateGroupForm extends Component {
-  componentWillReceiveProps(newProps) {
-    if (!this.props.submitSucceeded && newProps.submitSucceeded === true) {
-      setTimeout(newProps.reset, 600);
-    }
-  }
-
-  render() {
-    const {
-      title = (
-        <FormattedMessage
-          id="app.createGroupForm.title"
-          defaultMessage="Create new group"
-        />
-      ),
-      handleSubmit,
-      submitSucceeded = false,
-      submitFailed = false,
-      anyTouched = false,
-      asyncValidating = false,
-      invalid = false,
-      submitting = false
-    } = this.props;
-    return (
-      <FormBox
-        title={title}
-        type={submitSucceeded ? 'success' : undefined}
-        unlimitedHeight
-        collapsable
-        isOpen={false}
-        footer={
-          <div className="text-center">
-            <SubmitButton
-              id="createGroup"
-              handleSubmit={handleSubmit}
-              tabIndex={3}
-              submitting={submitting}
-              invalid={invalid}
-              dirty={anyTouched}
-              hasFailed={submitFailed}
-              hasSuceeded={submitSucceeded}
-              asyncValidating={asyncValidating}
-              messages={{
-                success: (
-                  <FormattedMessage
-                    id="app.createGroupForm.success"
-                    defaultMessage="Group has been created"
-                  />
-                ),
-                submit: (
-                  <FormattedMessage
-                    id="app.createGroupForm.createGroup"
-                    defaultMessage="Create new group"
-                  />
-                ),
-                submitting: (
-                  <FormattedMessage
-                    id="app.createGroupForm.processing"
-                    defaultMessage="Group is being created ..."
-                  />
-                )
-              }}
-            />
-          </div>
-        }
-      >
-        {submitFailed &&
-          <Alert bsStyle="danger">
-            <FormattedMessage
-              id="app.createGroupForm.failed"
-              defaultMessage="We are sorry but we weren't able to create a new group."
-            />
-          </Alert>}
-
-        <Field
-          name="name"
-          tabIndex={1}
-          component={TextField}
-          required
-          label={
-            <FormattedMessage
-              id="app.createGroup.groupName"
-              defaultMessage="Name:"
-            />
-          }
-        />
-
-        <Field
-          name="externalId"
-          tabIndex={2}
-          component={TextField}
-          required
-          label={
-            <FormattedMessage
-              id="app.createGroup.externalId"
-              defaultMessage="External ID (e. g. ID of the group in the school IS):"
-            />
-          }
-        />
-
-        <Field
-          name="description"
+const CreateGroupForm = ({
+  title = (
+    <FormattedMessage
+      id="app.createGroupForm.title"
+      defaultMessage="Create new group"
+    />
+  ),
+  handleSubmit,
+  submitSucceeded = false,
+  submitFailed = false,
+  anyTouched = false,
+  asyncValidating = false,
+  invalid = false,
+  submitting = false,
+  reset
+}) => (
+  <FormBox
+    title={title}
+    type={submitSucceeded ? 'success' : undefined}
+    unlimitedHeight
+    collapsable
+    isOpen={false}
+    footer={
+      <div className="text-center">
+        <SubmitButton
+          id="createGroup"
+          handleSubmit={handleSubmit}
           tabIndex={3}
-          component={MarkdownTextAreaField}
-          required
-          label={
-            <FormattedMessage
-              id="app.createGroup.groupDescription"
-              defaultMessage="Description:"
-            />
-          }
+          submitting={submitting}
+          invalid={invalid}
+          dirty={anyTouched}
+          hasFailed={submitFailed}
+          hasSuceeded={submitSucceeded}
+          asyncValidating={asyncValidating}
+          reset={reset}
+          messages={{
+            success: (
+              <FormattedMessage
+                id="app.createGroupForm.success"
+                defaultMessage="Group has been created"
+              />
+            ),
+            submit: (
+              <FormattedMessage
+                id="app.createGroupForm.createGroup"
+                defaultMessage="Create new group"
+              />
+            ),
+            submitting: (
+              <FormattedMessage
+                id="app.createGroupForm.processing"
+                defaultMessage="Group is being created ..."
+              />
+            )
+          }}
         />
+      </div>
+    }
+  >
+    {submitFailed &&
+      <Alert bsStyle="danger">
+        <FormattedMessage
+          id="app.createGroupForm.failed"
+          defaultMessage="We are sorry but we weren't able to create a new group."
+        />
+      </Alert>}
 
-        <Field
-          name="publicStats"
-          tabIndex={4}
-          component={CheckboxField}
-          label={
-            <FormattedMessage
-              id="app.createGroup.publicStats"
-              defaultMessage="Students can see statistics of each other"
-            />
-          }
+    <Field
+      name="name"
+      tabIndex={1}
+      component={TextField}
+      required
+      label={
+        <FormattedMessage
+          id="app.createGroup.groupName"
+          defaultMessage="Name:"
         />
-      </FormBox>
-    );
-  }
-}
+      }
+    />
+
+    <Field
+      name="externalId"
+      tabIndex={2}
+      component={TextField}
+      required
+      label={
+        <FormattedMessage
+          id="app.createGroup.externalId"
+          defaultMessage="External ID (e. g. ID of the group in the school IS):"
+        />
+      }
+    />
+
+    <Field
+      name="description"
+      tabIndex={3}
+      component={MarkdownTextAreaField}
+      required
+      label={
+        <FormattedMessage
+          id="app.createGroup.groupDescription"
+          defaultMessage="Description:"
+        />
+      }
+    />
+
+    <Field
+      name="publicStats"
+      tabIndex={4}
+      component={CheckboxField}
+      label={
+        <FormattedMessage
+          id="app.createGroup.publicStats"
+          defaultMessage="Students can see statistics of each other"
+        />
+      }
+    />
+  </FormBox>
+);
 
 CreateGroupForm.propTypes = {
   title: PropTypes.oneOfType([
@@ -206,5 +197,6 @@ const asyncValidate = (
 export default reduxForm({
   form: 'createGroup',
   validate,
-  asyncValidate
+  asyncValidate,
+  asyncBlurFields: ['name']
 })(CreateGroupForm);
