@@ -10,10 +10,13 @@ class SubmitButton extends Component {
   }
 
   submit = data => {
-    const { handleSubmit } = this.props;
+    const { handleSubmit, reset } = this.props;
     return handleSubmit(data).then(() => {
       this.setState({ saved: true });
-      setTimeout(() => this.setState({ saved: false }));
+      setTimeout(() => {
+        this.setState({ saved: false });
+        reset && reset();
+      }, 2000);
     });
   };
 
@@ -64,7 +67,11 @@ class SubmitButton extends Component {
       <Button
         type="submit"
         onClick={data => this.submit(data)}
-        bsStyle={hasFailed ? 'danger' : dirty ? 'warning' : 'success'}
+        bsStyle={
+          hasSucceeded
+            ? 'success'
+            : hasFailed ? 'danger' : dirty ? 'warning' : 'success'
+        }
         className="btn-flat"
         disabled={invalid || asyncValidating !== false || submitting}
       >
@@ -73,7 +80,7 @@ class SubmitButton extends Component {
               ? <span><SuccessIcon /> &nbsp; {successMsg}</span>
               : asyncValidating !== false
                   ? <span><LoadingIcon /> &nbsp; {validatingMsg}</span>
-                  : invalid
+                  : dirty && invalid
                       ? <span><WarningIcon /> &nbsp; {invalidMsg}</span>
                       : <span><SendIcon /> &nbsp; {submitMsg}</span>
           : <span><LoadingIcon /> &nbsp; {submittingMsg}</span>}
@@ -91,6 +98,7 @@ SubmitButton.propTypes = {
   hasFailed: PropTypes.bool,
   asyncValidating: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
   invalid: PropTypes.bool,
+  reset: PropTypes.func,
   messages: PropTypes.shape({
     submit: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
     success: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
