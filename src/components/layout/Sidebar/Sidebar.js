@@ -10,16 +10,14 @@ import Student from './Student';
 import Supervisor from './Supervisor';
 import BadgeContainer from '../../../containers/BadgeContainer';
 
-const Sidebar = (
-  {
-    isLoggedIn = false,
-    studentOf,
-    supervisorOf,
-    isAdmin,
-    small = false,
-    ...props
-  }
-) => (
+const Sidebar = ({
+  isLoggedIn = false,
+  studentOf,
+  supervisorOf,
+  isAdmin,
+  small = false,
+  ...props
+}) => (
   <aside className="main-sidebar">
     <section className="sidebar">
       {isLoggedIn && <BadgeContainer small={small} />}
@@ -29,8 +27,7 @@ const Sidebar = (
         studentOf.size > 0 &&
         <Student {...props} studentOf={studentOf} />}
 
-      {supervisorOf &&
-        supervisorOf.size > 0 &&
+      {(isAdmin || (supervisorOf && supervisorOf.size > 0)) &&
         <Supervisor {...props} supervisorOf={supervisorOf} />}
 
       {isAdmin && <Admin {...props} />}

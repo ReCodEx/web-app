@@ -98,11 +98,15 @@ class Instance extends Component {
 
             <Row>
               <Col sm={12}>
-                <InstanceDetail {...data} groups={groups} isAdmin={isAdmin} />
+                <InstanceDetail
+                  {...data}
+                  groups={groups}
+                  isAdmin={isSuperAdmin || isAdmin}
+                />
               </Col>
             </Row>
 
-            {isAdmin &&
+            {(isSuperAdmin || isAdmin) &&
               <Row>
                 <Col sm={6}>
                   <CreateGroupForm

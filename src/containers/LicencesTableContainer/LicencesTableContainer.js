@@ -11,7 +11,7 @@ import { getLicencesOfInstance } from '../../redux/selectors/licences';
 
 class LicencesTableContainer extends Component {
   static loadAsync = ({ instanceId }, dispatch) =>
-    Promise.all([dispatch(fetchInstanceLincences(instanceId))]);
+    dispatch(fetchInstanceLincences(instanceId));
 
   componentWillMount = () => this.props.loadAsync();
   componentWillReceiveProps = newProps => {

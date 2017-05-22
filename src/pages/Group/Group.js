@@ -37,7 +37,8 @@ import {
   readyUsersDataSelector,
   isStudentOf,
   isSupervisorOf,
-  isAdminOf
+  isAdminOf,
+  isSuperAdmin
 } from '../../redux/selectors/users';
 
 import {
@@ -59,7 +60,7 @@ class Group extends Component {
     group.supervisors.indexOf(userId) >= 0 ||
     group.students.indexOf(userId) >= 0;
 
-  static loadAsync = ({ groupId }, dispatch, userId) =>
+  static loadAsync = ({ groupId }, dispatch, userId, isSuperAdmin) =>
     Promise.all([
       dispatch(fetchGroupIfNeeded(groupId))
         .then(res => res.value)
@@ -67,17 +68,17 @@ class Group extends Component {
           Promise.all([
             dispatch(fetchInstanceIfNeeded(group.instanceId)),
             dispatch(fetchSupervisors(groupId)),
-            Group.isMemberOf(group, userId)
+            Group.isMemberOf(group, userId) || isSuperAdmin
               ? Promise.all([
-                dispatch(fetchAssignmentsForGroup(groupId)),
-                dispatch(fetchStudents(groupId))
-              ])
+                  dispatch(fetchAssignmentsForGroup(groupId)),
+                  dispatch(fetchStudents(groupId))
+                ])
               : Promise.resolve(),
             group.parentGroupId
               ? Promise.all([
-                dispatch(fetchGroupIfNeeded(group.parentGroupId)),
-                dispatch(fetchSubgroups(group.parentGroupId))
-              ])
+                  dispatch(fetchGroupIfNeeded(group.parentGroupId)),
+                  dispatch(fetchSubgroups(group.parentGroupId))
+                ])
               : dispatch(fetchSubgroups(group.id)),
             dispatch(fetchGroupsStatsIfNeeded(groupId))
           ])
@@ -85,8 +86,8 @@ class Group extends Component {
     ]);
 
   componentWillMount() {
-    const { loadAsync, userId } = this.props;
-    loadAsync(userId);
+    const { loadAsync, userId, isSuperAdmin } = this.props;
+    loadAsync(userId, isSuperAdmin);
   }
 
   componentWillReceiveProps(newProps) {
@@ -94,15 +95,19 @@ class Group extends Component {
       params: { groupId },
       isAdmin,
       isSupervisor,
-      isStudent
+      isStudent,
+      isSuperAdmin
     } = this.props;
 
     if (
       groupId !== newProps.params.groupId ||
-      (!(isStudent || isSupervisor || isAdmin) &&
-        (newProps.isStudent || newProps.isSupervisor || newProps.isAdmin))
+      (!(isStudent || isSupervisor || isAdmin || isSuperAdmin) &&
+        (newProps.isStudent ||
+          newProps.isSupervisor ||
+          newProps.isAdmin ||
+          newProps.isSuperAdmin))
     ) {
-      newProps.loadAsync(newProps.userId);
+      newProps.loadAsync(newProps.userId, newProps.isSuperAdmin);
     }
   }
 
@@ -152,6 +157,7 @@ class Group extends Component {
       isStudent,
       isAdmin,
       isSupervisor,
+      isSuperAdmin,
       addSubgroup,
       links: { GROUP_EDIT_URI_FACTORY }
     } = this.props;
@@ -246,6 +252,7 @@ Group.propTypes = {
   isStudent: PropTypes.bool,
   isAdmin: PropTypes.bool,
   isSupervisor: PropTypes.bool,
+  isSuperAdmin: PropTypes.bool,
   addSubgroup: PropTypes.func,
   loadAsync: PropTypes.func,
   stats: PropTypes.object,
@@ -278,7 +285,8 @@ const mapStateToProps = (state, { params: { groupId } }) => {
     supervisors: readyUsers.filter(user => supervisorsIds.includes(user.id)),
     isStudent: isStudentOf(userId, groupId)(state),
     isSupervisor: isSupervisorOf(userId, groupId)(state),
-    isAdmin: isAdminOf(userId, groupId)(state)
+    isAdmin: isAdminOf(userId, groupId)(state),
+    isSuperAdmin: isSuperAdmin(userId)(state)
   };
 };
 
@@ -291,7 +299,8 @@ const mapDispatchToProps = (dispatch, { params }) => ({
         parentGroupId: params.groupId
       })
     ),
-  loadAsync: userId => Group.loadAsync(params, dispatch, userId),
+  loadAsync: (userId, isSuperAdmin) =>
+    Group.loadAsync(params, dispatch, userId, isSuperAdmin),
   assignExercise: exerciseId =>
     dispatch(assignExercise(params.groupId, exerciseId)),
   push: url => dispatch(push(url))
