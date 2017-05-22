@@ -14,7 +14,11 @@ import { fetchAssignmentIfNeeded } from '../../redux/modules/assignments';
 import { fetchSubmissionIfNeeded } from '../../redux/modules/submissions';
 import { getSubmission } from '../../redux/selectors/submissions';
 import { getAssignment } from '../../redux/selectors/assignments';
-import { isSupervisorOf } from '../../redux/selectors/users';
+import {
+  isSupervisorOf,
+  isAdminOf,
+  isSuperAdmin
+} from '../../redux/selectors/users';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 
 class Submission extends Component {
@@ -39,7 +43,7 @@ class Submission extends Component {
       assignment,
       submission,
       params: { assignmentId },
-      isSupervisorOf
+      isSupervisorOrMore
     } = this.props;
 
     return (
@@ -98,14 +102,14 @@ class Submission extends Component {
         >
           {(submission, assignment) => (
             <div>
-              {isSupervisorOf(assignment.groupId) &&
+              {isSupervisorOrMore(assignment.groupId) &&
                 <p>
                   <AcceptSolutionContainer id={submission.id} />
                 </p>}
               <SubmissionDetail
                 submission={submission}
                 assignment={assignment}
-                isSupervisor={isSupervisorOf(assignment.groupId)}
+                isSupervisor={isSupervisorOrMore(assignment.groupId)}
               />
             </div>
           )}
@@ -124,15 +128,17 @@ Submission.propTypes = {
   children: PropTypes.element,
   submission: PropTypes.object,
   loadAsync: PropTypes.func.isRequired,
-  isSupervisorOf: PropTypes.func.isRequired
+  isSupervisorOrMore: PropTypes.func.isRequired
 };
 
 export default connect(
   (state, { params: { submissionId, assignmentId } }) => ({
     submission: getSubmission(submissionId)(state),
     assignment: getAssignment(assignmentId)(state),
-    isSupervisorOf: groupId =>
-      isSupervisorOf(loggedInUserIdSelector(state), groupId)(state)
+    isSupervisorOrMore: groupId =>
+      isSupervisorOf(loggedInUserIdSelector(state), groupId)(state) ||
+      isAdminOf(loggedInUserIdSelector(state), groupId)(state) ||
+      isSuperAdmin(loggedInUserIdSelector(state))(state)
   }),
   (dispatch, { params }) => ({
     loadAsync: () => Submission.loadAsync(params, dispatch)
