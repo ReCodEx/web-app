@@ -70,15 +70,15 @@ class Group extends Component {
             dispatch(fetchSupervisors(groupId)),
             Group.isMemberOf(group, userId) || isSuperAdmin
               ? Promise.all([
-                  dispatch(fetchAssignmentsForGroup(groupId)),
-                  dispatch(fetchStudents(groupId))
-                ])
+                dispatch(fetchAssignmentsForGroup(groupId)),
+                dispatch(fetchStudents(groupId))
+              ])
               : Promise.resolve(),
             group.parentGroupId
               ? Promise.all([
-                  dispatch(fetchGroupIfNeeded(group.parentGroupId)),
-                  dispatch(fetchSubgroups(group.parentGroupId))
-                ])
+                dispatch(fetchGroupIfNeeded(group.parentGroupId)),
+                dispatch(fetchSubgroups(group.parentGroupId))
+              ])
               : dispatch(fetchSubgroups(group.id)),
             dispatch(fetchGroupsStatsIfNeeded(groupId))
           ])
@@ -157,7 +157,6 @@ class Group extends Component {
       isStudent,
       isAdmin,
       isSupervisor,
-      isSuperAdmin,
       addSubgroup,
       links: { GROUP_EDIT_URI_FACTORY }
     } = this.props;
