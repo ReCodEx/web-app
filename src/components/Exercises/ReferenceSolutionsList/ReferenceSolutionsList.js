@@ -29,26 +29,28 @@ const ReferenceSolutionsList = ({
       </tr>
     </thead>
     <tbody>
-      {referenceSolutions.map(({ id, uploadedAt, description }) => (
-        <tr key={id}>
-          <td className="text-center">
-            <Icon name="file-code-o" />
-          </td>
-          <td>
-            {description}
-          </td>
-          <td>
-            <FormattedDate value={new Date(uploadedAt * 1000)} />
-            {' '}
-            &nbsp;
-            {' '}
-            <FormattedTime value={new Date(uploadedAt * 1000)} />
-          </td>
-          <td className="text-right">
-            {renderButtons(id)}
-          </td>
-        </tr>
-      ))}
+      {referenceSolutions
+        .sort((a, b) => a.uploadedAt - b.uploadedAt)
+        .map(({ id, uploadedAt, description }) => (
+          <tr key={id}>
+            <td className="text-center">
+              <Icon name="file-code-o" />
+            </td>
+            <td>
+              {description}
+            </td>
+            <td>
+              <FormattedDate value={new Date(uploadedAt * 1000)} />
+              {' '}
+              &nbsp;
+              {' '}
+              <FormattedTime value={new Date(uploadedAt * 1000)} />
+            </td>
+            <td className="text-right">
+              {renderButtons(id)}
+            </td>
+          </tr>
+        ))}
     </tbody>
   </Table>
 );

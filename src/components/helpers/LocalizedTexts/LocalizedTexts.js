@@ -15,7 +15,12 @@ const LocalizedTexts = ({ locales = [] }, { lang = 'en' }) => (
     id="localized-texts"
   >
     {locales.map(({ locale, text }, i) => (
-      <Tab key={i} eventKey={locale} title={locale} style={{overflow: "auto"}}>
+      <Tab
+        key={i}
+        eventKey={locale}
+        title={locale}
+        style={{ overflow: 'auto' }}
+      >
         <ReactMarkdown source={text} />
       </Tab>
     ))}
