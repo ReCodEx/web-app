@@ -17,11 +17,7 @@ class TreeViewInnerNode extends Component {
   isOpen = () => this.props.forceOpen || this.state.isOpen;
 
   render() {
-    const {
-      loading,
-      children,
-      ...props
-    } = this.props;
+    const { loading, children, ...props } = this.props;
 
     return (
       <ul className="nav nav-stacked">

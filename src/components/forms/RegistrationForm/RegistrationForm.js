@@ -18,19 +18,17 @@ import { validateRegistrationData } from '../../../redux/modules/users';
 import SubmitButton from '../SubmitButton';
 import { Throttle } from 'react-throttle';
 
-const RegistrationForm = (
-  {
-    submitting,
-    handleSubmit,
-    submitFailed = false,
-    submitSucceeded = false,
-    asyncValidate,
-    anyTouched,
-    instances,
-    asyncValidating,
-    invalid
-  }
-) => (
+const RegistrationForm = ({
+  submitting,
+  handleSubmit,
+  submitFailed = false,
+  submitSucceeded = false,
+  asyncValidate,
+  anyTouched,
+  instances,
+  asyncValidating,
+  invalid
+}) => (
   <FormBox
     title={
       <FormattedMessage
@@ -168,10 +166,8 @@ RegistrationForm.propTypes = {
   submitSucceeded: PropTypes.bool,
   submitting: PropTypes.bool,
   anyTouched: PropTypes.bool,
-  asyncValidating: PropTypes.oneOfType([
-    PropTypes.bool,
-    PropTypes.string
-  ]).isRequired,
+  asyncValidating: PropTypes.oneOfType([PropTypes.bool, PropTypes.string])
+    .isRequired,
   invalid: PropTypes.bool
 };
 

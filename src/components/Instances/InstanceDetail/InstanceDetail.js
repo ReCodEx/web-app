@@ -7,14 +7,7 @@ import ReactMarkdown from 'react-markdown';
 import Box from '../../widgets/Box';
 import GroupTree from '../../Groups/GroupTree';
 
-const InstanceDetail = (
-  {
-    description,
-    rootGroupId,
-    groups,
-    isAdmin
-  }
-) => (
+const InstanceDetail = ({ description, rootGroupId, groups, isAdmin }) => (
   <Row>
     <Col md={6}>
       <Box

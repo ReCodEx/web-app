@@ -122,4 +122,4 @@ export const makeAbsolute = url =>
     ? url
     : `${window.location.origin}/${url.indexOf('/') === 0 ? url.substr(1) : url}`;
 
-export const absolute = url => isAbsolute(url) ? url : makeAbsolute(url);
+export const absolute = url => (isAbsolute(url) ? url : makeAbsolute(url));

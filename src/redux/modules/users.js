@@ -67,7 +67,7 @@ const reducer = handleActions(
       state.updateIn(
         ['resources', userId, 'data'],
         userData =>
-          (userData === null ? null : userData.set('isVerified', true))
+          userData === null ? null : userData.set('isVerified', true)
       ),
 
     [groupsActionTypes.JOIN_GROUP_PENDING]: (

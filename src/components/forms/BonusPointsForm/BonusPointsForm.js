@@ -9,16 +9,14 @@ import SubmitButton from '../SubmitButton';
 
 import { TextField } from '../Fields';
 
-const BonusPointsForm = (
-  {
-    submitting,
-    handleSubmit,
-    anyTouched,
-    submitFailed = false,
-    submitSucceeded = false,
-    invalid
-  }
-) => (
+const BonusPointsForm = ({
+  submitting,
+  handleSubmit,
+  anyTouched,
+  submitFailed = false,
+  submitSucceeded = false,
+  invalid
+}) => (
   <FormBox
     title={
       <FormattedMessage

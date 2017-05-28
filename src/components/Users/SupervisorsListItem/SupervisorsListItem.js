@@ -8,17 +8,15 @@ import { makeAdmin } from '../../../redux/modules/groups';
 import { adminsOfGroup } from '../../../redux/selectors/groups';
 import UsersNameContainer from '../../../containers/UsersNameContainer';
 
-const SupervisorsListItem = (
-  {
-    isAdmin,
-    id,
-    fullName,
-    avatarUrl,
-    groupId,
-    groupAdmins,
-    makeAdmin
-  }
-) => (
+const SupervisorsListItem = ({
+  isAdmin,
+  id,
+  fullName,
+  avatarUrl,
+  groupId,
+  groupAdmins,
+  makeAdmin
+}) => (
   <tr>
     <td>
       <UsersNameContainer userId={id} />

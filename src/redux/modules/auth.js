@@ -34,15 +34,14 @@ const getUserId = token => token.get('sub');
  * Actions
  */
 
-export const logout = redirectUrl =>
-  dispatch => {
-    if (redirectUrl) {
-      dispatch(push(redirectUrl));
-    }
-    dispatch({
-      type: actionTypes.LOGOUT
-    });
-  };
+export const logout = redirectUrl => dispatch => {
+  if (redirectUrl) {
+    dispatch(push(redirectUrl));
+  }
+  dispatch({
+    type: actionTypes.LOGOUT
+  });
+};
 
 export const LOCAL_LOGIN = 'recodex-local-login';
 export const login = (username, password) =>
@@ -79,15 +78,14 @@ export const validatePasswordStrength = password =>
     body: { password }
   });
 
-export const externalLogin = service =>
-  credentials =>
-    createApiAction({
-      type: actionTypes.LOGIN,
-      method: 'POST',
-      endpoint: `/login/${service}`,
-      body: credentials,
-      meta: { service }
-    });
+export const externalLogin = service => credentials =>
+  createApiAction({
+    type: actionTypes.LOGIN,
+    method: 'POST',
+    endpoint: `/login/${service}`,
+    body: credentials,
+    meta: { service }
+  });
 
 export const externalLoginFailed = service => ({
   type: actionTypes.LOGIN_FAILIURE,
@@ -134,17 +132,17 @@ const auth = (accessToken, now = Date.now()) => {
   const decodedToken = decodeAndValidateAccessToken(accessToken, now);
   const initialState = accessToken && decodedToken
     ? fromJS({
-      status: {},
-      jwt: accessToken,
-      accessToken: decodedToken,
-      userId: getUserId(decodedToken)
-    })
+        status: {},
+        jwt: accessToken,
+        accessToken: decodedToken,
+        userId: getUserId(decodedToken)
+      })
     : fromJS({
-      status: {},
-      jwt: null,
-      accessToken: null,
-      userId: null
-    });
+        status: {},
+        jwt: null,
+        accessToken: null,
+        userId: null
+      });
 
   return handleActions(
     {
@@ -181,7 +179,8 @@ const auth = (accessToken, now = Date.now()) => {
       [actionTypes.LOGOUT]: (state, action) =>
         state
           .update('status', services =>
-            services.map(() => statusTypes.LOGGED_OUT))
+            services.map(() => statusTypes.LOGGED_OUT)
+          )
           .set('jwt', null)
           .set('accessToken', null)
           .set('userId', null),

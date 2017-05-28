@@ -17,14 +17,12 @@ import FailedLoadingSubmissionTableRow from './FailedLoadingSubmissionTableRow';
 import NotEvaluatedSubmissionTableRow from './NotEvaluatedSubmissionTableRow';
 import EvaluationFailedTableRow from './EvaluationFailedTableRow';
 
-const SubmissionsTable = (
-  {
-    title,
-    assignmentId,
-    submissions,
-    links: { SUBMISSION_DETAIL_URI_FACTORY }
-  }
-) => (
+const SubmissionsTable = ({
+  title,
+  assignmentId,
+  submissions,
+  links: { SUBMISSION_DETAIL_URI_FACTORY }
+}) => (
   <Box title={title} collapsable isOpen noPadding>
     <Table responsive>
       <thead>

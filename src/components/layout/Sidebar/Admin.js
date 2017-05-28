@@ -7,12 +7,7 @@ import MenuItem from '../../widgets/Sidebar/MenuItem';
 
 import withLinks from '../../../hoc/withLinks';
 
-const Admin = (
-  {
-    currentUrl,
-    links: { ADMIN_INSTANCES_URI }
-  }
-) => (
+const Admin = ({ currentUrl, links: { ADMIN_INSTANCES_URI } }) => (
   <ul className="sidebar-menu">
     <MenuTitle
       title={

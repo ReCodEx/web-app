@@ -5,11 +5,7 @@ import { LoadingAvatar } from '../../widgets/Avatar';
 
 import styles from './usersName.less';
 
-const LoadingUsersName = (
-  {
-    size = 22
-  }
-) => (
+const LoadingUsersName = ({ size = 22 }) => (
   <span className={styles.wrapper}>
     <span className={styles.avatar}>
       <LoadingAvatar light size={size} />

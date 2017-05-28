@@ -15,9 +15,10 @@ const FormBox = ({
 }) => (
   <Form onSubmit={onSubmit}>
     <Box
-      type={succeeded ? 'success' : (dirty ? 'warning' : 'default')}
+      type={succeeded ? 'success' : dirty ? 'warning' : 'default'}
       {...props}
-      unlimitedHeight>
+      unlimitedHeight
+    >
       <div>{children}</div>
     </Box>
   </Form>

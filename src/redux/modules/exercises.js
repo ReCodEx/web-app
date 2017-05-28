@@ -12,10 +12,7 @@ import {
 } from './additionalExerciseFiles';
 
 const resourceName = 'exercises';
-const {
-  actions,
-  reduceActions
-} = factory({ resourceName });
+const { actions, reduceActions } = factory({ resourceName });
 
 /**
  * Actions
@@ -83,7 +80,8 @@ const reducer = handleActions(
         }
 
         return exercise.update('forks', forks =>
-          forks.set(forkId, { status: forkStatuses.PENDING }));
+          forks.set(forkId, { status: forkStatuses.PENDING })
+        );
       }),
 
     [additionalActionTypes.FORK_EXERCISE_REJECTED]: (
@@ -124,6 +122,7 @@ const reducer = handleActions(
 
 const addFiles = (state, exerciseId, files, field) =>
   state.updateIn(['resources', exerciseId, 'data', field], list =>
-    list.push(...files.map(file => file.id)));
+    list.push(...files.map(file => file.id))
+  );
 
 export default reducer;

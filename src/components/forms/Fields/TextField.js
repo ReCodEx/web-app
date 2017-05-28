@@ -11,15 +11,15 @@ import {
 
 const TextField = ({
   input,
-  meta: {
-    touched,
-    error
-  },
+  meta: { touched, error },
   type = 'text',
   label,
   ...props
 }) => (
-  <FormGroup controlId={input.name} validationState={touched && error ? 'error' : undefined}>
+  <FormGroup
+    controlId={input.name}
+    validationState={touched && error ? 'error' : undefined}
+  >
     <ControlLabel>{label}</ControlLabel>
     <FormControl {...input} {...props} type={type} />
     {touched && error && <HelpBlock>{error}</HelpBlock>}
@@ -29,10 +29,7 @@ const TextField = ({
 TextField.propTypes = {
   type: PropTypes.string,
   input: PropTypes.shape({
-    value: PropTypes.oneOfType([
-      PropTypes.string,
-      PropTypes.number
-    ]).isRequired
+    value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired
   }).isRequired,
   meta: PropTypes.shape({
     touched: PropTypes.bool,

@@ -6,9 +6,11 @@ const getAccessToken = auth => auth.get('accessToken');
 const getLoggedInUserId = auth => auth.get('userId');
 const getStatus = createSelector(getAuth, auth => auth.get('status'));
 const getChangePasswordStatus = createSelector(getAuth, auth =>
-  auth.get('changePasswordStatus'));
+  auth.get('changePasswordStatus')
+);
 const getResetPasswordStatus = createSelector(getAuth, auth =>
-  auth.get('resetPasswordStatus'));
+  auth.get('resetPasswordStatus')
+);
 
 /**
  * Select access token from the state.
@@ -17,7 +19,7 @@ export const jwtSelector = createSelector(getAuth, auth => auth.get('jwt'));
 export const accessTokenSelector = createSelector(getAuth, getAccessToken);
 export const accessTokenExpiration = createSelector(
   accessTokenSelector,
-  token => token ? token.get('exp') * 1000 : 0
+  token => (token ? token.get('exp') * 1000 : 0)
 );
 export const loggedInUserIdSelector = createSelector(
   getAuth,
@@ -42,7 +44,8 @@ export const hasSucceeded = service =>
   );
 
 export const isLoggedIn = createSelector(getAuth, auth =>
-  Boolean(auth.get('userId')));
+  Boolean(auth.get('userId'))
+);
 
 export const isChanging = createSelector(
   getChangePasswordStatus,

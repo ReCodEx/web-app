@@ -2,21 +2,15 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import UsersNameContainer from '../../../containers/UsersNameContainer';
 
-const UsersListItem = ({
-  id,
-  fullName,
-  avatarUrl,
-  createActions
-}) => (
+const UsersListItem = ({ id, fullName, avatarUrl, createActions }) => (
   <tr>
     <td>
       <UsersNameContainer userId={id} />
     </td>
-    {createActions && (
+    {createActions &&
       <td className="text-right">
         {createActions(id)}
-      </td>
-    )}
+      </td>}
   </tr>
 );
 

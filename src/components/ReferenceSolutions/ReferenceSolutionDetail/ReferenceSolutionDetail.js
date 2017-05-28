@@ -7,15 +7,11 @@ import { Table } from 'react-bootstrap';
 import Box from '../../widgets/Box';
 import UsersNameContainer from '../../../containers/UsersNameContainer';
 
-const ReferenceSolutionDetail = (
-  {
-    description,
-    uploadedAt,
-    solution: {
-      userId
-    }
-  }
-) => (
+const ReferenceSolutionDetail = ({
+  description,
+  uploadedAt,
+  solution: { userId }
+}) => (
   <Box
     title={
       <FormattedMessage

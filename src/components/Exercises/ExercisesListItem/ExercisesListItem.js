@@ -8,17 +8,15 @@ import { Link } from 'react-router';
 
 import withLinks from '../../../hoc/withLinks';
 
-const ExercisesListItem = (
-  {
-    id,
-    name,
-    difficulty,
-    authorId,
-    createdAt,
-    createActions,
-    links: { EXERCISE_URI_FACTORY }
-  }
-) => (
+const ExercisesListItem = ({
+  id,
+  name,
+  difficulty,
+  authorId,
+  createdAt,
+  createActions,
+  links: { EXERCISE_URI_FACTORY }
+}) => (
   <tr>
     <td className="text-center">
       <Icon name="code" />

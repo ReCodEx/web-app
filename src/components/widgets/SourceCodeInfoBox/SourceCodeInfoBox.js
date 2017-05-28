@@ -3,14 +3,7 @@ import PropTypes from 'prop-types';
 import { SimpleInfoBox } from '../InfoBox';
 import prettyBytes from 'pretty-bytes';
 
-const SourceCodeInfoBox = (
-  {
-    id,
-    name,
-    size,
-    uploadedAt
-  }
-) => (
+const SourceCodeInfoBox = ({ id, name, size, uploadedAt }) => (
   <SimpleInfoBox
     title={name}
     description={prettyBytes(size)}

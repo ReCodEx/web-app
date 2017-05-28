@@ -8,19 +8,17 @@ import Footer from '../../widgets/Footer';
 
 import SidebarContainer from '../../../containers/SidebarContainer';
 
-export const Layout = (
-  {
-    toggleSize,
-    toggleVisibility,
-    sidebar,
-    isLoggedIn,
-    children,
-    lang,
-    currentUrl,
-    availableLangs,
-    onCloseSidebar
-  }
-) => (
+export const Layout = ({
+  toggleSize,
+  toggleVisibility,
+  sidebar,
+  isLoggedIn,
+  children,
+  lang,
+  currentUrl,
+  availableLangs,
+  onCloseSidebar
+}) => (
   <div
     className={classNames({
       wrapper: true,

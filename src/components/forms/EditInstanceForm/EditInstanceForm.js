@@ -8,16 +8,14 @@ import SubmitButton from '../SubmitButton';
 
 import { TextField, MarkdownTextAreaField, CheckboxField } from '../Fields';
 
-const EditInstanceForm = (
-  {
-    submitting,
-    handleSubmit,
-    anyTouched,
-    submitFailed = false,
-    submitSucceeded = false,
-    invalid
-  }
-) => (
+const EditInstanceForm = ({
+  submitting,
+  handleSubmit,
+  anyTouched,
+  submitFailed = false,
+  submitSucceeded = false,
+  invalid
+}) => (
   <FormBox
     title={
       <FormattedMessage

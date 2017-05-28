@@ -28,10 +28,7 @@ class GroupTree extends Component {
   );
 
   renderButtons = groupId => {
-    const {
-      isAdmin,
-      links: { GROUP_URI_FACTORY }
-    } = this.props;
+    const { isAdmin, links: { GROUP_URI_FACTORY } } = this.props;
     return (
       <span>
         <LinkContainer to={GROUP_URI_FACTORY(groupId)}>
@@ -75,10 +72,7 @@ class GroupTree extends Component {
     const {
       name,
       externalId,
-      childGroups: {
-        all: allChildGroups,
-        public: publicChildGroups
-      }
+      childGroups: { all: allChildGroups, public: publicChildGroups }
     } = getJsData(group);
 
     return (

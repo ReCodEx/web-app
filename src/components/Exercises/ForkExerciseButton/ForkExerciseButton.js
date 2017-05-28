@@ -5,13 +5,7 @@ import Button from '../../widgets/FlatButton';
 import Icon from 'react-fontawesome';
 import Confirm from '../../forms/Confirm';
 
-const ForkExerciseButton = (
-  {
-    forkId,
-    onClick,
-    ...props
-  }
-) => (
+const ForkExerciseButton = ({ forkId, onClick, ...props }) => (
   <Confirm
     id={forkId}
     onConfirmed={onClick}

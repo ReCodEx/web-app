@@ -21,7 +21,7 @@ const actionCreatorsFactory = ({
     return !state ? null : state.getIn(['resources', id]);
   };
 
-  const fetchMany = (apiOptions) =>
+  const fetchMany = apiOptions =>
     createApiAction({
       type: actionTypes.FETCH_MANY,
       method: 'GET',
@@ -29,29 +29,25 @@ const actionCreatorsFactory = ({
       ...apiOptions
     });
 
-  const fakeResult = (item) => ({
+  const fakeResult = item => ({
     value: getJsData(item)
   });
 
-  const fetchIfNeeded = (...ids) =>
-    (dispatch, getState) =>
-      Promise.all(
-        ids.map(id => dispatch(fetchOneIfNeeded(id)))
-      );
+  const fetchIfNeeded = (...ids) => (dispatch, getState) =>
+    Promise.all(ids.map(id => dispatch(fetchOneIfNeeded(id))));
 
-  const fetchOneIfNeeded = (id) =>
-    (dispatch, getState) => {
-      if (needsRefetching(getItem(id, getState))) {
-        archivedPromises[id] = dispatch(fetchResource(id));
-      }
+  const fetchOneIfNeeded = id => (dispatch, getState) => {
+    if (needsRefetching(getItem(id, getState))) {
+      archivedPromises[id] = dispatch(fetchResource(id));
+    }
 
-      const item = getItem(id, getState);
-      return isLoading(item)
-        ? archivedPromises[id]
-        : Promise.resolve(fakeResult(item));
-    };
+    const item = getItem(id, getState);
+    return isLoading(item)
+      ? archivedPromises[id]
+      : Promise.resolve(fakeResult(item));
+  };
 
-  const fetchResource = (id) =>
+  const fetchResource = id =>
     createApiAction({
       type: actionTypes.FETCH,
       method: 'GET',
@@ -65,7 +61,11 @@ const actionCreatorsFactory = ({
     resource => ({ id: resource.get('id') })
   );
 
-  const addResource = (body, tmpId = Math.random().toString(), endpoint = apiEndpointFactory('')) =>
+  const addResource = (
+    body,
+    tmpId = Math.random().toString(),
+    endpoint = apiEndpointFactory('')
+  ) =>
     createApiAction({
       type: actionTypes.ADD,
       method: 'POST',

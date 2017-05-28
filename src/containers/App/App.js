@@ -14,13 +14,13 @@ import { logout, refresh } from '../../redux/modules/auth';
 
 class App extends Component {
   static loadAsync = (params, dispatch, userId) =>
-    (userId
+    userId
       ? Promise.all([
-        dispatch(fetchUserIfNeeded(userId)),
-        dispatch(fetchUsersGroupsIfNeeded(userId)),
-        dispatch(fetchUsersInstancesIfNeeded(userId))
-      ])
-      : Promise.resolve());
+          dispatch(fetchUserIfNeeded(userId)),
+          dispatch(fetchUsersGroupsIfNeeded(userId)),
+          dispatch(fetchUsersInstancesIfNeeded(userId))
+        ])
+      : Promise.resolve();
 
   componentWillMount() {
     this.props.loadAsync(this.props.userId);

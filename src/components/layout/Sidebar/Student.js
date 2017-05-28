@@ -9,15 +9,13 @@ import { getId } from '../../../redux/helpers/resourceManager';
 
 import withLinks from '../../../hoc/withLinks';
 
-const Student = (
-  {
-    currentUrl,
-    studentOf,
-    isCollapsed,
-    notifications,
-    links: { GROUP_URI_FACTORY }
-  }
-) => (
+const Student = ({
+  currentUrl,
+  studentOf,
+  isCollapsed,
+  notifications,
+  links: { GROUP_URI_FACTORY }
+}) => (
   <ul className="sidebar-menu">
     <MenuTitle
       title={

@@ -11,13 +11,7 @@ import {
 } from '../../redux/modules/auth';
 import { statusSelector } from '../../redux/selectors/auth';
 
-const LoginBox = (
-  {
-    login,
-    fail,
-    status
-  }
-) => (
+const LoginBox = ({ login, fail, status }) => (
   <Box
     title={
       <FormattedMessage

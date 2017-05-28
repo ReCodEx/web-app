@@ -20,15 +20,13 @@ import withLinks from '../../hoc/withLinks';
 /**
  * This component enables the user to request reseting password for his/her email address.
  */
-const ResetPassword = (
-  {
-    resetPassword,
-    isReseting,
-    hasFailed,
-    hasSucceeded,
-    links: { HOME_URI }
-  }
-) => (
+const ResetPassword = ({
+  resetPassword,
+  isReseting,
+  hasFailed,
+  hasSucceeded,
+  links: { HOME_URI }
+}) => (
   <PageContent
     title={
       <FormattedMessage

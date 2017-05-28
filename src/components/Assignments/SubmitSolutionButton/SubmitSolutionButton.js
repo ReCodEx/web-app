@@ -4,12 +4,7 @@ import Icon from 'react-fontawesome';
 import Button from '../../widgets/FlatButton';
 import { FormattedMessage } from 'react-intl';
 
-const SubmitSolutionButton = (
-  {
-    disabled = false,
-    onClick
-  }
-) => (
+const SubmitSolutionButton = ({ disabled = false, onClick }) => (
   <Button
     bsStyle="success"
     className="btn-flat"

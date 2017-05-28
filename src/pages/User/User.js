@@ -80,9 +80,12 @@ class User extends Component {
                 Promise.all([
                   dispatch(fetchAssignmentsForGroup(group.id)),
                   dispatch(fetchGroupsStatsIfNeeded(group.id))
-                ]))
-            ));
-        }));
+                ])
+              )
+            )
+          );
+        })
+    );
 
   render() {
     const {

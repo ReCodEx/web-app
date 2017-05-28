@@ -10,15 +10,13 @@ import { getId } from '../../../redux/helpers/resourceManager';
 
 import withLinks from '../../../hoc/withLinks';
 
-const Supervisor = (
-  {
-    currentUrl,
-    supervisorOf,
-    isCollapsed,
-    notifications,
-    links: { GROUP_URI_FACTORY, EXERCISES_URI }
-  }
-) => (
+const Supervisor = ({
+  currentUrl,
+  supervisorOf,
+  isCollapsed,
+  notifications,
+  links: { GROUP_URI_FACTORY, EXERCISES_URI }
+}) => (
   <ul className="sidebar-menu">
     <MenuTitle
       title={

@@ -23,7 +23,8 @@ class AssignmentStats extends Component {
       dispatch(fetchAssignmentIfNeeded(assignmentId))
         .then(res => res.value)
         .then(assignment =>
-          Promise.all([dispatch(fetchStudents(assignment.groupId))]))
+          Promise.all([dispatch(fetchStudents(assignment.groupId))])
+        )
     ]);
 
   componentWillMount() {
@@ -37,11 +38,7 @@ class AssignmentStats extends Component {
   }
 
   render() {
-    const {
-      assignmentId,
-      assignment,
-      students
-    } = this.props;
+    const { assignmentId, assignment, students } = this.props;
 
     return (
       <PageContent

@@ -11,10 +11,7 @@ import {
 
 const TextAreaField = ({
   input,
-  meta: {
-    touched,
-    error
-  },
+  meta: { touched, error },
   type = 'text',
   label,
   children,
@@ -22,7 +19,8 @@ const TextAreaField = ({
 }) => (
   <FormGroup
     controlId={input.name}
-    validationState={touched && error ? 'error' : undefined}>
+    validationState={touched && error ? 'error' : undefined}
+  >
     <ControlLabel>{label}</ControlLabel>
     <FormControl {...input} {...props} componentClass="textarea" rows={8} />
     {touched && error && <HelpBlock>{error}</HelpBlock>}
@@ -42,7 +40,7 @@ TextAreaField.propTypes = {
   children: PropTypes.any,
   meta: PropTypes.shape({
     touched: PropTypes.bool,
-    error: PropTypes.oneOfType([ PropTypes.string, FormattedMessage ])
+    error: PropTypes.oneOfType([PropTypes.string, FormattedMessage])
   })
 };
 

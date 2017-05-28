@@ -7,17 +7,11 @@ import MenuItem from '../../widgets/Sidebar/MenuItem';
 
 import withLinks from '../../../hoc/withLinks';
 
-const Public = (
-  {
-    isLoggedIn,
-    currentUrl,
-    links: {
-      LOGIN_URI,
-      REGISTRATION_URI,
-      BUGS_URL
-    }
-  }
-) => (
+const Public = ({
+  isLoggedIn,
+  currentUrl,
+  links: { LOGIN_URI, REGISTRATION_URI, BUGS_URL }
+}) => (
   <ul className="sidebar-menu">
     <MenuTitle title="ReCodEx" />
     <MenuItem

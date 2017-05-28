@@ -5,7 +5,7 @@ import Icon from 'react-fontawesome';
 import Button from '../../widgets/FlatButton';
 
 const AcceptSolution = ({ accepted, accept }) =>
-  (accepted === true
+  accepted === true
     ? <Button bsStyle="success" disabled>
         <Icon name="check-circle" />
         {' '}
@@ -21,7 +21,7 @@ const AcceptSolution = ({ accepted, accept }) =>
           id="app.acceptSolution.notAccepted"
           defaultMessage="Accept this solution"
         />
-      </Button>);
+      </Button>;
 
 AcceptSolution.propTypes = {
   accepted: PropTypes.bool.isRequired,

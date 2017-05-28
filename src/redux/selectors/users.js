@@ -67,27 +67,27 @@ export const memberOfInstancesIdsSelector = userId =>
   createSelector(
     getUser(userId),
     user =>
-      (user && isReady(user)
+      user && isReady(user)
         ? List([user.getIn(['data', 'instanceId'])])
-        : List()) // @todo: Change when the user can be member of multiple instances
+        : List() // @todo: Change when the user can be member of multiple instances
   );
 
 export const studentOfGroupsIdsSelector = userId =>
   createSelector(
     getUser(userId),
     user =>
-      (user && isReady(user)
+      user && isReady(user)
         ? user.getIn(['data', 'groups', 'studentOf'])
-        : List())
+        : List()
   );
 
 export const supervisorOfGroupsIdsSelector = userId =>
   createSelector(
     getUser(userId),
     user =>
-      (user && isReady(user)
+      user && isReady(user)
         ? user.getIn(['data', 'groups', 'supervisorOf'])
-        : List())
+        : List()
   );
 
 export const isStudentOf = (userId, groupId) =>
@@ -141,7 +141,7 @@ export const canEditExercise = (userId, exerciseId) =>
 export const notificationsSelector = createSelector(
   loggedInUserSelector,
   user =>
-    (user && user.get('data') && user.getIn(['data', 'groupsStats'])
+    user && user.get('data') && user.getIn(['data', 'groupsStats'])
       ? user.getIn(['data', 'groupsStats']).reduce(
           (notifications, group) =>
             Object.assign({}, notifications, {
@@ -151,5 +151,5 @@ export const notificationsSelector = createSelector(
             }),
           {}
         )
-      : {})
+      : {}
 );

@@ -17,19 +17,17 @@ const dropZoneStyles = {
   textAlign: 'center'
 };
 
-const Upload = (
-  {
-    uploadFiles,
-    uploadingFiles,
-    attachedFiles,
-    failedFiles,
-    removedFiles,
-    removeFile,
-    returnFile,
-    removeFailedFile,
-    retryUploadFile
-  }
-) => (
+const Upload = ({
+  uploadFiles,
+  uploadingFiles,
+  attachedFiles,
+  failedFiles,
+  removedFiles,
+  removeFile,
+  returnFile,
+  removeFailedFile,
+  retryUploadFile
+}) => (
   <div>
     <DropZone onDrop={uploadFiles} style={dropZoneStyles}>
       <p>

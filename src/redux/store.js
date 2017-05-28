@@ -8,7 +8,7 @@ import accessTokenMiddleware from './middleware/accessTokenMiddleware';
 import apiMiddleware from './middleware/apiMiddleware';
 import createReducer from './reducer';
 
-const getMiddleware = (history) => [
+const getMiddleware = history => [
   accessTokenMiddleware,
   apiMiddleware,
   promiseMiddleware(),
@@ -16,23 +16,15 @@ const getMiddleware = (history) => [
   routerMiddleware(history)
 ];
 
-const dev = (history) =>
+const dev = history =>
   compose(
-    applyMiddleware(
-      ...getMiddleware(history)
-    ),
+    applyMiddleware(...getMiddleware(history)),
     canUseDOM && window.devToolsExtension ? window.devToolsExtension() : f => f // use the DEVtools if the extension is installed
   );
 
-const prod = (history) =>
-  compose(
-    applyMiddleware(
-      ...getMiddleware(history)
-    )
-  );
+const prod = history => compose(applyMiddleware(...getMiddleware(history)));
 
-const isDev = () =>
-  process.env.NODE_ENV === 'development';
+const isDev = () => process.env.NODE_ENV === 'development';
 
 export const configureStore = (history, initialState, token) =>
   createStore(

@@ -19,17 +19,20 @@ import { resourceStatus, isReady } from './status';
  * @param {RecordDescriptor} record The properties of the record
  * @return {object} ImmutableJS map with the properties of the record
  */
-const createRecord = ({
-  data = null,
-  state = resourceStatus.PENDING,
-  didInvalidate = false,
-  lastUpdate = null
-} = {}) => fromJS({
-  state,
-  data,
-  didInvalidate,
-  lastUpdate: lastUpdate || Date.now()
-});
+const createRecord = (
+  {
+    data = null,
+    state = resourceStatus.PENDING,
+    didInvalidate = false,
+    lastUpdate = null
+  } = {}
+) =>
+  fromJS({
+    state,
+    data,
+    didInvalidate,
+    lastUpdate: lastUpdate || Date.now()
+  });
 
 export default createRecord;
 
@@ -46,7 +49,7 @@ export const getData = resource =>
  */
 export const getJsData = resource => {
   const data = isReady(resource) ? getData(resource) : null;
-  return (data && data.toJS) ? data.toJS() : data;
+  return data && data.toJS ? data.toJS() : data;
 };
 
 /**

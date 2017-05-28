@@ -10,11 +10,7 @@ import NoAssignmentsTableRow from './NoAssignmentsTableRow';
 import LoadingAssignmentTableRow from './LoadingAssignmentTableRow';
 import ResourceRenderer from '../../helpers/ResourceRenderer';
 
-const AdminAssignmentsTable = (
-  {
-    assignments = List()
-  }
-) => (
+const AdminAssignmentsTable = ({ assignments = List() }) => (
   <Table hover>
     <thead>
       <tr>

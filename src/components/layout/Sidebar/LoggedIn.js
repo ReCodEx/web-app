@@ -9,18 +9,12 @@ import MenuItem from '../../widgets/Sidebar/MenuItem';
 
 import withLinks from '../../../hoc/withLinks';
 
-const LoggedIn = (
-  {
-    instances,
-    isCollapsed,
-    currentUrl,
-    links: {
-      DASHBOARD_URI,
-      INSTANCE_URI_FACTORY,
-      BUGS_URL
-    }
-  }
-) => (
+const LoggedIn = ({
+  instances,
+  isCollapsed,
+  currentUrl,
+  links: { DASHBOARD_URI, INSTANCE_URI_FACTORY, BUGS_URL }
+}) => (
   <ul className="sidebar-menu">
     <MenuTitle
       title={

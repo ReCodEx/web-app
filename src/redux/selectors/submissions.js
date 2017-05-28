@@ -8,7 +8,7 @@ export const isAccepted = id =>
   createSelector(
     getSubmission(id),
     submission =>
-      (submission.get('data') === null
+      submission.get('data') === null
         ? false
-        : submission.getIn(['data', 'accepted']))
+        : submission.getIn(['data', 'accepted'])
   );

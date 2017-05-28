@@ -5,12 +5,7 @@ import { Table } from 'react-bootstrap';
 import { MaybeSucceededIcon } from '../../icons';
 import Box from '../../widgets/Box';
 
-const LicencesTable = (
-  {
-    instance,
-    licences
-  }
-) => (
+const LicencesTable = ({ instance, licences }) => (
   <Box
     title={
       <FormattedMessage
@@ -53,30 +48,27 @@ const LicencesTable = (
           </tr>
         </thead>
         <tbody>
-          {licences.sort((a, b) => a.validUntil < b.validUntil ? 1 : -1).map(({
-            id,
-            validUntil,
-            isValid,
-            note
-          }) => (
-            <tr key={id}>
-              <td>
-                {!isValid || validUntil * 1000 < Date.now()
-                  ? <strike>{note}</strike>
-                  : note}
-              </td>
-              <td className="text-center">
-                <MaybeSucceededIcon success={isValid} />
-              </td>
-              <td>
-                <FormattedDate value={validUntil * 1000} />
-                {' '}
-                (
-                <FormattedRelative value={validUntil * 1000} />
-                )
-              </td>
-            </tr>
-          ))}
+          {licences
+            .sort((a, b) => (a.validUntil < b.validUntil ? 1 : -1))
+            .map(({ id, validUntil, isValid, note }) => (
+              <tr key={id}>
+                <td>
+                  {!isValid || validUntil * 1000 < Date.now()
+                    ? <strike>{note}</strike>
+                    : note}
+                </td>
+                <td className="text-center">
+                  <MaybeSucceededIcon success={isValid} />
+                </td>
+                <td>
+                  <FormattedDate value={validUntil * 1000} />
+                  {' '}
+                  (
+                  <FormattedRelative value={validUntil * 1000} />
+                  )
+                </td>
+              </tr>
+            ))}
 
           {licences.length === 0 &&
             <tr>

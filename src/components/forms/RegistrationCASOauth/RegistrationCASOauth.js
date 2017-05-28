@@ -11,17 +11,15 @@ import FormBox from '../../widgets/FormBox';
 import { CASAuthenticationButtonField, SelectField } from '../Fields';
 import SubmitButton from '../SubmitButton';
 
-const RegistrationCASOauth = (
-  {
-    submitting,
-    handleSubmit,
-    submitSucceeded,
-    submitFailed,
-    anyTouched,
-    instances = Map(),
-    invalid
-  }
-) => (
+const RegistrationCASOauth = ({
+  submitting,
+  handleSubmit,
+  submitSucceeded,
+  submitFailed,
+  anyTouched,
+  instances = Map(),
+  invalid
+}) => (
   <FormBox
     title={
       <FormattedMessage

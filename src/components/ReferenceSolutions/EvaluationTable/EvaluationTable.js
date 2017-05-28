@@ -30,29 +30,27 @@ const EvaluationTable = ({
           evaluation => evaluation.referenceSolution.id === referenceSolutionId
         )
         .sort((a, b) => b.evaluation.evaluatedAt - a.evaluation.evaluatedAt)
-        .map(({
-          evaluation: { id, evaluatedAt },
-          evaluationStatus,
-          accepted
-        }) => (
-          <tr key={id}>
-            <td>
-              <AssignmentStatusIcon
-                id={id}
-                status={evaluationStatus}
-                accepted={accepted}
-              />
-            </td>
-            <td>
-              <FormattedDate value={evaluatedAt * 1000} />
-              &nbsp;
-              <FormattedTime value={evaluatedAt * 1000} />
-            </td>
-            <td className="text-right">
-              {renderButtons(id)}
-            </td>
-          </tr>
-        ))}
+        .map(
+          ({ evaluation: { id, evaluatedAt }, evaluationStatus, accepted }) => (
+            <tr key={id}>
+              <td>
+                <AssignmentStatusIcon
+                  id={id}
+                  status={evaluationStatus}
+                  accepted={accepted}
+                />
+              </td>
+              <td>
+                <FormattedDate value={evaluatedAt * 1000} />
+                &nbsp;
+                <FormattedTime value={evaluatedAt * 1000} />
+              </td>
+              <td className="text-right">
+                {renderButtons(id)}
+              </td>
+            </tr>
+          )
+        )}
     </tbody>
   </Table>
 );

@@ -8,21 +8,11 @@ import { MaybeSucceededIcon } from '../../icons';
 import AuthentictionButtonContianer
   from '../../../containers/CAS/AuthenticationButtonContainer';
 
-const CASAuthenticationButtonField = (
-  {
-    input: {
-      name,
-      onChange,
-      value: ticket
-    },
-    meta: {
-      dirty,
-      form,
-      dispatch
-    },
-    label
-  }
-) => (
+const CASAuthenticationButtonField = ({
+  input: { name, onChange, value: ticket },
+  meta: { dirty, form, dispatch },
+  label
+}) => (
   <FormGroup controlId={name}>
     {dirty &&
       <span>

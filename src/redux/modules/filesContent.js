@@ -6,12 +6,9 @@ import factory, { initialState } from '../helpers/resourceManager';
  */
 
 const resourceName = 'filesContent';
-const {
-  actions,
-  reduceActions
-} = factory({
+const { actions, reduceActions } = factory({
   resourceName,
-  apiEndpointFactory: (id) => `/uploaded-files/${id}/content`
+  apiEndpointFactory: id => `/uploaded-files/${id}/content`
 });
 
 export const fetchContentIfNeeded = actions.fetchOneIfNeeded;

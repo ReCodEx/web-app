@@ -8,11 +8,7 @@ import factory, { initialState } from '../helpers/resourceManager';
 import { actionTypes as assignmentsActionTypes } from './assignments';
 
 const resourceName = 'groups';
-const {
-  actions,
-  actionTypes,
-  reduceActions
-} = factory({ resourceName });
+const { actions, actionTypes, reduceActions } = factory({ resourceName });
 
 /**
  * Actions
@@ -81,83 +77,75 @@ export const fetchInstanceGroupsIfNeeded = instanceId =>
     meta: { instanceId }
   });
 
-export const fetchUsersGroupsIfNeeded = userId =>
-  (dispatch, getState) => {
-    const user = getState().users.getIn(['resources', userId]);
-    if (user) {
-      dispatch(fetchUsersGroups(userId));
-    }
-  };
+export const fetchUsersGroupsIfNeeded = userId => (dispatch, getState) => {
+  const user = getState().users.getIn(['resources', userId]);
+  if (user) {
+    dispatch(fetchUsersGroups(userId));
+  }
+};
 
 export const createGroup = actions.addResource;
 export const editGroup = actions.updateResource;
 export const deleteGroup = actions.removeResource;
 
-export const joinGroup = (groupId, userId) =>
-  dispatch =>
-    dispatch(
-      createApiAction({
-        type: additionalActionTypes.JOIN_GROUP,
-        endpoint: `/groups/${groupId}/students/${userId}`,
-        method: 'POST',
-        meta: { groupId, userId }
-      })
-    ).catch(() => dispatch(addNotification('Cannot join group.', false))); // @todo: Make translatable
+export const joinGroup = (groupId, userId) => dispatch =>
+  dispatch(
+    createApiAction({
+      type: additionalActionTypes.JOIN_GROUP,
+      endpoint: `/groups/${groupId}/students/${userId}`,
+      method: 'POST',
+      meta: { groupId, userId }
+    })
+  ).catch(() => dispatch(addNotification('Cannot join group.', false))); // @todo: Make translatable
 
-export const leaveGroup = (groupId, userId) =>
-  dispatch =>
-    dispatch(
-      createApiAction({
-        type: additionalActionTypes.LEAVE_GROUP,
-        endpoint: `/groups/${groupId}/students/${userId}`,
-        method: 'DELETE',
-        meta: { groupId, userId }
-      })
-    ).catch(() => dispatch(addNotification('Cannot leave group.', false))); // @todo: Make translatable
+export const leaveGroup = (groupId, userId) => dispatch =>
+  dispatch(
+    createApiAction({
+      type: additionalActionTypes.LEAVE_GROUP,
+      endpoint: `/groups/${groupId}/students/${userId}`,
+      method: 'DELETE',
+      meta: { groupId, userId }
+    })
+  ).catch(() => dispatch(addNotification('Cannot leave group.', false))); // @todo: Make translatable
 
-export const makeSupervisor = (groupId, userId) =>
-  dispatch =>
+export const makeSupervisor = (groupId, userId) => dispatch =>
+  dispatch(
+    createApiAction({
+      type: additionalActionTypes.MAKE_SUPERVISOR,
+      endpoint: `/groups/${groupId}/supervisors/${userId}`,
+      method: 'POST',
+      meta: { groupId, userId }
+    })
+  ).catch(() =>
     dispatch(
-      createApiAction({
-        type: additionalActionTypes.MAKE_SUPERVISOR,
-        endpoint: `/groups/${groupId}/supervisors/${userId}`,
-        method: 'POST',
-        meta: { groupId, userId }
-      })
-    ).catch(() =>
-      dispatch(
-        addNotification(
-          'Cannot make this person supervisor of the group.',
-          false
-        )
-      )); // @todo: Make translatable
+      addNotification('Cannot make this person supervisor of the group.', false)
+    )
+  ); // @todo: Make translatable
 
-export const removeSupervisor = (groupId, userId) =>
-  dispatch =>
-    dispatch(
-      createApiAction({
-        type: additionalActionTypes.REMOVE_SUPERVISOR,
-        endpoint: `/groups/${groupId}/supervisors/${userId}`,
-        method: 'DELETE',
-        meta: { groupId, userId }
-      })
-    ).catch(() =>
-      dispatch(addNotification('Cannot remove supervisor.', false))); // @todo: Make translatable
+export const removeSupervisor = (groupId, userId) => dispatch =>
+  dispatch(
+    createApiAction({
+      type: additionalActionTypes.REMOVE_SUPERVISOR,
+      endpoint: `/groups/${groupId}/supervisors/${userId}`,
+      method: 'DELETE',
+      meta: { groupId, userId }
+    })
+  ).catch(() => dispatch(addNotification('Cannot remove supervisor.', false))); // @todo: Make translatable
 
-export const makeAdmin = (groupId, userId) =>
-  dispatch =>
+export const makeAdmin = (groupId, userId) => dispatch =>
+  dispatch(
+    createApiAction({
+      type: additionalActionTypes.MAKE_ADMIN,
+      endpoint: `/groups/${groupId}/admin`,
+      method: 'POST',
+      meta: { groupId, userId },
+      body: { userId }
+    })
+  ).catch(() =>
     dispatch(
-      createApiAction({
-        type: additionalActionTypes.MAKE_ADMIN,
-        endpoint: `/groups/${groupId}/admin`,
-        method: 'POST',
-        meta: { groupId, userId },
-        body: { userId }
-      })
-    ).catch(() =>
-      dispatch(
-        addNotification('Cannot make this person admin of the group.', false)
-      )); // @todo: Make translatable
+      addNotification('Cannot make this person admin of the group.', false)
+    )
+  ); // @todo: Make translatable
 
 /**
  * Reducer
@@ -192,17 +180,16 @@ const reducer = handleActions(
           group =>
             group.get('data') !== null
               ? group.updateIn(['data', 'childGroups', 'all'], all =>
-                  all.filter(groupId => groupId !== action.meta.id))
+                  all.filter(groupId => groupId !== action.meta.id)
+                )
               : null
-        ));
+        )
+      );
     },
 
     [additionalActionTypes.UPDATE_GROUP_FULFILLED]: (
       state,
-      {
-        payload: { parentGroupId, isPublic },
-        meta: { groupId, userId }
-      }
+      { payload: { parentGroupId, isPublic }, meta: { groupId, userId } }
     ) =>
       state.hasIn(['resources', parentGroupId, 'data'])
         ? state.updateIn(
@@ -220,7 +207,8 @@ const reducer = handleActions(
     ) =>
       state.hasIn(['resources', groupId, 'data'])
         ? state.updateIn(['resources', groupId, 'data', 'students'], students =>
-            students.push(userId))
+            students.push(userId)
+          )
         : state,
 
     [additionalActionTypes.JOIN_GROUP_REJECTED]: (
@@ -229,7 +217,8 @@ const reducer = handleActions(
     ) =>
       state.hasIn(['resources', groupId, 'data'])
         ? state.updateIn(['resources', groupId, 'data', 'students'], students =>
-            students.filter(id => id !== userId))
+            students.filter(id => id !== userId)
+          )
         : state,
 
     [additionalActionTypes.LEAVE_GROUP_FULFILLED]: (
@@ -237,7 +226,8 @@ const reducer = handleActions(
       { payload, meta: { groupId, userId } }
     ) =>
       state.updateIn(['resources', groupId, 'data', 'students'], students =>
-        students.filter(id => id !== userId)),
+        students.filter(id => id !== userId)
+      ),
 
     [additionalActionTypes.MAKE_SUPERVISOR_FULFILLED]: (
       state,
@@ -268,8 +258,10 @@ const reducer = handleActions(
         group
           .set('oldAdminId', group.get('adminId'))
           .update('admins', admins =>
-            admins.filter(id => id !== userId).push(userId))
-          .set('adminId', userId)),
+            admins.filter(id => id !== userId).push(userId)
+          )
+          .set('adminId', userId)
+      ),
 
     [additionalActionTypes.MAKE_ADMIN_FAILED]: (
       state,
@@ -278,9 +270,11 @@ const reducer = handleActions(
       state.updateIn(['resources', groupId, 'data'], group =>
         group
           .update('admins', admins =>
-            admins.filter(id => id !== group.get('adminId')).push(userId))
+            admins.filter(id => id !== group.get('adminId')).push(userId)
+          )
           .set('adminId', group.get('oldAdminId'))
-          .remove('oldAdminId')),
+          .remove('oldAdminId')
+      ),
 
     [additionalActionTypes.MAKE_ADMIN_FULFILLED]: (
       state,
@@ -290,7 +284,8 @@ const reducer = handleActions(
         group
           .remove('oldAdminId')
           .set('admins', List(admins))
-          .set('adminId', adminId)),
+          .set('adminId', adminId)
+      ),
 
     [additionalActionTypes.LOAD_USERS_GROUPS_FULFILLED]: (
       state,
@@ -344,7 +339,10 @@ const reducer = handleActions(
           group.updateIn(['data', 'assignments'], assignments =>
             assignments
               .update('all', ids => ids.filter(id => id !== assignmentId))
-              .update('public', ids => ids.filter(id => id !== assignmentId)))))
+              .update('public', ids => ids.filter(id => id !== assignmentId))
+          )
+        )
+      )
   }),
   initialState
 );

@@ -12,17 +12,15 @@ import {
   getSearchQuery
 } from '../../redux/selectors/search';
 
-const SearchContainer = (
-  {
-    id,
-    type = 'search',
-    query,
-    search,
-    status,
-    foundItems,
-    renderList
-  }
-) => (
+const SearchContainer = ({
+  id,
+  type = 'search',
+  query,
+  search,
+  status,
+  foundItems,
+  renderList
+}) => (
   <Search
     type={type}
     id={id}

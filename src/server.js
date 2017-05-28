@@ -22,7 +22,7 @@ import { configureStore } from './redux/store';
 import { loggedInUserIdSelector } from './redux/selectors/auth';
 import createRoutes from './pages/routes';
 
-addLocaleData([ ...cs ]);
+addLocaleData([...cs]);
 
 /**
  * Init server-side rendering of the app using Express with
@@ -61,28 +61,36 @@ app.get('*', (req, res) => {
   const history = syncHistoryWithStore(memoryHistory, store);
   const location = req.originalUrl;
 
-  match({ history, routes: createRoutes(store.getState), location }, (error, redirectLocation, renderProps) => {
-    if (redirectLocation) {
-      res.redirect(301, redirectLocation.pathname + redirectLocation.search);
-    } else if (error) {
-      // @todo use the 500.ejs view
-      res.status(500).send(error.message);
-    } else if (renderProps == null) {
-      // this should never happen but just for sure - if router failed
-      res.status(404).send('Not found');
-    } else {
-      const userId = loggedInUserIdSelector(store.getState()); // try to get the user ID from the token (if any)
-      const loadAsync = renderProps.components
-        .filter(component => component && component.WrappedComponent && component.WrappedComponent.loadAsync)
-        .map(component => component.WrappedComponent.loadAsync)
-        .map(load => load(renderProps.params, store.dispatch, userId));
+  match(
+    { history, routes: createRoutes(store.getState), location },
+    (error, redirectLocation, renderProps) => {
+      if (redirectLocation) {
+        res.redirect(301, redirectLocation.pathname + redirectLocation.search);
+      } else if (error) {
+        // @todo use the 500.ejs view
+        res.status(500).send(error.message);
+      } else if (renderProps == null) {
+        // this should never happen but just for sure - if router failed
+        res.status(404).send('Not found');
+      } else {
+        const userId = loggedInUserIdSelector(store.getState()); // try to get the user ID from the token (if any)
+        const loadAsync = renderProps.components
+          .filter(
+            component =>
+              component &&
+              component.WrappedComponent &&
+              component.WrappedComponent.loadAsync
+          )
+          .map(component => component.WrappedComponent.loadAsync)
+          .map(load => load(renderProps.params, store.dispatch, userId));
 
-      const oldStore = Object.assign({}, store);
-      Promise.all(loadAsync)
-        .then(() => renderPage(res, store, renderProps))
-        .catch(() => renderPage(res, oldStore, renderProps));
+        const oldStore = Object.assign({}, store);
+        Promise.all(loadAsync)
+          .then(() => renderPage(res, store, renderProps))
+          .catch(() => renderPage(res, oldStore, renderProps));
+      }
     }
-  });
+  );
 });
 
 const port = process.env.PORT || 8080;

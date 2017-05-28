@@ -6,19 +6,14 @@ import { Link } from 'react-router';
 import { Tooltip, OverlayTrigger } from 'react-bootstrap';
 import withLinks from '../../../hoc/withLinks';
 
-const Badge = (
-  {
-    id,
-    fullName,
-    avatarUrl,
-    expiration,
-    logout,
-    links: {
-      USER_URI_FACTORY,
-      EDIT_USER_URI_FACTORY
-    }
-  }
-) => (
+const Badge = ({
+  id,
+  fullName,
+  avatarUrl,
+  expiration,
+  logout,
+  links: { USER_URI_FACTORY, EDIT_USER_URI_FACTORY }
+}) => (
   <div className="user-panel">
     <div className="pull-left image">
       <img src={avatarUrl} alt={fullName} className="img-circle" />

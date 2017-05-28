@@ -48,22 +48,14 @@ const SourceCodeField = (
   {
     input,
     mode,
-    meta: {
-      touched,
-      error
-    },
+    meta: { touched, error },
     type = 'text',
     label,
     children,
     tabIndex,
     ...props
   },
-  {
-    userSettings: {
-      vimMode = false,
-      darkTheme = false
-    }
-  }
+  { userSettings: { vimMode = false, darkTheme = false } }
 ) => (
   <FormGroup
     controlId={input.name}

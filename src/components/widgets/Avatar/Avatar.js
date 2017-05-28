@@ -7,11 +7,7 @@ import PropTypes from 'prop-types';
  * of the avatar while the image is being downloaded or if the download
  * failed for some reason.
  */
-const Avatar = ({
-  src,
-  size = 45,
-  title = 'avatar'
-}) => (
+const Avatar = ({ src, size = 45, title = 'avatar' }) => (
   <img src={src} alt={title} width={size} className="img-circle" />
 );
 

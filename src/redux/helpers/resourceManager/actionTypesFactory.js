@@ -3,8 +3,8 @@
  */
 
 const defaultPrefix = resourceName => `recodex/resource/${resourceName}`;
-const twoPhaseActions = [ 'ADD', 'UPDATE', 'REMOVE', 'FETCH', 'FETCH_MANY' ];
-const onePhaseActions = [ 'INVALIDATE' ];
+const twoPhaseActions = ['ADD', 'UPDATE', 'REMOVE', 'FETCH', 'FETCH_MANY'];
+const onePhaseActions = ['INVALIDATE'];
 
 export const getActionTypes = (prefix, actions, postfixes = ['']) =>
   actions.reduce(
@@ -29,7 +29,12 @@ const actionTypesFactory = (
   resourceName,
   prefix = defaultPrefix(resourceName)
 ) => ({
-  ...getActionTypes(prefix, twoPhaseActions, ['', '_PENDING', '_FULFILLED', '_REJECTED']),
+  ...getActionTypes(prefix, twoPhaseActions, [
+    '',
+    '_PENDING',
+    '_FULFILLED',
+    '_REJECTED'
+  ]),
   ...getActionTypes(prefix, onePhaseActions)
 });
 

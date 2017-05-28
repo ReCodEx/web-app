@@ -19,15 +19,13 @@ const getMessage = (item, formatMessage) =>
  * The component passes the title and description to the Helmet library
  * which reflects these into the <head> section of the HTML document.
  */
-const PageContent = (
-  {
-    intl: { formatMessage },
-    title,
-    description = '',
-    breadcrumbs = [],
-    children
-  }
-) => (
+const PageContent = ({
+  intl: { formatMessage },
+  title,
+  description = '',
+  breadcrumbs = [],
+  children
+}) => (
   <div className="content-wrapper">
     <Helmet
       title={getMessage(title, formatMessage)}
@@ -48,10 +46,8 @@ const PageContent = (
 
 PageContent.propTypes = {
   title: PropTypes.oneOfType([PropTypes.string, PropTypes.element]).isRequired,
-  description: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.element
-  ]).isRequired,
+  description: PropTypes.oneOfType([PropTypes.string, PropTypes.element])
+    .isRequired,
   breadcrumbs: PropTypes.array,
   children: PropTypes.element,
   intl: intlShape.isRequired

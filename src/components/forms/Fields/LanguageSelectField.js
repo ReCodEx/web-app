@@ -11,7 +11,8 @@ const LanguageSelectField = ({ options = [], ...props }) => (
       { key: 'cs', name: 'Čeština' },
       { key: 'de', name: 'Deutsch' },
       ...options
-    ]} />
+    ]}
+  />
 );
 
 LanguageSelectField.propTypes = {

@@ -3,11 +3,7 @@ import PropTypes from 'prop-types';
 import { LoadingIcon } from '../../../icons';
 import { FormattedMessage } from 'react-intl';
 
-const LoadingAssignmentTableRow = (
-  {
-    showGroup = false
-  }
-) => (
+const LoadingAssignmentTableRow = ({ showGroup = false }) => (
   <tr>
     <td className="text-center" colSpan={showGroup ? 5 : 4}>
       <LoadingIcon />

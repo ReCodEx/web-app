@@ -8,14 +8,7 @@ class HeaderNotification extends Component {
   state = { hovering: false };
 
   render() {
-    const {
-      id,
-      successful = true,
-      msg,
-      hide = null,
-      time,
-      count
-    } = this.props;
+    const { id, successful = true, msg, hide = null, time, count } = this.props;
 
     const deleteOnClick = hide && this.state.hovering;
 
