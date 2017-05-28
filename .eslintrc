@@ -3,7 +3,8 @@
   "extends": [
     "eslint:recommended",
     "standard",
-    "plugin:react/recommended"
+    "plugin:react/recommended",
+    "prettier"
   ],
   "env": {
     "browser": true,
@@ -20,13 +21,13 @@
     "import/no-named-as-default": 2,
     "react/no-did-update-set-state": 0,
     "react/display-name": 0,
-    "indent": [
-      2,
-      2,
-      {
-        "SwitchCase": 1
-      }
-    ],
+#    "indent": [
+#      2,
+#      2,
+#      {
+#        "SwitchCase": 1
+#      }
+#    ],
     "quotes": [
       2,
       "single"

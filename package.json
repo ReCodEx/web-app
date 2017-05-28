@@ -20,7 +20,7 @@
     "dev": "babel-node bin/dev.js",
     "start": "node bin/server.js",
     "exportStrings": "babel-node bin/manageTranslations.js",
-	"format": "./node_modules/prettier/bin/prettier.js --single-quote --write 'src/**/*.js'"
+    "format": "./node_modules/prettier/bin/prettier.js --single-quote --write 'src/**/*.js'"
   },
   "dependencies": {
     "admin-lte": "2.3.11",
@@ -101,6 +101,7 @@
     "css-modules-require-hook": "^4.0.0",
     "dotenv": "^4.0.0",
     "eslint": "^3.19.0",
+    "eslint-config-prettier": "^2.1.1",
     "eslint-config-standard": "^10.2.1",
     "eslint-plugin-import": "^2.2.0",
     "eslint-plugin-node": "^4.2.2",
