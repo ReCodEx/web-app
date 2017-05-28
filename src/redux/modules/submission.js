@@ -20,7 +20,9 @@ export const actionTypes = {
   SUBMIT_PENDING: 'recodex/submission/SUBMIT_PENDING',
   SUBMIT_FULFILLED: 'recodex/submission/SUBMIT_FULFILLED',
   SUBMIT_REJECTED: 'recodex/submission/SUBMIT_REJECTED',
-  PROCESSING_FINISHED: 'recodex/submission/PROCESSING_FINISHED'
+  PROCESSING_FINISHED: 'recodex/submission/PROCESSING_FINISHED',
+  CREATE_REF: 'recodex/referenceSolutions/CREATE_REF',
+  CREATE_REF_FULFILLED: 'recodex/referenceSolutions/CREATE_REF_FULFILLED'
 };
 
 export const initialState = fromJS({
@@ -46,7 +48,7 @@ export const cancel = createAction(actionTypes.CANCEL);
 
 export const changeNote = createAction(actionTypes.CHANGE_NOTE);
 
-const submit = endpoint => (
+const submit = (endpoint, actionType) => (
   userId,
   id,
   note,
@@ -62,19 +64,22 @@ const submit = endpoint => (
     submitBody.runtimeEnvironmentId = runtimeEnvironmentId;
   }
   return createApiAction({
-    type: actionTypes.SUBMIT,
+    type: actionType,
     method: 'POST',
     endpoint: endpoint(id),
-    body: submitBody
+    body: submitBody,
+    meta: { urlId: id }
   });
 };
 
 export const submitAssignmentSolution = submit(
-  id => `/exercise-assignments/${id}/submit`
+  id => `/exercise-assignments/${id}/submit`,
+  actionTypes.SUBMIT
 );
 
 export const createReferenceSolution = submit(
-  id => `/reference-solutions/exercise/${id}`
+  id => `/reference-solutions/exercise/${id}`,
+  actionTypes.CREATE_REF
 );
 
 export const finishProcessing = createAction(actionTypes.PROCESSING_FINISHED);
@@ -113,6 +118,11 @@ const reducer = handleActions(
 
     [actionTypes.PROCESSING_FINISHED]: (state, { payload }) =>
       state.set('status', submissionStatus.FINISHED),
+
+    [actionTypes.CREATE_REF_FULFILLED]: (state, { payload, meta: { urlId } }) =>
+      state.updateIn(['resources', urlId, 'data'], solutions =>
+        solutions.push(fromJS(payload))
+      ),
 
     // wait until all the files are uploaded successfully:
     [uploadActionTypes.UPLOAD_PENDING]: (
