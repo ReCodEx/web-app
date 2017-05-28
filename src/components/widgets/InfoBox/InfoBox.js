@@ -13,10 +13,12 @@ const InfoBox = ({
   description = '',
   color = 'green'
 }) => (
-  <div className={classNames({
-    'info-box': true,
-    [`bg-${color}`]: true
-  })}>
+  <div
+    className={classNames({
+      'info-box': true,
+      [`bg-${color}`]: true
+    })}
+  >
     <span className="info-box-icon">
       <Icon name={icon} spin={spin} />
     </span>
@@ -24,7 +26,7 @@ const InfoBox = ({
       <span className="info-box-text">{title}</span>
       <span className="info-box-number">{value}</span>
       <div className="progress">
-        <div className="progress-bar" style={{ width: `${progress * 100}%` }}></div>
+        <div className="progress-bar" style={{ width: `${progress * 100}%` }} />
       </div>
       <span className="progress-description">
         {description}

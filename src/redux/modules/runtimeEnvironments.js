@@ -2,10 +2,7 @@ import { handleActions } from 'redux-actions';
 import factory, { initialState } from '../helpers/resourceManager';
 
 const resourceName = 'runtimeEnvironments';
-const {
-  actions,
-  reduceActions
-} = factory({ resourceName });
+const { actions, reduceActions } = factory({ resourceName });
 
 /**
  * Actions
@@ -23,7 +20,9 @@ export const fetchRuntimeEnvironments = () =>
  * Reducer
  */
 
-const reducer = handleActions(Object.assign({}, reduceActions, {
-}), initialState);
+const reducer = handleActions(
+  Object.assign({}, reduceActions, {}),
+  initialState
+);
 
 export default reducer;

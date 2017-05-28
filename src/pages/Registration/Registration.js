@@ -32,13 +32,10 @@ class Register extends Component {
 
   checkIfIsDone = ({ hasSucceeded, push, reset, links: { DASHBOARD_URI } }) => {
     if (hasSucceeded) {
-      setTimeout(
-        () => {
-          push(DASHBOARD_URI);
-          reset();
-        },
-        600
-      );
+      setTimeout(() => {
+        push(DASHBOARD_URI);
+        reset();
+      }, 600);
     }
   };
 
@@ -122,11 +119,14 @@ export default withLinks(
         dispatch(
           createAccount(firstName, lastName, email, password, instanceId)
         ),
-      createExternalAccount: (authType = 'default') =>
-        ({ instanceId, serviceId, ...credentials }) =>
-          dispatch(
-            createExternalAccount(instanceId, serviceId, credentials, authType)
-          ),
+      createExternalAccount: (authType = 'default') => ({
+        instanceId,
+        serviceId,
+        ...credentials
+      }) =>
+        dispatch(
+          createExternalAccount(instanceId, serviceId, credentials, authType)
+        ),
       push: url => dispatch(push(url)),
       triggerAsyncValidation: () =>
         dispatch(startAsyncValidation('registration')),

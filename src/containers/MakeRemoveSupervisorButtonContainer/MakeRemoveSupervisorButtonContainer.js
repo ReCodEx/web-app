@@ -5,7 +5,8 @@ import { makeSupervisor, removeSupervisor } from '../../redux/modules/groups';
 import { isSupervisorOf } from '../../redux/selectors/users';
 
 import MakeSupervisorButton from '../../components/Groups/MakeSupervisorButton';
-import RemoveSupervisorButton from '../../components/Groups/RemoveSupervisorButton';
+import RemoveSupervisorButton
+  from '../../components/Groups/RemoveSupervisorButton';
 
 const MakeRemoveSupervisorButtonContainer = ({
   isSupervisor,
@@ -16,8 +17,16 @@ const MakeRemoveSupervisorButtonContainer = ({
   ...props
 }) =>
   isSupervisor
-    ? <RemoveSupervisorButton {...props} onClick={() => removeSupervisor(groupId, userId)} bsSize="xs" />
-    : <MakeSupervisorButton {...props} onClick={() => makeSupervisor(groupId, userId)} bsSize="xs" />;
+    ? <RemoveSupervisorButton
+        {...props}
+        onClick={() => removeSupervisor(groupId, userId)}
+        bsSize="xs"
+      />
+    : <MakeSupervisorButton
+        {...props}
+        onClick={() => makeSupervisor(groupId, userId)}
+        bsSize="xs"
+      />;
 
 MakeRemoveSupervisorButtonContainer.propTypes = {
   groupId: PropTypes.string.isRequired,
@@ -33,4 +42,6 @@ const mapStateToProps = (state, { groupId, userId }) => ({
 
 const mapDispatchToProps = { makeSupervisor, removeSupervisor };
 
-export default connect(mapStateToProps, mapDispatchToProps)(MakeRemoveSupervisorButtonContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(
+  MakeRemoveSupervisorButtonContainer
+);

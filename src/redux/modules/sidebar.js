@@ -13,20 +13,20 @@ const initialState = fromJS({
   collapsed: false
 });
 
-export default handleActions({
-  [actionTypes.TOGGLE_VISIBILITY]: (state) =>
-    state.update('visible', visible => !visible),
+export default handleActions(
+  {
+    [actionTypes.TOGGLE_VISIBILITY]: state =>
+      state.update('visible', visible => !visible),
 
-  [actionTypes.TOGGLE_SIZE]: (state) =>
-    state.update('collapsed', collapsed => !collapsed),
+    [actionTypes.TOGGLE_SIZE]: state =>
+      state.update('collapsed', collapsed => !collapsed),
 
-  [actionTypes.COLLAPSE]: (state) =>
-    state.set('collapsed', true),
+    [actionTypes.COLLAPSE]: state => state.set('collapsed', true),
 
-  [actionTypes.UNROLL]: (state) =>
-    state.set('collapsed', false)
-
-}, initialState);
+    [actionTypes.UNROLL]: state => state.set('collapsed', false)
+  },
+  initialState
+);
 
 export const toggleVisibility = createAction(actionTypes.TOGGLE_VISIBILITY);
 export const toggleSize = createAction(actionTypes.TOGGLE_SIZE);

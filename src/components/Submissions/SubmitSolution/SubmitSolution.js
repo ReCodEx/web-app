@@ -31,24 +31,22 @@ const messages = defineMessages({
   }
 });
 
-const SubmitSolution = (
-  {
-    userId,
-    isOpen,
-    onClose,
-    reset,
-    uploadId,
-    canSubmit,
-    isSending,
-    hasFailed,
-    note = '',
-    runtimeEnvironmentIds,
-    changeRuntimeEnvironment,
-    saveNote,
-    submitSolution,
-    intl: { formatMessage }
-  }
-) => (
+const SubmitSolution = ({
+  userId,
+  isOpen,
+  onClose,
+  reset,
+  uploadId,
+  canSubmit,
+  isSending,
+  hasFailed,
+  note = '',
+  runtimeEnvironmentIds,
+  changeRuntimeEnvironment,
+  saveNote,
+  submitSolution,
+  intl: { formatMessage }
+}) => (
   <Modal show={isOpen} backdrop="static" onHide={onClose}>
     <Modal.Header closeButton>
       <Modal.Title>

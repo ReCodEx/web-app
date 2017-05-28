@@ -14,19 +14,13 @@ import Box from '../../widgets/Box';
 import { MaybeSucceededIcon } from '../../icons';
 import BonusPoints from '../../Assignments/SubmissionsTable/BonusPoints';
 
-const EvaluationDetail = (
-  {
-    assignment: {
-      firstDeadline,
-      allowSecondDeadline,
-      secondDeadline
-    },
-    evaluation,
-    note = '',
-    submittedAt,
-    maxPoints
-  }
-) => (
+const EvaluationDetail = ({
+  assignment: { firstDeadline, allowSecondDeadline, secondDeadline },
+  evaluation,
+  note = '',
+  submittedAt,
+  maxPoints
+}) => (
   <Box
     title={
       <FormattedMessage

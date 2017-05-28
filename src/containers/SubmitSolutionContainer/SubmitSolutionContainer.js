@@ -31,11 +31,7 @@ class SubmitSolutionContainer extends Component {
   };
 
   submit = () => {
-    const {
-      attachedFiles,
-      note,
-      submitSolution
-    } = this.props;
+    const { attachedFiles, note, submitSolution } = this.props;
 
     const { runtimeEnvironment } = this.state;
 

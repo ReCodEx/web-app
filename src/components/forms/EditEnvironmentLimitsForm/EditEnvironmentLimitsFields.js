@@ -7,19 +7,15 @@ import { TextField } from '../Fields';
 import EditHardwareGroupLimits from '../EditHardwareGroupLimits';
 import ResourceRenderer from '../../helpers/ResourceRenderer';
 
-const EditEnvironmentLimitsFields = (
-  {
-    prefix,
-    i,
-    environments,
-    runtimeEnvironments
-  }
-) => {
-  const {
-    environment,
-    limits,
-    referenceSolutionsEvaluations
-  } = environments[i];
+const EditEnvironmentLimitsFields = ({
+  prefix,
+  i,
+  environments,
+  runtimeEnvironments
+}) => {
+  const { environment, limits, referenceSolutionsEvaluations } = environments[
+    i
+  ];
   const runtime = runtimeEnvironments
     ? runtimeEnvironments.get(environment.runtimeEnvironmentId)
     : null;

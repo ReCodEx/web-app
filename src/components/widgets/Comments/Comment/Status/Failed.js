@@ -3,12 +3,7 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { WarningIcon } from '../../../../icons';
 
-const Failed = (
-  {
-    right,
-    repost
-  }
-) => (
+const Failed = ({ right, repost }) => (
   <span
     className={classNames({
       'direct-chat-timestamp': true,

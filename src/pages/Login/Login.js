@@ -26,18 +26,18 @@ class Login extends Component {
   /**
    * Redirect all logged in users to the dashboard as soon as they are visually informed about success.
    */
-  checkIfIsLoggedIn = (
-    { isLoggedIn, push, reset, links: { DASHBOARD_URI } }
-  ) => {
+  checkIfIsLoggedIn = ({
+    isLoggedIn,
+    push,
+    reset,
+    links: { DASHBOARD_URI }
+  }) => {
     if (isLoggedIn) {
-      this.timeout = setTimeout(
-        () => {
-          this.timeout = null;
-          push(DASHBOARD_URI);
-          reset();
-        },
-        600
-      );
+      this.timeout = setTimeout(() => {
+        this.timeout = null;
+        push(DASHBOARD_URI);
+        reset();
+      }, 600);
     }
   };
 
@@ -48,10 +48,7 @@ class Login extends Component {
   }
 
   render() {
-    const {
-      login,
-      links: { HOME_URI, RESET_PASSWORD_URI }
-    } = this.props;
+    const { login, links: { HOME_URI, RESET_PASSWORD_URI } } = this.props;
 
     return (
       <PageContent

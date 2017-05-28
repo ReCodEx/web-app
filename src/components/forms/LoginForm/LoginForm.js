@@ -12,15 +12,13 @@ import { EmailField, PasswordField } from '../Fields';
 import { Alert } from 'react-bootstrap';
 import Button from '../../widgets/FlatButton';
 
-const LoginForm = (
-  {
-    invalid,
-    handleSubmit,
-    submitFailed: hasFailed,
-    submitting,
-    hasSucceeded
-  }
-) => (
+const LoginForm = ({
+  invalid,
+  handleSubmit,
+  submitFailed: hasFailed,
+  submitting,
+  hasSucceeded
+}) => (
   <FormBox
     title={
       <FormattedMessage

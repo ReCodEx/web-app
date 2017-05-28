@@ -32,14 +32,12 @@ const getMode = ext => {
   }
 };
 
-const SourceCodeViewer = (
-  {
-    name,
-    content = '',
-    lineNumbers = true,
-    lines = 20
-  }
-) => (
+const SourceCodeViewer = ({
+  name,
+  content = '',
+  lineNumbers = true,
+  lines = 20
+}) => (
   <ClientOnly>
     <AceEditor
       value={content}

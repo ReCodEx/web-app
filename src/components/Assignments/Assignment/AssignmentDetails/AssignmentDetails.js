@@ -14,22 +14,20 @@ import ResourceRenderer from '../../../helpers/ResourceRenderer';
 import { SuccessIcon, MaybeSucceededIcon } from '../../../icons';
 import Box from '../../../widgets/Box';
 
-const AssignmentDetails = (
-  {
-    isOpen = true,
-    submissionsCountLimit,
-    firstDeadline,
-    secondDeadline,
-    allowSecondDeadline,
-    maxPointsBeforeFirstDeadline,
-    maxPointsBeforeSecondDeadline,
-    isAfterFirstDeadline,
-    isAfterSecondDeadline,
-    isBonus,
-    runtimeEnvironmentsIds,
-    canSubmit
-  }
-) => (
+const AssignmentDetails = ({
+  isOpen = true,
+  submissionsCountLimit,
+  firstDeadline,
+  secondDeadline,
+  allowSecondDeadline,
+  maxPointsBeforeFirstDeadline,
+  maxPointsBeforeSecondDeadline,
+  isAfterFirstDeadline,
+  isAfterSecondDeadline,
+  isBonus,
+  runtimeEnvironmentsIds,
+  canSubmit
+}) => (
   <Box
     title={
       <FormattedMessage id="app.assignment.title" defaultMessage="Details" />

@@ -17,7 +17,8 @@ const EditHardwareGroupLimits = ({
     add={false}
     remove={false}
     referenceSolutionsEvaluations={referenceSolutionsEvaluations}
-    ContentComponent={HardwareGroupFields} />
+    ContentComponent={HardwareGroupFields}
+  />
 );
 
 EditHardwareGroupLimits.propTypes = {

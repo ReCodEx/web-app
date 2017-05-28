@@ -48,17 +48,15 @@ const defaultFailed = noIcons => (
  * When all the files are fully loaded then the component displays the content
  * for the loaded state.
  */
-const ResourceRenderer = (
-  {
-    noIcons = false,
-    loading = defaultLoading(noIcons),
-    failed = defaultFailed(noIcons),
-    children: ready,
-    resource,
-    hiddenUntilReady = false,
-    forceLoading = false
-  }
-) => {
+const ResourceRenderer = ({
+  noIcons = false,
+  loading = defaultLoading(noIcons),
+  failed = defaultFailed(noIcons),
+  children: ready,
+  resource,
+  hiddenUntilReady = false,
+  forceLoading = false
+}) => {
   const resources = Array.isArray(resource) ? resource : [resource];
   return !resource || resources.some(isLoading) || forceLoading
     ? hiddenUntilReady ? null : loading

@@ -9,24 +9,22 @@ import GroupTree from '../GroupTree';
 import SupervisorsList from '../../Users/SupervisorsList';
 import { MaybeSucceededIcon } from '../../icons';
 
-const GroupDetail = (
-  {
-    group: {
-      id,
-      externalId,
-      name,
-      description,
-      threshold,
-      parentGroupId,
-      isPublic = false,
-      childGroups,
-      ...group
-    },
-    groups,
-    supervisors,
-    isAdmin
-  }
-) => (
+const GroupDetail = ({
+  group: {
+    id,
+    externalId,
+    name,
+    description,
+    threshold,
+    parentGroupId,
+    isPublic = false,
+    childGroups,
+    ...group
+  },
+  groups,
+  supervisors,
+  isAdmin
+}) => (
   <div>
     <Row>
       <Col lg={6} sm={12}>

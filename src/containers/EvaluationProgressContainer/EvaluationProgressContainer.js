@@ -41,7 +41,9 @@ class EvaluationProgressContainer extends Component {
   init = props => {
     const { monitor } = props;
     if (
-      this.socket == null && monitor !== null && monitor !== this.state.monitor
+      this.socket == null &&
+      monitor !== null &&
+      monitor !== this.state.monitor
     ) {
       if (typeof WebSocket === 'function') {
         this.socket = new WebSocket(monitor.url);
@@ -56,10 +58,7 @@ class EvaluationProgressContainer extends Component {
   };
 
   onError = () => {
-    const {
-      addMessage,
-      intl: { formatMessage }
-    } = this.props;
+    const { addMessage, intl: { formatMessage } } = this.props;
     addMessage({
       wasSuccessful: false,
       status: 'SKIPPED',
@@ -70,10 +69,7 @@ class EvaluationProgressContainer extends Component {
 
   onMessage = msg => {
     const data = JSON.parse(msg.data);
-    const {
-      addMessage,
-      intl: { formatMessage }
-    } = this.props;
+    const { addMessage, intl: { formatMessage } } = this.props;
 
     switch (data.command) {
       case 'TASK':
@@ -91,13 +87,11 @@ class EvaluationProgressContainer extends Component {
     }
   };
 
-  formatMessage = (
-    {
-      command,
-      task_state = 'OK', // eslint-disable-line camelcase
-      text = null
-    }
-  ) => ({
+  formatMessage = ({
+    command,
+    task_state = 'OK', // eslint-disable-line camelcase
+    text = null
+  }) => ({
     wasSuccessful: command !== 'TASK' || task_state === 'COMPLETED', // eslint-disable-line camelcase
     text: text || this.props.intl.formatMessage(this.getRandomMessage()),
     status: task_state // eslint-disable-line camelcase
@@ -149,12 +143,7 @@ class EvaluationProgressContainer extends Component {
   };
 
   render = () => {
-    const {
-      isOpen,
-      messages,
-      progress,
-      isFinished
-    } = this.props;
+    const { isOpen, messages, progress, isFinished } = this.props;
 
     return this.state.realTimeProcessing === true
       ? <EvaluationProgress

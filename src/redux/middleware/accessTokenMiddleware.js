@@ -1,6 +1,8 @@
 import { actionTypes } from '../modules/auth';
 import { jwtSelector } from '../selectors/auth';
-import { actionTypes as registrationActionTypes } from '../modules/registration';
+import {
+  actionTypes as registrationActionTypes
+} from '../modules/registration';
 import { CALL_API } from './apiMiddleware';
 import cookies from 'browser-cookies';
 import { canUseDOM } from 'exenv';
@@ -8,7 +10,7 @@ import { canUseDOM } from 'exenv';
 export const LOCAL_STORAGE_KEY = 'recodex/accessToken';
 export const COOKIES_KEY = 'recodex_accessToken';
 
-export const storeToken = (accessToken) => {
+export const storeToken = accessToken => {
   if (canUseDOM && accessToken) {
     if (typeof localStorage !== 'undefined') {
       localStorage.setItem(LOCAL_STORAGE_KEY, accessToken);
@@ -56,7 +58,8 @@ const middleware = store => next => action => {
     case CALL_API:
       if (!action.request.accessToken) {
         const token = jwtSelector(store.getState());
-        if (token) { // do not override the token if it was set explicitely and there is none in the state
+        if (token) {
+          // do not override the token if it was set explicitely and there is none in the state
           action.request.accessToken = token;
         }
       }

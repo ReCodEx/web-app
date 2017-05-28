@@ -10,19 +10,17 @@ import { validateRegistrationData } from '../../../redux/modules/users';
 
 import { TextField, PasswordField, PasswordStrength } from '../Fields';
 
-const EditUserProfileForm = (
-  {
-    submitting,
-    handleSubmit,
-    anyTouched,
-    submitFailed = false,
-    submitSucceeded = false,
-    asyncValidate,
-    pristine,
-    asyncValidating,
-    invalid
-  }
-) => (
+const EditUserProfileForm = ({
+  submitting,
+  handleSubmit,
+  anyTouched,
+  submitFailed = false,
+  submitSucceeded = false,
+  asyncValidate,
+  pristine,
+  asyncValidating,
+  invalid
+}) => (
   <FormBox
     title={
       <FormattedMessage
@@ -217,9 +215,14 @@ EditUserProfileForm.propTypes = {
   pristine: PropTypes.bool
 };
 
-const validate = (
-  { firstName, lastName, email, password, newPassword, passwordCheck }
-) => {
+const validate = ({
+  firstName,
+  lastName,
+  email,
+  password,
+  newPassword,
+  passwordCheck
+}) => {
   const errors = {};
 
   if (!firstName || firstName.length === 0) {

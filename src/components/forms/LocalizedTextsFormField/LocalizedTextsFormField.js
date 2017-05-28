@@ -13,10 +13,7 @@ class LocalizedTextsFormField extends Component {
   changeTab = n => this.setState({ localeTab: n });
 
   render() {
-    const {
-      fields,
-      localizedTexts = []
-    } = this.props;
+    const { fields, localizedTexts = [] } = this.props;
 
     return (
       <div>

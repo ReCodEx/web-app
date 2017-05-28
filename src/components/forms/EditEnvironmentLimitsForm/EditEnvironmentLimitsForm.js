@@ -13,16 +13,24 @@ const EditEnvironmentLimitsForm = ({
   <TabbedArrayField
     {...props}
     environments={environments}
-    getTitle={
-      (i) => (environments && environments[i])
+    getTitle={i =>
+      environments && environments[i]
         ? environments[i].environment.name
-        : <FormattedMessage id="app.editEnvironmentLimitsForm.newEnvironment" defaultMessage="New environment" />
-    }
+        : <FormattedMessage
+            id="app.editEnvironmentLimitsForm.newEnvironment"
+            defaultMessage="New environment"
+          />}
     ContentComponent={EditEnvironmentLimitsFields}
     runtimeEnvironments={runtimeEnvironments}
-    removeQuestion={<FormattedMessage id="app.editEnvironmentLimitsForm.environment.noEnvironment" defaultMessage="There is currently no environment specified for this assignment." />}
+    removeQuestion={
+      <FormattedMessage
+        id="app.editEnvironmentLimitsForm.environment.noEnvironment"
+        defaultMessage="There is currently no environment specified for this assignment."
+      />
+    }
     id="environment-limits"
-    remove />
+    remove
+  />
 );
 
 EditEnvironmentLimitsForm.propTypes = {

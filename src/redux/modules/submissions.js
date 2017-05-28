@@ -118,15 +118,15 @@ const reducer = handleActions(
       state.update('resources', resources =>
         resources.map(
           (item, itemId) =>
-            (item.get('data') !== null
+            item.get('data') !== null
               ? item.update(
                   'data',
                   data =>
-                    (itemId === id
+                    itemId === id
                       ? data.set('accepted', true)
-                      : data.set('accepted', false))
+                      : data.set('accepted', false)
                 )
-              : item)
+              : item
         )
       )
   }),

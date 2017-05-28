@@ -10,4 +10,5 @@ export const allReferenceSolutionsSelector = createSelector(
 
 export const referenceSolutionsSelector = exerciseId =>
   createSelector(allReferenceSolutionsSelector, referenceSolutions =>
-    referenceSolutions.get(exerciseId));
+    referenceSolutions.get(exerciseId)
+  );

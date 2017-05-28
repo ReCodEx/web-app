@@ -3,10 +3,7 @@ import factory, { initialState } from '../helpers/resourceManager';
 import { actionTypes as groupsActionTypes } from './groups';
 
 const resourceName = 'instances';
-const {
-  actions,
-  reduceActions
-} = factory({ resourceName });
+const { actions, reduceActions } = factory({ resourceName });
 
 /**
  * Actions
@@ -21,7 +18,7 @@ export const fetchInstances = () =>
     endpoint: '/instances'
   });
 
-export const fetchUsersInstancesIfNeeded = (userId) =>
+export const fetchUsersInstancesIfNeeded = userId =>
   actions.fetchMany({
     endpoint: `/users/${userId}/instances`
   });
@@ -32,20 +29,20 @@ export const editInstance = actions.updateResource;
  * Reducer
  */
 
-const reducer = handleActions(Object.assign({}, reduceActions, {
+const reducer = handleActions(
+  Object.assign({}, reduceActions, {
+    [groupsActionTypes.ADD_FULFILLED]: (state, { payload: group }) => {
+      const instance = state.getIn(['resources', group.instanceId]);
+      if (!instance || group.parentGroupId !== null) {
+        return state;
+      }
 
-  [groupsActionTypes.ADD_FULFILLED]: (state, { payload: group }) => {
-    const instance = state.getIn([ 'resources', group.instanceId ]);
-    if (!instance || group.parentGroupId !== null) {
-      return state;
+      return state.updateIn(['resources', group.instanceId, 'data'], instance =>
+        instance.update('topLevelGroups', groups => groups.push(group.id))
+      );
     }
-
-    return state.updateIn(
-      [ 'resources', group.instanceId, 'data' ],
-      instance => instance.update('topLevelGroups', groups => groups.push(group.id))
-    );
-  }
-
-}), initialState);
+  }),
+  initialState
+);
 
 export default reducer;

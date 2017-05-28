@@ -242,7 +242,7 @@ class Exercise extends Component {
                 >
                   <ResourceRenderer resource={referenceSolutions}>
                     {referenceSolutions =>
-                      (referenceSolutions.length > 0
+                      referenceSolutions.length > 0
                         ? <ReferenceSolutionsList
                             referenceSolutions={referenceSolutions}
                             renderButtons={evaluationId => (
@@ -270,7 +270,7 @@ class Exercise extends Component {
                               id="app.exercise.noReferenceSolutions"
                               defaultMessage="There are no reference solutions for this exercise yet."
                             />
-                          </p>)}
+                          </p>}
                   </ResourceRenderer>
                 </Box>
                 <SubmitSolutionContainer

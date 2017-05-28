@@ -11,17 +11,15 @@ import FormBox from '../../widgets/FormBox';
 import { TextField, PasswordField, SelectField } from '../Fields';
 import SubmitButton from '../SubmitButton';
 
-const ExternalRegistrationForm = (
-  {
-    submitting,
-    handleSubmit,
-    submitSucceeded,
-    submitFailed,
-    anyTouched,
-    instances = Map(),
-    invalid
-  }
-) => (
+const ExternalRegistrationForm = ({
+  submitting,
+  handleSubmit,
+  submitSucceeded,
+  submitFailed,
+  anyTouched,
+  instances = Map(),
+  invalid
+}) => (
   <FormBox
     title={
       <FormattedMessage

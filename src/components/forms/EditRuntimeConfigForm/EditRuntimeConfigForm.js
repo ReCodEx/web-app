@@ -4,13 +4,11 @@ import { FormattedMessage } from 'react-intl';
 import { TabbedArrayField } from '../Fields';
 import EditRuntimeConfigFields from './EditRuntimeConfigFields';
 
-const EditRuntimeConfigForm = (
-  {
-    runtimeConfigs = [],
-    runtimeEnvironments,
-    ...props
-  }
-) => (
+const EditRuntimeConfigForm = ({
+  runtimeConfigs = [],
+  runtimeEnvironments,
+  ...props
+}) => (
   <TabbedArrayField
     {...props}
     runtimeConfigs={runtimeConfigs}

@@ -16,22 +16,20 @@ import { MaybeSucceededIcon } from '../../icons';
 import withLinks from '../../../hoc/withLinks';
 import UsersNameContainer from '../../../containers/UsersNameContainer';
 
-const ExerciseDetail = (
-  {
-    id,
-    name,
-    authorId,
-    description = '',
-    difficulty,
-    createdAt,
-    updatedAt,
-    version,
-    forkedFrom = null,
-    localizedTexts,
-    runtimeConfigs,
-    links: { EXERCISE_URI_FACTORY }
-  }
-) => (
+const ExerciseDetail = ({
+  id,
+  name,
+  authorId,
+  description = '',
+  difficulty,
+  createdAt,
+  updatedAt,
+  version,
+  forkedFrom = null,
+  localizedTexts,
+  runtimeConfigs,
+  links: { EXERCISE_URI_FACTORY }
+}) => (
   <Box title={name} noPadding>
     <Table>
       <tbody>

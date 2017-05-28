@@ -9,17 +9,15 @@ import FormBox from '../../widgets/FormBox';
 import SubmitButton from '../SubmitButton';
 import { TextField, DatetimeField } from '../Fields';
 
-const AddLicenceForm = (
-  {
-    submitting,
-    anyTouched,
-    handleSubmit,
-    submitFailed = false,
-    submitSucceeded = false,
-    asyncValidating,
-    invalid
-  }
-) => (
+const AddLicenceForm = ({
+  submitting,
+  anyTouched,
+  handleSubmit,
+  submitFailed = false,
+  submitSucceeded = false,
+  asyncValidating,
+  invalid
+}) => (
   <FormBox
     title={
       <FormattedMessage

@@ -4,12 +4,7 @@ import { FormattedMessage } from 'react-intl';
 import Button from '../../widgets/FlatButton';
 import { FailedIcon } from '../../icons';
 
-const FailedForkExerciseButton = (
-  {
-    onClick,
-    ...props
-  }
-) => (
+const FailedForkExerciseButton = ({ onClick, ...props }) => (
   <Button
     bsStyle="danger"
     bsSize="sm"

@@ -16,24 +16,28 @@ const StudentsListItem = ({
       <UsersNameContainer userId={id} />
     </td>
     <td width={150}>
-      {stats && (
+      {stats &&
         <ProgressBar
           className="progress-xs"
-          now={stats.points.total > 0 ? Math.min(1, stats.points.gained / stats.points.total) * 100 : 0}
-          bsStyle={!stats.hasLimit ? 'info' : stats.passesLimit ? 'success' : 'danger'} />
-      )}
+          now={
+            stats.points.total > 0
+              ? Math.min(1, stats.points.gained / stats.points.total) * 100
+              : 0
+          }
+          bsStyle={
+            !stats.hasLimit ? 'info' : stats.passesLimit ? 'success' : 'danger'
+          }
+        />}
     </td>
     <td>
-      {stats && (
+      {stats &&
         <FormattedMessage
           id="app.studentsList.gainedPointsOf"
           defaultMessage="{gained, number} of {total, number}"
-          values={{ ...stats.points }} />
-      )}
+          values={{ ...stats.points }}
+        />}
     </td>
-    {renderActions && (
-      <td>{renderActions(id)}</td>
-    )}
+    {renderActions && <td>{renderActions(id)}</td>}
   </tr>
 );
 

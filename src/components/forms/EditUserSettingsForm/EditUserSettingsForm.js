@@ -8,16 +8,14 @@ import SubmitButton from '../SubmitButton';
 
 import { CheckboxField, LanguageSelectField } from '../Fields';
 
-const EditUserSettingsForm = (
-  {
-    submitting,
-    handleSubmit,
-    submitFailed = false,
-    submitSucceeded = false,
-    anyTouched,
-    invalid
-  }
-) => (
+const EditUserSettingsForm = ({
+  submitting,
+  handleSubmit,
+  submitFailed = false,
+  submitSucceeded = false,
+  anyTouched,
+  invalid
+}) => (
   <FormBox
     title={
       <FormattedMessage

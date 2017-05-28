@@ -6,14 +6,12 @@ import DeleteButton from '../../components/buttons/DeleteButton';
 import { deleteAssignment } from '../../redux/modules/assignments';
 import { getAssignment } from '../../redux/selectors/assignments';
 
-const DeleteAssignmentButtonContainer = (
-  {
-    assignment,
-    deleteAssignment,
-    onDeleted,
-    ...props
-  }
-) => (
+const DeleteAssignmentButtonContainer = ({
+  assignment,
+  deleteAssignment,
+  onDeleted,
+  ...props
+}) => (
   <DeleteButton
     {...props}
     resource={assignment}

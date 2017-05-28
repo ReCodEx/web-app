@@ -2,10 +2,7 @@ import { handleActions } from 'redux-actions';
 import factory, { initialState } from '../helpers/resourceManager';
 
 const resourceName = 'hwGroups';
-const {
-  actions,
-  reduceActions
-} = factory({ resourceName });
+const { actions, reduceActions } = factory({ resourceName });
 
 /**
  * Actions

@@ -6,11 +6,7 @@ import factory, { initialState } from '../helpers/resourceManager';
 import { commentsSelector } from '../selectors/comments';
 
 const resourceName = 'comments';
-const {
-  actions,
-  actionTypes: resourceActionTypes,
-  reduceActions
-} = factory({
+const { actions, actionTypes: resourceActionTypes, reduceActions } = factory({
   resourceName,
   needsRefetching: () => true // always look for newer comments
 });
@@ -35,7 +31,7 @@ export const actionTypes = {
 
 export const fetchThreadIfNeeded = actions.fetchOneIfNeeded;
 
-export const updateThread = (id) =>
+export const updateThread = id =>
   createApiAction({
     type: actionTypes.UPDATE,
     endpoint: `/comments/${id}`,
@@ -51,16 +47,25 @@ export const postComment = (user, threadId, text, isPrivate) =>
     meta: { threadId, user, tmpId: Math.random().toString() }
   });
 
-export const repostComment = (threadId, tmpId) =>
-  (dispatch, getState) => {
-    const comment = commentsSelector(getState(), threadId).find(cmt => cmt.get('id') === tmpId);
-    if (comment) {
-      dispatch({ type: actionTypes.REMOVE_COMMENT, payload: { threadId, id: tmpId } });
-      dispatch(
-        postComment(comment.get('user'), threadId, comment.get('text'), comment.get('isPrivate'))
-      ).catch(() => {});
-    }
-  };
+export const repostComment = (threadId, tmpId) => (dispatch, getState) => {
+  const comment = commentsSelector(getState(), threadId).find(
+    cmt => cmt.get('id') === tmpId
+  );
+  if (comment) {
+    dispatch({
+      type: actionTypes.REMOVE_COMMENT,
+      payload: { threadId, id: tmpId }
+    });
+    dispatch(
+      postComment(
+        comment.get('user'),
+        threadId,
+        comment.get('text'),
+        comment.get('isPrivate')
+      )
+    ).catch(() => {});
+  }
+};
 
 export const togglePrivacy = (threadId, commentId) =>
   createApiAction({
@@ -74,61 +79,115 @@ export const togglePrivacy = (threadId, commentId) =>
  * Reducer
  */
 
-const reducer = handleActions(Object.assign({}, reduceActions, {
+const reducer = handleActions(
+  Object.assign({}, reduceActions, {
+    [actionTypes.UPDATE_FULFILLED]: reduceActions[
+      resourceActionTypes.FETCH_FULFILLED
+    ],
 
-  [actionTypes.UPDATE_FULFILLED]: reduceActions[resourceActionTypes.FETCH_FULFILLED],
+    [actionTypes.POST_COMMENT_PENDING]: (
+      state,
+      { payload: { text, isPrivate }, meta: { tmpId, user, threadId } }
+    ) => {
+      const correctUserData = Object.assign({}, user, {
+        name: user.fullName || user.name
+      });
+      const resource = fromJS({
+        id: tmpId,
+        status: 'pending',
+        text,
+        user: correctUserData,
+        isPrivate: isPrivate === 'yes'
+      });
+      return state.updateIn(
+        ['resources', threadId, 'data', 'comments'],
+        comments => comments.push(resource)
+      );
+    },
 
-  [actionTypes.POST_COMMENT_PENDING]: (state, { payload: { text, isPrivate }, meta: { tmpId, user, threadId } }) => {
-    const correctUserData = Object.assign({}, user, { name: user.fullName || user.name });
-    const resource = fromJS({ id: tmpId, status: 'pending', text, user: correctUserData, isPrivate: isPrivate === 'yes' });
-    return state.updateIn(
-      ['resources', threadId, 'data', 'comments'],
-      comments => comments.push(resource)
-    );
-  },
+    [actionTypes.POST_COMMENT_FULFILLED]: (
+      state,
+      { payload, meta: { threadId, tmpId } }
+    ) => {
+      return state.updateIn(
+        ['resources', threadId, 'data', 'comments'],
+        comments =>
+          comments.map(
+            comment => (comment.get('id') === tmpId ? fromJS(payload) : comment)
+          )
+      );
+    },
 
-  [actionTypes.POST_COMMENT_FULFILLED]: (state, { payload, meta: { threadId, tmpId } }) => {
-    return state.updateIn(
-      ['resources', threadId, 'data', 'comments'],
-      comments => comments.map(comment => comment.get('id') === tmpId ? fromJS(payload) : comment)
-    );
-  },
+    [actionTypes.POST_COMMENT_REJECTED]: (
+      state,
+      { meta: { threadId, tmpId } }
+    ) => {
+      return state.updateIn(
+        ['resources', threadId, 'data', 'comments'],
+        comments =>
+          comments.map(
+            comment =>
+              comment.get('id') === tmpId
+                ? comment.set('status', 'failed')
+                : comment
+          )
+      );
+    },
 
-  [actionTypes.POST_COMMENT_REJECTED]: (state, { meta: { threadId, tmpId } }) => {
-    return state.updateIn(
-      ['resources', threadId, 'data', 'comments'],
-      comments => comments.map(comment => comment.get('id') === tmpId ? comment.set('status', 'failed') : comment)
-    );
-  },
+    [actionTypes.TOGGLE_PRIVACY_PENDING]: (
+      state,
+      { payload, meta: { threadId, commentId } }
+    ) => {
+      return state.updateIn(
+        ['resources', threadId, 'data', 'comments'],
+        comments =>
+          comments.map(
+            comment =>
+              comment.get('id') === commentId
+                ? comment.set('isToggling', true)
+                : comment
+          )
+      );
+    },
 
-  [actionTypes.TOGGLE_PRIVACY_PENDING]: (state, { payload, meta: { threadId, commentId } }) => {
-    return state.updateIn(
-      ['resources', threadId, 'data', 'comments'],
-      comments => comments.map(comment => comment.get('id') === commentId ? comment.set('isToggling', true) : comment)
-    );
-  },
+    [actionTypes.TOGGLE_PRIVACY_FULFILLED]: (
+      state,
+      { payload, meta: { threadId, commentId } }
+    ) => {
+      return state.updateIn(
+        ['resources', threadId, 'data', 'comments'],
+        comments =>
+          comments.map(
+            comment =>
+              comment.get('id') === commentId ? fromJS(payload) : comment
+          )
+      );
+    },
 
-  [actionTypes.TOGGLE_PRIVACY_FULFILLED]: (state, { payload, meta: { threadId, commentId } }) => {
-    return state.updateIn(
-      ['resources', threadId, 'data', 'comments'],
-      comments => comments.map(comment => comment.get('id') === commentId ? fromJS(payload) : comment)
-    );
-  },
+    [actionTypes.TOGGLE_PRIVACY_REJECTED]: (
+      state,
+      { payload, meta: { threadId, commentId } }
+    ) => {
+      return state.updateIn(
+        ['resources', threadId, 'data', 'comments'],
+        comments =>
+          comments.map(
+            comment =>
+              comment.get('id') === commentId
+                ? comment.set('isToggling', false)
+                : comment
+          )
+      );
+    },
 
-  [actionTypes.TOGGLE_PRIVACY_REJECTED]: (state, { payload, meta: { threadId, commentId } }) => {
-    return state.updateIn(
-      ['resources', threadId, 'data', 'comments'],
-      comments => comments.map(comment => comment.get('id') === commentId ? comment.set('isToggling', false) : comment)
-    );
-  },
-
-  [actionTypes.REMOVE_COMMENT]: (state, { meta: { threadId, id } }) => {
-    return state.updateIn(
-      ['resources', threadId, 'data', 'comments'],
-      comments => comments.filter(cmt => cmt.get('id') !== id)
-    );
-  }
-
-}), initialState);
+    [actionTypes.REMOVE_COMMENT]: (state, { meta: { threadId, id } }) => {
+      return state.updateIn(
+        ['resources', threadId, 'data', 'comments'],
+        comments => comments.filter(cmt => cmt.get('id') !== id)
+      );
+    }
+  }),
+  initialState
+);
 
 export default reducer;

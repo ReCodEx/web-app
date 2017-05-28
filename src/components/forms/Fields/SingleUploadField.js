@@ -11,14 +11,14 @@ import {
 
 const SingleUploadField = ({
   input,
-  meta: {
-    touched,
-    error
-  },
+  meta: { touched, error },
   label,
   ...props
 }) => (
-  <FormGroup controlId={input.name} validationState={touched && error ? 'error' : undefined}>
+  <FormGroup
+    controlId={input.name}
+    validationState={touched && error ? 'error' : undefined}
+  >
     <ControlLabel>{label}</ControlLabel>
     <FormControl {...input} {...props} type="upload" />
     {touched && error && <HelpBlock>{error}</HelpBlock>}

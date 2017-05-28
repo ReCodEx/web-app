@@ -20,7 +20,7 @@ let state;
 const ini = window.__INITIAL_STATE__;
 if (ini) {
   state = {};
-  Object.keys(ini).map((key) => {
+  Object.keys(ini).map(key => {
     state[key] = fromJS(ini[key]);
   });
 }
@@ -32,9 +32,7 @@ const history = syncHistoryWithStore(appHistory, store);
 
 render(
   <Provider store={store}>
-    <Router
-      history={history}
-      routes={createRoutes(store.getState)} />
+    <Router history={history} routes={createRoutes(store.getState)} />
   </Provider>,
   document.getElementById('root')
 );

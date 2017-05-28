@@ -6,13 +6,7 @@ import prettyMs from 'pretty-ms';
 import { Table } from 'react-bootstrap';
 import Box from '../../widgets/Box';
 
-const ReferenceSolutionsEvaluationsResults = (
-  {
-    results,
-    testId,
-    taskId
-  }
-) => (
+const ReferenceSolutionsEvaluationsResults = ({ results, testId, taskId }) => (
   <Box
     isOpen={false}
     collapsable

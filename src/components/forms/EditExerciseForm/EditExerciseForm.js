@@ -42,22 +42,18 @@ const messages = defineMessages({
   }
 });
 
-const EditExerciseForm = (
-  {
-    initialValues: exercise,
-    anyTouched,
-    submitting,
-    handleSubmit,
-    submitFailed: hasFailed,
-    submitSucceeded: hasSucceeded,
-    invalid,
-    asyncValidating,
-    formValues: {
-      localizedTexts
-    } = {},
-    intl: { formatMessage }
-  }
-) => (
+const EditExerciseForm = ({
+  initialValues: exercise,
+  anyTouched,
+  submitting,
+  handleSubmit,
+  submitFailed: hasFailed,
+  submitSucceeded: hasSucceeded,
+  invalid,
+  asyncValidating,
+  formValues: { localizedTexts } = {},
+  intl: { formatMessage }
+}) => (
   <FormBox
     title={
       <FormattedMessage
@@ -192,13 +188,7 @@ EditExerciseForm.propTypes = {
   })
 };
 
-const validate = (
-  {
-    name,
-    description,
-    difficulty
-  }
-) => {
+const validate = ({ name, description, difficulty }) => {
   const errors = {};
 
   if (!name) {
@@ -232,24 +222,24 @@ const validate = (
 };
 
 const asyncValidate = (values, dispatch, { exercise: { id, version } }) =>
-  dispatch(validateExercise(id, version)).then(res => res.value).then(({
-    versionIsUpToDate
-  }) => {
-    var errors = {};
-    if (versionIsUpToDate === false) {
-      errors['name'] = (
-        <FormattedMessage
-          id="app.editExerciseForm.validation.versionDiffers"
-          defaultMessage="Somebody has changed the exercise while you have been editing it. Please reload the page and apply your changes once more."
-        />
-      );
-      dispatch(touch('editExercise', 'name'));
-    }
+  dispatch(validateExercise(id, version))
+    .then(res => res.value)
+    .then(({ versionIsUpToDate }) => {
+      var errors = {};
+      if (versionIsUpToDate === false) {
+        errors['name'] = (
+          <FormattedMessage
+            id="app.editExerciseForm.validation.versionDiffers"
+            defaultMessage="Somebody has changed the exercise while you have been editing it. Please reload the page and apply your changes once more."
+          />
+        );
+        dispatch(touch('editExercise', 'name'));
+      }
 
-    if (Object.keys(errors).length > 0) {
-      throw errors;
-    }
-  });
+      if (Object.keys(errors).length > 0) {
+        throw errors;
+      }
+    });
 
 export default injectIntl(
   reduxForm({

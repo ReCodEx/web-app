@@ -24,18 +24,13 @@ class DatetimeField extends Component {
   render() {
     const {
       input,
-      meta: {
-        touched,
-        error
-      },
+      meta: { touched, error },
       disabled,
       label,
       ...props
     } = this.props;
 
-    const {
-      lang
-    } = this.context;
+    const { lang } = this.context;
 
     return (
       <FormGroup

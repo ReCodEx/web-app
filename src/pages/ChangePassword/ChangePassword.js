@@ -42,10 +42,7 @@ class ChangePassword extends Component {
     if (canUseDOM) {
       const hash = window.location.hash;
       if (hash.length === 0) {
-        const {
-          push,
-          links: { RESET_PASSWORD_URI }
-        } = this.props;
+        const { push, links: { RESET_PASSWORD_URI } } = this.props;
         push(RESET_PASSWORD_URI); // no hash -> redirect to the reset form
       } else {
         let token = window.location.hash.substr(1);
@@ -74,19 +71,12 @@ class ChangePassword extends Component {
   checkIfIsDone = props => {
     const { hasSucceeded } = props;
     if (hasSucceeded) {
-      this.timeout = setTimeout(
-        () => {
-          const {
-            push,
-            reset,
-            links: { DASHBOARD_URI }
-          } = this.props;
-          this.timeout = null;
-          reset();
-          push(DASHBOARD_URI);
-        },
-        1500
-      );
+      this.timeout = setTimeout(() => {
+        const { push, reset, links: { DASHBOARD_URI } } = this.props;
+        this.timeout = null;
+        reset();
+        push(DASHBOARD_URI);
+      }, 1500);
     }
   };
 

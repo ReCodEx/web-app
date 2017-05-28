@@ -10,15 +10,13 @@ import FormBox from '../../widgets/FormBox';
 import { PasswordField, PasswordStrength } from '../Fields';
 import { validatePasswordStrength } from '../../../redux/modules/auth';
 
-const ChangePasswordForm = (
-  {
-    submitting,
-    handleSubmit,
-    hasFailed = false,
-    hasSucceeded = false,
-    invalid
-  }
-) => (
+const ChangePasswordForm = ({
+  submitting,
+  handleSubmit,
+  hasFailed = false,
+  hasSucceeded = false,
+  invalid
+}) => (
   <FormBox
     title={
       <FormattedMessage
@@ -148,24 +146,24 @@ const validate = ({ password, passwordCheck }) => {
 };
 
 const asyncValidate = ({ password = '' }, dispatch) =>
-  dispatch(validatePasswordStrength(password)).then(res => res.value).then(({
-    passwordScore
-  }) => {
-    var errors = {};
-    if (passwordScore <= 0) {
-      errors['password'] = (
-        <FormattedMessage
-          id="app.changePasswordForm.validation.passwordTooWeak"
-          defaultMessage="The password you chose is too weak, please choose a different one."
-        />
-      );
-    }
-    dispatch(change('changePassword', 'passwordStrength', passwordScore));
+  dispatch(validatePasswordStrength(password))
+    .then(res => res.value)
+    .then(({ passwordScore }) => {
+      var errors = {};
+      if (passwordScore <= 0) {
+        errors['password'] = (
+          <FormattedMessage
+            id="app.changePasswordForm.validation.passwordTooWeak"
+            defaultMessage="The password you chose is too weak, please choose a different one."
+          />
+        );
+      }
+      dispatch(change('changePassword', 'passwordStrength', passwordScore));
 
-    if (Object.keys(errors).length > 0) {
-      throw errors;
-    }
-  });
+      if (Object.keys(errors).length > 0) {
+        throw errors;
+      }
+    });
 
 export default reduxForm({
   form: 'changePassword',

@@ -9,14 +9,14 @@ require('dotenv').config();
 const clientConfig = require('./webpack.config.js');
 
 var nodeModules = {};
-fs.readdirSync('node_modules')
+fs
+  .readdirSync('node_modules')
   .filter(function(x) {
     return ['.bin'].indexOf(x) === -1;
   })
   .forEach(function(mod) {
     nodeModules[mod] = 'commonjs ' + mod;
   });
-
 
 module.exports = {
   entry: path.join(__dirname, '..', 'src/server.js'),
@@ -35,8 +35,8 @@ module.exports = {
     new ExtractTextPlugin('style.css'),
     new webpack.DefinePlugin({
       'process.env': {
-        NODE_ENV: '\'production\'',
-        API_BASE: '\'' + process.env.API_BASE + '\''
+        NODE_ENV: "'production'",
+        API_BASE: "'" + process.env.API_BASE + "'"
       }
     })
   ]

@@ -6,15 +6,13 @@ import { LinkContainer } from 'react-router-bootstrap';
 import { Breadcrumb } from 'react-bootstrap';
 import withLinks from '../../../hoc/withLinks';
 
-const BreadcrumbItem = (
-  {
-    text,
-    link = null,
-    iconName = null,
-    isActive = false,
-    links
-  }
-) => {
+const BreadcrumbItem = ({
+  text,
+  link = null,
+  iconName = null,
+  isActive = false,
+  links
+}) => {
   const content = (
     <Breadcrumb.Item active={isActive}>
       {!!iconName && <Icon name={iconName} />} {text}

@@ -3,14 +3,7 @@ import PropTypes from 'prop-types';
 import prettyBytes from 'pretty-bytes';
 import { FormattedDate, FormattedTime } from 'react-intl';
 
-const SupplementaryFilesTableRow = (
-  {
-    name,
-    hashName,
-    size,
-    uploadedAt
-  }
-) => (
+const SupplementaryFilesTableRow = ({ name, hashName, size, uploadedAt }) => (
   <tr>
     <td>{name}</td>
     <td><code>{hashName}</code></td>

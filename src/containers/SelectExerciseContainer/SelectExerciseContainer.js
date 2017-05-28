@@ -6,18 +6,15 @@ import { searchExercises } from '../../redux/modules/search';
 import SearchContainer from '../SearchContainer';
 import ExercisesList from '../../components/Exercises/ExercisesList';
 
-const SelectExerciseContainer = ({
-  id,
-  search,
-  createActions
-}) => (
+const SelectExerciseContainer = ({ id, search, createActions }) => (
   <SearchContainer
     type="exercises"
     id={id}
     search={search}
-    renderList={
-      (exercises) => <ExercisesList exercises={exercises} createActions={createActions} />
-    } />
+    renderList={exercises => (
+      <ExercisesList exercises={exercises} createActions={createActions} />
+    )}
+  />
 );
 
 SelectExerciseContainer.propTypes = {
@@ -27,7 +24,7 @@ SelectExerciseContainer.propTypes = {
 };
 
 const mapDispatchToProps = (dispatch, { id }) => ({
-  search: (query) => dispatch(searchExercises()(id, query))
+  search: query => dispatch(searchExercises()(id, query))
 });
 
 export default connect(undefined, mapDispatchToProps)(SelectExerciseContainer);

@@ -15,29 +15,32 @@ const StudentsList = ({
 }) => (
   <Table hover responsive>
     <tbody>
-    {users.map((user, i) => (
-      <StudentsListItem
-        key={i}
-        {...user}
-        renderActions={renderActions}
-        stats={
-          isReady(stats)
-            ? getJsData(stats).find(item => item.userId === user.id)
-            : null
-        } />
-    ))}
+      {users.map((user, i) => (
+        <StudentsListItem
+          key={i}
+          {...user}
+          renderActions={renderActions}
+          stats={
+            isReady(stats)
+              ? getJsData(stats).find(item => item.userId === user.id)
+              : null
+          }
+        />
+      ))}
 
-    {users.length === 0 && isLoaded && (
-      <tr>
-        <td className="text-center">
-          <FormattedMessage id="app.studentsList.noStudents" defaultMessage="There are no students in this list." />
-        </td>
-      </tr>
-    )}
+      {users.length === 0 &&
+        isLoaded &&
+        <tr>
+          <td className="text-center">
+            <FormattedMessage
+              id="app.studentsList.noStudents"
+              defaultMessage="There are no students in this list."
+            />
+          </td>
+        </tr>}
 
-    {!isLoaded && (
-      <LoadingStudentsListItem withActions={Boolean(renderActions)} />
-    )}
+      {!isLoaded &&
+        <LoadingStudentsListItem withActions={Boolean(renderActions)} />}
     </tbody>
   </Table>
 );

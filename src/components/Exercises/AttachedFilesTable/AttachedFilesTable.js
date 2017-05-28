@@ -12,24 +12,22 @@ import { SendIcon } from '../../icons';
 import UploadContainer from '../../../containers/UploadContainer';
 import ResourceRenderer from '../../helpers/ResourceRenderer';
 
-const AttachedFilesTable = (
-  {
-    title = (
-      <FormattedMessage
-        id="app.attachedFilesTable.title"
-        defaultMessage="Attached files"
-      />
-    ),
-    description = null,
-    attachments,
-    canSubmit,
-    newFiles,
-    addFiles,
-    uploadId,
-    HeaderComponent,
-    RowComponent
-  }
-) => (
+const AttachedFilesTable = ({
+  title = (
+    <FormattedMessage
+      id="app.attachedFilesTable.title"
+      defaultMessage="Attached files"
+    />
+  ),
+  description = null,
+  attachments,
+  canSubmit,
+  newFiles,
+  addFiles,
+  uploadId,
+  HeaderComponent,
+  RowComponent
+}) => (
   <Box title={title} collapsable isOpen>
     <div>
       {description &&
@@ -63,7 +61,7 @@ const AttachedFilesTable = (
                 </thead>
                 <tbody>
                   {attachments
-                    .sort((a, b) => a.name < b.name ? -1 : +(a.name > b.name)) // sort lexicographicaly
+                    .sort((a, b) => (a.name < b.name ? -1 : +(a.name > b.name))) // sort lexicographicaly
                     .map((data, i) => <RowComponent {...data} key={data.id} />)}
                 </tbody>
               </Table>}

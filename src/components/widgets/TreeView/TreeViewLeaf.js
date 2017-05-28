@@ -5,17 +5,15 @@ import Icon from 'react-fontawesome';
 import { LoadingIcon } from '../../icons';
 import LevelGap from './LevelGap';
 
-const TreeViewLeaf = (
-  {
-    loading = false,
-    title,
-    externalId,
-    icon = 'square-o',
-    onClick,
-    level,
-    actions
-  }
-) => (
+const TreeViewLeaf = ({
+  loading = false,
+  title,
+  externalId,
+  icon = 'square-o',
+  onClick,
+  level,
+  actions
+}) => (
   <li
     onClick={onClick}
     style={{

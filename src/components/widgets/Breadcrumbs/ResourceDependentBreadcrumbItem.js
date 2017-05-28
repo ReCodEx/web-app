@@ -6,14 +6,12 @@ import ResourceRenderer from '../../helpers/ResourceRenderer';
 import { LoadingIcon } from '../../icons';
 import BreadcrumbItem from './BreadcrumbItem';
 
-const ResourceDependentBreadcrumbItem = (
-  {
-    resource,
-    iconName,
-    isActive,
-    breadcrumb
-  }
-) => (
+const ResourceDependentBreadcrumbItem = ({
+  resource,
+  iconName,
+  isActive,
+  breadcrumb
+}) => (
   <ResourceRenderer
     resource={resource}
     loading={

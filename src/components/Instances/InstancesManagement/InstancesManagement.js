@@ -6,11 +6,7 @@ import Page from '../../layout/Page';
 import Box from '../../widgets/Box';
 import InstancesTable from '../InstancesTable';
 
-const InstancesManagement = (
-  {
-    instances
-  }
-) => (
+const InstancesManagement = ({ instances }) => (
   <Page
     title={
       <FormattedMessage id="app.instances.title" defaultMessage="Instances" />

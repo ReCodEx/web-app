@@ -4,11 +4,7 @@ import { FormattedMessage } from 'react-intl';
 import Box from '../../widgets/Box';
 import TestResultsTable from '../TestResultsTable';
 
-const TestResults = (
-  {
-    evaluation
-  }
-) => (
+const TestResults = ({ evaluation }) => (
   <Box
     title={
       <FormattedMessage

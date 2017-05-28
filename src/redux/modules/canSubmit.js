@@ -7,23 +7,21 @@ import { actionTypes as assignmentActionTypes } from './assignments';
  */
 
 const resourceName = 'canSubmit';
-const {
-  actions,
-  reduceActions
-} = factory({
+const { actions, reduceActions } = factory({
   resourceName,
-  apiEndpointFactory: (assignmentId) =>
+  apiEndpointFactory: assignmentId =>
     `/exercise-assignments/${assignmentId}/can-submit`
 });
 
 export const canSubmit = actions.fetchOneIfNeeded;
 
-const reducer = handleActions(Object.assign({}, reduceActions, {
-
-  [assignmentActionTypes.UPDATE_FULFILLED]: (state, { meta: { id } }) => {
-    return state.removeIn(['resources', id]);
-  }
-
-}), initialState);
+const reducer = handleActions(
+  Object.assign({}, reduceActions, {
+    [assignmentActionTypes.UPDATE_FULFILLED]: (state, { meta: { id } }) => {
+      return state.removeIn(['resources', id]);
+    }
+  }),
+  initialState
+);
 
 export default reducer;

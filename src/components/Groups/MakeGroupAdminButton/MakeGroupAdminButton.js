@@ -4,12 +4,7 @@ import { FormattedMessage } from 'react-intl';
 import Button from '../../widgets/FlatButton';
 import Icon from 'react-fontawesome';
 
-const MakeGroupAdminButton = (
-  {
-    onClick,
-    ...props
-  }
-) => (
+const MakeGroupAdminButton = ({ onClick, ...props }) => (
   <Button {...props} onClick={onClick} bsStyle="success" className="btn-flat">
     <Icon name="user-secret" />
     {' '}

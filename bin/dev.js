@@ -13,7 +13,6 @@ let app = new Express();
 app.set('view engine', 'ejs');
 app.use(Express.static(path.join(__dirname, '../public')));
 
-
 app.get('*', (req, res) => {
   res.render('index', {
     html: '',
@@ -39,9 +38,13 @@ var server = new WebpackDevServer(webpack(config), {
 });
 
 server.listen(WEBPACK_DEV_SERVER_PORT, 'localhost', () => {
-  console.log(`${colors.yellow('WebpackDevServer')} is running on ${colors.underline(`http://localhost:${WEBPACK_DEV_SERVER_PORT}`)}`);
+  console.log(
+    `${colors.yellow('WebpackDevServer')} is running on ${colors.underline(`http://localhost:${WEBPACK_DEV_SERVER_PORT}`)}`
+  );
 });
 
 app.listen(PORT, () => {
-  console.log(`${colors.green('WebApp')} is running on ${colors.underline(`http://localhost:${PORT}`)}`);
+  console.log(
+    `${colors.green('WebApp')} is running on ${colors.underline(`http://localhost:${PORT}`)}`
+  );
 });

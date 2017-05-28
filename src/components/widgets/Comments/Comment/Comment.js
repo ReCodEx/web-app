@@ -9,22 +9,20 @@ import withLinks from '../../../../hoc/withLinks';
 
 import { Posted, Posting, Failed } from './Status';
 
-const Comment = (
-  {
-    isFromCurrentUser = false,
-    id,
-    right,
-    status = 'posted',
-    user,
-    postedAt,
-    isPrivate = false,
-    text,
-    repost,
-    isToggling = false,
-    togglePrivacy,
-    links: { USER_URI_FACTORY }
-  }
-) => (
+const Comment = ({
+  isFromCurrentUser = false,
+  id,
+  right,
+  status = 'posted',
+  user,
+  postedAt,
+  isPrivate = false,
+  text,
+  repost,
+  isToggling = false,
+  togglePrivacy,
+  links: { USER_URI_FACTORY }
+}) => (
   <div
     className={classNames({
       'direct-chat-success': isPrivate,

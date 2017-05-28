@@ -19,14 +19,12 @@ import {
   createGetAdditionalExerciseFiles
 } from '../../redux/selectors/additionalExerciseFiles';
 
-const AdditionalExerciseFilesTableContainer = (
-  {
-    exercise,
-    additionalExerciseFiles,
-    loadFiles,
-    addFiles
-  }
-) => (
+const AdditionalExerciseFilesTableContainer = ({
+  exercise,
+  additionalExerciseFiles,
+  loadFiles,
+  addFiles
+}) => (
   <AttachedFilesTableContainer
     uploadId={`additional-exercise-files-${exercise.id}`}
     attachments={additionalExerciseFiles}

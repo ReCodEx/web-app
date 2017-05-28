@@ -16,26 +16,35 @@ export const searchStatus = {
 };
 
 export const initialState = Map();
-const initialSearchState = (id, query) => Map({ id, query, results: List(), status: searchStatus.PENDING });
+const initialSearchState = (id, query) =>
+  Map({ id, query, results: List(), status: searchStatus.PENDING });
 
-export default handleActions({
+export default handleActions(
+  {
+    [actionTypes.SEARCH_PENDING]: (state, { meta: { id, query } }) => {
+      if (!state.has(id)) {
+        return state.set(id, initialSearchState(id, query));
+      } else {
+        return state.update(id, search =>
+          search.set('query', query).set('status', searchStatus.PENDING)
+        );
+      }
+    },
 
-  [actionTypes.SEARCH_PENDING]: (state, { meta: { id, query } }) => {
-    if (!state.has(id)) {
-      return state.set(id, initialSearchState(id, query));
-    } else {
-      return state.update(id, search => search.set('query', query).set('status', searchStatus.PENDING));
+    [actionTypes.SEARCH_REJECTED]: (state, { meta: { id } }) =>
+      state.update(id, search => search.set('status', searchStatus.FAILED)),
+
+    [actionTypes.SEARCH_FULFILLED]: (
+      state,
+      { payload: results, meta: { id } }
+    ) => {
+      return state.update(id, search =>
+        search.set('status', searchStatus.READY).set('results', fromJS(results))
+      );
     }
   },
-
-  [actionTypes.SEARCH_REJECTED]: (state, { meta: { id } }) =>
-    state.update(id, search => search.set('status', searchStatus.FAILED)),
-
-  [actionTypes.SEARCH_FULFILLED]: (state, { payload: results, meta: { id } }) => {
-    return state.update(id, search => search.set('status', searchStatus.READY).set('results', fromJS(results)));
-  }
-
-}, initialState);
+  initialState
+);
 
 export const search = endpoint => (id, query) =>
   createApiAction({
@@ -48,5 +57,4 @@ export const search = endpoint => (id, query) =>
 export const searchPeople = instanceId =>
   search(`/instances/${instanceId}/users`);
 
-export const searchExercises = () =>
-  search('/exercises');
+export const searchExercises = () => search('/exercises');

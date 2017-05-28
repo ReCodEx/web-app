@@ -5,20 +5,18 @@ import Button from '../../widgets/FlatButton';
 import { DeleteIcon } from '../../icons';
 import Confirm from '../../forms/Confirm';
 
-const ConfirmDeleteButton = (
-  {
-    id,
-    onClick,
-    disabled,
-    question = (
-      <FormattedMessage
-        id="app.deleteButton.confirm"
-        defaultMessage="Are you sure you want to delete the resource? This cannot be undone."
-      />
-    ),
-    ...props
-  }
-) => (
+const ConfirmDeleteButton = ({
+  id,
+  onClick,
+  disabled,
+  question = (
+    <FormattedMessage
+      id="app.deleteButton.confirm"
+      defaultMessage="Are you sure you want to delete the resource? This cannot be undone."
+    />
+  ),
+  ...props
+}) => (
   <Confirm id={id} onConfirmed={onClick} question={question}>
     <Button disabled={disabled || !id} bsStyle="danger" bsSize="sm" {...props}>
       <DeleteIcon />

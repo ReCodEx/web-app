@@ -4,13 +4,11 @@ import { FormattedMessage, FormattedDate, FormattedTime } from 'react-intl';
 import { Table } from 'react-bootstrap';
 import Icon from 'react-fontawesome';
 
-const ReferenceSolutionsList = (
-  {
-    referenceSolutions = [],
-    renderButtons = () => null,
-    ...props
-  }
-) => (
+const ReferenceSolutionsList = ({
+  referenceSolutions = [],
+  renderButtons = () => null,
+  ...props
+}) => (
   <Table hover {...props}>
     <thead>
       <tr>

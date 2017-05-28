@@ -13,15 +13,13 @@ import { accessTokenExpiration } from '../../redux/selectors/auth';
 
 import withLinks from '../../hoc/withLinks';
 
-const BadgeContainer = (
-  {
-    user,
-    expiration,
-    logout,
-    small = false,
-    links: { HOME_URI }
-  }
-) => (
+const BadgeContainer = ({
+  user,
+  expiration,
+  logout,
+  small = false,
+  links: { HOME_URI }
+}) => (
   <ResourceRenderer
     loading={<LoadingBadge small={small} />}
     failed={<FailedBadge color="black" small={small} />}

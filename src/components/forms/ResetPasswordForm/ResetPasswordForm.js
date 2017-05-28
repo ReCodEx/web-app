@@ -10,15 +10,13 @@ import { SuccessIcon, LoadingIcon } from '../../icons';
 import FormBox from '../../widgets/FormBox';
 import { EmailField } from '../Fields';
 
-const ResetPasswordForm = (
-  {
-    submitting,
-    handleSubmit,
-    hasFailed = false,
-    hasSucceeded = false,
-    invalid
-  }
-) => (
+const ResetPasswordForm = ({
+  submitting,
+  handleSubmit,
+  hasFailed = false,
+  hasSucceeded = false,
+  invalid
+}) => (
   <FormBox
     title={
       <FormattedMessage

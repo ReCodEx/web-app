@@ -10,15 +10,13 @@ import { TextField, PasswordField } from '../Fields';
 import { Alert } from 'react-bootstrap';
 import Button from '../../widgets/FlatButton';
 
-const LoginCASForm = (
-  {
-    invalid,
-    handleSubmit,
-    submitFailed: hasFailed,
-    submitting,
-    hasSucceeded
-  }
-) => (
+const LoginCASForm = ({
+  invalid,
+  handleSubmit,
+  submitFailed: hasFailed,
+  submitting,
+  hasSucceeded
+}) => (
   <FormBox
     title={
       <FormattedMessage
