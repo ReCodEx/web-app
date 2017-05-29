@@ -20,9 +20,7 @@ export const actionTypes = {
   SUBMIT_PENDING: 'recodex/submission/SUBMIT_PENDING',
   SUBMIT_FULFILLED: 'recodex/submission/SUBMIT_FULFILLED',
   SUBMIT_REJECTED: 'recodex/submission/SUBMIT_REJECTED',
-  PROCESSING_FINISHED: 'recodex/submission/PROCESSING_FINISHED',
-  CREATE_REF: 'recodex/referenceSolutions/CREATE_REF',
-  CREATE_REF_FULFILLED: 'recodex/referenceSolutions/CREATE_REF_FULFILLED'
+  PROCESSING_FINISHED: 'recodex/submission/PROCESSING_FINISHED'
 };
 
 export const initialState = fromJS({
@@ -48,7 +46,7 @@ export const cancel = createAction(actionTypes.CANCEL);
 
 export const changeNote = createAction(actionTypes.CHANGE_NOTE);
 
-const submit = (endpoint, actionType) => (
+const submit = (endpoint, submissionType = 'assignmentSolution') => (
   userId,
   id,
   note,
@@ -64,22 +62,21 @@ const submit = (endpoint, actionType) => (
     submitBody.runtimeEnvironmentId = runtimeEnvironmentId;
   }
   return createApiAction({
-    type: actionType,
+    type: actionTypes.SUBMIT,
     method: 'POST',
     endpoint: endpoint(id),
     body: submitBody,
-    meta: { urlId: id }
+    meta: { urlId: id, submissionType }
   });
 };
 
 export const submitAssignmentSolution = submit(
-  id => `/exercise-assignments/${id}/submit`,
-  actionTypes.SUBMIT
+  id => `/exercise-assignments/${id}/submit`
 );
 
 export const createReferenceSolution = submit(
   id => `/reference-solutions/exercise/${id}`,
-  actionTypes.CREATE_REF
+  'referenceSolution'
 );
 
 export const finishProcessing = createAction(actionTypes.PROCESSING_FINISHED);
@@ -105,24 +102,24 @@ const reducer = handleActions(
     [actionTypes.SUBMIT_REJECTED]: state =>
       state.set('status', submissionStatus.FAILED),
 
-    [actionTypes.SUBMIT_FULFILLED]: (state, { payload }) =>
-      state
-        .set('submissionId', payload.submission.id)
-        .set('monitor', {
-          url: payload.webSocketChannel.monitorUrl,
-          id: payload.webSocketChannel.id
-        })
-        .set('status', submissionStatus.PROCESSING),
+    [actionTypes.SUBMIT_FULFILLED]: (
+      state,
+      { payload: { submission, webSocketChannel } }
+    ) =>
+      submission && webSocketChannel
+        ? state
+            .set('submissionId', submission.id)
+            .set('monitor', {
+              url: webSocketChannel.monitorUrl,
+              id: webSocketChannel.id
+            })
+            .set('status', submissionStatus.PROCESSING)
+        : state.set('status', submissionStatus.PROCESSING),
 
     [actionTypes.CANCEL]: (state, { payload }) => initialState,
 
     [actionTypes.PROCESSING_FINISHED]: (state, { payload }) =>
       state.set('status', submissionStatus.FINISHED),
-
-    [actionTypes.CREATE_REF_FULFILLED]: (state, { payload, meta: { urlId } }) =>
-      state.updateIn(['resources', urlId, 'data'], solutions =>
-        solutions.push(fromJS(payload))
-      ),
 
     // wait until all the files are uploaded successfully:
     [uploadActionTypes.UPLOAD_PENDING]: (

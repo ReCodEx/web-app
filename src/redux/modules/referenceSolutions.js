@@ -1,7 +1,11 @@
 import { handleActions } from 'redux-actions';
+import { saveAs } from 'file-saver';
+import { List, fromJS } from 'immutable';
+
 import factory, { initialState } from '../helpers/resourceManager';
 import { createApiAction } from '../middleware/apiMiddleware';
-import { saveAs } from 'file-saver';
+
+import { actionTypes as additionalSubmissionActionTypes } from './submission';
 
 const resourceName = 'referenceSolutions';
 const { actions, reduceActions } = factory({
@@ -49,7 +53,20 @@ export const downloadEvaluationArchive = evaluationId => (dispatch, getState) =>
  */
 
 const reducer = handleActions(
-  Object.assign({}, reduceActions, {}),
+  Object.assign({}, reduceActions, {
+    [additionalSubmissionActionTypes.SUBMIT_FULFILLED]: (
+      state,
+      { payload, meta: { urlId, submissionType } }
+    ) =>
+      submissionType === 'referenceSolution'
+        ? state.updateIn(['resources', urlId, 'data'], data => {
+            if (!data) {
+              data = List();
+            }
+            return data.push(fromJS(payload));
+          })
+        : state
+  }),
   initialState
 );
 
