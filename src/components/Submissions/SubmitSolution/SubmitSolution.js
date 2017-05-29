@@ -28,6 +28,10 @@ const messages = defineMessages({
   detectRte: {
     id: 'app.submitSolution.autodetect',
     defaultMessage: 'Automatically detect'
+  },
+  selectOneRte: {
+    id: 'app.submitSolution.noAutodetect',
+    defaultMessage: 'Select one runtime environment'
   }
 });
 
@@ -43,6 +47,7 @@ const SubmitSolution = ({
   note = '',
   runtimeEnvironmentIds,
   changeRuntimeEnvironment,
+  autodetection,
   saveNote,
   submitSolution,
   intl: { formatMessage }
@@ -76,7 +81,9 @@ const SubmitSolution = ({
             defaultValue={null}
           >
             <option value={null}>
-              {formatMessage(messages.detectRte)}
+              {autodetection
+                ? formatMessage(messages.detectRte)
+                : formatMessage(messages.selectOneRte)}
             </option>
             {runtimeEnvironmentIds.map(rte => (
               <option key={rte} value={rte}>{rte}</option>
@@ -181,6 +188,7 @@ SubmitSolution.propTypes = {
   isProcessing: PropTypes.bool,
   isSending: PropTypes.bool,
   runtimeEnvironmentIds: PropTypes.array,
+  autodetection: PropTypes.bool,
   changeRuntimeEnvironment: PropTypes.func.isRequired,
   intl: intlShape.isRequired
 };
