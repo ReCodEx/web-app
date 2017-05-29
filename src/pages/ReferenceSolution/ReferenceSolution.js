@@ -153,7 +153,6 @@ class ReferenceSolution extends Component {
                             defaultMessage="Refresh"
                           />
                         </Button>
-                        {' '}
                         <Button
                           bsStyle="success"
                           className="btn-flat"
@@ -215,7 +214,8 @@ class ReferenceSolution extends Component {
 }
 
 ReferenceSolution.contextTypes = {
-  router: PropTypes.object
+  router: PropTypes.object,
+  links: PropTypes.object
 };
 
 ReferenceSolution.propTypes = {
@@ -229,8 +229,7 @@ ReferenceSolution.propTypes = {
   referenceSolutions: ImmutablePropTypes.map,
   environments: ImmutablePropTypes.map,
   downloadEvaluationArchive: PropTypes.func.isRequired,
-  intl: intlShape.isRequired,
-  links: PropTypes.object
+  intl: intlShape.isRequired
 };
 
 export default injectIntl(
