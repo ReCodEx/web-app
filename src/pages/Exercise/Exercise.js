@@ -284,6 +284,7 @@ class Exercise extends Component {
                   )}
                   showProgress={false}
                   autodetection={false}
+                  useReferenceSolutionMessages={true}
                 />
               </Col>
             </Row>

@@ -64,7 +64,8 @@ class SubmitSolutionContainer extends Component {
       reset,
       links: { SUBMISSION_DETAIL_URI_FACTORY },
       showProgress = true,
-      autodetection = true
+      autodetection = true,
+      useReferenceSolutionMessages = false
     } = this.props;
 
     const { runtimeEnvironment } = this.state;
@@ -88,6 +89,7 @@ class SubmitSolutionContainer extends Component {
           changeRuntimeEnvironment={this.changeRuntimeEnvironment}
           submitSolution={this.submit}
           autodetection={autodetection}
+          useReferenceMessages={useReferenceSolutionMessages}
         />
 
         {showProgress &&
@@ -122,7 +124,8 @@ SubmitSolutionContainer.propTypes = {
   links: PropTypes.object.isRequired,
   runtimeEnvironmentIds: PropTypes.array,
   showProgress: PropTypes.bool,
-  autodetection: PropTypes.bool
+  autodetection: PropTypes.bool,
+  useReferenceSolutionMessages: PropTypes.bool
 };
 
 export default withLinks(

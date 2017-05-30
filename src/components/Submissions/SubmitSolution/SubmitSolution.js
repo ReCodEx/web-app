@@ -1,11 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {
-  injectIntl,
-  intlShape,
-  defineMessages,
-  FormattedMessage
-} from 'react-intl';
+import { connect } from 'react-redux';
+import { injectIntl, intlShape, defineMessages } from 'react-intl';
 import {
   Modal,
   Button,
@@ -24,7 +20,11 @@ import {
 import UploadContainer from '../../../containers/UploadContainer';
 import UsersNameContainer from '../../../containers/UsersNameContainer';
 
-const messages = defineMessages({
+const commonMessages = defineMessages({
+  runtimeEnvironment: {
+    id: 'app.submitSolution.runtimeEnvironment',
+    defaultMessage: 'Select programming language/tool type/runtime environemnt:'
+  },
   detectRte: {
     id: 'app.submitSolution.autodetect',
     defaultMessage: 'Automatically detect'
@@ -32,6 +32,60 @@ const messages = defineMessages({
   selectOneRte: {
     id: 'app.submitSolution.noAutodetect',
     defaultMessage: 'Select one runtime environment'
+  },
+  resetForm: {
+    id: 'app.submitSolution.resetFormButton',
+    defaultMessage: 'Reset form'
+  },
+  closeForm: {
+    id: 'app.submitSolution.closeButton',
+    defaultMessage: 'Close'
+  },
+  instructions: {
+    id: 'app.submistSolution.instructions',
+    defaultMessage: 'You must attach at least one file with source code and wait, until all your files are uploaded to the server. If there is a problem uploading any of the files, please try uploading it again or remove the file. This form cannot be submitted until there are any files which have not been successfully uploaded or which could not have been uploaded to the server.'
+  },
+  submissionRejected: {
+    id: 'app.submistSolution.submitFailed',
+    defaultMessage: 'Action was rejected by the server. This usually means you have uploaded incorrect files - do your files have proper file type extensions? If you cannot submit the solution and there is no obvious reason, contact your administrator to sort things out.'
+  }
+});
+
+const submissionMessages = defineMessages({
+  title: {
+    id: 'app.submitSolution.title',
+    defaultMessage: 'Submit the solution'
+  },
+  noteLabel: {
+    id: 'app.submitSolution.noteLabel',
+    defaultMessage: 'Note for you and your supervisor(s)'
+  },
+  submitButton: {
+    id: 'app.submitSolution.submitButton',
+    defaultMessage: 'Submit the solution'
+  },
+  submitting: {
+    id: 'app.submitSolution.submittingButtonText',
+    defaultMessage: 'Submitting the solution ...'
+  }
+});
+
+const referenceSolutionMessages = defineMessages({
+  title: {
+    id: 'app.submitRefSolution.title',
+    defaultMessage: 'Create reference solution'
+  },
+  noteLabel: {
+    id: 'app.submitRefSolution.noteLabel',
+    defaultMessage: 'Description of the reference solution'
+  },
+  submitButton: {
+    id: 'app.submitRefSolution.submitButton',
+    defaultMessage: 'Create new reference solution'
+  },
+  submitting: {
+    id: 'app.submitRefSolution.submittingButtonText',
+    defaultMessage: 'Creating new reference solution ...'
   }
 });
 
@@ -50,15 +104,14 @@ const SubmitSolution = ({
   autodetection,
   saveNote,
   submitSolution,
+  useReferenceMessages,
+  messages,
   intl: { formatMessage }
 }) => (
   <Modal show={isOpen} backdrop="static" onHide={onClose}>
     <Modal.Header closeButton>
       <Modal.Title>
-        <FormattedMessage
-          id="app.submitSolution.title"
-          defaultMessage="Submit the solution"
-        />
+        {formatMessage(messages.title)}
       </Modal.Title>
     </Modal.Header>
     <Modal.Body>
@@ -70,10 +123,7 @@ const SubmitSolution = ({
       {runtimeEnvironmentIds.length > 0 &&
         <FormGroup>
           <ControlLabel>
-            <FormattedMessage
-              id="app.submitSolution.runtimeEnvironment"
-              defaultMessage="Select programming language/tool type/runtime environemnt:"
-            />
+            {formatMessage(commonMessages.runtimeEnvironment)}
           </ControlLabel>
           <FormControl
             onChange={e => changeRuntimeEnvironment(e.target.value)}
@@ -82,8 +132,8 @@ const SubmitSolution = ({
           >
             <option value={null}>
               {autodetection
-                ? formatMessage(messages.detectRte)
-                : formatMessage(messages.selectOneRte)}
+                ? formatMessage(commonMessages.detectRte)
+                : formatMessage(commonMessages.selectOneRte)}
             </option>
             {runtimeEnvironmentIds.map(rte => (
               <option key={rte} value={rte}>{rte}</option>
@@ -93,10 +143,7 @@ const SubmitSolution = ({
 
       <FormGroup>
         <ControlLabel>
-          <FormattedMessage
-            id="app.submitSolution.noteLabel"
-            defaultMessage="Short description (optional):"
-          />
+          {formatMessage(messages.noteLabel)}
         </ControlLabel>
         <FormControl
           onChange={e => saveNote(e.target.value)}
@@ -107,10 +154,7 @@ const SubmitSolution = ({
 
       {hasFailed &&
         <p className="text-left callout callout-danger">
-          <FormattedMessage
-            id="app.submistSolution.submitFailed"
-            defaultMessage="Submission was rejected by the server. This usually means you have uploaded incorrect files - do your files have proper file type extensions? If you cannot submit the solution and there is no obvious reason, contact your supervisor to sort things out."
-          />
+          {formatMessage(commonMessages.submissionRejected)}
         </p>}
     </Modal.Body>
     <Modal.Footer>
@@ -123,10 +167,7 @@ const SubmitSolution = ({
         >
           <LoadingIcon />
           {' '}
-          <FormattedMessage
-            id="app.submitSolution.submittingButtonText"
-            defaultMessage="Submitting the solution ..."
-          />
+          {formatMessage(messages.submitting)}
         </Button>}
 
       {!isSending &&
@@ -139,36 +180,24 @@ const SubmitSolution = ({
         >
           {hasFailed ? <WarningIcon /> : <SendIcon />}
           {' '}
-          <FormattedMessage
-            id="app.submitSolution.submitButton"
-            defaultMessage="Submit the solution"
-          />
+          {formatMessage(messages.submitButton)}
         </Button>}
 
       <Button bsStyle="default" className="btn-flat" onClick={reset}>
         <DeleteIcon />
         {' '}
-        <FormattedMessage
-          id="app.submitSolution.resetFormButton"
-          defaultMessage="Reset form"
-        />
+        {formatMessage(commonMessages.resetForm)}
       </Button>
 
       <Button bsStyle="default" className="btn-flat" onClick={onClose}>
         <CloseIcon />
         {' '}
-        <FormattedMessage
-          id="app.submitSolution.closeButton"
-          defaultMessage="Close"
-        />
+        {formatMessage(commonMessages.closeForm)}
       </Button>
 
       {!canSubmit &&
         <HelpBlock className="text-left">
-          <FormattedMessage
-            id="app.submistSolution.instructions"
-            defaultMessage="You must attach at least one file with source code and wait, until all your files are uploaded to the server. If there is a problem uploading any of the files, please try uploading it again or remove the file. This form cannot be submitted until there are any files which have not been successfully uploaded or which could not have been uploaded to the server."
-          />
+          {formatMessage(commonMessages.instructions)}
         </HelpBlock>}
     </Modal.Footer>
   </Modal>
@@ -190,7 +219,18 @@ SubmitSolution.propTypes = {
   runtimeEnvironmentIds: PropTypes.array,
   autodetection: PropTypes.bool,
   changeRuntimeEnvironment: PropTypes.func.isRequired,
+  useReferenceMessages: PropTypes.bool,
+  messages: PropTypes.object.isRequired,
   intl: intlShape.isRequired
 };
 
-export default injectIntl(SubmitSolution);
+export default injectIntl(
+  connect(
+    (state, { useReferenceMessages = false }) => ({
+      messages: useReferenceMessages
+        ? referenceSolutionMessages
+        : submissionMessages
+    }),
+    () => ({})
+  )(SubmitSolution)
+);
