@@ -34,9 +34,6 @@ class ReferenceSolutionEvaluation extends Component {
           referenceSolutionId={referenceSolutionId}
           renderButtons={renderButtons}
         />
-        {/*<div style={{ width: '80px', height: '80px', backgroundColor: 'red' }}>
-          {' '}{console.log(evaluations)}{' '}
-        </div>*/}
       </Box>
     );
   }
