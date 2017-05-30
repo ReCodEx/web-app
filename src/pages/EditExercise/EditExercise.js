@@ -28,7 +28,7 @@ import {
   editExercise,
   editRuntimeConfigs
 } from '../../redux/modules/exercises';
-import { fetchLimits, editLimits } from '../../redux/modules/limits';
+//import { fetchLimits, editLimits } from '../../redux/modules/limits';
 import { getExercise } from '../../redux/selectors/exercises';
 import { isSubmitting } from '../../redux/selectors/submission';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
@@ -38,7 +38,7 @@ import {
 import {
   runtimeEnvironmentsSelector
 } from '../../redux/selectors/runtimeEnvironments';
-import { getEnvironmentsLimits } from '../../redux/selectors/limits';
+//import { getEnvironmentsLimits } from '../../redux/selectors/limits';
 
 import withLinks from '../../hoc/withLinks';
 
@@ -54,7 +54,7 @@ class EditExercise extends Component {
   static loadAsync = ({ exerciseId }, dispatch) =>
     Promise.all([
       dispatch(fetchExerciseIfNeeded(exerciseId)),
-      dispatch(fetchLimits(exerciseId)),
+      //dispatch(fetchLimits(exerciseId)),
       dispatch(fetchRuntimeEnvironments())
     ]);
 
@@ -218,7 +218,7 @@ export default withLinks(
   connect(
     (state, { params: { exerciseId } }) => {
       const exerciseSelector = getExercise(exerciseId);
-      const environmentsSelector = getEnvironmentsLimits(exerciseId);
+      //const environmentsSelector = getEnvironmentsLimits(exerciseId);
       const userId = loggedInUserIdSelector(state);
       return {
         exercise: exerciseSelector(state),
@@ -227,7 +227,7 @@ export default withLinks(
         formValues: getFormValues('editExercise')(state),
         runtimesFormValues: getFormValues('editExerciseRuntimeConfigs')(state),
         runtimeEnvironments: runtimeEnvironmentsSelector(state),
-        environments: environmentsSelector(state)
+        environments: {} //environmentsSelector(state)
       };
     },
     (dispatch, { params: { exerciseId } }) => ({
@@ -236,9 +236,8 @@ export default withLinks(
       loadAsync: () => EditExercise.loadAsync({ exerciseId }, dispatch),
       editExercise: (version, data) =>
         dispatch(editExercise(exerciseId, { ...data, version })),
-      editRuntimeConfigs: data =>
-        dispatch(editRuntimeConfigs(exerciseId, data)),
-      editLimits: data => dispatch(editLimits(exerciseId, data))
+      editRuntimeConfigs: data => dispatch(editRuntimeConfigs(exerciseId, data))
+      //editLimits: data => dispatch(editLimits(exerciseId, data))
     })
   )(EditExercise)
 );

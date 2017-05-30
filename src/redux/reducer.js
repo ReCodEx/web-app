@@ -14,7 +14,6 @@ import filesContent from './modules/filesContent';
 import groups from './modules/groups';
 import instances from './modules/instances';
 import licences from './modules/licences';
-import limits from './modules/limits';
 import notifications from './modules/notifications';
 import { default as search } from './modules/search'; // because of a named export 'search'
 import sidebar from './modules/sidebar';
@@ -28,6 +27,8 @@ import runtimeEnvironments from './modules/runtimeEnvironments';
 import supplementaryFiles from './modules/supplementaryFiles';
 import additionalExerciseFiles from './modules/additionalExerciseFiles';
 import referenceSolutions from './modules/referenceSolutions';
+import referenceSolutionEvaluations
+  from './modules/referenceSolutionEvaluations';
 import hwGroups from './modules/hwGroups';
 
 const createRecodexReducers = token => ({
@@ -43,7 +44,6 @@ const createRecodexReducers = token => ({
   groups,
   instances,
   licences,
-  limits,
   notifications,
   search,
   sidebar,
@@ -56,6 +56,7 @@ const createRecodexReducers = token => ({
   runtimeEnvironments,
   supplementaryFiles,
   referenceSolutions,
+  referenceSolutionEvaluations,
   hwGroups,
   additionalExerciseFiles
 });

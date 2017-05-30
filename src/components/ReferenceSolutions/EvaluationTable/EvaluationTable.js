@@ -26,31 +26,33 @@ const EvaluationTable = ({
     </thead>
     <tbody>
       {evaluations
-        .filter(
-          evaluation => evaluation.referenceSolution.id === referenceSolutionId
-        )
-        .sort((a, b) => b.evaluation.evaluatedAt - a.evaluation.evaluatedAt)
-        .map(
-          ({ evaluation: { id, evaluatedAt }, evaluationStatus, accepted }) => (
-            <tr key={id}>
-              <td>
-                <AssignmentStatusIcon
-                  id={id}
-                  status={evaluationStatus}
-                  accepted={accepted}
-                />
-              </td>
-              <td>
-                <FormattedDate value={evaluatedAt * 1000} />
-                &nbsp;
-                <FormattedTime value={evaluatedAt * 1000} />
-              </td>
-              <td className="text-right">
-                {renderButtons(id)}
-              </td>
-            </tr>
-          )
-        )}
+        .sort((a, b) => {
+          if (a.evaluation == null || b.evaluation == null) {
+            return a.evaluationStatus.localeCompare(b.evaluationStatus);
+          }
+          return b.evaluation.evaluatedAt - a.evaluation.evaluatedAt;
+        })
+        .map(e => (
+          <tr key={e.id}>
+            <td>
+              <AssignmentStatusIcon
+                id={e.id}
+                status={e.evaluationStatus}
+                accepted={false}
+              />
+            </td>
+            {e.evaluation
+              ? <td>
+                  <FormattedDate value={e.evaluation.evaluatedAt * 1000} />
+                  &nbsp;
+                  <FormattedTime value={e.evaluation.evaluatedAt * 1000} />
+                </td>
+              : <td />}
+            <td className="text-right">
+              {renderButtons(e.id)}
+            </td>
+          </tr>
+        ))}
     </tbody>
   </Table>
 );

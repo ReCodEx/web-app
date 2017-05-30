@@ -33,6 +33,14 @@ export const evaluateReferenceSolution = solutionId =>
     meta: { solutionId }
   });
 
+export const fetchReferenceEvaluations = solutionId =>
+  createApiAction({
+    type: additionalActionTypes.FETCH_REFERENCE_EVALUATIONS,
+    endpoint: `/reference-solutions/${solutionId}/evaluations`,
+    method: 'GET',
+    meta: { solutionId }
+  });
+
 export const downloadEvaluationArchive = evaluationId => (dispatch, getState) =>
   dispatch(
     createApiAction({
