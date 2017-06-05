@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { FormattedMessage } from 'react-intl';
 import { Row, Col } from 'react-bootstrap';
+import ResourceRenderer from '../../helpers/ResourceRenderer';
 
 import Box from '../../widgets/Box';
 import AddStudent from '../AddStudent';
@@ -10,15 +11,16 @@ import SearchExercise from '../SearchExercise';
 import StudentsListContainer from '../../../containers/StudentsListContainer';
 import AdminAssignmentsTable from '../../Assignments/AdminAssignmentsTable';
 import LeaveJoinGroupButtonContainer from '../../../containers/LeaveJoinGroupButtonContainer';
-import GroupExercisesList from '../../../components/Exercises/GroupExercisesList';
+import ExercisesSimpleList from '../../../components/Exercises/ExercisesSimpleList';
 import Button from '../../../components/widgets/FlatButton';
-import { AddIcon } from '../../../components/icons';
+import { AddIcon, SendIcon } from '../../../components/icons';
 
 const SupervisorsView = ({
   group,
   assignments,
   exercises,
-  createGroupExercise
+  createGroupExercise,
+  assignExercise
 }) =>
   <div>
     <Row>
@@ -96,10 +98,28 @@ const SupervisorsView = ({
             </p>
           }
           collapsable
-          noPadding
           isOpen
         >
-          <GroupExercisesList exercises={exercises} />
+          <ResourceRenderer resource={exercises.toArray()}>
+            {(...exercises) =>
+              <ExercisesSimpleList
+                exercises={exercises}
+                createActions={exerciseId =>
+                  <Button
+                    onClick={() => assignExercise(exerciseId)}
+                    bsSize="xs"
+                    className="btn-flat"
+                  >
+                    <SendIcon />
+                    {' '}
+                    <FormattedMessage
+                      id="app.exercise.assign"
+                      defaultMessage="Assign this exercise"
+                    />
+                  </Button>}
+                assignExercise={assignExercise}
+              />}
+          </ResourceRenderer>
         </Box>
       </Col>
       <Col lg={6}>
@@ -137,7 +157,8 @@ SupervisorsView.propTypes = {
   group: PropTypes.object,
   assignments: ImmutablePropTypes.list.isRequired,
   exercises: ImmutablePropTypes.map.isRequired,
-  createGroupExercise: PropTypes.func.isRequired
+  createGroupExercise: PropTypes.func.isRequired,
+  assignExercise: PropTypes.func.isRequired
 };
 
 export default SupervisorsView;

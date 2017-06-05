@@ -10,11 +10,11 @@ import { Map } from 'immutable';
 
 import Page from '../../components/layout/Page';
 import Box from '../../components/widgets/Box';
-import ResourceRenderer from '../../components/helpers/ResourceRenderer';
+// import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 
 import EditExerciseForm from '../../components/forms/EditExerciseForm';
 import EditExerciseRuntimeConfigsForm from '../../components/forms/EditExerciseRuntimeConfigsForm';
-import EditExerciseLimitsForm from '../../components/forms/EditExerciseLimitsForm';
+// import EditExerciseLimitsForm from '../../components/forms/EditExerciseLimitsForm';
 import SupplementaryFilesTableContainer from '../../containers/SupplementaryFilesTableContainer';
 import AdditionalExerciseFilesTableContainer from '../../containers/AdditionalExerciseFilesTableContainer';
 import DeleteExerciseButtonContainer from '../../containers/DeleteExerciseButtonContainer';
@@ -58,8 +58,8 @@ class EditExercise extends Component {
       editExercise,
       editRuntimeConfigs,
       runtimeEnvironments,
-      environments,
-      editLimits,
+      // environments,
+      // editLimits,
       formValues,
       runtimesFormValues,
       push

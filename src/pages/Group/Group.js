@@ -159,6 +159,14 @@ class Group extends Component {
     );
   };
 
+  assignExercise = exerciseId => {
+    const { assignExercise, push } = this.props;
+    const { links: { ASSIGNMENT_EDIT_URI_FACTORY } } = this.context;
+    assignExercise(exerciseId).then(({ value: assigment }) =>
+      push(ASSIGNMENT_EDIT_URI_FACTORY(assigment.id))
+    );
+  };
+
   render() {
     const {
       group,
@@ -248,6 +256,7 @@ class Group extends Component {
                 assignments={allAssignments}
                 exercises={groupExercises}
                 createGroupExercise={this.createGroupExercise}
+                assignExercise={id => this.assignExercise(id)}
               />}
           </div>}
       </Page>
@@ -278,6 +287,10 @@ Group.propTypes = {
   assignExercise: PropTypes.func.isRequired,
   createGroupExercise: PropTypes.func.isRequired,
   push: PropTypes.func.isRequired,
+  links: PropTypes.object
+};
+
+Group.contextTypes = {
   links: PropTypes.object
 };
 
