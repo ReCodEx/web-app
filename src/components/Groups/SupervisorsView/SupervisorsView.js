@@ -9,10 +9,17 @@ import AddStudent from '../AddStudent';
 import SearchExercise from '../SearchExercise';
 import StudentsListContainer from '../../../containers/StudentsListContainer';
 import AdminAssignmentsTable from '../../Assignments/AdminAssignmentsTable';
-import LeaveJoinGroupButtonContainer
-  from '../../../containers/LeaveJoinGroupButtonContainer';
+import LeaveJoinGroupButtonContainer from '../../../containers/LeaveJoinGroupButtonContainer';
+import GroupExercisesList from '../../../components/Exercises/GroupExercisesList';
+import Button from '../../../components/widgets/FlatButton';
+import { AddIcon } from '../../../components/icons';
 
-const SupervisorsView = ({ group, assignments }) => (
+const SupervisorsView = ({
+  group,
+  assignments,
+  exercises,
+  createGroupExercise
+}) =>
   <div>
     <Row>
       <Col lg={12}>
@@ -40,12 +47,11 @@ const SupervisorsView = ({ group, assignments }) => (
         >
           <StudentsListContainer
             groupId={group.id}
-            renderActions={userId => (
+            renderActions={userId =>
               <LeaveJoinGroupButtonContainer
                 userId={userId}
                 groupId={group.id}
-              />
-            )}
+              />}
             fill
           />
         </Box>
@@ -60,6 +66,40 @@ const SupervisorsView = ({ group, assignments }) => (
           isOpen
         >
           <AddStudent instanceId={group.instanceId} groupId={group.id} />
+        </Box>
+      </Col>
+      <Col lg={6}>
+        <Box
+          title={
+            <FormattedMessage
+              id="app.group.spervisorsView.groupExercises"
+              defaultMessage="Group Exercises"
+            />
+          }
+          footer={
+            <p className="text-center">
+              <Button
+                bsStyle="success"
+                className="btn-flat"
+                bsSize="sm"
+                onClick={() => {
+                  createGroupExercise();
+                }}
+              >
+                <AddIcon />
+                {' '}
+                <FormattedMessage
+                  id="app.group.createExercise"
+                  defaultMessage="Add group exercise"
+                />
+              </Button>
+            </p>
+          }
+          collapsable
+          noPadding
+          isOpen
+        >
+          <GroupExercisesList exercises={exercises} />
         </Box>
       </Col>
       <Col lg={6}>
@@ -91,12 +131,13 @@ const SupervisorsView = ({ group, assignments }) => (
         </Box>
       </Col>
     </Row>
-  </div>
-);
+  </div>;
 
 SupervisorsView.propTypes = {
   group: PropTypes.object,
-  assignments: ImmutablePropTypes.list.isRequired
+  assignments: ImmutablePropTypes.list.isRequired,
+  exercises: ImmutablePropTypes.map.isRequired,
+  createGroupExercise: PropTypes.func.isRequired
 };
 
 export default SupervisorsView;

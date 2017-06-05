@@ -20,6 +20,7 @@ const ExerciseDetail = ({
   id,
   name,
   authorId,
+  groupId,
   description = '',
   difficulty,
   createdAt,
@@ -28,8 +29,8 @@ const ExerciseDetail = ({
   forkedFrom = null,
   localizedTexts,
   runtimeConfigs,
-  links: { EXERCISE_URI_FACTORY }
-}) => (
+  links: { EXERCISE_URI_FACTORY, GROUP_URI_FACTORY }
+}) =>
   <Box title={name} noPadding>
     <Table>
       <tbody>
@@ -42,6 +43,17 @@ const ExerciseDetail = ({
           </th>
           <td><UsersNameContainer userId={authorId} /></td>
         </tr>
+        {groupId &&
+          <tr>
+            <th>
+              <FormattedMessage
+                id="app.exercise.group"
+                defaultMessage="Group:"
+              />
+            </th>
+            <td><Link to={GROUP_URI_FACTORY(groupId)}>{groupId}</Link></td>
+            {/* @todo: display group name */}
+          </tr>}
         <tr>
           <th>
             <FormattedMessage
@@ -107,7 +119,7 @@ const ExerciseDetail = ({
               <Link to={EXERCISE_URI_FACTORY(forkedFrom.id)}>
                 {forkedFrom.name}
                 {' '}
-                (v
+                (
                 <FormattedNumber value={forkedFrom.version} />
                 )
               </Link>
@@ -121,7 +133,7 @@ const ExerciseDetail = ({
             />
           </th>
           <td>
-            {runtimeConfigs.map(({ id, name, isValid }) => (
+            {runtimeConfigs.map(({ id, name, isValid }) =>
               <p key={id}>
                 <OverlayTrigger
                   placement="left"
@@ -144,18 +156,18 @@ const ExerciseDetail = ({
                   </span>
                 </OverlayTrigger>
               </p>
-            ))}
+            )}
           </td>
         </tr>
       </tbody>
     </Table>
-  </Box>
-);
+  </Box>;
 
 ExerciseDetail.propTypes = {
   id: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   authorId: PropTypes.string.isRequired,
+  groupId: PropTypes.string.isRequired,
   difficulty: PropTypes.string.isRequired,
   description: PropTypes.string,
   createdAt: PropTypes.number.isRequired,

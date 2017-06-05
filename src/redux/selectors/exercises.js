@@ -1,4 +1,5 @@
 import { createSelector } from 'reselect';
+import { isReady } from '../helpers/resourceManager';
 
 const getExercises = state => state.exercises;
 const getResources = exercises => exercises.get('resources');
@@ -13,4 +14,11 @@ export const getExercise = id =>
 export const getFork = (id, forkId) =>
   createSelector(getExercise(id), exercise =>
     exercise.getIn(['data', 'forks', forkId])
+  );
+
+export const groupExercisesSelector = groupId =>
+  createSelector(exercisesSelector, exercises =>
+    exercises
+      .filter(isReady)
+      .filter(exercise => exercise.getIn(['data', 'groupId']) === groupId)
   );
