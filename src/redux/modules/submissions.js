@@ -8,6 +8,7 @@ import factory, {
 } from '../helpers/resourceManager';
 import { getSubmission } from '../selectors/submissions';
 import { saveAs } from 'file-saver';
+import { actionTypes as submissionActionTypes } from './submission';
 
 const resourceName = 'submissions';
 const needsRefetching = item =>
@@ -57,6 +58,15 @@ export const acceptSubmission = id =>
     type: additionalActionTypes.ACCEPT,
     method: 'GET',
     endpoint: `/submissions/${id}/set-accepted`,
+    meta: { id }
+  });
+
+export const resubmitSubmission = (id, isPrivate) =>
+  createApiAction({
+    type: submissionActionTypes.SUBMIT,
+    method: 'POST',
+    endpoint: `/submissions/${id}/resubmit`,
+    body: { private: isPrivate },
     meta: { id }
   });
 

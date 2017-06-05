@@ -32,7 +32,8 @@ class SubmissionDetail extends Component {
         maxPoints,
         files,
         evaluation,
-        accepted
+        accepted,
+        originalSubmissionId
       },
       assignment,
       isSupervisor
@@ -50,6 +51,8 @@ class SubmissionDetail extends Component {
               submittedBy={submittedBy}
               note={note}
               accepted={accepted}
+              originalSubmissionId={originalSubmissionId}
+              assignmentId={assignment.id}
             />
             <Row>
               {files.map(file => (
@@ -113,7 +116,8 @@ SubmissionDetail.propTypes = {
     submittedBy: PropTypes.string,
     evaluation: PropTypes.object,
     maxPoints: PropTypes.number.isRequired,
-    files: PropTypes.array
+    files: PropTypes.array,
+    originalSubmissionId: PropTypes.string
   }).isRequired,
   assignment: PropTypes.object.isRequired,
   isSupervisor: PropTypes.bool

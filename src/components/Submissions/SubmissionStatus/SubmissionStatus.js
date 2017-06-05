@@ -1,12 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Table } from 'react-bootstrap';
+import { Link } from 'react-router';
 import Icon from 'react-fontawesome';
 import { FormattedDate, FormattedTime, FormattedMessage } from 'react-intl';
 import Box from '../../widgets/Box';
 import AssignmentStatusIcon
   from '../../Assignments/Assignment/AssignmentStatusIcon';
 import UsersNameContainer from '../../../containers/UsersNameContainer';
+import withLinks from '../../../hoc/withLinks';
 
 const SubmissionStatus = ({
   evaluationStatus,
@@ -14,7 +16,10 @@ const SubmissionStatus = ({
   userId,
   submittedBy,
   note,
-  accepted
+  accepted,
+  originalSubmissionId = null,
+  assignmentId,
+  links: { SUBMISSION_DETAIL_URI_FACTORY }
 }) => (
   <Box
     title={
@@ -85,6 +90,28 @@ const SubmissionStatus = ({
               <UsersNameContainer userId={submittedBy} />
             </td>
           </tr>}
+        {originalSubmissionId &&
+          <tr>
+            <td className="text-center">
+              <Icon name="mail-forward" />
+            </td>
+            <th>
+              <FormattedMessage
+                id="app.submission.originalSubmission"
+                defaultMessage="Resubmit of:"
+              />
+            </th>
+            <td>
+              <Link
+                to={SUBMISSION_DETAIL_URI_FACTORY(
+                  assignmentId,
+                  originalSubmissionId
+                )}
+              >
+                {originalSubmissionId}
+              </Link>
+            </td>
+          </tr>}
         <tr>
           <td className="text-center">
             <b>
@@ -137,7 +164,9 @@ SubmissionStatus.propTypes = {
   userId: PropTypes.string.isRequired,
   submittedBy: PropTypes.string,
   note: PropTypes.string,
-  accepted: PropTypes.bool
+  accepted: PropTypes.bool,
+  originalSubmissionId: PropTypes.string,
+  assignmentId: PropTypes.string.isRequired
 };
 
-export default SubmissionStatus;
+export default withLinks(SubmissionStatus);
