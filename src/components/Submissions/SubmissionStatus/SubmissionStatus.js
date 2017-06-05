@@ -166,7 +166,8 @@ SubmissionStatus.propTypes = {
   note: PropTypes.string,
   accepted: PropTypes.bool,
   originalSubmissionId: PropTypes.string,
-  assignmentId: PropTypes.string.isRequired
+  assignmentId: PropTypes.string.isRequired,
+  links: PropTypes.object.isRequired
 };
 
 export default withLinks(SubmissionStatus);

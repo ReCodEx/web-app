@@ -40,10 +40,12 @@ ResubmitSolutionContainer.propTypes = {
   resubmit: PropTypes.func.isRequired,
   isPrivate: PropTypes.bool,
   monitor: PropTypes.object,
-  isProcessing: PropTypes.bool
+  isProcessing: PropTypes.bool,
+  newSubmissionId: PropTypes.string,
+  links: PropTypes.object.isRequired
 };
 
-const mapStateToProps = (state, {}) => ({
+const mapStateToProps = state => ({
   isProcessing: isProcessing(state),
   monitor: getMonitorParams(state),
   newSubmissionId: getSubmissionId(state)
