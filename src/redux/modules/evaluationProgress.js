@@ -68,20 +68,24 @@ export default handleActions(
       state,
       { payload: { webSocketChannelId, expectedTasksCount } }
     ) =>
-      initialState
-        .update('webSocketChannelId', () => webSocketChannelId)
-        .update('expectedTasksCount', () => expectedTasksCount),
+      webSocketChannelId
+        ? initialState
+            .update('webSocketChannelId', () => webSocketChannelId)
+            .update('expectedTasksCount', () => expectedTasksCount)
+        : initialState.set('isFinished', true),
 
     [submissionActionTypes.SUBMIT_FULFILLED]: (
       state,
       { payload: { webSocketChannel } }
     ) =>
-      initialState
-        .update('webSocketChannelId', () => webSocketChannel.id)
-        .update(
-          'expectedTasksCount',
-          () => webSocketChannel.expectedTasksCount
-        ),
+      webSocketChannel
+        ? initialState
+            .update('webSocketChannelId', () => webSocketChannel.id)
+            .update(
+              'expectedTasksCount',
+              () => webSocketChannel.expectedTasksCount
+            )
+        : initialState.set('isFinished', true),
 
     [actionTypes.COMPLETED_TASK]: (state, { payload: msg }) =>
       pushMessage(increment(state, 'completed'), msg),

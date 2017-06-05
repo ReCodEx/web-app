@@ -18,8 +18,14 @@ import {
   evaluateReferenceSolution
 } from '../../redux/modules/referenceSolutions';
 import {
+  fetchReferenceEvaluations
+} from '../../redux/modules/referenceSolutionEvaluations';
+import {
   referenceSolutionsSelector
 } from '../../redux/selectors/referenceSolutions';
+import {
+  getReferenceEvaluations
+} from '../../redux/selectors/referenceSolutionEvaluations';
 import ReferenceSolutionDetail
   from '../../components/ReferenceSolutions/ReferenceSolutionDetail';
 import ReferenceSolutionEvaluation
@@ -27,8 +33,6 @@ import ReferenceSolutionEvaluation
 import SourceCodeInfoBox from '../../components/widgets/SourceCodeInfoBox';
 import SourceCodeViewerContainer
   from '../../containers/SourceCodeViewerContainer';
-import { fetchLimits } from '../../redux/modules/limits';
-import { getEnvironmentsLimits } from '../../redux/selectors/limits';
 import { DownloadIcon, RefreshIcon, SendIcon } from '../../components/icons';
 
 const messages = defineMessages({
@@ -43,10 +47,10 @@ class ReferenceSolution extends Component {
   openFile = id => this.setState({ openFileId: id });
   hideFile = () => this.setState({ openFileId: null });
 
-  static loadAsync = ({ exerciseId }, dispatch) =>
+  static loadAsync = ({ exerciseId, referenceSolutionId }, dispatch) =>
     Promise.all([
       dispatch(fetchReferenceSolutionsIfNeeded(exerciseId)),
-      dispatch(fetchLimits(exerciseId))
+      dispatch(fetchReferenceEvaluations(referenceSolutionId))
     ]);
 
   componentWillMount() {
@@ -153,7 +157,6 @@ class ReferenceSolution extends Component {
                             defaultMessage="Refresh"
                           />
                         </Button>
-                        {' '}
                         <Button
                           bsStyle="success"
                           className="btn-flat"
@@ -172,12 +175,12 @@ class ReferenceSolution extends Component {
                   <ResourceRenderer resource={environments}>
                     {environments => (
                       <div>
-                        {environments.environments.map(env => (
+                        {Object.keys(environments).map(env => (
                           <ReferenceSolutionEvaluation
-                            key={env.environment.id}
+                            key={env}
                             referenceSolutionId={referenceSolutionId}
-                            environment={env.environment}
-                            evaluations={env.referenceSolutionsEvaluations}
+                            environment={env}
+                            evaluations={environments[env]}
                             renderButtons={evaluationId => (
                               <Button
                                 bsSize="xs"
@@ -215,7 +218,8 @@ class ReferenceSolution extends Component {
 }
 
 ReferenceSolution.contextTypes = {
-  router: PropTypes.object
+  router: PropTypes.object,
+  links: PropTypes.object
 };
 
 ReferenceSolution.propTypes = {
@@ -229,21 +233,21 @@ ReferenceSolution.propTypes = {
   referenceSolutions: ImmutablePropTypes.map,
   environments: ImmutablePropTypes.map,
   downloadEvaluationArchive: PropTypes.func.isRequired,
-  intl: intlShape.isRequired,
-  links: PropTypes.object
+  intl: intlShape.isRequired
 };
 
 export default injectIntl(
   connect(
     (state, { params: { exerciseId, referenceSolutionId } }) => ({
       referenceSolutions: referenceSolutionsSelector(exerciseId)(state),
-      environments: getEnvironmentsLimits(exerciseId)(state)
+      environments: getReferenceEvaluations(referenceSolutionId)(state)
     }),
     (dispatch, { params }) => ({
       loadAsync: () => ReferenceSolution.loadAsync(params, dispatch),
       downloadEvaluationArchive: evaluationId =>
         dispatch(downloadEvaluationArchive(evaluationId)),
-      fetchEvaluations: () => dispatch(fetchLimits(params.exerciseId)),
+      fetchEvaluations: () =>
+        dispatch(fetchReferenceEvaluations(params.referenceSolutionId)),
       evaluateReferenceSolution: () =>
         dispatch(evaluateReferenceSolution(params.referenceSolutionId))
     })

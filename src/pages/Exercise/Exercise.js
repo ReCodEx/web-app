@@ -282,6 +282,9 @@ class Exercise extends Component {
                   runtimeEnvironmentIds={exercise.runtimeConfigs.map(
                     cfg => cfg.runtimeEnvironmentId
                   )}
+                  showProgress={false}
+                  autodetection={false}
+                  useReferenceSolutionMessages={true}
                 />
               </Col>
             </Row>

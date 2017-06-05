@@ -1,10 +1,14 @@
 import { handleActions } from 'redux-actions';
+import { fromJS, List } from 'immutable';
 import factory, {
   initialState,
   createRecord,
   resourceStatus
 } from '../helpers/resourceManager';
-import { additionalActionTypes } from './groups';
+import { additionalActionTypes as additionalGroupActionTypes } from './groups';
+import {
+  additionalActionTypes as additionalSubmissionActionTypes
+} from './submissions';
 
 /**
  * Create actions & reducer
@@ -19,7 +23,7 @@ const { actions, reduceActions } = factory({
 export const fetchGroupsStatsIfNeeded = actions.fetchOneIfNeeded;
 const reducer = handleActions(
   Object.assign({}, reduceActions, {
-    [additionalActionTypes.LOAD_USERS_GROUPS_FULFILLED]: (
+    [additionalGroupActionTypes.LOAD_USERS_GROUPS_FULFILLED]: (
       state,
       { payload }
     ) => {
@@ -35,7 +39,16 @@ const reducer = handleActions(
       });
 
       return state;
-    }
+    },
+    [additionalSubmissionActionTypes.ACCEPT_FULFILLED]: (state, { payload }) =>
+      state.updateIn(['resources', payload.groupId, 'data'], stats => {
+        if (!stats) {
+          stats = List();
+        }
+        return stats
+          .filter(userStats => userStats.get('userId') !== payload.userId)
+          .push(fromJS(payload));
+      })
   }),
   initialState
 );

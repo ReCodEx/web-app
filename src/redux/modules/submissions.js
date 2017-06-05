@@ -8,6 +8,7 @@ import factory, {
 } from '../helpers/resourceManager';
 import { getSubmission } from '../selectors/submissions';
 import { saveAs } from 'file-saver';
+import { actionTypes as submissionActionTypes } from './submission';
 
 const resourceName = 'submissions';
 const needsRefetching = item =>
@@ -36,6 +37,7 @@ export const additionalActionTypes = {
   ACCEPT_PENDING: 'recodex/submissions/ACCEPT_PENDING',
   ACCEPT_FULFILLED: 'recodex/submissions/ACCEPT_FULFILLED',
   ACCEPT_FAILED: 'recodex/submissions/ACCEPT_FAILED',
+  RESUBMIT_ALL: 'recodex/submissions/RESUBMIT_ALL',
   DOWNLOAD_RESULT_ARCHIVE: 'recodex/files/DOWNLOAD_RESULT_ARCHIVE'
 };
 
@@ -58,6 +60,23 @@ export const acceptSubmission = id =>
     method: 'GET',
     endpoint: `/submissions/${id}/set-accepted`,
     meta: { id }
+  });
+
+export const resubmitSubmission = (id, isPrivate) =>
+  createApiAction({
+    type: submissionActionTypes.SUBMIT,
+    method: 'POST',
+    endpoint: `/submissions/${id}/resubmit`,
+    body: { private: isPrivate },
+    meta: { id }
+  });
+
+export const resubmitAllSubmissions = assignmentId =>
+  createApiAction({
+    type: additionalActionTypes.RESUBMIT_ALL,
+    method: 'POST',
+    endpoint: `/exercise-assignments/${assignmentId}/resubmit-all`,
+    meta: { assignmentId }
   });
 
 export const fetchUsersSubmissions = (userId, assignmentId) =>

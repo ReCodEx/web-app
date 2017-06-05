@@ -46,7 +46,7 @@ export const cancel = createAction(actionTypes.CANCEL);
 
 export const changeNote = createAction(actionTypes.CHANGE_NOTE);
 
-const submit = endpoint => (
+const submit = (endpoint, submissionType = 'assignmentSolution') => (
   userId,
   id,
   note,
@@ -65,7 +65,8 @@ const submit = endpoint => (
     type: actionTypes.SUBMIT,
     method: 'POST',
     endpoint: endpoint(id),
-    body: submitBody
+    body: submitBody,
+    meta: { urlId: id, submissionType }
   });
 };
 
@@ -74,7 +75,8 @@ export const submitAssignmentSolution = submit(
 );
 
 export const createReferenceSolution = submit(
-  id => `/reference-solutions/exercise/${id}`
+  id => `/reference-solutions/exercise/${id}`,
+  'referenceSolution'
 );
 
 export const finishProcessing = createAction(actionTypes.PROCESSING_FINISHED);
@@ -100,14 +102,19 @@ const reducer = handleActions(
     [actionTypes.SUBMIT_REJECTED]: state =>
       state.set('status', submissionStatus.FAILED),
 
-    [actionTypes.SUBMIT_FULFILLED]: (state, { payload }) =>
-      state
-        .set('submissionId', payload.submission.id)
-        .set('monitor', {
-          url: payload.webSocketChannel.monitorUrl,
-          id: payload.webSocketChannel.id
-        })
-        .set('status', submissionStatus.PROCESSING),
+    [actionTypes.SUBMIT_FULFILLED]: (
+      state,
+      { payload: { submission, webSocketChannel } }
+    ) =>
+      submission && webSocketChannel
+        ? state
+            .set('submissionId', submission.id)
+            .set('monitor', {
+              url: webSocketChannel.monitorUrl,
+              id: webSocketChannel.id
+            })
+            .set('status', submissionStatus.PROCESSING)
+        : state.set('status', submissionStatus.PROCESSING),
 
     [actionTypes.CANCEL]: (state, { payload }) => initialState,
 

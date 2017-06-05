@@ -62,15 +62,22 @@ class SubmitSolutionContainer extends Component {
       submissionId,
       monitor,
       reset,
-      links: { SUBMISSION_DETAIL_URI_FACTORY }
+      links: { SUBMISSION_DETAIL_URI_FACTORY },
+      showProgress = true,
+      autodetection = true,
+      useReferenceSolutionMessages = false
     } = this.props;
+
+    const { runtimeEnvironment } = this.state;
 
     return (
       <div>
         <SubmitSolution
           userId={userId}
           isOpen={isOpen}
-          canSubmit={canSubmit}
+          canSubmit={
+            canSubmit && (autodetection || Boolean(runtimeEnvironment))
+          }
           isSending={isSending}
           hasFailed={hasFailed}
           uploadId={id}
@@ -81,13 +88,16 @@ class SubmitSolutionContainer extends Component {
           runtimeEnvironmentIds={runtimeEnvironmentIds}
           changeRuntimeEnvironment={this.changeRuntimeEnvironment}
           submitSolution={this.submit}
+          autodetection={autodetection}
+          useReferenceMessages={useReferenceSolutionMessages}
         />
 
-        <EvaluationProgressContainer
-          isOpen={isProcessing}
-          monitor={monitor}
-          link={SUBMISSION_DETAIL_URI_FACTORY(id, submissionId)}
-        />
+        {showProgress &&
+          <EvaluationProgressContainer
+            isOpen={isProcessing}
+            monitor={monitor}
+            link={SUBMISSION_DETAIL_URI_FACTORY(id, submissionId)}
+          />}
       </div>
     );
   };
@@ -112,12 +122,15 @@ SubmitSolutionContainer.propTypes = {
   attachedFiles: PropTypes.array,
   reset: PropTypes.func.isRequired,
   links: PropTypes.object.isRequired,
-  runtimeEnvironmentIds: PropTypes.array
+  runtimeEnvironmentIds: PropTypes.array,
+  showProgress: PropTypes.bool,
+  autodetection: PropTypes.bool,
+  useReferenceSolutionMessages: PropTypes.bool
 };
 
 export default withLinks(
   connect(
-    (state, { id, userId }) => {
+    (state, { id, userId, autodetection = true }) => {
       const getUploadedFiles = createGetUploadedFiles(id);
       const allUploaded = createAllUploaded(id);
       return {

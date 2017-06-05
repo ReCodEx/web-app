@@ -9,6 +9,8 @@ import SubmissionDetail, {
   FailedSubmissionDetail
 } from '../../components/Submissions/SubmissionDetail';
 import AcceptSolutionContainer from '../../containers/AcceptSolutionContainer';
+import ResubmitSolutionContainer
+  from '../../containers/ResubmitSolutionContainer';
 
 import { fetchAssignmentIfNeeded } from '../../redux/modules/assignments';
 import { fetchSubmissionIfNeeded } from '../../redux/modules/submissions';
@@ -105,6 +107,10 @@ class Submission extends Component {
               {isSupervisorOrMore(assignment.groupId) &&
                 <p>
                   <AcceptSolutionContainer id={submission.id} />
+                  <ResubmitSolutionContainer
+                    id={submission.id}
+                    assignmentId={assignment.id}
+                  />
                 </p>}
               <SubmissionDetail
                 submission={submission}

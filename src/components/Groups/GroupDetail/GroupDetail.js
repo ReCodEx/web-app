@@ -39,6 +39,7 @@ const GroupDetail = ({
           type="primary"
           collapsable
           noPadding
+          unlimitedHeight
         >
           <Table>
             <tbody>
@@ -84,6 +85,7 @@ const GroupDetail = ({
             />
           }
           noPadding
+          unlimitedHeight
         >
           <GroupTree
             id={parentGroupId || id}
@@ -97,6 +99,7 @@ const GroupDetail = ({
         <Box
           noPadding
           collapsable
+          unlimitedHeight
           title={
             <FormattedMessage
               id="app.groupDetail.supervisors"

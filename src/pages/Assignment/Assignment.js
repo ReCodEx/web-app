@@ -30,6 +30,9 @@ import {
 import PageContent from '../../components/layout/PageContent';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import UsersNameContainer from '../../containers/UsersNameContainer';
+import {
+  ResubmitAllSolutionsContainer
+} from '../../containers/ResubmitSolutionContainer';
 import AssignmentDetails, {
   LoadingAssignmentDetails,
   FailedAssignmentDetails
@@ -159,6 +162,9 @@ class Assignment extends Component {
                           />
                         </Button>
                       </LinkContainer>
+                      <ResubmitAllSolutionsContainer
+                        assignmentId={assignment.id}
+                      />
                     </p>}
                 </Col>
               </Row>

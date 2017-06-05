@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { defineMessages, intlShape, injectIntl } from 'react-intl';
-import { Tabs, Tab } from 'react-bootstrap';
 
 import Box from '../../widgets/Box';
 import EvaluationTable from '../EvaluationTable';
@@ -14,9 +13,6 @@ const messages = defineMessages({
 });
 
 class ReferenceSolutionEvaluation extends Component {
-  state = { activeTab: 0 };
-  changeTab = n => this.setState({ activeTab: n });
-
   render() {
     const {
       environment,
@@ -28,39 +24,24 @@ class ReferenceSolutionEvaluation extends Component {
 
     return (
       <Box
-        title={
-          formatMessage(messages.titlePrefix) +
-            ' ' +
-            environment.runtimeEnvironmentId
-        }
+        title={formatMessage(messages.titlePrefix) + ' ' + environment}
         noPadding={true}
         collapsable={true}
         isOpen={true}
       >
-        <Tabs
-          id={environment.runtimeEnvironmentId}
-          className="nav-tabs-custom"
-          activeKey={this.state.activeTab}
-          onSelect={this.changeTab}
-        >
-          {Object.keys(evaluations).map((hwGroup, i) => (
-            <Tab key={i} eventKey={i} title={hwGroup}>
-              <EvaluationTable
-                evaluations={evaluations[hwGroup]}
-                referenceSolutionId={referenceSolutionId}
-                renderButtons={renderButtons}
-              />
-            </Tab>
-          ))}
-        </Tabs>
+        <EvaluationTable
+          evaluations={evaluations}
+          referenceSolutionId={referenceSolutionId}
+          renderButtons={renderButtons}
+        />
       </Box>
     );
   }
 }
 
 ReferenceSolutionEvaluation.propTypes = {
-  environment: PropTypes.object.isRequired,
-  evaluations: PropTypes.object,
+  environment: PropTypes.string.isRequired,
+  evaluations: PropTypes.array.isRequired,
   referenceSolutionId: PropTypes.string.isRequired,
   renderButtons: PropTypes.func,
   intl: intlShape.isRequired
