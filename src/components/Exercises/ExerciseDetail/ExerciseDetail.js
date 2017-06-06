@@ -167,7 +167,7 @@ ExerciseDetail.propTypes = {
   id: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   authorId: PropTypes.string.isRequired,
-  groupId: PropTypes.string.isRequired,
+  groupId: PropTypes.string,
   difficulty: PropTypes.string.isRequired,
   description: PropTypes.string,
   createdAt: PropTypes.number.isRequired,

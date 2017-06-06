@@ -38,12 +38,14 @@ const ExercisesSimpleList = ({ exercises, createActions, ...rest }) =>
     </thead>
     <tbody>
       {exercises
-        .sort(
-          (a, b) =>
-            a.name < b.name
-              ? -1
-              : b.name < a.name ? 1 : b.createdAt - a.createdAt
-        )
+        .sort((a, b) => {
+          var tmp = a.name.localeCompare(b.name);
+          if (tmp === 0) {
+            return b.createdAt - a.createdAt;
+          } else {
+            return tmp;
+          }
+        })
         .map(exercise =>
           <GroupExercisesListItem
             {...exercise}
