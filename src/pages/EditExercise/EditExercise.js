@@ -6,22 +6,18 @@ import { Row, Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 import { reset, getFormValues } from 'redux-form';
+import { Map } from 'immutable';
 
 import Page from '../../components/layout/Page';
 import Box from '../../components/widgets/Box';
-import ResourceRenderer from '../../components/helpers/ResourceRenderer';
+// import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 
 import EditExerciseForm from '../../components/forms/EditExerciseForm';
-import EditExerciseRuntimeConfigsForm
-  from '../../components/forms/EditExerciseRuntimeConfigsForm';
-import EditExerciseLimitsForm
-  from '../../components/forms/EditExerciseLimitsForm';
-import SupplementaryFilesTableContainer
-  from '../../containers/SupplementaryFilesTableContainer';
-import AdditionalExerciseFilesTableContainer
-  from '../../containers/AdditionalExerciseFilesTableContainer';
-import DeleteExerciseButtonContainer
-  from '../../containers/DeleteExerciseButtonContainer';
+import EditExerciseRuntimeConfigsForm from '../../components/forms/EditExerciseRuntimeConfigsForm';
+// import EditExerciseLimitsForm from '../../components/forms/EditExerciseLimitsForm';
+import SupplementaryFilesTableContainer from '../../containers/SupplementaryFilesTableContainer';
+import AdditionalExerciseFilesTableContainer from '../../containers/AdditionalExerciseFilesTableContainer';
+import DeleteExerciseButtonContainer from '../../containers/DeleteExerciseButtonContainer';
 
 import {
   fetchExerciseIfNeeded,
@@ -32,12 +28,8 @@ import {
 import { getExercise } from '../../redux/selectors/exercises';
 import { isSubmitting } from '../../redux/selectors/submission';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
-import {
-  fetchRuntimeEnvironments
-} from '../../redux/modules/runtimeEnvironments';
-import {
-  runtimeEnvironmentsSelector
-} from '../../redux/selectors/runtimeEnvironments';
+import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments';
+import { runtimeEnvironmentsSelector } from '../../redux/selectors/runtimeEnvironments';
 // import { getEnvironmentsLimits } from '../../redux/selectors/limits';
 
 import withLinks from '../../hoc/withLinks';
@@ -66,8 +58,8 @@ class EditExercise extends Component {
       editExercise,
       editRuntimeConfigs,
       runtimeEnvironments,
-      environments,
-      editLimits,
+      // environments,
+      // editLimits,
       formValues,
       runtimesFormValues,
       push
@@ -105,7 +97,7 @@ class EditExercise extends Component {
           }
         ]}
       >
-        {exercise => (
+        {exercise =>
           <div>
             <Row>
               <Col lg={6}>
@@ -148,20 +140,21 @@ class EditExercise extends Component {
                     />
                   </Col>
                 </Row>
+                {/*
                 <Row>
                   <Col lg={12}>
                     <ResourceRenderer resource={environments}>
-                      {environments => (
+                      {environments =>
                         <EditExerciseLimitsForm
                           initialValues={environments}
                           runtimeEnvironments={runtimeEnvironments}
                           exercise={exercise}
                           onSubmit={editLimits}
-                        />
-                      )}
+                        />}
                     </ResourceRenderer>
                   </Col>
                 </Row>
+                */}
               </Col>
             </Row>
             <br />
@@ -189,8 +182,7 @@ class EditExercise extends Component {
                 </p>
               </div>
             </Box>
-          </div>
-        )}
+          </div>}
       </Page>
     );
   }
@@ -227,7 +219,7 @@ export default withLinks(
         formValues: getFormValues('editExercise')(state),
         runtimesFormValues: getFormValues('editExerciseRuntimeConfigs')(state),
         runtimeEnvironments: runtimeEnvironmentsSelector(state),
-        environments: {} // environmentsSelector(state)
+        environments: Map() // environmentsSelector(state)
       };
     },
     (dispatch, { params: { exerciseId } }) => ({
@@ -236,8 +228,9 @@ export default withLinks(
       loadAsync: () => EditExercise.loadAsync({ exerciseId }, dispatch),
       editExercise: (version, data) =>
         dispatch(editExercise(exerciseId, { ...data, version })),
-      editRuntimeConfigs: data => dispatch(editRuntimeConfigs(exerciseId, data))
-      // editLimits: data => dispatch(editLimits(exerciseId, data))
+      editRuntimeConfigs: data =>
+        dispatch(editRuntimeConfigs(exerciseId, data)),
+      editLimits: data => {} // data => dispatch(editLimits(exerciseId, data))
     })
   )(EditExercise)
 );

@@ -6,15 +6,14 @@ import { push } from 'react-router-redux';
 import { LinkContainer } from 'react-router-bootstrap';
 import Button from '../../components/widgets/FlatButton';
 import { FormattedMessage } from 'react-intl';
-import { List } from 'immutable';
+import { List, Map } from 'immutable';
 
 import Page from '../../components/layout/Page';
 import GroupDetail, {
   LoadingGroupDetail,
   FailedGroupDetail
 } from '../../components/Groups/GroupDetail';
-import LeaveJoinGroupButtonContainer
-  from '../../containers/LeaveJoinGroupButtonContainer';
+import LeaveJoinGroupButtonContainer from '../../containers/LeaveJoinGroupButtonContainer';
 import AdminsView from '../../components/Groups/AdminsView';
 import SupervisorsView from '../../components/Groups/SupervisorsView';
 import StudentsView from '../../components/Groups/StudentsView';
@@ -32,6 +31,10 @@ import {
   fetchAssignmentsForGroup,
   create as assignExercise
 } from '../../redux/modules/assignments';
+import {
+  fetchGroupExercises,
+  create as createExercise
+} from '../../redux/modules/exercises';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import {
   readyUsersDataSelector,
@@ -47,6 +50,7 @@ import {
   groupsAssignmentsSelector,
   supervisorsOfGroup
 } from '../../redux/selectors/groups';
+import { groupExercisesSelector } from '../../redux/selectors/exercises';
 
 import { getStatuses } from '../../redux/selectors/stats';
 import { fetchInstanceIfNeeded } from '../../redux/modules/instances';
@@ -71,6 +75,7 @@ class Group extends Component {
             Group.isMemberOf(group, userId) || isSuperAdmin
               ? Promise.all([
                   dispatch(fetchAssignmentsForGroup(groupId)),
+                  dispatch(fetchGroupExercises(groupId)),
                   dispatch(fetchStudents(groupId))
                 ])
               : Promise.resolve(),
@@ -143,6 +148,25 @@ class Group extends Component {
     return breadcrumbs;
   };
 
+  createGroupExercise = () => {
+    const {
+      createGroupExercise,
+      push,
+      links: { EXERCISE_EDIT_URI_FACTORY }
+    } = this.props;
+    createGroupExercise().then(({ value: exercise }) =>
+      push(EXERCISE_EDIT_URI_FACTORY(exercise.id))
+    );
+  };
+
+  assignExercise = exerciseId => {
+    const { assignExercise, push } = this.props;
+    const { links: { ASSIGNMENT_EDIT_URI_FACTORY } } = this.context;
+    assignExercise(exerciseId).then(({ value: assigment }) =>
+      push(ASSIGNMENT_EDIT_URI_FACTORY(assigment.id))
+    );
+  };
+
   render() {
     const {
       group,
@@ -151,6 +175,7 @@ class Group extends Component {
       students,
       supervisors = List(),
       allAssignments = List(),
+      groupExercises = Map(),
       publicAssignments = List(),
       stats,
       statuses,
@@ -175,7 +200,7 @@ class Group extends Component {
         loading={<LoadingGroupDetail />}
         failed={<FailedGroupDetail />}
       >
-        {data => (
+        {data =>
           <div>
             {isAdmin &&
               <p>
@@ -229,9 +254,11 @@ class Group extends Component {
                 group={data}
                 statuses={statuses}
                 assignments={allAssignments}
+                exercises={groupExercises}
+                createGroupExercise={this.createGroupExercise}
+                assignExercise={id => this.assignExercise(id)}
               />}
-          </div>
-        )}
+          </div>}
       </Page>
     );
   }
@@ -246,6 +273,7 @@ Group.propTypes = {
   students: PropTypes.array,
   supervisors: PropTypes.array,
   allAssignments: ImmutablePropTypes.list,
+  groupExercises: ImmutablePropTypes.map,
   publicAssignments: ImmutablePropTypes.list,
   groups: ImmutablePropTypes.map,
   isStudent: PropTypes.bool,
@@ -257,7 +285,12 @@ Group.propTypes = {
   stats: PropTypes.object,
   statuses: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
   assignExercise: PropTypes.func.isRequired,
+  createGroupExercise: PropTypes.func.isRequired,
   push: PropTypes.func.isRequired,
+  links: PropTypes.object
+};
+
+Group.contextTypes = {
   links: PropTypes.object
 };
 
@@ -280,6 +313,7 @@ const mapStateToProps = (state, { params: { groupId } }) => {
     groups: groupsSelectors(state),
     publicAssignments: groupsAssignmentsSelector(groupId, 'public')(state),
     allAssignments: groupsAssignmentsSelector(groupId, 'all')(state),
+    groupExercises: groupExercisesSelector(groupId)(state),
     statuses: getStatuses(groupId, userId)(state),
     supervisors: readyUsers.filter(user => supervisorsIds.includes(user.id)),
     isStudent: isStudentOf(userId, groupId)(state),
@@ -302,6 +336,8 @@ const mapDispatchToProps = (dispatch, { params }) => ({
     Group.loadAsync(params, dispatch, userId, isSuperAdmin),
   assignExercise: exerciseId =>
     dispatch(assignExercise(params.groupId, exerciseId)),
+  createGroupExercise: () =>
+    dispatch(createExercise({ groupId: params.groupId })),
   push: url => dispatch(push(url))
 });
 
