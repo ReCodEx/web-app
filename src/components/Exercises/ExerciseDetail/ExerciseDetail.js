@@ -15,6 +15,7 @@ import { MaybeSucceededIcon } from '../../icons';
 
 import withLinks from '../../../hoc/withLinks';
 import UsersNameContainer from '../../../containers/UsersNameContainer';
+import GroupsNameContainer from '../../../containers/GroupsNameContainer';
 
 const ExerciseDetail = ({
   id,
@@ -29,7 +30,7 @@ const ExerciseDetail = ({
   forkedFrom = null,
   localizedTexts,
   runtimeConfigs,
-  links: { EXERCISE_URI_FACTORY, GROUP_URI_FACTORY }
+  links: { EXERCISE_URI_FACTORY }
 }) =>
   <Box title={name} noPadding>
     <Table>
@@ -51,8 +52,7 @@ const ExerciseDetail = ({
                 defaultMessage="Group:"
               />
             </th>
-            <td><Link to={GROUP_URI_FACTORY(groupId)}>{groupId}</Link></td>
-            {/* @todo: display group name */}
+            <td><GroupsNameContainer groupId={groupId} /></td>
           </tr>}
         <tr>
           <th>

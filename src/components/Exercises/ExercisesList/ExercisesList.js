@@ -5,7 +5,7 @@ import { FormattedMessage } from 'react-intl';
 
 import ExercisesListItem from '../ExercisesListItem';
 
-const ExercisesList = ({ exercises = [], createActions, ...rest }) => (
+const ExercisesList = ({ exercises = [], createActions, ...rest }) =>
   <Table>
     <thead>
       <tr>
@@ -17,6 +17,12 @@ const ExercisesList = ({ exercises = [], createActions, ...rest }) => (
           <FormattedMessage
             id="app.exercisesList.author"
             defaultMessage="Author"
+          />
+        </th>
+        <th>
+          <FormattedMessage
+            id="app.exercisesList.group"
+            defaultMessage="Group"
           />
         </th>
         <th>
@@ -41,13 +47,13 @@ const ExercisesList = ({ exercises = [], createActions, ...rest }) => (
               ? -1
               : b.name < a.name ? 1 : b.createdAt - a.createdAt
         )
-        .map(exercise => (
+        .map(exercise =>
           <ExercisesListItem
             {...exercise}
             createActions={createActions}
             key={exercise.id}
           />
-        ))}
+        )}
 
       {exercises.length === 0 &&
         <tr>
@@ -59,8 +65,7 @@ const ExercisesList = ({ exercises = [], createActions, ...rest }) => (
           </td>
         </tr>}
     </tbody>
-  </Table>
-);
+  </Table>;
 
 ExercisesList.propTypes = {
   exercises: PropTypes.array,
