@@ -78,6 +78,7 @@ class EditExercise extends Component {
       // editLimits,
       formValues,
       runtimesFormValues,
+      // configFormValues,
       push
     } = this.props;
 
@@ -142,18 +143,28 @@ class EditExercise extends Component {
                 </Row>
                 <Row>
                   <Col lg={12}>
-                    <EditExerciseRuntimeConfigsForm
-                      runtimeEnvironments={runtimeEnvironments}
-                      runtimeConfigs={
-                        runtimesFormValues
-                          ? runtimesFormValues.runtimeConfigs
-                          : [{}]
+                    <Box
+                      title={
+                        <FormattedMessage
+                          id="app.editExercise.editRuntimeConfig"
+                          defaultMessage="Edit runtime configurations"
+                        />
                       }
-                      initialValues={{
-                        runtimeConfigs: exercise.runtimeConfigs
-                      }}
-                      onSubmit={editRuntimeConfigs}
-                    />
+                      unlimitedHeight
+                    >
+                      <EditExerciseRuntimeConfigsForm
+                        runtimeEnvironments={runtimeEnvironments}
+                        runtimeConfigs={
+                          runtimesFormValues
+                            ? runtimesFormValues.runtimeConfigs
+                            : [{}]
+                        }
+                        initialValues={{
+                          runtimeConfigs: exercise.runtimeConfigs
+                        }}
+                        onSubmit={editRuntimeConfigs}
+                      />
+                    </Box>
                   </Col>
                 </Row>
                 <Row>
@@ -165,9 +176,16 @@ class EditExercise extends Component {
                           defaultMessage="Edit configurations"
                         />
                       }
+                      unlimitedHeight
                     >
                       <EditExerciseConfigForm
-                        initialValues={{ tests: [] }}
+                        runtimeEnvironments={runtimeEnvironments}
+                        // testConfigs={
+                        //   configFormValues ? configFormValues.testConfigs : [{}]
+                        // }
+                        initialValues={{
+                          testConfigs: [{ name: 'aaa' }, { name: 'bbb' }]
+                        }}
                         onSubmit={setConfig}
                       />
                     </Box>
@@ -237,6 +255,7 @@ EditExercise.propTypes = {
   editLimits: PropTypes.func.isRequired,
   formValues: PropTypes.object,
   runtimesFormValues: PropTypes.object,
+  // configFormValues: PropTypes.object,
   links: PropTypes.object.isRequired,
   push: PropTypes.func.isRequired
 };
@@ -253,6 +272,7 @@ export default withLinks(
         userId,
         formValues: getFormValues('editExercise')(state),
         runtimesFormValues: getFormValues('editExerciseRuntimeConfigs')(state),
+        configFormValues: getFormValues('editExerciseConfig')(state),
         runtimeEnvironments: runtimeEnvironmentsSelector(state),
         environments: Map() // environmentsSelector(state)
       };

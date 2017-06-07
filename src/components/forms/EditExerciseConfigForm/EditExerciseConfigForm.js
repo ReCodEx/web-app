@@ -2,37 +2,51 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { reduxForm, FieldArray } from 'redux-form';
 import { FormattedMessage } from 'react-intl';
-import { Alert, Table, Button } from 'react-bootstrap';
+import { Alert, Button } from 'react-bootstrap';
 import Icon from 'react-fontawesome';
 
 import SubmitButton from '../SubmitButton';
-import EditExerciseConfigTests from './EditExerciseConfigTests';
+import EditExerciseConfigEnvironment from './EditExerciseConfigEnvironment';
 
 class EditExerciseConfigForm extends Component {
-  state = { additionalColumnNames: [], tests: [] };
+  state = { testConfigs: [] };
 
   componentDidMount() {
     const { initialValues } = this.props;
-    this.setState({ tests: initialValues.tests });
+    this.setState({ testConfigs: initialValues.testConfigs });
   }
+
+  /* componentWillReceiveProps(newProps) {
+    this.setState({
+      testConfigs: newProps.testConfigs
+    });
+  } */
 
   addTest() {
     this.setState((prevState, props) => {
       return {
-        tests: prevState.tests.concat([
-          {
-            name: 'Test ' + (prevState.tests.length + 1)
+        testConfigs: prevState.testConfigs.map(testConfig => {
+          if (!testConfig.tests) {
+            testConfig.tests = [];
           }
-        ])
+          testConfig.tests = testConfig.tests.concat([
+            {
+              name: 'Test ' + (testConfig.tests.length + 1)
+            }
+          ]);
+          return testConfig;
+        })
       };
     });
   }
 
   render() {
     const {
+      runtimeEnvironments,
       anyTouched,
       submitting,
       handleSubmit,
+      // testConfigs,
       hasFailed = false,
       hasSucceeded = false,
       invalid
@@ -47,30 +61,13 @@ class EditExerciseConfigForm extends Component {
             />
           </Alert>}
 
-        <Table>
-          <thead>
-            <tr>
-              <th />
-              <th>
-                <FormattedMessage
-                  id="app.editExerciseConfigForm.compilation"
-                  defaultMessage="Compilation"
-                />
-              </th>
-              <th>
-                <FormattedMessage
-                  id="app.editExerciseConfigForm.execution"
-                  defaultMessage="Execution"
-                />
-              </th>
-            </tr>
-          </thead>
-          <FieldArray
-            name={'tests'}
-            component={EditExerciseConfigTests}
-            tests={this.state.tests}
-          />
-        </Table>
+        <FieldArray
+          name="testConfigs"
+          component={EditExerciseConfigEnvironment}
+          testConfigs={this.state.testConfigs}
+          // testConfigs={testConfigs}
+          runtimeEnvironments={runtimeEnvironments}
+        />
 
         <p className="text-center">
           <SubmitButton
@@ -123,12 +120,14 @@ class EditExerciseConfigForm extends Component {
 EditExerciseConfigForm.propTypes = {
   initialValues: PropTypes.object.isRequired,
   values: PropTypes.array,
+  // testConfigs: PropTypes.array,
   handleSubmit: PropTypes.func.isRequired,
   anyTouched: PropTypes.bool,
   submitting: PropTypes.bool,
   hasFailed: PropTypes.bool,
   hasSucceeded: PropTypes.bool,
-  invalid: PropTypes.bool
+  invalid: PropTypes.bool,
+  runtimeEnvironments: PropTypes.object.isRequired
 };
 
 const validate = () => {};

@@ -1,0 +1,37 @@
+import React from 'react';
+import PropTypes from 'prop-types';
+import { Field } from 'redux-form';
+import { TextField } from '../Fields';
+
+const EditExerciseConfigTest = ({ prefix, tests }) => (
+  <tbody>
+    {tests.map((test, index) => (
+      <tr key={index}>
+        <td style={{ verticalAlign: 'middle' }}>
+          <b>{test.name}</b>
+        </td>
+        <td>
+          <Field
+            name={`${prefix}.${index}.compilation`}
+            component={TextField}
+            label={''}
+          />
+        </td>
+        <td>
+          <Field
+            name={`${prefix}.${index}.execution`}
+            component={TextField}
+            label={''}
+          />
+        </td>
+      </tr>
+    ))}
+  </tbody>
+);
+
+EditExerciseConfigTest.propTypes = {
+  prefix: PropTypes.string.isRequired,
+  tests: PropTypes.array.isRequired
+};
+
+export default EditExerciseConfigTest;
