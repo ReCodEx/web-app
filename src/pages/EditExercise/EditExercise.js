@@ -13,23 +13,37 @@ import Box from '../../components/widgets/Box';
 // import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 
 import EditExerciseForm from '../../components/forms/EditExerciseForm';
-import EditExerciseRuntimeConfigsForm from '../../components/forms/EditExerciseRuntimeConfigsForm';
+import EditExerciseConfigForm
+  from '../../components/forms/EditExerciseConfigForm/EditExerciseConfigForm';
+import EditExerciseRuntimeConfigsForm
+  from '../../components/forms/EditExerciseRuntimeConfigsForm';
 // import EditExerciseLimitsForm from '../../components/forms/EditExerciseLimitsForm';
-import SupplementaryFilesTableContainer from '../../containers/SupplementaryFilesTableContainer';
-import AdditionalExerciseFilesTableContainer from '../../containers/AdditionalExerciseFilesTableContainer';
-import DeleteExerciseButtonContainer from '../../containers/DeleteExerciseButtonContainer';
+import SupplementaryFilesTableContainer
+  from '../../containers/SupplementaryFilesTableContainer';
+import AdditionalExerciseFilesTableContainer
+  from '../../containers/AdditionalExerciseFilesTableContainer';
+import DeleteExerciseButtonContainer
+  from '../../containers/DeleteExerciseButtonContainer';
 
 import {
   fetchExerciseIfNeeded,
   editExercise,
   editRuntimeConfigs
 } from '../../redux/modules/exercises';
+import {
+  fetchExerciseConfigIfNeeded,
+  setExerciseConfig
+} from '../../redux/modules/exerciseConfigs';
 // import { fetchLimits, editLimits } from '../../redux/modules/limits';
 import { getExercise } from '../../redux/selectors/exercises';
 import { isSubmitting } from '../../redux/selectors/submission';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
-import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments';
-import { runtimeEnvironmentsSelector } from '../../redux/selectors/runtimeEnvironments';
+import {
+  fetchRuntimeEnvironments
+} from '../../redux/modules/runtimeEnvironments';
+import {
+  runtimeEnvironmentsSelector
+} from '../../redux/selectors/runtimeEnvironments';
 // import { getEnvironmentsLimits } from '../../redux/selectors/limits';
 
 import withLinks from '../../hoc/withLinks';
@@ -46,6 +60,7 @@ class EditExercise extends Component {
   static loadAsync = ({ exerciseId }, dispatch) =>
     Promise.all([
       dispatch(fetchExerciseIfNeeded(exerciseId)),
+      dispatch(fetchExerciseConfigIfNeeded(exerciseId)),
       // dispatch(fetchLimits(exerciseId)),
       dispatch(fetchRuntimeEnvironments())
     ]);
@@ -57,6 +72,7 @@ class EditExercise extends Component {
       exercise,
       editExercise,
       editRuntimeConfigs,
+      setConfig,
       runtimeEnvironments,
       // environments,
       // editLimits,
@@ -97,7 +113,7 @@ class EditExercise extends Component {
           }
         ]}
       >
-        {exercise =>
+        {exercise => (
           <div>
             <Row>
               <Col lg={6}>
@@ -138,6 +154,23 @@ class EditExercise extends Component {
                       }}
                       onSubmit={editRuntimeConfigs}
                     />
+                  </Col>
+                </Row>
+                <Row>
+                  <Col lg={12}>
+                    <Box
+                      title={
+                        <FormattedMessage
+                          id="app.editExercise.editTestConfig"
+                          defaultMessage="Edit configurations"
+                        />
+                      }
+                    >
+                      <EditExerciseConfigForm
+                        initialValues={{ tests: [] }}
+                        onSubmit={setConfig}
+                      />
+                    </Box>
                   </Col>
                 </Row>
                 {/*
@@ -182,7 +215,8 @@ class EditExercise extends Component {
                 </p>
               </div>
             </Box>
-          </div>}
+          </div>
+        )}
       </Page>
     );
   }
@@ -194,6 +228,7 @@ EditExercise.propTypes = {
   loadAsync: PropTypes.func.isRequired,
   reset: PropTypes.func.isRequired,
   editExercise: PropTypes.func.isRequired,
+  setConfig: PropTypes.func.isRequired,
   editRuntimeConfigs: PropTypes.func.isRequired,
   params: PropTypes.shape({
     exerciseId: PropTypes.string.isRequired
@@ -230,6 +265,7 @@ export default withLinks(
         dispatch(editExercise(exerciseId, { ...data, version })),
       editRuntimeConfigs: data =>
         dispatch(editRuntimeConfigs(exerciseId, data)),
+      setConfig: data => dispatch(setExerciseConfig(exerciseId, data)),
       editLimits: data => {} // data => dispatch(editLimits(exerciseId, data))
     })
   )(EditExercise)

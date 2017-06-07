@@ -11,6 +11,11 @@ import EditExerciseConfigTests from './EditExerciseConfigTests';
 class EditExerciseConfigForm extends Component {
   state = { additionalColumnNames: [], tests: [] };
 
+  componentDidMount() {
+    const { initialValues } = this.props;
+    this.setState({ tests: initialValues.tests });
+  }
+
   addTest() {
     this.setState((prevState, props) => {
       return {
@@ -25,8 +30,6 @@ class EditExerciseConfigForm extends Component {
 
   render() {
     const {
-      exercise,
-      initialValues,
       anyTouched,
       submitting,
       handleSubmit,
@@ -122,7 +125,6 @@ EditExerciseConfigForm.propTypes = {
   values: PropTypes.array,
   handleSubmit: PropTypes.func.isRequired,
   anyTouched: PropTypes.bool,
-  exercise: PropTypes.object,
   submitting: PropTypes.bool,
   hasFailed: PropTypes.bool,
   hasSucceeded: PropTypes.bool,

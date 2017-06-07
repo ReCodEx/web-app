@@ -8,6 +8,7 @@ import { default as canSubmit } from './modules/canSubmit'; // because of a name
 import comments from './modules/comments';
 import emailVerification from './modules/emailVerification';
 import evaluationProgress from './modules/evaluationProgress';
+import exerciseConfigs from './modules/exerciseConfigs';
 import exercises from './modules/exercises';
 import files from './modules/files';
 import filesContent from './modules/filesContent';
@@ -38,6 +39,7 @@ const createRecodexReducers = token => ({
   comments,
   emailVerification,
   evaluationProgress,
+  exerciseConfigs,
   exercises,
   files,
   filesContent,

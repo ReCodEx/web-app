@@ -7,7 +7,9 @@ const EditExerciseConfigTests = ({ tests }) => (
   <tbody>
     {tests.map((test, index) => (
       <tr key={index}>
-        <td>{test.name}</td>
+        <td style={{ verticalAlign: 'middle' }}>
+          <b>{test.name}</b>
+        </td>
         <td>
           <Field
             name={`${test.name}.compilation`}
