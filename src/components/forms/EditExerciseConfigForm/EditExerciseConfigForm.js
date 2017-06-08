@@ -13,7 +13,7 @@ class EditExerciseConfigForm extends Component {
 
   componentDidMount() {
     const { initialValues } = this.props;
-    this.setState({ testConfigs: initialValues.testConfigs });
+    this.setState({ testConfigs: initialValues.config });
   }
 
   /* componentWillReceiveProps(newProps) {
@@ -118,7 +118,7 @@ class EditExerciseConfigForm extends Component {
 }
 
 EditExerciseConfigForm.propTypes = {
-  initialValues: PropTypes.object.isRequired,
+  initialValues: PropTypes.object,
   values: PropTypes.array,
   // testConfigs: PropTypes.array,
   handleSubmit: PropTypes.func.isRequired,

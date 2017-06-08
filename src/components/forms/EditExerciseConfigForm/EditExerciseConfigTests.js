@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FieldArray, Field } from 'redux-form';
+import { FieldArray } from 'redux-form';
 import { FormattedMessage } from 'react-intl';
 import { Table } from 'react-bootstrap';
 import EditExerciseConfigTest from './EditExerciseConfigTest';
-import { TextField, SelectField } from '../Fields';
-import { getJsData } from '../../../redux/helpers/resourceManager';
+// import { TextField, SelectField } from '../Fields';
+// import { getJsData } from '../../../redux/helpers/resourceManager';
 
 const EditExerciseConfigTests = ({
   prefix,
@@ -14,7 +14,7 @@ const EditExerciseConfigTests = ({
   runtimeEnvironments
 }) => (
   <div>
-    <Field
+    {/* <Field
       name={`${prefix}.name`}
       component={TextField}
       label={
@@ -26,7 +26,7 @@ const EditExerciseConfigTests = ({
     />
 
     <Field
-      name={`${prefix}.runtimeEnvironmentId`}
+      name={`${prefix}.name`}
       component={SelectField}
       options={[
         { key: '', name: '...' },
@@ -41,7 +41,7 @@ const EditExerciseConfigTests = ({
           defaultMessage="Select runtime environment:"
         />
       }
-    />
+    /> */}
     <Table>
       <thead>
         <tr>

@@ -100,7 +100,7 @@ TabbedArrayField.propTypes = {
   getTitle: PropTypes.func,
   add: PropTypes.bool,
   remove: PropTypes.bool,
-  fields: PropTypes.object,
+  fields: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
   ContentComponent: PropTypes.any,
   emptyMessage: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
   addMessage: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),

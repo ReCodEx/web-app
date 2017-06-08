@@ -8,6 +8,7 @@ const EditExerciseConfigEnvironment = ({ testConfigs, ...props }) => (
   <TabbedArrayField
     {...props}
     testConfigs={testConfigs}
+    fields={testConfigs.map(config => config.name)}
     getTitle={i =>
       testConfigs && testConfigs[i] && testConfigs[i].name
         ? testConfigs[i].name
@@ -34,7 +35,7 @@ const EditExerciseConfigEnvironment = ({ testConfigs, ...props }) => (
         defaultMessage="Do you really want to delete this runtime configuration?"
       />
     }
-    id="runtime-environments"
+    id="exercise-config-tabs"
     // remove
     // add
   />

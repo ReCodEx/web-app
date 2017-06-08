@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Field } from 'redux-form';
-import { TextField } from '../Fields';
+import { SelectField } from '../Fields';
 
 const EditExerciseConfigTest = ({ prefix, tests }) => (
   <tbody>
@@ -12,15 +12,27 @@ const EditExerciseConfigTest = ({ prefix, tests }) => (
         </td>
         <td>
           <Field
-            name={`${prefix}.${index}.compilation`}
-            component={TextField}
+            name={`${prefix}.compilation`}
+            component={SelectField}
+            options={[{ key: '', name: '...' }].concat(
+              test.pipelines.map(pipeline => ({
+                key: pipeline,
+                name: pipeline
+              }))
+            )}
             label={''}
           />
         </td>
         <td>
           <Field
-            name={`${prefix}.${index}.execution`}
-            component={TextField}
+            name={`${prefix}.execution`}
+            component={SelectField}
+            options={[{ key: '', name: '...' }].concat(
+              test.pipelines.map(pipeline => ({
+                key: pipeline,
+                name: pipeline
+              }))
+            )}
             label={''}
           />
         </td>
