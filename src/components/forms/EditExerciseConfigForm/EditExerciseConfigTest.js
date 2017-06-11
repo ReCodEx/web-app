@@ -12,14 +12,14 @@ const EditExerciseConfigTest = ({ prefix, tests }) => (
         </td>
         <td>
           <Field
-            name={`${prefix}.${index}.compilation`}
+            name={`${prefix}.${index}.pipelines.0`}
             component={TextField}
             label={''}
           />
         </td>
         <td>
           <Field
-            name={`${prefix}.${index}.execution`}
+            name={`${prefix}.${index}.pipelines.1`}
             component={TextField}
             label={''}
           />
