@@ -8,7 +8,7 @@ const EditExerciseConfigEnvironment = ({ testConfigs, ...props }) => (
   <TabbedArrayField
     {...props}
     testConfigs={testConfigs}
-    fields={testConfigs.map(config => config.name)}
+    fields={testConfigs.map((config, index) => `config.${index}`)}
     getTitle={i =>
       testConfigs && testConfigs[i] && testConfigs[i].name
         ? testConfigs[i].name

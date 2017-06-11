@@ -62,7 +62,7 @@ class EditExerciseConfigForm extends Component {
           </Alert>}
 
         <FieldArray
-          name="testConfigs"
+          name="config"
           component={EditExerciseConfigEnvironment}
           testConfigs={this.state.testConfigs}
           // testConfigs={testConfigs}
