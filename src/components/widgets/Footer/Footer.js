@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedHTMLMessage } from 'react-intl';
 
-const Footer = ({ version }) => (
+const Footer = ({ version }) =>
   <footer className="main-footer">
     <div className="pull-right hidden-xs">
       <FormattedHTMLMessage
@@ -18,8 +18,7 @@ const Footer = ({ version }) => (
         website: 'http://github.com/recodex'
       }}
     />
-  </footer>
-);
+  </footer>;
 
 Footer.propTypes = {
   version: PropTypes.string.isRequired

@@ -5,8 +5,7 @@ import { FormattedDate, FormattedTime, FormattedMessage } from 'react-intl';
 import { ButtonGroup } from 'react-bootstrap';
 import Button from '../../widgets/FlatButton';
 import { LinkContainer } from 'react-router-bootstrap';
-import DeleteAssignmentButtonContainer
-  from '../../../containers/DeleteAssignmentButtonContainer';
+import DeleteAssignmentButtonContainer from '../../../containers/DeleteAssignmentButtonContainer';
 
 import withLinks from '../../../hoc/withLinks';
 import {
@@ -27,7 +26,7 @@ const AdminAssignmentTableRow = ({
     ASSIGNMENT_DETAIL_URI_FACTORY: detail,
     ASSIGNMENT_EDIT_URI_FACTORY: edit
   }
-}) => (
+}) =>
   <tr>
     <td className="text-center">
       <MaybePublicIcon id={id} isPublic={isPublic} />
@@ -63,8 +62,7 @@ const AdminAssignmentTableRow = ({
         <DeleteAssignmentButtonContainer id={id} bsSize="xs" />
       </ButtonGroup>
     </td>
-  </tr>
-);
+  </tr>;
 
 AdminAssignmentTableRow.propTypes = {
   id: PropTypes.any.isRequired,

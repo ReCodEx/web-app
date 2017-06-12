@@ -7,9 +7,7 @@ import { List } from 'immutable';
 import { fetchUsersSubmissions } from '../../redux/modules/submissions';
 import SubmissionsTable from '../../components/Assignments/SubmissionsTable';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
-import {
-  createGetUsersSubmissionsForAssignment
-} from '../../redux/selectors/assignments';
+import { createGetUsersSubmissionsForAssignment } from '../../redux/selectors/assignments';
 
 class SubmissionsTableContainer extends Component {
   componentWillMount() {

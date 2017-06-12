@@ -8,7 +8,7 @@ const ReferenceSolutionsList = ({
   referenceSolutions = [],
   renderButtons = () => null,
   ...props
-}) => (
+}) =>
   <Table hover {...props}>
     <thead>
       <tr>
@@ -31,7 +31,7 @@ const ReferenceSolutionsList = ({
     <tbody>
       {referenceSolutions
         .sort((a, b) => a.uploadedAt - b.uploadedAt)
-        .map(({ id, uploadedAt, description }) => (
+        .map(({ id, uploadedAt, description }) =>
           <tr key={id}>
             <td className="text-center">
               <Icon name="file-code-o" />
@@ -50,10 +50,9 @@ const ReferenceSolutionsList = ({
               {renderButtons(id)}
             </td>
           </tr>
-        ))}
+        )}
     </tbody>
-  </Table>
-);
+  </Table>;
 
 ReferenceSolutionsList.propTypes = {
   referenceSolutions: PropTypes.array.isRequired,

@@ -2,7 +2,7 @@ import React from 'react';
 import { ListGroupItem } from 'react-bootstrap';
 import { LoadingAvatar } from '../../widgets/Avatar';
 
-const LoadingUsersListItem = () => (
+const LoadingUsersListItem = () =>
   <ListGroupItem>
     <div className="pull-left image">
       <LoadingAvatar />
@@ -10,7 +10,6 @@ const LoadingUsersListItem = () => (
     <div className="pull-left info">
       <p>Načítám...</p>
     </div>
-  </ListGroupItem>
-);
+  </ListGroupItem>;
 
 export default LoadingUsersListItem;

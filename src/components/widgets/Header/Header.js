@@ -3,8 +3,7 @@ import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { IndexLink } from 'react-router';
 import MediaQuery from 'react-responsive';
-import HeaderNotificationsContainer
-  from '../../../containers/HeaderNotificationsContainer';
+import HeaderNotificationsContainer from '../../../containers/HeaderNotificationsContainer';
 import HeaderLanguageSwitching from '../HeaderLanguageSwitching';
 import ClientOnly from '../../helpers/ClientOnly';
 
@@ -72,14 +71,14 @@ class Header extends Component {
           <div className="navbar-custom-menu">
             <ul className="nav navbar-nav">
               <HeaderNotificationsContainer />
-              {availableLangs.map(lang => (
+              {availableLangs.map(lang =>
                 <HeaderLanguageSwitching
                   lang={lang}
                   active={currentLang === lang}
                   key={lang}
                   currentUrl={currentUrl}
                 />
-              ))}
+              )}
             </ul>
           </div>
         </div>

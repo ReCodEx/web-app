@@ -17,7 +17,7 @@ const UsersName = ({
   noLink,
   links: { USER_URI_FACTORY },
   currentUserId
-}) => (
+}) =>
   <span className={styles.wrapper}>
     <span className={styles.avatar}>
       <Avatar size={size} src={avatarUrl} title={fullName} />
@@ -40,8 +40,7 @@ const UsersName = ({
           <NotVerified userId={id} currentUserId={currentUserId} />}
       </span>
     </span>
-  </span>
-);
+  </span>;
 
 UsersName.propTypes = {
   id: PropTypes.string.isRequired,

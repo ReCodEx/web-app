@@ -5,7 +5,7 @@ import { Table } from 'react-bootstrap';
 import { MaybeSucceededIcon } from '../../icons';
 import Box from '../../widgets/Box';
 
-const LicencesTable = ({ instance, licences }) => (
+const LicencesTable = ({ instance, licences }) =>
   <Box
     title={
       <FormattedMessage
@@ -50,7 +50,7 @@ const LicencesTable = ({ instance, licences }) => (
         <tbody>
           {licences
             .sort((a, b) => (a.validUntil < b.validUntil ? 1 : -1))
-            .map(({ id, validUntil, isValid, note }) => (
+            .map(({ id, validUntil, isValid, note }) =>
               <tr key={id}>
                 <td>
                   {!isValid || validUntil * 1000 < Date.now()
@@ -68,7 +68,7 @@ const LicencesTable = ({ instance, licences }) => (
                   )
                 </td>
               </tr>
-            ))}
+            )}
 
           {licences.length === 0 &&
             <tr>
@@ -82,8 +82,7 @@ const LicencesTable = ({ instance, licences }) => (
         </tbody>
       </Table>
     </div>
-  </Box>
-);
+  </Box>;
 
 LicencesTable.propTypes = {
   instance: PropTypes.shape({

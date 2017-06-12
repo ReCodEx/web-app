@@ -5,7 +5,7 @@ import TextField from './TextField';
 import { HelpBlock } from 'react-bootstrap';
 import { FormattedMessage } from 'react-intl';
 
-const BytesTextField = ({ input, ...props }) => (
+const BytesTextField = ({ input, ...props }) =>
   <div>
     <TextField {...props} input={input} />
     <HelpBlock>
@@ -15,8 +15,7 @@ const BytesTextField = ({ input, ...props }) => (
       />
       {' '}<b>{prettyBytes(Number(input.value))}</b>
     </HelpBlock>
-  </div>
-);
+  </div>;
 
 BytesTextField.propTypes = {
   input: PropTypes.shape({

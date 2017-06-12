@@ -17,7 +17,7 @@ const EditExerciseLimitsForm = ({
   hasFailed = false,
   hasSucceeded = false,
   invalid
-}) => (
+}) =>
   <div>
     {hasFailed &&
       <Alert bsStyle="danger">
@@ -65,8 +65,7 @@ const EditExerciseLimitsForm = ({
         }}
       />
     </p>
-  </div>
-);
+  </div>;
 
 EditExerciseLimitsForm.propTypes = {
   initialValues: PropTypes.object.isRequired,

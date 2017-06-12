@@ -25,7 +25,7 @@ const AssignmentTableRow = ({
     ASSIGNMENT_DETAIL_URI_FACTORY,
     ASSIGNMENT_DETAIL_SPECIFIC_USER_URI_FACTORY
   }
-}) => (
+}) =>
   <tr>
     <td className="text-center">
       <AssignmentStatusIcon id={id} status={status} accepted={accepted} />
@@ -55,8 +55,7 @@ const AssignmentTableRow = ({
           </span>
         : <span>-</span>}
     </td>
-  </tr>
-);
+  </tr>;
 
 AssignmentTableRow.propTypes = {
   showGroup: PropTypes.bool,

@@ -1,7 +1,7 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-const SupplementaryFilesTableHeaderRow = () => (
+const SupplementaryFilesTableHeaderRow = () =>
   <tr>
     <th>
       <FormattedMessage
@@ -27,7 +27,6 @@ const SupplementaryFilesTableHeaderRow = () => (
         defaultMessage="Uploaded at"
       />
     </th>
-  </tr>
-);
+  </tr>;
 
 export default SupplementaryFilesTableHeaderRow;

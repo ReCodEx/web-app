@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import SelectField from './SelectField';
 
-const LanguageSelectField = ({ options = [], ...props }) => (
+const LanguageSelectField = ({ options = [], ...props }) =>
   <SelectField
     {...props}
     options={[
@@ -12,8 +12,7 @@ const LanguageSelectField = ({ options = [], ...props }) => (
       { key: 'de', name: 'Deutsch' },
       ...options
     ]}
-  />
-);
+  />;
 
 LanguageSelectField.propTypes = {
   options: PropTypes.array

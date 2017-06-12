@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { LoadingIcon } from '../../../../icons';
 
-const Posting = ({ right }) => (
+const Posting = ({ right }) =>
   <span
     className={classNames({
       'direct-chat-timestamp': true,
@@ -12,8 +12,7 @@ const Posting = ({ right }) => (
     })}
   >
     <LoadingIcon /> Publikuji ...
-  </span>
-);
+  </span>;
 
 Posting.propTypes = {
   right: PropTypes.bool.isRequired

@@ -3,7 +3,7 @@ import { FormattedMessage } from 'react-intl';
 import { LoadingIcon } from '../../icons';
 import Box from '../../widgets/Box';
 
-const LoadingExerciseDetail = () => (
+const LoadingExerciseDetail = () =>
   <Box
     title={
       <FormattedMessage
@@ -18,7 +18,6 @@ const LoadingExerciseDetail = () => (
       id="app.exercises.loadingDetail"
       defaultMessage="Loading exercise's detail"
     />
-  </Box>
-);
+  </Box>;
 
 export default LoadingExerciseDetail;

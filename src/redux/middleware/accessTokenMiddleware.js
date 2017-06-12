@@ -1,8 +1,6 @@
 import { actionTypes } from '../modules/auth';
 import { jwtSelector } from '../selectors/auth';
-import {
-  actionTypes as registrationActionTypes
-} from '../modules/registration';
+import { actionTypes as registrationActionTypes } from '../modules/registration';
 import { CALL_API } from './apiMiddleware';
 import cookies from 'browser-cookies';
 import { canUseDOM } from 'exenv';

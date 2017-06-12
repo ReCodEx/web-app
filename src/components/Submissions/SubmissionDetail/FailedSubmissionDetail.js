@@ -3,7 +3,7 @@ import { FormattedMessage } from 'react-intl';
 import Box from '../../widgets/Box';
 import { WarningIcon } from '../../icons';
 
-const FailedSubmissionDetail = () => (
+const FailedSubmissionDetail = () =>
   <Box
     title={
       <span>
@@ -23,7 +23,6 @@ const FailedSubmissionDetail = () => (
       id="app.failedSubmissionDetail.description"
       defaultMessage="Make sure you are connected to the Internet and repeat the action after a while."
     />
-  </Box>
-);
+  </Box>;
 
 export default FailedSubmissionDetail;

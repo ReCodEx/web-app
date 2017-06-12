@@ -27,7 +27,7 @@ const Upload = ({
   returnFile,
   removeFailedFile,
   retryUploadFile
-}) => (
+}) =>
   <div>
     <DropZone onDrop={uploadFiles} style={dropZoneStyles}>
       <p>
@@ -62,8 +62,7 @@ const Upload = ({
         removeFailedFile={removeFailedFile}
         retryUploadFile={retryUploadFile}
       />}
-  </div>
-);
+  </div>;
 
 Upload.propTypes = {
   uploadingFiles: PropTypes.array.isRequired,

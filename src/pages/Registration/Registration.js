@@ -8,8 +8,7 @@ import { reset, startAsyncValidation } from 'redux-form';
 import { Row, Col } from 'react-bootstrap';
 import PageContent from '../../components/layout/PageContent';
 import RegistrationForm from '../../components/forms/RegistrationForm';
-import ExternalRegistrationForm
-  from '../../components/forms/ExternalRegistrationForm';
+import ExternalRegistrationForm from '../../components/forms/ExternalRegistrationForm';
 import RegistrationCASOauth from '../../components/forms/RegistrationCASOauth';
 
 import {

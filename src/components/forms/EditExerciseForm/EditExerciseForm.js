@@ -53,7 +53,7 @@ const EditExerciseForm = ({
   asyncValidating,
   formValues: { localizedTexts } = {},
   intl: { formatMessage }
-}) => (
+}) =>
   <FormBox
     title={
       <FormattedMessage
@@ -169,8 +169,7 @@ const EditExerciseForm = ({
       localizedTexts={localizedTexts}
       component={LocalizedTextsFormField}
     />
-  </FormBox>
-);
+  </FormBox>;
 
 EditExerciseForm.propTypes = {
   initialValues: PropTypes.object.isRequired,
@@ -188,7 +187,7 @@ EditExerciseForm.propTypes = {
   })
 };
 
-const validate = ({ name, description, difficulty }) => {
+const validate = ({ name, description, difficulty, localizedTexts }) => {
   const errors = {};
 
   if (!name) {
@@ -216,6 +215,20 @@ const validate = ({ name, description, difficulty }) => {
         defaultMessage="Please fill the description of the exercise."
       />
     );
+  }
+
+  const localeArr = localizedTexts
+    .filter(text => text !== undefined)
+    .map(text => text.locale);
+  for (let i = 0; i < localeArr.length; ++i) {
+    if (localeArr.indexOf(localeArr[i]) !== i) {
+      errors[`localizedTexts[${i}].locale`] = (
+        <FormattedMessage
+          id="app.editExerciseForm.validation.localizedTexts"
+          defaultMessage="There are more language variants with the same locale. Please make sure locales are unique."
+        />
+      );
+    }
   }
 
   return errors;

@@ -12,7 +12,7 @@ const EditExerciseConfigTests = ({
   i,
   testConfigs,
   runtimeEnvironments
-}) => (
+}) =>
   <div>
     {/* <Field
       name={`${prefix}.name`}
@@ -71,8 +71,7 @@ const EditExerciseConfigTests = ({
         prefix={`${prefix}.tests`}
       />
     </Table>
-  </div>
-);
+  </div>;
 
 EditExerciseConfigTests.propTypes = {
   prefix: PropTypes.string.isRequired,

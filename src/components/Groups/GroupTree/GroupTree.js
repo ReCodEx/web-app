@@ -6,13 +6,12 @@ import Button from '../../widgets/FlatButton';
 import { LinkContainer } from 'react-router-bootstrap';
 import { TreeView, TreeViewItem } from '../../widgets/TreeView';
 import { isReady, getJsData } from '../../../redux/helpers/resourceManager';
-import DeleteGroupButtonContainer
-  from '../../../containers/DeleteGroupButtonContainer';
+import DeleteGroupButtonContainer from '../../../containers/DeleteGroupButtonContainer';
 
 import withLinks from '../../../hoc/withLinks';
 
 class GroupTree extends Component {
-  renderLoading = level => (
+  renderLoading = level =>
     <TreeView>
       <TreeViewItem
         level={level}
@@ -24,8 +23,7 @@ class GroupTree extends Component {
           />
         }
       />
-    </TreeView>
-  );
+    </TreeView>;
 
   renderButtons = groupId => {
     const { isAdmin, links: { GROUP_URI_FACTORY } } = this.props;
@@ -88,7 +86,7 @@ class GroupTree extends Component {
               : undefined
           }
         >
-          {allChildGroups.map(id => (
+          {allChildGroups.map(id =>
             <GroupTree
               {...this.props}
               key={id}
@@ -98,7 +96,7 @@ class GroupTree extends Component {
               level={level + 1}
               isPublic={publicChildGroups.indexOf(id) >= 0}
             />
-          ))}
+          )}
         </TreeViewItem>
       </TreeView>
     );

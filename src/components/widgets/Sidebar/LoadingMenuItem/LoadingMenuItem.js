@@ -1,7 +1,7 @@
 import React from 'react';
 import { LoadingIcon } from '../../../icons';
 
-const LoadingMenuItem = () => (
+const LoadingMenuItem = () =>
   <li>
     <a>
       <LoadingIcon />
@@ -13,7 +13,6 @@ const LoadingMenuItem = () => (
         Načítám ...
       </span>
     </a>
-  </li>
-);
+  </li>;
 
 export default LoadingMenuItem;

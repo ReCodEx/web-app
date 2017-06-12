@@ -62,7 +62,7 @@ class EditUser extends Component {
           }
         ]}
       >
-        {data => (
+        {data =>
           <Row>
             <Col lg={6}>
               <EditUserProfileForm
@@ -76,8 +76,7 @@ class EditUser extends Component {
                 initialValues={data.settings}
               />
             </Col>
-          </Row>
-        )}
+          </Row>}
       </Page>
     );
   }

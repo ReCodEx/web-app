@@ -4,7 +4,7 @@ import { Row, Col, Image } from 'react-bootstrap';
 
 import PageContent from '../../components/layout/PageContent';
 
-const Home = () => (
+const Home = () =>
   <PageContent
     title={
       <FormattedMessage
@@ -90,7 +90,6 @@ const Home = () => (
         </Col>
       </Row>
     </div>
-  </PageContent>
-);
+  </PageContent>;
 
 export default Home;

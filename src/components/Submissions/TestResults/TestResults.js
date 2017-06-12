@@ -4,7 +4,7 @@ import { FormattedMessage } from 'react-intl';
 import Box from '../../widgets/Box';
 import TestResultsTable from '../TestResultsTable';
 
-const TestResults = ({ evaluation }) => (
+const TestResults = ({ evaluation }) =>
   <Box
     title={
       <FormattedMessage
@@ -17,8 +17,7 @@ const TestResults = ({ evaluation }) => (
     isOpen={true}
   >
     <TestResultsTable results={evaluation.testResults} />
-  </Box>
-);
+  </Box>;
 
 TestResults.propTypes = {
   evaluation: PropTypes.object.isRequired

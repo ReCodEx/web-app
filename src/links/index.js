@@ -31,7 +31,9 @@ export const linksFactory = lang => {
     exerciseId,
     referenceSolutionId
   ) =>
-    `${EXERCISE_URI_FACTORY(exerciseId)}/reference-solution/${referenceSolutionId}`;
+    `${EXERCISE_URI_FACTORY(
+      exerciseId
+    )}/reference-solution/${referenceSolutionId}`;
 
   // assignments and solution submissions
   const ASSIGNMENT_DETAIL_URI_FACTORY = id => `${prefix}/app/assignment/${id}`;
@@ -120,6 +122,8 @@ export const isAbsolute = url => url.match('^(https?:)?//.+') !== null;
 export const makeAbsolute = url =>
   typeof window === 'undefined'
     ? url
-    : `${window.location.origin}/${url.indexOf('/') === 0 ? url.substr(1) : url}`;
+    : `${window.location.origin}/${url.indexOf('/') === 0
+        ? url.substr(1)
+        : url}`;
 
 export const absolute = url => (isAbsolute(url) ? url : makeAbsolute(url));

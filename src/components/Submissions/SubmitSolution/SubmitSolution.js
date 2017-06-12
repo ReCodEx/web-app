@@ -43,11 +43,13 @@ const commonMessages = defineMessages({
   },
   instructions: {
     id: 'app.submistSolution.instructions',
-    defaultMessage: 'You must attach at least one file with source code and wait, until all your files are uploaded to the server. If there is a problem uploading any of the files, please try uploading it again or remove the file. This form cannot be submitted until there are any files which have not been successfully uploaded or which could not have been uploaded to the server.'
+    defaultMessage:
+      'You must attach at least one file with source code and wait, until all your files are uploaded to the server. If there is a problem uploading any of the files, please try uploading it again or remove the file. This form cannot be submitted until there are any files which have not been successfully uploaded or which could not have been uploaded to the server.'
   },
   submissionRejected: {
     id: 'app.submistSolution.submitFailed',
-    defaultMessage: 'Action was rejected by the server. This usually means you have uploaded incorrect files - do your files have proper file type extensions? If you cannot submit the solution and there is no obvious reason, contact your administrator to sort things out.'
+    defaultMessage:
+      'Action was rejected by the server. This usually means you have uploaded incorrect files - do your files have proper file type extensions? If you cannot submit the solution and there is no obvious reason, contact your administrator to sort things out.'
   }
 });
 
@@ -107,7 +109,7 @@ const SubmitSolution = ({
   useReferenceMessages,
   messages,
   intl: { formatMessage }
-}) => (
+}) =>
   <Modal show={isOpen} backdrop="static" onHide={onClose}>
     <Modal.Header closeButton>
       <Modal.Title>
@@ -135,9 +137,9 @@ const SubmitSolution = ({
                 ? formatMessage(commonMessages.detectRte)
                 : formatMessage(commonMessages.selectOneRte)}
             </option>
-            {runtimeEnvironmentIds.map(rte => (
+            {runtimeEnvironmentIds.map(rte =>
               <option key={rte} value={rte}>{rte}</option>
-            ))}
+            )}
           </FormControl>
         </FormGroup>}
 
@@ -200,8 +202,7 @@ const SubmitSolution = ({
           {formatMessage(commonMessages.instructions)}
         </HelpBlock>}
     </Modal.Footer>
-  </Modal>
-);
+  </Modal>;
 
 SubmitSolution.propTypes = {
   userId: PropTypes.string.isRequired,

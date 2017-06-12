@@ -16,7 +16,7 @@ const FailedSubmissionTableRow = ({
   submittedAt,
   maxPoints,
   evaluation: { score, points, bonusPoints }
-}) => (
+}) =>
   <tr>
     <td><AssignmentStatusIcon id={link} status="failed" /></td>
     <td>
@@ -49,8 +49,7 @@ const FailedSubmissionTableRow = ({
         />
       </Link>
     </td>
-  </tr>
-);
+  </tr>;
 
 FailedSubmissionTableRow.propTypes = {
   link: PropTypes.string.isRequired,

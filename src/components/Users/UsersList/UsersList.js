@@ -4,12 +4,12 @@ import { Table } from 'react-bootstrap';
 import { FormattedMessage } from 'react-intl';
 import UsersListItem from '../UsersListItem';
 
-const UsersList = ({ users = [], createActions, ...rest }) => (
+const UsersList = ({ users = [], createActions, ...rest }) =>
   <Table>
     <tbody>
-      {users.map(user => (
+      {users.map(user =>
         <UsersListItem {...user} createActions={createActions} key={user.id} />
-      ))}
+      )}
 
       {users.length === 0 &&
         <tr>
@@ -21,8 +21,7 @@ const UsersList = ({ users = [], createActions, ...rest }) => (
           </td>
         </tr>}
     </tbody>
-  </Table>
-);
+  </Table>;
 
 UsersList.propTypes = {
   users: PropTypes.array,

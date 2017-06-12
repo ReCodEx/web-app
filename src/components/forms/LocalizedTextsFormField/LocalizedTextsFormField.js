@@ -41,7 +41,7 @@ class LocalizedTextsFormField extends Component {
             activeKey={this.state.localeTab}
             onSelect={this.changeTab}
           >
-            {fields.map((localized, i) => (
+            {fields.map((localized, i) =>
               <Tab
                 key={i}
                 eventKey={i}
@@ -104,7 +104,7 @@ class LocalizedTextsFormField extends Component {
                   </Confirm>
                 </p>
               </Tab>
-            ))}
+            )}
           </Tabs>}
 
         {fields.length === 0 &&

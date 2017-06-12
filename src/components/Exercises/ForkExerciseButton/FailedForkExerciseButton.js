@@ -4,7 +4,7 @@ import { FormattedMessage } from 'react-intl';
 import Button from '../../widgets/FlatButton';
 import { FailedIcon } from '../../icons';
 
-const FailedForkExerciseButton = ({ onClick, ...props }) => (
+const FailedForkExerciseButton = ({ onClick, ...props }) =>
   <Button
     bsStyle="danger"
     bsSize="sm"
@@ -18,8 +18,7 @@ const FailedForkExerciseButton = ({ onClick, ...props }) => (
       id="app.forkExerciseButton.failed"
       defaultMessage="Try forking the exercise again"
     />
-  </Button>
-);
+  </Button>;
 
 FailedForkExerciseButton.propTypes = {
   onClick: PropTypes.func.isRequired

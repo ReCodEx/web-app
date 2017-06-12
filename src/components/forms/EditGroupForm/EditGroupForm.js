@@ -15,7 +15,7 @@ const EditGroupForm = ({
   submitFailed = false,
   submitSucceeded = false,
   invalid
-}) => (
+}) =>
   <FormBox
     title={
       <FormattedMessage
@@ -144,8 +144,7 @@ const EditGroupForm = ({
         />
       }
     />
-  </FormBox>
-);
+  </FormBox>;
 
 EditGroupForm.propTypes = {
   handleSubmit: PropTypes.func.isRequired,

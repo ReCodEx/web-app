@@ -36,15 +36,14 @@ class UsersNameContainer extends Component {
         loading={<LoadingUsersName size={size} />}
         failed={<FailedUsersName size={size} />}
       >
-        {user => (
+        {user =>
           <UsersName
             {...user}
             large={large}
             size={size}
             noLink={noLink}
             currentUserId={currentUserId}
-          />
-        )}
+          />}
       </ResourceRenderer>
     );
   }

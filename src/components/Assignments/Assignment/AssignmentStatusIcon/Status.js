@@ -4,7 +4,7 @@ import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import Icon from 'react-fontawesome';
 import { FormattedMessage } from 'react-intl';
 
-const Status = ({ id, message, icon, accepted = false }) => (
+const Status = ({ id, message, icon, accepted = false }) =>
   <span>
     {!accepted &&
       <OverlayTrigger
@@ -34,8 +34,7 @@ const Status = ({ id, message, icon, accepted = false }) => (
       >
         <Icon name="check-circle" className="text-green" />
       </OverlayTrigger>}
-  </span>
-);
+  </span>;
 
 Status.propTypes = {
   id: PropTypes.string.isRequired,

@@ -2,7 +2,7 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { LoadingIcon } from '../../icons';
 
-const LoadingSubmissionTableRow = () => (
+const LoadingSubmissionTableRow = () =>
   <tr>
     <td colSpan={5} className="text-center">
       <LoadingIcon />
@@ -12,7 +12,6 @@ const LoadingSubmissionTableRow = () => (
         defaultMessage="Loading submitted solutions ..."
       />
     </td>
-  </tr>
-);
+  </tr>;
 
 export default LoadingSubmissionTableRow;

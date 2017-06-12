@@ -74,12 +74,11 @@ class EditInstance extends Component {
           }
         ]}
       >
-        {instance => (
+        {instance =>
           <EditInstanceForm
             initialValues={this.getInitialValues(instance)}
             onSubmit={editInstance}
-          />
-        )}
+          />}
       </Page>
     );
   }

@@ -12,7 +12,7 @@ const FormBox = ({
   dirty = false,
   children,
   ...props
-}) => (
+}) =>
   <Form onSubmit={onSubmit}>
     <Box
       type={succeeded ? 'success' : dirty ? 'warning' : 'default'}
@@ -21,8 +21,7 @@ const FormBox = ({
     >
       <div>{children}</div>
     </Box>
-  </Form>
-);
+  </Form>;
 
 FormBox.propTypes = {
   onSubmit: PropTypes.func,

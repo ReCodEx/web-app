@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import { Field } from 'redux-form';
 import { TextField } from '../Fields';
 
-const EditExerciseConfigTest = ({ prefix, tests }) => (
+const EditExerciseConfigTest = ({ prefix, tests }) =>
   <tbody>
-    {tests.map((test, index) => (
+    {tests.map((test, index) =>
       <tr key={index}>
         <td style={{ verticalAlign: 'middle' }}>
           <b>{test.name}</b>
@@ -25,7 +25,7 @@ const EditExerciseConfigTest = ({ prefix, tests }) => (
           />
         </td>
         {test.variables &&
-          Object.keys(test.variables).map(key => (
+          Object.keys(test.variables).map(key =>
             <td key={key}>
               <Field
                 name={`${prefix}.${index}.variables.${key}`}
@@ -33,11 +33,10 @@ const EditExerciseConfigTest = ({ prefix, tests }) => (
                 label={key + ':'}
               />
             </td>
-          ))}
+          )}
       </tr>
-    ))}
-  </tbody>
-);
+    )}
+  </tbody>;
 
 EditExerciseConfigTest.propTypes = {
   prefix: PropTypes.string.isRequired,

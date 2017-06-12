@@ -16,7 +16,7 @@ const TextAreaField = ({
   label,
   children,
   ...props
-}) => (
+}) =>
   <FormGroup
     controlId={input.name}
     validationState={touched && error ? 'error' : undefined}
@@ -25,8 +25,7 @@ const TextAreaField = ({
     <FormControl {...input} {...props} componentClass="textarea" rows={8} />
     {touched && error && <HelpBlock>{error}</HelpBlock>}
     {children}
-  </FormGroup>
-);
+  </FormGroup>;
 
 TextAreaField.propTypes = {
   type: PropTypes.string,

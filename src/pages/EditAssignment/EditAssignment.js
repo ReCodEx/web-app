@@ -10,8 +10,7 @@ import PageContent from '../../components/layout/PageContent';
 
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import EditAssignmentForm from '../../components/forms/EditAssignmentForm';
-import DeleteAssignmentButtonContainer
-  from '../../containers/DeleteAssignmentButtonContainer';
+import DeleteAssignmentButtonContainer from '../../containers/DeleteAssignmentButtonContainer';
 import Box from '../../components/widgets/Box';
 import { LoadingIcon, WarningIcon } from '../../components/icons';
 
@@ -21,14 +20,10 @@ import {
 } from '../../redux/modules/assignments';
 import { getAssignment } from '../../redux/selectors/assignments';
 import { canSubmitSolution } from '../../redux/selectors/canSubmit';
-import {
-  runtimeEnvironmentsSelector
-} from '../../redux/selectors/runtimeEnvironments';
+import { runtimeEnvironmentsSelector } from '../../redux/selectors/runtimeEnvironments';
 import { isSubmitting } from '../../redux/selectors/submission';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
-import {
-  fetchRuntimeEnvironments
-} from '../../redux/modules/runtimeEnvironments';
+import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments';
 import { isReady, getJsData } from '../../redux/helpers/resourceManager';
 
 import withLinks from '../../hoc/withLinks';
@@ -142,7 +137,7 @@ class EditAssignment extends Component {
             }
             resource={assignment}
           >
-            {data => (
+            {data =>
               <div>
                 <EditAssignmentForm
                   assignment={data}
@@ -150,8 +145,7 @@ class EditAssignment extends Component {
                   onSubmit={formData => editAssignment(data.version, formData)}
                   formValues={formValues}
                 />
-              </div>
-            )}
+              </div>}
           </ResourceRenderer>
           <br />
           <Box

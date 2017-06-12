@@ -10,7 +10,7 @@ import NoAssignmentsTableRow from './NoAssignmentsTableRow';
 import LoadingAssignmentTableRow from './LoadingAssignmentTableRow';
 import ResourceRenderer from '../../helpers/ResourceRenderer';
 
-const AdminAssignmentsTable = ({ assignments = List() }) => (
+const AdminAssignmentsTable = ({ assignments = List() }) =>
   <Table hover>
     <thead>
       <tr>
@@ -55,16 +55,15 @@ const AdminAssignmentsTable = ({ assignments = List() }) => (
           : <tbody>
               {assignments
                 .sort((a, b) => a.firstDeadline - b.firstDeadline)
-                .map(assignment => (
+                .map(assignment =>
                   <AdminAssignmentsTableRow
                     key={assignment.id}
                     {...assignment}
                   />
-                ))}
+                )}
             </tbody>}
     </ResourceRenderer>
-  </Table>
-);
+  </Table>;
 
 AdminAssignmentsTable.propTypes = {
   assignments: ImmutablePropTypes.list.isRequired,

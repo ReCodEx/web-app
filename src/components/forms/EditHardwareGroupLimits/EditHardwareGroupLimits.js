@@ -8,7 +8,7 @@ const EditHardwareGroupLimits = ({
   limits,
   referenceSolutionsEvaluations,
   ...props
-}) => (
+}) =>
   <TabbedArrayField
     {...props}
     limits={limits}
@@ -18,8 +18,7 @@ const EditHardwareGroupLimits = ({
     remove={false}
     referenceSolutionsEvaluations={referenceSolutionsEvaluations}
     ContentComponent={HardwareGroupFields}
-  />
-);
+  />;
 
 EditHardwareGroupLimits.propTypes = {
   limits: PropTypes.array,

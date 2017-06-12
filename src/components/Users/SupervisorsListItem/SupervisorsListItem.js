@@ -1,8 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import MakeRemoveSupervisorButtonContainer
-  from '../../../containers/MakeRemoveSupervisorButtonContainer';
+import MakeRemoveSupervisorButtonContainer from '../../../containers/MakeRemoveSupervisorButtonContainer';
 import MakeGroupAdminButton from '../../Groups/MakeGroupAdminButton';
 import { makeAdmin } from '../../../redux/modules/groups';
 import { adminsOfGroup } from '../../../redux/selectors/groups';
@@ -16,7 +15,7 @@ const SupervisorsListItem = ({
   groupId,
   groupAdmins,
   makeAdmin
-}) => (
+}) =>
   <tr>
     <td>
       <UsersNameContainer userId={id} />
@@ -30,8 +29,7 @@ const SupervisorsListItem = ({
             bsSize="xs"
           />}
       </td>}
-  </tr>
-);
+  </tr>;
 
 SupervisorsListItem.propTypes = {
   id: PropTypes.string.isRequired,

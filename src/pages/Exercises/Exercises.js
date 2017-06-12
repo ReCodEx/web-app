@@ -67,7 +67,7 @@ class Exercises extends Component {
           }
         ]}
       >
-        {(...exercises) => (
+        {(...exercises) =>
           <div>
             <Box
               title={
@@ -100,8 +100,7 @@ class Exercises extends Component {
             >
               <ExercisesList exercises={exercises} />
             </Box>
-          </div>
-        )}
+          </div>}
       </Page>
     );
   }

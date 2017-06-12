@@ -3,7 +3,7 @@ import { FormattedMessage } from 'react-intl';
 import { LoadingIcon } from '../../icons';
 import Box from '../../widgets/Box';
 
-const LoadingInstanceDetail = () => (
+const LoadingInstanceDetail = () =>
   <Box
     title={
       <FormattedMessage
@@ -18,7 +18,6 @@ const LoadingInstanceDetail = () => (
       id="app.instances.loadingDetail"
       defaultMessage="Loading instance's detail"
     />
-  </Box>
-);
+  </Box>;
 
 export default LoadingInstanceDetail;

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import Box from '../../widgets/Box';
 
-const CompilationLogs = ({ initiationOutputs }) => (
+const CompilationLogs = ({ initiationOutputs }) =>
   <Box
     title={
       <FormattedMessage
@@ -18,8 +18,7 @@ const CompilationLogs = ({ initiationOutputs }) => (
     <pre>
       {initiationOutputs}
     </pre>
-  </Box>
-);
+  </Box>;
 
 CompilationLogs.propTypes = {
   initiationOutputs: PropTypes.string.isRequired

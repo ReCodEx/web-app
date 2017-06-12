@@ -2,21 +2,19 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Table } from 'react-bootstrap';
 import { FormattedMessage } from 'react-intl';
-import SupervisorsListItem, {
-  LoadingSupervisorsListItem
-} from '../SupervisorsListItem';
+import SupervisorsListItem, { LoadingSupervisorsListItem } from '../SupervisorsListItem';
 
-const SupervisorsList = ({ groupId, users, isLoaded = true, isAdmin }) => (
+const SupervisorsList = ({ groupId, users, isLoaded = true, isAdmin }) =>
   <Table hover>
     <tbody>
-      {users.map(user => (
+      {users.map(user =>
         <SupervisorsListItem
           key={user.id}
           {...user}
           groupId={groupId}
           isAdmin={isAdmin}
         />
-      ))}
+      )}
 
       {users.length === 0 &&
         isLoaded &&
@@ -31,8 +29,7 @@ const SupervisorsList = ({ groupId, users, isLoaded = true, isAdmin }) => (
 
       {!isLoaded && <LoadingSupervisorsListItem isAdmin={isAdmin} />}
     </tbody>
-  </Table>
-);
+  </Table>;
 
 SupervisorsList.propTypes = {
   users: PropTypes.array.isRequired,

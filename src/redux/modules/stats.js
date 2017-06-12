@@ -6,9 +6,7 @@ import factory, {
   resourceStatus
 } from '../helpers/resourceManager';
 import { additionalActionTypes as additionalGroupActionTypes } from './groups';
-import {
-  additionalActionTypes as additionalSubmissionActionTypes
-} from './submissions';
+import { additionalActionTypes as additionalSubmissionActionTypes } from './submissions';
 
 /**
  * Create actions & reducer

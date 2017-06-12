@@ -30,9 +30,7 @@ import {
 import PageContent from '../../components/layout/PageContent';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import UsersNameContainer from '../../containers/UsersNameContainer';
-import {
-  ResubmitAllSolutionsContainer
-} from '../../containers/ResubmitSolutionContainer';
+import { ResubmitAllSolutionsContainer } from '../../containers/ResubmitSolutionContainer';
 import AssignmentDetails, {
   LoadingAssignmentDetails,
   FailedAssignmentDetails
@@ -40,11 +38,9 @@ import AssignmentDetails, {
 
 import { EditIcon, ResultsIcon } from '../../components/icons';
 import LocalizedTexts from '../../components/helpers/LocalizedTexts';
-import SubmitSolutionButton
-  from '../../components/Assignments/SubmitSolutionButton';
+import SubmitSolutionButton from '../../components/Assignments/SubmitSolutionButton';
 import SubmitSolutionContainer from '../../containers/SubmitSolutionContainer';
-import SubmissionsTableContainer
-  from '../../containers/SubmissionsTableContainer';
+import SubmissionsTableContainer from '../../containers/SubmissionsTableContainer';
 
 import withLinks from '../../hoc/withLinks';
 
@@ -128,7 +124,7 @@ class Assignment extends Component {
           failed={<FailedAssignmentDetails />}
           resource={assignment}
         >
-          {assignment => (
+          {assignment =>
             <div>
               <Row>
                 <Col xs={12}>
@@ -194,12 +190,11 @@ class Assignment extends Component {
                           loading={<SubmitSolutionButton disabled={true} />}
                           resource={canSubmit}
                         >
-                          {canSubmit => (
+                          {canSubmit =>
                             <SubmitSolutionButton
                               onClick={init(assignment.id)}
                               disabled={!canSubmit}
-                            />
-                          )}
+                            />}
                         </ResourceRenderer>
                       </p>
                       <SubmitSolutionContainer
@@ -218,8 +213,7 @@ class Assignment extends Component {
                     </div>}
                 </Col>
               </Row>
-            </div>
-          )}
+            </div>}
         </ResourceRenderer>
       </PageContent>
     );

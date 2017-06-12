@@ -15,16 +15,14 @@ import {
   addAdditionalExerciseFiles
 } from '../../redux/modules/additionalExerciseFiles';
 
-import {
-  createGetAdditionalExerciseFiles
-} from '../../redux/selectors/additionalExerciseFiles';
+import { createGetAdditionalExerciseFiles } from '../../redux/selectors/additionalExerciseFiles';
 
 const AdditionalExerciseFilesTableContainer = ({
   exercise,
   additionalExerciseFiles,
   loadFiles,
   addFiles
-}) => (
+}) =>
   <AttachedFilesTableContainer
     uploadId={`additional-exercise-files-${exercise.id}`}
     attachments={additionalExerciseFiles}
@@ -44,8 +42,7 @@ const AdditionalExerciseFilesTableContainer = ({
     }
     HeaderComponent={AdditionalFilesTableHeaderRow}
     RowComponent={AdditionalFilesTableRow}
-  />
-);
+  />;
 
 AdditionalExerciseFilesTableContainer.propTypes = {
   exercise: PropTypes.shape({

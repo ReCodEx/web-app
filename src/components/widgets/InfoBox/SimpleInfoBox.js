@@ -7,7 +7,7 @@ const SimpleInfoBox = ({
   description = '',
   icon = 'info',
   color = 'yellow'
-}) => (
+}) =>
   <div className="info-box">
     <span className={'info-box-icon bg-' + color}>
       <Icon name={icon} />
@@ -16,8 +16,7 @@ const SimpleInfoBox = ({
       <span className="info-box-text">{title}</span>
       <span className="info-box-number">{description}</span>
     </div>
-  </div>
-);
+  </div>;
 
 SimpleInfoBox.propTypes = {
   title: PropTypes.string.isRequired,

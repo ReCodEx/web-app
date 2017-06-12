@@ -9,8 +9,7 @@ import { reset } from 'redux-form';
 
 import Page from '../../components/layout/Page';
 import EditGroupForm from '../../components/forms/EditGroupForm';
-import DeleteGroupButtonContainer
-  from '../../containers/DeleteGroupButtonContainer';
+import DeleteGroupButtonContainer from '../../containers/DeleteGroupButtonContainer';
 import Box from '../../components/widgets/Box';
 
 import { fetchGroupIfNeeded, editGroup } from '../../redux/modules/groups';
@@ -70,7 +69,7 @@ class EditGroup extends Component {
           }
         ]}
       >
-        {group => (
+        {group =>
           <div>
             <EditGroupForm
               initialValues={this.getInitialValues(group)}
@@ -98,7 +97,7 @@ class EditGroup extends Component {
                     id={group.id}
                     disabled={
                       group.parentGroupId === null ||
-                        (group.childGroups && group.childGroups.length > 0)
+                      (group.childGroups && group.childGroups.length > 0)
                     }
                     onDeleted={() =>
                       push(GROUP_URI_FACTORY(group.parentGroupId))}
@@ -114,8 +113,7 @@ class EditGroup extends Component {
                 </p>
               </div>
             </Box>
-          </div>
-        )}
+          </div>}
       </Page>
     );
   }

@@ -19,22 +19,20 @@ const BadgeContainer = ({
   logout,
   small = false,
   links: { HOME_URI }
-}) => (
+}) =>
   <ResourceRenderer
     loading={<LoadingBadge small={small} />}
     failed={<FailedBadge color="black" small={small} />}
     resource={user}
   >
-    {data => (
+    {data =>
       <Badge
         {...data}
         logout={() => logout(HOME_URI)}
         expiration={expiration}
         small={small}
-      />
-    )}
-  </ResourceRenderer>
-);
+      />}
+  </ResourceRenderer>;
 
 BadgeContainer.propTypes = {
   user: PropTypes.object,

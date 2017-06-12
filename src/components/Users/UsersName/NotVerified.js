@@ -3,8 +3,7 @@ import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { OverlayTrigger, Popover } from 'react-bootstrap';
 import { WarningIcon } from '../../icons';
-import ResendVerificationEmail
-  from '../../../containers/ResendVerificationEmailContainer';
+import ResendVerificationEmail from '../../../containers/ResendVerificationEmailContainer';
 
 const NotVerified = ({ userId, currentUserId }) => {
   return (

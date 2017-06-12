@@ -5,7 +5,7 @@ import CommentBox from '../CommentBox';
 import AddComment from '../AddComment';
 import { WarningIcon } from '../../../icons';
 
-const LoadingCommentThread = () => (
+const LoadingCommentThread = () =>
   <CommentBox commentsCount={0} footer={<AddComment />}>
     <div>
       <p className="text-center">
@@ -17,7 +17,6 @@ const LoadingCommentThread = () => (
         />
       </p>
     </div>
-  </CommentBox>
-);
+  </CommentBox>;
 
 export default LoadingCommentThread;

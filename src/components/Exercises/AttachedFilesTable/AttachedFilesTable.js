@@ -27,7 +27,7 @@ const AttachedFilesTable = ({
   uploadId,
   HeaderComponent,
   RowComponent
-}) => (
+}) =>
   <Box title={title} collapsable isOpen>
     <div>
       {description &&
@@ -52,7 +52,7 @@ const AttachedFilesTable = ({
         </p>}
 
       <ResourceRenderer resource={attachments.toArray()}>
-        {(...attachments) => (
+        {(...attachments) =>
           <div>
             {attachments.length > 0 &&
               <Table responsive>
@@ -74,12 +74,10 @@ const AttachedFilesTable = ({
                   defaultMessage="There are no uploaded files yet."
                 />
               </p>}
-          </div>
-        )}
+          </div>}
       </ResourceRenderer>
     </div>
-  </Box>
-);
+  </Box>;
 
 AttachedFilesTable.propTypes = {
   title: PropTypes.oneOfType([

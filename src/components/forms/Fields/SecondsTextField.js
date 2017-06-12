@@ -5,7 +5,7 @@ import TextField from './TextField';
 import { HelpBlock } from 'react-bootstrap';
 import { FormattedMessage } from 'react-intl';
 
-const SecondsTextField = ({ input, ...props }) => (
+const SecondsTextField = ({ input, ...props }) =>
   <div>
     <TextField {...props} input={input} />
     {!props.meta.error &&
@@ -17,8 +17,7 @@ const SecondsTextField = ({ input, ...props }) => (
         />
         {' '}<b>{prettyMs(Number(input.value) * 1000)}</b>
       </HelpBlock>}
-  </div>
-);
+  </div>;
 
 SecondsTextField.propTypes = {
   input: PropTypes.shape({

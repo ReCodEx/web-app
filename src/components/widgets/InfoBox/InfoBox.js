@@ -12,7 +12,7 @@ const InfoBox = ({
   progress,
   description = '',
   color = 'green'
-}) => (
+}) =>
   <div
     className={classNames({
       'info-box': true,
@@ -32,8 +32,7 @@ const InfoBox = ({
         {description}
       </span>
     </div>
-  </div>
-);
+  </div>;
 
 InfoBox.propTypes = {
   title: PropTypes.oneOfType([

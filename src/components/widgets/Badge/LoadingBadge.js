@@ -2,7 +2,7 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { LoadingAvatar } from '../Avatar';
 
-const LoadingBadge = props => (
+const LoadingBadge = props =>
   <div className="user-panel">
     <div className="pull-left image">
       <LoadingAvatar {...props} />
@@ -18,7 +18,6 @@ const LoadingBadge = props => (
       </p>
       <a />
     </div>
-  </div>
-);
+  </div>;
 
 export default LoadingBadge;

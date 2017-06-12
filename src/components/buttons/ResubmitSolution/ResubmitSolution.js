@@ -4,7 +4,7 @@ import { FormattedMessage } from 'react-intl';
 import Icon from 'react-fontawesome';
 import Button from '../../widgets/FlatButton';
 
-const ResubmitSolution = ({ resubmit }) => (
+const ResubmitSolution = ({ resubmit }) =>
   <Button bsStyle="success" onClick={resubmit}>
     <Icon name="mail-forward" />
     {' '}
@@ -12,8 +12,7 @@ const ResubmitSolution = ({ resubmit }) => (
       id="app.resubmitSolution.resubmit"
       defaultMessage="Resubmit this solution"
     />
-  </Button>
-);
+  </Button>;
 
 ResubmitSolution.propTypes = {
   resubmit: PropTypes.func.isRequired

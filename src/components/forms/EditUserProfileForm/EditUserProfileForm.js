@@ -20,7 +20,7 @@ const EditUserProfileForm = ({
   pristine,
   asyncValidating,
   invalid
-}) => (
+}) =>
   <FormBox
     title={
       <FormattedMessage
@@ -199,8 +199,7 @@ const EditUserProfileForm = ({
       }
     />
 
-  </FormBox>
-);
+  </FormBox>;
 
 EditUserProfileForm.propTypes = {
   handleSubmit: PropTypes.func.isRequired,

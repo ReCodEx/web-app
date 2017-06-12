@@ -13,12 +13,12 @@ const GroupsList = ({
   renderButtons = () => null,
   links: { GROUP_URI_FACTORY },
   ...props
-}) => (
+}) =>
   <ResourceRenderer resource={groups.toArray()}>
-    {(...groups) => (
+    {(...groups) =>
       <Table hover {...props}>
         <tbody>
-          {groups.map(({ id, name }) => (
+          {groups.map(({ id, name }) =>
             <tr key={id}>
               <td className="text-center">
                 <Icon name="group" />
@@ -30,12 +30,10 @@ const GroupsList = ({
                 {renderButtons(id)}
               </td>
             </tr>
-          ))}
+          )}
         </tbody>
-      </Table>
-    )}
-  </ResourceRenderer>
-);
+      </Table>}
+  </ResourceRenderer>;
 
 GroupsList.propTypes = {
   groups: ImmutablePropTypes.map.isRequired,

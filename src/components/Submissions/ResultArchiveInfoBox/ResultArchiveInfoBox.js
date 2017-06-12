@@ -14,13 +14,12 @@ const messages = defineMessages({
   }
 });
 
-const ResultArchiveInfoBox = ({ submissionId, intl: { formatMessage } }) => (
+const ResultArchiveInfoBox = ({ submissionId, intl: { formatMessage } }) =>
   <SimpleInfoBox
     icon="file-archive-o"
     title={formatMessage(messages.title)}
     description={formatMessage(messages.description)}
-  />
-);
+  />;
 
 ResultArchiveInfoBox.propTypes = {
   submissionId: PropTypes.string.isRequired,

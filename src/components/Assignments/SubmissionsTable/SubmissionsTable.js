@@ -22,7 +22,7 @@ const SubmissionsTable = ({
   assignmentId,
   submissions,
   links: { SUBMISSION_DETAIL_URI_FACTORY }
-}) => (
+}) =>
   <Box title={title} collapsable isOpen noPadding>
     <Table responsive>
       <thead>
@@ -60,7 +60,7 @@ const SubmissionsTable = ({
         loading={<LoadingSubmissionTableRow />}
         failed={<FailedLoadingSubmissionTableRow />}
       >
-        {(...submissions) => (
+        {(...submissions) =>
           <tbody>
             {submissions.map((data, i) => {
               const id = data.id;
@@ -95,13 +95,11 @@ const SubmissionsTable = ({
                   return null;
               }
             })}
-          </tbody>
-        )}
+          </tbody>}
       </ResourceRenderer>
       {submissions.size === 0 && <tbody><NoSolutionYetTableRow /></tbody>}
     </Table>
-  </Box>
-);
+  </Box>;
 
 SubmissionsTable.propTypes = {
   title: PropTypes.oneOfType([

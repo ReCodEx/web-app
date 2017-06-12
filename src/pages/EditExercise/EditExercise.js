@@ -12,16 +12,11 @@ import Box from '../../components/widgets/Box';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 
 import EditExerciseForm from '../../components/forms/EditExerciseForm';
-import EditExerciseConfigForm
-  from '../../components/forms/EditExerciseConfigForm/EditExerciseConfigForm';
-import EditExerciseRuntimeConfigsForm
-  from '../../components/forms/EditExerciseRuntimeConfigsForm';
-import SupplementaryFilesTableContainer
-  from '../../containers/SupplementaryFilesTableContainer';
-import AdditionalExerciseFilesTableContainer
-  from '../../containers/AdditionalExerciseFilesTableContainer';
-import DeleteExerciseButtonContainer
-  from '../../containers/DeleteExerciseButtonContainer';
+import EditExerciseConfigForm from '../../components/forms/EditExerciseConfigForm/EditExerciseConfigForm';
+import EditExerciseRuntimeConfigsForm from '../../components/forms/EditExerciseRuntimeConfigsForm';
+import SupplementaryFilesTableContainer from '../../containers/SupplementaryFilesTableContainer';
+import AdditionalExerciseFilesTableContainer from '../../containers/AdditionalExerciseFilesTableContainer';
+import DeleteExerciseButtonContainer from '../../containers/DeleteExerciseButtonContainer';
 
 import {
   fetchExerciseIfNeeded,
@@ -36,12 +31,8 @@ import { getExercise } from '../../redux/selectors/exercises';
 import { isSubmitting } from '../../redux/selectors/submission';
 import { exerciseConfigSelector } from '../../redux/selectors/exerciseConfigs';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
-import {
-  fetchRuntimeEnvironments
-} from '../../redux/modules/runtimeEnvironments';
-import {
-  runtimeEnvironmentsSelector
-} from '../../redux/selectors/runtimeEnvironments';
+import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments';
+import { runtimeEnvironmentsSelector } from '../../redux/selectors/runtimeEnvironments';
 
 import withLinks from '../../hoc/withLinks';
 
@@ -109,7 +100,7 @@ class EditExercise extends Component {
           }
         ]}
       >
-        {exercise => (
+        {exercise =>
           <div>
             <Row>
               <Col lg={6}>
@@ -174,7 +165,7 @@ class EditExercise extends Component {
                       unlimitedHeight
                     >
                       <ResourceRenderer resource={exerciseConfig}>
-                        {config => (
+                        {config =>
                           <EditExerciseConfigForm
                             runtimeEnvironments={runtimeEnvironments}
                             // testConfigs={
@@ -182,8 +173,7 @@ class EditExercise extends Component {
                             // }
                             initialValues={{ config: config }}
                             onSubmit={setConfig}
-                          />
-                        )}
+                          />}
                       </ResourceRenderer>
                     </Box>
                   </Col>
@@ -215,8 +205,7 @@ class EditExercise extends Component {
                 </p>
               </div>
             </Box>
-          </div>
-        )}
+          </div>}
       </Page>
     );
   }

@@ -32,7 +32,7 @@ const EditAssignmentForm = ({
   asyncValidating,
   invalid,
   formValues: { firstDeadline, allowSecondDeadline, localizedTexts } = {}
-}) => (
+}) =>
   <div>
     <FormBox
       title={
@@ -253,8 +253,7 @@ const EditAssignmentForm = ({
       />
 
     </FormBox>
-  </div>
-);
+  </div>;
 
 EditAssignmentForm.propTypes = {
   initialValues: PropTypes.object.isRequired,

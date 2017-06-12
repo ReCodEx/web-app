@@ -4,7 +4,7 @@ import { FormattedMessage } from 'react-intl';
 import { TabbedArrayField } from '../Fields';
 import EditExerciseConfigTests from './EditExerciseConfigTests';
 
-const EditExerciseConfigEnvironment = ({ testConfigs, ...props }) => (
+const EditExerciseConfigEnvironment = ({ testConfigs, ...props }) =>
   <TabbedArrayField
     {...props}
     testConfigs={testConfigs}
@@ -38,8 +38,7 @@ const EditExerciseConfigEnvironment = ({ testConfigs, ...props }) => (
     id="exercise-config-tabs"
     // remove
     // add
-  />
-);
+  />;
 
 EditExerciseConfigEnvironment.propTypes = {
   testConfigs: PropTypes.array.isRequired

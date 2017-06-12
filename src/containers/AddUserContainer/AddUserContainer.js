@@ -6,16 +6,14 @@ import { searchPeople } from '../../redux/modules/search';
 import SearchContainer from '../SearchContainer';
 import UsersList from '../../components/Users/UsersList';
 
-const AddUserContainer = ({ id, groupId, search, createActions }) => (
+const AddUserContainer = ({ id, groupId, search, createActions }) =>
   <SearchContainer
     type="users"
     id={id}
     search={search}
-    renderList={users => (
-      <UsersList users={users} createActions={createActions} />
-    )}
-  />
-);
+    renderList={users =>
+      <UsersList users={users} createActions={createActions} />}
+  />;
 
 AddUserContainer.propTypes = {
   id: PropTypes.string.isRequired,

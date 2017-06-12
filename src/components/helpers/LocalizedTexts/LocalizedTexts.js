@@ -4,7 +4,7 @@ import { FormattedMessage } from 'react-intl';
 import { Tabs, Tab } from 'react-bootstrap';
 import ReactMarkdown from 'react-markdown';
 
-const LocalizedTexts = ({ locales = [] }, { lang = 'en' }) => (
+const LocalizedTexts = ({ locales = [] }, { lang = 'en' }) =>
   <Tabs
     defaultActiveKey={
       locales.find(({ locale }) => locale === lang) || locales.length === 0
@@ -14,7 +14,7 @@ const LocalizedTexts = ({ locales = [] }, { lang = 'en' }) => (
     className="nav-tabs-custom"
     id="localized-texts"
   >
-    {locales.map(({ locale, text }, i) => (
+    {locales.map(({ locale, text }, i) =>
       <Tab
         key={i}
         eventKey={locale}
@@ -23,7 +23,7 @@ const LocalizedTexts = ({ locales = [] }, { lang = 'en' }) => (
       >
         <ReactMarkdown source={text} />
       </Tab>
-    ))}
+    )}
     {locales.length === 0 &&
       <Tab eventKey={lang} title={lang}>
         <FormattedMessage
@@ -31,8 +31,7 @@ const LocalizedTexts = ({ locales = [] }, { lang = 'en' }) => (
           defaultMessage="Localized text has not been published yet."
         />
       </Tab>}
-  </Tabs>
-);
+  </Tabs>;
 
 LocalizedTexts.contextTypes = {
   lang: PropTypes.string

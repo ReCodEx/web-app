@@ -2,7 +2,7 @@ import React from 'react';
 import Box from '../../widgets/Box';
 import { LoadingIcon } from '../../icons';
 
-const LoadingSubmissionDetail = () => (
+const LoadingSubmissionDetail = () =>
   <Box
     title={
       <span>
@@ -13,7 +13,6 @@ const LoadingSubmissionDetail = () => (
     isOpen={true}
   >
     Načítám výsledky ...
-  </Box>
-);
+  </Box>;
 
 export default LoadingSubmissionDetail;

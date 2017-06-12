@@ -37,7 +37,7 @@ const SourceCodeViewer = ({
   content = '',
   lineNumbers = true,
   lines = 20
-}) => (
+}) =>
   <ClientOnly>
     <AceEditor
       value={content}
@@ -48,8 +48,7 @@ const SourceCodeViewer = ({
       width="100%"
       editorProps={{ $blockScrolling: true }}
     />
-  </ClientOnly>
-);
+  </ClientOnly>;
 
 SourceCodeViewer.propTypes = {
   name: PropTypes.string.isRequired,
