@@ -18,7 +18,7 @@ const ExercisesListItem = ({
   createdAt,
   createActions,
   links: { EXERCISE_URI_FACTORY }
-}) =>
+}) => (
   <tr>
     <td className="text-center">
       <Icon name="code" />
@@ -51,7 +51,8 @@ const ExercisesListItem = ({
       <td className="text-right">
         {createActions(id)}
       </td>}
-  </tr>;
+  </tr>
+);
 
 ExercisesListItem.propTypes = {
   id: PropTypes.string.isRequired,

@@ -4,19 +4,22 @@ import { connect } from 'react-redux';
 
 import { searchExercises } from '../../redux/modules/search';
 import SearchContainer from '../SearchContainer';
-import ExercisesSimpleList from '../../components/Exercises/ExercisesSimpleList';
+import ExercisesSimpleList
+  from '../../components/Exercises/ExercisesSimpleList';
 
-const SelectExerciseContainer = ({ id, search, createActions }) =>
+const SelectExerciseContainer = ({ id, search, createActions }) => (
   <SearchContainer
     type="exercises"
     id={id}
     search={search}
-    renderList={exercises =>
+    renderList={exercises => (
       <ExercisesSimpleList
         exercises={exercises}
         createActions={createActions}
-      />}
-  />;
+      />
+    )}
+  />
+);
 
 SelectExerciseContainer.propTypes = {
   id: PropTypes.string.isRequired,

@@ -10,8 +10,10 @@ import AddStudent from '../AddStudent';
 import SearchExercise from '../SearchExercise';
 import StudentsListContainer from '../../../containers/StudentsListContainer';
 import AdminAssignmentsTable from '../../Assignments/AdminAssignmentsTable';
-import LeaveJoinGroupButtonContainer from '../../../containers/LeaveJoinGroupButtonContainer';
-import ExercisesSimpleList from '../../../components/Exercises/ExercisesSimpleList';
+import LeaveJoinGroupButtonContainer
+  from '../../../containers/LeaveJoinGroupButtonContainer';
+import ExercisesSimpleList
+  from '../../../components/Exercises/ExercisesSimpleList';
 import Button from '../../../components/widgets/FlatButton';
 import { AddIcon, SendIcon } from '../../../components/icons';
 
@@ -21,7 +23,7 @@ const SupervisorsView = ({
   exercises,
   createGroupExercise,
   assignExercise
-}) =>
+}) => (
   <div>
     <Row>
       <Col lg={12}>
@@ -49,11 +51,12 @@ const SupervisorsView = ({
         >
           <StudentsListContainer
             groupId={group.id}
-            renderActions={userId =>
+            renderActions={userId => (
               <LeaveJoinGroupButtonContainer
                 userId={userId}
                 groupId={group.id}
-              />}
+              />
+            )}
             fill
           />
         </Box>
@@ -101,10 +104,10 @@ const SupervisorsView = ({
           isOpen
         >
           <ResourceRenderer resource={exercises.toArray()}>
-            {(...exercises) =>
+            {(...exercises) => (
               <ExercisesSimpleList
                 exercises={exercises}
-                createActions={exerciseId =>
+                createActions={exerciseId => (
                   <Button
                     onClick={() => assignExercise(exerciseId)}
                     bsSize="xs"
@@ -116,9 +119,11 @@ const SupervisorsView = ({
                       id="app.exercise.assign"
                       defaultMessage="Assign this exercise"
                     />
-                  </Button>}
+                  </Button>
+                )}
                 assignExercise={assignExercise}
-              />}
+              />
+            )}
           </ResourceRenderer>
         </Box>
       </Col>
@@ -151,7 +156,8 @@ const SupervisorsView = ({
         </Box>
       </Col>
     </Row>
-  </div>;
+  </div>
+);
 
 SupervisorsView.propTypes = {
   group: PropTypes.object,

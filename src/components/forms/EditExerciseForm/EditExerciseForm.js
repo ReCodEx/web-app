@@ -188,7 +188,7 @@ EditExerciseForm.propTypes = {
   })
 };
 
-const validate = ({ name, description, difficulty }) => {
+const validate = ({ name, description, difficulty, localizedTexts }) => {
   const errors = {};
 
   if (!name) {
@@ -217,6 +217,65 @@ const validate = ({ name, description, difficulty }) => {
       />
     );
   }
+
+  if (localizedTexts.length < 1) {
+    errors['_error'] = (
+      <FormattedMessage
+        id="app.editExerciseForm.validation.noLocalizedText"
+        defaultMessage="Please add at least one localized text describing the exercise."
+      />
+    );
+  }
+
+  const localizedTextsErrors = {};
+  for (let i = 0; i < localizedTexts.length; ++i) {
+    const localeErrors = {};
+    if (!localizedTexts[i]) {
+      localeErrors['locale'] = (
+        <FormattedMessage
+          id="app.editExerciseForm.validation.localizedText"
+          defaultMessage="Please fill localized information."
+        />
+      );
+    } else {
+      if (!localizedTexts[i].locale) {
+        localeErrors['locale'] = (
+          <FormattedMessage
+            id="app.editExerciseForm.validation.localizedText.locale"
+            defaultMessage="Please select the language."
+          />
+        );
+      }
+
+      if (!localizedTexts[i].text) {
+        localeErrors['text'] = (
+          <FormattedMessage
+            id="app.editExerciseForm.validation.localizedText.text"
+            defaultMessage="Please fill the description in this language."
+          />
+        );
+      }
+    }
+
+    localizedTextsErrors[i] = localeErrors;
+  }
+
+  const localeArr = localizedTexts
+    .filter(text => text !== undefined)
+    .map(text => text.locale);
+  for (let i = 0; i < localeArr.length; ++i) {
+    const localeErrors = {};
+    if (localeArr.indexOf(localeArr[i]) !== i) {
+      localeErrors['locale'] = (
+        <FormattedMessage
+          id="app.editExerciseForm.validation.sameLocalizedTexts"
+          defaultMessage="There are more language variants with the same locale. Please make sure locales are unique."
+        />
+      );
+    }
+    localizedTextsErrors[i] = localeErrors;
+  }
+  errors['localizedTexts'] = localizedTextsErrors;
 
   return errors;
 };

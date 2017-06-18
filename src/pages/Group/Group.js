@@ -13,7 +13,8 @@ import GroupDetail, {
   LoadingGroupDetail,
   FailedGroupDetail
 } from '../../components/Groups/GroupDetail';
-import LeaveJoinGroupButtonContainer from '../../containers/LeaveJoinGroupButtonContainer';
+import LeaveJoinGroupButtonContainer
+  from '../../containers/LeaveJoinGroupButtonContainer';
 import AdminsView from '../../components/Groups/AdminsView';
 import SupervisorsView from '../../components/Groups/SupervisorsView';
 import StudentsView from '../../components/Groups/StudentsView';
@@ -200,7 +201,7 @@ class Group extends Component {
         loading={<LoadingGroupDetail />}
         failed={<FailedGroupDetail />}
       >
-        {data =>
+        {data => (
           <div>
             {isAdmin &&
               <p>
@@ -258,7 +259,8 @@ class Group extends Component {
                 createGroupExercise={this.createGroupExercise}
                 assignExercise={id => this.assignExercise(id)}
               />}
-          </div>}
+          </div>
+        )}
       </Page>
     );
   }

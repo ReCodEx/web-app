@@ -13,7 +13,7 @@ const ExercisesSimpleListItem = ({
   authorId,
   createActions,
   links: { EXERCISE_URI_FACTORY }
-}) =>
+}) => (
   <tr>
     <td>
       <strong><Link to={EXERCISE_URI_FACTORY(id)}>{name}</Link></strong>
@@ -28,7 +28,8 @@ const ExercisesSimpleListItem = ({
       <td>
         {createActions(id)}
       </td>}
-  </tr>;
+  </tr>
+);
 
 ExercisesSimpleListItem.propTypes = {
   id: PropTypes.string.isRequired,
