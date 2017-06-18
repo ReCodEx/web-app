@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { FormattedRelative } from 'react-intl';
 
-const Posted = ({ right, postedAt }) =>
+const Posted = ({ right, postedAt }) => (
   <span
     className={classNames({
       'direct-chat-timestamp': true,
@@ -12,7 +12,8 @@ const Posted = ({ right, postedAt }) =>
     })}
   >
     <FormattedRelative value={postedAt * 1000} />
-  </span>;
+  </span>
+);
 
 Posted.propTypes = {
   right: PropTypes.bool.isRequired,

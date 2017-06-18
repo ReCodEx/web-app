@@ -11,7 +11,7 @@ const ResourceDependentBreadcrumbItem = ({
   iconName,
   isActive,
   breadcrumb
-}) =>
+}) => (
   <ResourceRenderer
     resource={resource}
     loading={
@@ -31,13 +31,15 @@ const ResourceDependentBreadcrumbItem = ({
     }
     failed={null}
   >
-    {data =>
+    {data => (
       <BreadcrumbItem
         iconName={iconName}
         {...breadcrumb(data)}
         isActive={isActive}
-      />}
-  </ResourceRenderer>;
+      />
+    )}
+  </ResourceRenderer>
+);
 
 ResourceDependentBreadcrumbItem.propTypes = {
   resource: PropTypes.object,

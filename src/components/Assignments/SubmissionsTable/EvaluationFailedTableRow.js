@@ -4,7 +4,7 @@ import { FormattedDate, FormattedTime, FormattedMessage } from 'react-intl';
 import { Link } from 'react-router';
 import AssignmentStatusIcon from '../Assignment/AssignmentStatusIcon';
 
-const EvaluationFailedTableRow = ({ link, note, submittedAt }) =>
+const EvaluationFailedTableRow = ({ link, note, submittedAt }) => (
   <tr>
     <td><AssignmentStatusIcon id={link} status="evaluation-failed" /></td>
     <td>
@@ -33,7 +33,8 @@ const EvaluationFailedTableRow = ({ link, note, submittedAt }) =>
         />
       </Link>
     </td>
-  </tr>;
+  </tr>
+);
 
 EvaluationFailedTableRow.propTypes = {
   link: PropTypes.string.isRequired,

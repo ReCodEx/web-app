@@ -4,7 +4,8 @@ import { FormattedMessage } from 'react-intl';
 import { Field } from 'redux-form';
 import { Row, Col, HelpBlock } from 'react-bootstrap';
 import { BytesTextField, SecondsTextField } from '../Fields';
-import ReferenceSolutionsEvaluationsResults from '../../Submissions/ReferenceSolutionsEvaluationsResults';
+import ReferenceSolutionsEvaluationsResults
+  from '../../Submissions/ReferenceSolutionsEvaluationsResults';
 
 const sortTests = tests => {
   return tests.sort((a, b) => a.localeCompare(b));
@@ -21,7 +22,7 @@ const HardwareGroupFields = ({
     referenceSolutionsEvaluations[hardwareGroup];
   return (
     <Row>
-      {sortTests(Object.keys(tests)).map((testName, j) =>
+      {sortTests(Object.keys(tests)).map((testName, j) => (
         <Col lg={6} key={j}>
           <h4>
             <FormattedMessage
@@ -31,7 +32,7 @@ const HardwareGroupFields = ({
             {' '}
             <b>{testName}</b>
           </h4>
-          {Object.keys(tests[testName]).map((taskId, k) =>
+          {Object.keys(tests[testName]).map((taskId, k) => (
             <div key={k}>
               <Field
                 name={`${prefix}.tests.${testName}.${taskId}.time`}
@@ -72,9 +73,9 @@ const HardwareGroupFields = ({
                   />
                 </HelpBlock>}
             </div>
-          )}
+          ))}
         </Col>
-      )}
+      ))}
     </Row>
   );
 };

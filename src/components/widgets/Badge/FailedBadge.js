@@ -2,7 +2,7 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { FailedAvatar } from '../Avatar';
 
-const FailedBadge = props =>
+const FailedBadge = props => (
   <div className="user-panel">
     <div className="pull-left image">
       <FailedAvatar {...props} />
@@ -21,6 +21,7 @@ const FailedBadge = props =>
         />
       </p>
     </div>
-  </div>;
+  </div>
+);
 
 export default FailedBadge;

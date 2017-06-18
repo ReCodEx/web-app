@@ -13,7 +13,7 @@ const UploadsTable = ({
   returnFile,
   removeFailedFile,
   retryUploadFile
-}) =>
+}) => (
   <Table responsive>
     <thead>
       <tr>
@@ -24,7 +24,7 @@ const UploadsTable = ({
       </tr>
     </thead>
     <tbody>
-      {attachedFiles.map(payload =>
+      {attachedFiles.map(payload => (
         <tr key={'attached-' + payload.name}>
           <td className="text-center">
             <Icon name="check" className="text-success text-bold" />
@@ -41,9 +41,9 @@ const UploadsTable = ({
             </Button>
           </td>
         </tr>
-      )}
+      ))}
 
-      {uploadingFiles.map(payload =>
+      {uploadingFiles.map(payload => (
         <tr key={'uploading-' + payload.name}>
           <td className="text-center">
             <Icon name="circle-o" spin />
@@ -52,9 +52,9 @@ const UploadsTable = ({
           <td>{prettyBytes(payload.file.size)}</td>
           <td />
         </tr>
-      )}
+      ))}
 
-      {failedFiles.map(payload =>
+      {failedFiles.map(payload => (
         <tr key={'failed-' + payload.name}>
           <td className="text-center">
             <Icon name="exclamation-triangle" className="text-danger" />
@@ -80,9 +80,9 @@ const UploadsTable = ({
             </ButtonGroup>
           </td>
         </tr>
-      )}
+      ))}
 
-      {removedFiles.map(payload =>
+      {removedFiles.map(payload => (
         <tr key={'removed' + payload.name}>
           <td className="text-center">
             <Icon name="trash" className="text-warning" />
@@ -101,9 +101,10 @@ const UploadsTable = ({
             </ButtonGroup>
           </td>
         </tr>
-      )}
+      ))}
     </tbody>
-  </Table>;
+  </Table>
+);
 
 UploadsTable.propTypes = {
   uploadingFiles: PropTypes.array.isRequired,

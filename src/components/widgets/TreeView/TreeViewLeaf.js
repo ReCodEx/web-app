@@ -13,7 +13,7 @@ const TreeViewLeaf = ({
   onClick,
   level,
   actions
-}) =>
+}) => (
   <li
     onClick={onClick}
     style={{
@@ -36,7 +36,8 @@ const TreeViewLeaf = ({
     <span className="pull-right">
       {actions}
     </span>
-  </li>;
+  </li>
+);
 
 TreeViewLeaf.propTypes = {
   loading: PropTypes.bool,

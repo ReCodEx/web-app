@@ -16,7 +16,7 @@ const HeaderNotificationsDropdown = ({
   hideNotification,
   newNotifications,
   oldNotifications
-}) =>
+}) => (
   <li
     className={classNames({
       'notifications-menu': true,
@@ -44,17 +44,17 @@ const HeaderNotificationsDropdown = ({
       </li>
       <li>
         <ul className="menu">
-          {newNotifications.map(notification =>
+          {newNotifications.map(notification => (
             <HeaderNotification
               key={notification.id}
               hide={hideNotification}
               {...notification}
             />
-          )}
+          ))}
           {showAll &&
-            oldNotifications.map(notification =>
+            oldNotifications.map(notification => (
               <HeaderNotification key={notification.id} {...notification} />
-            )}
+            ))}
         </ul>
       </li>
       {oldNotifications.size > 0 &&
@@ -79,7 +79,8 @@ const HeaderNotificationsDropdown = ({
           </a>
         </li>}
     </ul>
-  </li>;
+  </li>
+);
 
 HeaderNotificationsDropdown.propTypes = {
   isOpen: PropTypes.bool,

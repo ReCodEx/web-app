@@ -2,10 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Nav } from 'react-bootstrap';
 
-const TreeView = ({ children }) =>
+const TreeView = ({ children }) => (
   <Nav stacked>
     {children}
-  </Nav>;
+  </Nav>
+);
 
 TreeView.propTypes = {
   children: PropTypes.any.isRequired

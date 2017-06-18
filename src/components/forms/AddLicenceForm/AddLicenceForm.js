@@ -17,7 +17,7 @@ const AddLicenceForm = ({
   submitSucceeded = false,
   asyncValidating,
   invalid
-}) =>
+}) => (
   <FormBox
     title={
       <FormattedMessage
@@ -88,7 +88,8 @@ const AddLicenceForm = ({
         />
       }
     />
-  </FormBox>;
+  </FormBox>
+);
 
 AddLicenceForm.propTypes = {
   handleSubmit: PropTypes.func.isRequired,

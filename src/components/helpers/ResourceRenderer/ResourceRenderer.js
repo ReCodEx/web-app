@@ -11,7 +11,7 @@ import {
   getJsData
 } from '../../../redux/helpers/resourceManager';
 
-const defaultLoading = noIcons =>
+const defaultLoading = noIcons => (
   <span>
     {!noIcons && <LoadingIcon />}
     {' '}
@@ -19,9 +19,10 @@ const defaultLoading = noIcons =>
       id="app.resourceRenderer.loading"
       defaultMessage="Loading ..."
     />
-  </span>;
+  </span>
+);
 
-const defaultFailed = noIcons =>
+const defaultFailed = noIcons => (
   <span>
     {!noIcons && <WarningIcon />}
     {' '}
@@ -29,7 +30,8 @@ const defaultFailed = noIcons =>
       id="app.resourceRenderer.loadingFailed"
       defaultMessage="Loading failed."
     />
-  </span>;
+  </span>
+);
 
 /**
  * ResourceRenderer component is given a resource managed by the resourceManager
@@ -59,14 +61,14 @@ const ResourceRenderer = ({
   return !resource || resources.some(isLoading) || forceLoading
     ? hiddenUntilReady ? null : loading
     : resources.some(hasFailed)
-      ? hiddenUntilReady ? null : failed
-      : ready(
-          ...resources
-            .filter(res => !isDeleting(res))
-            .filter(res => !isDeleted(res))
-            .filter(res => !isPosting(res))
-            .map(getJsData)
-        ); // display all ready items
+        ? hiddenUntilReady ? null : failed
+        : ready(
+            ...resources
+              .filter(res => !isDeleting(res))
+              .filter(res => !isDeleted(res))
+              .filter(res => !isPosting(res))
+              .map(getJsData)
+          ); // display all ready items
 };
 
 ResourceRenderer.propTypes = {

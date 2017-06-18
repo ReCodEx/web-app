@@ -67,7 +67,7 @@ class EvaluationProgress extends Component {
             >
               <Table responsive>
                 <tbody>
-                  {messages.map(({ wasSuccessful, text, status }, i) =>
+                  {messages.map(({ wasSuccessful, text, status }, i) => (
                     <tr key={i}>
                       <td
                         className={classNames({
@@ -98,7 +98,7 @@ class EvaluationProgress extends Component {
                         <EvaluationStatusText status={status} />
                       </td>
                     </tr>
-                  )}
+                  ))}
                 </tbody>
               </Table>
             </div>}

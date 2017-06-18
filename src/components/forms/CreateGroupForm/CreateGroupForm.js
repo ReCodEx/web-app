@@ -23,7 +23,7 @@ const CreateGroupForm = ({
   invalid = false,
   submitting = false,
   reset
-}) =>
+}) => (
   <FormBox
     title={title}
     type={submitSucceeded ? 'success' : undefined}
@@ -125,7 +125,8 @@ const CreateGroupForm = ({
         />
       }
     />
-  </FormBox>;
+  </FormBox>
+);
 
 CreateGroupForm.propTypes = {
   title: PropTypes.oneOfType([

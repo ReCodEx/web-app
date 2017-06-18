@@ -4,7 +4,7 @@ import Icon from 'react-fontawesome';
 import Button from '../../widgets/FlatButton';
 import { FormattedMessage } from 'react-intl';
 
-const SubmitSolutionButton = ({ disabled = false, onClick }) =>
+const SubmitSolutionButton = ({ disabled = false, onClick }) => (
   <Button
     bsStyle="success"
     className="btn-flat"
@@ -17,7 +17,8 @@ const SubmitSolutionButton = ({ disabled = false, onClick }) =>
       id="app.submissionsTable.submitNewSolution"
       defaultMessage="Submit new solution"
     />
-  </Button>;
+  </Button>
+);
 
 SubmitSolutionButton.propTypes = {
   disabled: PropTypes.bool,

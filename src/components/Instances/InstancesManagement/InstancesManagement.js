@@ -6,7 +6,7 @@ import Page from '../../layout/Page';
 import Box from '../../widgets/Box';
 import InstancesTable from '../InstancesTable';
 
-const InstancesManagement = ({ instances }) =>
+const InstancesManagement = ({ instances }) => (
   <Page
     title={
       <FormattedMessage id="app.instances.title" defaultMessage="Instances" />
@@ -19,7 +19,7 @@ const InstancesManagement = ({ instances }) =>
     }
     resource={instances.toArray()}
   >
-    {(...instances) =>
+    {(...instances) => (
       <Row>
         <Col lg={6}>
           <Box
@@ -34,8 +34,10 @@ const InstancesManagement = ({ instances }) =>
             <InstancesTable instances={instances} />
           </Box>
         </Col>
-      </Row>}
-  </Page>;
+      </Row>
+    )}
+  </Page>
+);
 
 InstancesManagement.propTypes = {
   instances: ImmutablePropTypes.map

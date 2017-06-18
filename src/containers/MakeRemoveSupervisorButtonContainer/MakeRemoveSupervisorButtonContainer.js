@@ -5,7 +5,8 @@ import { makeSupervisor, removeSupervisor } from '../../redux/modules/groups';
 import { isSupervisorOf } from '../../redux/selectors/users';
 
 import MakeSupervisorButton from '../../components/Groups/MakeSupervisorButton';
-import RemoveSupervisorButton from '../../components/Groups/RemoveSupervisorButton';
+import RemoveSupervisorButton
+  from '../../components/Groups/RemoveSupervisorButton';
 
 const MakeRemoveSupervisorButtonContainer = ({
   isSupervisor,

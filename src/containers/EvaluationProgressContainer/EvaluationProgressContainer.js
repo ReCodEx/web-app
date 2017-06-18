@@ -24,7 +24,8 @@ import {
 
 import { finishProcessing } from '../../redux/modules/submission';
 
-import EvaluationProgress from '../../components/Assignments/EvaluationProgress';
+import EvaluationProgress
+  from '../../components/Assignments/EvaluationProgress';
 import randomMessages, { extraMessages } from './randomMessages';
 
 class EvaluationProgressContainer extends Component {

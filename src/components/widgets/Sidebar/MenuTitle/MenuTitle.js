@@ -1,10 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const MenuTitle = ({ title }) =>
+const MenuTitle = ({ title }) => (
   <li className="header text-uppercase">
     {title}
-  </li>;
+  </li>
+);
 
 MenuTitle.propTypes = {
   title: PropTypes.oneOfType([PropTypes.string, PropTypes.element]).isRequired

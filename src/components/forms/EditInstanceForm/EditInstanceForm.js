@@ -15,7 +15,7 @@ const EditInstanceForm = ({
   submitFailed = false,
   submitSucceeded = false,
   invalid
-}) =>
+}) => (
   <FormBox
     title={
       <FormattedMessage
@@ -98,7 +98,8 @@ const EditInstanceForm = ({
         />
       }
     />
-  </FormBox>;
+  </FormBox>
+);
 
 EditInstanceForm.propTypes = {
   handleSubmit: PropTypes.func.isRequired,

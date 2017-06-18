@@ -14,7 +14,7 @@ const MenuItem = (
     onIsActive = isActive => isActive
   },
   { isActive }
-) =>
+) => (
   <li
     className={classNames({
       active: isActive(link)
@@ -42,7 +42,8 @@ const MenuItem = (
           {notificationsCount}
         </small>}
     </Link>
-  </li>;
+  </li>
+);
 
 MenuItem.propTypes = {
   title: PropTypes.oneOfType([PropTypes.element, PropTypes.string]),

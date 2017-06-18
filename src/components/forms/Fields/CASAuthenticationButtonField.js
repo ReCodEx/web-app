@@ -5,13 +5,14 @@ import { change } from 'redux-form';
 
 import { FormGroup } from 'react-bootstrap';
 import { MaybeSucceededIcon } from '../../icons';
-import AuthentictionButtonContianer from '../../../containers/CAS/AuthenticationButtonContainer';
+import AuthentictionButtonContianer
+  from '../../../containers/CAS/AuthenticationButtonContainer';
 
 const CASAuthenticationButtonField = ({
   input: { name, onChange, value: ticket },
   meta: { dirty, form, dispatch },
   label
-}) =>
+}) => (
   <FormGroup controlId={name}>
     {dirty &&
       <span>
@@ -38,7 +39,8 @@ const CASAuthenticationButtonField = ({
           onFailed={() => onChange(false)}
         />
       </p>}
-  </FormGroup>;
+  </FormGroup>
+);
 
 CASAuthenticationButtonField.propTypes = {
   label: PropTypes.oneOfType([

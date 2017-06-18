@@ -14,7 +14,8 @@ import { LoadingInfoBox } from '../../components/widgets/InfoBox';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import UsersNameContainer from '../../containers/UsersNameContainer';
 import StudentsListContainer from '../../containers/StudentsListContainer';
-import AssignmentsTable from '../../components/Assignments/Assignment/AssignmentsTable';
+import AssignmentsTable
+  from '../../components/Assignments/Assignment/AssignmentsTable';
 import UsersStats from '../../components/Users/UsersStats';
 import { fetchAssignmentsForGroup } from '../../redux/modules/assignments';
 import { fetchUserIfNeeded } from '../../redux/modules/users';
@@ -121,7 +122,7 @@ class Dashboard extends Component {
           }
         ]}
       >
-        {user =>
+        {user => (
           <div>
             <p>
               <UsersNameContainer userId={user.id} large noLink />
@@ -129,7 +130,7 @@ class Dashboard extends Component {
 
             {studentOfGroupsIds.length > 0 &&
               <ResourceRenderer resource={studentOf}>
-                {(...groups) =>
+                {(...groups) => (
                   <div>
                     <h2 className="page-heading">
                       <FormattedMessage
@@ -138,7 +139,7 @@ class Dashboard extends Component {
                       />
                     </h2>
 
-                    {groups.map(group =>
+                    {groups.map(group => (
                       <div key={group.id}>
                         <ResourceRenderer
                           loading={
@@ -150,7 +151,7 @@ class Dashboard extends Component {
                           }
                           resource={groupStatistics(group.id)}
                         >
-                          {statistics =>
+                          {statistics => (
                             <Row>
                               <Col lg={4}>
                                 <Link to={GROUP_URI_FACTORY(group.id)}>
@@ -191,12 +192,14 @@ class Dashboard extends Component {
                                   />
                                 </Box>
                               </Col>
-                            </Row>}
+                            </Row>
+                          )}
                         </ResourceRenderer>
                       </div>
-                    )}
+                    ))}
 
-                  </div>}
+                  </div>
+                )}
               </ResourceRenderer>}
 
             {supervisorOfGroupsIds.length > 0 &&
@@ -209,15 +212,15 @@ class Dashboard extends Component {
                     />
                   </h2>
                   <ResourceRenderer resource={supervisorOf}>
-                    {(...groups) =>
+                    {(...groups) => (
                       <div>
-                        {groups.map(group =>
+                        {groups.map(group => (
                           <Row key={group.id}>
                             <Col lg={12}>
                               <ResourceRenderer
                                 resource={groupStatistics(group.id)}
                               >
-                                {statistics =>
+                                {statistics => (
                                   <Box
                                     title={group.name}
                                     collapsable
@@ -239,12 +242,14 @@ class Dashboard extends Component {
                                     }
                                   >
                                     <StudentsListContainer groupId={group.id} />
-                                  </Box>}
+                                  </Box>
+                                )}
                               </ResourceRenderer>
                             </Col>
                           </Row>
-                        )}
-                      </div>}
+                        ))}
+                      </div>
+                    )}
                   </ResourceRenderer>
                 </Col>
               </Row>}
@@ -305,7 +310,8 @@ class Dashboard extends Component {
                   </div>
                 </Col>
               </Row>}
-          </div>}
+          </div>
+        )}
       </Page>
     );
   }

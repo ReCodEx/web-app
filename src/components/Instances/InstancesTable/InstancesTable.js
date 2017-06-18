@@ -8,7 +8,7 @@ import UsersNameContainer from '../../../containers/UsersNameContainer';
 
 import withLinks from '../../../hoc/withLinks';
 
-const InstancesTable = ({ instances, links: { INSTANCE_URI_FACTORY } }) =>
+const InstancesTable = ({ instances, links: { INSTANCE_URI_FACTORY } }) => (
   <Table hover>
     <thead>
       <tr>
@@ -35,7 +35,7 @@ const InstancesTable = ({ instances, links: { INSTANCE_URI_FACTORY } }) =>
     <tbody>
       {instances
         .sort((a, b) => (a.name < b.name ? -1 : 1))
-        .map(({ id, name, admin, hasValidLicence }) =>
+        .map(({ id, name, admin, hasValidLicence }) => (
           <tr key={id}>
             <td>
               <Link to={INSTANCE_URI_FACTORY(id)}>{name}</Link>
@@ -47,9 +47,10 @@ const InstancesTable = ({ instances, links: { INSTANCE_URI_FACTORY } }) =>
               <MaybeSucceededIcon success={hasValidLicence} />
             </td>
           </tr>
-        )}
+        ))}
     </tbody>
-  </Table>;
+  </Table>
+);
 
 InstancesTable.propTypes = {
   instances: PropTypes.array.isRequired,

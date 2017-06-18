@@ -7,7 +7,7 @@ import Box from '../../widgets/Box';
 import AddSupervisor from '../AddSupervisor';
 import CreateGroupForm from '../../forms/CreateGroupForm'; // @todo replace with it's' container
 
-const AdminsView = ({ group, addSubgroup }) =>
+const AdminsView = ({ group, addSubgroup }) => (
   <div>
     <Row>
       <Col sm={12}>
@@ -48,7 +48,8 @@ const AdminsView = ({ group, addSubgroup }) =>
         />
       </Col>
     </Row>
-  </div>;
+  </div>
+);
 
 AdminsView.propTypes = {
   group: PropTypes.object.isRequired,

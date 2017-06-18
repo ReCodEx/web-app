@@ -17,13 +17,22 @@ import {
   downloadEvaluationArchive,
   evaluateReferenceSolution
 } from '../../redux/modules/referenceSolutions';
-import { fetchReferenceEvaluations } from '../../redux/modules/referenceSolutionEvaluations';
-import { referenceSolutionsSelector } from '../../redux/selectors/referenceSolutions';
-import { getReferenceEvaluations } from '../../redux/selectors/referenceSolutionEvaluations';
-import ReferenceSolutionDetail from '../../components/ReferenceSolutions/ReferenceSolutionDetail';
-import ReferenceSolutionEvaluation from '../../components/ReferenceSolutions/ReferenceSolutionEvaluation';
+import {
+  fetchReferenceEvaluations
+} from '../../redux/modules/referenceSolutionEvaluations';
+import {
+  referenceSolutionsSelector
+} from '../../redux/selectors/referenceSolutions';
+import {
+  getReferenceEvaluations
+} from '../../redux/selectors/referenceSolutionEvaluations';
+import ReferenceSolutionDetail
+  from '../../components/ReferenceSolutions/ReferenceSolutionDetail';
+import ReferenceSolutionEvaluation
+  from '../../components/ReferenceSolutions/ReferenceSolutionEvaluation';
 import SourceCodeInfoBox from '../../components/widgets/SourceCodeInfoBox';
-import SourceCodeViewerContainer from '../../containers/SourceCodeViewerContainer';
+import SourceCodeViewerContainer
+  from '../../containers/SourceCodeViewerContainer';
 import { DownloadIcon, RefreshIcon, SendIcon } from '../../components/icons';
 
 const messages = defineMessages({
@@ -123,13 +132,13 @@ class ReferenceSolution extends Component {
                 <Col lg={6}>
                   <ReferenceSolutionDetail {...referenceSolution} />
                   <Row>
-                    {referenceSolution.solution.files.map(file =>
+                    {referenceSolution.solution.files.map(file => (
                       <Col lg={6} md={12} key={file.id}>
                         <a href="#" onClick={() => this.openFile(file.id)}>
                           <SourceCodeInfoBox {...file} />
                         </a>
                       </Col>
-                    )}
+                    ))}
                   </Row>
                 </Col>
                 <Col lg={6}>
@@ -164,15 +173,15 @@ class ReferenceSolution extends Component {
                     </Col>
                   </Row>
                   <ResourceRenderer resource={environments}>
-                    {environments =>
+                    {environments => (
                       <div>
-                        {Object.keys(environments).map(env =>
+                        {Object.keys(environments).map(env => (
                           <ReferenceSolutionEvaluation
                             key={env}
                             referenceSolutionId={referenceSolutionId}
                             environment={env}
                             evaluations={environments[env]}
-                            renderButtons={evaluationId =>
+                            renderButtons={evaluationId => (
                               <Button
                                 bsSize="xs"
                                 className="btn-flat"
@@ -185,10 +194,12 @@ class ReferenceSolution extends Component {
                                   id="app.referenceSolutionEvaluation.downloadResults"
                                   defaultMessage="Download results"
                                 />
-                              </Button>}
+                              </Button>
+                            )}
                           />
-                        )}
-                      </div>}
+                        ))}
+                      </div>
+                    )}
                   </ResourceRenderer>
                 </Col>
               </Row>

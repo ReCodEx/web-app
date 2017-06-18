@@ -3,7 +3,7 @@ import { FormattedMessage } from 'react-intl';
 import { LoadingIcon } from '../../icons';
 import Box from '../../widgets/Box';
 
-const LoadingGroupDetail = () =>
+const LoadingGroupDetail = () => (
   <Box
     noPadding={false}
     title={
@@ -21,6 +21,7 @@ const LoadingGroupDetail = () =>
       id="app.groupDetail.loading"
       defaultMessage="Loading group's description ..."
     />
-  </Box>;
+  </Box>
+);
 
 export default LoadingGroupDetail;

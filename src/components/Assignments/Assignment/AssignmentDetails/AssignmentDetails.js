@@ -27,7 +27,7 @@ const AssignmentDetails = ({
   isBonus,
   runtimeEnvironmentsIds,
   canSubmit
-}) =>
+}) => (
   <Box
     title={
       <FormattedMessage id="app.assignment.title" defaultMessage="Details" />
@@ -112,8 +112,8 @@ const AssignmentDetails = ({
             {!isAfterFirstDeadline
               ? maxPointsBeforeFirstDeadline
               : !isAfterSecondDeadline && allowSecondDeadline
-                ? maxPointsBeforeSecondDeadline
-                : 0}
+                  ? maxPointsBeforeSecondDeadline
+                  : 0}
           </td>
         </tr>
         <tr>
@@ -177,7 +177,8 @@ const AssignmentDetails = ({
         </tr>
       </tbody>
     </Table>
-  </Box>;
+  </Box>
+);
 
 AssignmentDetails.propTypes = {
   isOpen: PropTypes.bool,

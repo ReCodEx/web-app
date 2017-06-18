@@ -17,7 +17,7 @@ const LoadingInfoBox = ({
     />
   ),
   ...props
-}) =>
+}) => (
   <InfoBox
     icon="rotate-right"
     spin
@@ -25,7 +25,8 @@ const LoadingInfoBox = ({
     description={description}
     color="gray"
     {...props}
-  />;
+  />
+);
 
 LoadingInfoBox.propTypes = {
   title: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),

@@ -16,7 +16,7 @@ const Supervisor = ({
   isCollapsed,
   notifications,
   links: { GROUP_URI_FACTORY, EXERCISES_URI }
-}) =>
+}) => (
   <ul className="sidebar-menu">
     <MenuTitle
       title={
@@ -51,7 +51,8 @@ const Supervisor = ({
       currentPath={currentUrl}
       link={EXERCISES_URI}
     />
-  </ul>;
+  </ul>
+);
 
 Supervisor.propTypes = {
   currentUrl: PropTypes.string.isRequired,

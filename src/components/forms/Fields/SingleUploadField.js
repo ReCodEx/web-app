@@ -14,7 +14,7 @@ const SingleUploadField = ({
   meta: { touched, error },
   label,
   ...props
-}) =>
+}) => (
   <FormGroup
     controlId={input.name}
     validationState={touched && error ? 'error' : undefined}
@@ -22,7 +22,8 @@ const SingleUploadField = ({
     <ControlLabel>{label}</ControlLabel>
     <FormControl {...input} {...props} type="upload" />
     {touched && error && <HelpBlock>{error}</HelpBlock>}
-  </FormGroup>;
+  </FormGroup>
+);
 
 SingleUploadField.propTypes = {
   input: PropTypes.shape({

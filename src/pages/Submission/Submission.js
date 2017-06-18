@@ -5,9 +5,12 @@ import { FormattedMessage } from 'react-intl';
 
 import PageContent from '../../components/layout/PageContent';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
-import SubmissionDetail, { FailedSubmissionDetail } from '../../components/Submissions/SubmissionDetail';
+import SubmissionDetail, {
+  FailedSubmissionDetail
+} from '../../components/Submissions/SubmissionDetail';
 import AcceptSolutionContainer from '../../containers/AcceptSolutionContainer';
-import ResubmitSolutionContainer from '../../containers/ResubmitSolutionContainer';
+import ResubmitSolutionContainer
+  from '../../containers/ResubmitSolutionContainer';
 
 import { fetchAssignmentIfNeeded } from '../../redux/modules/assignments';
 import { fetchSubmissionIfNeeded } from '../../redux/modules/submissions';
@@ -99,7 +102,7 @@ class Submission extends Component {
           failed={<FailedSubmissionDetail />}
           resource={[submission, assignment]}
         >
-          {(submission, assignment) =>
+          {(submission, assignment) => (
             <div>
               {isSupervisorOrMore(assignment.groupId) &&
                 <p>
@@ -114,7 +117,8 @@ class Submission extends Component {
                 assignment={assignment}
                 isSupervisor={isSupervisorOrMore(assignment.groupId)}
               />
-            </div>}
+            </div>
+          )}
         </ResourceRenderer>
       </PageContent>
     );

@@ -6,9 +6,11 @@ import SubmissionStatus from '../SubmissionStatus';
 import SourceCodeInfoBox from '../../widgets/SourceCodeInfoBox';
 import TestResults from '../TestResults';
 import BonusPointsContainer from '../../../containers/BonusPointsContainer';
-import DownloadResultArchiveContainer from '../../../containers/DownloadResultArchiveContainer';
+import DownloadResultArchiveContainer
+  from '../../../containers/DownloadResultArchiveContainer';
 import CommentThreadContainer from '../../../containers/CommentThreadContainer';
-import SourceCodeViewerContainer from '../../../containers/SourceCodeViewerContainer';
+import SourceCodeViewerContainer
+  from '../../../containers/SourceCodeViewerContainer';
 
 import EvaluationDetail from '../EvaluationDetail';
 import CompilationLogs from '../CompilationLogs';
@@ -53,13 +55,13 @@ class SubmissionDetail extends Component {
               assignmentId={assignment.id}
             />
             <Row>
-              {files.map(file =>
+              {files.map(file => (
                 <Col lg={6} md={12} key={file.id}>
                   <a href="#" onClick={() => this.openFile(file.id)}>
                     <SourceCodeInfoBox {...file} />
                   </a>
                 </Col>
-              )}
+              ))}
             </Row>
             {evaluation &&
               <CompilationLogs

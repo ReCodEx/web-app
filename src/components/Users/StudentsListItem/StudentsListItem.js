@@ -4,7 +4,13 @@ import { FormattedMessage } from 'react-intl';
 import { ProgressBar } from 'react-bootstrap';
 import UsersNameContainer from '../../../containers/UsersNameContainer';
 
-const StudentsListItem = ({ id, fullName, avatarUrl, stats, renderActions }) =>
+const StudentsListItem = ({
+  id,
+  fullName,
+  avatarUrl,
+  stats,
+  renderActions
+}) => (
   <tr>
     <td>
       <UsersNameContainer userId={id} />
@@ -32,7 +38,8 @@ const StudentsListItem = ({ id, fullName, avatarUrl, stats, renderActions }) =>
         />}
     </td>
     {renderActions && <td>{renderActions(id)}</td>}
-  </tr>;
+  </tr>
+);
 
 StudentsListItem.propTypes = {
   id: PropTypes.string.isRequired,

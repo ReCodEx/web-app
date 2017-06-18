@@ -4,7 +4,7 @@ import { FormattedDate, FormattedTime, FormattedMessage } from 'react-intl';
 import { Link } from 'react-router';
 import AssignmentStatusIcon from '../Assignment/AssignmentStatusIcon';
 
-const NotEvaluatedSubmissionTableRow = ({ link, note, submittedAt }) =>
+const NotEvaluatedSubmissionTableRow = ({ link, note, submittedAt }) => (
   <tr>
     <td><AssignmentStatusIcon id={link} status="work-in-progress" /></td>
     <td>
@@ -25,7 +25,8 @@ const NotEvaluatedSubmissionTableRow = ({ link, note, submittedAt }) =>
         />
       </Link>
     </td>
-  </tr>;
+  </tr>
+);
 
 NotEvaluatedSubmissionTableRow.propTypes = {
   link: PropTypes.string.isRequired,

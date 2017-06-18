@@ -15,7 +15,7 @@ const Student = ({
   isCollapsed,
   notifications,
   links: { GROUP_URI_FACTORY }
-}) =>
+}) => (
   <ul className="sidebar-menu">
     <MenuTitle
       title={
@@ -39,7 +39,8 @@ const Student = ({
       createLink={item => GROUP_URI_FACTORY(getId(item))}
       forceOpen={isCollapsed}
     />
-  </ul>;
+  </ul>
+);
 
 Student.propTypes = {
   currentUrl: PropTypes.string.isRequired,

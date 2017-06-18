@@ -77,12 +77,12 @@ class SubmitButton extends Component {
       >
         {!submitting
           ? hasSucceeded
-            ? <span><SuccessIcon /> &nbsp; {successMsg}</span>
-            : asyncValidating !== false
-              ? <span><LoadingIcon /> &nbsp; {validatingMsg}</span>
-              : dirty && invalid
-                ? <span><WarningIcon /> &nbsp; {invalidMsg}</span>
-                : <span><SendIcon /> &nbsp; {submitMsg}</span>
+              ? <span><SuccessIcon /> &nbsp; {successMsg}</span>
+              : asyncValidating !== false
+                  ? <span><LoadingIcon /> &nbsp; {validatingMsg}</span>
+                  : dirty && invalid
+                      ? <span><WarningIcon /> &nbsp; {invalidMsg}</span>
+                      : <span><SendIcon /> &nbsp; {submitMsg}</span>
           : <span><LoadingIcon /> &nbsp; {submittingMsg}</span>}
       </Button>
     );

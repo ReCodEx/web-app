@@ -5,7 +5,7 @@ import { FormattedMessage, FormattedNumber } from 'react-intl';
 import { Table, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import Icon from 'react-fontawesome';
 
-const tickOrCross = (isOK, ratio, tooltipId) =>
+const tickOrCross = (isOK, ratio, tooltipId) => (
   <td
     className={classNames({
       'text-center': true,
@@ -26,9 +26,10 @@ const tickOrCross = (isOK, ratio, tooltipId) =>
         />
         )
       </small>}
-  </td>;
+  </td>
+);
 
-const TestResultsTable = ({ results }) =>
+const TestResultsTable = ({ results }) => (
   <Table responsive>
     <thead>
       <tr>
@@ -113,7 +114,7 @@ const TestResultsTable = ({ results }) =>
           message,
           timeRatio,
           memoryRatio
-        }) =>
+        }) => (
           <tr key={testName}>
             {tickOrCross(score === 1)}
             <td>
@@ -170,9 +171,11 @@ const TestResultsTable = ({ results }) =>
             {tickOrCross(memoryExceeded === false, memoryRatio)}
             {tickOrCross(timeExceeded === false, timeRatio)}
           </tr>
+        )
       )}
     </tbody>
-  </Table>;
+  </Table>
+);
 
 TestResultsTable.propTypes = {
   results: PropTypes.arrayOf(

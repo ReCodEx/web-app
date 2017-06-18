@@ -56,7 +56,7 @@ const SourceCodeField = (
     ...props
   },
   { userSettings: { vimMode = false, darkTheme = false } }
-) =>
+) => (
   <FormGroup
     controlId={input.name}
     validationState={touched && error ? 'error' : undefined}
@@ -76,7 +76,8 @@ const SourceCodeField = (
     </ClientOnly>
     {touched && error && <HelpBlock>{error}</HelpBlock>}
     {children}
-  </FormGroup>;
+  </FormGroup>
+);
 
 SourceCodeField.propTypes = {
   input: PropTypes.shape({

@@ -19,7 +19,7 @@ const RegistrationCASOauth = ({
   anyTouched,
   instances = Map(),
   invalid
-}) =>
+}) => (
   <FormBox
     title={
       <FormattedMessage
@@ -83,7 +83,7 @@ const RegistrationCASOauth = ({
     />
 
     <ResourceRenderer resource={instances.toArray()}>
-      {(...instances) =>
+      {(...instances) => (
         <Field
           name="instanceId"
           required
@@ -98,9 +98,11 @@ const RegistrationCASOauth = ({
             { key: '', name: '...' },
             ...instances.map(({ id: key, name }) => ({ key, name }))
           ]}
-        />}
+        />
+      )}
     </ResourceRenderer>
-  </FormBox>;
+  </FormBox>
+);
 
 RegistrationCASOauth.propTypes = {
   instances: ImmutablePropTypes.map.isRequired,

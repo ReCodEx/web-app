@@ -18,7 +18,7 @@ const LoginForm = ({
   submitFailed: hasFailed,
   submitting,
   hasSucceeded
-}) =>
+}) => (
   <FormBox
     title={
       <FormattedMessage
@@ -37,22 +37,22 @@ const LoginForm = ({
         >
           {!submitting
             ? hasSucceeded
-              ? <span>
-                  <SuccessIcon />
-                  {' '}
-                  <FormattedMessage
-                    id="app.loginForm.success"
-                    defaultMessage="You are successfully signed in"
-                  />
-                </span>
-              : <span>
-                  <Icon name="sign-in" />
-                  {' '}
-                  <FormattedMessage
-                    id="app.loginForm.login"
-                    defaultMessage="Sign in"
-                  />
-                </span>
+                ? <span>
+                    <SuccessIcon />
+                    {' '}
+                    <FormattedMessage
+                      id="app.loginForm.success"
+                      defaultMessage="You are successfully signed in"
+                    />
+                  </span>
+                : <span>
+                    <Icon name="sign-in" />
+                    {' '}
+                    <FormattedMessage
+                      id="app.loginForm.login"
+                      defaultMessage="Sign in"
+                    />
+                  </span>
             : <span>
                 <LoadingIcon />
                 {' '}
@@ -95,7 +95,8 @@ const LoginForm = ({
         />
       }
     />
-  </FormBox>;
+  </FormBox>
+);
 
 LoginForm.propTypes = {
   onSubmit: PropTypes.func.isRequired,

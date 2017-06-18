@@ -8,7 +8,7 @@ const EditRuntimeConfigForm = ({
   runtimeConfigs = [],
   runtimeEnvironments,
   ...props
-}) =>
+}) => (
   <TabbedArrayField
     {...props}
     runtimeConfigs={runtimeConfigs}
@@ -42,7 +42,8 @@ const EditRuntimeConfigForm = ({
     id="runtime-configuration"
     remove
     add
-  />;
+  />
+);
 
 EditRuntimeConfigForm.propTypes = {
   runtimeConfigs: PropTypes.array.isRequired,

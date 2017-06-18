@@ -9,7 +9,7 @@ const EditEnvironmentLimitsForm = ({
   environments = [],
   runtimeEnvironments,
   ...props
-}) =>
+}) => (
   <TabbedArrayField
     {...props}
     environments={environments}
@@ -30,7 +30,8 @@ const EditEnvironmentLimitsForm = ({
     }
     id="environment-limits"
     remove
-  />;
+  />
+);
 
 EditEnvironmentLimitsForm.propTypes = {
   environments: PropTypes.array,

@@ -10,7 +10,7 @@ const AdditionalFilesTableRow = ({
   size,
   uploadedAt,
   links: { DOWNLOAD }
-}) =>
+}) => (
   <tr>
     <td>{name}</td>
     <td>
@@ -24,7 +24,8 @@ const AdditionalFilesTableRow = ({
       &nbsp;
       <FormattedTime value={uploadedAt * 1000} />
     </td>
-  </tr>;
+  </tr>
+);
 
 AdditionalFilesTableRow.propTypes = {
   id: PropTypes.string.isRequired,

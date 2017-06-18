@@ -8,10 +8,10 @@ const getMessage = (item, formatMessage) =>
   !item
     ? ''
     : typeof item === 'string'
-      ? item
-      : item.Component === FormattedMessage
-        ? formatMessage(item.props)
-        : getMessage(item.children);
+        ? item
+        : item.Component === FormattedMessage
+            ? formatMessage(item.props)
+            : getMessage(item.children);
 
 /**
  * Holds the main content of a page with the common structure for
@@ -25,7 +25,7 @@ const PageContent = ({
   description = '',
   breadcrumbs = [],
   children
-}) =>
+}) => (
   <div className="content-wrapper">
     <Helmet
       title={getMessage(title, formatMessage)}
@@ -41,7 +41,8 @@ const PageContent = ({
     <section className="content">
       {children}
     </section>
-  </div>;
+  </div>
+);
 
 PageContent.propTypes = {
   title: PropTypes.oneOfType([PropTypes.string, PropTypes.element]).isRequired,

@@ -10,7 +10,8 @@ import { studentsOfGroup } from '../../redux/selectors/groups';
 import { getAssignment } from '../../redux/selectors/assignments';
 import { fetchStudents } from '../../redux/modules/users';
 import { isReady, getJsData, getId } from '../../redux/helpers/resourceManager';
-import SubmissionsTableContainer from '../../containers/SubmissionsTableContainer';
+import SubmissionsTableContainer
+  from '../../containers/SubmissionsTableContainer';
 import { fetchAssignmentIfNeeded } from '../../redux/modules/assignments';
 
 import PageContent from '../../components/layout/PageContent';
@@ -93,7 +94,7 @@ class AssignmentStats extends Component {
         ]}
       >
         <div>
-          {students.map(user =>
+          {students.map(user => (
             <Row key={user.id}>
               <Col sm={12}>
                 <SubmissionsTableContainer
@@ -103,7 +104,7 @@ class AssignmentStats extends Component {
                 />
               </Col>
             </Row>
-          )}
+          ))}
         </div>
       </PageContent>
     );

@@ -15,7 +15,7 @@ const EditUserSettingsForm = ({
   submitSucceeded = false,
   anyTouched,
   invalid
-}) =>
+}) => (
   <FormBox
     title={
       <FormattedMessage
@@ -117,7 +117,8 @@ const EditUserSettingsForm = ({
       }
     />
 
-  </FormBox>;
+  </FormBox>
+);
 
 EditUserSettingsForm.propTypes = {
   handleSubmit: PropTypes.func.isRequired,

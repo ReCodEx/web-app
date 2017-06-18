@@ -9,7 +9,7 @@ const FakeAvatar = ({
   light = false,
   children,
   small = false
-}) =>
+}) => (
   <span
     style={{
       display: 'inline-block',
@@ -27,7 +27,8 @@ const FakeAvatar = ({
     }}
   >
     {children}
-  </span>;
+  </span>
+);
 
 FakeAvatar.propTypes = {
   size: PropTypes.number,

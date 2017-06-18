@@ -18,7 +18,7 @@ const SuccessfulSubmissionTableRow = ({
   maxPoints,
   evaluation: { score, bonusPoints, points },
   accepted
-}) =>
+}) => (
   <tr>
     <td>
       <AssignmentStatusIcon id={link} status="done" accepted={accepted} />
@@ -53,7 +53,8 @@ const SuccessfulSubmissionTableRow = ({
         />
       </Link>
     </td>
-  </tr>;
+  </tr>
+);
 
 SuccessfulSubmissionTableRow.propTypes = {
   link: PropTypes.string.isRequired,

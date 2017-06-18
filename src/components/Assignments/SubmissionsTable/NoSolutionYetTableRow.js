@@ -1,7 +1,7 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-const NoSolutionYetTableRow = () =>
+const NoSolutionYetTableRow = () => (
   <tr>
     <td colSpan={5} className="text-center">
       <FormattedMessage
@@ -9,6 +9,7 @@ const NoSolutionYetTableRow = () =>
         defaultMessage="No solutions were submitted yet."
       />
     </td>
-  </tr>;
+  </tr>
+);
 
 export default NoSolutionYetTableRow;

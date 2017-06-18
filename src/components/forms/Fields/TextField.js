@@ -15,7 +15,7 @@ const TextField = ({
   type = 'text',
   label,
   ...props
-}) =>
+}) => (
   <FormGroup
     controlId={input.name}
     validationState={touched && error ? 'error' : undefined}
@@ -23,7 +23,8 @@ const TextField = ({
     <ControlLabel>{label}</ControlLabel>
     <FormControl {...input} {...props} type={type} />
     {touched && error && <HelpBlock>{error}</HelpBlock>}
-  </FormGroup>;
+  </FormGroup>
+);
 
 TextField.propTypes = {
   type: PropTypes.string,

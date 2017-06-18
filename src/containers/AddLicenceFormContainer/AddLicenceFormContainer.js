@@ -6,8 +6,9 @@ import { reset } from 'redux-form';
 import AddLicenceForm from '../../components/forms/AddLicenceForm';
 import { addLicence } from '../../redux/modules/licences';
 
-const AddLicenceFormContainer = ({ addLicence }) =>
-  <AddLicenceForm onSubmit={addLicence} />;
+const AddLicenceFormContainer = ({ addLicence }) => (
+  <AddLicenceForm onSubmit={addLicence} />
+);
 
 AddLicenceFormContainer.propTypes = {
   instanceId: PropTypes.string.isRequired,

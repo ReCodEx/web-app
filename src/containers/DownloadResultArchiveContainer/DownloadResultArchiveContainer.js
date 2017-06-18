@@ -3,15 +3,17 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import { downloadResultArchive } from '../../redux/modules/submissions';
-import ResultArchiveInfoBox from '../../components/Submissions/ResultArchiveInfoBox';
+import ResultArchiveInfoBox
+  from '../../components/Submissions/ResultArchiveInfoBox';
 
 const DownloadResultArchiveContainer = ({
   submissionId,
   downloadResultArchive
-}) =>
+}) => (
   <a href="#" onClick={downloadResultArchive}>
     <ResultArchiveInfoBox submissionId={submissionId} />
-  </a>;
+  </a>
+);
 
 DownloadResultArchiveContainer.propTypes = {
   submissionId: PropTypes.string.isRequired,

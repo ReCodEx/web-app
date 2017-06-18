@@ -8,12 +8,15 @@ import { push } from 'react-router-redux';
 import { Row, Col, Alert } from 'react-bootstrap';
 import Box from '../../components/widgets/Box';
 import PageContent from '../../components/layout/PageContent';
-import ResendVerificationEmailContainer from '../../containers/ResendVerificationEmailContainer';
+import ResendVerificationEmailContainer
+  from '../../containers/ResendVerificationEmailContainer';
 
 import { decode, isTokenValid, isInScope } from '../../redux/helpers/token';
 import { verifyEmail } from '../../redux/modules/emailVerification';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
-import { verificationStatusSelector } from '../../redux/selectors/emailVerification';
+import {
+  verificationStatusSelector
+} from '../../redux/selectors/emailVerification';
 import { LoadingIcon, SuccessIcon, FailedIcon } from '../../components/icons';
 
 import withLinks from '../../hoc/withLinks';

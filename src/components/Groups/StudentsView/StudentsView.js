@@ -8,7 +8,7 @@ import Box from '../../widgets/Box';
 import AssignmentsTable from '../../Assignments/Assignment/AssignmentsTable';
 import StudentsListContainer from '../../../containers/StudentsListContainer';
 
-const StudentsView = ({ group, statuses = [], assignments }) =>
+const StudentsView = ({ group, statuses = [], assignments }) => (
   <div>
     <Row>
       <Col sm={12}>
@@ -59,7 +59,8 @@ const StudentsView = ({ group, statuses = [], assignments }) =>
         </Box>
       </Col>
     </Row>
-  </div>;
+  </div>
+);
 
 StudentsView.propTypes = {
   group: PropTypes.object.isRequired,

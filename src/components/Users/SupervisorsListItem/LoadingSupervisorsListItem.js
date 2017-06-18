@@ -2,12 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { LoadingUsersName } from '../../Users/UsersName';
 
-const LoadingSupervisorsListItem = ({ isAdmin }) =>
+const LoadingSupervisorsListItem = ({ isAdmin }) => (
   <tr>
     <td colSpan={isAdmin ? 2 : 1}>
       <LoadingUsersName />
     </td>
-  </tr>;
+  </tr>
+);
 
 LoadingSupervisorsListItem.propTypes = {
   isAdmin: PropTypes.bool

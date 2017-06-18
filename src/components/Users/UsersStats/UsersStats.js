@@ -7,7 +7,7 @@ const UsersStats = ({
   id,
   name,
   stats: { assignments, points, hasLimit, passesLimit }
-}) =>
+}) => (
   <InfoBox
     color={!hasLimit ? 'blue' : passesLimit ? 'green' : 'red'}
     icon={!hasLimit ? 'info' : passesLimit ? 'check' : 'exclamation-triangle'}
@@ -26,7 +26,8 @@ const UsersStats = ({
         values={{ name }}
       />
     }
-  />;
+  />
+);
 
 UsersStats.propTypes = {
   id: PropTypes.string.isRequired,

@@ -17,7 +17,7 @@ const Sidebar = ({
   isAdmin,
   small = false,
   ...props
-}) =>
+}) => (
   <aside className="main-sidebar">
     <section className="sidebar">
       {isLoggedIn && <BadgeContainer small={small} />}
@@ -34,7 +34,8 @@ const Sidebar = ({
 
       {!isLoggedIn && <Public {...props} />}
     </section>
-  </aside>;
+  </aside>
+);
 
 Sidebar.propTypes = {
   isLoggedIn: PropTypes.bool,

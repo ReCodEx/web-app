@@ -20,7 +20,7 @@ const SearchContainer = ({
   status,
   foundItems,
   renderList
-}) =>
+}) => (
   <Search
     type={type}
     id={id}
@@ -31,7 +31,8 @@ const SearchContainer = ({
     hasFailed={status === searchStatus.FAILED}
     onChange={search}
     renderList={renderList}
-  />;
+  />
+);
 
 SearchContainer.propTypes = {
   id: PropTypes.string.isRequired,

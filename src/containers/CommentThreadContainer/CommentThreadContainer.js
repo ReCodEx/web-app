@@ -66,14 +66,15 @@ class CommentThreadContainer extends Component {
         loading={<LoadingCommentThread />}
         failed={<FailedCommentThread />}
       >
-        {(thread, user) =>
+        {(thread, user) => (
           <CommentThread
             comments={thread.comments.sort((a, b) => a.postedAt - b.postedAt)}
             currentUserId={user.id}
             addComment={(text, isPrivate) => addComment(user, text, isPrivate)}
             togglePrivacy={togglePrivacy}
             repostComment={repostComment}
-          />}
+          />
+        )}
       </ResourceRenderer>
     );
   }

@@ -2,7 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import LoginSuccessful from './LoginSuccessful';
 import LoggingIn from './LoggingIn';
-import AuthenticationButtonContainer from '../../../containers/CAS/AuthenticationButtonContainer';
+import AuthenticationButtonContainer
+  from '../../../containers/CAS/AuthenticationButtonContainer';
 
 import { statusTypes } from '../../../redux/modules/auth';
 

@@ -18,7 +18,7 @@ export const Layout = ({
   currentUrl,
   availableLangs,
   onCloseSidebar
-}) =>
+}) => (
   <div
     className={classNames({
       wrapper: true,
@@ -48,7 +48,8 @@ export const Layout = ({
       {children}
       <Footer version="v1.0.0" />
     </div>
-  </div>;
+  </div>
+);
 
 Layout.propTypes = {
   toggleSize: PropTypes.func,

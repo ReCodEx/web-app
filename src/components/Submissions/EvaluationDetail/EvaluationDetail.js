@@ -20,7 +20,7 @@ const EvaluationDetail = ({
   note = '',
   submittedAt,
   maxPoints
-}) =>
+}) => (
   <Box
     title={
       <FormattedMessage
@@ -139,10 +139,10 @@ const EvaluationDetail = ({
           <td
             className={classnames({
               'text-center': true,
-              'text-danger':
-                !evaluation.isCorrect && evaluation.bonusPoints === 0,
-              'text-success':
-                evaluation.isCorrect && evaluation.bonusPoints === 0,
+              'text-danger': !evaluation.isCorrect &&
+                evaluation.bonusPoints === 0,
+              'text-success': evaluation.isCorrect &&
+                evaluation.bonusPoints === 0,
               'text-bold': evaluation.bonusPoints === 0
             })}
           >
@@ -172,12 +172,10 @@ const EvaluationDetail = ({
             <td
               className={classnames({
                 'text-center': true,
-                'text-danger':
-                  !evaluation.isCorrect ||
-                    evaluation.points + evaluation.bonusPoints <= 0,
-                'text-success':
-                  evaluation.isCorrect &&
-                    evaluation.points + evaluation.bonusPoints > 0
+                'text-danger': !evaluation.isCorrect ||
+                  evaluation.points + evaluation.bonusPoints <= 0,
+                'text-success': evaluation.isCorrect &&
+                  evaluation.points + evaluation.bonusPoints > 0
               })}
             >
               <b>
@@ -187,7 +185,8 @@ const EvaluationDetail = ({
           </tr>}
       </tbody>
     </Table>
-  </Box>;
+  </Box>
+);
 
 EvaluationDetail.propTypes = {
   assignment: PropTypes.shape({

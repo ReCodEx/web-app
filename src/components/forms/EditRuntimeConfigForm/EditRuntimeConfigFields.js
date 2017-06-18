@@ -11,7 +11,7 @@ const EditRuntimeConfigFields = ({
   i,
   runtimeConfigs,
   runtimeEnvironments
-}) =>
+}) => (
   <div>
     <Field
       name={`${prefix}.name`}
@@ -59,7 +59,8 @@ const EditRuntimeConfigFields = ({
         defaultMessage="Read more about <a href='https://github.com/ReCodEx/wiki/wiki/Job-configuration' target='_blank'>job configuration</a> syntax."
       />
     </HelpBlock>
-  </div>;
+  </div>
+);
 
 EditRuntimeConfigFields.propTypes = {
   prefix: PropTypes.string.isRequired,

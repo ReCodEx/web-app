@@ -13,7 +13,7 @@ const Badge = ({
   expiration,
   logout,
   links: { USER_URI_FACTORY, EDIT_USER_URI_FACTORY }
-}) =>
+}) => (
   <div className="user-panel">
     <div className="pull-left image">
       <img src={avatarUrl} alt={fullName} className="img-circle" />
@@ -49,7 +49,8 @@ const Badge = ({
         </a>
       </OverlayTrigger>
     </div>
-  </div>;
+  </div>
+);
 
 Badge.propTypes = {
   id: PropTypes.string.isRequired,

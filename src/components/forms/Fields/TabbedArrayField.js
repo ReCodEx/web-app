@@ -59,7 +59,7 @@ class TabbedArrayField extends Component {
             activeKey={this.state.activeTab}
             onSelect={this.changeTab}
           >
-            {fields.map((prefix, i) =>
+            {fields.map((prefix, i) => (
               <Tab key={i} eventKey={i} title={getTitle(i)}>
                 <ContentComponent {...props} i={i} prefix={prefix} />
                 {remove &&
@@ -83,7 +83,7 @@ class TabbedArrayField extends Component {
                     </Confirm>
                   </p>}
               </Tab>
-            )}
+            ))}
           </Tabs>}
 
         {fields.length === 0 &&

@@ -20,7 +20,7 @@ const AssignmentsTable = ({
   statuses = [],
   showGroup = true,
   userId = null
-}) =>
+}) => (
   <Table hover>
     <thead>
       <tr>
@@ -61,7 +61,7 @@ const AssignmentsTable = ({
         .filter(isReady)
         .map(getJsData)
         .sort((a, b) => a.firstDeadline - b.firstDeadline)
-        .map(assignment =>
+        .map(assignment => (
           <AssignmentTableRow
             key={assignment.id}
             item={assignment}
@@ -69,9 +69,10 @@ const AssignmentsTable = ({
             showGroup={showGroup}
             status={statuses[assignment.id]}
           />
-        )}
+        ))}
     </tbody>
-  </Table>;
+  </Table>
+);
 
 AssignmentsTable.propTypes = {
   assignments: ImmutablePropTypes.list.isRequired,

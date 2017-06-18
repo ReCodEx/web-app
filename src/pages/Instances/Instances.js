@@ -5,7 +5,8 @@ import { connect } from 'react-redux';
 import { fetchInstances } from '../../redux/modules/instances';
 import { instancesSelector } from '../../redux/selectors/instances';
 
-import InstancesManagement from '../../components/Instances/InstancesManagement';
+import InstancesManagement
+  from '../../components/Instances/InstancesManagement';
 
 class Instances extends Component {
   static loadAsync = (params, dispatch) =>

@@ -2,7 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-import { ResubmitAllSolutions } from '../../components/buttons/ResubmitSolution';
+import {
+  ResubmitAllSolutions
+} from '../../components/buttons/ResubmitSolution';
 import { resubmitAllSubmissions } from '../../redux/modules/submissions';
 
 const ResubmitAllSolutionsContainer = ({ assignmentId, resubmit }) => {

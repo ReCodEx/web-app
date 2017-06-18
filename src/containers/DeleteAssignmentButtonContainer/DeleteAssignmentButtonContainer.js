@@ -11,12 +11,13 @@ const DeleteAssignmentButtonContainer = ({
   deleteAssignment,
   onDeleted,
   ...props
-}) =>
+}) => (
   <DeleteButton
     {...props}
     resource={assignment}
     deleteResource={deleteAssignment}
-  />;
+  />
+);
 
 DeleteAssignmentButtonContainer.propTypes = {
   id: PropTypes.string.isRequired,

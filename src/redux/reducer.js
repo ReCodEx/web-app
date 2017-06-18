@@ -28,7 +28,8 @@ import runtimeEnvironments from './modules/runtimeEnvironments';
 import supplementaryFiles from './modules/supplementaryFiles';
 import additionalExerciseFiles from './modules/additionalExerciseFiles';
 import referenceSolutions from './modules/referenceSolutions';
-import referenceSolutionEvaluations from './modules/referenceSolutionEvaluations';
+import referenceSolutionEvaluations
+  from './modules/referenceSolutionEvaluations';
 import hwGroups from './modules/hwGroups';
 
 const createRecodexReducers = token => ({

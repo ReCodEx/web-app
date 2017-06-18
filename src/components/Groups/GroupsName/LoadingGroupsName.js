@@ -2,13 +2,14 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { LoadingIcon } from '../../icons';
 
-const LoadingGroupsName = () =>
+const LoadingGroupsName = () => (
   <div>
     <LoadingIcon />
     <FormattedMessage
       id="app.groupsName.loading"
       defaultMessage="Loading ..."
     />
-  </div>;
+  </div>
+);
 
 export default LoadingGroupsName;

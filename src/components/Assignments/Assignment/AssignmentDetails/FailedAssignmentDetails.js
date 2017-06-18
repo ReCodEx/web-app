@@ -3,7 +3,7 @@ import Box from '../../../widgets/Box';
 import { WarningIcon } from '../../../icons';
 import { FormattedMessage } from 'react-intl';
 
-const FailedAssignmentDetails = () =>
+const FailedAssignmentDetails = () => (
   <Box
     title={
       <span>
@@ -24,6 +24,7 @@ const FailedAssignmentDetails = () =>
         defaultMessage="The assignment of this exercise could not be loaded. Make sure you are connected to the Internet and try again later."
       />
     </p>
-  </Box>;
+  </Box>
+);
 
 export default FailedAssignmentDetails;

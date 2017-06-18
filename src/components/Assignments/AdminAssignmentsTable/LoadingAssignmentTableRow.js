@@ -2,7 +2,7 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { LoadingIcon } from '../../icons';
 
-const LoadingAssignmentTableRow = () =>
+const LoadingAssignmentTableRow = () => (
   <tr>
     <td className="text-center" colSpan={5}>
       <LoadingIcon />
@@ -12,7 +12,8 @@ const LoadingAssignmentTableRow = () =>
         defaultMessage="Loading assignments ..."
       />
     </td>
-  </tr>;
+  </tr>
+);
 
 LoadingAssignmentTableRow.propTypes = {};
 

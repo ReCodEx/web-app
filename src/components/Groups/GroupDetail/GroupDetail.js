@@ -24,7 +24,7 @@ const GroupDetail = ({
   groups,
   supervisors,
   isAdmin
-}) =>
+}) => (
   <div>
     <Row>
       <Col lg={6} sm={12}>
@@ -117,7 +117,8 @@ const GroupDetail = ({
         </Box>
       </Col>
     </Row>
-  </div>;
+  </div>
+);
 
 GroupDetail.propTypes = {
   group: PropTypes.shape({

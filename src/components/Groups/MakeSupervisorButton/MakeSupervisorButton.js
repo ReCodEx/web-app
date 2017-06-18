@@ -4,7 +4,7 @@ import { FormattedMessage } from 'react-intl';
 import Button from '../../widgets/FlatButton';
 import Icon from 'react-fontawesome';
 
-const MakeSupervisorButton = ({ onClick, ...props }) =>
+const MakeSupervisorButton = ({ onClick, ...props }) => (
   <Button {...props} onClick={onClick} bsStyle="success" className="btn-flat">
     <Icon name="user-plus" />
     {' '}
@@ -12,7 +12,8 @@ const MakeSupervisorButton = ({ onClick, ...props }) =>
       id="app.groups.makeSupervisorButton"
       defaultMessage="Make supervisor"
     />
-  </Button>;
+  </Button>
+);
 
 MakeSupervisorButton.propTypes = {
   onClick: PropTypes.func.isRequired

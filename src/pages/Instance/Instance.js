@@ -74,7 +74,7 @@ class Instance extends Component {
           }
         ]}
       >
-        {data =>
+        {data => (
           <div>
             {isSuperAdmin &&
               <Row>
@@ -120,7 +120,8 @@ class Instance extends Component {
                     <AddLicenceFormContainer instanceId={data.id} />}
                 </Col>
               </Row>}
-          </div>}
+          </div>
+        )}
       </Page>
     );
   }

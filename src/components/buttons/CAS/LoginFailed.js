@@ -4,14 +4,15 @@ import { FormattedMessage } from 'react-intl';
 import Button from '../../widgets/FlatButton';
 import { WarningIcon } from '../../icons';
 
-const LoginFailed = ({ onClick }) =>
+const LoginFailed = ({ onClick }) => (
   <Button bsStyle="danger" onClick={onClick}>
     <WarningIcon />{' '}
     <FormattedMessage
       id="app.casLoginButton.failed"
       defaultMessage="Try again"
     />
-  </Button>;
+  </Button>
+);
 
 LoginFailed.propTypes = {
   onClick: PropTypes.func.isRequired

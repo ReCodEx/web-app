@@ -14,7 +14,8 @@ import Box from '../../components/widgets/Box';
 import { LoadingInfoBox } from '../../components/widgets/InfoBox';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import UsersNameContainer from '../../containers/UsersNameContainer';
-import AssignmentsTable from '../../components/Assignments/Assignment/AssignmentsTable';
+import AssignmentsTable
+  from '../../components/Assignments/Assignment/AssignmentsTable';
 import UsersStats from '../../components/Users/UsersStats';
 import { fetchAssignmentsForGroup } from '../../redux/modules/assignments';
 import { fetchUserIfNeeded } from '../../redux/modules/users';
@@ -126,7 +127,7 @@ class User extends Component {
           }
         ]}
       >
-        {user =>
+        {user => (
           <div>
             <p>
               <UsersNameContainer userId={user.id} large noLink />
@@ -134,9 +135,9 @@ class User extends Component {
 
             {commonGroups.length > 0 &&
               <ResourceRenderer resource={commonGroups}>
-                {(...groups) =>
+                {(...groups) => (
                   <div>
-                    {groups.map(group =>
+                    {groups.map(group => (
                       <div key={group.id}>
                         <ResourceRenderer
                           loading={
@@ -148,7 +149,7 @@ class User extends Component {
                           }
                           resource={groupStatistics(group.id)}
                         >
-                          {statistics =>
+                          {statistics => (
                             <Row>
                               <Col lg={4}>
                                 <Link to={GROUP_URI_FACTORY(group.id)}>
@@ -189,12 +190,14 @@ class User extends Component {
                                   />
                                 </Box>
                               </Col>
-                            </Row>}
+                            </Row>
+                          )}
                         </ResourceRenderer>
                       </div>
-                    )}
+                    ))}
 
-                  </div>}
+                  </div>
+                )}
               </ResourceRenderer>}
 
             {commonGroups.length === 0 &&
@@ -250,7 +253,8 @@ class User extends Component {
                   </div>
                 </Col>
               </Row>}
-          </div>}
+          </div>
+        )}
       </Page>
     );
   }

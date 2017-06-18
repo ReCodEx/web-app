@@ -23,7 +23,7 @@ const EditEnvironmentLimitsFields = ({
   return (
     <div>
       <ResourceRenderer resource={runtime}>
-        {runtime =>
+        {runtime => (
           <div>
             <h4>{runtime.name}</h4>
             <ul>
@@ -31,7 +31,8 @@ const EditEnvironmentLimitsFields = ({
               <li>{runtime.platform}</li>
               <li>{runtime.description}</li>
             </ul>
-          </div>}
+          </div>
+        )}
       </ResourceRenderer>
 
       <Field

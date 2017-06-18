@@ -5,7 +5,8 @@ import { Link } from 'react-router';
 import Icon from 'react-fontawesome';
 import { FormattedDate, FormattedTime, FormattedMessage } from 'react-intl';
 import Box from '../../widgets/Box';
-import AssignmentStatusIcon from '../../Assignments/Assignment/AssignmentStatusIcon';
+import AssignmentStatusIcon
+  from '../../Assignments/Assignment/AssignmentStatusIcon';
 import UsersNameContainer from '../../../containers/UsersNameContainer';
 import withLinks from '../../../hoc/withLinks';
 
@@ -19,7 +20,7 @@ const SubmissionStatus = ({
   originalSubmissionId = null,
   assignmentId,
   links: { SUBMISSION_DETAIL_URI_FACTORY }
-}) =>
+}) => (
   <Box
     title={
       <FormattedMessage id="app.submission.title" defaultMessage="Solution" />
@@ -154,7 +155,8 @@ const SubmissionStatus = ({
         </tr>
       </tbody>
     </Table>
-  </Box>;
+  </Box>
+);
 
 SubmissionStatus.propTypes = {
   evaluationStatus: PropTypes.string.isRequired,

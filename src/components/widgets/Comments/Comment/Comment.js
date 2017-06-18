@@ -22,7 +22,7 @@ const Comment = ({
   isToggling = false,
   togglePrivacy,
   links: { USER_URI_FACTORY }
-}) =>
+}) => (
   <div
     className={classNames({
       'direct-chat-success': isPrivate,
@@ -86,7 +86,8 @@ const Comment = ({
         {text}
       </div>
     </div>
-  </div>;
+  </div>
+);
 
 Comment.propTypes = {
   isFromCurrentUser: PropTypes.bool,

@@ -22,7 +22,7 @@ const EditExerciseRuntimeConfigsForm = ({
   submitFailed: hasFailed,
   submitSucceeded: hasSucceeded,
   invalid
-}) =>
+}) => (
   <div>
     {hasFailed &&
       <Alert bsStyle="danger">
@@ -70,7 +70,8 @@ const EditExerciseRuntimeConfigsForm = ({
         }}
       />
     </p>
-  </div>;
+  </div>
+);
 
 EditExerciseRuntimeConfigsForm.propTypes = {
   initialValues: PropTypes.object.isRequired,

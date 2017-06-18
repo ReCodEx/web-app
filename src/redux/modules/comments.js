@@ -81,8 +81,9 @@ export const togglePrivacy = (threadId, commentId) =>
 
 const reducer = handleActions(
   Object.assign({}, reduceActions, {
-    [actionTypes.UPDATE_FULFILLED]:
-      reduceActions[resourceActionTypes.FETCH_FULFILLED],
+    [actionTypes.UPDATE_FULFILLED]: reduceActions[
+      resourceActionTypes.FETCH_FULFILLED
+    ],
 
     [actionTypes.POST_COMMENT_PENDING]: (
       state,

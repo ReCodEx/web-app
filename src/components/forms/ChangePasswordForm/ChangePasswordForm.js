@@ -16,7 +16,7 @@ const ChangePasswordForm = ({
   hasFailed = false,
   hasSucceeded = false,
   invalid
-}) =>
+}) => (
   <FormBox
     title={
       <FormattedMessage
@@ -35,20 +35,20 @@ const ChangePasswordForm = ({
         >
           {!submitting
             ? hasSucceeded
-              ? <span>
-                  <SuccessIcon />
-                  {' '}
-                  &nbsp;
-                  {' '}
-                  <FormattedMessage
-                    id="app.changePasswordForm.success"
-                    defaultMessage="Your password has been changed."
+                ? <span>
+                    <SuccessIcon />
+                    {' '}
+                    &nbsp;
+                    {' '}
+                    <FormattedMessage
+                      id="app.changePasswordForm.success"
+                      defaultMessage="Your password has been changed."
+                    />
+                  </span>
+                : <FormattedMessage
+                    id="app.changePasswordForm.changePassword"
+                    defaultMessage="Change password"
                   />
-                </span>
-              : <FormattedMessage
-                  id="app.changePasswordForm.changePassword"
-                  defaultMessage="Change password"
-                />
             : <span>
                 <LoadingIcon />
                 {' '}
@@ -110,7 +110,8 @@ const ChangePasswordForm = ({
         />
       }
     />
-  </FormBox>;
+  </FormBox>
+);
 
 ChangePasswordForm.propTypes = {
   handleSubmit: PropTypes.func.isRequired,

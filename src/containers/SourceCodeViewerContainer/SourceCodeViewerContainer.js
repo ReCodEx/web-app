@@ -60,7 +60,7 @@ class SourceCodeViewerContainer extends Component {
         }
         resource={[file, code]}
       >
-        {(file, code) =>
+        {(file, code) => (
           <Modal show={show} onHide={onHide} bsSize="large">
             <Modal.Header closeButton>
               <Modal.Title>{file.name}</Modal.Title>
@@ -78,7 +78,8 @@ class SourceCodeViewerContainer extends Component {
                 />
               </Button>
             </Modal.Footer>
-          </Modal>}
+          </Modal>
+        )}
       </ResourceRenderer>
     );
   }

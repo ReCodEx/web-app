@@ -16,7 +16,7 @@ const BonusPointsForm = ({
   submitFailed = false,
   submitSucceeded = false,
   invalid
-}) =>
+}) => (
   <FormBox
     title={
       <FormattedMessage
@@ -79,7 +79,8 @@ const BonusPointsForm = ({
         />
       }
     />
-  </FormBox>;
+  </FormBox>
+);
 
 BonusPointsForm.propTypes = {
   handleSubmit: PropTypes.func.isRequired,

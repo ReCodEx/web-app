@@ -16,14 +16,15 @@ const ConfirmDeleteButton = ({
     />
   ),
   ...props
-}) =>
+}) => (
   <Confirm id={id} onConfirmed={onClick} question={question}>
     <Button disabled={disabled || !id} bsStyle="danger" bsSize="sm" {...props}>
       <DeleteIcon />
       {' '}
       <FormattedMessage id="app.deleteButton.delete" defaultMessage="Delete" />
     </Button>
-  </Confirm>;
+  </Confirm>
+);
 
 ConfirmDeleteButton.propTypes = {
   onClick: PropTypes.func,

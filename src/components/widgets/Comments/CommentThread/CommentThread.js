@@ -12,7 +12,7 @@ const CommentThread = ({
   addComment,
   repostComment,
   togglePrivacy
-}) =>
+}) => (
   <CommentBox
     commentsCount={comments.length}
     footer={addComment && <AddComment addComment={addComment} />}
@@ -38,7 +38,8 @@ const CommentThread = ({
           />
         </p>}
     </div>
-  </CommentBox>;
+  </CommentBox>
+);
 
 CommentThread.propTypes = {
   comments: PropTypes.array,

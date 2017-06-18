@@ -28,7 +28,7 @@ const RegistrationForm = ({
   instances,
   asyncValidating,
   invalid
-}) =>
+}) => (
   <FormBox
     title={
       <FormattedMessage
@@ -136,7 +136,7 @@ const RegistrationForm = ({
       }
     />
     <ResourceRenderer resource={instances.toArray()}>
-      {(...instances) =>
+      {(...instances) => (
         <Field
           name="instanceId"
           required
@@ -151,9 +151,11 @@ const RegistrationForm = ({
             { key: '', name: '...' },
             ...instances.map(({ id: key, name }) => ({ key, name }))
           ]}
-        />}
+        />
+      )}
     </ResourceRenderer>
-  </FormBox>;
+  </FormBox>
+);
 
 RegistrationForm.propTypes = {
   instances: PropTypes.object.isRequired,

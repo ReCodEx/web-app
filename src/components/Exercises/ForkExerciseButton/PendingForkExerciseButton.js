@@ -3,7 +3,7 @@ import { FormattedMessage } from 'react-intl';
 import Button from '../../widgets/FlatButton';
 import { LoadingIcon } from '../../icons';
 
-const PendingForkExerciseButton = props =>
+const PendingForkExerciseButton = props => (
   <Button
     bsStyle="default"
     bsSize="sm"
@@ -17,6 +17,7 @@ const PendingForkExerciseButton = props =>
       id="app.forkExerciseButton.loading"
       defaultMessage="Forking ..."
     />
-  </Button>;
+  </Button>
+);
 
 export default PendingForkExerciseButton;

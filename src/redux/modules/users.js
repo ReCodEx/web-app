@@ -4,16 +4,15 @@ import factory, { initialState } from '../helpers/resourceManager';
 import { createApiAction } from '../middleware/apiMiddleware';
 
 import { additionalActionTypes as groupsActionTypes } from './groups';
-import { actionTypes as emailVerificationActionTypes } from './emailVerification';
+import {
+  actionTypes as emailVerificationActionTypes
+} from './emailVerification';
 
 export const actionTypes = {
   VALIDATE_REGISTRATION_DATA: 'recodex/users/VALIDATE_REGISTRATION_DATA',
-  VALIDATE_REGISTRATION_DATA_PENDING:
-    'recodex/users/VALIDATE_REGISTRATION_DATA_PENDING',
-  VALIDATE_REGISTRATION_DATA_FULFILLED:
-    'recodex/users/VALIDATE_REGISTRATION_DATA_FULFILLED',
-  VALIDATE_REGISTRATION_DATA_FAILED:
-    'recodex/users/VALIDATE_REGISTRATION_DATA_FAILED',
+  VALIDATE_REGISTRATION_DATA_PENDING: 'recodex/users/VALIDATE_REGISTRATION_DATA_PENDING',
+  VALIDATE_REGISTRATION_DATA_FULFILLED: 'recodex/users/VALIDATE_REGISTRATION_DATA_FULFILLED',
+  VALIDATE_REGISTRATION_DATA_FAILED: 'recodex/users/VALIDATE_REGISTRATION_DATA_FAILED',
   UPDATE_PROFILE: 'recodex/users/UPDATE_PROFILE',
   UPDATE_PROFILE_PENDING: 'recodex/users/UPDATE_PROFILE_PENDING',
   UPDATE_PROFILE_FULFILLED: 'recodex/users/UPDATE_PROFILE_FULFILLED',

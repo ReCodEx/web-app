@@ -15,14 +15,16 @@ import {
   addSupplementaryFiles
 } from '../../redux/modules/supplementaryFiles';
 
-import { createGetSupplementaryFiles } from '../../redux/selectors/supplementaryFiles';
+import {
+  createGetSupplementaryFiles
+} from '../../redux/selectors/supplementaryFiles';
 
 const SupplementaryFilesTableContainer = ({
   exercise,
   supplementaryFiles,
   loadFiles,
   addFiles
-}) =>
+}) => (
   <AttachedFilesTableContainer
     uploadId={`supplementary-files-${exercise.id}`}
     attachments={supplementaryFiles}
@@ -42,7 +44,8 @@ const SupplementaryFilesTableContainer = ({
     }
     HeaderComponent={SupplementaryFilesTableHeaderRow}
     RowComponent={SupplementaryFilesTableRow}
-  />;
+  />
+);
 
 SupplementaryFilesTableContainer.propTypes = {
   exercise: PropTypes.shape({

@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 import { canUseDOM } from 'exenv';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
-import HeaderNotificationsDropdown from '../../components/widgets/HeaderNotificationsDropdown';
+import HeaderNotificationsDropdown
+  from '../../components/widgets/HeaderNotificationsDropdown';
 import { hideNotification } from '../../redux/modules/notifications';
 import {
   newNotificationsSelector,

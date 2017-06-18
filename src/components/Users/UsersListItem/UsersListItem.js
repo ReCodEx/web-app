@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import UsersNameContainer from '../../../containers/UsersNameContainer';
 
-const UsersListItem = ({ id, fullName, avatarUrl, createActions }) =>
+const UsersListItem = ({ id, fullName, avatarUrl, createActions }) => (
   <tr>
     <td>
       <UsersNameContainer userId={id} />
@@ -11,7 +11,8 @@ const UsersListItem = ({ id, fullName, avatarUrl, createActions }) =>
       <td className="text-right">
         {createActions(id)}
       </td>}
-  </tr>;
+  </tr>
+);
 
 UsersListItem.propTypes = {
   id: PropTypes.string.isRequired,
