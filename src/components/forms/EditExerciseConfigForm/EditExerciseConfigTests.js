@@ -48,14 +48,14 @@ const EditExerciseConfigTests = ({
           <th />
           <th>
             <FormattedMessage
-              id="app.editExerciseConfigForm.compilation"
-              defaultMessage="Compilation"
+              id="app.editExerciseConfigForm.pipelines"
+              defaultMessage="Pipelines"
             />
           </th>
           <th>
             <FormattedMessage
-              id="app.editExerciseConfigForm.execution"
-              defaultMessage="Execution"
+              id="app.editExerciseConfigForm.variables"
+              defaultMessage="Variables"
             />
           </th>
         </tr>

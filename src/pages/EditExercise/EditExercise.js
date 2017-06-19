@@ -123,17 +123,19 @@ class EditExercise extends Component {
                       formValues={formValues}
                     />
                   </Col>
-                  <Col lg={12}>
-                    <AdditionalExerciseFilesTableContainer
-                      exercise={exercise}
-                    />
-                  </Col>
                 </Row>
               </Col>
               <Col lg={6}>
                 <Row>
                   <Col lg={12}>
                     <SupplementaryFilesTableContainer exercise={exercise} />
+                  </Col>
+                </Row>
+                <Row>
+                  <Col lg={12}>
+                    <AdditionalExerciseFilesTableContainer
+                      exercise={exercise}
+                    />
                   </Col>
                 </Row>
                 <Row>
@@ -162,59 +164,61 @@ class EditExercise extends Component {
                     </Box>
                   </Col>
                 </Row>
-                <Row>
-                  <Col lg={12}>
-                    <Box
-                      title={
-                        <FormattedMessage
-                          id="app.editExercise.editTestConfig"
-                          defaultMessage="Edit configurations"
-                        />
-                      }
-                      unlimitedHeight
-                    >
-                      <ResourceRenderer resource={exerciseConfig}>
-                        {config => (
-                          <EditExerciseConfigForm
-                            runtimeEnvironments={runtimeEnvironments}
-                            // testConfigs={
-                            //   configFormValues ? configFormValues.testConfigs : [{}]
-                            // }
-                            initialValues={{ config: config }}
-                            onSubmit={setConfig}
-                          />
-                        )}
-                      </ResourceRenderer>
-                    </Box>
-                  </Col>
-                </Row>
               </Col>
             </Row>
             <br />
-            <Box
-              type="danger"
-              title={
-                <FormattedMessage
-                  id="app.editExercise.deleteExercise"
-                  defaultMessage="Delete the exercise"
-                />
-              }
-            >
-              <div>
-                <p>
-                  <FormattedMessage
-                    id="app.editExercise.deleteExerciseWarning"
-                    defaultMessage="Deleting an exercise will remove all the students submissions and all assignments."
-                  />
-                </p>
-                <p className="text-center">
-                  <DeleteExerciseButtonContainer
-                    id={exercise.id}
-                    onDeleted={() => push(EXERCISES_URI)}
-                  />
-                </p>
-              </div>
-            </Box>
+            <Row>
+              <Col lg={12}>
+                <Box
+                  title={
+                    <FormattedMessage
+                      id="app.editExercise.editTestConfig"
+                      defaultMessage="Edit configurations"
+                    />
+                  }
+                  unlimitedHeight
+                >
+                  <ResourceRenderer resource={exerciseConfig}>
+                    {config => (
+                      <EditExerciseConfigForm
+                        runtimeEnvironments={runtimeEnvironments}
+                        // testConfigs={
+                        //   configFormValues ? configFormValues.testConfigs : [{}]
+                        // }
+                        initialValues={{ config: config }}
+                        onSubmit={setConfig}
+                      />
+                    )}
+                  </ResourceRenderer>
+                </Box>
+              </Col>
+              <Col lg={12}>
+                <Box
+                  type="danger"
+                  title={
+                    <FormattedMessage
+                      id="app.editExercise.deleteExercise"
+                      defaultMessage="Delete the exercise"
+                    />
+                  }
+                >
+                  <div>
+                    <p>
+                      <FormattedMessage
+                        id="app.editExercise.deleteExerciseWarning"
+                        defaultMessage="Deleting an exercise will remove all the students submissions and all assignments."
+                      />
+                    </p>
+                    <p className="text-center">
+                      <DeleteExerciseButtonContainer
+                        id={exercise.id}
+                        onDeleted={() => push(EXERCISES_URI)}
+                      />
+                    </p>
+                  </div>
+                </Box>
+              </Col>
+            </Row>
           </div>
         )}
       </Page>
