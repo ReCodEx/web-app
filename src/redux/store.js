@@ -4,12 +4,12 @@ import { createStore, compose, applyMiddleware } from 'redux';
 import { routerMiddleware } from 'react-router-redux';
 import thunkMiddleware from 'redux-thunk';
 import promiseMiddleware from 'redux-promise-middleware';
-import accessTokenMiddleware from './middleware/accessTokenMiddleware';
+import authMiddleware from './middleware/authMiddleware';
 import apiMiddleware from './middleware/apiMiddleware';
 import createReducer from './reducer';
 
 const getMiddleware = history => [
-  accessTokenMiddleware,
+  authMiddleware,
   apiMiddleware,
   promiseMiddleware(),
   thunkMiddleware,

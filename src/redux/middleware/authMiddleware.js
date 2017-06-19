@@ -1,11 +1,11 @@
 import { actionTypes } from '../modules/auth';
 import { jwtSelector } from '../selectors/auth';
-import {
-  actionTypes as registrationActionTypes
-} from '../modules/registration';
+import { actionTypes as registrationActionTypes } from '../modules/registration';
 import { CALL_API } from './apiMiddleware';
 import cookies from 'browser-cookies';
 import { canUseDOM } from 'exenv';
+import { changeLanguage } from '../../links';
+import { push } from 'react-router-redux';
 
 export const LOCAL_STORAGE_KEY = 'recodex/accessToken';
 export const COOKIES_KEY = 'recodex_accessToken';
@@ -51,6 +51,16 @@ const middleware = store => next => action => {
     case actionTypes.LOGIN_SUCCESS:
     case registrationActionTypes.CREATE_ACCOUNT_FULFILLED:
       storeToken(action.payload.accessToken);
+      if (typeof window !== 'undefined') {
+        store.dispatch(
+          push(
+            changeLanguage(
+              window.location.pathname,
+              action.payload.user.settings.defaultLanguage
+            )
+          )
+        );
+      }
       break;
     case actionTypes.LOGOUT:
       removeToken();

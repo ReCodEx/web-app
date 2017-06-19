@@ -13,7 +13,7 @@ import createBrowserHistory from 'history/lib/createBrowserHistory';
 import { configureStore } from './redux/store';
 import createRoutes from './pages/routes';
 
-import { getToken } from './redux/middleware/accessTokenMiddleware';
+import { getToken } from './redux/middleware/authMiddleware';
 
 // load the initial state form the server - if any
 let state;
