@@ -1,5 +1,4 @@
-import { expect } from 'chai';
-
+import { fromJS } from 'immutable';
 import { createApiAction } from '../../../src/redux/middleware/apiMiddleware';
 import { actionTypes as authActionTypes } from '../../../src/redux/modules/auth';
 
@@ -8,10 +7,15 @@ import middleware, {
   storeToken,
   removeToken,
   getToken
-} from '../../../src/redux/middleware/accessTokenMiddleware';
+} from '../../../src/redux/middleware/authMiddleware';
+
+import chai from 'chai';
+import spies from 'chai-spies';
+
+chai.use(spies);
+const expect = chai.expect;
 
 describe('Middleware for access token storage and injecting to HTTP requests', () => {
-
   afterEach(() => {
     localStorage.clear();
     localStorage.itemInsertionCallback = null;
@@ -41,6 +45,8 @@ describe('Middleware for access token storage and injecting to HTTP requests', (
   });
 
   describe('(Middleware)', () => {
+    const createFakeStore = () => ({ dispatch: chai.spy() });
+
     it('must intersect LOGIN action and store the accessToken in the payload', () => {
       // clean the storage first
       localStorage.removeItem(LOCAL_STORAGE_KEY);
@@ -49,12 +55,19 @@ describe('Middleware for access token storage and injecting to HTTP requests', (
       const action = {
         type: authActionTypes.LOGIN_SUCCESS,
         payload: {
-          accessToken: 'abcdefgh'
+          accessToken: 'abcdefgh',
+          user: {
+            settings: {
+              defaultLanguage: 'xy'
+            }
+          }
         }
       };
 
-      middleware(null)(a => a)(action);
+      const store = createFakeStore();
+      middleware(store)(a => a)(action);
       expect(localStorage.getItem(LOCAL_STORAGE_KEY)).to.equal('abcdefgh');
+      expect(store.dispatch).to.have.been.called.once();
     });
 
     it('must intersect LOGOUT action and remove the accessToken from the local storage', () => {
@@ -64,17 +77,23 @@ describe('Middleware for access token storage and injecting to HTTP requests', (
         type: authActionTypes.LOGOUT
       };
 
-      middleware(null)(a => a)(action);
+      const store = createFakeStore();
+      middleware(store)(a => a)(action);
       expect(localStorage.getItem(LOCAL_STORAGE_KEY)).to.equal(null);
     });
 
     it('must intersect the CALL_API action and add access token to the request (if any)', () => {
       const action = createApiAction({});
-      //expect(middleware(null)(a => a)(action).request).to.eql({});
-
-      localStorage.setItem(LOCAL_STORAGE_KEY, 'abcdefgh');
-      //expect(middleware(null)(a => a)(action).request).to.eql({ accessToken: 'abcdefgh' });
+      const accessToken = 'abcdefgh';
+      expect(
+        middleware({
+          getState: () => ({
+            auth: fromJS({
+              jwt: accessToken
+            })
+          })
+        })(a => a)(action).request
+      ).to.eql({ accessToken });
     });
   });
-
 });
