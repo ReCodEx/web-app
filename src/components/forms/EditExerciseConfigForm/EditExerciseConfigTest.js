@@ -6,7 +6,7 @@ import { TextField } from '../Fields';
 const EditExerciseConfigTest = ({ prefix, tests }) => (
   <tbody>
     {tests.map((test, index) => [
-      <tr key={index}>
+      <tr key={`${index}.first`}>
         <td style={{ verticalAlign: 'middle' }} rowSpan={2}>
           <b>{test.name}</b>
         </td>
@@ -30,7 +30,7 @@ const EditExerciseConfigTest = ({ prefix, tests }) => (
             </td>
           ))}
       </tr>,
-      <tr>
+      <tr key={`${index}.second`}>
         <td>
           <Field
             name={`${prefix}.${index}.pipelines.1.name`}

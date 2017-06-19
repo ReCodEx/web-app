@@ -36,8 +36,6 @@ const EditExerciseConfigEnvironment = ({ testConfigs, ...props }) => (
       />
     }
     id="exercise-config-tabs"
-    // remove
-    // add
   />
 );
 

@@ -4,8 +4,6 @@ import { FieldArray } from 'redux-form';
 import { FormattedMessage } from 'react-intl';
 import { Table } from 'react-bootstrap';
 import EditExerciseConfigTest from './EditExerciseConfigTest';
-// import { TextField, SelectField } from '../Fields';
-// import { getJsData } from '../../../redux/helpers/resourceManager';
 
 const EditExerciseConfigTests = ({
   prefix,
@@ -14,34 +12,6 @@ const EditExerciseConfigTests = ({
   runtimeEnvironments
 }) => (
   <div>
-    {/* <Field
-      name={`${prefix}.name`}
-      component={TextField}
-      label={
-        <FormattedMessage
-          id="app.editExerciseConfigForm.configName"
-          defaultMessage="Name of Configuration:"
-        />
-      }
-    />
-
-    <Field
-      name={`${prefix}.name`}
-      component={SelectField}
-      options={[
-        { key: '', name: '...' },
-        ...runtimeEnvironments
-          .map(getJsData)
-          .map(env => ({ key: env.id, name: env.name }))
-          .toArray()
-      ]}
-      label={
-        <FormattedMessage
-          id="app.editExerciseConfigForm.runtimeEnvironment"
-          defaultMessage="Select runtime environment:"
-        />
-      }
-    /> */}
     <Table>
       <thead>
         <tr>
