@@ -51,7 +51,7 @@ const AdminAssignmentTableRow = ({
     <td>
       <ButtonGroup>
         <LinkContainer to={edit(id)}>
-          <Button bsSize="xs">
+          <Button bsSize="xs" bsStyle="warning">
             <EditIcon />
             {' '}
             <FormattedMessage
