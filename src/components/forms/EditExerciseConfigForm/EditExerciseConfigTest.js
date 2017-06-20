@@ -2,8 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Field } from 'redux-form';
 import { TextField } from '../Fields';
+import EditExerciseConfigVariable from './EditExerciseConfigVariable';
 
-const EditExerciseConfigTest = ({ prefix, tests }) => (
+const EditExerciseConfigTest = ({ prefix, tests }) =>
   <tbody>
     {tests.map((test, index) => [
       <tr key={`${index}.first`}>
@@ -20,15 +21,13 @@ const EditExerciseConfigTest = ({ prefix, tests }) => (
         {test.pipelines &&
           test.pipelines[0] &&
           test.pipelines[0].variables &&
-          test.pipelines[0].variables.map((variable, variableIndex) => (
-            <td key={variable.name}>
-              <Field
-                name={`${prefix}.${index}.pipelines.0.variables.${variableIndex}.value`}
-                component={TextField}
-                label={variable.name + ':'}
-              />
-            </td>
-          ))}
+          test.pipelines[0].variables.map((variable, variableIndex) =>
+            <EditExerciseConfigVariable
+              key={`${prefix}.${index}.pipelines.0.variables.${variableIndex}`}
+              prefix={`${prefix}.${index}.pipelines.0.variables.${variableIndex}`}
+              data={variable}
+            />
+          )}
       </tr>,
       <tr key={`${index}.second`}>
         <td>
@@ -41,19 +40,16 @@ const EditExerciseConfigTest = ({ prefix, tests }) => (
         {test.pipelines &&
           test.pipelines[1] &&
           test.pipelines[1].variables &&
-          test.pipelines[1].variables.map((variable, variableIndex) => (
-            <td key={variable.name}>
-              <Field
-                name={`${prefix}.${index}.pipelines.1.variables.${variableIndex}.value`}
-                component={TextField}
-                label={variable.name + ':'}
-              />
-            </td>
-          ))}
+          test.pipelines[1].variables.map((variable, variableIndex) =>
+            <EditExerciseConfigVariable
+              key={`${prefix}.${index}.pipelines.1.variables.${variableIndex}`}
+              prefix={`${prefix}.${index}.pipelines.1.variables.${variableIndex}`}
+              data={variable}
+            />
+          )}
       </tr>
     ])}
-  </tbody>
-);
+  </tbody>;
 
 EditExerciseConfigTest.propTypes = {
   prefix: PropTypes.string.isRequired,
