@@ -2,9 +2,25 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Row, Col } from 'react-bootstrap';
 import { Field } from 'redux-form';
+import { defineMessages, intlShape, injectIntl } from 'react-intl';
 import { TextField, SelectField } from '../Fields';
 
-const EditExerciseConfigVariable = ({ prefix, data }) =>
+const messages = defineMessages({
+  stringType: {
+    id: 'app.editExerciseConfigForm.stringType',
+    defaultMessage: 'String'
+  },
+  fileType: {
+    id: 'app.editExerciseConfigForm.fileType',
+    defaultMessage: 'File'
+  }
+});
+
+const EditExerciseConfigVariable = ({
+  prefix,
+  data,
+  intl: { formatMessage }
+}) =>
   <td key={data.name}>
     <Row>
       <Col xs={12}>
@@ -18,8 +34,8 @@ const EditExerciseConfigVariable = ({ prefix, data }) =>
           name={`${prefix}.type`}
           component={SelectField}
           options={[
-            { key: 'string', name: 'String' },
-            { key: 'file', name: 'File' }
+            { key: 'string', name: formatMessage(messages.stringType) },
+            { key: 'file', name: formatMessage(messages.fileType) }
           ]}
           label={''}
         />
@@ -37,7 +53,8 @@ const EditExerciseConfigVariable = ({ prefix, data }) =>
 
 EditExerciseConfigVariable.propTypes = {
   prefix: PropTypes.string.isRequired,
-  data: PropTypes.object.isRequired
+  data: PropTypes.object.isRequired,
+  intl: intlShape.isRequired
 };
 
-export default EditExerciseConfigVariable;
+export default injectIntl(EditExerciseConfigVariable);

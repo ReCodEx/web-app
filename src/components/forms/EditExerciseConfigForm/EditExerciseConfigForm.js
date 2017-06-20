@@ -40,6 +40,20 @@ class EditExerciseConfigForm extends Component {
     });
   }
 
+  removeLastTest() {
+    this.setState((prevState, props) => {
+      return {
+        testConfigs: prevState.testConfigs.map(testConfig => {
+          if (!testConfig.tests || testConfig.tests === []) {
+            return testConfig;
+          }
+          testConfig.tests = testConfig.tests.slice(0, -1);
+          return testConfig;
+        })
+      };
+    });
+  }
+
   render() {
     const {
       runtimeEnvironments,
@@ -101,7 +115,7 @@ class EditExerciseConfigForm extends Component {
           />
           <Button
             onClick={() => this.addTest()}
-            bsStyle={'info'}
+            bsStyle={'primary'}
             className="btn-flat"
           >
             <Icon name="plus" />
@@ -109,6 +123,18 @@ class EditExerciseConfigForm extends Component {
             <FormattedMessage
               id="app.editExerciseConfigForm.addTest"
               defaultMessage="Add new test"
+            />
+          </Button>
+          <Button
+            onClick={() => this.removeLastTest()}
+            bsStyle={'danger'}
+            className="btn-flat"
+          >
+            <Icon name="minus" />
+            {' '}
+            <FormattedMessage
+              id="app.editExerciseConfigForm.removeLastTest"
+              defaultMessage="Remove last test"
             />
           </Button>
         </p>
