@@ -81,7 +81,13 @@ app.get('*', (req, res) => {
               component.WrappedComponent &&
               component.WrappedComponent.loadAsync
           )
-          .map(component => component.WrappedComponent.loadAsync)
+          .map(component => {
+            // there might be several layers of wrapping - connect, withLinks, ...
+            while (component.WrappedComponent) {
+              component = component.WrappedComponent;
+            }
+            return component.loadAsync;
+          })
           .map(load => load(renderProps.params, store.dispatch, userId));
 
         const oldStore = Object.assign({}, store);

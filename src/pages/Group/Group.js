@@ -60,10 +60,11 @@ import { instanceSelector } from '../../redux/selectors/instances';
 import withLinks from '../../hoc/withLinks';
 
 class Group extends Component {
+  static isAdminOf = (group, userId) =>
+    group.admins.indexOf(userId) >= 0 || group.supervisors.indexOf(userId) >= 0;
+
   static isMemberOf = (group, userId) =>
-    group.admins.indexOf(userId) >= 0 ||
-    group.supervisors.indexOf(userId) >= 0 ||
-    group.students.indexOf(userId) >= 0;
+    isAdminOf(group, userId) || group.students.indexOf(userId) >= 0;
 
   static loadAsync = ({ groupId }, dispatch, userId, isSuperAdmin) =>
     Promise.all([
@@ -73,10 +74,12 @@ class Group extends Component {
           Promise.all([
             dispatch(fetchInstanceIfNeeded(group.instanceId)),
             dispatch(fetchSupervisors(groupId)),
+            Group.isAdminOf(group, userId) || isSuperAdmin
+              ? Promise.all([dispatch(fetchGroupExercises(groupId))])
+              : Promise.resolve(),
             Group.isMemberOf(group, userId) || isSuperAdmin
               ? Promise.all([
                   dispatch(fetchAssignmentsForGroup(groupId)),
-                  dispatch(fetchGroupExercises(groupId)),
                   dispatch(fetchStudents(groupId))
                 ])
               : Promise.resolve(),
