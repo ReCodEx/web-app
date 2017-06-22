@@ -308,11 +308,20 @@ const validate = ({
     );
   }
 
+  if (localizedTexts.length < 1) {
+    errors['_error'] = (
+      <FormattedMessage
+        id="app.editAssignmentForm.validation.noLocalizedText"
+        defaultMessage="Please add at least one localized text describing the assignment."
+      />
+    );
+  }
+
   const localizedTextsErrors = {};
   for (let i = 0; i < localizedTexts.length; ++i) {
-    const localeErros = {};
+    const localeErrors = {};
     if (!localizedTexts[i]) {
-      localeErros['locale'] = (
+      localeErrors['locale'] = (
         <FormattedMessage
           id="app.editAssignmentForm.validation.localizedText"
           defaultMessage="Please fill localized information."
@@ -320,7 +329,7 @@ const validate = ({
       );
     } else {
       if (!localizedTexts[i].locale) {
-        localeErros['locale'] = (
+        localeErrors['locale'] = (
           <FormattedMessage
             id="app.editAssignmentForm.validation.localizedText.locale"
             defaultMessage="Please select the language."
@@ -329,7 +338,7 @@ const validate = ({
       }
 
       if (!localizedTexts[i].text) {
-        localeErros['text'] = (
+        localeErrors['text'] = (
           <FormattedMessage
             id="app.editAssignmentForm.validation.localizedText.text"
             defaultMessage="Please fill the description in this language."
@@ -338,7 +347,7 @@ const validate = ({
       }
     }
 
-    localizedTextsErrors[i] = localeErros;
+    localizedTextsErrors[i] = localeErrors;
   }
 
   errors['localizedTexts'] = localizedTextsErrors;

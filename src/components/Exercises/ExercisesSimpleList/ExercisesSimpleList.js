@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 
 import GroupExercisesListItem from '../ExercisesSimpleListItem';
 
-const ExercisesSimpleList = ({ exercises, createActions, ...rest }) =>
+const ExercisesSimpleList = ({ exercises, createActions, ...rest }) => (
   <Table>
     <thead>
       <tr>
@@ -46,13 +46,13 @@ const ExercisesSimpleList = ({ exercises, createActions, ...rest }) =>
             return tmp;
           }
         })
-        .map(exercise =>
+        .map(exercise => (
           <GroupExercisesListItem
             {...exercise}
             createActions={createActions}
             key={exercise.id}
           />
-        )}
+        ))}
 
       {exercises.length === 0 &&
         <tr>
@@ -64,7 +64,8 @@ const ExercisesSimpleList = ({ exercises, createActions, ...rest }) =>
           </td>
         </tr>}
     </tbody>
-  </Table>;
+  </Table>
+);
 
 ExercisesSimpleList.propTypes = {
   exercises: PropTypes.array.isRequired,

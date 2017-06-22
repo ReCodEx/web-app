@@ -31,7 +31,7 @@ const ExerciseDetail = ({
   localizedTexts,
   runtimeConfigs,
   links: { EXERCISE_URI_FACTORY }
-}) =>
+}) => (
   <Box title={name} noPadding>
     <Table>
       <tbody>
@@ -133,7 +133,7 @@ const ExerciseDetail = ({
             />
           </th>
           <td>
-            {runtimeConfigs.map(({ id, name, isValid }) =>
+            {runtimeConfigs.map(({ id, name, isValid }) => (
               <p key={id}>
                 <OverlayTrigger
                   placement="left"
@@ -156,12 +156,13 @@ const ExerciseDetail = ({
                   </span>
                 </OverlayTrigger>
               </p>
-            )}
+            ))}
           </td>
         </tr>
       </tbody>
     </Table>
-  </Box>;
+  </Box>
+);
 
 ExerciseDetail.propTypes = {
   id: PropTypes.string.isRequired,

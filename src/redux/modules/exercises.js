@@ -3,9 +3,13 @@ import { Map } from 'immutable';
 import factory, { initialState } from '../helpers/resourceManager';
 import { createApiAction } from '../middleware/apiMiddleware';
 
-import { actionTypes as supplementaryFilesActionTypes } from './supplementaryFiles';
+import {
+  actionTypes as supplementaryFilesActionTypes
+} from './supplementaryFiles';
 
-import { actionTypes as additionalFilesActionTypes } from './additionalExerciseFiles';
+import {
+  actionTypes as additionalFilesActionTypes
+} from './additionalExerciseFiles';
 
 const resourceName = 'exercises';
 const { actions, reduceActions } = factory({ resourceName });

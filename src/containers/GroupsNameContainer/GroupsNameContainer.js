@@ -6,7 +6,9 @@ import { connect } from 'react-redux';
 import { fetchGroupIfNeeded } from '../../redux/modules/groups';
 import { groupSelector } from '../../redux/selectors/groups';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
-import GroupsName, { LoadingGroupsName } from '../../components/Groups/GroupsName';
+import GroupsName, {
+  LoadingGroupsName
+} from '../../components/Groups/GroupsName';
 
 class GroupsNameContainer extends Component {
   componentWillMount() {
