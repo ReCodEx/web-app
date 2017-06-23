@@ -80,13 +80,42 @@ const Home = () => (
           </p>
           <p>
             <a href="https://play.google.com/store/apps/details?id=io.github.recodex.android&amp;pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1">
-              <img
-                alt="Get it on Google Play"
-                src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png"
+              <Image
+                alt={'Get it on Google Play'}
+                src={
+                  'https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png'
+                }
                 width={181}
               />
             </a>
           </p>
+        </Col>
+      </Row>
+      <Row>
+        <Col sm={6}>
+          <h2>
+            <FormattedMessage
+              id="app.homepage.acknowledgementTitle"
+              defaultMessage="Acknowledgement"
+            />
+          </h2>
+          <Row>
+            <Col sm={6}>
+              <p>
+                <FormattedHTMLMessage
+                  id="app.homepage.acknowledgementContent"
+                  defaultMessage="This project was supported by the Student Grant Program (SFG) of the Faculty of Mathematics and Physics, Charles University."
+                />
+              </p>
+            </Col>
+            <Col sm={6}>
+              <Image
+                src={'/public/matfyz_logo.png'}
+                className="img-responsive center-block"
+                width={250}
+              />
+            </Col>
+          </Row>
         </Col>
       </Row>
     </div>
