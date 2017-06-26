@@ -2,12 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { joinGroup, leaveGroup } from '../../redux/modules/groups';
+import { fetchAssignmentsForGroup } from '../../redux/modules/assignments';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import { isStudentOf } from '../../redux/selectors/users';
 
 import JoinGroupButton from '../../components/buttons/JoinGroupButton';
 import LeaveGroupButton from '../../components/buttons/LeaveGroupButton';
-import RemoveFromGroupButton from '../../components/buttons/RemoveFromGroupButton';
+import RemoveFromGroupButton
+  from '../../components/buttons/RemoveFromGroupButton';
 
 const LeaveJoinGroupButtonContainer = ({
   isStudent,
@@ -16,23 +18,25 @@ const LeaveJoinGroupButtonContainer = ({
   groupId,
   joinGroup,
   leaveGroup,
+  fetchAssignmentsForGroup,
   ...props
 }) =>
   isStudent
     ? userId === currentUserId
-      ? <LeaveGroupButton
-          {...props}
-          onClick={() => leaveGroup(groupId, userId)}
-          bsSize="xs"
-        />
-      : <RemoveFromGroupButton
-          {...props}
-          onClick={() => leaveGroup(groupId, userId)}
-          bsSize="xs"
-        />
+        ? <LeaveGroupButton
+            {...props}
+            onClick={() => leaveGroup(groupId, userId)}
+            bsSize="xs"
+          />
+        : <RemoveFromGroupButton
+            {...props}
+            onClick={() => leaveGroup(groupId, userId)}
+            bsSize="xs"
+          />
     : <JoinGroupButton
         {...props}
-        onClick={() => joinGroup(groupId, userId)}
+        onClick={() =>
+          joinGroup(groupId, userId).then(fetchAssignmentsForGroup(groupId))}
         bsSize="xs"
       />;
 
@@ -42,7 +46,8 @@ LeaveJoinGroupButtonContainer.propTypes = {
   userId: PropTypes.string.isRequired,
   isStudent: PropTypes.bool.isRequired,
   joinGroup: PropTypes.func.isRequired,
-  leaveGroup: PropTypes.func.isRequired
+  leaveGroup: PropTypes.func.isRequired,
+  fetchAssignmentsForGroup: PropTypes.func.isRequired
 };
 
 const mapStateToProps = (state, { userId, groupId }) => ({
@@ -50,7 +55,7 @@ const mapStateToProps = (state, { userId, groupId }) => ({
   currentUserId: loggedInUserIdSelector(state)
 });
 
-const mapDispatchToProps = { joinGroup, leaveGroup };
+const mapDispatchToProps = { joinGroup, leaveGroup, fetchAssignmentsForGroup };
 
 export default connect(mapStateToProps, mapDispatchToProps)(
   LeaveJoinGroupButtonContainer
