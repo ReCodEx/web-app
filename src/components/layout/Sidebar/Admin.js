@@ -7,7 +7,7 @@ import MenuItem from '../../widgets/Sidebar/MenuItem';
 
 import withLinks from '../../../hoc/withLinks';
 
-const Admin = ({ currentUrl, links: { ADMIN_INSTANCES_URI } }) => (
+const Admin = ({ currentUrl, links: { ADMIN_INSTANCES_URI, USERS_URI } }) => (
   <ul className="sidebar-menu">
     <MenuTitle
       title={
@@ -27,6 +27,17 @@ const Admin = ({ currentUrl, links: { ADMIN_INSTANCES_URI } }) => (
       }
       currentPath={currentUrl}
       link={ADMIN_INSTANCES_URI}
+    />
+    <MenuItem
+      icon="users"
+      title={
+        <FormattedMessage
+          id="app.sidebar.menu.admin.users"
+          defaultMessage="Users"
+        />
+      }
+      currentPath={currentUrl}
+      link={USERS_URI}
     />
   </ul>
 );

@@ -19,6 +19,7 @@ export const linksFactory = lang => {
   const GROUP_EDIT_URI_FACTORY = id => `${GROUP_URI_FACTORY(id)}/edit`;
 
   // user details
+  const USERS_URI = `${prefix}/app/users`;
   const USER_URI_FACTORY = id => `${prefix}/app/user/${id}`;
   const EDIT_USER_URI_FACTORY = id => `${USER_URI_FACTORY(id)}/edit`;
 
@@ -71,6 +72,7 @@ export const linksFactory = lang => {
     INSTANCE_URI_FACTORY,
     GROUP_URI_FACTORY,
     GROUP_EDIT_URI_FACTORY,
+    USERS_URI,
     USER_URI_FACTORY,
     EDIT_USER_URI_FACTORY,
     EXERCISES_URI,

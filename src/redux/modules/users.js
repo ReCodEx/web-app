@@ -30,6 +30,9 @@ var { actions, reduceActions } = factory({ resourceName });
  * Actions
  */
 
+export const fetchAllUsers = actions.fetchMany({
+  endpoint: '/users'
+});
 export const loadUserData = actions.pushResource;
 export const fetchUserIfNeeded = actions.fetchIfNeeded;
 export const validateRegistrationData = (email, password) =>
@@ -43,6 +46,7 @@ export const validateRegistrationData = (email, password) =>
 export const updateProfile = actions.updateResource;
 export const updateSettings = (id, body) =>
   actions.updateResource(id, body, `/users/${id}/settings`);
+export const deleteUser = actions.removeResource;
 
 export const fetchSupervisors = groupId =>
   actions.fetchMany({

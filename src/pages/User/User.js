@@ -23,7 +23,8 @@ import { fetchGroupsIfNeeded } from '../../redux/modules/groups';
 import {
   getUser,
   studentOfGroupsIdsSelector,
-  isStudent
+  isStudent,
+  isSuperAdmin
 } from '../../redux/selectors/users';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import { fetchGroupsStatsIfNeeded } from '../../redux/modules/stats';
@@ -91,6 +92,7 @@ class User extends Component {
     const {
       user,
       student,
+      isAdmin,
       studentOfGroupsIds,
       commonGroups,
       loggedInUserId,
@@ -133,7 +135,7 @@ class User extends Component {
               <UsersNameContainer userId={user.id} large noLink />
             </p>
 
-            {commonGroups.length > 0 &&
+            {(commonGroups.length > 0 || isAdmin) &&
               <ResourceRenderer resource={commonGroups}>
                 {(...groups) => (
                   <div>
@@ -201,6 +203,7 @@ class User extends Component {
               </ResourceRenderer>}
 
             {commonGroups.length === 0 &&
+              !isAdmin &&
               user.id !== loggedInUserId &&
               <div className="callout callout-warning">
                 <h4>
@@ -263,6 +266,7 @@ class User extends Component {
 User.propTypes = {
   user: ImmutablePropTypes.map,
   commonGroups: PropTypes.array,
+  isAdmin: PropTypes.bool,
   studentOfGroupsIds: PropTypes.array,
   params: PropTypes.shape({ userId: PropTypes.string.isRequired }).isRequired,
   loadAsync: PropTypes.func.isRequired,
@@ -290,6 +294,7 @@ export default withLinks(
         loggedInUserId,
         student: isStudent(userId)(state),
         user: getUser(userId)(state),
+        isAdmin: isSuperAdmin(loggedInUserId)(state),
         studentOfGroupsIds: studentOfGroupsIdsSelector(userId)(state).toArray(),
         groupAssignments: groupId => groupsAssignmentsSelector(groupId)(state),
         groupStatistics: groupId => createGroupsStatsSelector(groupId)(state),
