@@ -25,6 +25,7 @@ import AssignmentStats from './AssignmentStats';
 import NotFound from './NotFound';
 import Submission from './Submission';
 import Registration from './Registration';
+import Users from './Users';
 import User from './User';
 import EditUser from './EditUser';
 import ReferenceSolution from './ReferenceSolution';
@@ -92,6 +93,7 @@ const createRoutes = getState => {
             <Route path="edit" component={EditGroup} />
           </Route>
           <Route path="instance/:instanceId" component={Instance} />
+          <Route path="users" component={Users} />
           <Route path="user/:userId">
             <IndexRoute component={User} />
             <Route path="edit" component={EditUser} />
