@@ -12,16 +12,12 @@ import Box from '../../components/widgets/Box';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 
 import EditExerciseForm from '../../components/forms/EditExerciseForm';
-import EditExerciseConfigForm
-  from '../../components/forms/EditExerciseConfigForm/EditExerciseConfigForm';
-import EditExerciseRuntimeConfigsForm
-  from '../../components/forms/EditExerciseRuntimeConfigsForm';
-import SupplementaryFilesTableContainer
-  from '../../containers/SupplementaryFilesTableContainer';
-import AdditionalExerciseFilesTableContainer
-  from '../../containers/AdditionalExerciseFilesTableContainer';
-import DeleteExerciseButtonContainer
-  from '../../containers/DeleteExerciseButtonContainer';
+import EditExerciseConfigForm from '../../components/forms/EditExerciseConfigForm/EditExerciseConfigForm';
+import EditExerciseRuntimeConfigsForm from '../../components/forms/EditExerciseRuntimeConfigsForm';
+import EditPipelinesForm from '../../components/forms/EditPipelinesForm';
+import SupplementaryFilesTableContainer from '../../containers/SupplementaryFilesTableContainer';
+import AdditionalExerciseFilesTableContainer from '../../containers/AdditionalExerciseFilesTableContainer';
+import DeleteExerciseButtonContainer from '../../containers/DeleteExerciseButtonContainer';
 
 import {
   fetchExerciseIfNeeded,
@@ -32,16 +28,14 @@ import {
   fetchExerciseConfigIfNeeded,
   setExerciseConfig
 } from '../../redux/modules/exerciseConfigs';
+import { fetchPipelines } from '../../redux/modules/pipelines';
+import { pipelinesSelector } from '../../redux/selectors/pipelines';
 import { getExercise } from '../../redux/selectors/exercises';
 import { isSubmitting } from '../../redux/selectors/submission';
 import { exerciseConfigSelector } from '../../redux/selectors/exerciseConfigs';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
-import {
-  fetchRuntimeEnvironments
-} from '../../redux/modules/runtimeEnvironments';
-import {
-  runtimeEnvironmentsSelector
-} from '../../redux/selectors/runtimeEnvironments';
+import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments';
+import { runtimeEnvironmentsSelector } from '../../redux/selectors/runtimeEnvironments';
 
 import withLinks from '../../hoc/withLinks';
 
@@ -59,6 +53,7 @@ class EditExercise extends Component {
       dispatch(fetchExerciseIfNeeded(exerciseId)),
       dispatch(fetchExerciseConfigIfNeeded(exerciseId)),
       dispatch(fetchRuntimeEnvironments())
+      // dispatch(fetchPipelines(exerciseId))
     ]);
 
   render() {
@@ -74,8 +69,23 @@ class EditExercise extends Component {
       runtimesFormValues,
       // configFormValues,
       exerciseConfig,
+      exercisePipelines,
       push
     } = this.props;
+
+    // ~!@#$%^&*()_+
+    console.log(exercisePipelines); // eslint-disable-line no-console
+    const pipelines = [
+      {
+        name: 'pipeline1',
+        boxes: JSON.stringify(
+          [{ name: 'abc', inputs: ['x', 'y', 'z'], outputs: ['u', 'v'] }],
+          null,
+          '  '
+        )
+      }
+    ];
+    // ~!@#$%^&*()_+
 
     return (
       <Page
@@ -109,7 +119,7 @@ class EditExercise extends Component {
           }
         ]}
       >
-        {exercise => (
+        {exercise =>
           <div>
             <Row>
               <Col lg={6}>
@@ -179,7 +189,7 @@ class EditExercise extends Component {
                   unlimitedHeight
                 >
                   <ResourceRenderer resource={exerciseConfig}>
-                    {config => (
+                    {config =>
                       <EditExerciseConfigForm
                         runtimeEnvironments={runtimeEnvironments}
                         // testConfigs={
@@ -187,10 +197,20 @@ class EditExercise extends Component {
                         // }
                         initialValues={{ config: config }}
                         onSubmit={setConfig}
-                      />
-                    )}
+                      />}
                   </ResourceRenderer>
                 </Box>
+                {/*
+                <ResourceRenderer resource={exercisePipelines}>
+                  {pipelines =>
+                */}
+                <EditPipelinesForm
+                  pipelines={pipelines}
+                  initialValues={{ pipelines }}
+                />
+                {/* }
+                </ResourceRenderer>
+                */}
               </Col>
               <Col lg={12}>
                 <Box
@@ -219,8 +239,7 @@ class EditExercise extends Component {
                 </Box>
               </Col>
             </Row>
-          </div>
-        )}
+          </div>}
       </Page>
     );
   }
@@ -241,6 +260,7 @@ EditExercise.propTypes = {
   runtimesFormValues: PropTypes.object,
   // configFormValues: PropTypes.object,
   exerciseConfig: PropTypes.object,
+  exercisePipelines: ImmutablePropTypes.map,
   links: PropTypes.object.isRequired,
   push: PropTypes.func.isRequired
 };
@@ -258,6 +278,7 @@ export default withLinks(
         runtimesFormValues: getFormValues('editExerciseRuntimeConfigs')(state),
         // configFormValues: getFormValues('editExerciseConfig')(state),
         runtimeEnvironments: runtimeEnvironmentsSelector(state),
+        exercisePipelines: pipelinesSelector(exerciseId)(state),
         exerciseConfig: exerciseConfigSelector(exerciseId)(state)
       };
     },
