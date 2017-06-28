@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import MakeRemoveSupervisorButtonContainer
   from '../../../containers/MakeRemoveSupervisorButtonContainer';
@@ -39,12 +40,12 @@ SupervisorsListItem.propTypes = {
   groupId: PropTypes.string.isRequired,
   fullName: PropTypes.string.isRequired,
   avatarUrl: PropTypes.string.isRequired,
-  groupAdmins: PropTypes.array.isRequired,
+  groupAdmins: ImmutablePropTypes.list.isRequired,
   makeAdmin: PropTypes.func.isRequired
 };
 
 const mapStateToProps = (state, { groupId }) => ({
-  groupAdmins: adminsOfGroup(groupId)(state).toJS()
+  groupAdmins: adminsOfGroup(groupId)(state)
 });
 
 const mapDispatchToProps = {
