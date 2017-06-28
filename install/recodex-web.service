@@ -1,0 +1,21 @@
+# ReCodEx web-app systemd configuration file
+#
+# This file should be placed in /etc/systemd/system/ directory
+
+[Unit]
+Description=Recodex Web App
+Documentation=http://recodex.github.io/web-app/,https://github.com/ReCodEx/GlobalWiki/wiki
+DefaultDependencies=true
+
+[Service]
+Type=simple
+StandardInput=null
+StandardOutput=null
+StandardError=journal
+User=recodex
+Group=recodex
+WorkingDirectory=/usr/lib/node_modules/recodex-web
+ExecStart=/usr/bin/node /usr/lib/node_modules/recodex-web/bin/server.js
+
+[Install]
+WantedBy=multi-user.target

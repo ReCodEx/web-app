@@ -64,7 +64,7 @@ class Group extends Component {
     group.admins.indexOf(userId) >= 0 || group.supervisors.indexOf(userId) >= 0;
 
   static isMemberOf = (group, userId) =>
-    isAdminOf(group, userId) || group.students.indexOf(userId) >= 0;
+    Group.isAdminOf(group, userId) || group.students.indexOf(userId) >= 0;
 
   static loadAsync = ({ groupId }, dispatch, userId, isSuperAdmin) =>
     Promise.all([
