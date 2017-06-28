@@ -40,6 +40,10 @@ module.exports = {
         loader: extractCss.extract(['css-loader?modules', 'less-loader'])
       },
       {
+        test: /\.scss$/,
+        loader: extractCss.extract(['css-loader?modules', 'sass-loader'])
+      },
+      {
         test: /.*\.(gif|png|jpe?g|svg)$/i,
         loaders: ['file-loader']
       }

@@ -28,7 +28,7 @@ import {
   fetchExerciseConfigIfNeeded,
   setExerciseConfig
 } from '../../redux/modules/exerciseConfigs';
-import { fetchPipelines } from '../../redux/modules/pipelines';
+// import { fetchPipelines } from '../../redux/modules/pipelines';
 import { pipelinesSelector } from '../../redux/selectors/pipelines';
 import { getExercise } from '../../redux/selectors/exercises';
 import { isSubmitting } from '../../redux/selectors/submission';
@@ -79,7 +79,89 @@ class EditExercise extends Component {
       {
         name: 'pipeline1',
         boxes: JSON.stringify(
-          [{ name: 'abc', inputs: ['x', 'y', 'z'], outputs: ['u', 'v'] }],
+          {
+            id: '8b3602c7-bcb0-4a3b-998a-30ba9d4e2a4e',
+            offsetX: 0,
+            offsetY: 0,
+            zoom: 100,
+            links: [
+              {
+                id: '44b9afae-c361-40d7-aa81-c6d8e02a1c65',
+                _class: 'LinkModel',
+                selected: false,
+                type: 'default',
+                source: '4120b567-5931-481a-a98a-ce2d87071ab0',
+                sourcePort: '17f751b0-03cc-4af7-bc76-415980b22724',
+                target: '83cc5845-d6cd-45cd-a8e0-f0d8dc807d19',
+                targetPort: '262ef6d1-1ca3-49ab-9bc0-ce610834acd8',
+                points: [
+                  {
+                    id: '54a1d4c7-142c-45ea-9fdb-938db620c226',
+                    _class: 'PointModel',
+                    selected: false,
+                    x: 158.640625,
+                    y: 132.5
+                  },
+                  {
+                    id: '0eecb27d-9bca-456c-b55d-e30ed9e44af5',
+                    _class: 'PointModel',
+                    selected: false,
+                    x: 409.5,
+                    y: 132.5
+                  }
+                ],
+                extras: {}
+              }
+            ],
+            nodes: [
+              {
+                id: '4120b567-5931-481a-a98a-ce2d87071ab0',
+                _class: 'DefaultNodeModel',
+                selected: false,
+                type: 'default',
+                x: 100,
+                y: 100,
+                extras: {},
+                ports: [
+                  {
+                    id: '17f751b0-03cc-4af7-bc76-415980b22724',
+                    _class: 'DefaultPortModel',
+                    selected: false,
+                    name: 'out-1',
+                    parentNode: '4120b567-5931-481a-a98a-ce2d87071ab0',
+                    links: ['44b9afae-c361-40d7-aa81-c6d8e02a1c65'],
+                    in: false,
+                    label: 'Out'
+                  }
+                ],
+                name: 'Node 1',
+                color: 'rgb(0,192,255)'
+              },
+              {
+                id: '83cc5845-d6cd-45cd-a8e0-f0d8dc807d19',
+                _class: 'DefaultNodeModel',
+                selected: false,
+                type: 'default',
+                x: 400,
+                y: 100,
+                extras: {},
+                ports: [
+                  {
+                    id: '262ef6d1-1ca3-49ab-9bc0-ce610834acd8',
+                    _class: 'DefaultPortModel',
+                    selected: false,
+                    name: 'in-1',
+                    parentNode: '83cc5845-d6cd-45cd-a8e0-f0d8dc807d19',
+                    links: ['44b9afae-c361-40d7-aa81-c6d8e02a1c65'],
+                    in: true,
+                    label: 'IN'
+                  }
+                ],
+                name: 'Node 2',
+                color: 'rgb(192,255,0)'
+              }
+            ]
+          },
           null,
           '  '
         )

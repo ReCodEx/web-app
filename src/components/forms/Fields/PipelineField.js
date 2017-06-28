@@ -9,7 +9,7 @@ import {
   HelpBlock
 } from 'react-bootstrap';
 
-import PipelineVisualisation from '../../Exercises/PipelineVisualisation';
+import PipelineVisualEditor from '../../Exercises/PipelineVisualEditor';
 
 const PipelineField = ({
   input,
@@ -32,7 +32,7 @@ const PipelineField = ({
     />
     {touched && error && <HelpBlock>{error}</HelpBlock>}
 
-    <PipelineVisualisation source={input.value} />
+    <PipelineVisualEditor source={input.value} onChange={input.onChange} />
   </FormGroup>;
 
 PipelineField.propTypes = {
