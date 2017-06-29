@@ -30,9 +30,8 @@ const PipelineField = ({
       rows={8}
       style={{ fontFamily: 'mono' }}
     />
-    {touched && error && <HelpBlock>{error}</HelpBlock>}
-
     <PipelineVisualEditor source={input.value} onChange={input.onChange} />
+    {touched && error && <HelpBlock>{error}</HelpBlock>}
   </FormGroup>;
 
 PipelineField.propTypes = {

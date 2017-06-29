@@ -17,6 +17,8 @@ import {
 
 import 'storm-react-diagrams/dist/style.css';
 
+import AddBoxForm from './AddBoxForm';
+
 class PipelineVisualEditor extends Component {
   state = { source: null, engine: null };
 
@@ -32,17 +34,19 @@ class PipelineVisualEditor extends Component {
     this.changeSource(engine, source);
   };
 
-  // componentWillReceiveProps = nextProps => {
-  //   const { source, engine } = this.state;
-  //   if (source !== nextProps.source) {
-  //     this.changeSource(engine, nextProps.source);
-  //   }
-  // };
+  componentWillReceiveProps = nextProps => {
+    const { source, engine } = this.state;
+    if (source !== nextProps.source) {
+      this.changeSource(engine, nextProps.source);
+    }
+  };
 
   changeSource = (engine, source) => {
-    if (isJSON(source)) {
+    if (isJSON(source) || source.length === 0) {
       const model = new DiagramModel();
-      model.deSerializeDiagram(JSON.parse(source), engine);
+      if (source.length > 0) {
+        model.deSerializeDiagram(JSON.parse(source), engine);
+      }
       model.addListener({
         nodesUpdated: this.onChange,
         linksUpdated: this.onChange
@@ -52,7 +56,8 @@ class PipelineVisualEditor extends Component {
     }
   };
 
-  addNode = (name, portsIn, portsOut, color = 'rgb(0,192,255)') => {
+  addNode = (name, portsIn, portsOut, type) => {
+    const color = this.getColorByType(type);
     const node = new DefaultNodeModel(name, color);
     for (let port of portsIn) {
       node.addPort(new DefaultPortModel(true, port));
@@ -66,6 +71,8 @@ class PipelineVisualEditor extends Component {
     const model = engine.getDiagramModel();
     model.addNode(node);
   };
+
+  getColorByType = type => 'rgb(0,192,255)';
 
   onChange = () => {
     const { engine } = this.state;
@@ -84,25 +91,13 @@ class PipelineVisualEditor extends Component {
             height: 400,
             width: '100%',
             display: 'flex',
-            background: 'rgb(60,60,60)'
+            background: 'rgb(60,60,60)',
+            margin: '20px 0'
           }}
         >
-          <DiagramWidget diagramEngine={engine} allowLooseLinks={false} />
+          <DiagramWidget diagramEngine={engine} />
         </div>
-        <p>
-          <button
-            onClick={e => {
-              this.addNode(
-                'Compile',
-                ['source_file', 'header_file'],
-                ['binary_file']
-              );
-              e.preventDefault();
-            }}
-          >
-            Add compile box
-          </button>
-        </p>
+        <AddBoxForm add={this.addNode} />
       </div>
     );
   }
