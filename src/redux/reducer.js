@@ -17,6 +17,7 @@ import instances from './modules/instances';
 import licences from './modules/licences';
 import notifications from './modules/notifications';
 import pipelines from './modules/pipelines';
+import publicProfiles from './modules/publicProfiles';
 import { default as search } from './modules/search'; // because of a named export 'search'
 import sidebar from './modules/sidebar';
 import stats from './modules/stats';
@@ -48,6 +49,7 @@ const createRecodexReducers = token => ({
   licences,
   notifications,
   pipelines,
+  publicProfiles,
   search,
   sidebar,
   stats,

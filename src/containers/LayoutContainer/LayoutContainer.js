@@ -121,7 +121,7 @@ class LayoutContainer extends Component {
     moment.locale(lang);
 
     return (
-      <IntlProvider locale={lang} messages={this.getMessages(lang)}>
+      <IntlProvider key={lang} locale={lang} messages={this.getMessages(lang)}>
         <Layout
           sidebar={sidebar}
           isLoggedIn={isLoggedIn}

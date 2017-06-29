@@ -16,6 +16,9 @@ export const groupsSelectors = state => state.groups.get('resources');
 const filterGroups = (ids, groups) =>
   groups.filter(isReady).filter(group => ids.contains(getId(group)));
 
+export const groupSelector = id =>
+  createSelector(groupsSelectors, groups => groups.get(id));
+
 export const studentOfSelector = userId =>
   createSelector(
     [studentOfGroupsIdsSelector(userId), groupsSelectors],
@@ -37,13 +40,7 @@ const usersOfGroup = (type, groupId) =>
 export const studentsOfGroup = groupId => usersOfGroup('students', groupId);
 export const supervisorsOfGroup = groupId =>
   usersOfGroup('supervisors', groupId);
-export const adminsOfGroup = groupId =>
-  createSelector(groupSelector(groupId), group =>
-    group.getIn(['data', 'admins'])
-  );
-
-export const groupSelector = id =>
-  createSelector(groupsSelectors, groups => groups.get(id));
+export const adminsOfGroup = groupId => usersOfGroup('admins', groupId);
 
 export const groupsAssignmentsIdsSelector = (id, type = 'public') =>
   createSelector(
