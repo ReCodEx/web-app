@@ -40,9 +40,11 @@ export const convertGraphToDot = ({ nodes, dependencies }) => {
     return `
       subgraph cluster_${i} {
         label = "${name}";
+        id = "${name}";
         ${!hasFullSupport ? 'color=red; fontcolor=red;' : ''}
         subgraph cluster_inputs {
           style = "filled";
+          id = "${name}_inputs";
           label = "inputs";
           color = "#fcffc6";
           fontcolor = black;
@@ -50,6 +52,7 @@ export const convertGraphToDot = ({ nodes, dependencies }) => {
         }
         subgraph cluster_outputs {
           style = "filled";
+          id = "${name}_outputs";
           label = "outputs";
           color = "#d1f9e9";
           fontcolor = black;
