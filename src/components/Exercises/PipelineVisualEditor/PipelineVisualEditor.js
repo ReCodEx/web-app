@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import isJSON from 'validator/lib/isJSON';
-import Viz from 'viz.js/viz-lite';
 
+import { convertGraphToSvg } from '../../../helpers/dot';
 import AddBoxForm from './AddBoxForm';
+
+import style from './pipeline.less';
+
 class PipelineVisualEditor extends Component {
   state = { source: null, graph: null };
 
@@ -27,18 +30,23 @@ class PipelineVisualEditor extends Component {
   };
 
   createGraphFromSource = source => {
-    const graph = { nodes: [], dependencies: [] };
-    // @todo
+    let graph = { nodes: JSON.parse(source), dependencies: [] };
+    for (let node of graph.nodes) {
+      graph = this.addDependencies(graph, node);
+    }
+
     return graph;
   };
 
   addDependencies = (graph, node) => {
-    const newDependencies = [];
+    const dependencies = graph.dependencies;
+    const candidates = [];
+
     for (let old of graph.nodes) {
       for (let portIn of old.portsIn) {
         for (let portOut of node.portsOut) {
           if (portIn === portOut) {
-            newDependencies.push({
+            candidates.push({
               from: node.name,
               to: old.name,
               name: portIn
@@ -46,10 +54,11 @@ class PipelineVisualEditor extends Component {
           }
         }
       }
+
       for (let portIn of node.portsIn) {
         for (let portOut of old.portsOut) {
           if (portIn === portOut) {
-            newDependencies.push({
+            candidates.push({
               from: old.name,
               to: node.name,
               name: portIn
@@ -59,16 +68,33 @@ class PipelineVisualEditor extends Component {
       }
     }
 
+    for (let candidate of candidates) {
+      let unique = true;
+      for (let dependency of dependencies) {
+        if (
+          candidate.name === dependency.name &&
+          candidate.from === dependency.from &&
+          candidate.to === candidate.to
+        ) {
+          unique = false;
+          break;
+        }
+      }
+
+      if (unique === true) {
+        dependencies.push(candidate);
+      }
+    }
+
     return {
-      ...graph,
-      dependencies: [...graph.dependencies, ...newDependencies]
+      nodes: graph.nodes,
+      dependencies
     };
   };
 
   addNode = (name, portsIn, portsOut, type) => {
     const { source, graph } = this.state;
-    const color = this.getColorByType(type);
-    const node = { name, portsIn, portsOut, type, color };
+    const node = { name, portsIn, portsOut, type };
 
     const obj = JSON.parse(source);
     obj.push(node);
@@ -85,29 +111,14 @@ class PipelineVisualEditor extends Component {
     onChange(updatedSource);
   };
 
-  getColorByType = type => 'blue';
-
-  convertToDot = graph => {
-    const dependencies = graph.dependencies;
-    const commands = dependencies.map(
-      ({ from, to, name }) => `${from} -> ${to} [label="${name}"]`
-    );
-    const nodes = graph.nodes.map(({ name, color }) => `${name} [shape=rect]`);
-    return `digraph { rankdir=LR; ${nodes.join(';')} ${commands.join(';')} }`;
-  };
-
   render() {
     const { graph } = this.state;
-    const dot = this.convertToDot(graph);
-    const svg = Viz(dot);
-    // const svg = '';
+    const svg = convertGraphToSvg(graph);
+
     return (
       <div>
         <div
-          style={{
-            width: '100%',
-            margin: '20px 0'
-          }}
+          className={style.pipeline}
           dangerouslySetInnerHTML={{ __html: svg }}
         />
         <AddBoxForm add={this.addNode} />
