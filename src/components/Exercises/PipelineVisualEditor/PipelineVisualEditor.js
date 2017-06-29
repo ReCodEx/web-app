@@ -1,102 +1,115 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import isJSON from 'validator/lib/isJSON';
-
-import {
-  DiagramEngine,
-  DiagramModel,
-  DiagramWidget,
-  DefaultLinkFactory,
-  DefaultNodeFactory,
-  DefaultNodeInstanceFactory,
-  DefaultPortInstanceFactory,
-  LinkInstanceFactory,
-  DefaultNodeModel,
-  DefaultPortModel
-} from 'storm-react-diagrams';
-
-import 'storm-react-diagrams/dist/style.css';
+import Viz from 'viz.js/viz-lite';
 
 import AddBoxForm from './AddBoxForm';
-
 class PipelineVisualEditor extends Component {
-  state = { source: null, engine: null };
+  state = { source: null, graph: null };
 
   componentWillMount = () => {
-    const engine = new DiagramEngine();
-    engine.registerNodeFactory(new DefaultNodeFactory());
-    engine.registerLinkFactory(new DefaultLinkFactory());
-    engine.registerInstanceFactory(new DefaultNodeInstanceFactory());
-    engine.registerInstanceFactory(new DefaultPortInstanceFactory());
-    engine.registerInstanceFactory(new LinkInstanceFactory());
-
     const { source } = this.props;
-    this.changeSource(engine, source);
+    this.changeSource(source);
   };
 
   componentWillReceiveProps = nextProps => {
-    const { source, engine } = this.state;
+    const { source } = this.state;
     if (source !== nextProps.source) {
-      this.changeSource(engine, nextProps.source);
+      this.changeSource(nextProps.source);
     }
   };
 
-  changeSource = (engine, source) => {
-    if (isJSON(source) || source.length === 0) {
-      const model = new DiagramModel();
-      if (source.length > 0) {
-        model.deSerializeDiagram(JSON.parse(source), engine);
-      }
-      model.addListener({
-        nodesUpdated: this.onChange,
-        linksUpdated: this.onChange
-      });
-      engine.setDiagramModel(model);
-      this.setState({ source, engine });
+  changeSource = source => {
+    if (isJSON(source)) {
+      const graph = this.createGraphFromSource(source);
+      this.setState({ source, graph }); // @todo: this might be a problem - the graph strucuture is not 1:1
     }
+  };
+
+  createGraphFromSource = source => {
+    const graph = { nodes: [], dependencies: [] };
+    // @todo
+    return graph;
+  };
+
+  addDependencies = (graph, node) => {
+    const newDependencies = [];
+    for (let old of graph.nodes) {
+      for (let portIn of old.portsIn) {
+        for (let portOut of node.portsOut) {
+          if (portIn === portOut) {
+            newDependencies.push({
+              from: node.name,
+              to: old.name,
+              name: portIn
+            });
+          }
+        }
+      }
+      for (let portIn of node.portsIn) {
+        for (let portOut of old.portsOut) {
+          if (portIn === portOut) {
+            newDependencies.push({
+              from: old.name,
+              to: node.name,
+              name: portIn
+            });
+          }
+        }
+      }
+    }
+
+    return {
+      ...graph,
+      dependencies: [...graph.dependencies, ...newDependencies]
+    };
   };
 
   addNode = (name, portsIn, portsOut, type) => {
+    const { source, graph } = this.state;
     const color = this.getColorByType(type);
-    const node = new DefaultNodeModel(name, color);
-    for (let port of portsIn) {
-      node.addPort(new DefaultPortModel(true, port));
-    }
+    const node = { name, portsIn, portsOut, type, color };
 
-    for (let port of portsOut) {
-      node.addPort(new DefaultPortModel(false, port));
-    }
+    const obj = JSON.parse(source);
+    obj.push(node);
+    const updatedSource = JSON.stringify(obj);
 
-    const { engine } = this.state;
-    const model = engine.getDiagramModel();
-    model.addNode(node);
+    graph.nodes.push(node);
+
+    this.setState({
+      source: updatedSource,
+      graph: this.addDependencies(graph, node)
+    });
+
+    const { onChange } = this.props;
+    onChange(updatedSource);
   };
 
-  getColorByType = type => 'rgb(0,192,255)';
+  getColorByType = type => 'blue';
 
-  onChange = () => {
-    const { engine } = this.state;
-    const { onChange } = this.props;
-    const model = engine.getDiagramModel();
-    const source = JSON.stringify(model.serializeDiagram());
-    onChange(source);
+  convertToDot = graph => {
+    const dependencies = graph.dependencies;
+    const commands = dependencies.map(
+      ({ from, to, name }) => `${from} -> ${to} [label="${name}"]`
+    );
+    const nodes = graph.nodes.map(({ name, color }) => `${name} [shape=rect]`);
+    return `digraph { rankdir=LR; ${nodes.join(';')} ${commands.join(';')} }`;
   };
 
   render() {
-    const { engine } = this.state;
+    const { graph } = this.state;
+    const dot = this.convertToDot(graph);
+    const svg = Viz(dot);
+    // const svg = '';
     return (
       <div>
         <div
           style={{
-            height: 400,
             width: '100%',
-            display: 'flex',
-            background: 'rgb(60,60,60)',
             margin: '20px 0'
           }}
-        >
-          <DiagramWidget diagramEngine={engine} />
-        </div>
+          dangerouslySetInnerHTML={{ __html: svg }}
+        />
         <AddBoxForm add={this.addNode} />
       </div>
     );

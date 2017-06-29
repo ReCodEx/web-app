@@ -78,7 +78,7 @@ class EditExercise extends Component {
     const pipelines = [
       {
         name: 'pipeline1',
-        boxes: ''
+        boxes: '[]'
       }
     ];
     // ~!@#$%^&*()_+
