@@ -10,10 +10,7 @@ import ResourceRenderer from '../../helpers/ResourceRenderer';
 import Box from '../../widgets/Box';
 import AddStudent from '../AddStudent';
 import SearchExercise from '../SearchExercise';
-import StudentsListContainer from '../../../containers/StudentsListContainer';
 import AdminAssignmentsTable from '../../Assignments/AdminAssignmentsTable';
-import LeaveJoinGroupButtonContainer
-  from '../../../containers/LeaveJoinGroupButtonContainer';
 import ExercisesSimpleList
   from '../../../components/Exercises/ExercisesSimpleList';
 import Button from '../../../components/widgets/FlatButton';
@@ -53,24 +50,16 @@ const SupervisorsView = ({
         <Box
           title={
             <FormattedMessage
-              id="app.group.spervisorsView.students"
-              defaultMessage="Students"
+              id="app.group.spervisorsView.assignments"
+              defaultMessage="Assignments"
             />
           }
           collapsable
-          unlimitedHeight
           noPadding
+          unlimitedHeight
+          isOpen
         >
-          <StudentsListContainer
-            groupId={group.id}
-            renderActions={userId => (
-              <LeaveJoinGroupButtonContainer
-                userId={userId}
-                groupId={group.id}
-              />
-            )}
-            fill
-          />
+          <AdminAssignmentsTable assignments={assignments} />
         </Box>
         <Box
           title={
@@ -79,7 +68,6 @@ const SupervisorsView = ({
               defaultMessage="Add student"
             />
           }
-          collapsable
           isOpen
         >
           <AddStudent instanceId={group.instanceId} groupId={group.id} />
@@ -172,22 +160,6 @@ const SupervisorsView = ({
             )}
           </ResourceRenderer>
         </Box>
-      </Col>
-      <Col lg={6}>
-        <Box
-          title={
-            <FormattedMessage
-              id="app.group.spervisorsView.assignments"
-              defaultMessage="Assignments"
-            />
-          }
-          collapsable
-          noPadding
-          unlimitedHeight
-          isOpen
-        >
-          <AdminAssignmentsTable assignments={assignments} />
-        </Box>
         <Box
           title={
             <FormattedMessage
@@ -195,7 +167,6 @@ const SupervisorsView = ({
               defaultMessage="Find an exercise"
             />
           }
-          collapsable
           isOpen
         >
           <SearchExercise groupId={group.id} />

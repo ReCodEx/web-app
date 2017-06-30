@@ -5,7 +5,6 @@ import { Row, Col, Table } from 'react-bootstrap';
 import ReactMarkdown from 'react-markdown';
 
 import Box from '../../widgets/Box';
-import GroupTree from '../GroupTree';
 import SupervisorsList from '../../Users/SupervisorsList';
 import { MaybeSucceededIcon } from '../../icons';
 
@@ -24,7 +23,7 @@ const GroupDetail = ({
   groups,
   supervisors,
   isAdmin
-}) =>
+}) => (
   <div>
     <Row>
       <Col lg={6} sm={12}>
@@ -78,26 +77,6 @@ const GroupDetail = ({
       </Col>
       <Col lg={6} sm={12}>
         <Box
-          title={
-            <FormattedMessage
-              id="app.groupDetail.groupsTitle"
-              defaultMessage="Groups hierarchy"
-            />
-          }
-          noPadding
-          unlimitedHeight
-          collapsable
-        >
-          <GroupTree
-            id={parentGroupId || id}
-            currentGroupId={id}
-            groups={groups}
-            isOpen
-          />
-        </Box>
-      </Col>
-      <Col lg={6} sm={12}>
-        <Box
           noPadding
           collapsable
           unlimitedHeight
@@ -118,7 +97,8 @@ const GroupDetail = ({
         </Box>
       </Col>
     </Row>
-  </div>;
+  </div>
+);
 
 GroupDetail.propTypes = {
   group: PropTypes.shape({

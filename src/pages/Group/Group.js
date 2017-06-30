@@ -227,6 +227,7 @@ class Group extends Component {
                 stats={stats}
                 statuses={statuses}
                 assignments={publicAssignments}
+                isAdmin={isAdmin}
               />}
 
             <GroupDetail
