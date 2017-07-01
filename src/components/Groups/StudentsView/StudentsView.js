@@ -15,71 +15,68 @@ const StudentsView = ({
   statuses = [],
   assignments,
   isAdmin = false
-}) => {
-  var actions = () => {};
-  if (isAdmin) {
-    actions = userId => (
-      <LeaveJoinGroupButtonContainer userId={userId} groupId={group.id} />
-    );
-  }
-  return (
-    <div>
-      <Row>
-        <Col sm={12}>
-          <h3>
+}) => (
+  <div>
+    <Row>
+      <Col sm={12}>
+        <h3>
+          <FormattedMessage
+            id="app.group.studentsView.title"
+            defaultMessage="Student's dashboard for {groupName}"
+            values={{ groupName: group.name }}
+          />
+        </h3>
+      </Col>
+    </Row>
+    <Row>
+      <Col lg={6}>
+        <Box
+          title={
             <FormattedMessage
-              id="app.group.studentsView.title"
-              defaultMessage="Student's dashboard for {groupName}"
-              values={{ groupName: group.name }}
+              id="app.studentsView.assignments"
+              defaultMessage="Assignments"
             />
-          </h3>
-        </Col>
-      </Row>
-      <Row>
-        <Col lg={6}>
-          <Box
-            title={
-              <FormattedMessage
-                id="app.studentsView.assignments"
-                defaultMessage="Assignments"
-              />
-            }
-            collapsable
-            noPadding
-            unlimitedHeight
-            isOpen
-          >
-            <AssignmentsTable
-              assignments={assignments}
-              showGroup={false}
-              statuses={statuses}
+          }
+          collapsable
+          noPadding
+          unlimitedHeight
+          isOpen
+        >
+          <AssignmentsTable
+            assignments={assignments}
+            showGroup={false}
+            statuses={statuses}
+          />
+        </Box>
+      </Col>
+      <Col lg={6}>
+        <Box
+          title={
+            <FormattedMessage
+              id="app.studentsView.students"
+              defaultMessage="Students"
             />
-          </Box>
-        </Col>
-        <Col lg={6}>
-          <Box
-            title={
-              <FormattedMessage
-                id="app.studentsView.students"
-                defaultMessage="Students"
-              />
-            }
-            collapsable
-            noPadding
-            unlimitedHeight
-            isOpen
-          >
-            <StudentsListContainer
-              groupId={group.id}
-              renderActions={actions}
-              fill
-            />
-          </Box>
-        </Col>
-      </Row>
-    </div>
-  );
-};
+          }
+          collapsable
+          noPadding
+          unlimitedHeight
+          isOpen
+        >
+          <StudentsListContainer
+            groupId={group.id}
+            renderActions={userId =>
+              isAdmin &&
+              <LeaveJoinGroupButtonContainer
+                userId={userId}
+                groupId={group.id}
+              />}
+            fill
+          />
+        </Box>
+      </Col>
+    </Row>
+  </div>
+);
 
 StudentsView.propTypes = {
   group: PropTypes.object.isRequired,

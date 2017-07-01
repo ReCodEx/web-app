@@ -21,11 +21,7 @@ import StudentsView from '../../components/Groups/StudentsView';
 import { EditIcon } from '../../components/icons';
 
 import { isReady, getJsData } from '../../redux/helpers/resourceManager';
-import {
-  createGroup,
-  fetchSubgroups,
-  fetchGroupIfNeeded
-} from '../../redux/modules/groups';
+import { createGroup, fetchGroupIfNeeded } from '../../redux/modules/groups';
 import { fetchGroupsStatsIfNeeded } from '../../redux/modules/stats';
 import { fetchSupervisors, fetchStudents } from '../../redux/modules/users';
 import {
@@ -83,12 +79,6 @@ class Group extends Component {
                   dispatch(fetchStudents(groupId))
                 ])
               : Promise.resolve(),
-            group.parentGroupId
-              ? Promise.all([
-                  dispatch(fetchGroupIfNeeded(group.parentGroupId)),
-                  dispatch(fetchSubgroups(group.parentGroupId))
-                ])
-              : dispatch(fetchSubgroups(group.id)),
             dispatch(fetchGroupsStatsIfNeeded(groupId))
           ])
         )
@@ -121,7 +111,7 @@ class Group extends Component {
   }
 
   getBreadcrumbs = () => {
-    const { group, instance, parentGroup } = this.props;
+    const { group, instance } = this.props;
     const breadcrumbs = [
       {
         resource: instance,
@@ -130,15 +120,6 @@ class Group extends Component {
           link: ({ INSTANCE_URI_FACTORY }) => INSTANCE_URI_FACTORY(data.id),
           text: data.name,
           resource: instance
-        })
-      },
-      {
-        resource: parentGroup,
-        iconName: 'group',
-        hidden: parentGroup === null,
-        breadcrumb: data => ({
-          link: ({ GROUP_URI_FACTORY }) => GROUP_URI_FACTORY(data.id),
-          text: data.name
         })
       },
       {
@@ -275,7 +256,6 @@ Group.propTypes = {
   userId: PropTypes.string.isRequired,
   group: ImmutablePropTypes.map,
   instance: ImmutablePropTypes.map,
-  parentGroup: ImmutablePropTypes.map,
   students: PropTypes.array,
   supervisors: PropTypes.array,
   allAssignments: ImmutablePropTypes.list,
@@ -312,9 +292,6 @@ const mapStateToProps = (state, { params: { groupId } }) => {
     userId,
     instance: isReady(group)
       ? instanceSelector(state, groupData.instanceId)
-      : null,
-    parentGroup: isReady(group) && groupData.parentGroupId !== null
-      ? groupSelector(groupData.parentGroupId)(state)
       : null,
     groups: groupsSelectors(state),
     publicAssignments: groupsAssignmentsSelector(groupId, 'public')(state),
