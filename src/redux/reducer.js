@@ -13,6 +13,7 @@ import exercises from './modules/exercises';
 import files from './modules/files';
 import filesContent from './modules/filesContent';
 import groups from './modules/groups';
+import groupResults from './modules/groupResults';
 import instances from './modules/instances';
 import licences from './modules/licences';
 import notifications from './modules/notifications';
@@ -29,7 +30,8 @@ import runtimeEnvironments from './modules/runtimeEnvironments';
 import supplementaryFiles from './modules/supplementaryFiles';
 import additionalExerciseFiles from './modules/additionalExerciseFiles';
 import referenceSolutions from './modules/referenceSolutions';
-import referenceSolutionEvaluations from './modules/referenceSolutionEvaluations';
+import referenceSolutionEvaluations
+  from './modules/referenceSolutionEvaluations';
 import hwGroups from './modules/hwGroups';
 
 const createRecodexReducers = token => ({
@@ -44,6 +46,7 @@ const createRecodexReducers = token => ({
   files,
   filesContent,
   groups,
+  groupResults,
   instances,
   licences,
   notifications,

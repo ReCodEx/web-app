@@ -13,6 +13,7 @@ import SearchExercise from '../SearchExercise';
 import AdminAssignmentsTable from '../../Assignments/AdminAssignmentsTable';
 import ExercisesSimpleList
   from '../../../components/Exercises/ExercisesSimpleList';
+import ResultsTableContainer from '../../../containers/ResultsTableContainer';
 import Button from '../../../components/widgets/FlatButton';
 import {
   AddIcon,
@@ -31,6 +32,8 @@ const SupervisorsView = ({
   createGroupExercise,
   assignExercise,
   deleteExercise,
+  users,
+  publicAssignments,
   links: { EXERCISE_EDIT_URI_FACTORY }
 }) => (
   <div>
@@ -43,6 +46,26 @@ const SupervisorsView = ({
             values={{ groupName: group.name }}
           />
         </h3>
+      </Col>
+    </Row>
+    <Row>
+      <Col xs={12}>
+        <Box
+          title={
+            <FormattedMessage
+              id="app.group.spervisorsView.resultsTable"
+              defaultMessage="Results"
+            />
+          }
+          isOpen
+          unlimitedHeight
+          noPadding
+        >
+          <ResultsTableContainer
+            users={users}
+            assignments={publicAssignments}
+          />
+        </Box>
       </Col>
     </Row>
     <Row>
@@ -183,6 +206,8 @@ SupervisorsView.propTypes = {
   createGroupExercise: PropTypes.func.isRequired,
   assignExercise: PropTypes.func.isRequired,
   deleteExercise: PropTypes.func.isRequired,
+  users: PropTypes.array.isRequired,
+  publicAssignments: ImmutablePropTypes.list.isRequired,
   links: PropTypes.object
 };
 

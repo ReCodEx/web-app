@@ -1,18 +1,24 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import ImmutablePropTypes from 'react-immutable-proptypes';
+import UsersNameContainer from '../../../containers/UsersNameContainer';
 
-const ResultsTableRow = (user, assignmentsIds, getPoints) => (
+const ResultsTableRow = ({ userId, assignmentsIds, getPoints }) => (
   <tr>
-    <td className="text-center">{user.fullName}</td>
-    {assignmentsIds.map(assignment => (
-      <td key={assignment}>{getPoints(assignment, user.id)}</td>
-    ))}
+    <td><UsersNameContainer userId={userId} /></td>
+    {assignmentsIds.map(assignmentId => {
+      const submission = getPoints(assignmentId, userId);
+      const points = submission !== {} ? submission.evaluation.points : '-';
+      return (
+        <td key={assignmentId}>
+          {points}
+        </td>
+      );
+    })}
   </tr>
 );
 
 ResultsTableRow.propTypes = {
-  user: ImmutablePropTypes.map.isRequired,
+  userId: PropTypes.string.isRequired,
   assignmentsIds: PropTypes.array.isRequired,
   getPoints: PropTypes.func.isRequired
 };
