@@ -9,35 +9,33 @@ const createDependency = (from, to, clusterTo = null) => {
   return dep;
 };
 
-export const convertGraphToDot = ({ nodes, dependencies }) => {
-  const commands = dependencies.map(({ from, to, name }) => {
-    const nodeTo = nodes.find(node => node.name === to);
-    const clusterTo = nodes.indexOf(nodeTo);
-    return createDependency(subnode(from, name), subnode(to, name), clusterTo);
-  });
-
-  const subgraphs = nodes.map(({ name, portsIn, portsOut }, i) => {
-    let hasFullSupport = true;
-    const inputs = portsIn.map(port => {
-      const hasSupport = dependencies.find(
-        dep => dep.to === name && dep.name === port
-      );
-
-      if (!hasSupport) {
-        hasFullSupport = false;
-      }
-
-      return (
-        `${subnode(name, port)} [label="${port}"]` +
-        (!hasSupport ? '[color=red, fontcolor=red]' : '')
-      );
-    });
-
-    const outputs = portsOut.map(
-      port => `${subnode(name, port)} [label=${port}]`
+const createDotForNodeFactory = dependencies => (
+  name,
+  portsIn,
+  portsOut,
+  i
+) => {
+  let hasFullSupport = true;
+  const inputs = portsIn.map(port => {
+    const hasSupport = dependencies.find(
+      dep => dep.to === name && dep.name === port
     );
 
-    return `
+    if (!hasSupport) {
+      hasFullSupport = false;
+    }
+
+    return (
+      `${subnode(name, port)} [label="${port}"]` +
+      (!hasSupport ? '[color=red, fontcolor=red]' : '')
+    );
+  });
+
+  const outputs = portsOut.map(
+    port => `${subnode(name, port)} [label=${port}]`
+  );
+
+  return `
       subgraph cluster_${i} {
         label = "${name}";
         id = "${name}";
@@ -59,24 +57,44 @@ export const convertGraphToDot = ({ nodes, dependencies }) => {
           ${outputs.join(';')}
         }
       }`;
-  });
+};
 
-  const mapOutputsToScore = nodes
+const createDotForDependencyFactory = nodes => (from, to, name) => {
+  const nodeTo = nodes.find(node => node.name === to);
+  const clusterTo = nodes.indexOf(nodeTo);
+  return createDependency(subnode(from, name), subnode(to, name), clusterTo);
+};
+
+const createDotForGraph = (nodes, commands, outputsToScore) => `
+    digraph {
+      node [shape=rect];
+      compound = true;
+      ${nodes.join('\n')}
+      ${commands.join(';')}
+      ${outputsToScore.join(';')}
+      score [shape=doublecircle, style=filled, color = "#00a65a", fontcolor=white];
+    }`;
+
+export const convertGraphToDot = ({ nodes, dependencies }) => {
+  const createDotForDependency = createDotForDependencyFactory(nodes);
+  const commands = dependencies.map(({ from, to, name }) =>
+    createDotForDependency(from, to, name)
+  );
+
+  const createDotForNode = createDotForNodeFactory(dependencies);
+  const nodesDot = nodes.map(({ name, portsIn, portsOut }, i) =>
+    createDotForNode(name, portsIn, portsOut, i)
+  );
+
+  // 'score' is a special case of dependency - the only expected output of the pipeline
+  const outputsToScore = nodes
     .map(({ name, portsOut }) => {
       const score = portsOut.find(port => port === 'score');
       return score ? createDependency(subnode(name, 'score'), 'score') : null;
     })
     .filter(cmd => cmd !== null);
 
-  return `
-    digraph {
-      node [shape=rect];
-      compound = true;
-      ${subgraphs.join('\n')}
-      ${commands.join(';')}
-      ${mapOutputsToScore.join(';')}
-      score [shape=doublecircle, style=filled, color = "#00a65a", fontcolor=white];
-    }`;
+  return createDotForGraph(nodesDot, commands, outputsToScore);
 };
 
 export const convertGraphToSvg = graph => {
