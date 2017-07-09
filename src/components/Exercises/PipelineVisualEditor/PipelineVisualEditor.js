@@ -2,10 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import isJSON from 'validator/lib/isJSON';
 
-import { convertGraphToSvg } from '../../../helpers/dot';
 import AddBoxForm from './AddBoxForm';
-
-import style from './pipeline.less';
+import PipelineVisualisation from '../PipelineVisualisation';
 
 class PipelineVisualEditor extends Component {
   state = { source: null, graph: null };
@@ -113,14 +111,9 @@ class PipelineVisualEditor extends Component {
 
   render() {
     const { graph } = this.state;
-    const svg = convertGraphToSvg(graph);
-
     return (
       <div>
-        <div
-          className={style.pipeline}
-          dangerouslySetInnerHTML={{ __html: svg }}
-        />
+        <PipelineVisualisation graph={graph} />
         <AddBoxForm add={this.addNode} />
       </div>
     );
