@@ -33,17 +33,44 @@ class Box extends Component {
   showDetails = () => this.setState({ isOpen: true });
   hideDetails = () => this.setState({ isOpen: false });
 
-  render() {
+  renderBody() {
     const {
-      title,
       description = null,
-      type = 'default',
       noPadding = false,
       children,
       footer,
+      unlimitedHeight = false
+    } = this.props;
+    return (
+      <div>
+        {description &&
+          <div className={styles.description}>
+            {description}
+          </div>}
+        <div
+          className={classNames({
+            'box-body': true,
+            'no-padding': noPadding,
+            [styles.limited]: !unlimitedHeight,
+            [styles.unlimited]: unlimitedHeight
+          })}
+        >
+          {children}
+        </div>
+        {footer &&
+          <div className={'box-footer'}>
+            {footer}
+          </div>}
+      </div>
+    );
+  }
+
+  render() {
+    const {
+      title,
+      type = 'default',
       solid = false,
       collapsable = false,
-      unlimitedHeight = false,
       className = ''
     } = this.props;
     const { isOpen = true } = this.state;
@@ -59,7 +86,9 @@ class Box extends Component {
         })}
       >
         <div className="box-header with-border" onClick={this.toggleDetails}>
-          <h3 className="box-title">{title}</h3>
+          <h3 className="box-title">
+            {title}
+          </h3>
           {collapsable &&
             <div className="box-tools pull-right">
               <button
@@ -71,24 +100,12 @@ class Box extends Component {
               </button>
             </div>}
         </div>
-        <Collapse isOpened={isOpen}>
-          {description &&
-            <div className={styles.description}>{description}</div>}
-          <div
-            className={classNames({
-              'box-body': true,
-              'no-padding': noPadding,
-              [styles.limited]: !unlimitedHeight,
-              [styles.unlimited]: unlimitedHeight
-            })}
-          >
-            {children}
-          </div>
-          {footer &&
-            <div className={'box-footer'}>
-              {footer}
-            </div>}
-        </Collapse>
+        {collapsable &&
+          <Collapse isOpened={isOpen}>
+            {this.renderBody()}
+          </Collapse>}
+
+        {!collapsable && this.renderBody()}
       </div>
     );
   }
