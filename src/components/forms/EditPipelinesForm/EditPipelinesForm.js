@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { reduxForm, FieldArray } from 'redux-form';
 import { FormattedMessage } from 'react-intl';
-import { Button } from 'react-bootstrap';
-import Icon from 'react-fontawesome';
 
 import SubmitButton from '../SubmitButton';
 import EditPipelines from './EditPipelines';
@@ -108,13 +106,11 @@ class EditPipelinesForm extends Component {
           </p>
         }
       >
-
         <FieldArray
           name="pipelines"
           component={EditPipelines}
           pipelines={pipelines}
         />
-
       </FormBox>
     );
   }

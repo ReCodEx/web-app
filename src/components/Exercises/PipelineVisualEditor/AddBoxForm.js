@@ -55,7 +55,7 @@ class AddBoxForm extends Component {
   };
 
   render() {
-    const { touched, name, portsIn, portsOut, type } = this.state;
+    const { touched, name, portsIn, portsOut } = this.state;
     return (
       <Box
         title={
