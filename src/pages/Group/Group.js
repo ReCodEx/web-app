@@ -13,12 +13,12 @@ import GroupDetail, {
   LoadingGroupDetail,
   FailedGroupDetail
 } from '../../components/Groups/GroupDetail';
-import LeaveJoinGroupButtonContainer
-  from '../../containers/LeaveJoinGroupButtonContainer';
+import LeaveJoinGroupButtonContainer from '../../containers/LeaveJoinGroupButtonContainer';
 import AdminsView from '../../components/Groups/AdminsView';
 import SupervisorsView from '../../components/Groups/SupervisorsView';
 import StudentsView from '../../components/Groups/StudentsView';
 import { EditIcon } from '../../components/icons';
+import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 
 import { isReady, getJsData } from '../../redux/helpers/resourceManager';
 import {
@@ -174,6 +174,7 @@ class Group extends Component {
   render() {
     const {
       group,
+      parentGroup,
       userId,
       groups,
       students,
@@ -204,14 +205,13 @@ class Group extends Component {
         loading={<LoadingGroupDetail />}
         failed={<FailedGroupDetail />}
       >
-        {data => (
+        {data =>
           <div>
             {isAdmin &&
               <p>
                 <LinkContainer to={GROUP_EDIT_URI_FACTORY(data.id)}>
                   <Button bsStyle="warning">
-                    <EditIcon />
-                    {' '}
+                    <EditIcon />{' '}
                     <FormattedMessage
                       id="app.group.edit"
                       defaultMessage="Edit group settings"
@@ -229,12 +229,26 @@ class Group extends Component {
                 assignments={publicAssignments}
               />}
 
-            <GroupDetail
-              group={data}
-              supervisors={supervisors}
-              isAdmin={isAdmin}
-              groups={groups}
-            />
+            {data.parentGroupId &&
+              <ResourceRenderer resource={parentGroup}>
+                {parentGroup =>
+                  <GroupDetail
+                    group={data}
+                    parentGroup={parentGroup}
+                    supervisors={supervisors}
+                    isAdmin={isAdmin}
+                    groups={groups}
+                  />}
+              </ResourceRenderer>}
+
+            {!data.parentGroupId &&
+              <GroupDetail
+                group={data}
+                parentGroup={null}
+                supervisors={supervisors}
+                isAdmin={isAdmin}
+                groups={groups}
+              />}
 
             {!isAdmin &&
               !isSupervisor &&
@@ -262,8 +276,7 @@ class Group extends Component {
                 createGroupExercise={this.createGroupExercise}
                 assignExercise={id => this.assignExercise(id)}
               />}
-          </div>
-        )}
+          </div>}
       </Page>
     );
   }
@@ -312,9 +325,10 @@ const mapStateToProps = (state, { params: { groupId } }) => {
     instance: isReady(group)
       ? instanceSelector(state, groupData.instanceId)
       : null,
-    parentGroup: isReady(group) && groupData.parentGroupId !== null
-      ? groupSelector(groupData.parentGroupId)(state)
-      : null,
+    parentGroup:
+      isReady(group) && groupData.parentGroupId !== null
+        ? groupSelector(groupData.parentGroupId)(state)
+        : null,
     groups: groupsSelectors(state),
     publicAssignments: groupsAssignmentsSelector(groupId, 'public')(state),
     allAssignments: groupsAssignmentsSelector(groupId, 'all')(state),
