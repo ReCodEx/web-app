@@ -3,11 +3,14 @@ import PropTypes from 'prop-types';
 import { FormattedMessage, FormattedNumber } from 'react-intl';
 import { Row, Col, Table } from 'react-bootstrap';
 import ReactMarkdown from 'react-markdown';
+import { Link } from 'react-router';
 
 import Box from '../../widgets/Box';
 import GroupTree from '../GroupTree';
 import SupervisorsList from '../../Users/SupervisorsList';
 import { MaybeSucceededIcon } from '../../icons';
+
+import withLinks from '../../../hoc/withLinks';
 
 const GroupDetail = ({
   group: {
@@ -21,9 +24,11 @@ const GroupDetail = ({
     childGroups,
     ...group
   },
+  parentGroup,
   groups,
   supervisors,
-  isAdmin
+  isAdmin,
+  links: { GROUP_URI_FACTORY }
 }) =>
   <div>
     <Row>
@@ -51,7 +56,25 @@ const GroupDetail = ({
                       defaultMessage="External identification of the group:"
                     />
                   </th>
-                  <td><code>{externalId}</code></td>
+                  <td>
+                    <code>
+                      {externalId}
+                    </code>
+                  </td>
+                </tr>}
+              {parentGroup &&
+                <tr>
+                  <th>
+                    <FormattedMessage
+                      id="app.groupDetail.externalId"
+                      defaultMessage="External identification of the group:"
+                    />
+                  </th>
+                  <td>
+                    <Link to={GROUP_URI_FACTORY(parentGroupId)}>
+                      {parentGroup.name}
+                    </Link>
+                  </td>
                 </tr>}
               <tr>
                 <th>
@@ -60,7 +83,9 @@ const GroupDetail = ({
                     defaultMessage="Students can join this group themselves:"
                   />
                 </th>
-                <td><MaybeSucceededIcon success={isPublic} /></td>
+                <td>
+                  <MaybeSucceededIcon success={isPublic} />
+                </td>
               </tr>
               {threshold !== null &&
                 <tr>
@@ -70,7 +95,9 @@ const GroupDetail = ({
                       defaultMessage="Minimum percent of the total points count needed to complete the course:"
                     />
                   </th>
-                  <td><FormattedNumber value={threshold} style="percent" /></td>
+                  <td>
+                    <FormattedNumber value={threshold} style="percent" />
+                  </td>
                 </tr>}
             </tbody>
           </Table>
@@ -84,16 +111,46 @@ const GroupDetail = ({
               defaultMessage="Groups hierarchy"
             />
           }
-          noPadding
+          /* No padding in the case when the hierarchy is not empty. */
+          noPadding={
+            (isAdmin && childGroups.all.length > 0) ||
+            (!isAdmin && childGroups.public.length > 0)
+          }
           unlimitedHeight
           collapsable
         >
-          <GroupTree
-            id={parentGroupId || id}
-            currentGroupId={id}
-            groups={groups}
-            isOpen
-          />
+          <div>
+            {isAdmin &&
+              childGroups.all.map(childId =>
+                <GroupTree
+                  key={childId}
+                  id={childId}
+                  currentGroupId={id}
+                  groups={groups}
+                  isOpen
+                />
+              )}
+
+            {!isAdmin &&
+              childGroups.public.map(childId =>
+                <GroupTree
+                  key={childId}
+                  id={childId}
+                  currentGroupId={id}
+                  groups={groups}
+                  isOpen
+                />
+              )}
+
+            {((isAdmin && childGroups.all.length === 0) ||
+              (!isAdmin && childGroups.public.length === 0)) &&
+              <div className="text-center">
+                <FormattedMessage
+                  id="app.groupDetail.noSubgroups"
+                  defaultMessage="This group has no subgroups."
+                />
+              </div>}
+          </div>
         </Box>
       </Col>
       <Col lg={6} sm={12}>
@@ -134,9 +191,13 @@ GroupDetail.propTypes = {
     isPublic: PropTypes.bool,
     supervisors: PropTypes.array.isRequired
   }),
+  parentGroup: PropTypes.shape({
+    name: PropTypes.string.isRequired
+  }),
   groups: PropTypes.object.isRequired,
   supervisors: PropTypes.array.isRequired,
-  isAdmin: PropTypes.bool
+  isAdmin: PropTypes.bool,
+  links: PropTypes.object
 };
 
-export default GroupDetail;
+export default withLinks(GroupDetail);
