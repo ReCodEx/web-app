@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 
 import ResultsTable from '../../components/Groups/ResultsTable';
 import { fetchBestSubmission } from '../../redux/modules/groupResults';
-import { getBestSubmission } from '../../redux/selectors/groupResults';
+import { getBestSubmissionsAssoc } from '../../redux/selectors/groupResults';
 
 class ResultsTableContainer extends Component {
   componentWillMount() {
@@ -22,22 +22,17 @@ class ResultsTableContainer extends Component {
 
   static loadAsync = ({ users, assignments }, dispatch) => {
     assignments.map(assignment =>
-      users.map(
-        user =>
-          assignment &&
-          user &&
-          dispatch(fetchBestSubmission(user.id, assignment.id))
-      )
+      users.map(user => dispatch(fetchBestSubmission(user.id, assignment.id)))
     );
   };
 
   render() {
-    const { users, assignments, getPoints } = this.props;
+    const { users, assignments, submissions } = this.props;
     return (
       <ResultsTable
         users={users}
         assignments={assignments}
-        getPoints={getPoints}
+        submissions={submissions}
       />
     );
   }
@@ -46,15 +41,15 @@ class ResultsTableContainer extends Component {
 ResultsTableContainer.propTypes = {
   users: PropTypes.array.isRequired,
   assignments: PropTypes.array.isRequired,
-  getPoints: PropTypes.func,
+  submissions: PropTypes.object,
   loadAsync: PropTypes.func
 };
 
 export default connect(
-  state => ({}),
+  (state, { users, assignments }) => ({
+    submissions: getBestSubmissionsAssoc(assignments, users)(state)
+  }),
   (dispatch, { users, assignments }) => ({
-    getPoints: (assignmentId, userId) =>
-      dispatch(getBestSubmission(assignmentId, userId)),
     loadAsync: () =>
       ResultsTableContainer.loadAsync({ users, assignments }, dispatch)
   })
