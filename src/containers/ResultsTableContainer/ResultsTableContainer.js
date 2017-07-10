@@ -1,12 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 
 import ResultsTable from '../../components/Groups/ResultsTable';
 import { fetchBestSubmission } from '../../redux/modules/groupResults';
 import { getBestSubmission } from '../../redux/selectors/groupResults';
-import { getJsData } from '../../redux/helpers/resourceManager';
 
 class ResultsTableContainer extends Component {
   componentWillMount() {
@@ -14,26 +12,23 @@ class ResultsTableContainer extends Component {
   }
 
   componentWillReceiveProps(newProps) {
-    if (
-      this.props.users !== newProps.users ||
-      this.props.assignments !== newProps.assignments
-    ) {
-      this.props.loadAsync();
-    }
+    // if (
+    //   this.props.users !== newProps.users ||
+    //   this.props.assignments !== newProps.assignments
+    // ) {
+    //   this.props.loadAsync();
+    // }
   }
 
   static loadAsync = ({ users, assignments }, dispatch) => {
-    assignments
-      .toArray()
-      .map(getJsData)
-      .map(assignment =>
-        users.map(
-          user =>
-            assignment &&
-            user &&
-            dispatch(fetchBestSubmission(user.id, assignment.id))
-        )
-      );
+    assignments.map(assignment =>
+      users.map(
+        user =>
+          assignment &&
+          user &&
+          dispatch(fetchBestSubmission(user.id, assignment.id))
+      )
+    );
   };
 
   render() {
@@ -50,7 +45,7 @@ class ResultsTableContainer extends Component {
 
 ResultsTableContainer.propTypes = {
   users: PropTypes.array.isRequired,
-  assignments: ImmutablePropTypes.list.isRequired,
+  assignments: PropTypes.array.isRequired,
   getPoints: PropTypes.func,
   loadAsync: PropTypes.func
 };
