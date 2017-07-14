@@ -6,6 +6,7 @@ import { Link } from 'react-router';
 
 import ResultsTableRow from './ResultsTableRow';
 import withLinks from '../../../hoc/withLinks';
+import ResourceRenderer from '../../helpers/ResourceRenderer';
 
 const ResultsTable = ({
   assignments = List(),
@@ -33,12 +34,20 @@ const ResultsTable = ({
       </thead>
       <tbody key={'body'}>
         {users.map(user =>
-          <ResultsTableRow
+          <ResourceRenderer
             key={user.id}
-            userId={user.id}
-            assignmentsIds={assignmentsIds}
-            submissions={submissions}
-          />
+            resource={Object.keys(submissions[user.id]).map(
+              key => submissions[user.id][key]
+            )}
+          >
+            {(...userSubmissions) =>
+              <ResultsTableRow
+                key={user.id}
+                userId={user.id}
+                assignmentsIds={assignmentsIds}
+                submissions={userSubmissions}
+              />}
+          </ResourceRenderer>
         )}
       </tbody>
     </Table>

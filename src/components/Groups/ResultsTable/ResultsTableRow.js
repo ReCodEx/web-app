@@ -7,9 +7,14 @@ const ResultsTableRow = ({ userId, assignmentsIds, submissions }) =>
     <td>
       <UsersNameContainer userId={userId} />
     </td>
-    {assignmentsIds.map(assignmentId => {
-      const submission = submissions[assignmentId][userId];
-      const points = submission !== null ? submission.evaluation.points : '-';
+    {assignmentsIds.map((assignmentId, i) => {
+      const submission = submissions[i];
+      const points = submission &&
+        submission !== null &&
+        submission.evaluation &&
+        submission.evaluation !== null
+        ? submission.evaluation.points
+        : '-';
       return (
         <td key={assignmentId}>
           {points}
@@ -21,7 +26,7 @@ const ResultsTableRow = ({ userId, assignmentsIds, submissions }) =>
 ResultsTableRow.propTypes = {
   userId: PropTypes.string.isRequired,
   assignmentsIds: PropTypes.array.isRequired,
-  submissions: PropTypes.object.isRequired
+  submissions: PropTypes.array.isRequired
 };
 
 export default ResultsTableRow;
