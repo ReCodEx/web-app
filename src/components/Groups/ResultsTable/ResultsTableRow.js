@@ -7,17 +7,33 @@ const ResultsTableRow = ({ userId, assignmentsIds, submissions }) =>
     <td>
       <UsersNameContainer userId={userId} />
     </td>
-    {assignmentsIds.map((assignmentId, i) => {
-      const submission = submissions[i];
+    {assignmentsIds.map(assignmentId => {
+      const submission = submissions.filter(
+        s => s.exerciseAssignmentId === assignmentId
+      )[0];
       const points = submission &&
         submission !== null &&
         submission.evaluation &&
         submission.evaluation !== null
         ? submission.evaluation.points
         : '-';
+      const bonusPoints = submission &&
+        submission !== null &&
+        submission.evaluation &&
+        submission.evaluation !== null
+        ? submission.evaluation.bonusPoints
+        : 0;
       return (
         <td key={assignmentId}>
           {points}
+          {bonusPoints > 0 &&
+            <span style={{ color: 'green' }}>
+              +{bonusPoints}
+            </span>}
+          {bonusPoints < 0 &&
+            <span style={{ color: 'red' }}>
+              {bonusPoints}
+            </span>}
         </td>
       );
     })}
