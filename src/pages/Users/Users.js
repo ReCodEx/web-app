@@ -5,8 +5,14 @@ import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import { push } from 'react-router-redux';
 import { LinkContainer } from 'react-router-bootstrap';
+import {
+  FormGroup,
+  ControlLabel,
+  FormControl,
+  InputGroup
+} from 'react-bootstrap';
 
-import { SettingsIcon } from '../../components/icons';
+import { SettingsIcon, SearchIcon } from '../../components/icons';
 import Button from '../../components/widgets/FlatButton';
 import DeleteUserButtonContainer
   from '../../containers/DeleteUserButtonContainer';
@@ -23,6 +29,25 @@ class Users extends Component {
 
   componentWillMount() {
     this.props.loadAsync();
+    this.setState({ visibleUsers: [] });
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      visibleUsers: nextProps.users.toArray().map(user => user.toJS().data)
+    });
+  }
+
+  onChange(query, allUsers) {
+    const normalizedQuery = query.toLocaleLowerCase();
+    const filteredUsers = allUsers.filter(
+      user =>
+        user.name.lastName.toLocaleLowerCase().startsWith(normalizedQuery) ||
+        user.fullName.toLocaleLowerCase().startsWith(normalizedQuery)
+    );
+    this.setState({
+      visibleUsers: filteredUsers
+    });
   }
 
   render() {
@@ -61,24 +86,55 @@ class Users extends Component {
               noPadding
               unlimitedHeight
             >
-              <UsersList
-                users={users}
-                createActions={userId => (
-                  <div>
-                    <LinkContainer to={EDIT_USER_URI_FACTORY(userId)}>
-                      <Button bsSize="xs" className="btn-flat">
-                        <SettingsIcon />
-                        {' '}
-                        <FormattedMessage
-                          id="app.users.settings"
-                          defaultMessage="Settings"
-                        />
-                      </Button>
-                    </LinkContainer>
-                    <DeleteUserButtonContainer id={userId} bsSize="xs" />
-                  </div>
-                )}
-              />
+              <div>
+                <form style={{ padding: '10px' }}>
+                  <FormGroup>
+                    <ControlLabel>
+                      <FormattedMessage
+                        id="app.search.title"
+                        defaultMessage="Search:"
+                      />
+                    </ControlLabel>
+                    <InputGroup>
+                      <FormControl
+                        onChange={e => {
+                          this.query = e.target.value;
+                        }}
+                      />
+                      <InputGroup.Button>
+                        <Button
+                          type="submit"
+                          onClick={e => {
+                            e.preventDefault();
+                            this.onChange(this.query, users);
+                          }}
+                          disabled={false}
+                        >
+                          <SearchIcon />
+                        </Button>
+                      </InputGroup.Button>
+                    </InputGroup>
+                  </FormGroup>
+                </form>
+                <UsersList
+                  users={this.state.visibleUsers}
+                  createActions={userId => (
+                    <div>
+                      <LinkContainer to={EDIT_USER_URI_FACTORY(userId)}>
+                        <Button bsSize="xs" className="btn-flat">
+                          <SettingsIcon />
+                          {' '}
+                          <FormattedMessage
+                            id="app.users.settings"
+                            defaultMessage="Settings"
+                          />
+                        </Button>
+                      </LinkContainer>
+                      <DeleteUserButtonContainer id={userId} bsSize="xs" />
+                    </div>
+                  )}
+                />
+              </div>
             </Box>
           </div>
         )}
@@ -91,7 +147,8 @@ Users.propTypes = {
   loadAsync: PropTypes.func.isRequired,
   push: PropTypes.func.isRequired,
   links: PropTypes.object.isRequired,
-  users: ImmutablePropTypes.map
+  users: ImmutablePropTypes.map,
+  query: PropTypes.string
 };
 
 export default withLinks(

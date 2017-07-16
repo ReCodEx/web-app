@@ -21,11 +21,7 @@ import StudentsView from '../../components/Groups/StudentsView';
 import { EditIcon } from '../../components/icons';
 
 import { isReady, getJsData } from '../../redux/helpers/resourceManager';
-import {
-  createGroup,
-  fetchSubgroups,
-  fetchGroupIfNeeded
-} from '../../redux/modules/groups';
+import { createGroup, fetchGroupIfNeeded } from '../../redux/modules/groups';
 import { fetchGroupsStatsIfNeeded } from '../../redux/modules/stats';
 import { fetchSupervisors, fetchStudents } from '../../redux/modules/users';
 import {
@@ -49,7 +45,8 @@ import {
   groupSelector,
   groupsSelectors,
   groupsAssignmentsSelector,
-  supervisorsOfGroup
+  supervisorsOfGroup,
+  studentsOfGroup
 } from '../../redux/selectors/groups';
 import { groupExercisesSelector } from '../../redux/selectors/exercises';
 
@@ -80,16 +77,10 @@ class Group extends Component {
             Group.isMemberOf(group, userId) || isSuperAdmin
               ? Promise.all([
                   dispatch(fetchAssignmentsForGroup(groupId)),
-                  dispatch(fetchStudents(groupId))
+                  dispatch(fetchStudents(groupId)),
+                  dispatch(fetchGroupsStatsIfNeeded(groupId))
                 ])
-              : Promise.resolve(),
-            group.parentGroupId
-              ? Promise.all([
-                  dispatch(fetchGroupIfNeeded(group.parentGroupId)),
-                  dispatch(fetchSubgroups(group.parentGroupId))
-                ])
-              : dispatch(fetchSubgroups(group.id)),
-            dispatch(fetchGroupsStatsIfNeeded(groupId))
+              : Promise.resolve()
           ])
         )
     ]);
@@ -121,7 +112,7 @@ class Group extends Component {
   }
 
   getBreadcrumbs = () => {
-    const { group, instance, parentGroup } = this.props;
+    const { group, instance } = this.props;
     const breadcrumbs = [
       {
         resource: instance,
@@ -130,15 +121,6 @@ class Group extends Component {
           link: ({ INSTANCE_URI_FACTORY }) => INSTANCE_URI_FACTORY(data.id),
           text: data.name,
           resource: instance
-        })
-      },
-      {
-        resource: parentGroup,
-        iconName: 'group',
-        hidden: parentGroup === null,
-        breadcrumb: data => ({
-          link: ({ GROUP_URI_FACTORY }) => GROUP_URI_FACTORY(data.id),
-          text: data.name
         })
       },
       {
@@ -220,13 +202,13 @@ class Group extends Component {
                 </LinkContainer>
               </p>}
 
-            {isStudent &&
+            {(isStudent || isSupervisor || isAdmin) &&
               <StudentsView
                 group={data}
-                students={students}
                 stats={stats}
                 statuses={statuses}
                 assignments={publicAssignments}
+                isAdmin={isAdmin}
               />}
 
             <GroupDetail
@@ -261,6 +243,8 @@ class Group extends Component {
                 exercises={groupExercises}
                 createGroupExercise={this.createGroupExercise}
                 assignExercise={id => this.assignExercise(id)}
+                users={students}
+                publicAssignments={publicAssignments}
               />}
           </div>
         )}
@@ -274,7 +258,6 @@ Group.propTypes = {
   userId: PropTypes.string.isRequired,
   group: ImmutablePropTypes.map,
   instance: ImmutablePropTypes.map,
-  parentGroup: ImmutablePropTypes.map,
   students: PropTypes.array,
   supervisors: PropTypes.array,
   allAssignments: ImmutablePropTypes.list,
@@ -304,6 +287,7 @@ const mapStateToProps = (state, { params: { groupId } }) => {
   const groupData = getJsData(group);
   const userId = loggedInUserIdSelector(state);
   const supervisorsIds = supervisorsOfGroup(groupId)(state);
+  const studentsIds = studentsOfGroup(groupId)(state);
   const readyUsers = readyUsersDataSelector(state);
 
   return {
@@ -312,15 +296,13 @@ const mapStateToProps = (state, { params: { groupId } }) => {
     instance: isReady(group)
       ? instanceSelector(state, groupData.instanceId)
       : null,
-    parentGroup: isReady(group) && groupData.parentGroupId !== null
-      ? groupSelector(groupData.parentGroupId)(state)
-      : null,
     groups: groupsSelectors(state),
     publicAssignments: groupsAssignmentsSelector(groupId, 'public')(state),
     allAssignments: groupsAssignmentsSelector(groupId, 'all')(state),
     groupExercises: groupExercisesSelector(groupId)(state),
     statuses: getStatuses(groupId, userId)(state),
     supervisors: readyUsers.filter(user => supervisorsIds.includes(user.id)),
+    students: readyUsers.filter(user => studentsIds.includes(user.id)),
     isStudent: isStudentOf(userId, groupId)(state),
     isSupervisor: isSupervisorOf(userId, groupId)(state),
     isAdmin: isAdminOf(userId, groupId)(state),

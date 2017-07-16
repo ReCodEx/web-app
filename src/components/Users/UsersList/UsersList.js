@@ -7,9 +7,19 @@ import UsersListItem from '../UsersListItem';
 const UsersList = ({ users = [], createActions, ...rest }) => (
   <Table>
     <tbody>
-      {users.map(user => (
-        <UsersListItem {...user} createActions={createActions} key={user.id} />
-      ))}
+      {users
+        .sort((a, b) => {
+          const aName = a.name.lastName + ' ' + a.name.firstName;
+          const bName = b.name.lastName + ' ' + b.name.firstName;
+          return aName.localeCompare(bName);
+        })
+        .map(user => (
+          <UsersListItem
+            {...user}
+            createActions={createActions}
+            key={user.id}
+          />
+        ))}
 
       {users.length === 0 &&
         <tr>

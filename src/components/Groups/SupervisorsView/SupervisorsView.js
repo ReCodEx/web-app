@@ -10,12 +10,9 @@ import ResourceRenderer from '../../helpers/ResourceRenderer';
 import Box from '../../widgets/Box';
 import AddStudent from '../AddStudent';
 import SearchExercise from '../SearchExercise';
-import StudentsListContainer from '../../../containers/StudentsListContainer';
 import AdminAssignmentsTable from '../../Assignments/AdminAssignmentsTable';
-import LeaveJoinGroupButtonContainer
-  from '../../../containers/LeaveJoinGroupButtonContainer';
-import ExercisesSimpleList
-  from '../../../components/Exercises/ExercisesSimpleList';
+import ExercisesSimpleList from '../../../components/Exercises/ExercisesSimpleList';
+import ResultsTableContainer from '../../../containers/ResultsTableContainer';
 import Button from '../../../components/widgets/FlatButton';
 import {
   AddIcon,
@@ -34,8 +31,10 @@ const SupervisorsView = ({
   createGroupExercise,
   assignExercise,
   deleteExercise,
+  users,
+  publicAssignments,
   links: { EXERCISE_EDIT_URI_FACTORY }
-}) => (
+}) =>
   <div>
     <Row>
       <Col lg={12}>
@@ -49,28 +48,39 @@ const SupervisorsView = ({
       </Col>
     </Row>
     <Row>
+      <Col xs={12}>
+        <Box
+          title={
+            <FormattedMessage
+              id="app.group.spervisorsView.resultsTable"
+              defaultMessage="Results"
+            />
+          }
+          isOpen
+          unlimitedHeight
+          noPadding
+        >
+          <ResourceRenderer resource={publicAssignments}>
+            {(...assignments) =>
+              <ResultsTableContainer users={users} assignments={assignments} />}
+          </ResourceRenderer>
+        </Box>
+      </Col>
+    </Row>
+    <Row>
       <Col lg={6}>
         <Box
           title={
             <FormattedMessage
-              id="app.group.spervisorsView.students"
-              defaultMessage="Students"
+              id="app.group.spervisorsView.assignments"
+              defaultMessage="Assignments"
             />
           }
-          collapsable
-          unlimitedHeight
           noPadding
+          unlimitedHeight
+          isOpen
         >
-          <StudentsListContainer
-            groupId={group.id}
-            renderActions={userId => (
-              <LeaveJoinGroupButtonContainer
-                userId={userId}
-                groupId={group.id}
-              />
-            )}
-            fill
-          />
+          <AdminAssignmentsTable assignments={assignments} />
         </Box>
         <Box
           title={
@@ -79,7 +89,6 @@ const SupervisorsView = ({
               defaultMessage="Add student"
             />
           }
-          collapsable
           isOpen
         >
           <AddStudent instanceId={group.instanceId} groupId={group.id} />
@@ -103,8 +112,7 @@ const SupervisorsView = ({
                   createGroupExercise();
                 }}
               >
-                <AddIcon />
-                {' '}
+                <AddIcon />{' '}
                 <FormattedMessage
                   id="app.group.createExercise"
                   defaultMessage="Add group exercise"
@@ -112,22 +120,20 @@ const SupervisorsView = ({
               </Button>
             </p>
           }
-          collapsable
           isOpen
         >
           <ResourceRenderer resource={exercises.toArray()}>
-            {(...exercises) => (
+            {(...exercises) =>
               <ExercisesSimpleList
                 exercises={exercises}
-                createActions={exerciseId => (
+                createActions={exerciseId =>
                   <div>
                     <Button
                       onClick={() => assignExercise(exerciseId)}
                       bsSize="xs"
                       className="btn-flat"
                     >
-                      <SendIcon />
-                      {' '}
+                      <SendIcon />{' '}
                       <FormattedMessage
                         id="app.exercise.assignButton"
                         defaultMessage="Assign"
@@ -139,8 +145,7 @@ const SupervisorsView = ({
                         className="btn-flat"
                         bsStyle="warning"
                       >
-                        <EditIcon />
-                        {' '}
+                        <EditIcon />{' '}
                         <FormattedMessage
                           id="app.exercise.editButton"
                           defaultMessage="Edit"
@@ -158,35 +163,16 @@ const SupervisorsView = ({
                       }
                     >
                       <Button bsSize="xs" className="btn-flat" bsStyle="danger">
-                        <DeleteIcon />
-                        {' '}
+                        <DeleteIcon />{' '}
                         <FormattedMessage
                           id="app.exercise.deleteButton"
                           defaultMessage="Delete"
                         />
                       </Button>
                     </Confirm>
-                  </div>
-                )}
-              />
-            )}
+                  </div>}
+              />}
           </ResourceRenderer>
-        </Box>
-      </Col>
-      <Col lg={6}>
-        <Box
-          title={
-            <FormattedMessage
-              id="app.group.spervisorsView.assignments"
-              defaultMessage="Assignments"
-            />
-          }
-          collapsable
-          noPadding
-          unlimitedHeight
-          isOpen
-        >
-          <AdminAssignmentsTable assignments={assignments} />
         </Box>
         <Box
           title={
@@ -195,15 +181,13 @@ const SupervisorsView = ({
               defaultMessage="Find an exercise"
             />
           }
-          collapsable
           isOpen
         >
           <SearchExercise groupId={group.id} />
         </Box>
       </Col>
     </Row>
-  </div>
-);
+  </div>;
 
 SupervisorsView.propTypes = {
   group: PropTypes.object,
@@ -212,6 +196,8 @@ SupervisorsView.propTypes = {
   createGroupExercise: PropTypes.func.isRequired,
   assignExercise: PropTypes.func.isRequired,
   deleteExercise: PropTypes.func.isRequired,
+  users: PropTypes.array.isRequired,
+  publicAssignments: ImmutablePropTypes.list.isRequired,
   links: PropTypes.object
 };
 
