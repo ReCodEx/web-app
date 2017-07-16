@@ -12,12 +12,12 @@ class ResultsTableContainer extends Component {
   }
 
   componentWillReceiveProps(newProps) {
-    // if (
-    //   this.props.users !== newProps.users ||
-    //   this.props.assignments !== newProps.assignments
-    // ) {
-    //   this.props.loadAsync();
-    // }
+    if (
+      this.props.users.length !== newProps.users.length ||
+      this.props.users.some((user, i) => user.id !== newProps.users[i].id)
+    ) {
+      this.props.loadAsync();
+    }
   }
 
   static loadAsync = ({ users, assignments }, dispatch) => {
