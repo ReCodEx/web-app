@@ -5,6 +5,8 @@ import { Table } from 'react-bootstrap';
 import { Link } from 'react-router';
 
 import ResultsTableRow from './ResultsTableRow';
+import LoadingResultsTableRow from './LoadingResultsTableRow';
+import NoResultsAvailableRow from './NoResultsAvailableRow';
 import withLinks from '../../../hoc/withLinks';
 import ResourceRenderer from '../../helpers/ResourceRenderer';
 
@@ -23,32 +25,38 @@ const ResultsTable = ({
       <thead key={'head'}>
         <tr>
           <th />
-          {assignmentsArray.map(assignment =>
+          {assignmentsArray.map(assignment => (
             <th key={assignment.id}>
               <Link to={SUPERVISOR_STATS_URI_FACTORY(assignment.id)}>
                 {assignment.name}
               </Link>
             </th>
-          )}
+          ))}
         </tr>
       </thead>
       <tbody key={'body'}>
-        {users.map(user =>
-          <ResourceRenderer
-            key={user.id}
-            resource={Object.keys(submissions[user.id]).map(
-              key => submissions[user.id][key]
-            )}
-          >
-            {(...userSubmissions) =>
-              <ResultsTableRow
-                key={user.id}
-                userId={user.id}
-                assignmentsIds={assignmentsIds}
-                submissions={userSubmissions}
-              />}
-          </ResourceRenderer>
-        )}
+        {(users.length === 0 || assignments.length === 0) &&
+          <NoResultsAvailableRow />}
+        {users.length !== 0 &&
+          assignments.length !== 0 &&
+          users.map(user => (
+            <ResourceRenderer
+              key={user.id}
+              resource={Object.keys(submissions[user.id]).map(
+                key => submissions[user.id][key]
+              )}
+              loading={<LoadingResultsTableRow />}
+            >
+              {(...userSubmissions) => (
+                <ResultsTableRow
+                  key={user.id}
+                  userId={user.id}
+                  assignmentsIds={assignmentsIds}
+                  submissions={userSubmissions}
+                />
+              )}
+            </ResourceRenderer>
+          ))}
       </tbody>
     </Table>
   );

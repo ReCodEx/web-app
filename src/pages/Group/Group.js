@@ -77,10 +77,10 @@ class Group extends Component {
             Group.isMemberOf(group, userId) || isSuperAdmin
               ? Promise.all([
                   dispatch(fetchAssignmentsForGroup(groupId)),
-                  dispatch(fetchStudents(groupId))
+                  dispatch(fetchStudents(groupId)),
+                  dispatch(fetchGroupsStatsIfNeeded(groupId))
                 ])
-              : Promise.resolve(),
-            dispatch(fetchGroupsStatsIfNeeded(groupId))
+              : Promise.resolve()
           ])
         )
     ]);
@@ -202,7 +202,7 @@ class Group extends Component {
                 </LinkContainer>
               </p>}
 
-            {isStudent &&
+            {(isStudent || isSupervisor || isAdmin) &&
               <StudentsView
                 group={data}
                 stats={stats}
