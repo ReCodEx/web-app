@@ -11,6 +11,7 @@ class EditEnvironmentConfigForm extends Component {
   render() {
     const {
       environmentFormValues: { environmentConfigs = [] } = {},
+      runtimeEnvironments = [],
       anyTouched,
       submitting,
       handleSubmit,
@@ -29,9 +30,10 @@ class EditEnvironmentConfigForm extends Component {
           </Alert>}
 
         <FieldArray
-          name="environmentConfigs"
+          name="runtimeConfigs"
           component={EditEnvironmentConfigTabs}
           environmentConfigs={environmentConfigs}
+          runtimeEnvironments={runtimeEnvironments}
         />
 
         <div className="text-center">
@@ -81,7 +83,8 @@ EditEnvironmentConfigForm.propTypes = {
   invalid: PropTypes.bool,
   environmentFormValues: PropTypes.shape({
     environmentConfigs: PropTypes.array
-  })
+  }),
+  runtimeEnvironments: PropTypes.object
 };
 
 const validate = () => {};

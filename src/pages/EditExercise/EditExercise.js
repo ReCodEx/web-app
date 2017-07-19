@@ -31,9 +31,16 @@ import {
   fetchExerciseConfigIfNeeded,
   setExerciseConfig
 } from '../../redux/modules/exerciseConfigs';
+import {
+  fetchExerciseEnvironmentConfigIfNeeded,
+  setExerciseEnvironmentConfig
+} from '../../redux/modules/exerciseEnvironmentConfigs';
 import { getExercise } from '../../redux/selectors/exercises';
 import { isSubmitting } from '../../redux/selectors/submission';
 import { exerciseConfigSelector } from '../../redux/selectors/exerciseConfigs';
+import {
+  exerciseEnvironmentConfigSelector
+} from '../../redux/selectors/exerciseEnvironmentConfigs';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import {
   fetchRuntimeEnvironments
@@ -57,7 +64,8 @@ class EditExercise extends Component {
     Promise.all([
       dispatch(fetchExerciseIfNeeded(exerciseId)),
       dispatch(fetchExerciseConfigIfNeeded(exerciseId)),
-      dispatch(fetchRuntimeEnvironments())
+      dispatch(fetchRuntimeEnvironments()),
+      dispatch(fetchExerciseEnvironmentConfigIfNeeded(exerciseId))
     ]);
 
   render() {
@@ -72,6 +80,7 @@ class EditExercise extends Component {
       formValues,
       environmentFormValues,
       exerciseConfig,
+      exerciseEnvironmentConfig,
       push
     } = this.props;
 
@@ -148,10 +157,9 @@ class EditExercise extends Component {
                     >
                       <EditEnvironmentConfigForm
                         environmentFormValues={environmentFormValues}
-                        initialValues={{
-                          environmentConfigs: []
-                        }}
+                        initialValues={exerciseEnvironmentConfig}
                         onSubmit={editEnvironmentConfigs}
+                        runtimeEnvironments={runtimeEnvironments}
                       />
                     </Box>
                   </Col>
@@ -232,6 +240,7 @@ EditExercise.propTypes = {
   formValues: PropTypes.object,
   environmentFormValues: PropTypes.object,
   exerciseConfig: PropTypes.object,
+  exerciseEnvironmentConfig: PropTypes.object,
   links: PropTypes.object.isRequired,
   push: PropTypes.func.isRequired
 };
@@ -248,7 +257,10 @@ export default withLinks(
         formValues: getFormValues('editExercise')(state),
         environmentFormValues: getFormValues('editEnvironmentConfig')(state),
         runtimeEnvironments: runtimeEnvironmentsSelector(state),
-        exerciseConfig: exerciseConfigSelector(exerciseId)(state)
+        exerciseConfig: exerciseConfigSelector(exerciseId)(state),
+        exerciseEnvironmentConfig: exerciseEnvironmentConfigSelector(
+          exerciseId
+        )(state)
       };
     },
     (dispatch, { params: { exerciseId } }) => ({
@@ -257,8 +269,9 @@ export default withLinks(
       loadAsync: () => EditExercise.loadAsync({ exerciseId }, dispatch),
       editExercise: (version, data) =>
         dispatch(editExercise(exerciseId, { ...data, version })),
-      editEnvironmentConfigs: data => {},
-      // dispatch(editRuntimeConfigs(exerciseId, data)),
+      editEnvironmentConfigs: data => {
+        dispatch(setExerciseEnvironmentConfig(exerciseId, data));
+      },
       setConfig: data => dispatch(setExerciseConfig(exerciseId, data))
     })
   )(EditExercise)

@@ -43,7 +43,8 @@ const EditEnvironmentConfigTabs = ({ environmentConfigs, ...props }) => (
 );
 
 EditEnvironmentConfigTabs.propTypes = {
-  environmentConfigs: PropTypes.array.isRequired
+  environmentConfigs: PropTypes.array.isRequired,
+  runtimeEnvironments: PropTypes.object
 };
 
 export default EditEnvironmentConfigTabs;
