@@ -6,7 +6,7 @@ import { FormattedMessage } from 'react-intl';
 import ExercisesListItem from '../ExercisesListItem';
 
 const ExercisesList = ({ exercises = [], createActions, ...rest }) => (
-  <Table>
+  <Table hover>
     <thead>
       <tr>
         <th />

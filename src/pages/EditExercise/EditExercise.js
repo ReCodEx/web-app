@@ -14,8 +14,8 @@ import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import EditExerciseForm from '../../components/forms/EditExerciseForm';
 import EditExerciseConfigForm
   from '../../components/forms/EditExerciseConfigForm/EditExerciseConfigForm';
-import EditExerciseRuntimeConfigsForm
-  from '../../components/forms/EditExerciseRuntimeConfigsForm';
+import EditEnvironmentConfigForm
+  from '../../components/forms/EditEnvironmentConfigForm';
 import SupplementaryFilesTableContainer
   from '../../containers/SupplementaryFilesTableContainer';
 import AdditionalExerciseFilesTableContainer
@@ -25,8 +25,7 @@ import DeleteExerciseButtonContainer
 
 import {
   fetchExerciseIfNeeded,
-  editExercise,
-  editRuntimeConfigs
+  editExercise
 } from '../../redux/modules/exercises';
 import {
   fetchExerciseConfigIfNeeded,
@@ -67,12 +66,11 @@ class EditExercise extends Component {
       params: { exerciseId },
       exercise,
       editExercise,
-      editRuntimeConfigs,
+      editEnvironmentConfigs,
       setConfig,
       runtimeEnvironments,
       formValues,
-      runtimesFormValues,
-      // configFormValues,
+      environmentFormValues,
       exerciseConfig,
       push
     } = this.props;
@@ -116,7 +114,6 @@ class EditExercise extends Component {
                 <Row>
                   <Col lg={12}>
                     <EditExerciseForm
-                      exercise={exercise}
                       initialValues={exercise}
                       onSubmit={formData =>
                         editExercise(exercise.version, formData)}
@@ -143,23 +140,18 @@ class EditExercise extends Component {
                     <Box
                       title={
                         <FormattedMessage
-                          id="app.editExercise.editRuntimeConfig"
-                          defaultMessage="Edit runtime configurations"
+                          id="app.editExercise.editEnvironmentConfig"
+                          defaultMessage="Edit environment configurations"
                         />
                       }
                       unlimitedHeight
                     >
-                      <EditExerciseRuntimeConfigsForm
-                        runtimeEnvironments={runtimeEnvironments}
-                        runtimeConfigs={
-                          runtimesFormValues
-                            ? runtimesFormValues.runtimeConfigs
-                            : [{}]
-                        }
+                      <EditEnvironmentConfigForm
+                        environmentFormValues={environmentFormValues}
                         initialValues={{
-                          runtimeConfigs: exercise.runtimeConfigs
+                          environmentConfigs: []
                         }}
-                        onSubmit={editRuntimeConfigs}
+                        onSubmit={editEnvironmentConfigs}
                       />
                     </Box>
                   </Col>
@@ -233,13 +225,12 @@ EditExercise.propTypes = {
   reset: PropTypes.func.isRequired,
   editExercise: PropTypes.func.isRequired,
   setConfig: PropTypes.func.isRequired,
-  editRuntimeConfigs: PropTypes.func.isRequired,
+  editEnvironmentConfigs: PropTypes.func.isRequired,
   params: PropTypes.shape({
     exerciseId: PropTypes.string.isRequired
   }).isRequired,
   formValues: PropTypes.object,
-  runtimesFormValues: PropTypes.object,
-  // configFormValues: PropTypes.object,
+  environmentFormValues: PropTypes.object,
   exerciseConfig: PropTypes.object,
   links: PropTypes.object.isRequired,
   push: PropTypes.func.isRequired
@@ -255,8 +246,7 @@ export default withLinks(
         submitting: isSubmitting(state),
         userId,
         formValues: getFormValues('editExercise')(state),
-        runtimesFormValues: getFormValues('editExerciseRuntimeConfigs')(state),
-        // configFormValues: getFormValues('editExerciseConfig')(state),
+        environmentFormValues: getFormValues('editEnvironmentConfig')(state),
         runtimeEnvironments: runtimeEnvironmentsSelector(state),
         exerciseConfig: exerciseConfigSelector(exerciseId)(state)
       };
@@ -267,8 +257,8 @@ export default withLinks(
       loadAsync: () => EditExercise.loadAsync({ exerciseId }, dispatch),
       editExercise: (version, data) =>
         dispatch(editExercise(exerciseId, { ...data, version })),
-      editRuntimeConfigs: data =>
-        dispatch(editRuntimeConfigs(exerciseId, data)),
+      editEnvironmentConfigs: data => {},
+      // dispatch(editRuntimeConfigs(exerciseId, data)),
       setConfig: data => dispatch(setExerciseConfig(exerciseId, data))
     })
   )(EditExercise)
