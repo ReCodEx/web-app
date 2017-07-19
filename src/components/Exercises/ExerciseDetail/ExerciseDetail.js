@@ -6,12 +6,11 @@ import {
   FormattedTime,
   FormattedDate
 } from 'react-intl';
-import { Table, OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { Table } from 'react-bootstrap';
 import ReactMarkdown from 'react-markdown';
 import { Link } from 'react-router';
 import Box from '../../widgets/Box';
 import DifficultyIcon from '../DifficultyIcon';
-import { MaybeSucceededIcon } from '../../icons';
 
 import withLinks from '../../../hoc/withLinks';
 import UsersNameContainer from '../../../containers/UsersNameContainer';
@@ -29,7 +28,7 @@ const ExerciseDetail = ({
   version,
   forkedFrom = null,
   localizedTexts,
-  runtimeConfigs,
+  runtimeEnvironments,
   links: { EXERCISE_URI_FACTORY }
 }) => (
   <Box title={name} noPadding>
@@ -133,29 +132,10 @@ const ExerciseDetail = ({
             />
           </th>
           <td>
-            {runtimeConfigs.map(({ id, name, isValid }) => (
-              <p key={id}>
-                <OverlayTrigger
-                  placement="left"
-                  overlay={
-                    <Tooltip id={id}>
-                      {isValid
-                        ? <FormattedMessage
-                            id="app.exercise.runtimes.isValid"
-                            defaultMessage="Configuration is valid"
-                          />
-                        : <FormattedMessage
-                            id="app.exercise.runtimes.isNotValid"
-                            defaultMessage="Configuration is not valid"
-                          />}
-                    </Tooltip>
-                  }
-                >
-                  <span>
-                    <MaybeSucceededIcon success={isValid} />&nbsp;{name}
-                  </span>
-                </OverlayTrigger>
-              </p>
+            {runtimeEnvironments.map(({ id, name }) => (
+              <span key={id}>
+                {name}
+              </span>
             ))}
           </td>
         </tr>
@@ -176,7 +156,7 @@ ExerciseDetail.propTypes = {
   version: PropTypes.number.isRequired,
   forkedFrom: PropTypes.object,
   localizedTexts: PropTypes.array.isRequired,
-  runtimeConfigs: PropTypes.array.isRequired,
+  runtimeEnvironments: PropTypes.array.isRequired,
   links: PropTypes.object
 };
 

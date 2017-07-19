@@ -279,7 +279,7 @@ class Exercise extends Component {
                   onSubmit={createReferenceSolution}
                   onReset={init}
                   isOpen={submitting}
-                  runtimeEnvironmentIds={exercise.runtimeConfigs.map(
+                  runtimeEnvironmentIds={exercise.runtimeEnvironments.map(
                     cfg => cfg.runtimeEnvironmentId
                   )}
                   showProgress={false}

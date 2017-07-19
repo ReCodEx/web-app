@@ -10,7 +10,7 @@ import EditEnvironmentConfigTabs from './EditEnvironmentConfigTabs';
 class EditEnvironmentConfigForm extends Component {
   render() {
     const {
-      environmentFormValues: { environmentConfigs },
+      environmentFormValues: { environmentConfigs = [] } = {},
       anyTouched,
       submitting,
       handleSubmit,
