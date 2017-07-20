@@ -25,13 +25,13 @@ const messages = defineMessages({
 
 const EditEnvironmentConfigVariables = ({
   prefix,
-  variables,
+  environment,
   intl: { formatMessage }
-}) => (
+}) =>
   <div>
     <Table>
       <tbody>
-        {variables.map((variable, index) => (
+        {environment.variablesTable.map((variable, index) =>
           <tr key={index}>
             <td>
               <Field
@@ -67,7 +67,7 @@ const EditEnvironmentConfigVariables = ({
             </td>
             <td>
               <Button
-                onClick={() => variables.remove(index)}
+                onClick={() => environment.variablesTable.remove(index)}
                 bsStyle={'danger'}
                 bsSize="xs"
                 className="btn-flat"
@@ -81,11 +81,11 @@ const EditEnvironmentConfigVariables = ({
               </Button>
             </td>
           </tr>
-        ))}
+        )}
       </tbody>
     </Table>
     <Button
-      onClick={() => variables.push({ '': { type: 'string', value: '' } })}
+      onClick={() => environment.variablesTable.push()}
       bsStyle={'primary'}
       className="btn-flat"
     >
@@ -96,12 +96,11 @@ const EditEnvironmentConfigVariables = ({
         defaultMessage="Add variable"
       />
     </Button>
-  </div>
-);
+  </div>;
 
 EditEnvironmentConfigVariables.propTypes = {
   prefix: PropTypes.string.isRequired,
-  variables: PropTypes.array.isRequired,
+  environment: PropTypes.object.isRequired,
   intl: intlShape.isRequired
 };
 

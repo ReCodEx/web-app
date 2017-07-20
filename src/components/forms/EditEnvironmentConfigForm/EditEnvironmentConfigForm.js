@@ -10,7 +10,7 @@ import EditEnvironmentConfigTabs from './EditEnvironmentConfigTabs';
 class EditEnvironmentConfigForm extends Component {
   render() {
     const {
-      environmentFormValues: { environmentConfigs = [] } = {},
+      initialValues: { environmentConfigs = [] },
       runtimeEnvironments = [],
       anyTouched,
       submitting,
@@ -19,6 +19,7 @@ class EditEnvironmentConfigForm extends Component {
       hasSucceeded = false,
       invalid
     } = this.props;
+
     return (
       <div>
         {hasFailed &&
@@ -30,9 +31,9 @@ class EditEnvironmentConfigForm extends Component {
           </Alert>}
 
         <FieldArray
-          name="runtimeConfigs"
+          name="environmentConfigs"
           component={EditEnvironmentConfigTabs}
-          environmentConfigs={environmentConfigs}
+          environmentValues={environmentConfigs}
           runtimeEnvironments={runtimeEnvironments}
         />
 
@@ -81,9 +82,6 @@ EditEnvironmentConfigForm.propTypes = {
   hasFailed: PropTypes.bool,
   hasSucceeded: PropTypes.bool,
   invalid: PropTypes.bool,
-  environmentFormValues: PropTypes.shape({
-    environmentConfigs: PropTypes.array
-  }),
   runtimeEnvironments: PropTypes.object
 };
 

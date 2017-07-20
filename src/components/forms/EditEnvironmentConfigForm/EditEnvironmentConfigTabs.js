@@ -4,15 +4,15 @@ import { FormattedMessage } from 'react-intl';
 import { TabbedArrayField } from '../Fields';
 import EditEnvironmentConfigTab from './EditEnvironmentConfigTab';
 
-const EditEnvironmentConfigTabs = ({ environmentConfigs, ...props }) => (
+const EditEnvironmentConfigTabs = ({ environmentValues, ...props }) =>
   <TabbedArrayField
     {...props}
-    environmentConfigs={environmentConfigs}
+    environmentValues={environmentValues}
     getTitle={i =>
-      environmentConfigs &&
-        environmentConfigs[i] &&
-        environmentConfigs[i].runtimeEnvironmentId
-        ? environmentConfigs[i].runtimeEnvironmentId
+      environmentValues &&
+        environmentValues[i] &&
+        environmentValues[i].runtimeEnvironmentId
+        ? environmentValues[i].runtimeEnvironmentId
         : <FormattedMessage
             id="app.editEnvironmentConfigTabs.newConfig"
             defaultMessage="New configuration"
@@ -39,11 +39,10 @@ const EditEnvironmentConfigTabs = ({ environmentConfigs, ...props }) => (
     id="environment-config-tabs"
     add
     remove
-  />
-);
+  />;
 
 EditEnvironmentConfigTabs.propTypes = {
-  environmentConfigs: PropTypes.array.isRequired,
+  environmentValues: PropTypes.array.isRequired,
   runtimeEnvironments: PropTypes.object
 };
 
