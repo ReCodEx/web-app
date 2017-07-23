@@ -354,20 +354,17 @@ const validate = ({
     .filter(text => text !== undefined)
     .map(text => text.locale);
   for (let i = 0; i < localeArr.length; ++i) {
-    const localeErrors = {};
     if (localeArr.indexOf(localeArr[i]) !== i) {
-      localeErrors['locale'] = (
-        <FormattedMessage
-          id="app.editAssignmentForm.validation.sameLocalizedTexts"
-          defaultMessage="There are more language variants with the same locale. Please make sure locales are unique."
-        />
-      );
-    }
-    if (!localizedTextsErrors[i].locale) {
-      localizedTextsErrors[i] = localeErrors;
+      if (!localizedTextsErrors[i].locale) {
+        localizedTextsErrors[i].locale = (
+          <FormattedMessage
+            id="app.editAssignmentForm.validation.sameLocalizedTexts"
+            defaultMessage="There are more language variants with the same locale. Please make sure locales are unique."
+          />
+        );
+      }
     }
   }
-
   errors['localizedTexts'] = localizedTextsErrors;
 
   if (!firstDeadline) {
