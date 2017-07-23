@@ -1,123 +1,72 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { Field } from 'redux-form';
-import { Alert, Tabs, Tab } from 'react-bootstrap';
-import Button from '../../widgets/FlatButton';
-import Confirm from '../Confirm';
-import { AddIcon, WarningIcon } from '../../icons';
-import { MarkdownTextAreaField, LanguageSelectField } from '../Fields';
+import {
+  TabbedArrayField,
+  MarkdownTextAreaField,
+  LanguageSelectField
+} from '../Fields';
 
-class LocalizedTextsFormField extends Component {
-  state = { localeTab: 0 };
-  changeTab = n => this.setState({ localeTab: n });
-
-  render() {
-    const { fields, localizedTexts = [] } = this.props;
-
-    return (
+const LocalizedTextsFormField = ({ fields, localizedTexts = [] }) => (
+  <TabbedArrayField
+    fields={fields}
+    localizedTexts={localizedTexts}
+    getTitle={i =>
+      localizedTexts && localizedTexts[i] && localizedTexts[i].locale
+        ? localizedTexts[i].locale
+        : <FormattedMessage
+            id="app.editAssignmentForm.newLocale"
+            defaultMessage="New language"
+          />}
+    ContentComponent={({ prefix, i }) => (
       <div>
-        <p>
-          <Button
-            bsStyle="success"
-            bsSize="sm"
-            onClick={() => {
-              fields.push();
-              this.changeTab(fields.length);
-            }}
-          >
-            <AddIcon />
-            {' '}
+        <Field
+          name={`${prefix}.locale`}
+          component={LanguageSelectField}
+          label={
             <FormattedMessage
-              id="app.editAssignmentForm.addLanguage"
-              defaultMessage="Add language variant"
+              id="app.editAssignmentForm.localized.locale"
+              defaultMessage="The language:"
             />
-          </Button>
-        </p>
-        {fields.length > 0 &&
-          <Tabs
-            id="localized-assignments"
-            className="nav-tabs-custom"
-            activeKey={this.state.localeTab}
-            onSelect={this.changeTab}
-          >
-            {fields.map((localized, i) => (
-              <Tab
-                key={i}
-                eventKey={i}
-                title={
-                  localizedTexts &&
-                    localizedTexts[i] &&
-                    localizedTexts[i].locale
-                    ? localizedTexts[i].locale
-                    : <FormattedMessage
-                        id="app.editAssignmentForm.newLocale"
-                        defaultMessage="New language"
-                      />
-                }
-              >
-                <Field
-                  name={`${localized}.locale`}
-                  component={LanguageSelectField}
-                  label={
-                    <FormattedMessage
-                      id="app.editAssignmentForm.localized.locale"
-                      defaultMessage="The language:"
-                    />
-                  }
-                />
+          }
+        />
 
-                <Field
-                  name={`${localized}.text`}
-                  component={MarkdownTextAreaField}
-                  label={
-                    <FormattedMessage
-                      id="app.editAssignmentForm.localized.assignment"
-                      defaultMessage="Description for the students:"
-                    />
-                  }
-                />
-
-                <hr />
-                <p className="text-center">
-                  <Confirm
-                    id={`remove-locale-${i}`}
-                    question={
-                      <FormattedMessage
-                        id="app.editAssignmentForm.localized.reallyRemoveQuestion"
-                        defaultMessage="Do you really want to delete the assignmenet in this language?"
-                      />
-                    }
-                    onConfirmed={() => {
-                      fields.remove(i);
-                      this.changeTab(Math.min(i, fields.length - 2));
-                    }}
-                  >
-                    <Button bsStyle="default">
-                      <WarningIcon />
-                      {' '}
-                      <FormattedMessage
-                        id="app.editAssignmentForm.localized.remove"
-                        defaultMessage="Remove this language"
-                      />
-                    </Button>
-                  </Confirm>
-                </p>
-              </Tab>
-            ))}
-          </Tabs>}
-
-        {fields.length === 0 &&
-          <Alert bsStyle="warning">
+        <Field
+          name={`${prefix}.text`}
+          component={MarkdownTextAreaField}
+          label={
             <FormattedMessage
-              id="app.editAssignmentForm.localized.noLanguage"
-              defaultMessage="There is currently no text in any language for this assignment."
+              id="app.editAssignmentForm.localized.assignment"
+              defaultMessage="Description for the students:"
             />
-          </Alert>}
+          }
+        />
       </div>
-    );
-  }
-}
+    )}
+    emptyMessage={
+      <FormattedMessage
+        id="app.editAssignmentForm.localized.noLanguage"
+        defaultMessage="There is currently no text in any language for this assignment."
+      />
+    }
+    addMessage={
+      <FormattedMessage
+        id="app.editAssignmentForm.addLanguage"
+        defaultMessage="Add language variant"
+      />
+    }
+    removeQuestion={
+      <FormattedMessage
+        id="app.editAssignmentForm.localized.reallyRemoveQuestion"
+        defaultMessage="Do you really want to delete the assignmenet in this language?"
+      />
+    }
+    id="localized-assignments"
+    add
+    remove
+  />
+);
 
 LocalizedTextsFormField.propTypes = {
   fields: PropTypes.object,

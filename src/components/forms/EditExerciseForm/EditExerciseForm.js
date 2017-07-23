@@ -280,7 +280,7 @@ const validate = ({ name, description, difficulty, localizedTexts }) => {
   return errors;
 };
 
-const asyncValidate = (values, dispatch, { exercise: { id, version } }) =>
+const asyncValidate = (values, dispatch, { initialValues: { id, version } }) =>
   dispatch(validateExercise(id, version))
     .then(res => res.value)
     .then(({ versionIsUpToDate }) => {
