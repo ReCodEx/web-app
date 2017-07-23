@@ -24,18 +24,17 @@ const messages = defineMessages({
 });
 
 const EditEnvironmentConfigVariables = ({
-  prefix,
-  environment,
+  fields,
   intl: { formatMessage }
-}) =>
+}) => (
   <div>
     <Table>
       <tbody>
-        {environment.variablesTable.map((variable, index) =>
+        {fields.map((variable, index) => (
           <tr key={index}>
             <td>
               <Field
-                name={`${prefix}.${variable}`}
+                name={`${variable}.name`}
                 component={TextField}
                 label={''}
               />
@@ -44,9 +43,10 @@ const EditEnvironmentConfigVariables = ({
               <Row>
                 <Col xs={4} style={{ paddingRight: '0px' }}>
                   <Field
-                    name={`${prefix}.${variable}.type`}
+                    name={`${variable}.type`}
                     component={SelectField}
                     options={[
+                      { key: '', name: '...' },
                       {
                         key: 'string',
                         name: formatMessage(messages.stringType)
@@ -58,16 +58,16 @@ const EditEnvironmentConfigVariables = ({
                 </Col>
                 <Col xs={8} style={{ paddingLeft: '0px' }}>
                   <Field
-                    name={`${prefix}.${variable}.value`}
+                    name={`${variable}.value`}
                     component={TextField}
                     label={''}
                   />
                 </Col>
               </Row>
             </td>
-            <td>
+            <td style={{ verticalAlign: 'middle' }}>
               <Button
-                onClick={() => environment.variablesTable.remove(index)}
+                onClick={() => fields.remove(index)}
                 bsStyle={'danger'}
                 bsSize="xs"
                 className="btn-flat"
@@ -81,11 +81,11 @@ const EditEnvironmentConfigVariables = ({
               </Button>
             </td>
           </tr>
-        )}
+        ))}
       </tbody>
     </Table>
     <Button
-      onClick={() => environment.variablesTable.push()}
+      onClick={() => fields.push()}
       bsStyle={'primary'}
       className="btn-flat"
     >
@@ -96,11 +96,11 @@ const EditEnvironmentConfigVariables = ({
         defaultMessage="Add variable"
       />
     </Button>
-  </div>;
+  </div>
+);
 
 EditEnvironmentConfigVariables.propTypes = {
-  prefix: PropTypes.string.isRequired,
-  environment: PropTypes.object.isRequired,
+  fields: PropTypes.object,
   intl: intlShape.isRequired
 };
 

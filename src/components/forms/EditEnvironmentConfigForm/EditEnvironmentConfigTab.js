@@ -38,8 +38,6 @@ const EditEnvironmentConfigTab = ({
       <FieldArray
         name={`${prefix}.variablesTable`}
         component={EditEnvironmentConfigVariables}
-        environment={environmentValues[i]}
-        prefix={`${prefix}.variablesTable`}
       />
     </div>
   );
