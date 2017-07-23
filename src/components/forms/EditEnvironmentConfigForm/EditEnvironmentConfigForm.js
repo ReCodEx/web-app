@@ -10,8 +10,8 @@ import EditEnvironmentConfigTabs from './EditEnvironmentConfigTabs';
 class EditEnvironmentConfigForm extends Component {
   render() {
     const {
-      initialValues: { environmentConfigs = [] },
       runtimeEnvironments = [],
+      environmentFormValues: { environmentConfigs = [] } = {},
       anyTouched,
       submitting,
       handleSubmit,
@@ -74,7 +74,7 @@ class EditEnvironmentConfigForm extends Component {
 }
 
 EditEnvironmentConfigForm.propTypes = {
-  initialValues: PropTypes.object,
+  environmentFormValues: PropTypes.object,
   values: PropTypes.array,
   handleSubmit: PropTypes.func.isRequired,
   anyTouched: PropTypes.bool,
@@ -85,7 +85,104 @@ EditEnvironmentConfigForm.propTypes = {
   runtimeEnvironments: PropTypes.object
 };
 
-const validate = () => {};
+const validate = ({ environmentConfigs }) => {
+  const errors = {};
+
+  if (environmentConfigs.length < 1) {
+    errors['_error'] = (
+      <FormattedMessage
+        id="app.editEnvironmentConfigForm.validation.noEnvironments"
+        defaultMessage="Please add at least one environment config for the exercise."
+      />
+    );
+  }
+
+  const environmentConfigsErrors = {};
+  for (let i = 0; i < environmentConfigs.length; ++i) {
+    const environmentErrors = {};
+    if (!environmentConfigs[i]) {
+      environmentErrors['runtimeEnvironmentId'] = (
+        <FormattedMessage
+          id="app.editEnvironmentConfigForm.validation.environments"
+          defaultMessage="Please fill environment information."
+        />
+      );
+    } else {
+      if (!environmentConfigs[i].runtimeEnvironmentId) {
+        environmentErrors['runtimeEnvironmentId'] = (
+          <FormattedMessage
+            id="app.editEnvironmentConfigForm.validation.environments.runtime"
+            defaultMessage="Please select the runtime environment."
+          />
+        );
+      }
+    }
+
+    const variablesErrors = {};
+    const variables = environmentConfigs[i]
+      ? environmentConfigs[i].variablesTable
+      : [];
+    for (let j = 0; j < variables.length; ++j) {
+      const variableErrors = {};
+      if (!variables[j]) {
+        variableErrors['name'] = (
+          <FormattedMessage
+            id="app.editEnvironmentConfigForm.validation.environments.variableNameType"
+            defaultMessage="Please specify variable name, type and value."
+          />
+        );
+      }
+      if (variables[j] && !variables[j].name) {
+        variableErrors['name'] = (
+          <FormattedMessage
+            id="app.editEnvironmentConfigForm.validation.environments.variableName"
+            defaultMessage="Please specify variable name."
+          />
+        );
+      }
+      if (variables[j] && !variables[j].type) {
+        variableErrors['type'] = (
+          <FormattedMessage
+            id="app.editEnvironmentConfigForm.validation.environments.variableType"
+            defaultMessage="Please specify variable type."
+          />
+        );
+      }
+      if (variables[j] && !variables[j].value) {
+        variableErrors['value'] = (
+          <FormattedMessage
+            id="app.editEnvironmentConfigForm.validation.environments.variableValue"
+            defaultMessage="Please specify variable value."
+          />
+        );
+      }
+      variablesErrors[j] = variableErrors;
+    }
+    environmentErrors['variablesTable'] = variablesErrors;
+
+    environmentConfigsErrors[i] = environmentErrors;
+  }
+
+  const environmentArr = environmentConfigs
+    .filter(config => config !== undefined)
+    .map(config => config.runtimeEnvironmentId);
+  for (let i = 0; i < environmentArr.length; ++i) {
+    if (environmentArr.indexOf(environmentArr[i]) !== i) {
+      if (!environmentConfigsErrors[i].runtimeEnvironmentId) {
+        environmentConfigsErrors[i].runtimeEnvironmentId = (
+          <FormattedMessage
+            id="app.editEnvironmentConfigForm.validation.sameEnvironments"
+            defaultMessage="There are more environment specifications for the same environment. Please make sure environments are unique."
+          />
+        );
+      }
+    }
+  }
+
+  errors['environmentConfigs'] = environmentConfigsErrors;
+
+  return errors;
+};
 
 export default reduxForm({
   form: 'editEnvironmentConfig',

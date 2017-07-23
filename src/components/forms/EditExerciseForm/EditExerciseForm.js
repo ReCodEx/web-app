@@ -273,7 +273,9 @@ const validate = ({ name, description, difficulty, localizedTexts }) => {
         />
       );
     }
-    localizedTextsErrors[i] = localeErrors;
+    if (!localizedTextsErrors[i].locale) {
+      localizedTextsErrors[i] = localeErrors;
+    }
   }
   errors['localizedTexts'] = localizedTextsErrors;
 

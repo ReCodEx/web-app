@@ -363,7 +363,9 @@ const validate = ({
         />
       );
     }
-    localizedTextsErrors[i] = localeErrors;
+    if (!localizedTextsErrors[i].locale) {
+      localizedTextsErrors[i] = localeErrors;
+    }
   }
 
   errors['localizedTexts'] = localizedTextsErrors;

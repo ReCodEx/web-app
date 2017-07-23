@@ -29,6 +29,16 @@ const EditEnvironmentConfigVariables = ({
 }) => (
   <div>
     <Table>
+      <thead>
+        <tr>
+          <th>
+            <FormattedMessage
+              id="app.editEnvironmentConfigVariables.variables"
+              defaultMessage="Variables:"
+            />
+          </th>
+        </tr>
+      </thead>
       <tbody>
         {fields.map((variable, index) => (
           <tr key={index}>
