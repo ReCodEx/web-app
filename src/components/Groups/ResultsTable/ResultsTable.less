@@ -1,0 +1,19 @@
+.verticalText {
+  display: inline-block;
+  overflow: hidden;
+  width: 1.5em;
+}
+
+.verticalTextInner {
+  display: inline-block;
+  white-space: nowrap;
+  line-height: 1.5;
+  transform: translate(0, 100%) rotate(-90deg);
+  transform-origin: 0 0;
+}
+
+.verticalTextInner:after {
+  content: "";
+  display: block;
+  margin: -1.5em 0 100%;
+}

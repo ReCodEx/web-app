@@ -3,12 +3,14 @@ import PropTypes from 'prop-types';
 import { List } from 'immutable';
 import { Table } from 'react-bootstrap';
 import { Link } from 'react-router';
+import { FormattedMessage } from 'react-intl';
 
 import ResultsTableRow from './ResultsTableRow';
 import LoadingResultsTableRow from './LoadingResultsTableRow';
 import NoResultsAvailableRow from './NoResultsAvailableRow';
 import withLinks from '../../../hoc/withLinks';
 import ResourceRenderer from '../../helpers/ResourceRenderer';
+import styles from './ResultsTable.less';
 
 const ResultsTable = ({
   assignments = List(),
@@ -27,11 +29,21 @@ const ResultsTable = ({
           <th />
           {assignmentsArray.map(assignment => (
             <th key={assignment.id}>
-              <Link to={SUPERVISOR_STATS_URI_FACTORY(assignment.id)}>
-                {assignment.name}
-              </Link>
+              <div className={styles.verticalText}>
+                <div className={styles.verticalTextInner}>
+                  <Link to={SUPERVISOR_STATS_URI_FACTORY(assignment.id)}>
+                    {assignment.name}
+                  </Link>
+                </div>
+              </div>
             </th>
           ))}
+          <th style={{ textAlign: 'right' }}>
+            <FormattedMessage
+              id="app.resultsTable.total"
+              defaultMessage="Total"
+            />
+          </th>
         </tr>
       </thead>
       <tbody key={'body'}>

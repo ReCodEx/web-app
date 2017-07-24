@@ -9,6 +9,7 @@ import comments from './modules/comments';
 import emailVerification from './modules/emailVerification';
 import evaluationProgress from './modules/evaluationProgress';
 import exerciseConfigs from './modules/exerciseConfigs';
+import exerciseEnvironmentConfigs from './modules/exerciseEnvironmentConfigs';
 import exercises from './modules/exercises';
 import files from './modules/files';
 import filesContent from './modules/filesContent';
@@ -42,6 +43,7 @@ const createRecodexReducers = token => ({
   emailVerification,
   evaluationProgress,
   exerciseConfigs,
+  exerciseEnvironmentConfigs,
   exercises,
   files,
   filesContent,
