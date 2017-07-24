@@ -1,15 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 import { Field } from 'redux-form';
 import { TextField } from '../Fields';
 import EditExerciseConfigVariable from './EditExerciseConfigVariable';
 
-const EditExerciseConfigTest = ({ prefix, tests }) =>
+const EditExerciseConfigTest = ({ prefix, tests, supplementaryFiles }) =>
   <tbody>
     {tests.map((test, index) => [
       <tr key={`${index}.first`}>
         <td style={{ verticalAlign: 'middle' }} rowSpan={2}>
-          <b>{test.name}</b>
+          <b>
+            {test.name}
+          </b>
         </td>
         <td>
           <Field
@@ -26,6 +29,7 @@ const EditExerciseConfigTest = ({ prefix, tests }) =>
               key={`${prefix}.${index}.pipelines.0.variables.${variableIndex}`}
               prefix={`${prefix}.${index}.pipelines.0.variables.${variableIndex}`}
               data={variable}
+              supplementaryFiles={supplementaryFiles}
             />
           )}
       </tr>,
@@ -45,6 +49,7 @@ const EditExerciseConfigTest = ({ prefix, tests }) =>
               key={`${prefix}.${index}.pipelines.1.variables.${variableIndex}`}
               prefix={`${prefix}.${index}.pipelines.1.variables.${variableIndex}`}
               data={variable}
+              supplementaryFiles={supplementaryFiles}
             />
           )}
       </tr>
@@ -53,7 +58,8 @@ const EditExerciseConfigTest = ({ prefix, tests }) =>
 
 EditExerciseConfigTest.propTypes = {
   prefix: PropTypes.string.isRequired,
-  tests: PropTypes.array.isRequired
+  tests: PropTypes.array.isRequired,
+  supplementaryFiles: ImmutablePropTypes.map
 };
 
 export default EditExerciseConfigTest;

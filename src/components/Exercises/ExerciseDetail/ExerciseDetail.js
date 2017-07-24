@@ -15,6 +15,7 @@ import DifficultyIcon from '../DifficultyIcon';
 import withLinks from '../../../hoc/withLinks';
 import UsersNameContainer from '../../../containers/UsersNameContainer';
 import GroupsNameContainer from '../../../containers/GroupsNameContainer';
+import styles from './ExerciseDetail.less';
 
 const ExerciseDetail = ({
   id,
@@ -30,7 +31,7 @@ const ExerciseDetail = ({
   localizedTexts,
   runtimeEnvironments,
   links: { EXERCISE_URI_FACTORY }
-}) => (
+}) =>
   <Box title={name} noPadding>
     <Table>
       <tbody>
@@ -41,7 +42,9 @@ const ExerciseDetail = ({
               defaultMessage="Author:"
             />
           </th>
-          <td><UsersNameContainer userId={authorId} /></td>
+          <td>
+            <UsersNameContainer userId={authorId} />
+          </td>
         </tr>
         {groupId &&
           <tr>
@@ -51,7 +54,9 @@ const ExerciseDetail = ({
                 defaultMessage="Group:"
               />
             </th>
-            <td><GroupsNameContainer groupId={groupId} /></td>
+            <td>
+              <GroupsNameContainer groupId={groupId} />
+            </td>
           </tr>}
         <tr>
           <th>
@@ -60,7 +65,9 @@ const ExerciseDetail = ({
               defaultMessage="Difficulty:"
             />
           </th>
-          <td><DifficultyIcon difficulty={difficulty} /></td>
+          <td>
+            <DifficultyIcon difficulty={difficulty} />
+          </td>
         </tr>
         <tr>
           <th>
@@ -69,7 +76,9 @@ const ExerciseDetail = ({
               defaultMessage="Author's description:"
             />
           </th>
-          <td><ReactMarkdown source={description} /></td>
+          <td>
+            <ReactMarkdown source={description} />
+          </td>
         </tr>
         <tr>
           <th>
@@ -79,8 +88,7 @@ const ExerciseDetail = ({
             />
           </th>
           <td>
-            <FormattedDate value={createdAt * 1000} />
-            {' '}
+            <FormattedDate value={createdAt * 1000} />{' '}
             <FormattedTime value={createdAt * 1000} />
           </td>
         </tr>
@@ -92,8 +100,7 @@ const ExerciseDetail = ({
             />
           </th>
           <td>
-            <FormattedDate value={updatedAt * 1000} />
-            {' '}
+            <FormattedDate value={updatedAt * 1000} />{' '}
             <FormattedTime value={updatedAt * 1000} />
           </td>
         </tr>
@@ -104,7 +111,9 @@ const ExerciseDetail = ({
               defaultMessage="Version:"
             />
           </th>
-          <td>v<FormattedNumber value={version} /></td>
+          <td>
+            v<FormattedNumber value={version} />
+          </td>
         </tr>
         {forkedFrom &&
           <tr>
@@ -116,9 +125,7 @@ const ExerciseDetail = ({
             </th>
             <td>
               <Link to={EXERCISE_URI_FACTORY(forkedFrom.id)}>
-                {forkedFrom.name}
-                {' '}
-                (
+                {forkedFrom.name} (
                 <FormattedNumber value={forkedFrom.version} />
                 )
               </Link>
@@ -132,17 +139,16 @@ const ExerciseDetail = ({
             />
           </th>
           <td>
-            {runtimeEnvironments.map(({ id, name }) => (
-              <span key={id}>
+            {runtimeEnvironments.map(({ id, name }) =>
+              <span key={id} className={styles.environment}>
                 {name}
               </span>
-            ))}
+            )}
           </td>
         </tr>
       </tbody>
     </Table>
-  </Box>
-);
+  </Box>;
 
 ExerciseDetail.propTypes = {
   id: PropTypes.string.isRequired,

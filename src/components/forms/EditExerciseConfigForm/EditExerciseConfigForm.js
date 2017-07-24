@@ -1,26 +1,31 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 import { reduxForm, FieldArray } from 'redux-form';
+import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import { Alert, Button } from 'react-bootstrap';
 import Icon from 'react-fontawesome';
 
 import SubmitButton from '../SubmitButton';
 import EditExerciseConfigEnvironment from './EditExerciseConfigEnvironment';
+import { fetchSupplementaryFilesForExercise } from '../../../redux/modules/supplementaryFiles';
+import { createGetSupplementaryFiles } from '../../../redux/selectors/supplementaryFiles';
 
 class EditExerciseConfigForm extends Component {
   state = { testConfigs: [] };
 
   componentDidMount() {
-    const { initialValues } = this.props;
+    const { initialValues, fetchFiles } = this.props;
     this.setState({ testConfigs: initialValues.config });
+    fetchFiles();
   }
 
-  /* componentWillReceiveProps(newProps) {
-    this.setState({
-      testConfigs: newProps.testConfigs
-    });
-  } */
+  componentWillReceiveProps(newProps) {
+    if (this.props.exercise.id !== newProps.exercise.id) {
+      newProps.fetchFiles();
+    }
+  }
 
   addTest() {
     this.setState((prevState, props) => {
@@ -57,10 +62,10 @@ class EditExerciseConfigForm extends Component {
   render() {
     const {
       runtimeEnvironments,
+      supplementaryFiles,
       anyTouched,
       submitting,
       handleSubmit,
-      // testConfigs,
       hasFailed = false,
       hasSucceeded = false,
       invalid
@@ -79,8 +84,8 @@ class EditExerciseConfigForm extends Component {
           name="config"
           component={EditExerciseConfigEnvironment}
           testConfigs={this.state.testConfigs}
-          // testConfigs={testConfigs}
           runtimeEnvironments={runtimeEnvironments}
+          supplementaryFiles={supplementaryFiles}
         />
 
         <p className="text-center">
@@ -118,8 +123,7 @@ class EditExerciseConfigForm extends Component {
             bsStyle={'primary'}
             className="btn-flat"
           >
-            <Icon name="plus" />
-            {' '}
+            <Icon name="plus" />{' '}
             <FormattedMessage
               id="app.editExerciseConfigForm.addTest"
               defaultMessage="Add new test"
@@ -130,8 +134,7 @@ class EditExerciseConfigForm extends Component {
             bsStyle={'danger'}
             className="btn-flat"
           >
-            <Icon name="minus" />
-            {' '}
+            <Icon name="minus" />{' '}
             <FormattedMessage
               id="app.editExerciseConfigForm.removeLastTest"
               defaultMessage="Remove last test"
@@ -146,19 +149,37 @@ class EditExerciseConfigForm extends Component {
 EditExerciseConfigForm.propTypes = {
   initialValues: PropTypes.object,
   values: PropTypes.array,
-  // testConfigs: PropTypes.array,
   handleSubmit: PropTypes.func.isRequired,
   anyTouched: PropTypes.bool,
   submitting: PropTypes.bool,
   hasFailed: PropTypes.bool,
   hasSucceeded: PropTypes.bool,
   invalid: PropTypes.bool,
-  runtimeEnvironments: PropTypes.object.isRequired
+  runtimeEnvironments: PropTypes.object.isRequired,
+  supplementaryFiles: ImmutablePropTypes.map,
+  fetchFiles: PropTypes.func.isRequired,
+  exercise: PropTypes.shape({
+    id: PropTypes.string.isRequired
+  })
 };
 
 const validate = () => {};
 
+const ConnectedEditExerciseConfigForm = connect(
+  (state, { exercise }) => {
+    const getSupplementaryFilesForExercise = createGetSupplementaryFiles(
+      exercise.supplementaryFilesIds
+    );
+    return {
+      supplementaryFiles: getSupplementaryFilesForExercise(state)
+    };
+  },
+  (dispatch, { exercise }) => ({
+    fetchFiles: () => dispatch(fetchSupplementaryFilesForExercise(exercise.id))
+  })
+)(EditExerciseConfigForm);
+
 export default reduxForm({
   form: 'editExerciseConfig',
   validate
-})(EditExerciseConfigForm);
+})(ConnectedEditExerciseConfigForm);
