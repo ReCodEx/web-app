@@ -53,7 +53,7 @@ class SubmitSolutionContainer extends Component {
       note,
       cancel,
       id,
-      runtimeEnvironmentIds,
+      runtimeEnvironments,
       changeNote,
       canSubmit,
       hasFailed,
@@ -85,7 +85,7 @@ class SubmitSolutionContainer extends Component {
           note={note}
           saveNote={changeNote}
           onClose={cancel}
-          runtimeEnvironmentIds={runtimeEnvironmentIds}
+          runtimeEnvironments={runtimeEnvironments}
           changeRuntimeEnvironment={this.changeRuntimeEnvironment}
           submitSolution={this.submit}
           autodetection={autodetection}
@@ -122,7 +122,7 @@ SubmitSolutionContainer.propTypes = {
   attachedFiles: PropTypes.array,
   reset: PropTypes.func.isRequired,
   links: PropTypes.object.isRequired,
-  runtimeEnvironmentIds: PropTypes.array,
+  runtimeEnvironments: PropTypes.array,
   showProgress: PropTypes.bool,
   autodetection: PropTypes.bool,
   useReferenceSolutionMessages: PropTypes.bool
