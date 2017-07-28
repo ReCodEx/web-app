@@ -5,10 +5,15 @@ import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import Button from '../../components/widgets/FlatButton';
 import { push } from 'react-router-redux';
+import { ButtonGroup } from 'react-bootstrap';
+import { LinkContainer } from 'react-router-bootstrap';
 
+import DeletePipelineButtonContainer from '../../containers/DeletePipelineButtonContainer';
 import Page from '../../components/layout/Page';
 import Box from '../../components/widgets/Box';
-import { AddIcon } from '../../components/icons';
+import { canEditPipeline } from '../../redux/selectors/users';
+import { loggedInUserIdSelector } from '../../redux/selectors/auth';
+import { AddIcon, EditIcon } from '../../components/icons';
 import { pipelinesSelector } from '../../redux/selectors/pipelines';
 import {
   fetchPipelines,
@@ -38,7 +43,11 @@ class Pipelines extends Component {
   };
 
   render() {
-    const { pipelines } = this.props;
+    const {
+      pipelines,
+      isAuthorOfPipeline,
+      links: { PIPELINE_EDIT_URI_FACTORY }
+    } = this.props;
 
     return (
       <Page
@@ -97,7 +106,23 @@ class Pipelines extends Component {
               noPadding
               unlimitedHeight
             >
-              <PipelinesList pipelines={pipelines} />
+              <PipelinesList
+                pipelines={pipelines}
+                createActions={id =>
+                  isAuthorOfPipeline(id) &&
+                  <ButtonGroup>
+                    <LinkContainer to={PIPELINE_EDIT_URI_FACTORY(id)}>
+                      <Button bsSize="xs" bsStyle="warning">
+                        <EditIcon />{' '}
+                        <FormattedMessage
+                          id="app.pipelines.listEdit"
+                          defaultMessage="Edit"
+                        />
+                      </Button>
+                    </LinkContainer>
+                    <DeletePipelineButtonContainer id={id} bsSize="xs" />
+                  </ButtonGroup>}
+              />
             </Box>
           </div>}
       </Page>
@@ -109,15 +134,22 @@ Pipelines.propTypes = {
   loadAsync: PropTypes.func.isRequired,
   pipelines: ImmutablePropTypes.map,
   createPipeline: PropTypes.func.isRequired,
+  isAuthorOfPipeline: PropTypes.func.isRequired,
   push: PropTypes.func.isRequired,
   links: PropTypes.object.isRequired
 };
 
 export default withLinks(
   connect(
-    state => ({
-      pipelines: pipelinesSelector(state)
-    }),
+    state => {
+      const userId = loggedInUserIdSelector(state);
+
+      return {
+        pipelines: pipelinesSelector(state),
+        isAuthorOfPipeline: pipelineId =>
+          canEditPipeline(userId, pipelineId)(state)
+      };
+    },
     dispatch => ({
       push: url => dispatch(push(url)),
       createPipeline: () => dispatch(createPipeline()),

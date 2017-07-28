@@ -4,12 +4,17 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import Button from '../../components/widgets/FlatButton';
+import { ButtonGroup } from 'react-bootstrap';
 import { push } from 'react-router-redux';
+import { LinkContainer } from 'react-router-bootstrap';
+import DeleteExerciseButtonContainer from '../../containers/DeleteExerciseButtonContainer';
 
 import Page from '../../components/layout/Page';
 import Box from '../../components/widgets/Box';
-import { AddIcon } from '../../components/icons';
+import { AddIcon, EditIcon } from '../../components/icons';
 import { exercisesSelector } from '../../redux/selectors/exercises';
+import { canEditExercise } from '../../redux/selectors/users';
+import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import {
   fetchExercises,
   create as createExercise
@@ -38,7 +43,11 @@ class Exercises extends Component {
   };
 
   render() {
-    const { exercises } = this.props;
+    const {
+      exercises,
+      isAuthorOfExercise,
+      links: { EXERCISE_EDIT_URI_FACTORY }
+    } = this.props;
 
     return (
       <Page
@@ -67,7 +76,7 @@ class Exercises extends Component {
           }
         ]}
       >
-        {(...exercises) => (
+        {(...exercises) =>
           <div>
             <Box
               title={
@@ -86,8 +95,7 @@ class Exercises extends Component {
                       this.newExercise();
                     }}
                   >
-                    <AddIcon />
-                    {' '}
+                    <AddIcon />{' '}
                     <FormattedMessage
                       id="app.exercises.add"
                       defaultMessage="Add exercise"
@@ -98,10 +106,25 @@ class Exercises extends Component {
               noPadding
               unlimitedHeight
             >
-              <ExercisesList exercises={exercises} />
+              <ExercisesList
+                exercises={exercises}
+                createActions={id =>
+                  isAuthorOfExercise(id) &&
+                  <ButtonGroup>
+                    <LinkContainer to={EXERCISE_EDIT_URI_FACTORY(id)}>
+                      <Button bsSize="xs" bsStyle="warning">
+                        <EditIcon />{' '}
+                        <FormattedMessage
+                          id="app.exercises.listEdit"
+                          defaultMessage="Edit"
+                        />
+                      </Button>
+                    </LinkContainer>
+                    <DeleteExerciseButtonContainer id={id} bsSize="xs" />
+                  </ButtonGroup>}
+              />
             </Box>
-          </div>
-        )}
+          </div>}
       </Page>
     );
   }
@@ -111,15 +134,22 @@ Exercises.propTypes = {
   loadAsync: PropTypes.func.isRequired,
   exercises: ImmutablePropTypes.map,
   createExercise: PropTypes.func.isRequired,
+  isAuthorOfExercise: PropTypes.func.isRequired,
   push: PropTypes.func.isRequired,
   links: PropTypes.object.isRequired
 };
 
 export default withLinks(
   connect(
-    state => ({
-      exercises: exercisesSelector(state)
-    }),
+    state => {
+      const userId = loggedInUserIdSelector(state);
+
+      return {
+        exercises: exercisesSelector(state),
+        isAuthorOfExercise: exerciseId =>
+          canEditExercise(userId, exerciseId)(state)
+      };
+    },
     dispatch => ({
       push: url => dispatch(push(url)),
       createExercise: () => dispatch(createExercise()),
