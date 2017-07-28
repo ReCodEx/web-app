@@ -11,6 +11,7 @@ import evaluationProgress from './modules/evaluationProgress';
 import exerciseConfigs from './modules/exerciseConfigs';
 import exerciseEnvironmentConfigs from './modules/exerciseEnvironmentConfigs';
 import exercises from './modules/exercises';
+import pipelines from './modules/pipelines';
 import files from './modules/files';
 import filesContent from './modules/filesContent';
 import groups from './modules/groups';
@@ -31,8 +32,7 @@ import runtimeEnvironments from './modules/runtimeEnvironments';
 import supplementaryFiles from './modules/supplementaryFiles';
 import additionalExerciseFiles from './modules/additionalExerciseFiles';
 import referenceSolutions from './modules/referenceSolutions';
-import referenceSolutionEvaluations
-  from './modules/referenceSolutionEvaluations';
+import referenceSolutionEvaluations from './modules/referenceSolutionEvaluations';
 import hwGroups from './modules/hwGroups';
 
 const createRecodexReducers = token => ({
@@ -45,6 +45,7 @@ const createRecodexReducers = token => ({
   exerciseConfigs,
   exerciseEnvironmentConfigs,
   exercises,
+  pipelines,
   files,
   filesContent,
   groups,

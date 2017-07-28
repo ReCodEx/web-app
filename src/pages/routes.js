@@ -29,6 +29,8 @@ import Users from './Users';
 import User from './User';
 import EditUser from './EditUser';
 import ReferenceSolution from './ReferenceSolution';
+import Pipelines from './Pipelines';
+import EditPipeline from './EditPipeline';
 
 import ChangePassword from './ChangePassword';
 import ResetPassword from './ResetPassword';
@@ -86,6 +88,13 @@ const createRoutes = getState => {
                 path="reference-solution/:referenceSolutionId"
                 component={ReferenceSolution}
               />
+            </Route>
+          </Route>
+          <Route path="pipelines">
+            <IndexRoute component={Pipelines} />
+            <Route path=":pipelineId">
+              {/* <IndexRoute component={Pipeline} /> */}
+              <Route path="edit" component={EditPipeline} />
             </Route>
           </Route>
           <Route path="group/:groupId">

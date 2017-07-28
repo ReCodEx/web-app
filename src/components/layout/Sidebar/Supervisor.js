@@ -15,8 +15,8 @@ const Supervisor = ({
   supervisorOf,
   isCollapsed,
   notifications,
-  links: { GROUP_URI_FACTORY, EXERCISES_URI }
-}) => (
+  links: { GROUP_URI_FACTORY, EXERCISES_URI, PIPELINES_URI }
+}) =>
   <ul className="sidebar-menu">
     <MenuTitle
       title={
@@ -51,8 +51,18 @@ const Supervisor = ({
       currentPath={currentUrl}
       link={EXERCISES_URI}
     />
-  </ul>
-);
+    <MenuItem
+      title={
+        <FormattedMessage
+          id="app.sidebar.menu.pipelines"
+          defaultMessage="Pipelines"
+        />
+      }
+      icon="random"
+      currentPath={currentUrl}
+      link={PIPELINES_URI}
+    />
+  </ul>;
 
 Supervisor.propTypes = {
   currentUrl: PropTypes.string.isRequired,

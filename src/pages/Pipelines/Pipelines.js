@@ -4,85 +4,85 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import Button from '../../components/widgets/FlatButton';
-import { ButtonGroup } from 'react-bootstrap';
 import { push } from 'react-router-redux';
+import { ButtonGroup } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
-import DeleteExerciseButtonContainer from '../../containers/DeleteExerciseButtonContainer';
 
+import DeletePipelineButtonContainer from '../../containers/DeletePipelineButtonContainer';
 import Page from '../../components/layout/Page';
 import Box from '../../components/widgets/Box';
-import { AddIcon, EditIcon } from '../../components/icons';
-import { exercisesSelector } from '../../redux/selectors/exercises';
-import { canEditExercise } from '../../redux/selectors/users';
+import { canEditPipeline } from '../../redux/selectors/users';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
+import { AddIcon, EditIcon } from '../../components/icons';
+import { pipelinesSelector } from '../../redux/selectors/pipelines';
 import {
-  fetchExercises,
-  create as createExercise
-} from '../../redux/modules/exercises';
-import ExercisesList from '../../components/Exercises/ExercisesList';
+  fetchPipelines,
+  create as createPipeline
+} from '../../redux/modules/pipelines';
+import PipelinesList from '../../components/Pipelines/PipelinesList';
 
 import withLinks from '../../hoc/withLinks';
 
-class Exercises extends Component {
+class Pipelines extends Component {
   static loadAsync = (params, dispatch) =>
-    Promise.all([dispatch(fetchExercises())]);
+    Promise.all([dispatch(fetchPipelines())]);
 
   componentWillMount() {
     this.props.loadAsync();
   }
 
-  newExercise = () => {
+  newPipeline = () => {
     const {
-      createExercise,
+      createPipeline,
       push,
-      links: { EXERCISE_EDIT_URI_FACTORY }
+      links: { PIPELINE_EDIT_URI_FACTORY }
     } = this.props;
-    createExercise().then(({ value: exercise }) =>
-      push(EXERCISE_EDIT_URI_FACTORY(exercise.id))
+    createPipeline().then(({ value: pipeline }) =>
+      push(PIPELINE_EDIT_URI_FACTORY(pipeline.id))
     );
   };
 
   render() {
     const {
-      exercises,
-      isAuthorOfExercise,
-      links: { EXERCISE_EDIT_URI_FACTORY }
+      pipelines,
+      isAuthorOfPipeline,
+      links: { PIPELINE_EDIT_URI_FACTORY }
     } = this.props;
 
     return (
       <Page
-        resource={exercises.toArray()}
+        resource={pipelines.toArray()}
         title={
           <FormattedMessage
-            id="app.exercises.title"
-            defaultMessage="Exercise list"
+            id="app.pipelines.title"
+            defaultMessage="Pipeline list"
           />
         }
         description={
           <FormattedMessage
-            id="app.instance.description"
-            defaultMessage="List and assign exercises to your groups."
+            id="app.pipelines.description"
+            defaultMessage="List and modify available pipelines."
           />
         }
         breadcrumbs={[
           {
             text: (
               <FormattedMessage
-                id="app.exercises.title"
-                defaultMessage="Exercise list"
+                id="app.pipelines.title"
+                defaultMessage="Pipeline list"
               />
             ),
-            iconName: 'puzzle-piece'
+            iconName: 'random'
           }
         ]}
       >
-        {(...exercises) =>
+        {(...pipelines) =>
           <div>
             <Box
               title={
                 <FormattedMessage
-                  id="app.exercises.listTitle"
-                  defaultMessage="Exercises"
+                  id="app.pipelines.listTitle"
+                  defaultMessage="Pipelines"
                 />
               }
               footer={
@@ -92,13 +92,13 @@ class Exercises extends Component {
                     className="btn-flat"
                     bsSize="sm"
                     onClick={() => {
-                      this.newExercise();
+                      this.newPipeline();
                     }}
                   >
                     <AddIcon />{' '}
                     <FormattedMessage
-                      id="app.exercises.add"
-                      defaultMessage="Add exercise"
+                      id="app.pipelines.add"
+                      defaultMessage="Add pipeline"
                     />
                   </Button>
                 </p>
@@ -106,21 +106,21 @@ class Exercises extends Component {
               noPadding
               unlimitedHeight
             >
-              <ExercisesList
-                exercises={exercises}
+              <PipelinesList
+                pipelines={pipelines}
                 createActions={id =>
-                  isAuthorOfExercise(id) &&
+                  isAuthorOfPipeline(id) &&
                   <ButtonGroup>
-                    <LinkContainer to={EXERCISE_EDIT_URI_FACTORY(id)}>
+                    <LinkContainer to={PIPELINE_EDIT_URI_FACTORY(id)}>
                       <Button bsSize="xs" bsStyle="warning">
                         <EditIcon />{' '}
                         <FormattedMessage
-                          id="app.exercises.listEdit"
+                          id="app.pipelines.listEdit"
                           defaultMessage="Edit"
                         />
                       </Button>
                     </LinkContainer>
-                    <DeleteExerciseButtonContainer id={id} bsSize="xs" />
+                    <DeletePipelineButtonContainer id={id} bsSize="xs" />
                   </ButtonGroup>}
               />
             </Box>
@@ -130,11 +130,11 @@ class Exercises extends Component {
   }
 }
 
-Exercises.propTypes = {
+Pipelines.propTypes = {
   loadAsync: PropTypes.func.isRequired,
-  exercises: ImmutablePropTypes.map,
-  createExercise: PropTypes.func.isRequired,
-  isAuthorOfExercise: PropTypes.func.isRequired,
+  pipelines: ImmutablePropTypes.map,
+  createPipeline: PropTypes.func.isRequired,
+  isAuthorOfPipeline: PropTypes.func.isRequired,
   push: PropTypes.func.isRequired,
   links: PropTypes.object.isRequired
 };
@@ -145,15 +145,15 @@ export default withLinks(
       const userId = loggedInUserIdSelector(state);
 
       return {
-        exercises: exercisesSelector(state),
-        isAuthorOfExercise: exerciseId =>
-          canEditExercise(userId, exerciseId)(state)
+        pipelines: pipelinesSelector(state),
+        isAuthorOfPipeline: pipelineId =>
+          canEditPipeline(userId, pipelineId)(state)
       };
     },
     dispatch => ({
       push: url => dispatch(push(url)),
-      createExercise: () => dispatch(createExercise()),
-      loadAsync: () => Exercises.loadAsync({}, dispatch)
+      createPipeline: () => dispatch(createPipeline()),
+      loadAsync: () => Pipelines.loadAsync({}, dispatch)
     })
-  )(Exercises)
+  )(Pipelines)
 );
