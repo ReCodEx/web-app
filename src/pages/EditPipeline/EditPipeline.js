@@ -83,7 +83,8 @@ class EditPipeline extends Component {
                   <Col lg={12}>
                     <EditPipelineForm
                       initialValues={pipeline}
-                      onSubmit={editPipeline}
+                      onSubmit={formData =>
+                        editPipeline(pipeline.version, formData)}
                     />
                   </Col>
                 </Row>
@@ -150,7 +151,8 @@ export default withLinks(
       push: url => dispatch(push(url)),
       reset: () => dispatch(reset('editPipeline')),
       loadAsync: () => EditPipeline.loadAsync({ pipelineId }, dispatch),
-      editPipeline: data => dispatch(editPipeline(pipelineId, data))
+      editPipeline: (version, data) =>
+        dispatch(editPipeline(pipelineId, { ...data, version }))
     })
   )(EditPipeline)
 );

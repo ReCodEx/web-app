@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { canUseDOM } from 'exenv';
-import { reduxForm, Field } from 'redux-form';
+import { reduxForm, Field, touch } from 'redux-form';
 import { FormattedMessage } from 'react-intl';
 import { Alert } from 'react-bootstrap';
 
@@ -9,6 +9,7 @@ import { TextField, MarkdownTextAreaField } from '../Fields';
 
 import FormBox from '../../widgets/FormBox';
 import SubmitButton from '../SubmitButton';
+import { validatePipeline } from '../../../redux/modules/pipelines';
 
 if (canUseDOM) {
   require('codemirror/mode/yaml/yaml');
@@ -21,7 +22,8 @@ const EditPipelineForm = ({
   handleSubmit,
   submitFailed: hasFailed,
   submitSucceeded: hasSucceeded,
-  invalid
+  invalid,
+  asyncValidating
 }) =>
   <FormBox
     title={
@@ -43,6 +45,7 @@ const EditPipelineForm = ({
           hasSucceeded={hasSucceeded}
           hasFailed={hasFailed}
           handleSubmit={handleSubmit}
+          asyncValidating={asyncValidating}
           messages={{
             submit: (
               <FormattedMessage
@@ -60,6 +63,12 @@ const EditPipelineForm = ({
               <FormattedMessage
                 id="app.editPipelineForm.success"
                 defaultMessage="Settings were saved."
+              />
+            ),
+            validating: (
+              <FormattedMessage
+                id="app.editPipelineForm.validating"
+                defaultMessage="Validating..."
               />
             )
           }}
@@ -106,7 +115,8 @@ EditPipelineForm.propTypes = {
   submitting: PropTypes.bool,
   submitFailed: PropTypes.bool,
   submitSucceeded: PropTypes.bool,
-  invalid: PropTypes.bool
+  invalid: PropTypes.bool,
+  asyncValidating: PropTypes.oneOfType([PropTypes.bool, PropTypes.string])
 };
 
 const validate = ({ name, description }) => {
@@ -133,7 +143,28 @@ const validate = ({ name, description }) => {
   return errors;
 };
 
+const asyncValidate = (values, dispatch, { initialValues: { id, version } }) =>
+  dispatch(validatePipeline(id, version))
+    .then(res => res.value)
+    .then(({ versionIsUpToDate }) => {
+      var errors = {};
+      if (versionIsUpToDate === false) {
+        errors['name'] = (
+          <FormattedMessage
+            id="app.editPipelineForm.validation.versionDiffers"
+            defaultMessage="Somebody has changed the pipeline while you have been editing it. Please reload the page and apply your changes once more."
+          />
+        );
+        dispatch(touch('editPipeline', 'name'));
+      }
+
+      if (Object.keys(errors).length > 0) {
+        throw errors;
+      }
+    });
+
 export default reduxForm({
   form: 'editPipeline',
-  validate
+  validate,
+  asyncValidate
 })(EditPipelineForm);
