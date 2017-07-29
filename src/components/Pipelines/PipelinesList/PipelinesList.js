@@ -19,6 +19,12 @@ const PipelinesList = ({ pipelines = [], createActions }) =>
             defaultMessage="Author"
           />
         </th>
+        <th>
+          <FormattedMessage
+            id="app.pipelinesList.createdAt"
+            defaultMessage="Created"
+          />
+        </th>
       </tr>
     </thead>
     <tbody>

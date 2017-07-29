@@ -7,7 +7,7 @@ import factory, {
 
 import { actionTypes as userActionTypes } from './users';
 
-const resourceName = 'public-profiles';
+const resourceName = 'publicProfiles';
 const { actions, reduceActions } = factory({
   resourceName,
   apiEndpointFactory: userId => `/users/${userId}/public`

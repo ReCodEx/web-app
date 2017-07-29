@@ -4,8 +4,8 @@ import { Table } from 'react-bootstrap';
 import { FormattedMessage } from 'react-intl';
 import UsersListItem from '../UsersListItem';
 
-const UsersList = ({ users = [], createActions, ...rest }) => (
-  <Table>
+const UsersList = ({ users = [], createActions, ...rest }) =>
+  <Table hover>
     <tbody>
       {users
         .sort((a, b) => {
@@ -13,13 +13,13 @@ const UsersList = ({ users = [], createActions, ...rest }) => (
           const bName = b.name.lastName + ' ' + b.name.firstName;
           return aName.localeCompare(bName);
         })
-        .map(user => (
+        .map(user =>
           <UsersListItem
-            {...user}
+            id={user.id}
             createActions={createActions}
             key={user.id}
           />
-        ))}
+        )}
 
       {users.length === 0 &&
         <tr>
@@ -31,8 +31,7 @@ const UsersList = ({ users = [], createActions, ...rest }) => (
           </td>
         </tr>}
     </tbody>
-  </Table>
-);
+  </Table>;
 
 UsersList.propTypes = {
   users: PropTypes.array,
