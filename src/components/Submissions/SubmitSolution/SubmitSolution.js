@@ -43,11 +43,13 @@ const commonMessages = defineMessages({
   },
   instructions: {
     id: 'app.submistSolution.instructions',
-    defaultMessage: 'You must attach at least one file with source code and wait, until all your files are uploaded to the server. If there is a problem uploading any of the files, please try uploading it again or remove the file. This form cannot be submitted until there are any files which have not been successfully uploaded or which could not have been uploaded to the server.'
+    defaultMessage:
+      'You must attach at least one file with source code and wait, until all your files are uploaded to the server. If there is a problem uploading any of the files, please try uploading it again or remove the file. This form cannot be submitted until there are any files which have not been successfully uploaded or which could not have been uploaded to the server.'
   },
   submissionRejected: {
     id: 'app.submistSolution.submitFailed',
-    defaultMessage: 'Action was rejected by the server. This usually means you have uploaded incorrect files - do your files have proper file type extensions? If you cannot submit the solution and there is no obvious reason, contact your administrator to sort things out.'
+    defaultMessage:
+      'Action was rejected by the server. This usually means you have uploaded incorrect files - do your files have proper file type extensions? If you cannot submit the solution and there is no obvious reason, contact your administrator to sort things out.'
   }
 });
 
@@ -99,7 +101,7 @@ const SubmitSolution = ({
   isSending,
   hasFailed,
   note = '',
-  runtimeEnvironmentIds,
+  runtimeEnvironments,
   changeRuntimeEnvironment,
   autodetection,
   saveNote,
@@ -107,7 +109,7 @@ const SubmitSolution = ({
   useReferenceMessages,
   messages,
   intl: { formatMessage }
-}) => (
+}) =>
   <Modal show={isOpen} backdrop="static" onHide={onClose}>
     <Modal.Header closeButton>
       <Modal.Title>
@@ -120,7 +122,7 @@ const SubmitSolution = ({
       </p>
       <UploadContainer id={uploadId} />
 
-      {runtimeEnvironmentIds.length > 0 &&
+      {runtimeEnvironments.length > 0 &&
         <FormGroup>
           <ControlLabel>
             {formatMessage(commonMessages.runtimeEnvironment)}
@@ -135,9 +137,11 @@ const SubmitSolution = ({
                 ? formatMessage(commonMessages.detectRte)
                 : formatMessage(commonMessages.selectOneRte)}
             </option>
-            {runtimeEnvironmentIds.map(rte => (
-              <option key={rte} value={rte}>{rte}</option>
-            ))}
+            {runtimeEnvironments.map(rte =>
+              <option key={rte.id} value={rte.id}>
+                {rte.name}
+              </option>
+            )}
           </FormControl>
         </FormGroup>}
 
@@ -165,9 +169,7 @@ const SubmitSolution = ({
           bsStyle="success"
           className="btn-flat"
         >
-          <LoadingIcon />
-          {' '}
-          {formatMessage(messages.submitting)}
+          <LoadingIcon /> {formatMessage(messages.submitting)}
         </Button>}
 
       {!isSending &&
@@ -178,21 +180,16 @@ const SubmitSolution = ({
           className="btn-flat"
           onClick={submitSolution}
         >
-          {hasFailed ? <WarningIcon /> : <SendIcon />}
-          {' '}
+          {hasFailed ? <WarningIcon /> : <SendIcon />}{' '}
           {formatMessage(messages.submitButton)}
         </Button>}
 
       <Button bsStyle="default" className="btn-flat" onClick={reset}>
-        <DeleteIcon />
-        {' '}
-        {formatMessage(commonMessages.resetForm)}
+        <DeleteIcon /> {formatMessage(commonMessages.resetForm)}
       </Button>
 
       <Button bsStyle="default" className="btn-flat" onClick={onClose}>
-        <CloseIcon />
-        {' '}
-        {formatMessage(commonMessages.closeForm)}
+        <CloseIcon /> {formatMessage(commonMessages.closeForm)}
       </Button>
 
       {!canSubmit &&
@@ -200,8 +197,7 @@ const SubmitSolution = ({
           {formatMessage(commonMessages.instructions)}
         </HelpBlock>}
     </Modal.Footer>
-  </Modal>
-);
+  </Modal>;
 
 SubmitSolution.propTypes = {
   userId: PropTypes.string.isRequired,
@@ -216,7 +212,7 @@ SubmitSolution.propTypes = {
   hasFailed: PropTypes.bool,
   isProcessing: PropTypes.bool,
   isSending: PropTypes.bool,
-  runtimeEnvironmentIds: PropTypes.array,
+  runtimeEnvironments: PropTypes.array,
   autodetection: PropTypes.bool,
   changeRuntimeEnvironment: PropTypes.func.isRequired,
   useReferenceMessages: PropTypes.bool,

@@ -7,8 +7,15 @@ import { Row, Col } from 'react-bootstrap';
 import Box from '../../widgets/Box';
 import AssignmentsTable from '../../Assignments/Assignment/AssignmentsTable';
 import StudentsListContainer from '../../../containers/StudentsListContainer';
+import LeaveJoinGroupButtonContainer
+  from '../../../containers/LeaveJoinGroupButtonContainer';
 
-const StudentsView = ({ group, statuses = [], assignments }) => (
+const StudentsView = ({
+  group,
+  statuses = [],
+  assignments,
+  isAdmin = false
+}) => (
   <div>
     <Row>
       <Col sm={12}>
@@ -55,7 +62,16 @@ const StudentsView = ({ group, statuses = [], assignments }) => (
           unlimitedHeight
           isOpen
         >
-          <StudentsListContainer groupId={group.id} fill />
+          <StudentsListContainer
+            groupId={group.id}
+            renderActions={userId =>
+              isAdmin &&
+              <LeaveJoinGroupButtonContainer
+                userId={userId}
+                groupId={group.id}
+              />}
+            fill
+          />
         </Box>
       </Col>
     </Row>
@@ -65,7 +81,8 @@ const StudentsView = ({ group, statuses = [], assignments }) => (
 StudentsView.propTypes = {
   group: PropTypes.object.isRequired,
   assignments: ImmutablePropTypes.list.isRequired,
-  statuses: PropTypes.oneOfType([PropTypes.object, PropTypes.array])
+  statuses: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
+  isAdmin: PropTypes.bool
 };
 
 export default StudentsView;

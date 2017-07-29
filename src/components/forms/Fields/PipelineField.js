@@ -9,7 +9,7 @@ import {
   HelpBlock
 } from 'react-bootstrap';
 
-import PipelineVisualEditor from '../../Exercises/PipelineVisualEditor';
+import PipelineVisualEditor from '../../Pipelines/PipelineVisualEditor';
 
 const PipelineField = ({
   input,
@@ -22,7 +22,9 @@ const PipelineField = ({
     controlId={input.name}
     validationState={touched && error ? 'error' : undefined}
   >
-    <ControlLabel>{label}</ControlLabel>
+    <ControlLabel>
+      {label}
+    </ControlLabel>
     <FormControl
       {...input}
       {...props}
@@ -31,7 +33,11 @@ const PipelineField = ({
       style={{ fontFamily: 'mono' }}
     />
     <PipelineVisualEditor source={input.value} onChange={input.onChange} />
-    {touched && error && <HelpBlock>{error}</HelpBlock>}
+    {touched &&
+      error &&
+      <HelpBlock>
+        {error}
+      </HelpBlock>}
   </FormGroup>;
 
 PipelineField.propTypes = {

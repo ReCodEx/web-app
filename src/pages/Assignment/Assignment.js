@@ -13,6 +13,7 @@ import {
   init,
   submitAssignmentSolution as submitSolution
 } from '../../redux/modules/submission';
+import { fetchRuntimeEnvironmentIfNeeded } from '../../redux/modules/runtimeEnvironments';
 
 import {
   getAssignment,
@@ -26,13 +27,12 @@ import {
   isStudentOf,
   isSupervisorOf
 } from '../../redux/selectors/users';
+import { runtimeEnvironmentSelector } from '../../redux/selectors/runtimeEnvironments';
 
 import PageContent from '../../components/layout/PageContent';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import UsersNameContainer from '../../containers/UsersNameContainer';
-import {
-  ResubmitAllSolutionsContainer
-} from '../../containers/ResubmitSolutionContainer';
+import { ResubmitAllSolutionsContainer } from '../../containers/ResubmitSolutionContainer';
 import AssignmentDetails, {
   LoadingAssignmentDetails,
   FailedAssignmentDetails
@@ -40,18 +40,22 @@ import AssignmentDetails, {
 
 import { EditIcon, ResultsIcon } from '../../components/icons';
 import LocalizedTexts from '../../components/helpers/LocalizedTexts';
-import SubmitSolutionButton
-  from '../../components/Assignments/SubmitSolutionButton';
+import SubmitSolutionButton from '../../components/Assignments/SubmitSolutionButton';
 import SubmitSolutionContainer from '../../containers/SubmitSolutionContainer';
-import SubmissionsTableContainer
-  from '../../containers/SubmissionsTableContainer';
+import SubmissionsTableContainer from '../../containers/SubmissionsTableContainer';
 
 import withLinks from '../../hoc/withLinks';
 
 class Assignment extends Component {
   static loadAsync = ({ assignmentId }, dispatch) =>
     Promise.all([
-      dispatch(fetchAssignmentIfNeeded(assignmentId)),
+      dispatch(fetchAssignmentIfNeeded(assignmentId))
+        .then(res => res.value)
+        .then(({ runtimeEnvironmentsIds }) =>
+          runtimeEnvironmentsIds.map(id =>
+            dispatch(fetchRuntimeEnvironmentIfNeeded(id))
+          )
+        ),
       dispatch(canSubmit(assignmentId))
     ]);
 
@@ -80,7 +84,7 @@ class Assignment extends Component {
       isStudentOf,
       isSupervisorOf,
       canSubmit,
-      runtimeEnvironmentIds,
+      runtimeEnvironments,
       links: { ASSIGNMENT_EDIT_URI_FACTORY, SUPERVISOR_STATS_URI_FACTORY }
     } = this.props;
 
@@ -88,7 +92,10 @@ class Assignment extends Component {
       <PageContent
         title={
           <ResourceRenderer resource={assignment}>
-            {assignment => <span>{assignment.name}</span>}
+            {assignment =>
+              <span>
+                {assignment.name}
+              </span>}
           </ResourceRenderer>
         }
         description={
@@ -128,7 +135,7 @@ class Assignment extends Component {
           failed={<FailedAssignmentDetails />}
           resource={assignment}
         >
-          {assignment => (
+          {assignment =>
             <div>
               <Row>
                 <Col xs={12}>
@@ -142,8 +149,7 @@ class Assignment extends Component {
                         to={ASSIGNMENT_EDIT_URI_FACTORY(assignment.id)}
                       >
                         <Button bsStyle="warning">
-                          <EditIcon />
-                          {' '}
+                          <EditIcon />{' '}
                           <FormattedMessage
                             id="app.assignment.editSettings"
                             defaultMessage="Edit assignment settings"
@@ -154,8 +160,7 @@ class Assignment extends Component {
                         to={SUPERVISOR_STATS_URI_FACTORY(assignment.id)}
                       >
                         <Button bsStyle="primary">
-                          <ResultsIcon />
-                          {' '}
+                          <ResultsIcon />{' '}
                           <FormattedMessage
                             id="app.assignment.viewResults"
                             defaultMessage="View student results"
@@ -185,6 +190,7 @@ class Assignment extends Component {
                       assignment.secondDeadline
                     )}
                     canSubmit={canSubmit}
+                    runtimeEnvironments={runtimeEnvironments}
                   />
 
                   {isStudentOf(assignment.groupId) &&
@@ -194,12 +200,11 @@ class Assignment extends Component {
                           loading={<SubmitSolutionButton disabled={true} />}
                           resource={canSubmit}
                         >
-                          {canSubmit => (
+                          {canSubmit =>
                             <SubmitSolutionButton
                               onClick={init(assignment.id)}
                               disabled={!canSubmit}
-                            />
-                          )}
+                            />}
                         </ResourceRenderer>
                       </p>
                       <SubmitSolutionContainer
@@ -208,7 +213,7 @@ class Assignment extends Component {
                         onSubmit={submitSolution}
                         onReset={init}
                         isOpen={submitting}
-                        runtimeEnvironmentIds={runtimeEnvironmentIds}
+                        runtimeEnvironments={runtimeEnvironments}
                       />
 
                       <SubmissionsTableContainer
@@ -218,8 +223,7 @@ class Assignment extends Component {
                     </div>}
                 </Col>
               </Row>
-            </div>
-          )}
+            </div>}
         </ResourceRenderer>
       </PageContent>
     );
@@ -241,7 +245,7 @@ Assignment.propTypes = {
   init: PropTypes.func.isRequired,
   loadAsync: PropTypes.func.isRequired,
   links: PropTypes.object.isRequired,
-  runtimeEnvironmentIds: PropTypes.array
+  runtimeEnvironments: PropTypes.array
 };
 
 export default withLinks(
@@ -253,7 +257,9 @@ export default withLinks(
       return {
         assignment: assignmentSelector(state),
         submitting: isSubmitting(state),
-        runtimeEnvironmentIds: environments(state).toJS(),
+        runtimeEnvironments: environments(state)
+          .toJS()
+          .map(i => runtimeEnvironmentSelector(i)(state)),
         userId,
         loggeInUserId: loggedInUserIdSelector(state),
         isSuperAdmin: isSuperAdmin(userId)(state),

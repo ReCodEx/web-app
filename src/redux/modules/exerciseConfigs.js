@@ -13,9 +13,7 @@ const { actions, reduceActions } = factory({
 
 export const fetchExerciseConfig = actions.fetchResource;
 export const fetchExerciseConfigIfNeeded = actions.fetchOneIfNeeded;
-
-export const setExerciseConfig = (id, body) =>
-  actions.updateResource(id, body, `/exercises/${id}/config`);
+export const setExerciseConfig = actions.updateResource;
 
 const reducer = handleActions(reduceActions, initialState);
 export default reducer;

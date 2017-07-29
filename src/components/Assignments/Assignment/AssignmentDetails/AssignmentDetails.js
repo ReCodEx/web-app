@@ -25,9 +25,9 @@ const AssignmentDetails = ({
   isAfterFirstDeadline,
   isAfterSecondDeadline,
   isBonus,
-  runtimeEnvironmentsIds,
+  runtimeEnvironments,
   canSubmit
-}) => (
+}) =>
   <Box
     title={
       <FormattedMessage id="app.assignment.title" defaultMessage="Details" />
@@ -57,13 +57,10 @@ const AssignmentDetails = ({
           </td>
           <td>
             <strong>
-              <FormattedDate value={new Date(firstDeadline * 1000)} />
-              {' '}
-              &nbsp;
-              {' '}
+              <FormattedDate value={new Date(firstDeadline * 1000)} /> &nbsp;{' '}
               <FormattedTime value={new Date(firstDeadline * 1000)} />
-            </strong>
-            {' '}(<FormattedRelative value={new Date(firstDeadline * 1000)} />)
+            </strong>{' '}
+            (<FormattedRelative value={new Date(firstDeadline * 1000)} />)
           </td>
         </tr>
         {allowSecondDeadline &&
@@ -86,13 +83,9 @@ const AssignmentDetails = ({
             </td>
             <td>
               <strong>
-                <FormattedDate value={new Date(secondDeadline * 1000)} />
-                {' '}
-                &nbsp;
-                {' '}
+                <FormattedDate value={new Date(secondDeadline * 1000)} /> &nbsp;{' '}
                 <FormattedTime value={new Date(secondDeadline * 1000)} />
-              </strong>
-              {' '}
+              </strong>{' '}
               (
               <FormattedRelative value={new Date(secondDeadline * 1000)} />
               )
@@ -112,8 +105,8 @@ const AssignmentDetails = ({
             {!isAfterFirstDeadline
               ? maxPointsBeforeFirstDeadline
               : !isAfterSecondDeadline && allowSecondDeadline
-                  ? maxPointsBeforeSecondDeadline
-                  : 0}
+                ? maxPointsBeforeSecondDeadline
+                : 0}
           </td>
         </tr>
         <tr>
@@ -172,13 +165,16 @@ const AssignmentDetails = ({
             />
           </td>
           <td>
-            {runtimeEnvironmentsIds.map(env => <Label key={env}>{env}</Label>)}
+            {runtimeEnvironments.map(env =>
+              <Label key={env.id}>
+                {env.name}
+              </Label>
+            )}
           </td>
         </tr>
       </tbody>
     </Table>
-  </Box>
-);
+  </Box>;
 
 AssignmentDetails.propTypes = {
   isOpen: PropTypes.bool,
@@ -191,7 +187,7 @@ AssignmentDetails.propTypes = {
   isAfterFirstDeadline: PropTypes.bool.isRequired,
   isAfterSecondDeadline: PropTypes.bool.isRequired,
   isBonus: PropTypes.bool,
-  runtimeEnvironmentsIds: PropTypes.array,
+  runtimeEnvironments: PropTypes.array,
   canSubmit: ImmutablePropTypes.map
 };
 

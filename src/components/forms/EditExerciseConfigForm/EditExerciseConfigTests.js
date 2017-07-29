@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 import { FieldArray } from 'redux-form';
 import { FormattedMessage } from 'react-intl';
 import { Table } from 'react-bootstrap';
@@ -9,8 +10,9 @@ const EditExerciseConfigTests = ({
   prefix,
   i,
   testConfigs,
-  runtimeEnvironments
-}) => (
+  runtimeEnvironments,
+  supplementaryFiles
+}) =>
   <div>
     <Table>
       <thead>
@@ -39,16 +41,17 @@ const EditExerciseConfigTests = ({
             : []
         }
         prefix={`${prefix}.tests`}
+        supplementaryFiles={supplementaryFiles}
       />
     </Table>
-  </div>
-);
+  </div>;
 
 EditExerciseConfigTests.propTypes = {
   prefix: PropTypes.string.isRequired,
   i: PropTypes.number.isRequired,
   testConfigs: PropTypes.array.isRequired,
-  runtimeEnvironments: PropTypes.object.isRequired
+  runtimeEnvironments: PropTypes.object.isRequired,
+  supplementaryFiles: ImmutablePropTypes.map
 };
 
 export default EditExerciseConfigTests;

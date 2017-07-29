@@ -6,7 +6,7 @@ import AddBoxForm from './AddBoxForm';
 import PipelineVisualisation from '../PipelineVisualisation';
 
 class PipelineVisualEditor extends Component {
-  state = { source: null, graph: null };
+  state = { source: '[]', graph: { dependencies: [], nodes: [] } };
 
   componentWillMount = () => {
     const { source } = this.props;

@@ -98,6 +98,6 @@ export const convertGraphToDot = ({ nodes, dependencies }) => {
 };
 
 export const convertGraphToSvg = graph => {
-  const dot = convertGraphToDot(graph);
+  const dot = graph ? convertGraphToDot(graph) : '';
   return Viz(dot);
 };

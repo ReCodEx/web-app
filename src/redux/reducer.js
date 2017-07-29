@@ -9,14 +9,16 @@ import comments from './modules/comments';
 import emailVerification from './modules/emailVerification';
 import evaluationProgress from './modules/evaluationProgress';
 import exerciseConfigs from './modules/exerciseConfigs';
+import exerciseEnvironmentConfigs from './modules/exerciseEnvironmentConfigs';
 import exercises from './modules/exercises';
+import pipelines from './modules/pipelines';
 import files from './modules/files';
 import filesContent from './modules/filesContent';
 import groups from './modules/groups';
+import groupResults from './modules/groupResults';
 import instances from './modules/instances';
 import licences from './modules/licences';
 import notifications from './modules/notifications';
-import pipelines from './modules/pipelines';
 import publicProfiles from './modules/publicProfiles';
 import { default as search } from './modules/search'; // because of a named export 'search'
 import sidebar from './modules/sidebar';
@@ -41,14 +43,16 @@ const createRecodexReducers = token => ({
   emailVerification,
   evaluationProgress,
   exerciseConfigs,
+  exerciseEnvironmentConfigs,
   exercises,
+  pipelines,
   files,
   filesContent,
   groups,
+  groupResults,
   instances,
   licences,
   notifications,
-  pipelines,
   publicProfiles,
   search,
   sidebar,

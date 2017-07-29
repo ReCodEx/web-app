@@ -18,27 +18,21 @@ import ExerciseDetail from '../../components/Exercises/ExerciseDetail';
 import LocalizedTexts from '../../components/helpers/LocalizedTexts';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import GroupsList from '../../components/Groups/GroupsList';
-import ReferenceSolutionsList
-  from '../../components/Exercises/ReferenceSolutionsList';
+import ReferenceSolutionsList from '../../components/Exercises/ReferenceSolutionsList';
 import SubmitSolutionContainer from '../../containers/SubmitSolutionContainer';
 import Box from '../../components/widgets/Box';
 import { EditIcon, SendIcon } from '../../components/icons';
 
-import ForkExerciseButtonContainer
-  from '../../containers/ForkExerciseButtonContainer';
+import ForkExerciseButtonContainer from '../../containers/ForkExerciseButtonContainer';
 
 import { isSubmitting } from '../../redux/selectors/submission';
 import { fetchExerciseIfNeeded } from '../../redux/modules/exercises';
-import {
-  fetchReferenceSolutionsIfNeeded
-} from '../../redux/modules/referenceSolutions';
+import { fetchReferenceSolutionsIfNeeded } from '../../redux/modules/referenceSolutions';
 import { createReferenceSolution, init } from '../../redux/modules/submission';
 import { fetchHardwareGroups } from '../../redux/modules/hwGroups';
 import { create as assignExercise } from '../../redux/modules/assignments';
 import { exerciseSelector } from '../../redux/selectors/exercises';
-import {
-  referenceSolutionsSelector
-} from '../../redux/selectors/referenceSolutions';
+import { referenceSolutionsSelector } from '../../redux/selectors/referenceSolutions';
 import { canEditExercise } from '../../redux/selectors/users';
 
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
@@ -149,7 +143,7 @@ class Exercise extends Component {
           }
         ]}
       >
-        {exercise => (
+        {exercise =>
           <div>
             <Row>
               <Col sm={12}>
@@ -201,24 +195,21 @@ class Exercise extends Component {
                     forceLoading={supervisedGroups.length === 0}
                     resource={supervisedGroups}
                   >
-                    {() => (
+                    {() =>
                       <GroupsList
                         groups={supervisedGroups}
-                        renderButtons={groupId => (
+                        renderButtons={groupId =>
                           <Button
                             bsSize="xs"
                             onClick={() => this.assignExercise(groupId)}
                           >
-                            <SendIcon />
-                            {' '}
+                            <SendIcon />{' '}
                             <FormattedMessage
                               id="app.exercise.assign"
                               defaultMessage="Assign"
                             />
-                          </Button>
-                        )}
-                      />
-                    )}
+                          </Button>}
+                      />}
                   </ResourceRenderer>
                 </Box>
               </Col>
@@ -245,7 +236,7 @@ class Exercise extends Component {
                       referenceSolutions.length > 0
                         ? <ReferenceSolutionsList
                             referenceSolutions={referenceSolutions}
-                            renderButtons={evaluationId => (
+                            renderButtons={evaluationId =>
                               <Button
                                 bsSize="xs"
                                 onClick={() =>
@@ -256,14 +247,12 @@ class Exercise extends Component {
                                     )
                                   )}
                               >
-                                <SendIcon />
-                                {' '}
+                                <SendIcon />{' '}
                                 <FormattedMessage
                                   id="app.exercise.referenceSolutionDetail"
                                   defaultMessage="View detail"
                                 />
-                              </Button>
-                            )}
+                              </Button>}
                           />
                         : <p className="text-center">
                             <FormattedMessage
@@ -279,17 +268,14 @@ class Exercise extends Component {
                   onSubmit={createReferenceSolution}
                   onReset={init}
                   isOpen={submitting}
-                  runtimeEnvironmentIds={exercise.runtimeConfigs.map(
-                    cfg => cfg.runtimeEnvironmentId
-                  )}
+                  runtimeEnvironments={exercise.runtimeEnvironments}
                   showProgress={false}
                   autodetection={false}
                   useReferenceSolutionMessages={true}
                 />
               </Col>
             </Row>
-          </div>
-        )}
+          </div>}
       </Page>
     );
   }

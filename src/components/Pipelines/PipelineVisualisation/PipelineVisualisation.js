@@ -12,8 +12,8 @@ const PipelineVisualisation = ({ graph, variables }) => {
 };
 
 PipelineVisualisation.propTypes = {
-  graph: PropTypes.object.isRequired,
-  variables: PropTypes.array.isRequired
+  graph: PropTypes.object,
+  variables: PropTypes.array
 };
 
 export default PipelineVisualisation;

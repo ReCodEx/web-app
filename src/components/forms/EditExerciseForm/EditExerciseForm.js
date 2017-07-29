@@ -264,23 +264,23 @@ const validate = ({ name, description, difficulty, localizedTexts }) => {
     .filter(text => text !== undefined)
     .map(text => text.locale);
   for (let i = 0; i < localeArr.length; ++i) {
-    const localeErrors = {};
     if (localeArr.indexOf(localeArr[i]) !== i) {
-      localeErrors['locale'] = (
-        <FormattedMessage
-          id="app.editExerciseForm.validation.sameLocalizedTexts"
-          defaultMessage="There are more language variants with the same locale. Please make sure locales are unique."
-        />
-      );
+      if (!localizedTextsErrors[i].locale) {
+        localizedTextsErrors[i].locale = (
+          <FormattedMessage
+            id="app.editExerciseForm.validation.sameLocalizedTexts"
+            defaultMessage="There are more language variants with the same locale. Please make sure locales are unique."
+          />
+        );
+      }
     }
-    localizedTextsErrors[i] = localeErrors;
   }
   errors['localizedTexts'] = localizedTextsErrors;
 
   return errors;
 };
 
-const asyncValidate = (values, dispatch, { exercise: { id, version } }) =>
+const asyncValidate = (values, dispatch, { initialValues: { id, version } }) =>
   dispatch(validateExercise(id, version))
     .then(res => res.value)
     .then(({ versionIsUpToDate }) => {

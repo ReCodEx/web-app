@@ -6,16 +6,16 @@ import {
   FormattedTime,
   FormattedDate
 } from 'react-intl';
-import { Table, OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { Table } from 'react-bootstrap';
 import ReactMarkdown from 'react-markdown';
 import { Link } from 'react-router';
 import Box from '../../widgets/Box';
 import DifficultyIcon from '../DifficultyIcon';
-import { MaybeSucceededIcon } from '../../icons';
 
 import withLinks from '../../../hoc/withLinks';
 import UsersNameContainer from '../../../containers/UsersNameContainer';
 import GroupsNameContainer from '../../../containers/GroupsNameContainer';
+import styles from './ExerciseDetail.less';
 
 const ExerciseDetail = ({
   id,
@@ -29,9 +29,9 @@ const ExerciseDetail = ({
   version,
   forkedFrom = null,
   localizedTexts,
-  runtimeConfigs,
+  runtimeEnvironments,
   links: { EXERCISE_URI_FACTORY }
-}) => (
+}) =>
   <Box title={name} noPadding>
     <Table>
       <tbody>
@@ -42,7 +42,9 @@ const ExerciseDetail = ({
               defaultMessage="Author:"
             />
           </th>
-          <td><UsersNameContainer userId={authorId} /></td>
+          <td>
+            <UsersNameContainer userId={authorId} />
+          </td>
         </tr>
         {groupId &&
           <tr>
@@ -52,7 +54,9 @@ const ExerciseDetail = ({
                 defaultMessage="Group:"
               />
             </th>
-            <td><GroupsNameContainer groupId={groupId} /></td>
+            <td>
+              <GroupsNameContainer groupId={groupId} />
+            </td>
           </tr>}
         <tr>
           <th>
@@ -61,7 +65,9 @@ const ExerciseDetail = ({
               defaultMessage="Difficulty:"
             />
           </th>
-          <td><DifficultyIcon difficulty={difficulty} /></td>
+          <td>
+            <DifficultyIcon difficulty={difficulty} />
+          </td>
         </tr>
         <tr>
           <th>
@@ -70,7 +76,9 @@ const ExerciseDetail = ({
               defaultMessage="Author's description:"
             />
           </th>
-          <td><ReactMarkdown source={description} /></td>
+          <td>
+            <ReactMarkdown source={description} />
+          </td>
         </tr>
         <tr>
           <th>
@@ -80,8 +88,7 @@ const ExerciseDetail = ({
             />
           </th>
           <td>
-            <FormattedDate value={createdAt * 1000} />
-            {' '}
+            <FormattedDate value={createdAt * 1000} />{' '}
             <FormattedTime value={createdAt * 1000} />
           </td>
         </tr>
@@ -93,8 +100,7 @@ const ExerciseDetail = ({
             />
           </th>
           <td>
-            <FormattedDate value={updatedAt * 1000} />
-            {' '}
+            <FormattedDate value={updatedAt * 1000} />{' '}
             <FormattedTime value={updatedAt * 1000} />
           </td>
         </tr>
@@ -105,7 +111,9 @@ const ExerciseDetail = ({
               defaultMessage="Version:"
             />
           </th>
-          <td>v<FormattedNumber value={version} /></td>
+          <td>
+            v<FormattedNumber value={version} />
+          </td>
         </tr>
         {forkedFrom &&
           <tr>
@@ -117,9 +125,7 @@ const ExerciseDetail = ({
             </th>
             <td>
               <Link to={EXERCISE_URI_FACTORY(forkedFrom.id)}>
-                {forkedFrom.name}
-                {' '}
-                (
+                {forkedFrom.name} (
                 <FormattedNumber value={forkedFrom.version} />
                 )
               </Link>
@@ -133,36 +139,16 @@ const ExerciseDetail = ({
             />
           </th>
           <td>
-            {runtimeConfigs.map(({ id, name, isValid }) => (
-              <p key={id}>
-                <OverlayTrigger
-                  placement="left"
-                  overlay={
-                    <Tooltip id={id}>
-                      {isValid
-                        ? <FormattedMessage
-                            id="app.exercise.runtimes.isValid"
-                            defaultMessage="Configuration is valid"
-                          />
-                        : <FormattedMessage
-                            id="app.exercise.runtimes.isNotValid"
-                            defaultMessage="Configuration is not valid"
-                          />}
-                    </Tooltip>
-                  }
-                >
-                  <span>
-                    <MaybeSucceededIcon success={isValid} />&nbsp;{name}
-                  </span>
-                </OverlayTrigger>
-              </p>
-            ))}
+            {runtimeEnvironments.map(({ id, name }) =>
+              <span key={id} className={styles.environment}>
+                {name}
+              </span>
+            )}
           </td>
         </tr>
       </tbody>
     </Table>
-  </Box>
-);
+  </Box>;
 
 ExerciseDetail.propTypes = {
   id: PropTypes.string.isRequired,
@@ -176,7 +162,7 @@ ExerciseDetail.propTypes = {
   version: PropTypes.number.isRequired,
   forkedFrom: PropTypes.object,
   localizedTexts: PropTypes.array.isRequired,
-  runtimeConfigs: PropTypes.array.isRequired,
+  runtimeEnvironments: PropTypes.array.isRequired,
   links: PropTypes.object
 };
 

@@ -4,6 +4,7 @@ import { List } from 'immutable';
 import { loggedInUserIdSelector } from './auth';
 import { groupSelector, studentsOfGroup, supervisorsOfGroup } from './groups';
 import { exerciseSelector } from './exercises';
+import { pipelineSelector } from './pipelines';
 import { isReady, getJsData } from '../helpers/resourceManager';
 
 const getUsers = state => state.users.get('resources');
@@ -138,6 +139,16 @@ export const canEditExercise = (userId, exerciseId) =>
         exercise.getIn(['data', 'authorId']) === userId)
   );
 
+export const canEditPipeline = (userId, pipelineId) =>
+  createSelector(
+    [pipelineSelector(pipelineId), isSuperAdmin(userId)],
+    (pipeline, isSuperAdmin) =>
+      isSuperAdmin ||
+      (pipeline &&
+        isReady(pipeline) &&
+        pipeline.getIn(['data', 'author']) === userId)
+  );
+
 export const notificationsSelector = createSelector(
   loggedInUserSelector,
   user =>
@@ -145,7 +156,8 @@ export const notificationsSelector = createSelector(
       ? user.getIn(['data', 'groupsStats']).reduce(
           (notifications, group) =>
             Object.assign({}, notifications, {
-              [group.id]: group.stats.assignments.total -
+              [group.id]:
+                group.stats.assignments.total -
                 group.stats.assignments.completed -
                 group.stats.assignments.missed
             }),

@@ -32,7 +32,15 @@ export const linksFactory = lang => {
     exerciseId,
     referenceSolutionId
   ) =>
-    `${EXERCISE_URI_FACTORY(exerciseId)}/reference-solution/${referenceSolutionId}`;
+    `${EXERCISE_URI_FACTORY(
+      exerciseId
+    )}/reference-solution/${referenceSolutionId}`;
+
+  // pipeline details
+  const PIPELINES_URI = `${prefix}/app/pipelines`;
+  const PIPELINE_CREATE_URI_FACTORY = () => `${PIPELINES_URI}`;
+  const PIPELINE_URI_FACTORY = id => `${PIPELINES_URI}/${id}`;
+  const PIPELINE_EDIT_URI_FACTORY = id => `${PIPELINE_URI_FACTORY(id)}/edit`;
 
   // assignments and solution submissions
   const ASSIGNMENT_DETAIL_URI_FACTORY = id => `${prefix}/app/assignment/${id}`;
@@ -80,6 +88,10 @@ export const linksFactory = lang => {
     EXERCISE_EDIT_URI_FACTORY,
     EXERCISE_CREATE_URI_FACTORY,
     EXERCISE_REFERENCE_SOLUTION_URI_FACTORY,
+    PIPELINES_URI,
+    PIPELINE_URI_FACTORY,
+    PIPELINE_EDIT_URI_FACTORY,
+    PIPELINE_CREATE_URI_FACTORY,
     ASSIGNMENT_EDIT_URI_FACTORY,
     ASSIGNMENT_DETAIL_URI_FACTORY,
     ASSIGNMENT_DETAIL_SPECIFIC_USER_URI_FACTORY,
@@ -122,6 +134,8 @@ export const isAbsolute = url => url.match('^(https?:)?//.+') !== null;
 export const makeAbsolute = url =>
   typeof window === 'undefined'
     ? url
-    : `${window.location.origin}/${url.indexOf('/') === 0 ? url.substr(1) : url}`;
+    : `${window.location.origin}/${url.indexOf('/') === 0
+        ? url.substr(1)
+        : url}`;
 
 export const absolute = url => (isAbsolute(url) ? url : makeAbsolute(url));
