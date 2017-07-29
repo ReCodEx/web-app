@@ -14,8 +14,7 @@ import {
 
 import { SettingsIcon, SearchIcon } from '../../components/icons';
 import Button from '../../components/widgets/FlatButton';
-import DeleteUserButtonContainer
-  from '../../containers/DeleteUserButtonContainer';
+import DeleteUserButtonContainer from '../../containers/DeleteUserButtonContainer';
 import Page from '../../components/layout/Page';
 import Box from '../../components/widgets/Box';
 import UsersList from '../../components/Users/UsersList';
@@ -43,7 +42,8 @@ class Users extends Component {
     const filteredUsers = allUsers.filter(
       user =>
         user.name.lastName.toLocaleLowerCase().startsWith(normalizedQuery) ||
-        user.fullName.toLocaleLowerCase().startsWith(normalizedQuery)
+        user.fullName.toLocaleLowerCase().startsWith(normalizedQuery) ||
+        user.id.toLocaleLowerCase().startsWith(normalizedQuery)
     );
     this.setState({
       visibleUsers: filteredUsers
@@ -74,7 +74,7 @@ class Users extends Component {
           }
         ]}
       >
-        {(...users) => (
+        {(...users) =>
           <div>
             <Box
               title={
@@ -118,12 +118,11 @@ class Users extends Component {
                 </form>
                 <UsersList
                   users={this.state.visibleUsers}
-                  createActions={userId => (
+                  createActions={userId =>
                     <div>
                       <LinkContainer to={EDIT_USER_URI_FACTORY(userId)}>
                         <Button bsSize="xs" className="btn-flat">
-                          <SettingsIcon />
-                          {' '}
+                          <SettingsIcon />{' '}
                           <FormattedMessage
                             id="app.users.settings"
                             defaultMessage="Settings"
@@ -131,13 +130,11 @@ class Users extends Component {
                         </Button>
                       </LinkContainer>
                       <DeleteUserButtonContainer id={userId} bsSize="xs" />
-                    </div>
-                  )}
+                    </div>}
                 />
               </div>
             </Box>
-          </div>
-        )}
+          </div>}
       </Page>
     );
   }
@@ -147,8 +144,7 @@ Users.propTypes = {
   loadAsync: PropTypes.func.isRequired,
   push: PropTypes.func.isRequired,
   links: PropTypes.object.isRequired,
-  users: ImmutablePropTypes.map,
-  query: PropTypes.string
+  users: ImmutablePropTypes.map
 };
 
 export default withLinks(

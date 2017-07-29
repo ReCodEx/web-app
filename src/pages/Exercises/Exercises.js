@@ -4,14 +4,20 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import Button from '../../components/widgets/FlatButton';
-import { ButtonGroup } from 'react-bootstrap';
 import { push } from 'react-router-redux';
 import { LinkContainer } from 'react-router-bootstrap';
 import DeleteExerciseButtonContainer from '../../containers/DeleteExerciseButtonContainer';
+import {
+  FormGroup,
+  ControlLabel,
+  FormControl,
+  InputGroup,
+  ButtonGroup
+} from 'react-bootstrap';
 
 import Page from '../../components/layout/Page';
 import Box from '../../components/widgets/Box';
-import { AddIcon, EditIcon } from '../../components/icons';
+import { AddIcon, EditIcon, SearchIcon } from '../../components/icons';
 import { exercisesSelector } from '../../redux/selectors/exercises';
 import { canEditExercise } from '../../redux/selectors/users';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
@@ -29,6 +35,27 @@ class Exercises extends Component {
 
   componentWillMount() {
     this.props.loadAsync();
+    this.setState({ visibleExercises: [] });
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      visibleExercises: nextProps.exercises
+        .toArray()
+        .map(exercise => exercise.toJS().data)
+    });
+  }
+
+  onChange(query, allExercises) {
+    const normalizedQuery = query.toLocaleLowerCase();
+    const filteredExercises = allExercises.filter(
+      exercise =>
+        exercise.name.toLocaleLowerCase().startsWith(normalizedQuery) ||
+        exercise.id.toLocaleLowerCase().startsWith(normalizedQuery)
+    );
+    this.setState({
+      visibleExercises: filteredExercises
+    });
   }
 
   newExercise = () => {
@@ -106,23 +133,54 @@ class Exercises extends Component {
               noPadding
               unlimitedHeight
             >
-              <ExercisesList
-                exercises={exercises}
-                createActions={id =>
-                  isAuthorOfExercise(id) &&
-                  <ButtonGroup>
-                    <LinkContainer to={EXERCISE_EDIT_URI_FACTORY(id)}>
-                      <Button bsSize="xs" bsStyle="warning">
-                        <EditIcon />{' '}
-                        <FormattedMessage
-                          id="app.exercises.listEdit"
-                          defaultMessage="Edit"
-                        />
-                      </Button>
-                    </LinkContainer>
-                    <DeleteExerciseButtonContainer id={id} bsSize="xs" />
-                  </ButtonGroup>}
-              />
+              <div>
+                <form style={{ padding: '10px' }}>
+                  <FormGroup>
+                    <ControlLabel>
+                      <FormattedMessage
+                        id="app.search.title"
+                        defaultMessage="Search:"
+                      />
+                    </ControlLabel>
+                    <InputGroup>
+                      <FormControl
+                        onChange={e => {
+                          this.query = e.target.value;
+                        }}
+                      />
+                      <InputGroup.Button>
+                        <Button
+                          type="submit"
+                          onClick={e => {
+                            e.preventDefault();
+                            this.onChange(this.query, exercises);
+                          }}
+                          disabled={false}
+                        >
+                          <SearchIcon />
+                        </Button>
+                      </InputGroup.Button>
+                    </InputGroup>
+                  </FormGroup>
+                </form>
+                <ExercisesList
+                  exercises={this.state.visibleExercises}
+                  createActions={id =>
+                    isAuthorOfExercise(id) &&
+                    <ButtonGroup>
+                      <LinkContainer to={EXERCISE_EDIT_URI_FACTORY(id)}>
+                        <Button bsSize="xs" bsStyle="warning">
+                          <EditIcon />{' '}
+                          <FormattedMessage
+                            id="app.exercises.listEdit"
+                            defaultMessage="Edit"
+                          />
+                        </Button>
+                      </LinkContainer>
+                      <DeleteExerciseButtonContainer id={id} bsSize="xs" />
+                    </ButtonGroup>}
+                />
+              </div>
             </Box>
           </div>}
       </Page>
