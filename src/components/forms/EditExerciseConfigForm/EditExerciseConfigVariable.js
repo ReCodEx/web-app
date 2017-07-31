@@ -34,7 +34,7 @@ const EditExerciseConfigVariable = ({ prefix, data, supplementaryFiles }) =>
                 label={''}
                 options={[{ key: '', name: '...' }].concat(
                   supplementaryFiles
-                    .sort((a, b) => (a.name < b.name ? -1 : +(a.name > b.name))) // sort lexicographicaly
+                    .sort((a, b) => a.name.localeCompare(b.name))
                     .map(data => {
                       const obj = {};
                       obj['key'] = data.hashName;

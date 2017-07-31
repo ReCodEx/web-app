@@ -27,7 +27,7 @@ const AttachedFilesTable = ({
   uploadId,
   HeaderComponent,
   RowComponent
-}) => (
+}) =>
   <Box title={title} collapsable isOpen>
     <div>
       {description &&
@@ -42,8 +42,7 @@ const AttachedFilesTable = ({
             disabled={!canSubmit}
             onClick={() => addFiles(newFiles)}
           >
-            <SendIcon />
-            {' '}
+            <SendIcon />{' '}
             <FormattedMessage
               id="app.attachedFilesTable.addFiles"
               defaultMessage="Save files"
@@ -52,7 +51,7 @@ const AttachedFilesTable = ({
         </p>}
 
       <ResourceRenderer resource={attachments.toArray()}>
-        {(...attachments) => (
+        {(...attachments) =>
           <div>
             {attachments.length > 0 &&
               <Table responsive>
@@ -61,25 +60,22 @@ const AttachedFilesTable = ({
                 </thead>
                 <tbody>
                   {attachments
-                    .sort((a, b) => (a.name < b.name ? -1 : +(a.name > b.name))) // sort lexicographicaly
+                    .sort((a, b) => a.name.localeCompare(b.name))
                     .map((data, i) => <RowComponent {...data} key={data.id} />)}
                 </tbody>
               </Table>}
             {attachments.length === 0 &&
               <p className="text-center">
-                <Icon name="folder-open-o" />
-                {' '}
+                <Icon name="folder-open-o" />{' '}
                 <FormattedMessage
                   id="app.attachedFilesTable.empty"
                   defaultMessage="There are no uploaded files yet."
                 />
               </p>}
-          </div>
-        )}
+          </div>}
       </ResourceRenderer>
     </div>
-  </Box>
-);
+  </Box>;
 
 AttachedFilesTable.propTypes = {
   title: PropTypes.oneOfType([

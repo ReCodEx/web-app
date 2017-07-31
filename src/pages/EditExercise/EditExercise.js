@@ -22,6 +22,7 @@ import {
   fetchExerciseIfNeeded,
   editExercise
 } from '../../redux/modules/exercises';
+import { fetchPipelines } from '../../redux/modules/pipelines';
 import {
   fetchExerciseConfigIfNeeded,
   setExerciseConfig
@@ -31,6 +32,7 @@ import {
   setExerciseEnvironmentConfig
 } from '../../redux/modules/exerciseEnvironmentConfigs';
 import { getExercise } from '../../redux/selectors/exercises';
+import { pipelinesSelector } from '../../redux/selectors/pipelines';
 import { isSubmitting } from '../../redux/selectors/submission';
 import { exerciseConfigSelector } from '../../redux/selectors/exerciseConfigs';
 import { exerciseEnvironmentConfigSelector } from '../../redux/selectors/exerciseEnvironmentConfigs';
@@ -54,7 +56,8 @@ class EditExercise extends Component {
       dispatch(fetchExerciseIfNeeded(exerciseId)),
       dispatch(fetchExerciseConfigIfNeeded(exerciseId)),
       dispatch(fetchRuntimeEnvironments()),
-      dispatch(fetchExerciseEnvironmentConfigIfNeeded(exerciseId))
+      dispatch(fetchExerciseEnvironmentConfigIfNeeded(exerciseId)),
+      dispatch(fetchPipelines())
     ]);
 
   render() {
@@ -70,6 +73,7 @@ class EditExercise extends Component {
       environmentFormValues,
       exerciseConfig,
       exerciseEnvironmentConfig,
+      pipelines,
       push
     } = this.props;
 
@@ -179,6 +183,7 @@ class EditExercise extends Component {
                         initialValues={{ config: config }}
                         onSubmit={setConfig}
                         exercise={exercise}
+                        pipelines={pipelines}
                       />}
                   </ResourceRenderer>
                 </Box>
@@ -231,6 +236,7 @@ EditExercise.propTypes = {
   environmentFormValues: PropTypes.object,
   exerciseConfig: PropTypes.object,
   exerciseEnvironmentConfig: PropTypes.object,
+  pipelines: ImmutablePropTypes.map,
   links: PropTypes.object.isRequired,
   push: PropTypes.func.isRequired
 };
@@ -248,7 +254,8 @@ export default withLinks(
         exerciseConfig: exerciseConfigSelector(exerciseId)(state),
         exerciseEnvironmentConfig: exerciseEnvironmentConfigSelector(
           exerciseId
-        )(state)
+        )(state),
+        pipelines: pipelinesSelector(state)
       };
     },
     (dispatch, { params: { exerciseId } }) => ({
