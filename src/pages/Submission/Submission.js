@@ -3,15 +3,15 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 
-import PageContent from '../../components/layout/PageContent';
+import Page from '../../components/layout/Page';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import SubmissionDetail, {
   FailedSubmissionDetail
 } from '../../components/Submissions/SubmissionDetail';
 import AcceptSolutionContainer from '../../containers/AcceptSolutionContainer';
-import ResubmitSolutionContainer
-  from '../../containers/ResubmitSolutionContainer';
+import ResubmitSolutionContainer from '../../containers/ResubmitSolutionContainer';
 
+import { fetchGroupsStats } from '../../redux/modules/stats';
 import { fetchAssignmentIfNeeded } from '../../redux/modules/assignments';
 import { fetchSubmissionIfNeeded } from '../../redux/modules/submissions';
 import { getSubmission } from '../../redux/selectors/submissions';
@@ -28,6 +28,8 @@ class Submission extends Component {
     Promise.all([
       dispatch(fetchSubmissionIfNeeded(submissionId)),
       dispatch(fetchAssignmentIfNeeded(assignmentId))
+        .then(res => res.value)
+        .then(assignment => dispatch(fetchGroupsStats(assignment.groupId)))
     ]);
 
   componentWillMount() {
@@ -49,12 +51,9 @@ class Submission extends Component {
     } = this.props;
 
     return (
-      <PageContent
-        title={
-          <ResourceRenderer resource={assignment} noIcons>
-            {assignmentData => <span>{assignmentData.name}</span>}
-          </ResourceRenderer>
-        }
+      <Page
+        resource={assignment}
+        title={assignment => assignment.name}
         description={
           <FormattedMessage
             id="app.submission.evaluation.title"
@@ -102,7 +101,7 @@ class Submission extends Component {
           failed={<FailedSubmissionDetail />}
           resource={[submission, assignment]}
         >
-          {(submission, assignment) => (
+          {(submission, assignment) =>
             <div>
               {isSupervisorOrMore(assignment.groupId) &&
                 <p>
@@ -117,10 +116,9 @@ class Submission extends Component {
                 assignment={assignment}
                 isSupervisor={isSupervisorOrMore(assignment.groupId)}
               />
-            </div>
-          )}
+            </div>}
         </ResourceRenderer>
-      </PageContent>
+      </Page>
     );
   }
 }
