@@ -18,7 +18,10 @@ import AssignmentsTable from '../../components/Assignments/Assignment/Assignment
 import UsersStats from '../../components/Users/UsersStats';
 import { fetchAssignmentsForGroup } from '../../redux/modules/assignments';
 import { fetchUserIfNeeded } from '../../redux/modules/users';
-import { fetchGroupsIfNeeded } from '../../redux/modules/groups';
+import {
+  fetchGroupsIfNeeded,
+  fetchInstanceGroupsIfNeeded
+} from '../../redux/modules/groups';
 
 import {
   getUser,
@@ -35,7 +38,8 @@ import { createGroupsStatsSelector } from '../../redux/selectors/stats';
 import {
   groupsAssignmentsSelector,
   supervisorOfSelector,
-  studentOfSelector
+  studentOfSelector,
+  groupsSelectors
 } from '../../redux/selectors/groups';
 import { InfoIcon } from '../../components/icons';
 import { getJsData } from '../../redux/helpers/resourceManager';
@@ -67,14 +71,21 @@ class Dashboard extends Component {
         const state = getState();
         const user = getJsData(getUser(userId)(state));
         const groups = user.groups.studentOf.concat(user.groups.supervisorOf);
+        const isAdmin = isSuperAdmin(userId)(state);
 
         return dispatch(fetchGroupsIfNeeded(...groups)).then(groups =>
           Promise.all(
-            groups.map(({ value: group }) =>
-              Promise.all([
-                dispatch(fetchAssignmentsForGroup(group.id)),
-                dispatch(fetchGroupsStatsIfNeeded(group.id))
-              ])
+            [
+              isAdmin
+                ? dispatch(fetchInstanceGroupsIfNeeded(user.instanceId))
+                : Promise.resolve()
+            ].concat(
+              groups.map(({ value: group }) =>
+                Promise.all([
+                  dispatch(fetchAssignmentsForGroup(group.id)),
+                  dispatch(fetchGroupsStatsIfNeeded(group.id))
+                ])
+              )
             )
           )
         );
@@ -93,6 +104,8 @@ class Dashboard extends Component {
       groupAssignments,
       groupStatistics,
       usersStatistics,
+      allGroups,
+      isAdmin,
       links: { GROUP_URI_FACTORY, INSTANCE_URI_FACTORY }
     } = this.props;
 
@@ -212,7 +225,12 @@ class Dashboard extends Component {
                     />
                   </h2>
 
-                  <SisSupervisorGroupsContainer />
+                  <ResourceRenderer
+                    resource={isAdmin ? allGroups : supervisorOf}
+                  >
+                    {(...groups) =>
+                      <SisSupervisorGroupsContainer groups={groups} />}
+                  </ResourceRenderer>
 
                   <ResourceRenderer resource={supervisorOf}>
                     {(...groups) =>
@@ -330,6 +348,8 @@ Dashboard.propTypes = {
   groupAssignments: PropTypes.func.isRequired,
   groupStatistics: PropTypes.func.isRequired,
   usersStatistics: PropTypes.func.isRequired,
+  allGroups: PropTypes.array,
+  isAdmin: PropTypes.bool,
   links: PropTypes.object
 };
 
@@ -352,7 +372,9 @@ export default withLinks(
         groupAssignments: groupId => groupsAssignmentsSelector(groupId)(state),
         groupStatistics: groupId => createGroupsStatsSelector(groupId)(state),
         usersStatistics: statistics =>
-          statistics.find(stat => stat.userId === userId) || {}
+          statistics.find(stat => stat.userId === userId) || {},
+        allGroups: groupsSelectors(state).toArray(),
+        isAdmin: isSuperAdmin(userId)(state)
       };
     },
     (dispatch, { params }) => ({

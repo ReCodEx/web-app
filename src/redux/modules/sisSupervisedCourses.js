@@ -20,7 +20,10 @@ export const actionTypes = {
   FETCH: 'recodex/sisSupervisedCourses/FETCH',
   FETCH_PENDING: 'recodex/sisSupervisedCourses/FETCH_PENDING',
   FETCH_REJECTED: 'recodex/sisSupervisedCourses/FETCH_REJECTED',
-  FETCH_FULFILLED: 'recodex/sisSupervisedCourses/FETCH_FULFILLED'
+  FETCH_FULFILLED: 'recodex/sisSupervisedCourses/FETCH_FULFILLED',
+  CREATE: 'recodex/sisSupervisedCourses/CREATE',
+  BIND: 'recodex/sisSupervisedCourses/BIND',
+  BIND_FULFILLED: 'recodex/sisSupervisedCourses/BIND_FULFILLED'
 };
 
 export const fetchSisSupervisedCourses = (userId, year, term) =>
@@ -29,6 +32,24 @@ export const fetchSisSupervisedCourses = (userId, year, term) =>
     method: 'GET',
     endpoint: `/extensions/sis/users/${userId}/supervised-courses/${year}/${term}`,
     meta: { userId, year, term }
+  });
+
+export const sisCreateGroup = (courseId, data) =>
+  createApiAction({
+    type: actionTypes.CREATE,
+    method: 'POST',
+    endpoint: `/extensions/sis/remote-courses/${courseId}/create`,
+    meta: { courseId },
+    body: { ...data }
+  });
+
+export const sisBindGroup = (courseId, data, userId, year, term) =>
+  createApiAction({
+    type: actionTypes.BIND,
+    method: 'POST',
+    endpoint: `/extensions/sis/remote-courses/${courseId}/bind`,
+    meta: { courseId, userId, year, term },
+    body: { ...data }
   });
 
 const reducer = handleActions(

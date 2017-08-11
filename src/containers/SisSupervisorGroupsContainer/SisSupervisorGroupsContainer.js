@@ -3,17 +3,23 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import Box from '../../components/widgets/Box';
-import { Table, Accordion, Panel } from 'react-bootstrap';
+import { Table, Accordion, Panel, Row, Col } from 'react-bootstrap';
 import Button from '../../components/widgets/FlatButton';
 import { LinkContainer } from 'react-router-bootstrap';
 import Icon from 'react-fontawesome';
 
 import { fetchSisStatusIfNeeded } from '../../redux/modules/sisStatus';
-import { fetchSisSupervisedCourses } from '../../redux/modules/sisSupervisedCourses';
+import {
+  fetchSisSupervisedCourses,
+  sisCreateGroup,
+  sisBindGroup
+} from '../../redux/modules/sisSupervisedCourses';
 import { sisStateSelector } from '../../redux/selectors/sisStatus';
 import { sisSupervisedCoursesSelector } from '../../redux/selectors/sisSupervisedCourses';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
+import SisCreateGroupForm from '../../components/forms/SisCreateGroupForm';
+import SisBindGroupForm from '../../components/forms/SisBindGroupForm';
 
 import withLinks from '../../hoc/withLinks';
 
@@ -39,7 +45,15 @@ class SisSupervisorGroupsContainer extends Component {
   };
 
   render() {
-    const { sisStatus, sisCourses, links: { GROUP_URI_FACTORY } } = this.props;
+    const {
+      sisStatus,
+      sisCourses,
+      groups,
+      currentUserId,
+      createGroup,
+      bindGroup,
+      links: { GROUP_URI_FACTORY }
+    } = this.props;
     return (
       <Box
         title={
@@ -164,6 +178,39 @@ class SisSupervisorGroupsContainer extends Component {
                                               />
                                             </b>
                                           </div>}
+                                      <Row>
+                                        <Col xs={6}>
+                                          <SisCreateGroupForm
+                                            form={
+                                              'sisCreateGroup' +
+                                              course.course.code
+                                            }
+                                            onSubmit={data =>
+                                              createGroup(
+                                                course.course.code,
+                                                data
+                                              )}
+                                            groups={groups}
+                                          />
+                                        </Col>
+                                        <Col xs={6}>
+                                          <SisBindGroupForm
+                                            form={
+                                              'sisBindGroup' +
+                                              course.course.code
+                                            }
+                                            onSubmit={data =>
+                                              bindGroup(
+                                                course.course.code,
+                                                data,
+                                                currentUserId,
+                                                term.year,
+                                                term.term
+                                              )}
+                                            groups={groups}
+                                          />
+                                        </Col>
+                                      </Row>
                                     </Panel>
                                   )}
                               </Accordion>
@@ -189,8 +236,11 @@ class SisSupervisorGroupsContainer extends Component {
 SisSupervisorGroupsContainer.propTypes = {
   sisStatus: PropTypes.object,
   currentUserId: PropTypes.string,
+  groups: PropTypes.array,
   loadData: PropTypes.func.isRequired,
   sisCourses: PropTypes.func.isRequired,
+  createGroup: PropTypes.func.isRequired,
+  bindGroup: PropTypes.func.isRequired,
   links: PropTypes.object
 };
 
@@ -207,7 +257,10 @@ export default withLinks(
     },
     dispatch => ({
       loadData: loggedInUserId =>
-        SisSupervisorGroupsContainer.loadData(dispatch, loggedInUserId)
+        SisSupervisorGroupsContainer.loadData(dispatch, loggedInUserId),
+      createGroup: (courseId, data) => dispatch(sisCreateGroup(courseId, data)),
+      bindGroup: (courseId, data, userId, year, term) =>
+        dispatch(sisBindGroup(courseId, data, userId, year, term))
     })
   )(SisSupervisorGroupsContainer)
 );
