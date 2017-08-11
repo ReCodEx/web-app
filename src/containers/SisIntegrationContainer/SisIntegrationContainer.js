@@ -76,68 +76,79 @@ class SisIntegrationContainer extends Component {
                       />{' '}
                       {`${term.year}-${term.term}`}
                     </h4>
-                    <Table hover>
-                      <thead>
-                        <tr>
-                          <th>
-                            <FormattedMessage
-                              id="app.sisIntegration.groupName"
-                              defaultMessage="Name"
-                            />
-                          </th>
-                          <th>
-                            <FormattedMessage
-                              id="app.sisIntegration.groupExtId"
-                              defaultMessage="SIS ID"
-                            />
-                          </th>
-                          <th />
-                        </tr>
-                      </thead>
-                      <ResourceRenderer
-                        resource={sisGroups(term.year, term.term)}
-                      >
-                        {groups =>
-                          <tbody>
-                            {groups &&
-                              groups.map((group, i) =>
-                                <tr key={i}>
-                                  <td>
-                                    {group.name}
-                                  </td>
-                                  <td>
-                                    <code>
-                                      {group.externalId}
-                                    </code>
-                                  </td>
-                                  <td className="text-right">
-                                    <span>
-                                      <LinkContainer
-                                        to={GROUP_URI_FACTORY(group.id)}
-                                      >
-                                        <Button
-                                          bsStyle="primary"
-                                          bsSize="xs"
-                                          className="btn-flat"
-                                        >
-                                          <Icon name="group" />{' '}
-                                          <FormattedMessage
-                                            id="app.sisIntegration.groupDetail"
-                                            defaultMessage="See group's page"
-                                          />
-                                        </Button>
-                                      </LinkContainer>
-                                      <LeaveJoinGroupButtonContainer
-                                        userId={currentUserId}
-                                        groupId={group.id}
+                    <ResourceRenderer
+                      resource={sisGroups(term.year, term.term)}
+                    >
+                      {groups =>
+                        <div>
+                          {groups && groups.length > 0
+                            ? <Table hover>
+                                <thead>
+                                  <tr>
+                                    <th>
+                                      <FormattedMessage
+                                        id="app.sisIntegration.groupName"
+                                        defaultMessage="Name"
                                       />
-                                    </span>
-                                  </td>
-                                </tr>
-                              )}
-                          </tbody>}
-                      </ResourceRenderer>
-                    </Table>
+                                    </th>
+                                    <th>
+                                      <FormattedMessage
+                                        id="app.sisIntegration.groupExtId"
+                                        defaultMessage="SIS ID"
+                                      />
+                                    </th>
+                                    <th />
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  {groups &&
+                                    groups.map((group, i) =>
+                                      <tr key={i}>
+                                        <td>
+                                          {group.name}
+                                        </td>
+                                        <td>
+                                          <code>
+                                            {group.externalId}
+                                          </code>
+                                        </td>
+                                        <td className="text-right">
+                                          <span>
+                                            <LinkContainer
+                                              to={GROUP_URI_FACTORY(group.id)}
+                                            >
+                                              <Button
+                                                bsStyle="primary"
+                                                bsSize="xs"
+                                                className="btn-flat"
+                                              >
+                                                <Icon name="group" />{' '}
+                                                <FormattedMessage
+                                                  id="app.sisIntegration.groupDetail"
+                                                  defaultMessage="See group's page"
+                                                />
+                                              </Button>
+                                            </LinkContainer>
+                                            <LeaveJoinGroupButtonContainer
+                                              userId={currentUserId}
+                                              groupId={group.id}
+                                            />
+                                          </span>
+                                        </td>
+                                      </tr>
+                                    )}
+                                </tbody>
+                              </Table>
+                            : <div className="text-center">
+                                <b>
+                                  <FormattedMessage
+                                    id="app.sisIntegration.noSisGroups"
+                                    defaultMessage="Currently there are no ReCodEx groups matching your SIS subjects for this time period."
+                                  />
+                                </b>
+                              </div>}
+                        </div>}
+                    </ResourceRenderer>
                   </div>
                 )}
             </div>}
