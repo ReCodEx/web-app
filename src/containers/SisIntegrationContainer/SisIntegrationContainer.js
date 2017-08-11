@@ -3,11 +3,20 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import Box from '../../components/widgets/Box';
+import { Table } from 'react-bootstrap';
+import Button from '../../components/widgets/FlatButton';
+import { LinkContainer } from 'react-router-bootstrap';
+import Icon from 'react-fontawesome';
 
 import { fetchSisStatusIfNeeded } from '../../redux/modules/sisStatus';
+import { fetchSisSubscribedGroups } from '../../redux/modules/sisSubscribedGroups';
 import { sisStateSelector } from '../../redux/selectors/sisStatus';
+import { sisSubscribedGroupsSelector } from '../../redux/selectors/sisSubscribedGroups';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
+import LeaveJoinGroupButtonContainer from '../LeaveJoinGroupButtonContainer';
+
+import withLinks from '../../hoc/withLinks';
 
 class SisIntegrationContainer extends Component {
   componentWillMount() {
@@ -15,17 +24,32 @@ class SisIntegrationContainer extends Component {
   }
 
   static loadData = (dispatch, loggedInUserId) => {
-    dispatch((dispatch, getState) => dispatch(fetchSisStatusIfNeeded()));
+    dispatch((dispatch, getState) =>
+      dispatch(fetchSisStatusIfNeeded())
+        .then(res => res.value)
+        .then(status =>
+          status.terms.map(term =>
+            dispatch(
+              fetchSisSubscribedGroups(loggedInUserId, term.year, term.term)
+            )
+          )
+        )
+    );
   };
 
   render() {
-    const { sisStatus, currentUserId } = this.props;
+    const {
+      sisStatus,
+      currentUserId,
+      sisGroups,
+      links: { GROUP_URI_FACTORY }
+    } = this.props;
     return (
       <Box
         title={
           <FormattedMessage
-            id="app.dashboard.sisIntegration"
-            defaultMessage="SIS integration"
+            id="app.dashboard.sisGroups"
+            defaultMessage="SIS groups with ReCodEx mapping"
           />
         }
         collapsable
@@ -42,7 +66,80 @@ class SisIntegrationContainer extends Component {
                     defaultMessage="Your account does not support SIS integration. Please, log in using CAS-UK."
                   />
                 </div>}
-              {console.log(sisStatus)}
+              {sisStatus.accessible &&
+                sisStatus.terms.map((term, i) =>
+                  <div key={i}>
+                    <h4 style={{ paddingLeft: '10px' }}>
+                      <FormattedMessage
+                        id="app.sisIntegration.yearTerm"
+                        defaultMessage="Year and term:"
+                      />{' '}
+                      {`${term.year}-${term.term}`}
+                    </h4>
+                    <Table hover>
+                      <thead>
+                        <tr>
+                          <th>
+                            <FormattedMessage
+                              id="app.sisIntegration.groupName"
+                              defaultMessage="Name"
+                            />
+                          </th>
+                          <th>
+                            <FormattedMessage
+                              id="app.sisIntegration.groupExtId"
+                              defaultMessage="SIS ID"
+                            />
+                          </th>
+                          <th />
+                        </tr>
+                      </thead>
+                      <ResourceRenderer
+                        resource={sisGroups(term.year, term.term)}
+                      >
+                        {groups =>
+                          <tbody>
+                            {groups &&
+                              groups.map((group, i) =>
+                                <tr key={i}>
+                                  <td>
+                                    {group.name}
+                                  </td>
+                                  <td>
+                                    <code>
+                                      {group.externalId}
+                                    </code>
+                                  </td>
+                                  <td className="text-right">
+                                    <span>
+                                      <LinkContainer
+                                        to={GROUP_URI_FACTORY(group.id)}
+                                      >
+                                        <Button
+                                          bsStyle="primary"
+                                          bsSize="xs"
+                                          className="btn-flat"
+                                        >
+                                          <Icon name="group" />{' '}
+                                          <FormattedMessage
+                                            id="app.sisIntegration.groupDetail"
+                                            defaultMessage="See group's page"
+                                          />
+                                        </Button>
+                                      </LinkContainer>
+                                      <LeaveJoinGroupButtonContainer
+                                        userId={currentUserId}
+                                        groupId={group.id}
+                                      />
+                                    </span>
+                                  </td>
+                                </tr>
+                              )}
+                          </tbody>}
+                      </ResourceRenderer>
+                    </Table>
+                  </div>
+                )}
             </div>}
         </ResourceRenderer>
       </Box>
@@ -53,16 +150,25 @@ class SisIntegrationContainer extends Component {
 SisIntegrationContainer.propTypes = {
   sisStatus: PropTypes.object,
   currentUserId: PropTypes.string,
-  loadData: PropTypes.func.isRequired
+  loadData: PropTypes.func.isRequired,
+  sisGroups: PropTypes.func.isRequired,
+  links: PropTypes.object
 };
 
-export default connect(
-  state => ({
-    sisStatus: sisStateSelector(state),
-    currentUserId: loggedInUserIdSelector(state)
-  }),
-  dispatch => ({
-    loadData: loggedInUserId =>
-      SisIntegrationContainer.loadData(dispatch, loggedInUserId)
-  })
-)(SisIntegrationContainer);
+export default withLinks(
+  connect(
+    state => {
+      const currentUserId = loggedInUserIdSelector(state);
+      return {
+        sisStatus: sisStateSelector(state),
+        currentUserId,
+        sisGroups: (year, term) =>
+          sisSubscribedGroupsSelector(currentUserId, year, term)(state)
+      };
+    },
+    dispatch => ({
+      loadData: loggedInUserId =>
+        SisIntegrationContainer.loadData(dispatch, loggedInUserId)
+    })
+  )(SisIntegrationContainer)
+);

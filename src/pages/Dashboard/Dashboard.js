@@ -128,8 +128,6 @@ class Dashboard extends Component {
               <UsersNameContainer userId={user.id} large noLink />
             </p>
 
-            <SisIntegrationContainer />
-
             {studentOfGroupsIds.length > 0 &&
               <ResourceRenderer resource={studentOf}>
                 {(...groups) =>
@@ -140,6 +138,8 @@ class Dashboard extends Component {
                         defaultMessage="Groups you are student of"
                       />
                     </h2>
+
+                    <SisIntegrationContainer />
 
                     {groups.map(group =>
                       <div key={group.id}>
