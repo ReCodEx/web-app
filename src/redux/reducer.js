@@ -36,6 +36,7 @@ import referenceSolutionEvaluations from './modules/referenceSolutionEvaluations
 import hwGroups from './modules/hwGroups';
 import sisStatus from './modules/sisStatus';
 import sisSubscribedGroups from './modules/sisSubscribedGroups';
+import sisSupervisedCourses from './modules/sisSupervisedCourses';
 
 const createRecodexReducers = token => ({
   auth: auth(token),
@@ -71,7 +72,8 @@ const createRecodexReducers = token => ({
   hwGroups,
   additionalExerciseFiles,
   sisStatus,
-  sisSubscribedGroups
+  sisSubscribedGroups,
+  sisSupervisedCourses
 });
 
 const librariesReducers = {

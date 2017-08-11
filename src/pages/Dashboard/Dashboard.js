@@ -40,6 +40,7 @@ import {
 import { InfoIcon } from '../../components/icons';
 import { getJsData } from '../../redux/helpers/resourceManager';
 import SisIntegrationContainer from '../../containers/SisIntegrationContainer';
+import SisSupervisorGroupsContainer from '../../containers/SisSupervisorGroupsContainer';
 
 import withLinks from '../../hoc/withLinks';
 
@@ -210,6 +211,9 @@ class Dashboard extends Component {
                       defaultMessage="Groups you supervise"
                     />
                   </h2>
+
+                  <SisSupervisorGroupsContainer />
+
                   <ResourceRenderer resource={supervisorOf}>
                     {(...groups) =>
                       <div>

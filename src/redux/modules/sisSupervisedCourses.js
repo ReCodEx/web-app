@@ -1,0 +1,57 @@
+import { handleActions } from 'redux-actions';
+import factory, {
+  initialState,
+  createRecord,
+  resourceStatus
+} from '../helpers/resourceManager';
+import { createApiAction } from '../middleware/apiMiddleware';
+import { fromJS } from 'immutable';
+
+/**
+ * Create actions & reducer
+ */
+
+const resourceName = 'sisSupervisedCourses';
+const { reduceActions } = factory({
+  resourceName
+});
+
+export const actionTypes = {
+  FETCH: 'recodex/sisSupervisedCourses/FETCH',
+  FETCH_PENDING: 'recodex/sisSupervisedCourses/FETCH_PENDING',
+  FETCH_REJECTED: 'recodex/sisSupervisedCourses/FETCH_REJECTED',
+  FETCH_FULFILLED: 'recodex/sisSupervisedCourses/FETCH_FULFILLED'
+};
+
+export const fetchSisSupervisedCourses = (userId, year, term) =>
+  createApiAction({
+    type: actionTypes.FETCH,
+    method: 'GET',
+    endpoint: `/extensions/sis/users/${userId}/supervised-courses/${year}/${term}`,
+    meta: { userId, year, term }
+  });
+
+const reducer = handleActions(
+  Object.assign({}, reduceActions, {
+    [actionTypes.FETCH_PENDING]: (state, { meta: { userId, year, term } }) =>
+      state.setIn(['resources', userId, `${year}-${term}`], createRecord()),
+
+    [actionTypes.FETCH_REJECTED]: (state, { meta: { userId, year, term } }) =>
+      state.setIn(
+        ['resources', userId, `${year}-${term}`],
+        createRecord({ state: resourceStatus.FAILED })
+      ),
+
+    [actionTypes.FETCH_FULFILLED]: (
+      state,
+      { payload, meta: { userId, year, term } }
+    ) =>
+      state.setIn(
+        ['resources', userId, `${year}-${term}`],
+        createRecord({ state: resourceStatus.FULFILLED, data: fromJS(payload) })
+      )
+  }),
+  initialState
+);
+
+export default reducer;
