@@ -4,6 +4,7 @@ import { reducer as formReducer } from 'redux-form';
 
 import auth, { actionTypes as authActionTypes } from './modules/auth';
 import assignments from './modules/assignments';
+import boxes from './modules/boxes';
 import { default as canSubmit } from './modules/canSubmit'; // because of a named export 'canSubmit'
 import comments from './modules/comments';
 import emailVerification from './modules/emailVerification';
@@ -38,6 +39,7 @@ import hwGroups from './modules/hwGroups';
 const createRecodexReducers = token => ({
   auth: auth(token),
   assignments,
+  boxes,
   canSubmit,
   comments,
   emailVerification,
