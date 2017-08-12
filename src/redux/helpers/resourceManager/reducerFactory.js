@@ -4,19 +4,19 @@ import { resourceStatus } from './status';
 
 export const initialState = fromJS({ resources: {}, fetchManyStatus: {} });
 
-const reducerFactory = actionTypes => ({
+const reducerFactory = (actionTypes, id = 'id') => ({
   [actionTypes.FETCH_PENDING]: (state, { meta }) =>
-    state.setIn(['resources', meta.id], createRecord()),
+    state.setIn(['resources', meta[id]], createRecord()),
 
   [actionTypes.FETCH_REJECTED]: (state, { meta }) =>
     state.setIn(
-      ['resources', meta.id],
+      ['resources', meta[id]],
       createRecord({ state: resourceStatus.FAILED })
     ),
 
   [actionTypes.FETCH_FULFILLED]: (state, { meta, payload: data }) =>
     state.setIn(
-      ['resources', meta.id],
+      ['resources', meta[id]],
       createRecord({ state: resourceStatus.FULFILLED, data })
     ),
 
@@ -33,7 +33,7 @@ const reducerFactory = actionTypes => ({
     state
       .removeIn(['resources', tmpId])
       .setIn(
-        ['resources', data.id],
+        ['resources', data[id]],
         createRecord({ state: resourceStatus.FULFILLED, data })
       ),
 
@@ -51,7 +51,7 @@ const reducerFactory = actionTypes => ({
       .reduce(
         (state, data) =>
           state.setIn(
-            ['resources', data.id],
+            ['resources', data[id]],
             createRecord({ state: resourceStatus.FULFILLED, data })
           ),
         state

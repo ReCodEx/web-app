@@ -51,6 +51,7 @@ export {
  * Creates a reducer and prepared action creators
  */
 const createResourceManager = ({
+  idFieldName = 'id',
   resourceName,
   selector = defaultSelectorFactory(resourceName),
   apiEndpointFactory = defaultApiEndpointFactory(resourceName),
@@ -67,7 +68,7 @@ const createResourceManager = ({
       createAction,
       createApiAction
     }), // @todo rename to actionCreators
-    reduceActions: reducerFactory(actionTypes)
+    reduceActions: reducerFactory(actionTypes, idFieldName)
   };
 };
 
