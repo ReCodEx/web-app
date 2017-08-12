@@ -16,30 +16,33 @@ const createDotForNodeFactory = dependencies => (
   i
 ) => {
   let hasFullSupport = true;
-  const inputs = portsIn.map(port => {
-    const hasSupport = dependencies.find(
-      dep => dep.to === name && dep.name === port
-    );
+  const inputs = Object.keys(portsIn)
+    .map(portName => portsIn[portName].value)
+    .map(port => {
+      const hasSupport = dependencies.find(
+        dep => dep.to === name && dep.name === port
+      );
 
-    if (!hasSupport) {
-      hasFullSupport = false;
-    }
+      if (!hasSupport) {
+        hasFullSupport = false;
+      }
 
-    return (
-      `${subnode(name, port)} [label="${port}"]` +
-      (!hasSupport ? '[color=red, fontcolor=red]' : '')
-    );
-  });
+      return (
+        `${subnode(name, port)} [label="${port}"]` +
+        (!hasSupport ? '[color=red, fontcolor=red]' : '')
+      );
+    });
 
-  const outputs = portsOut.map(
-    port => `${subnode(name, port)} [label=${port}]`
-  );
+  const outputs = Object.keys(portsOut)
+    .map(portName => portsOut[portName].value)
+    .map(port => `${subnode(name, port)} [label="${port}"]`);
 
   return `
       subgraph cluster_${i} {
         label = "${name}";
         id = "${name}";
-        ${!hasFullSupport ? 'color=red; fontcolor=red;' : ''}
+        ${!hasFullSupport ? 'color=red; fontcolor=red;' : 'bgcolor=white;'}
+        comment = "box";
         subgraph cluster_inputs {
           style = "filled";
           id = "${name}_inputs";
@@ -65,14 +68,12 @@ const createDotForDependencyFactory = nodes => (from, to, name) => {
   return createDependency(subnode(from, name), subnode(to, name), clusterTo);
 };
 
-const createDotForGraph = (nodes, commands, outputsToScore) => `
+const createDotForGraph = (nodes, commands) => `
     digraph {
       node [shape=rect];
       compound = true;
       ${nodes.join('\n')}
       ${commands.join(';')}
-      ${outputsToScore.join(';')}
-      score [shape=doublecircle, style=filled, color = "#00a65a", fontcolor=white];
     }`;
 
 export const convertGraphToDot = ({ nodes, dependencies }) => {
@@ -86,15 +87,7 @@ export const convertGraphToDot = ({ nodes, dependencies }) => {
     createDotForNode(name, portsIn, portsOut, i)
   );
 
-  // 'score' is a special case of dependency - the only expected output of the pipeline
-  const outputsToScore = nodes
-    .map(({ name, portsOut }) => {
-      const score = portsOut.find(port => port === 'score');
-      return score ? createDependency(subnode(name, 'score'), 'score') : null;
-    })
-    .filter(cmd => cmd !== null);
-
-  return createDotForGraph(nodesDot, commands, outputsToScore);
+  return createDotForGraph(nodesDot, commands);
 };
 
 export const convertGraphToSvg = graph => {
