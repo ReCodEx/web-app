@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import isJSON from 'validator/lib/isJSON';
 
-import AddBoxForm from './AddBoxForm';
+import AddBoxForm from '../BoxForm/AddBoxForm';
 import PipelineVisualisation from '../PipelineVisualisation';
 
 class PipelineVisualEditor extends Component {
@@ -11,6 +11,42 @@ class PipelineVisualEditor extends Component {
   componentWillMount = () => {
     const { source } = this.props;
     this.changeSource(source);
+  };
+
+  componentDidMount = () => {
+    const { editorWrapper } = this;
+    editorWrapper.addEventListener('click', e => this.onClick(e.target));
+  };
+
+  componentWillUnmount = () => {
+    const { editorWrapper } = this;
+    editorWrapper.removeEventListener('click', this.onClick);
+  };
+
+  onClick = target => {
+    let cluster = this.findTopmostCluster(target);
+
+    if (!cluster) {
+      return;
+    }
+
+    return null;
+    // const boxId = cluster.attr;
+    // this.editBox(boxId);
+  };
+
+  findTopmostCluster = el => {
+    console.log(el);
+    let cluster = null;
+    while (el !== null && el.nodeName !== 'svg') {
+      console.log(el);
+      if (el === el.closest('.cluster')) {
+        cluster = el;
+      }
+      el = el.parentElement;
+    }
+
+    return cluster;
   };
 
   componentWillReceiveProps = nextProps => {
@@ -41,25 +77,29 @@ class PipelineVisualEditor extends Component {
     const candidates = [];
 
     for (let old of graph.nodes) {
-      for (let portIn of old.portsIn) {
-        for (let portOut of node.portsOut) {
-          if (portIn === portOut) {
+      for (let portInName of Object.keys(old.portsIn)) {
+        const portIn = old.portsIn[portInName];
+        for (let portOutName of Object.keys(node.portsOut)) {
+          const portOut = node.portsOut[portOutName];
+          if (portIn.value === portOut.value) {
             candidates.push({
               from: node.name,
               to: old.name,
-              name: portIn
+              name: portIn.value
             });
           }
         }
       }
 
-      for (let portIn of node.portsIn) {
-        for (let portOut of old.portsOut) {
-          if (portIn === portOut) {
+      for (let portInName of Object.keys(node.portsIn)) {
+        const portIn = node.portsIn[portInName];
+        for (let portOutName of Object.keys(old.portsOut)) {
+          const portOut = old.portsOut[portOutName];
+          if (portIn.value === portOut.value) {
             candidates.push({
               from: old.name,
               to: node.name,
-              name: portIn
+              name: portIn.value
             });
           }
         }
@@ -72,7 +112,7 @@ class PipelineVisualEditor extends Component {
         if (
           candidate.name === dependency.name &&
           candidate.from === dependency.from &&
-          candidate.to === candidate.to
+          candidate.to === dependency.to
         ) {
           unique = false;
           break;
@@ -112,7 +152,11 @@ class PipelineVisualEditor extends Component {
   render() {
     const { graph } = this.state;
     return (
-      <div>
+      <div
+        ref={el => {
+          this.editorWrapper = el;
+        }}
+      >
         <PipelineVisualisation graph={graph} />
         <AddBoxForm add={this.addNode} />
       </div>
