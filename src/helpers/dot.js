@@ -1,10 +1,10 @@
 import Viz from 'viz.js/viz-lite';
 
-const subnode = (node, port) => `${node}__${port}`;
+const subnode = (node, port) => `"${node}__${port}"`;
 
 const createDependency = (from, to, clusterTo = null) => {
   const dep =
-    `"${from}" -> "${to}"` +
+    `${from} -> ${to}` +
     (clusterTo === null ? '' : `[lhead = cluster_${clusterTo}]`);
   return dep;
 };
