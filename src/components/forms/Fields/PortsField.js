@@ -19,8 +19,7 @@ const PortsField = ({ label, prefix, ports }) =>
         key={name}
         name={`${prefix}.${name}.value`}
         component={TextField}
-        defaultValue={name}
-        label={`${name}${type ? `(${type}):` : ''}`}
+        label={`${name}${type ? ` (${type}):` : ''}`}
       />
     )}
   </div>;

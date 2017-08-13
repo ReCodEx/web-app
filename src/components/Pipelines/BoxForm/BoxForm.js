@@ -6,9 +6,10 @@ import { connect } from 'react-redux';
 import { reduxForm, Field, formValueSelector } from 'redux-form';
 
 import { TextField, SelectField, PortsField } from '../../forms/Fields';
-import { Alert } from 'react-bootstrap';
+import { Modal, Alert } from 'react-bootstrap';
+import Button from '../../widgets/FlatButton';
+import { DeleteIcon } from '../../icons';
 
-import Box from '../../widgets/Box';
 import SubmitButton from '../../forms/SubmitButton';
 
 import { fetchBoxTypes } from '../../../redux/modules/boxes';
@@ -23,6 +24,7 @@ class BoxForm extends Component {
 
   render() {
     const {
+      show,
       boxTypes,
       selectedType,
       title,
@@ -33,7 +35,9 @@ class BoxForm extends Component {
       asyncValidating = false,
       invalid = false,
       submitting = false,
-      reset
+      reset,
+      onHide,
+      onDelete
     } = this.props;
 
     const currentBoxType = boxTypes.find(box => box.name === selectedType);
@@ -41,49 +45,11 @@ class BoxForm extends Component {
       Object.keys(ports).map(port => ({ name: port, ...ports[port] }));
 
     return (
-      <Box
-        title={title}
-        footer={
-          <p className="text-center">
-            <SubmitButton
-              id="updateBox"
-              handleSubmit={data => {
-                handleSubmit(data);
-                return Promise.resolve(data);
-              }}
-              submitting={submitting}
-              invalid={invalid}
-              dirty={anyTouched}
-              hasFailed={submitFailed}
-              hasSuceeded={submitSucceeded}
-              asyncValidating={asyncValidating}
-              reset={reset}
-              messages={{
-                success: (
-                  <FormattedMessage
-                    id="app.pipelineEditor.BoxForm.success"
-                    defaultMessage="Saved"
-                  />
-                ),
-                submit: (
-                  <FormattedMessage
-                    id="app.pipelineEditor.BoxForm.createGroup"
-                    defaultMessage="Save"
-                  />
-                ),
-                submitting: (
-                  <FormattedMessage
-                    id="app.pipelineEditor.BoxForm.processing"
-                    defaultMessage="Saving ..."
-                  />
-                )
-              }}
-            />
-          </p>
-        }
-        solid
-      >
-        <div>
+      <Modal show={show} onHide={onHide} keyboard>
+        <Modal.Header closeButton>
+          {title}
+        </Modal.Header>
+        <Modal.Body>
           {submitFailed &&
             <Alert bsStyle="danger">
               <FormattedMessage
@@ -149,13 +115,59 @@ class BoxForm extends Component {
                 />
               }
             />}
-        </div>
-      </Box>
+        </Modal.Body>
+        <Modal.Footer>
+          <p className="text-center">
+            <SubmitButton
+              id="updateBox"
+              handleSubmit={data => {
+                handleSubmit();
+                return Promise.resolve();
+              }}
+              submitting={submitting}
+              invalid={invalid}
+              dirty={anyTouched}
+              hasFailed={submitFailed}
+              hasSuceeded={submitSucceeded}
+              asyncValidating={asyncValidating}
+              reset={reset}
+              messages={{
+                success: (
+                  <FormattedMessage
+                    id="app.pipelineEditor.BoxForm.success"
+                    defaultMessage="Saved"
+                  />
+                ),
+                submit: (
+                  <FormattedMessage
+                    id="app.pipelineEditor.BoxForm.createGroup"
+                    defaultMessage="Save"
+                  />
+                ),
+                submitting: (
+                  <FormattedMessage
+                    id="app.pipelineEditor.BoxForm.processing"
+                    defaultMessage="Saving ..."
+                  />
+                )
+              }}
+            />
+            <Button onClick={onDelete} bsStyle="danger">
+              <DeleteIcon />{' '}
+              <FormattedMessage
+                id="app.pipelineEditor.BoxForm.delete"
+                defaultMessage="Delete box"
+              />
+            </Button>
+          </p>
+        </Modal.Footer>
+      </Modal>
     );
   }
 }
 
 BoxForm.propTypes = {
+  show: PropTypes.bool,
   title: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) }),
@@ -172,7 +184,9 @@ BoxForm.propTypes = {
   asyncValidating: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
   invalid: PropTypes.bool,
   submitting: PropTypes.bool,
-  fetchBoxTypes: PropTypes.func.isRequired
+  fetchBoxTypes: PropTypes.func.isRequired,
+  onHide: PropTypes.func.isRequired,
+  onDelete: PropTypes.func.isRequired
 };
 
 const validate = (

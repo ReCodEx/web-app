@@ -9,16 +9,26 @@ class SubmitButton extends Component {
     this.setState({ saved: false });
   }
 
+  componentWillUnmount() {
+    if (this.resetAfterSomeTime) {
+      clearTimeout(this.resetAfterSomeTime);
+      this.reset();
+    }
+  }
+
   submit = data => {
-    const { handleSubmit, reset } = this.props;
+    const { handleSubmit } = this.props;
     return handleSubmit(data).then(() => {
       this.setState({ saved: true });
-      setTimeout(() => {
-        this.setState({ saved: false });
-        reset && reset();
-      }, 2000);
+      this.resetAfterSomeTime = setTimeout(this.reset, 2000);
     });
   };
+
+  reset() {
+    const { reset } = this.props;
+    this.setState({ saved: false });
+    reset && reset();
+  }
 
   render() {
     const {
@@ -77,13 +87,23 @@ class SubmitButton extends Component {
       >
         {!submitting
           ? hasSucceeded
-              ? <span><SuccessIcon /> &nbsp; {successMsg}</span>
-              : asyncValidating !== false
-                  ? <span><LoadingIcon /> &nbsp; {validatingMsg}</span>
-                  : dirty && invalid
-                      ? <span><WarningIcon /> &nbsp; {invalidMsg}</span>
-                      : <span><SendIcon /> &nbsp; {submitMsg}</span>
-          : <span><LoadingIcon /> &nbsp; {submittingMsg}</span>}
+            ? <span>
+                <SuccessIcon /> &nbsp; {successMsg}
+              </span>
+            : asyncValidating !== false
+              ? <span>
+                  <LoadingIcon /> &nbsp; {validatingMsg}
+                </span>
+              : dirty && invalid
+                ? <span>
+                    <WarningIcon /> &nbsp; {invalidMsg}
+                  </span>
+                : <span>
+                    <SendIcon /> &nbsp; {submitMsg}
+                  </span>
+          : <span>
+              <LoadingIcon /> &nbsp; {submittingMsg}
+            </span>}
       </Button>
     );
   }

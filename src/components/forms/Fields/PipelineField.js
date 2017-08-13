@@ -25,13 +25,15 @@ const PipelineField = ({
     <ControlLabel>
       {label}
     </ControlLabel>
-    <FormControl
-      {...input}
-      {...props}
-      componentClass="textarea"
-      rows={8}
-      style={{ fontFamily: 'mono' }}
-    />
+    <div className="hidden">
+      <FormControl
+        {...input}
+        {...props}
+        componentClass="textarea"
+        rows={8}
+        style={{ fontFamily: 'mono' }}
+      />
+    </div>
     <PipelineVisualEditor source={input.value} onChange={input.onChange} />
     {touched &&
       error &&

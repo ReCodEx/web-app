@@ -1,16 +1,38 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import isJSON from 'validator/lib/isJSON';
+import { FormattedMessage } from 'react-intl';
+import { Well } from 'react-bootstrap';
+
+import Button from '../../widgets/FlatButton';
+import { AddIcon } from '../../icons';
 
 import AddBoxForm from '../BoxForm/AddBoxForm';
+import EditBoxForm from '../BoxForm/EditBoxForm';
 import PipelineVisualisation from '../PipelineVisualisation';
 
+import {
+  addNode,
+  replaceNode,
+  removeNode,
+  createGraphFromSource,
+  graphToSource
+} from '../../../helpers/pipelineGraph';
+
 class PipelineVisualEditor extends Component {
-  state = { source: '[]', graph: { dependencies: [], nodes: [] } };
+  state = {
+    graph: { dependencies: [], nodes: [] },
+    addItem: false,
+    itemToEdit: null
+  };
 
   componentWillMount = () => {
+    // initialize the graph, if the source is valid
     const { source } = this.props;
-    this.changeSource(source);
+    if (isJSON(source)) {
+      const graph = createGraphFromSource(source);
+      this.setState({ graph });
+    }
   };
 
   componentDidMount = () => {
@@ -24,24 +46,20 @@ class PipelineVisualEditor extends Component {
   };
 
   onClick = target => {
-    let cluster = this.findTopmostCluster(target);
+    let boxId = this.findTopmostCluster(target);
+    const nodeToEdit = boxId
+      ? this.state.graph.nodes.find(node => node.name === boxId)
+      : null;
 
-    if (!cluster) {
-      return;
-    }
-
-    return null;
-    // const boxId = cluster.attr;
-    // this.editBox(boxId);
+    this.setState({ nodeToEdit });
   };
 
   findTopmostCluster = el => {
-    console.log(el);
     let cluster = null;
     while (el !== null && el.nodeName !== 'svg') {
-      console.log(el);
-      if (el === el.closest('.cluster')) {
-        cluster = el;
+      if (el.classList.contains('cluster')) {
+        cluster = el.id.substr(2); // remove prefix ("B-", "I-", "O-")
+        break;
       }
       el = el.parentElement;
     }
@@ -49,116 +67,68 @@ class PipelineVisualEditor extends Component {
     return cluster;
   };
 
-  componentWillReceiveProps = nextProps => {
-    const { source } = this.state;
-    if (source !== nextProps.source) {
-      this.changeSource(nextProps.source);
-    }
-  };
-
-  changeSource = source => {
-    if (isJSON(source)) {
-      const graph = this.createGraphFromSource(source);
-      this.setState({ source, graph }); // @todo: this might be a problem - the graph strucuture is not 1:1
-    }
-  };
-
-  createGraphFromSource = source => {
-    let graph = { nodes: JSON.parse(source), dependencies: [] };
-    for (let node of graph.nodes) {
-      graph = this.addDependencies(graph, node);
-    }
-
-    return graph;
-  };
-
-  addDependencies = (graph, node) => {
-    const dependencies = graph.dependencies;
-    const candidates = [];
-
-    for (let old of graph.nodes) {
-      for (let portInName of Object.keys(old.portsIn)) {
-        const portIn = old.portsIn[portInName];
-        for (let portOutName of Object.keys(node.portsOut)) {
-          const portOut = node.portsOut[portOutName];
-          if (portIn.value === portOut.value) {
-            candidates.push({
-              from: node.name,
-              to: old.name,
-              name: portIn.value
-            });
-          }
-        }
-      }
-
-      for (let portInName of Object.keys(node.portsIn)) {
-        const portIn = node.portsIn[portInName];
-        for (let portOutName of Object.keys(old.portsOut)) {
-          const portOut = old.portsOut[portOutName];
-          if (portIn.value === portOut.value) {
-            candidates.push({
-              from: old.name,
-              to: node.name,
-              name: portIn.value
-            });
-          }
-        }
-      }
-    }
-
-    for (let candidate of candidates) {
-      let unique = true;
-      for (let dependency of dependencies) {
-        if (
-          candidate.name === dependency.name &&
-          candidate.from === dependency.from &&
-          candidate.to === dependency.to
-        ) {
-          unique = false;
-          break;
-        }
-      }
-
-      if (unique === true) {
-        dependencies.push(candidate);
-      }
-    }
-
-    return {
-      nodes: graph.nodes,
-      dependencies
-    };
-  };
-
   addNode = (name, portsIn, portsOut, type) => {
-    const { source, graph } = this.state;
     const node = { name, portsIn, portsOut, type };
+    const graph = addNode(this.state.graph, node);
 
-    const obj = JSON.parse(source);
-    obj.push(node);
-    const updatedSource = JSON.stringify(obj);
+    this.save(graph);
+  };
 
-    graph.nodes.push(node);
+  editNode = (oldNode, newNode) => {
+    const graph = replaceNode(this.state.graph, oldNode, newNode);
+    this.save(graph);
+  };
 
-    this.setState({
-      source: updatedSource,
-      graph: this.addDependencies(graph, node)
-    });
+  deleteNode = node => {
+    const graph = removeNode(this.state.graph, node);
+    this.save(graph);
+  };
 
+  showAddNodeForm = () => {
+    this.setState({ addItem: true });
+  };
+
+  save = graph => {
     const { onChange } = this.props;
-    onChange(updatedSource);
+    const source = graphToSource(graph);
+    onChange(source);
+    this.setState({ graph });
+  };
+
+  onHideModal = () => {
+    this.setState({ addItem: false, nodeToEdit: null });
   };
 
   render() {
-    const { graph } = this.state;
+    const { graph, nodeToEdit, addItem } = this.state;
     return (
       <div
         ref={el => {
           this.editorWrapper = el;
         }}
       >
-        <PipelineVisualisation graph={graph} />
-        <AddBoxForm add={this.addNode} />
+        <Well>
+          {graph.nodes.length > 0 && <PipelineVisualisation graph={graph} />}
+          <Button onClick={this.showAddNodeForm}>
+            <AddIcon />
+            <FormattedMessage
+              id="app.pipelineVisualEditor.addBoxButton"
+              defaultMessage="Add box"
+            />
+          </Button>
+        </Well>
+        <AddBoxForm
+          add={this.addNode}
+          show={addItem}
+          onHide={this.onHideModal}
+        />
+        <EditBoxForm
+          item={nodeToEdit}
+          edit={data => this.editNode(nodeToEdit, data)}
+          show={Boolean(nodeToEdit)}
+          onHide={this.onHideModal}
+          onDelete={() => this.deleteNode(nodeToEdit)}
+        />
       </div>
     );
   }
