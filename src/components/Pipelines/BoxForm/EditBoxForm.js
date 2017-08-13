@@ -17,7 +17,7 @@ const EditBoxForm = ({ item, edit, onHide, boxTypes, onDelete, ...props }) =>
             values={{ name: item.name }}
           />
         }
-        show={item}
+        show={Boolean(item)}
         initialValues={item}
         onHide={onHide}
         onSubmit={data => {
