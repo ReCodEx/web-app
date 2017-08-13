@@ -1,14 +1,14 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { FormattedMessage } from 'react-intl';
+import React from "react";
+import PropTypes from "prop-types";
+import { FormattedMessage } from "react-intl";
 
-import BoxForm from './BoxForm';
+import BoxForm from "./BoxForm";
 
 const AddBoxForm = ({ add }) =>
   <BoxForm
     title={
       <FormattedMessage
-        id="app.pipelineEditor.BoxForm.title"
+        id="app.pipelineEditor.AddBoxForm.title"
         defaultMessage="Add a box"
       />
     }
