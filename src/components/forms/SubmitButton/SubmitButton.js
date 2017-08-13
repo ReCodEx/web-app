@@ -10,8 +10,10 @@ class SubmitButton extends Component {
   }
 
   componentWillUnmount() {
+    this.unmounted = true;
     if (this.resetAfterSomeTime) {
       clearTimeout(this.resetAfterSomeTime);
+      this.resetAfterSomeTime = undefined;
       this.reset();
     }
   }
@@ -19,8 +21,12 @@ class SubmitButton extends Component {
   submit = data => {
     const { handleSubmit } = this.props;
     return handleSubmit(data).then(() => {
-      this.setState({ saved: true });
-      this.resetAfterSomeTime = setTimeout(this.reset, 2000);
+      if (!this.unmounted) {
+        this.setState({ saved: true });
+        this.resetAfterSomeTime = setTimeout(this.reset, 2000);
+      } else {
+        this.props.reset(); // the redux form must be still reset
+      }
     });
   };
 
