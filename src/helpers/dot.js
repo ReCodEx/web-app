@@ -41,8 +41,9 @@ const createDotForNodeFactory = dependencies => (
       subgraph cluster_${i} {
         label = "${name}";
         id = "B-${name}";
-        ${!hasFullSupport ? 'color=red; fontcolor=red;' : 'bgcolor=white;'}
-        comment = "box";
+        ${!hasFullSupport
+          ? 'fontcolor=red; color=red;'
+          : 'color = "#f8f8f8"; style=filled;'}
         subgraph cluster_inputs {
           style = "filled";
           id = "I-${name}";
