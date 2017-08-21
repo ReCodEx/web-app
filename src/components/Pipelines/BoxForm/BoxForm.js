@@ -216,8 +216,11 @@ const validate = (
   } else {
     const boxType = boxTypes.find(box => box.name === type);
 
+    const portsInNames = Object.keys(boxType.portsIn);
+    const portsOutNames = Object.keys(boxType.portsOut);
     const portsInErrors = {};
-    for (let portName of Object.keys(boxType.portsIn)) {
+
+    for (let portName of portsInNames) {
       if (!portsIn[portName] || portsIn[portName].length === 0) {
         portsInErrors[portName] = {
           value: (
@@ -235,13 +238,33 @@ const validate = (
     }
 
     const portsOutErrors = {};
-    for (let portName of Object.keys(boxType.portsOut)) {
+    for (let portName of portsOutNames) {
       if (!portsOut[portName] || portsOut[portName].length === 0) {
         portsOutErrors[portName] = {
           value: (
             <FormattedMessage id="app.pipelineEditor.BoxForm.missingPortName" />
           )
         };
+      }
+    }
+
+    // check that one box does not have the same var as input and output
+    for (let portIn of portsInNames) {
+      for (let portOut of portsOutNames) {
+        if (
+          portsIn[portIn] &&
+          portsOut[portOut] &&
+          portsIn[portIn].value === portsOut[portOut].value
+        ) {
+          portsOutErrors[portOut] = {
+            value: (
+              <FormattedMessage
+                id="app.pipelineEditor.BoxForm.loop"
+                defaultMessage="Box can't use its own output as its input."
+              />
+            )
+          };
+        }
       }
     }
 
