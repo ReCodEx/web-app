@@ -11,13 +11,7 @@ import {
 
 import PipelineVisualEditor from '../../Pipelines/PipelineVisualEditor';
 
-const PipelineField = ({
-  input,
-  meta: { touched, error },
-  type = 'text',
-  label,
-  ...props
-}) =>
+const PipelineField = ({ input, meta: { touched, error }, label, ...props }) =>
   <FormGroup
     controlId={input.name}
     validationState={touched && error ? 'error' : undefined}
@@ -43,7 +37,6 @@ const PipelineField = ({
   </FormGroup>;
 
 PipelineField.propTypes = {
-  type: PropTypes.string,
   input: PropTypes.shape({
     name: PropTypes.string.isRequired
   }).isRequired,
