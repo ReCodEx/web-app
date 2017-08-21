@@ -6,9 +6,7 @@ import factory, {
   resourceStatus
 } from '../helpers/resourceManager';
 import { additionalActionTypes as additionalGroupActionTypes } from './groups';
-import {
-  additionalActionTypes as additionalSubmissionActionTypes
-} from './submissions';
+import { additionalActionTypes as additionalSubmissionActionTypes } from './submissions';
 
 /**
  * Create actions & reducer
@@ -20,7 +18,9 @@ const { actions, reduceActions } = factory({
   apiEndpointFactory: groupId => `/groups/${groupId}/students/stats`
 });
 
+export const fetchGroupsStats = actions.fetchResource;
 export const fetchGroupsStatsIfNeeded = actions.fetchOneIfNeeded;
+
 const reducer = handleActions(
   Object.assign({}, reduceActions, {
     [additionalGroupActionTypes.LOAD_USERS_GROUPS_FULFILLED]: (

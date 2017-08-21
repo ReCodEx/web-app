@@ -13,15 +13,18 @@ import GroupDetail, {
   LoadingGroupDetail,
   FailedGroupDetail
 } from '../../components/Groups/GroupDetail';
-import LeaveJoinGroupButtonContainer
-  from '../../containers/LeaveJoinGroupButtonContainer';
+import LeaveJoinGroupButtonContainer from '../../containers/LeaveJoinGroupButtonContainer';
 import AdminsView from '../../components/Groups/AdminsView';
 import SupervisorsView from '../../components/Groups/SupervisorsView';
 import StudentsView from '../../components/Groups/StudentsView';
 import { EditIcon } from '../../components/icons';
 
 import { isReady, getJsData } from '../../redux/helpers/resourceManager';
-import { createGroup, fetchGroupIfNeeded } from '../../redux/modules/groups';
+import {
+  createGroup,
+  fetchGroupIfNeeded,
+  fetchInstanceGroupsIfNeeded
+} from '../../redux/modules/groups';
 import { fetchGroupsStatsIfNeeded } from '../../redux/modules/stats';
 import { fetchSupervisors, fetchStudents } from '../../redux/modules/users';
 import {
@@ -65,24 +68,25 @@ class Group extends Component {
 
   static loadAsync = ({ groupId }, dispatch, userId, isSuperAdmin) =>
     Promise.all([
-      dispatch(fetchGroupIfNeeded(groupId))
-        .then(res => res.value)
-        .then(group =>
-          Promise.all([
-            dispatch(fetchInstanceIfNeeded(group.instanceId)),
-            dispatch(fetchSupervisors(groupId)),
-            Group.isAdminOf(group, userId) || isSuperAdmin
-              ? Promise.all([dispatch(fetchGroupExercises(groupId))])
-              : Promise.resolve(),
-            Group.isMemberOf(group, userId) || isSuperAdmin
-              ? Promise.all([
-                  dispatch(fetchAssignmentsForGroup(groupId)),
-                  dispatch(fetchStudents(groupId)),
-                  dispatch(fetchGroupsStatsIfNeeded(groupId))
-                ])
-              : Promise.resolve()
-          ])
-        )
+      dispatch(fetchGroupIfNeeded(groupId)).then(res => res.value).then(group =>
+        Promise.all([
+          dispatch(fetchInstanceIfNeeded(group.instanceId)),
+          dispatch(fetchSupervisors(groupId)),
+          Group.isAdminOf(group, userId) || isSuperAdmin
+            ? Promise.all([
+                dispatch(fetchInstanceGroupsIfNeeded(group.instanceId)), // for group traversal finding group exercises
+                dispatch(fetchGroupExercises(groupId))
+              ])
+            : Promise.resolve(),
+          Group.isMemberOf(group, userId) || isSuperAdmin
+            ? Promise.all([
+                dispatch(fetchAssignmentsForGroup(groupId)),
+                dispatch(fetchStudents(groupId)),
+                dispatch(fetchGroupsStatsIfNeeded(groupId))
+              ])
+            : Promise.resolve()
+        ])
+      )
     ]);
 
   componentWillMount() {
@@ -186,14 +190,13 @@ class Group extends Component {
         loading={<LoadingGroupDetail />}
         failed={<FailedGroupDetail />}
       >
-        {data => (
+        {data =>
           <div>
             {isAdmin &&
               <p>
                 <LinkContainer to={GROUP_EDIT_URI_FACTORY(data.id)}>
                   <Button bsStyle="warning">
-                    <EditIcon />
-                    {' '}
+                    <EditIcon />{' '}
                     <FormattedMessage
                       id="app.group.edit"
                       defaultMessage="Edit group settings"
@@ -246,8 +249,7 @@ class Group extends Component {
                 users={students}
                 publicAssignments={publicAssignments}
               />}
-          </div>
-        )}
+          </div>}
       </Page>
     );
   }

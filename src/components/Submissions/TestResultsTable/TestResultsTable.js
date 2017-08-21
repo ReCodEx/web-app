@@ -5,7 +5,7 @@ import { FormattedMessage, FormattedNumber } from 'react-intl';
 import { Table, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import Icon from 'react-fontawesome';
 
-const tickOrCross = (isOK, ratio, tooltipId) => (
+const tickOrCross = (isOK, ratio, tooltipId) =>
   <td
     className={classNames({
       'text-center': true,
@@ -13,8 +13,7 @@ const tickOrCross = (isOK, ratio, tooltipId) => (
       'text-danger': !isOK
     })}
   >
-    <Icon name={isOK ? 'check' : 'times'} />
-    {' '}
+    <Icon name={isOK ? 'check' : 'times'} />{' '}
     {(ratio || ratio === 0) &&
       <small>
         (
@@ -26,10 +25,9 @@ const tickOrCross = (isOK, ratio, tooltipId) => (
         />
         )
       </small>}
-  </td>
-);
+  </td>;
 
-const TestResultsTable = ({ results }) => (
+const TestResultsTable = ({ results }) =>
   <Table responsive>
     <thead>
       <tr>
@@ -45,7 +43,9 @@ const TestResultsTable = ({ results }) => (
               </Tooltip>
             }
           >
-            <span><Icon name="check" />/<Icon name="times" /></span>
+            <span>
+              <Icon name="check" />/<Icon name="times" />
+            </span>
           </OverlayTrigger>
         </th>
         <th>
@@ -100,6 +100,21 @@ const TestResultsTable = ({ results }) => (
             <Icon name="rocket" />
           </OverlayTrigger>
         </th>
+        <th className="text-center">
+          <OverlayTrigger
+            placement="top"
+            overlay={
+              <Tooltip id="exitCode">
+                <FormattedMessage
+                  id="app.submissions.testResultsTable.exitCode"
+                  defaultMessage="Exit code"
+                />
+              </Tooltip>
+            }
+          >
+            <Icon name="exclamation-circle" />
+          </OverlayTrigger>
+        </th>
       </tr>
     </thead>
     <tbody>
@@ -113,8 +128,9 @@ const TestResultsTable = ({ results }) => (
           timeExceeded,
           message,
           timeRatio,
-          memoryRatio
-        }) => (
+          memoryRatio,
+          exitCode
+        }) =>
           <tr key={testName}>
             {tickOrCross(score === 1)}
             <td>
@@ -170,12 +186,13 @@ const TestResultsTable = ({ results }) => (
 
             {tickOrCross(memoryExceeded === false, memoryRatio)}
             {tickOrCross(timeExceeded === false, timeRatio)}
+            <td className="text-center">
+              {exitCode}
+            </td>
           </tr>
-        )
       )}
     </tbody>
-  </Table>
-);
+  </Table>;
 
 TestResultsTable.propTypes = {
   results: PropTypes.arrayOf(

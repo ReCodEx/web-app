@@ -11,7 +11,8 @@ const EditExerciseConfigTests = ({
   i,
   testConfigs,
   runtimeEnvironments,
-  supplementaryFiles
+  supplementaryFiles,
+  pipelines
 }) =>
   <div>
     <Table>
@@ -42,6 +43,7 @@ const EditExerciseConfigTests = ({
         }
         prefix={`${prefix}.tests`}
         supplementaryFiles={supplementaryFiles}
+        pipelines={pipelines}
       />
     </Table>
   </div>;
@@ -51,7 +53,8 @@ EditExerciseConfigTests.propTypes = {
   i: PropTypes.number.isRequired,
   testConfigs: PropTypes.array.isRequired,
   runtimeEnvironments: PropTypes.object.isRequired,
-  supplementaryFiles: ImmutablePropTypes.map
+  supplementaryFiles: ImmutablePropTypes.map,
+  pipelines: ImmutablePropTypes.map
 };
 
 export default EditExerciseConfigTests;

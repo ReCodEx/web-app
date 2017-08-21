@@ -14,12 +14,14 @@ import { LoadingInfoBox } from '../../components/widgets/InfoBox';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import UsersNameContainer from '../../containers/UsersNameContainer';
 import StudentsListContainer from '../../containers/StudentsListContainer';
-import AssignmentsTable
-  from '../../components/Assignments/Assignment/AssignmentsTable';
+import AssignmentsTable from '../../components/Assignments/Assignment/AssignmentsTable';
 import UsersStats from '../../components/Users/UsersStats';
 import { fetchAssignmentsForGroup } from '../../redux/modules/assignments';
 import { fetchUserIfNeeded } from '../../redux/modules/users';
-import { fetchGroupsIfNeeded } from '../../redux/modules/groups';
+import {
+  fetchGroupsIfNeeded,
+  fetchInstanceGroupsIfNeeded
+} from '../../redux/modules/groups';
 
 import {
   getUser,
@@ -36,10 +38,13 @@ import { createGroupsStatsSelector } from '../../redux/selectors/stats';
 import {
   groupsAssignmentsSelector,
   supervisorOfSelector,
-  studentOfSelector
+  studentOfSelector,
+  groupsSelectors
 } from '../../redux/selectors/groups';
 import { InfoIcon } from '../../components/icons';
 import { getJsData } from '../../redux/helpers/resourceManager';
+import SisIntegrationContainer from '../../containers/SisIntegrationContainer';
+import SisSupervisorGroupsContainer from '../../containers/SisSupervisorGroupsContainer';
 
 import withLinks from '../../hoc/withLinks';
 
@@ -66,14 +71,21 @@ class Dashboard extends Component {
         const state = getState();
         const user = getJsData(getUser(userId)(state));
         const groups = user.groups.studentOf.concat(user.groups.supervisorOf);
+        const isAdmin = isSuperAdmin(userId)(state);
 
         return dispatch(fetchGroupsIfNeeded(...groups)).then(groups =>
           Promise.all(
-            groups.map(({ value: group }) =>
-              Promise.all([
-                dispatch(fetchAssignmentsForGroup(group.id)),
-                dispatch(fetchGroupsStatsIfNeeded(group.id))
-              ])
+            [
+              isAdmin
+                ? dispatch(fetchInstanceGroupsIfNeeded(user.instanceId))
+                : Promise.resolve()
+            ].concat(
+              groups.map(({ value: group }) =>
+                Promise.all([
+                  dispatch(fetchAssignmentsForGroup(group.id)),
+                  dispatch(fetchGroupsStatsIfNeeded(group.id))
+                ])
+              )
             )
           )
         );
@@ -92,6 +104,8 @@ class Dashboard extends Component {
       groupAssignments,
       groupStatistics,
       usersStatistics,
+      allGroups,
+      isAdmin,
       links: { GROUP_URI_FACTORY, INSTANCE_URI_FACTORY }
     } = this.props;
 
@@ -122,7 +136,7 @@ class Dashboard extends Component {
           }
         ]}
       >
-        {user => (
+        {user =>
           <div>
             <p>
               <UsersNameContainer userId={user.id} large noLink />
@@ -130,7 +144,7 @@ class Dashboard extends Component {
 
             {studentOfGroupsIds.length > 0 &&
               <ResourceRenderer resource={studentOf}>
-                {(...groups) => (
+                {(...groups) =>
                   <div>
                     <h2 className="page-heading">
                       <FormattedMessage
@@ -139,7 +153,9 @@ class Dashboard extends Component {
                       />
                     </h2>
 
-                    {groups.map(group => (
+                    <SisIntegrationContainer />
+
+                    {groups.map(group =>
                       <div key={group.id}>
                         <ResourceRenderer
                           loading={
@@ -151,7 +167,7 @@ class Dashboard extends Component {
                           }
                           resource={groupStatistics(group.id)}
                         >
-                          {statistics => (
+                          {statistics =>
                             <Row>
                               <Col lg={4}>
                                 <Link to={GROUP_URI_FACTORY(group.id)}>
@@ -192,14 +208,11 @@ class Dashboard extends Component {
                                   />
                                 </Box>
                               </Col>
-                            </Row>
-                          )}
+                            </Row>}
                         </ResourceRenderer>
                       </div>
-                    ))}
-
-                  </div>
-                )}
+                    )}
+                  </div>}
               </ResourceRenderer>}
 
             {supervisorOfGroupsIds.length > 0 &&
@@ -211,16 +224,24 @@ class Dashboard extends Component {
                       defaultMessage="Groups you supervise"
                     />
                   </h2>
+
+                  <ResourceRenderer
+                    resource={isAdmin ? allGroups : supervisorOf}
+                  >
+                    {(...groups) =>
+                      <SisSupervisorGroupsContainer groups={groups} />}
+                  </ResourceRenderer>
+
                   <ResourceRenderer resource={supervisorOf}>
-                    {(...groups) => (
+                    {(...groups) =>
                       <div>
-                        {groups.map(group => (
+                        {groups.map(group =>
                           <Row key={group.id}>
                             <Col lg={12}>
                               <ResourceRenderer
                                 resource={groupStatistics(group.id)}
                               >
-                                {statistics => (
+                                {statistics =>
                                   <Box
                                     title={group.name}
                                     collapsable
@@ -242,14 +263,12 @@ class Dashboard extends Component {
                                     }
                                   >
                                     <StudentsListContainer groupId={group.id} />
-                                  </Box>
-                                )}
+                                  </Box>}
                               </ResourceRenderer>
                             </Col>
                           </Row>
-                        ))}
-                      </div>
-                    )}
+                        )}
+                      </div>}
                   </ResourceRenderer>
                 </Col>
               </Row>}
@@ -260,8 +279,7 @@ class Dashboard extends Component {
                 <Col sm={12}>
                   <div className="callout callout-success">
                     <h4>
-                      <InfoIcon />
-                      {' '}
+                      <InfoIcon />{' '}
                       <FormattedMessage
                         id="app.user.welcomeTitle"
                         defaultMessage="Welcome to ReCodEx"
@@ -294,8 +312,7 @@ class Dashboard extends Component {
                 <Col sm={12}>
                   <div className="callout callout-success">
                     <h4>
-                      <InfoIcon />
-                      {' '}
+                      <InfoIcon />{' '}
                       <FormattedMessage
                         id="app.user.welcomeTitle"
                         defaultMessage="Welcome to ReCodEx"
@@ -310,8 +327,7 @@ class Dashboard extends Component {
                   </div>
                 </Col>
               </Row>}
-          </div>
-        )}
+          </div>}
       </Page>
     );
   }
@@ -332,6 +348,8 @@ Dashboard.propTypes = {
   groupAssignments: PropTypes.func.isRequired,
   groupStatistics: PropTypes.func.isRequired,
   usersStatistics: PropTypes.func.isRequired,
+  allGroups: PropTypes.array,
+  isAdmin: PropTypes.bool,
   links: PropTypes.object
 };
 
@@ -354,7 +372,9 @@ export default withLinks(
         groupAssignments: groupId => groupsAssignmentsSelector(groupId)(state),
         groupStatistics: groupId => createGroupsStatsSelector(groupId)(state),
         usersStatistics: statistics =>
-          statistics.find(stat => stat.userId === userId) || {}
+          statistics.find(stat => stat.userId === userId) || {},
+        allGroups: groupsSelectors(state).toArray(),
+        isAdmin: isSuperAdmin(userId)(state)
       };
     },
     (dispatch, { params }) => ({

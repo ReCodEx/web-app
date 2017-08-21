@@ -5,7 +5,7 @@ import { FormattedMessage } from 'react-intl';
 
 import ExercisesListItem from '../ExercisesListItem';
 
-const ExercisesList = ({ exercises = [], createActions, ...rest }) => (
+const ExercisesList = ({ exercises = [], createActions, ...rest }) =>
   <Table hover>
     <thead>
       <tr>
@@ -41,19 +41,20 @@ const ExercisesList = ({ exercises = [], createActions, ...rest }) => (
     </thead>
     <tbody>
       {exercises
+        .filter(e => e !== null)
         .sort(
           (a, b) =>
             a.name < b.name
               ? -1
               : b.name < a.name ? 1 : b.createdAt - a.createdAt
         )
-        .map(exercise => (
+        .map(exercise =>
           <ExercisesListItem
             {...exercise}
             createActions={createActions}
             key={exercise.id}
           />
-        ))}
+        )}
 
       {exercises.length === 0 &&
         <tr>
@@ -65,8 +66,7 @@ const ExercisesList = ({ exercises = [], createActions, ...rest }) => (
           </td>
         </tr>}
     </tbody>
-  </Table>
-);
+  </Table>;
 
 ExercisesList.propTypes = {
   exercises: PropTypes.array,

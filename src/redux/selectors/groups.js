@@ -57,3 +57,20 @@ export const groupsAssignmentsSelector = (id, type = 'public') =>
     (groupsAssignmentsIds, assignments) =>
       groupsAssignmentsIds.map(id => assignments.getIn(['resources', id]))
   );
+
+const getGroupParentIds = (id, groups) => {
+  const group = groups.get(id);
+  if (group && isReady(group)) {
+    const data = group.get('data');
+    return data.get('parentGroupId') !== null
+      ? [data.get('id')].concat(
+          getGroupParentIds(data.get('parentGroupId'), groups)
+        )
+      : [data.get('id')];
+  } else {
+    return [];
+  }
+};
+
+export const allParentIdsForGroup = id =>
+  createSelector(groupsSelectors, groups => getGroupParentIds(id, groups));

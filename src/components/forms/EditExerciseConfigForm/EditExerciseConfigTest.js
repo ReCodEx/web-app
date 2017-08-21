@@ -2,10 +2,16 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { Field } from 'redux-form';
-import { TextField } from '../Fields';
+import { SelectField } from '../Fields';
 import EditExerciseConfigVariable from './EditExerciseConfigVariable';
+import ResourceRenderer from '../../helpers/ResourceRenderer';
 
-const EditExerciseConfigTest = ({ prefix, tests, supplementaryFiles }) =>
+const EditExerciseConfigTest = ({
+  prefix,
+  tests,
+  supplementaryFiles,
+  pipelines
+}) =>
   <tbody>
     {tests.map((test, index) => [
       <tr key={`${index}.first`}>
@@ -15,11 +21,24 @@ const EditExerciseConfigTest = ({ prefix, tests, supplementaryFiles }) =>
           </b>
         </td>
         <td>
-          <Field
-            name={`${prefix}.${index}.pipelines.0.name`}
-            component={TextField}
-            label={''}
-          />
+          <ResourceRenderer resource={pipelines.toArray()}>
+            {(...pipelines) =>
+              <Field
+                name={`${prefix}.${index}.pipelines.0.name`}
+                component={SelectField}
+                options={[{ key: '', name: '...' }].concat(
+                  pipelines
+                    .sort((a, b) => a.name.localeCompare(b.name))
+                    .map(data => {
+                      const obj = {};
+                      obj['key'] = data.id;
+                      obj['name'] = data.name;
+                      return obj;
+                    })
+                )}
+                label={''}
+              />}
+          </ResourceRenderer>
         </td>
         {test.pipelines &&
           test.pipelines[0] &&
@@ -35,11 +54,24 @@ const EditExerciseConfigTest = ({ prefix, tests, supplementaryFiles }) =>
       </tr>,
       <tr key={`${index}.second`}>
         <td>
-          <Field
-            name={`${prefix}.${index}.pipelines.1.name`}
-            component={TextField}
-            label={''}
-          />
+          <ResourceRenderer resource={pipelines.toArray()}>
+            {(...pipelines) =>
+              <Field
+                name={`${prefix}.${index}.pipelines.1.name`}
+                component={SelectField}
+                options={[{ key: '', name: '...' }].concat(
+                  pipelines
+                    .sort((a, b) => a.name.localeCompare(b.name))
+                    .map(data => {
+                      const obj = {};
+                      obj['key'] = data.id;
+                      obj['name'] = data.name;
+                      return obj;
+                    })
+                )}
+                label={''}
+              />}
+          </ResourceRenderer>
         </td>
         {test.pipelines &&
           test.pipelines[1] &&
@@ -59,7 +91,8 @@ const EditExerciseConfigTest = ({ prefix, tests, supplementaryFiles }) =>
 EditExerciseConfigTest.propTypes = {
   prefix: PropTypes.string.isRequired,
   tests: PropTypes.array.isRequired,
-  supplementaryFiles: ImmutablePropTypes.map
+  supplementaryFiles: ImmutablePropTypes.map,
+  pipelines: ImmutablePropTypes.map
 };
 
 export default EditExerciseConfigTest;

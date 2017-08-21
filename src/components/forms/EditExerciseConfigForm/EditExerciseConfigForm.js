@@ -63,6 +63,7 @@ class EditExerciseConfigForm extends Component {
     const {
       runtimeEnvironments,
       supplementaryFiles,
+      pipelines,
       anyTouched,
       submitting,
       handleSubmit,
@@ -86,6 +87,7 @@ class EditExerciseConfigForm extends Component {
           testConfigs={this.state.testConfigs}
           runtimeEnvironments={runtimeEnvironments}
           supplementaryFiles={supplementaryFiles}
+          pipelines={pipelines}
         />
 
         <p className="text-center">
@@ -160,7 +162,8 @@ EditExerciseConfigForm.propTypes = {
   fetchFiles: PropTypes.func.isRequired,
   exercise: PropTypes.shape({
     id: PropTypes.string.isRequired
-  })
+  }),
+  pipelines: ImmutablePropTypes.map
 };
 
 const validate = () => {};
