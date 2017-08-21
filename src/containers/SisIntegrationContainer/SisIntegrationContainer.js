@@ -27,12 +27,14 @@ class SisIntegrationContainer extends Component {
     dispatch((dispatch, getState) =>
       dispatch(fetchSisStatusIfNeeded())
         .then(res => res.value)
-        .then(status =>
-          status.terms.map(term =>
-            dispatch(
-              fetchSisSubscribedGroups(loggedInUserId, term.year, term.term)
+        .then(
+          status =>
+            status.accessible &&
+            status.terms.map(term =>
+              dispatch(
+                fetchSisSubscribedGroups(loggedInUserId, term.year, term.term)
+              )
             )
-          )
         )
     );
   };
