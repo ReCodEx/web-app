@@ -8,7 +8,7 @@ export const runtimeEnvironmentsSelector = createSelector(
   getRuntimeEnvironments,
   getResources
 );
-export const runtimeEnvironmentSelector = createSelector(
-  [runtimeEnvironmentsSelector, (state, id) => id],
-  (runtimeEnvironments, id) => runtimeEnvironments.get(id)
-);
+export const runtimeEnvironmentSelector = environmentId =>
+  createSelector(runtimeEnvironmentsSelector, runtimeEnvironments =>
+    runtimeEnvironments.get(environmentId)
+  );
