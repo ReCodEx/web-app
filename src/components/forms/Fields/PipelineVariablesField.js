@@ -14,12 +14,12 @@ const PipelineVariablesField = ({ input, label, variables }) =>
         id="app.portsField.empty"
         defaultMessage="There are no ports."
       />}
-    {variables.map(({ name }) =>
+    {variables.map(({ value }) =>
       <Field
-        key={name}
-        name={`${input.name}.${name}`}
+        key={value}
+        name={`${input.name}.${value}`}
         component={TextField}
-        label={`${name}: `}
+        label={`${value}: `}
       />
     )}
   </div>;

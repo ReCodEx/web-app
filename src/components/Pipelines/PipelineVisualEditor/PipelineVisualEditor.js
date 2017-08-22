@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import isJSON from 'validator/lib/isJSON';
 import { FormattedMessage } from 'react-intl';
 import { Well } from 'react-bootstrap';
 
@@ -15,9 +14,7 @@ import {
   addNode,
   replaceNode,
   removeNode,
-  createGraphFromSource,
-  createGraphFromNodes,
-  graphToSource
+  createGraphFromNodes
 } from '../../../helpers/pipelineGraph';
 
 class PipelineVisualEditor extends Component {
@@ -30,10 +27,7 @@ class PipelineVisualEditor extends Component {
   componentWillMount = () => {
     // initialize the graph, if the source is valid
     const { source } = this.props;
-    const graph =
-      typeof source === 'string'
-        ? isJSON(source) ? createGraphFromSource(source) : null
-        : createGraphFromNodes(source);
+    const graph = createGraphFromNodes(source);
 
     this.setState({ graph });
   };
@@ -93,8 +87,7 @@ class PipelineVisualEditor extends Component {
 
   save = graph => {
     const { onChange } = this.props;
-    const source = graphToSource(graph);
-    onChange(source);
+    onChange(graph.nodes);
     this.setState({ graph });
   };
 

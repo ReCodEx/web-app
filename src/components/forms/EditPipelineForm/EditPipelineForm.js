@@ -194,8 +194,24 @@ const asyncValidate = (values, dispatch, { initialValues: { id, version } }) =>
       }
     });
 
+const flattenPorts = boxes =>
+  boxes.reduce(
+    (acc, ports) => [
+      ...acc,
+      ...Object.keys(ports).map(port => ({ name: port, ...ports[port] }))
+    ],
+    []
+  );
+
+const extractVariables = (boxes = []) => {
+  const inputs = flattenPorts(boxes.map(box => box.portsIn));
+  return [...new Set(inputs)];
+};
+
 const mapStateToProps = state => ({
-  variables: formValueSelector('editPipeline')(state, 'pipeline.variables')
+  variables: extractVariables(
+    formValueSelector('editPipeline')(state, 'pipeline.boxes')
+  )
 });
 
 export default connect(mapStateToProps)(

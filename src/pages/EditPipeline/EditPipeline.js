@@ -82,9 +82,27 @@ class EditPipeline extends Component {
                 <Row>
                   <Col lg={12}>
                     <EditPipelineForm
-                      initialValues={pipeline}
-                      onSubmit={formData =>
-                        editPipeline(pipeline.version, formData)}
+                      initialValues={{
+                        ...pipeline,
+                        pipeline: { boxes: pipeline.pipeline.boxes }
+                      }}
+                      onSubmit={({
+                        pipeline: { boxes, variables },
+                        ...formData
+                      }) => {
+                        const transformedData = {
+                          ...formData,
+                          pipeline: {
+                            boxes,
+                            variables: Object.keys(variables).map(name => ({
+                              name,
+                              type: 'string',
+                              value: variables[name]
+                            }))
+                          }
+                        };
+                        return editPipeline(pipeline.version, transformedData);
+                      }}
                     />
                   </Col>
                 </Row>
@@ -141,12 +159,10 @@ EditPipeline.propTypes = {
 
 export default withLinks(
   connect(
-    (state, { params: { pipelineId } }) => {
-      return {
-        pipeline: getPipeline(pipelineId)(state),
-        userId: loggedInUserIdSelector(state)
-      };
-    },
+    (state, { params: { pipelineId } }) => ({
+      pipeline: getPipeline(pipelineId)(state),
+      userId: loggedInUserIdSelector(state)
+    }),
     (dispatch, { params: { pipelineId } }) => ({
       push: url => dispatch(push(url)),
       reset: () => dispatch(reset('editPipeline')),
