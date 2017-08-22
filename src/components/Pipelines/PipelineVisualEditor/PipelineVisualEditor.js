@@ -17,6 +17,8 @@ import {
   createGraphFromNodes
 } from '../../../helpers/pipelineGraph';
 
+import './pipeline.css';
+
 class PipelineVisualEditor extends Component {
   state = {
     graph: { dependencies: [], nodes: [] },
@@ -103,7 +105,7 @@ class PipelineVisualEditor extends Component {
           this.editorWrapper = el;
         }}
       >
-        <Well>
+        <Well className="pipeline">
           {graph.nodes.length > 0 && <PipelineVisualisation graph={graph} />}
           <p className="text-center">
             <Button onClick={this.showAddNodeForm}>
