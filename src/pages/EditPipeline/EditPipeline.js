@@ -75,7 +75,7 @@ class EditPipeline extends Component {
           }
         ]}
       >
-        {pipeline =>
+        {({ pipeline: { boxes, variables }, ...data }) =>
           <div>
             <Row>
               <Col lg={6}>
@@ -83,8 +83,17 @@ class EditPipeline extends Component {
                   <Col lg={12}>
                     <EditPipelineForm
                       initialValues={{
-                        ...pipeline,
-                        pipeline: { boxes: pipeline.pipeline.boxes }
+                        ...data,
+                        pipeline: {
+                          boxes,
+                          variables: variables.reduce(
+                            (acc, variable) => ({
+                              ...acc,
+                              [variable.name]: variable.value
+                            }),
+                            {}
+                          )
+                        }
                       }}
                       onSubmit={({
                         pipeline: { boxes, variables },
@@ -101,7 +110,7 @@ class EditPipeline extends Component {
                             }))
                           }
                         };
-                        return editPipeline(pipeline.version, transformedData);
+                        return editPipeline(data.version, transformedData);
                       }}
                     />
                   </Col>
@@ -131,7 +140,7 @@ class EditPipeline extends Component {
                     </p>
                     <p className="text-center">
                       <DeletePipelineButtonContainer
-                        id={pipeline.id}
+                        id={data.id}
                         onDeleted={() => push(PIPELINES_URI)}
                       />
                     </p>
