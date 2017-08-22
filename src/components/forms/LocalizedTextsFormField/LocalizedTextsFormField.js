@@ -1,17 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import { Field } from 'redux-form';
-import {
-  TabbedArrayField,
-  MarkdownTextAreaField,
-  LanguageSelectField
-} from '../Fields';
+import { TabbedArrayField } from '../Fields';
+import LocalizedTextFormField from './LocalizedTextFormField';
 
-const LocalizedTextsFormField = ({ fields, localizedTexts = [] }) => (
+const LocalizedTextsFormField = ({ localizedTexts = [], ...props }) => (
   <TabbedArrayField
-    fields={fields}
-    localizedTexts={localizedTexts}
+    {...props}
     getTitle={i =>
       localizedTexts && localizedTexts[i] && localizedTexts[i].locale
         ? localizedTexts[i].locale
@@ -19,31 +14,7 @@ const LocalizedTextsFormField = ({ fields, localizedTexts = [] }) => (
             id="app.editAssignmentForm.newLocale"
             defaultMessage="New language"
           />}
-    ContentComponent={({ prefix, i }) => (
-      <div>
-        <Field
-          name={`${prefix}.locale`}
-          component={LanguageSelectField}
-          label={
-            <FormattedMessage
-              id="app.editAssignmentForm.localized.locale"
-              defaultMessage="The language:"
-            />
-          }
-        />
-
-        <Field
-          name={`${prefix}.text`}
-          component={MarkdownTextAreaField}
-          label={
-            <FormattedMessage
-              id="app.editAssignmentForm.localized.assignment"
-              defaultMessage="Description for the students:"
-            />
-          }
-        />
-      </div>
-    )}
+    ContentComponent={LocalizedTextFormField}
     emptyMessage={
       <FormattedMessage
         id="app.editAssignmentForm.localized.noLanguage"
@@ -69,7 +40,6 @@ const LocalizedTextsFormField = ({ fields, localizedTexts = [] }) => (
 );
 
 LocalizedTextsFormField.propTypes = {
-  fields: PropTypes.object,
   localizedTexts: PropTypes.array
 };
 
