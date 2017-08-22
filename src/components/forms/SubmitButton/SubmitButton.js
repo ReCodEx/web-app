@@ -30,11 +30,11 @@ class SubmitButton extends Component {
     });
   };
 
-  reset() {
+  reset = () => {
     const { reset } = this.props;
     this.setState({ saved: false });
     reset && reset();
-  }
+  };
 
   render() {
     const {
