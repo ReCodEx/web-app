@@ -40,7 +40,7 @@ class BoxForm extends Component {
       onDelete
     } = this.props;
 
-    const currentBoxType = boxTypes.find(box => box.name === selectedType);
+    const currentBoxType = boxTypes.find(box => box.type === selectedType);
     const getPortsArray = ports =>
       Object.keys(ports).map(port => ({ name: port, ...ports[port] }));
 
@@ -77,7 +77,7 @@ class BoxForm extends Component {
             component={SelectField}
             options={[
               { key: '', name: '...' },
-              ...boxTypes.map(({ name }) => ({ key: name, name }))
+              ...boxTypes.map(({ name, type }) => ({ key: type, name }))
             ]}
             required
             label={
@@ -102,7 +102,7 @@ class BoxForm extends Component {
               }
             />}
 
-          {selectedType &&
+          {currentBoxType &&
             <Field
               name="portsOut"
               prefix="portsOut"
@@ -215,61 +215,62 @@ const validate = (
     );
   } else {
     const boxType = boxTypes.find(box => box.name === type);
+    if (boxType) {
+      const portsInNames = Object.keys(boxType.portsIn);
+      const portsOutNames = Object.keys(boxType.portsOut);
+      const portsInErrors = {};
 
-    const portsInNames = Object.keys(boxType.portsIn);
-    const portsOutNames = Object.keys(boxType.portsOut);
-    const portsInErrors = {};
-
-    for (let portName of portsInNames) {
-      if (!portsIn[portName] || portsIn[portName].length === 0) {
-        portsInErrors[portName] = {
-          value: (
-            <FormattedMessage
-              id="app.pipelineEditor.BoxForm.missingPortName"
-              defaultMessage="You must choose some name for the port."
-            />
-          )
-        };
-      }
-    }
-
-    if (Object.keys(portsInErrors).length > 0) {
-      errors['portsIn'] = portsInErrors;
-    }
-
-    const portsOutErrors = {};
-    for (let portName of portsOutNames) {
-      if (!portsOut[portName] || portsOut[portName].length === 0) {
-        portsOutErrors[portName] = {
-          value: (
-            <FormattedMessage id="app.pipelineEditor.BoxForm.missingPortName" />
-          )
-        };
-      }
-    }
-
-    // check that one box does not have the same var as input and output
-    for (let portIn of portsInNames) {
-      for (let portOut of portsOutNames) {
-        if (
-          portsIn[portIn] &&
-          portsOut[portOut] &&
-          portsIn[portIn].value === portsOut[portOut].value
-        ) {
-          portsOutErrors[portOut] = {
+      for (let portName of portsInNames) {
+        if (!portsIn[portName] || portsIn[portName].length === 0) {
+          portsInErrors[portName] = {
             value: (
               <FormattedMessage
-                id="app.pipelineEditor.BoxForm.loop"
-                defaultMessage="Box can't use its own output as its input."
+                id="app.pipelineEditor.BoxForm.missingPortName"
+                defaultMessage="You must choose some name for the port."
               />
             )
           };
         }
       }
-    }
 
-    if (Object.keys(portsOutErrors).length > 0) {
-      errors['portsOut'] = portsOutErrors;
+      if (Object.keys(portsInErrors).length > 0) {
+        errors['portsIn'] = portsInErrors;
+      }
+
+      const portsOutErrors = {};
+      for (let portName of portsOutNames) {
+        if (!portsOut[portName] || portsOut[portName].length === 0) {
+          portsOutErrors[portName] = {
+            value: (
+              <FormattedMessage id="app.pipelineEditor.BoxForm.missingPortName" />
+            )
+          };
+        }
+      }
+
+      // check that one box does not have the same var as input and output
+      for (let portIn of portsInNames) {
+        for (let portOut of portsOutNames) {
+          if (
+            portsIn[portIn] &&
+            portsOut[portOut] &&
+            portsIn[portIn].value === portsOut[portOut].value
+          ) {
+            portsOutErrors[portOut] = {
+              value: (
+                <FormattedMessage
+                  id="app.pipelineEditor.BoxForm.loop"
+                  defaultMessage="Box can't use its own output as its input."
+                />
+              )
+            };
+          }
+        }
+      }
+
+      if (Object.keys(portsOutErrors).length > 0) {
+        errors['portsOut'] = portsOutErrors;
+      }
     }
   }
 

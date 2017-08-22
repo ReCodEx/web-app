@@ -71,17 +71,23 @@ export const removeNode = ({ nodes, dependencies }, node) => ({
 export const replaceNode = (graph, oldNode, newNode) =>
   addNode(removeNode(graph, oldNode), newNode);
 
-/*
- * Manipulation with the JSON source code
- */
+export const createGraphFromNodes = nodes => {
+  let graph = { nodes, dependencies: [] };
 
-export const createGraphFromSource = source => {
-  let graph = { nodes: JSON.parse(source), dependencies: [] };
   for (let node of graph.nodes) {
     graph = addDependencies(graph, node);
   }
 
   return graph;
+};
+
+/*
+ * Manipulation with the JSON source code
+ */
+
+export const createGraphFromSource = source => {
+  const nodes = JSON.parse(source);
+  return createGraphFromNodes(nodes);
 };
 
 export const graphToSource = graph => JSON.stringify(graph.nodes);

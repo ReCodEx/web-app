@@ -42,21 +42,24 @@ const createDotForNodeFactory = dependencies => (
         label = "${name}";
         id = "B-${name}";
         ${!hasFullSupport
-          ? 'fontcolor=red; color=red;'
-          : 'color = "#f8f8f8"; style=filled;'}
+          ? 'fontcolor = "red"; color = "red";'
+          : 'color = "black"; style = "filled, solid";'}
+        fillcolor = "#f9f9f9";
         subgraph cluster_inputs {
-          style = "filled";
+          style = "filled, solid";
           id = "I-${name}";
           label = "inputs";
           color = "#fcffc6";
+          fillcolor = "#fcffc6";
           fontcolor = black;
           ${inputs.join(';')}
         }
         subgraph cluster_outputs {
-          style = "filled";
+          style = "filled, solid";
           id = "O-${name}";
           label = "outputs";
           color = "#d1f9e9";
+          fillcolor = "#d1f9e9";
           fontcolor = black;
           ${outputs.join(';')}
         }

@@ -21,7 +21,7 @@ const EditBoxForm = ({ item, edit, onHide, boxTypes, onDelete, ...props }) =>
         initialValues={item}
         onHide={onHide}
         onSubmit={data => {
-          const boxType = boxTypes.find(box => box.name === data.type);
+          const boxType = boxTypes.find(box => box.type === data.type);
           if (!boxType) {
             throw new Error('No box type was selected.');
           }

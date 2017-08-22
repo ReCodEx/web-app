@@ -16,6 +16,7 @@ import {
   replaceNode,
   removeNode,
   createGraphFromSource,
+  createGraphFromNodes,
   graphToSource
 } from '../../../helpers/pipelineGraph';
 
@@ -29,10 +30,12 @@ class PipelineVisualEditor extends Component {
   componentWillMount = () => {
     // initialize the graph, if the source is valid
     const { source } = this.props;
-    if (isJSON(source)) {
-      const graph = createGraphFromSource(source);
-      this.setState({ graph });
-    }
+    const graph =
+      typeof source === 'string'
+        ? isJSON(source) ? createGraphFromSource(source) : null
+        : createGraphFromNodes(source);
+
+    this.setState({ graph });
   };
 
   componentDidMount = () => {
@@ -109,13 +112,15 @@ class PipelineVisualEditor extends Component {
       >
         <Well>
           {graph.nodes.length > 0 && <PipelineVisualisation graph={graph} />}
-          <Button onClick={this.showAddNodeForm}>
-            <AddIcon />
-            <FormattedMessage
-              id="app.pipelineVisualEditor.addBoxButton"
-              defaultMessage="Add box"
-            />
-          </Button>
+          <p className="text-center">
+            <Button onClick={this.showAddNodeForm}>
+              <AddIcon />
+              <FormattedMessage
+                id="app.pipelineVisualEditor.addBoxButton"
+                defaultMessage="Add box"
+              />
+            </Button>
+          </p>
         </Well>
         <AddBoxForm
           add={this.addNode}
@@ -135,7 +140,7 @@ class PipelineVisualEditor extends Component {
 }
 
 PipelineVisualEditor.propTypes = {
-  source: PropTypes.string.isRequired,
+  source: PropTypes.oneOfType([PropTypes.string, PropTypes.array]).isRequired,
   onChange: PropTypes.func.isRequired
 };
 

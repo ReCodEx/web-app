@@ -114,7 +114,7 @@ const EditPipelineForm = ({
     />
 
     <Field
-      name="boxes"
+      name="pipeline.boxes"
       component={PipelineField}
       label={
         <FormattedMessage
@@ -125,7 +125,7 @@ const EditPipelineForm = ({
     />
 
     <Field
-      name="variables"
+      name="pipeline.variables"
       component={PipelineVariablesField}
       variables={variables}
       label={
