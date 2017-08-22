@@ -4,7 +4,7 @@ import { Field } from 'redux-form';
 import { TextField } from '../Fields';
 import { FormattedMessage } from 'react-intl';
 
-const PipelineVariablesField = ({ label, prefix, variables }) =>
+const PipelineVariablesField = ({ input, label, variables }) =>
   <div>
     <h4>
       {label}
@@ -17,7 +17,7 @@ const PipelineVariablesField = ({ label, prefix, variables }) =>
     {variables.map(({ name }) =>
       <Field
         key={name}
-        name={`${prefix}.${name}`}
+        name={`${input.name}.${name}`}
         component={TextField}
         label={`${name}: `}
       />
@@ -25,12 +25,14 @@ const PipelineVariablesField = ({ label, prefix, variables }) =>
   </div>;
 
 PipelineVariablesField.propTypes = {
+  input: PropTypes.shape({
+    name: PropTypes.string.isRequired
+  }).isRequired,
   label: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) }),
     PropTypes.element
   ]).isRequired,
-  prefix: PropTypes.string.isRequired,
   variables: PropTypes.array
 };
 
