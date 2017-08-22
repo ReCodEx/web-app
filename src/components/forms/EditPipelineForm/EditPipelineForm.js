@@ -1,11 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { canUseDOM } from 'exenv';
-import { reduxForm, Field, touch } from 'redux-form';
+import { connect } from 'react-redux';
+import { reduxForm, Field, touch, formValueSelector } from 'redux-form';
 import { FormattedMessage } from 'react-intl';
 import { Alert } from 'react-bootstrap';
 
-import { TextField, MarkdownTextAreaField, PipelineField } from '../Fields';
+import {
+  TextField,
+  MarkdownTextAreaField,
+  PipelineField,
+  PipelineVariablesField
+} from '../Fields';
 
 import FormBox from '../../widgets/FormBox';
 import SubmitButton from '../SubmitButton';
@@ -22,6 +28,7 @@ const EditPipelineForm = ({
   handleSubmit,
   submitFailed: hasFailed,
   submitSucceeded: hasSucceeded,
+  variables = [],
   invalid,
   asyncValidating
 }) =>
@@ -116,6 +123,18 @@ const EditPipelineForm = ({
         />
       }
     />
+
+    <Field
+      name="variables"
+      component={PipelineVariablesField}
+      variables={variables}
+      label={
+        <FormattedMessage
+          id="app.editPipelineFields.pipelineVariables"
+          defaultMessage="Pipeline variables:"
+        />
+      }
+    />
   </FormBox>;
 
 EditPipelineForm.propTypes = {
@@ -127,6 +146,7 @@ EditPipelineForm.propTypes = {
   submitFailed: PropTypes.bool,
   submitSucceeded: PropTypes.bool,
   invalid: PropTypes.bool,
+  variables: PropTypes.array,
   asyncValidating: PropTypes.oneOfType([PropTypes.bool, PropTypes.string])
 };
 
@@ -174,8 +194,14 @@ const asyncValidate = (values, dispatch, { initialValues: { id, version } }) =>
       }
     });
 
-export default reduxForm({
-  form: 'editPipeline',
-  validate,
-  asyncValidate
-})(EditPipelineForm);
+const mapStateToProps = state => ({
+  variables: formValueSelector('editPipeline')(state, 'pipeline.variables')
+});
+
+export default connect(mapStateToProps)(
+  reduxForm({
+    form: 'editPipeline',
+    validate,
+    asyncValidate
+  })(EditPipelineForm)
+);
