@@ -1450,12 +1450,6 @@ clone@^2.1.1:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/clone/-/clone-2.1.1.tgz#d217d1e961118e3ac9a4b8bba3285553bf647cdb"
 
-closest@^0.0.1:
-  version "0.0.1"
-  resolved "https://registry.yarnpkg.com/closest/-/closest-0.0.1.tgz#26da6f80b3e0e17e71f80f12782819e9f653495c"
-  dependencies:
-    matches-selector "0.0.1"
-
 co@3.1.0:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/co/-/co-3.1.0.tgz#4ea54ea5a08938153185e15210c68d9092bc1b78"
@@ -4529,10 +4523,6 @@ marked@^0.3.5:
   version "0.3.6"
   resolved "https://registry.yarnpkg.com/marked/-/marked-0.3.6.tgz#b2c6c618fccece4ef86c4fc6cb8a7cbf5aeda8d7"
 
-matches-selector@0.0.1:
-  version "0.0.1"
-  resolved "https://registry.yarnpkg.com/matches-selector/-/matches-selector-0.0.1.tgz#1df5262243ae341c1a0804dd302048267ac713bb"
-
 matchmediaquery@^0.2.1:
   version "0.2.1"
   resolved "https://registry.yarnpkg.com/matchmediaquery/-/matchmediaquery-0.2.1.tgz#223c7005793de03e47ce92b13285a72c44ada2cf"
@@ -6000,7 +5990,7 @@ react-toggle@^3.0.1:
   dependencies:
     classnames "^2.2.5"
 
-react@^15.0.2, react@^15.1.0, react@^15.5.4:
+react@^15.0.2, react@^15.5.4:
   version "15.6.1"
   resolved "https://registry.yarnpkg.com/react/-/react-15.6.1.tgz#baa8434ec6780bde997cdc380b79cd33b96393df"
   dependencies:
@@ -6702,14 +6692,6 @@ stdout-stream@^1.4.0:
 stealthy-require@^1.1.0:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/stealthy-require/-/stealthy-require-1.1.1.tgz#35b09875b4ff49f26a777e509b3090a3226bf24b"
-
-storm-react-diagrams@^2.4.9:
-  version "2.4.9"
-  resolved "https://registry.yarnpkg.com/storm-react-diagrams/-/storm-react-diagrams-2.4.9.tgz#60ed20edc4d15221a8eca4f8db5dc6aced481cdd"
-  dependencies:
-    closest "^0.0.1"
-    lodash "^4.13.1"
-    react "^15.1.0"
 
 stream-browserify@^2.0.1:
   version "2.0.1"
