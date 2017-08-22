@@ -13,7 +13,7 @@ import {
   init,
   submitAssignmentSolution as submitSolution
 } from '../../redux/modules/submission';
-import { fetchRuntimeEnvironmentIfNeeded } from '../../redux/modules/runtimeEnvironments';
+import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments';
 
 import {
   getAssignment,
@@ -49,13 +49,8 @@ import withLinks from '../../hoc/withLinks';
 class Assignment extends Component {
   static loadAsync = ({ assignmentId }, dispatch) =>
     Promise.all([
-      dispatch(fetchAssignmentIfNeeded(assignmentId))
-        .then(res => res.value)
-        .then(({ runtimeEnvironmentsIds }) =>
-          runtimeEnvironmentsIds.map(id =>
-            dispatch(fetchRuntimeEnvironmentIfNeeded(id))
-          )
-        ),
+      dispatch(fetchAssignmentIfNeeded(assignmentId)),
+      dispatch(fetchRuntimeEnvironments()),
       dispatch(canSubmit(assignmentId))
     ]);
 
@@ -180,48 +175,51 @@ class Assignment extends Component {
                       <LocalizedTexts locales={assignment.localizedTexts} />}
                   </div>
                 </Col>
-                <Col lg={6}>
-                  <AssignmentDetails
-                    {...assignment}
-                    isAfterFirstDeadline={this.isAfter(
-                      assignment.firstDeadline
-                    )}
-                    isAfterSecondDeadline={this.isAfter(
-                      assignment.secondDeadline
-                    )}
-                    canSubmit={canSubmit}
-                    runtimeEnvironments={runtimeEnvironments}
-                  />
-
-                  {isStudentOf(assignment.groupId) &&
-                    <div>
-                      <p className="text-center">
-                        <ResourceRenderer
-                          loading={<SubmitSolutionButton disabled={true} />}
-                          resource={canSubmit}
-                        >
-                          {canSubmit =>
-                            <SubmitSolutionButton
-                              onClick={init(assignment.id)}
-                              disabled={!canSubmit}
-                            />}
-                        </ResourceRenderer>
-                      </p>
-                      <SubmitSolutionContainer
-                        userId={userId}
-                        id={assignment.id}
-                        onSubmit={submitSolution}
-                        onReset={init}
-                        isOpen={submitting}
-                        runtimeEnvironments={runtimeEnvironments}
+                <ResourceRenderer resource={runtimeEnvironments}>
+                  {(...runtimes) =>
+                    <Col lg={6}>
+                      <AssignmentDetails
+                        {...assignment}
+                        isAfterFirstDeadline={this.isAfter(
+                          assignment.firstDeadline
+                        )}
+                        isAfterSecondDeadline={this.isAfter(
+                          assignment.secondDeadline
+                        )}
+                        canSubmit={canSubmit}
+                        runtimeEnvironments={runtimes}
                       />
 
-                      <SubmissionsTableContainer
-                        userId={userId}
-                        assignmentId={assignment.id}
-                      />
-                    </div>}
-                </Col>
+                      {isStudentOf(assignment.groupId) &&
+                        <div>
+                          <p className="text-center">
+                            <ResourceRenderer
+                              loading={<SubmitSolutionButton disabled={true} />}
+                              resource={canSubmit}
+                            >
+                              {canSubmit =>
+                                <SubmitSolutionButton
+                                  onClick={init(assignment.id)}
+                                  disabled={!canSubmit}
+                                />}
+                            </ResourceRenderer>
+                          </p>
+                          <SubmitSolutionContainer
+                            userId={userId}
+                            id={assignment.id}
+                            onSubmit={submitSolution}
+                            onReset={init}
+                            isOpen={submitting}
+                            runtimeEnvironments={runtimes}
+                          />
+
+                          <SubmissionsTableContainer
+                            userId={userId}
+                            assignmentId={assignment.id}
+                          />
+                        </div>}
+                    </Col>}
+                </ResourceRenderer>
               </Row>
             </div>}
         </ResourceRenderer>
@@ -252,14 +250,16 @@ export default withLinks(
   connect(
     (state, { params: { assignmentId, userId } }) => {
       const assignmentSelector = getAssignment(assignmentId);
-      const environments = runtimeEnvironmentsSelector(assignmentId);
+      const environments = runtimeEnvironmentsSelector(assignmentId)(
+        state
+      ).toJS();
       userId = userId || loggedInUserIdSelector(state);
       return {
         assignment: assignmentSelector(state),
         submitting: isSubmitting(state),
-        runtimeEnvironments: environments(state)
-          .toJS()
-          .map(i => runtimeEnvironmentSelector(i)(state)),
+        runtimeEnvironments: environments.map(i =>
+          runtimeEnvironmentSelector(i)(state)
+        ),
         userId,
         loggeInUserId: loggedInUserIdSelector(state),
         isSuperAdmin: isSuperAdmin(userId)(state),
