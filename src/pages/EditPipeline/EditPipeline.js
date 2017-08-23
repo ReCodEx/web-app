@@ -103,10 +103,10 @@ class EditPipeline extends Component {
                           ...formData,
                           pipeline: {
                             boxes,
-                            variables: Object.keys(variables).map(name => ({
-                              name,
+                            variables: Object.keys(variables).map(key => ({
+                              name: atob(key),
                               type: 'string',
-                              value: variables[name]
+                              value: variables[key]
                             }))
                           }
                         };

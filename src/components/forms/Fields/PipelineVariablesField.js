@@ -19,7 +19,7 @@ const PipelineVariablesField = ({ input, label, variables }) =>
         key={value}
         name={`${input.name}.${value}`}
         component={TextField}
-        label={`${value}: `}
+        label={`${atob(value)}: `}
       />
     )}
   </div>;
