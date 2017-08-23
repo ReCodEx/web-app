@@ -106,7 +106,7 @@ class Dashboard extends Component {
       usersStatistics,
       allGroups,
       isAdmin,
-      links: { GROUP_URI_FACTORY, INSTANCE_URI_FACTORY }
+      links: { GROUP_URI_FACTORY }
     } = this.props;
 
     return (
@@ -142,6 +142,53 @@ class Dashboard extends Component {
               <UsersNameContainer userId={user.id} large noLink />
             </p>
 
+            {student &&
+              studentOfGroupsIds.length === 0 &&
+              <Row>
+                <Col sm={12}>
+                  <div className="callout callout-success">
+                    <h4>
+                      <InfoIcon />{' '}
+                      <FormattedMessage
+                        id="app.user.welcomeTitle"
+                        defaultMessage="Welcome to ReCodEx"
+                      />
+                    </h4>
+                    <p>
+                      <FormattedMessage
+                        id="app.user.newAccount"
+                        defaultMessage="Your account is ready, but you are not a member of any group yet. You should see the list of all the available groups and join some of them."
+                        values={{ name: user.name }}
+                      />
+                    </p>
+                  </div>
+                </Col>
+              </Row>}
+
+            {supervisor &&
+              supervisorOfGroupsIds.length === 0 &&
+              <Row>
+                <Col sm={12}>
+                  <div className="callout callout-success">
+                    <h4>
+                      <InfoIcon />{' '}
+                      <FormattedMessage
+                        id="app.user.welcomeTitle"
+                        defaultMessage="Welcome to ReCodEx"
+                      />
+                    </h4>
+                    <p>
+                      <FormattedMessage
+                        id="app.user.newSupervisorAccount"
+                        defaultMessage="Your account is ready, but you are not a member of any group yet. The administrator will assign you to a group and you will be able to manage the group afterwards."
+                      />
+                    </p>
+                  </div>
+                </Col>
+              </Row>}
+
+            {student && <SisIntegrationContainer />}
+
             {studentOfGroupsIds.length > 0 &&
               <ResourceRenderer resource={studentOf}>
                 {(...groups) =>
@@ -152,8 +199,6 @@ class Dashboard extends Component {
                         defaultMessage="Groups you are student of"
                       />
                     </h2>
-
-                    <SisIntegrationContainer />
 
                     {groups.map(group =>
                       <div key={group.id}>
@@ -215,6 +260,12 @@ class Dashboard extends Component {
                   </div>}
               </ResourceRenderer>}
 
+            {(supervisor || isAdmin) &&
+              <ResourceRenderer resource={isAdmin ? allGroups : supervisorOf}>
+                {(...groups) =>
+                  <SisSupervisorGroupsContainer groups={groups} />}
+              </ResourceRenderer>}
+
             {supervisorOfGroupsIds.length > 0 &&
               <Row>
                 <Col sm={12}>
@@ -224,13 +275,6 @@ class Dashboard extends Component {
                       defaultMessage="Groups you supervise"
                     />
                   </h2>
-
-                  <ResourceRenderer
-                    resource={isAdmin ? allGroups : supervisorOf}
-                  >
-                    {(...groups) =>
-                      <SisSupervisorGroupsContainer groups={groups} />}
-                  </ResourceRenderer>
 
                   <ResourceRenderer resource={supervisorOf}>
                     {(...groups) =>
@@ -270,61 +314,6 @@ class Dashboard extends Component {
                         )}
                       </div>}
                   </ResourceRenderer>
-                </Col>
-              </Row>}
-
-            {student &&
-              studentOfGroupsIds.length === 0 &&
-              <Row>
-                <Col sm={12}>
-                  <div className="callout callout-success">
-                    <h4>
-                      <InfoIcon />{' '}
-                      <FormattedMessage
-                        id="app.user.welcomeTitle"
-                        defaultMessage="Welcome to ReCodEx"
-                      />
-                    </h4>
-                    <p>
-                      <FormattedMessage
-                        id="app.user.newAccount"
-                        defaultMessage="Your account is ready, but you are not a member of any group yet. You should see the list of all the available groups and join some of them."
-                        values={{ name: user.name }}
-                      />
-                    </p>
-                    <p className="text-center">
-                      <LinkContainer to={INSTANCE_URI_FACTORY(user.instanceId)}>
-                        <Button bsStyle="success">
-                          <FormattedMessage
-                            id="app.user.examineGroupsInstance"
-                            defaultMessage="Find your groups"
-                          />
-                        </Button>
-                      </LinkContainer>
-                    </p>
-                  </div>
-                </Col>
-              </Row>}
-
-            {supervisor &&
-              supervisorOfGroupsIds.length === 0 &&
-              <Row>
-                <Col sm={12}>
-                  <div className="callout callout-success">
-                    <h4>
-                      <InfoIcon />{' '}
-                      <FormattedMessage
-                        id="app.user.welcomeTitle"
-                        defaultMessage="Welcome to ReCodEx"
-                      />
-                    </h4>
-                    <p>
-                      <FormattedMessage
-                        id="app.user.newSupervisorAccount"
-                        defaultMessage="Your account is ready, but you are not a member of any group yet. The administrator will assign you to a group and you will be able to manage the group afterwards."
-                      />
-                    </p>
-                  </div>
                 </Col>
               </Row>}
           </div>}
