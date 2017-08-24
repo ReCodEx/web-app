@@ -8,12 +8,8 @@ class ExpandingTextField extends Component {
 
   componentDidMount() {
     const { input: { value } } = this.props;
-    const initialValue = Array.isArray(value) ? value : [''];
+    const initialValue = Array.isArray(value) ? value.concat(['']) : [''];
     this.setState({ texts: initialValue });
-  }
-
-  componentWillReceiveProps(newProps) {
-    this.setState({ texts: newProps.input.value });
   }
 
   changeText = (i, text, onChange) => {
@@ -23,7 +19,20 @@ class ExpandingTextField extends Component {
       texts.push('');
     }
     this.setState({ texts });
-    onChange(texts);
+
+    const texts2 = texts.slice(0, texts.length - 1);
+    onChange(texts2);
+  };
+
+  removeIfEmpty = (i, onChange) => {
+    const { texts } = this.state;
+    if (i !== texts.length - 1 && texts[i] === '') {
+      texts.splice(i, 1);
+      this.setState({ texts });
+
+      const texts2 = texts.slice(0, texts.length - 1);
+      onChange(texts2);
+    }
   };
 
   render() {
@@ -37,6 +46,7 @@ class ExpandingTextField extends Component {
             key={i}
             componentClass="input"
             onChange={e => this.changeText(i, e.target.value, onChange)}
+            onBlur={() => this.removeIfEmpty(i, onChange)}
             value={text}
           />
         )}
