@@ -39,7 +39,14 @@ const EditEnvironmentConfigTab = ({
       <FieldArray
         name={`${prefix}.variablesTable`}
         component={EditEnvironmentConfigVariables}
-        formValues={formValues.environmentConfigs[i].variablesTable}
+        formValues={
+          formValues &&
+          formValues.environmentConfigs &&
+          formValues.environmentConfigs[i] &&
+          formValues.environmentConfigs[i].variablesTable
+            ? formValues.environmentConfigs[i].variablesTable
+            : []
+        }
       />
     </div>
   );

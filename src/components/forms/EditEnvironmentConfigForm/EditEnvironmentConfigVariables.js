@@ -84,16 +84,17 @@ const EditEnvironmentConfigVariables = ({
                   />
                 </Col>
                 <Col xs={8} style={{ paddingLeft: '0px' }}>
-                  <Field
-                    name={`${variable}.value`}
-                    component={
-                      formValues[index].type === 'string' ||
-                      formValues[index].type === 'file'
-                        ? TextField
-                        : ExpandingTextField
-                    }
-                    label={''}
-                  />
+                  {formValues[index] &&
+                    <Field
+                      name={`${variable}.value`}
+                      component={
+                        formValues[index].type === 'string' ||
+                        formValues[index].type === 'file'
+                          ? TextField
+                          : ExpandingTextField
+                      }
+                      label={''}
+                    />}
                 </Col>
               </Row>
             </td>
