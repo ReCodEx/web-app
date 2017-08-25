@@ -78,7 +78,7 @@ class EditPipeline extends Component {
         {({ pipeline: { boxes, variables }, ...data }) =>
           <div>
             <Row>
-              <Col lg={6}>
+              <Col lg={12}>
                 <Row>
                   <Col lg={12}>
                     <EditPipelineForm
