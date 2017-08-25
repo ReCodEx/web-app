@@ -207,8 +207,16 @@ const flattenPorts = boxes =>
   );
 
 const extractVariables = (boxes = []) => {
-  const inputs = flattenPorts(boxes.map(box => box.portsIn));
-  return [...new Set(inputs)];
+  const inputs = flattenPorts(
+    boxes.map(box => box.portsIn).filter(ports => ports)
+  );
+
+  // remove duplicities
+  return inputs.reduce(
+    (acc, port) =>
+      !acc.find(item => item.name === port.name) ? [...acc, port] : acc,
+    []
+  );
 };
 
 const mapStateToProps = state => ({

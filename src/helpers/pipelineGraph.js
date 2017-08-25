@@ -7,10 +7,15 @@ export const addDependencies = (graph, node) => {
   const dependencies = graph.dependencies;
   const candidates = [];
 
+  const nodePortsIn = node.portsIn ? Object.keys(node.portsIn) : {};
+  const nodePortsOut = node.portsOut ? Object.keys(node.portsOut) : {};
+
   for (let old of graph.nodes) {
-    for (let portInName of Object.keys(old.portsIn)) {
+    const oldPortsIn = old.portsIn ? Object.keys(old.portsIn) : {};
+    const oldPortsOut = old.portsOut ? Object.keys(old.portsOut) : {};
+    for (let portInName of oldPortsIn) {
       const portIn = old.portsIn[portInName];
-      for (let portOutName of Object.keys(node.portsOut)) {
+      for (let portOutName of nodePortsOut) {
         const portOut = node.portsOut[portOutName];
         if (portIn.value === portOut.value) {
           candidates.push({
@@ -22,9 +27,9 @@ export const addDependencies = (graph, node) => {
       }
     }
 
-    for (let portInName of Object.keys(node.portsIn)) {
+    for (let portInName of nodePortsIn) {
       const portIn = node.portsIn[portInName];
-      for (let portOutName of Object.keys(old.portsOut)) {
+      for (let portOutName of oldPortsOut) {
         const portOut = old.portsOut[portOutName];
         if (portIn.value === portOut.value) {
           candidates.push({

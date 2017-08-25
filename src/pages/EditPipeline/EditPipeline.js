@@ -89,7 +89,7 @@ class EditPipeline extends Component {
                           variables: variables.reduce(
                             (acc, variable) => ({
                               ...acc,
-                              [variable.name]: variable.value
+                              [btoa(variable.name)]: variable.value
                             }),
                             {}
                           )
@@ -102,7 +102,17 @@ class EditPipeline extends Component {
                         const transformedData = {
                           ...formData,
                           pipeline: {
-                            boxes,
+                            boxes: boxes.map(box => {
+                              if (Object.keys(box.portsIn).length === 0) {
+                                delete box.portsIn;
+                              }
+
+                              if (Object.keys(box.portsOut).length === 0) {
+                                delete box.portsOut;
+                              }
+
+                              return box;
+                            }),
                             variables: Object.keys(variables).map(key => ({
                               name: atob(key),
                               type: 'string',

@@ -11,8 +11,8 @@ const createDependency = (from, to, clusterTo = null) => {
 
 const createDotForNodeFactory = dependencies => (
   name,
-  portsIn,
-  portsOut,
+  portsIn = {},
+  portsOut = {},
   i
 ) => {
   let hasFullSupport = true;

@@ -30,11 +30,23 @@ const EditBoxForm = ({ item, edit, onHide, boxTypes, onDelete, ...props }) =>
           const allowedPortsOut = Object.keys(boxType.portsOut);
 
           const portsIn = allowedPortsIn.reduce(
-            (acc, port) => ({ ...acc, [port]: data.portsIn[port] }),
+            (acc, port) => ({
+              ...acc,
+              [port]: {
+                type: boxType.portsIn[port].type,
+                ...data.portsIn[port]
+              }
+            }),
             {}
           );
           const portsOut = allowedPortsOut.reduce(
-            (acc, port) => ({ ...acc, [port]: data.portsOut[port] }),
+            (acc, port) => ({
+              ...acc,
+              [port]: {
+                type: boxType.portsOut[port].type,
+                ...data.portsOut[port]
+              }
+            }),
             {}
           );
 
