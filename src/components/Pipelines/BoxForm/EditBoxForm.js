@@ -33,17 +33,24 @@ const EditBoxForm = ({ item, edit, onHide, boxTypes, onDelete, ...props }) =>
             (acc, port) => ({
               ...acc,
               [port]: {
-                type: boxType.portsIn[port].type,
+                type:
+                  boxType.portsIn[port].type === '?'
+                    ? 'string'
+                    : boxType.portsIn[port].type,
                 ...data.portsIn[port]
               }
             }),
             {}
           );
+
           const portsOut = allowedPortsOut.reduce(
             (acc, port) => ({
               ...acc,
               [port]: {
-                type: boxType.portsOut[port].type,
+                type:
+                  boxType.portsOut[port].type === '?'
+                    ? 'string'
+                    : boxType.portsOut[port].type,
                 ...data.portsOut[port]
               }
             }),

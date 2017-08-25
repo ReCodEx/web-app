@@ -28,7 +28,10 @@ const AddBoxForm = ({ add, onHide, boxTypes, ...props }) =>
         (acc, port) => ({
           ...acc,
           [port]: {
-            type: boxType.portsIn[port].type,
+            type:
+              boxType.portsIn[port].type === '?'
+                ? 'string'
+                : boxType.portsIn[port].type,
             ...portsIn[port]
           }
         }),
@@ -39,7 +42,10 @@ const AddBoxForm = ({ add, onHide, boxTypes, ...props }) =>
         (acc, port) => ({
           ...acc,
           [port]: {
-            type: boxType.portsOut[port].type,
+            type:
+              boxType.portsOut[port].type === '?'
+                ? 'string'
+                : boxType.portsOut[port].type,
             ...portsOut[port]
           }
         }),
