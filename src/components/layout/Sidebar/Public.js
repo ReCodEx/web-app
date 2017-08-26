@@ -11,7 +11,7 @@ const Public = ({
   isLoggedIn,
   currentUrl,
   links: { LOGIN_URI, REGISTRATION_URI, BUGS_URL }
-}) => (
+}) =>
   <ul className="sidebar-menu">
     <MenuTitle title="ReCodEx" />
     <MenuItem
@@ -44,14 +44,11 @@ const Public = ({
           defaultMessage="Feedback and bug reporting"
         />
       }
-      isActive={false}
       icon="bug"
       link={BUGS_URL}
       currentPath={currentUrl}
-      inNewTab={true}
     />
-  </ul>
-);
+  </ul>;
 
 Public.propTypes = {
   isLoggedIn: PropTypes.bool,
