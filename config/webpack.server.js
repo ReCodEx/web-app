@@ -1,7 +1,5 @@
 const path = require('path');
-const webpack = require('webpack');
 const fs = require('fs');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 // load variables from .env
 require('dotenv').config();
@@ -31,13 +29,5 @@ module.exports = {
   },
   module: clientConfig.module,
   externals: nodeModules,
-  plugins: [
-    new ExtractTextPlugin('style.css'),
-    new webpack.DefinePlugin({
-      'process.env': {
-        NODE_ENV: "'production'",
-        API_BASE: "'" + process.env.API_BASE + "'"
-      }
-    })
-  ]
+  plugins: clientConfig.plugins
 };
