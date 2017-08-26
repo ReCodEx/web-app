@@ -47,7 +47,6 @@ class MenuGroup extends Component {
     } = this.props;
 
     const dropdownStyles = {
-      maxHeight: 200,
       overflowY: 'auto',
       overflowX: 'hidden'
     };
