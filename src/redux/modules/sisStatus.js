@@ -11,7 +11,7 @@ const { actions, reduceActions } = factory({
   apiEndpointFactory: () => '/extensions/sis/status'
 });
 
-export const fetchSisStatusIfNeeded = () => actions.fetchOneIfNeeded('status');
+export const fetchSisStatusIfNeeded = actions.fetchOneIfNeeded;
 
 const reducer = handleActions(
   Object.assign({}, reduceActions, {}),

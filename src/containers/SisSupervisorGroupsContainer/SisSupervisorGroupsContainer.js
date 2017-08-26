@@ -30,21 +30,16 @@ class SisSupervisorGroupsContainer extends Component {
     this.props.loadData(this.props.currentUserId);
   }
 
-  static loadData = (dispatch, loggedInUserId) => {
-    dispatch((dispatch, getState) =>
-      dispatch(fetchSisStatusIfNeeded())
-        .then(res => res.value)
-        .then(
-          status =>
-            status.accessible &&
-            status.terms.map(term =>
-              dispatch(
-                fetchSisSupervisedCourses(loggedInUserId, term.year, term.term)
-              )
-            )
-        )
-    );
-  };
+  static loadData = (dispatch, loggedInUserId) =>
+    dispatch(fetchSisStatusIfNeeded())
+      .then(res => res.value)
+      .then(
+        ({ accessible, terms }) =>
+          accessible &&
+          terms.map(({ year, term }) =>
+            dispatch(fetchSisSupervisedCourses(loggedInUserId, year, term))
+          )
+      );
 
   render() {
     const {
@@ -73,12 +68,12 @@ class SisSupervisorGroupsContainer extends Component {
           {sisStatus =>
             <div>
               {!sisStatus.accessible &&
-                <div className="text-center">
+                <p className="text-center">
                   <FormattedMessage
                     id="app.sisSupervisor.noAccessible"
                     defaultMessage="Your account does not support SIS integration. Please, log in using CAS-UK."
                   />
-                </div>}
+                </p>}
               {sisStatus.accessible &&
                 sisStatus.terms.map((term, i) =>
                   <div key={i}>
