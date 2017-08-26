@@ -75,16 +75,53 @@ class EditPipeline extends Component {
           }
         ]}
       >
-        {pipeline =>
+        {({ pipeline: { boxes, variables }, ...data }) =>
           <div>
             <Row>
-              <Col lg={6}>
+              <Col lg={12}>
                 <Row>
                   <Col lg={12}>
                     <EditPipelineForm
-                      initialValues={pipeline}
-                      onSubmit={formData =>
-                        editPipeline(pipeline.version, formData)}
+                      initialValues={{
+                        ...data,
+                        pipeline: {
+                          boxes,
+                          variables: variables.reduce(
+                            (acc, variable) => ({
+                              ...acc,
+                              [btoa(variable.name)]: variable.value
+                            }),
+                            {}
+                          )
+                        }
+                      }}
+                      onSubmit={({
+                        pipeline: { boxes, variables },
+                        ...formData
+                      }) => {
+                        const transformedData = {
+                          ...formData,
+                          pipeline: {
+                            boxes: boxes.map(box => {
+                              if (Object.keys(box.portsIn).length === 0) {
+                                delete box.portsIn;
+                              }
+
+                              if (Object.keys(box.portsOut).length === 0) {
+                                delete box.portsOut;
+                              }
+
+                              return box;
+                            }),
+                            variables: Object.keys(variables).map(key => ({
+                              name: atob(key),
+                              type: 'string',
+                              value: variables[key]
+                            }))
+                          }
+                        };
+                        return editPipeline(data.version, transformedData);
+                      }}
                     />
                   </Col>
                 </Row>
@@ -113,7 +150,7 @@ class EditPipeline extends Component {
                     </p>
                     <p className="text-center">
                       <DeletePipelineButtonContainer
-                        id={pipeline.id}
+                        id={data.id}
                         onDeleted={() => push(PIPELINES_URI)}
                       />
                     </p>
@@ -141,12 +178,10 @@ EditPipeline.propTypes = {
 
 export default withLinks(
   connect(
-    (state, { params: { pipelineId } }) => {
-      return {
-        pipeline: getPipeline(pipelineId)(state),
-        userId: loggedInUserIdSelector(state)
-      };
-    },
+    (state, { params: { pipelineId } }) => ({
+      pipeline: getPipeline(pipelineId)(state),
+      userId: loggedInUserIdSelector(state)
+    }),
     (dispatch, { params: { pipelineId } }) => ({
       push: url => dispatch(push(url)),
       reset: () => dispatch(reset('editPipeline')),

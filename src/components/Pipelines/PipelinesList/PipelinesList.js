@@ -29,6 +29,7 @@ const PipelinesList = ({ pipelines = [], createActions }) =>
     </thead>
     <tbody>
       {pipelines
+        .filter(a => a !== null)
         .sort((a, b) => a.name.localeCompare(b.name))
         .map(pipeline =>
           <PipelinesListItem
