@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { reduxForm, FieldArray } from 'redux-form';
+import { reduxForm, FieldArray, getFormValues } from 'redux-form';
+import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import { Alert } from 'react-bootstrap';
 
@@ -17,7 +18,8 @@ class EditEnvironmentConfigForm extends Component {
       handleSubmit,
       hasFailed = false,
       hasSucceeded = false,
-      invalid
+      invalid,
+      formValues
     } = this.props;
 
     return (
@@ -35,6 +37,7 @@ class EditEnvironmentConfigForm extends Component {
           component={EditEnvironmentConfigTabs}
           environmentValues={environmentConfigs}
           runtimeEnvironments={runtimeEnvironments}
+          formValues={formValues}
         />
 
         <div className="text-center">
@@ -82,7 +85,8 @@ EditEnvironmentConfigForm.propTypes = {
   hasFailed: PropTypes.bool,
   hasSucceeded: PropTypes.bool,
   invalid: PropTypes.bool,
-  runtimeEnvironments: PropTypes.object
+  runtimeEnvironments: PropTypes.object,
+  formValues: PropTypes.object
 };
 
 const validate = ({ environmentConfigs }) => {
@@ -184,7 +188,13 @@ const validate = ({ environmentConfigs }) => {
   return errors;
 };
 
-export default reduxForm({
-  form: 'editEnvironmentConfig',
-  validate
-})(EditEnvironmentConfigForm);
+export default connect(state => {
+  return {
+    formValues: getFormValues('editEnvironmentConfig')(state)
+  };
+})(
+  reduxForm({
+    form: 'editEnvironmentConfig',
+    validate
+  })(EditEnvironmentConfigForm)
+);

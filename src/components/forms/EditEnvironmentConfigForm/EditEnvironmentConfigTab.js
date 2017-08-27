@@ -9,7 +9,8 @@ const EditEnvironmentConfigTab = ({
   prefix,
   i,
   environmentValues,
-  runtimeEnvironments
+  runtimeEnvironments,
+  formValues
 }) => {
   if (!environmentValues[i]) {
     environmentValues[i] = {
@@ -38,6 +39,14 @@ const EditEnvironmentConfigTab = ({
       <FieldArray
         name={`${prefix}.variablesTable`}
         component={EditEnvironmentConfigVariables}
+        formValues={
+          formValues &&
+          formValues.environmentConfigs &&
+          formValues.environmentConfigs[i] &&
+          formValues.environmentConfigs[i].variablesTable
+            ? formValues.environmentConfigs[i].variablesTable
+            : []
+        }
       />
     </div>
   );
@@ -47,7 +56,8 @@ EditEnvironmentConfigTab.propTypes = {
   prefix: PropTypes.string.isRequired,
   i: PropTypes.number.isRequired,
   environmentValues: PropTypes.array.isRequired,
-  runtimeEnvironments: PropTypes.object
+  runtimeEnvironments: PropTypes.object,
+  formValues: PropTypes.object
 };
 
 export default EditEnvironmentConfigTab;
