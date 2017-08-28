@@ -14,7 +14,7 @@ const LoggedIn = ({
   isCollapsed,
   currentUrl,
   links: { DASHBOARD_URI, INSTANCE_URI_FACTORY, BUGS_URL }
-}) => (
+}) =>
   <ul className="sidebar-menu">
     <MenuTitle
       title={
@@ -39,7 +39,7 @@ const LoggedIn = ({
         .toArray()
         .filter(isReady)
         .map(getJsData)
-        .map(({ id, name }) => (
+        .map(({ id, name }) =>
           <MenuItem
             key={id}
             title={name}
@@ -47,7 +47,7 @@ const LoggedIn = ({
             currentPath={currentUrl}
             link={INSTANCE_URI_FACTORY(id)}
           />
-        ))}
+        )}
 
     <MenuItem
       title={
@@ -56,14 +56,11 @@ const LoggedIn = ({
           defaultMessage="Feedback and bug reporting"
         />
       }
-      isActive={false}
       icon="bug"
       link={BUGS_URL}
       currentPath={currentUrl}
-      inNewTab={true}
     />
-  </ul>
-);
+  </ul>;
 
 LoggedIn.propTypes = {
   instances: ImmutablePropTypes.list,

@@ -13,6 +13,7 @@ import EmailVerification from './EmailVerification';
 import Exercise from './Exercise';
 import Exercises from './Exercises';
 import EditExercise from './EditExercise';
+import FeedbackAndBugs from './FeedbackAndBugs';
 import Group from './Group';
 import EditGroup from './EditGroup';
 import Instance from './Instance';
@@ -69,6 +70,7 @@ const createRoutes = getState => {
           component={Registration}
           onEnter={onlyUnauth}
         />
+        <Route path="bugs-and-feedback" component={FeedbackAndBugs} />
         <Route path="email-verification" component={EmailVerification} />
         <Route path="app" onEnter={requireAuth}>
           <IndexRoute component={Dashboard} />
