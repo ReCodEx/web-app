@@ -70,14 +70,19 @@ export const getVariablesForPipelines = (
   exerciseId,
   runtimeEnvironmentId,
   pipelinesIds
-) =>
-  createApiAction({
+) => {
+  const body =
+    runtimeEnvironmentId === 'default'
+      ? { pipelinesIds }
+      : { runtimeEnvironmentId, pipelinesIds };
+  return createApiAction({
     type: additionalActionTypes.GET_PIPELINE_VARIABLES,
     method: 'POST',
     endpoint: `/exercises/${exerciseId}/config/variables`,
     meta: { exerciseId, runtimeEnvironmentId, pipelinesIds },
-    body: { runtimeEnvironmentId, pipelinesIds }
+    body
   });
+};
 
 /**
  * Reducer
