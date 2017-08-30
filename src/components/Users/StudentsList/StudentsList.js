@@ -12,10 +12,10 @@ const StudentsList = ({
   stats,
   renderActions,
   ...rest
-}) => (
-  <Table hover responsive>
+}) =>
+  <Table hover>
     <tbody>
-      {users.map((user, i) => (
+      {users.map((user, i) =>
         <StudentsListItem
           key={i}
           {...user}
@@ -26,7 +26,7 @@ const StudentsList = ({
               : null
           }
         />
-      ))}
+      )}
 
       {users.length === 0 &&
         isLoaded &&
@@ -42,8 +42,7 @@ const StudentsList = ({
       {!isLoaded &&
         <LoadingStudentsListItem withActions={Boolean(renderActions)} />}
     </tbody>
-  </Table>
-);
+  </Table>;
 
 StudentsList.propTypes = {
   users: PropTypes.array,
