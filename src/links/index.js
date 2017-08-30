@@ -58,7 +58,8 @@ export const linksFactory = lang => {
     `${prefix}/app/assignment/${assignmentId}/submission/${submissionId}/file/${fileId}`;
 
   // external links
-  const BUGS_URL = 'https://www.github.com/recodex/web-app/issues';
+  const BUGS_URL = `${prefix}/bugs-and-feedback`;
+  const GITHUB_BUGS_URL = 'https://www.github.com/recodex/web-app/issues';
 
   // administration
   const ADMIN_URI = `${prefix}/admin`;
@@ -100,6 +101,7 @@ export const linksFactory = lang => {
     SUPERVISOR_STATS_URI_FACTORY,
     SOURCE_CODE_DETAIL_URI_FACTORY,
     BUGS_URL,
+    GITHUB_BUGS_URL,
     ADMIN_INSTANCES_URI,
     ADMIN_EDIT_INSTANCE_URI_FACTORY,
     DOWNLOAD

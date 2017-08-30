@@ -10,7 +10,7 @@ import {
   FormattedMessage
 } from 'react-intl';
 
-import { TextField, SelectField } from '../Fields';
+import { TextField, SelectField, ExpandingTextField } from '../Fields';
 
 const messages = defineMessages({
   stringType: {
@@ -20,13 +20,22 @@ const messages = defineMessages({
   fileType: {
     id: 'app.editEnvironmentConfigVariables.fileType',
     defaultMessage: 'File'
+  },
+  stringArrayType: {
+    id: 'app.editEnvironmentConfigVariables.stringArrayType',
+    defaultMessage: 'Array of strings'
+  },
+  fileArrayType: {
+    id: 'app.editEnvironmentConfigVariables.fileArrayType',
+    defaultMessage: 'Array of files'
   }
 });
 
 const EditEnvironmentConfigVariables = ({
   fields,
+  formValues,
   intl: { formatMessage }
-}) => (
+}) =>
   <div>
     <Table>
       <thead>
@@ -40,7 +49,7 @@ const EditEnvironmentConfigVariables = ({
         </tr>
       </thead>
       <tbody>
-        {fields.map((variable, index) => (
+        {fields.map((variable, index) =>
           <tr key={index}>
             <td>
               <Field
@@ -61,17 +70,31 @@ const EditEnvironmentConfigVariables = ({
                         key: 'string',
                         name: formatMessage(messages.stringType)
                       },
-                      { key: 'file', name: formatMessage(messages.fileType) }
+                      { key: 'file', name: formatMessage(messages.fileType) },
+                      {
+                        key: 'string[]',
+                        name: formatMessage(messages.stringArrayType)
+                      },
+                      {
+                        key: 'file[]',
+                        name: formatMessage(messages.fileArrayType)
+                      }
                     ]}
                     label={''}
                   />
                 </Col>
                 <Col xs={8} style={{ paddingLeft: '0px' }}>
-                  <Field
-                    name={`${variable}.value`}
-                    component={TextField}
-                    label={''}
-                  />
+                  {formValues[index] &&
+                    <Field
+                      name={`${variable}.value`}
+                      component={
+                        formValues[index].type === 'string' ||
+                        formValues[index].type === 'file'
+                          ? TextField
+                          : ExpandingTextField
+                      }
+                      label={''}
+                    />}
                 </Col>
               </Row>
             </td>
@@ -82,8 +105,7 @@ const EditEnvironmentConfigVariables = ({
                 bsSize="xs"
                 className="btn-flat"
               >
-                <Icon name="minus" />
-                {' '}
+                <Icon name="minus" />{' '}
                 <FormattedMessage
                   id="app.editEnvironmentConfigVariables.remove"
                   defaultMessage="Remove"
@@ -91,7 +113,7 @@ const EditEnvironmentConfigVariables = ({
               </Button>
             </td>
           </tr>
-        ))}
+        )}
       </tbody>
     </Table>
     <Button
@@ -99,18 +121,17 @@ const EditEnvironmentConfigVariables = ({
       bsStyle={'primary'}
       className="btn-flat"
     >
-      <Icon name="plus" />
-      {' '}
+      <Icon name="plus" />{' '}
       <FormattedMessage
         id="app.editEnvironmentConfigVariables.add"
         defaultMessage="Add variable"
       />
     </Button>
-  </div>
-);
+  </div>;
 
 EditEnvironmentConfigVariables.propTypes = {
   fields: PropTypes.object,
+  formValues: PropTypes.array,
   intl: intlShape.isRequired
 };
 
