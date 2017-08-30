@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import { reduxForm, FieldArray } from 'redux-form';
+import { reduxForm, FieldArray, getFormValues } from 'redux-form';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import { Alert, Button } from 'react-bootstrap';
@@ -11,6 +11,7 @@ import SubmitButton from '../SubmitButton';
 import EditExerciseConfigEnvironment from './EditExerciseConfigEnvironment';
 import { fetchSupplementaryFilesForExercise } from '../../../redux/modules/supplementaryFiles';
 import { createGetSupplementaryFiles } from '../../../redux/selectors/supplementaryFiles';
+import { getVariablesForPipelines } from '../../../redux/modules/exercises';
 
 class EditExerciseConfigForm extends Component {
   state = { testConfigs: [] };
@@ -59,6 +60,78 @@ class EditExerciseConfigForm extends Component {
     });
   }
 
+  getTestPipelinesVariables(runtimeEnvironmentIndex, testIndex) {
+    const { formValues, fetchVariables, change } = this.props;
+    const formPipelines =
+      formValues.config[runtimeEnvironmentIndex].tests[testIndex].pipelines;
+    var pipelines = [];
+    var firstSkipped = false;
+    if (
+      formPipelines[0] &&
+      formPipelines[0].name &&
+      formPipelines[0].name !== ''
+    ) {
+      pipelines.push(formPipelines[0].name);
+    } else {
+      firstSkipped = true;
+    }
+    if (
+      formPipelines[1] &&
+      formPipelines[1].name &&
+      formPipelines[1].name !== ''
+    ) {
+      pipelines.push(formPipelines[1].name);
+    }
+
+    fetchVariables(
+      this.state.testConfigs[runtimeEnvironmentIndex].name,
+      pipelines
+    )
+      .then(res => res.value)
+      .then(value => {
+        var newPipelines = [];
+        if (firstSkipped) {
+          newPipelines.push({ name: '', variables: [] });
+        }
+        const pipelineKeys = Object.keys(value);
+        for (
+          var pipelineIndex = 0;
+          pipelineIndex < pipelineKeys.length;
+          pipelineIndex++
+        ) {
+          const pipelineName = pipelineKeys[pipelineIndex];
+          newPipelines.push({
+            name: pipelineName,
+            variables: value[pipelineName]
+          });
+          for (
+            var variableIndex = 0;
+            variableIndex < value[pipelineName].length;
+            variableIndex++
+          ) {
+            change(
+              `config[${runtimeEnvironmentIndex}][tests][${testIndex}][pipelines][${pipelineIndex}][variables][${variableIndex}][name]`,
+              value[pipelineName][variableIndex].name
+            );
+            change(
+              `config[${runtimeEnvironmentIndex}][tests][${testIndex}][pipelines][${pipelineIndex}][variables][${variableIndex}][type]`,
+              value[pipelineName][variableIndex].type
+            );
+          }
+        }
+
+        this.setState((prevState, props) => {
+          var newTestConfigs = prevState.testConfigs;
+          newTestConfigs[runtimeEnvironmentIndex].tests[
+            testIndex
+          ].pipelines = newPipelines;
+          return {
+            testConfigs: newTestConfigs
+          };
+        });
+      });
+  }
+
   render() {
     const {
       runtimeEnvironments,
@@ -88,6 +161,8 @@ class EditExerciseConfigForm extends Component {
           runtimeEnvironments={runtimeEnvironments}
           supplementaryFiles={supplementaryFiles}
           pipelines={pipelines}
+          fetchVariables={(runtimeEnvironmentIndex, testIndex) =>
+            this.getTestPipelinesVariables(runtimeEnvironmentIndex, testIndex)}
         />
 
         <p className="text-center">
@@ -163,7 +238,10 @@ EditExerciseConfigForm.propTypes = {
   exercise: PropTypes.shape({
     id: PropTypes.string.isRequired
   }),
-  pipelines: ImmutablePropTypes.map
+  pipelines: ImmutablePropTypes.map,
+  formValues: PropTypes.object,
+  fetchVariables: PropTypes.func,
+  change: PropTypes.func
 };
 
 const validate = () => {};
@@ -174,11 +252,20 @@ const ConnectedEditExerciseConfigForm = connect(
       exercise.supplementaryFilesIds
     );
     return {
-      supplementaryFiles: getSupplementaryFilesForExercise(state)
+      supplementaryFiles: getSupplementaryFilesForExercise(state),
+      formValues: getFormValues('editExerciseConfig')(state)
     };
   },
   (dispatch, { exercise }) => ({
-    fetchFiles: () => dispatch(fetchSupplementaryFilesForExercise(exercise.id))
+    fetchFiles: () => dispatch(fetchSupplementaryFilesForExercise(exercise.id)),
+    fetchVariables: (runtimeEnvironmentIndex, testIndex) =>
+      dispatch(
+        getVariablesForPipelines(
+          exercise.id,
+          runtimeEnvironmentIndex,
+          testIndex
+        )
+      )
   })
 )(EditExerciseConfigForm);
 

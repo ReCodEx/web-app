@@ -3,13 +3,9 @@ import { Map } from 'immutable';
 import factory, { initialState } from '../helpers/resourceManager';
 import { createApiAction } from '../middleware/apiMiddleware';
 
-import {
-  actionTypes as supplementaryFilesActionTypes
-} from './supplementaryFiles';
+import { actionTypes as supplementaryFilesActionTypes } from './supplementaryFiles';
 
-import {
-  actionTypes as additionalFilesActionTypes
-} from './additionalExerciseFiles';
+import { actionTypes as additionalFilesActionTypes } from './additionalExerciseFiles';
 
 const resourceName = 'exercises';
 const { actions, reduceActions } = factory({ resourceName });
@@ -23,7 +19,8 @@ export const additionalActionTypes = {
   FORK_EXERCISE: 'recodex/exercises/FORK_EXERCISE',
   FORK_EXERCISE_PENDING: 'recodex/exercises/FORK_EXERCISE_PENDING',
   FORK_EXERCISE_REJECTED: 'recodex/exercises/FORK_EXERCISE_REJECTED',
-  FORK_EXERCISE_FULFILLED: 'recodex/exercises/FORK_EXERCISE_FULFILLED'
+  FORK_EXERCISE_FULFILLED: 'recodex/exercises/FORK_EXERCISE_FULFILLED',
+  GET_PIPELINE_VARIABLES: 'recodex/exercises/GET_PIPELINE_VARIABLES'
 };
 
 export const loadExercise = actions.pushResource;
@@ -67,6 +64,19 @@ export const validateExercise = (id, version) =>
     endpoint: `/exercises/${id}/validate`,
     method: 'POST',
     body: { version }
+  });
+
+export const getVariablesForPipelines = (
+  exerciseId,
+  runtimeEnvironmentId,
+  pipelinesIds
+) =>
+  createApiAction({
+    type: additionalActionTypes.GET_PIPELINE_VARIABLES,
+    method: 'POST',
+    endpoint: `/exercises/${exerciseId}/config/variables`,
+    meta: { exerciseId, runtimeEnvironmentId, pipelinesIds },
+    body: { runtimeEnvironmentId, pipelinesIds }
   });
 
 /**
