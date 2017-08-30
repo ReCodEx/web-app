@@ -62,6 +62,8 @@ class EditExerciseConfigForm extends Component {
 
   getTestPipelinesVariables(runtimeEnvironmentIndex, testIndex) {
     const { formValues, fetchVariables, change } = this.props;
+
+    // prepare request data
     const formPipelines =
       formValues.config[runtimeEnvironmentIndex].tests[testIndex].pipelines;
     var pipelines = [];
@@ -83,53 +85,69 @@ class EditExerciseConfigForm extends Component {
       pipelines.push(formPipelines[1].name);
     }
 
-    fetchVariables(
-      this.state.testConfigs[runtimeEnvironmentIndex].name,
-      pipelines
-    )
-      .then(res => res.value)
-      .then(value => {
-        var newPipelines = [];
-        if (firstSkipped) {
-          newPipelines.push({ name: '', variables: [] });
-        }
-        const pipelineKeys = Object.keys(value);
-        for (
-          var pipelineIndex = 0;
-          pipelineIndex < pipelineKeys.length;
-          pipelineIndex++
-        ) {
-          const pipelineName = pipelineKeys[pipelineIndex];
-          newPipelines.push({
-            name: pipelineName,
-            variables: value[pipelineName]
-          });
-          for (
-            var variableIndex = 0;
-            variableIndex < value[pipelineName].length;
-            variableIndex++
-          ) {
-            change(
-              `config[${runtimeEnvironmentIndex}][tests][${testIndex}][pipelines][${pipelineIndex}][variables][${variableIndex}][name]`,
-              value[pipelineName][variableIndex].name
-            );
-            change(
-              `config[${runtimeEnvironmentIndex}][tests][${testIndex}][pipelines][${pipelineIndex}][variables][${variableIndex}][type]`,
-              value[pipelineName][variableIndex].type
-            );
+    if (pipelines.length > 0) {
+      // perform the API request
+      fetchVariables(
+        this.state.testConfigs[runtimeEnvironmentIndex].name,
+        pipelines
+      )
+        .then(res => res.value)
+        .then(data => {
+          var newPipelines = [];
+          if (firstSkipped) {
+            newPipelines.push({ name: '', variables: [] });
           }
-        }
+          const pipelineKeys = Object.keys(data);
+          for (
+            var pipelineIndex = 0;
+            pipelineIndex < pipelineKeys.length;
+            pipelineIndex++
+          ) {
+            // prepare pipelines and variables from response
+            const pipelineName = pipelineKeys[pipelineIndex];
+            newPipelines.push({
+              name: pipelineName,
+              variables: data[pipelineName]
+            });
+            // clear previous variables from form (those which will not get overwritten)
+            if (
+              data[pipelineName].length <
+              formPipelines[pipelineIndex].variables.length
+            ) {
+              change(
+                `config[${runtimeEnvironmentIndex}][tests][${testIndex}][pipelines][${pipelineIndex}][variables]`,
+                ''
+              );
+            }
+            // set name and type into form for each variable
+            for (
+              var variableIndex = 0;
+              variableIndex < data[pipelineName].length;
+              variableIndex++
+            ) {
+              change(
+                `config[${runtimeEnvironmentIndex}][tests][${testIndex}][pipelines][${pipelineIndex}][variables][${variableIndex}][name]`,
+                data[pipelineName][variableIndex].name
+              );
+              change(
+                `config[${runtimeEnvironmentIndex}][tests][${testIndex}][pipelines][${pipelineIndex}][variables][${variableIndex}][type]`,
+                data[pipelineName][variableIndex].type
+              );
+            }
+          }
 
-        this.setState((prevState, props) => {
-          var newTestConfigs = prevState.testConfigs;
-          newTestConfigs[runtimeEnvironmentIndex].tests[
-            testIndex
-          ].pipelines = newPipelines;
-          return {
-            testConfigs: newTestConfigs
-          };
+          // save new variables into state
+          this.setState((prevState, props) => {
+            var newTestConfigs = prevState.testConfigs;
+            newTestConfigs[runtimeEnvironmentIndex].tests[
+              testIndex
+            ].pipelines = newPipelines;
+            return {
+              testConfigs: newTestConfigs
+            };
+          });
         });
-      });
+    }
   }
 
   render() {
