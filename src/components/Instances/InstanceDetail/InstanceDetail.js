@@ -30,6 +30,7 @@ const InstanceDetail = ({ description, rootGroupId, groups, isAdmin }) =>
           />
         }
         noPadding
+        unlimitedHeight
       >
         <div>
           {rootGroupId !== null &&

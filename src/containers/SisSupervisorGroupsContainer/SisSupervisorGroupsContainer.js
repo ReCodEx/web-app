@@ -30,7 +30,7 @@ class SisSupervisorGroupsContainer extends Component {
     this.props.loadData(this.props.currentUserId);
   }
 
-  static loadData = (dispatch, loggedInUserId) =>
+  static loadData = (dispatch, loggedInUserId) => {
     dispatch(fetchSisStatusIfNeeded())
       .then(res => res.value)
       .then(
@@ -40,6 +40,7 @@ class SisSupervisorGroupsContainer extends Component {
             dispatch(fetchSisSupervisedCourses(loggedInUserId, year, term))
           )
       );
+  };
 
   render() {
     const {

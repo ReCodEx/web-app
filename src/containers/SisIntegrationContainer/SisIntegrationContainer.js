@@ -24,19 +24,15 @@ class SisIntegrationContainer extends Component {
   }
 
   static loadData = (dispatch, loggedInUserId) => {
-    dispatch((dispatch, getState) =>
-      dispatch(fetchSisStatusIfNeeded())
-        .then(res => res.value)
-        .then(
-          status =>
-            status.accessible &&
-            status.terms.map(term =>
-              dispatch(
-                fetchSisSubscribedGroups(loggedInUserId, term.year, term.term)
-              )
-            )
-        )
-    );
+    dispatch(fetchSisStatusIfNeeded())
+      .then(res => res.value)
+      .then(
+        ({ accessible, terms }) =>
+          accessible &&
+          terms.map(({ year, term }) =>
+            dispatch(fetchSisSubscribedGroups(loggedInUserId, year, term))
+          )
+      );
   };
 
   render() {
@@ -62,12 +58,12 @@ class SisIntegrationContainer extends Component {
           {sisStatus =>
             <div>
               {!sisStatus.accessible &&
-                <div className="text-center">
+                <p className="text-center">
                   <FormattedMessage
                     id="app.sisIntegration.noAccessible"
                     defaultMessage="Your account does not support SIS integration. Please, log in using CAS-UK."
                   />
-                </div>}
+                </p>}
               {sisStatus.accessible &&
                 sisStatus.terms.map((term, i) =>
                   <div key={i}>
