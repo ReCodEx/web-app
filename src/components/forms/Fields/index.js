@@ -8,6 +8,7 @@ export { default as PasswordStrength } from './PasswordStrength';
 export { default as LanguageSelectField } from './LanguageSelectField';
 export { default as PipelineField } from './PipelineField';
 export { default as PipelineVariablesField } from './PipelineVariablesField';
+export { default as PortField } from './PortField';
 export { default as PortsField } from './PortsField';
 export { default as SecondsTextField } from './SecondsTextField';
 export { default as SelectField } from './SelectField';
