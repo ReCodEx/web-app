@@ -7,7 +7,7 @@ import ReactMarkdown from 'react-markdown';
 import Box from '../../widgets/Box';
 import GroupTree from '../../Groups/GroupTree';
 
-const InstanceDetail = ({ description, rootGroupId, groups, isAdmin }) => (
+const InstanceDetail = ({ description, rootGroupId, groups, isAdmin }) =>
   <Row>
     <Col md={6}>
       <Box
@@ -30,6 +30,7 @@ const InstanceDetail = ({ description, rootGroupId, groups, isAdmin }) => (
           />
         }
         noPadding
+        unlimitedHeight
       >
         <div>
           {rootGroupId !== null &&
@@ -37,6 +38,7 @@ const InstanceDetail = ({ description, rootGroupId, groups, isAdmin }) => (
               id={rootGroupId}
               deletable={false}
               isAdmin={isAdmin}
+              isOpen
               groups={groups}
             />}
 
@@ -48,8 +50,7 @@ const InstanceDetail = ({ description, rootGroupId, groups, isAdmin }) => (
         </div>
       </Box>
     </Col>
-  </Row>
-);
+  </Row>;
 
 InstanceDetail.propTypes = {
   description: PropTypes.string.isRequired,

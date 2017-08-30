@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, FormattedHTMLMessage } from 'react-intl';
 
 import { connect } from 'react-redux';
 import { reduxForm, Field, formValueSelector } from 'redux-form';
@@ -183,6 +183,7 @@ BoxForm.propTypes = {
   anyTouched: PropTypes.bool,
   asyncValidating: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
   invalid: PropTypes.bool,
+  existingBoxes: PropTypes.array.isRequired,
   submitting: PropTypes.bool,
   fetchBoxTypes: PropTypes.func.isRequired,
   onHide: PropTypes.func.isRequired,
@@ -191,7 +192,7 @@ BoxForm.propTypes = {
 
 const validate = (
   { name, type, portsIn = {}, portsOut = {} },
-  { boxTypes }
+  { boxTypes, existingBoxes }
 ) => {
   const errors = {};
 
@@ -204,8 +205,6 @@ const validate = (
     );
   }
 
-  // @todo: validate that we don't have two boxes with the same name
-
   if (!type) {
     errors['type'] = (
       <FormattedMessage
@@ -214,11 +213,27 @@ const validate = (
       />
     );
   } else {
-    const boxType = boxTypes.find(box => box.name === type);
+    const boxType = boxTypes.find(box => box.type === type);
     if (boxType) {
       const portsInNames = Object.keys(boxType.portsIn);
       const portsOutNames = Object.keys(boxType.portsOut);
       const portsInErrors = {};
+
+      const existingVariablesTypes = {};
+      const examplesOfPorts = {};
+      for (let box of existingBoxes) {
+        if (box.name === name) {
+          continue;
+        }
+
+        for (let { type, value } of [
+          ...Object.values(box.portsIn),
+          ...Object.values(box.portsOut)
+        ]) {
+          existingVariablesTypes[value] = type;
+          examplesOfPorts[value] = box.name;
+        }
+      }
 
       for (let portName of portsInNames) {
         if (!portsIn[portName] || portsIn[portName].length === 0) {
@@ -230,9 +245,33 @@ const validate = (
               />
             )
           };
+        } else {
+          const intendedVariableName = portsIn[portName].value;
+          const portType = boxType.portsIn[portName].type;
+          if (
+            portType !== '?' &&
+            existingVariablesTypes[intendedVariableName] &&
+            existingVariablesTypes[intendedVariableName] !== portType
+          ) {
+            portsInErrors[portName] = {
+              value: (
+                <FormattedHTMLMessage
+                  id="app.pipelineEditor.BoxForm.conflictingPortType"
+                  defaultMessage="You cannot set this variable to the port - the type of this port is <code>{portType}</code>, but the variable <code>{variable}</code> is already associated with port of type <code>{variableType}</code> (e.g., in box <code>{exampleBox}</code>)."
+                  values={{
+                    variable: intendedVariableName,
+                    portType,
+                    variableType: existingVariablesTypes[intendedVariableName],
+                    exampleBox: examplesOfPorts[intendedVariableName]
+                  }}
+                />
+              )
+            };
+          }
         }
       }
 
+      // check that the variable in a certain port has the correct port
       if (Object.keys(portsInErrors).length > 0) {
         errors['portsIn'] = portsInErrors;
       }
@@ -279,6 +318,7 @@ const validate = (
 
 const mapStateToProps = state => ({
   boxTypes: getBoxTypes(state),
+  existingBoxes: formValueSelector('editPipeline')(state, 'pipeline.boxes'),
   selectedType: formValueSelector('boxForm')(state, 'type')
 });
 

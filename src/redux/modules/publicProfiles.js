@@ -36,6 +36,19 @@ const reducer = handleActions(
           data: { id, fullName, avatarUrl, isVerified },
           state: resourceStatus.FULFILLED
         })
+      ),
+
+    [userActionTypes.FETCH_MANY_FULFILLED]: (state, { payload: users }) =>
+      users.reduce(
+        (state, { id, fullName, avatarUrl, isVerified = false }) =>
+          state.setIn(
+            ['resources', id],
+            createRecord({
+              data: { id, fullName, avatarUrl, isVerified },
+              state: resourceStatus.FULFILLED
+            })
+          ),
+        state
       )
   }),
   initialState

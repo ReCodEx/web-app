@@ -1,16 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage } from 'react-intl';
+import { FormattedHTMLMessage } from 'react-intl';
 import { ProgressBar } from 'react-bootstrap';
 import UsersNameContainer from '../../../containers/UsersNameContainer';
 
-const StudentsListItem = ({
-  id,
-  fullName,
-  avatarUrl,
-  stats,
-  renderActions
-}) => (
+const StudentsListItem = ({ id, fullName, avatarUrl, stats, renderActions }) =>
   <tr>
     <td>
       <UsersNameContainer userId={id} />
@@ -31,15 +25,17 @@ const StudentsListItem = ({
     </td>
     <td>
       {stats &&
-        <FormattedMessage
-          id="app.studentsList.gainedPointsOf"
-          defaultMessage="{gained, number} of {total, number}"
+        <FormattedHTMLMessage
+          id="app.studentsList.gainedPointsOfWithoutBreakingSpaces"
+          defaultMessage="{gained, number}&nbsp;of&nbsp;{total, number}"
           values={{ ...stats.points }}
         />}
     </td>
-    {renderActions && <td>{renderActions(id)}</td>}
-  </tr>
-);
+    {renderActions &&
+      <td>
+        {renderActions(id)}
+      </td>}
+  </tr>;
 
 StudentsListItem.propTypes = {
   id: PropTypes.string.isRequired,

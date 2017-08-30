@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Field } from 'redux-form';
-import { TextField } from '../Fields';
+import { PortField } from '../Fields';
 import { FormattedMessage } from 'react-intl';
 
 const PortsField = ({ label, prefix, ports }) =>
@@ -18,8 +18,9 @@ const PortsField = ({ label, prefix, ports }) =>
       <Field
         key={name}
         name={`${prefix}.${name}.value`}
-        component={TextField}
-        label={`${name}${type ? ` (${type}):` : ''}`}
+        component={PortField}
+        label={name}
+        portType={type}
       />
     )}
   </div>;
