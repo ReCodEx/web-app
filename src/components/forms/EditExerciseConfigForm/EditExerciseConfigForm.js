@@ -263,7 +263,52 @@ EditExerciseConfigForm.propTypes = {
   change: PropTypes.func
 };
 
-const validate = () => {};
+const validate = ({ config }) => {
+  const errors = {};
+  errors['config'] = {};
+
+  if (config.length < 2) {
+    errors['_error'] = (
+      <FormattedMessage
+        id="app.editExerciseConfigForm.validation.noEnvironments"
+        defaultMessage="Please add at least one environment config for the exercise."
+      />
+    );
+  }
+
+  for (let i = 0; i < config.length; i++) {
+    const envErrors = {};
+
+    envErrors['tests'] = {};
+    for (let j = 0; j < config[i].tests.length; j++) {
+      const testErrors = {};
+
+      if (
+        config[i].tests[j].pipelines &&
+        config[i].tests[j].pipelines[0] &&
+        config[i].tests[j].pipelines[1] &&
+        config[i].tests[j].pipelines[0].name ===
+          config[i].tests[j].pipelines[1].name
+      ) {
+        const pipelineErrors = {};
+        pipelineErrors['name'] = (
+          <FormattedMessage
+            id="app.editExerciseConfigForm.validation.duplicatePipeline"
+            defaultMessage="Please select a different pipeline."
+          />
+        );
+        testErrors['pipelines'] = {};
+        testErrors['pipelines'][1] = pipelineErrors;
+      }
+
+      envErrors['tests'][j] = testErrors;
+    }
+
+    errors['config'][i] = envErrors;
+  }
+
+  return errors;
+};
 
 const ConnectedEditExerciseConfigForm = connect(
   (state, { exercise }) => {
