@@ -111,8 +111,9 @@ class EditExerciseConfigForm extends Component {
             });
             // clear previous variables from form (those which will not get overwritten)
             if (
-              data[pipelineName].length <
-              formPipelines[pipelineIndex].variables.length
+              data[pipelineName].length < formPipelines[pipelineIndex].variables
+                ? formPipelines[pipelineIndex].variables.length
+                : 0
             ) {
               change(
                 `config[${runtimeEnvironmentIndex}][tests][${testIndex}][pipelines][${pipelineIndex}][variables]`,
