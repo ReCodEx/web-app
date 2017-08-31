@@ -3,7 +3,12 @@ import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { Row, Col } from 'react-bootstrap';
 import { Field } from 'redux-form';
-import { TextField, SelectField } from '../Fields';
+import {
+  TextField,
+  SelectField,
+  ExpandingTextField,
+  ExpandingSelectField
+} from '../Fields';
 import ResourceRenderer from '../../helpers/ResourceRenderer';
 
 const EditExerciseConfigVariable = ({ prefix, data, supplementaryFiles }) =>
@@ -32,6 +37,31 @@ const EditExerciseConfigVariable = ({ prefix, data, supplementaryFiles }) =>
                 style={{ marginTop: '-20px' }}
                 component={SelectField}
                 label={''}
+                options={[{ key: '', name: '...' }].concat(
+                  supplementaryFiles
+                    .sort((a, b) => a.name.localeCompare(b.name))
+                    .map(data => {
+                      const obj = {};
+                      obj['key'] = data.hashName;
+                      obj['name'] = data.name;
+                      return obj;
+                    })
+                )}
+              />}
+          </ResourceRenderer>}
+        {data.type === 'string[]' &&
+          <Field
+            name={`${prefix}.value`}
+            style={{ marginTop: '-20px' }}
+            component={ExpandingTextField}
+          />}
+        {data.type === 'file[]' &&
+          <ResourceRenderer resource={supplementaryFiles.toArray()}>
+            {(...supplementaryFiles) =>
+              <Field
+                name={`${prefix}.value`}
+                style={{ marginTop: '-20px' }}
+                component={ExpandingSelectField}
                 options={[{ key: '', name: '...' }].concat(
                   supplementaryFiles
                     .sort((a, b) => a.name.localeCompare(b.name))

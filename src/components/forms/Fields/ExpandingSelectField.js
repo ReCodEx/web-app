@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import { FormGroup, FormControl, HelpBlock } from 'react-bootstrap';
 
-class ExpandingTextField extends Component {
+class ExpandingSelectField extends Component {
   state = { texts: [''] };
 
   componentDidMount() {
@@ -36,22 +36,32 @@ class ExpandingTextField extends Component {
   };
 
   render() {
-    const { input: { onChange }, meta: { touched, error } } = this.props;
+    const {
+      input: { name, onChange },
+      meta: { touched, error },
+      options
+    } = this.props;
     const { texts } = this.state;
 
     return (
       <FormGroup
-        controlId={'value'}
+        controlId={name}
         validationState={touched && error ? 'error' : undefined}
       >
         {texts.map((text, i) =>
           <FormControl
             key={i}
-            componentClass="input"
             onChange={e => this.changeText(i, e.target.value, onChange)}
             onBlur={() => this.removeIfEmpty(i, onChange)}
             value={text}
-          />
+            componentClass="select"
+          >
+            {options.map(({ key, name }) =>
+              <option value={key} key={key}>
+                {name}
+              </option>
+            )}
+          </FormControl>
         )}
         {touched &&
           error &&
@@ -63,9 +73,10 @@ class ExpandingTextField extends Component {
   }
 }
 
-ExpandingTextField.propTypes = {
+ExpandingSelectField.propTypes = {
   input: PropTypes.object,
-  meta: PropTypes.object
+  meta: PropTypes.object,
+  options: PropTypes.array
 };
 
-export default ExpandingTextField;
+export default ExpandingSelectField;

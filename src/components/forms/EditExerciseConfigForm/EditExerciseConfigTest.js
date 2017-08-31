@@ -10,7 +10,9 @@ const EditExerciseConfigTest = ({
   prefix,
   tests,
   supplementaryFiles,
-  pipelines
+  pipelines,
+  runtimeEnvironmentIndex,
+  fetchVariables
 }) =>
   <tbody>
     {tests.map((test, index) => [
@@ -37,6 +39,10 @@ const EditExerciseConfigTest = ({
                     })
                 )}
                 label={''}
+                onBlur={e => {
+                  fetchVariables(runtimeEnvironmentIndex, index);
+                  e.preventDefault();
+                }}
               />}
           </ResourceRenderer>
         </td>
@@ -70,6 +76,10 @@ const EditExerciseConfigTest = ({
                     })
                 )}
                 label={''}
+                onBlur={e => {
+                  fetchVariables(runtimeEnvironmentIndex, index);
+                  e.preventDefault();
+                }}
               />}
           </ResourceRenderer>
         </td>
@@ -92,7 +102,9 @@ EditExerciseConfigTest.propTypes = {
   prefix: PropTypes.string.isRequired,
   tests: PropTypes.array.isRequired,
   supplementaryFiles: ImmutablePropTypes.map,
-  pipelines: ImmutablePropTypes.map
+  pipelines: ImmutablePropTypes.map,
+  runtimeEnvironmentIndex: PropTypes.number.isRequired,
+  fetchVariables: PropTypes.func
 };
 
 export default EditExerciseConfigTest;
