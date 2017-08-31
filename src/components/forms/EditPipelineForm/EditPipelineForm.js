@@ -205,6 +205,7 @@ const flattenPorts = boxes =>
       ...acc,
       ...Object.keys(ports).map(port => ({
         name: port,
+        type: ports[port].type,
         value: btoa(ports[port].value)
       }))
     ],
