@@ -28,6 +28,8 @@ export const linksFactory = lang => {
   const EXERCISE_CREATE_URI_FACTORY = () => `${EXERCISES_URI}`;
   const EXERCISE_URI_FACTORY = id => `${EXERCISES_URI}/${id}`;
   const EXERCISE_EDIT_URI_FACTORY = id => `${EXERCISE_URI_FACTORY(id)}/edit`;
+  const EXERCISE_EDIT_CONFIG_URI_FACTORY = id =>
+    `${EXERCISE_URI_FACTORY(id)}/edit-config`;
   const EXERCISE_REFERENCE_SOLUTION_URI_FACTORY = (
     exerciseId,
     referenceSolutionId
@@ -87,6 +89,7 @@ export const linksFactory = lang => {
     EXERCISES_URI,
     EXERCISE_URI_FACTORY,
     EXERCISE_EDIT_URI_FACTORY,
+    EXERCISE_EDIT_CONFIG_URI_FACTORY,
     EXERCISE_CREATE_URI_FACTORY,
     EXERCISE_REFERENCE_SOLUTION_URI_FACTORY,
     PIPELINES_URI,
