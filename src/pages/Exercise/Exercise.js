@@ -9,7 +9,7 @@ import {
   intlShape,
   injectIntl
 } from 'react-intl';
-import { Row, Col } from 'react-bootstrap';
+import { Row, Col, ButtonGroup } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 import Button from '../../components/widgets/FlatButton';
 
@@ -107,6 +107,7 @@ class Exercise extends Component {
       links: {
         EXERCISES_URI,
         EXERCISE_EDIT_URI_FACTORY,
+        EXERCISE_EDIT_CONFIG_URI_FACTORY,
         EXERCISE_REFERENCE_SOLUTION_URI_FACTORY
       }
     } = this.context;
@@ -147,23 +148,40 @@ class Exercise extends Component {
           <div>
             <Row>
               <Col sm={12}>
-                <p>
+                <div>
                   {isAuthorOfExercise(exercise.id) &&
-                    <LinkContainer to={EXERCISE_EDIT_URI_FACTORY(exercise.id)}>
-                      <Button bsStyle="warning" bsSize="sm">
-                        <EditIcon />
-                        &nbsp;
-                        <FormattedMessage
-                          id="app.exercise.editSettings"
-                          defaultMessage="Edit exercise settings"
-                        />
-                      </Button>
-                    </LinkContainer>}
+                    <ButtonGroup>
+                      <LinkContainer
+                        to={EXERCISE_EDIT_URI_FACTORY(exercise.id)}
+                      >
+                        <Button bsStyle="warning" bsSize="sm">
+                          <EditIcon />
+                          &nbsp;
+                          <FormattedMessage
+                            id="app.exercise.editSettings"
+                            defaultMessage="Edit exercise settings"
+                          />
+                        </Button>
+                      </LinkContainer>
+                      <LinkContainer
+                        to={EXERCISE_EDIT_CONFIG_URI_FACTORY(exercise.id)}
+                      >
+                        <Button bsStyle="warning" bsSize="sm">
+                          <EditIcon />
+                          &nbsp;
+                          <FormattedMessage
+                            id="app.exercise.editConfig"
+                            defaultMessage="Edit exercise config"
+                          />
+                        </Button>
+                      </LinkContainer>
+                    </ButtonGroup>}
                   <ForkExerciseButtonContainer
                     exerciseId={exercise.id}
                     forkId={forkId}
                   />
-                </p>
+                </div>
+                <p />
               </Col>
             </Row>
             <Row>

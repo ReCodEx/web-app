@@ -73,7 +73,7 @@ class Exercises extends Component {
     const {
       exercises,
       isAuthorOfExercise,
-      links: { EXERCISE_EDIT_URI_FACTORY }
+      links: { EXERCISE_EDIT_URI_FACTORY, EXERCISE_EDIT_CONFIG_URI_FACTORY }
     } = this.props;
 
     return (
@@ -174,6 +174,15 @@ class Exercises extends Component {
                           <FormattedMessage
                             id="app.exercises.listEdit"
                             defaultMessage="Edit"
+                          />
+                        </Button>
+                      </LinkContainer>
+                      <LinkContainer to={EXERCISE_EDIT_CONFIG_URI_FACTORY(id)}>
+                        <Button bsSize="xs" bsStyle="warning">
+                          <EditIcon />{' '}
+                          <FormattedMessage
+                            id="app.exercises.listEditConfig"
+                            defaultMessage="Edit config"
                           />
                         </Button>
                       </LinkContainer>

@@ -33,7 +33,7 @@ const SupervisorsView = ({
   deleteExercise,
   users,
   publicAssignments,
-  links: { EXERCISE_EDIT_URI_FACTORY }
+  links: { EXERCISE_EDIT_URI_FACTORY, EXERCISE_EDIT_CONFIG_URI_FACTORY }
 }) =>
   <div>
     <Row>
@@ -149,6 +149,21 @@ const SupervisorsView = ({
                         <FormattedMessage
                           id="app.exercise.editButton"
                           defaultMessage="Edit"
+                        />
+                      </Button>
+                    </LinkContainer>
+                    <LinkContainer
+                      to={EXERCISE_EDIT_CONFIG_URI_FACTORY(exerciseId)}
+                    >
+                      <Button
+                        bsSize="xs"
+                        className="btn-flat"
+                        bsStyle="warning"
+                      >
+                        <EditIcon />{' '}
+                        <FormattedMessage
+                          id="app.exercise.editConfigButton"
+                          defaultMessage="Edit config"
                         />
                       </Button>
                     </LinkContainer>
