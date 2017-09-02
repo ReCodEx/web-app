@@ -12,9 +12,12 @@ import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 
 import EditExerciseConfigForm from '../../components/forms/EditExerciseConfigForm/EditExerciseConfigForm';
 import EditEnvironmentConfigForm from '../../components/forms/EditEnvironmentConfigForm';
+import EditLimitsBox from '../../components/EditLimitsBox';
+
 import SupplementaryFilesTableContainer from '../../containers/SupplementaryFilesTableContainer';
 
 import { fetchExerciseIfNeeded } from '../../redux/modules/exercises';
+import { fetchHardwareGroups } from '../../redux/modules/hwGroups';
 import { fetchPipelines } from '../../redux/modules/pipelines';
 import {
   fetchExerciseConfigIfNeeded,
@@ -31,6 +34,7 @@ import { exerciseEnvironmentConfigSelector } from '../../redux/selectors/exercis
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments';
 import { runtimeEnvironmentsSelector } from '../../redux/selectors/runtimeEnvironments';
+import { hardwareGroupsSelector } from '../../redux/selectors/hwGroups';
 
 import withLinks from '../../hoc/withLinks';
 
@@ -48,7 +52,8 @@ class EditExerciseConfig extends Component {
       dispatch(fetchExerciseConfigIfNeeded(exerciseId)),
       dispatch(fetchRuntimeEnvironments()),
       dispatch(fetchExerciseEnvironmentConfigIfNeeded(exerciseId)),
-      dispatch(fetchPipelines())
+      dispatch(fetchPipelines()),
+      dispatch(fetchHardwareGroups())
     ]);
 
   render() {
@@ -62,7 +67,8 @@ class EditExerciseConfig extends Component {
       environmentFormValues,
       exerciseConfig,
       exerciseEnvironmentConfig,
-      pipelines
+      pipelines,
+      hardwareGroups
     } = this.props;
 
     return (
@@ -134,26 +140,28 @@ class EditExerciseConfig extends Component {
             <br />
             <Row>
               <Col lg={12}>
-                <Box
-                  title={
-                    <FormattedMessage
-                      id="app.editExercise.editTestConfig"
-                      defaultMessage="Edit configurations"
-                    />
-                  }
-                  unlimitedHeight
+                <ResourceRenderer
+                  resource={[exerciseConfig, ...runtimeEnvironments.toArray()]}
                 >
-                  <ResourceRenderer resource={exerciseConfig}>
-                    {config =>
+                  {(config, ...runtimeEnvironments) =>
+                    <div>
                       <EditExerciseConfigForm
                         runtimeEnvironments={runtimeEnvironments}
                         initialValues={{ config: config }}
                         onSubmit={setConfig}
                         exercise={exercise}
                         pipelines={pipelines}
-                      />}
-                  </ResourceRenderer>
-                </Box>
+                      />
+                      <ResourceRenderer resource={hardwareGroups}>
+                        {(...hardwareGroups) =>
+                          <EditLimitsBox
+                            hardwareGroups={hardwareGroups}
+                            runtimeEnvironments={runtimeEnvironments}
+                            config={config}
+                          />}
+                      </ResourceRenderer>
+                    </div>}
+                </ResourceRenderer>
               </Col>
             </Row>
           </div>}
@@ -175,7 +183,8 @@ EditExerciseConfig.propTypes = {
   exerciseConfig: PropTypes.object,
   exerciseEnvironmentConfig: PropTypes.object,
   pipelines: ImmutablePropTypes.map,
-  links: PropTypes.object.isRequired
+  links: PropTypes.object.isRequired,
+  hardwareGroups: PropTypes.array
 };
 
 export default withLinks(
@@ -190,7 +199,8 @@ export default withLinks(
         exerciseEnvironmentConfig: exerciseEnvironmentConfigSelector(
           exerciseId
         )(state),
-        pipelines: pipelinesSelector(state)
+        pipelines: pipelinesSelector(state),
+        hardwareGroups: hardwareGroupsSelector(state).toArray()
       };
     },
     (dispatch, { params: { exerciseId } }) => ({

@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import { Alert, Button } from 'react-bootstrap';
 import Icon from 'react-fontawesome';
+import Box from '../../../components/widgets/Box';
 
 import SubmitButton from '../SubmitButton';
 import EditExerciseConfigEnvironment from './EditExerciseConfigEnvironment';
@@ -164,7 +165,15 @@ class EditExerciseConfigForm extends Component {
       invalid
     } = this.props;
     return (
-      <div>
+      <Box
+        title={
+          <FormattedMessage
+            id="app.editExercise.editTestConfig"
+            defaultMessage="Edit configurations"
+          />
+        }
+        unlimitedHeight
+      >
         {hasFailed &&
           <Alert bsStyle="danger">
             <FormattedMessage
@@ -237,7 +246,7 @@ class EditExerciseConfigForm extends Component {
             />
           </Button>
         </p>
-      </div>
+      </Box>
     );
   }
 }
@@ -251,7 +260,7 @@ EditExerciseConfigForm.propTypes = {
   hasFailed: PropTypes.bool,
   hasSucceeded: PropTypes.bool,
   invalid: PropTypes.bool,
-  runtimeEnvironments: PropTypes.object.isRequired,
+  runtimeEnvironments: PropTypes.array.isRequired,
   supplementaryFiles: ImmutablePropTypes.map,
   fetchFiles: PropTypes.func.isRequired,
   exercise: PropTypes.shape({
