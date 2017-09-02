@@ -58,14 +58,18 @@ class EditExercise extends Component {
         }
         breadcrumbs={[
           {
-            text: (
-              <FormattedMessage
-                id="app.exercise.title"
-                defaultMessage="Exercise"
-              />
-            ),
-            iconName: 'puzzle-piece',
-            link: EXERCISE_URI_FACTORY(exerciseId)
+            resource: exercise,
+            breadcrumb: ({ name }) => ({
+              text: (
+                <FormattedMessage
+                  id="app.exercise.breadcrumbTitle"
+                  defaultMessage="Exercise {name}"
+                  values={{ name }}
+                />
+              ),
+              iconName: 'puzzle-piece',
+              link: EXERCISE_URI_FACTORY(exerciseId)
+            })
           },
           {
             text: (
