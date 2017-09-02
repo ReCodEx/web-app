@@ -13,6 +13,7 @@ import EmailVerification from './EmailVerification';
 import Exercise from './Exercise';
 import Exercises from './Exercises';
 import EditExercise from './EditExercise';
+import EditExerciseConfig from './EditExerciseConfig';
 import FeedbackAndBugs from './FeedbackAndBugs';
 import Group from './Group';
 import EditGroup from './EditGroup';
@@ -86,6 +87,7 @@ const createRoutes = getState => {
             <Route path=":exerciseId">
               <IndexRoute component={Exercise} />
               <Route path="edit" component={EditExercise} />
+              <Route path="edit-config" component={EditExerciseConfig} />
               <Route
                 path="reference-solution/:referenceSolutionId"
                 component={ReferenceSolution}

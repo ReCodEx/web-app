@@ -287,6 +287,8 @@ const validate = ({ config }) => {
         config[i].tests[j].pipelines &&
         config[i].tests[j].pipelines[0] &&
         config[i].tests[j].pipelines[1] &&
+        config[i].tests[j].pipelines[0].name !== '' &&
+        config[i].tests[j].pipelines[1].name !== '' &&
         config[i].tests[j].pipelines[0].name ===
           config[i].tests[j].pipelines[1].name
       ) {
