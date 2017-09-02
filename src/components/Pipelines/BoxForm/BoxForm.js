@@ -8,9 +8,10 @@ import { reduxForm, Field, formValueSelector } from 'redux-form';
 import { TextField, SelectField, PortsField } from '../../forms/Fields';
 import { Modal, Alert } from 'react-bootstrap';
 import Button from '../../widgets/FlatButton';
-import { DeleteIcon } from '../../icons';
+import ConfirmDeleteButton from '../../buttons/DeleteButton/ConfirmDeleteButton';
 
 import SubmitButton from '../../forms/SubmitButton';
+import { CloseIcon } from '../../../components/icons';
 
 import { fetchBoxTypes } from '../../../redux/modules/boxes';
 import { getBoxTypes } from '../../../redux/selectors/boxes';
@@ -152,13 +153,19 @@ class BoxForm extends Component {
                 )
               }}
             />
-            <Button onClick={onDelete} bsStyle="danger">
-              <DeleteIcon />{' '}
+            <Button onClick={onHide}>
+              <CloseIcon />&nbsp;
               <FormattedMessage
-                id="app.pipelineEditor.BoxForm.delete"
-                defaultMessage="Delete box"
+                id="app.pipelineEditor.BoxForm.close"
+                defaultMessage="Close"
               />
             </Button>
+            <span style={{ display: 'inline-block', width: '5px' }} />
+            <ConfirmDeleteButton
+              id="delete-box"
+              onClick={onDelete}
+              small={false}
+            />
           </p>
         </Modal.Footer>
       </Modal>
