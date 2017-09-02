@@ -1,7 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { FormattedMessage } from 'react-intl';
 
-import { FormGroup, FormControl, HelpBlock } from 'react-bootstrap';
+import {
+  FormGroup,
+  FormControl,
+  HelpBlock,
+  ControlLabel
+} from 'react-bootstrap';
 
 class ExpandingTextField extends Component {
   state = { texts: [''] };
@@ -36,7 +42,11 @@ class ExpandingTextField extends Component {
   };
 
   render() {
-    const { input: { onChange }, meta: { touched, error } } = this.props;
+    const {
+      label = '',
+      input: { onChange },
+      meta: { touched, error }
+    } = this.props;
     const { texts } = this.state;
 
     return (
@@ -44,6 +54,9 @@ class ExpandingTextField extends Component {
         controlId={'value'}
         validationState={touched && error ? 'error' : undefined}
       >
+        <ControlLabel>
+          {label}
+        </ControlLabel>
         {texts.map((text, i) =>
           <FormControl
             key={i}
@@ -65,7 +78,11 @@ class ExpandingTextField extends Component {
 
 ExpandingTextField.propTypes = {
   input: PropTypes.object,
-  meta: PropTypes.object
+  meta: PropTypes.object,
+  label: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) })
+  ])
 };
 
 export default ExpandingTextField;

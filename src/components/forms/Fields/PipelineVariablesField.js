@@ -1,8 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Field } from 'redux-form';
-import { TextField } from '../Fields';
+import { TextField, ExpandingTextField } from '../Fields';
 import { FormattedMessage } from 'react-intl';
+
+const isArray = (type = '') => type.indexOf('[]') === type.length - 2;
 
 const PipelineVariablesField = ({ input, label, variables }) =>
   <div>
@@ -14,11 +16,11 @@ const PipelineVariablesField = ({ input, label, variables }) =>
         id="app.portsField.empty"
         defaultMessage="There are no ports."
       />}
-    {variables.map(({ value }) =>
+    {variables.map(({ value, type }) =>
       <Field
         key={value}
         name={`${input.name}.${value}`}
-        component={TextField}
+        component={isArray(type) ? ExpandingTextField : TextField}
         label={`${atob(value)}: `}
       />
     )}
