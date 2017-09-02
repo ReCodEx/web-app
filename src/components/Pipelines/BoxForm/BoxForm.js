@@ -15,6 +15,7 @@ import { CloseIcon } from '../../../components/icons';
 
 import { fetchBoxTypes } from '../../../redux/modules/boxes';
 import { getBoxTypes } from '../../../redux/selectors/boxes';
+import { getVariablesTypes, isUnknownType } from '../../../helpers/boxes';
 
 class BoxForm extends Component {
   componentWillMount = () => this.loadBoxTypes();
@@ -226,21 +227,10 @@ const validate = (
       const portsOutNames = Object.keys(boxType.portsOut);
       const portsInErrors = {};
 
-      const existingVariablesTypes = {};
-      const examplesOfPorts = {};
-      for (let box of existingBoxes) {
-        if (box.name === name) {
-          continue;
-        }
-
-        for (let { type, value } of [
-          ...Object.values(box.portsIn),
-          ...Object.values(box.portsOut)
-        ]) {
-          existingVariablesTypes[value] = type;
-          examplesOfPorts[value] = box.name;
-        }
-      }
+      const existingVariablesTypes = getVariablesTypes(
+        boxTypes,
+        existingBoxes.filter(box => box.name !== name && box.type !== type)
+      );
 
       for (let portName of portsInNames) {
         if (!portsIn[portName] || portsIn[portName].length === 0) {
@@ -255,10 +245,13 @@ const validate = (
         } else {
           const intendedVariableName = portsIn[portName].value;
           const portType = boxType.portsIn[portName].type;
+          const existingVariableType =
+            existingVariablesTypes[intendedVariableName];
           if (
-            portType !== '?' &&
-            existingVariablesTypes[intendedVariableName] &&
-            existingVariablesTypes[intendedVariableName] !== portType
+            !isUnknownType(portType) &&
+            existingVariableType &&
+            !isUnknownType(existingVariableType.type) &&
+            existingVariableType.type !== portType
           ) {
             portsInErrors[portName] = {
               value: (
@@ -268,8 +261,8 @@ const validate = (
                   values={{
                     variable: intendedVariableName,
                     portType,
-                    variableType: existingVariablesTypes[intendedVariableName],
-                    exampleBox: examplesOfPorts[intendedVariableName]
+                    variableType: existingVariableType.type,
+                    exampleBox: existingVariableType.examplePort
                   }}
                 />
               )

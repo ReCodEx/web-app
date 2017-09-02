@@ -19,8 +19,10 @@ import {
 } from '../../redux/modules/pipelines';
 import { getPipeline } from '../../redux/selectors/pipelines';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
+import { getBoxTypes } from '../../redux/selectors/boxes';
 
 import withLinks from '../../hoc/withLinks';
+import { transformPipelineDataForApi } from '../../helpers/boxes';
 
 class EditPipeline extends Component {
   componentWillMount = () => this.props.loadAsync();
@@ -39,6 +41,7 @@ class EditPipeline extends Component {
       links: { PIPELINES_URI, PIPELINE_URI_FACTORY },
       params: { pipelineId },
       pipeline,
+      boxTypes,
       editPipeline,
       push
     } = this.props;
@@ -95,33 +98,14 @@ class EditPipeline extends Component {
                           )
                         }
                       }}
-                      onSubmit={({
-                        pipeline: { boxes, variables },
-                        ...formData
-                      }) => {
-                        const transformedData = {
-                          ...formData,
-                          pipeline: {
-                            boxes: boxes.map(box => {
-                              if (Object.keys(box.portsIn).length === 0) {
-                                delete box.portsIn;
-                              }
-
-                              if (Object.keys(box.portsOut).length === 0) {
-                                delete box.portsOut;
-                              }
-
-                              return box;
-                            }),
-                            variables: Object.keys(variables).map(key => ({
-                              name: atob(key),
-                              type: 'string',
-                              value: variables[key]
-                            }))
-                          }
-                        };
-                        return editPipeline(data.version, transformedData);
-                      }}
+                      onSubmit={({ pipeline, ...formData }) =>
+                        editPipeline(data.version, {
+                          pipeline: transformPipelineDataForApi(
+                            boxTypes,
+                            pipeline
+                          ),
+                          ...formData
+                        })}
                     />
                   </Col>
                 </Row>
@@ -173,6 +157,7 @@ EditPipeline.propTypes = {
     pipelineId: PropTypes.string.isRequired
   }).isRequired,
   links: PropTypes.object.isRequired,
+  boxTypes: PropTypes.array.isRequired,
   push: PropTypes.func.isRequired
 };
 
@@ -180,6 +165,7 @@ export default withLinks(
   connect(
     (state, { params: { pipelineId } }) => ({
       pipeline: getPipeline(pipelineId)(state),
+      boxTypes: getBoxTypes(state),
       userId: loggedInUserIdSelector(state)
     }),
     (dispatch, { params: { pipelineId } }) => ({
