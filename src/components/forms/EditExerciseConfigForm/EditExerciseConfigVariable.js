@@ -22,7 +22,7 @@ const EditExerciseConfigVariable = ({ prefix, data, supplementaryFiles }) =>
     </Row>
     <Row>
       <Col xs={12}>
-        {data.type === 'string' &&
+        {(data.type === 'string' || data.type === 'remote-file') &&
           <Field
             name={`${prefix}.value`}
             style={{ marginTop: '-20px' }}
@@ -49,7 +49,7 @@ const EditExerciseConfigVariable = ({ prefix, data, supplementaryFiles }) =>
                 )}
               />}
           </ResourceRenderer>}
-        {data.type === 'string[]' &&
+        {(data.type === 'string[]' || data.type === 'remote-file[]') &&
           <Field
             name={`${prefix}.value`}
             style={{ marginTop: '-20px' }}

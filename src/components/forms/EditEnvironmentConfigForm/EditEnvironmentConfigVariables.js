@@ -21,6 +21,10 @@ const messages = defineMessages({
     id: 'app.editEnvironmentConfigVariables.fileType',
     defaultMessage: 'File'
   },
+  remoteFileType: {
+    id: 'app.editEnvironmentConfigVariables.remoteFileType',
+    defaultMessage: 'Remote file'
+  },
   stringArrayType: {
     id: 'app.editEnvironmentConfigVariables.stringArrayType',
     defaultMessage: 'Array of strings'
@@ -28,6 +32,10 @@ const messages = defineMessages({
   fileArrayType: {
     id: 'app.editEnvironmentConfigVariables.fileArrayType',
     defaultMessage: 'Array of files'
+  },
+  remoteFileArrayType: {
+    id: 'app.editEnvironmentConfigVariables.remoteFileArrayType',
+    defaultMessage: 'Array of remote files'
   }
 });
 
@@ -72,12 +80,20 @@ const EditEnvironmentConfigVariables = ({
                       },
                       { key: 'file', name: formatMessage(messages.fileType) },
                       {
+                        key: 'remote-file',
+                        name: formatMessage(messages.remoteFileType)
+                      },
+                      {
                         key: 'string[]',
                         name: formatMessage(messages.stringArrayType)
                       },
                       {
                         key: 'file[]',
                         name: formatMessage(messages.fileArrayType)
+                      },
+                      {
+                        key: 'remote-file[]',
+                        name: formatMessage(messages.remoteFileArrayType)
                       }
                     ]}
                     label={''}
@@ -89,7 +105,8 @@ const EditEnvironmentConfigVariables = ({
                       name={`${variable}.value`}
                       component={
                         formValues[index].type === 'string' ||
-                        formValues[index].type === 'file'
+                        formValues[index].type === 'file' ||
+                        formValues[index].type === 'remote-file'
                           ? TextField
                           : ExpandingTextField
                       }
