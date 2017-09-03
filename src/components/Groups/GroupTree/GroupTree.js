@@ -6,13 +6,12 @@ import Button from '../../widgets/FlatButton';
 import { LinkContainer } from 'react-router-bootstrap';
 import { TreeView, TreeViewItem } from '../../widgets/TreeView';
 import { isReady, getJsData } from '../../../redux/helpers/resourceManager';
-import DeleteGroupButtonContainer
-  from '../../../containers/DeleteGroupButtonContainer';
+import DeleteGroupButtonContainer from '../../../containers/DeleteGroupButtonContainer';
 
 import withLinks from '../../../hoc/withLinks';
 
 class GroupTree extends Component {
-  renderLoading = level => (
+  renderLoading = level =>
     <TreeView>
       <TreeViewItem
         level={level}
@@ -24,8 +23,7 @@ class GroupTree extends Component {
           />
         }
       />
-    </TreeView>
-  );
+    </TreeView>;
 
   renderButtons = groupId => {
     const { isAdmin, links: { GROUP_URI_FACTORY } } = this.props;
@@ -33,8 +31,7 @@ class GroupTree extends Component {
       <span>
         <LinkContainer to={GROUP_URI_FACTORY(groupId)}>
           <Button bsStyle="primary" bsSize="xs" className="btn-flat">
-            <Icon name="group" />
-            {' '}
+            <Icon name="group" />{' '}
             <FormattedMessage
               id="app.groupTree.detailButton"
               defaultMessage="See group's page"
@@ -77,18 +74,32 @@ class GroupTree extends Component {
 
     return (
       <TreeView>
-        <TreeViewItem
-          title={name}
-          level={level}
-          externalId={externalId}
-          isOpen={currentGroupId === id || isOpen}
-          actions={
-            currentGroupId !== id
-              ? this.renderButtons(id, GROUP_URI_FACTORY(id), isAdmin)
-              : undefined
-          }
-        >
-          {allChildGroups.map(id => (
+        {level !== 0 &&
+          <TreeViewItem
+            title={name}
+            level={level}
+            externalId={externalId}
+            isOpen={currentGroupId === id || isOpen}
+            actions={
+              currentGroupId !== id
+                ? this.renderButtons(id, GROUP_URI_FACTORY(id), isAdmin)
+                : undefined
+            }
+          >
+            {allChildGroups.map(id =>
+              <GroupTree
+                {...this.props}
+                key={id}
+                id={id}
+                isAdmin={isAdmin}
+                deletable={true}
+                level={level + 1}
+                isPublic={publicChildGroups.indexOf(id) >= 0}
+              />
+            )}
+          </TreeViewItem>}
+        {level === 0 &&
+          allChildGroups.map(id =>
             <GroupTree
               {...this.props}
               key={id}
@@ -98,8 +109,7 @@ class GroupTree extends Component {
               level={level + 1}
               isPublic={publicChildGroups.indexOf(id) >= 0}
             />
-          ))}
-        </TreeViewItem>
+          )}
       </TreeView>
     );
   }
