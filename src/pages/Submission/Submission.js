@@ -22,6 +22,7 @@ import {
   isSuperAdmin
 } from '../../redux/selectors/users';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
+import { clientOnly } from '../../helpers/clientOnly';
 
 class Submission extends Component {
   static loadAsync = ({ submissionId, assignmentId }, dispatch) =>
@@ -145,6 +146,6 @@ export default connect(
       isSuperAdmin(loggedInUserIdSelector(state))(state)
   }),
   (dispatch, { params }) => ({
-    loadAsync: () => Submission.loadAsync(params, dispatch)
+    loadAsync: () => clientOnly(() => Submission.loadAsync(params, dispatch))
   })
 )(Submission);

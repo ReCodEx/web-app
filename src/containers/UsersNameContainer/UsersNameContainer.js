@@ -11,20 +11,21 @@ import UsersName, {
   LoadingUsersName,
   FailedUsersName
 } from '../../components/Users/UsersName';
+import { clientOnly } from '../../helpers/clientOnly';
 
 class UsersNameContainer extends Component {
   componentWillMount() {
-    UsersNameContainer.loadData(this.props);
+    this.props.loadData();
   }
 
   componentWillReceiveProps(newProps) {
     if (this.props.userId !== newProps.userId) {
-      UsersNameContainer.loadData(newProps);
+      newProps.loadData();
     }
   }
 
-  static loadData = ({ loadProfileIfNeeded }) => {
-    loadProfileIfNeeded();
+  static loadData = (userId, dispatch) => {
+    dispatch(fetchProfileIfNeeded(userId));
   };
 
   render() {
@@ -54,7 +55,8 @@ UsersNameContainer.propTypes = {
   currentUserId: PropTypes.string,
   large: PropTypes.bool,
   user: ImmutablePropTypes.map,
-  noLink: PropTypes.bool
+  noLink: PropTypes.bool,
+  loadData: PropTypes.func.isRequired
 };
 
 export default connect(
@@ -63,6 +65,8 @@ export default connect(
     currentUserId: loggedInUserIdSelector(state)
   }),
   (dispatch, { userId }) => ({
-    loadProfileIfNeeded: () => dispatch(fetchProfileIfNeeded(userId))
+    loadProfileIfNeeded: () => dispatch(fetchProfileIfNeeded(userId)),
+    loadData: () =>
+      clientOnly(() => UsersNameContainer.loadData(userId, dispatch))
   })
 )(UsersNameContainer);

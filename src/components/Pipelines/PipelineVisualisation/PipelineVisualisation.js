@@ -2,12 +2,24 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import { convertGraphToSvg } from '../../../helpers/dot';
+import ClientOnly from '../../../components/helpers/ClientOnly';
+import { canUseDOM } from 'exenv';
 import style from './pipeline.less';
 
 const PipelineVisualisation = ({ graph, variables }) => {
-  const svg = convertGraphToSvg(graph, variables);
+  let svg = '';
+  if (canUseDOM) {
+    svg = convertGraphToSvg(graph, variables);
+  }
   return (
-    <div className={style.pipeline} dangerouslySetInnerHTML={{ __html: svg }} />
+    <ClientOnly>
+      <div
+        className={style.pipeline}
+        dangerouslySetInnerHTML={{
+          __html: svg
+        }}
+      />
+    </ClientOnly>
   );
 };
 

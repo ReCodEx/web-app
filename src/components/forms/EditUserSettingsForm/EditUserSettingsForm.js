@@ -15,7 +15,7 @@ const EditUserSettingsForm = ({
   submitSucceeded = false,
   anyTouched,
   invalid
-}) => (
+}) =>
   <FormBox
     title={
       <FormattedMessage
@@ -117,8 +117,52 @@ const EditUserSettingsForm = ({
       }
     />
 
-  </FormBox>
-);
+    <h3>
+      <FormattedMessage
+        id="app.editUserSettings.emailsTitle"
+        defaultMessage="Emails:"
+      />
+    </h3>
+
+    <Field
+      name="newAssignmentEmails"
+      tabIndex={1}
+      component={CheckboxField}
+      onOff
+      label={
+        <FormattedMessage
+          id="app.editUserSettings.newAssignmentEmails"
+          defaultMessage="Notify about new assignments:"
+        />
+      }
+    />
+
+    <Field
+      name="assignmentDeadlineEmails"
+      tabIndex={1}
+      component={CheckboxField}
+      onOff
+      label={
+        <FormattedMessage
+          id="app.editUserSettings.assignmentDeadlineEmails"
+          defaultMessage="Notify about near assignments deadline:"
+        />
+      }
+    />
+
+    <Field
+      name="submissionEvaluatedEmails"
+      tabIndex={1}
+      component={CheckboxField}
+      onOff
+      label={
+        <FormattedMessage
+          id="app.editUserSettings.submissionEvaluatedEmails"
+          defaultMessage="Notify about submission evaluation:"
+        />
+      }
+    />
+  </FormBox>;
 
 EditUserSettingsForm.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
