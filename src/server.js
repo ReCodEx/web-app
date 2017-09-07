@@ -24,6 +24,17 @@ import createRoutes from './pages/routes';
 
 addLocaleData([...cs]);
 
+// Register global atob a btoa functions
+global.Buffer = global.Buffer || require('buffer').Buffer;
+
+if (typeof btoa === 'undefined') {
+  global.btoa = str => Buffer.from(str).toString('base64');
+}
+
+if (typeof atob === 'undefined') {
+  global.atob = b64Encoded => Buffer.from(b64Encoded, 'base64').toString();
+}
+
 /**
  * Init server-side rendering of the app using Express with
  * some basic middleware for tempaltes and static file serving.
