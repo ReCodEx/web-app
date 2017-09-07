@@ -104,11 +104,10 @@ const EditEnvironmentConfigVariables = ({
                     <Field
                       name={`${variable}.value`}
                       component={
-                        formValues[index].type === 'string' ||
-                        formValues[index].type === 'file' ||
-                        formValues[index].type === 'remote-file'
-                          ? TextField
-                          : ExpandingTextField
+                        formValues[index].type === 'string[]' ||
+                        formValues[index].type === 'remote-file[]'
+                          ? ExpandingTextField
+                          : TextField
                       }
                       label={''}
                     />}
