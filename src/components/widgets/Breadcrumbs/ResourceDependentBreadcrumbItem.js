@@ -11,15 +11,14 @@ const ResourceDependentBreadcrumbItem = ({
   iconName,
   isActive,
   breadcrumb
-}) => (
+}) =>
   <ResourceRenderer
     resource={resource}
     loading={
       <BreadcrumbItem
         text={
           <span>
-            {iconName !== null ? <Icon name={iconName} /> : <LoadingIcon />}
-            {' '}
+            {iconName ? <Icon name={iconName} /> : <LoadingIcon />}{' '}
             <FormattedMessage
               id="app.resourceDependendBreadcrumbItem.loading"
               defaultMessage="Loading ..."
@@ -31,15 +30,13 @@ const ResourceDependentBreadcrumbItem = ({
     }
     failed={null}
   >
-    {data => (
+    {data =>
       <BreadcrumbItem
         iconName={iconName}
         {...breadcrumb(data)}
         isActive={isActive}
-      />
-    )}
-  </ResourceRenderer>
-);
+      />}
+  </ResourceRenderer>;
 
 ResourceDependentBreadcrumbItem.propTypes = {
   resource: PropTypes.object,

@@ -174,78 +174,83 @@ class EditExerciseConfigForm extends Component {
         }
         unlimitedHeight
       >
-        {hasFailed &&
-          <Alert bsStyle="danger">
-            <FormattedMessage
-              id="app.editExerciseConfigForm.failed"
-              defaultMessage="Saving failed. Please try again later."
-            />
-          </Alert>}
+        <div>
+          {hasFailed &&
+            <Alert bsStyle="danger">
+              <FormattedMessage
+                id="app.editExerciseConfigForm.failed"
+                defaultMessage="Saving failed. Please try again later."
+              />
+            </Alert>}
 
-        <FieldArray
-          name="config"
-          component={EditExerciseConfigEnvironment}
-          testConfigs={this.state.testConfigs}
-          runtimeEnvironments={runtimeEnvironments}
-          supplementaryFiles={supplementaryFiles}
-          pipelines={pipelines}
-          fetchVariables={(runtimeEnvironmentIndex, testIndex) =>
-            this.getTestPipelinesVariables(runtimeEnvironmentIndex, testIndex)}
-        />
-
-        <p className="text-center">
-          <SubmitButton
-            id="editExerciseConfig"
-            invalid={invalid}
-            submitting={submitting}
-            hasSucceeded={hasSucceeded}
-            dirty={anyTouched}
-            hasFailed={hasFailed}
-            handleSubmit={handleSubmit}
-            messages={{
-              submit: (
-                <FormattedMessage
-                  id="app.editExerciseConfigForm.submit"
-                  defaultMessage="Change configuration"
-                />
-              ),
-              submitting: (
-                <FormattedMessage
-                  id="app.editExerciseConfigForm.submitting"
-                  defaultMessage="Saving configuration ..."
-                />
-              ),
-              success: (
-                <FormattedMessage
-                  id="app.editExerciseConfigForm.success"
-                  defaultMessage="Configuration was changed."
-                />
-              )
-            }}
+          <FieldArray
+            name="config"
+            component={EditExerciseConfigEnvironment}
+            testConfigs={this.state.testConfigs}
+            runtimeEnvironments={runtimeEnvironments}
+            supplementaryFiles={supplementaryFiles}
+            pipelines={pipelines}
+            fetchVariables={(runtimeEnvironmentIndex, testIndex) =>
+              this.getTestPipelinesVariables(
+                runtimeEnvironmentIndex,
+                testIndex
+              )}
           />
-          <Button
-            onClick={() => this.addTest()}
-            bsStyle={'primary'}
-            className="btn-flat"
-          >
-            <Icon name="plus" />{' '}
-            <FormattedMessage
-              id="app.editExerciseConfigForm.addTest"
-              defaultMessage="Add new test"
+
+          <p className="text-center">
+            <SubmitButton
+              id="editExerciseConfig"
+              invalid={invalid}
+              submitting={submitting}
+              hasSucceeded={hasSucceeded}
+              dirty={anyTouched}
+              hasFailed={hasFailed}
+              handleSubmit={handleSubmit}
+              messages={{
+                submit: (
+                  <FormattedMessage
+                    id="app.editExerciseConfigForm.submit"
+                    defaultMessage="Change configuration"
+                  />
+                ),
+                submitting: (
+                  <FormattedMessage
+                    id="app.editExerciseConfigForm.submitting"
+                    defaultMessage="Saving configuration ..."
+                  />
+                ),
+                success: (
+                  <FormattedMessage
+                    id="app.editExerciseConfigForm.success"
+                    defaultMessage="Configuration was changed."
+                  />
+                )
+              }}
             />
-          </Button>
-          <Button
-            onClick={() => this.removeLastTest()}
-            bsStyle={'danger'}
-            className="btn-flat"
-          >
-            <Icon name="minus" />{' '}
-            <FormattedMessage
-              id="app.editExerciseConfigForm.removeLastTest"
-              defaultMessage="Remove last test"
-            />
-          </Button>
-        </p>
+            <Button
+              onClick={() => this.addTest()}
+              bsStyle={'primary'}
+              className="btn-flat"
+            >
+              <Icon name="plus" />{' '}
+              <FormattedMessage
+                id="app.editExerciseConfigForm.addTest"
+                defaultMessage="Add new test"
+              />
+            </Button>
+            <Button
+              onClick={() => this.removeLastTest()}
+              bsStyle={'danger'}
+              className="btn-flat"
+            >
+              <Icon name="minus" />{' '}
+              <FormattedMessage
+                id="app.editExerciseConfigForm.removeLastTest"
+                defaultMessage="Remove last test"
+              />
+            </Button>
+          </p>
+        </div>
       </Box>
     );
   }

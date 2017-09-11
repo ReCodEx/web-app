@@ -12,7 +12,7 @@ import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 
 import EditExerciseConfigForm from '../../components/forms/EditExerciseConfigForm/EditExerciseConfigForm';
 import EditEnvironmentConfigForm from '../../components/forms/EditEnvironmentConfigForm';
-import EditLimitsBox from '../../components/EditLimitsBox';
+import EditLimitsBox from '../../components/Exercises/EditLimitsBox';
 
 import SupplementaryFilesTableContainer from '../../containers/SupplementaryFilesTableContainer';
 
