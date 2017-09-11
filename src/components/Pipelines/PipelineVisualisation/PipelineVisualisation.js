@@ -6,10 +6,10 @@ import ClientOnly from '../../../components/helpers/ClientOnly';
 import { canUseDOM } from 'exenv';
 import style from './pipeline.less';
 
-const PipelineVisualisation = ({ graph, variables }) => {
+const PipelineVisualisation = ({ graph }) => {
   let svg = '';
   if (canUseDOM) {
-    svg = convertGraphToSvg(graph, variables);
+    svg = convertGraphToSvg(graph);
   }
   return (
     <ClientOnly>
@@ -24,8 +24,7 @@ const PipelineVisualisation = ({ graph, variables }) => {
 };
 
 PipelineVisualisation.propTypes = {
-  graph: PropTypes.object,
-  variables: PropTypes.array
+  graph: PropTypes.object
 };
 
 export default PipelineVisualisation;
