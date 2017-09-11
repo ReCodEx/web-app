@@ -156,7 +156,7 @@ class EditExerciseConfig extends Component {
                         {(...hardwareGroups) =>
                           <EditLimitsBox
                             hardwareGroups={hardwareGroups}
-                            runtimeEnvironments={runtimeEnvironments}
+                            environments={exercise.runtimeEnvironments}
                             config={config}
                           />}
                       </ResourceRenderer>

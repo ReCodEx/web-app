@@ -4,14 +4,14 @@ import { FormattedMessage } from 'react-intl';
 import { Tabs, Tab } from 'react-bootstrap';
 
 import Box from '../../widgets/Box';
-import EditExerciseLimitsForm from '../../forms/EditExerciseLimitsForm';
+import EditEnvironmentLimitsForm from '../../forms/EditEnvironmentLimitsForm';
 
 const getTestsList = config =>
   config === null || config.length === 0
     ? []
     : config[0].tests.map(({ name }) => name);
 
-const EditLimitsBox = ({ hardwareGroups, runtimeEnvironments, config }) =>
+const EditLimitsBox = ({ hardwareGroups, environments, config }) =>
   <Box
     title={
       <FormattedMessage
@@ -21,26 +21,20 @@ const EditLimitsBox = ({ hardwareGroups, runtimeEnvironments, config }) =>
     }
   >
     <Tabs id="edit-limits" className="nav-tabs-custom">
-      {hardwareGroups
-        .filter(({ isAvailable }) => isAvailable)
-        .map(({ id, description }) =>
-          <Tab key={id} eventKey={id} title={id}>
-            <p>
-              {description}
-            </p>
-            <EditExerciseLimitsForm
-              environments={runtimeEnvironments}
-              runtimeEnvironments={runtimeEnvironments}
-              tests={getTestsList(config)}
-            />
-          </Tab>
-        )}
+      {hardwareGroups.filter(({ isAvailable }) => isAvailable).map(({ id }) =>
+        <Tab key={id} eventKey={id} title={id}>
+          <EditEnvironmentLimitsForm
+            environments={environments}
+            tests={getTestsList(config)}
+          />
+        </Tab>
+      )}
     </Tabs>
   </Box>;
 
 EditLimitsBox.propTypes = {
   hardwareGroups: PropTypes.array.isRequired,
-  runtimeEnvironments: PropTypes.array.isRequired,
+  environments: PropTypes.array.isRequired,
   config: PropTypes.array.isRequired
 };
 

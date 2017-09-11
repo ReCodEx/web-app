@@ -1,32 +1,38 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import ImmutablePropTypes from 'react-immutable-proptypes';
-// import { FormattedMessage } from 'react-intl';
-// import { TabbedArrayField } from '../Fields';
-// import EditEnvironmentLimitsFields from './EditEnvironmentLimitsFields';
+import { reduxForm } from 'redux-form';
+import { LimitsField } from '../Fields';
 
-import { Row, Col } from 'react-bootstrap';
+import { Row, Col, Label } from 'react-bootstrap';
 
-const EditEnvironmentLimitsForm = ({
-  environments = [],
-  runtimeEnvironments,
-  ...props
-}) =>
+const EditEnvironmentLimitsForm = ({ environments = [], tests, ...props }) =>
   <Row>
-    {environments.map(environment =>
-      <Col key={environment}>
+    {environments.map(({ id, name, platform, description }) =>
+      <Col key={id} sm={Math.floor(12 / environments.length)}>
         <h3>
-          {environment.name}
+          {name} <Label>{platform}</Label>
         </h3>
-        {JSON.stringify(environment)}
-        {/* <EditEnvironmentLimitsFields /> */}
+        <p>
+          {description}
+        </p>
+
+        {tests.map(test =>
+          <LimitsField
+            key={test}
+            prefix={`limits.${test}`}
+            test={test}
+            label={test}
+          />
+        )}
       </Col>
     )}
   </Row>;
 
 EditEnvironmentLimitsForm.propTypes = {
   environments: PropTypes.array,
-  runtimeEnvironments: ImmutablePropTypes.map
+  tests: PropTypes.array
 };
 
-export default EditEnvironmentLimitsForm;
+export default reduxForm({
+  form: 'editEnvironmentLimits'
+})(EditEnvironmentLimitsForm);
