@@ -96,7 +96,7 @@ describe('helpers', () => {
           {
             name: 'B',
             portsIn: { 'source-files': { value: 'a', type: 'file[]' } },
-            portsOut: { 'binary-file': null },
+            portsOut: { 'binary-file': { value: '', type: 'file' } },
             type: 'gcc'
           }
         ],

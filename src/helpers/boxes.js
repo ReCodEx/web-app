@@ -36,7 +36,9 @@ const transformPortTypes = (ports, boxTypePorts, variableTypes) =>
   Object.keys(boxTypePorts).reduce(
     (acc, name) => ({
       ...acc,
-      [name]: ports[name] ? transformPort(ports[name], variableTypes) : null
+      [name]: ports[name]
+        ? transformPort(ports[name], variableTypes)
+        : { value: '', type: boxTypePorts[name].type }
     }),
     {}
   );
