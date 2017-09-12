@@ -51,7 +51,7 @@ describe('helpers', () => {
   });
 
   describe('Sending graph to the server', () => {
-    it.only('should preprocess the data before sending to the server', () => {
+    it('should preprocess the data before sending to the server', () => {
       const boxTypes = [
         {
           name: 'Input Data',
