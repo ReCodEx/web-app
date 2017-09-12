@@ -13,7 +13,7 @@ const TreeViewLeaf = ({
   onClick,
   level,
   actions
-}) => (
+}) =>
   <li
     onClick={onClick}
     style={{
@@ -21,7 +21,7 @@ const TreeViewLeaf = ({
       padding: '15px 10px'
     }}
   >
-    <LevelGap level={level} />
+    <LevelGap level={level - 1} /> {/* root group is not displayed */}
     <span style={{ width: 30, textAlign: 'center', display: 'inline-block' }}>
       {loading ? <LoadingIcon /> : <Icon name={icon} />}
     </span>
@@ -33,11 +33,8 @@ const TreeViewLeaf = ({
         <code>{externalId}</code>
         )
       </span>}
-    <span className="pull-right">
-      {actions}
-    </span>
-  </li>
-);
+    <span className="pull-right">{actions}</span>
+  </li>;
 
 TreeViewLeaf.propTypes = {
   loading: PropTypes.bool,

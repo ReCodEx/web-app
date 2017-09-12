@@ -10,10 +10,12 @@ import {
   Label
 } from 'react-bootstrap';
 
-const isUnknown = name => name === '?';
-const isArray = name => name.indexOf('[]') > 0;
+import { isArrayType, isUnknownType } from '../../../helpers/boxes';
+
 const getLabelStyle = portType =>
-  isArray(portType) ? 'primary' : isUnknown(portType) ? 'default' : 'info';
+  isArrayType(portType)
+    ? 'primary'
+    : isUnknownType(portType) ? 'default' : 'info';
 
 const PortField = ({
   input,

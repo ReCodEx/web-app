@@ -9,6 +9,7 @@ const ConfirmDeleteButton = ({
   id,
   onClick,
   disabled,
+  small = true,
   question = (
     <FormattedMessage
       id="app.deleteButton.confirm"
@@ -16,19 +17,23 @@ const ConfirmDeleteButton = ({
     />
   ),
   ...props
-}) => (
+}) =>
   <Confirm id={id} onConfirmed={onClick} question={question}>
-    <Button disabled={disabled || !id} bsStyle="danger" bsSize="sm" {...props}>
-      <DeleteIcon />
-      {' '}
+    <Button
+      disabled={disabled || !id}
+      bsStyle="danger"
+      bsSize={small ? 'sm' : undefined}
+      {...props}
+    >
+      <DeleteIcon />{' '}
       <FormattedMessage id="app.deleteButton.delete" defaultMessage="Delete" />
     </Button>
-  </Confirm>
-);
+  </Confirm>;
 
 ConfirmDeleteButton.propTypes = {
   onClick: PropTypes.func,
   id: PropTypes.string,
+  small: PropTypes.bool,
   question: PropTypes.any,
   disabled: PropTypes.bool
 };

@@ -22,14 +22,14 @@ const EditExerciseConfigVariable = ({ prefix, data, supplementaryFiles }) =>
     </Row>
     <Row>
       <Col xs={12}>
-        {data.type === 'string' &&
+        {(data.type === 'string' || data.type === 'file') &&
           <Field
             name={`${prefix}.value`}
             style={{ marginTop: '-20px' }}
             component={TextField}
             label={''}
           />}
-        {data.type === 'file' &&
+        {data.type === 'remote-file' &&
           <ResourceRenderer resource={supplementaryFiles.toArray()}>
             {(...supplementaryFiles) =>
               <Field
@@ -47,13 +47,13 @@ const EditExerciseConfigVariable = ({ prefix, data, supplementaryFiles }) =>
                 )}
               />}
           </ResourceRenderer>}
-        {data.type === 'string[]' &&
+        {(data.type === 'string[]' || data.type === 'file[]') &&
           <Field
             name={`${prefix}.value`}
             style={{ marginTop: '-20px' }}
             component={ExpandingTextField}
           />}
-        {data.type === 'file[]' &&
+        {data.type === 'remote-file[]' &&
           <ResourceRenderer resource={supplementaryFiles.toArray()}>
             {(...supplementaryFiles) =>
               <Field

@@ -8,12 +8,14 @@ import { reduxForm, Field, formValueSelector } from 'redux-form';
 import { TextField, SelectField, PortsField } from '../../forms/Fields';
 import { Modal, Alert } from 'react-bootstrap';
 import Button from '../../widgets/FlatButton';
-import { DeleteIcon } from '../../icons';
+import ConfirmDeleteButton from '../../buttons/DeleteButton/ConfirmDeleteButton';
 
 import SubmitButton from '../../forms/SubmitButton';
+import { CloseIcon } from '../../../components/icons';
 
 import { fetchBoxTypes } from '../../../redux/modules/boxes';
 import { getBoxTypes } from '../../../redux/selectors/boxes';
+import { getVariablesTypes, isUnknownType } from '../../../helpers/boxes';
 
 class BoxForm extends Component {
   componentWillMount = () => this.loadBoxTypes();
@@ -152,13 +154,19 @@ class BoxForm extends Component {
                 )
               }}
             />
-            <Button onClick={onDelete} bsStyle="danger">
-              <DeleteIcon />{' '}
+            <Button onClick={onHide}>
+              <CloseIcon />&nbsp;
               <FormattedMessage
-                id="app.pipelineEditor.BoxForm.delete"
-                defaultMessage="Delete box"
+                id="app.pipelineEditor.BoxForm.close"
+                defaultMessage="Close"
               />
             </Button>
+            <span style={{ display: 'inline-block', width: '5px' }} />
+            <ConfirmDeleteButton
+              id="delete-box"
+              onClick={onDelete}
+              small={false}
+            />
           </p>
         </Modal.Footer>
       </Modal>
@@ -219,21 +227,10 @@ const validate = (
       const portsOutNames = Object.keys(boxType.portsOut);
       const portsInErrors = {};
 
-      const existingVariablesTypes = {};
-      const examplesOfPorts = {};
-      for (let box of existingBoxes) {
-        if (box.name === name) {
-          continue;
-        }
-
-        for (let { type, value } of [
-          ...Object.values(box.portsIn),
-          ...Object.values(box.portsOut)
-        ]) {
-          existingVariablesTypes[value] = type;
-          examplesOfPorts[value] = box.name;
-        }
-      }
+      const existingVariablesTypes = getVariablesTypes(
+        boxTypes,
+        existingBoxes.filter(box => box.name !== name && box.type !== type)
+      );
 
       for (let portName of portsInNames) {
         if (!portsIn[portName] || portsIn[portName].length === 0) {
@@ -248,10 +245,13 @@ const validate = (
         } else {
           const intendedVariableName = portsIn[portName].value;
           const portType = boxType.portsIn[portName].type;
+          const existingVariableType =
+            existingVariablesTypes[intendedVariableName];
           if (
-            portType !== '?' &&
-            existingVariablesTypes[intendedVariableName] &&
-            existingVariablesTypes[intendedVariableName] !== portType
+            !isUnknownType(portType) &&
+            existingVariableType &&
+            !isUnknownType(existingVariableType.type) &&
+            existingVariableType.type !== portType
           ) {
             portsInErrors[portName] = {
               value: (
@@ -261,8 +261,8 @@ const validate = (
                   values={{
                     variable: intendedVariableName,
                     portType,
-                    variableType: existingVariablesTypes[intendedVariableName],
-                    exampleBox: examplesOfPorts[intendedVariableName]
+                    variableType: existingVariableType.type,
+                    exampleBox: existingVariableType.examplePort
                   }}
                 />
               )
