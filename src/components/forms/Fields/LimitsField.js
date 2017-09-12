@@ -1,14 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Field } from 'redux-form';
-import { BytesTextField, SecondsTextField } from '../Fields';
+import { BytesTextField, SecondsTextField, TextField } from '../Fields';
 import { FormattedMessage } from 'react-intl';
 
-const LimitsField = ({ test, label, prefix, ...props }) =>
+const LimitsField = ({ label, prefix, ...props }) =>
   <div>
-    <h4>
-      {test}
-    </h4>
     <Field
       name={`${prefix}.memory`}
       component={BytesTextField}
@@ -21,7 +18,7 @@ const LimitsField = ({ test, label, prefix, ...props }) =>
       {...props}
     />
     <Field
-      name={`${prefix}.time`}
+      name={`${prefix}.wall-time`}
       component={SecondsTextField}
       label={
         <FormattedMessage
@@ -31,10 +28,20 @@ const LimitsField = ({ test, label, prefix, ...props }) =>
       }
       {...props}
     />
+    <Field
+      name={`${prefix}.parallel`}
+      component={TextField}
+      label={
+        <FormattedMessage
+          id="app.fields.limits.parallel"
+          defaultMessage="Number of parallel processes:"
+        />
+      }
+      {...props}
+    />
   </div>;
 
 LimitsField.propTypes = {
-  test: PropTypes.string.isRequired,
   label: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) }),

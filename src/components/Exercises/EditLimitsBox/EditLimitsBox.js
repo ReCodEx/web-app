@@ -6,12 +6,7 @@ import { Tabs, Tab } from 'react-bootstrap';
 import Box from '../../widgets/Box';
 import EditLimits from '../../forms/EditLimits';
 
-const getTestsList = config =>
-  config === null || config.length === 0
-    ? []
-    : config[0].tests.map(({ name }) => name);
-
-const EditLimitsBox = ({ hardwareGroups, environments, config }) =>
+const EditLimitsBox = ({ hardwareGroups, editLimits, limits, ...props }) =>
   <Box
     title={
       <FormattedMessage
@@ -25,8 +20,9 @@ const EditLimitsBox = ({ hardwareGroups, environments, config }) =>
       {hardwareGroups.filter(({ isAvailable }) => isAvailable).map(({ id }) =>
         <Tab key={id} eventKey={id} title={id}>
           <EditLimits
-            environments={environments}
-            tests={getTestsList(config)}
+            editLimits={editLimits(id)}
+            limits={limits(id)}
+            {...props}
           />
         </Tab>
       )}
@@ -35,8 +31,8 @@ const EditLimitsBox = ({ hardwareGroups, environments, config }) =>
 
 EditLimitsBox.propTypes = {
   hardwareGroups: PropTypes.array.isRequired,
-  environments: PropTypes.array.isRequired,
-  config: PropTypes.array.isRequired
+  editLimits: PropTypes.func.isRequired,
+  limits: PropTypes.func.isRequired
 };
 
 export default EditLimitsBox;
