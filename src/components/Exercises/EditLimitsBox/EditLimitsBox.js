@@ -4,7 +4,7 @@ import { FormattedMessage } from 'react-intl';
 import { Tabs, Tab } from 'react-bootstrap';
 
 import Box from '../../widgets/Box';
-import EditEnvironmentLimitsForm from '../../forms/EditEnvironmentLimitsForm';
+import EditLimits from '../../forms/EditLimits';
 
 const getTestsList = config =>
   config === null || config.length === 0
@@ -19,11 +19,12 @@ const EditLimitsBox = ({ hardwareGroups, environments, config }) =>
         defaultMessage="Edit limits"
       />
     }
+    unlimitedHeight
   >
     <Tabs id="edit-limits" className="nav-tabs-custom">
       {hardwareGroups.filter(({ isAvailable }) => isAvailable).map(({ id }) =>
         <Tab key={id} eventKey={id} title={id}>
-          <EditEnvironmentLimitsForm
+          <EditLimits
             environments={environments}
             tests={getTestsList(config)}
           />
