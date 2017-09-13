@@ -55,7 +55,7 @@ EditExerciseConfigTests.propTypes = {
   prefix: PropTypes.string.isRequired,
   i: PropTypes.number.isRequired,
   testConfigs: PropTypes.array.isRequired,
-  runtimeEnvironments: PropTypes.object.isRequired,
+  runtimeEnvironments: PropTypes.array.isRequired,
   supplementaryFiles: ImmutablePropTypes.map,
   pipelines: ImmutablePropTypes.map,
   fetchVariables: PropTypes.func

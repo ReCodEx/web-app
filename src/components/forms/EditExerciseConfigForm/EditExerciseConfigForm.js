@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import { Alert, Button } from 'react-bootstrap';
 import Icon from 'react-fontawesome';
+import Box from '../../../components/widgets/Box';
 
 import SubmitButton from '../SubmitButton';
 import EditExerciseConfigEnvironment from './EditExerciseConfigEnvironment';
@@ -164,80 +165,93 @@ class EditExerciseConfigForm extends Component {
       invalid
     } = this.props;
     return (
-      <div>
-        {hasFailed &&
-          <Alert bsStyle="danger">
-            <FormattedMessage
-              id="app.editExerciseConfigForm.failed"
-              defaultMessage="Saving failed. Please try again later."
-            />
-          </Alert>}
-
-        <FieldArray
-          name="config"
-          component={EditExerciseConfigEnvironment}
-          testConfigs={this.state.testConfigs}
-          runtimeEnvironments={runtimeEnvironments}
-          supplementaryFiles={supplementaryFiles}
-          pipelines={pipelines}
-          fetchVariables={(runtimeEnvironmentIndex, testIndex) =>
-            this.getTestPipelinesVariables(runtimeEnvironmentIndex, testIndex)}
-        />
-
-        <p className="text-center">
-          <SubmitButton
-            id="editExerciseConfig"
-            invalid={invalid}
-            submitting={submitting}
-            hasSucceeded={hasSucceeded}
-            dirty={anyTouched}
-            hasFailed={hasFailed}
-            handleSubmit={handleSubmit}
-            messages={{
-              submit: (
-                <FormattedMessage
-                  id="app.editExerciseConfigForm.submit"
-                  defaultMessage="Change configuration"
-                />
-              ),
-              submitting: (
-                <FormattedMessage
-                  id="app.editExerciseConfigForm.submitting"
-                  defaultMessage="Saving configuration ..."
-                />
-              ),
-              success: (
-                <FormattedMessage
-                  id="app.editExerciseConfigForm.success"
-                  defaultMessage="Configuration was changed."
-                />
-              )
-            }}
+      <Box
+        title={
+          <FormattedMessage
+            id="app.editExercise.editTestConfig"
+            defaultMessage="Edit configurations"
           />
-          <Button
-            onClick={() => this.addTest()}
-            bsStyle={'primary'}
-            className="btn-flat"
-          >
-            <Icon name="plus" />{' '}
-            <FormattedMessage
-              id="app.editExerciseConfigForm.addTest"
-              defaultMessage="Add new test"
+        }
+        unlimitedHeight
+      >
+        <div>
+          {hasFailed &&
+            <Alert bsStyle="danger">
+              <FormattedMessage
+                id="app.editExerciseConfigForm.failed"
+                defaultMessage="Saving failed. Please try again later."
+              />
+            </Alert>}
+
+          <FieldArray
+            name="config"
+            component={EditExerciseConfigEnvironment}
+            testConfigs={this.state.testConfigs}
+            runtimeEnvironments={runtimeEnvironments}
+            supplementaryFiles={supplementaryFiles}
+            pipelines={pipelines}
+            fetchVariables={(runtimeEnvironmentIndex, testIndex) =>
+              this.getTestPipelinesVariables(
+                runtimeEnvironmentIndex,
+                testIndex
+              )}
+          />
+
+          <p className="text-center">
+            <SubmitButton
+              id="editExerciseConfig"
+              invalid={invalid}
+              submitting={submitting}
+              hasSucceeded={hasSucceeded}
+              dirty={anyTouched}
+              hasFailed={hasFailed}
+              handleSubmit={handleSubmit}
+              messages={{
+                submit: (
+                  <FormattedMessage
+                    id="app.editExerciseConfigForm.submit"
+                    defaultMessage="Change configuration"
+                  />
+                ),
+                submitting: (
+                  <FormattedMessage
+                    id="app.editExerciseConfigForm.submitting"
+                    defaultMessage="Saving configuration ..."
+                  />
+                ),
+                success: (
+                  <FormattedMessage
+                    id="app.editExerciseConfigForm.success"
+                    defaultMessage="Configuration was changed."
+                  />
+                )
+              }}
             />
-          </Button>
-          <Button
-            onClick={() => this.removeLastTest()}
-            bsStyle={'danger'}
-            className="btn-flat"
-          >
-            <Icon name="minus" />{' '}
-            <FormattedMessage
-              id="app.editExerciseConfigForm.removeLastTest"
-              defaultMessage="Remove last test"
-            />
-          </Button>
-        </p>
-      </div>
+            <Button
+              onClick={() => this.addTest()}
+              bsStyle={'primary'}
+              className="btn-flat"
+            >
+              <Icon name="plus" />{' '}
+              <FormattedMessage
+                id="app.editExerciseConfigForm.addTest"
+                defaultMessage="Add new test"
+              />
+            </Button>
+            <Button
+              onClick={() => this.removeLastTest()}
+              bsStyle={'danger'}
+              className="btn-flat"
+            >
+              <Icon name="minus" />{' '}
+              <FormattedMessage
+                id="app.editExerciseConfigForm.removeLastTest"
+                defaultMessage="Remove last test"
+              />
+            </Button>
+          </p>
+        </div>
+      </Box>
     );
   }
 }
@@ -251,7 +265,7 @@ EditExerciseConfigForm.propTypes = {
   hasFailed: PropTypes.bool,
   hasSucceeded: PropTypes.bool,
   invalid: PropTypes.bool,
-  runtimeEnvironments: PropTypes.object.isRequired,
+  runtimeEnvironments: PropTypes.array.isRequired,
   supplementaryFiles: ImmutablePropTypes.map,
   fetchFiles: PropTypes.func.isRequired,
   exercise: PropTypes.shape({

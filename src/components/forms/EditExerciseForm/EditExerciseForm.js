@@ -53,7 +53,7 @@ const EditExerciseForm = ({
   asyncValidating,
   formValues: { localizedTexts } = {},
   intl: { formatMessage }
-}) => (
+}) =>
   <FormBox
     title={
       <FormattedMessage
@@ -169,8 +169,7 @@ const EditExerciseForm = ({
       localizedTexts={localizedTexts}
       component={LocalizedTextsFormField}
     />
-  </FormBox>
-);
+  </FormBox>;
 
 EditExerciseForm.propTypes = {
   initialValues: PropTypes.object.isRequired,

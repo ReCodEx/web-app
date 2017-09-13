@@ -40,12 +40,10 @@ const EditExerciseConfigVariable = ({ prefix, data, supplementaryFiles }) =>
                 options={[{ key: '', name: '...' }].concat(
                   supplementaryFiles
                     .sort((a, b) => a.name.localeCompare(b.name))
-                    .map(data => {
-                      const obj = {};
-                      obj['key'] = data.hashName;
-                      obj['name'] = data.name;
-                      return obj;
-                    })
+                    .map((data, i) => ({
+                      key: i,
+                      name: data.name
+                    }))
                 )}
               />}
           </ResourceRenderer>}
@@ -65,12 +63,10 @@ const EditExerciseConfigVariable = ({ prefix, data, supplementaryFiles }) =>
                 options={[{ key: '', name: '...' }].concat(
                   supplementaryFiles
                     .sort((a, b) => a.name.localeCompare(b.name))
-                    .map(data => {
-                      const obj = {};
-                      obj['key'] = data.hashName;
-                      obj['name'] = data.name;
-                      return obj;
-                    })
+                    .map((data, i) => ({
+                      key: i,
+                      name: data.name
+                    }))
                 )}
               />}
           </ResourceRenderer>}
