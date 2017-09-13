@@ -40,8 +40,9 @@ const EditExerciseConfigVariable = ({ prefix, data, supplementaryFiles }) =>
                 options={[{ key: '', name: '...' }].concat(
                   supplementaryFiles
                     .sort((a, b) => a.name.localeCompare(b.name))
-                    .map((data, i) => ({
-                      key: i,
+                    .filter((item, pos, arr) => arr.indexOf(item) === pos)
+                    .map(data => ({
+                      key: data.hashName,
                       name: data.name
                     }))
                 )}
@@ -63,8 +64,9 @@ const EditExerciseConfigVariable = ({ prefix, data, supplementaryFiles }) =>
                 options={[{ key: '', name: '...' }].concat(
                   supplementaryFiles
                     .sort((a, b) => a.name.localeCompare(b.name))
-                    .map((data, i) => ({
-                      key: i,
+                    .filter((item, pos, arr) => arr.indexOf(item) === pos)
+                    .map(data => ({
+                      key: data.hashName,
                       name: data.name
                     }))
                 )}
