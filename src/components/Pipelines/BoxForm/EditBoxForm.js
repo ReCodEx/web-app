@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 
 import BoxForm from './BoxForm';
 import { getBoxTypes } from '../../../redux/selectors/boxes';
+import { createBoxFromFormInputs } from '../../../helpers/boxes';
 
 const EditBoxForm = ({ item, edit, onHide, boxTypes, onDelete, ...props }) =>
   item
@@ -21,48 +22,8 @@ const EditBoxForm = ({ item, edit, onHide, boxTypes, onDelete, ...props }) =>
         initialValues={item}
         onHide={onHide}
         onSubmit={data => {
-          const boxType = boxTypes.find(box => box.type === data.type);
-          if (!boxType) {
-            throw new Error('No box type was selected.');
-          }
-
-          const allowedPortsIn = Object.keys(boxType.portsIn);
-          const allowedPortsOut = Object.keys(boxType.portsOut);
-
-          const portsIn = allowedPortsIn.reduce(
-            (acc, port) => ({
-              ...acc,
-              [port]: {
-                type:
-                  boxType.portsIn[port].type === '?'
-                    ? 'string'
-                    : boxType.portsIn[port].type,
-                ...data.portsIn[port]
-              }
-            }),
-            {}
-          );
-
-          const portsOut = allowedPortsOut.reduce(
-            (acc, port) => ({
-              ...acc,
-              [port]: {
-                type:
-                  boxType.portsOut[port].type === '?'
-                    ? 'string'
-                    : boxType.portsOut[port].type,
-                ...data.portsOut[port]
-              }
-            }),
-            {}
-          );
-
-          edit(
-            Object.assign(data, {
-              portsIn,
-              portsOut
-            })
-          );
+          const box = createBoxFromFormInputs(data, boxTypes);
+          edit(box);
           onHide();
         }}
         onDelete={() => {

@@ -233,16 +233,7 @@ const validate = (
       );
 
       for (let portName of portsInNames) {
-        if (!portsIn[portName] || portsIn[portName].length === 0) {
-          portsInErrors[portName] = {
-            value: (
-              <FormattedMessage
-                id="app.pipelineEditor.BoxForm.missingPortName"
-                defaultMessage="You must choose some name for the port."
-              />
-            )
-          };
-        } else {
+        if (portsIn[portName] && portsIn[portName].length > 0) {
           const intendedVariableName = portsIn[portName].value;
           const portType = boxType.portsIn[portName].type;
           const existingVariableType =
@@ -277,15 +268,6 @@ const validate = (
       }
 
       const portsOutErrors = {};
-      for (let portName of portsOutNames) {
-        if (!portsOut[portName] || portsOut[portName].length === 0) {
-          portsOutErrors[portName] = {
-            value: (
-              <FormattedMessage id="app.pipelineEditor.BoxForm.missingPortName" />
-            )
-          };
-        }
-      }
 
       // check that one box does not have the same var as input and output
       for (let portIn of portsInNames) {

@@ -16,6 +16,7 @@ import {
 import FormBox from '../../widgets/FormBox';
 import SubmitButton from '../SubmitButton';
 import { validatePipeline } from '../../../redux/modules/pipelines';
+import { extractVariables } from '../../../helpers/boxes';
 
 if (canUseDOM) {
   require('codemirror/mode/yaml/yaml');
@@ -198,32 +199,6 @@ const asyncValidate = (values, dispatch, { initialValues: { id, version } }) =>
         throw errors;
       }
     });
-
-const flattenPorts = boxes =>
-  boxes.reduce(
-    (acc, ports) => [
-      ...acc,
-      ...Object.keys(ports).map(port => ({
-        name: port,
-        type: ports[port].type,
-        value: btoa(ports[port].value)
-      }))
-    ],
-    []
-  );
-
-const extractVariables = (boxes = []) => {
-  const inputs = flattenPorts(
-    boxes.map(box => box.portsIn).filter(ports => ports)
-  );
-
-  // remove duplicities
-  return inputs.reduce(
-    (acc, port) =>
-      !acc.find(item => item.name === port.name) ? [...acc, port] : acc,
-    []
-  );
-};
 
 const mapStateToProps = state => ({
   variables: extractVariables(
