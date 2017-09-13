@@ -61,7 +61,7 @@ const AttachedFilesTable = ({
                 <tbody>
                   {attachments
                     .sort((a, b) => a.name.localeCompare(b.name))
-                    .map((data, i) => <RowComponent {...data} key={data.id} />)}
+                    .map((data, i) => <RowComponent {...data} key={i} />)}
                 </tbody>
               </Table>}
             {attachments.length === 0 &&

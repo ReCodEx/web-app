@@ -15,20 +15,27 @@ const SelectField = ({
   label,
   options,
   ...props
-}) => (
+}) =>
   <FormGroup
     controlId={input.name}
     validationState={touched && error ? 'error' : undefined}
   >
-    <ControlLabel>{label}</ControlLabel>
+    <ControlLabel>
+      {label}
+    </ControlLabel>
     <FormControl {...input} {...props} componentClass="select">
-      {options.map(({ key, name }) => (
-        <option value={key} key={key}>{name}</option>
-      ))}
+      {options.map(({ key, name }, i) =>
+        <option value={key} key={i}>
+          {name}
+        </option>
+      )}
     </FormControl>
-    {touched && error && <HelpBlock>{error}</HelpBlock>}
-  </FormGroup>
-);
+    {touched &&
+      error &&
+      <HelpBlock>
+        {error}
+      </HelpBlock>}
+  </FormGroup>;
 
 SelectField.propTypes = {
   input: PropTypes.shape({
