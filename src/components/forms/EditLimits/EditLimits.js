@@ -30,6 +30,7 @@ const EditLimits = ({
             {limits =>
               <EditEnvironmentLimitsForm
                 {...props}
+                envName={name}
                 config={config.find(forEnv => forEnv.name === id)}
                 initialValues={{ limits }}
                 form={`editEnvironmentLimits-${id}`}

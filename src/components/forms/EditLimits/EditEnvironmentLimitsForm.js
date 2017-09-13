@@ -10,6 +10,7 @@ import SubmitButton from '../SubmitButton';
 
 const EditEnvironmentLimitsForm = ({
   config,
+  envName,
   onSubmit,
   anyTouched,
   submitting,
@@ -93,7 +94,7 @@ const EditEnvironmentLimitsForm = ({
             <FormattedMessage
               id="app.editEnvironmentLimitsForm.submit"
               defaultMessage="Save changes to {env}"
-              values={{ env: name }}
+              values={{ env: envName }}
             />
           ),
           submitting: (
@@ -121,6 +122,7 @@ const EditEnvironmentLimitsForm = ({
 
 EditEnvironmentLimitsForm.propTypes = {
   config: PropTypes.object.isRequired,
+  envName: PropTypes.string.isRequired,
   onSubmit: PropTypes.func.isRequired,
   initialValues: PropTypes.object.isRequired,
   values: PropTypes.object,
