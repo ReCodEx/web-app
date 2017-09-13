@@ -164,6 +164,18 @@ const EditExerciseForm = ({
       }
     />
 
+    <Field
+      name="isLocked"
+      component={CheckboxField}
+      onOff
+      label={
+        <FormattedMessage
+          id="app.editExerciseForm.isLocked"
+          defaultMessage="Exercise is locked (visible, but cannot be assigned to any group)."
+        />
+      }
+    />
+
     <FieldArray
       name="localizedTexts"
       localizedTexts={localizedTexts}
