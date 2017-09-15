@@ -26,7 +26,7 @@ import withLinks from '../../hoc/withLinks';
 const days = ['Po', 'Út', 'St', 'Čt', 'Pá', 'So', 'Ne'];
 
 class SisSupervisorGroupsContainer extends Component {
-  componentWillMount() {
+  componentDidMount() {
     this.props.loadData(this.props.currentUserId);
   }
 
