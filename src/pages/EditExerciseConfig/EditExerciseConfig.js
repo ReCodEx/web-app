@@ -12,17 +12,19 @@ import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 
 import EditExerciseConfigForm from '../../components/forms/EditExerciseConfigForm/EditExerciseConfigForm';
 import EditEnvironmentConfigForm from '../../components/forms/EditEnvironmentConfigForm';
-import EditLimitsBox from '../../components/Exercises/EditLimitsBox';
+import EditSimpleLimitsBox from '../../components/Exercises/EditSimpleLimitsBox';
 
 import SupplementaryFilesTableContainer from '../../containers/SupplementaryFilesTableContainer';
 
 import { fetchExerciseIfNeeded } from '../../redux/modules/exercises';
-import { fetchHardwareGroups } from '../../redux/modules/hwGroups';
 import { fetchPipelines } from '../../redux/modules/pipelines';
 import {
-  fetchExerciseEnvironmentLimitsIfNeeded,
-  editEnvironmentLimits
-} from '../../redux/modules/limits';
+  fetchExerciseEnvironmentSimpleLimitsIfNeeded,
+  editEnvironmentSimpleLimits,
+  setHorizontally,
+  setVertically,
+  setAll
+} from '../../redux/modules/simpleLimits';
 import {
   fetchExerciseConfigIfNeeded,
   setExerciseConfig
@@ -38,12 +40,9 @@ import { exerciseEnvironmentConfigSelector } from '../../redux/selectors/exercis
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments';
 import { runtimeEnvironmentsSelector } from '../../redux/selectors/runtimeEnvironments';
-import { hardwareGroupsSelector } from '../../redux/selectors/hwGroups';
-import { limitsSelector } from '../../redux/selectors/limits';
+import { simpleLimitsSelector } from '../../redux/selectors/simpleLimits';
 
 import withLinks from '../../hoc/withLinks';
-
-const needsLimits = box => box.type === 'elf-exec';
 
 class EditExerciseConfig extends Component {
   componentWillMount = () => this.props.loadAsync();
@@ -56,19 +55,12 @@ class EditExerciseConfig extends Component {
   static loadAsync = ({ exerciseId }, dispatch) =>
     Promise.all([
       dispatch(fetchExerciseIfNeeded(exerciseId)).then(({ value: exercise }) =>
-        dispatch(fetchHardwareGroups()).then(({ value: hardwareGroups }) =>
-          Promise.all(
-            exercise.runtimeEnvironments.map(environment =>
-              Promise.all(
-                hardwareGroups.map(group =>
-                  dispatch(
-                    fetchExerciseEnvironmentLimitsIfNeeded(
-                      exerciseId,
-                      environment.id,
-                      group.id
-                    )
-                  )
-                )
+        Promise.all(
+          exercise.runtimeEnvironments.map(environment =>
+            dispatch(
+              fetchExerciseEnvironmentSimpleLimitsIfNeeded(
+                exerciseId,
+                environment.id
               )
             )
           )
@@ -91,10 +83,12 @@ class EditExerciseConfig extends Component {
       environmentFormValues,
       exerciseConfig,
       exerciseEnvironmentConfig,
-      editEnvironmentLimits,
+      editEnvironmentSimpleLimits,
       pipelines,
       limits,
-      hardwareGroups
+      setHorizontally,
+      setVertically,
+      setAll
     } = this.props;
 
     return (
@@ -178,23 +172,15 @@ class EditExerciseConfig extends Component {
                         exercise={exercise}
                         pipelines={pipelines}
                       />
-                      <ResourceRenderer resource={pipelines.toArray()}>
-                        {(...pipelines) =>
-                          <ResourceRenderer resource={hardwareGroups}>
-                            {(...hardwareGroups) =>
-                              <EditLimitsBox
-                                hardwareGroups={hardwareGroups}
-                                editLimits={editEnvironmentLimits}
-                                environments={exercise.runtimeEnvironments}
-                                limits={limits}
-                                config={config}
-                                getBoxesWithLimits={pipeline =>
-                                  pipelines
-                                    .find(p => p.id === pipeline)
-                                    .pipeline.boxes.filter(needsLimits)}
-                              />}
-                          </ResourceRenderer>}
-                      </ResourceRenderer>
+                      <EditSimpleLimitsBox
+                        editLimits={editEnvironmentSimpleLimits}
+                        environments={exercise.runtimeEnvironments}
+                        limits={limits}
+                        config={config}
+                        setVertically={setVertically}
+                        setHorizontally={setHorizontally}
+                        setAll={setAll}
+                      />
                     </div>}
                 </ResourceRenderer>
               </Col>
@@ -217,11 +203,13 @@ EditExerciseConfig.propTypes = {
   environmentFormValues: PropTypes.object,
   exerciseConfig: PropTypes.object,
   exerciseEnvironmentConfig: PropTypes.object,
-  editEnvironmentLimits: PropTypes.func.isRequired,
+  editEnvironmentSimpleLimits: PropTypes.func.isRequired,
   pipelines: ImmutablePropTypes.map,
   links: PropTypes.object.isRequired,
   limits: PropTypes.func.isRequired,
-  hardwareGroups: PropTypes.array
+  setHorizontally: PropTypes.func.isRequired,
+  setVertically: PropTypes.func.isRequired,
+  setAll: PropTypes.func.isRequired
 };
 
 export default withLinks(
@@ -237,20 +225,25 @@ export default withLinks(
           exerciseId
         )(state),
         pipelines: pipelinesSelector(state),
-        limits: hwGroup => runtimeEnvironmentId =>
-          limitsSelector(exerciseId, runtimeEnvironmentId, hwGroup)(state),
-        hardwareGroups: hardwareGroupsSelector(state).toArray()
+        limits: runtimeEnvironmentId =>
+          simpleLimitsSelector(exerciseId, runtimeEnvironmentId)(state)
       };
     },
     (dispatch, { params: { exerciseId } }) => ({
       loadAsync: () => EditExerciseConfig.loadAsync({ exerciseId }, dispatch),
       editEnvironmentConfigs: data =>
         dispatch(setExerciseEnvironmentConfig(exerciseId, data)),
-      editEnvironmentLimits: hwGroup => runtimeEnvironmentId => data =>
+      editEnvironmentSimpleLimits: runtimeEnvironmentId => data =>
         dispatch(
-          editEnvironmentLimits(exerciseId, runtimeEnvironmentId, hwGroup, data)
+          editEnvironmentSimpleLimits(exerciseId, runtimeEnvironmentId, data)
         ),
-      setConfig: data => dispatch(setExerciseConfig(exerciseId, data))
+      setConfig: data => dispatch(setExerciseConfig(exerciseId, data)),
+      setHorizontally: runtimeEnvironmentId => testName => () =>
+        dispatch(setHorizontally(exerciseId, runtimeEnvironmentId, testName)),
+      setVertically: runtimeEnvironmentId => testName => () =>
+        dispatch(setVertically(exerciseId, runtimeEnvironmentId, testName)),
+      setAll: runtimeEnvironmentId => testName => () =>
+        dispatch(setAll(exerciseId, runtimeEnvironmentId, testName))
     })
   )(EditExerciseConfig)
 );
