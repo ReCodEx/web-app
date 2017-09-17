@@ -11,6 +11,7 @@ import Page from '../../components/layout/Page';
 import Box from '../../components/widgets/Box';
 
 import EditPipelineForm from '../../components/forms/EditPipelineForm';
+import PipelineFilesTableContainer from '../../containers/PipelineFilesTableContainer';
 import DeletePipelineButtonContainer from '../../containers/DeletePipelineButtonContainer';
 
 import {
@@ -112,6 +113,11 @@ class EditPipeline extends Component {
               </Col>
               <Col lg={6}>
                 <div />
+              </Col>
+            </Row>
+            <Row>
+              <Col lg={6}>
+                <PipelineFilesTableContainer pipeline={data} />
               </Col>
             </Row>
             <Row>
