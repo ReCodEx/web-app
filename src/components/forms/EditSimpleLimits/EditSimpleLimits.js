@@ -7,6 +7,8 @@ import ResourceRenderer from '../../helpers/ResourceRenderer';
 
 import styles from './styles.less';
 
+const formName = id => `editEnvironmentSimpleLimits-${id}`;
+
 const EditSimpleLimits = ({
   environments = [],
   editLimits,
@@ -36,11 +38,11 @@ const EditSimpleLimits = ({
                 envName={name}
                 config={config.find(forEnv => forEnv.name === id)}
                 initialValues={{ limits }}
-                form={`editEnvironmentSimpleLimits-${id}`}
+                form={formName(id)}
                 onSubmit={editLimits(id)}
-                setHorizontally={setHorizontally(id)}
-                setVertically={setVertically(id)}
-                setAll={setAll(id)}
+                setHorizontally={setHorizontally(formName(id), id)}
+                setVertically={setVertically(formName(id), id)}
+                setAll={setAll(formName(id), id)}
               />}
           </ResourceRenderer>
         </div>

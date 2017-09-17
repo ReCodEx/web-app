@@ -238,12 +238,16 @@ export default withLinks(
           editEnvironmentSimpleLimits(exerciseId, runtimeEnvironmentId, data)
         ),
       setConfig: data => dispatch(setExerciseConfig(exerciseId, data)),
-      setHorizontally: runtimeEnvironmentId => testName => () =>
-        dispatch(setHorizontally(exerciseId, runtimeEnvironmentId, testName)),
-      setVertically: runtimeEnvironmentId => testName => () =>
-        dispatch(setVertically(exerciseId, runtimeEnvironmentId, testName)),
-      setAll: runtimeEnvironmentId => testName => () =>
-        dispatch(setAll(exerciseId, runtimeEnvironmentId, testName))
+      setHorizontally: (formName, runtimeEnvironmentId) => testName => () =>
+        dispatch(
+          setHorizontally(formName, exerciseId, runtimeEnvironmentId, testName)
+        ),
+      setVertically: (formName, runtimeEnvironmentId) => testName => () =>
+        dispatch(
+          setVertically(formName, exerciseId, runtimeEnvironmentId, testName)
+        ),
+      setAll: (formName, runtimeEnvironmentId) => testName => () =>
+        dispatch(setAll(formName, exerciseId, runtimeEnvironmentId, testName))
     })
   )(EditExerciseConfig)
 );

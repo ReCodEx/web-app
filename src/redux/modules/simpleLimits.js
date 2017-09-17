@@ -1,5 +1,6 @@
 import { handleActions } from 'redux-actions';
 import factory, { initialState } from '../helpers/resourceManager';
+import { change } from 'redux-form';
 
 /**
  * Create actions & reducer
@@ -48,36 +49,90 @@ export const editEnvironmentSimpleLimits = (
     data
   );
 
-export const setVertically = (exerciseId, runtimeEnvironmentId, testName) => ({
-  type: additionalActionTypes.CLONE_VERTICAL,
-  payload: {
-    exerciseId,
-    runtimeEnvironmentId,
-    testName
-  }
-});
-
-export const setHorizontally = (
+const getSimpleLimitsOf = (
+  { form },
+  formName,
   exerciseId,
   runtimeEnvironmentId,
   testName
-) => ({
-  type: additionalActionTypes.CLONE_HORIZONTAL,
-  payload: {
-    exerciseId,
-    runtimeEnvironmentId,
-    testName
-  }
-});
+) =>
+  form[formName].values.limits[testName] ||
+  form[formName].values.limits[testName] ||
+  {};
 
-export const setAll = (exerciseId, runtimeEnvironmentId, testName) => ({
-  type: additionalActionTypes.CLONE_ALL,
-  payload: {
+const isSimpleLimitsForm = ({ values }, testName) =>
+  values.limits &&
+  Object.keys(values).length === 1 &&
+  values.limits[testName] &&
+  values.limits[testName].hasOwnProperty('wall-time') &
+    values.limits[testName].hasOwnProperty('memory');
+
+const getAllSimpleLimitsFormNames = ({ form }, testName) =>
+  Object.keys(form).filter(name => isSimpleLimitsForm(form[name], testName));
+
+const getAllTestNames = ({ form }, formName) =>
+  Object.keys(form[formName].values.limits);
+
+const field = testName => `limits.${testName}`;
+
+export const setVertically = (
+  formName,
+  exerciseId,
+  runtimeEnvironmentId,
+  testName
+) => (dispatch, getState) => {
+  const state = getState();
+  const data = getSimpleLimitsOf(
+    state,
+    formName,
     exerciseId,
     runtimeEnvironmentId,
     testName
-  }
-});
+  );
+  getAllTestNames(getState(), formName).map(testName =>
+    dispatch(change(formName, field(testName), data))
+  );
+};
+
+export const setHorizontally = (
+  formName,
+  exerciseId,
+  runtimeEnvironmentId,
+  testName
+) => (dispatch, getState) => {
+  const state = getState();
+  const data = getSimpleLimitsOf(
+    state,
+    formName,
+    exerciseId,
+    runtimeEnvironmentId,
+    testName
+  );
+  getAllSimpleLimitsFormNames(getState(), testName).map(formName =>
+    dispatch(change(formName, field(testName), data))
+  );
+};
+
+export const setAll = (
+  formName,
+  exerciseId,
+  runtimeEnvironmentId,
+  testName
+) => (dispatch, getState) => {
+  const state = getState();
+  const data = getSimpleLimitsOf(
+    state,
+    formName,
+    exerciseId,
+    runtimeEnvironmentId,
+    testName
+  );
+  getAllSimpleLimitsFormNames(getState(), testName).map(formName =>
+    getAllTestNames(getState(), formName).map(testName =>
+      dispatch(change(formName, field(testName), data))
+    )
+  );
+};
 
 const reducer = handleActions(reduceActions, initialState);
 export default reducer;
