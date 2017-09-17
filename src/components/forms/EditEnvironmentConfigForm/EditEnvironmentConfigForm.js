@@ -9,6 +9,48 @@ import SubmitButton from '../SubmitButton';
 import EditEnvironmentConfigTabs from './EditEnvironmentConfigTabs';
 
 class EditEnvironmentConfigForm extends Component {
+  fillDefaultVariablesIfNeeded(index) {
+    const { formValues, runtimeEnvironments } = this.props;
+
+    const envId =
+      formValues &&
+      formValues.environmentConfigs &&
+      formValues.environmentConfigs[index] &&
+      formValues.environmentConfigs[index].runtimeEnvironmentId
+        ? formValues.environmentConfigs[index].runtimeEnvironmentId
+        : '';
+    let currentVariables =
+      formValues &&
+      formValues.environmentConfigs &&
+      formValues.environmentConfigs[index] &&
+      formValues.environmentConfigs[index].variablesTable
+        ? formValues.environmentConfigs[index].variablesTable
+        : [];
+
+    const environment =
+      runtimeEnvironments &&
+      runtimeEnvironments.toJS()[envId] &&
+      runtimeEnvironments.toJS()[envId]
+        ? runtimeEnvironments.toJS()[envId].data
+        : {};
+    const envDefaults = environment.defaultVariables
+      ? environment.defaultVariables
+      : [];
+
+    for (const envVariable of envDefaults) {
+      let isPresent = false;
+      for (const curVariable of currentVariables) {
+        if (curVariable.name === envVariable.name) {
+          isPresent = true;
+        }
+      }
+
+      if (!isPresent) {
+        currentVariables.push(envVariable);
+      }
+    }
+  }
+
   render() {
     const {
       runtimeEnvironments = [],
@@ -38,6 +80,8 @@ class EditEnvironmentConfigForm extends Component {
           environmentValues={environmentConfigs}
           runtimeEnvironments={runtimeEnvironments}
           formValues={formValues}
+          fillDefaultVariablesIfNeeded={i =>
+            this.fillDefaultVariablesIfNeeded(i)}
         />
 
         <div className="text-center">
