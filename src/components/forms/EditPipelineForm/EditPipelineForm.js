@@ -31,7 +31,8 @@ const EditPipelineForm = ({
   submitSucceeded: hasSucceeded,
   variables = [],
   invalid,
-  asyncValidating
+  asyncValidating,
+  supplementaryFiles
 }) =>
   <FormBox
     title={
@@ -138,6 +139,7 @@ const EditPipelineForm = ({
               defaultMessage="Pipeline variables:"
             />
           }
+          supplementaryFiles={supplementaryFiles}
         />
       </Col>
     </Row>
