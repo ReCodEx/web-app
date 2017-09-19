@@ -6,7 +6,6 @@ import { Row, Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 import { reset } from 'redux-form';
-import { Map } from 'immutable';
 
 import Page from '../../components/layout/Page';
 import Box from '../../components/widgets/Box';
@@ -22,8 +21,6 @@ import {
 import { getPipeline } from '../../redux/selectors/pipelines';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import { getBoxTypes } from '../../redux/selectors/boxes';
-import { fetchSupplementaryFilesForPipeline } from '../../redux/modules/pipelineFiles';
-import { createGetPipelineFiles } from '../../redux/selectors/pipelineFiles';
 
 import withLinks from '../../hoc/withLinks';
 import { transformPipelineDataForApi } from '../../helpers/boxes';
@@ -38,10 +35,7 @@ class EditPipeline extends Component {
   };
 
   static loadAsync = ({ pipelineId }, dispatch) =>
-    Promise.all([
-      dispatch(fetchPipelineIfNeeded(pipelineId)),
-      dispatch(fetchSupplementaryFilesForPipeline(pipelineId))
-    ]);
+    Promise.all([dispatch(fetchPipelineIfNeeded(pipelineId))]);
 
   render() {
     const {
@@ -50,8 +44,7 @@ class EditPipeline extends Component {
       pipeline,
       boxTypes,
       editPipeline,
-      push,
-      supplementaryFiles
+      push
     } = this.props;
 
     return (
@@ -114,9 +107,7 @@ class EditPipeline extends Component {
                           ),
                           ...formData
                         })}
-                      supplementaryFiles={/*supplementaryFiles(
-                        pipeline.supplementaryFilesIds
-                      )*/ Map()}
+                      pipeline={data}
                     />
                   </Col>
                 </Row>
@@ -174,8 +165,7 @@ EditPipeline.propTypes = {
   }).isRequired,
   links: PropTypes.object.isRequired,
   boxTypes: PropTypes.array.isRequired,
-  push: PropTypes.func.isRequired,
-  supplementaryFiles: PropTypes.func
+  push: PropTypes.func.isRequired
 };
 
 export default withLinks(
@@ -184,8 +174,7 @@ export default withLinks(
       return {
         pipeline: getPipeline(pipelineId)(state),
         boxTypes: getBoxTypes(state),
-        userId: loggedInUserIdSelector(state),
-        supplementaryFiles: fileIds => createGetPipelineFiles(fileIds)(state)
+        userId: loggedInUserIdSelector(state)
       };
     },
     (dispatch, { params: { pipelineId } }) => ({

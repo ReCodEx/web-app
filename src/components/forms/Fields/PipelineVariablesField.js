@@ -70,7 +70,7 @@ PipelineVariablesField.propTypes = {
     PropTypes.element
   ]).isRequired,
   variables: PropTypes.array,
-  remoteFiles: ImmutablePropTypes.map
+  supplementaryFiles: ImmutablePropTypes.map
 };
 
 export default PipelineVariablesField;
