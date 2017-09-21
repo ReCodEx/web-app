@@ -8,7 +8,11 @@ const resourceName = 'pipelines';
 const { actions, reduceActions } = factory({ resourceName });
 
 export const additionalActionTypes = {
-  VALIDATE_PIPELINE: 'recodex/pipelines/VALIDATE_PIPELINE'
+  VALIDATE_PIPELINE: 'recodex/pipelines/VALIDATE_PIPELINE',
+  FORK_PIPELINE: 'recodex/pipelines/FORK_PIPELINE',
+  FORK_PIPELINE_PENDING: 'recodex/pipelines/FORK_PIPELINE_PENDING',
+  FORK_PIPELINE_REJECTED: 'recodex/pipelines/FORK_PIPELINE_REJECTED',
+  FORK_PIPELINE_FULFILLED: 'recodex/pipelines/FORK_PIPELINE_FULFILLED'
 };
 
 export const fetchPipelinesIfNeeded = actions.fetchIfNeeded;
@@ -19,6 +23,34 @@ export const fetchPipelines = () =>
   actions.fetchMany({
     endpoint: '/pipelines'
   });
+
+export const fetchExercisePipelines = exerciseId =>
+  actions.fetchMany({
+    endpoint: `/exercises/${exerciseId}/pipelines`
+  });
+
+export const forkStatuses = {
+  PENDING: 'PENDING',
+  REJECTED: 'REJECTED',
+  FULFILLED: 'FULFILLED'
+};
+
+export const forkPipeline = (id, forkId, exerciseId = null) => {
+  let actionData = {
+    type: additionalActionTypes.FORK_PIPELINE,
+    endpoint: `/pipelines/${id}/fork`,
+    method: 'POST',
+    meta: { id, forkId }
+  };
+  if (
+    Object.keys(exerciseId).length !== 0 &&
+    exerciseId.constructor === Object &&
+    exerciseId !== null
+  ) {
+    actionData.body = { exerciseId };
+  }
+  return createApiAction(actionData);
+};
 
 export const create = actions.addResource;
 export const editPipeline = actions.updateResource;
@@ -40,7 +72,38 @@ const reducer = handleActions(
     ) =>
       state.hasIn(['resources', pipelineId])
         ? addFiles(state, pipelineId, files, 'supplementaryFilesIds')
-        : state
+        : state,
+
+    [additionalActionTypes.FORK_PIPELINE_PENDING]: (
+      state,
+      { meta: { id, forkId } }
+    ) =>
+      state.updateIn(['resources', id, 'data'], pipeline => {
+        if (!pipeline.has('forks')) {
+          pipeline = pipeline.set('forks', new Map());
+        }
+
+        return pipeline.update('forks', forks =>
+          forks.set(forkId, { status: forkStatuses.PENDING })
+        );
+      }),
+
+    [additionalActionTypes.FORK_PIPELINE_REJECTED]: (
+      state,
+      { meta: { id, forkId } }
+    ) =>
+      state.setIn(['resources', id, 'data', 'forks', forkId], {
+        status: forkStatuses.REJECTED
+      }),
+
+    [additionalActionTypes.FORK_PIPELINE_FULFILLED]: (
+      state,
+      { payload: { id: pipelineId }, meta: { id, forkId } }
+    ) =>
+      state.setIn(['resources', id, 'data', 'forks', forkId], {
+        status: forkStatuses.FULFILLED,
+        pipelineId
+      })
   }),
   initialState
 );

@@ -18,13 +18,17 @@ const ExercisesListItem = ({
   createdAt,
   createActions,
   links: { EXERCISE_URI_FACTORY }
-}) => (
+}) =>
   <tr>
     <td className="text-center">
       <Icon name="code" />
     </td>
     <td>
-      <strong><Link to={EXERCISE_URI_FACTORY(id)}>{name}</Link></strong>
+      <strong>
+        <Link to={EXERCISE_URI_FACTORY(id)}>
+          {name}
+        </Link>
+      </strong>
     </td>
     <td>
       <UsersNameContainer userId={authorId} />
@@ -43,16 +47,14 @@ const ExercisesListItem = ({
       <DifficultyIcon difficulty={difficulty} />
     </td>
     <td>
-      <FormattedDate value={createdAt * 1000} />
-      {' '}
+      <FormattedDate value={createdAt * 1000} />{' '}
       <FormattedTime value={createdAt * 1000} />
     </td>
     {createActions &&
       <td className="text-right">
         {createActions(id)}
       </td>}
-  </tr>
-);
+  </tr>;
 
 ExercisesListItem.propTypes = {
   id: PropTypes.string.isRequired,
