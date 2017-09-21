@@ -11,6 +11,11 @@ export const pipelineSelector = pipelineId =>
 export const getPipeline = id =>
   createSelector(getPipelines, pipelines => pipelines.getIn(['resources', id]));
 
+export const getFork = (id, forkId) =>
+  createSelector(getPipeline(id), pipeline =>
+    pipeline.getIn(['data', 'forks', forkId])
+  );
+
 export const exercisePipelinesSelector = exerciseId =>
   createSelector([pipelinesSelector], pipelines =>
     pipelines
