@@ -21,7 +21,14 @@ import GroupsList from '../../components/Groups/GroupsList';
 import ReferenceSolutionsList from '../../components/Exercises/ReferenceSolutionsList';
 import SubmitSolutionContainer from '../../containers/SubmitSolutionContainer';
 import Box from '../../components/widgets/Box';
-import { EditIcon, SendIcon } from '../../components/icons';
+import {
+  EditIcon,
+  SendIcon,
+  DeleteIcon,
+  AddIcon
+} from '../../components/icons';
+import Confirm from '../../components/forms/Confirm';
+import PipelinesSimpleList from '../../components/Pipelines/PipelinesSimpleList';
 
 import ForkExerciseButtonContainer from '../../containers/ForkExerciseButtonContainer';
 
@@ -34,9 +41,16 @@ import { create as assignExercise } from '../../redux/modules/assignments';
 import { exerciseSelector } from '../../redux/selectors/exercises';
 import { referenceSolutionsSelector } from '../../redux/selectors/referenceSolutions';
 import { canEditExercise } from '../../redux/selectors/users';
+import {
+  deletePipeline,
+  fetchExercisePipelines,
+  create as createPipeline
+} from '../../redux/modules/pipelines';
+import { exercisePipelinesSelector } from '../../redux/selectors/pipelines';
 
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import { supervisorOfSelector } from '../../redux/selectors/groups';
+import withLinks from '../../hoc/withLinks';
 
 const messages = defineMessages({
   groupsBox: {
@@ -60,7 +74,8 @@ class Exercise extends Component {
     Promise.all([
       dispatch(fetchExerciseIfNeeded(exerciseId)),
       dispatch(fetchReferenceSolutionsIfNeeded(exerciseId)),
-      dispatch(fetchHardwareGroups())
+      dispatch(fetchHardwareGroups()),
+      dispatch(fetchExercisePipelines(exerciseId))
     ]);
 
   componentWillMount() {
@@ -88,6 +103,17 @@ class Exercise extends Component {
     );
   };
 
+  createExercisePipeline = () => {
+    const {
+      createExercisePipeline,
+      push,
+      links: { PIPELINE_EDIT_URI_FACTORY }
+    } = this.props;
+    createExercisePipeline().then(({ value: pipeline }) =>
+      push(PIPELINE_EDIT_URI_FACTORY(pipeline.id))
+    );
+  };
+
   render() {
     const {
       userId,
@@ -98,6 +124,7 @@ class Exercise extends Component {
       referenceSolutions,
       intl: { formatMessage },
       initCreateReferenceSolution,
+      exercisePipelines,
       push
     } = this.props;
 
@@ -108,7 +135,8 @@ class Exercise extends Component {
         EXERCISES_URI,
         EXERCISE_EDIT_URI_FACTORY,
         EXERCISE_EDIT_CONFIG_URI_FACTORY,
-        EXERCISE_REFERENCE_SOLUTION_URI_FACTORY
+        EXERCISE_REFERENCE_SOLUTION_URI_FACTORY,
+        PIPELINE_EDIT_URI_FACTORY
       }
     } = this.context;
 
@@ -280,19 +308,95 @@ class Exercise extends Component {
                           </p>}
                   </ResourceRenderer>
                 </Box>
-                <SubmitSolutionContainer
-                  userId={userId}
-                  id={exercise.id}
-                  onSubmit={createReferenceSolution}
-                  onReset={init}
-                  isOpen={submitting}
-                  runtimeEnvironments={exercise.runtimeEnvironments}
-                  showProgress={false}
-                  autodetection={false}
-                  useReferenceSolutionMessages={true}
-                />
               </Col>
             </Row>
+            <Row>
+              <Col lg={6}>
+                <Box
+                  title={
+                    <FormattedMessage
+                      id="app.exercise.exercisePipelines"
+                      defaultMessage="Exercise Pipelines"
+                    />
+                  }
+                  footer={
+                    <p className="text-center">
+                      <Button
+                        bsStyle="success"
+                        className="btn-flat"
+                        bsSize="sm"
+                        onClick={this.createExercisePipeline}
+                      >
+                        <AddIcon />{' '}
+                        <FormattedMessage
+                          id="app.exercise.createPipeline"
+                          defaultMessage="Add exercise pipeline"
+                        />
+                      </Button>
+                    </p>
+                  }
+                  isOpen
+                >
+                  <ResourceRenderer resource={exercisePipelines.toArray()}>
+                    {(...pipelines) =>
+                      <PipelinesSimpleList
+                        pipelines={pipelines}
+                        createActions={pipelineId =>
+                          <div>
+                            <LinkContainer
+                              to={PIPELINE_EDIT_URI_FACTORY(pipelineId)}
+                            >
+                              <Button
+                                bsSize="xs"
+                                className="btn-flat"
+                                bsStyle="warning"
+                              >
+                                <EditIcon />{' '}
+                                <FormattedMessage
+                                  id="app.pipeline.editButton"
+                                  defaultMessage="Edit"
+                                />
+                              </Button>
+                            </LinkContainer>
+                            <Confirm
+                              id={pipelineId}
+                              onConfirmed={() => deletePipeline(pipelineId)}
+                              question={
+                                <FormattedMessage
+                                  id="app.pipeline.deleteConfirm"
+                                  defaultMessage="Are you sure you want to delete the pipeline? This cannot be undone."
+                                />
+                              }
+                            >
+                              <Button
+                                bsSize="xs"
+                                className="btn-flat"
+                                bsStyle="danger"
+                              >
+                                <DeleteIcon />{' '}
+                                <FormattedMessage
+                                  id="app.exercise.deleteButton"
+                                  defaultMessage="Delete"
+                                />
+                              </Button>
+                            </Confirm>
+                          </div>}
+                      />}
+                  </ResourceRenderer>
+                </Box>
+              </Col>
+            </Row>
+            <SubmitSolutionContainer
+              userId={userId}
+              id={exercise.id}
+              onSubmit={createReferenceSolution}
+              onReset={init}
+              isOpen={submitting}
+              runtimeEnvironments={exercise.runtimeEnvironments}
+              showProgress={false}
+              autodetection={false}
+              useReferenceSolutionMessages={true}
+            />
           </div>}
       </Page>
     );
@@ -317,29 +421,39 @@ Exercise.propTypes = {
   referenceSolutions: ImmutablePropTypes.map,
   intl: intlShape.isRequired,
   submitting: PropTypes.bool,
-  initCreateReferenceSolution: PropTypes.func.isRequired
+  initCreateReferenceSolution: PropTypes.func.isRequired,
+  exercisePipelines: ImmutablePropTypes.map,
+  createExercisePipeline: PropTypes.func,
+  links: PropTypes.object
 };
 
-export default injectIntl(
-  connect(
-    (state, { params: { exerciseId } }) => {
-      const userId = loggedInUserIdSelector(state);
+export default withLinks(
+  injectIntl(
+    connect(
+      (state, { params: { exerciseId } }) => {
+        const userId = loggedInUserIdSelector(state);
 
-      return {
-        userId,
-        exercise: exerciseSelector(exerciseId)(state),
-        submitting: isSubmitting(state),
-        supervisedGroups: supervisorOfSelector(userId)(state),
-        isAuthorOfExercise: exerciseId =>
-          canEditExercise(userId, exerciseId)(state),
-        referenceSolutions: referenceSolutionsSelector(exerciseId)(state)
-      };
-    },
-    (dispatch, { params: { exerciseId } }) => ({
-      loadAsync: () => Exercise.loadAsync({ exerciseId }, dispatch),
-      assignExercise: groupId => dispatch(assignExercise(groupId, exerciseId)),
-      push: url => dispatch(push(url)),
-      initCreateReferenceSolution: userId => dispatch(init(userId, exerciseId))
-    })
-  )(Exercise)
+        return {
+          userId,
+          exercise: exerciseSelector(exerciseId)(state),
+          submitting: isSubmitting(state),
+          supervisedGroups: supervisorOfSelector(userId)(state),
+          isAuthorOfExercise: exerciseId =>
+            canEditExercise(userId, exerciseId)(state),
+          referenceSolutions: referenceSolutionsSelector(exerciseId)(state),
+          exercisePipelines: exercisePipelinesSelector(exerciseId)(state)
+        };
+      },
+      (dispatch, { params: { exerciseId } }) => ({
+        loadAsync: () => Exercise.loadAsync({ exerciseId }, dispatch),
+        assignExercise: groupId =>
+          dispatch(assignExercise(groupId, exerciseId)),
+        push: url => dispatch(push(url)),
+        initCreateReferenceSolution: userId =>
+          dispatch(init(userId, exerciseId)),
+        createExercisePipeline: () =>
+          dispatch(createPipeline({ exerciseId: exerciseId }))
+      })
+    )(Exercise)
+  )
 );

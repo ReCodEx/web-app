@@ -20,6 +20,11 @@ export const fetchPipelines = () =>
     endpoint: '/pipelines'
   });
 
+export const fetchExercisePipelines = exerciseId =>
+  actions.fetchMany({
+    endpoint: `/exercises/${exerciseId}/pipelines`
+  });
+
 export const create = actions.addResource;
 export const editPipeline = actions.updateResource;
 export const deletePipeline = actions.removeResource;

@@ -1,4 +1,5 @@
 import { createSelector } from 'reselect';
+import { isReady } from '../helpers/resourceManager';
 
 const getPipelines = state => state.pipelines;
 const getResources = pipelines => pipelines.get('resources');
@@ -9,3 +10,10 @@ export const pipelineSelector = pipelineId =>
 
 export const getPipeline = id =>
   createSelector(getPipelines, pipelines => pipelines.getIn(['resources', id]));
+
+export const exercisePipelinesSelector = exerciseId =>
+  createSelector([pipelinesSelector], pipelines =>
+    pipelines
+      .filter(isReady)
+      .filter(pipeline => pipeline.exerciseId === exerciseId)
+  );
