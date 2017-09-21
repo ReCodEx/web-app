@@ -2,8 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Icon from 'react-fontawesome';
 import UsersNameContainer from '../../../containers/UsersNameContainer';
+import ExercisesNameContainer from '../../../containers/ExercisesNameContainer';
 import { Link } from 'react-router';
-import { FormattedDate, FormattedTime } from 'react-intl';
+import { FormattedDate, FormattedTime, FormattedMessage } from 'react-intl';
 
 import withLinks from '../../../hoc/withLinks';
 
@@ -11,6 +12,7 @@ const PipelinesListItem = ({
   id,
   name,
   author,
+  exerciseId,
   createdAt,
   createActions,
   links: { PIPELINE_URI_FACTORY }
@@ -30,6 +32,16 @@ const PipelinesListItem = ({
       <UsersNameContainer userId={author} />
     </td>
     <td>
+      {exerciseId
+        ? <ExercisesNameContainer exerciseId={exerciseId} />
+        : <i>
+            <FormattedMessage
+              id="app.pipelinesListItem.exercise.public"
+              defaultMessage="Public"
+            />
+          </i>}
+    </td>
+    <td>
       <FormattedDate value={createdAt * 1000} />{' '}
       <FormattedTime value={createdAt * 1000} />
     </td>
@@ -42,6 +54,7 @@ const PipelinesListItem = ({
 PipelinesListItem.propTypes = {
   id: PropTypes.string.isRequired,
   author: PropTypes.string.isRequired,
+  exerciseId: PropTypes.string,
   name: PropTypes.string.isRequired,
   createdAt: PropTypes.number.isRequired,
   createActions: PropTypes.func,
