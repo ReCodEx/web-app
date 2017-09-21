@@ -15,5 +15,5 @@ export const exercisePipelinesSelector = exerciseId =>
   createSelector([pipelinesSelector], pipelines =>
     pipelines
       .filter(isReady)
-      .filter(pipeline => pipeline.exerciseId === exerciseId)
+      .filter(pipeline => pipeline.toJS().data.exerciseId === exerciseId)
   );

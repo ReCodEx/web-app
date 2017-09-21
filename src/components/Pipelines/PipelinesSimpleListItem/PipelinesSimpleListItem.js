@@ -8,7 +8,7 @@ import withLinks from '../../../hoc/withLinks';
 const PipelinesSimpleListItem = ({
   id,
   name,
-  authorId,
+  author,
   createActions,
   links: { PIPELINE_URI_FACTORY }
 }) =>
@@ -21,7 +21,7 @@ const PipelinesSimpleListItem = ({
       </strong>
     </td>
     <td>
-      <UsersNameContainer userId={authorId} />
+      <UsersNameContainer userId={author} />
     </td>
     {createActions &&
       <td>
@@ -31,7 +31,7 @@ const PipelinesSimpleListItem = ({
 
 PipelinesSimpleListItem.propTypes = {
   id: PropTypes.string.isRequired,
-  authorId: PropTypes.string.isRequired,
+  author: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   createdAt: PropTypes.number.isRequired,
   createActions: PropTypes.func,

@@ -40,7 +40,11 @@ import { fetchHardwareGroups } from '../../redux/modules/hwGroups';
 import { create as assignExercise } from '../../redux/modules/assignments';
 import { exerciseSelector } from '../../redux/selectors/exercises';
 import { referenceSolutionsSelector } from '../../redux/selectors/referenceSolutions';
-import { canEditExercise } from '../../redux/selectors/users';
+import {
+  canEditExercise,
+  isSupervisor,
+  isSuperAdmin
+} from '../../redux/selectors/users';
 import {
   deletePipeline,
   fetchExercisePipelines,
@@ -50,6 +54,7 @@ import { exercisePipelinesSelector } from '../../redux/selectors/pipelines';
 
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import { supervisorOfSelector } from '../../redux/selectors/groups';
+
 import withLinks from '../../hoc/withLinks';
 
 const messages = defineMessages({
@@ -70,7 +75,7 @@ const messages = defineMessages({
 class Exercise extends Component {
   state = { forkId: null };
 
-  static loadAsync = ({ exerciseId }, dispatch) =>
+  static loadAsync = (dispatch, exerciseId) =>
     Promise.all([
       dispatch(fetchExerciseIfNeeded(exerciseId)),
       dispatch(fetchReferenceSolutionsIfNeeded(exerciseId)),
@@ -424,7 +429,8 @@ Exercise.propTypes = {
   initCreateReferenceSolution: PropTypes.func.isRequired,
   exercisePipelines: ImmutablePropTypes.map,
   createExercisePipeline: PropTypes.func,
-  links: PropTypes.object
+  links: PropTypes.object,
+  isAdmin: PropTypes.bool.isRequired
 };
 
 export default withLinks(
@@ -441,11 +447,12 @@ export default withLinks(
           isAuthorOfExercise: exerciseId =>
             canEditExercise(userId, exerciseId)(state),
           referenceSolutions: referenceSolutionsSelector(exerciseId)(state),
-          exercisePipelines: exercisePipelinesSelector(exerciseId)(state)
+          exercisePipelines: exercisePipelinesSelector(exerciseId)(state),
+          isAdmin: isSupervisor(userId)(state) || isSuperAdmin(userId)(state)
         };
       },
       (dispatch, { params: { exerciseId } }) => ({
-        loadAsync: () => Exercise.loadAsync({ exerciseId }, dispatch),
+        loadAsync: () => Exercise.loadAsync(dispatch, exerciseId),
         assignExercise: groupId =>
           dispatch(assignExercise(groupId, exerciseId)),
         push: url => dispatch(push(url)),
