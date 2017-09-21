@@ -35,14 +35,22 @@ export const forkStatuses = {
   FULFILLED: 'FULFILLED'
 };
 
-export const forkPipeline = (id, forkId, exerciseId = null) =>
-  createApiAction({
+export const forkPipeline = (id, forkId, exerciseId = null) => {
+  let actionData = {
     type: additionalActionTypes.FORK_PIPELINE,
     endpoint: `/pipelines/${id}/fork`,
     method: 'POST',
-    meta: { id, forkId },
-    body: { exerciseId }
-  });
+    meta: { id, forkId }
+  };
+  if (
+    Object.keys(exerciseId).length !== 0 &&
+    exerciseId.constructor === Object &&
+    exerciseId !== null
+  ) {
+    actionData.body = { exerciseId };
+  }
+  return createApiAction(actionData);
+};
 
 export const create = actions.addResource;
 export const editPipeline = actions.updateResource;

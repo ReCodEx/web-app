@@ -19,6 +19,8 @@ import {
 import { getPipeline } from '../../redux/selectors/pipelines';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import { canEditPipeline } from '../../redux/selectors/users';
+import { fetchExercises } from '../../redux/modules/exercises';
+import { exercisesSelector } from '../../redux/selectors/exercises';
 
 import { createGraphFromNodes } from '../../helpers/pipelineGraph';
 import withLinks from '../../hoc/withLinks';
@@ -47,17 +49,21 @@ class Pipeline extends Component {
   }
 
   static loadAsync = ({ pipelineId }, dispatch, setState) =>
-    dispatch(fetchPipelineIfNeeded(pipelineId))
-      .then(res => res.value)
-      .then(pipeline => {
-        const graph = createGraphFromNodes(pipeline.pipeline.boxes);
-        setState({ graph });
-      });
+    Promise.all([
+      dispatch(fetchPipelineIfNeeded(pipelineId))
+        .then(res => res.value)
+        .then(pipeline => {
+          const graph = createGraphFromNodes(pipeline.pipeline.boxes);
+          setState({ graph });
+        }),
+      dispatch(fetchExercises())
+    ]);
 
   render() {
     const {
       links: { PIPELINES_URI, PIPELINE_EDIT_URI_FACTORY },
       pipeline,
+      exercises,
       isAuthorOfPipeline,
       forkPipeline
     } = this.props;
@@ -116,6 +122,7 @@ class Pipeline extends Component {
                       </LinkContainer>}
                     <ForkPipelineForm
                       pipelineId={pipeline.id}
+                      exercises={exercises}
                       forkId={this.state.forkId}
                       onSubmit={formData => forkPipeline(forkId, formData)}
                     />
@@ -156,7 +163,8 @@ Pipeline.propTypes = {
   }).isRequired,
   isAuthorOfPipeline: PropTypes.func.isRequired,
   links: PropTypes.object.isRequired,
-  forkPipeline: PropTypes.func.isRequired
+  forkPipeline: PropTypes.func.isRequired,
+  exercises: ImmutablePropTypes.map
 };
 
 export default withLinks(
@@ -168,7 +176,8 @@ export default withLinks(
         pipeline: getPipeline(pipelineId)(state),
         userId: loggedInUserIdSelector(state),
         isAuthorOfPipeline: pipelineId =>
-          canEditPipeline(userId, pipelineId)(state)
+          canEditPipeline(userId, pipelineId)(state),
+        exercises: exercisesSelector(state)
       };
     },
     (dispatch, { params: { pipelineId } }) => ({

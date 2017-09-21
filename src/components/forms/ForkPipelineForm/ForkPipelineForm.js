@@ -1,16 +1,18 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 import { FormattedMessage } from 'react-intl';
 import { Alert, Form } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 import { reduxForm, Field } from 'redux-form';
-import { TextField } from '../Fields';
+import { SelectField } from '../Fields';
 import SubmitButton from '../SubmitButton';
 import Button from '../../../components/widgets/FlatButton';
 import { SuccessIcon } from '../../../components/icons';
 import { forkStatuses } from '../../../redux/modules/pipelines';
 import { getFork } from '../../../redux/selectors/pipelines';
+import ResourceRenderer from '../../helpers/ResourceRenderer';
 
 import withLinks from '../../../hoc/withLinks';
 
@@ -36,7 +38,8 @@ class ForkPipelineForm extends Component {
       handleSubmit,
       hasFailed = false,
       hasSucceeded = false,
-      invalid
+      invalid,
+      exercises
     } = this.props;
 
     switch (forkStatus) {
@@ -66,7 +69,24 @@ class ForkPipelineForm extends Component {
                 />
               </Alert>}
             <Form inline className="formSpace">
-              <Field name="exerciseId" component={TextField} label="" />
+              <ResourceRenderer resource={exercises.toArray()}>
+                {(...exercises) =>
+                  <Field
+                    name={'exerciseId'}
+                    component={SelectField}
+                    label={''}
+                    options={[{ key: '', name: '_Public_' }].concat(
+                      exercises
+                        .sort((a, b) => a.name.localeCompare(b.name))
+                        .filter((item, pos, arr) => arr.indexOf(item) === pos)
+                        .map(exercise => ({
+                          key: exercise.id,
+                          name: exercise.name
+                        }))
+                    )}
+                  />}
+              </ResourceRenderer>
+
               <SubmitButton
                 id="forkPipeline"
                 invalid={invalid}
@@ -116,7 +136,8 @@ ForkPipelineForm.propTypes = {
   invalid: PropTypes.bool,
   handleSubmit: PropTypes.func.isRequired,
   push: PropTypes.func.isRequired,
-  links: PropTypes.object
+  links: PropTypes.object,
+  exercises: ImmutablePropTypes.map
 };
 
 const mapStateToProps = (state, { pipelineId, forkId }) => {
