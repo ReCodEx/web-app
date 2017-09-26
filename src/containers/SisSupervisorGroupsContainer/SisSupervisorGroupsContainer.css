@@ -1,0 +1,13 @@
+.header {
+  font-size: 14px;
+}
+
+.leftText {
+  margin-left: 20px;
+}
+
+.leftIcon {
+  margin-left: -20px;
+  position: absolute;
+  line-height: 20px;
+}
