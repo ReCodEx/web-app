@@ -9,6 +9,8 @@ import {
   defineMessages
 } from 'react-intl';
 import { Alert } from 'react-bootstrap';
+import Icon from 'react-fontawesome';
+import { LinkContainer } from 'react-router-bootstrap';
 
 import {
   TextField,
@@ -19,9 +21,10 @@ import {
 
 import FormBox from '../../widgets/FormBox';
 import SubmitButton from '../SubmitButton';
+import Button from '../../widgets/FlatButton';
 import LocalizedTextsFormField from '../LocalizedTextsFormField';
-
 import { validateExercise } from '../../../redux/modules/exercises';
+import withLinks from '../../../hoc/withLinks';
 
 if (canUseDOM) {
   require('codemirror/mode/yaml/yaml');
@@ -52,7 +55,8 @@ const EditExerciseForm = ({
   invalid,
   asyncValidating,
   formValues: { localizedTexts } = {},
-  intl: { formatMessage }
+  intl: { formatMessage },
+  links: { EXERCISE_EDIT_CONFIG_URI_FACTORY }
 }) =>
   <FormBox
     title={
@@ -102,6 +106,15 @@ const EditExerciseForm = ({
             )
           }}
         />
+        <LinkContainer to={EXERCISE_EDIT_CONFIG_URI_FACTORY(exercise.id)}>
+          <Button bsStyle="info">
+            <Icon name="arrow-right" />{' '}
+            <FormattedMessage
+              id="app.editExerciseForm.gotoConfig"
+              defaultMessage="Go to config"
+            />
+          </Button>
+        </LinkContainer>
       </div>
     }
   >
@@ -196,7 +209,8 @@ EditExerciseForm.propTypes = {
   asyncValidating: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
   formValues: PropTypes.shape({
     localizedTexts: PropTypes.array
-  })
+  }),
+  links: PropTypes.object
 };
 
 const validate = ({ name, description, difficulty, localizedTexts }) => {
@@ -311,10 +325,12 @@ const asyncValidate = (values, dispatch, { initialValues: { id, version } }) =>
       }
     });
 
-export default injectIntl(
-  reduxForm({
-    form: 'editExercise',
-    validate,
-    asyncValidate
-  })(EditExerciseForm)
+export default withLinks(
+  injectIntl(
+    reduxForm({
+      form: 'editExercise',
+      validate,
+      asyncValidate
+    })(EditExerciseForm)
+  )
 );
