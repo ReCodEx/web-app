@@ -4,6 +4,7 @@ import classNames from 'classnames';
 import { FormattedMessage, FormattedNumber } from 'react-intl';
 import { Table, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import Icon from 'react-fontawesome';
+import exitCodeMapping from '../../helpers/exitCodeMapping';
 
 const tickOrCross = (isOK, ratio, tooltipId) =>
   <td
@@ -27,7 +28,7 @@ const tickOrCross = (isOK, ratio, tooltipId) =>
       </small>}
   </td>;
 
-const TestResultsTable = ({ results }) =>
+const TestResultsTable = ({ results, runtimeEnvironmentId }) =>
   <Table responsive>
     <thead>
       <tr>
@@ -187,7 +188,7 @@ const TestResultsTable = ({ results }) =>
             {tickOrCross(memoryExceeded === false, memoryRatio)}
             {tickOrCross(timeExceeded === false, timeRatio)}
             <td className="text-center">
-              {exitCode}
+              {exitCodeMapping(runtimeEnvironmentId, exitCode)}
             </td>
           </tr>
       )}
@@ -199,7 +200,8 @@ TestResultsTable.propTypes = {
     PropTypes.shape({
       testName: PropTypes.string
     })
-  ).isRequired
+  ).isRequired,
+  runtimeEnvironmentId: PropTypes.string
 };
 
 export default TestResultsTable;

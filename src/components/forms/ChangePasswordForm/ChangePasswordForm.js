@@ -16,7 +16,7 @@ const ChangePasswordForm = ({
   hasFailed = false,
   hasSucceeded = false,
   invalid
-}) => (
+}) =>
   <FormBox
     title={
       <FormattedMessage
@@ -35,25 +35,19 @@ const ChangePasswordForm = ({
         >
           {!submitting
             ? hasSucceeded
-                ? <span>
-                    <SuccessIcon />
-                    {' '}
-                    &nbsp;
-                    {' '}
-                    <FormattedMessage
-                      id="app.changePasswordForm.success"
-                      defaultMessage="Your password has been changed."
-                    />
-                  </span>
-                : <FormattedMessage
-                    id="app.changePasswordForm.changePassword"
-                    defaultMessage="Change password"
+              ? <span>
+                  <SuccessIcon /> &nbsp;{' '}
+                  <FormattedMessage
+                    id="app.changePasswordForm.success"
+                    defaultMessage="Your password has been changed."
                   />
+                </span>
+              : <FormattedMessage
+                  id="app.changePasswordForm.changePassword"
+                  defaultMessage="Change password"
+                />
             : <span>
-                <LoadingIcon />
-                {' '}
-                &nbsp;
-                {' '}
+                <LoadingIcon /> &nbsp;{' '}
                 <FormattedMessage
                   id="app.changePasswordForm.processing"
                   defaultMessage="Changing password ..."
@@ -110,8 +104,7 @@ const ChangePasswordForm = ({
         />
       }
     />
-  </FormBox>
-);
+  </FormBox>;
 
 ChangePasswordForm.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
@@ -146,24 +139,28 @@ const validate = ({ password, passwordCheck }) => {
 };
 
 const asyncValidate = ({ password = '' }, dispatch) =>
-  dispatch(validatePasswordStrength(password))
-    .then(res => res.value)
-    .then(({ passwordScore }) => {
-      var errors = {};
-      if (passwordScore <= 0) {
-        errors['password'] = (
-          <FormattedMessage
-            id="app.changePasswordForm.validation.passwordTooWeak"
-            defaultMessage="The password you chose is too weak, please choose a different one."
-          />
-        );
-      }
-      dispatch(change('changePassword', 'passwordStrength', passwordScore));
+  new Promise((resolve, reject) =>
+    dispatch(validatePasswordStrength(password))
+      .then(res => res.value)
+      .then(({ passwordScore }) => {
+        var errors = {};
+        if (passwordScore <= 0) {
+          errors['password'] = (
+            <FormattedMessage
+              id="app.changePasswordForm.validation.passwordTooWeak"
+              defaultMessage="The password you chose is too weak, please choose a different one."
+            />
+          );
+        }
+        dispatch(change('changePassword', 'passwordStrength', passwordScore));
 
-      if (Object.keys(errors).length > 0) {
-        throw errors;
-      }
-    });
+        if (Object.keys(errors).length > 0) {
+          throw errors;
+        }
+      })
+      .then(resolve())
+      .catch(errors => reject(errors))
+  );
 
 export default reduxForm({
   form: 'changePassword',
