@@ -306,24 +306,28 @@ const validate = ({ name, description, difficulty, localizedTexts }) => {
 };
 
 const asyncValidate = (values, dispatch, { initialValues: { id, version } }) =>
-  dispatch(validateExercise(id, version))
-    .then(res => res.value)
-    .then(({ versionIsUpToDate }) => {
-      var errors = {};
-      if (versionIsUpToDate === false) {
-        errors['name'] = (
-          <FormattedMessage
-            id="app.editExerciseForm.validation.versionDiffers"
-            defaultMessage="Somebody has changed the exercise while you have been editing it. Please reload the page and apply your changes once more."
-          />
-        );
-        dispatch(touch('editExercise', 'name'));
-      }
+  new Promise((resolve, reject) =>
+    dispatch(validateExercise(id, version))
+      .then(res => res.value)
+      .then(({ versionIsUpToDate }) => {
+        var errors = {};
+        if (versionIsUpToDate === false) {
+          errors['name'] = (
+            <FormattedMessage
+              id="app.editExerciseForm.validation.versionDiffers"
+              defaultMessage="Somebody has changed the exercise while you have been editing it. Please reload the page and apply your changes once more."
+            />
+          );
+          dispatch(touch('editExercise', 'name'));
+        }
 
-      if (Object.keys(errors).length > 0) {
-        throw errors;
-      }
-    });
+        if (Object.keys(errors).length > 0) {
+          throw errors;
+        }
+      })
+      .then(resolve())
+      .catch(errors => reject(errors))
+  );
 
 export default withLinks(
   injectIntl(
