@@ -22,11 +22,12 @@ import SisCreateGroupForm from '../../components/forms/SisCreateGroupForm';
 import SisBindGroupForm from '../../components/forms/SisBindGroupForm';
 
 import withLinks from '../../hoc/withLinks';
+import './SisSupervisorGroupsContainer.css';
 
 const days = ['Po', 'Út', 'St', 'Čt', 'Pá', 'So', 'Ne'];
 
 class SisSupervisorGroupsContainer extends Component {
-  componentWillMount() {
+  componentDidMount() {
     this.props.loadData(this.props.currentUserId);
   }
 
@@ -97,8 +98,17 @@ class SisSupervisorGroupsContainer extends Component {
                                     <Panel
                                       key={i}
                                       header={
-                                        <span style={{ fontSize: '14px' }}>
-                                          {course.course.captions.cs} (<code>{course.course.code}</code>){' '}
+                                        <span className="header">
+                                          <span className="leftText">
+                                            {course.groups.length > 0 &&
+                                              <Icon
+                                                name="check"
+                                                className="leftIcon"
+                                              />}
+                                            <span>
+                                              {course.course.captions.cs} (<code>{course.course.code}</code>){' '}
+                                            </span>
+                                          </span>
                                           <span className="pull-right">
                                             {days[course.course.dayOfWeek]}{' '}
                                             {course.course.time}{' '}
@@ -111,7 +121,11 @@ class SisSupervisorGroupsContainer extends Component {
                                         </span>
                                       }
                                       eventKey={i}
-                                      bsStyle="success"
+                                      bsStyle={
+                                        course.course.type === 'lecture'
+                                          ? 'info'
+                                          : 'success'
+                                      }
                                     >
                                       {course.groups.length > 0
                                         ? <Table hover>

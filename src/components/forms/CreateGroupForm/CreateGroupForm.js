@@ -23,7 +23,7 @@ const CreateGroupForm = ({
   invalid = false,
   submitting = false,
   reset
-}) => (
+}) =>
   <FormBox
     title={title}
     type={submitSucceeded ? 'success' : undefined}
@@ -125,8 +125,7 @@ const CreateGroupForm = ({
         />
       }
     />
-  </FormBox>
-);
+  </FormBox>;
 
 CreateGroupForm.propTypes = {
   title: PropTypes.oneOfType([
@@ -174,25 +173,29 @@ const asyncValidate = (
   dispatch,
   { instanceId, parentGroupId = undefined }
 ) =>
-  dispatch(validateAddGroup(name, instanceId, parentGroupId))
-    .then(res => res.value)
-    .then(({ groupNameIsFree }) => {
-      var errors = {};
+  new Promise((resolve, reject) =>
+    dispatch(validateAddGroup(name, instanceId, parentGroupId))
+      .then(res => res.value)
+      .then(({ groupNameIsFree }) => {
+        var errors = {};
 
-      if (!groupNameIsFree) {
-        errors['name'] = (
-          <FormattedMessage
-            id="app.createGroup.validation.nameCollision"
-            defaultMessage="The name &quot;{name}&quot; is already used, please choose a different one."
-            values={{ name }}
-          />
-        );
-      }
+        if (!groupNameIsFree) {
+          errors['name'] = (
+            <FormattedMessage
+              id="app.createGroup.validation.nameCollision"
+              defaultMessage="The name &quot;{name}&quot; is already used, please choose a different one."
+              values={{ name }}
+            />
+          );
+        }
 
-      if (Object.keys(errors).length > 0) {
-        throw errors;
-      }
-    });
+        if (Object.keys(errors).length > 0) {
+          throw errors;
+        }
+      })
+      .then(resolve())
+      .catch(errors => reject(errors))
+  );
 
 export default reduxForm({
   form: 'createGroup',

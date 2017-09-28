@@ -10,11 +10,17 @@ import Page from '../../components/layout/Page';
 import Box from '../../components/widgets/Box';
 import Button from '../../components/widgets/FlatButton';
 import { EditIcon } from '../../components/icons';
+import ForkPipelineForm from '../../components/forms/ForkPipelineForm';
 
-import { fetchPipelineIfNeeded } from '../../redux/modules/pipelines';
+import {
+  fetchPipelineIfNeeded,
+  forkPipeline
+} from '../../redux/modules/pipelines';
 import { getPipeline } from '../../redux/selectors/pipelines';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import { canEditPipeline } from '../../redux/selectors/users';
+import { fetchExercises } from '../../redux/modules/exercises';
+import { exercisesSelector } from '../../redux/selectors/exercises';
 
 import { createGraphFromNodes } from '../../helpers/pipelineGraph';
 import withLinks from '../../hoc/withLinks';
@@ -23,33 +29,45 @@ import PipelineVisualisation from '../../components/Pipelines/PipelineVisualisat
 
 class Pipeline extends Component {
   state = {
-    graph: { dependencies: [], nodes: [] }
+    graph: { dependencies: [], nodes: [] },
+    forkId: null
   };
 
   componentWillMount() {
     this.props.loadAsync(val => this.setState(val));
+    this.reset();
   }
   componentWillReceiveProps = props => {
     if (this.props.params.pipelineId !== props.params.pipelineId) {
       props.loadAsync(val => this.setState(val));
+      this.reset();
     }
   };
 
+  reset() {
+    this.setState({ forkId: Math.random().toString() });
+  }
+
   static loadAsync = ({ pipelineId }, dispatch, setState) =>
-    dispatch(fetchPipelineIfNeeded(pipelineId))
-      .then(res => res.value)
-      .then(pipeline => {
-        const graph = createGraphFromNodes(pipeline.pipeline.boxes);
-        setState({ graph });
-      });
+    Promise.all([
+      dispatch(fetchPipelineIfNeeded(pipelineId))
+        .then(res => res.value)
+        .then(pipeline => {
+          const graph = createGraphFromNodes(pipeline.pipeline.boxes);
+          setState({ graph });
+        }),
+      dispatch(fetchExercises())
+    ]);
 
   render() {
     const {
       links: { PIPELINES_URI, PIPELINE_EDIT_URI_FACTORY },
       pipeline,
-      isAuthorOfPipeline
+      exercises,
+      isAuthorOfPipeline,
+      forkPipeline
     } = this.props;
-    const { graph } = this.state;
+    const { graph, forkId } = this.state;
 
     return (
       <Page
@@ -88,8 +106,8 @@ class Pipeline extends Component {
             <Row>
               <Col lg={6}>
                 <div>
-                  {isAuthorOfPipeline(pipeline.id) &&
-                    <ButtonGroup>
+                  <ButtonGroup>
+                    {isAuthorOfPipeline(pipeline.id) &&
                       <LinkContainer
                         to={PIPELINE_EDIT_URI_FACTORY(pipeline.id)}
                       >
@@ -101,8 +119,14 @@ class Pipeline extends Component {
                             defaultMessage="Edit pipeline"
                           />
                         </Button>
-                      </LinkContainer>
-                    </ButtonGroup>}
+                      </LinkContainer>}
+                    <ForkPipelineForm
+                      pipelineId={pipeline.id}
+                      exercises={exercises}
+                      forkId={this.state.forkId}
+                      onSubmit={formData => forkPipeline(forkId, formData)}
+                    />
+                  </ButtonGroup>
                 </div>
                 <p />
                 <PipelineDetail {...pipeline} />
@@ -138,7 +162,9 @@ Pipeline.propTypes = {
     pipelineId: PropTypes.string.isRequired
   }).isRequired,
   isAuthorOfPipeline: PropTypes.func.isRequired,
-  links: PropTypes.object.isRequired
+  links: PropTypes.object.isRequired,
+  forkPipeline: PropTypes.func.isRequired,
+  exercises: ImmutablePropTypes.map
 };
 
 export default withLinks(
@@ -150,12 +176,15 @@ export default withLinks(
         pipeline: getPipeline(pipelineId)(state),
         userId: loggedInUserIdSelector(state),
         isAuthorOfPipeline: pipelineId =>
-          canEditPipeline(userId, pipelineId)(state)
+          canEditPipeline(userId, pipelineId)(state),
+        exercises: exercisesSelector(state)
       };
     },
     (dispatch, { params: { pipelineId } }) => ({
       loadAsync: setState =>
-        Pipeline.loadAsync({ pipelineId }, dispatch, setState)
+        Pipeline.loadAsync({ pipelineId }, dispatch, setState),
+      forkPipeline: (forkId, data) =>
+        dispatch(forkPipeline(pipelineId, forkId, data))
     })
   )(Pipeline)
 );

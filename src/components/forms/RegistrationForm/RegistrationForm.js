@@ -28,7 +28,7 @@ const RegistrationForm = ({
   instances,
   asyncValidating,
   invalid
-}) => (
+}) =>
   <FormBox
     title={
       <FormattedMessage
@@ -136,7 +136,7 @@ const RegistrationForm = ({
       }
     />
     <ResourceRenderer resource={instances.toArray()}>
-      {(...instances) => (
+      {(...instances) =>
         <Field
           name="instanceId"
           required
@@ -151,11 +151,9 @@ const RegistrationForm = ({
             { key: '', name: '...' },
             ...instances.map(({ id: key, name }) => ({ key, name }))
           ]}
-        />
-      )}
+        />}
     </ResourceRenderer>
-  </FormBox>
-);
+  </FormBox>;
 
 RegistrationForm.propTypes = {
   instances: PropTypes.object.isRequired,
@@ -230,33 +228,37 @@ const validate = ({ firstName, lastName, email, password, instanceId }) => {
 };
 
 const asyncValidate = ({ email = '', password = '' }, dispatch) =>
-  dispatch(validateRegistrationData(email, password))
-    .then(res => res.value)
-    .then(({ usernameIsFree, passwordScore }) => {
-      var errors = {};
-      if (usernameIsFree === false) {
-        errors['email'] = (
-          <FormattedMessage
-            id="app.registrationForm.validation.emailAlreadyTaken"
-            defaultMessage="This email address is already taken by another user."
-          />
-        );
-      }
+  new Promise((resolve, reject) =>
+    dispatch(validateRegistrationData(email, password))
+      .then(res => res.value)
+      .then(({ usernameIsFree, passwordScore }) => {
+        var errors = {};
+        if (usernameIsFree === false) {
+          errors['email'] = (
+            <FormattedMessage
+              id="app.registrationForm.validation.emailAlreadyTaken"
+              defaultMessage="This email address is already taken by another user."
+            />
+          );
+        }
 
-      if (passwordScore <= 0) {
-        errors['password'] = (
-          <FormattedMessage
-            id="app.registrationForm.validation.passwordTooWeak"
-            defaultMessage="The password you chose is too weak, please choose a different one."
-          />
-        );
-      }
-      dispatch(change('registration', 'passwordStrength', passwordScore));
+        if (passwordScore <= 0) {
+          errors['password'] = (
+            <FormattedMessage
+              id="app.registrationForm.validation.passwordTooWeak"
+              defaultMessage="The password you chose is too weak, please choose a different one."
+            />
+          );
+        }
+        dispatch(change('registration', 'passwordStrength', passwordScore));
 
-      if (Object.keys(errors).length > 0) {
-        throw errors;
-      }
-    });
+        if (Object.keys(errors).length > 0) {
+          throw errors;
+        }
+      })
+      .then(resolve())
+      .catch(errors => reject(errors))
+  );
 
 export default reduxForm({
   form: 'registration',

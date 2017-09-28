@@ -32,7 +32,7 @@ const EditAssignmentForm = ({
   asyncValidating,
   invalid,
   formValues: { firstDeadline, allowSecondDeadline, localizedTexts } = {}
-}) => (
+}) =>
   <div>
     <FormBox
       title={
@@ -80,7 +80,6 @@ const EditAssignmentForm = ({
         </div>
       }
     >
-
       {hasFailed &&
         <Alert bsStyle="danger">
           <FormattedMessage
@@ -251,10 +250,8 @@ const EditAssignmentForm = ({
           />
         }
       />
-
     </FormBox>
-  </div>
-);
+  </div>;
 
 EditAssignmentForm.propTypes = {
   initialValues: PropTypes.object.isRequired,
@@ -454,24 +451,28 @@ const validate = ({
 };
 
 const asyncValidate = (values, dispatch, { assignment: { id, version } }) =>
-  dispatch(validateAssignment(id, version))
-    .then(res => res.value)
-    .then(({ versionIsUpToDate }) => {
-      var errors = {};
-      if (versionIsUpToDate === false) {
-        errors['name'] = (
-          <FormattedMessage
-            id="app.editExerciseForm.validation.versionDiffers"
-            defaultMessage="Somebody has changed the exercise while you have been editing it. Please reload the page and apply your changes once more."
-          />
-        );
-        dispatch(touch('editAssignment', 'name'));
-      }
+  new Promise((resolve, reject) =>
+    dispatch(validateAssignment(id, version))
+      .then(res => res.value)
+      .then(({ versionIsUpToDate }) => {
+        var errors = {};
+        if (versionIsUpToDate === false) {
+          errors['name'] = (
+            <FormattedMessage
+              id="app.editExerciseForm.validation.versionDiffers"
+              defaultMessage="Somebody has changed the exercise while you have been editing it. Please reload the page and apply your changes once more."
+            />
+          );
+          dispatch(touch('editAssignment', 'name'));
+        }
 
-      if (Object.keys(errors).length > 0) {
-        throw errors;
-      }
-    });
+        if (Object.keys(errors).length > 0) {
+          throw errors;
+        }
+      })
+      .then(resolve())
+      .catch(errors => reject(errors))
+  );
 
 export default reduxForm({
   form: 'editAssignment',

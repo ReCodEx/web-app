@@ -25,7 +25,8 @@ class SubmitButton extends Component {
         this.setState({ saved: true });
         this.resetAfterSomeTime = setTimeout(this.reset, 2000);
       } else {
-        this.props.reset(); // the redux form must be still reset
+        const { reset } = this.props;
+        reset && reset(); // the redux form must be still reset
       }
     });
   };
@@ -43,6 +44,7 @@ class SubmitButton extends Component {
       hasFailed,
       invalid,
       asyncValidating = false,
+      noIcons = false,
       messages: {
         submit: submitMsg = (
           <FormattedMessage
@@ -94,21 +96,22 @@ class SubmitButton extends Component {
         {!submitting
           ? hasSucceeded
             ? <span>
-                <SuccessIcon /> &nbsp; {successMsg}
+                {!noIcons && <SuccessIcon />} &nbsp;
+                {successMsg}
               </span>
             : asyncValidating !== false
               ? <span>
-                  <LoadingIcon /> &nbsp; {validatingMsg}
+                  {!noIcons && <LoadingIcon />} &nbsp; {validatingMsg}
                 </span>
               : dirty && invalid
                 ? <span>
-                    <WarningIcon /> &nbsp; {invalidMsg}
+                    {!noIcons && <WarningIcon />} &nbsp; {invalidMsg}
                   </span>
                 : <span>
-                    <SendIcon /> &nbsp; {submitMsg}
+                    {!noIcons && <SendIcon />} &nbsp; {submitMsg}
                   </span>
           : <span>
-              <LoadingIcon /> &nbsp; {submittingMsg}
+              {!noIcons && <LoadingIcon />} &nbsp; {submittingMsg}
             </span>}
       </Button>
     );
@@ -123,6 +126,7 @@ SubmitButton.propTypes = {
   hasSucceeded: PropTypes.bool,
   hasFailed: PropTypes.bool,
   asyncValidating: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
+  noIcons: PropTypes.bool,
   invalid: PropTypes.bool,
   reset: PropTypes.func,
   messages: PropTypes.shape({
