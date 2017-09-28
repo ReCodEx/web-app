@@ -11,10 +11,12 @@ import { Table } from 'react-bootstrap';
 import Box from '../../widgets/Box';
 
 import UsersNameContainer from '../../../containers/UsersNameContainer';
+import ExercisesNameContainer from '../../../containers/ExercisesNameContainer';
 
 const PipelineDetail = ({
   id,
   author,
+  exerciseId,
   name,
   description = '',
   createdAt,
@@ -44,6 +46,24 @@ const PipelineDetail = ({
           </th>
           <td>
             <ReactMarkdown source={description} />
+          </td>
+        </tr>
+        <tr>
+          <th>
+            <FormattedMessage
+              id="app.pipeline.exercise"
+              defaultMessage="Exercise:"
+            />
+          </th>
+          <td>
+            {exerciseId
+              ? <ExercisesNameContainer exerciseId={exerciseId} />
+              : <i>
+                  <FormattedMessage
+                    id="app.pipeline.publicExercise"
+                    defaultMessage="Public"
+                  />
+                </i>}
           </td>
         </tr>
         <tr>
@@ -89,6 +109,7 @@ PipelineDetail.propTypes = {
   id: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   author: PropTypes.string.isRequired,
+  exerciseId: PropTypes.string,
   description: PropTypes.string,
   createdAt: PropTypes.number.isRequired,
   updatedAt: PropTypes.number.isRequired,

@@ -74,6 +74,7 @@ export const transformPipelineDataForApi = (
         name: atob(key),
         value: variables[key] ? variables[key] : ''
       }))
+      .filter(({ name }) => variableTypes[name])
       .map(({ name, ...variable }) => ({
         ...variable,
         name,

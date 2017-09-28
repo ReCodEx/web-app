@@ -46,18 +46,21 @@ const ExerciseDetail = ({
             <UsersNameContainer userId={authorId} />
           </td>
         </tr>
-        {groupId &&
-          <tr>
-            <th>
-              <FormattedMessage
-                id="app.exercise.group"
-                defaultMessage="Group:"
-              />
-            </th>
-            <td>
-              <GroupsNameContainer groupId={groupId} />
-            </td>
-          </tr>}
+        <tr>
+          <th>
+            <FormattedMessage id="app.exercise.group" defaultMessage="Group:" />
+          </th>
+          <td>
+            {groupId
+              ? <GroupsNameContainer groupId={groupId} />
+              : <i>
+                  <FormattedMessage
+                    id="app.exercise.publicGroup"
+                    defaultMessage="Public"
+                  />
+                </i>}
+          </td>
+        </tr>
         <tr>
           <th>
             <FormattedMessage

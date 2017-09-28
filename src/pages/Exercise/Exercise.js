@@ -55,6 +55,7 @@ import { exercisePipelinesSelector } from '../../redux/selectors/pipelines';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import { supervisorOfSelector } from '../../redux/selectors/groups';
 
+import { clientOnly } from '../../helpers/clientOnly';
 import withLinks from '../../hoc/withLinks';
 
 const messages = defineMessages({
@@ -452,7 +453,8 @@ export default withLinks(
         };
       },
       (dispatch, { params: { exerciseId } }) => ({
-        loadAsync: () => Exercise.loadAsync(dispatch, exerciseId),
+        loadAsync: () =>
+          clientOnly(() => Exercise.loadAsync(dispatch, exerciseId)),
         assignExercise: groupId =>
           dispatch(assignExercise(groupId, exerciseId)),
         push: url => dispatch(push(url)),

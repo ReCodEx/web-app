@@ -20,7 +20,7 @@ const EditUserProfileForm = ({
   pristine,
   asyncValidating,
   invalid
-}) => (
+}) =>
   <FormBox
     title={
       <FormattedMessage
@@ -198,9 +198,7 @@ const EditUserProfileForm = ({
         />
       }
     />
-
-  </FormBox>
-);
+  </FormBox>;
 
 EditUserProfileForm.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
@@ -285,36 +283,40 @@ const validate = ({
 };
 
 const asyncValidate = ({ email, newPassword = '' }, dispatch) =>
-  dispatch(validateRegistrationData(email, newPassword))
-    .then(res => res.value)
-    .then(({ usernameIsFree, passwordScore }) => {
-      var errors = {};
-      if (!usernameIsFree) {
-        errors['email'] = (
-          <FormattedMessage
-            id="app.editUserProfile.validation.emailTaken"
-            defaultMessage="This email address is already taken by someone else or it is equal to your old email address."
-          />
-        );
-      }
+  new Promise((resolve, reject) =>
+    dispatch(validateRegistrationData(email, newPassword))
+      .then(res => res.value)
+      .then(({ usernameIsFree, passwordScore }) => {
+        var errors = {};
+        if (!usernameIsFree) {
+          errors['email'] = (
+            <FormattedMessage
+              id="app.editUserProfile.validation.emailTaken"
+              defaultMessage="This email address is already taken by someone else or it is equal to your old email address."
+            />
+          );
+        }
 
-      if (newPassword.lenght > 0 && passwordScore <= 0) {
-        // changing new password is optional
-        errors['newPassword'] = (
-          <FormattedMessage
-            id="app.editUserProfile.validation.passwordTooWeak"
-            defaultMessage="The password you chose is too weak, please choose a different one."
-          />
-        );
-        dispatch(
-          change('edit-user-profile', 'passwordStrength', passwordScore)
-        );
-      }
+        if (newPassword.lenght > 0 && passwordScore <= 0) {
+          // changing new password is optional
+          errors['newPassword'] = (
+            <FormattedMessage
+              id="app.editUserProfile.validation.passwordTooWeak"
+              defaultMessage="The password you chose is too weak, please choose a different one."
+            />
+          );
+          dispatch(
+            change('edit-user-profile', 'passwordStrength', passwordScore)
+          );
+        }
 
-      if (Object.keys(errors).length > 0) {
-        throw errors;
-      }
-    });
+        if (Object.keys(errors).length > 0) {
+          throw errors;
+        }
+      })
+      .then(resolve())
+      .catch(errors => reject(errors))
+  );
 
 export default reduxForm({
   form: 'edit-user-profile',

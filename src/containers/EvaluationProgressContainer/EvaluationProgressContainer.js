@@ -24,8 +24,7 @@ import {
 
 import { finishProcessing } from '../../redux/modules/submission';
 
-import EvaluationProgress
-  from '../../components/Assignments/EvaluationProgress';
+import EvaluationProgress from '../../components/Assignments/EvaluationProgress';
 import randomMessages, { extraMessages } from './randomMessages';
 
 class EvaluationProgressContainer extends Component {
@@ -144,11 +143,17 @@ class EvaluationProgressContainer extends Component {
 
   render = () => {
     const { isOpen, messages, progress, isFinished } = this.props;
+    let displayedMessages = new List();
+    const now = new Date();
+    if (now.getDate() === 1 && now.getMonth() === 5) {
+      // April fools day
+      displayedMessages = messages;
+    }
 
     return this.state.realTimeProcessing === true
       ? <EvaluationProgress
           isOpen={isOpen}
-          messages={messages}
+          messages={displayedMessages}
           completed={progress.completed}
           skipped={progress.skipped}
           failed={progress.failed}

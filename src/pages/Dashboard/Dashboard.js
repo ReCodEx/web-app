@@ -49,7 +49,7 @@ import SisSupervisorGroupsContainer from '../../containers/SisSupervisorGroupsCo
 import withLinks from '../../hoc/withLinks';
 
 class Dashboard extends Component {
-  componentWillMount = () => this.props.loadAsync(this.props.userId);
+  componentDidMount = () => this.props.loadAsync(this.props.userId);
   componentWillReceiveProps = newProps => {
     if (
       this.props.userId !== newProps.userId ||

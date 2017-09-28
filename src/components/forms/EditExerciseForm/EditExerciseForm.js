@@ -9,6 +9,8 @@ import {
   defineMessages
 } from 'react-intl';
 import { Alert } from 'react-bootstrap';
+import Icon from 'react-fontawesome';
+import { LinkContainer } from 'react-router-bootstrap';
 
 import {
   TextField,
@@ -19,9 +21,10 @@ import {
 
 import FormBox from '../../widgets/FormBox';
 import SubmitButton from '../SubmitButton';
+import Button from '../../widgets/FlatButton';
 import LocalizedTextsFormField from '../LocalizedTextsFormField';
-
 import { validateExercise } from '../../../redux/modules/exercises';
+import withLinks from '../../../hoc/withLinks';
 
 if (canUseDOM) {
   require('codemirror/mode/yaml/yaml');
@@ -52,7 +55,8 @@ const EditExerciseForm = ({
   invalid,
   asyncValidating,
   formValues: { localizedTexts } = {},
-  intl: { formatMessage }
+  intl: { formatMessage },
+  links: { EXERCISE_EDIT_CONFIG_URI_FACTORY }
 }) =>
   <FormBox
     title={
@@ -102,6 +106,15 @@ const EditExerciseForm = ({
             )
           }}
         />
+        <LinkContainer to={EXERCISE_EDIT_CONFIG_URI_FACTORY(exercise.id)}>
+          <Button bsStyle="info">
+            <Icon name="arrow-right" />{' '}
+            <FormattedMessage
+              id="app.editExerciseForm.gotoConfig"
+              defaultMessage="Go to config"
+            />
+          </Button>
+        </LinkContainer>
       </div>
     }
   >
@@ -196,7 +209,8 @@ EditExerciseForm.propTypes = {
   asyncValidating: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
   formValues: PropTypes.shape({
     localizedTexts: PropTypes.array
-  })
+  }),
+  links: PropTypes.object
 };
 
 const validate = ({ name, description, difficulty, localizedTexts }) => {
@@ -292,29 +306,35 @@ const validate = ({ name, description, difficulty, localizedTexts }) => {
 };
 
 const asyncValidate = (values, dispatch, { initialValues: { id, version } }) =>
-  dispatch(validateExercise(id, version))
-    .then(res => res.value)
-    .then(({ versionIsUpToDate }) => {
-      var errors = {};
-      if (versionIsUpToDate === false) {
-        errors['name'] = (
-          <FormattedMessage
-            id="app.editExerciseForm.validation.versionDiffers"
-            defaultMessage="Somebody has changed the exercise while you have been editing it. Please reload the page and apply your changes once more."
-          />
-        );
-        dispatch(touch('editExercise', 'name'));
-      }
+  new Promise((resolve, reject) =>
+    dispatch(validateExercise(id, version))
+      .then(res => res.value)
+      .then(({ versionIsUpToDate }) => {
+        var errors = {};
+        if (versionIsUpToDate === false) {
+          errors['name'] = (
+            <FormattedMessage
+              id="app.editExerciseForm.validation.versionDiffers"
+              defaultMessage="Somebody has changed the exercise while you have been editing it. Please reload the page and apply your changes once more."
+            />
+          );
+          dispatch(touch('editExercise', 'name'));
+        }
 
-      if (Object.keys(errors).length > 0) {
-        throw errors;
-      }
-    });
+        if (Object.keys(errors).length > 0) {
+          throw errors;
+        }
+      })
+      .then(resolve())
+      .catch(errors => reject(errors))
+  );
 
-export default injectIntl(
-  reduxForm({
-    form: 'editExercise',
-    validate,
-    asyncValidate
-  })(EditExerciseForm)
+export default withLinks(
+  injectIntl(
+    reduxForm({
+      form: 'editExercise',
+      validate,
+      asyncValidate
+    })(EditExerciseForm)
+  )
 );
