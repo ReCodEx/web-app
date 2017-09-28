@@ -5,7 +5,7 @@ import { FormattedMessage } from 'react-intl';
 import { Row, Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
-import { reset } from 'redux-form';
+import { reset, formValueSelector } from 'redux-form';
 
 import Page from '../../components/layout/Page';
 import Box from '../../components/widgets/Box';
@@ -23,7 +23,10 @@ import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import { getBoxTypes } from '../../redux/selectors/boxes';
 
 import withLinks from '../../hoc/withLinks';
-import { transformPipelineDataForApi } from '../../helpers/boxes';
+import {
+  transformPipelineDataForApi,
+  extractVariables
+} from '../../helpers/boxes';
 
 class EditPipeline extends Component {
   componentWillMount = () => this.props.loadAsync();
@@ -44,7 +47,8 @@ class EditPipeline extends Component {
       pipeline,
       boxTypes,
       editPipeline,
-      push
+      push,
+      variables: extractedVariables
     } = this.props;
 
     return (
@@ -103,7 +107,8 @@ class EditPipeline extends Component {
                         editPipeline(data.version, {
                           pipeline: transformPipelineDataForApi(
                             boxTypes,
-                            pipeline
+                            pipeline,
+                            extractedVariables
                           ),
                           ...formData
                         })}
@@ -165,7 +170,8 @@ EditPipeline.propTypes = {
   }).isRequired,
   links: PropTypes.object.isRequired,
   boxTypes: PropTypes.array.isRequired,
-  push: PropTypes.func.isRequired
+  push: PropTypes.func.isRequired,
+  variables: PropTypes.array
 };
 
 export default withLinks(
@@ -174,7 +180,10 @@ export default withLinks(
       return {
         pipeline: getPipeline(pipelineId)(state),
         boxTypes: getBoxTypes(state),
-        userId: loggedInUserIdSelector(state)
+        userId: loggedInUserIdSelector(state),
+        variables: extractVariables(
+          formValueSelector('editPipeline')(state, 'pipeline.boxes')
+        )
       };
     },
     (dispatch, { params: { pipelineId } }) => ({

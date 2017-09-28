@@ -36,7 +36,11 @@ const transformPortTypes = (ports, boxTypePorts, variableTypes) =>
     {}
   );
 
-export const transformPipelineDataForApi = (boxTypes, { boxes, variables }) => {
+export const transformPipelineDataForApi = (
+  boxTypes,
+  { boxes, variables },
+  extractedVariables
+) => {
   const variableTypes = getVariablesTypes(boxTypes, boxes);
   const transformedData = {
     boxes: boxes.map(box => {
@@ -64,10 +68,11 @@ export const transformPipelineDataForApi = (boxTypes, { boxes, variables }) => {
 
       return box;
     }),
-    variables: Object.keys(variables)
+    variables: extractedVariables
+      .map(({ value }) => value)
       .map(key => ({
         name: atob(key),
-        value: variables[key]
+        value: variables[key] ? variables[key] : ''
       }))
       .map(({ name, ...variable }) => ({
         ...variable,
