@@ -6,7 +6,7 @@ import {
   FormattedTime,
   FormattedDate
 } from 'react-intl';
-import { Table } from 'react-bootstrap';
+import { Table, Label } from 'react-bootstrap';
 import ReactMarkdown from 'react-markdown';
 import { Link } from 'react-router';
 import Box from '../../widgets/Box';
@@ -140,9 +140,9 @@ const ExerciseDetail = ({
           </th>
           <td>
             {runtimeEnvironments.map(({ id, name }) =>
-              <span key={id} className={styles.environment}>
+              <Label key={id} className={styles.environment}>
                 {name}
-              </span>
+              </Label>
             )}
           </td>
         </tr>

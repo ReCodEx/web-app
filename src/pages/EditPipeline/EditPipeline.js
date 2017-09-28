@@ -11,6 +11,7 @@ import Page from '../../components/layout/Page';
 import Box from '../../components/widgets/Box';
 
 import EditPipelineForm from '../../components/forms/EditPipelineForm';
+import PipelineFilesTableContainer from '../../containers/PipelineFilesTableContainer';
 import DeletePipelineButtonContainer from '../../containers/DeletePipelineButtonContainer';
 
 import {
@@ -106,12 +107,18 @@ class EditPipeline extends Component {
                           ),
                           ...formData
                         })}
+                      pipeline={data}
                     />
                   </Col>
                 </Row>
               </Col>
               <Col lg={6}>
                 <div />
+              </Col>
+            </Row>
+            <Row>
+              <Col lg={6}>
+                <PipelineFilesTableContainer pipeline={data} />
               </Col>
             </Row>
             <Row>
@@ -163,11 +170,13 @@ EditPipeline.propTypes = {
 
 export default withLinks(
   connect(
-    (state, { params: { pipelineId } }) => ({
-      pipeline: getPipeline(pipelineId)(state),
-      boxTypes: getBoxTypes(state),
-      userId: loggedInUserIdSelector(state)
-    }),
+    (state, { params: { pipelineId } }) => {
+      return {
+        pipeline: getPipeline(pipelineId)(state),
+        boxTypes: getBoxTypes(state),
+        userId: loggedInUserIdSelector(state)
+      };
+    },
     (dispatch, { params: { pipelineId } }) => ({
       push: url => dispatch(push(url)),
       reset: () => dispatch(reset('editPipeline')),

@@ -10,7 +10,8 @@ const EditEnvironmentConfigTab = ({
   i,
   environmentValues,
   runtimeEnvironments,
-  formValues
+  formValues,
+  fillDefaultVariablesIfNeeded
 }) => {
   if (!environmentValues[i]) {
     environmentValues[i] = {
@@ -29,6 +30,7 @@ const EditEnvironmentConfigTab = ({
             name: runtimeEnvironments.toJS()[key].data.name
           }))
         )}
+        onBlur={fillDefaultVariablesIfNeeded(i)}
         label={
           <FormattedMessage
             id="app.editEnvironmentConfigTab.runtimeEnvironment"
@@ -57,7 +59,8 @@ EditEnvironmentConfigTab.propTypes = {
   i: PropTypes.number.isRequired,
   environmentValues: PropTypes.array.isRequired,
   runtimeEnvironments: PropTypes.object,
-  formValues: PropTypes.object
+  formValues: PropTypes.object,
+  fillDefaultVariablesIfNeeded: PropTypes.func
 };
 
 export default EditEnvironmentConfigTab;

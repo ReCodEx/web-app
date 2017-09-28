@@ -166,7 +166,7 @@ const AssignmentDetails = ({
           </td>
           <td>
             {runtimeEnvironments.map(env =>
-              <Label key={env.id}>
+              <Label key={env.id} style={{ margin: '2px' }}>
                 {env.name}
               </Label>
             )}

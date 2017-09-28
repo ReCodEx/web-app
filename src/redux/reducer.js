@@ -33,6 +33,7 @@ import upload from './modules/upload';
 import users from './modules/users';
 import runtimeEnvironments from './modules/runtimeEnvironments';
 import supplementaryFiles from './modules/supplementaryFiles';
+import pipelineFiles from './modules/pipelineFiles';
 import additionalExerciseFiles from './modules/additionalExerciseFiles';
 import referenceSolutions from './modules/referenceSolutions';
 import referenceSolutionEvaluations from './modules/referenceSolutionEvaluations';
@@ -73,6 +74,7 @@ const createRecodexReducers = token => ({
   upload,
   runtimeEnvironments,
   supplementaryFiles,
+  pipelineFiles,
   referenceSolutions,
   referenceSolutionEvaluations,
   hwGroups,
