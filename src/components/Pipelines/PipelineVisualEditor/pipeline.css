@@ -15,11 +15,6 @@
   transition: all 0.15s ease-in-out;
 }
 
-.pipeline svg .cluster[id^="B-"]:hover {
-  transform-origin: center center;
-  transform: scale(1.05);
-}
-
 .pipeline svg .cluster[id^="B-"]:hover > polygon {
   fill: #fffdf8;
 }
