@@ -14,11 +14,11 @@ describe('helpers', () => {
         name: 'X',
         type: 'box-type-A',
         portsIn: {
-          A: { type: '?' },
+          A: { type: 'file[]' },
           B: { type: 'file' }
         },
         portsOut: {
-          C: { type: '?' }
+          C: { type: 'string' }
         }
       };
       const boxTypes = [
@@ -71,7 +71,7 @@ describe('helpers', () => {
           {
             name: 'A',
             portsIn: {},
-            portsOut: { 'in-data': { value: 'a', type: '?' } },
+            portsOut: { 'in-data': { value: 'a', type: 'file[]' } },
             type: 'data-in'
           },
           {

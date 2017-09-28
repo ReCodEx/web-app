@@ -20,6 +20,7 @@ import groupResults from './modules/groupResults';
 import instances from './modules/instances';
 import licences from './modules/licences';
 import limits from './modules/limits';
+import simpleLimits from './modules/simpleLimits';
 import notifications from './modules/notifications';
 import publicProfiles from './modules/publicProfiles';
 import { default as search } from './modules/search'; // because of a named export 'search'
@@ -60,6 +61,7 @@ const createRecodexReducers = token => ({
   instances,
   licences,
   limits,
+  simpleLimits,
   notifications,
   publicProfiles,
   search,

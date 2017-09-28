@@ -225,8 +225,8 @@ const asyncValidate = (values, dispatch, { initialValues: { id, version } }) =>
           throw errors;
         }
       })
-      .then(res => resolve(res))
-      .catch(e => reject(e))
+      .then(resolve())
+      .catch(errors => reject(errors))
   );
 
 export default connect(
