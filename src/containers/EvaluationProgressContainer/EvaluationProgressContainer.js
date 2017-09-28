@@ -145,7 +145,7 @@ class EvaluationProgressContainer extends Component {
     const { isOpen, messages, progress, isFinished } = this.props;
     let displayedMessages = new List();
     const now = new Date();
-    if (now.getDate() === 1 && now.getMonth() === 5) {
+    if (now.getDate() === 1 && now.getMonth() === 3) {
       // April fools day
       displayedMessages = messages;
     }
