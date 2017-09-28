@@ -15,7 +15,7 @@ import { CloseIcon } from '../../../components/icons';
 
 import { fetchBoxTypes } from '../../../redux/modules/boxes';
 import { getBoxTypes } from '../../../redux/selectors/boxes';
-import { getVariablesTypes, isUnknownType } from '../../../helpers/boxes';
+import { getVariablesTypes } from '../../../helpers/boxes';
 
 class BoxForm extends Component {
   componentWillMount = () => this.loadBoxTypes();
@@ -238,12 +238,7 @@ const validate = (
           const portType = boxType.portsIn[portName].type;
           const existingVariableType =
             existingVariablesTypes[intendedVariableName];
-          if (
-            !isUnknownType(portType) &&
-            existingVariableType &&
-            !isUnknownType(existingVariableType.type) &&
-            existingVariableType.type !== portType
-          ) {
+          if (existingVariableType && existingVariableType.type !== portType) {
             portsInErrors[portName] = {
               value: (
                 <FormattedHTMLMessage

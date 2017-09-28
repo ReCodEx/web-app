@@ -6,11 +6,9 @@ import SubmissionStatus from '../SubmissionStatus';
 import SourceCodeInfoBox from '../../widgets/SourceCodeInfoBox';
 import TestResults from '../TestResults';
 import BonusPointsContainer from '../../../containers/BonusPointsContainer';
-import DownloadResultArchiveContainer
-  from '../../../containers/DownloadResultArchiveContainer';
+import DownloadResultArchiveContainer from '../../../containers/DownloadResultArchiveContainer';
 import CommentThreadContainer from '../../../containers/CommentThreadContainer';
-import SourceCodeViewerContainer
-  from '../../../containers/SourceCodeViewerContainer';
+import SourceCodeViewerContainer from '../../../containers/SourceCodeViewerContainer';
 
 import EvaluationDetail from '../EvaluationDetail';
 import CompilationLogs from '../CompilationLogs';
@@ -33,7 +31,8 @@ class SubmissionDetail extends Component {
         files,
         evaluation,
         accepted,
-        originalSubmissionId
+        originalSubmissionId,
+        runtimeEnvironmentId
       },
       assignment,
       isSupervisor
@@ -55,13 +54,13 @@ class SubmissionDetail extends Component {
               assignmentId={assignment.id}
             />
             <Row>
-              {files.map(file => (
+              {files.map(file =>
                 <Col lg={6} md={12} key={file.id}>
                   <a href="#" onClick={() => this.openFile(file.id)}>
                     <SourceCodeInfoBox {...file} />
                   </a>
                 </Col>
-              ))}
+              )}
             </Row>
             {evaluation &&
               <CompilationLogs
@@ -92,7 +91,10 @@ class SubmissionDetail extends Component {
                   </Col>
                 </Row>}
 
-              <TestResults evaluation={evaluation} />
+              <TestResults
+                evaluation={evaluation}
+                runtimeEnvironmentId={runtimeEnvironmentId}
+              />
             </Col>}
         </Row>
 
@@ -117,7 +119,8 @@ SubmissionDetail.propTypes = {
     evaluation: PropTypes.object,
     maxPoints: PropTypes.number.isRequired,
     files: PropTypes.array,
-    originalSubmissionId: PropTypes.string
+    originalSubmissionId: PropTypes.string,
+    runtimeEnvironmentId: PropTypes.string
   }).isRequired,
   assignment: PropTypes.object.isRequired,
   isSupervisor: PropTypes.bool
