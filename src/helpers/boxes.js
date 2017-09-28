@@ -1,5 +1,3 @@
-export const UNKNOWN_PORT_TYPE = '?';
-export const isUnknownType = type => type === UNKNOWN_PORT_TYPE;
 export const isArrayType = type => type.indexOf('[]') > 0;
 
 export const getVariablesTypes = (boxTypes, boxes) => {
@@ -27,17 +25,12 @@ export const getVariablesTypes = (boxTypes, boxes) => {
   return variablesTypes;
 };
 
-const transformPort = ({ type, value }, variableTypes) => ({
-  type: isUnknownType(type) ? variableTypes[value].type : type,
-  value
-});
-
 const transformPortTypes = (ports, boxTypePorts, variableTypes) =>
   Object.keys(boxTypePorts).reduce(
     (acc, name) => ({
       ...acc,
       [name]: ports[name]
-        ? transformPort(ports[name], variableTypes)
+        ? ports[name]
         : { value: '', type: boxTypePorts[name].type }
     }),
     {}
@@ -76,10 +69,6 @@ export const transformPipelineDataForApi = (boxTypes, { boxes, variables }) => {
         name: atob(key),
         value: variables[key]
       }))
-      .filter(
-        ({ name }) =>
-          variableTypes[name] && !isUnknownType(variableTypes[name].type)
-      )
       .map(({ name, ...variable }) => ({
         ...variable,
         name,
@@ -138,13 +127,11 @@ const flattenPorts = boxes =>
   boxes.reduce(
     (acc, ports) => [
       ...acc,
-      ...Object.keys(ports)
-        .filter(port => isUnknownType(ports[port].type) === false)
-        .map(port => ({
-          name: port,
-          type: ports[port].type,
-          value: btoa(ports[port].value)
-        }))
+      ...Object.keys(ports).map(port => ({
+        name: port,
+        type: ports[port].type,
+        value: btoa(ports[port].value)
+      }))
     ],
     []
   );
@@ -152,7 +139,7 @@ const flattenPorts = boxes =>
 export const extractVariables = (boxes = []) => {
   const inputs = flattenPorts(
     boxes.map(box => ({ ...box.portsIn })).filter(ports => ports)
-  );
+  ).filter(({ value }) => value.length > 0);
 
   // remove duplicities
   return inputs.reduce(
