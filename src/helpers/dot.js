@@ -18,6 +18,7 @@ const createDotForNodeFactory = dependencies => (
   let hasFullSupport = true;
   const inputs = Object.keys(portsIn)
     .map(portName => portsIn[portName].value)
+    .filter(value => value.length > 0)
     .map(port => {
       const hasSupport = dependencies.find(
         dep => dep.to === name && dep.name === port
@@ -35,6 +36,7 @@ const createDotForNodeFactory = dependencies => (
 
   const outputs = Object.keys(portsOut)
     .map(portName => portsOut[portName].value)
+    .filter(value => value.length > 0)
     .map(port => `${subnode(name, port)} [label="${port}"]`);
 
   return `
