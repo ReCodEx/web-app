@@ -17,10 +17,12 @@ const AddBoxForm = ({ add, onHide, boxTypes, ...props }) =>
       />
     }
     onSubmit={data => {
-      const { name, portsIn, portsOut, type } = createBoxFromFormInputs(
-        data,
-        boxTypes
-      );
+      const {
+        name,
+        portsIn = {},
+        portsOut = {},
+        type
+      } = createBoxFromFormInputs(data, boxTypes);
       add(name, portsIn, portsOut, type);
       onHide();
     }}
