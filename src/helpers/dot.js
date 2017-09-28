@@ -63,6 +63,9 @@ const createDotForNodeFactory = dependencies => (
           fontcolor = black;
           ${outputs.join(';')}
         }
+        ${inputs.length === 0 && outputs.length === 0
+          ? `"E-${name}" [label="void"]`
+          : ''}
       }`;
 };
 
