@@ -83,8 +83,15 @@ describe('helpers', () => {
         ],
         variables: { 'YQ==': ['ABC'] }
       };
+      const extractedVariables = [
+        { name: 'in-data', type: 'file[]', value: 'YQ==' }
+      ];
 
-      const transformedData = transformPipelineDataForApi(boxTypes, pipeline);
+      const transformedData = transformPipelineDataForApi(
+        boxTypes,
+        pipeline,
+        extractedVariables
+      );
 
       expect(transformedData).to.eql({
         boxes: [

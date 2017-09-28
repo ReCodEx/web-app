@@ -11,7 +11,8 @@ import {
 } from '../Fields';
 import ResourceRenderer from '../../helpers/ResourceRenderer';
 
-const isArray = (type = '') => type.indexOf('[]') === type.length - 2;
+const isArray = (type = '') =>
+  typeof type === 'string' && type.indexOf('[]') === type.length - 2;
 
 const PipelineVariablesField = ({
   input,

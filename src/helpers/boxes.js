@@ -30,13 +30,17 @@ const transformPortTypes = (ports, boxTypePorts, variableTypes) =>
     (acc, name) => ({
       ...acc,
       [name]: ports[name]
-        ? { value: ports[name].value, type: ports[name].type }
+        ? ports[name]
         : { value: '', type: boxTypePorts[name].type }
     }),
     {}
   );
 
-export const transformPipelineDataForApi = (boxTypes, { boxes, variables }) => {
+export const transformPipelineDataForApi = (
+  boxTypes,
+  { boxes, variables },
+  extractedVariables
+) => {
   const variableTypes = getVariablesTypes(boxTypes, boxes);
   const transformedData = {
     boxes: boxes.map(box => {
@@ -64,10 +68,11 @@ export const transformPipelineDataForApi = (boxTypes, { boxes, variables }) => {
 
       return box;
     }),
-    variables: Object.keys(variables)
+    variables: extractedVariables
+      .map(({ value }) => value)
       .map(key => ({
         name: atob(key),
-        value: variables[key]
+        value: variables[key] ? variables[key] : ''
       }))
       .filter(({ name }) => variableTypes[name])
       .map(({ name, ...variable }) => ({
@@ -140,7 +145,7 @@ const flattenPorts = boxes =>
 export const extractVariables = (boxes = []) => {
   const inputs = flattenPorts(
     boxes.map(box => ({ ...box.portsIn })).filter(ports => ports)
-  );
+  ).filter(({ value }) => value.length > 0);
 
   // remove duplicities
   return inputs.reduce(
