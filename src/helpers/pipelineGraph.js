@@ -15,9 +15,13 @@ export const addDependencies = (graph, node) => {
     const oldPortsOut = old.portsOut ? Object.keys(old.portsOut) : {};
     for (let portInName of oldPortsIn) {
       const portIn = old.portsIn[portInName];
+      if (portIn.value.length === 0) {
+        continue;
+      }
+
       for (let portOutName of nodePortsOut) {
         const portOut = node.portsOut[portOutName];
-        if (portIn.value === portOut.value) {
+        if (portOut.value.length > 0 && portIn.value === portOut.value) {
           candidates.push({
             from: node.name,
             to: old.name,
@@ -29,9 +33,13 @@ export const addDependencies = (graph, node) => {
 
     for (let portInName of nodePortsIn) {
       const portIn = node.portsIn[portInName];
+      if (portIn.value.length === 0) {
+        continue;
+      }
+
       for (let portOutName of oldPortsOut) {
         const portOut = old.portsOut[portOutName];
-        if (portIn.value === portOut.value) {
+        if (portOut.value.length > 0 && portIn.value === portOut.value) {
           candidates.push({
             from: old.name,
             to: node.name,
