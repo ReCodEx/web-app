@@ -206,24 +206,28 @@ const validate = ({ name, description }) => {
 };
 
 const asyncValidate = (values, dispatch, { initialValues: { id, version } }) =>
-  dispatch(validatePipeline(id, version))
-    .then(res => res.value)
-    .then(({ versionIsUpToDate }) => {
-      var errors = {};
-      if (versionIsUpToDate === false) {
-        errors['name'] = (
-          <FormattedMessage
-            id="app.editPipelineForm.validation.versionDiffers"
-            defaultMessage="Somebody has changed the pipeline while you have been editing it. Please reload the page and apply your changes once more."
-          />
-        );
-        dispatch(touch('editPipeline', 'name'));
-      }
+  new Promise((resolve, reject) =>
+    dispatch(validatePipeline(id, version))
+      .then(res => res.value)
+      .then(({ versionIsUpToDate }) => {
+        var errors = {};
+        if (versionIsUpToDate === false) {
+          errors['name'] = (
+            <FormattedMessage
+              id="app.editPipelineForm.validation.versionDiffers"
+              defaultMessage="Somebody has changed the pipeline while you have been editing it. Please reload the page and apply your changes once more."
+            />
+          );
+          dispatch(touch('editPipeline', 'name'));
+        }
 
-      if (Object.keys(errors).length > 0) {
-        throw errors;
-      }
-    });
+        if (Object.keys(errors).length > 0) {
+          throw errors;
+        }
+      })
+      .then(res => resolve(res))
+      .catch(e => reject(e))
+  );
 
 export default connect(
   (state, { pipeline }) => ({
