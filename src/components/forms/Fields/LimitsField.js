@@ -40,17 +40,6 @@ const LimitsField = ({
       }
       {...props}
     />
-    <Field
-      name={`${prefix}.parallel`}
-      component={TextField}
-      label={
-        <FormattedMessage
-          id="app.fields.limits.parallel"
-          defaultMessage="Number of parallel processes:"
-        />
-      }
-      {...props}
-    />
 
     <p className="text-center">
       <FlatButton onClick={setHorizontally} bsSize="xs">
