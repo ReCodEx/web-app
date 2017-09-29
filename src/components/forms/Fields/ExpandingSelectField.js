@@ -1,7 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { FormattedMessage } from 'react-intl';
 
-import { FormGroup, FormControl, HelpBlock } from 'react-bootstrap';
+import {
+  FormGroup,
+  FormControl,
+  HelpBlock,
+  ControlLabel
+} from 'react-bootstrap';
 
 class ExpandingSelectField extends Component {
   state = { texts: [''] };
@@ -37,9 +43,12 @@ class ExpandingSelectField extends Component {
 
   render() {
     const {
+      label = '',
       input: { name, onChange },
       meta: { touched, error },
-      options
+      options,
+      style = {},
+      ...props
     } = this.props;
     const { texts } = this.state;
 
@@ -48,21 +57,27 @@ class ExpandingSelectField extends Component {
         controlId={name}
         validationState={touched && error ? 'error' : undefined}
       >
-        {texts.map((text, i) =>
-          <FormControl
-            key={i}
-            onChange={e => this.changeText(i, e.target.value, onChange)}
-            onBlur={() => this.removeIfEmpty(i, onChange)}
-            value={text}
-            componentClass="select"
-          >
-            {options.map(({ key, name }) =>
-              <option value={key} key={key}>
-                {name}
-              </option>
-            )}
-          </FormControl>
-        )}
+        <ControlLabel>
+          {label}
+        </ControlLabel>
+        <div style={style}>
+          {texts.map((text, i) =>
+            <FormControl
+              key={i}
+              onChange={e => this.changeText(i, e.target.value, onChange)}
+              onBlur={() => this.removeIfEmpty(i, onChange)}
+              value={text}
+              componentClass="select"
+              {...props}
+            >
+              {options.map(({ key, name }, o) =>
+                <option value={key} key={o}>
+                  {name}
+                </option>
+              )}
+            </FormControl>
+          )}
+        </div>
         {touched &&
           error &&
           <HelpBlock>
@@ -76,7 +91,12 @@ class ExpandingSelectField extends Component {
 ExpandingSelectField.propTypes = {
   input: PropTypes.object,
   meta: PropTypes.object,
-  options: PropTypes.array
+  options: PropTypes.array,
+  label: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) })
+  ]).isRequired,
+  style: PropTypes.object
 };
 
 export default ExpandingSelectField;

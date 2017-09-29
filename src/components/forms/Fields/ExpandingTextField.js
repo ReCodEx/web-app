@@ -45,7 +45,9 @@ class ExpandingTextField extends Component {
     const {
       label = '',
       input: { onChange },
-      meta: { touched, error }
+      meta: { touched, error },
+      style = {},
+      ...props
     } = this.props;
     const { texts } = this.state;
 
@@ -57,15 +59,18 @@ class ExpandingTextField extends Component {
         <ControlLabel>
           {label}
         </ControlLabel>
-        {texts.map((text, i) =>
-          <FormControl
-            key={i}
-            componentClass="input"
-            onChange={e => this.changeText(i, e.target.value, onChange)}
-            onBlur={() => this.removeIfEmpty(i, onChange)}
-            value={text}
-          />
-        )}
+        <div style={style}>
+          {texts.map((text, i) =>
+            <FormControl
+              key={i}
+              componentClass="input"
+              onChange={e => this.changeText(i, e.target.value, onChange)}
+              onBlur={() => this.removeIfEmpty(i, onChange)}
+              value={text}
+              {...props}
+            />
+          )}
+        </div>
         {touched &&
           error &&
           <HelpBlock>
@@ -82,7 +87,8 @@ ExpandingTextField.propTypes = {
   label: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) })
-  ])
+  ]).isRequired,
+  style: PropTypes.object
 };
 
 export default ExpandingTextField;

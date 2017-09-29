@@ -53,6 +53,7 @@ const EditExerciseConfigVariable = ({ prefix, data, supplementaryFiles }) =>
             name={`${prefix}.value`}
             style={{ marginTop: '-20px' }}
             component={ExpandingTextField}
+            label={''}
           />}
         {data.type === 'remote-file[]' &&
           <ResourceRenderer resource={supplementaryFiles.toArray()}>
@@ -61,6 +62,7 @@ const EditExerciseConfigVariable = ({ prefix, data, supplementaryFiles }) =>
                 name={`${prefix}.value`}
                 style={{ marginTop: '-20px' }}
                 component={ExpandingSelectField}
+                label={''}
                 options={[{ key: '', name: '...' }].concat(
                   supplementaryFiles
                     .sort((a, b) => a.name.localeCompare(b.name))
