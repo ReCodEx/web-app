@@ -132,7 +132,7 @@ const EditUserSettingsForm = ({
       label={
         <FormattedMessage
           id="app.editUserSettings.newAssignmentEmails"
-          defaultMessage="Notify about new assignments:"
+          defaultMessage="Notify about new assignments"
         />
       }
     />
@@ -145,7 +145,7 @@ const EditUserSettingsForm = ({
       label={
         <FormattedMessage
           id="app.editUserSettings.assignmentDeadlineEmails"
-          defaultMessage="Notify about near assignments deadline:"
+          defaultMessage="Notify about near assignments deadline"
         />
       }
     />
@@ -158,7 +158,7 @@ const EditUserSettingsForm = ({
       label={
         <FormattedMessage
           id="app.editUserSettings.submissionEvaluatedEmails"
-          defaultMessage="Notify about submission evaluation:"
+          defaultMessage="Notify about submission evaluation"
         />
       }
     />
