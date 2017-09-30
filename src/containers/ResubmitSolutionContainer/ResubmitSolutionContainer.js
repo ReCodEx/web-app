@@ -16,7 +16,6 @@ const ResubmitSolutionContainer = ({
   id,
   assignmentId,
   resubmit,
-  isPrivate = false,
   monitor,
   isProcessing,
   newSubmissionId,
@@ -51,7 +50,7 @@ const mapStateToProps = state => ({
   newSubmissionId: getSubmissionId(state)
 });
 
-const mapDispatchToProps = (dispatch, { id, isPrivate }) => ({
+const mapDispatchToProps = (dispatch, { id, isPrivate = false }) => ({
   resubmit: () => dispatch(resubmitSubmission(id, isPrivate))
 });
 

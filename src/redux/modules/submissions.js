@@ -26,9 +26,12 @@ const { actions, actionTypes, reduceActions } = factory({
 
 export const additionalActionTypes = {
   LOAD_USERS_SUBMISSIONS: 'recodex/submissions/LOAD_USERS_SUBMISSIONS',
-  LOAD_USERS_SUBMISSIONS_PENDING: 'recodex/submissions/LOAD_USERS_SUBMISSIONS_PENDING',
-  LOAD_USERS_SUBMISSIONS_FULFILLED: 'recodex/submissions/LOAD_USERS_SUBMISSIONS_FULFILLED',
-  LOAD_USERS_SUBMISSIONS_FAILED: 'recodex/submissions/LOAD_USERS_SUBMISSIONS_FAILED',
+  LOAD_USERS_SUBMISSIONS_PENDING:
+    'recodex/submissions/LOAD_USERS_SUBMISSIONS_PENDING',
+  LOAD_USERS_SUBMISSIONS_FULFILLED:
+    'recodex/submissions/LOAD_USERS_SUBMISSIONS_FULFILLED',
+  LOAD_USERS_SUBMISSIONS_FAILED:
+    'recodex/submissions/LOAD_USERS_SUBMISSIONS_FAILED',
   SET_BONUS_POINTS: 'recodex/submissions/SET_BONUS_POINTS',
   SET_BONUS_POINTS_PENDING: 'recodex/submissions/SET_BONUS_POINTS_PENDING',
   SET_BONUS_POINTS_FULFILLED: 'recodex/submissions/SET_BONUS_POINTS_FULFILLED',
@@ -62,12 +65,12 @@ export const acceptSubmission = id =>
     meta: { id }
   });
 
-export const resubmitSubmission = (id, isPrivate) =>
+export const resubmitSubmission = (id, isPrivate, isDebug = true) =>
   createApiAction({
     type: submissionActionTypes.SUBMIT,
     method: 'POST',
     endpoint: `/submissions/${id}/resubmit`,
-    body: { private: isPrivate },
+    body: { private: isPrivate, debug: isDebug },
     meta: { id }
   });
 
@@ -114,9 +117,8 @@ export const downloadResultArchive = submissionId => (dispatch, getState) =>
 
 const reducer = handleActions(
   Object.assign({}, reduceActions, {
-    [additionalActionTypes.LOAD_USERS_SUBMISSIONS_FULFILLED]: reduceActions[
-      actionTypes.FETCH_MANY_FULFILLED
-    ],
+    [additionalActionTypes.LOAD_USERS_SUBMISSIONS_FULFILLED]:
+      reduceActions[actionTypes.FETCH_MANY_FULFILLED],
 
     [additionalActionTypes.SET_BONUS_POINTS_FULFILLED]: (
       state,
