@@ -3,14 +3,13 @@ import PropTypes from 'prop-types';
 import { FormattedMessage, FormattedDate, FormattedTime } from 'react-intl';
 import { Table } from 'react-bootstrap';
 
-import AssignmentStatusIcon
-  from '../../Assignments/Assignment/AssignmentStatusIcon';
+import AssignmentStatusIcon from '../../Assignments/Assignment/AssignmentStatusIcon';
 
 const EvaluationTable = ({
   evaluations,
   referenceSolutionId,
   renderButtons = () => null
-}) => (
+}) =>
   <Table>
     <thead>
       <tr>
@@ -32,7 +31,7 @@ const EvaluationTable = ({
           }
           return b.evaluation.evaluatedAt - a.evaluation.evaluatedAt;
         })
-        .map(e => (
+        .map(e =>
           <tr key={e.id}>
             <td>
               <AssignmentStatusIcon
@@ -52,10 +51,19 @@ const EvaluationTable = ({
               {renderButtons(e.id)}
             </td>
           </tr>
-        ))}
+        )}
+
+      {evaluations.length === 0 &&
+        <tr>
+          <td className="text-center" colSpan={3}>
+            <FormattedMessage
+              id="app.evaluationTable.empty"
+              defaultMessage="There are no evaluations in this list."
+            />
+          </td>
+        </tr>}
     </tbody>
-  </Table>
-);
+  </Table>;
 
 EvaluationTable.propTypes = {
   evaluations: PropTypes.array.isRequired,
