@@ -54,7 +54,8 @@ module.exports = {
     new webpack.DefinePlugin({
       'process.env': {
         NODE_ENV: "'" + process.env.NODE_ENV + "'",
-        API_BASE: "'" + process.env.API_BASE + "'"
+        API_BASE: "'" + process.env.API_BASE + "'",
+        TITLE: "'" + process.env.TITLE + "'"
       }
     })
   ]
