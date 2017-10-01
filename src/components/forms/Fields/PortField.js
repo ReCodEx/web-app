@@ -24,7 +24,7 @@ const PortField = ({
 }) =>
   <FormGroup
     controlId={input.name}
-    validationState={touched && error ? 'error' : undefined}
+    validationState={error ? (touched ? 'error' : 'warning') : undefined}
   >
     <ControlLabel>
       {label}{' '}
@@ -36,10 +36,14 @@ const PortField = ({
       </Label>
     </ControlLabel>
     <FormControl {...input} {...props} type={type} />
-    {touched &&
-      error &&
+    {error &&
       <HelpBlock>
-        {error}
+        {' '}{touched
+          ? error
+          : <FormattedMessage
+              defaultMessage="This field is required."
+              id="app.field.isRequired"
+            />}{' '}
       </HelpBlock>}
   </FormGroup>;
 

@@ -16,17 +16,26 @@ const TextAreaField = ({
   label,
   children,
   ...props
-}) => (
+}) =>
   <FormGroup
     controlId={input.name}
-    validationState={touched && error ? 'error' : undefined}
+    validationState={error ? (touched ? 'error' : 'warning') : undefined}
   >
-    <ControlLabel>{label}</ControlLabel>
+    <ControlLabel>
+      {label}
+    </ControlLabel>
     <FormControl {...input} {...props} componentClass="textarea" rows={8} />
-    {touched && error && <HelpBlock>{error}</HelpBlock>}
+    {error &&
+      <HelpBlock>
+        {' '}{touched
+          ? error
+          : <FormattedMessage
+              defaultMessage="This field is required."
+              id="app.field.isRequired"
+            />}{' '}
+      </HelpBlock>}
     {children}
-  </FormGroup>
-);
+  </FormGroup>;
 
 TextAreaField.propTypes = {
   type: PropTypes.string,

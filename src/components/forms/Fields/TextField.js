@@ -15,16 +15,25 @@ const TextField = ({
   type = 'text',
   label,
   ...props
-}) => (
+}) =>
   <FormGroup
     controlId={input.name}
-    validationState={touched && error ? 'error' : undefined}
+    validationState={error ? (touched ? 'error' : 'warning') : undefined}
   >
-    <ControlLabel>{label}</ControlLabel>
+    <ControlLabel>
+      {label}
+    </ControlLabel>
     <FormControl {...input} {...props} type={type} />
-    {touched && error && <HelpBlock>{error}</HelpBlock>}
-  </FormGroup>
-);
+    {error &&
+      <HelpBlock>
+        {' '}{touched
+          ? error
+          : <FormattedMessage
+              defaultMessage="This field is required."
+              id="app.field.isRequired"
+            />}{' '}
+      </HelpBlock>}
+  </FormGroup>;
 
 TextField.propTypes = {
   type: PropTypes.string,
