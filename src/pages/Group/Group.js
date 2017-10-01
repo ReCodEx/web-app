@@ -18,6 +18,7 @@ import AdminsView from '../../components/Groups/AdminsView';
 import SupervisorsView from '../../components/Groups/SupervisorsView';
 import StudentsView from '../../components/Groups/StudentsView';
 import { EditIcon } from '../../components/icons';
+import GroupsNameContainer from '../../containers/GroupsNameContainer';
 
 import { isReady, getJsData } from '../../redux/helpers/resourceManager';
 import {
@@ -192,6 +193,16 @@ class Group extends Component {
       >
         {data =>
           <div>
+            {data.parentGroupId &&
+              <div>
+                {' '}<FormattedMessage
+                  id="app.group.parent"
+                  defaultMessage="Parent group:"
+                />{' '}
+                <GroupsNameContainer groupId={data.parentGroupId} />
+                <br />
+                <br />
+              </div>}
             {isAdmin &&
               <p>
                 <LinkContainer to={GROUP_EDIT_URI_FACTORY(data.id)}>
