@@ -15,7 +15,7 @@ const EditInstanceForm = ({
   submitFailed = false,
   submitSucceeded = false,
   invalid
-}) => (
+}) =>
   <FormBox
     title={
       <FormattedMessage
@@ -98,8 +98,7 @@ const EditInstanceForm = ({
         />
       }
     />
-  </FormBox>
-);
+  </FormBox>;
 
 EditInstanceForm.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
@@ -111,8 +110,17 @@ EditInstanceForm.propTypes = {
   invalid: PropTypes.bool
 };
 
-const validate = ({ bonusPoints }) => {
+const validate = ({ name }) => {
   const errors = {};
+
+  if (!name) {
+    errors['name'] = (
+      <FormattedMessage
+        id="app.editInstanceForm.validation.emptyName"
+        defaultMessage="Please fill the name of the instance."
+      />
+    );
+  }
 
   return errors;
 };

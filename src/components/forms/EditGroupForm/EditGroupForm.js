@@ -15,7 +15,7 @@ const EditGroupForm = ({
   submitFailed = false,
   submitSucceeded = false,
   invalid
-}) => (
+}) =>
   <FormBox
     title={
       <FormattedMessage
@@ -144,8 +144,7 @@ const EditGroupForm = ({
         />
       }
     />
-  </FormBox>
-);
+  </FormBox>;
 
 EditGroupForm.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
@@ -165,15 +164,6 @@ const validate = ({ name, description, threshold }) => {
       <FormattedMessage
         id="app.createGroup.validation.emptyName"
         defaultMessage="Group name cannot be empty."
-      />
-    );
-  }
-
-  if (!description || description.length === 0) {
-    errors['description'] = (
-      <FormattedMessage
-        id="app.createGroup.validation.emptyDescription"
-        defaultMessage="Group description cannot be empty."
       />
     );
   }
