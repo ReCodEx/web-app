@@ -193,16 +193,17 @@ class Group extends Component {
       >
         {data =>
           <div>
-            {data.parentGroupId &&
-              <div>
-                {' '}<FormattedMessage
-                  id="app.group.parent"
-                  defaultMessage="Parent group:"
-                />{' '}
-                <GroupsNameContainer groupId={data.parentGroupId} />
-                <br />
-                <br />
-              </div>}
+            {data.parentGroupsIds.map(
+              (groupId, i) =>
+                i !== 0 &&
+                <span key={i}>
+                  {' '}&gt; <GroupsNameContainer groupId={groupId} />
+                </span>
+            )}
+            <span>
+              {' '}&gt; <GroupsNameContainer groupId={data.id} />
+            </span>
+            {data.parentGroupsIds.length > 1 && <p />}
             {isAdmin &&
               <p>
                 <LinkContainer to={GROUP_EDIT_URI_FACTORY(data.id)}>
