@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { FormattedMessage } from 'react-intl';
-import { Row, Col } from 'react-bootstrap';
+import { Row, Col, Alert } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 import { reset, formValueSelector } from 'redux-form';
@@ -85,6 +85,24 @@ class EditPipeline extends Component {
       >
         {({ pipeline: { boxes, variables }, ...data }) =>
           <div>
+            <Row>
+              <Col lg={12}>
+                <Alert bsStyle="warning">
+                  <h4>
+                    <FormattedMessage
+                      id="app.editPipeline.disclaimer"
+                      defaultMessage="Disclaimer"
+                    />
+                  </h4>
+                  <p>
+                    <FormattedMessage
+                      id="app.editPipeline.disclaimerWarning"
+                      defaultMessage="Modifying the pipeline might break all exercises using the pipeline!"
+                    />
+                  </p>
+                </Alert>
+              </Col>
+            </Row>
             <Row>
               <Col lg={12}>
                 <Row>
