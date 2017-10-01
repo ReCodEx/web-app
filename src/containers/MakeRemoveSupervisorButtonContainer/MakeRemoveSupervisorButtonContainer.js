@@ -2,11 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { makeSupervisor, removeSupervisor } from '../../redux/modules/groups';
+import { fetchUserIfNeeded } from '../../redux/modules/users';
 import { isSupervisorOf } from '../../redux/selectors/users';
 
 import MakeSupervisorButton from '../../components/Groups/MakeSupervisorButton';
-import RemoveSupervisorButton
-  from '../../components/Groups/RemoveSupervisorButton';
+import RemoveSupervisorButton from '../../components/Groups/RemoveSupervisorButton';
 
 const MakeRemoveSupervisorButtonContainer = ({
   isSupervisor,
@@ -14,6 +14,7 @@ const MakeRemoveSupervisorButtonContainer = ({
   groupId,
   makeSupervisor,
   removeSupervisor,
+  fetchUserIfNeeded,
   ...props
 }) =>
   isSupervisor
@@ -24,7 +25,9 @@ const MakeRemoveSupervisorButtonContainer = ({
       />
     : <MakeSupervisorButton
         {...props}
-        onClick={() => makeSupervisor(groupId, userId)}
+        onClick={() => {
+          fetchUserIfNeeded(userId).then(() => makeSupervisor(groupId, userId));
+        }}
         bsSize="xs"
       />;
 
@@ -33,14 +36,19 @@ MakeRemoveSupervisorButtonContainer.propTypes = {
   userId: PropTypes.string.isRequired,
   isSupervisor: PropTypes.bool.isRequired,
   makeSupervisor: PropTypes.func.isRequired,
-  removeSupervisor: PropTypes.func.isRequired
+  removeSupervisor: PropTypes.func.isRequired,
+  fetchUserIfNeeded: PropTypes.func.isRequired
 };
 
 const mapStateToProps = (state, { groupId, userId }) => ({
   isSupervisor: isSupervisorOf(userId, groupId)(state)
 });
 
-const mapDispatchToProps = { makeSupervisor, removeSupervisor };
+const mapDispatchToProps = {
+  makeSupervisor,
+  removeSupervisor,
+  fetchUserIfNeeded
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(
   MakeRemoveSupervisorButtonContainer
