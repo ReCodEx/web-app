@@ -73,21 +73,27 @@ class Register extends Component {
         ]}
       >
         <Row>
-          <Col lg={4} md={6} mdOffset={0} sm={8} smOffset={2}>
-            <RegistrationForm instances={instances} onSubmit={createAccount} />
-          </Col>
-          <Col lg={4} md={6} mdOffset={0} sm={8} smOffset={2}>
-            <ExternalRegistrationForm
-              instances={instances}
-              onSubmit={createExternalAccount()}
-            />
-          </Col>
-          <Col lg={4} md={6} mdOffset={0} sm={8} smOffset={2}>
-            <RegistrationCASOauth
-              instances={instances}
-              onSubmit={createExternalAccount('oauth')}
-            />
-          </Col>
+          {process.env.ALLOW_NORMAL_REGISTRATION === 'true' &&
+            <Col lg={4} md={6} mdOffset={0} sm={8} smOffset={2}>
+              <RegistrationForm
+                instances={instances}
+                onSubmit={createAccount}
+              />
+            </Col>}
+          {process.env.ALLOW_LDAP_REGISTRATION === 'true' &&
+            <Col lg={4} md={6} mdOffset={0} sm={8} smOffset={2}>
+              <ExternalRegistrationForm
+                instances={instances}
+                onSubmit={createExternalAccount()}
+              />
+            </Col>}
+          {process.env.ALLOW_CAS_REGISTRATION === 'true' &&
+            <Col lg={4} md={6} mdOffset={0} sm={8} smOffset={2}>
+              <RegistrationCASOauth
+                instances={instances}
+                onSubmit={createExternalAccount('oauth')}
+              />
+            </Col>}
         </Row>
       </PageContent>
     );
