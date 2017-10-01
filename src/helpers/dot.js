@@ -9,6 +9,12 @@ const createDependency = (from, to, clusterTo = null) => {
   return dep;
 };
 
+const createDotForPorts = ports =>
+  Object.keys(ports)
+    .map(portName => ports[portName].value)
+    .filter(value => value.length > 0)
+    .map(port => `${subnode(name, port)} [label="${port}"]`);
+
 const createDotForNodeFactory = dependencies => (
   name,
   portsIn = {},
@@ -16,28 +22,8 @@ const createDotForNodeFactory = dependencies => (
   i
 ) => {
   let hasFullSupport = true;
-  const inputs = Object.keys(portsIn)
-    .map(portName => portsIn[portName].value)
-    .filter(value => value.length > 0)
-    .map(port => {
-      const hasSupport = dependencies.find(
-        dep => dep.to === name && dep.name === port
-      );
-
-      if (!hasSupport) {
-        hasFullSupport = false;
-      }
-
-      return (
-        `${subnode(name, port)} [label="${port}"]` +
-        (!hasSupport ? '[color=red, fontcolor=red]' : '')
-      );
-    });
-
-  const outputs = Object.keys(portsOut)
-    .map(portName => portsOut[portName].value)
-    .filter(value => value.length > 0)
-    .map(port => `${subnode(name, port)} [label="${port}"]`);
+  const inputs = createDotForPorts(portsIn);
+  const outputs = createDotForPorts(portsOut);
 
   return `
       subgraph cluster_${i} {
