@@ -178,6 +178,17 @@ const EditUserProfileForm = ({
     </Throttle>
 
     <Field
+      name="passwordStrength"
+      component={PasswordStrength}
+      label={
+        <FormattedMessage
+          id="app.changePasswordForm.passwordStrength"
+          defaultMessage="Password strength:"
+        />
+      }
+    />
+
+    <Field
       name="passwordCheck"
       tabIndex={8}
       component={PasswordField}
@@ -185,16 +196,6 @@ const EditUserProfileForm = ({
         <FormattedMessage
           id="app.changePasswordForm.passwordCheck"
           defaultMessage="Repeat your password to prevent typos:"
-        />
-      }
-    />
-    <Field
-      name="passwordStrength"
-      component={PasswordStrength}
-      label={
-        <FormattedMessage
-          id="app.changePasswordForm.passwordStrength"
-          defaultMessage="Password strength:"
         />
       }
     />
@@ -223,7 +224,7 @@ const validate = ({
 }) => {
   const errors = {};
 
-  if (!firstName || firstName.length === 0) {
+  if (!firstName) {
     errors['firstName'] = (
       <FormattedMessage
         id="app.editUserProfile.validation.emptyFirstName"
@@ -232,11 +233,29 @@ const validate = ({
     );
   }
 
-  if (!lastName || lastName.length === 0) {
+  if (firstName && firstName.length < 2) {
+    errors['firstName'] = (
+      <FormattedMessage
+        id="app.editUserProfile.validation.shortFirstName"
+        defaultMessage="First name must contain at least 2 characters."
+      />
+    );
+  }
+
+  if (!lastName) {
     errors['lastName'] = (
       <FormattedMessage
         id="app.editUserProfile.validation.emptyLastName"
         defaultMessage="Last name cannot be empty."
+      />
+    );
+  }
+
+  if (lastName && lastName.length < 2) {
+    errors['lastName'] = (
+      <FormattedMessage
+        id="app.editUserProfile.validation.shortLastName"
+        defaultMessage="Last name must contain at least 2 characters."
       />
     );
   }
@@ -297,18 +316,9 @@ const asyncValidate = ({ email, newPassword = '' }, dispatch) =>
           );
         }
 
-        if (newPassword.lenght > 0 && passwordScore <= 0) {
-          // changing new password is optional
-          errors['newPassword'] = (
-            <FormattedMessage
-              id="app.editUserProfile.validation.passwordTooWeak"
-              defaultMessage="The password you chose is too weak, please choose a different one."
-            />
-          );
-          dispatch(
-            change('edit-user-profile', 'passwordStrength', passwordScore)
-          );
-        }
+        dispatch(
+          change('edit-user-profile', 'passwordStrength', passwordScore)
+        );
 
         if (Object.keys(errors).length > 0) {
           throw errors;

@@ -25,13 +25,14 @@ export const createAccount = (
   lastName,
   email,
   password,
+  passwordConfirm,
   instanceId
 ) =>
   createApiAction({
     type: actionTypes.CREATE_ACCOUNT,
     method: 'POST',
     endpoint: '/users',
-    body: { firstName, lastName, email, password, instanceId }
+    body: { firstName, lastName, email, password, passwordConfirm, instanceId }
   });
 
 export const createExternalAccount = (
