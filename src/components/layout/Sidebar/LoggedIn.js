@@ -13,7 +13,7 @@ const LoggedIn = ({
   instances,
   isCollapsed,
   currentUrl,
-  links: { DASHBOARD_URI, INSTANCE_URI_FACTORY, BUGS_URL }
+  links: { DASHBOARD_URI, INSTANCE_URI_FACTORY, BUGS_URL, FAQ_URL }
 }) =>
   <ul className="sidebar-menu">
     <MenuTitle
@@ -58,6 +58,14 @@ const LoggedIn = ({
       }
       icon="bug"
       link={BUGS_URL}
+      currentPath={currentUrl}
+    />
+    <MenuItem
+      title={
+        <FormattedMessage id="app.sidebar.menu.faq" defaultMessage="FAQ" />
+      }
+      icon="blind"
+      link={FAQ_URL}
       currentPath={currentUrl}
     />
   </ul>;

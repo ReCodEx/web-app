@@ -34,6 +34,7 @@ import ReferenceSolution from './ReferenceSolution';
 import Pipelines from './Pipelines';
 import EditPipeline from './EditPipeline';
 import Pipeline from './Pipeline';
+import FAQ from './FAQ';
 
 import ChangePassword from './ChangePassword';
 import ResetPassword from './ResetPassword';
@@ -73,6 +74,7 @@ const createRoutes = getState => {
           onEnter={onlyUnauth}
         />
         <Route path="bugs-and-feedback" component={FeedbackAndBugs} />
+        <Route path="faq" component={FAQ} />
         <Route path="email-verification" component={EmailVerification} />
         <Route path="app" onEnter={requireAuth}>
           <IndexRoute component={Dashboard} />

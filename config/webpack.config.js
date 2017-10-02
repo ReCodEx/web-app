@@ -55,7 +55,12 @@ module.exports = {
       'process.env': {
         NODE_ENV: "'" + process.env.NODE_ENV + "'",
         API_BASE: "'" + process.env.API_BASE + "'",
-        TITLE: "'" + process.env.TITLE + "'"
+        TITLE: "'" + process.env.TITLE + "'",
+        ALLOW_NORMAL_REGISTRATION:
+          "'" + process.env.ALLOW_NORMAL_REGISTRATION + "'",
+        ALLOW_LDAP_REGISTRATION:
+          "'" + process.env.ALLOW_LDAP_REGISTRATION + "'",
+        ALLOW_CAS_REGISTRATION: "'" + process.env.ALLOW_CAS_REGISTRATION + "'"
       }
     })
   ]
