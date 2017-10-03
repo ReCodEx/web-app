@@ -6,12 +6,14 @@ import { Table } from 'react-bootstrap';
 
 import Box from '../../widgets/Box';
 import UsersNameContainer from '../../../containers/UsersNameContainer';
+import ExercisesNameContainer from '../../../containers/ExercisesNameContainer';
 
 const ReferenceSolutionDetail = ({
   description,
   uploadedAt,
-  solution: { userId }
-}) => (
+  solution: { userId },
+  exerciseId
+}) =>
   <Box
     title={
       <FormattedMessage
@@ -27,6 +29,20 @@ const ReferenceSolutionDetail = ({
       <tbody>
         <tr>
           <td className="text-center">
+            <Icon name="code" />
+          </td>
+          <th>
+            <FormattedMessage
+              id="app.referenceSolutionDetail.exercise"
+              defaultMessage="Exercise"
+            />
+          </th>
+          <td>
+            {exerciseId && <ExercisesNameContainer exerciseId={exerciseId} />}
+          </td>
+        </tr>
+        <tr>
+          <td className="text-center">
             <Icon name="pencil" />
           </td>
           <th>
@@ -35,7 +51,9 @@ const ReferenceSolutionDetail = ({
               defaultMessage="Description"
             />
           </th>
-          <td>{description}</td>
+          <td>
+            {description}
+          </td>
         </tr>
         <tr>
           <td className="text-center">
@@ -69,15 +87,15 @@ const ReferenceSolutionDetail = ({
         </tr>
       </tbody>
     </Table>
-  </Box>
-);
+  </Box>;
 
 ReferenceSolutionDetail.propTypes = {
   description: PropTypes.string.isRequired,
   uploadedAt: PropTypes.number.isRequired,
   solution: PropTypes.shape({
     userId: PropTypes.string.isRequired
-  }).isRequired
+  }).isRequired,
+  exerciseId: PropTypes.string.isRequired
 };
 
 export default ReferenceSolutionDetail;

@@ -46,9 +46,16 @@ const EvaluationTable = ({
                   &nbsp;
                   <FormattedTime value={e.evaluation.evaluatedAt * 1000} />
                 </td>
-              : <td />}
+              : <td>
+                  <i>
+                    <FormattedMessage
+                      id="app.evaluationTable.notAvailable"
+                      defaultMessage="Evaluation not available"
+                    />
+                  </i>
+                </td>}
             <td className="text-right">
-              {renderButtons(e.id)}
+              {renderButtons(e)}
             </td>
           </tr>
         )}
