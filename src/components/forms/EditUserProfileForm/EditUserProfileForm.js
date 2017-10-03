@@ -129,6 +129,7 @@ const EditUserProfileForm = ({
       name="email"
       tabIndex={6}
       component={TextField}
+      autoComplete="off"
       label={
         <FormattedMessage
           id="app.changePasswordForm.email"
@@ -154,6 +155,7 @@ const EditUserProfileForm = ({
       name="password"
       tabIndex={6}
       component={PasswordField}
+      autoComplete="off"
       label={
         <FormattedMessage
           id="app.changePasswordForm.oldPassword"
@@ -166,6 +168,7 @@ const EditUserProfileForm = ({
       <Field
         name="newPassword"
         component={PasswordField}
+        autoComplete="off"
         tabIndex={7}
         onKeyDown={() => asyncValidate()}
         label={
