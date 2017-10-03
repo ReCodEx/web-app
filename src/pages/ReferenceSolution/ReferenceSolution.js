@@ -173,12 +173,13 @@ class ReferenceSolution extends Component {
                             referenceSolutionId={referenceSolutionId}
                             environment={env}
                             evaluations={environments[env]}
-                            renderButtons={evaluationId =>
+                            renderButtons={evaluation =>
+                              evaluation.evaluation &&
                               <Button
                                 bsSize="xs"
                                 className="btn-flat"
                                 onClick={() =>
-                                  downloadEvaluationArchive(evaluationId)}
+                                  downloadEvaluationArchive(evaluation.id)}
                               >
                                 <DownloadIcon />{' '}
                                 <FormattedMessage
