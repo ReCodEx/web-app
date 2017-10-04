@@ -24,7 +24,8 @@ import { isReady, getJsData } from '../../redux/helpers/resourceManager';
 import {
   createGroup,
   fetchGroupIfNeeded,
-  fetchInstanceGroupsIfNeeded
+  fetchInstanceGroupsIfNeeded,
+  fetchSubgroups
 } from '../../redux/modules/groups';
 import { fetchGroupsStatsIfNeeded } from '../../redux/modules/stats';
 import { fetchSupervisors, fetchStudents } from '../../redux/modules/users';
@@ -87,7 +88,8 @@ class Group extends Component {
               ])
             : Promise.resolve()
         ])
-      )
+      ),
+      dispatch(fetchSubgroups(groupId))
     ]);
 
   componentWillMount() {

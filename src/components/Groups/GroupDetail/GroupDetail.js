@@ -7,6 +7,7 @@ import ReactMarkdown from 'react-markdown';
 import Box from '../../widgets/Box';
 import SupervisorsList from '../../Users/SupervisorsList';
 import { MaybeSucceededIcon } from '../../icons';
+import GroupTree from '../GroupTree';
 
 const GroupDetail = ({
   group: {
@@ -23,57 +24,92 @@ const GroupDetail = ({
   groups,
   supervisors,
   isAdmin
-}) => (
+}) =>
   <div>
     <Row>
       <Col lg={6} sm={12}>
-        <Box
-          title={
-            <FormattedMessage
-              id="app.groupDetail.description"
-              defaultMessage="Group description"
-            />
-          }
-          description={<ReactMarkdown source={description} />}
-          type="primary"
-          collapsable
-          noPadding
-          unlimitedHeight
-        >
-          <Table>
-            <tbody>
-              {externalId &&
-                <tr>
-                  <th>
-                    <FormattedMessage
-                      id="app.groupDetail.externalId"
-                      defaultMessage="External identification of the group:"
-                    />
-                  </th>
-                  <td><code>{externalId}</code></td>
-                </tr>}
-              <tr>
-                <th>
+        <Row>
+          <Col sm={12}>
+            <Box
+              title={
+                <FormattedMessage
+                  id="app.groupDetail.description"
+                  defaultMessage="Group description"
+                />
+              }
+              description={<ReactMarkdown source={description} />}
+              type="primary"
+              collapsable
+              noPadding
+              unlimitedHeight
+            >
+              <Table>
+                <tbody>
+                  {externalId &&
+                    <tr>
+                      <th>
+                        <FormattedMessage
+                          id="app.groupDetail.externalId"
+                          defaultMessage="External identification of the group:"
+                        />
+                      </th>
+                      <td>
+                        <code>
+                          {externalId}
+                        </code>
+                      </td>
+                    </tr>}
+                  <tr>
+                    <th>
+                      <FormattedMessage
+                        id="app.groupDetail.isPublic"
+                        defaultMessage="Students can join this group themselves:"
+                      />
+                    </th>
+                    <td>
+                      <MaybeSucceededIcon success={isPublic} />
+                    </td>
+                  </tr>
+                  {threshold !== null &&
+                    <tr>
+                      <th>
+                        <FormattedMessage
+                          id="app.groupDetail.threshold"
+                          defaultMessage="Minimum percent of the total points count needed to complete the course:"
+                        />
+                      </th>
+                      <td>
+                        <FormattedNumber value={threshold} style="percent" />
+                      </td>
+                    </tr>}
+                </tbody>
+              </Table>
+            </Box>
+          </Col>
+        </Row>
+        {childGroups.all.length > 0 &&
+          <Row>
+            <Col sm={12}>
+              <Box
+                title={
                   <FormattedMessage
-                    id="app.groupDetail.isPublic"
-                    defaultMessage="Students can join this group themselves:"
+                    id="app.groupDetail.subgroups"
+                    defaultMessage="Subgroups hierarchy"
                   />
-                </th>
-                <td><MaybeSucceededIcon success={isPublic} /></td>
-              </tr>
-              {threshold !== null &&
-                <tr>
-                  <th>
-                    <FormattedMessage
-                      id="app.groupDetail.threshold"
-                      defaultMessage="Minimum percent of the total points count needed to complete the course:"
-                    />
-                  </th>
-                  <td><FormattedNumber value={threshold} style="percent" /></td>
-                </tr>}
-            </tbody>
-          </Table>
-        </Box>
+                }
+                unlimitedHeight
+              >
+                <GroupTree
+                  id={id}
+                  deletable={false}
+                  isAdmin={isAdmin}
+                  isOpen
+                  groups={groups}
+                  level={1}
+                />
+              </Box>
+            </Col>
+          </Row>}
       </Col>
       <Col lg={6} sm={12}>
         <Box
@@ -97,8 +133,7 @@ const GroupDetail = ({
         </Box>
       </Col>
     </Row>
-  </div>
-);
+  </div>;
 
 GroupDetail.propTypes = {
   group: PropTypes.shape({
