@@ -24,7 +24,8 @@ import { isReady, getJsData } from '../../redux/helpers/resourceManager';
 import {
   createGroup,
   fetchGroupIfNeeded,
-  fetchInstanceGroupsIfNeeded
+  fetchInstanceGroupsIfNeeded,
+  fetchSubgroups
 } from '../../redux/modules/groups';
 import { fetchGroupsStatsIfNeeded } from '../../redux/modules/stats';
 import { fetchSupervisors, fetchStudents } from '../../redux/modules/users';
@@ -87,7 +88,8 @@ class Group extends Component {
               ])
             : Promise.resolve()
         ])
-      )
+      ),
+      dispatch(fetchSubgroups(groupId))
     ]);
 
   componentWillMount() {
@@ -172,6 +174,7 @@ class Group extends Component {
       statuses,
       isStudent,
       isAdmin,
+      isSuperAdmin,
       isSupervisor,
       addSubgroup,
       links: { GROUP_EDIT_URI_FACTORY }
@@ -204,7 +207,7 @@ class Group extends Component {
               {' '}&gt; <GroupsNameContainer groupId={data.id} />
             </span>
             {data.parentGroupsIds.length > 1 && <p />}
-            {isAdmin &&
+            {(isAdmin || isSuperAdmin) &&
               <p>
                 <LinkContainer to={GROUP_EDIT_URI_FACTORY(data.id)}>
                   <Button bsStyle="warning">
@@ -217,19 +220,19 @@ class Group extends Component {
                 </LinkContainer>
               </p>}
 
-            {(isStudent || isSupervisor || isAdmin) &&
+            {(isStudent || isSupervisor || isAdmin || isSuperAdmin) &&
               <StudentsView
                 group={data}
                 stats={stats}
                 statuses={statuses}
                 assignments={publicAssignments}
-                isAdmin={isAdmin}
+                isAdmin={isAdmin || isSuperAdmin}
               />}
 
             <GroupDetail
               group={data}
               supervisors={supervisors}
-              isAdmin={isAdmin}
+              isAdmin={isAdmin || isSuperAdmin}
               groups={groups}
             />
 
@@ -243,14 +246,14 @@ class Group extends Component {
                 />
               </p>}
 
-            {isAdmin &&
+            {(isAdmin || isSuperAdmin) &&
               <AdminsView
                 group={data}
                 supervisors={supervisors}
                 addSubgroup={addSubgroup(data.instanceId)}
               />}
 
-            {(isAdmin || isSupervisor) &&
+            {(isAdmin || isSuperAdmin || isSupervisor) &&
               <SupervisorsView
                 group={data}
                 statuses={statuses}
