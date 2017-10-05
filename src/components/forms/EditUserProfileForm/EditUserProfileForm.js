@@ -266,15 +266,6 @@ const validate = (
 
   if (allowChangePassword) {
     if (oldPassword || password || passwordConfirm) {
-      if (!oldPassword || oldPassword.length === 0) {
-        errors['oldPassword'] = (
-          <FormattedMessage
-            id="app.editUserProfile.validation.emptyOldPassword"
-            defaultMessage="Old password cannot be empty if you want to change your password."
-          />
-        );
-      }
-
       if (!password || password.length === 0) {
         errors['password'] = (
           <FormattedMessage
@@ -293,7 +284,13 @@ const validate = (
         );
       }
 
-      if (password && password.length > 0 && password === oldPassword) {
+      if (
+        password &&
+        password.length > 0 &&
+        oldPassword &&
+        oldPassword.length > 0 &&
+        password === oldPassword
+      ) {
         errors['password'] = (
           <FormattedMessage
             id="app.editUserProfile.validation.samePasswords"
