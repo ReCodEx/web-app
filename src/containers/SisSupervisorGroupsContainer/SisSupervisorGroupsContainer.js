@@ -55,6 +55,7 @@ class SisSupervisorGroupsContainer extends Component {
     const {
       sisStatus,
       sisCourses,
+      groups,
       currentUserId,
       createGroup,
       bindGroup,
@@ -231,11 +232,7 @@ class SisSupervisorGroupsContainer extends Component {
                                                 term.year,
                                                 term.term
                                               )}
-                                            groups={
-                                              sisPossibleParents(
-                                                course.course.code
-                                              ).toJS().data
-                                            }
+                                            groups={groups}
                                           />
                                         </Col>
                                       </Row>
