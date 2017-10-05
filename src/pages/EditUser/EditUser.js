@@ -68,7 +68,7 @@ class EditUser extends Component {
               <EditUserProfileForm
                 onSubmit={updateProfile}
                 initialValues={data}
-                allowChangePassword={!user.isExternal}
+                allowChangePassword={!data.isExternal}
               />
             </Col>
             <Col lg={6}>
