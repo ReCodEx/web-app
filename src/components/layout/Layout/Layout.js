@@ -48,6 +48,7 @@ export const Layout = ({
     />
     <div onClick={onCloseSidebar}>
       {children}
+      {/* global gitRevision */}
       <Footer version={gitRevision.VERSION} />
     </div>
   </div>;
