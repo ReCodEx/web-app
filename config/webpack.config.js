@@ -1,6 +1,7 @@
 const path = require('path');
 const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const GitRevisionPlugin = require('git-revision-webpack-plugin');
 
 // load variables from .env
 require('dotenv').config();
@@ -13,6 +14,9 @@ try {
 }
 
 const extractCss = new ExtractTextPlugin('style.css');
+const gitRevisionPlugin = new GitRevisionPlugin({
+  versionCommand: 'describe --always --tags'
+});
 
 module.exports = {
   devtool: process.env.NODE_ENV === 'development' ? 'source-map' : 'none',
@@ -61,6 +65,11 @@ module.exports = {
         ALLOW_LDAP_REGISTRATION:
           "'" + process.env.ALLOW_LDAP_REGISTRATION + "'",
         ALLOW_CAS_REGISTRATION: "'" + process.env.ALLOW_CAS_REGISTRATION + "'"
+      },
+      gitRevision: {
+        VERSION: JSON.stringify(gitRevisionPlugin.version()),
+        COMMITHASH: JSON.stringify(gitRevisionPlugin.commithash()),
+        BRANCH: JSON.stringify(gitRevisionPlugin.branch())
       }
     })
   ]
