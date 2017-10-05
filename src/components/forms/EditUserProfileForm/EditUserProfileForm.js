@@ -304,9 +304,9 @@ const validate = (
   return errors;
 };
 
-const asyncValidate = ({ email, newPassword = '' }, dispatch) =>
+const asyncValidate = ({ email, password = '' }, dispatch) =>
   new Promise((resolve, reject) =>
-    dispatch(validateRegistrationData(email, newPassword))
+    dispatch(validateRegistrationData(email, password))
       .then(res => res.value)
       .then(({ usernameIsFree, passwordScore }) => {
         var errors = {};
@@ -335,5 +335,5 @@ export default reduxForm({
   form: 'edit-user-profile',
   validate,
   asyncValidate,
-  asyncBlurFields: ['email', 'newPassword']
+  asyncBlurFields: ['email', 'password', 'passwordConfirm']
 })(EditUserProfileForm);
