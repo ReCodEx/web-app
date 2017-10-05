@@ -12,3 +12,5 @@ build
 npm-debug.log
 .env
 .vscode
+prod/
+

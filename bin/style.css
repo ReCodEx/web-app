@@ -411,6 +411,7 @@ td.rdtYear:hover {
 ._3UMjyramP1cG1fzxhz5WjU {
   padding: 20px 0;
   width: 100%;
+  text-align: center;
 }
 ._3UMjyramP1cG1fzxhz5WjU svg {
   max-width: 100%;
@@ -432,11 +433,6 @@ td.rdtYear:hover {
   transition: all 0.15s ease-in-out;
 }
 
-.pipeline svg .cluster[id^="B-"]:hover {
-  transform-origin: center center;
-  transform: scale(1.05);
-}
-
 .pipeline svg .cluster[id^="B-"]:hover > polygon {
   fill: #fffdf8;
 }
@@ -446,10 +442,30 @@ td.rdtYear:hover {
 .pipeline svg .node {
   pointer-events: none;
 }
+.header {
+  font-size: 14px;
+}
+
+.leftText {
+  margin-left: 20px;
+}
+
+.leftIcon {
+  margin-left: -20px;
+  position: absolute;
+  line-height: 20px;
+}
 ._1RmNTL6YAcBc6z2Q4iOvrg {
-  padding: 2px;
-  margin: 3px;
-  background-color: lightgrey;
+  margin: 2px;
+}
+._1-UuPamjbL7ePbgN5ccznP {
+  padding: 20px;
+  margin: 10px;
+  background: #fafafa;
+}
+._1II5KbDwXilXrX2Mid9NaN {
+  padding: 20px;
+  margin: 10px;
 }
 ._5m3qnTdfk9gyUcSGujT4i {
   max-height: 500;
@@ -472,4 +488,8 @@ td.rdtYear:hover {
   content: "";
   display: block;
   margin: -1.5em 0 100%;
+}
+.formSpace {
+  padding-left: 10px;
+  display: flex;
 }
