@@ -15,6 +15,7 @@ const Sidebar = ({
   studentOf,
   supervisorOf,
   isAdmin,
+  isSupervisor,
   small = false,
   ...props
 }) => (
@@ -24,11 +25,11 @@ const Sidebar = ({
       {isLoggedIn && <LoggedIn {...props} />}
 
       {studentOf &&
-        studentOf.size > 0 &&
-        <Student {...props} studentOf={studentOf} />}
+        studentOf.size > 0 && <Student {...props} studentOf={studentOf} />}
 
-      {(isAdmin || (supervisorOf && supervisorOf.size > 0)) &&
-        <Supervisor {...props} supervisorOf={supervisorOf} />}
+      {(isAdmin || isSupervisor) && (
+        <Supervisor {...props} supervisorOf={supervisorOf} />
+      )}
 
       {isAdmin && <Admin {...props} />}
 
@@ -42,6 +43,7 @@ Sidebar.propTypes = {
   studentOf: ImmutablePropTypes.map,
   supervisorOf: ImmutablePropTypes.map,
   isAdmin: PropTypes.bool,
+  isSupervisor: PropTypes.bool,
   small: PropTypes.bool
 };
 
