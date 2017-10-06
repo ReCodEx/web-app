@@ -19,11 +19,9 @@ import {
   instanceSelector,
   isAdminOfInstance
 } from '../../redux/selectors/instances';
-import {
-  createGroup,
-  fetchInstanceGroupsIfNeeded
-} from '../../redux/modules/groups';
-import { groupsSelectors } from '../../redux/selectors/groups';
+import { createGroup } from '../../redux/modules/groups';
+import { fetchInstancePublicGroups } from '../../redux/modules/publicGroups';
+import { publicGroupsSelectors } from '../../redux/selectors/publicGroups';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import { isSuperAdmin } from '../../redux/selectors/users';
 
@@ -33,7 +31,7 @@ class Instance extends Component {
   static loadAsync = ({ instanceId }, dispatch) =>
     Promise.all([
       dispatch(fetchInstanceIfNeeded(instanceId)),
-      dispatch(fetchInstanceGroupsIfNeeded(instanceId))
+      dispatch(fetchInstancePublicGroups(instanceId))
     ]);
 
   componentWillMount() {
@@ -74,7 +72,7 @@ class Instance extends Component {
           }
         ]}
       >
-        {data => (
+        {data =>
           <div>
             {isSuperAdmin &&
               <Row>
@@ -84,8 +82,7 @@ class Instance extends Component {
                       to={ADMIN_EDIT_INSTANCE_URI_FACTORY(instanceId)}
                     >
                       <Button bsStyle="warning">
-                        <EditIcon />
-                        {' '}
+                        <EditIcon />{' '}
                         <FormattedMessage
                           id="app.instance.edit"
                           defaultMessage="Edit instance"
@@ -120,8 +117,7 @@ class Instance extends Component {
                     <AddLicenceFormContainer instanceId={data.id} />}
                 </Col>
               </Row>}
-          </div>
-        )}
+          </div>}
       </Page>
     );
   }
@@ -146,7 +142,7 @@ export default withLinks(
       const userId = loggedInUserIdSelector(state);
       return {
         instance: instanceSelector(state, instanceId),
-        groups: groupsSelectors(state),
+        groups: publicGroupsSelectors(state),
         isAdmin: isAdminOfInstance(userId, instanceId)(state),
         isSuperAdmin: isSuperAdmin(userId)(state)
       };

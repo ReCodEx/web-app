@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 
-import { fetchGroupIfNeeded } from '../../redux/modules/groups';
-import { groupSelector } from '../../redux/selectors/groups';
+import { fetchPublicGroupIfNeeded } from '../../redux/modules/publicGroups';
+import { publicGroupSelector } from '../../redux/selectors/publicGroups';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import GroupsName, {
   LoadingGroupsName
@@ -29,7 +29,7 @@ class GroupsNameContainer extends Component {
     const { group, noLink } = this.props;
     return (
       <ResourceRenderer resource={group} loading={<LoadingGroupsName />}>
-        {group => <GroupsName {...group} noLink={noLink} />}
+        {group => <GroupsName {...group} noLink={noLink || !group.canView} />}
       </ResourceRenderer>
     );
   }
@@ -43,9 +43,9 @@ GroupsNameContainer.propTypes = {
 
 export default connect(
   (state, { groupId }) => ({
-    group: groupSelector(groupId)(state)
+    group: publicGroupSelector(groupId)(state)
   }),
   (dispatch, { groupId }) => ({
-    loadGroupIfNeeded: () => dispatch(fetchGroupIfNeeded(groupId))
+    loadGroupIfNeeded: () => dispatch(fetchPublicGroupIfNeeded(groupId))
   })
 )(GroupsNameContainer);

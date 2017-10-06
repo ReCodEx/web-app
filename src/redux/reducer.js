@@ -16,6 +16,7 @@ import pipelines from './modules/pipelines';
 import files from './modules/files';
 import filesContent from './modules/filesContent';
 import groups from './modules/groups';
+import publicGroups from './modules/publicGroups';
 import groupResults from './modules/groupResults';
 import instances from './modules/instances';
 import licences from './modules/licences';
@@ -58,13 +59,13 @@ const createRecodexReducers = token => ({
   files,
   filesContent,
   groups,
+  publicGroups,
   groupResults,
   instances,
   licences,
   limits,
   simpleLimits,
   notifications,
-  publicProfiles,
   search,
   sidebar,
   stats,
@@ -72,6 +73,7 @@ const createRecodexReducers = token => ({
   submissions,
   registration,
   users,
+  publicProfiles,
   upload,
   runtimeEnvironments,
   supplementaryFiles,

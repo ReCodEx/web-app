@@ -69,7 +69,8 @@ class GroupTree extends Component {
     const {
       name,
       externalId,
-      childGroups: { all: allChildGroups, public: publicChildGroups }
+      childGroups: { all: allChildGroups, public: publicChildGroups },
+      canView
     } = getJsData(group);
 
     return (
@@ -81,7 +82,7 @@ class GroupTree extends Component {
             externalId={externalId}
             isOpen={currentGroupId === id || isOpen}
             actions={
-              currentGroupId !== id
+              currentGroupId !== id && canView
                 ? this.renderButtons(id, GROUP_URI_FACTORY(id), isAdmin)
                 : undefined
             }
