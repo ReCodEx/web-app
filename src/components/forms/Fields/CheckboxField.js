@@ -17,13 +17,21 @@ const CheckboxField = ({
   /* eslint-disable no-unneeded-ternary */
   return (
     <FormGroup
-      validationState={touched && error ? 'error' : undefined}
+      validationState={error ? (touched ? 'error' : 'warning') : undefined}
       controlId={input.name}
     >
       <Component {...props} {...input} checked={input.value ? true : false}>
         {label}
       </Component>
-      {touched && error && <HelpBlock>{error}</HelpBlock>}
+      {error &&
+        <HelpBlock>
+          {' '}{touched
+            ? error
+            : <FormattedMessage
+                defaultMessage="This field is required."
+                id="app.field.isRequired"
+              />}{' '}
+        </HelpBlock>}
     </FormGroup>
   );
 };

@@ -56,12 +56,14 @@ const SourceCodeField = (
     ...props
   },
   { userSettings: { vimMode = false, darkTheme = false } }
-) => (
+) =>
   <FormGroup
     controlId={input.name}
-    validationState={touched && error ? 'error' : undefined}
+    validationState={error ? (touched ? 'error' : 'warning') : undefined}
   >
-    <ControlLabel>{label}</ControlLabel>
+    <ControlLabel>
+      {label}
+    </ControlLabel>
     <ClientOnly>
       <AceEditor
         {...input}
@@ -74,10 +76,17 @@ const SourceCodeField = (
         editorProps={{ $blockScrolling: true }}
       />
     </ClientOnly>
-    {touched && error && <HelpBlock>{error}</HelpBlock>}
+    {error &&
+      <HelpBlock>
+        {' '}{touched
+          ? error
+          : <FormattedMessage
+              defaultMessage="This field is required."
+              id="app.field.isRequired"
+            />}{' '}
+      </HelpBlock>}
     {children}
-  </FormGroup>
-);
+  </FormGroup>;
 
 SourceCodeField.propTypes = {
   input: PropTypes.shape({

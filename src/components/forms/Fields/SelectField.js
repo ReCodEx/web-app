@@ -18,7 +18,7 @@ const SelectField = ({
 }) =>
   <FormGroup
     controlId={input.name}
-    validationState={touched && error ? 'error' : undefined}
+    validationState={error ? (touched ? 'error' : 'warning') : undefined}
   >
     <ControlLabel>
       {label}
@@ -30,10 +30,14 @@ const SelectField = ({
         </option>
       )}
     </FormControl>
-    {touched &&
-      error &&
+    {error &&
       <HelpBlock>
-        {error}
+        {touched
+          ? error
+          : <FormattedMessage
+              defaultMessage="This field is required."
+              id="app.field.isRequired"
+            />}
       </HelpBlock>}
   </FormGroup>;
 

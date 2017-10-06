@@ -14,11 +14,9 @@ import PipelineVisualEditor from '../../Pipelines/PipelineVisualEditor';
 const PipelineField = ({ input, meta: { touched, error }, label, ...props }) =>
   <FormGroup
     controlId={input.name}
-    validationState={touched && error ? 'error' : undefined}
+    validationState={error ? (touched ? 'error' : 'warning') : undefined}
   >
-    <ControlLabel>
-      {label}
-    </ControlLabel>
+    <ControlLabel>{label}</ControlLabel>
     <div className="hidden">
       <FormControl
         {...input}
@@ -28,11 +26,15 @@ const PipelineField = ({ input, meta: { touched, error }, label, ...props }) =>
         style={{ fontFamily: 'mono' }}
       />
     </div>
-    <PipelineVisualEditor source={input.value} onChange={input.onChange} />
-    {touched &&
-      error &&
+    <PipelineVisualEditor source={input.value} onChange={input.onChange} />{' '}
+    {error &&
       <HelpBlock>
-        {error}
+        {' '}{touched
+          ? error
+          : <FormattedMessage
+              defaultMessage="This field is required."
+              id="app.field.isRequired"
+            />}{' '}
       </HelpBlock>}
   </FormGroup>;
 
