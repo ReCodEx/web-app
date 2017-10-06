@@ -201,22 +201,25 @@ class SisSupervisorGroupsContainer extends Component {
                                           </div>}
                                       <Row>
                                         <Col xs={6}>
-                                          <SisCreateGroupForm
-                                            form={
-                                              'sisCreateGroup' +
+                                          <ResourceRenderer
+                                            resource={sisPossibleParents(
                                               course.course.code
-                                            }
-                                            onSubmit={data =>
-                                              createGroup(
-                                                course.course.code,
-                                                data
-                                              )}
-                                            groups={
-                                              sisPossibleParents(
-                                                course.course.code
-                                              ).toJS().data
-                                            }
-                                          />
+                                            )}
+                                          >
+                                            {possibleParents =>
+                                              <SisCreateGroupForm
+                                                form={
+                                                  'sisCreateGroup' +
+                                                  course.course.code
+                                                }
+                                                onSubmit={data =>
+                                                  createGroup(
+                                                    course.course.code,
+                                                    data
+                                                  )}
+                                                groups={possibleParents}
+                                              />}
+                                          </ResourceRenderer>
                                         </Col>
                                         <Col xs={6}>
                                           <SisBindGroupForm
