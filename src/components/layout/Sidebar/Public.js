@@ -10,7 +10,7 @@ import withLinks from '../../../hoc/withLinks';
 const Public = ({
   isLoggedIn,
   currentUrl,
-  links: { LOGIN_URI, REGISTRATION_URI, BUGS_URL }
+  links: { LOGIN_URI, REGISTRATION_URI, BUGS_URL, FAQ_URL }
 }) =>
   <ul className="sidebar-menu">
     <MenuTitle title="ReCodEx" />
@@ -46,6 +46,14 @@ const Public = ({
       }
       icon="bug"
       link={BUGS_URL}
+      currentPath={currentUrl}
+    />
+    <MenuItem
+      title={
+        <FormattedMessage id="app.sidebar.menu.faq" defaultMessage="FAQ" />
+      }
+      icon="blind"
+      link={FAQ_URL}
       currentPath={currentUrl}
     />
   </ul>;

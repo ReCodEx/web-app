@@ -1,20 +1,18 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import ImmutablePropTypes from 'react-immutable-proptypes';
-import { List } from 'immutable';
 import { Row, Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import { usersSelector } from '../../redux/selectors/users';
-import { studentsOfGroup } from '../../redux/selectors/groups';
+import { groupSelector, studentsOfGroup } from '../../redux/selectors/groups';
 import { getAssignment } from '../../redux/selectors/assignments';
 import { fetchStudents } from '../../redux/modules/users';
 import { isReady, getJsData, getId } from '../../redux/helpers/resourceManager';
-import SubmissionsTableContainer
-  from '../../containers/SubmissionsTableContainer';
+import SubmissionsTableContainer from '../../containers/SubmissionsTableContainer';
 import { fetchAssignmentIfNeeded } from '../../redux/modules/assignments';
+import { fetchGroupIfNeeded } from '../../redux/modules/groups';
 
-import PageContent from '../../components/layout/PageContent';
+import Page from '../../components/layout/Page';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 
 class AssignmentStats extends Component {
@@ -23,7 +21,10 @@ class AssignmentStats extends Component {
       dispatch(fetchAssignmentIfNeeded(assignmentId))
         .then(res => res.value)
         .then(assignment =>
-          Promise.all([dispatch(fetchStudents(assignment.groupId))])
+          Promise.all([
+            dispatch(fetchGroupIfNeeded(assignment.groupId)),
+            dispatch(fetchStudents(assignment.groupId))
+          ])
         )
     ]);
 
@@ -38,13 +39,17 @@ class AssignmentStats extends Component {
   }
 
   render() {
-    const { assignmentId, assignment, students } = this.props;
+    const { assignmentId, assignment, getStudents, getGroup } = this.props;
 
     return (
-      <PageContent
+      <Page
+        resource={assignment}
         title={
           <ResourceRenderer resource={assignment}>
-            {assignment => <span>{assignment.name}</span>}
+            {assignment =>
+              <span>
+                {assignment.name}
+              </span>}
           </ResourceRenderer>
         }
         description={
@@ -93,20 +98,26 @@ class AssignmentStats extends Component {
           }
         ]}
       >
-        <div>
-          {students.map(user => (
-            <Row key={user.id}>
-              <Col sm={12}>
-                <SubmissionsTableContainer
-                  title={user.fullName}
-                  userId={user.id}
-                  assignmentId={assignmentId}
-                />
-              </Col>
-            </Row>
-          ))}
-        </div>
-      </PageContent>
+        {assignment =>
+          <div>
+            <ResourceRenderer resource={getGroup(assignment.groupId)}>
+              {group =>
+                <div>
+                  {getStudents(group.id).map(user =>
+                    <Row key={user.id}>
+                      <Col sm={12}>
+                        <SubmissionsTableContainer
+                          title={user.fullName}
+                          userId={user.id}
+                          assignmentId={assignmentId}
+                        />
+                      </Col>
+                    </Row>
+                  )}
+                </div>}
+            </ResourceRenderer>
+          </div>}
+      </Page>
     );
   }
 }
@@ -114,25 +125,26 @@ class AssignmentStats extends Component {
 AssignmentStats.propTypes = {
   assignmentId: PropTypes.string.isRequired,
   assignment: PropTypes.object,
-  students: ImmutablePropTypes.list.isRequired,
+  getStudents: PropTypes.func.isRequired,
+  getGroup: PropTypes.func.isRequired,
   loadAsync: PropTypes.func.isRequired
 };
 
 export default connect(
   (state, { params: { assignmentId } }) => {
     const assignment = getAssignment(assignmentId)(state);
-    const studentsIds = isReady(assignment)
-      ? studentsOfGroup(getJsData(assignment).groupId)(state)
-      : List();
+    const getStudentsIds = groupId => studentsOfGroup(groupId)(state);
     const readyUsers = usersSelector(state).toList().filter(isReady);
 
     return {
       assignmentId,
       assignment,
-      students: readyUsers
-        .filter(isReady)
-        .filter(user => studentsIds.includes(getId(user)))
-        .map(getJsData)
+      getStudentsIds,
+      getStudents: groupId =>
+        readyUsers
+          .filter(user => getStudentsIds(groupId).includes(getId(user)))
+          .map(getJsData),
+      getGroup: id => groupSelector(id)(state)
     };
   },
   (dispatch, { params: { assignmentId } }) => ({

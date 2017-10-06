@@ -4,7 +4,7 @@ import { Row, Col, Image } from 'react-bootstrap';
 
 import PageContent from '../../components/layout/PageContent';
 
-const Home = () => (
+const Home = () =>
   <PageContent
     title={
       <FormattedMessage
@@ -117,9 +117,19 @@ const Home = () => (
             </Col>
           </Row>
         </Col>
+        <Col sm={6}>
+          <h2>
+            <FormattedMessage id="app.homepage.help" defaultMessage="Help" />
+          </h2>
+          <p>
+            <FormattedHTMLMessage
+              id="app.homepage.helpContent"
+              defaultMessage="If you have any issues with ReCodEx, please consult the <a href=&quot;https://github.com/ReCodEx/wiki/wiki/User-documentation&quot;>user documentation</a> first."
+            />
+          </p>
+        </Col>
       </Row>
     </div>
-  </PageContent>
-);
+  </PageContent>;
 
 export default Home;

@@ -19,7 +19,8 @@ const EditUserProfileForm = ({
   asyncValidate,
   pristine,
   asyncValidating,
-  invalid
+  invalid,
+  allowChangePassword
 }) =>
   <FormBox
     title={
@@ -129,6 +130,7 @@ const EditUserProfileForm = ({
       name="email"
       tabIndex={6}
       component={TextField}
+      autoComplete="off"
       label={
         <FormattedMessage
           id="app.changePasswordForm.email"
@@ -137,67 +139,73 @@ const EditUserProfileForm = ({
       }
     />
 
-    <h3>
-      <FormattedMessage
-        id="app.editUserProfile.passwordTitle"
-        defaultMessage="Change your password"
-      />
-    </h3>
-    <p>
-      <FormattedMessage
-        id="app.editUserProfile.passwordInstructions"
-        defaultMessage="If you don't want to change your password leave these inputs blank"
-      />
-    </p>
-
-    <Field
-      name="password"
-      tabIndex={6}
-      component={PasswordField}
-      label={
-        <FormattedMessage
-          id="app.changePasswordForm.oldPassword"
-          defaultMessage="Old password:"
-        />
-      }
-    />
-
-    <Throttle time={500} handler="onKeyDown">
-      <Field
-        name="newPassword"
-        component={PasswordField}
-        tabIndex={7}
-        onKeyDown={() => asyncValidate()}
-        label={
+    {allowChangePassword &&
+      <div>
+        <h3>
           <FormattedMessage
-            id="app.changePasswordForm.password"
-            defaultMessage="New password:"
+            id="app.editUserProfile.passwordTitle"
+            defaultMessage="Change your password"
           />
-        }
-      />
-    </Throttle>
+        </h3>
+        <p>
+          <FormattedMessage
+            id="app.editUserProfile.passwordInstructions"
+            defaultMessage="If you don't want to change your password leave these inputs blank"
+          />
+        </p>
 
-    <Field
-      name="passwordCheck"
-      tabIndex={8}
-      component={PasswordField}
-      label={
-        <FormattedMessage
-          id="app.changePasswordForm.passwordCheck"
-          defaultMessage="Repeat your password to prevent typos:"
+        <Field
+          name="oldPassword"
+          tabIndex={6}
+          component={PasswordField}
+          autoComplete="off"
+          label={
+            <FormattedMessage
+              id="app.changePasswordForm.oldPassword"
+              defaultMessage="Old password:"
+            />
+          }
         />
-      }
-    />
-    <Field
-      name="passwordStrength"
-      component={PasswordStrength}
-      label={
-        <FormattedMessage
-          id="app.changePasswordForm.passwordStrength"
-          defaultMessage="Password strength:"
+
+        <Throttle time={500} handler="onKeyDown">
+          <Field
+            name="password"
+            component={PasswordField}
+            autoComplete="off"
+            tabIndex={7}
+            onKeyDown={() => asyncValidate()}
+            label={
+              <FormattedMessage
+                id="app.changePasswordForm.password"
+                defaultMessage="New password:"
+              />
+            }
+          />
+        </Throttle>
+
+        <Field
+          name="passwordStrength"
+          component={PasswordStrength}
+          label={
+            <FormattedMessage
+              id="app.changePasswordForm.passwordStrength"
+              defaultMessage="Password strength:"
+            />
+          }
         />
-      }
-    />
+
+        <Field
+          name="passwordConfirm"
+          tabIndex={8}
+          component={PasswordField}
+          label={
+            <FormattedMessage
+              id="app.changePasswordForm.passwordCheck"
+              defaultMessage="Repeat your password to prevent typos:"
+            />
+          }
+        />
+      </div>}
   </FormBox>;
 
 EditUserProfileForm.propTypes = {
@@ -210,20 +218,17 @@ EditUserProfileForm.propTypes = {
   submitting: PropTypes.bool,
   asyncValidating: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
   invalid: PropTypes.bool,
-  pristine: PropTypes.bool
+  pristine: PropTypes.bool,
+  allowChangePassword: PropTypes.bool.isRequired
 };
 
-const validate = ({
-  firstName,
-  lastName,
-  email,
-  password,
-  newPassword,
-  passwordCheck
-}) => {
+const validate = (
+  { firstName, lastName, email, oldPassword, password, passwordConfirm },
+  { allowChangePassword }
+) => {
   const errors = {};
 
-  if (!firstName || firstName.length === 0) {
+  if (!firstName) {
     errors['firstName'] = (
       <FormattedMessage
         id="app.editUserProfile.validation.emptyFirstName"
@@ -232,7 +237,16 @@ const validate = ({
     );
   }
 
-  if (!lastName || lastName.length === 0) {
+  if (firstName && firstName.length < 2) {
+    errors['firstName'] = (
+      <FormattedMessage
+        id="app.editUserProfile.validation.shortFirstName"
+        defaultMessage="First name must contain at least 2 characters."
+      />
+    );
+  }
+
+  if (!lastName) {
     errors['lastName'] = (
       <FormattedMessage
         id="app.editUserProfile.validation.emptyLastName"
@@ -241,50 +255,58 @@ const validate = ({
     );
   }
 
-  if (password || newPassword || passwordCheck) {
-    if (!password || password.length === 0) {
-      errors['password'] = (
-        <FormattedMessage
-          id="app.editUserProfile.validation.emptyOldPassword"
-          defaultMessage="Old password cannot be empty if you want to change your password."
-        />
-      );
-    }
+  if (lastName && lastName.length < 2) {
+    errors['lastName'] = (
+      <FormattedMessage
+        id="app.editUserProfile.validation.shortLastName"
+        defaultMessage="Last name must contain at least 2 characters."
+      />
+    );
+  }
 
-    if (!newPassword || newPassword.length === 0) {
-      errors['newPassword'] = (
-        <FormattedMessage
-          id="app.editUserProfile.validation.emptyNewPassword"
-          defaultMessage="New password cannot be empty if you want to change your password."
-        />
-      );
-    }
+  if (allowChangePassword) {
+    if (oldPassword || password || passwordConfirm) {
+      if (!password || password.length === 0) {
+        errors['password'] = (
+          <FormattedMessage
+            id="app.editUserProfile.validation.emptyNewPassword"
+            defaultMessage="New password cannot be empty if you want to change your password."
+          />
+        );
+      }
 
-    if (newPassword !== passwordCheck) {
-      errors['passwordCheck'] = (
-        <FormattedMessage
-          id="app.editUserProfile.validation.passwordsDontMatch"
-          defaultMessage="Passwords don't match."
-        />
-      );
-    }
+      if (password !== passwordConfirm) {
+        errors['passwordConfirm'] = (
+          <FormattedMessage
+            id="app.editUserProfile.validation.passwordsDontMatch"
+            defaultMessage="Passwords don't match."
+          />
+        );
+      }
 
-    if (newPassword && newPassword.length > 0 && newPassword === password) {
-      errors['newPassword'] = (
-        <FormattedMessage
-          id="app.editUserProfile.validation.samePasswords"
-          defaultMessage="Changing your password to the same password does not make any sense."
-        />
-      );
+      if (
+        password &&
+        password.length > 0 &&
+        oldPassword &&
+        oldPassword.length > 0 &&
+        password === oldPassword
+      ) {
+        errors['password'] = (
+          <FormattedMessage
+            id="app.editUserProfile.validation.samePasswords"
+            defaultMessage="Changing your password to the same password does not make any sense."
+          />
+        );
+      }
     }
   }
 
   return errors;
 };
 
-const asyncValidate = ({ email, newPassword = '' }, dispatch) =>
+const asyncValidate = ({ email, password = '' }, dispatch) =>
   new Promise((resolve, reject) =>
-    dispatch(validateRegistrationData(email, newPassword))
+    dispatch(validateRegistrationData(email, password))
       .then(res => res.value)
       .then(({ usernameIsFree, passwordScore }) => {
         var errors = {};
@@ -297,18 +319,9 @@ const asyncValidate = ({ email, newPassword = '' }, dispatch) =>
           );
         }
 
-        if (newPassword.lenght > 0 && passwordScore <= 0) {
-          // changing new password is optional
-          errors['newPassword'] = (
-            <FormattedMessage
-              id="app.editUserProfile.validation.passwordTooWeak"
-              defaultMessage="The password you chose is too weak, please choose a different one."
-            />
-          );
-          dispatch(
-            change('edit-user-profile', 'passwordStrength', passwordScore)
-          );
-        }
+        dispatch(
+          change('edit-user-profile', 'passwordStrength', passwordScore)
+        );
 
         if (Object.keys(errors).length > 0) {
           throw errors;
@@ -322,5 +335,5 @@ export default reduxForm({
   form: 'edit-user-profile',
   validate,
   asyncValidate,
-  asyncBlurFields: ['email', 'newPassword']
+  asyncBlurFields: ['email', 'password', 'passwordConfirm']
 })(EditUserProfileForm);

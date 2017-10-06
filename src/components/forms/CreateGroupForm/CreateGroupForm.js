@@ -156,15 +156,6 @@ const validate = ({ name, description }) => {
     );
   }
 
-  if (!description || description.length === 0) {
-    errors['description'] = (
-      <FormattedMessage
-        id="app.createGroup.validation.emptyDescription"
-        defaultMessage="Group description cannot be empty."
-      />
-    );
-  }
-
   return errors;
 };
 

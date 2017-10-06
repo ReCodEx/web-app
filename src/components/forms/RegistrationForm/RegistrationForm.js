@@ -135,6 +135,18 @@ const RegistrationForm = ({
         />
       }
     />
+
+    <Field
+      name="passwordConfirm"
+      component={PasswordField}
+      label={
+        <FormattedMessage
+          id="app.registrationForm.passwordConfirm"
+          defaultMessage="Confirm password:"
+        />
+      }
+    />
+
     <ResourceRenderer resource={instances.toArray()}>
       {(...instances) =>
         <Field
@@ -169,7 +181,14 @@ RegistrationForm.propTypes = {
   invalid: PropTypes.bool
 };
 
-const validate = ({ firstName, lastName, email, password, instanceId }) => {
+const validate = ({
+  firstName,
+  lastName,
+  email,
+  password,
+  passwordConfirm,
+  instanceId
+}) => {
   const errors = {};
 
   if (!firstName) {
@@ -181,11 +200,29 @@ const validate = ({ firstName, lastName, email, password, instanceId }) => {
     );
   }
 
+  if (firstName && firstName.length < 2) {
+    errors['firstName'] = (
+      <FormattedMessage
+        id="app.registrationForm.validation.shortFirstName"
+        defaultMessage="First name must contain at least 2 characters."
+      />
+    );
+  }
+
   if (!lastName) {
     errors['lastName'] = (
       <FormattedMessage
         id="app.registrationForm.validation.emptyLastName"
         defaultMessage="Last name cannot be empty."
+      />
+    );
+  }
+
+  if (lastName && lastName.length < 2) {
+    errors['lastName'] = (
+      <FormattedMessage
+        id="app.registrationForm.validation.shortLastName"
+        defaultMessage="Last name must contain at least 2 characters."
       />
     );
   }
@@ -211,6 +248,24 @@ const validate = ({ firstName, lastName, email, password, instanceId }) => {
       <FormattedMessage
         id="app.registrationForm.validation.emptyPassword"
         defaultMessage="Password cannot be empty."
+      />
+    );
+  }
+
+  if (!passwordConfirm) {
+    errors['passwordConfirm'] = (
+      <FormattedMessage
+        id="app.registrationForm.validation.emptyPassword"
+        defaultMessage="Password cannot be empty."
+      />
+    );
+  }
+
+  if (password !== passwordConfirm) {
+    errors['passwordConfirm'] = (
+      <FormattedMessage
+        id="app.registrationForm.validation.passwordDontMatch"
+        defaultMessage="Passwords don't match."
       />
     );
   }
@@ -242,14 +297,6 @@ const asyncValidate = ({ email = '', password = '' }, dispatch) =>
           );
         }
 
-        if (passwordScore <= 0) {
-          errors['password'] = (
-            <FormattedMessage
-              id="app.registrationForm.validation.passwordTooWeak"
-              defaultMessage="The password you chose is too weak, please choose a different one."
-            />
-          );
-        }
         dispatch(change('registration', 'passwordStrength', passwordScore));
 
         if (Object.keys(errors).length > 0) {
@@ -264,5 +311,5 @@ export default reduxForm({
   form: 'registration',
   validate,
   asyncValidate,
-  asyncBlurFields: ['email', 'password']
+  asyncBlurFields: ['email', 'password', 'passwordConfirm']
 })(RegistrationForm);

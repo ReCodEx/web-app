@@ -19,7 +19,7 @@ import LeaveJoinGroupButtonContainer from '../LeaveJoinGroupButtonContainer';
 import withLinks from '../../hoc/withLinks';
 
 class SisIntegrationContainer extends Component {
-  componentWillMount() {
+  componentDidMount() {
     this.props.loadData(this.props.currentUserId);
   }
 

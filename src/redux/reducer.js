@@ -41,6 +41,7 @@ import hwGroups from './modules/hwGroups';
 import sisStatus from './modules/sisStatus';
 import sisSubscribedGroups from './modules/sisSubscribedGroups';
 import sisSupervisedCourses from './modules/sisSupervisedCourses';
+import sisPossibleParents from './modules/sisPossibleParents';
 
 const createRecodexReducers = token => ({
   auth: auth(token),
@@ -81,7 +82,8 @@ const createRecodexReducers = token => ({
   additionalExerciseFiles,
   sisStatus,
   sisSubscribedGroups,
-  sisSupervisedCourses
+  sisSupervisedCourses,
+  sisPossibleParents
 });
 
 const librariesReducers = {

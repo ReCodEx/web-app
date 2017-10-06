@@ -8,6 +8,8 @@ import Footer from '../../widgets/Footer';
 
 import SidebarContainer from '../../../containers/SidebarContainer';
 
+const title = process.env.TITLE || 'ReCodEx';
+
 export const Layout = ({
   toggleSize,
   toggleVisibility,
@@ -18,7 +20,7 @@ export const Layout = ({
   currentUrl,
   availableLangs,
   onCloseSidebar
-}) => (
+}) =>
   <div
     className={classNames({
       wrapper: true,
@@ -30,7 +32,7 @@ export const Layout = ({
       overflow: 'visible'
     }}
   >
-    <Helmet defaultTitle="ReCodEx" titleTemplate="%s | ReCodEx" />
+    <Helmet defaultTitle={`${title}`} titleTemplate={`%s | ${title}`} />
     <Header
       toggleSidebarSize={toggleSize}
       toggleSidebarVisibility={toggleVisibility}
@@ -46,10 +48,10 @@ export const Layout = ({
     />
     <div onClick={onCloseSidebar}>
       {children}
-      <Footer version="v1.0.0" />
+      {/* global gitRevision */}
+      <Footer version={gitRevision.VERSION} />
     </div>
-  </div>
-);
+  </div>;
 
 Layout.propTypes = {
   toggleSize: PropTypes.func,

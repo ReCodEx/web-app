@@ -14,6 +14,8 @@ import {
   sisCreateGroup,
   sisBindGroup
 } from '../../redux/modules/sisSupervisedCourses';
+import { fetchSisPossibleParentsIfNeeded } from '../../redux/modules/sisPossibleParents';
+import { sisPossibleParentsSelector } from '../../redux/selectors/sisPossibleParents';
 import { sisStateSelector } from '../../redux/selectors/sisStatus';
 import { sisSupervisedCoursesSelector } from '../../redux/selectors/sisSupervisedCourses';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
@@ -39,6 +41,12 @@ class SisSupervisorGroupsContainer extends Component {
           accessible &&
           terms.map(({ year, term }) =>
             dispatch(fetchSisSupervisedCourses(loggedInUserId, year, term))
+              .then(res => res.value)
+              .then(courses =>
+                courses.map(course =>
+                  dispatch(fetchSisPossibleParentsIfNeeded(course.course.code))
+                )
+              )
           )
       );
   };
@@ -51,6 +59,7 @@ class SisSupervisorGroupsContainer extends Component {
       currentUserId,
       createGroup,
       bindGroup,
+      sisPossibleParents,
       links: { GROUP_URI_FACTORY }
     } = this.props;
     return (
@@ -202,7 +211,11 @@ class SisSupervisorGroupsContainer extends Component {
                                                 course.course.code,
                                                 data
                                               )}
-                                            groups={groups}
+                                            groups={
+                                              sisPossibleParents(
+                                                course.course.code
+                                              ).toJS().data
+                                            }
                                           />
                                         </Col>
                                         <Col xs={6}>
@@ -253,7 +266,8 @@ SisSupervisorGroupsContainer.propTypes = {
   sisCourses: PropTypes.func.isRequired,
   createGroup: PropTypes.func.isRequired,
   bindGroup: PropTypes.func.isRequired,
-  links: PropTypes.object
+  links: PropTypes.object,
+  sisPossibleParents: PropTypes.func.isRequired
 };
 
 export default withLinks(
@@ -264,7 +278,9 @@ export default withLinks(
         sisStatus: sisStateSelector(state),
         currentUserId,
         sisCourses: (year, term) =>
-          sisSupervisedCoursesSelector(currentUserId, year, term)(state)
+          sisSupervisedCoursesSelector(currentUserId, year, term)(state),
+        sisPossibleParents: courseId =>
+          sisPossibleParentsSelector(courseId)(state)
       };
     },
     dispatch => ({

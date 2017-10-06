@@ -62,12 +62,13 @@ class EditUser extends Component {
           }
         ]}
       >
-        {data => (
+        {data =>
           <Row>
             <Col lg={6}>
               <EditUserProfileForm
                 onSubmit={updateProfile}
                 initialValues={data}
+                allowChangePassword={!data.isExternal}
               />
             </Col>
             <Col lg={6}>
@@ -76,8 +77,7 @@ class EditUser extends Component {
                 initialValues={data.settings}
               />
             </Col>
-          </Row>
-        )}
+          </Row>}
       </Page>
     );
   }

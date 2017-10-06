@@ -8,8 +8,7 @@ import { reset, startAsyncValidation } from 'redux-form';
 import { Row, Col } from 'react-bootstrap';
 import PageContent from '../../components/layout/PageContent';
 import RegistrationForm from '../../components/forms/RegistrationForm';
-import ExternalRegistrationForm
-  from '../../components/forms/ExternalRegistrationForm';
+import ExternalRegistrationForm from '../../components/forms/ExternalRegistrationForm';
 import RegistrationCASOauth from '../../components/forms/RegistrationCASOauth';
 
 import {
@@ -74,21 +73,27 @@ class Register extends Component {
         ]}
       >
         <Row>
-          <Col lg={4} md={6} mdOffset={0} sm={8} smOffset={2}>
-            <RegistrationForm instances={instances} onSubmit={createAccount} />
-          </Col>
-          <Col lg={4} md={6} mdOffset={0} sm={8} smOffset={2}>
-            <ExternalRegistrationForm
-              instances={instances}
-              onSubmit={createExternalAccount()}
-            />
-          </Col>
-          <Col lg={4} md={6} mdOffset={0} sm={8} smOffset={2}>
-            <RegistrationCASOauth
-              instances={instances}
-              onSubmit={createExternalAccount('oauth')}
-            />
-          </Col>
+          {process.env.ALLOW_NORMAL_REGISTRATION === 'true' &&
+            <Col lg={4} md={6} mdOffset={0} sm={8} smOffset={2}>
+              <RegistrationForm
+                instances={instances}
+                onSubmit={createAccount}
+              />
+            </Col>}
+          {process.env.ALLOW_LDAP_REGISTRATION === 'true' &&
+            <Col lg={4} md={6} mdOffset={0} sm={8} smOffset={2}>
+              <ExternalRegistrationForm
+                instances={instances}
+                onSubmit={createExternalAccount()}
+              />
+            </Col>}
+          {process.env.ALLOW_CAS_REGISTRATION === 'true' &&
+            <Col lg={4} md={6} mdOffset={0} sm={8} smOffset={2}>
+              <RegistrationCASOauth
+                instances={instances}
+                onSubmit={createExternalAccount('oauth')}
+              />
+            </Col>}
         </Row>
       </PageContent>
     );
@@ -115,9 +120,23 @@ export default withLinks(
     }),
     dispatch => ({
       loadAsync: () => Promise.all([dispatch(fetchInstances())]),
-      createAccount: ({ firstName, lastName, email, password, instanceId }) =>
+      createAccount: ({
+        firstName,
+        lastName,
+        email,
+        password,
+        passwordConfirm,
+        instanceId
+      }) =>
         dispatch(
-          createAccount(firstName, lastName, email, password, instanceId)
+          createAccount(
+            firstName,
+            lastName,
+            email,
+            password,
+            passwordConfirm,
+            instanceId
+          )
         ),
       createExternalAccount: (authType = 'default') => ({
         instanceId,
