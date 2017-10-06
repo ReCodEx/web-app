@@ -232,7 +232,9 @@ class SisSupervisorGroupsContainer extends Component {
                                                 term.year,
                                                 term.term
                                               )}
-                                            groups={groups}
+                                            groups={
+                                              groups !== null ? groups : []
+                                            }
                                           />
                                         </Col>
                                       </Row>
