@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import { Set } from 'immutable';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import { Row, Col } from 'react-bootstrap';
@@ -14,12 +13,11 @@ import Box from '../../components/widgets/Box';
 import { LoadingInfoBox } from '../../components/widgets/InfoBox';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import UsersNameContainer from '../../containers/UsersNameContainer';
-import AssignmentsTable
-  from '../../components/Assignments/Assignment/AssignmentsTable';
+import AssignmentsTable from '../../components/Assignments/Assignment/AssignmentsTable';
 import UsersStats from '../../components/Users/UsersStats';
 import { fetchAssignmentsForGroup } from '../../redux/modules/assignments';
 import { fetchUserIfNeeded } from '../../redux/modules/users';
-import { fetchGroupsIfNeeded } from '../../redux/modules/groups';
+import { fetchInstanceGroupsIfNeeded } from '../../redux/modules/groups';
 import {
   getUser,
   studentOfGroupsIdsSelector,
@@ -32,7 +30,8 @@ import { createGroupsStatsSelector } from '../../redux/selectors/stats';
 import {
   groupsAssignmentsSelector,
   studentOfSelector,
-  supervisorOfSelector
+  supervisorOfSelector,
+  adminOfSelector
 } from '../../redux/selectors/groups';
 import { InfoIcon } from '../../components/icons';
 import { getJsData } from '../../redux/helpers/resourceManager';
@@ -62,22 +61,12 @@ class User extends Component {
         .then(() => {
           const state = getState();
           const user = getJsData(getUser(userId)(state));
-          const currentUser = getJsData(getUser(loggedInUserId)(state));
-
-          let commonGroupsIds;
-          if (userId === loggedInUserId) {
-            commonGroupsIds = user.groups.studentOf;
-          } else {
-            commonGroupsIds = Set(user.groups.studentOf)
-              .intersect(Set(currentUser.groups.supervisorOf))
-              .toArray();
-          }
 
           return dispatch(
-            fetchGroupsIfNeeded(...commonGroupsIds)
+            fetchInstanceGroupsIfNeeded(user.instanceId)
           ).then(groups =>
             Promise.all(
-              groups.map(({ value: group }) =>
+              groups.value.map(group =>
                 Promise.all([
                   dispatch(fetchAssignmentsForGroup(group.id)),
                   dispatch(fetchGroupsStatsIfNeeded(group.id))
@@ -129,7 +118,7 @@ class User extends Component {
           }
         ]}
       >
-        {user => (
+        {user =>
           <div>
             <p>
               <UsersNameContainer userId={user.id} large noLink />
@@ -137,9 +126,9 @@ class User extends Component {
 
             {(commonGroups.length > 0 || isAdmin) &&
               <ResourceRenderer resource={commonGroups}>
-                {(...groups) => (
+                {(...groups) =>
                   <div>
-                    {groups.map(group => (
+                    {groups.map(group =>
                       <div key={group.id}>
                         <ResourceRenderer
                           loading={
@@ -151,7 +140,7 @@ class User extends Component {
                           }
                           resource={groupStatistics(group.id)}
                         >
-                          {statistics => (
+                          {statistics =>
                             <Row>
                               <Col lg={4}>
                                 <Link to={GROUP_URI_FACTORY(group.id)}>
@@ -192,14 +181,11 @@ class User extends Component {
                                   />
                                 </Box>
                               </Col>
-                            </Row>
-                          )}
+                            </Row>}
                         </ResourceRenderer>
                       </div>
-                    ))}
-
-                  </div>
-                )}
+                    )}
+                  </div>}
               </ResourceRenderer>}
 
             {commonGroups.length === 0 &&
@@ -207,8 +193,7 @@ class User extends Component {
               user.id !== loggedInUserId &&
               <div className="callout callout-warning">
                 <h4>
-                  <InfoIcon />
-                  {' '}
+                  <InfoIcon />{' '}
                   <FormattedMessage
                     id="app.user.nothingInCommon.title"
                     defaultMessage="You are not a supervisor of {name}"
@@ -229,8 +214,7 @@ class User extends Component {
                 <Col sm={12}>
                   <div className="callout callout-success">
                     <h4>
-                      <InfoIcon />
-                      {' '}
+                      <InfoIcon />{' '}
                       <FormattedMessage
                         id="app.user.welcomeTitle"
                         defaultMessage="Welcome to ReCodEx"
@@ -256,8 +240,7 @@ class User extends Component {
                   </div>
                 </Col>
               </Row>}
-          </div>
-        )}
+          </div>}
       </Page>
     );
   }
@@ -286,9 +269,11 @@ export default withLinks(
       const supervisorOf = supervisorOfSelector(loggedInUserId)(state)
         .toList()
         .toSet();
-      const commonGroups = userId === loggedInUserId
-        ? studentOf.toArray()
-        : studentOf.intersect(supervisorOf).toArray();
+      const adminOf = adminOfSelector(loggedInUserId)(state).toList().toSet();
+      const commonGroups =
+        userId === loggedInUserId
+          ? studentOf.toArray()
+          : studentOf.intersect(supervisorOf.union(adminOf)).toArray();
 
       return {
         loggedInUserId,

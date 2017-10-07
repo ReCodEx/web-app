@@ -6,7 +6,7 @@ import {
   supervisorOfGroupsIdsSelector
 } from './users';
 import { getAssignments } from './assignments';
-import { isReady, getId } from '../helpers/resourceManager';
+import { isReady, getId, getJsData } from '../helpers/resourceManager';
 
 /**
  * Select groups part of the state
@@ -29,6 +29,14 @@ export const supervisorOfSelector = userId =>
   createSelector(
     [supervisorOfGroupsIdsSelector(userId), groupsSelectors],
     filterGroups
+  );
+
+export const adminOfSelector = userId =>
+  createSelector(groupsSelectors, groups =>
+    groups
+      .filter(isReady)
+      .map(getJsData)
+      .filter(group => group.admins.indexOf(userId) >= 0)
   );
 
 const usersOfGroup = (type, groupId) =>
