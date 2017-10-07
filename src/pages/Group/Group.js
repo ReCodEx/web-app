@@ -7,6 +7,7 @@ import { LinkContainer } from 'react-router-bootstrap';
 import Button from '../../components/widgets/FlatButton';
 import { FormattedMessage } from 'react-intl';
 import { List, Map } from 'immutable';
+import { Breadcrumb } from 'react-bootstrap';
 
 import Page from '../../components/layout/Page';
 import GroupDetail, {
@@ -73,28 +74,26 @@ class Group extends Component {
 
   static loadAsync = ({ groupId }, dispatch, userId, isSuperAdmin) =>
     Promise.all([
-      dispatch(fetchGroupIfNeeded(groupId))
-        .then(res => res.value)
-        .then(group =>
-          Promise.all([
-            dispatch(fetchInstanceIfNeeded(group.instanceId)),
-            dispatch(fetchSupervisors(groupId)),
-            Group.isAdminOrSupervisorOf(group, userId) || isSuperAdmin
-              ? Promise.all([
-                  dispatch(fetchInstanceGroupsIfNeeded(group.instanceId)), // for group traversal finding group exercises
-                  dispatch(fetchInstancePublicGroups(group.instanceId)),
-                  dispatch(fetchGroupExercises(groupId))
-                ])
-              : Promise.resolve(),
-            Group.isMemberOf(group, userId) || isSuperAdmin
-              ? Promise.all([
-                  dispatch(fetchAssignmentsForGroup(groupId)),
-                  dispatch(fetchStudents(groupId)),
-                  dispatch(fetchGroupsStatsIfNeeded(groupId))
-                ])
-              : Promise.resolve()
-          ])
-        ),
+      dispatch(fetchGroupIfNeeded(groupId)).then(res => res.value).then(group =>
+        Promise.all([
+          dispatch(fetchInstanceIfNeeded(group.instanceId)),
+          dispatch(fetchSupervisors(groupId)),
+          dispatch(fetchInstancePublicGroups(group.instanceId)),
+          Group.isAdminOrSupervisorOf(group, userId) || isSuperAdmin
+            ? Promise.all([
+                dispatch(fetchInstanceGroupsIfNeeded(group.instanceId)), // for group traversal finding group exercises
+                dispatch(fetchGroupExercises(groupId))
+              ])
+            : Promise.resolve(),
+          Group.isMemberOf(group, userId) || isSuperAdmin
+            ? Promise.all([
+                dispatch(fetchAssignmentsForGroup(groupId)),
+                dispatch(fetchStudents(groupId)),
+                dispatch(fetchGroupsStatsIfNeeded(groupId))
+              ])
+            : Promise.resolve()
+        ])
+      ),
       dispatch(fetchSubgroups(groupId))
     ]);
 
@@ -203,19 +202,19 @@ class Group extends Component {
       >
         {data => (
           <div>
-            {data.parentGroupsIds.map(
-              (groupId, i) =>
-                i !== 0 && (
-                  <span key={i}>
-                    {' '}
-                    &gt; <GroupsNameContainer groupId={groupId} />
-                  </span>
-                )
-            )}
-            <span>
-              {' '}
-              &gt; <GroupsNameContainer groupId={data.id} />
-            </span>
+            <Breadcrumb bsSize="small">
+              {data.parentGroupsIds.map(
+                (groupId, i) =>
+                  i !== 0 &&
+                  <Breadcrumb.Item key={i}>
+                    <GroupsNameContainer groupId={groupId} />
+                  </Breadcrumb.Item>
+              )}
+              <Breadcrumb.Item active>
+                <GroupsNameContainer groupId={data.id} noLink />
+              </Breadcrumb.Item>
+            </Breadcrumb>
+
             {data.parentGroupsIds.length > 1 && <p />}
             {(isAdmin || isSuperAdmin) && (
               <p>
