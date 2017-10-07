@@ -110,7 +110,9 @@ export const isAdminOf = (userId, groupId) =>
     [groupSelector(groupId), isSuperAdmin(userId)],
     (group, isSuperAdmin) =>
       isSuperAdmin === true ||
-      (group && isReady(group) && group.getIn(['data', 'adminId']) === userId)
+      (group &&
+        isReady(group) &&
+        group.getIn(['data', 'admins']).indexOf(userId) >= 0)
   );
 
 export const isMemberOf = (userId, groupId) =>
