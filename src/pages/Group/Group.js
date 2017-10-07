@@ -74,28 +74,26 @@ class Group extends Component {
 
   static loadAsync = ({ groupId }, dispatch, userId, isSuperAdmin) =>
     Promise.all([
-      dispatch(fetchGroupIfNeeded(groupId))
-        .then(res => res.value)
-        .then(group =>
-          Promise.all([
-            dispatch(fetchInstanceIfNeeded(group.instanceId)),
-            dispatch(fetchSupervisors(groupId)),
-            Group.isAdminOrSupervisorOf(group, userId) || isSuperAdmin
-              ? Promise.all([
-                  dispatch(fetchInstanceGroupsIfNeeded(group.instanceId)), // for group traversal finding group exercises
-                  dispatch(fetchInstancePublicGroups(group.instanceId)),
-                  dispatch(fetchGroupExercises(groupId))
-                ])
-              : Promise.resolve(),
-            Group.isMemberOf(group, userId) || isSuperAdmin
-              ? Promise.all([
-                  dispatch(fetchAssignmentsForGroup(groupId)),
-                  dispatch(fetchStudents(groupId)),
-                  dispatch(fetchGroupsStatsIfNeeded(groupId))
-                ])
-              : Promise.resolve()
-          ])
-        ),
+      dispatch(fetchGroupIfNeeded(groupId)).then(res => res.value).then(group =>
+        Promise.all([
+          dispatch(fetchInstanceIfNeeded(group.instanceId)),
+          dispatch(fetchSupervisors(groupId)),
+          dispatch(fetchInstancePublicGroups(group.instanceId)),
+          Group.isAdminOrSupervisorOf(group, userId) || isSuperAdmin
+            ? Promise.all([
+                dispatch(fetchInstanceGroupsIfNeeded(group.instanceId)), // for group traversal finding group exercises
+                dispatch(fetchGroupExercises(groupId))
+              ])
+            : Promise.resolve(),
+          Group.isMemberOf(group, userId) || isSuperAdmin
+            ? Promise.all([
+                dispatch(fetchAssignmentsForGroup(groupId)),
+                dispatch(fetchStudents(groupId)),
+                dispatch(fetchGroupsStatsIfNeeded(groupId))
+              ])
+            : Promise.resolve()
+        ])
+      ),
       dispatch(fetchSubgroups(groupId))
     ]);
 
