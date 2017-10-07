@@ -37,6 +37,7 @@ import {
   fetchGroupExercises,
   create as createExercise
 } from '../../redux/modules/exercises';
+import { fetchInstancePublicGroups } from '../../redux/modules/publicGroups';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import {
   readyUsersDataSelector,
@@ -54,6 +55,7 @@ import {
   studentsOfGroup
 } from '../../redux/selectors/groups';
 import { groupExercisesSelector } from '../../redux/selectors/exercises';
+import { publicGroupsSelectors } from '../../redux/selectors/publicGroups';
 
 import { getStatuses } from '../../redux/selectors/stats';
 import { fetchInstanceIfNeeded } from '../../redux/modules/instances';
@@ -62,33 +64,37 @@ import { instanceSelector } from '../../redux/selectors/instances';
 import withLinks from '../../hoc/withLinks';
 
 class Group extends Component {
-  static isAdminOf = (group, userId) =>
+  static isAdminOrSupervisorOf = (group, userId) =>
     group.admins.indexOf(userId) >= 0 || group.supervisors.indexOf(userId) >= 0;
 
   static isMemberOf = (group, userId) =>
-    Group.isAdminOf(group, userId) || group.students.indexOf(userId) >= 0;
+    Group.isAdminOrSupervisorOf(group, userId) ||
+    group.students.indexOf(userId) >= 0;
 
   static loadAsync = ({ groupId }, dispatch, userId, isSuperAdmin) =>
     Promise.all([
-      dispatch(fetchGroupIfNeeded(groupId)).then(res => res.value).then(group =>
-        Promise.all([
-          dispatch(fetchInstanceIfNeeded(group.instanceId)),
-          dispatch(fetchSupervisors(groupId)),
-          Group.isAdminOf(group, userId) || isSuperAdmin
-            ? Promise.all([
-                dispatch(fetchInstanceGroupsIfNeeded(group.instanceId)), // for group traversal finding group exercises
-                dispatch(fetchGroupExercises(groupId))
-              ])
-            : Promise.resolve(),
-          Group.isMemberOf(group, userId) || isSuperAdmin
-            ? Promise.all([
-                dispatch(fetchAssignmentsForGroup(groupId)),
-                dispatch(fetchStudents(groupId)),
-                dispatch(fetchGroupsStatsIfNeeded(groupId))
-              ])
-            : Promise.resolve()
-        ])
-      ),
+      dispatch(fetchGroupIfNeeded(groupId))
+        .then(res => res.value)
+        .then(group =>
+          Promise.all([
+            dispatch(fetchInstanceIfNeeded(group.instanceId)),
+            dispatch(fetchSupervisors(groupId)),
+            Group.isAdminOrSupervisorOf(group, userId) || isSuperAdmin
+              ? Promise.all([
+                  dispatch(fetchInstanceGroupsIfNeeded(group.instanceId)), // for group traversal finding group exercises
+                  dispatch(fetchInstancePublicGroups(group.instanceId)),
+                  dispatch(fetchGroupExercises(groupId))
+                ])
+              : Promise.resolve(),
+            Group.isMemberOf(group, userId) || isSuperAdmin
+              ? Promise.all([
+                  dispatch(fetchAssignmentsForGroup(groupId)),
+                  dispatch(fetchStudents(groupId)),
+                  dispatch(fetchGroupsStatsIfNeeded(groupId))
+                ])
+              : Promise.resolve()
+          ])
+        ),
       dispatch(fetchSubgroups(groupId))
     ]);
 
@@ -165,6 +171,7 @@ class Group extends Component {
       group,
       userId,
       groups,
+      publicGroups,
       students,
       supervisors = List(),
       allAssignments = List(),
@@ -194,20 +201,23 @@ class Group extends Component {
         loading={<LoadingGroupDetail />}
         failed={<FailedGroupDetail />}
       >
-        {data =>
+        {data => (
           <div>
             {data.parentGroupsIds.map(
               (groupId, i) =>
-                i !== 0 &&
-                <span key={i}>
-                  {' '}&gt; <GroupsNameContainer groupId={groupId} />
-                </span>
+                i !== 0 && (
+                  <span key={i}>
+                    {' '}
+                    &gt; <GroupsNameContainer groupId={groupId} />
+                  </span>
+                )
             )}
             <span>
-              {' '}&gt; <GroupsNameContainer groupId={data.id} />
+              {' '}
+              &gt; <GroupsNameContainer groupId={data.id} />
             </span>
             {data.parentGroupsIds.length > 1 && <p />}
-            {(isAdmin || isSuperAdmin) &&
+            {(isAdmin || isSuperAdmin) && (
               <p>
                 <LinkContainer to={GROUP_EDIT_URI_FACTORY(data.id)}>
                   <Button bsStyle="warning">
@@ -218,42 +228,47 @@ class Group extends Component {
                     />
                   </Button>
                 </LinkContainer>
-              </p>}
+              </p>
+            )}
 
-            {(isStudent || isSupervisor || isAdmin || isSuperAdmin) &&
+            {(isStudent || isSupervisor || isAdmin || isSuperAdmin) && (
               <StudentsView
                 group={data}
                 stats={stats}
                 statuses={statuses}
                 assignments={publicAssignments}
                 isAdmin={isAdmin || isSuperAdmin}
-              />}
+              />
+            )}
 
             <GroupDetail
               group={data}
               supervisors={supervisors}
               isAdmin={isAdmin || isSuperAdmin}
               groups={groups}
+              publicGroups={publicGroups}
             />
 
             {!isAdmin &&
               !isSupervisor &&
-              data.isPublic &&
-              <p className="text-center">
-                <LeaveJoinGroupButtonContainer
-                  userId={userId}
-                  groupId={data.id}
-                />
-              </p>}
+              data.isPublic && (
+                <p className="text-center">
+                  <LeaveJoinGroupButtonContainer
+                    userId={userId}
+                    groupId={data.id}
+                  />
+                </p>
+              )}
 
-            {(isAdmin || isSuperAdmin) &&
+            {(isAdmin || isSuperAdmin) && (
               <AdminsView
                 group={data}
                 supervisors={supervisors}
                 addSubgroup={addSubgroup(data.instanceId)}
-              />}
+              />
+            )}
 
-            {(isAdmin || isSuperAdmin || isSupervisor) &&
+            {(isAdmin || isSuperAdmin || isSupervisor) && (
               <SupervisorsView
                 group={data}
                 statuses={statuses}
@@ -263,8 +278,10 @@ class Group extends Component {
                 assignExercise={id => this.assignExercise(id)}
                 users={students}
                 publicAssignments={publicAssignments}
-              />}
-          </div>}
+              />
+            )}
+          </div>
+        )}
       </Page>
     );
   }
@@ -281,6 +298,7 @@ Group.propTypes = {
   groupExercises: ImmutablePropTypes.map,
   publicAssignments: ImmutablePropTypes.list,
   groups: ImmutablePropTypes.map,
+  publicGroups: ImmutablePropTypes.map,
   isStudent: PropTypes.bool,
   isAdmin: PropTypes.bool,
   isSupervisor: PropTypes.bool,
@@ -314,6 +332,7 @@ const mapStateToProps = (state, { params: { groupId } }) => {
       ? instanceSelector(state, groupData.instanceId)
       : null,
     groups: groupsSelectors(state),
+    publicGroups: publicGroupsSelectors(state),
     publicAssignments: groupsAssignmentsSelector(groupId, 'public')(state),
     allAssignments: groupsAssignmentsSelector(groupId, 'all')(state),
     groupExercises: groupExercisesSelector(groupId)(state),
