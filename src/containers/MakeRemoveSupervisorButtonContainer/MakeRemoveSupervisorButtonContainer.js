@@ -14,7 +14,7 @@ const MakeRemoveSupervisorButtonContainer = ({
   groupId,
   makeSupervisor,
   removeSupervisor,
-  fetchUserIfNeeded,
+  fetchProfileIfNeeded,
   ...props
 }) =>
   isSupervisor
@@ -39,7 +39,7 @@ MakeRemoveSupervisorButtonContainer.propTypes = {
   isSupervisor: PropTypes.bool.isRequired,
   makeSupervisor: PropTypes.func.isRequired,
   removeSupervisor: PropTypes.func.isRequired,
-  fetchUserIfNeeded: PropTypes.func.isRequired
+  fetchProfileIfNeeded: PropTypes.func.isRequired
 };
 
 const mapStateToProps = (state, { groupId, userId }) => ({
