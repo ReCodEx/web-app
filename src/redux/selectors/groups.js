@@ -31,6 +31,22 @@ export const supervisorOfSelector = userId =>
     filterGroups
   );
 
+export const studentOfSelector2 = userId =>
+  createSelector(groupsSelectors, groups =>
+    groups
+      .filter(isReady)
+      .map(getJsData)
+      .filter(group => group.students.indexOf(userId) >= 0)
+  );
+
+export const supervisorOfSelector2 = userId =>
+  createSelector(groupsSelectors, groups =>
+    groups
+      .filter(isReady)
+      .map(getJsData)
+      .filter(group => group.supervisors.indexOf(userId) >= 0)
+  );
+
 export const adminOfSelector = userId =>
   createSelector(groupsSelectors, groups =>
     groups

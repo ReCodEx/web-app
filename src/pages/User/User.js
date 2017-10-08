@@ -7,6 +7,7 @@ import { Row, Col } from 'react-bootstrap';
 import Button from '../../components/widgets/FlatButton';
 import { Link } from 'react-router';
 import { LinkContainer } from 'react-router-bootstrap';
+import { Set } from 'immutable';
 
 import Page from '../../components/layout/Page';
 import Box from '../../components/widgets/Box';
@@ -17,6 +18,7 @@ import AssignmentsTable from '../../components/Assignments/Assignment/Assignment
 import UsersStats from '../../components/Users/UsersStats';
 import { fetchAssignmentsForGroup } from '../../redux/modules/assignments';
 import { fetchUserIfNeeded } from '../../redux/modules/users';
+import { fetchProfileIfNeeded } from '../../redux/modules/publicProfiles';
 import { fetchInstanceGroupsIfNeeded } from '../../redux/modules/groups';
 import {
   getUser,
@@ -24,13 +26,14 @@ import {
   isStudent,
   isSuperAdmin
 } from '../../redux/selectors/users';
+import { getProfile } from '../../redux/selectors/publicProfiles';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import { fetchGroupsStatsIfNeeded } from '../../redux/modules/stats';
 import { createGroupsStatsSelector } from '../../redux/selectors/stats';
 import {
   groupsAssignmentsSelector,
-  studentOfSelector,
-  supervisorOfSelector,
+  studentOfSelector2,
+  supervisorOfSelector2,
   adminOfSelector
 } from '../../redux/selectors/groups';
 import { InfoIcon } from '../../components/icons';
@@ -43,7 +46,7 @@ class User extends Component {
   componentWillReceiveProps = newProps => {
     if (
       this.props.params.userId !== newProps.params.userId ||
-      this.props.commonGroups.size > newProps.commonGroups.size
+      this.props.commonGroups.length > newProps.commonGroups.length
     ) {
       newProps.loadAsync(newProps.loggedInUserId);
     }
@@ -56,22 +59,31 @@ class User extends Component {
    */
   static loadAsync = ({ userId }, dispatch, loggedInUserId) =>
     dispatch((dispatch, getState) =>
-      dispatch(fetchUserIfNeeded(userId))
+      dispatch(fetchProfileIfNeeded(userId))
         .then(() => dispatch(fetchUserIfNeeded(loggedInUserId)))
         .then(() => {
           const state = getState();
-          const user = getJsData(getUser(userId)(state));
+          const instanceId = getJsData(getUser(loggedInUserId)(state))
+            .instanceId;
 
           return dispatch(
-            fetchInstanceGroupsIfNeeded(user.instanceId)
+            fetchInstanceGroupsIfNeeded(instanceId)
           ).then(groups =>
             Promise.all(
-              groups.value.map(group =>
-                Promise.all([
-                  dispatch(fetchAssignmentsForGroup(group.id)),
-                  dispatch(fetchGroupsStatsIfNeeded(group.id))
-                ])
-              )
+              groups.value.map(group => {
+                if (
+                  group.students.indexOf(userId) >= 0 ||
+                  group.supervisors.indexOf(loggedInUserId) >= 0 ||
+                  group.admins.indexOf(loggedInUserId) >= 0
+                ) {
+                  return Promise.all([
+                    dispatch(fetchAssignmentsForGroup(group.id)),
+                    dispatch(fetchGroupsStatsIfNeeded(group.id))
+                  ]);
+                } else {
+                  return Promise.resolve();
+                }
+              })
             )
           );
         })
@@ -125,68 +137,63 @@ class User extends Component {
             </p>
 
             {(commonGroups.length > 0 || isAdmin) &&
-              <ResourceRenderer resource={commonGroups}>
-                {(...groups) =>
-                  <div>
-                    {groups.map(group =>
-                      <div key={group.id}>
-                        <ResourceRenderer
-                          loading={
-                            <Row>
-                              <Col lg={4}>
-                                <LoadingInfoBox title={group.name} />
-                              </Col>
-                            </Row>
-                          }
-                          resource={groupStatistics(group.id)}
-                        >
-                          {statistics =>
-                            <Row>
-                              <Col lg={4}>
-                                <Link to={GROUP_URI_FACTORY(group.id)}>
-                                  <UsersStats
-                                    {...group}
-                                    stats={usersStatistics(statistics)}
-                                  />
-                                </Link>
-                              </Col>
-                              <Col lg={8}>
-                                <Box
-                                  title={group.name}
-                                  collapsable
-                                  noPadding
-                                  isOpen
-                                  footer={
-                                    <p className="text-center">
-                                      <LinkContainer
-                                        to={GROUP_URI_FACTORY(group.id)}
-                                      >
-                                        <Button bsSize="sm">
-                                          <FormattedMessage
-                                            id="app.user.groupDetail"
-                                            defaultMessage="Show group's detail"
-                                          />
-                                        </Button>
-                                      </LinkContainer>
-                                    </p>
-                                  }
-                                >
-                                  <AssignmentsTable
-                                    userId={user.id}
-                                    assignments={groupAssignments(group.id)}
-                                    showGroup={false}
-                                    statuses={
-                                      usersStatistics(statistics).statuses
-                                    }
-                                  />
-                                </Box>
-                              </Col>
-                            </Row>}
-                        </ResourceRenderer>
-                      </div>
-                    )}
-                  </div>}
-              </ResourceRenderer>}
+              <div>
+                {commonGroups.map(group =>
+                  <div key={group.id}>
+                    <ResourceRenderer
+                      loading={
+                        <Row>
+                          <Col lg={4}>
+                            <LoadingInfoBox title={group.name} />
+                          </Col>
+                        </Row>
+                      }
+                      resource={groupStatistics(group.id)}
+                    >
+                      {statistics =>
+                        <Row>
+                          <Col lg={4}>
+                            <Link to={GROUP_URI_FACTORY(group.id)}>
+                              <UsersStats
+                                {...group}
+                                stats={usersStatistics(statistics)}
+                              />
+                            </Link>
+                          </Col>
+                          <Col lg={8}>
+                            <Box
+                              title={group.name}
+                              collapsable
+                              noPadding
+                              isOpen
+                              footer={
+                                <p className="text-center">
+                                  <LinkContainer
+                                    to={GROUP_URI_FACTORY(group.id)}
+                                  >
+                                    <Button bsSize="sm">
+                                      <FormattedMessage
+                                        id="app.user.groupDetail"
+                                        defaultMessage="Show group's detail"
+                                      />
+                                    </Button>
+                                  </LinkContainer>
+                                </p>
+                              }
+                            >
+                              <AssignmentsTable
+                                userId={user.id}
+                                assignments={groupAssignments(group.id)}
+                                showGroup={false}
+                                statuses={usersStatistics(statistics).statuses}
+                              />
+                            </Box>
+                          </Col>
+                        </Row>}
+                    </ResourceRenderer>
+                  </div>
+                )}
+              </div>}
 
             {commonGroups.length === 0 &&
               !isAdmin &&
@@ -224,7 +231,7 @@ class User extends Component {
                       <FormattedMessage
                         id="app.user.newAccount"
                         defaultMessage="Your account is ready, but you are not a member of any group yet. You should see the list of all the available groups and join some of them."
-                        values={{ name: user.name }}
+                        values={{ name: user.fullName }}
                       />
                     </p>
                     <p className="text-center">
@@ -265,20 +272,39 @@ export default withLinks(
   connect(
     (state, { params: { userId } }) => {
       const loggedInUserId = loggedInUserIdSelector(state);
-      const studentOf = studentOfSelector(userId)(state).toList().toSet();
-      const supervisorOf = supervisorOfSelector(loggedInUserId)(state)
+      const studentOfArray = studentOfSelector2(userId)(state)
         .toList()
-        .toSet();
-      const adminOf = adminOfSelector(loggedInUserId)(state).toList().toSet();
+        .toArray();
+      const studentOf = new Set(
+        studentOfSelector2(userId)(state).toList().toJS().map(group => group.id)
+      );
+      const supervisorOf = new Set(
+        supervisorOfSelector2(loggedInUserId)(state)
+          .toList()
+          .toJS()
+          .map(group => group.id)
+      );
+      const adminOf = new Set(
+        adminOfSelector(loggedInUserId)(state)
+          .toList()
+          .toJS()
+          .map(group => group.id)
+      );
+
+      const otherUserGroupsIds = studentOf
+        .intersect(supervisorOf.union(adminOf))
+        .toArray();
       const commonGroups =
         userId === loggedInUserId
-          ? studentOf.toArray()
-          : studentOf.intersect(supervisorOf.union(adminOf)).toArray();
+          ? studentOfArray
+          : studentOfArray.filter(
+              group => otherUserGroupsIds.indexOf(group.id) >= 0
+            );
 
       return {
         loggedInUserId,
         student: isStudent(userId)(state),
-        user: getUser(userId)(state),
+        user: getProfile(userId)(state),
         isAdmin: isSuperAdmin(loggedInUserId)(state),
         studentOfGroupsIds: studentOfGroupsIdsSelector(userId)(state).toArray(),
         groupAssignments: groupId => groupsAssignmentsSelector(groupId)(state),
