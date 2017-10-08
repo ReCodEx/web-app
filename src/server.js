@@ -47,6 +47,17 @@ app.set('view engine', 'ejs');
 app.use(Express.static('public'));
 app.use(cookieParser());
 
+const renderWithoutSSR = (res, renderProps) => {
+  const head = Helmet.rewind();
+  res.render('index', {
+    html: '',
+    head,
+    reduxState: 'undefined',
+    bundle,
+    style: '/style.css'
+  });
+};
+
 const renderPage = (res, store, renderProps) => {
   let html = renderToString(
     <Provider store={store}>
@@ -101,10 +112,9 @@ app.get('*', (req, res) => {
           })
           .map(load => load(renderProps.params, store.dispatch, userId));
 
-        const oldStore = Object.assign({}, store);
         Promise.all(loadAsync)
           .then(() => renderPage(res, store, renderProps))
-          .catch(() => renderPage(res, oldStore, renderProps));
+          .catch(() => renderWithoutSSR(res, renderProps));
       }
     }
   );
