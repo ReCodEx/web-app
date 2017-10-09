@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import ReactMarkdown from 'react-markdown';
+import ReactMarkdown from 'react-remarkable';
 
 import PageContent from '../../components/layout/PageContent';
 import withLinks from '../../hoc/withLinks';

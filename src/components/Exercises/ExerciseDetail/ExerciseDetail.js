@@ -7,7 +7,7 @@ import {
   FormattedDate
 } from 'react-intl';
 import { Table, Label } from 'react-bootstrap';
-import ReactMarkdown from 'react-markdown';
+import ReactMarkdown from 'react-remarkable';
 import { Link } from 'react-router';
 import Box from '../../widgets/Box';
 import DifficultyIcon from '../DifficultyIcon';

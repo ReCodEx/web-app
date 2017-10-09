@@ -6,7 +6,7 @@ import {
   FormattedTime,
   FormattedDate
 } from 'react-intl';
-import ReactMarkdown from 'react-markdown';
+import ReactMarkdown from 'react-remarkable';
 import { Table } from 'react-bootstrap';
 import Box from '../../widgets/Box';
 
