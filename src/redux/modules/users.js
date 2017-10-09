@@ -71,11 +71,13 @@ const reducer = handleActions(
       state,
       { meta: { userId } }
     ) =>
-      state.updateIn(
-        ['resources', userId, 'data'],
-        userData =>
-          userData === null ? null : userData.set('isVerified', true)
-      ),
+      state.hasIn(['resources', userId])
+        ? state.updateIn(
+            ['resources', userId, 'data'],
+            userData =>
+              userData === null ? null : userData.set('isVerified', true)
+          )
+        : state,
 
     [groupsActionTypes.JOIN_GROUP_PENDING]: (
       state,
