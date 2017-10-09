@@ -272,6 +272,8 @@ export default withLinks(
   connect(
     (state, { params: { userId } }) => {
       const loggedInUserId = loggedInUserIdSelector(state);
+      const isSuperadmin = isSuperAdmin(loggedInUserId)(state);
+
       const studentOfArray = studentOfSelector2(userId)(state)
         .toList()
         .toArray();
@@ -295,7 +297,7 @@ export default withLinks(
         .intersect(supervisorOf.union(adminOf))
         .toArray();
       const commonGroups =
-        userId === loggedInUserId
+        userId === loggedInUserId || isSuperadmin
           ? studentOfArray
           : studentOfArray.filter(
               group => otherUserGroupsIds.indexOf(group.id) >= 0
@@ -305,7 +307,7 @@ export default withLinks(
         loggedInUserId,
         student: isStudent(userId)(state),
         user: getProfile(userId)(state),
-        isAdmin: isSuperAdmin(loggedInUserId)(state),
+        isAdmin: isSuperadmin,
         studentOfGroupsIds: studentOfGroupsIdsSelector(userId)(state).toArray(),
         groupAssignments: groupId => groupsAssignmentsSelector(groupId)(state),
         groupStatistics: groupId => createGroupsStatsSelector(groupId)(state),
