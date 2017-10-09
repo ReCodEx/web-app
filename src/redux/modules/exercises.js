@@ -8,7 +8,9 @@ import { actionTypes as supplementaryFilesActionTypes } from './supplementaryFil
 import { actionTypes as additionalFilesActionTypes } from './additionalExerciseFiles';
 
 const resourceName = 'exercises';
-const { actions, reduceActions } = factory({ resourceName });
+const { actions, reduceActions, actionTypes } = factory({ resourceName });
+
+export { actionTypes };
 
 /**
  * Actions

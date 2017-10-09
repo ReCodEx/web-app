@@ -18,6 +18,7 @@ import filesContent from './modules/filesContent';
 import groups from './modules/groups';
 import publicGroups from './modules/publicGroups';
 import groupResults from './modules/groupResults';
+import groupExercises from './modules/groupExercises';
 import instances from './modules/instances';
 import licences from './modules/licences';
 import limits from './modules/limits';
@@ -61,6 +62,7 @@ const createRecodexReducers = token => ({
   groups,
   publicGroups,
   groupResults,
+  groupExercises,
   instances,
   licences,
   limits,
