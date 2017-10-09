@@ -188,7 +188,12 @@ const TestResultsTable = ({ results, runtimeEnvironmentId }) =>
             {tickOrCross(memoryExceeded === false, memoryRatio)}
             {tickOrCross(timeExceeded === false, timeRatio)}
             <td className="text-center">
-              {exitCodeMapping(runtimeEnvironmentId, exitCode)}
+              {exitCode === 0 && score !== 1
+                ? <FormattedMessage
+                    id="app.exitCodes.FAILED"
+                    defaultMessage="FAILED"
+                  />
+                : exitCodeMapping(runtimeEnvironmentId, exitCode)}
             </td>
           </tr>
       )}
