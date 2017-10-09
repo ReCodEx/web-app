@@ -16,6 +16,7 @@ import withLinks from '../../../hoc/withLinks';
 import UsersNameContainer from '../../../containers/UsersNameContainer';
 import GroupsNameContainer from '../../../containers/GroupsNameContainer';
 import styles from './ExerciseDetail.less';
+import { MaybeSucceededIcon } from '../../icons';
 
 const ExerciseDetail = ({
   id,
@@ -30,8 +31,10 @@ const ExerciseDetail = ({
   forkedFrom = null,
   localizedTexts,
   runtimeEnvironments,
+  isPublic,
+  isLocked,
   links: { EXERCISE_URI_FACTORY }
-}) =>
+}) => (
   <Box title={name} noPadding>
     <Table>
       <tbody>
@@ -51,14 +54,16 @@ const ExerciseDetail = ({
             <FormattedMessage id="app.exercise.group" defaultMessage="Group:" />
           </th>
           <td>
-            {groupId
-              ? <GroupsNameContainer groupId={groupId} />
-              : <i>
-                  <FormattedMessage
-                    id="app.exercise.publicGroup"
-                    defaultMessage="Public"
-                  />
-                </i>}
+            {groupId ? (
+              <GroupsNameContainer groupId={groupId} />
+            ) : (
+              <i>
+                <FormattedMessage
+                  id="app.exercise.publicGroup"
+                  defaultMessage="Public"
+                />
+              </i>
+            )}
           </td>
         </tr>
         <tr>
@@ -118,7 +123,7 @@ const ExerciseDetail = ({
             v<FormattedNumber value={version} />
           </td>
         </tr>
-        {forkedFrom &&
+        {forkedFrom && (
           <tr>
             <th>
               <FormattedMessage
@@ -133,7 +138,8 @@ const ExerciseDetail = ({
                 )
               </Link>
             </td>
-          </tr>}
+          </tr>
+        )}
         <tr>
           <th>
             <FormattedMessage
@@ -142,16 +148,39 @@ const ExerciseDetail = ({
             />
           </th>
           <td>
-            {runtimeEnvironments.map(({ id, name }) =>
+            {runtimeEnvironments.map(({ id, name }) => (
               <Label key={id} className={styles.environment}>
                 {name}
               </Label>
-            )}
+            ))}
+          </td>
+        </tr>
+        <tr>
+          <th>
+            <FormattedMessage
+              id="app.exercise.isPublic"
+              defaultMessage="Is public:"
+            />
+          </th>
+          <td>
+            <MaybeSucceededIcon success={isPublic} />
+          </td>
+        </tr>
+        <tr>
+          <th>
+            <FormattedMessage
+              id="app.exercise.isLocked"
+              defaultMessage="Is locked:"
+            />
+          </th>
+          <td>
+            <MaybeSucceededIcon success={isLocked} />
           </td>
         </tr>
       </tbody>
     </Table>
-  </Box>;
+  </Box>
+);
 
 ExerciseDetail.propTypes = {
   id: PropTypes.string.isRequired,
@@ -166,6 +195,8 @@ ExerciseDetail.propTypes = {
   forkedFrom: PropTypes.object,
   localizedTexts: PropTypes.array.isRequired,
   runtimeEnvironments: PropTypes.array.isRequired,
+  isPublic: PropTypes.bool.isRequired,
+  isLocked: PropTypes.bool.isRequired,
   links: PropTypes.object
 };
 
