@@ -6,7 +6,6 @@ import Button from '../../widgets/FlatButton';
 import { LinkContainer } from 'react-router-bootstrap';
 import { TreeView, TreeViewItem } from '../../widgets/TreeView';
 import { isReady, getJsData } from '../../../redux/helpers/resourceManager';
-import DeleteGroupButtonContainer from '../../../containers/DeleteGroupButtonContainer';
 
 import withLinks from '../../../hoc/withLinks';
 
@@ -26,7 +25,7 @@ class GroupTree extends Component {
     </TreeView>;
 
   renderButtons = groupId => {
-    const { isAdmin, links: { GROUP_URI_FACTORY } } = this.props;
+    const { links: { GROUP_URI_FACTORY } } = this.props;
     return (
       <span>
         <LinkContainer to={GROUP_URI_FACTORY(groupId)}>
@@ -38,13 +37,6 @@ class GroupTree extends Component {
             />
           </Button>
         </LinkContainer>
-
-        {isAdmin &&
-          <DeleteGroupButtonContainer
-            id={groupId}
-            bsSize="xs"
-            className="btn-flat"
-          />}
       </span>
     );
   };
@@ -54,7 +46,6 @@ class GroupTree extends Component {
       id,
       level = 0,
       isOpen,
-      isAdmin,
       isPublic = true,
       groups,
       currentGroupId = null,
@@ -83,7 +74,7 @@ class GroupTree extends Component {
             isOpen={currentGroupId === id || isOpen}
             actions={
               currentGroupId !== id && canView
-                ? this.renderButtons(id, GROUP_URI_FACTORY(id), isAdmin)
+                ? this.renderButtons(id, GROUP_URI_FACTORY(id))
                 : undefined
             }
           >
@@ -92,7 +83,6 @@ class GroupTree extends Component {
                 {...this.props}
                 key={id}
                 id={id}
-                isAdmin={isAdmin}
                 deletable={true}
                 level={level + 1}
                 isPublic={publicChildGroups.indexOf(id) >= 0}
@@ -105,7 +95,6 @@ class GroupTree extends Component {
               {...this.props}
               key={id}
               id={id}
-              isAdmin={isAdmin}
               deletable={true}
               level={level + 1}
               isPublic={publicChildGroups.indexOf(id) >= 0}
@@ -120,7 +109,6 @@ GroupTree.propTypes = {
   id: PropTypes.string.isRequired,
   groups: PropTypes.object.isRequired,
   level: PropTypes.number,
-  isAdmin: PropTypes.bool,
   isOpen: PropTypes.bool,
   isPublic: PropTypes.bool,
   deletable: PropTypes.bool,
