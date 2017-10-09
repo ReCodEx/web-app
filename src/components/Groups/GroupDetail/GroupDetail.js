@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { FormattedMessage, FormattedNumber } from 'react-intl';
 import { Row, Col, Table } from 'react-bootstrap';
-import ReactMarkdown from 'react-markdown';
+import ReactMarkdown from 'react-remarkable';
 
 import Box from '../../widgets/Box';
 import SupervisorsList from '../../Users/SupervisorsList';

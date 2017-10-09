@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { Tabs, Tab } from 'react-bootstrap';
-import ReactMarkdown from 'react-markdown';
+import ReactMarkdown from 'react-remarkable';
 
 const LocalizedTexts = ({ locales = [] }, { lang = 'en' }) => (
   <Tabs
