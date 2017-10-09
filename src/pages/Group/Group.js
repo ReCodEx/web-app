@@ -7,7 +7,7 @@ import { LinkContainer } from 'react-router-bootstrap';
 import Button from '../../components/widgets/FlatButton';
 import { FormattedMessage } from 'react-intl';
 import { List, Map } from 'immutable';
-import { Breadcrumb } from 'react-bootstrap';
+import { Well } from 'react-bootstrap';
 
 import Page from '../../components/layout/Page';
 import GroupDetail, {
@@ -200,23 +200,22 @@ class Group extends Component {
         loading={<LoadingGroupDetail />}
         failed={<FailedGroupDetail />}
       >
-        {data => (
+        {data =>
           <div>
-            <Breadcrumb bsSize="small">
+            <Well bsSize="sm">
               {data.parentGroupsIds.map(
                 (groupId, i) =>
                   i !== 0 &&
-                  <Breadcrumb.Item key={i}>
-                    <GroupsNameContainer groupId={groupId} />
-                  </Breadcrumb.Item>
+                  <span key={i}>
+                    <GroupsNameContainer groupId={groupId} />{' '}
+                    <span style={{ margin: '0 5px', color: '#aaa' }}>/</span>
+                  </span>
               )}
-              <Breadcrumb.Item active>
-                <GroupsNameContainer groupId={data.id} noLink />
-              </Breadcrumb.Item>
-            </Breadcrumb>
+              <GroupsNameContainer groupId={data.id} noLink />
+            </Well>
 
             {data.parentGroupsIds.length > 1 && <p />}
-            {(isAdmin || isSuperAdmin) && (
+            {(isAdmin || isSuperAdmin) &&
               <p>
                 <LinkContainer to={GROUP_EDIT_URI_FACTORY(data.id)}>
                   <Button bsStyle="warning">
@@ -227,18 +226,16 @@ class Group extends Component {
                     />
                   </Button>
                 </LinkContainer>
-              </p>
-            )}
+              </p>}
 
-            {(isStudent || isSupervisor || isAdmin || isSuperAdmin) && (
+            {(isStudent || isSupervisor || isAdmin || isSuperAdmin) &&
               <StudentsView
                 group={data}
                 stats={stats}
                 statuses={statuses}
                 assignments={publicAssignments}
                 isAdmin={isAdmin || isSuperAdmin}
-              />
-            )}
+              />}
 
             <GroupDetail
               group={data}
@@ -250,24 +247,22 @@ class Group extends Component {
 
             {!isAdmin &&
               !isSupervisor &&
-              data.isPublic && (
-                <p className="text-center">
-                  <LeaveJoinGroupButtonContainer
-                    userId={userId}
-                    groupId={data.id}
-                  />
-                </p>
-              )}
+              data.isPublic &&
+              <p className="text-center">
+                <LeaveJoinGroupButtonContainer
+                  userId={userId}
+                  groupId={data.id}
+                />
+              </p>}
 
-            {(isAdmin || isSuperAdmin) && (
+            {(isAdmin || isSuperAdmin) &&
               <AdminsView
                 group={data}
                 supervisors={supervisors}
                 addSubgroup={addSubgroup(data.instanceId)}
-              />
-            )}
+              />}
 
-            {(isAdmin || isSuperAdmin || isSupervisor) && (
+            {(isAdmin || isSuperAdmin || isSupervisor) &&
               <SupervisorsView
                 group={data}
                 statuses={statuses}
@@ -277,10 +272,8 @@ class Group extends Component {
                 assignExercise={id => this.assignExercise(id)}
                 users={students}
                 publicAssignments={publicAssignments}
-              />
-            )}
-          </div>
-        )}
+              />}
+          </div>}
       </Page>
     );
   }
