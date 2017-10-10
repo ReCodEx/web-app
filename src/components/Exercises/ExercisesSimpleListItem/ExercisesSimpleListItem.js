@@ -5,18 +5,23 @@ import UsersNameContainer from '../../../containers/UsersNameContainer';
 import { Link } from 'react-router';
 
 import withLinks from '../../../hoc/withLinks';
+import { MaybeLockedExerciseIcon } from '../../icons';
 
 const ExercisesSimpleListItem = ({
   id,
   name,
   difficulty,
   authorId,
+  isLocked,
   createActions,
   links: { EXERCISE_URI_FACTORY }
 }) => (
   <tr>
     <td>
-      <strong><Link to={EXERCISE_URI_FACTORY(id)}>{name}</Link></strong>
+      <MaybeLockedExerciseIcon id={id} isLocked={isLocked} />
+      <strong>
+        <Link to={EXERCISE_URI_FACTORY(id)}>{name}</Link>
+      </strong>
     </td>
     <td>
       <UsersNameContainer userId={authorId} />
@@ -24,10 +29,9 @@ const ExercisesSimpleListItem = ({
     <td>
       <DifficultyIcon difficulty={difficulty} />
     </td>
-    {createActions &&
-      <td>
-        {createActions(id)}
-      </td>}
+    {createActions && (
+      <td className="text-right">{createActions(id, isLocked)}</td>
+    )}
   </tr>
 );
 
@@ -36,7 +40,7 @@ ExercisesSimpleListItem.propTypes = {
   authorId: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   difficulty: PropTypes.string.isRequired,
-  createdAt: PropTypes.number.isRequired,
+  isLocked: PropTypes.bool.isRequired,
   createActions: PropTypes.func,
   links: PropTypes.object
 };

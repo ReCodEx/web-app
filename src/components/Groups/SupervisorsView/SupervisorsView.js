@@ -20,6 +20,7 @@ import {
   EditIcon,
   DeleteIcon
 } from '../../../components/icons';
+import AssignExerciseButton from '../../../components/buttons/AssignExerciseButton';
 import { deleteExercise } from '../../../redux/modules/exercises';
 import Confirm from '../../../components/forms/Confirm';
 import withLinks from '../../../hoc/withLinks';
@@ -34,7 +35,7 @@ const SupervisorsView = ({
   users,
   publicAssignments,
   links: { EXERCISE_EDIT_URI_FACTORY, EXERCISE_EDIT_CONFIG_URI_FACTORY }
-}) =>
+}) => (
   <div>
     <Row>
       <Col lg={12}>
@@ -61,8 +62,9 @@ const SupervisorsView = ({
           noPadding
         >
           <ResourceRenderer resource={publicAssignments}>
-            {(...assignments) =>
-              <ResultsTableContainer users={users} assignments={assignments} />}
+            {(...assignments) => (
+              <ResultsTableContainer users={users} assignments={assignments} />
+            )}
           </ResourceRenderer>
         </Box>
       </Col>
@@ -82,6 +84,8 @@ const SupervisorsView = ({
         >
           <AdminAssignmentsTable assignments={assignments} />
         </Box>
+      </Col>
+      <Col lg={6}>
         <Box
           title={
             <FormattedMessage
@@ -93,8 +97,19 @@ const SupervisorsView = ({
         >
           <AddStudent instanceId={group.instanceId} groupId={group.id} />
         </Box>
+        <Box
+          title={
+            <FormattedMessage
+              id="app.group.spervisorsView.searchExercise"
+              defaultMessage="Find an exercise"
+            />
+          }
+          isOpen
+        >
+          <SearchExercise groupId={group.id} />
+        </Box>
       </Col>
-      <Col lg={6}>
+      <Col lg={12}>
         <Box
           title={
             <FormattedMessage
@@ -123,22 +138,15 @@ const SupervisorsView = ({
           isOpen
         >
           <ResourceRenderer resource={exercises.toArray()}>
-            {(...exercises) =>
+            {(...exercises) => (
               <ExercisesSimpleList
                 exercises={exercises}
-                createActions={exerciseId =>
+                createActions={(exerciseId, isLocked) => (
                   <div>
-                    <Button
-                      onClick={() => assignExercise(exerciseId)}
-                      bsSize="xs"
-                      className="btn-flat"
-                    >
-                      <SendIcon />{' '}
-                      <FormattedMessage
-                        id="app.exercise.assignButton"
-                        defaultMessage="Assign"
-                      />
-                    </Button>
+                    <AssignExerciseButton
+                      isLocked={isLocked}
+                      assignExercise={() => assignExercise(exerciseId)}
+                    />
                     <LinkContainer to={EXERCISE_EDIT_URI_FACTORY(exerciseId)}>
                       <Button
                         bsSize="xs"
@@ -185,24 +193,16 @@ const SupervisorsView = ({
                         />
                       </Button>
                     </Confirm>
-                  </div>}
-              />}
+                  </div>
+                )}
+              />
+            )}
           </ResourceRenderer>
-        </Box>
-        <Box
-          title={
-            <FormattedMessage
-              id="app.group.spervisorsView.searchExercise"
-              defaultMessage="Find an exercise"
-            />
-          }
-          isOpen
-        >
-          <SearchExercise groupId={group.id} />
         </Box>
       </Col>
     </Row>
-  </div>;
+  </div>
+);
 
 SupervisorsView.propTypes = {
   group: PropTypes.object,

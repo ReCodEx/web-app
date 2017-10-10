@@ -27,13 +27,7 @@ const ExercisesSimpleList = ({ exercises, createActions, ...rest }) => (
             defaultMessage="Difficulty"
           />
         </th>
-        {createActions &&
-          <th>
-            <FormattedMessage
-              id="app.exercisesSimpleList.actions"
-              defaultMessage="Actions"
-            />
-          </th>}
+        {createActions && <th />}
       </tr>
     </thead>
     <tbody>
@@ -54,7 +48,7 @@ const ExercisesSimpleList = ({ exercises, createActions, ...rest }) => (
           />
         ))}
 
-      {exercises.length === 0 &&
+      {exercises.length === 0 && (
         <tr>
           <td className="text-center" colSpan={4}>
             <FormattedMessage
@@ -62,7 +56,8 @@ const ExercisesSimpleList = ({ exercises, createActions, ...rest }) => (
               defaultMessage="There are no exercises in this list."
             />
           </td>
-        </tr>}
+        </tr>
+      )}
     </tbody>
   </Table>
 );
