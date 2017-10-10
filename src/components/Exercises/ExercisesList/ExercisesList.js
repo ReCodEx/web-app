@@ -21,8 +21,8 @@ const ExercisesList = ({ exercises = [], createActions, ...rest }) => (
         </th>
         <th>
           <FormattedMessage
-            id="app.exercisesList.group"
-            defaultMessage="Group"
+            id="app.exercisesList.groups"
+            defaultMessage="Groups"
           />
         </th>
         <th>
@@ -56,7 +56,7 @@ const ExercisesList = ({ exercises = [], createActions, ...rest }) => (
           />
         ))}
 
-      {exercises.length === 0 &&
+      {exercises.length === 0 && (
         <tr>
           <td className="text-center" colSpan={6}>
             <FormattedMessage
@@ -64,7 +64,8 @@ const ExercisesList = ({ exercises = [], createActions, ...rest }) => (
               defaultMessage="There are no exercises in this list."
             />
           </td>
-        </tr>}
+        </tr>
+      )}
     </tbody>
   </Table>
 );
