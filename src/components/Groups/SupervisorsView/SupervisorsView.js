@@ -14,12 +14,7 @@ import AdminAssignmentsTable from '../../Assignments/AdminAssignmentsTable';
 import ExercisesSimpleList from '../../../components/Exercises/ExercisesSimpleList';
 import ResultsTableContainer from '../../../containers/ResultsTableContainer';
 import Button from '../../../components/widgets/FlatButton';
-import {
-  AddIcon,
-  SendIcon,
-  EditIcon,
-  DeleteIcon
-} from '../../../components/icons';
+import { AddIcon, EditIcon, DeleteIcon } from '../../../components/icons';
 import AssignExerciseButton from '../../../components/buttons/AssignExerciseButton';
 import { deleteExercise } from '../../../redux/modules/exercises';
 import Confirm from '../../../components/forms/Confirm';
