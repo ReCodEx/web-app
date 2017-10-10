@@ -103,7 +103,7 @@ class Exercises extends Component {
           }
         ]}
       >
-        {(...exercises) =>
+        {(...exercises) => (
           <div>
             <Box
               title={
@@ -166,32 +166,36 @@ class Exercises extends Component {
                 <ExercisesList
                   exercises={this.state.visibleExercises}
                   createActions={id =>
-                    isAuthorOfExercise(id) &&
-                    <ButtonGroup>
-                      <LinkContainer to={EXERCISE_EDIT_URI_FACTORY(id)}>
-                        <Button bsSize="xs" bsStyle="warning">
-                          <EditIcon />{' '}
-                          <FormattedMessage
-                            id="app.exercises.listEdit"
-                            defaultMessage="Edit"
-                          />
-                        </Button>
-                      </LinkContainer>
-                      <LinkContainer to={EXERCISE_EDIT_CONFIG_URI_FACTORY(id)}>
-                        <Button bsSize="xs" bsStyle="warning">
-                          <EditIcon />{' '}
-                          <FormattedMessage
-                            id="app.exercises.listEditConfig"
-                            defaultMessage="Edit config"
-                          />
-                        </Button>
-                      </LinkContainer>
-                      <DeleteExerciseButtonContainer id={id} bsSize="xs" />
-                    </ButtonGroup>}
+                    isAuthorOfExercise(id) && (
+                      <ButtonGroup>
+                        <LinkContainer to={EXERCISE_EDIT_URI_FACTORY(id)}>
+                          <Button bsSize="xs" bsStyle="warning">
+                            <EditIcon />{' '}
+                            <FormattedMessage
+                              id="app.exercises.listEdit"
+                              defaultMessage="Edit"
+                            />
+                          </Button>
+                        </LinkContainer>
+                        <LinkContainer
+                          to={EXERCISE_EDIT_CONFIG_URI_FACTORY(id)}
+                        >
+                          <Button bsSize="xs" bsStyle="warning">
+                            <EditIcon />{' '}
+                            <FormattedMessage
+                              id="app.exercises.listEditConfig"
+                              defaultMessage="Edit config"
+                            />
+                          </Button>
+                        </LinkContainer>
+                        <DeleteExerciseButtonContainer id={id} bsSize="xs" />
+                      </ButtonGroup>
+                    )}
                 />
               </div>
             </Box>
-          </div>}
+          </div>
+        )}
       </Page>
     );
   }

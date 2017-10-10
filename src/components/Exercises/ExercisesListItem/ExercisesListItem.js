@@ -8,6 +8,7 @@ import GroupsNameContainer from '../../../containers/GroupsNameContainer';
 import { Link } from 'react-router';
 
 import withLinks from '../../../hoc/withLinks';
+import { MaybeLockedExerciseIcon } from '../../icons';
 
 const ExercisesListItem = ({
   id,
@@ -16,32 +17,34 @@ const ExercisesListItem = ({
   authorId,
   groupId,
   createdAt,
+  isLocked,
   createActions,
   links: { EXERCISE_URI_FACTORY }
-}) =>
+}) => (
   <tr>
     <td className="text-center">
       <Icon name="code" />
     </td>
     <td>
+      <MaybeLockedExerciseIcon id={id} isLocked={isLocked} />
       <strong>
-        <Link to={EXERCISE_URI_FACTORY(id)}>
-          {name}
-        </Link>
+        <Link to={EXERCISE_URI_FACTORY(id)}>{name}</Link>
       </strong>
     </td>
     <td>
       <UsersNameContainer userId={authorId} />
     </td>
     <td>
-      {groupId
-        ? <GroupsNameContainer groupId={groupId} />
-        : <i>
-            <FormattedMessage
-              id="app.exercisesListItem.group.public"
-              defaultMessage="Public"
-            />
-          </i>}
+      {groupId ? (
+        <GroupsNameContainer groupId={groupId} />
+      ) : (
+        <i>
+          <FormattedMessage
+            id="app.exercisesListItem.group.public"
+            defaultMessage="Public"
+          />
+        </i>
+      )}
     </td>
     <td>
       <DifficultyIcon difficulty={difficulty} />
@@ -50,11 +53,9 @@ const ExercisesListItem = ({
       <FormattedDate value={createdAt * 1000} />{' '}
       <FormattedTime value={createdAt * 1000} />
     </td>
-    {createActions &&
-      <td className="text-right">
-        {createActions(id)}
-      </td>}
-  </tr>;
+    {createActions && <td className="text-right">{createActions(id)}</td>}
+  </tr>
+);
 
 ExercisesListItem.propTypes = {
   id: PropTypes.string.isRequired,
@@ -63,6 +64,7 @@ ExercisesListItem.propTypes = {
   name: PropTypes.string.isRequired,
   difficulty: PropTypes.string.isRequired,
   createdAt: PropTypes.number.isRequired,
+  isLocked: PropTypes.bool.isRequired,
   createActions: PropTypes.func,
   links: PropTypes.object
 };

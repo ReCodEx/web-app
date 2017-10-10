@@ -19,3 +19,4 @@ export { default as SettingsIcon } from './SettingsIcon';
 export {
   default as MaybeBonusAssignmentIcon
 } from './MaybeBonusAssignmentIcon';
+export { default as MaybeLockedExerciseIcon } from './MaybeLockedExerciseIcon';

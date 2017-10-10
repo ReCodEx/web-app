@@ -31,6 +31,7 @@ import Confirm from '../../components/forms/Confirm';
 import PipelinesSimpleList from '../../components/Pipelines/PipelinesSimpleList';
 
 import ForkExerciseButtonContainer from '../../containers/ForkExerciseButtonContainer';
+import AssignExerciseButton from '../../components/buttons/AssignExerciseButton';
 
 import { isSubmitting } from '../../redux/selectors/submission';
 import { fetchExerciseIfNeeded } from '../../redux/modules/exercises';
@@ -178,12 +179,12 @@ class Exercise extends Component {
           }
         ]}
       >
-        {exercise =>
+        {exercise => (
           <div>
             <Row>
               <Col sm={12}>
                 <div>
-                  {isAuthorOfExercise(exercise.id) &&
+                  {isAuthorOfExercise(exercise.id) && (
                     <ButtonGroup>
                       <LinkContainer
                         to={EXERCISE_EDIT_URI_FACTORY(exercise.id)}
@@ -209,7 +210,8 @@ class Exercise extends Component {
                           />
                         </Button>
                       </LinkContainer>
-                    </ButtonGroup>}
+                    </ButtonGroup>
+                  )}
                   <ForkExerciseButtonContainer
                     exerciseId={exercise.id}
                     forkId={forkId}
@@ -221,8 +223,9 @@ class Exercise extends Component {
             <Row>
               <Col lg={6}>
                 <div>
-                  {exercise.localizedTexts.length > 0 &&
-                    <LocalizedTexts locales={exercise.localizedTexts} />}
+                  {exercise.localizedTexts.length > 0 && (
+                    <LocalizedTexts locales={exercise.localizedTexts} />
+                  )}
                 </div>
               </Col>
               <Col lg={6}>
@@ -247,21 +250,17 @@ class Exercise extends Component {
                     forceLoading={supervisedGroups.length === 0}
                     resource={supervisedGroups}
                   >
-                    {() =>
+                    {() => (
                       <GroupsList
                         groups={supervisedGroups}
-                        renderButtons={groupId =>
-                          <Button
-                            bsSize="xs"
-                            onClick={() => this.assignExercise(groupId)}
-                          >
-                            <SendIcon />{' '}
-                            <FormattedMessage
-                              id="app.exercise.assign"
-                              defaultMessage="Assign"
-                            />
-                          </Button>}
-                      />}
+                        renderButtons={groupId => (
+                          <AssignExerciseButton
+                            isLocked={exercise.isLocked}
+                            assignExercise={() => this.assignExercise(groupId)}
+                          />
+                        )}
+                      />
+                    )}
                   </ResourceRenderer>
                 </Box>
               </Col>
@@ -285,33 +284,36 @@ class Exercise extends Component {
                 >
                   <ResourceRenderer resource={referenceSolutions}>
                     {referenceSolutions =>
-                      referenceSolutions.length > 0
-                        ? <ReferenceSolutionsList
-                            referenceSolutions={referenceSolutions}
-                            renderButtons={evaluationId =>
-                              <Button
-                                bsSize="xs"
-                                onClick={() =>
-                                  push(
-                                    EXERCISE_REFERENCE_SOLUTION_URI_FACTORY(
-                                      exercise.id,
-                                      evaluationId
-                                    )
-                                  )}
-                              >
-                                <SendIcon />{' '}
-                                <FormattedMessage
-                                  id="app.exercise.referenceSolutionDetail"
-                                  defaultMessage="View detail"
-                                />
-                              </Button>}
+                      referenceSolutions.length > 0 ? (
+                        <ReferenceSolutionsList
+                          referenceSolutions={referenceSolutions}
+                          renderButtons={evaluationId => (
+                            <Button
+                              bsSize="xs"
+                              onClick={() =>
+                                push(
+                                  EXERCISE_REFERENCE_SOLUTION_URI_FACTORY(
+                                    exercise.id,
+                                    evaluationId
+                                  )
+                                )}
+                            >
+                              <SendIcon />{' '}
+                              <FormattedMessage
+                                id="app.exercise.referenceSolutionDetail"
+                                defaultMessage="View detail"
+                              />
+                            </Button>
+                          )}
+                        />
+                      ) : (
+                        <p className="text-center">
+                          <FormattedMessage
+                            id="app.exercise.noReferenceSolutions"
+                            defaultMessage="There are no reference solutions for this exercise yet."
                           />
-                        : <p className="text-center">
-                            <FormattedMessage
-                              id="app.exercise.noReferenceSolutions"
-                              defaultMessage="There are no reference solutions for this exercise yet."
-                            />
-                          </p>}
+                        </p>
+                      )}
                   </ResourceRenderer>
                 </Box>
               </Col>
@@ -344,10 +346,10 @@ class Exercise extends Component {
                   isOpen
                 >
                   <ResourceRenderer resource={exercisePipelines.toArray()}>
-                    {(...pipelines) =>
+                    {(...pipelines) => (
                       <PipelinesSimpleList
                         pipelines={pipelines}
-                        createActions={pipelineId =>
+                        createActions={pipelineId => (
                           <div>
                             <LinkContainer
                               to={PIPELINE_EDIT_URI_FACTORY(pipelineId)}
@@ -386,8 +388,10 @@ class Exercise extends Component {
                                 />
                               </Button>
                             </Confirm>
-                          </div>}
-                      />}
+                          </div>
+                        )}
+                      />
+                    )}
                   </ResourceRenderer>
                 </Box>
               </Col>
@@ -403,7 +407,8 @@ class Exercise extends Component {
               autodetection={false}
               useReferenceSolutionMessages={true}
             />
-          </div>}
+          </div>
+        )}
       </Page>
     );
   }
