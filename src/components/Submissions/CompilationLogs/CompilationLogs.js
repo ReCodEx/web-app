@@ -13,7 +13,7 @@ const CompilationLogs = ({ initiationOutputs }) =>
     }
     noPadding={true}
     collapsable={true}
-    isOpen={initiationOutputs !== '\n'}
+    isOpen={initiationOutputs.trim() !== ''}
   >
     <pre>
       {initiationOutputs}

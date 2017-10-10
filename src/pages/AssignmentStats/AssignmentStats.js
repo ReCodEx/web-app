@@ -103,17 +103,23 @@ class AssignmentStats extends Component {
             <ResourceRenderer resource={getGroup(assignment.groupId)}>
               {group =>
                 <div>
-                  {getStudents(group.id).map(user =>
-                    <Row key={user.id}>
-                      <Col sm={12}>
-                        <SubmissionsTableContainer
-                          title={user.fullName}
-                          userId={user.id}
-                          assignmentId={assignmentId}
-                        />
-                      </Col>
-                    </Row>
-                  )}
+                  {getStudents(group.id)
+                    .sort((a, b) => {
+                      const aName = a.name.lastName + ' ' + a.name.firstName;
+                      const bName = b.name.lastName + ' ' + b.name.firstName;
+                      return aName.localeCompare(bName);
+                    })
+                    .map(user =>
+                      <Row key={user.id}>
+                        <Col sm={12}>
+                          <SubmissionsTableContainer
+                            title={user.fullName}
+                            userId={user.id}
+                            assignmentId={assignmentId}
+                          />
+                        </Col>
+                      </Row>
+                    )}
                 </div>}
             </ResourceRenderer>
           </div>}
