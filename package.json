@@ -58,6 +58,7 @@
     "react-bootstrap": "^0.31.2",
     "react-codemirror": "^0.3.0",
     "react-collapse": "^4.0.2",
+    "react-copy-to-clipboard": "^5.0.1",
     "react-datetime": "^2.8.10",
     "react-dom": "^15.5.4",
     "react-dropzone": "^3.5.3",
