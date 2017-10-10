@@ -55,7 +55,7 @@ import {
   supervisorsOfGroup,
   studentsOfGroup
 } from '../../redux/selectors/groups';
-import { groupExercisesSelector } from '../../redux/selectors/exercises';
+import { getExercisesByIdsSelector } from '../../redux/selectors/exercises';
 import { publicGroupsSelectors } from '../../redux/selectors/publicGroups';
 
 import { getStatuses } from '../../redux/selectors/stats';
@@ -74,26 +74,28 @@ class Group extends Component {
 
   static loadAsync = ({ groupId }, dispatch, userId, isSuperAdmin) =>
     Promise.all([
-      dispatch(fetchGroupIfNeeded(groupId)).then(res => res.value).then(group =>
-        Promise.all([
-          dispatch(fetchInstanceIfNeeded(group.instanceId)),
-          dispatch(fetchSupervisors(groupId)),
-          dispatch(fetchInstancePublicGroups(group.instanceId)),
-          Group.isAdminOrSupervisorOf(group, userId) || isSuperAdmin
-            ? Promise.all([
-                dispatch(fetchInstanceGroupsIfNeeded(group.instanceId)), // for group traversal finding group exercises
-                dispatch(fetchGroupExercises(groupId))
-              ])
-            : Promise.resolve(),
-          Group.isMemberOf(group, userId) || isSuperAdmin
-            ? Promise.all([
-                dispatch(fetchAssignmentsForGroup(groupId)),
-                dispatch(fetchStudents(groupId)),
-                dispatch(fetchGroupsStatsIfNeeded(groupId))
-              ])
-            : Promise.resolve()
-        ])
-      ),
+      dispatch(fetchGroupIfNeeded(groupId))
+        .then(res => res.value)
+        .then(group =>
+          Promise.all([
+            dispatch(fetchInstanceIfNeeded(group.instanceId)),
+            dispatch(fetchSupervisors(groupId)),
+            dispatch(fetchInstancePublicGroups(group.instanceId)),
+            Group.isAdminOrSupervisorOf(group, userId) || isSuperAdmin
+              ? Promise.all([
+                  dispatch(fetchInstanceGroupsIfNeeded(group.instanceId)), // for group traversal finding group exercises
+                  dispatch(fetchGroupExercises(groupId))
+                ])
+              : Promise.resolve(),
+            Group.isMemberOf(group, userId) || isSuperAdmin
+              ? Promise.all([
+                  dispatch(fetchAssignmentsForGroup(groupId)),
+                  dispatch(fetchStudents(groupId)),
+                  dispatch(fetchGroupsStatsIfNeeded(groupId))
+                ])
+              : Promise.resolve()
+          ])
+        ),
       dispatch(fetchSubgroups(groupId))
     ]);
 
@@ -200,22 +202,23 @@ class Group extends Component {
         loading={<LoadingGroupDetail />}
         failed={<FailedGroupDetail />}
       >
-        {data =>
+        {data => (
           <div>
             <Well bsSize="sm">
               {data.parentGroupsIds.map(
                 (groupId, i) =>
-                  i !== 0 &&
-                  <span key={i}>
-                    <GroupsNameContainer groupId={groupId} />{' '}
-                    <span style={{ margin: '0 5px', color: '#aaa' }}>/</span>
-                  </span>
+                  i !== 0 && (
+                    <span key={i}>
+                      <GroupsNameContainer groupId={groupId} />{' '}
+                      <span style={{ margin: '0 5px', color: '#aaa' }}>/</span>
+                    </span>
+                  )
               )}
               <GroupsNameContainer groupId={data.id} noLink />
             </Well>
 
             {data.parentGroupsIds.length > 1 && <p />}
-            {(isAdmin || isSuperAdmin) &&
+            {(isAdmin || isSuperAdmin) && (
               <p>
                 <LinkContainer to={GROUP_EDIT_URI_FACTORY(data.id)}>
                   <Button bsStyle="warning">
@@ -226,16 +229,18 @@ class Group extends Component {
                     />
                   </Button>
                 </LinkContainer>
-              </p>}
+              </p>
+            )}
 
-            {(isStudent || isSupervisor || isAdmin || isSuperAdmin) &&
+            {(isStudent || isSupervisor || isAdmin || isSuperAdmin) && (
               <StudentsView
                 group={data}
                 stats={stats}
                 statuses={statuses}
                 assignments={publicAssignments}
                 isAdmin={isAdmin || isSuperAdmin}
-              />}
+              />
+            )}
 
             <GroupDetail
               group={data}
@@ -247,22 +252,24 @@ class Group extends Component {
 
             {!isAdmin &&
               !isSupervisor &&
-              data.isPublic &&
-              <p className="text-center">
-                <LeaveJoinGroupButtonContainer
-                  userId={userId}
-                  groupId={data.id}
-                />
-              </p>}
+              data.isPublic && (
+                <p className="text-center">
+                  <LeaveJoinGroupButtonContainer
+                    userId={userId}
+                    groupId={data.id}
+                  />
+                </p>
+              )}
 
-            {(isAdmin || isSuperAdmin) &&
+            {(isAdmin || isSuperAdmin) && (
               <AdminsView
                 group={data}
                 supervisors={supervisors}
                 addSubgroup={addSubgroup(data.instanceId)}
-              />}
+              />
+            )}
 
-            {(isAdmin || isSuperAdmin || isSupervisor) &&
+            {(isAdmin || isSuperAdmin || isSupervisor) && (
               <SupervisorsView
                 group={data}
                 statuses={statuses}
@@ -272,8 +279,10 @@ class Group extends Component {
                 assignExercise={id => this.assignExercise(id)}
                 users={students}
                 publicAssignments={publicAssignments}
-              />}
-          </div>}
+              />
+            )}
+          </div>
+        )}
       </Page>
     );
   }
@@ -316,6 +325,9 @@ const mapStateToProps = (state, { params: { groupId } }) => {
   const supervisorsIds = supervisorsOfGroup(groupId)(state);
   const studentsIds = studentsOfGroup(groupId)(state);
   const readyUsers = readyUsersDataSelector(state);
+  const groupExercisesIds = state.groupExercises[groupId]
+    ? state.groupExercises[groupId]
+    : [];
 
   return {
     group,
@@ -327,7 +339,7 @@ const mapStateToProps = (state, { params: { groupId } }) => {
     publicGroups: publicGroupsSelectors(state),
     publicAssignments: groupsAssignmentsSelector(groupId, 'public')(state),
     allAssignments: groupsAssignmentsSelector(groupId, 'all')(state),
-    groupExercises: groupExercisesSelector(groupId)(state),
+    groupExercises: getExercisesByIdsSelector(groupExercisesIds)(state),
     statuses: getStatuses(groupId, userId)(state),
     supervisors: readyUsers.filter(user => supervisorsIds.includes(user.id)),
     students: readyUsers.filter(user => studentsIds.includes(user.id)),
