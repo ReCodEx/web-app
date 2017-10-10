@@ -54,22 +54,29 @@ class SubmissionDetail extends Component {
               assignmentId={assignment.id}
             />
             <Row>
-              {files.map(file =>
+              {files.map(file => (
                 <Col lg={6} md={12} key={file.id}>
-                  <a href="#" onClick={() => this.openFile(file.id)}>
+                  <a
+                    href="#"
+                    onClick={e => {
+                      e.preventDefault();
+                      this.openFile(file.id);
+                    }}
+                  >
                     <SourceCodeInfoBox {...file} />
                   </a>
                 </Col>
-              )}
+              ))}
             </Row>
-            {evaluation &&
+            {evaluation && (
               <CompilationLogs
                 initiationOutputs={evaluation.initiationOutputs}
-              />}
+              />
+            )}
             <CommentThreadContainer threadId={id} />
           </Col>
 
-          {evaluation &&
+          {evaluation && (
             <Col md={6} sm={12}>
               <EvaluationDetail
                 assignment={assignment}
@@ -78,24 +85,27 @@ class SubmissionDetail extends Component {
                 maxPoints={maxPoints}
               />
 
-              {isSupervisor &&
+              {isSupervisor && (
                 <BonusPointsContainer
                   submissionId={id}
                   evaluation={evaluation}
-                />}
+                />
+              )}
 
-              {isSupervisor &&
+              {isSupervisor && (
                 <Row>
                   <Col lg={6} md={12}>
                     <DownloadResultArchiveContainer submissionId={id} />
                   </Col>
-                </Row>}
+                </Row>
+              )}
 
               <TestResults
                 evaluation={evaluation}
                 runtimeEnvironmentId={runtimeEnvironmentId}
               />
-            </Col>}
+            </Col>
+          )}
         </Row>
 
         <SourceCodeViewerContainer

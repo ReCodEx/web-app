@@ -126,13 +126,19 @@ class ReferenceSolution extends Component {
                     exerciseId={exerciseId}
                   />
                   <Row>
-                    {referenceSolution.solution.files.map(file =>
+                    {referenceSolution.solution.files.map(file => (
                       <Col lg={6} md={12} key={file.id}>
-                        <a href="#" onClick={() => this.openFile(file.id)}>
+                        <a
+                          href="#"
+                          onClick={e => {
+                            e.preventDefault();
+                            this.openFile(file.id);
+                          }}
+                        >
                           <SourceCodeInfoBox {...file} />
                         </a>
                       </Col>
-                    )}
+                    ))}
                   </Row>
                 </Col>
                 <Col lg={6}>
@@ -165,31 +171,33 @@ class ReferenceSolution extends Component {
                     </Col>
                   </Row>
                   <ResourceRenderer resource={environments}>
-                    {environments =>
+                    {environments => (
                       <div>
-                        {Object.keys(environments).map(env =>
+                        {Object.keys(environments).map(env => (
                           <ReferenceSolutionEvaluation
                             key={env}
                             referenceSolutionId={referenceSolutionId}
                             environment={env}
                             evaluations={environments[env]}
                             renderButtons={evaluation =>
-                              evaluation.evaluation &&
-                              <Button
-                                bsSize="xs"
-                                className="btn-flat"
-                                onClick={() =>
-                                  downloadEvaluationArchive(evaluation.id)}
-                              >
-                                <DownloadIcon />{' '}
-                                <FormattedMessage
-                                  id="app.referenceSolutionEvaluation.downloadResults"
-                                  defaultMessage="Download results"
-                                />
-                              </Button>}
+                              evaluation.evaluation && (
+                                <Button
+                                  bsSize="xs"
+                                  className="btn-flat"
+                                  onClick={() =>
+                                    downloadEvaluationArchive(evaluation.id)}
+                                >
+                                  <DownloadIcon />{' '}
+                                  <FormattedMessage
+                                    id="app.referenceSolutionEvaluation.downloadResults"
+                                    defaultMessage="Download results"
+                                  />
+                                </Button>
+                              )}
                           />
-                        )}
-                      </div>}
+                        ))}
+                      </div>
+                    )}
                   </ResourceRenderer>
                 </Col>
               </Row>
