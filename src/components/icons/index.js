@@ -20,3 +20,4 @@ export {
   default as MaybeBonusAssignmentIcon
 } from './MaybeBonusAssignmentIcon';
 export { default as MaybeLockedExerciseIcon } from './MaybeLockedExerciseIcon';
+export { default as CopyIcon } from './CopyIcon';
