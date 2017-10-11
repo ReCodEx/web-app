@@ -15,7 +15,7 @@ const ExercisesListItem = ({
   name,
   difficulty,
   authorId,
-  groupId,
+  groupsIds = [],
   createdAt,
   isLocked,
   createActions,
@@ -35,8 +35,10 @@ const ExercisesListItem = ({
       <UsersNameContainer userId={authorId} />
     </td>
     <td>
-      {groupId ? (
-        <GroupsNameContainer groupId={groupId} />
+      {groupsIds.length > 0 ? (
+        groupsIds.map((groupId, i) => (
+          <GroupsNameContainer key={i} groupId={groupId} />
+        ))
       ) : (
         <i>
           <FormattedMessage
@@ -60,7 +62,7 @@ const ExercisesListItem = ({
 ExercisesListItem.propTypes = {
   id: PropTypes.string.isRequired,
   authorId: PropTypes.string.isRequired,
-  groupId: PropTypes.string,
+  groupsIds: PropTypes.array,
   name: PropTypes.string.isRequired,
   difficulty: PropTypes.string.isRequired,
   createdAt: PropTypes.number.isRequired,

@@ -22,7 +22,7 @@ const ExerciseDetail = ({
   id,
   name,
   authorId,
-  groupId,
+  groupsIds = [],
   description = '',
   difficulty,
   createdAt,
@@ -51,11 +51,16 @@ const ExerciseDetail = ({
         </tr>
         <tr>
           <th>
-            <FormattedMessage id="app.exercise.group" defaultMessage="Group:" />
+            <FormattedMessage
+              id="app.exercise.groups"
+              defaultMessage="Groups:"
+            />
           </th>
           <td>
-            {groupId ? (
-              <GroupsNameContainer groupId={groupId} />
+            {groupsIds.length > 0 ? (
+              groupsIds.map((groupId, i) => (
+                <GroupsNameContainer key={i} groupId={groupId} />
+              ))
             ) : (
               <i>
                 <FormattedMessage
@@ -186,7 +191,7 @@ ExerciseDetail.propTypes = {
   id: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   authorId: PropTypes.string.isRequired,
-  groupId: PropTypes.string,
+  groupsIds: PropTypes.array,
   difficulty: PropTypes.string.isRequired,
   description: PropTypes.string,
   createdAt: PropTypes.number.isRequired,
