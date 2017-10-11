@@ -59,7 +59,9 @@ const ExerciseDetail = ({
           <td>
             {groupsIds.length > 0 ? (
               groupsIds.map((groupId, i) => (
-                <GroupsNameContainer key={i} groupId={groupId} />
+                <div key={i}>
+                  <GroupsNameContainer groupId={groupId} />
+                </div>
               ))
             ) : (
               <i>
