@@ -63,6 +63,7 @@ import { fetchInstanceIfNeeded } from '../../redux/modules/instances';
 import { instanceSelector } from '../../redux/selectors/instances';
 
 import withLinks from '../../hoc/withLinks';
+import './Group.css';
 
 class Group extends Component {
   static isAdminOrSupervisorOf = (group, userId) =>
@@ -74,28 +75,26 @@ class Group extends Component {
 
   static loadAsync = ({ groupId }, dispatch, userId, isSuperAdmin) =>
     Promise.all([
-      dispatch(fetchGroupIfNeeded(groupId))
-        .then(res => res.value)
-        .then(group =>
-          Promise.all([
-            dispatch(fetchInstanceIfNeeded(group.instanceId)),
-            dispatch(fetchSupervisors(groupId)),
-            dispatch(fetchInstancePublicGroups(group.instanceId)),
-            Group.isAdminOrSupervisorOf(group, userId) || isSuperAdmin
-              ? Promise.all([
-                  dispatch(fetchInstanceGroupsIfNeeded(group.instanceId)), // for group traversal finding group exercises
-                  dispatch(fetchGroupExercises(groupId))
-                ])
-              : Promise.resolve(),
-            Group.isMemberOf(group, userId) || isSuperAdmin
-              ? Promise.all([
-                  dispatch(fetchAssignmentsForGroup(groupId)),
-                  dispatch(fetchStudents(groupId)),
-                  dispatch(fetchGroupsStatsIfNeeded(groupId))
-                ])
-              : Promise.resolve()
-          ])
-        ),
+      dispatch(fetchGroupIfNeeded(groupId)).then(res => res.value).then(group =>
+        Promise.all([
+          dispatch(fetchInstanceIfNeeded(group.instanceId)),
+          dispatch(fetchSupervisors(groupId)),
+          dispatch(fetchInstancePublicGroups(group.instanceId)),
+          Group.isAdminOrSupervisorOf(group, userId) || isSuperAdmin
+            ? Promise.all([
+                dispatch(fetchInstanceGroupsIfNeeded(group.instanceId)), // for group traversal finding group exercises
+                dispatch(fetchGroupExercises(groupId))
+              ])
+            : Promise.resolve(),
+          Group.isMemberOf(group, userId) || isSuperAdmin
+            ? Promise.all([
+                dispatch(fetchAssignmentsForGroup(groupId)),
+                dispatch(fetchStudents(groupId)),
+                dispatch(fetchGroupsStatsIfNeeded(groupId))
+              ])
+            : Promise.resolve()
+        ])
+      ),
       dispatch(fetchSubgroups(groupId))
     ]);
 
@@ -202,23 +201,22 @@ class Group extends Component {
         loading={<LoadingGroupDetail />}
         failed={<FailedGroupDetail />}
       >
-        {data => (
+        {data =>
           <div>
-            <Well bsSize="sm">
+            <Well bsSize="sm" className="groupParents">
               {data.parentGroupsIds.map(
                 (groupId, i) =>
-                  i !== 0 && (
-                    <span key={i}>
-                      <GroupsNameContainer groupId={groupId} />{' '}
-                      <span style={{ margin: '0 5px', color: '#aaa' }}>/</span>
-                    </span>
-                  )
+                  i !== 0 &&
+                  <span key={i}>
+                    <GroupsNameContainer groupId={groupId} />{' '}
+                    <span style={{ margin: '0 5px', color: '#aaa' }}>/</span>
+                  </span>
               )}
               <GroupsNameContainer groupId={data.id} noLink />
             </Well>
 
             {data.parentGroupsIds.length > 1 && <p />}
-            {(isAdmin || isSuperAdmin) && (
+            {(isAdmin || isSuperAdmin) &&
               <p>
                 <LinkContainer to={GROUP_EDIT_URI_FACTORY(data.id)}>
                   <Button bsStyle="warning">
@@ -229,18 +227,16 @@ class Group extends Component {
                     />
                   </Button>
                 </LinkContainer>
-              </p>
-            )}
+              </p>}
 
-            {(isStudent || isSupervisor || isAdmin || isSuperAdmin) && (
+            {(isStudent || isSupervisor || isAdmin || isSuperAdmin) &&
               <StudentsView
                 group={data}
                 stats={stats}
                 statuses={statuses}
                 assignments={publicAssignments}
                 isAdmin={isAdmin || isSuperAdmin}
-              />
-            )}
+              />}
 
             <GroupDetail
               group={data}
@@ -252,24 +248,22 @@ class Group extends Component {
 
             {!isAdmin &&
               !isSupervisor &&
-              data.isPublic && (
-                <p className="text-center">
-                  <LeaveJoinGroupButtonContainer
-                    userId={userId}
-                    groupId={data.id}
-                  />
-                </p>
-              )}
+              data.isPublic &&
+              <p className="text-center">
+                <LeaveJoinGroupButtonContainer
+                  userId={userId}
+                  groupId={data.id}
+                />
+              </p>}
 
-            {(isAdmin || isSuperAdmin) && (
+            {(isAdmin || isSuperAdmin) &&
               <AdminsView
                 group={data}
                 supervisors={supervisors}
                 addSubgroup={addSubgroup(data.instanceId)}
-              />
-            )}
+              />}
 
-            {(isAdmin || isSuperAdmin || isSupervisor) && (
+            {(isAdmin || isSuperAdmin || isSupervisor) &&
               <SupervisorsView
                 group={data}
                 statuses={statuses}
@@ -279,10 +273,8 @@ class Group extends Component {
                 assignExercise={id => this.assignExercise(id)}
                 users={students}
                 publicAssignments={publicAssignments}
-              />
-            )}
-          </div>
-        )}
+              />}
+          </div>}
       </Page>
     );
   }
