@@ -31,6 +31,7 @@ import Users from './Users';
 import User from './User';
 import EditUser from './EditUser';
 import ReferenceSolution from './ReferenceSolution';
+import ReferenceSolutionEvaluation from './ReferenceSolutionEvaluation';
 import Pipelines from './Pipelines';
 import EditPipeline from './EditPipeline';
 import Pipeline from './Pipeline';
@@ -91,10 +92,13 @@ const createRoutes = getState => {
               <IndexRoute component={Exercise} />
               <Route path="edit" component={EditExercise} />
               <Route path="edit-config" component={EditExerciseConfig} />
-              <Route
-                path="reference-solution/:referenceSolutionId"
-                component={ReferenceSolution}
-              />
+              <Route path="reference-solution/:referenceSolutionId">
+                <IndexRoute component={ReferenceSolution} />
+                <Route
+                  path="evaluation/:evaluationId"
+                  component={ReferenceSolutionEvaluation}
+                />
+              </Route>
             </Route>
           </Route>
           <Route path="pipelines">

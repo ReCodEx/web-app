@@ -12,13 +12,13 @@ const messages = defineMessages({
   }
 });
 
-class ReferenceSolutionEvaluation extends Component {
+class ReferenceSolutionEvaluations extends Component {
   render() {
     const {
       environment,
       evaluations,
       referenceSolutionId,
-      renderButtons,
+      exerciseId,
       intl: { formatMessage }
     } = this.props;
 
@@ -32,19 +32,19 @@ class ReferenceSolutionEvaluation extends Component {
         <EvaluationTable
           evaluations={evaluations}
           referenceSolutionId={referenceSolutionId}
-          renderButtons={renderButtons}
+          exerciseId={exerciseId}
         />
       </Box>
     );
   }
 }
 
-ReferenceSolutionEvaluation.propTypes = {
+ReferenceSolutionEvaluations.propTypes = {
   environment: PropTypes.string.isRequired,
   evaluations: PropTypes.array.isRequired,
   referenceSolutionId: PropTypes.string.isRequired,
-  renderButtons: PropTypes.func,
+  exerciseId: PropTypes.string.isRequired,
   intl: intlShape.isRequired
 };
 
-export default injectIntl(ReferenceSolutionEvaluation);
+export default injectIntl(ReferenceSolutionEvaluations);

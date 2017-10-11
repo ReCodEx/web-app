@@ -2,14 +2,17 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage, FormattedDate, FormattedTime } from 'react-intl';
 import { Table } from 'react-bootstrap';
+import { Link } from 'react-router';
 
+import withLinks from '../../../hoc/withLinks';
 import AssignmentStatusIcon from '../../Assignments/Assignment/AssignmentStatusIcon';
 
 const EvaluationTable = ({
   evaluations,
   referenceSolutionId,
-  renderButtons = () => null
-}) =>
+  exerciseId,
+  links: { REFERENCE_SOLUTION_EVALUATION_URI_FACTORY }
+}) => (
   <Table>
     <thead>
       <tr>
@@ -31,7 +34,7 @@ const EvaluationTable = ({
           }
           return b.evaluation.evaluatedAt - a.evaluation.evaluatedAt;
         })
-        .map(e =>
+        .map(e => (
           <tr key={e.id}>
             <td>
               <AssignmentStatusIcon
@@ -40,27 +43,41 @@ const EvaluationTable = ({
                 accepted={false}
               />
             </td>
-            {e.evaluation
-              ? <td>
-                  <FormattedDate value={e.evaluation.evaluatedAt * 1000} />
-                  &nbsp;
-                  <FormattedTime value={e.evaluation.evaluatedAt * 1000} />
-                </td>
-              : <td>
-                  <i>
-                    <FormattedMessage
-                      id="app.evaluationTable.notAvailable"
-                      defaultMessage="Evaluation not available"
-                    />
-                  </i>
-                </td>}
+            {e.evaluation ? (
+              <td>
+                <FormattedDate value={e.evaluation.evaluatedAt * 1000} />
+                &nbsp;
+                <FormattedTime value={e.evaluation.evaluatedAt * 1000} />
+              </td>
+            ) : (
+              <td>
+                <i>
+                  <FormattedMessage
+                    id="app.evaluationTable.notAvailable"
+                    defaultMessage="Evaluation not available"
+                  />
+                </i>
+              </td>
+            )}
             <td className="text-right">
-              {renderButtons(e)}
+              <Link
+                to={REFERENCE_SOLUTION_EVALUATION_URI_FACTORY(
+                  exerciseId,
+                  referenceSolutionId,
+                  e.id
+                )}
+                className="btn btn-flat btn-default btn-xs"
+              >
+                <FormattedMessage
+                  id="app.evaluationTable.showDetails"
+                  defaultMessage="Show details"
+                />
+              </Link>
             </td>
           </tr>
-        )}
+        ))}
 
-      {evaluations.length === 0 &&
+      {evaluations.length === 0 && (
         <tr>
           <td className="text-center" colSpan={3}>
             <FormattedMessage
@@ -68,14 +85,17 @@ const EvaluationTable = ({
               defaultMessage="There are no evaluations in this list."
             />
           </td>
-        </tr>}
+        </tr>
+      )}
     </tbody>
-  </Table>;
+  </Table>
+);
 
 EvaluationTable.propTypes = {
   evaluations: PropTypes.array.isRequired,
   referenceSolutionId: PropTypes.string.isRequired,
-  renderButtons: PropTypes.func
+  exerciseId: PropTypes.string.isRequired,
+  links: PropTypes.object
 };
 
-export default EvaluationTable;
+export default withLinks(EvaluationTable);

@@ -9,6 +9,8 @@ import {
 } from 'react-intl';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { Row, Col, Button } from 'react-bootstrap';
+
+import withLinks from '../../hoc/withLinks';
 import Page from '../../components/layout/Page';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 
@@ -17,14 +19,14 @@ import {
   downloadEvaluationArchive,
   evaluateReferenceSolution
 } from '../../redux/modules/referenceSolutions';
-import { fetchReferenceEvaluations } from '../../redux/modules/referenceSolutionEvaluations';
+import { fetchEnvironmentReferenceEvaluations } from '../../redux/modules/environmentReferenceSolutionEvaluations';
 import { referenceSolutionsSelector } from '../../redux/selectors/referenceSolutions';
-import { getReferenceEvaluations } from '../../redux/selectors/referenceSolutionEvaluations';
+import { getEnvironmentReferenceEvaluations } from '../../redux/selectors/environmentReferenceSolutionEvaluations';
 import ReferenceSolutionDetail from '../../components/ReferenceSolutions/ReferenceSolutionDetail';
-import ReferenceSolutionEvaluation from '../../components/ReferenceSolutions/ReferenceSolutionEvaluation';
+import ReferenceSolutionEvaluations from '../../components/ReferenceSolutions/ReferenceSolutionEvaluations';
 import SourceCodeInfoBox from '../../components/widgets/SourceCodeInfoBox';
 import SourceCodeViewerContainer from '../../containers/SourceCodeViewerContainer';
-import { DownloadIcon, RefreshIcon, SendIcon } from '../../components/icons';
+import { RefreshIcon, SendIcon } from '../../components/icons';
 
 const messages = defineMessages({
   title: {
@@ -41,7 +43,7 @@ class ReferenceSolution extends Component {
   static loadAsync = ({ exerciseId, referenceSolutionId }, dispatch) =>
     Promise.all([
       dispatch(fetchReferenceSolutionsIfNeeded(exerciseId)),
-      dispatch(fetchReferenceEvaluations(referenceSolutionId))
+      dispatch(fetchEnvironmentReferenceEvaluations(referenceSolutionId))
     ]);
 
   componentWillMount() {
@@ -62,14 +64,12 @@ class ReferenceSolution extends Component {
       referenceSolutions,
       environments,
       params: { exerciseId, referenceSolutionId },
-      downloadEvaluationArchive,
-      fetchEvaluations,
+      fetchEnvironmentEvaluations,
       evaluateReferenceSolution,
-      intl: { formatMessage }
+      intl: { formatMessage },
+      links: { EXERCISES_URI, EXERCISE_URI_FACTORY }
     } = this.props;
     const { openFileId } = this.state;
-
-    const { links: { EXERCISES_URI, EXERCISE_URI_FACTORY } } = this.context;
 
     return (
       <Page
@@ -148,7 +148,7 @@ class ReferenceSolution extends Component {
                         <Button
                           bsStyle="default"
                           className="btn-flat"
-                          onClick={fetchEvaluations}
+                          onClick={fetchEnvironmentEvaluations}
                         >
                           <RefreshIcon />{' '}
                           <FormattedMessage
@@ -174,26 +174,12 @@ class ReferenceSolution extends Component {
                     {environments => (
                       <div>
                         {Object.keys(environments).map(env => (
-                          <ReferenceSolutionEvaluation
+                          <ReferenceSolutionEvaluations
                             key={env}
                             referenceSolutionId={referenceSolutionId}
                             environment={env}
                             evaluations={environments[env]}
-                            renderButtons={evaluation =>
-                              evaluation.evaluation && (
-                                <Button
-                                  bsSize="xs"
-                                  className="btn-flat"
-                                  onClick={() =>
-                                    downloadEvaluationArchive(evaluation.id)}
-                                >
-                                  <DownloadIcon />{' '}
-                                  <FormattedMessage
-                                    id="app.referenceSolutionEvaluation.downloadResults"
-                                    defaultMessage="Download results"
-                                  />
-                                </Button>
-                              )}
+                            exerciseId={exerciseId}
                           />
                         ))}
                       </div>
@@ -216,8 +202,7 @@ class ReferenceSolution extends Component {
 }
 
 ReferenceSolution.contextTypes = {
-  router: PropTypes.object,
-  links: PropTypes.object
+  router: PropTypes.object
 };
 
 ReferenceSolution.propTypes = {
@@ -226,28 +211,35 @@ ReferenceSolution.propTypes = {
     referenceSolutionId: PropTypes.string.isRequired
   }).isRequired,
   loadAsync: PropTypes.func.isRequired,
-  fetchEvaluations: PropTypes.func.isRequired,
+  fetchEnvironmentEvaluations: PropTypes.func.isRequired,
   evaluateReferenceSolution: PropTypes.func.isRequired,
   referenceSolutions: ImmutablePropTypes.map,
   environments: ImmutablePropTypes.map,
   downloadEvaluationArchive: PropTypes.func.isRequired,
-  intl: intlShape.isRequired
+  intl: intlShape.isRequired,
+  links: PropTypes.object.isRequired
 };
 
-export default injectIntl(
-  connect(
-    (state, { params: { exerciseId, referenceSolutionId } }) => ({
-      referenceSolutions: referenceSolutionsSelector(exerciseId)(state),
-      environments: getReferenceEvaluations(referenceSolutionId)(state)
-    }),
-    (dispatch, { params }) => ({
-      loadAsync: () => ReferenceSolution.loadAsync(params, dispatch),
-      downloadEvaluationArchive: evaluationId =>
-        dispatch(downloadEvaluationArchive(evaluationId)),
-      fetchEvaluations: () =>
-        dispatch(fetchReferenceEvaluations(params.referenceSolutionId)),
-      evaluateReferenceSolution: () =>
-        dispatch(evaluateReferenceSolution(params.referenceSolutionId))
-    })
-  )(ReferenceSolution)
+export default withLinks(
+  injectIntl(
+    connect(
+      (state, { params: { exerciseId, referenceSolutionId } }) => ({
+        referenceSolutions: referenceSolutionsSelector(exerciseId)(state),
+        environments: getEnvironmentReferenceEvaluations(referenceSolutionId)(
+          state
+        )
+      }),
+      (dispatch, { params }) => ({
+        loadAsync: () => ReferenceSolution.loadAsync(params, dispatch),
+        downloadEvaluationArchive: evaluationId =>
+          dispatch(downloadEvaluationArchive(evaluationId)),
+        fetchEnvironmentEvaluations: () =>
+          dispatch(
+            fetchEnvironmentReferenceEvaluations(params.referenceSolutionId)
+          ),
+        evaluateReferenceSolution: () =>
+          dispatch(evaluateReferenceSolution(params.referenceSolutionId))
+      })
+    )(ReferenceSolution)
+  )
 );
