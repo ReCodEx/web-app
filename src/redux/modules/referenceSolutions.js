@@ -1,5 +1,4 @@
 import { handleActions } from 'redux-actions';
-import { saveAs } from 'file-saver';
 import { List, fromJS } from 'immutable';
 
 import factory, { initialState } from '../helpers/resourceManager';
@@ -18,10 +17,6 @@ const { actions, reduceActions } = factory({
  * Actions
  */
 
-export const additionalActionTypes = {
-  DOWNLOAD_EVALUATION_ARCHIVE: 'recodex/files/DOWNLOAD_EVALUATION_ARCHIVE'
-};
-
 export const fetchReferenceSolutions = actions.fetchResource;
 export const fetchReferenceSolutionsIfNeeded = actions.fetchOneIfNeeded; // fetch solutions for one exercise
 
@@ -33,29 +28,6 @@ export const evaluateReferenceSolution = (solutionId, isDebug = false) =>
     body: { debug: isDebug },
     meta: { solutionId }
   });
-
-export const fetchReferenceEvaluations = solutionId =>
-  createApiAction({
-    type: additionalActionTypes.FETCH_REFERENCE_EVALUATIONS,
-    endpoint: `/reference-solutions/${solutionId}/evaluations`,
-    method: 'GET',
-    meta: { solutionId }
-  });
-
-export const downloadEvaluationArchive = evaluationId => (dispatch, getState) =>
-  dispatch(
-    createApiAction({
-      type: additionalActionTypes.DOWNLOAD_EVALUATION_ARCHIVE,
-      method: 'GET',
-      endpoint: `/reference-solutions/evaluation/${evaluationId}/download-result`,
-      doNotProcess: true // the response is not (does not have to be) a JSON
-    })
-  )
-    .then(({ value }) => value.blob())
-    .then(blob => {
-      saveAs(blob, evaluationId + '.zip');
-      return Promise.resolve();
-    });
 
 /**
  * Reducer

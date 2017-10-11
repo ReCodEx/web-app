@@ -6,25 +6,24 @@ import Box from '../../widgets/Box';
 import EvaluationTable from '../EvaluationTable';
 
 const messages = defineMessages({
-  titlePrefix: {
-    id: 'app.referenceSolutionEvaluation.titlePrefix',
-    defaultMessage: 'Evaluations for runtime:'
+  title: {
+    id: 'app.referenceSolutionEvaluation.title',
+    defaultMessage: 'Evaluations of reference solution'
   }
 });
 
-class ReferenceSolutionEvaluation extends Component {
+class ReferenceSolutionEvaluations extends Component {
   render() {
     const {
-      environment,
       evaluations,
       referenceSolutionId,
-      renderButtons,
+      exerciseId,
       intl: { formatMessage }
     } = this.props;
 
     return (
       <Box
-        title={formatMessage(messages.titlePrefix) + ' ' + environment}
+        title={formatMessage(messages.title)}
         noPadding={true}
         collapsable={true}
         isOpen={true}
@@ -32,19 +31,18 @@ class ReferenceSolutionEvaluation extends Component {
         <EvaluationTable
           evaluations={evaluations}
           referenceSolutionId={referenceSolutionId}
-          renderButtons={renderButtons}
+          exerciseId={exerciseId}
         />
       </Box>
     );
   }
 }
 
-ReferenceSolutionEvaluation.propTypes = {
-  environment: PropTypes.string.isRequired,
+ReferenceSolutionEvaluations.propTypes = {
   evaluations: PropTypes.array.isRequired,
   referenceSolutionId: PropTypes.string.isRequired,
-  renderButtons: PropTypes.func,
+  exerciseId: PropTypes.string.isRequired,
   intl: intlShape.isRequired
 };
 
-export default injectIntl(ReferenceSolutionEvaluation);
+export default injectIntl(ReferenceSolutionEvaluations);

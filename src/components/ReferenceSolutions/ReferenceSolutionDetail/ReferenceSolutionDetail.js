@@ -13,7 +13,7 @@ const ReferenceSolutionDetail = ({
   uploadedAt,
   solution: { userId },
   exerciseId
-}) =>
+}) => (
   <Box
     title={
       <FormattedMessage
@@ -51,9 +51,7 @@ const ReferenceSolutionDetail = ({
               defaultMessage="Description"
             />
           </th>
-          <td>
-            {description}
-          </td>
+          <td>{description}</td>
         </tr>
         <tr>
           <td className="text-center">
@@ -87,7 +85,8 @@ const ReferenceSolutionDetail = ({
         </tr>
       </tbody>
     </Table>
-  </Box>;
+  </Box>
+);
 
 ReferenceSolutionDetail.propTypes = {
   description: PropTypes.string.isRequired,

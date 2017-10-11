@@ -3,8 +3,7 @@ import PropTypes from 'prop-types';
 import { canUseDOM } from 'exenv';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
-import HeaderNotificationsDropdown
-  from '../../components/widgets/HeaderNotificationsDropdown';
+import HeaderNotificationsDropdown from '../../components/widgets/HeaderNotificationsDropdown';
 import { hideNotification } from '../../redux/modules/notifications';
 import {
   newNotificationsSelector,
@@ -49,7 +48,8 @@ class HeaderNotificationsContainer extends Component {
   //
   //
 
-  toggleOpen = () => {
+  toggleOpen = e => {
+    e.preventDefault();
     this.state.isOpen ? this.close() : this.open();
     this.markClick();
   };

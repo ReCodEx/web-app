@@ -2,13 +2,14 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { LoadingIcon } from '../../icons';
 
-const LoadingExercisesName = () =>
+const LoadingExercisesName = () => (
   <div>
-    <LoadingIcon />
+    <LoadingIcon />{' '}
     <FormattedMessage
       id="app.exercisesName.loading"
       defaultMessage="Loading ..."
     />
-  </div>;
+  </div>
+);
 
 export default LoadingExercisesName;

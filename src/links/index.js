@@ -30,6 +30,8 @@ export const linksFactory = lang => {
   const EXERCISE_EDIT_URI_FACTORY = id => `${EXERCISE_URI_FACTORY(id)}/edit`;
   const EXERCISE_EDIT_CONFIG_URI_FACTORY = id =>
     `${EXERCISE_URI_FACTORY(id)}/edit-config`;
+
+  // reference solution
   const EXERCISE_REFERENCE_SOLUTION_URI_FACTORY = (
     exerciseId,
     referenceSolutionId
@@ -37,6 +39,14 @@ export const linksFactory = lang => {
     `${EXERCISE_URI_FACTORY(
       exerciseId
     )}/reference-solution/${referenceSolutionId}`;
+  const REFERENCE_SOLUTION_EVALUATION_URI_FACTORY = (
+    exerciseId,
+    solutionId,
+    evaluationId
+  ) =>
+    `${EXERCISE_URI_FACTORY(
+      exerciseId
+    )}/reference-solution/${solutionId}/evaluation/${evaluationId}`;
 
   // pipeline details
   const PIPELINES_URI = `${prefix}/app/pipelines`;
@@ -109,7 +119,8 @@ export const linksFactory = lang => {
     GITHUB_BUGS_URL,
     ADMIN_INSTANCES_URI,
     ADMIN_EDIT_INSTANCE_URI_FACTORY,
-    DOWNLOAD
+    DOWNLOAD,
+    REFERENCE_SOLUTION_EVALUATION_URI_FACTORY
   };
 };
 

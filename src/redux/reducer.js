@@ -38,12 +38,12 @@ import supplementaryFiles from './modules/supplementaryFiles';
 import pipelineFiles from './modules/pipelineFiles';
 import additionalExerciseFiles from './modules/additionalExerciseFiles';
 import referenceSolutions from './modules/referenceSolutions';
-import referenceSolutionEvaluations from './modules/referenceSolutionEvaluations';
 import hwGroups from './modules/hwGroups';
 import sisStatus from './modules/sisStatus';
 import sisSubscribedGroups from './modules/sisSubscribedGroups';
 import sisSupervisedCourses from './modules/sisSupervisedCourses';
 import sisPossibleParents from './modules/sisPossibleParents';
+import referenceSolutionEvaluations from './modules/referenceSolutionEvaluations';
 
 const createRecodexReducers = token => ({
   auth: auth(token),
