@@ -60,10 +60,12 @@ class HeaderNotification extends Component {
                 </CopyToClipboard>
               </a>
             </span>
-            <span>
-              {count > 1 && <Badge pullRight>{count}</Badge>}
-              {msg}
-            </span>
+            <span>{msg}</span>
+            {count > 1 && (
+              <span className={styles.container}>
+                <Badge pullRight>{count}</Badge>
+              </span>
+            )}
           </a>
         </OverlayTrigger>
       </li>

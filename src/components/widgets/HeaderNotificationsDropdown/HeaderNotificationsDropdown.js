@@ -25,11 +25,16 @@ const HeaderNotificationsDropdown = ({
     })}
   >
     <a href="#" className="dropdown-toggle" onClick={toggleOpen}>
-      <Icon name="bell-o" />
-      {newNotifications.size > 0 &&
-        <Label bsStyle="primary">
+      {newNotifications.size === 0 ? (
+        <Icon name="bell-o" />
+      ) : (
+        <Icon name="bell" />
+      )}
+      {newNotifications.size > 0 && (
+        <Label bsStyle="danger">
           {newNotifications.reduce((acc, n) => acc + n.count, 0)}
-        </Label>}
+        </Label>
+      )}
     </a>
     <ul className="dropdown-menu" onClick={markClick}>
       <li className="header">
@@ -57,27 +62,30 @@ const HeaderNotificationsDropdown = ({
             ))}
         </ul>
       </li>
-      {oldNotifications.size > 0 &&
+      {oldNotifications.size > 0 && (
         <li className="footer">
           <a href="#" onClick={toggleShowAll}>
-            {showAll
-              ? <FormattedMessage
-                  id="app.notifications.hideAll"
-                  defaultMessage="Only new notifications"
-                />
-              : <FormattedMessage
-                  id="app.notifications.showAll"
-                  defaultMessage={`Show {count, plural,
+            {showAll ? (
+              <FormattedMessage
+                id="app.notifications.hideAll"
+                defaultMessage="Only new notifications"
+              />
+            ) : (
+              <FormattedMessage
+                id="app.notifications.showAll"
+                defaultMessage={`Show {count, plural,
                     one {old notification}
                     two {two notifications}
                     other {all # notifications}
                   }`}
-                  values={{
-                    count: newNotifications.size + oldNotifications.size
-                  }}
-                />}
+                values={{
+                  count: newNotifications.size + oldNotifications.size
+                }}
+              />
+            )}
           </a>
-        </li>}
+        </li>
+      )}
     </ul>
   </li>
 );
