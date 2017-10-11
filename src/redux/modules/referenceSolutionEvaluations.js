@@ -23,6 +23,11 @@ export const fetchReferenceSolutionEvaluation = actions.fetchResource;
 export const fetchReferenceSolutionEvaluationIfNeeded =
   actions.fetchOneIfNeeded;
 
+export const fetchReferenceSolutionEvaluationsForSolution = solutionId =>
+  actions.fetchMany({
+    endpoint: `/reference-solutions/${solutionId}/evaluations`
+  });
+
 export const downloadEvaluationArchive = evaluationId => (dispatch, getState) =>
   dispatch(
     createApiAction({

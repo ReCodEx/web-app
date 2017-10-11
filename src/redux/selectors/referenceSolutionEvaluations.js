@@ -1,4 +1,5 @@
 import { createSelector } from 'reselect';
+import { isReady } from '../helpers/resourceManager';
 
 const getReferenceSolutionEvaluations = state =>
   state.referenceSolutionEvaluations;
@@ -15,4 +16,11 @@ export const referenceSolutionEvaluationSelector = evaluationId =>
     referenceSolutionEvaluationsSelector,
     referenceSolutionEvaluations =>
       referenceSolutionEvaluations.get(evaluationId)
+  );
+
+export const getReferenceSolutionEvaluationsByIdsSelector = ids =>
+  createSelector(referenceSolutionEvaluationsSelector, evaluations =>
+    evaluations
+      .filter(isReady)
+      .filter(evaluation => ids.indexOf(evaluation.getIn(['data', 'id'])) >= 0)
   );

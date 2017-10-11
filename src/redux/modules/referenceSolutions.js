@@ -1,5 +1,4 @@
 import { handleActions } from 'redux-actions';
-import { saveAs } from 'file-saver';
 import { List, fromJS } from 'immutable';
 
 import factory, { initialState } from '../helpers/resourceManager';

@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Icon from 'react-fontawesome';
 import classnames from 'classnames';
 import {
   FormattedMessage,
