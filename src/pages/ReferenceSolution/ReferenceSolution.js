@@ -16,10 +16,12 @@ import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 
 import {
   fetchReferenceSolutionsIfNeeded,
-  downloadEvaluationArchive,
   evaluateReferenceSolution
 } from '../../redux/modules/referenceSolutions';
-import { fetchEnvironmentReferenceEvaluations } from '../../redux/modules/environmentReferenceSolutionEvaluations';
+import {
+  fetchEnvironmentReferenceEvaluationsIfNeeded,
+  fetchEnvironmentReferenceEvaluations
+} from '../../redux/modules/environmentReferenceSolutionEvaluations';
 import { referenceSolutionsSelector } from '../../redux/selectors/referenceSolutions';
 import { getEnvironmentReferenceEvaluations } from '../../redux/selectors/environmentReferenceSolutionEvaluations';
 import ReferenceSolutionDetail from '../../components/ReferenceSolutions/ReferenceSolutionDetail';
@@ -43,7 +45,9 @@ class ReferenceSolution extends Component {
   static loadAsync = ({ exerciseId, referenceSolutionId }, dispatch) =>
     Promise.all([
       dispatch(fetchReferenceSolutionsIfNeeded(exerciseId)),
-      dispatch(fetchEnvironmentReferenceEvaluations(referenceSolutionId))
+      dispatch(
+        fetchEnvironmentReferenceEvaluationsIfNeeded(referenceSolutionId)
+      )
     ]);
 
   componentWillMount() {
@@ -215,7 +219,6 @@ ReferenceSolution.propTypes = {
   evaluateReferenceSolution: PropTypes.func.isRequired,
   referenceSolutions: ImmutablePropTypes.map,
   environments: ImmutablePropTypes.map,
-  downloadEvaluationArchive: PropTypes.func.isRequired,
   intl: intlShape.isRequired,
   links: PropTypes.object.isRequired
 };
@@ -231,8 +234,6 @@ export default withLinks(
       }),
       (dispatch, { params }) => ({
         loadAsync: () => ReferenceSolution.loadAsync(params, dispatch),
-        downloadEvaluationArchive: evaluationId =>
-          dispatch(downloadEvaluationArchive(evaluationId)),
         fetchEnvironmentEvaluations: () =>
           dispatch(
             fetchEnvironmentReferenceEvaluations(params.referenceSolutionId)

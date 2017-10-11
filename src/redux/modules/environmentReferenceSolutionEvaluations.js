@@ -12,6 +12,8 @@ const { actions, reduceActions } = factory({
 });
 
 export const fetchEnvironmentReferenceEvaluations = actions.fetchResource;
+export const fetchEnvironmentReferenceEvaluationsIfNeeded =
+  actions.fetchIfNeeded;
 
 const reducer = handleActions(reduceActions, initialState);
 export default reducer;
