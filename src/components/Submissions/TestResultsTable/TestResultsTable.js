@@ -147,24 +147,32 @@ const TestResultsTable = ({ results, runtimeEnvironmentId }) => (
             </td>
             <td>{testName}</td>
             <td className="text-center">
-              {status === 'OK' && (
-                <FormattedMessage
-                  id="app.submissions.testResultsTable.statusOK"
-                  defaultMessage="OK"
-                />
-              )}
-              {status === 'SKIPPED' && (
-                <FormattedMessage
-                  id="app.submissions.testResultsTable.statusSkipped"
-                  defaultMessage="Skipped"
-                />
-              )}
-              {status === 'FAILED' && (
-                <FormattedMessage
-                  id="app.submissions.testResultsTable.statusFailed"
-                  defaultMessage="Failed"
-                />
-              )}
+              <b>
+                {status === 'OK' && (
+                  <span className="text-success">
+                    <FormattedMessage
+                      id="app.submissions.testResultsTable.statusOK"
+                      defaultMessage="OK"
+                    />
+                  </span>
+                )}
+                {status === 'SKIPPED' && (
+                  <span className="test-warning">
+                    <FormattedMessage
+                      id="app.submissions.testResultsTable.statusSkipped"
+                      defaultMessage="SKIPPED"
+                    />
+                  </span>
+                )}
+                {status === 'FAILED' && (
+                  <span className="test-danger">
+                    <FormattedMessage
+                      id="app.submissions.testResultsTable.statusFailed"
+                      defaultMessage="FAILED"
+                    />
+                  </span>
+                )}
+              </b>
             </td>
 
             {tickOrCross(memoryExceeded === false, memoryRatio)}
