@@ -13,6 +13,8 @@ import { getFile, getFilesContent } from '../../redux/selectors/files';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import SourceCodeViewer from '../../components/helpers/SourceCodeViewer';
 
+import styles from './sourceCode.less';
+
 class SourceCodeViewerContainer extends Component {
   componentWillMount() {
     const { fileId, loadAsync } = this.props;
@@ -32,11 +34,10 @@ class SourceCodeViewerContainer extends Component {
     return (
       <ResourceRenderer
         loading={
-          <Modal show={show} onHide={onHide} bsSize="large">
+          <Modal show={show} onHide={onHide} dialogClassName={styles.modal}>
             <Modal.Header closeButton>
               <Modal.Title>
-                <LoadingIcon />
-                {' '}
+                <LoadingIcon />{' '}
                 <FormattedMessage
                   id="app.sourceCodeViewer.loading"
                   defaultMessage="Loading ..."
@@ -48,8 +49,7 @@ class SourceCodeViewerContainer extends Component {
             </Modal.Body>
             <Modal.Footer>
               <Button disabled>
-                <DownloadIcon />
-                {' '}
+                <DownloadIcon />{' '}
                 <FormattedMessage
                   id="app.sourceCodeViewer.downloadButton"
                   defaultMessage="Download file"
@@ -61,7 +61,7 @@ class SourceCodeViewerContainer extends Component {
         resource={[file, code]}
       >
         {(file, code) => (
-          <Modal show={show} onHide={onHide} bsSize="large">
+          <Modal show={show} onHide={onHide} dialogClassName={styles.modal}>
             <Modal.Header closeButton>
               <Modal.Title>{file.name}</Modal.Title>
             </Modal.Header>
@@ -70,8 +70,7 @@ class SourceCodeViewerContainer extends Component {
             </Modal.Body>
             <Modal.Footer>
               <Button onClick={() => download(file.id)}>
-                <DownloadIcon />
-                {' '}
+                <DownloadIcon />{' '}
                 <FormattedMessage
                   id="app.sourceCodeViewer.downloadButton"
                   defaultMessage="Download file"
