@@ -157,7 +157,7 @@ const TestResultsTable = ({ results, runtimeEnvironmentId }) => (
                   </span>
                 )}
                 {status === 'SKIPPED' && (
-                  <span className="test-warning">
+                  <span className="text-warning">
                     <FormattedMessage
                       id="app.submissions.testResultsTable.statusSkipped"
                       defaultMessage="SKIPPED"
@@ -165,7 +165,7 @@ const TestResultsTable = ({ results, runtimeEnvironmentId }) => (
                   </span>
                 )}
                 {status === 'FAILED' && (
-                  <span className="test-danger">
+                  <span className="text-danger">
                     <FormattedMessage
                       id="app.submissions.testResultsTable.statusFailed"
                       defaultMessage="FAILED"
