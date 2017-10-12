@@ -13,6 +13,13 @@ const { actions, actionTypes, reduceActions } = factory({
 
 export { actionTypes };
 
+export const additionalActionTypes = {
+  VALIDATE_ASSIGNMENT: 'recodex/assignment/VALIDATE',
+  SYNC_ASSIGNMENT: 'recodex/assignment/SYNC_ASSIGNMENT',
+  SYNC_ASSIGNMENT_PENDING: 'recodex/assignment/SYNC_ASSIGNMENT_PENDING',
+  SYNC_ASSIGNMENT_FULFILLED: 'recodex/assignment/SYNC_ASSIGNMENT_FULFILLED'
+};
+
 /**
  * Actions
  */
@@ -34,10 +41,18 @@ export const deleteAssignment = actions.removeResource;
 
 export const validateAssignment = (id, version) =>
   createApiAction({
-    type: 'VALIDATE_ASSIGNMENT',
+    type: additionalActionTypes.VALIDATE_ASSIGNMENT,
     endpoint: `/exercise-assignments/${id}/validate`,
     method: 'POST',
     body: { version }
+  });
+
+export const syncWithExercise = assignmentId =>
+  createApiAction({
+    type: additionalActionTypes.SYNC_ASSIGNMENT,
+    endpoint: `/exercise-assignments/${assignmentId}/sync-exercise`,
+    method: 'POST',
+    meta: { assignmentId }
   });
 
 /**
@@ -53,7 +68,11 @@ const reducer = handleActions(
       state.setIn(
         ['submissions', assignmentId, userId],
         fromJS(payload.map(submission => submission.id))
-      )
+      ),
+    [additionalActionTypes.SYNC_ASSIGNMENT_FULFILLED]: (
+      state,
+      { payload, meta: { assignmentId } }
+    ) => state.setIn(['resources', assignmentId, 'data'], fromJS(payload))
   }),
   initialState
 );
