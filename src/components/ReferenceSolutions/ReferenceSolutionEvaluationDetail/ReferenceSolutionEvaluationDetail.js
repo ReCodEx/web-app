@@ -47,15 +47,21 @@ class ReferenceSolutionEvaluationDetail extends Component {
                 </Col>
               ))}
             </Row>
+            {solutionEvaluation.evaluation && (
+              <CompilationLogs
+                initiationOutputs={
+                  solutionEvaluation.evaluation.initiationOutputs
+                }
+              />
+            )}
           </Col>
           {solutionEvaluation.evaluation && (
             <Col lg={6} sm={12}>
               <EvaluationDetail evaluation={solutionEvaluation.evaluation} />
 
-              <CompilationLogs
-                initiationOutputs={
-                  solutionEvaluation.evaluation.initiationOutputs
-                }
+              <TestResults
+                evaluation={solutionEvaluation.evaluation}
+                runtimeEnvironmentId={referenceSolution.runtimeEnvironmentId}
               />
 
               <Row>
@@ -65,11 +71,6 @@ class ReferenceSolutionEvaluationDetail extends Component {
                   </a>
                 </Col>
               </Row>
-
-              <TestResults
-                evaluation={solutionEvaluation.evaluation}
-                runtimeEnvironmentId={referenceSolution.runtimeEnvironmentId}
-              />
             </Col>
           )}
         </Row>
