@@ -44,6 +44,15 @@ export const logout = redirectUrl => dispatch => {
 };
 
 export const LOCAL_LOGIN = 'recodex-local-login';
+
+export const takeOver = userId =>
+  createApiAction({
+    type: actionTypes.LOGIN,
+    method: 'POST',
+    endpoint: `/login/takeover/${userId}`,
+    meta: { service: LOCAL_LOGIN }
+  });
+
 export const login = (username, password) =>
   createApiAction({
     type: actionTypes.LOGIN,
@@ -130,19 +139,20 @@ export const decodeAndValidateAccessToken = (token, now = Date.now()) => {
  */
 const auth = (accessToken, now = Date.now()) => {
   const decodedToken = decodeAndValidateAccessToken(accessToken, now);
-  const initialState = accessToken && decodedToken
-    ? fromJS({
-        status: {},
-        jwt: accessToken,
-        accessToken: decodedToken,
-        userId: getUserId(decodedToken)
-      })
-    : fromJS({
-        status: {},
-        jwt: null,
-        accessToken: null,
-        userId: null
-      });
+  const initialState =
+    accessToken && decodedToken
+      ? fromJS({
+          status: {},
+          jwt: accessToken,
+          accessToken: decodedToken,
+          userId: getUserId(decodedToken)
+        })
+      : fromJS({
+          status: {},
+          jwt: null,
+          accessToken: null,
+          userId: null
+        });
 
   return handleActions(
     {
