@@ -12,6 +12,7 @@ export { default as SearchIcon } from './SearchIcon';
 export { default as SendIcon } from './SendIcon';
 export { default as UploadIcon } from './UploadIcon';
 export { default as SuccessIcon } from './SuccessIcon';
+export { default as TransferIcon } from './TransferIcon';
 export { default as MaybeSucceededIcon } from './MaybeSucceededIcon';
 export { default as MaybePublicIcon } from './MaybePublicIcon';
 export { default as RefreshIcon } from './RefreshIcon';
