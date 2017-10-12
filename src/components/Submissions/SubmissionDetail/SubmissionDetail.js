@@ -92,6 +92,11 @@ class SubmissionDetail extends Component {
                 />
               )}
 
+              <TestResults
+                evaluation={evaluation}
+                runtimeEnvironmentId={runtimeEnvironmentId}
+              />
+
               {isSupervisor && (
                 <Row>
                   <Col lg={6} md={12}>
@@ -99,11 +104,6 @@ class SubmissionDetail extends Component {
                   </Col>
                 </Row>
               )}
-
-              <TestResults
-                evaluation={evaluation}
-                runtimeEnvironmentId={runtimeEnvironmentId}
-              />
             </Col>
           )}
         </Row>

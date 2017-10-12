@@ -6,7 +6,7 @@ import { Table, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import Icon from 'react-fontawesome';
 import exitCodeMapping from '../../helpers/exitCodeMapping';
 
-const tickOrCross = (isOK, ratio, tooltipId) =>
+const tickOrCross = (isOK, ratio, tooltipId) => (
   <td
     className={classNames({
       'text-center': true,
@@ -15,7 +15,7 @@ const tickOrCross = (isOK, ratio, tooltipId) =>
     })}
   >
     <Icon name={isOK ? 'check' : 'times'} />{' '}
-    {(ratio || ratio === 0) &&
+    {(ratio || ratio === 0) && (
       <small>
         (
         <FormattedNumber
@@ -25,10 +25,12 @@ const tickOrCross = (isOK, ratio, tooltipId) =>
           maximumFactionDigits={3}
         />
         )
-      </small>}
-  </td>;
+      </small>
+    )}
+  </td>
+);
 
-const TestResultsTable = ({ results, runtimeEnvironmentId }) =>
+const TestResultsTable = ({ results, runtimeEnvironmentId }) => (
   <Table responsive>
     <thead>
       <tr>
@@ -55,7 +57,6 @@ const TestResultsTable = ({ results, runtimeEnvironmentId }) =>
             defaultMessage="Test name"
           />
         </th>
-        <th />
         <th className="text-center">
           <OverlayTrigger
             placement="top"
@@ -131,74 +132,52 @@ const TestResultsTable = ({ results, runtimeEnvironmentId }) =>
           timeRatio,
           memoryRatio,
           exitCode
-        }) =>
+        }) => (
           <tr key={testName}>
-            {tickOrCross(score === 1)}
-            <td>
-              {testName}
+            <td
+              className={classNames({
+                'text-center': true,
+                'text-success': score === 1,
+                'text-danger': score !== 1
+              })}
+            >
+              <b>
+                <FormattedNumber value={score} style="percent" />
+              </b>
             </td>
+            <td>{testName}</td>
             <td className="text-center">
-              <FormattedNumber value={score} style="percent" />
-            </td>
-            <td className="text-center">
-              {status === 'OK' &&
-                <OverlayTrigger
-                  placement="bottom"
-                  overlay={
-                    <Tooltip id={`status-${id}`}>
-                      <FormattedMessage
-                        id="app.submissions.testResultsTable.statusOK"
-                        defaultMessage="OK"
-                      />
-                    </Tooltip>
-                  }
-                >
-                  <Icon name="smile-o" />
-                </OverlayTrigger>}
-              {status === 'SKIPPED' &&
-                <OverlayTrigger
-                  placement="bottom"
-                  overlay={
-                    <Tooltip id={`status-${id}`}>
-                      <FormattedMessage
-                        id="app.submissions.testResultsTable.statusSkipped"
-                        defaultMessage="Skipped"
-                      />
-                    </Tooltip>
-                  }
-                >
-                  <Icon name="meh-o" />
-                </OverlayTrigger>}
-              {status === 'FAILED' &&
-                <OverlayTrigger
-                  placement="bottom"
-                  overlay={
-                    <Tooltip id={`status-${id}`}>
-                      <FormattedMessage
-                        id="app.submissions.testResultsTable.statusFailed"
-                        defaultMessage="Failed"
-                      />
-                    </Tooltip>
-                  }
-                >
-                  <Icon name="frown-o" />
-                </OverlayTrigger>}
+              {status === 'OK' && (
+                <FormattedMessage
+                  id="app.submissions.testResultsTable.statusOK"
+                  defaultMessage="OK"
+                />
+              )}
+              {status === 'SKIPPED' && (
+                <FormattedMessage
+                  id="app.submissions.testResultsTable.statusSkipped"
+                  defaultMessage="Skipped"
+                />
+              )}
+              {status === 'FAILED' && (
+                <FormattedMessage
+                  id="app.submissions.testResultsTable.statusFailed"
+                  defaultMessage="Failed"
+                />
+              )}
             </td>
 
             {tickOrCross(memoryExceeded === false, memoryRatio)}
             {tickOrCross(timeExceeded === false, timeRatio)}
             <td className="text-center">
-              {exitCode === 0 && score !== 1
-                ? <FormattedMessage
-                    id="app.exitCodes.FAILED"
-                    defaultMessage="FAILED"
-                  />
-                : exitCodeMapping(runtimeEnvironmentId, exitCode)}
+              {exitCodeMapping(runtimeEnvironmentId, exitCode)}
             </td>
           </tr>
+        )
       )}
     </tbody>
-  </Table>;
+  </Table>
+);
 
 TestResultsTable.propTypes = {
   results: PropTypes.arrayOf(

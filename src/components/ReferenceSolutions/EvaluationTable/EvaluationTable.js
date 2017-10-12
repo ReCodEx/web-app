@@ -1,8 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage, FormattedDate, FormattedTime } from 'react-intl';
+import {
+  FormattedMessage,
+  FormattedDate,
+  FormattedTime,
+  FormattedNumber
+} from 'react-intl';
 import { Table } from 'react-bootstrap';
 import { Link } from 'react-router';
+import classnames from 'classnames';
 
 import withLinks from '../../../hoc/withLinks';
 import AssignmentStatusIcon from '../../Assignments/Assignment/AssignmentStatusIcon';
@@ -21,6 +27,12 @@ const EvaluationTable = ({
           <FormattedMessage
             id="app.evaluationTable.evaluatedAt"
             defaultMessage="Evaluated at:"
+          />
+        </th>
+        <th>
+          <FormattedMessage
+            id="app.evaluationTable.score"
+            defaultMessage="Score:"
           />
         </th>
         <th />
@@ -43,14 +55,27 @@ const EvaluationTable = ({
                 accepted={false}
               />
             </td>
-            {e.evaluation ? (
+            {e.evaluation && (
               <td>
                 <FormattedDate value={e.evaluation.evaluatedAt * 1000} />
                 &nbsp;
                 <FormattedTime value={e.evaluation.evaluatedAt * 1000} />
               </td>
-            ) : (
-              <td>
+            )}
+            {e.evaluation && (
+              <td
+                className={classnames({
+                  'text-danger': !e.evaluation.isCorrect,
+                  'text-success': e.evaluation.isCorrect
+                })}
+              >
+                <b>
+                  <FormattedNumber style="percent" value={e.evaluation.score} />
+                </b>
+              </td>
+            )}
+            {!e.evaluation && (
+              <td colSpan="2">
                 <i>
                   <FormattedMessage
                     id="app.evaluationTable.notAvailable"

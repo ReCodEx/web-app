@@ -227,13 +227,6 @@ class Exercise extends Component {
                     <LocalizedTexts locales={exercise.localizedTexts} />
                   )}
                 </div>
-              </Col>
-              <Col lg={6}>
-                <ExerciseDetail {...exercise} />
-              </Col>
-            </Row>
-            <Row>
-              <Col md={6}>
                 <Box
                   title={formatMessage(messages.groupsBox)}
                   description={
@@ -263,63 +256,6 @@ class Exercise extends Component {
                     )}
                   </ResourceRenderer>
                 </Box>
-              </Col>
-              <Col md={6}>
-                <Box
-                  title={formatMessage(messages.referenceSolutionsBox)}
-                  noPadding
-                  footer={
-                    <p className="text-center">
-                      <Button
-                        bsStyle="success"
-                        onClick={() => initCreateReferenceSolution(userId)}
-                      >
-                        <FormattedMessage
-                          id="app.exercise.createReferenceSoution"
-                          defaultMessage="Create reference solution"
-                        />
-                      </Button>
-                    </p>
-                  }
-                >
-                  <ResourceRenderer resource={referenceSolutions}>
-                    {referenceSolutions =>
-                      referenceSolutions.length > 0 ? (
-                        <ReferenceSolutionsList
-                          referenceSolutions={referenceSolutions}
-                          renderButtons={evaluationId => (
-                            <Button
-                              bsSize="xs"
-                              onClick={() =>
-                                push(
-                                  EXERCISE_REFERENCE_SOLUTION_URI_FACTORY(
-                                    exercise.id,
-                                    evaluationId
-                                  )
-                                )}
-                            >
-                              <SendIcon />{' '}
-                              <FormattedMessage
-                                id="app.exercise.referenceSolutionDetail"
-                                defaultMessage="View detail"
-                              />
-                            </Button>
-                          )}
-                        />
-                      ) : (
-                        <p className="text-center">
-                          <FormattedMessage
-                            id="app.exercise.noReferenceSolutions"
-                            defaultMessage="There are no reference solutions for this exercise yet."
-                          />
-                        </p>
-                      )}
-                  </ResourceRenderer>
-                </Box>
-              </Col>
-            </Row>
-            <Row>
-              <Col lg={6}>
                 <Box
                   title={
                     <FormattedMessage
@@ -392,6 +328,60 @@ class Exercise extends Component {
                         )}
                       />
                     )}
+                  </ResourceRenderer>
+                </Box>
+              </Col>
+              <Col lg={6}>
+                <ExerciseDetail {...exercise} />
+                <Box
+                  title={formatMessage(messages.referenceSolutionsBox)}
+                  noPadding
+                  footer={
+                    <p className="text-center">
+                      <Button
+                        bsStyle="success"
+                        onClick={() => initCreateReferenceSolution(userId)}
+                      >
+                        <FormattedMessage
+                          id="app.exercise.createReferenceSoution"
+                          defaultMessage="Create reference solution"
+                        />
+                      </Button>
+                    </p>
+                  }
+                >
+                  <ResourceRenderer resource={referenceSolutions}>
+                    {referenceSolutions =>
+                      referenceSolutions.length > 0 ? (
+                        <ReferenceSolutionsList
+                          referenceSolutions={referenceSolutions}
+                          renderButtons={evaluationId => (
+                            <Button
+                              bsSize="xs"
+                              onClick={() =>
+                                push(
+                                  EXERCISE_REFERENCE_SOLUTION_URI_FACTORY(
+                                    exercise.id,
+                                    evaluationId
+                                  )
+                                )}
+                            >
+                              <SendIcon />{' '}
+                              <FormattedMessage
+                                id="app.exercise.referenceSolutionDetail"
+                                defaultMessage="View detail"
+                              />
+                            </Button>
+                          )}
+                        />
+                      ) : (
+                        <p className="text-center">
+                          <FormattedMessage
+                            id="app.exercise.noReferenceSolutions"
+                            defaultMessage="There are no reference solutions for this exercise yet."
+                          />
+                        </p>
+                      )}
                   </ResourceRenderer>
                 </Box>
               </Col>
