@@ -2,6 +2,12 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
 const exitCodeMapping = (runtimeEnvironmentId, exitCode) => {
+  if (exitCode === -1) {
+    return (
+      <FormattedMessage id="app.exitCodes.unknown" defaultMessage="Unknown" />
+    );
+  }
+
   switch (runtimeEnvironmentId) {
     case 'java':
       return javaMapping(exitCode);
