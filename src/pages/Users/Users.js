@@ -12,14 +12,16 @@ import {
   InputGroup
 } from 'react-bootstrap';
 
-import { SettingsIcon, SearchIcon } from '../../components/icons';
+import { SettingsIcon, SearchIcon, TransferIcon } from '../../components/icons';
 import Button from '../../components/widgets/FlatButton';
 import DeleteUserButtonContainer from '../../containers/DeleteUserButtonContainer';
 import Page from '../../components/layout/Page';
 import Box from '../../components/widgets/Box';
 import UsersList from '../../components/Users/UsersList';
-import { usersSelector } from '../../redux/selectors/users';
+import { usersSelector, isSuperAdmin } from '../../redux/selectors/users';
 import { fetchAllUsers } from '../../redux/modules/users';
+import { takeOver } from '../../redux/modules/auth';
+import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 
 import withLinks from '../../hoc/withLinks';
 
@@ -51,7 +53,12 @@ class Users extends Component {
   }
 
   render() {
-    const { users, links: { EDIT_USER_URI_FACTORY } } = this.props;
+    const {
+      users,
+      links: { EDIT_USER_URI_FACTORY, DASHBOARD_URI },
+      takeOver,
+      isSuperAdmin
+    } = this.props;
 
     return (
       <Page
@@ -121,7 +128,7 @@ class Users extends Component {
                   createActions={userId =>
                     <div>
                       <LinkContainer to={EDIT_USER_URI_FACTORY(userId)}>
-                        <Button bsSize="xs" className="btn-flat">
+                        <Button bsSize="xs">
                           <SettingsIcon />{' '}
                           <FormattedMessage
                             id="app.users.settings"
@@ -129,6 +136,17 @@ class Users extends Component {
                           />
                         </Button>
                       </LinkContainer>
+                      {isSuperAdmin &&
+                        <Button
+                          bsSize="xs"
+                          onClick={() => takeOver(userId, DASHBOARD_URI)}
+                        >
+                          <TransferIcon />{' '}
+                          <FormattedMessage
+                            id="app.users.takeOver"
+                            defaultMessage="Login as"
+                          />
+                        </Button>}
                       <DeleteUserButtonContainer id={userId} bsSize="xs" />
                     </div>}
                 />
@@ -144,17 +162,22 @@ Users.propTypes = {
   loadAsync: PropTypes.func.isRequired,
   push: PropTypes.func.isRequired,
   links: PropTypes.object.isRequired,
-  users: ImmutablePropTypes.map
+  users: ImmutablePropTypes.map,
+  takeOver: PropTypes.func.isRequired,
+  isSuperAdmin: PropTypes.bool
 };
 
 export default withLinks(
   connect(
     state => ({
-      users: usersSelector(state)
+      users: usersSelector(state),
+      isSuperAdmin: isSuperAdmin(loggedInUserIdSelector(state))(state)
     }),
     dispatch => ({
       push: url => dispatch(push(url)),
-      loadAsync: () => Users.loadAsync({}, dispatch)
+      loadAsync: () => Users.loadAsync({}, dispatch),
+      takeOver: (userId, redirectUrl) =>
+        dispatch(takeOver(userId)).then(() => dispatch(push(redirectUrl)))
     })
   )(Users)
 );
