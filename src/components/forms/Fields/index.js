@@ -1,4 +1,3 @@
-export { default as BytesTextField } from './BytesTextField';
 export { default as CheckboxField } from './CheckboxField';
 export { default as EmailField } from './EmailField';
 export { default as DatetimeField } from './DatetimeField';
@@ -6,6 +5,7 @@ export { default as MarkdownTextAreaField } from './MarkdownTextAreaField';
 export { default as LimitsField } from './LimitsField';
 export { default as PasswordField } from './PasswordField';
 export { default as PasswordStrength } from './PasswordStrength';
+export { default as KiloBytesTextField } from './KiloBytesTextField';
 export { default as LanguageSelectField } from './LanguageSelectField';
 export { default as PipelineField } from './PipelineField';
 export { default as PipelineVariablesField } from './PipelineVariablesField';
