@@ -9,9 +9,10 @@ import authMiddleware from './middleware/authMiddleware';
 import apiMiddleware from './middleware/apiMiddleware';
 import createReducer from './reducer';
 import createEngine from 'redux-storage-engine-localstorage';
+import filter from 'redux-storage-decorator-filter';
 import { actionTypes } from './modules/auth';
 
-const engine = createEngine('recodex/store');
+const engine = filter(createEngine('recodex/store'), ['userSwitching']);
 
 const getMiddleware = history => [
   authMiddleware,
@@ -33,10 +34,7 @@ const prod = history => compose(applyMiddleware(...getMiddleware(history)));
 const isDev = () => process.env.NODE_ENV === 'development';
 
 export const configureStore = (history, initialState, token) => {
-  const reducer = createReducer(token, (old, next) => ({
-    ...old,
-    userSwitching: next.userSwitching
-  }));
+  const reducer = createReducer(token);
   const store = createStore(
     storage.reducer(reducer),
     initialState,

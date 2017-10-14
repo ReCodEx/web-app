@@ -83,6 +83,7 @@
     "redux-form": "^6.2.1",
     "redux-promise-middleware": "^4.2.0",
     "redux-storage": "^4.1.2",
+    "redux-storage-decorator-filter": "^1.1.8",
     "redux-storage-engine-localstorage": "^1.1.4",
     "redux-thunk": "^2.0.1",
     "reselect": "^3.0.1",
