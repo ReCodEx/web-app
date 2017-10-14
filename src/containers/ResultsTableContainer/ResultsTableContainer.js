@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import ResultsTable from '../../components/Groups/ResultsTable';
-import { fetchBestSubmission } from '../../redux/modules/groupResults';
+import { fetchBestSubmissions } from '../../redux/modules/groupResults';
 import { getBestSubmissionsAssoc } from '../../redux/selectors/groupResults';
 
 class ResultsTableContainer extends Component {
@@ -22,7 +22,7 @@ class ResultsTableContainer extends Component {
 
   static loadAsync = ({ users, assignments }, dispatch) => {
     assignments.map(assignment =>
-      users.map(user => dispatch(fetchBestSubmission(user.id, assignment.id)))
+      dispatch(fetchBestSubmissions(assignment.id))
     );
   };
 

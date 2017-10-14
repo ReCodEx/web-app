@@ -17,7 +17,10 @@ const { reduceActions } = factory({
 export const additionalActionTypes = {
   BEST_SUBMISSION: 'recodex/groupResults/BEST_SUBMISSION',
   BEST_SUBMISSION_PENDING: 'recodex/groupResults/BEST_SUBMISSION_PENDING',
-  BEST_SUBMISSION_FULFILLED: 'recodex/groupResults/BEST_SUBMISSION_FULFILLED'
+  BEST_SUBMISSION_FULFILLED: 'recodex/groupResults/BEST_SUBMISSION_FULFILLED',
+  BEST_SUBMISSIONS: 'recodex/groupResults/BEST_SUBMISSIONS',
+  BEST_SUBMISSIONS_PENDING: 'recodex/groupResults/BEST_SUBMISSIONS_PENDING',
+  BEST_SUBMISSIONS_FULFILLED: 'recodex/groupResults/BEST_SUBMISSIONS_FULFILLED'
 };
 
 export const fetchBestSubmission = (userId, assignmentId) =>
@@ -26,6 +29,14 @@ export const fetchBestSubmission = (userId, assignmentId) =>
     endpoint: `/exercise-assignments/${assignmentId}/users/${userId}/best-submission`,
     method: 'GET',
     meta: { userId, assignmentId }
+  });
+
+export const fetchBestSubmissions = assignmentId =>
+  createApiAction({
+    type: additionalActionTypes.BEST_SUBMISSION,
+    endpoint: `/exercise-assignments/${assignmentId}/best-submissions`,
+    method: 'GET',
+    meta: { assignmentId }
   });
 
 /**
@@ -41,14 +52,21 @@ const reducer = handleActions(
 
     [additionalActionTypes.BEST_SUBMISSION_FULFILLED]: (
       state,
-      { payload = {}, meta: { userId, assignmentId } }
+      { payload = {}, meta: { assignmentId } }
     ) =>
-      state
-        .setIn(['resources', assignmentId, userId, 'data'], fromJS(payload))
-        .setIn(
-          ['resources', assignmentId, userId, 'state'],
-          resourceStatus.FULFILLED
-        )
+      Object.keys(payload).reduce(
+        (state, userId) =>
+          state
+            .setIn(
+              ['resources', assignmentId, userId, 'data'],
+              fromJS(payload[userId])
+            )
+            .setIn(
+              ['resources', assignmentId, userId, 'state'],
+              resourceStatus.FULFILLED
+            ),
+        state
+      )
   }),
   initialState
 );
