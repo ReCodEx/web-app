@@ -4,9 +4,12 @@ import classNames from 'classnames';
 import { FormattedMessage, FormattedNumber } from 'react-intl';
 import { Table, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import Icon from 'react-fontawesome';
+import prettyMs from 'pretty-ms';
+import prettyBytes from 'pretty-bytes';
+
 import exitCodeMapping from '../../helpers/exitCodeMapping';
 
-const tickOrCross = (isOK, ratio, tooltipId) => (
+const tickOrCrossAndRatioOrValue = (isOK, ratio, value, pretty) => (
   <td
     className={classNames({
       'text-center': true,
@@ -15,18 +18,18 @@ const tickOrCross = (isOK, ratio, tooltipId) => (
     })}
   >
     <Icon name={isOK ? 'check' : 'times'} />{' '}
-    {(ratio || ratio === 0) && (
-      <small>
-        (
-        <FormattedNumber
-          value={ratio}
-          style="percent"
-          minimumFractionDigits={1}
-          maximumFactionDigits={3}
-        />
-        )
-      </small>
-    )}
+    <small>
+      {value
+        ? pretty(value * 1000)
+        : (ratio || ratio === 0) && (
+            <FormattedNumber
+              value={ratio}
+              style="percent"
+              minimumFractionDigits={1}
+              maximumFactionDigits={3}
+            />
+          )}
+    </small>
   </td>
 );
 
@@ -131,6 +134,8 @@ const TestResultsTable = ({ results, runtimeEnvironmentId }) => (
           message,
           timeRatio,
           memoryRatio,
+          time,
+          memory,
           exitCode
         }) => (
           <tr key={testName}>
@@ -175,8 +180,19 @@ const TestResultsTable = ({ results, runtimeEnvironmentId }) => (
               </b>
             </td>
 
-            {tickOrCross(memoryExceeded === false, memoryRatio)}
-            {tickOrCross(timeExceeded === false, timeRatio)}
+            {tickOrCrossAndRatioOrValue(
+              memoryExceeded === false,
+              memoryRatio,
+              memory,
+              prettyBytes
+            )}
+            {tickOrCrossAndRatioOrValue(
+              timeExceeded === false,
+              timeRatio,
+              time,
+              prettyMs
+            )}
+
             <td className="text-center">
               {exitCodeMapping(runtimeEnvironmentId, exitCode)}
             </td>

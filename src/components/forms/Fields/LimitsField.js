@@ -4,7 +4,7 @@ import { Field } from 'redux-form';
 import { FormattedMessage } from 'react-intl';
 import Icon from 'react-fontawesome';
 
-import { BytesTextField, SecondsTextField } from '../Fields';
+import { KiloBytesTextField, SecondsTextField } from '../Fields';
 import FlatButton from '../../widgets/FlatButton';
 import Confirm from '../../forms/Confirm';
 
@@ -16,11 +16,11 @@ const LimitsField = ({
   setVertically,
   setAll,
   ...props
-}) =>
+}) => (
   <div>
     <Field
       name={`${prefix}.memory`}
-      component={BytesTextField}
+      component={KiloBytesTextField}
       label={
         <FormattedMessage
           id="app.fields.limits.memory"
@@ -63,7 +63,8 @@ const LimitsField = ({
         </FlatButton>
       </Confirm>
     </p>
-  </div>;
+  </div>
+);
 
 LimitsField.propTypes = {
   label: PropTypes.oneOfType([

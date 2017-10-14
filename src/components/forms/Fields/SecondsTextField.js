@@ -9,14 +9,15 @@ const SecondsTextField = ({ input, ...props }) => (
   <div>
     <TextField {...props} input={input} />
     {!props.meta.error &&
-      !isNaN(Number(input.value)) &&
-      <HelpBlock>
-        <FormattedMessage
-          id="app.milisecondsTextField.humanReadable"
-          defaultMessage="Human readable variant:"
-        />
-        {' '}<b>{prettyMs(Number(input.value) * 1000)}</b>
-      </HelpBlock>}
+      !isNaN(Number(input.value)) && (
+        <HelpBlock>
+          <FormattedMessage
+            id="app.milisecondsTextField.humanReadable"
+            defaultMessage="Human readable variant:"
+          />{' '}
+          <b>{prettyMs(Number(input.value) * 1000)}</b>
+        </HelpBlock>
+      )}
   </div>
 );
 

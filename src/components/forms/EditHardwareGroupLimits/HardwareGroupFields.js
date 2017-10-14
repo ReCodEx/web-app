@@ -3,9 +3,8 @@ import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { Field } from 'redux-form';
 import { Row, Col, HelpBlock } from 'react-bootstrap';
-import { BytesTextField, SecondsTextField } from '../Fields';
-import ReferenceSolutionsEvaluationsResults
-  from '../../Submissions/ReferenceSolutionsEvaluationsResults';
+import { KiloBytesTextField, SecondsTextField } from '../Fields';
+import ReferenceSolutionsEvaluationsResults from '../../Submissions/ReferenceSolutionsEvaluationsResults';
 
 const sortTests = tests => {
   return tests.sort((a, b) => a.localeCompare(b));
@@ -28,8 +27,7 @@ const HardwareGroupFields = ({
             <FormattedMessage
               id="app.hardwareGroupFields.test"
               defaultMessage="Test:"
-            />
-            {' '}
+            />{' '}
             <b>{testName}</b>
           </h4>
           {Object.keys(tests[testName]).map((taskId, k) => (
@@ -47,7 +45,7 @@ const HardwareGroupFields = ({
               />
               <Field
                 name={`${prefix}.tests.${testName}.${taskId}.memory`}
-                component={BytesTextField}
+                component={KiloBytesTextField}
                 label={
                   <FormattedMessage
                     id="app.hardwareGroupFields.memoryLimit"
@@ -57,21 +55,23 @@ const HardwareGroupFields = ({
                 }
               />
 
-              {referenceSolutionsEvaluationsResults &&
+              {referenceSolutionsEvaluationsResults && (
                 <ReferenceSolutionsEvaluationsResults
                   testId={testName}
                   taskId={taskId}
                   results={referenceSolutionsEvaluationsResults}
-                />}
+                />
+              )}
 
-              {!referenceSolutionsEvaluationsResults &&
+              {!referenceSolutionsEvaluationsResults && (
                 <HelpBlock>
                   <FormattedMessage
                     id="app.hardwareGroupFields.noReferenceSolutions"
                     defaultMessage="There are no reference solutions' evaluations' for test '{testName}' and its task '{taskId}'."
                     values={{ testName, taskId }}
                   />
-                </HelpBlock>}
+                </HelpBlock>
+              )}
             </div>
           ))}
         </Col>
