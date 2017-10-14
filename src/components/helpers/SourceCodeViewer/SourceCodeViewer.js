@@ -32,30 +32,34 @@ const getMode = ext => {
   }
 };
 
-const SourceCodeViewer = ({
-  name,
-  content = '',
-  lineNumbers = true,
-  lines = 20
-}) => (
+const SourceCodeViewer = (
+  { name, content = '', lineNumbers = true, lines = 20 },
+  { userSettings: { vimMode = false, darkTheme = false } }
+) =>
   <ClientOnly>
     <AceEditor
       value={content}
-      disabled
       mode={getMode(name.split('.').pop())}
-      theme="monokai"
+      keyboardHandler={vimMode ? 'vim' : undefined}
+      theme={darkTheme ? 'monokai' : 'github'}
       name="source-code-viewer"
       width="100%"
-      editorProps={{ $blockScrolling: true }}
+      height="100%"
+      minLines={10}
+      maxLines={50}
+      editorProps={{ $blockScrolling: true, $autoScrollEditorIntoView: true }}
     />
-  </ClientOnly>
-);
+  </ClientOnly>;
 
 SourceCodeViewer.propTypes = {
   name: PropTypes.string.isRequired,
   content: PropTypes.string,
   lineNumbers: PropTypes.bool,
   lines: PropTypes.number
+};
+
+SourceCodeViewer.contextTypes = {
+  userSettings: PropTypes.object
 };
 
 export default SourceCodeViewer;
