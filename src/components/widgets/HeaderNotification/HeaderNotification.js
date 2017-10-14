@@ -54,11 +54,11 @@ class HeaderNotification extends Component {
               )}
             </span>
             <span className="fa">
-              <a className={styles.copy} href="#">
+              <span className={styles.copy}>
                 <CopyToClipboard text={msg}>
                   <CopyIcon />
                 </CopyToClipboard>
-              </a>
+              </span>
             </span>
             <span>{msg}</span>
             {count > 1 && (
