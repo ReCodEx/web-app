@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { logout } from '../../redux/modules/auth';
 
+import UserSwitchingContainer from '../../containers/UserSwitchingContainer';
+
 import Badge, {
   LoadingBadge,
   FailedBadge
@@ -19,22 +21,23 @@ const BadgeContainer = ({
   logout,
   small = false,
   links: { HOME_URI }
-}) => (
+}) =>
   <ResourceRenderer
     loading={<LoadingBadge small={small} />}
     failed={<FailedBadge color="black" small={small} />}
     resource={user}
   >
-    {data => (
-      <Badge
-        {...data}
-        logout={() => logout(HOME_URI)}
-        expiration={expiration}
-        small={small}
-      />
-    )}
-  </ResourceRenderer>
-);
+    {data =>
+      <span>
+        <Badge
+          {...data}
+          logout={() => logout(HOME_URI)}
+          expiration={expiration}
+          small={small}
+        />
+        <UserSwitchingContainer open={true} />
+      </span>}
+  </ResourceRenderer>;
 
 BadgeContainer.propTypes = {
   user: PropTypes.object,

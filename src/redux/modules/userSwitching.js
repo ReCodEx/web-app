@@ -7,7 +7,7 @@ export const switchUser = userId => (dispatch, getState) => {
   const state = getState().userSwitching;
   const accessToken = state[userId] ? state[userId].accessToken : null;
   if (!accessToken || !isTokenValid(accessToken)) {
-    dispatch(addNotification({ msg: 'The token has already expired.' }));
+    dispatch(addNotification('The token has already expired.', false));
   } else {
     dispatch({
       type: actionTypes.LOGIN_SUCCESS,
@@ -27,7 +27,11 @@ const reducer = handleActions(
         : {
             ...state,
             [user.id]: {
-              user: { id: user.id, name: user.name, avatarUrl: user.avatarUrl },
+              user: {
+                id: user.id,
+                fullName: user.fullName,
+                avatarUrl: user.avatarUrl
+              },
               accessToken
             }
           }
