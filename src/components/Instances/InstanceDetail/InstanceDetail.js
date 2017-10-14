@@ -36,9 +36,8 @@ const InstanceDetail = ({ description, rootGroupId, groups, isAdmin }) =>
           {rootGroupId !== null &&
             <GroupTree
               id={rootGroupId}
-              deletable={false}
               isAdmin={isAdmin}
-              isOpen
+              //isOpen={false}
               groups={groups}
             />}
 
