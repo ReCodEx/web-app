@@ -73,7 +73,10 @@ const SourceCodeField = (
         tabIndex={tabIndex}
         keyboardHandler={vimMode ? 'vim' : undefined}
         width="100%"
-        editorProps={{ $blockScrolling: true }}
+        height="100%"
+        minLines={5}
+        maxLines={20}
+        editorProps={{ $blockScrolling: true, $autoScrollEditorIntoView: true }}
       />
     </ClientOnly>
     {error &&
