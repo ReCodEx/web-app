@@ -9,6 +9,7 @@ import factory, {
 import { getSubmission } from '../selectors/submissions';
 import { saveAs } from 'file-saver';
 import { actionTypes as submissionActionTypes } from './submission';
+import { addNotification } from './notifications';
 
 const resourceName = 'submissions';
 const needsRefetching = item =>
@@ -104,12 +105,25 @@ export const downloadResultArchive = submissionId => (dispatch, getState) =>
         })
       )
     )
+    .then(result => {
+      const { value: { ok, status } } = result;
+      if (ok === false) {
+        const msg =
+          status === 404
+            ? 'The archive containing the results could not be found on the server.'
+            : `This results archive cannot be downloaded (${status}).`;
+        throw new Error(msg);
+      }
+
+      return result;
+    })
     .then(({ value }) => value.blob())
     .then(blob => {
       const submission = getJsData(getSubmission(submissionId)(getState())); // the file is 100% loaded at this time
       saveAs(blob, submission.id + '.zip'); // TODO: solve this better... proper file name should be given during downloading... so use it
       return Promise.resolve();
-    });
+    })
+    .catch(e => dispatch(addNotification(e.message, false)));
 
 /**
  * Reducer
