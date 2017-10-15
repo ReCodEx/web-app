@@ -19,16 +19,17 @@ const tickOrCrossAndRatioOrValue = (isOK, ratio, value, pretty) => (
   >
     <Icon name={isOK ? 'check' : 'times'} />{' '}
     <small>
-      {value
-        ? pretty(value * 1000)
-        : (ratio || ratio === 0) && (
-            <FormattedNumber
-              value={ratio}
-              style="percent"
-              minimumFractionDigits={1}
-              maximumFactionDigits={3}
-            />
-          )}
+      {value && '('}
+      {(ratio || ratio === 0) && (
+        <FormattedNumber
+          value={ratio}
+          style="percent"
+          minimumFractionDigits={1}
+          maximumFactionDigits={3}
+        />
+      )}
+      {value && ') '}
+      {value && pretty(value * 1000)}
     </small>
   </td>
 );
