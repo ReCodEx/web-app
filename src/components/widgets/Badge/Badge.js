@@ -67,7 +67,13 @@ class Badge extends Component {
               </Tooltip>
             }
           >
-            <a href="#" onClick={logout}>
+            <a
+              href="#"
+              onClick={e => {
+                e.preventDefault();
+                logout();
+              }}
+            >
               <Icon name="sign-out" className="text-danger" />{' '}
               <FormattedMessage id="app.logout" defaultMessage="Logout" />
             </a>
