@@ -11,6 +11,7 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 
 import withLinks from '../../hoc/withLinks';
 import Page from '../../components/layout/Page';
+import { clientOnly } from '../../helpers/clientOnly';
 
 import { fetchReferenceSolutionsIfNeeded } from '../../redux/modules/referenceSolutions';
 import { referenceSolutionsSelector } from '../../redux/selectors/referenceSolutions';
@@ -161,7 +162,9 @@ export default withLinks(
       }),
       (dispatch, { params }) => ({
         loadAsync: () =>
-          ReferenceSolutionEvaluation.loadAsync(params, dispatch),
+          clientOnly(() =>
+            ReferenceSolutionEvaluation.loadAsync(params, dispatch)
+          ),
         downloadEvaluationArchive: e => {
           e.preventDefault();
           dispatch(downloadEvaluationArchive(params.evaluationId));

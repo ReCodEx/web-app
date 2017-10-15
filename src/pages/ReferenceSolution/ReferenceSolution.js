@@ -12,6 +12,7 @@ import { Row, Col, Button } from 'react-bootstrap';
 
 import withLinks from '../../hoc/withLinks';
 import Page from '../../components/layout/Page';
+import { clientOnly } from '../../helpers/clientOnly';
 
 import {
   fetchReferenceSolutionsIfNeeded,
@@ -119,7 +120,7 @@ class ReferenceSolution extends Component {
                     exerciseId={exerciseId}
                   />
                   <Row>
-                    {referenceSolution.solution.files.map(file => (
+                    {referenceSolution.solution.files.map(file =>
                       <Col lg={6} md={12} key={file.id}>
                         <a
                           href="#"
@@ -131,7 +132,7 @@ class ReferenceSolution extends Component {
                           <SourceCodeInfoBox {...file} />
                         </a>
                       </Col>
-                    ))}
+                    )}
                   </Row>
                 </Col>
                 <Col lg={6}>
@@ -208,7 +209,8 @@ export default withLinks(
         referenceSolutions: referenceSolutionsSelector(exerciseId)(state)
       }),
       (dispatch, { params }) => ({
-        loadAsync: () => ReferenceSolution.loadAsync(params, dispatch),
+        loadAsync: () =>
+          clientOnly(() => ReferenceSolution.loadAsync(params, dispatch)),
         refreshSolutionEvaluations: () => {
           dispatch(fetchReferenceSolutions(params.exerciseId));
         },

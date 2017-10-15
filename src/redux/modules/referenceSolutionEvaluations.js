@@ -39,7 +39,8 @@ export const downloadEvaluationArchive = evaluationId => (dispatch, getState) =>
   )
     .then(({ value }) => value.blob())
     .then(blob => {
-      saveAs(blob, evaluationId + '.zip');
+      const typedBlob = new Blob([blob], { type: 'application/zip' });
+      saveAs(typedBlob, evaluationId + '.zip');
       return Promise.resolve();
     });
 

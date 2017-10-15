@@ -5,6 +5,7 @@ public/bundle.js
 public/bundle.js.map
 public/
 bin/*.jpg
+bin/*.css
 bin/server.js
 bin/server.js.map
 tmp
