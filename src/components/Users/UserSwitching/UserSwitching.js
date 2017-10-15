@@ -5,7 +5,7 @@ import MenuTitle from '../../widgets/Sidebar/MenuTitle';
 import MenuButton from '../../widgets/Sidebar/MenuButton';
 
 const UserSwitching = ({ users = [], currentUserId, loginAs, open }) =>
-  users.length > 0
+  users.filter(switching => switching.user.id !== currentUserId).length > 0
     ? <ul className="sidebar-menu">
         <MenuTitle
           title={
