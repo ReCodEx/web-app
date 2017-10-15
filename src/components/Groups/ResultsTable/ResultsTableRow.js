@@ -10,21 +10,23 @@ const ResultsTableRow = ({ userId, assignmentsIds, submissions }) => {
         <UsersNameContainer userId={userId} />
       </td>
       {assignmentsIds.map(assignmentId => {
-        const submission = submissions.filter(
-          s => s.exerciseAssignmentId === assignmentId
-        )[0];
-        const points = submission &&
+        const submission = submissions
+          .filter(s => s !== null)
+          .filter(s => s.exerciseAssignmentId === assignmentId)[0];
+        const points =
+          submission &&
           submission !== null &&
           submission.evaluation &&
           submission.evaluation !== null
-          ? submission.evaluation.points
-          : '-';
-        const bonusPoints = submission &&
+            ? submission.evaluation.points
+            : '-';
+        const bonusPoints =
+          submission &&
           submission !== null &&
           submission.evaluation &&
           submission.evaluation !== null
-          ? submission.evaluation.bonusPoints
-          : 0;
+            ? submission.evaluation.bonusPoints
+            : 0;
         totalPoints += points !== '-' ? points : 0;
         totalPoints += bonusPoints;
         return (
@@ -42,7 +44,9 @@ const ResultsTableRow = ({ userId, assignmentsIds, submissions }) => {
         );
       })}
       <td style={{ textAlign: 'right' }}>
-        <b>{totalPoints}</b>
+        <b>
+          {totalPoints}
+        </b>
       </td>
     </tr>
   );
