@@ -18,10 +18,11 @@ import { getToken } from './redux/middleware/authMiddleware';
 // load the initial state form the server - if any
 let state;
 const ini = window.__INITIAL_STATE__;
+const blacklist = ['userSwitching'];
 if (ini) {
   state = {};
   Object.keys(ini).map(key => {
-    state[key] = fromJS(ini[key]);
+    state[key] = blacklist.indexOf(key) >= 0 ? ini[key] : fromJS(ini[key]);
   });
 }
 
