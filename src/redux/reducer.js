@@ -33,6 +33,7 @@ import submissions from './modules/submissions';
 import registration from './modules/registration';
 import upload from './modules/upload';
 import users from './modules/users';
+import userSwitching from './modules/userSwitching';
 import runtimeEnvironments from './modules/runtimeEnvironments';
 import supplementaryFiles from './modules/supplementaryFiles';
 import pipelineFiles from './modules/pipelineFiles';
@@ -75,6 +76,7 @@ const createRecodexReducers = token => ({
   submissions,
   registration,
   users,
+  userSwitching,
   publicProfiles,
   upload,
   runtimeEnvironments,
