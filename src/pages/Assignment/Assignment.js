@@ -49,6 +49,8 @@ import SubmissionsTableContainer from '../../containers/SubmissionsTableContaine
 
 import withLinks from '../../hoc/withLinks';
 
+import { getLocalizedName } from '../../helpers/localizedTexts';
+
 class Assignment extends Component {
   static loadAsync = ({ assignmentId }, dispatch) =>
     Promise.all([
@@ -69,11 +71,6 @@ class Assignment extends Component {
 
   isAfter = unixTime => {
     return unixTime * 1000 < Date.now();
-  };
-
-  getLocalizedName = (texts, locale, defaultName) => {
-    const localizedText = texts.find(text => text.locale === locale);
-    return localizedText ? localizedText.shortText : defaultName;
   };
 
   render() {
@@ -100,7 +97,7 @@ class Assignment extends Component {
           <ResourceRenderer resource={assignment}>
             {assignment =>
               <span>
-                {this.getLocalizedName(
+                {getLocalizedName(
                   assignment.localizedTexts,
                   lang,
                   assignment.name

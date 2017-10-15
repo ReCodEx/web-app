@@ -14,10 +14,7 @@ import {
   MaybeBonusAssignmentIcon
 } from '../../icons';
 
-const getLocalizedName = (texts, locale, defaultName) => {
-  const localizedText = texts.find(text => text.locale === locale);
-  return localizedText ? localizedText.shortText : defaultName;
-};
+import { getLocalizedName } from '../../../helpers/localizedTexts';
 
 const AdminAssignmentTableRow = (
   {
