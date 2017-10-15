@@ -1,17 +1,18 @@
 import { handleActions } from 'redux-actions';
 import { actionTypes } from './auth';
-import { isTokenValid } from '../helpers/token';
+import { decode, isTokenValid } from '../helpers/token';
 import { addNotification } from './notifications';
 
 export const switchUser = userId => (dispatch, getState) => {
   const state = getState().userSwitching;
-  const accessToken = state[userId] ? state[userId].accessToken : null;
-  if (!accessToken || !isTokenValid(accessToken)) {
+  const user = state[userId] ? state[userId] : null;
+  const decodedToken = decode(user.accessToken);
+  if (!user.accessToken || !isTokenValid(decodedToken)) {
     dispatch(addNotification('The token has already expired.', false));
   } else {
     dispatch({
       type: actionTypes.LOGIN_SUCCESS,
-      payload: { accessToken },
+      payload: user,
       meta: { service: 'takeover' }
     });
   }
@@ -21,19 +22,12 @@ const initialState = {};
 
 const reducer = handleActions(
   {
-    [actionTypes.LOGIN_SUCCESS]: (state, { payload: { user, accessToken } }) =>
-      state[user.id]
+    [actionTypes.LOGIN_SUCCESS]: (state, { payload }) =>
+      state[payload.user.id]
         ? state
         : {
             ...state,
-            [user.id]: {
-              user: {
-                id: user.id,
-                fullName: user.fullName,
-                avatarUrl: user.avatarUrl
-              },
-              accessToken
-            }
+            [payload.user.id]: payload
           }
   },
   initialState
