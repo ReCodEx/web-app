@@ -71,6 +71,11 @@ class Assignment extends Component {
     return unixTime * 1000 < Date.now();
   };
 
+  getLocalizedName = (texts, locale, defaultName) => {
+    const localizedText = texts.find(text => text.locale === locale);
+    return localizedText ? localizedText.shortText : defaultName;
+  };
+
   render() {
     const {
       assignment,
@@ -87,13 +92,19 @@ class Assignment extends Component {
       links: { ASSIGNMENT_EDIT_URI_FACTORY, SUPERVISOR_STATS_URI_FACTORY }
     } = this.props;
 
+    const { lang } = this.context;
+
     return (
       <PageContent
         title={
           <ResourceRenderer resource={assignment}>
             {assignment =>
               <span>
-                {assignment.name}
+                {this.getLocalizedName(
+                  assignment.localizedTexts,
+                  lang,
+                  assignment.name
+                )}
               </span>}
           </ResourceRenderer>
         }
@@ -327,6 +338,10 @@ Assignment.propTypes = {
   links: PropTypes.object.isRequired,
   runtimeEnvironments: PropTypes.array,
   exerciseSync: PropTypes.func.isRequired
+};
+
+Assignment.contextTypes = {
+  lang: PropTypes.string.isRequired
 };
 
 export default withLinks(
