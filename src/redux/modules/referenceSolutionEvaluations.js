@@ -3,6 +3,7 @@ import { saveAs } from 'file-saver';
 
 import factory, { initialState } from '../helpers/resourceManager';
 import { createApiAction } from '../middleware/apiMiddleware';
+import { downloadHelper } from '../helpers/api/download';
 
 const resourceName = 'referenceSolutions';
 const { actions, reduceActions } = factory({
@@ -28,21 +29,12 @@ export const fetchReferenceSolutionEvaluationsForSolution = solutionId =>
     endpoint: `/reference-solutions/${solutionId}/evaluations`
   });
 
-export const downloadEvaluationArchive = evaluationId => (dispatch, getState) =>
-  dispatch(
-    createApiAction({
-      type: additionalActionTypes.DOWNLOAD_EVALUATION_ARCHIVE,
-      method: 'GET',
-      endpoint: `/reference-solutions/evaluation/${evaluationId}/download-result`,
-      doNotProcess: true // the response is not (does not have to be) a JSON
-    })
-  )
-    .then(({ value }) => value.blob())
-    .then(blob => {
-      const typedBlob = new Blob([blob], { type: 'application/zip' });
-      saveAs(typedBlob, evaluationId + '.zip');
-      return Promise.resolve();
-    });
+export const downloadEvaluationArchive = downloadHelper({
+  actionType: additionalActionTypes.DOWNLOAD_EVALUATION_ARCHIVE,
+  fetch: fetchReferenceSolutionEvaluationIfNeeded,
+  endpoint: id => `/reference-solutions/evaluation/${id}/download-result`,
+  fileNameSelector: (id, state) => `${id}.zip`
+});
 
 /**
  * Reducer
