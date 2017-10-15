@@ -119,8 +119,9 @@ export const downloadResultArchive = submissionId => (dispatch, getState) =>
     })
     .then(({ value }) => value.blob())
     .then(blob => {
+      const typedBlob = new Blob([blob], { type: 'application/zip' });
       const submission = getJsData(getSubmission(submissionId)(getState())); // the file is 100% loaded at this time
-      saveAs(blob, submission.id + '.zip'); // TODO: solve this better... proper file name should be given during downloading... so use it
+      saveAs(typedBlob, submission.id + '.zip'); // TODO: solve this better... proper file name should be given during downloading... so use it
       return Promise.resolve();
     })
     .catch(e => dispatch(addNotification(e.message, false)));
