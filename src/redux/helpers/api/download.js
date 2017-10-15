@@ -1,13 +1,12 @@
 import { createApiAction } from '../../middleware/apiMiddleware';
 import { saveAs } from 'file-saver';
-import { getJsData } from '../resourceManager';
 import { addNotification } from '../../modules/notifications';
 
 export const downloadHelper = ({
   fetch,
   endpoint,
   actionType,
-  fileSelector
+  fileNameSelector
 }) => id => (dispatch, getState) =>
   dispatch(fetch(id))
     .then(() =>
@@ -35,8 +34,8 @@ export const downloadHelper = ({
     .then(({ value }) => value.blob())
     .then(blob => {
       const typedBlob = new Blob([blob], { type: 'text/plain;charset=utf-8' });
-      const file = getJsData(fileSelector(id)(getState())); // the file is 100% loaded at this time
-      saveAs(typedBlob, file.name);
+      const fileName = fileNameSelector(id, getState());
+      saveAs(typedBlob, fileName);
       return Promise.resolve();
     })
     .catch(e => dispatch(addNotification(e.message, false)));

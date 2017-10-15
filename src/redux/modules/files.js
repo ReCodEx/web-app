@@ -1,5 +1,5 @@
 import { handleActions } from 'redux-actions';
-import factory, { initialState } from '../helpers/resourceManager';
+import factory, { initialState, getJsData } from '../helpers/resourceManager';
 import { getFile } from '../selectors/files';
 import { downloadHelper } from '../helpers/api/download';
 
@@ -24,13 +24,13 @@ export const download = downloadHelper({
   endpoint: id => `/uploaded-files/${id}/download`,
   fetch: fetchFileIfNeeded,
   actionType: actionTypes.DOWNLOAD,
-  fileSelector: getFile
+  fileNameSelector: (id, state) => `${getJsData(getFile(id)(state)).name}.zip`
 });
 export const downloadSupplementaryFile = downloadHelper({
   endpoint: id => `/uploaded-files/supplementary-file/${id}/download`,
   fetch: fetchFileIfNeeded,
   actionType: actionTypes.DOWNLOAD,
-  fileSelector: getFile
+  fileNameSelector: (id, state) => `${getJsData(getFile(id)(state)).name}.zip`
 });
 
 /**
