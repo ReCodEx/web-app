@@ -35,8 +35,9 @@ export const download = id => (dispatch, getState) =>
     )
     .then(({ value }) => value.blob())
     .then(blob => {
+      const typedBlob = new Blob([blob], { type: 'text/plain;charset=utf-8' });
       const file = getJsData(getFile(id)(getState())); // the file is 100% loaded at this time
-      saveAs(blob, file.name);
+      saveAs(typedBlob, file.name);
       return Promise.resolve();
     });
 
