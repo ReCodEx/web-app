@@ -2,9 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
-const MenuButton = ({
+import styles from './MenuAvatar.less';
+
+const MenuAvatar = ({
   title,
-  icon = 'circle-o',
+  avatarUrl,
   notificationsCount = 0,
   isActive = false,
   onClick
@@ -21,13 +23,7 @@ const MenuButton = ({
       }}
       style={{ cursor: 'pointer' }}
     >
-      <i
-        className={classNames({
-          fa: true,
-          [`fa-${icon}`]: true,
-          'text-yellow': notificationsCount > 0
-        })}
-      />
+      <img src={avatarUrl} alt={title} className={styles.avatar} />
       <span
         style={{
           whiteSpace: 'normal',
@@ -44,12 +40,12 @@ const MenuButton = ({
     </a>
   </li>;
 
-MenuButton.propTypes = {
+MenuAvatar.propTypes = {
   title: PropTypes.oneOfType([PropTypes.element, PropTypes.string]),
-  icon: PropTypes.string,
+  avatarUrl: PropTypes.string,
   onClick: PropTypes.func,
   notificationsCount: PropTypes.number,
   isActive: PropTypes.bool
 };
 
-export default MenuButton;
+export default MenuAvatar;

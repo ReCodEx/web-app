@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import MenuTitle from '../../widgets/Sidebar/MenuTitle';
-import MenuButton from '../../widgets/Sidebar/MenuButton';
+import MenuAvatar from '../../widgets/Sidebar/MenuAvatar';
 
 const UserSwitching = ({ users = [], currentUserId, loginAs, open }) =>
   users.filter(switching => switching.user.id !== currentUserId).length > 0
@@ -15,9 +15,9 @@ const UserSwitching = ({ users = [], currentUserId, loginAs, open }) =>
             />
           }
         />
-        {users.map(({ user: { id, fullName } }) =>
-          <MenuButton
-            icon="user"
+        {users.map(({ user: { id, fullName, avatarUrl } }) =>
+          <MenuAvatar
+            avatarUrl={avatarUrl}
             key={id}
             title={fullName}
             onClick={() => loginAs(id)}
