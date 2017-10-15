@@ -21,14 +21,14 @@ const actionTypes = {
 export const loadFile = actions.pushResource;
 export const fetchFileIfNeeded = actions.fetchOneIfNeeded;
 
-export const download = id => (dispatch, getState) =>
+const downloadHelper = endpoint => id => (dispatch, getState) =>
   dispatch(fetchFileIfNeeded(id))
     .then(() =>
       dispatch(
         createApiAction({
           type: actionTypes.DOWNLOAD,
           method: 'GET',
-          endpoint: `/uploaded-files/${id}/download`,
+          endpoint: endpoint(id),
           doNotProcess: true // the response is not (does not have to be) a JSON
         })
       )
@@ -40,6 +40,11 @@ export const download = id => (dispatch, getState) =>
       saveAs(typedBlob, file.name);
       return Promise.resolve();
     });
+
+export const download = downloadHelper(id => `/uploaded-files/${id}/download`);
+export const downloadSupplementaryFile = downloadHelper(
+  id => `/uploaded-files/supplementary-file/${id}/download`
+);
 
 /**
  * Reducer
