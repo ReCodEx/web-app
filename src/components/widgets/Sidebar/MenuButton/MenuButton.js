@@ -14,7 +14,13 @@ const MenuButton = ({
       active: isActive
     })}
   >
-    <a href="" onClick={onClick} style={{ cursor: 'pointer' }}>
+    <a
+      onClick={e => {
+        e.preventDefault();
+        onClick();
+      }}
+      style={{ cursor: 'pointer' }}
+    >
       <i
         className={classNames({
           fa: true,
