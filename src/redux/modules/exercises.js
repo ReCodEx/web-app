@@ -30,9 +30,11 @@ export const fetchExercisesIfNeeded = actions.fetchIfNeeded;
 export const fetchExercise = actions.fetchResource;
 export const fetchExerciseIfNeeded = actions.fetchOneIfNeeded;
 
+export const fetchManyEndpoint = '/exercises';
+
 export const fetchExercises = () =>
   actions.fetchMany({
-    endpoint: '/exercises'
+    endpoint: fetchManyEndpoint
   });
 
 export const fetchGroupExercises = groupId =>

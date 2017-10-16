@@ -31,7 +31,7 @@ const Page = ({
   ),
   children,
   ...props
-}) => (
+}) =>
   <ResourceRenderer
     resource={resource}
     loading={
@@ -39,7 +39,7 @@ const Page = ({
     }
     failed={<PageContent title={failedTitle} description={failedDescription} />}
   >
-    {(...resources) => (
+    {(...resources) =>
       <PageContent
         {...props}
         title={typeof title === 'function' ? title(...resources) : title}
@@ -50,10 +50,8 @@ const Page = ({
         }
       >
         {typeof children === 'function' ? children(...resources) : children}
-      </PageContent>
-    )}
-  </ResourceRenderer>
-);
+      </PageContent>}
+  </ResourceRenderer>;
 
 const stringOrFormattedMessage = PropTypes.oneOfType([
   PropTypes.string,

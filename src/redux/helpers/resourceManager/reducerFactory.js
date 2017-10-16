@@ -56,7 +56,7 @@ const reducerFactory = (actionTypes, id = 'id') => ({
           ),
         state
       )
-      .setIn(['fetchManyStatus', endpoint], resourceStatus.LOADED),
+      .setIn(['fetchManyStatus', endpoint], resourceStatus.FULFILLED),
 
   [actionTypes.UPDATE_FULFILLED]: (state, { payload, meta: { id } }) =>
     state.setIn(['resources', id, 'data'], fromJS(payload)),
