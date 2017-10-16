@@ -53,7 +53,7 @@ class SourceCodeViewerContainer extends Component {
         loadingFooterRef.clientHeight;
       this.setState({ height });
     } else {
-      console.log('already has height', this.state.height);
+      // console.log('already has height', this.state.height);
     }
   }
 
