@@ -31,7 +31,8 @@ export const downloadEvaluationArchive = downloadHelper({
   actionType: additionalActionTypes.DOWNLOAD_EVALUATION_ARCHIVE,
   fetch: fetchReferenceSolutionEvaluationIfNeeded,
   endpoint: id => `/reference-solutions/evaluation/${id}/download-result`,
-  fileNameSelector: (id, state) => `${id}.zip`
+  fileNameSelector: (id, state) => `${id}.zip`,
+  contentType: 'application/zip'
 });
 
 /**

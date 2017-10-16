@@ -97,7 +97,8 @@ export const downloadResultArchive = downloadHelper({
   fetch: fetchSubmissionIfNeeded,
   actionType: additionalActionTypes.DOWNLOAD_RESULT_ARCHIVE,
   fileNameSelector: (id, state) =>
-    `${getJsData(getSubmission(id)(state)).name}.zip`
+    `${getJsData(getSubmission(id)(state)).name}.zip`,
+  contentType: 'application/zip'
 });
 
 /**

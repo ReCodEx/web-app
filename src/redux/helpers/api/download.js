@@ -6,7 +6,8 @@ export const downloadHelper = ({
   fetch,
   endpoint,
   actionType,
-  fileNameSelector
+  fileNameSelector,
+  contentType
 }) => id => (dispatch, getState) =>
   dispatch(fetch(id))
     .then(() =>
@@ -33,7 +34,7 @@ export const downloadHelper = ({
     })
     .then(({ value }) => value.blob())
     .then(blob => {
-      const typedBlob = new Blob([blob], { type: 'text/plain;charset=utf-8' });
+      const typedBlob = new Blob([blob], { type: contentType });
       const fileName = fileNameSelector(id, getState());
       saveAs(typedBlob, fileName);
       return Promise.resolve();
