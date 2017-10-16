@@ -15,10 +15,13 @@ import {
   ButtonGroup
 } from 'react-bootstrap';
 
-import Page from '../../components/layout/Page';
+import PageContent from '../../components/layout/PageContent';
 import Box from '../../components/widgets/Box';
 import { AddIcon, EditIcon, SearchIcon } from '../../components/icons';
-import { exercisesSelector } from '../../redux/selectors/exercises';
+import {
+  exercisesSelector,
+  fetchManyStatus
+} from '../../redux/selectors/exercises';
 import { canEditExercise } from '../../redux/selectors/users';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import {
@@ -27,6 +30,8 @@ import {
 } from '../../redux/modules/exercises';
 import ExercisesList from '../../components/Exercises/ExercisesList';
 
+import FetchManyResourceRenderer from '../../components/helpers/FetchManyResourceRenderer';
+import { getJsData } from '../../redux/helpers/resourceManager';
 import withLinks from '../../hoc/withLinks';
 
 class Exercises extends Component {
@@ -71,40 +76,74 @@ class Exercises extends Component {
 
   render() {
     const {
-      exercises,
       isAuthorOfExercise,
+      exercises,
+      fetchStatus,
       links: { EXERCISE_EDIT_URI_FACTORY, EXERCISE_EDIT_CONFIG_URI_FACTORY }
     } = this.props;
 
     return (
-      <Page
-        resource={exercises.toArray()}
-        title={
-          <FormattedMessage
-            id="app.exercises.title"
-            defaultMessage="Exercise list"
+      <FetchManyResourceRenderer
+        fetchManyStatus={fetchStatus}
+        loading={
+          <PageContent
+            title={
+              <FormattedMessage
+                id="app.page.exercises.loading"
+                defaultMessage="Loading list of exercises ..."
+              />
+            }
+            description={
+              <FormattedMessage
+                id="app.page.exercises.loadingDescription"
+                defaultMessage="Please wait while we are getting the list of exercises ready."
+              />
+            }
           />
         }
-        description={
-          <FormattedMessage
-            id="app.instance.description"
-            defaultMessage="List and assign exercises to your groups."
+        failed={
+          <PageContent
+            title={
+              <FormattedMessage
+                id="app.page.exercises.failed"
+                defaultMessage="Cannot load the list of exercises"
+              />
+            }
+            description={
+              <FormattedMessage
+                id="app.page.exercises.failedDescription"
+                defaultMessage="We are sorry for the inconvenience, please try again later."
+              />
+            }
           />
         }
-        breadcrumbs={[
-          {
-            text: (
+      >
+        {() =>
+          <PageContent
+            title={
               <FormattedMessage
                 id="app.exercises.title"
                 defaultMessage="Exercise list"
               />
-            ),
-            iconName: 'puzzle-piece'
-          }
-        ]}
-      >
-        {(...exercises) => (
-          <div>
+            }
+            description={
+              <FormattedMessage
+                id="app.instance.description"
+                defaultMessage="List and assign exercises to your groups."
+              />
+            }
+            breadcrumbs={[
+              {
+                text: (
+                  <FormattedMessage
+                    id="app.exercises.title"
+                    defaultMessage="Exercise list"
+                  />
+                ),
+                iconName: 'puzzle-piece'
+              }
+            ]}
+          >
             <Box
               title={
                 <FormattedMessage
@@ -153,7 +192,7 @@ class Exercises extends Component {
                           type="submit"
                           onClick={e => {
                             e.preventDefault();
-                            this.onChange(this.query, exercises);
+                            this.onChange(this.query, exercises.map(getJsData));
                           }}
                           disabled={false}
                         >
@@ -166,37 +205,33 @@ class Exercises extends Component {
                 <ExercisesList
                   exercises={this.state.visibleExercises}
                   createActions={id =>
-                    isAuthorOfExercise(id) && (
-                      <ButtonGroup>
-                        <LinkContainer to={EXERCISE_EDIT_URI_FACTORY(id)}>
-                          <Button bsSize="xs" bsStyle="warning">
-                            <EditIcon />{' '}
-                            <FormattedMessage
-                              id="app.exercises.listEdit"
-                              defaultMessage="Edit"
-                            />
-                          </Button>
-                        </LinkContainer>
-                        <LinkContainer
-                          to={EXERCISE_EDIT_CONFIG_URI_FACTORY(id)}
-                        >
-                          <Button bsSize="xs" bsStyle="warning">
-                            <EditIcon />{' '}
-                            <FormattedMessage
-                              id="app.exercises.listEditConfig"
-                              defaultMessage="Edit config"
-                            />
-                          </Button>
-                        </LinkContainer>
-                        <DeleteExerciseButtonContainer id={id} bsSize="xs" />
-                      </ButtonGroup>
-                    )}
+                    isAuthorOfExercise(id) &&
+                    <ButtonGroup>
+                      <LinkContainer to={EXERCISE_EDIT_URI_FACTORY(id)}>
+                        <Button bsSize="xs" bsStyle="warning">
+                          <EditIcon />{' '}
+                          <FormattedMessage
+                            id="app.exercises.listEdit"
+                            defaultMessage="Edit"
+                          />
+                        </Button>
+                      </LinkContainer>
+                      <LinkContainer to={EXERCISE_EDIT_CONFIG_URI_FACTORY(id)}>
+                        <Button bsSize="xs" bsStyle="warning">
+                          <EditIcon />{' '}
+                          <FormattedMessage
+                            id="app.exercises.listEditConfig"
+                            defaultMessage="Edit config"
+                          />
+                        </Button>
+                      </LinkContainer>
+                      <DeleteExerciseButtonContainer id={id} bsSize="xs" />
+                    </ButtonGroup>}
                 />
               </div>
             </Box>
-          </div>
-        )}
-      </Page>
+          </PageContent>}
+      </FetchManyResourceRenderer>
     );
   }
 }
@@ -207,16 +242,17 @@ Exercises.propTypes = {
   createExercise: PropTypes.func.isRequired,
   isAuthorOfExercise: PropTypes.func.isRequired,
   push: PropTypes.func.isRequired,
-  links: PropTypes.object.isRequired
+  links: PropTypes.object.isRequired,
+  fetchStatus: PropTypes.string
 };
 
 export default withLinks(
   connect(
     state => {
       const userId = loggedInUserIdSelector(state);
-
       return {
         exercises: exercisesSelector(state),
+        fetchStatus: fetchManyStatus(state),
         isAuthorOfExercise: exerciseId =>
           canEditExercise(userId, exerciseId)(state)
       };

@@ -7,8 +7,8 @@ import factory, {
   getJsData
 } from '../helpers/resourceManager';
 import { getSubmission } from '../selectors/submissions';
-import { saveAs } from 'file-saver';
 import { actionTypes as submissionActionTypes } from './submission';
+import { downloadHelper } from '../helpers/api/download';
 
 const resourceName = 'submissions';
 const needsRefetching = item =>
@@ -92,25 +92,14 @@ export const fetchUsersSubmissions = (userId, assignmentId) =>
     }
   });
 
-export const downloadResultArchive = submissionId => (dispatch, getState) =>
-  dispatch(fetchSubmissionIfNeeded(submissionId))
-    .then(() =>
-      dispatch(
-        createApiAction({
-          type: additionalActionTypes.DOWNLOAD_RESULT_ARCHIVE,
-          method: 'GET',
-          endpoint: `/submissions/${submissionId}/download-result`,
-          doNotProcess: true // the response is not (does not have to be) a JSON
-        })
-      )
-    )
-    .then(({ value }) => value.blob())
-    .then(blob => {
-      const typedBlob = new Blob([blob], { type: 'application/zip' });
-      const submission = getJsData(getSubmission(submissionId)(getState())); // the file is 100% loaded at this time
-      saveAs(typedBlob, submission.id + '.zip'); // TODO: solve this better... proper file name should be given during downloading... so use it
-      return Promise.resolve();
-    });
+export const downloadResultArchive = downloadHelper({
+  endpoint: id => `/submissions/${id}/download-result`,
+  fetch: fetchSubmissionIfNeeded,
+  actionType: additionalActionTypes.DOWNLOAD_RESULT_ARCHIVE,
+  fileNameSelector: (id, state) =>
+    `${getJsData(getSubmission(id)(state)).name}.zip`,
+  contentType: 'application/zip'
+});
 
 /**
  * Reducer
