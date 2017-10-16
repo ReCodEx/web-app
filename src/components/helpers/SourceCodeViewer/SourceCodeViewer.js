@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { canUseDOM } from 'exenv';
-import ClientOnly from '../ClientOnly';
 
 var AceEditor = null;
 if (canUseDOM) {
@@ -33,29 +32,27 @@ const getMode = ext => {
 };
 
 const SourceCodeViewer = (
-  { name, content = '', lineNumbers = true, lines = 20 },
+  { name, content = '', lineNumbers = true, height },
   { userSettings: { vimMode = false, darkTheme = false } }
 ) =>
-  <ClientOnly>
-    <AceEditor
-      value={content}
-      mode={getMode(name.split('.').pop())}
-      keyboardHandler={vimMode ? 'vim' : undefined}
-      theme={darkTheme ? 'monokai' : 'github'}
-      name="source-code-viewer"
-      width="100%"
-      height="100%"
-      minLines={10}
-      maxLines={50}
-      editorProps={{ $blockScrolling: true, $autoScrollEditorIntoView: true }}
-    />
-  </ClientOnly>;
+  height
+    ? <AceEditor
+        value={content}
+        mode={getMode(name.split('.').pop())}
+        keyboardHandler={vimMode ? 'vim' : undefined}
+        theme={darkTheme ? 'monokai' : 'github'}
+        name="source-code-viewer"
+        width="100%"
+        height={`${height}px`}
+        editorProps={{ $blockScrolling: true, $autoScrollEditorIntoView: true }}
+      />
+    : null;
 
 SourceCodeViewer.propTypes = {
   name: PropTypes.string.isRequired,
   content: PropTypes.string,
   lineNumbers: PropTypes.bool,
-  lines: PropTypes.number
+  height: PropTypes.number
 };
 
 SourceCodeViewer.contextTypes = {

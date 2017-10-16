@@ -16,6 +16,8 @@ import SourceCodeViewer from '../../components/helpers/SourceCodeViewer';
 import styles from './sourceCode.less';
 
 class SourceCodeViewerContainer extends Component {
+  state = { height: null };
+
   componentWillMount() {
     const { fileId, loadAsync } = this.props;
     if (fileId !== null) {
@@ -29,56 +31,110 @@ class SourceCodeViewerContainer extends Component {
     }
   }
 
+  onModalEntered() {
+    if (this.state.height === null) {
+      const { headerRef, bodyRef, footerRef } = this;
+      const height =
+        window.innerHeight -
+        headerRef.clientHeight -
+        bodyRef.clientHeight -
+        footerRef.clientHeight;
+      this.setState({ height });
+    }
+  }
+
+  onModalEnteredWhileLoading() {
+    if (this.state.height === null) {
+      const { loadingHeaderRef, loadingBodyRef, loadingFooterRef } = this;
+      const height =
+        window.innerHeight -
+        loadingHeaderRef.clientHeight -
+        loadingBodyRef.clientHeight -
+        loadingFooterRef.clientHeight;
+      this.setState({ height });
+    } else {
+      console.log('already has height', this.state.height);
+    }
+  }
+
   render() {
     const { show, onHide, download, file, code } = this.props;
+    const { height } = this.state;
     return (
       <ResourceRenderer
         loading={
-          <Modal show={show} onHide={onHide} dialogClassName={styles.modal}>
-            <Modal.Header closeButton>
-              <Modal.Title>
-                <LoadingIcon />{' '}
-                <FormattedMessage
-                  id="app.sourceCodeViewer.loading"
-                  defaultMessage="Loading ..."
-                />
-              </Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-              <SourceCodeViewer content="" name="" />
-            </Modal.Body>
-            <Modal.Footer>
-              <Button disabled>
-                <DownloadIcon />{' '}
-                <FormattedMessage
-                  id="app.sourceCodeViewer.downloadButton"
-                  defaultMessage="Download file"
-                />
-              </Button>
-            </Modal.Footer>
+          <Modal
+            show={show}
+            onHide={onHide}
+            dialogClassName={styles.modal}
+            onEntered={() => this.onModalEnteredWhileLoading()}
+          >
+            <div ref={header => (this.loadingHeaderRef = header)}>
+              <Modal.Header closeButton>
+                <Modal.Title>
+                  <LoadingIcon />{' '}
+                  <FormattedMessage
+                    id="app.sourceCodeViewer.loading"
+                    defaultMessage="Loading ..."
+                  />
+                </Modal.Title>
+              </Modal.Header>
+            </div>
+            <div ref={body => (this.loadingBodyRef = body)}>
+              <Modal.Body className={styles.modalBody}>
+                <SourceCodeViewer content="" name="" />
+              </Modal.Body>
+            </div>
+            <div ref={footer => (this.loadingFooterRef = footer)}>
+              <Modal.Footer>
+                <Button disabled>
+                  <DownloadIcon />{' '}
+                  <FormattedMessage
+                    id="app.sourceCodeViewer.downloadButton"
+                    defaultMessage="Download file"
+                  />
+                </Button>
+              </Modal.Footer>
+            </div>
           </Modal>
         }
         resource={[file, code]}
       >
-        {(file, code) => (
-          <Modal show={show} onHide={onHide} dialogClassName={styles.modal}>
-            <Modal.Header closeButton>
-              <Modal.Title>{file.name}</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-              <SourceCodeViewer content={code} name={file.name} />
-            </Modal.Body>
-            <Modal.Footer>
-              <Button onClick={() => download(file.id)}>
-                <DownloadIcon />{' '}
-                <FormattedMessage
-                  id="app.sourceCodeViewer.downloadButton"
-                  defaultMessage="Download file"
+        {(file, code) =>
+          <Modal
+            show={show}
+            onHide={onHide}
+            dialogClassName={styles.modal}
+            onEntered={() => this.onModalEntered()}
+          >
+            <div ref={header => (this.headerRef = header)}>
+              <Modal.Header closeButton>
+                <Modal.Title>
+                  {file.name}
+                </Modal.Title>
+              </Modal.Header>
+            </div>
+            <div ref={body => (this.bodyRef = body)}>
+              <Modal.Body className={styles.modalBody}>
+                <SourceCodeViewer
+                  content={code}
+                  name={file.name}
+                  height={height}
                 />
-              </Button>
-            </Modal.Footer>
-          </Modal>
-        )}
+              </Modal.Body>
+            </div>
+            <div ref={footer => (this.footerRef = footer)}>
+              <Modal.Footer>
+                <Button onClick={() => download(file.id)}>
+                  <DownloadIcon />{' '}
+                  <FormattedMessage
+                    id="app.sourceCodeViewer.downloadButton"
+                    defaultMessage="Download file"
+                  />
+                </Button>
+              </Modal.Footer>
+            </div>
+          </Modal>}
       </ResourceRenderer>
     );
   }
