@@ -1,8 +1,6 @@
 import { handleActions } from 'redux-actions';
-import { saveAs } from 'file-saver';
 
 import factory, { initialState } from '../helpers/resourceManager';
-import { createApiAction } from '../middleware/apiMiddleware';
 import { downloadHelper } from '../helpers/api/download';
 
 const resourceName = 'referenceSolutions';
