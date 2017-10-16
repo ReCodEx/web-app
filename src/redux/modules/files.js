@@ -24,15 +24,15 @@ export const download = downloadHelper({
   endpoint: id => `/uploaded-files/${id}/download`,
   fetch: fetchFileIfNeeded,
   actionType: actionTypes.DOWNLOAD,
-  fileNameSelector: (id, state) => `${getJsData(getFile(id)(state)).name}.zip`,
-  contentType: 'application/zip'
+  fileNameSelector: (id, state) => getJsData(getFile(id)(state)).name,
+  contentType: 'text/plain;charset=utf-8'
 });
 export const downloadSupplementaryFile = downloadHelper({
   endpoint: id => `/uploaded-files/supplementary-file/${id}/download`,
   fetch: fetchFileIfNeeded,
   actionType: actionTypes.DOWNLOAD,
-  fileNameSelector: (id, state) => `${getJsData(getFile(id)(state)).name}.zip`,
-  contentType: 'application/zip'
+  fileNameSelector: (id, state) => getJsData(getFile(id)(state)).name,
+  contentType: 'text/plain;charset=utf-8'
 });
 
 /**
