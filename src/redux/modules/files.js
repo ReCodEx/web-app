@@ -1,8 +1,7 @@
 import { handleActions } from 'redux-actions';
 import factory, { initialState, getJsData } from '../helpers/resourceManager';
-import { createApiAction } from '../middleware/apiMiddleware';
 import { getFile } from '../selectors/files';
-import { saveAs } from 'file-saver';
+import { downloadHelper } from '../helpers/api/download';
 
 const resourceName = 'files';
 const { actions, reduceActions } = factory({
@@ -21,30 +20,20 @@ const actionTypes = {
 export const loadFile = actions.pushResource;
 export const fetchFileIfNeeded = actions.fetchOneIfNeeded;
 
-const downloadHelper = endpoint => id => (dispatch, getState) =>
-  dispatch(fetchFileIfNeeded(id))
-    .then(() =>
-      dispatch(
-        createApiAction({
-          type: actionTypes.DOWNLOAD,
-          method: 'GET',
-          endpoint: endpoint(id),
-          doNotProcess: true // the response is not (does not have to be) a JSON
-        })
-      )
-    )
-    .then(({ value }) => value.blob())
-    .then(blob => {
-      const typedBlob = new Blob([blob], { type: 'text/plain;charset=utf-8' });
-      const file = getJsData(getFile(id)(getState())); // the file is 100% loaded at this time
-      saveAs(typedBlob, file.name);
-      return Promise.resolve();
-    });
-
-export const download = downloadHelper(id => `/uploaded-files/${id}/download`);
-export const downloadSupplementaryFile = downloadHelper(
-  id => `/uploaded-files/supplementary-file/${id}/download`
-);
+export const download = downloadHelper({
+  endpoint: id => `/uploaded-files/${id}/download`,
+  fetch: fetchFileIfNeeded,
+  actionType: actionTypes.DOWNLOAD,
+  fileNameSelector: (id, state) => getJsData(getFile(id)(state)).name,
+  contentType: 'text/plain;charset=utf-8'
+});
+export const downloadSupplementaryFile = downloadHelper({
+  endpoint: id => `/uploaded-files/supplementary-file/${id}/download`,
+  fetch: fetchFileIfNeeded,
+  actionType: actionTypes.DOWNLOAD,
+  fileNameSelector: (id, state) => getJsData(getFile(id)(state)).name,
+  contentType: 'text/plain;charset=utf-8'
+});
 
 /**
  * Reducer
