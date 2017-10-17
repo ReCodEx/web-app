@@ -12,13 +12,18 @@ import {
   InputGroup
 } from 'react-bootstrap';
 
+import FetchManyResourceRenderer from '../../components/helpers/FetchManyResourceRenderer';
 import { SettingsIcon, SearchIcon, TransferIcon } from '../../components/icons';
 import Button from '../../components/widgets/FlatButton';
 import DeleteUserButtonContainer from '../../containers/DeleteUserButtonContainer';
-import Page from '../../components/layout/Page';
+import PageContent from '../../components/layout/PageContent';
 import Box from '../../components/widgets/Box';
 import UsersList from '../../components/Users/UsersList';
-import { usersSelector, isSuperAdmin } from '../../redux/selectors/users';
+import {
+  usersSelector,
+  isSuperAdmin,
+  fetchManyStatus
+} from '../../redux/selectors/users';
 import { fetchAllUsers } from '../../redux/modules/users';
 import { takeOver } from '../../redux/modules/auth';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
@@ -57,103 +62,145 @@ class Users extends Component {
       users,
       links: { EDIT_USER_URI_FACTORY, DASHBOARD_URI },
       takeOver,
-      isSuperAdmin
+      isSuperAdmin,
+      fetchStatus
     } = this.props;
 
     return (
-      <Page
-        resource={users.toArray()}
-        title={
-          <FormattedMessage id="app.users.title" defaultMessage="User list" />
-        }
-        description={
-          <FormattedMessage
-            id="app.users.description"
-            defaultMessage="Browse all ReCodEx users."
+      <FetchManyResourceRenderer
+        fetchManyStatus={fetchStatus}
+        loading={
+          <PageContent
+            title={
+              <FormattedMessage
+                id="app.page.users.loading"
+                defaultMessage="Loading list of users ..."
+              />
+            }
+            description={
+              <FormattedMessage
+                id="app.page.users.loadingDescription"
+                defaultMessage="Please wait while we are getting the list of users ready."
+              />
+            }
           />
         }
-        breadcrumbs={[
-          {
-            text: (
-              <FormattedMessage id="app.users.users" defaultMessage="Users" />
-            ),
-            iconName: 'users'
-          }
-        ]}
+        failed={
+          <PageContent
+            title={
+              <FormattedMessage
+                id="app.page.users.failed"
+                defaultMessage="Cannot load the list of users"
+              />
+            }
+            description={
+              <FormattedMessage
+                id="app.page.users.failedDescription"
+                defaultMessage="We are sorry for the inconvenience, please try again later."
+              />
+            }
+          />
+        }
       >
-        {(...users) =>
-          <div>
-            <Box
-              title={
-                <FormattedMessage
-                  id="app.users.listTitle"
-                  defaultMessage="Users"
-                />
+        {() =>
+          <PageContent
+            title={
+              <FormattedMessage
+                id="app.users.title"
+                defaultMessage="User list"
+              />
+            }
+            description={
+              <FormattedMessage
+                id="app.users.description"
+                defaultMessage="Browse all ReCodEx users."
+              />
+            }
+            breadcrumbs={[
+              {
+                text: (
+                  <FormattedMessage
+                    id="app.users.users"
+                    defaultMessage="Users"
+                  />
+                ),
+                iconName: 'users'
               }
-              noPadding
-              unlimitedHeight
-            >
-              <div>
-                <form style={{ padding: '10px' }}>
-                  <FormGroup>
-                    <ControlLabel>
-                      <FormattedMessage
-                        id="app.search.title"
-                        defaultMessage="Search:"
-                      />
-                    </ControlLabel>
-                    <InputGroup>
-                      <FormControl
-                        onChange={e => {
-                          this.query = e.target.value;
-                        }}
-                      />
-                      <InputGroup.Button>
-                        <Button
-                          type="submit"
-                          onClick={e => {
-                            e.preventDefault();
-                            this.onChange(this.query, users);
+            ]}
+          >
+            <div>
+              <Box
+                title={
+                  <FormattedMessage
+                    id="app.users.listTitle"
+                    defaultMessage="Users"
+                  />
+                }
+                noPadding
+                unlimitedHeight
+              >
+                <div>
+                  <form style={{ padding: '10px' }}>
+                    <FormGroup>
+                      <ControlLabel>
+                        <FormattedMessage
+                          id="app.search.title"
+                          defaultMessage="Search:"
+                        />
+                      </ControlLabel>
+                      <InputGroup>
+                        <FormControl
+                          onChange={e => {
+                            this.query = e.target.value;
                           }}
-                          disabled={false}
-                        >
-                          <SearchIcon />
-                        </Button>
-                      </InputGroup.Button>
-                    </InputGroup>
-                  </FormGroup>
-                </form>
-                <UsersList
-                  users={this.state.visibleUsers}
-                  createActions={userId =>
-                    <div>
-                      <LinkContainer to={EDIT_USER_URI_FACTORY(userId)}>
-                        <Button bsSize="xs">
-                          <SettingsIcon />{' '}
-                          <FormattedMessage
-                            id="app.users.settings"
-                            defaultMessage="Settings"
-                          />
-                        </Button>
-                      </LinkContainer>
-                      {isSuperAdmin &&
-                        <Button
-                          bsSize="xs"
-                          onClick={() => takeOver(userId, DASHBOARD_URI)}
-                        >
-                          <TransferIcon />{' '}
-                          <FormattedMessage
-                            id="app.users.takeOver"
-                            defaultMessage="Login as"
-                          />
-                        </Button>}
-                      <DeleteUserButtonContainer id={userId} bsSize="xs" />
-                    </div>}
-                />
-              </div>
-            </Box>
-          </div>}
-      </Page>
+                        />
+                        <InputGroup.Button>
+                          <Button
+                            type="submit"
+                            onClick={e => {
+                              e.preventDefault();
+                              this.onChange(this.query, users);
+                            }}
+                            disabled={false}
+                          >
+                            <SearchIcon />
+                          </Button>
+                        </InputGroup.Button>
+                      </InputGroup>
+                    </FormGroup>
+                  </form>
+                  <UsersList
+                    users={this.state.visibleUsers}
+                    createActions={userId =>
+                      <div>
+                        <LinkContainer to={EDIT_USER_URI_FACTORY(userId)}>
+                          <Button bsSize="xs">
+                            <SettingsIcon />{' '}
+                            <FormattedMessage
+                              id="app.users.settings"
+                              defaultMessage="Settings"
+                            />
+                          </Button>
+                        </LinkContainer>
+                        {isSuperAdmin &&
+                          <Button
+                            bsSize="xs"
+                            onClick={() => takeOver(userId, DASHBOARD_URI)}
+                          >
+                            <TransferIcon />{' '}
+                            <FormattedMessage
+                              id="app.users.takeOver"
+                              defaultMessage="Login as"
+                            />
+                          </Button>}
+                        <DeleteUserButtonContainer id={userId} bsSize="xs" />
+                      </div>}
+                  />
+                </div>
+              </Box>
+            </div>
+          </PageContent>}
+      </FetchManyResourceRenderer>
     );
   }
 }
@@ -164,13 +211,15 @@ Users.propTypes = {
   links: PropTypes.object.isRequired,
   users: ImmutablePropTypes.map,
   takeOver: PropTypes.func.isRequired,
-  isSuperAdmin: PropTypes.bool
+  isSuperAdmin: PropTypes.bool,
+  fetchStatus: PropTypes.string
 };
 
 export default withLinks(
   connect(
     state => ({
       users: usersSelector(state),
+      fetchStatus: fetchManyStatus(state),
       isSuperAdmin: isSuperAdmin(loggedInUserIdSelector(state))(state)
     }),
     dispatch => ({
