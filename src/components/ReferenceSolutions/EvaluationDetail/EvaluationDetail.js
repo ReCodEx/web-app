@@ -43,18 +43,6 @@ const EvaluationDetail = ({ evaluation, note = '' }) => (
         <tr>
           <th>
             <FormattedMessage
-              id="app.evaluationDetail.hasFinished"
-              defaultMessage="Evaluation process has finished:"
-            />
-          </th>
-          <td className="text-center">
-            <MaybeSucceededIcon success={!evaluation.evaluationFailed} />
-          </td>
-        </tr>
-
-        <tr>
-          <th>
-            <FormattedMessage
               id="app.evaluationDetail.isValid"
               defaultMessage="Evaluation is valid:"
             />

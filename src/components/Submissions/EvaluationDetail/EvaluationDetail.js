@@ -56,37 +56,28 @@ const EvaluationDetail = ({
             />
           </th>
           <td className="text-center">
-            {submittedAt < firstDeadline
-              ? <Icon name="check" className="text-success" />
-              : <Icon name="times" className="text-danger" />}
+            {submittedAt < firstDeadline ? (
+              <Icon name="check" className="text-success" />
+            ) : (
+              <Icon name="times" className="text-danger" />
+            )}
           </td>
         </tr>
 
         {submittedAt >= firstDeadline &&
-          allowSecondDeadline === true &&
-          <tr>
-            <th>
-              <FormattedMessage
-                id="app.evaluationDetail.beforeSecondDeadline"
-                defaultMessage="Was submitted before the second deadline:"
-              />
-            </th>
-            <td className="text-center">
-              <MaybeSucceededIcon success={submittedAt < secondDeadline} />
-            </td>
-          </tr>}
-
-        <tr>
-          <th>
-            <FormattedMessage
-              id="app.evaluationDetail.hasFinished"
-              defaultMessage="Evaluation process has finished:"
-            />
-          </th>
-          <td className="text-center">
-            <MaybeSucceededIcon success={!evaluation.evaluationFailed} />
-          </td>
-        </tr>
+          allowSecondDeadline === true && (
+            <tr>
+              <th>
+                <FormattedMessage
+                  id="app.evaluationDetail.beforeSecondDeadline"
+                  defaultMessage="Was submitted before the second deadline:"
+                />
+              </th>
+              <td className="text-center">
+                <MaybeSucceededIcon success={submittedAt < secondDeadline} />
+              </td>
+            </tr>
+          )}
 
         <tr>
           <th>
@@ -126,7 +117,9 @@ const EvaluationDetail = ({
               'text-success': evaluation.isCorrect
             })}
           >
-            <b><FormattedNumber style="percent" value={evaluation.score} /></b>
+            <b>
+              <FormattedNumber style="percent" value={evaluation.score} />
+            </b>
           </td>
         </tr>
         <tr>
@@ -139,17 +132,17 @@ const EvaluationDetail = ({
           <td
             className={classnames({
               'text-center': true,
-              'text-danger': !evaluation.isCorrect &&
-                evaluation.bonusPoints === 0,
-              'text-success': evaluation.isCorrect &&
-                evaluation.bonusPoints === 0,
+              'text-danger':
+                !evaluation.isCorrect && evaluation.bonusPoints === 0,
+              'text-success':
+                evaluation.isCorrect && evaluation.bonusPoints === 0,
               'text-bold': evaluation.bonusPoints === 0
             })}
           >
             {evaluation.points}/{maxPoints}
           </td>
         </tr>
-        {evaluation.bonusPoints !== 0 &&
+        {evaluation.bonusPoints !== 0 && (
           <tr>
             <th>
               <FormattedMessage
@@ -160,8 +153,9 @@ const EvaluationDetail = ({
             <td className="text-center">
               <BonusPoints bonus={evaluation.bonusPoints} />
             </td>
-          </tr>}
-        {evaluation.bonusPoints !== 0 &&
+          </tr>
+        )}
+        {evaluation.bonusPoints !== 0 && (
           <tr>
             <th>
               <FormattedMessage
@@ -172,9 +166,11 @@ const EvaluationDetail = ({
             <td
               className={classnames({
                 'text-center': true,
-                'text-danger': !evaluation.isCorrect ||
+                'text-danger':
+                  !evaluation.isCorrect ||
                   evaluation.points + evaluation.bonusPoints <= 0,
-                'text-success': evaluation.isCorrect &&
+                'text-success':
+                  evaluation.isCorrect &&
                   evaluation.points + evaluation.bonusPoints > 0
               })}
             >
@@ -182,7 +178,8 @@ const EvaluationDetail = ({
                 {evaluation.points + evaluation.bonusPoints}/{maxPoints}
               </b>
             </td>
-          </tr>}
+          </tr>
+        )}
       </tbody>
     </Table>
   </Box>
