@@ -1,5 +1,6 @@
 import { createSelector } from 'reselect';
 import { List } from 'immutable';
+import { fetchManyEndpoint } from '../modules/users';
 
 import { loggedInUserIdSelector } from './auth';
 import { groupSelector, studentsOfGroup, supervisorsOfGroup } from './groups';
@@ -7,12 +8,17 @@ import { exerciseSelector } from './exercises';
 import { pipelineSelector } from './pipelines';
 import { isReady, getJsData } from '../helpers/resourceManager';
 
-const getUsers = state => state.users.get('resources');
+const getUsers = state => state.users;
+const getResources = users => users.get('resources');
 
 /**
  * Select users part of the state
  */
-export const usersSelector = getUsers;
+export const usersSelector = createSelector(getUsers, getResources);
+
+export const fetchManyStatus = createSelector(getUsers, state =>
+  state.getIn(['fetchManyStatus', fetchManyEndpoint])
+);
 
 export const getUser = userId =>
   createSelector(usersSelector, users => users.get(userId));

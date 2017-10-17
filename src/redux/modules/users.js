@@ -33,8 +33,10 @@ export { actionTypes };
  * Actions
  */
 
+export const fetchManyEndpoint = '/users';
+
 export const fetchAllUsers = actions.fetchMany({
-  endpoint: '/users'
+  endpoint: fetchManyEndpoint
 });
 export const loadUserData = actions.pushResource;
 export const fetchUserIfNeeded = actions.fetchIfNeeded;

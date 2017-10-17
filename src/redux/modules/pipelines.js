@@ -19,9 +19,11 @@ export const fetchPipelinesIfNeeded = actions.fetchIfNeeded;
 export const fetchPipeline = actions.fetchResource;
 export const fetchPipelineIfNeeded = actions.fetchOneIfNeeded;
 
+export const fetchManyEndpoint = '/pipelines';
+
 export const fetchPipelines = () =>
   actions.fetchMany({
-    endpoint: '/pipelines'
+    endpoint: fetchManyEndpoint
   });
 
 export const fetchExercisePipelines = exerciseId =>

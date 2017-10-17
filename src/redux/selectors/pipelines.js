@@ -1,8 +1,13 @@
 import { createSelector } from 'reselect';
 import { isReady } from '../helpers/resourceManager';
+import { fetchManyEndpoint } from '../modules/pipelines';
 
 const getPipelines = state => state.pipelines;
 const getResources = pipelines => pipelines.get('resources');
+
+export const fetchManyStatus = createSelector(getPipelines, state =>
+  state.getIn(['fetchManyStatus', fetchManyEndpoint])
+);
 
 export const pipelinesSelector = createSelector(getPipelines, getResources);
 export const pipelineSelector = pipelineId =>
