@@ -106,7 +106,7 @@ const SubmitSolution = ({
   autodetection,
   saveNote,
   submitSolution,
-  useReferenceMessages,
+  isReferenceSolution,
   messages,
   intl: { formatMessage }
 }) =>
@@ -215,15 +215,15 @@ SubmitSolution.propTypes = {
   runtimeEnvironments: PropTypes.array,
   autodetection: PropTypes.bool,
   changeRuntimeEnvironment: PropTypes.func.isRequired,
-  useReferenceMessages: PropTypes.bool,
+  isReferenceSolution: PropTypes.bool,
   messages: PropTypes.object.isRequired,
   intl: intlShape.isRequired
 };
 
 export default injectIntl(
   connect(
-    (state, { useReferenceMessages = false }) => ({
-      messages: useReferenceMessages
+    (state, { isReferenceSolution = false }) => ({
+      messages: isReferenceSolution
         ? referenceSolutionMessages
         : submissionMessages
     }),
