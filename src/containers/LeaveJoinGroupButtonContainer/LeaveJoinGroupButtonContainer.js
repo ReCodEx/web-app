@@ -27,30 +27,34 @@ const LeaveJoinGroupButtonContainer = ({
   fetchGroupsStatsIfNeeded,
   ...props
 }) =>
-  isStudent
-    ? userId === currentUserId
-      ? <LeaveGroupButton
-          {...props}
-          onClick={() => leaveGroup(groupId, userId)}
-          bsSize="xs"
-        />
-      : <RemoveFromGroupButton
-          {...props}
-          onClick={() => leaveGroup(groupId, userId)}
-          bsSize="xs"
-        />
-    : <JoinGroupButton
+  isStudent ? (
+    userId === currentUserId ? (
+      <LeaveGroupButton
         {...props}
-        onClick={() =>
-          joinGroup(groupId, userId).then(
-            Promise.all([
-              fetchGroupIfNeeded(groupId),
-              fetchAssignmentsForGroup(groupId),
-              fetchGroupsStatsIfNeeded(groupId)
-            ])
-          )}
+        onClick={() => leaveGroup(groupId, userId)}
         bsSize="xs"
-      />;
+      />
+    ) : (
+      <RemoveFromGroupButton
+        {...props}
+        onClick={() => leaveGroup(groupId, userId)}
+        bsSize="xs"
+      />
+    )
+  ) : (
+    <JoinGroupButton
+      {...props}
+      onClick={() =>
+        joinGroup(groupId, userId).then(() =>
+          Promise.all([
+            fetchGroupIfNeeded(groupId),
+            fetchAssignmentsForGroup(groupId),
+            fetchGroupsStatsIfNeeded(groupId)
+          ])
+        )}
+      bsSize="xs"
+    />
+  );
 
 LeaveJoinGroupButtonContainer.propTypes = {
   groupId: PropTypes.string.isRequired,
