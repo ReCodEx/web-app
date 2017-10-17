@@ -8,7 +8,7 @@ import LevelGap from './LevelGap';
 const TreeViewLeaf = ({
   loading = false,
   title,
-  externalId,
+  admins,
   icon = 'square-o',
   onClick,
   level,
@@ -26,12 +26,16 @@ const TreeViewLeaf = ({
       {loading ? <LoadingIcon /> : <Icon name={icon} />}
     </span>
     {title}
-    {externalId &&
-      externalId !== '' &&
+    {admins &&
+      admins.length > 0 &&
       <span>
-        {' '}(
-        <code>{externalId}</code>
-        )
+        &nbsp;&nbsp; (<small>
+          <em>
+            {admins
+              .map(a => a.name.firstName + ' ' + a.name.lastName)
+              .join(', ')}
+          </em>
+        </small>)
       </span>}
     <span className="pull-right">{actions}</span>
   </li>;
@@ -42,7 +46,7 @@ TreeViewLeaf.propTypes = {
     PropTypes.string,
     PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) })
   ]).isRequired,
-  externalId: PropTypes.string,
+  admins: PropTypes.array,
   icon: PropTypes.string,
   onClick: PropTypes.func,
   level: PropTypes.number.isRequired,
