@@ -1,5 +1,6 @@
 import { createSelector } from 'reselect';
 import { statusTypes } from '../modules/auth';
+import { isTokenValid } from '../helpers/token';
 
 const getAuth = state => state.auth;
 const getAccessToken = auth => auth.get('accessToken');
@@ -43,8 +44,10 @@ export const hasSucceeded = service =>
     status => status === statusTypes.LOGGED_IN
   );
 
-export const isLoggedIn = createSelector(getAuth, auth =>
-  Boolean(auth.get('userId'))
+export const isLoggedIn = createSelector(
+  getAuth,
+  auth =>
+    Boolean(auth.get('userId')) && isTokenValid(auth.get('accessToken').toJS())
 );
 
 export const isChanging = createSelector(
