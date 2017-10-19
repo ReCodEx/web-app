@@ -58,3 +58,5 @@ export const searchPeople = instanceId =>
   search(`/instances/${instanceId}/users`);
 
 export const searchExercises = () => search('/exercises');
+
+export const searchPipelines = () => search('/pipelines');
