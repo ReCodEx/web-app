@@ -19,8 +19,9 @@ const SearchContainer = ({
   search,
   status,
   foundItems,
-  renderList
-}) => (
+  renderList,
+  showAllOnEmptyQuery = false
+}) =>
   <Search
     type={type}
     id={id}
@@ -31,8 +32,8 @@ const SearchContainer = ({
     hasFailed={status === searchStatus.FAILED}
     onChange={search}
     renderList={renderList}
-  />
-);
+    showAllOnEmptyQuery={showAllOnEmptyQuery}
+  />;
 
 SearchContainer.propTypes = {
   id: PropTypes.string.isRequired,
@@ -41,7 +42,8 @@ SearchContainer.propTypes = {
   query: PropTypes.string,
   status: PropTypes.string,
   foundItems: ImmutablePropTypes.list.isRequired,
-  renderList: PropTypes.func.isRequired
+  renderList: PropTypes.func.isRequired,
+  showAllOnEmptyQuery: PropTypes.bool
 };
 
 const mapStateToProps = (state, { id }) => {

@@ -1,68 +1,35 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import Button from '../../components/widgets/FlatButton';
 import { push } from 'react-router-redux';
 import { LinkContainer } from 'react-router-bootstrap';
-import {
-  FormGroup,
-  ControlLabel,
-  FormControl,
-  InputGroup,
-  ButtonGroup
-} from 'react-bootstrap';
+import { ButtonGroup } from 'react-bootstrap';
 
+import SearchContainer from '../../containers/SearchContainer';
 import DeletePipelineButtonContainer from '../../containers/DeletePipelineButtonContainer';
 import PageContent from '../../components/layout/PageContent';
 import Box from '../../components/widgets/Box';
 import { canEditPipeline } from '../../redux/selectors/users';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
-import { AddIcon, EditIcon, SearchIcon } from '../../components/icons';
-import {
-  pipelinesSelector,
-  fetchManyStatus
-} from '../../redux/selectors/pipelines';
+import { AddIcon, EditIcon } from '../../components/icons';
+import { fetchManyStatus } from '../../redux/selectors/pipelines';
 import {
   fetchPipelines,
   create as createPipeline
 } from '../../redux/modules/pipelines';
+import { searchPipelines } from '../../redux/modules/search';
 import PipelinesList from '../../components/Pipelines/PipelinesList';
 import FetchManyResourceRenderer from '../../components/helpers/FetchManyResourceRenderer';
 
 import withLinks from '../../hoc/withLinks';
 
 class Pipelines extends Component {
-  static loadAsync = (params, dispatch) =>
-    Promise.all([dispatch(fetchPipelines())]);
+  static loadAsync = (params, dispatch) => dispatch(fetchPipelines());
 
   componentWillMount() {
     this.props.loadAsync();
-    this.setState({ visiblePipelines: [] });
-  }
-
-  componentWillReceiveProps(nextProps) {
-    this.setState({
-      visiblePipelines: nextProps.pipelines
-        .toArray()
-        .map(pipeline => pipeline.toJS().data)
-    });
-  }
-
-  onChange(query, allPipelines) {
-    const normalizedQuery = query.toLocaleLowerCase();
-    const filteredPipelines = allPipelines
-      .toArray()
-      .map(pipeline => pipeline.toJS().data)
-      .filter(
-        pipeline =>
-          pipeline.name.toLocaleLowerCase().startsWith(normalizedQuery) ||
-          pipeline.id.toLocaleLowerCase().startsWith(normalizedQuery)
-      );
-    this.setState({
-      visiblePipelines: filteredPipelines
-    });
   }
 
   newPipeline = () => {
@@ -78,9 +45,9 @@ class Pipelines extends Component {
 
   render() {
     const {
-      pipelines,
       fetchStatus,
       isAuthorOfPipeline,
+      search,
       links: { PIPELINE_EDIT_URI_FACTORY }
     } = this.props;
 
@@ -146,67 +113,41 @@ class Pipelines extends Component {
               }
             ]}
           >
-            <div>
-              <Box
-                title={
-                  <FormattedMessage
-                    id="app.pipelines.listTitle"
-                    defaultMessage="Pipelines"
-                  />
-                }
-                footer={
-                  <p className="text-center">
-                    <Button
-                      bsStyle="success"
-                      className="btn-flat"
-                      bsSize="sm"
-                      onClick={() => {
-                        this.newPipeline();
-                      }}
-                    >
-                      <AddIcon />{' '}
-                      <FormattedMessage
-                        id="app.pipelines.add"
-                        defaultMessage="Add pipeline"
-                      />
-                    </Button>
-                  </p>
-                }
-                noPadding
-                unlimitedHeight
-              >
-                <div>
-                  <form style={{ padding: '10px' }}>
-                    <FormGroup>
-                      <ControlLabel>
-                        <FormattedMessage
-                          id="app.search.title"
-                          defaultMessage="Search:"
-                        />
-                      </ControlLabel>
-                      <InputGroup>
-                        <FormControl
-                          onChange={e => {
-                            this.query = e.target.value;
-                          }}
-                        />
-                        <InputGroup.Button>
-                          <Button
-                            type="submit"
-                            onClick={e => {
-                              e.preventDefault();
-                              this.onChange(this.query, pipelines);
-                            }}
-                            disabled={false}
-                          >
-                            <SearchIcon />
-                          </Button>
-                        </InputGroup.Button>
-                      </InputGroup>
-                    </FormGroup>
-                  </form>
+            <Box
+              title={
+                <FormattedMessage
+                  id="app.pipelines.listTitle"
+                  defaultMessage="Pipelines"
+                />
+              }
+              footer={
+                <p className="text-center">
+                  <Button
+                    bsStyle="success"
+                    className="btn-flat"
+                    bsSize="sm"
+                    onClick={() => {
+                      this.newPipeline();
+                    }}
+                  >
+                    <AddIcon />{' '}
+                    <FormattedMessage
+                      id="app.pipelines.add"
+                      defaultMessage="Add pipeline"
+                    />
+                  </Button>
+                </p>
+              }
+              unlimitedHeight
+            >
+              <SearchContainer
+                type="pipelines"
+                id="pipelines-page"
+                search={search}
+                showAllOnEmptyQuery={true}
+                renderList={pipelines =>
                   <PipelinesList
-                    pipelines={this.state.visiblePipelines}
+                    pipelines={pipelines}
                     createActions={id =>
                       isAuthorOfPipeline(id) &&
                       <ButtonGroup>
@@ -221,10 +162,9 @@ class Pipelines extends Component {
                         </LinkContainer>
                         <DeletePipelineButtonContainer id={id} bsSize="xs" />
                       </ButtonGroup>}
-                  />
-                </div>
-              </Box>
-            </div>
+                  />}
+              />
+            </Box>
           </PageContent>}
       </FetchManyResourceRenderer>
     );
@@ -233,12 +173,12 @@ class Pipelines extends Component {
 
 Pipelines.propTypes = {
   loadAsync: PropTypes.func.isRequired,
-  pipelines: ImmutablePropTypes.map,
   createPipeline: PropTypes.func.isRequired,
   isAuthorOfPipeline: PropTypes.func.isRequired,
   push: PropTypes.func.isRequired,
   links: PropTypes.object.isRequired,
-  fetchStatus: PropTypes.string
+  fetchStatus: PropTypes.string,
+  search: PropTypes.func
 };
 
 export default withLinks(
@@ -247,7 +187,6 @@ export default withLinks(
       const userId = loggedInUserIdSelector(state);
 
       return {
-        pipelines: pipelinesSelector(state),
         fetchStatus: fetchManyStatus(state),
         isAuthorOfPipeline: pipelineId =>
           canEditPipeline(userId, pipelineId)(state)
@@ -256,7 +195,8 @@ export default withLinks(
     dispatch => ({
       push: url => dispatch(push(url)),
       createPipeline: () => dispatch(createPipeline()),
-      loadAsync: () => Pipelines.loadAsync({}, dispatch)
+      loadAsync: () => Pipelines.loadAsync({}, dispatch),
+      search: query => dispatch(searchPipelines()('pipelines-page', query))
     })
   )(Pipelines)
 );
