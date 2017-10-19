@@ -294,12 +294,15 @@ class Assignment extends Component {
                             isOpen={submitting}
                             runtimeEnvironments={runtimes}
                           />
-
-                          <SubmissionsTableContainer
-                            userId={userId}
-                            assignmentId={assignment.id}
-                          />
                         </div>}
+
+                      {(isStudentOf(assignment.groupId) ||
+                        isSupervisorOf(assignment.groupId) ||
+                        isSuperAdmin) &&
+                        <SubmissionsTableContainer
+                          userId={userId}
+                          assignmentId={assignment.id}
+                        />}
                     </Col>}
                 </ResourceRenderer>
               </Row>
@@ -336,7 +339,8 @@ export default withLinks(
       const environments = runtimeEnvironmentsSelector(assignmentId)(
         state
       ).toJS();
-      userId = userId || loggedInUserIdSelector(state);
+      const loggedInUserId = loggedInUserIdSelector(state);
+      userId = userId || loggedInUserId;
       return {
         assignment: assignmentSelector(state),
         submitting: isSubmitting(state),
@@ -344,10 +348,11 @@ export default withLinks(
           runtimeEnvironmentSelector(i)(state)
         ),
         userId,
-        loggeInUserId: loggedInUserIdSelector(state),
-        isSuperAdmin: isSuperAdmin(userId)(state),
-        isStudentOf: groupId => isStudentOf(userId, groupId)(state),
-        isSupervisorOf: groupId => isSupervisorOf(userId, groupId)(state),
+        loggedInUserId,
+        isSuperAdmin: isSuperAdmin(loggedInUserId)(state),
+        isStudentOf: groupId => isStudentOf(loggedInUserId, groupId)(state),
+        isSupervisorOf: groupId =>
+          isSupervisorOf(loggedInUserId, groupId)(state),
         canSubmit: canSubmitSolution(assignmentId)(state)
       };
     },
