@@ -3,10 +3,8 @@ import { handleActions } from 'redux-actions';
 import { createApiAction } from '../middleware/apiMiddleware';
 import factory, {
   initialState,
-  defaultNeedsRefetching,
-  getJsData
+  defaultNeedsRefetching
 } from '../helpers/resourceManager';
-import { getSubmission } from '../selectors/submissions';
 import { actionTypes as submissionActionTypes } from './submission';
 import { downloadHelper } from '../helpers/api/download';
 
@@ -96,8 +94,7 @@ export const downloadResultArchive = downloadHelper({
   endpoint: id => `/submissions/${id}/download-result`,
   fetch: fetchSubmissionIfNeeded,
   actionType: additionalActionTypes.DOWNLOAD_RESULT_ARCHIVE,
-  fileNameSelector: (id, state) =>
-    `${getJsData(getSubmission(id)(state)).name}.zip`,
+  fileNameSelector: (id, state) => `${id}.zip`,
   contentType: 'application/zip'
 });
 
