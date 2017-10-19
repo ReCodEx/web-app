@@ -46,12 +46,15 @@ class Users extends Component {
 
   onChange(query, allUsers) {
     const normalizedQuery = query.toLocaleLowerCase();
-    const filteredUsers = allUsers.filter(
-      user =>
-        user.name.lastName.toLocaleLowerCase().startsWith(normalizedQuery) ||
-        user.fullName.toLocaleLowerCase().startsWith(normalizedQuery) ||
-        user.id.toLocaleLowerCase().startsWith(normalizedQuery)
-    );
+    const filteredUsers = allUsers
+      .toArray()
+      .map(user => user.toJS().data)
+      .filter(
+        user =>
+          user.name.lastName.toLocaleLowerCase().startsWith(normalizedQuery) ||
+          user.fullName.toLocaleLowerCase().startsWith(normalizedQuery) ||
+          user.id.toLocaleLowerCase().startsWith(normalizedQuery)
+      );
     this.setState({
       visibleUsers: filteredUsers
     });

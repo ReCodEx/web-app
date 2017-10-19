@@ -53,11 +53,13 @@ class Exercises extends Component {
 
   onChange(query, allExercises) {
     const normalizedQuery = query.toLocaleLowerCase();
-    const filteredExercises = allExercises.filter(
-      exercise =>
-        exercise.name.toLocaleLowerCase().startsWith(normalizedQuery) ||
-        exercise.id.toLocaleLowerCase().startsWith(normalizedQuery)
-    );
+    const filteredExercises = allExercises
+      .toArray()
+      .filter(
+        exercise =>
+          exercise.name.toLocaleLowerCase().startsWith(normalizedQuery) ||
+          exercise.id.toLocaleLowerCase().startsWith(normalizedQuery)
+      );
     this.setState({
       visibleExercises: filteredExercises
     });

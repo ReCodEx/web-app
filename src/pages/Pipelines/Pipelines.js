@@ -52,11 +52,14 @@ class Pipelines extends Component {
 
   onChange(query, allPipelines) {
     const normalizedQuery = query.toLocaleLowerCase();
-    const filteredPipelines = allPipelines.filter(
-      pipeline =>
-        pipeline.name.toLocaleLowerCase().startsWith(normalizedQuery) ||
-        pipeline.id.toLocaleLowerCase().startsWith(normalizedQuery)
-    );
+    const filteredPipelines = allPipelines
+      .toArray()
+      .map(pipeline => pipeline.toJS().data)
+      .filter(
+        pipeline =>
+          pipeline.name.toLocaleLowerCase().startsWith(normalizedQuery) ||
+          pipeline.id.toLocaleLowerCase().startsWith(normalizedQuery)
+      );
     this.setState({
       visiblePipelines: filteredPipelines
     });
