@@ -20,13 +20,14 @@ const GroupDetail = ({
     parentGroupId,
     isPublic = false,
     childGroups,
+    adminId,
     ...group
   },
   groups,
   publicGroups,
   supervisors,
   isAdmin
-}) => (
+}) =>
   <div>
     <Row>
       <Col lg={6} sm={12}>
@@ -47,7 +48,7 @@ const GroupDetail = ({
             >
               <Table>
                 <tbody>
-                  {externalId && (
+                  {externalId &&
                     <tr>
                       <th>
                         <FormattedMessage
@@ -56,10 +57,11 @@ const GroupDetail = ({
                         />
                       </th>
                       <td>
-                        <code>{externalId}</code>
+                        <code>
+                          {externalId}
+                        </code>
                       </td>
-                    </tr>
-                  )}
+                    </tr>}
                   <tr>
                     <th>
                       <FormattedMessage
@@ -71,7 +73,7 @@ const GroupDetail = ({
                       <MaybeSucceededIcon success={isPublic} />
                     </td>
                   </tr>
-                  {threshold !== null && (
+                  {threshold !== null &&
                     <tr>
                       <th>
                         <FormattedMessage
@@ -82,14 +84,13 @@ const GroupDetail = ({
                       <td>
                         <FormattedNumber value={threshold} style="percent" />
                       </td>
-                    </tr>
-                  )}
+                    </tr>}
                 </tbody>
               </Table>
             </Box>
           </Col>
         </Row>
-        {childGroups.all.length > 0 && (
+        {childGroups.all.length > 0 &&
           <Row>
             <Col sm={12}>
               <Box
@@ -111,8 +112,7 @@ const GroupDetail = ({
                 />
               </Box>
             </Col>
-          </Row>
-        )}
+          </Row>}
       </Col>
       <Col lg={6} sm={12}>
         <Box
@@ -131,13 +131,13 @@ const GroupDetail = ({
             groupId={id}
             users={supervisors}
             isAdmin={isAdmin}
+            mainAdminId={adminId}
             isLoaded={supervisors.length === group.supervisors.length}
           />
         </Box>
       </Col>
     </Row>
-  </div>
-);
+  </div>;
 
 GroupDetail.propTypes = {
   group: PropTypes.shape({

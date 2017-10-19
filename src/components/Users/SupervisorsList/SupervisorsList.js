@@ -6,17 +6,24 @@ import SupervisorsListItem, {
   LoadingSupervisorsListItem
 } from '../SupervisorsListItem';
 
-const SupervisorsList = ({ groupId, users, isLoaded = true, isAdmin }) => (
+const SupervisorsList = ({
+  groupId,
+  users,
+  isLoaded = true,
+  isAdmin,
+  mainAdminId
+}) =>
   <Table hover>
     <tbody>
-      {users.map(user => (
+      {users.map(user =>
         <SupervisorsListItem
           key={user.id}
           {...user}
           groupId={groupId}
           isAdmin={isAdmin}
+          mainAdminId={mainAdminId}
         />
-      ))}
+      )}
 
       {users.length === 0 &&
         isLoaded &&
@@ -31,14 +38,14 @@ const SupervisorsList = ({ groupId, users, isLoaded = true, isAdmin }) => (
 
       {!isLoaded && <LoadingSupervisorsListItem isAdmin={isAdmin} />}
     </tbody>
-  </Table>
-);
+  </Table>;
 
 SupervisorsList.propTypes = {
   users: PropTypes.array.isRequired,
   groupId: PropTypes.string.isRequired,
   isLoaded: PropTypes.bool,
-  isAdmin: PropTypes.bool
+  isAdmin: PropTypes.bool,
+  mainAdminId: PropTypes.string
 };
 
 export default SupervisorsList;
