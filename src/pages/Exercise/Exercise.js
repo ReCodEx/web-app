@@ -59,6 +59,8 @@ import { supervisorOfSelector } from '../../redux/selectors/groups';
 import { clientOnly } from '../../helpers/clientOnly';
 import withLinks from '../../hoc/withLinks';
 
+import { getLocalizedName } from '../../helpers/localizedTexts';
+
 const messages = defineMessages({
   groupsBox: {
     id: 'app.exercise.groupsBox',
@@ -144,12 +146,14 @@ class Exercise extends Component {
         EXERCISE_EDIT_CONFIG_URI_FACTORY,
         EXERCISE_REFERENCE_SOLUTION_URI_FACTORY,
         PIPELINE_EDIT_URI_FACTORY
-      }
+      },
+      lang
     } = this.context;
 
     return (
       <Page
-        title={exercise => exercise.name}
+        title={exercise =>
+          getLocalizedName(exercise.localizedTexts, lang, exercise.name)}
         resource={exercise}
         description={
           <FormattedMessage
@@ -395,7 +399,8 @@ class Exercise extends Component {
 }
 
 Exercise.contextTypes = {
-  links: PropTypes.object
+  links: PropTypes.object,
+  lang: PropTypes.string.isRequired
 };
 
 Exercise.propTypes = {

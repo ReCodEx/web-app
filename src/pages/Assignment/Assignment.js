@@ -49,6 +49,8 @@ import SubmissionsTableContainer from '../../containers/SubmissionsTableContaine
 
 import withLinks from '../../hoc/withLinks';
 
+import { getLocalizedName } from '../../helpers/localizedTexts';
+
 class Assignment extends Component {
   static loadAsync = ({ assignmentId }, dispatch) =>
     Promise.all([
@@ -87,13 +89,19 @@ class Assignment extends Component {
       links: { ASSIGNMENT_EDIT_URI_FACTORY, SUPERVISOR_STATS_URI_FACTORY }
     } = this.props;
 
+    const { lang } = this.context;
+
     return (
       <PageContent
         title={
           <ResourceRenderer resource={assignment}>
             {assignment =>
               <span>
-                {assignment.name}
+                {getLocalizedName(
+                  assignment.localizedTexts,
+                  lang,
+                  assignment.name
+                )}
               </span>}
           </ResourceRenderer>
         }
@@ -327,6 +335,10 @@ Assignment.propTypes = {
   links: PropTypes.object.isRequired,
   runtimeEnvironments: PropTypes.array,
   exerciseSync: PropTypes.func.isRequired
+};
+
+Assignment.contextTypes = {
+  lang: PropTypes.string.isRequired
 };
 
 export default withLinks(
