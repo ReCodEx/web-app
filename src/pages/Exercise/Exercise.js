@@ -35,7 +35,10 @@ import AssignExerciseButton from '../../components/buttons/AssignExerciseButton'
 
 import { isSubmitting } from '../../redux/selectors/submission';
 import { fetchExerciseIfNeeded } from '../../redux/modules/exercises';
-import { fetchReferenceSolutionsIfNeeded } from '../../redux/modules/referenceSolutions';
+import {
+  fetchReferenceSolutionsIfNeeded,
+  deleteReferenceSolution
+} from '../../redux/modules/referenceSolutions';
 import { createReferenceSolution, init } from '../../redux/modules/submission';
 import { fetchHardwareGroups } from '../../redux/modules/hwGroups';
 import { create as assignExercise } from '../../redux/modules/assignments';
@@ -132,6 +135,7 @@ class Exercise extends Component {
       intl: { formatMessage },
       initCreateReferenceSolution,
       exercisePipelines,
+      deleteReferenceSolution,
       push
     } = this.props;
 
@@ -349,23 +353,51 @@ class Exercise extends Component {
                       referenceSolutions.length > 0
                         ? <ReferenceSolutionsList
                             referenceSolutions={referenceSolutions}
-                            renderButtons={evaluationId =>
-                              <Button
-                                bsSize="xs"
-                                onClick={() =>
-                                  push(
-                                    EXERCISE_REFERENCE_SOLUTION_URI_FACTORY(
+                            renderButtons={solutionId =>
+                              <div>
+                                <Button
+                                  bsSize="xs"
+                                  onClick={() =>
+                                    push(
+                                      EXERCISE_REFERENCE_SOLUTION_URI_FACTORY(
+                                        exercise.id,
+                                        solutionId
+                                      )
+                                    )}
+                                >
+                                  <SendIcon />{' '}
+                                  <FormattedMessage
+                                    id="app.exercise.referenceSolutionDetail"
+                                    defaultMessage="View detail"
+                                  />
+                                </Button>
+                                <Confirm
+                                  id={solutionId}
+                                  onConfirmed={() =>
+                                    deleteReferenceSolution(
                                       exercise.id,
-                                      evaluationId
-                                    )
-                                  )}
-                              >
-                                <SendIcon />{' '}
-                                <FormattedMessage
-                                  id="app.exercise.referenceSolutionDetail"
-                                  defaultMessage="View detail"
-                                />
-                              </Button>}
+                                      solutionId
+                                    )}
+                                  question={
+                                    <FormattedMessage
+                                      id="app.exercise.referenceSolution.deleteConfirm"
+                                      defaultMessage="Are you sure you want to delete the reference solution? This cannot be undone."
+                                    />
+                                  }
+                                >
+                                  <Button
+                                    bsSize="xs"
+                                    className="btn-flat"
+                                    bsStyle="danger"
+                                  >
+                                    <DeleteIcon />{' '}
+                                    <FormattedMessage
+                                      id="app.exercise.referenceSolution.deleteButton"
+                                      defaultMessage="Delete"
+                                    />
+                                  </Button>
+                                </Confirm>
+                              </div>}
                           />
                         : <p className="text-center">
                             <FormattedMessage
@@ -416,7 +448,8 @@ Exercise.propTypes = {
   exercisePipelines: ImmutablePropTypes.map,
   createExercisePipeline: PropTypes.func,
   links: PropTypes.object,
-  isAdmin: PropTypes.bool.isRequired
+  isAdmin: PropTypes.bool.isRequired,
+  deleteReferenceSolution: PropTypes.func.isRequired
 };
 
 export default withLinks(
@@ -446,7 +479,9 @@ export default withLinks(
         initCreateReferenceSolution: userId =>
           dispatch(init(userId, exerciseId)),
         createExercisePipeline: () =>
-          dispatch(createPipeline({ exerciseId: exerciseId }))
+          dispatch(createPipeline({ exerciseId: exerciseId })),
+        deleteReferenceSolution: (exerciseId, solutionId) =>
+          dispatch(deleteReferenceSolution(exerciseId, solutionId))
       })
     )(Exercise)
   )
