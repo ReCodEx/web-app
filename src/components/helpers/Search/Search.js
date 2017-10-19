@@ -15,6 +15,13 @@ import { LoadingIcon, SearchIcon, WarningIcon } from '../../icons';
 import styles from './search.less';
 
 class Search extends Component {
+  componentDidMount() {
+    const { showAllOnEmptyQuery, onChange, query } = this.props;
+    if (showAllOnEmptyQuery) {
+      onChange(query);
+    }
+  }
+
   render() {
     const {
       id = '',
@@ -23,7 +30,8 @@ class Search extends Component {
       hasFailed,
       query,
       foundItems,
-      renderList
+      renderList,
+      showAllOnEmptyQuery = false
     } = this.props;
 
     return (
@@ -60,17 +68,22 @@ class Search extends Component {
             </InputGroup>
           </FormGroup>
         </form>
-        {query &&
-          query.length > 0 &&
+        {((query && query.length > 0) || showAllOnEmptyQuery) &&
           <div>
-            <p>
-              {' '}
-              <FormattedMessage
-                id="app.search.query"
-                defaultMessage="Searched query: "
-              />
-              <strong><em>{'"'}{query}{'"'}</em></strong>
-            </p>
+            {query.length > 0 &&
+              <p>
+                {' '}<FormattedMessage
+                  id="app.search.query"
+                  defaultMessage="Searched query: "
+                />
+                <strong>
+                  <em>
+                    {'"'}
+                    {query}
+                    {'"'}
+                  </em>
+                </strong>
+              </p>}
 
             {(!isLoading || foundItems.size > 0) &&
               <div className={styles.list}>
@@ -91,7 +104,8 @@ Search.propTypes = {
   foundItems: ImmutablePropTypes.list.isRequired,
   isLoading: PropTypes.bool,
   hasFailed: PropTypes.bool,
-  isReady: PropTypes.bool
+  isReady: PropTypes.bool,
+  showAllOnEmptyQuery: PropTypes.bool
 };
 
 export default Search;
