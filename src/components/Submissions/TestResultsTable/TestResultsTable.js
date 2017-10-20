@@ -9,7 +9,9 @@ import prettyBytes from 'pretty-bytes';
 
 import exitCodeMapping from '../../helpers/exitCodeMapping';
 
-const tickOrCrossAndRatioOrValue = (isOK, ratio, value, pretty) => (
+const hasValue = value => value !== null;
+
+const tickOrCrossAndRatioOrValue = (isOK, ratio, value, pretty) =>
   <td
     className={classNames({
       'text-center': true,
@@ -19,22 +21,20 @@ const tickOrCrossAndRatioOrValue = (isOK, ratio, value, pretty) => (
   >
     <Icon name={isOK ? 'check' : 'times'} />{' '}
     <small>
-      {value && '('}
-      {(ratio || ratio === 0) && (
+      {hasValue(value) && '('}
+      {(ratio || ratio === 0) &&
         <FormattedNumber
           value={ratio}
           style="percent"
           minimumFractionDigits={1}
           maximumFactionDigits={3}
-        />
-      )}
-      {value && ') '}
-      {value && pretty(value * 1000)}
+        />}
+      {hasValue(value) && ') '}
+      {hasValue(value) && pretty(value * 1000)}
     </small>
-  </td>
-);
+  </td>;
 
-const TestResultsTable = ({ results, runtimeEnvironmentId }) => (
+const TestResultsTable = ({ results, runtimeEnvironmentId }) =>
   <Table responsive>
     <thead>
       <tr>
@@ -138,7 +138,7 @@ const TestResultsTable = ({ results, runtimeEnvironmentId }) => (
           time,
           memory,
           exitCode
-        }) => (
+        }) =>
           <tr key={testName}>
             <td
               className={classNames({
@@ -151,33 +151,32 @@ const TestResultsTable = ({ results, runtimeEnvironmentId }) => (
                 <FormattedNumber value={score} style="percent" />
               </b>
             </td>
-            <td>{testName}</td>
+            <td>
+              {testName}
+            </td>
             <td className="text-center">
               <b>
-                {status === 'OK' && (
+                {status === 'OK' &&
                   <span className="text-success">
                     <FormattedMessage
                       id="app.submissions.testResultsTable.statusOK"
                       defaultMessage="OK"
                     />
-                  </span>
-                )}
-                {status === 'SKIPPED' && (
+                  </span>}
+                {status === 'SKIPPED' &&
                   <span className="text-warning">
                     <FormattedMessage
                       id="app.submissions.testResultsTable.statusSkipped"
                       defaultMessage="SKIPPED"
                     />
-                  </span>
-                )}
-                {status === 'FAILED' && (
+                  </span>}
+                {status === 'FAILED' &&
                   <span className="text-danger">
                     <FormattedMessage
                       id="app.submissions.testResultsTable.statusFailed"
                       defaultMessage="FAILED"
                     />
-                  </span>
-                )}
+                  </span>}
               </b>
             </td>
 
@@ -198,11 +197,9 @@ const TestResultsTable = ({ results, runtimeEnvironmentId }) => (
               {exitCodeMapping(runtimeEnvironmentId, exitCode)}
             </td>
           </tr>
-        )
       )}
     </tbody>
-  </Table>
-);
+  </Table>;
 
 TestResultsTable.propTypes = {
   results: PropTypes.arrayOf(

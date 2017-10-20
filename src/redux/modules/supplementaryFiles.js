@@ -44,12 +44,12 @@ export const addSupplementaryFiles = (exerciseId, files) =>
     }
   });
 
-export const removeSupplementaryFile = fileId =>
+export const removeSupplementaryFile = (exerciseId, fileId) =>
   createApiAction({
     type: actionTypes.REMOVE_FILE,
-    endpoint: `/uploaded-files/${fileId}`,
+    endpoint: `/exercises/${exerciseId}/supplementary-files/${fileId}`,
     method: 'DELETE',
-    meta: { fileId }
+    meta: { exerciseId, fileId }
   });
 
 /**
