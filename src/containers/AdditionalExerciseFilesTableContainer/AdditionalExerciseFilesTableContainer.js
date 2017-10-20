@@ -12,24 +12,25 @@ import {
 
 import {
   fetchAdditionalExerciseFiles,
-  addAdditionalExerciseFiles
+  addAdditionalExerciseFiles,
+  removeAdditionalExerciseFile
 } from '../../redux/modules/additionalExerciseFiles';
 
-import {
-  createGetAdditionalExerciseFiles
-} from '../../redux/selectors/additionalExerciseFiles';
+import { createGetAdditionalExerciseFiles } from '../../redux/selectors/additionalExerciseFiles';
 
 const AdditionalExerciseFilesTableContainer = ({
   exercise,
   additionalExerciseFiles,
   loadFiles,
-  addFiles
-}) => (
+  addFiles,
+  removeFile
+}) =>
   <AttachedFilesTableContainer
     uploadId={`additional-exercise-files-${exercise.id}`}
     attachments={additionalExerciseFiles}
     loadFiles={loadFiles}
     addFiles={addFiles}
+    removeFile={removeFile}
     title={
       <FormattedMessage
         id="app.additionalExerciseFilesTable.title"
@@ -44,8 +45,7 @@ const AdditionalExerciseFilesTableContainer = ({
     }
     HeaderComponent={AdditionalFilesTableHeaderRow}
     RowComponent={AdditionalFilesTableRow}
-  />
-);
+  />;
 
 AdditionalExerciseFilesTableContainer.propTypes = {
   exercise: PropTypes.shape({
@@ -54,7 +54,8 @@ AdditionalExerciseFilesTableContainer.propTypes = {
   }).isRequired,
   additionalExerciseFiles: ImmutablePropTypes.map,
   loadFiles: PropTypes.func.isRequired,
-  addFiles: PropTypes.func.isRequired
+  addFiles: PropTypes.func.isRequired,
+  removeFile: PropTypes.func.isRequired
 };
 
 export default connect(
@@ -68,6 +69,7 @@ export default connect(
   },
   (dispatch, { exercise }) => ({
     loadFiles: () => dispatch(fetchAdditionalExerciseFiles(exercise.id)),
-    addFiles: files => dispatch(addAdditionalExerciseFiles(exercise.id, files))
+    addFiles: files => dispatch(addAdditionalExerciseFiles(exercise.id, files)),
+    removeFile: id => dispatch(removeAdditionalExerciseFile(exercise.id, id))
   })
 )(AdditionalExerciseFilesTableContainer);
