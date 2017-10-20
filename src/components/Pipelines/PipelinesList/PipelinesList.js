@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Table } from 'react-bootstrap';
-import { FormattedMessage } from 'react-intl';
+import { injectIntl, FormattedMessage } from 'react-intl';
 
 import PipelinesListItem from '../PipelinesListItem';
 
-const PipelinesList = ({ pipelines = [], createActions }) =>
+const PipelinesList = ({ pipelines = [], createActions, intl }) =>
   <Table hover>
     <thead>
       <tr>
@@ -36,7 +36,7 @@ const PipelinesList = ({ pipelines = [], createActions }) =>
     <tbody>
       {pipelines
         .filter(a => a !== null)
-        .sort((a, b) => a.name.localeCompare(b.name))
+        .sort((a, b) => a.name.localeCompare(b.name, intl.locale))
         .map(pipeline =>
           <PipelinesListItem
             {...pipeline}
@@ -59,7 +59,8 @@ const PipelinesList = ({ pipelines = [], createActions }) =>
 
 PipelinesList.propTypes = {
   pipelines: PropTypes.array,
-  createActions: PropTypes.func
+  createActions: PropTypes.func,
+  intl: PropTypes.shape({ formatMessage: PropTypes.func.isRequired }).isRequired
 };
 
-export default PipelinesList;
+export default injectIntl(PipelinesList);

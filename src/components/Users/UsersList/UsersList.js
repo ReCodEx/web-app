@@ -1,17 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Table } from 'react-bootstrap';
-import { FormattedMessage } from 'react-intl';
+import { injectIntl, FormattedMessage } from 'react-intl';
 import UsersListItem from '../UsersListItem';
 
-const UsersList = ({ users = [], createActions, ...rest }) =>
+const UsersList = ({ users = [], createActions, intl, ...rest }) =>
   <Table hover>
     <tbody>
       {users
         .sort((a, b) => {
           const aName = a.name.lastName + ' ' + a.name.firstName;
           const bName = b.name.lastName + ' ' + b.name.firstName;
-          return aName.localeCompare(bName);
+          return aName.localeCompare(bName, intl.locale);
         })
         .map(user =>
           <UsersListItem
@@ -35,7 +35,8 @@ const UsersList = ({ users = [], createActions, ...rest }) =>
 
 UsersList.propTypes = {
   users: PropTypes.array,
-  createActions: PropTypes.func
+  createActions: PropTypes.func,
+  intl: PropTypes.shape({ formatMessage: PropTypes.func.isRequired }).isRequired
 };
 
-export default UsersList;
+export default injectIntl(UsersList);

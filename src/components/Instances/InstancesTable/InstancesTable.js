@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage } from 'react-intl';
+import { injectIntl, FormattedMessage } from 'react-intl';
 import { Table } from 'react-bootstrap';
 import { Link } from 'react-router';
 import { MaybeSucceededIcon } from '../../icons';
@@ -8,7 +8,7 @@ import UsersNameContainer from '../../../containers/UsersNameContainer';
 
 import withLinks from '../../../hoc/withLinks';
 
-const InstancesTable = ({ instances, links: { INSTANCE_URI_FACTORY } }) => (
+const InstancesTable = ({ instances, links: { INSTANCE_URI_FACTORY }, intl }) =>
   <Table hover>
     <thead>
       <tr>
@@ -34,11 +34,13 @@ const InstancesTable = ({ instances, links: { INSTANCE_URI_FACTORY } }) => (
     </thead>
     <tbody>
       {instances
-        .sort((a, b) => (a.name < b.name ? -1 : 1))
-        .map(({ id, name, admin, hasValidLicence }) => (
+        .sort((a, b) => a.name.localeCompare(b.name, intl.locale))
+        .map(({ id, name, admin, hasValidLicence }) =>
           <tr key={id}>
             <td>
-              <Link to={INSTANCE_URI_FACTORY(id)}>{name}</Link>
+              <Link to={INSTANCE_URI_FACTORY(id)}>
+                {name}
+              </Link>
             </td>
             <td>
               <UsersNameContainer userId={admin} />
@@ -47,14 +49,14 @@ const InstancesTable = ({ instances, links: { INSTANCE_URI_FACTORY } }) => (
               <MaybeSucceededIcon success={hasValidLicence} />
             </td>
           </tr>
-        ))}
+        )}
     </tbody>
-  </Table>
-);
+  </Table>;
 
 InstancesTable.propTypes = {
   instances: PropTypes.array.isRequired,
-  links: PropTypes.object
+  links: PropTypes.object,
+  intl: PropTypes.shape({ formatMessage: PropTypes.func.isRequired }).isRequired
 };
 
-export default withLinks(InstancesTable);
+export default injectIntl(withLinks(InstancesTable));

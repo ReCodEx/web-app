@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Row, Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
-import { FormattedMessage } from 'react-intl';
+import { injectIntl, FormattedMessage } from 'react-intl';
 import { usersSelector } from '../../redux/selectors/users';
 import { groupSelector, studentsOfGroup } from '../../redux/selectors/groups';
 import { getAssignment } from '../../redux/selectors/assignments';
@@ -39,7 +39,13 @@ class AssignmentStats extends Component {
   }
 
   render() {
-    const { assignmentId, assignment, getStudents, getGroup } = this.props;
+    const {
+      assignmentId,
+      assignment,
+      getStudents,
+      getGroup,
+      intl
+    } = this.props;
 
     return (
       <Page
@@ -107,7 +113,7 @@ class AssignmentStats extends Component {
                     .sort((a, b) => {
                       const aName = a.name.lastName + ' ' + a.name.firstName;
                       const bName = b.name.lastName + ' ' + b.name.firstName;
-                      return aName.localeCompare(bName);
+                      return aName.localeCompare(bName, intl.locale);
                     })
                     .map(user =>
                       <Row key={user.id}>
@@ -133,7 +139,8 @@ AssignmentStats.propTypes = {
   assignment: PropTypes.object,
   getStudents: PropTypes.func.isRequired,
   getGroup: PropTypes.func.isRequired,
-  loadAsync: PropTypes.func.isRequired
+  loadAsync: PropTypes.func.isRequired,
+  intl: PropTypes.shape({ formatMessage: PropTypes.func.isRequired }).isRequired
 };
 
 export default connect(
@@ -156,4 +163,4 @@ export default connect(
   (dispatch, { params: { assignmentId } }) => ({
     loadAsync: () => AssignmentStats.loadAsync({ assignmentId }, dispatch)
   })
-)(AssignmentStats);
+)(injectIntl(AssignmentStats));

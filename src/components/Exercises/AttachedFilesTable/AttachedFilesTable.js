@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import { FormattedMessage } from 'react-intl';
+import { injectIntl, FormattedMessage } from 'react-intl';
 
 import Icon from 'react-fontawesome';
 import { Table } from 'react-bootstrap';
@@ -26,7 +26,8 @@ const AttachedFilesTable = ({
   addFiles,
   uploadId,
   HeaderComponent,
-  RowComponent
+  RowComponent,
+  intl
 }) =>
   <Box title={title} collapsable isOpen>
     <div>
@@ -60,7 +61,7 @@ const AttachedFilesTable = ({
                 </thead>
                 <tbody>
                   {attachments
-                    .sort((a, b) => a.name.localeCompare(b.name))
+                    .sort((a, b) => a.name.localeCompare(b.name, intl.locale))
                     .map((data, i) => <RowComponent {...data} key={i} />)}
                 </tbody>
               </Table>}
@@ -94,7 +95,8 @@ AttachedFilesTable.propTypes = {
   newFiles: ImmutablePropTypes.list,
   addFiles: PropTypes.func,
   HeaderComponent: PropTypes.func.isRequired,
-  RowComponent: PropTypes.func.isRequired
+  RowComponent: PropTypes.func.isRequired,
+  intl: PropTypes.shape({ formatMessage: PropTypes.func.isRequired }).isRequired
 };
 
-export default AttachedFilesTable;
+export default injectIntl(AttachedFilesTable);
