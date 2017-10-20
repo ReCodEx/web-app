@@ -12,24 +12,28 @@ import {
 
 import {
   fetchSupplementaryFilesForExercise,
-  addSupplementaryFiles
+  addSupplementaryFiles,
+  removeSupplementaryFile
 } from '../../redux/modules/supplementaryFiles';
+import { downloadSupplementaryFile } from '../../redux/modules/files';
 
-import {
-  createGetSupplementaryFiles
-} from '../../redux/selectors/supplementaryFiles';
+import { createGetSupplementaryFiles } from '../../redux/selectors/supplementaryFiles';
 
 const SupplementaryFilesTableContainer = ({
   exercise,
   supplementaryFiles,
   loadFiles,
-  addFiles
-}) => (
+  addFiles,
+  removeFile,
+  downloadFile
+}) =>
   <AttachedFilesTableContainer
     uploadId={`supplementary-files-${exercise.id}`}
     attachments={supplementaryFiles}
     loadFiles={loadFiles}
     addFiles={addFiles}
+    removeFile={removeFile}
+    downloadFile={downloadFile}
     title={
       <FormattedMessage
         id="app.supplementaryFilesTable.title"
@@ -44,8 +48,7 @@ const SupplementaryFilesTableContainer = ({
     }
     HeaderComponent={SupplementaryFilesTableHeaderRow}
     RowComponent={SupplementaryFilesTableRow}
-  />
-);
+  />;
 
 SupplementaryFilesTableContainer.propTypes = {
   exercise: PropTypes.shape({
@@ -54,7 +57,9 @@ SupplementaryFilesTableContainer.propTypes = {
   }).isRequired,
   supplementaryFiles: ImmutablePropTypes.map,
   loadFiles: PropTypes.func.isRequired,
-  addFiles: PropTypes.func.isRequired
+  addFiles: PropTypes.func.isRequired,
+  removeFile: PropTypes.func.isRequired,
+  downloadFile: PropTypes.func.isRequired
 };
 
 export default connect(
@@ -68,6 +73,11 @@ export default connect(
   },
   (dispatch, { exercise }) => ({
     loadFiles: () => dispatch(fetchSupplementaryFilesForExercise(exercise.id)),
-    addFiles: files => dispatch(addSupplementaryFiles(exercise.id, files))
+    addFiles: files => dispatch(addSupplementaryFiles(exercise.id, files)),
+    removeFile: id => dispatch(removeSupplementaryFile(exercise.id, id)),
+    downloadFile: (event, id) => {
+      event.preventDefault();
+      dispatch(downloadSupplementaryFile(id));
+    }
   })
 )(SupplementaryFilesTableContainer);
