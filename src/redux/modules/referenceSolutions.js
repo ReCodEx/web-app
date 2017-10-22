@@ -17,6 +17,13 @@ const { actions, reduceActions } = factory({
  * Actions
  */
 
+export const additionalActionTypes = {
+  REMOVE: 'recodex/referenceSolutions/REMOVE',
+  REMOVE_PENDING: 'recodex/referenceSolutions/REMOVE_PENDING',
+  REMOVE_FULFILLED: 'recodex/referenceSolutions/REMOVE_FULFILLED',
+  REMOVE_REJECTED: 'recodex/referenceSolutions/REMOVE_REJECTED'
+};
+
 export const fetchReferenceSolutions = actions.fetchResource;
 export const fetchReferenceSolutionsIfNeeded = actions.fetchOneIfNeeded; // fetch solutions for one exercise
 
@@ -27,6 +34,14 @@ export const evaluateReferenceSolution = (solutionId, isDebug = false) =>
     method: 'POST',
     body: { debug: isDebug },
     meta: { solutionId }
+  });
+
+export const deleteReferenceSolution = (exerciseId, solutionId) =>
+  createApiAction({
+    type: additionalActionTypes.REMOVE,
+    endpoint: `/reference-solutions/${solutionId}`,
+    method: 'DELETE',
+    meta: { exerciseId, solutionId }
   });
 
 /**
@@ -46,7 +61,14 @@ const reducer = handleActions(
             }
             return data.push(fromJS(payload));
           })
-        : state
+        : state,
+    [additionalActionTypes.REMOVE_FULFILLED]: (
+      state,
+      { payload, meta: { exerciseId, solutionId } }
+    ) =>
+      state.updateIn(['resources', exerciseId, 'data'], solutions =>
+        solutions.filter(solution => solution.toJS().id !== solutionId)
+      )
   }),
   initialState
 );

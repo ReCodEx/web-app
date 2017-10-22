@@ -24,6 +24,8 @@ const AttachedFilesTable = ({
   canSubmit,
   newFiles,
   addFiles,
+  removeFile,
+  downloadFile,
   uploadId,
   HeaderComponent,
   RowComponent
@@ -61,7 +63,14 @@ const AttachedFilesTable = ({
                 <tbody>
                   {attachments
                     .sort((a, b) => a.name.localeCompare(b.name))
-                    .map((data, i) => <RowComponent {...data} key={i} />)}
+                    .map((data, i) =>
+                      <RowComponent
+                        {...data}
+                        removeFile={removeFile}
+                        downloadFile={downloadFile}
+                        key={i}
+                      />
+                    )}
                 </tbody>
               </Table>}
             {attachments.length === 0 &&
@@ -93,6 +102,8 @@ AttachedFilesTable.propTypes = {
   canSubmit: PropTypes.bool,
   newFiles: ImmutablePropTypes.list,
   addFiles: PropTypes.func,
+  removeFile: PropTypes.func,
+  downloadFile: PropTypes.func,
   HeaderComponent: PropTypes.func.isRequired,
   RowComponent: PropTypes.func.isRequired
 };

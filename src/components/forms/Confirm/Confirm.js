@@ -32,15 +32,13 @@ class Confirm extends Component {
       id,
       yes = (
         <span>
-          <SuccessIcon />
-          {' '}
+          <SuccessIcon />{' '}
           <FormattedMessage id="app.confirm.yes" defaultMessage="Yes" />
         </span>
       ),
       no = (
         <span>
-          <CloseIcon />
-          {' '}
+          <CloseIcon />{' '}
           <FormattedMessage id="app.confirm.no" defaultMessage="No" />
         </span>
       )
@@ -52,8 +50,12 @@ class Confirm extends Component {
         <Popover id={id} title={question}>
           <div className="text-center">
             <ButtonGroup bsSize="sm">
-              <Button onClick={e => this.confirm(e)}>{yes}</Button>
-              <Button onClick={e => this.dismiss(e)}>{no}</Button>
+              <Button onClick={e => this.confirm(e)}>
+                {yes}
+              </Button>
+              <Button onClick={e => this.dismiss(e)}>
+                {no}
+              </Button>
             </ButtonGroup>
           </div>
         </Popover>
@@ -62,9 +64,12 @@ class Confirm extends Component {
   }
 
   render() {
-    const { children } = this.props;
+    const { children, className = '' } = this.props;
     return (
-      <span style={{ display: 'inline-block', position: 'relative' }}>
+      <span
+        style={{ display: 'inline-block', position: 'relative' }}
+        className={className}
+      >
         {React.cloneElement(children, {
           onClick: e => this.askForConfirmation(e)
         })}
@@ -87,7 +92,8 @@ Confirm.propTypes = {
   question: stringOrFormattedMessage.isRequired,
   yes: stringOrFormattedMessage,
   no: stringOrFormattedMessage,
-  children: PropTypes.element.isRequired
+  children: PropTypes.element.isRequired,
+  className: PropTypes.string
 };
 
 export default Confirm;

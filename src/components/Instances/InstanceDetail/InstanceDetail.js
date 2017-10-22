@@ -34,13 +34,7 @@ const InstanceDetail = ({ description, rootGroupId, groups, isAdmin }) =>
       >
         <div>
           {rootGroupId !== null &&
-            <GroupTree
-              id={rootGroupId}
-              deletable={false}
-              isAdmin={isAdmin}
-              isOpen
-              groups={groups}
-            />}
+            <GroupTree id={rootGroupId} isAdmin={isAdmin} groups={groups} />}
 
           {rootGroupId === null &&
             <FormattedMessage

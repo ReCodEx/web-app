@@ -1,66 +1,35 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import Button from '../../components/widgets/FlatButton';
 import { push } from 'react-router-redux';
 import { LinkContainer } from 'react-router-bootstrap';
+import { ButtonGroup } from 'react-bootstrap';
 import DeleteExerciseButtonContainer from '../../containers/DeleteExerciseButtonContainer';
-import {
-  FormGroup,
-  ControlLabel,
-  FormControl,
-  InputGroup,
-  ButtonGroup
-} from 'react-bootstrap';
+import SearchContainer from '../../containers/SearchContainer';
 
 import PageContent from '../../components/layout/PageContent';
 import Box from '../../components/widgets/Box';
-import { AddIcon, EditIcon, SearchIcon } from '../../components/icons';
-import {
-  exercisesSelector,
-  fetchManyStatus
-} from '../../redux/selectors/exercises';
+import { AddIcon, EditIcon } from '../../components/icons';
+import { fetchManyStatus } from '../../redux/selectors/exercises';
 import { canEditExercise } from '../../redux/selectors/users';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import {
   fetchExercises,
   create as createExercise
 } from '../../redux/modules/exercises';
+import { searchExercises } from '../../redux/modules/search';
 import ExercisesList from '../../components/Exercises/ExercisesList';
 
 import FetchManyResourceRenderer from '../../components/helpers/FetchManyResourceRenderer';
-import { getJsData } from '../../redux/helpers/resourceManager';
 import withLinks from '../../hoc/withLinks';
 
 class Exercises extends Component {
-  static loadAsync = (params, dispatch) =>
-    Promise.all([dispatch(fetchExercises())]);
+  static loadAsync = (params, dispatch) => dispatch(fetchExercises());
 
   componentWillMount() {
     this.props.loadAsync();
-    this.setState({ visibleExercises: [] });
-  }
-
-  componentWillReceiveProps(nextProps) {
-    this.setState({
-      visibleExercises: nextProps.exercises
-        .toArray()
-        .map(exercise => exercise.toJS().data)
-    });
-  }
-
-  onChange(query, allExercises) {
-    const normalizedQuery = query.toLocaleLowerCase();
-    const filteredExercises = allExercises.filter(
-      exercise =>
-        exercise.name.toLocaleLowerCase().startsWith(normalizedQuery) ||
-        exercise.id.toLocaleLowerCase().startsWith(normalizedQuery)
-    );
-    this.setState({
-      visibleExercises: filteredExercises
-    });
   }
 
   newExercise = () => {
@@ -77,8 +46,8 @@ class Exercises extends Component {
   render() {
     const {
       isAuthorOfExercise,
-      exercises,
       fetchStatus,
+      search,
       links: { EXERCISE_EDIT_URI_FACTORY, EXERCISE_EDIT_CONFIG_URI_FACTORY }
     } = this.props;
 
@@ -169,66 +138,43 @@ class Exercises extends Component {
                   </Button>
                 </p>
               }
-              noPadding
               unlimitedHeight
             >
-              <div>
-                <form style={{ padding: '10px' }}>
-                  <FormGroup>
-                    <ControlLabel>
-                      <FormattedMessage
-                        id="app.search.title"
-                        defaultMessage="Search:"
-                      />
-                    </ControlLabel>
-                    <InputGroup>
-                      <FormControl
-                        onChange={e => {
-                          this.query = e.target.value;
-                        }}
-                      />
-                      <InputGroup.Button>
-                        <Button
-                          type="submit"
-                          onClick={e => {
-                            e.preventDefault();
-                            this.onChange(this.query, exercises.map(getJsData));
-                          }}
-                          disabled={false}
+              <SearchContainer
+                type="exercises"
+                id="exercises-page"
+                search={search}
+                showAllOnEmptyQuery={true}
+                renderList={exercises =>
+                  <ExercisesList
+                    exercises={exercises}
+                    createActions={id =>
+                      isAuthorOfExercise(id) &&
+                      <ButtonGroup>
+                        <LinkContainer to={EXERCISE_EDIT_URI_FACTORY(id)}>
+                          <Button bsSize="xs" bsStyle="warning">
+                            <EditIcon />{' '}
+                            <FormattedMessage
+                              id="app.exercises.listEdit"
+                              defaultMessage="Edit"
+                            />
+                          </Button>
+                        </LinkContainer>
+                        <LinkContainer
+                          to={EXERCISE_EDIT_CONFIG_URI_FACTORY(id)}
                         >
-                          <SearchIcon />
-                        </Button>
-                      </InputGroup.Button>
-                    </InputGroup>
-                  </FormGroup>
-                </form>
-                <ExercisesList
-                  exercises={this.state.visibleExercises}
-                  createActions={id =>
-                    isAuthorOfExercise(id) &&
-                    <ButtonGroup>
-                      <LinkContainer to={EXERCISE_EDIT_URI_FACTORY(id)}>
-                        <Button bsSize="xs" bsStyle="warning">
-                          <EditIcon />{' '}
-                          <FormattedMessage
-                            id="app.exercises.listEdit"
-                            defaultMessage="Edit"
-                          />
-                        </Button>
-                      </LinkContainer>
-                      <LinkContainer to={EXERCISE_EDIT_CONFIG_URI_FACTORY(id)}>
-                        <Button bsSize="xs" bsStyle="warning">
-                          <EditIcon />{' '}
-                          <FormattedMessage
-                            id="app.exercises.listEditConfig"
-                            defaultMessage="Edit config"
-                          />
-                        </Button>
-                      </LinkContainer>
-                      <DeleteExerciseButtonContainer id={id} bsSize="xs" />
-                    </ButtonGroup>}
-                />
-              </div>
+                          <Button bsSize="xs" bsStyle="warning">
+                            <EditIcon />{' '}
+                            <FormattedMessage
+                              id="app.exercises.listEditConfig"
+                              defaultMessage="Edit config"
+                            />
+                          </Button>
+                        </LinkContainer>
+                        <DeleteExerciseButtonContainer id={id} bsSize="xs" />
+                      </ButtonGroup>}
+                  />}
+              />
             </Box>
           </PageContent>}
       </FetchManyResourceRenderer>
@@ -238,12 +184,12 @@ class Exercises extends Component {
 
 Exercises.propTypes = {
   loadAsync: PropTypes.func.isRequired,
-  exercises: ImmutablePropTypes.map,
   createExercise: PropTypes.func.isRequired,
   isAuthorOfExercise: PropTypes.func.isRequired,
   push: PropTypes.func.isRequired,
   links: PropTypes.object.isRequired,
-  fetchStatus: PropTypes.string
+  fetchStatus: PropTypes.string,
+  search: PropTypes.func
 };
 
 export default withLinks(
@@ -251,7 +197,6 @@ export default withLinks(
     state => {
       const userId = loggedInUserIdSelector(state);
       return {
-        exercises: exercisesSelector(state),
         fetchStatus: fetchManyStatus(state),
         isAuthorOfExercise: exerciseId =>
           canEditExercise(userId, exerciseId)(state)
@@ -260,7 +205,8 @@ export default withLinks(
     dispatch => ({
       push: url => dispatch(push(url)),
       createExercise: () => dispatch(createExercise()),
-      loadAsync: () => Exercises.loadAsync({}, dispatch)
+      loadAsync: () => Exercises.loadAsync({}, dispatch),
+      search: query => dispatch(searchExercises()('exercises-page', query))
     })
   )(Exercises)
 );

@@ -21,6 +21,7 @@ const SupplementaryFilesTableHeaderRow = () =>
         defaultMessage="Uploaded at"
       />
     </th>
+    <th />
   </tr>;
 
 export default SupplementaryFilesTableHeaderRow;

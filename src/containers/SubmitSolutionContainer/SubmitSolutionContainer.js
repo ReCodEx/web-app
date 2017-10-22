@@ -22,6 +22,7 @@ import {
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import { cancel, changeNote } from '../../redux/modules/submission';
 import { reset as resetUpload } from '../../redux/modules/upload';
+import { evaluateReferenceSolution } from '../../redux/modules/referenceSolutions';
 
 import withLinks from '../../hoc/withLinks';
 
@@ -65,7 +66,7 @@ class SubmitSolutionContainer extends Component {
       links: { SUBMISSION_DETAIL_URI_FACTORY },
       showProgress = true,
       autodetection = true,
-      useReferenceSolutionMessages = false
+      isReferenceSolution = false
     } = this.props;
 
     const { runtimeEnvironment } = this.state;
@@ -89,7 +90,7 @@ class SubmitSolutionContainer extends Component {
           changeRuntimeEnvironment={this.changeRuntimeEnvironment}
           submitSolution={this.submit}
           autodetection={autodetection}
-          useReferenceMessages={useReferenceSolutionMessages}
+          isReferenceSolution={isReferenceSolution}
         />
 
         {showProgress &&
@@ -125,7 +126,7 @@ SubmitSolutionContainer.propTypes = {
   runtimeEnvironments: PropTypes.array,
   showProgress: PropTypes.bool,
   autodetection: PropTypes.bool,
-  useReferenceSolutionMessages: PropTypes.bool
+  isReferenceSolution: PropTypes.bool
 };
 
 export default withLinks(
@@ -145,11 +146,16 @@ export default withLinks(
         monitor: getMonitorParams(state)
       };
     },
-    (dispatch, { id, userId, onSubmit, onReset }) => ({
+    (dispatch, { id, userId, onSubmit, onReset, isReferenceSolution }) => ({
       changeNote: note => dispatch(changeNote(note)),
       cancel: () => dispatch(cancel()),
       submitSolution: (note, files, runtimeEnvironmentId = null) =>
-        dispatch(onSubmit(userId, id, note, files, runtimeEnvironmentId)),
+        dispatch(onSubmit(userId, id, note, files, runtimeEnvironmentId)).then(
+          res =>
+            isReferenceSolution
+              ? dispatch(evaluateReferenceSolution(res.value.id))
+              : Promise.resolve()
+        ),
       reset: () => dispatch(resetUpload(id)) && dispatch(onReset(userId, id))
     })
   )(SubmitSolutionContainer)

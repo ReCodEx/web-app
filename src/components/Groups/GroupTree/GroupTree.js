@@ -45,7 +45,7 @@ class GroupTree extends Component {
     const {
       id,
       level = 0,
-      isOpen,
+      isOpen = false,
       isPublic = true,
       groups,
       currentGroupId = null,
@@ -59,7 +59,7 @@ class GroupTree extends Component {
 
     const {
       name,
-      externalId,
+      admins,
       childGroups: { all: allChildGroups, public: publicChildGroups },
       canView
     } = getJsData(group);
@@ -70,7 +70,7 @@ class GroupTree extends Component {
           <TreeViewItem
             title={name}
             level={level}
-            externalId={externalId}
+            admins={admins}
             isOpen={currentGroupId === id || isOpen}
             actions={
               currentGroupId !== id && canView
@@ -83,7 +83,7 @@ class GroupTree extends Component {
                 {...this.props}
                 key={id}
                 id={id}
-                deletable={true}
+                isOpen={true}
                 level={level + 1}
                 isPublic={publicChildGroups.indexOf(id) >= 0}
               />
@@ -95,7 +95,6 @@ class GroupTree extends Component {
               {...this.props}
               key={id}
               id={id}
-              deletable={true}
               level={level + 1}
               isPublic={publicChildGroups.indexOf(id) >= 0}
             />
@@ -111,7 +110,6 @@ GroupTree.propTypes = {
   level: PropTypes.number,
   isOpen: PropTypes.bool,
   isPublic: PropTypes.bool,
-  deletable: PropTypes.bool,
   currentGroupId: PropTypes.string,
   links: PropTypes.object
 };

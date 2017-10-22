@@ -46,7 +46,7 @@ export default handleActions(
   initialState
 );
 
-export const search = endpoint => (id, query) =>
+export const search = endpoint => (id, query = '') =>
   createApiAction({
     type: actionTypes.SEARCH,
     endpoint,
@@ -58,3 +58,5 @@ export const searchPeople = instanceId =>
   search(`/instances/${instanceId}/users`);
 
 export const searchExercises = () => search('/exercises');
+
+export const searchPipelines = () => search('/pipelines');

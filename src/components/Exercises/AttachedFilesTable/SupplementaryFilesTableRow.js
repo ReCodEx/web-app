@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import prettyBytes from 'pretty-bytes';
-import { FormattedDate, FormattedTime } from 'react-intl';
-import { downloadSupplementaryFile } from '../../../redux/modules/files';
+import { FormattedDate, FormattedTime, FormattedMessage } from 'react-intl';
+import { Button } from 'react-bootstrap';
+import Confirm from '../../../components/forms/Confirm';
+import { DeleteIcon } from '../../../components/icons';
 
 const SupplementaryFilesTableRow = ({
   id,
@@ -11,13 +12,18 @@ const SupplementaryFilesTableRow = ({
   hashName,
   size,
   uploadedAt,
-  downloadFile
+  downloadFile,
+  removeFile
 }) =>
   <tr>
     <td>
-      <a href="#" onClick={downloadFile}>
-        {name}
-      </a>
+      {downloadFile
+        ? <a href="#" onClick={e => downloadFile(e, id)}>
+            {name}
+          </a>
+        : <span>
+            {name}
+          </span>}
     </td>
     <td>
       {prettyBytes(size)}
@@ -27,6 +33,28 @@ const SupplementaryFilesTableRow = ({
       &nbsp;
       <FormattedTime value={uploadedAt * 1000} />
     </td>
+    <td>
+      {removeFile &&
+        <Confirm
+          id={id}
+          onConfirmed={() => removeFile(id)}
+          question={
+            <FormattedMessage
+              id="app.supplementaryFiles.deleteConfirm"
+              defaultMessage="Are you sure you want to delete the file? This cannot be undone."
+            />
+          }
+          className="pull-right"
+        >
+          <Button bsSize="xs" className="btn-flat" bsStyle="danger">
+            <DeleteIcon />{' '}
+            <FormattedMessage
+              id="app.supplementaryFiles.deleteButton"
+              defaultMessage="Delete"
+            />
+          </Button>
+        </Confirm>}
+    </td>
   </tr>;
 
 SupplementaryFilesTableRow.propTypes = {
@@ -35,15 +63,8 @@ SupplementaryFilesTableRow.propTypes = {
   hashName: PropTypes.string.isRequired,
   size: PropTypes.number.isRequired,
   uploadedAt: PropTypes.number.isRequired,
-  downloadFile: PropTypes.func.isRequired
+  downloadFile: PropTypes.func,
+  removeFile: PropTypes.func
 };
 
-export default connect(
-  (state, props) => ({}),
-  (dispatch, { id }) => ({
-    downloadFile: e => {
-      e.preventDefault();
-      dispatch(downloadSupplementaryFile(id));
-    }
-  })
-)(SupplementaryFilesTableRow);
+export default SupplementaryFilesTableRow;

@@ -17,7 +17,9 @@ export const actionTypes = {
   ADD_FILES: 'recodex/supplementaryFiles/ADD_FILES',
   ADD_FILES_PENDING: 'recodex/supplementaryFiles/ADD_FILES_PENDING',
   ADD_FILES_FULFILLED: 'recodex/supplementaryFiles/ADD_FILES_FULFILLED',
-  ADD_FILES_FAILED: 'recodex/supplementaryFiles/ADD_FILES_REJECTED'
+  ADD_FILES_FAILED: 'recodex/supplementaryFiles/ADD_FILES_REJECTED',
+  REMOVE_FILE: 'recodex/supplementaryFiles/REMOVE_FILE',
+  REMOVE_FILE_FULFILLED: 'recodex/supplementaryFiles/REMOVE_FILE_FULFILLED'
 };
 
 export const fetchSupplementaryFilesForExercise = exerciseId =>
@@ -42,6 +44,14 @@ export const addSupplementaryFiles = (exerciseId, files) =>
     }
   });
 
+export const removeSupplementaryFile = (exerciseId, fileId) =>
+  createApiAction({
+    type: actionTypes.REMOVE_FILE,
+    endpoint: `/exercises/${exerciseId}/supplementary-files/${fileId}`,
+    method: 'DELETE',
+    meta: { exerciseId, fileId }
+  });
+
 /**
  * Reducer
  */
@@ -56,7 +66,11 @@ const reducer = handleActions(
             createRecord({ data, state: resourceStatus.FULFILLED })
           ),
         state
-      )
+      ),
+    [actionTypes.REMOVE_FILE_FULFILLED]: (
+      state,
+      { payload, meta: { fileId } }
+    ) => state.deleteIn(['resources', fileId])
   }),
   initialState
 );
