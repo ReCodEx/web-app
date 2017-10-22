@@ -2,6 +2,9 @@ import statusCode from 'statuscode';
 import { addNotification } from '../../modules/notifications';
 import flatten from 'flat';
 
+import { logout } from '../../modules/auth';
+import { isTokenValid, decode } from '../../helpers/token';
+
 export const isTwoHundredCode = status => statusCode.accept(status, '2xx');
 export const isServerError = status => statusCode.accept(status, '5xx');
 export const isUnauthorized = status => status === 403;
@@ -73,15 +76,33 @@ export const createApiCallPromise = (
     query = {},
     method = 'GET',
     headers = {},
+    accessToken = '',
     body = undefined,
     wasSuccessful = () => true,
     doNotProcess = false
   },
   dispatch = undefined
 ) => {
-  let call = createRequest(endpoint, query, method, headers, body).catch(err =>
-    detectUnreachableServer(err, dispatch)
-  );
+  let call = createRequest(endpoint, query, method, headers, body)
+    .catch(err => detectUnreachableServer(err, dispatch))
+    .then(res => {
+      if (
+        res.status === 401 &&
+        !isTokenValid(decode(accessToken)) &&
+        dispatch
+      ) {
+        dispatch(logout('/'));
+        dispatch(
+          addNotification(
+            'Your session expired and you were automatically logged out of the ReCodEx system.',
+            false
+          )
+        );
+        return Promise.reject(res);
+      }
+
+      return res;
+    });
 
   // this processing can be manually skipped
   return doNotProcess === true ? call : processResponse(call, dispatch);

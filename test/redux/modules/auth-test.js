@@ -99,7 +99,8 @@ describe('Authentication', () => {
       it('must return LOGGED OUT initial state when an expired access token is given', () => {
         // the token
         const exp = 1491903618 * 1000;
-        const expiredToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE0OTE5MDM2MTh9.3iH9ZXaaACF0Jugajfv4TggeUcqJzPQYqGveh16WHkU';
+        const expiredToken =
+          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE0OTE5MDM2MTh9.3iH9ZXaaACF0Jugajfv4TggeUcqJzPQYqGveh16WHkU';
 
         const reducer = reducerFactory(expiredToken, exp + 1000); // +1 second
         const state = reducer(undefined, {});
@@ -114,7 +115,8 @@ describe('Authentication', () => {
 
       it('must return LOGGED IN initial state when a valid access token is given', () => {
         const exp = 1491903618 * 1000;
-        const validToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE0OTE5MDM2MTgsInN1YiI6MTIzfQ._Er1LBGLVnD3bdg439fgL7E1YcnMgTDYtzfgjQrQrXQ';
+        const validToken =
+          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE0OTE5MDM2MTgsInN1YiI6MTIzfQ._Er1LBGLVnD3bdg439fgL7E1YcnMgTDYtzfgjQrQrXQ';
         const reducer = reducerFactory(validToken, exp - 1000); // -1 second
         const state = reducer(undefined, {});
         const expectedState = fromJS({
@@ -142,7 +144,10 @@ describe('Authentication', () => {
     it('must detect that the user is logged in', () => {
       const state = {
         auth: fromJS({
-          userId: 123
+          userId: 123,
+          accessToken: {
+            exp: Date.now() / 1000 + 100
+          }
         })
       };
 
