@@ -430,7 +430,10 @@ const validate = ({
 
   if (pointsPercentualThreshold) {
     const numericThreshold = Number(pointsPercentualThreshold);
-    if (pointsPercentualThreshold !== Math.round(numericThreshold).toString()) {
+    if (
+      pointsPercentualThreshold.toString() !==
+      Math.round(numericThreshold).toString()
+    ) {
       errors['pointsPercentualThreshold'] = (
         <FormattedMessage
           id="app.editAssignmentForm.validation.pointsPercentualThresholdMustBeInteger"
