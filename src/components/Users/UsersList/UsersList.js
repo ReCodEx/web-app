@@ -36,7 +36,7 @@ const UsersList = ({ users = [], createActions, intl, ...rest }) =>
 UsersList.propTypes = {
   users: PropTypes.array,
   createActions: PropTypes.func,
-  intl: PropTypes.shape({ formatMessage: PropTypes.func.isRequired }).isRequired
+  intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired
 };
 
 export default injectIntl(UsersList);

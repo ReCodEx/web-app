@@ -56,7 +56,7 @@ const InstancesTable = ({ instances, links: { INSTANCE_URI_FACTORY }, intl }) =>
 InstancesTable.propTypes = {
   instances: PropTypes.array.isRequired,
   links: PropTypes.object,
-  intl: PropTypes.shape({ formatMessage: PropTypes.func.isRequired }).isRequired
+  intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired
 };
 
 export default injectIntl(withLinks(InstancesTable));

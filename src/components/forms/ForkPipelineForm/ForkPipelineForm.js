@@ -141,7 +141,7 @@ ForkPipelineForm.propTypes = {
   push: PropTypes.func.isRequired,
   links: PropTypes.object,
   exercises: ImmutablePropTypes.map,
-  intl: PropTypes.shape({ formatMessage: PropTypes.func.isRequired }).isRequired
+  intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired
 };
 
 const mapStateToProps = (state, { pipelineId, forkId }) => {

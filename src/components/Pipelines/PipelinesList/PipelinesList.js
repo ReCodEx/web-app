@@ -60,7 +60,7 @@ const PipelinesList = ({ pipelines = [], createActions, intl }) =>
 PipelinesList.propTypes = {
   pipelines: PropTypes.array,
   createActions: PropTypes.func,
-  intl: PropTypes.shape({ formatMessage: PropTypes.func.isRequired }).isRequired
+  intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired
 };
 
 export default injectIntl(PipelinesList);

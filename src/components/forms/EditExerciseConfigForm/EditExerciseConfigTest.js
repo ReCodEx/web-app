@@ -107,7 +107,7 @@ EditExerciseConfigTest.propTypes = {
   pipelines: ImmutablePropTypes.map,
   runtimeEnvironmentIndex: PropTypes.number.isRequired,
   fetchVariables: PropTypes.func,
-  intl: PropTypes.shape({ formatMessage: PropTypes.func.isRequired }).isRequired
+  intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired
 };
 
 export default injectIntl(EditExerciseConfigTest);

@@ -140,7 +140,7 @@ AssignmentStats.propTypes = {
   getStudents: PropTypes.func.isRequired,
   getGroup: PropTypes.func.isRequired,
   loadAsync: PropTypes.func.isRequired,
-  intl: PropTypes.shape({ formatMessage: PropTypes.func.isRequired }).isRequired
+  intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired
 };
 
 export default connect(

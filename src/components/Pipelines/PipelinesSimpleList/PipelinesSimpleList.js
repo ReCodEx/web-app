@@ -60,7 +60,7 @@ const PipelinesSimpleList = ({ pipelines, createActions, intl, ...rest }) =>
 PipelinesSimpleList.propTypes = {
   pipelines: PropTypes.array.isRequired,
   createActions: PropTypes.func,
-  intl: PropTypes.shape({ formatMessage: PropTypes.func.isRequired }).isRequired
+  intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired
 };
 
 export default injectIntl(PipelinesSimpleList);

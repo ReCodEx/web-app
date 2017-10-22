@@ -107,7 +107,7 @@ AttachedFilesTable.propTypes = {
   downloadFile: PropTypes.func,
   HeaderComponent: PropTypes.func.isRequired,
   RowComponent: PropTypes.func.isRequired,
-  intl: PropTypes.shape({ formatMessage: PropTypes.func.isRequired }).isRequired
+  intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired
 };
 
 export default injectIntl(AttachedFilesTable);

@@ -63,7 +63,7 @@ const ExercisesSimpleList = ({ exercises, createActions, intl, ...rest }) =>
 ExercisesSimpleList.propTypes = {
   exercises: PropTypes.array.isRequired,
   createActions: PropTypes.func,
-  intl: PropTypes.shape({ formatMessage: PropTypes.func.isRequired }).isRequired
+  intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired
 };
 
 export default injectIntl(ExercisesSimpleList);

@@ -77,7 +77,7 @@ Supervisor.propTypes = {
   isCollapsed: PropTypes.bool,
   notifications: PropTypes.object,
   links: PropTypes.object,
-  intl: PropTypes.shape({ formatMessage: PropTypes.func.isRequired }).isRequired
+  intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired
 };
 
 export default injectIntl(withLinks(Supervisor));

@@ -73,7 +73,7 @@ PipelineVariablesField.propTypes = {
   ]).isRequired,
   variables: PropTypes.array,
   supplementaryFiles: ImmutablePropTypes.map,
-  intl: PropTypes.shape({ formatMessage: PropTypes.func.isRequired }).isRequired
+  intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired
 };
 
 export default injectIntl(PipelineVariablesField);
