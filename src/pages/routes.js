@@ -123,7 +123,7 @@ const createRoutes = getState => {
           <IndexRoute component={ResetPassword} />
           <Route path="change" component={ChangePassword} />
         </Route>
-        <Route path="admin">
+        <Route path="admin" onEnter={requireAuth}>
           <Route path="instances">
             <IndexRoute component={Instances} />
             <Route path=":instanceId">

@@ -42,7 +42,6 @@ class DatetimeField extends Component {
           {...input}
           {...props}
           locale={lang}
-          utc={true}
           onFocus={() => this.onFocus()}
           inputProps={{ disabled }}
         />{' '}
