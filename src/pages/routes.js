@@ -101,24 +101,20 @@ const createRoutes = getState => {
               </Route>
             </Route>
           </Route>
-          <Route path="pipelines" onEnter={requireAuth}>
+          <Route path="pipelines">
             <IndexRoute component={Pipelines} />
             <Route path=":pipelineId">
               <IndexRoute component={Pipeline} />
               <Route path="edit" component={EditPipeline} />
             </Route>
           </Route>
-          <Route path="group/:groupId" onEnter={requireAuth}>
+          <Route path="group/:groupId">
             <IndexRoute component={Group} />
             <Route path="edit" component={EditGroup} />
           </Route>
-          <Route
-            path="instance/:instanceId"
-            component={Instance}
-            onEnter={requireAuth}
-          />
-          <Route path="users" component={Users} onEnter={requireAuth} />
-          <Route path="user/:userId" onEnter={requireAuth}>
+          <Route path="instance/:instanceId" component={Instance} />
+          <Route path="users" component={Users} />
+          <Route path="user/:userId">
             <IndexRoute component={User} />
             <Route path="edit" component={EditUser} />
           </Route>
