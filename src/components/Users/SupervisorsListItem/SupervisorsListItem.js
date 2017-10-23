@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import MakeRemoveSupervisorButtonContainer from '../../../containers/MakeRemoveSupervisorButtonContainer';
 import MakeGroupAdminButton from '../../Groups/MakeGroupAdminButton';
-import { makeAdmin } from '../../../redux/modules/groups';
+import RemoveGroupAdminButton from '../../Groups/RemoveGroupAdminButton';
+import { addAdmin, removeAdmin } from '../../../redux/modules/groups';
 import { adminsOfGroup } from '../../../redux/selectors/groups';
 import UsersNameContainer from '../../../containers/UsersNameContainer';
 
@@ -13,8 +14,9 @@ const SupervisorsListItem = ({
   fullName,
   avatarUrl,
   groupId,
-  makeAdmin,
-  mainAdminId
+  addAdmin,
+  removeAdmin,
+  primaryAdminsIds
 }) =>
   <tr>
     <td>
@@ -23,9 +25,14 @@ const SupervisorsListItem = ({
     {isAdmin &&
       <td>
         <MakeRemoveSupervisorButtonContainer userId={id} groupId={groupId} />
-        {id !== mainAdminId &&
+        {primaryAdminsIds.indexOf(id) < 0 &&
           <MakeGroupAdminButton
-            onClick={() => makeAdmin(groupId, id)}
+            onClick={() => addAdmin(groupId, id)}
+            bsSize="xs"
+          />}
+        {primaryAdminsIds.indexOf(id) >= 0 &&
+          <RemoveGroupAdminButton
+            onClick={() => removeAdmin(groupId, id)}
             bsSize="xs"
           />}
       </td>}
@@ -37,8 +44,9 @@ SupervisorsListItem.propTypes = {
   groupId: PropTypes.string.isRequired,
   fullName: PropTypes.string.isRequired,
   avatarUrl: PropTypes.string.isRequired,
-  makeAdmin: PropTypes.func.isRequired,
-  mainAdminId: PropTypes.string.isRequired
+  addAdmin: PropTypes.func.isRequired,
+  removeAdmin: PropTypes.func.isRequired,
+  primaryAdminsIds: PropTypes.array.isRequired
 };
 
 const mapStateToProps = (state, { groupId }) => ({
@@ -46,7 +54,8 @@ const mapStateToProps = (state, { groupId }) => ({
 });
 
 const mapDispatchToProps = {
-  makeAdmin
+  addAdmin,
+  removeAdmin
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(

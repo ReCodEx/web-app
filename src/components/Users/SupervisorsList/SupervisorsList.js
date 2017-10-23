@@ -11,7 +11,7 @@ const SupervisorsList = ({
   users,
   isLoaded = true,
   isAdmin,
-  mainAdminId
+  primaryAdminsIds
 }) =>
   <Table hover>
     <tbody>
@@ -21,7 +21,7 @@ const SupervisorsList = ({
           {...user}
           groupId={groupId}
           isAdmin={isAdmin}
-          mainAdminId={mainAdminId}
+          primaryAdminsIds={primaryAdminsIds}
         />
       )}
 
@@ -45,7 +45,7 @@ SupervisorsList.propTypes = {
   groupId: PropTypes.string.isRequired,
   isLoaded: PropTypes.bool,
   isAdmin: PropTypes.bool,
-  mainAdminId: PropTypes.string
+  primaryAdminsIds: PropTypes.array.isRequired
 };
 
 export default SupervisorsList;

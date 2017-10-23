@@ -20,7 +20,7 @@ const GroupDetail = ({
     parentGroupId,
     isPublic = false,
     childGroups,
-    adminId,
+    primaryAdminsIds,
     ...group
   },
   groups,
@@ -131,7 +131,7 @@ const GroupDetail = ({
             groupId={id}
             users={supervisors}
             isAdmin={isAdmin}
-            mainAdminId={adminId}
+            primaryAdminsIds={primaryAdminsIds}
             isLoaded={supervisors.length === group.supervisors.length}
           />
         </Box>
@@ -151,7 +151,8 @@ GroupDetail.propTypes = {
     }),
     threshold: PropTypes.number,
     isPublic: PropTypes.bool,
-    supervisors: PropTypes.array.isRequired
+    supervisors: PropTypes.array.isRequired,
+    primaryAdminsIds: PropTypes.array.isRequired
   }),
   groups: PropTypes.object.isRequired,
   publicGroups: ImmutablePropTypes.map.isRequired,
