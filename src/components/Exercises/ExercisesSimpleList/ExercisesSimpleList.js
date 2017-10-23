@@ -1,11 +1,11 @@
 import React from 'react';
 import { Table } from 'react-bootstrap';
-import { FormattedMessage } from 'react-intl';
+import { injectIntl, FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
 
 import GroupExercisesListItem from '../ExercisesSimpleListItem';
 
-const ExercisesSimpleList = ({ exercises, createActions, ...rest }) => (
+const ExercisesSimpleList = ({ exercises, createActions, intl, ...rest }) =>
   <Table>
     <thead>
       <tr>
@@ -33,22 +33,22 @@ const ExercisesSimpleList = ({ exercises, createActions, ...rest }) => (
     <tbody>
       {exercises
         .sort((a, b) => {
-          var tmp = a.name.localeCompare(b.name);
+          var tmp = a.name.localeCompare(b.name, intl.locale);
           if (tmp === 0) {
             return b.createdAt - a.createdAt;
           } else {
             return tmp;
           }
         })
-        .map(exercise => (
+        .map(exercise =>
           <GroupExercisesListItem
             {...exercise}
             createActions={createActions}
             key={exercise.id}
           />
-        ))}
+        )}
 
-      {exercises.length === 0 && (
+      {exercises.length === 0 &&
         <tr>
           <td className="text-center" colSpan={4}>
             <FormattedMessage
@@ -56,15 +56,14 @@ const ExercisesSimpleList = ({ exercises, createActions, ...rest }) => (
               defaultMessage="There are no exercises in this list."
             />
           </td>
-        </tr>
-      )}
+        </tr>}
     </tbody>
-  </Table>
-);
+  </Table>;
 
 ExercisesSimpleList.propTypes = {
   exercises: PropTypes.array.isRequired,
-  createActions: PropTypes.func
+  createActions: PropTypes.func,
+  intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired
 };
 
-export default ExercisesSimpleList;
+export default injectIntl(ExercisesSimpleList);

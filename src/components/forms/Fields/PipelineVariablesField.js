@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Field } from 'redux-form';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import { FormattedMessage } from 'react-intl';
+import { injectIntl, FormattedMessage } from 'react-intl';
 import {
   TextField,
   SelectField,
@@ -18,7 +18,8 @@ const PipelineVariablesField = ({
   input,
   label,
   variables,
-  supplementaryFiles
+  supplementaryFiles,
+  intl
 }) =>
   <div>
     <h4>
@@ -39,7 +40,7 @@ const PipelineVariablesField = ({
                 component={isArray(type) ? ExpandingSelectField : SelectField}
                 options={[{ key: '', name: '...' }].concat(
                   supplementaryFiles
-                    .sort((a, b) => a.name.localeCompare(b.name))
+                    .sort((a, b) => a.name.localeCompare(b.name, intl.locale))
                     .filter((item, pos, arr) => arr.indexOf(item) === pos)
                     .map(data => ({
                       key: data.hashName,
@@ -71,7 +72,8 @@ PipelineVariablesField.propTypes = {
     PropTypes.element
   ]).isRequired,
   variables: PropTypes.array,
-  supplementaryFiles: ImmutablePropTypes.map
+  supplementaryFiles: ImmutablePropTypes.map,
+  intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired
 };
 
-export default PipelineVariablesField;
+export default injectIntl(PipelineVariablesField);

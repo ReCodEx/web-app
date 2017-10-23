@@ -1,4 +1,5 @@
 import React from 'react';
+import { injectIntl } from 'react-intl';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { Field } from 'redux-form';
@@ -12,7 +13,8 @@ const EditExerciseConfigTest = ({
   supplementaryFiles,
   pipelines,
   runtimeEnvironmentIndex,
-  fetchVariables
+  fetchVariables,
+  intl
 }) =>
   <tbody>
     {tests.map((test, index) => [
@@ -30,7 +32,7 @@ const EditExerciseConfigTest = ({
                 component={SelectField}
                 options={[{ key: '', name: '...' }].concat(
                   pipelines
-                    .sort((a, b) => a.name.localeCompare(b.name))
+                    .sort((a, b) => a.name.localeCompare(b.name, intl.locale))
                     .map(data => {
                       const obj = {};
                       obj['key'] = data.id;
@@ -67,7 +69,7 @@ const EditExerciseConfigTest = ({
                 component={SelectField}
                 options={[{ key: '', name: '...' }].concat(
                   pipelines
-                    .sort((a, b) => a.name.localeCompare(b.name))
+                    .sort((a, b) => a.name.localeCompare(b.name, intl.locale))
                     .map(data => {
                       const obj = {};
                       obj['key'] = data.id;
@@ -104,7 +106,8 @@ EditExerciseConfigTest.propTypes = {
   supplementaryFiles: ImmutablePropTypes.map,
   pipelines: ImmutablePropTypes.map,
   runtimeEnvironmentIndex: PropTypes.number.isRequired,
-  fetchVariables: PropTypes.func
+  fetchVariables: PropTypes.func,
+  intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired
 };
 
-export default EditExerciseConfigTest;
+export default injectIntl(EditExerciseConfigTest);

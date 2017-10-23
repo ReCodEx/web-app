@@ -1,4 +1,5 @@
 import React from 'react';
+import { injectIntl } from 'react-intl';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { Row, Col } from 'react-bootstrap';
@@ -11,7 +12,12 @@ import {
 } from '../Fields';
 import ResourceRenderer from '../../helpers/ResourceRenderer';
 
-const EditExerciseConfigVariable = ({ prefix, data, supplementaryFiles }) =>
+const EditExerciseConfigVariable = ({
+  prefix,
+  data,
+  supplementaryFiles,
+  intl
+}) =>
   <td key={data.name}>
     <Row>
       <Col xs={12}>
@@ -39,7 +45,7 @@ const EditExerciseConfigVariable = ({ prefix, data, supplementaryFiles }) =>
                 label={''}
                 options={[{ key: '', name: '...' }].concat(
                   supplementaryFiles
-                    .sort((a, b) => a.name.localeCompare(b.name))
+                    .sort((a, b) => a.name.localeCompare(b.name, intl.locale))
                     .filter((item, pos, arr) => arr.indexOf(item) === pos)
                     .map(data => ({
                       key: data.hashName,
@@ -65,7 +71,7 @@ const EditExerciseConfigVariable = ({ prefix, data, supplementaryFiles }) =>
                 label={''}
                 options={[{ key: '', name: '...' }].concat(
                   supplementaryFiles
-                    .sort((a, b) => a.name.localeCompare(b.name))
+                    .sort((a, b) => a.name.localeCompare(b.name, intl.locale))
                     .filter((item, pos, arr) => arr.indexOf(item) === pos)
                     .map(data => ({
                       key: data.hashName,
@@ -81,7 +87,8 @@ const EditExerciseConfigVariable = ({ prefix, data, supplementaryFiles }) =>
 EditExerciseConfigVariable.propTypes = {
   prefix: PropTypes.string.isRequired,
   data: PropTypes.object.isRequired,
-  supplementaryFiles: ImmutablePropTypes.map
+  supplementaryFiles: ImmutablePropTypes.map,
+  intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired
 };
 
-export default EditExerciseConfigVariable;
+export default injectIntl(EditExerciseConfigVariable);

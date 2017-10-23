@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import { FormattedMessage } from 'react-intl';
+import { injectIntl, FormattedMessage } from 'react-intl';
 import { Alert, Form } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
@@ -39,7 +39,8 @@ class ForkPipelineForm extends Component {
       hasFailed = false,
       hasSucceeded = false,
       invalid,
-      exercises
+      exercises,
+      intl
     } = this.props;
 
     switch (forkStatus) {
@@ -77,7 +78,9 @@ class ForkPipelineForm extends Component {
                     label={''}
                     options={[{ key: '', name: '_Public_' }].concat(
                       exercises
-                        .sort((a, b) => a.name.localeCompare(b.name))
+                        .sort((a, b) =>
+                          a.name.localeCompare(b.name, intl.locale)
+                        )
                         .filter((item, pos, arr) => arr.indexOf(item) === pos)
                         .map(exercise => ({
                           key: exercise.id,
@@ -137,7 +140,8 @@ ForkPipelineForm.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
   push: PropTypes.func.isRequired,
   links: PropTypes.object,
-  exercises: ImmutablePropTypes.map
+  exercises: ImmutablePropTypes.map,
+  intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired
 };
 
 const mapStateToProps = (state, { pipelineId, forkId }) => {
@@ -160,6 +164,6 @@ export default withLinks(
     reduxForm({
       form: 'forkPipeline',
       validate
-    })(ForkPipelineForm)
+    })(injectIntl(ForkPipelineForm))
   )
 );

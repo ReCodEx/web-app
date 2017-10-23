@@ -16,3 +16,4 @@ npm-debug.log
 prod/
 package-lock.json
 
+/run_server.bat

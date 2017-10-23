@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import { FormattedMessage } from 'react-intl';
+import { injectIntl, FormattedMessage } from 'react-intl';
 
 import MenuTitle from '../../widgets/Sidebar/MenuTitle';
 import MenuGroup from '../../widgets/Sidebar/MenuGroup';
@@ -15,7 +15,8 @@ const Supervisor = ({
   supervisorOf,
   isCollapsed,
   notifications,
-  links: { GROUP_URI_FACTORY, EXERCISES_URI, PIPELINES_URI }
+  links: { GROUP_URI_FACTORY, EXERCISES_URI, PIPELINES_URI },
+  intl
 }) =>
   <ul className="sidebar-menu">
     <MenuTitle
@@ -33,7 +34,13 @@ const Supervisor = ({
           defaultMessage="Groups - supervisor"
         />
       }
-      items={supervisorOf.toList()}
+      items={supervisorOf
+        .toList()
+        .sort((a, b) =>
+          a
+            .getIn(['data', 'name'])
+            .localeCompare(b.getIn(['data', 'name']), intl.locale)
+        )}
       notifications={{}}
       icon="wrench"
       currentPath={currentUrl}
@@ -69,7 +76,8 @@ Supervisor.propTypes = {
   supervisorOf: ImmutablePropTypes.map,
   isCollapsed: PropTypes.bool,
   notifications: PropTypes.object,
-  links: PropTypes.object
+  links: PropTypes.object,
+  intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired
 };
 
-export default withLinks(Supervisor);
+export default injectIntl(withLinks(Supervisor));
