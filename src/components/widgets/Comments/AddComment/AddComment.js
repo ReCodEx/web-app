@@ -40,7 +40,7 @@ class AddComment extends Component {
 
   render() {
     const { text, isPrivate } = this.state;
-    const { addComment, intl: { formatMessage } } = this.props;
+    const { addComment, refresh, intl: { formatMessage } } = this.props;
 
     return (
       <Form>
@@ -63,6 +63,12 @@ class AddComment extends Component {
                 <FormattedMessage
                   id="app.comments.addComment"
                   defaultMessage="Send"
+                />
+              </Button>
+              <Button bsStyle="default" onClick={refresh}>
+                <FormattedMessage
+                  id="app.comments.refresh"
+                  defaultMessage="Refresh"
                 />
               </Button>
             </InputGroup.Button>
@@ -96,6 +102,7 @@ class AddComment extends Component {
 
 AddComment.propTypes = {
   addComment: PropTypes.func,
+  refresh: PropTypes.func,
   intl: intlShape.isRequired
 };
 

@@ -27,24 +27,12 @@ import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 class CommentThreadContainer extends Component {
   componentWillMount() {
     CommentThreadContainer.loadData(this.props);
-    this.pollInterval = setInterval(() => this.poll(), 60000); // once a minute
-  }
-
-  componentWillUnmount() {
-    clearInterval(this.pollInterval);
   }
 
   componentWillReceiveProps(newProps) {
     if (this.props.threadId !== newProps.threadId) {
       CommentThreadContainer.loadData(newProps);
     }
-  }
-
-  /**
-   * Periodically ask for new comments.
-   */
-  poll() {
-    this.props.poll();
   }
 
   static loadData = ({ loadThreadIfNeeded }) => {
@@ -57,7 +45,8 @@ class CommentThreadContainer extends Component {
       user,
       addComment,
       repostComment,
-      togglePrivacy
+      togglePrivacy,
+      refresh
     } = this.props;
 
     return (
@@ -66,15 +55,15 @@ class CommentThreadContainer extends Component {
         loading={<LoadingCommentThread />}
         failed={<FailedCommentThread />}
       >
-        {(thread, user) => (
+        {(thread, user) =>
           <CommentThread
             comments={thread.comments.sort((a, b) => a.postedAt - b.postedAt)}
             currentUserId={user.id}
             addComment={(text, isPrivate) => addComment(user, text, isPrivate)}
             togglePrivacy={togglePrivacy}
             repostComment={repostComment}
-          />
-        )}
+            refresh={refresh}
+          />}
       </ResourceRenderer>
     );
   }
@@ -87,7 +76,7 @@ CommentThreadContainer.propTypes = {
   addComment: PropTypes.func.isRequired,
   repostComment: PropTypes.func,
   togglePrivacy: PropTypes.func,
-  poll: PropTypes.func.isRequired
+  refresh: PropTypes.func.isRequired
 };
 
 export default connect(
@@ -101,6 +90,6 @@ export default connect(
     repostComment: tmpId => dispatch(repostComment(threadId, tmpId)),
     togglePrivacy: id => dispatch(togglePrivacy(threadId, id)),
     loadThreadIfNeeded: () => dispatch(fetchThreadIfNeeded(threadId)),
-    poll: () => dispatch(updateThread(threadId))
+    refresh: () => dispatch(updateThread(threadId))
   })
 )(CommentThreadContainer);

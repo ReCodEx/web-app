@@ -11,11 +11,14 @@ const CommentThread = ({
   currentUserId,
   addComment,
   repostComment,
-  togglePrivacy
-}) => (
+  togglePrivacy,
+  refresh
+}) =>
   <CommentBox
     commentsCount={comments.length}
-    footer={addComment && <AddComment addComment={addComment} />}
+    footer={
+      addComment && <AddComment addComment={addComment} refresh={refresh} />
+    }
   >
     <div>
       {comments.map(
@@ -38,15 +41,15 @@ const CommentThread = ({
           />
         </p>}
     </div>
-  </CommentBox>
-);
+  </CommentBox>;
 
 CommentThread.propTypes = {
   comments: PropTypes.array,
   currentUserId: PropTypes.string.isRequired,
   addComment: PropTypes.func,
   repostComment: PropTypes.func,
-  togglePrivacy: PropTypes.func
+  togglePrivacy: PropTypes.func,
+  refresh: PropTypes.func
 };
 
 export default CommentThread;
