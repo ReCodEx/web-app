@@ -150,17 +150,18 @@ class ReferenceSolution extends Component {
                             defaultMessage="Refresh"
                           />
                         </Button>
-                        <Button
-                          bsStyle="success"
-                          className="btn-flat"
-                          onClick={evaluateReferenceSolution}
-                        >
-                          <SendIcon />{' '}
-                          <FormattedMessage
-                            id="app.referenceSolutionDetail.resubmit"
-                            defaultMessage="Resubmit"
-                          />
-                        </Button>
+                        {referenceSolution.canEvaluate &&
+                          <Button
+                            bsStyle="success"
+                            className="btn-flat"
+                            onClick={evaluateReferenceSolution}
+                          >
+                            <SendIcon />{' '}
+                            <FormattedMessage
+                              id="app.referenceSolutionDetail.resubmit"
+                              defaultMessage="Resubmit"
+                            />
+                          </Button>}
                       </p>
                     </Col>
                   </Row>

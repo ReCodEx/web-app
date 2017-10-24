@@ -353,7 +353,7 @@ class Exercise extends Component {
                       referenceSolutions.length > 0
                         ? <ReferenceSolutionsList
                             referenceSolutions={referenceSolutions}
-                            renderButtons={solutionId =>
+                            renderButtons={(solutionId, canDelete) =>
                               <div>
                                 <Button
                                   bsSize="xs"
@@ -371,32 +371,33 @@ class Exercise extends Component {
                                     defaultMessage="View detail"
                                   />
                                 </Button>
-                                <Confirm
-                                  id={solutionId}
-                                  onConfirmed={() =>
-                                    deleteReferenceSolution(
-                                      exercise.id,
-                                      solutionId
-                                    )}
-                                  question={
-                                    <FormattedMessage
-                                      id="app.exercise.referenceSolution.deleteConfirm"
-                                      defaultMessage="Are you sure you want to delete the reference solution? This cannot be undone."
-                                    />
-                                  }
-                                >
-                                  <Button
-                                    bsSize="xs"
-                                    className="btn-flat"
-                                    bsStyle="danger"
+                                {canDelete &&
+                                  <Confirm
+                                    id={solutionId}
+                                    onConfirmed={() =>
+                                      deleteReferenceSolution(
+                                        exercise.id,
+                                        solutionId
+                                      )}
+                                    question={
+                                      <FormattedMessage
+                                        id="app.exercise.referenceSolution.deleteConfirm"
+                                        defaultMessage="Are you sure you want to delete the reference solution? This cannot be undone."
+                                      />
+                                    }
                                   >
-                                    <DeleteIcon />{' '}
-                                    <FormattedMessage
-                                      id="app.exercise.referenceSolution.deleteButton"
-                                      defaultMessage="Delete"
-                                    />
-                                  </Button>
-                                </Confirm>
+                                    <Button
+                                      bsSize="xs"
+                                      className="btn-flat"
+                                      bsStyle="danger"
+                                    >
+                                      <DeleteIcon />{' '}
+                                      <FormattedMessage
+                                        id="app.exercise.referenceSolution.deleteButton"
+                                        defaultMessage="Delete"
+                                      />
+                                    </Button>
+                                  </Confirm>}
                               </div>}
                           />
                         : <p className="text-center">
