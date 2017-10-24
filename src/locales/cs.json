@@ -1,6 +1,6 @@
 {
   "app.EditEnvironmentLimitsForm.cloneAll.yesNoQuestion": "Do you really want to use these limits for all the tests of all runtime environments?",
-  "app.acceptSolution.accepted": "Označeno pro hodnocení",
+  "app.acceptSolution.accepted": "Odebrat označení pro hodnocení",
   "app.acceptSolution.notAccepted": "Označit pro hodnocení",
   "app.addLicence.addLicenceTitle": "Přidat novou licenci",
   "app.addLicence.failed": "Přidávání licence selhalo.",
