@@ -129,10 +129,10 @@ const reducer = handleActions(
       ),
 
     [additionalActionTypes.ACCEPT_PENDING]: (state, { meta: { id } }) =>
-      state.setIn(['resources', id, 'data', 'accepted'], true),
+      state.setIn(['resources', id, 'data', 'accepted-pending'], true),
 
     [additionalActionTypes.ACCEPT_FAILED]: (state, { meta: { id } }) =>
-      state.setIn(['resources', id, 'data', 'accepted'], false),
+      state.setIn(['resources', id, 'data', 'accepted-pending'], false),
 
     [additionalActionTypes.ACCEPT_FULFILLED]: (state, { meta: { id } }) =>
       state.update('resources', resources =>
@@ -143,17 +143,21 @@ const reducer = handleActions(
                   'data',
                   data =>
                     itemId === id
-                      ? data.set('accepted', true)
-                      : data.set('accepted', false)
+                      ? data
+                          .set('accepted', true)
+                          .set('accepted-pending', false)
+                      : data
+                          .set('accepted', false)
+                          .set('accepted-pending', false)
                 )
               : item
         )
       ),
     [additionalActionTypes.UNACCEPT_PENDING]: (state, { meta: { id } }) =>
-      state.setIn(['resources', id, 'data', 'accepted'], false),
+      state.setIn(['resources', id, 'data', 'accepted-pending'], true),
 
     [additionalActionTypes.UNACCEPT_FAILED]: (state, { meta: { id } }) =>
-      state.setIn(['resources', id, 'data', 'accepted'], true),
+      state.setIn(['resources', id, 'data', 'accepted-pending'], false),
 
     [additionalActionTypes.UNACCEPT_FULFILLED]: (state, { meta: { id } }) =>
       state.update('resources', resources =>
@@ -164,8 +168,12 @@ const reducer = handleActions(
                   'data',
                   data =>
                     itemId === id
-                      ? data.set('accepted', false)
-                      : data.set('accepted', true)
+                      ? data
+                          .set('accepted', false)
+                          .set('accepted-pending', false)
+                      : data
+                          .set('accepted', true)
+                          .set('accepted-pending', false)
                 )
               : item
         )

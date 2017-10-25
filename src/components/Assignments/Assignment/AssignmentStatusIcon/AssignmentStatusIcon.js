@@ -2,13 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import Icon from 'react-fontawesome';
-import Staus from './Status';
+import Status from './Status';
 
 const AssignmentStatusIcon = ({ id, status, accepted = false }) => {
   switch (status) {
     case 'done':
       return (
-        <Staus
+        <Status
           id={id}
           accepted={accepted}
           icon={<Icon name="thumbs-o-up" className="text-green" />}
@@ -23,7 +23,7 @@ const AssignmentStatusIcon = ({ id, status, accepted = false }) => {
 
     case 'work-in-progress':
       return (
-        <Staus
+        <Status
           id={id}
           icon={<Icon name="cogs" className="text-yellow" />}
           message={
@@ -37,7 +37,7 @@ const AssignmentStatusIcon = ({ id, status, accepted = false }) => {
 
     case 'failed':
       return (
-        <Staus
+        <Status
           id={id}
           icon={<Icon name="thumbs-o-down" className="text-red" />}
           message={
@@ -51,7 +51,7 @@ const AssignmentStatusIcon = ({ id, status, accepted = false }) => {
 
     case 'evaluation-failed':
       return (
-        <Staus
+        <Status
           id={id}
           icon={<Icon name="exclamation-triangle" className="text-yellow" />}
           message={
@@ -65,7 +65,7 @@ const AssignmentStatusIcon = ({ id, status, accepted = false }) => {
 
     default:
       return (
-        <Staus
+        <Status
           id={id}
           icon={<Icon name="code" className="text-gray" />}
           message={

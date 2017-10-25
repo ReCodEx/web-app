@@ -1,7 +1,7 @@
 {
   "app.EditEnvironmentLimitsForm.cloneAll.yesNoQuestion": "Do you really want to use these limits for all the tests of all runtime environments?",
-  "app.acceptSolution.accepted": "Remove grading mark",
-  "app.acceptSolution.notAccepted": "Mark for grading",
+  "app.acceptSolution.accepted": "Revoke as Final",
+  "app.acceptSolution.notAccepted": "Accept as Final",
   "app.addLicence.addLicenceTitle": "Add new licence",
   "app.addLicence.failed": "Cannot add the licence.",
   "app.addLicence.note": "Note:",
