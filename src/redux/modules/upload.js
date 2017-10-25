@@ -50,7 +50,7 @@ export const removeFailedFile = createAction(
 export const uploadSuccessful = createAction(
   actionTypes.UPLOAD_FULFILLED,
   (id, payload) => payload,
-  id => ({ id })
+  (id, file) => ({ id, fileName: file.name })
 );
 export const uploadFailed = createAction(
   actionTypes.UPLOAD_FAILED,
@@ -80,14 +80,40 @@ const reducer = handleActions(
           list.push({ name: fileName, file: payload[fileName] })
         )
         .updateIn([id, 'failed'], list =>
-          list.filter(item => item.name !== payload.name)
+          list.filter(item => item.name !== fileName)
         )
         .updateIn([id, 'removed'], list =>
-          list.filter(item => item.name !== payload.name)
+          list.filter(item => item.name !== fileName)
         )
         .updateIn([id, 'uploaded'], list =>
-          list.filter(item => item.name !== payload.name)
+          list.filter(item => item.name !== fileName)
         ),
+
+    [actionTypes.UPLOAD_FULFILLED]: (
+      state,
+      { payload, meta: { id, fileName } }
+    ) =>
+      state
+        .updateIn([id, 'uploading'], list =>
+          list.filter(item => item.name !== fileName)
+        )
+        .updateIn([id, 'uploaded'], list =>
+          list.filter(item => item.name !== fileName)
+        ) // overwrite file with the same name
+        .updateIn([id, 'uploaded'], list =>
+          list.push({ name: payload.name, file: payload })
+        ),
+
+    [actionTypes.UPLOAD_FAILED]: (state, { meta: { id, fileName } }) => {
+      const file = state
+        .getIn([id, 'uploading'])
+        .find(item => item.name === fileName);
+      return state
+        .updateIn([id, 'uploading'], list =>
+          list.filter(item => item.name !== fileName)
+        )
+        .updateIn([id, 'failed'], list => list.push(file));
+    },
 
     [actionTypes.REMOVE_FILE]: (state, { payload, meta: { id } }) =>
       state
@@ -106,30 +132,7 @@ const reducer = handleActions(
     [actionTypes.REMOVE_FAILED_FILE]: (state, { payload, meta: { id } }) =>
       state.updateIn([id, 'failed'], list =>
         list.filter(item => item.name !== payload.name)
-      ),
-
-    [actionTypes.UPLOAD_FULFILLED]: (state, { payload, meta: { id } }) =>
-      state
-        .updateIn([id, 'uploading'], list =>
-          list.filter(item => item.name !== payload.name)
-        )
-        .updateIn([id, 'uploaded'], list =>
-          list.filter(item => item.name !== payload.name)
-        ) // overwrite file with the same name
-        .updateIn([id, 'uploaded'], list =>
-          list.push({ name: payload.name, file: payload })
-        ),
-
-    [actionTypes.UPLOAD_FAILED]: (state, { meta: { id, fileName } }) => {
-      const file = state
-        .getIn([id, 'uploading'])
-        .find(item => item.name === fileName);
-      return state
-        .updateIn([id, 'uploading'], list =>
-          list.filter(item => item.name !== fileName)
-        )
-        .updateIn([id, 'failed'], list => list.push(file));
-    }
+      )
   },
   initialState
 );
