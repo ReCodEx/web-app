@@ -15,7 +15,7 @@ describe('Submissions', () => {
 
       expect(action.request).to.eql({
         type: additionalActionTypes.ACCEPT,
-        method: 'GET',
+        method: 'POST',
         endpoint: `/submissions/${id}/set-accepted`,
         meta: { id }
       });
@@ -35,6 +35,9 @@ describe('Submissions', () => {
       const pendingState = reducer(initialState, pendingAction);
       expect(
         pendingState.getIn(['resources', id, 'data', 'accepted'])
+      ).to.equal(false);
+      expect(
+        pendingState.getIn(['resources', id, 'data', 'accepted-pending'])
       ).to.equal(true);
 
       const failedAction = {
@@ -46,6 +49,9 @@ describe('Submissions', () => {
       expect(failedState.getIn(['resources', id, 'data', 'accepted'])).to.equal(
         false
       );
+      expect(
+        failedState.getIn(['resources', id, 'data', 'accepted-pending'])
+      ).to.equal(false);
 
       const successAction = {
         type: additionalActionTypes.ACCEPT_FULFILLED,

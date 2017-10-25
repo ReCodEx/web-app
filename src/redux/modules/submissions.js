@@ -38,6 +38,10 @@ export const additionalActionTypes = {
   ACCEPT_PENDING: 'recodex/submissions/ACCEPT_PENDING',
   ACCEPT_FULFILLED: 'recodex/submissions/ACCEPT_FULFILLED',
   ACCEPT_FAILED: 'recodex/submissions/ACCEPT_FAILED',
+  UNACCEPT: 'recodex/submissions/UNACCEPT',
+  UNACCEPT_PENDING: 'recodex/submissions/UNACCEPT_PENDING',
+  UNACCEPT_FULFILLED: 'recodex/submissions/UNACCEPT_FULFILLED',
+  UNACCEPT_FAILED: 'recodex/submissions/UNACCEPT_FAILED',
   RESUBMIT_ALL: 'recodex/submissions/RESUBMIT_ALL',
   DOWNLOAD_RESULT_ARCHIVE: 'recodex/files/DOWNLOAD_RESULT_ARCHIVE'
 };
@@ -58,8 +62,16 @@ export const setPoints = (submissionId, bonusPoints) =>
 export const acceptSubmission = id =>
   createApiAction({
     type: additionalActionTypes.ACCEPT,
-    method: 'GET',
+    method: 'POST',
     endpoint: `/submissions/${id}/set-accepted`,
+    meta: { id }
+  });
+
+export const unacceptSubmission = id =>
+  createApiAction({
+    type: additionalActionTypes.UNACCEPT,
+    method: 'DELETE',
+    endpoint: `/submissions/${id}/unset-accepted`,
     meta: { id }
   });
 
@@ -117,10 +129,10 @@ const reducer = handleActions(
       ),
 
     [additionalActionTypes.ACCEPT_PENDING]: (state, { meta: { id } }) =>
-      state.setIn(['resources', id, 'data', 'accepted'], true),
+      state.setIn(['resources', id, 'data', 'accepted-pending'], true),
 
     [additionalActionTypes.ACCEPT_FAILED]: (state, { meta: { id } }) =>
-      state.setIn(['resources', id, 'data', 'accepted'], false),
+      state.setIn(['resources', id, 'data', 'accepted-pending'], false),
 
     [additionalActionTypes.ACCEPT_FULFILLED]: (state, { meta: { id } }) =>
       state.update('resources', resources =>
@@ -131,8 +143,37 @@ const reducer = handleActions(
                   'data',
                   data =>
                     itemId === id
-                      ? data.set('accepted', true)
-                      : data.set('accepted', false)
+                      ? data
+                          .set('accepted', true)
+                          .set('accepted-pending', false)
+                      : data
+                          .set('accepted', false)
+                          .set('accepted-pending', false)
+                )
+              : item
+        )
+      ),
+    [additionalActionTypes.UNACCEPT_PENDING]: (state, { meta: { id } }) =>
+      state.setIn(['resources', id, 'data', 'accepted-pending'], true),
+
+    [additionalActionTypes.UNACCEPT_FAILED]: (state, { meta: { id } }) =>
+      state.setIn(['resources', id, 'data', 'accepted-pending'], false),
+
+    [additionalActionTypes.UNACCEPT_FULFILLED]: (state, { meta: { id } }) =>
+      state.update('resources', resources =>
+        resources.map(
+          (item, itemId) =>
+            item.get('data') !== null
+              ? item.update(
+                  'data',
+                  data =>
+                    itemId === id
+                      ? data
+                          .set('accepted', false)
+                          .set('accepted-pending', false)
+                      : data
+                          .set('accepted', true)
+                          .set('accepted-pending', false)
                 )
               : item
         )
