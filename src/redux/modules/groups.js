@@ -37,10 +37,14 @@ export const additionalActionTypes = {
   REMOVE_SUPERVISOR_PENDING: 'recodex/groups/REMOVE_SUPERVISOR_PENDING',
   REMOVE_SUPERVISOR_FULFILLED: 'recodex/groups/REMOVE_SUPERVISOR_FULFILLED',
   REMOVE_SUPERVISOR_REJECTED: 'recodex/groups/REMOVE_SUPERVISOR_REJECTED',
-  MAKE_ADMIN: 'recodex/groups/MAKE_ADMIN',
-  MAKE_ADMIN_PENDING: 'recodex/groups/MAKE_ADMIN_PENDING',
-  MAKE_ADMIN_FULFILLED: 'recodex/groups/MAKE_ADMIN_FULFILLED',
-  MAKE_ADMIN_REJECTED: 'recodex/groups/MAKE_ADMIN_REJECTED'
+  ADD_ADMIN: 'recodex/groups/ADD_ADMIN',
+  ADD_ADMIN_PENDING: 'recodex/groups/ADD_ADMIN_PENDING',
+  ADD_ADMIN_FULFILLED: 'recodex/groups/ADD_ADMIN_FULFILLED',
+  ADD_ADMIN_REJECTED: 'recodex/groups/ADD_ADMIN_REJECTED',
+  REMOVE_ADMIN: 'recodex/groups/REMOVE_ADMIN',
+  REMOVE_ADMIN_PENDING: 'recodex/groups/REMOVE_ADMIN_PENDING',
+  REMOVE_ADMIN_FULFILLED: 'recodex/groups/REMOVE_ADMIN_FULFILLED',
+  REMOVE_ADMIN_REJECTED: 'recodex/groups/REMOVE_ADMIN_REJECTED'
 };
 
 export const loadGroup = actions.pushResource;
@@ -52,9 +56,10 @@ export const validateAddGroup = (name, instanceId, parentGroupId = null) =>
     type: 'VALIDATE_ADD_GROUP_DATA',
     endpoint: '/groups/validate-add-group-data',
     method: 'POST',
-    body: parentGroupId === null
-      ? { name, instanceId }
-      : { name, instanceId, parentGroupId }
+    body:
+      parentGroupId === null
+        ? { name, instanceId }
+        : { name, instanceId, parentGroupId }
   });
 
 export const fetchSubgroups = groupId =>
@@ -132,10 +137,10 @@ export const removeSupervisor = (groupId, userId) => dispatch =>
     })
   ).catch(() => dispatch(addNotification('Cannot remove supervisor.', false))); // @todo: Make translatable
 
-export const makeAdmin = (groupId, userId) => dispatch =>
+export const addAdmin = (groupId, userId) => dispatch =>
   dispatch(
     createApiAction({
-      type: additionalActionTypes.MAKE_ADMIN,
+      type: additionalActionTypes.ADD_ADMIN,
       endpoint: `/groups/${groupId}/admin`,
       method: 'POST',
       meta: { groupId, userId },
@@ -144,6 +149,23 @@ export const makeAdmin = (groupId, userId) => dispatch =>
   ).catch(() =>
     dispatch(
       addNotification('Cannot make this person admin of the group.', false)
+    )
+  ); // @todo: Make translatable
+
+export const removeAdmin = (groupId, userId) => dispatch =>
+  dispatch(
+    createApiAction({
+      type: additionalActionTypes.REMOVE_ADMIN,
+      endpoint: `/groups/${groupId}/admin/${userId}`,
+      method: 'DELETE',
+      meta: { groupId, userId }
+    })
+  ).catch(() =>
+    dispatch(
+      addNotification(
+        'Cannot remove this person from admins of the group.',
+        false
+      )
     )
   ); // @todo: Make translatable
 
@@ -250,41 +272,60 @@ const reducer = handleActions(
         supervisors => supervisors.filter(id => id !== userId)
       ),
 
-    [additionalActionTypes.MAKE_ADMIN_PENDING]: (
+    [additionalActionTypes.ADD_ADMIN_PENDING]: (
       state,
-      { payload: { userId }, meta: { groupId } }
+      { payload, meta: { groupId, userId } }
     ) =>
-      state.updateIn(['resources', groupId, 'data'], group =>
-        group
-          .set('oldAdminId', group.get('adminId'))
-          .update('admins', admins =>
-            admins.filter(id => id !== userId).push(userId)
-          )
-          .set('adminId', userId)
+      state.updateIn(
+        ['resources', groupId, 'data', 'primaryAdminsIds'],
+        admins => admins.filter(id => id !== userId).concat([userId])
       ),
 
-    [additionalActionTypes.MAKE_ADMIN_FAILED]: (
+    [additionalActionTypes.ADD_ADMIN_FAILED]: (
       state,
-      { payload: { userId }, meta: { groupId } }
+      { payload, meta: { groupId, userId } }
     ) =>
-      state.updateIn(['resources', groupId, 'data'], group =>
-        group
-          .update('admins', admins =>
-            admins.filter(id => id !== group.get('adminId')).push(userId)
-          )
-          .set('adminId', group.get('oldAdminId'))
-          .remove('oldAdminId')
+      state.updateIn(
+        ['resources', groupId, 'data', 'primaryAdminsIds'],
+        admins => admins.filter(id => id !== userId)
       ),
 
-    [additionalActionTypes.MAKE_ADMIN_FULFILLED]: (
+    [additionalActionTypes.ADD_ADMIN_FULFILLED]: (
       state,
-      { payload: { adminId, admins }, meta: { groupId } }
+      { payload: { primaryAdminsIds, admins }, meta: { groupId } }
     ) =>
       state.updateIn(['resources', groupId, 'data'], group =>
         group
-          .remove('oldAdminId')
           .set('admins', List(admins))
-          .set('adminId', adminId)
+          .set('primaryAdminsIds', primaryAdminsIds)
+      ),
+
+    [additionalActionTypes.REMOVE_ADMIN_PENDING]: (
+      state,
+      { payload, meta: { groupId, userId } }
+    ) =>
+      state.updateIn(
+        ['resources', groupId, 'data', 'primaryAdminsIds'],
+        admins => admins.filter(id => id !== userId)
+      ),
+
+    [additionalActionTypes.REMOVE_ADMIN_FAILED]: (
+      state,
+      { payload, meta: { groupId, userId } }
+    ) =>
+      state.updateIn(
+        ['resources', groupId, 'data', 'primaryAdminsIds'],
+        admins => admins.filter(id => id !== userId).concat([userId])
+      ),
+
+    [additionalActionTypes.REMOVE_ADMIN_FULFILLED]: (
+      state,
+      { payload: { primaryAdminsIds, admins }, meta: { groupId } }
+    ) =>
+      state.updateIn(['resources', groupId, 'data'], group =>
+        group
+          .set('admins', List(admins))
+          .set('primaryAdminsIds', primaryAdminsIds)
       ),
 
     [additionalActionTypes.LOAD_USERS_GROUPS_FULFILLED]: (

@@ -12,3 +12,14 @@ export const isAccepted = id =>
         ? false
         : submission.getIn(['data', 'accepted'])
   );
+
+export const isAcceptPending = id =>
+  createSelector(
+    getSubmission(id),
+    submission =>
+      submission.get('data') === null
+        ? false
+        : submission.getIn(['data', 'accepted-pending']) !== undefined
+          ? submission.getIn(['data', 'accepted-pending'])
+          : false
+  );
