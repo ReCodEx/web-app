@@ -17,10 +17,10 @@ import BonusPoints from '../../Assignments/SubmissionsTable/BonusPoints';
 const EvaluationDetail = ({
   assignment: { firstDeadline, allowSecondDeadline, secondDeadline },
   evaluation,
-  note = '',
+  isCorrect,
   submittedAt,
   maxPoints
-}) => (
+}) =>
   <Box
     title={
       <FormattedMessage
@@ -56,40 +56,25 @@ const EvaluationDetail = ({
             />
           </th>
           <td className="text-center">
-            {submittedAt < firstDeadline ? (
-              <Icon name="check" className="text-success" />
-            ) : (
-              <Icon name="times" className="text-danger" />
-            )}
+            {submittedAt < firstDeadline
+              ? <Icon name="check" className="text-success" />
+              : <Icon name="times" className="text-danger" />}
           </td>
         </tr>
 
         {submittedAt >= firstDeadline &&
-          allowSecondDeadline === true && (
-            <tr>
-              <th>
-                <FormattedMessage
-                  id="app.evaluationDetail.beforeSecondDeadline"
-                  defaultMessage="Was submitted before the second deadline:"
-                />
-              </th>
-              <td className="text-center">
-                <MaybeSucceededIcon success={submittedAt < secondDeadline} />
-              </td>
-            </tr>
-          )}
-
-        <tr>
-          <th>
-            <FormattedMessage
-              id="app.evaluationDetail.isValid"
-              defaultMessage="Evaluation is valid:"
-            />
-          </th>
-          <td className="text-center">
-            <MaybeSucceededIcon success={evaluation.isValid} />
-          </td>
-        </tr>
+          allowSecondDeadline === true &&
+          <tr>
+            <th>
+              <FormattedMessage
+                id="app.evaluationDetail.beforeSecondDeadline"
+                defaultMessage="Was submitted before the second deadline:"
+              />
+            </th>
+            <td className="text-center">
+              <MaybeSucceededIcon success={submittedAt < secondDeadline} />
+            </td>
+          </tr>}
 
         <tr>
           <th>
@@ -113,8 +98,8 @@ const EvaluationDetail = ({
           <td
             className={classnames({
               'text-center': true,
-              'text-danger': !evaluation.isCorrect,
-              'text-success': evaluation.isCorrect
+              'text-danger': !isCorrect,
+              'text-success': isCorrect
             })}
           >
             <b>
@@ -142,7 +127,7 @@ const EvaluationDetail = ({
             {evaluation.points}/{maxPoints}
           </td>
         </tr>
-        {evaluation.bonusPoints !== 0 && (
+        {evaluation.bonusPoints !== 0 &&
           <tr>
             <th>
               <FormattedMessage
@@ -153,9 +138,8 @@ const EvaluationDetail = ({
             <td className="text-center">
               <BonusPoints bonus={evaluation.bonusPoints} />
             </td>
-          </tr>
-        )}
-        {evaluation.bonusPoints !== 0 && (
+          </tr>}
+        {evaluation.bonusPoints !== 0 &&
           <tr>
             <th>
               <FormattedMessage
@@ -178,12 +162,10 @@ const EvaluationDetail = ({
                 {evaluation.points + evaluation.bonusPoints}/{maxPoints}
               </b>
             </td>
-          </tr>
-        )}
+          </tr>}
       </tbody>
     </Table>
-  </Box>
-);
+  </Box>;
 
 EvaluationDetail.propTypes = {
   assignment: PropTypes.shape({
@@ -191,7 +173,7 @@ EvaluationDetail.propTypes = {
     allowSecondDeadline: PropTypes.bool.isRequired,
     secondDeadline: PropTypes.number
   }).isRequired,
-  note: PropTypes.string,
+  isCorrect: PropTypes.bool.isRequired,
   submittedAt: PropTypes.number.isRequired,
   evaluation: PropTypes.object,
   maxPoints: PropTypes.number.isRequired

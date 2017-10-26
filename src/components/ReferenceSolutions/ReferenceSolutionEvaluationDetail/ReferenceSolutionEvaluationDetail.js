@@ -33,7 +33,7 @@ class ReferenceSolutionEvaluationDetail extends Component {
               exerciseId={exerciseId}
             />
             <Row>
-              {referenceSolution.solution.files.map(file => (
+              {referenceSolution.solution.files.map(file =>
                 <Col lg={6} md={12} key={file.id}>
                   <a
                     href="#"
@@ -45,19 +45,21 @@ class ReferenceSolutionEvaluationDetail extends Component {
                     <SourceCodeInfoBox {...file} />
                   </a>
                 </Col>
-              ))}
+              )}
             </Row>
-            {solutionEvaluation.evaluation && (
+            {solutionEvaluation.evaluation &&
               <CompilationLogs
                 initiationOutputs={
                   solutionEvaluation.evaluation.initiationOutputs
                 }
-              />
-            )}
+              />}
           </Col>
-          {solutionEvaluation.evaluation && (
+          {solutionEvaluation.evaluation &&
             <Col lg={6} sm={12}>
-              <EvaluationDetail evaluation={solutionEvaluation.evaluation} />
+              <EvaluationDetail
+                evaluation={solutionEvaluation.evaluation}
+                isCorrect={solutionEvaluation.isCorrect}
+              />
 
               <TestResults
                 evaluation={solutionEvaluation.evaluation}
@@ -71,8 +73,7 @@ class ReferenceSolutionEvaluationDetail extends Component {
                   </a>
                 </Col>
               </Row>
-            </Col>
-          )}
+            </Col>}
         </Row>
 
         <SourceCodeViewerContainer
