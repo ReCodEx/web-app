@@ -26,7 +26,8 @@ const AssignmentDetails = ({
   isAfterSecondDeadline,
   isBonus,
   runtimeEnvironments,
-  canSubmit
+  canSubmit,
+  pointsPercentualThreshold
 }) =>
   <Box
     title={
@@ -156,6 +157,20 @@ const AssignmentDetails = ({
           </tr>}
         <tr>
           <td className="text-center">
+            <Icon name="percent" />
+          </td>
+          <td>
+            <FormattedMessage
+              id="app.assignment.pointsPercentualThreshold"
+              defaultMessage="Points percentual threshold:"
+            />
+          </td>
+          <td>
+            {pointsPercentualThreshold * 100} %
+          </td>
+        </tr>
+        <tr>
+          <td className="text-center">
             <Icon name="code" />
           </td>
           <td>
@@ -188,7 +203,8 @@ AssignmentDetails.propTypes = {
   isAfterSecondDeadline: PropTypes.bool.isRequired,
   isBonus: PropTypes.bool,
   runtimeEnvironments: PropTypes.array,
-  canSubmit: ImmutablePropTypes.map
+  canSubmit: ImmutablePropTypes.map,
+  pointsPercentualThreshold: PropTypes.number
 };
 
 export default AssignmentDetails;
