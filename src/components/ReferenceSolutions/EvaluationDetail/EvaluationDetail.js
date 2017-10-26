@@ -12,7 +12,7 @@ import { Table } from 'react-bootstrap';
 import Box from '../../widgets/Box';
 import { MaybeSucceededIcon } from '../../icons';
 
-const EvaluationDetail = ({ evaluation, note = '' }) => (
+const EvaluationDetail = ({ evaluation, isCorrect }) =>
   <Box
     title={
       <FormattedMessage
@@ -43,18 +43,6 @@ const EvaluationDetail = ({ evaluation, note = '' }) => (
         <tr>
           <th>
             <FormattedMessage
-              id="app.evaluationDetail.isValid"
-              defaultMessage="Evaluation is valid:"
-            />
-          </th>
-          <td className="text-center">
-            <MaybeSucceededIcon success={evaluation.isValid} />
-          </td>
-        </tr>
-
-        <tr>
-          <th>
-            <FormattedMessage
               id="app.evaluationDetail.buildSucceeded"
               defaultMessage="Build succeeded:"
             />
@@ -74,8 +62,8 @@ const EvaluationDetail = ({ evaluation, note = '' }) => (
           <td
             className={classnames({
               'text-center': true,
-              'text-danger': !evaluation.isCorrect,
-              'text-success': evaluation.isCorrect
+              'text-danger': !isCorrect,
+              'text-success': isCorrect
             })}
           >
             <b>
@@ -85,12 +73,11 @@ const EvaluationDetail = ({ evaluation, note = '' }) => (
         </tr>
       </tbody>
     </Table>
-  </Box>
-);
+  </Box>;
 
 EvaluationDetail.propTypes = {
   evaluation: PropTypes.object.isRequired,
-  note: PropTypes.string
+  isCorrect: PropTypes.bool.isRequired
 };
 
 export default EvaluationDetail;
