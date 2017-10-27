@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
+import classNames from 'classnames';
 
 // import Admin from '../Admin';
 import Public from './Public';
@@ -9,6 +10,8 @@ import Admin from './Admin';
 import Student from './Student';
 import Supervisor from './Supervisor';
 import BadgeContainer from '../../../containers/BadgeContainer';
+
+import styles from './sidebar.less';
 
 const Sidebar = ({
   isLoggedIn = false,
@@ -19,7 +22,7 @@ const Sidebar = ({
   small = false,
   ...props
 }) => (
-  <aside className="main-sidebar">
+  <aside className={classNames(['main-sidebar', styles.mainSidebar])}>
     <section className="sidebar">
       {isLoggedIn && <BadgeContainer small={small} />}
       {isLoggedIn && <LoggedIn {...props} />}
