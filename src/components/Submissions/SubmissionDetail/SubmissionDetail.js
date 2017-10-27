@@ -32,7 +32,8 @@ class SubmissionDetail extends Component {
         evaluation,
         accepted,
         originalSubmissionId,
-        runtimeEnvironmentId
+        runtimeEnvironmentId,
+        isCorrect
       },
       assignment,
       isSupervisor
@@ -54,7 +55,7 @@ class SubmissionDetail extends Component {
               assignmentId={assignment.id}
             />
             <Row>
-              {files.map(file => (
+              {files.map(file =>
                 <Col lg={6} md={12} key={file.id}>
                   <a
                     href="#"
@@ -66,46 +67,43 @@ class SubmissionDetail extends Component {
                     <SourceCodeInfoBox {...file} />
                   </a>
                 </Col>
-              ))}
+              )}
             </Row>
-            {evaluation && (
+            {evaluation &&
               <CompilationLogs
                 initiationOutputs={evaluation.initiationOutputs}
-              />
-            )}
+              />}
             <CommentThreadContainer threadId={id} />
           </Col>
 
-          {evaluation && (
+          {evaluation &&
             <Col md={6} sm={12}>
               <EvaluationDetail
                 assignment={assignment}
                 evaluation={evaluation}
                 submittedAt={submittedAt}
                 maxPoints={maxPoints}
+                isCorrect={isCorrect}
               />
 
-              {isSupervisor && (
+              {isSupervisor &&
                 <BonusPointsContainer
                   submissionId={id}
                   evaluation={evaluation}
-                />
-              )}
+                />}
 
               <TestResults
                 evaluation={evaluation}
                 runtimeEnvironmentId={runtimeEnvironmentId}
               />
 
-              {isSupervisor && (
+              {isSupervisor &&
                 <Row>
                   <Col lg={6} md={12}>
                     <DownloadResultArchiveContainer submissionId={id} />
                   </Col>
-                </Row>
-              )}
-            </Col>
-          )}
+                </Row>}
+            </Col>}
         </Row>
 
         <SourceCodeViewerContainer
@@ -130,7 +128,8 @@ SubmissionDetail.propTypes = {
     maxPoints: PropTypes.number.isRequired,
     files: PropTypes.array,
     originalSubmissionId: PropTypes.string,
-    runtimeEnvironmentId: PropTypes.string
+    runtimeEnvironmentId: PropTypes.string,
+    isCorrect: PropTypes.bool
   }).isRequired,
   assignment: PropTypes.object.isRequired,
   isSupervisor: PropTypes.bool
