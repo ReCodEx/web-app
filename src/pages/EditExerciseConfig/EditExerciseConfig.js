@@ -12,6 +12,7 @@ import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 
 import EditExerciseConfigForm from '../../components/forms/EditExerciseConfigForm/EditExerciseConfigForm';
 import EditEnvironmentConfigForm from '../../components/forms/EditEnvironmentConfigForm';
+import EditScoreConfigForm from '../../components/forms/EditScoreConfigForm';
 import EditSimpleLimitsBox from '../../components/Exercises/EditSimpleLimitsBox';
 
 import SupplementaryFilesTableContainer from '../../containers/SupplementaryFilesTableContainer';
@@ -154,6 +155,21 @@ class EditExerciseConfig extends Component {
                         runtimeEnvironments={runtimeEnvironments}
                       />}
                   </ResourceRenderer>
+                </Box>
+              </Col>
+            </Row>
+            <Row>
+              <Col lg={6}>
+                <Box
+                  title={
+                    <FormattedMessage
+                      id="app.editExercise.editScoreConfig"
+                      defaultMessage="Edit score configurations"
+                    />
+                  }
+                  unlimitedHeight
+                >
+                  <EditScoreConfigForm />
                 </Box>
               </Col>
             </Row>
