@@ -117,10 +117,8 @@ const EvaluationDetail = ({
           <td
             className={classnames({
               'text-center': true,
-              'text-danger':
-                !evaluation.isCorrect && evaluation.bonusPoints === 0,
-              'text-success':
-                evaluation.isCorrect && evaluation.bonusPoints === 0,
+              'text-danger': !isCorrect && evaluation.bonusPoints === 0,
+              'text-success': isCorrect && evaluation.bonusPoints === 0,
               'text-bold': evaluation.bonusPoints === 0
             })}
           >
@@ -151,11 +149,9 @@ const EvaluationDetail = ({
               className={classnames({
                 'text-center': true,
                 'text-danger':
-                  !evaluation.isCorrect ||
-                  evaluation.points + evaluation.bonusPoints <= 0,
+                  !isCorrect || evaluation.points + evaluation.bonusPoints <= 0,
                 'text-success':
-                  evaluation.isCorrect &&
-                  evaluation.points + evaluation.bonusPoints > 0
+                  isCorrect && evaluation.points + evaluation.bonusPoints > 0
               })}
             >
               <b>
