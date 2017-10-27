@@ -27,7 +27,7 @@ const ResultsTable = ({
       <thead key={'head'}>
         <tr>
           <th />
-          {assignmentsArray.map(assignment => (
+          {assignmentsArray.map(assignment =>
             <th key={assignment.id}>
               <div className={styles.verticalText}>
                 <div className={styles.verticalTextInner}>
@@ -37,7 +37,7 @@ const ResultsTable = ({
                 </div>
               </div>
             </th>
-          ))}
+          )}
           <th style={{ textAlign: 'right' }}>
             <FormattedMessage
               id="app.resultsTable.total"
@@ -51,7 +51,7 @@ const ResultsTable = ({
           <NoResultsAvailableRow />}
         {users.length !== 0 &&
           assignments.length !== 0 &&
-          users.map(user => (
+          users.map(user =>
             <ResourceRenderer
               key={user.id}
               resource={Object.keys(submissions[user.id]).map(
@@ -59,16 +59,15 @@ const ResultsTable = ({
               )}
               loading={<LoadingResultsTableRow />}
             >
-              {(...userSubmissions) => (
+              {(...userSubmissions) =>
                 <ResultsTableRow
                   key={user.id}
                   userId={user.id}
                   assignmentsIds={assignmentsIds}
                   submissions={userSubmissions}
-                />
-              )}
+                />}
             </ResourceRenderer>
-          ))}
+          )}
       </tbody>
     </Table>
   );
