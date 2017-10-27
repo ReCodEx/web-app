@@ -18,7 +18,7 @@ const EvaluationTable = ({
   referenceSolutionId,
   exerciseId,
   links: { REFERENCE_SOLUTION_EVALUATION_URI_FACTORY }
-}) => (
+}) =>
   <Table>
     <thead>
       <tr>
@@ -46,7 +46,7 @@ const EvaluationTable = ({
           }
           return b.evaluation.evaluatedAt - a.evaluation.evaluatedAt;
         })
-        .map(e => (
+        .map(e =>
           <tr key={e.id}>
             <td>
               <AssignmentStatusIcon
@@ -55,26 +55,24 @@ const EvaluationTable = ({
                 accepted={false}
               />
             </td>
-            {e.evaluation && (
+            {e.evaluation &&
               <td>
                 <FormattedDate value={e.evaluation.evaluatedAt * 1000} />
                 &nbsp;
                 <FormattedTime value={e.evaluation.evaluatedAt * 1000} />
-              </td>
-            )}
-            {e.evaluation && (
+              </td>}
+            {e.evaluation &&
               <td
                 className={classnames({
-                  'text-danger': !e.evaluation.isCorrect,
-                  'text-success': e.evaluation.isCorrect
+                  'text-danger': !e.isCorrect,
+                  'text-success': e.isCorrect
                 })}
               >
                 <b>
                   <FormattedNumber style="percent" value={e.evaluation.score} />
                 </b>
-              </td>
-            )}
-            {!e.evaluation && (
+              </td>}
+            {!e.evaluation &&
               <td colSpan="2">
                 <i>
                   <FormattedMessage
@@ -82,8 +80,7 @@ const EvaluationTable = ({
                     defaultMessage="Evaluation not available"
                   />
                 </i>
-              </td>
-            )}
+              </td>}
             <td className="text-right">
               <Link
                 to={REFERENCE_SOLUTION_EVALUATION_URI_FACTORY(
@@ -100,9 +97,9 @@ const EvaluationTable = ({
               </Link>
             </td>
           </tr>
-        ))}
+        )}
 
-      {evaluations.length === 0 && (
+      {evaluations.length === 0 &&
         <tr>
           <td className="text-center" colSpan={3}>
             <FormattedMessage
@@ -110,11 +107,9 @@ const EvaluationTable = ({
               defaultMessage="There are no evaluations in this list."
             />
           </td>
-        </tr>
-      )}
+        </tr>}
     </tbody>
-  </Table>
-);
+  </Table>;
 
 EvaluationTable.propTypes = {
   evaluations: PropTypes.array.isRequired,
