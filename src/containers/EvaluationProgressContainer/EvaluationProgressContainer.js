@@ -28,10 +28,19 @@ import EvaluationProgress from '../../components/Assignments/EvaluationProgress'
 import randomMessages, { extraMessages } from './randomMessages';
 
 class EvaluationProgressContainer extends Component {
-  state = { realTimeProcessing: true, monitor: null };
+  state = { realTimeProcessing: true, monitor: null, isUserClosed: false };
   socket = null;
   componentWillMount = () => this.init(this.props);
-  componentWillReceiveProps = props => this.init(props);
+  componentWillReceiveProps = newProps => {
+    if (newProps.monitor && newProps.monitor.id) {
+      if (this.props.monitor && this.props.monitor.id) {
+        if (newProps.monitor.id === this.props.monitor.id) {
+          return;
+        }
+      }
+      this.init(newProps);
+    }
+  };
   componentWillUnmount = () => {
     this.closeSocket();
     this.socket = null;
@@ -39,11 +48,13 @@ class EvaluationProgressContainer extends Component {
 
   init = props => {
     const { monitor } = props;
-    if (
-      this.socket == null &&
-      monitor !== null &&
-      monitor !== this.state.monitor
-    ) {
+
+    if (this.socket !== null) {
+      this.closeSocket();
+    }
+    this.setState({ isUserClosed: false, realTimeProcessing: true });
+
+    if (monitor !== null && monitor !== this.state.monitor) {
       if (typeof WebSocket === 'function') {
         this.socket = new WebSocket(monitor.url);
         this.socket.onopen = () => this.socket.send(monitor.id);
@@ -138,11 +149,18 @@ class EvaluationProgressContainer extends Component {
   finish = () => {
     const { push, link, finishProcessing } = this.props;
     finishProcessing();
+    this.closeSocket();
     push(link);
+  };
+
+  onUserClose = () => {
+    this.closeSocket();
+    this.setState({ isUserClosed: true, monitor: null });
   };
 
   render = () => {
     const { isOpen, messages, progress, isFinished } = this.props;
+    const { isUserClosed } = this.state;
     let displayedMessages = new List();
     const now = new Date();
     if (now.getDate() === 1 && now.getMonth() === 3) {
@@ -152,7 +170,7 @@ class EvaluationProgressContainer extends Component {
 
     return this.state.realTimeProcessing === true
       ? <EvaluationProgress
-          isOpen={isOpen}
+          isOpen={isOpen && !isUserClosed}
           messages={displayedMessages}
           completed={progress.completed}
           skipped={progress.skipped}
@@ -160,15 +178,17 @@ class EvaluationProgressContainer extends Component {
           finished={isFinished}
           showContinueButton={isFinished || this.isClosed}
           finishProcessing={this.finish}
+          onClose={this.onUserClose}
         />
       : <EvaluationProgress
-          isOpen={isOpen}
+          isOpen={isOpen && !isUserClosed}
           completed={0}
           skipped={100}
           failed={0}
           finished={false}
           showContinueButton={true}
           finishProcessing={this.finish}
+          onClose={this.onUserClose}
           messages={List([
             this.formatMessage({
               command: 'TASK',

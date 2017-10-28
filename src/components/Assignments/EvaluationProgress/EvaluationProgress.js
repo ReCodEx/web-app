@@ -39,11 +39,12 @@ class EvaluationProgress extends Component {
       completed = 0,
       skipped = 0,
       failed = 0,
-      finishProcessing
+      finishProcessing,
+      onClose
     } = this.props;
 
     return (
-      <Modal show={isOpen} backdrop="static">
+      <Modal show={isOpen} backdrop="static" onHide={onClose}>
         <Modal.Header closeButton>
           <Modal.Title>
             <FormattedMessage
@@ -130,7 +131,8 @@ EvaluationProgress.propTypes = {
   completed: PropTypes.number.isRequired,
   skipped: PropTypes.number.isRequired,
   failed: PropTypes.number.isRequired,
-  finishProcessing: PropTypes.func.isRequired
+  finishProcessing: PropTypes.func.isRequired,
+  onClose: PropTypes.func.isRequired
 };
 
 export default EvaluationProgress;
