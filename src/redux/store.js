@@ -10,7 +10,8 @@ import apiMiddleware from './middleware/apiMiddleware';
 import createReducer from './reducer';
 import createEngine from 'redux-storage-engine-localstorage';
 import filter from 'redux-storage-decorator-filter';
-import { actionTypes } from './modules/auth';
+import { actionTypes as authActionTypes } from './modules/auth';
+import { actionTypes as switchingActionTypes } from './modules/userSwitching';
 
 const engine = filter(createEngine('recodex/store'), ['userSwitching']);
 
@@ -20,7 +21,11 @@ const getMiddleware = history => [
   promiseMiddleware(),
   thunkMiddleware,
   routerMiddleware(history),
-  storage.createMiddleware(engine, [], [actionTypes.LOGIN_SUCCESS])
+  storage.createMiddleware(
+    engine,
+    [],
+    [authActionTypes.LOGIN_SUCCESS, switchingActionTypes.REMOVE_USER]
+  )
 ];
 
 const dev = history =>
