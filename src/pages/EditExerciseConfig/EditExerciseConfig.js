@@ -31,6 +31,10 @@ import {
   setExerciseConfig
 } from '../../redux/modules/exerciseConfigs';
 import {
+  fetchScoreConfigIfNeeded,
+  setScoreConfig
+} from '../../redux/modules/exerciseScoreConfig';
+import {
   fetchExerciseEnvironmentConfigIfNeeded,
   setExerciseEnvironmentConfig
 } from '../../redux/modules/exerciseEnvironmentConfigs';
@@ -38,6 +42,7 @@ import { getExercise } from '../../redux/selectors/exercises';
 import { pipelinesSelector } from '../../redux/selectors/pipelines';
 import { exerciseConfigSelector } from '../../redux/selectors/exerciseConfigs';
 import { exerciseEnvironmentConfigSelector } from '../../redux/selectors/exerciseEnvironmentConfigs';
+import { exerciseScoreConfigSelector } from '../../redux/selectors/exerciseScoreConfig';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments';
 import { runtimeEnvironmentsSelector } from '../../redux/selectors/runtimeEnvironments';
@@ -70,7 +75,8 @@ class EditExerciseConfig extends Component {
       dispatch(fetchExerciseConfigIfNeeded(exerciseId)),
       dispatch(fetchRuntimeEnvironments()),
       dispatch(fetchExerciseEnvironmentConfigIfNeeded(exerciseId)),
-      dispatch(fetchPipelines())
+      dispatch(fetchPipelines()),
+      dispatch(fetchScoreConfigIfNeeded(exerciseId))
     ]);
 
   render() {
@@ -84,12 +90,14 @@ class EditExerciseConfig extends Component {
       environmentFormValues,
       exerciseConfig,
       exerciseEnvironmentConfig,
+      exerciseScoreConfig,
       editEnvironmentSimpleLimits,
       pipelines,
       limits,
       setHorizontally,
       setVertically,
-      setAll
+      setAll,
+      editScoreConfig
     } = this.props;
 
     return (
@@ -169,7 +177,13 @@ class EditExerciseConfig extends Component {
                   }
                   unlimitedHeight
                 >
-                  <EditScoreConfigForm />
+                  <ResourceRenderer resource={exerciseScoreConfig}>
+                    {config =>
+                      <EditScoreConfigForm
+                        onSubmit={editScoreConfig}
+                        initialValues={{ scoreConfig: config }}
+                      />}
+                  </ResourceRenderer>
                 </Box>
               </Col>
             </Row>
@@ -219,13 +233,15 @@ EditExerciseConfig.propTypes = {
   environmentFormValues: PropTypes.object,
   exerciseConfig: PropTypes.object,
   exerciseEnvironmentConfig: PropTypes.object,
+  exerciseScoreConfig: PropTypes.object,
   editEnvironmentSimpleLimits: PropTypes.func.isRequired,
   pipelines: ImmutablePropTypes.map,
   links: PropTypes.object.isRequired,
   limits: PropTypes.func.isRequired,
   setHorizontally: PropTypes.func.isRequired,
   setVertically: PropTypes.func.isRequired,
-  setAll: PropTypes.func.isRequired
+  setAll: PropTypes.func.isRequired,
+  editScoreConfig: PropTypes.func.isRequired
 };
 
 export default withLinks(
@@ -240,6 +256,7 @@ export default withLinks(
         exerciseEnvironmentConfig: exerciseEnvironmentConfigSelector(
           exerciseId
         )(state),
+        exerciseScoreConfig: exerciseScoreConfigSelector(exerciseId)(state),
         pipelines: pipelinesSelector(state),
         limits: runtimeEnvironmentId =>
           simpleLimitsSelector(exerciseId, runtimeEnvironmentId)(state)
@@ -263,7 +280,8 @@ export default withLinks(
           setVertically(formName, exerciseId, runtimeEnvironmentId, testName)
         ),
       setAll: (formName, runtimeEnvironmentId) => testName => () =>
-        dispatch(setAll(formName, exerciseId, runtimeEnvironmentId, testName))
+        dispatch(setAll(formName, exerciseId, runtimeEnvironmentId, testName)),
+      editScoreConfig: data => dispatch(setScoreConfig(exerciseId, data))
     })
   )(EditExerciseConfig)
 );
