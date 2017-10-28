@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { FormattedMessage, FormattedDate, FormattedTime } from 'react-intl';
 import { Table } from 'react-bootstrap';
 import Icon from 'react-fontawesome';
+import UsersNameContainer from '../../../containers/UsersNameContainer';
 
 const ReferenceSolutionsList = ({
   referenceSolutions = [],
@@ -26,27 +27,38 @@ const ReferenceSolutionsList = ({
           />
         </th>
         <th />
+        <th />
       </tr>
     </thead>
     <tbody>
       {referenceSolutions
         .sort((a, b) => a.uploadedAt - b.uploadedAt)
-        .map(({ id, uploadedAt, description, canDelete }) =>
-          <tr key={id}>
-            <td className="text-center">
-              <Icon name="file-code-o" />
-            </td>
-            <td>
-              {description}
-            </td>
-            <td>
-              <FormattedDate value={new Date(uploadedAt * 1000)} /> &nbsp;{' '}
-              <FormattedTime value={new Date(uploadedAt * 1000)} />
-            </td>
-            <td className="text-right">
-              {renderButtons(id, canDelete)}
-            </td>
-          </tr>
+        .map(
+          ({
+            id,
+            uploadedAt,
+            description,
+            permissionHints,
+            solution: { userId }
+          }) =>
+            <tr key={id}>
+              <td className="text-center">
+                <Icon name="file-code-o" />
+              </td>
+              <td>
+                {description}
+              </td>
+              <td>
+                <FormattedDate value={new Date(uploadedAt * 1000)} /> &nbsp;{' '}
+                <FormattedTime value={new Date(uploadedAt * 1000)} />
+              </td>
+              <td>
+                <UsersNameContainer userId={userId} />
+              </td>
+              <td className="text-right">
+                {renderButtons(id, permissionHints)}
+              </td>
+            </tr>
         )}
     </tbody>
   </Table>;

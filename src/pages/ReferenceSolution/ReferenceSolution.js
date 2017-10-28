@@ -111,6 +111,7 @@ class ReferenceSolution extends Component {
           const referenceSolution = referenceSolutions.find(
             solution => solution.id === referenceSolutionId
           );
+          const permissionHints = referenceSolution.permissionHints;
           return (
             <div>
               <Row>
@@ -150,7 +151,8 @@ class ReferenceSolution extends Component {
                             defaultMessage="Refresh"
                           />
                         </Button>
-                        {referenceSolution.canEvaluate &&
+                        {permissionHints &&
+                          permissionHints.evaluate !== false &&
                           <Button
                             bsStyle="success"
                             className="btn-flat"

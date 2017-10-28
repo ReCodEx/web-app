@@ -210,7 +210,7 @@ export default withLinks(
       loadAsync: () => EditAssignment.loadAsync({ assignmentId }, dispatch),
       editAssignment: (version, data) => {
         // convert deadline times to timestamps
-        let processedData = Object.assign({}, data, {
+        const processedData = Object.assign({}, data, {
           firstDeadline: moment(data.firstDeadline).unix(),
           secondDeadline: moment(data.secondDeadline).unix(),
           submissionsCountLimit: Number(data.submissionsCountLimit),
