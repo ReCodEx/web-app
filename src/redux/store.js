@@ -24,7 +24,11 @@ const getMiddleware = history => [
   storage.createMiddleware(
     engine,
     [],
-    [authActionTypes.LOGIN_SUCCESS, switchingActionTypes.REMOVE_USER]
+    [
+      authActionTypes.LOGIN_SUCCESS,
+      authActionTypes.LOGOUT,
+      switchingActionTypes.REMOVE_USER
+    ]
   )
 ];
 
