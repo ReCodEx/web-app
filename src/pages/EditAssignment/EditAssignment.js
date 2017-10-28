@@ -221,13 +221,6 @@ export default withLinks(
           delete processedData.maxPointsBeforeSecondDeadline;
         }
         return dispatch(editAssignment(assignmentId, processedData));
-        /*
-        return dispatch(editAssignment(assignmentId, processedData)).then(() =>
-          dispatch(
-            initialize('editAssignment', { ...data, version: version + 1 })
-          )
-        );
-*/
       }
     })
   )(EditAssignment)
