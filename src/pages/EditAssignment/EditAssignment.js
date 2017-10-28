@@ -210,17 +210,24 @@ export default withLinks(
       loadAsync: () => EditAssignment.loadAsync({ assignmentId }, dispatch),
       editAssignment: (version, data) => {
         // convert deadline times to timestamps
-        const processedData = Object.assign({}, data, {
+        let processedData = Object.assign({}, data, {
           firstDeadline: moment(data.firstDeadline).unix(),
           secondDeadline: moment(data.secondDeadline).unix(),
           submissionsCountLimit: Number(data.submissionsCountLimit),
           version
         });
+        if (!processedData.allowSecondDeadline) {
+          delete processedData.secondDeadline;
+          delete processedData.maxPointsBeforeSecondDeadline;
+        }
+        return dispatch(editAssignment(assignmentId, processedData));
+        /*
         return dispatch(editAssignment(assignmentId, processedData)).then(() =>
           dispatch(
             initialize('editAssignment', { ...data, version: version + 1 })
           )
         );
+*/
       }
     })
   )(EditAssignment)
