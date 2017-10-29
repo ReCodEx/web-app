@@ -34,12 +34,12 @@ export const fetchSisSupervisedCourses = (userId, year, term) =>
     meta: { userId, year, term }
   });
 
-export const sisCreateGroup = (courseId, data) =>
+export const sisCreateGroup = (courseId, userId, year, term, data) =>
   createApiAction({
     type: actionTypes.CREATE,
     method: 'POST',
     endpoint: `/extensions/sis/remote-courses/${courseId}/create`,
-    meta: { courseId },
+    meta: { userId, courseId, year, term },
     body: { ...data }
   });
 
