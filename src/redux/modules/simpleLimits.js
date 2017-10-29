@@ -57,21 +57,25 @@ const getSimpleLimitsOf = (
   testName
 ) =>
   form[formName].values.limits[testName] ||
-  form[formName].values.limits[testName] ||
+  form[formName].values.initial[testName] ||
   {};
 
-const isSimpleLimitsForm = ({ values }, testName) =>
-  values.limits &&
-  Object.keys(values).length === 1 &&
-  values.limits[testName] &&
-  values.limits[testName].hasOwnProperty('wall-time') &
-    values.limits[testName].hasOwnProperty('memory');
+const isSimpleLimitsForm = ({ registeredFields }, testName) =>
+  registeredFields &&
+  registeredFields.hasOwnProperty(`limits.${testName}.wall-time`) &&
+  registeredFields.hasOwnProperty(`limits.${testName}.memory`);
 
 const getAllSimpleLimitsFormNames = ({ form }, testName) =>
   Object.keys(form).filter(name => isSimpleLimitsForm(form[name], testName));
 
 const getAllTestNames = ({ form }, formName) =>
-  Object.keys(form[formName].values.limits);
+  Object.keys(form[formName].registeredFields)
+    .map(name => {
+      const firstDot = name.indexOf('.');
+      const lastDot = name.lastIndexOf('.');
+      return name.substring(firstDot + 1, lastDot);
+    })
+    .reduce((acc, name) => (acc.indexOf(name) >= 0 ? acc : [...acc, name]), []);
 
 const field = testName => `limits.${testName}`;
 
