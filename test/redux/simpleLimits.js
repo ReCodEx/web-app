@@ -15,22 +15,46 @@ const exerciseId = random();
 const runtimeEnvironmentId = random();
 const testA = random();
 const testB = random();
+const registeredFields = {
+  [`limits.${testA}.memory`]: {
+    name: `limits.${testA}.memory`,
+    type: 'Field',
+    count: 1
+  },
+  [`limits.${testA}.wall-time`]: {
+    name: `limits.${testA}.wall-time`,
+    type: 'Field',
+    count: 1
+  },
+  [`limits.${testB}.memory`]: {
+    name: `limits.${testB}.memory`,
+    type: 'Field',
+    count: 1
+  },
+  [`limits.${testB}.wall-time`]: {
+    name: `limits.${testB}.wall-time`,
+    type: 'Field',
+    count: 1
+  }
+};
 
 const initialState = {
   form: {
     [formA]: {
+      registeredFields,
       values: {
         limits: {
-          [testA]: { memory: 1, 'wall-time': 2, parallel: 3 },
-          [testB]: { memory: 4, 'wall-time': 5, parallel: 6 }
+          [testA]: { memory: 1, 'wall-time': 2 },
+          [testB]: { memory: 4, 'wall-time': 5 }
         }
       }
     },
     [formB]: {
+      registeredFields,
       values: {
         limits: {
-          [testA]: { memory: 7, 'wall-time': 8, parallel: 9 },
-          [testB]: { memory: 10, 'wall-time': 11, parallel: 12 }
+          [testA]: { memory: 7, 'wall-time': 8 },
+          [testB]: { memory: 10, 'wall-time': 11 }
         }
       }
     }
@@ -42,7 +66,7 @@ const getTestStore = () =>
 
 describe('simpleLimits', () => {
   describe('reducer', () => {
-    it('must copy values horizontally across the same test', () => {
+    it('must copy values horizontally across the same tests', () => {
       const { dispatch, getState } = getTestStore();
 
       setHorizontally(formA, exerciseId, runtimeEnvironmentId, testA)(
@@ -54,6 +78,7 @@ describe('simpleLimits', () => {
         form: {
           [formA]: initialState.form[formA],
           [formB]: {
+            registeredFields,
             values: {
               limits: {
                 [testA]: initialState.form[formA].values.limits[testA],
@@ -65,7 +90,7 @@ describe('simpleLimits', () => {
       });
     });
 
-    it('must copy values vertically across the runtime environment', () => {
+    it('must copy values vertically across the runtime environments', () => {
       const { dispatch, getState } = getTestStore();
 
       setVertically(formA, exerciseId, runtimeEnvironmentId, testA)(
@@ -76,6 +101,7 @@ describe('simpleLimits', () => {
       expect(getState()).to.eql({
         form: {
           [formA]: {
+            registeredFields,
             values: {
               limits: {
                 [testA]: initialState.form[formA].values.limits[testA],
@@ -88,7 +114,7 @@ describe('simpleLimits', () => {
       });
     });
 
-    it('must copy values vertucally across the runtime environment', () => {
+    it('must copy values in all directions across the runtime environments', () => {
       const { dispatch, getState } = getTestStore();
 
       setAll(formA, exerciseId, runtimeEnvironmentId, testA)(
@@ -99,6 +125,7 @@ describe('simpleLimits', () => {
       expect(getState()).to.eql({
         form: {
           [formA]: {
+            registeredFields,
             values: {
               limits: {
                 [testA]: initialState.form[formA].values.limits[testA],
@@ -107,6 +134,7 @@ describe('simpleLimits', () => {
             }
           },
           [formB]: {
+            registeredFields,
             values: {
               limits: {
                 [testA]: initialState.form[formA].values.limits[testA],
