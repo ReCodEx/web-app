@@ -9,6 +9,15 @@ import styles from './styles.less';
 
 const formName = id => `editEnvironmentSimpleLimits-${id}`;
 
+const fillInDefaultValuesWhereMissing = (testNames, limits) =>
+  testNames.reduce(
+    (acc, test) => ({
+      ...acc,
+      [test]: limits[test] || { memory: 0, 'wall-time': 0 }
+    }),
+    {}
+  );
+
 const EditSimpleLimits = ({
   environments = [],
   editLimits,
@@ -32,18 +41,27 @@ const EditSimpleLimits = ({
             {description} <Label>{platform}</Label>
           </p>
           <ResourceRenderer resource={limits(id)}>
-            {limits =>
-              <EditEnvironmentSimpleLimitsForm
-                {...props}
-                envName={name}
-                config={config.find(forEnv => forEnv.name === id)}
-                initialValues={{ limits }}
-                form={formName(id)}
-                onSubmit={editLimits(id)}
-                setHorizontally={setHorizontally(formName(id), id)}
-                setVertically={setVertically(formName(id), id)}
-                setAll={setAll(formName(id), id)}
-              />}
+            {limits => {
+              const envConfig = config.find(forEnv => forEnv.name === id);
+              return (
+                <EditEnvironmentSimpleLimitsForm
+                  {...props}
+                  envName={name}
+                  config={envConfig}
+                  initialValues={{
+                    limits: fillInDefaultValuesWhereMissing(
+                      envConfig.tests.map(test => test.name),
+                      limits
+                    )
+                  }}
+                  form={formName(id)}
+                  onSubmit={editLimits(id)}
+                  setHorizontally={setHorizontally(formName(id), id)}
+                  setVertically={setVertically(formName(id), id)}
+                  setAll={setAll(formName(id), id)}
+                />
+              );
+            }}
           </ResourceRenderer>
         </div>
       </Col>
