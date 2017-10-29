@@ -2,6 +2,7 @@ import { createSelector } from 'reselect';
 import { List } from 'immutable';
 import { fetchManyEndpoint } from '../modules/users';
 
+import { extractLanguageFromUrl } from '../../links';
 import { loggedInUserIdSelector } from './auth';
 import { groupSelector, studentsOfGroup, supervisorsOfGroup } from './groups';
 import { exerciseSelector } from './exercises';
@@ -10,6 +11,8 @@ import { isReady, getJsData } from '../helpers/resourceManager';
 
 const getUsers = state => state.users;
 const getResources = users => users.get('resources');
+const getLang = state =>
+  extractLanguageFromUrl(state.routing.locationBeforeTransitions.pathname);
 
 /**
  * Select users part of the state
@@ -23,19 +26,19 @@ export const fetchManyStatus = createSelector(getUsers, state =>
 export const getUser = userId =>
   createSelector(usersSelector, users => users.get(userId));
 
-export const readyUsersDataSelector = createSelector(usersSelector, users =>
-  users
-    .toList()
-    .filter(isReady)
-    .map(getJsData)
-    .sort((a, b) => {
-      if (a.name.lastName < b.name.lastName) return -1;
-      if (a.name.lastName > b.name.lastName) return 1;
-      if (a.name.firstName < b.name.firstName) return -1;
-      if (a.name.firstName > b.name.firstName) return 1;
-      return 0;
-    })
-    .toArray()
+export const readyUsersDataSelector = createSelector(
+  [usersSelector, getLang],
+  (users, lang) =>
+    users
+      .toList()
+      .filter(isReady)
+      .map(getJsData)
+      .sort(
+        (a, b) =>
+          a.name.lastName.localeCompare(b.name.lastName, lang) ||
+          a.name.firstName.localeCompare(b.name.firstName, lang)
+      )
+      .toArray()
 );
 
 export const isVerified = userId =>

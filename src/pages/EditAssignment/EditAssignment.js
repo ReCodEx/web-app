@@ -4,7 +4,7 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
-import { reset, getFormValues, initialize } from 'redux-form';
+import { reset, getFormValues } from 'redux-form';
 import moment from 'moment';
 import PageContent from '../../components/layout/PageContent';
 
@@ -216,11 +216,11 @@ export default withLinks(
           submissionsCountLimit: Number(data.submissionsCountLimit),
           version
         });
-        return dispatch(editAssignment(assignmentId, processedData)).then(() =>
-          dispatch(
-            initialize('editAssignment', { ...data, version: version + 1 })
-          )
-        );
+        if (!processedData.allowSecondDeadline) {
+          delete processedData.secondDeadline;
+          delete processedData.maxPointsBeforeSecondDeadline;
+        }
+        return dispatch(editAssignment(assignmentId, processedData));
       }
     })
   )(EditAssignment)

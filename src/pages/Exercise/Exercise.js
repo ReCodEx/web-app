@@ -44,11 +44,7 @@ import { fetchHardwareGroups } from '../../redux/modules/hwGroups';
 import { create as assignExercise } from '../../redux/modules/assignments';
 import { exerciseSelector } from '../../redux/selectors/exercises';
 import { referenceSolutionsSelector } from '../../redux/selectors/referenceSolutions';
-import {
-  canEditExercise,
-  isSupervisor,
-  isSuperAdmin
-} from '../../redux/selectors/users';
+import { canEditExercise } from '../../redux/selectors/users';
 import {
   deletePipeline,
   fetchExercisePipelines,
@@ -130,7 +126,7 @@ class Exercise extends Component {
       exercise,
       submitting,
       supervisedGroups,
-      isAuthorOfExercise,
+      canEditExercise,
       referenceSolutions,
       intl: { formatMessage },
       initCreateReferenceSolution,
@@ -187,8 +183,8 @@ class Exercise extends Component {
           <div>
             <Row>
               <Col sm={12}>
-                <div>
-                  {isAuthorOfExercise(exercise.id) &&
+                {canEditExercise(exercise.id) &&
+                  <div>
                     <ButtonGroup>
                       <LinkContainer
                         to={EXERCISE_EDIT_URI_FACTORY(exercise.id)}
@@ -214,12 +210,12 @@ class Exercise extends Component {
                           />
                         </Button>
                       </LinkContainer>
-                    </ButtonGroup>}
-                  <ForkExerciseButtonContainer
-                    exerciseId={exercise.id}
-                    forkId={forkId}
-                  />
-                </div>
+                    </ButtonGroup>
+                    <ForkExerciseButtonContainer
+                      exerciseId={exercise.id}
+                      forkId={forkId}
+                    />
+                  </div>}
                 <p />
               </Col>
             </Row>
@@ -353,7 +349,7 @@ class Exercise extends Component {
                       referenceSolutions.length > 0
                         ? <ReferenceSolutionsList
                             referenceSolutions={referenceSolutions}
-                            renderButtons={solutionId =>
+                            renderButtons={(solutionId, permissionHints) =>
                               <div>
                                 <Button
                                   bsSize="xs"
@@ -371,32 +367,34 @@ class Exercise extends Component {
                                     defaultMessage="View detail"
                                   />
                                 </Button>
-                                <Confirm
-                                  id={solutionId}
-                                  onConfirmed={() =>
-                                    deleteReferenceSolution(
-                                      exercise.id,
-                                      solutionId
-                                    )}
-                                  question={
-                                    <FormattedMessage
-                                      id="app.exercise.referenceSolution.deleteConfirm"
-                                      defaultMessage="Are you sure you want to delete the reference solution? This cannot be undone."
-                                    />
-                                  }
-                                >
-                                  <Button
-                                    bsSize="xs"
-                                    className="btn-flat"
-                                    bsStyle="danger"
+                                {permissionHints &&
+                                  permissionHints.delete !== false &&
+                                  <Confirm
+                                    id={solutionId}
+                                    onConfirmed={() =>
+                                      deleteReferenceSolution(
+                                        exercise.id,
+                                        solutionId
+                                      )}
+                                    question={
+                                      <FormattedMessage
+                                        id="app.exercise.referenceSolution.deleteConfirm"
+                                        defaultMessage="Are you sure you want to delete the reference solution? This cannot be undone."
+                                      />
+                                    }
                                   >
-                                    <DeleteIcon />{' '}
-                                    <FormattedMessage
-                                      id="app.exercise.referenceSolution.deleteButton"
-                                      defaultMessage="Delete"
-                                    />
-                                  </Button>
-                                </Confirm>
+                                    <Button
+                                      bsSize="xs"
+                                      className="btn-flat"
+                                      bsStyle="danger"
+                                    >
+                                      <DeleteIcon />{' '}
+                                      <FormattedMessage
+                                        id="app.exercise.referenceSolution.deleteButton"
+                                        defaultMessage="Delete"
+                                      />
+                                    </Button>
+                                  </Confirm>}
                               </div>}
                           />
                         : <p className="text-center">
@@ -440,7 +438,7 @@ Exercise.propTypes = {
   push: PropTypes.func.isRequired,
   exercise: ImmutablePropTypes.map,
   supervisedGroups: PropTypes.object,
-  isAuthorOfExercise: PropTypes.func.isRequired,
+  canEditExercise: PropTypes.func.isRequired,
   referenceSolutions: ImmutablePropTypes.map,
   intl: intlShape.isRequired,
   submitting: PropTypes.bool,
@@ -448,7 +446,6 @@ Exercise.propTypes = {
   exercisePipelines: ImmutablePropTypes.map,
   createExercisePipeline: PropTypes.func,
   links: PropTypes.object,
-  isAdmin: PropTypes.bool.isRequired,
   deleteReferenceSolution: PropTypes.func.isRequired
 };
 
@@ -463,11 +460,10 @@ export default withLinks(
           exercise: exerciseSelector(exerciseId)(state),
           submitting: isSubmitting(state),
           supervisedGroups: supervisorOfSelector(userId)(state),
-          isAuthorOfExercise: exerciseId =>
+          canEditExercise: exerciseId =>
             canEditExercise(userId, exerciseId)(state),
           referenceSolutions: referenceSolutionsSelector(exerciseId)(state),
-          exercisePipelines: exercisePipelinesSelector(exerciseId)(state),
-          isAdmin: isSupervisor(userId)(state) || isSuperAdmin(userId)(state)
+          exercisePipelines: exercisePipelinesSelector(exerciseId)(state)
         };
       },
       (dispatch, { params: { exerciseId } }) => ({

@@ -13,7 +13,7 @@ import PageContent from '../../components/layout/PageContent';
 import Box from '../../components/widgets/Box';
 import { AddIcon, EditIcon } from '../../components/icons';
 import { fetchManyStatus } from '../../redux/selectors/exercises';
-import { canEditExercise } from '../../redux/selectors/users';
+import { canEditExercise, isSuperAdmin } from '../../redux/selectors/users';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import {
   fetchExercises,
@@ -45,6 +45,7 @@ class Exercises extends Component {
 
   render() {
     const {
+      isSuperAdmin,
       isAuthorOfExercise,
       fetchStatus,
       search,
@@ -121,6 +122,7 @@ class Exercises extends Component {
                 />
               }
               footer={
+                isSuperAdmin &&
                 <p className="text-center">
                   <Button
                     bsStyle="success"
@@ -185,6 +187,7 @@ class Exercises extends Component {
 Exercises.propTypes = {
   loadAsync: PropTypes.func.isRequired,
   createExercise: PropTypes.func.isRequired,
+  isSuperAdmin: PropTypes.bool.isRequired,
   isAuthorOfExercise: PropTypes.func.isRequired,
   push: PropTypes.func.isRequired,
   links: PropTypes.object.isRequired,
@@ -198,6 +201,7 @@ export default withLinks(
       const userId = loggedInUserIdSelector(state);
       return {
         fetchStatus: fetchManyStatus(state),
+        isSuperAdmin: isSuperAdmin(userId)(state),
         isAuthorOfExercise: exerciseId =>
           canEditExercise(userId, exerciseId)(state)
       };
