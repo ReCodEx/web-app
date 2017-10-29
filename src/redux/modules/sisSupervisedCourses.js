@@ -56,6 +56,18 @@ export const sisBindGroup = (courseId, data, userId, year, term) =>
 const reducer = handleActions(
   Object.assign({}, reduceActions, {
     [actionTypes.CREATE_FULFILLED]: (
+      state,
+      { meta: { userId, year, term }, payload }
+    ) =>
+      state.setIn(
+        ['resources', userId, `${year}-${term}`],
+        createRecord({ state: resourceStatus.FULFILLED, data: fromJS(payload) })
+      ),
+
+    [actionTypes.BIND_FULFILLED]: (
+      state,
+      { meta: { userId, year, term }, payload }
+    ) =>
       state.setIn(
         ['resources', userId, `${year}-${term}`],
         createRecord({ state: resourceStatus.FULFILLED, data: fromJS(payload) })
