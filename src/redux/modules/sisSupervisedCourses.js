@@ -22,6 +22,7 @@ export const actionTypes = {
   FETCH_REJECTED: 'recodex/sisSupervisedCourses/FETCH_REJECTED',
   FETCH_FULFILLED: 'recodex/sisSupervisedCourses/FETCH_FULFILLED',
   CREATE: 'recodex/sisSupervisedCourses/CREATE',
+  CREATE_FULFILLED: 'recodex/sisSupervisedCourses/CREATE_FULFILLED',
   BIND: 'recodex/sisSupervisedCourses/BIND',
   BIND_FULFILLED: 'recodex/sisSupervisedCourses/BIND_FULFILLED'
 };
@@ -54,7 +55,7 @@ export const sisBindGroup = (courseId, data, userId, year, term) =>
 
 const reducer = handleActions(
   Object.assign({}, reduceActions, {
-    [actionTypes.CREATE]: (state, { meta: { userId, year, term }, payload }) =>
+    [actionTypes.CREATE_FULFILLED]: (
       state.setIn(
         ['resources', userId, `${year}-${term}`],
         createRecord({ state: resourceStatus.FULFILLED, data: fromJS(payload) })
