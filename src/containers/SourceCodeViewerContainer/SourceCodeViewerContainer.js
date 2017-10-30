@@ -58,7 +58,7 @@ class SourceCodeViewerContainer extends Component {
   }
 
   render() {
-    const { show, onHide, download, file, code } = this.props;
+    const { show, onHide, download, file, content } = this.props;
     const { height } = this.state;
     return (
       <ResourceRenderer
@@ -98,9 +98,9 @@ class SourceCodeViewerContainer extends Component {
             </div>
           </Modal>
         }
-        resource={[file, code]}
+        resource={[file, content]}
       >
-        {(file, code) =>
+        {(file, content) =>
           <Modal
             show={show}
             onHide={onHide}
@@ -116,8 +116,26 @@ class SourceCodeViewerContainer extends Component {
             </div>
             <div ref={body => (this.bodyRef = body)}>
               <Modal.Body className={styles.modalBody}>
+                {content.malformedCharacters &&
+                  content.tooLarge &&
+                  <div className="callout callout-warning">
+                    {content.malformedCharacters &&
+                      <p>
+                        <FormattedMessage
+                          id="app.sourceCodeViewer.utf8Warning"
+                          defaultMessage="The source file is not a valid UTF-8 file. Some characters may be displayed incorrectly. Use the download button to see unaltered source file."
+                        />
+                      </p>}
+                    {content.tooLarge &&
+                      <p>
+                        <FormattedMessage
+                          id="app.sourceCodeViewer.incompleteWarning"
+                          defaultMessage="The selected source file is too large. Only a leading part of the file is displayed here. Use the download button to get the whole file."
+                        />
+                      </p>}
+                  </div>}
                 <SourceCodeViewer
-                  content={code}
+                  content={content.content}
                   name={file.name}
                   height={height}
                 />
@@ -147,13 +165,13 @@ SourceCodeViewerContainer.propTypes = {
   onHide: PropTypes.func.isRequired,
   loadAsync: PropTypes.func.isRequired,
   download: PropTypes.func.isRequired,
-  code: ImmutablePropTypes.map
+  content: ImmutablePropTypes.map
 };
 
 export default connect(
   (state, { fileId }) => ({
     file: getFile(fileId)(state),
-    code: getFilesContent(fileId)(state)
+    content: getFilesContent(fileId)(state)
   }),
   (dispatch, { fileId }) => ({
     loadAsync: () =>
