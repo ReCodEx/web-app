@@ -16,8 +16,6 @@ import SourceCodeViewer from '../../components/helpers/SourceCodeViewer';
 import styles from './sourceCode.less';
 
 class SourceCodeViewerContainer extends Component {
-  state = { height: null };
-
   componentWillMount() {
     const { fileId, loadAsync } = this.props;
     if (fileId !== null) {
@@ -31,45 +29,13 @@ class SourceCodeViewerContainer extends Component {
     }
   }
 
-  onModalEntered() {
-    if (this.state.height === null) {
-      const { headerRef, bodyRef, footerRef } = this;
-      const height =
-        window.innerHeight -
-        headerRef.clientHeight -
-        bodyRef.clientHeight -
-        footerRef.clientHeight;
-      this.setState({ height });
-    }
-  }
-
-  onModalEnteredWhileLoading() {
-    if (this.state.height === null) {
-      const { loadingHeaderRef, loadingBodyRef, loadingFooterRef } = this;
-      const height =
-        window.innerHeight -
-        loadingHeaderRef.clientHeight -
-        loadingBodyRef.clientHeight -
-        loadingFooterRef.clientHeight;
-      this.setState({ height });
-    } else {
-      // console.log('already has height', this.state.height);
-    }
-  }
-
   render() {
     const { show, onHide, download, file, content } = this.props;
-    const { height } = this.state;
     return (
       <ResourceRenderer
         loading={
-          <Modal
-            show={show}
-            onHide={onHide}
-            dialogClassName={styles.modal}
-            onEntered={() => this.onModalEnteredWhileLoading()}
-          >
-            <div ref={header => (this.loadingHeaderRef = header)}>
+          <Modal show={show} onHide={onHide} dialogClassName={styles.modal}>
+            <div>
               <Modal.Header closeButton>
                 <Modal.Title>
                   <LoadingIcon />{' '}
@@ -80,12 +46,14 @@ class SourceCodeViewerContainer extends Component {
                 </Modal.Title>
               </Modal.Header>
             </div>
-            <div ref={body => (this.loadingBodyRef = body)}>
+            <div>
               <Modal.Body className={styles.modalBody}>
-                <SourceCodeViewer content="" name="" />
+                <div>
+                  <SourceCodeViewer content="" name="" />
+                </div>
               </Modal.Body>
             </div>
-            <div ref={footer => (this.loadingFooterRef = footer)}>
+            <div>
               <Modal.Footer>
                 <Button disabled>
                   <DownloadIcon />{' '}
@@ -101,23 +69,17 @@ class SourceCodeViewerContainer extends Component {
         resource={[file, content]}
       >
         {(file, content) =>
-          <Modal
-            show={show}
-            onHide={onHide}
-            dialogClassName={styles.modal}
-            onEntered={() => this.onModalEntered()}
-          >
-            <div ref={header => (this.headerRef = header)}>
+          <Modal show={show} onHide={onHide} dialogClassName={styles.modal}>
+            <div>
               <Modal.Header closeButton>
                 <Modal.Title>
                   {file.name}
                 </Modal.Title>
               </Modal.Header>
             </div>
-            <div ref={body => (this.bodyRef = body)}>
+            <div>
               <Modal.Body className={styles.modalBody}>
-                {content.malformedCharacters &&
-                  content.tooLarge &&
+                {(content.malformedCharacters || content.tooLarge) &&
                   <div className="callout callout-warning">
                     {content.malformedCharacters &&
                       <p>
@@ -134,14 +96,15 @@ class SourceCodeViewerContainer extends Component {
                         />
                       </p>}
                   </div>}
-                <SourceCodeViewer
-                  content={content.content}
-                  name={file.name}
-                  height={height}
-                />
+                <div>
+                  <SourceCodeViewer
+                    content={content.content}
+                    name={file.name}
+                  />
+                </div>
               </Modal.Body>
             </div>
-            <div ref={footer => (this.footerRef = footer)}>
+            <div>
               <Modal.Footer>
                 <Button onClick={() => download(file.id)}>
                   <DownloadIcon />{' '}
