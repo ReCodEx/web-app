@@ -16,6 +16,10 @@ NODE_ENV=development
 API_BASE=http://localhost:4000/v1
 PORT=8080
 WEBPACK_DEV_SERVER_PORT=8081
+TITLE=ReCodEx
+ALLOW_NORMAL_REGISTRATION=true
+ALLOW_LDAP_REGISTRATION=false
+ALLOW_CAS_REGISTRATION=true
 ```
 
 ## Run Dev
@@ -37,7 +41,7 @@ yarn build
 yarn start
 ```
 
-Consider using [PM2](http://pm2.keymetrics.io/) or similar tool to run the `yarn start` command to prevent crashes of the web service.
+Consider using [PM2](http://pm2.keymetrics.io/) or similar tool to run the `yarn start` command to prevent crashes of the web service. It is wise to use watch mode of PM2 in `prod/` subdirectory and deploy the app using `yarn deploy` command.
 
 ## License
 
