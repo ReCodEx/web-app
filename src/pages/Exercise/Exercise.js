@@ -57,6 +57,7 @@ import { supervisorOfSelector } from '../../redux/selectors/groups';
 
 import { clientOnly } from '../../helpers/clientOnly';
 import withLinks from '../../hoc/withLinks';
+import { getLocalizedName } from '../../helpers/getLocalizedData';
 
 const messages = defineMessages({
   groupsBox: {
@@ -128,7 +129,7 @@ class Exercise extends Component {
       supervisedGroups,
       canEditExercise,
       referenceSolutions,
-      intl: { formatMessage },
+      intl: { formatMessage, locale },
       initCreateReferenceSolution,
       exercisePipelines,
       deleteReferenceSolution,
@@ -149,7 +150,7 @@ class Exercise extends Component {
 
     return (
       <Page
-        title={exercise => exercise.name}
+        title={exercise => getLocalizedName(exercise, locale)}
         resource={exercise}
         description={
           <FormattedMessage
@@ -326,7 +327,7 @@ class Exercise extends Component {
                 </Box>
               </Col>
               <Col lg={6}>
-                <ExerciseDetail {...exercise} />
+                <ExerciseDetail {...exercise} locale={locale} />
                 <Box
                   title={formatMessage(messages.referenceSolutionsBox)}
                   noPadding

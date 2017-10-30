@@ -17,6 +17,10 @@ import UsersNameContainer from '../../../containers/UsersNameContainer';
 import GroupsNameContainer from '../../../containers/GroupsNameContainer';
 import styles from './ExerciseDetail.less';
 import { MaybeSucceededIcon } from '../../icons';
+import {
+  getLocalizedName,
+  getLocalizedDescription
+} from '../../../helpers/getLocalizedData';
 
 const ExerciseDetail = ({
   id,
@@ -33,9 +37,10 @@ const ExerciseDetail = ({
   runtimeEnvironments,
   isPublic,
   isLocked,
+  locale,
   links: { EXERCISE_URI_FACTORY }
-}) => (
-  <Box title={name} noPadding>
+}) =>
+  <Box title={getLocalizedName({ name, localizedTexts }, locale)} noPadding>
     <Table>
       <tbody>
         <tr>
@@ -57,20 +62,18 @@ const ExerciseDetail = ({
             />
           </th>
           <td>
-            {groupsIds.length > 0 ? (
-              groupsIds.map((groupId, i) => (
-                <div key={i}>
-                  <GroupsNameContainer groupId={groupId} />
-                </div>
-              ))
-            ) : (
-              <i>
-                <FormattedMessage
-                  id="app.exercise.publicGroup"
-                  defaultMessage="Public"
-                />
-              </i>
-            )}
+            {groupsIds.length > 0
+              ? groupsIds.map((groupId, i) =>
+                  <div key={i}>
+                    <GroupsNameContainer groupId={groupId} />
+                  </div>
+                )
+              : <i>
+                  <FormattedMessage
+                    id="app.exercise.publicGroup"
+                    defaultMessage="Public"
+                  />
+                </i>}
           </td>
         </tr>
         <tr>
@@ -92,7 +95,12 @@ const ExerciseDetail = ({
             />
           </th>
           <td>
-            <ReactMarkdown source={description} />
+            <ReactMarkdown
+              source={getLocalizedDescription(
+                { description, localizedTexts },
+                locale
+              )}
+            />
           </td>
         </tr>
         <tr>
@@ -130,7 +138,7 @@ const ExerciseDetail = ({
             v<FormattedNumber value={version} />
           </td>
         </tr>
-        {forkedFrom && (
+        {forkedFrom &&
           <tr>
             <th>
               <FormattedMessage
@@ -145,8 +153,7 @@ const ExerciseDetail = ({
                 )
               </Link>
             </td>
-          </tr>
-        )}
+          </tr>}
         <tr>
           <th>
             <FormattedMessage
@@ -155,11 +162,11 @@ const ExerciseDetail = ({
             />
           </th>
           <td>
-            {runtimeEnvironments.map(({ id, name }) => (
+            {runtimeEnvironments.map(({ id, name }) =>
               <Label key={id} className={styles.environment}>
                 {name}
               </Label>
-            ))}
+            )}
           </td>
         </tr>
         <tr>
@@ -186,8 +193,7 @@ const ExerciseDetail = ({
         </tr>
       </tbody>
     </Table>
-  </Box>
-);
+  </Box>;
 
 ExerciseDetail.propTypes = {
   id: PropTypes.string.isRequired,
@@ -204,6 +210,7 @@ ExerciseDetail.propTypes = {
   runtimeEnvironments: PropTypes.array.isRequired,
   isPublic: PropTypes.bool.isRequired,
   isLocked: PropTypes.bool.isRequired,
+  locale: PropTypes.string.isRequired,
   links: PropTypes.object
 };
 
