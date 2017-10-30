@@ -1,12 +1,38 @@
 .modal {
-  width: 100%;
-  height: 100%;
+  position: absolute;
+  width: auto;
+  height: auto;
+  top: 1vmax;
+  bottom: 1vmax;
+  left: 1vmax;
+  right: 1vmax;
   margin: 0;
 
   & > :global(.modal-content) {
     min-height: 100%;
+    display: flex;
+    flex-direction: column;
+
+    & > div:nth-child(2) {
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+    }
   }
 }
 
 .modalBody {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+
+  & > *:last-child {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+
+    & > * {
+      flex-grow: 1;
+    }
+  }
 }

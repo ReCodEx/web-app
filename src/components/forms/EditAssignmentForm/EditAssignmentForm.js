@@ -1,26 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { canUseDOM } from 'exenv';
 import { reduxForm, Field, FieldArray, touch } from 'redux-form';
-import { FormattedHTMLMessage, FormattedMessage } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { Alert, HelpBlock } from 'react-bootstrap';
 import isNumeric from 'validator/lib/isNumeric';
 
 import FormBox from '../../widgets/FormBox';
-import {
-  DatetimeField,
-  TextField,
-  CheckboxField,
-  SourceCodeField
-} from '../Fields';
+import { DatetimeField, TextField, CheckboxField } from '../Fields';
 import LocalizedTextsFormField from '../LocalizedTextsFormField';
 import SubmitButton from '../SubmitButton';
 
 import { validateAssignment } from '../../../redux/modules/assignments';
-
-if (canUseDOM) {
-  require('codemirror/mode/yaml/yaml');
-}
 
 const EditAssignmentForm = ({
   initialValues: assignment,
@@ -93,24 +83,6 @@ const EditAssignmentForm = ({
         localizedTexts={localizedTexts}
         component={LocalizedTextsFormField}
       />
-
-      <Field
-        name="scoreConfig"
-        component={SourceCodeField}
-        mode="yaml"
-        label={
-          <FormattedMessage
-            id="app.editAssignmentForm.scoreConfig"
-            defaultMessage="Score configuration:"
-          />
-        }
-      />
-      <HelpBlock>
-        <FormattedHTMLMessage
-          id="app.editAssignmentForm.moreAboutScoreConfig"
-          defaultMessage="Read more about <a href='https://github.com/ReCodEx/wiki/wiki/Assignments#scoring'>score configuration</a> syntax."
-        />
-      </HelpBlock>
 
       <Field
         name="firstDeadline"

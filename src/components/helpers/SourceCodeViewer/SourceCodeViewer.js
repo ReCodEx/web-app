@@ -32,27 +32,24 @@ const getMode = ext => {
 };
 
 const SourceCodeViewer = (
-  { name, content = '', lineNumbers = true, height },
+  { name, content = '', lineNumbers = true },
   { userSettings: { vimMode = false, darkTheme = false } }
 ) =>
-  height
-    ? <AceEditor
-        value={content}
-        mode={getMode(name.split('.').pop())}
-        keyboardHandler={vimMode ? 'vim' : undefined}
-        theme={darkTheme ? 'monokai' : 'github'}
-        name="source-code-viewer"
-        width="100%"
-        height={`${height}px`}
-        editorProps={{ $blockScrolling: true, $autoScrollEditorIntoView: true }}
-      />
-    : null;
+  <AceEditor
+    value={content}
+    mode={getMode(name.split('.').pop())}
+    keyboardHandler={vimMode ? 'vim' : undefined}
+    theme={darkTheme ? 'monokai' : 'github'}
+    name="source-code-viewer"
+    width="100%"
+    height="100%"
+    editorProps={{ $blockScrolling: true, $autoScrollEditorIntoView: true }}
+  />;
 
 SourceCodeViewer.propTypes = {
   name: PropTypes.string.isRequired,
   content: PropTypes.string,
-  lineNumbers: PropTypes.bool,
-  height: PropTypes.number
+  lineNumbers: PropTypes.bool
 };
 
 SourceCodeViewer.contextTypes = {

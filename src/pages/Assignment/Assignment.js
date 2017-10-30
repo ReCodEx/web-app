@@ -182,7 +182,11 @@ class Assignment extends Component {
                     .upToDate ||
                   !assignment.exerciseSynchronizationInfo.localizedTexts
                     .upToDate ||
-                  !assignment.exerciseSynchronizationInfo.limits.upToDate) &&
+                  !assignment.exerciseSynchronizationInfo.limits.upToDate ||
+                  !assignment.exerciseSynchronizationInfo.scoreConfig
+                    .upToDate ||
+                  !assignment.exerciseSynchronizationInfo.scoreCalculator
+                    .upToDate) &&
                 <Row>
                   <Col sm={12}>
                     <Alert bsStyle="warning">
@@ -236,6 +240,22 @@ class Assignment extends Component {
                               <FormattedMessage
                                 id="app.assignment.syncLimits"
                                 defaultMessage="Limits"
+                              />
+                            </li>}
+                          {!assignment.exerciseSynchronizationInfo.scoreConfig
+                            .upToDate &&
+                            <li>
+                              <FormattedMessage
+                                id="app.assignment.syncScoreConfig"
+                                defaultMessage="Score configuration"
+                              />
+                            </li>}
+                          {!assignment.exerciseSynchronizationInfo
+                            .scoreCalculator.upToDate &&
+                            <li>
+                              <FormattedMessage
+                                id="app.assignment.syncScoreCalculator"
+                                defaultMessage="Score calculator"
                               />
                             </li>}
                         </ul>
