@@ -12,12 +12,7 @@ import { Alert } from 'react-bootstrap';
 import Icon from 'react-fontawesome';
 import { LinkContainer } from 'react-router-bootstrap';
 
-import {
-  TextField,
-  SelectField,
-  CheckboxField,
-  MarkdownTextAreaField
-} from '../Fields';
+import { SelectField, CheckboxField } from '../Fields';
 
 import FormBox from '../../widgets/FormBox';
 import SubmitButton from '../SubmitButton';
@@ -126,15 +121,10 @@ const EditExerciseForm = ({
         />
       </Alert>}
 
-    <Field
-      name="name"
-      component={TextField}
-      label={
-        <FormattedMessage
-          id="app.editExerciseForm.name"
-          defaultMessage="Exercise name:"
-        />
-      }
+    <FieldArray
+      name="localizedTexts"
+      localizedTexts={localizedTexts}
+      component={LocalizedTextsFormField}
     />
 
     <Field
@@ -150,17 +140,6 @@ const EditExerciseForm = ({
         <FormattedMessage
           id="app.editExerciseForm.difficulty"
           defaultMessage="Difficulty"
-        />
-      }
-    />
-
-    <Field
-      name="description"
-      component={MarkdownTextAreaField}
-      label={
-        <FormattedMessage
-          id="app.editExerciseForm.description"
-          defaultMessage="Description for supervisors:"
         />
       }
     />
@@ -188,12 +167,6 @@ const EditExerciseForm = ({
         />
       }
     />
-
-    <FieldArray
-      name="localizedTexts"
-      localizedTexts={localizedTexts}
-      component={LocalizedTextsFormField}
-    />
   </FormBox>;
 
 EditExerciseForm.propTypes = {
@@ -216,29 +189,11 @@ EditExerciseForm.propTypes = {
 const validate = ({ name, description, difficulty, localizedTexts }) => {
   const errors = {};
 
-  if (!name) {
-    errors['name'] = (
-      <FormattedMessage
-        id="app.editExerciseForm.validation.emptyName"
-        defaultMessage="Please fill the name of the exercise."
-      />
-    );
-  }
-
   if (!difficulty) {
     errors['difficulty'] = (
       <FormattedMessage
         id="app.editExerciseForm.validation.difficulty"
         defaultMessage="Please select the difficulty of the exercise."
-      />
-    );
-  }
-
-  if (!description) {
-    errors['description'] = (
-      <FormattedMessage
-        id="app.editExerciseForm.validation.description"
-        defaultMessage="Please fill the description of the exercise."
       />
     );
   }
@@ -263,6 +218,15 @@ const validate = ({ name, description, difficulty, localizedTexts }) => {
         />
       );
     } else {
+      if (!localizedTexts[i].name) {
+        localeErrors['name'] = (
+          <FormattedMessage
+            id="app.editExerciseForm.validation.emptyName"
+            defaultMessage="Please fill the name of the exercise."
+          />
+        );
+      }
+
       if (!localizedTexts[i].locale) {
         localeErrors['locale'] = (
           <FormattedMessage
@@ -277,6 +241,15 @@ const validate = ({ name, description, difficulty, localizedTexts }) => {
           <FormattedMessage
             id="app.editExerciseForm.validation.localizedText.text"
             defaultMessage="Please fill the description in this language."
+          />
+        );
+      }
+
+      if (!localizedTexts[i].description) {
+        localeErrors['description'] = (
+          <FormattedMessage
+            id="app.editExerciseForm.validation.description"
+            defaultMessage="Please fill the description of the exercise."
           />
         );
       }

@@ -88,29 +88,6 @@ const EditAssignmentForm = ({
           />
         </Alert>}
 
-      <Field
-        name="name"
-        component={TextField}
-        label={
-          <FormattedMessage
-            id="app.editAssignmentForm.name"
-            defaultMessage="Assignment default name:"
-          />
-        }
-      />
-
-      <Field
-        name="isPublic"
-        component={CheckboxField}
-        onOff
-        label={
-          <FormattedMessage
-            id="app.editAssignmentForm.isPublic"
-            defaultMessage="Visible to students"
-          />
-        }
-      />
-
       <FieldArray
         name="localizedTexts"
         localizedTexts={localizedTexts}
@@ -250,6 +227,18 @@ const EditAssignmentForm = ({
           />
         }
       />
+
+      <Field
+        name="isPublic"
+        component={CheckboxField}
+        onOff
+        label={
+          <FormattedMessage
+            id="app.editAssignmentForm.isPublic"
+            defaultMessage="Visible to students"
+          />
+        }
+      />
     </FormBox>
   </div>;
 
@@ -296,15 +285,6 @@ const validate = ({
 }) => {
   const errors = {};
 
-  if (!name) {
-    errors['name'] = (
-      <FormattedMessage
-        id="app.editAssignmentForm.validation.emptyName"
-        defaultMessage="Please fill the name of the assignment."
-      />
-    );
-  }
-
   if (localizedTexts.length < 1) {
     errors['_error'] = (
       <FormattedMessage
@@ -325,6 +305,15 @@ const validate = ({
         />
       );
     } else {
+      if (!localizedTexts[i].name) {
+        localeErrors['name'] = (
+          <FormattedMessage
+            id="app.editAssignmentForm.validation.emptyName"
+            defaultMessage="Please fill the name of the assignment."
+          />
+        );
+      }
+
       if (!localizedTexts[i].locale) {
         localeErrors['locale'] = (
           <FormattedMessage
