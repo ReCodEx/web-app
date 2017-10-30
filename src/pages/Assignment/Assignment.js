@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import { Col, Row, Alert } from 'react-bootstrap';
 import Button from '../../components/widgets/FlatButton';
 import { LinkContainer } from 'react-router-bootstrap';
@@ -40,7 +40,6 @@ import AssignmentDetails, {
   LoadingAssignmentDetails,
   FailedAssignmentDetails
 } from '../../components/Assignments/Assignment/AssignmentDetails';
-
 import { EditIcon, ResultsIcon } from '../../components/icons';
 import LocalizedTexts from '../../components/helpers/LocalizedTexts';
 import SubmitSolutionButton from '../../components/Assignments/SubmitSolutionButton';
@@ -48,6 +47,7 @@ import SubmitSolutionContainer from '../../containers/SubmitSolutionContainer';
 import SubmissionsTableContainer from '../../containers/SubmissionsTableContainer';
 
 import withLinks from '../../hoc/withLinks';
+import { getLocalizedName } from '../../helpers/getLocalizedData';
 
 class Assignment extends Component {
   static loadAsync = ({ assignmentId }, dispatch) =>
@@ -84,6 +84,7 @@ class Assignment extends Component {
       canSubmit,
       runtimeEnvironments,
       exerciseSync,
+      intl: { locale },
       links: { ASSIGNMENT_EDIT_URI_FACTORY, SUPERVISOR_STATS_URI_FACTORY }
     } = this.props;
 
@@ -93,7 +94,7 @@ class Assignment extends Component {
           <ResourceRenderer resource={assignment}>
             {assignment =>
               <span>
-                {assignment.name}
+                {getLocalizedName(assignment, locale)}
               </span>}
           </ResourceRenderer>
         }
@@ -329,37 +330,40 @@ Assignment.propTypes = {
   loadAsync: PropTypes.func.isRequired,
   links: PropTypes.object.isRequired,
   runtimeEnvironments: PropTypes.array,
-  exerciseSync: PropTypes.func.isRequired
+  exerciseSync: PropTypes.func.isRequired,
+  intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired
 };
 
-export default withLinks(
-  connect(
-    (state, { params: { assignmentId, userId } }) => {
-      const assignmentSelector = getAssignment(assignmentId);
-      const environments = runtimeEnvironmentsSelector(assignmentId)(
-        state
-      ).toJS();
-      const loggedInUserId = loggedInUserIdSelector(state);
-      userId = userId || loggedInUserId;
-      return {
-        assignment: assignmentSelector(state),
-        submitting: isSubmitting(state),
-        runtimeEnvironments: environments.map(i =>
-          runtimeEnvironmentSelector(i)(state)
-        ),
-        userId,
-        loggedInUserId,
-        isSuperAdmin: isSuperAdmin(loggedInUserId)(state),
-        isStudentOf: groupId => isStudentOf(loggedInUserId, groupId)(state),
-        isSupervisorOf: groupId =>
-          isSupervisorOf(loggedInUserId, groupId)(state),
-        canSubmit: canSubmitSolution(assignmentId)(state)
-      };
-    },
-    (dispatch, { params: { assignmentId } }) => ({
-      init: userId => () => dispatch(init(userId, assignmentId)),
-      loadAsync: () => Assignment.loadAsync({ assignmentId }, dispatch),
-      exerciseSync: () => dispatch(syncWithExercise(assignmentId))
-    })
-  )(Assignment)
+export default injectIntl(
+  withLinks(
+    connect(
+      (state, { params: { assignmentId, userId } }) => {
+        const assignmentSelector = getAssignment(assignmentId);
+        const environments = runtimeEnvironmentsSelector(assignmentId)(
+          state
+        ).toJS();
+        const loggedInUserId = loggedInUserIdSelector(state);
+        userId = userId || loggedInUserId;
+        return {
+          assignment: assignmentSelector(state),
+          submitting: isSubmitting(state),
+          runtimeEnvironments: environments.map(i =>
+            runtimeEnvironmentSelector(i)(state)
+          ),
+          userId,
+          loggedInUserId,
+          isSuperAdmin: isSuperAdmin(loggedInUserId)(state),
+          isStudentOf: groupId => isStudentOf(loggedInUserId, groupId)(state),
+          isSupervisorOf: groupId =>
+            isSupervisorOf(loggedInUserId, groupId)(state),
+          canSubmit: canSubmitSolution(assignmentId)(state)
+        };
+      },
+      (dispatch, { params: { assignmentId } }) => ({
+        init: userId => () => dispatch(init(userId, assignmentId)),
+        loadAsync: () => Assignment.loadAsync({ assignmentId }, dispatch),
+        exerciseSync: () => dispatch(syncWithExercise(assignmentId))
+      })
+    )(Assignment)
+  )
 );

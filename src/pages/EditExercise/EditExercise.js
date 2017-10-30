@@ -60,12 +60,14 @@ class EditExercise extends Component {
         breadcrumbs={[
           {
             resource: exercise,
-            breadcrumb: ({ name }) => ({
+            breadcrumb: ({ name, localizedTexts }) => ({
               text: (
                 <FormattedMessage
                   id="app.exercise.breadcrumbTitle"
                   defaultMessage="Exercise {name}"
-                  values={{ name }}
+                  values={{
+                    name: getLocalizedName({ name, localizedTexts }, locale)
+                  }}
                 />
               ),
               iconName: 'puzzle-piece',
