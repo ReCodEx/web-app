@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { reduxForm, Field, FieldArray, touch } from 'redux-form';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import { Alert, HelpBlock } from 'react-bootstrap';
 import isNumeric from 'validator/lib/isNumeric';
 
@@ -11,6 +11,7 @@ import LocalizedTextsFormField from '../LocalizedTextsFormField';
 import SubmitButton from '../SubmitButton';
 
 import { validateAssignment } from '../../../redux/modules/assignments';
+import { getLocalizedName } from '../../../helpers/getLocalizedData';
 
 const EditAssignmentForm = ({
   initialValues: assignment,
@@ -21,7 +22,8 @@ const EditAssignmentForm = ({
   submitSucceeded: hasSucceeded,
   asyncValidating,
   invalid,
-  formValues: { firstDeadline, allowSecondDeadline, localizedTexts } = {}
+  formValues: { firstDeadline, allowSecondDeadline, localizedTexts } = {},
+  intl: { locale }
 }) =>
   <div>
     <FormBox
@@ -29,7 +31,7 @@ const EditAssignmentForm = ({
         <FormattedMessage
           id="app.editAssignmentForm.title"
           defaultMessage="Edit assignment {name}"
-          values={{ name: assignment.name }}
+          values={{ name: getLocalizedName(assignment, locale) }}
         />
       }
       successful={hasSucceeded}
@@ -231,7 +233,8 @@ EditAssignmentForm.propTypes = {
       PropTypes.string
     ]),
     localizedTexts: PropTypes.array
-  })
+  }),
+  intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired
 };
 
 const isNonNegativeInteger = n =>
@@ -438,8 +441,10 @@ const asyncValidate = (values, dispatch, { assignment: { id, version } }) =>
       .catch(errors => reject(errors))
   );
 
-export default reduxForm({
-  form: 'editAssignment',
-  validate,
-  asyncValidate
-})(EditAssignmentForm);
+export default injectIntl(
+  reduxForm({
+    form: 'editAssignment',
+    validate,
+    asyncValidate
+  })(EditAssignmentForm)
+);
