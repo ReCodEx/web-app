@@ -5,6 +5,7 @@ import AssignmentStatusIcon from '../AssignmentStatusIcon/AssignmentStatusIcon';
 import { FormattedDate, FormattedTime } from 'react-intl';
 
 import withLinks from '../../../../hoc/withLinks';
+import { getLocalizedName } from '../../../../helpers/getLocalizedData';
 import { MaybeBonusAssignmentIcon } from '../../../icons';
 
 const AssignmentTableRow = ({
@@ -13,6 +14,7 @@ const AssignmentTableRow = ({
     id,
     name,
     group,
+    localizedTexts,
     allowSecondDeadline,
     firstDeadline,
     secondDeadline,
@@ -21,11 +23,12 @@ const AssignmentTableRow = ({
   },
   status,
   userId,
+  locale,
   links: {
     ASSIGNMENT_DETAIL_URI_FACTORY,
     ASSIGNMENT_DETAIL_SPECIFIC_USER_URI_FACTORY
   }
-}) => (
+}) =>
   <tr>
     <td className="text-center">
       <AssignmentStatusIcon id={id} status={status} accepted={accepted} />
@@ -39,37 +42,43 @@ const AssignmentTableRow = ({
             : ASSIGNMENT_DETAIL_URI_FACTORY(id)
         }
       >
-        {name}
+        {getLocalizedName({ name, localizedTexts }, locale)}
       </Link>
     </td>
-    {showGroup && <td>{group}</td>}
+    {showGroup &&
+      <td>
+        {group}
+      </td>}
     <td>
-      <FormattedDate value={new Date(firstDeadline * 1000)} />{', '}
+      <FormattedDate value={new Date(firstDeadline * 1000)} />
+      {', '}
       <FormattedTime value={new Date(firstDeadline * 1000)} />
     </td>
     <td>
       {allowSecondDeadline
         ? <span>
-            <FormattedDate value={new Date(secondDeadline * 1000)} />{', '}
+            <FormattedDate value={new Date(secondDeadline * 1000)} />
+            {', '}
             <FormattedTime value={new Date(secondDeadline * 1000)} />
           </span>
         : <span>-</span>}
     </td>
-  </tr>
-);
+  </tr>;
 
 AssignmentTableRow.propTypes = {
   showGroup: PropTypes.bool,
   item: PropTypes.shape({
     id: PropTypes.any.isRequired,
     name: PropTypes.string.isRequired,
+    localizedTexts: PropTypes.array.isRequired,
     firstDeadline: PropTypes.number.isRequired,
     secondDeadline: PropTypes.number.isRequired,
     groupId: PropTypes.string
   }),
   status: PropTypes.string,
   userId: PropTypes.string,
-  links: PropTypes.object
+  links: PropTypes.object,
+  locale: PropTypes.string.isRequired
 };
 
 export default withLinks(AssignmentTableRow);

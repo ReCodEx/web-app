@@ -2,10 +2,25 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { Field } from 'redux-form';
-import { MarkdownTextAreaField, LanguageSelectField } from '../Fields';
+import {
+  MarkdownTextAreaField,
+  LanguageSelectField,
+  TextField
+} from '../Fields';
 
-const LocalizedTextFormField = ({ prefix }) => (
+const LocalizedTextFormField = ({ prefix }) =>
   <div>
+    <Field
+      name={`${prefix}.name`}
+      component={TextField}
+      label={
+        <FormattedMessage
+          id="app.editAssignmentForm.localized.name"
+          defaultMessage="Name:"
+        />
+      }
+    />
+
     <Field
       name={`${prefix}.locale`}
       component={LanguageSelectField}
@@ -27,8 +42,18 @@ const LocalizedTextFormField = ({ prefix }) => (
         />
       }
     />
-  </div>
-);
+
+    <Field
+      name={`${prefix}.description`}
+      component={MarkdownTextAreaField}
+      label={
+        <FormattedMessage
+          id="app.editAssignmentForm.description"
+          defaultMessage="Description for supervisors:"
+        />
+      }
+    />
+  </div>;
 
 LocalizedTextFormField.propTypes = {
   prefix: PropTypes.string.isRequired

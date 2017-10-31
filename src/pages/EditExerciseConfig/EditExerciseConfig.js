@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import { Row, Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { getFormValues } from 'redux-form';
@@ -49,6 +49,7 @@ import { runtimeEnvironmentsSelector } from '../../redux/selectors/runtimeEnviro
 import { simpleLimitsSelector } from '../../redux/selectors/simpleLimits';
 
 import withLinks from '../../hoc/withLinks';
+import { getLocalizedName } from '../../helpers/getLocalizedData';
 
 class EditExerciseConfig extends Component {
   componentWillMount = () => this.props.loadAsync();
@@ -97,13 +98,14 @@ class EditExerciseConfig extends Component {
       setHorizontally,
       setVertically,
       setAll,
-      editScoreConfig
+      editScoreConfig,
+      intl: { locale }
     } = this.props;
 
     return (
       <Page
         resource={exercise}
-        title={exercise => exercise.name}
+        title={exercise => getLocalizedName(exercise, locale)}
         description={
           <FormattedMessage
             id="app.editExerciseConfig.description"
@@ -113,12 +115,14 @@ class EditExerciseConfig extends Component {
         breadcrumbs={[
           {
             resource: exercise,
-            breadcrumb: ({ name }) => ({
+            breadcrumb: ({ name, localizedTexts }) => ({
               text: (
                 <FormattedMessage
                   id="app.exercise.breadcrumbTitle"
                   defaultMessage="Exercise {name}"
-                  values={{ name }}
+                  values={{
+                    name: getLocalizedName({ name, localizedTexts }, locale)
+                  }}
                 />
               ),
               iconName: 'puzzle-piece',
@@ -241,47 +245,57 @@ EditExerciseConfig.propTypes = {
   setHorizontally: PropTypes.func.isRequired,
   setVertically: PropTypes.func.isRequired,
   setAll: PropTypes.func.isRequired,
-  editScoreConfig: PropTypes.func.isRequired
+  editScoreConfig: PropTypes.func.isRequired,
+  intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired
 };
 
-export default withLinks(
-  connect(
-    (state, { params: { exerciseId } }) => {
-      return {
-        exercise: getExercise(exerciseId)(state),
-        userId: loggedInUserIdSelector(state),
-        environmentFormValues: getFormValues('editEnvironmentConfig')(state),
-        runtimeEnvironments: runtimeEnvironmentsSelector(state),
-        exerciseConfig: exerciseConfigSelector(exerciseId)(state),
-        exerciseEnvironmentConfig: exerciseEnvironmentConfigSelector(
-          exerciseId
-        )(state),
-        exerciseScoreConfig: exerciseScoreConfigSelector(exerciseId)(state),
-        pipelines: pipelinesSelector(state),
-        limits: runtimeEnvironmentId =>
-          simpleLimitsSelector(exerciseId, runtimeEnvironmentId)(state)
-      };
-    },
-    (dispatch, { params: { exerciseId } }) => ({
-      loadAsync: () => EditExerciseConfig.loadAsync({ exerciseId }, dispatch),
-      editEnvironmentConfigs: data =>
-        dispatch(setExerciseEnvironmentConfig(exerciseId, data)),
-      editEnvironmentSimpleLimits: runtimeEnvironmentId => data =>
-        dispatch(
-          editEnvironmentSimpleLimits(exerciseId, runtimeEnvironmentId, data)
-        ),
-      setConfig: data => dispatch(setExerciseConfig(exerciseId, data)),
-      setHorizontally: (formName, runtimeEnvironmentId) => testName => () =>
-        dispatch(
-          setHorizontally(formName, exerciseId, runtimeEnvironmentId, testName)
-        ),
-      setVertically: (formName, runtimeEnvironmentId) => testName => () =>
-        dispatch(
-          setVertically(formName, exerciseId, runtimeEnvironmentId, testName)
-        ),
-      setAll: (formName, runtimeEnvironmentId) => testName => () =>
-        dispatch(setAll(formName, exerciseId, runtimeEnvironmentId, testName)),
-      editScoreConfig: data => dispatch(setScoreConfig(exerciseId, data))
-    })
-  )(EditExerciseConfig)
+export default injectIntl(
+  withLinks(
+    connect(
+      (state, { params: { exerciseId } }) => {
+        return {
+          exercise: getExercise(exerciseId)(state),
+          userId: loggedInUserIdSelector(state),
+          environmentFormValues: getFormValues('editEnvironmentConfig')(state),
+          runtimeEnvironments: runtimeEnvironmentsSelector(state),
+          exerciseConfig: exerciseConfigSelector(exerciseId)(state),
+          exerciseScoreConfig: exerciseScoreConfigSelector(exerciseId)(state),
+          exerciseEnvironmentConfig: exerciseEnvironmentConfigSelector(
+            exerciseId
+          )(state),
+          pipelines: pipelinesSelector(state),
+          limits: runtimeEnvironmentId =>
+            simpleLimitsSelector(exerciseId, runtimeEnvironmentId)(state)
+        };
+      },
+      (dispatch, { params: { exerciseId } }) => ({
+        loadAsync: () => EditExerciseConfig.loadAsync({ exerciseId }, dispatch),
+        editEnvironmentConfigs: data =>
+          dispatch(setExerciseEnvironmentConfig(exerciseId, data)),
+        editEnvironmentSimpleLimits: runtimeEnvironmentId => data =>
+          dispatch(
+            editEnvironmentSimpleLimits(exerciseId, runtimeEnvironmentId, data)
+          ),
+        setConfig: data => dispatch(setExerciseConfig(exerciseId, data)),
+        setHorizontally: (formName, runtimeEnvironmentId) => testName => () =>
+          dispatch(
+            setHorizontally(
+              formName,
+              exerciseId,
+              runtimeEnvironmentId,
+              testName
+            )
+          ),
+        setVertically: (formName, runtimeEnvironmentId) => testName => () =>
+          dispatch(
+            setVertically(formName, exerciseId, runtimeEnvironmentId, testName)
+          ),
+        setAll: (formName, runtimeEnvironmentId) => testName => () =>
+          dispatch(
+            setAll(formName, exerciseId, runtimeEnvironmentId, testName)
+          ),
+        editScoreConfig: data => dispatch(setScoreConfig(exerciseId, data))
+      })
+    )(EditExerciseConfig)
+  )
 );

@@ -3,12 +3,13 @@ import PropTypes from 'prop-types';
 import { List } from 'immutable';
 import { Table } from 'react-bootstrap';
 import { Link } from 'react-router';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
 import ResultsTableRow from './ResultsTableRow';
 import LoadingResultsTableRow from './LoadingResultsTableRow';
 import NoResultsAvailableRow from './NoResultsAvailableRow';
 import withLinks from '../../../hoc/withLinks';
+import { getLocalizedName } from '../../../helpers/getLocalizedData';
 import ResourceRenderer from '../../helpers/ResourceRenderer';
 import styles from './ResultsTable.less';
 
@@ -16,6 +17,7 @@ const ResultsTable = ({
   assignments = List(),
   users = [],
   submissions,
+  intl: { locale },
   links: { SUPERVISOR_STATS_URI_FACTORY }
 }) => {
   const assignmentsArray = assignments.sort(
@@ -32,7 +34,7 @@ const ResultsTable = ({
               <div className={styles.verticalText}>
                 <div className={styles.verticalTextInner}>
                   <Link to={SUPERVISOR_STATS_URI_FACTORY(assignment.id)}>
-                    {assignment.name}
+                    {getLocalizedName(assignment, locale)}
                   </Link>
                 </div>
               </div>
@@ -77,7 +79,8 @@ ResultsTable.propTypes = {
   assignments: PropTypes.array.isRequired,
   users: PropTypes.array.isRequired,
   submissions: PropTypes.object.isRequired,
-  links: PropTypes.object
+  links: PropTypes.object,
+  intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired
 };
 
-export default withLinks(ResultsTable);
+export default injectIntl(withLinks(ResultsTable));

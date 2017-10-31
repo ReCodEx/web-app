@@ -3,14 +3,14 @@ import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { List } from 'immutable';
 import { Table } from 'react-bootstrap';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
 import AdminAssignmentsTableRow from './AdminAssignmentsTableRow';
 import NoAssignmentsTableRow from './NoAssignmentsTableRow';
 import LoadingAssignmentTableRow from './LoadingAssignmentTableRow';
 import ResourceRenderer from '../../helpers/ResourceRenderer';
 
-const AdminAssignmentsTable = ({ assignments = List() }) => (
+const AdminAssignmentsTable = ({ assignments = List(), intl: { locale } }) =>
   <Table hover>
     <thead>
       <tr>
@@ -51,25 +51,28 @@ const AdminAssignmentsTable = ({ assignments = List() }) => (
     >
       {(...assignments) =>
         assignments.length === 0
-          ? <tbody><NoAssignmentsTableRow /></tbody>
+          ? <tbody>
+              <NoAssignmentsTableRow />
+            </tbody>
           : <tbody>
               {assignments
                 .sort((a, b) => a.firstDeadline - b.firstDeadline)
-                .map(assignment => (
+                .map(assignment =>
                   <AdminAssignmentsTableRow
                     key={assignment.id}
                     {...assignment}
+                    locale={locale}
                   />
-                ))}
+                )}
             </tbody>}
     </ResourceRenderer>
-  </Table>
-);
+  </Table>;
 
 AdminAssignmentsTable.propTypes = {
   assignments: ImmutablePropTypes.list.isRequired,
   showGroup: PropTypes.bool,
-  statuses: PropTypes.object
+  statuses: PropTypes.object,
+  intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired
 };
 
-export default AdminAssignmentsTable;
+export default injectIntl(AdminAssignmentsTable);
