@@ -39,6 +39,7 @@ const AssignmentStatusIcon = ({ id, status, accepted = false }) => {
       return (
         <Status
           id={id}
+          accepted={accepted}
           icon={<Icon name="thumbs-o-down" className="text-red" />}
           message={
             <FormattedMessage
