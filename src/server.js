@@ -97,20 +97,18 @@ app.get('*', (req, res) => {
       } else {
         const userId = loggedInUserIdSelector(store.getState()); // try to get the user ID from the token (if any)
         const loadAsync = renderProps.components
-          .filter(
-            component =>
-              component &&
-              component.WrappedComponent &&
-              component.WrappedComponent.loadAsync
-          )
+          .filter(component => component)
           .map(component => {
             // there might be several layers of wrapping - connect, withLinks, ...
             while (component.WrappedComponent) {
               component = component.WrappedComponent;
             }
-            return component.loadAsync;
+            return component;
           })
-          .map(load => load(renderProps.params, store.dispatch, userId));
+          .filter(component => component.loadAsync)
+          .map(component =>
+            component.loadAsync(renderProps.params, store.dispatch, userId)
+          );
 
         Promise.all(loadAsync)
           .then(() => renderPage(res, store, renderProps))

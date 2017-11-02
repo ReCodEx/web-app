@@ -7,6 +7,7 @@ import promiseMiddleware from 'redux-promise-middleware';
 import * as storage from 'redux-storage';
 import authMiddleware from './middleware/authMiddleware';
 import apiMiddleware from './middleware/apiMiddleware';
+import loggerMiddleware from './middleware/loggerMiddleware';
 import createReducer from './reducer';
 import createEngine from 'redux-storage-engine-localstorage';
 import filter from 'redux-storage-decorator-filter';
@@ -35,7 +36,10 @@ const getMiddleware = history => [
 const dev = history =>
   compose(
     applyMiddleware(...getMiddleware(history)),
-    canUseDOM && window.devToolsExtension ? window.devToolsExtension() : f => f // use the DEVtools if the extension is installed
+    canUseDOM && window.devToolsExtension ? window.devToolsExtension() : f => f, // use the DEVtools if the extension is installed
+    !canUseDOM || !window.devToolsExtension // dev tools not available, or we are at server -> manual logging
+      ? applyMiddleware(loggerMiddleware)
+      : f => f
   );
 
 const prod = history => compose(applyMiddleware(...getMiddleware(history)));
