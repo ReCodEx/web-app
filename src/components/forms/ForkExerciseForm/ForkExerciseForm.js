@@ -87,7 +87,6 @@ class ForkExerciseForm extends Component {
                           name: group.name
                         }))
                     )}
-                    disabled
                   />}
               </ResourceRenderer>
 
@@ -120,7 +119,6 @@ class ForkExerciseForm extends Component {
                     />
                   )
                 }}
-                disabled
               />
             </Form>
           </div>

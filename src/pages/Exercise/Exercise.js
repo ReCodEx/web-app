@@ -29,7 +29,7 @@ import {
 } from '../../components/icons';
 import Confirm from '../../components/forms/Confirm';
 import PipelinesSimpleList from '../../components/Pipelines/PipelinesSimpleList';
-import ForkExerciseForm from '../../components/forms/ForkExerciseForm';
+// import ForkExerciseForm from '../../components/forms/ForkExerciseForm';
 import AssignExerciseButton from '../../components/buttons/AssignExerciseButton';
 
 import { isSubmitting } from '../../redux/selectors/submission';
@@ -139,12 +139,12 @@ class Exercise extends Component {
       initCreateReferenceSolution,
       exercisePipelines,
       deleteReferenceSolution,
-      push,
-      groups,
-      forkExercise
+      push
+      // groups,
+      // forkExercise
     } = this.props;
 
-    const { forkId } = this.state;
+    // const { forkId } = this.state;
 
     const {
       links: {
@@ -219,12 +219,12 @@ class Exercise extends Component {
                           />
                         </Button>
                       </LinkContainer>
-                      <ForkExerciseForm
+                      {/* <ForkExerciseForm
                         exerciseId={exercise.id}
                         groups={groups}
                         forkId={forkId}
                         onSubmit={formData => forkExercise(forkId, formData)}
-                      />
+                      /> */}
                     </ButtonGroup>
                   </div>}
                 <p />
@@ -481,7 +481,8 @@ export default withLinks(
         };
       },
       (dispatch, { params: { exerciseId } }) => ({
-        loadAsync: userId => Exercise.loadAsync({ exerciseId }, dispatch, userId),
+        loadAsync: userId =>
+          Exercise.loadAsync({ exerciseId }, dispatch, userId),
         assignExercise: groupId =>
           dispatch(assignExercise(groupId, exerciseId)),
         push: url => dispatch(push(url)),

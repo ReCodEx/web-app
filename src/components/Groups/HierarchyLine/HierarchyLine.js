@@ -12,7 +12,7 @@ const HierarchyLine = ({ groupId, parentGroupsIds }) =>
         i !== 0 &&
         <span key={i}>
           <GroupsNameContainer groupId={groupId} />{' '}
-          <span style={{ margin: '0 5px', color: '#aaa' }}>/</span>
+          <span className="slashStyle">/</span>
         </span>
     )}
     <GroupsNameContainer groupId={groupId} noLink />
