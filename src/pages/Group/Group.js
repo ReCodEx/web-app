@@ -49,7 +49,7 @@ import {
 
 import {
   groupSelector,
-  groupsSelectors,
+  groupsSelector,
   groupsAssignmentsSelector,
   supervisorsOfGroup,
   studentsOfGroup
@@ -317,7 +317,7 @@ const mapStateToProps = (state, { params: { groupId } }) => {
     instance: isReady(group)
       ? instanceSelector(state, groupData.instanceId)
       : null,
-    groups: groupsSelectors(state),
+    groups: groupsSelector(state),
     publicGroups: publicGroupsSelectors(state),
     publicAssignments: groupsAssignmentsSelector(groupId, 'public')(state),
     allAssignments: groupsAssignmentsSelector(groupId, 'all')(state),

@@ -123,7 +123,7 @@ class Pipeline extends Component {
                     <ForkPipelineForm
                       pipelineId={pipeline.id}
                       exercises={exercises}
-                      forkId={this.state.forkId}
+                      forkId={forkId}
                       onSubmit={formData => forkPipeline(forkId, formData)}
                     />
                   </ButtonGroup>

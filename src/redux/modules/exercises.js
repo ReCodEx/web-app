@@ -48,13 +48,18 @@ export const forkStatuses = {
   FULFILLED: 'FULFILLED'
 };
 
-export const forkExercise = (id, forkId) =>
-  createApiAction({
+export const forkExercise = (id, forkId, formData = null) => {
+  let actionData = {
     type: additionalActionTypes.FORK_EXERCISE,
     endpoint: `/exercises/${id}/fork`,
     method: 'POST',
     meta: { id, forkId }
-  });
+  };
+  if (formData && formData.groupId) {
+    actionData.body = { groupId: formData.groupId };
+  }
+  return createApiAction(actionData);
+};
 
 export const create = actions.addResource;
 export const editExercise = actions.updateResource;
