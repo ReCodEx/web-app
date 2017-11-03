@@ -15,6 +15,7 @@ const TestResults = ({ evaluation, runtimeEnvironmentId }) =>
     noPadding={true}
     collapsable={true}
     isOpen={true}
+    unlimitedHeight
   >
     <TestResultsTable
       results={evaluation.testResults}

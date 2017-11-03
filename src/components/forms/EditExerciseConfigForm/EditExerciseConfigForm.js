@@ -25,6 +25,7 @@ class EditExerciseConfigForm extends Component {
 
   componentWillReceiveProps(newProps) {
     if (this.props.exercise.id !== newProps.exercise.id) {
+      this.setState({ testConfigs: newProps.initialValues.config });
       newProps.fetchFiles();
     }
   }
@@ -36,11 +37,9 @@ class EditExerciseConfigForm extends Component {
           if (!testConfig.tests) {
             testConfig.tests = [];
           }
-          testConfig.tests = testConfig.tests.concat([
-            {
-              name: 'Test ' + (testConfig.tests.length + 1)
-            }
-          ]);
+          testConfig.tests.push({
+            name: 'Test ' + (testConfig.tests.length + 1)
+          });
           return testConfig;
         })
       };

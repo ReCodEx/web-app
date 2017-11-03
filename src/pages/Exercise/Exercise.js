@@ -29,12 +29,14 @@ import {
 } from '../../components/icons';
 import Confirm from '../../components/forms/Confirm';
 import PipelinesSimpleList from '../../components/Pipelines/PipelinesSimpleList';
-
-import ForkExerciseButtonContainer from '../../containers/ForkExerciseButtonContainer';
+// import ForkExerciseForm from '../../components/forms/ForkExerciseForm';
 import AssignExerciseButton from '../../components/buttons/AssignExerciseButton';
 
 import { isSubmitting } from '../../redux/selectors/submission';
-import { fetchExerciseIfNeeded } from '../../redux/modules/exercises';
+import {
+  fetchExerciseIfNeeded,
+  forkExercise
+} from '../../redux/modules/exercises';
 import {
   fetchReferenceSolutionsIfNeeded,
   deleteReferenceSolution
@@ -51,9 +53,13 @@ import {
   create as createPipeline
 } from '../../redux/modules/pipelines';
 import { exercisePipelinesSelector } from '../../redux/selectors/pipelines';
+import { fetchUsersGroupsIfNeeded } from '../../redux/modules/groups';
 
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
-import { supervisorOfSelector } from '../../redux/selectors/groups';
+import {
+  supervisorOfSelector,
+  groupsSelector
+} from '../../redux/selectors/groups';
 
 import withLinks from '../../hoc/withLinks';
 import { getLocalizedName } from '../../helpers/getLocalizedData';
@@ -76,22 +82,23 @@ const messages = defineMessages({
 class Exercise extends Component {
   state = { forkId: null };
 
-  static loadAsync = ({ exerciseId }, dispatch) =>
+  static loadAsync = ({ exerciseId }, dispatch, userId) =>
     Promise.all([
       dispatch(fetchExerciseIfNeeded(exerciseId)),
       dispatch(fetchReferenceSolutionsIfNeeded(exerciseId)),
       dispatch(fetchHardwareGroups()),
-      dispatch(fetchExercisePipelines(exerciseId))
+      dispatch(fetchExercisePipelines(exerciseId)),
+      dispatch(fetchUsersGroupsIfNeeded(userId))
     ]);
 
   componentWillMount() {
-    this.props.loadAsync();
+    this.props.loadAsync(this.props.userId);
     this.reset();
   }
 
   componentWillReceiveProps(newProps) {
     if (this.props.params.exerciseId !== newProps.params.exerciseId) {
-      newProps.loadAsync();
+      newProps.loadAsync(this.props.userId);
       this.reset();
     }
   }
@@ -133,9 +140,11 @@ class Exercise extends Component {
       exercisePipelines,
       deleteReferenceSolution,
       push
+      // groups,
+      // forkExercise
     } = this.props;
 
-    const { forkId } = this.state;
+    // const { forkId } = this.state;
 
     const {
       links: {
@@ -210,11 +219,13 @@ class Exercise extends Component {
                           />
                         </Button>
                       </LinkContainer>
+                      {/* <ForkExerciseForm
+                        exerciseId={exercise.id}
+                        groups={groups}
+                        forkId={forkId}
+                        onSubmit={formData => forkExercise(forkId, formData)}
+                      /> */}
                     </ButtonGroup>
-                    <ForkExerciseButtonContainer
-                      exerciseId={exercise.id}
-                      forkId={forkId}
-                    />
                   </div>}
                 <p />
               </Col>
@@ -446,7 +457,9 @@ Exercise.propTypes = {
   exercisePipelines: ImmutablePropTypes.map,
   createExercisePipeline: PropTypes.func,
   links: PropTypes.object,
-  deleteReferenceSolution: PropTypes.func.isRequired
+  deleteReferenceSolution: PropTypes.func.isRequired,
+  forkExercise: PropTypes.func.isRequired,
+  groups: ImmutablePropTypes.map
 };
 
 export default withLinks(
@@ -463,11 +476,13 @@ export default withLinks(
           canEditExercise: exerciseId =>
             canEditExercise(userId, exerciseId)(state),
           referenceSolutions: referenceSolutionsSelector(exerciseId)(state),
-          exercisePipelines: exercisePipelinesSelector(exerciseId)(state)
+          exercisePipelines: exercisePipelinesSelector(exerciseId)(state),
+          groups: groupsSelector(state)
         };
       },
       (dispatch, { params: { exerciseId } }) => ({
-        loadAsync: () => Exercise.loadAsync({ exerciseId }, dispatch),
+        loadAsync: userId =>
+          Exercise.loadAsync({ exerciseId }, dispatch, userId),
         assignExercise: groupId =>
           dispatch(assignExercise(groupId, exerciseId)),
         push: url => dispatch(push(url)),
@@ -476,7 +491,9 @@ export default withLinks(
         createExercisePipeline: () =>
           dispatch(createPipeline({ exerciseId: exerciseId })),
         deleteReferenceSolution: (exerciseId, solutionId) =>
-          dispatch(deleteReferenceSolution(exerciseId, solutionId))
+          dispatch(deleteReferenceSolution(exerciseId, solutionId)),
+        forkExercise: (forkId, data) =>
+          dispatch(forkExercise(exerciseId, forkId, data))
       })
     )(Exercise)
   )

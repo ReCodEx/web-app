@@ -6,13 +6,12 @@ import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 import { reset, getFormValues } from 'redux-form';
 import moment from 'moment';
-import PageContent from '../../components/layout/PageContent';
+import Page from '../../components/layout/Page';
 
-import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import EditAssignmentForm from '../../components/forms/EditAssignmentForm';
 import DeleteAssignmentButtonContainer from '../../containers/DeleteAssignmentButtonContainer';
 import Box from '../../components/widgets/Box';
-import { LoadingIcon, WarningIcon } from '../../components/icons';
+import HierarchyLineContainer from '../../containers/HierarchyLineContainer';
 
 import {
   fetchAssignment,
@@ -70,7 +69,8 @@ class EditAssignment extends Component {
     } = this.props;
 
     return (
-      <PageContent
+      <Page
+        resource={assignment}
         title={
           <FormattedMessage
             id="app.editAssignment.title"
@@ -95,83 +95,46 @@ class EditAssignment extends Component {
           }
         ]}
       >
-        <div>
-          <ResourceRenderer
-            loading={
-              <Box
-                title={
-                  <FormattedMessage
-                    id="app.editAssignment.loading"
-                    defaultMessage="Loading ..."
-                  />
-                }
-              >
-                <p>
-                  <LoadingIcon />{' '}
-                  <FormattedMessage
-                    id="app.editAssignment.loadingDescription"
-                    defaultMessage="Loading latest assignment settings ..."
-                  />
-                </p>
-              </Box>
-            }
-            failed={
-              <Box
-                title={
-                  <FormattedMessage
-                    id="app.editAssignment.failed"
-                    defaultMessage="Failed loading assignment settings"
-                  />
-                }
-              >
-                <p>
-                  <WarningIcon />{' '}
-                  <FormattedMessage
-                    id="app.editAssignment.failedDescription"
-                    defaultMessage="Assignment settings could not have been loaded."
-                  />
-                </p>
-              </Box>
-            }
-            resource={assignment}
-          >
-            {data =>
-              <div>
-                <EditAssignmentForm
-                  assignment={data}
-                  initialValues={data ? this.getInitialValues(data) : {}}
-                  onSubmit={formData => editAssignment(data.version, formData)}
-                  formValues={formValues}
-                />
-              </div>}
-          </ResourceRenderer>
-          <br />
-          <Box
-            type="danger"
-            title={
-              <FormattedMessage
-                id="app.editAssignment.deleteAssignment"
-                defaultMessage="Delete the assignment"
-              />
-            }
-          >
-            <div>
-              <p>
+        {assignment =>
+          <div>
+            <HierarchyLineContainer groupId={assignment.groupId} />
+            <EditAssignmentForm
+              assignment={assignment}
+              initialValues={
+                assignment ? this.getInitialValues(assignment) : {}
+              }
+              onSubmit={formData =>
+                editAssignment(assignment.version, formData)}
+              formValues={formValues}
+            />
+
+            <br />
+            <Box
+              type="danger"
+              title={
                 <FormattedMessage
-                  id="app.editAssignment.deleteAssignmentWarning"
-                  defaultMessage="Deleting an assignment will remove all the students submissions and you will have to contact the administrator of ReCodEx if you wanted to restore the assignment in the future."
+                  id="app.editAssignment.deleteAssignment"
+                  defaultMessage="Delete the assignment"
                 />
-              </p>
-              <p className="text-center">
-                <DeleteAssignmentButtonContainer
-                  id={assignmentId}
-                  onDeleted={() => push(GROUP_URI_FACTORY(this.groupId))}
-                />
-              </p>
-            </div>
-          </Box>
-        </div>
-      </PageContent>
+              }
+            >
+              <div>
+                <p>
+                  <FormattedMessage
+                    id="app.editAssignment.deleteAssignmentWarning"
+                    defaultMessage="Deleting an assignment will remove all the students submissions and you will have to contact the administrator of ReCodEx if you wanted to restore the assignment in the future."
+                  />
+                </p>
+                <p className="text-center">
+                  <DeleteAssignmentButtonContainer
+                    id={assignmentId}
+                    onDeleted={() => push(GROUP_URI_FACTORY(this.groupId))}
+                  />
+                </p>
+              </div>
+            </Box>
+          </div>}
+      </Page>
     );
   }
 }

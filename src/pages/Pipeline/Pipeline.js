@@ -103,32 +103,30 @@ class Pipeline extends Component {
       >
         {pipeline =>
           <div>
+            <div>
+              <ButtonGroup>
+                {isAuthorOfPipeline(pipeline.id) &&
+                  <LinkContainer to={PIPELINE_EDIT_URI_FACTORY(pipeline.id)}>
+                    <Button bsStyle="warning" bsSize="sm">
+                      <EditIcon />
+                      &nbsp;
+                      <FormattedMessage
+                        id="app.pipeline.editSettings"
+                        defaultMessage="Edit pipeline"
+                      />
+                    </Button>
+                  </LinkContainer>}
+                <ForkPipelineForm
+                  pipelineId={pipeline.id}
+                  exercises={exercises}
+                  forkId={forkId}
+                  onSubmit={formData => forkPipeline(forkId, formData)}
+                />
+              </ButtonGroup>
+            </div>
+            <p />
             <Row>
               <Col lg={6}>
-                <div>
-                  <ButtonGroup>
-                    {isAuthorOfPipeline(pipeline.id) &&
-                      <LinkContainer
-                        to={PIPELINE_EDIT_URI_FACTORY(pipeline.id)}
-                      >
-                        <Button bsStyle="warning" bsSize="sm">
-                          <EditIcon />
-                          &nbsp;
-                          <FormattedMessage
-                            id="app.pipeline.editSettings"
-                            defaultMessage="Edit pipeline"
-                          />
-                        </Button>
-                      </LinkContainer>}
-                    <ForkPipelineForm
-                      pipelineId={pipeline.id}
-                      exercises={exercises}
-                      forkId={this.state.forkId}
-                      onSubmit={formData => forkPipeline(forkId, formData)}
-                    />
-                  </ButtonGroup>
-                </div>
-                <p />
                 <PipelineDetail {...pipeline} />
               </Col>
               <Col lg={6}>

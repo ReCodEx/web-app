@@ -45,6 +45,7 @@ class SubmitButton extends Component {
       invalid,
       asyncValidating = false,
       noIcons = false,
+      disabled = false,
       messages: {
         submit: submitMsg = (
           <FormattedMessage
@@ -91,7 +92,9 @@ class SubmitButton extends Component {
             : hasFailed ? 'danger' : dirty ? 'warning' : 'success'
         }
         className="btn-flat"
-        disabled={invalid || asyncValidating !== false || submitting}
+        disabled={
+          invalid || asyncValidating !== false || submitting || disabled
+        }
       >
         {!submitting
           ? hasSucceeded
@@ -128,6 +131,7 @@ SubmitButton.propTypes = {
   asyncValidating: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
   noIcons: PropTypes.bool,
   invalid: PropTypes.bool,
+  disabled: PropTypes.bool,
   reset: PropTypes.func,
   messages: PropTypes.shape({
     submit: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),

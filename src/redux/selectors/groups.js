@@ -12,27 +12,27 @@ import { isReady, getId, getJsData } from '../helpers/resourceManager';
  * Select groups part of the state
  */
 
-export const groupsSelectors = state => state.groups.get('resources');
+export const groupsSelector = state => state.groups.get('resources');
 const filterGroups = (ids, groups) =>
   groups.filter(isReady).filter(group => ids.contains(getId(group)));
 
 export const groupSelector = id =>
-  createSelector(groupsSelectors, groups => groups.get(id));
+  createSelector(groupsSelector, groups => groups.get(id));
 
 export const studentOfSelector = userId =>
   createSelector(
-    [studentOfGroupsIdsSelector(userId), groupsSelectors],
+    [studentOfGroupsIdsSelector(userId), groupsSelector],
     filterGroups
   );
 
 export const supervisorOfSelector = userId =>
   createSelector(
-    [supervisorOfGroupsIdsSelector(userId), groupsSelectors],
+    [supervisorOfGroupsIdsSelector(userId), groupsSelector],
     filterGroups
   );
 
 export const studentOfSelector2 = userId =>
-  createSelector(groupsSelectors, groups =>
+  createSelector(groupsSelector, groups =>
     groups
       .filter(isReady)
       .map(getJsData)
@@ -40,7 +40,7 @@ export const studentOfSelector2 = userId =>
   );
 
 export const supervisorOfSelector2 = userId =>
-  createSelector(groupsSelectors, groups =>
+  createSelector(groupsSelector, groups =>
     groups
       .filter(isReady)
       .map(getJsData)
@@ -48,7 +48,7 @@ export const supervisorOfSelector2 = userId =>
   );
 
 export const adminOfSelector = userId =>
-  createSelector(groupsSelectors, groups =>
+  createSelector(groupsSelector, groups =>
     groups
       .filter(isReady)
       .map(getJsData)
@@ -97,4 +97,4 @@ const getGroupParentIds = (id, groups) => {
 };
 
 export const allParentIdsForGroup = id =>
-  createSelector(groupsSelectors, groups => getGroupParentIds(id, groups));
+  createSelector(groupsSelector, groups => getGroupParentIds(id, groups));
