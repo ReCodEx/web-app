@@ -59,6 +59,7 @@ const renderWithoutSSR = (res, renderProps) => {
 };
 
 const renderPage = (res, store, renderProps) => {
+  let reduxState = serialize(store.getState(), { isJSON: true });
   let html = renderToString(
     <Provider store={store}>
       <RouterContext {...renderProps} />
@@ -69,7 +70,7 @@ const renderPage = (res, store, renderProps) => {
   res.render('index', {
     html,
     head,
-    reduxState: serialize(store.getState(), { isJSON: true }),
+    reduxState,
     bundle,
     style: '/style.css'
   });
