@@ -9,8 +9,6 @@ import LicencesTable from '../../components/Instances/LicencesTable';
 import { fetchInstanceLincences } from '../../redux/modules/licences';
 import { getLicencesOfInstance } from '../../redux/selectors/licences';
 
-import { clientOnly } from '../../helpers/clientOnly';
-
 class LicencesTableContainer extends Component {
   static loadAsync = ({ instanceId }, dispatch) =>
     dispatch(fetchInstanceLincences(instanceId));
@@ -44,8 +42,6 @@ export default connect(
   }),
   (dispatch, { instance }) => ({
     loadAsync: () =>
-      clientOnly(() =>
-        LicencesTableContainer.loadAsync({ instanceId: instance.id }, dispatch)
-      )
+      LicencesTableContainer.loadAsync({ instanceId: instance.id }, dispatch)
   })
 )(LicencesTableContainer);

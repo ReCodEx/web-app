@@ -61,7 +61,6 @@ import {
   groupsSelector
 } from '../../redux/selectors/groups';
 
-import { clientOnly } from '../../helpers/clientOnly';
 import withLinks from '../../hoc/withLinks';
 import { getLocalizedName } from '../../helpers/getLocalizedData';
 
@@ -83,7 +82,7 @@ const messages = defineMessages({
 class Exercise extends Component {
   state = { forkId: null };
 
-  static loadAsync = (dispatch, exerciseId, userId) =>
+  static loadAsync = ({ exerciseId }, dispatch, userId) =>
     Promise.all([
       dispatch(fetchExerciseIfNeeded(exerciseId)),
       dispatch(fetchReferenceSolutionsIfNeeded(exerciseId)),
@@ -482,8 +481,7 @@ export default withLinks(
         };
       },
       (dispatch, { params: { exerciseId } }) => ({
-        loadAsync: userId =>
-          clientOnly(() => Exercise.loadAsync(dispatch, exerciseId, userId)),
+        loadAsync: userId => Exercise.loadAsync({ exerciseId }, dispatch, userId),
         assignExercise: groupId =>
           dispatch(assignExercise(groupId, exerciseId)),
         push: url => dispatch(push(url)),
