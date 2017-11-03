@@ -12,17 +12,17 @@ import GroupsName, {
 
 class GroupsNameContainer extends Component {
   componentWillMount() {
-    GroupsNameContainer.loadData(this.props);
+    this.props.loadAsync();
   }
 
   componentWillReceiveProps(newProps) {
     if (this.props.groupId !== newProps.groupId) {
-      GroupsNameContainer.loadData(newProps);
+      newProps.loadAsync();
     }
   }
 
-  static loadData = ({ loadGroupIfNeeded }) => {
-    loadGroupIfNeeded();
+  static loadAsync = ({ groupId }, dispatch) => {
+    dispatch(fetchPublicGroupIfNeeded(groupId));
   };
 
   render() {
@@ -38,7 +38,8 @@ class GroupsNameContainer extends Component {
 GroupsNameContainer.propTypes = {
   groupId: PropTypes.string.isRequired,
   group: ImmutablePropTypes.map,
-  noLink: PropTypes.bool
+  noLink: PropTypes.bool,
+  loadAsync: PropTypes.func.isRequired
 };
 
 export default connect(
@@ -46,6 +47,6 @@ export default connect(
     group: publicGroupSelector(groupId)(state)
   }),
   (dispatch, { groupId }) => ({
-    loadGroupIfNeeded: () => dispatch(fetchPublicGroupIfNeeded(groupId))
+    loadAsync: () => GroupsNameContainer.loadAsync({ groupId }, dispatch)
   })
 )(GroupsNameContainer);
