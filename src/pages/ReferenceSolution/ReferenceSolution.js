@@ -12,7 +12,6 @@ import { Row, Col, Button } from 'react-bootstrap';
 
 import withLinks from '../../hoc/withLinks';
 import Page from '../../components/layout/Page';
-import { clientOnly } from '../../helpers/clientOnly';
 
 import {
   fetchReferenceSolutionsIfNeeded,
@@ -212,8 +211,7 @@ export default withLinks(
         referenceSolutions: referenceSolutionsSelector(exerciseId)(state)
       }),
       (dispatch, { params }) => ({
-        loadAsync: () =>
-          clientOnly(() => ReferenceSolution.loadAsync(params, dispatch)),
+        loadAsync: () => ReferenceSolution.loadAsync(params, dispatch),
         refreshSolutionEvaluations: () => {
           dispatch(fetchReferenceSolutions(params.exerciseId));
         },
