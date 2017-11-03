@@ -55,7 +55,6 @@ import { exercisePipelinesSelector } from '../../redux/selectors/pipelines';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import { supervisorOfSelector } from '../../redux/selectors/groups';
 
-import { clientOnly } from '../../helpers/clientOnly';
 import withLinks from '../../hoc/withLinks';
 import { getLocalizedName } from '../../helpers/getLocalizedData';
 
@@ -468,8 +467,7 @@ export default withLinks(
         };
       },
       (dispatch, { params: { exerciseId } }) => ({
-        loadAsync: () =>
-          clientOnly(() => Exercise.loadAsync(dispatch, exerciseId)),
+        loadAsync: () => Exercise.loadAsync(dispatch, exerciseId),
         assignExercise: groupId =>
           dispatch(assignExercise(groupId, exerciseId)),
         push: url => dispatch(push(url)),

@@ -22,7 +22,6 @@ import {
   isSuperAdmin
 } from '../../redux/selectors/users';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
-import { clientOnly } from '../../helpers/clientOnly';
 import { getLocalizedName } from '../../helpers/getLocalizedData';
 
 class Submission extends Component {
@@ -150,7 +149,7 @@ export default injectIntl(
         isSuperAdmin(loggedInUserIdSelector(state))(state)
     }),
     (dispatch, { params }) => ({
-      loadAsync: () => clientOnly(() => Submission.loadAsync(params, dispatch))
+      loadAsync: () => Submission.loadAsync(params, dispatch)
     })
   )(Submission)
 );

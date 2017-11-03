@@ -11,7 +11,6 @@ import UsersName, {
   LoadingUsersName,
   FailedUsersName
 } from '../../components/Users/UsersName';
-import { clientOnly } from '../../helpers/clientOnly';
 
 class UsersNameContainer extends Component {
   componentWillMount() {
@@ -66,7 +65,6 @@ export default connect(
   }),
   (dispatch, { userId }) => ({
     loadProfileIfNeeded: () => dispatch(fetchProfileIfNeeded(userId)),
-    loadData: () =>
-      clientOnly(() => UsersNameContainer.loadData(userId, dispatch))
+    loadData: () => UsersNameContainer.loadData(userId, dispatch)
   })
 )(UsersNameContainer);
