@@ -10,6 +10,7 @@ import SubmissionDetail, {
 } from '../../components/Submissions/SubmissionDetail';
 import AcceptSolutionContainer from '../../containers/AcceptSolutionContainer';
 import ResubmitSolutionContainer from '../../containers/ResubmitSolutionContainer';
+import HierarchyLineContainer from '../../containers/HierarchyLineContainer';
 
 import { fetchGroupsStats } from '../../redux/modules/stats';
 import { fetchAssignmentIfNeeded } from '../../redux/modules/assignments';
@@ -106,6 +107,7 @@ class Submission extends Component {
         >
           {(submission, assignment) =>
             <div>
+              <HierarchyLineContainer groupId={assignment.groupId} />
               {isSupervisorOrMore(assignment.groupId) &&
                 <p>
                   <AcceptSolutionContainer id={submission.id} />

@@ -7,7 +7,6 @@ import { LinkContainer } from 'react-router-bootstrap';
 import Button from '../../components/widgets/FlatButton';
 import { FormattedMessage } from 'react-intl';
 import { List, Map } from 'immutable';
-import { Well } from 'react-bootstrap';
 
 import Page from '../../components/layout/Page';
 import GroupDetail, {
@@ -18,8 +17,8 @@ import LeaveJoinGroupButtonContainer from '../../containers/LeaveJoinGroupButton
 import AdminsView from '../../components/Groups/AdminsView';
 import SupervisorsView from '../../components/Groups/SupervisorsView';
 import StudentsView from '../../components/Groups/StudentsView';
+import HierarchyLine from '../../components/Groups/HierarchyLine';
 import { EditIcon } from '../../components/icons';
-import GroupsNameContainer from '../../containers/GroupsNameContainer';
 
 import { isReady, getJsData } from '../../redux/helpers/resourceManager';
 import {
@@ -63,7 +62,6 @@ import { fetchInstanceIfNeeded } from '../../redux/modules/instances';
 import { instanceSelector } from '../../redux/selectors/instances';
 
 import withLinks from '../../hoc/withLinks';
-import './Group.css';
 
 class Group extends Component {
   static isAdminOrSupervisorOf = (group, userId) =>
@@ -203,19 +201,11 @@ class Group extends Component {
       >
         {data =>
           <div>
-            <Well bsSize="sm" className="groupParents">
-              {data.parentGroupsIds.map(
-                (groupId, i) =>
-                  i !== 0 &&
-                  <span key={i}>
-                    <GroupsNameContainer groupId={groupId} />{' '}
-                    <span style={{ margin: '0 5px', color: '#aaa' }}>/</span>
-                  </span>
-              )}
-              <GroupsNameContainer groupId={data.id} noLink />
-            </Well>
-
-            {data.parentGroupsIds.length > 1 && <p />}
+            <HierarchyLine
+              groupId={data.id}
+              parentGroupsIds={data.parentGroupsIds}
+            />
+            <p />
             {(isAdmin || isSuperAdmin) &&
               <p>
                 <LinkContainer to={GROUP_EDIT_URI_FACTORY(data.id)}>
