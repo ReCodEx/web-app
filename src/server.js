@@ -88,7 +88,7 @@ app.get('*', (req, res) => {
     { history, routes: createRoutes(store.getState), location },
     (error, redirectLocation, renderProps) => {
       if (redirectLocation) {
-        res.redirect(301, redirectLocation.pathname + redirectLocation.search);
+        res.redirect(302, redirectLocation.pathname + redirectLocation.search);
       } else if (error) {
         // @todo use the 500.ejs view
         res.status(500).send(error.message);
