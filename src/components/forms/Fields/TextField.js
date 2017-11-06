@@ -27,7 +27,11 @@ const TextField = ({
       {...input}
       {...props}
       type={type}
-      value={Array.isArray(value) ? value[0] : value}
+      value={
+        typeof value === 'string' || typeof value === 'number'
+          ? value
+          : value[0]
+      }
     />
     {error &&
       <HelpBlock>
