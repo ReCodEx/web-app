@@ -6,28 +6,19 @@ import { List } from 'immutable';
 
 import { fetchUsersSubmissions } from '../../redux/modules/submissions';
 import SubmissionsTable from '../../components/Assignments/SubmissionsTable';
-import { loggedInUserIdSelector } from '../../redux/selectors/auth';
-import {
-  createGetUsersSubmissionsForAssignment
-} from '../../redux/selectors/assignments';
+import { createGetUsersSubmissionsForAssignment } from '../../redux/selectors/assignments';
 
 class SubmissionsTableContainer extends Component {
-  componentWillMount() {
-    SubmissionsTableContainer.loadData(this.props);
-  }
+  componentWillMount = () => this.props.loadAsync();
 
   componentWillReceiveProps(newProps) {
     if (
       this.props.assignmentId !== newProps.assignmentId ||
       this.props.userId !== newProps.userId
     ) {
-      SubmissionsTableContainer.loadData(newProps);
+      newProps.loadAsync();
     }
   }
-
-  static loadData = ({ userId, assignmentId, loadSubmissionsForUser }) => {
-    loadSubmissionsForUser(userId, assignmentId);
-  };
 
   sortSubmissions(submissions) {
     return submissions.sort((a, b) => {
@@ -65,20 +56,19 @@ SubmissionsTableContainer.propTypes = {
   userId: PropTypes.string.isRequired,
   title: PropTypes.string,
   assignmentId: PropTypes.string.isRequired,
-  submissions: PropTypes.instanceOf(List)
+  submissions: PropTypes.instanceOf(List),
+  loadAsync: PropTypes.func.isRequired
 };
 
 export default connect(
-  (state, props) => {
+  (state, { userId, assignmentId }) => {
     const getSubmissions = createGetUsersSubmissionsForAssignment();
-    const userId = props.userId ? props.userId : loggedInUserIdSelector(state);
     return {
       userId,
-      submissions: getSubmissions(state, userId, props.assignmentId)
+      submissions: getSubmissions(state, userId, assignmentId)
     };
   },
-  (dispatch, props) => ({
-    loadSubmissionsForUser: (userId, assignmentId) =>
-      dispatch(fetchUsersSubmissions(userId, assignmentId))
+  (dispatch, { userId, assignmentId }) => ({
+    loadAsync: () => dispatch(fetchUsersSubmissions(userId, assignmentId))
   })
 )(SubmissionsTableContainer);

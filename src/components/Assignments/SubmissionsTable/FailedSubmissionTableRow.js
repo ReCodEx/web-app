@@ -15,10 +15,13 @@ const FailedSubmissionTableRow = ({
   note,
   submittedAt,
   maxPoints,
-  evaluation: { score, points, bonusPoints }
-}) => (
+  evaluation: { score, points, bonusPoints },
+  accepted
+}) =>
   <tr>
-    <td><AssignmentStatusIcon id={link} status="failed" /></td>
+    <td>
+      <AssignmentStatusIcon id={link} status="failed" accepted={accepted} />
+    </td>
     <td>
       <FormattedDate value={submittedAt * 1000} />
       &nbsp;
@@ -49,8 +52,7 @@ const FailedSubmissionTableRow = ({
         />
       </Link>
     </td>
-  </tr>
-);
+  </tr>;
 
 FailedSubmissionTableRow.propTypes = {
   link: PropTypes.string.isRequired,
@@ -60,7 +62,8 @@ FailedSubmissionTableRow.propTypes = {
   evaluation: PropTypes.shape({
     score: PropTypes.number.isRequired,
     points: PropTypes.number.isRequired
-  }).isRequired
+  }).isRequired,
+  accepted: PropTypes.bool
 };
 
 export default FailedSubmissionTableRow;

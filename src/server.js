@@ -59,6 +59,7 @@ const renderWithoutSSR = (res, renderProps) => {
 };
 
 const renderPage = (res, store, renderProps) => {
+  let reduxState = serialize(store.getState(), { isJSON: true });
   let html = renderToString(
     <Provider store={store}>
       <RouterContext {...renderProps} />
@@ -69,7 +70,7 @@ const renderPage = (res, store, renderProps) => {
   res.render('index', {
     html,
     head,
-    reduxState: serialize(store.getState(), { isJSON: true }),
+    reduxState,
     bundle,
     style: '/style.css'
   });
@@ -87,7 +88,7 @@ app.get('*', (req, res) => {
     { history, routes: createRoutes(store.getState), location },
     (error, redirectLocation, renderProps) => {
       if (redirectLocation) {
-        res.redirect(301, redirectLocation.pathname + redirectLocation.search);
+        res.redirect(302, redirectLocation.pathname + redirectLocation.search);
       } else if (error) {
         // @todo use the 500.ejs view
         res.status(500).send(error.message);
@@ -97,20 +98,18 @@ app.get('*', (req, res) => {
       } else {
         const userId = loggedInUserIdSelector(store.getState()); // try to get the user ID from the token (if any)
         const loadAsync = renderProps.components
-          .filter(
-            component =>
-              component &&
-              component.WrappedComponent &&
-              component.WrappedComponent.loadAsync
-          )
+          .filter(component => component)
           .map(component => {
             // there might be several layers of wrapping - connect, withLinks, ...
             while (component.WrappedComponent) {
               component = component.WrappedComponent;
             }
-            return component.loadAsync;
+            return component;
           })
-          .map(load => load(renderProps.params, store.dispatch, userId));
+          .filter(component => component.loadAsync)
+          .map(component =>
+            component.loadAsync(renderProps.params, store.dispatch, userId)
+          );
 
         Promise.all(loadAsync)
           .then(() => renderPage(res, store, renderProps))

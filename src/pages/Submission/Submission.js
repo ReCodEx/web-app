@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
 import Page from '../../components/layout/Page';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
@@ -10,6 +10,7 @@ import SubmissionDetail, {
 } from '../../components/Submissions/SubmissionDetail';
 import AcceptSolutionContainer from '../../containers/AcceptSolutionContainer';
 import ResubmitSolutionContainer from '../../containers/ResubmitSolutionContainer';
+import HierarchyLineContainer from '../../containers/HierarchyLineContainer';
 
 import { fetchGroupsStats } from '../../redux/modules/stats';
 import { fetchAssignmentIfNeeded } from '../../redux/modules/assignments';
@@ -22,7 +23,7 @@ import {
   isSuperAdmin
 } from '../../redux/selectors/users';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
-import { clientOnly } from '../../helpers/clientOnly';
+import { getLocalizedName } from '../../helpers/getLocalizedData';
 
 class Submission extends Component {
   static loadAsync = ({ submissionId, assignmentId }, dispatch) =>
@@ -48,13 +49,14 @@ class Submission extends Component {
       assignment,
       submission,
       params: { assignmentId },
-      isSupervisorOrMore
+      isSupervisorOrMore,
+      intl: { locale }
     } = this.props;
 
     return (
       <Page
         resource={assignment}
-        title={assignment => assignment.name}
+        title={assignment => getLocalizedName(assignment, locale)}
         description={
           <FormattedMessage
             id="app.submission.evaluation.title"
@@ -104,6 +106,7 @@ class Submission extends Component {
         >
           {(submission, assignment) =>
             <div>
+              <HierarchyLineContainer groupId={assignment.groupId} />
               {isSupervisorOrMore(assignment.groupId) &&
                 <p>
                   <AcceptSolutionContainer id={submission.id} />
@@ -133,19 +136,22 @@ Submission.propTypes = {
   children: PropTypes.element,
   submission: PropTypes.object,
   loadAsync: PropTypes.func.isRequired,
-  isSupervisorOrMore: PropTypes.func.isRequired
+  isSupervisorOrMore: PropTypes.func.isRequired,
+  intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired
 };
 
-export default connect(
-  (state, { params: { submissionId, assignmentId } }) => ({
-    submission: getSubmission(submissionId)(state),
-    assignment: getAssignment(assignmentId)(state),
-    isSupervisorOrMore: groupId =>
-      isSupervisorOf(loggedInUserIdSelector(state), groupId)(state) ||
-      isAdminOf(loggedInUserIdSelector(state), groupId)(state) ||
-      isSuperAdmin(loggedInUserIdSelector(state))(state)
-  }),
-  (dispatch, { params }) => ({
-    loadAsync: () => clientOnly(() => Submission.loadAsync(params, dispatch))
-  })
-)(Submission);
+export default injectIntl(
+  connect(
+    (state, { params: { submissionId, assignmentId } }) => ({
+      submission: getSubmission(submissionId)(state),
+      assignment: getAssignment(assignmentId)(state),
+      isSupervisorOrMore: groupId =>
+        isSupervisorOf(loggedInUserIdSelector(state), groupId)(state) ||
+        isAdminOf(loggedInUserIdSelector(state), groupId)(state) ||
+        isSuperAdmin(loggedInUserIdSelector(state))(state)
+    }),
+    (dispatch, { params }) => ({
+      loadAsync: () => Submission.loadAsync(params, dispatch)
+    })
+  )(Submission)
+);

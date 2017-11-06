@@ -5,7 +5,12 @@ import PropTypes from 'prop-types';
 
 import GroupExercisesListItem from '../ExercisesSimpleListItem';
 
-const ExercisesSimpleList = ({ exercises, createActions, intl, ...rest }) =>
+const ExercisesSimpleList = ({
+  exercises,
+  createActions,
+  intl: { locale },
+  ...rest
+}) =>
   <Table>
     <thead>
       <tr>
@@ -33,7 +38,7 @@ const ExercisesSimpleList = ({ exercises, createActions, intl, ...rest }) =>
     <tbody>
       {exercises
         .sort((a, b) => {
-          var tmp = a.name.localeCompare(b.name, intl.locale);
+          var tmp = a.name.localeCompare(b.name, locale);
           if (tmp === 0) {
             return b.createdAt - a.createdAt;
           } else {
@@ -44,6 +49,7 @@ const ExercisesSimpleList = ({ exercises, createActions, intl, ...rest }) =>
           <GroupExercisesListItem
             {...exercise}
             createActions={createActions}
+            locale={locale}
             key={exercise.id}
           />
         )}

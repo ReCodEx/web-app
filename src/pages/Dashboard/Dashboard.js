@@ -39,7 +39,7 @@ import {
   groupsAssignmentsSelector,
   supervisorOfSelector,
   studentOfSelector,
-  groupsSelectors
+  groupsSelector
 } from '../../redux/selectors/groups';
 import { InfoIcon } from '../../components/icons';
 import { getJsData } from '../../redux/helpers/resourceManager';
@@ -362,7 +362,7 @@ export default withLinks(
         groupStatistics: groupId => createGroupsStatsSelector(groupId)(state),
         usersStatistics: statistics =>
           statistics.find(stat => stat.userId === userId) || {},
-        allGroups: groupsSelectors(state).toArray(),
+        allGroups: groupsSelector(state).toArray(),
         isAdmin: isSuperAdmin(userId)(state)
       };
     },

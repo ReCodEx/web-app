@@ -9,7 +9,7 @@ const createDependency = (from, to, clusterTo = null) => {
   return dep;
 };
 
-const createDotForPorts = ports =>
+const createDotForPorts = (name, ports) =>
   Object.keys(ports)
     .map(portName => ports[portName].value)
     .filter(value => value.length > 0)
@@ -22,8 +22,8 @@ const createDotForNodeFactory = dependencies => (
   i
 ) => {
   let hasFullSupport = true;
-  const inputs = createDotForPorts(portsIn);
-  const outputs = createDotForPorts(portsOut);
+  const inputs = createDotForPorts(name, portsIn);
+  const outputs = createDotForPorts(name, portsOut);
 
   return `
       subgraph cluster_${i} {

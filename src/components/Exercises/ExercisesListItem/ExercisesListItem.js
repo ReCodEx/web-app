@@ -8,6 +8,7 @@ import GroupsNameContainer from '../../../containers/GroupsNameContainer';
 import { Link } from 'react-router';
 
 import withLinks from '../../../hoc/withLinks';
+import { getLocalizedName } from '../../../helpers/getLocalizedData';
 import { MaybeLockedExerciseIcon } from '../../icons';
 
 const ExercisesListItem = ({
@@ -16,11 +17,13 @@ const ExercisesListItem = ({
   difficulty,
   authorId,
   groupsIds = [],
+  localizedTexts,
   createdAt,
   isLocked,
   createActions,
+  locale,
   links: { EXERCISE_URI_FACTORY }
-}) => (
+}) =>
   <tr>
     <td className="text-center">
       <Icon name="code" />
@@ -28,27 +31,27 @@ const ExercisesListItem = ({
     <td>
       <MaybeLockedExerciseIcon id={id} isLocked={isLocked} />
       <strong>
-        <Link to={EXERCISE_URI_FACTORY(id)}>{name}</Link>
+        <Link to={EXERCISE_URI_FACTORY(id)}>
+          {getLocalizedName({ name, localizedTexts }, locale)}
+        </Link>
       </strong>
     </td>
     <td>
       <UsersNameContainer userId={authorId} />
     </td>
     <td>
-      {groupsIds.length > 0 ? (
-        groupsIds.map((groupId, i) => (
-          <div key={i}>
-            <GroupsNameContainer groupId={groupId} />
-          </div>
-        ))
-      ) : (
-        <i>
-          <FormattedMessage
-            id="app.exercisesListItem.group.public"
-            defaultMessage="Public"
-          />
-        </i>
-      )}
+      {groupsIds.length > 0
+        ? groupsIds.map((groupId, i) =>
+            <div key={i}>
+              <GroupsNameContainer groupId={groupId} />
+            </div>
+          )
+        : <i>
+            <FormattedMessage
+              id="app.exercisesListItem.group.public"
+              defaultMessage="Public"
+            />
+          </i>}
     </td>
     <td>
       <DifficultyIcon difficulty={difficulty} />
@@ -57,9 +60,11 @@ const ExercisesListItem = ({
       <FormattedDate value={createdAt * 1000} />{' '}
       <FormattedTime value={createdAt * 1000} />
     </td>
-    {createActions && <td className="text-right">{createActions(id)}</td>}
-  </tr>
-);
+    {createActions &&
+      <td className="text-right">
+        {createActions(id)}
+      </td>}
+  </tr>;
 
 ExercisesListItem.propTypes = {
   id: PropTypes.string.isRequired,
@@ -69,7 +74,9 @@ ExercisesListItem.propTypes = {
   difficulty: PropTypes.string.isRequired,
   createdAt: PropTypes.number.isRequired,
   isLocked: PropTypes.bool.isRequired,
+  localizedTexts: PropTypes.array.isRequired,
   createActions: PropTypes.func,
+  locale: PropTypes.string.isRequired,
   links: PropTypes.object
 };
 

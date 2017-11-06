@@ -14,6 +14,7 @@ import { fetchGroupIfNeeded } from '../../redux/modules/groups';
 
 import Page from '../../components/layout/Page';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
+import HierarchyLineContainer from '../../containers/HierarchyLineContainer';
 
 class AssignmentStats extends Component {
   static loadAsync = ({ assignmentId }, dispatch) =>
@@ -106,6 +107,7 @@ class AssignmentStats extends Component {
       >
         {assignment =>
           <div>
+            <HierarchyLineContainer groupId={assignment.groupId} />
             <ResourceRenderer resource={getGroup(assignment.groupId)}>
               {group =>
                 <div>

@@ -5,7 +5,12 @@ import { injectIntl, FormattedMessage } from 'react-intl';
 
 import ExercisesListItem from '../ExercisesListItem';
 
-const ExercisesList = ({ exercises = [], createActions, intl, ...rest }) =>
+const ExercisesList = ({
+  exercises = [],
+  createActions,
+  intl: { locale },
+  ...rest
+}) =>
   <Table hover>
     <thead>
       <tr>
@@ -44,13 +49,13 @@ const ExercisesList = ({ exercises = [], createActions, intl, ...rest }) =>
         .filter(e => e !== null)
         .sort(
           (a, b) =>
-            a.name.localeCompare(b.name, intl.locale) ||
-            b.createdAt - a.createdAt
+            a.name.localeCompare(b.name, locale) || b.createdAt - a.createdAt
         )
         .map(exercise =>
           <ExercisesListItem
             {...exercise}
             createActions={createActions}
+            locale={locale}
             key={exercise.id}
           />
         )}

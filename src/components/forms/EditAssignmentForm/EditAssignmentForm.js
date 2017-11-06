@@ -1,26 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { canUseDOM } from 'exenv';
 import { reduxForm, Field, FieldArray, touch } from 'redux-form';
-import { FormattedHTMLMessage, FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import { Alert, HelpBlock } from 'react-bootstrap';
 import isNumeric from 'validator/lib/isNumeric';
 
 import FormBox from '../../widgets/FormBox';
-import {
-  DatetimeField,
-  TextField,
-  CheckboxField,
-  SourceCodeField
-} from '../Fields';
+import { DatetimeField, TextField, CheckboxField } from '../Fields';
 import LocalizedTextsFormField from '../LocalizedTextsFormField';
 import SubmitButton from '../SubmitButton';
 
 import { validateAssignment } from '../../../redux/modules/assignments';
-
-if (canUseDOM) {
-  require('codemirror/mode/yaml/yaml');
-}
+import { getLocalizedName } from '../../../helpers/getLocalizedData';
 
 const EditAssignmentForm = ({
   initialValues: assignment,
@@ -31,7 +22,8 @@ const EditAssignmentForm = ({
   submitSucceeded: hasSucceeded,
   asyncValidating,
   invalid,
-  formValues: { firstDeadline, allowSecondDeadline, localizedTexts } = {}
+  formValues: { firstDeadline, allowSecondDeadline, localizedTexts } = {},
+  intl: { locale }
 }) =>
   <div>
     <FormBox
@@ -39,7 +31,7 @@ const EditAssignmentForm = ({
         <FormattedMessage
           id="app.editAssignmentForm.title"
           defaultMessage="Edit assignment {name}"
-          values={{ name: assignment.name }}
+          values={{ name: getLocalizedName(assignment, locale) }}
         />
       }
       successful={hasSucceeded}
@@ -88,52 +80,11 @@ const EditAssignmentForm = ({
           />
         </Alert>}
 
-      <Field
-        name="name"
-        component={TextField}
-        label={
-          <FormattedMessage
-            id="app.editAssignmentForm.name"
-            defaultMessage="Assignment default name:"
-          />
-        }
-      />
-
-      <Field
-        name="isPublic"
-        component={CheckboxField}
-        onOff
-        label={
-          <FormattedMessage
-            id="app.editAssignmentForm.isPublic"
-            defaultMessage="Visible to students"
-          />
-        }
-      />
-
       <FieldArray
         name="localizedTexts"
         localizedTexts={localizedTexts}
         component={LocalizedTextsFormField}
       />
-
-      <Field
-        name="scoreConfig"
-        component={SourceCodeField}
-        mode="yaml"
-        label={
-          <FormattedMessage
-            id="app.editAssignmentForm.scoreConfig"
-            defaultMessage="Score configuration:"
-          />
-        }
-      />
-      <HelpBlock>
-        <FormattedHTMLMessage
-          id="app.editAssignmentForm.moreAboutScoreConfig"
-          defaultMessage="Read more about <a href='https://github.com/ReCodEx/wiki/wiki/Assignments#scoring'>score configuration</a> syntax."
-        />
-      </HelpBlock>
 
       <Field
         name="firstDeadline"
@@ -250,6 +201,18 @@ const EditAssignmentForm = ({
           />
         }
       />
+
+      <Field
+        name="isPublic"
+        component={CheckboxField}
+        onOff
+        label={
+          <FormattedMessage
+            id="app.editAssignmentForm.isPublic"
+            defaultMessage="Visible to students"
+          />
+        }
+      />
     </FormBox>
   </div>;
 
@@ -270,7 +233,8 @@ EditAssignmentForm.propTypes = {
       PropTypes.string
     ]),
     localizedTexts: PropTypes.array
-  })
+  }),
+  intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired
 };
 
 const isNonNegativeInteger = n =>
@@ -296,15 +260,6 @@ const validate = ({
 }) => {
   const errors = {};
 
-  if (!name) {
-    errors['name'] = (
-      <FormattedMessage
-        id="app.editAssignmentForm.validation.emptyName"
-        defaultMessage="Please fill the name of the assignment."
-      />
-    );
-  }
-
   if (localizedTexts.length < 1) {
     errors['_error'] = (
       <FormattedMessage
@@ -325,6 +280,15 @@ const validate = ({
         />
       );
     } else {
+      if (!localizedTexts[i].name) {
+        localeErrors['name'] = (
+          <FormattedMessage
+            id="app.editAssignmentForm.validation.emptyName"
+            defaultMessage="Please fill the name of the assignment."
+          />
+        );
+      }
+
       if (!localizedTexts[i].locale) {
         localeErrors['locale'] = (
           <FormattedMessage
@@ -477,8 +441,10 @@ const asyncValidate = (values, dispatch, { assignment: { id, version } }) =>
       .catch(errors => reject(errors))
   );
 
-export default reduxForm({
-  form: 'editAssignment',
-  validate,
-  asyncValidate
-})(EditAssignmentForm);
+export default injectIntl(
+  reduxForm({
+    form: 'editAssignment',
+    validate,
+    asyncValidate
+  })(EditAssignmentForm)
+);

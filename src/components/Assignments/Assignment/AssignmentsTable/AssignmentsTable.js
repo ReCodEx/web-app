@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { List } from 'immutable';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { Table } from 'react-bootstrap';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
 import {
   isReady,
@@ -48,7 +48,8 @@ const AssignmentsTable = ({
   assignments = List(),
   statuses = [],
   showGroup = true,
-  userId = null
+  userId = null,
+  intl: { locale }
 }) =>
   <Table hover>
     <thead>
@@ -97,6 +98,7 @@ const AssignmentsTable = ({
             userId={userId}
             showGroup={showGroup}
             status={statuses[assignment.id]}
+            locale={locale}
           />
         )}
     </tbody>
@@ -106,7 +108,8 @@ AssignmentsTable.propTypes = {
   assignments: ImmutablePropTypes.list.isRequired,
   showGroup: PropTypes.bool,
   statuses: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
-  userId: PropTypes.string
+  userId: PropTypes.string,
+  intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired
 };
 
-export default AssignmentsTable;
+export default injectIntl(AssignmentsTable);

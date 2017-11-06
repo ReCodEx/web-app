@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import Box from '../../components/widgets/Box';
 import { Table, Accordion, Panel, Row, Col } from 'react-bootstrap';
 import Button from '../../components/widgets/FlatButton';
@@ -26,7 +26,25 @@ import SisBindGroupForm from '../../components/forms/SisBindGroupForm';
 import withLinks from '../../hoc/withLinks';
 import './SisSupervisorGroupsContainer.css';
 
-const days = ['Po', 'Út', 'St', 'Čt', 'Pá', 'So', 'Ne'];
+const days = {
+  cs: ['Po', 'Út', 'St', 'Čt', 'Pá', 'So', 'Ne'],
+  en: ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su']
+};
+
+const oddEven = {
+  cs: ['lichý', 'sudý'],
+  en: ['odd', 'even']
+};
+
+const getLocalizedData = (obj, locale) => {
+  if (obj && obj[locale]) {
+    return obj[locale];
+  } else if (obj && Object.keys(obj).length > 0) {
+    return Object.keys(obj)[0];
+  } else {
+    return null;
+  }
+};
 
 class SisSupervisorGroupsContainer extends Component {
   componentDidMount() {
@@ -60,7 +78,8 @@ class SisSupervisorGroupsContainer extends Component {
       createGroup,
       bindGroup,
       sisPossibleParents,
-      links: { GROUP_URI_FACTORY }
+      links: { GROUP_URI_FACTORY },
+      intl: { locale }
     } = this.props;
     return (
       <Box
@@ -115,16 +134,27 @@ class SisSupervisorGroupsContainer extends Component {
                                                 className="leftIcon"
                                               />}
                                             <span>
-                                              {course.course.captions.cs} (<code>{course.course.code}</code>){' '}
+                                              {getLocalizedData(
+                                                course.course.captions,
+                                                locale
+                                              )}{' '}
+                                              (<code>{course.course.code}</code>){' '}
                                             </span>
                                           </span>
                                           <span className="pull-right">
-                                            {days[course.course.dayOfWeek]}{' '}
+                                            {
+                                              getLocalizedData(days, locale)[
+                                                course.course.dayOfWeek
+                                              ]
+                                            }{' '}
                                             {course.course.time}{' '}
                                             {course.course.fortnightly
-                                              ? course.course.oddWeeks
-                                                ? '(lichý)'
-                                                : '(sudý)'
+                                              ? getLocalizedData(
+                                                  oddEven,
+                                                  locale
+                                                )[
+                                                  course.course.oddWeeks ? 0 : 1
+                                                ]
                                               : ''}
                                           </span>
                                         </span>
@@ -275,28 +305,32 @@ SisSupervisorGroupsContainer.propTypes = {
   createGroup: PropTypes.func.isRequired,
   bindGroup: PropTypes.func.isRequired,
   links: PropTypes.object,
-  sisPossibleParents: PropTypes.func.isRequired
+  sisPossibleParents: PropTypes.func.isRequired,
+  intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired
 };
 
-export default withLinks(
-  connect(
-    state => {
-      const currentUserId = loggedInUserIdSelector(state);
-      return {
-        sisStatus: sisStateSelector(state),
-        currentUserId,
-        sisCourses: (year, term) =>
-          sisSupervisedCoursesSelector(currentUserId, year, term)(state),
-        sisPossibleParents: courseId =>
-          sisPossibleParentsSelector(courseId)(state)
-      };
-    },
-    dispatch => ({
-      loadData: loggedInUserId =>
-        SisSupervisorGroupsContainer.loadData(dispatch, loggedInUserId),
-      createGroup: (courseId, data) => dispatch(sisCreateGroup(courseId, data)),
-      bindGroup: (courseId, data, userId, year, term) =>
-        dispatch(sisBindGroup(courseId, data, userId, year, term))
-    })
-  )(SisSupervisorGroupsContainer)
+export default injectIntl(
+  withLinks(
+    connect(
+      state => {
+        const currentUserId = loggedInUserIdSelector(state);
+        return {
+          sisStatus: sisStateSelector(state),
+          currentUserId,
+          sisCourses: (year, term) =>
+            sisSupervisedCoursesSelector(currentUserId, year, term)(state),
+          sisPossibleParents: courseId =>
+            sisPossibleParentsSelector(courseId)(state)
+        };
+      },
+      dispatch => ({
+        loadData: loggedInUserId =>
+          SisSupervisorGroupsContainer.loadData(dispatch, loggedInUserId),
+        createGroup: (courseId, data) =>
+          dispatch(sisCreateGroup(courseId, data)),
+        bindGroup: (courseId, data, userId, year, term) =>
+          dispatch(sisBindGroup(courseId, data, userId, year, term))
+      })
+    )(SisSupervisorGroupsContainer)
+  )
 );
