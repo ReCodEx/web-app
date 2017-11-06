@@ -11,8 +11,13 @@ import {
 } from '../Fields';
 import ResourceRenderer from '../../helpers/ResourceRenderer';
 
-const isArray = (type = '') =>
-  typeof type === 'string' && type.indexOf('[]') === type.length - 2;
+const isArray = (firstValue, type = '') =>
+  firstValue.length > 0 &&
+  firstValue[0] !== '$' &&
+  typeof type === 'string' &&
+  type.indexOf('[]') === type.length - 2;
+
+const firstValue = value => (Array.isArray(value) ? value[0] : value);
 
 const PipelineVariablesField = ({
   input,
@@ -63,7 +68,11 @@ const PipelineVariablesField = ({
             <Field
               key={value}
               name={`${input.name}.${value}`}
-              component={isArray(type) ? ExpandingTextField : TextField}
+              component={
+                isArray(firstValue(input.value[value]), type)
+                  ? ExpandingTextField
+                  : TextField
+              }
               label={`${atob(value)}: `}
             />}
         </div>
