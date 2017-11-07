@@ -8,7 +8,7 @@ import GroupsNameContainer from '../../../containers/GroupsNameContainer';
 import { Link } from 'react-router';
 
 import withLinks from '../../../hoc/withLinks';
-import { getLocalizedName } from '../../../helpers/getLocalizedData';
+import LocalizedExerciseName from '../../helpers/LocalizedExerciseName';
 import { MaybeLockedExerciseIcon } from '../../icons';
 
 const ExercisesListItem = ({
@@ -32,7 +32,7 @@ const ExercisesListItem = ({
       <MaybeLockedExerciseIcon id={id} isLocked={isLocked} />
       <strong>
         <Link to={EXERCISE_URI_FACTORY(id)}>
-          {getLocalizedName({ name, localizedTexts }, locale)}
+          <LocalizedExerciseName entity={{ name, localizedTexts }} />
         </Link>
       </strong>
     </td>

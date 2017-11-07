@@ -7,3 +7,10 @@ const getLocalizedX = field => (entity, locale) => {
 
 export const getLocalizedName = getLocalizedX('name');
 export const getLocalizedDescription = getLocalizedX('description');
+
+export const getOtherLocalizedNames = (entity, locale) => {
+  const name = getLocalizedName(entity, locale);
+  return entity.localizedTexts
+    .filter(text => text.name && text.name !== name)
+    .map(({ name, locale }) => ({ name, locale }));
+};

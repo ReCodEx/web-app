@@ -17,6 +17,7 @@ import Page from '../../components/layout/Page';
 import ExerciseDetail from '../../components/Exercises/ExerciseDetail';
 import LocalizedTexts from '../../components/helpers/LocalizedTexts';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
+import LocalizedExerciseName from '../../components/helpers/LocalizedExerciseName';
 import GroupsList from '../../components/Groups/GroupsList';
 import ReferenceSolutionsList from '../../components/Exercises/ReferenceSolutionsList';
 import SubmitSolutionContainer from '../../containers/SubmitSolutionContainer';
@@ -62,7 +63,6 @@ import {
 } from '../../redux/selectors/groups';
 
 import withLinks from '../../hoc/withLinks';
-import { getLocalizedName } from '../../helpers/getLocalizedData';
 
 const messages = defineMessages({
   groupsBox: {
@@ -158,7 +158,7 @@ class Exercise extends Component {
 
     return (
       <Page
-        title={exercise => getLocalizedName(exercise, locale)}
+        title={exercise => <LocalizedExerciseName entity={exercise} />}
         resource={exercise}
         description={
           <FormattedMessage

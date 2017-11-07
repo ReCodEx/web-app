@@ -18,9 +18,9 @@ import FormBox from '../../widgets/FormBox';
 import SubmitButton from '../SubmitButton';
 import Button from '../../widgets/FlatButton';
 import LocalizedTextsFormField from '../LocalizedTextsFormField';
+import LocalizedExerciseName from '../../helpers/LocalizedExerciseName';
 import { validateExercise } from '../../../redux/modules/exercises';
 import withLinks from '../../../hoc/withLinks';
-import { getLocalizedName } from '../../../helpers/getLocalizedData';
 
 if (canUseDOM) {
   require('codemirror/mode/yaml/yaml');
@@ -59,7 +59,7 @@ const EditExerciseForm = ({
       <FormattedMessage
         id="app.editExerciseForm.title"
         defaultMessage="Edit exercise {name}"
-        values={{ name: getLocalizedName(exercise, locale) }}
+        values={{ name: <LocalizedExerciseName entity={exercise} /> }}
       />
     }
     succeeded={hasSucceeded}

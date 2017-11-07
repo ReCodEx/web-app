@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router';
 
 import withLinks from '../../../hoc/withLinks';
-import { getLocalizedName } from '../../../helpers/getLocalizedData';
+import LocalizedExerciseName from '../../helpers/LocalizedExerciseName';
 
 import { MaybeLockedExerciseIcon } from '../../icons';
 
@@ -13,17 +13,16 @@ const ExercisesName = ({
   localizedTexts,
   isLocked,
   noLink,
-  locale,
   links: { EXERCISE_URI_FACTORY }
 }) =>
   <span>
     <MaybeLockedExerciseIcon id={id} isLocked={isLocked} />
     {noLink
       ? <span>
-          {getLocalizedName({ name, localizedTexts }, locale)}
+          <LocalizedExerciseName entity={{ name, localizedTexts }} />
         </span>
       : <Link to={EXERCISE_URI_FACTORY(id)}>
-          {getLocalizedName({ name, localizedTexts }, locale)}
+          <LocalizedExerciseName entity={{ name, localizedTexts }} />
         </Link>}
   </span>;
 
@@ -33,8 +32,7 @@ ExercisesName.propTypes = {
   localizedTexts: PropTypes.array.isRequired,
   isLocked: PropTypes.bool.isRequired,
   noLink: PropTypes.bool,
-  links: PropTypes.object,
-  locale: PropTypes.string.isRequired
+  links: PropTypes.object
 };
 
 export default withLinks(ExercisesName);

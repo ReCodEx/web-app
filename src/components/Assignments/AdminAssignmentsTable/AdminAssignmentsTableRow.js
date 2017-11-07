@@ -8,7 +8,7 @@ import { LinkContainer } from 'react-router-bootstrap';
 import DeleteAssignmentButtonContainer from '../../../containers/DeleteAssignmentButtonContainer';
 
 import withLinks from '../../../hoc/withLinks';
-import { getLocalizedName } from '../../../helpers/getLocalizedData';
+import LocalizedExerciseName from '../../helpers/LocalizedExerciseName';
 import {
   EditIcon,
   MaybePublicIcon,
@@ -24,7 +24,6 @@ const AdminAssignmentTableRow = ({
   firstDeadline,
   secondDeadline,
   isBonus,
-  locale,
   links: {
     ASSIGNMENT_DETAIL_URI_FACTORY: detail,
     ASSIGNMENT_EDIT_URI_FACTORY: edit
@@ -37,7 +36,7 @@ const AdminAssignmentTableRow = ({
     <td>
       <MaybeBonusAssignmentIcon id={id} isBonus={isBonus} />
       <Link to={detail(id)}>
-        {getLocalizedName({ name, localizedTexts }, locale)}
+        <LocalizedExerciseName entity={{ name, localizedTexts }} />
       </Link>
     </td>
     <td>
@@ -80,8 +79,7 @@ AdminAssignmentTableRow.propTypes = {
   allowSecondDeadline: PropTypes.bool.isRequired,
   secondDeadline: PropTypes.number.isRequired,
   groupId: PropTypes.string,
-  links: PropTypes.object,
-  locale: PropTypes.string.isRequired
+  links: PropTypes.object
 };
 
 export default withLinks(AdminAssignmentTableRow);

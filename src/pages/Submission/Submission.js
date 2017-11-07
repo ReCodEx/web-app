@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { FormattedMessage, injectIntl } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 
 import Page from '../../components/layout/Page';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
+import LocalizedExerciseName from '../../components/helpers/LocalizedExerciseName';
 import SubmissionDetail, {
   FailedSubmissionDetail
 } from '../../components/Submissions/SubmissionDetail';
@@ -23,7 +24,6 @@ import {
   isSuperAdmin
 } from '../../redux/selectors/users';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
-import { getLocalizedName } from '../../helpers/getLocalizedData';
 
 class Submission extends Component {
   static loadAsync = ({ submissionId, assignmentId }, dispatch) =>
@@ -49,14 +49,13 @@ class Submission extends Component {
       assignment,
       submission,
       params: { assignmentId },
-      isSupervisorOrMore,
-      intl: { locale }
+      isSupervisorOrMore
     } = this.props;
 
     return (
       <Page
         resource={assignment}
-        title={assignment => getLocalizedName(assignment, locale)}
+        title={assignment => <LocalizedExerciseName entity={assignment} />}
         description={
           <FormattedMessage
             id="app.submission.evaluation.title"
@@ -136,22 +135,19 @@ Submission.propTypes = {
   children: PropTypes.element,
   submission: PropTypes.object,
   loadAsync: PropTypes.func.isRequired,
-  isSupervisorOrMore: PropTypes.func.isRequired,
-  intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired
+  isSupervisorOrMore: PropTypes.func.isRequired
 };
 
-export default injectIntl(
-  connect(
-    (state, { params: { submissionId, assignmentId } }) => ({
-      submission: getSubmission(submissionId)(state),
-      assignment: getAssignment(assignmentId)(state),
-      isSupervisorOrMore: groupId =>
-        isSupervisorOf(loggedInUserIdSelector(state), groupId)(state) ||
-        isAdminOf(loggedInUserIdSelector(state), groupId)(state) ||
-        isSuperAdmin(loggedInUserIdSelector(state))(state)
-    }),
-    (dispatch, { params }) => ({
-      loadAsync: () => Submission.loadAsync(params, dispatch)
-    })
-  )(Submission)
-);
+export default connect(
+  (state, { params: { submissionId, assignmentId } }) => ({
+    submission: getSubmission(submissionId)(state),
+    assignment: getAssignment(assignmentId)(state),
+    isSupervisorOrMore: groupId =>
+      isSupervisorOf(loggedInUserIdSelector(state), groupId)(state) ||
+      isAdminOf(loggedInUserIdSelector(state), groupId)(state) ||
+      isSuperAdmin(loggedInUserIdSelector(state))(state)
+  }),
+  (dispatch, { params }) => ({
+    loadAsync: () => Submission.loadAsync(params, dispatch)
+  })
+)(Submission);

@@ -17,10 +17,8 @@ import UsersNameContainer from '../../../containers/UsersNameContainer';
 import GroupsNameContainer from '../../../containers/GroupsNameContainer';
 import styles from './ExerciseDetail.less';
 import { MaybeSucceededIcon } from '../../icons';
-import {
-  getLocalizedName,
-  getLocalizedDescription
-} from '../../../helpers/getLocalizedData';
+import { getLocalizedDescription } from '../../../helpers/getLocalizedData';
+import LocalizedExerciseName from '../../helpers/LocalizedExerciseName';
 
 const ExerciseDetail = ({
   id,
@@ -40,7 +38,10 @@ const ExerciseDetail = ({
   locale,
   links: { EXERCISE_URI_FACTORY }
 }) =>
-  <Box title={getLocalizedName({ name, localizedTexts }, locale)} noPadding>
+  <Box
+    title={<LocalizedExerciseName entity={{ name, localizedTexts }} />}
+    noPadding
+  >
     <Table>
       <tbody>
         <tr>

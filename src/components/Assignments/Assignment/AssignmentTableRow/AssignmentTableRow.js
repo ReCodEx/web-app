@@ -5,7 +5,7 @@ import AssignmentStatusIcon from '../AssignmentStatusIcon/AssignmentStatusIcon';
 import { FormattedDate, FormattedTime } from 'react-intl';
 
 import withLinks from '../../../../hoc/withLinks';
-import { getLocalizedName } from '../../../../helpers/getLocalizedData';
+import LocalizedExerciseName from '../../../helpers/LocalizedExerciseName';
 import { MaybeBonusAssignmentIcon } from '../../../icons';
 
 const AssignmentTableRow = ({
@@ -23,7 +23,6 @@ const AssignmentTableRow = ({
   },
   status,
   userId,
-  locale,
   links: {
     ASSIGNMENT_DETAIL_URI_FACTORY,
     ASSIGNMENT_DETAIL_SPECIFIC_USER_URI_FACTORY
@@ -42,7 +41,7 @@ const AssignmentTableRow = ({
             : ASSIGNMENT_DETAIL_URI_FACTORY(id)
         }
       >
-        {getLocalizedName({ name, localizedTexts }, locale)}
+        <LocalizedExerciseName entity={{ name, localizedTexts }} />
       </Link>
     </td>
     {showGroup &&
@@ -77,8 +76,7 @@ AssignmentTableRow.propTypes = {
   }),
   status: PropTypes.string,
   userId: PropTypes.string,
-  links: PropTypes.object,
-  locale: PropTypes.string.isRequired
+  links: PropTypes.object
 };
 
 export default withLinks(AssignmentTableRow);

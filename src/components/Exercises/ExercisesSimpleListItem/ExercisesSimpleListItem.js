@@ -5,7 +5,7 @@ import UsersNameContainer from '../../../containers/UsersNameContainer';
 import { Link } from 'react-router';
 
 import withLinks from '../../../hoc/withLinks';
-import { getLocalizedName } from '../../../helpers/getLocalizedData';
+import LocalizedExerciseName from '../../helpers/LocalizedExerciseName';
 import { MaybeLockedExerciseIcon } from '../../icons';
 
 const ExercisesSimpleListItem = ({
@@ -24,7 +24,7 @@ const ExercisesSimpleListItem = ({
       <MaybeLockedExerciseIcon id={id} isLocked={isLocked} />
       <strong>
         <Link to={EXERCISE_URI_FACTORY(id)}>
-          {getLocalizedName({ name, localizedTexts }, locale)}
+          <LocalizedExerciseName entity={{ name, localizedTexts }} />
         </Link>
       </strong>
     </td>
