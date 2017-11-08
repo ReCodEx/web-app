@@ -4,6 +4,7 @@ import { injectIntl, FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
 
 import GroupExercisesListItem from '../ExercisesSimpleListItem';
+import { getLocalizedName } from '../../../helpers/getLocalizedData';
 
 const ExercisesSimpleList = ({
   exercises,
@@ -38,7 +39,10 @@ const ExercisesSimpleList = ({
     <tbody>
       {exercises
         .sort((a, b) => {
-          var tmp = a.name.localeCompare(b.name, locale);
+          var tmp = getLocalizedName(a, locale).localeCompare(
+            getLocalizedName(b, locale),
+            locale
+          );
           if (tmp === 0) {
             return b.createdAt - a.createdAt;
           } else {

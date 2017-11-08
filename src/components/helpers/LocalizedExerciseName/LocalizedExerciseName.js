@@ -1,0 +1,43 @@
+import React from 'react';
+import PropTypes from 'prop-types';
+import { injectIntl } from 'react-intl';
+import { OverlayTrigger, Tooltip } from 'react-bootstrap';
+import Icon from 'react-fontawesome';
+
+import {
+  getLocalizedName,
+  getOtherLocalizedNames
+} from '../../../helpers/getLocalizedData';
+
+const LocalizedExerciseName = ({ entity, intl: { locale } }) => {
+  const otherNames = getOtherLocalizedNames(entity, locale);
+  return (
+    <span>
+      {getLocalizedName(entity, locale)}
+      {otherNames.length > 0 &&
+        <span>
+          &nbsp;<OverlayTrigger
+            placement="right"
+            overlay={
+              <Tooltip id={otherNames.map(n => n.name).join(', ')}>
+                {otherNames.map(name =>
+                  <div key={entity.id + '.nametooltip.' + name.locale}>
+                    <strong>{name.name}</strong>&nbsp;[{name.locale}]
+                  </div>
+                )}
+              </Tooltip>
+            }
+          >
+            <Icon name="flag-o" className="text-black" />
+          </OverlayTrigger>&nbsp;
+        </span>}
+    </span>
+  );
+};
+
+LocalizedExerciseName.propTypes = {
+  entity: PropTypes.object,
+  intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired
+};
+
+export default injectIntl(LocalizedExerciseName);

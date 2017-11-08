@@ -4,6 +4,7 @@ import { Table } from 'react-bootstrap';
 import { injectIntl, FormattedMessage } from 'react-intl';
 
 import ExercisesListItem from '../ExercisesListItem';
+import { getLocalizedName } from '../../../helpers/getLocalizedData';
 
 const ExercisesList = ({
   exercises = [],
@@ -49,7 +50,10 @@ const ExercisesList = ({
         .filter(e => e !== null)
         .sort(
           (a, b) =>
-            a.name.localeCompare(b.name, locale) || b.createdAt - a.createdAt
+            getLocalizedName(a, locale).localeCompare(
+              getLocalizedName(b, locale),
+              locale
+            ) || b.createdAt - a.createdAt
         )
         .map(exercise =>
           <ExercisesListItem

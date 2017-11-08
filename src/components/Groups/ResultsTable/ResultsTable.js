@@ -3,21 +3,20 @@ import PropTypes from 'prop-types';
 import { List } from 'immutable';
 import { Table } from 'react-bootstrap';
 import { Link } from 'react-router';
-import { FormattedMessage, injectIntl } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 
 import ResultsTableRow from './ResultsTableRow';
 import LoadingResultsTableRow from './LoadingResultsTableRow';
 import NoResultsAvailableRow from './NoResultsAvailableRow';
 import withLinks from '../../../hoc/withLinks';
-import { getLocalizedName } from '../../../helpers/getLocalizedData';
 import ResourceRenderer from '../../helpers/ResourceRenderer';
+import LocalizedExerciseName from '../../helpers/LocalizedExerciseName';
 import styles from './ResultsTable.less';
 
 const ResultsTable = ({
   assignments = List(),
   users = [],
   submissions,
-  intl: { locale },
   links: { SUPERVISOR_STATS_URI_FACTORY }
 }) => {
   const assignmentsArray = assignments.sort(
@@ -34,7 +33,7 @@ const ResultsTable = ({
               <div className={styles.verticalText}>
                 <div className={styles.verticalTextInner}>
                   <Link to={SUPERVISOR_STATS_URI_FACTORY(assignment.id)}>
-                    {getLocalizedName(assignment, locale)}
+                    <LocalizedExerciseName entity={assignment} />
                   </Link>
                 </div>
               </div>
@@ -79,8 +78,7 @@ ResultsTable.propTypes = {
   assignments: PropTypes.array.isRequired,
   users: PropTypes.array.isRequired,
   submissions: PropTypes.object.isRequired,
-  links: PropTypes.object,
-  intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired
+  links: PropTypes.object
 };
 
-export default injectIntl(withLinks(ResultsTable));
+export default withLinks(ResultsTable);

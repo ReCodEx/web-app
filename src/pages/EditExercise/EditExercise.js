@@ -12,6 +12,7 @@ import Box from '../../components/widgets/Box';
 import EditExerciseForm from '../../components/forms/EditExerciseForm';
 import AdditionalExerciseFilesTableContainer from '../../containers/AdditionalExerciseFilesTableContainer';
 import DeleteExerciseButtonContainer from '../../containers/DeleteExerciseButtonContainer';
+import LocalizedExerciseName from '../../components/helpers/LocalizedExerciseName';
 
 import {
   fetchExerciseIfNeeded,
@@ -50,7 +51,7 @@ class EditExercise extends Component {
     return (
       <Page
         resource={exercise}
-        title={exercise => getLocalizedName(exercise, locale)}
+        title={exercise => <LocalizedExerciseName entity={exercise} />}
         description={
           <FormattedMessage
             id="app.editExercise.description"
