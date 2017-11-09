@@ -4,6 +4,7 @@ import { List } from 'immutable';
 import { connect } from 'react-redux';
 import SubmitSolution from '../../components/Submissions/SubmitSolution';
 import EvaluationProgressContainer from '../EvaluationProgressContainer';
+import { fetchUsersSubmissions } from '../../redux/modules/submissions';
 
 import {
   getNote,
@@ -66,7 +67,8 @@ class SubmitSolutionContainer extends Component {
       links: { SUBMISSION_DETAIL_URI_FACTORY },
       showProgress = true,
       autodetection = true,
-      isReferenceSolution = false
+      isReferenceSolution = false,
+      fetchSubmissions
     } = this.props;
 
     const { runtimeEnvironment } = this.state;
@@ -98,6 +100,7 @@ class SubmitSolutionContainer extends Component {
             isOpen={isProcessing}
             monitor={monitor}
             link={SUBMISSION_DETAIL_URI_FACTORY(id, submissionId)}
+            onUserClose={fetchSubmissions}
           />}
       </div>
     );
@@ -126,7 +129,8 @@ SubmitSolutionContainer.propTypes = {
   runtimeEnvironments: PropTypes.array,
   showProgress: PropTypes.bool,
   autodetection: PropTypes.bool,
-  isReferenceSolution: PropTypes.bool
+  isReferenceSolution: PropTypes.bool,
+  fetchSubmissions: PropTypes.func.isRequired
 };
 
 export default withLinks(
@@ -156,7 +160,8 @@ export default withLinks(
               ? dispatch(evaluateReferenceSolution(res.value.id))
               : Promise.resolve()
         ),
-      reset: () => dispatch(resetUpload(id)) && dispatch(onReset(userId, id))
+      reset: () => dispatch(resetUpload(id)) && dispatch(onReset(userId, id)),
+      fetchSubmissions: () => dispatch(fetchUsersSubmissions(userId, id))
     })
   )(SubmitSolutionContainer)
 );

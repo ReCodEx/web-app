@@ -28,7 +28,7 @@ import EvaluationProgress from '../../components/Assignments/EvaluationProgress'
 import randomMessages, { extraMessages } from './randomMessages';
 
 class EvaluationProgressContainer extends Component {
-  state = { realTimeProcessing: true, monitor: null, isUserClosed: false };
+  state = { realTimeProcessing: true, monitor: null };
   socket = null;
   componentWillMount = () => this.init(this.props);
   componentWillReceiveProps = newProps => {
@@ -52,7 +52,7 @@ class EvaluationProgressContainer extends Component {
     if (this.socket !== null) {
       this.closeSocket();
     }
-    this.setState({ isUserClosed: false, realTimeProcessing: true });
+    this.setState({ realTimeProcessing: true });
 
     if (monitor !== null && monitor !== this.state.monitor) {
       if (typeof WebSocket === 'function') {
@@ -153,14 +153,15 @@ class EvaluationProgressContainer extends Component {
     push(link);
   };
 
-  onUserClose = () => {
+  userCloseAction = () => {
+    const { onUserClose, finishProcessing } = this.props;
+    finishProcessing();
     this.closeSocket();
-    this.setState({ isUserClosed: true, monitor: null });
+    onUserClose && onUserClose();
   };
 
   render = () => {
     const { isOpen, messages, progress, isFinished } = this.props;
-    const { isUserClosed } = this.state;
     let displayedMessages = new List();
     const now = new Date();
     if (now.getDate() === 1 && now.getMonth() === 3) {
@@ -170,7 +171,7 @@ class EvaluationProgressContainer extends Component {
 
     return this.state.realTimeProcessing === true
       ? <EvaluationProgress
-          isOpen={isOpen && !isUserClosed}
+          isOpen={isOpen}
           messages={displayedMessages}
           completed={progress.completed}
           skipped={progress.skipped}
@@ -178,17 +179,17 @@ class EvaluationProgressContainer extends Component {
           finished={isFinished}
           showContinueButton={isFinished || this.isClosed}
           finishProcessing={this.finish}
-          onClose={this.onUserClose}
+          onClose={this.userCloseAction}
         />
       : <EvaluationProgress
-          isOpen={isOpen && !isUserClosed}
+          isOpen={isOpen}
           completed={0}
           skipped={100}
           failed={0}
           finished={false}
           showContinueButton={true}
           finishProcessing={this.finish}
-          onClose={this.onUserClose}
+          onClose={this.userCloseAction}
           messages={List([
             this.formatMessage({
               command: 'TASK',
@@ -232,7 +233,8 @@ EvaluationProgressContainer.propTypes = {
   goToEvaluationDetails: PropTypes.func,
   messages: PropTypes.object,
   intl: PropTypes.object.isRequired,
-  push: PropTypes.func.isRequired
+  push: PropTypes.func.isRequired,
+  onUserClose: PropTypes.func
 };
 
 export default connect(
