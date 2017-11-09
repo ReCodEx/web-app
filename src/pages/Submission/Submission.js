@@ -112,6 +112,12 @@ class Submission extends Component {
                   <ResubmitSolutionContainer
                     id={submission.id}
                     assignmentId={assignment.id}
+                    isDebug={true}
+                  />
+                  <ResubmitSolutionContainer
+                    id={submission.id}
+                    assignmentId={assignment.id}
+                    isDebug={false}
                   />
                 </p>}
               <SubmissionDetail

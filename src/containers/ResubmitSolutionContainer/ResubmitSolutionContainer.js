@@ -19,11 +19,12 @@ const ResubmitSolutionContainer = ({
   monitor,
   isProcessing,
   newSubmissionId,
+  isDebug = true,
   links: { SUBMISSION_DETAIL_URI_FACTORY }
 }) => {
   return (
     <span>
-      <ResubmitSolution resubmit={resubmit} />
+      <ResubmitSolution resubmit={resubmit} isDebug={isDebug} />
       <EvaluationProgressContainer
         isOpen={isProcessing}
         monitor={monitor}
@@ -41,7 +42,8 @@ ResubmitSolutionContainer.propTypes = {
   monitor: PropTypes.object,
   isProcessing: PropTypes.bool,
   newSubmissionId: PropTypes.string,
-  links: PropTypes.object.isRequired
+  links: PropTypes.object.isRequired,
+  isDebug: PropTypes.bool
 };
 
 const mapStateToProps = state => ({
@@ -51,7 +53,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = (dispatch, { id, isPrivate = false }) => ({
-  resubmit: () => dispatch(resubmitSubmission(id, isPrivate))
+  resubmit: isDebug => dispatch(resubmitSubmission(id, isPrivate, isDebug))
 });
 
 export default withLinks(
