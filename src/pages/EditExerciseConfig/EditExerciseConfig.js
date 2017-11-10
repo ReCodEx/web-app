@@ -11,7 +11,7 @@ import Box from '../../components/widgets/Box';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import LocalizedExerciseName from '../../components/helpers/LocalizedExerciseName';
 
-import EditExerciseConfigForm from '../../components/forms/EditExerciseConfigForm/EditExerciseConfigForm';
+// import EditExerciseConfigForm from '../../components/forms/EditExerciseConfigForm/EditExerciseConfigForm';
 import EditEnvironmentConfigForm from '../../components/forms/EditEnvironmentConfigForm';
 import EditScoreConfigForm from '../../components/forms/EditScoreConfigForm';
 import EditSimpleLimitsBox from '../../components/Exercises/EditSimpleLimitsBox';
@@ -87,14 +87,14 @@ class EditExerciseConfig extends Component {
       params: { exerciseId },
       exercise,
       editEnvironmentConfigs,
-      setConfig,
+      // setConfig,
       runtimeEnvironments,
       environmentFormValues,
       exerciseConfig,
       exerciseEnvironmentConfig,
       exerciseScoreConfig,
       editEnvironmentSimpleLimits,
-      pipelines,
+      // pipelines,
       limits,
       setHorizontally,
       setVertically,
@@ -200,13 +200,13 @@ class EditExerciseConfig extends Component {
                 >
                   {(config, ...runtimeEnvironments) =>
                     <div>
-                      <EditExerciseConfigForm
+                      {/* <EditExerciseConfigForm
                         runtimeEnvironments={runtimeEnvironments}
                         initialValues={{ config: config }}
                         onSubmit={setConfig}
                         exercise={exercise}
                         pipelines={pipelines}
-                      />
+                      /> */}
                       <EditSimpleLimitsBox
                         editLimits={editEnvironmentSimpleLimits}
                         environments={exercise.runtimeEnvironments}
