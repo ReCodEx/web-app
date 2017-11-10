@@ -245,6 +245,9 @@ class SisSupervisorGroupsContainer extends Component {
                                                 onSubmit={data =>
                                                   createGroup(
                                                     course.course.code,
+                                                    currentUserId,
+                                                    term.year,
+                                                    term.term,
                                                     data
                                                   )}
                                                 groups={possibleParents}

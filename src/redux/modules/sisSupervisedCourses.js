@@ -22,6 +22,7 @@ export const actionTypes = {
   FETCH_REJECTED: 'recodex/sisSupervisedCourses/FETCH_REJECTED',
   FETCH_FULFILLED: 'recodex/sisSupervisedCourses/FETCH_FULFILLED',
   CREATE: 'recodex/sisSupervisedCourses/CREATE',
+  CREATE_FULFILLED: 'recodex/sisSupervisedCourses/CREATE_FULFILLED',
   BIND: 'recodex/sisSupervisedCourses/BIND',
   BIND_FULFILLED: 'recodex/sisSupervisedCourses/BIND_FULFILLED'
 };
@@ -34,12 +35,12 @@ export const fetchSisSupervisedCourses = (userId, year, term) =>
     meta: { userId, year, term }
   });
 
-export const sisCreateGroup = (courseId, data) =>
+export const sisCreateGroup = (courseId, userId, year, term, data) =>
   createApiAction({
     type: actionTypes.CREATE,
     method: 'POST',
     endpoint: `/extensions/sis/remote-courses/${courseId}/create`,
-    meta: { courseId },
+    meta: { userId, courseId, year, term },
     body: { ...data }
   });
 
@@ -54,6 +55,24 @@ export const sisBindGroup = (courseId, data, userId, year, term) =>
 
 const reducer = handleActions(
   Object.assign({}, reduceActions, {
+    [actionTypes.CREATE_FULFILLED]: (
+      state,
+      { meta: { userId, year, term }, payload }
+    ) =>
+      state.setIn(
+        ['resources', userId, `${year}-${term}`],
+        createRecord({ state: resourceStatus.FULFILLED, data: fromJS(payload) })
+      ),
+
+    [actionTypes.BIND_FULFILLED]: (
+      state,
+      { meta: { userId, year, term }, payload }
+    ) =>
+      state.setIn(
+        ['resources', userId, `${year}-${term}`],
+        createRecord({ state: resourceStatus.FULFILLED, data: fromJS(payload) })
+      ),
+
     [actionTypes.FETCH_PENDING]: (state, { meta: { userId, year, term } }) =>
       state.setIn(['resources', userId, `${year}-${term}`], createRecord()),
 
