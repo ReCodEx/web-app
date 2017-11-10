@@ -1,12 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import { reduxForm, Field } from 'redux-form';
+import { reduxForm, Field, FieldArray } from 'redux-form';
 import { Alert } from 'react-bootstrap';
 import FormBox from '../../widgets/FormBox';
 import SubmitButton from '../SubmitButton';
+import LocalizedTextsFormField from '../LocalizedTextsFormField';
 
-import { TextField, CheckboxField, MarkdownTextAreaField } from '../Fields';
+import { TextField, CheckboxField } from '../Fields';
 
 const EditGroupForm = ({
   submitting,
@@ -14,14 +15,23 @@ const EditGroupForm = ({
   anyTouched,
   submitFailed = false,
   submitSucceeded = false,
-  invalid
+  invalid,
+  createNew = false,
+  formValues: { localizedTexts } = {},
+  collapsable = false,
+  isOpen = true
 }) =>
   <FormBox
     title={
-      <FormattedMessage
-        id="app.editGroupForm.title"
-        defaultMessage="Edit group"
-      />
+      createNew
+        ? <FormattedMessage
+            id="app.editGroupForm.titleNew"
+            defaultMessage="Create new group"
+          />
+        : <FormattedMessage
+            id="app.editGroupForm.titleEdit"
+            defaultMessage="Edit group"
+          />
     }
     type={submitSucceeded ? 'success' : undefined}
     footer={
@@ -35,12 +45,15 @@ const EditGroupForm = ({
           hasFailed={submitFailed}
           invalid={invalid}
           messages={{
-            submit: (
-              <FormattedMessage
-                id="app.editGroupForm.set"
-                defaultMessage="Edit group"
-              />
-            ),
+            submit: createNew
+              ? <FormattedMessage
+                  id="app.editGroupForm.successNew"
+                  defaultMessage="Group has been created"
+                />
+              : <FormattedMessage
+                  id="app.editGroupForm.set"
+                  defaultMessage="Edit group"
+                />,
             submitting: (
               <FormattedMessage
                 id="app.editGroupForm.processing"
@@ -57,6 +70,9 @@ const EditGroupForm = ({
         />
       </div>
     }
+    collapsable={collapsable}
+    isOpen={isOpen}
+    unlimitedheight
   >
     {submitFailed &&
       <Alert bsStyle="danger">
@@ -66,17 +82,10 @@ const EditGroupForm = ({
         />
       </Alert>}
 
-    <Field
-      name="name"
-      tabIndex={1}
-      component={TextField}
-      required
-      label={
-        <FormattedMessage
-          id="app.createGroup.groupName"
-          defaultMessage="Name:"
-        />
-      }
+    <FieldArray
+      name="localizedTexts"
+      localizedTexts={localizedTexts}
+      component={LocalizedTextsFormField}
     />
 
     <Field
@@ -88,19 +97,6 @@ const EditGroupForm = ({
         <FormattedMessage
           id="app.createGroup.externalId"
           defaultMessage="External ID of the group (e. g. ID of the group in the school IS):"
-        />
-      }
-    />
-
-    <Field
-      name="description"
-      tabIndex={3}
-      component={MarkdownTextAreaField}
-      required
-      label={
-        <FormattedMessage
-          id="app.createGroup.groupDescription"
-          defaultMessage="Description:"
         />
       }
     />
@@ -153,20 +149,17 @@ EditGroupForm.propTypes = {
   submitFailed: PropTypes.bool,
   submitSucceeded: PropTypes.bool,
   submitting: PropTypes.bool,
-  invalid: PropTypes.bool
+  invalid: PropTypes.bool,
+  formValues: PropTypes.shape({
+    localizedTexts: PropTypes.array
+  }),
+  createNew: PropTypes.bool,
+  collapsable: PropTypes.bool,
+  isOpen: PropTypes.bool
 };
 
-const validate = ({ name, description, threshold }) => {
+const validate = ({ localizedTexts = [], threshold }) => {
   const errors = {};
-
-  if (!name || name.length === 0) {
-    errors['name'] = (
-      <FormattedMessage
-        id="app.createGroup.validation.emptyName"
-        defaultMessage="Group name cannot be empty."
-      />
-    );
-  }
 
   if (threshold) {
     const numericThreshold = Number(threshold);
@@ -187,10 +180,87 @@ const validate = ({ name, description, threshold }) => {
     }
   }
 
+  if (localizedTexts.length < 1) {
+    errors['_error'] = (
+      <FormattedMessage
+        id="app.createGroupForm.validation.noLocalizedText"
+        defaultMessage="Please add at least one localized text describing the group."
+      />
+    );
+  }
+
+  const localizedTextsErrors = {};
+  for (let i = 0; i < localizedTexts.length; ++i) {
+    const localeErrors = {};
+    if (!localizedTexts[i]) {
+      localeErrors['locale'] = (
+        <FormattedMessage
+          id="app.editGroupForm.validation.localizedText"
+          defaultMessage="Please fill localized information."
+        />
+      );
+    } else {
+      if (!localizedTexts[i].name) {
+        localeErrors['name'] = (
+          <FormattedMessage
+            id="app.editGroupForm.validation.emptyName"
+            defaultMessage="Please fill the name of the group."
+          />
+        );
+      }
+
+      if (!localizedTexts[i].locale) {
+        localeErrors['locale'] = (
+          <FormattedMessage
+            id="app.editGroupForm.validation.localizedText.locale"
+            defaultMessage="Please select the language."
+          />
+        );
+      }
+
+      if (!localizedTexts[i].text) {
+        localeErrors['text'] = (
+          <FormattedMessage
+            id="app.editGroupForm.validation.localizedText.text"
+            defaultMessage="Please fill the description in this language."
+          />
+        );
+      }
+
+      if (!localizedTexts[i].description) {
+        localeErrors['description'] = (
+          <FormattedMessage
+            id="app.editGroupForm.validation.description"
+            defaultMessage="Please fill the description of the group."
+          />
+        );
+      }
+    }
+
+    localizedTextsErrors[i] = localeErrors;
+  }
+
+  const localeArr = localizedTexts
+    .filter(text => text !== undefined)
+    .map(text => text.locale);
+  for (let i = 0; i < localeArr.length; ++i) {
+    if (localeArr.indexOf(localeArr[i]) !== i) {
+      if (!localizedTextsErrors[i].locale) {
+        localizedTextsErrors[i].locale = (
+          <FormattedMessage
+            id="app.editGroupForm.validation.sameLocalizedTexts"
+            defaultMessage="There are more language variants with the same locale. Please make sure locales are unique."
+          />
+        );
+      }
+    }
+  }
+  errors['localizedTexts'] = localizedTextsErrors;
+
   return errors;
 };
 
 export default reduxForm({
-  form: 'edit-group',
+  form: 'editGroup',
   validate
 })(EditGroupForm);

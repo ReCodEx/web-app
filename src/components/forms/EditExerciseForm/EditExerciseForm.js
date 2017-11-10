@@ -187,7 +187,7 @@ EditExerciseForm.propTypes = {
   links: PropTypes.object
 };
 
-const validate = ({ name, description, difficulty, localizedTexts }) => {
+const validate = ({ difficulty, localizedTexts }) => {
   const errors = {};
 
   if (!difficulty) {

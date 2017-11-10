@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
+import { getFormValues } from 'redux-form';
 import { FormattedMessage } from 'react-intl';
 import { Row, Col } from 'react-bootstrap';
 import Button from '../../components/widgets/FlatButton';
@@ -11,7 +12,7 @@ import Page from '../../components/layout/Page';
 import InstanceDetail from '../../components/Instances/InstanceDetail';
 import LicencesTableContainer from '../../containers/LicencesTableContainer';
 import AddLicenceFormContainer from '../../containers/AddLicenceFormContainer';
-import CreateGroupForm from '../../components/forms/CreateGroupForm';
+import EditGroupForm from '../../components/forms/EditGroupForm';
 import { EditIcon } from '../../components/icons';
 
 import { fetchInstanceIfNeeded } from '../../redux/modules/instances';
@@ -52,6 +53,7 @@ class Instance extends Component {
       createGroup,
       isAdmin,
       isSuperAdmin,
+      formValues,
       links: { ADMIN_EDIT_INSTANCE_URI_FACTORY }
     } = this.props;
 
@@ -106,9 +108,14 @@ class Instance extends Component {
             {(isSuperAdmin || isAdmin) &&
               <Row>
                 <Col sm={6}>
-                  <CreateGroupForm
+                  <EditGroupForm
                     onSubmit={createGroup}
                     instanceId={instanceId}
+                    createNew
+                    collapsable={true}
+                    isOpen={false}
+                    formValues={formValues}
+                    initialValues={{ publicStats: true }}
                   />
                 </Col>
                 <Col sm={6}>
@@ -133,7 +140,8 @@ Instance.propTypes = {
   createGroup: PropTypes.func.isRequired,
   isAdmin: PropTypes.bool.isRequired,
   isSuperAdmin: PropTypes.bool.isRequired,
-  links: PropTypes.object.isRequired
+  links: PropTypes.object.isRequired,
+  formValues: PropTypes.object
 };
 
 export default withLinks(
@@ -144,7 +152,8 @@ export default withLinks(
         instance: instanceSelector(state, instanceId),
         groups: publicGroupsSelectors(state),
         isAdmin: isAdminOfInstance(userId, instanceId)(state),
-        isSuperAdmin: isSuperAdmin(userId)(state)
+        isSuperAdmin: isSuperAdmin(userId)(state),
+        formValues: getFormValues('editGroup')(state)
       };
     },
     (dispatch, { params: { instanceId } }) => ({
