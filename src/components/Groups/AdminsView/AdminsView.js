@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import { Row, Col } from 'react-bootstrap';
 import { getFormValues } from 'redux-form';
 import { connect } from 'react-redux';
@@ -8,8 +8,9 @@ import { connect } from 'react-redux';
 import Box from '../../widgets/Box';
 import AddSupervisor from '../AddSupervisor';
 import EditGroupForm from '../../forms/EditGroupForm';
+import { getLocalizedName } from '../../../helpers/getLocalizedData';
 
-const AdminsView = ({ group, addSubgroup, formValues }) =>
+const AdminsView = ({ group, addSubgroup, formValues, intl: { locale } }) =>
   <div>
     <Row>
       <Col sm={12}>
@@ -17,7 +18,7 @@ const AdminsView = ({ group, addSubgroup, formValues }) =>
           <FormattedMessage
             id="app.group.adminsView.title"
             defaultMessage="Administrator controls of {groupName}"
-            values={{ groupName: group.name }}
+            values={{ groupName: getLocalizedName(group, locale) }}
           />
         </h3>
       </Col>
@@ -51,7 +52,8 @@ const AdminsView = ({ group, addSubgroup, formValues }) =>
 AdminsView.propTypes = {
   group: PropTypes.object.isRequired,
   addSubgroup: PropTypes.func.isRequired,
-  formValues: PropTypes.object
+  formValues: PropTypes.object,
+  intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired
 };
 
 export default connect(
@@ -61,4 +63,4 @@ export default connect(
     };
   },
   dispatch => ({})
-)(AdminsView);
+)(injectIntl(AdminsView));

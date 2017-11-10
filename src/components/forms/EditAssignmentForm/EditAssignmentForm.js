@@ -11,7 +11,7 @@ import LocalizedTextsFormField from '../LocalizedTextsFormField';
 import SubmitButton from '../SubmitButton';
 
 import { validateAssignment } from '../../../redux/modules/assignments';
-import LocalizedExerciseName from '../../helpers/LocalizedExerciseName';
+import { LocalizedExerciseName } from '../../helpers/LocalizedNames';
 
 const EditAssignmentForm = ({
   initialValues: assignment,

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { Row, Col } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
@@ -19,6 +19,7 @@ import AssignExerciseButton from '../../../components/buttons/AssignExerciseButt
 import { deleteExercise } from '../../../redux/modules/exercises';
 import Confirm from '../../../components/forms/Confirm';
 import withLinks from '../../../hoc/withLinks';
+import { getLocalizedName } from '../../../helpers/getLocalizedData';
 
 const SupervisorsView = ({
   group,
@@ -29,8 +30,9 @@ const SupervisorsView = ({
   deleteExercise,
   users,
   publicAssignments,
-  links: { EXERCISE_EDIT_URI_FACTORY, EXERCISE_EDIT_CONFIG_URI_FACTORY }
-}) => (
+  links: { EXERCISE_EDIT_URI_FACTORY, EXERCISE_EDIT_CONFIG_URI_FACTORY },
+  intl: { locale }
+}) =>
   <div>
     <Row>
       <Col lg={12}>
@@ -38,7 +40,7 @@ const SupervisorsView = ({
           <FormattedMessage
             id="app.group.supervisorsView.title"
             defaultMessage="Supervisor's controls of {groupName}"
-            values={{ groupName: group.name }}
+            values={{ groupName: getLocalizedName(group, locale) }}
           />
         </h3>
       </Col>
@@ -57,9 +59,8 @@ const SupervisorsView = ({
           noPadding
         >
           <ResourceRenderer resource={publicAssignments}>
-            {(...assignments) => (
-              <ResultsTableContainer users={users} assignments={assignments} />
-            )}
+            {(...assignments) =>
+              <ResultsTableContainer users={users} assignments={assignments} />}
           </ResourceRenderer>
         </Box>
       </Col>
@@ -133,10 +134,10 @@ const SupervisorsView = ({
           isOpen
         >
           <ResourceRenderer resource={exercises.toArray()}>
-            {(...exercises) => (
+            {(...exercises) =>
               <ExercisesSimpleList
                 exercises={exercises}
-                createActions={(exerciseId, isLocked) => (
+                createActions={(exerciseId, isLocked) =>
                   <div>
                     <AssignExerciseButton
                       isLocked={isLocked}
@@ -188,16 +189,13 @@ const SupervisorsView = ({
                         />
                       </Button>
                     </Confirm>
-                  </div>
-                )}
-              />
-            )}
+                  </div>}
+              />}
           </ResourceRenderer>
         </Box>
       </Col>
     </Row>
-  </div>
-);
+  </div>;
 
 SupervisorsView.propTypes = {
   group: PropTypes.object,
@@ -208,7 +206,8 @@ SupervisorsView.propTypes = {
   deleteExercise: PropTypes.func.isRequired,
   users: PropTypes.array.isRequired,
   publicAssignments: ImmutablePropTypes.list.isRequired,
-  links: PropTypes.object
+  links: PropTypes.object,
+  intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired
 };
 
 export default withLinks(
@@ -217,5 +216,5 @@ export default withLinks(
     dispatch => ({
       deleteExercise: id => dispatch(deleteExercise(id))
     })
-  )(SupervisorsView)
+  )(injectIntl(SupervisorsView))
 );

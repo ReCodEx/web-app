@@ -19,6 +19,7 @@ import SupervisorsView from '../../components/Groups/SupervisorsView';
 import StudentsView from '../../components/Groups/StudentsView';
 import HierarchyLine from '../../components/Groups/HierarchyLine';
 import { EditIcon } from '../../components/icons';
+import { LocalizedGroupName } from '../../components/helpers/LocalizedNames';
 
 import { isReady, getJsData } from '../../redux/helpers/resourceManager';
 import {
@@ -188,7 +189,7 @@ class Group extends Component {
     return (
       <Page
         resource={group}
-        title={group => group.name}
+        title={group => <LocalizedGroupName entity={group} />}
         description={
           <FormattedMessage
             id="app.group.description"

@@ -1,13 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { reduxForm, Field } from 'redux-form';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
+import { Alert } from 'react-bootstrap';
 
 import FormBox from '../../widgets/FormBox';
 import { SelectField } from '../Fields';
-
-import { Alert } from 'react-bootstrap';
 import SubmitButton from '../SubmitButton';
+
+import { getLocalizedName } from '../../../helpers/getLocalizedData';
 
 const SisBindGroupForm = ({
   invalid,
@@ -16,7 +17,8 @@ const SisBindGroupForm = ({
   submitFailed: hasFailed,
   submitting,
   hasSucceeded,
-  groups
+  groups,
+  intl: { locale }
 }) =>
   <FormBox
     title={
@@ -79,7 +81,10 @@ const SisBindGroupForm = ({
         />
       }
       options={[{ key: '', name: '...' }].concat(
-        groups.map(group => ({ key: group.id, name: group.name }))
+        groups.map(group => ({
+          key: group.id,
+          name: getLocalizedName(group, locale)
+        }))
       )}
     />
   </FormBox>;
@@ -92,7 +97,8 @@ SisBindGroupForm.propTypes = {
   submitting: PropTypes.bool,
   hasSucceeded: PropTypes.bool,
   submitFailed: PropTypes.bool,
-  groups: PropTypes.array
+  groups: PropTypes.array,
+  intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired
 };
 
 const validate = ({ groupId }) => {
@@ -113,4 +119,4 @@ const validate = ({ groupId }) => {
 export default reduxForm({
   form: 'sisBindGroup',
   validate
-})(SisBindGroupForm);
+})(injectIntl(SisBindGroupForm));

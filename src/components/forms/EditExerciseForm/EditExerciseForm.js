@@ -18,7 +18,7 @@ import FormBox from '../../widgets/FormBox';
 import SubmitButton from '../SubmitButton';
 import Button from '../../widgets/FlatButton';
 import LocalizedTextsFormField from '../LocalizedTextsFormField';
-import LocalizedExerciseName from '../../helpers/LocalizedExerciseName';
+import { LocalizedExerciseName } from '../../helpers/LocalizedNames';
 import { validateExercise } from '../../../redux/modules/exercises';
 import withLinks from '../../../hoc/withLinks';
 

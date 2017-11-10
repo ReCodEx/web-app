@@ -16,6 +16,7 @@ import UsersNameContainer from '../../containers/UsersNameContainer';
 import StudentsListContainer from '../../containers/StudentsListContainer';
 import AssignmentsTable from '../../components/Assignments/Assignment/AssignmentsTable';
 import UsersStats from '../../components/Users/UsersStats';
+import GroupsName from '../../components/Groups/GroupsName';
 import { fetchAssignmentsForGroup } from '../../redux/modules/assignments';
 import { fetchUserIfNeeded } from '../../redux/modules/users';
 import {
@@ -206,7 +207,9 @@ class Dashboard extends Component {
                           loading={
                             <Row>
                               <Col lg={4}>
-                                <LoadingInfoBox title={group.name} />
+                                <LoadingInfoBox
+                                  title={<GroupsName {...group} noLink />}
+                                />
                               </Col>
                             </Row>
                           }
@@ -224,7 +227,7 @@ class Dashboard extends Component {
                               </Col>
                               <Col lg={8}>
                                 <Box
-                                  title={group.name}
+                                  title={<GroupsName {...group} noLink />}
                                   collapsable
                                   noPadding
                                   isOpen
@@ -287,7 +290,7 @@ class Dashboard extends Component {
                               >
                                 {statistics =>
                                   <Box
-                                    title={group.name}
+                                    title={<GroupsName {...group} noLink />}
                                     collapsable
                                     noPadding
                                     isOpen

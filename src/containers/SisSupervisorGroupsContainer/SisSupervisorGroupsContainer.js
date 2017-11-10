@@ -22,6 +22,7 @@ import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import SisCreateGroupForm from '../../components/forms/SisCreateGroupForm';
 import SisBindGroupForm from '../../components/forms/SisBindGroupForm';
+import { getLocalizedName } from '../../helpers/getLocalizedData';
 
 import withLinks from '../../hoc/withLinks';
 import './SisSupervisorGroupsContainer.css';
@@ -189,7 +190,10 @@ class SisSupervisorGroupsContainer extends Component {
                                               {course.groups.map((group, i) =>
                                                 <tr key={i}>
                                                   <td>
-                                                    {group.name}
+                                                    {getLocalizedName(
+                                                      group,
+                                                      locale
+                                                    )}
                                                   </td>
                                                   <td>
                                                     <code>
