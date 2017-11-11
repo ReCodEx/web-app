@@ -10,7 +10,7 @@ import {
 } from 'react-bootstrap';
 
 const TextField = ({
-  input,
+  input: { value, ...input },
   meta: { touched, error },
   type = 'text',
   label,
@@ -23,7 +23,16 @@ const TextField = ({
     <ControlLabel>
       {label}
     </ControlLabel>
-    <FormControl {...input} {...props} type={type} />
+    <FormControl
+      {...input}
+      {...props}
+      type={type}
+      value={
+        typeof value === 'string' || typeof value === 'number'
+          ? value
+          : value[0]
+      }
+    />
     {error &&
       <HelpBlock>
         {' '}{touched
@@ -38,7 +47,11 @@ const TextField = ({
 TextField.propTypes = {
   type: PropTypes.string,
   input: PropTypes.shape({
-    value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired
+    value: PropTypes.oneOfType([
+      PropTypes.array,
+      PropTypes.string,
+      PropTypes.number
+    ]).isRequired
   }).isRequired,
   meta: PropTypes.shape({
     touched: PropTypes.bool,

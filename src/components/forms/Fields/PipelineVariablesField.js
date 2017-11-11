@@ -11,8 +11,13 @@ import {
 } from '../Fields';
 import ResourceRenderer from '../../helpers/ResourceRenderer';
 
-const isArray = (type = '') =>
-  typeof type === 'string' && type.indexOf('[]') === type.length - 2;
+const isArray = (firstValue, type = '') =>
+  firstValue.length > 0 &&
+  firstValue[0] !== '$' &&
+  typeof type === 'string' &&
+  type.indexOf('[]') === type.length - 2;
+
+const firstValue = value => (Array.isArray(value) ? value[0] : value);
 
 const PipelineVariablesField = ({
   input,
@@ -30,36 +35,48 @@ const PipelineVariablesField = ({
         id="app.portsField.empty"
         defaultMessage="There are no ports."
       />}
-    {variables.map(({ value, type }, i) =>
-      <div key={i}>
-        {(type === 'remote-file' || type === 'remote-file[]') &&
-          <ResourceRenderer resource={supplementaryFiles.toArray()}>
-            {(...supplementaryFiles) =>
-              <Field
-                name={`${input.name}.${value}`}
-                component={isArray(type) ? ExpandingSelectField : SelectField}
-                options={[{ key: '', name: '...' }].concat(
-                  supplementaryFiles
-                    .sort((a, b) => a.name.localeCompare(b.name, intl.locale))
-                    .filter((item, pos, arr) => arr.indexOf(item) === pos)
-                    .map(data => ({
-                      key: data.hashName,
-                      name: data.name
-                    }))
-                )}
-                label={`${atob(value)}: `}
-              />}
-          </ResourceRenderer>}
-        {type !== 'remote-file' &&
-          type !== 'remote-file[]' &&
-          <Field
-            key={value}
-            name={`${input.name}.${value}`}
-            component={isArray(type) ? ExpandingTextField : TextField}
-            label={`${atob(value)}: `}
-          />}
-      </div>
-    )}
+    {variables
+      .reduce(
+        (acc, variable) =>
+          acc.find(used => used.value === variable.value)
+            ? acc
+            : [...acc, variable],
+        []
+      )
+      .map(({ value, type }, i) =>
+        <div key={i}>
+          {(type === 'remote-file' || type === 'remote-file[]') &&
+            <ResourceRenderer resource={supplementaryFiles.toArray()}>
+              {(...supplementaryFiles) =>
+                <Field
+                  name={`${input.name}.${value}`}
+                  component={isArray(type) ? ExpandingSelectField : SelectField}
+                  options={[{ key: '', name: '...' }].concat(
+                    supplementaryFiles
+                      .sort((a, b) => a.name.localeCompare(b.name, intl.locale))
+                      .filter((item, pos, arr) => arr.indexOf(item) === pos)
+                      .map(data => ({
+                        key: data.hashName,
+                        name: data.name
+                      }))
+                  )}
+                  label={`${atob(value)}: `}
+                />}
+            </ResourceRenderer>}
+          {type !== 'remote-file' &&
+            type !== 'remote-file[]' &&
+            <Field
+              key={value}
+              name={`${input.name}.${value}`}
+              component={
+                isArray(firstValue(input.value[value]), type)
+                  ? ExpandingTextField
+                  : TextField
+              }
+              label={`${atob(value)}: `}
+            />}
+        </div>
+      )}
   </div>;
 
 PipelineVariablesField.propTypes = {

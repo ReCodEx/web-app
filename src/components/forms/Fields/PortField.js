@@ -17,7 +17,6 @@ const getLabelStyle = portType => (isArrayType(portType) ? 'primary' : 'info');
 const PortField = ({
   input,
   meta: { touched, error },
-  type = 'text',
   label,
   portType,
   ...props
@@ -35,7 +34,7 @@ const PortField = ({
         {portType}
       </Label>
     </ControlLabel>
-    <FormControl {...input} {...props} type={type} />
+    <FormControl {...input} {...props} type="text" />
     {error &&
       <HelpBlock>
         {' '}{touched
@@ -48,7 +47,6 @@ const PortField = ({
   </FormGroup>;
 
 PortField.propTypes = {
-  type: PropTypes.string,
   input: PropTypes.shape({
     value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired
   }).isRequired,
