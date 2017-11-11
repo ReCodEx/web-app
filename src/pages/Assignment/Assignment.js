@@ -35,7 +35,7 @@ import { runtimeEnvironmentSelector } from '../../redux/selectors/runtimeEnviron
 
 import Page from '../../components/layout/Page';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
-import LocalizedExerciseName from '../../components/helpers/LocalizedExerciseName';
+import { LocalizedExerciseName } from '../../components/helpers/LocalizedNames';
 import UsersNameContainer from '../../containers/UsersNameContainer';
 import { ResubmitAllSolutionsContainer } from '../../containers/ResubmitSolutionContainer';
 import HierarchyLineContainer from '../../containers/HierarchyLineContainer';

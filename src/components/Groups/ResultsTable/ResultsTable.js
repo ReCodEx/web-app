@@ -10,7 +10,7 @@ import LoadingResultsTableRow from './LoadingResultsTableRow';
 import NoResultsAvailableRow from './NoResultsAvailableRow';
 import withLinks from '../../../hoc/withLinks';
 import ResourceRenderer from '../../helpers/ResourceRenderer';
-import LocalizedExerciseName from '../../helpers/LocalizedExerciseName';
+import { LocalizedExerciseName } from '../../helpers/LocalizedNames';
 import styles from './ResultsTable.less';
 
 const ResultsTable = ({

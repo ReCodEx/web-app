@@ -13,6 +13,7 @@ import { SuccessIcon } from '../../../components/icons';
 import { forkStatuses } from '../../../redux/modules/exercises';
 import { getFork } from '../../../redux/selectors/exercises';
 import ResourceRenderer from '../../helpers/ResourceRenderer';
+import { getLocalizedName } from '../../../helpers/getLocalizedData';
 
 import withLinks from '../../../hoc/withLinks';
 
@@ -40,7 +41,7 @@ class ForkExerciseForm extends Component {
       hasSucceeded = false,
       invalid,
       groups,
-      intl
+      intl: { locale }
     } = this.props;
 
     switch (forkStatus) {
@@ -78,13 +79,11 @@ class ForkExerciseForm extends Component {
                     label={''}
                     options={[{ key: '', name: '_Public_' }].concat(
                       groups
-                        .sort((a, b) =>
-                          a.name.localeCompare(b.name, intl.locale)
-                        )
+                        .sort((a, b) => a.name.localeCompare(b.name, locale))
                         .filter((item, pos, arr) => arr.indexOf(item) === pos)
                         .map(group => ({
                           key: group.id,
-                          name: group.name
+                          name: getLocalizedName(group, locale)
                         }))
                     )}
                   />}

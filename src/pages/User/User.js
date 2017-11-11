@@ -16,6 +16,7 @@ import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import UsersNameContainer from '../../containers/UsersNameContainer';
 import AssignmentsTable from '../../components/Assignments/Assignment/AssignmentsTable';
 import UsersStats from '../../components/Users/UsersStats';
+import GroupsName from '../../components/Groups/GroupsName';
 import { fetchAssignmentsForGroup } from '../../redux/modules/assignments';
 import { fetchUserIfNeeded } from '../../redux/modules/users';
 import { fetchProfileIfNeeded } from '../../redux/modules/publicProfiles';
@@ -144,7 +145,9 @@ class User extends Component {
                       loading={
                         <Row>
                           <Col lg={4}>
-                            <LoadingInfoBox title={group.name} />
+                            <LoadingInfoBox
+                              title={<GroupsName {...group} noLink />}
+                            />
                           </Col>
                         </Row>
                       }
@@ -162,7 +165,7 @@ class User extends Component {
                           </Col>
                           <Col lg={8}>
                             <Box
-                              title={group.name}
+                              title={<GroupsName {...group} noLink />}
                               collapsable
                               noPadding
                               isOpen

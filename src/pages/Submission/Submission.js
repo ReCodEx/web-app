@@ -5,7 +5,7 @@ import { FormattedMessage } from 'react-intl';
 
 import Page from '../../components/layout/Page';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
-import LocalizedExerciseName from '../../components/helpers/LocalizedExerciseName';
+import { LocalizedExerciseName } from '../../components/helpers/LocalizedNames';
 import SubmissionDetail, {
   FailedSubmissionDetail
 } from '../../components/Submissions/SubmissionDetail';

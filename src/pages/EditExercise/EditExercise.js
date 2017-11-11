@@ -12,7 +12,7 @@ import Box from '../../components/widgets/Box';
 import EditExerciseForm from '../../components/forms/EditExerciseForm';
 import AdditionalExerciseFilesTableContainer from '../../containers/AdditionalExerciseFilesTableContainer';
 import DeleteExerciseButtonContainer from '../../containers/DeleteExerciseButtonContainer';
-import LocalizedExerciseName from '../../components/helpers/LocalizedExerciseName';
+import { LocalizedExerciseName } from '../../components/helpers/LocalizedNames';
 
 import {
   fetchExerciseIfNeeded,

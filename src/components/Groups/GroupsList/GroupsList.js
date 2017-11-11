@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { Table } from 'react-bootstrap';
 import ResourceRenderer from '../../helpers/ResourceRenderer';
 import Icon from 'react-fontawesome';
 
+import GroupsName from '../GroupsName';
 import withLinks from '../../../hoc/withLinks';
 
 const GroupsList = ({
@@ -13,29 +13,31 @@ const GroupsList = ({
   renderButtons = () => null,
   links: { GROUP_URI_FACTORY },
   ...props
-}) => (
+}) =>
   <ResourceRenderer resource={groups.toArray()}>
-    {(...groups) => (
+    {(...groups) =>
       <Table hover {...props}>
         <tbody>
-          {groups.map(({ id, name }) => (
+          {groups.map(({ id, name, localizedTexts }) =>
             <tr key={id}>
               <td className="text-center">
                 <Icon name="group" />
               </td>
               <td>
-                <Link to={GROUP_URI_FACTORY(id)}>{name}</Link>
+                <GroupsName
+                  id={id}
+                  name={name}
+                  localizedTexts={localizedTexts}
+                />
               </td>
               <td className="text-right">
                 {renderButtons(id)}
               </td>
             </tr>
-          ))}
+          )}
         </tbody>
-      </Table>
-    )}
-  </ResourceRenderer>
-);
+      </Table>}
+  </ResourceRenderer>;
 
 GroupsList.propTypes = {
   groups: ImmutablePropTypes.map.isRequired,

@@ -1,13 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import { Row, Col } from 'react-bootstrap';
+import { getFormValues } from 'redux-form';
+import { connect } from 'react-redux';
 
 import Box from '../../widgets/Box';
 import AddSupervisor from '../AddSupervisor';
-import CreateGroupForm from '../../forms/CreateGroupForm'; // @todo replace with it's' container
+import EditGroupForm from '../../forms/EditGroupForm';
+import { getLocalizedName } from '../../../helpers/getLocalizedData';
 
-const AdminsView = ({ group, addSubgroup }) => (
+const AdminsView = ({ group, addSubgroup, formValues, intl: { locale } }) =>
   <div>
     <Row>
       <Col sm={12}>
@@ -15,7 +18,7 @@ const AdminsView = ({ group, addSubgroup }) => (
           <FormattedMessage
             id="app.group.adminsView.title"
             defaultMessage="Administrator controls of {groupName}"
-            values={{ groupName: group.name }}
+            values={{ groupName: getLocalizedName(group, locale) }}
           />
         </h3>
       </Col>
@@ -34,26 +37,30 @@ const AdminsView = ({ group, addSubgroup }) => (
         </Box>
       </Col>
       <Col md={6}>
-        <CreateGroupForm
-          title={
-            <FormattedMessage
-              id="app.group.adminsView.addSubgroup"
-              defaultMessage="Add subgroup"
-            />
-          }
+        <EditGroupForm
           onSubmit={addSubgroup}
-          instanceId={group.instanceId}
           initialValues={{ publicStats: true }}
-          parentGroupId={group.id}
+          createNew
+          collapsable
+          isOpen={false}
+          formValues={formValues}
         />
       </Col>
     </Row>
-  </div>
-);
+  </div>;
 
 AdminsView.propTypes = {
   group: PropTypes.object.isRequired,
-  addSubgroup: PropTypes.func.isRequired
+  addSubgroup: PropTypes.func.isRequired,
+  formValues: PropTypes.object,
+  intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired
 };
 
-export default AdminsView;
+export default connect(
+  state => {
+    return {
+      formValues: getFormValues('editGroup')(state)
+    };
+  },
+  dispatch => ({})
+)(injectIntl(AdminsView));

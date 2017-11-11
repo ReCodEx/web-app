@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import { Row, Col } from 'react-bootstrap';
 import Button from '../../components/widgets/FlatButton';
 import { Link } from 'react-router';
@@ -16,6 +16,7 @@ import UsersNameContainer from '../../containers/UsersNameContainer';
 import StudentsListContainer from '../../containers/StudentsListContainer';
 import AssignmentsTable from '../../components/Assignments/Assignment/AssignmentsTable';
 import UsersStats from '../../components/Users/UsersStats';
+import GroupsName from '../../components/Groups/GroupsName';
 import { fetchAssignmentsForGroup } from '../../redux/modules/assignments';
 import { fetchUserIfNeeded } from '../../redux/modules/users';
 import {
@@ -46,6 +47,7 @@ import { getJsData } from '../../redux/helpers/resourceManager';
 import SisIntegrationContainer from '../../containers/SisIntegrationContainer';
 import SisSupervisorGroupsContainer from '../../containers/SisSupervisorGroupsContainer';
 
+import { getLocalizedName } from '../../helpers/getLocalizedData';
 import withLinks from '../../hoc/withLinks';
 
 class Dashboard extends Component {
@@ -106,7 +108,8 @@ class Dashboard extends Component {
       usersStatistics,
       allGroups,
       isAdmin,
-      links: { GROUP_URI_FACTORY }
+      links: { GROUP_URI_FACTORY },
+      intl: { locale }
     } = this.props;
 
     return (
@@ -206,7 +209,9 @@ class Dashboard extends Component {
                           loading={
                             <Row>
                               <Col lg={4}>
-                                <LoadingInfoBox title={group.name} />
+                                <LoadingInfoBox
+                                  title={getLocalizedName(group, locale)}
+                                />
                               </Col>
                             </Row>
                           }
@@ -224,7 +229,7 @@ class Dashboard extends Component {
                               </Col>
                               <Col lg={8}>
                                 <Box
-                                  title={group.name}
+                                  title={<GroupsName {...group} noLink />}
                                   collapsable
                                   noPadding
                                   isOpen
@@ -287,7 +292,7 @@ class Dashboard extends Component {
                               >
                                 {statistics =>
                                   <Box
-                                    title={group.name}
+                                    title={<GroupsName {...group} noLink />}
                                     collapsable
                                     noPadding
                                     isOpen
@@ -339,7 +344,8 @@ Dashboard.propTypes = {
   usersStatistics: PropTypes.func.isRequired,
   allGroups: PropTypes.array,
   isAdmin: PropTypes.bool,
-  links: PropTypes.object
+  links: PropTypes.object,
+  intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired
 };
 
 export default withLinks(
@@ -370,5 +376,5 @@ export default withLinks(
       loadAsync: loggedInUserId =>
         Dashboard.loadAsync(params, dispatch, loggedInUserId)
     })
-  )(Dashboard)
+  )(injectIntl(Dashboard))
 );

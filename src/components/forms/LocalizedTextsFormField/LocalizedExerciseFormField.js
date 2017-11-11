@@ -8,7 +8,7 @@ import {
   TextField
 } from '../Fields';
 
-const LocalizedTextFormField = ({ prefix }) =>
+const LocalizedExerciseFormField = ({ prefix }) =>
   <div>
     <Field
       name={`${prefix}.name`}
@@ -55,8 +55,8 @@ const LocalizedTextFormField = ({ prefix }) =>
     />
   </div>;
 
-LocalizedTextFormField.propTypes = {
+LocalizedExerciseFormField.propTypes = {
   prefix: PropTypes.string.isRequired
 };
 
-export default LocalizedTextFormField;
+export default LocalizedExerciseFormField;

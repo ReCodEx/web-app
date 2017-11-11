@@ -5,13 +5,13 @@ import { FormattedMessage } from 'react-intl';
 import { HelpBlock } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
-import { reset } from 'redux-form';
+import { reset, getFormValues } from 'redux-form';
 
 import Page from '../../components/layout/Page';
 import EditGroupForm from '../../components/forms/EditGroupForm';
-import DeleteGroupButtonContainer
-  from '../../containers/DeleteGroupButtonContainer';
+import DeleteGroupButtonContainer from '../../containers/DeleteGroupButtonContainer';
 import Box from '../../components/widgets/Box';
+import { LocalizedGroupName } from '../../components/helpers/LocalizedNames';
 
 import { fetchGroupIfNeeded, editGroup } from '../../redux/modules/groups';
 import { groupSelector } from '../../redux/selectors/groups';
@@ -40,13 +40,14 @@ class EditGroup extends Component {
       group,
       links: { GROUP_URI_FACTORY },
       editGroup,
+      formValues,
       push
     } = this.props;
 
     return (
       <Page
         resource={group}
-        title={group => group.name}
+        title={group => <LocalizedGroupName entity={group} />}
         description={
           <FormattedMessage
             id="app.editGroup.description"
@@ -70,11 +71,12 @@ class EditGroup extends Component {
           }
         ]}
       >
-        {group => (
+        {group =>
           <div>
             <EditGroupForm
               initialValues={this.getInitialValues(group)}
               onSubmit={editGroup}
+              formValues={formValues}
             />
 
             <Box
@@ -98,7 +100,7 @@ class EditGroup extends Component {
                     id={group.id}
                     disabled={
                       group.parentGroupId === null ||
-                        (group.childGroups && group.childGroups.length > 0)
+                      (group.childGroups && group.childGroups.length > 0)
                     }
                     onDeleted={() =>
                       push(GROUP_URI_FACTORY(group.parentGroupId))}
@@ -114,8 +116,7 @@ class EditGroup extends Component {
                 </p>
               </div>
             </Box>
-          </div>
-        )}
+          </div>}
       </Page>
     );
   }
@@ -130,7 +131,8 @@ EditGroup.propTypes = {
   }).isRequired,
   group: ImmutablePropTypes.map,
   editGroup: PropTypes.func.isRequired,
-  push: PropTypes.func.isRequired
+  push: PropTypes.func.isRequired,
+  formValues: PropTypes.object
 };
 
 export default withLinks(
@@ -141,7 +143,8 @@ export default withLinks(
       return {
         group: selectGroup(state),
         userId,
-        isStudentOf: groupId => isSupervisorOf(userId, groupId)(state)
+        isStudentOf: groupId => isSupervisorOf(userId, groupId)(state),
+        formValues: getFormValues('editGroup')(state)
       };
     },
     (dispatch, { params: { groupId } }) => ({

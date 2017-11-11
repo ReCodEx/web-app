@@ -2,45 +2,52 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { TabbedArrayField } from '../Fields';
-import LocalizedTextFormField from './LocalizedTextFormField';
+import LocalizedExerciseFormField from './LocalizedExerciseFormField';
+import LocalizedGroupFormField from './LocalizedGroupFormField';
 
-const LocalizedTextsFormField = ({ localizedTexts = [], ...props }) => (
+const LocalizedTextsFormField = ({
+  localizedTexts = [],
+  isGroup = false,
+  ...props
+}) =>
   <TabbedArrayField
     {...props}
     getTitle={i =>
       localizedTexts && localizedTexts[i] && localizedTexts[i].locale
         ? localizedTexts[i].locale
         : <FormattedMessage
-            id="app.editAssignmentForm.newLocale"
+            id="app.editLocalizedTextForm.newLocale"
             defaultMessage="New language"
           />}
-    ContentComponent={LocalizedTextFormField}
+    ContentComponent={
+      isGroup ? LocalizedGroupFormField : LocalizedExerciseFormField
+    }
     emptyMessage={
       <FormattedMessage
-        id="app.editAssignmentForm.localized.noLanguage"
-        defaultMessage="There is currently no text in any language for this assignment."
+        id="app.editLocalizedTextForm.localized.noLanguage"
+        defaultMessage="There is currently no text in any language."
       />
     }
     addMessage={
       <FormattedMessage
-        id="app.editAssignmentForm.addLanguage"
+        id="app.editLocalizedTextForm.addLanguage"
         defaultMessage="Add language variant"
       />
     }
     removeQuestion={
       <FormattedMessage
-        id="app.editAssignmentForm.localized.reallyRemoveQuestion"
-        defaultMessage="Do you really want to delete the assignmenet in this language?"
+        id="app.editLocalizedTextForm.localized.reallyRemoveQuestion"
+        defaultMessage="Do you really want to delete this localization?"
       />
     }
-    id="localized-assignments"
+    id="localized-texts"
     add
     remove
-  />
-);
+  />;
 
 LocalizedTextsFormField.propTypes = {
-  localizedTexts: PropTypes.array
+  localizedTexts: PropTypes.array,
+  isGroup: PropTypes.bool
 };
 
 export default LocalizedTextsFormField;
