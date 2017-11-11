@@ -48,7 +48,7 @@ const EditGroupForm = ({
             submit: createNew
               ? <FormattedMessage
                   id="app.editGroupForm.successNew"
-                  defaultMessage="Group has been created"
+                  defaultMessage="Create group"
                 />
               : <FormattedMessage
                   id="app.editGroupForm.set"

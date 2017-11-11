@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 import { LinkContainer } from 'react-router-bootstrap';
 import Button from '../../components/widgets/FlatButton';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import { List, Map } from 'immutable';
 
 import Page from '../../components/layout/Page';
@@ -62,6 +62,7 @@ import { getStatuses } from '../../redux/selectors/stats';
 import { fetchInstanceIfNeeded } from '../../redux/modules/instances';
 import { instanceSelector } from '../../redux/selectors/instances';
 
+import { getLocalizedName } from '../../helpers/getLocalizedData';
 import withLinks from '../../hoc/withLinks';
 
 class Group extends Component {
@@ -124,7 +125,7 @@ class Group extends Component {
   }
 
   getBreadcrumbs = () => {
-    const { group, instance } = this.props;
+    const { group, instance, intl: { locale } } = this.props;
     const breadcrumbs = [
       {
         resource: instance,
@@ -139,7 +140,7 @@ class Group extends Component {
         resource: group,
         iconName: 'group',
         breadcrumb: data => ({
-          text: data.name
+          text: getLocalizedName(data, locale)
         })
       }
     ];
@@ -294,7 +295,8 @@ Group.propTypes = {
   assignExercise: PropTypes.func.isRequired,
   createGroupExercise: PropTypes.func.isRequired,
   push: PropTypes.func.isRequired,
-  links: PropTypes.object
+  links: PropTypes.object,
+  intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired
 };
 
 Group.contextTypes = {
@@ -351,4 +353,6 @@ const mapDispatchToProps = (dispatch, { params }) => ({
   push: url => dispatch(push(url))
 });
 
-export default withLinks(connect(mapStateToProps, mapDispatchToProps)(Group));
+export default withLinks(
+  connect(mapStateToProps, mapDispatchToProps)(injectIntl(Group))
+);

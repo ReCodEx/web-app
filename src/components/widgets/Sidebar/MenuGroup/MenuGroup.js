@@ -97,7 +97,9 @@ class MenuGroup extends Component {
                     title={getLocalizedName(
                       {
                         name: item.getIn(['data', 'name']),
-                        localizedTexts: item.getIn(['data', 'localizedTexts'])
+                        localizedTexts: item
+                          .getIn(['data', 'localizedTexts'])
+                          .toJS()
                       },
                       locale
                     )}

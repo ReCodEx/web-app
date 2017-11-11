@@ -5,7 +5,7 @@ import { FormattedMessage } from 'react-intl';
 import { HelpBlock } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
-import { reset } from 'redux-form';
+import { reset, getFormValues } from 'redux-form';
 
 import Page from '../../components/layout/Page';
 import EditGroupForm from '../../components/forms/EditGroupForm';
@@ -40,6 +40,7 @@ class EditGroup extends Component {
       group,
       links: { GROUP_URI_FACTORY },
       editGroup,
+      formValues,
       push
     } = this.props;
 
@@ -75,6 +76,7 @@ class EditGroup extends Component {
             <EditGroupForm
               initialValues={this.getInitialValues(group)}
               onSubmit={editGroup}
+              formValues={formValues}
             />
 
             <Box
@@ -129,7 +131,8 @@ EditGroup.propTypes = {
   }).isRequired,
   group: ImmutablePropTypes.map,
   editGroup: PropTypes.func.isRequired,
-  push: PropTypes.func.isRequired
+  push: PropTypes.func.isRequired,
+  formValues: PropTypes.object
 };
 
 export default withLinks(
@@ -140,7 +143,8 @@ export default withLinks(
       return {
         group: selectGroup(state),
         userId,
-        isStudentOf: groupId => isSupervisorOf(userId, groupId)(state)
+        isStudentOf: groupId => isSupervisorOf(userId, groupId)(state),
+        formValues: getFormValues('editGroup')(state)
       };
     },
     (dispatch, { params: { groupId } }) => ({

@@ -6,6 +6,7 @@ import Button from '../../widgets/FlatButton';
 import { LinkContainer } from 'react-router-bootstrap';
 import { TreeView, TreeViewItem } from '../../widgets/TreeView';
 import { isReady, getJsData } from '../../../redux/helpers/resourceManager';
+import GroupsName from '../GroupsName';
 
 import withLinks from '../../../hoc/withLinks';
 
@@ -59,6 +60,7 @@ class GroupTree extends Component {
 
     const {
       name,
+      localizedTexts,
       admins,
       childGroups: { all: allChildGroups, public: publicChildGroups },
       canView
@@ -68,7 +70,14 @@ class GroupTree extends Component {
       <TreeView>
         {level !== 0 &&
           <TreeViewItem
-            title={name}
+            title={
+              <GroupsName
+                id={id}
+                name={name}
+                localizedTexts={localizedTexts}
+                noLink
+              />
+            }
             level={level}
             admins={admins}
             isOpen={currentGroupId === id || isOpen}
