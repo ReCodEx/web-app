@@ -35,7 +35,7 @@ export const fetchSisSupervisedCourses = (userId, year, term) =>
     meta: { userId, year, term }
   });
 
-export const sisCreateGroup = (courseId, userId, year, term, data) =>
+export const sisCreateGroup = (courseId, data, userId, year, term) =>
   createApiAction({
     type: actionTypes.CREATE,
     method: 'POST',

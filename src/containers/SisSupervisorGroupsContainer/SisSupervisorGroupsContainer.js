@@ -245,10 +245,10 @@ class SisSupervisorGroupsContainer extends Component {
                                                 onSubmit={data =>
                                                   createGroup(
                                                     course.course.code,
+                                                    data,
                                                     currentUserId,
                                                     term.year,
-                                                    term.term,
-                                                    data
+                                                    term.term
                                                   )}
                                                 groups={possibleParents}
                                               />}
@@ -326,8 +326,8 @@ export default injectIntl(
       dispatch => ({
         loadData: loggedInUserId =>
           SisSupervisorGroupsContainer.loadData(dispatch, loggedInUserId),
-        createGroup: (courseId, data) =>
-          dispatch(sisCreateGroup(courseId, data)),
+        createGroup: (courseId, data, userId, year, term) =>
+          dispatch(sisCreateGroup(courseId, data, userId, year, term)),
         bindGroup: (courseId, data, userId, year, term) =>
           dispatch(sisBindGroup(courseId, data, userId, year, term))
       })
