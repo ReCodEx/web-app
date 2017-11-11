@@ -9,7 +9,10 @@ import Box from '../../widgets/Box';
 import SupervisorsList from '../../Users/SupervisorsList';
 import { MaybeSucceededIcon } from '../../icons';
 import GroupTree from '../GroupTree';
-import { getLocalizedName } from '../../../helpers/getLocalizedData';
+import {
+  getLocalizedName,
+  getLocalizedDescription
+} from '../../../helpers/getLocalizedData';
 
 const GroupDetail = ({
   group: {
@@ -43,7 +46,14 @@ const GroupDetail = ({
                   defaultMessage="Group description"
                 />
               }
-              description={<ReactMarkdown source={description} />}
+              description={
+                <ReactMarkdown
+                  source={getLocalizedDescription(
+                    { description, localizedTexts },
+                    locale
+                  )}
+                />
+              }
               type="primary"
               collapsable
               noPadding

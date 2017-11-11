@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
+import { injectIntl } from 'react-intl';
 import classNames from 'classnames';
 import Icon from 'react-fontawesome';
 import MenuItem from '../MenuItem';
 import LoadingMenuItem from '../LoadingMenuItem';
 import { isLoading } from '../../../../redux/helpers/resourceManager';
+import { getLocalizedName } from '../../../../helpers/getLocalizedData';
 
 class MenuGroup extends Component {
   componentWillMount = () =>
@@ -43,7 +45,8 @@ class MenuGroup extends Component {
       createLink,
       currentPath,
       notifications,
-      forceOpen = false
+      forceOpen = false,
+      intl: { locale }
     } = this.props;
 
     const dropdownStyles = {
@@ -91,7 +94,13 @@ class MenuGroup extends Component {
                 ? <LoadingMenuItem key={key} />
                 : <MenuItem
                     key={key}
-                    title={item.getIn(['data', 'name'])}
+                    title={getLocalizedName(
+                      {
+                        name: item.getIn(['data', 'name']),
+                        localizedTexts: item.getIn(['data', 'localizedTexts'])
+                      },
+                      locale
+                    )}
                     icon="circle-o"
                     currentPath={currentPath}
                     notificationsCount={itemsNotificationsCount(item)}
@@ -112,11 +121,12 @@ MenuGroup.propTypes = {
   currentPath: PropTypes.string,
   forceOpen: PropTypes.bool,
   createLink: PropTypes.func.isRequired,
-  notifications: PropTypes.object
+  notifications: PropTypes.object,
+  intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired
 };
 
 MenuGroup.contextTypes = {
   isActive: PropTypes.func
 };
 
-export default MenuGroup;
+export default injectIntl(MenuGroup);

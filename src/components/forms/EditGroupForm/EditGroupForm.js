@@ -86,6 +86,7 @@ const EditGroupForm = ({
       name="localizedTexts"
       localizedTexts={localizedTexts}
       component={LocalizedTextsFormField}
+      isGroup={true}
     />
 
     <Field
