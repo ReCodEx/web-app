@@ -66,7 +66,7 @@ const SubmissionsTable = ({
               const id = data.id;
               const link = SUBMISSION_DETAIL_URI_FACTORY(assignmentId, id);
 
-              switch (data.evaluationStatus) {
+              switch (data.lastSubmission.evaluationStatus) {
                 case 'done':
                   return (
                     <SuccessfulSubmissionTableRow

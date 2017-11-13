@@ -95,7 +95,7 @@ export const resubmitAllSubmissions = assignmentId =>
 export const fetchUsersSubmissions = (userId, assignmentId) =>
   actions.fetchMany({
     type: additionalActionTypes.LOAD_USERS_SUBMISSIONS,
-    endpoint: `/exercise-assignments/${assignmentId}/users/${userId}/submissions`,
+    endpoint: `/exercise-assignments/${assignmentId}/users/${userId}/solutions`,
     meta: {
       assignmentId,
       userId
@@ -103,7 +103,7 @@ export const fetchUsersSubmissions = (userId, assignmentId) =>
   });
 
 export const downloadResultArchive = downloadHelper({
-  endpoint: id => `/submissions/${id}/download-result`,
+  endpoint: id => `/submissions/evaluation/${id}/download-result`,
   fetch: fetchSubmissionIfNeeded,
   actionType: additionalActionTypes.DOWNLOAD_RESULT_ARCHIVE,
   fileNameSelector: (id, state) => `${id}.zip`,

@@ -14,19 +14,20 @@ import Points from './Points';
 const SuccessfulSubmissionTableRow = ({
   link,
   note,
-  submittedAt,
+  lastSubmission: { evaluation: { score, points } },
   maxPoints,
-  evaluation: { score, bonusPoints, points },
+  bonusPoints,
+  solution: { createdAt },
   accepted
-}) => (
+}) =>
   <tr>
     <td>
       <AssignmentStatusIcon id={link} status="done" accepted={accepted} />
     </td>
     <td>
-      <FormattedDate value={submittedAt * 1000} />
+      <FormattedDate value={createdAt * 1000} />
       &nbsp;
-      <FormattedTime value={submittedAt * 1000} />
+      <FormattedTime value={createdAt * 1000} />
     </td>
     <td className="text-center">
       <strong className="text-success">
@@ -53,17 +54,21 @@ const SuccessfulSubmissionTableRow = ({
         />
       </Link>
     </td>
-  </tr>
-);
+  </tr>;
 
 SuccessfulSubmissionTableRow.propTypes = {
   link: PropTypes.string.isRequired,
-  submittedAt: PropTypes.number.isRequired,
   note: PropTypes.string.isRequired,
   maxPoints: PropTypes.number.isRequired,
-  evaluation: PropTypes.shape({
-    score: PropTypes.number.isRequired,
-    points: PropTypes.number.isRequired
+  bonusPoints: PropTypes.number.isRequired,
+  lastSubmission: PropTypes.shape({
+    evaluation: PropTypes.shape({
+      score: PropTypes.number.isRequired,
+      points: PropTypes.number.isRequired
+    })
+  }).isRequired,
+  solution: PropTypes.shape({
+    createdAt: PropTypes.number.isRequired
   }).isRequired,
   accepted: PropTypes.bool
 };

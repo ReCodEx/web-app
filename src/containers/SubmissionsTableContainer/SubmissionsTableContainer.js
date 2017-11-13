@@ -22,8 +22,8 @@ class SubmissionsTableContainer extends Component {
 
   sortSubmissions(submissions) {
     return submissions.sort((a, b) => {
-      var aTimestamp = a.get('data').get('submittedAt');
-      var bTimestamp = b.get('data').get('submittedAt');
+      var aTimestamp = a.getIn(['data', 'solution', 'createdAt']);
+      var bTimestamp = b.getIn(['data', 'solution', 'createdAt']);
       return bTimestamp - aTimestamp;
     });
   }

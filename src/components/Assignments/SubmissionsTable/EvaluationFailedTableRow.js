@@ -4,23 +4,21 @@ import { FormattedDate, FormattedTime, FormattedMessage } from 'react-intl';
 import { Link } from 'react-router';
 import AssignmentStatusIcon from '../Assignment/AssignmentStatusIcon';
 
-const EvaluationFailedTableRow = ({ link, note, submittedAt }) => (
+const EvaluationFailedTableRow = ({ link, note, solution: { createdAt } }) =>
   <tr>
-    <td><AssignmentStatusIcon id={link} status="evaluation-failed" /></td>
     <td>
-      <FormattedDate value={submittedAt * 1000} />
+      <AssignmentStatusIcon id={link} status="evaluation-failed" />
+    </td>
+    <td>
+      <FormattedDate value={createdAt * 1000} />
       &nbsp;
-      <FormattedTime value={submittedAt * 1000} />
+      <FormattedTime value={createdAt * 1000} />
     </td>
     <td className="text-center">
-      <span className="text-danger">
-        -
-      </span>
+      <span className="text-danger">-</span>
     </td>
     <td className="text-center">
-      <span className="text-danger">
-        -
-      </span>
+      <span className="text-danger">-</span>
     </td>
     <td>
       {note}
@@ -33,13 +31,14 @@ const EvaluationFailedTableRow = ({ link, note, submittedAt }) => (
         />
       </Link>
     </td>
-  </tr>
-);
+  </tr>;
 
 EvaluationFailedTableRow.propTypes = {
   link: PropTypes.string.isRequired,
-  submittedAt: PropTypes.number.isRequired,
-  note: PropTypes.string.isRequired
+  note: PropTypes.string.isRequired,
+  solution: PropTypes.shape({
+    createdAt: PropTypes.number.isRequired
+  }).isRequired
 };
 
 export default EvaluationFailedTableRow;
