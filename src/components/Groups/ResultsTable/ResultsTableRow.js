@@ -14,19 +14,11 @@ const ResultsTableRow = ({ userId, assignmentsIds, submissions }) => {
           .filter(s => s !== null)
           .filter(s => s.exerciseAssignmentId === assignmentId)[0];
         const points =
-          submission &&
-          submission !== null &&
-          submission.evaluation &&
-          submission.evaluation !== null
-            ? submission.evaluation.points
+          submission !== null
+            ? submission.lastSubmission.evaluation.points
             : '-';
         const bonusPoints =
-          submission &&
-          submission !== null &&
-          submission.evaluation &&
-          submission.evaluation !== null
-            ? submission.evaluation.bonusPoints
-            : 0;
+          submission && submission !== null ? submission.bonusPoints : 0;
         totalPoints += points !== '-' ? points : 0;
         totalPoints += bonusPoints;
         return (

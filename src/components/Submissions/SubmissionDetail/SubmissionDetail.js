@@ -23,17 +23,17 @@ class SubmissionDetail extends Component {
       submission: {
         id,
         note = '',
-        evaluationStatus,
-        submittedAt,
-        userId,
-        submittedBy,
+        solution: { createdAt, userId, files, ...restSolution },
+        lastSubmission: {
+          submittedBy,
+          evaluation,
+          isCorrect,
+          evaluationStatus
+        },
         maxPoints,
-        files,
-        evaluation,
+        bonusPoints,
         accepted,
-        originalSubmissionId,
-        runtimeEnvironmentId,
-        isCorrect
+        runtimeEnvironmentId
       },
       assignment,
       isSupervisor
@@ -46,12 +46,12 @@ class SubmissionDetail extends Component {
           <Col md={6} sm={12}>
             <SubmissionStatus
               evaluationStatus={evaluationStatus}
-              submittedAt={submittedAt}
+              submittedAt={createdAt}
               userId={userId}
               submittedBy={submittedBy}
               note={note}
               accepted={accepted}
-              originalSubmissionId={originalSubmissionId}
+              originalSubmissionId={restSolution.id}
               assignmentId={assignment.id}
             />
             <Row>
@@ -81,15 +81,16 @@ class SubmissionDetail extends Component {
               <EvaluationDetail
                 assignment={assignment}
                 evaluation={evaluation}
-                submittedAt={submittedAt}
+                submittedAt={createdAt}
                 maxPoints={maxPoints}
                 isCorrect={isCorrect}
+                bonusPoints={bonusPoints}
               />
 
               {isSupervisor &&
                 <BonusPointsContainer
                   submissionId={id}
-                  evaluation={evaluation}
+                  bonusPoints={bonusPoints}
                 />}
 
               <TestResults
@@ -119,17 +120,20 @@ class SubmissionDetail extends Component {
 SubmissionDetail.propTypes = {
   submission: PropTypes.shape({
     id: PropTypes.string.isRequired,
-    evaluationStatus: PropTypes.string.isRequired,
     note: PropTypes.string,
-    submittedAt: PropTypes.number.isRequired,
-    userId: PropTypes.string.isRequired,
-    submittedBy: PropTypes.string,
-    evaluation: PropTypes.object,
+    lastSubmission: PropTypes.shape({
+      evaluationStatus: PropTypes.string.isRequired,
+      submittedBy: PropTypes.string,
+      evaluation: PropTypes.object,
+      isCorrect: PropTypes.bool
+    }).isRequired,
+    solution: PropTypes.shape({
+      createdAt: PropTypes.number.isRequired,
+      userId: PropTypes.string.isRequired,
+      files: PropTypes.array
+    }).isRequired,
     maxPoints: PropTypes.number.isRequired,
-    files: PropTypes.array,
-    originalSubmissionId: PropTypes.string,
-    runtimeEnvironmentId: PropTypes.string,
-    isCorrect: PropTypes.bool
+    runtimeEnvironmentId: PropTypes.string
   }).isRequired,
   assignment: PropTypes.object.isRequired,
   isSupervisor: PropTypes.bool

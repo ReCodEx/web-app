@@ -5,18 +5,15 @@ import BonusPointsForm from '../../components/forms/BonusPointsForm';
 
 import { setPoints } from '../../redux/modules/submissions';
 
-const BonusPointsContainer = ({ evaluation, setPoints }) => (
+const BonusPointsContainer = ({ bonusPoints, setPoints }) =>
   <BonusPointsForm
     onSubmit={setPoints}
-    initialvalues={{ points: evaluation.bonusPoints }}
-  />
-);
+    initialvalues={{ points: bonusPoints }}
+  />;
 
 BonusPointsContainer.propTypes = {
   submissionId: PropTypes.string.isRequired,
-  evaluation: PropTypes.shape({
-    bonusPoints: PropTypes.number.isRequired
-  }).isRequired,
+  bonusPoints: PropTypes.number.isRequired,
   setPoints: PropTypes.func.isRequired
 };
 
