@@ -10,10 +10,9 @@ import ExercisesNameContainer from '../../../containers/ExercisesNameContainer';
 
 const ReferenceSolutionDetail = ({
   description,
-  uploadedAt,
-  solution: { userId },
+  solution: { userId, createdAt },
   exerciseId
-}) => (
+}) =>
   <Box
     title={
       <FormattedMessage
@@ -51,7 +50,9 @@ const ReferenceSolutionDetail = ({
               defaultMessage="Description"
             />
           </th>
-          <td>{description}</td>
+          <td>
+            {description}
+          </td>
         </tr>
         <tr>
           <td className="text-center">
@@ -64,9 +65,9 @@ const ReferenceSolutionDetail = ({
             />
           </th>
           <td>
-            <FormattedDate value={uploadedAt * 1000} />
+            <FormattedDate value={createdAt * 1000} />
             &nbsp;
-            <FormattedTime value={uploadedAt * 1000} />
+            <FormattedTime value={createdAt * 1000} />
           </td>
         </tr>
         <tr>
@@ -85,14 +86,13 @@ const ReferenceSolutionDetail = ({
         </tr>
       </tbody>
     </Table>
-  </Box>
-);
+  </Box>;
 
 ReferenceSolutionDetail.propTypes = {
   description: PropTypes.string.isRequired,
-  uploadedAt: PropTypes.number.isRequired,
   solution: PropTypes.shape({
-    userId: PropTypes.string.isRequired
+    userId: PropTypes.string.isRequired,
+    createdAt: PropTypes.number.isRequired
   }).isRequired,
   exerciseId: PropTypes.string.isRequired
 };
