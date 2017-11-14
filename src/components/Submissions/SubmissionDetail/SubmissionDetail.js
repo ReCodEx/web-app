@@ -9,6 +9,7 @@ import BonusPointsContainer from '../../../containers/BonusPointsContainer';
 import DownloadResultArchiveContainer from '../../../containers/DownloadResultArchiveContainer';
 import CommentThreadContainer from '../../../containers/CommentThreadContainer';
 import SourceCodeViewerContainer from '../../../containers/SourceCodeViewerContainer';
+import SubmissionEvaluationsContainer from '../../../containers/SubmissionEvaluationsContainer';
 
 import EvaluationDetail from '../EvaluationDetail';
 import CompilationLogs from '../CompilationLogs';
@@ -33,7 +34,8 @@ class SubmissionDetail extends Component {
         maxPoints,
         bonusPoints,
         accepted,
-        runtimeEnvironmentId
+        runtimeEnvironmentId,
+        submissions
       },
       assignment,
       isSupervisor
@@ -102,6 +104,16 @@ class SubmissionDetail extends Component {
                 <Row>
                   <Col lg={6} md={12}>
                     <DownloadResultArchiveContainer submissionId={id} />
+                  </Col>
+                </Row>}
+              {isSupervisor &&
+                <Row>
+                  <Col lg={12}>
+                    <SubmissionEvaluationsContainer
+                      submissionId={id}
+                      submission={{ submissions }}
+                      assignmentId={assignment.id}
+                    />
                   </Col>
                 </Row>}
             </Col>}
