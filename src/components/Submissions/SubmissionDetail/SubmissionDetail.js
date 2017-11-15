@@ -15,9 +15,15 @@ import EvaluationDetail from '../EvaluationDetail';
 import CompilationLogs from '../CompilationLogs';
 
 class SubmissionDetail extends Component {
-  state = { openFileId: null };
+  state = { openFileId: null, activeSubmissionId: null };
   openFile = id => this.setState({ openFileId: id });
   hideFile = () => this.setState({ openFileId: null });
+
+  componentWillMount() {
+    this.setState({
+      activeSubmissionId: this.props.submission.lastSubmission.id
+    });
+  }
 
   render() {
     const {
@@ -25,13 +31,6 @@ class SubmissionDetail extends Component {
         id,
         note = '',
         solution: { createdAt, userId, files, ...restSolution },
-        lastSubmission: {
-          submittedBy,
-          evaluation,
-          isCorrect,
-          evaluationStatus,
-          ...restLastSub
-        },
         maxPoints,
         bonusPoints,
         accepted,
@@ -39,9 +38,17 @@ class SubmissionDetail extends Component {
         submissions
       },
       assignment,
-      isSupervisor
+      isSupervisor,
+      evaluations
     } = this.props;
-    const { openFileId } = this.state;
+    const { openFileId, activeSubmissionId } = this.state;
+    const {
+      submittedBy,
+      evaluation,
+      isCorrect,
+      evaluationStatus,
+      ...restSub
+    } = evaluations.toJS()[activeSubmissionId].data;
 
     return (
       <div>
@@ -104,9 +111,7 @@ class SubmissionDetail extends Component {
               {isSupervisor &&
                 <Row>
                   <Col lg={6} md={12}>
-                    <DownloadResultArchiveContainer
-                      submissionId={restLastSub.id}
-                    />
+                    <DownloadResultArchiveContainer submissionId={restSub.id} />
                   </Col>
                 </Row>}
               {isSupervisor &&
@@ -116,6 +121,8 @@ class SubmissionDetail extends Component {
                       submissionId={id}
                       submission={{ submissions }}
                       assignmentId={assignment.id}
+                      activeSubmissionId={activeSubmissionId}
+                      onSelect={id => this.setState({ activeSubmissionId: id })}
                     />
                   </Col>
                 </Row>}
@@ -136,12 +143,8 @@ SubmissionDetail.propTypes = {
   submission: PropTypes.shape({
     id: PropTypes.string.isRequired,
     note: PropTypes.string,
-    lastSubmission: PropTypes.shape({
-      evaluationStatus: PropTypes.string.isRequired,
-      submittedBy: PropTypes.string,
-      evaluation: PropTypes.object,
-      isCorrect: PropTypes.bool
-    }).isRequired,
+    lastSubmission: PropTypes.shape({ id: PropTypes.string.isRequired })
+      .isRequired,
     solution: PropTypes.shape({
       createdAt: PropTypes.number.isRequired,
       userId: PropTypes.string.isRequired,
@@ -151,7 +154,8 @@ SubmissionDetail.propTypes = {
     runtimeEnvironmentId: PropTypes.string
   }).isRequired,
   assignment: PropTypes.object.isRequired,
-  isSupervisor: PropTypes.bool
+  isSupervisor: PropTypes.bool,
+  evaluations: PropTypes.object.isRequired
 };
 
 export default SubmissionDetail;

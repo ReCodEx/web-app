@@ -1,5 +1,6 @@
 import { createSelector } from 'reselect';
 import { isReady } from '../helpers/resourceManager';
+import { fetchManyEndpoint } from '../modules/submissionEvaluations';
 
 const getSubmissionEvaluations = state => state.submissionEvaluations;
 const getResources = submissionEvaluations =>
@@ -20,4 +21,9 @@ export const getSubmissionEvaluationsByIdsSelector = ids =>
     evaluations
       .filter(isReady)
       .filter(evaluation => ids.indexOf(evaluation.getIn(['data', 'id'])) >= 0)
+  );
+
+export const fetchManyStatus = id =>
+  createSelector(getSubmissionEvaluations, state =>
+    state.getIn(['fetchManyStatus', fetchManyEndpoint(id)])
   );

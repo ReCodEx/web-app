@@ -21,9 +21,12 @@ export const additionalActionTypes = {
 export const fetchSubmissionEvaluation = actions.fetchResource;
 export const fetchSubmissionEvaluationIfNeeded = actions.fetchOneIfNeeded;
 
+export const fetchManyEndpoint = id =>
+  `/assignment-solutions/${id}/evaluations`;
+
 export const fetchSubmissionEvaluationsForSolution = solutionId =>
   actions.fetchMany({
-    endpoint: `/assignment-solutions/${solutionId}/evaluations`
+    endpoint: fetchManyEndpoint(solutionId)
   });
 
 export const downloadEvaluationArchive = downloadHelper({
