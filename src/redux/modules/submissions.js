@@ -6,7 +6,6 @@ import factory, {
   defaultNeedsRefetching
 } from '../helpers/resourceManager';
 import { actionTypes as submissionActionTypes } from './submission';
-import { downloadHelper } from '../helpers/api/download';
 
 const resourceName = 'submissions';
 const needsRefetching = item =>
@@ -102,14 +101,6 @@ export const fetchUsersSubmissions = (userId, assignmentId) =>
       userId
     }
   });
-
-export const downloadResultArchive = downloadHelper({
-  endpoint: id => `/assignment-solutions/evaluation/${id}/download-result`,
-  fetch: fetchSubmissionIfNeeded,
-  actionType: additionalActionTypes.DOWNLOAD_RESULT_ARCHIVE,
-  fileNameSelector: (id, state) => `${id}.zip`,
-  contentType: 'application/zip'
-});
 
 /**
  * Reducer

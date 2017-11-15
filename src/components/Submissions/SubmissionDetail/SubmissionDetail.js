@@ -29,7 +29,8 @@ class SubmissionDetail extends Component {
           submittedBy,
           evaluation,
           isCorrect,
-          evaluationStatus
+          evaluationStatus,
+          ...restLastSub
         },
         maxPoints,
         bonusPoints,
@@ -103,7 +104,9 @@ class SubmissionDetail extends Component {
               {isSupervisor &&
                 <Row>
                   <Col lg={6} md={12}>
-                    <DownloadResultArchiveContainer submissionId={id} />
+                    <DownloadResultArchiveContainer
+                      submissionId={restLastSub.id}
+                    />
                   </Col>
                 </Row>}
               {isSupervisor &&

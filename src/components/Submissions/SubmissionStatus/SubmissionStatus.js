@@ -1,12 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Table } from 'react-bootstrap';
-import { Link } from 'react-router';
 import Icon from 'react-fontawesome';
 import { FormattedDate, FormattedTime, FormattedMessage } from 'react-intl';
 import Box from '../../widgets/Box';
-import AssignmentStatusIcon
-  from '../../Assignments/Assignment/AssignmentStatusIcon';
+import AssignmentStatusIcon from '../../Assignments/Assignment/AssignmentStatusIcon';
 import UsersNameContainer from '../../../containers/UsersNameContainer';
 import withLinks from '../../../hoc/withLinks';
 
@@ -20,7 +18,7 @@ const SubmissionStatus = ({
   originalSubmissionId = null,
   assignmentId,
   links: { SUBMISSION_DETAIL_URI_FACTORY }
-}) => (
+}) =>
   <Box
     title={
       <FormattedMessage id="app.submission.title" defaultMessage="Solution" />
@@ -42,7 +40,9 @@ const SubmissionStatus = ({
                 defaultMessage="Note:"
               />
             </th>
-            <td>{note}</td>
+            <td>
+              {note}
+            </td>
           </tr>}
         <tr>
           <td className="text-center">
@@ -82,34 +82,12 @@ const SubmissionStatus = ({
             </td>
             <th>
               <FormattedMessage
-                id="app.submission.submittedBy"
-                defaultMessage="Submitted by:"
+                id="app.submission.reevaluatedBy"
+                defaultMessage="Reevaluated by:"
               />
             </th>
             <td>
               <UsersNameContainer userId={submittedBy} />
-            </td>
-          </tr>}
-        {originalSubmissionId &&
-          <tr>
-            <td className="text-center">
-              <Icon name="mail-forward" />
-            </td>
-            <th>
-              <FormattedMessage
-                id="app.submission.originalSubmission"
-                defaultMessage="Resubmit of:"
-              />
-            </th>
-            <td>
-              <Link
-                to={SUBMISSION_DETAIL_URI_FACTORY(
-                  assignmentId,
-                  originalSubmissionId
-                )}
-              >
-                {originalSubmissionId}
-              </Link>
             </td>
           </tr>}
         <tr>
@@ -155,8 +133,7 @@ const SubmissionStatus = ({
         </tr>
       </tbody>
     </Table>
-  </Box>
-);
+  </Box>;
 
 SubmissionStatus.propTypes = {
   evaluationStatus: PropTypes.string.isRequired,
