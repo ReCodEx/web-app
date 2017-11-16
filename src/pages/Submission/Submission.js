@@ -121,15 +121,14 @@ class Submission extends Component {
                   <ResubmitSolutionContainer
                     id={submission.id}
                     assignmentId={assignment.id}
-                    isDebug={true}
+                    isDebug={false}
                   />
                   <ResubmitSolutionContainer
                     id={submission.id}
                     assignmentId={assignment.id}
-                    isDebug={false}
+                    isDebug={true}
                   />
                 </p>}
-              {console.log(fetchStatus)}
               <FetchManyResourceRenderer fetchManyStatus={fetchStatus}>
                 {() =>
                   <SubmissionDetail
@@ -157,7 +156,7 @@ Submission.propTypes = {
   loadAsync: PropTypes.func.isRequired,
   isSupervisorOrMore: PropTypes.func.isRequired,
   evaluations: PropTypes.object,
-  fetchStatus: PropTypes.string.isRequired
+  fetchStatus: PropTypes.string
 };
 
 export default connect(

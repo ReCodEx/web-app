@@ -9,7 +9,8 @@ import BonusPointsContainer from '../../../containers/BonusPointsContainer';
 import DownloadResultArchiveContainer from '../../../containers/DownloadResultArchiveContainer';
 import CommentThreadContainer from '../../../containers/CommentThreadContainer';
 import SourceCodeViewerContainer from '../../../containers/SourceCodeViewerContainer';
-import SubmissionEvaluationsContainer from '../../../containers/SubmissionEvaluationsContainer';
+import SubmissionEvaluations from '../SubmissionEvaluations';
+import ResourceRenderer from '../../helpers/ResourceRenderer';
 
 import EvaluationDetail from '../EvaluationDetail';
 import CompilationLogs from '../CompilationLogs';
@@ -34,8 +35,7 @@ class SubmissionDetail extends Component {
         maxPoints,
         bonusPoints,
         accepted,
-        runtimeEnvironmentId,
-        submissions
+        runtimeEnvironmentId
       },
       assignment,
       isSupervisor,
@@ -117,13 +117,17 @@ class SubmissionDetail extends Component {
               {isSupervisor &&
                 <Row>
                   <Col lg={12}>
-                    <SubmissionEvaluationsContainer
-                      submissionId={id}
-                      submission={{ submissions }}
-                      assignmentId={assignment.id}
-                      activeSubmissionId={activeSubmissionId}
-                      onSelect={id => this.setState({ activeSubmissionId: id })}
-                    />
+                    <ResourceRenderer resource={evaluations.toArray()}>
+                      {(...evaluations) =>
+                        <SubmissionEvaluations
+                          submissionId={id}
+                          evaluations={evaluations}
+                          assignmentId={assignment.id}
+                          activeSubmissionId={activeSubmissionId}
+                          onSelect={id =>
+                            this.setState({ activeSubmissionId: id })}
+                        />}
+                    </ResourceRenderer>
                   </Col>
                 </Row>}
             </Col>}

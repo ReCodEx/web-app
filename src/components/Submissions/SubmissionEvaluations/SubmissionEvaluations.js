@@ -28,13 +28,14 @@ const SubmissionEvaluations = ({
   >
     <EvaluationTable
       evaluations={evaluations}
+      selectedRowId={activeSubmissionId}
       renderButtons={id =>
         <td className="text-right">
           {id === activeSubmissionId
             ? <Button bsStyle="success" bsSize="xs" disabled>
                 <FormattedMessage
-                  id="app.submissionEvaluation.active"
-                  defaultMessage="Active"
+                  id="app.submissionEvaluation.selected"
+                  defaultMessage="Selected"
                 />
               </Button>
             : <Button

@@ -24,7 +24,7 @@ const ResubmitSolutionContainer = ({
 }) => {
   return (
     <span>
-      <ResubmitSolution resubmit={resubmit} isDebug={isDebug} />
+      <ResubmitSolution id={id} resubmit={resubmit} isDebug={isDebug} />
       <EvaluationProgressContainer
         isOpen={isProcessing}
         monitor={monitor}
