@@ -4,7 +4,7 @@ import { List, Map } from 'immutable';
 import { loggedInUserSelector } from './users';
 import { groupsSelector, filterGroups } from './groups';
 import { getAssignments } from './assignments';
-import { isReady, getJsData } from '../helpers/resourceManager';
+import { isReady } from '../helpers/resourceManager';
 
 const EMPTY_MAP = Map();
 const EMPTY_LIST = List();
