@@ -18,7 +18,7 @@ import GroupsNameContainer from '../../../containers/GroupsNameContainer';
 import styles from './ExerciseDetail.less';
 import { MaybeSucceededIcon } from '../../icons';
 import { getLocalizedDescription } from '../../../helpers/getLocalizedData';
-import LocalizedExerciseName from '../../helpers/LocalizedExerciseName';
+import { LocalizedExerciseName } from '../../helpers/LocalizedNames';
 
 const ExerciseDetail = ({
   id,

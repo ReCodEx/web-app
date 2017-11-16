@@ -2,12 +2,12 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { reduxForm, Field } from 'redux-form';
 import { FormattedMessage, injectIntl } from 'react-intl';
+import { Alert } from 'react-bootstrap';
 
 import FormBox from '../../widgets/FormBox';
 import { SelectField } from '../Fields';
-
-import { Alert } from 'react-bootstrap';
 import SubmitButton from '../SubmitButton';
+import { getGroupCanonicalLocalizedName } from '../../../helpers/getLocalizedData';
 
 class SisCreateGroupForm extends Component {
   render() {
@@ -19,6 +19,7 @@ class SisCreateGroupForm extends Component {
       submitting,
       hasSucceeded,
       groups,
+      groupsAccessor,
       intl: { locale }
     } = this.props;
 
@@ -87,7 +88,11 @@ class SisCreateGroupForm extends Component {
           options={groups
             .map(group => ({
               key: group.id,
-              name: group.name
+              name: getGroupCanonicalLocalizedName(
+                group,
+                groupsAccessor,
+                locale
+              )
             }))
             .sort((a, b) => a.name.localeCompare(b.name, locale))}
           addEmptyOption
@@ -106,6 +111,7 @@ SisCreateGroupForm.propTypes = {
   hasSucceeded: PropTypes.bool,
   submitFailed: PropTypes.bool,
   groups: PropTypes.array,
+  groupsAccessor: PropTypes.func.isRequired,
   intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired
 };
 

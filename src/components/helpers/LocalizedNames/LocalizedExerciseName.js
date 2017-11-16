@@ -20,8 +20,8 @@ const LocalizedExerciseName = ({ entity, intl: { locale } }) => {
             placement="right"
             overlay={
               <Tooltip id={otherNames.map(n => n.name).join(', ')}>
-                {otherNames.map(name =>
-                  <div key={entity.id + '.nametooltip.' + name.locale}>
+                {otherNames.map((name, i) =>
+                  <div key={i}>
                     <strong>{name.name}</strong>&nbsp;[{name.locale}]
                   </div>
                 )}

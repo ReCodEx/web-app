@@ -4,6 +4,7 @@ import { FormattedMessage } from 'react-intl';
 import Icon from 'react-fontawesome';
 import { LoadingIcon } from '../../icons';
 import LevelGap from './LevelGap';
+import GroupsName from '../../../components/Groups/GroupsName';
 
 const TreeViewLeaf = ({
   loading = false,
@@ -44,7 +45,7 @@ TreeViewLeaf.propTypes = {
   loading: PropTypes.bool,
   title: PropTypes.oneOfType([
     PropTypes.string,
-    PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) })
+    PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage, GroupsName]) })
   ]).isRequired,
   admins: PropTypes.array,
   icon: PropTypes.string,

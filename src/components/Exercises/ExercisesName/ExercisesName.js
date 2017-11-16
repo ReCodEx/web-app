@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router';
 
 import withLinks from '../../../hoc/withLinks';
-import LocalizedExerciseName from '../../helpers/LocalizedExerciseName';
+import { LocalizedExerciseName } from '../../helpers/LocalizedNames';
 
 import { MaybeLockedExerciseIcon } from '../../icons';
 

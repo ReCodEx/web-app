@@ -5,7 +5,7 @@ import AssignmentStatusIcon from '../AssignmentStatusIcon/AssignmentStatusIcon';
 import { FormattedDate, FormattedTime } from 'react-intl';
 
 import withLinks from '../../../../hoc/withLinks';
-import LocalizedExerciseName from '../../../helpers/LocalizedExerciseName';
+import { LocalizedExerciseName } from '../../../helpers/LocalizedNames';
 import { MaybeBonusAssignmentIcon } from '../../../icons';
 
 const AssignmentTableRow = ({

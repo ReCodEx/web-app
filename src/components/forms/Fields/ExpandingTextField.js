@@ -14,7 +14,9 @@ class ExpandingTextField extends Component {
 
   componentDidMount() {
     const { input: { value } } = this.props;
-    const initialValue = Array.isArray(value) ? value.concat(['']) : [''];
+    const initialValue = Array.isArray(value)
+      ? value.concat([''])
+      : [value, ''];
     this.setState({ texts: initialValue });
   }
 
@@ -40,6 +42,8 @@ class ExpandingTextField extends Component {
       onChange(texts2);
     }
   };
+
+  isReference = () => {};
 
   render() {
     const {

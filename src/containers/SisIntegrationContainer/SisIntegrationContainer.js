@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import Box from '../../components/widgets/Box';
 import { Table } from 'react-bootstrap';
 import Button from '../../components/widgets/FlatButton';
 import { LinkContainer } from 'react-router-bootstrap';
 import Icon from 'react-fontawesome';
 
+import UsersNameContainer from '../UsersNameContainer';
 import { fetchSisStatusIfNeeded } from '../../redux/modules/sisStatus';
 import { fetchSisSubscribedGroups } from '../../redux/modules/sisSubscribedGroups';
 import { sisStateSelector } from '../../redux/selectors/sisStatus';
@@ -15,6 +16,7 @@ import { sisSubscribedGroupsSelector } from '../../redux/selectors/sisSubscribed
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import LeaveJoinGroupButtonContainer from '../LeaveJoinGroupButtonContainer';
+import { getLocalizedName } from '../../helpers/getLocalizedData';
 
 import withLinks from '../../hoc/withLinks';
 
@@ -40,7 +42,8 @@ class SisIntegrationContainer extends Component {
       sisStatus,
       currentUserId,
       sisGroups,
-      links: { GROUP_URI_FACTORY }
+      links: { GROUP_URI_FACTORY },
+      intl: { locale }
     } = this.props;
     return (
       <Box
@@ -91,8 +94,8 @@ class SisIntegrationContainer extends Component {
                                     </th>
                                     <th>
                                       <FormattedMessage
-                                        id="app.sisIntegration.groupExtId"
-                                        defaultMessage="SIS ID"
+                                        id="app.sisIntegration.groupAdmins"
+                                        defaultMessage="Group Administrators"
                                       />
                                     </th>
                                     <th />
@@ -103,12 +106,15 @@ class SisIntegrationContainer extends Component {
                                     groups.map((group, i) =>
                                       <tr key={i}>
                                         <td>
-                                          {group.name}
+                                          {getLocalizedName(group, locale)}
                                         </td>
                                         <td>
-                                          <code>
-                                            {group.externalId}
-                                          </code>
+                                          {group.primaryAdminsIds.map(id =>
+                                            <UsersNameContainer
+                                              key={id}
+                                              userId={id}
+                                            />
+                                          )}
                                         </td>
                                         <td className="text-right">
                                           <span>
@@ -138,12 +144,14 @@ class SisIntegrationContainer extends Component {
                                 </tbody>
                               </Table>
                             : <div className="text-center">
-                                <b>
-                                  <FormattedMessage
-                                    id="app.sisIntegration.noSisGroups"
-                                    defaultMessage="Currently there are no ReCodEx groups matching your SIS subjects for this time period."
-                                  />
-                                </b>
+                                <p>
+                                  <b>
+                                    <FormattedMessage
+                                      id="app.sisIntegration.noSisGroups"
+                                      defaultMessage="Currently there are no ReCodEx groups matching your SIS subjects for this time period."
+                                    />
+                                  </b>
+                                </p>
                               </div>}
                         </div>}
                     </ResourceRenderer>
@@ -161,7 +169,8 @@ SisIntegrationContainer.propTypes = {
   currentUserId: PropTypes.string,
   loadData: PropTypes.func.isRequired,
   sisGroups: PropTypes.func.isRequired,
-  links: PropTypes.object
+  links: PropTypes.object,
+  intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired
 };
 
 export default withLinks(
@@ -179,5 +188,5 @@ export default withLinks(
       loadData: loggedInUserId =>
         SisIntegrationContainer.loadData(dispatch, loggedInUserId)
     })
-  )(SisIntegrationContainer)
+  )(injectIntl(SisIntegrationContainer))
 );

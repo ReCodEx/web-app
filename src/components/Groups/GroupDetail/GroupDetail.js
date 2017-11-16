@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import { FormattedMessage, FormattedNumber } from 'react-intl';
+import { FormattedMessage, FormattedNumber, injectIntl } from 'react-intl';
 import { Row, Col, Table } from 'react-bootstrap';
 import ReactMarkdown from 'react-remarkable';
 
@@ -9,12 +9,17 @@ import Box from '../../widgets/Box';
 import SupervisorsList from '../../Users/SupervisorsList';
 import { MaybeSucceededIcon } from '../../icons';
 import GroupTree from '../GroupTree';
+import {
+  getLocalizedName,
+  getLocalizedDescription
+} from '../../../helpers/getLocalizedData';
 
 const GroupDetail = ({
   group: {
     id,
     externalId,
     name,
+    localizedTexts,
     description,
     threshold,
     parentGroupId,
@@ -26,7 +31,8 @@ const GroupDetail = ({
   groups,
   publicGroups,
   supervisors,
-  isAdmin
+  isAdmin,
+  intl: { locale }
 }) =>
   <div>
     <Row>
@@ -40,7 +46,14 @@ const GroupDetail = ({
                   defaultMessage="Group description"
                 />
               }
-              description={<ReactMarkdown source={description} />}
+              description={
+                <ReactMarkdown
+                  source={getLocalizedDescription(
+                    { description, localizedTexts },
+                    locale
+                  )}
+                />
+              }
               type="primary"
               collapsable
               noPadding
@@ -123,7 +136,9 @@ const GroupDetail = ({
             <FormattedMessage
               id="app.groupDetail.supervisors"
               defaultMessage="Supervisors of {groupName}"
-              values={{ groupName: name }}
+              values={{
+                groupName: getLocalizedName({ name, localizedTexts }, locale)
+              }}
             />
           }
         >
@@ -157,7 +172,8 @@ GroupDetail.propTypes = {
   groups: PropTypes.object.isRequired,
   publicGroups: ImmutablePropTypes.map.isRequired,
   supervisors: PropTypes.array.isRequired,
-  isAdmin: PropTypes.bool
+  isAdmin: PropTypes.bool,
+  intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired
 };
 
-export default GroupDetail;
+export default injectIntl(GroupDetail);
