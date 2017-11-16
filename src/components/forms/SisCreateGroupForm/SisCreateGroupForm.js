@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { reduxForm, Field } from 'redux-form';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
 import FormBox from '../../widgets/FormBox';
 import { SelectField } from '../Fields';
@@ -18,7 +18,8 @@ class SisCreateGroupForm extends Component {
       submitFailed: hasFailed,
       submitting,
       hasSucceeded,
-      groups
+      groups,
+      intl: { locale }
     } = this.props;
 
     return (
@@ -83,10 +84,12 @@ class SisCreateGroupForm extends Component {
               defaultMessage="Parent group:"
             />
           }
-          options={groups.map(group => ({
-            key: group.id,
-            name: group.name
-          }))}
+          options={groups
+            .map(group => ({
+              key: group.id,
+              name: group.name
+            }))
+            .sort((a, b) => a.name.localeCompare(b.name, locale))}
           addEmptyOption
         />
       </FormBox>
@@ -102,7 +105,8 @@ SisCreateGroupForm.propTypes = {
   submitting: PropTypes.bool,
   hasSucceeded: PropTypes.bool,
   submitFailed: PropTypes.bool,
-  groups: PropTypes.array
+  groups: PropTypes.array,
+  intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired
 };
 
 const validate = ({ parentGroupId }) => {
@@ -123,4 +127,4 @@ const validate = ({ parentGroupId }) => {
 export default reduxForm({
   form: 'sisCreateGroup',
   validate
-})(SisCreateGroupForm);
+})(injectIntl(SisCreateGroupForm));

@@ -9,6 +9,7 @@ import Button from '../../components/widgets/FlatButton';
 import { LinkContainer } from 'react-router-bootstrap';
 import Icon from 'react-fontawesome';
 
+import { fetchGroupsIfNeeded } from '../../redux/modules/groups';
 import { fetchSisStatusIfNeeded } from '../../redux/modules/sisStatus';
 import {
   fetchSisSupervisedCourses,
@@ -51,10 +52,10 @@ const getLocalizedData = (obj, locale) => {
 
 class SisSupervisorGroupsContainer extends Component {
   componentDidUpdate(prevProps) {
-    console.log('SisSupervisorGroupsContainer');
+    //console.log('SisSupervisorGroupsContainer');
     Object.keys(this.props).forEach(key => {
       if (this.props[key] !== prevProps[key]) {
-        console.log(key, 'changed from', prevProps[key], 'to', this.props[key]);
+        //console.log(key, 'changed from', prevProps[key], 'to', this.props[key]);
       }
     });
   }
@@ -75,6 +76,12 @@ class SisSupervisorGroupsContainer extends Component {
               .then(courses =>
                 courses.map(course =>
                   dispatch(fetchSisPossibleParentsIfNeeded(course.course.code))
+                    .then(res => res.value)
+                    .then(parents =>
+                      parents.map(parent =>
+                        dispatch(fetchGroupsIfNeeded(...parent.parentGroupsIds))
+                      )
+                    )
                 )
               )
           )

@@ -51,16 +51,14 @@ import SisSupervisorGroupsContainer from '../../containers/SisSupervisorGroupsCo
 
 import withLinks from '../../hoc/withLinks';
 
-import { Map } from 'immutable';
-
 const EMPTY_OBJ = {};
 
 class Dashboard extends Component {
   componentDidUpdate(prevProps) {
-    console.log('Dashboard');
+    //console.log('Dashboard');
     Object.keys(this.props).forEach(key => {
       if (this.props[key] !== prevProps[key]) {
-        console.log(key, 'changed from', prevProps[key], 'to', this.props[key]);
+        //console.log(key, 'changed from', prevProps[key], 'to', this.props[key]);
       }
     });
   }
