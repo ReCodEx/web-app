@@ -27,7 +27,7 @@ import {
 } from '../../redux/selectors/users';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import {
-  getSubmissionEvaluationsByIdsSelector,
+  evaluationsForSubmissionSelector,
   fetchManyStatus
 } from '../../redux/selectors/submissionEvaluations';
 
@@ -160,24 +160,16 @@ Submission.propTypes = {
 };
 
 export default connect(
-  (state, { params: { submissionId, assignmentId } }) => {
-    const submission = getSubmission(submissionId)(state);
-    return {
-      submission,
-      assignment: getAssignment(assignmentId)(state),
-      isSupervisorOrMore: groupId =>
-        isSupervisorOf(loggedInUserIdSelector(state), groupId)(state) ||
-        isAdminOf(loggedInUserIdSelector(state), groupId)(state) ||
-        isSuperAdmin(loggedInUserIdSelector(state))(state),
-      evaluations:
-        submission && submission.toJS().data != null
-          ? getSubmissionEvaluationsByIdsSelector(
-              submission.toJS().data.submissions
-            )(state)
-          : null,
-      fetchStatus: fetchManyStatus(submissionId)(state)
-    };
-  },
+  (state, { params: { submissionId, assignmentId } }) => ({
+    submission: getSubmission(submissionId)(state),
+    assignment: getAssignment(assignmentId)(state),
+    isSupervisorOrMore: groupId =>
+      isSupervisorOf(loggedInUserIdSelector(state), groupId)(state) ||
+      isAdminOf(loggedInUserIdSelector(state), groupId)(state) ||
+      isSuperAdmin(loggedInUserIdSelector(state))(state),
+    evaluations: evaluationsForSubmissionSelector(submissionId)(state),
+    fetchStatus: fetchManyStatus(submissionId)(state)
+  }),
   (dispatch, { params }) => ({
     loadAsync: () => Submission.loadAsync(params, dispatch)
   })
