@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import Box from '../../components/widgets/Box';
@@ -36,6 +37,8 @@ const oddEven = {
   en: ['odd', 'even']
 };
 
+const EMPTY_ARRAY = [];
+
 const getLocalizedData = (obj, locale) => {
   if (obj && obj[locale]) {
     return obj[locale];
@@ -47,6 +50,15 @@ const getLocalizedData = (obj, locale) => {
 };
 
 class SisSupervisorGroupsContainer extends Component {
+  componentDidUpdate(prevProps) {
+    console.log('SisSupervisorGroupsContainer');
+    Object.keys(this.props).forEach(key => {
+      if (this.props[key] !== prevProps[key]) {
+        console.log(key, 'changed from', prevProps[key], 'to', this.props[key]);
+      }
+    });
+  }
+
   componentDidMount() {
     this.props.loadData(this.props.currentUserId);
   }
@@ -81,6 +93,7 @@ class SisSupervisorGroupsContainer extends Component {
       links: { GROUP_URI_FACTORY },
       intl: { locale }
     } = this.props;
+
     return (
       <Box
         title={
@@ -115,7 +128,7 @@ class SisSupervisorGroupsContainer extends Component {
                       {`${term.year}-${term.term}`}
                     </h4>
                     <ResourceRenderer
-                      resource={sisCourses(term.year, term.term)}
+                      resource={sisCourses.get(`${term.year}-${term.term}`)}
                     >
                       {courses =>
                         <div>
@@ -232,7 +245,7 @@ class SisSupervisorGroupsContainer extends Component {
                                       <Row>
                                         <Col xs={6}>
                                           <ResourceRenderer
-                                            resource={sisPossibleParents(
+                                            resource={sisPossibleParents.get(
                                               course.course.code
                                             )}
                                           >
@@ -269,7 +282,12 @@ class SisSupervisorGroupsContainer extends Component {
                                                 term.term
                                               )}
                                             groups={
-                                              groups !== null ? groups : []
+                                              groups !== null
+                                                ? groups.map(group => ({
+                                                    key: group.id,
+                                                    name: group.name
+                                                  }))
+                                                : EMPTY_ARRAY
                                             }
                                           />
                                         </Col>
@@ -301,7 +319,7 @@ SisSupervisorGroupsContainer.propTypes = {
   currentUserId: PropTypes.string,
   groups: PropTypes.array,
   loadData: PropTypes.func.isRequired,
-  sisCourses: PropTypes.func.isRequired,
+  sisCourses: ImmutablePropTypes.map,
   createGroup: PropTypes.func.isRequired,
   bindGroup: PropTypes.func.isRequired,
   links: PropTypes.object,
@@ -317,10 +335,8 @@ export default injectIntl(
         return {
           sisStatus: sisStateSelector(state),
           currentUserId,
-          sisCourses: (year, term) =>
-            sisSupervisedCoursesSelector(currentUserId, year, term)(state),
-          sisPossibleParents: courseId =>
-            sisPossibleParentsSelector(courseId)(state)
+          sisCourses: sisSupervisedCoursesSelector(state),
+          sisPossibleParents: sisPossibleParentsSelector(state)
         };
       },
       dispatch => ({

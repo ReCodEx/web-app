@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { reduxForm, Field } from 'redux-form';
 import { FormattedMessage } from 'react-intl';
@@ -9,80 +9,90 @@ import { SelectField } from '../Fields';
 import { Alert } from 'react-bootstrap';
 import SubmitButton from '../SubmitButton';
 
-const SisCreateGroupForm = ({
-  invalid,
-  anyTouched,
-  handleSubmit,
-  submitFailed: hasFailed,
-  submitting,
-  hasSucceeded,
-  groups
-}) =>
-  <FormBox
-    title={
-      <FormattedMessage
-        id="app.sisCreateGroupForm.title"
-        defaultMessage="Create ReCodEx group from SIS"
-      />
-    }
-    type={hasSucceeded ? 'success' : undefined}
-    footer={
-      <div className="text-center">
-        <SubmitButton
-          id="sisCreateGroup"
-          invalid={invalid}
-          submitting={submitting}
-          dirty={anyTouched}
-          hasSucceeded={hasSucceeded}
-          hasFailed={hasFailed}
-          handleSubmit={handleSubmit}
-          messages={{
-            submit: (
-              <FormattedMessage
-                id="app.sisCreateGroupForm.submit"
-                defaultMessage="Create"
-              />
-            ),
-            submitting: (
-              <FormattedMessage
-                id="app.sisCreateGroupForm.submitting"
-                defaultMessage="Creating ..."
-              />
-            ),
-            success: (
-              <FormattedMessage
-                id="app.sisCreateGroupForm.success"
-                defaultMessage="The group was created."
-              />
-            )
-          }}
-        />
-      </div>
-    }
-  >
-    {hasFailed &&
-      <Alert bsStyle="danger">
-        <FormattedMessage
-          id="app.sisCreateGroupForm.failed"
-          defaultMessage="Creating group failed. Please try again later."
-        />
-      </Alert>}
+class SisCreateGroupForm extends Component {
+  render() {
+    const {
+      invalid,
+      anyTouched,
+      handleSubmit,
+      submitFailed: hasFailed,
+      submitting,
+      hasSucceeded,
+      groups
+    } = this.props;
 
-    <Field
-      name="parentGroupId"
-      required
-      component={SelectField}
-      label={
-        <FormattedMessage
-          id="app.sisCreateGroupForm.parentGroup"
-          defaultMessage="Parent group:"
+    return (
+      <FormBox
+        title={
+          <FormattedMessage
+            id="app.sisCreateGroupForm.title"
+            defaultMessage="Create ReCodEx group from SIS"
+          />
+        }
+        succeeded={hasSucceeded}
+        dirty={anyTouched}
+        footer={
+          <div className="text-center">
+            <SubmitButton
+              id="sisCreateGroup"
+              invalid={invalid}
+              submitting={submitting}
+              dirty={anyTouched}
+              hasSucceeded={hasSucceeded}
+              hasFailed={hasFailed}
+              handleSubmit={handleSubmit}
+              messages={{
+                submit: (
+                  <FormattedMessage
+                    id="app.sisCreateGroupForm.submit"
+                    defaultMessage="Create"
+                  />
+                ),
+                submitting: (
+                  <FormattedMessage
+                    id="app.sisCreateGroupForm.submitting"
+                    defaultMessage="Creating ..."
+                  />
+                ),
+                success: (
+                  <FormattedMessage
+                    id="app.sisCreateGroupForm.success"
+                    defaultMessage="The group was created."
+                  />
+                )
+              }}
+            />
+          </div>
+        }
+      >
+        {hasFailed &&
+          <Alert bsStyle="danger">
+            <FormattedMessage
+              id="app.sisCreateGroupForm.failed"
+              defaultMessage="Creating group failed. Please try again later."
+            />
+          </Alert>}
+
+        <Field
+          name="parentGroupId"
+          required
+          component={SelectField}
+          label={
+            <FormattedMessage
+              id="app.sisCreateGroupForm.parentGroup"
+              defaultMessage="Parent group:"
+            />
+          }
+          options={groups.map(group => ({
+            key: group.id,
+            name: group.name
+          }))}
+          addEmptyOption
         />
-      }
-      options={[{ key: '', name: '...' }].concat(
-        groups.map(group => ({ key: group.id, name: group.name }))
-      )}
-    />
-  </FormBox>;
+      </FormBox>
+    );
+  }
+}
 
 SisCreateGroupForm.propTypes = {
   onSubmit: PropTypes.func.isRequired,

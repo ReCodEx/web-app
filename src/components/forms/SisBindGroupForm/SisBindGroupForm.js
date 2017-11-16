@@ -25,7 +25,8 @@ const SisBindGroupForm = ({
         defaultMessage="Bind existing ReCodEx group to SIS"
       />
     }
-    type={hasSucceeded ? 'success' : undefined}
+    succeeded={hasSucceeded}
+    dirty={anyTouched}
     footer={
       <div className="text-center">
         <SubmitButton
@@ -78,9 +79,8 @@ const SisBindGroupForm = ({
           defaultMessage="Group:"
         />
       }
-      options={[{ key: '', name: '...' }].concat(
-        groups.map(group => ({ key: group.id, name: group.name }))
-      )}
+      options={groups}
+      addEmptyOption
     />
   </FormBox>;
 

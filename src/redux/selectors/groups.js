@@ -13,7 +13,7 @@ import { isReady, getId, getJsData } from '../helpers/resourceManager';
  */
 
 export const groupsSelector = state => state.groups.get('resources');
-const filterGroups = (ids, groups) =>
+export const filterGroups = (ids, groups) =>
   groups.filter(isReady).filter(group => ids.contains(getId(group)));
 
 export const groupSelector = id =>
