@@ -235,12 +235,14 @@ class SisSupervisorGroupsContainer extends Component {
                                             </tbody>
                                           </Table>
                                         : <div className="text-center">
-                                            <b>
-                                              <FormattedMessage
-                                                id="app.sisSupervisor.noSisGroups"
-                                                defaultMessage="Currently there are no ReCodEx groups matching this SIS lecture."
-                                              />
-                                            </b>
+                                            <p>
+                                              <b>
+                                                <FormattedMessage
+                                                  id="app.sisSupervisor.noSisGroups"
+                                                  defaultMessage="Currently there are no ReCodEx groups matching this SIS lecture."
+                                                />
+                                              </b>
+                                            </p>
                                           </div>}
                                       <Row>
                                         <Col xs={6}>
@@ -323,7 +325,7 @@ SisSupervisorGroupsContainer.propTypes = {
   createGroup: PropTypes.func.isRequired,
   bindGroup: PropTypes.func.isRequired,
   links: PropTypes.object,
-  sisPossibleParents: PropTypes.func.isRequired,
+  sisPossibleParents: ImmutablePropTypes.map,
   intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired
 };
 
