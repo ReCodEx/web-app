@@ -1,4 +1,5 @@
 const middleware = store => next => action => {
+  /* eslint no-console: ["error", { allow: ["log"] }] */
   let verbose = false;
   if (verbose) {
     console.log(action);

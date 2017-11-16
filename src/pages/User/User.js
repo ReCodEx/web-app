@@ -313,7 +313,7 @@ export default withLinks(
         isAdmin: isSuperadmin,
         studentOfGroupsIds: studentOfGroupsIdsSelector(userId)(state).toArray(),
         groupAssignments: groupId => groupsAssignmentsSelector(groupId)(state),
-        groupStatistics: groupId => createGroupsStatsSelector(groupId)(state),
+        groupStatistics: createGroupsStatsSelector(state),
         usersStatistics: statistics =>
           statistics.find(stat => stat.userId === userId) || {},
         commonGroups

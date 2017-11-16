@@ -26,8 +26,6 @@ import {
 
 import {
   getUser,
-  studentOfGroupsIdsSelector,
-  supervisorOfGroupsIdsSelector,
   isStudent,
   isSupervisor,
   isSuperAdmin
@@ -35,13 +33,13 @@ import {
 
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import { fetchGroupsStatsIfNeeded } from '../../redux/modules/stats';
-import { createGroupsStatsSelector } from '../../redux/selectors/stats';
+import { statisticsSelector } from '../../redux/selectors/stats';
+import { groupsSelector } from '../../redux/selectors/groups';
 import {
-  groupsAssignmentsSelector,
-  supervisorOfSelector,
-  studentOfSelector,
-  groupsSelector
-} from '../../redux/selectors/groups';
+  loggedInStudentOfGroupsAssignmentsSelector,
+  loggedInSupervisorOfSelector,
+  loggedInStudentOfSelector
+} from '../../redux/selectors/usersGroups';
 import { InfoIcon } from '../../components/icons';
 import { getJsData } from '../../redux/helpers/resourceManager';
 import SisIntegrationContainer from '../../containers/SisIntegrationContainer';
@@ -50,8 +48,11 @@ import SisSupervisorGroupsContainer from '../../containers/SisSupervisorGroupsCo
 import { getLocalizedName } from '../../helpers/getLocalizedData';
 import withLinks from '../../hoc/withLinks';
 
+const EMPTY_OBJ = {};
+
 class Dashboard extends Component {
   componentDidMount = () => this.props.loadAsync(this.props.userId);
+
   componentWillReceiveProps = newProps => {
     if (
       this.props.userId !== newProps.userId ||
@@ -94,18 +95,21 @@ class Dashboard extends Component {
       })
     );
 
+  usersStatistics(statistics) {
+    return (
+      statistics.find(stat => stat.userId === this.props.userId) || EMPTY_OBJ
+    );
+  }
+
   render() {
     const {
       user,
       student,
       studentOf,
-      studentOfGroupsIds,
       supervisor,
       supervisorOf,
-      supervisorOfGroupsIds,
       groupAssignments,
-      groupStatistics,
-      usersStatistics,
+      statistics,
       allGroups,
       isAdmin,
       links: { GROUP_URI_FACTORY },
@@ -146,7 +150,7 @@ class Dashboard extends Component {
             </p>
 
             {student &&
-              studentOfGroupsIds.length === 0 &&
+              studentOf.size === 0 &&
               <Row>
                 <Col sm={12}>
                   <div className="callout callout-success">
@@ -169,7 +173,7 @@ class Dashboard extends Component {
               </Row>}
 
             {supervisor &&
-              supervisorOfGroupsIds.length === 0 &&
+              supervisorOf.size === 0 &&
               <Row>
                 <Col sm={12}>
                   <div className="callout callout-success">
@@ -192,8 +196,8 @@ class Dashboard extends Component {
 
             {student && <SisIntegrationContainer />}
 
-            {studentOfGroupsIds.length > 0 &&
-              <ResourceRenderer resource={studentOf}>
+            {studentOf.size > 0 &&
+              <ResourceRenderer resource={studentOf.toArray()}>
                 {(...groups) =>
                   <div>
                     <h2 className="page-heading">
@@ -205,94 +209,32 @@ class Dashboard extends Component {
 
                     {groups.map(group =>
                       <div key={group.id}>
-                        <ResourceRenderer
-                          loading={
-                            <Row>
-                              <Col lg={4}>
-                                <LoadingInfoBox
-                                  title={getLocalizedName(group, locale)}
-                                />
-                              </Col>
-                            </Row>
-                          }
-                          resource={groupStatistics(group.id)}
-                        >
-                          {statistics =>
-                            <Row>
-                              <Col lg={4}>
-                                <Link to={GROUP_URI_FACTORY(group.id)}>
-                                  <UsersStats
-                                    {...group}
-                                    stats={usersStatistics(statistics)}
+                        {
+                          <ResourceRenderer
+                            loading={
+                              <Row>
+                                <Col lg={4}>
+                                  <LoadingInfoBox
+                                    title={getLocalizedName(group, locale)}
                                   />
-                                </Link>
-                              </Col>
-                              <Col lg={8}>
-                                <Box
-                                  title={<GroupsName {...group} noLink />}
-                                  collapsable
-                                  noPadding
-                                  isOpen
-                                  footer={
-                                    <p className="text-center">
-                                      <LinkContainer
-                                        to={GROUP_URI_FACTORY(group.id)}
-                                      >
-                                        <Button bsSize="sm">
-                                          <FormattedMessage
-                                            id="app.user.groupDetail"
-                                            defaultMessage="Show group's detail"
-                                          />
-                                        </Button>
-                                      </LinkContainer>
-                                    </p>
-                                  }
-                                >
-                                  <AssignmentsTable
-                                    userId={user.id}
-                                    assignments={groupAssignments(group.id)}
-                                    showGroup={false}
-                                    statuses={
-                                      usersStatistics(statistics).statuses
-                                    }
-                                  />
-                                </Box>
-                              </Col>
-                            </Row>}
-                        </ResourceRenderer>
-                      </div>
-                    )}
-                  </div>}
-              </ResourceRenderer>}
-
-            {(supervisor || isAdmin) &&
-              <ResourceRenderer resource={isAdmin ? allGroups : supervisorOf}>
-                {(...groups) =>
-                  <SisSupervisorGroupsContainer groups={groups} />}
-              </ResourceRenderer>}
-
-            {supervisorOfGroupsIds.length > 0 &&
-              <Row>
-                <Col sm={12}>
-                  <h2 className="page-heading">
-                    <FormattedMessage
-                      id="app.dashboard.supervisorOf"
-                      defaultMessage="Groups you supervise"
-                    />
-                  </h2>
-
-                  <ResourceRenderer resource={supervisorOf}>
-                    {(...groups) =>
-                      <div>
-                        {groups.map(group =>
-                          <Row key={group.id}>
-                            <Col lg={12}>
-                              <ResourceRenderer
-                                resource={groupStatistics(group.id)}
-                              >
-                                {statistics =>
+                                </Col>
+                              </Row>
+                            }
+                            resource={statistics.get(group.id)}
+                          >
+                            {statistics =>
+                              <Row>
+                                <Col lg={4}>
+                                  <Link to={GROUP_URI_FACTORY(group.id)}>
+                                    <UsersStats
+                                      {...group}
+                                      stats={this.usersStatistics(statistics)}
+                                    />
+                                  </Link>
+                                </Col>
+                                <Col lg={8}>
                                   <Box
-                                    title={<GroupsName {...group} noLink />}
+                                    title={getLocalizedName(group, locale)}
                                     collapsable
                                     noPadding
                                     isOpen
@@ -311,9 +253,84 @@ class Dashboard extends Component {
                                       </p>
                                     }
                                   >
-                                    <StudentsListContainer groupId={group.id} />
-                                  </Box>}
-                              </ResourceRenderer>
+                                    <AssignmentsTable
+                                      userId={user.id}
+                                      assignments={groupAssignments.get(
+                                        group.id
+                                      )}
+                                      showGroup={false}
+                                      statuses={
+                                        this.usersStatistics(statistics)
+                                          .statuses
+                                      }
+                                    />
+                                  </Box>
+                                </Col>
+                              </Row>}
+                          </ResourceRenderer>
+                        }
+                      </div>
+                    )}
+                  </div>}
+              </ResourceRenderer>}
+
+            {(supervisor || isAdmin) &&
+              <ResourceRenderer
+                resource={
+                  isAdmin ? allGroups.toArray() : supervisorOf.toArray()
+                }
+              >
+                {(...groups) =>
+                  <SisSupervisorGroupsContainer groups={groups} />}
+              </ResourceRenderer>}
+
+            {supervisorOf.size > 0 &&
+              <Row>
+                <Col sm={12}>
+                  <h2 className="page-heading">
+                    <FormattedMessage
+                      id="app.dashboard.supervisorOf"
+                      defaultMessage="Groups you supervise"
+                    />
+                  </h2>
+
+                  <ResourceRenderer resource={supervisorOf.toArray()}>
+                    {(...groups) =>
+                      <div>
+                        {groups.map(group =>
+                          <Row key={group.id}>
+                            <Col lg={12}>
+                              {
+                                <ResourceRenderer
+                                  resource={statistics.get(group.id)}
+                                >
+                                  {statistics =>
+                                    <Box
+                                      title={<GroupsName {...group} noLink />}
+                                      collapsable
+                                      noPadding
+                                      isOpen
+                                      footer={
+                                        <p className="text-center">
+                                          <LinkContainer
+                                            to={GROUP_URI_FACTORY(group.id)}
+                                          >
+                                            <Button bsSize="sm">
+                                              <FormattedMessage
+                                                id="app.user.groupDetail"
+                                                defaultMessage="Show group's detail"
+                                              />
+                                            </Button>
+                                          </LinkContainer>
+                                        </p>
+                                      }
+                                    >
+                                      <StudentsListContainer
+                                        groupId={group.id}
+                                      />
+                                    </Box>}
+                                </ResourceRenderer>
+                              }
                             </Col>
                           </Row>
                         )}
@@ -331,18 +348,15 @@ Dashboard.propTypes = {
   user: ImmutablePropTypes.map,
   commonGroups: PropTypes.array,
   student: PropTypes.bool,
-  studentOf: PropTypes.array,
-  studentOfGroupsIds: PropTypes.array,
+  studentOf: ImmutablePropTypes.map,
   supervisor: PropTypes.bool,
-  supervisorOf: PropTypes.array,
-  supervisorOfGroupsIds: PropTypes.array,
+  supervisorOf: ImmutablePropTypes.map,
   superadmin: PropTypes.bool,
   loadAsync: PropTypes.func.isRequired,
   userId: PropTypes.string,
-  groupAssignments: PropTypes.func.isRequired,
-  groupStatistics: PropTypes.func.isRequired,
-  usersStatistics: PropTypes.func.isRequired,
-  allGroups: PropTypes.array,
+  groupAssignments: ImmutablePropTypes.map,
+  statistics: ImmutablePropTypes.map,
+  allGroups: ImmutablePropTypes.map,
   isAdmin: PropTypes.bool,
   links: PropTypes.object,
   intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired
@@ -358,17 +372,11 @@ export default withLinks(
         supervisor: isSupervisor(userId)(state),
         superadmin: isSuperAdmin(userId)(state),
         user: getUser(userId)(state),
-        studentOfGroupsIds: studentOfGroupsIdsSelector(userId)(state).toArray(),
-        studentOf: studentOfSelector(userId)(state).toArray(),
-        supervisorOfGroupsIds: supervisorOfGroupsIdsSelector(userId)(
-          state
-        ).toArray(),
-        supervisorOf: supervisorOfSelector(userId)(state).toArray(),
-        groupAssignments: groupId => groupsAssignmentsSelector(groupId)(state),
-        groupStatistics: groupId => createGroupsStatsSelector(groupId)(state),
-        usersStatistics: statistics =>
-          statistics.find(stat => stat.userId === userId) || {},
-        allGroups: groupsSelector(state).toArray(),
+        studentOf: loggedInStudentOfSelector(state),
+        supervisorOf: loggedInSupervisorOfSelector(state),
+        groupAssignments: loggedInStudentOfGroupsAssignmentsSelector(state),
+        statistics: statisticsSelector(state),
+        allGroups: groupsSelector(state),
         isAdmin: isSuperAdmin(userId)(state)
       };
     },

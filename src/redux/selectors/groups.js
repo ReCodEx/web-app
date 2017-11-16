@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect';
-import { List } from 'immutable';
+import { List, Map } from 'immutable';
 
 import {
   studentOfGroupsIdsSelector,
@@ -11,13 +11,20 @@ import { isReady, getId, getJsData } from '../helpers/resourceManager';
 /**
  * Select groups part of the state
  */
+const EMPTY_MAP = Map();
 
 export const groupsSelector = state => state.groups.get('resources');
-const filterGroups = (ids, groups) =>
+export const filterGroups = (ids, groups) =>
   groups.filter(isReady).filter(group => ids.contains(getId(group)));
 
 export const groupSelector = id =>
   createSelector(groupsSelector, groups => groups.get(id));
+
+// This is perhaps the best way how to create simple accessor (selector with parameter).
+export const groupDataAccessorSelector = createSelector(
+  groupsSelector,
+  groups => groupId => groups.getIn([groupId, 'data'], EMPTY_MAP)
+);
 
 export const studentOfSelector = userId =>
   createSelector(

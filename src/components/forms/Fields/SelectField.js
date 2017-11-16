@@ -14,6 +14,8 @@ const SelectField = ({
   meta: { touched, error },
   label,
   options,
+  addEmptyOption = false,
+  emptyOptionCaption = '...',
   ...props
 }) =>
   <FormGroup
@@ -24,6 +26,10 @@ const SelectField = ({
       {label}
     </ControlLabel>
     <FormControl {...input} {...props} componentClass="select">
+      {addEmptyOption &&
+        <option value={''} key={'-1'}>
+          {emptyOptionCaption}
+        </option>}
       {options.map(({ key, name }, i) =>
         <option value={key} key={i}>
           {name}
@@ -51,7 +57,9 @@ SelectField.propTypes = {
     PropTypes.string,
     PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) })
   ]).isRequired,
-  options: PropTypes.array.isRequired
+  options: PropTypes.array.isRequired,
+  addEmptyOption: PropTypes.bool,
+  emptyOptionCaption: PropTypes.string
 };
 
 export default SelectField;

@@ -8,6 +8,7 @@ import Button from '../../components/widgets/FlatButton';
 import { LinkContainer } from 'react-router-bootstrap';
 import Icon from 'react-fontawesome';
 
+import UsersNameContainer from '../UsersNameContainer';
 import { fetchSisStatusIfNeeded } from '../../redux/modules/sisStatus';
 import { fetchSisSubscribedGroups } from '../../redux/modules/sisSubscribedGroups';
 import { sisStateSelector } from '../../redux/selectors/sisStatus';
@@ -93,8 +94,8 @@ class SisIntegrationContainer extends Component {
                                     </th>
                                     <th>
                                       <FormattedMessage
-                                        id="app.sisIntegration.groupExtId"
-                                        defaultMessage="SIS ID"
+                                        id="app.sisIntegration.groupAdmins"
+                                        defaultMessage="Group Administrators"
                                       />
                                     </th>
                                     <th />
@@ -108,9 +109,12 @@ class SisIntegrationContainer extends Component {
                                           {getLocalizedName(group, locale)}
                                         </td>
                                         <td>
-                                          <code>
-                                            {group.externalId}
-                                          </code>
+                                          {group.primaryAdminsIds.map(id =>
+                                            <UsersNameContainer
+                                              key={id}
+                                              userId={id}
+                                            />
+                                          )}
                                         </td>
                                         <td className="text-right">
                                           <span>
@@ -140,12 +144,14 @@ class SisIntegrationContainer extends Component {
                                 </tbody>
                               </Table>
                             : <div className="text-center">
-                                <b>
-                                  <FormattedMessage
-                                    id="app.sisIntegration.noSisGroups"
-                                    defaultMessage="Currently there are no ReCodEx groups matching your SIS subjects for this time period."
-                                  />
-                                </b>
+                                <p>
+                                  <b>
+                                    <FormattedMessage
+                                      id="app.sisIntegration.noSisGroups"
+                                      defaultMessage="Currently there are no ReCodEx groups matching your SIS subjects for this time period."
+                                    />
+                                  </b>
+                                </p>
                               </div>}
                         </div>}
                     </ResourceRenderer>
