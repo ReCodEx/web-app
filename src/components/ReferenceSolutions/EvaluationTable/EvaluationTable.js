@@ -7,18 +7,11 @@ import {
   FormattedNumber
 } from 'react-intl';
 import { Table } from 'react-bootstrap';
-import { Link } from 'react-router';
 import classnames from 'classnames';
-
-import withLinks from '../../../hoc/withLinks';
 import AssignmentStatusIcon from '../../Assignments/Assignment/AssignmentStatusIcon';
+import './EvaluationTable.css';
 
-const EvaluationTable = ({
-  evaluations,
-  referenceSolutionId,
-  exerciseId,
-  links: { REFERENCE_SOLUTION_EVALUATION_URI_FACTORY }
-}) =>
+const EvaluationTable = ({ evaluations, renderButtons, selectedRowId = '' }) =>
   <Table>
     <thead>
       <tr>
@@ -47,7 +40,7 @@ const EvaluationTable = ({
           return b.evaluation.evaluatedAt - a.evaluation.evaluatedAt;
         })
         .map(e =>
-          <tr key={e.id}>
+          <tr key={e.id} className={selectedRowId === e.id ? 'activeRow' : ''}>
             <td>
               <AssignmentStatusIcon
                 id={e.id}
@@ -81,21 +74,7 @@ const EvaluationTable = ({
                   />
                 </i>
               </td>}
-            <td className="text-right">
-              <Link
-                to={REFERENCE_SOLUTION_EVALUATION_URI_FACTORY(
-                  exerciseId,
-                  referenceSolutionId,
-                  e.id
-                )}
-                className="btn btn-flat btn-default btn-xs"
-              >
-                <FormattedMessage
-                  id="app.evaluationTable.showDetails"
-                  defaultMessage="Show details"
-                />
-              </Link>
-            </td>
+            {renderButtons && renderButtons(e.id)}
           </tr>
         )}
 
@@ -113,9 +92,8 @@ const EvaluationTable = ({
 
 EvaluationTable.propTypes = {
   evaluations: PropTypes.array.isRequired,
-  referenceSolutionId: PropTypes.string.isRequired,
-  exerciseId: PropTypes.string.isRequired,
-  links: PropTypes.object
+  renderButtons: PropTypes.func,
+  selectedRowId: PropTypes.string
 };
 
-export default withLinks(EvaluationTable);
+export default EvaluationTable;

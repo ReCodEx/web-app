@@ -25,7 +25,7 @@ import {
   getUser,
   studentOfGroupsIdsSelector,
   isStudent,
-  isSuperAdmin
+  isLoggedAsSuperAdmin
 } from '../../redux/selectors/users';
 import { getProfile } from '../../redux/selectors/publicProfiles';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
@@ -275,7 +275,7 @@ export default withLinks(
   connect(
     (state, { params: { userId } }) => {
       const loggedInUserId = loggedInUserIdSelector(state);
-      const isSuperadmin = isSuperAdmin(loggedInUserId)(state);
+      const isSuperadmin = isLoggedAsSuperAdmin(state);
 
       const studentOfArray = studentOfSelector2(userId)(state)
         .toList()

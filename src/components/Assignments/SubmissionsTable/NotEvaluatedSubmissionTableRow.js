@@ -4,13 +4,19 @@ import { FormattedDate, FormattedTime, FormattedMessage } from 'react-intl';
 import { Link } from 'react-router';
 import AssignmentStatusIcon from '../Assignment/AssignmentStatusIcon';
 
-const NotEvaluatedSubmissionTableRow = ({ link, note, submittedAt }) => (
+const NotEvaluatedSubmissionTableRow = ({
+  link,
+  note,
+  solution: { createdAt }
+}) =>
   <tr>
-    <td><AssignmentStatusIcon id={link} status="work-in-progress" /></td>
     <td>
-      <FormattedDate value={submittedAt * 1000} />
+      <AssignmentStatusIcon id={link} status="work-in-progress" />
+    </td>
+    <td>
+      <FormattedDate value={createdAt * 1000} />
       &nbsp;
-      <FormattedTime value={submittedAt * 1000} />
+      <FormattedTime value={createdAt * 1000} />
     </td>
     <td className="text-center">-</td>
     <td className="text-center">- / -</td>
@@ -25,13 +31,14 @@ const NotEvaluatedSubmissionTableRow = ({ link, note, submittedAt }) => (
         />
       </Link>
     </td>
-  </tr>
-);
+  </tr>;
 
 NotEvaluatedSubmissionTableRow.propTypes = {
   link: PropTypes.string.isRequired,
-  submittedAt: PropTypes.number.isRequired,
-  note: PropTypes.string.isRequired
+  note: PropTypes.string.isRequired,
+  solution: PropTypes.shape({
+    createdAt: PropTypes.number.isRequired
+  }).isRequired
 };
 
 export default NotEvaluatedSubmissionTableRow;

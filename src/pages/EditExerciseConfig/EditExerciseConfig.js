@@ -11,7 +11,7 @@ import Box from '../../components/widgets/Box';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import { LocalizedExerciseName } from '../../components/helpers/LocalizedNames';
 
-// import EditExerciseConfigForm from '../../components/forms/EditExerciseConfigForm/EditExerciseConfigForm';
+import EditExerciseConfigForm from '../../components/forms/EditExerciseConfigForm/EditExerciseConfigForm';
 import EditEnvironmentConfigForm from '../../components/forms/EditEnvironmentConfigForm';
 import EditScoreConfigForm from '../../components/forms/EditScoreConfigForm';
 import EditSimpleLimitsBox from '../../components/Exercises/EditSimpleLimitsBox';
@@ -51,6 +51,7 @@ import { simpleLimitsSelector } from '../../redux/selectors/simpleLimits';
 
 import withLinks from '../../hoc/withLinks';
 import { getLocalizedName } from '../../helpers/getLocalizedData';
+import { isLoggedAsSuperAdmin } from '../../redux/selectors/users';
 
 class EditExerciseConfig extends Component {
   componentWillMount = () => this.props.loadAsync();
@@ -87,19 +88,20 @@ class EditExerciseConfig extends Component {
       params: { exerciseId },
       exercise,
       editEnvironmentConfigs,
-      // setConfig,
+      setConfig,
       runtimeEnvironments,
       environmentFormValues,
       exerciseConfig,
       exerciseEnvironmentConfig,
       exerciseScoreConfig,
       editEnvironmentSimpleLimits,
-      // pipelines,
+      pipelines,
       limits,
       setHorizontally,
       setVertically,
       setAll,
       editScoreConfig,
+      superadmin,
       intl: { locale }
     } = this.props;
 
@@ -200,13 +202,14 @@ class EditExerciseConfig extends Component {
                 >
                   {(config, ...runtimeEnvironments) =>
                     <div>
-                      {/* <EditExerciseConfigForm
-                        runtimeEnvironments={runtimeEnvironments}
-                        initialValues={{ config: config }}
-                        onSubmit={setConfig}
-                        exercise={exercise}
-                        pipelines={pipelines}
-                      /> */}
+                      {superadmin &&
+                        <EditExerciseConfigForm
+                          runtimeEnvironments={runtimeEnvironments}
+                          initialValues={{ config: config }}
+                          onSubmit={setConfig}
+                          exercise={exercise}
+                          pipelines={pipelines}
+                        />}
                       <EditSimpleLimitsBox
                         editLimits={editEnvironmentSimpleLimits}
                         environments={exercise.runtimeEnvironments}
@@ -247,6 +250,7 @@ EditExerciseConfig.propTypes = {
   setVertically: PropTypes.func.isRequired,
   setAll: PropTypes.func.isRequired,
   editScoreConfig: PropTypes.func.isRequired,
+  superadmin: PropTypes.bool.isRequired,
   intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired
 };
 
@@ -266,7 +270,8 @@ export default injectIntl(
           )(state),
           pipelines: pipelinesSelector(state),
           limits: runtimeEnvironmentId =>
-            simpleLimitsSelector(exerciseId, runtimeEnvironmentId)(state)
+            simpleLimitsSelector(exerciseId, runtimeEnvironmentId)(state),
+          superadmin: isLoggedAsSuperAdmin(state)
         };
       },
       (dispatch, { params: { exerciseId } }) => ({

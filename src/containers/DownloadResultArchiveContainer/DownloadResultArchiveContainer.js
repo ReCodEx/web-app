@@ -2,17 +2,16 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-import { downloadResultArchive } from '../../redux/modules/submissions';
+import { downloadEvaluationArchive } from '../../redux/modules/submissionEvaluations';
 import ResultArchiveInfoBox from '../../components/Submissions/ResultArchiveInfoBox';
 
 const DownloadResultArchiveContainer = ({
   submissionId,
   downloadResultArchive
-}) => (
+}) =>
   <a href="#" onClick={downloadResultArchive}>
     <ResultArchiveInfoBox id={submissionId} />
-  </a>
-);
+  </a>;
 
 DownloadResultArchiveContainer.propTypes = {
   submissionId: PropTypes.string.isRequired,
@@ -24,7 +23,7 @@ export default connect(
   (dispatch, { submissionId }) => ({
     downloadResultArchive: e => {
       e.preventDefault();
-      dispatch(downloadResultArchive(submissionId));
+      dispatch(downloadEvaluationArchive(submissionId));
     }
   })
 )(DownloadResultArchiveContainer);

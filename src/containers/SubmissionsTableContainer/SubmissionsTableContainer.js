@@ -6,7 +6,7 @@ import { List } from 'immutable';
 
 import { fetchUsersSubmissions } from '../../redux/modules/submissions';
 import SubmissionsTable from '../../components/Assignments/SubmissionsTable';
-import { createGetUsersSubmissionsForAssignment } from '../../redux/selectors/assignments';
+import { getUserSubmissions } from '../../redux/selectors/assignments';
 
 class SubmissionsTableContainer extends Component {
   componentWillMount = () => this.props.loadAsync();
@@ -22,8 +22,8 @@ class SubmissionsTableContainer extends Component {
 
   sortSubmissions(submissions) {
     return submissions.sort((a, b) => {
-      var aTimestamp = a.get('data').get('submittedAt');
-      var bTimestamp = b.get('data').get('submittedAt');
+      var aTimestamp = a.getIn(['data', 'solution', 'createdAt']);
+      var bTimestamp = b.getIn(['data', 'solution', 'createdAt']);
       return bTimestamp - aTimestamp;
     });
   }
@@ -62,10 +62,9 @@ SubmissionsTableContainer.propTypes = {
 
 export default connect(
   (state, { userId, assignmentId }) => {
-    const getSubmissions = createGetUsersSubmissionsForAssignment();
     return {
       userId,
-      submissions: getSubmissions(state, userId, assignmentId)
+      submissions: getUserSubmissions(userId, assignmentId)(state)
     };
   },
   (dispatch, { userId, assignmentId }) => ({

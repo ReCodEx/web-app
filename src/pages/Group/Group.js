@@ -45,7 +45,7 @@ import {
   isStudentOf,
   isSupervisorOf,
   isAdminOf,
-  isSuperAdmin
+  isLoggedAsSuperAdmin
 } from '../../redux/selectors/users';
 
 import {
@@ -331,7 +331,7 @@ const mapStateToProps = (state, { params: { groupId } }) => {
     isStudent: isStudentOf(userId, groupId)(state),
     isSupervisor: isSupervisorOf(userId, groupId)(state),
     isAdmin: isAdminOf(userId, groupId)(state),
-    isSuperAdmin: isSuperAdmin(userId)(state)
+    isSuperAdmin: isLoggedAsSuperAdmin(state)
   };
 };
 

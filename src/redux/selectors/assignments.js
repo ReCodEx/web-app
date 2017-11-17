@@ -22,21 +22,19 @@ export const runtimeEnvironmentsSelector = id =>
         : List()
   );
 
-export const getUsersSubmissionIds = (state, userId, assignmentId) => {
-  const submissions = getAssignments(state).getIn([
-    'submissions',
-    assignmentId,
-    userId
-  ]);
-  if (!submissions) {
-    return List();
-  }
-
-  return submissions;
-};
-
-export const createGetUsersSubmissionsForAssignment = () =>
+export const getUserSubmissions = (userId, assignmentId) =>
   createSelector(
-    [getUsersSubmissionIds, getSubmissions],
-    (submissionIds, submissions) => submissionIds.map(id => submissions.get(id))
+    [getSubmissions, getAssignments],
+    (submissions, assignments) => {
+      const assignmentSubmissions = assignments.getIn([
+        'submissions',
+        assignmentId,
+        userId
+      ]);
+      if (!assignmentSubmissions) {
+        return List();
+      }
+
+      return assignmentSubmissions.map(id => submissions.get(id));
+    }
   );

@@ -12,23 +12,30 @@ import SubmissionDetail, {
 import AcceptSolutionContainer from '../../containers/AcceptSolutionContainer';
 import ResubmitSolutionContainer from '../../containers/ResubmitSolutionContainer';
 import HierarchyLineContainer from '../../containers/HierarchyLineContainer';
+import FetchManyResourceRenderer from '../../components/helpers/FetchManyResourceRenderer';
 
 import { fetchGroupsStats } from '../../redux/modules/stats';
 import { fetchAssignmentIfNeeded } from '../../redux/modules/assignments';
 import { fetchSubmissionIfNeeded } from '../../redux/modules/submissions';
+import { fetchSubmissionEvaluationsForSolution } from '../../redux/modules/submissionEvaluations';
 import { getSubmission } from '../../redux/selectors/submissions';
 import { getAssignment } from '../../redux/selectors/assignments';
 import {
   isSupervisorOf,
   isAdminOf,
-  isSuperAdmin
+  isLoggedAsSuperAdmin
 } from '../../redux/selectors/users';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
+import {
+  evaluationsForSubmissionSelector,
+  fetchManyStatus
+} from '../../redux/selectors/submissionEvaluations';
 
 class Submission extends Component {
   static loadAsync = ({ submissionId, assignmentId }, dispatch) =>
     Promise.all([
       dispatch(fetchSubmissionIfNeeded(submissionId)),
+      dispatch(fetchSubmissionEvaluationsForSolution(submissionId)),
       dispatch(fetchAssignmentIfNeeded(assignmentId))
         .then(res => res.value)
         .then(assignment => dispatch(fetchGroupsStats(assignment.groupId)))
@@ -49,7 +56,9 @@ class Submission extends Component {
       assignment,
       submission,
       params: { assignmentId },
-      isSupervisorOrMore
+      isSupervisorOrMore,
+      evaluations,
+      fetchStatus
     } = this.props;
 
     return (
@@ -112,19 +121,23 @@ class Submission extends Component {
                   <ResubmitSolutionContainer
                     id={submission.id}
                     assignmentId={assignment.id}
-                    isDebug={true}
+                    isDebug={false}
                   />
                   <ResubmitSolutionContainer
                     id={submission.id}
                     assignmentId={assignment.id}
-                    isDebug={false}
+                    isDebug={true}
                   />
                 </p>}
-              <SubmissionDetail
-                submission={submission}
-                assignment={assignment}
-                isSupervisor={isSupervisorOrMore(assignment.groupId)}
-              />
+              <FetchManyResourceRenderer fetchManyStatus={fetchStatus}>
+                {() =>
+                  <SubmissionDetail
+                    submission={submission}
+                    assignment={assignment}
+                    isSupervisor={isSupervisorOrMore(assignment.groupId)}
+                    evaluations={evaluations}
+                  />}
+              </FetchManyResourceRenderer>
             </div>}
         </ResourceRenderer>
       </Page>
@@ -141,7 +154,9 @@ Submission.propTypes = {
   children: PropTypes.element,
   submission: PropTypes.object,
   loadAsync: PropTypes.func.isRequired,
-  isSupervisorOrMore: PropTypes.func.isRequired
+  isSupervisorOrMore: PropTypes.func.isRequired,
+  evaluations: PropTypes.object,
+  fetchStatus: PropTypes.string
 };
 
 export default connect(
@@ -151,7 +166,9 @@ export default connect(
     isSupervisorOrMore: groupId =>
       isSupervisorOf(loggedInUserIdSelector(state), groupId)(state) ||
       isAdminOf(loggedInUserIdSelector(state), groupId)(state) ||
-      isSuperAdmin(loggedInUserIdSelector(state))(state)
+      isLoggedAsSuperAdmin(state),
+    evaluations: evaluationsForSubmissionSelector(submissionId)(state),
+    fetchStatus: fetchManyStatus(submissionId)(state)
   }),
   (dispatch, { params }) => ({
     loadAsync: () => Submission.loadAsync(params, dispatch)

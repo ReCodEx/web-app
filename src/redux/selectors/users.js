@@ -59,9 +59,6 @@ export const isStudent = userId =>
 export const isSupervisor = userId =>
   createSelector(getRole(userId), role => role === 'supervisor');
 
-export const isSuperAdmin = userId =>
-  createSelector(getRole(userId), role => role === 'superadmin');
-
 export const getUserSettings = userId =>
   createSelector(
     getUser(userId),
@@ -71,6 +68,11 @@ export const getUserSettings = userId =>
 export const loggedInUserSelector = createSelector(
   [usersSelector, loggedInUserIdSelector],
   (users, id) => users.get(id)
+);
+
+export const isLoggedAsSuperAdmin = createSelector(
+  [usersSelector, loggedInUserIdSelector],
+  (users, id) => users.get(id).getIn(['data', 'role']) === 'superadmin'
 );
 
 export const memberOfInstancesIdsSelector = userId =>
@@ -116,7 +118,7 @@ export const isSupervisorOf = (userId, groupId) =>
 
 export const isAdminOf = (userId, groupId) =>
   createSelector(
-    [groupSelector(groupId), isSuperAdmin(userId)],
+    [groupSelector(groupId), isLoggedAsSuperAdmin],
     (group, isSuperAdmin) =>
       isSuperAdmin === true ||
       (group &&
@@ -142,7 +144,7 @@ export const usersGroupsIds = userId =>
 
 export const canEditExercise = (userId, exerciseId) =>
   createSelector(
-    [exerciseSelector(exerciseId), isSuperAdmin(userId)],
+    [exerciseSelector(exerciseId), isLoggedAsSuperAdmin],
     (exercise, isSuperAdmin) =>
       isSuperAdmin ||
       (exercise &&
@@ -152,7 +154,7 @@ export const canEditExercise = (userId, exerciseId) =>
 
 export const canEditPipeline = (userId, pipelineId) =>
   createSelector(
-    [pipelineSelector(pipelineId), isSuperAdmin(userId)],
+    [pipelineSelector(pipelineId), isLoggedAsSuperAdmin],
     (pipeline, isSuperAdmin) =>
       isSuperAdmin ||
       (pipeline &&

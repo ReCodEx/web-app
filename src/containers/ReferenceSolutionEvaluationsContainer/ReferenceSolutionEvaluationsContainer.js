@@ -28,13 +28,12 @@ class ReferenceSolutionEvaluationsContainer extends Component {
 
     return (
       <ResourceRenderer resource={evaluations.toArray()}>
-        {(...evaluations) => (
+        {(...evaluations) =>
           <ReferenceSolutionEvaluations
             referenceSolutionId={referenceSolutionId}
             evaluations={evaluations}
             exerciseId={exerciseId}
-          />
-        )}
+          />}
       </ResourceRenderer>
     );
   }
@@ -51,7 +50,7 @@ ReferenceSolutionEvaluationsContainer.propTypes = {
 export default connect(
   (state, { referenceSolution }) => ({
     evaluations: getReferenceSolutionEvaluationsByIdsSelector(
-      referenceSolution.evaluations
+      referenceSolution.submissions
     )(state)
   }),
   (dispatch, { referenceSolutionId, exerciseId }) => ({

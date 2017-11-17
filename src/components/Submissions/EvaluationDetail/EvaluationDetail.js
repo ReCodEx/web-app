@@ -19,7 +19,8 @@ const EvaluationDetail = ({
   evaluation,
   isCorrect,
   submittedAt,
-  maxPoints
+  maxPoints,
+  bonusPoints
 }) =>
   <Box
     title={
@@ -117,15 +118,15 @@ const EvaluationDetail = ({
           <td
             className={classnames({
               'text-center': true,
-              'text-danger': !isCorrect && evaluation.bonusPoints === 0,
-              'text-success': isCorrect && evaluation.bonusPoints === 0,
+              'text-danger': !isCorrect && bonusPoints === 0,
+              'text-success': isCorrect && bonusPoints === 0,
               'text-bold': evaluation.bonusPoints === 0
             })}
           >
             {evaluation.points}/{maxPoints}
           </td>
         </tr>
-        {evaluation.bonusPoints !== 0 &&
+        {bonusPoints !== 0 &&
           <tr>
             <th>
               <FormattedMessage
@@ -134,10 +135,10 @@ const EvaluationDetail = ({
               />
             </th>
             <td className="text-center">
-              <BonusPoints bonus={evaluation.bonusPoints} />
+              <BonusPoints bonus={bonusPoints} />
             </td>
           </tr>}
-        {evaluation.bonusPoints !== 0 &&
+        {bonusPoints !== 0 &&
           <tr>
             <th>
               <FormattedMessage
@@ -149,13 +150,12 @@ const EvaluationDetail = ({
               className={classnames({
                 'text-center': true,
                 'text-danger':
-                  !isCorrect || evaluation.points + evaluation.bonusPoints <= 0,
-                'text-success':
-                  isCorrect && evaluation.points + evaluation.bonusPoints > 0
+                  !isCorrect || evaluation.points + bonusPoints <= 0,
+                'text-success': isCorrect && evaluation.points + bonusPoints > 0
               })}
             >
               <b>
-                {evaluation.points + evaluation.bonusPoints}/{maxPoints}
+                {evaluation.points + bonusPoints}/{maxPoints}
               </b>
             </td>
           </tr>}
@@ -172,7 +172,8 @@ EvaluationDetail.propTypes = {
   isCorrect: PropTypes.bool.isRequired,
   submittedAt: PropTypes.number.isRequired,
   evaluation: PropTypes.object,
-  maxPoints: PropTypes.number.isRequired
+  maxPoints: PropTypes.number.isRequired,
+  bonusPoints: PropTypes.number.isRequired
 };
 
 export default EvaluationDetail;

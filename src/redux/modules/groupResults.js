@@ -26,7 +26,7 @@ export const additionalActionTypes = {
 export const fetchBestSubmission = (userId, assignmentId) =>
   createApiAction({
     type: additionalActionTypes.BEST_SUBMISSION,
-    endpoint: `/exercise-assignments/${assignmentId}/users/${userId}/best-submission`,
+    endpoint: `/exercise-assignments/${assignmentId}/users/${userId}/best-solution`,
     method: 'GET',
     meta: { userId, assignmentId }
   });
@@ -34,7 +34,7 @@ export const fetchBestSubmission = (userId, assignmentId) =>
 export const fetchBestSubmissions = assignmentId =>
   createApiAction({
     type: additionalActionTypes.BEST_SUBMISSION,
-    endpoint: `/exercise-assignments/${assignmentId}/best-submissions`,
+    endpoint: `/exercise-assignments/${assignmentId}/best-solutions`,
     method: 'GET',
     meta: { assignmentId }
   });

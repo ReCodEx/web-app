@@ -36,10 +36,9 @@ const ReferenceSolutionsList = ({
         .map(
           ({
             id,
-            uploadedAt,
             description,
             permissionHints,
-            solution: { userId }
+            solution: { userId, createdAt }
           }) =>
             <tr key={id}>
               <td className="text-center">
@@ -49,8 +48,8 @@ const ReferenceSolutionsList = ({
                 {description}
               </td>
               <td>
-                <FormattedDate value={new Date(uploadedAt * 1000)} /> &nbsp;{' '}
-                <FormattedTime value={new Date(uploadedAt * 1000)} />
+                <FormattedDate value={new Date(createdAt * 1000)} /> &nbsp;{' '}
+                <FormattedTime value={new Date(createdAt * 1000)} />
               </td>
               <td>
                 <UsersNameContainer userId={userId} />

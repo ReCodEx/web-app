@@ -1,48 +1,55 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import { defineMessages, intlShape, injectIntl } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
+import { Link } from 'react-router';
 
 import Box from '../../widgets/Box';
 import EvaluationTable from '../EvaluationTable';
+import withLinks from '../../../hoc/withLinks';
 
-const messages = defineMessages({
-  title: {
-    id: 'app.referenceSolutionEvaluation.title',
-    defaultMessage: 'Evaluations of reference solution'
-  }
-});
-
-class ReferenceSolutionEvaluations extends Component {
-  render() {
-    const {
-      evaluations,
-      referenceSolutionId,
-      exerciseId,
-      intl: { formatMessage }
-    } = this.props;
-
-    return (
-      <Box
-        title={formatMessage(messages.title)}
-        noPadding={true}
-        collapsable={true}
-        isOpen={true}
-      >
-        <EvaluationTable
-          evaluations={evaluations}
-          referenceSolutionId={referenceSolutionId}
-          exerciseId={exerciseId}
-        />
-      </Box>
-    );
-  }
-}
+const ReferenceSolutionEvaluations = ({
+  evaluations,
+  referenceSolutionId,
+  exerciseId,
+  links: { REFERENCE_SOLUTION_EVALUATION_URI_FACTORY }
+}) =>
+  <Box
+    title={
+      <FormattedMessage
+        id="app.referenceSolutionEvaluation.title"
+        defaultMessage="Evaluations of reference solution"
+      />
+    }
+    noPadding={true}
+    collapsable={true}
+    isOpen={true}
+  >
+    <EvaluationTable
+      evaluations={evaluations}
+      renderButtons={id =>
+        <td className="text-right">
+          <Link
+            to={REFERENCE_SOLUTION_EVALUATION_URI_FACTORY(
+              exerciseId,
+              referenceSolutionId,
+              id
+            )}
+            className="btn btn-flat btn-default btn-xs"
+          >
+            <FormattedMessage
+              id="app.evaluationTable.showDetails"
+              defaultMessage="Show details"
+            />
+          </Link>
+        </td>}
+    />
+  </Box>;
 
 ReferenceSolutionEvaluations.propTypes = {
   evaluations: PropTypes.array.isRequired,
   referenceSolutionId: PropTypes.string.isRequired,
   exerciseId: PropTypes.string.isRequired,
-  intl: intlShape.isRequired
+  links: PropTypes.object
 };
 
-export default injectIntl(ReferenceSolutionEvaluations);
+export default withLinks(ReferenceSolutionEvaluations);

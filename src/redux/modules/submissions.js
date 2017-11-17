@@ -6,7 +6,6 @@ import factory, {
   defaultNeedsRefetching
 } from '../helpers/resourceManager';
 import { actionTypes as submissionActionTypes } from './submission';
-import { downloadHelper } from '../helpers/api/download';
 
 const resourceName = 'submissions';
 const needsRefetching = item =>
@@ -15,6 +14,7 @@ const needsRefetching = item =>
 
 const { actions, actionTypes, reduceActions } = factory({
   resourceName,
+  apiEndpointFactory: id => `/assignment-solutions/${id}`,
   needsRefetching
 });
 
@@ -53,7 +53,7 @@ export const fetchSubmissionIfNeeded = actions.fetchOneIfNeeded;
 export const setPoints = (submissionId, bonusPoints) =>
   createApiAction({
     type: additionalActionTypes.SET_BONUS_POINTS,
-    endpoint: `/submissions/${submissionId}`,
+    endpoint: `/assignment-solutions/${submissionId}/bonus-points`,
     method: 'POST',
     body: { bonusPoints },
     meta: { submissionId, bonusPoints }
@@ -63,7 +63,7 @@ export const acceptSubmission = id =>
   createApiAction({
     type: additionalActionTypes.ACCEPT,
     method: 'POST',
-    endpoint: `/submissions/${id}/set-accepted`,
+    endpoint: `/assignment-solutions/${id}/set-accepted`,
     meta: { id }
   });
 
@@ -71,7 +71,7 @@ export const unacceptSubmission = id =>
   createApiAction({
     type: additionalActionTypes.UNACCEPT,
     method: 'DELETE',
-    endpoint: `/submissions/${id}/unset-accepted`,
+    endpoint: `/assignment-solutions/${id}/unset-accepted`,
     meta: { id }
   });
 
@@ -79,7 +79,7 @@ export const resubmitSubmission = (id, isPrivate, isDebug = true) =>
   createApiAction({
     type: submissionActionTypes.SUBMIT,
     method: 'POST',
-    endpoint: `/submissions/${id}/resubmit`,
+    endpoint: `/assignment-solutions/${id}/resubmit`,
     body: { private: isPrivate, debug: isDebug },
     meta: { id }
   });
@@ -95,20 +95,12 @@ export const resubmitAllSubmissions = assignmentId =>
 export const fetchUsersSubmissions = (userId, assignmentId) =>
   actions.fetchMany({
     type: additionalActionTypes.LOAD_USERS_SUBMISSIONS,
-    endpoint: `/exercise-assignments/${assignmentId}/users/${userId}/submissions`,
+    endpoint: `/exercise-assignments/${assignmentId}/users/${userId}/solutions`,
     meta: {
       assignmentId,
       userId
     }
   });
-
-export const downloadResultArchive = downloadHelper({
-  endpoint: id => `/submissions/${id}/download-result`,
-  fetch: fetchSubmissionIfNeeded,
-  actionType: additionalActionTypes.DOWNLOAD_RESULT_ARCHIVE,
-  fileNameSelector: (id, state) => `${id}.zip`,
-  contentType: 'application/zip'
-});
 
 /**
  * Reducer
@@ -124,7 +116,7 @@ const reducer = handleActions(
       { meta: { submissionId, bonusPoints } }
     ) =>
       state.setIn(
-        ['resources', submissionId, 'data', 'evaluation', 'bonusPoints'],
+        ['resources', submissionId, 'data', 'bonusPoints'],
         Number(bonusPoints)
       ),
 

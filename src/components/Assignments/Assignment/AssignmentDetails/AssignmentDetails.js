@@ -27,7 +27,8 @@ const AssignmentDetails = ({
   isBonus,
   runtimeEnvironments,
   canSubmit,
-  pointsPercentualThreshold
+  pointsPercentualThreshold,
+  alreadySubmitted
 }) =>
   <Box
     title={
@@ -112,7 +113,7 @@ const AssignmentDetails = ({
         </tr>
         <tr>
           <td className="text-center">
-            <Icon name="cloud-upload" />
+            <Icon name="ban" />
           </td>
           <td>
             <FormattedMessage
@@ -122,6 +123,20 @@ const AssignmentDetails = ({
           </td>
           <td>
             {submissionsCountLimit === null ? '-' : submissionsCountLimit}
+          </td>
+        </tr>
+        <tr>
+          <td className="text-center">
+            <Icon name="coffee" />
+          </td>
+          <td>
+            <FormattedMessage
+              id="app.assignment.alreadySubmitted"
+              defaultMessage="Already submitted:"
+            />
+          </td>
+          <td>
+            {alreadySubmitted}
           </td>
         </tr>
         <tr>
@@ -204,7 +219,8 @@ AssignmentDetails.propTypes = {
   isBonus: PropTypes.bool,
   runtimeEnvironments: PropTypes.array,
   canSubmit: ImmutablePropTypes.map,
-  pointsPercentualThreshold: PropTypes.number
+  pointsPercentualThreshold: PropTypes.number,
+  alreadySubmitted: PropTypes.number.isRequired
 };
 
 export default AssignmentDetails;

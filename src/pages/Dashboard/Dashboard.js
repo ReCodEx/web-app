@@ -28,7 +28,7 @@ import {
   getUser,
   isStudent,
   isSupervisor,
-  isSuperAdmin
+  isLoggedAsSuperAdmin
 } from '../../redux/selectors/users';
 
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
@@ -74,7 +74,7 @@ class Dashboard extends Component {
         const state = getState();
         const user = getJsData(getUser(userId)(state));
         const groups = user.groups.studentOf.concat(user.groups.supervisorOf);
-        const isAdmin = isSuperAdmin(userId)(state);
+        const isAdmin = isLoggedAsSuperAdmin(state);
 
         return dispatch(fetchGroupsIfNeeded(...groups)).then(groups =>
           Promise.all(
@@ -108,10 +108,10 @@ class Dashboard extends Component {
       studentOf,
       supervisor,
       supervisorOf,
+      superadmin,
       groupAssignments,
       statistics,
       allGroups,
-      isAdmin,
       links: { GROUP_URI_FACTORY },
       intl: { locale }
     } = this.props;
@@ -274,10 +274,10 @@ class Dashboard extends Component {
                   </div>}
               </ResourceRenderer>}
 
-            {(supervisor || isAdmin) &&
+            {(supervisor || superadmin) &&
               <ResourceRenderer
                 resource={
-                  isAdmin ? allGroups.toArray() : supervisorOf.toArray()
+                  superadmin ? allGroups.toArray() : supervisorOf.toArray()
                 }
               >
                 {(...groups) =>
@@ -357,7 +357,6 @@ Dashboard.propTypes = {
   groupAssignments: ImmutablePropTypes.map,
   statistics: ImmutablePropTypes.map,
   allGroups: ImmutablePropTypes.map,
-  isAdmin: PropTypes.bool,
   links: PropTypes.object,
   intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired
 };
@@ -370,14 +369,13 @@ export default withLinks(
         userId,
         student: isStudent(userId)(state),
         supervisor: isSupervisor(userId)(state),
-        superadmin: isSuperAdmin(userId)(state),
+        superadmin: isLoggedAsSuperAdmin(state),
         user: getUser(userId)(state),
         studentOf: loggedInStudentOfSelector(state),
         supervisorOf: loggedInSupervisorOfSelector(state),
         groupAssignments: loggedInStudentOfGroupsAssignmentsSelector(state),
         statistics: statisticsSelector(state),
-        allGroups: groupsSelector(state),
-        isAdmin: isSuperAdmin(userId)(state)
+        allGroups: groupsSelector(state)
       };
     },
     (dispatch, { params }) => ({

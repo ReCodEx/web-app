@@ -16,7 +16,7 @@ describe('Submissions', () => {
       expect(action.request).to.eql({
         type: additionalActionTypes.ACCEPT,
         method: 'POST',
-        endpoint: `/submissions/${id}/set-accepted`,
+        endpoint: `/assignment-solutions/${id}/set-accepted`,
         meta: { id }
       });
     });

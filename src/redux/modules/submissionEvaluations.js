@@ -3,11 +3,11 @@ import { handleActions } from 'redux-actions';
 import factory, { initialState } from '../helpers/resourceManager';
 import { downloadHelper } from '../helpers/api/download';
 
-const resourceName = 'referenceSolutionEvaluations';
+const resourceName = 'submissionEvaluations';
 const { actions, reduceActions } = factory({
   resourceName,
   apiEndpointFactory: evaluationId =>
-    `/reference-solutions/evaluation/${evaluationId}`
+    `/assignment-solutions/evaluation/${evaluationId}`
 });
 
 /**
@@ -18,19 +18,21 @@ export const additionalActionTypes = {
   DOWNLOAD_EVALUATION_ARCHIVE: 'recodex/files/DOWNLOAD_EVALUATION_ARCHIVE'
 };
 
-export const fetchReferenceSolutionEvaluation = actions.fetchResource;
-export const fetchReferenceSolutionEvaluationIfNeeded =
-  actions.fetchOneIfNeeded;
+export const fetchSubmissionEvaluation = actions.fetchResource;
+export const fetchSubmissionEvaluationIfNeeded = actions.fetchOneIfNeeded;
 
-export const fetchReferenceSolutionEvaluationsForSolution = solutionId =>
+export const fetchManyEndpoint = id =>
+  `/assignment-solutions/${id}/evaluations`;
+
+export const fetchSubmissionEvaluationsForSolution = solutionId =>
   actions.fetchMany({
-    endpoint: `/reference-solutions/${solutionId}/evaluations`
+    endpoint: fetchManyEndpoint(solutionId)
   });
 
 export const downloadEvaluationArchive = downloadHelper({
   actionType: additionalActionTypes.DOWNLOAD_EVALUATION_ARCHIVE,
-  fetch: fetchReferenceSolutionEvaluationIfNeeded,
-  endpoint: id => `/reference-solutions/evaluation/${id}/download-result`,
+  fetch: fetchSubmissionEvaluationIfNeeded,
+  endpoint: id => `/assignment-solutions/evaluation/${id}/download-result`,
   fileNameSelector: (id, state) => `${id}.zip`,
   contentType: 'application/zip'
 });

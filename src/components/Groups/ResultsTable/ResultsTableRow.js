@@ -16,17 +16,12 @@ const ResultsTableRow = ({ userId, assignmentsIds, submissions }) => {
         const points =
           submission &&
           submission !== null &&
-          submission.evaluation &&
-          submission.evaluation !== null
-            ? submission.evaluation.points
+          submission.lastSubmission.evaluation &&
+          submission.lastSubmission.evaluation.points
+            ? submission.lastSubmission.evaluation.points
             : '-';
         const bonusPoints =
-          submission &&
-          submission !== null &&
-          submission.evaluation &&
-          submission.evaluation !== null
-            ? submission.evaluation.bonusPoints
-            : 0;
+          submission && submission !== null ? submission.bonusPoints : 0;
         totalPoints += points !== '-' ? points : 0;
         totalPoints += bonusPoints;
         return (

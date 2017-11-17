@@ -9,36 +9,46 @@ import BonusPointsContainer from '../../../containers/BonusPointsContainer';
 import DownloadResultArchiveContainer from '../../../containers/DownloadResultArchiveContainer';
 import CommentThreadContainer from '../../../containers/CommentThreadContainer';
 import SourceCodeViewerContainer from '../../../containers/SourceCodeViewerContainer';
+import SubmissionEvaluations from '../SubmissionEvaluations';
+import ResourceRenderer from '../../helpers/ResourceRenderer';
 
 import EvaluationDetail from '../EvaluationDetail';
 import CompilationLogs from '../CompilationLogs';
 
 class SubmissionDetail extends Component {
-  state = { openFileId: null };
+  state = { openFileId: null, activeSubmissionId: null };
   openFile = id => this.setState({ openFileId: id });
   hideFile = () => this.setState({ openFileId: null });
+
+  componentWillMount() {
+    this.setState({
+      activeSubmissionId: this.props.submission.lastSubmission.id
+    });
+  }
 
   render() {
     const {
       submission: {
         id,
         note = '',
-        evaluationStatus,
-        submittedAt,
-        userId,
-        submittedBy,
+        solution: { createdAt, userId, files, ...restSolution },
         maxPoints,
-        files,
-        evaluation,
+        bonusPoints,
         accepted,
-        originalSubmissionId,
-        runtimeEnvironmentId,
-        isCorrect
+        runtimeEnvironmentId
       },
       assignment,
-      isSupervisor
+      isSupervisor,
+      evaluations
     } = this.props;
-    const { openFileId } = this.state;
+    const { openFileId, activeSubmissionId } = this.state;
+    const {
+      submittedBy,
+      evaluation,
+      isCorrect,
+      evaluationStatus,
+      ...restSub
+    } = evaluations.toJS()[activeSubmissionId].data;
 
     return (
       <div>
@@ -46,12 +56,12 @@ class SubmissionDetail extends Component {
           <Col md={6} sm={12}>
             <SubmissionStatus
               evaluationStatus={evaluationStatus}
-              submittedAt={submittedAt}
+              submittedAt={createdAt}
               userId={userId}
               submittedBy={submittedBy}
               note={note}
               accepted={accepted}
-              originalSubmissionId={originalSubmissionId}
+              originalSubmissionId={restSolution.id}
               assignmentId={assignment.id}
             />
             <Row>
@@ -76,31 +86,52 @@ class SubmissionDetail extends Component {
             <CommentThreadContainer threadId={id} />
           </Col>
 
-          {evaluation &&
+          {evaluations &&
             <Col md={6} sm={12}>
-              <EvaluationDetail
-                assignment={assignment}
-                evaluation={evaluation}
-                submittedAt={submittedAt}
-                maxPoints={maxPoints}
-                isCorrect={isCorrect}
-              />
-
-              {isSupervisor &&
-                <BonusPointsContainer
-                  submissionId={id}
+              {evaluation &&
+                <EvaluationDetail
+                  assignment={assignment}
                   evaluation={evaluation}
+                  submittedAt={createdAt}
+                  maxPoints={maxPoints}
+                  isCorrect={isCorrect}
+                  bonusPoints={bonusPoints}
                 />}
 
-              <TestResults
-                evaluation={evaluation}
-                runtimeEnvironmentId={runtimeEnvironmentId}
-              />
+              {evaluation &&
+                isSupervisor &&
+                <BonusPointsContainer
+                  submissionId={id}
+                  bonusPoints={bonusPoints}
+                />}
 
-              {isSupervisor &&
+              {evaluation &&
+                <TestResults
+                  evaluation={evaluation}
+                  runtimeEnvironmentId={runtimeEnvironmentId}
+                />}
+
+              {evaluation &&
+                isSupervisor &&
                 <Row>
                   <Col lg={6} md={12}>
-                    <DownloadResultArchiveContainer submissionId={id} />
+                    <DownloadResultArchiveContainer submissionId={restSub.id} />
+                  </Col>
+                </Row>}
+              {isSupervisor &&
+                <Row>
+                  <Col lg={12}>
+                    <ResourceRenderer resource={evaluations.toArray()}>
+                      {(...evaluations) =>
+                        <SubmissionEvaluations
+                          submissionId={id}
+                          evaluations={evaluations}
+                          assignmentId={assignment.id}
+                          activeSubmissionId={activeSubmissionId}
+                          onSelect={id =>
+                            this.setState({ activeSubmissionId: id })}
+                        />}
+                    </ResourceRenderer>
                   </Col>
                 </Row>}
             </Col>}
@@ -119,20 +150,20 @@ class SubmissionDetail extends Component {
 SubmissionDetail.propTypes = {
   submission: PropTypes.shape({
     id: PropTypes.string.isRequired,
-    evaluationStatus: PropTypes.string.isRequired,
     note: PropTypes.string,
-    submittedAt: PropTypes.number.isRequired,
-    userId: PropTypes.string.isRequired,
-    submittedBy: PropTypes.string,
-    evaluation: PropTypes.object,
+    lastSubmission: PropTypes.shape({ id: PropTypes.string.isRequired })
+      .isRequired,
+    solution: PropTypes.shape({
+      createdAt: PropTypes.number.isRequired,
+      userId: PropTypes.string.isRequired,
+      files: PropTypes.array
+    }).isRequired,
     maxPoints: PropTypes.number.isRequired,
-    files: PropTypes.array,
-    originalSubmissionId: PropTypes.string,
-    runtimeEnvironmentId: PropTypes.string,
-    isCorrect: PropTypes.bool
+    runtimeEnvironmentId: PropTypes.string
   }).isRequired,
   assignment: PropTypes.object.isRequired,
-  isSupervisor: PropTypes.bool
+  isSupervisor: PropTypes.bool,
+  evaluations: PropTypes.object.isRequired
 };
 
 export default SubmissionDetail;

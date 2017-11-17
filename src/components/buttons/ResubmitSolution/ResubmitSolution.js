@@ -3,23 +3,36 @@ import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import Icon from 'react-fontawesome';
 import Button from '../../widgets/FlatButton';
+import Confirm from '../../forms/Confirm';
 
-const ResubmitSolution = ({ resubmit, isDebug }) =>
-  <Button bsStyle="success" onClick={() => resubmit(isDebug)}>
-    <Icon name="mail-forward" />{' '}
-    {isDebug &&
+const ResubmitSolution = ({ id, resubmit, isDebug }) =>
+  <Confirm
+    id={id}
+    onConfirmed={() => resubmit(isDebug)}
+    question={
       <FormattedMessage
-        id="app.resubmitSolution.resubmitDebug"
-        defaultMessage="Resubmit (debug mode)"
-      />}
-    {!isDebug &&
-      <FormattedMessage
-        id="app.resubmitSolution.resubmitNondebug"
-        defaultMessage="Resubmit (normal mode)"
-      />}
-  </Button>;
+        id="app.resubmitSolution.confirm"
+        defaultMessage="Are you sure you want to resubmit this solution?"
+      />
+    }
+  >
+    <Button bsStyle={isDebug ? 'danger' : 'success'}>
+      <Icon name="mail-forward" />{' '}
+      {isDebug &&
+        <FormattedMessage
+          id="app.resubmitSolution.resubmitDebug"
+          defaultMessage="Resubmit (debug mode)"
+        />}
+      {!isDebug &&
+        <FormattedMessage
+          id="app.resubmitSolution.resubmitNondebug"
+          defaultMessage="Resubmit (normal mode)"
+        />}
+    </Button>
+  </Confirm>;
 
 ResubmitSolution.propTypes = {
+  id: PropTypes.string.isRequired,
   resubmit: PropTypes.func.isRequired,
   isDebug: PropTypes.bool.isRequired
 };

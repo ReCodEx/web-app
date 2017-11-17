@@ -24,7 +24,7 @@ import { createGroup } from '../../redux/modules/groups';
 import { fetchInstancePublicGroups } from '../../redux/modules/publicGroups';
 import { publicGroupsSelectors } from '../../redux/selectors/publicGroups';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
-import { isSuperAdmin } from '../../redux/selectors/users';
+import { isLoggedAsSuperAdmin } from '../../redux/selectors/users';
 
 import withLinks from '../../hoc/withLinks';
 
@@ -152,7 +152,7 @@ export default withLinks(
         instance: instanceSelector(state, instanceId),
         groups: publicGroupsSelectors(state),
         isAdmin: isAdminOfInstance(userId, instanceId)(state),
-        isSuperAdmin: isSuperAdmin(userId)(state),
+        isSuperAdmin: isLoggedAsSuperAdmin(state),
         formValues: getFormValues('editGroup')(state)
       };
     },
