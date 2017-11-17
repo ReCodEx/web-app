@@ -14,7 +14,7 @@ const ResultsTableRow = ({ userId, assignmentsIds, submissions }) => {
           .filter(s => s !== null)
           .filter(s => s.exerciseAssignmentId === assignmentId)[0];
         const points =
-          submission !== null
+          submission && submission !== null
             ? submission.lastSubmission.evaluation.points
             : '-';
         const bonusPoints =
