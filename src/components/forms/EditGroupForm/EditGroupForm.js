@@ -227,15 +227,6 @@ const validate = ({ localizedTexts = [], threshold }) => {
           />
         );
       }
-
-      if (!localizedTexts[i].description) {
-        localeErrors['description'] = (
-          <FormattedMessage
-            id="app.editGroupForm.validation.description"
-            defaultMessage="Please fill the description of the group."
-          />
-        );
-      }
     }
 
     localizedTextsErrors[i] = localeErrors;

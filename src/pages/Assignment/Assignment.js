@@ -27,9 +27,9 @@ import { canSubmitSolution } from '../../redux/selectors/canSubmit';
 import { isSubmitting } from '../../redux/selectors/submission';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import {
-  isSuperAdmin,
   isStudentOf,
-  isSupervisorOf
+  isSupervisorOf,
+  isLoggedAsSuperAdmin
 } from '../../redux/selectors/users';
 import { runtimeEnvironmentSelector } from '../../redux/selectors/runtimeEnvironments';
 
@@ -356,7 +356,7 @@ export default withLinks(
         ),
         userId,
         loggedInUserId,
-        isSuperAdmin: isSuperAdmin(loggedInUserId)(state),
+        isSuperAdmin: isLoggedAsSuperAdmin(state),
         isStudentOf: groupId => isStudentOf(loggedInUserId, groupId)(state),
         isSupervisorOf: groupId =>
           isSupervisorOf(loggedInUserId, groupId)(state),

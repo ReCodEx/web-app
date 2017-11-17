@@ -13,7 +13,10 @@ import PageContent from '../../components/layout/PageContent';
 import Box from '../../components/widgets/Box';
 import { AddIcon, EditIcon } from '../../components/icons';
 import { fetchManyStatus } from '../../redux/selectors/exercises';
-import { canEditExercise, isSuperAdmin } from '../../redux/selectors/users';
+import {
+  canEditExercise,
+  isLoggedAsSuperAdmin
+} from '../../redux/selectors/users';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import {
   fetchExercises,
@@ -201,7 +204,7 @@ export default withLinks(
       const userId = loggedInUserIdSelector(state);
       return {
         fetchStatus: fetchManyStatus(state),
-        isSuperAdmin: isSuperAdmin(userId)(state),
+        isSuperAdmin: isLoggedAsSuperAdmin(state),
         isAuthorOfExercise: exerciseId =>
           canEditExercise(userId, exerciseId)(state)
       };

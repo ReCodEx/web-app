@@ -8,8 +8,8 @@ import {
 } from '../../redux/selectors/groups';
 import {
   notificationsSelector,
-  isSuperAdmin,
-  isSupervisor
+  isSupervisor,
+  isLoggedAsSuperAdmin
 } from '../../redux/selectors/users';
 
 const mapStateToProps = state => {
@@ -17,7 +17,7 @@ const mapStateToProps = state => {
   return {
     instances: memberOfInstances(userId)(state),
     studentOf: studentOfSelector(userId)(state),
-    isAdmin: isSuperAdmin(userId)(state),
+    isAdmin: isLoggedAsSuperAdmin(state),
     isSupervisor: isSupervisor(userId)(state),
     supervisorOf: supervisorOfSelector(userId)(state),
     notifications: notificationsSelector(state)

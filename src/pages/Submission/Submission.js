@@ -23,7 +23,7 @@ import { getAssignment } from '../../redux/selectors/assignments';
 import {
   isSupervisorOf,
   isAdminOf,
-  isSuperAdmin
+  isLoggedAsSuperAdmin
 } from '../../redux/selectors/users';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import {
@@ -166,7 +166,7 @@ export default connect(
     isSupervisorOrMore: groupId =>
       isSupervisorOf(loggedInUserIdSelector(state), groupId)(state) ||
       isAdminOf(loggedInUserIdSelector(state), groupId)(state) ||
-      isSuperAdmin(loggedInUserIdSelector(state))(state),
+      isLoggedAsSuperAdmin(state),
     evaluations: evaluationsForSubmissionSelector(submissionId)(state),
     fetchStatus: fetchManyStatus(submissionId)(state)
   }),

@@ -30,7 +30,7 @@ import {
   supervisorOfGroupsIdsSelector,
   isStudent,
   isSupervisor,
-  isSuperAdmin
+  isLoggedAsSuperAdmin
 } from '../../redux/selectors/users';
 
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
@@ -73,7 +73,7 @@ class Dashboard extends Component {
         const state = getState();
         const user = getJsData(getUser(userId)(state));
         const groups = user.groups.studentOf.concat(user.groups.supervisorOf);
-        const isAdmin = isSuperAdmin(userId)(state);
+        const isAdmin = isLoggedAsSuperAdmin(state);
 
         return dispatch(fetchGroupsIfNeeded(...groups)).then(groups =>
           Promise.all(
@@ -103,11 +103,11 @@ class Dashboard extends Component {
       supervisor,
       supervisorOf,
       supervisorOfGroupsIds,
+      superadmin,
       groupAssignments,
       groupStatistics,
       usersStatistics,
       allGroups,
-      isAdmin,
       links: { GROUP_URI_FACTORY },
       intl: { locale }
     } = this.props;
@@ -265,8 +265,10 @@ class Dashboard extends Component {
                   </div>}
               </ResourceRenderer>}
 
-            {(supervisor || isAdmin) &&
-              <ResourceRenderer resource={isAdmin ? allGroups : supervisorOf}>
+            {(supervisor || superadmin) &&
+              <ResourceRenderer
+                resource={superadmin ? allGroups : supervisorOf}
+              >
                 {(...groups) =>
                   <SisSupervisorGroupsContainer groups={groups} />}
               </ResourceRenderer>}
@@ -343,7 +345,6 @@ Dashboard.propTypes = {
   groupStatistics: PropTypes.func.isRequired,
   usersStatistics: PropTypes.func.isRequired,
   allGroups: PropTypes.array,
-  isAdmin: PropTypes.bool,
   links: PropTypes.object,
   intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired
 };
@@ -356,7 +357,7 @@ export default withLinks(
         userId,
         student: isStudent(userId)(state),
         supervisor: isSupervisor(userId)(state),
-        superadmin: isSuperAdmin(userId)(state),
+        superadmin: isLoggedAsSuperAdmin(state),
         user: getUser(userId)(state),
         studentOfGroupsIds: studentOfGroupsIdsSelector(userId)(state).toArray(),
         studentOf: studentOfSelector(userId)(state).toArray(),
@@ -368,8 +369,7 @@ export default withLinks(
         groupStatistics: groupId => createGroupsStatsSelector(groupId)(state),
         usersStatistics: statistics =>
           statistics.find(stat => stat.userId === userId) || {},
-        allGroups: groupsSelector(state).toArray(),
-        isAdmin: isSuperAdmin(userId)(state)
+        allGroups: groupsSelector(state).toArray()
       };
     },
     (dispatch, { params }) => ({

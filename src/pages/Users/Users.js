@@ -15,11 +15,10 @@ import Box from '../../components/widgets/Box';
 import UsersList from '../../components/Users/UsersList';
 import SearchContainer from '../../containers/SearchContainer';
 import {
-  isSuperAdmin,
   fetchManyStatus,
-  loggedInUserSelector
+  loggedInUserSelector,
+  isLoggedAsSuperAdmin
 } from '../../redux/selectors/users';
-import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import { fetchAllUsers } from '../../redux/modules/users';
 import { takeOver } from '../../redux/modules/auth';
 import { searchPeople } from '../../redux/modules/search';
@@ -172,7 +171,7 @@ export default withLinks(
   connect(
     state => {
       return {
-        isSuperAdmin: isSuperAdmin(loggedInUserIdSelector(state))(state),
+        isSuperAdmin: isLoggedAsSuperAdmin(state),
         fetchStatus: fetchManyStatus(state),
         user: loggedInUserSelector(state)
       };
