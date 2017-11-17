@@ -8,7 +8,7 @@ import FormBox from '../../widgets/FormBox';
 import { SelectField } from '../Fields';
 import SubmitButton from '../SubmitButton';
 
-import { getLocalizedName } from '../../../helpers/getLocalizedData';
+import { getGroupCanonicalLocalizedName } from '../../../helpers/getLocalizedData';
 
 const SisBindGroupForm = ({
   invalid,
@@ -18,6 +18,7 @@ const SisBindGroupForm = ({
   submitting,
   hasSucceeded,
   groups,
+  groupsAccessor,
   intl: { locale }
 }) =>
   <FormBox
@@ -27,7 +28,8 @@ const SisBindGroupForm = ({
         defaultMessage="Bind existing ReCodEx group to SIS"
       />
     }
-    type={hasSucceeded ? 'success' : undefined}
+    succeeded={hasSucceeded}
+    dirty={anyTouched}
     footer={
       <div className="text-center">
         <SubmitButton
@@ -80,12 +82,13 @@ const SisBindGroupForm = ({
           defaultMessage="Group:"
         />
       }
-      options={[{ key: '', name: '...' }].concat(
-        groups.map(group => ({
+      options={groups
+        .map(group => ({
           key: group.id,
-          name: getLocalizedName(group, locale)
+          name: getGroupCanonicalLocalizedName(group, groupsAccessor, locale)
         }))
-      )}
+        .sort((a, b) => a.name.localeCompare(b.name, locale))}
+      addEmptyOption
     />
   </FormBox>;
 
@@ -98,6 +101,7 @@ SisBindGroupForm.propTypes = {
   hasSucceeded: PropTypes.bool,
   submitFailed: PropTypes.bool,
   groups: PropTypes.array,
+  groupsAccessor: PropTypes.func.isRequired,
   intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired
 };
 

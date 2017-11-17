@@ -1,15 +1,24 @@
 import { createSelector } from 'reselect';
 import { Map } from 'immutable';
+import { loggedInUserIdSelector } from './auth';
 
 const getResources = state => state.sisSupervisedCourses.get('resources');
 
-export const sisSupervisedCoursesSelector = (userId, year, term) =>
-  createSelector(
-    getResources,
-    resources =>
-      resources &&
-      resources.get(userId) &&
-      resources.getIn([userId, `${year}-${term}`])
-        ? resources.getIn([userId, `${year}-${term}`])
-        : Map()
-  );
+const getSisStateTerms = state =>
+  state.sisStatus.getIn(['resources', 'status', 'data', 'terms']);
+
+const EMPTY_MAP = Map();
+
+export const sisSupervisedCoursesSelector = createSelector(
+  [getResources, getSisStateTerms, loggedInUserIdSelector],
+  (resources, terms, userId) => {
+    return resources && terms && terms.size > 0 && resources.get(userId)
+      ? Map(
+          terms.map(term => {
+            const termKey = term.get('year') + '-' + term.get('term');
+            return [termKey, resources.getIn([userId, termKey], EMPTY_MAP)];
+          })
+        )
+      : EMPTY_MAP;
+  }
+);

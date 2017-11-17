@@ -35,7 +35,7 @@ export const fetchSisSupervisedCourses = (userId, year, term) =>
     meta: { userId, year, term }
   });
 
-export const sisCreateGroup = (courseId, userId, year, term, data) =>
+export const sisCreateGroup = (courseId, data, userId, year, term) =>
   createApiAction({
     type: actionTypes.CREATE,
     method: 'POST',
@@ -57,20 +57,20 @@ const reducer = handleActions(
   Object.assign({}, reduceActions, {
     [actionTypes.CREATE_FULFILLED]: (
       state,
-      { meta: { userId, year, term }, payload }
+      { meta: { userId, courseId, year, term }, payload }
     ) =>
-      state.setIn(
-        ['resources', userId, `${year}-${term}`],
-        createRecord({ state: resourceStatus.FULFILLED, data: fromJS(payload) })
+      state.updateIn(
+        ['resources', userId, `${year}-${term}`, 'data', courseId, 'groups'],
+        groups => groups.push(fromJS(payload))
       ),
 
     [actionTypes.BIND_FULFILLED]: (
       state,
-      { meta: { userId, year, term }, payload }
+      { meta: { userId, courseId, year, term }, payload }
     ) =>
-      state.setIn(
-        ['resources', userId, `${year}-${term}`],
-        createRecord({ state: resourceStatus.FULFILLED, data: fromJS(payload) })
+      state.updateIn(
+        ['resources', userId, `${year}-${term}`, 'data', courseId, 'groups'],
+        groups => groups.push(fromJS(payload))
       ),
 
     [actionTypes.FETCH_PENDING]: (state, { meta: { userId, year, term } }) =>
@@ -88,7 +88,15 @@ const reducer = handleActions(
     ) =>
       state.setIn(
         ['resources', userId, `${year}-${term}`],
-        createRecord({ state: resourceStatus.FULFILLED, data: fromJS(payload) })
+        createRecord({
+          state: resourceStatus.FULFILLED,
+          data: fromJS(
+            payload.reduce((map, p) => {
+              map[p.course.code] = p;
+              return map;
+            }, {})
+          )
+        })
       )
   }),
   initialState
