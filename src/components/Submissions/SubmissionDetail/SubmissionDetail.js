@@ -86,29 +86,33 @@ class SubmissionDetail extends Component {
             <CommentThreadContainer threadId={id} />
           </Col>
 
-          {evaluation &&
+          {evaluations &&
             <Col md={6} sm={12}>
-              <EvaluationDetail
-                assignment={assignment}
-                evaluation={evaluation}
-                submittedAt={createdAt}
-                maxPoints={maxPoints}
-                isCorrect={isCorrect}
-                bonusPoints={bonusPoints}
-              />
+              {evaluation &&
+                <EvaluationDetail
+                  assignment={assignment}
+                  evaluation={evaluation}
+                  submittedAt={createdAt}
+                  maxPoints={maxPoints}
+                  isCorrect={isCorrect}
+                  bonusPoints={bonusPoints}
+                />}
 
-              {isSupervisor &&
+              {evaluation &&
+                isSupervisor &&
                 <BonusPointsContainer
                   submissionId={id}
                   bonusPoints={bonusPoints}
                 />}
 
-              <TestResults
-                evaluation={evaluation}
-                runtimeEnvironmentId={runtimeEnvironmentId}
-              />
+              {evaluation &&
+                <TestResults
+                  evaluation={evaluation}
+                  runtimeEnvironmentId={runtimeEnvironmentId}
+                />}
 
-              {isSupervisor &&
+              {evaluation &&
+                isSupervisor &&
                 <Row>
                   <Col lg={6} md={12}>
                     <DownloadResultArchiveContainer submissionId={restSub.id} />
