@@ -17,11 +17,13 @@ import {
   init,
   submitAssignmentSolution as submitSolution
 } from '../../redux/modules/submission';
+import { fetchUsersSubmissions } from '../../redux/modules/submissions';
 import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments';
 
 import {
   getAssignment,
-  runtimeEnvironmentsSelector
+  runtimeEnvironmentsSelector,
+  getUserSubmissions
 } from '../../redux/selectors/assignments';
 import { canSubmitSolution } from '../../redux/selectors/canSubmit';
 import { isSubmitting } from '../../redux/selectors/submission';
@@ -44,31 +46,43 @@ import { EditIcon, ResultsIcon } from '../../components/icons';
 import LocalizedTexts from '../../components/helpers/LocalizedTexts';
 import SubmitSolutionButton from '../../components/Assignments/SubmitSolutionButton';
 import SubmitSolutionContainer from '../../containers/SubmitSolutionContainer';
-import SubmissionsTableContainer from '../../containers/SubmissionsTableContainer';
+import SubmissionsTable from '../../components/Assignments/SubmissionsTable';
 
 import withLinks from '../../hoc/withLinks';
 
 class Assignment extends Component {
-  static loadAsync = ({ assignmentId }, dispatch) =>
+  static loadAsync = ({ assignmentId }, dispatch, userId) =>
     Promise.all([
       dispatch(fetchAssignmentIfNeeded(assignmentId)),
       dispatch(fetchRuntimeEnvironments()),
-      dispatch(canSubmit(assignmentId))
+      dispatch(canSubmit(assignmentId)),
+      dispatch(fetchUsersSubmissions(userId, assignmentId))
     ]);
 
   componentWillMount() {
-    this.props.loadAsync();
+    this.props.loadAsync(this.props.userId);
   }
 
   componentWillReceiveProps(newProps) {
-    if (this.props.params.assignmentId !== newProps.params.assignmentId) {
-      newProps.loadAsync();
+    if (
+      this.props.params.assignmentId !== newProps.params.assignmentId ||
+      this.props.userId !== newProps.userId
+    ) {
+      newProps.loadAsync(newProps.userId);
     }
   }
 
   isAfter = unixTime => {
     return unixTime * 1000 < Date.now();
   };
+
+  sortSubmissions(submissions) {
+    return submissions.sort((a, b) => {
+      var aTimestamp = a.getIn(['data', 'solution', 'createdAt']);
+      var bTimestamp = b.getIn(['data', 'solution', 'createdAt']);
+      return bTimestamp - aTimestamp;
+    });
+  }
 
   render() {
     const {
@@ -83,6 +97,7 @@ class Assignment extends Component {
       canSubmit,
       runtimeEnvironments,
       exerciseSync,
+      submissions,
       links: { ASSIGNMENT_EDIT_URI_FACTORY, SUPERVISOR_STATS_URI_FACTORY }
     } = this.props;
 
@@ -278,6 +293,7 @@ class Assignment extends Component {
                       )}
                       canSubmit={canSubmit}
                       runtimeEnvironments={runtimes}
+                      alreadySubmitted={submissions.count()}
                     />
 
                     {isStudentOf(assignment.groupId) &&
@@ -307,8 +323,15 @@ class Assignment extends Component {
                     {(isStudentOf(assignment.groupId) ||
                       isSupervisorOf(assignment.groupId) ||
                       isSuperAdmin) &&
-                      <SubmissionsTableContainer
+                      <SubmissionsTable
+                        title={
+                          <FormattedMessage
+                            id="app.submissionsTable.title"
+                            defaultMessage="Submitted solutions"
+                          />
+                        }
                         userId={userId}
+                        submissions={this.sortSubmissions(submissions)}
                         assignmentId={assignment.id}
                       />}
                   </Col>}
@@ -336,7 +359,8 @@ Assignment.propTypes = {
   loadAsync: PropTypes.func.isRequired,
   links: PropTypes.object.isRequired,
   runtimeEnvironments: PropTypes.array,
-  exerciseSync: PropTypes.func.isRequired
+  exerciseSync: PropTypes.func.isRequired,
+  submissions: ImmutablePropTypes.list.isRequired
 };
 
 export default withLinks(
@@ -360,12 +384,14 @@ export default withLinks(
         isStudentOf: groupId => isStudentOf(loggedInUserId, groupId)(state),
         isSupervisorOf: groupId =>
           isSupervisorOf(loggedInUserId, groupId)(state),
-        canSubmit: canSubmitSolution(assignmentId)(state)
+        canSubmit: canSubmitSolution(assignmentId)(state),
+        submissions: getUserSubmissions(userId, assignmentId)(state)
       };
     },
-    (dispatch, { params: { assignmentId } }) => ({
+    (dispatch, { params: { assignmentId, userId } }) => ({
       init: userId => () => dispatch(init(userId, assignmentId)),
-      loadAsync: () => Assignment.loadAsync({ assignmentId }, dispatch),
+      loadAsync: userId =>
+        Assignment.loadAsync({ assignmentId }, dispatch, userId),
       exerciseSync: () => dispatch(syncWithExercise(assignmentId))
     })
   )(Assignment)
