@@ -35,11 +35,11 @@ const getMiddleware = history => [
 
 const dev = history =>
   compose(
-    applyMiddleware(...getMiddleware(history)),
-    canUseDOM && window.devToolsExtension ? window.devToolsExtension() : f => f, // use the DEVtools if the extension is installed
-    !canUseDOM || !window.devToolsExtension // dev tools not available, or we are at server -> manual logging
-      ? applyMiddleware(loggerMiddleware)
-      : f => f
+    applyMiddleware(
+      ...getMiddleware(history),
+      loggerMiddleware(!canUseDOM || !window.devToolsExtension)
+    ),
+    canUseDOM && window.devToolsExtension ? window.devToolsExtension() : f => f // use the DEVtools if the extension is installed
   );
 
 const prod = history => compose(applyMiddleware(...getMiddleware(history)));
