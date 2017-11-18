@@ -3,10 +3,6 @@ import Sidebar from '../../components/layout/Sidebar/Sidebar';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import { memberOfInstances } from '../../redux/selectors/instances';
 import {
-  studentOfSelector,
-  supervisorOfSelector
-} from '../../redux/selectors/groups';
-import {
   loggedInStudentOfSelector,
   loggedInSupervisorOfSelector
 } from '../../redux/selectors/usersGroups';
