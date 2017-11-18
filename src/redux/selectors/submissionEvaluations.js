@@ -25,6 +25,8 @@ export const evaluationsForSubmissionSelector = submissionId =>
         .filter(isReady)
         .filter(
           evaluation =>
+            submission &&
+            submission.getIn(['data', 'submissions']) &&
             submission
               .get('data')
               .get('submissions')

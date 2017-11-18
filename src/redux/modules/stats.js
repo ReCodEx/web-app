@@ -1,11 +1,6 @@
 import { handleActions } from 'redux-actions';
 import { fromJS, List } from 'immutable';
-import factory, {
-  initialState,
-  createRecord,
-  resourceStatus
-} from '../helpers/resourceManager';
-import { additionalActionTypes as additionalGroupActionTypes } from './groups';
+import factory, { initialState } from '../helpers/resourceManager';
 import { additionalActionTypes as additionalSubmissionActionTypes } from './submissions';
 
 /**
@@ -23,24 +18,19 @@ export const fetchGroupsStatsIfNeeded = actions.fetchOneIfNeeded;
 
 const reducer = handleActions(
   Object.assign({}, reduceActions, {
-    [additionalGroupActionTypes.LOAD_USERS_GROUPS_FULFILLED]: (
+    [additionalSubmissionActionTypes.ACCEPT_FULFILLED]: (state, { payload }) =>
+      state.updateIn(['resources', payload.groupId, 'data'], stats => {
+        if (!stats) {
+          stats = List();
+        }
+        return stats
+          .filter(userStats => userStats.get('userId') !== payload.userId)
+          .push(fromJS(payload));
+      }),
+    [additionalSubmissionActionTypes.UNACCEPT_FULFILLED]: (
       state,
       { payload }
-    ) => {
-      payload.stats.map(item => {
-        state.setIn(
-          'resources',
-          item.id,
-          createRecord({
-            data: item,
-            status: resourceStatus.FULFILLED
-          })
-        );
-      });
-
-      return state;
-    },
-    [additionalSubmissionActionTypes.ACCEPT_FULFILLED]: (state, { payload }) =>
+    ) =>
       state.updateIn(['resources', payload.groupId, 'data'], stats => {
         if (!stats) {
           stats = List();
