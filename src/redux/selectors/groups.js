@@ -14,6 +14,7 @@ import { isReady, getId, getJsData } from '../helpers/resourceManager';
 const EMPTY_MAP = Map();
 
 export const groupsSelector = state => state.groups.get('resources');
+
 export const filterGroups = (ids, groups) =>
   groups.filter(isReady).filter(group => ids.contains(getId(group)));
 

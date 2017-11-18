@@ -1,6 +1,6 @@
 const middleware = isDev => store => next => action => {
   /* eslint no-console: ["error", { allow: ["log", "error"] }] */
-  let verbose = false && isDev;
+  let verbose = false;
   var actionType = action.type;
   if (verbose) {
     console.log('Starting ' + actionType);
@@ -13,7 +13,7 @@ const middleware = isDev => store => next => action => {
     var res = next(action);
   } catch (e) {
     console.error('Exception thrown when processing action ' + actionType);
-    if (isDev) console.error(e);
+    if (verbose) console.error(e);
     throw e;
   }
   if (verbose) {

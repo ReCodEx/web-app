@@ -5,7 +5,10 @@ import { addNotification } from './notifications';
 import { createApiAction } from '../middleware/apiMiddleware';
 import factory, { initialState } from '../helpers/resourceManager';
 
+import createRecord from '../helpers/resourceManager/recordFactory';
+import { resourceStatus } from '../helpers/resourceManager/status';
 import { actionTypes as assignmentsActionTypes } from './assignments';
+import { actionTypes as sisSupervisedCoursesActionTypes } from './sisSupervisedCourses';
 
 const resourceName = 'groups';
 const { actions, actionTypes, reduceActions } = factory({ resourceName });
@@ -383,6 +386,15 @@ const reducer = handleActions(
               .update('public', ids => ids.filter(id => id !== assignmentId))
           )
         )
+      ),
+
+    [sisSupervisedCoursesActionTypes.CREATE_FULFILLED]: (
+      state,
+      { payload: data }
+    ) =>
+      state.setIn(
+        ['resources', data.id],
+        createRecord({ state: resourceStatus.FULFILLED, data })
       )
   }),
   initialState
