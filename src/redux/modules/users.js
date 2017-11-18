@@ -4,6 +4,7 @@ import factory, { initialState } from '../helpers/resourceManager';
 import { createApiAction } from '../middleware/apiMiddleware';
 
 import { additionalActionTypes as groupsActionTypes } from './groups';
+import { actionTypes as sisSupervisedCoursesActionTypes } from './sisSupervisedCourses';
 import { actionTypes as emailVerificationActionTypes } from './emailVerification';
 
 export const additionalActionTypes = {
@@ -148,6 +149,20 @@ const reducer = handleActions(
       return state.updateIn(
         ['resources', userId, 'data', 'groups', 'supervisorOf'],
         list => list.push(groupId)
+      );
+    },
+
+    [sisSupervisedCoursesActionTypes.CREATE_FULFILLED]: (
+      state,
+      { meta: { userId }, payload }
+    ) => {
+      if (!state.getIn(['resources', userId])) {
+        return state;
+      }
+
+      return state.updateIn(
+        ['resources', userId, 'data', 'groups', 'supervisorOf'],
+        list => list.push(payload.id)
       );
     },
 
