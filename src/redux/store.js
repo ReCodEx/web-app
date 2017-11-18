@@ -37,7 +37,7 @@ const dev = history =>
   compose(
     applyMiddleware(
       ...getMiddleware(history),
-      loggerMiddleware(!canUseDOM || !window.devToolsExtension || true)
+      loggerMiddleware(!canUseDOM || !window.devToolsExtension)
     ),
     canUseDOM && window.devToolsExtension ? window.devToolsExtension() : f => f // use the DEVtools if the extension is installed
   );
