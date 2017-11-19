@@ -17,7 +17,7 @@ const ResultsTableRow = ({ userId, assignmentsIds, submissions }) => {
           submission &&
           submission !== null &&
           submission.lastSubmission.evaluation &&
-          submission.lastSubmission.evaluation.points
+          Number.isInteger(submission.lastSubmission.evaluation.points)
             ? submission.lastSubmission.evaluation.points
             : '-';
         const bonusPoints =
