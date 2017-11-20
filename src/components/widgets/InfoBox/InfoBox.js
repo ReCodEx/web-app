@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { FormattedMessage, FormattedNumber } from 'react-intl';
 import Icon from 'react-fontawesome';
 import classNames from 'classnames';
+import GroupsName from '../../../components/Groups/GroupsName';
 
 const InfoBox = ({
   title,
@@ -12,7 +13,7 @@ const InfoBox = ({
   progress,
   description = '',
   color = 'green'
-}) => (
+}) =>
   <div
     className={classNames({
       'info-box': true,
@@ -23,8 +24,12 @@ const InfoBox = ({
       <Icon name={icon} spin={spin} />
     </span>
     <div className="info-box-content">
-      <span className="info-box-text">{title}</span>
-      <span className="info-box-number">{value}</span>
+      <span className="info-box-text">
+        {title}
+      </span>
+      <span className="info-box-number">
+        {value}
+      </span>
       <div className="progress">
         <div className="progress-bar" style={{ width: `${progress * 100}%` }} />
       </div>
@@ -32,13 +37,12 @@ const InfoBox = ({
         {description}
       </span>
     </div>
-  </div>
-);
+  </div>;
 
 InfoBox.propTypes = {
   title: PropTypes.oneOfType([
     PropTypes.string,
-    PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) })
+    PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage, GroupsName]) })
   ]).isRequired,
   value: PropTypes.oneOfType([
     PropTypes.number,
