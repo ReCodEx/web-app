@@ -1,6 +1,7 @@
 import { canUseDOM } from 'exenv';
 
 import { createStore, compose, applyMiddleware } from 'redux';
+import { composeWithDevTools } from 'remote-redux-devtools';
 import { routerMiddleware } from 'react-router-redux';
 import thunkMiddleware from 'redux-thunk';
 import promiseMiddleware from 'redux-promise-middleware';
@@ -13,6 +14,8 @@ import createEngine from 'redux-storage-engine-localstorage';
 import filter from 'redux-storage-decorator-filter';
 import { actionTypes as authActionTypes } from './modules/auth';
 import { actionTypes as switchingActionTypes } from './modules/userSwitching';
+
+const REDUX_DEV_SERVER_PORT = process.env.REDUX_DEV_SERVER_PORT !== 'undefined' ? process.env.REDUX_DEV_SERVER_PORT : 8082;
 
 const engine = filter(createEngine('recodex/store'), ['userSwitching']);
 
@@ -33,13 +36,18 @@ const getMiddleware = history => [
   )
 ];
 
+const composeEnhancers = composeWithDevTools({
+  realtime: true,
+  name: 'ReCodEx',
+  host: '127.0.0.1',
+  port: REDUX_DEV_SERVER_PORT
+});
+
 const dev = history =>
-  compose(
-    applyMiddleware(
-      ...getMiddleware(history),
-      loggerMiddleware(!canUseDOM || !window.devToolsExtension)
-    ),
-    canUseDOM && window.devToolsExtension ? window.devToolsExtension() : f => f // use the DEVtools if the extension is installed
+  composeEnhancers(
+    compose(
+      applyMiddleware(...getMiddleware(history), loggerMiddleware(!canUseDOM))
+    )
   );
 
 const prod = history => compose(applyMiddleware(...getMiddleware(history)));

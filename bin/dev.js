@@ -5,9 +5,11 @@ import WebpackDevServer from 'webpack-dev-server';
 import path from 'path';
 import config from '../config/webpack.config';
 import colors from 'colors';
+import remotedev from 'remotedev-server';
 
 const PORT = process.env.PORT || 8080;
 const WEBPACK_DEV_SERVER_PORT = process.env.WEBPACK_DEV_SERVER_PORT || 8081;
+const REDUX_DEV_SERVER_PORT = process.env.REDUX_DEV_SERVER_PORT || 8082;
 
 let app = new Express();
 app.set('view engine', 'ejs');
@@ -37,14 +39,23 @@ var server = new WebpackDevServer(webpack(config), {
   stats: { colors: true }
 });
 
+remotedev({
+  hostname: '127.0.0.1',
+  port: REDUX_DEV_SERVER_PORT
+});
+
 server.listen(WEBPACK_DEV_SERVER_PORT, 'localhost', () => {
   console.log(
-    `${colors.yellow('WebpackDevServer')} is running on ${colors.underline(`http://localhost:${WEBPACK_DEV_SERVER_PORT}`)}`
+    `${colors.yellow('WebpackDevServer')} is running on ${colors.underline(
+      `http://localhost:${WEBPACK_DEV_SERVER_PORT}`
+    )}`
   );
 });
 
 app.listen(PORT, () => {
   console.log(
-    `${colors.green('WebApp')} is running on ${colors.underline(`http://localhost:${PORT}`)}`
+    `${colors.green('WebApp')} is running on ${colors.underline(
+      `http://localhost:${PORT}`
+    )}`
   );
 });
