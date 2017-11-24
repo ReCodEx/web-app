@@ -150,7 +150,7 @@ class Exercise extends Component {
       links: {
         EXERCISES_URI,
         EXERCISE_EDIT_URI_FACTORY,
-        EXERCISE_EDIT_CONFIG_URI_FACTORY,
+        EXERCISE_EDIT_SIMPLE_CONFIG_URI_FACTORY,
         EXERCISE_REFERENCE_SOLUTION_URI_FACTORY,
         PIPELINE_EDIT_URI_FACTORY
       }
@@ -208,7 +208,9 @@ class Exercise extends Component {
                         </Button>
                       </LinkContainer>
                       <LinkContainer
-                        to={EXERCISE_EDIT_CONFIG_URI_FACTORY(exercise.id)}
+                        to={EXERCISE_EDIT_SIMPLE_CONFIG_URI_FACTORY(
+                          exercise.id
+                        )}
                       >
                         <Button bsStyle="warning" bsSize="sm">
                           <EditIcon />

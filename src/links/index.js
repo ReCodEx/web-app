@@ -30,6 +30,8 @@ export const linksFactory = lang => {
   const EXERCISE_EDIT_URI_FACTORY = id => `${EXERCISE_URI_FACTORY(id)}/edit`;
   const EXERCISE_EDIT_CONFIG_URI_FACTORY = id =>
     `${EXERCISE_URI_FACTORY(id)}/edit-config`;
+  const EXERCISE_EDIT_SIMPLE_CONFIG_URI_FACTORY = id =>
+    `${EXERCISE_URI_FACTORY(id)}/edit-simple-config`;
 
   // reference solution
   const EXERCISE_REFERENCE_SOLUTION_URI_FACTORY = (
@@ -101,6 +103,7 @@ export const linksFactory = lang => {
     EXERCISE_URI_FACTORY,
     EXERCISE_EDIT_URI_FACTORY,
     EXERCISE_EDIT_CONFIG_URI_FACTORY,
+    EXERCISE_EDIT_SIMPLE_CONFIG_URI_FACTORY,
     EXERCISE_CREATE_URI_FACTORY,
     EXERCISE_REFERENCE_SOLUTION_URI_FACTORY,
     PIPELINES_URI,

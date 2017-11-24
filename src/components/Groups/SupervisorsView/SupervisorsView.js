@@ -30,7 +30,7 @@ const SupervisorsView = ({
   deleteExercise,
   users,
   publicAssignments,
-  links: { EXERCISE_EDIT_URI_FACTORY, EXERCISE_EDIT_CONFIG_URI_FACTORY },
+  links: { EXERCISE_EDIT_URI_FACTORY, EXERCISE_EDIT_SIMPLE_CONFIG_URI_FACTORY },
   intl: { locale }
 }) =>
   <div>
@@ -157,7 +157,7 @@ const SupervisorsView = ({
                       </Button>
                     </LinkContainer>
                     <LinkContainer
-                      to={EXERCISE_EDIT_CONFIG_URI_FACTORY(exerciseId)}
+                      to={EXERCISE_EDIT_SIMPLE_CONFIG_URI_FACTORY(exerciseId)}
                     >
                       <Button
                         bsSize="xs"

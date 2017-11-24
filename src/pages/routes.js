@@ -14,6 +14,7 @@ import Exercise from './Exercise';
 import Exercises from './Exercises';
 import EditExercise from './EditExercise';
 import EditExerciseConfig from './EditExerciseConfig';
+import EditExerciseSimpleConfig from './EditExerciseSimpleConfig';
 import FeedbackAndBugs from './FeedbackAndBugs';
 import Group from './Group';
 import EditGroup from './EditGroup';
@@ -92,6 +93,10 @@ const createRoutes = getState => {
               <IndexRoute component={Exercise} />
               <Route path="edit" component={EditExercise} />
               <Route path="edit-config" component={EditExerciseConfig} />
+              <Route
+                path="edit-simple-config"
+                component={EditExerciseSimpleConfig}
+              />
               <Route path="reference-solution/:referenceSolutionId">
                 <IndexRoute component={ReferenceSolution} />
                 <Route
