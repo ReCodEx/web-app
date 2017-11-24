@@ -11,6 +11,8 @@ export const instanceSelector = createSelector(
   (instances, id) => instances.get(id)
 );
 
+// export const instanceForGroupSelector =
+
 export const publicInstancesSelector = createSelector(
   instancesSelector,
   instances =>

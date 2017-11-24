@@ -32,7 +32,7 @@ import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import { fetchGroupsStatsIfNeeded } from '../../redux/modules/stats';
 import { createGroupsStatsSelector } from '../../redux/selectors/stats';
 import {
-  groupsAssignmentsSelector,
+  groupsPublicAssignmentsSelector,
   studentOfSelector2,
   supervisorOfSelector2,
   adminOfSelector
@@ -312,7 +312,8 @@ export default withLinks(
         user: getProfile(userId)(state),
         isAdmin: isSuperadmin,
         studentOfGroupsIds: studentOfGroupsIdsSelector(userId)(state).toArray(),
-        groupAssignments: groupId => groupsAssignmentsSelector(groupId)(state),
+        groupAssignments: groupId =>
+          groupsPublicAssignmentsSelector(state, groupId),
         groupStatistics: groupId => createGroupsStatsSelector(groupId)(state),
         usersStatistics: statistics =>
           statistics.find(stat => stat.userId === userId) || {},
