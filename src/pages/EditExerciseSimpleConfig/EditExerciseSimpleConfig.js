@@ -12,6 +12,7 @@ import { LocalizedExerciseName } from '../../components/helpers/LocalizedNames';
 import EditSimpleLimitsBox from '../../components/Exercises/EditSimpleLimitsBox';
 import SupplementaryFilesTableContainer from '../../containers/SupplementaryFilesTableContainer';
 import EditTestsForm from '../../components/forms/EditTestsForm';
+import EditExerciseSimpleConfigForm from '../../components/forms/EditExerciseSimpleConfigForm';
 
 import { fetchExerciseIfNeeded } from '../../redux/modules/exercises';
 import {
@@ -134,8 +135,28 @@ class EditExerciseSimpleConfig extends Component {
                 <SupplementaryFilesTableContainer exercise={exercise} />
               </Col>
             </Row>
-
             <br />
+
+            <Row>
+              <Col lg={12}>
+                <Box
+                  title={
+                    <FormattedMessage
+                      id="app.editExercise.editConfig"
+                      defaultMessage="Edit exercise configuration"
+                    />
+                  }
+                  unlimitedHeight
+                >
+                  <EditExerciseSimpleConfigForm
+                    runtimeEnvironments={runtimeEnvironments}
+                    onSubmit={data => console.log(data)}
+                  />
+                </Box>
+              </Col>
+            </Row>
+            <br />
+
             <Row>
               <Col lg={12}>
                 <ResourceRenderer
