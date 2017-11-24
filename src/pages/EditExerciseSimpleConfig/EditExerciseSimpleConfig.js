@@ -125,10 +125,16 @@ class EditExerciseSimpleConfig extends Component {
                   }
                   unlimitedHeight
                 >
-                  <EditTestsForm
-                    initialValues={{ isUniform: true }}
-                    onSubmit={data => console.log(data)}
-                  />
+                  <ResourceRenderer
+                    resource={[...runtimeEnvironments.toArray()]}
+                  >
+                    {(...environments) =>
+                      <EditTestsForm
+                        initialValues={{ isUniform: true }}
+                        runtimeEnvironments={environments}
+                        onSubmit={data => console.log(data)}
+                      />}
+                  </ResourceRenderer>
                 </Box>
               </Col>
               <Col lg={6}>
@@ -149,7 +155,6 @@ class EditExerciseSimpleConfig extends Component {
                   unlimitedHeight
                 >
                   <EditExerciseSimpleConfigForm
-                    runtimeEnvironments={runtimeEnvironments}
                     onSubmit={data => console.log(data)}
                   />
                 </Box>
@@ -159,10 +164,8 @@ class EditExerciseSimpleConfig extends Component {
 
             <Row>
               <Col lg={12}>
-                <ResourceRenderer
-                  resource={[exerciseConfig, ...runtimeEnvironments.toArray()]}
-                >
-                  {(config, ...runtimeEnvironments) =>
+                <ResourceRenderer resource={exerciseConfig}>
+                  {config =>
                     <div>
                       <EditSimpleLimitsBox
                         editLimits={editEnvironmentSimpleLimits}

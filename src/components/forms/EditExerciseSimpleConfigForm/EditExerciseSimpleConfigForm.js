@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import ImmutablePropTypes from 'react-immutable-proptypes';
 import { reduxForm, FieldArray, getFormValues } from 'redux-form';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import { Alert } from 'react-bootstrap';
 
-import EditExerciseSimpleConfigEnvironment from './EditExerciseSiimpleConfigEnvironment';
+import EditExerciseSimpleConfigTest from './EditExerciseSimpleConfigTest';
 import SubmitButton from '../SubmitButton';
 
 class EditExerciseSimpleConfigForm extends Component {
@@ -18,7 +17,6 @@ class EditExerciseSimpleConfigForm extends Component {
       hasFailed = false,
       hasSucceeded = false,
       invalid,
-      runtimeEnvironments,
       formValues
     } = this.props;
     return (
@@ -33,9 +31,9 @@ class EditExerciseSimpleConfigForm extends Component {
 
         <FieldArray
           name="config"
-          component={EditExerciseSimpleConfigEnvironment}
-          runtimeEnvironments={runtimeEnvironments}
+          component={EditExerciseSimpleConfigTest}
           formValues={formValues}
+          prefix="config"
         />
 
         <p className="text-center">
@@ -86,8 +84,7 @@ EditExerciseSimpleConfigForm.propTypes = {
   exercise: PropTypes.shape({
     id: PropTypes.string.isRequired
   }),
-  formValues: PropTypes.object,
-  runtimeEnvironments: ImmutablePropTypes.map
+  formValues: PropTypes.object
 };
 
 const validate = () => {
