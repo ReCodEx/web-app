@@ -33,6 +33,37 @@ import { simpleLimitsSelector } from '../../redux/selectors/simpleLimits';
 
 import withLinks from '../../hoc/withLinks';
 import { getLocalizedName } from '../../helpers/getLocalizedData';
+import { exerciseEnvironmentConfigSelector } from '../../redux/selectors/exerciseEnvironmentConfigs';
+import {
+  fetchExerciseEnvironmentConfigIfNeeded,
+  setExerciseEnvironmentConfig
+} from '../../redux/modules/exerciseEnvironmentConfigs';
+
+const getEnvInitValues = environmentConfigs => {
+  let res = {};
+  for (const env of environmentConfigs) {
+    res[env.runtimeEnvironmentId] = true;
+  }
+  return res;
+};
+
+const transformAndSendEnvValues = (
+  formData,
+  environments,
+  editEnvironmentConfigs
+) => {
+  let res = [];
+  for (const env in formData) {
+    if (formData[env] !== true && formData[env] !== 'true') {
+      continue;
+    }
+    let envObj = { runtimeEnvironmentId: env };
+    const currentFullEnv = environments.find(e => e.id === env);
+    envObj.variablesTable = currentFullEnv.defaultVariables;
+    res.push(envObj);
+  }
+  return editEnvironmentConfigs({ environmentConfigs: res });
+};
 
 class EditExerciseSimpleConfig extends Component {
   componentWillMount = () => this.props.loadAsync();
@@ -57,6 +88,7 @@ class EditExerciseSimpleConfig extends Component {
         )
       ),
       dispatch(fetchExerciseConfigIfNeeded(exerciseId)),
+      dispatch(fetchExerciseEnvironmentConfigIfNeeded(exerciseId)),
       dispatch(fetchRuntimeEnvironments())
     ]);
 
@@ -68,6 +100,8 @@ class EditExerciseSimpleConfig extends Component {
       runtimeEnvironments,
       exerciseConfig,
       editEnvironmentSimpleLimits,
+      exerciseEnvironmentConfig,
+      editEnvironmentConfigs,
       limits,
       setHorizontally,
       setVertically,
@@ -144,10 +178,19 @@ class EditExerciseSimpleConfig extends Component {
                     resource={[...runtimeEnvironments.toArray()]}
                   >
                     {(...environments) =>
-                      <EditEnvironmentSimpleForm
-                        runtimeEnvironments={environments}
-                        onSubmit={data => console.log(data)}
-                      />}
+                      <ResourceRenderer resource={exerciseEnvironmentConfig}>
+                        {environmentConfigs =>
+                          <EditEnvironmentSimpleForm
+                            initialValues={getEnvInitValues(environmentConfigs)}
+                            runtimeEnvironments={environments}
+                            onSubmit={data =>
+                              transformAndSendEnvValues(
+                                data,
+                                environments,
+                                editEnvironmentConfigs
+                              )}
+                          />}
+                      </ResourceRenderer>}
                   </ResourceRenderer>
                 </Box>
               </Col>
@@ -209,6 +252,8 @@ EditExerciseSimpleConfig.propTypes = {
     exerciseId: PropTypes.string.isRequired
   }).isRequired,
   exerciseConfig: PropTypes.object,
+  exerciseEnvironmentConfig: PropTypes.object,
+  editEnvironmentConfigs: PropTypes.func.isRequired,
   editEnvironmentSimpleLimits: PropTypes.func.isRequired,
   links: PropTypes.object.isRequired,
   limits: PropTypes.func.isRequired,
@@ -228,7 +273,10 @@ export default injectIntl(
           runtimeEnvironments: runtimeEnvironmentsSelector(state),
           exerciseConfig: exerciseConfigSelector(exerciseId)(state),
           limits: runtimeEnvironmentId =>
-            simpleLimitsSelector(exerciseId, runtimeEnvironmentId)(state)
+            simpleLimitsSelector(exerciseId, runtimeEnvironmentId)(state),
+          exerciseEnvironmentConfig: exerciseEnvironmentConfigSelector(
+            exerciseId
+          )(state)
         };
       },
       (dispatch, { params: { exerciseId } }) => ({
@@ -238,6 +286,8 @@ export default injectIntl(
           dispatch(
             editEnvironmentSimpleLimits(exerciseId, runtimeEnvironmentId, data)
           ),
+        editEnvironmentConfigs: data =>
+          dispatch(setExerciseEnvironmentConfig(exerciseId, data)),
         setHorizontally: (formName, runtimeEnvironmentId) => testName => () =>
           dispatch(
             setHorizontally(
