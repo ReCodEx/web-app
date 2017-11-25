@@ -10,13 +10,13 @@ import {
 } from 'react-bootstrap';
 
 class ExpandingTextField extends Component {
-  state = { texts: [''] };
+  state = { texts: [] };
 
   componentDidMount() {
     const { input: { value } } = this.props;
     const initialValue = Array.isArray(value)
       ? value.concat([''])
-      : [value, ''];
+      : value.trim() !== '' ? [value, ''] : [''];
     this.setState({ texts: initialValue });
   }
 

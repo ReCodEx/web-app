@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 import { reduxForm, FieldArray, getFormValues } from 'redux-form';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
@@ -7,6 +8,8 @@ import { Alert } from 'react-bootstrap';
 
 import EditExerciseSimpleConfigTest from './EditExerciseSimpleConfigTest';
 import SubmitButton from '../SubmitButton';
+import ResourceRenderer from '../../helpers/ResourceRenderer';
+import { createGetSupplementaryFiles } from '../../../redux/selectors/supplementaryFiles';
 
 class EditExerciseSimpleConfigForm extends Component {
   render() {
@@ -17,7 +20,8 @@ class EditExerciseSimpleConfigForm extends Component {
       hasFailed = false,
       hasSucceeded = false,
       invalid,
-      formValues
+      formValues,
+      supplementaryFiles
     } = this.props;
     return (
       <div>
@@ -28,13 +32,16 @@ class EditExerciseSimpleConfigForm extends Component {
               defaultMessage="Saving failed. Please try again later."
             />
           </Alert>}
-
-        <FieldArray
-          name="config"
-          component={EditExerciseSimpleConfigTest}
-          formValues={formValues}
-          prefix="config"
-        />
+        <ResourceRenderer resource={supplementaryFiles.toArray()}>
+          {(...files) =>
+            <FieldArray
+              name="config"
+              component={EditExerciseSimpleConfigTest}
+              formValues={formValues}
+              supplementaryFiles={files}
+              prefix="config"
+            />}
+        </ResourceRenderer>
 
         <p className="text-center">
           <SubmitButton
@@ -84,7 +91,8 @@ EditExerciseSimpleConfigForm.propTypes = {
   exercise: PropTypes.shape({
     id: PropTypes.string.isRequired
   }),
-  formValues: PropTypes.object
+  formValues: PropTypes.object,
+  supplementaryFiles: ImmutablePropTypes.map
 };
 
 const validate = () => {
@@ -94,7 +102,11 @@ const validate = () => {
 };
 
 export default connect((state, { exercise }) => {
+  const getSupplementaryFilesForExercise = createGetSupplementaryFiles(
+    exercise.supplementaryFilesIds
+  );
   return {
+    supplementaryFiles: getSupplementaryFilesForExercise(state),
     formValues: getFormValues('editExerciseSimpleConfig')(state)
   };
 })(

@@ -155,6 +155,7 @@ class EditExerciseSimpleConfig extends Component {
                   unlimitedHeight
                 >
                   <EditExerciseSimpleConfigForm
+                    exercise={exercise}
                     onSubmit={data => console.log(data)}
                   />
                 </Box>

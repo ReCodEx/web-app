@@ -10,26 +10,29 @@ import {
   ControlLabel
 } from 'react-bootstrap';
 
+const EMPTY_VALUE = { first: '', second: '' };
+
 class ExpandingInputFilesField extends Component {
-  state = { texts: [{ first: '', second: '' }] };
+  state = { texts: [] };
 
   componentDidMount() {
     const { input: { value } } = this.props;
-    const initialValue = Array.isArray(value)
-      ? value.concat([''])
-      : [value, ''];
+    const initialValue =
+      Array.isArray(value) && value.first && value.second
+        ? value.concat([EMPTY_VALUE])
+        : [EMPTY_VALUE];
     this.setState({ texts: initialValue });
   }
 
   changeText = (i, text, isFirst, onChange) => {
     const { texts } = this.state;
     if (isFirst) {
-      texts[i] = { first: text.trim(), second: '' };
+      texts[i] = { first: text.trim(), second: texts[i].second };
     } else {
-      texts[i] = { first: '', second: text.trim() };
+      texts[i] = { first: texts[i].first, second: text.trim() };
     }
     if (i === texts.length - 1) {
-      texts.push({ first: '', second: '' });
+      texts.push(EMPTY_VALUE);
     }
     this.setState({ texts });
 

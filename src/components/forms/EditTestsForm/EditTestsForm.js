@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { reduxForm, FieldArray, Field, getFormValues } from 'redux-form';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
-import { Alert } from 'react-bootstrap';
+import { Alert, Row, Col } from 'react-bootstrap';
 
 import EditTestsTest from './EditTestsTest';
 import { CheckboxField } from '../Fields';
@@ -18,7 +18,8 @@ class EditTestsForm extends Component {
       hasFailed = false,
       hasSucceeded = false,
       invalid,
-      formValues
+      formValues,
+      runtimeEnvironments
     } = this.props;
 
     return (
@@ -42,6 +43,21 @@ class EditTestsForm extends Component {
             />
           }
         />
+
+        <hr />
+        <Row>
+          {runtimeEnvironments.map((environment, i) =>
+            <Col key={i} xs={12} sm={6}>
+              <Field
+                name={`re.${environment.id}`}
+                component={CheckboxField}
+                onOff
+                label={environment.name}
+              />
+            </Col>
+          )}
+        </Row>
+        <hr />
 
         <FieldArray
           name="tests"
@@ -93,7 +109,8 @@ EditTestsForm.propTypes = {
   hasFailed: PropTypes.bool,
   hasSucceeded: PropTypes.bool,
   invalid: PropTypes.bool,
-  formValues: PropTypes.object
+  formValues: PropTypes.object,
+  runtimeEnvironments: PropTypes.array
 };
 
 const validate = () => {
