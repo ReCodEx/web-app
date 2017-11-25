@@ -12,6 +12,7 @@ import evaluationProgress from './modules/evaluationProgress';
 import exerciseConfigs from './modules/exerciseConfigs';
 import exerciseEnvironmentConfigs from './modules/exerciseEnvironmentConfigs';
 import exerciseScoreConfig from './modules/exerciseScoreConfig';
+import exerciseTests from './modules/exerciseTests';
 import exercises from './modules/exercises';
 import pipelines from './modules/pipelines';
 import files from './modules/files';
@@ -59,6 +60,7 @@ const createRecodexReducers = token => ({
   exerciseConfigs,
   exerciseEnvironmentConfigs,
   exerciseScoreConfig,
+  exerciseTests,
   exercises,
   pipelines,
   files,

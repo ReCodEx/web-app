@@ -4,6 +4,7 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { Row, Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
+import yaml from 'js-yaml';
 
 import Page from '../../components/layout/Page';
 import Box from '../../components/widgets/Box';
@@ -38,6 +39,16 @@ import {
   fetchExerciseEnvironmentConfigIfNeeded,
   setExerciseEnvironmentConfig
 } from '../../redux/modules/exerciseEnvironmentConfigs';
+import { exerciseScoreConfigSelector } from '../../redux/selectors/exerciseScoreConfig';
+import {
+  fetchScoreConfigIfNeeded,
+  setScoreConfig
+} from '../../redux/modules/exerciseScoreConfig';
+import {
+  fetchExerciseTestsIfNeeded,
+  setExerciseTests
+} from '../../redux/modules/exerciseTests';
+import { exerciseTestsSelector } from '../../redux/selectors/exerciseTests';
 
 const getEnvInitValues = environmentConfigs => {
   let res = {};
@@ -65,6 +76,51 @@ const transformAndSendEnvValues = (
   return editEnvironmentConfigs({ environmentConfigs: res });
 };
 
+const getTestsInitValues = (exerciseTests, scoreConfig, locale) => {
+  const jsonScoreConfig = yaml.safeLoad(scoreConfig);
+  const testWeights = jsonScoreConfig.testWeights || {};
+  const sortedTests = exerciseTests.sort((a, b) =>
+    a.name.localeCompare(b.name, locale)
+  );
+
+  let res = [];
+  let allWeightsSame = true;
+  let lastWeight = null;
+  for (const test of sortedTests) {
+    const testWeight = testWeights[test.name] || 100;
+    if (lastWeight !== null && testWeight !== lastWeight) {
+      allWeightsSame = false;
+    }
+    lastWeight = testWeight;
+    res.push({ name: test.name, weight: testWeight });
+  }
+
+  return { isUniform: allWeightsSame, tests: res };
+};
+
+const transformAndSendTestsValues = (
+  formData,
+  editExerciseTests,
+  editExerciseScoreConfig
+) => {
+  const uniformScore =
+    formData.isUniform === true || formData.isUniform === 'true';
+  let scoreConfigData = { testWeights: {} };
+  let testsData = [];
+
+  for (const test of formData.tests) {
+    const testWeight = uniformScore ? 100 : Number(test.weight);
+    scoreConfigData.testWeights[test.name] = testWeight;
+
+    testsData.push({ name: test.name });
+  }
+
+  return Promise.all([
+    editExerciseTests({ tests: testsData }),
+    editExerciseScoreConfig({ scoreConfig: yaml.safeDump(scoreConfigData) })
+  ]);
+};
+
 class EditExerciseSimpleConfig extends Component {
   componentWillMount = () => this.props.loadAsync();
   componentWillReceiveProps = props => {
@@ -89,6 +145,8 @@ class EditExerciseSimpleConfig extends Component {
       ),
       dispatch(fetchExerciseConfigIfNeeded(exerciseId)),
       dispatch(fetchExerciseEnvironmentConfigIfNeeded(exerciseId)),
+      dispatch(fetchScoreConfigIfNeeded(exerciseId)),
+      dispatch(fetchExerciseTestsIfNeeded(exerciseId)),
       dispatch(fetchRuntimeEnvironments())
     ]);
 
@@ -102,6 +160,10 @@ class EditExerciseSimpleConfig extends Component {
       editEnvironmentSimpleLimits,
       exerciseEnvironmentConfig,
       editEnvironmentConfigs,
+      exerciseScoreConfig,
+      exerciseTests,
+      editScoreConfig,
+      editTests,
       limits,
       setHorizontally,
       setVertically,
@@ -160,10 +222,24 @@ class EditExerciseSimpleConfig extends Component {
                   }
                   unlimitedHeight
                 >
-                  <EditTestsForm
-                    initialValues={{ isUniform: true }}
-                    onSubmit={data => console.log(data)}
-                  />
+                  <ResourceRenderer
+                    resource={[exerciseScoreConfig, exerciseTests]}
+                  >
+                    {(scoreConfig, tests) =>
+                      <EditTestsForm
+                        initialValues={getTestsInitValues(
+                          tests,
+                          scoreConfig,
+                          locale
+                        )}
+                        onSubmit={data =>
+                          transformAndSendTestsValues(
+                            data,
+                            editTests,
+                            editScoreConfig
+                          )}
+                      />}
+                  </ResourceRenderer>
                 </Box>
                 <Box
                   title={
@@ -255,6 +331,10 @@ EditExerciseSimpleConfig.propTypes = {
   exerciseEnvironmentConfig: PropTypes.object,
   editEnvironmentConfigs: PropTypes.func.isRequired,
   editEnvironmentSimpleLimits: PropTypes.func.isRequired,
+  exerciseScoreConfig: PropTypes.object,
+  exerciseTests: PropTypes.object,
+  editScoreConfig: PropTypes.func.isRequired,
+  editTests: PropTypes.func.isRequired,
   links: PropTypes.object.isRequired,
   limits: PropTypes.func.isRequired,
   setHorizontally: PropTypes.func.isRequired,
@@ -276,7 +356,9 @@ export default injectIntl(
             simpleLimitsSelector(exerciseId, runtimeEnvironmentId)(state),
           exerciseEnvironmentConfig: exerciseEnvironmentConfigSelector(
             exerciseId
-          )(state)
+          )(state),
+          exerciseScoreConfig: exerciseScoreConfigSelector(exerciseId)(state),
+          exerciseTests: exerciseTestsSelector(exerciseId)(state)
         };
       },
       (dispatch, { params: { exerciseId } }) => ({
@@ -288,6 +370,8 @@ export default injectIntl(
           ),
         editEnvironmentConfigs: data =>
           dispatch(setExerciseEnvironmentConfig(exerciseId, data)),
+        editScoreConfig: data => dispatch(setScoreConfig(exerciseId, data)),
+        editTests: data => dispatch(setExerciseTests(exerciseId, data)),
         setHorizontally: (formName, runtimeEnvironmentId) => testName => () =>
           dispatch(
             setHorizontally(
