@@ -17,10 +17,9 @@ class ExpandingInputFilesField extends Component {
 
   componentDidMount() {
     const { input: { value } } = this.props;
-    const initialValue =
-      Array.isArray(value) && value.first && value.second
-        ? value.concat([EMPTY_VALUE])
-        : [EMPTY_VALUE];
+    const initialValue = Array.isArray(value)
+      ? value.concat([EMPTY_VALUE])
+      : [EMPTY_VALUE];
     this.setState({ texts: initialValue });
   }
 

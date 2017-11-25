@@ -121,6 +121,91 @@ const transformAndSendTestsValues = (
   ]);
 };
 
+const getSimpleConfigInitValues = (config, tests, locale) => {
+  const confTests = config[0].tests.sort((a, b) =>
+    a.name.localeCompare(b.name, locale)
+  );
+
+  let res = [];
+  for (let test of confTests) {
+    let testObj = { name: test.name };
+    const variables = test.pipelines.reduce(
+      (acc, pipeline) => acc.concat(pipeline.variables),
+      []
+    );
+
+    const inputFiles = variables.find(
+      variable => variable.name === 'input-files'
+    );
+    const actualInputs = variables.find(
+      variable => variable.name === 'actual-inputs'
+    );
+    if (inputFiles) {
+      testObj.inputFiles = inputFiles.value.map((value, i) => ({
+        first: value,
+        second:
+          actualInputs && actualInputs.value && actualInputs.value[i]
+            ? actualInputs.value[i]
+            : ''
+      }));
+    }
+
+    const expectedOutput = variables.find(
+      variable => variable.name === 'expected-output'
+    );
+    if (expectedOutput) {
+      testObj.expectedOutput = expectedOutput.value;
+    }
+
+    const runArgs = variables.find(variable => variable.name === 'run-args');
+    if (runArgs) {
+      testObj.runArgs = runArgs.value;
+    }
+
+    const actualOutput = variables.find(
+      variable => variable.name === 'actual-output'
+    );
+    if (actualOutput) {
+      testObj.useOutFile = true;
+      testObj.outputFile = actualOutput.value;
+    }
+
+    const stdinFile = variables.find(
+      variable => variable.name === 'stdin-file'
+    );
+    if (stdinFile) {
+      testObj.inputStdin = stdinFile.value;
+    }
+
+    const standardJudge = variables.find(
+      variable => variable.name === 'judge-type'
+    );
+    if (standardJudge) {
+      testObj.useCustomJudge = false;
+      testObj.judgeBinary = standardJudge.value;
+    }
+
+    const customJudge = variables.find(
+      variable => variable.name === 'custom-judge'
+    );
+    if (customJudge) {
+      testObj.customJudgeBinary = customJudge.value;
+      testObj.useCustomJudge = customJudge.value.trim() !== '';
+    }
+
+    const judgeArgs = variables.find(
+      variable => variable.name === 'judge-args'
+    );
+    if (judgeArgs) {
+      testObj.judgeArgs = judgeArgs.value;
+    }
+
+    res.push(testObj);
+  }
+
+  return { config: res };
+};
+
 class EditExerciseSimpleConfig extends Component {
   componentWillMount = () => this.props.loadAsync();
   componentWillReceiveProps = props => {
@@ -287,10 +372,25 @@ class EditExerciseSimpleConfig extends Component {
                   }
                   unlimitedHeight
                 >
-                  <EditExerciseSimpleConfigForm
-                    exercise={exercise}
-                    onSubmit={data => console.log(data)}
-                  />
+                  <ResourceRenderer resource={[exerciseConfig, exerciseTests]}>
+                    {(config, tests) => {
+                      const sortedTests = tests.sort((a, b) =>
+                        a.name.localeCompare(b.name, locale)
+                      );
+                      return (
+                        <EditExerciseSimpleConfigForm
+                          initialValues={getSimpleConfigInitValues(
+                            config,
+                            sortedTests,
+                            locale
+                          )}
+                          exercise={exercise}
+                          exerciseTests={sortedTests}
+                          onSubmit={data => console.log(data)}
+                        />
+                      );
+                    }}
+                  </ResourceRenderer>
                 </Box>
               </Col>
             </Row>

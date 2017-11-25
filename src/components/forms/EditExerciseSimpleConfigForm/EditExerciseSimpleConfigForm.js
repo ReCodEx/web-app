@@ -21,7 +21,8 @@ class EditExerciseSimpleConfigForm extends Component {
       hasSucceeded = false,
       invalid,
       formValues,
-      supplementaryFiles
+      supplementaryFiles,
+      exerciseTests
     } = this.props;
     return (
       <div>
@@ -40,6 +41,7 @@ class EditExerciseSimpleConfigForm extends Component {
               formValues={formValues}
               supplementaryFiles={files}
               prefix="config"
+              exerciseTests={exerciseTests}
             />}
         </ResourceRenderer>
 
@@ -92,7 +94,8 @@ EditExerciseSimpleConfigForm.propTypes = {
     id: PropTypes.string.isRequired
   }),
   formValues: PropTypes.object,
-  supplementaryFiles: ImmutablePropTypes.map
+  supplementaryFiles: ImmutablePropTypes.map,
+  exerciseTests: PropTypes.array
 };
 
 const validate = () => {
