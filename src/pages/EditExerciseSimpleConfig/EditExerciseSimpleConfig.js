@@ -13,6 +13,7 @@ import EditSimpleLimitsBox from '../../components/Exercises/EditSimpleLimitsBox'
 import SupplementaryFilesTableContainer from '../../containers/SupplementaryFilesTableContainer';
 import EditTestsForm from '../../components/forms/EditTestsForm';
 import EditExerciseSimpleConfigForm from '../../components/forms/EditExerciseSimpleConfigForm';
+import EditEnvironmentSimpleForm from '../../components/forms/EditEnvironmentSimpleForm';
 
 import { fetchExerciseIfNeeded } from '../../redux/modules/exercises';
 import {
@@ -125,12 +126,25 @@ class EditExerciseSimpleConfig extends Component {
                   }
                   unlimitedHeight
                 >
+                  <EditTestsForm
+                    initialValues={{ isUniform: true }}
+                    onSubmit={data => console.log(data)}
+                  />
+                </Box>
+                <Box
+                  title={
+                    <FormattedMessage
+                      id="app.editExercise.editEnvironments"
+                      defaultMessage="Edit runtime environments"
+                    />
+                  }
+                  unlimitedHeight
+                >
                   <ResourceRenderer
                     resource={[...runtimeEnvironments.toArray()]}
                   >
                     {(...environments) =>
-                      <EditTestsForm
-                        initialValues={{ isUniform: true }}
+                      <EditEnvironmentSimpleForm
                         runtimeEnvironments={environments}
                         onSubmit={data => console.log(data)}
                       />}

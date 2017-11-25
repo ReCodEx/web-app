@@ -1,15 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { reduxForm, FieldArray, Field, getFormValues } from 'redux-form';
-import { connect } from 'react-redux';
+import { reduxForm, Field } from 'redux-form';
 import { FormattedMessage } from 'react-intl';
-import { Alert } from 'react-bootstrap';
+import { Alert, Row, Col } from 'react-bootstrap';
 
-import EditTestsTest from './EditTestsTest';
 import { CheckboxField } from '../Fields';
 import SubmitButton from '../SubmitButton';
 
-class EditTestsForm extends Component {
+class EditEnvironmentSimpleForm extends Component {
   render() {
     const {
       anyTouched,
@@ -18,7 +16,7 @@ class EditTestsForm extends Component {
       hasFailed = false,
       hasSucceeded = false,
       invalid,
-      formValues
+      runtimeEnvironments
     } = this.props;
 
     return (
@@ -26,28 +24,23 @@ class EditTestsForm extends Component {
         {hasFailed &&
           <Alert bsStyle="danger">
             <FormattedMessage
-              id="app.editTestsForm.failed"
+              id="app.editEnvironmentSimpleForm.failed"
               defaultMessage="Saving failed. Please try again later."
             />
           </Alert>}
 
-        <Field
-          name="isUniform"
-          component={CheckboxField}
-          onOff
-          label={
-            <FormattedMessage
-              id="app.editTestsForm.isUniform"
-              defaultMessage="Using uniform point distribution for all tests"
-            />
-          }
-        />
-
-        <FieldArray
-          name="tests"
-          component={EditTestsTest}
-          isUniform={formValues ? formValues.isUniform === true : true}
-        />
+        <Row>
+          {runtimeEnvironments.map((environment, i) =>
+            <Col key={i} xs={12} sm={6}>
+              <Field
+                name={`${environment.id}`}
+                component={CheckboxField}
+                onOff
+                label={environment.name}
+              />
+            </Col>
+          )}
+        </Row>
 
         <div className="text-center">
           <SubmitButton
@@ -61,19 +54,19 @@ class EditTestsForm extends Component {
             messages={{
               submit: (
                 <FormattedMessage
-                  id="app.editTestsForm.submit"
+                  id="app.editEnvironmentSimpleForm.submit"
                   defaultMessage="Change configuration"
                 />
               ),
               submitting: (
                 <FormattedMessage
-                  id="app.editTestsForm.submitting"
+                  id="app.editEnvironmentSimpleForm.submitting"
                   defaultMessage="Saving configuration ..."
                 />
               ),
               success: (
                 <FormattedMessage
-                  id="app.editTestsForm.success"
+                  id="app.editEnvironmentSimpleForm.success"
                   defaultMessage="Configuration was changed."
                 />
               )
@@ -85,7 +78,7 @@ class EditTestsForm extends Component {
   }
 }
 
-EditTestsForm.propTypes = {
+EditEnvironmentSimpleForm.propTypes = {
   values: PropTypes.array,
   handleSubmit: PropTypes.func.isRequired,
   anyTouched: PropTypes.bool,
@@ -93,7 +86,7 @@ EditTestsForm.propTypes = {
   hasFailed: PropTypes.bool,
   hasSucceeded: PropTypes.bool,
   invalid: PropTypes.bool,
-  formValues: PropTypes.object
+  runtimeEnvironments: PropTypes.array
 };
 
 const validate = () => {
@@ -102,13 +95,7 @@ const validate = () => {
   return errors;
 };
 
-export default connect(state => {
-  return {
-    formValues: getFormValues('editTests')(state)
-  };
-})(
-  reduxForm({
-    form: 'editTests',
-    validate
-  })(EditTestsForm)
-);
+export default reduxForm({
+  form: 'editEnvironmentSimple',
+  validate
+})(EditEnvironmentSimpleForm);
