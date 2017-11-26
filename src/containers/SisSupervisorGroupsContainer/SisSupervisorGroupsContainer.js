@@ -9,7 +9,7 @@ import Button from '../../components/widgets/FlatButton';
 import { LinkContainer } from 'react-router-bootstrap';
 import Icon from 'react-fontawesome';
 
-import { fetchGroupsIfNeeded } from '../../redux/modules/groups';
+import { fetchPublicGroupsIfNeeded } from '../../redux/modules/publicGroups';
 import { fetchSisStatusIfNeeded } from '../../redux/modules/sisStatus';
 import {
   fetchSisSupervisedCourses,
@@ -21,7 +21,7 @@ import { sisPossibleParentsSelector } from '../../redux/selectors/sisPossiblePar
 import { sisStateSelector } from '../../redux/selectors/sisStatus';
 import { sisSupervisedCoursesSelector } from '../../redux/selectors/sisSupervisedCourses';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
-import { groupDataAccessorSelector } from '../../redux/selectors/groups';
+import { publicGroupDataAccessorSelector } from '../../redux/selectors/publicGroups';
 
 import UsersNameContainer from '../UsersNameContainer';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
@@ -72,7 +72,12 @@ class SisSupervisorGroupsContainer extends Component {
                     .then(res => res.value)
                     .then(parents =>
                       parents.map(parent =>
-                        dispatch(fetchGroupsIfNeeded(...parent.parentGroupsIds))
+                        dispatch(
+                          fetchPublicGroupsIfNeeded(
+                            parent.id,
+                            ...parent.parentGroupsIds
+                          )
+                        )
                       )
                     )
                 )
@@ -341,7 +346,7 @@ export default injectIntl(
           currentUserId,
           sisCourses: sisSupervisedCoursesSelector(state),
           sisPossibleParents: sisPossibleParentsSelector(state),
-          groupsAccessor: groupDataAccessorSelector(state)
+          groupsAccessor: publicGroupDataAccessorSelector(state)
         };
       },
       dispatch => ({
