@@ -14,6 +14,7 @@ import { fetchGroupIfNeeded } from '../../redux/modules/groups';
 
 import Page from '../../components/layout/Page';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
+import { LocalizedExerciseName } from '../../components/helpers/LocalizedNames';
 import HierarchyLineContainer from '../../containers/HierarchyLineContainer';
 
 class AssignmentStats extends Component {
@@ -53,10 +54,7 @@ class AssignmentStats extends Component {
         resource={assignment}
         title={
           <ResourceRenderer resource={assignment}>
-            {assignment =>
-              <span>
-                {assignment.name}
-              </span>}
+            {assignment => <LocalizedExerciseName entity={assignment} />}
           </ResourceRenderer>
         }
         description={
