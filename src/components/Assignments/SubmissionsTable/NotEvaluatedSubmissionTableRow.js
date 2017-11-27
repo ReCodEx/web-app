@@ -7,11 +7,15 @@ import AssignmentStatusIcon from '../Assignment/AssignmentStatusIcon';
 const NotEvaluatedSubmissionTableRow = ({
   link,
   note,
-  solution: { createdAt }
+  solution: { createdAt },
+  lastSubmission
 }) =>
   <tr>
     <td>
-      <AssignmentStatusIcon id={link} status="work-in-progress" />
+      <AssignmentStatusIcon
+        id={link}
+        status={lastSubmission ? 'work-in-progress' : 'missing-submission'}
+      />
     </td>
     <td>
       <FormattedDate value={createdAt * 1000} />
@@ -26,8 +30,8 @@ const NotEvaluatedSubmissionTableRow = ({
     <td className="text-right">
       <Link to={link} className="btn btn-flat btn-default btn-xs">
         <FormattedMessage
-          id="app.submissionsTable.findOutResult"
-          defaultMessage="Find out results of evaluation"
+          id="app.submissionsTable.showDetails"
+          defaultMessage="Show details"
         />
       </Link>
     </td>
@@ -38,7 +42,8 @@ NotEvaluatedSubmissionTableRow.propTypes = {
   note: PropTypes.string.isRequired,
   solution: PropTypes.shape({
     createdAt: PropTypes.number.isRequired
-  }).isRequired
+  }).isRequired,
+  lastSubmission: PropTypes.object
 };
 
 export default NotEvaluatedSubmissionTableRow;
