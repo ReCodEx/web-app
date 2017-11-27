@@ -66,7 +66,9 @@ const SubmissionsTable = ({
               const id = data.id;
               const link = SUBMISSION_DETAIL_URI_FACTORY(assignmentId, id);
 
-              switch (data.lastSubmission.evaluationStatus) {
+              switch (data.lastSubmission
+                ? data.lastSubmission.evaluationStatus
+                : null) {
                 case 'done':
                   return (
                     <SuccessfulSubmissionTableRow
@@ -79,12 +81,14 @@ const SubmissionsTable = ({
                   return (
                     <FailedSubmissionTableRow {...data} key={id} link={link} />
                   );
+                case null:
                 case 'work-in-progress':
                   return (
                     <NotEvaluatedSubmissionTableRow
                       {...data}
                       key={id}
                       link={link}
+                      lastSubmission={data.lastSubmission}
                     />
                   );
                 case 'evaluation-failed':

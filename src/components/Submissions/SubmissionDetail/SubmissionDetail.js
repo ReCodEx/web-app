@@ -22,7 +22,9 @@ class SubmissionDetail extends Component {
 
   componentWillMount() {
     this.setState({
-      activeSubmissionId: this.props.submission.lastSubmission.id
+      activeSubmissionId: this.props.submission.lastSubmission
+        ? this.props.submission.lastSubmission.id
+        : null
     });
   }
 
@@ -42,14 +44,16 @@ class SubmissionDetail extends Component {
       evaluations
     } = this.props;
     const { openFileId, activeSubmissionId } = this.state;
-    const {
-      submittedBy,
-      evaluation,
-      isCorrect,
-      evaluationStatus,
-      ...restSub
-    } = evaluations.toJS()[activeSubmissionId].data;
 
+    if (activeSubmissionId) {
+      var {
+        submittedBy,
+        evaluation,
+        isCorrect,
+        evaluationStatus,
+        ...restSub
+      } = evaluations.toJS()[activeSubmissionId].data;
+    } else evaluationStatus = 'missing-submission';
     return (
       <div>
         <Row>
@@ -118,7 +122,8 @@ class SubmissionDetail extends Component {
                     <DownloadResultArchiveContainer submissionId={restSub.id} />
                   </Col>
                 </Row>}
-              {isSupervisor &&
+              {activeSubmissionId &&
+                isSupervisor &&
                 <Row>
                   <Col lg={12}>
                     <ResourceRenderer resource={evaluations.toArray()}>
@@ -151,8 +156,7 @@ SubmissionDetail.propTypes = {
   submission: PropTypes.shape({
     id: PropTypes.string.isRequired,
     note: PropTypes.string,
-    lastSubmission: PropTypes.shape({ id: PropTypes.string.isRequired })
-      .isRequired,
+    lastSubmission: PropTypes.shape({ id: PropTypes.string.isRequired }),
     solution: PropTypes.shape({
       createdAt: PropTypes.number.isRequired,
       userId: PropTypes.string.isRequired,

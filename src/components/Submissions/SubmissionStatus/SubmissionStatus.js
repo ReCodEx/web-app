@@ -102,8 +102,8 @@ const SubmissionStatus = ({
           </td>
           <th>
             <FormattedMessage
-              id="app.submission.isCorrect"
-              defaultMessage="Solution is correct:"
+              id="app.submission.evaluationStatus"
+              defaultMessage="Evaluation Status:"
             />
           </th>
           <td>
@@ -127,6 +127,11 @@ const SubmissionStatus = ({
                 <FormattedMessage
                   id="app.submission.evaluation.status.systemFailiure"
                   defaultMessage="Evaluation process had failed and your submission could not have been evaluated. Please submit the solution once more. If you keep receiving errors please contact the administrator of this project."
+                />}
+              {evaluationStatus === 'missing-submission' &&
+                <FormattedMessage
+                  id="app.submission.evaluation.status.solutionMissingSubmission"
+                  defaultMessage="Solution was not submitted for evaluation. This was probably caused by an error in the assignment configuration."
                 />}
             </strong>
           </td>
