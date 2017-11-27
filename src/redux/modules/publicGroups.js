@@ -11,6 +11,7 @@ const { actions, reduceActions } = factory({
  * Actions
  */
 
+export const fetchPublicGroupsIfNeeded = actions.fetchIfNeeded;
 export const fetchPublicGroupIfNeeded = actions.fetchOneIfNeeded;
 
 export const fetchInstancePublicGroups = instanceId =>
