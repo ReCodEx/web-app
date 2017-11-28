@@ -48,13 +48,21 @@ class Pipeline extends Component {
     this.setState({ forkId: Math.random().toString() });
   }
 
-  static loadAsync = ({ pipelineId }, dispatch, setState) =>
+  static loadAsync = (
+    { pipelineId },
+    dispatch,
+    userId,
+    isSuperadmin,
+    setState = null
+  ) =>
     Promise.all([
       dispatch(fetchPipelineIfNeeded(pipelineId))
         .then(res => res.value)
         .then(pipeline => {
           const graph = createGraphFromNodes(pipeline.pipeline.boxes);
-          setState({ graph });
+          if (setState) {
+            setState({ graph });
+          }
         }),
       dispatch(fetchExercises())
     ]);
@@ -180,7 +188,7 @@ export default withLinks(
     },
     (dispatch, { params: { pipelineId } }) => ({
       loadAsync: setState =>
-        Pipeline.loadAsync({ pipelineId }, dispatch, setState),
+        Pipeline.loadAsync({ pipelineId }, dispatch, null, false, setState),
       forkPipeline: (forkId, data) =>
         dispatch(forkPipeline(pipelineId, forkId, data))
     })
