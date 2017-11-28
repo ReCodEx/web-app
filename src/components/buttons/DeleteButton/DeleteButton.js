@@ -13,11 +13,7 @@ import {
 } from '../../../redux/helpers/resourceManager';
 
 const DeleteButton = ({ resource, deleteResource, disabled, ...props }) => {
-  if (!resource) {
-    return null;
-  }
-
-  if (isDeleted(resource)) {
+  if (!resource || isDeleted(resource)) {
     return <DeletedButton {...props} disabled={disabled} />;
   }
 
