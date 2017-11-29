@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import prettyBytes from 'pretty-bytes';
+import { prettyPrintBytes } from '../../helpers/stringFormatters';
 import { FormattedDate, FormattedTime, FormattedMessage } from 'react-intl';
 import { Button } from 'react-bootstrap';
 import Confirm from '../../../components/forms/Confirm';
@@ -26,7 +26,7 @@ const SupplementaryFilesTableRow = ({
           </span>}
     </td>
     <td>
-      {prettyBytes(size)}
+      {prettyPrintBytes(size)}
     </td>
     <td>
       <FormattedDate value={uploadedAt * 1000} />

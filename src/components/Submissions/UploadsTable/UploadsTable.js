@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import prettyBytes from 'pretty-bytes';
+import { prettyPrintBytes } from '../../helpers/stringFormatters';
 import Icon from 'react-fontawesome';
 import { Table, Button, ButtonGroup } from 'react-bootstrap';
 
@@ -13,7 +13,7 @@ const UploadsTable = ({
   returnFile,
   removeFailedFile,
   retryUploadFile
-}) => (
+}) =>
   <Table responsive>
     <thead>
       <tr>
@@ -24,13 +24,17 @@ const UploadsTable = ({
       </tr>
     </thead>
     <tbody>
-      {attachedFiles.map(payload => (
+      {attachedFiles.map(payload =>
         <tr key={'attached-' + payload.name}>
           <td className="text-center">
             <Icon name="check" className="text-success text-bold" />
           </td>
-          <td>{payload.name}</td>
-          <td>{prettyBytes(payload.file.size)}</td>
+          <td>
+            {payload.name}
+          </td>
+          <td>
+            {prettyPrintBytes(payload.file.size)}
+          </td>
           <td>
             <Button
               bsSize="xs"
@@ -41,26 +45,34 @@ const UploadsTable = ({
             </Button>
           </td>
         </tr>
-      ))}
+      )}
 
-      {uploadingFiles.map(payload => (
+      {uploadingFiles.map(payload =>
         <tr key={'uploading-' + payload.name}>
           <td className="text-center">
             <Icon name="circle-o" spin />
           </td>
-          <td>{payload.name}</td>
-          <td>{prettyBytes(payload.file.size)}</td>
+          <td>
+            {payload.name}
+          </td>
+          <td>
+            {prettyPrintBytes(payload.file.size)}
+          </td>
           <td />
         </tr>
-      ))}
+      )}
 
-      {failedFiles.map(payload => (
+      {failedFiles.map(payload =>
         <tr key={'failed-' + payload.name}>
           <td className="text-center">
             <Icon name="exclamation-triangle" className="text-danger" />
           </td>
-          <td>{payload.name}</td>
-          <td>{prettyBytes(payload.file.size)}</td>
+          <td>
+            {payload.name}
+          </td>
+          <td>
+            {prettyPrintBytes(payload.file.size)}
+          </td>
           <td>
             <ButtonGroup>
               <Button
@@ -80,15 +92,19 @@ const UploadsTable = ({
             </ButtonGroup>
           </td>
         </tr>
-      ))}
+      )}
 
-      {removedFiles.map(payload => (
+      {removedFiles.map(payload =>
         <tr key={'removed' + payload.name}>
           <td className="text-center">
             <Icon name="trash" className="text-warning" />
           </td>
-          <td>{payload.name}</td>
-          <td>{prettyBytes(payload.file.size)}</td>
+          <td>
+            {payload.name}
+          </td>
+          <td>
+            {prettyPrintBytes(payload.file.size)}
+          </td>
           <td>
             <ButtonGroup>
               <Button
@@ -101,10 +117,9 @@ const UploadsTable = ({
             </ButtonGroup>
           </td>
         </tr>
-      ))}
+      )}
     </tbody>
-  </Table>
-);
+  </Table>;
 
 UploadsTable.propTypes = {
   uploadingFiles: PropTypes.array.isRequired,

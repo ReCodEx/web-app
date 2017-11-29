@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage, FormattedDate } from 'react-intl';
-import prettyBytes from 'pretty-bytes';
+import { prettyPrintBytes } from '../../helpers/stringFormatters';
 import prettyMs from 'pretty-ms';
 import { Table } from 'react-bootstrap';
 import Box from '../../widgets/Box';
 
-const ReferenceSolutionsEvaluationsResults = ({ results, testId, taskId }) => (
+const ReferenceSolutionsEvaluationsResults = ({ results, testId, taskId }) =>
   <Box
     isOpen={false}
     collapsable
@@ -71,19 +71,24 @@ const ReferenceSolutionsEvaluationsResults = ({ results, testId, taskId }) => (
 
             return (
               <tr key={i}>
-                <td>{result.referenceSolution.description}</td>
+                <td>
+                  {result.referenceSolution.description}
+                </td>
                 <td>
                   <FormattedDate value={result.evaluation.evaluatedAt * 1000} />
                 </td>
-                <td>{prettyBytes(taskStats.usedMemory)}</td>
-                <td>{prettyMs(taskStats.usedTime * 1000)}</td>
+                <td>
+                  {prettyPrintBytes(taskStats.usedMemory)}
+                </td>
+                <td>
+                  {prettyMs(taskStats.usedTime * 1000)}
+                </td>
               </tr>
             );
           })}
       </tbody>
     </Table>
-  </Box>
-);
+  </Box>;
 
 ReferenceSolutionsEvaluationsResults.propTypes = {
   results: PropTypes.array.isRequired,

@@ -5,7 +5,7 @@ import { FormattedMessage, FormattedNumber } from 'react-intl';
 import { Table, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import Icon from 'react-fontawesome';
 import prettyMs from 'pretty-ms';
-import prettyBytes from 'pretty-bytes';
+import { prettyPrintBytes } from '../../helpers/stringFormatters';
 
 import exitCodeMapping from '../../helpers/exitCodeMapping';
 
@@ -184,7 +184,7 @@ const TestResultsTable = ({ results, runtimeEnvironmentId }) =>
               memoryExceeded === false,
               memoryRatio,
               memory,
-              prettyBytes
+              prettyPrintBytes
             )}
             {tickOrCrossAndRatioOrValue(
               timeExceeded === false,

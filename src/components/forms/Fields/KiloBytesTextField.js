@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import prettyBytes from 'pretty-bytes';
+import { prettyPrintBytes } from '../../helpers/stringFormatters';
 import TextField from './TextField';
 import { HelpBlock } from 'react-bootstrap';
 import { FormattedMessage } from 'react-intl';
 
-const KiloBytesTextField = ({ input, ...props }) => (
+const KiloBytesTextField = ({ input, ...props }) =>
   <div>
     <TextField {...props} input={input} />
     <HelpBlock>
@@ -13,10 +13,9 @@ const KiloBytesTextField = ({ input, ...props }) => (
         id="app.bytesTextField.humanReadable"
         defaultMessage="Human readable variant:"
       />{' '}
-      <b>{prettyBytes(Number(input.value) * 1000)}</b>
+      <b>{prettyPrintBytes(Number(input.value) * 1024)}</b>
     </HelpBlock>
-  </div>
-);
+  </div>;
 
 KiloBytesTextField.propTypes = {
   input: PropTypes.shape({
