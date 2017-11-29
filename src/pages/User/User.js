@@ -43,13 +43,16 @@ import { getJsData } from '../../redux/helpers/resourceManager';
 import withLinks from '../../hoc/withLinks';
 
 class User extends Component {
-  componentWillMount = () => this.props.loadAsync(this.props.loggedInUserId);
+  componentWillMount = () =>
+    this.props.loadAsync(this.props.loggedInUserId, this.props.isAdmin);
   componentWillReceiveProps = newProps => {
     if (
       this.props.params.userId !== newProps.params.userId ||
-      this.props.commonGroups.length > newProps.commonGroups.length
+      this.props.commonGroups.length > newProps.commonGroups.length ||
+      this.props.loggedInUserId !== newProps.loggedInUserId ||
+      this.props.isAdmin !== newProps.isAdmin
     ) {
-      newProps.loadAsync(newProps.loggedInUserId);
+      newProps.loadAsync(newProps.loggedInUserId, newProps.isAdmin);
     }
   };
 
@@ -58,7 +61,7 @@ class User extends Component {
    * to load the groups and necessary data for the intersection
    * of user's groups of which the current user is a supervisor.
    */
-  static loadAsync = ({ userId }, dispatch, loggedInUserId) =>
+  static loadAsync = ({ userId }, dispatch, loggedInUserId, isAdmin) =>
     dispatch((dispatch, getState) =>
       dispatch(fetchProfileIfNeeded(userId))
         .then(() => dispatch(fetchUserIfNeeded(loggedInUserId)))
@@ -73,9 +76,11 @@ class User extends Component {
             Promise.all(
               groups.value.map(group => {
                 if (
-                  group.students.indexOf(userId) >= 0 ||
-                  group.supervisors.indexOf(loggedInUserId) >= 0 ||
-                  group.admins.indexOf(loggedInUserId) >= 0
+                  group.students.indexOf(userId) >= 0 &&
+                  (isAdmin ||
+                    userId === loggedInUserId ||
+                    group.supervisors.indexOf(loggedInUserId) >= 0 ||
+                    group.admins.indexOf(loggedInUserId) >= 0)
                 ) {
                   return Promise.all([
                     dispatch(fetchAssignmentsForGroup(group.id)),
@@ -321,8 +326,8 @@ export default withLinks(
       };
     },
     (dispatch, { params }) => ({
-      loadAsync: loggedInUserId =>
-        User.loadAsync(params, dispatch, loggedInUserId)
+      loadAsync: (loggedInUserId, isAdmin) =>
+        User.loadAsync(params, dispatch, loggedInUserId, isAdmin)
     })
   )(User)
 );

@@ -273,12 +273,13 @@ class Assignment extends Component {
                   </Alert>
                 </Col>
               </Row>}
+
             <Row>
               <Col lg={6}>
-                <div>
-                  {assignment.localizedTexts.length > 0 &&
-                    <LocalizedTexts locales={assignment.localizedTexts} />}
-                </div>
+                {assignment.localizedTexts.length > 0 &&
+                  <div>
+                    <LocalizedTexts locales={assignment.localizedTexts} />
+                  </div>}
               </Col>
               <ResourceRenderer resource={runtimeEnvironments}>
                 {(...runtimes) =>

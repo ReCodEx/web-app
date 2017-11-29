@@ -20,6 +20,7 @@ import { syncHistoryWithStore } from 'react-router-redux';
 import createHistory from 'react-router/lib/createMemoryHistory';
 import { configureStore } from './redux/store';
 import { loggedInUserIdSelector } from './redux/selectors/auth';
+import { isLoggedAsSuperAdmin } from './redux/selectors/users';
 import createRoutes from './pages/routes';
 
 addLocaleData([...cs]);
@@ -97,6 +98,7 @@ app.get('*', (req, res) => {
         res.status(404).send('Not found');
       } else {
         const userId = loggedInUserIdSelector(store.getState()); // try to get the user ID from the token (if any)
+        const isSuperadmin = isLoggedAsSuperAdmin(store.getState());
         const loadAsync = renderProps.components
           .filter(component => component)
           .map(component => {
@@ -108,7 +110,12 @@ app.get('*', (req, res) => {
           })
           .filter(component => component.loadAsync)
           .map(component =>
-            component.loadAsync(renderProps.params, store.dispatch, userId)
+            component.loadAsync(
+              renderProps.params,
+              store.dispatch,
+              userId,
+              isSuperadmin
+            )
           );
 
         Promise.all(loadAsync)

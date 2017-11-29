@@ -11,13 +11,12 @@ const DeleteExerciseButtonContainer = ({
   deleteExercise,
   onDeleted,
   ...props
-}) => (
+}) =>
   <DeleteButton
     {...props}
     resource={exercise}
     deleteResource={deleteExercise}
-  />
-);
+  />;
 
 DeleteExerciseButtonContainer.propTypes = {
   id: PropTypes.string.isRequired,
@@ -32,8 +31,11 @@ export default connect(
   }),
   (dispatch, { id, onDeleted }) => ({
     deleteExercise: () => {
-      onDeleted && onDeleted();
-      return dispatch(deleteExercise(id));
+      const promise = dispatch(deleteExercise(id));
+      if (onDeleted) {
+        promise.then(onDeleted);
+      }
+      return promise;
     }
   })
 )(DeleteExerciseButtonContainer);

@@ -23,6 +23,7 @@ import {
   fetchGroupsIfNeeded,
   fetchInstanceGroupsIfNeeded
 } from '../../redux/modules/groups';
+import { fetchPublicGroupsIfNeeded } from '../../redux/modules/publicGroups';
 
 import {
   getUser,
@@ -86,7 +87,13 @@ class Dashboard extends Component {
               groups.map(({ value: group }) =>
                 Promise.all([
                   dispatch(fetchAssignmentsForGroup(group.id)),
-                  dispatch(fetchGroupsStatsIfNeeded(group.id))
+                  dispatch(fetchGroupsStatsIfNeeded(group.id)),
+                  dispatch(
+                    fetchPublicGroupsIfNeeded(
+                      group.id,
+                      ...group.parentGroupsIds
+                    )
+                  )
                 ])
               )
             )

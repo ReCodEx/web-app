@@ -23,8 +23,8 @@ import {
   create as createExercise
 } from '../../redux/modules/exercises';
 import { searchExercises } from '../../redux/modules/search';
+import { getSearchQuery } from '../../redux/selectors/search';
 import ExercisesList from '../../components/Exercises/ExercisesList';
-
 import FetchManyResourceRenderer from '../../components/helpers/FetchManyResourceRenderer';
 import withLinks from '../../hoc/withLinks';
 
@@ -48,6 +48,7 @@ class Exercises extends Component {
 
   render() {
     const {
+      query,
       isSuperAdmin,
       isAuthorOfExercise,
       fetchStatus,
@@ -179,7 +180,11 @@ class Exercises extends Component {
                             />
                           </Button>
                         </LinkContainer>
-                        <DeleteExerciseButtonContainer id={id} bsSize="xs" />
+                        <DeleteExerciseButtonContainer
+                          id={id}
+                          bsSize="xs"
+                          onDeleted={() => search(query)}
+                        />
                       </ButtonGroup>}
                   />}
               />
@@ -192,6 +197,7 @@ class Exercises extends Component {
 
 Exercises.propTypes = {
   loadAsync: PropTypes.func.isRequired,
+  query: PropTypes.string,
   createExercise: PropTypes.func.isRequired,
   isSuperAdmin: PropTypes.bool.isRequired,
   isAuthorOfExercise: PropTypes.func.isRequired,
@@ -206,6 +212,7 @@ export default withLinks(
     state => {
       const userId = loggedInUserIdSelector(state);
       return {
+        query: getSearchQuery('exercises-page')(state),
         fetchStatus: fetchManyStatus(state),
         isSuperAdmin: isLoggedAsSuperAdmin(state),
         isAuthorOfExercise: exerciseId =>

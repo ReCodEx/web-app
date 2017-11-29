@@ -64,6 +64,20 @@ const AssignmentStatusIcon = ({ id, status, accepted = false }) => {
         />
       );
 
+    case 'missing-submission':
+      return (
+        <Status
+          id={id}
+          icon={<Icon name="exclamation-triangle" className="text-red" />}
+          message={
+            <FormattedMessage
+              id="app.assignemntStatusIcon.solutionMissingSubmission"
+              defaultMessage="The solution was not submitted for evaluation probably due to an error. You may need to resubmit it."
+            />
+          }
+        />
+      );
+
     default:
       return (
         <Status
