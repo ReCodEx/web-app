@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Field } from 'redux-form';
 import { Row, Col } from 'react-bootstrap';
-import { FormattedMessage, injectIntl } from 'react-intl';
+import { FormattedMessage, injectIntl, defineMessages } from 'react-intl';
 
 import {
   SelectField,
@@ -11,6 +11,45 @@ import {
   ExpandingInputFilesField,
   CheckboxField
 } from '../Fields';
+
+const messages = defineMessages({
+  normal: {
+    id: 'recodex-judge-normal',
+    defaultMessage: 'Normal judge'
+  },
+  float: {
+    id: 'recodex-judge-float',
+    defaultMessage: 'Floating point judge'
+  },
+  normalNewline: {
+    id: 'recodex-judge-normal-newline',
+    defaultMessage: 'Normal judge ignoring newlines'
+  },
+  floatNewline: {
+    id: 'recodex-judge-float-newline',
+    defaultMessage: 'Floating judge ignoring newlines'
+  },
+  shuffle: {
+    id: 'recodex-judge-shuffle',
+    defaultMessage: 'Shuffle judge'
+  },
+  shuffleRows: {
+    id: 'recodex-judge-shuffle-rows',
+    defaultMessage: 'Shuffle judge ignoring rows'
+  },
+  shuffleAll: {
+    id: 'recodex-judge-shuffle-all',
+    defaultMessage: 'Shuffle judge ignoring all'
+  },
+  shuffleNewline: {
+    id: 'recodex-judge-shuffle-newline',
+    defaultMessage: 'Shuffle judge ignoring newlines'
+  },
+  diff: {
+    id: 'diff',
+    defaultMessage: 'Diff'
+  }
+});
 
 const EditExerciseSimpleConfigTest = ({
   fields,
@@ -181,11 +220,39 @@ const EditExerciseSimpleConfigTest = ({
                       { key: '', name: '...' },
                       {
                         key: 'recodex-judge-normal',
-                        name: 'recodex-judge-normal'
+                        name: intl.formatMessage(messages.normal)
+                      },
+                      {
+                        key: 'recodex-judge-float',
+                        name: intl.formatMessage(messages.float)
+                      },
+                      {
+                        key: 'recodex-judge-normal-newline',
+                        name: intl.formatMessage(messages.normalNewline)
+                      },
+                      {
+                        key: 'recodex-judge-float-newline',
+                        name: intl.formatMessage(messages.floatNewline)
                       },
                       {
                         key: 'recodex-judge-shuffle',
-                        name: 'recodex-judge-shuffle'
+                        name: intl.formatMessage(messages.shuffle)
+                      },
+                      {
+                        key: 'recodex-judge-shuffle-rows',
+                        name: intl.formatMessage(messages.shuffleRows)
+                      },
+                      {
+                        key: 'recodex-judge-shuffle-all',
+                        name: intl.formatMessage(messages.shuffleAll)
+                      },
+                      {
+                        key: 'recodex-judge-shuffle-newline',
+                        name: intl.formatMessage(messages.shuffleNewline)
+                      },
+                      {
+                        key: 'diff',
+                        name: intl.formatMessage(messages.diff)
                       }
                     ]}
                     label={
