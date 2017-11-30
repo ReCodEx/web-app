@@ -195,16 +195,21 @@ const EditExerciseSimpleConfigTest = ({
                       />
                     }
                   />}
-              <Field
-                name={`${test}.judgeArgs`}
-                component={TextField}
-                label={
-                  <FormattedMessage
-                    id="app.editExerciseSimpleConfigTests.judgeArgs"
-                    defaultMessage="Judge arguments:"
-                  />
-                }
-              />
+              {formValues &&
+                formValues.config &&
+                formValues.config[i] &&
+                (formValues.config[i].useCustomJudge === true ||
+                  formValues.config[i].useCustomJudge === 'true') &&
+                <Field
+                  name={`${test}.judgeArgs`}
+                  component={TextField}
+                  label={
+                    <FormattedMessage
+                      id="app.editExerciseSimpleConfigTests.judgeArgs"
+                      defaultMessage="Judge arguments:"
+                    />
+                  }
+                />}
             </Col>
           </Row>
         </div>
