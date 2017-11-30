@@ -118,6 +118,8 @@ export const getSimpleConfigInitValues = (config, tests, locale) => {
     if (actualOutput) {
       testObj.useOutFile = true;
       testObj.outputFile = actualOutput.value;
+    } else {
+      testObj.outputFile = '';
     }
 
     const stdinFile = variables.find(
@@ -168,6 +170,7 @@ export const transformAndSendConfigValues = (
   let testVars = [];
   for (const test of formData.config) {
     let variables = [];
+    let producesFiles = false;
 
     variables.push({
       name: 'custom-judge',
@@ -199,6 +202,14 @@ export const transformAndSendConfigValues = (
       type: 'string[]',
       value: test.runArgs
     });
+    if (test.outputFile !== '') {
+      variables.push({
+        name: 'actual-output',
+        type: 'file[]',
+        value: test.outputFile
+      });
+      producesFiles = true;
+    }
 
     let inputFiles = [];
     let renamedNames = [];
@@ -217,7 +228,11 @@ export const transformAndSendConfigValues = (
       value: renamedNames
     });
 
-    testVars.push({ name: test.name, variables: variables });
+    testVars.push({
+      name: test.name,
+      variables: variables,
+      producesFiles: producesFiles
+    });
   }
 
   let envs = [];
@@ -226,15 +241,19 @@ export const transformAndSendConfigValues = (
     const envPipelines = pipelines.filter(
       pipeline => pipeline.runtimeEnvironmentId === envId
     );
-    const compilationPipelineId = envPipelines.filter(
-      pipeline => pipeline.parameters.isCompilationPipeline
-    )[0].id;
-    const executionPipelineId = envPipelines.filter(
-      pipeline => pipeline.parameters.isExecutionPipeline
-    )[0].id;
 
     let tests = [];
     for (const testVar of testVars) {
+      const compilationPipelineId = envPipelines.filter(
+        pipeline => pipeline.parameters.isCompilationPipeline
+      )[0].id;
+      const executionPipelineId = envPipelines.filter(
+        pipeline =>
+          pipeline.parameters.isExecutionPipeline &&
+          (testVar.producesFiles
+            ? pipeline.parameters.producesFiles
+            : pipeline.parameters.producesStdout)
+      )[0].id;
       tests.push({
         name: testVar.name,
         pipelines: [
