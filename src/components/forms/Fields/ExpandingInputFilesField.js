@@ -60,7 +60,7 @@ class ExpandingInputFilesField extends Component {
     const {
       leftLabel = '',
       rightLabel = '',
-      input: { onChange },
+      input: { onChange, ...input },
       meta: { touched, error },
       style = {},
       options,
@@ -69,15 +69,15 @@ class ExpandingInputFilesField extends Component {
     const { texts } = this.state;
 
     return (
-      <Row>
-        <Col sm={6}>
-          <FormGroup
-            controlId={'first'}
-            validationState={
-              error ? (touched ? 'error' : 'warning') : undefined
-            }
-          >
-            <ControlLabel>{leftLabel}</ControlLabel>
+      <FormGroup
+        controlId={input.name}
+        validationState={error ? (touched ? 'error' : 'warning') : undefined}
+      >
+        <Row>
+          <Col sm={6}>
+            <ControlLabel>
+              {leftLabel}
+            </ControlLabel>
             <div style={style}>
               {texts.map((text, i) =>
                 <FormControl
@@ -96,17 +96,12 @@ class ExpandingInputFilesField extends Component {
                   )}
                 </FormControl>
               )}
-            </div>{' '}
-          </FormGroup>
-        </Col>
-        <Col sm={6}>
-          <FormGroup
-            controlId={'second'}
-            validationState={
-              error ? (touched ? 'error' : 'warning') : undefined
-            }
-          >
-            <ControlLabel>{rightLabel}</ControlLabel>
+            </div>
+          </Col>
+          <Col sm={6}>
+            <ControlLabel>
+              {rightLabel}
+            </ControlLabel>
             <div style={style}>
               {texts.map((text, i) =>
                 <FormControl
@@ -119,9 +114,9 @@ class ExpandingInputFilesField extends Component {
                   {...props}
                 />
               )}
-            </div>{' '}
-          </FormGroup>
-        </Col>
+            </div>
+          </Col>
+        </Row>
         {error &&
           <HelpBlock>
             {' '}{touched
@@ -131,7 +126,7 @@ class ExpandingInputFilesField extends Component {
                   id="app.field.isRequired"
                 />}{' '}
           </HelpBlock>}
-      </Row>
+      </FormGroup>
     );
   }
 }

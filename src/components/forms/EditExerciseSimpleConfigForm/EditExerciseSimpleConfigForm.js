@@ -98,8 +98,77 @@ EditExerciseSimpleConfigForm.propTypes = {
   exerciseTests: PropTypes.array
 };
 
-const validate = () => {
+const validate = ({ config }) => {
   const errors = {};
+
+  const configErrors = {};
+  for (let i = 0; i < config.length; ++i) {
+    const test = config[i];
+    const testErrors = {};
+
+    if (!test.expectedOutput || test.expectedOutput === '') {
+      testErrors['expectedOutput'] = (
+        <FormattedMessage
+          id="app.editExerciseSimpleConfigForm.validation.expectedOutput"
+          defaultMessage="Please fill the expected output file."
+        />
+      );
+    }
+
+    if (test.useOutFile && (!test.outputFile || test.outputFile === '')) {
+      testErrors['outputFile'] = (
+        <FormattedMessage
+          id="app.editExerciseSimpleConfigForm.validation.outputFile"
+          defaultMessage="Please fill the name of the output file or use standard input instead."
+        />
+      );
+    }
+
+    if (!test.judgeBinary || test.judgeBinary === '') {
+      testErrors['judgeBinary'] = (
+        <FormattedMessage
+          id="app.editExerciseSimpleConfigForm.validation.judgeBinary"
+          defaultMessage="Please select the judge type for this test."
+        />
+      );
+    }
+
+    if (
+      test.useCustomJudge &&
+      (!test.customJudgeBinary || test.customJudgeBinary === '')
+    ) {
+      testErrors['customJudgeBinary'] = (
+        <FormattedMessage
+          id="app.editExerciseSimpleConfigForm.validation.customJudge"
+          defaultMessage="Please select the custom judge binary for this test or use one of the standard judges instead."
+        />
+      );
+    }
+
+    const inputErrorMessage = (
+      <FormattedMessage
+        id="app.editExerciseSimpleConfigForm.validation.inputFilesNotPaired"
+        defaultMessage="Input files are not properly paired with their names. Please make sure each file has a name."
+      />
+    );
+    for (const inputFilePair of test.inputFiles) {
+      if (
+        (!inputFilePair.first || inputFilePair.first === '') &&
+        inputFilePair.second !== ''
+      ) {
+        testErrors['inputFiles'] = inputErrorMessage;
+      }
+      if (
+        (!inputFilePair.second || inputFilePair.second === '') &&
+        inputFilePair.first !== ''
+      ) {
+        testErrors['inputFiles'] = inputErrorMessage;
+      }
+    }
+
+    configErrors[i] = testErrors;
+  }
+  errors['config'] = configErrors;
 
   return errors;
 };

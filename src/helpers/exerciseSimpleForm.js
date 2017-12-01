@@ -164,9 +164,6 @@ export const transformAndSendConfigValues = (
   environments,
   setConfig
 ) => {
-  console.log(environments);
-  console.log(pipelines);
-
   let testVars = [];
   for (const test of formData.config) {
     let variables = [];
