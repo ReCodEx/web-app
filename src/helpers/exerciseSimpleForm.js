@@ -72,9 +72,10 @@ export const transformAndSendTestsValues = (
 };
 
 export const getSimpleConfigInitValues = (config, tests, locale) => {
-  const confTests = config[0].tests.sort((a, b) =>
-    a.name.localeCompare(b.name, locale)
-  );
+  const confTests =
+    config[0] && config[0].tests
+      ? config[0].tests.sort((a, b) => a.name.localeCompare(b.name, locale))
+      : [];
 
   let res = [];
   for (let test of confTests) {
@@ -91,13 +92,15 @@ export const getSimpleConfigInitValues = (config, tests, locale) => {
       variable => variable.name === 'actual-inputs'
     );
     if (inputFiles) {
-      testObj.inputFiles = inputFiles.value.map((value, i) => ({
-        first: value,
-        second:
-          actualInputs && actualInputs.value && actualInputs.value[i]
-            ? actualInputs.value[i]
-            : ''
-      }));
+      testObj.inputFiles = inputFiles.value
+        ? inputFiles.value.map((value, i) => ({
+            first: value,
+            second:
+              actualInputs && actualInputs.value && actualInputs.value[i]
+                ? actualInputs.value[i]
+                : ''
+          }))
+        : [];
     }
 
     const expectedOutput = variables.find(
@@ -210,7 +213,9 @@ export const transformAndSendConfigValues = (
 
     let inputFiles = [];
     let renamedNames = [];
-    for (const item of test.inputFiles) {
+    const inFilesArr =
+      test.inputFiles && Array.isArray(test.inputFiles) ? test.inputFiles : [];
+    for (const item of inFilesArr) {
       inputFiles.push(item.first);
       renamedNames.push(item.second);
     }

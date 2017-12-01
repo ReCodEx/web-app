@@ -151,7 +151,9 @@ const validate = ({ config }) => {
         defaultMessage="Input files are not properly paired with their names. Please make sure each file has a name."
       />
     );
-    for (const inputFilePair of test.inputFiles) {
+    const inFilesArr =
+      test.inputFiles && Array.isArray(test.inputFiles) ? test.inputFiles : [];
+    for (const inputFilePair of inFilesArr) {
       if (
         (!inputFilePair.first || inputFilePair.first === '') &&
         inputFilePair.second !== ''
