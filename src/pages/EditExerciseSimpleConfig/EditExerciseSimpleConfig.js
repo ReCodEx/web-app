@@ -196,22 +196,22 @@ class EditExerciseSimpleConfig extends Component {
                   unlimitedHeight
                 >
                   <ResourceRenderer
-                    resource={[...runtimeEnvironments.toArray()]}
+                    resource={[
+                      exerciseEnvironmentConfig,
+                      ...runtimeEnvironments.toArray()
+                    ]}
                   >
-                    {(...environments) =>
-                      <ResourceRenderer resource={exerciseEnvironmentConfig}>
-                        {environmentConfigs =>
-                          <EditEnvironmentSimpleForm
-                            initialValues={getEnvInitValues(environmentConfigs)}
-                            runtimeEnvironments={environments}
-                            onSubmit={data =>
-                              transformAndSendEnvValues(
-                                data,
-                                environments,
-                                editEnvironmentConfigs
-                              )}
-                          />}
-                      </ResourceRenderer>}
+                    {(environmentConfigs, ...environments) =>
+                      <EditEnvironmentSimpleForm
+                        initialValues={getEnvInitValues(environmentConfigs)}
+                        runtimeEnvironments={environments}
+                        onSubmit={data =>
+                          transformAndSendEnvValues(
+                            data,
+                            environments,
+                            editEnvironmentConfigs
+                          )}
+                      />}
                   </ResourceRenderer>
                 </Box>
               </Col>

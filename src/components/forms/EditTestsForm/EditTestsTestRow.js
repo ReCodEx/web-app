@@ -15,7 +15,7 @@ const EditTestsTestRow = ({ test, onRemove, isUniform }) =>
         name={`${test}.name`}
         component={TextField}
         label={''}
-        className="testRow"
+        groupClassName="testRow"
       />
     </td>
     {!isUniform &&
@@ -24,7 +24,7 @@ const EditTestsTestRow = ({ test, onRemove, isUniform }) =>
           name={`${test}.weight`}
           component={TextField}
           label={''}
-          className="testRow"
+          groupClassName="testRow"
         />
       </td>}
     <td style={{ verticalAlign: 'middle' }}>

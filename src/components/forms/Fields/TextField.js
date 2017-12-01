@@ -14,11 +14,13 @@ const TextField = ({
   meta: { touched, error },
   type = 'text',
   label,
+  groupClassName = '',
   ...props
 }) =>
   <FormGroup
     controlId={input.name}
     validationState={error ? (touched ? 'error' : 'warning') : undefined}
+    className={groupClassName}
   >
     <ControlLabel>
       {label}
@@ -60,7 +62,8 @@ TextField.propTypes = {
   label: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) })
-  ]).isRequired
+  ]).isRequired,
+  groupClassName: PropTypes.string
 };
 
 export default TextField;
