@@ -1,6 +1,5 @@
 import statusCode from 'statuscode';
 import { addNotification } from '../../modules/notifications';
-import flatten from 'flat';
 
 import { logout } from '../../modules/auth';
 import { isTokenValid, decode } from '../../helpers/token';
@@ -13,28 +12,6 @@ export const API_BASE = process.env.API_BASE || 'http://localhost:4000/v1';
 
 const maybeShash = endpoint => (endpoint.indexOf('/') === 0 ? '' : '/');
 const getUrl = endpoint => API_BASE + maybeShash(endpoint) + endpoint;
-
-export const flattenBody = body => {
-  const flattened = flatten(body, { delimiter: ':' });
-  body = {};
-
-  Object.keys(flattened).map(key => {
-    // 'a:b:c:d' => 'a[b][c][d]'
-    const bracketedKey = key.replace(/:([^:$]+)/g, '[$1]');
-    body[bracketedKey] = flattened[key];
-  });
-
-  return body;
-};
-
-const createFormData = body => {
-  const data = new FormData();
-  const flattened = flattenBody(body);
-  for (let key in flattened) {
-    data.append(key, flattened[key]);
-  }
-  return data;
-};
 
 const maybeQuestionMark = (endpoint, query) =>
   Object.keys(query).length === 0
@@ -51,18 +28,19 @@ export const createRequest = (endpoint, query = {}, method, headers, body) =>
   fetch(getUrl(assembleEndpoint(endpoint, query)), {
     method,
     headers,
-    body: body ? createFormData(body) : undefined
+    body: body ? JSON.stringify(body) : undefined
   });
 
 export const getHeaders = (headers, accessToken) => {
+  const jsonHeaders = { 'Content-Type': 'application/json', ...headers };
   if (accessToken) {
     return {
       Authorization: `Bearer ${accessToken}`,
-      ...headers
+      ...jsonHeaders
     };
   }
 
-  return headers;
+  return jsonHeaders;
 };
 
 /**
