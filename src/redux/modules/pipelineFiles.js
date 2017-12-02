@@ -39,7 +39,8 @@ export const addPipelineFiles = (pipelineId, files) =>
         tmpId: Math.random().toString(),
         file: uploaded.file
       }))
-    }
+    },
+    uploadFiles: true
   });
 
 /**

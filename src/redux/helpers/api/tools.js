@@ -1,5 +1,6 @@
 import statusCode from 'statuscode';
 import { addNotification } from '../../modules/notifications';
+import { flatten } from 'flat';
 
 import { logout } from '../../modules/auth';
 import { isTokenValid, decode } from '../../helpers/token';
@@ -24,23 +25,56 @@ const generateQuery = query =>
 export const assembleEndpoint = (endpoint, query = {}) =>
   endpoint + maybeQuestionMark(endpoint, query) + generateQuery(query);
 
-export const createRequest = (endpoint, query = {}, method, headers, body) =>
+export const flattenBody = body => {
+  const flattened = flatten(body, { delimiter: ':' });
+  body = {};
+
+  Object.keys(flattened).map(key => {
+    // 'a:b:c:d' => 'a[b][c][d]'
+    const bracketedKey = key.replace(/:([^:$]+)/g, '[$1]');
+    body[bracketedKey] = flattened[key];
+  });
+
+  return body;
+};
+
+const createFormData = body => {
+  const data = new FormData();
+  const flattened = flattenBody(body);
+  for (let key in flattened) {
+    data.append(key, flattened[key]);
+  }
+  return data;
+};
+
+export const createRequest = (
+  endpoint,
+  query = {},
+  method,
+  headers,
+  body,
+  uploadFiles
+) =>
   fetch(getUrl(assembleEndpoint(endpoint, query)), {
     method,
     headers,
-    body: body ? JSON.stringify(body) : undefined
+    body: body
+      ? uploadFiles ? createFormData(body) : JSON.stringify(body)
+      : undefined
   });
 
-export const getHeaders = (headers, accessToken) => {
-  const jsonHeaders = { 'Content-Type': 'application/json', ...headers };
+export const getHeaders = (headers, accessToken, skipContentType) => {
+  const usedHeaders = skipContentType
+    ? headers
+    : { 'Content-Type': 'application/json', ...headers };
   if (accessToken) {
     return {
       Authorization: `Bearer ${accessToken}`,
-      ...jsonHeaders
+      ...usedHeaders
     };
   }
 
-  return jsonHeaders;
+  return usedHeaders;
 };
 
 /**
@@ -57,11 +91,12 @@ export const createApiCallPromise = (
     accessToken = '',
     body = undefined,
     wasSuccessful = () => true,
-    doNotProcess = false
+    doNotProcess = false,
+    uploadFiles = false
   },
   dispatch = undefined
 ) => {
-  let call = createRequest(endpoint, query, method, headers, body)
+  let call = createRequest(endpoint, query, method, headers, body, uploadFiles)
     .catch(err => detectUnreachableServer(err, dispatch))
     .then(res => {
       if (
