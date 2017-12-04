@@ -1,6 +1,6 @@
 const middleware = isDev => store => next => action => {
   /* eslint no-console: ["error", { allow: ["log", "error"] }] */
-  let verbose = false;
+  let verbose = true;
   var actionType = action.type;
   if (verbose) {
     console.log('Starting ' + actionType);

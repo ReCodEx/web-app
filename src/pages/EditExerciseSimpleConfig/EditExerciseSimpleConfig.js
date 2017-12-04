@@ -10,7 +10,7 @@ import Page from '../../components/layout/Page';
 import Box from '../../components/widgets/Box';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import { LocalizedExerciseName } from '../../components/helpers/LocalizedNames';
-import EditSimpleLimitsBox from '../../components/Exercises/EditSimpleLimitsBox';
+import EditSimpleLimitsForm from '../../components/forms/EditSimpleLimits/EditSimpleLimitsForm';
 import SupplementaryFilesTableContainer from '../../containers/SupplementaryFilesTableContainer';
 import EditTestsForm from '../../components/forms/EditTestsForm';
 import EditExerciseSimpleConfigForm from '../../components/forms/EditExerciseSimpleConfigForm';
@@ -30,7 +30,7 @@ import { exerciseConfigSelector } from '../../redux/selectors/exerciseConfigs';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments';
 import { runtimeEnvironmentsSelector } from '../../redux/selectors/runtimeEnvironments';
-import { simpleLimitsSelector } from '../../redux/selectors/simpleLimits';
+import { simpleLimitsAllSelector } from '../../redux/selectors/simpleLimits';
 
 import withLinks from '../../hoc/withLinks';
 import { getLocalizedName } from '../../helpers/getLocalizedData';
@@ -204,6 +204,27 @@ const getSimpleConfigInitValues = (config, tests, locale) => {
   }
 
   return { config: res };
+};
+
+const getLimitsInitValues = (limits, tests, environments) => {
+  let res = {};
+
+  tests.forEach(test => {
+    const testId = 'test' + btoa(test.name); // the name can be anything, but it must be compatible with redux-form <Field>
+    res[testId] = {};
+    environments.forEach(environment => {
+      const envId = 'env' + btoa(environment.id); // the name can be anything, but it must be compatible with redux-form <Field>
+      res[testId][envId] =
+        limits[environment.id] && limits[environment.id][test.name]
+          ? limits[environment.id][test.name]
+          : {
+              memory: 0,
+              'wall-time': 0
+            };
+    });
+  });
+
+  return { limits: res };
 };
 
 class EditExerciseSimpleConfig extends Component {
@@ -398,7 +419,28 @@ class EditExerciseSimpleConfig extends Component {
 
             <Row>
               <Col lg={12}>
-                <ResourceRenderer resource={exerciseConfig}>
+                <ResourceRenderer resource={exerciseTests}>
+                  {(
+                    tests // todo add limits here, so the form wait for them to load and update getLimitsInitValues
+                  ) =>
+                    <EditSimpleLimitsForm
+                      editLimits={editEnvironmentSimpleLimits}
+                      environments={exercise.runtimeEnvironments}
+                      tests={tests.sort((a, b) =>
+                        a.name.localeCompare(b.name, locale)
+                      )}
+                      initialValues={getLimitsInitValues(
+                        limits,
+                        tests,
+                        exercise.runtimeEnvironments
+                      )}
+                      setVertically={setVertically}
+                      setHorizontally={setHorizontally}
+                      setAll={setAll}
+                    />}
+                </ResourceRenderer>
+                {/*
+                  <ResourceRenderer resource={exerciseConfig}>
                   {config =>
                     <div>
                       <EditSimpleLimitsBox
@@ -410,8 +452,9 @@ class EditExerciseSimpleConfig extends Component {
                         setHorizontally={setHorizontally}
                         setAll={setAll}
                       />
-                    </div>}
-                </ResourceRenderer>
+                    </div>
+                                    </ResourceRenderer>
+                                    */}
               </Col>
             </Row>
           </div>}
@@ -436,7 +479,7 @@ EditExerciseSimpleConfig.propTypes = {
   editScoreConfig: PropTypes.func.isRequired,
   editTests: PropTypes.func.isRequired,
   links: PropTypes.object.isRequired,
-  limits: PropTypes.func.isRequired,
+  limits: PropTypes.object.isRequired,
   setHorizontally: PropTypes.func.isRequired,
   setVertically: PropTypes.func.isRequired,
   setAll: PropTypes.func.isRequired,
@@ -452,8 +495,7 @@ export default injectIntl(
           userId: loggedInUserIdSelector(state),
           runtimeEnvironments: runtimeEnvironmentsSelector(state),
           exerciseConfig: exerciseConfigSelector(exerciseId)(state),
-          limits: runtimeEnvironmentId =>
-            simpleLimitsSelector(exerciseId, runtimeEnvironmentId)(state),
+          limits: simpleLimitsAllSelector(exerciseId)(state),
           exerciseEnvironmentConfig: exerciseEnvironmentConfigSelector(
             exerciseId
           )(state),

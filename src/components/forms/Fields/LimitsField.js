@@ -16,7 +16,7 @@ const LimitsField = ({
   setVertically,
   setAll,
   ...props
-}) => (
+}) =>
   <div>
     <Field
       name={`${prefix}.memory`}
@@ -63,8 +63,7 @@ const LimitsField = ({
         </FlatButton>
       </Confirm>
     </p>
-  </div>
-);
+  </div>;
 
 LimitsField.propTypes = {
   label: PropTypes.oneOfType([

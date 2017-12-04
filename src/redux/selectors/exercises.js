@@ -20,6 +20,12 @@ export const fetchManyStatus = createSelector(getExercises, state =>
 export const getExercise = id =>
   createSelector(getExercises, exercises => exercises.getIn(['resources', id]));
 
+export const getExerciseRuntimeEnvironments = id =>
+  createSelector(
+    getExercise(id),
+    exercise => exercise && exercise.getIn(['data', 'runtimeEnvironments'])
+  );
+
 export const getFork = (id, forkId) =>
   createSelector(getExercise(id), exercise =>
     exercise.getIn(['data', 'forks', forkId])
