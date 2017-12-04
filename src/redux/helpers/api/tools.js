@@ -47,6 +47,19 @@ const createFormData = body => {
   return data;
 };
 
+const encodeBody = (body, method, encodeAsMultipart) => {
+  if (method.toUpperCase() !== 'POST') {
+    return undefined;
+  }
+
+  if (encodeAsMultipart) {
+    return body ? createFormData(body) : undefined;
+  } else {
+    // otherwise we encode in JSON
+    return JSON.stringify(body || []);
+  }
+};
+
 export const createRequest = (
   endpoint,
   query = {},
@@ -58,9 +71,7 @@ export const createRequest = (
   fetch(getUrl(assembleEndpoint(endpoint, query)), {
     method,
     headers,
-    body: body
-      ? uploadFiles ? createFormData(body) : JSON.stringify(body)
-      : undefined
+    body: encodeBody(body, method, uploadFiles)
   });
 
 export const getHeaders = (headers, accessToken, skipContentType) => {
