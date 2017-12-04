@@ -21,7 +21,8 @@ export const uploadFile = (id, file, endpoint = '/uploaded-files') =>
     method: 'POST',
     endpoint,
     body: { [file.name]: file },
-    meta: { id, fileName: file.name }
+    meta: { id, fileName: file.name },
+    uploadFiles: true
   });
 
 const wrapWithName = (id, file) => ({ [file.name]: file });

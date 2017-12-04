@@ -18,7 +18,8 @@ export const apiCall = (
     body = undefined,
     meta = undefined,
     wasSuccessful = isTwoHundredCode,
-    doNotProcess = false
+    doNotProcess = false,
+    uploadFiles = false
   },
   dispatch = undefined
 ) => ({
@@ -29,10 +30,11 @@ export const apiCall = (
         endpoint,
         query,
         method,
-        headers: getHeaders(headers, accessToken),
+        headers: getHeaders(headers, accessToken, uploadFiles),
         body,
         wasSuccessful,
-        doNotProcess
+        doNotProcess,
+        uploadFiles
       },
       dispatch
     ),
