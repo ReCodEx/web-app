@@ -89,8 +89,20 @@ EditEnvironmentSimpleForm.propTypes = {
   runtimeEnvironments: PropTypes.array
 };
 
-const validate = () => {
+const validate = formData => {
   const errors = {};
+
+  if (
+    Object.values(formData).filter(value => value === true || value === 'true')
+      .length === 0
+  ) {
+    errors['_error'] = (
+      <FormattedMessage
+        id="app.editEnvironmentSimpleForm.validation.environments"
+        defaultMessage="Please add at least one runtime environment."
+      />
+    );
+  }
 
   return errors;
 };

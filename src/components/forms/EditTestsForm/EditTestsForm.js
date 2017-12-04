@@ -96,8 +96,51 @@ EditTestsForm.propTypes = {
   formValues: PropTypes.object
 };
 
-const validate = () => {
+const validate = ({ isUniform, tests }) => {
   const errors = {};
+
+  const testsErrors = {};
+  const knownTests = new Set();
+  for (let i = 0; i < tests.length; ++i) {
+    const test = tests[i];
+    const testErrors = {};
+    if (!test.name || test.name === '') {
+      testErrors['name'] = (
+        <FormattedMessage
+          id="app.editTestsForm.validation.testName"
+          defaultMessage="Please fill test name."
+        />
+      );
+    }
+    if (knownTests.has(test.name)) {
+      testErrors['name'] = (
+        <FormattedMessage
+          id="app.editTestsForm.validation.testNameTaken"
+          defaultMessage="This name is taken, please fill different one."
+        />
+      );
+    }
+    knownTests.add(test.name);
+    if (!isUniform && (!test.weight || test.weight === '')) {
+      testErrors['weight'] = (
+        <FormattedMessage
+          id="app.editTestsForm.validation.testWeightEmpty"
+          defaultMessage="Please fill test weight."
+        />
+      );
+    }
+    const weight = Number.parseInt(test.weight);
+    if (!isUniform && (!Number.isFinite(weight) || weight < 0)) {
+      testErrors['weight'] = (
+        <FormattedMessage
+          id="app.editTestsForm.validation.testWeight"
+          defaultMessage="Test weight must be positive integer."
+        />
+      );
+    }
+    testsErrors[i] = testErrors;
+  }
+  errors['tests'] = testsErrors;
 
   return errors;
 };

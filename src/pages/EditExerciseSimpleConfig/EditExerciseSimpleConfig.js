@@ -4,7 +4,6 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { Row, Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
-import yaml from 'js-yaml';
 
 import Page from '../../components/layout/Page';
 import Box from '../../components/widgets/Box';
@@ -24,7 +23,10 @@ import {
   setVertically,
   setAll
 } from '../../redux/modules/simpleLimits';
-import { fetchExerciseConfigIfNeeded } from '../../redux/modules/exerciseConfigs';
+import {
+  fetchExerciseConfigIfNeeded,
+  setExerciseConfig
+} from '../../redux/modules/exerciseConfigs';
 import { getExercise } from '../../redux/selectors/exercises';
 import { exerciseConfigSelector } from '../../redux/selectors/exerciseConfigs';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
@@ -49,162 +51,17 @@ import {
   setExerciseTests
 } from '../../redux/modules/exerciseTests';
 import { exerciseTestsSelector } from '../../redux/selectors/exerciseTests';
+import { fetchPipelines } from '../../redux/modules/pipelines';
+import { pipelinesSelector } from '../../redux/selectors/pipelines';
 
-const getEnvInitValues = environmentConfigs => {
-  let res = {};
-  for (const env of environmentConfigs) {
-    res[env.runtimeEnvironmentId] = true;
-  }
-  return res;
-};
-
-const transformAndSendEnvValues = (
-  formData,
-  environments,
-  editEnvironmentConfigs
-) => {
-  let res = [];
-  for (const env in formData) {
-    if (formData[env] !== true && formData[env] !== 'true') {
-      continue;
-    }
-    let envObj = { runtimeEnvironmentId: env };
-    const currentFullEnv = environments.find(e => e.id === env);
-    envObj.variablesTable = currentFullEnv.defaultVariables;
-    res.push(envObj);
-  }
-  return editEnvironmentConfigs({ environmentConfigs: res });
-};
-
-const getTestsInitValues = (exerciseTests, scoreConfig, locale) => {
-  const jsonScoreConfig = yaml.safeLoad(scoreConfig);
-  const testWeights = jsonScoreConfig.testWeights || {};
-  const sortedTests = exerciseTests.sort((a, b) =>
-    a.name.localeCompare(b.name, locale)
-  );
-
-  let res = [];
-  let allWeightsSame = true;
-  let lastWeight = null;
-  for (const test of sortedTests) {
-    const testWeight = testWeights[test.name] || 100;
-    if (lastWeight !== null && testWeight !== lastWeight) {
-      allWeightsSame = false;
-    }
-    lastWeight = testWeight;
-    res.push({ name: test.name, weight: testWeight });
-  }
-
-  return { isUniform: allWeightsSame, tests: res };
-};
-
-const transformAndSendTestsValues = (
-  formData,
-  editExerciseTests,
-  editExerciseScoreConfig
-) => {
-  const uniformScore =
-    formData.isUniform === true || formData.isUniform === 'true';
-  let scoreConfigData = { testWeights: {} };
-  let testsData = [];
-
-  for (const test of formData.tests) {
-    const testWeight = uniformScore ? 100 : Number(test.weight);
-    scoreConfigData.testWeights[test.name] = testWeight;
-
-    testsData.push({ name: test.name });
-  }
-
-  return Promise.all([
-    editExerciseTests({ tests: testsData }),
-    editExerciseScoreConfig({ scoreConfig: yaml.safeDump(scoreConfigData) })
-  ]);
-};
-
-const getSimpleConfigInitValues = (config, tests, locale) => {
-  const confTests = config[0].tests.sort((a, b) =>
-    a.name.localeCompare(b.name, locale)
-  );
-
-  let res = [];
-  for (let test of confTests) {
-    let testObj = { name: test.name };
-    const variables = test.pipelines.reduce(
-      (acc, pipeline) => acc.concat(pipeline.variables),
-      []
-    );
-
-    const inputFiles = variables.find(
-      variable => variable.name === 'input-files'
-    );
-    const actualInputs = variables.find(
-      variable => variable.name === 'actual-inputs'
-    );
-    if (inputFiles) {
-      testObj.inputFiles = inputFiles.value.map((value, i) => ({
-        first: value,
-        second:
-          actualInputs && actualInputs.value && actualInputs.value[i]
-            ? actualInputs.value[i]
-            : ''
-      }));
-    }
-
-    const expectedOutput = variables.find(
-      variable => variable.name === 'expected-output'
-    );
-    if (expectedOutput) {
-      testObj.expectedOutput = expectedOutput.value;
-    }
-
-    const runArgs = variables.find(variable => variable.name === 'run-args');
-    if (runArgs) {
-      testObj.runArgs = runArgs.value;
-    }
-
-    const actualOutput = variables.find(
-      variable => variable.name === 'actual-output'
-    );
-    if (actualOutput) {
-      testObj.useOutFile = true;
-      testObj.outputFile = actualOutput.value;
-    }
-
-    const stdinFile = variables.find(
-      variable => variable.name === 'stdin-file'
-    );
-    if (stdinFile) {
-      testObj.inputStdin = stdinFile.value;
-    }
-
-    const standardJudge = variables.find(
-      variable => variable.name === 'judge-type'
-    );
-    if (standardJudge) {
-      testObj.useCustomJudge = false;
-      testObj.judgeBinary = standardJudge.value;
-    }
-
-    const customJudge = variables.find(
-      variable => variable.name === 'custom-judge'
-    );
-    if (customJudge) {
-      testObj.customJudgeBinary = customJudge.value;
-      testObj.useCustomJudge = customJudge.value.trim() !== '';
-    }
-
-    const judgeArgs = variables.find(
-      variable => variable.name === 'judge-args'
-    );
-    if (judgeArgs) {
-      testObj.judgeArgs = judgeArgs.value;
-    }
-
-    res.push(testObj);
-  }
-
-  return { config: res };
-};
+import {
+  getEnvInitValues,
+  transformAndSendEnvValues,
+  getTestsInitValues,
+  transformAndSendTestsValues,
+  getSimpleConfigInitValues,
+  transformAndSendConfigValues
+} from '../../helpers/exerciseSimpleForm';
 
 const getLimitsInitValues = (limits, tests, environments) => {
   let res = {};
@@ -253,7 +110,8 @@ class EditExerciseSimpleConfig extends Component {
       dispatch(fetchExerciseEnvironmentConfigIfNeeded(exerciseId)),
       dispatch(fetchScoreConfigIfNeeded(exerciseId)),
       dispatch(fetchExerciseTestsIfNeeded(exerciseId)),
-      dispatch(fetchRuntimeEnvironments())
+      dispatch(fetchRuntimeEnvironments()),
+      dispatch(fetchPipelines())
     ]);
 
   render() {
@@ -270,7 +128,9 @@ class EditExerciseSimpleConfig extends Component {
       exerciseTests,
       editScoreConfig,
       editTests,
+      setConfig,
       limits,
+      pipelines,
       setHorizontally,
       setVertically,
       setAll,
@@ -357,22 +217,22 @@ class EditExerciseSimpleConfig extends Component {
                   unlimitedHeight
                 >
                   <ResourceRenderer
-                    resource={[...runtimeEnvironments.toArray()]}
+                    resource={[
+                      exerciseEnvironmentConfig,
+                      ...runtimeEnvironments.toArray()
+                    ]}
                   >
-                    {(...environments) =>
-                      <ResourceRenderer resource={exerciseEnvironmentConfig}>
-                        {environmentConfigs =>
-                          <EditEnvironmentSimpleForm
-                            initialValues={getEnvInitValues(environmentConfigs)}
-                            runtimeEnvironments={environments}
-                            onSubmit={data =>
-                              transformAndSendEnvValues(
-                                data,
-                                environments,
-                                editEnvironmentConfigs
-                              )}
-                          />}
-                      </ResourceRenderer>}
+                    {(environmentConfigs, ...environments) =>
+                      <EditEnvironmentSimpleForm
+                        initialValues={getEnvInitValues(environmentConfigs)}
+                        runtimeEnvironments={environments}
+                        onSubmit={data =>
+                          transformAndSendEnvValues(
+                            data,
+                            environments,
+                            editEnvironmentConfigs
+                          )}
+                      />}
                   </ResourceRenderer>
                 </Box>
               </Col>
@@ -393,8 +253,15 @@ class EditExerciseSimpleConfig extends Component {
                   }
                   unlimitedHeight
                 >
-                  <ResourceRenderer resource={[exerciseConfig, exerciseTests]}>
-                    {(config, tests) => {
+                  <ResourceRenderer
+                    resource={[
+                      exerciseConfig,
+                      exerciseTests,
+                      exerciseEnvironmentConfig,
+                      ...pipelines.toArray()
+                    ]}
+                  >
+                    {(config, tests, environments, ...pipelines) => {
                       const sortedTests = tests.sort((a, b) =>
                         a.name.localeCompare(b.name, locale)
                       );
@@ -407,7 +274,13 @@ class EditExerciseSimpleConfig extends Component {
                           )}
                           exercise={exercise}
                           exerciseTests={sortedTests}
-                          onSubmit={data => console.log(data)}
+                          onSubmit={data =>
+                            transformAndSendConfigValues(
+                              data,
+                              pipelines,
+                              environments,
+                              setConfig
+                            )}
                         />
                       );
                     }}
@@ -478,8 +351,10 @@ EditExerciseSimpleConfig.propTypes = {
   exerciseTests: PropTypes.object,
   editScoreConfig: PropTypes.func.isRequired,
   editTests: PropTypes.func.isRequired,
+  setConfig: PropTypes.func.isRequired,
   links: PropTypes.object.isRequired,
   limits: PropTypes.object.isRequired,
+  pipelines: ImmutablePropTypes.map,
   setHorizontally: PropTypes.func.isRequired,
   setVertically: PropTypes.func.isRequired,
   setAll: PropTypes.func.isRequired,
@@ -500,7 +375,8 @@ export default injectIntl(
             exerciseId
           )(state),
           exerciseScoreConfig: exerciseScoreConfigSelector(exerciseId)(state),
-          exerciseTests: exerciseTestsSelector(exerciseId)(state)
+          exerciseTests: exerciseTestsSelector(exerciseId)(state),
+          pipelines: pipelinesSelector(state)
         };
       },
       (dispatch, { params: { exerciseId } }) => ({
@@ -514,6 +390,7 @@ export default injectIntl(
           dispatch(setExerciseEnvironmentConfig(exerciseId, data)),
         editScoreConfig: data => dispatch(setScoreConfig(exerciseId, data)),
         editTests: data => dispatch(setExerciseTests(exerciseId, data)),
+        setConfig: data => dispatch(setExerciseConfig(exerciseId, data)),
         setHorizontally: (formName, runtimeEnvironmentId) => testName => () =>
           dispatch(
             setHorizontally(
