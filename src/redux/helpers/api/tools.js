@@ -1,6 +1,6 @@
 import statusCode from 'statuscode';
 import { addNotification } from '../../modules/notifications';
-import flatten from 'flat';
+import { flatten } from 'flat';
 
 import { logout } from '../../modules/auth';
 import { isTokenValid, decode } from '../../helpers/token';
@@ -13,6 +13,17 @@ export const API_BASE = process.env.API_BASE || 'http://localhost:4000/v1';
 
 const maybeShash = endpoint => (endpoint.indexOf('/') === 0 ? '' : '/');
 const getUrl = endpoint => API_BASE + maybeShash(endpoint) + endpoint;
+
+const maybeQuestionMark = (endpoint, query) =>
+  Object.keys(query).length === 0
+    ? ''
+    : endpoint.indexOf('?') === -1 ? '?' : '&';
+
+const generateQuery = query =>
+  !query ? '' : Object.keys(query).map(key => `${key}=${query[key]}`).join('&');
+
+export const assembleEndpoint = (endpoint, query = {}) =>
+  endpoint + maybeQuestionMark(endpoint, query) + generateQuery(query);
 
 export const flattenBody = body => {
   const flattened = flatten(body, { delimiter: ':' });
@@ -36,33 +47,45 @@ const createFormData = body => {
   return data;
 };
 
-const maybeQuestionMark = (endpoint, query) =>
-  Object.keys(query).length === 0
-    ? ''
-    : endpoint.indexOf('?') === -1 ? '?' : '&';
+const encodeBody = (body, method, encodeAsMultipart) => {
+  if (method.toUpperCase() !== 'POST') {
+    return undefined;
+  }
 
-const generateQuery = query =>
-  !query ? '' : Object.keys(query).map(key => `${key}=${query[key]}`).join('&');
+  if (encodeAsMultipart) {
+    return body ? createFormData(body) : undefined;
+  } else {
+    // otherwise we encode in JSON
+    return JSON.stringify(body || []);
+  }
+};
 
-export const assembleEndpoint = (endpoint, query = {}) =>
-  endpoint + maybeQuestionMark(endpoint, query) + generateQuery(query);
-
-export const createRequest = (endpoint, query = {}, method, headers, body) =>
+export const createRequest = (
+  endpoint,
+  query = {},
+  method,
+  headers,
+  body,
+  uploadFiles
+) =>
   fetch(getUrl(assembleEndpoint(endpoint, query)), {
     method,
     headers,
-    body: body ? createFormData(body) : undefined
+    body: encodeBody(body, method, uploadFiles)
   });
 
-export const getHeaders = (headers, accessToken) => {
+export const getHeaders = (headers, accessToken, skipContentType) => {
+  const usedHeaders = skipContentType
+    ? headers
+    : { 'Content-Type': 'application/json', ...headers };
   if (accessToken) {
     return {
       Authorization: `Bearer ${accessToken}`,
-      ...headers
+      ...usedHeaders
     };
   }
 
-  return headers;
+  return usedHeaders;
 };
 
 /**
@@ -79,11 +102,12 @@ export const createApiCallPromise = (
     accessToken = '',
     body = undefined,
     wasSuccessful = () => true,
-    doNotProcess = false
+    doNotProcess = false,
+    uploadFiles = false
   },
   dispatch = undefined
 ) => {
-  let call = createRequest(endpoint, query, method, headers, body)
+  let call = createRequest(endpoint, query, method, headers, body, uploadFiles)
     .catch(err => detectUnreachableServer(err, dispatch))
     .then(res => {
       if (

@@ -41,7 +41,8 @@ export const addAdditionalExerciseFiles = (exerciseId, files) =>
         tmpId: Math.random().toString(),
         file: uploaded.file
       }))
-    }
+    },
+    uploadFiles: true
   });
 
 export const removeAdditionalExerciseFile = (exerciseId, fileId) =>
