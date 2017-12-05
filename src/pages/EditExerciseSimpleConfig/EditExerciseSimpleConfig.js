@@ -19,9 +19,9 @@ import { fetchExerciseIfNeeded } from '../../redux/modules/exercises';
 import {
   fetchExerciseEnvironmentSimpleLimitsIfNeeded,
   editEnvironmentSimpleLimits,
-  setHorizontally,
-  setVertically,
-  setAll
+  cloneHorizontally,
+  cloneVertically,
+  cloneAll
 } from '../../redux/modules/simpleLimits';
 import {
   fetchExerciseConfigIfNeeded,
@@ -32,7 +32,7 @@ import { exerciseConfigSelector } from '../../redux/selectors/exerciseConfigs';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments';
 import { runtimeEnvironmentsSelector } from '../../redux/selectors/runtimeEnvironments';
-import { simpleLimitsAllSelector } from '../../redux/selectors/simpleLimits';
+import { simpleLimitsSelector } from '../../redux/selectors/simpleLimits';
 
 import withLinks from '../../hoc/withLinks';
 import { getLocalizedName } from '../../helpers/getLocalizedData';
@@ -60,10 +60,11 @@ import {
   getTestsInitValues,
   transformAndSendTestsValues,
   getSimpleConfigInitValues,
-  transformAndSendConfigValues
+  transformAndSendConfigValues,
+  getLimitsInitValues
 } from '../../helpers/exerciseSimpleForm';
 
-const getLimitsInitValues = (limits, tests, environments) => {
+const getLimitsInitValuesOld = (limits, tests, environments) => {
   let res = {};
 
   tests.forEach(test => {
@@ -131,9 +132,9 @@ class EditExerciseSimpleConfig extends Component {
       setConfig,
       limits,
       pipelines,
-      setHorizontally,
-      setVertically,
-      setAll,
+      cloneHorizontally,
+      cloneVertically,
+      cloneAll,
       intl: { locale }
     } = this.props;
 
@@ -293,9 +294,7 @@ class EditExerciseSimpleConfig extends Component {
             <Row>
               <Col lg={12}>
                 <ResourceRenderer resource={exerciseTests}>
-                  {(
-                    tests // todo add limits here, so the form wait for them to load and update getLimitsInitValues
-                  ) =>
+                  {tests =>
                     <EditSimpleLimitsForm
                       editLimits={editEnvironmentSimpleLimits}
                       environments={exercise.runtimeEnvironments}
@@ -305,11 +304,12 @@ class EditExerciseSimpleConfig extends Component {
                       initialValues={getLimitsInitValues(
                         limits,
                         tests,
-                        exercise.runtimeEnvironments
+                        exercise.runtimeEnvironments,
+                        exercise.id
                       )}
-                      setVertically={setVertically}
-                      setHorizontally={setHorizontally}
-                      setAll={setAll}
+                      cloneVertically={cloneVertically}
+                      cloneHorizontally={cloneHorizontally}
+                      cloneAll={cloneAll}
                     />}
                 </ResourceRenderer>
                 {/*
@@ -355,9 +355,9 @@ EditExerciseSimpleConfig.propTypes = {
   links: PropTypes.object.isRequired,
   limits: PropTypes.object.isRequired,
   pipelines: ImmutablePropTypes.map,
-  setHorizontally: PropTypes.func.isRequired,
-  setVertically: PropTypes.func.isRequired,
-  setAll: PropTypes.func.isRequired,
+  cloneHorizontally: PropTypes.func.isRequired,
+  cloneVertically: PropTypes.func.isRequired,
+  cloneAll: PropTypes.func.isRequired,
   intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired
 };
 
@@ -370,7 +370,7 @@ export default injectIntl(
           userId: loggedInUserIdSelector(state),
           runtimeEnvironments: runtimeEnvironmentsSelector(state),
           exerciseConfig: exerciseConfigSelector(exerciseId)(state),
-          limits: simpleLimitsAllSelector(exerciseId)(state),
+          limits: simpleLimitsSelector(state),
           exerciseEnvironmentConfig: exerciseEnvironmentConfigSelector(
             exerciseId
           )(state),
@@ -391,21 +391,24 @@ export default injectIntl(
         editScoreConfig: data => dispatch(setScoreConfig(exerciseId, data)),
         editTests: data => dispatch(setExerciseTests(exerciseId, data)),
         setConfig: data => dispatch(setExerciseConfig(exerciseId, data)),
-        setHorizontally: (formName, runtimeEnvironmentId) => testName => () =>
+        cloneVertically: (
+          formName,
+          testName,
+          runtimeEnvironmentId
+        ) => field => () =>
           dispatch(
-            setHorizontally(
-              formName,
-              exerciseId,
-              runtimeEnvironmentId,
-              testName
-            )
+            cloneVertically(formName, testName, runtimeEnvironmentId, field)
           ),
-        setVertically: (formName, runtimeEnvironmentId) => testName => () =>
+        cloneHorizontally: (
+          formName,
+          testName,
+          runtimeEnvironmentId
+        ) => field => () =>
           dispatch(
-            setVertically(formName, exerciseId, runtimeEnvironmentId, testName)
+            cloneHorizontally(formName, testName, runtimeEnvironmentId, field)
           ),
-        setAll: (formName, runtimeEnvironmentId) => testName => () =>
-          dispatch(setAll(formName, exerciseId, runtimeEnvironmentId, testName))
+        cloneAll: (formName, testName, runtimeEnvironmentId) => field => () =>
+          dispatch(cloneAll(formName, testName, runtimeEnvironmentId, field))
       })
     )(EditExerciseSimpleConfig)
   )

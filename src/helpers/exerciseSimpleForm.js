@@ -1,4 +1,9 @@
 import yaml from 'js-yaml';
+import {
+  endpointDisguisedAsIdFactory,
+  encodeTestName,
+  encodeEnvironmentId
+} from '../redux/modules/simpleLimits';
 
 export const getEnvInitValues = environmentConfigs => {
   let res = {};
@@ -277,4 +282,38 @@ export const transformAndSendConfigValues = (
   }
 
   return setConfig({ config: envs });
+};
+
+export const getLimitsInitValues = (
+  limits,
+  tests,
+  environments,
+  exerciseId
+) => {
+  let res = {};
+
+  tests.forEach(test => {
+    const testId = encodeTestName(test.name);
+    res[testId] = {};
+    environments.forEach(environment => {
+      const envId = encodeEnvironmentId(environment.id); // the name can be anything, but it must be compatible with redux-form <Field>
+      const lim = limits.getIn([
+        endpointDisguisedAsIdFactory({
+          exerciseId,
+          runtimeEnvironmentId: environment.id
+        }),
+        'data',
+        test.name
+      ]);
+      res[testId][envId] = lim
+        ? lim.toJS()
+        : {
+            // default
+            memory: 0,
+            'wall-time': 0
+          };
+    });
+  });
+
+  return { limits: res };
 };

@@ -7,6 +7,7 @@ const getLimits = state => state.simpleLimits;
 const EMPTY_OBJ = {};
 const EMPTY_MAP = Map();
 
+/*
 export const simpleLimitsSelector = (exerciseId, runtimeEnvironmentId) =>
   createSelector(getLimits, limits =>
     limits.getIn([
@@ -17,6 +18,11 @@ export const simpleLimitsSelector = (exerciseId, runtimeEnvironmentId) =>
       })
     ])
   );
+*/
+
+export const simpleLimitsSelector = createSelector(getLimits, limits =>
+  limits.get('resources')
+);
 
 export const simpleLimitsAllSelector = exerciseId =>
   createSelector(

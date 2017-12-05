@@ -8,15 +8,20 @@ import { EditSimpleLimitsField } from '../Fields';
 import SubmitButton from '../SubmitButton';
 import FormBox from '../../widgets/FormBox';
 
+import {
+  encodeTestName,
+  encodeEnvironmentId
+} from '../../../redux/modules/simpleLimits';
+
 import styles from './styles.less';
 
 const EditSimpleLimitsForm = ({
   environments,
   editLimits,
   tests,
-  setHorizontally,
-  setVertically,
-  setAll,
+  cloneHorizontally,
+  cloneVertically,
+  cloneAll,
   anyTouched,
   submitting,
   submitFailed,
@@ -104,7 +109,9 @@ const EditSimpleLimitsForm = ({
 
             {environments.map(environment => {
               const id =
-                'test' + btoa(test.name) + '.env' + btoa(environment.id);
+                encodeTestName(test.name) +
+                '.' +
+                encodeEnvironmentId(environment.id);
               return (
                 <td
                   key={`td.${id}`}
@@ -115,9 +122,21 @@ const EditSimpleLimitsForm = ({
                     id={id}
                     testsCount={tests.length}
                     environmentsCount={environments.length}
-                    setHorizontally={setHorizontally(test.name)}
-                    setVertically={setVertically(test.name)}
-                    setAll={setAll(test.name)}
+                    cloneVertically={cloneVertically(
+                      'editSimpleLimits',
+                      test.name,
+                      environment.id
+                    )}
+                    cloneHorizontally={cloneHorizontally(
+                      'editSimpleLimits',
+                      test.name,
+                      environment.id
+                    )}
+                    cloneAll={cloneAll(
+                      'editSimpleLimits',
+                      test.name,
+                      environment.id
+                    )}
                   />
                 </td>
               );
@@ -141,9 +160,9 @@ EditSimpleLimitsForm.propTypes = {
   tests: PropTypes.array.isRequired,
   environments: PropTypes.array,
   editLimits: PropTypes.func.isRequired,
-  setHorizontally: PropTypes.func.isRequired,
-  setVertically: PropTypes.func.isRequired,
-  setAll: PropTypes.func.isRequired,
+  cloneHorizontally: PropTypes.func.isRequired,
+  cloneVertically: PropTypes.func.isRequired,
+  cloneAll: PropTypes.func.isRequired,
   anyTouched: PropTypes.bool,
   submitting: PropTypes.bool,
   submitFailed: PropTypes.bool,
@@ -226,6 +245,5 @@ const validate = ({ limits }) => {
 export default reduxForm({
   form: 'editSimpleLimits',
   enableReinitialize: true,
-  keepDirtyOnReinitialize: true,
-  validate
+  keepDirtyOnReinitialize: true
 })(EditSimpleLimitsForm);

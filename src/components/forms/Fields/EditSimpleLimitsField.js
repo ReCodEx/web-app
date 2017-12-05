@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Field, formValues } from 'redux-form';
+import { Field } from 'redux-form';
 import { FormattedMessage } from 'react-intl';
 import { Row, Col } from 'react-bootstrap';
 import Icon from 'react-fontawesome';
@@ -14,16 +14,90 @@ import prettyMs from 'pretty-ms';
 
 import styles from './EditSimpleLimitsField.less';
 
+const LimitsValueField = ({ input, prettyPrint, ...props }) =>
+  <tr>
+    <td width="100%" rowSpan="2">
+      <TextField {...props} input={input} />
+    </td>
+    <td className={styles.buttonsCol}>
+      <b>
+        {prettyPrint(input.value)}
+      </b>
+    </td>
+  </tr>;
+
+LimitsValueField.propTypes = {
+  input: PropTypes.shape({
+    value: PropTypes.any.isRequired
+  }).isRequired,
+  prettyPrint: PropTypes.func.isRequired
+};
+
+const prettyPrintBytesWrap = value =>
+  Number.isNaN(Number(value)) ? '-' : prettyPrintBytes(Number(value) * 1024);
+
+const prettyPrintMsWrap = value =>
+  Number.isNaN(Number(value)) ? '-' : prettyMs(Number(value) * 1000);
+
+/**
+ * These limits are only soft limits applied in webapp.
+ * Note that hard maxima are in worker configuration /etc/recodex/worker on all worker hosts.
+ * If you need to change this, worker limits should probably be changed as well.
+ */
+const limitRanges = {
+  memory: {
+    min: 128,
+    max: 1024 * 1024 // 1GiB
+  },
+  time: {
+    min: 0.1,
+    max: 60
+  }
+};
+
+const validateValue = (ranges, pretty) => value => {
+  const num = Number(value);
+  if (Number.isNaN(num)) {
+    return (
+      <FormattedMessage
+        id="app.EditSimpleLimitsForm.validation.NaN"
+        defaultMessage="Given value is not a number."
+      />
+    );
+  }
+
+  if (num < ranges.min) {
+    return (
+      <FormattedMessage
+        id="app.EditSimpleLimitsForm.validation.tooLow"
+        defaultMessage="Given value is below the recommended minimum ({min})."
+        values={{ min: pretty(ranges.min) }}
+      />
+    );
+  }
+  if (num > ranges.max) {
+    return (
+      <FormattedMessage
+        id="app.EditSimpleLimitsForm.validation.tooHigh"
+        defaultMessage="Given value exceeds the recommended maximum ({max})."
+        values={{ max: pretty(ranges.max) }}
+      />
+    );
+  }
+  return undefined;
+};
+
+const validateMemory = validateValue(limitRanges.memory, prettyPrintBytes);
+const validateTime = validateValue(limitRanges.time, prettyMs);
+
 const EditSimpleLimitsField = ({
   prefix,
   id,
-  memoryValue,
-  wallTimeValue,
   testsCount,
   environmentsCount,
-  setHorizontally,
-  setVertically,
-  setAll,
+  cloneVertically,
+  cloneHorizontally,
+  cloneAll,
   ...props
 }) =>
   <div>
@@ -31,36 +105,29 @@ const EditSimpleLimitsField = ({
       <Col lg={environmentsCount >= 3 ? 12 : 6} md={12}>
         <table>
           <tbody>
-            <tr>
-              <td width="100%">
-                <Field
-                  name={`${prefix}.memory`}
-                  component={TextField}
-                  label={
-                    <FormattedMessage
-                      id="app.fields.limits.memory"
-                      defaultMessage="Memory Limit [KiB]:"
-                    />
-                  }
-                  {...props}
+            <Field
+              name={`${prefix}.memory`}
+              component={LimitsValueField}
+              prettyPrint={prettyPrintBytesWrap}
+              label={
+                <FormattedMessage
+                  id="app.fields.limits.memory"
+                  defaultMessage="Memory Limit [KiB]:"
                 />
-              </td>
+              }
+              validate={validateMemory}
+              {...props}
+            />
+            <tr>
               <td className={styles.buttonsCol}>
-                <b>
-                  {Number.isNaN(Number(memoryValue))
-                    ? '-'
-                    : prettyPrintBytes(Number(memoryValue) * 1024)}
-                </b>
-                <br />
-
                 {testsCount > 1 &&
-                  <FlatButton onClick={setVertically} bsSize="xs">
+                  <FlatButton onClick={cloneVertically('memory')} bsSize="xs">
                     <Icon name="arrows-v" />
                   </FlatButton>}
                 {environmentsCount > 1 &&
                   <Confirm
                     id={`confirm.${id}.memory.horizontal`}
-                    onConfirmed={setHorizontally}
+                    onConfirmed={cloneHorizontally('memory')}
                     question={
                       <FormattedMessage
                         id="app.EditLimitsForm.cloneHorizontal.yesNoQuestion"
@@ -76,7 +143,7 @@ const EditSimpleLimitsField = ({
                   environmentsCount > 1 &&
                   <Confirm
                     id={`confirm.${id}.memory.all`}
-                    onConfirmed={setAll}
+                    onConfirmed={cloneAll('memory')}
                     question={
                       <FormattedMessage
                         id="app.EditLimitsForm.cloneAll.yesNoQuestion"
@@ -96,36 +163,32 @@ const EditSimpleLimitsField = ({
       <Col lg={environmentsCount >= 3 ? 12 : 6} md={12}>
         <table>
           <tbody>
-            <tr>
-              <td width="100%">
-                <Field
-                  name={`${prefix}.wall-time`}
-                  component={TextField}
-                  label={
-                    <FormattedMessage
-                      id="app.fields.limits.time"
-                      defaultMessage="Time Limit [s]:"
-                    />
-                  }
-                  {...props}
+            <Field
+              name={`${prefix}.wall-time`}
+              component={LimitsValueField}
+              prettyPrint={prettyPrintMsWrap}
+              validate={validateTime}
+              label={
+                <FormattedMessage
+                  id="app.fields.limits.time"
+                  defaultMessage="Time Limit [s]:"
                 />
-              </td>
+              }
+              {...props}
+            />
+            <tr>
               <td className={styles.buttonsCol}>
-                <b>
-                  {Number.isNaN(Number(wallTimeValue))
-                    ? '-'
-                    : prettyMs(Number(wallTimeValue) * 1000)}
-                </b>
-                <br />
-
                 {testsCount > 1 &&
-                  <FlatButton onClick={setVertically} bsSize="xs">
+                  <FlatButton
+                    onClick={cloneVertically('wall-time')}
+                    bsSize="xs"
+                  >
                     <Icon name="arrows-v" />
                   </FlatButton>}
                 {environmentsCount > 1 &&
                   <Confirm
                     id={`confirm.${id}.wall-time.horizontal`}
-                    onConfirmed={setHorizontally}
+                    onConfirmed={cloneHorizontally('wall-time')}
                     question={
                       <FormattedMessage
                         id="app.EditLimitsForm.cloneHorizontal.yesNoQuestion"
@@ -141,7 +204,7 @@ const EditSimpleLimitsField = ({
                   environmentsCount > 1 &&
                   <Confirm
                     id={`confirm.${id}.wall-time.all`}
-                    onConfirmed={setAll}
+                    onConfirmed={cloneAll('wall-time')}
                     question={
                       <FormattedMessage
                         id="app.EditLimitsForm.cloneAll.yesNoQuestion"
@@ -163,19 +226,12 @@ const EditSimpleLimitsField = ({
 
 EditSimpleLimitsField.propTypes = {
   id: PropTypes.string.isRequired,
-  setHorizontally: PropTypes.func.isRequired,
-  setVertically: PropTypes.func.isRequired,
-  setAll: PropTypes.func.isRequired,
+  cloneVertically: PropTypes.func.isRequired,
+  cloneHorizontally: PropTypes.func.isRequired,
+  cloneAll: PropTypes.func.isRequired,
   prefix: PropTypes.string.isRequired,
-  memoryValue: PropTypes.oneOfType([PropTypes.number, PropTypes.string])
-    .isRequired,
-  wallTimeValue: PropTypes.oneOfType([PropTypes.number, PropTypes.string])
-    .isRequired,
   testsCount: PropTypes.number.isRequired,
   environmentsCount: PropTypes.number.isRequired
 };
 
-export default formValues(props => ({
-  memoryValue: `${props.prefix}.memory`,
-  wallTimeValue: `${props.prefix}.wall-time`
-}))(EditSimpleLimitsField);
+export default EditSimpleLimitsField;
