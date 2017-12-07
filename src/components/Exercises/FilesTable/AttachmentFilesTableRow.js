@@ -7,7 +7,7 @@ import { Button } from 'react-bootstrap';
 import Confirm from '../../../components/forms/Confirm';
 import { DeleteIcon } from '../../../components/icons';
 
-const AdditionalFilesTableRow = ({
+const AttachmentFilesTableRow = ({
   id,
   name,
   size,
@@ -39,7 +39,7 @@ const AdditionalFilesTableRow = ({
           onConfirmed={() => removeFile(id)}
           question={
             <FormattedMessage
-              id="app.additionalFiles.deleteConfirm"
+              id="app.attachmentFiles.deleteConfirm"
               defaultMessage="Are you sure you want to delete the file? This cannot be undone."
             />
           }
@@ -48,7 +48,7 @@ const AdditionalFilesTableRow = ({
           <Button bsSize="xs" className="btn-flat" bsStyle="danger">
             <DeleteIcon />{' '}
             <FormattedMessage
-              id="app.additionalFiles.deleteButton"
+              id="app.attachmentFiles.deleteButton"
               defaultMessage="Delete"
             />
           </Button>
@@ -56,7 +56,7 @@ const AdditionalFilesTableRow = ({
     </td>
   </tr>;
 
-AdditionalFilesTableRow.propTypes = {
+AttachmentFilesTableRow.propTypes = {
   id: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   size: PropTypes.number.isRequired,
@@ -65,4 +65,4 @@ AdditionalFilesTableRow.propTypes = {
   removeFile: PropTypes.func
 };
 
-export default withLinks(AdditionalFilesTableRow);
+export default withLinks(AttachmentFilesTableRow);
