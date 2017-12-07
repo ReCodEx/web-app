@@ -12,6 +12,8 @@ import {
   CheckboxField
 } from '../Fields';
 
+import './EditExerciseSimpleConfigForm.css';
+
 const messages = defineMessages({
   normal: {
     id: 'recodex-judge-normal',
@@ -69,7 +71,7 @@ const EditExerciseSimpleConfigTest = ({
       }))
   );
   return (
-    <div>
+    <div className="configRow">
       <Row>
         <Col lg={12}>
           <h3>

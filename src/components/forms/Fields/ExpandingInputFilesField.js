@@ -61,7 +61,7 @@ class ExpandingInputFilesField extends Component {
       leftLabel = '',
       rightLabel = '',
       input: { onChange, ...input },
-      meta: { touched, error },
+      meta: { dirty, error },
       style = {},
       options,
       ...props
@@ -71,7 +71,7 @@ class ExpandingInputFilesField extends Component {
     return (
       <FormGroup
         controlId={input.name}
-        validationState={error ? (touched ? 'error' : 'warning') : undefined}
+        validationState={error ? 'error' : dirty ? 'warning' : undefined}
       >
         <Row>
           <Col sm={6}>
@@ -119,12 +119,7 @@ class ExpandingInputFilesField extends Component {
         </Row>
         {error &&
           <HelpBlock>
-            {' '}{touched
-              ? error
-              : <FormattedMessage
-                  defaultMessage="This field is required."
-                  id="app.field.isRequired"
-                />}{' '}
+            {' '}{error}{' '}
           </HelpBlock>}
       </FormGroup>
     );

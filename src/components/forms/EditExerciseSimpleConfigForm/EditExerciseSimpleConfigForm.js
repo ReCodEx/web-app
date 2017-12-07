@@ -32,6 +32,7 @@ const EditExerciseSimpleConfigForm = ({
       />
     }
     unlimitedHeight
+    noPadding
     success={submitSucceeded}
     dirty={dirty}
     footer={
