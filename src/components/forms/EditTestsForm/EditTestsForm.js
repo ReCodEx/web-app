@@ -8,6 +8,8 @@ import { Alert } from 'react-bootstrap';
 import EditTestsTest from './EditTestsTest';
 import { CheckboxField } from '../Fields';
 import SubmitButton from '../SubmitButton';
+import Button from '../../widgets/FlatButton';
+import { RefreshIcon } from '../../icons';
 
 class EditTestsForm extends Component {
   render() {
@@ -15,6 +17,7 @@ class EditTestsForm extends Component {
       dirty,
       submitting,
       handleSubmit,
+      reset,
       hasFailed = false,
       hasSucceeded = false,
       invalid,
@@ -50,6 +53,22 @@ class EditTestsForm extends Component {
         />
 
         <div className="text-center">
+          {dirty &&
+            <span>
+              <Button
+                type="reset"
+                onClick={reset}
+                bsStyle={'danger'}
+                className="btn-flat"
+              >
+                <RefreshIcon /> &nbsp;
+                <FormattedMessage
+                  id="app.editTestsForm.reset"
+                  defaultMessage="Reset"
+                />
+              </Button>{' '}
+            </span>}
+
           <SubmitButton
             id="editTests"
             invalid={invalid}
@@ -88,6 +107,7 @@ class EditTestsForm extends Component {
 EditTestsForm.propTypes = {
   values: PropTypes.array,
   handleSubmit: PropTypes.func.isRequired,
+  reset: PropTypes.func.isRequired,
   dirty: PropTypes.bool,
   submitting: PropTypes.bool,
   hasFailed: PropTypes.bool,

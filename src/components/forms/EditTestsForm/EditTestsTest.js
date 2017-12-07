@@ -56,7 +56,7 @@ const EditTestsTest = ({ fields, isUniform, testValues }) => {
       <div style={{ textAlign: 'right' }}>
         <Button
           onClick={() =>
-            fields.push({ name: `Test ${fields.length}`, weight: 100 })}
+            fields.push({ name: 'Test ' + (fields.length + 1), weight: '100' })}
           bsStyle={'primary'}
           className="btn-flat"
         >
