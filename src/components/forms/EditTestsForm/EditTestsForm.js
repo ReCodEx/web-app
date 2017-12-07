@@ -12,7 +12,7 @@ import SubmitButton from '../SubmitButton';
 class EditTestsForm extends Component {
   render() {
     const {
-      anyTouched,
+      dirty,
       submitting,
       handleSubmit,
       hasFailed = false,
@@ -55,26 +55,26 @@ class EditTestsForm extends Component {
             invalid={invalid}
             submitting={submitting}
             hasSucceeded={hasSucceeded}
-            dirty={anyTouched}
+            dirty={dirty}
             hasFailed={hasFailed}
             handleSubmit={handleSubmit}
             messages={{
               submit: (
                 <FormattedMessage
                   id="app.editTestsForm.submit"
-                  defaultMessage="Change configuration"
+                  defaultMessage="Save Tests"
                 />
               ),
               submitting: (
                 <FormattedMessage
                   id="app.editTestsForm.submitting"
-                  defaultMessage="Saving configuration ..."
+                  defaultMessage="Saving Tests ..."
                 />
               ),
               success: (
                 <FormattedMessage
                   id="app.editTestsForm.success"
-                  defaultMessage="Configuration was changed."
+                  defaultMessage="Tests Saved."
                 />
               )
             }}
@@ -88,7 +88,7 @@ class EditTestsForm extends Component {
 EditTestsForm.propTypes = {
   values: PropTypes.array,
   handleSubmit: PropTypes.func.isRequired,
-  anyTouched: PropTypes.bool,
+  dirty: PropTypes.bool,
   submitting: PropTypes.bool,
   hasFailed: PropTypes.bool,
   hasSucceeded: PropTypes.bool,

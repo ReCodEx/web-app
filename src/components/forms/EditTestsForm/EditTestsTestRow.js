@@ -8,7 +8,7 @@ import { FormattedMessage } from 'react-intl';
 import { TextField } from '../Fields';
 import './EditTests.css';
 
-const EditTestsTestRow = ({ test, onRemove, isUniform }) =>
+const EditTestsTestRow = ({ test, onRemove, isUniform, percent }) =>
   <tr>
     <td>
       <Field
@@ -27,6 +27,9 @@ const EditTestsTestRow = ({ test, onRemove, isUniform }) =>
           groupClassName="testRow"
         />
       </td>}
+    <td style={{ textAlign: 'center', verticalAlign: 'middle' }}>
+      {percent}
+    </td>
     <td style={{ verticalAlign: 'middle' }}>
       <Button
         onClick={onRemove}
@@ -46,7 +49,8 @@ const EditTestsTestRow = ({ test, onRemove, isUniform }) =>
 EditTestsTestRow.propTypes = {
   test: PropTypes.string.isRequired,
   onRemove: PropTypes.func.isRequired,
-  isUniform: PropTypes.bool.isRequired
+  isUniform: PropTypes.bool.isRequired,
+  percent: PropTypes.string.isRequired
 };
 
 export default EditTestsTestRow;

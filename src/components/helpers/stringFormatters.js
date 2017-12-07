@@ -19,3 +19,11 @@ export function prettyPrintBytes(input) {
   const { value, unit } = parseBytes(input);
   return `${value} ${unit}`;
 }
+
+export function prettyPrintPercent(percent) {
+  percent = Number(percent);
+  if (Number.isNaN(percent)) {
+    return '-';
+  }
+  return (Math.round(percent * 1000) / 10).toString() + '%';
+}

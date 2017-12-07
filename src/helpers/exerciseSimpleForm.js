@@ -47,7 +47,7 @@ export const getTestsInitValues = (exerciseTests, scoreConfig, locale) => {
       allWeightsSame = false;
     }
     lastWeight = testWeight;
-    res.push({ name: test.name, weight: testWeight });
+    res.push({ name: test.name, weight: String(testWeight) });
   }
 
   return { isUniform: allWeightsSame, tests: res };
