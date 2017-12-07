@@ -170,10 +170,13 @@ export const transformAndSendConfigValues = (
   formData,
   pipelines,
   environments,
+  sortedTests,
   setConfig
 ) => {
   let testVars = [];
-  for (const test of formData.config) {
+  for (let testIndex = 0; testIndex < sortedTests.length; ++testIndex) {
+    const test = formData.config[testIndex];
+    const testName = sortedTests[testIndex].name;
     let variables = [];
 
     variables.push({
@@ -234,7 +237,7 @@ export const transformAndSendConfigValues = (
     });
 
     testVars.push({
-      name: test.name,
+      name: testName,
       variables: variables,
       producesFiles: test.useOutFile
     });

@@ -49,7 +49,7 @@ class ExpandingTextField extends Component {
     const {
       label = '',
       input: { onChange },
-      meta: { touched, error },
+      meta: { dirty, error },
       style = {},
       ...props
     } = this.props;
@@ -58,7 +58,7 @@ class ExpandingTextField extends Component {
     return (
       <FormGroup
         controlId={'value'}
-        validationState={error ? (touched ? 'error' : 'warning') : undefined}
+        validationState={error ? 'error' : dirty ? 'warning' : undefined}
       >
         <ControlLabel>{label}</ControlLabel>
         <div style={style}>
@@ -75,12 +75,7 @@ class ExpandingTextField extends Component {
         </div>{' '}
         {error &&
           <HelpBlock>
-            {' '}{touched
-              ? error
-              : <FormattedMessage
-                  defaultMessage="This field is required."
-                  id="app.field.isRequired"
-                />}{' '}
+            {' '}{error}{' '}
           </HelpBlock>}
       </FormGroup>
     );

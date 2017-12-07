@@ -38,6 +38,7 @@ const EditSimpleLimitsForm = ({
       />
     }
     unlimitedHeight
+    noPadding
     success={submitSucceeded}
     dirty={dirty}
     footer={

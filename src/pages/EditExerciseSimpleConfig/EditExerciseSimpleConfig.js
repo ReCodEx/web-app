@@ -225,48 +225,39 @@ class EditExerciseSimpleConfig extends Component {
 
             <Row>
               <Col lg={12}>
-                <Box
-                  title={
-                    <FormattedMessage
-                      id="app.editExercise.editConfig"
-                      defaultMessage="Edit exercise configuration"
-                    />
-                  }
-                  unlimitedHeight
+                <ResourceRenderer
+                  resource={[
+                    exerciseConfig,
+                    exerciseTests,
+                    exerciseEnvironmentConfig,
+                    ...pipelines.toArray()
+                  ]}
                 >
-                  <ResourceRenderer
-                    resource={[
-                      exerciseConfig,
-                      exerciseTests,
-                      exerciseEnvironmentConfig,
-                      ...pipelines.toArray()
-                    ]}
-                  >
-                    {(config, tests, environments, ...pipelines) => {
-                      const sortedTests = tests.sort((a, b) =>
-                        a.name.localeCompare(b.name, locale)
-                      );
-                      return (
-                        <EditExerciseSimpleConfigForm
-                          initialValues={getSimpleConfigInitValues(
-                            config,
+                  {(config, tests, environments, ...pipelines) => {
+                    const sortedTests = tests.sort((a, b) =>
+                      a.name.localeCompare(b.name, locale)
+                    );
+                    return (
+                      <EditExerciseSimpleConfigForm
+                        initialValues={getSimpleConfigInitValues(
+                          config,
+                          sortedTests,
+                          locale
+                        )}
+                        exercise={exercise}
+                        exerciseTests={sortedTests}
+                        onSubmit={data =>
+                          transformAndSendConfigValues(
+                            data,
+                            pipelines,
+                            environments,
                             sortedTests,
-                            locale
+                            setConfig
                           )}
-                          exercise={exercise}
-                          exerciseTests={sortedTests}
-                          onSubmit={data =>
-                            transformAndSendConfigValues(
-                              data,
-                              pipelines,
-                              environments,
-                              setConfig
-                            )}
-                        />
-                      );
-                    }}
-                  </ResourceRenderer>
-                </Box>
+                      />
+                    );
+                  }}
+                </ResourceRenderer>
               </Col>
             </Row>
             <br />

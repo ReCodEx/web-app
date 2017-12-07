@@ -11,7 +11,7 @@ import {
 
 const SelectField = ({
   input,
-  meta: { touched, error },
+  meta: { touched, dirty, error },
   label,
   options,
   addEmptyOption = false,
@@ -20,7 +20,7 @@ const SelectField = ({
 }) =>
   <FormGroup
     controlId={input.name}
-    validationState={error ? (touched ? 'error' : 'warning') : undefined}
+    validationState={error ? 'error' : dirty ? 'warning' : undefined}
   >
     <ControlLabel>
       {label}
@@ -38,12 +38,7 @@ const SelectField = ({
     </FormControl>
     {error &&
       <HelpBlock>
-        {touched
-          ? error
-          : <FormattedMessage
-              defaultMessage="This field is required."
-              id="app.field.isRequired"
-            />}
+        {' '}{error}{' '}
       </HelpBlock>}
   </FormGroup>;
 
@@ -51,7 +46,11 @@ SelectField.propTypes = {
   input: PropTypes.shape({
     name: PropTypes.string.isRequired
   }).isRequired,
-  meta: PropTypes.shape({ error: PropTypes.any, touched: PropTypes.bool }),
+  meta: PropTypes.shape({
+    error: PropTypes.any,
+    dirty: PropTypes.bool,
+    touched: PropTypes.bool
+  }),
   type: PropTypes.string,
   label: PropTypes.oneOfType([
     PropTypes.string,
