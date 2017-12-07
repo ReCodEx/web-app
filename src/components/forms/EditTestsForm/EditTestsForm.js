@@ -106,8 +106,8 @@ class EditTestsForm extends Component {
 
 EditTestsForm.propTypes = {
   values: PropTypes.array,
-  handleSubmit: PropTypes.func.isRequired,
   reset: PropTypes.func.isRequired,
+  handleSubmit: PropTypes.func.isRequired,
   dirty: PropTypes.bool,
   submitting: PropTypes.bool,
   hasFailed: PropTypes.bool,

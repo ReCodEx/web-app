@@ -7,6 +7,8 @@ import { reduxForm } from 'redux-form';
 import { EditSimpleLimitsField } from '../Fields';
 import SubmitButton from '../SubmitButton';
 import FormBox from '../../widgets/FormBox';
+import Button from '../../widgets/FlatButton';
+import { RefreshIcon } from '../../icons';
 
 import {
   encodeTestName,
@@ -22,6 +24,7 @@ const EditSimpleLimitsForm = ({
   cloneHorizontally,
   cloneVertically,
   cloneAll,
+  reset,
   handleSubmit,
   anyTouched,
   dirty,
@@ -43,6 +46,21 @@ const EditSimpleLimitsForm = ({
     dirty={dirty}
     footer={
       <div className="text-center">
+        {dirty &&
+          <span>
+            <Button
+              type="reset"
+              onClick={reset}
+              bsStyle={'danger'}
+              className="btn-flat"
+            >
+              <RefreshIcon /> &nbsp;
+              <FormattedMessage
+                id="app.editSimpleLimitsForm.reset"
+                defaultMessage="Reset"
+              />
+            </Button>{' '}
+          </span>}
         <SubmitButton
           id="editSimpleLimits"
           invalid={invalid}
@@ -156,6 +174,7 @@ EditSimpleLimitsForm.propTypes = {
   cloneHorizontally: PropTypes.func.isRequired,
   cloneVertically: PropTypes.func.isRequired,
   cloneAll: PropTypes.func.isRequired,
+  reset: PropTypes.func.isRequired,
   handleSubmit: PropTypes.func.isRequired,
   anyTouched: PropTypes.bool,
   dirty: PropTypes.bool,

@@ -6,12 +6,15 @@ import { Alert, Row, Col } from 'react-bootstrap';
 
 import { CheckboxField } from '../Fields';
 import SubmitButton from '../SubmitButton';
+import Button from '../../widgets/FlatButton';
+import { RefreshIcon } from '../../icons';
 
 class EditEnvironmentSimpleForm extends Component {
   render() {
     const {
-      anyTouched,
+      dirty,
       submitting,
+      reset,
       handleSubmit,
       hasFailed = false,
       hasSucceeded = false,
@@ -43,31 +46,47 @@ class EditEnvironmentSimpleForm extends Component {
         </Row>
 
         <div className="text-center">
+          {dirty &&
+            <span>
+              <Button
+                type="reset"
+                onClick={reset}
+                bsStyle={'danger'}
+                className="btn-flat"
+              >
+                <RefreshIcon /> &nbsp;
+                <FormattedMessage
+                  id="app.editEnvironmentSimpleForm.reset"
+                  defaultMessage="Reset"
+                />
+              </Button>{' '}
+            </span>}
+
           <SubmitButton
             id="editTests"
             invalid={invalid}
             submitting={submitting}
             hasSucceeded={hasSucceeded}
-            dirty={anyTouched}
+            dirty={dirty}
             hasFailed={hasFailed}
             handleSubmit={handleSubmit}
             messages={{
               submit: (
                 <FormattedMessage
                   id="app.editEnvironmentSimpleForm.submit"
-                  defaultMessage="Change configuration"
+                  defaultMessage="Save Environments"
                 />
               ),
               submitting: (
                 <FormattedMessage
                   id="app.editEnvironmentSimpleForm.submitting"
-                  defaultMessage="Saving configuration ..."
+                  defaultMessage="Saving Environments ..."
                 />
               ),
               success: (
                 <FormattedMessage
                   id="app.editEnvironmentSimpleForm.success"
-                  defaultMessage="Configuration was changed."
+                  defaultMessage="Environments Saved."
                 />
               )
             }}
@@ -80,8 +99,9 @@ class EditEnvironmentSimpleForm extends Component {
 
 EditEnvironmentSimpleForm.propTypes = {
   values: PropTypes.array,
+  reset: PropTypes.func.isRequired,
   handleSubmit: PropTypes.func.isRequired,
-  anyTouched: PropTypes.bool,
+  dirty: PropTypes.bool,
   submitting: PropTypes.bool,
   hasFailed: PropTypes.bool,
   hasSucceeded: PropTypes.bool,

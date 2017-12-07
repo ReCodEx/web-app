@@ -9,7 +9,7 @@ import OnOffCheckbox from '../OnOffCheckbox';
 const CheckboxField = ({
   input,
   onOff = false,
-  meta: { touched, error },
+  meta: { dirty, error },
   label,
   ...props
 }) => {
@@ -17,7 +17,7 @@ const CheckboxField = ({
   /* eslint-disable no-unneeded-ternary */
   return (
     <FormGroup
-      validationState={error ? (touched ? 'error' : 'warning') : undefined}
+      validationState={error ? 'error' : dirty ? 'warning' : undefined}
       controlId={input.name}
     >
       <Component {...props} {...input} checked={input.value ? true : false}>
@@ -25,12 +25,7 @@ const CheckboxField = ({
       </Component>
       {error &&
         <HelpBlock>
-          {' '}{touched
-            ? error
-            : <FormattedMessage
-                defaultMessage="This field is required."
-                id="app.field.isRequired"
-              />}{' '}
+          {' '}{error}{' '}
         </HelpBlock>}
     </FormGroup>
   );

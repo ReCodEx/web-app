@@ -93,7 +93,7 @@ const EditSimpleLimitsField = ({
               label={
                 <FormattedMessage
                   id="app.fields.limits.memory"
-                  defaultMessage="Memory Limit [KiB]:"
+                  defaultMessage="Memory [KiB]:"
                 />
               }
               validate={validateMemory}
@@ -152,7 +152,7 @@ const EditSimpleLimitsField = ({
               label={
                 <FormattedMessage
                   id="app.fields.limits.time"
-                  defaultMessage="Time Limit [s]:"
+                  defaultMessage="Time [s]:"
                 />
               }
               {...props}
