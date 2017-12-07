@@ -90,9 +90,9 @@ class EditExerciseConfig extends Component {
       exerciseConfig,
       exerciseEnvironmentConfig,
       exerciseScoreConfig,
-      editEnvironmentSimpleLimits,
+      // editEnvironmentSimpleLimits,
       pipelines,
-      limits,
+      // limits,
       editScoreConfig,
       superadmin,
       intl: { locale }

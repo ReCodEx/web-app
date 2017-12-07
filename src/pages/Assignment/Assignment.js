@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
-import { Col, Row, Alert } from 'react-bootstrap';
+import { Col, Row } from 'react-bootstrap';
 
 import Button from '../../components/widgets/FlatButton';
 import { LinkContainer } from 'react-router-bootstrap';
@@ -47,6 +47,7 @@ import LocalizedTexts from '../../components/helpers/LocalizedTexts';
 import SubmitSolutionButton from '../../components/Assignments/SubmitSolutionButton';
 import SubmitSolutionContainer from '../../containers/SubmitSolutionContainer';
 import SubmissionsTable from '../../components/Assignments/SubmissionsTable';
+import AssignmentSync from '../../components/Assignments/Assignment/AssignmentSync';
 
 import withLinks from '../../hoc/withLinks';
 
@@ -177,102 +178,10 @@ class Assignment extends Component {
               </Col>
             </Row>
             {(isSuperAdmin || isSupervisorOf(assignment.groupId)) &&
-              (!assignment.exerciseSynchronizationInfo.exerciseConfig
-                .upToDate ||
-                !assignment.exerciseSynchronizationInfo
-                  .exerciseEnvironmentConfigs.upToDate ||
-                !assignment.exerciseSynchronizationInfo.hardwareGroups
-                  .upToDate ||
-                !assignment.exerciseSynchronizationInfo.localizedTexts
-                  .upToDate ||
-                !assignment.exerciseSynchronizationInfo.limits.upToDate ||
-                !assignment.exerciseSynchronizationInfo.scoreConfig.upToDate ||
-                !assignment.exerciseSynchronizationInfo.scoreCalculator
-                  .upToDate) &&
-              <Row>
-                <Col sm={12}>
-                  <Alert bsStyle="warning">
-                    <h4>
-                      <FormattedMessage
-                        id="app.assignment.syncRequired"
-                        defaultMessage="The exercise was updated!"
-                      />
-                    </h4>
-                    <div>
-                      <FormattedMessage
-                        id="app.assignment.syncDescription"
-                        defaultMessage="The exercise for this assignment was updated in following categories:"
-                      />
-                      <ul>
-                        {!assignment.exerciseSynchronizationInfo.exerciseConfig
-                          .upToDate &&
-                          <li>
-                            <FormattedMessage
-                              id="app.assignment.syncExerciseConfig"
-                              defaultMessage="Exercise configuration"
-                            />
-                          </li>}
-                        {!assignment.exerciseSynchronizationInfo
-                          .exerciseEnvironmentConfigs.upToDate &&
-                          <li>
-                            <FormattedMessage
-                              id="app.assignment.syncExerciseEnvironmentConfigs"
-                              defaultMessage="Environment configuration"
-                            />
-                          </li>}
-                        {!assignment.exerciseSynchronizationInfo.hardwareGroups
-                          .upToDate &&
-                          <li>
-                            <FormattedMessage
-                              id="app.assignment.syncHardwareGroups"
-                              defaultMessage="Hardware groups"
-                            />
-                          </li>}
-                        {!assignment.exerciseSynchronizationInfo.localizedTexts
-                          .upToDate &&
-                          <li>
-                            <FormattedMessage
-                              id="app.assignment.syncLocalizedTexts"
-                              defaultMessage="Localized texts"
-                            />
-                          </li>}
-                        {!assignment.exerciseSynchronizationInfo.limits
-                          .upToDate &&
-                          <li>
-                            <FormattedMessage
-                              id="app.assignment.syncLimits"
-                              defaultMessage="Limits"
-                            />
-                          </li>}
-                        {!assignment.exerciseSynchronizationInfo.scoreConfig
-                          .upToDate &&
-                          <li>
-                            <FormattedMessage
-                              id="app.assignment.syncScoreConfig"
-                              defaultMessage="Score configuration"
-                            />
-                          </li>}
-                        {!assignment.exerciseSynchronizationInfo.scoreCalculator
-                          .upToDate &&
-                          <li>
-                            <FormattedMessage
-                              id="app.assignment.syncScoreCalculator"
-                              defaultMessage="Score calculator"
-                            />
-                          </li>}
-                      </ul>
-                    </div>
-                    <p>
-                      <Button bsStyle="primary" onClick={exerciseSync}>
-                        <FormattedMessage
-                          id="app.assignment.syncButton"
-                          defaultMessage="Update this assignment"
-                        />
-                      </Button>
-                    </p>
-                  </Alert>
-                </Col>
-              </Row>}
+              <AssignmentSync
+                syncInfo={assignment.exerciseSynchronizationInfo}
+                exerciseSync={exerciseSync}
+              />}
 
             <Row>
               <Col lg={6}>

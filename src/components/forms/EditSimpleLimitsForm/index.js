@@ -1,1 +1,1 @@
-export default from './EditSimpleLimits';
+export default from './EditSimpleLimitsForm';
