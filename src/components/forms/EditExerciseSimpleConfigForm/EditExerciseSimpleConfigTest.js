@@ -64,7 +64,7 @@ const EditExerciseSimpleConfigTest = ({
       .sort((a, b) => a.name.localeCompare(b.name, intl.locale))
       .filter((item, pos, arr) => arr.indexOf(item) === pos)
       .map(data => ({
-        key: data.hashName,
+        key: data.name,
         name: data.name
       }))
   );

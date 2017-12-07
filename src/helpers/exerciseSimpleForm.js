@@ -175,12 +175,11 @@ export const transformAndSendConfigValues = (
   let testVars = [];
   for (const test of formData.config) {
     let variables = [];
-    let producesFiles = false;
 
     variables.push({
       name: 'custom-judge',
       type: 'remote-file',
-      value: test.customJudgeBinary
+      value: test.useCustomJudge ? test.customJudgeBinary : ''
     });
     variables.push({
       name: 'expected-output',
@@ -207,13 +206,12 @@ export const transformAndSendConfigValues = (
       type: 'string[]',
       value: test.runArgs
     });
-    if (test.outputFile !== '') {
+    if (test.useOutFile) {
       variables.push({
         name: 'actual-output',
         type: 'file[]',
         value: test.outputFile
       });
-      producesFiles = true;
     }
 
     let inputFiles = [];
@@ -238,7 +236,7 @@ export const transformAndSendConfigValues = (
     testVars.push({
       name: test.name,
       variables: variables,
-      producesFiles: producesFiles
+      producesFiles: test.useOutFile
     });
   }
 
@@ -246,7 +244,7 @@ export const transformAndSendConfigValues = (
   for (const environment of environments) {
     const envId = environment.runtimeEnvironmentId;
     const envPipelines = pipelines.filter(
-      pipeline => pipeline.runtimeEnvironmentId === envId
+      pipeline => pipeline.runtimeEnvironmentIds.indexOf(envId) >= 0
     );
 
     let tests = [];
