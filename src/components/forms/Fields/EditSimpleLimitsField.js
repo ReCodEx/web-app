@@ -5,33 +5,14 @@ import { FormattedMessage } from 'react-intl';
 import { Row, Col } from 'react-bootstrap';
 import Icon from 'react-fontawesome';
 
-import { TextField } from '../Fields';
 import FlatButton from '../../widgets/FlatButton';
 import Confirm from '../../forms/Confirm';
+import LimitsValueField from './LimitsValueField';
 
 import { prettyPrintBytes } from '../../helpers/stringFormatters';
 import prettyMs from 'pretty-ms';
 
 import styles from './EditSimpleLimitsField.less';
-
-const LimitsValueField = ({ input, prettyPrint, ...props }) =>
-  <tr>
-    <td width="100%" rowSpan="2">
-      <TextField {...props} input={input} />
-    </td>
-    <td className={styles.buttonsCol}>
-      <b>
-        {prettyPrint(input.value)}
-      </b>
-    </td>
-  </tr>;
-
-LimitsValueField.propTypes = {
-  input: PropTypes.shape({
-    value: PropTypes.any.isRequired
-  }).isRequired,
-  prettyPrint: PropTypes.func.isRequired
-};
 
 const prettyPrintBytesWrap = value =>
   Number.isNaN(Number(value)) ? '-' : prettyPrintBytes(Number(value) * 1024);
@@ -87,8 +68,8 @@ const validateValue = (ranges, pretty) => value => {
   return undefined;
 };
 
-const validateMemory = validateValue(limitRanges.memory, prettyPrintBytes);
-const validateTime = validateValue(limitRanges.time, prettyMs);
+const validateMemory = validateValue(limitRanges.memory, prettyPrintBytesWrap);
+const validateTime = validateValue(limitRanges.time, prettyPrintMsWrap);
 
 const EditSimpleLimitsField = ({
   prefix,

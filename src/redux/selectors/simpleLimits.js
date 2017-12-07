@@ -1,24 +1,9 @@
 import { createSelector } from 'reselect';
-import { Map } from 'immutable';
 import { getExerciseRuntimeEnvironments } from './exercises';
 import { endpointDisguisedAsIdFactory } from '../modules/simpleLimits';
 
 const getLimits = state => state.simpleLimits;
 const EMPTY_OBJ = {};
-const EMPTY_MAP = Map();
-
-/*
-export const simpleLimitsSelector = (exerciseId, runtimeEnvironmentId) =>
-  createSelector(getLimits, limits =>
-    limits.getIn([
-      'resources',
-      endpointDisguisedAsIdFactory({
-        exerciseId,
-        runtimeEnvironmentId
-      })
-    ])
-  );
-*/
 
 export const simpleLimitsSelector = createSelector(getLimits, limits =>
   limits.get('resources')

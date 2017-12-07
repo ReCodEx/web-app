@@ -284,6 +284,10 @@ export const transformAndSendConfigValues = (
   return setConfig({ config: envs });
 };
 
+/**
+ * Assemble data from all simpleLimits environments into one table.
+ * Also ensures proper encoding for environment IDs and test names, which are used as keys.
+ */
 export const getLimitsInitValues = (
   limits,
   tests,
@@ -296,8 +300,8 @@ export const getLimitsInitValues = (
     const testId = encodeTestName(test.name);
     res[testId] = {};
     environments.forEach(environment => {
-      const envId = encodeEnvironmentId(environment.id); // the name can be anything, but it must be compatible with redux-form <Field>
-      const lim = limits.getIn([
+      const envId = encodeEnvironmentId(environment.id);
+      let lim = limits.getIn([
         endpointDisguisedAsIdFactory({
           exerciseId,
           runtimeEnvironmentId: environment.id
@@ -305,15 +309,40 @@ export const getLimitsInitValues = (
         'data',
         test.name
       ]);
-      res[testId][envId] = lim
-        ? lim.toJS()
-        : {
-            // default
-            memory: 0,
-            'wall-time': 0
-          };
+      if (lim) {
+        lim = lim.toJS();
+      }
+
+      res[testId][envId] = {
+        memory: lim ? String(lim.memory) : '0',
+        'wall-time': lim ? String(lim['wall-time']) : '0'
+      };
     });
   });
 
   return { limits: res };
 };
+
+/**
+ * Transform form data and pass them to dispatching function.
+ * The data have to be re-assembled, since they use different format and keys are encoded.
+ * The dispatching function is invoked for every environment and all promise is returned.
+ */
+export const transformAndSendLimitsValues = (
+  formData,
+  tests,
+  runtimeEnvironments,
+  editEnvironmentSimpleLimits
+) =>
+  Promise.all(
+    runtimeEnvironments.map(environment => {
+      const envId = encodeEnvironmentId(environment.id);
+      const data = {
+        limits: tests.reduce((acc, test) => {
+          acc[test.name] = formData.limits[encodeTestName(test.name)][envId];
+          return acc;
+        }, {})
+      };
+      return editEnvironmentSimpleLimits(environment.id, data);
+    })
+  );

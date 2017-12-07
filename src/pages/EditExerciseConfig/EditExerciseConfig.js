@@ -14,7 +14,6 @@ import { LocalizedExerciseName } from '../../components/helpers/LocalizedNames';
 import EditExerciseConfigForm from '../../components/forms/EditExerciseConfigForm/EditExerciseConfigForm';
 import EditEnvironmentConfigForm from '../../components/forms/EditEnvironmentConfigForm';
 import EditScoreConfigForm from '../../components/forms/EditScoreConfigForm';
-import EditSimpleLimitsBox from '../../components/Exercises/EditSimpleLimitsBox';
 
 import SupplementaryFilesTableContainer from '../../containers/SupplementaryFilesTableContainer';
 
@@ -22,10 +21,7 @@ import { fetchExerciseIfNeeded } from '../../redux/modules/exercises';
 import { fetchPipelines } from '../../redux/modules/pipelines';
 import {
   fetchExerciseEnvironmentSimpleLimitsIfNeeded,
-  editEnvironmentSimpleLimits,
-  setHorizontally,
-  setVertically,
-  setAll
+  editEnvironmentSimpleLimits
 } from '../../redux/modules/simpleLimits';
 import {
   fetchExerciseConfigIfNeeded,
@@ -97,9 +93,6 @@ class EditExerciseConfig extends Component {
       editEnvironmentSimpleLimits,
       pipelines,
       limits,
-      setHorizontally,
-      setVertically,
-      setAll,
       editScoreConfig,
       superadmin,
       intl: { locale }
@@ -210,6 +203,7 @@ class EditExerciseConfig extends Component {
                           exercise={exercise}
                           pipelines={pipelines}
                         />}
+                      {/* Limit editation was completely redefined in simple form.
                       <EditSimpleLimitsBox
                         editLimits={editEnvironmentSimpleLimits}
                         environments={exercise.runtimeEnvironments}
@@ -218,7 +212,7 @@ class EditExerciseConfig extends Component {
                         setVertically={setVertically}
                         setHorizontally={setHorizontally}
                         setAll={setAll}
-                      />
+                      /> */}
                     </div>}
                 </ResourceRenderer>
               </Col>
@@ -246,9 +240,6 @@ EditExerciseConfig.propTypes = {
   pipelines: ImmutablePropTypes.map,
   links: PropTypes.object.isRequired,
   limits: PropTypes.func.isRequired,
-  setHorizontally: PropTypes.func.isRequired,
-  setVertically: PropTypes.func.isRequired,
-  setAll: PropTypes.func.isRequired,
   editScoreConfig: PropTypes.func.isRequired,
   superadmin: PropTypes.bool.isRequired,
   intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired
@@ -283,23 +274,6 @@ export default injectIntl(
             editEnvironmentSimpleLimits(exerciseId, runtimeEnvironmentId, data)
           ),
         setConfig: data => dispatch(setExerciseConfig(exerciseId, data)),
-        setHorizontally: (formName, runtimeEnvironmentId) => testName => () =>
-          dispatch(
-            setHorizontally(
-              formName,
-              exerciseId,
-              runtimeEnvironmentId,
-              testName
-            )
-          ),
-        setVertically: (formName, runtimeEnvironmentId) => testName => () =>
-          dispatch(
-            setVertically(formName, exerciseId, runtimeEnvironmentId, testName)
-          ),
-        setAll: (formName, runtimeEnvironmentId) => testName => () =>
-          dispatch(
-            setAll(formName, exerciseId, runtimeEnvironmentId, testName)
-          ),
         editScoreConfig: data => dispatch(setScoreConfig(exerciseId, data))
       })
     )(EditExerciseConfig)

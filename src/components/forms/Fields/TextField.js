@@ -11,7 +11,7 @@ import {
 
 const TextField = ({
   input: { value, ...input },
-  meta: { touched, error },
+  meta: { touched, dirty, error },
   type = 'text',
   label,
   groupClassName = '',
@@ -19,7 +19,7 @@ const TextField = ({
 }) =>
   <FormGroup
     controlId={input.name}
-    validationState={error ? (touched ? 'error' : 'warning') : undefined}
+    validationState={error ? 'error' : dirty ? 'warning' : undefined}
     className={groupClassName}
   >
     <ControlLabel>
@@ -37,12 +37,7 @@ const TextField = ({
     />
     {error &&
       <HelpBlock>
-        {' '}{touched
-          ? error
-          : <FormattedMessage
-              defaultMessage="This field is required."
-              id="app.field.isRequired"
-            />}{' '}
+        {' '}{error}{' '}
       </HelpBlock>}
   </FormGroup>;
 
@@ -57,6 +52,7 @@ TextField.propTypes = {
   }).isRequired,
   meta: PropTypes.shape({
     touched: PropTypes.bool,
+    dirty: PropTypes.bool,
     error: PropTypes.any
   }).isRequired,
   label: PropTypes.oneOfType([

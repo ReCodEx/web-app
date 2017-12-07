@@ -50,27 +50,6 @@ export const editEnvironmentSimpleLimits = (
   );
 
 /*
-const isSimpleLimitsForm = ({ registeredFields }, testName) =>
-  registeredFields &&
-  registeredFields.hasOwnProperty(`limits.${testName}.wall-time`) &&
-  registeredFields.hasOwnProperty(`limits.${testName}.memory`);
-
-const getAllSimpleLimitsFormNames = ({ form }, testName) =>
-  Object.keys(form).filter(name => isSimpleLimitsForm(form[name], testName));
-
-const getAllTestNames = ({ form }, formName) =>
-  Object.keys(form[formName].registeredFields)
-    .map(name => {
-      const firstDot = name.indexOf('.');
-      const lastDot = name.lastIndexOf('.');
-      return name.substring(firstDot + 1, lastDot);
-    })
-    .reduce((acc, name) => (acc.indexOf(name) >= 0 ? acc : [...acc, name]), []);
-
-const field = testName => `limits.${testName}`;
-*/
-
-/*
  * Special functions for cloning buttons
  */
 

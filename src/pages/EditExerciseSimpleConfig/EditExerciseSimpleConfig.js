@@ -9,7 +9,7 @@ import Page from '../../components/layout/Page';
 import Box from '../../components/widgets/Box';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import { LocalizedExerciseName } from '../../components/helpers/LocalizedNames';
-import EditSimpleLimitsForm from '../../components/forms/EditSimpleLimits/EditSimpleLimitsForm';
+import EditSimpleLimitsForm from '../../components/forms/EditSimpleLimitsForm/EditSimpleLimitsForm';
 import SupplementaryFilesTableContainer from '../../containers/SupplementaryFilesTableContainer';
 import EditTestsForm from '../../components/forms/EditTestsForm';
 import EditExerciseSimpleConfigForm from '../../components/forms/EditExerciseSimpleConfigForm';
@@ -61,29 +61,9 @@ import {
   transformAndSendTestsValues,
   getSimpleConfigInitValues,
   transformAndSendConfigValues,
-  getLimitsInitValues
+  getLimitsInitValues,
+  transformAndSendLimitsValues
 } from '../../helpers/exerciseSimpleForm';
-
-const getLimitsInitValuesOld = (limits, tests, environments) => {
-  let res = {};
-
-  tests.forEach(test => {
-    const testId = 'test' + btoa(test.name); // the name can be anything, but it must be compatible with redux-form <Field>
-    res[testId] = {};
-    environments.forEach(environment => {
-      const envId = 'env' + btoa(environment.id); // the name can be anything, but it must be compatible with redux-form <Field>
-      res[testId][envId] =
-        limits[environment.id] && limits[environment.id][test.name]
-          ? limits[environment.id][test.name]
-          : {
-              memory: 0,
-              'wall-time': 0
-            };
-    });
-  });
-
-  return { limits: res };
-};
 
 class EditExerciseSimpleConfig extends Component {
   componentWillMount = () => this.props.loadAsync();
@@ -293,10 +273,18 @@ class EditExerciseSimpleConfig extends Component {
 
             <Row>
               <Col lg={12}>
-                <ResourceRenderer resource={exerciseTests}>
+                <ResourceRenderer
+                  resource={[exerciseTests, ...limits.toArray()]}
+                >
                   {tests =>
                     <EditSimpleLimitsForm
-                      editLimits={editEnvironmentSimpleLimits}
+                      onSubmit={data =>
+                        transformAndSendLimitsValues(
+                          data,
+                          tests,
+                          exercise.runtimeEnvironments,
+                          editEnvironmentSimpleLimits
+                        )}
                       environments={exercise.runtimeEnvironments}
                       tests={tests.sort((a, b) =>
                         a.name.localeCompare(b.name, locale)
@@ -312,22 +300,6 @@ class EditExerciseSimpleConfig extends Component {
                       cloneAll={cloneAll}
                     />}
                 </ResourceRenderer>
-                {/*
-                  <ResourceRenderer resource={exerciseConfig}>
-                  {config =>
-                    <div>
-                      <EditSimpleLimitsBox
-                        editLimits={editEnvironmentSimpleLimits}
-                        environments={exercise.runtimeEnvironments}
-                        limits={limits}
-                        config={config}
-                        setVertically={setVertically}
-                        setHorizontally={setHorizontally}
-                        setAll={setAll}
-                      />
-                    </div>
-                                    </ResourceRenderer>
-                                    */}
               </Col>
             </Row>
           </div>}
@@ -382,7 +354,7 @@ export default injectIntl(
       (dispatch, { params: { exerciseId } }) => ({
         loadAsync: () =>
           EditExerciseSimpleConfig.loadAsync({ exerciseId }, dispatch),
-        editEnvironmentSimpleLimits: runtimeEnvironmentId => data =>
+        editEnvironmentSimpleLimits: (runtimeEnvironmentId, data) =>
           dispatch(
             editEnvironmentSimpleLimits(exerciseId, runtimeEnvironmentId, data)
           ),

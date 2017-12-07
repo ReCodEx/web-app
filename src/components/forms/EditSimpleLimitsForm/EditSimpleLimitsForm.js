@@ -12,17 +12,19 @@ import {
   encodeTestName,
   encodeEnvironmentId
 } from '../../../redux/modules/simpleLimits';
+import prettyMs from 'pretty-ms';
 
 import styles from './styles.less';
 
 const EditSimpleLimitsForm = ({
   environments,
-  editLimits,
   tests,
   cloneHorizontally,
   cloneVertically,
   cloneAll,
+  handleSubmit,
   anyTouched,
+  dirty,
   submitting,
   submitFailed,
   submitSucceeded,
@@ -36,18 +38,18 @@ const EditSimpleLimitsForm = ({
       />
     }
     unlimitedHeight
-    /* type={submitSucceeded ? 'success' : undefined} */
+    success={submitSucceeded}
+    dirty={dirty}
     footer={
       <div className="text-center">
         <SubmitButton
           id="editSimpleLimits"
           invalid={invalid}
           submitting={submitting}
-          dirty={anyTouched}
+          dirty={dirty}
           hasSucceeded={submitSucceeded}
           hasFailed={submitFailed}
-          handleSubmit={f => f}
-          /*        asyncValidating={asyncValidating} */
+          handleSubmit={handleSubmit}
           messages={{
             submit: (
               <FormattedMessage
@@ -81,8 +83,8 @@ const EditSimpleLimitsForm = ({
     {submitFailed &&
       <Alert bsStyle="danger">
         <FormattedMessage
-          id="app.bonusPointsForm.failed"
-          defaultMessage="Cannot save the bonus points."
+          id="app.editSimpleLimitsForm.failed"
+          defaultMessage="Cannot save the exercise limits. Please try again later."
         />
       </Alert>}
 
@@ -95,7 +97,7 @@ const EditSimpleLimitsForm = ({
               key={'th-' + environment.id}
               className={styles.limitsTableHeading}
             >
-              {environment.id}
+              {environment.name}
             </th>
           )}
         </tr>
@@ -141,15 +143,6 @@ const EditSimpleLimitsForm = ({
                 </td>
               );
             })}
-
-            {/* <LimitsField
-            prefix={`limits.${test.name}`}
-            label={test}
-            id={`${envName}/${test.name}`}
-            setHorizontally={setHorizontally(test.name)}
-            setVertically={setVertically(test.name)}
-            setAll={setAll(test.name)}
-          /> */}
           </tr>
         )}
       </tbody>
@@ -159,11 +152,12 @@ const EditSimpleLimitsForm = ({
 EditSimpleLimitsForm.propTypes = {
   tests: PropTypes.array.isRequired,
   environments: PropTypes.array,
-  editLimits: PropTypes.func.isRequired,
   cloneHorizontally: PropTypes.func.isRequired,
   cloneVertically: PropTypes.func.isRequired,
   cloneAll: PropTypes.func.isRequired,
+  handleSubmit: PropTypes.func.isRequired,
   anyTouched: PropTypes.bool,
+  dirty: PropTypes.bool,
   submitting: PropTypes.bool,
   submitFailed: PropTypes.bool,
   submitSucceeded: PropTypes.bool,
@@ -172,78 +166,63 @@ EditSimpleLimitsForm.propTypes = {
 
 const validate = ({ limits }) => {
   const errors = {};
-  /*
-  for (let test of Object.keys(limits)) {
-    const testErrors = {};
-    const fields = limits[test];
+  const maxSumTime = 300; // 5 minutes
 
-    if (!fields['memory'] || fields['memory'].length === 0) {
-      testErrors['memory'] = (
-        <FormattedMessage
-          id="app.editEnvironmentLimitsForm.validation.memory"
-          defaultMessage="You must set the memory limit."
-        />
-      );
-    } else if (
-      Number(fields['memory']).toString() !== fields['memory'] ||
-      Number(fields['memory']) <= 0
-    ) {
-      testErrors['memory'] = (
-        <FormattedMessage
-          id="app.editEnvironmentLimitsForm.validation.memory.mustBePositive"
-          defaultMessage="You must set the memory limit to a positive number."
-        />
-      );
-    }
+  // Compute sum of wall times for each environment.
+  let sums = {};
+  Object.keys(limits).forEach(test =>
+    Object.keys(limits[test]).forEach(env => {
+      if (limits[test][env]['wall-time']) {
+        const val = Number(limits[test][env]['wall-time']);
+        if (!Number.isNaN(val) && val > 0) {
+          sums[env] = (sums[env] || 0) + val;
+        }
+      }
+    })
+  );
 
-    if (!fields['time'] || fields['time'].length === 0) {
-      testErrors['time'] = (
-        <FormattedMessage
-          id="app.editEnvironmentLimitsForm.validation.time"
-          defaultMessage="You must set the time limit."
-        />
-      );
-    } else if (
-      Number(fields['time']).toString() !== fields['time'] ||
-      Number(fields['time']) <= 0
-    ) {
-      testErrors['time'] = (
-        <FormattedMessage
-          id="app.editEnvironmentLimitsForm.validation.time.mustBePositive"
-          defaultMessage="You must set the time limit to a positive number."
-        />
-      );
+  // Check if some environemnts have exceeded the limit ...
+  const limitsErrors = {};
+  Object.keys(limits).forEach(test => {
+    const testsErrors = {};
+    Object.keys(sums).forEach(env => {
+      if (sums[env] > maxSumTime) {
+        testsErrors[env] = {
+          'wall-time': (
+            <FormattedMessage
+              id="app.editSimpleLimitsForm.validation.timeSum"
+              defaultMessage="The sum of time limits ({sum}) exceeds allowed maximum ({max})."
+              values={{
+                sum: prettyMs(sums[env] * 1000),
+                max: prettyMs(maxSumTime * 1000)
+              }}
+            />
+          )
+        };
+      }
+    });
+    if (Object.keys(testsErrors).length > 0) {
+      limitsErrors[test] = testsErrors;
     }
-
-    if (!fields['parallel'] || fields['parallel'].length === 0) {
-      testErrors['parallel'] = (
-        <FormattedMessage
-          id="app.editEnvironmentLimitsForm.validation.parallel"
-          defaultMessage="You must set the limit for the number of parallel processes."
-        />
-      );
-    } else if (
-      Number(fields['parallel']).toString() !== fields['parallel'] ||
-      Number(fields['parallel']) <= 0
-    ) {
-      testErrors['parallel'] = (
-        <FormattedMessage
-          id="app.editEnvironmentLimitsForm.validation.parallel.mustBePositive"
-          defaultMessage="You must set the limit for the number of parallel processes to a positive number."
-        />
-      );
-    }
-
-    if (testErrors.length > 0) {
-      errors[test] = testErrors;
-    }
+  });
+  if (Object.keys(limitsErrors).length > 0) {
+    errors['limits'] = limitsErrors;
   }
-*/
+
   return errors;
 };
 
 export default reduxForm({
   form: 'editSimpleLimits',
   enableReinitialize: true,
-  keepDirtyOnReinitialize: true
+  keepDirtyOnReinitialize: true,
+  immutableProps: [
+    'environments',
+    'tests',
+    'cloneHorizontally',
+    'cloneVertically',
+    'cloneAll',
+    'handleSubmit'
+  ],
+  validate
 })(EditSimpleLimitsForm);

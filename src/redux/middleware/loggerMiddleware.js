@@ -1,25 +1,28 @@
-const middleware = isDev => store => next => action => {
-  /* eslint no-console: ["error", { allow: ["log", "error"] }] */
-  let verbose = true;
+const middleware = (
+  noDOM,
+  verbose,
+  fullException
+) => store => next => action => {
+  /* eslint no-console: ["error", { allow: ["log", "error", "debug"] }] */
   var actionType = action.type;
   if (verbose) {
-    console.log('Starting ' + actionType);
-    console.log(action);
-  } else if (isDev) {
-    console.log(actionType);
+    console.debug('Starting ' + actionType);
+    console.debug(action);
+  } else if (noDOM) {
+    console.debug(actionType);
   }
 
   try {
     var res = next(action);
   } catch (e) {
-    console.error('Exception thrown when processing action ' + actionType);
-    if (verbose) console.error(e);
+    console.log('Exception thrown when processing action ' + actionType);
+    if (fullException) console.error(e);
     throw e;
   }
   if (verbose) {
-    console.log('State After Action ' + actionType);
-    console.log(store.getState().groups);
-    console.log('--------------------');
+    console.debug('State After Action ' + actionType);
+    console.debug(store.getState().groups);
+    console.debug('--------------------');
   }
 
   return res;

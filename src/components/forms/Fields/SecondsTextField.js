@@ -5,6 +5,7 @@ import TextField from './TextField';
 import { HelpBlock } from 'react-bootstrap';
 import { FormattedMessage } from 'react-intl';
 
+// !!! this component is no longer used in EditSimpleLimits, but it so may happen it will be recycled for the complex edit form...
 const SecondsTextField = ({ input, ...props }) =>
   <div>
     <TextField {...props} input={input} />

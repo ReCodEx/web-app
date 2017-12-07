@@ -8,6 +8,7 @@ import { KiloBytesTextField, SecondsTextField } from '../Fields';
 import FlatButton from '../../widgets/FlatButton';
 import Confirm from '../../forms/Confirm';
 
+// !!! this component is no longer used in EditSimpleLimits, but it so may happen it will be recycled for the complex edit form...
 const LimitsField = ({
   label,
   prefix,
