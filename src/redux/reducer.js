@@ -38,7 +38,7 @@ import userSwitching from './modules/userSwitching';
 import runtimeEnvironments from './modules/runtimeEnvironments';
 import supplementaryFiles from './modules/supplementaryFiles';
 import pipelineFiles from './modules/pipelineFiles';
-import attachmentExerciseFiles from './modules/attachmentExerciseFiles';
+import attachmentFiles from './modules/attachmentFiles';
 import referenceSolutions from './modules/referenceSolutions';
 import hwGroups from './modules/hwGroups';
 import sisStatus from './modules/sisStatus';
@@ -88,7 +88,7 @@ const createRecodexReducers = token => ({
   referenceSolutions,
   referenceSolutionEvaluations,
   hwGroups,
-  attachmentExerciseFiles,
+  attachmentFiles,
   sisStatus,
   sisSubscribedGroups,
   sisSupervisedCourses,

@@ -11,35 +11,35 @@ import {
 } from '../../components/Exercises/FilesTable';
 
 import {
-  fetchAttachmentExerciseFiles,
-  addAttachmentExerciseFiles,
-  removeAttachmentExerciseFile
-} from '../../redux/modules/attachmentExerciseFiles';
+  fetchAttachmentFiles,
+  addAttachmentFiles,
+  removeAttachmentFile
+} from '../../redux/modules/attachmentFiles';
 
-import { createGetAttachmentExerciseFiles } from '../../redux/selectors/attachmentExerciseFiles';
+import { createGetAttachmentFiles } from '../../redux/selectors/attachmentFiles';
 
-const AttachmentExerciseFilesTableContainer = ({
+const AttachmentFilesTableContainer = ({
   exercise,
-  attachmentExerciseFiles,
+  attachmentFiles,
   loadFiles,
   addFiles,
   removeFile
 }) =>
   <FilesTableContainer
     uploadId={`attachment-exercise-files-${exercise.id}`}
-    attachments={attachmentExerciseFiles}
+    attachments={attachmentFiles}
     loadFiles={loadFiles}
     addFiles={addFiles}
     removeFile={removeFile}
     title={
       <FormattedMessage
-        id="app.attachmentExerciseFilesTable.title"
+        id="app.attachmentFilesTable.title"
         defaultMessage="Attached files"
       />
     }
     description={
       <FormattedMessage
-        id="app.attachmentExerciseFilesTable.description"
+        id="app.attachmentFilesTable.description"
         defaultMessage="Attached files are files which can be used within exercise description using links provided below. Attached files can be viewed or downloaded by students."
       />
     }
@@ -47,12 +47,12 @@ const AttachmentExerciseFilesTableContainer = ({
     RowComponent={AttachmentFilesTableRow}
   />;
 
-AttachmentExerciseFilesTableContainer.propTypes = {
+AttachmentFilesTableContainer.propTypes = {
   exercise: PropTypes.shape({
     id: PropTypes.string.isRequired,
-    attachmentExerciseFilesIds: PropTypes.array.isRequired
+    attachmentFilesIds: PropTypes.array.isRequired
   }).isRequired,
-  attachmentExerciseFiles: ImmutablePropTypes.map,
+  attachmentFiles: ImmutablePropTypes.map,
   loadFiles: PropTypes.func.isRequired,
   addFiles: PropTypes.func.isRequired,
   removeFile: PropTypes.func.isRequired
@@ -60,16 +60,16 @@ AttachmentExerciseFilesTableContainer.propTypes = {
 
 export default connect(
   (state, { exercise }) => {
-    const getAttachmentExerciseFiles = createGetAttachmentExerciseFiles(
-      exercise.attachmentExerciseFilesIds
+    const getAttachmentFiles = createGetAttachmentFiles(
+      exercise.attachmentFilesIds
     );
     return {
-      attachmentExerciseFiles: getAttachmentExerciseFiles(state)
+      attachmentFiles: getAttachmentFiles(state)
     };
   },
   (dispatch, { exercise }) => ({
-    loadFiles: () => dispatch(fetchAttachmentExerciseFiles(exercise.id)),
-    addFiles: files => dispatch(addAttachmentExerciseFiles(exercise.id, files)),
-    removeFile: id => dispatch(removeAttachmentExerciseFile(exercise.id, id))
+    loadFiles: () => dispatch(fetchAttachmentFiles(exercise.id)),
+    addFiles: files => dispatch(addAttachmentFiles(exercise.id, files)),
+    removeFile: id => dispatch(removeAttachmentFile(exercise.id, id))
   })
-)(AttachmentExerciseFilesTableContainer);
+)(AttachmentFilesTableContainer);

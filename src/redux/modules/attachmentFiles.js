@@ -6,7 +6,7 @@ import factory, {
 } from '../helpers/resourceManager';
 import { createApiAction } from '../middleware/apiMiddleware';
 
-const resourceName = 'attachmentExerciseFiles';
+const resourceName = 'attachmentFiles';
 const { actions, reduceActions } = factory({ resourceName });
 
 /**
@@ -14,20 +14,20 @@ const { actions, reduceActions } = factory({ resourceName });
  */
 
 export const actionTypes = {
-  ADD_FILES: 'recodex/attachmentExerciseFiles/ADD_FILES',
-  ADD_FILES_PENDING: 'recodex/attachmentExerciseFiles/ADD_FILES_PENDING',
-  ADD_FILES_FULFILLED: 'recodex/attachmentExerciseFiles/ADD_FILES_FULFILLED',
-  ADD_FILES_FAILED: 'recodex/attachmentExerciseFiles/ADD_FILES_REJECTED',
-  REMOVE_FILE: 'recodex/attachmentExerciseFiles/REMOVE_FILE',
-  REMOVE_FILE_FULFILLED: 'recodex/attachmentExerciseFiles/REMOVE_FILE_FULFILLED'
+  ADD_FILES: 'recodex/attachmentFiles/ADD_FILES',
+  ADD_FILES_PENDING: 'recodex/attachmentFiles/ADD_FILES_PENDING',
+  ADD_FILES_FULFILLED: 'recodex/attachmentFiles/ADD_FILES_FULFILLED',
+  ADD_FILES_FAILED: 'recodex/attachmentFiles/ADD_FILES_REJECTED',
+  REMOVE_FILE: 'recodex/attachmentFiles/REMOVE_FILE',
+  REMOVE_FILE_FULFILLED: 'recodex/attachmentFiles/REMOVE_FILE_FULFILLED'
 };
 
-export const fetchAttachmentExerciseFiles = exerciseId =>
+export const fetchAttachmentFiles = exerciseId =>
   actions.fetchMany({
     endpoint: `/exercises/${exerciseId}/attachment-files`
   });
 
-export const addAttachmentExerciseFiles = (exerciseId, files) =>
+export const addAttachmentFiles = (exerciseId, files) =>
   createApiAction({
     type: actionTypes.ADD_FILES,
     endpoint: `/exercises/${exerciseId}/attachment-files`,
@@ -45,7 +45,7 @@ export const addAttachmentExerciseFiles = (exerciseId, files) =>
     uploadFiles: true
   });
 
-export const removeAttachmentExerciseFile = (exerciseId, fileId) =>
+export const removeAttachmentFile = (exerciseId, fileId) =>
   createApiAction({
     type: actionTypes.REMOVE_FILE,
     endpoint: `/exercises/${exerciseId}/attachment-files/${fileId}`,

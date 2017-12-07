@@ -1,1 +1,1 @@
-export default from './AttachmentExerciseFilesTableContainer';
+export default from './AttachmentFilesTableContainer';

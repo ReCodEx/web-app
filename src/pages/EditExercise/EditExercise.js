@@ -10,7 +10,7 @@ import { reset, getFormValues } from 'redux-form';
 import Page from '../../components/layout/Page';
 import Box from '../../components/widgets/Box';
 import EditExerciseForm from '../../components/forms/EditExerciseForm';
-import AttachmentExerciseFilesTableContainer from '../../containers/AttachmentExerciseFilesTableContainer';
+import AttachmentFilesTableContainer from '../../containers/AttachmentFilesTableContainer';
 import DeleteExerciseButtonContainer from '../../containers/DeleteExerciseButtonContainer';
 import { LocalizedExerciseName } from '../../components/helpers/LocalizedNames';
 
@@ -98,7 +98,7 @@ class EditExercise extends Component {
                 />
               </Col>
               <Col lg={6}>
-                <AttachmentExerciseFilesTableContainer exercise={exercise} />
+                <AttachmentFilesTableContainer exercise={exercise} />
               </Col>
             </Row>
             <br />

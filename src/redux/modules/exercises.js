@@ -5,7 +5,7 @@ import { createApiAction } from '../middleware/apiMiddleware';
 
 import { actionTypes as supplementaryFilesActionTypes } from './supplementaryFiles';
 
-import { actionTypes as attachmentFilesActionTypes } from './attachmentExerciseFiles';
+import { actionTypes as attachmentFilesActionTypes } from './attachmentFiles';
 
 const resourceName = 'exercises';
 const { actions, reduceActions, actionTypes } = factory({ resourceName });
@@ -143,7 +143,7 @@ const reducer = handleActions(
       { payload: files, meta: { exerciseId } }
     ) =>
       state.hasIn(['resources', exerciseId])
-        ? addFiles(state, exerciseId, files, 'attachmentExerciseFilesIds')
+        ? addFiles(state, exerciseId, files, 'attachmentFilesIds')
         : state
   }),
   initialState
