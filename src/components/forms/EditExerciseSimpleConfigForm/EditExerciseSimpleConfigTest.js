@@ -15,39 +15,39 @@ import {
 const messages = defineMessages({
   normal: {
     id: 'recodex-judge-normal',
-    defaultMessage: 'Normal judge'
+    defaultMessage: 'Token judge'
   },
   float: {
     id: 'recodex-judge-float',
-    defaultMessage: 'Floating point judge'
+    defaultMessage: 'Float-numbers judge'
   },
   normalNewline: {
     id: 'recodex-judge-normal-newline',
-    defaultMessage: 'Normal judge ignoring newlines'
+    defaultMessage: 'Token judge (ignoring ends of lines)'
   },
   floatNewline: {
     id: 'recodex-judge-float-newline',
-    defaultMessage: 'Floating judge ignoring newlines'
+    defaultMessage: 'Float-numbers judge (ignoring ends of lines)'
   },
   shuffle: {
     id: 'recodex-judge-shuffle',
-    defaultMessage: 'Shuffle judge'
+    defaultMessage: 'Unordered-tokens judge'
   },
   shuffleRows: {
     id: 'recodex-judge-shuffle-rows',
-    defaultMessage: 'Shuffle judge ignoring rows'
+    defaultMessage: 'Unordered-rows judge'
   },
   shuffleAll: {
     id: 'recodex-judge-shuffle-all',
-    defaultMessage: 'Shuffle judge ignoring all'
+    defaultMessage: 'Unordered-tokens-and-rows judge'
   },
   shuffleNewline: {
     id: 'recodex-judge-shuffle-newline',
-    defaultMessage: 'Shuffle judge ignoring newlines'
+    defaultMessage: 'Unordered-tokens judge (ignoring ends of lines)'
   },
   diff: {
     id: 'diff',
-    defaultMessage: 'Diff'
+    defaultMessage: 'Binary-safe judge'
   }
 });
 
