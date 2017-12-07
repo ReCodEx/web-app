@@ -1,98 +1,108 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import { reduxForm, FieldArray, getFormValues } from 'redux-form';
+import { reduxForm, getFormValues } from 'redux-form';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import { Alert } from 'react-bootstrap';
+import FormBox from '../../widgets/FormBox';
 
 import EditExerciseSimpleConfigTest from './EditExerciseSimpleConfigTest';
 import SubmitButton from '../SubmitButton';
 import ResourceRenderer from '../../helpers/ResourceRenderer';
 import { createGetSupplementaryFiles } from '../../../redux/selectors/supplementaryFiles';
 
-class EditExerciseSimpleConfigForm extends Component {
-  render() {
-    const {
-      anyTouched,
-      submitting,
-      handleSubmit,
-      hasFailed = false,
-      hasSucceeded = false,
-      invalid,
-      formValues,
-      supplementaryFiles,
-      exerciseTests
-    } = this.props;
-    return (
-      <div>
-        {hasFailed &&
-          <Alert bsStyle="danger">
-            <FormattedMessage
-              id="app.editExerciseConfigForm.failed"
-              defaultMessage="Saving failed. Please try again later."
-            />
-          </Alert>}
-        <ResourceRenderer resource={supplementaryFiles.toArray()}>
-          {(...files) =>
-            <FieldArray
-              name="config"
-              component={EditExerciseSimpleConfigTest}
+const EditExerciseSimpleConfigForm = ({
+  anyTouched,
+  handleSubmit,
+  submitting,
+  submitFailed,
+  submitSucceeded,
+  invalid,
+  dirty,
+  formValues,
+  supplementaryFiles,
+  exerciseTests
+}) =>
+  <FormBox
+    title={
+      <FormattedMessage
+        id="app.editExercise.editConfig"
+        defaultMessage="Edit exercise configuration"
+      />
+    }
+    unlimitedHeight
+    success={submitSucceeded}
+    dirty={dirty}
+    footer={
+      <div className="text-center">
+        <SubmitButton
+          id="editExerciseSimpleConfig"
+          invalid={invalid}
+          submitting={submitting}
+          dirty={dirty}
+          hasSucceeded={submitSucceeded}
+          hasFailed={submitFailed}
+          handleSubmit={handleSubmit}
+          messages={{
+            submit: (
+              <FormattedMessage
+                id="app.editExerciseSimpleConfigForm.submit"
+                defaultMessage="Change configuration"
+              />
+            ),
+            submitting: (
+              <FormattedMessage
+                id="app.editExerciseSimpleConfigForm.submitting"
+                defaultMessage="Saving configuration ..."
+              />
+            ),
+            success: (
+              <FormattedMessage
+                id="app.editExerciseSimpleConfigForm.success"
+                defaultMessage="Configuration was changed."
+              />
+            )
+          }}
+        />
+      </div>
+    }
+  >
+    {submitFailed &&
+      <Alert bsStyle="danger">
+        <FormattedMessage
+          id="app.editExerciseConfigForm.failed"
+          defaultMessage="Saving failed. Please try again later."
+        />
+      </Alert>}
+    <ResourceRenderer resource={supplementaryFiles.toArray()}>
+      {(...files) =>
+        <div>
+          {exerciseTests.map((test, i) =>
+            <EditExerciseSimpleConfigTest
+              key={i}
               formValues={formValues}
               supplementaryFiles={files}
-              prefix="config"
-              exerciseTests={exerciseTests}
-            />}
-        </ResourceRenderer>
-
-        <p className="text-center">
-          <SubmitButton
-            id="editExerciseSimpleConfig"
-            invalid={invalid}
-            submitting={submitting}
-            hasSucceeded={hasSucceeded}
-            dirty={anyTouched}
-            hasFailed={hasFailed}
-            handleSubmit={handleSubmit}
-            messages={{
-              submit: (
-                <FormattedMessage
-                  id="app.editExerciseSimpleConfigForm.submit"
-                  defaultMessage="Change configuration"
-                />
-              ),
-              submitting: (
-                <FormattedMessage
-                  id="app.editExerciseSimpleConfigForm.submitting"
-                  defaultMessage="Saving configuration ..."
-                />
-              ),
-              success: (
-                <FormattedMessage
-                  id="app.editExerciseSimpleConfigForm.success"
-                  defaultMessage="Configuration was changed."
-                />
-              )
-            }}
-          />
-        </p>
-      </div>
-    );
-  }
-}
+              testName={test.name}
+              test={`config.${i}`}
+              i={i}
+            />
+          )}
+        </div>}
+    </ResourceRenderer>
+  </FormBox>;
 
 EditExerciseSimpleConfigForm.propTypes = {
   initialValues: PropTypes.object,
-  values: PropTypes.array,
   handleSubmit: PropTypes.func.isRequired,
   anyTouched: PropTypes.bool,
   submitting: PropTypes.bool,
   hasFailed: PropTypes.bool,
   hasSucceeded: PropTypes.bool,
+  dirty: PropTypes.bool,
+  submitFailed: PropTypes.bool,
+  submitSucceeded: PropTypes.bool,
   invalid: PropTypes.bool,
-  exercise: PropTypes.shape({
-    id: PropTypes.string.isRequired
-  }),
   formValues: PropTypes.object,
   supplementaryFiles: ImmutablePropTypes.map,
   exerciseTests: PropTypes.array
@@ -186,6 +196,14 @@ export default connect((state, { exercise }) => {
 })(
   reduxForm({
     form: 'editExerciseSimpleConfig',
+    enableReinitialize: true,
+    keepDirtyOnReinitialize: true,
+    immutableProps: [
+      'formValues',
+      'supplementaryFiles',
+      'exerciseTests',
+      'handleSubmit'
+    ],
     validate
   })(EditExerciseSimpleConfigForm)
 );
