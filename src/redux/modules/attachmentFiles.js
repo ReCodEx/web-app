@@ -6,7 +6,7 @@ import factory, {
 } from '../helpers/resourceManager';
 import { createApiAction } from '../middleware/apiMiddleware';
 
-const resourceName = 'additionalExerciseFiles';
+const resourceName = 'attachmentExerciseFiles';
 const { actions, reduceActions } = factory({ resourceName });
 
 /**
@@ -14,23 +14,23 @@ const { actions, reduceActions } = factory({ resourceName });
  */
 
 export const actionTypes = {
-  ADD_FILES: 'recodex/additionalExerciseFiles/ADD_FILES',
-  ADD_FILES_PENDING: 'recodex/additionalExerciseFiles/ADD_FILES_PENDING',
-  ADD_FILES_FULFILLED: 'recodex/additionalExerciseFiles/ADD_FILES_FULFILLED',
-  ADD_FILES_FAILED: 'recodex/additionalExerciseFiles/ADD_FILES_REJECTED',
-  REMOVE_FILE: 'recodex/additionalExerciseFiles/REMOVE_FILE',
-  REMOVE_FILE_FULFILLED: 'recodex/additionalExerciseFiles/REMOVE_FILE_FULFILLED'
+  ADD_FILES: 'recodex/attachmentExerciseFiles/ADD_FILES',
+  ADD_FILES_PENDING: 'recodex/attachmentExerciseFiles/ADD_FILES_PENDING',
+  ADD_FILES_FULFILLED: 'recodex/attachmentExerciseFiles/ADD_FILES_FULFILLED',
+  ADD_FILES_FAILED: 'recodex/attachmentExerciseFiles/ADD_FILES_REJECTED',
+  REMOVE_FILE: 'recodex/attachmentExerciseFiles/REMOVE_FILE',
+  REMOVE_FILE_FULFILLED: 'recodex/attachmentExerciseFiles/REMOVE_FILE_FULFILLED'
 };
 
-export const fetchAdditionalExerciseFiles = exerciseId =>
+export const fetchAttachmentExerciseFiles = exerciseId =>
   actions.fetchMany({
-    endpoint: `/exercises/${exerciseId}/additional-files`
+    endpoint: `/exercises/${exerciseId}/attachment-files`
   });
 
-export const addAdditionalExerciseFiles = (exerciseId, files) =>
+export const addAttachmentExerciseFiles = (exerciseId, files) =>
   createApiAction({
     type: actionTypes.ADD_FILES,
-    endpoint: `/exercises/${exerciseId}/additional-files`,
+    endpoint: `/exercises/${exerciseId}/attachment-files`,
     method: 'POST',
     body: {
       files: files.map(uploaded => uploaded.file.id)
@@ -45,10 +45,10 @@ export const addAdditionalExerciseFiles = (exerciseId, files) =>
     uploadFiles: true
   });
 
-export const removeAdditionalExerciseFile = (exerciseId, fileId) =>
+export const removeAttachmentExerciseFile = (exerciseId, fileId) =>
   createApiAction({
     type: actionTypes.REMOVE_FILE,
-    endpoint: `/exercises/${exerciseId}/additional-files/${fileId}`,
+    endpoint: `/exercises/${exerciseId}/attachment-files/${fileId}`,
     method: 'DELETE',
     meta: { exerciseId, fileId }
   });

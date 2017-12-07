@@ -1,33 +1,33 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-const AdditionalFilesTableHeaderRow = () =>
+const AttachmentFilesTableHeaderRow = () =>
   <tr>
     <th>
       <FormattedMessage
-        id="app.additionalFilesTable.fileName"
+        id="app.attachmentFilesTable.fileName"
         defaultMessage="Original filename"
       />
     </th>
     <th>
       <FormattedMessage
-        id="app.additionalFilesTable.url"
+        id="app.attachmentFilesTable.url"
         defaultMessage="URL"
       />
     </th>
     <th>
       <FormattedMessage
-        id="app.additionalFilesTable.fileSize"
+        id="app.attachmentFilesTable.fileSize"
         defaultMessage="Filesize"
       />
     </th>
     <th>
       <FormattedMessage
-        id="app.additionalFilesTable.fileUploadedAt"
+        id="app.attachmentFilesTable.fileUploadedAt"
         defaultMessage="Uploaded at"
       />
     </th>
     <th />
   </tr>;
 
-export default AdditionalFilesTableHeaderRow;
+export default AttachmentFilesTableHeaderRow;

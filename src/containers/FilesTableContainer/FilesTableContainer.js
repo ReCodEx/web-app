@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { List } from 'immutable';
 
-import AttachedFilesTable from '../../components/Exercises/AttachedFilesTable';
+import FilesTable from '../../components/Exercises/FilesTable';
 
 import { reset } from '../../redux/modules/upload';
 import {
@@ -12,14 +12,14 @@ import {
   createAllUploaded
 } from '../../redux/selectors/upload';
 
-class AttachedFilesTableContainer extends Component {
+class FilesTableContainer extends Component {
   componentWillMount() {
-    AttachedFilesTableContainer.loadData(this.props);
+    FilesTableContainer.loadData(this.props);
   }
 
   componentWillReceiveProps(newProps) {
     if (this.props.uploadId !== newProps.uploadId) {
-      AttachedFilesTableContainer.loadData(newProps);
+      FilesTableContainer.loadData(newProps);
     }
   }
 
@@ -27,10 +27,10 @@ class AttachedFilesTableContainer extends Component {
     loadFiles();
   };
 
-  render = () => <AttachedFilesTable {...this.props} />;
+  render = () => <FilesTable {...this.props} />;
 }
 
-AttachedFilesTableContainer.propTypes = {
+FilesTableContainer.propTypes = {
   uploadId: PropTypes.string.isRequired,
   attachments: ImmutablePropTypes.map,
   newFiles: ImmutablePropTypes.list,
@@ -47,4 +47,4 @@ export default connect(
   (dispatch, { uploadId, addFiles }) => ({
     addFiles: files => addFiles(files.toJS()).then(dispatch(reset(uploadId)))
   })
-)(AttachedFilesTableContainer);
+)(FilesTableContainer);

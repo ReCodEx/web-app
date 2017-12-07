@@ -4,11 +4,11 @@ import { connect } from 'react-redux';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { FormattedMessage } from 'react-intl';
 
-import AttachedFilesTableContainer from '../AttachedFilesTableContainer';
+import FilesTableContainer from '../FilesTableContainer';
 import {
   SupplementaryFilesTableHeaderRow,
   SupplementaryFilesTableRow
-} from '../../components/Exercises/AttachedFilesTable';
+} from '../../components/Exercises/FilesTable';
 
 import {
   fetchSupplementaryFilesForExercise,
@@ -27,7 +27,7 @@ const SupplementaryFilesTableContainer = ({
   removeFile,
   downloadFile
 }) =>
-  <AttachedFilesTableContainer
+  <FilesTableContainer
     uploadId={`supplementary-files-${exercise.id}`}
     attachments={supplementaryFiles}
     loadFiles={loadFiles}
