@@ -21,9 +21,11 @@ import {
   editEnvironmentSimpleLimits,
   cloneHorizontally,
   cloneVertically,
-  cloneAll
+  cloneAll,
+  fetchExerciseEnvironmentSimpleLimits
 } from '../../redux/modules/simpleLimits';
 import {
+  fetchExerciseConfig,
   fetchExerciseConfigIfNeeded,
   setExerciseConfig
 } from '../../redux/modules/exerciseConfigs';
@@ -102,6 +104,7 @@ class EditExerciseSimpleConfig extends Component {
       exercise,
       runtimeEnvironments,
       exerciseConfig,
+      fetchEnvironmentSimpleLimits,
       editEnvironmentSimpleLimits,
       exerciseEnvironmentConfig,
       editEnvironmentConfigs,
@@ -109,6 +112,7 @@ class EditExerciseSimpleConfig extends Component {
       exerciseTests,
       editScoreConfig,
       editTests,
+      fetchConfig,
       setConfig,
       limits,
       pipelines,
@@ -184,6 +188,11 @@ class EditExerciseSimpleConfig extends Component {
                             data,
                             editTests,
                             editScoreConfig
+                          ).then(() =>
+                            Promise.all([
+                              fetchConfig(),
+                              fetchEnvironmentSimpleLimits()
+                            ])
                           )}
                       />}
                   </ResourceRenderer>
@@ -309,11 +318,13 @@ EditExerciseSimpleConfig.propTypes = {
   exerciseConfig: PropTypes.object,
   exerciseEnvironmentConfig: PropTypes.object,
   editEnvironmentConfigs: PropTypes.func.isRequired,
+  fetchEnvironmentSimpleLimits: PropTypes.func.isRequired,
   editEnvironmentSimpleLimits: PropTypes.func.isRequired,
   exerciseScoreConfig: PropTypes.object,
   exerciseTests: PropTypes.object,
   editScoreConfig: PropTypes.func.isRequired,
   editTests: PropTypes.func.isRequired,
+  fetchConfig: PropTypes.func.isRequired,
   setConfig: PropTypes.func.isRequired,
   links: PropTypes.object.isRequired,
   limits: PropTypes.object.isRequired,
@@ -345,6 +356,21 @@ export default injectIntl(
       (dispatch, { params: { exerciseId } }) => ({
         loadAsync: () =>
           EditExerciseSimpleConfig.loadAsync({ exerciseId }, dispatch),
+        fetchEnvironmentSimpleLimits: () =>
+          dispatch(
+            fetchExerciseIfNeeded(exerciseId)
+          ).then(({ value: exercise }) =>
+            Promise.all(
+              exercise.runtimeEnvironments.map(environment =>
+                dispatch(
+                  fetchExerciseEnvironmentSimpleLimits(
+                    exerciseId,
+                    environment.id
+                  )
+                )
+              )
+            )
+          ),
         editEnvironmentSimpleLimits: (runtimeEnvironmentId, data) =>
           dispatch(
             editEnvironmentSimpleLimits(exerciseId, runtimeEnvironmentId, data)
@@ -353,6 +379,7 @@ export default injectIntl(
           dispatch(setExerciseEnvironmentConfig(exerciseId, data)),
         editScoreConfig: data => dispatch(setScoreConfig(exerciseId, data)),
         editTests: data => dispatch(setExerciseTests(exerciseId, data)),
+        fetchConfig: () => dispatch(fetchExerciseConfig(exerciseId)),
         setConfig: data => dispatch(setExerciseConfig(exerciseId, data)),
         cloneVertically: (
           formName,

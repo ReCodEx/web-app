@@ -49,19 +49,25 @@ const EditExerciseSimpleConfigForm = ({
             submit: (
               <FormattedMessage
                 id="app.editExerciseSimpleConfigForm.submit"
-                defaultMessage="Change configuration"
+                defaultMessage="Save Configuration"
               />
             ),
             submitting: (
               <FormattedMessage
                 id="app.editExerciseSimpleConfigForm.submitting"
-                defaultMessage="Saving configuration ..."
+                defaultMessage="Saving Configuration ..."
               />
             ),
             success: (
               <FormattedMessage
                 id="app.editExerciseSimpleConfigForm.success"
-                defaultMessage="Configuration was changed."
+                defaultMessage="Configuration Saved"
+              />
+            ),
+            validating: (
+              <FormattedMessage
+                id="app.editExerciseSimpleConfigForm.validating"
+                defaultMessage="Validating ..."
               />
             )
           }}

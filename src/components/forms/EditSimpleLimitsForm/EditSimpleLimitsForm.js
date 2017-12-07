@@ -67,13 +67,13 @@ const EditSimpleLimitsForm = ({
             success: (
               <FormattedMessage
                 id="app.editSimpleLimitsForm.success"
-                defaultMessage="Limits Saved."
+                defaultMessage="Limits Saved"
               />
             ),
             validating: (
               <FormattedMessage
                 id="app.editSimpleLimitsForm.validating"
-                defaultMessage="Validating..."
+                defaultMessage="Validating ..."
               />
             )
           }}
