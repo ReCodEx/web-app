@@ -252,25 +252,37 @@ class EditExerciseSimpleConfig extends Component {
                     const sortedTests = tests.sort((a, b) =>
                       a.name.localeCompare(b.name, locale)
                     );
-                    return (
-                      <EditExerciseSimpleConfigForm
-                        initialValues={getSimpleConfigInitValues(
-                          config,
-                          sortedTests,
-                          locale
-                        )}
-                        exercise={exercise}
-                        exerciseTests={sortedTests}
-                        onSubmit={data =>
-                          transformAndSendConfigValues(
-                            data,
-                            pipelines,
-                            environments,
+                    return tests.length > 0
+                      ? <EditExerciseSimpleConfigForm
+                          initialValues={getSimpleConfigInitValues(
+                            config,
                             sortedTests,
-                            setConfig
+                            locale
                           )}
-                      />
-                    );
+                          exercise={exercise}
+                          exerciseTests={sortedTests}
+                          onSubmit={data =>
+                            transformAndSendConfigValues(
+                              data,
+                              pipelines,
+                              environments,
+                              sortedTests,
+                              setConfig
+                            )}
+                        />
+                      : <div className="alert alert-warning">
+                          <h4>
+                            <i className="icon fa fa-warning" />{' '}
+                            <FormattedMessage
+                              id="app.editExercise.editConfig"
+                              defaultMessage="Edit exercise configuration"
+                            />
+                          </h4>
+                          <FormattedMessage
+                            id="app.editExerciseSimpleConfig.noTests"
+                            defaultMessage="There are no tests yet. The form cannot be displayed until at least one test is created."
+                          />
+                        </div>;
                   }}
                 </ResourceRenderer>
               </Col>
@@ -287,28 +299,42 @@ class EditExerciseSimpleConfig extends Component {
                   ]}
                 >
                   {(tests, envConfig) =>
-                    <EditSimpleLimitsForm
-                      onSubmit={data =>
-                        transformAndSendLimitsValues(
-                          data,
-                          tests,
-                          exercise.runtimeEnvironments,
-                          editEnvironmentSimpleLimits
-                        )}
-                      environments={exercise.runtimeEnvironments}
-                      tests={tests.sort((a, b) =>
-                        a.name.localeCompare(b.name, locale)
-                      )}
-                      initialValues={getLimitsInitValues(
-                        limits,
-                        tests,
-                        exercise.runtimeEnvironments,
-                        exercise.id
-                      )}
-                      cloneVertically={cloneVertically}
-                      cloneHorizontally={cloneHorizontally}
-                      cloneAll={cloneAll}
-                    />}
+                    tests.length > 0 && exercise.runtimeEnvironments.length > 0
+                      ? <EditSimpleLimitsForm
+                          onSubmit={data =>
+                            transformAndSendLimitsValues(
+                              data,
+                              tests,
+                              exercise.runtimeEnvironments,
+                              editEnvironmentSimpleLimits
+                            )}
+                          environments={exercise.runtimeEnvironments}
+                          tests={tests.sort((a, b) =>
+                            a.name.localeCompare(b.name, locale)
+                          )}
+                          initialValues={getLimitsInitValues(
+                            limits,
+                            tests,
+                            exercise.runtimeEnvironments,
+                            exercise.id
+                          )}
+                          cloneVertically={cloneVertically}
+                          cloneHorizontally={cloneHorizontally}
+                          cloneAll={cloneAll}
+                        />
+                      : <div className="alert alert-warning">
+                          <h4>
+                            <i className="icon fa fa-warning" />{' '}
+                            <FormattedMessage
+                              id="app.editLimitsBox.title"
+                              defaultMessage="Edit limits"
+                            />
+                          </h4>
+                          <FormattedMessage
+                            id="app.editExerciseSimpleConfig.noTestsOrEnvironments"
+                            defaultMessage="There are no tests or no enabled environments yet. The form cannot be displayed until at least one test is created and one environment is enabled."
+                          />
+                        </div>}
                 </ResourceRenderer>
               </Col>
             </Row>

@@ -217,7 +217,6 @@ const EditExerciseSimpleConfigTest = ({
                 name={`${test}.judgeBinary`}
                 component={SelectField}
                 options={[
-                  { key: '', name: '...' },
                   {
                     key: 'recodex-judge-normal',
                     name: intl.formatMessage(messages.normal)

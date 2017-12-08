@@ -12,8 +12,11 @@ import SubmitButton from '../SubmitButton';
 import ResourceRenderer from '../../helpers/ResourceRenderer';
 import { createGetSupplementaryFiles } from '../../../redux/selectors/supplementaryFiles';
 
+import Button from '../../widgets/FlatButton';
+import { RefreshIcon } from '../../icons';
+
 const EditExerciseSimpleConfigForm = ({
-  anyTouched,
+  reset,
   handleSubmit,
   submitting,
   submitFailed,
@@ -37,6 +40,22 @@ const EditExerciseSimpleConfigForm = ({
     dirty={dirty}
     footer={
       <div className="text-center">
+        {dirty &&
+          <span>
+            <Button
+              type="reset"
+              onClick={reset}
+              bsStyle={'danger'}
+              className="btn-flat"
+            >
+              <RefreshIcon /> &nbsp;
+              <FormattedMessage
+                id="app.editExerciseSimpleConfigForm.reset"
+                defaultMessage="Reset"
+              />
+            </Button>{' '}
+          </span>}
+
         <SubmitButton
           id="editExerciseSimpleConfig"
           invalid={invalid}
@@ -61,7 +80,7 @@ const EditExerciseSimpleConfigForm = ({
             success: (
               <FormattedMessage
                 id="app.editExerciseSimpleConfigForm.success"
-                defaultMessage="Configuration Saved"
+                defaultMessage="Configuration Saved."
               />
             ),
             validating: (
@@ -101,8 +120,8 @@ const EditExerciseSimpleConfigForm = ({
 
 EditExerciseSimpleConfigForm.propTypes = {
   initialValues: PropTypes.object,
+  reset: PropTypes.func.isRequired,
   handleSubmit: PropTypes.func.isRequired,
-  anyTouched: PropTypes.bool,
   submitting: PropTypes.bool,
   hasFailed: PropTypes.bool,
   hasSucceeded: PropTypes.bool,

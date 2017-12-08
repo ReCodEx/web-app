@@ -54,6 +54,8 @@ class EditTestsForm extends Component {
 
         <div className="text-center">
           {dirty &&
+            !submitting &&
+            !hasSucceeded &&
             <span>
               <Button
                 type="reset"
@@ -76,7 +78,7 @@ class EditTestsForm extends Component {
             hasSucceeded={hasSucceeded}
             dirty={dirty}
             hasFailed={hasFailed}
-            handleSubmit={handleSubmit}
+            handleSubmit={data => handleSubmit(data).then(reset)}
             messages={{
               submit: (
                 <FormattedMessage
@@ -172,6 +174,8 @@ export default connect(state => {
 })(
   reduxForm({
     form: 'editTests',
+    enableReinitialize: true,
+    keepDirtyOnReinitialize: true,
     validate
   })(EditTestsForm)
 );

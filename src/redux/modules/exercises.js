@@ -1,5 +1,5 @@
 import { handleActions } from 'redux-actions';
-import { Map } from 'immutable';
+import { Map, List } from 'immutable';
 import factory, { initialState } from '../helpers/resourceManager';
 import { createApiAction } from '../middleware/apiMiddleware';
 
@@ -135,7 +135,7 @@ const reducer = handleActions(
       { payload: files, meta: { exerciseId } }
     ) =>
       state.hasIn(['resources', exerciseId])
-        ? addFiles(state, exerciseId, files, 'supplementaryFilesIds')
+        ? updateFiles(state, exerciseId, files, 'supplementaryFilesIds')
         : state,
 
     [additionalFilesActionTypes.ADD_FILES_FULFILLED]: (
@@ -143,15 +143,15 @@ const reducer = handleActions(
       { payload: files, meta: { exerciseId } }
     ) =>
       state.hasIn(['resources', exerciseId])
-        ? addFiles(state, exerciseId, files, 'additionalExerciseFilesIds')
+        ? updateFiles(state, exerciseId, files, 'additionalExerciseFilesIds')
         : state
   }),
   initialState
 );
 
-const addFiles = (state, exerciseId, files, field) =>
+const updateFiles = (state, exerciseId, files, field) =>
   state.updateIn(['resources', exerciseId, 'data', field], list =>
-    list.push(...files.map(file => file.id))
+    List(files.map(file => file.id))
   );
 
 export default reducer;

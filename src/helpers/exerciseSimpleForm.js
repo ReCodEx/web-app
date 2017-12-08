@@ -50,7 +50,7 @@ export const getTestsInitValues = (exerciseTests, scoreConfig, locale) => {
       allWeightsSame = false;
     }
     lastWeight = testWeight;
-    res.push({ name: test.name, weight: String(testWeight) });
+    res.push({ id: test.id, name: test.name, weight: String(testWeight) });
   }
 
   return { isUniform: allWeightsSame, tests: res };
@@ -70,7 +70,9 @@ export const transformAndSendTestsValues = (
     const testWeight = uniformScore ? 100 : Number(test.weight);
     scoreConfigData.testWeights[test.name] = testWeight;
 
-    testsData.push({ name: test.name });
+    testsData.push(
+      test.id ? { id: test.id, name: test.name } : { name: test.name }
+    );
   }
 
   return Promise.all([
@@ -143,17 +145,20 @@ export const getSimpleConfigInitValues = (config, tests, locale) => {
     const standardJudge = variables.find(
       variable => variable.name === 'judge-type'
     );
-    if (standardJudge) {
-      testObj.useCustomJudge = false;
-      testObj.judgeBinary = standardJudge.value;
-    }
-
     const customJudge = variables.find(
       variable => variable.name === 'custom-judge'
     );
+
+    testObj.useCustomJudge = false;
     if (customJudge) {
       testObj.customJudgeBinary = customJudge.value;
       testObj.useCustomJudge = customJudge.value.trim() !== '';
+    }
+    if (!testObj.useCustomJudge) {
+      testObj.judgeBinary =
+        standardJudge && standardJudge.value
+          ? standardJudge.value
+          : 'recodex-judge-normal';
     }
 
     const judgeArgs = variables.find(
