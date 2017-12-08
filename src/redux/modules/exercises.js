@@ -1,16 +1,37 @@
-import { handleActions } from 'redux-actions';
-import { Map, List } from 'immutable';
-import factory, { initialState } from '../helpers/resourceManager';
-import { createApiAction } from '../middleware/apiMiddleware';
+import {
+  handleActions
+} from 'redux-actions';
+import {
+  Map,
+  List
+} from 'immutable';
+import factory, {
+  initialState
+} from '../helpers/resourceManager';
+import {
+  createApiAction
+} from '../middleware/apiMiddleware';
 
-import { actionTypes as supplementaryFilesActionTypes } from './supplementaryFiles';
+import {
+  actionTypes as supplementaryFilesActionTypes
+} from './supplementaryFiles';
 
-import { actionTypes as additionalFilesActionTypes } from './additionalExerciseFiles';
+import {
+  actionTypes as attachmentFilesActionTypes
+} from './attachmentFiles';
 
 const resourceName = 'exercises';
-const { actions, reduceActions, actionTypes } = factory({ resourceName });
+const {
+  actions,
+  reduceActions,
+  actionTypes
+} = factory({
+  resourceName
+});
 
-export { actionTypes };
+export {
+  actionTypes
+};
 
 /**
  * Actions
@@ -53,10 +74,15 @@ export const forkExercise = (id, forkId, formData = null) => {
     type: additionalActionTypes.FORK_EXERCISE,
     endpoint: `/exercises/${id}/fork`,
     method: 'POST',
-    meta: { id, forkId }
+    meta: {
+      id,
+      forkId
+    }
   };
   if (formData && formData.groupId) {
-    actionData.body = { groupId: formData.groupId };
+    actionData.body = {
+      groupId: formData.groupId
+    };
   }
   return createApiAction(actionData);
 };
@@ -72,7 +98,9 @@ export const validateExercise = (id, version) =>
     type: additionalActionTypes.VALIDATE_EXERCISE,
     endpoint: `/exercises/${id}/validate`,
     method: 'POST',
-    body: { version }
+    body: {
+      version
+    }
   });
 
 export const getVariablesForPipelines = (
@@ -81,14 +109,21 @@ export const getVariablesForPipelines = (
   pipelinesIds
 ) => {
   const body =
-    runtimeEnvironmentId === 'default'
-      ? { pipelinesIds }
-      : { runtimeEnvironmentId, pipelinesIds };
+    runtimeEnvironmentId === 'default' ? {
+      pipelinesIds
+    } : {
+      runtimeEnvironmentId,
+      pipelinesIds
+    };
   return createApiAction({
     type: additionalActionTypes.GET_PIPELINE_VARIABLES,
     method: 'POST',
     endpoint: `/exercises/${exerciseId}/config/variables`,
-    meta: { exerciseId, runtimeEnvironmentId, pipelinesIds },
+    meta: {
+      exerciseId,
+      runtimeEnvironmentId,
+      pipelinesIds
+    },
     body
   });
 };
@@ -100,51 +135,74 @@ export const getVariablesForPipelines = (
 const reducer = handleActions(
   Object.assign({}, reduceActions, {
     [additionalActionTypes.FORK_EXERCISE_PENDING]: (
-      state,
-      { meta: { id, forkId } }
-    ) =>
+        state, {
+          meta: {
+            id,
+            forkId
+          }
+        }
+      ) =>
       state.updateIn(['resources', id, 'data'], exercise => {
         if (!exercise.has('forks')) {
           exercise = exercise.set('forks', Map());
         }
 
         return exercise.update('forks', forks =>
-          forks.set(forkId, { status: forkStatuses.PENDING })
+          forks.set(forkId, {
+            status: forkStatuses.PENDING
+          })
         );
       }),
 
     [additionalActionTypes.FORK_EXERCISE_REJECTED]: (
-      state,
-      { meta: { id, forkId } }
-    ) =>
+        state, {
+          meta: {
+            id,
+            forkId
+          }
+        }
+      ) =>
       state.setIn(['resources', id, 'data', 'forks', forkId], {
         status: forkStatuses.REJECTED
       }),
 
     [additionalActionTypes.FORK_EXERCISE_FULFILLED]: (
-      state,
-      { payload: { id: exerciseId }, meta: { id, forkId } }
-    ) =>
+        state, {
+          payload: {
+            id: exerciseId
+          },
+          meta: {
+            id,
+            forkId
+          }
+        }
+      ) =>
       state.setIn(['resources', id, 'data', 'forks', forkId], {
         status: forkStatuses.FULFILLED,
         exerciseId
       }),
 
     [supplementaryFilesActionTypes.ADD_FILES_FULFILLED]: (
-      state,
-      { payload: files, meta: { exerciseId } }
-    ) =>
-      state.hasIn(['resources', exerciseId])
-        ? updateFiles(state, exerciseId, files, 'supplementaryFilesIds')
-        : state,
+        state, {
+          payload: files,
+          meta: {
+            exerciseId
+          }
+        }
+      ) =>
+      state.hasIn(['resources', exerciseId]) ?
+      updateFiles(state, exerciseId, files, 'supplementaryFilesIds') : state,
 
-    [additionalFilesActionTypes.ADD_FILES_FULFILLED]: (
-      state,
-      { payload: files, meta: { exerciseId } }
-    ) =>
-      state.hasIn(['resources', exerciseId])
-        ? updateFiles(state, exerciseId, files, 'additionalExerciseFilesIds')
-        : state
+    [attachmentFilesActionTypes.ADD_FILES_FULFILLED]: (
+        state, {
+          payload: files,
+          meta: {
+            exerciseId
+          }
+        }
+      ) =>
+      state.hasIn(['resources', exerciseId]) ?
+      updateFiles(state, exerciseId, files, 'attachmentFilesIds') : state
   }),
   initialState
 );

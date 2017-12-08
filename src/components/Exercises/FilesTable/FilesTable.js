@@ -12,10 +12,10 @@ import { SendIcon } from '../../icons';
 import UploadContainer from '../../../containers/UploadContainer';
 import ResourceRenderer from '../../helpers/ResourceRenderer';
 
-const AttachedFilesTable = ({
+const FilesTable = ({
   title = (
     <FormattedMessage
-      id="app.attachedFilesTable.title"
+      id="app.filesTable.title"
       defaultMessage="Attached files"
     />
   ),
@@ -47,7 +47,7 @@ const AttachedFilesTable = ({
           >
             <SendIcon />{' '}
             <FormattedMessage
-              id="app.attachedFilesTable.addFiles"
+              id="app.filesTable.addFiles"
               defaultMessage="Save files"
             />
           </Button>
@@ -78,7 +78,7 @@ const AttachedFilesTable = ({
               <p className="text-center">
                 <Icon name="folder-open-o" />{' '}
                 <FormattedMessage
-                  id="app.attachedFilesTable.empty"
+                  id="app.filesTable.empty"
                   defaultMessage="There are no uploaded files yet."
                 />
               </p>}
@@ -87,7 +87,7 @@ const AttachedFilesTable = ({
     </div>
   </Box>;
 
-AttachedFilesTable.propTypes = {
+FilesTable.propTypes = {
   title: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) }),
@@ -110,4 +110,4 @@ AttachedFilesTable.propTypes = {
   intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired
 };
 
-export default injectIntl(AttachedFilesTable);
+export default injectIntl(FilesTable);
