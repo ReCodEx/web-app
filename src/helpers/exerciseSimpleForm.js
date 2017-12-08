@@ -16,7 +16,8 @@ export const getEnvInitValues = environmentConfigs => {
 export const transformAndSendEnvValues = (
   formData,
   environments,
-  editEnvironmentConfigs
+  editEnvironmentConfigs,
+  reloadConfigAndLimits
 ) => {
   let res = [];
   for (const env in formData) {
@@ -28,7 +29,9 @@ export const transformAndSendEnvValues = (
     envObj.variablesTable = currentFullEnv.defaultVariables;
     res.push(envObj);
   }
-  return editEnvironmentConfigs({ environmentConfigs: res });
+  return editEnvironmentConfigs({ environmentConfigs: res }).then(
+    reloadConfigAndLimits
+  );
 };
 
 export const getTestsInitValues = (exerciseTests, scoreConfig, locale) => {

@@ -15,7 +15,10 @@ import EditTestsForm from '../../components/forms/EditTestsForm';
 import EditExerciseSimpleConfigForm from '../../components/forms/EditExerciseSimpleConfigForm';
 import EditEnvironmentSimpleForm from '../../components/forms/EditEnvironmentSimpleForm';
 
-import { fetchExerciseIfNeeded } from '../../redux/modules/exercises';
+import {
+  fetchExercise,
+  fetchExerciseIfNeeded
+} from '../../redux/modules/exercises';
 import {
   fetchExerciseEnvironmentSimpleLimitsIfNeeded,
   editEnvironmentSimpleLimits,
@@ -40,6 +43,7 @@ import withLinks from '../../hoc/withLinks';
 import { getLocalizedName } from '../../helpers/getLocalizedData';
 import { exerciseEnvironmentConfigSelector } from '../../redux/selectors/exerciseEnvironmentConfigs';
 import {
+  fetchExerciseEnvironmentConfig,
   fetchExerciseEnvironmentConfigIfNeeded,
   setExerciseEnvironmentConfig
 } from '../../redux/modules/exerciseEnvironmentConfigs';
@@ -119,6 +123,7 @@ class EditExerciseSimpleConfig extends Component {
       cloneHorizontally,
       cloneVertically,
       cloneAll,
+      reloadConfigAndLimits,
       intl: { locale }
     } = this.props;
 
@@ -220,7 +225,8 @@ class EditExerciseSimpleConfig extends Component {
                           transformAndSendEnvValues(
                             data,
                             environments,
-                            editEnvironmentConfigs
+                            editEnvironmentConfigs,
+                            reloadConfigAndLimits(exercise.id)
                           )}
                       />}
                   </ResourceRenderer>
@@ -274,9 +280,13 @@ class EditExerciseSimpleConfig extends Component {
             <Row>
               <Col lg={12}>
                 <ResourceRenderer
-                  resource={[exerciseTests, ...limits.toArray()]}
+                  resource={[
+                    exerciseTests,
+                    exerciseEnvironmentConfig,
+                    ...limits.toArray()
+                  ]}
                 >
-                  {tests =>
+                  {(tests, envConfig) =>
                     <EditSimpleLimitsForm
                       onSubmit={data =>
                         transformAndSendLimitsValues(
@@ -332,6 +342,7 @@ EditExerciseSimpleConfig.propTypes = {
   cloneHorizontally: PropTypes.func.isRequired,
   cloneVertically: PropTypes.func.isRequired,
   cloneAll: PropTypes.func.isRequired,
+  reloadConfigAndLimits: PropTypes.func.isRequired,
   intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired
 };
 
@@ -398,7 +409,23 @@ export default injectIntl(
             cloneHorizontally(formName, testName, runtimeEnvironmentId, field)
           ),
         cloneAll: (formName, testName, runtimeEnvironmentId) => field => () =>
-          dispatch(cloneAll(formName, testName, runtimeEnvironmentId, field))
+          dispatch(cloneAll(formName, testName, runtimeEnvironmentId, field)),
+
+        reloadConfigAndLimits: exerciseId => () =>
+          dispatch(fetchExercise(exerciseId)).then(({ value: exercise }) =>
+            Promise.all([
+              dispatch(fetchExerciseConfig(exerciseId)),
+              dispatch(fetchExerciseEnvironmentConfig(exerciseId)),
+              ...exercise.runtimeEnvironments.map(environment =>
+                dispatch(
+                  fetchExerciseEnvironmentSimpleLimits(
+                    exerciseId,
+                    environment.id
+                  )
+                )
+              )
+            ])
+          )
       })
     )(EditExerciseSimpleConfig)
   )
