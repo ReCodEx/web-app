@@ -10,10 +10,7 @@ import FormBox from '../../widgets/FormBox';
 import Button from '../../widgets/FlatButton';
 import { RefreshIcon } from '../../icons';
 
-import {
-  encodeTestName,
-  encodeEnvironmentId
-} from '../../../redux/modules/simpleLimits';
+import { encodeEnvironmentId } from '../../../redux/modules/simpleLimits';
 import prettyMs from 'pretty-ms';
 
 import styles from './styles.less';
@@ -129,10 +126,7 @@ const EditSimpleLimitsForm = ({
             </th>
 
             {environments.map(environment => {
-              const id =
-                encodeTestName(test.name) +
-                '.' +
-                encodeEnvironmentId(environment.id);
+              const id = test.id + '.' + encodeEnvironmentId(environment.id);
               return (
                 <td
                   key={`td.${id}`}
@@ -145,17 +139,17 @@ const EditSimpleLimitsForm = ({
                     environmentsCount={environments.length}
                     cloneVertically={cloneVertically(
                       'editSimpleLimits',
-                      test.name,
+                      test.id,
                       environment.id
                     )}
                     cloneHorizontally={cloneHorizontally(
                       'editSimpleLimits',
-                      test.name,
+                      test.id,
                       environment.id
                     )}
                     cloneAll={cloneAll(
                       'editSimpleLimits',
-                      test.name,
+                      test.id,
                       environment.id
                     )}
                   />

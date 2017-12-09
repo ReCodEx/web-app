@@ -1,7 +1,6 @@
 import yaml from 'js-yaml';
 import {
   endpointDisguisedAsIdFactory,
-  encodeTestName,
   encodeEnvironmentId
 } from '../redux/modules/simpleLimits';
 
@@ -83,8 +82,12 @@ export const transformAndSendTestsValues = (
 
 export const getSimpleConfigInitValues = (config, tests, locale) => {
   const confTests =
-    config[0] && config[0].tests
-      ? config[0].tests.sort((a, b) => a.name.localeCompare(b.name, locale))
+    tests && config[0] && config[0].tests
+      ? config[0].tests.sort((a, b) => {
+          const aName = tests.find(test => test.id === a.name).name;
+          const bName = tests.find(test => test.id === b.name).name;
+          return aName.localeCompare(bName, locale);
+        })
       : [];
 
   let res = [];
@@ -171,6 +174,11 @@ export const getSimpleConfigInitValues = (config, tests, locale) => {
     res.push(testObj);
   }
 
+  // fill new tests with default judge
+  for (let i = confTests.length; i < tests.length; ++i) {
+    res.push({ judgeBinary: 'recodex-judge-normal' });
+  }
+
   return { config: res };
 };
 
@@ -184,7 +192,7 @@ export const transformAndSendConfigValues = (
   let testVars = [];
   for (let testIndex = 0; testIndex < sortedTests.length; ++testIndex) {
     const test = formData.config[testIndex];
-    const testName = sortedTests[testIndex].name;
+    const testName = sortedTests[testIndex].id;
     let variables = [];
 
     variables.push({
@@ -306,7 +314,7 @@ export const getLimitsInitValues = (
   let res = {};
 
   tests.forEach(test => {
-    const testId = encodeTestName(test.name);
+    const testId = test.id;
     res[testId] = {};
     environments.forEach(environment => {
       const envId = encodeEnvironmentId(environment.id);
@@ -316,7 +324,7 @@ export const getLimitsInitValues = (
           runtimeEnvironmentId: environment.id
         }),
         'data',
-        test.name
+        String(testId)
       ]);
       if (lim) {
         lim = lim.toJS();
@@ -348,7 +356,7 @@ export const transformAndSendLimitsValues = (
       const envId = encodeEnvironmentId(environment.id);
       const data = {
         limits: tests.reduce((acc, test) => {
-          acc[test.name] = formData.limits[encodeTestName(test.name)][envId];
+          acc[test.id] = formData.limits[test.id][envId];
           return acc;
         }, {})
       };

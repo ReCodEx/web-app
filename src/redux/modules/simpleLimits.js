@@ -53,23 +53,23 @@ export const editEnvironmentSimpleLimits = (
  * Special functions for cloning buttons
  */
 
-// Encoding function which help us avoid problems with some characters in test names and env ids (e.g., character '.').
-export const encodeTestName = testName => 'test' + btoa(testName);
+// Encoding function which help us avoid problems with some characters in env ids (e.g., character '.').
 export const encodeEnvironmentId = envId => 'env' + btoa(envId);
 
 // Get a single value by its test name, environment ID, and field identifier
 const getSimpleLimitsOf = (
   { form },
   formName,
-  testName,
+  testId,
   runtimeEnvironmentId,
   field
 ) => {
-  const testEnc = encodeTestName(testName);
   const envEnc = encodeEnvironmentId(runtimeEnvironmentId);
+  console.log(testId);
+  console.log(form[formName].values.limits);
   return (
-    form[formName].values.limits[testEnc][envEnc][field] ||
-    form[formName].initial.limits[testName][envEnc][field] ||
+    form[formName].values.limits[testId][envEnc][field] ||
+    form[formName].initial.limits[testId][envEnc][field] ||
     null
   );
 };
@@ -78,11 +78,11 @@ const getSimpleLimitsOf = (
 const getTargetFormKeys = (
   { form }, // form key in the store
   formName, // form identifier
-  testName, // test name or null (if all test should be targetted)
+  testId, // test id or null (if all test should be targetted)
   environmentId, // environment ID or null (if all environments should be targetted)
   field // field identifier (memory or wall-time)
 ) => {
-  const testEnc = testName ? encodeTestName(testName) : null;
+  const testEnc = testId || null;
   const envEnc = environmentId ? encodeEnvironmentId(environmentId) : null;
   return form && form[formName] && form[formName].registeredFields
     ? Object.keys(form[formName].registeredFields).filter(key => {
