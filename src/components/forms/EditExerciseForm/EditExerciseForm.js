@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { canUseDOM } from 'exenv';
 import { reduxForm, Field, FieldArray, touch } from 'redux-form';
 import {
   injectIntl,
@@ -21,10 +20,6 @@ import LocalizedTextsFormField from '../LocalizedTextsFormField';
 import { LocalizedExerciseName } from '../../helpers/LocalizedNames';
 import { validateExercise } from '../../../redux/modules/exercises';
 import withLinks from '../../../hoc/withLinks';
-
-if (canUseDOM) {
-  require('codemirror/mode/yaml/yaml');
-}
 
 const messages = defineMessages({
   easy: {

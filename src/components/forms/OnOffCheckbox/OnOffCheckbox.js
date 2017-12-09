@@ -16,7 +16,7 @@ const OnOffCheckbox = ({
   disabled,
   checked,
   ...props
-}) => (
+}) =>
   <ControlLabel
     htmlFor={name}
     className={classNames({
@@ -38,8 +38,7 @@ const OnOffCheckbox = ({
     <span className={styles.labelText}>
       {children}
     </span>
-  </ControlLabel>
-);
+  </ControlLabel>;
 
 OnOffCheckbox.propTypes = {
   checked: PropTypes.bool,

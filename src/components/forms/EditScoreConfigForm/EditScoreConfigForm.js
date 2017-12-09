@@ -1,16 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { canUseDOM } from 'exenv';
 import { reduxForm, Field } from 'redux-form';
 import { FormattedMessage } from 'react-intl';
 import { Alert } from 'react-bootstrap';
 
 import { SourceCodeField } from '../Fields';
 import SubmitButton from '../SubmitButton';
-
-if (canUseDOM) {
-  require('codemirror/mode/yaml/yaml');
-}
 
 const EditScoreConfigForm = ({
   anyTouched,
