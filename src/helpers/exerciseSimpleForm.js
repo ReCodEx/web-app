@@ -1,6 +1,7 @@
 import yaml from 'js-yaml';
 import {
   endpointDisguisedAsIdFactory,
+  encodeTestId,
   encodeEnvironmentId
 } from '../redux/modules/simpleLimits';
 
@@ -314,8 +315,8 @@ export const getLimitsInitValues = (
   let res = {};
 
   tests.forEach(test => {
-    const testId = test.id;
-    res[testId] = {};
+    const testEnc = encodeTestId(test.id);
+    res[testEnc] = {};
     environments.forEach(environment => {
       const envId = encodeEnvironmentId(environment.id);
       let lim = limits.getIn([
@@ -324,13 +325,13 @@ export const getLimitsInitValues = (
           runtimeEnvironmentId: environment.id
         }),
         'data',
-        String(testId)
+        String(test.id)
       ]);
       if (lim) {
         lim = lim.toJS();
       }
 
-      res[testId][envId] = {
+      res[testEnc][envId] = {
         memory: lim ? String(lim.memory) : '0',
         'wall-time': lim ? String(lim['wall-time']) : '0'
       };
@@ -356,7 +357,7 @@ export const transformAndSendLimitsValues = (
       const envId = encodeEnvironmentId(environment.id);
       const data = {
         limits: tests.reduce((acc, test) => {
-          acc[test.id] = formData.limits[test.id][envId];
+          acc[test.id] = formData.limits[encodeTestId(test.id)][envId];
           return acc;
         }, {})
       };

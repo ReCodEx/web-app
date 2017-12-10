@@ -9,6 +9,9 @@ import {
   HelpBlock,
   ControlLabel
 } from 'react-bootstrap';
+import classNames from 'classnames';
+
+import styles from './commonStyles.less';
 
 const EMPTY_VALUE = { first: '', second: '' };
 
@@ -60,10 +63,11 @@ class ExpandingInputFilesField extends Component {
     const {
       leftLabel = '',
       rightLabel = '',
-      input: { onChange, ...input },
-      meta: { dirty, error },
+      input: { onChange, onFocus, onBlur, ...input },
+      meta: { active, dirty, error, warning },
       style = {},
       options,
+      ignoreDirty = false,
       ...props
     } = this.props;
     const { texts } = this.state;
@@ -71,7 +75,7 @@ class ExpandingInputFilesField extends Component {
     return (
       <FormGroup
         controlId={input.name}
-        validationState={error ? 'error' : dirty ? 'warning' : undefined}
+        validationState={error ? 'error' : warning ? 'warning' : undefined}
       >
         <Row>
           <Col sm={6}>
@@ -84,9 +88,23 @@ class ExpandingInputFilesField extends Component {
                   key={i}
                   onChange={e =>
                     this.changeText(i, e.target.value, true, onChange)}
-                  onBlur={() => this.removeIfEmpty(i, onChange)}
+                  onFocus={onFocus}
+                  onBlur={e => {
+                    onBlur(e);
+                    this.removeIfEmpty(i, onChange);
+                  }}
                   value={text.first}
                   componentClass="select"
+                  bsClass={classNames({
+                    'form-control': true,
+                    [styles.dirty]:
+                      i < texts.length - 1 &&
+                      dirty &&
+                      !ignoreDirty &&
+                      !error &&
+                      !warning,
+                    [styles.active]: active
+                  })}
                   {...props}
                 >
                   {options.map(({ key, name }, o) =>
@@ -109,8 +127,22 @@ class ExpandingInputFilesField extends Component {
                   componentClass="input"
                   onChange={e =>
                     this.changeText(i, e.target.value, false, onChange)}
-                  onBlur={() => this.removeIfEmpty(i, onChange)}
+                  onFocus={onFocus}
+                  onBlur={e => {
+                    onBlur(e);
+                    this.removeIfEmpty(i, onChange);
+                  }}
                   value={text.second}
+                  bsClass={classNames({
+                    'form-control': true,
+                    [styles.dirty]:
+                      i < texts.length - 1 &&
+                      dirty &&
+                      !ignoreDirty &&
+                      !error &&
+                      !warning,
+                    [styles.active]: active
+                  })}
                   {...props}
                 />
               )}
@@ -121,6 +153,11 @@ class ExpandingInputFilesField extends Component {
           <HelpBlock>
             {' '}{error}{' '}
           </HelpBlock>}
+        {!error &&
+          warning &&
+          <HelpBlock>
+            {' '}{warning}{' '}
+          </HelpBlock>}
       </FormGroup>
     );
   }
@@ -128,7 +165,12 @@ class ExpandingInputFilesField extends Component {
 
 ExpandingInputFilesField.propTypes = {
   input: PropTypes.object,
-  meta: PropTypes.object,
+  meta: PropTypes.shape({
+    active: PropTypes.bool,
+    dirty: PropTypes.bool,
+    error: PropTypes.any,
+    warning: PropTypes.any
+  }).isRequired,
   leftLabel: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) })
@@ -138,7 +180,8 @@ ExpandingInputFilesField.propTypes = {
     PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) })
   ]).isRequired,
   style: PropTypes.object,
-  options: PropTypes.array
+  options: PropTypes.array,
+  ignoreDirty: PropTypes.bool
 };
 
 export default ExpandingInputFilesField;

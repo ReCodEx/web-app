@@ -1,38 +1,51 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-
 import {
   FormGroup,
   FormControl,
   ControlLabel,
   HelpBlock
 } from 'react-bootstrap';
+import classNames from 'classnames';
+
+import styles from './commonStyles.less';
 
 const TextAreaField = ({
   input,
-  meta: { touched, error },
+  meta: { active, dirty, error, warning },
   type = 'text',
   label,
   children,
+  ignoreDirty = false,
   ...props
 }) =>
   <FormGroup
     controlId={input.name}
-    validationState={error ? (touched ? 'error' : 'warning') : undefined}
+    validationState={error ? 'error' : warning ? 'warning' : undefined}
   >
     <ControlLabel>
       {label}
     </ControlLabel>
-    <FormControl {...input} {...props} componentClass="textarea" rows={8} />
+    <FormControl
+      {...input}
+      {...props}
+      componentClass="textarea"
+      rows={8}
+      bsClass={classNames({
+        'form-control': true,
+        [styles.dirty]: dirty && !ignoreDirty && !error && !warning,
+        [styles.active]: active
+      })}
+    />
     {error &&
       <HelpBlock>
-        {' '}{touched
-          ? error
-          : <FormattedMessage
-              defaultMessage="This field is required."
-              id="app.field.isRequired"
-            />}{' '}
+        {' '}{error}{' '}
+      </HelpBlock>}
+    {!error &&
+      warning &&
+      <HelpBlock>
+        {' '}{warning}{' '}
       </HelpBlock>}
     {children}
   </FormGroup>;
@@ -48,9 +61,12 @@ TextAreaField.propTypes = {
   ]).isRequired,
   children: PropTypes.any,
   meta: PropTypes.shape({
-    touched: PropTypes.bool,
-    error: PropTypes.oneOfType([PropTypes.string, FormattedMessage])
-  })
+    active: PropTypes.bool,
+    dirty: PropTypes.bool,
+    error: PropTypes.any,
+    warning: PropTypes.any
+  }).isRequired,
+  ignoreDirty: PropTypes.bool
 };
 
 export default TextAreaField;

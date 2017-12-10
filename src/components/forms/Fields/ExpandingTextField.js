@@ -8,6 +8,9 @@ import {
   HelpBlock,
   ControlLabel
 } from 'react-bootstrap';
+import classNames from 'classnames';
+
+import styles from './commonStyles.less';
 
 class ExpandingTextField extends Component {
   state = { texts: [] };
@@ -48,9 +51,10 @@ class ExpandingTextField extends Component {
   render() {
     const {
       label = '',
-      input: { onChange },
-      meta: { dirty, error },
+      input: { onChange, onFocus, onBlur },
+      meta: { active, dirty, error, warning },
       style = {},
+      ignoreDirty = false,
       ...props
     } = this.props;
     const { texts } = this.state;
@@ -58,7 +62,7 @@ class ExpandingTextField extends Component {
     return (
       <FormGroup
         controlId={'value'}
-        validationState={error ? 'error' : dirty ? 'warning' : undefined}
+        validationState={error ? 'error' : warning ? 'warning' : undefined}
       >
         <ControlLabel>{label}</ControlLabel>
         <div style={style}>
@@ -67,8 +71,22 @@ class ExpandingTextField extends Component {
               key={i}
               componentClass="input"
               onChange={e => this.changeText(i, e.target.value, onChange)}
-              onBlur={() => this.removeIfEmpty(i, onChange)}
+              onFocus={onFocus}
+              onBlur={e => {
+                onBlur(e);
+                this.removeIfEmpty(i, onChange);
+              }}
               value={text}
+              bsClass={classNames({
+                'form-control': true,
+                [styles.dirty]:
+                  i < texts.length - 1 &&
+                  dirty &&
+                  !ignoreDirty &&
+                  !error &&
+                  !warning,
+                [styles.active]: active
+              })}
               {...props}
             />
           )}
@@ -77,6 +95,11 @@ class ExpandingTextField extends Component {
           <HelpBlock>
             {' '}{error}{' '}
           </HelpBlock>}
+        {!error &&
+          warning &&
+          <HelpBlock>
+            {' '}{warning}{' '}
+          </HelpBlock>}
       </FormGroup>
     );
   }
@@ -84,12 +107,18 @@ class ExpandingTextField extends Component {
 
 ExpandingTextField.propTypes = {
   input: PropTypes.object,
-  meta: PropTypes.object,
+  meta: PropTypes.shape({
+    active: PropTypes.bool,
+    dirty: PropTypes.bool,
+    error: PropTypes.any,
+    warning: PropTypes.any
+  }).isRequired,
   label: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) })
   ]).isRequired,
-  style: PropTypes.object
+  style: PropTypes.object,
+  ignoreDirty: PropTypes.bool
 };
 
 export default ExpandingTextField;

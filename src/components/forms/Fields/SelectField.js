@@ -8,24 +8,37 @@ import {
   ControlLabel,
   HelpBlock
 } from 'react-bootstrap';
+import classNames from 'classnames';
+
+import styles from './commonStyles.less';
 
 const SelectField = ({
   input,
-  meta: { touched, dirty, error },
+  meta: { active, dirty, warning, error },
   label,
   options,
   addEmptyOption = false,
   emptyOptionCaption = '...',
+  ignoreDirty = false,
   ...props
 }) =>
   <FormGroup
     controlId={input.name}
-    validationState={error ? 'error' : dirty ? 'warning' : undefined}
+    validationState={error ? 'error' : warning ? 'warning' : undefined}
   >
     <ControlLabel>
       {label}
     </ControlLabel>
-    <FormControl {...input} {...props} componentClass="select">
+    <FormControl
+      {...input}
+      {...props}
+      componentClass="select"
+      bsClass={classNames({
+        'form-control': true,
+        [styles.dirty]: dirty && !ignoreDirty && !error && !warning,
+        [styles.active]: active
+      })}
+    >
       {addEmptyOption &&
         <option value={''} key={'-1'}>
           {emptyOptionCaption}
@@ -40,6 +53,11 @@ const SelectField = ({
       <HelpBlock>
         {' '}{error}{' '}
       </HelpBlock>}
+    {!error &&
+      warning &&
+      <HelpBlock>
+        {' '}{warning}{' '}
+      </HelpBlock>}
   </FormGroup>;
 
 SelectField.propTypes = {
@@ -47,10 +65,11 @@ SelectField.propTypes = {
     name: PropTypes.string.isRequired
   }).isRequired,
   meta: PropTypes.shape({
-    error: PropTypes.any,
+    active: PropTypes.bool,
     dirty: PropTypes.bool,
-    touched: PropTypes.bool
-  }),
+    error: PropTypes.any,
+    warning: PropTypes.any
+  }).isRequired,
   type: PropTypes.string,
   label: PropTypes.oneOfType([
     PropTypes.string,
@@ -58,7 +77,8 @@ SelectField.propTypes = {
   ]).isRequired,
   options: PropTypes.array.isRequired,
   addEmptyOption: PropTypes.bool,
-  emptyOptionCaption: PropTypes.string
+  emptyOptionCaption: PropTypes.string,
+  ignoreDirty: PropTypes.bool
 };
 
 export default SelectField;

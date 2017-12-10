@@ -54,6 +54,7 @@ export const editEnvironmentSimpleLimits = (
  */
 
 // Encoding function which help us avoid problems with some characters in env ids (e.g., character '.').
+export const encodeTestId = testId => 'test' + testId;
 export const encodeEnvironmentId = envId => 'env' + btoa(envId);
 
 // Get a single value by its test name, environment ID, and field identifier
@@ -64,11 +65,10 @@ const getSimpleLimitsOf = (
   runtimeEnvironmentId,
   field
 ) => {
+  const testEnc = encodeTestId(testId);
   const envEnc = encodeEnvironmentId(runtimeEnvironmentId);
-  console.log(testId);
-  console.log(form[formName].values.limits);
   return (
-    form[formName].values.limits[testId][envEnc][field] ||
+    form[formName].values.limits[testEnc][envEnc][field] ||
     form[formName].initial.limits[testId][envEnc][field] ||
     null
   );
@@ -82,7 +82,7 @@ const getTargetFormKeys = (
   environmentId, // environment ID or null (if all environments should be targetted)
   field // field identifier (memory or wall-time)
 ) => {
-  const testEnc = testId || null;
+  const testEnc = testId ? encodeTestId(testId) : null;
   const envEnc = environmentId ? encodeEnvironmentId(environmentId) : null;
   return form && form[formName] && form[formName].registeredFields
     ? Object.keys(form[formName].registeredFields).filter(key => {
@@ -99,7 +99,7 @@ const getTargetFormKeys = (
 // Clone given value vertically (all test in environment)
 export const cloneVertically = (
   formName, // form identifier
-  testName, // test identifier
+  testId, // test identifier
   runtimeEnvironmentId, // environment identifier
   field // field identifier (memory or wall-time)
 ) => (dispatch, getState) => {
@@ -107,7 +107,7 @@ export const cloneVertically = (
   const value = getSimpleLimitsOf(
     state,
     formName,
-    testName,
+    testId,
     runtimeEnvironmentId,
     field
   );
@@ -125,7 +125,7 @@ export const cloneVertically = (
 // Clone given value horizontally (all environments of the same test)
 export const cloneHorizontally = (
   formName, // form identifier
-  testName, // test identifier
+  testId, // test identifier
   runtimeEnvironmentId, // environment identifier
   field // field identifier (memory or wall-time)
 ) => (dispatch, getState) => {
@@ -133,7 +133,7 @@ export const cloneHorizontally = (
   const value = getSimpleLimitsOf(
     state,
     formName,
-    testName,
+    testId,
     runtimeEnvironmentId,
     field
   );
@@ -141,7 +141,7 @@ export const cloneHorizontally = (
     getTargetFormKeys(
       state,
       formName,
-      testName,
+      testId,
       null, // no environemnt ID => all environments accepted
       field
     ).map(key => dispatch(change(formName, key, value)));
@@ -151,7 +151,7 @@ export const cloneHorizontally = (
 // Clone given value to all fields
 export const cloneAll = (
   formName, // form identifier
-  testName, // test identifier
+  testId, // test identifier
   runtimeEnvironmentId, // environment identifier
   field // field identifier (memory or wall-time)
 ) => (dispatch, getState) => {
@@ -159,7 +159,7 @@ export const cloneAll = (
   const value = getSimpleLimitsOf(
     state,
     formName,
-    testName,
+    testId,
     runtimeEnvironmentId,
     field
   );

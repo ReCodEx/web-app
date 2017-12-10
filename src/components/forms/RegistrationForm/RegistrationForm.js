@@ -16,7 +16,6 @@ import {
 } from '../Fields';
 import { validateRegistrationData } from '../../../redux/modules/users';
 import SubmitButton from '../SubmitButton';
-import { Throttle } from 'react-throttle';
 
 const RegistrationForm = ({
   submitting,
@@ -111,19 +110,20 @@ const RegistrationForm = ({
       }
     />
 
-    <Throttle time={500} handler="onKeyDown">
-      <Field
-        name="password"
-        component={PasswordField}
-        onKeyDown={() => asyncValidate()}
-        label={
-          <FormattedMessage
-            id="app.registrationForm.password"
-            defaultMessage="Password:"
-          />
-        }
-      />
-    </Throttle>
+    {/* <Throttle time={500} handler="onKeyDown">    </Throttle> */}
+
+    <Field
+      name="password"
+      component={PasswordField}
+      onKeyDown={() =>
+        eventAggregator('RegistrationFormAsyncValidate', asyncValidate, 500)}
+      label={
+        <FormattedMessage
+          id="app.registrationForm.password"
+          defaultMessage="Password:"
+        />
+      }
+    />
 
     <Field
       name="passwordStrength"

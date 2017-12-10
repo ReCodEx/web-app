@@ -1,25 +1,28 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-
 import {
   FormGroup,
   FormControl,
   ControlLabel,
   HelpBlock
 } from 'react-bootstrap';
+import classNames from 'classnames';
+
+import styles from './commonStyles.less';
 
 const TextField = ({
   input: { value, ...input },
-  meta: { touched, dirty, error },
+  meta: { active, dirty, error, warning },
   type = 'text',
   label,
   groupClassName = '',
+  ignoreDirty = false,
   ...props
 }) =>
   <FormGroup
     controlId={input.name}
-    validationState={error ? 'error' : dirty ? 'warning' : undefined}
+    validationState={error ? 'error' : warning ? 'warning' : undefined}
     className={groupClassName}
   >
     <ControlLabel>
@@ -34,10 +37,20 @@ const TextField = ({
           ? value
           : value[0]
       }
+      bsClass={classNames({
+        'form-control': true,
+        [styles.dirty]: dirty && !ignoreDirty && !error && !warning,
+        [styles.active]: active
+      })}
     />
     {error &&
       <HelpBlock>
         {' '}{error}{' '}
+      </HelpBlock>}
+    {!error &&
+      warning &&
+      <HelpBlock>
+        {' '}{warning}{' '}
       </HelpBlock>}
   </FormGroup>;
 
@@ -51,15 +64,17 @@ TextField.propTypes = {
     ]).isRequired
   }).isRequired,
   meta: PropTypes.shape({
-    touched: PropTypes.bool,
+    active: PropTypes.bool,
     dirty: PropTypes.bool,
-    error: PropTypes.any
+    error: PropTypes.any,
+    warning: PropTypes.any
   }).isRequired,
   label: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) })
   ]).isRequired,
-  groupClassName: PropTypes.string
+  groupClassName: PropTypes.string,
+  ignoreDirty: PropTypes.bool
 };
 
 export default TextField;
