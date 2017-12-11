@@ -53,20 +53,24 @@ const EditTestsTest = ({ fields, isUniform, testValues }) => {
           )}
         </tbody>
       </Table>
-      <div style={{ textAlign: 'right' }}>
-        <Button
-          onClick={() =>
-            fields.push({ name: 'Test ' + (fields.length + 1), weight: '100' })}
-          bsStyle={'primary'}
-          className="btn-flat"
-        >
-          <Icon name="plus" />{' '}
-          <FormattedMessage
-            id="app.editTestsTest.add"
-            defaultMessage="Add test"
-          />
-        </Button>
-      </div>
+      {fields.length < 99 &&
+        <div style={{ textAlign: 'right' }}>
+          <Button
+            onClick={() =>
+              fields.push({
+                name: 'Test ' + (fields.length + 1).toString().padStart(2, '0'),
+                weight: '100'
+              })}
+            bsStyle={'primary'}
+            className="btn-flat"
+          >
+            <Icon name="plus" />{' '}
+            <FormattedMessage
+              id="app.editTestsTest.add"
+              defaultMessage="Add test"
+            />
+          </Button>
+        </div>}
     </div>
   );
 };

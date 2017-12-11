@@ -26,9 +26,10 @@ const SelectField = ({
     controlId={input.name}
     validationState={error ? 'error' : warning ? 'warning' : undefined}
   >
-    <ControlLabel>
-      {label}
-    </ControlLabel>
+    {label &&
+      <ControlLabel>
+        {label}
+      </ControlLabel>}
     <FormControl
       {...input}
       {...props}

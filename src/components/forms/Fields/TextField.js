@@ -25,9 +25,10 @@ const TextField = ({
     validationState={error ? 'error' : warning ? 'warning' : undefined}
     className={groupClassName}
   >
-    <ControlLabel>
-      {label}
-    </ControlLabel>
+    {label &&
+      <ControlLabel>
+        {label}
+      </ControlLabel>}
     <FormControl
       {...input}
       {...props}

@@ -235,7 +235,7 @@ const validate = ({ limits }) => {
 export default reduxForm({
   form: 'editSimpleLimits',
   enableReinitialize: true,
-  keepDirtyOnReinitialize: true,
+  keepDirtyOnReinitialize: false,
   immutableProps: [
     'environments',
     'tests',

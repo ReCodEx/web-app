@@ -1,112 +1,63 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
+import { Field } from 'redux-form';
+import { ControlLabel } from 'react-bootstrap';
+import Icon from 'react-fontawesome';
 
-import {
-  FormGroup,
-  FormControl,
-  HelpBlock,
-  ControlLabel
-} from 'react-bootstrap';
-import classNames from 'classnames';
+import FlatButton from '../../widgets/FlatButton';
+
+import TextField from './TextField';
 
 import styles from './commonStyles.less';
 
-class ExpandingTextField extends Component {
-  state = { texts: [] };
-
-  componentDidMount() {
-    const { input: { value } } = this.props;
-    const initialValue = Array.isArray(value)
-      ? value.concat([''])
-      : value.trim() !== '' ? [value, ''] : [''];
-    this.setState({ texts: initialValue });
-  }
-
-  changeText = (i, text, onChange) => {
-    const { texts } = this.state;
-    texts[i] = text.trim();
-    if (i === texts.length - 1) {
-      texts.push('');
-    }
-    this.setState({ texts });
-
-    const texts2 = texts.slice(0, texts.length - 1);
-    onChange(texts2);
-  };
-
-  removeIfEmpty = (i, onChange) => {
-    const { texts } = this.state;
-    if (i !== texts.length - 1 && texts[i] === '') {
-      texts.splice(i, 1);
-      this.setState({ texts });
-
-      const texts2 = texts.slice(0, texts.length - 1);
-      onChange(texts2);
-    }
-  };
-
-  isReference = () => {};
-
-  render() {
-    const {
-      label = '',
-      input: { onChange, onFocus, onBlur },
-      meta: { active, dirty, error, warning },
-      style = {},
-      ignoreDirty = false,
-      ...props
-    } = this.props;
-    const { texts } = this.state;
-
-    return (
-      <FormGroup
-        controlId={'value'}
-        validationState={error ? 'error' : warning ? 'warning' : undefined}
-      >
-        <ControlLabel>{label}</ControlLabel>
-        <div style={style}>
-          {texts.map((text, i) =>
-            <FormControl
-              key={i}
-              componentClass="input"
-              onChange={e => this.changeText(i, e.target.value, onChange)}
-              onFocus={onFocus}
-              onBlur={e => {
-                onBlur(e);
-                this.removeIfEmpty(i, onChange);
-              }}
-              value={text}
-              bsClass={classNames({
-                'form-control': true,
-                [styles.dirty]:
-                  i < texts.length - 1 &&
-                  dirty &&
-                  !ignoreDirty &&
-                  !error &&
-                  !warning,
-                [styles.active]: active
-              })}
-              {...props}
-            />
-          )}
-        </div>{' '}
-        {error &&
-          <HelpBlock>
-            {' '}{error}{' '}
-          </HelpBlock>}
-        {!error &&
-          warning &&
-          <HelpBlock>
-            {' '}{warning}{' '}
-          </HelpBlock>}
-      </FormGroup>
-    );
-  }
-}
+const ExpandingTextField = ({
+  fields,
+  meta: { active, dirty, error, warning },
+  label,
+  ...props
+}) =>
+  <div>
+    <ControlLabel>
+      {label}
+    </ControlLabel>
+    <table>
+      <tbody>
+        {fields.map((field, index) =>
+          <tr key={index}>
+            <td width="100%" className={styles.alignTop}>
+              <Field name={field} component={TextField} label={''} {...props} />
+            </td>
+            <td className={styles.alignTop}>
+              <FlatButton onClick={() => fields.insert(index, '')}>
+                <Icon name="reply" />
+              </FlatButton>
+            </td>
+            <td className={styles.alignTop}>
+              <FlatButton onClick={() => fields.remove(index)}>
+                <Icon name="remove" />
+              </FlatButton>
+            </td>
+          </tr>
+        )}
+      </tbody>
+    </table>
+    <div style={{ textAlign: 'center' }}>
+      {fields.length === 0 &&
+        <span style={{ paddingRight: '2em' }}>
+          <FormattedMessage
+            id="app.expandingTextField.noItems"
+            defaultMessage="There are no items yet..."
+          />
+        </span>}
+      <FlatButton onClick={() => fields.push('')}>
+        <Icon name="plus" />
+      </FlatButton>
+    </div>
+  </div>;
 
 ExpandingTextField.propTypes = {
-  input: PropTypes.object,
+  fields: PropTypes.object.isRequired,
   meta: PropTypes.shape({
     active: PropTypes.bool,
     dirty: PropTypes.bool,
@@ -116,9 +67,7 @@ ExpandingTextField.propTypes = {
   label: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) })
-  ]).isRequired,
-  style: PropTypes.object,
-  ignoreDirty: PropTypes.bool
+  ]).isRequired
 };
 
 export default ExpandingTextField;

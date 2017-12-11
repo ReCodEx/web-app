@@ -83,21 +83,20 @@ export const transformAndSendTestsValues = (
 
 export const getSimpleConfigInitValues = (config, tests, locale) => {
   const confTests =
-    tests && config[0] && config[0].tests
-      ? config[0].tests.sort((a, b) => {
-          const aName = tests.find(test => test.id === a.name).name;
-          const bName = tests.find(test => test.id === b.name).name;
-          return aName.localeCompare(bName, locale);
-        })
-      : [];
+    tests && config[0] && config[0].tests ? config[0].tests : [];
 
-  let res = [];
-  for (let test of confTests) {
-    let testObj = { name: test.name };
-    const variables = test.pipelines.reduce(
-      (acc, pipeline) => acc.concat(pipeline.variables),
-      []
-    );
+  let res = {};
+  for (let test of tests) {
+    const testConf = confTests.find(t => t.name === test.id);
+    let testObj = { name: test.id };
+
+    const variables =
+      testConf && testConf.pipelines
+        ? testConf.pipelines.reduce(
+            (acc, pipeline) => acc.concat(pipeline.variables),
+            []
+          )
+        : [];
 
     const inputFiles = variables.find(
       variable => variable.name === 'input-files'
@@ -108,10 +107,10 @@ export const getSimpleConfigInitValues = (config, tests, locale) => {
     if (inputFiles) {
       testObj.inputFiles = inputFiles.value
         ? inputFiles.value.map((value, i) => ({
-            first: value,
-            second:
+            file: value,
+            name:
               actualInputs && actualInputs.value && actualInputs.value[i]
-                ? actualInputs.value[i]
+                ? actualInputs.value[i].trim()
                 : ''
           }))
         : [];
@@ -125,17 +124,21 @@ export const getSimpleConfigInitValues = (config, tests, locale) => {
     }
 
     const runArgs = variables.find(variable => variable.name === 'run-args');
-    if (runArgs) {
-      testObj.runArgs = runArgs.value;
+    testObj.runArgs = [];
+    if (runArgs && runArgs.value) {
+      testObj.runArgs = Array.isArray(runArgs.value)
+        ? runArgs.value
+        : [runArgs.value];
     }
 
     const actualOutput = variables.find(
       variable => variable.name === 'actual-output'
     );
-    if (actualOutput) {
+    if (actualOutput && actualOutput.value && actualOutput.value.trim()) {
       testObj.useOutFile = true;
-      testObj.outputFile = actualOutput.value;
+      testObj.outputFile = actualOutput.value.trim();
     } else {
+      testObj.useOutFile = false;
       testObj.outputFile = '';
     }
 
@@ -154,9 +157,11 @@ export const getSimpleConfigInitValues = (config, tests, locale) => {
     );
 
     testObj.useCustomJudge = false;
-    if (customJudge) {
+    testObj.customJudgeBinary = '';
+    testObj.judgeBinary = '';
+    if (customJudge && customJudge.value) {
       testObj.customJudgeBinary = customJudge.value;
-      testObj.useCustomJudge = customJudge.value.trim() !== '';
+      testObj.useCustomJudge = true;
     }
     if (!testObj.useCustomJudge) {
       testObj.judgeBinary =
@@ -168,16 +173,14 @@ export const getSimpleConfigInitValues = (config, tests, locale) => {
     const judgeArgs = variables.find(
       variable => variable.name === 'judge-args'
     );
-    if (judgeArgs) {
-      testObj.judgeArgs = judgeArgs.value;
+    testObj.judgeArgs = [];
+    if (judgeArgs && judgeArgs.value) {
+      testObj.judgeArgs = Array.isArray(judgeArgs.value)
+        ? judgeArgs.value
+        : [judgeArgs.value];
     }
 
-    res.push(testObj);
-  }
-
-  // fill new tests with default judge
-  for (let i = confTests.length; i < tests.length; ++i) {
-    res.push({ judgeBinary: 'recodex-judge-normal' });
+    res[encodeTestId(test.id)] = testObj;
   }
 
   return { config: res };
@@ -187,13 +190,13 @@ export const transformAndSendConfigValues = (
   formData,
   pipelines,
   environments,
-  sortedTests,
+  tests,
   setConfig
 ) => {
   let testVars = [];
-  for (let testIndex = 0; testIndex < sortedTests.length; ++testIndex) {
-    const test = formData.config[testIndex];
-    const testName = sortedTests[testIndex].id;
+  for (let t of tests) {
+    const testName = t.id;
+    const test = formData.config[encodeTestId(testName)];
     let variables = [];
 
     variables.push({
@@ -229,8 +232,8 @@ export const transformAndSendConfigValues = (
     if (test.useOutFile) {
       variables.push({
         name: 'actual-output',
-        type: 'file[]',
-        value: test.outputFile
+        type: 'file',
+        value: test.useOutFile ? test.outputFile.trim() : ''
       });
     }
 
@@ -239,8 +242,8 @@ export const transformAndSendConfigValues = (
     const inFilesArr =
       test.inputFiles && Array.isArray(test.inputFiles) ? test.inputFiles : [];
     for (const item of inFilesArr) {
-      inputFiles.push(item.first);
-      renamedNames.push(item.second);
+      inputFiles.push(item.file);
+      renamedNames.push(item.name.trim());
     }
     variables.push({
       name: 'input-files',
@@ -267,7 +270,7 @@ export const transformAndSendConfigValues = (
       pipeline => pipeline.runtimeEnvironmentIds.indexOf(envId) >= 0
     );
 
-    let tests = [];
+    let testsCfg = [];
     for (const testVar of testVars) {
       const compilationPipelineId = envPipelines.filter(
         pipeline => pipeline.parameters.isCompilationPipeline
@@ -279,7 +282,7 @@ export const transformAndSendConfigValues = (
             ? pipeline.parameters.producesFiles
             : pipeline.parameters.producesStdout)
       )[0].id;
-      tests.push({
+      testsCfg.push({
         name: testVar.name,
         pipelines: [
           {
@@ -295,7 +298,7 @@ export const transformAndSendConfigValues = (
     }
     envs.push({
       name: envId,
-      tests: tests
+      tests: testsCfg
     });
   }
 

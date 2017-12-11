@@ -5,15 +5,16 @@ import { reduxForm, getFormValues } from 'redux-form';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import { Alert } from 'react-bootstrap';
+
 import FormBox from '../../widgets/FormBox';
-
-import EditExerciseSimpleConfigTest from './EditExerciseSimpleConfigTest';
-import SubmitButton from '../SubmitButton';
-import ResourceRenderer from '../../helpers/ResourceRenderer';
-import { createGetSupplementaryFiles } from '../../../redux/selectors/supplementaryFiles';
-
 import Button from '../../widgets/FlatButton';
 import { RefreshIcon } from '../../icons';
+import SubmitButton from '../SubmitButton';
+import ResourceRenderer from '../../helpers/ResourceRenderer';
+
+import EditExerciseSimpleConfigTest from './EditExerciseSimpleConfigTest';
+import { createGetSupplementaryFiles } from '../../../redux/selectors/supplementaryFiles';
+import { encodeTestId } from '../../../redux/modules/simpleLimits';
 
 const EditExerciseSimpleConfigForm = ({
   reset,
@@ -104,14 +105,16 @@ const EditExerciseSimpleConfigForm = ({
     <ResourceRenderer resource={supplementaryFiles.toArray()}>
       {(...files) =>
         <div>
-          {exerciseTests.map((test, i) =>
+          {exerciseTests.map((test, idx) =>
             <EditExerciseSimpleConfigTest
-              key={i}
+              key={idx}
               formValues={formValues}
               supplementaryFiles={files}
               testName={test.name}
-              test={`config.${i}`}
-              i={i}
+              test={'config.' + encodeTestId(test.id)}
+              testKey={encodeTestId(test.id)}
+              testIndex={idx}
+              smartFill={() => undefined}
             />
           )}
         </div>}
@@ -134,83 +137,6 @@ EditExerciseSimpleConfigForm.propTypes = {
   exerciseTests: PropTypes.array
 };
 
-const validate = ({ config }) => {
-  const errors = {};
-
-  const configErrors = {};
-  for (let i = 0; i < config.length; ++i) {
-    const test = config[i];
-    const testErrors = {};
-
-    if (!test.expectedOutput || test.expectedOutput === '') {
-      testErrors['expectedOutput'] = (
-        <FormattedMessage
-          id="app.editExerciseSimpleConfigForm.validation.expectedOutput"
-          defaultMessage="Please fill the expected output file."
-        />
-      );
-    }
-
-    if (test.useOutFile && (!test.outputFile || test.outputFile === '')) {
-      testErrors['outputFile'] = (
-        <FormattedMessage
-          id="app.editExerciseSimpleConfigForm.validation.outputFile"
-          defaultMessage="Please fill the name of the output file or use standard input instead."
-        />
-      );
-    }
-
-    if (!test.judgeBinary || test.judgeBinary === '') {
-      testErrors['judgeBinary'] = (
-        <FormattedMessage
-          id="app.editExerciseSimpleConfigForm.validation.judgeBinary"
-          defaultMessage="Please select the judge type for this test."
-        />
-      );
-    }
-
-    if (
-      test.useCustomJudge &&
-      (!test.customJudgeBinary || test.customJudgeBinary === '')
-    ) {
-      testErrors['customJudgeBinary'] = (
-        <FormattedMessage
-          id="app.editExerciseSimpleConfigForm.validation.customJudge"
-          defaultMessage="Please select the custom judge binary for this test or use one of the standard judges instead."
-        />
-      );
-    }
-
-    const inputErrorMessage = (
-      <FormattedMessage
-        id="app.editExerciseSimpleConfigForm.validation.inputFilesNotPaired"
-        defaultMessage="Input files are not properly paired with their names. Please make sure each file has a name."
-      />
-    );
-    const inFilesArr =
-      test.inputFiles && Array.isArray(test.inputFiles) ? test.inputFiles : [];
-    for (const inputFilePair of inFilesArr) {
-      if (
-        (!inputFilePair.first || inputFilePair.first === '') &&
-        inputFilePair.second !== ''
-      ) {
-        testErrors['inputFiles'] = inputErrorMessage;
-      }
-      if (
-        (!inputFilePair.second || inputFilePair.second === '') &&
-        inputFilePair.first !== ''
-      ) {
-        testErrors['inputFiles'] = inputErrorMessage;
-      }
-    }
-
-    configErrors[i] = testErrors;
-  }
-  errors['config'] = configErrors;
-
-  return errors;
-};
-
 export default connect((state, { exercise }) => {
   const getSupplementaryFilesForExercise = createGetSupplementaryFiles(
     exercise.supplementaryFilesIds
@@ -223,13 +149,12 @@ export default connect((state, { exercise }) => {
   reduxForm({
     form: 'editExerciseSimpleConfig',
     enableReinitialize: true,
-    keepDirtyOnReinitialize: true,
+    keepDirtyOnReinitialize: false,
     immutableProps: [
       'formValues',
       'supplementaryFiles',
       'exerciseTests',
       'handleSubmit'
-    ],
-    validate
+    ]
   })(EditExerciseSimpleConfigForm)
 );

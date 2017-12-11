@@ -78,7 +78,7 @@ class EditTestsForm extends Component {
             hasSucceeded={hasSucceeded}
             dirty={dirty}
             hasFailed={hasFailed}
-            handleSubmit={data => handleSubmit(data).then(reset)}
+            handleSubmit={handleSubmit}
             messages={{
               submit: (
                 <FormattedMessage
@@ -175,7 +175,7 @@ export default connect(state => {
   reduxForm({
     form: 'editTests',
     enableReinitialize: true,
-    keepDirtyOnReinitialize: true,
+    keepDirtyOnReinitialize: false,
     validate
   })(EditTestsForm)
 );

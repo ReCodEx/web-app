@@ -1,170 +1,107 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import {
-  Row,
-  Col,
-  FormGroup,
-  FormControl,
-  HelpBlock,
-  ControlLabel
-} from 'react-bootstrap';
-import classNames from 'classnames';
+import { Field } from 'redux-form';
+import { ControlLabel } from 'react-bootstrap';
+import Icon from 'react-fontawesome';
+
+import FlatButton from '../../widgets/FlatButton';
+
+import SelectField from './SelectField';
+import TextField from './TextField';
 
 import styles from './commonStyles.less';
 
-const EMPTY_VALUE = { first: '', second: '' };
+const EMPTY_VALUE = { file: '', name: '' };
 
-class ExpandingInputFilesField extends Component {
-  state = { texts: [] };
+const validate = value =>
+  !value || value.trim() === ''
+    ? <FormattedMessage
+        id="app.expandingInputFilesField.validateEmpty"
+        defaultMessage="This value must not be empty."
+      />
+    : undefined;
 
-  componentDidMount() {
-    const { input: { value } } = this.props;
-    const initialValue = Array.isArray(value)
-      ? value.concat([EMPTY_VALUE])
-      : [EMPTY_VALUE];
-    this.setState({ texts: initialValue });
-  }
-
-  changeText = (i, text, isFirst, onChange) => {
-    const { texts } = this.state;
-    if (isFirst) {
-      texts[i] = { first: text.trim(), second: texts[i].second };
-    } else {
-      texts[i] = { first: texts[i].first, second: text.trim() };
-    }
-    if (i === texts.length - 1) {
-      texts.push(EMPTY_VALUE);
-    }
-    this.setState({ texts });
-
-    const texts2 = texts.slice(0, texts.length - 1);
-    onChange(texts2);
-  };
-
-  removeIfEmpty = (i, onChange) => {
-    const { texts } = this.state;
-    if (
-      i !== texts.length - 1 &&
-      texts[i].first === '' &&
-      texts[i].second === ''
-    ) {
-      texts.splice(i, 1);
-      this.setState({ texts });
-
-      const texts2 = texts.slice(0, texts.length - 1);
-      onChange(texts2);
-    }
-  };
-
-  isReference = () => {};
-
-  render() {
-    const {
-      leftLabel = '',
-      rightLabel = '',
-      input: { onChange, onFocus, onBlur, ...input },
-      meta: { active, dirty, error, warning },
-      style = {},
-      options,
-      ignoreDirty = false,
-      ...props
-    } = this.props;
-    const { texts } = this.state;
-
-    return (
-      <FormGroup
-        controlId={input.name}
-        validationState={error ? 'error' : warning ? 'warning' : undefined}
-      >
-        <Row>
-          <Col sm={6}>
-            <ControlLabel>
-              {leftLabel}
-            </ControlLabel>
-            <div style={style}>
-              {texts.map((text, i) =>
-                <FormControl
-                  key={i}
-                  onChange={e =>
-                    this.changeText(i, e.target.value, true, onChange)}
-                  onFocus={onFocus}
-                  onBlur={e => {
-                    onBlur(e);
-                    this.removeIfEmpty(i, onChange);
-                  }}
-                  value={text.first}
-                  componentClass="select"
-                  bsClass={classNames({
-                    'form-control': true,
-                    [styles.dirty]:
-                      i < texts.length - 1 &&
-                      dirty &&
-                      !ignoreDirty &&
-                      !error &&
-                      !warning,
-                    [styles.active]: active
-                  })}
-                  {...props}
-                >
-                  {options.map(({ key, name }, o) =>
-                    <option value={key} key={o}>
-                      {name}
-                    </option>
-                  )}
-                </FormControl>
-              )}
-            </div>
-          </Col>
-          <Col sm={6}>
-            <ControlLabel>
-              {rightLabel}
-            </ControlLabel>
-            <div style={style}>
-              {texts.map((text, i) =>
-                <FormControl
-                  key={i}
-                  componentClass="input"
-                  onChange={e =>
-                    this.changeText(i, e.target.value, false, onChange)}
-                  onFocus={onFocus}
-                  onBlur={e => {
-                    onBlur(e);
-                    this.removeIfEmpty(i, onChange);
-                  }}
-                  value={text.second}
-                  bsClass={classNames({
-                    'form-control': true,
-                    [styles.dirty]:
-                      i < texts.length - 1 &&
-                      dirty &&
-                      !ignoreDirty &&
-                      !error &&
-                      !warning,
-                    [styles.active]: active
-                  })}
+const ExpandingInputFilesField = ({
+  fields,
+  meta: { active, dirty, error, warning },
+  leftLabel = '',
+  rightLabel = '',
+  options,
+  ...props
+}) =>
+  <div>
+    {fields.length > 0 &&
+      <table>
+        <thead>
+          <tr>
+            <th width="50%">
+              <ControlLabel>
+                {leftLabel}
+              </ControlLabel>
+            </th>
+            <th width="50%">
+              <ControlLabel>
+                {rightLabel}
+              </ControlLabel>
+            </th>
+            <th />
+            <th />
+          </tr>
+        </thead>
+        <tbody>
+          {fields.map((field, index) =>
+            <tr key={index}>
+              <td className={styles.alignTop}>
+                <Field
+                  name={`${field}.file`}
+                  component={SelectField}
+                  label={''}
+                  options={options}
+                  addEmptyOption={true}
+                  validate={validate}
                   {...props}
                 />
-              )}
-            </div>
-          </Col>
-        </Row>
-        {error &&
-          <HelpBlock>
-            {' '}{error}{' '}
-          </HelpBlock>}
-        {!error &&
-          warning &&
-          <HelpBlock>
-            {' '}{warning}{' '}
-          </HelpBlock>}
-      </FormGroup>
-    );
-  }
-}
+              </td>
+              <td className={styles.alignTop}>
+                <Field
+                  name={`${field}.name`}
+                  component={TextField}
+                  label={''}
+                  validate={validate}
+                  {...props}
+                />
+              </td>
+              <td className={styles.alignTop}>
+                <FlatButton onClick={() => fields.insert(index, EMPTY_VALUE)}>
+                  <Icon name="reply" />
+                </FlatButton>
+              </td>
+              <td className={styles.alignTop}>
+                <FlatButton onClick={() => fields.remove(index)}>
+                  <Icon name="remove" />
+                </FlatButton>
+              </td>
+            </tr>
+          )}
+        </tbody>
+      </table>}
+    <div style={{ textAlign: 'center' }}>
+      {fields.length === 0 &&
+        <span style={{ paddingRight: '2em' }}>
+          <FormattedMessage
+            id="app.expandingInputFilesField.noFiles"
+            defaultMessage="There are no files yet..."
+          />
+        </span>}
+      <FlatButton onClick={() => fields.push(EMPTY_VALUE)}>
+        <Icon name="plus" />
+      </FlatButton>
+    </div>
+  </div>;
 
 ExpandingInputFilesField.propTypes = {
-  input: PropTypes.object,
+  fields: PropTypes.object.isRequired,
   meta: PropTypes.shape({
     active: PropTypes.bool,
     dirty: PropTypes.bool,
@@ -179,9 +116,7 @@ ExpandingInputFilesField.propTypes = {
     PropTypes.string,
     PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) })
   ]).isRequired,
-  style: PropTypes.object,
-  options: PropTypes.array,
-  ignoreDirty: PropTypes.bool
+  options: PropTypes.array
 };
 
 export default ExpandingInputFilesField;

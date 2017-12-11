@@ -1,9 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Field } from 'redux-form';
+import { Field, FieldArray } from 'redux-form';
 import { Row, Col } from 'react-bootstrap';
 import { FormattedMessage, injectIntl, defineMessages } from 'react-intl';
+import Icon from 'react-fontawesome';
 
+import Button from '../../widgets/FlatButton';
 import {
   SelectField,
   TextField,
@@ -11,6 +13,7 @@ import {
   ExpandingInputFilesField,
   CheckboxField
 } from '../Fields';
+import Confirm from '../../forms/Confirm';
 
 import './EditExerciseSimpleConfigForm.css';
 
@@ -53,23 +56,47 @@ const messages = defineMessages({
   }
 });
 
+const validateExpectedOutput = value =>
+  !value || value.trim() === ''
+    ? <FormattedMessage
+        id="app.editExerciseSimpleConfigForm.validation.expectedOutput"
+        defaultMessage="Please, fill in the expected output file."
+      />
+    : undefined;
+
+const validateOutputFile = value =>
+  !value || value.trim() === ''
+    ? <FormattedMessage
+        id="app.editExerciseSimpleConfigForm.validation.outputFile"
+        defaultMessage="Please, fill in the name of the output file."
+      />
+    : undefined;
+
+const validateCustomJudge = value =>
+  !value || value.trim() === ''
+    ? <FormattedMessage
+        id="app.editExerciseSimpleConfigForm.validation.customJudge"
+        defaultMessage="Please, select the custom judge binary for this test or use one of the standard judges instead."
+      />
+    : undefined;
+
 const EditExerciseSimpleConfigTest = ({
   supplementaryFiles,
   formValues,
   testName,
   test,
-  i,
+  testKey,
+  testIndex,
+  smartFill,
   intl
 }) => {
-  const supplementaryFilesOptions = [{ key: '', name: '...' }].concat(
-    supplementaryFiles
-      .sort((a, b) => a.name.localeCompare(b.name, intl.locale))
-      .filter((item, pos, arr) => arr.indexOf(item) === pos)
-      .map(data => ({
-        key: data.name,
-        name: data.name
-      }))
-  );
+  const supplementaryFilesOptions = supplementaryFiles
+    .sort((a, b) => a.name.localeCompare(b.name, intl.locale))
+    .filter((item, pos, arr) => arr.indexOf(item) === pos)
+    .map(data => ({
+      key: data.name,
+      name: data.name
+    }));
   return (
     <div className="configRow">
       <Row>
@@ -87,7 +114,7 @@ const EditExerciseSimpleConfigTest = ({
               defaultMessage="Input"
             />
           </h4>
-          <Field
+          <FieldArray
             name={`${test}.inputFiles`}
             component={ExpandingInputFilesField}
             options={supplementaryFilesOptions}
@@ -100,7 +127,7 @@ const EditExerciseSimpleConfigTest = ({
             rightLabel={
               <FormattedMessage
                 id="app.editExerciseSimpleConfigTests.inputFilesRename"
-                defaultMessage="Renamed file name:"
+                defaultMessage="Rename as:"
               />
             }
           />
@@ -108,6 +135,7 @@ const EditExerciseSimpleConfigTest = ({
             name={`${test}.inputStdin`}
             component={SelectField}
             options={supplementaryFilesOptions}
+            addEmptyOption={true}
             label={
               <FormattedMessage
                 id="app.editExerciseSimpleConfigTests.inputStdin"
@@ -123,7 +151,7 @@ const EditExerciseSimpleConfigTest = ({
               defaultMessage="Execution"
             />
           </h4>
-          <Field
+          <FieldArray
             name={`${test}.runArgs`}
             component={ExpandingTextField}
             label={
@@ -154,12 +182,13 @@ const EditExerciseSimpleConfigTest = ({
           />
           {formValues &&
             formValues.config &&
-            formValues.config[i] &&
-            (formValues.config[i].useOutFile === true ||
-              formValues.config[i].useOutFile === 'true') &&
+            formValues.config[testKey] &&
+            (formValues.config[testKey].useOutFile === true ||
+              formValues.config[testKey].useOutFile === 'true') &&
             <Field
               name={`${test}.outputFile`}
               component={TextField}
+              validate={validateOutputFile}
               label={
                 <FormattedMessage
                   id="app.editExerciseSimpleConfigTests.outputFile"
@@ -171,6 +200,8 @@ const EditExerciseSimpleConfigTest = ({
             name={`${test}.expectedOutput`}
             component={SelectField}
             options={supplementaryFilesOptions}
+            addEmptyOption={true}
+            validate={validateExpectedOutput}
             label={
               <FormattedMessage
                 id="app.editExerciseSimpleConfigTests.expectedOutput"
@@ -199,17 +230,19 @@ const EditExerciseSimpleConfigTest = ({
           />
           {formValues &&
           formValues.config &&
-          formValues.config[i] &&
-          (formValues.config[i].useCustomJudge === true ||
-            formValues.config[i].useCustomJudge === 'true')
+          formValues.config[testKey] &&
+          (formValues.config[testKey].useCustomJudge === true ||
+            formValues.config[testKey].useCustomJudge === 'true')
             ? <Field
                 name={`${test}.customJudgeBinary`}
                 component={SelectField}
                 options={supplementaryFilesOptions}
+                addEmptyOption={true}
+                validate={validateCustomJudge}
                 label={
                   <FormattedMessage
                     id="app.editExerciseSimpleConfigTests.customJudgeBinary"
-                    defaultMessage="Custom judge binary:"
+                    defaultMessage="Custom judge executable:"
                   />
                 }
               />
@@ -256,19 +289,19 @@ const EditExerciseSimpleConfigTest = ({
                 ]}
                 label={
                   <FormattedMessage
-                    id="app.editExerciseSimpleConfigTests.judgeBinary"
-                    defaultMessage="Judge binary:"
+                    id="app.editExerciseSimpleConfigTests.judgeType"
+                    defaultMessage="Judge:"
                   />
                 }
               />}
           {formValues &&
             formValues.config &&
-            formValues.config[i] &&
-            (formValues.config[i].useCustomJudge === true ||
-              formValues.config[i].useCustomJudge === 'true') &&
-            <Field
+            formValues.config[testKey] &&
+            (formValues.config[testKey].useCustomJudge === true ||
+              formValues.config[testKey].useCustomJudge === 'true') &&
+            <FieldArray
               name={`${test}.judgeArgs`}
-              component={TextField}
+              component={ExpandingTextField}
               label={
                 <FormattedMessage
                   id="app.editExerciseSimpleConfigTests.judgeArgs"
@@ -276,6 +309,27 @@ const EditExerciseSimpleConfigTest = ({
                 />
               }
             />}
+          {testIndex === 0 &&
+            <div style={{ textAlign: 'right', padding: '1em' }}>
+              <Confirm
+                id={'smartFill'}
+                onConfirmed={smartFill}
+                question={
+                  <FormattedMessage
+                    id="app.editExerciseConfigForm.smartFill.yesNoQuestion"
+                    defaultMessage="Do you really wish to overwrite configuration of all subsequent tests using the first test as a template? Files will be paired to individual test configurations by a heuristics based on matching name substrings."
+                  />
+                }
+              >
+                <Button bsStyle={'primary'} className="btn-flat">
+                  <Icon name="arrows" />{' '}
+                  <FormattedMessage
+                    id="app.editExerciseConfigForm.smartFill"
+                    defaultMessage="Smart Fill"
+                  />
+                </Button>
+              </Confirm>
+            </div>}
         </Col>
       </Row>
     </div>
@@ -285,10 +339,12 @@ const EditExerciseSimpleConfigTest = ({
 EditExerciseSimpleConfigTest.propTypes = {
   testName: PropTypes.string.isRequired,
   test: PropTypes.string.isRequired,
-  i: PropTypes.number.isRequired,
+  testKey: PropTypes.string.isRequired,
+  testIndex: PropTypes.number.isRequired,
   supplementaryFiles: PropTypes.array.isRequired,
   exerciseTests: PropTypes.array,
   formValues: PropTypes.object,
+  smartFill: PropTypes.func.isRequired,
   intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired
 };
 
