@@ -65,7 +65,9 @@ module.exports = {
           "'" + process.env.ALLOW_NORMAL_REGISTRATION + "'",
         ALLOW_LDAP_REGISTRATION:
           "'" + process.env.ALLOW_LDAP_REGISTRATION + "'",
-        ALLOW_CAS_REGISTRATION: "'" + process.env.ALLOW_CAS_REGISTRATION + "'"
+        ALLOW_CAS_REGISTRATION: "'" + process.env.ALLOW_CAS_REGISTRATION + "'",
+        LOGGER_MIDDLEWARE_VERBOSE: "'" + process.env.LOGGER_MIDDLEWARE_VERBOSE + "'",
+        LOGGER_MIDDLEWARE_EXCEPTIONS: "'" + process.env.LOGGER_MIDDLEWARE_EXCEPTIONS + "'",
       },
       gitRevision: {
         VERSION: JSON.stringify(gitRevisionPlugin.version()),

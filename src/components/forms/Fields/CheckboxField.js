@@ -9,7 +9,7 @@ import OnOffCheckbox from '../OnOffCheckbox';
 const CheckboxField = ({
   input,
   onOff = false,
-  meta: { touched, error },
+  meta: { dirty, error, warning },
   label,
   ...props
 }) => {
@@ -17,7 +17,9 @@ const CheckboxField = ({
   /* eslint-disable no-unneeded-ternary */
   return (
     <FormGroup
-      validationState={error ? (touched ? 'error' : 'warning') : undefined}
+      validationState={
+        error ? 'error' : warning ? 'warning' : dirty ? 'success' : undefined
+      }
       controlId={input.name}
     >
       <Component {...props} {...input} checked={input.value ? true : false}>
@@ -25,12 +27,12 @@ const CheckboxField = ({
       </Component>
       {error &&
         <HelpBlock>
-          {' '}{touched
-            ? error
-            : <FormattedMessage
-                defaultMessage="This field is required."
-                id="app.field.isRequired"
-              />}{' '}
+          {' '}{error}{' '}
+        </HelpBlock>}
+      {!error &&
+        warning &&
+        <HelpBlock>
+          {' '}{warning}{' '}
         </HelpBlock>}
     </FormGroup>
   );
@@ -41,7 +43,11 @@ CheckboxField.propTypes = {
     name: PropTypes.string.isRequired,
     value: PropTypes.oneOfType([PropTypes.bool, PropTypes.string])
   }).isRequired,
-  meta: PropTypes.object.isRequired,
+  meta: PropTypes.shape({
+    dirty: PropTypes.bool,
+    error: PropTypes.oneOfType([PropTypes.string, FormattedMessage]),
+    warning: PropTypes.oneOfType([PropTypes.string, FormattedMessage])
+  }).isRequired,
   type: PropTypes.string,
   onOff: PropTypes.bool,
   label: PropTypes.oneOfType([

@@ -1,15 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { SimpleInfoBox } from '../InfoBox';
-import prettyBytes from 'pretty-bytes';
+import { prettyPrintBytes } from '../../helpers/stringFormatters';
 
-const SourceCodeInfoBox = ({ id, name, size, uploadedAt }) => (
+const SourceCodeInfoBox = ({ id, name, size, uploadedAt }) =>
   <SimpleInfoBox
     title={name}
-    description={prettyBytes(size)}
+    description={prettyPrintBytes(size)}
     icon="file-code-o"
-  />
-);
+  />;
 
 SourceCodeInfoBox.propTypes = {
   id: PropTypes.string.isRequired,

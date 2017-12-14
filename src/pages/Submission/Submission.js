@@ -122,11 +122,13 @@ class Submission extends Component {
                     id={submission.id}
                     assignmentId={assignment.id}
                     isDebug={false}
+                    userId={submission.solution.userId}
                   />
                   <ResubmitSolutionContainer
                     id={submission.id}
                     assignmentId={assignment.id}
                     isDebug={true}
+                    userId={submission.solution.userId}
                   />
                 </p>}
               <FetchManyResourceRenderer fetchManyStatus={fetchStatus}>

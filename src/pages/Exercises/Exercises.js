@@ -53,7 +53,10 @@ class Exercises extends Component {
       isAuthorOfExercise,
       fetchStatus,
       search,
-      links: { EXERCISE_EDIT_URI_FACTORY, EXERCISE_EDIT_CONFIG_URI_FACTORY }
+      links: {
+        EXERCISE_EDIT_URI_FACTORY,
+        EXERCISE_EDIT_SIMPLE_CONFIG_URI_FACTORY
+      }
     } = this.props;
 
     return (
@@ -167,7 +170,7 @@ class Exercises extends Component {
                           </Button>
                         </LinkContainer>
                         <LinkContainer
-                          to={EXERCISE_EDIT_CONFIG_URI_FACTORY(id)}
+                          to={EXERCISE_EDIT_SIMPLE_CONFIG_URI_FACTORY(id)}
                         >
                           <Button bsSize="xs" bsStyle="warning">
                             <EditIcon />{' '}

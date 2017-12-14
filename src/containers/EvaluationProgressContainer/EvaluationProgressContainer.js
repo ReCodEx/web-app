@@ -147,9 +147,10 @@ class EvaluationProgressContainer extends Component {
   };
 
   finish = () => {
-    const { push, link, finishProcessing } = this.props;
+    const { push, link, finishProcessing, onFinish } = this.props;
     finishProcessing();
     this.closeSocket();
+    onFinish && onFinish();
     push(link);
   };
 
@@ -234,7 +235,8 @@ EvaluationProgressContainer.propTypes = {
   messages: PropTypes.object,
   intl: PropTypes.object.isRequired,
   push: PropTypes.func.isRequired,
-  onUserClose: PropTypes.func
+  onUserClose: PropTypes.func,
+  onFinish: PropTypes.func
 };
 
 export default connect(

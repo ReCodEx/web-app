@@ -101,6 +101,7 @@ class SubmitSolutionContainer extends Component {
             monitor={monitor}
             link={SUBMISSION_DETAIL_URI_FACTORY(id, submissionId)}
             onUserClose={fetchSubmissions}
+            onFinish={fetchSubmissions}
           />}
       </div>
     );

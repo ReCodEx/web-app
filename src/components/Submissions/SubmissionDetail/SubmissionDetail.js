@@ -28,6 +28,14 @@ class SubmissionDetail extends Component {
     });
   }
 
+  componentWillReceiveProps(newProps) {
+    if (this.props.evaluations.size !== newProps.evaluations.size) {
+      this.setState({
+        activeSubmissionId: newProps.submission.lastSubmission.id
+      });
+    }
+  }
+
   render() {
     const {
       submission: {

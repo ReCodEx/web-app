@@ -3,7 +3,10 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import ResubmitSolution from '../../components/buttons/ResubmitSolution';
-import { resubmitSubmission } from '../../redux/modules/submissions';
+import {
+  resubmitSubmission,
+  fetchUsersSubmissions
+} from '../../redux/modules/submissions';
 import {
   isProcessing,
   getMonitorParams,
@@ -11,14 +14,17 @@ import {
 } from '../../redux/selectors/submission';
 import EvaluationProgressContainer from '../EvaluationProgressContainer';
 import withLinks from '../../hoc/withLinks';
+import { fetchSubmissionEvaluationsForSolution } from '../../redux/modules/submissionEvaluations';
 
 const ResubmitSolutionContainer = ({
   id,
   assignmentId,
+  userId,
   resubmit,
   monitor,
   isProcessing,
   newSubmissionId,
+  fetchSubmissions,
   isDebug = true,
   links: { SUBMISSION_DETAIL_URI_FACTORY }
 }) => {
@@ -29,6 +35,7 @@ const ResubmitSolutionContainer = ({
         isOpen={isProcessing}
         monitor={monitor}
         link={SUBMISSION_DETAIL_URI_FACTORY(assignmentId, newSubmissionId)}
+        onFinish={() => fetchSubmissions(userId)}
       />
     </span>
   );
@@ -43,7 +50,9 @@ ResubmitSolutionContainer.propTypes = {
   isProcessing: PropTypes.bool,
   newSubmissionId: PropTypes.string,
   links: PropTypes.object.isRequired,
-  isDebug: PropTypes.bool
+  isDebug: PropTypes.bool,
+  userId: PropTypes.string,
+  fetchSubmissions: PropTypes.func
 };
 
 const mapStateToProps = state => ({
@@ -52,8 +61,16 @@ const mapStateToProps = state => ({
   newSubmissionId: getSubmissionId(state)
 });
 
-const mapDispatchToProps = (dispatch, { id, isPrivate = false }) => ({
-  resubmit: isDebug => dispatch(resubmitSubmission(id, isPrivate, isDebug))
+const mapDispatchToProps = (
+  dispatch,
+  { id, isPrivate = false, assignmentId }
+) => ({
+  resubmit: isDebug => dispatch(resubmitSubmission(id, isPrivate, isDebug)),
+  fetchSubmissions: userId =>
+    Promise.all([
+      dispatch(fetchSubmissionEvaluationsForSolution(id)),
+      dispatch(fetchUsersSubmissions(userId, assignmentId))
+    ])
 });
 
 export default withLinks(

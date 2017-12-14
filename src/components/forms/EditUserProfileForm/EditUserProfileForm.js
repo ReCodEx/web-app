@@ -5,7 +5,7 @@ import { reduxForm, Field, change } from 'redux-form';
 import { Alert } from 'react-bootstrap';
 import FormBox from '../../widgets/FormBox';
 import SubmitButton from '../SubmitButton';
-import { Throttle } from 'react-throttle';
+
 import { validateRegistrationData } from '../../../redux/modules/users';
 
 import { TextField, PasswordField, PasswordStrength } from '../Fields';
@@ -167,21 +167,18 @@ const EditUserProfileForm = ({
           }
         />
 
-        <Throttle time={500} handler="onKeyDown">
-          <Field
-            name="password"
-            component={PasswordField}
-            autoComplete="off"
-            tabIndex={7}
-            onKeyDown={() => asyncValidate()}
-            label={
-              <FormattedMessage
-                id="app.changePasswordForm.password"
-                defaultMessage="New password:"
-              />
-            }
-          />
-        </Throttle>
+        <Field
+          name="password"
+          component={PasswordField}
+          autoComplete="off"
+          tabIndex={7}
+          label={
+            <FormattedMessage
+              id="app.changePasswordForm.password"
+              defaultMessage="New password:"
+            />
+          }
+        />
 
         <Field
           name="passwordStrength"

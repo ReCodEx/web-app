@@ -51,7 +51,14 @@ const composeEnhancers = REDUX_DEV_SERVER_PORT
 const dev = history =>
   composeEnhancers(
     compose(
-      applyMiddleware(...getMiddleware(history), loggerMiddleware(!canUseDOM)),
+      applyMiddleware(
+        ...getMiddleware(history),
+        loggerMiddleware(
+          !canUseDOM,
+          process.env.LOGGER_MIDDLEWARE_VERBOSE === 'true',
+          process.env.LOGGER_MIDDLEWARE_EXCEPTIONS === 'true'
+        )
+      ),
       !REDUX_DEV_SERVER_PORT && canUseDOM && window.devToolsExtension // if no server is in place and dev tools are available, use them
         ? window.devToolsExtension()
         : f => f

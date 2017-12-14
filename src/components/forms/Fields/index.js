@@ -2,6 +2,8 @@ export { default as CheckboxField } from './CheckboxField';
 export { default as EmailField } from './EmailField';
 export { default as DatetimeField } from './DatetimeField';
 export { default as MarkdownTextAreaField } from './MarkdownTextAreaField';
+export { default as EditSimpleLimitsField } from './EditSimpleLimitsField';
+export { default as LimitsValueField } from './LimitsValueField';
 export { default as LimitsField } from './LimitsField';
 export { default as PasswordField } from './PasswordField';
 export { default as PasswordStrength } from './PasswordStrength';
@@ -20,6 +22,9 @@ export { default as TextAreaField } from './TextAreaField';
 export { default as TextField } from './TextField';
 export { default as ExpandingTextField } from './ExpandingTextField';
 export { default as ExpandingSelectField } from './ExpandingSelectField';
+export {
+  default as ExpandingInputFilesField
+} from './ExpandingInputFilesField';
 export {
   default as CASAuthenticationButtonField
 } from './CASAuthenticationButtonField';

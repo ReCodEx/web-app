@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import prettyBytes from 'pretty-bytes';
+import { prettyPrintBytes } from '../../helpers/stringFormatters';
 import { FormattedDate, FormattedTime, FormattedMessage } from 'react-intl';
 import withLinks from '../../../hoc/withLinks';
 import { Button } from 'react-bootstrap';
@@ -25,7 +25,7 @@ const AttachmentFilesTableRow = ({
       </a>
     </td>
     <td>
-      {prettyBytes(size)}
+      {prettyPrintBytes(size)}
     </td>
     <td>
       <FormattedDate value={uploadedAt * 1000} />

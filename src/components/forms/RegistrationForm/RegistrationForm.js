@@ -6,6 +6,7 @@ import { Alert } from 'react-bootstrap';
 import isEmail from 'validator/lib/isEmail';
 
 import ResourceRenderer from '../../helpers/ResourceRenderer';
+import { eventAggregator } from '../../../helpers/eventAggregator';
 import FormBox from '../../widgets/FormBox';
 import {
   EmailField,
@@ -16,7 +17,6 @@ import {
 } from '../Fields';
 import { validateRegistrationData } from '../../../redux/modules/users';
 import SubmitButton from '../SubmitButton';
-import { Throttle } from 'react-throttle';
 
 const RegistrationForm = ({
   submitting,
@@ -111,19 +111,18 @@ const RegistrationForm = ({
       }
     />
 
-    <Throttle time={500} handler="onKeyDown">
-      <Field
-        name="password"
-        component={PasswordField}
-        onKeyDown={() => asyncValidate()}
-        label={
-          <FormattedMessage
-            id="app.registrationForm.password"
-            defaultMessage="Password:"
-          />
-        }
-      />
-    </Throttle>
+    <Field
+      name="password"
+      component={PasswordField}
+      onKeyDown={() =>
+        eventAggregator('RegistrationFormAsyncValidate', asyncValidate, 500)}
+      label={
+        <FormattedMessage
+          id="app.registrationForm.password"
+          defaultMessage="Password:"
+        />
+      }
+    />
 
     <Field
       name="passwordStrength"

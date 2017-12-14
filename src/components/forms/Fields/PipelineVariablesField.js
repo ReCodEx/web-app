@@ -11,13 +11,13 @@ import {
 } from '../Fields';
 import ResourceRenderer from '../../helpers/ResourceRenderer';
 
-const isArray = (firstValue, type = '') =>
-  firstValue.length > 0 &&
-  firstValue[0] !== '$' &&
+const isArray = (firstVal, type = '') =>
+  firstVal.length > 0 &&
+  firstVal[0] !== '$' &&
   typeof type === 'string' &&
   type.indexOf('[]') === type.length - 2;
 
-const firstValue = value => (Array.isArray(value) ? value[0] : value);
+const firstValue = value => (Array.isArray(value) ? value[0] || '' : value);
 
 const PipelineVariablesField = ({
   input,
@@ -50,7 +50,11 @@ const PipelineVariablesField = ({
               {(...supplementaryFiles) =>
                 <Field
                   name={`${input.name}.${value}`}
-                  component={isArray(type) ? ExpandingSelectField : SelectField}
+                  component={
+                    isArray(firstValue(input.value[value]), type)
+                      ? ExpandingSelectField
+                      : SelectField
+                  }
                   options={[{ key: '', name: '...' }].concat(
                     supplementaryFiles
                       .sort((a, b) => a.name.localeCompare(b.name, intl.locale))

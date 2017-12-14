@@ -31,7 +31,7 @@ const FilesTable = ({
   RowComponent,
   intl
 }) =>
-  <Box title={title} collapsable isOpen>
+  <Box title={title} collapsable isOpen unlimitedHeight>
     <div>
       {description &&
         <p>

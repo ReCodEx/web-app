@@ -8,6 +8,9 @@ import {
   HelpBlock,
   ControlLabel
 } from 'react-bootstrap';
+import classNames from 'classnames';
+
+import styles from './commonStyles.less';
 
 class ExpandingSelectField extends Component {
   state = { texts: [''] };
@@ -44,10 +47,11 @@ class ExpandingSelectField extends Component {
   render() {
     const {
       label = '',
-      input: { name, onChange },
-      meta: { touched, error },
+      input: { name, onChange, onFocus, onBlur },
+      meta: { active, dirty, error, warning },
       options,
       style = {},
+      ignoreDirty = false,
       ...props
     } = this.props;
     const { texts } = this.state;
@@ -55,7 +59,7 @@ class ExpandingSelectField extends Component {
     return (
       <FormGroup
         controlId={name}
-        validationState={error ? (touched ? 'error' : 'warning') : undefined}
+        validationState={error ? 'error' : warning ? 'warning' : undefined}
       >
         <ControlLabel>{label}</ControlLabel>
         <div style={style}>
@@ -63,9 +67,23 @@ class ExpandingSelectField extends Component {
             <FormControl
               key={i}
               onChange={e => this.changeText(i, e.target.value, onChange)}
-              onBlur={() => this.removeIfEmpty(i, onChange)}
+              onFocus={onFocus}
+              onBlur={e => {
+                onBlur(e);
+                this.removeIfEmpty(i, onChange);
+              }}
               value={text}
               componentClass="select"
+              bsClass={classNames({
+                'form-control': true,
+                [styles.dirty]:
+                  i < texts.length - 1 &&
+                  dirty &&
+                  !ignoreDirty &&
+                  !error &&
+                  !warning,
+                [styles.active]: active
+              })}
               {...props}
             >
               {options.map(({ key, name }, o) =>
@@ -78,12 +96,12 @@ class ExpandingSelectField extends Component {
         </div>{' '}
         {error &&
           <HelpBlock>
-            {' '}{touched
-              ? error
-              : <FormattedMessage
-                  defaultMessage="This field is required."
-                  id="app.field.isRequired"
-                />}{' '}
+            {' '}{error}{' '}
+          </HelpBlock>}
+        {!error &&
+          warning &&
+          <HelpBlock>
+            {' '}{warning}{' '}
           </HelpBlock>}
       </FormGroup>
     );
@@ -92,13 +110,19 @@ class ExpandingSelectField extends Component {
 
 ExpandingSelectField.propTypes = {
   input: PropTypes.object,
-  meta: PropTypes.object,
+  meta: PropTypes.shape({
+    active: PropTypes.bool,
+    dirty: PropTypes.bool,
+    error: PropTypes.any,
+    warning: PropTypes.any
+  }).isRequired,
   options: PropTypes.array,
   label: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) })
   ]).isRequired,
-  style: PropTypes.object
+  style: PropTypes.object,
+  ignoreDirty: PropTypes.bool
 };
 
 export default ExpandingSelectField;

@@ -1,9 +1,15 @@
 import { createSelector } from 'reselect';
+import { List } from 'immutable';
 import { getJsData } from '../helpers/resourceManager';
+import { loggedInUserIdSelector } from './auth';
 
 /**
  * Public selectors
  */
+
+const getParam = (state, id) => id;
+const EMPTY_LIST = List();
+const EMPTY_OBJ = {};
 
 export const statisticsSelector = state => state.stats.get('resources');
 
@@ -25,3 +31,15 @@ export const getStatuses = (groupId, userId) =>
     getUsersStatistics(groupId, userId),
     stats => (stats ? stats.statuses : {})
   );
+
+export const getStatusesForLoggedUser = createSelector(
+  [statisticsSelector, loggedInUserIdSelector, getParam],
+  (stats, userId, groupId) => {
+    const data = stats.getIn([groupId, 'data'], EMPTY_LIST);
+    if (data !== null) {
+      const statObj = data.toJS().find(stats => stats.userId === userId);
+      return statObj ? statObj.statuses : EMPTY_OBJ;
+    }
+    return EMPTY_OBJ;
+  }
+);

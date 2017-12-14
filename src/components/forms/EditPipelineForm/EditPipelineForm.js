@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import { canUseDOM } from 'exenv';
 import { connect } from 'react-redux';
 import { reduxForm, Field, touch, formValueSelector } from 'redux-form';
 import { FormattedMessage } from 'react-intl';
@@ -20,10 +19,6 @@ import { validatePipeline } from '../../../redux/modules/pipelines';
 import { extractVariables } from '../../../helpers/boxes';
 import { fetchSupplementaryFilesForPipeline } from '../../../redux/modules/pipelineFiles';
 import { createGetPipelineFiles } from '../../../redux/selectors/pipelineFiles';
-
-if (canUseDOM) {
-  require('codemirror/mode/yaml/yaml');
-}
 
 class EditPipelineForm extends Component {
   componentDidMount = () => this.props.loadAsync();

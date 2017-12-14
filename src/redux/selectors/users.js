@@ -4,10 +4,18 @@ import { fetchManyEndpoint } from '../modules/users';
 
 import { extractLanguageFromUrl } from '../../links';
 import { loggedInUserIdSelector } from './auth';
-import { groupSelector, studentsOfGroup, supervisorsOfGroup } from './groups';
+import {
+  groupSelector,
+  studentsOfGroup,
+  supervisorsOfGroup,
+  groupsSelector
+} from './groups';
 import { exerciseSelector } from './exercises';
 import { pipelineSelector } from './pipelines';
 import { isReady, getJsData } from '../helpers/resourceManager';
+
+const getParam = (state, id) => id;
+const EMPTY_LIST = List();
 
 const getUsers = state => state.users;
 const getResources = users => users.get('resources');
@@ -39,6 +47,28 @@ export const readyUsersDataSelector = createSelector(
           a.name.firstName.localeCompare(b.name.firstName, lang)
       )
       .toArray()
+);
+
+export const supervisorsOfGroupSelector = createSelector(
+  [readyUsersDataSelector, groupsSelector, getParam],
+  (users, groups, groupId) =>
+    users.filter(user =>
+      groups
+        .getIn([groupId, 'data', 'supervisors'], EMPTY_LIST)
+        .toJS()
+        .includes(user.id)
+    )
+);
+
+export const studentsOfGroupSelector = createSelector(
+  [readyUsersDataSelector, groupsSelector, getParam],
+  (users, groups, groupId) =>
+    users.filter(user =>
+      groups
+        .getIn([groupId, 'data', 'students'], EMPTY_LIST)
+        .toJS()
+        .includes(user.id)
+    )
 );
 
 export const isVerified = userId =>

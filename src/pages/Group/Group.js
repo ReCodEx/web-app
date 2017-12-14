@@ -21,7 +21,6 @@ import HierarchyLine from '../../components/Groups/HierarchyLine';
 import { EditIcon } from '../../components/icons';
 import { LocalizedGroupName } from '../../components/helpers/LocalizedNames';
 
-import { isReady, getJsData } from '../../redux/helpers/resourceManager';
 import {
   createGroup,
   fetchGroupIfNeeded,
@@ -41,26 +40,24 @@ import {
 import { fetchInstancePublicGroups } from '../../redux/modules/publicGroups';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import {
-  readyUsersDataSelector,
   isStudentOf,
   isSupervisorOf,
   isAdminOf,
-  isLoggedAsSuperAdmin
+  isLoggedAsSuperAdmin,
+  supervisorsOfGroupSelector,
+  studentsOfGroupSelector
 } from '../../redux/selectors/users';
 
 import {
   groupSelector,
   groupsSelector,
-  groupsAssignmentsSelector,
-  supervisorsOfGroup,
-  studentsOfGroup
+  groupsPublicAssignmentsSelector,
+  groupsAllAssignmentsSelector
 } from '../../redux/selectors/groups';
-import { getExercisesByIdsSelector } from '../../redux/selectors/exercises';
+import { getExercisesForGroup } from '../../redux/selectors/exercises';
 import { publicGroupsSelectors } from '../../redux/selectors/publicGroups';
 
-import { getStatuses } from '../../redux/selectors/stats';
-import { fetchInstanceIfNeeded } from '../../redux/modules/instances';
-import { instanceSelector } from '../../redux/selectors/instances';
+import { getStatusesForLoggedUser } from '../../redux/selectors/stats';
 
 import { getLocalizedName } from '../../helpers/getLocalizedData';
 import withLinks from '../../hoc/withLinks';
@@ -77,7 +74,6 @@ class Group extends Component {
     Promise.all([
       dispatch(fetchGroupIfNeeded(groupId)).then(res => res.value).then(group =>
         Promise.all([
-          dispatch(fetchInstanceIfNeeded(group.instanceId)),
           dispatch(fetchSupervisors(groupId)),
           dispatch(fetchInstancePublicGroups(group.instanceId)),
           Group.isAdminOrSupervisorOf(group, userId) || isSuperAdmin
@@ -104,36 +100,23 @@ class Group extends Component {
   }
 
   componentWillReceiveProps(newProps) {
-    const {
-      params: { groupId },
-      isAdmin,
-      isSupervisor,
-      isStudent,
-      isSuperAdmin
-    } = this.props;
+    const { params: { groupId } } = this.props;
 
-    if (
-      groupId !== newProps.params.groupId ||
-      (!(isStudent || isSupervisor || isAdmin || isSuperAdmin) &&
-        (newProps.isStudent ||
-          newProps.isSupervisor ||
-          newProps.isAdmin ||
-          newProps.isSuperAdmin))
-    ) {
+    if (groupId !== newProps.params.groupId) {
       newProps.loadAsync(newProps.userId, newProps.isSuperAdmin);
     }
   }
 
   getBreadcrumbs = () => {
-    const { group, instance, intl: { locale } } = this.props;
+    const { group, intl: { locale } } = this.props;
     const breadcrumbs = [
       {
-        resource: instance,
+        resource: group,
         iconName: 'university',
         breadcrumb: data => ({
-          link: ({ INSTANCE_URI_FACTORY }) => INSTANCE_URI_FACTORY(data.id),
-          text: data.name,
-          resource: instance
+          link: ({ INSTANCE_URI_FACTORY }) =>
+            INSTANCE_URI_FACTORY(data.instanceId),
+          text: 'Instance'
         })
       },
       {
@@ -304,30 +287,19 @@ Group.contextTypes = {
 };
 
 const mapStateToProps = (state, { params: { groupId } }) => {
-  const group = groupSelector(groupId)(state);
-  const groupData = getJsData(group);
   const userId = loggedInUserIdSelector(state);
-  const supervisorsIds = supervisorsOfGroup(groupId)(state);
-  const studentsIds = studentsOfGroup(groupId)(state);
-  const readyUsers = readyUsersDataSelector(state);
-  const groupExercisesIds = state.groupExercises[groupId]
-    ? state.groupExercises[groupId]
-    : [];
 
   return {
-    group,
+    group: groupSelector(groupId)(state),
     userId,
-    instance: isReady(group)
-      ? instanceSelector(state, groupData.instanceId)
-      : null,
     groups: groupsSelector(state),
     publicGroups: publicGroupsSelectors(state),
-    publicAssignments: groupsAssignmentsSelector(groupId, 'public')(state),
-    allAssignments: groupsAssignmentsSelector(groupId, 'all')(state),
-    groupExercises: getExercisesByIdsSelector(groupExercisesIds)(state),
-    statuses: getStatuses(groupId, userId)(state),
-    supervisors: readyUsers.filter(user => supervisorsIds.includes(user.id)),
-    students: readyUsers.filter(user => studentsIds.includes(user.id)),
+    publicAssignments: groupsPublicAssignmentsSelector(state, groupId),
+    allAssignments: groupsAllAssignmentsSelector(state, groupId),
+    groupExercises: getExercisesForGroup(state, groupId),
+    statuses: getStatusesForLoggedUser(state, groupId),
+    supervisors: supervisorsOfGroupSelector(state, groupId),
+    students: studentsOfGroupSelector(state, groupId),
     isStudent: isStudentOf(userId, groupId)(state),
     isSupervisor: isSupervisorOf(userId, groupId)(state),
     isAdmin: isAdminOf(userId, groupId)(state),

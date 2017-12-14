@@ -11,7 +11,9 @@ import { isReady, getId, getJsData } from '../helpers/resourceManager';
 /**
  * Select groups part of the state
  */
+const getParam = (state, id) => id;
 const EMPTY_MAP = Map();
+const EMPTY_LIST = List();
 
 export const groupsSelector = state => state.groups.get('resources');
 
@@ -83,12 +85,21 @@ export const groupsAssignmentsIdsSelector = (id, type = 'public') =>
         : List()
   );
 
-export const groupsAssignmentsSelector = (id, type = 'public') =>
-  createSelector(
-    [groupsAssignmentsIdsSelector(id, type), getAssignments],
-    (groupsAssignmentsIds, assignments) =>
-      groupsAssignmentsIds.map(id => assignments.getIn(['resources', id]))
-  );
+export const groupsPublicAssignmentsSelector = createSelector(
+  [groupsSelector, getAssignments, getParam],
+  (groups, assignments, groupId) =>
+    groups
+      .getIn([groupId, 'data', 'assignments', 'public'], EMPTY_LIST)
+      .map(id => assignments.getIn(['resources', id]))
+);
+
+export const groupsAllAssignmentsSelector = createSelector(
+  [groupsSelector, getAssignments, getParam],
+  (groups, assignments, groupId) =>
+    groups
+      .getIn([groupId, 'data', 'assignments', 'all'], EMPTY_LIST)
+      .map(id => assignments.getIn(['resources', id]))
+);
 
 const getGroupParentIds = (id, groups) => {
   const group = groups.get(id);

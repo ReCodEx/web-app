@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { canUseDOM } from 'exenv';
 import { reduxForm, Field, FieldArray, touch } from 'redux-form';
 import {
   injectIntl,
@@ -21,10 +20,6 @@ import LocalizedTextsFormField from '../LocalizedTextsFormField';
 import { LocalizedExerciseName } from '../../helpers/LocalizedNames';
 import { validateExercise } from '../../../redux/modules/exercises';
 import withLinks from '../../../hoc/withLinks';
-
-if (canUseDOM) {
-  require('codemirror/mode/yaml/yaml');
-}
 
 const messages = defineMessages({
   easy: {
@@ -52,7 +47,7 @@ const EditExerciseForm = ({
   asyncValidating,
   formValues: { localizedTexts } = {},
   intl: { formatMessage, locale },
-  links: { EXERCISE_EDIT_CONFIG_URI_FACTORY }
+  links: { EXERCISE_EDIT_SIMPLE_CONFIG_URI_FACTORY }
 }) =>
   <FormBox
     title={
@@ -102,7 +97,9 @@ const EditExerciseForm = ({
             )
           }}
         />
-        <LinkContainer to={EXERCISE_EDIT_CONFIG_URI_FACTORY(exercise.id)}>
+        <LinkContainer
+          to={EXERCISE_EDIT_SIMPLE_CONFIG_URI_FACTORY(exercise.id)}
+        >
           <Button bsStyle="info">
             <Icon name="arrow-right" />{' '}
             <FormattedMessage

@@ -9,21 +9,25 @@ import {
   HelpBlock,
   Label
 } from 'react-bootstrap';
+import classNames from 'classnames';
 
 import { isArrayType } from '../../../helpers/boxes';
+
+import styles from './commonStyles.less';
 
 const getLabelStyle = portType => (isArrayType(portType) ? 'primary' : 'info');
 
 const PortField = ({
   input,
-  meta: { touched, error },
+  meta: { active, dirty, error, warning },
   label,
   portType,
+  ignoreDirty = false,
   ...props
 }) =>
   <FormGroup
     controlId={input.name}
-    validationState={error ? (touched ? 'error' : 'warning') : undefined}
+    validationState={error ? 'error' : warning ? 'warning' : undefined}
   >
     <ControlLabel>
       {label}{' '}
@@ -34,15 +38,24 @@ const PortField = ({
         {portType}
       </Label>
     </ControlLabel>
-    <FormControl {...input} {...props} type="text" />
+    <FormControl
+      {...input}
+      {...props}
+      type="text"
+      bsClass={classNames({
+        'form-control': true,
+        [styles.dirty]: dirty && !ignoreDirty && !error && !warning,
+        [styles.active]: active
+      })}
+    />
     {error &&
       <HelpBlock>
-        {' '}{touched
-          ? error
-          : <FormattedMessage
-              defaultMessage="This field is required."
-              id="app.field.isRequired"
-            />}{' '}
+        {' '}{error}{' '}
+      </HelpBlock>}
+    {!error &&
+      warning &&
+      <HelpBlock>
+        {' '}{warning}{' '}
       </HelpBlock>}
   </FormGroup>;
 
@@ -51,14 +64,17 @@ PortField.propTypes = {
     value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired
   }).isRequired,
   meta: PropTypes.shape({
-    touched: PropTypes.bool,
-    error: PropTypes.any
+    active: PropTypes.bool,
+    dirty: PropTypes.bool,
+    error: PropTypes.any,
+    warning: PropTypes.any
   }).isRequired,
   label: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) })
   ]).isRequired,
-  portType: PropTypes.string.isRequired
+  portType: PropTypes.string.isRequired,
+  ignoreDirty: PropTypes.bool
 };
 
 export default PortField;

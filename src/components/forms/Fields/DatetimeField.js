@@ -5,8 +5,11 @@ import Datetime from 'react-datetime';
 import 'react-datetime/css/react-datetime.css';
 
 import { FormGroup, ControlLabel, HelpBlock } from 'react-bootstrap';
+import classNames from 'classnames';
 
 import withLinks from '../../../hoc/withLinks';
+
+import styles from './commonStyles.less';
 
 class DatetimeField extends Component {
   /**
@@ -24,9 +27,10 @@ class DatetimeField extends Component {
   render() {
     const {
       input,
-      meta: { touched, error },
+      meta: { active, dirty, error, warning },
       disabled,
       label,
+      ignoreDirty = false,
       ...props
     } = this.props;
 
@@ -35,7 +39,7 @@ class DatetimeField extends Component {
     return (
       <FormGroup
         controlId={input.name}
-        validationState={error ? (touched ? 'error' : 'warning') : undefined}
+        validationState={error ? 'error' : warning ? 'warning' : undefined}
       >
         <ControlLabel>{label}</ControlLabel>
         <Datetime
@@ -44,15 +48,20 @@ class DatetimeField extends Component {
           locale={lang}
           onFocus={() => this.onFocus()}
           inputProps={{ disabled }}
+          bsClass={classNames({
+            'form-control': true,
+            [styles.dirty]: dirty && !ignoreDirty && !error && !warning,
+            [styles.active]: active
+          })}
         />{' '}
         {error &&
           <HelpBlock>
-            {' '}{touched
-              ? error
-              : <FormattedMessage
-                  defaultMessage="This field is required."
-                  id="app.field.isRequired"
-                />}{' '}
+            {' '}{error}{' '}
+          </HelpBlock>}
+        {!error &&
+          warning &&
+          <HelpBlock>
+            {' '}{warning}{' '}
           </HelpBlock>}
       </FormGroup>
     );
@@ -75,10 +84,13 @@ DatetimeField.propTypes = {
     ])
   }).isRequired,
   meta: PropTypes.shape({
-    touched: PropTypes.bool,
-    error: PropTypes.any
+    active: PropTypes.bool,
+    dirty: PropTypes.bool,
+    error: PropTypes.any,
+    warning: PropTypes.any
   }).isRequired,
-  disabled: PropTypes.bool
+  disabled: PropTypes.bool,
+  ignoreDirty: PropTypes.bool
 };
 
 export default withLinks(DatetimeField);
