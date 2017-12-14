@@ -111,8 +111,6 @@ const RegistrationForm = ({
       }
     />
 
-    {/* <Throttle time={500} handler="onKeyDown">    </Throttle> */}
-
     <Field
       name="password"
       component={PasswordField}

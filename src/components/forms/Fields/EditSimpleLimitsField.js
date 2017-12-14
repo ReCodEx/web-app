@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Field } from 'redux-form';
 import { FormattedMessage } from 'react-intl';
-import { Row, Col } from 'react-bootstrap';
+import { Row, Col, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import Icon from 'react-fontawesome';
 
 import FlatButton from '../../widgets/FlatButton';
@@ -102,9 +102,21 @@ const EditSimpleLimitsField = ({
             <tr>
               <td className={styles.buttonsCol}>
                 {testsCount > 1 &&
-                  <FlatButton onClick={cloneVertically('memory')} bsSize="xs">
-                    <Icon name="arrows-v" />
-                  </FlatButton>}
+                  <OverlayTrigger
+                    placement="bottom"
+                    overlay={
+                      <Tooltip id={Date.now()}>
+                        <FormattedMessage
+                          id="app.editSimpleLimitsField.tooltip.cloneVertical"
+                          defaultMessage="Copy this value vertically to all tests within the environment."
+                        />
+                      </Tooltip>
+                    }
+                  >
+                    <FlatButton onClick={cloneVertically('memory')} bsSize="xs">
+                      <Icon name="arrows-v" />
+                    </FlatButton>
+                  </OverlayTrigger>}
                 {environmentsCount > 1 &&
                   <Confirm
                     id={`confirm.${id}.memory.horizontal`}
@@ -116,9 +128,21 @@ const EditSimpleLimitsField = ({
                       />
                     }
                   >
-                    <FlatButton bsSize="xs">
-                      <Icon name="arrows-h" />
-                    </FlatButton>
+                    <OverlayTrigger
+                      placement="bottom"
+                      overlay={
+                        <Tooltip id={Date.now()}>
+                          <FormattedMessage
+                            id="app.editSimpleLimitsField.tooltip.cloneHorizontal"
+                            defaultMessage="Copy this value horizontally to all environments of the test."
+                          />
+                        </Tooltip>
+                      }
+                    >
+                      <FlatButton bsSize="xs">
+                        <Icon name="arrows-h" />
+                      </FlatButton>
+                    </OverlayTrigger>
                   </Confirm>}
                 {testsCount > 1 &&
                   environmentsCount > 1 &&
@@ -132,9 +156,21 @@ const EditSimpleLimitsField = ({
                       />
                     }
                   >
-                    <FlatButton bsSize="xs">
-                      <Icon name="arrows" />
-                    </FlatButton>
+                    <OverlayTrigger
+                      placement="bottom"
+                      overlay={
+                        <Tooltip id={Date.now()}>
+                          <FormattedMessage
+                            id="app.editSimpleLimitsField.tooltip.cloneAll"
+                            defaultMessage="Copy this value to all tests in all environments."
+                          />
+                        </Tooltip>
+                      }
+                    >
+                      <FlatButton bsSize="xs">
+                        <Icon name="arrows" />
+                      </FlatButton>
+                    </OverlayTrigger>
                   </Confirm>}
               </td>
             </tr>
@@ -160,12 +196,24 @@ const EditSimpleLimitsField = ({
             <tr>
               <td className={styles.buttonsCol}>
                 {testsCount > 1 &&
-                  <FlatButton
-                    onClick={cloneVertically('wall-time')}
-                    bsSize="xs"
+                  <OverlayTrigger
+                    placement="bottom"
+                    overlay={
+                      <Tooltip id={Date.now()}>
+                        <FormattedMessage
+                          id="app.editSimpleLimitsField.tooltip.cloneVertical"
+                          defaultMessage="Copy this value vertically to all tests within the environment."
+                        />
+                      </Tooltip>
+                    }
                   >
-                    <Icon name="arrows-v" />
-                  </FlatButton>}
+                    <FlatButton
+                      onClick={cloneVertically('wall-time')}
+                      bsSize="xs"
+                    >
+                      <Icon name="arrows-v" />
+                    </FlatButton>
+                  </OverlayTrigger>}
                 {environmentsCount > 1 &&
                   <Confirm
                     id={`confirm.${id}.wall-time.horizontal`}
@@ -177,9 +225,21 @@ const EditSimpleLimitsField = ({
                       />
                     }
                   >
-                    <FlatButton bsSize="xs">
-                      <Icon name="arrows-h" />
-                    </FlatButton>
+                    <OverlayTrigger
+                      placement="bottom"
+                      overlay={
+                        <Tooltip id={Date.now()}>
+                          <FormattedMessage
+                            id="app.editSimpleLimitsField.tooltip.cloneHorizontal"
+                            defaultMessage="Copy this value horizontally to all environments of the test."
+                          />
+                        </Tooltip>
+                      }
+                    >
+                      <FlatButton bsSize="xs">
+                        <Icon name="arrows-h" />
+                      </FlatButton>
+                    </OverlayTrigger>
                   </Confirm>}
                 {testsCount > 1 &&
                   environmentsCount > 1 &&
@@ -193,9 +253,21 @@ const EditSimpleLimitsField = ({
                       />
                     }
                   >
-                    <FlatButton bsSize="xs">
-                      <Icon name="arrows" />
-                    </FlatButton>
+                    <OverlayTrigger
+                      placement="bottom"
+                      overlay={
+                        <Tooltip id={Date.now()}>
+                          <FormattedMessage
+                            id="app.editSimpleLimitsField.tooltip.cloneAll"
+                            defaultMessage="Copy this value to all tests in all environments."
+                          />
+                        </Tooltip>
+                      }
+                    >
+                      <FlatButton bsSize="xs">
+                        <Icon name="arrows" />
+                      </FlatButton>
+                    </OverlayTrigger>
                   </Confirm>}
               </td>
             </tr>

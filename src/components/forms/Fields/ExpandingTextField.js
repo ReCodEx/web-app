@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { Field } from 'redux-form';
-import { ControlLabel } from 'react-bootstrap';
+import { ControlLabel, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import Icon from 'react-fontawesome';
 
 import FlatButton from '../../widgets/FlatButton';
@@ -29,14 +29,38 @@ const ExpandingTextField = ({
               <Field name={field} component={TextField} label={''} {...props} />
             </td>
             <td className={styles.alignTop}>
-              <FlatButton onClick={() => fields.insert(index, '')}>
-                <Icon name="reply" />
-              </FlatButton>
+              <OverlayTrigger
+                placement="top"
+                overlay={
+                  <Tooltip id={Date.now()}>
+                    <FormattedMessage
+                      id="app.expandingTextField.tooltip.addAbove"
+                      defaultMessage="Insert new item right above."
+                    />
+                  </Tooltip>
+                }
+              >
+                <FlatButton onClick={() => fields.insert(index, '')}>
+                  <Icon name="reply" />
+                </FlatButton>
+              </OverlayTrigger>
             </td>
             <td className={styles.alignTop}>
-              <FlatButton onClick={() => fields.remove(index)}>
-                <Icon name="remove" />
-              </FlatButton>
+              <OverlayTrigger
+                placement="top"
+                overlay={
+                  <Tooltip id={Date.now()}>
+                    <FormattedMessage
+                      id="app.expandingTextField.tooltip.remove"
+                      defaultMessage="Remove this item from the list."
+                    />
+                  </Tooltip>
+                }
+              >
+                <FlatButton onClick={() => fields.remove(index)}>
+                  <Icon name="remove" />
+                </FlatButton>
+              </OverlayTrigger>
             </td>
           </tr>
         )}
@@ -50,9 +74,21 @@ const ExpandingTextField = ({
             defaultMessage="There are no items yet..."
           />
         </span>}
-      <FlatButton onClick={() => fields.push('')}>
-        <Icon name="plus" />
-      </FlatButton>
+      <OverlayTrigger
+        placement="right"
+        overlay={
+          <Tooltip id={Date.now()}>
+            <FormattedMessage
+              id="app.expandingTextField.tooltip.add"
+              defaultMessage="Append a new item."
+            />
+          </Tooltip>
+        }
+      >
+        <FlatButton onClick={() => fields.push('')}>
+          <Icon name="plus" />
+        </FlatButton>
+      </OverlayTrigger>
     </div>
   </div>;
 

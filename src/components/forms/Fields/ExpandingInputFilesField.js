@@ -2,7 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { Field } from 'redux-form';
-import { ControlLabel } from 'react-bootstrap';
+import { ControlLabel, OverlayTrigger, Tooltip } from 'react-bootstrap';
+
 import Icon from 'react-fontawesome';
 
 import FlatButton from '../../widgets/FlatButton';
@@ -46,7 +47,6 @@ const ExpandingInputFilesField = ({
               </ControlLabel>
             </th>
             <th />
-            <th />
           </tr>
         </thead>
         <tbody>
@@ -73,14 +73,21 @@ const ExpandingInputFilesField = ({
                 />
               </td>
               <td className={styles.alignTop}>
-                <FlatButton onClick={() => fields.insert(index, EMPTY_VALUE)}>
-                  <Icon name="reply" />
-                </FlatButton>
-              </td>
-              <td className={styles.alignTop}>
-                <FlatButton onClick={() => fields.remove(index)}>
-                  <Icon name="remove" />
-                </FlatButton>
+                <OverlayTrigger
+                  placement="top"
+                  overlay={
+                    <Tooltip id={Date.now()}>
+                      <FormattedMessage
+                        id="app.expandingInputFilesField.tooltip.remove"
+                        defaultMessage="Remove this file from input files."
+                      />
+                    </Tooltip>
+                  }
+                >
+                  <FlatButton onClick={() => fields.remove(index)}>
+                    <Icon name="remove" />
+                  </FlatButton>
+                </OverlayTrigger>
               </td>
             </tr>
           )}
@@ -94,9 +101,21 @@ const ExpandingInputFilesField = ({
             defaultMessage="There are no files yet..."
           />
         </span>}
-      <FlatButton onClick={() => fields.push(EMPTY_VALUE)}>
-        <Icon name="plus" />
-      </FlatButton>
+      <OverlayTrigger
+        placement="right"
+        overlay={
+          <Tooltip id={Date.now()}>
+            <FormattedMessage
+              id="app.expandingInputFilesField.tooltip.add"
+              defaultMessage="Add another input file."
+            />
+          </Tooltip>
+        }
+      >
+        <FlatButton onClick={() => fields.push(EMPTY_VALUE)}>
+          <Icon name="plus" />
+        </FlatButton>
+      </OverlayTrigger>
     </div>
   </div>;
 
