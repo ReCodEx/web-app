@@ -256,7 +256,7 @@
   "app.editExerciseConfigForm.submit": "Change configuration",
   "app.editExerciseConfigForm.submitting": "Saving configuration ...",
   "app.editExerciseConfigForm.success": "Configuration was changed.",
-  "app.editExerciseConfigForm.validation.duplicateInputFile": "Duplicate name detected. The input file aliases must be unique.",
+  "app.editExerciseConfigForm.validation.duplicateInputFile": "Duplicate name detected.",
   "app.editExerciseConfigForm.validation.duplicatePipeline": "Please select a different pipeline.",
   "app.editExerciseConfigForm.validation.noEnvironments": "Please add at least one environment config for the exercise.",
   "app.editExerciseConfigForm.variables": "Variables",

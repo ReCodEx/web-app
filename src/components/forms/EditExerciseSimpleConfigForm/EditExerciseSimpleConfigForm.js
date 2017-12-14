@@ -175,14 +175,15 @@ const validate = formData => {
           }
           indices.forEach(
             idx =>
-              (testErrors[testKey].inputFiles[idx] = (
-                <FormattedMessage
-                  id="app.editExerciseConfigForm.validation.duplicateInputFile"
-                  defaultMessage="Duplicate name detected. The input file aliases must be unique."
-                />
-              ))
+              (testErrors[testKey].inputFiles[idx] = {
+                name: (
+                  <FormattedMessage
+                    id="app.editExerciseConfigForm.validation.duplicateInputFile"
+                    defaultMessage="Duplicate name detected."
+                  />
+                )
+              })
           );
-          console.log(testErrors);
         }
       }
     }
@@ -217,7 +218,7 @@ export default connect(
       'supplementaryFiles',
       'exerciseTests',
       'handleSubmit'
-    ]
-    //validate
+    ],
+    validate
   })(EditExerciseSimpleConfigForm)
 );
