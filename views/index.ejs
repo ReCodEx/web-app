@@ -21,10 +21,10 @@
   </div>
   <% if (reduxState) { %>
     <script>
-      window.__INITIAL_STATE__ = <% - reduxState %>;
+      window.__INITIAL_STATE__ = <%- reduxState %>;
     </script>
-    <% } %>
-      <script src="<%= bundle %>"></script>
+  <% } %>
+    <script src="<%= bundle %>"></script>
 </body>
 
 </html>
