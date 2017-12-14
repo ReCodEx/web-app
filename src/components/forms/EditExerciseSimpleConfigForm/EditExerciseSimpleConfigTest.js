@@ -85,14 +85,16 @@ const EditExerciseSimpleConfigTest = ({
   formValues,
   testName,
   test,
+  testId,
   testKey,
   testIndex,
+  testErrors,
   smartFill,
   intl
 }) => {
   const supplementaryFilesOptions = supplementaryFiles
     .sort((a, b) => a.name.localeCompare(b.name, intl.locale))
-    .filter((item, pos, arr) => arr.indexOf(item) === pos)
+    .filter((item, pos, arr) => arr.indexOf(item) === pos) // WTF?
     .map(data => ({
       key: data.name,
       name: data.name
@@ -321,7 +323,11 @@ const EditExerciseSimpleConfigTest = ({
                   />
                 }
               >
-                <Button bsStyle={'primary'} className="btn-flat">
+                <Button
+                  bsStyle={'primary'}
+                  className="btn-flat"
+                  disabled={Boolean(testErrors)}
+                >
                   <Icon name="arrows" />{' '}
                   <FormattedMessage
                     id="app.editExerciseConfigForm.smartFill"
@@ -339,11 +345,13 @@ const EditExerciseSimpleConfigTest = ({
 EditExerciseSimpleConfigTest.propTypes = {
   testName: PropTypes.string.isRequired,
   test: PropTypes.string.isRequired,
+  testId: PropTypes.number.isRequired,
   testKey: PropTypes.string.isRequired,
   testIndex: PropTypes.number.isRequired,
   supplementaryFiles: PropTypes.array.isRequired,
   exerciseTests: PropTypes.array,
   formValues: PropTypes.object,
+  testErrors: PropTypes.object,
   smartFill: PropTypes.func.isRequired,
   intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired
 };

@@ -9,3 +9,9 @@ export const exerciseConfigsSelector = createSelector(
 );
 export const exerciseConfigSelector = exerciseId =>
   createSelector(exerciseConfigsSelector, configs => configs.get(exerciseId));
+
+export const exerciseConfigFormErrors = (state, formName) =>
+  (state.form[formName] &&
+    state.form[formName].syncErrors &&
+    state.form[formName].syncErrors.config) ||
+  null;

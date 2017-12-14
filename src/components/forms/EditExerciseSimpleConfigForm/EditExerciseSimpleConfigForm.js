@@ -15,6 +15,8 @@ import ResourceRenderer from '../../helpers/ResourceRenderer';
 import EditExerciseSimpleConfigTest from './EditExerciseSimpleConfigTest';
 import { createGetSupplementaryFiles } from '../../../redux/selectors/supplementaryFiles';
 import { encodeTestId } from '../../../redux/modules/simpleLimits';
+import { smartFillExerciseConfigForm } from '../../../redux/modules/exerciseConfigs';
+import { exerciseConfigFormErrors } from '../../../redux/selectors/exerciseConfigs';
 
 const EditExerciseSimpleConfigForm = ({
   reset,
@@ -25,8 +27,10 @@ const EditExerciseSimpleConfigForm = ({
   invalid,
   dirty,
   formValues,
+  formErrors,
   supplementaryFiles,
-  exerciseTests
+  exerciseTests,
+  smartFill
 }) =>
   <FormBox
     title={
@@ -112,9 +116,11 @@ const EditExerciseSimpleConfigForm = ({
               supplementaryFiles={files}
               testName={test.name}
               test={'config.' + encodeTestId(test.id)}
+              testId={test.id}
               testKey={encodeTestId(test.id)}
               testIndex={idx}
-              smartFill={() => undefined}
+              testErrors={formErrors && formErrors[encodeTestId(test.id)]}
+              smartFill={smartFill(test.id, exerciseTests, files)}
             />
           )}
         </div>}
@@ -133,21 +139,78 @@ EditExerciseSimpleConfigForm.propTypes = {
   submitSucceeded: PropTypes.bool,
   invalid: PropTypes.bool,
   formValues: PropTypes.object,
+  formErrors: PropTypes.object,
   supplementaryFiles: ImmutablePropTypes.map,
-  exerciseTests: PropTypes.array
+  exerciseTests: PropTypes.array,
+  smartFill: PropTypes.func.isRequired
 };
 
-export default connect((state, { exercise }) => {
-  const getSupplementaryFilesForExercise = createGetSupplementaryFiles(
-    exercise.supplementaryFilesIds
-  );
-  return {
-    supplementaryFiles: getSupplementaryFilesForExercise(state),
-    formValues: getFormValues('editExerciseSimpleConfig')(state)
-  };
-})(
+const FORM_NAME = 'editExerciseSimpleConfig';
+
+const validate = formData => {
+  const testErrors = {};
+
+  for (const testKey in formData.config) {
+    const test = formData.config[testKey];
+    if (test.inputFiles.length > 1) {
+      // Construct a name index to detect duplicates ...
+      const nameIndex = {};
+      test.inputFiles.forEach(({ name }, idx) => {
+        name = name && name.trim();
+        if (name) {
+          if (nameIndex[name] === undefined) {
+            nameIndex[name] = [idx];
+          } else {
+            nameIndex[name].push(idx);
+          }
+        }
+      });
+
+      // Traverse the index and place an error to all duplicates ...
+      for (const name in nameIndex) {
+        const indices = nameIndex[name];
+        if (indices.length > 1) {
+          if (!testErrors[testKey]) {
+            testErrors[testKey] = { inputFiles: [] };
+          }
+          indices.forEach(
+            idx =>
+              (testErrors[testKey].inputFiles[idx] = {
+                name: (
+                  <FormattedMessage
+                    id="app.editExerciseConfigForm.validation.duplicateInputFile"
+                    defaultMessage="Duplicate name detected."
+                  />
+                )
+              })
+          );
+        }
+      }
+    }
+  }
+  return Object.keys(testErrors).length > 0
+    ? { config: testErrors }
+    : undefined;
+};
+
+export default connect(
+  (state, { exercise }) => {
+    const getSupplementaryFilesForExercise = createGetSupplementaryFiles(
+      exercise.supplementaryFilesIds
+    );
+    return {
+      supplementaryFiles: getSupplementaryFilesForExercise(state),
+      formValues: getFormValues(FORM_NAME)(state),
+      formErrors: exerciseConfigFormErrors(state, FORM_NAME)
+    };
+  },
+  dispatch => ({
+    smartFill: (testId, tests, files) => () =>
+      dispatch(smartFillExerciseConfigForm(FORM_NAME, testId, tests, files))
+  })
+)(
   reduxForm({
-    form: 'editExerciseSimpleConfig',
+    form: FORM_NAME,
     enableReinitialize: true,
     keepDirtyOnReinitialize: false,
     immutableProps: [
@@ -155,6 +218,7 @@ export default connect((state, { exercise }) => {
       'supplementaryFiles',
       'exerciseTests',
       'handleSubmit'
-    ]
+    ],
+    validate
   })(EditExerciseSimpleConfigForm)
 );
