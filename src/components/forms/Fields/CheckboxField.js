@@ -6,8 +6,6 @@ import { FormGroup, HelpBlock, Checkbox } from 'react-bootstrap';
 
 import OnOffCheckbox from '../OnOffCheckbox';
 
-import styles from './commonStyles.less';
-
 const CheckboxField = ({
   input,
   onOff = false,

@@ -1,24 +1,30 @@
 <!DOCTYPE html>
 <html>
-  <head <%- head.htmlAttributes.toString() %>>
-    <meta charset="utf-8">
-    <%- head.title.toString() %>
-    <%- head.meta.toString() %>
-    <%- head.link.toString() %>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="icon" type="image/png" href="/public/favicon.ico" />
 
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.2/css/font-awesome.min.css">
-    <link rel="stylesheet" href="<%= style %>">
-  </head>
-  <body class="skin-green fixed">
-    <div id="root"><%- html %></div>
-    <% if (reduxState) { %>
+<head <%- head.htmlAttributes.toString() %>>
+  <meta charset="utf-8">
+  <%- head.title.toString() %>
+    <%- head.meta.toString() %>
+      <%- head.link.toString() %>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="icon" type="image/png" href="/public/favicon.ico" />
+
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+          crossorigin="anonymous">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link rel="stylesheet" href="<%= style %>">
+</head>
+
+<body class="skin-green fixed">
+  <div id="root">
+    <%- html %>
+  </div>
+  <% if (reduxState) { %>
     <script>
-      window.__INITIAL_STATE__ = <%- reduxState  %>;
+      window.__INITIAL_STATE__ = <% - reduxState %>;
     </script>
     <% } %>
-    <script src="<%= bundle %>"></script>
-  </body>
+      <script src="<%= bundle %>"></script>
+</body>
+
 </html>

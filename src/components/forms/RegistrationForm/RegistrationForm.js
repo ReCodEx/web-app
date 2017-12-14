@@ -6,6 +6,7 @@ import { Alert } from 'react-bootstrap';
 import isEmail from 'validator/lib/isEmail';
 
 import ResourceRenderer from '../../helpers/ResourceRenderer';
+import { eventAggregator } from '../../../helpers/eventAggregator';
 import FormBox from '../../widgets/FormBox';
 import {
   EmailField,
