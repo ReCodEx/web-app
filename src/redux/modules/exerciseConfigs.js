@@ -3,7 +3,6 @@ import { change } from 'redux-form';
 
 import factory, { initialState } from '../helpers/resourceManager';
 import { encodeTestId } from './simpleLimits';
-import { absolute } from '../../links/index';
 
 /**
  * Create actions & reducer
