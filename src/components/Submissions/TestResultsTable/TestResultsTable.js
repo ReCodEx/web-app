@@ -88,7 +88,7 @@ const TestResultsTable = ({ results, runtimeEnvironmentId }) =>
               </Tooltip>
             }
           >
-            <Icon name="stack-overflow" />
+            <Icon name="microchip" />
           </OverlayTrigger>
         </th>
         <th className="text-center">
@@ -103,7 +103,7 @@ const TestResultsTable = ({ results, runtimeEnvironmentId }) =>
               </Tooltip>
             }
           >
-            <Icon name="rocket" />
+            <Icon name="hourglass-end" />
           </OverlayTrigger>
         </th>
         <th className="text-center">
