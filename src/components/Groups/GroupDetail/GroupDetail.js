@@ -61,7 +61,7 @@ const GroupDetail = ({
             >
               <Table>
                 <tbody>
-                  {externalId &&
+                  {Boolean(externalId) &&
                     <tr>
                       <th>
                         <FormattedMessage
