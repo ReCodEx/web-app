@@ -3,7 +3,7 @@
 [![Build Status](https://travis-ci.org/ReCodEx/web-app.svg?branch=master)](https://travis-ci.org/ReCodEx/web-app)
 [![styled with prettier](https://img.shields.io/badge/styled_with-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
 
-The descriptin and documentation of the project is placed in the [global wiki](https://github.com/ReCodEx/wiki/wiki/Web-application) of the ReCodEx project.
+The descriptin and documentation of the project is placed in the [global wiki](https://github.com/ReCodEx/wiki/wiki) of the ReCodEx project.
 
 ## Environment variables
 
@@ -42,7 +42,3 @@ yarn start
 ```
 
 Consider using [PM2](http://pm2.keymetrics.io/) or similar tool to run the `yarn start` command to prevent crashes of the web service. It is wise to use watch mode of PM2 in `prod/` subdirectory and deploy the app using `yarn deploy` command.
-
-## License
-
-[MIT](http://isekivacenz.mit-license.org/)
