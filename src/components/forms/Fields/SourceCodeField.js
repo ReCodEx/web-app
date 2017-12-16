@@ -1,65 +1,35 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import { canUseDOM } from 'exenv';
+
 import ClientOnly from '../../helpers/ClientOnly';
 
 import { FormGroup, ControlLabel, HelpBlock } from 'react-bootstrap';
 
 // load the ACE editor only when rendering in the browser
-let AceEditor = null;
-if (canUseDOM) {
-  AceEditor = require('react-ace').default;
-  require('brace/theme/monokai');
-  require('brace/theme/github');
-  require('brace/mode/c_cpp');
-  require('brace/mode/java');
-  require('brace/mode/csharp');
-  require('brace/keybinding/vim');
-}
-
-const getMode = ext => {
-  switch (ext) {
-    case 'java':
-      return 'java';
-
-    case 'cs':
-      return 'csharp';
-
-    case 'c':
-    case 'cpp':
-    case 'h':
-    case 'hpp':
-      return 'c_cpp';
-
-    case 'md':
-    case 'markdown':
-      return 'markdown';
-
-    case '':
-      return 'makefile';
-
-    default:
-      return 'c_cpp';
-  }
-};
+import {
+  loadAceEditor,
+  getAceModeFromExtension
+} from '../../helpers/AceEditorLoader';
+let AceEditor = loadAceEditor();
 
 const SourceCodeField = (
   {
     input,
     mode,
-    meta: { touched, error },
+    meta: { dirty, error, warning },
     type = 'text',
     label,
     children,
     tabIndex,
+    onBlur,
     ...props
   },
   { userSettings: { vimMode = false, darkTheme = false } }
 ) =>
   <FormGroup
     controlId={input.name}
-    validationState={error ? (touched ? 'error' : 'warning') : undefined}
+    validationState={error ? 'error' : warning ? 'warning' : undefined}
   >
     <ControlLabel>
       {label}
@@ -67,7 +37,7 @@ const SourceCodeField = (
     <ClientOnly>
       <AceEditor
         {...input}
-        mode={getMode(mode)}
+        mode={getAceModeFromExtension(mode)}
         theme={darkTheme ? 'monokai' : 'github'}
         name={input.name}
         tabIndex={tabIndex}
@@ -76,17 +46,22 @@ const SourceCodeField = (
         height="100%"
         minLines={5}
         maxLines={20}
-        editorProps={{ $blockScrolling: true, $autoScrollEditorIntoView: true }}
+        onBlur={() => input.onBlur() // this is a hack that will ensure blur call witout distorting the contents
+        }
+        editorProps={{
+          $blockScrolling: Infinity,
+          $autoScrollEditorIntoView: true
+        }}
       />
     </ClientOnly>
     {error &&
       <HelpBlock>
-        {' '}{touched
-          ? error
-          : <FormattedMessage
-              defaultMessage="This field is required."
-              id="app.field.isRequired"
-            />}{' '}
+        {' '}{error}{' '}
+      </HelpBlock>}
+    {!error &&
+      warning &&
+      <HelpBlock>
+        {' '}{warning}{' '}
       </HelpBlock>}
     {children}
   </FormGroup>;
@@ -97,13 +72,18 @@ SourceCodeField.propTypes = {
   }).isRequired,
   mode: PropTypes.string.isRequired,
   children: PropTypes.any,
-  meta: PropTypes.shape({ error: PropTypes.any, touched: PropTypes.bool }),
+  meta: PropTypes.shape({
+    error: PropTypes.any,
+    warning: PropTypes.any,
+    dirty: PropTypes.bool
+  }),
   tabIndex: PropTypes.number,
   type: PropTypes.string,
   label: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) })
-  ]).isRequired
+  ]).isRequired,
+  onBlur: PropTypes.func
 };
 
 SourceCodeField.contextTypes = {

@@ -152,7 +152,7 @@ const validate = formData => {
 
   for (const testKey in formData.config) {
     const test = formData.config[testKey];
-    if (test.inputFiles.length > 1) {
+    if (test.inputFiles && test.inputFiles.length > 1) {
       // Construct a name index to detect duplicates ...
       const nameIndex = {};
       test.inputFiles.forEach(({ name }, idx) => {
