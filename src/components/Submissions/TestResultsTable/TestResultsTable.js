@@ -11,7 +11,7 @@ import exitCodeMapping from '../../helpers/exitCodeMapping';
 
 const hasValue = value => value !== null;
 
-const tickOrCrossAndRatioOrValue = (isOK, ratio, value, pretty) =>
+const tickOrCrossAndRatioOrValue = (isOK, ratio, value, pretty, multiplier) =>
   <td
     className={classNames({
       'text-center': true,
@@ -30,7 +30,7 @@ const tickOrCrossAndRatioOrValue = (isOK, ratio, value, pretty) =>
           maximumFactionDigits={3}
         />}
       {hasValue(value) && ') '}
-      {hasValue(value) && pretty(value * 1000)}
+      {hasValue(value) && pretty(value * multiplier)}
     </small>
   </td>;
 
@@ -78,12 +78,15 @@ const TestResultsTable = ({ results, runtimeEnvironmentId }) =>
               <Tooltip id="memoryExceeded">
                 <FormattedMessage
                   id="app.submissions.testResultsTable.memoryExceeded"
-                  defaultMessage="Memory limit"
+                  defaultMessage="Measured memory utilization"
                 />
               </Tooltip>
             }
           >
-            <Icon name="microchip" />
+            <span>
+              <Icon name="thermometer-half" />&nbsp;&nbsp;
+              <Icon name="microchip" />
+            </span>
           </OverlayTrigger>
         </th>
         <th className="text-center">
@@ -93,12 +96,15 @@ const TestResultsTable = ({ results, runtimeEnvironmentId }) =>
               <Tooltip id="timeExceeded">
                 <FormattedMessage
                   id="app.submissions.testResultsTable.timeExceeded"
-                  defaultMessage="Time limit"
+                  defaultMessage="Measured execution time"
                 />
               </Tooltip>
             }
           >
-            <Icon name="hourglass-end" />
+            <span>
+              <Icon name="thermometer-half" />&nbsp;&nbsp;
+              <Icon name="bolt" />
+            </span>
           </OverlayTrigger>
         </th>
         <th className="text-center">
@@ -113,7 +119,7 @@ const TestResultsTable = ({ results, runtimeEnvironmentId }) =>
               </Tooltip>
             }
           >
-            <Icon name="exclamation-circle" />
+            <Icon name="power-off" />
           </OverlayTrigger>
         </th>
       </tr>
@@ -179,13 +185,15 @@ const TestResultsTable = ({ results, runtimeEnvironmentId }) =>
               memoryExceeded === false,
               memoryRatio,
               memory,
-              prettyPrintBytes
+              prettyPrintBytes,
+              1024
             )}
             {tickOrCrossAndRatioOrValue(
               timeExceeded === false,
               timeRatio,
               time,
-              prettyMs
+              prettyMs,
+              1000
             )}
 
             <td className="text-center">
