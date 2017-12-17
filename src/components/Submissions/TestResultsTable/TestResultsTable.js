@@ -38,6 +38,7 @@ const TestResultsTable = ({ results, runtimeEnvironmentId }) =>
   <Table responsive>
     <thead>
       <tr>
+        <th />
         <th className="text-center">
           <OverlayTrigger
             placement="top"
@@ -55,12 +56,6 @@ const TestResultsTable = ({ results, runtimeEnvironmentId }) =>
             </span>
           </OverlayTrigger>
         </th>
-        <th>
-          <FormattedMessage
-            id="app.submissions.testResultsTable.testName"
-            defaultMessage="Test name"
-          />
-        </th>
         <th className="text-center">
           <OverlayTrigger
             placement="top"
@@ -73,7 +68,7 @@ const TestResultsTable = ({ results, runtimeEnvironmentId }) =>
               </Tooltip>
             }
           >
-            <Icon name="question" />
+            <Icon name="balance-scale" />
           </OverlayTrigger>
         </th>
         <th className="text-center">
@@ -140,6 +135,9 @@ const TestResultsTable = ({ results, runtimeEnvironmentId }) =>
           exitCode
         }) =>
           <tr key={testName}>
+            <td>
+              {testName}
+            </td>
             <td
               className={classNames({
                 'text-center': true,
@@ -150,9 +148,6 @@ const TestResultsTable = ({ results, runtimeEnvironmentId }) =>
               <b>
                 <FormattedNumber value={score} style="percent" />
               </b>
-            </td>
-            <td>
-              {testName}
             </td>
             <td className="text-center">
               <b>
