@@ -163,6 +163,7 @@ const validate = ({ localizedTexts = [], threshold }) => {
   const errors = {};
 
   if (threshold) {
+    threshold = String(threshold);
     const numericThreshold = Number(threshold);
     if (threshold !== Math.round(numericThreshold).toString()) {
       errors['threshold'] = (
@@ -254,5 +255,7 @@ const validate = ({ localizedTexts = [], threshold }) => {
 
 export default reduxForm({
   form: 'editGroup',
+  enableReinitialize: true,
+  keepDirtyOnReinitialize: false,
   validate
 })(EditGroupForm);
