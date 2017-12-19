@@ -14,18 +14,16 @@ const ResubmitAllSolutions = ({
       defaultMessage="Are you sure you want to resubmit all solutions of all students for this assignment? This can take serious amount of time."
     />
   )
-}) => (
+}) =>
   <Confirm id={id} onConfirmed={resubmit} question={question}>
-    <Button bsStyle="success">
-      <Icon name="mail-forward" />
-      {' '}
+    <Button bsStyle="danger">
+      <Icon name="mail-forward" />{' '}
       <FormattedMessage
         id="app.resubmitSolution.resubmitAll"
-        defaultMessage="Resubmit all solution for this assignment"
+        defaultMessage="Resubmit All Solutions"
       />
     </Button>
-  </Confirm>
-);
+  </Confirm>;
 
 ResubmitAllSolutions.propTypes = {
   id: PropTypes.string.isRequired,

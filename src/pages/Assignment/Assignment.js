@@ -156,7 +156,7 @@ class Assignment extends Component {
                         <EditIcon />{' '}
                         <FormattedMessage
                           id="app.assignment.editSettings"
-                          defaultMessage="Edit assignment settings"
+                          defaultMessage="Edit Assignment Settings"
                         />
                       </Button>
                     </LinkContainer>
@@ -167,7 +167,7 @@ class Assignment extends Component {
                         <ResultsIcon />{' '}
                         <FormattedMessage
                           id="app.assignment.viewResults"
-                          defaultMessage="View student results"
+                          defaultMessage="Student Results"
                         />
                       </Button>
                     </LinkContainer>
