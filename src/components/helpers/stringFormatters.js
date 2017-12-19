@@ -11,7 +11,9 @@ export function parseBytes(value) {
     absValue /= base;
     ++unit;
   }
-  const rounded = Math.round(absValue * 1000) / 1000;
+  const intDigits = Math.round(absValue).toString().length;
+  const fractionBase = intDigits > 3 ? 1 : Math.pow(10, 4 - intDigits);
+  const rounded = Math.round(absValue * fractionBase) / fractionBase;
   return { value: rounded.toString(), unit: units[unit] };
 }
 

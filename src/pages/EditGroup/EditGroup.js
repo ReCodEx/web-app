@@ -31,7 +31,7 @@ class EditGroup extends Component {
 
   getInitialValues = ({ threshold, ...group }) => ({
     ...group,
-    threshold: threshold * 100
+    threshold: String(threshold * 100)
   });
 
   render() {
