@@ -1,26 +1,30 @@
 import { createSelector } from 'reselect';
 import { List } from 'immutable';
 import { getSubmissions } from './submissions';
+import { runtimeEnvironmentSelector } from './runtimeEnvironments';
 
 export const getAssignments = state => state.assignments;
-export const createAssignmentSelector = () =>
-  createSelector([getAssignments, (state, id) => id], (assignments, id) =>
-    assignments.getIn(['resources', id])
-  );
 
-export const getAssignment = id =>
-  createSelector(getAssignments, assignments =>
-    assignments.getIn(['resources', id])
-  );
+const getAssignmentResources = state => getAssignments(state).get('resources');
 
-export const runtimeEnvironmentsSelector = id =>
-  createSelector(
-    getAssignment(id),
-    assignment =>
-      assignment && assignment.get('data') !== null
-        ? assignment.getIn(['data', 'runtimeEnvironmentsIds'])
-        : List()
-  );
+export const getAssignment = createSelector(
+  getAssignmentResources,
+  assignments => id => assignments.get(id)
+);
+
+const EMPTY_ARRAY = [];
+
+export const assignmentEnvironmentsSelector = createSelector(
+  [getAssignment, runtimeEnvironmentSelector],
+  (assignmentSelector, envSelector) => id => {
+    const assignment = assignmentSelector(id);
+    const envIds =
+      assignment && assignment.getIn(['data', 'runtimeEnvironmentsIds']);
+    return envIds && envSelector
+      ? envIds.toArray().map(envSelector)
+      : EMPTY_ARRAY;
+  }
+);
 
 export const getUserSubmissions = (userId, assignmentId) =>
   createSelector(

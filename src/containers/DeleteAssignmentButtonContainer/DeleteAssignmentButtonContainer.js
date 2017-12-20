@@ -11,13 +11,12 @@ const DeleteAssignmentButtonContainer = ({
   deleteAssignment,
   onDeleted,
   ...props
-}) => (
+}) =>
   <DeleteButton
     {...props}
     resource={assignment}
     deleteResource={deleteAssignment}
-  />
-);
+  />;
 
 DeleteAssignmentButtonContainer.propTypes = {
   id: PropTypes.string.isRequired,
@@ -28,7 +27,7 @@ DeleteAssignmentButtonContainer.propTypes = {
 
 export default connect(
   (state, { id }) => ({
-    assignment: getAssignment(id)(state)
+    assignment: getAssignment(state)(id)
   }),
   (dispatch, { id, onDeleted }) => ({
     deleteAssignment: () =>

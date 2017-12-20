@@ -21,6 +21,7 @@ const SubmissionsTable = ({
   title,
   assignmentId,
   submissions,
+  runtimeEnvironments,
   links: { SUBMISSION_DETAIL_URI_FACTORY }
 }) =>
   <Box title={title} collapsable isOpen noPadding unlimitedHeight>
@@ -46,6 +47,12 @@ const SubmissionsTable = ({
               defaultMessage="Received points"
             />
           </th>
+          <th className="text-center">
+            <FormattedMessage
+              id="app.submissionsTable.environment"
+              defaultMessage="Target language"
+            />
+          </th>
           <th>
             <FormattedMessage
               id="app.submissionsTable.note"
@@ -65,7 +72,11 @@ const SubmissionsTable = ({
             {submissions.map((data, i) => {
               const id = data.id;
               const link = SUBMISSION_DETAIL_URI_FACTORY(assignmentId, id);
-
+              const runtimeEnvironment =
+                data.runtimeEnvironmentId &&
+                runtimeEnvironments.find(
+                  ({ id }) => id === data.runtimeEnvironmentId
+                );
               switch (data.lastSubmission
                 ? data.lastSubmission.evaluationStatus
                 : null) {
@@ -75,11 +86,17 @@ const SubmissionsTable = ({
                       {...data}
                       key={id}
                       link={link}
+                      runtimeEnvironment={runtimeEnvironment}
                     />
                   );
                 case 'failed':
                   return (
-                    <FailedSubmissionTableRow {...data} key={id} link={link} />
+                    <FailedSubmissionTableRow
+                      {...data}
+                      key={id}
+                      link={link}
+                      runtimeEnvironment={runtimeEnvironment}
+                    />
                   );
                 case null:
                 case 'work-in-progress':
@@ -89,11 +106,17 @@ const SubmissionsTable = ({
                       key={id}
                       link={link}
                       lastSubmission={data.lastSubmission}
+                      runtimeEnvironment={runtimeEnvironment}
                     />
                   );
                 case 'evaluation-failed':
                   return (
-                    <EvaluationFailedTableRow {...data} key={id} link={link} />
+                    <EvaluationFailedTableRow
+                      {...data}
+                      key={id}
+                      link={link}
+                      runtimeEnvironment={runtimeEnvironment}
+                    />
                   );
                 default:
                   return null;
@@ -116,6 +139,7 @@ SubmissionsTable.propTypes = {
   ]).isRequired,
   assignmentId: PropTypes.string.isRequired,
   submissions: PropTypes.instanceOf(List),
+  runtimeEnvironments: PropTypes.array,
   links: PropTypes.object
 };
 

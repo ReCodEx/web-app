@@ -22,7 +22,7 @@ import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironment
 
 import {
   getAssignment,
-  runtimeEnvironmentsSelector,
+  assignmentEnvironmentsSelector,
   getUserSubmissions
 } from '../../redux/selectors/assignments';
 import { canSubmitSolution } from '../../redux/selectors/canSubmit';
@@ -33,7 +33,6 @@ import {
   isSupervisorOf,
   isLoggedAsSuperAdmin
 } from '../../redux/selectors/users';
-import { runtimeEnvironmentSelector } from '../../redux/selectors/runtimeEnvironments';
 
 import Page from '../../components/layout/Page';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
@@ -276,17 +275,13 @@ Assignment.propTypes = {
 export default withLinks(
   connect(
     (state, { params: { assignmentId, userId } }) => {
-      const assignmentSelector = getAssignment(assignmentId);
-      const environments = runtimeEnvironmentsSelector(assignmentId)(
-        state
-      ).toJS();
       const loggedInUserId = loggedInUserIdSelector(state);
       userId = userId || loggedInUserId;
       return {
-        assignment: assignmentSelector(state),
+        assignment: getAssignment(state)(assignmentId),
         submitting: isSubmitting(state),
-        runtimeEnvironments: environments.map(i =>
-          runtimeEnvironmentSelector(i)(state)
+        runtimeEnvironments: assignmentEnvironmentsSelector(state)(
+          assignmentId
         ),
         userId,
         loggedInUserId,

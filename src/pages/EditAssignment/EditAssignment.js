@@ -15,7 +15,7 @@ import EditAssignmentForm from '../../components/forms/EditAssignmentForm';
 import DeleteAssignmentButtonContainer from '../../containers/DeleteAssignmentButtonContainer';
 import Box from '../../components/widgets/Box';
 import HierarchyLineContainer from '../../containers/HierarchyLineContainer';
-import { EditIcon, ResultsIcon } from '../../components/icons';
+import { ResultsIcon } from '../../components/icons';
 
 import {
   fetchAssignment,
@@ -202,9 +202,8 @@ EditAssignment.propTypes = {
 export default withLinks(
   connect(
     (state, { params: { assignmentId } }) => {
-      const assignmentSelector = getAssignment(assignmentId);
       return {
-        assignment: assignmentSelector(state),
+        assignment: getAssignment(state)(assignmentId),
         runtimeEnvironments: runtimeEnvironmentsSelector(state),
         submitting: isSubmitting(state),
         isSuperAdmin: isLoggedAsSuperAdmin(state),

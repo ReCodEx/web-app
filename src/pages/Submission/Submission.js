@@ -164,7 +164,7 @@ Submission.propTypes = {
 export default connect(
   (state, { params: { submissionId, assignmentId } }) => ({
     submission: getSubmission(submissionId)(state),
-    assignment: getAssignment(assignmentId)(state),
+    assignment: getAssignment(state)(assignmentId),
     isSupervisorOrMore: groupId =>
       isSupervisorOf(loggedInUserIdSelector(state), groupId)(state) ||
       isAdminOf(loggedInUserIdSelector(state), groupId)(state) ||

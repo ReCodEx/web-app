@@ -18,23 +18,24 @@ const SuccessfulSubmissionTableRow = ({
   maxPoints,
   bonusPoints,
   solution: { createdAt },
-  accepted
+  accepted,
+  runtimeEnvironment = null
 }) =>
   <tr>
     <td>
       <AssignmentStatusIcon id={link} status="done" accepted={accepted} />
     </td>
-    <td>
+    <td className="text-nowrap">
       <FormattedDate value={createdAt * 1000} />
       &nbsp;
       <FormattedTime value={createdAt * 1000} />
     </td>
-    <td className="text-center">
+    <td className="text-center text-nowrap">
       <strong className="text-success">
         <FormattedNumber style="percent" value={score} />
       </strong>
     </td>
-    <td className="text-center">
+    <td className="text-center text-nowrap">
       <strong className="text-success">
         <Points
           points={points}
@@ -42,6 +43,9 @@ const SuccessfulSubmissionTableRow = ({
           maxPoints={maxPoints}
         />
       </strong>
+    </td>
+    <td className="text-center text-nowrap">
+      {runtimeEnvironment ? runtimeEnvironment.name : '-'}
     </td>
     <td>
       {note}
@@ -70,7 +74,8 @@ SuccessfulSubmissionTableRow.propTypes = {
   solution: PropTypes.shape({
     createdAt: PropTypes.number.isRequired
   }).isRequired,
-  accepted: PropTypes.bool
+  accepted: PropTypes.bool,
+  runtimeEnvironment: PropTypes.object
 };
 
 export default SuccessfulSubmissionTableRow;

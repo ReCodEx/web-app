@@ -33,6 +33,7 @@ class SubmissionsTableContainer extends Component {
       userId,
       assignmentId,
       submissions,
+      runtimeEnvironments,
       title = (
         <FormattedMessage
           id="app.submissionsTableContainer.title"
@@ -47,6 +48,7 @@ class SubmissionsTableContainer extends Component {
         userId={userId}
         submissions={this.sortSubmissions(submissions)}
         assignmentId={assignmentId}
+        runtimeEnvironments={runtimeEnvironments}
       />
     );
   }
@@ -57,6 +59,7 @@ SubmissionsTableContainer.propTypes = {
   title: PropTypes.string,
   assignmentId: PropTypes.string.isRequired,
   submissions: PropTypes.instanceOf(List),
+  runtimeEnvironments: PropTypes.array,
   loadAsync: PropTypes.func.isRequired
 };
 

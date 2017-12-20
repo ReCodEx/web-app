@@ -8,7 +8,8 @@ const NotEvaluatedSubmissionTableRow = ({
   link,
   note,
   solution: { createdAt },
-  lastSubmission
+  lastSubmission,
+  runtimeEnvironment = null
 }) =>
   <tr>
     <td>
@@ -17,13 +18,16 @@ const NotEvaluatedSubmissionTableRow = ({
         status={lastSubmission ? 'work-in-progress' : 'missing-submission'}
       />
     </td>
-    <td>
+    <td className="text-nowrap">
       <FormattedDate value={createdAt * 1000} />
       &nbsp;
       <FormattedTime value={createdAt * 1000} />
     </td>
-    <td className="text-center">-</td>
-    <td className="text-center">- / -</td>
+    <td className="text-center text-nowrap">-</td>
+    <td className="text-center text-nowrap">- / -</td>
+    <td className="text-center text-nowrap">
+      {runtimeEnvironment ? runtimeEnvironment.name : '-'}
+    </td>
     <td>
       {note}
     </td>
@@ -43,7 +47,8 @@ NotEvaluatedSubmissionTableRow.propTypes = {
   solution: PropTypes.shape({
     createdAt: PropTypes.number.isRequired
   }).isRequired,
-  lastSubmission: PropTypes.object
+  lastSubmission: PropTypes.object,
+  runtimeEnvironment: PropTypes.object
 };
 
 export default NotEvaluatedSubmissionTableRow;
