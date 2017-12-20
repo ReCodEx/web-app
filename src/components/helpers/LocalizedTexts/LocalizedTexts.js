@@ -4,6 +4,8 @@ import { FormattedMessage } from 'react-intl';
 import { Tabs, Tab } from 'react-bootstrap';
 import ReactMarkdown from 'react-remarkable';
 
+import './LocalizedTexts.css';
+
 const LocalizedTexts = ({ locales = [] }, { lang = 'en' }) => (
   <Tabs
     defaultActiveKey={
@@ -19,7 +21,6 @@ const LocalizedTexts = ({ locales = [] }, { lang = 'en' }) => (
         key={i}
         eventKey={locale}
         title={locale}
-        style={{ overflow: 'auto' }}
       >
         <ReactMarkdown source={text} />
       </Tab>
