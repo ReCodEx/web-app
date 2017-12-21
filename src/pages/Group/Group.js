@@ -27,7 +27,7 @@ import {
   fetchInstanceGroupsIfNeeded,
   fetchSubgroups
 } from '../../redux/modules/groups';
-import { fetchGroupsStatsIfNeeded } from '../../redux/modules/stats';
+import { fetchGroupsStats } from '../../redux/modules/stats';
 import { fetchSupervisors, fetchStudents } from '../../redux/modules/users';
 import {
   fetchAssignmentsForGroup,
@@ -61,6 +61,7 @@ import { getStatusesForLoggedUser } from '../../redux/selectors/stats';
 
 import { getLocalizedName } from '../../helpers/getLocalizedData';
 import withLinks from '../../hoc/withLinks';
+import { isReady } from '../../redux/helpers/resourceManager/index';
 
 class Group extends Component {
   static isAdminOrSupervisorOf = (group, userId) =>
@@ -86,7 +87,7 @@ class Group extends Component {
             ? Promise.all([
                 dispatch(fetchAssignmentsForGroup(groupId)),
                 dispatch(fetchStudents(groupId)),
-                dispatch(fetchGroupsStatsIfNeeded(groupId))
+                dispatch(fetchGroupsStats(groupId))
               ])
             : Promise.resolve()
         ])
@@ -104,6 +105,17 @@ class Group extends Component {
 
     if (groupId !== newProps.params.groupId) {
       newProps.loadAsync(newProps.userId, newProps.isSuperAdmin);
+    }
+
+    if (isReady(this.props.group) && isReady(newProps.group)) {
+      const thisData = this.props.group.toJS().data;
+      const newData = newProps.group.toJS().data;
+      if (thisData.supervisors.length !== newData.supervisors.length) {
+        newProps.refetchSupervisors();
+      }
+      if (thisData.students.length !== newData.students.length) {
+        newProps.loadAsync(newProps.userId, newProps.isSuperAdmin);
+      }
     }
   }
 
@@ -278,6 +290,7 @@ Group.propTypes = {
   assignExercise: PropTypes.func.isRequired,
   createGroupExercise: PropTypes.func.isRequired,
   push: PropTypes.func.isRequired,
+  refetchSupervisors: PropTypes.func.isRequired,
   links: PropTypes.object,
   intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired
 };
@@ -322,7 +335,8 @@ const mapDispatchToProps = (dispatch, { params }) => ({
     dispatch(assignExercise(params.groupId, exerciseId)),
   createGroupExercise: () =>
     dispatch(createExercise({ groupId: params.groupId })),
-  push: url => dispatch(push(url))
+  push: url => dispatch(push(url)),
+  refetchSupervisors: () => dispatch(fetchSupervisors(params.groupId))
 });
 
 export default withLinks(
