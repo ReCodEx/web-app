@@ -14,6 +14,7 @@ const StudentsView = ({
   group,
   statuses = [],
   assignments,
+  bestSubmissions,
   isAdmin = false,
   intl: { locale }
 }) =>
@@ -47,6 +48,7 @@ const StudentsView = ({
             assignments={assignments}
             showGroup={false}
             statuses={statuses}
+            bestSubmissions={bestSubmissions}
           />
         </Box>
       </Col>
@@ -83,6 +85,7 @@ StudentsView.propTypes = {
   assignments: ImmutablePropTypes.list.isRequired,
   statuses: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
   isAdmin: PropTypes.bool,
+  bestSubmissions: PropTypes.object,
   intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired
 };
 

@@ -44,11 +44,25 @@ const compareAssignments = (a, b) => {
   }
 };
 
+const displayPoints = (bestSubmissions, assignments) => {
+  const assignmentIds = assignments
+    .filter(isReady)
+    .map(getJsData)
+    .map(assignment => assignment.id);
+  return Object.keys(bestSubmissions)
+    .filter(key => assignmentIds.indexOf(key) >= 0)
+    .reduce((acc, key) => {
+      acc = acc || bestSubmissions[key];
+      return acc;
+    }, false);
+};
+
 const AssignmentsTable = ({
   assignments = List(),
   statuses = [],
   showGroup = true,
   userId = null,
+  bestSubmissions = {},
   intl: { locale }
 }) =>
   <Table hover>
@@ -66,6 +80,13 @@ const AssignmentsTable = ({
             <FormattedMessage
               id="app.assignments.group"
               defaultMessage="Group"
+            />
+          </th>}
+        {displayPoints(bestSubmissions, assignments) &&
+          <th>
+            <FormattedMessage
+              id="app.assignments.points"
+              defaultMessage="Points"
             />
           </th>}
         <th>
@@ -99,6 +120,7 @@ const AssignmentsTable = ({
             showGroup={showGroup}
             status={statuses[assignment.id]}
             locale={locale}
+            bestSubmission={bestSubmissions[assignment.id]}
           />
         )}
     </tbody>
@@ -109,6 +131,7 @@ AssignmentsTable.propTypes = {
   showGroup: PropTypes.bool,
   statuses: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
   userId: PropTypes.string,
+  bestSubmissions: PropTypes.object,
   intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired
 };
 

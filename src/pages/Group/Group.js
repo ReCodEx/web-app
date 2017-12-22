@@ -62,6 +62,8 @@ import { getStatusesForLoggedUser } from '../../redux/selectors/stats';
 import { getLocalizedName } from '../../helpers/getLocalizedData';
 import withLinks from '../../hoc/withLinks';
 import { isReady } from '../../redux/helpers/resourceManager/index';
+import { fetchBestSubmission } from '../../redux/modules/groupResults';
+import { getBestSubmissionsForLoggedInUser } from '../../redux/selectors/groupResults';
 
 class Group extends Component {
   static isAdminOrSupervisorOf = (group, userId) =>
@@ -89,6 +91,13 @@ class Group extends Component {
                 dispatch(fetchStudents(groupId)),
                 dispatch(fetchGroupsStats(groupId))
               ])
+            : Promise.resolve(),
+          group.students.indexOf(userId) >= 0
+            ? Promise.all(
+                group.assignments.all.map(assignmentId =>
+                  dispatch(fetchBestSubmission(userId, assignmentId))
+                )
+              )
             : Promise.resolve()
         ])
       ),
@@ -105,6 +114,7 @@ class Group extends Component {
 
     if (groupId !== newProps.params.groupId) {
       newProps.loadAsync(newProps.userId, newProps.isSuperAdmin);
+      return;
     }
 
     if (isReady(this.props.group) && isReady(newProps.group)) {
@@ -174,6 +184,7 @@ class Group extends Component {
       publicAssignments = List(),
       stats,
       statuses,
+      bestSubmissions,
       isStudent,
       isAdmin,
       isSuperAdmin,
@@ -215,13 +226,13 @@ class Group extends Component {
                   </Button>
                 </LinkContainer>
               </p>}
-
             {(isStudent || isSupervisor || isAdmin || isSuperAdmin) &&
               <StudentsView
                 group={data}
                 stats={stats}
                 statuses={statuses}
                 assignments={publicAssignments}
+                bestSubmissions={bestSubmissions}
                 isAdmin={isAdmin || isSuperAdmin}
               />}
 
@@ -287,6 +298,7 @@ Group.propTypes = {
   loadAsync: PropTypes.func,
   stats: PropTypes.object,
   statuses: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
+  bestSubmissions: PropTypes.object,
   assignExercise: PropTypes.func.isRequired,
   createGroupExercise: PropTypes.func.isRequired,
   push: PropTypes.func.isRequired,
@@ -311,6 +323,7 @@ const mapStateToProps = (state, { params: { groupId } }) => {
     allAssignments: groupsAllAssignmentsSelector(state, groupId),
     groupExercises: getExercisesForGroup(state, groupId),
     statuses: getStatusesForLoggedUser(state, groupId),
+    bestSubmissions: getBestSubmissionsForLoggedInUser(state),
     supervisors: supervisorsOfGroupSelector(state, groupId),
     students: studentsOfGroupSelector(state, groupId),
     isStudent: isStudentOf(userId, groupId)(state),
