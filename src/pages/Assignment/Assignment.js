@@ -242,6 +242,7 @@ class Assignment extends Component {
                         userId={userId}
                         submissions={this.sortSubmissions(submissions)}
                         assignmentId={assignment.id}
+                        runtimeEnvironments={runtimes}
                       />}
                   </Col>}
               </ResourceRenderer>

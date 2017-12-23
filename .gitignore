@@ -17,3 +17,4 @@ prod/
 package-lock.json
 
 /run_server.bat
+/run_export_strings.bat

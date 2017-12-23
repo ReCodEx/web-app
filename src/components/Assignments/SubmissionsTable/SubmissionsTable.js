@@ -74,6 +74,7 @@ const SubmissionsTable = ({
               const link = SUBMISSION_DETAIL_URI_FACTORY(assignmentId, id);
               const runtimeEnvironment =
                 data.runtimeEnvironmentId &&
+                runtimeEnvironments &&
                 runtimeEnvironments.find(
                   ({ id }) => id === data.runtimeEnvironmentId
                 );
