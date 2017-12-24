@@ -39,7 +39,7 @@ class AuthenticationButtonContainer extends Component {
         const ticket = getTicketFromUrl(this.casWindow.location.href);
         if (ticket !== null) {
           // cancel the window and the interval
-          this.dispose();
+          this.dispose(1000); // delayed window close (1s)
           const clientUrl = absolute(links.HOME_URI);
           onTicketObtained(ticket, clientUrl);
         }
@@ -52,15 +52,27 @@ class AuthenticationButtonContainer extends Component {
   /**
    * Clean up all the mess (the window, the interval)
    */
-  dispose = () => {
-    if (this.casWindow) {
-      this.casWindow.close();
-      this.casWindow = null;
-    }
-
+  dispose = (windowCloseDelay = 0) => {
     if (this.pollCASLogin) {
       clearInterval(this.pollCASLogin);
       this.pollCASLogin = null;
+    }
+
+    if (this.casWindow) {
+      if (windowCloseDelay > 0 && !this.casWindow.closed) {
+        // A delay before close is requested ...
+        const lingeringWindow = this.casWindow;
+        lingeringWindow.blur();
+        window.setTimeout(() => {
+          if (!lingeringWindow.closed) lingeringWindow.close();
+        }, windowCloseDelay);
+      } else {
+        // Close immediately
+        this.casWindow.close();
+      }
+
+      this.casWindow = null;
+      window.focus(); // focus back to our main window
     }
   };
 

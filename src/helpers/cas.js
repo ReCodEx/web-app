@@ -1,8 +1,12 @@
 export const createCASLoginUrl = serviceUrl =>
-  `https://idp.cuni.cz/cas/login?service=${encodeURIComponent(serviceUrl)}&renew=true`;
+  `https://idp.cuni.cz/cas/login?service=${encodeURIComponent(
+    serviceUrl
+  )}&renew=true`;
 
 export const createCASValidationUrl = (ticket, serviceUrl, backendUrl) =>
-  `https://idp.cuni.cz/cas/p3/serviceValidate?ticket=${encodeURIComponent(ticket)}&service=${encodeURIComponent(serviceUrl)}&format=json`;
+  `https://idp.cuni.cz/cas/p3/serviceValidate?ticket=${encodeURIComponent(
+    ticket
+  )}&service=${encodeURIComponent(serviceUrl)}&format=json`;
 
 export const getTicketFromUrl = url => {
   const match = url.match(/[?&]ticket=([^&\b]+)/);
@@ -20,7 +24,7 @@ export const openCASWindow = serviceUrl =>
     ? window.open(
         createCASLoginUrl(serviceUrl),
         'CAS',
-        'modal=true,width=1024,height=850'
+        'modal=true,width=1024,height=850,centerscreen=yes'
       )
     : null;
 
