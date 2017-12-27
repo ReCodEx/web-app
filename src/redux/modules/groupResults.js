@@ -52,21 +52,14 @@ const reducer = handleActions(
 
     [additionalActionTypes.BEST_SUBMISSION_FULFILLED]: (
       state,
-      { payload = {}, meta: { assignmentId } }
+      { payload = {}, meta: { assignmentId, userId } }
     ) =>
-      Object.keys(payload).reduce(
-        (state, userId) =>
-          state
-            .setIn(
-              ['resources', assignmentId, userId, 'data'],
-              fromJS(payload[userId])
-            )
-            .setIn(
-              ['resources', assignmentId, userId, 'state'],
-              resourceStatus.FULFILLED
-            ),
-        state
-      )
+      state
+        .setIn(['resources', assignmentId, userId, 'data'], fromJS(payload))
+        .setIn(
+          ['resources', assignmentId, userId, 'state'],
+          resourceStatus.FULFILLED
+        )
   }),
   initialState
 );
