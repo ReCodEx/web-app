@@ -49,7 +49,8 @@ class SubmissionDetail extends Component {
       },
       assignment,
       isSupervisor,
-      evaluations
+      evaluations,
+      runtimeEnvironments
     } = this.props;
     const { openFileId, activeSubmissionId } = this.state;
 
@@ -75,6 +76,13 @@ class SubmissionDetail extends Component {
               accepted={accepted}
               originalSubmissionId={restSolution.id}
               assignmentId={assignment.id}
+              environment={
+                runtimeEnvironments &&
+                runtimeEnvironmentId &&
+                runtimeEnvironments.find(
+                  ({ id }) => id === runtimeEnvironmentId
+                )
+              }
             />
             <Row>
               {files.map(file =>
@@ -175,7 +183,8 @@ SubmissionDetail.propTypes = {
   }).isRequired,
   assignment: PropTypes.object.isRequired,
   isSupervisor: PropTypes.bool,
-  evaluations: PropTypes.object.isRequired
+  evaluations: PropTypes.object.isRequired,
+  runtimeEnvironments: PropTypes.array
 };
 
 export default SubmissionDetail;
