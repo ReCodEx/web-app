@@ -132,6 +132,23 @@ export const decodeAndValidateAccessToken = (token, now = Date.now()) => {
   return fromJS(decodedToken);
 };
 
+const closeAuthPopupWindow = popupWindow => {
+  if (
+    popupWindow &&
+    !popupWindow.closed &&
+    popupWindow.close &&
+    popupWindow.postMessage
+  ) {
+    // Double kill (in case we cannot close the window, it may listen to a message and drop dead on its own)
+    try {
+      popupWindow.postMessage('die', window.location.origin);
+      popupWindow.close();
+    } catch (e) {
+      // silent fail, this is probably because one of the kill succeeded and the other one failed
+    }
+  }
+};
+
 /**
  * Authentication reducer.
  * @param  {string} accessToken An access token to initialise the reducer
@@ -163,16 +180,7 @@ const auth = (accessToken, now = Date.now()) => {
         state,
         { payload: { accessToken }, meta: { service, popupWindow } }
       ) => {
-        if (
-          popupWindow &&
-          !popupWindow.closed &&
-          popupWindow.close &&
-          popupWindow.postMessage
-        ) {
-          // Double kill (in case we cannot close the window, it may listen to a message and drop dead on its own)
-          popupWindow.postMessage('die', window.location.origin);
-          popupWindow.close();
-        }
+        closeAuthPopupWindow(popupWindow);
         return state
           .setIn(['status', service], statusTypes.LOGGED_IN)
           .set('jwt', accessToken)
@@ -184,16 +192,7 @@ const auth = (accessToken, now = Date.now()) => {
         state,
         { meta: { service, popupWindow } }
       ) => {
-        if (
-          popupWindow &&
-          !popupWindow.closed &&
-          popupWindow.close &&
-          popupWindow.postMessage
-        ) {
-          // Double kill (in case we cannot close the window, it may listen to a message and drop dead on its own)
-          popupWindow.postMessage('die', window.location.origin);
-          popupWindow.close();
-        }
+        closeAuthPopupWindow(popupWindow);
         return state
           .setIn(['status', service], statusTypes.LOGIN_FAILED)
           .set('jwt', null)

@@ -17,7 +17,11 @@ class AuthenticationButtonContainer extends Component {
     const ticket = e.data; // the message should be the ticket
     const { links, onTicketObtained } = this.props;
 
-    if (ticket !== null && e.source === this.casWindow) {
+    if (
+      ticket !== null &&
+      e.source === this.casWindow &&
+      this.casWindow !== null
+    ) {
       // cancel the window and the interval
       const clientUrl = absolute(links.LOGIN_EXTERN_FINALIZATION('cas-uk'));
       this.casWindow.postMessage('received', e.origin);
@@ -27,7 +31,7 @@ class AuthenticationButtonContainer extends Component {
   };
 
   onClick = () => {
-    if (this.casWindow === null) {
+    if (this.casWindow === null || this.casWindow.closed) {
       const { links, onFailed } = this.props;
 
       const returnUrl = absolute(links.LOGIN_EXTERN_FINALIZATION('cas-uk'));
@@ -49,7 +53,7 @@ class AuthenticationButtonContainer extends Component {
 
   pollPopupClosedHandler = () => {
     // Check, whether the popup has been closed ...
-    if (this.casWindow && this.casWindow.closed === true) {
+    if (!this.casWindow || this.casWindow.closed === true) {
       this.dispose();
     }
   };
@@ -57,7 +61,9 @@ class AuthenticationButtonContainer extends Component {
   /**
    * Clean up all the mess (the window, the interval)
    */
-  dispose = (windowCloseDelay = 0) => {
+  dispose = () => {
+    window.removeEventListener('message', this.messageHandler);
+
     if (this.pollPopupClosed) {
       clearInterval(this.pollPopupClosed);
       this.pollPopupClosed = null;
@@ -65,10 +71,7 @@ class AuthenticationButtonContainer extends Component {
 
     if (this.casWindow) {
       this.casWindow = null;
-      window.focus(); // focus back to our main window
     }
-
-    window.removeEventListener('message', this.messageHandler);
   };
 
   /**
