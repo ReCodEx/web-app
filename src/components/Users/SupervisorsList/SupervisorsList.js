@@ -15,15 +15,16 @@ const SupervisorsList = ({
 }) =>
   <Table hover>
     <tbody>
-      {users.map(user =>
-        <SupervisorsListItem
-          key={user.id}
-          {...user}
-          groupId={groupId}
-          isAdmin={isAdmin}
-          primaryAdminsIds={primaryAdminsIds}
-        />
-      )}
+      {isLoaded &&
+        users.map(user =>
+          <SupervisorsListItem
+            key={user.id}
+            {...user}
+            groupId={groupId}
+            isAdmin={isAdmin}
+            primaryAdminsIds={primaryAdminsIds}
+          />
+        )}
 
       {users.length === 0 &&
         isLoaded &&

@@ -155,7 +155,10 @@ class ReferenceSolution extends Component {
                           <Button
                             bsStyle="success"
                             className="btn-flat"
-                            onClick={evaluateReferenceSolution}
+                            onClick={() =>
+                              evaluateReferenceSolution().then(
+                                refreshSolutionEvaluations
+                              )}
                           >
                             <SendIcon />{' '}
                             <FormattedMessage

@@ -94,6 +94,12 @@ class SisIntegrationContainer extends Component {
                                     </th>
                                     <th>
                                       <FormattedMessage
+                                        id="app.sisIntegration.courseId"
+                                        defaultMessage="Course ID"
+                                      />
+                                    </th>
+                                    <th>
+                                      <FormattedMessage
                                         id="app.sisIntegration.groupAdmins"
                                         defaultMessage="Group Administrators"
                                       />
@@ -107,6 +113,11 @@ class SisIntegrationContainer extends Component {
                                       <tr key={i}>
                                         <td>
                                           {getLocalizedName(group, locale)}
+                                        </td>
+                                        <td>
+                                          <code>
+                                            {group.sisCode}
+                                          </code>
                                         </td>
                                         <td>
                                           {group.primaryAdminsIds.map(id =>

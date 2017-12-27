@@ -4,6 +4,7 @@ import { Link } from 'react-router';
 import AssignmentStatusIcon from '../AssignmentStatusIcon/AssignmentStatusIcon';
 import { FormattedDate, FormattedTime } from 'react-intl';
 
+import ResourceRenderer from '../../../helpers/ResourceRenderer';
 import withLinks from '../../../../hoc/withLinks';
 import { LocalizedExerciseName } from '../../../helpers/LocalizedNames';
 import { MaybeBonusAssignmentIcon } from '../../../icons';
@@ -23,6 +24,7 @@ const AssignmentTableRow = ({
   },
   status,
   userId,
+  bestSubmission,
   links: {
     ASSIGNMENT_DETAIL_URI_FACTORY,
     ASSIGNMENT_DETAIL_SPECIFIC_USER_URI_FACTORY
@@ -47,6 +49,25 @@ const AssignmentTableRow = ({
     {showGroup &&
       <td>
         {group}
+      </td>}
+    {bestSubmission &&
+      <td>
+        <ResourceRenderer resource={bestSubmission}>
+          {data =>
+            data.lastSubmission
+              ? <span>
+                  {data.lastSubmission.evaluation.points}
+                  {data.bonusPoints > 0 &&
+                    <span style={{ color: 'green' }}>
+                      +{data.bonusPoints}
+                    </span>}
+                  {data.bonusPoints < 0 &&
+                    <span style={{ color: 'red' }}>
+                      {data.bonusPoints}
+                    </span>}/{data.maxPoints}
+                </span>
+              : <span />}
+        </ResourceRenderer>
       </td>}
     <td>
       <FormattedDate value={new Date(firstDeadline * 1000)} />
@@ -76,6 +97,7 @@ AssignmentTableRow.propTypes = {
   }),
   status: PropTypes.string,
   userId: PropTypes.string,
+  bestSubmission: PropTypes.object,
   links: PropTypes.object
 };
 
