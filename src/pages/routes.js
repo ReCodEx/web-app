@@ -58,6 +58,14 @@ const createRoutes = getState => {
     }
   };
 
+  const checkEmptyRoute = (nextState, replace) => {
+    // Make sure an empty route leads to default language
+    const url = nextState.location.pathname;
+    if (url === '/') {
+      replace(changeLanguage(url, defaultLanguage));
+    }
+  };
+
   const checkLanguage = (nextState, replace) => {
     const url = nextState.location.pathname;
     const lang = extractLanguageFromUrl(url);
@@ -67,7 +75,7 @@ const createRoutes = getState => {
   };
 
   return (
-    <Route path="/" component={App}>
+    <Route path="/" component={App} onEnter={checkEmptyRoute}>
       <Route
         exact
         path="/login-extern/:service"
