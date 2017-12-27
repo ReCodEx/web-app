@@ -11,7 +11,7 @@ import {
 } from '../../redux/modules/auth';
 import { statusSelector } from '../../redux/selectors/auth';
 
-const LoginBox = ({ login, fail, status }) => (
+const LoginBox = ({ login, fail, status }) =>
   <Box
     title={
       <FormattedMessage
@@ -29,8 +29,7 @@ const LoginBox = ({ login, fail, status }) => (
       id="app.cas.login.description"
       defaultMessage="After you click on the button below, you will be redirected to CAS UK. After you are authenticated, the popup window will be closed and you will be logged into ReCodEx."
     />
-  </Box>
-);
+  </Box>;
 
 LoginBox.propTypes = {
   login: PropTypes.func.isRequired,
@@ -45,9 +44,9 @@ export default connect(
   dispatch => ({
     fail: () =>
       dispatch(externalLoginFailed(loginServices.external.CAS_UK_TICKET)),
-    login: (ticket, clientUrl) => {
+    login: (ticket, clientUrl, popupWindow = null) => {
       const login = externalLogin(loginServices.external.CAS_UK_TICKET);
-      return dispatch(login({ ticket, clientUrl }));
+      return dispatch(login({ ticket, clientUrl }, popupWindow));
     }
   })
 )(LoginBox);

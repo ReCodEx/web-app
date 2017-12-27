@@ -87,13 +87,13 @@ export const validatePasswordStrength = password =>
     body: { password }
   });
 
-export const externalLogin = service => credentials =>
+export const externalLogin = service => (credentials, popupWindow = null) =>
   createApiAction({
     type: actionTypes.LOGIN,
     method: 'POST',
     endpoint: `/login/${service}`,
     body: credentials,
-    meta: { service }
+    meta: { service, popupWindow }
   });
 
 export const externalLoginFailed = service => ({
@@ -161,20 +161,45 @@ const auth = (accessToken, now = Date.now()) => {
 
       [actionTypes.LOGIN_SUCCESS]: (
         state,
-        { payload: { accessToken }, meta: { service } }
-      ) =>
-        state
+        { payload: { accessToken }, meta: { service, popupWindow } }
+      ) => {
+        if (
+          popupWindow &&
+          !popupWindow.closed &&
+          popupWindow.close &&
+          popupWindow.postMessage
+        ) {
+          // Double kill (in case we cannot close the window, it may listen to a message and drop dead on its own)
+          popupWindow.postMessage('die', window.location.origin);
+          popupWindow.close();
+        }
+        return state
           .setIn(['status', service], statusTypes.LOGGED_IN)
           .set('jwt', accessToken)
           .set('accessToken', decodeAndValidateAccessToken(accessToken))
-          .set('userId', getUserId(decodeAndValidateAccessToken(accessToken))),
+          .set('userId', getUserId(decodeAndValidateAccessToken(accessToken)));
+      },
 
-      [actionTypes.LOGIN_FAILIURE]: (state, { meta: { service } }) =>
-        state
+      [actionTypes.LOGIN_FAILIURE]: (
+        state,
+        { meta: { service, popupWindow } }
+      ) => {
+        if (
+          popupWindow &&
+          !popupWindow.closed &&
+          popupWindow.close &&
+          popupWindow.postMessage
+        ) {
+          // Double kill (in case we cannot close the window, it may listen to a message and drop dead on its own)
+          popupWindow.postMessage('die', window.location.origin);
+          popupWindow.close();
+        }
+        return state
           .setIn(['status', service], statusTypes.LOGIN_FAILED)
           .set('jwt', null)
           .set('accessToken', null)
-          .set('userId', null),
+          .set('userId', null);
+      },
 
       [registrationActionTypes.CREATE_ACCOUNT_FULFILLED]: (
         state,

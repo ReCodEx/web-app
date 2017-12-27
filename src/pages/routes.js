@@ -22,6 +22,7 @@ import Instance from './Instance';
 import Instances from './Instances';
 import EditInstances from './EditInstance';
 import Login from './Login';
+import LoginExternFinalization from './LoginExternFinalization';
 import Assignment from './Assignment';
 import EditAssignment from './EditAssignment';
 import AssignmentStats from './AssignmentStats';
@@ -66,8 +67,13 @@ const createRoutes = getState => {
   };
 
   return (
-    <Route path="/" component={App} onEnter={checkLanguage}>
-      <Route path="/:lang" component={LayoutContainer}>
+    <Route path="/" component={App}>
+      <Route
+        exact
+        path="/login-extern/:service"
+        component={LoginExternFinalization}
+      />
+      <Route path="/:lang" component={LayoutContainer} onEnter={checkLanguage}>
         <IndexRoute component={Home} />
         <Route path="login" component={Login} onEnter={onlyUnauth} />
         <Route

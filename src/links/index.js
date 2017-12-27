@@ -85,6 +85,9 @@ export const linksFactory = lang => {
   // download files
   const DOWNLOAD = fileId => `${API_BASE}/uploaded-files/${fileId}/download`;
 
+  // special links
+  const LOGIN_EXTERN_FINALIZATION = service => `/login-extern/${service}`;
+
   return {
     API_BASE,
     HOME_URI,
@@ -123,7 +126,8 @@ export const linksFactory = lang => {
     ADMIN_INSTANCES_URI,
     ADMIN_EDIT_INSTANCE_URI_FACTORY,
     DOWNLOAD,
-    REFERENCE_SOLUTION_EVALUATION_URI_FACTORY
+    REFERENCE_SOLUTION_EVALUATION_URI_FACTORY,
+    LOGIN_EXTERN_FINALIZATION
   };
 };
 
