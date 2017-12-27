@@ -5,11 +5,12 @@ const middleware = (
 ) => store => next => action => {
   /* eslint no-console: ["error", { allow: ["log", "error", "debug"] }] */
   var actionType = action.type;
+  const logger = noDOM ? console.log : console.debug; // older nodejs do not have console.debug()
   if (verbose) {
-    console.debug('Starting ' + actionType);
-    console.debug(action);
+    logger('Starting ' + actionType);
+    logger(action);
   } else if (noDOM) {
-    console.debug(actionType);
+    logger(actionType);
   }
 
   try {
@@ -20,9 +21,9 @@ const middleware = (
     throw e;
   }
   if (verbose) {
-    console.debug('State After Action ' + actionType);
-    console.debug(store.getState().groups);
-    console.debug('--------------------');
+    logger('State After Action ' + actionType);
+    logger(store.getState().groups);
+    logger('--------------------');
   }
 
   return res;
