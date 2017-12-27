@@ -39,7 +39,8 @@ class SubmissionsTableContainer extends Component {
           id="app.submissionsTableContainer.title"
           defaultMessage="Submitted solutions"
         />
-      )
+      ),
+      noteMaxlen = 32
     } = this.props;
 
     return (
@@ -49,6 +50,7 @@ class SubmissionsTableContainer extends Component {
         submissions={this.sortSubmissions(submissions)}
         assignmentId={assignmentId}
         runtimeEnvironments={runtimeEnvironments}
+        noteMaxlen={noteMaxlen}
       />
     );
   }
@@ -60,6 +62,7 @@ SubmissionsTableContainer.propTypes = {
   assignmentId: PropTypes.string.isRequired,
   submissions: PropTypes.instanceOf(List),
   runtimeEnvironments: PropTypes.array,
+  noteMaxlen: PropTypes.number,
   loadAsync: PropTypes.func.isRequired
 };
 

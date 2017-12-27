@@ -2,10 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { List } from 'immutable';
 import { FormattedMessage } from 'react-intl';
+import { OverlayTrigger, Tooltip, Table } from 'react-bootstrap';
 
-import { Table } from 'react-bootstrap';
 import Box from '../../widgets/Box';
-
 import withLinks from '../../../hoc/withLinks';
 
 import ResourceRenderer from '../../helpers/ResourceRenderer';
@@ -22,6 +21,7 @@ const SubmissionsTable = ({
   assignmentId,
   submissions,
   runtimeEnvironments,
+  noteMaxlen = 32,
   links: { SUBMISSION_DETAIL_URI_FACTORY }
 }) =>
   <Box title={title} collapsable isOpen noPadding unlimitedHeight>
@@ -78,6 +78,23 @@ const SubmissionsTable = ({
                 runtimeEnvironments.find(
                   ({ id }) => id === data.runtimeEnvironmentId
                 );
+
+              const note =
+                !data.note || data.note.length <= noteMaxlen
+                  ? data.note
+                  : <OverlayTrigger
+                      placement="left"
+                      overlay={
+                        <Tooltip id={id}>
+                          {data.note}
+                        </Tooltip>
+                      }
+                    >
+                      <span>
+                        {data.note.substr(0, noteMaxlen - 3).trim()}&hellip;
+                      </span>
+                    </OverlayTrigger>;
+
               switch (data.lastSubmission
                 ? data.lastSubmission.evaluationStatus
                 : null) {
@@ -88,6 +105,7 @@ const SubmissionsTable = ({
                       key={id}
                       link={link}
                       runtimeEnvironment={runtimeEnvironment}
+                      note={note}
                     />
                   );
                 case 'failed':
@@ -97,6 +115,7 @@ const SubmissionsTable = ({
                       key={id}
                       link={link}
                       runtimeEnvironment={runtimeEnvironment}
+                      note={note}
                     />
                   );
                 case null:
@@ -108,6 +127,7 @@ const SubmissionsTable = ({
                       link={link}
                       lastSubmission={data.lastSubmission}
                       runtimeEnvironment={runtimeEnvironment}
+                      note={note}
                     />
                   );
                 case 'evaluation-failed':
@@ -117,6 +137,7 @@ const SubmissionsTable = ({
                       key={id}
                       link={link}
                       runtimeEnvironment={runtimeEnvironment}
+                      note={note}
                     />
                   );
                 default:
@@ -141,6 +162,7 @@ SubmissionsTable.propTypes = {
   assignmentId: PropTypes.string.isRequired,
   submissions: PropTypes.instanceOf(List),
   runtimeEnvironments: PropTypes.array,
+  noteMaxlen: PropTypes.number,
   links: PropTypes.object
 };
 

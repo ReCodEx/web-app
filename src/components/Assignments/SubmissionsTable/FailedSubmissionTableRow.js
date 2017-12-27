@@ -61,7 +61,7 @@ const FailedSubmissionTableRow = ({
 
 FailedSubmissionTableRow.propTypes = {
   link: PropTypes.string.isRequired,
-  note: PropTypes.string.isRequired,
+  note: PropTypes.any.isRequired,
   maxPoints: PropTypes.number.isRequired,
   bonusPoints: PropTypes.number.isRequired,
   lastSubmission: PropTypes.shape({

@@ -43,7 +43,7 @@ const EvaluationFailedTableRow = ({
 
 EvaluationFailedTableRow.propTypes = {
   link: PropTypes.string.isRequired,
-  note: PropTypes.string.isRequired,
+  note: PropTypes.any.isRequired,
   solution: PropTypes.shape({
     createdAt: PropTypes.number.isRequired
   }).isRequired,

@@ -2,17 +2,15 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { WarningIcon } from '../../icons';
 
-const FailedLoadingSubmissionTableRow = () => (
+const FailedLoadingSubmissionTableRow = () =>
   <tr>
-    <td colSpan={5} className="text-center">
-      <WarningIcon />
-      {' '}
+    <td colSpan={7} className="text-center">
+      <WarningIcon />{' '}
       <FormattedMessage
         id="app.submissionsTable.failedLoading"
         defaultMessage="Could not load this submission."
       />
     </td>
-  </tr>
-);
+  </tr>;
 
 export default FailedLoadingSubmissionTableRow;

@@ -135,6 +135,7 @@ class AssignmentStats extends Component {
                                 userId={user.id}
                                 assignmentId={assignmentId}
                                 runtimeEnvironments={runtimes}
+                                noteMaxlen={160}
                               />
                             </Col>
                           </Row>
