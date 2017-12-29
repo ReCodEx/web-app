@@ -3,16 +3,21 @@ import PropTypes from 'prop-types';
 import { FormattedDate, FormattedTime, FormattedMessage } from 'react-intl';
 import { Link } from 'react-router';
 import AssignmentStatusIcon from '../Assignment/AssignmentStatusIcon';
+import CommentsIcon from './CommentsIcon';
 
 const EvaluationFailedTableRow = ({
   link,
   note,
   solution: { createdAt },
-  runtimeEnvironment = null
+  runtimeEnvironment = null,
+  commentsStats = null
 }) =>
   <tr>
     <td>
       <AssignmentStatusIcon id={link} status="evaluation-failed" />
+    </td>
+    <td>
+      <CommentsIcon id={link} commentsStats={commentsStats} />
     </td>
     <td className="text-nowrap">
       <FormattedDate value={createdAt * 1000} />
@@ -47,6 +52,7 @@ EvaluationFailedTableRow.propTypes = {
   solution: PropTypes.shape({
     createdAt: PropTypes.number.isRequired
   }).isRequired,
+  commentsStats: PropTypes.object,
   runtimeEnvironment: PropTypes.object
 };
 

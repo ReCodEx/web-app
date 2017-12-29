@@ -10,6 +10,7 @@ import { Link } from 'react-router';
 
 import AssignmentStatusIcon from '../Assignment/AssignmentStatusIcon';
 import Points from './Points';
+import CommentsIcon from './CommentsIcon';
 
 const SuccessfulSubmissionTableRow = ({
   link,
@@ -19,11 +20,15 @@ const SuccessfulSubmissionTableRow = ({
   bonusPoints,
   solution: { createdAt },
   accepted,
-  runtimeEnvironment = null
+  runtimeEnvironment = null,
+  commentsStats = null
 }) =>
   <tr>
     <td>
       <AssignmentStatusIcon id={link} status="done" accepted={accepted} />
+    </td>
+    <td>
+      <CommentsIcon id={link} commentsStats={commentsStats} />
     </td>
     <td className="text-nowrap">
       <FormattedDate value={createdAt * 1000} />
@@ -75,6 +80,7 @@ SuccessfulSubmissionTableRow.propTypes = {
     createdAt: PropTypes.number.isRequired
   }).isRequired,
   accepted: PropTypes.bool,
+  commentsStats: PropTypes.object,
   runtimeEnvironment: PropTypes.object
 };
 

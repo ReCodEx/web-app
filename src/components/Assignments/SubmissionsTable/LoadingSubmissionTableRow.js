@@ -4,7 +4,7 @@ import { LoadingIcon } from '../../icons';
 
 const LoadingSubmissionTableRow = () =>
   <tr>
-    <td colSpan={7} className="text-center">
+    <td colSpan={8} className="text-center">
       <LoadingIcon />{' '}
       <FormattedMessage
         id="app.submissionsTable.loading"

@@ -243,6 +243,7 @@ class Assignment extends Component {
                         submissions={this.sortSubmissions(submissions)}
                         assignmentId={assignment.id}
                         runtimeEnvironments={runtimes}
+                        noteMaxlen={32}
                       />}
                   </Col>}
               </ResourceRenderer>

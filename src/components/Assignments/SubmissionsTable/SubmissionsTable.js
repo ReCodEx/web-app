@@ -29,6 +29,7 @@ const SubmissionsTable = ({
       <thead>
         <tr>
           <th />
+          <th />
           <th>
             <FormattedMessage
               id="app.submissionsTable.submissionDate"

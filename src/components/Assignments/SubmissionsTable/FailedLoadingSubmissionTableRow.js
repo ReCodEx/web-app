@@ -4,7 +4,7 @@ import { WarningIcon } from '../../icons';
 
 const FailedLoadingSubmissionTableRow = () =>
   <tr>
-    <td colSpan={7} className="text-center">
+    <td colSpan={8} className="text-center">
       <WarningIcon />{' '}
       <FormattedMessage
         id="app.submissionsTable.failedLoading"
