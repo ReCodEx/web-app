@@ -3,22 +3,35 @@ import PropTypes from 'prop-types';
 import { FormattedDate, FormattedTime, FormattedMessage } from 'react-intl';
 import { Link } from 'react-router';
 import AssignmentStatusIcon from '../Assignment/AssignmentStatusIcon';
+import CommentsIcon from './CommentsIcon';
 
-const EvaluationFailedTableRow = ({ link, note, solution: { createdAt } }) =>
+const EvaluationFailedTableRow = ({
+  link,
+  note,
+  solution: { createdAt },
+  runtimeEnvironment = null,
+  commentsStats = null
+}) =>
   <tr>
     <td>
       <AssignmentStatusIcon id={link} status="evaluation-failed" />
     </td>
     <td>
+      <CommentsIcon id={link} commentsStats={commentsStats} />
+    </td>
+    <td className="text-nowrap">
       <FormattedDate value={createdAt * 1000} />
       &nbsp;
       <FormattedTime value={createdAt * 1000} />
     </td>
-    <td className="text-center">
+    <td className="text-center text-nowrap">
       <span className="text-danger">-</span>
     </td>
-    <td className="text-center">
+    <td className="text-center text-nowrap">
       <span className="text-danger">-</span>
+    </td>
+    <td className="text-center text-nowrap">
+      {runtimeEnvironment ? runtimeEnvironment.name : '-'}
     </td>
     <td>
       {note}
@@ -35,10 +48,12 @@ const EvaluationFailedTableRow = ({ link, note, solution: { createdAt } }) =>
 
 EvaluationFailedTableRow.propTypes = {
   link: PropTypes.string.isRequired,
-  note: PropTypes.string.isRequired,
+  note: PropTypes.any.isRequired,
   solution: PropTypes.shape({
     createdAt: PropTypes.number.isRequired
-  }).isRequired
+  }).isRequired,
+  commentsStats: PropTypes.object,
+  runtimeEnvironment: PropTypes.object
 };
 
 export default EvaluationFailedTableRow;

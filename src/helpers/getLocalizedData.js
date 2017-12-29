@@ -26,7 +26,7 @@ export const getGroupCanonicalLocalizedName = (
     const parentRes = group.parentGroupsIds
       .filter((_, i) => i > 0) // skip the first one (the root group)
       .map(groupsAccessor) // get the group object
-      .map(g => g.toJS()) // convert to normal JS (from immutable)
+      .map(g => g && g.toJS()) // convert to normal JS (from immutable)
       .map(g => (g && g.localizedTexts ? getLocalizedName(g, locale) : '??'))
       .join(separator);
     if (parentRes) {

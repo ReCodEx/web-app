@@ -9,6 +9,7 @@ import {
 import { Link } from 'react-router';
 import AssignmentStatusIcon from '../Assignment/AssignmentStatusIcon';
 import Points from './Points';
+import CommentsIcon from './CommentsIcon';
 
 const FailedSubmissionTableRow = ({
   link,
@@ -17,23 +18,28 @@ const FailedSubmissionTableRow = ({
   maxPoints,
   bonusPoints,
   solution: { createdAt },
-  accepted
+  accepted,
+  runtimeEnvironment = null,
+  commentsStats = null
 }) =>
   <tr>
     <td>
       <AssignmentStatusIcon id={link} status="failed" accepted={accepted} />
     </td>
     <td>
+      <CommentsIcon id={link} commentsStats={commentsStats} />
+    </td>
+    <td className="text-nowrap">
       <FormattedDate value={createdAt * 1000} />
       &nbsp;
       <FormattedTime value={createdAt * 1000} />
     </td>
-    <td className="text-center">
+    <td className="text-center text-nowrap">
       <span className="text-danger">
         <FormattedNumber style="percent" value={score} />
       </span>
     </td>
-    <td className="text-center">
+    <td className="text-center text-nowrap">
       <span className="text-danger">
         <Points
           points={points}
@@ -41,6 +47,9 @@ const FailedSubmissionTableRow = ({
           bonusPoints={bonusPoints}
         />
       </span>
+    </td>
+    <td className="text-center text-nowrap">
+      {runtimeEnvironment ? runtimeEnvironment.name : '-'}
     </td>
     <td>
       {note}
@@ -57,7 +66,7 @@ const FailedSubmissionTableRow = ({
 
 FailedSubmissionTableRow.propTypes = {
   link: PropTypes.string.isRequired,
-  note: PropTypes.string.isRequired,
+  note: PropTypes.any.isRequired,
   maxPoints: PropTypes.number.isRequired,
   bonusPoints: PropTypes.number.isRequired,
   lastSubmission: PropTypes.shape({
@@ -69,7 +78,9 @@ FailedSubmissionTableRow.propTypes = {
   solution: PropTypes.shape({
     createdAt: PropTypes.number.isRequired
   }).isRequired,
-  accepted: PropTypes.bool
+  accepted: PropTypes.bool,
+  commentsStats: PropTypes.object,
+  runtimeEnvironment: PropTypes.object
 };
 
 export default FailedSubmissionTableRow;

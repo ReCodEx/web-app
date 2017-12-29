@@ -2,10 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { List } from 'immutable';
 import { FormattedMessage } from 'react-intl';
+import { OverlayTrigger, Tooltip, Table } from 'react-bootstrap';
 
-import { Table } from 'react-bootstrap';
 import Box from '../../widgets/Box';
-
 import withLinks from '../../../hoc/withLinks';
 
 import ResourceRenderer from '../../helpers/ResourceRenderer';
@@ -21,12 +20,15 @@ const SubmissionsTable = ({
   title,
   assignmentId,
   submissions,
+  runtimeEnvironments,
+  noteMaxlen = 32,
   links: { SUBMISSION_DETAIL_URI_FACTORY }
 }) =>
   <Box title={title} collapsable isOpen noPadding unlimitedHeight>
     <Table responsive>
       <thead>
         <tr>
+          <th />
           <th />
           <th>
             <FormattedMessage
@@ -44,6 +46,12 @@ const SubmissionsTable = ({
             <FormattedMessage
               id="app.submissionsTable.receivedPoints"
               defaultMessage="Received points"
+            />
+          </th>
+          <th className="text-center">
+            <FormattedMessage
+              id="app.submissionsTable.environment"
+              defaultMessage="Target language"
             />
           </th>
           <th>
@@ -65,6 +73,28 @@ const SubmissionsTable = ({
             {submissions.map((data, i) => {
               const id = data.id;
               const link = SUBMISSION_DETAIL_URI_FACTORY(assignmentId, id);
+              const runtimeEnvironment =
+                data.runtimeEnvironmentId &&
+                runtimeEnvironments &&
+                runtimeEnvironments.find(
+                  ({ id }) => id === data.runtimeEnvironmentId
+                );
+
+              const note =
+                !data.note || data.note.length <= noteMaxlen
+                  ? data.note
+                  : <OverlayTrigger
+                      placement="left"
+                      overlay={
+                        <Tooltip id={id}>
+                          {data.note}
+                        </Tooltip>
+                      }
+                    >
+                      <span>
+                        {data.note.substr(0, noteMaxlen - 3).trim()}&hellip;
+                      </span>
+                    </OverlayTrigger>;
 
               switch (data.lastSubmission
                 ? data.lastSubmission.evaluationStatus
@@ -75,11 +105,19 @@ const SubmissionsTable = ({
                       {...data}
                       key={id}
                       link={link}
+                      runtimeEnvironment={runtimeEnvironment}
+                      note={note}
                     />
                   );
                 case 'failed':
                   return (
-                    <FailedSubmissionTableRow {...data} key={id} link={link} />
+                    <FailedSubmissionTableRow
+                      {...data}
+                      key={id}
+                      link={link}
+                      runtimeEnvironment={runtimeEnvironment}
+                      note={note}
+                    />
                   );
                 case null:
                 case 'work-in-progress':
@@ -89,11 +127,19 @@ const SubmissionsTable = ({
                       key={id}
                       link={link}
                       lastSubmission={data.lastSubmission}
+                      runtimeEnvironment={runtimeEnvironment}
+                      note={note}
                     />
                   );
                 case 'evaluation-failed':
                   return (
-                    <EvaluationFailedTableRow {...data} key={id} link={link} />
+                    <EvaluationFailedTableRow
+                      {...data}
+                      key={id}
+                      link={link}
+                      runtimeEnvironment={runtimeEnvironment}
+                      note={note}
+                    />
                   );
                 default:
                   return null;
@@ -116,6 +162,8 @@ SubmissionsTable.propTypes = {
   ]).isRequired,
   assignmentId: PropTypes.string.isRequired,
   submissions: PropTypes.instanceOf(List),
+  runtimeEnvironments: PropTypes.array,
+  noteMaxlen: PropTypes.number,
   links: PropTypes.object
 };
 

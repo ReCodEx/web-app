@@ -60,10 +60,10 @@ const TestResultsTable = ({ results, runtimeEnvironmentId }) =>
           <OverlayTrigger
             placement="top"
             overlay={
-              <Tooltip id="status">
+              <Tooltip id="correctness">
                 <FormattedMessage
-                  id="app.submissions.testResultsTable.status"
-                  defaultMessage="Evaluation status"
+                  id="app.submissions.testResultsTable.correctness"
+                  defaultMessage="Correctness of the result (verdict of the judge)"
                 />
               </Tooltip>
             }
@@ -114,7 +114,7 @@ const TestResultsTable = ({ results, runtimeEnvironmentId }) =>
               <Tooltip id="exitCode">
                 <FormattedMessage
                   id="app.submissions.testResultsTable.exitCode"
-                  defaultMessage="Exit code"
+                  defaultMessage="Exit code (possibly translated into error message if translation is available)"
                 />
               </Tooltip>
             }

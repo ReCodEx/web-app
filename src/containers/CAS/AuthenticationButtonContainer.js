@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Authenticate, LoginFailed } from '../../components/buttons/CAS';
-import { openCASWindow, getTicketFromUrl } from '../../helpers/cas';
+import { openCASWindow } from '../../helpers/cas';
 import withLinks from '../../hoc/withLinks';
 import { absolute } from '../../links';
 
@@ -9,43 +9,52 @@ class AuthenticationButtonContainer extends Component {
   constructor(props, context) {
     super(props, context);
     this.casWindow = null;
-    this.pollCASLogin = null;
+    this.pollPopupClosed = null;
   }
 
+  // Handle the messages from our popup window...
+  messageHandler = e => {
+    const ticket = e.data; // the message should be the ticket
+    const { links, onTicketObtained } = this.props;
+
+    if (
+      ticket !== null &&
+      e.source === this.casWindow &&
+      this.casWindow !== null
+    ) {
+      // cancel the window and the interval
+      const clientUrl = absolute(links.LOGIN_EXTERN_FINALIZATION('cas-uk'));
+      this.casWindow.postMessage('received', e.origin);
+      onTicketObtained(ticket, clientUrl, this.casWindow);
+      this.dispose(); // delayed window close (1s)
+    }
+  };
+
   onClick = () => {
-    if (this.casWindow === null) {
+    if (this.casWindow === null || this.casWindow.closed) {
       const { links, onFailed } = this.props;
-      const returnUrl = absolute(links.HOME_URI);
+
+      const returnUrl = absolute(links.LOGIN_EXTERN_FINALIZATION('cas-uk'));
       this.casWindow = openCASWindow(returnUrl);
       if (!this.casWindow) {
         onFailed(); // not in browser or for some reason the window could not have been opened
       } else {
         // the window is open, now periodically check if the user has already logged in
-        this.pollCASLogin = setInterval(this.pollTicket, 100);
+        window.addEventListener('message', this.messageHandler);
+        this.pollPopupClosed = window.setInterval(
+          this.pollPopupClosedHandler,
+          100
+        );
       }
     } else {
       this.casWindow.focus(); // no need to create the window again
     }
   };
 
-  pollTicket = () => {
-    const { onTicketObtained, links } = this.props;
-    if (this.casWindow === null || this.casWindow.closed === true) {
-      // the user has closed the window manually or the window was closed
-      // programatically, but the interval was cleared too late
+  pollPopupClosedHandler = () => {
+    // Check, whether the popup has been closed ...
+    if (!this.casWindow || this.casWindow.closed === true) {
       this.dispose();
-    } else {
-      try {
-        const ticket = getTicketFromUrl(this.casWindow.location.href);
-        if (ticket !== null) {
-          // cancel the window and the interval
-          this.dispose();
-          const clientUrl = absolute(links.HOME_URI);
-          onTicketObtained(ticket, clientUrl);
-        }
-      } catch (e) {
-        // silent error - not redirected yet
-      }
     }
   };
 
@@ -53,14 +62,15 @@ class AuthenticationButtonContainer extends Component {
    * Clean up all the mess (the window, the interval)
    */
   dispose = () => {
-    if (this.casWindow) {
-      this.casWindow.close();
-      this.casWindow = null;
+    window.removeEventListener('message', this.messageHandler);
+
+    if (this.pollPopupClosed) {
+      clearInterval(this.pollPopupClosed);
+      this.pollPopupClosed = null;
     }
 
-    if (this.pollCASLogin) {
-      clearInterval(this.pollCASLogin);
-      this.pollCASLogin = null;
+    if (this.casWindow) {
+      this.casWindow = null;
     }
   };
 

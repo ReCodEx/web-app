@@ -10,6 +10,7 @@ import { Link } from 'react-router';
 
 import AssignmentStatusIcon from '../Assignment/AssignmentStatusIcon';
 import Points from './Points';
+import CommentsIcon from './CommentsIcon';
 
 const SuccessfulSubmissionTableRow = ({
   link,
@@ -18,23 +19,28 @@ const SuccessfulSubmissionTableRow = ({
   maxPoints,
   bonusPoints,
   solution: { createdAt },
-  accepted
+  accepted,
+  runtimeEnvironment = null,
+  commentsStats = null
 }) =>
   <tr>
     <td>
       <AssignmentStatusIcon id={link} status="done" accepted={accepted} />
     </td>
     <td>
+      <CommentsIcon id={link} commentsStats={commentsStats} />
+    </td>
+    <td className="text-nowrap">
       <FormattedDate value={createdAt * 1000} />
       &nbsp;
       <FormattedTime value={createdAt * 1000} />
     </td>
-    <td className="text-center">
+    <td className="text-center text-nowrap">
       <strong className="text-success">
         <FormattedNumber style="percent" value={score} />
       </strong>
     </td>
-    <td className="text-center">
+    <td className="text-center text-nowrap">
       <strong className="text-success">
         <Points
           points={points}
@@ -42,6 +48,9 @@ const SuccessfulSubmissionTableRow = ({
           maxPoints={maxPoints}
         />
       </strong>
+    </td>
+    <td className="text-center text-nowrap">
+      {runtimeEnvironment ? runtimeEnvironment.name : '-'}
     </td>
     <td>
       {note}
@@ -58,7 +67,7 @@ const SuccessfulSubmissionTableRow = ({
 
 SuccessfulSubmissionTableRow.propTypes = {
   link: PropTypes.string.isRequired,
-  note: PropTypes.string.isRequired,
+  note: PropTypes.any.isRequired,
   maxPoints: PropTypes.number.isRequired,
   bonusPoints: PropTypes.number.isRequired,
   lastSubmission: PropTypes.shape({
@@ -70,7 +79,9 @@ SuccessfulSubmissionTableRow.propTypes = {
   solution: PropTypes.shape({
     createdAt: PropTypes.number.isRequired
   }).isRequired,
-  accepted: PropTypes.bool
+  accepted: PropTypes.bool,
+  commentsStats: PropTypes.object,
+  runtimeEnvironment: PropTypes.object
 };
 
 export default SuccessfulSubmissionTableRow;

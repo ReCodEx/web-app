@@ -3,14 +3,20 @@ import PropTypes from 'prop-types';
 import { Row, Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { injectIntl, FormattedMessage } from 'react-intl';
+
 import { usersSelector } from '../../redux/selectors/users';
 import { groupSelector, studentsOfGroup } from '../../redux/selectors/groups';
-import { getAssignment } from '../../redux/selectors/assignments';
+import {
+  getAssignment,
+  assignmentEnvironmentsSelector
+} from '../../redux/selectors/assignments';
+
 import { fetchStudents } from '../../redux/modules/users';
 import { isReady, getJsData, getId } from '../../redux/helpers/resourceManager';
 import SubmissionsTableContainer from '../../containers/SubmissionsTableContainer';
 import { fetchAssignmentIfNeeded } from '../../redux/modules/assignments';
 import { fetchGroupIfNeeded } from '../../redux/modules/groups';
+import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments';
 
 import Page from '../../components/layout/Page';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
@@ -27,7 +33,8 @@ class AssignmentStats extends Component {
             dispatch(fetchGroupIfNeeded(assignment.groupId)),
             dispatch(fetchStudents(assignment.groupId))
           ])
-        )
+        ),
+      dispatch(fetchRuntimeEnvironments())
     ]);
 
   componentWillMount() {
@@ -46,6 +53,7 @@ class AssignmentStats extends Component {
       assignment,
       getStudents,
       getGroup,
+      runtimeEnvironments,
       intl
     } = this.props;
 
@@ -106,8 +114,10 @@ class AssignmentStats extends Component {
         {assignment =>
           <div>
             <HierarchyLineContainer groupId={assignment.groupId} />
-            <ResourceRenderer resource={getGroup(assignment.groupId)}>
-              {group =>
+            <ResourceRenderer
+              resource={[getGroup(assignment.groupId), ...runtimeEnvironments]}
+            >
+              {(group, ...runtimes) =>
                 <div>
                   {getStudents(group.id)
                     .sort((a, b) => {
@@ -122,6 +132,8 @@ class AssignmentStats extends Component {
                             title={user.fullName}
                             userId={user.id}
                             assignmentId={assignmentId}
+                            runtimeEnvironments={runtimes}
+                            noteMaxlen={160}
                           />
                         </Col>
                       </Row>
@@ -139,13 +151,14 @@ AssignmentStats.propTypes = {
   assignment: PropTypes.object,
   getStudents: PropTypes.func.isRequired,
   getGroup: PropTypes.func.isRequired,
+  runtimeEnvironments: PropTypes.array,
   loadAsync: PropTypes.func.isRequired,
   intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired
 };
 
 export default connect(
   (state, { params: { assignmentId } }) => {
-    const assignment = getAssignment(assignmentId)(state);
+    const assignment = getAssignment(state)(assignmentId);
     const getStudentsIds = groupId => studentsOfGroup(groupId)(state);
     const readyUsers = usersSelector(state).toList().filter(isReady);
 
@@ -157,7 +170,8 @@ export default connect(
         readyUsers
           .filter(user => getStudentsIds(groupId).includes(getId(user)))
           .map(getJsData),
-      getGroup: id => groupSelector(id)(state)
+      getGroup: id => groupSelector(id)(state),
+      runtimeEnvironments: assignmentEnvironmentsSelector(state)(assignmentId)
     };
   },
   (dispatch, { params: { assignmentId } }) => ({

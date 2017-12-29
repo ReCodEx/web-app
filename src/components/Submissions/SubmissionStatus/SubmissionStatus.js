@@ -17,6 +17,7 @@ const SubmissionStatus = ({
   accepted,
   originalSubmissionId = null,
   assignmentId,
+  environment,
   links: { SUBMISSION_DETAIL_URI_FACTORY }
 }) =>
   <Box
@@ -74,7 +75,7 @@ const SubmissionStatus = ({
             <UsersNameContainer userId={userId} />
           </td>
         </tr>
-        {submittedBy &&
+        {Boolean(submittedBy) &&
           submittedBy !== userId &&
           <tr>
             <td className="text-center">
@@ -88,6 +89,22 @@ const SubmissionStatus = ({
             </th>
             <td>
               <UsersNameContainer userId={submittedBy} />
+            </td>
+          </tr>}
+        {Boolean(environment) &&
+          Boolean(environment.name) &&
+          <tr>
+            <td className="text-center">
+              <Icon name="code" />
+            </td>
+            <th>
+              <FormattedMessage
+                id="app.submission.environment"
+                defaultMessage="Target language:"
+              />
+            </th>
+            <td>
+              {environment.name}
             </td>
           </tr>}
         <tr>
@@ -149,6 +166,7 @@ SubmissionStatus.propTypes = {
   accepted: PropTypes.bool,
   originalSubmissionId: PropTypes.string,
   assignmentId: PropTypes.string.isRequired,
+  environment: PropTypes.object,
   links: PropTypes.object.isRequired
 };
 

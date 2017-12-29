@@ -87,13 +87,13 @@ export const validatePasswordStrength = password =>
     body: { password }
   });
 
-export const externalLogin = service => credentials =>
+export const externalLogin = service => (credentials, popupWindow = null) =>
   createApiAction({
     type: actionTypes.LOGIN,
     method: 'POST',
     endpoint: `/login/${service}`,
     body: credentials,
-    meta: { service }
+    meta: { service, popupWindow }
   });
 
 export const externalLoginFailed = service => ({
@@ -132,6 +132,23 @@ export const decodeAndValidateAccessToken = (token, now = Date.now()) => {
   return fromJS(decodedToken);
 };
 
+const closeAuthPopupWindow = popupWindow => {
+  if (
+    popupWindow &&
+    !popupWindow.closed &&
+    popupWindow.close &&
+    popupWindow.postMessage
+  ) {
+    // Double kill (in case we cannot close the window, it may listen to a message and drop dead on its own)
+    try {
+      popupWindow.postMessage('die', window.location.origin);
+      popupWindow.close();
+    } catch (e) {
+      // silent fail, this is probably because one of the kill succeeded and the other one failed
+    }
+  }
+};
+
 /**
  * Authentication reducer.
  * @param  {string} accessToken An access token to initialise the reducer
@@ -161,20 +178,27 @@ const auth = (accessToken, now = Date.now()) => {
 
       [actionTypes.LOGIN_SUCCESS]: (
         state,
-        { payload: { accessToken }, meta: { service } }
-      ) =>
-        state
+        { payload: { accessToken }, meta: { service, popupWindow } }
+      ) => {
+        closeAuthPopupWindow(popupWindow);
+        return state
           .setIn(['status', service], statusTypes.LOGGED_IN)
           .set('jwt', accessToken)
           .set('accessToken', decodeAndValidateAccessToken(accessToken))
-          .set('userId', getUserId(decodeAndValidateAccessToken(accessToken))),
+          .set('userId', getUserId(decodeAndValidateAccessToken(accessToken)));
+      },
 
-      [actionTypes.LOGIN_FAILIURE]: (state, { meta: { service } }) =>
-        state
+      [actionTypes.LOGIN_FAILIURE]: (
+        state,
+        { meta: { service, popupWindow } }
+      ) => {
+        closeAuthPopupWindow(popupWindow);
+        return state
           .setIn(['status', service], statusTypes.LOGIN_FAILED)
           .set('jwt', null)
           .set('accessToken', null)
-          .set('userId', null),
+          .set('userId', null);
+      },
 
       [registrationActionTypes.CREATE_ACCOUNT_FULFILLED]: (
         state,

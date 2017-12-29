@@ -22,7 +22,7 @@ const Comment = ({
   isToggling = false,
   togglePrivacy,
   links: { USER_URI_FACTORY }
-}) => (
+}) =>
   <div
     className={classNames({
       'direct-chat-success': isPrivate,
@@ -83,11 +83,14 @@ const Comment = ({
               spin={isToggling}
             />
           </OverlayTrigger>}{' '}
-        {text}
+        {text.split('\n').map((line, idx) =>
+          <div key={idx} style={{ minHeight: '1em' }}>
+            {line}
+          </div>
+        )}
       </div>
     </div>
-  </div>
-);
+  </div>;
 
 Comment.propTypes = {
   isFromCurrentUser: PropTypes.bool,

@@ -47,7 +47,9 @@ class AddComment extends Component {
         <FormGroup>
           <InputGroup>
             <FormControl
-              type="text"
+              componentClass="textarea"
+              rows={text.split('\n').length}
+              style={{ resize: 'none', overflow: 'hidden' }}
               disabled={!addComment}
               onChange={e => this.changeText(e.target.value)}
               placeholder={formatMessage(messages.placeholder)}

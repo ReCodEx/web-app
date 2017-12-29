@@ -2,28 +2,38 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { FormattedMessage } from 'react-intl';
+import { Col, Row } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 import { reset, getFormValues } from 'redux-form';
 import moment from 'moment';
-import Page from '../../components/layout/Page';
+import { LinkContainer } from 'react-router-bootstrap';
 
+import Button from '../../components/widgets/FlatButton';
+import Page from '../../components/layout/Page';
 import EditAssignmentForm from '../../components/forms/EditAssignmentForm';
 import DeleteAssignmentButtonContainer from '../../containers/DeleteAssignmentButtonContainer';
 import Box from '../../components/widgets/Box';
 import HierarchyLineContainer from '../../containers/HierarchyLineContainer';
+import { ResultsIcon } from '../../components/icons';
 
 import {
   fetchAssignment,
-  editAssignment
+  editAssignment,
+  syncWithExercise
 } from '../../redux/modules/assignments';
 import { getAssignment } from '../../redux/selectors/assignments';
 import { canSubmitSolution } from '../../redux/selectors/canSubmit';
 import { runtimeEnvironmentsSelector } from '../../redux/selectors/runtimeEnvironments';
 import { isSubmitting } from '../../redux/selectors/submission';
-import { loggedInUserIdSelector } from '../../redux/selectors/auth';
+import {
+  isSupervisorOf,
+  isLoggedAsSuperAdmin
+} from '../../redux/selectors/users';
 import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments';
 import { isReady, getJsData } from '../../redux/helpers/resourceManager';
+import { ResubmitAllSolutionsContainer } from '../../containers/ResubmitSolutionContainer';
+import AssignmentSync from '../../components/Assignments/Assignment/AssignmentSync';
 
 import withLinks from '../../hoc/withLinks';
 
@@ -60,12 +70,18 @@ class EditAssignment extends Component {
 
   render() {
     const {
-      links: { ASSIGNMENT_DETAIL_URI_FACTORY, GROUP_URI_FACTORY },
+      links: {
+        ASSIGNMENT_DETAIL_URI_FACTORY,
+        GROUP_URI_FACTORY,
+        SUPERVISOR_STATS_URI_FACTORY
+      },
       params: { assignmentId },
       push,
       assignment,
       editAssignment,
-      formValues
+      isSuperAdmin,
+      formValues,
+      exerciseSync
     } = this.props;
 
     return (
@@ -97,7 +113,34 @@ class EditAssignment extends Component {
       >
         {assignment =>
           <div>
-            <HierarchyLineContainer groupId={assignment.groupId} />
+            <Row>
+              <Col xs={12}>
+                <HierarchyLineContainer groupId={assignment.groupId} />
+                {(isSuperAdmin || isSupervisorOf(assignment.groupId)) &&
+                  <p>
+                    <LinkContainer
+                      to={SUPERVISOR_STATS_URI_FACTORY(assignment.id)}
+                    >
+                      <Button bsStyle="primary">
+                        <ResultsIcon />{' '}
+                        <FormattedMessage
+                          id="app.assignment.viewResults"
+                          defaultMessage="Student Results"
+                        />
+                      </Button>
+                    </LinkContainer>
+                    <ResubmitAllSolutionsContainer
+                      assignmentId={assignment.id}
+                    />
+                  </p>}
+              </Col>
+            </Row>
+            {(isSuperAdmin || isSupervisorOf(assignment.groupId)) &&
+              <AssignmentSync
+                syncInfo={assignment.exerciseSynchronizationInfo}
+                exerciseSync={exerciseSync}
+              />}
+
             <EditAssignmentForm
               assignment={assignment}
               initialValues={
@@ -146,23 +189,23 @@ EditAssignment.propTypes = {
   params: PropTypes.shape({
     assignmentId: PropTypes.string.isRequired
   }).isRequired,
+  isSuperAdmin: PropTypes.bool,
   assignment: ImmutablePropTypes.map,
   runtimeEnvironments: ImmutablePropTypes.map,
   editAssignment: PropTypes.func.isRequired,
   formValues: PropTypes.object,
+  exerciseSync: PropTypes.func.isRequired,
   links: PropTypes.object
 };
 
 export default withLinks(
   connect(
     (state, { params: { assignmentId } }) => {
-      const assignmentSelector = getAssignment(assignmentId);
-      const userId = loggedInUserIdSelector(state);
       return {
-        assignment: assignmentSelector(state),
+        assignment: getAssignment(state)(assignmentId),
         runtimeEnvironments: runtimeEnvironmentsSelector(state),
         submitting: isSubmitting(state),
-        userId,
+        isSuperAdmin: isLoggedAsSuperAdmin(state),
         canSubmit: canSubmitSolution(assignmentId)(state),
         formValues: getFormValues('editAssignment')(state)
       };
@@ -184,7 +227,8 @@ export default withLinks(
           delete processedData.maxPointsBeforeSecondDeadline;
         }
         return dispatch(editAssignment(assignmentId, processedData));
-      }
+      },
+      exerciseSync: () => dispatch(syncWithExercise(assignmentId))
     })
   )(EditAssignment)
 );
