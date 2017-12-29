@@ -9,7 +9,7 @@ const createIcon = commentsStats => {
     return <Icon name="comment-o" />;
   }
   if (commentsStats.authoredCount === commentsStats.count) {
-    return <Icon name="comment-o" flip="horizontal" />;
+    return <Icon name="comment" flip="horizontal" />;
   }
   return <Icon name="comments-o" />;
 };

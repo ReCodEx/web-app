@@ -991,6 +991,8 @@
   "app.submissions.testResultsTable.statusOK": "OK",
   "app.submissions.testResultsTable.statusSkipped": "SKIPPED",
   "app.submissions.testResultsTable.timeExceeded": "Measured execution time",
+  "app.submissionsTable.commentsIcon.count": "Total Comments: {count}",
+  "app.submissionsTable.commentsIcon.last": "Last Comment: {last}",
   "app.submissionsTable.environment": "Target language",
   "app.submissionsTable.failedLoading": "Could not load this submission.",
   "app.submissionsTable.loading": "Loading submitted solutions ...",
