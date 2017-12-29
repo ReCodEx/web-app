@@ -65,7 +65,7 @@ describe('Authentication', () => {
           serviceToken: 'xyz',
           otherData: 'uvw'
         },
-        meta: { service: serviceId }
+        meta: { service: serviceId, popupWindow: null }
       });
     });
   });
