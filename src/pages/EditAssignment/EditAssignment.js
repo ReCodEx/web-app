@@ -73,7 +73,6 @@ class EditAssignment extends Component {
       links: {
         ASSIGNMENT_DETAIL_URI_FACTORY,
         GROUP_URI_FACTORY,
-        ASSIGNMENT_EDIT_URI_FACTORY,
         SUPERVISOR_STATS_URI_FACTORY
       },
       params: { assignmentId },

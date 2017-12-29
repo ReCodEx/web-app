@@ -1,11 +1,6 @@
 import React, { Component } from 'react';
-//import PropTypes from 'prop-types';
 
 import { getTicketFromUrl } from '../../helpers/cas';
-
-import 'admin-lte/dist/css/AdminLTE.min.css';
-import 'admin-lte/dist/css/skins/skin-green.min.css';
-// import 'admin-lte/dist/css/skins/skin-purple.min.css';
 
 import styles from './LoginExternFinalization.less';
 
@@ -58,11 +53,5 @@ class LoginExternFinalization extends Component {
     );
   }
 }
-
-LoginExternFinalization.propTypes = {
-  //  params: PropTypes.shape({
-  //    lang: PropTypes.string
-  //  }),
-};
 
 export default LoginExternFinalization;

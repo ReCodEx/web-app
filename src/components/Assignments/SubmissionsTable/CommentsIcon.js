@@ -5,10 +5,10 @@ import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import Icon from 'react-fontawesome';
 
 const createIcon = commentsStats => {
-  if (commentsStats.mineCount === 0) {
+  if (commentsStats.authoredCount === 0) {
     return <Icon name="comment-o" />;
   }
-  if (commentsStats.mineCount === commentsStats.count) {
+  if (commentsStats.authoredCount === commentsStats.count) {
     return <Icon name="comment-o" flip="horizontal" />;
   }
   return <Icon name="comments-o" />;
