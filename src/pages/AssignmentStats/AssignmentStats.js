@@ -114,34 +114,31 @@ class AssignmentStats extends Component {
         {assignment =>
           <div>
             <HierarchyLineContainer groupId={assignment.groupId} />
-            <ResourceRenderer resource={getGroup(assignment.groupId)}>
-              {group =>
-                <ResourceRenderer resource={runtimeEnvironments}>
-                  {(...runtimes) =>
-                    <div>
-                      {getStudents(group.id)
-                        .sort((a, b) => {
-                          const aName =
-                            a.name.lastName + ' ' + a.name.firstName;
-                          const bName =
-                            b.name.lastName + ' ' + b.name.firstName;
-                          return aName.localeCompare(bName, intl.locale);
-                        })
-                        .map(user =>
-                          <Row key={user.id}>
-                            <Col sm={12}>
-                              <SubmissionsTableContainer
-                                title={user.fullName}
-                                userId={user.id}
-                                assignmentId={assignmentId}
-                                runtimeEnvironments={runtimes}
-                                noteMaxlen={160}
-                              />
-                            </Col>
-                          </Row>
-                        )}
-                    </div>}
-                </ResourceRenderer>}
+            <ResourceRenderer
+              resource={[getGroup(assignment.groupId), ...runtimeEnvironments]}
+            >
+              {(group, ...runtimes) =>
+                <div>
+                  {getStudents(group.id)
+                    .sort((a, b) => {
+                      const aName = a.name.lastName + ' ' + a.name.firstName;
+                      const bName = b.name.lastName + ' ' + b.name.firstName;
+                      return aName.localeCompare(bName, intl.locale);
+                    })
+                    .map(user =>
+                      <Row key={user.id}>
+                        <Col sm={12}>
+                          <SubmissionsTableContainer
+                            title={user.fullName}
+                            userId={user.id}
+                            assignmentId={assignmentId}
+                            runtimeEnvironments={runtimes}
+                            noteMaxlen={160}
+                          />
+                        </Col>
+                      </Row>
+                    )}
+                </div>}
             </ResourceRenderer>
           </div>}
       </Page>
