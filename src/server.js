@@ -41,11 +41,29 @@ if (typeof atob === 'undefined') {
  * some basic middleware for tempaltes and static file serving.
  */
 
-const bundle = process.env.BUNDLE || '/bundle.js';
+function getFileName(pattern, addPrefix = '') {
+  const glob = require('glob');
+  const files = glob.sync(pattern);
+  if (!files || files.length < 1) {
+    return null;
+  }
+  const fileName = files[0].substr(files[0].lastIndexOf('/') + 1);
+  return fileName ? addPrefix + fileName : null;
+}
+
+const bundle =
+  process.env.BUNDLE || getFileName('public/bundle-*.js', '/') || '/bundle.js';
+const style = getFileName('public/style-*.css', '/') || '/style.css';
 
 let app = new Express();
 app.set('view engine', 'ejs');
-app.use(Express.static('public'));
+app.use(
+  Express.static('public', {
+    immutable: true,
+    maxAge: '30d',
+    lastModified: true
+  })
+);
 app.use(cookieParser());
 
 const renderWithoutSSR = (res, renderProps) => {
@@ -55,7 +73,7 @@ const renderWithoutSSR = (res, renderProps) => {
     head,
     reduxState: 'undefined',
     bundle,
-    style: '/style.css'
+    style
   });
 };
 
@@ -73,7 +91,7 @@ const renderPage = (res, store, renderProps) => {
     head,
     reduxState,
     bundle,
-    style: '/style.css'
+    style
   });
 };
 

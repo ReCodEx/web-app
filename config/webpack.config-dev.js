@@ -13,7 +13,7 @@ try {
   require('os').networkInterfaces = () => ({});
 }
 
-const extractCss = new ExtractTextPlugin('style-[contenthash].css');
+const extractCss = new ExtractTextPlugin('style.css');
 const gitRevisionPlugin = new GitRevisionPlugin({
   versionCommand: 'describe --always --tags'
 });
@@ -22,7 +22,7 @@ module.exports = {
   devtool: process.env.NODE_ENV === 'development' ? 'source-map' : 'none',
   entry: path.join(__dirname, '..', 'src/client.js'),
   output: {
-    filename: 'bundle-[hash].js',
+    filename: 'bundle.js',
     path: path.join(__dirname, '..', 'public'),
     publicPath: '/public/'
   },
