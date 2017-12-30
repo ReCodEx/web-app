@@ -48,18 +48,37 @@ const reducer = handleActions(
     [additionalActionTypes.BEST_SUBMISSION_PENDING]: (
       state,
       { payload, meta: { userId, assignmentId } }
-    ) => state.setIn(['resources', assignmentId, userId], createRecord()),
+    ) =>
+      userId !== undefined
+        ? state.setIn(['resources', assignmentId, userId], createRecord())
+        : state,
 
     [additionalActionTypes.BEST_SUBMISSION_FULFILLED]: (
       state,
       { payload = {}, meta: { assignmentId, userId } }
-    ) =>
-      state
-        .setIn(['resources', assignmentId, userId, 'data'], fromJS(payload))
-        .setIn(
-          ['resources', assignmentId, userId, 'state'],
-          resourceStatus.FULFILLED
-        )
+    ) => {
+      if (userId !== undefined) {
+        // update single-user record
+        return state
+          .setIn(['resources', assignmentId, userId, 'data'], fromJS(payload))
+          .setIn(
+            ['resources', assignmentId, userId, 'state'],
+            resourceStatus.FULFILLED
+          );
+      } else {
+        // Update for each user in the payload
+        for (const uId in payload) {
+          state = state.setIn(
+            ['resources', assignmentId, uId],
+            createRecord({
+              data: fromJS(payload[uId]),
+              state: resourceStatus.FULFILLED
+            })
+          );
+        }
+        return state;
+      }
+    }
   }),
   initialState
 );
