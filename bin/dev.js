@@ -2,7 +2,7 @@ import Express from 'express';
 import webpack from 'webpack';
 import WebpackDevServer from 'webpack-dev-server';
 import path from 'path';
-import config from '../config/webpack.config';
+import config from '../config/webpack.config-dev';
 import colors from 'colors';
 import remotedev from 'remotedev-server';
 
