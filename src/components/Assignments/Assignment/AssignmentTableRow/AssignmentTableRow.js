@@ -54,7 +54,7 @@ const AssignmentTableRow = ({
       <td>
         <ResourceRenderer resource={bestSubmission}>
           {data =>
-            data.lastSubmission
+            data && data.lastSubmission
               ? <span>
                   {data.lastSubmission.evaluation.points}
                   {data.bonusPoints > 0 &&

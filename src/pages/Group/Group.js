@@ -110,9 +110,13 @@ class Group extends Component {
   }
 
   componentWillReceiveProps(newProps) {
-    const { params: { groupId } } = this.props;
+    const { params: { groupId }, userId, isSuperAdmin } = this.props;
 
-    if (groupId !== newProps.params.groupId) {
+    if (
+      groupId !== newProps.params.groupId ||
+      userId !== newProps.userId ||
+      isSuperAdmin !== newProps.isSuperAdmin
+    ) {
       newProps.loadAsync(newProps.userId, newProps.isSuperAdmin);
       return;
     }
