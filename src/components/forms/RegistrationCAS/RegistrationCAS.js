@@ -11,7 +11,7 @@ import FormBox from '../../widgets/FormBox';
 import { CASAuthenticationButtonField, SelectField } from '../Fields';
 import SubmitButton from '../SubmitButton';
 
-const RegistrationCASOauth = ({
+const RegistrationCAS = ({
   submitting,
   handleSubmit,
   submitSucceeded,
@@ -19,7 +19,7 @@ const RegistrationCASOauth = ({
   anyTouched,
   instances = Map(),
   invalid
-}) => (
+}) =>
   <FormBox
     title={
       <FormattedMessage
@@ -83,7 +83,7 @@ const RegistrationCASOauth = ({
     />
 
     <ResourceRenderer resource={instances.toArray()}>
-      {(...instances) => (
+      {(...instances) =>
         <Field
           name="instanceId"
           required
@@ -98,13 +98,11 @@ const RegistrationCASOauth = ({
             { key: '', name: '...' },
             ...instances.map(({ id: key, name }) => ({ key, name }))
           ]}
-        />
-      )}
+        />}
     </ResourceRenderer>
-  </FormBox>
-);
+  </FormBox>;
 
-RegistrationCASOauth.propTypes = {
+RegistrationCAS.propTypes = {
   instances: ImmutablePropTypes.map.isRequired,
   handleSubmit: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
@@ -145,7 +143,7 @@ const initialValues = {
 };
 
 export default reduxForm({
-  form: 'registration-cas-oauth',
+  form: 'registration-cas',
   initialValues,
   validate
-})(RegistrationCASOauth);
+})(RegistrationCAS);
