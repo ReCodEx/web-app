@@ -9,7 +9,7 @@ import { Row, Col } from 'react-bootstrap';
 import PageContent from '../../components/layout/PageContent';
 import RegistrationForm from '../../components/forms/RegistrationForm';
 import ExternalRegistrationForm from '../../components/forms/ExternalRegistrationForm';
-import RegistrationCASOauth from '../../components/forms/RegistrationCASOauth';
+import RegistrationCAS from '../../components/forms/RegistrationCAS';
 
 import {
   createAccount,
@@ -89,9 +89,9 @@ class Register extends Component {
             </Col>}
           {process.env.ALLOW_CAS_REGISTRATION === 'true' &&
             <Col lg={4} md={6} mdOffset={0} sm={8} smOffset={2}>
-              <RegistrationCASOauth
+              <RegistrationCAS
                 instances={instances}
-                onSubmit={createExternalAccount('oauth')}
+                onSubmit={createExternalAccount('cas')}
               />
             </Col>}
         </Row>
