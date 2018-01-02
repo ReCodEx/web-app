@@ -105,7 +105,7 @@ export const loginServices = {
   local: LOCAL_LOGIN,
   external: {
     CAS_UK: 'cas-uk',
-    CAS_UK_TICKET: 'cas-uk/oauth'
+    CAS_UK_TICKET: 'cas-uk/cas'
   }
 };
 
