@@ -551,6 +551,7 @@
   "app.exitCodes.mono.200": "Internal error",
   "app.exitCodes.mono.201": "No main method",
   "app.exitCodes.mono.202": "More main methods",
+  "app.exitCodes.pascal.0": "OK",
   "app.exitCodes.pascal.1": "Invalid function number",
   "app.exitCodes.pascal.100": "Disk read error",
   "app.exitCodes.pascal.101": "Disk write error",

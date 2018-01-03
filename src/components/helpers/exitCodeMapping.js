@@ -6,6 +6,7 @@ import { FormattedMessage } from 'react-intl';
  * https://www.freepascal.org/docs-html/user/userap4.html
  */
 const pascalCodes = {
+  0: <FormattedMessage id="app.exitCodes.pascal.0" defaultMessage="OK" />,
   1: (
     <FormattedMessage
       id="app.exitCodes.pascal.1"
