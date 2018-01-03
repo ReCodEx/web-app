@@ -63,7 +63,7 @@ class GroupTree extends Component {
       localizedTexts,
       canView,
       childGroups: { all: allChildGroups, public: publicChildGroups },
-      privateData: { admins }
+      primaryAdminsIds
     } = getJsData(group);
 
     return (
@@ -79,7 +79,7 @@ class GroupTree extends Component {
               />
             }
             level={level}
-            admins={admins}
+            admins={primaryAdminsIds}
             isOpen={currentGroupId === id || isOpen}
             actions={
               currentGroupId !== id && canView

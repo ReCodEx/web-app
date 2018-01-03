@@ -5,6 +5,7 @@ import Icon from 'react-fontawesome';
 import { LoadingIcon } from '../../icons';
 import LevelGap from './LevelGap';
 import GroupsName from '../../../components/Groups/GroupsName';
+import UsersSimpleNameContainer from '../../../containers/UsersSimpleNameContainer';
 
 const TreeViewLeaf = ({
   loading = false,
@@ -27,18 +28,16 @@ const TreeViewLeaf = ({
       {loading ? <LoadingIcon /> : <Icon name={icon} />}
     </span>
     {title}
-    {console.log(admins)}
-    {/*admins &&
+    {admins &&
       admins.length > 0 &&
       <span>
         &nbsp;&nbsp; (<small>
           <em>
-            {admins
-              .map(a => a.name.firstName + ' ' + a.name.lastName)
-              .join(', ')}
+            {}
+            {admins.map(a => <UsersSimpleNameContainer key={a} userId={a} />)}
           </em>
         </small>)
-      </span>*/}
+      </span>}
     <span className="pull-right">{actions}</span>
   </li>;
 
