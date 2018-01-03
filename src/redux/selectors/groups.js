@@ -68,7 +68,10 @@ export const adminOfSelector = userId =>
 const usersOfGroup = (type, groupId) =>
   createSelector(
     groupSelector(groupId),
-    group => (group && isReady(group) ? group.getIn(['data', type]) : List())
+    group =>
+      group && isReady(group)
+        ? group.getIn(['data', 'privateData', type])
+        : List()
   );
 
 export const studentsOfGroup = groupId => usersOfGroup('students', groupId);
@@ -89,7 +92,10 @@ export const groupsPublicAssignmentsSelector = createSelector(
   [groupsSelector, getAssignments, getParam],
   (groups, assignments, groupId) =>
     groups
-      .getIn([groupId, 'data', 'assignments', 'public'], EMPTY_LIST)
+      .getIn(
+        [groupId, 'data', 'privateData', 'assignments', 'public'],
+        EMPTY_LIST
+      )
       .map(id => assignments.getIn(['resources', id]))
 );
 
@@ -97,7 +103,7 @@ export const groupsAllAssignmentsSelector = createSelector(
   [groupsSelector, getAssignments, getParam],
   (groups, assignments, groupId) =>
     groups
-      .getIn([groupId, 'data', 'assignments', 'all'], EMPTY_LIST)
+      .getIn([groupId, 'data', 'privateData', 'assignments', 'all'], EMPTY_LIST)
       .map(id => assignments.getIn(['resources', id]))
 );
 

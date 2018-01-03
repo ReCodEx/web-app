@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 
-import { fetchPublicGroupIfNeeded } from '../../redux/modules/publicGroups';
-import { publicGroupSelector } from '../../redux/selectors/publicGroups';
+import { fetchGroupIfNeeded } from '../../redux/modules/groups';
+import { groupSelector } from '../../redux/selectors/groups';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import GroupsName, {
   LoadingGroupsName
@@ -22,7 +22,7 @@ class GroupsNameContainer extends Component {
   }
 
   static loadAsync = ({ groupId }, dispatch) => {
-    dispatch(fetchPublicGroupIfNeeded(groupId));
+    dispatch(fetchGroupIfNeeded(groupId));
   };
 
   render() {
@@ -44,7 +44,7 @@ GroupsNameContainer.propTypes = {
 
 export default connect(
   (state, { groupId }) => ({
-    group: publicGroupSelector(groupId)(state)
+    group: groupSelector(groupId)(state)
   }),
   (dispatch, { groupId }) => ({
     loadAsync: () => GroupsNameContainer.loadAsync({ groupId }, dispatch)

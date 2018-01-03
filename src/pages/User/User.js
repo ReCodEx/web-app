@@ -19,15 +19,13 @@ import UsersStats from '../../components/Users/UsersStats';
 import GroupsName from '../../components/Groups/GroupsName';
 import { fetchAssignmentsForGroup } from '../../redux/modules/assignments';
 import { fetchUserIfNeeded } from '../../redux/modules/users';
-import { fetchProfileIfNeeded } from '../../redux/modules/publicProfiles';
-import { fetchInstanceGroupsIfNeeded } from '../../redux/modules/groups';
+import { fetchInstanceGroups } from '../../redux/modules/groups';
 import {
   getUser,
   studentOfGroupsIdsSelector,
   isStudent,
   isLoggedAsSuperAdmin
 } from '../../redux/selectors/users';
-import { getProfile } from '../../redux/selectors/publicProfiles';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import { fetchGroupsStatsIfNeeded } from '../../redux/modules/stats';
 import { createGroupsStatsSelector } from '../../redux/selectors/stats';
@@ -63,16 +61,14 @@ class User extends Component {
    */
   static loadAsync = ({ userId }, dispatch, loggedInUserId, isAdmin) =>
     dispatch((dispatch, getState) =>
-      dispatch(fetchProfileIfNeeded(userId))
+      dispatch(fetchUserIfNeeded(userId))
         .then(() => dispatch(fetchUserIfNeeded(loggedInUserId)))
         .then(() => {
           const state = getState();
           const instanceId = getJsData(getUser(loggedInUserId)(state))
             .instanceId;
 
-          return dispatch(
-            fetchInstanceGroupsIfNeeded(instanceId)
-          ).then(groups =>
+          return dispatch(fetchInstanceGroups(instanceId)).then(groups =>
             Promise.all(
               groups.value.map(group => {
                 if (
@@ -314,7 +310,7 @@ export default withLinks(
       return {
         loggedInUserId,
         student: isStudent(userId)(state),
-        user: getProfile(userId)(state),
+        user: getUser(userId)(state),
         isAdmin: isSuperadmin,
         studentOfGroupsIds: studentOfGroupsIdsSelector(userId)(state).toArray(),
         groupAssignments: groupId =>

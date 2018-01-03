@@ -79,7 +79,7 @@ export const fetchUsersGroups = userId =>
     meta: { userId }
   });
 
-export const fetchInstanceGroupsIfNeeded = instanceId =>
+export const fetchInstanceGroups = instanceId =>
   actions.fetchMany({
     endpoint: `/instances/${instanceId}/groups`,
     meta: { instanceId }

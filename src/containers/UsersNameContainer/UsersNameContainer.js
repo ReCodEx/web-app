@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 
-import { fetchProfileIfNeeded } from '../../redux/modules/publicProfiles';
-import { getProfile } from '../../redux/selectors/publicProfiles';
+import { fetchUserIfNeeded } from '../../redux/modules/users';
+import { getUser } from '../../redux/selectors/users';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import UsersName, {
@@ -24,7 +24,7 @@ class UsersNameContainer extends Component {
   }
 
   static loadAsync = ({ userId }, dispatch) => {
-    dispatch(fetchProfileIfNeeded(userId));
+    dispatch(fetchUserIfNeeded(userId));
   };
 
   render() {
@@ -60,11 +60,11 @@ UsersNameContainer.propTypes = {
 
 export default connect(
   (state, { userId }) => ({
-    user: getProfile(userId)(state),
+    user: getUser(userId)(state),
     currentUserId: loggedInUserIdSelector(state)
   }),
   (dispatch, { userId }) => ({
-    loadProfileIfNeeded: () => dispatch(fetchProfileIfNeeded(userId)),
+    loadProfileIfNeeded: () => dispatch(fetchUserIfNeeded(userId)),
     loadAsync: () => UsersNameContainer.loadAsync({ userId }, dispatch)
   })
 )(UsersNameContainer);

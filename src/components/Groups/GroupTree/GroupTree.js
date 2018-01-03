@@ -61,9 +61,9 @@ class GroupTree extends Component {
     const {
       name,
       localizedTexts,
-      admins,
+      canView,
       childGroups: { all: allChildGroups, public: publicChildGroups },
-      canView
+      privateData: { admins }
     } = getJsData(group);
 
     return (

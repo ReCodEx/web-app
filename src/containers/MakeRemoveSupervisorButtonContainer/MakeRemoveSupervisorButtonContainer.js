@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { makeSupervisor, removeSupervisor } from '../../redux/modules/groups';
-import { fetchProfileIfNeeded } from '../../redux/modules/publicProfiles';
+import { fetchUserIfNeeded } from '../../redux/modules/users';
 import { isSupervisorOf } from '../../redux/selectors/users';
 
 import MakeSupervisorButton from '../../components/Groups/MakeSupervisorButton';
@@ -14,7 +14,7 @@ const MakeRemoveSupervisorButtonContainer = ({
   groupId,
   makeSupervisor,
   removeSupervisor,
-  fetchProfileIfNeeded,
+  fetchUserIfNeeded,
   ...props
 }) =>
   isSupervisor
@@ -26,9 +26,7 @@ const MakeRemoveSupervisorButtonContainer = ({
     : <MakeSupervisorButton
         {...props}
         onClick={() => {
-          fetchProfileIfNeeded(userId).then(() =>
-            makeSupervisor(groupId, userId)
-          );
+          fetchUserIfNeeded(userId).then(() => makeSupervisor(groupId, userId));
         }}
         bsSize="xs"
       />;
@@ -39,7 +37,7 @@ MakeRemoveSupervisorButtonContainer.propTypes = {
   isSupervisor: PropTypes.bool.isRequired,
   makeSupervisor: PropTypes.func.isRequired,
   removeSupervisor: PropTypes.func.isRequired,
-  fetchProfileIfNeeded: PropTypes.func.isRequired
+  fetchUserIfNeeded: PropTypes.func.isRequired
 };
 
 const mapStateToProps = (state, { groupId, userId }) => ({
@@ -49,7 +47,7 @@ const mapStateToProps = (state, { groupId, userId }) => ({
 const mapDispatchToProps = {
   makeSupervisor,
   removeSupervisor,
-  fetchProfileIfNeeded
+  fetchUserIfNeeded
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(

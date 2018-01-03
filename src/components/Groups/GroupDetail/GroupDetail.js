@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import ImmutablePropTypes from 'react-immutable-proptypes';
 import { FormattedMessage, FormattedNumber, injectIntl } from 'react-intl';
 import { Row, Col, Table } from 'react-bootstrap';
 import ReactMarkdown from 'react-remarkable';
@@ -20,16 +19,17 @@ const GroupDetail = ({
     externalId,
     name,
     localizedTexts,
-    description,
-    threshold,
-    parentGroupId,
-    isPublic = false,
-    childGroups,
     primaryAdminsIds,
-    ...group
+    childGroups,
+    privateData: {
+      description,
+      threshold,
+      parentGroupId,
+      isPublic = false,
+      ...privateGroup
+    }
   },
   groups,
-  publicGroups,
   supervisors,
   isAdmin,
   intl: { locale }
@@ -120,7 +120,7 @@ const GroupDetail = ({
                   deletable={false}
                   isAdmin={isAdmin}
                   isOpen
-                  groups={publicGroups}
+                  groups={groups}
                   level={1}
                 />
               </Box>
@@ -147,7 +147,7 @@ const GroupDetail = ({
             users={supervisors}
             isAdmin={isAdmin}
             primaryAdminsIds={primaryAdminsIds}
-            isLoaded={supervisors.length === group.supervisors.length}
+            isLoaded={supervisors.length === privateGroup.supervisors.length}
           />
         </Box>
       </Col>
@@ -158,19 +158,20 @@ GroupDetail.propTypes = {
   group: PropTypes.shape({
     id: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
-    description: PropTypes.string.isRequired,
     parentGroupId: PropTypes.string,
     childGroups: PropTypes.shape({
       all: PropTypes.array,
       public: PropTypes.array.isRequired
     }),
     threshold: PropTypes.number,
-    isPublic: PropTypes.bool,
-    supervisors: PropTypes.array.isRequired,
-    primaryAdminsIds: PropTypes.array.isRequired
+    primaryAdminsIds: PropTypes.array.isRequired,
+    privateData: PropTypes.shape({
+      description: PropTypes.string.isRequired,
+      isPublic: PropTypes.bool,
+      supervisors: PropTypes.array.isRequired
+    })
   }),
   groups: PropTypes.object.isRequired,
-  publicGroups: ImmutablePropTypes.map.isRequired,
   supervisors: PropTypes.array.isRequired,
   isAdmin: PropTypes.bool,
   intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired

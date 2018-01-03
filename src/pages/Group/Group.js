@@ -24,7 +24,7 @@ import { LocalizedGroupName } from '../../components/helpers/LocalizedNames';
 import {
   createGroup,
   fetchGroupIfNeeded,
-  fetchInstanceGroupsIfNeeded,
+  fetchInstanceGroups,
   fetchSubgroups
 } from '../../redux/modules/groups';
 import { fetchGroupsStats } from '../../redux/modules/stats';
@@ -37,7 +37,6 @@ import {
   fetchGroupExercises,
   create as createExercise
 } from '../../redux/modules/exercises';
-import { fetchInstancePublicGroups } from '../../redux/modules/publicGroups';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import {
   isStudentOf,
@@ -55,7 +54,6 @@ import {
   groupsAllAssignmentsSelector
 } from '../../redux/selectors/groups';
 import { getExercisesForGroup } from '../../redux/selectors/exercises';
-import { publicGroupsSelectors } from '../../redux/selectors/publicGroups';
 
 import { getStatusesForLoggedUser } from '../../redux/selectors/stats';
 
@@ -67,40 +65,40 @@ import { getBestSubmissionsForLoggedInUser } from '../../redux/selectors/groupRe
 
 class Group extends Component {
   static isAdminOrSupervisorOf = (group, userId) =>
-    group.admins.indexOf(userId) >= 0 || group.supervisors.indexOf(userId) >= 0;
+    group.privateData.admins.indexOf(userId) >= 0 ||
+    group.privateData.supervisors.indexOf(userId) >= 0;
 
   static isMemberOf = (group, userId) =>
     Group.isAdminOrSupervisorOf(group, userId) ||
-    group.students.indexOf(userId) >= 0;
+    group.privateData.students.indexOf(userId) >= 0;
 
   static loadAsync = ({ groupId }, dispatch, userId, isSuperAdmin) =>
     Promise.all([
-      dispatch(fetchGroupIfNeeded(groupId)).then(res => res.value).then(group =>
-        Promise.all([
-          dispatch(fetchSupervisors(groupId)),
-          dispatch(fetchInstancePublicGroups(group.instanceId)),
-          Group.isAdminOrSupervisorOf(group, userId) || isSuperAdmin
-            ? Promise.all([
-                dispatch(fetchInstanceGroupsIfNeeded(group.instanceId)), // for group traversal finding group exercises
-                dispatch(fetchGroupExercises(groupId))
-              ])
-            : Promise.resolve(),
-          Group.isMemberOf(group, userId) || isSuperAdmin
-            ? Promise.all([
-                dispatch(fetchAssignmentsForGroup(groupId)),
-                dispatch(fetchStudents(groupId)),
-                dispatch(fetchGroupsStats(groupId))
-              ])
-            : Promise.resolve(),
-          group.students.indexOf(userId) >= 0
-            ? Promise.all(
-                group.assignments.all.map(assignmentId =>
-                  dispatch(fetchBestSubmission(userId, assignmentId))
+      dispatch(fetchGroupIfNeeded(groupId))
+        .then(res => res.value)
+        .then(group =>
+          Promise.all([
+            dispatch(fetchSupervisors(groupId)),
+            dispatch(fetchInstanceGroups(group.privateData.instanceId)),
+            Group.isAdminOrSupervisorOf(group, userId) || isSuperAdmin
+              ? Promise.all([dispatch(fetchGroupExercises(groupId))])
+              : Promise.resolve(),
+            Group.isMemberOf(group, userId) || isSuperAdmin
+              ? Promise.all([
+                  dispatch(fetchAssignmentsForGroup(groupId)),
+                  dispatch(fetchStudents(groupId)),
+                  dispatch(fetchGroupsStats(groupId))
+                ])
+              : Promise.resolve(),
+            group.privateData.students.indexOf(userId) >= 0
+              ? Promise.all(
+                  group.privateData.assignments.all.map(assignmentId =>
+                    dispatch(fetchBestSubmission(userId, assignmentId))
+                  )
                 )
-              )
-            : Promise.resolve()
-        ])
-      ),
+              : Promise.resolve()
+          ])
+        ),
       dispatch(fetchSubgroups(groupId))
     ]);
 
@@ -122,8 +120,8 @@ class Group extends Component {
     }
 
     if (isReady(this.props.group) && isReady(newProps.group)) {
-      const thisData = this.props.group.toJS().data;
-      const newData = newProps.group.toJS().data;
+      const thisData = this.props.group.toJS().data.privateData;
+      const newData = newProps.group.toJS().data.privateData;
       if (thisData.supervisors.length !== newData.supervisors.length) {
         newProps.refetchSupervisors();
       }
@@ -180,7 +178,6 @@ class Group extends Component {
       group,
       userId,
       groups,
-      publicGroups,
       students,
       supervisors = List(),
       allAssignments = List(),
@@ -215,7 +212,7 @@ class Group extends Component {
           <div>
             <HierarchyLine
               groupId={data.id}
-              parentGroupsIds={data.parentGroupsIds}
+              parentGroupsIds={data.privateData.parentGroupsIds}
             />
             <p />
             {(isAdmin || isSuperAdmin) &&
@@ -245,7 +242,6 @@ class Group extends Component {
               supervisors={supervisors}
               isAdmin={isAdmin || isSuperAdmin}
               groups={groups}
-              publicGroups={publicGroups}
             />
 
             {!isAdmin &&
@@ -293,7 +289,6 @@ Group.propTypes = {
   groupExercises: ImmutablePropTypes.map,
   publicAssignments: ImmutablePropTypes.list,
   groups: ImmutablePropTypes.map,
-  publicGroups: ImmutablePropTypes.map,
   isStudent: PropTypes.bool,
   isAdmin: PropTypes.bool,
   isSupervisor: PropTypes.bool,
@@ -322,7 +317,6 @@ const mapStateToProps = (state, { params: { groupId } }) => {
     group: groupSelector(groupId)(state),
     userId,
     groups: groupsSelector(state),
-    publicGroups: publicGroupsSelectors(state),
     publicAssignments: groupsPublicAssignmentsSelector(state, groupId),
     allAssignments: groupsAllAssignmentsSelector(state, groupId),
     groupExercises: getExercisesForGroup(state, groupId),

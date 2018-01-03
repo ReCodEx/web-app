@@ -27,7 +27,8 @@ const TreeViewLeaf = ({
       {loading ? <LoadingIcon /> : <Icon name={icon} />}
     </span>
     {title}
-    {admins &&
+    {console.log(admins)}
+    {/*admins &&
       admins.length > 0 &&
       <span>
         &nbsp;&nbsp; (<small>
@@ -37,7 +38,7 @@ const TreeViewLeaf = ({
               .join(', ')}
           </em>
         </small>)
-      </span>}
+      </span>*/}
     <span className="pull-right">{actions}</span>
   </li>;
 
