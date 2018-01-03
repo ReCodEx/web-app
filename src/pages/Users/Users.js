@@ -117,7 +117,7 @@ class Users extends Component {
                 <SearchContainer
                   type="users"
                   id="users-page"
-                  search={search(user.toJS().data.instanceId)}
+                  search={search(user.toJS().data.privateData.instanceId)}
                   showAllOnEmptyQuery={true}
                   renderList={users =>
                     <UsersList

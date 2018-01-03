@@ -66,17 +66,18 @@ class User extends Component {
         .then(() => {
           const state = getState();
           const instanceId = getJsData(getUser(loggedInUserId)(state))
-            .instanceId;
+            .privateData.instanceId;
 
           return dispatch(fetchInstanceGroups(instanceId)).then(groups =>
             Promise.all(
               groups.value.map(group => {
                 if (
-                  group.students.indexOf(userId) >= 0 &&
+                  group.privateData.students.indexOf(userId) >= 0 &&
                   (isAdmin ||
                     userId === loggedInUserId ||
-                    group.supervisors.indexOf(loggedInUserId) >= 0 ||
-                    group.admins.indexOf(loggedInUserId) >= 0)
+                    group.privateData.supervisors.indexOf(loggedInUserId) >=
+                      0 ||
+                    group.privateData.admins.indexOf(loggedInUserId) >= 0)
                 ) {
                   return Promise.all([
                     dispatch(fetchAssignmentsForGroup(group.id)),
