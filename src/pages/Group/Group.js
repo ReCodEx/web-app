@@ -258,7 +258,7 @@ class Group extends Component {
               <AdminsView
                 group={data}
                 supervisors={supervisors}
-                addSubgroup={addSubgroup(data.instanceId)}
+                addSubgroup={addSubgroup(data.privateData.instanceId)}
               />}
 
             {(isAdmin || isSuperAdmin || isSupervisor) &&

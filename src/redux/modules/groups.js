@@ -186,14 +186,21 @@ const reducer = handleActions(
       // update the new hierarchy inside the local state
       const { payload: group } = action;
       if (
-        group.parentGroupId === null ||
-        !state.getIn(['resources', group.parentGroupId])
+        !group.privateData ||
+        group.privateData.parentGroupId === null ||
+        !state.getIn(['resources', group.privateData.parentGroupId])
       ) {
         return state;
       }
 
       return state.updateIn(
-        ['resources', group.parentGroupId, 'data', 'childGroups', 'all'],
+        [
+          'resources',
+          group.privateData.parentGroupId,
+          'data',
+          'childGroups',
+          'all'
+        ],
         children => children.push(group.id)
       );
     },
