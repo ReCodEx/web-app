@@ -91,7 +91,7 @@ const reducer = handleActions(
       }
 
       return state.updateIn(
-        ['resources', userId, 'data', 'groups', 'studentOf'],
+        ['resources', userId, 'data', 'privateData', 'groups', 'studentOf'],
         list => list.push(groupId)
       );
     },
@@ -105,7 +105,7 @@ const reducer = handleActions(
       }
 
       return state.updateIn(
-        ['resources', userId, 'data', 'groups', 'studentOf'],
+        ['resources', userId, 'data', 'privateData', 'groups', 'studentOf'],
         list => list.filter(id => id !== groupId)
       );
     },
@@ -119,7 +119,7 @@ const reducer = handleActions(
       }
 
       return state.updateIn(
-        ['resources', userId, 'data', 'groups', 'studentOf'],
+        ['resources', userId, 'data', 'privateData', 'groups', 'studentOf'],
         list => list.filter(id => id !== groupId)
       );
     },
@@ -133,7 +133,7 @@ const reducer = handleActions(
       }
 
       return state.updateIn(
-        ['resources', userId, 'data', 'groups', 'studentOf'],
+        ['resources', userId, 'data', 'privateData', 'groups', 'studentOf'],
         list => list.push(groupId)
       );
     },
@@ -147,7 +147,7 @@ const reducer = handleActions(
       }
 
       return state.updateIn(
-        ['resources', userId, 'data', 'groups', 'supervisorOf'],
+        ['resources', userId, 'data', 'privateData', 'groups', 'supervisorOf'],
         list => list.push(groupId)
       );
     },
@@ -161,7 +161,7 @@ const reducer = handleActions(
       }
 
       return state.updateIn(
-        ['resources', userId, 'data', 'groups', 'supervisorOf'],
+        ['resources', userId, 'data', 'privateData', 'groups', 'supervisorOf'],
         list => list.push(payload.id)
       );
     },
@@ -175,7 +175,7 @@ const reducer = handleActions(
       }
 
       return state.updateIn(
-        ['resources', userId, 'data', 'groups', 'supervisorOf'],
+        ['resources', userId, 'data', 'privateData', 'groups', 'supervisorOf'],
         list => list.filter(id => id !== groupId)
       );
     },
@@ -189,7 +189,7 @@ const reducer = handleActions(
       }
 
       return state.updateIn(
-        ['resources', userId, 'data', 'groups', 'supervisorOf'],
+        ['resources', userId, 'data', 'privateData', 'groups', 'supervisorOf'],
         list => list.filter(id => id !== groupId)
       );
     },
@@ -203,7 +203,7 @@ const reducer = handleActions(
       }
 
       return state.updateIn(
-        ['resources', userId, 'data', 'groups', 'supervisorOf'],
+        ['resources', userId, 'data', 'privateData', 'groups', 'supervisorOf'],
         list => list.push(groupId)
       );
     }

@@ -46,7 +46,10 @@ export const studentOfSelector2 = userId =>
     groups
       .filter(isReady)
       .map(getJsData)
-      .filter(group => group.privateData.students.indexOf(userId) >= 0)
+      .filter(
+        group =>
+          group.privateData && group.privateData.students.indexOf(userId) >= 0
+      )
   );
 
 export const supervisorOfSelector2 = userId =>
@@ -54,7 +57,11 @@ export const supervisorOfSelector2 = userId =>
     groups
       .filter(isReady)
       .map(getJsData)
-      .filter(group => group.privateData.supervisors.indexOf(userId) >= 0)
+      .filter(
+        group =>
+          group.privateData &&
+          group.privateData.supervisors.indexOf(userId) >= 0
+      )
   );
 
 export const adminOfSelector = userId =>
@@ -62,7 +69,10 @@ export const adminOfSelector = userId =>
     groups
       .filter(isReady)
       .map(getJsData)
-      .filter(group => group.privateData.admins.indexOf(userId) >= 0)
+      .filter(
+        group =>
+          group.privateData && group.privateData.admins.indexOf(userId) >= 0
+      )
   );
 
 const usersOfGroup = (type, groupId) =>

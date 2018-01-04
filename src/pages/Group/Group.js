@@ -139,7 +139,7 @@ class Group extends Component {
         iconName: 'university',
         breadcrumb: data => ({
           link: ({ INSTANCE_URI_FACTORY }) =>
-            INSTANCE_URI_FACTORY(data.instanceId),
+            INSTANCE_URI_FACTORY(data.privateData.instanceId),
           text: 'Instance'
         })
       },

@@ -72,6 +72,7 @@ class User extends Component {
             Promise.all(
               groups.value.map(group => {
                 if (
+                  group.privateData &&
                   group.privateData.students.indexOf(userId) >= 0 &&
                   (isAdmin ||
                     userId === loggedInUserId ||

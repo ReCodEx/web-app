@@ -231,8 +231,9 @@ const reducer = handleActions(
       { payload, meta: { groupId, userId } }
     ) =>
       state.hasIn(['resources', groupId, 'data'])
-        ? state.updateIn(['resources', groupId, 'data', 'students'], students =>
-            students.push(userId)
+        ? state.updateIn(
+            ['resources', groupId, 'data', 'privateData', 'students'],
+            students => students.push(userId)
           )
         : state,
 
@@ -241,8 +242,9 @@ const reducer = handleActions(
       { payload, meta: { groupId, userId } }
     ) =>
       state.hasIn(['resources', groupId, 'data'])
-        ? state.updateIn(['resources', groupId, 'data', 'students'], students =>
-            students.filter(id => id !== userId)
+        ? state.updateIn(
+            ['resources', groupId, 'data', 'privateData', 'students'],
+            students => students.filter(id => id !== userId)
           )
         : state,
 
@@ -250,8 +252,9 @@ const reducer = handleActions(
       state,
       { payload, meta: { groupId, userId } }
     ) =>
-      state.updateIn(['resources', groupId, 'data', 'students'], students =>
-        students.filter(id => id !== userId)
+      state.updateIn(
+        ['resources', groupId, 'data', 'privateData', 'students'],
+        students => students.filter(id => id !== userId)
       ),
 
     [additionalActionTypes.MAKE_SUPERVISOR_FULFILLED]: (
@@ -259,7 +262,7 @@ const reducer = handleActions(
       { payload, meta: { groupId, userId } }
     ) =>
       state.updateIn(
-        ['resources', groupId, 'data', 'supervisors'],
+        ['resources', groupId, 'data', 'privateData', 'supervisors'],
         supervisors =>
           supervisors.push(
             fromJS(payload.supervisors.find(id => id === userId))
@@ -271,7 +274,7 @@ const reducer = handleActions(
       { payload, meta: { groupId, userId } }
     ) =>
       state.updateIn(
-        ['resources', groupId, 'data', 'supervisors'],
+        ['resources', groupId, 'data', 'privateData', 'supervisors'],
         supervisors => supervisors.filter(id => id !== userId)
       ),
 
@@ -299,7 +302,7 @@ const reducer = handleActions(
     ) =>
       state.updateIn(['resources', groupId, 'data'], group =>
         group
-          .set('admins', List(admins))
+          .setIn(['privateData', 'admins'], List(admins))
           .set('primaryAdminsIds', primaryAdminsIds)
       ),
 
@@ -327,7 +330,7 @@ const reducer = handleActions(
     ) =>
       state.updateIn(['resources', groupId, 'data'], group =>
         group
-          .set('admins', List(admins))
+          .setIn(['privateData', 'admins'], List(admins))
           .set('primaryAdminsIds', primaryAdminsIds)
       ),
 
@@ -347,7 +350,7 @@ const reducer = handleActions(
       { payload: { id: assignmentId, isPublic, groupId } }
     ) =>
       state.updateIn(
-        ['resources', groupId, 'data', 'assignments', 'public'],
+        ['resources', groupId, 'data', 'privateData', 'assignments', 'public'],
         assignments => {
           if (isPublic) {
             return assignments.push(assignmentId).toSet().toList();
@@ -365,7 +368,7 @@ const reducer = handleActions(
       { payload: { id: assignmentId }, meta: { body: { groupId } } }
     ) =>
       state.updateIn(
-        ['resources', groupId, 'data', 'assignments', 'all'],
+        ['resources', groupId, 'data', 'privateData', 'assignments', 'all'],
         assignments => {
           if (!assignments) {
             assignments = List();
@@ -380,7 +383,7 @@ const reducer = handleActions(
     ) =>
       state.update('resources', groups =>
         groups.map(group =>
-          group.updateIn(['data', 'assignments'], assignments =>
+          group.updateIn(['data', 'privateData', 'assignments'], assignments =>
             assignments
               .update('all', ids => ids.filter(id => id !== assignmentId))
               .update('public', ids => ids.filter(id => id !== assignmentId))

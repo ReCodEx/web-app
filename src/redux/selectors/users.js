@@ -125,7 +125,7 @@ export const studentOfGroupsIdsSelector = userId =>
     getUser(userId),
     user =>
       user && isReady(user)
-        ? user.getIn(['data', 'privateData', 'groups', 'studentOf'])
+        ? user.getIn(['data', 'privateData', 'groups', 'studentOf'], List())
         : List()
   );
 
@@ -134,7 +134,7 @@ export const supervisorOfGroupsIdsSelector = userId =>
     getUser(userId),
     user =>
       user && isReady(user)
-        ? user.getIn(['data', 'privateData', 'groups', 'supervisorOf'])
+        ? user.getIn(['data', 'privateData', 'groups', 'supervisorOf'], List())
         : List()
   );
 
@@ -159,7 +159,7 @@ export const isAdminOf = (userId, groupId) =>
       isSuperAdmin === true ||
       (group &&
         isReady(group) &&
-        group.getIn(['data', 'admins']).indexOf(userId) >= 0)
+        group.getIn(['data', 'privateData', 'admins']).indexOf(userId) >= 0)
   );
 
 export const isMemberOf = (userId, groupId) =>
