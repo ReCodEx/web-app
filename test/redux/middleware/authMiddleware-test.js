@@ -57,8 +57,10 @@ describe('Middleware for access token storage and injecting to HTTP requests', (
         payload: {
           accessToken: 'abcdefgh',
           user: {
-            settings: {
-              defaultLanguage: 'xy'
+            privateData: {
+              settings: {
+                defaultLanguage: 'xy'
+              }
             }
           }
         }

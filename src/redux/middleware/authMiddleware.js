@@ -56,7 +56,7 @@ const middleware = store => next => action => {
           push(
             changeLanguage(
               window.location.pathname,
-              action.payload.user.settings.defaultLanguage
+              action.payload.user.privateData.settings.defaultLanguage
             )
           )
         );
