@@ -18,7 +18,6 @@ import pipelines from './modules/pipelines';
 import files from './modules/files';
 import filesContent from './modules/filesContent';
 import groups from './modules/groups';
-import publicGroups from './modules/publicGroups';
 import groupResults from './modules/groupResults';
 import groupExercises from './modules/groupExercises';
 import instances from './modules/instances';
@@ -26,7 +25,6 @@ import licences from './modules/licences';
 import limits from './modules/limits';
 import simpleLimits from './modules/simpleLimits';
 import notifications from './modules/notifications';
-import publicProfiles from './modules/publicProfiles';
 import { default as search } from './modules/search'; // because of a named export 'search'
 import sidebar from './modules/sidebar';
 import stats from './modules/stats';
@@ -66,7 +64,6 @@ const createRecodexReducers = token => ({
   files,
   filesContent,
   groups,
-  publicGroups,
   groupResults,
   groupExercises,
   instances,
@@ -82,7 +79,6 @@ const createRecodexReducers = token => ({
   registration,
   users,
   userSwitching,
-  publicProfiles,
   upload,
   runtimeEnvironments,
   supplementaryFiles,

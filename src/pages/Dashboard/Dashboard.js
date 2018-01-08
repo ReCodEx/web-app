@@ -21,9 +21,8 @@ import { fetchAssignmentsForGroup } from '../../redux/modules/assignments';
 import { fetchUserIfNeeded } from '../../redux/modules/users';
 import {
   fetchGroupsIfNeeded,
-  fetchInstanceGroupsIfNeeded
+  fetchInstanceGroups
 } from '../../redux/modules/groups';
-import { fetchPublicGroupsIfNeeded } from '../../redux/modules/publicGroups';
 
 import {
   getUser,
@@ -74,14 +73,16 @@ class Dashboard extends Component {
       dispatch(fetchUserIfNeeded(userId)).then(() => {
         const state = getState();
         const user = getJsData(getUser(userId)(state));
-        const groups = user.groups.studentOf.concat(user.groups.supervisorOf);
+        const groups = user.privateData.groups.studentOf.concat(
+          user.privateData.groups.supervisorOf
+        );
         const isAdmin = isLoggedAsSuperAdmin(state);
 
         return dispatch(fetchGroupsIfNeeded(...groups)).then(groups =>
           Promise.all(
             [
               isAdmin
-                ? dispatch(fetchInstanceGroupsIfNeeded(user.instanceId))
+                ? dispatch(fetchInstanceGroups(user.privateData.instanceId))
                 : Promise.resolve()
             ].concat(
               groups.map(({ value: group }) =>
@@ -89,10 +90,7 @@ class Dashboard extends Component {
                   dispatch(fetchAssignmentsForGroup(group.id)),
                   dispatch(fetchGroupsStatsIfNeeded(group.id)),
                   dispatch(
-                    fetchPublicGroupsIfNeeded(
-                      group.id,
-                      ...group.parentGroupsIds
-                    )
+                    fetchGroupsIfNeeded(...group.privateData.parentGroupsIds)
                   )
                 ])
               )
@@ -307,37 +305,33 @@ class Dashboard extends Component {
                         {groups.map(group =>
                           <Row key={group.id}>
                             <Col lg={12}>
-                              {
-                                <ResourceRenderer
-                                  resource={statistics.get(group.id)}
-                                >
-                                  {statistics =>
-                                    <Box
-                                      title={<GroupsName {...group} noLink />}
-                                      collapsable
-                                      noPadding
-                                      isOpen
-                                      footer={
-                                        <p className="text-center">
-                                          <LinkContainer
-                                            to={GROUP_URI_FACTORY(group.id)}
-                                          >
-                                            <Button bsSize="sm">
-                                              <FormattedMessage
-                                                id="app.user.groupDetail"
-                                                defaultMessage="Show group's detail"
-                                              />
-                                            </Button>
-                                          </LinkContainer>
-                                        </p>
-                                      }
-                                    >
-                                      <StudentsListContainer
-                                        groupId={group.id}
-                                      />
-                                    </Box>}
-                                </ResourceRenderer>
-                              }
+                              <ResourceRenderer
+                                resource={statistics.get(group.id)}
+                              >
+                                {statistics =>
+                                  <Box
+                                    title={<GroupsName {...group} noLink />}
+                                    collapsable
+                                    noPadding
+                                    isOpen
+                                    footer={
+                                      <p className="text-center">
+                                        <LinkContainer
+                                          to={GROUP_URI_FACTORY(group.id)}
+                                        >
+                                          <Button bsSize="sm">
+                                            <FormattedMessage
+                                              id="app.user.groupDetail"
+                                              defaultMessage="Show group's detail"
+                                            />
+                                          </Button>
+                                        </LinkContainer>
+                                      </p>
+                                    }
+                                  >
+                                    <StudentsListContainer groupId={group.id} />
+                                  </Box>}
+                              </ResourceRenderer>
                             </Col>
                           </Row>
                         )}

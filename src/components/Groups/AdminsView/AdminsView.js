@@ -33,7 +33,10 @@ const AdminsView = ({ group, addSubgroup, formValues, intl: { locale } }) =>
             />
           }
         >
-          <AddSupervisor instanceId={group.instanceId} groupId={group.id} />
+          <AddSupervisor
+            instanceId={group.privateData.instanceId}
+            groupId={group.id}
+          />
         </Box>
       </Col>
       <Col md={6}>

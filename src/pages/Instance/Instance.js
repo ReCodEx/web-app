@@ -20,9 +20,8 @@ import {
   instanceSelector,
   isAdminOfInstance
 } from '../../redux/selectors/instances';
-import { createGroup } from '../../redux/modules/groups';
-import { fetchInstancePublicGroups } from '../../redux/modules/publicGroups';
-import { publicGroupsSelectors } from '../../redux/selectors/publicGroups';
+import { createGroup, fetchInstanceGroups } from '../../redux/modules/groups';
+import { groupsSelector } from '../../redux/selectors/groups';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import { isLoggedAsSuperAdmin } from '../../redux/selectors/users';
 
@@ -32,7 +31,7 @@ class Instance extends Component {
   static loadAsync = ({ instanceId }, dispatch) =>
     Promise.all([
       dispatch(fetchInstanceIfNeeded(instanceId)),
-      dispatch(fetchInstancePublicGroups(instanceId))
+      dispatch(fetchInstanceGroups(instanceId))
     ]);
 
   componentWillMount() {
@@ -150,7 +149,7 @@ export default withLinks(
       const userId = loggedInUserIdSelector(state);
       return {
         instance: instanceSelector(state, instanceId),
-        groups: publicGroupsSelectors(state),
+        groups: groupsSelector(state),
         isAdmin: isAdminOfInstance(userId, instanceId)(state),
         isSuperAdmin: isLoggedAsSuperAdmin(state),
         formValues: getFormValues('editGroup')(state)

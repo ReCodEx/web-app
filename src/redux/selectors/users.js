@@ -54,7 +54,7 @@ export const supervisorsOfGroupSelector = createSelector(
   (users, groups, groupId) =>
     users.filter(user =>
       groups
-        .getIn([groupId, 'data', 'supervisors'], EMPTY_LIST)
+        .getIn([groupId, 'data', 'privateData', 'supervisors'], EMPTY_LIST)
         .toJS()
         .includes(user.id)
     )
@@ -65,7 +65,7 @@ export const studentsOfGroupSelector = createSelector(
   (users, groups, groupId) =>
     users.filter(user =>
       groups
-        .getIn([groupId, 'data', 'students'], EMPTY_LIST)
+        .getIn([groupId, 'data', 'privateData', 'students'], EMPTY_LIST)
         .toJS()
         .includes(user.id)
     )
@@ -80,7 +80,7 @@ export const isVerified = userId =>
 export const getRole = userId =>
   createSelector(
     getUser(userId),
-    user => (user ? user.getIn(['data', 'role']) : null)
+    user => (user ? user.getIn(['data', 'privateData', 'role']) : null)
   );
 
 export const isStudent = userId =>
@@ -92,7 +92,10 @@ export const isSupervisor = userId =>
 export const getUserSettings = userId =>
   createSelector(
     getUser(userId),
-    user => (isReady(user) ? user.getIn(['data', 'settings']).toJS() : {})
+    user =>
+      isReady(user)
+        ? user.getIn(['data', 'privateData', 'settings']).toJS()
+        : {}
   );
 
 export const loggedInUserSelector = createSelector(
@@ -104,7 +107,7 @@ export const isLoggedAsSuperAdmin = createSelector(
   [loggedInUserSelector],
   loggedInUser =>
     loggedInUser && isReady(loggedInUser)
-      ? loggedInUser.getIn(['data', 'role']) === 'superadmin'
+      ? loggedInUser.getIn(['data', 'privateData', 'role']) === 'superadmin'
       : false
 );
 
@@ -113,7 +116,7 @@ export const memberOfInstancesIdsSelector = userId =>
     getUser(userId),
     user =>
       user && isReady(user)
-        ? List([user.getIn(['data', 'instanceId'])])
+        ? List([user.getIn(['data', 'privateData', 'instanceId'])])
         : List() // @todo: Change when the user can be member of multiple instances
   );
 
@@ -122,7 +125,7 @@ export const studentOfGroupsIdsSelector = userId =>
     getUser(userId),
     user =>
       user && isReady(user)
-        ? user.getIn(['data', 'groups', 'studentOf'])
+        ? user.getIn(['data', 'privateData', 'groups', 'studentOf'], List())
         : List()
   );
 
@@ -131,7 +134,7 @@ export const supervisorOfGroupsIdsSelector = userId =>
     getUser(userId),
     user =>
       user && isReady(user)
-        ? user.getIn(['data', 'groups', 'supervisorOf'])
+        ? user.getIn(['data', 'privateData', 'groups', 'supervisorOf'], List())
         : List()
   );
 
@@ -156,7 +159,7 @@ export const isAdminOf = (userId, groupId) =>
       isSuperAdmin === true ||
       (group &&
         isReady(group) &&
-        group.getIn(['data', 'admins']).indexOf(userId) >= 0)
+        group.getIn(['data', 'privateData', 'admins']).indexOf(userId) >= 0)
   );
 
 export const isMemberOf = (userId, groupId) =>

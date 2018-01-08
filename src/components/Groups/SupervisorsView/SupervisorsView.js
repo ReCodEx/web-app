@@ -91,7 +91,10 @@ const SupervisorsView = ({
           }
           isOpen
         >
-          <AddStudent instanceId={group.instanceId} groupId={group.id} />
+          <AddStudent
+            instanceId={group.privateData.instanceId}
+            groupId={group.id}
+          />
         </Box>
         <Box
           title={

@@ -25,14 +25,16 @@ export default createSelector(
 export const loggedInStudentOfGroupsIdsSelector = createSelector(
   loggedInUserSelector,
   user =>
-    user && isReady(user) ? user.getIn(['data', 'groups', 'studentOf']) : List()
+    user && isReady(user)
+      ? user.getIn(['data', 'privateData', 'groups', 'studentOf'])
+      : List()
 );
 
 export const loggedInSupervisorOfGroupsIdsSelector = createSelector(
   loggedInUserSelector,
   user =>
     user && isReady(user)
-      ? user.getIn(['data', 'groups', 'supervisorOf'])
+      ? user.getIn(['data', 'privateData', 'groups', 'supervisorOf'])
       : List()
 );
 

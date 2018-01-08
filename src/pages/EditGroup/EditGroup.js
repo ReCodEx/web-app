@@ -99,14 +99,14 @@ class EditGroup extends Component {
                   <DeleteGroupButtonContainer
                     id={group.id}
                     disabled={
-                      group.parentGroupId === null ||
+                      group.privateData.parentGroupId === null ||
                       (group.childGroups && group.childGroups.length > 0)
                     }
                     onDeleted={() =>
-                      push(GROUP_URI_FACTORY(group.parentGroupId))}
+                      push(GROUP_URI_FACTORY(group.privateData.parentGroupId))}
                   />
 
-                  {group.parentGroupId === null &&
+                  {group.privateData.parentGroupId === null &&
                     <HelpBlock>
                       <FormattedMessage
                         id="app.editGroup.cannotDeleteRootGroup"

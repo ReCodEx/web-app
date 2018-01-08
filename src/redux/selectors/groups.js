@@ -46,7 +46,10 @@ export const studentOfSelector2 = userId =>
     groups
       .filter(isReady)
       .map(getJsData)
-      .filter(group => group.students.indexOf(userId) >= 0)
+      .filter(
+        group =>
+          group.privateData && group.privateData.students.indexOf(userId) >= 0
+      )
   );
 
 export const supervisorOfSelector2 = userId =>
@@ -54,7 +57,11 @@ export const supervisorOfSelector2 = userId =>
     groups
       .filter(isReady)
       .map(getJsData)
-      .filter(group => group.supervisors.indexOf(userId) >= 0)
+      .filter(
+        group =>
+          group.privateData &&
+          group.privateData.supervisors.indexOf(userId) >= 0
+      )
   );
 
 export const adminOfSelector = userId =>
@@ -62,13 +69,19 @@ export const adminOfSelector = userId =>
     groups
       .filter(isReady)
       .map(getJsData)
-      .filter(group => group.admins.indexOf(userId) >= 0)
+      .filter(
+        group =>
+          group.privateData && group.privateData.admins.indexOf(userId) >= 0
+      )
   );
 
 const usersOfGroup = (type, groupId) =>
   createSelector(
     groupSelector(groupId),
-    group => (group && isReady(group) ? group.getIn(['data', type]) : List())
+    group =>
+      group && isReady(group)
+        ? group.getIn(['data', 'privateData', type])
+        : List()
   );
 
 export const studentsOfGroup = groupId => usersOfGroup('students', groupId);
@@ -89,7 +102,10 @@ export const groupsPublicAssignmentsSelector = createSelector(
   [groupsSelector, getAssignments, getParam],
   (groups, assignments, groupId) =>
     groups
-      .getIn([groupId, 'data', 'assignments', 'public'], EMPTY_LIST)
+      .getIn(
+        [groupId, 'data', 'privateData', 'assignments', 'public'],
+        EMPTY_LIST
+      )
       .map(id => assignments.getIn(['resources', id]))
 );
 
@@ -97,7 +113,7 @@ export const groupsAllAssignmentsSelector = createSelector(
   [groupsSelector, getAssignments, getParam],
   (groups, assignments, groupId) =>
     groups
-      .getIn([groupId, 'data', 'assignments', 'all'], EMPTY_LIST)
+      .getIn([groupId, 'data', 'privateData', 'assignments', 'all'], EMPTY_LIST)
       .map(id => assignments.getIn(['resources', id]))
 );
 

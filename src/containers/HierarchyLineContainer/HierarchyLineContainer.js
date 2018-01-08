@@ -30,7 +30,7 @@ class HierarchyLineContainer extends Component {
         {group =>
           <HierarchyLine
             groupId={group.id}
-            parentGroupsIds={group.parentGroupsIds}
+            parentGroupsIds={group.privateData.parentGroupsIds}
           />}
       </ResourceRenderer>
     );

@@ -80,8 +80,7 @@ class Login extends Component {
               <FormattedMessage
                 id="app.login.cannotRememberPassword"
                 defaultMessage="You cannot remember what your password was?"
-              />
-              {' '}
+              />{' '}
               <Link to={RESET_PASSWORD_URI}>
                 <FormattedMessage
                   id="app.login.resetPassword"
