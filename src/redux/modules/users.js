@@ -224,17 +224,13 @@ const reducer = handleActions(
     [additionalActionTypes.CREATE_LOCAL_LOGIN_PENDING]: (
       state,
       { meta: { id } }
-    ) =>
-      state.setIn(
-        ['resources', id, 'data', 'privateData', 'isExternal'],
-        false
-      ),
+    ) => state.setIn(['resources', id, 'data', 'privateData', 'isLocal'], true),
 
     [additionalActionTypes.CREATE_LOCAL_LOGIN_FAILED]: (
       state,
       { meta: { id } }
     ) =>
-      state.setIn(['resources', id, 'data', 'privateData', 'isExternal'], true),
+      state.setIn(['resources', id, 'data', 'privateData', 'isLocal'], false),
 
     [additionalActionTypes.CREATE_LOCAL_LOGIN_FULFILLED]: (
       state,

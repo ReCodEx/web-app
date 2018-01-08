@@ -67,7 +67,7 @@ class EditUser extends Component {
       >
         {data =>
           <div>
-            {data.privateData.isExternal &&
+            {!data.privateData.isLocal &&
               <p>
                 <Button bsStyle="warning" onClick={makeLocalLogin}>
                   <LocalIcon />{' '}
