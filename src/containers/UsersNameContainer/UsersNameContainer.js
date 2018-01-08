@@ -12,6 +12,8 @@ import UsersName, {
   FailedUsersName
 } from '../../components/Users/UsersName';
 
+import './UsersNameContainer.css';
+
 class UsersNameContainer extends Component {
   componentWillMount() {
     this.props.loadAsync();
@@ -28,7 +30,7 @@ class UsersNameContainer extends Component {
   };
 
   render() {
-    const { user, large, noLink, currentUserId } = this.props;
+    const { user, large, noLink, currentUserId, isSimple = false } = this.props;
     const size = large ? 45 : 22;
     return (
       <ResourceRenderer
@@ -37,13 +39,17 @@ class UsersNameContainer extends Component {
         failed={<FailedUsersName size={size} />}
       >
         {user =>
-          <UsersName
-            {...user}
-            large={large}
-            size={size}
-            noLink={noLink}
-            currentUserId={currentUserId}
-          />}
+          isSimple
+            ? <span className="simpleName">
+                {user.name.firstName} {user.name.lastName}
+              </span>
+            : <UsersName
+                {...user}
+                large={large}
+                size={size}
+                noLink={noLink}
+                currentUserId={currentUserId}
+              />}
       </ResourceRenderer>
     );
   }
@@ -55,7 +61,8 @@ UsersNameContainer.propTypes = {
   large: PropTypes.bool,
   user: ImmutablePropTypes.map,
   noLink: PropTypes.bool,
-  loadAsync: PropTypes.func.isRequired
+  loadAsync: PropTypes.func.isRequired,
+  isSimple: PropTypes.bool
 };
 
 export default connect(
