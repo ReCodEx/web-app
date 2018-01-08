@@ -8,10 +8,13 @@ import { Row, Col } from 'react-bootstrap';
 import {
   fetchUserIfNeeded,
   updateProfile,
-  updateSettings
+  updateSettings,
+  makeLocalLogin
 } from '../../redux/modules/users';
 import { getUser } from '../../redux/selectors/users';
 import Page from '../../components/layout/Page';
+import Button from '../../components/widgets/FlatButton';
+import { LocalIcon } from '../../components/icons';
 
 import EditUserProfileForm from '../../components/forms/EditUserProfileForm';
 import EditUserSettingsForm from '../../components/forms/EditUserSettingsForm';
@@ -31,7 +34,7 @@ class EditUser extends Component {
   }
 
   render() {
-    const { user, updateProfile, updateSettings } = this.props;
+    const { user, updateProfile, updateSettings, makeLocalLogin } = this.props;
     return (
       <Page
         resource={user}
@@ -63,21 +66,33 @@ class EditUser extends Component {
         ]}
       >
         {data =>
-          <Row>
-            <Col lg={6}>
-              <EditUserProfileForm
-                onSubmit={updateProfile}
-                initialValues={{ ...data, email: data.privateData.email }}
-                allowChangePassword={!data.isExternal}
-              />
-            </Col>
-            <Col lg={6}>
-              <EditUserSettingsForm
-                onSubmit={updateSettings}
-                initialValues={data.privateData.settings}
-              />
-            </Col>
-          </Row>}
+          <div>
+            {data.privateData.isExternal &&
+              <p>
+                <Button bsStyle="warning" onClick={makeLocalLogin}>
+                  <LocalIcon />{' '}
+                  <FormattedMessage
+                    id="app.editUser.makeLocal"
+                    defaultMessage="Create local account"
+                  />
+                </Button>
+              </p>}
+            <Row>
+              <Col lg={6}>
+                <EditUserProfileForm
+                  onSubmit={updateProfile}
+                  initialValues={{ ...data, email: data.privateData.email }}
+                  allowChangePassword={!data.isExternal}
+                />
+              </Col>
+              <Col lg={6}>
+                <EditUserSettingsForm
+                  onSubmit={updateSettings}
+                  initialValues={data.privateData.settings}
+                />
+              </Col>
+            </Row>
+          </div>}
       </Page>
     );
   }
@@ -88,7 +103,8 @@ EditUser.propTypes = {
   params: PropTypes.shape({ userId: PropTypes.string.isRequired }).isRequired,
   loadAsync: PropTypes.func.isRequired,
   updateProfile: PropTypes.func.isRequired,
-  updateSettings: PropTypes.func.isRequired
+  updateSettings: PropTypes.func.isRequired,
+  makeLocalLogin: PropTypes.func.isRequired
 };
 
 export default connect(
@@ -99,6 +115,7 @@ export default connect(
     loadAsync: () => EditUser.loadAsync({ userId }, dispatch),
     updateSettings: data => dispatch(updateSettings(userId, data)),
     updateProfile: ({ name, ...data }) =>
-      dispatch(updateProfile(userId, { ...name, ...data }))
+      dispatch(updateProfile(userId, { ...name, ...data })),
+    makeLocalLogin: () => dispatch(makeLocalLogin(userId))
   })
 )(EditUser);
