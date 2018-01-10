@@ -1,5 +1,19 @@
 .simpleName {
-  margin-left: 4px;
-  margin-right: 4px;
   white-space: nowrap;
+}
+
+.simpleName:after {
+  content: ', ';
+}
+
+.simpleName:first-of-type {
+  margin-left: 2px;
+}
+
+.simpleName:last-of-type {
+  margin-right: 3px;
+}
+
+.simpleName:last-of-type:after {
+  content: '';
 }
