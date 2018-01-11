@@ -38,6 +38,7 @@ import Pipelines from './Pipelines';
 import EditPipeline from './EditPipeline';
 import Pipeline from './Pipeline';
 import FAQ from './FAQ';
+import SubmissionFailures from './SubmissionFailures/SubmissionFailures';
 
 import ChangePassword from './ChangePassword';
 import ResetPassword from './ResetPassword';
@@ -136,6 +137,9 @@ const createRoutes = getState => {
           <Route path="user/:userId">
             <IndexRoute component={User} />
             <Route path="edit" component={EditUser} />
+          </Route>
+          <Route path="submission-failures">
+            <IndexRoute component={SubmissionFailures} />
           </Route>
         </Route>
         <Route path="forgotten-password">

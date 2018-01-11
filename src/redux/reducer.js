@@ -46,6 +46,7 @@ import sisSupervisedCourses from './modules/sisSupervisedCourses';
 import sisPossibleParents from './modules/sisPossibleParents';
 import referenceSolutionEvaluations from './modules/referenceSolutionEvaluations';
 import submissionEvaluations from './modules/submissionEvaluations';
+import submissionFailures from './modules/submissionFailures';
 
 const createRecodexReducers = token => ({
   auth: auth(token),
@@ -91,7 +92,8 @@ const createRecodexReducers = token => ({
   sisSubscribedGroups,
   sisSupervisedCourses,
   sisPossibleParents,
-  submissionEvaluations
+  submissionEvaluations,
+  submissionFailures
 });
 
 const librariesReducers = {
