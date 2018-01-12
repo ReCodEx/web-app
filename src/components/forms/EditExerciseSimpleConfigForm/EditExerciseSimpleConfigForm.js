@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { reduxForm, getFormValues } from 'redux-form';
 import { connect } from 'react-redux';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import { Alert } from 'react-bootstrap';
 
 import FormBox from '../../widgets/FormBox';
@@ -30,7 +30,8 @@ const EditExerciseSimpleConfigForm = ({
   formErrors,
   supplementaryFiles,
   exerciseTests,
-  smartFill
+  smartFill,
+  intl: { locale }
 }) =>
   <FormBox
     title={
@@ -109,20 +110,22 @@ const EditExerciseSimpleConfigForm = ({
     <ResourceRenderer resource={supplementaryFiles.toArray()}>
       {(...files) =>
         <div>
-          {exerciseTests.map((test, idx) =>
-            <EditExerciseSimpleConfigTest
-              key={idx}
-              formValues={formValues}
-              supplementaryFiles={files}
-              testName={test.name}
-              test={'config.' + encodeTestId(test.id)}
-              testId={test.id}
-              testKey={encodeTestId(test.id)}
-              testIndex={idx}
-              testErrors={formErrors && formErrors[encodeTestId(test.id)]}
-              smartFill={smartFill(test.id, exerciseTests, files)}
-            />
-          )}
+          {exerciseTests
+            .sort((a, b) => a.name.localeCompare(b.name, locale))
+            .map((test, idx) =>
+              <EditExerciseSimpleConfigTest
+                key={idx}
+                formValues={formValues}
+                supplementaryFiles={files}
+                testName={test.name}
+                test={'config.' + encodeTestId(test.id)}
+                testId={test.id}
+                testKey={encodeTestId(test.id)}
+                testIndex={idx}
+                testErrors={formErrors && formErrors[encodeTestId(test.id)]}
+                smartFill={smartFill(test.id, exerciseTests, files)}
+              />
+            )}
         </div>}
     </ResourceRenderer>
   </FormBox>;
@@ -142,7 +145,8 @@ EditExerciseSimpleConfigForm.propTypes = {
   formErrors: PropTypes.object,
   supplementaryFiles: ImmutablePropTypes.map,
   exerciseTests: PropTypes.array,
-  smartFill: PropTypes.func.isRequired
+  smartFill: PropTypes.func.isRequired,
+  intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired
 };
 
 const FORM_NAME = 'editExerciseSimpleConfig';
@@ -193,32 +197,34 @@ const validate = formData => {
     : undefined;
 };
 
-export default connect(
-  (state, { exercise }) => {
-    const getSupplementaryFilesForExercise = createGetSupplementaryFiles(
-      exercise.supplementaryFilesIds
-    );
-    return {
-      supplementaryFiles: getSupplementaryFilesForExercise(state),
-      formValues: getFormValues(FORM_NAME)(state),
-      formErrors: exerciseConfigFormErrors(state, FORM_NAME)
-    };
-  },
-  dispatch => ({
-    smartFill: (testId, tests, files) => () =>
-      dispatch(smartFillExerciseConfigForm(FORM_NAME, testId, tests, files))
-  })
-)(
-  reduxForm({
-    form: FORM_NAME,
-    enableReinitialize: true,
-    keepDirtyOnReinitialize: false,
-    immutableProps: [
-      'formValues',
-      'supplementaryFiles',
-      'exerciseTests',
-      'handleSubmit'
-    ],
-    validate
-  })(EditExerciseSimpleConfigForm)
+export default injectIntl(
+  connect(
+    (state, { exercise }) => {
+      const getSupplementaryFilesForExercise = createGetSupplementaryFiles(
+        exercise.supplementaryFilesIds
+      );
+      return {
+        supplementaryFiles: getSupplementaryFilesForExercise(state),
+        formValues: getFormValues(FORM_NAME)(state),
+        formErrors: exerciseConfigFormErrors(state, FORM_NAME)
+      };
+    },
+    dispatch => ({
+      smartFill: (testId, tests, files) => () =>
+        dispatch(smartFillExerciseConfigForm(FORM_NAME, testId, tests, files))
+    })
+  )(
+    reduxForm({
+      form: FORM_NAME,
+      enableReinitialize: true,
+      keepDirtyOnReinitialize: false,
+      immutableProps: [
+        'formValues',
+        'supplementaryFiles',
+        'exerciseTests',
+        'handleSubmit'
+      ],
+      validate
+    })(EditExerciseSimpleConfigForm)
+  )
 );

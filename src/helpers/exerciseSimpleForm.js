@@ -5,35 +5,9 @@ import {
   encodeEnvironmentId
 } from '../redux/modules/simpleLimits';
 
-export const getEnvInitValues = environmentConfigs => {
-  let res = {};
-  for (const env of environmentConfigs) {
-    res[env.runtimeEnvironmentId] = true;
-  }
-  return res;
-};
-
-export const transformAndSendEnvValues = (
-  formData,
-  environments,
-  editEnvironmentConfigs,
-  reloadConfigAndLimits
-) => {
-  let res = [];
-  for (const env in formData) {
-    if (formData[env] !== true && formData[env] !== 'true') {
-      continue;
-    }
-    let envObj = { runtimeEnvironmentId: env };
-    const currentFullEnv = environments.find(e => e.id === env);
-    envObj.variablesTable = currentFullEnv.defaultVariables;
-    res.push(envObj);
-  }
-  return editEnvironmentConfigs({ environmentConfigs: res }).then(
-    reloadConfigAndLimits
-  );
-};
-
+/*
+ * Tests and Score
+ */
 export const getTestsInitValues = (exerciseTests, scoreConfig, locale) => {
   const jsonScoreConfig = yaml.safeLoad(scoreConfig);
   const testWeights = jsonScoreConfig.testWeights || {};
@@ -81,7 +55,39 @@ export const transformAndSendTestsValues = (
   ]);
 };
 
-export const getSimpleConfigInitValues = (config, tests, locale) => {
+/*
+ * Environments
+ */
+export const getEnvInitValues = environmentConfigs => {
+  let res = {};
+  for (const env of environmentConfigs) {
+    res[env.runtimeEnvironmentId] = true;
+  }
+  return res;
+};
+
+export const transformEnvValues = (
+  formData,
+  environments,
+  editEnvironmentConfigs
+) => {
+  let res = [];
+  for (const env in formData) {
+    if (formData[env] !== true && formData[env] !== 'true') {
+      continue;
+    }
+    let envObj = { runtimeEnvironmentId: env };
+    const currentFullEnv = environments.find(e => e.id === env);
+    envObj.variablesTable = currentFullEnv.defaultVariables;
+    res.push(envObj);
+  }
+  return res;
+};
+
+/*
+ * Configuration variables
+ */
+export const getSimpleConfigInitValues = (config, tests) => {
   const confTests =
     tests && config[0] && config[0].tests ? config[0].tests : [];
 
@@ -191,6 +197,7 @@ export const transformAndSendConfigValues = (
   pipelines,
   environments,
   tests,
+  originalConfig,
   setConfig
 ) => {
   let testVars = [];
@@ -305,9 +312,8 @@ export const transformAndSendConfigValues = (
   return setConfig({ config: envs });
 };
 
-/**
- * Assemble data from all simpleLimits environments into one table.
- * Also ensures proper encoding for environment IDs and test names, which are used as keys.
+/*
+ * Memory and Time limits
  */
 export const getLimitsInitValues = (
   limits,

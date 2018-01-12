@@ -62,7 +62,7 @@ import { pipelinesSelector } from '../../redux/selectors/pipelines';
 
 import {
   getEnvInitValues,
-  transformAndSendEnvValues,
+  transformEnvValues,
   getTestsInitValues,
   transformAndSendTestsValues,
   getSimpleConfigInitValues,
@@ -213,22 +213,42 @@ class EditExerciseSimpleConfig extends Component {
                 >
                   <ResourceRenderer
                     resource={[
+                      exerciseConfig,
+                      exerciseTests,
                       exerciseEnvironmentConfig,
-                      ...runtimeEnvironments.toArray()
+                      ...pipelines.toArray()
                     ]}
                   >
-                    {(environmentConfigs, ...environments) =>
-                      <EditEnvironmentSimpleForm
-                        initialValues={getEnvInitValues(environmentConfigs)}
-                        runtimeEnvironments={environments}
-                        onSubmit={data =>
-                          transformAndSendEnvValues(
-                            data,
-                            environments,
-                            editEnvironmentConfigs,
-                            reloadConfigAndLimits(exercise.id)
-                          )}
-                      />}
+                    {(config, tests, environmentConfigs, ...pipelines) =>
+                      <ResourceRenderer
+                        resource={runtimeEnvironments.toArray()}
+                      >
+                        {(...environments) =>
+                          <EditEnvironmentSimpleForm
+                            initialValues={getEnvInitValues(environmentConfigs)}
+                            runtimeEnvironments={environments}
+                            onSubmit={data => {
+                              const newEnvironments = transformEnvValues(
+                                data,
+                                environments
+                              );
+                              return editEnvironmentConfigs({
+                                environmentConfigs: newEnvironments
+                              })
+                                .then(() =>
+                                  transformAndSendConfigValues(
+                                    getSimpleConfigInitValues(config, tests),
+                                    pipelines,
+                                    newEnvironments,
+                                    tests,
+                                    config,
+                                    setConfig
+                                  )
+                                )
+                                .then(reloadConfigAndLimits(exercise.id));
+                            }}
+                          />}
+                      </ResourceRenderer>}
                   </ResourceRenderer>
                 </Box>
               </Col>
@@ -248,25 +268,22 @@ class EditExerciseSimpleConfig extends Component {
                     ...pipelines.toArray()
                   ]}
                 >
-                  {(config, tests, environments, ...pipelines) => {
-                    const sortedTests = tests.sort((a, b) =>
-                      a.name.localeCompare(b.name, locale)
-                    );
-                    return tests.length > 0
+                  {(config, tests, environments, ...pipelines) =>
+                    tests.length > 0
                       ? <EditExerciseSimpleConfigForm
                           initialValues={getSimpleConfigInitValues(
                             config,
-                            sortedTests,
-                            locale
+                            tests
                           )}
                           exercise={exercise}
-                          exerciseTests={sortedTests}
+                          exerciseTests={tests}
                           onSubmit={data =>
                             transformAndSendConfigValues(
                               data,
                               pipelines,
                               environments,
-                              sortedTests,
+                              tests,
+                              config,
                               setConfig
                             )}
                         />
@@ -282,8 +299,7 @@ class EditExerciseSimpleConfig extends Component {
                             id="app.editExerciseSimpleConfig.noTests"
                             defaultMessage="There are no tests yet. The form cannot be displayed until at least one test is created."
                           />
-                        </div>;
-                  }}
+                        </div>}
                 </ResourceRenderer>
               </Col>
             </Row>
@@ -309,9 +325,7 @@ class EditExerciseSimpleConfig extends Component {
                               editEnvironmentSimpleLimits
                             )}
                           environments={exercise.runtimeEnvironments}
-                          tests={tests.sort((a, b) =>
-                            a.name.localeCompare(b.name, locale)
-                          )}
+                          tests={tests}
                           initialValues={getLimitsInitValues(
                             limits,
                             tests,

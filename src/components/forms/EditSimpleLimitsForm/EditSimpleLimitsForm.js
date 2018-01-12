@@ -1,7 +1,7 @@
 import React from 'react';
 import { Alert, Table } from 'react-bootstrap';
 import PropTypes from 'prop-types';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import { reduxForm } from 'redux-form';
 
 import { EditSimpleLimitsField } from '../Fields';
@@ -31,7 +31,8 @@ const EditSimpleLimitsForm = ({
   submitting,
   submitFailed,
   submitSucceeded,
-  invalid
+  invalid,
+  intl: { locale }
 }) =>
   <FormBox
     title={
@@ -122,7 +123,7 @@ const EditSimpleLimitsForm = ({
         </tr>
       </thead>
       <tbody>
-        {tests.map(test =>
+        {tests.sort((a, b) => a.name.localeCompare(b.name, locale)).map(test =>
           <tr key={test.name}>
             <th className={styles.limitsTableHeading}>
               {test.name}
@@ -181,7 +182,8 @@ EditSimpleLimitsForm.propTypes = {
   submitting: PropTypes.bool,
   submitFailed: PropTypes.bool,
   submitSucceeded: PropTypes.bool,
-  invalid: PropTypes.bool
+  invalid: PropTypes.bool,
+  intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired
 };
 
 const validate = ({ limits }) => {
@@ -232,17 +234,19 @@ const validate = ({ limits }) => {
   return errors;
 };
 
-export default reduxForm({
-  form: 'editSimpleLimits',
-  enableReinitialize: true,
-  keepDirtyOnReinitialize: false,
-  immutableProps: [
-    'environments',
-    'tests',
-    'cloneHorizontally',
-    'cloneVertically',
-    'cloneAll',
-    'handleSubmit'
-  ],
-  validate
-})(EditSimpleLimitsForm);
+export default injectIntl(
+  reduxForm({
+    form: 'editSimpleLimits',
+    enableReinitialize: true,
+    keepDirtyOnReinitialize: false,
+    immutableProps: [
+      'environments',
+      'tests',
+      'cloneHorizontally',
+      'cloneVertically',
+      'cloneAll',
+      'handleSubmit'
+    ],
+    validate
+  })(EditSimpleLimitsForm)
+);
