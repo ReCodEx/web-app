@@ -3,12 +3,18 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 
-import Page from '../../components/layout/Page';
-import ResourceRenderer from '../../components/helpers/ResourceRenderer';
+import PageContent from '../../components/layout/PageContent';
+import FetchManyResourceRenderer from '../../components/helpers/FetchManyResourceRenderer';
 import { fetchAllFailures } from '../../redux/modules/submissionFailures';
+import {
+  fetchManyStatus,
+  readySubmissionFailuresSelector
+} from '../../redux/selectors/submissionFailures';
+import FailuresList from '../../components/SubmissionFailures/FailuresList/FailuresList';
+import Box from '../../components/widgets/Box/Box';
 
 class SubmissionFailures extends Component {
-  static loadAsync = ({}, dispatch) =>
+  static loadAsync = (params, dispatch) =>
     Promise.all([dispatch(fetchAllFailures)]);
 
   componentWillMount() {
@@ -16,48 +22,100 @@ class SubmissionFailures extends Component {
   }
 
   render() {
-    const { submissionFailures = [] } = this.props;
+    const { submissionFailures, fetchStatus } = this.props;
 
     return (
-      <Page
-        resource={submissionFailures}
-        title={
-          <FormattedMessage
-            id="app.submissionFailures.title"
-            defaultMessage="Submission Failures"
+      <FetchManyResourceRenderer
+        fetchManyStatus={fetchStatus}
+        loading={
+          <PageContent
+            title={
+              <FormattedMessage
+                id="app.submissionFailures.loading"
+                defaultMessage="Loading list of failures ..."
+              />
+            }
+            description={
+              <FormattedMessage
+                id="app.submissionFailures.loadingDescription"
+                defaultMessage="Please wait while we are getting the list of failures ready."
+              />
+            }
           />
         }
-        description={
-          <FormattedMessage
-            id="app.submissionFailures.description"
-            defaultMessage="Submission Failures"
+        failed={
+          <PageContent
+            title={
+              <FormattedMessage
+                id="app.submissionFailures.failed"
+                defaultMessage="Cannot load the list of failures"
+              />
+            }
+            description={
+              <FormattedMessage
+                id="app.submissionFailures.failedDescription"
+                defaultMessage="We are sorry for the inconvenience, please try again later."
+              />
+            }
           />
         }
-        breadcrumbs={[
-          {
-            text: (
+      >
+        {() =>
+          <PageContent
+            title={
               <FormattedMessage
                 id="app.submissionFailures.title"
                 defaultMessage="Submission Failures"
               />
-            ),
-            iconName: 'fort-awesome'
-          }
-        ]}
-      >
-        <div />
-      </Page>
+            }
+            description={
+              <FormattedMessage
+                id="app.submissionFailures.description"
+                defaultMessage="Browse all submission failures"
+              />
+            }
+            breadcrumbs={[
+              {
+                text: (
+                  <FormattedMessage
+                    id="app.submissionFailures.title"
+                    defaultMessage="Submission Failures"
+                  />
+                ),
+                iconName: 'fort-awesome'
+              }
+            ]}
+          >
+            <Box
+              title={
+                <FormattedMessage
+                  id="app.submissionFailures.listTitle"
+                  defaultMessage="Submission Failures"
+                />
+              }
+              unlimitedHeight
+              noPadding
+            >
+              <FailuresList failures={submissionFailures} />
+            </Box>
+          </PageContent>}
+      </FetchManyResourceRenderer>
     );
   }
 }
 
 SubmissionFailures.propTypes = {
-  loadAsync: PropTypes.func.isRequired
+  loadAsync: PropTypes.func.isRequired,
+  fetchStatus: PropTypes.string,
+  submissionFailures: PropTypes.array
 };
 
 export default connect(
-  (state, { params: {} }) => ({}),
-  (dispatch, { params }) => ({
-    loadAsync: () => SubmissionFailures.loadAsync(params, dispatch)
+  state => ({
+    fetchStatus: fetchManyStatus(state),
+    submissionFailures: readySubmissionFailuresSelector(state)
+  }),
+  dispatch => ({
+    loadAsync: () => SubmissionFailures.loadAsync({}, dispatch)
   })
 )(SubmissionFailures);
