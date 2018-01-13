@@ -94,7 +94,7 @@ const simpleConfigVariablesMapping = {
   expectedOutput: 'expected-output',
   runArgs: 'run-args',
   outputFile: 'actual-output',
-  stdinFile: 'stdin-file',
+  inputStdin: 'stdin-file',
   judgeBinary: 'judge-type',
   customJudgeBinary: 'custom-judge',
   judgeArgs: 'judge-args'
@@ -188,8 +188,8 @@ export const getSimpleConfigInitValues = (config, tests) => {
     }
 
     // Additional updates after simple variables were set
-    testObj.useOutFile = testObj.outputFile !== '';
-    testObj.useCustomJudge = testObj.customJudgeBinary !== '';
+    testObj.useOutFile = Boolean(testObj.outputFile);
+    testObj.useCustomJudge = Boolean(testObj.customJudgeBinary);
     if (testObj.useCustomJudge) {
       testObj.judgeBinary = '';
     } else if (!testObj.judgeBinary) {
@@ -204,7 +204,9 @@ export const getSimpleConfigInitValues = (config, tests) => {
 
 // Prepare one variable to be sent in to the API
 const transformConfigSimpleVariable = (variables, name, value) => {
-  variables.push({ name, type: simpleConfigVariablesTypes[name], value });
+  if (value !== undefined) {
+    variables.push({ name, type: simpleConfigVariablesTypes[name], value });
+  }
 };
 
 const transformConfigInputFiles = (variables, test) => {
@@ -228,7 +230,7 @@ const transformConfigTestExecutionVariables = test => {
   if (!test.useCustomJudge) {
     test.customJudgeBinary = '';
   }
-  test.outputFile = test.useOutFile ? test.outputFile.trim() : '';
+  test.outputFile = test.useOutFile ? test.outputFile.trim() : undefined;
 
   // Prepare variables for the config
   let variables = [];
@@ -247,7 +249,8 @@ const transformConfigTestExecutionVariables = test => {
 
 const mergeOriginalVariables = (newVars, origVars) => {
   origVars.forEach(ov => {
-    if (!newVars.find(nv => nv.name === ov.name)) {
+    // Only values unknown to simple form are added
+    if (simpleConfigVariablesTypes[ov.name] === undefined) {
       newVars.push(ov); // add missing variable
     }
   });
