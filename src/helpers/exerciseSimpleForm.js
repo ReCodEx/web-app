@@ -87,6 +87,77 @@ export const transformEnvValues = (
 /*
  * Configuration variables
  */
+
+// Configure simple variables using mapping between name and testObj property.
+// Object has the same properites as testObj and values are variable names.
+const simpleConfigVariablesMapping = {
+  expectedOutput: 'expected-output',
+  runArgs: 'run-args',
+  outputFile: 'actual-output',
+  stdinFile: 'stdin-file',
+  judgeBinary: 'judge-type',
+  customJudgeBinary: 'custom-judge',
+  judgeArgs: 'judge-args'
+};
+
+// Variable types as they should be sent back to API
+const simpleConfigVariablesTypes = {
+  'expected-output': 'remote-file',
+  'run-args': 'string[]',
+  'actual-output': 'file',
+  'stdin-file': 'remote-file',
+  'judge-type': 'string',
+  'custom-judge': 'remote-file',
+  'judge-args': 'string[]',
+  'input-files': 'remote-file[]',
+  'actual-inputs': 'file[]'
+};
+
+// Fetch one simple variable (string or array) and fill it into the testObj under selected property.
+const getSimpleConfigSimpleVariable = (
+  variables,
+  testObj,
+  variableName,
+  propertyName
+) => {
+  const variable = variables.find(variable => variable.name === variableName);
+  const isArray = variable && variable.type && variable.type.endsWith('[]');
+  if (isArray) {
+    testObj[propertyName] = []; // array needs default
+  }
+  if (variable) {
+    let value = variable.value;
+    if (isArray && !value) {
+      value = [];
+    } else if (!isArray) {
+      value = value.trim();
+    }
+    testObj[propertyName] = isArray && !Array.isArray(value) ? [value] : value;
+  }
+};
+
+// Get input files and their corresponding actual names (and fill them to testObj).
+const getSimpleConfigInputFiles = (variables, testObj) => {
+  const inputFiles = variables.find(
+    variable => variable.name === 'input-files'
+  );
+  const actualInputs = variables.find(
+    variable => variable.name === 'actual-inputs'
+  );
+  if (inputFiles) {
+    testObj.inputFiles = inputFiles.value
+      ? inputFiles.value.map((value, i) => ({
+          file: value,
+          name:
+            actualInputs && actualInputs.value && actualInputs.value[i]
+              ? actualInputs.value[i].trim()
+              : ''
+        }))
+      : [];
+  }
+};
+
+// Prepare the initial form data for configuration form ...
 export const getSimpleConfigInitValues = (config, tests) => {
   const confTests =
     tests && config[0] && config[0].tests ? config[0].tests : [];
@@ -104,92 +175,82 @@ export const getSimpleConfigInitValues = (config, tests) => {
           )
         : [];
 
-    const inputFiles = variables.find(
-      variable => variable.name === 'input-files'
-    );
-    const actualInputs = variables.find(
-      variable => variable.name === 'actual-inputs'
-    );
-    if (inputFiles) {
-      testObj.inputFiles = inputFiles.value
-        ? inputFiles.value.map((value, i) => ({
-            file: value,
-            name:
-              actualInputs && actualInputs.value && actualInputs.value[i]
-                ? actualInputs.value[i].trim()
-                : ''
-          }))
-        : [];
+    // Fetch values from variables and fill them to testObj.
+    getSimpleConfigInputFiles(variables, testObj);
+
+    for (const property in simpleConfigVariablesMapping) {
+      getSimpleConfigSimpleVariable(
+        variables,
+        testObj,
+        simpleConfigVariablesMapping[property],
+        property
+      );
     }
 
-    const expectedOutput = variables.find(
-      variable => variable.name === 'expected-output'
-    );
-    if (expectedOutput) {
-      testObj.expectedOutput = expectedOutput.value;
-    }
-
-    const runArgs = variables.find(variable => variable.name === 'run-args');
-    testObj.runArgs = [];
-    if (runArgs && runArgs.value) {
-      testObj.runArgs = Array.isArray(runArgs.value)
-        ? runArgs.value
-        : [runArgs.value];
-    }
-
-    const actualOutput = variables.find(
-      variable => variable.name === 'actual-output'
-    );
-    if (actualOutput && actualOutput.value && actualOutput.value.trim()) {
-      testObj.useOutFile = true;
-      testObj.outputFile = actualOutput.value.trim();
-    } else {
-      testObj.useOutFile = false;
-      testObj.outputFile = '';
-    }
-
-    const stdinFile = variables.find(
-      variable => variable.name === 'stdin-file'
-    );
-    if (stdinFile) {
-      testObj.inputStdin = stdinFile.value;
-    }
-
-    const standardJudge = variables.find(
-      variable => variable.name === 'judge-type'
-    );
-    const customJudge = variables.find(
-      variable => variable.name === 'custom-judge'
-    );
-
-    testObj.useCustomJudge = false;
-    testObj.customJudgeBinary = '';
-    testObj.judgeBinary = '';
-    if (customJudge && customJudge.value) {
-      testObj.customJudgeBinary = customJudge.value;
-      testObj.useCustomJudge = true;
-    }
-    if (!testObj.useCustomJudge) {
-      testObj.judgeBinary =
-        standardJudge && standardJudge.value
-          ? standardJudge.value
-          : 'recodex-judge-normal';
-    }
-
-    const judgeArgs = variables.find(
-      variable => variable.name === 'judge-args'
-    );
-    testObj.judgeArgs = [];
-    if (judgeArgs && judgeArgs.value) {
-      testObj.judgeArgs = Array.isArray(judgeArgs.value)
-        ? judgeArgs.value
-        : [judgeArgs.value];
+    // Additional updates after simple variables were set
+    testObj.useOutFile = testObj.outputFile !== '';
+    testObj.useCustomJudge = testObj.customJudgeBinary !== '';
+    if (testObj.useCustomJudge) {
+      testObj.judgeBinary = '';
+    } else if (!testObj.judgeBinary) {
+      testObj.judgeBinary = 'recodex-judge-normal';
     }
 
     res[encodeTestId(test.id)] = testObj;
   }
 
   return { config: res };
+};
+
+// Prepare one variable to be sent in to the API
+const transformConfigSimpleVariable = (variables, name, value) => {
+  variables.push({ name, type: simpleConfigVariablesTypes[name], value });
+};
+
+const transformConfigInputFiles = (variables, test) => {
+  let inputFiles = [];
+  let renamed = [];
+  const inFilesArr =
+    test.inputFiles && Array.isArray(test.inputFiles) ? test.inputFiles : [];
+
+  for (const item of inFilesArr) {
+    inputFiles.push(item.file);
+    renamed.push(item.name.trim());
+  }
+
+  transformConfigSimpleVariable(variables, 'input-files', inputFiles);
+  transformConfigSimpleVariable(variables, 'actual-inputs', renamed);
+};
+
+// Prepare variables for execution pipeline of one test in one environment
+const transformConfigTestExecutionVariables = test => {
+  // Final updates ...
+  if (!test.useCustomJudge) {
+    test.customJudgeBinary = '';
+  }
+  test.outputFile = test.useOutFile ? test.outputFile.trim() : '';
+
+  // Prepare variables for the config
+  let variables = [];
+  for (const property in simpleConfigVariablesMapping) {
+    transformConfigSimpleVariable(
+      variables,
+      simpleConfigVariablesMapping[property],
+      test[property]
+    );
+  }
+
+  transformConfigInputFiles(variables, test);
+
+  return variables;
+};
+
+const mergeOriginalVariables = (newVars, origVars) => {
+  origVars.forEach(ov => {
+    if (!newVars.find(nv => nv.name === ov.name)) {
+      newVars.push(ov); // add missing variable
+    }
+  });
 };
 
 export const transformAndSendConfigValues = (
@@ -200,76 +261,6 @@ export const transformAndSendConfigValues = (
   originalConfig,
   setConfig
 ) => {
-  let testVars = [];
-  for (let t of tests) {
-    const testName = t.id;
-    const test = formData.config[encodeTestId(testName)];
-    let variables = [];
-
-    variables.push({
-      name: 'custom-judge',
-      type: 'remote-file',
-      value: test.useCustomJudge ? test.customJudgeBinary : ''
-    });
-    variables.push({
-      name: 'expected-output',
-      type: 'remote-file',
-      value: test.expectedOutput
-    });
-    variables.push({
-      name: 'judge-type',
-      type: 'string',
-      value: test.judgeBinary
-    });
-    variables.push({
-      name: 'stdin-file',
-      type: 'remote-file',
-      value: test.inputStdin
-    });
-    variables.push({
-      name: 'judge-args',
-      type: 'string[]',
-      value: test.judgeArgs
-    });
-    variables.push({
-      name: 'run-args',
-      type: 'string[]',
-      value: test.runArgs
-    });
-    if (test.useOutFile) {
-      variables.push({
-        name: 'actual-output',
-        type: 'file',
-        value: test.useOutFile ? test.outputFile.trim() : ''
-      });
-    }
-
-    let inputFiles = [];
-    let renamedNames = [];
-    const inFilesArr =
-      test.inputFiles && Array.isArray(test.inputFiles) ? test.inputFiles : [];
-    for (const item of inFilesArr) {
-      inputFiles.push(item.file);
-      renamedNames.push(item.name.trim());
-    }
-    variables.push({
-      name: 'input-files',
-      type: 'remote-file[]',
-      value: inputFiles
-    });
-    variables.push({
-      name: 'actual-inputs',
-      type: 'file[]',
-      value: renamedNames
-    });
-
-    testVars.push({
-      name: testName,
-      variables: variables,
-      producesFiles: test.useOutFile
-    });
-  }
-
   let envs = [];
   for (const environment of environments) {
     const envId = environment.runtimeEnvironmentId;
@@ -277,28 +268,50 @@ export const transformAndSendConfigValues = (
       pipeline => pipeline.runtimeEnvironmentIds.indexOf(envId) >= 0
     );
 
+    // Find the right pipelines ...
+    const compilationPipeline = envPipelines.find(
+      pipeline => pipeline.parameters.isCompilationPipeline
+    );
+    const executionPipelineStdout = envPipelines.find(
+      pipeline =>
+        pipeline.parameters.isExecutionPipeline &&
+        pipeline.parameters.producesStdout
+    );
+    const executionPipelineFiles = envPipelines.find(
+      pipeline =>
+        pipeline.parameters.isExecutionPipeline &&
+        pipeline.parameters.producesFiles
+    );
+
+    // Create configuration for all tests ...
     let testsCfg = [];
-    for (const testVar of testVars) {
-      const compilationPipelineId = envPipelines.filter(
-        pipeline => pipeline.parameters.isCompilationPipeline
-      )[0].id;
-      const executionPipelineId = envPipelines.filter(
-        pipeline =>
-          pipeline.parameters.isExecutionPipeline &&
-          (testVar.producesFiles
-            ? pipeline.parameters.producesFiles
-            : pipeline.parameters.producesStdout)
-      )[0].id;
+    for (const t of tests) {
+      const testName = t.id;
+      const test = formData.config[encodeTestId(testName)];
+      const executionPipeline = test.useOutFile
+        ? executionPipelineFiles
+        : executionPipelineStdout;
+
+      const testVars = transformConfigTestExecutionVariables(test);
+
+      // Get original values so they wont get lost ...
+      const originalPipelines = originalConfig
+        .find(config => config.name === envId) // config for the right environment
+        .tests.find(test => test.name === testName).pipelines; // and the right test
+      const origCompilationVars = originalPipelines[0].variables; // the first pipeline is for compilation
+      const origExecutionVars = originalPipelines[1].variables; // the second pipeline is for execution
+      mergeOriginalVariables(testVars, origExecutionVars);
+
       testsCfg.push({
-        name: testVar.name,
+        name: testName,
         pipelines: [
           {
-            name: compilationPipelineId,
-            variables: []
+            name: compilationPipeline.id,
+            variables: origCompilationVars // copied from original config
           },
           {
-            name: executionPipelineId,
-            variables: testVar.variables
+            name: executionPipeline.id,
+            variables: testVars // TODO merge with original config
           }
         ]
       });
