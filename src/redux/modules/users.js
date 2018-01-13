@@ -1,4 +1,5 @@
 import { handleActions } from 'redux-actions';
+import { fromJS } from 'immutable';
 
 import factory, { initialState } from '../helpers/resourceManager';
 import { createApiAction } from '../middleware/apiMiddleware';
@@ -22,7 +23,11 @@ export const additionalActionTypes = {
   UPDATE_SETTINGS: 'recodex/users/UPDATE_SETTINGS',
   UPDATE_SETTINGS_PENDING: 'recodex/users/UPDATE_SETTINGS_PENDING',
   UPDATE_SETTINGS_FULFILLED: 'recodex/users/UPDATE_SETTINGS_FULFILLED',
-  UPDATE_SETTINGS_FAILED: 'recodex/users/UPDATE_SETTINGS_FAILED'
+  UPDATE_SETTINGS_FAILED: 'recodex/users/UPDATE_SETTINGS_FAILED',
+  CREATE_LOCAL_LOGIN: 'recodex/users/CREATE_LOCAL_LOGIN',
+  CREATE_LOCAL_LOGIN_PENDING: 'recodex/users/CREATE_LOCAL_LOGIN_PENDING',
+  CREATE_LOCAL_LOGIN_FULFILLED: 'recodex/users/CREATE_LOCAL_LOGIN_FULFILLED',
+  CREATE_LOCAL_LOGIN_FAILED: 'recodex/users/CREATE_LOCAL_LOGIN_FAILED'
 };
 
 const resourceName = 'users';
@@ -62,6 +67,14 @@ export const fetchSupervisors = groupId =>
 export const fetchStudents = groupId =>
   actions.fetchMany({
     endpoint: `/groups/${groupId}/students`
+  });
+
+export const makeLocalLogin = id =>
+  createApiAction({
+    type: additionalActionTypes.CREATE_LOCAL_LOGIN,
+    endpoint: `/users/${id}/create-local`,
+    method: 'POST',
+    meta: { id }
   });
 
 /**
@@ -206,7 +219,23 @@ const reducer = handleActions(
         ['resources', userId, 'data', 'privateData', 'groups', 'supervisorOf'],
         list => list.push(groupId)
       );
-    }
+    },
+
+    [additionalActionTypes.CREATE_LOCAL_LOGIN_PENDING]: (
+      state,
+      { meta: { id } }
+    ) => state.setIn(['resources', id, 'data', 'privateData', 'isLocal'], true),
+
+    [additionalActionTypes.CREATE_LOCAL_LOGIN_FAILED]: (
+      state,
+      { meta: { id } }
+    ) =>
+      state.setIn(['resources', id, 'data', 'privateData', 'isLocal'], false),
+
+    [additionalActionTypes.CREATE_LOCAL_LOGIN_FULFILLED]: (
+      state,
+      { payload, meta: { id } }
+    ) => state.setIn(['resources', id, 'data'], fromJS(payload))
   }),
   initialState
 );

@@ -22,3 +22,4 @@ export {
 } from './MaybeBonusAssignmentIcon';
 export { default as MaybeLockedExerciseIcon } from './MaybeLockedExerciseIcon';
 export { default as CopyIcon } from './CopyIcon';
+export { default as LocalIcon } from './LocalIcon';

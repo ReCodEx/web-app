@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Field } from 'redux-form';
+import { Field, FieldArray } from 'redux-form';
 import { Table, Button, Row, Col } from 'react-bootstrap';
 import Icon from 'react-fontawesome';
 import {
@@ -101,16 +101,18 @@ const EditEnvironmentConfigVariables = ({
                 </Col>
                 <Col xs={8} style={{ paddingLeft: '0px' }}>
                   {formValues[index] &&
-                    <Field
-                      name={`${variable}.value`}
-                      component={
-                        formValues[index].type === 'string[]' ||
-                        formValues[index].type === 'remote-file[]'
-                          ? ExpandingTextField
-                          : TextField
-                      }
-                      label={''}
-                    />}
+                    (formValues[index].type === 'string[]' ||
+                    formValues[index].type === 'remote-file[]'
+                      ? <FieldArray
+                          name={`${variable}.value`}
+                          component={ExpandingTextField}
+                          label={''}
+                        />
+                      : <Field
+                          name={`${variable}.value`}
+                          component={TextField}
+                          label={''}
+                        />)}
                 </Col>
               </Row>
             </td>

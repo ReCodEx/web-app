@@ -1,128 +1,115 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
+import { Field } from 'redux-form';
+import { ControlLabel, OverlayTrigger, Tooltip } from 'react-bootstrap';
+import Icon from 'react-fontawesome';
 
-import {
-  FormGroup,
-  FormControl,
-  HelpBlock,
-  ControlLabel
-} from 'react-bootstrap';
-import classNames from 'classnames';
+import FlatButton from '../../widgets/FlatButton';
+
+import SelectField from './SelectField';
 
 import styles from './commonStyles.less';
 
-class ExpandingSelectField extends Component {
-  state = { texts: [''] };
-
-  componentDidMount() {
-    const { input: { value } } = this.props;
-    const initialValue = Array.isArray(value) ? value.concat(['']) : [''];
-    this.setState({ texts: initialValue });
-  }
-
-  changeText = (i, text, onChange) => {
-    const { texts } = this.state;
-    texts[i] = text.trim();
-    if (i === texts.length - 1) {
-      texts.push('');
-    }
-    this.setState({ texts });
-
-    const texts2 = texts.slice(0, texts.length - 1);
-    onChange(texts2);
-  };
-
-  removeIfEmpty = (i, onChange) => {
-    const { texts } = this.state;
-    if (i !== texts.length - 1 && texts[i] === '') {
-      texts.splice(i, 1);
-      this.setState({ texts });
-
-      const texts2 = texts.slice(0, texts.length - 1);
-      onChange(texts2);
-    }
-  };
-
-  render() {
-    const {
-      label = '',
-      input: { name, onChange, onFocus, onBlur },
-      meta: { active, dirty, error, warning },
-      options,
-      style = {},
-      ignoreDirty = false,
-      ...props
-    } = this.props;
-    const { texts } = this.state;
-
-    return (
-      <FormGroup
-        controlId={name}
-        validationState={error ? 'error' : warning ? 'warning' : undefined}
+const ExpandingSelectField = ({
+  fields,
+  meta: { active, dirty, error, warning },
+  label,
+  ...props
+}) =>
+  <div>
+    <ControlLabel>
+      {label}
+    </ControlLabel>
+    <table>
+      <tbody>
+        {fields.map((field, index) =>
+          <tr key={index}>
+            <td width="100%" className={styles.alignTop}>
+              <Field
+                name={field}
+                component={SelectField}
+                label={''}
+                {...props}
+              />
+            </td>
+            <td className={styles.alignTop}>
+              <OverlayTrigger
+                placement="top"
+                overlay={
+                  <Tooltip id={Date.now()}>
+                    <FormattedMessage
+                      id="app.expandingTextField.tooltip.addAbove"
+                      defaultMessage="Insert new item right above."
+                    />
+                  </Tooltip>
+                }
+              >
+                <FlatButton onClick={() => fields.insert(index, '')}>
+                  <Icon name="reply" />
+                </FlatButton>
+              </OverlayTrigger>
+            </td>
+            <td className={styles.alignTop}>
+              <OverlayTrigger
+                placement="top"
+                overlay={
+                  <Tooltip id={Date.now()}>
+                    <FormattedMessage
+                      id="app.expandingTextField.tooltip.remove"
+                      defaultMessage="Remove this item from the list."
+                    />
+                  </Tooltip>
+                }
+              >
+                <FlatButton onClick={() => fields.remove(index)}>
+                  <Icon name="remove" />
+                </FlatButton>
+              </OverlayTrigger>
+            </td>
+          </tr>
+        )}
+      </tbody>
+    </table>
+    <div style={{ textAlign: 'center' }}>
+      {fields.length === 0 &&
+        <span style={{ paddingRight: '2em' }}>
+          <FormattedMessage
+            id="app.expandingTextField.noItems"
+            defaultMessage="There are no items yet..."
+          />
+        </span>}
+      <OverlayTrigger
+        placement="right"
+        overlay={
+          <Tooltip id={Date.now()}>
+            <FormattedMessage
+              id="app.expandingTextField.tooltip.add"
+              defaultMessage="Append a new item."
+            />
+          </Tooltip>
+        }
       >
-        <ControlLabel>{label}</ControlLabel>
-        <div style={style}>
-          {texts.map((text, i) =>
-            <FormControl
-              key={i}
-              onChange={e => this.changeText(i, e.target.value, onChange)}
-              onFocus={onFocus}
-              onBlur={e => {
-                onBlur(e);
-                this.removeIfEmpty(i, onChange);
-              }}
-              value={text}
-              componentClass="select"
-              bsClass={classNames({
-                'form-control': true,
-                [styles.dirty]:
-                  i < texts.length - 1 &&
-                  dirty &&
-                  !ignoreDirty &&
-                  !error &&
-                  !warning,
-                [styles.active]: active
-              })}
-              {...props}
-            >
-              {options.map(({ key, name }, o) =>
-                <option value={key} key={o}>
-                  {name}
-                </option>
-              )}
-            </FormControl>
-          )}
-        </div>{' '}
-        {error &&
-          <HelpBlock>
-            {' '}{error}{' '}
-          </HelpBlock>}
-        {!error &&
-          warning &&
-          <HelpBlock>
-            {' '}{warning}{' '}
-          </HelpBlock>}
-      </FormGroup>
-    );
-  }
-}
+        <FlatButton onClick={() => fields.push('')}>
+          <Icon name="plus" />
+        </FlatButton>
+      </OverlayTrigger>
+    </div>
+  </div>;
 
 ExpandingSelectField.propTypes = {
-  input: PropTypes.object,
+  fields: PropTypes.object.isRequired,
   meta: PropTypes.shape({
     active: PropTypes.bool,
     dirty: PropTypes.bool,
     error: PropTypes.any,
     warning: PropTypes.any
   }).isRequired,
-  options: PropTypes.array,
   label: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) })
   ]).isRequired,
-  style: PropTypes.object,
-  ignoreDirty: PropTypes.bool
+  options: PropTypes.array
 };
 
 export default ExpandingSelectField;

@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Field } from 'redux-form';
+import { Field, FieldArray } from 'redux-form';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { injectIntl, FormattedMessage } from 'react-intl';
 import {
@@ -48,37 +48,55 @@ const PipelineVariablesField = ({
           {(type === 'remote-file' || type === 'remote-file[]') &&
             <ResourceRenderer resource={supplementaryFiles.toArray()}>
               {(...supplementaryFiles) =>
-                <Field
-                  name={`${input.name}.${value}`}
-                  component={
-                    isArray(firstValue(input.value[value]), type)
-                      ? ExpandingSelectField
-                      : SelectField
-                  }
-                  options={[{ key: '', name: '...' }].concat(
-                    supplementaryFiles
-                      .sort((a, b) => a.name.localeCompare(b.name, intl.locale))
-                      .filter((item, pos, arr) => arr.indexOf(item) === pos)
-                      .map(data => ({
-                        key: data.hashName,
-                        name: data.name
-                      }))
-                  )}
-                  label={`${atob(value)}: `}
-                />}
+                isArray(firstValue(input.value[value]), type)
+                  ? <FieldArray
+                      name={`${input.name}.${value}`}
+                      component={ExpandingSelectField}
+                      options={[{ key: '', name: '...' }].concat(
+                        supplementaryFiles
+                          .sort((a, b) =>
+                            a.name.localeCompare(b.name, intl.locale)
+                          )
+                          .filter((item, pos, arr) => arr.indexOf(item) === pos)
+                          .map(data => ({
+                            key: data.hashName,
+                            name: data.name
+                          }))
+                      )}
+                      label={`${atob(value)}: `}
+                    />
+                  : <Field
+                      name={`${input.name}.${value}`}
+                      component={SelectField}
+                      options={[{ key: '', name: '...' }].concat(
+                        supplementaryFiles
+                          .sort((a, b) =>
+                            a.name.localeCompare(b.name, intl.locale)
+                          )
+                          .filter((item, pos, arr) => arr.indexOf(item) === pos)
+                          .map(data => ({
+                            key: data.hashName,
+                            name: data.name
+                          }))
+                      )}
+                      label={`${atob(value)}: `}
+                    />}
             </ResourceRenderer>}
           {type !== 'remote-file' &&
             type !== 'remote-file[]' &&
-            <Field
-              key={value}
-              name={`${input.name}.${value}`}
-              component={
-                isArray(firstValue(input.value[value]), type)
-                  ? ExpandingTextField
-                  : TextField
-              }
-              label={`${atob(value)}: `}
-            />}
+            (isArray(firstValue(input.value[value]), type)
+              ? <FieldArray
+                  key={value}
+                  name={`${input.name}.${value}`}
+                  component={ExpandingTextField}
+                  label={`${atob(value)}: `}
+                />
+              : <Field
+                  key={value}
+                  name={`${input.name}.${value}`}
+                  component={TextField}
+                  label={`${atob(value)}: `}
+                />)}
         </div>
       )}
   </div>;

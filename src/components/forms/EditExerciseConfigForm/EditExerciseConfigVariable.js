@@ -3,7 +3,7 @@ import { injectIntl } from 'react-intl';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { Row, Col } from 'react-bootstrap';
-import { Field } from 'redux-form';
+import { Field, FieldArray } from 'redux-form';
 import {
   TextField,
   SelectField,
@@ -55,7 +55,7 @@ const EditExerciseConfigVariable = ({
               />}
           </ResourceRenderer>}
         {(data.type === 'string[]' || data.type === 'file[]') &&
-          <Field
+          <FieldArray
             name={`${prefix}.value`}
             style={{ marginTop: '-20px' }}
             component={ExpandingTextField}
@@ -64,7 +64,7 @@ const EditExerciseConfigVariable = ({
         {data.type === 'remote-file[]' &&
           <ResourceRenderer resource={supplementaryFiles.toArray()}>
             {(...supplementaryFiles) =>
-              <Field
+              <FieldArray
                 name={`${prefix}.value`}
                 style={{ marginTop: '-20px' }}
                 component={ExpandingSelectField}
