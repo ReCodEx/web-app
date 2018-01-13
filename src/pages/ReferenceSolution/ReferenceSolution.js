@@ -59,6 +59,7 @@ class ReferenceSolution extends Component {
       params: { exerciseId, referenceSolutionId },
       refreshSolutionEvaluations,
       evaluateReferenceSolution,
+      evaluateReferenceSolutionInDebugMode,
       intl: { formatMessage },
       links: { EXERCISES_URI, EXERCISE_URI_FACTORY }
     } = this.props;
@@ -166,6 +167,22 @@ class ReferenceSolution extends Component {
                               defaultMessage="Resubmit"
                             />
                           </Button>}
+                        {permissionHints &&
+                          permissionHints.evaluate !== false &&
+                          <Button
+                            bsStyle="danger"
+                            className="btn-flat"
+                            onClick={() =>
+                              evaluateReferenceSolutionInDebugMode().then(
+                                refreshSolutionEvaluations
+                              )}
+                          >
+                            <SendIcon />{' '}
+                            <FormattedMessage
+                              id="app.referenceSolutionDetail.resubmitDebug"
+                              defaultMessage="Resubmit in Debug Mode"
+                            />
+                          </Button>}
                       </p>
                     </Col>
                   </Row>
@@ -202,6 +219,7 @@ ReferenceSolution.propTypes = {
   loadAsync: PropTypes.func.isRequired,
   refreshSolutionEvaluations: PropTypes.func.isRequired,
   evaluateReferenceSolution: PropTypes.func.isRequired,
+  evaluateReferenceSolutionInDebugMode: PropTypes.func.isRequired,
   referenceSolutions: ImmutablePropTypes.map,
   intl: intlShape.isRequired,
   links: PropTypes.object.isRequired
@@ -219,7 +237,9 @@ export default withLinks(
           dispatch(fetchReferenceSolutions(params.exerciseId));
         },
         evaluateReferenceSolution: () =>
-          dispatch(evaluateReferenceSolution(params.referenceSolutionId))
+          dispatch(evaluateReferenceSolution(params.referenceSolutionId)),
+        evaluateReferenceSolutionInDebugMode: () =>
+          dispatch(evaluateReferenceSolution(params.referenceSolutionId, true))
       })
     )(ReferenceSolution)
   )
