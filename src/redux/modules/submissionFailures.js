@@ -1,12 +1,14 @@
 import { handleActions } from 'redux-actions';
 import factory, { initialState } from '../helpers/resourceManager';
 import { createApiAction } from '../middleware/apiMiddleware';
+import { fromJS } from 'immutable';
 
 const resourceName = 'submissionFailures';
 var { actions, reduceActions } = factory({ resourceName });
 
 export const additionalActionTypes = {
-  RESOLVE: 'recodex/submissionFailures/RESOLVE'
+  RESOLVE: 'recodex/submissionFailures/RESOLVE',
+  RESOLVE_FULFILLED: 'recodex/submissionFailures/RESOLVE_FULFILLED'
 };
 
 /**
@@ -32,7 +34,12 @@ export const resolveFailure = (id, note) =>
  */
 
 const reducer = handleActions(
-  Object.assign({}, reduceActions, {}),
+  Object.assign({}, reduceActions, {
+    [additionalActionTypes.RESOLVE_FULFILLED]: (
+      state,
+      { meta: { id }, payload }
+    ) => state.setIn(['resources', id, 'data'], fromJS(payload))
+  }),
   initialState
 );
 

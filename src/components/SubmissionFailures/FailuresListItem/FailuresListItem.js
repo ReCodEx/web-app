@@ -5,7 +5,7 @@ import Icon from 'react-fontawesome';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 
 const FailuresListItem = ({ id, createActions, failure }) =>
-  <tr>
+  <tr className={failure.resolvedAt ? 'success' : 'danger'}>
     <td className="text-center">
       <OverlayTrigger
         placement="top"

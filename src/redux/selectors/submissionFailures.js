@@ -26,6 +26,6 @@ export const readySubmissionFailuresSelector = createSelector(
       .toList()
       .filter(isReady)
       .map(getJsData)
-      .sort((a, b) => a.createdAt - b.createdAt)
+      .sort((a, b) => b.createdAt - a.createdAt)
       .toArray()
 );

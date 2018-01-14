@@ -5,7 +5,7 @@ import { FormattedMessage } from 'react-intl';
 import FailuresListItem from '../FailuresListItem';
 
 const FailuresList = ({ failures, createActions }) =>
-  <Table striped hover>
+  <Table hover>
     <thead>
       <tr>
         <th>

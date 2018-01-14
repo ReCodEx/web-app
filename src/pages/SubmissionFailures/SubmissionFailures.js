@@ -5,15 +5,22 @@ import { FormattedMessage } from 'react-intl';
 
 import PageContent from '../../components/layout/PageContent';
 import FetchManyResourceRenderer from '../../components/helpers/FetchManyResourceRenderer';
-import { fetchAllFailures } from '../../redux/modules/submissionFailures';
+import {
+  fetchAllFailures,
+  resolveFailure
+} from '../../redux/modules/submissionFailures';
 import {
   fetchManyStatus,
   readySubmissionFailuresSelector
 } from '../../redux/selectors/submissionFailures';
 import FailuresList from '../../components/SubmissionFailures/FailuresList/FailuresList';
 import Box from '../../components/widgets/Box/Box';
+import ResolveFailure from '../../components/SubmissionFailures/ResolveFailure/ResolveFailure';
+import { Button } from 'react-bootstrap';
 
 class SubmissionFailures extends Component {
+  state = { isOpen: false, activeId: null };
+
   static loadAsync = (params, dispatch) =>
     Promise.all([dispatch(fetchAllFailures)]);
 
@@ -22,7 +29,7 @@ class SubmissionFailures extends Component {
   }
 
   render() {
-    const { submissionFailures, fetchStatus } = this.props;
+    const { submissionFailures, fetchStatus, resolveFailure } = this.props;
 
     return (
       <FetchManyResourceRenderer
@@ -96,7 +103,33 @@ class SubmissionFailures extends Component {
               unlimitedHeight
               noPadding
             >
-              <FailuresList failures={submissionFailures} />
+              <div>
+                <FailuresList
+                  failures={submissionFailures}
+                  createActions={id =>
+                    <Button
+                      bsStyle="warning"
+                      className="btn-flat"
+                      bsSize="sm"
+                      onClick={() =>
+                        this.setState({ isOpen: true, activeId: id })}
+                    >
+                      <FormattedMessage
+                        id="app.submissionFailures.resolve"
+                        defaultMessage="Resolve"
+                      />
+                    </Button>}
+                />
+                <ResolveFailure
+                  isOpen={this.state.isOpen}
+                  onClose={() =>
+                    this.setState({ isOpen: false, activeId: null })}
+                  onSubmit={data =>
+                    resolveFailure(this.state.activeId, data.note).then(() =>
+                      this.setState({ isOpen: false, activeId: null })
+                    )}
+                />
+              </div>
             </Box>
           </PageContent>}
       </FetchManyResourceRenderer>
@@ -107,7 +140,8 @@ class SubmissionFailures extends Component {
 SubmissionFailures.propTypes = {
   loadAsync: PropTypes.func.isRequired,
   fetchStatus: PropTypes.string,
-  submissionFailures: PropTypes.array
+  submissionFailures: PropTypes.array,
+  resolveFailure: PropTypes.func
 };
 
 export default connect(
@@ -116,6 +150,7 @@ export default connect(
     submissionFailures: readySubmissionFailuresSelector(state)
   }),
   dispatch => ({
-    loadAsync: () => SubmissionFailures.loadAsync({}, dispatch)
+    loadAsync: () => SubmissionFailures.loadAsync({}, dispatch),
+    resolveFailure: (id, note) => dispatch(resolveFailure(id, note))
   })
 )(SubmissionFailures);
