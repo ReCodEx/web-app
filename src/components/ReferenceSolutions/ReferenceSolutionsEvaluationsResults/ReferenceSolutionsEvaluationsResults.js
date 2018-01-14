@@ -78,10 +78,10 @@ const ReferenceSolutionsEvaluationsResults = ({ results, testId, taskId }) =>
                   <FormattedDate value={result.evaluation.evaluatedAt * 1000} />
                 </td>
                 <td>
-                  {prettyPrintBytes(taskStats.usedMemory)}
+                  {prettyPrintBytes(taskStats.memory)}
                 </td>
                 <td>
-                  {prettyMs(taskStats.usedTime * 1000)}
+                  {prettyMs(taskStats.wallTime * 1000)}
                 </td>
               </tr>
             );
