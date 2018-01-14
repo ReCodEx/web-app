@@ -7,6 +7,14 @@ import { Field, reduxForm } from 'redux-form';
 import TextField from '../../forms/Fields/TextField';
 import SubmitButton from '../../forms/SubmitButton';
 
+const maxNoteLength = value =>
+  value && value.length >= 255
+    ? <FormattedMessage
+        id="app.submissionFailures.resolveMaxLengthExceeded"
+        defaultMessage="Maximum length of the note exceeded."
+      />
+    : undefined;
+
 const ResolveFailure = ({
   isOpen,
   onClose,
@@ -15,7 +23,8 @@ const ResolveFailure = ({
   anyTouched,
   submitFailed = false,
   submitSucceeded = false,
-  invalid
+  invalid,
+  reset
 }) =>
   <Modal show={isOpen} backdrop="static" onHide={onClose}>
     <Modal.Header closeButton>
@@ -36,12 +45,13 @@ const ResolveFailure = ({
             defaultMessage="Resolve note:"
           />
         }
+        validate={maxNoteLength}
       />
     </Modal.Body>
     <Modal.Footer>
       <SubmitButton
         id="resolve-failure"
-        handleSubmit={handleSubmit}
+        handleSubmit={data => handleSubmit(data).then(() => reset())}
         submitting={submitting}
         dirty={anyTouched}
         hasSucceeded={submitSucceeded}
@@ -87,6 +97,7 @@ ResolveFailure.propTypes = {
   submitSucceeded: PropTypes.bool,
   submitting: PropTypes.bool,
   invalid: PropTypes.bool,
+  reset: PropTypes.func,
   onClose: PropTypes.func.isRequired,
   isOpen: PropTypes.bool.isRequired
 };
