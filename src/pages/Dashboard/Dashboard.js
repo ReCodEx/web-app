@@ -89,9 +89,7 @@ class Dashboard extends Component {
                 Promise.all([
                   dispatch(fetchAssignmentsForGroup(group.id)),
                   dispatch(fetchGroupsStatsIfNeeded(group.id)),
-                  dispatch(
-                    fetchGroupsIfNeeded(...group.privateData.parentGroupsIds)
-                  )
+                  dispatch(fetchGroupsIfNeeded(...group.parentGroupsIds))
                 ])
               )
             )

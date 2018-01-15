@@ -212,7 +212,7 @@ class Group extends Component {
           <div>
             <HierarchyLine
               groupId={data.id}
-              parentGroupsIds={data.privateData.parentGroupsIds}
+              parentGroupsIds={data.parentGroupsIds}
             />
             <p />
             {(isAdmin || isSuperAdmin) &&
