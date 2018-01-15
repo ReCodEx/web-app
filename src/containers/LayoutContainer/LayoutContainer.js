@@ -17,8 +17,7 @@ import { messages, localeData, defaultLanguage } from '../../locales';
 import { linksFactory, isAbsolute } from '../../links';
 
 import 'admin-lte/dist/css/AdminLTE.min.css';
-import 'admin-lte/dist/css/skins/skin-green.min.css';
-// import 'admin-lte/dist/css/skins/skin-purple.min.css';
+import 'admin-lte/dist/css/skins/_all-skins.min.css';
 
 /**
  * Handles the dependency injection of the localized links based on the current language stated in the URL.
