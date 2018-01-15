@@ -132,11 +132,11 @@ const TestResultsTable = ({ results, runtimeEnvironmentId }) =>
           score,
           status,
           memoryExceeded,
-          timeExceeded,
+          wallTimeExceeded,
           message,
-          timeRatio,
+          wallTimeRatio,
           memoryRatio,
-          time,
+          wallTime,
           memory,
           exitCode
         }) =>
@@ -189,9 +189,9 @@ const TestResultsTable = ({ results, runtimeEnvironmentId }) =>
               1024
             )}
             {tickOrCrossAndRatioOrValue(
-              timeExceeded === false,
-              timeRatio,
-              time,
+              wallTimeExceeded === false,
+              wallTimeRatio,
+              wallTime,
               prettyMs,
               1000
             )}
