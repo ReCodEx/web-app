@@ -82,6 +82,9 @@ export const linksFactory = lang => {
   const ADMIN_EDIT_INSTANCE_URI_FACTORY = instanceId =>
     `${ADMIN_INSTANCES_URI}/${instanceId}/edit`;
 
+  // failures details
+  const FAILURES_URI = `${prefix}/app/submission-failures`;
+
   // download files
   const DOWNLOAD = fileId => `${API_BASE}/uploaded-files/${fileId}/download`;
 
@@ -127,7 +130,8 @@ export const linksFactory = lang => {
     ADMIN_EDIT_INSTANCE_URI_FACTORY,
     DOWNLOAD,
     REFERENCE_SOLUTION_EVALUATION_URI_FACTORY,
-    LOGIN_EXTERN_FINALIZATION
+    LOGIN_EXTERN_FINALIZATION,
+    FAILURES_URI
   };
 };
 
