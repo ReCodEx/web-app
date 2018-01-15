@@ -57,16 +57,16 @@ class HeaderNotification extends Component {
               onMouseOut={() => this.setState({ hovering: false })}
             >
               {deleteOnClick
-                ? <a
-                    className="fa"
+                ? <span
+                    className={styles.delete}
                     href={hide ? '#' : undefined}
                     onClick={e => {
                       e.preventDefault();
                       hide && hide(id);
                     }}
                   >
-                    <DeleteIcon className="text-red" />
-                  </a>
+                    <DeleteIcon className="fa text-red" />
+                  </span>
                 : successful ? <SuccessIcon /> : <WarningIcon />}
             </span>
             <span className="fa">

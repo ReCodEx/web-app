@@ -113,6 +113,19 @@ const simpleConfigVariablesTypes = {
   'actual-inputs': 'file[]'
 };
 
+const EMPTY_COMPILATION_PIPELINE_VARS = [
+  {
+    name: 'extra-files',
+    type: 'remote-file[]',
+    value: []
+  },
+  {
+    name: 'extra-file-names',
+    type: 'file[]',
+    value: []
+  }
+];
+
 // Fetch one simple variable (string or array) and fill it into the testObj under selected property.
 const getSimpleConfigSimpleVariable = (
   variables,
@@ -295,15 +308,29 @@ export const transformAndSendConfigValues = (
         ? executionPipelineFiles
         : executionPipelineStdout;
 
-      const testVars = transformConfigTestExecutionVariables(test);
-
-      // Get original values so they wont get lost ...
       const originalPipelines = originalConfig
         .find(config => config.name === envId) // config for the right environment
         .tests.find(test => test.name === testName).pipelines; // and the right test
-      const origCompilationVars = originalPipelines[0].variables; // the first pipeline is for compilation
-      const origExecutionVars = originalPipelines[1].variables; // the second pipeline is for execution
-      mergeOriginalVariables(testVars, origExecutionVars);
+
+      // Get original values of compilation pipeline ...
+      const originalCompilationPipeline = originalPipelines.find(
+        p => p.name === compilationPipeline.id
+      );
+      const origCompilationVars =
+        (originalCompilationPipeline &&
+          originalCompilationPipeline.variables) ||
+        EMPTY_COMPILATION_PIPELINE_VARS; // if pipeline variables are not present, prepare an empty set
+
+      // Prepare variables for execution pipeline ...
+      const testVars = transformConfigTestExecutionVariables(test);
+
+      const originalExecutionPipeline = originalPipelines.find(
+        p => p.name === executionPipeline.id
+      );
+      if (originalExecutionPipeline && originalExecutionPipeline.variables) {
+        const origExecutionVars = originalExecutionPipeline.variables; // the second pipeline is for execution
+        mergeOriginalVariables(testVars, origExecutionVars);
+      }
 
       testsCfg.push({
         name: testName,
