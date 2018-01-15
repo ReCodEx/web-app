@@ -60,6 +60,7 @@ module.exports = {
         NODE_ENV: "'" + process.env.NODE_ENV + "'",
         API_BASE: "'" + process.env.API_BASE + "'",
         TITLE: "'" + process.env.TITLE + "'",
+        SKIN: "'" + process.env.SKIN + "'",
         REDUX_DEV_SERVER_PORT: "'" + process.env.REDUX_DEV_SERVER_PORT + "'",
         ALLOW_NORMAL_REGISTRATION:
           "'" + process.env.ALLOW_NORMAL_REGISTRATION + "'",
