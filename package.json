@@ -10,7 +10,7 @@
   },
   "private": true,
   "scripts": {
-    "clean": "rm -f public/bundle* && rm -f public/style* && rm -f bin/server.js",
+    "clean": "rm -f public/bundle* && rm -f public/style* && rm -f bin/server.js && rm -f bin/style*",
     "build:server": "webpack -p --config config/webpack.server.js",
     "build:client": "webpack -p --config config/webpack.config.js",
     "build:server:test": "webpack --config config/webpack.server.js",

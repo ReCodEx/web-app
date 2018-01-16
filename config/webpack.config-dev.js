@@ -6,7 +6,7 @@ const GitRevisionPlugin = require('git-revision-webpack-plugin');
 // load variables from .env
 require('dotenv').config();
 
-// fix Widnows 10 Ubuntu issues with less loader:
+// fix Windows 10 and Ubuntu issues with less loader:
 try {
   require('os').networkInterfaces();
 } catch (e) {

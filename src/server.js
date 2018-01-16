@@ -72,6 +72,7 @@ const renderWithoutSSR = (res, renderProps) => {
     html: '',
     head,
     reduxState: 'undefined',
+    skin: process.env.SKIN,
     bundle,
     style
   });
@@ -90,6 +91,7 @@ const renderPage = (res, store, renderProps) => {
     html,
     head,
     reduxState,
+    skin: process.env.SKIN,
     bundle,
     style
   });

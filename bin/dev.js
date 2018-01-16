@@ -24,6 +24,7 @@ app.get('*', (req, res) => {
       link: ''
     },
     reduxState: undefined,
+    skin: process.env.SKIN,
     style: `http://localhost:${WEBPACK_DEV_SERVER_PORT}/style.css`,
     bundle: `http://localhost:${WEBPACK_DEV_SERVER_PORT}/bundle.js`
   });

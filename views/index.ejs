@@ -68,7 +68,7 @@
 
       <script>
         document.getElementById('loading-screen').remove();
-        document.body.className = "<%= process.env.SKIN ? process.env.SKIN : 'skin-green' %> fixed";
+        document.body.className = "<%- skin ? skin : 'skin-green' %> fixed";
 
       </script>
 
