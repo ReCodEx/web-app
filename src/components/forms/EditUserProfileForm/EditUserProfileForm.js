@@ -13,14 +13,16 @@ import { TextField, PasswordField, PasswordStrength } from '../Fields';
 const EditUserProfileForm = ({
   submitting,
   handleSubmit,
-  anyTouched,
+  dirty,
   submitFailed = false,
   submitSucceeded = false,
   asyncValidate,
   pristine,
   asyncValidating,
   invalid,
-  allowChangePassword
+  allowChangePassword,
+  emptyLocalPassword,
+  reset
 }) =>
   <FormBox
     title={
@@ -34,13 +36,13 @@ const EditUserProfileForm = ({
       <div className="text-center">
         <SubmitButton
           id="editUserProfile"
-          handleSubmit={handleSubmit}
+          handleSubmit={data => handleSubmit(data).then(() => reset())}
           submitting={submitting}
-          dirty={anyTouched}
+          dirty={dirty}
+          invalid={invalid}
           hasSucceeded={submitSucceeded}
           hasFailed={submitFailed}
           asyncValidating={asyncValidating}
-          invalid={pristine || invalid}
           tabIndex={9}
           messages={{
             submit: (
@@ -154,18 +156,33 @@ const EditUserProfileForm = ({
           />
         </p>
 
-        <Field
-          name="oldPassword"
-          tabIndex={6}
-          component={PasswordField}
-          autoComplete="off"
-          label={
-            <FormattedMessage
-              id="app.changePasswordForm.oldPassword"
-              defaultMessage="Old password:"
-            />
-          }
-        />
+        {emptyLocalPassword
+          ? <div className="callout callout-warning">
+              <h4>
+                <FormattedMessage
+                  id="app.editUserProfile.emptyLocalPassword"
+                  defaultMessage="Local account does not have a password"
+                />
+              </h4>
+              <p>
+                <FormattedMessage
+                  id="app.editUserProfile.emptyLocalPasswordExplain"
+                  defaultMessage="You may not sign in to ReCodEx using local account until you set the password."
+                />
+              </p>
+            </div>
+          : <Field
+              name="oldPassword"
+              tabIndex={6}
+              component={PasswordField}
+              autoComplete="off"
+              label={
+                <FormattedMessage
+                  id="app.changePasswordForm.oldPassword"
+                  defaultMessage="Old password:"
+                />
+              }
+            />}
 
         <Field
           name="password"
@@ -211,12 +228,14 @@ EditUserProfileForm.propTypes = {
   asyncValidate: PropTypes.func.isRequired,
   submitFailed: PropTypes.bool,
   submitSucceeded: PropTypes.bool,
-  anyTouched: PropTypes.bool,
+  dirty: PropTypes.bool,
   submitting: PropTypes.bool,
   asyncValidating: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
   invalid: PropTypes.bool,
   pristine: PropTypes.bool,
-  allowChangePassword: PropTypes.bool.isRequired
+  reset: PropTypes.func,
+  allowChangePassword: PropTypes.bool.isRequired,
+  emptyLocalPassword: PropTypes.bool.isRequired
 };
 
 const validate = (
@@ -301,8 +320,13 @@ const validate = (
   return errors;
 };
 
-const asyncValidate = ({ email, password = '' }, dispatch) =>
-  new Promise((resolve, reject) =>
+const asyncValidate = ({ email, password = '' }, dispatch) => {
+  if (password === '') {
+    dispatch(change('edit-user-profile', 'passwordStrength', null));
+    return Promise.resolve();
+  }
+
+  return new Promise((resolve, reject) =>
     dispatch(validateRegistrationData(email, password))
       .then(res => res.value)
       .then(({ usernameIsFree, passwordScore }) => {
@@ -327,7 +351,7 @@ const asyncValidate = ({ email, password = '' }, dispatch) =>
       .then(resolve())
       .catch(errors => reject(errors))
   );
-
+};
 export default reduxForm({
   form: 'edit-user-profile',
   validate,
