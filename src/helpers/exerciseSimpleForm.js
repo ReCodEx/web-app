@@ -24,10 +24,17 @@ export const getTestsInitValues = (exerciseTests, scoreConfig, locale) => {
       allWeightsSame = false;
     }
     lastWeight = testWeight;
-    res.push({ id: test.id, name: test.name, weight: String(testWeight) });
+    res.push({
+      id: test.id,
+      name: test.name,
+      weight: String(testWeight)
+    });
   }
 
-  return { isUniform: allWeightsSame, tests: res };
+  return {
+    isUniform: allWeightsSame,
+    tests: res
+  };
 };
 
 export const transformAndSendTestsValues = (
@@ -37,7 +44,9 @@ export const transformAndSendTestsValues = (
 ) => {
   const uniformScore =
     formData.isUniform === true || formData.isUniform === 'true';
-  let scoreConfigData = { testWeights: {} };
+  let scoreConfigData = {
+    testWeights: {}
+  };
   let testsData = [];
 
   for (const test of formData.tests) {
@@ -45,13 +54,24 @@ export const transformAndSendTestsValues = (
     scoreConfigData.testWeights[test.name] = testWeight;
 
     testsData.push(
-      test.id ? { id: test.id, name: test.name } : { name: test.name }
+      test.id
+        ? {
+            id: test.id,
+            name: test.name
+          }
+        : {
+            name: test.name
+          }
     );
   }
 
   return Promise.all([
-    editExerciseTests({ tests: testsData }),
-    editExerciseScoreConfig({ scoreConfig: yaml.safeDump(scoreConfigData) })
+    editExerciseTests({
+      tests: testsData
+    }),
+    editExerciseScoreConfig({
+      scoreConfig: yaml.safeDump(scoreConfigData)
+    })
   ]);
 };
 
@@ -76,7 +96,9 @@ export const transformEnvValues = (
     if (formData[env] !== true && formData[env] !== 'true') {
       continue;
     }
-    let envObj = { runtimeEnvironmentId: env };
+    let envObj = {
+      runtimeEnvironmentId: env
+    };
     const currentFullEnv = environments.find(e => e.id === env);
     envObj.variablesTable = currentFullEnv.defaultVariables;
     res.push(envObj);
@@ -88,31 +110,56 @@ export const transformEnvValues = (
  * Configuration variables
  */
 
-// Configure simple variables using mapping between name and testObj property.
-// Object has the same properites as testObj and values are variable names.
-const simpleConfigVariablesMapping = {
-  expectedOutput: 'expected-output',
-  runArgs: 'run-args',
-  outputFile: 'actual-output',
-  inputStdin: 'stdin-file',
-  judgeBinary: 'judge-type',
-  customJudgeBinary: 'custom-judge',
-  judgeArgs: 'judge-args'
+// Execution pipeline variables and their meta-data
+// (associated property in form data object, type, and default value).
+const EXEC_PIPELINE_VARS = {
+  'expected-output': {
+    prop: 'expectedOutput',
+    type: 'remote-file',
+    default: ''
+  },
+  'run-args': {
+    prop: 'runArgs',
+    type: 'string[]',
+    default: []
+  },
+  'actual-output': {
+    prop: 'outputFile',
+    type: 'file'
+  },
+  'stdin-file': {
+    prop: 'inputStdin',
+    type: 'remote-file',
+    default: ''
+  },
+  'judge-type': {
+    prop: 'judgeBinary',
+    type: 'string',
+    default: 'recodex-judge-normal'
+  },
+  'custom-judge': {
+    prop: 'customJudgeBinary',
+    type: 'remote-file',
+    default: ''
+  },
+  'judge-args': {
+    prop: 'judgeArgs',
+    type: 'string[]',
+    default: []
+  },
+  'input-files': {
+    prop: 'inputFiles',
+    type: 'remote-file[]',
+    default: []
+  },
+  'actual-inputs': {
+    prop: 'actualInputs',
+    type: 'file[]',
+    default: []
+  }
 };
 
-// Variable types as they should be sent back to API
-const simpleConfigVariablesTypes = {
-  'expected-output': 'remote-file',
-  'run-args': 'string[]',
-  'actual-output': 'file',
-  'stdin-file': 'remote-file',
-  'judge-type': 'string',
-  'custom-judge': 'remote-file',
-  'judge-args': 'string[]',
-  'input-files': 'remote-file[]',
-  'actual-inputs': 'file[]'
-};
-
+// Structure used to fill empty compilation pipeline variables.
 const EMPTY_COMPILATION_PIPELINE_VARS = [
   {
     name: 'extra-files',
@@ -127,46 +174,29 @@ const EMPTY_COMPILATION_PIPELINE_VARS = [
 ];
 
 // Fetch one simple variable (string or array) and fill it into the testObj under selected property.
-const getSimpleConfigSimpleVariable = (
-  variables,
-  testObj,
-  variableName,
-  propertyName
-) => {
+const getSimpleConfigSimpleVariable = (variables, testObj, variableName) => {
+  if (EXEC_PIPELINE_VARS[variableName] === undefined) {
+    return;
+  }
+
+  const propertyName = EXEC_PIPELINE_VARS[variableName].prop;
   const variable = variables.find(variable => variable.name === variableName);
   const isArray = variable && variable.type && variable.type.endsWith('[]');
-  if (isArray) {
-    testObj[propertyName] = []; // array needs default
-  }
+
+  let value;
   if (variable) {
-    let value = variable.value;
+    value = variable.value;
     if (isArray && !value) {
       value = [];
     } else if (!isArray) {
       value = value.trim();
     }
-    testObj[propertyName] = isArray && !Array.isArray(value) ? [value] : value;
+  } else if (EXEC_PIPELINE_VARS[variableName].default !== undefined) {
+    value = EXEC_PIPELINE_VARS[variableName].default;
   }
-};
 
-// Get input files and their corresponding actual names (and fill them to testObj).
-const getSimpleConfigInputFiles = (variables, testObj) => {
-  const inputFiles = variables.find(
-    variable => variable.name === 'input-files'
-  );
-  const actualInputs = variables.find(
-    variable => variable.name === 'actual-inputs'
-  );
-  if (inputFiles) {
-    testObj.inputFiles = inputFiles.value
-      ? inputFiles.value.map((value, i) => ({
-          file: value,
-          name:
-            actualInputs && actualInputs.value && actualInputs.value[i]
-              ? actualInputs.value[i].trim()
-              : ''
-        }))
-      : [];
+  if (value !== undefined) {
+    testObj[propertyName] = isArray && !Array.isArray(value) ? [value] : value;
   }
 };
 
@@ -178,7 +208,9 @@ export const getSimpleConfigInitValues = (config, tests) => {
   let res = {};
   for (let test of tests) {
     const testConf = confTests.find(t => t.name === test.id);
-    let testObj = { name: test.id };
+    let testObj = {
+      name: test.id
+    };
 
     const variables =
       testConf && testConf.pipelines
@@ -188,74 +220,86 @@ export const getSimpleConfigInitValues = (config, tests) => {
           )
         : [];
 
-    // Fetch values from variables and fill them to testObj.
-    getSimpleConfigInputFiles(variables, testObj);
-
-    for (const property in simpleConfigVariablesMapping) {
-      getSimpleConfigSimpleVariable(
-        variables,
-        testObj,
-        simpleConfigVariablesMapping[property],
-        property
-      );
+    for (const varName in EXEC_PIPELINE_VARS) {
+      getSimpleConfigSimpleVariable(variables, testObj, varName);
     }
+
+    // Postprocess input files and their names ...
+    testObj.inputFiles = testObj.inputFiles.map((value, i) => ({
+      file: value,
+      name:
+        testObj.actualInputs && testObj.actualInputs[i]
+          ? testObj.actualInputs[i].trim()
+          : ''
+    }));
+    delete testObj.actualInputs;
 
     // Additional updates after simple variables were set
     testObj.useOutFile = Boolean(testObj.outputFile);
     testObj.useCustomJudge = Boolean(testObj.customJudgeBinary);
     if (testObj.useCustomJudge) {
       testObj.judgeBinary = '';
-    } else if (!testObj.judgeBinary) {
-      testObj.judgeBinary = 'recodex-judge-normal';
     }
 
     res[encodeTestId(test.id)] = testObj;
   }
 
-  return { config: res };
+  return {
+    config: res
+  };
 };
 
 // Prepare one variable to be sent in to the API
 const transformConfigSimpleVariable = (variables, name, value) => {
-  if (value !== undefined) {
-    variables.push({ name, type: simpleConfigVariablesTypes[name], value });
+  const finalValue =
+    value === undefined ? EXEC_PIPELINE_VARS[name].default : value;
+  if (finalValue !== undefined) {
+    variables.push({
+      name,
+      type: EXEC_PIPELINE_VARS[name].type,
+      value: finalValue
+    });
   }
 };
 
-const transformConfigInputFiles = (variables, test) => {
+const transformConfigInputFiles = test => {
   let inputFiles = [];
-  let renamed = [];
+  let actualInputs = [];
   const inFilesArr =
     test.inputFiles && Array.isArray(test.inputFiles) ? test.inputFiles : [];
 
   for (const item of inFilesArr) {
     inputFiles.push(item.file);
-    renamed.push(item.name.trim());
+    actualInputs.push(item.name.trim());
   }
 
-  transformConfigSimpleVariable(variables, 'input-files', inputFiles);
-  transformConfigSimpleVariable(variables, 'actual-inputs', renamed);
+  return {
+    inputFiles,
+    actualInputs
+  };
 };
 
 // Prepare variables for execution pipeline of one test in one environment
 const transformConfigTestExecutionVariables = test => {
   // Final updates ...
+  let overrides = transformConfigInputFiles(test);
   if (!test.useCustomJudge) {
-    test.customJudgeBinary = '';
+    overrides.customJudgeBinary = '';
   }
-  test.outputFile = test.useOutFile ? test.outputFile.trim() : undefined;
+  overrides.outputFile = test.outputFile && test.outputFile.trim();
 
   // Prepare variables for the config
   let variables = [];
-  for (const property in simpleConfigVariablesMapping) {
-    transformConfigSimpleVariable(
-      variables,
-      simpleConfigVariablesMapping[property],
-      test[property]
-    );
+  for (const varName in EXEC_PIPELINE_VARS) {
+    const propName = EXEC_PIPELINE_VARS[varName].prop;
+    if (propName !== 'outputFile' || test.useOutFile) {
+      transformConfigSimpleVariable(
+        variables,
+        varName,
+        overrides[propName] !== undefined ? overrides[propName] : test[propName]
+      );
+    }
   }
-
-  transformConfigInputFiles(variables, test);
 
   return variables;
 };
@@ -263,10 +307,18 @@ const transformConfigTestExecutionVariables = test => {
 const mergeOriginalVariables = (newVars, origVars) => {
   origVars.forEach(ov => {
     // Only values unknown to simple form are added
-    if (simpleConfigVariablesTypes[ov.name] === undefined) {
+    if (EXEC_PIPELINE_VARS[ov.name] === undefined) {
       newVars.push(ov); // add missing variable
     }
   });
+};
+
+// safe getter to traverse compex object/array structures
+const _safeGet = (obj, path) => {
+  path.forEach(step => {
+    obj = obj && (typeof step === 'function' ? obj.find(step) : obj[step]);
+  });
+  return obj;
 };
 
 export const transformAndSendConfigValues = (
@@ -308,27 +360,26 @@ export const transformAndSendConfigValues = (
         ? executionPipelineFiles
         : executionPipelineStdout;
 
-      const originalPipelines = originalConfig
-        .find(config => config.name === envId) // config for the right environment
-        .tests.find(test => test.name === testName).pipelines; // and the right test
+      const originalPipelines = _safeGet(originalConfig, [
+        config => config.name === envId,
+        'tests',
+        test => test.name === testName,
+        'pipelines'
+      ]);
 
-      // Get original values of compilation pipeline ...
-      const originalCompilationPipeline = originalPipelines.find(
-        p => p.name === compilationPipeline.id
-      );
       const origCompilationVars =
-        (originalCompilationPipeline &&
-          originalCompilationPipeline.variables) ||
-        EMPTY_COMPILATION_PIPELINE_VARS; // if pipeline variables are not present, prepare an empty set
+        _safeGet(originalPipelines, [
+          p => p.name === compilationPipeline.id,
+          'variables'
+        ]) || EMPTY_COMPILATION_PIPELINE_VARS; // if pipeline variables are not present, prepare an empty set
 
       // Prepare variables for execution pipeline ...
       const testVars = transformConfigTestExecutionVariables(test);
-
-      const originalExecutionPipeline = originalPipelines.find(
-        p => p.name === executionPipeline.id
-      );
-      if (originalExecutionPipeline && originalExecutionPipeline.variables) {
-        const origExecutionVars = originalExecutionPipeline.variables; // the second pipeline is for execution
+      const origExecutionVars = _safeGet(originalPipelines, [
+        p => p.name === executionPipeline.id,
+        'variables'
+      ]);
+      if (origExecutionVars) {
         mergeOriginalVariables(testVars, origExecutionVars);
       }
 
@@ -341,7 +392,7 @@ export const transformAndSendConfigValues = (
           },
           {
             name: executionPipeline.id,
-            variables: testVars // TODO merge with original config
+            variables: testVars
           }
         ]
       });
@@ -352,7 +403,9 @@ export const transformAndSendConfigValues = (
     });
   }
 
-  return setConfig({ config: envs });
+  return setConfig({
+    config: envs
+  });
 };
 
 /*
@@ -385,12 +438,23 @@ export const getLimitsInitValues = (
 
       res[testEnc][envId] = {
         memory: lim ? String(lim.memory) : '0',
-        'wall-time': lim ? String(lim['wall-time']) : '0'
+        time: lim ? String(lim['wall-time']) : '0'
       };
     });
   });
 
-  return { limits: res };
+  return {
+    limits: res,
+    preciseTime: true
+  };
+};
+
+const transformLimitsObject = ({ memory, time }, timeField = 'wall-time') => {
+  let res = {
+    memory
+  };
+  res[timeField] = time;
+  return res;
 };
 
 /**
@@ -409,7 +473,9 @@ export const transformAndSendLimitsValues = (
       const envId = encodeEnvironmentId(environment.id);
       const data = {
         limits: tests.reduce((acc, test) => {
-          acc[test.id] = formData.limits[encodeTestId(test.id)][envId];
+          acc[test.id] = transformLimitsObject(
+            formData.limits[encodeTestId(test.id)][envId]
+          );
           return acc;
         }, {})
       };
