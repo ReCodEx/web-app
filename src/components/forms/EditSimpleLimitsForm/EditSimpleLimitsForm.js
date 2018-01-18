@@ -1,15 +1,15 @@
 import React from 'react';
-import { Alert, Table } from 'react-bootstrap';
+import { Alert, Table, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 import { FormattedMessage, injectIntl } from 'react-intl';
-import { reduxForm } from 'redux-form';
+import { reduxForm, Field } from 'redux-form';
+import classNames from 'classnames';
 
-import { EditSimpleLimitsField } from '../Fields';
+import { EditSimpleLimitsField, CheckboxField } from '../Fields';
 import SubmitButton from '../SubmitButton';
 import FormBox from '../../widgets/FormBox';
 import Button from '../../widgets/FlatButton';
 import { RefreshIcon } from '../../icons';
-
 import {
   encodeTestId,
   encodeEnvironmentId
@@ -107,7 +107,39 @@ const EditSimpleLimitsForm = ({
           defaultMessage="Cannot save the exercise limits. Please try again later."
         />
       </Alert>}
-
+    <OverlayTrigger
+      placement="right"
+      delayHide={5000}
+      overlay={
+        <Tooltip id="preciseTime-comment">
+          <FormattedMessage
+            id="app.editSimpleLimitsForm.preciseTimeTooltip"
+            defaultMessage="If precise time measurement is selected, ReCodEx will measure the consumed CPU time of tested soltions. Otherwise, the wall time will be measured. CPU is better in cases when serial time complexity of the solution is tested and tight time limits are set. Wall time is better in general cases as it better reflects the actual time consumed by the solution (indcluing I/O), but it is more susceptible to errors of measurement."
+          />
+        </Tooltip>
+      }
+    >
+      <div
+        style={{
+          marginLeft: '15px',
+          paddingTop: '15px',
+          paddingBottom: '-15px',
+          display: 'inline-block'
+        }}
+      >
+        <Field
+          name="preciseTime"
+          component={CheckboxField}
+          onOff
+          label={
+            <FormattedMessage
+              id="app.editSimpleLimitsForm.preciseTime"
+              defaultMessage="Precise Time Measurement"
+            />
+          }
+        />
+      </div>
+    </OverlayTrigger>
     <Table striped>
       <thead>
         <tr>
@@ -194,8 +226,8 @@ const validate = ({ limits }) => {
   let sums = {};
   Object.keys(limits).forEach(test =>
     Object.keys(limits[test]).forEach(env => {
-      if (limits[test][env]['wall-time']) {
-        const val = Number(limits[test][env]['wall-time']);
+      if (limits[test][env]['time']) {
+        const val = Number(limits[test][env]['time']);
         if (!Number.isNaN(val) && val > 0) {
           sums[env] = (sums[env] || 0) + val;
         }
@@ -210,7 +242,7 @@ const validate = ({ limits }) => {
     Object.keys(sums).forEach(env => {
       if (sums[env] > maxSumTime) {
         testsErrors[env] = {
-          'wall-time': (
+          time: (
             <FormattedMessage
               id="app.editSimpleLimitsForm.validation.timeSum"
               defaultMessage="The sum of time limits ({sum}) exceeds allowed maximum ({max})."

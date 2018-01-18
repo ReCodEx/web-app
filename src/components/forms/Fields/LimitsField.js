@@ -31,7 +31,7 @@ const LimitsField = ({
       {...props}
     />
     <Field
-      name={`${prefix}.wall-time`}
+      name={`${prefix}.time`}
       component={SecondsTextField}
       label={
         <FormattedMessage

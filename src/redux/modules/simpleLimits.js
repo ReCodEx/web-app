@@ -80,7 +80,7 @@ const getTargetFormKeys = (
   formName, // form identifier
   testId, // test id or null (if all test should be targetted)
   environmentId, // environment ID or null (if all environments should be targetted)
-  field // field identifier (memory or wall-time)
+  field // field identifier (memory or time)
 ) => {
   const testEnc = testId ? encodeTestId(testId) : null;
   const envEnc = environmentId ? encodeEnvironmentId(environmentId) : null;
@@ -101,7 +101,7 @@ export const cloneVertically = (
   formName, // form identifier
   testId, // test identifier
   runtimeEnvironmentId, // environment identifier
-  field // field identifier (memory or wall-time)
+  field // field identifier (memory or time)
 ) => (dispatch, getState) => {
   const state = getState();
   const value = getSimpleLimitsOf(
@@ -127,7 +127,7 @@ export const cloneHorizontally = (
   formName, // form identifier
   testId, // test identifier
   runtimeEnvironmentId, // environment identifier
-  field // field identifier (memory or wall-time)
+  field // field identifier (memory or time)
 ) => (dispatch, getState) => {
   const state = getState();
   const value = getSimpleLimitsOf(
@@ -153,7 +153,7 @@ export const cloneAll = (
   formName, // form identifier
   testId, // test identifier
   runtimeEnvironmentId, // environment identifier
-  field // field identifier (memory or wall-time)
+  field // field identifier (memory or time)
 ) => (dispatch, getState) => {
   const state = getState();
   const value = getSimpleLimitsOf(
