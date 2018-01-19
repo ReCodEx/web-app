@@ -45,9 +45,14 @@ const EditTestsTest = ({ fields, isUniform, testValues }) => {
               key={index}
               test={test}
               isUniform={isUniform}
-              percent={prettyPrintPercent(
-                (isUniform ? 1 : Number(testValues[index].weight)) / weightSum
-              )}
+              percent={
+                testValues[index] && testValues[index].weight
+                  ? prettyPrintPercent(
+                      (isUniform ? 1 : Number(testValues[index].weight)) /
+                        weightSum
+                    )
+                  : '?'
+              }
               onRemove={() => fields.remove(index)}
             />
           )}

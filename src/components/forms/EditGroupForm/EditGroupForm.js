@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { reduxForm, Field, FieldArray } from 'redux-form';
-import { Alert } from 'react-bootstrap';
+import { Alert, Row, Col } from 'react-bootstrap';
 import FormBox from '../../widgets/FormBox';
 import SubmitButton from '../SubmitButton';
 import LocalizedTextsFormField from '../LocalizedTextsFormField';
@@ -17,7 +17,7 @@ const EditGroupForm = ({
   submitSucceeded = false,
   invalid,
   createNew = false,
-  formValues: { localizedTexts } = {},
+  formValues: { localizedTexts, hasThreshold } = {},
   collapsable = false,
   isOpen = true
 }) =>
@@ -101,46 +101,70 @@ const EditGroupForm = ({
         />
       }
     />
-
-    <Field
-      name="isPublic"
-      tabIndex={4}
-      component={CheckboxField}
-      onOff
-      label={
-        <FormattedMessage
-          id="app.createGroup.isPublic"
-          defaultMessage="Students can join the group themselves"
+    <Row>
+      <Col lg={6}>
+        <Field
+          name="isPublic"
+          tabIndex={4}
+          component={CheckboxField}
+          onOff
+          label={
+            <FormattedMessage
+              id="app.createGroup.isPublic"
+              defaultMessage="Students can join the group themselves"
+            />
+          }
+          required
         />
-      }
-      required
-    />
-
-    <Field
-      name="publicStats"
-      tabIndex={5}
-      component={CheckboxField}
-      onOff
-      label={
-        <FormattedMessage
-          id="app.createGroup.publicStats"
-          defaultMessage="Students can see statistics of each other"
+      </Col>
+      <Col lg={6}>
+        <Field
+          name="publicStats"
+          tabIndex={5}
+          component={CheckboxField}
+          onOff
+          label={
+            <FormattedMessage
+              id="app.createGroup.publicStats"
+              defaultMessage="Students can see statistics of each other"
+            />
+          }
+          required
         />
-      }
-      required
-    />
+      </Col>
+    </Row>
 
-    <Field
-      name="threshold"
-      tabIndex={6}
-      component={TextField}
-      label={
-        <FormattedMessage
-          id="app.createGroup.threshold"
-          defaultMessage="Minimum percent of the total points count needed to complete the course:"
+    <Row>
+      <Col lg={6}>
+        <Field
+          name="hasThreshold"
+          tabIndex={6}
+          component={CheckboxField}
+          onOff
+          label={
+            <FormattedMessage
+              id="app.createGroup.hasThreshold"
+              defaultMessage="Students require cetrain number of points to complete the course"
+            />
+          }
+          required
         />
-      }
-    />
+      </Col>
+      <Col lg={6}>
+        {hasThreshold &&
+          <Field
+            name="threshold"
+            tabIndex={7}
+            component={TextField}
+            label={
+              <FormattedMessage
+                id="app.createGroup.threshold"
+                defaultMessage="Minimum percent of the total points count needed to complete the course:"
+              />
+            }
+          />}
+      </Col>
+    </Row>
   </FormBox>;
 
 EditGroupForm.propTypes = {
@@ -159,13 +183,16 @@ EditGroupForm.propTypes = {
   isOpen: PropTypes.bool
 };
 
-const validate = ({ localizedTexts = [], threshold }) => {
+const validate = ({ localizedTexts = [], hasThreshold, threshold }) => {
   const errors = {};
 
-  if (threshold) {
+  if (hasThreshold) {
     threshold = String(threshold);
     const numericThreshold = Number(threshold);
-    if (threshold !== Math.round(numericThreshold).toString()) {
+    if (
+      isNaN(numericThreshold) ||
+      threshold !== Math.round(numericThreshold).toString()
+    ) {
       errors['threshold'] = (
         <FormattedMessage
           id="app.createGroup.validation.thresholdMustBeInteger"
