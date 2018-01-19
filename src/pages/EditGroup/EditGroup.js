@@ -29,9 +29,20 @@ class EditGroup extends Component {
     }
   };
 
-  getInitialValues = ({ threshold, ...group }) => ({
-    ...group,
-    threshold: String(threshold * 100)
+  getInitialValues = ({
+    localizedTexts,
+    externalId,
+    privateData: { isPublic, publicStats, threshold }
+  }) => ({
+    localizedTexts,
+    externalId,
+    isPublic,
+    publicStats,
+    hasThreshold: threshold !== null && threshold !== undefined,
+    threshold:
+      threshold !== null && threshold !== undefined
+        ? String(Number(threshold) * 100)
+        : '0'
   });
 
   render() {
@@ -151,11 +162,25 @@ export default withLinks(
       push: url => dispatch(push(url)),
       reset: () => dispatch(reset('editGroup')),
       loadAsync: () => dispatch(fetchGroupIfNeeded(groupId)),
-      editGroup: data => {
-        if (data.threshold === null) {
-          delete data.threshold;
+      editGroup: ({
+        localizedTexts,
+        externalId,
+        isPublic,
+        publicStats,
+        threshold,
+        hasThreshold
+      }) => {
+        let transformedData = {
+          localizedTexts,
+          externalId,
+          isPublic,
+          publicStats,
+          hasThreshold
+        };
+        if (hasThreshold) {
+          transformedData.threshold = Number(threshold);
         }
-        return dispatch(editGroup(groupId, data));
+        return dispatch(editGroup(groupId, transformedData));
       }
     })
   )(EditGroup)
