@@ -163,7 +163,6 @@ const validate = ({ isUniform, tests }) => {
     testsErrors[i] = testErrors;
   }
   errors['tests'] = testsErrors;
-
   return errors;
 };
 
