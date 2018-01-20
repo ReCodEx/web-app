@@ -29,16 +29,19 @@ const FilesTable = ({
   uploadId,
   HeaderComponent,
   RowComponent,
-  intl
+  intl,
+  isOpen = true,
+  viewOnly = false
 }) =>
-  <Box title={title} collapsable isOpen unlimitedHeight>
+  <Box title={title} collapsable isOpen={isOpen} unlimitedHeight>
     <div>
       {description &&
         <p>
           {description}
         </p>}
-      <UploadContainer id={uploadId} />
-      {newFiles.size > 0 &&
+      {!viewOnly && <UploadContainer id={uploadId} />}
+      {!viewOnly &&
+        newFiles.size > 0 &&
         <p className="text-center">
           <Button
             bsStyle="success"
@@ -59,7 +62,7 @@ const FilesTable = ({
             {attachments.length > 0 &&
               <Table responsive>
                 <thead>
-                  <HeaderComponent />
+                  <HeaderComponent viewOnly={viewOnly} />
                 </thead>
                 <tbody>
                   {attachments
@@ -69,6 +72,7 @@ const FilesTable = ({
                         {...data}
                         removeFile={removeFile}
                         downloadFile={downloadFile}
+                        viewOnly={viewOnly}
                         key={i}
                       />
                     )}
@@ -107,7 +111,9 @@ FilesTable.propTypes = {
   downloadFile: PropTypes.func,
   HeaderComponent: PropTypes.func.isRequired,
   RowComponent: PropTypes.func.isRequired,
-  intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired
+  intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired,
+  isOpen: PropTypes.bool,
+  viewOnly: PropTypes.bool
 };
 
 export default injectIntl(FilesTable);

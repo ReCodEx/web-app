@@ -25,7 +25,9 @@ const SupplementaryFilesTableContainer = ({
   loadFiles,
   addFiles,
   removeFile,
-  downloadFile
+  downloadFile,
+  viewOnly = false,
+  ...props
 }) =>
   <FilesTableContainer
     uploadId={`supplementary-files-${exercise.id}`}
@@ -48,6 +50,8 @@ const SupplementaryFilesTableContainer = ({
     }
     HeaderComponent={SupplementaryFilesTableHeaderRow}
     RowComponent={SupplementaryFilesTableRow}
+    viewOnly={viewOnly}
+    {...props}
   />;
 
 SupplementaryFilesTableContainer.propTypes = {
@@ -59,7 +63,8 @@ SupplementaryFilesTableContainer.propTypes = {
   loadFiles: PropTypes.func.isRequired,
   addFiles: PropTypes.func.isRequired,
   removeFile: PropTypes.func.isRequired,
-  downloadFile: PropTypes.func.isRequired
+  downloadFile: PropTypes.func.isRequired,
+  viewOnly: PropTypes.bool
 };
 
 export default connect(

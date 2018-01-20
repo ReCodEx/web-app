@@ -13,7 +13,8 @@ const SupplementaryFilesTableRow = ({
   size,
   uploadedAt,
   downloadFile,
-  removeFile
+  removeFile,
+  viewOnly
 }) =>
   <tr>
     <td>
@@ -33,28 +34,29 @@ const SupplementaryFilesTableRow = ({
       &nbsp;
       <FormattedTime value={uploadedAt * 1000} />
     </td>
-    <td>
-      {removeFile &&
-        <Confirm
-          id={id}
-          onConfirmed={() => removeFile(id)}
-          question={
-            <FormattedMessage
-              id="app.supplementaryFiles.deleteConfirm"
-              defaultMessage="Are you sure you want to delete the file? This cannot be undone."
-            />
-          }
-          className="pull-right"
-        >
-          <Button bsSize="xs" className="btn-flat" bsStyle="danger">
-            <DeleteIcon />{' '}
-            <FormattedMessage
-              id="app.supplementaryFiles.deleteButton"
-              defaultMessage="Delete"
-            />
-          </Button>
-        </Confirm>}
-    </td>
+    {!viewOnly &&
+      <td>
+        {removeFile &&
+          <Confirm
+            id={id}
+            onConfirmed={() => removeFile(id)}
+            question={
+              <FormattedMessage
+                id="app.supplementaryFiles.deleteConfirm"
+                defaultMessage="Are you sure you want to delete the file? This cannot be undone."
+              />
+            }
+            className="pull-right"
+          >
+            <Button bsSize="xs" className="btn-flat" bsStyle="danger">
+              <DeleteIcon />{' '}
+              <FormattedMessage
+                id="app.supplementaryFiles.deleteButton"
+                defaultMessage="Delete"
+              />
+            </Button>
+          </Confirm>}
+      </td>}
   </tr>;
 
 SupplementaryFilesTableRow.propTypes = {
@@ -64,7 +66,8 @@ SupplementaryFilesTableRow.propTypes = {
   size: PropTypes.number.isRequired,
   uploadedAt: PropTypes.number.isRequired,
   downloadFile: PropTypes.func,
-  removeFile: PropTypes.func
+  removeFile: PropTypes.func,
+  viewOnly: PropTypes.bool
 };
 
 export default SupplementaryFilesTableRow;
