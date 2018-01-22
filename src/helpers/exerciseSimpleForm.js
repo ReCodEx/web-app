@@ -1,4 +1,6 @@
 import yaml from 'js-yaml';
+import { defaultMemoize } from 'reselect';
+
 import {
   endpointDisguisedAsIdFactory,
   encodeTestId,
@@ -37,23 +39,19 @@ export const getTestsInitValues = (exerciseTests, scoreConfig, locale) => {
   };
 };
 
-export const transformAndSendTestsValues = (
-  formData,
-  editExerciseTests,
-  editExerciseScoreConfig
-) => {
+export const transformTestsValues = formData => {
   const uniformScore =
     formData.isUniform === true || formData.isUniform === 'true';
   let scoreConfigData = {
     testWeights: {}
   };
-  let testsData = [];
+  let tests = [];
 
   for (const test of formData.tests) {
     const testWeight = uniformScore ? 100 : Number(test.weight);
     scoreConfigData.testWeights[test.name] = testWeight;
 
-    testsData.push(
+    tests.push(
       test.id
         ? {
             id: test.id,
@@ -65,14 +63,10 @@ export const transformAndSendTestsValues = (
     );
   }
 
-  return Promise.all([
-    editExerciseTests({
-      tests: testsData
-    }),
-    editExerciseScoreConfig({
-      scoreConfig: yaml.safeDump(scoreConfigData)
-    })
-  ]);
+  return {
+    tests,
+    scoreConfig: yaml.safeDump(scoreConfigData)
+  };
 };
 
 /*
@@ -201,7 +195,7 @@ const getSimpleConfigSimpleVariable = (variables, testObj, variableName) => {
 };
 
 // Prepare the initial form data for configuration form ...
-export const getSimpleConfigInitValues = (config, tests) => {
+export const getSimpleConfigInitValues = defaultMemoize((config, tests) => {
   const confTests =
     tests && config[0] && config[0].tests ? config[0].tests : [];
 
@@ -247,7 +241,7 @@ export const getSimpleConfigInitValues = (config, tests) => {
   return {
     config: res
   };
-};
+});
 
 // Prepare one variable to be sent in to the API
 const transformConfigSimpleVariable = (variables, name, value) => {
@@ -321,13 +315,12 @@ const _safeGet = (obj, path) => {
   return obj;
 };
 
-export const transformAndSendConfigValues = (
+export const transformConfigValues = (
   formData,
   pipelines,
   environments,
   tests,
-  originalConfig,
-  setConfig
+  originalConfig
 ) => {
   let envs = [];
   for (const environment of environments) {
@@ -340,6 +333,7 @@ export const transformAndSendConfigValues = (
     const compilationPipeline = envPipelines.find(
       pipeline => pipeline.parameters.isCompilationPipeline
     );
+
     const executionPipelineStdout = envPipelines.find(
       pipeline =>
         pipeline.parameters.isExecutionPipeline &&
@@ -403,51 +397,46 @@ export const transformAndSendConfigValues = (
     });
   }
 
-  return setConfig({
-    config: envs
-  });
+  return { config: envs };
 };
 
 /*
  * Memory and Time limits
  */
-export const getLimitsInitValues = (
-  limits,
-  tests,
-  environments,
-  exerciseId
-) => {
-  let res = {};
+export const getLimitsInitValues = defaultMemoize(
+  (limits, tests, environments, exerciseId) => {
+    let res = {};
 
-  tests.forEach(test => {
-    const testEnc = encodeTestId(test.id);
-    res[testEnc] = {};
-    environments.forEach(environment => {
-      const envId = encodeEnvironmentId(environment.id);
-      let lim = limits.getIn([
-        endpointDisguisedAsIdFactory({
-          exerciseId,
-          runtimeEnvironmentId: environment.id
-        }),
-        'data',
-        String(test.id)
-      ]);
-      if (lim) {
-        lim = lim.toJS();
-      }
+    tests.forEach(test => {
+      const testEnc = encodeTestId(test.id);
+      res[testEnc] = {};
+      environments.forEach(environment => {
+        const envId = encodeEnvironmentId(environment.id);
+        let lim = limits.getIn([
+          endpointDisguisedAsIdFactory({
+            exerciseId,
+            runtimeEnvironmentId: environment.id
+          }),
+          'data',
+          String(test.id)
+        ]);
+        if (lim) {
+          lim = lim.toJS();
+        }
 
-      res[testEnc][envId] = {
-        memory: lim ? String(lim.memory) : '0',
-        time: lim ? String(lim['wall-time']) : '0'
-      };
+        res[testEnc][envId] = {
+          memory: lim ? String(lim.memory) : '0',
+          time: lim ? String(lim['wall-time']) : '0'
+        };
+      });
     });
-  });
 
-  return {
-    limits: res,
-    preciseTime: true
-  };
-};
+    return {
+      limits: res,
+      preciseTime: true
+    };
+  }
+);
 
 const transformLimitsObject = ({ memory, time }, timeField = 'wall-time') => {
   let res = {
@@ -462,23 +451,16 @@ const transformLimitsObject = ({ memory, time }, timeField = 'wall-time') => {
  * The data have to be re-assembled, since they use different format and keys are encoded.
  * The dispatching function is invoked for every environment and all promise is returned.
  */
-export const transformAndSendLimitsValues = (
-  formData,
-  tests,
-  runtimeEnvironments,
-  editEnvironmentSimpleLimits
-) =>
-  Promise.all(
-    runtimeEnvironments.map(environment => {
-      const envId = encodeEnvironmentId(environment.id);
-      const data = {
-        limits: tests.reduce((acc, test) => {
-          acc[test.id] = transformLimitsObject(
-            formData.limits[encodeTestId(test.id)][envId]
-          );
-          return acc;
-        }, {})
-      };
-      return editEnvironmentSimpleLimits(environment.id, data);
-    })
-  );
+export const transformLimitsValues = (formData, tests, runtimeEnvironments) =>
+  runtimeEnvironments.map(environment => {
+    const envId = encodeEnvironmentId(environment.id);
+    const data = {
+      limits: tests.reduce((acc, test) => {
+        acc[test.id] = transformLimitsObject(
+          formData.limits[encodeTestId(test.id)][envId]
+        );
+        return acc;
+      }, {})
+    };
+    return { id: environment.id, data };
+  });

@@ -17,7 +17,7 @@ import {
 } from '../../redux/modules/supplementaryFiles';
 import { downloadSupplementaryFile } from '../../redux/modules/files';
 
-import { createGetSupplementaryFiles } from '../../redux/selectors/supplementaryFiles';
+import { getSupplementaryFilesForExercise } from '../../redux/selectors/supplementaryFiles';
 
 const SupplementaryFilesTableContainer = ({
   exercise,
@@ -64,11 +64,8 @@ SupplementaryFilesTableContainer.propTypes = {
 
 export default connect(
   (state, { exercise }) => {
-    const getSupplementaryFilesForExercise = createGetSupplementaryFiles(
-      exercise.supplementaryFilesIds
-    );
     return {
-      supplementaryFiles: getSupplementaryFilesForExercise(state)
+      supplementaryFiles: getSupplementaryFilesForExercise(exercise.id)(state)
     };
   },
   (dispatch, { exercise }) => ({

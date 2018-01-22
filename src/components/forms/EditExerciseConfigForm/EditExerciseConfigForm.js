@@ -11,7 +11,7 @@ import Box from '../../../components/widgets/Box';
 import SubmitButton from '../SubmitButton';
 import EditExerciseConfigEnvironment from './EditExerciseConfigEnvironment';
 import { fetchSupplementaryFilesForExercise } from '../../../redux/modules/supplementaryFiles';
-import { createGetSupplementaryFiles } from '../../../redux/selectors/supplementaryFiles';
+import { getSupplementaryFilesForExercise } from '../../../redux/selectors/supplementaryFiles';
 import { getVariablesForPipelines } from '../../../redux/modules/exercises';
 
 class EditExerciseConfigForm extends Component {
@@ -327,11 +327,8 @@ const validate = ({ config }) => {
 
 const ConnectedEditExerciseConfigForm = connect(
   (state, { exercise }) => {
-    const getSupplementaryFilesForExercise = createGetSupplementaryFiles(
-      exercise.supplementaryFilesIds
-    );
     return {
-      supplementaryFiles: getSupplementaryFilesForExercise(state),
+      supplementaryFiles: getSupplementaryFilesForExercise(exercise.id)(state),
       formValues: getFormValues('editExerciseConfig')(state)
     };
   },

@@ -1,5 +1,6 @@
-import { createSelector } from 'reselect';
+import { createSelector, defaultMemoize } from 'reselect';
 import { isReady } from '../helpers/resourceManager';
+import { getExercise } from './exercises';
 
 const getSupplementaryFiles = state => state.supplementaryFiles;
 export const getSupplementaryFile = id =>
@@ -16,3 +17,19 @@ export const createGetSupplementaryFiles = ids =>
       .filter(isReady)
       .filter(file => ids.indexOf(file.getIn(['data', 'id'])) >= 0)
   );
+
+export const getSupplementaryFilesForExercise = defaultMemoize(exerciseId =>
+  createSelector(
+    [getExercise(exerciseId), supplementaryFilesSelector],
+    (exercise, supplementaryFiles) => {
+      const ids = exercise && exercise.getIn(['data', 'supplementaryFilesIds']);
+      return (
+        ids &&
+        supplementaryFiles &&
+        supplementaryFiles
+          .filter(isReady)
+          .filter(file => ids.indexOf(file.getIn(['data', 'id'])) >= 0)
+      );
+    }
+  )
+);

@@ -9,15 +9,9 @@
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" type="image/png" href="/public/favicon.ico" />
         <style type="text/css">
-          @font-face {
-            font-family: termcyr;
-            src: url("/public/term_cyr.ttf");
-            font-display: block;
-          }
-
           #loading-screen {
-            font-family: termcyr, Verdana, Geneva, Tahoma, sans-serif;
-            font-size: 24pt;
+            font-family: Helvetica, Arial, sans-serif;
+            font-size: 32pt;
             font-variant: small-caps;
             position: fixed;
             top: 0;
@@ -52,7 +46,9 @@
 </head>
 
 <body class="loading">
-  <div id="loading-screen">Loading...</div>
+  <div id="loading-screen">
+    <%= ((new Date()).getMonth() === 3 && (new Date()).getDate() === 1) ? 'Loudím' : 'Loading' %>...
+  </div>
 
   <div id="root">
     <%- html %>
