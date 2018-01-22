@@ -72,8 +72,13 @@ export const transformTestsValues = formData => {
 /*
  * Environments
  */
-export const getEnvInitValues = environmentConfigs => {
+export const getEnvInitValues = (environmentConfigs, environments) => {
   let res = {};
+  // all environments
+  for (const env of environments) {
+    res[env.id] = false; // make sure we have all the environments set
+  }
+  // only environments in the config
   for (const env of environmentConfigs) {
     res[env.runtimeEnvironmentId] = true;
   }
@@ -406,6 +411,8 @@ export const transformConfigValues = (
 export const getLimitsInitValues = defaultMemoize(
   (limits, tests, environments, exerciseId) => {
     let res = {};
+    let wallTimeCount = 0;
+    let cpuTimeCount = 0;
 
     tests.forEach(test => {
       const testEnc = encodeTestId(test.id);
@@ -424,16 +431,40 @@ export const getLimitsInitValues = defaultMemoize(
           lim = lim.toJS();
         }
 
+        // Prepare time object and aggregate data for heuristics ...
+        const time = {};
+        if (lim && lim['wall-time']) {
+          time['wall-time'] = String(lim['wall-time']);
+          ++wallTimeCount;
+        }
+        if (lim && lim['cpu-time']) {
+          time['cpu-time'] = String(lim['cpu-time']);
+          ++cpuTimeCount;
+        }
         res[testEnc][envId] = {
           memory: lim ? String(lim.memory) : '0',
-          time: lim ? String(lim['wall-time']) : '0'
+          time
         };
       });
     });
 
+    // Use heuristics to decide, which time will be used, and postprocess the data
+    const preciseTime = cpuTimeCount >= wallTimeCount;
+    const primaryTime = preciseTime ? 'cpu-time' : 'wall-time';
+    const secondaryTime = preciseTime ? 'wall-time' : 'cpu-time';
+    for (const testEnc in res) {
+      for (const envId in res[testEnc]) {
+        const time = res[testEnc][envId].time;
+        res[testEnc][envId].time =
+          time[primaryTime] !== undefined
+            ? time[primaryTime]
+            : time[secondaryTime] !== undefined ? time[secondaryTime] : '0';
+      }
+    }
+
     return {
       limits: res,
-      preciseTime: true
+      preciseTime
     };
   }
 );
@@ -457,7 +488,8 @@ export const transformLimitsValues = (formData, tests, runtimeEnvironments) =>
     const data = {
       limits: tests.reduce((acc, test) => {
         acc[test.id] = transformLimitsObject(
-          formData.limits[encodeTestId(test.id)][envId]
+          formData.limits[encodeTestId(test.id)][envId],
+          formData.preciseTime ? 'cpu-time' : 'wall-time'
         );
         return acc;
       }, {})

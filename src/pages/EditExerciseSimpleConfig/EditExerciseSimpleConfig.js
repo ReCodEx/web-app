@@ -279,7 +279,8 @@ class EditExerciseSimpleConfig extends Component {
                               {environments =>
                                 <EditEnvironmentSimpleForm
                                   initialValues={getEnvInitValues(
-                                    environmentConfigs
+                                    environmentConfigs,
+                                    environments
                                   )}
                                   runtimeEnvironments={environments}
                                   onSubmit={this.transformAndSendEnvValues(

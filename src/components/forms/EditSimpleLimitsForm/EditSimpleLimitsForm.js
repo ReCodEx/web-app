@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import { Alert, Table, OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { Alert, Table, Row, Col } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { reduxForm, Field } from 'redux-form';
+import Icon from 'react-fontawesome';
 
 import { EditSimpleLimitsField, CheckboxField } from '../Fields';
 import SubmitButton from '../SubmitButton';
@@ -108,39 +109,34 @@ class EditSimpleLimitsForm extends Component {
               defaultMessage="Cannot save the exercise limits. Please try again later."
             />
           </Alert>}
-        <OverlayTrigger
-          placement="right"
-          delayHide={5000}
-          overlay={
-            <Tooltip id="preciseTime-comment">
-              <FormattedMessage
-                id="app.editSimpleLimitsForm.preciseTimeTooltip"
-                defaultMessage="If precise time measurement is selected, ReCodEx will measure the consumed CPU time of tested soltions. Otherwise, the wall time will be measured. CPU is better in cases when serial time complexity of the solution is tested and tight time limits are set. Wall time is better in general cases as it better reflects the actual time consumed by the solution (indcluing I/O), but it is more susceptible to errors of measurement."
+        <Row>
+          <Col lg={3}>
+            <div className={styles.preciseTime}>
+              <Field
+                name="preciseTime"
+                component={CheckboxField}
+                onOff
+                label={
+                  <FormattedMessage
+                    id="app.editSimpleLimitsForm.preciseTime"
+                    defaultMessage="Precise Time Measurement"
+                  />
+                }
               />
-            </Tooltip>
-          }
-        >
-          <div
-            style={{
-              marginLeft: '15px',
-              paddingTop: '15px',
-              paddingBottom: '-15px',
-              display: 'inline-block'
-            }}
-          >
-            <Field
-              name="preciseTime"
-              component={CheckboxField}
-              onOff
-              label={
+            </div>
+          </Col>
+          <Col lg={9}>
+            <div>
+              <p className={styles.preciseTimeTooltip}>
+                <Icon name="info-circle" style={{ marginRight: '1em' }} />
                 <FormattedMessage
-                  id="app.editSimpleLimitsForm.preciseTime"
-                  defaultMessage="Precise Time Measurement"
+                  id="app.editSimpleLimitsForm.preciseTimeTooltip"
+                  defaultMessage="If precise time measurement is selected, ReCodEx will measure the consumed CPU time of tested soltions. Otherwise, the wall time will be measured. CPU is better in cases when serial time complexity of the solution is tested and tight time limits are set. Wall time is better in general cases as it better reflects the actual time consumed by the solution (indcluing I/O), but it is more susceptible to errors of measurement."
                 />
-              }
-            />
-          </div>
-        </OverlayTrigger>
+              </p>
+            </div>
+          </Col>
+        </Row>
         <Table striped>
           <thead>
             <tr>
