@@ -63,6 +63,7 @@ import {
 } from '../../redux/selectors/groups';
 
 import withLinks from '../../hoc/withLinks';
+import SupplementaryFilesTableContainer from '../../containers/SupplementaryFilesTableContainer/SupplementaryFilesTableContainer';
 
 const messages = defineMessages({
   groupsBox: {
@@ -418,6 +419,13 @@ class Exercise extends Component {
                           </p>}
                   </ResourceRenderer>
                 </Box>
+              </Col>
+              <Col lg={6}>
+                <SupplementaryFilesTableContainer
+                  isOpen={false}
+                  viewOnly={true}
+                  exercise={exercise}
+                />
               </Col>
             </Row>
             <SubmitSolutionContainer
