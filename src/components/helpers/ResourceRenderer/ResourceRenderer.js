@@ -74,12 +74,18 @@ class ResourceRenderer extends Component {
       this.oldResources === null ||
       !shallowResourcesEqual(this.oldResources, resources)
     ) {
-      this.oldResources = resources;
       this.oldData = resources
         .filter(res => !isDeleting(res))
         .filter(res => !isDeleted(res))
         .filter(res => !isPosting(res))
-        .map(getJsData);
+        .map(
+          (res, idx) =>
+            // If a particular resource did not change, re-use its old data
+            this.oldResources && this.oldResources[idx] === res
+              ? this.oldData[idx]
+              : getJsData(res)
+        );
+      this.oldResources = resources;
     }
     return returnAsArray ? ready(this.oldData) : ready(...this.oldData);
   };
@@ -89,7 +95,6 @@ class ResourceRenderer extends Component {
       noIcons = false,
       loading = defaultLoading(noIcons),
       failed = defaultFailed(noIcons),
-      //      children: ready,
       resource,
       hiddenUntilReady = false,
       forceLoading = false
