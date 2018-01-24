@@ -1,12 +1,15 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage } from 'react-intl';
-import Icon from 'react-fontawesome';
-import Button from '../../widgets/FlatButton';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import { LinkContainer } from 'react-router-bootstrap';
+import Icon from 'react-fontawesome';
+
+import Button from '../../widgets/FlatButton';
 import { TreeView, TreeViewItem } from '../../widgets/TreeView';
 import { isReady, getJsData } from '../../../redux/helpers/resourceManager';
 import GroupsName from '../GroupsName';
+import { computeVisibleGroupsMap } from '../../helpers/group.js';
+import { getLocalizedResourceName } from '../../../helpers/getLocalizedData';
 
 import withLinks from '../../../hoc/withLinks';
 
@@ -42,6 +45,33 @@ class GroupTree extends Component {
     );
   };
 
+  renderChildGroups = (
+    { all: allChildGroups, public: publicChildGroups },
+    visibleGroupsMap
+  ) => {
+    const { level = 0, isOpen = false, groups, intl: { locale } } = this.props;
+    return allChildGroups
+      .filter(id => visibleGroupsMap[id])
+      .sort((id1, id2) => {
+        const name1 = getLocalizedResourceName(groups.get(id1), locale);
+        const name2 = getLocalizedResourceName(groups.get(id2), locale);
+        return name1 !== undefined && name2 !== undefined
+          ? name1.localeCompare(name2, locale)
+          : 0;
+      })
+      .map(id =>
+        <GroupTree
+          {...this.props}
+          key={id}
+          id={id}
+          isOpen={level !== 0 || isOpen}
+          level={level + 1}
+          isPublic={publicChildGroups.indexOf(id) >= 0}
+          visibleGroupsMap={visibleGroupsMap}
+        />
+      );
+  };
+
   render() {
     const {
       id,
@@ -50,6 +80,7 @@ class GroupTree extends Component {
       isPublic = true,
       groups,
       currentGroupId = null,
+      visibleGroupsMap = null,
       links: { GROUP_URI_FACTORY }
     } = this.props;
 
@@ -62,9 +93,14 @@ class GroupTree extends Component {
       name,
       localizedTexts,
       canView,
-      childGroups: { all: allChildGroups, public: publicChildGroups },
+      childGroups,
       primaryAdminsIds
     } = getJsData(group);
+
+    const actualVisibleGroupsMap =
+      visibleGroupsMap !== null
+        ? visibleGroupsMap
+        : computeVisibleGroupsMap(groups);
 
     return (
       <TreeView>
@@ -78,8 +114,10 @@ class GroupTree extends Component {
                 noLink
               />
             }
+            id={id}
             level={level}
             admins={primaryAdminsIds}
+            isPublic={isPublic}
             isOpen={currentGroupId === id || isOpen}
             actions={
               currentGroupId !== id && canView
@@ -87,27 +125,10 @@ class GroupTree extends Component {
                 : undefined
             }
           >
-            {allChildGroups.map(id =>
-              <GroupTree
-                {...this.props}
-                key={id}
-                id={id}
-                isOpen={true}
-                level={level + 1}
-                isPublic={publicChildGroups.indexOf(id) >= 0}
-              />
-            )}
+            {this.renderChildGroups(childGroups, actualVisibleGroupsMap)}
           </TreeViewItem>}
         {level === 0 &&
-          allChildGroups.map(id =>
-            <GroupTree
-              {...this.props}
-              key={id}
-              id={id}
-              level={level + 1}
-              isPublic={publicChildGroups.indexOf(id) >= 0}
-            />
-          )}
+          this.renderChildGroups(childGroups, actualVisibleGroupsMap)}
       </TreeView>
     );
   }
@@ -120,7 +141,9 @@ GroupTree.propTypes = {
   isOpen: PropTypes.bool,
   isPublic: PropTypes.bool,
   currentGroupId: PropTypes.string,
-  links: PropTypes.object
+  visibleGroupsMap: PropTypes.object,
+  links: PropTypes.object,
+  intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired
 };
 
-export default withLinks(GroupTree);
+export default withLinks(injectIntl(GroupTree));

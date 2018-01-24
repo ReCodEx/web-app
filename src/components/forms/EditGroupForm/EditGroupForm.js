@@ -111,7 +111,7 @@ const EditGroupForm = ({
           label={
             <FormattedMessage
               id="app.createGroup.isPublic"
-              defaultMessage="Students can join the group themselves"
+              defaultMessage="Public (everyone can see and join this group)"
             />
           }
           required

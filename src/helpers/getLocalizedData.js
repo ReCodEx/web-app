@@ -5,8 +5,20 @@ const getLocalizedX = field => (entity, locale) => {
   return localizedText ? localizedText[field] : entity[field];
 };
 
+const getLocalizedResourceX = field => (resource, locale) => {
+  const localizedTexts = resource && resource.getIn(['data', 'localizedTexts']);
+  const localizedText =
+    localizedTexts &&
+    localizedTexts.find(text => text.get('locale') === locale);
+  return localizedText
+    ? localizedText.get(field)
+    : resource ? resource.getIn(['data', field]) : undefined;
+};
+
 export const getLocalizedName = getLocalizedX('name');
 export const getLocalizedDescription = getLocalizedX('description');
+
+export const getLocalizedResourceName = getLocalizedResourceX('name');
 
 export const getOtherLocalizedNames = (entity, locale) => {
   const name = getLocalizedName(entity, locale);

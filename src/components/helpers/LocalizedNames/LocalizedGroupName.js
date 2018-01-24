@@ -28,7 +28,7 @@ const LocalizedGroupName = ({ entity, intl: { locale } }) => {
               </Tooltip>
             }
           >
-            <Icon name="flag-o" className="text-black" />
+            <Icon name="flag-o" className="text-muted" />
           </OverlayTrigger>&nbsp;
         </span>}
     </span>
