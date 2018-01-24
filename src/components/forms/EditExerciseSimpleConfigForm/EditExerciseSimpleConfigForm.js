@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { reduxForm, getFormValues } from 'redux-form';
@@ -13,122 +13,129 @@ import SubmitButton from '../SubmitButton';
 import ResourceRenderer from '../../helpers/ResourceRenderer';
 
 import EditExerciseSimpleConfigTest from './EditExerciseSimpleConfigTest';
-import { createGetSupplementaryFiles } from '../../../redux/selectors/supplementaryFiles';
+import { getSupplementaryFilesForExercise } from '../../../redux/selectors/supplementaryFiles';
 import { encodeTestId } from '../../../redux/modules/simpleLimits';
 import { smartFillExerciseConfigForm } from '../../../redux/modules/exerciseConfigs';
 import { exerciseConfigFormErrors } from '../../../redux/selectors/exerciseConfigs';
 
-const EditExerciseSimpleConfigForm = ({
-  reset,
-  handleSubmit,
-  submitting,
-  submitFailed,
-  submitSucceeded,
-  invalid,
-  dirty,
-  formValues,
-  formErrors,
-  supplementaryFiles,
-  exerciseTests,
-  smartFill,
-  intl: { locale }
-}) =>
-  <FormBox
-    title={
-      <FormattedMessage
-        id="app.editExercise.editConfig"
-        defaultMessage="Edit exercise configuration"
-      />
-    }
-    unlimitedHeight
-    noPadding
-    success={submitSucceeded}
-    dirty={dirty}
-    footer={
-      <div className="text-center">
-        {dirty &&
-          <span>
-            <Button
-              type="reset"
-              onClick={reset}
-              bsStyle={'danger'}
-              className="btn-flat"
-            >
-              <RefreshIcon /> &nbsp;
-              <FormattedMessage
-                id="app.editExerciseSimpleConfigForm.reset"
-                defaultMessage="Reset"
-              />
-            </Button>{' '}
-          </span>}
+class EditExerciseSimpleConfigForm extends Component {
+  render() {
+    const {
+      reset,
+      handleSubmit,
+      submitting,
+      submitFailed,
+      submitSucceeded,
+      invalid,
+      dirty,
+      formValues,
+      formErrors,
+      supplementaryFiles,
+      exerciseTests,
+      smartFill,
+      intl: { locale }
+    } = this.props;
 
-        <SubmitButton
-          id="editExerciseSimpleConfig"
-          invalid={invalid}
-          submitting={submitting}
-          dirty={dirty}
-          hasSucceeded={submitSucceeded}
-          hasFailed={submitFailed}
-          handleSubmit={handleSubmit}
-          messages={{
-            submit: (
-              <FormattedMessage
-                id="app.editExerciseSimpleConfigForm.submit"
-                defaultMessage="Save Configuration"
-              />
-            ),
-            submitting: (
-              <FormattedMessage
-                id="app.editExerciseSimpleConfigForm.submitting"
-                defaultMessage="Saving Configuration ..."
-              />
-            ),
-            success: (
-              <FormattedMessage
-                id="app.editExerciseSimpleConfigForm.success"
-                defaultMessage="Configuration Saved."
-              />
-            ),
-            validating: (
-              <FormattedMessage
-                id="app.editExerciseSimpleConfigForm.validating"
-                defaultMessage="Validating ..."
-              />
-            )
-          }}
-        />
-      </div>
-    }
-  >
-    {submitFailed &&
-      <Alert bsStyle="danger">
-        <FormattedMessage
-          id="app.editExerciseConfigForm.failed"
-          defaultMessage="Saving failed. Please try again later."
-        />
-      </Alert>}
-    <ResourceRenderer resource={supplementaryFiles.toArray()}>
-      {(...files) =>
-        <div>
-          {exerciseTests
-            .sort((a, b) => a.name.localeCompare(b.name, locale))
-            .map((test, idx) =>
-              <EditExerciseSimpleConfigTest
-                key={idx}
-                formValues={formValues}
-                supplementaryFiles={files}
-                testName={test.name}
-                test={'config.' + encodeTestId(test.id)}
-                testId={test.id}
-                testKey={encodeTestId(test.id)}
-                testIndex={idx}
-                testErrors={formErrors && formErrors[encodeTestId(test.id)]}
-                smartFill={smartFill(test.id, exerciseTests, files)}
-              />
-            )}
-        </div>}
-    </ResourceRenderer>
-  </FormBox>;
+    return (
+      <FormBox
+        title={
+          <FormattedMessage
+            id="app.editExercise.editConfig"
+            defaultMessage="Edit exercise configuration"
+          />
+        }
+        unlimitedHeight
+        noPadding
+        success={submitSucceeded}
+        dirty={dirty}
+        footer={
+          <div className="text-center">
+            {dirty &&
+              <span>
+                <Button
+                  type="reset"
+                  onClick={reset}
+                  bsStyle={'danger'}
+                  className="btn-flat"
+                >
+                  <RefreshIcon /> &nbsp;
+                  <FormattedMessage
+                    id="app.editExerciseSimpleConfigForm.reset"
+                    defaultMessage="Reset"
+                  />
+                </Button>{' '}
+              </span>}
+
+            <SubmitButton
+              id="editExerciseSimpleConfig"
+              invalid={invalid}
+              submitting={submitting}
+              dirty={dirty}
+              hasSucceeded={submitSucceeded}
+              hasFailed={submitFailed}
+              handleSubmit={handleSubmit}
+              messages={{
+                submit: (
+                  <FormattedMessage
+                    id="app.editExerciseSimpleConfigForm.submit"
+                    defaultMessage="Save Configuration"
+                  />
+                ),
+                submitting: (
+                  <FormattedMessage
+                    id="app.editExerciseSimpleConfigForm.submitting"
+                    defaultMessage="Saving Configuration ..."
+                  />
+                ),
+                success: (
+                  <FormattedMessage
+                    id="app.editExerciseSimpleConfigForm.success"
+                    defaultMessage="Configuration Saved."
+                  />
+                ),
+                validating: (
+                  <FormattedMessage
+                    id="app.editExerciseSimpleConfigForm.validating"
+                    defaultMessage="Validating ..."
+                  />
+                )
+              }}
+            />
+          </div>
+        }
+      >
+        {submitFailed &&
+          <Alert bsStyle="danger">
+            <FormattedMessage
+              id="app.editExerciseConfigForm.failed"
+              defaultMessage="Saving failed. Please try again later."
+            />
+          </Alert>}
+        <ResourceRenderer resource={supplementaryFiles.toArray()}>
+          {(...files) =>
+            <div>
+              {exerciseTests
+                .sort((a, b) => a.name.localeCompare(b.name, locale))
+                .map((test, idx) =>
+                  <EditExerciseSimpleConfigTest
+                    key={idx}
+                    formValues={formValues}
+                    supplementaryFiles={files}
+                    testName={test.name}
+                    test={'config.' + encodeTestId(test.id)}
+                    testId={test.id}
+                    testKey={encodeTestId(test.id)}
+                    testIndex={idx}
+                    testErrors={formErrors && formErrors[encodeTestId(test.id)]}
+                    smartFill={smartFill(test.id, exerciseTests, files)}
+                  />
+                )}
+            </div>}
+        </ResourceRenderer>
+      </FormBox>
+    );
+  }
+}
 
 EditExerciseSimpleConfigForm.propTypes = {
   initialValues: PropTypes.object,
@@ -197,34 +204,29 @@ const validate = formData => {
     : undefined;
 };
 
-export default injectIntl(
-  connect(
-    (state, { exercise }) => {
-      const getSupplementaryFilesForExercise = createGetSupplementaryFiles(
-        exercise.supplementaryFilesIds
-      );
-      return {
-        supplementaryFiles: getSupplementaryFilesForExercise(state),
-        formValues: getFormValues(FORM_NAME)(state),
-        formErrors: exerciseConfigFormErrors(state, FORM_NAME)
-      };
-    },
-    dispatch => ({
-      smartFill: (testId, tests, files) => () =>
-        dispatch(smartFillExerciseConfigForm(FORM_NAME, testId, tests, files))
-    })
-  )(
-    reduxForm({
-      form: FORM_NAME,
-      enableReinitialize: true,
-      keepDirtyOnReinitialize: false,
-      immutableProps: [
-        'formValues',
-        'supplementaryFiles',
-        'exerciseTests',
-        'handleSubmit'
-      ],
-      validate
-    })(EditExerciseSimpleConfigForm)
-  )
+export default connect(
+  (state, { exercise }) => {
+    return {
+      supplementaryFiles: getSupplementaryFilesForExercise(exercise.id)(state),
+      formValues: getFormValues(FORM_NAME)(state),
+      formErrors: exerciseConfigFormErrors(state, FORM_NAME)
+    };
+  },
+  dispatch => ({
+    smartFill: (testId, tests, files) => () =>
+      dispatch(smartFillExerciseConfigForm(FORM_NAME, testId, tests, files))
+  })
+)(
+  reduxForm({
+    form: FORM_NAME,
+    enableReinitialize: true,
+    keepDirtyOnReinitialize: false,
+    immutableProps: [
+      'formValues',
+      'supplementaryFiles',
+      'exerciseTests',
+      'handleSubmit'
+    ],
+    validate
+  })(injectIntl(EditExerciseSimpleConfigForm))
 );

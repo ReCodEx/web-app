@@ -181,7 +181,7 @@ const EditSimpleLimitsField = ({
         <table>
           <tbody>
             <Field
-              name={`${prefix}.wall-time`}
+              name={`${prefix}.time`}
               component={LimitsValueField}
               prettyPrint={prettyPrintMsWrap}
               validate={validateTime}
@@ -207,17 +207,14 @@ const EditSimpleLimitsField = ({
                       </Tooltip>
                     }
                   >
-                    <FlatButton
-                      onClick={cloneVertically('wall-time')}
-                      bsSize="xs"
-                    >
+                    <FlatButton onClick={cloneVertically('time')} bsSize="xs">
                       <Icon name="arrows-v" />
                     </FlatButton>
                   </OverlayTrigger>}
                 {environmentsCount > 1 &&
                   <Confirm
-                    id={`confirm.${id}.wall-time.horizontal`}
-                    onConfirmed={cloneHorizontally('wall-time')}
+                    id={`confirm.${id}.time.horizontal`}
+                    onConfirmed={cloneHorizontally('time')}
                     question={
                       <FormattedMessage
                         id="app.EditLimitsForm.cloneHorizontal.yesNoQuestion"
@@ -244,8 +241,8 @@ const EditSimpleLimitsField = ({
                 {testsCount > 1 &&
                   environmentsCount > 1 &&
                   <Confirm
-                    id={`confirm.${id}.wall-time.all`}
-                    onConfirmed={cloneAll('wall-time')}
+                    id={`confirm.${id}.time.all`}
+                    onConfirmed={cloneAll('time')}
                     question={
                       <FormattedMessage
                         id="app.EditLimitsForm.cloneAll.yesNoQuestion"

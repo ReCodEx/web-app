@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { List } from 'immutable';
@@ -31,6 +31,20 @@ const defaultFailed = noIcons =>
     />
   </span>;
 
+const shallowResourcesEqual = (oldResources, newResources) => {
+  if (oldResources.length !== newResources.length) {
+    return false;
+  }
+
+  // Ah, finally, some old-school for-loops...
+  for (let i = 0; i < oldResources.length; ++i) {
+    if (oldResources[i] !== newResources[i]) {
+      return false;
+    }
+  }
+  return true;
+};
+
 /**
  * ResourceRenderer component is given a resource managed by the resourceManager
  * as a prop and displays different content based on the state of the given
@@ -46,34 +60,62 @@ const defaultFailed = noIcons =>
  * When all the files are fully loaded then the component displays the content
  * for the loaded state.
  */
-const ResourceRenderer = ({
-  noIcons = false,
-  loading = defaultLoading(noIcons),
-  failed = defaultFailed(noIcons),
-  children: ready,
-  resource,
-  hiddenUntilReady = false,
-  forceLoading = false
-}) => {
-  const resources =
-    List.isList(resource) || Array.isArray(resource) ? resource : [resource];
-  const stillLoading =
-    !resource ||
-    resources.find(res => !res) ||
-    resources.some(isLoading) ||
-    forceLoading;
-  return stillLoading
-    ? hiddenUntilReady ? null : loading
-    : resources.some(hasFailed)
-      ? hiddenUntilReady ? null : failed
-      : ready(
-          ...resources
-            .filter(res => !isDeleting(res))
-            .filter(res => !isDeleted(res))
-            .filter(res => !isPosting(res))
-            .map(getJsData)
-        ); // display all ready items
-};
+class ResourceRenderer extends Component {
+  componentWillMount = () => {
+    // Reset caching variables ...
+    this.oldResources = null;
+    this.oldData = null;
+  };
+
+  // Perform rendering of the childs whilst keeping resource data cached ...
+  renderReady = resources => {
+    const { children: ready, returnAsArray = false } = this.props;
+    if (
+      this.oldResources === null ||
+      !shallowResourcesEqual(this.oldResources, resources)
+    ) {
+      this.oldData = resources
+        .filter(res => !isDeleting(res))
+        .filter(res => !isDeleted(res))
+        .filter(res => !isPosting(res))
+        .map(
+          (res, idx) =>
+            // If a particular resource did not change, re-use its old data
+            this.oldResources && this.oldResources[idx] === res
+              ? this.oldData[idx]
+              : getJsData(res)
+        );
+      this.oldResources = resources;
+    }
+    return returnAsArray ? ready(this.oldData) : ready(...this.oldData);
+  };
+
+  render() {
+    const {
+      noIcons = false,
+      loading = defaultLoading(noIcons),
+      failed = defaultFailed(noIcons),
+      resource,
+      hiddenUntilReady = false,
+      forceLoading = false
+    } = this.props;
+
+    const resources = Array.isArray(resource)
+      ? resource
+      : List.isList(resource) ? resource.toArray() : [resource];
+    const stillLoading =
+      !resource ||
+      resources.find(res => !res) ||
+      resources.some(isLoading) ||
+      forceLoading;
+
+    return stillLoading
+      ? hiddenUntilReady ? null : loading
+      : resources.some(hasFailed)
+        ? hiddenUntilReady ? null : failed
+        : this.renderReady(resources);
+  }
+}
 
 ResourceRenderer.propTypes = {
   loading: PropTypes.element,
@@ -86,7 +128,8 @@ ResourceRenderer.propTypes = {
   ]),
   hiddenUntilReady: PropTypes.bool,
   forceLoading: PropTypes.bool,
-  noIcons: PropTypes.bool
+  noIcons: PropTypes.bool,
+  returnAsArray: PropTypes.bool
 };
 
 export default ResourceRenderer;

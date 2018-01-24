@@ -4,6 +4,7 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { Row, Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
+import { defaultMemoize } from 'reselect';
 
 import Page from '../../components/layout/Page';
 import Box from '../../components/widgets/Box';
@@ -64,18 +65,19 @@ import {
   getEnvInitValues,
   transformEnvValues,
   getTestsInitValues,
-  transformAndSendTestsValues,
+  transformTestsValues,
   getSimpleConfigInitValues,
-  transformAndSendConfigValues,
+  transformConfigValues,
   getLimitsInitValues,
-  transformAndSendLimitsValues
+  transformLimitsValues
 } from '../../helpers/exerciseSimpleForm';
 
 class EditExerciseSimpleConfig extends Component {
   componentWillMount = () => this.props.loadAsync();
-  componentWillReceiveProps = props => {
-    if (this.props.params.exerciseId !== props.params.exerciseId) {
-      props.loadAsync();
+
+  componentWillReceiveProps = nextProps => {
+    if (this.props.params.exerciseId !== nextProps.params.exerciseId) {
+      nextProps.loadAsync();
     }
   };
 
@@ -101,6 +103,73 @@ class EditExerciseSimpleConfig extends Component {
       dispatch(fetchPipelines())
     ]);
 
+  transformAndSendTestsValues = data => {
+    const {
+      editTests,
+      editScoreConfig,
+      fetchConfig,
+      fetchEnvironmentSimpleLimits
+    } = this.props;
+
+    const { tests, scoreConfig } = transformTestsValues(data);
+
+    return Promise.all([
+      editTests({ tests }),
+      editScoreConfig({ scoreConfig })
+    ]).then(() => Promise.all([fetchConfig(), fetchEnvironmentSimpleLimits()]));
+  };
+
+  transformAndSendConfigValuesCreator = defaultMemoize(
+    (pipelines, environments, tests, config) => {
+      const { setConfig } = this.props;
+      return data =>
+        setConfig(
+          transformConfigValues(data, pipelines, environments, tests, config)
+        );
+    }
+  );
+
+  transformAndSendEnvValues = defaultMemoize(
+    (exerciseId, pipelines, environments, tests, config) => {
+      const {
+        editEnvironmentConfigs,
+        reloadConfigAndLimits,
+        setConfig
+      } = this.props;
+
+      return data => {
+        const newEnvironments = transformEnvValues(data, environments);
+        const configData = transformConfigValues(
+          getSimpleConfigInitValues(config, tests),
+          pipelines,
+          newEnvironments,
+          tests,
+          config
+        );
+        return editEnvironmentConfigs({
+          environmentConfigs: newEnvironments
+        })
+          .then(() => setConfig(configData))
+          .then(reloadConfigAndLimits(exerciseId));
+      };
+    }
+  );
+
+  transformAndSendLimitsValues = defaultMemoize(
+    (tests, exerciseRuntimeEnvironments) => {
+      const { editEnvironmentSimpleLimits } = this.props;
+      return formData =>
+        Promise.all(
+          transformLimitsValues(
+            formData,
+            tests,
+            exerciseRuntimeEnvironments,
+            editEnvironmentSimpleLimits
+          ).map(({ id, data }) => editEnvironmentSimpleLimits(id, data))
+        );
+    }
+  );
+
   render() {
     const {
       links: { EXERCISE_URI_FACTORY },
@@ -108,28 +177,20 @@ class EditExerciseSimpleConfig extends Component {
       exercise,
       runtimeEnvironments,
       exerciseConfig,
-      fetchEnvironmentSimpleLimits,
-      editEnvironmentSimpleLimits,
       exerciseEnvironmentConfig,
-      editEnvironmentConfigs,
       exerciseScoreConfig,
       exerciseTests,
-      editScoreConfig,
-      editTests,
-      fetchConfig,
-      setConfig,
       limits,
       pipelines,
       cloneHorizontally,
       cloneVertically,
       cloneAll,
-      reloadConfigAndLimits,
       intl: { locale }
     } = this.props;
 
     return (
       <Page
-        resource={exercise}
+        resource={[exercise, exerciseTests]}
         title={exercise => <LocalizedExerciseName entity={exercise} />}
         description={
           <FormattedMessage
@@ -165,165 +226,134 @@ class EditExerciseSimpleConfig extends Component {
           }
         ]}
       >
-        {exercise =>
+        {(exercise, tests) =>
           <div>
-            <Row>
-              <Col lg={6}>
-                <Box
-                  title={
-                    <FormattedMessage
-                      id="app.editExercise.editTests"
-                      defaultMessage="Edit tests"
-                    />
-                  }
-                  unlimitedHeight
-                >
-                  <ResourceRenderer
-                    resource={[exerciseScoreConfig, exerciseTests]}
-                  >
-                    {(scoreConfig, tests) =>
-                      <EditTestsForm
-                        initialValues={getTestsInitValues(
-                          tests,
-                          scoreConfig,
-                          locale
-                        )}
-                        onSubmit={data =>
-                          transformAndSendTestsValues(
-                            data,
-                            editTests,
-                            editScoreConfig
-                          ).then(() =>
-                            Promise.all([
-                              fetchConfig(),
-                              fetchEnvironmentSimpleLimits()
-                            ])
-                          )}
-                      />}
-                  </ResourceRenderer>
-                </Box>
-                <Box
-                  title={
-                    <FormattedMessage
-                      id="app.editExercise.editEnvironments"
-                      defaultMessage="Edit runtime environments"
-                    />
-                  }
-                  unlimitedHeight
-                >
-                  <ResourceRenderer
-                    resource={[
-                      exerciseConfig,
-                      exerciseTests,
-                      exerciseEnvironmentConfig,
-                      ...pipelines.toArray()
-                    ]}
-                  >
-                    {(config, tests, environmentConfigs, ...pipelines) =>
-                      <ResourceRenderer
-                        resource={runtimeEnvironments.toArray()}
-                      >
-                        {(...environments) =>
-                          <EditEnvironmentSimpleForm
-                            initialValues={getEnvInitValues(environmentConfigs)}
-                            runtimeEnvironments={environments}
-                            onSubmit={data => {
-                              const newEnvironments = transformEnvValues(
-                                data,
-                                environments
-                              );
-                              return editEnvironmentConfigs({
-                                environmentConfigs: newEnvironments
-                              })
-                                .then(() =>
-                                  transformAndSendConfigValues(
-                                    getSimpleConfigInitValues(config, tests),
-                                    pipelines,
-                                    newEnvironments,
-                                    tests,
-                                    config,
-                                    setConfig
-                                  )
-                                )
-                                .then(reloadConfigAndLimits(exercise.id));
-                            }}
-                          />}
-                      </ResourceRenderer>}
-                  </ResourceRenderer>
-                </Box>
-              </Col>
-              <Col lg={6}>
-                <SupplementaryFilesTableContainer exercise={exercise} />
-              </Col>
-            </Row>
-            <br />
-
-            <Row>
-              <Col lg={12}>
-                <ResourceRenderer
-                  resource={[
-                    exerciseConfig,
-                    exerciseTests,
-                    exerciseEnvironmentConfig,
-                    ...pipelines.toArray()
-                  ]}
-                >
-                  {(config, tests, environments, ...pipelines) =>
-                    tests.length > 0
-                      ? <EditExerciseSimpleConfigForm
-                          initialValues={getSimpleConfigInitValues(
-                            config,
-                            tests
-                          )}
-                          exercise={exercise}
-                          exerciseTests={tests}
-                          onSubmit={data =>
-                            transformAndSendConfigValues(
-                              data,
-                              pipelines,
-                              environments,
-                              tests,
-                              config,
-                              setConfig
-                            )}
-                        />
-                      : <div className="alert alert-warning">
-                          <h4>
-                            <i className="icon fa fa-warning" />{' '}
-                            <FormattedMessage
-                              id="app.editExercise.editConfig"
-                              defaultMessage="Edit exercise configuration"
-                            />
-                          </h4>
+            <ResourceRenderer
+              resource={pipelines.toArray()}
+              returnAsArray={true}
+            >
+              {(
+                pipelines // pipelines are returned as a whole array (so they can be cached properly)
+              ) =>
+                <div>
+                  <Row>
+                    <Col lg={6}>
+                      <Box
+                        title={
                           <FormattedMessage
-                            id="app.editExerciseSimpleConfig.noTests"
-                            defaultMessage="There are no tests yet. The form cannot be displayed until at least one test is created."
+                            id="app.editExercise.editTests"
+                            defaultMessage="Edit tests"
                           />
-                        </div>}
-                </ResourceRenderer>
-              </Col>
-            </Row>
-            <br />
+                        }
+                        unlimitedHeight
+                      >
+                        <ResourceRenderer resource={exerciseScoreConfig}>
+                          {scoreConfig =>
+                            <EditTestsForm
+                              initialValues={getTestsInitValues(
+                                tests,
+                                scoreConfig,
+                                locale
+                              )}
+                              onSubmit={this.transformAndSendTestsValues}
+                            />}
+                        </ResourceRenderer>
+                      </Box>
+                      <Box
+                        title={
+                          <FormattedMessage
+                            id="app.editExercise.editEnvironments"
+                            defaultMessage="Edit runtime environments"
+                          />
+                        }
+                        unlimitedHeight
+                      >
+                        <ResourceRenderer
+                          resource={[exerciseConfig, exerciseEnvironmentConfig]}
+                        >
+                          {(config, environmentConfigs) =>
+                            <ResourceRenderer
+                              resource={runtimeEnvironments.toArray()}
+                              returnAsArray={true}
+                            >
+                              {environments =>
+                                <EditEnvironmentSimpleForm
+                                  initialValues={getEnvInitValues(
+                                    environmentConfigs,
+                                    environments
+                                  )}
+                                  runtimeEnvironments={environments}
+                                  onSubmit={this.transformAndSendEnvValues(
+                                    exercise.id,
+                                    pipelines,
+                                    environments,
+                                    tests,
+                                    config
+                                  )}
+                                />}
+                            </ResourceRenderer>}
+                        </ResourceRenderer>
+                      </Box>
+                    </Col>
+                    <Col lg={6}>
+                      <SupplementaryFilesTableContainer exercise={exercise} />
+                    </Col>
+                  </Row>
+                  <br />
+
+                  <Row>
+                    <Col lg={12}>
+                      <ResourceRenderer
+                        resource={[exerciseConfig, exerciseEnvironmentConfig]}
+                      >
+                        {(config, environments) =>
+                          tests.length > 0
+                            ? <EditExerciseSimpleConfigForm
+                                initialValues={getSimpleConfigInitValues(
+                                  config,
+                                  tests
+                                )}
+                                exercise={exercise}
+                                exerciseTests={tests}
+                                onSubmit={this.transformAndSendConfigValuesCreator(
+                                  pipelines,
+                                  environments,
+                                  tests,
+                                  config
+                                )}
+                              />
+                            : <div className="alert alert-warning">
+                                <h4>
+                                  <i className="icon fa fa-warning" />{' '}
+                                  <FormattedMessage
+                                    id="app.editExercise.editConfig"
+                                    defaultMessage="Edit exercise configuration"
+                                  />
+                                </h4>
+                                <FormattedMessage
+                                  id="app.editExerciseSimpleConfig.noTests"
+                                  defaultMessage="There are no tests yet. The form cannot be displayed until at least one test is created."
+                                />
+                              </div>}
+                      </ResourceRenderer>
+                    </Col>
+                  </Row>
+                  <br />
+                </div>}
+            </ResourceRenderer>
 
             <Row>
               <Col lg={12}>
                 <ResourceRenderer
-                  resource={[
-                    exerciseTests,
-                    exerciseEnvironmentConfig,
-                    ...limits.toArray()
-                  ]}
+                  resource={[exerciseEnvironmentConfig, ...limits.toArray()]}
                 >
-                  {(tests, envConfig) =>
+                  {envConfig =>
                     tests.length > 0 && exercise.runtimeEnvironments.length > 0
                       ? <EditSimpleLimitsForm
-                          onSubmit={data =>
-                            transformAndSendLimitsValues(
-                              data,
-                              tests,
-                              exercise.runtimeEnvironments,
-                              editEnvironmentSimpleLimits
-                            )}
+                          onSubmit={this.transformAndSendLimitsValues(
+                            tests,
+                            exercise.runtimeEnvironments
+                          )}
                           environments={exercise.runtimeEnvironments}
                           tests={tests}
                           initialValues={getLimitsInitValues(
@@ -386,6 +416,21 @@ EditExerciseSimpleConfig.propTypes = {
   intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired
 };
 
+const cloneVerticallyWrapper = defaultMemoize(
+  dispatch => (formName, testName, runtimeEnvironmentId) => field => () =>
+    dispatch(cloneVertically(formName, testName, runtimeEnvironmentId, field))
+);
+
+const cloneHorizontallyWrapper = defaultMemoize(
+  dispatch => (formName, testName, runtimeEnvironmentId) => field => () =>
+    dispatch(cloneHorizontally(formName, testName, runtimeEnvironmentId, field))
+);
+
+const cloneAllWrapper = defaultMemoize(
+  dispatch => (formName, testName, runtimeEnvironmentId) => field => () =>
+    dispatch(cloneAll(formName, testName, runtimeEnvironmentId, field))
+);
+
 export default injectIntl(
   withLinks(
     connect(
@@ -432,25 +477,9 @@ export default injectIntl(
         editTests: data => dispatch(setExerciseTests(exerciseId, data)),
         fetchConfig: () => dispatch(fetchExerciseConfig(exerciseId)),
         setConfig: data => dispatch(setExerciseConfig(exerciseId, data)),
-        cloneVertically: (
-          formName,
-          testName,
-          runtimeEnvironmentId
-        ) => field => () =>
-          dispatch(
-            cloneVertically(formName, testName, runtimeEnvironmentId, field)
-          ),
-        cloneHorizontally: (
-          formName,
-          testName,
-          runtimeEnvironmentId
-        ) => field => () =>
-          dispatch(
-            cloneHorizontally(formName, testName, runtimeEnvironmentId, field)
-          ),
-        cloneAll: (formName, testName, runtimeEnvironmentId) => field => () =>
-          dispatch(cloneAll(formName, testName, runtimeEnvironmentId, field)),
-
+        cloneVertically: cloneVerticallyWrapper(dispatch),
+        cloneHorizontally: cloneHorizontallyWrapper(dispatch),
+        cloneAll: cloneAllWrapper(dispatch),
         reloadConfigAndLimits: exerciseId => () =>
           dispatch(fetchExercise(exerciseId)).then(({ value: exercise }) =>
             Promise.all([
