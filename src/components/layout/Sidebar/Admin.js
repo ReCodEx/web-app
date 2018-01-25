@@ -43,7 +43,7 @@ const Admin = ({
       link={USERS_URI}
     />
     <MenuItem
-      icon="fort-awesome"
+      icon="bomb"
       title={
         <FormattedMessage
           id="app.sidebar.menu.admin.failures"
