@@ -85,6 +85,9 @@ export const linksFactory = lang => {
   // failures details
   const FAILURES_URI = `${prefix}/app/submission-failures`;
 
+  // failures details
+  const SIS_INTEGRATION_URI = `${prefix}/app/sis-integration`;
+
   // download files
   const DOWNLOAD = fileId => `${API_BASE}/uploaded-files/${fileId}/download`;
 
@@ -131,7 +134,8 @@ export const linksFactory = lang => {
     DOWNLOAD,
     REFERENCE_SOLUTION_EVALUATION_URI_FACTORY,
     LOGIN_EXTERN_FINALIZATION,
-    FAILURES_URI
+    FAILURES_URI,
+    SIS_INTEGRATION_URI
   };
 };
 
