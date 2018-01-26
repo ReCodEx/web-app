@@ -124,7 +124,7 @@ const EditSimpleLimitsField = ({
                     question={
                       <FormattedMessage
                         id="app.EditLimitsForm.cloneHorizontal.yesNoQuestion"
-                        defaultMessage="Do you really want to use these limits for all runtime environments of this test? Pleae note, that individual environments have different performance characteristics."
+                        defaultMessage="Do you really want to use these limits for all runtime environments of this test? Please note, that individual environments have different performance characteristics."
                       />
                     }
                   >
@@ -152,7 +152,7 @@ const EditSimpleLimitsField = ({
                     question={
                       <FormattedMessage
                         id="app.EditLimitsForm.cloneAll.yesNoQuestion"
-                        defaultMessage="Do you really want to use these limits for all the tests of all runtime environments? Pleae note, that individual environments have different performance characteristics."
+                        defaultMessage="Do you really want to use these limits for all the tests of all runtime environments? Please note, that individual environments have different performance characteristics."
                       />
                     }
                   >
@@ -218,7 +218,7 @@ const EditSimpleLimitsField = ({
                     question={
                       <FormattedMessage
                         id="app.EditLimitsForm.cloneHorizontal.yesNoQuestion"
-                        defaultMessage="Do you really want to use these limits for all runtime environments of this test? Pleae note, that individual environments have different performance characteristics."
+                        defaultMessage="Do you really want to use these limits for all runtime environments of this test? Please note, that individual environments have different performance characteristics."
                       />
                     }
                   >
@@ -246,7 +246,7 @@ const EditSimpleLimitsField = ({
                     question={
                       <FormattedMessage
                         id="app.EditLimitsForm.cloneAll.yesNoQuestion"
-                        defaultMessage="Do you really want to use these limits for all the tests of all runtime environments? Pleae note, that individual environments have different performance characteristics."
+                        defaultMessage="Do you really want to use these limits for all the tests of all runtime environments? Please note, that individual environments have different performance characteristics."
                       />
                     }
                   >

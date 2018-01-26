@@ -1,7 +1,7 @@
 {
   "app.EditEnvironmentLimitsForm.cloneAll.yesNoQuestion": "Do you really want to use these limits for all the tests of all runtime environments?",
-  "app.EditLimitsForm.cloneAll.yesNoQuestion": "Do you really want to use these limits for all the tests of all runtime environments? Pleae note, that individual environments have different performance characteristics.",
-  "app.EditLimitsForm.cloneHorizontal.yesNoQuestion": "Do you really want to use these limits for all runtime environments of this test? Pleae note, that individual environments have different performance characteristics.",
+  "app.EditLimitsForm.cloneAll.yesNoQuestion": "Do you really want to use these limits for all the tests of all runtime environments? Please note, that individual environments have different performance characteristics.",
+  "app.EditLimitsForm.cloneHorizontal.yesNoQuestion": "Do you really want to use these limits for all runtime environments of this test? Please note, that individual environments have different performance characteristics.",
   "app.EditSimpleLimitsForm.validation.NaN": "Given value is not a number.",
   "app.EditSimpleLimitsForm.validation.tooHigh": "Given value exceeds the recommended maximum ({max}).",
   "app.EditSimpleLimitsForm.validation.tooLow": "Given value is below the recommended minimum ({min}).",
@@ -379,7 +379,7 @@
   "app.editSimpleLimitsField.tooltip.cloneVertical": "Copy this value vertically to all tests within the environment.",
   "app.editSimpleLimitsForm.failed": "Nepodařilo se uložit limity. Prosím, opakujte akci později.",
   "app.editSimpleLimitsForm.preciseTime": "Precise Time Measurement",
-  "app.editSimpleLimitsForm.preciseTimeTooltip": "If precise time measurement is selected, ReCodEx will measure the consumed CPU time of tested soltions. Otherwise, the wall time will be measured. CPU is better in cases when serial time complexity of the solution is tested and tight time limits are set. Wall time is better in general cases as it better reflects the actual time consumed by the solution (indcluing I/O), but it is more susceptible to errors of measurement.",
+  "app.editSimpleLimitsForm.preciseTimeTooltip": "If precise time measurement is selected, ReCodEx will measure the consumed CPU time of tested solutions. Otherwise, the wall time will be measured. CPU is better in cases when serial time complexity of the solution is tested and tight time limits are set. Wall time is better in general cases as it better reflects the actual time consumed by the solution (including I/O), but it is more susceptible to errors of measurement.",
   "app.editSimpleLimitsForm.reset": "Obnovit původní",
   "app.editSimpleLimitsForm.submit": "Uložit limity",
   "app.editSimpleLimitsForm.submitting": "Ukládám limity ...",

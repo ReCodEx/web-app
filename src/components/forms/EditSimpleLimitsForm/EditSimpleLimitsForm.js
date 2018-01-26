@@ -128,10 +128,10 @@ class EditSimpleLimitsForm extends Component {
           <Col lg={9}>
             <div>
               <p className={styles.preciseTimeTooltip}>
-                <Icon name="info-circle" style={{ marginRight: '1em' }} />
+                <Icon name="info-circle" />
                 <FormattedMessage
                   id="app.editSimpleLimitsForm.preciseTimeTooltip"
-                  defaultMessage="If precise time measurement is selected, ReCodEx will measure the consumed CPU time of tested soltions. Otherwise, the wall time will be measured. CPU is better in cases when serial time complexity of the solution is tested and tight time limits are set. Wall time is better in general cases as it better reflects the actual time consumed by the solution (indcluing I/O), but it is more susceptible to errors of measurement."
+                  defaultMessage="If precise time measurement is selected, ReCodEx will measure the consumed CPU time of tested solutions. Otherwise, the wall time will be measured. CPU is better in cases when serial time complexity of the solution is tested and tight time limits are set. Wall time is better in general cases as it better reflects the actual time consumed by the solution (including I/O), but it is more susceptible to errors of measurement."
                 />
               </p>
             </div>
