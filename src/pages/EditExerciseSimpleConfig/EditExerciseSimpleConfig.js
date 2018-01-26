@@ -5,6 +5,7 @@ import { FormattedMessage, injectIntl } from 'react-intl';
 import { Row, Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { defaultMemoize } from 'reselect';
+import Icon from 'react-fontawesome';
 
 import Page from '../../components/layout/Page';
 import Box from '../../components/widgets/Box';
@@ -236,6 +237,21 @@ class EditExerciseSimpleConfig extends Component {
                 pipelines // pipelines are returned as a whole array (so they can be cached properly)
               ) =>
                 <div>
+                  {exercise.isBroken &&
+                    <Row>
+                      <Col sm={12}>
+                        <div className="alert alert-warning">
+                          <h4>
+                            <Icon name="medkit" />&nbsp;&nbsp;
+                            <FormattedMessage
+                              id="app.exercise.isBroken"
+                              defaultMessage="Exercise configuration is incorrect and needs fixing"
+                            />
+                          </h4>
+                          {exercise.validationError}
+                        </div>
+                      </Col>
+                    </Row>}
                   <Row>
                     <Col lg={6}>
                       <Box

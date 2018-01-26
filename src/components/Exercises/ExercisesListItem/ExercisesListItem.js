@@ -9,7 +9,7 @@ import { Link } from 'react-router';
 
 import withLinks from '../../../hoc/withLinks';
 import { LocalizedExerciseName } from '../../helpers/LocalizedNames';
-import { MaybeLockedExerciseIcon } from '../../icons';
+import { ExercisePrefixIcons } from '../../icons';
 
 const ExercisesListItem = ({
   id,
@@ -20,6 +20,8 @@ const ExercisesListItem = ({
   localizedTexts,
   createdAt,
   isLocked,
+  isBroken,
+  validationError,
   createActions,
   locale,
   links: { EXERCISE_URI_FACTORY }
@@ -29,7 +31,12 @@ const ExercisesListItem = ({
       <Icon name="code" />
     </td>
     <td>
-      <MaybeLockedExerciseIcon id={id} isLocked={isLocked} />
+      <ExercisePrefixIcons
+        id={id}
+        isLocked={isLocked}
+        isBroken={isBroken}
+        validationError={validationError}
+      />
       <strong>
         <Link to={EXERCISE_URI_FACTORY(id)}>
           <LocalizedExerciseName entity={{ name, localizedTexts }} />
@@ -74,6 +81,8 @@ ExercisesListItem.propTypes = {
   difficulty: PropTypes.string.isRequired,
   createdAt: PropTypes.number.isRequired,
   isLocked: PropTypes.bool.isRequired,
+  isBroken: PropTypes.bool.isRequired,
+  validationError: PropTypes.string,
   localizedTexts: PropTypes.array.isRequired,
   createActions: PropTypes.func,
   locale: PropTypes.string.isRequired,

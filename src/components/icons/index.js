@@ -20,6 +20,6 @@ export { default as SettingsIcon } from './SettingsIcon';
 export {
   default as MaybeBonusAssignmentIcon
 } from './MaybeBonusAssignmentIcon';
-export { default as MaybeLockedExerciseIcon } from './MaybeLockedExerciseIcon';
+export { default as ExercisePrefixIcons } from './ExercisePrefixIcons';
 export { default as CopyIcon } from './CopyIcon';
 export { default as LocalIcon } from './LocalIcon';

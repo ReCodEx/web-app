@@ -11,8 +11,9 @@ import {
 } from 'react-intl';
 import { Row, Col, ButtonGroup } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
-import Button from '../../components/widgets/FlatButton';
+import Icon from 'react-fontawesome';
 
+import Button from '../../components/widgets/FlatButton';
 import Page from '../../components/layout/Page';
 import ExerciseDetail from '../../components/Exercises/ExerciseDetail';
 import LocalizedTexts from '../../components/helpers/LocalizedTexts';
@@ -191,6 +192,21 @@ class Exercise extends Component {
       >
         {exercise =>
           <div>
+            {exercise.isBroken &&
+              <Row>
+                <Col sm={12}>
+                  <div className="alert alert-warning">
+                    <h4>
+                      <Icon name="medkit" />&nbsp;&nbsp;
+                      <FormattedMessage
+                        id="app.exercise.isBroken"
+                        defaultMessage="Exercise configuration is incorrect and needs fixing"
+                      />
+                    </h4>
+                    {exercise.validationError}
+                  </div>
+                </Col>
+              </Row>}
             <Row>
               <Col sm={12}>
                 {canEditExercise(exercise.id) &&
@@ -239,33 +255,36 @@ class Exercise extends Component {
                   {exercise.localizedTexts.length > 0 &&
                     <LocalizedTexts locales={exercise.localizedTexts} />}
                 </div>
-                <Box
-                  title={formatMessage(messages.groupsBox)}
-                  description={
-                    <p>
-                      <FormattedMessage
-                        id="app.exercise.assignToGroup"
-                        defaultMessage="You can assign this exercise to one of the groups you supervise."
-                      />
-                    </p>
-                  }
-                  noPadding
-                >
-                  <ResourceRenderer
-                    forceLoading={supervisedGroups.length === 0}
-                    resource={supervisedGroups}
+                {!exercise.isBroken &&
+                  <Box
+                    title={formatMessage(messages.groupsBox)}
+                    description={
+                      <p>
+                        <FormattedMessage
+                          id="app.exercise.assignToGroup"
+                          defaultMessage="You can assign this exercise to one of the groups you supervise."
+                        />
+                      </p>
+                    }
+                    noPadding
                   >
-                    {() =>
-                      <GroupsList
-                        groups={supervisedGroups}
-                        renderButtons={groupId =>
-                          <AssignExerciseButton
-                            isLocked={exercise.isLocked}
-                            assignExercise={() => this.assignExercise(groupId)}
-                          />}
-                      />}
-                  </ResourceRenderer>
-                </Box>
+                    <ResourceRenderer
+                      forceLoading={supervisedGroups.length === 0}
+                      resource={supervisedGroups}
+                    >
+                      {() =>
+                        <GroupsList
+                          groups={supervisedGroups}
+                          renderButtons={groupId =>
+                            <AssignExerciseButton
+                              isLocked={exercise.isLocked}
+                              isBroken={exercise.isBroken}
+                              assignExercise={() =>
+                                this.assignExercise(groupId)}
+                            />}
+                        />}
+                    </ResourceRenderer>
+                  </Box>}
                 <Box
                   title={
                     <FormattedMessage
@@ -291,8 +310,11 @@ class Exercise extends Component {
                   }
                   isOpen
                 >
-                  <ResourceRenderer resource={exercisePipelines.toArray()}>
-                    {(...pipelines) =>
+                  <ResourceRenderer
+                    resource={exercisePipelines.toArray()}
+                    returnAsArray={true}
+                  >
+                    {pipelines =>
                       <PipelinesSimpleList
                         pipelines={pipelines}
                         createActions={pipelineId =>
@@ -419,8 +441,6 @@ class Exercise extends Component {
                           </p>}
                   </ResourceRenderer>
                 </Box>
-              </Col>
-              <Col lg={6}>
                 <SupplementaryFilesTableContainer
                   isOpen={false}
                   viewOnly={true}
