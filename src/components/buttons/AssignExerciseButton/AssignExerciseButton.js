@@ -1,19 +1,30 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
+import Icon from 'react-fontawesome';
 import Button from '../../widgets/FlatButton';
 import { SendIcon, InfoIcon } from '../../../components/icons';
 
-const AssignExerciseButton = ({ isLocked, assignExercise, ...props }) => {
-  if (isLocked) {
+const AssignExerciseButton = ({
+  isLocked,
+  isBroken,
+  assignExercise,
+  ...props
+}) => {
+  if (isLocked || isBroken) {
     return (
       <Button bsSize="xs" className="btn-flat" disabled={true} {...props}>
-        <InfoIcon />
+        {isBroken ? <Icon name="medkit" /> : <InfoIcon />}
         {'  '}
-        <FormattedMessage
-          id="app.assignExerciseButton.isLocked"
-          defaultMessage="Locked"
-        />
+        {isBroken
+          ? <FormattedMessage
+              id="app.assignExerciseButton.isBroken"
+              defaultMessage="Broken"
+            />
+          : <FormattedMessage
+              id="app.assignExerciseButton.isLocked"
+              defaultMessage="Locked"
+            />}
       </Button>
     );
   } else {
@@ -32,6 +43,7 @@ const AssignExerciseButton = ({ isLocked, assignExercise, ...props }) => {
 
 AssignExerciseButton.propTypes = {
   isLocked: PropTypes.bool.isRequired,
+  isBroken: PropTypes.bool.isRequired,
   assignExercise: PropTypes.func.isRequired
 };
 

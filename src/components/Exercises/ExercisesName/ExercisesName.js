@@ -5,18 +5,25 @@ import { Link } from 'react-router';
 import withLinks from '../../../hoc/withLinks';
 import { LocalizedExerciseName } from '../../helpers/LocalizedNames';
 
-import { MaybeLockedExerciseIcon } from '../../icons';
+import { ExercisePrefixIcons } from '../../icons';
 
 const ExercisesName = ({
   id,
   name,
   localizedTexts,
   isLocked,
+  isBroken,
+  validationError,
   noLink,
   links: { EXERCISE_URI_FACTORY }
 }) =>
   <span>
-    <MaybeLockedExerciseIcon id={id} isLocked={isLocked} />
+    <ExercisePrefixIcons
+      id={id}
+      isLocked={isLocked}
+      isBroken={isBroken}
+      validationError={validationError}
+    />
     {noLink
       ? <span>
           <LocalizedExerciseName entity={{ name, localizedTexts }} />
@@ -31,6 +38,8 @@ ExercisesName.propTypes = {
   name: PropTypes.string.isRequired,
   localizedTexts: PropTypes.array.isRequired,
   isLocked: PropTypes.bool.isRequired,
+  isBroken: PropTypes.bool.isRequired,
+  validationError: PropTypes.string,
   noLink: PropTypes.bool,
   links: PropTypes.object
 };

@@ -140,10 +140,11 @@ const SupervisorsView = ({
             {(...exercises) =>
               <ExercisesSimpleList
                 exercises={exercises}
-                createActions={(exerciseId, isLocked) =>
+                createActions={(exerciseId, isLocked, isBroken) =>
                   <div>
                     <AssignExerciseButton
                       isLocked={isLocked}
+                      isBroken={isBroken}
                       assignExercise={() => assignExercise(exerciseId)}
                     />
                     <LinkContainer to={EXERCISE_EDIT_URI_FACTORY(exerciseId)}>
