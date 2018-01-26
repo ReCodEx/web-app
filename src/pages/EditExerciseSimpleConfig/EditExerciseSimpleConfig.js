@@ -131,7 +131,7 @@ class EditExerciseSimpleConfig extends Component {
   );
 
   transformAndSendEnvValues = defaultMemoize(
-    (exerciseId, pipelines, environments, tests, config) => {
+    (pipelines, environments, tests, config) => {
       const {
         editEnvironmentConfigs,
         reloadConfigAndLimits,
@@ -151,23 +151,22 @@ class EditExerciseSimpleConfig extends Component {
           environmentConfigs: newEnvironments
         })
           .then(() => setConfig(configData))
-          .then(reloadConfigAndLimits(exerciseId));
+          .then(reloadConfigAndLimits);
       };
     }
   );
 
   transformAndSendLimitsValues = defaultMemoize(
     (tests, exerciseRuntimeEnvironments) => {
-      const { editEnvironmentSimpleLimits } = this.props;
+      const { editEnvironmentSimpleLimits, reloadExercise } = this.props;
       return formData =>
         Promise.all(
           transformLimitsValues(
             formData,
             tests,
-            exerciseRuntimeEnvironments,
-            editEnvironmentSimpleLimits
+            exerciseRuntimeEnvironments
           ).map(({ id, data }) => editEnvironmentSimpleLimits(id, data))
-        );
+        ).then(reloadExercise);
     }
   );
 
@@ -300,7 +299,6 @@ class EditExerciseSimpleConfig extends Component {
                                   )}
                                   runtimeEnvironments={environments}
                                   onSubmit={this.transformAndSendEnvValues(
-                                    exercise.id,
                                     pipelines,
                                     environments,
                                     tests,
@@ -428,6 +426,7 @@ EditExerciseSimpleConfig.propTypes = {
   cloneHorizontally: PropTypes.func.isRequired,
   cloneVertically: PropTypes.func.isRequired,
   cloneAll: PropTypes.func.isRequired,
+  reloadExercise: PropTypes.func.isRequired,
   reloadConfigAndLimits: PropTypes.func.isRequired,
   intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired
 };
@@ -496,7 +495,8 @@ export default injectIntl(
         cloneVertically: cloneVerticallyWrapper(dispatch),
         cloneHorizontally: cloneHorizontallyWrapper(dispatch),
         cloneAll: cloneAllWrapper(dispatch),
-        reloadConfigAndLimits: exerciseId => () =>
+        reloadExercise: () => dispatch(fetchExercise(exerciseId)),
+        reloadConfigAndLimits: () =>
           dispatch(fetchExercise(exerciseId)).then(({ value: exercise }) =>
             Promise.all([
               dispatch(fetchExerciseConfig(exerciseId)),

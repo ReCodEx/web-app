@@ -15,7 +15,6 @@ const ExercisesSimpleListItem = ({
   authorId,
   isLocked,
   isBroken,
-  validationError,
   localizedTexts,
   createActions,
   locale,
@@ -23,12 +22,7 @@ const ExercisesSimpleListItem = ({
 }) =>
   <tr>
     <td>
-      <ExercisePrefixIcons
-        id={id}
-        isLocked={isLocked}
-        isBroken={isBroken}
-        validationError={validationError}
-      />
+      <ExercisePrefixIcons id={id} isLocked={isLocked} isBroken={isBroken} />
       <strong>
         <Link to={EXERCISE_URI_FACTORY(id)}>
           <LocalizedExerciseName entity={{ name, localizedTexts }} />
@@ -54,7 +48,6 @@ ExercisesSimpleListItem.propTypes = {
   difficulty: PropTypes.string.isRequired,
   isLocked: PropTypes.bool.isRequired,
   isBroken: PropTypes.bool.isRequired,
-  validationError: PropTypes.string,
   localizedTexts: PropTypes.array.isRequired,
   createActions: PropTypes.func,
   locale: PropTypes.string.isRequired,
