@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import { Row, Col, Button } from 'react-bootstrap';
+import moment from 'moment';
 
 import PageContent from '../../components/layout/PageContent';
 import { isLoggedAsSuperAdmin } from '../../redux/selectors/users';
@@ -10,7 +11,8 @@ import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import {
   fetchAllTerms,
   create,
-  deleteTerm
+  deleteTerm,
+  editTerm
 } from '../../redux/modules/sisTerms';
 import FetchManyResourceRenderer from '../../components/helpers/FetchManyResourceRenderer';
 import {
@@ -21,9 +23,12 @@ import AddSisTermForm from '../../components/forms/AddSisTermForm/AddSisTermForm
 import TermsList from '../../components/SisIntegration/TermsList/TermsList';
 import Box from '../../components/widgets/Box/Box';
 import Confirm from '../../components/forms/Confirm';
-import { DeleteIcon } from '../../components/icons';
+import { EditIcon, DeleteIcon } from '../../components/icons';
+import EditTerm from '../../components/SisIntegration/EditTerm';
 
 class SisIntegration extends Component {
+  state = { openEdit: null };
+
   static loadAsync = (params, dispatch, userId, isSuperAdmin) =>
     Promise.all([dispatch(fetchAllTerms)]);
 
@@ -33,7 +38,13 @@ class SisIntegration extends Component {
   }
 
   render() {
-    const { fetchStatus, createNewTerm, deleteTerm, sisTerms } = this.props;
+    const {
+      fetchStatus,
+      createNewTerm,
+      deleteTerm,
+      editTerm,
+      sisTerms
+    } = this.props;
 
     return (
       <PageContent
@@ -79,6 +90,18 @@ class SisIntegration extends Component {
                     terms={sisTerms}
                     createActions={id =>
                       <div>
+                        <Button
+                          bsSize="xs"
+                          className="btn-flat"
+                          bsStyle="warning"
+                          onClick={() => this.setState({ openEdit: id })}
+                        >
+                          <EditIcon />{' '}
+                          <FormattedMessage
+                            id="app.sisIntegration.editButton"
+                            defaultMessage="Edit"
+                          />
+                        </Button>
                         <Confirm
                           id={id}
                           onConfirmed={() => deleteTerm(id)}
@@ -101,6 +124,15 @@ class SisIntegration extends Component {
                             />
                           </Button>
                         </Confirm>
+                        <EditTerm
+                          id={id}
+                          isOpen={this.state.openEdit === id}
+                          onClose={() => this.setState({ openEdit: null })}
+                          onSubmit={data =>
+                            editTerm(this.state.openEdit, data).then(() =>
+                              this.setState({ openEdit: null })
+                            )}
+                        />
                       </div>}
                   />
                 </Box>}
@@ -122,6 +154,7 @@ SisIntegration.propTypes = {
   fetchStatus: PropTypes.string,
   createNewTerm: PropTypes.func,
   deleteTerm: PropTypes.func,
+  editTerm: PropTypes.func,
   sisTerms: PropTypes.array.isRequired
 };
 
@@ -138,7 +171,16 @@ const mapDispatchToProps = (dispatch, { params }) => ({
   loadAsync: (userId, isSuperAdmin) =>
     SisIntegration.loadAsync(params, dispatch, userId, isSuperAdmin),
   createNewTerm: data => dispatch(create(data)),
-  deleteTerm: id => dispatch(deleteTerm(id))
+  deleteTerm: id => dispatch(deleteTerm(id)),
+  editTerm: (id, data) => {
+    // convert deadline times to timestamps
+    const processedData = Object.assign({}, data, {
+      beginning: moment(data.beginning).unix(),
+      end: moment(data.end).unix(),
+      advertiseUntil: moment(data.advertiseUntil).unix()
+    });
+    return dispatch(editTerm(id, processedData));
+  }
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(SisIntegration);
