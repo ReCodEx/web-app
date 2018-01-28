@@ -44,6 +44,7 @@ import sisStatus from './modules/sisStatus';
 import sisSubscribedGroups from './modules/sisSubscribedGroups';
 import sisSupervisedCourses from './modules/sisSupervisedCourses';
 import sisPossibleParents from './modules/sisPossibleParents';
+import sisTerms from './modules/sisTerms';
 import referenceSolutionEvaluations from './modules/referenceSolutionEvaluations';
 import submissionEvaluations from './modules/submissionEvaluations';
 import submissionFailures from './modules/submissionFailures';
@@ -92,6 +93,7 @@ const createRecodexReducers = token => ({
   sisSubscribedGroups,
   sisSupervisedCourses,
   sisPossibleParents,
+  sisTerms,
   submissionEvaluations,
   submissionFailures
 });
