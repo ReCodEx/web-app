@@ -10,6 +10,7 @@ import {
 import { Alert } from 'react-bootstrap';
 import Icon from 'react-fontawesome';
 import { LinkContainer } from 'react-router-bootstrap';
+import { defaultMemoize } from 'reselect';
 
 import { SelectField, CheckboxField } from '../Fields';
 
@@ -35,6 +36,12 @@ const messages = defineMessages({
     defaultMessage: 'Hard'
   }
 });
+
+const difficultyOptions = defaultMemoize(formatMessage => [
+  { key: 'easy', name: formatMessage(messages.easy) },
+  { key: 'medium', name: formatMessage(messages.medium) },
+  { key: 'hard', name: formatMessage(messages.hard) }
+]);
 
 const EditExerciseForm = ({
   initialValues: exercise,
@@ -128,12 +135,8 @@ const EditExerciseForm = ({
     <Field
       name="difficulty"
       component={SelectField}
-      options={[
-        { key: '', name: '...' },
-        { key: 'easy', name: formatMessage(messages.easy) },
-        { key: 'medium', name: formatMessage(messages.medium) },
-        { key: 'hard', name: formatMessage(messages.hard) }
-      ]}
+      options={difficultyOptions(formatMessage)}
+      addEmptyOption={true}
       label={
         <FormattedMessage
           id="app.editExerciseForm.difficulty"
@@ -300,12 +303,34 @@ const asyncValidate = (values, dispatch, { initialValues: { id, version } }) =>
       .catch(errors => reject(errors))
   );
 
+// Actually, this is reimplementation of default behavior from documentation.
+// For some reason, the asyncValidation is by default called also for every change event (which is not documented).
+const shouldAsyncValidate = ({
+  syncValidationPasses,
+  trigger,
+  pristine,
+  initialized
+}) => {
+  if (!syncValidationPasses) {
+    return false;
+  }
+  switch (trigger) {
+    case 'blur':
+      return true;
+    case 'submit':
+      return !pristine || !initialized;
+    default:
+      return false;
+  }
+};
+
 export default withLinks(
   injectIntl(
     reduxForm({
       form: 'editExercise',
       validate,
-      asyncValidate
+      asyncValidate,
+      shouldAsyncValidate
     })(EditExerciseForm)
   )
 );
