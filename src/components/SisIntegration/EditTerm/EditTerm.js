@@ -107,4 +107,8 @@ EditTerm.propTypes = {
   isOpen: PropTypes.bool.isRequired
 };
 
-export default reduxForm({ form: 'edit-sis-term' })(EditTerm);
+export default reduxForm({
+  form: 'edit-sis-term',
+  enableReinitialize: true,
+  keepDirtyOnReinitialize: false
+})(EditTerm);

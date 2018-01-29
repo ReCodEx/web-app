@@ -88,7 +88,7 @@ class SisIntegration extends Component {
                 >
                   <TermsList
                     terms={sisTerms}
-                    createActions={id =>
+                    createActions={(id, data) =>
                       <div>
                         <Button
                           bsSize="xs"
@@ -125,13 +125,18 @@ class SisIntegration extends Component {
                           </Button>
                         </Confirm>
                         <EditTerm
-                          id={id}
+                          form={id}
                           isOpen={this.state.openEdit === id}
                           onClose={() => this.setState({ openEdit: null })}
                           onSubmit={data =>
                             editTerm(this.state.openEdit, data).then(() =>
                               this.setState({ openEdit: null })
                             )}
+                          initialValues={{
+                            beginning: data.beginning * 1000,
+                            end: data.end * 1000,
+                            advertiseUntil: data.advertiseUntil * 1000
+                          }}
                         />
                       </div>}
                   />

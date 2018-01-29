@@ -2,46 +2,43 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage, FormattedDate, FormattedTime } from 'react-intl';
 
-const TermsListItem = ({
-  data: { id, year, term, beginning, end, advertiseUntil },
-  createActions
-}) =>
+const TermsListItem = ({ data, createActions }) =>
   <tr>
     <td>
-      {year}
+      {data.year}
     </td>
     <td>
-      {term === 1 &&
+      {data.term === 1 &&
         <FormattedMessage id="app.termsList.winter" defaultMessage="Winter" />}
-      {term === 2 &&
+      {data.term === 2 &&
         <FormattedMessage id="app.termsList.summer" defaultMessage="Summer" />}
-      {term !== 1 &&
-        term !== 2 &&
+      {data.term !== 1 &&
+        data.term !== 2 &&
         <span>
-          {term}
+          {data.term}
         </span>}
     </td>
     <td>
-      {beginning
-        ? <FormattedDate value={new Date(beginning * 1000)} />
+      {data.beginning
+        ? <FormattedDate value={new Date(data.beginning * 1000)} />
         : <span>&mdash;</span>}
     </td>
     <td>
-      {end
-        ? <FormattedDate value={new Date(end * 1000)} />
+      {data.end
+        ? <FormattedDate value={new Date(data.end * 1000)} />
         : <span>&mdash;</span>}
     </td>
     <td>
-      {advertiseUntil
+      {data.advertiseUntil
         ? <span>
-            <FormattedDate value={new Date(advertiseUntil * 1000)} />
+            <FormattedDate value={new Date(data.advertiseUntil * 1000)} />
             {', '}
-            <FormattedTime value={new Date(advertiseUntil * 1000)} />
+            <FormattedTime value={new Date(data.advertiseUntil * 1000)} />
           </span>
         : <span>&mdash;</span>}
     </td>
     <td className="text-right">
-      {createActions && createActions(id)}
+      {createActions && createActions(data.id, data)}
     </td>
   </tr>;
 
