@@ -107,8 +107,55 @@ EditTerm.propTypes = {
   isOpen: PropTypes.bool.isRequired
 };
 
+const validate = ({ beginning, end, advertiseUntil }) => {
+  const errors = {};
+
+  if (!beginning) {
+    errors['beginning'] = (
+      <FormattedMessage
+        id="app.editSisTerm.validation.noBeginning"
+        defaultMessage="Start of the term is required."
+      />
+    );
+  }
+
+  if (!end) {
+    errors['end'] = (
+      <FormattedMessage
+        id="app.editSisTerm.validation.noEnd"
+        defaultMessage="End of the term is required."
+      />
+    );
+  }
+
+  if (!advertiseUntil) {
+    errors['advertiseUntil'] = (
+      <FormattedMessage
+        id="app.editSisTerm.validation.noAdvertiseUntil"
+        defaultMessage="End date of advertising the term is required."
+      />
+    );
+  }
+
+  const bDate = new Date(beginning * 1000);
+  const eDate = new Date(end * 1000);
+  const aDate = new Date(advertiseUntil * 1000);
+
+  if (aDate < bDate || aDate > eDate) {
+    errors['advertiseUntil'] = (
+      <FormattedMessage
+        id="app.editSisTerm.validation.advertiseInLimits"
+        defaultMessage="The term can be advertised only in its period."
+      />
+    );
+  }
+
+  return errors;
+};
+
 export default reduxForm({
   form: 'edit-sis-term',
   enableReinitialize: true,
-  keepDirtyOnReinitialize: false
+  keepDirtyOnReinitialize: false,
+  validate
 })(EditTerm);
