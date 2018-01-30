@@ -89,7 +89,7 @@ class SubmissionFailures extends Component {
                     defaultMessage="Submission Failures"
                   />
                 ),
-                iconName: 'fort-awesome'
+                iconName: 'bomb'
               }
             ]}
           >
@@ -110,7 +110,7 @@ class SubmissionFailures extends Component {
                     <Button
                       bsStyle="warning"
                       className="btn-flat"
-                      bsSize="sm"
+                      bsSize="xs"
                       onClick={() =>
                         this.setState({ isOpen: true, activeId: id })}
                     >
