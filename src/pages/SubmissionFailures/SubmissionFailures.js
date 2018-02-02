@@ -125,9 +125,10 @@ class SubmissionFailures extends Component {
                   onClose={() =>
                     this.setState({ isOpen: false, activeId: null })}
                   onSubmit={data =>
-                    resolveFailure(this.state.activeId, data.note).then(() =>
+                    resolveFailure(this.state.activeId, data).then(() =>
                       this.setState({ isOpen: false, activeId: null })
                     )}
+                  initialValues={{ sendEmail: true }}
                 />
               </div>
             </Box>
@@ -151,6 +152,6 @@ export default connect(
   }),
   dispatch => ({
     loadAsync: () => SubmissionFailures.loadAsync({}, dispatch),
-    resolveFailure: (id, note) => dispatch(resolveFailure(id, note))
+    resolveFailure: (id, data) => dispatch(resolveFailure(id, data))
   })
 )(SubmissionFailures);
