@@ -1,6 +1,9 @@
 import { createSelector } from 'reselect';
+import { List } from 'immutable';
 import { isReady } from '../helpers/resourceManager';
-import { memberOfInstancesIdsSelector } from './users';
+import { loggedInUserSelector } from './users';
+
+const EMPTY_LIST = List();
 
 const getInstances = state => state.instances;
 const getResources = instances => instances.get('resources');
@@ -22,11 +25,17 @@ export const publicInstancesSelector = createSelector(
 export const instanceByIdSelector = instanceId =>
   createSelector([instancesSelector], instances => instances.get(instanceId));
 
-export const memberOfInstances = userId =>
-  createSelector(
-    [memberOfInstancesIdsSelector(userId), instancesSelector],
-    (ids, instances) => ids.map(id => instances.get(id)).filter(isReady)
-  );
+export const loggedInUserMemberOfInstances = createSelector(
+  [loggedInUserSelector, instancesSelector],
+  (user, instances) => {
+    const instanceId =
+      user &&
+      isReady(user) &&
+      user.getIn(['data', 'privateData', 'instanceId']);
+    const instance = instanceId && instances.get(instanceId);
+    return instance ? List([instance]) : EMPTY_LIST;
+  }
+);
 
 export const isAdminOfInstance = (userId, instanceId) =>
   createSelector(
