@@ -38,7 +38,8 @@ import Pipelines from './Pipelines';
 import EditPipeline from './EditPipeline';
 import Pipeline from './Pipeline';
 import FAQ from './FAQ';
-import SubmissionFailures from './SubmissionFailures/SubmissionFailures';
+import SubmissionFailures from './SubmissionFailures';
+import SisIntegration from './SisIntegration';
 
 import ChangePassword from './ChangePassword';
 import ResetPassword from './ResetPassword';
@@ -140,6 +141,9 @@ const createRoutes = getState => {
           </Route>
           <Route path="submission-failures">
             <IndexRoute component={SubmissionFailures} />
+          </Route>
+          <Route path="sis-integration">
+            <IndexRoute component={SisIntegration} />
           </Route>
         </Route>
         <Route path="forgotten-password">

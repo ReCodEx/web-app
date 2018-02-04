@@ -19,7 +19,8 @@ const EditGroupForm = ({
   createNew = false,
   formValues: { localizedTexts, hasThreshold } = {},
   collapsable = false,
-  isOpen = true
+  isOpen = true,
+  reset
 }) =>
   <FormBox
     title={
@@ -38,7 +39,7 @@ const EditGroupForm = ({
       <div className="text-center">
         <SubmitButton
           id="editGroup"
-          handleSubmit={handleSubmit}
+          handleSubmit={data => handleSubmit(data).then(() => reset())}
           submitting={submitting}
           dirty={anyTouched}
           hasSucceeded={submitSucceeded}
@@ -180,7 +181,8 @@ EditGroupForm.propTypes = {
   }),
   createNew: PropTypes.bool,
   collapsable: PropTypes.bool,
-  isOpen: PropTypes.bool
+  isOpen: PropTypes.bool,
+  reset: PropTypes.func
 };
 
 const validate = ({ localizedTexts = [], hasThreshold, threshold }) => {

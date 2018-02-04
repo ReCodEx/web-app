@@ -16,9 +16,10 @@ const FailuresListItem = ({ id, createActions, failure }) =>
         }
       >
         <div>
-          {failure.type === 'broker_reject' && <Icon name="times-rectangle" />}
-          {failure.type === 'evaluation_failure' && <Icon name="tint" />}
-          {failure.type === 'loading_failure' && <Icon name="wrench" />}
+          {failure.type === 'broker_reject' && <Icon name="exchange" />}
+          {failure.type === 'evaluation_failure' &&
+            <Icon name="graduation-cap" />}
+          {failure.type === 'loading_failure' && <Icon name="download" />}
         </div>
       </OverlayTrigger>
     </td>

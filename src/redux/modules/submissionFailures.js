@@ -20,12 +20,12 @@ export const fetchAllFailures = actions.fetchMany({
   endpoint: fetchManyEndpoint
 });
 
-export const resolveFailure = (id, note) =>
+export const resolveFailure = (id, data) =>
   createApiAction({
     type: additionalActionTypes.RESOLVE,
     method: 'POST',
     endpoint: `/submission-failures/${id}/resolve`,
-    body: { note },
+    body: { ...data },
     meta: { id }
   });
 

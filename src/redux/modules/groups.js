@@ -260,23 +260,12 @@ const reducer = handleActions(
     [additionalActionTypes.MAKE_SUPERVISOR_FULFILLED]: (
       state,
       { payload, meta: { groupId, userId } }
-    ) =>
-      state.updateIn(
-        ['resources', groupId, 'data', 'privateData', 'supervisors'],
-        supervisors =>
-          supervisors.push(
-            fromJS(payload.supervisors.find(id => id === userId))
-          )
-      ),
+    ) => state.setIn(['resources', groupId, 'data'], fromJS(payload)),
 
     [additionalActionTypes.REMOVE_SUPERVISOR_FULFILLED]: (
       state,
       { payload, meta: { groupId, userId } }
-    ) =>
-      state.updateIn(
-        ['resources', groupId, 'data', 'privateData', 'supervisors'],
-        supervisors => supervisors.filter(id => id !== userId)
-      ),
+    ) => state.setIn(['resources', groupId, 'data'], fromJS(payload)),
 
     [additionalActionTypes.ADD_ADMIN_PENDING]: (
       state,
@@ -298,13 +287,8 @@ const reducer = handleActions(
 
     [additionalActionTypes.ADD_ADMIN_FULFILLED]: (
       state,
-      { payload: { primaryAdminsIds, admins }, meta: { groupId } }
-    ) =>
-      state.updateIn(['resources', groupId, 'data'], group =>
-        group
-          .setIn(['privateData', 'admins'], List(admins))
-          .set('primaryAdminsIds', primaryAdminsIds)
-      ),
+      { payload, meta: { groupId } }
+    ) => state.setIn(['resources', groupId, 'data'], fromJS(payload)),
 
     [additionalActionTypes.REMOVE_ADMIN_PENDING]: (
       state,
@@ -326,13 +310,8 @@ const reducer = handleActions(
 
     [additionalActionTypes.REMOVE_ADMIN_FULFILLED]: (
       state,
-      { payload: { primaryAdminsIds, admins }, meta: { groupId } }
-    ) =>
-      state.updateIn(['resources', groupId, 'data'], group =>
-        group
-          .setIn(['privateData', 'admins'], List(admins))
-          .set('primaryAdminsIds', primaryAdminsIds)
-      ),
+      { payload, meta: { groupId } }
+    ) => state.setIn(['resources', groupId, 'data'], fromJS(payload)),
 
     [additionalActionTypes.LOAD_USERS_GROUPS_FULFILLED]: (
       state,

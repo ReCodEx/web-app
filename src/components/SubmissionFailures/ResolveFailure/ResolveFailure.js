@@ -4,8 +4,8 @@ import { Modal, Button } from 'react-bootstrap';
 import { CloseIcon } from '../../icons';
 import { FormattedMessage } from 'react-intl';
 import { Field, reduxForm } from 'redux-form';
-import TextField from '../../forms/Fields/TextField';
 import SubmitButton from '../../forms/SubmitButton';
+import { TextField, CheckboxField } from '../../forms/Fields';
 
 const maxNoteLength = value =>
   value && value.length >= 255
@@ -46,6 +46,17 @@ const ResolveFailure = ({
           />
         }
         validate={maxNoteLength}
+      />
+      <Field
+        name="sendEmail"
+        component={CheckboxField}
+        onOff
+        label={
+          <FormattedMessage
+            id="app.submissionFailures.sendEmail"
+            defaultMessage="Send email"
+          />
+        }
       />
     </Modal.Body>
     <Modal.Footer>
