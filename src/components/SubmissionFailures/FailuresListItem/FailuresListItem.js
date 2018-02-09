@@ -1,10 +1,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FormattedDate, FormattedTime } from 'react-intl';
+import { FormattedDate, FormattedTime, FormattedMessage } from 'react-intl';
 import Icon from 'react-fontawesome';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { Link } from 'react-router';
+import withLinks from '../../../hoc/withLinks';
 
-const FailuresListItem = ({ id, createActions, failure }) =>
+const FailuresListItem = ({
+  id,
+  createActions,
+  failure,
+  links: {
+    SUBMISSION_DETAIL_URI_FACTORY,
+    EXERCISE_REFERENCE_SOLUTION_URI_FACTORY
+  }
+}) =>
   <tr className={failure.resolvedAt ? 'success' : 'danger'}>
     <td className="text-center">
       <OverlayTrigger
@@ -25,6 +35,35 @@ const FailuresListItem = ({ id, createActions, failure }) =>
     </td>
     <td>
       {failure.description}
+    </td>
+    <td>
+      {failure.assignmentSolutionId &&
+        <Link
+          to={SUBMISSION_DETAIL_URI_FACTORY(
+            failure.assignmentId,
+            failure.assignmentSolutionId
+          )}
+        >
+          <FormattedMessage
+            id="app.failureListItem.studentAssignment"
+            defaultMessage="Student assignment"
+          />
+        </Link>}
+      {failure.referenceSolutionId &&
+        <Link
+          to={EXERCISE_REFERENCE_SOLUTION_URI_FACTORY(
+            failure.exerciseId,
+            failure.referenceSolutionId
+          )}
+        >
+          <FormattedMessage
+            id="app.failureListItem.referenceAssignment"
+            defaultMessage="Reference assignment"
+          />
+        </Link>}
+      {failure.assignmentSolutionId === null &&
+        failure.referenceSolutionId === null &&
+        <span>&mdash;</span>}
     </td>
     <td>
       <FormattedDate value={new Date(failure.createdAt * 1000)} />
@@ -55,7 +94,8 @@ const FailuresListItem = ({ id, createActions, failure }) =>
 FailuresListItem.propTypes = {
   id: PropTypes.string.isRequired,
   failure: PropTypes.object.isRequired,
-  createActions: PropTypes.func
+  createActions: PropTypes.func,
+  links: PropTypes.object
 };
 
-export default FailuresListItem;
+export default withLinks(FailuresListItem);
