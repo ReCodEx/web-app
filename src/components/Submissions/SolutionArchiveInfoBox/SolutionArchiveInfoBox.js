@@ -1,0 +1,29 @@
+import React from 'react';
+import PropTypes from 'prop-types';
+import { injectIntl, defineMessages } from 'react-intl';
+import { SimpleInfoBox } from '../../widgets/InfoBox';
+
+const messages = defineMessages({
+  title: {
+    id: 'app.solutionArchiveInfoBox.title',
+    defaultMessage: 'Solution archive'
+  },
+  description: {
+    id: 'app.solutionArchiveInfoBox.description',
+    defaultMessage: 'All user sources in one package'
+  }
+});
+
+const SolutionArchiveInfoBox = ({ id, intl: { formatMessage } }) =>
+  <SimpleInfoBox
+    icon="file-archive-o"
+    title={formatMessage(messages.title)}
+    description={formatMessage(messages.description)}
+  />;
+
+SolutionArchiveInfoBox.propTypes = {
+  id: PropTypes.string.isRequired,
+  intl: PropTypes.shape({ formatMessage: PropTypes.func.isRequired }).isRequired
+};
+
+export default injectIntl(SolutionArchiveInfoBox);
