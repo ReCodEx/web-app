@@ -62,18 +62,19 @@ class EditAssignment extends Component {
     pointsPercentualThreshold,
     ...rest
   }) => ({
-    firstDeadline: moment.unix(firstDeadline),
-    secondDeadline: moment.unix(secondDeadline),
-    pointsPercentualThreshold: pointsPercentualThreshold * 100,
-    ...rest
-  });
+      firstDeadline: moment.unix(firstDeadline),
+      secondDeadline: moment.unix(secondDeadline),
+      pointsPercentualThreshold: pointsPercentualThreshold * 100,
+      ...rest
+    });
 
   render() {
     const {
       links: {
         ASSIGNMENT_DETAIL_URI_FACTORY,
-        GROUP_URI_FACTORY,
-        SUPERVISOR_STATS_URI_FACTORY
+      GROUP_URI_FACTORY,
+      SUPERVISOR_STATS_URI_FACTORY,
+      EXERCISE_URI_FACTORY
       },
       params: { assignmentId },
       push,
@@ -101,8 +102,21 @@ class EditAssignment extends Component {
         }
         breadcrumbs={[
           {
-            text: <FormattedMessage id="app.assignment.title" />,
+            resource: assignment,
             iconName: 'puzzle-piece',
+            breadcrumb: assignment => ({
+              text: (
+                <FormattedMessage
+                  id="app.exercise.title"
+                  defaultMessage="Exercise"
+                />
+              ),
+              link: EXERCISE_URI_FACTORY(assignment.exerciseId)
+            })
+          },
+          {
+            text: <FormattedMessage id="app.assignment.title" />,
+            iconName: 'hourglass-start',
             link: ASSIGNMENT_DETAIL_URI_FACTORY(assignmentId)
           },
           {

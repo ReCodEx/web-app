@@ -127,13 +127,27 @@ class Assignment extends Component {
             })
           },
           {
+            resource: assignment,
+            iconName: 'puzzle-piece',
+            breadcrumb: assignment => ({
+              text: (
+                <FormattedMessage
+                  id="app.exercise.title"
+                  defaultMessage="Exercise"
+                />
+              ),
+              link: ({ EXERCISE_URI_FACTORY }) =>
+                EXERCISE_URI_FACTORY(assignment.exerciseId)
+            })
+          },
+          {
             text: (
               <FormattedMessage
                 id="app.assignment.title"
                 defaultMessage="Exercise assignment"
               />
             ),
-            iconName: 'puzzle-piece'
+            iconName: 'hourglass-start'
           }
         ]}
       >
