@@ -129,16 +129,17 @@ class Assignment extends Component {
           {
             resource: assignment,
             iconName: 'puzzle-piece',
-            breadcrumb: assignment => ({
-              text: (
-                <FormattedMessage
-                  id="app.exercise.title"
-                  defaultMessage="Exercise"
-                />
-              ),
-              link: ({ EXERCISE_URI_FACTORY }) =>
-                EXERCISE_URI_FACTORY(assignment.exerciseId)
-            })
+            breadcrumb: assignment => (
+              {
+                text: (
+                  <FormattedMessage
+                    id="app.exercise.title"
+                    defaultMessage="Exercise"
+                  />
+                ),
+                link: ({ EXERCISE_URI_FACTORY }) =>
+                  (isSuperAdmin || isSupervisorOf(assignment.groupId)) ? EXERCISE_URI_FACTORY(assignment.exerciseId) : '#'
+              })
           },
           {
             text: (
