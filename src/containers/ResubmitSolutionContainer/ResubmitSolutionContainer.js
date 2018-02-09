@@ -36,6 +36,7 @@ const ResubmitSolutionContainer = ({
         monitor={monitor}
         link={SUBMISSION_DETAIL_URI_FACTORY(assignmentId, newSubmissionId)}
         onFinish={() => fetchSubmissions(userId)}
+        onUserClose={() => fetchSubmissions(userId)}
       />
     </span>
   );
