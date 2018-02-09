@@ -26,16 +26,14 @@ import { getAssignment } from '../../redux/selectors/assignments';
 import { canSubmitSolution } from '../../redux/selectors/canSubmit';
 import { runtimeEnvironmentsSelector } from '../../redux/selectors/runtimeEnvironments';
 import { isSubmitting } from '../../redux/selectors/submission';
-import {
-  isSupervisorOf,
-  isLoggedAsSuperAdmin
-} from '../../redux/selectors/users';
+import { isSupervisorOf, isAdminOf } from '../../redux/selectors/users';
 import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments';
 import { isReady, getJsData } from '../../redux/helpers/resourceManager';
 import { ResubmitAllSolutionsContainer } from '../../containers/ResubmitSolutionContainer';
 import AssignmentSync from '../../components/Assignments/Assignment/AssignmentSync';
 
 import withLinks from '../../hoc/withLinks';
+import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 
 class EditAssignment extends Component {
   componentWillMount = () => this.props.loadAsync();
@@ -62,25 +60,26 @@ class EditAssignment extends Component {
     pointsPercentualThreshold,
     ...rest
   }) => ({
-      firstDeadline: moment.unix(firstDeadline),
-      secondDeadline: moment.unix(secondDeadline),
-      pointsPercentualThreshold: pointsPercentualThreshold * 100,
-      ...rest
-    });
+    firstDeadline: moment.unix(firstDeadline),
+    secondDeadline: moment.unix(secondDeadline),
+    pointsPercentualThreshold: pointsPercentualThreshold * 100,
+    ...rest
+  });
 
   render() {
     const {
       links: {
         ASSIGNMENT_DETAIL_URI_FACTORY,
-      GROUP_URI_FACTORY,
-      SUPERVISOR_STATS_URI_FACTORY,
-      EXERCISE_URI_FACTORY
+        GROUP_URI_FACTORY,
+        SUPERVISOR_STATS_URI_FACTORY,
+        EXERCISE_URI_FACTORY
       },
       params: { assignmentId },
       push,
       assignment,
       editAssignment,
-      isSuperAdmin,
+      isSupervisorOf,
+      isAdminOf,
       formValues,
       exerciseSync
     } = this.props;
@@ -130,7 +129,8 @@ class EditAssignment extends Component {
             <Row>
               <Col xs={12}>
                 <HierarchyLineContainer groupId={assignment.groupId} />
-                {(isSuperAdmin || isSupervisorOf(assignment.groupId)) &&
+                {(isAdminOf(assignment.groupId) ||
+                  isSupervisorOf(assignment.groupId)) &&
                   <p>
                     <LinkContainer
                       to={SUPERVISOR_STATS_URI_FACTORY(assignment.id)}
@@ -149,7 +149,8 @@ class EditAssignment extends Component {
                   </p>}
               </Col>
             </Row>
-            {(isSuperAdmin || isSupervisorOf(assignment.groupId)) &&
+            {(isAdminOf(assignment.groupId) ||
+              isSupervisorOf(assignment.groupId)) &&
               <AssignmentSync
                 syncInfo={assignment.exerciseSynchronizationInfo}
                 exerciseSync={exerciseSync}
@@ -203,25 +204,29 @@ EditAssignment.propTypes = {
   params: PropTypes.shape({
     assignmentId: PropTypes.string.isRequired
   }).isRequired,
-  isSuperAdmin: PropTypes.bool,
   assignment: ImmutablePropTypes.map,
   runtimeEnvironments: ImmutablePropTypes.map,
   editAssignment: PropTypes.func.isRequired,
   formValues: PropTypes.object,
   exerciseSync: PropTypes.func.isRequired,
-  links: PropTypes.object
+  links: PropTypes.object,
+  isSupervisorOf: PropTypes.func.isRequired,
+  isAdminOf: PropTypes.func.isRequired
 };
 
 export default withLinks(
   connect(
     (state, { params: { assignmentId } }) => {
+      const loggedInUserId = loggedInUserIdSelector(state);
       return {
         assignment: getAssignment(state)(assignmentId),
         runtimeEnvironments: runtimeEnvironmentsSelector(state),
         submitting: isSubmitting(state),
-        isSuperAdmin: isLoggedAsSuperAdmin(state),
         canSubmit: canSubmitSolution(assignmentId)(state),
-        formValues: getFormValues('editAssignment')(state)
+        formValues: getFormValues('editAssignment')(state),
+        isSupervisorOf: groupId =>
+          isSupervisorOf(loggedInUserId, groupId)(state),
+        isAdminOf: groupId => isAdminOf(loggedInUserId, groupId)(state)
       };
     },
     (dispatch, { params: { assignmentId } }) => ({
