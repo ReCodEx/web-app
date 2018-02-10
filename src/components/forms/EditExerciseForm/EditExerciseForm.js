@@ -52,8 +52,8 @@ const EditExerciseForm = ({
   submitSucceeded: hasSucceeded,
   invalid,
   asyncValidating,
-  formValues: { localizedTexts } = {},
-  intl: { formatMessage, locale },
+  localizedTextsLocales = [],
+  intl: { formatMessage },
   links: { EXERCISE_EDIT_SIMPLE_CONFIG_URI_FACTORY }
 }) =>
   <FormBox
@@ -128,7 +128,7 @@ const EditExerciseForm = ({
 
     <FieldArray
       name="localizedTexts"
-      localizedTexts={localizedTexts}
+      localizedTextsLocales={localizedTextsLocales}
       component={LocalizedTextsFormField}
     />
 
@@ -181,9 +181,7 @@ EditExerciseForm.propTypes = {
   submitSucceeded: PropTypes.bool,
   invalid: PropTypes.bool,
   asyncValidating: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
-  formValues: PropTypes.shape({
-    localizedTexts: PropTypes.array
-  }),
+  localizedTextsLocales: PropTypes.array,
   links: PropTypes.object
 };
 
@@ -325,12 +323,12 @@ const shouldAsyncValidate = ({
 };
 
 export default withLinks(
-  injectIntl(
-    reduxForm({
-      form: 'editExercise',
-      validate,
-      asyncValidate,
-      shouldAsyncValidate
-    })(EditExerciseForm)
-  )
+  reduxForm({
+    form: 'editExercise',
+    validate,
+    asyncValidate,
+    shouldAsyncValidate,
+    enableReinitialize: true,
+    keepDirtyOnReinitialize: false
+  })(injectIntl(EditExerciseForm))
 );

@@ -5,7 +5,7 @@ import { FormattedMessage } from 'react-intl';
 import { HelpBlock } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
-import { reset, getFormValues } from 'redux-form';
+import { reset, formValueSelector } from 'redux-form';
 
 import Page from '../../components/layout/Page';
 import EditGroupForm from '../../components/forms/EditGroupForm';
@@ -17,6 +17,7 @@ import { fetchGroupIfNeeded, editGroup } from '../../redux/modules/groups';
 import { groupSelector } from '../../redux/selectors/groups';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import { isSupervisorOf } from '../../redux/selectors/users';
+import { getLocalizedTextsLocales } from '../../helpers/getLocalizedData';
 
 import withLinks from '../../hoc/withLinks';
 
@@ -51,7 +52,8 @@ class EditGroup extends Component {
       group,
       links: { GROUP_URI_FACTORY },
       editGroup,
-      formValues,
+      hasThreshold,
+      localizedTexts,
       push
     } = this.props;
 
@@ -87,7 +89,8 @@ class EditGroup extends Component {
             <EditGroupForm
               initialValues={this.getInitialValues(group)}
               onSubmit={editGroup}
-              formValues={formValues}
+              hasThreshold={hasThreshold}
+              localizedTextsLocales={getLocalizedTextsLocales(localizedTexts)}
             />
 
             <Box
@@ -143,8 +146,11 @@ EditGroup.propTypes = {
   group: ImmutablePropTypes.map,
   editGroup: PropTypes.func.isRequired,
   push: PropTypes.func.isRequired,
-  formValues: PropTypes.object
+  hasThreshold: PropTypes.bool,
+  localizedTexts: PropTypes.array
 };
+
+const editGroupFormSelector = formValueSelector('editGroup');
 
 export default withLinks(
   connect(
@@ -155,7 +161,8 @@ export default withLinks(
         group: selectGroup(state),
         userId,
         isStudentOf: groupId => isSupervisorOf(userId, groupId)(state),
-        formValues: getFormValues('editGroup')(state)
+        hasThreshold: editGroupFormSelector(state, 'hasThreshold'),
+        localizedTexts: editGroupFormSelector(state, 'localizedTexts')
       };
     },
     (dispatch, { params: { groupId } }) => ({

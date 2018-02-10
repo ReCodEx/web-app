@@ -5,7 +5,7 @@ import { FormattedMessage } from 'react-intl';
 import { Col, Row } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
-import { reset, getFormValues } from 'redux-form';
+import { reset, formValueSelector } from 'redux-form';
 import moment from 'moment';
 import { LinkContainer } from 'react-router-bootstrap';
 
@@ -34,6 +34,7 @@ import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironment
 import { isReady, getJsData } from '../../redux/helpers/resourceManager';
 import { ResubmitAllSolutionsContainer } from '../../containers/ResubmitSolutionContainer';
 import AssignmentSync from '../../components/Assignments/Assignment/AssignmentSync';
+import { getLocalizedTextsLocales } from '../../helpers/getLocalizedData';
 
 import withLinks from '../../hoc/withLinks';
 
@@ -80,7 +81,9 @@ class EditAssignment extends Component {
       assignment,
       editAssignment,
       isSuperAdmin,
-      formValues,
+      firstDeadline,
+      allowSecondDeadline,
+      localizedTexts,
       exerciseSync
     } = this.props;
 
@@ -148,7 +151,9 @@ class EditAssignment extends Component {
               }
               onSubmit={formData =>
                 editAssignment(assignment.version, formData)}
-              formValues={formValues}
+              firstDeadline={firstDeadline}
+              allowSecondDeadline={allowSecondDeadline}
+              localizedTextsLocales={getLocalizedTextsLocales(localizedTexts)}
             />
 
             <br />
@@ -193,10 +198,14 @@ EditAssignment.propTypes = {
   assignment: ImmutablePropTypes.map,
   runtimeEnvironments: ImmutablePropTypes.map,
   editAssignment: PropTypes.func.isRequired,
-  formValues: PropTypes.object,
+  firstDeadline: PropTypes.oneOfType([PropTypes.number, PropTypes.object]),
+  allowSecondDeadline: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
+  localizedTexts: PropTypes.array,
   exerciseSync: PropTypes.func.isRequired,
   links: PropTypes.object
 };
+
+const editAssignmentFormSelector = formValueSelector('editAssignment');
 
 export default withLinks(
   connect(
@@ -207,7 +216,12 @@ export default withLinks(
         submitting: isSubmitting(state),
         isSuperAdmin: isLoggedAsSuperAdmin(state),
         canSubmit: canSubmitSolution(assignmentId)(state),
-        formValues: getFormValues('editAssignment')(state)
+        firstDeadline: editAssignmentFormSelector(state, 'firstDeadline'),
+        allowSecondDeadline: editAssignmentFormSelector(
+          state,
+          'allowSecondDeadline'
+        ),
+        localizedTexts: editAssignmentFormSelector(state, 'localizedTexts')
       };
     },
     (dispatch, { params: { assignmentId } }) => ({

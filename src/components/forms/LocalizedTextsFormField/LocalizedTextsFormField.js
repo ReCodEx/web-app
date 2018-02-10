@@ -6,15 +6,15 @@ import LocalizedExerciseFormField from './LocalizedExerciseFormField';
 import LocalizedGroupFormField from './LocalizedGroupFormField';
 
 const LocalizedTextsFormField = ({
-  localizedTexts = [],
+  localizedTextsLocales = [],
   isGroup = false,
   ...props
 }) =>
   <TabbedArrayField
     {...props}
     getTitle={i =>
-      localizedTexts && localizedTexts[i] && localizedTexts[i].locale
-        ? localizedTexts[i].locale
+      localizedTextsLocales && localizedTextsLocales[i]
+        ? localizedTextsLocales[i]
         : <FormattedMessage
             id="app.editLocalizedTextForm.newLocale"
             defaultMessage="New language"
@@ -46,7 +46,7 @@ const LocalizedTextsFormField = ({
   />;
 
 LocalizedTextsFormField.propTypes = {
-  localizedTexts: PropTypes.array,
+  localizedTextsLocales: PropTypes.array,
   isGroup: PropTypes.bool
 };
 

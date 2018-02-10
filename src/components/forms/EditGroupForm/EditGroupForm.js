@@ -17,7 +17,8 @@ const EditGroupForm = ({
   submitSucceeded = false,
   invalid,
   createNew = false,
-  formValues: { localizedTexts, hasThreshold } = {},
+  localizedTextsLocales,
+  hasThreshold,
   collapsable = false,
   isOpen = true,
   reset
@@ -85,7 +86,7 @@ const EditGroupForm = ({
 
     <FieldArray
       name="localizedTexts"
-      localizedTexts={localizedTexts}
+      localizedTextsLocales={localizedTextsLocales}
       component={LocalizedTextsFormField}
       isGroup={true}
     />
@@ -176,9 +177,8 @@ EditGroupForm.propTypes = {
   submitSucceeded: PropTypes.bool,
   submitting: PropTypes.bool,
   invalid: PropTypes.bool,
-  formValues: PropTypes.shape({
-    localizedTexts: PropTypes.array
-  }),
+  hasThreshold: PropTypes.bool,
+  localizedTextsLocales: PropTypes.array,
   createNew: PropTypes.bool,
   collapsable: PropTypes.bool,
   isOpen: PropTypes.bool,
