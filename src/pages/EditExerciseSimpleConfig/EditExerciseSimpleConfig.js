@@ -166,7 +166,7 @@ class EditExerciseSimpleConfig extends Component {
             tests,
             exerciseRuntimeEnvironments
           ).map(({ id, data }) => editEnvironmentSimpleLimits(id, data))
-        ); //.then(reloadExercise);
+        ).then(reloadExercise);
     }
   );
 
