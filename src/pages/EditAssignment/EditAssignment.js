@@ -8,6 +8,7 @@ import { push } from 'react-router-redux';
 import { reset, formValueSelector } from 'redux-form';
 import moment from 'moment';
 import { LinkContainer } from 'react-router-bootstrap';
+import { defaultMemoize } from 'reselect';
 
 import Button from '../../components/widgets/FlatButton';
 import Page from '../../components/layout/Page';
@@ -40,14 +41,14 @@ import withLinks from '../../hoc/withLinks';
 
 class EditAssignment extends Component {
   componentWillMount = () => this.props.loadAsync();
-  componentWillReceiveProps = props => {
-    if (this.props.params.assignmentId !== props.params.assignmentId) {
-      props.reset();
-      props.loadAsync();
+  componentWillReceiveProps = nextProps => {
+    if (this.props.params.assignmentId !== nextProps.params.assignmentId) {
+      nextProps.reset();
+      nextProps.loadAsync();
     }
 
-    if (isReady(props.assignment)) {
-      this.groupId = getJsData(props.assignment).groupId;
+    if (isReady(nextProps.assignment)) {
+      this.groupId = getJsData(nextProps.assignment).groupId;
     }
   };
 
@@ -57,17 +58,24 @@ class EditAssignment extends Component {
       dispatch(fetchRuntimeEnvironments())
     ]);
 
-  getInitialValues = ({
-    firstDeadline,
-    secondDeadline,
-    pointsPercentualThreshold,
-    ...rest
-  }) => ({
-    firstDeadline: moment.unix(firstDeadline),
-    secondDeadline: moment.unix(secondDeadline),
-    pointsPercentualThreshold: pointsPercentualThreshold * 100,
-    ...rest
-  });
+  getInitialValues = defaultMemoize(
+    ({
+      firstDeadline,
+      secondDeadline,
+      pointsPercentualThreshold,
+      ...rest
+    }) => ({
+      firstDeadline: moment.unix(firstDeadline),
+      secondDeadline: moment.unix(secondDeadline),
+      pointsPercentualThreshold: pointsPercentualThreshold * 100,
+      ...rest
+    })
+  );
+
+  editAssignmentSubmitHandler = formData => {
+    const { assignment, editAssignment } = this.props;
+    return editAssignment(assignment.getIn(['data', 'version']), formData);
+  };
 
   render() {
     const {
@@ -79,7 +87,6 @@ class EditAssignment extends Component {
       params: { assignmentId },
       push,
       assignment,
-      editAssignment,
       isSuperAdmin,
       firstDeadline,
       allowSecondDeadline,
@@ -149,8 +156,7 @@ class EditAssignment extends Component {
               initialValues={
                 assignment ? this.getInitialValues(assignment) : {}
               }
-              onSubmit={formData =>
-                editAssignment(assignment.version, formData)}
+              onSubmit={this.editAssignmentSubmitHandler}
               firstDeadline={firstDeadline}
               allowSecondDeadline={allowSecondDeadline}
               localizedTextsLocales={getLocalizedTextsLocales(localizedTexts)}
@@ -207,42 +213,40 @@ EditAssignment.propTypes = {
 
 const editAssignmentFormSelector = formValueSelector('editAssignment');
 
-export default withLinks(
-  connect(
-    (state, { params: { assignmentId } }) => {
-      return {
-        assignment: getAssignment(state)(assignmentId),
-        runtimeEnvironments: runtimeEnvironmentsSelector(state),
-        submitting: isSubmitting(state),
-        isSuperAdmin: isLoggedAsSuperAdmin(state),
-        canSubmit: canSubmitSolution(assignmentId)(state),
-        firstDeadline: editAssignmentFormSelector(state, 'firstDeadline'),
-        allowSecondDeadline: editAssignmentFormSelector(
-          state,
-          'allowSecondDeadline'
-        ),
-        localizedTexts: editAssignmentFormSelector(state, 'localizedTexts')
-      };
+export default connect(
+  (state, { params: { assignmentId } }) => {
+    return {
+      assignment: getAssignment(state)(assignmentId),
+      runtimeEnvironments: runtimeEnvironmentsSelector(state),
+      submitting: isSubmitting(state),
+      isSuperAdmin: isLoggedAsSuperAdmin(state),
+      canSubmit: canSubmitSolution(assignmentId)(state),
+      firstDeadline: editAssignmentFormSelector(state, 'firstDeadline'),
+      allowSecondDeadline: editAssignmentFormSelector(
+        state,
+        'allowSecondDeadline'
+      ),
+      localizedTexts: editAssignmentFormSelector(state, 'localizedTexts')
+    };
+  },
+  (dispatch, { params: { assignmentId } }) => ({
+    push: url => dispatch(push(url)),
+    reset: () => dispatch(reset('editAssignment')),
+    loadAsync: () => EditAssignment.loadAsync({ assignmentId }, dispatch),
+    editAssignment: (version, data) => {
+      // convert deadline times to timestamps
+      const processedData = Object.assign({}, data, {
+        firstDeadline: moment(data.firstDeadline).unix(),
+        secondDeadline: moment(data.secondDeadline).unix(),
+        submissionsCountLimit: Number(data.submissionsCountLimit),
+        version
+      });
+      if (!processedData.allowSecondDeadline) {
+        delete processedData.secondDeadline;
+        delete processedData.maxPointsBeforeSecondDeadline;
+      }
+      return dispatch(editAssignment(assignmentId, processedData));
     },
-    (dispatch, { params: { assignmentId } }) => ({
-      push: url => dispatch(push(url)),
-      reset: () => dispatch(reset('editAssignment')),
-      loadAsync: () => EditAssignment.loadAsync({ assignmentId }, dispatch),
-      editAssignment: (version, data) => {
-        // convert deadline times to timestamps
-        const processedData = Object.assign({}, data, {
-          firstDeadline: moment(data.firstDeadline).unix(),
-          secondDeadline: moment(data.secondDeadline).unix(),
-          submissionsCountLimit: Number(data.submissionsCountLimit),
-          version
-        });
-        if (!processedData.allowSecondDeadline) {
-          delete processedData.secondDeadline;
-          delete processedData.maxPointsBeforeSecondDeadline;
-        }
-        return dispatch(editAssignment(assignmentId, processedData));
-      },
-      exerciseSync: () => dispatch(syncWithExercise(assignmentId))
-    })
-  )(EditAssignment)
-);
+    exerciseSync: () => dispatch(syncWithExercise(assignmentId))
+  })
+)(withLinks(EditAssignment));
