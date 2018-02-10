@@ -19,6 +19,7 @@ const SolutionArchiveInfoBox = ({ id, intl: { formatMessage } }) =>
     icon="file-archive-o"
     title={formatMessage(messages.title)}
     description={formatMessage(messages.description)}
+    color="blue"
   />;
 
 SolutionArchiveInfoBox.propTypes = {

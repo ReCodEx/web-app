@@ -15,7 +15,8 @@ const { actions, reduceActions } = factory({
  */
 
 export const additionalActionTypes = {
-  DOWNLOAD_EVALUATION_ARCHIVE: 'recodex/files/DOWNLOAD_EVALUATION_ARCHIVE'
+  DOWNLOAD_EVALUATION_ARCHIVE: 'recodex/files/DOWNLOAD_EVALUATION_ARCHIVE',
+  DOWNLOAD_SOLUTION_ARCHIVE: 'recodex/files/DOWNLOAD_SOLUTION_ARCHIVE'
 };
 
 export const fetchReferenceSolutionEvaluation = actions.fetchResource;
@@ -29,8 +30,16 @@ export const fetchReferenceSolutionEvaluationsForSolution = solutionId =>
 
 export const downloadEvaluationArchive = downloadHelper({
   actionType: additionalActionTypes.DOWNLOAD_EVALUATION_ARCHIVE,
-  fetch: fetchReferenceSolutionEvaluationIfNeeded,
+  fetch: null,
   endpoint: id => `/reference-solutions/evaluation/${id}/download-result`,
+  fileNameSelector: (id, state) => `${id}.zip`,
+  contentType: 'application/zip'
+});
+
+export const downloadSolutionArchive = downloadHelper({
+  actionType: additionalActionTypes.DOWNLOAD_SOLUTION_ARCHIVE,
+  fetch: null,
+  endpoint: id => `/reference-solutions/${id}/download-solution`,
   fileNameSelector: (id, state) => `${id}.zip`,
   contentType: 'application/zip'
 });

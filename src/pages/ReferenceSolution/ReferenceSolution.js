@@ -24,6 +24,8 @@ import SourceCodeInfoBox from '../../components/widgets/SourceCodeInfoBox';
 import SourceCodeViewerContainer from '../../containers/SourceCodeViewerContainer';
 import { RefreshIcon, SendIcon } from '../../components/icons';
 import ReferenceSolutionEvaluationsContainer from '../../containers/ReferenceSolutionEvaluationsContainer';
+import SolutionArchiveInfoBox from '../../components/Submissions/SolutionArchiveInfoBox';
+import { downloadSolutionArchive } from '../../redux/modules/referenceSolutionEvaluations';
 
 const messages = defineMessages({
   title: {
@@ -60,6 +62,7 @@ class ReferenceSolution extends Component {
       refreshSolutionEvaluations,
       evaluateReferenceSolution,
       evaluateReferenceSolutionInDebugMode,
+      downloadSolutionArchive,
       intl: { formatMessage },
       links: { EXERCISES_URI, EXERCISE_URI_FACTORY }
     } = this.props;
@@ -134,6 +137,13 @@ class ReferenceSolution extends Component {
                         </a>
                       </Col>
                     )}
+                  </Row>
+                  <Row>
+                    <Col lg={6} md={12}>
+                      <a href="#" onClick={downloadSolutionArchive}>
+                        <SolutionArchiveInfoBox id={referenceSolution.id} />
+                      </a>
+                    </Col>
                   </Row>
                 </Col>
                 <Col lg={6}>
@@ -221,6 +231,7 @@ ReferenceSolution.propTypes = {
   evaluateReferenceSolution: PropTypes.func.isRequired,
   evaluateReferenceSolutionInDebugMode: PropTypes.func.isRequired,
   referenceSolutions: ImmutablePropTypes.map,
+  downloadSolutionArchive: PropTypes.func,
   intl: intlShape.isRequired,
   links: PropTypes.object.isRequired
 };
@@ -239,7 +250,11 @@ export default withLinks(
         evaluateReferenceSolution: () =>
           dispatch(evaluateReferenceSolution(params.referenceSolutionId)),
         evaluateReferenceSolutionInDebugMode: () =>
-          dispatch(evaluateReferenceSolution(params.referenceSolutionId, true))
+          dispatch(evaluateReferenceSolution(params.referenceSolutionId, true)),
+        downloadSolutionArchive: e => {
+          e.preventDefault();
+          dispatch(downloadSolutionArchive(params.referenceSolutionId));
+        }
       })
     )(ReferenceSolution)
   )
