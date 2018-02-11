@@ -13,7 +13,8 @@ import {
 import {
   fetchSupplementaryFilesForExercise,
   addSupplementaryFiles,
-  removeSupplementaryFile
+  removeSupplementaryFile,
+  downloadSupplementaryArchive
 } from '../../redux/modules/supplementaryFiles';
 import { downloadSupplementaryFile } from '../../redux/modules/files';
 
@@ -27,6 +28,7 @@ const SupplementaryFilesTableContainer = ({
   removeFile,
   downloadFile,
   viewOnly = false,
+  downloadArchive,
   ...props
 }) =>
   <FilesTableContainer
@@ -51,6 +53,7 @@ const SupplementaryFilesTableContainer = ({
     HeaderComponent={SupplementaryFilesTableHeaderRow}
     RowComponent={SupplementaryFilesTableRow}
     viewOnly={viewOnly}
+    downloadArchive={downloadArchive}
     {...props}
   />;
 
@@ -64,7 +67,8 @@ SupplementaryFilesTableContainer.propTypes = {
   addFiles: PropTypes.func.isRequired,
   removeFile: PropTypes.func.isRequired,
   downloadFile: PropTypes.func.isRequired,
-  viewOnly: PropTypes.bool
+  viewOnly: PropTypes.bool,
+  downloadArchive: PropTypes.func
 };
 
 export default connect(
@@ -80,6 +84,10 @@ export default connect(
     downloadFile: (event, id) => {
       event.preventDefault();
       dispatch(downloadSupplementaryFile(id));
+    },
+    downloadArchive: e => {
+      e.preventDefault();
+      dispatch(downloadSupplementaryArchive(exercise.id));
     }
   })
 )(SupplementaryFilesTableContainer);

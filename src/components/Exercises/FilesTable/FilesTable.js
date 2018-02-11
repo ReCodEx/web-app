@@ -7,7 +7,7 @@ import Icon from 'react-fontawesome';
 import { Table } from 'react-bootstrap';
 import Button from '../../widgets/FlatButton';
 import Box from '../../widgets/Box';
-import { SendIcon } from '../../icons';
+import { SendIcon, DownloadIcon } from '../../icons';
 
 import UploadContainer from '../../../containers/UploadContainer';
 import ResourceRenderer from '../../helpers/ResourceRenderer';
@@ -31,7 +31,8 @@ const FilesTable = ({
   RowComponent,
   intl,
   isOpen = true,
-  viewOnly = false
+  viewOnly = false,
+  downloadArchive
 }) =>
   <Box title={title} collapsable isOpen={isOpen} unlimitedHeight>
     <div>
@@ -88,6 +89,16 @@ const FilesTable = ({
               </p>}
           </div>}
       </ResourceRenderer>
+      {downloadArchive &&
+        <p>
+          <Button bsStyle="primary" onClick={downloadArchive}>
+            <DownloadIcon />{' '}
+            <FormattedMessage
+              id="app.filesTable.downloadArchive"
+              defaultMessage="Download all"
+            />
+          </Button>
+        </p>}
     </div>
   </Box>;
 
@@ -113,7 +124,8 @@ FilesTable.propTypes = {
   RowComponent: PropTypes.func.isRequired,
   intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired,
   isOpen: PropTypes.bool,
-  viewOnly: PropTypes.bool
+  viewOnly: PropTypes.bool,
+  downloadArchive: PropTypes.func
 };
 
 export default injectIntl(FilesTable);

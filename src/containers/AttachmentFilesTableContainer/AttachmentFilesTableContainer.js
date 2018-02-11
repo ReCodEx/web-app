@@ -13,7 +13,8 @@ import {
 import {
   fetchAttachmentFiles,
   addAttachmentFiles,
-  removeAttachmentFile
+  removeAttachmentFile,
+  downloadAttachmentArchive
 } from '../../redux/modules/attachmentFiles';
 
 import { createGetAttachmentFiles } from '../../redux/selectors/attachmentFiles';
@@ -23,7 +24,8 @@ const AttachmentFilesTableContainer = ({
   attachmentFiles,
   loadFiles,
   addFiles,
-  removeFile
+  removeFile,
+  downloadArchive
 }) =>
   <FilesTableContainer
     uploadId={`attachment-exercise-files-${exercise.id}`}
@@ -45,6 +47,7 @@ const AttachmentFilesTableContainer = ({
     }
     HeaderComponent={AttachmentFilesTableHeaderRow}
     RowComponent={AttachmentFilesTableRow}
+    downloadArchive={downloadArchive}
   />;
 
 AttachmentFilesTableContainer.propTypes = {
@@ -55,7 +58,8 @@ AttachmentFilesTableContainer.propTypes = {
   attachmentFiles: ImmutablePropTypes.map,
   loadFiles: PropTypes.func.isRequired,
   addFiles: PropTypes.func.isRequired,
-  removeFile: PropTypes.func.isRequired
+  removeFile: PropTypes.func.isRequired,
+  downloadArchive: PropTypes.func
 };
 
 export default connect(
@@ -70,6 +74,10 @@ export default connect(
   (dispatch, { exercise }) => ({
     loadFiles: () => dispatch(fetchAttachmentFiles(exercise.id)),
     addFiles: files => dispatch(addAttachmentFiles(exercise.id, files)),
-    removeFile: id => dispatch(removeAttachmentFile(exercise.id, id))
+    removeFile: id => dispatch(removeAttachmentFile(exercise.id, id)),
+    downloadArchive: e => {
+      e.preventDefault();
+      dispatch(downloadAttachmentArchive(exercise.id));
+    }
   })
 )(AttachmentFilesTableContainer);

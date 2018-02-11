@@ -5,6 +5,7 @@ import factory, {
   resourceStatus
 } from '../helpers/resourceManager';
 import { createApiAction } from '../middleware/apiMiddleware';
+import { downloadHelper } from '../helpers/api/download';
 
 const resourceName = 'attachmentFiles';
 const { actions, reduceActions } = factory({ resourceName });
@@ -19,7 +20,9 @@ export const actionTypes = {
   ADD_FILES_FULFILLED: 'recodex/attachmentFiles/ADD_FILES_FULFILLED',
   ADD_FILES_FAILED: 'recodex/attachmentFiles/ADD_FILES_REJECTED',
   REMOVE_FILE: 'recodex/attachmentFiles/REMOVE_FILE',
-  REMOVE_FILE_FULFILLED: 'recodex/attachmentFiles/REMOVE_FILE_FULFILLED'
+  REMOVE_FILE_FULFILLED: 'recodex/attachmentFiles/REMOVE_FILE_FULFILLED',
+  DOWNLOAD_ATTACHMENT_ARCHIVE:
+    'recodex/attachmentFiles/DOWNLOAD_ATTACHMENT_ARCHIVE'
 };
 
 export const fetchAttachmentFiles = exerciseId =>
@@ -52,6 +55,14 @@ export const removeAttachmentFile = (exerciseId, fileId) =>
     method: 'DELETE',
     meta: { exerciseId, fileId }
   });
+
+export const downloadAttachmentArchive = downloadHelper({
+  actionType: actionTypes.DOWNLOAD_ATTACHMENT_ARCHIVE,
+  fetch: null,
+  endpoint: id => `/exercises/${id}/attachment-files/download-archive`,
+  fileNameSelector: (id, state) => `${id}.zip`,
+  contentType: 'application/zip'
+});
 
 /**
  * Reducer

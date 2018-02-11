@@ -27,10 +27,7 @@ import { getAssignment } from '../../redux/selectors/assignments';
 import { canSubmitSolution } from '../../redux/selectors/canSubmit';
 import { runtimeEnvironmentsSelector } from '../../redux/selectors/runtimeEnvironments';
 import { isSubmitting } from '../../redux/selectors/submission';
-import {
-  isSupervisorOf,
-  isLoggedAsSuperAdmin
-} from '../../redux/selectors/users';
+import { isSupervisorOf, isAdminOf } from '../../redux/selectors/users';
 import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments';
 import { isReady, getJsData } from '../../redux/helpers/resourceManager';
 import { ResubmitAllSolutionsContainer } from '../../containers/ResubmitSolutionContainer';
@@ -38,6 +35,7 @@ import AssignmentSync from '../../components/Assignments/Assignment/AssignmentSy
 import { getLocalizedTextsLocales } from '../../helpers/getLocalizedData';
 
 import withLinks from '../../hoc/withLinks';
+import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 
 class EditAssignment extends Component {
   componentWillMount = () => this.props.loadAsync();
@@ -82,12 +80,14 @@ class EditAssignment extends Component {
       links: {
         ASSIGNMENT_DETAIL_URI_FACTORY,
         GROUP_URI_FACTORY,
-        SUPERVISOR_STATS_URI_FACTORY
+        SUPERVISOR_STATS_URI_FACTORY,
+        EXERCISE_URI_FACTORY
       },
       params: { assignmentId },
       push,
       assignment,
-      isSuperAdmin,
+      isSupervisorOf,
+      isAdminOf,
       firstDeadline,
       allowSecondDeadline,
       localizedTexts,
@@ -111,8 +111,21 @@ class EditAssignment extends Component {
         }
         breadcrumbs={[
           {
-            text: <FormattedMessage id="app.assignment.title" />,
+            resource: assignment,
             iconName: 'puzzle-piece',
+            breadcrumb: assignment => ({
+              text: (
+                <FormattedMessage
+                  id="app.exercise.title"
+                  defaultMessage="Exercise"
+                />
+              ),
+              link: EXERCISE_URI_FACTORY(assignment.exerciseId)
+            })
+          },
+          {
+            text: <FormattedMessage id="app.assignment.title" />,
+            iconName: 'hourglass-start',
             link: ASSIGNMENT_DETAIL_URI_FACTORY(assignmentId)
           },
           {
@@ -126,7 +139,8 @@ class EditAssignment extends Component {
             <Row>
               <Col xs={12}>
                 <HierarchyLineContainer groupId={assignment.groupId} />
-                {(isSuperAdmin || isSupervisorOf(assignment.groupId)) &&
+                {(isAdminOf(assignment.groupId) ||
+                  isSupervisorOf(assignment.groupId)) &&
                   <p>
                     <LinkContainer
                       to={SUPERVISOR_STATS_URI_FACTORY(assignment.id)}
@@ -145,7 +159,8 @@ class EditAssignment extends Component {
                   </p>}
               </Col>
             </Row>
-            {(isSuperAdmin || isSupervisorOf(assignment.groupId)) &&
+            {(isAdminOf(assignment.groupId) ||
+              isSupervisorOf(assignment.groupId)) &&
               <AssignmentSync
                 syncInfo={assignment.exerciseSynchronizationInfo}
                 exerciseSync={exerciseSync}
@@ -200,7 +215,6 @@ EditAssignment.propTypes = {
   params: PropTypes.shape({
     assignmentId: PropTypes.string.isRequired
   }).isRequired,
-  isSuperAdmin: PropTypes.bool,
   assignment: ImmutablePropTypes.map,
   runtimeEnvironments: ImmutablePropTypes.map,
   editAssignment: PropTypes.func.isRequired,
@@ -208,25 +222,29 @@ EditAssignment.propTypes = {
   allowSecondDeadline: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
   localizedTexts: PropTypes.array,
   exerciseSync: PropTypes.func.isRequired,
-  links: PropTypes.object
+  links: PropTypes.object,
+  isSupervisorOf: PropTypes.func.isRequired,
+  isAdminOf: PropTypes.func.isRequired
 };
 
 const editAssignmentFormSelector = formValueSelector('editAssignment');
 
 export default connect(
   (state, { params: { assignmentId } }) => {
+    const loggedInUserId = loggedInUserIdSelector(state);
     return {
       assignment: getAssignment(state)(assignmentId),
       runtimeEnvironments: runtimeEnvironmentsSelector(state),
       submitting: isSubmitting(state),
-      isSuperAdmin: isLoggedAsSuperAdmin(state),
       canSubmit: canSubmitSolution(assignmentId)(state),
       firstDeadline: editAssignmentFormSelector(state, 'firstDeadline'),
       allowSecondDeadline: editAssignmentFormSelector(
         state,
         'allowSecondDeadline'
       ),
-      localizedTexts: editAssignmentFormSelector(state, 'localizedTexts')
+      localizedTexts: editAssignmentFormSelector(state, 'localizedTexts'),
+      isSupervisorOf: groupId => isSupervisorOf(loggedInUserId, groupId)(state),
+      isAdminOf: groupId => isAdminOf(loggedInUserId, groupId)(state)
     };
   },
   (dispatch, { params: { assignmentId } }) => ({
