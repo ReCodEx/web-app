@@ -10,7 +10,7 @@ const messages = defineMessages({
   },
   description: {
     id: 'app.solutionArchiveInfoBox.description',
-    defaultMessage: 'All user sources in one package'
+    defaultMessage: 'All submitted source files in one ZIP archive'
   }
 });
 
