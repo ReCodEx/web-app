@@ -31,7 +31,7 @@ import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import {
   isStudentOf,
   isSupervisorOf,
-  isLoggedAsSuperAdmin
+  isAdminOf
 } from '../../redux/selectors/users';
 
 import Page from '../../components/layout/Page';
@@ -91,9 +91,9 @@ class Assignment extends Component {
       userId,
       loggedInUserId,
       init,
-      isSuperAdmin,
       isStudentOf,
       isSupervisorOf,
+      isAdminOf,
       canSubmit,
       runtimeEnvironments,
       exerciseSync,
@@ -127,13 +127,30 @@ class Assignment extends Component {
             })
           },
           {
+            resource: assignment,
+            iconName: 'puzzle-piece',
+            breadcrumb: assignment => ({
+              text: (
+                <FormattedMessage
+                  id="app.exercise.title"
+                  defaultMessage="Exercise"
+                />
+              ),
+              link: ({ EXERCISE_URI_FACTORY }) =>
+                isAdminOf(assignment.groupId) ||
+                isSupervisorOf(assignment.groupId)
+                  ? EXERCISE_URI_FACTORY(assignment.exerciseId)
+                  : '#'
+            })
+          },
+          {
             text: (
               <FormattedMessage
                 id="app.assignment.title"
                 defaultMessage="Exercise assignment"
               />
             ),
-            iconName: 'puzzle-piece'
+            iconName: 'hourglass-start'
           }
         ]}
       >
@@ -146,7 +163,8 @@ class Assignment extends Component {
                   <p>
                     <UsersNameContainer userId={userId} />
                   </p>}
-                {(isSuperAdmin || isSupervisorOf(assignment.groupId)) &&
+                {(isSupervisorOf(assignment.groupId) ||
+                  isAdminOf(assignment.groupId)) && // includes superadmin
                   <p>
                     <LinkContainer
                       to={ASSIGNMENT_EDIT_URI_FACTORY(assignment.id)}
@@ -176,7 +194,8 @@ class Assignment extends Component {
                   </p>}
               </Col>
             </Row>
-            {(isSuperAdmin || isSupervisorOf(assignment.groupId)) &&
+            {(isSupervisorOf(assignment.groupId) ||
+              isAdminOf(assignment.groupId)) && // includes superadmin
               <AssignmentSync
                 syncInfo={assignment.exerciseSynchronizationInfo}
                 exerciseSync={exerciseSync}
@@ -231,7 +250,7 @@ class Assignment extends Component {
 
                     {(isStudentOf(assignment.groupId) ||
                       isSupervisorOf(assignment.groupId) ||
-                      isSuperAdmin) &&
+                      isAdminOf(assignment.groupId)) && // includes superadmin
                       <SubmissionsTable
                         title={
                           <FormattedMessage
@@ -260,9 +279,9 @@ Assignment.propTypes = {
   params: PropTypes.shape({
     assignmentId: PropTypes.string.isRequired
   }),
-  isSuperAdmin: PropTypes.bool,
   isStudentOf: PropTypes.func.isRequired,
   isSupervisorOf: PropTypes.func.isRequired,
+  isAdminOf: PropTypes.func.isRequired,
   assignment: PropTypes.object,
   canSubmit: ImmutablePropTypes.map,
   submitting: PropTypes.bool.isRequired,
@@ -287,10 +306,10 @@ export default withLinks(
         ),
         userId,
         loggedInUserId,
-        isSuperAdmin: isLoggedAsSuperAdmin(state),
         isStudentOf: groupId => isStudentOf(loggedInUserId, groupId)(state),
         isSupervisorOf: groupId =>
           isSupervisorOf(loggedInUserId, groupId)(state),
+        isAdminOf: groupId => isAdminOf(loggedInUserId, groupId)(state),
         canSubmit: canSubmitSolution(assignmentId)(state),
         submissions: getUserSubmissions(userId, assignmentId)(state)
       };

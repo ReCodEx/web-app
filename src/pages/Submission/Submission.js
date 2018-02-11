@@ -94,13 +94,28 @@ class Submission extends Component {
             })
           },
           {
+            resource: assignment,
+            iconName: 'puzzle-piece',
+            breadcrumb: assignment => (
+              {
+                text: (
+                  <FormattedMessage
+                    id="app.exercise.title"
+                    defaultMessage="Exercise"
+                  />
+                ),
+                link: ({ EXERCISE_URI_FACTORY }) =>
+                  (isSupervisorOrMore(assignment.groupId)) ? EXERCISE_URI_FACTORY(assignment.exerciseId) : '#'
+              })
+          },
+          {
             text: (
               <FormattedMessage
                 id="app.assignment.title"
                 defaultMessage="Exercise assignment"
               />
             ),
-            iconName: 'puzzle-piece',
+            iconName: 'hourglass-start',
             link: ({ ASSIGNMENT_DETAIL_URI_FACTORY }) =>
               ASSIGNMENT_DETAIL_URI_FACTORY(assignmentId)
           },

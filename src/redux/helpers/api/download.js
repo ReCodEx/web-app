@@ -8,8 +8,14 @@ export const downloadHelper = ({
   actionType,
   fileNameSelector,
   contentType
-}) => id => (dispatch, getState) =>
-  dispatch(fetch(id))
+}) => id => (dispatch, getState) => {
+  let initial;
+  if (fetch !== null) {
+    initial = dispatch(fetch(id));
+  } else {
+    initial = Promise.resolve();
+  }
+  return initial
     .then(() =>
       dispatch(
         createApiAction({
@@ -40,3 +46,4 @@ export const downloadHelper = ({
       return Promise.resolve();
     })
     .catch(e => dispatch(addNotification(e.message, false)));
+};

@@ -7,6 +7,7 @@ import SourceCodeInfoBox from '../../widgets/SourceCodeInfoBox';
 import TestResults from '../TestResults';
 import BonusPointsContainer from '../../../containers/BonusPointsContainer';
 import DownloadResultArchiveContainer from '../../../containers/DownloadResultArchiveContainer';
+import DownloadSolutionArchiveContainer from '../../../containers/DownloadSolutionArchiveContainer';
 import CommentThreadContainer from '../../../containers/CommentThreadContainer';
 import SourceCodeViewerContainer from '../../../containers/SourceCodeViewerContainer';
 import SubmissionEvaluations from '../SubmissionEvaluations';
@@ -136,6 +137,9 @@ class SubmissionDetail extends Component {
                 <Row>
                   <Col lg={6} md={12}>
                     <DownloadResultArchiveContainer submissionId={restSub.id} />
+                  </Col>
+                  <Col lg={6} md={12}>
+                    <DownloadSolutionArchiveContainer solutionId={id} />
                   </Col>
                 </Row>}
               {activeSubmissionId &&

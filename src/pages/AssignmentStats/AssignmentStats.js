@@ -92,6 +92,20 @@ class AssignmentStats extends Component {
             breadcrumb: assignment => ({
               text: (
                 <FormattedMessage
+                  id="app.exercise.title"
+                  defaultMessage="Exercise"
+                />
+              ),
+              link: ({ EXERCISE_URI_FACTORY }) =>
+                EXERCISE_URI_FACTORY(assignment.exerciseId)
+            })
+          },
+          {
+            resource: assignment,
+            iconName: 'hourglass-start',
+            breadcrumb: assignment => ({
+              text: (
+                <FormattedMessage
                   id="app.assignment.title"
                   defaultMessage="Exercise assignment"
                 />
