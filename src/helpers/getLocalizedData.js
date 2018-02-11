@@ -47,3 +47,19 @@ export const getGroupCanonicalLocalizedName = (
   }
   return res;
 };
+
+let lastLocales = [];
+export const getLocalizedTextsLocales = localizedTexts => {
+  const locales = localizedTexts ? localizedTexts.map(t => t && t.locale) : [];
+
+  if (lastLocales.length !== locales.length) {
+    return (lastLocales = locales);
+  }
+
+  for (let i = 0; i < locales.length; ++i) {
+    if (lastLocales[i] !== locales[i]) {
+      return (lastLocales = locales);
+    }
+  }
+  return lastLocales;
+};

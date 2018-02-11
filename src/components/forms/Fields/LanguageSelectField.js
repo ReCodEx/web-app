@@ -1,20 +1,14 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import SelectField from './SelectField';
 
-const LanguageSelectField = ({ options = [], ...props }) =>
-  <SelectField
-    {...props}
-    options={[
-      { key: '', name: '...' },
-      { key: 'en', name: 'English' },
-      { key: 'cs', name: 'Čeština' },
-      ...options
-    ]}
-  />;
+const languageOptions = [
+  { key: 'en', name: 'English' },
+  { key: 'cs', name: 'Čeština' }
+];
 
-LanguageSelectField.propTypes = {
-  options: PropTypes.array
-};
+const LanguageSelectField = ({ ...props }) =>
+  <SelectField {...props} options={languageOptions} addEmptyOption={true} />;
+
+LanguageSelectField.propTypes = {};
 
 export default LanguageSelectField;

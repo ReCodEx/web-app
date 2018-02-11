@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import classNames from 'classnames';
 
-// import Admin from '../Admin';
 import Public from './Public';
 import LoggedIn from './LoggedIn';
 import Admin from './Admin';
@@ -21,25 +20,24 @@ const Sidebar = ({
   isSupervisor,
   small = false,
   ...props
-}) => (
+}) =>
   <aside className={classNames(['main-sidebar', styles.mainSidebar])}>
     <section className="sidebar">
       {isLoggedIn && <BadgeContainer small={small} />}
       {isLoggedIn && <LoggedIn {...props} />}
 
       {studentOf &&
-        studentOf.size > 0 && <Student {...props} studentOf={studentOf} />}
+        studentOf.size > 0 &&
+        <Student {...props} studentOf={studentOf} />}
 
-      {(isAdmin || isSupervisor) && (
-        <Supervisor {...props} supervisorOf={supervisorOf} />
-      )}
+      {(isAdmin || isSupervisor) &&
+        <Supervisor {...props} supervisorOf={supervisorOf} />}
 
       {isAdmin && <Admin {...props} />}
 
       {!isLoggedIn && <Public {...props} />}
     </section>
-  </aside>
-);
+  </aside>;
 
 Sidebar.propTypes = {
   isLoggedIn: PropTypes.bool,

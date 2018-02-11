@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import Sidebar from '../../components/layout/Sidebar/Sidebar';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
-import { memberOfInstances } from '../../redux/selectors/instances';
+import { loggedInUserMemberOfInstances } from '../../redux/selectors/instances';
 import {
   loggedInStudentOfSelector,
   loggedInSupervisorOfSelector
@@ -15,7 +15,7 @@ import {
 const mapStateToProps = state => {
   const userId = loggedInUserIdSelector(state);
   return {
-    instances: memberOfInstances(userId)(state),
+    instances: loggedInUserMemberOfInstances(state),
     studentOf: loggedInStudentOfSelector(state),
     isAdmin: isLoggedAsSuperAdmin(state),
     isSupervisor: isSupervisor(userId)(state),

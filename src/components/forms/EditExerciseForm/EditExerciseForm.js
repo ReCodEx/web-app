@@ -10,6 +10,7 @@ import {
 import { Alert } from 'react-bootstrap';
 import Icon from 'react-fontawesome';
 import { LinkContainer } from 'react-router-bootstrap';
+import { defaultMemoize } from 'reselect';
 
 import { SelectField, CheckboxField } from '../Fields';
 
@@ -36,6 +37,12 @@ const messages = defineMessages({
   }
 });
 
+const difficultyOptions = defaultMemoize(formatMessage => [
+  { key: 'easy', name: formatMessage(messages.easy) },
+  { key: 'medium', name: formatMessage(messages.medium) },
+  { key: 'hard', name: formatMessage(messages.hard) }
+]);
+
 const EditExerciseForm = ({
   initialValues: exercise,
   anyTouched,
@@ -45,8 +52,8 @@ const EditExerciseForm = ({
   submitSucceeded: hasSucceeded,
   invalid,
   asyncValidating,
-  formValues: { localizedTexts } = {},
-  intl: { formatMessage, locale },
+  localizedTextsLocales = [],
+  intl: { formatMessage },
   links: { EXERCISE_EDIT_SIMPLE_CONFIG_URI_FACTORY }
 }) =>
   <FormBox
@@ -121,19 +128,15 @@ const EditExerciseForm = ({
 
     <FieldArray
       name="localizedTexts"
-      localizedTexts={localizedTexts}
+      localizedTextsLocales={localizedTextsLocales}
       component={LocalizedTextsFormField}
     />
 
     <Field
       name="difficulty"
       component={SelectField}
-      options={[
-        { key: '', name: '...' },
-        { key: 'easy', name: formatMessage(messages.easy) },
-        { key: 'medium', name: formatMessage(messages.medium) },
-        { key: 'hard', name: formatMessage(messages.hard) }
-      ]}
+      options={difficultyOptions(formatMessage)}
+      addEmptyOption={true}
       label={
         <FormattedMessage
           id="app.editExerciseForm.difficulty"
@@ -178,9 +181,7 @@ EditExerciseForm.propTypes = {
   submitSucceeded: PropTypes.bool,
   invalid: PropTypes.bool,
   asyncValidating: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
-  formValues: PropTypes.shape({
-    localizedTexts: PropTypes.array
-  }),
+  localizedTextsLocales: PropTypes.array,
   links: PropTypes.object
 };
 
@@ -300,12 +301,34 @@ const asyncValidate = (values, dispatch, { initialValues: { id, version } }) =>
       .catch(errors => reject(errors))
   );
 
+// Actually, this is reimplementation of default behavior from documentation.
+// For some reason, the asyncValidation is by default called also for every change event (which is not documented).
+const shouldAsyncValidate = ({
+  syncValidationPasses,
+  trigger,
+  pristine,
+  initialized
+}) => {
+  if (!syncValidationPasses) {
+    return false;
+  }
+  switch (trigger) {
+    case 'blur':
+      return true;
+    case 'submit':
+      return !pristine || !initialized;
+    default:
+      return false;
+  }
+};
+
 export default withLinks(
-  injectIntl(
-    reduxForm({
-      form: 'editExercise',
-      validate,
-      asyncValidate
-    })(EditExerciseForm)
-  )
+  reduxForm({
+    form: 'editExercise',
+    validate,
+    asyncValidate,
+    shouldAsyncValidate,
+    enableReinitialize: true,
+    keepDirtyOnReinitialize: false
+  })(injectIntl(EditExerciseForm))
 );

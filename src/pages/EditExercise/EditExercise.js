@@ -5,7 +5,7 @@ import { FormattedMessage, injectIntl } from 'react-intl';
 import { Row, Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
-import { reset, getFormValues } from 'redux-form';
+import { reset, formValueSelector } from 'redux-form';
 import Icon from 'react-fontawesome';
 
 import Page from '../../components/layout/Page';
@@ -24,27 +24,34 @@ import { isSubmitting } from '../../redux/selectors/submission';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 
 import withLinks from '../../hoc/withLinks';
-import { getLocalizedName } from '../../helpers/getLocalizedData';
+import {
+  getLocalizedName,
+  getLocalizedTextsLocales
+} from '../../helpers/getLocalizedData';
 
 class EditExercise extends Component {
   componentWillMount = () => this.props.loadAsync();
-  componentWillReceiveProps = props => {
-    if (this.props.params.exerciseId !== props.params.exerciseId) {
-      props.reset();
-      props.loadAsync();
+  componentWillReceiveProps = nextProps => {
+    if (this.props.params.exerciseId !== nextProps.params.exerciseId) {
+      nextProps.reset();
+      nextProps.loadAsync();
     }
   };
 
   static loadAsync = ({ exerciseId }, dispatch) =>
     Promise.all([dispatch(fetchExerciseIfNeeded(exerciseId))]);
 
+  editExerciseSubmitHandler = formData => {
+    const { exercise, editExercise } = this.props;
+    return editExercise(exercise.getIn(['data', 'version']), formData);
+  };
+
   render() {
     const {
       links: { EXERCISES_URI, EXERCISE_URI_FACTORY },
       params: { exerciseId },
       exercise,
-      editExercise,
-      formValues,
+      localizedTexts,
       push,
       intl: { locale }
     } = this.props;
@@ -108,9 +115,10 @@ class EditExercise extends Component {
               <Col lg={6}>
                 <EditExerciseForm
                   initialValues={exercise}
-                  onSubmit={formData =>
-                    editExercise(exercise.version, formData)}
-                  formValues={formValues}
+                  onSubmit={this.editExerciseSubmitHandler}
+                  localizedTextsLocales={getLocalizedTextsLocales(
+                    localizedTexts
+                  )}
                 />
               </Col>
               <Col lg={6}>
@@ -160,30 +168,30 @@ EditExercise.propTypes = {
   params: PropTypes.shape({
     exerciseId: PropTypes.string.isRequired
   }).isRequired,
-  formValues: PropTypes.object,
+  localizedTexts: PropTypes.array,
   links: PropTypes.object.isRequired,
   push: PropTypes.func.isRequired,
   intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired
 };
 
-export default injectIntl(
-  withLinks(
-    connect(
-      (state, { params: { exerciseId } }) => {
-        return {
-          exercise: getExercise(exerciseId)(state),
-          submitting: isSubmitting(state),
-          userId: loggedInUserIdSelector(state),
-          formValues: getFormValues('editExercise')(state)
-        };
-      },
-      (dispatch, { params: { exerciseId } }) => ({
-        push: url => dispatch(push(url)),
-        reset: () => dispatch(reset('editExercise')),
-        loadAsync: () => EditExercise.loadAsync({ exerciseId }, dispatch),
-        editExercise: (version, data) =>
-          dispatch(editExercise(exerciseId, { ...data, version }))
-      })
-    )(EditExercise)
-  )
+const editExerciseFormSelector = formValueSelector('editExercise');
+
+export default withLinks(
+  connect(
+    (state, { params: { exerciseId } }) => {
+      return {
+        exercise: getExercise(exerciseId)(state),
+        submitting: isSubmitting(state),
+        userId: loggedInUserIdSelector(state),
+        localizedTexts: editExerciseFormSelector(state, 'localizedTexts')
+      };
+    },
+    (dispatch, { params: { exerciseId } }) => ({
+      push: url => dispatch(push(url)),
+      reset: () => dispatch(reset('editExercise')),
+      loadAsync: () => EditExercise.loadAsync({ exerciseId }, dispatch),
+      editExercise: (version, data) =>
+        dispatch(editExercise(exerciseId, { ...data, version }))
+    })
+  )(injectIntl(EditExercise))
 );

@@ -200,8 +200,11 @@ class Dashboard extends Component {
             {student && <SisIntegrationContainer />}
 
             {studentOf.size > 0 &&
-              <ResourceRenderer resource={studentOf.toArray()}>
-                {(...groups) =>
+              <ResourceRenderer
+                resource={studentOf.toArray()}
+                returnAsArray={true}
+              >
+                {groups =>
                   <div>
                     <h2 className="page-heading">
                       <FormattedMessage
@@ -282,9 +285,9 @@ class Dashboard extends Component {
                 resource={
                   superadmin ? allGroups.toArray() : supervisorOf.toArray()
                 }
+                returnAsArray={true}
               >
-                {(...groups) =>
-                  <SisSupervisorGroupsContainer groups={groups} />}
+                {groups => <SisSupervisorGroupsContainer groups={groups} />}
               </ResourceRenderer>}
 
             {supervisorOf.size > 0 &&
@@ -297,8 +300,11 @@ class Dashboard extends Component {
                     />
                   </h2>
 
-                  <ResourceRenderer resource={supervisorOf.toArray()}>
-                    {(...groups) =>
+                  <ResourceRenderer
+                    resource={supervisorOf.toArray()}
+                    returnAsArray={true}
+                  >
+                    {groups =>
                       <div>
                         {groups.map(group =>
                           <Row key={group.id}>

@@ -22,7 +22,9 @@ const EditAssignmentForm = ({
   submitSucceeded: hasSucceeded,
   asyncValidating,
   invalid,
-  formValues: { firstDeadline, allowSecondDeadline, localizedTexts } = {}
+  firstDeadline,
+  allowSecondDeadline,
+  localizedTextsLocales
 }) =>
   <div>
     <FormBox
@@ -81,7 +83,7 @@ const EditAssignmentForm = ({
 
       <FieldArray
         name="localizedTexts"
-        localizedTexts={localizedTexts}
+        localizedTextsLocales={localizedTextsLocales}
         component={LocalizedTextsFormField}
       />
 
@@ -225,14 +227,9 @@ EditAssignmentForm.propTypes = {
   submitSucceeded: PropTypes.bool,
   asyncValidating: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
   invalid: PropTypes.bool,
-  formValues: PropTypes.shape({
-    firstDeadline: PropTypes.oneOfType([PropTypes.number, PropTypes.object]), // object == moment.js instance
-    allowSecondDeadline: PropTypes.oneOfType([
-      PropTypes.bool,
-      PropTypes.string
-    ]),
-    localizedTexts: PropTypes.array
-  })
+  firstDeadline: PropTypes.oneOfType([PropTypes.number, PropTypes.object]), // object == moment.js instance
+  allowSecondDeadline: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
+  localizedTextsLocales: PropTypes.array
 };
 
 const isNonNegativeInteger = n =>
@@ -442,5 +439,7 @@ const asyncValidate = (values, dispatch, { assignment: { id, version } }) =>
 export default reduxForm({
   form: 'editAssignment',
   validate,
-  asyncValidate
+  asyncValidate,
+  enableReinitialize: true,
+  keepDirtyOnReinitialize: false
 })(EditAssignmentForm);

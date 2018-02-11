@@ -13,17 +13,11 @@ const ExercisesName = ({
   localizedTexts,
   isLocked,
   isBroken,
-  validationError,
   noLink,
   links: { EXERCISE_URI_FACTORY }
 }) =>
   <span>
-    <ExercisePrefixIcons
-      id={id}
-      isLocked={isLocked}
-      isBroken={isBroken}
-      validationError={validationError}
-    />
+    <ExercisePrefixIcons id={id} isLocked={isLocked} isBroken={isBroken} />
     {noLink
       ? <span>
           <LocalizedExerciseName entity={{ name, localizedTexts }} />
@@ -39,7 +33,6 @@ ExercisesName.propTypes = {
   localizedTexts: PropTypes.array.isRequired,
   isLocked: PropTypes.bool.isRequired,
   isBroken: PropTypes.bool.isRequired,
-  validationError: PropTypes.string,
   noLink: PropTypes.bool,
   links: PropTypes.object
 };
