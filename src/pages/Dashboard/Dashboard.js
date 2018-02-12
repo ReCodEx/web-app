@@ -197,7 +197,7 @@ class Dashboard extends Component {
                 </Col>
               </Row>}
 
-            {student && <SisIntegrationContainer />}
+            <SisIntegrationContainer />
 
             {studentOf.size > 0 &&
               <ResourceRenderer
