@@ -6,3 +6,29 @@
 .configRow:nth-child(odd) {
   background-color: #F9F9F9;
 }
+
+
+.compilation {
+  overflow: auto;
+}
+
+.compilation > table {
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.compilation > table > tbody > tr > td {
+  padding-right: 10px;
+  padding-left: 10px;
+  border-right: 1px solid #ddd;
+  min-width: 250px;
+}
+
+.compilation > table > tbody > tr > td:first-of-type {
+  padding-left: 0;
+}
+
+.compilation > table > tbody > tr > td:last-of-type {
+  border-right-width: 0;
+  padding-right: 0;
+}

@@ -31,6 +31,7 @@ class EditExerciseSimpleConfigForm extends Component {
       formValues,
       formErrors,
       supplementaryFiles,
+      exercise,
       exerciseTests,
       smartFill,
       intl: { locale }
@@ -119,6 +120,7 @@ class EditExerciseSimpleConfigForm extends Component {
                 .map((test, idx) =>
                   <EditExerciseSimpleConfigTest
                     key={idx}
+                    exercise={exercise}
                     formValues={formValues}
                     supplementaryFiles={files}
                     testName={test.name}
@@ -151,6 +153,7 @@ EditExerciseSimpleConfigForm.propTypes = {
   formValues: PropTypes.object,
   formErrors: PropTypes.object,
   supplementaryFiles: ImmutablePropTypes.map,
+  exercise: PropTypes.object,
   exerciseTests: PropTypes.array,
   smartFill: PropTypes.func.isRequired,
   intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired

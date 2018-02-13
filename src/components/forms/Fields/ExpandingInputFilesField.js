@@ -93,7 +93,7 @@ const ExpandingInputFilesField = ({
           )}
         </tbody>
       </table>}
-    <div style={{ textAlign: 'center' }}>
+    <div className="text-center">
       {fields.length === 0 &&
         <span style={{ paddingRight: '2em' }}>
           <FormattedMessage

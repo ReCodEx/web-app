@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Field, FieldArray } from 'redux-form';
-import { Row, Col } from 'react-bootstrap';
+import { Well, Row, Col } from 'react-bootstrap';
 import { FormattedMessage, injectIntl, defineMessages } from 'react-intl';
 import Icon from 'react-fontawesome';
 
@@ -82,6 +82,7 @@ const validateCustomJudge = value =>
 
 const EditExerciseSimpleConfigTest = ({
   supplementaryFiles,
+  exercise,
   formValues,
   testName,
   test,
@@ -102,14 +103,56 @@ const EditExerciseSimpleConfigTest = ({
   return (
     <div className="configRow">
       <Row>
-        <Col lg={12}>
+        <Col sm={12}>
           <h3>
             {testName}
           </h3>
         </Col>
       </Row>
+      <Well>
+        <h4>
+          <FormattedMessage
+            id="app.editExerciseSimpleConfigTests.compilationTitle"
+            defaultMessage="Compilation"
+          />
+        </h4>
+        <div className="compilation">
+          <table>
+            <tbody>
+              <tr>
+                {exercise.runtimeEnvironments
+                  .sort((a, b) => a.name.localeCompare(b.name, intl.locale))
+                  .map(env =>
+                    <td key={env.id}>
+                      <h5>
+                        {env.name}
+                      </h5>
+                      <FieldArray
+                        name={`${test}.compilation.${env.id}.extra-files`}
+                        component={ExpandingInputFilesField}
+                        options={supplementaryFilesOptions}
+                        leftLabel={
+                          <FormattedMessage
+                            id="app.editExerciseSimpleConfigTests.extraFilesActual"
+                            defaultMessage="Extra file:"
+                          />
+                        }
+                        rightLabel={
+                          <FormattedMessage
+                            id="app.editExerciseSimpleConfigTests.extraFilesRename"
+                            defaultMessage="Rename as:"
+                          />
+                        }
+                      />
+                    </td>
+                  )}
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </Well>
       <Row>
-        <Col lg={3}>
+        <Col md={6} lg={3}>
           <h4>
             <FormattedMessage
               id="app.editExerciseSimpleConfigTests.inputTitle"
@@ -146,7 +189,7 @@ const EditExerciseSimpleConfigTest = ({
             }
           />
         </Col>
-        <Col lg={3}>
+        <Col md={6} lg={3}>
           <h4>
             <FormattedMessage
               id="app.editExerciseSimpleConfigTests.executionTitle"
@@ -164,7 +207,7 @@ const EditExerciseSimpleConfigTest = ({
             }
           />
         </Col>
-        <Col lg={3}>
+        <Col md={6} lg={3}>
           <h4>
             <FormattedMessage
               id="app.editExerciseSimpleConfigTests.outputTitle"
@@ -212,7 +255,7 @@ const EditExerciseSimpleConfigTest = ({
             }
           />
         </Col>
-        <Col lg={3}>
+        <Col md={6} lg={3}>
           <h4>
             <FormattedMessage
               id="app.editExerciseSimpleConfigTests.judgeTitle"
@@ -343,6 +386,7 @@ const EditExerciseSimpleConfigTest = ({
 };
 
 EditExerciseSimpleConfigTest.propTypes = {
+  exercise: PropTypes.object,
   testName: PropTypes.string.isRequired,
   test: PropTypes.string.isRequired,
   testId: PropTypes.number.isRequired,

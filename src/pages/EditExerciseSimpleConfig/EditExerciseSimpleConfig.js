@@ -141,7 +141,7 @@ class EditExerciseSimpleConfig extends Component {
       return data => {
         const newEnvironments = transformEnvValues(data, environments);
         const configData = transformConfigValues(
-          getSimpleConfigInitValues(config, tests),
+          getSimpleConfigInitValues(config, tests, environments),
           pipelines,
           newEnvironments,
           tests,
@@ -316,7 +316,7 @@ class EditExerciseSimpleConfig extends Component {
                   <br />
 
                   <Row>
-                    <Col lg={12}>
+                    <Col sm={12}>
                       <ResourceRenderer
                         resource={[exerciseConfig, exerciseEnvironmentConfig]}
                       >
@@ -325,7 +325,8 @@ class EditExerciseSimpleConfig extends Component {
                             ? <EditExerciseSimpleConfigForm
                                 initialValues={getSimpleConfigInitValues(
                                   config,
-                                  tests
+                                  tests,
+                                  environments
                                 )}
                                 exercise={exercise}
                                 exerciseTests={tests}
@@ -357,7 +358,7 @@ class EditExerciseSimpleConfig extends Component {
             </ResourceRenderer>
 
             <Row>
-              <Col lg={12}>
+              <Col sm={12}>
                 <ResourceRenderer
                   resource={[exerciseEnvironmentConfig, ...limits.toArray()]}
                 >
