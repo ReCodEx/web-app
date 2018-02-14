@@ -17,7 +17,7 @@ import {
   downloadAttachmentArchive
 } from '../../redux/modules/attachmentFiles';
 
-import { createGetAttachmentFiles } from '../../redux/selectors/attachmentFiles';
+import { getAttachmentFilesForExercise } from '../../redux/selectors/attachmentFiles';
 
 const AttachmentFilesTableContainer = ({
   exercise,
@@ -64,11 +64,8 @@ AttachmentFilesTableContainer.propTypes = {
 
 export default connect(
   (state, { exercise }) => {
-    const getAttachmentFiles = createGetAttachmentFiles(
-      exercise.attachmentFilesIds
-    );
     return {
-      attachmentFiles: getAttachmentFiles(state)
+      attachmentFiles: getAttachmentFilesForExercise(exercise.id)(state)
     };
   },
   (dispatch, { exercise }) => ({
