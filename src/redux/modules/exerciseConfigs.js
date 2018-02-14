@@ -233,6 +233,31 @@ const prepareTransformations = (template, firstTestId, tests, files) => {
         .filter(({ file }) => file); // remove records which do not have apropriate file
   }
 
+  // Compilation extra files ...
+  const compilation = {}; // matches for all environments
+  for (const envId in template.compilation) {
+    compilation[envId] = template.compilation[envId][
+      'extra-files'
+    ].map(({ name, file }) => ({
+      name,
+      file,
+      matches: bestMatchFileNames(file, firstTestId, tests, files)
+    }));
+
+    transformations.compilation = testId => {
+      const transformed = {};
+      for (const envId in compilation) {
+        transformed[envId] = compilation[envId]
+          .map(({ name, file, matches }) => ({
+            name,
+            file: matches ? matches.testFiles[testId] || undefined : file
+          }))
+          .filter(({ file }) => file); // remove records which do not have apropriate file
+      }
+      return transformed;
+    };
+  }
+
   return transformations;
 };
 

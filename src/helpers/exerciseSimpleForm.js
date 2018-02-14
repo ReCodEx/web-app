@@ -213,7 +213,7 @@ const postprocInputFiles = (files, names) =>
     name: names && names[i] ? names[i].trim() : ''
   }));
 
-const getSimpleConfigExtraFiles = (testObj, config, environments) => {
+const getSimpleConfigCompilationVars = (testObj, config, environments) => {
   const compilation = {};
   for (const environment of environments) {
     const pipelines =
@@ -287,7 +287,7 @@ export const getSimpleConfigInitValues = defaultMemoize(
         testObj.judgeBinary = '';
       }
 
-      getSimpleConfigExtraFiles(testObj, config, environments);
+      getSimpleConfigCompilationVars(testObj, config, environments);
 
       res[encodeTestId(test.id)] = testObj;
     }
