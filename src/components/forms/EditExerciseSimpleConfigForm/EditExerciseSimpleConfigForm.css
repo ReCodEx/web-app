@@ -1,6 +1,11 @@
 .configRow {
   padding-left: 15px;
   padding-right: 15px;
+  border-bottom: 2px solid #ddd;
+}
+
+.configRow:nth-child(1) {
+  background-color: #f4fcf4!important;
 }
 
 .configRow:nth-child(odd) {
@@ -31,4 +36,14 @@
 .compilation > table > tbody > tr > td:last-of-type {
   border-right-width: 0;
   padding-right: 0;
+}
+
+.compilation-open {
+  cursor: pointer;
+  font-size: 85%;
+}
+
+.compilation-close {
+  cursor: pointer;
+  margin-top: 0;
 }

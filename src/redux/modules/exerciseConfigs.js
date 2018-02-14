@@ -252,7 +252,7 @@ const prepareTransformations = (template, firstTestId, tests, files) => {
         'extra-files': compilation[envId]
           .map(({ name, file, matches }) => ({
             name,
-            file: matches ? matches.testFiles[testId] || undefined : file
+            file: (matches && matches.testFiles[testId]) || file
           }))
           .filter(({ file }) => file) // remove records which do not have apropriate file
       };

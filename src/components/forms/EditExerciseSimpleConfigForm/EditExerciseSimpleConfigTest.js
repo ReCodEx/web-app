@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Field, FieldArray } from 'redux-form';
 import { Well, Row, Col } from 'react-bootstrap';
@@ -80,321 +80,342 @@ const validateCustomJudge = value =>
       />
     : undefined;
 
-const EditExerciseSimpleConfigTest = ({
-  supplementaryFiles,
-  exercise,
-  formValues,
-  testName,
-  test,
-  testId,
-  testKey,
-  testIndex,
-  testErrors,
-  smartFill,
-  intl
-}) => {
-  const supplementaryFilesOptions = supplementaryFiles
-    .sort((a, b) => a.name.localeCompare(b.name, intl.locale))
-    .filter((item, pos, arr) => arr.indexOf(item) === pos) // WTF?
-    .map(data => ({
-      key: data.name,
-      name: data.name
-    }));
-  return (
-    <div className="configRow">
-      <Row>
-        <Col sm={12}>
-          <h3>
-            {testName}
-          </h3>
-        </Col>
-      </Row>
-      <Well>
-        <h4>
-          <FormattedMessage
-            id="app.editExerciseSimpleConfigTests.compilationTitle"
-            defaultMessage="Compilation"
-          />
-        </h4>
-        <div className="compilation">
-          <table>
-            <tbody>
-              <tr>
-                {exercise.runtimeEnvironments
-                  .sort((a, b) => a.name.localeCompare(b.name, intl.locale))
-                  .map(env =>
-                    <td key={env.id}>
-                      <h5>
-                        {env.name}
-                      </h5>
-                      <FieldArray
-                        name={`${test}.compilation.${env.id}.extra-files`}
-                        component={ExpandingInputFilesField}
-                        options={supplementaryFilesOptions}
-                        leftLabel={
-                          <FormattedMessage
-                            id="app.editExerciseSimpleConfigTests.extraFilesActual"
-                            defaultMessage="Extra file:"
-                          />
-                        }
-                        rightLabel={
-                          <FormattedMessage
-                            id="app.editExerciseSimpleConfigTests.extraFilesRename"
-                            defaultMessage="Rename as:"
-                          />
-                        }
-                      />
-                    </td>
-                  )}
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </Well>
-      <Row>
-        <Col md={6} lg={3}>
-          <h4>
-            <FormattedMessage
-              id="app.editExerciseSimpleConfigTests.inputTitle"
-              defaultMessage="Input"
-            />
-          </h4>
-          <FieldArray
-            name={`${test}.inputFiles`}
-            component={ExpandingInputFilesField}
-            options={supplementaryFilesOptions}
-            leftLabel={
-              <FormattedMessage
-                id="app.editExerciseSimpleConfigTests.inputFilesActual"
-                defaultMessage="Input file:"
-              />
-            }
-            rightLabel={
-              <FormattedMessage
-                id="app.editExerciseSimpleConfigTests.inputFilesRename"
-                defaultMessage="Rename as:"
-              />
-            }
-          />
-          <Field
-            name={`${test}.inputStdin`}
-            component={SelectField}
-            options={supplementaryFilesOptions}
-            addEmptyOption={true}
-            label={
-              <FormattedMessage
-                id="app.editExerciseSimpleConfigTests.inputStdin"
-                defaultMessage="Stdin:"
-              />
-            }
-          />
-        </Col>
-        <Col md={6} lg={3}>
-          <h4>
-            <FormattedMessage
-              id="app.editExerciseSimpleConfigTests.executionTitle"
-              defaultMessage="Execution"
-            />
-          </h4>
-          <FieldArray
-            name={`${test}.runArgs`}
-            component={ExpandingTextField}
-            label={
-              <FormattedMessage
-                id="app.editExerciseSimpleConfigTests.executionArguments"
-                defaultMessage="Execution arguments:"
-              />
-            }
-          />
-        </Col>
-        <Col md={6} lg={3}>
-          <h4>
-            <FormattedMessage
-              id="app.editExerciseSimpleConfigTests.outputTitle"
-              defaultMessage="Output"
-            />
-          </h4>
-          <Field
-            name={`${test}.useOutFile`}
-            component={CheckboxField}
-            onOff
-            label={
-              <FormattedMessage
-                id="app.editExerciseSimpleConfigTests.useOutfile"
-                defaultMessage="Use output file instead of stdout"
-              />
-            }
-          />
-          {formValues &&
-            formValues.config &&
-            formValues.config[testKey] &&
-            (formValues.config[testKey].useOutFile === true ||
-              formValues.config[testKey].useOutFile === 'true') &&
-            <Field
-              name={`${test}.outputFile`}
-              component={TextField}
-              validate={validateOutputFile}
-              label={
+class EditExerciseSimpleConfigTest extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { compilationOpen: null }; // null means the user has not changed the state and
+  }
+
+  compilationOpen = ev => {
+    ev.preventDefault();
+    this.setState({ compilationOpen: true });
+  };
+
+  compilationClose = ev => {
+    ev.preventDefault();
+    this.setState({ compilationOpen: false });
+  };
+
+  render() {
+    const {
+      supplementaryFiles,
+      exercise,
+      hasCompilationExtraFiles,
+      useOutFile,
+      useCustomJudge,
+      testName,
+      test,
+      testIndex,
+      testErrors,
+      smartFill,
+      intl
+    } = this.props;
+    const supplementaryFilesOptions = supplementaryFiles
+      .sort((a, b) => a.name.localeCompare(b.name, intl.locale))
+      .filter((item, pos, arr) => arr.indexOf(item) === pos) // WTF?
+      .map(data => ({
+        key: data.name,
+        name: data.name
+      }));
+    return (
+      <div className="configRow">
+        <Row>
+          <Col sm={12}>
+            <h3>
+              {testName}
+            </h3>
+          </Col>
+        </Row>
+        {this.state.compilationOpen === true ||
+        (this.state.compilationOpen === null && hasCompilationExtraFiles)
+          ? <Well>
+              <h4 className="compilation-close" onClick={this.compilationClose}>
+                <Icon name="minus-square-o" />&nbsp;&nbsp;
                 <FormattedMessage
-                  id="app.editExerciseSimpleConfigTests.outputFile"
-                  defaultMessage="Output file:"
+                  id="app.editExerciseSimpleConfigTests.compilationTitle"
+                  defaultMessage="Compilation"
+                />
+              </h4>
+              <div className="compilation">
+                <table>
+                  <tbody>
+                    <tr>
+                      {exercise.runtimeEnvironments
+                        .sort((a, b) =>
+                          a.name.localeCompare(b.name, intl.locale)
+                        )
+                        .map(env =>
+                          <td key={env.id}>
+                            <h5>
+                              {env.name}
+                            </h5>
+                            <FieldArray
+                              name={`${test}.compilation.${env.id}.extra-files`}
+                              component={ExpandingInputFilesField}
+                              options={supplementaryFilesOptions}
+                              leftLabel={
+                                <FormattedMessage
+                                  id="app.editExerciseSimpleConfigTests.extraFilesActual"
+                                  defaultMessage="Extra file:"
+                                />
+                              }
+                              rightLabel={
+                                <FormattedMessage
+                                  id="app.editExerciseSimpleConfigTests.extraFilesRename"
+                                  defaultMessage="Rename as:"
+                                />
+                              }
+                            />
+                          </td>
+                        )}
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </Well>
+          : <div
+              className="text-muted compilation-open"
+              onClick={this.compilationOpen}
+            >
+              <Icon name="plus-square-o" />&nbsp;&nbsp;
+              <FormattedMessage
+                id="app.editExerciseSimpleConfigTests.compilationTitle"
+                defaultMessage="Compilation"
+              />
+            </div>}
+        <Row>
+          <Col md={6} lg={3}>
+            <h4>
+              <FormattedMessage
+                id="app.editExerciseSimpleConfigTests.inputTitle"
+                defaultMessage="Input"
+              />
+            </h4>
+            <FieldArray
+              name={`${test}.inputFiles`}
+              component={ExpandingInputFilesField}
+              options={supplementaryFilesOptions}
+              leftLabel={
+                <FormattedMessage
+                  id="app.editExerciseSimpleConfigTests.inputFilesActual"
+                  defaultMessage="Input file:"
                 />
               }
-            />}
-          <Field
-            name={`${test}.expectedOutput`}
-            component={SelectField}
-            options={supplementaryFilesOptions}
-            addEmptyOption={true}
-            validate={validateExpectedOutput}
-            label={
-              <FormattedMessage
-                id="app.editExerciseSimpleConfigTests.expectedOutput"
-                defaultMessage="Expected output:"
-              />
-            }
-          />
-        </Col>
-        <Col md={6} lg={3}>
-          <h4>
-            <FormattedMessage
-              id="app.editExerciseSimpleConfigTests.judgeTitle"
-              defaultMessage="Judge"
+              rightLabel={
+                <FormattedMessage
+                  id="app.editExerciseSimpleConfigTests.inputFilesRename"
+                  defaultMessage="Rename as:"
+                />
+              }
             />
-          </h4>
-          <Field
-            name={`${test}.useCustomJudge`}
-            component={CheckboxField}
-            onOff
-            label={
+            <Field
+              name={`${test}.inputStdin`}
+              component={SelectField}
+              options={supplementaryFilesOptions}
+              addEmptyOption={true}
+              label={
+                <FormattedMessage
+                  id="app.editExerciseSimpleConfigTests.inputStdin"
+                  defaultMessage="Stdin:"
+                />
+              }
+            />
+          </Col>
+          <Col md={6} lg={3}>
+            <h4>
               <FormattedMessage
-                id="app.editExerciseSimpleConfigTests.useCustomJudge"
-                defaultMessage="Use custom judge binary"
+                id="app.editExerciseSimpleConfigTests.executionTitle"
+                defaultMessage="Execution"
               />
-            }
-          />
-          {formValues &&
-          formValues.config &&
-          formValues.config[testKey] &&
-          (formValues.config[testKey].useCustomJudge === true ||
-            formValues.config[testKey].useCustomJudge === 'true')
-            ? <Field
-                name={`${test}.customJudgeBinary`}
-                component={SelectField}
-                options={supplementaryFilesOptions}
-                addEmptyOption={true}
-                validate={validateCustomJudge}
-                label={
-                  <FormattedMessage
-                    id="app.editExerciseSimpleConfigTests.customJudgeBinary"
-                    defaultMessage="Custom judge executable:"
-                  />
-                }
-              />
-            : <Field
-                name={`${test}.judgeBinary`}
-                component={SelectField}
-                options={[
-                  {
-                    key: 'recodex-judge-normal',
-                    name: intl.formatMessage(messages.normal)
-                  },
-                  {
-                    key: 'recodex-judge-float',
-                    name: intl.formatMessage(messages.float)
-                  },
-                  {
-                    key: 'recodex-judge-normal-newline',
-                    name: intl.formatMessage(messages.normalNewline)
-                  },
-                  {
-                    key: 'recodex-judge-float-newline',
-                    name: intl.formatMessage(messages.floatNewline)
-                  },
-                  {
-                    key: 'recodex-judge-shuffle',
-                    name: intl.formatMessage(messages.shuffle)
-                  },
-                  {
-                    key: 'recodex-judge-shuffle-rows',
-                    name: intl.formatMessage(messages.shuffleRows)
-                  },
-                  {
-                    key: 'recodex-judge-shuffle-all',
-                    name: intl.formatMessage(messages.shuffleAll)
-                  },
-                  {
-                    key: 'recodex-judge-shuffle-newline',
-                    name: intl.formatMessage(messages.shuffleNewline)
-                  },
-                  {
-                    key: 'diff',
-                    name: intl.formatMessage(messages.diff)
-                  }
-                ]}
-                label={
-                  <FormattedMessage
-                    id="app.editExerciseSimpleConfigTests.judgeType"
-                    defaultMessage="Judge:"
-                  />
-                }
-              />}
-          {formValues &&
-            formValues.config &&
-            formValues.config[testKey] &&
-            (formValues.config[testKey].useCustomJudge === true ||
-              formValues.config[testKey].useCustomJudge === 'true') &&
+            </h4>
             <FieldArray
-              name={`${test}.judgeArgs`}
+              name={`${test}.runArgs`}
               component={ExpandingTextField}
               label={
                 <FormattedMessage
-                  id="app.editExerciseSimpleConfigTests.judgeArgs"
-                  defaultMessage="Judge arguments:"
+                  id="app.editExerciseSimpleConfigTests.executionArguments"
+                  defaultMessage="Execution arguments:"
                 />
               }
-            />}
-          {testIndex === 0 &&
-            <div style={{ textAlign: 'right', padding: '1em' }}>
-              <Confirm
-                id={'smartFill'}
-                onConfirmed={smartFill}
-                question={
+            />
+          </Col>
+          <Col md={6} lg={3}>
+            <h4>
+              <FormattedMessage
+                id="app.editExerciseSimpleConfigTests.outputTitle"
+                defaultMessage="Output"
+              />
+            </h4>
+            <Field
+              name={`${test}.useOutFile`}
+              component={CheckboxField}
+              onOff
+              label={
+                <FormattedMessage
+                  id="app.editExerciseSimpleConfigTests.useOutfile"
+                  defaultMessage="Use output file instead of stdout"
+                />
+              }
+            />
+            {useOutFile &&
+              <Field
+                name={`${test}.outputFile`}
+                component={TextField}
+                validate={validateOutputFile}
+                label={
                   <FormattedMessage
-                    id="app.editExerciseConfigForm.smartFill.yesNoQuestion"
-                    defaultMessage="Do you really wish to overwrite configuration of all subsequent tests using the first test as a template? Files will be paired to individual test configurations by a heuristics based on matching name substrings."
+                    id="app.editExerciseSimpleConfigTests.outputFile"
+                    defaultMessage="Output file:"
                   />
                 }
-              >
-                <Button
-                  bsStyle={'primary'}
-                  className="btn-flat"
-                  disabled={Boolean(testErrors)}
-                >
-                  <Icon name="arrows" />{' '}
+              />}
+            <Field
+              name={`${test}.expectedOutput`}
+              component={SelectField}
+              options={supplementaryFilesOptions}
+              addEmptyOption={true}
+              validate={validateExpectedOutput}
+              label={
+                <FormattedMessage
+                  id="app.editExerciseSimpleConfigTests.expectedOutput"
+                  defaultMessage="Expected output:"
+                />
+              }
+            />
+          </Col>
+          <Col md={6} lg={3}>
+            <h4>
+              <FormattedMessage
+                id="app.editExerciseSimpleConfigTests.judgeTitle"
+                defaultMessage="Judge"
+              />
+            </h4>
+            <Field
+              name={`${test}.useCustomJudge`}
+              component={CheckboxField}
+              onOff
+              label={
+                <FormattedMessage
+                  id="app.editExerciseSimpleConfigTests.useCustomJudge"
+                  defaultMessage="Use custom judge binary"
+                />
+              }
+            />
+            {useCustomJudge
+              ? <Field
+                  name={`${test}.customJudgeBinary`}
+                  component={SelectField}
+                  options={supplementaryFilesOptions}
+                  addEmptyOption={true}
+                  validate={validateCustomJudge}
+                  label={
+                    <FormattedMessage
+                      id="app.editExerciseSimpleConfigTests.customJudgeBinary"
+                      defaultMessage="Custom judge executable:"
+                    />
+                  }
+                />
+              : <Field
+                  name={`${test}.judgeBinary`}
+                  component={SelectField}
+                  options={[
+                    {
+                      key: 'recodex-judge-normal',
+                      name: intl.formatMessage(messages.normal)
+                    },
+                    {
+                      key: 'recodex-judge-float',
+                      name: intl.formatMessage(messages.float)
+                    },
+                    {
+                      key: 'recodex-judge-normal-newline',
+                      name: intl.formatMessage(messages.normalNewline)
+                    },
+                    {
+                      key: 'recodex-judge-float-newline',
+                      name: intl.formatMessage(messages.floatNewline)
+                    },
+                    {
+                      key: 'recodex-judge-shuffle',
+                      name: intl.formatMessage(messages.shuffle)
+                    },
+                    {
+                      key: 'recodex-judge-shuffle-rows',
+                      name: intl.formatMessage(messages.shuffleRows)
+                    },
+                    {
+                      key: 'recodex-judge-shuffle-all',
+                      name: intl.formatMessage(messages.shuffleAll)
+                    },
+                    {
+                      key: 'recodex-judge-shuffle-newline',
+                      name: intl.formatMessage(messages.shuffleNewline)
+                    },
+                    {
+                      key: 'diff',
+                      name: intl.formatMessage(messages.diff)
+                    }
+                  ]}
+                  label={
+                    <FormattedMessage
+                      id="app.editExerciseSimpleConfigTests.judgeType"
+                      defaultMessage="Judge:"
+                    />
+                  }
+                />}
+            {useCustomJudge &&
+              <FieldArray
+                name={`${test}.judgeArgs`}
+                component={ExpandingTextField}
+                label={
                   <FormattedMessage
-                    id="app.editExerciseConfigForm.smartFill"
-                    defaultMessage="Smart Fill"
+                    id="app.editExerciseSimpleConfigTests.judgeArgs"
+                    defaultMessage="Judge arguments:"
                   />
-                </Button>
-              </Confirm>
-            </div>}
-        </Col>
-      </Row>
-    </div>
-  );
-};
+                }
+              />}
+            {testIndex === 0 &&
+              <div style={{ textAlign: 'right', padding: '1em' }}>
+                <Confirm
+                  id={'smartFill'}
+                  onConfirmed={smartFill}
+                  question={
+                    <FormattedMessage
+                      id="app.editExerciseConfigForm.smartFill.yesNoQuestion"
+                      defaultMessage="Do you really wish to overwrite configuration of all subsequent tests using the first test as a template? Files will be paired to individual test configurations by a heuristics based on matching name substrings."
+                    />
+                  }
+                >
+                  <Button
+                    bsStyle={'primary'}
+                    className="btn-flat"
+                    disabled={Boolean(testErrors)}
+                  >
+                    <Icon name="arrows" />{' '}
+                    <FormattedMessage
+                      id="app.editExerciseConfigForm.smartFill"
+                      defaultMessage="Smart Fill"
+                    />
+                  </Button>
+                </Confirm>
+              </div>}
+          </Col>
+        </Row>
+      </div>
+    );
+  }
+}
 
 EditExerciseSimpleConfigTest.propTypes = {
   exercise: PropTypes.object,
   testName: PropTypes.string.isRequired,
   test: PropTypes.string.isRequired,
-  testId: PropTypes.number.isRequired,
-  testKey: PropTypes.string.isRequired,
   testIndex: PropTypes.number.isRequired,
   supplementaryFiles: PropTypes.array.isRequired,
   exerciseTests: PropTypes.array,
-  formValues: PropTypes.object,
+  hasCompilationExtraFiles: PropTypes.bool,
+  useOutFile: PropTypes.bool,
+  useCustomJudge: PropTypes.bool,
   testErrors: PropTypes.object,
   smartFill: PropTypes.func.isRequired,
   intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired
