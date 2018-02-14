@@ -243,20 +243,22 @@ const prepareTransformations = (template, firstTestId, tests, files) => {
       file,
       matches: bestMatchFileNames(file, firstTestId, tests, files)
     }));
+  }
 
-    transformations.compilation = testId => {
-      const transformed = {};
-      for (const envId in compilation) {
-        transformed[envId] = compilation[envId]
+  transformations.compilation = testId => {
+    const transformed = {};
+    for (const envId in compilation) {
+      transformed[envId] = {
+        'extra-files': compilation[envId]
           .map(({ name, file, matches }) => ({
             name,
             file: matches ? matches.testFiles[testId] || undefined : file
           }))
-          .filter(({ file }) => file); // remove records which do not have apropriate file
-      }
-      return transformed;
-    };
-  }
+          .filter(({ file }) => file) // remove records which do not have apropriate file
+      };
+    }
+    return transformed;
+  };
 
   return transformations;
 };
@@ -299,7 +301,8 @@ export const smartFillExerciseConfigForm = (
           'useCustomJudge',
           'judgeBinary',
           'customJudgeBinary',
-          'judgeArgs'
+          'judgeArgs',
+          'compilation'
         ]
           .map(field => {
             const value = transformations[field]
