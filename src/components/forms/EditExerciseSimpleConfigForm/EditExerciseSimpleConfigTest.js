@@ -105,7 +105,6 @@ class EditExerciseSimpleConfigTest extends Component {
       useCustomJudge,
       testName,
       test,
-      testIndex,
       testErrors,
       smartFill,
       intl
@@ -374,7 +373,7 @@ class EditExerciseSimpleConfigTest extends Component {
                   />
                 }
               />}
-            {testIndex === 0 &&
+            {Boolean(smartFill) &&
               <div style={{ textAlign: 'right', padding: '1em' }}>
                 <Confirm
                   id={'smartFill'}
@@ -410,14 +409,13 @@ EditExerciseSimpleConfigTest.propTypes = {
   exercise: PropTypes.object,
   testName: PropTypes.string.isRequired,
   test: PropTypes.string.isRequired,
-  testIndex: PropTypes.number.isRequired,
   supplementaryFiles: PropTypes.array.isRequired,
   exerciseTests: PropTypes.array,
   hasCompilationExtraFiles: PropTypes.bool,
   useOutFile: PropTypes.bool,
   useCustomJudge: PropTypes.bool,
   testErrors: PropTypes.object,
-  smartFill: PropTypes.func.isRequired,
+  smartFill: PropTypes.func,
   intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired
 };
 

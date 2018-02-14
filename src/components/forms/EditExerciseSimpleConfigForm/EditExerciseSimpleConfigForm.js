@@ -143,11 +143,14 @@ class EditExerciseSimpleConfigForm extends Component {
                       supplementaryFiles={files}
                       testName={test.name}
                       test={'config.' + encodeTestId(test.id)}
-                      testIndex={idx}
                       testErrors={
                         formErrors && formErrors[encodeTestId(test.id)]
                       }
-                      smartFill={smartFill(test.id, exerciseTests, files)}
+                      smartFill={
+                        idx === 0
+                          ? smartFill(test.id, exerciseTests, files)
+                          : undefined
+                      }
                     />
                   );
                 })}
