@@ -1,8 +1,49 @@
 .configRow {
   padding-left: 15px;
   padding-right: 15px;
+  border-bottom: 2px solid #ddd;
+}
+
+.configRow:nth-child(1) {
+  background-color: #f4fcf4!important;
 }
 
 .configRow:nth-child(odd) {
   background-color: #F9F9F9;
+}
+
+
+.compilation {
+  overflow: auto;
+}
+
+.compilation > table {
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.compilation > table > tbody > tr > td {
+  padding-right: 10px;
+  padding-left: 10px;
+  border-right: 1px solid #ddd;
+  min-width: 250px;
+}
+
+.compilation > table > tbody > tr > td:first-of-type {
+  padding-left: 0;
+}
+
+.compilation > table > tbody > tr > td:last-of-type {
+  border-right-width: 0;
+  padding-right: 0;
+}
+
+.compilation-open {
+  cursor: pointer;
+  font-size: 85%;
+}
+
+.compilation-close {
+  cursor: pointer;
+  margin-top: 0;
 }

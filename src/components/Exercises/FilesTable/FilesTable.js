@@ -57,8 +57,8 @@ const FilesTable = ({
           </Button>
         </p>}
 
-      <ResourceRenderer resource={attachments.toArray()}>
-        {(...attachments) =>
+      <ResourceRenderer resource={attachments.toArray()} returnAsArray={true}>
+        {attachments =>
           <div>
             {attachments.length > 0 &&
               <Table responsive>

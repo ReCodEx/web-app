@@ -18,6 +18,15 @@ import { encodeTestId } from '../../../redux/modules/simpleLimits';
 import { smartFillExerciseConfigForm } from '../../../redux/modules/exerciseConfigs';
 import { exerciseConfigFormErrors } from '../../../redux/selectors/exerciseConfigs';
 
+const hasCompilationExtraFiles = testData =>
+  testData &&
+  testData.compilation &&
+  Object.keys(testData.compilation).reduce(
+    (res, envId) =>
+      res || testData.compilation[envId]['extra-files'].length > 0,
+    false
+  );
+
 class EditExerciseSimpleConfigForm extends Component {
   render() {
     const {
@@ -31,6 +40,7 @@ class EditExerciseSimpleConfigForm extends Component {
       formValues,
       formErrors,
       supplementaryFiles,
+      exercise,
       exerciseTests,
       smartFill,
       intl: { locale }
@@ -116,20 +126,34 @@ class EditExerciseSimpleConfigForm extends Component {
             <div>
               {exerciseTests
                 .sort((a, b) => a.name.localeCompare(b.name, locale))
-                .map((test, idx) =>
-                  <EditExerciseSimpleConfigTest
-                    key={idx}
-                    formValues={formValues}
-                    supplementaryFiles={files}
-                    testName={test.name}
-                    test={'config.' + encodeTestId(test.id)}
-                    testId={test.id}
-                    testKey={encodeTestId(test.id)}
-                    testIndex={idx}
-                    testErrors={formErrors && formErrors[encodeTestId(test.id)]}
-                    smartFill={smartFill(test.id, exerciseTests, files)}
-                  />
-                )}
+                .map((test, idx) => {
+                  const testData =
+                    formValues &&
+                    formValues.config &&
+                    formValues.config[encodeTestId(test.id)];
+                  return (
+                    <EditExerciseSimpleConfigTest
+                      key={idx}
+                      exercise={exercise}
+                      hasCompilationExtraFiles={hasCompilationExtraFiles(
+                        testData
+                      )}
+                      useOutFile={testData && testData.useOutFile}
+                      useCustomJudge={testData && testData.useCustomJudge}
+                      supplementaryFiles={files}
+                      testName={test.name}
+                      test={'config.' + encodeTestId(test.id)}
+                      testErrors={
+                        formErrors && formErrors[encodeTestId(test.id)]
+                      }
+                      smartFill={
+                        idx === 0
+                          ? smartFill(test.id, exerciseTests, files)
+                          : undefined
+                      }
+                    />
+                  );
+                })}
             </div>}
         </ResourceRenderer>
       </FormBox>
@@ -151,6 +175,7 @@ EditExerciseSimpleConfigForm.propTypes = {
   formValues: PropTypes.object,
   formErrors: PropTypes.object,
   supplementaryFiles: ImmutablePropTypes.map,
+  exercise: PropTypes.object,
   exerciseTests: PropTypes.array,
   smartFill: PropTypes.func.isRequired,
   intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired
@@ -205,7 +230,7 @@ const validate = formData => {
 };
 
 export default connect(
-  (state, { exercise }) => {
+  (state, { exercise, exerciseTests }) => {
     return {
       supplementaryFiles: getSupplementaryFilesForExercise(exercise.id)(state),
       formValues: getFormValues(FORM_NAME)(state),
