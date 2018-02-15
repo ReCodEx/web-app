@@ -105,28 +105,21 @@ class EditExerciseSimpleConfig extends Component {
     ]);
 
   transformAndSendTestsValues = data => {
-    const {
-      editTests,
-      editScoreConfig,
-      fetchConfig,
-      fetchEnvironmentSimpleLimits
-    } = this.props;
-
+    const { editTests, editScoreConfig, reloadConfigAndLimits } = this.props;
     const { tests, scoreConfig } = transformTestsValues(data);
-
     return Promise.all([
       editTests({ tests }),
       editScoreConfig({ scoreConfig })
-    ]).then(() => Promise.all([fetchConfig(), fetchEnvironmentSimpleLimits()]));
+    ]).then(reloadConfigAndLimits);
   };
 
   transformAndSendConfigValuesCreator = defaultMemoize(
     (pipelines, environments, tests, config) => {
-      const { setConfig } = this.props;
+      const { setConfig, reloadExercise } = this.props;
       return data =>
         setConfig(
           transformConfigValues(data, pipelines, environments, tests, config)
-        );
+        ).then(reloadExercise);
     }
   );
 
