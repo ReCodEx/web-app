@@ -77,7 +77,7 @@ class GroupTree extends Component {
       id,
       level = 0,
       isOpen = false,
-      isPublic = true,
+      isPublic = false,
       groups,
       currentGroupId = null,
       visibleGroupsMap = null,
@@ -86,7 +86,7 @@ class GroupTree extends Component {
 
     const group = groups.get(id);
     if (!group || !isReady(group)) {
-      return isPublic ? this.renderLoading(level) : null;
+      return this.renderLoading(level);
     }
 
     const {

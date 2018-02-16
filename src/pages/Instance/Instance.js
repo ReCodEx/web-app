@@ -27,6 +27,8 @@ import { isLoggedAsSuperAdmin } from '../../redux/selectors/users';
 
 import withLinks from '../../hoc/withLinks';
 
+const EMPTY_OBJECT = {};
+
 class Instance extends Component {
   static loadAsync = ({ instanceId }, dispatch) =>
     Promise.all([
@@ -112,9 +114,9 @@ class Instance extends Component {
                     instanceId={instanceId}
                     createNew
                     collapsable={true}
-                    isOpen={false}
+                    isOpen={true}
                     formValues={formValues}
-                    initialValues={{ publicStats: true }}
+                    initialValues={EMPTY_OBJECT}
                   />
                 </Col>
                 <Col sm={6}>
