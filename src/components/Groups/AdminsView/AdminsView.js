@@ -10,6 +10,8 @@ import AddSupervisor from '../AddSupervisor';
 import EditGroupForm from '../../forms/EditGroupForm';
 import { getLocalizedName } from '../../../helpers/getLocalizedData';
 
+const EMPTY_OBJECT = {};
+
 const AdminsView = ({ group, addSubgroup, formValues, intl: { locale } }) =>
   <div>
     <Row>
@@ -42,7 +44,7 @@ const AdminsView = ({ group, addSubgroup, formValues, intl: { locale } }) =>
       <Col md={6}>
         <EditGroupForm
           onSubmit={addSubgroup}
-          initialValues={{ publicStats: true }}
+          initialValues={EMPTY_OBJECT}
           createNew
           collapsable
           isOpen={false}
