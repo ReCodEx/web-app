@@ -119,6 +119,7 @@ const GroupDetail = ({
                   id={id}
                   deletable={false}
                   isAdmin={isAdmin}
+                  isPublic={isPublic}
                   isOpen
                   groups={groups}
                   level={1}
