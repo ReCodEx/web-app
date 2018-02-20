@@ -14,10 +14,9 @@ import Box from '../../components/widgets/Box';
 import { AddIcon, EditIcon } from '../../components/icons';
 import { fetchManyStatus } from '../../redux/selectors/exercises';
 import {
-  canEditExercise,
+  canLoggedUserEditExercise,
   isLoggedAsSuperAdmin
 } from '../../redux/selectors/users';
-import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import {
   fetchExercises,
   create as createExercise
@@ -210,13 +209,12 @@ Exercises.propTypes = {
 export default withLinks(
   connect(
     state => {
-      const userId = loggedInUserIdSelector(state);
       return {
         query: getSearchQuery('exercises-page')(state),
         fetchStatus: fetchManyStatus(state),
         isSuperAdmin: isLoggedAsSuperAdmin(state),
         isAuthorOfExercise: exerciseId =>
-          canEditExercise(userId, exerciseId)(state)
+          canLoggedUserEditExercise(exerciseId)(state)
       };
     },
     dispatch => ({

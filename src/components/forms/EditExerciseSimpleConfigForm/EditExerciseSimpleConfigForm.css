@@ -1,6 +1,7 @@
 .configRow {
   padding-left: 15px;
   padding-right: 15px;
+  padding-bottom: 10px;
   border-bottom: 2px solid #ddd;
 }
 

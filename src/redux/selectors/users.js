@@ -178,14 +178,20 @@ export const usersGroupsIds = userId =>
     (student, supervisor) => student.concat(supervisor)
   );
 
-export const canEditExercise = (userId, exerciseId) =>
+export const canLoggedUserEditExercise = exerciseId =>
   createSelector(
-    [exerciseSelector(exerciseId), isLoggedAsSuperAdmin],
-    (exercise, isSuperAdmin) =>
-      isSuperAdmin ||
-      (exercise &&
-        isReady(exercise) &&
-        exercise.getIn(['data', 'authorId']) === userId)
+    [
+      exerciseSelector(exerciseId),
+      loggedInUserIdSelector,
+      isLoggedAsSuperAdmin
+    ],
+    (exercise, userId, isSuperAdmin) =>
+      Boolean(
+        isSuperAdmin ||
+          (exercise &&
+            isReady(exercise) &&
+            exercise.getIn(['data', 'authorId']) === userId)
+      )
   );
 
 export const canEditPipeline = (userId, pipelineId) =>
