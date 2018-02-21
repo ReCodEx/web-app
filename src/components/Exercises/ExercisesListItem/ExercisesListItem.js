@@ -47,10 +47,10 @@ const ExercisesListItem = ({
               <GroupsNameContainer groupId={groupId} />
             </div>
           )
-        : <i>
+        : <i className="text-muted">
             <FormattedMessage
-              id="app.exercisesListItem.group.public"
-              defaultMessage="Public"
+              id="app.exercisesListItem.noGroups"
+              defaultMessage="no groups"
             />
           </i>}
     </td>

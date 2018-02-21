@@ -47,10 +47,7 @@ const AttachmentFilesTableRow = ({
         >
           <Button bsSize="xs" className="btn-flat" bsStyle="danger">
             <DeleteIcon />{' '}
-            <FormattedMessage
-              id="app.attachmentFiles.deleteButton"
-              defaultMessage="Delete"
-            />
+            <FormattedMessage id="generic.delete" defaultMessage="Delete" />
           </Button>
         </Confirm>}
     </td>

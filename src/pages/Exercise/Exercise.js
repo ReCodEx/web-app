@@ -313,7 +313,7 @@ class Exercise extends Component {
                               >
                                 <DeleteIcon />{' '}
                                 <FormattedMessage
-                                  id="app.exercise.deleteButton"
+                                  id="generic.delete"
                                   defaultMessage="Delete"
                                 />
                               </Button>
@@ -388,7 +388,7 @@ class Exercise extends Component {
                                     >
                                       <DeleteIcon />{' '}
                                       <FormattedMessage
-                                        id="app.exercise.referenceSolution.deleteButton"
+                                        id="generic.delete"
                                         defaultMessage="Delete"
                                       />
                                     </Button>

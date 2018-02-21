@@ -5,19 +5,20 @@ import { FormattedMessage, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { Row, Col } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
-import ResourceRenderer from '../../helpers/ResourceRenderer';
 
+import DeleteExerciseButtonContainer from '../../../containers/DeleteExerciseButtonContainer';
+import ExercisesSimpleList from '../../../components/Exercises/ExercisesSimpleList';
+import ResultsTableContainer from '../../../containers/ResultsTableContainer';
+import Button from '../../../components/widgets/FlatButton';
+import { AddIcon, EditIcon } from '../../../components/icons';
+import AssignExerciseButton from '../../../components/buttons/AssignExerciseButton';
+
+import ResourceRenderer from '../../helpers/ResourceRenderer';
 import Box from '../../widgets/Box';
 import AddStudent from '../AddStudent';
 import SearchExercise from '../SearchExercise';
 import AdminAssignmentsTable from '../../Assignments/AdminAssignmentsTable';
-import ExercisesSimpleList from '../../../components/Exercises/ExercisesSimpleList';
-import ResultsTableContainer from '../../../containers/ResultsTableContainer';
-import Button from '../../../components/widgets/FlatButton';
-import { AddIcon, EditIcon, DeleteIcon } from '../../../components/icons';
-import AssignExerciseButton from '../../../components/buttons/AssignExerciseButton';
 import { deleteExercise } from '../../../redux/modules/exercises';
-import Confirm from '../../../components/forms/Confirm';
 import withLinks from '../../../hoc/withLinks';
 import { getLocalizedName } from '../../../helpers/getLocalizedData';
 
@@ -30,7 +31,11 @@ const SupervisorsView = ({
   deleteExercise,
   users,
   publicAssignments,
-  links: { EXERCISE_EDIT_URI_FACTORY, EXERCISE_EDIT_SIMPLE_CONFIG_URI_FACTORY },
+  links: {
+    EXERCISE_EDIT_URI_FACTORY,
+    EXERCISE_EDIT_SIMPLE_CONFIG_URI_FACTORY,
+    EXERCISE_EDIT_LIMITS_URI_FACTORY
+  },
   intl: { locale }
 }) =>
   <div>
@@ -147,52 +152,43 @@ const SupervisorsView = ({
                       isBroken={isBroken}
                       assignExercise={() => assignExercise(exerciseId)}
                     />
+
                     <LinkContainer to={EXERCISE_EDIT_URI_FACTORY(exerciseId)}>
-                      <Button
-                        bsSize="xs"
-                        className="btn-flat"
-                        bsStyle="warning"
-                      >
+                      <Button bsSize="xs" bsStyle="warning">
                         <EditIcon />{' '}
                         <FormattedMessage
-                          id="app.exercise.editButton"
-                          defaultMessage="Edit"
+                          id="app.exercises.listEdit"
+                          defaultMessage="Settings"
                         />
                       </Button>
                     </LinkContainer>
                     <LinkContainer
                       to={EXERCISE_EDIT_SIMPLE_CONFIG_URI_FACTORY(exerciseId)}
                     >
-                      <Button
-                        bsSize="xs"
-                        className="btn-flat"
-                        bsStyle="warning"
-                      >
+                      <Button bsSize="xs" bsStyle="warning">
                         <EditIcon />{' '}
                         <FormattedMessage
-                          id="app.exercise.editConfigButton"
-                          defaultMessage="Edit config"
+                          id="app.exercises.listEditConfig"
+                          defaultMessage="Configuration"
                         />
                       </Button>
                     </LinkContainer>
-                    <Confirm
-                      id={exerciseId}
-                      onConfirmed={() => deleteExercise(exerciseId)}
-                      question={
-                        <FormattedMessage
-                          id="app.exercise.deleteConfirm"
-                          defaultMessage="Are you sure you want to delete the exercise? This cannot be undone."
-                        />
-                      }
+                    <LinkContainer
+                      to={EXERCISE_EDIT_LIMITS_URI_FACTORY(exerciseId)}
                     >
-                      <Button bsSize="xs" className="btn-flat" bsStyle="danger">
-                        <DeleteIcon />{' '}
+                      <Button bsSize="xs" bsStyle="warning">
+                        <EditIcon />{' '}
                         <FormattedMessage
-                          id="app.exercise.deleteButton"
-                          defaultMessage="Delete"
+                          id="app.exercises.listEditLimits"
+                          defaultMessage="Limits"
                         />
                       </Button>
-                    </Confirm>
+                    </LinkContainer>
+
+                    <DeleteExerciseButtonContainer
+                      id={exerciseId}
+                      bsSize="xs"
+                    />
                   </div>}
               />}
           </ResourceRenderer>

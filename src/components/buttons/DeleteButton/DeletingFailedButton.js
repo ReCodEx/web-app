@@ -14,8 +14,8 @@ const DeletingFailedButton = ({ onClick, ...props }) =>
   >
     <FailedIcon />{' '}
     <FormattedMessage
-      id="app.deleteButton.deletingFailed"
-      defaultMessage="Deleting failed"
+      id="generic.deleteFailed"
+      defaultMessage="Delete Failed"
     />
   </Button>;
 

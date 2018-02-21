@@ -26,7 +26,7 @@ const ConfirmDeleteButton = ({
       {...props}
     >
       <DeleteIcon />{' '}
-      <FormattedMessage id="app.deleteButton.delete" defaultMessage="Delete" />
+      <FormattedMessage id="generic.delete" defaultMessage="Delete" />
     </Button>
   </Confirm>;
 

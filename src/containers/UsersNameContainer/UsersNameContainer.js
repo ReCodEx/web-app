@@ -41,7 +41,7 @@ class UsersNameContainer extends Component {
       >
         {user =>
           isSimple
-            ? <span className="simpleName">
+            ? <span className="simpleName text-nowrap">
                 {user.name.firstName} {user.name.lastName}
               </span>
             : <UsersName

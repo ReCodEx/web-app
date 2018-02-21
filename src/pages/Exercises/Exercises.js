@@ -5,7 +5,6 @@ import { FormattedMessage } from 'react-intl';
 import Button from '../../components/widgets/FlatButton';
 import { push } from 'react-router-redux';
 import { LinkContainer } from 'react-router-bootstrap';
-import { ButtonGroup } from 'react-bootstrap';
 import DeleteExerciseButtonContainer from '../../containers/DeleteExerciseButtonContainer';
 import SearchContainer from '../../containers/SearchContainer';
 
@@ -54,7 +53,8 @@ class Exercises extends Component {
       search,
       links: {
         EXERCISE_EDIT_URI_FACTORY,
-        EXERCISE_EDIT_SIMPLE_CONFIG_URI_FACTORY
+        EXERCISE_EDIT_SIMPLE_CONFIG_URI_FACTORY,
+        EXERCISE_EDIT_LIMITS_URI_FACTORY
       }
     } = this.props;
 
@@ -158,13 +158,13 @@ class Exercises extends Component {
                     exercises={exercises}
                     createActions={id =>
                       isAuthorOfExercise(id) &&
-                      <ButtonGroup>
+                      <div>
                         <LinkContainer to={EXERCISE_EDIT_URI_FACTORY(id)}>
                           <Button bsSize="xs" bsStyle="warning">
                             <EditIcon />{' '}
                             <FormattedMessage
                               id="app.exercises.listEdit"
-                              defaultMessage="Edit"
+                              defaultMessage="Settings"
                             />
                           </Button>
                         </LinkContainer>
@@ -175,16 +175,28 @@ class Exercises extends Component {
                             <EditIcon />{' '}
                             <FormattedMessage
                               id="app.exercises.listEditConfig"
-                              defaultMessage="Edit config"
+                              defaultMessage="Configuration"
                             />
                           </Button>
                         </LinkContainer>
+                        <LinkContainer
+                          to={EXERCISE_EDIT_LIMITS_URI_FACTORY(id)}
+                        >
+                          <Button bsSize="xs" bsStyle="warning">
+                            <EditIcon />{' '}
+                            <FormattedMessage
+                              id="app.exercises.listEditLimits"
+                              defaultMessage="Limits"
+                            />
+                          </Button>
+                        </LinkContainer>
+
                         <DeleteExerciseButtonContainer
                           id={id}
                           bsSize="xs"
                           onDeleted={() => search(query)}
                         />
-                      </ButtonGroup>}
+                      </div>}
                   />}
               />
             </Box>
