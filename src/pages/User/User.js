@@ -38,7 +38,7 @@ import {
 import { InfoIcon } from '../../components/icons';
 import { getJsData } from '../../redux/helpers/resourceManager';
 
-import withLinks from '../../hoc/withLinks';
+import withLinks from '../../helpers/withLinks';
 
 class User extends Component {
   componentWillMount = () =>

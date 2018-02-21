@@ -14,7 +14,7 @@ import { forkStatuses } from '../../../redux/modules/pipelines';
 import { getFork } from '../../../redux/selectors/pipelines';
 import ResourceRenderer from '../../helpers/ResourceRenderer';
 
-import withLinks from '../../../hoc/withLinks';
+import withLinks from '../../../helpers/withLinks';
 
 import './ForkPipelineForm.css';
 

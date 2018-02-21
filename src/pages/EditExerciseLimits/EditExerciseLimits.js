@@ -27,7 +27,7 @@ import { getExercise } from '../../redux/selectors/exercises';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import { simpleLimitsSelector } from '../../redux/selectors/simpleLimits';
 
-import withLinks from '../../hoc/withLinks';
+import withLinks from '../../helpers/withLinks';
 import { getLocalizedName } from '../../helpers/getLocalizedData';
 import { fetchExerciseTestsIfNeeded } from '../../redux/modules/exerciseTests';
 import { exerciseTestsSelector } from '../../redux/selectors/exerciseTests';
@@ -37,13 +37,10 @@ import {
   transformLimitsValues
 } from '../../helpers/exerciseSimpleForm'; // TODO presun
 
-import { logPropsChanges } from '../../helpers/debugTools';
-
 class EditExerciseLimits extends Component {
   componentWillMount = () => this.props.loadAsync();
 
   componentWillReceiveProps = nextProps => {
-    logPropsChanges('EditExerciseLimits', this.props, nextProps);
     if (this.props.params.exerciseId !== nextProps.params.exerciseId) {
       nextProps.loadAsync();
     }

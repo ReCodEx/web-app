@@ -15,7 +15,7 @@ import { getFork } from '../../../redux/selectors/exercises';
 import ResourceRenderer from '../../helpers/ResourceRenderer';
 import { getLocalizedName } from '../../../helpers/getLocalizedData';
 
-import withLinks from '../../../hoc/withLinks';
+import withLinks from '../../../helpers/withLinks';
 
 import './ForkExerciseForm.css';
 

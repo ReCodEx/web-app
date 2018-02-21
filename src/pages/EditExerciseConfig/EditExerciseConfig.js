@@ -45,7 +45,7 @@ import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironment
 import { runtimeEnvironmentsSelector } from '../../redux/selectors/runtimeEnvironments';
 import { simpleLimitsSelector } from '../../redux/selectors/simpleLimits';
 
-import withLinks from '../../hoc/withLinks';
+import withLinks from '../../helpers/withLinks';
 import { getLocalizedName } from '../../helpers/getLocalizedData';
 import { isLoggedAsSuperAdmin } from '../../redux/selectors/users';
 

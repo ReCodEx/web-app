@@ -24,7 +24,7 @@ import { searchExercises } from '../../redux/modules/search';
 import { getSearchQuery } from '../../redux/selectors/search';
 import ExercisesList from '../../components/Exercises/ExercisesList';
 import FetchManyResourceRenderer from '../../components/helpers/FetchManyResourceRenderer';
-import withLinks from '../../hoc/withLinks';
+import withLinks from '../../helpers/withLinks';
 
 class Exercises extends Component {
   static loadAsync = (params, dispatch) => dispatch(fetchExercises());

@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { prettyPrintBytes } from '../../helpers/stringFormatters';
 import { FormattedDate, FormattedTime, FormattedMessage } from 'react-intl';
-import withLinks from '../../../hoc/withLinks';
+import withLinks from '../../../helpers/withLinks';
 import { Button } from 'react-bootstrap';
 import Confirm from '../../../components/forms/Confirm';
 import { DeleteIcon } from '../../../components/icons';

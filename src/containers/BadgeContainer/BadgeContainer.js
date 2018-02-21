@@ -13,7 +13,7 @@ import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import { loggedInUserSelector } from '../../redux/selectors/users';
 import { accessTokenExpiration } from '../../redux/selectors/auth';
 
-import withLinks from '../../hoc/withLinks';
+import withLinks from '../../helpers/withLinks';
 
 const BadgeContainer = ({
   user,

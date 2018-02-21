@@ -5,7 +5,7 @@ import { Link } from 'react-router';
 
 import Box from '../../widgets/Box';
 import EvaluationTable from '../EvaluationTable';
-import withLinks from '../../../hoc/withLinks';
+import withLinks from '../../../helpers/withLinks';
 
 const ReferenceSolutionEvaluations = ({
   evaluations,

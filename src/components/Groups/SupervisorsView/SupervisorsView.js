@@ -19,7 +19,7 @@ import AddStudent from '../AddStudent';
 import SearchExercise from '../SearchExercise';
 import AdminAssignmentsTable from '../../Assignments/AdminAssignmentsTable';
 import { deleteExercise } from '../../../redux/modules/exercises';
-import withLinks from '../../../hoc/withLinks';
+import withLinks from '../../../helpers/withLinks';
 import { getLocalizedName } from '../../../helpers/getLocalizedData';
 
 const SupervisorsView = ({

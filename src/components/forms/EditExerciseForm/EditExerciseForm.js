@@ -20,7 +20,7 @@ import Button from '../../widgets/FlatButton';
 import LocalizedTextsFormField from '../LocalizedTextsFormField';
 import { LocalizedExerciseName } from '../../helpers/LocalizedNames';
 import { validateExercise } from '../../../redux/modules/exercises';
-import withLinks from '../../../hoc/withLinks';
+import withLinks from '../../../helpers/withLinks';
 
 const messages = defineMessages({
   easy: {

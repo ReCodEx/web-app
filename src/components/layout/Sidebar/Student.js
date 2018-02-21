@@ -7,7 +7,7 @@ import MenuTitle from '../../widgets/Sidebar/MenuTitle';
 import MenuGroup from '../../widgets/Sidebar/MenuGroup';
 import { getId } from '../../../redux/helpers/resourceManager';
 
-import withLinks from '../../../hoc/withLinks';
+import withLinks from '../../../helpers/withLinks';
 
 const Student = ({
   currentUrl,

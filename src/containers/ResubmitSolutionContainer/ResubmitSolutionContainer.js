@@ -13,7 +13,7 @@ import {
   getSubmissionId
 } from '../../redux/selectors/submission';
 import EvaluationProgressContainer from '../EvaluationProgressContainer';
-import withLinks from '../../hoc/withLinks';
+import withLinks from '../../helpers/withLinks';
 import { fetchSubmissionEvaluationsForSolution } from '../../redux/modules/submissionEvaluations';
 
 const ResubmitSolutionContainer = ({

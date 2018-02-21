@@ -1,5 +1,7 @@
 import { createSelector } from 'reselect';
 import { List } from 'immutable';
+
+import { EMPTY_LIST, EMPTY_OBJ } from '../../helpers/common';
 import { fetchManyEndpoint } from '../modules/users';
 
 import { extractLanguageFromUrl } from '../../links';
@@ -15,7 +17,6 @@ import { pipelineSelector } from './pipelines';
 import { isReady, getJsData } from '../helpers/resourceManager';
 
 const getParam = (state, id) => id;
-const EMPTY_LIST = List();
 
 const getUsers = state => state.users;
 const getResources = users => users.get('resources');
@@ -95,7 +96,7 @@ export const getUserSettings = userId =>
     user =>
       isReady(user)
         ? user.getIn(['data', 'privateData', 'settings']).toJS()
-        : {}
+        : EMPTY_OBJ
   );
 
 export const loggedInUserSelector = createSelector(
@@ -117,7 +118,7 @@ export const memberOfInstancesIdsSelector = userId =>
     user =>
       user && isReady(user)
         ? List([user.getIn(['data', 'privateData', 'instanceId'])])
-        : List() // @todo: Change when the user can be member of multiple instances
+        : EMPTY_LIST // @todo: Change when the user can be member of multiple instances
   );
 
 export const studentOfGroupsIdsSelector = userId =>
@@ -125,8 +126,8 @@ export const studentOfGroupsIdsSelector = userId =>
     getUser(userId),
     user =>
       user && isReady(user)
-        ? user.getIn(['data', 'privateData', 'groups', 'studentOf'], List())
-        : List()
+        ? user.getIn(['data', 'privateData', 'groups', 'studentOf'], EMPTY_LIST)
+        : EMPTY_LIST
   );
 
 export const supervisorOfGroupsIdsSelector = userId =>
@@ -134,8 +135,11 @@ export const supervisorOfGroupsIdsSelector = userId =>
     getUser(userId),
     user =>
       user && isReady(user)
-        ? user.getIn(['data', 'privateData', 'groups', 'supervisorOf'], List())
-        : List()
+        ? user.getIn(
+            ['data', 'privateData', 'groups', 'supervisorOf'],
+            EMPTY_LIST
+          )
+        : EMPTY_LIST
   );
 
 export const isStudentOf = (userId, groupId) =>
@@ -218,5 +222,5 @@ export const notificationsSelector = createSelector(
             }),
           {}
         )
-      : {}
+      : EMPTY_OBJ
 );

@@ -1,13 +1,11 @@
 import { createSelector } from 'reselect';
-import { List, Map } from 'immutable';
+import { Map } from 'immutable';
 
+import { EMPTY_MAP, EMPTY_LIST } from '../../helpers/common';
 import { loggedInUserSelector } from './users';
 import { groupsSelector, filterGroups } from './groups';
 import { getAssignments } from './assignments';
 import { isReady } from '../helpers/resourceManager';
-
-const EMPTY_MAP = Map();
-const EMPTY_LIST = List();
 
 // all the groups in the state
 export const allGroups = state => state.groups;
@@ -27,7 +25,7 @@ export const loggedInStudentOfGroupsIdsSelector = createSelector(
   user =>
     user && isReady(user)
       ? user.getIn(['data', 'privateData', 'groups', 'studentOf'])
-      : List()
+      : EMPTY_LIST
 );
 
 export const loggedInSupervisorOfGroupsIdsSelector = createSelector(
@@ -35,7 +33,7 @@ export const loggedInSupervisorOfGroupsIdsSelector = createSelector(
   user =>
     user && isReady(user)
       ? user.getIn(['data', 'privateData', 'groups', 'supervisorOf'])
-      : List()
+      : EMPTY_LIST
 );
 
 export const loggedInStudentOfSelector = createSelector(

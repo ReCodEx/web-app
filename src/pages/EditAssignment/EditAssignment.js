@@ -34,7 +34,7 @@ import { ResubmitAllSolutionsContainer } from '../../containers/ResubmitSolution
 import AssignmentSync from '../../components/Assignments/Assignment/AssignmentSync';
 import { getLocalizedTextsLocales } from '../../helpers/getLocalizedData';
 
-import withLinks from '../../hoc/withLinks';
+import withLinks from '../../helpers/withLinks';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 
 class EditAssignment extends Component {

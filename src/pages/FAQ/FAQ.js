@@ -4,7 +4,7 @@ import { FormattedMessage } from 'react-intl';
 import ReactMarkdown from 'react-remarkable';
 
 import PageContent from '../../components/layout/PageContent';
-import withLinks from '../../hoc/withLinks';
+import withLinks from '../../helpers/withLinks';
 
 const FAQ_MD_URI = 'https://raw.githubusercontent.com/wiki/ReCodEx/wiki/FAQ.md';
 

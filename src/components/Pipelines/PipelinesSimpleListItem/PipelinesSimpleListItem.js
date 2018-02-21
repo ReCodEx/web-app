@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import UsersNameContainer from '../../../containers/UsersNameContainer';
 import { Link } from 'react-router';
 
-import withLinks from '../../../hoc/withLinks';
+import withLinks from '../../../helpers/withLinks';
 
 const PipelinesSimpleListItem = ({
   id,

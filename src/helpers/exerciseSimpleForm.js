@@ -1,19 +1,13 @@
 import yaml from 'js-yaml';
 import { defaultMemoize } from 'reselect';
 
+import { safeGet } from '../helpers/common';
+
 import {
   endpointDisguisedAsIdFactory,
   encodeTestId,
   encodeEnvironmentId
 } from '../redux/modules/simpleLimits';
-
-// safe getter to traverse compex object/array structures
-const _safeGet = (obj, path) => {
-  path.forEach(step => {
-    obj = obj && (typeof step === 'function' ? obj.find(step) : obj[step]);
-  });
-  return obj;
-};
 
 /*
  * Tests and Score
@@ -217,7 +211,7 @@ const getSimpleConfigCompilationVars = (testObj, config, environments) => {
   const compilation = {};
   for (const environment of environments) {
     const pipelines =
-      _safeGet(config, [
+      safeGet(config, [
         c => c.name === environment.runtimeEnvironmentId,
         'tests',
         t => t.name === testObj.name,
@@ -362,7 +356,7 @@ const mergeOriginalVariables = (newVars, origVars) => {
 };
 
 const mergeCompilationVariables = (origVars, testObj, envId) => {
-  const extraFiles = _safeGet(testObj, ['compilation', envId, 'extra-files']);
+  const extraFiles = safeGet(testObj, ['compilation', envId, 'extra-files']);
   if (!extraFiles) {
     return origVars;
   }
@@ -420,7 +414,7 @@ export const transformConfigValues = (
         ? executionPipelineFiles
         : executionPipelineStdout;
 
-      const originalPipelines = _safeGet(originalConfig, [
+      const originalPipelines = safeGet(originalConfig, [
         config => config.name === envId,
         'tests',
         t => t.name === testName,
@@ -429,7 +423,7 @@ export const transformConfigValues = (
 
       // Prepare variables for compilation pipeline ...
       const origCompilationVars =
-        _safeGet(originalPipelines, [
+        safeGet(originalPipelines, [
           p => p.name === compilationPipeline.id,
           'variables'
         ]) || EMPTY_COMPILATION_PIPELINE_VARS; // if pipeline variables are not present, prepare an empty set
@@ -442,7 +436,7 @@ export const transformConfigValues = (
 
       // Prepare variables for execution pipeline ...
       const testVars = transformConfigTestExecutionVariables(test);
-      const origExecutionVars = _safeGet(originalPipelines, [
+      const origExecutionVars = safeGet(originalPipelines, [
         p => p.name === executionPipeline.id,
         'variables'
       ]);

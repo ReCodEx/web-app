@@ -9,7 +9,7 @@ import { EditIcon } from '../../icons';
 // import Confirm from '../../components/forms/Confirm';
 // import ForkExerciseForm from '../../components/forms/ForkExerciseForm';
 
-import withLinks from '../../../hoc/withLinks';
+import withLinks from '../../../helpers/withLinks';
 
 const ExerciseButtons = ({
   exerciseId,

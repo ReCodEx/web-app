@@ -11,7 +11,7 @@ import GroupsName from '../GroupsName';
 import { computeVisibleGroupsMap } from '../../helpers/group.js';
 import { getLocalizedResourceName } from '../../../helpers/getLocalizedData';
 
-import withLinks from '../../../hoc/withLinks';
+import withLinks from '../../../helpers/withLinks';
 
 class GroupTree extends Component {
   renderLoading = level =>

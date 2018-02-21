@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router';
 import Avatar from '../../widgets/Avatar';
 import NotVerified from './NotVerified';
-import withLinks from '../../../hoc/withLinks';
+import withLinks from '../../../helpers/withLinks';
 
 import styles from './usersName.less';
 

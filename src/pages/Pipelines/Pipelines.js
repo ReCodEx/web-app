@@ -23,7 +23,7 @@ import { searchPipelines } from '../../redux/modules/search';
 import PipelinesList from '../../components/Pipelines/PipelinesList';
 import FetchManyResourceRenderer from '../../components/helpers/FetchManyResourceRenderer';
 
-import withLinks from '../../hoc/withLinks';
+import withLinks from '../../helpers/withLinks';
 
 class Pipelines extends Component {
   static loadAsync = (params, dispatch) => dispatch(fetchPipelines());

@@ -7,7 +7,7 @@ import UsersNameContainer from '../../../containers/UsersNameContainer';
 import GroupsNameContainer from '../../../containers/GroupsNameContainer';
 import { Link } from 'react-router';
 
-import withLinks from '../../../hoc/withLinks';
+import withLinks from '../../../helpers/withLinks';
 import { LocalizedExerciseName } from '../../helpers/LocalizedNames';
 import { ExercisePrefixIcons } from '../../icons';
 

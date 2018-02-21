@@ -64,7 +64,7 @@ import {
   groupsSelector
 } from '../../redux/selectors/groups';
 
-import withLinks from '../../hoc/withLinks';
+import withLinks from '../../helpers/withLinks';
 
 const messages = defineMessages({
   groupsBox: {

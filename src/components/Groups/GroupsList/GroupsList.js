@@ -6,7 +6,7 @@ import ResourceRenderer from '../../helpers/ResourceRenderer';
 import Icon from 'react-fontawesome';
 
 import GroupsName from '../GroupsName';
-import withLinks from '../../../hoc/withLinks';
+import withLinks from '../../../helpers/withLinks';
 
 const GroupsList = ({
   groups = [],
