@@ -9,7 +9,7 @@ import Icon from 'react-fontawesome';
 
 import Page from '../../components/layout/Page';
 import { LocalizedExerciseName } from '../../components/helpers/LocalizedNames';
-import EditSimpleLimitsForm from '../../components/forms/EditSimpleLimitsForm/EditSimpleLimitsForm';
+import EditLimitsForm from '../../components/forms/EditLimitsForm/EditLimitsForm';
 import ExerciseButtons from '../../components/Exercises/ExerciseButtons';
 
 import {
@@ -166,7 +166,7 @@ class EditExerciseLimits extends Component {
               <Col sm={12}>
                 {exercise.hardwareGroups && exercise.hardwareGroups.length === 1
                   ? tests.length > 0 && exercise.runtimeEnvironments.length > 0
-                    ? <EditSimpleLimitsForm
+                    ? <EditLimitsForm
                         onSubmit={this.transformAndSendLimitsValues(
                           tests,
                           exercise.runtimeEnvironments

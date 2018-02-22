@@ -2,7 +2,7 @@ export { default as CheckboxField } from './CheckboxField';
 export { default as EmailField } from './EmailField';
 export { default as DatetimeField } from './DatetimeField';
 export { default as MarkdownTextAreaField } from './MarkdownTextAreaField';
-export { default as EditSimpleLimitsField } from './EditSimpleLimitsField';
+export { default as EditLimitsField } from './EditLimitsField';
 export { default as LimitsValueField } from './LimitsValueField';
 export { default as PasswordField } from './PasswordField';
 export { default as PasswordStrength } from './PasswordStrength';

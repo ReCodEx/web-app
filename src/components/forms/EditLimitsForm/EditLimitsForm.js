@@ -5,7 +5,7 @@ import { FormattedMessage, injectIntl } from 'react-intl';
 import { reduxForm, Field } from 'redux-form';
 import Icon from 'react-fontawesome';
 
-import { EditSimpleLimitsField, CheckboxField } from '../Fields';
+import { EditLimitsField, CheckboxField } from '../Fields';
 import SubmitButton from '../SubmitButton';
 import FormBox from '../../widgets/FormBox';
 import Button from '../../widgets/FlatButton';
@@ -16,7 +16,7 @@ import prettyMs from 'pretty-ms';
 
 import styles from './styles.less';
 
-class EditSimpleLimitsForm extends Component {
+class EditLimitsForm extends Component {
   render() {
     const {
       environments,
@@ -57,13 +57,13 @@ class EditSimpleLimitsForm extends Component {
                 >
                   <RefreshIcon /> &nbsp;
                   <FormattedMessage
-                    id="app.editSimpleLimitsForm.reset"
+                    id="app.editLimitsForm.reset"
                     defaultMessage="Reset"
                   />
                 </Button>{' '}
               </span>}
             <SubmitButton
-              id="editSimpleLimits"
+              id="editLimits"
               invalid={invalid}
               submitting={submitting}
               dirty={dirty}
@@ -73,25 +73,25 @@ class EditSimpleLimitsForm extends Component {
               messages={{
                 submit: (
                   <FormattedMessage
-                    id="app.editSimpleLimitsForm.submit"
+                    id="app.editLimitsForm.submit"
                     defaultMessage="Save Limits"
                   />
                 ),
                 submitting: (
                   <FormattedMessage
-                    id="app.editSimpleLimitsForm.submitting"
+                    id="app.editLimitsForm.submitting"
                     defaultMessage="Saving Limits ..."
                   />
                 ),
                 success: (
                   <FormattedMessage
-                    id="app.editSimpleLimitsForm.success"
+                    id="app.editLimitsForm.success"
                     defaultMessage="Limits Saved"
                   />
                 ),
                 validating: (
                   <FormattedMessage
-                    id="app.editSimpleLimitsForm.validating"
+                    id="app.editLimitsForm.validating"
                     defaultMessage="Validating ..."
                   />
                 )
@@ -103,7 +103,7 @@ class EditSimpleLimitsForm extends Component {
         {submitFailed &&
           <Alert bsStyle="danger">
             <FormattedMessage
-              id="app.editSimpleLimitsForm.failed"
+              id="app.editLimitsForm.failed"
               defaultMessage="Cannot save the exercise limits. Please try again later."
             />
           </Alert>}
@@ -116,7 +116,7 @@ class EditSimpleLimitsForm extends Component {
                 onOff
                 label={
                   <FormattedMessage
-                    id="app.editSimpleLimitsForm.preciseTime"
+                    id="app.editLimitsForm.preciseTime"
                     defaultMessage="Precise Time Measurement"
                   />
                 }
@@ -128,7 +128,7 @@ class EditSimpleLimitsForm extends Component {
               <p className={styles.preciseTimeTooltip}>
                 <Icon name="info-circle" />
                 <FormattedMessage
-                  id="app.editSimpleLimitsForm.preciseTimeTooltip"
+                  id="app.editLimitsForm.preciseTimeTooltip"
                   defaultMessage="If precise time measurement is selected, ReCodEx will measure the consumed CPU time of tested solutions. Otherwise, the wall time will be measured. CPU is better in cases when serial time complexity of the solution is tested and tight time limits are set. Wall time is better in general cases as it better reflects the actual time consumed by the solution (including I/O), but it is more susceptible to errors of measurement."
                 />
               </p>
@@ -168,23 +168,23 @@ class EditSimpleLimitsForm extends Component {
                           environments.length > 1 ? styles.colSeparator : ''
                         }
                       >
-                        <EditSimpleLimitsField
+                        <EditLimitsField
                           prefix={`limits.${id}`}
                           id={id}
                           testsCount={tests.length}
                           environmentsCount={environments.length}
                           cloneVertically={cloneVertically(
-                            'editSimpleLimits',
+                            'editLimits',
                             test.id,
                             environment.id
                           )}
                           cloneHorizontally={cloneHorizontally(
-                            'editSimpleLimits',
+                            'editLimits',
                             test.id,
                             environment.id
                           )}
                           cloneAll={cloneAll(
-                            'editSimpleLimits',
+                            'editLimits',
                             test.id,
                             environment.id
                           )}
@@ -201,7 +201,7 @@ class EditSimpleLimitsForm extends Component {
   }
 }
 
-EditSimpleLimitsForm.propTypes = {
+EditLimitsForm.propTypes = {
   tests: PropTypes.array.isRequired,
   environments: PropTypes.array,
   cloneHorizontally: PropTypes.func.isRequired,
@@ -244,7 +244,7 @@ const validate = ({ limits }) => {
         testsErrors[env] = {
           time: (
             <FormattedMessage
-              id="app.editSimpleLimitsForm.validation.timeSum"
+              id="app.editLimitsForm.validation.timeSum"
               defaultMessage="The sum of time limits ({sum}) exceeds allowed maximum ({max})."
               values={{
                 sum: prettyMs(sums[env] * 1000),
@@ -267,7 +267,7 @@ const validate = ({ limits }) => {
 };
 
 export default reduxForm({
-  form: 'editSimpleLimits',
+  form: 'editLimits',
   enableReinitialize: true,
   keepDirtyOnReinitialize: false,
   immutableProps: [
@@ -279,4 +279,4 @@ export default reduxForm({
     'handleSubmit'
   ],
   validate
-})(injectIntl(EditSimpleLimitsForm));
+})(injectIntl(EditLimitsForm));

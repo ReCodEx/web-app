@@ -12,7 +12,7 @@ import LimitsValueField from './LimitsValueField';
 import { prettyPrintBytes } from '../../helpers/stringFormatters';
 import prettyMs from 'pretty-ms';
 
-import styles from './EditSimpleLimitsField.less';
+import styles from './EditLimitsField.less';
 
 const prettyPrintBytesWrap = value =>
   Number.isNaN(Number(value)) ? '-' : prettyPrintBytes(Number(value) * 1024);
@@ -41,7 +41,7 @@ const validateValue = (ranges, pretty) => value => {
   if (Number.isNaN(num)) {
     return (
       <FormattedMessage
-        id="app.EditSimpleLimitsForm.validation.NaN"
+        id="app.EditLimitsForm.validation.NaN"
         defaultMessage="Given value is not a number."
       />
     );
@@ -50,7 +50,7 @@ const validateValue = (ranges, pretty) => value => {
   if (num < ranges.min) {
     return (
       <FormattedMessage
-        id="app.EditSimpleLimitsForm.validation.tooLow"
+        id="app.EditLimitsForm.validation.tooLow"
         defaultMessage="Given value is below the recommended minimum ({min})."
         values={{ min: pretty(ranges.min) }}
       />
@@ -59,7 +59,7 @@ const validateValue = (ranges, pretty) => value => {
   if (num > ranges.max) {
     return (
       <FormattedMessage
-        id="app.EditSimpleLimitsForm.validation.tooHigh"
+        id="app.EditLimitsForm.validation.tooHigh"
         defaultMessage="Given value exceeds the recommended maximum ({max})."
         values={{ max: pretty(ranges.max) }}
       />
@@ -71,7 +71,7 @@ const validateValue = (ranges, pretty) => value => {
 const validateMemory = validateValue(limitRanges.memory, prettyPrintBytesWrap);
 const validateTime = validateValue(limitRanges.time, prettyPrintMsWrap);
 
-const EditSimpleLimitsField = ({
+const EditLimitsField = ({
   prefix,
   id,
   testsCount,
@@ -107,7 +107,7 @@ const EditSimpleLimitsField = ({
                     overlay={
                       <Tooltip id={Date.now()}>
                         <FormattedMessage
-                          id="app.editSimpleLimitsField.tooltip.cloneVertical"
+                          id="app.editLimitsField.tooltip.cloneVertical"
                           defaultMessage="Copy this value vertically to all tests within the environment."
                         />
                       </Tooltip>
@@ -133,7 +133,7 @@ const EditSimpleLimitsField = ({
                       overlay={
                         <Tooltip id={Date.now()}>
                           <FormattedMessage
-                            id="app.editSimpleLimitsField.tooltip.cloneHorizontal"
+                            id="app.editLimitsField.tooltip.cloneHorizontal"
                             defaultMessage="Copy this value horizontally to all environments of the test."
                           />
                         </Tooltip>
@@ -161,7 +161,7 @@ const EditSimpleLimitsField = ({
                       overlay={
                         <Tooltip id={Date.now()}>
                           <FormattedMessage
-                            id="app.editSimpleLimitsField.tooltip.cloneAll"
+                            id="app.editLimitsField.tooltip.cloneAll"
                             defaultMessage="Copy this value to all tests in all environments."
                           />
                         </Tooltip>
@@ -201,7 +201,7 @@ const EditSimpleLimitsField = ({
                     overlay={
                       <Tooltip id={Date.now()}>
                         <FormattedMessage
-                          id="app.editSimpleLimitsField.tooltip.cloneVertical"
+                          id="app.editLimitsField.tooltip.cloneVertical"
                           defaultMessage="Copy this value vertically to all tests within the environment."
                         />
                       </Tooltip>
@@ -227,7 +227,7 @@ const EditSimpleLimitsField = ({
                       overlay={
                         <Tooltip id={Date.now()}>
                           <FormattedMessage
-                            id="app.editSimpleLimitsField.tooltip.cloneHorizontal"
+                            id="app.editLimitsField.tooltip.cloneHorizontal"
                             defaultMessage="Copy this value horizontally to all environments of the test."
                           />
                         </Tooltip>
@@ -255,7 +255,7 @@ const EditSimpleLimitsField = ({
                       overlay={
                         <Tooltip id={Date.now()}>
                           <FormattedMessage
-                            id="app.editSimpleLimitsField.tooltip.cloneAll"
+                            id="app.editLimitsField.tooltip.cloneAll"
                             defaultMessage="Copy this value to all tests in all environments."
                           />
                         </Tooltip>
@@ -274,7 +274,7 @@ const EditSimpleLimitsField = ({
     </Row>
   </div>;
 
-EditSimpleLimitsField.propTypes = {
+EditLimitsField.propTypes = {
   id: PropTypes.string.isRequired,
   cloneVertically: PropTypes.func.isRequired,
   cloneHorizontally: PropTypes.func.isRequired,
@@ -284,4 +284,4 @@ EditSimpleLimitsField.propTypes = {
   environmentsCount: PropTypes.number.isRequired
 };
 
-export default EditSimpleLimitsField;
+export default EditLimitsField;
