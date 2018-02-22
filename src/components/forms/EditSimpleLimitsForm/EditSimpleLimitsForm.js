@@ -10,10 +10,8 @@ import SubmitButton from '../SubmitButton';
 import FormBox from '../../widgets/FormBox';
 import Button from '../../widgets/FlatButton';
 import { RefreshIcon } from '../../icons';
-import {
-  encodeTestId,
-  encodeEnvironmentId
-} from '../../../redux/modules/simpleLimits';
+import { encodeId, encodeNumId } from '../../../helpers/common';
+
 import prettyMs from 'pretty-ms';
 
 import styles from './styles.less';
@@ -162,9 +160,7 @@ class EditSimpleLimitsForm extends Component {
 
                   {environments.map(environment => {
                     const id =
-                      encodeTestId(test.id) +
-                      '.' +
-                      encodeEnvironmentId(environment.id);
+                      encodeNumId(test.id) + '.' + encodeId(environment.id);
                     return (
                       <td
                         key={`td.${id}`}

@@ -18,3 +18,11 @@ export function safeGet(obj, path, def = undefined) {
   });
   return obj === undefined ? def : obj;
 }
+
+export function encodeId(id) {
+  return 'BID' + btoa(id);
+}
+
+export function encodeNumId(id) {
+  return 'ID' + id;
+}

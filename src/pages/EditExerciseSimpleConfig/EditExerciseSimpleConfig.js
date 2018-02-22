@@ -31,7 +31,6 @@ import { exerciseConfigSelector } from '../../redux/selectors/exerciseConfigs';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments';
 import { runtimeEnvironmentsSelector } from '../../redux/selectors/runtimeEnvironments';
-import { simpleLimitsSelector } from '../../redux/selectors/simpleLimits';
 
 import withLinks from '../../helpers/withLinks';
 import { getLocalizedName } from '../../helpers/getLocalizedData';
@@ -348,7 +347,6 @@ export default withLinks(
         userId: loggedInUserIdSelector(state),
         runtimeEnvironments: runtimeEnvironmentsSelector(state),
         exerciseConfig: exerciseConfigSelector(exerciseId)(state),
-        limits: simpleLimitsSelector(state),
         exerciseEnvironmentConfig: exerciseEnvironmentConfigSelector(
           exerciseId
         )(state),

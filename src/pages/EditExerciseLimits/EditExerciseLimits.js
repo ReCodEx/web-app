@@ -17,15 +17,15 @@ import {
   fetchExerciseIfNeeded
 } from '../../redux/modules/exercises';
 import {
-  fetchExerciseEnvironmentSimpleLimitsIfNeeded,
-  editEnvironmentSimpleLimits,
+  fetchExerciseEnvironmentLimitsIfNeeded,
+  editEnvironmentLimits,
   cloneHorizontally,
   cloneVertically,
   cloneAll
-} from '../../redux/modules/simpleLimits';
+} from '../../redux/modules/limits';
 import { getExercise } from '../../redux/selectors/exercises';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
-import { simpleLimitsSelector } from '../../redux/selectors/simpleLimits';
+import { limitsSelector } from '../../redux/selectors/limits';
 
 import withLinks from '../../helpers/withLinks';
 import { getLocalizedName } from '../../helpers/getLocalizedData';
@@ -35,7 +35,7 @@ import { exerciseTestsSelector } from '../../redux/selectors/exerciseTests';
 import {
   getLimitsInitValues,
   transformLimitsValues
-} from '../../helpers/exerciseSimpleForm'; // TODO presun
+} from '../../helpers/exerciseLimits';
 
 class EditExerciseLimits extends Component {
   componentWillMount = () => this.props.loadAsync();
@@ -48,31 +48,41 @@ class EditExerciseLimits extends Component {
 
   static loadAsync = ({ exerciseId }, dispatch) =>
     Promise.all([
-      dispatch(fetchExerciseIfNeeded(exerciseId)).then(({ value: exercise }) =>
-        Promise.all(
-          exercise.runtimeEnvironments.map(environment =>
-            dispatch(
-              fetchExerciseEnvironmentSimpleLimitsIfNeeded(
-                exerciseId,
-                environment.id
+      dispatch(fetchExerciseIfNeeded(exerciseId)).then(
+        ({ value: exercise }) =>
+          exercise.hardwareGroups && exercise.hardwareGroups.length === 1
+            ? Promise.all(
+                exercise.runtimeEnvironments.map(environment =>
+                  dispatch(
+                    fetchExerciseEnvironmentLimitsIfNeeded(
+                      exerciseId,
+                      environment.id,
+                      exercise.hardwareGroups[0].id
+                    )
+                  )
+                )
               )
-            )
-          )
-        )
+            : Promise.resolve()
       ),
       dispatch(fetchExerciseTestsIfNeeded(exerciseId))
     ]);
 
   transformAndSendLimitsValues = defaultMemoize(
     (tests, exerciseRuntimeEnvironments) => {
-      const { editEnvironmentSimpleLimits, reloadExercise } = this.props;
+      const { exercise, editEnvironmentLimits, reloadExercise } = this.props;
       return formData =>
         Promise.all(
           transformLimitsValues(
             formData,
             tests,
             exerciseRuntimeEnvironments
-          ).map(({ id, data }) => editEnvironmentSimpleLimits(id, data))
+          ).map(({ id, data }) =>
+            editEnvironmentLimits(
+              exercise.getIn(['data', 'hardwareGroups', 0, 'id']),
+              id,
+              data
+            )
+          )
         ).then(reloadExercise);
     }
   );
@@ -154,36 +164,47 @@ class EditExerciseLimits extends Component {
 
             <Row>
               <Col sm={12}>
-                {tests.length > 0 && exercise.runtimeEnvironments.length > 0
-                  ? <EditSimpleLimitsForm
-                      onSubmit={this.transformAndSendLimitsValues(
-                        tests,
-                        exercise.runtimeEnvironments
-                      )}
-                      environments={exercise.runtimeEnvironments}
-                      tests={tests}
-                      initialValues={getLimitsInitValues(
-                        limits,
-                        tests,
-                        exercise.runtimeEnvironments,
-                        exercise.id
-                      )}
-                      cloneVertically={cloneVertically}
-                      cloneHorizontally={cloneHorizontally}
-                      cloneAll={cloneAll}
-                    />
-                  : <div className="alert alert-warning">
-                      <h4>
-                        <i className="icon fa fa-warning" />{' '}
+                {exercise.hardwareGroups && exercise.hardwareGroups.length === 1
+                  ? tests.length > 0 && exercise.runtimeEnvironments.length > 0
+                    ? <EditSimpleLimitsForm
+                        onSubmit={this.transformAndSendLimitsValues(
+                          tests,
+                          exercise.runtimeEnvironments
+                        )}
+                        environments={exercise.runtimeEnvironments}
+                        tests={tests}
+                        initialValues={getLimitsInitValues(
+                          limits,
+                          tests,
+                          exercise.runtimeEnvironments,
+                          exercise.id,
+                          exercise.hardwareGroups[0].id
+                        )}
+                        cloneVertically={cloneVertically}
+                        cloneHorizontally={cloneHorizontally}
+                        cloneAll={cloneAll}
+                      />
+                    : <div className="alert alert-warning">
+                        <h4>
+                          <i className="icon fa fa-warning" />{' '}
+                          <FormattedMessage
+                            id="app.editLimitsBox.title"
+                            defaultMessage="Edit limits"
+                          />
+                        </h4>
                         <FormattedMessage
-                          id="app.editLimitsBox.title"
-                          defaultMessage="Edit limits"
+                          id="app.editExerciseSimpleConfig.noTestsOrEnvironments"
+                          defaultMessage="There are no tests or no enabled environments yet. The form cannot be displayed until at least one test is created and one environment is enabled."
+                        />
+                      </div>
+                  : <div className="alert alert-danger">
+                      <h4>
+                        <i className="icon fa fa-ban" />{' '}
+                        <FormattedMessage
+                          id="app.editExerciseLimits.invalidHwGroups"
+                          defaultMessage="The exercise uses complex configuration which cannot be editted by this form."
                         />
                       </h4>
-                      <FormattedMessage
-                        id="app.editExerciseSimpleConfig.noTestsOrEnvironments"
-                        defaultMessage="There are no tests or no enabled environments yet. The form cannot be displayed until at least one test is created and one environment is enabled."
-                      />
                     </div>}
               </Col>
             </Row>
@@ -199,7 +220,7 @@ EditExerciseLimits.propTypes = {
   params: PropTypes.shape({
     exerciseId: PropTypes.string.isRequired
   }).isRequired,
-  editEnvironmentSimpleLimits: PropTypes.func.isRequired,
+  editEnvironmentLimits: PropTypes.func.isRequired,
   exerciseTests: PropTypes.object,
   links: PropTypes.object.isRequired,
   limits: PropTypes.object.isRequired,
@@ -231,15 +252,20 @@ export default withLinks(
       return {
         exercise: getExercise(exerciseId)(state),
         userId: loggedInUserIdSelector(state),
-        limits: simpleLimitsSelector(state),
+        limits: limitsSelector(state),
         exerciseTests: exerciseTestsSelector(exerciseId)(state)
       };
     },
     (dispatch, { params: { exerciseId } }) => ({
       loadAsync: () => EditExerciseLimits.loadAsync({ exerciseId }, dispatch),
-      editEnvironmentSimpleLimits: (runtimeEnvironmentId, data) =>
+      editEnvironmentLimits: (hwGroupId, runtimeEnvironmentId, data) =>
         dispatch(
-          editEnvironmentSimpleLimits(exerciseId, runtimeEnvironmentId, data)
+          editEnvironmentLimits(
+            exerciseId,
+            runtimeEnvironmentId,
+            hwGroupId,
+            data
+          )
         ),
       cloneVertically: cloneVerticallyWrapper(dispatch),
       cloneHorizontally: cloneHorizontallyWrapper(dispatch),
