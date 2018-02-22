@@ -16,7 +16,10 @@ import { LocalizedGroupName } from '../../components/helpers/LocalizedNames';
 import { fetchGroupIfNeeded, editGroup } from '../../redux/modules/groups';
 import { groupSelector } from '../../redux/selectors/groups';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
-import { isSupervisorOf } from '../../redux/selectors/users';
+import {
+  isSupervisorOf,
+  isLoggedAsSuperAdmin
+} from '../../redux/selectors/users';
 import { getLocalizedTextsLocales } from '../../helpers/getLocalizedData';
 
 import withLinks from '../../hoc/withLinks';
@@ -50,6 +53,7 @@ class EditGroup extends Component {
     const {
       params: { groupId },
       group,
+      isSuperAdmin,
       links: { GROUP_URI_FACTORY },
       editGroup,
       hasThreshold,
@@ -91,6 +95,7 @@ class EditGroup extends Component {
               onSubmit={editGroup}
               hasThreshold={hasThreshold}
               localizedTextsLocales={getLocalizedTextsLocales(localizedTexts)}
+              isSuperAdmin={isSuperAdmin}
             />
 
             <Box
@@ -147,7 +152,8 @@ EditGroup.propTypes = {
   editGroup: PropTypes.func.isRequired,
   push: PropTypes.func.isRequired,
   hasThreshold: PropTypes.bool,
-  localizedTexts: PropTypes.array
+  localizedTexts: PropTypes.array,
+  isSuperAdmin: PropTypes.bool
 };
 
 const editGroupFormSelector = formValueSelector('editGroup');
@@ -162,7 +168,8 @@ export default withLinks(
         userId,
         isStudentOf: groupId => isSupervisorOf(userId, groupId)(state),
         hasThreshold: editGroupFormSelector(state, 'hasThreshold'),
-        localizedTexts: editGroupFormSelector(state, 'localizedTexts')
+        localizedTexts: editGroupFormSelector(state, 'localizedTexts'),
+        isSuperAdmin: isLoggedAsSuperAdmin(state)
       };
     },
     (dispatch, { params: { groupId } }) => ({
