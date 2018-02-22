@@ -48,8 +48,8 @@ const EditExerciseForm = ({
   anyTouched,
   submitting,
   handleSubmit,
-  submitFailed: hasFailed,
-  submitSucceeded: hasSucceeded,
+  submitFailed,
+  submitSucceeded,
   invalid,
   asyncValidating,
   localizedTextsLocales = [],
@@ -64,7 +64,7 @@ const EditExerciseForm = ({
         values={{ name: <LocalizedExerciseName entity={exercise} /> }}
       />
     }
-    succeeded={hasSucceeded}
+    succeeded={submitSucceeded}
     dirty={anyTouched}
     footer={
       <div className="text-center">
@@ -73,8 +73,8 @@ const EditExerciseForm = ({
           invalid={invalid}
           submitting={submitting}
           dirty={anyTouched}
-          hasSucceeded={hasSucceeded}
-          hasFailed={hasFailed}
+          hasSucceeded={submitSucceeded}
+          hasFailed={submitFailed}
           handleSubmit={handleSubmit}
           asyncValidating={asyncValidating}
           messages={{
@@ -118,7 +118,7 @@ const EditExerciseForm = ({
       </div>
     }
   >
-    {hasFailed &&
+    {submitFailed &&
       <Alert bsStyle="danger">
         <FormattedMessage
           id="app.editExerciseForm.failed"

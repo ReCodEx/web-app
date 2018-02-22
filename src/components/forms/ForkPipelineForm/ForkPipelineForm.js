@@ -36,8 +36,8 @@ class ForkPipelineForm extends Component {
       anyTouched,
       submitting,
       handleSubmit,
-      hasFailed = false,
-      hasSucceeded = false,
+      submitFailed,
+      submitSucceeded,
       invalid,
       exercises,
       intl
@@ -62,7 +62,7 @@ class ForkPipelineForm extends Component {
       default:
         return (
           <div>
-            {hasFailed &&
+            {submitFailed &&
               <Alert bsStyle="danger">
                 <FormattedMessage
                   id="app.forkPipelineForm.failed"
@@ -94,9 +94,9 @@ class ForkPipelineForm extends Component {
                 id="forkPipeline"
                 invalid={invalid}
                 submitting={submitting}
-                hasSucceeded={hasSucceeded}
+                hasSucceeded={submitSucceeded}
                 dirty={anyTouched}
-                hasFailed={hasFailed}
+                hasFailed={submitFailed}
                 handleSubmit={handleSubmit}
                 noIcons
                 messages={{
@@ -134,8 +134,8 @@ ForkPipelineForm.propTypes = {
   forkedPipelineId: PropTypes.string,
   anyTouched: PropTypes.bool,
   submitting: PropTypes.bool,
-  hasFailed: PropTypes.bool,
-  hasSucceeded: PropTypes.bool,
+  submitFailed: PropTypes.bool,
+  submitSucceeded: PropTypes.bool,
   invalid: PropTypes.bool,
   handleSubmit: PropTypes.func.isRequired,
   push: PropTypes.func.isRequired,

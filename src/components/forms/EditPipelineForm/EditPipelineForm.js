@@ -38,8 +38,8 @@ class EditPipelineForm extends Component {
       anyTouched,
       submitting,
       handleSubmit,
-      submitFailed: hasFailed,
-      submitSucceeded: hasSucceeded,
+      submitFailed,
+      submitSucceeded,
       variables = [],
       invalid,
       asyncValidating,
@@ -54,7 +54,7 @@ class EditPipelineForm extends Component {
             values={{ name: pipeline.name }}
           />
         }
-        succeeded={hasSucceeded}
+        succeeded={submitSucceeded}
         dirty={anyTouched}
         footer={
           <div className="text-center">
@@ -63,8 +63,8 @@ class EditPipelineForm extends Component {
               invalid={invalid}
               submitting={submitting}
               dirty={anyTouched}
-              hasSucceeded={hasSucceeded}
-              hasFailed={hasFailed}
+              hasSucceeded={submitSucceeded}
+              hasFailed={submitFailed}
               handleSubmit={handleSubmit}
               asyncValidating={asyncValidating}
               messages={{
@@ -97,7 +97,7 @@ class EditPipelineForm extends Component {
           </div>
         }
       >
-        {hasFailed &&
+        {submitFailed &&
           <Alert bsStyle="danger">
             <FormattedMessage
               id="app.editPipelineForm.failed"
