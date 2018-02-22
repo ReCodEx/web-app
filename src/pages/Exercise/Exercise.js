@@ -31,7 +31,7 @@ import {
 } from '../../components/icons';
 import Confirm from '../../components/forms/Confirm';
 import PipelinesSimpleList from '../../components/Pipelines/PipelinesSimpleList';
-// import ForkExerciseForm from '../../components/forms/ForkExerciseForm';
+import ForkExerciseForm from '../../components/forms/ForkExerciseForm';
 import AssignExerciseButton from '../../components/buttons/AssignExerciseButton';
 
 import { isSubmitting } from '../../redux/selectors/submission';
@@ -48,23 +48,31 @@ import { fetchHardwareGroups } from '../../redux/modules/hwGroups';
 import { create as assignExercise } from '../../redux/modules/assignments';
 import { exerciseSelector } from '../../redux/selectors/exercises';
 import { referenceSolutionsSelector } from '../../redux/selectors/referenceSolutions';
-import { canEditExercise } from '../../redux/selectors/users';
+import {
+  canEditExercise,
+  isLoggedAsSuperAdmin
+} from '../../redux/selectors/users';
 import {
   deletePipeline,
   fetchExercisePipelines,
   create as createPipeline
 } from '../../redux/modules/pipelines';
 import { exercisePipelinesSelector } from '../../redux/selectors/pipelines';
-import { fetchUsersGroupsIfNeeded } from '../../redux/modules/groups';
+import {
+  fetchUsersGroupsIfNeeded,
+  fetchInstanceGroups
+} from '../../redux/modules/groups';
 
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import {
   supervisorOfSelector,
-  groupsSelector
+  groupsSelector,
+  groupDataAccessorSelector
 } from '../../redux/selectors/groups';
 
 import withLinks from '../../hoc/withLinks';
 import SupplementaryFilesTableContainer from '../../containers/SupplementaryFilesTableContainer/SupplementaryFilesTableContainer';
+import { fetchUser } from '../../redux/modules/users';
 
 const messages = defineMessages({
   groupsBox: {
@@ -90,7 +98,15 @@ class Exercise extends Component {
       dispatch(fetchReferenceSolutionsIfNeeded(exerciseId)),
       dispatch(fetchHardwareGroups()),
       dispatch(fetchExercisePipelines(exerciseId)),
-      dispatch(fetchUsersGroupsIfNeeded(userId))
+      dispatch(fetchUsersGroupsIfNeeded(userId)),
+      dispatch(fetchUser(userId))
+        .then(res => res.value)
+        .then(
+          data =>
+            data.privateData.role === 'superadmin'
+              ? dispatch(fetchInstanceGroups(data.privateData.instanceId))
+              : Promise.resolve()
+        )
     ]);
 
   componentWillMount() {
@@ -141,12 +157,14 @@ class Exercise extends Component {
       initCreateReferenceSolution,
       exercisePipelines,
       deleteReferenceSolution,
-      push
-      // groups,
-      // forkExercise
+      push,
+      groups,
+      groupsAccessor,
+      forkExercise,
+      isSuperAdmin
     } = this.props;
 
-    // const { forkId } = this.state;
+    const { forkId } = this.state;
 
     const {
       links: {
@@ -238,13 +256,16 @@ class Exercise extends Component {
                           />
                         </Button>
                       </LinkContainer>
-                      {/* <ForkExerciseForm
+                    </ButtonGroup>
+                    <p />
+                    {isSuperAdmin &&
+                      <ForkExerciseForm
                         exerciseId={exercise.id}
                         groups={groups}
                         forkId={forkId}
                         onSubmit={formData => forkExercise(forkId, formData)}
-                      /> */}
-                    </ButtonGroup>
+                        groupsAccessor={groupsAccessor}
+                      />}
                   </div>}
                 <p />
               </Col>
@@ -489,7 +510,9 @@ Exercise.propTypes = {
   links: PropTypes.object,
   deleteReferenceSolution: PropTypes.func.isRequired,
   forkExercise: PropTypes.func.isRequired,
-  groups: ImmutablePropTypes.map
+  groups: ImmutablePropTypes.map,
+  isSuperAdmin: PropTypes.bool,
+  groupsAccessor: PropTypes.func.isRequired
 };
 
 export default withLinks(
@@ -507,7 +530,9 @@ export default withLinks(
             canEditExercise(userId, exerciseId)(state),
           referenceSolutions: referenceSolutionsSelector(exerciseId)(state),
           exercisePipelines: exercisePipelinesSelector(exerciseId)(state),
-          groups: groupsSelector(state)
+          groups: groupsSelector(state),
+          groupsAccessor: groupDataAccessorSelector(state),
+          isSuperAdmin: isLoggedAsSuperAdmin(state)
         };
       },
       (dispatch, { params: { exerciseId } }) => ({
