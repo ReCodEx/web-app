@@ -12,6 +12,8 @@ import {
 import { Row, Col, ButtonGroup } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 import Icon from 'react-fontawesome';
+import moment from 'moment';
+import { formValueSelector } from 'redux-form';
 
 import Button from '../../components/widgets/FlatButton';
 import Page from '../../components/layout/Page';
@@ -19,7 +21,6 @@ import ExerciseDetail from '../../components/Exercises/ExerciseDetail';
 import LocalizedTexts from '../../components/helpers/LocalizedTexts';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import { LocalizedExerciseName } from '../../components/helpers/LocalizedNames';
-import GroupsList from '../../components/Groups/GroupsList';
 import ReferenceSolutionsList from '../../components/Exercises/ReferenceSolutionsList';
 import SubmitSolutionContainer from '../../containers/SubmitSolutionContainer';
 import Box from '../../components/widgets/Box';
@@ -32,7 +33,6 @@ import {
 import Confirm from '../../components/forms/Confirm';
 import PipelinesSimpleList from '../../components/Pipelines/PipelinesSimpleList';
 import ForkExerciseForm from '../../components/forms/ForkExerciseForm';
-import AssignExerciseButton from '../../components/buttons/AssignExerciseButton';
 
 import { isSubmitting } from '../../redux/selectors/submission';
 import {
@@ -45,7 +45,10 @@ import {
 } from '../../redux/modules/referenceSolutions';
 import { createReferenceSolution, init } from '../../redux/modules/submission';
 import { fetchHardwareGroups } from '../../redux/modules/hwGroups';
-import { create as assignExercise } from '../../redux/modules/assignments';
+import {
+  create as assignExercise,
+  editAssignment
+} from '../../redux/modules/assignments';
 import { exerciseSelector } from '../../redux/selectors/exercises';
 import { referenceSolutionsSelector } from '../../redux/selectors/referenceSolutions';
 import {
@@ -65,7 +68,6 @@ import {
 
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import {
-  supervisorOfSelector,
   groupsSelector,
   groupDataAccessorSelector
 } from '../../redux/selectors/groups';
@@ -73,11 +75,12 @@ import {
 import withLinks from '../../hoc/withLinks';
 import SupplementaryFilesTableContainer from '../../containers/SupplementaryFilesTableContainer/SupplementaryFilesTableContainer';
 import { fetchUser } from '../../redux/modules/users';
+import MultiAssignForm from '../../components/forms/MultiAssignForm';
 
 const messages = defineMessages({
   groupsBox: {
     id: 'app.exercise.groupsBox',
-    defaultMessage: 'Groups'
+    defaultMessage: 'Assign to groups'
   },
   referenceSolutionsBox: {
     id: 'app.exercise.referenceSolutionsBox',
@@ -125,13 +128,35 @@ class Exercise extends Component {
     this.setState({ forkId: Math.random().toString() });
   }
 
-  assignExercise = groupId => {
-    const { assignExercise, push } = this.props;
-    const { links: { ASSIGNMENT_EDIT_URI_FACTORY } } = this.context;
+  assignExercise = formData => {
+    const { assignExercise, editAssignment } = this.props;
 
-    assignExercise(groupId).then(({ value: assigment }) =>
-      push(ASSIGNMENT_EDIT_URI_FACTORY(assigment.id))
-    );
+    const groups =
+      formData && formData.groups
+        ? Object.keys(formData.groups).filter(key => formData.groups[key])
+        : [];
+
+    let actions = [];
+
+    for (const groupId of groups) {
+      assignExercise(groupId).then(({ value: assigment }) => {
+        let assignmentData = Object.assign({}, assigment, formData, {
+          firstDeadline: moment(formData.firstDeadline).unix(),
+          secondDeadline: moment(formData.secondDeadline).unix(),
+          submissionsCountLimit: Number(formData.submissionsCountLimit),
+          isPublic: true
+        });
+        if (!assignmentData.allowSecondDeadline) {
+          delete assignmentData.secondDeadline;
+          delete assignmentData.maxPointsBeforeSecondDeadline;
+        }
+        delete assignmentData.groups;
+
+        return editAssignment(assigment.id, assignmentData);
+      });
+    }
+
+    return Promise.all(actions);
   };
 
   createExercisePipeline = () => {
@@ -150,7 +175,6 @@ class Exercise extends Component {
       userId,
       exercise,
       submitting,
-      supervisedGroups,
       canEditExercise,
       referenceSolutions,
       intl: { formatMessage, locale },
@@ -161,7 +185,9 @@ class Exercise extends Component {
       groups,
       groupsAccessor,
       forkExercise,
-      isSuperAdmin
+      isSuperAdmin,
+      firstDeadline,
+      allowSecondDeadline
     } = this.props;
 
     const { forkId } = this.state;
@@ -277,32 +303,28 @@ class Exercise extends Component {
                     <LocalizedTexts locales={exercise.localizedTexts} />}
                 </div>
                 {!exercise.isBroken &&
+                  !exercise.isLocked &&
                   <Box
                     title={formatMessage(messages.groupsBox)}
                     description={
                       <p>
                         <FormattedMessage
                           id="app.exercise.assignToGroup"
-                          defaultMessage="You can assign this exercise to one of the groups you supervise."
+                          defaultMessage="You can assign this exercise to some of the groups you supervise."
                         />
                       </p>
                     }
-                    noPadding
+                    unlimitedHeight
                   >
-                    <ResourceRenderer
-                      forceLoading={supervisedGroups.length === 0}
-                      resource={supervisedGroups}
-                    >
-                      {() =>
-                        <GroupsList
-                          groups={supervisedGroups}
-                          renderButtons={groupId =>
-                            <AssignExerciseButton
-                              isLocked={exercise.isLocked}
-                              isBroken={exercise.isBroken}
-                              assignExercise={() =>
-                                this.assignExercise(groupId)}
-                            />}
+                    <ResourceRenderer resource={groups.toArray()} returnAsArray>
+                      {visibleGroups =>
+                        <MultiAssignForm
+                          groups={visibleGroups}
+                          onSubmit={this.assignExercise}
+                          firstDeadline={firstDeadline}
+                          allowSecondDeadline={allowSecondDeadline}
+                          groupsAccessor={groupsAccessor}
+                          locale={locale}
                         />}
                     </ResourceRenderer>
                   </Box>}
@@ -497,6 +519,7 @@ Exercise.propTypes = {
   }).isRequired,
   loadAsync: PropTypes.func.isRequired,
   assignExercise: PropTypes.func.isRequired,
+  editAssignment: PropTypes.func.isRequired,
   push: PropTypes.func.isRequired,
   exercise: ImmutablePropTypes.map,
   supervisedGroups: PropTypes.object,
@@ -512,8 +535,12 @@ Exercise.propTypes = {
   forkExercise: PropTypes.func.isRequired,
   groups: ImmutablePropTypes.map,
   isSuperAdmin: PropTypes.bool,
-  groupsAccessor: PropTypes.func.isRequired
+  groupsAccessor: PropTypes.func.isRequired,
+  firstDeadline: PropTypes.oneOfType([PropTypes.number, PropTypes.object]),
+  allowSecondDeadline: PropTypes.oneOfType([PropTypes.bool, PropTypes.string])
 };
+
+const editMultiAssignFormSelector = formValueSelector('multiAssign');
 
 export default withLinks(
   injectIntl(
@@ -525,14 +552,18 @@ export default withLinks(
           userId,
           exercise: exerciseSelector(exerciseId)(state),
           submitting: isSubmitting(state),
-          supervisedGroups: supervisorOfSelector(userId)(state),
           canEditExercise: exerciseId =>
             canEditExercise(userId, exerciseId)(state),
           referenceSolutions: referenceSolutionsSelector(exerciseId)(state),
           exercisePipelines: exercisePipelinesSelector(exerciseId)(state),
           groups: groupsSelector(state),
           groupsAccessor: groupDataAccessorSelector(state),
-          isSuperAdmin: isLoggedAsSuperAdmin(state)
+          isSuperAdmin: isLoggedAsSuperAdmin(state),
+          firstDeadline: editMultiAssignFormSelector(state, 'firstDeadline'),
+          allowSecondDeadline: editMultiAssignFormSelector(
+            state,
+            'allowSecondDeadline'
+          )
         };
       },
       (dispatch, { params: { exerciseId } }) => ({
@@ -540,6 +571,7 @@ export default withLinks(
           Exercise.loadAsync({ exerciseId }, dispatch, userId),
         assignExercise: groupId =>
           dispatch(assignExercise(groupId, exerciseId)),
+        editAssignment: (id, body) => dispatch(editAssignment(id, body)),
         push: url => dispatch(push(url)),
         initCreateReferenceSolution: userId =>
           dispatch(init(userId, exerciseId)),
