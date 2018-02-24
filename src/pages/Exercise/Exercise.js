@@ -13,6 +13,7 @@ import { Row, Col } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 import Icon from 'react-fontawesome';
 import { formValueSelector } from 'redux-form';
+import moment from 'moment';
 
 import SupplementaryFilesTableContainer from '../../containers/SupplementaryFilesTableContainer/SupplementaryFilesTableContainer';
 import Button from '../../components/widgets/FlatButton';
@@ -46,7 +47,10 @@ import {
 } from '../../redux/modules/referenceSolutions';
 import { createReferenceSolution, init } from '../../redux/modules/submission';
 import { fetchHardwareGroups } from '../../redux/modules/hwGroups';
-import { create as assignExercise } from '../../redux/modules/assignments';
+import {
+  create as assignExercise,
+  editAssignment
+} from '../../redux/modules/assignments';
 import { exerciseSelector } from '../../redux/selectors/exercises';
 import { referenceSolutionsSelector } from '../../redux/selectors/referenceSolutions';
 import {
@@ -126,13 +130,35 @@ class Exercise extends Component {
     this.setState({ forkId: Math.random().toString() });
   }
 
-  assignExercise = groupId => {
-    const { assignExercise, push } = this.props;
-    const { links: { ASSIGNMENT_EDIT_URI_FACTORY } } = this.context;
+  assignExercise = formData => {
+    const { assignExercise, editAssignment } = this.props;
 
-    assignExercise(groupId).then(({ value: assigment }) =>
-      push(ASSIGNMENT_EDIT_URI_FACTORY(assigment.id))
-    );
+    const groups =
+      formData && formData.groups
+        ? Object.keys(formData.groups).filter(key => formData.groups[key])
+        : [];
+
+    let actions = [];
+
+    for (const groupId of groups) {
+      assignExercise(groupId).then(({ value: assigment }) => {
+        let assignmentData = Object.assign({}, assigment, formData, {
+          firstDeadline: moment(formData.firstDeadline).unix(),
+          secondDeadline: moment(formData.secondDeadline).unix(),
+          submissionsCountLimit: Number(formData.submissionsCountLimit),
+          isPublic: true
+        });
+        if (!assignmentData.allowSecondDeadline) {
+          delete assignmentData.secondDeadline;
+          delete assignmentData.maxPointsBeforeSecondDeadline;
+        }
+        delete assignmentData.groups;
+
+        return editAssignment(assigment.id, assignmentData);
+      });
+    }
+
+    return Promise.all(actions);
   };
 
   createExercisePipeline = () => {
@@ -464,6 +490,7 @@ Exercise.propTypes = {
   }).isRequired,
   loadAsync: PropTypes.func.isRequired,
   assignExercise: PropTypes.func.isRequired,
+  editAssignment: PropTypes.func.isRequired,
   push: PropTypes.func.isRequired,
   exercise: ImmutablePropTypes.map,
   supervisedGroups: PropTypes.object,
@@ -512,6 +539,7 @@ export default withLinks(
     (dispatch, { params: { exerciseId } }) => ({
       loadAsync: userId => Exercise.loadAsync({ exerciseId }, dispatch, userId),
       assignExercise: groupId => dispatch(assignExercise(groupId, exerciseId)),
+      editAssignment: (id, body) => dispatch(editAssignment(id, body)),
       push: url => dispatch(push(url)),
       initCreateReferenceSolution: userId => dispatch(init(userId, exerciseId)),
       createExercisePipeline: () =>
