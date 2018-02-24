@@ -9,6 +9,7 @@ import Icon from 'react-fontawesome';
 import { formValueSelector } from 'redux-form';
 
 import Page from '../../components/layout/Page';
+import HardwareGroupMetadata from '../../components/Exercises/HardwareGroupMetadata';
 import { LocalizedExerciseName } from '../../components/helpers/LocalizedNames';
 import EditHardwareGroupForm from '../../components/forms/EditHardwareGroupForm';
 import EditLimitsForm from '../../components/forms/EditLimitsForm/EditLimitsForm';
@@ -33,6 +34,7 @@ import { getExercise } from '../../redux/selectors/exercises';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import { limitsSelector } from '../../redux/selectors/limits';
 import { hardwareGroupsSelector } from '../../redux/selectors/hwGroups';
+import { isLoggedAsSuperAdmin } from '../../redux/selectors/users';
 
 import withLinks from '../../helpers/withLinks';
 import { getLocalizedName } from '../../helpers/getLocalizedData';
@@ -160,6 +162,8 @@ class EditExerciseLimits extends Component {
       limits,
       hardwareGroups,
       preciseTime,
+      targetHardwareGroup,
+      isSuperAdmin,
       cloneHorizontally,
       cloneVertically,
       cloneAll,
@@ -250,13 +254,13 @@ class EditExerciseLimits extends Component {
                 </Col>
               </Row>}
 
-            <Row>
-              <Col sm={12} md={6}>
-                <ResourceRenderer
-                  resource={hardwareGroups.toArray()}
-                  returnAsArray={true}
-                >
-                  {hwg =>
+            <ResourceRenderer
+              resource={hardwareGroups.toArray()}
+              returnAsArray={true}
+            >
+              {hwgs =>
+                <Row>
+                  <Col sm={12} md={6}>
                     <EditHardwareGroupForm
                       initialValues={{
                         hardwareGroup:
@@ -265,7 +269,11 @@ class EditExerciseLimits extends Component {
                             ? exercise.hardwareGroups[0].id
                             : ''
                       }}
-                      hardwareGroups={hwg}
+                      hardwareGroups={hwgs}
+                      addEmptyOption={
+                        !exercise.hardwareGroups ||
+                        exercise.hardwareGroups.length !== 1
+                      }
                       onSubmit={this.transformAndSendHardwareGroups(
                         exercise.id,
                         exercise.hardwareGroups &&
@@ -274,10 +282,39 @@ class EditExerciseLimits extends Component {
                         tests,
                         exercise.runtimeEnvironments
                       )}
-                    />}
-                </ResourceRenderer>
-              </Col>
-            </Row>
+                    />
+                  </Col>
+                  <Col sm={12} md={6}>
+                    {exercise.hardwareGroups.map(h =>
+                      <HardwareGroupMetadata
+                        key={h.id}
+                        hardwareGroup={h}
+                        isSuperAdmin={isSuperAdmin}
+                      />
+                    )}
+                    {Boolean(
+                      targetHardwareGroup &&
+                        (exercise.hardwareGroups.length !== 1 ||
+                          targetHardwareGroup !== exercise.hardwareGroups[0].id)
+                    ) &&
+                      <div>
+                        <div
+                          className="text-center text-muted"
+                          style={{ marginBottom: '15px' }}
+                        >
+                          &nbsp;<Icon name="arrow-down" />&nbsp;
+                        </div>
+                        <HardwareGroupMetadata
+                          key={targetHardwareGroup}
+                          hardwareGroup={hwgs.find(
+                            h => h.id === targetHardwareGroup
+                          )}
+                          isSuperAdmin={isSuperAdmin}
+                        />
+                      </div>}
+                  </Col>
+                </Row>}
+            </ResourceRenderer>
 
             <Row>
               <Col sm={12}>
@@ -340,6 +377,8 @@ EditExerciseLimits.propTypes = {
   limits: PropTypes.object.isRequired,
   hardwareGroups: ImmutablePropTypes.map,
   preciseTime: PropTypes.bool,
+  targetHardwareGroup: PropTypes.string,
+  isSuperAdmin: PropTypes.bool.isRequired,
   cloneHorizontally: PropTypes.func.isRequired,
   cloneVertically: PropTypes.func.isRequired,
   cloneAll: PropTypes.func.isRequired,
@@ -364,6 +403,7 @@ const cloneAllWrapper = defaultMemoize(
 );
 
 const editLimitsFormSelector = formValueSelector('editLimits');
+const editHardwareGroupFormSelector = formValueSelector('editHardwareGroup');
 
 export default withLinks(
   connect(
@@ -374,7 +414,12 @@ export default withLinks(
         limits: limitsSelector(state),
         exerciseTests: exerciseTestsSelector(exerciseId)(state),
         hardwareGroups: hardwareGroupsSelector(state),
-        preciseTime: editLimitsFormSelector(state, 'preciseTime')
+        preciseTime: editLimitsFormSelector(state, 'preciseTime'),
+        targetHardwareGroup: editHardwareGroupFormSelector(
+          state,
+          'hardwareGroup'
+        ),
+        isSuperAdmin: isLoggedAsSuperAdmin(state)
       };
     },
     (dispatch, { params: { exerciseId } }) => ({

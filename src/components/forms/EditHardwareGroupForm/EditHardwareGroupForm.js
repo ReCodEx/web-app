@@ -20,6 +20,7 @@ const EditHardwareGroupForm = ({
   invalid,
   reset,
   hardwareGroups,
+  addEmptyOption = true,
   intl: { locale }
 }) =>
   <FormBox
@@ -86,7 +87,7 @@ const EditHardwareGroupForm = ({
       options={hardwareGroups
         .map(hwg => ({ key: hwg.id, name: hwg.name }))
         .sort((a, b) => a.name.localeCompare(b.name, locale))}
-      addEmptyOption={true}
+      addEmptyOption={addEmptyOption}
       label={
         <FormattedMessage
           id="app.editHardwareGroupForm.hwGroupSelect"
@@ -106,6 +107,7 @@ EditHardwareGroupForm.propTypes = {
   invalid: PropTypes.bool,
   reset: PropTypes.func.isRequired,
   hardwareGroups: PropTypes.array.isRequired,
+  addEmptyOption: PropTypes.bool,
   intl: intlShape.isRequired
 };
 
@@ -124,7 +126,7 @@ const validate = ({ bonusPoints }) => {
 };
 
 export default reduxForm({
-  form: 'bonus-points',
+  form: 'editHardwareGroup',
   enableReinitialize: true,
   keepDirtyOnReinitialize: false,
   validate

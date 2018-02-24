@@ -100,35 +100,40 @@ export const transformLimitsValues = (formData, tests, runtimeEnvironments) =>
  * Validation
  */
 
+const LIMITS_CONSTRAINTS_DEFAULTS = {
+  memory: 1024 * 1024,
+  cpuTimePerTest: 60, // 1 minute
+  cpuTimePerExercise: 300, // 5 minutes
+  wallTimePerTest: 60,
+  wallTimePerExercise: 300
+};
+
+const combineHardwareGroupLimitsConstraints = exerciseHwGroups => {
+  // Reduce all hwGroup metadata using min function
+  const res = {};
+  exerciseHwGroups.forEach(({ metadata }) =>
+    Object.keys(LIMITS_CONSTRAINTS_DEFAULTS).forEach(key => {
+      if (metadata[key]) {
+        res[key] =
+          res[key] !== undefined
+            ? Math.min(res[key], metadata[key])
+            : metadata[key];
+      }
+    })
+  );
+
+  // Make sure all keys exists (use defaults for missing ones).
+  Object.keys(LIMITS_CONSTRAINTS_DEFAULTS).forEach(key => {
+    res[key] = res[key] || LIMITS_CONSTRAINTS_DEFAULTS[key];
+  });
+
+  return res;
+};
+
 // Compute limit constraints from hwGroup metadata
 export const getLimitsConstraints = defaultMemoize(
   (exerciseHwGroups, preciseTime) => {
-    const defaults = {
-      memory: 1024 * 1024,
-      cpuTimePerTest: 60, // 1 minute
-      cpuTimePerExercise: 300, // 5 minutes
-      wallTimePerTest: 60,
-      wallTimePerExercise: 300
-    };
-
-    // Reduce all hwGroup metadata using min function
-    const res = {};
-    exerciseHwGroups.forEach(({ metadata }) =>
-      Object.keys(defaults).forEach(key => {
-        if (metadata[key]) {
-          res[key] =
-            res[key] !== undefined
-              ? Math.min(res[key], metadata[key])
-              : metadata[key];
-        }
-      })
-    );
-
-    // Make sure all keys exists (use defaults for missing ones).
-    Object.keys(defaults).forEach(key => {
-      res[key] = res[key] || defaults[key];
-    });
-
+    const res = combineHardwareGroupLimitsConstraints(exerciseHwGroups);
     return {
       memory: { min: 128, max: res.memory },
       time: {
@@ -140,6 +145,20 @@ export const getLimitsConstraints = defaultMemoize(
         max: res[preciseTime ? 'cpuTimePerExercise' : 'wallTimePerExercise']
       }
     };
+  }
+);
+
+// Compute complete list for visualization of a single
+export const getLimitsConstraintsOfSingleGroup = defaultMemoize(
+  exerciseHwGroup => {
+    const res = combineHardwareGroupLimitsConstraints([exerciseHwGroup]);
+    for (const key in res) {
+      res[key] = {
+        min: key === 'memory' ? 128 : 0.1,
+        max: res[key]
+      };
+    }
+    return res;
   }
 );
 
