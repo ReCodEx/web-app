@@ -38,7 +38,7 @@ export const getStatusesForLoggedUser = createSelector(
     const data = stats.getIn([groupId, 'data'], EMPTY_LIST);
     if (data !== null) {
       const statObj = data.toJS().find(stats => stats.userId === userId);
-      return statObj ? statObj.statuses : EMPTY_OBJ;
+      return statObj ? statObj.assignments : EMPTY_OBJ;
     }
     return EMPTY_OBJ;
   }

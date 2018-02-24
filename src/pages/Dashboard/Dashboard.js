@@ -267,7 +267,7 @@ class Dashboard extends Component {
                                       showGroup={false}
                                       statuses={
                                         this.usersStatistics(statistics)
-                                          .statuses
+                                          .assignments
                                       }
                                     />
                                   </Box>

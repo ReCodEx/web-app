@@ -42,10 +42,6 @@ StudentsListItem.propTypes = {
   fullName: PropTypes.string.isRequired,
   avatarUrl: PropTypes.string.isRequired,
   stats: PropTypes.shape({
-    assignments: PropTypes.shape({
-      total: PropTypes.number.isRequired,
-      completed: PropTypes.number.isRequired
-    }),
     points: PropTypes.shape({
       total: PropTypes.number.isRequired,
       gained: PropTypes.number.isRequired
