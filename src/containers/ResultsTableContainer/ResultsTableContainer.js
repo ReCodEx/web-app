@@ -40,7 +40,7 @@ ResultsTableContainer.propTypes = {
   users: PropTypes.array.isRequired,
   assignments: PropTypes.array.isRequired,
   groupId: PropTypes.string.isRequired,
-  stats: PropTypes.object.isRequired,
+  stats: PropTypes.object,
   loadAsync: PropTypes.func
 };
 

@@ -172,6 +172,7 @@ class User extends Component {
                               collapsable
                               noPadding
                               isOpen
+                              unlimitedHeight
                               footer={
                                 <p className="text-center">
                                   <LinkContainer
@@ -191,7 +192,9 @@ class User extends Component {
                                 userId={user.id}
                                 assignments={groupAssignments(group.id)}
                                 showGroup={false}
-                                statuses={usersStatistics(statistics).statuses}
+                                statuses={
+                                  usersStatistics(statistics).assignments
+                                }
                               />
                             </Box>
                           </Col>
