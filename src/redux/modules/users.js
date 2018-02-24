@@ -45,6 +45,7 @@ export const fetchAllUsers = actions.fetchMany({
   endpoint: fetchManyEndpoint
 });
 export const loadUserData = actions.pushResource;
+export const fetchUser = actions.fetchResource;
 export const fetchUserIfNeeded = actions.fetchIfNeeded;
 export const validateRegistrationData = (email, password) =>
   createApiAction({
