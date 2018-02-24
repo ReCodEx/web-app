@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage, intlShape, injectIntl } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { reduxForm, Field } from 'redux-form';
 import { Alert } from 'react-bootstrap';
 import isInt from 'validator/lib/isInt';
@@ -20,8 +20,7 @@ const EditHardwareGroupForm = ({
   invalid,
   reset,
   hardwareGroups,
-  addEmptyOption = true,
-  intl: { locale }
+  addEmptyOption = true
 }) =>
   <FormBox
     title={
@@ -86,7 +85,8 @@ const EditHardwareGroupForm = ({
       component={SelectField}
       options={hardwareGroups
         .map(hwg => ({ key: hwg.id, name: hwg.name }))
-        .sort((a, b) => a.name.localeCompare(b.name, locale))}
+        .sort((a, b) => a.key.localeCompare(b.key)) // intentionally no locale (key is our identifier)
+      }
       addEmptyOption={addEmptyOption}
       label={
         <FormattedMessage
@@ -107,8 +107,7 @@ EditHardwareGroupForm.propTypes = {
   invalid: PropTypes.bool,
   reset: PropTypes.func.isRequired,
   hardwareGroups: PropTypes.array.isRequired,
-  addEmptyOption: PropTypes.bool,
-  intl: intlShape.isRequired
+  addEmptyOption: PropTypes.bool
 };
 
 const validate = ({ bonusPoints }) => {
@@ -130,4 +129,4 @@ export default reduxForm({
   enableReinitialize: true,
   keepDirtyOnReinitialize: false,
   validate
-})(injectIntl(EditHardwareGroupForm));
+})(EditHardwareGroupForm);

@@ -8,15 +8,12 @@ import {
   defineMessages
 } from 'react-intl';
 import { Alert } from 'react-bootstrap';
-import Icon from 'react-fontawesome';
-import { LinkContainer } from 'react-router-bootstrap';
 import { defaultMemoize } from 'reselect';
 
 import { SelectField, CheckboxField } from '../Fields';
 
 import FormBox from '../../widgets/FormBox';
 import SubmitButton from '../SubmitButton';
-import Button from '../../widgets/FlatButton';
 import LocalizedTextsFormField from '../LocalizedTextsFormField';
 import { LocalizedExerciseName } from '../../helpers/LocalizedNames';
 import { validateExercise } from '../../../redux/modules/exercises';
@@ -104,17 +101,6 @@ const EditExerciseForm = ({
             )
           }}
         />
-        <LinkContainer
-          to={EXERCISE_EDIT_SIMPLE_CONFIG_URI_FACTORY(exercise.id)}
-        >
-          <Button bsStyle="info">
-            <Icon name="arrow-right" />{' '}
-            <FormattedMessage
-              id="app.editExerciseForm.gotoConfig"
-              defaultMessage="Go to config"
-            />
-          </Button>
-        </LinkContainer>
       </div>
     }
   >

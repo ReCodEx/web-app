@@ -9,7 +9,7 @@ export const EMPTY_FNC = () => {};
 export const identity = x => x;
 
 // Safe getter to traverse compex object/array structures.
-export function safeGet(obj, path, def = undefined) {
+export const safeGet = (obj, path, def = undefined) => {
   if (!Array.isArray(path)) {
     path = [path];
   }
@@ -17,12 +17,12 @@ export function safeGet(obj, path, def = undefined) {
     obj = obj && (typeof step === 'function' ? obj.find(step) : obj[step]);
   });
   return obj === undefined ? def : obj;
-}
+};
 
-export function encodeId(id) {
+export const encodeId = id => {
   return 'BID' + btoa(id);
-}
+};
 
-export function encodeNumId(id) {
+export const encodeNumId = id => {
   return 'ID' + id;
-}
+};
