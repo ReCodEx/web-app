@@ -9,12 +9,12 @@ import {
   intlShape,
   injectIntl
 } from 'react-intl';
-import { Row, Col, ButtonGroup } from 'react-bootstrap';
+import { Row, Col } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 import Icon from 'react-fontawesome';
-import moment from 'moment';
 import { formValueSelector } from 'redux-form';
 
+import SupplementaryFilesTableContainer from '../../containers/SupplementaryFilesTableContainer/SupplementaryFilesTableContainer';
 import Button from '../../components/widgets/FlatButton';
 import Page from '../../components/layout/Page';
 import ExerciseDetail from '../../components/Exercises/ExerciseDetail';
@@ -32,6 +32,7 @@ import {
 } from '../../components/icons';
 import Confirm from '../../components/forms/Confirm';
 import PipelinesSimpleList from '../../components/Pipelines/PipelinesSimpleList';
+import ExerciseButtons from '../../components/Exercises/ExerciseButtons';
 import ForkExerciseForm from '../../components/forms/ForkExerciseForm';
 
 import { isSubmitting } from '../../redux/selectors/submission';
@@ -45,14 +46,11 @@ import {
 } from '../../redux/modules/referenceSolutions';
 import { createReferenceSolution, init } from '../../redux/modules/submission';
 import { fetchHardwareGroups } from '../../redux/modules/hwGroups';
-import {
-  create as assignExercise,
-  editAssignment
-} from '../../redux/modules/assignments';
+import { create as assignExercise } from '../../redux/modules/assignments';
 import { exerciseSelector } from '../../redux/selectors/exercises';
 import { referenceSolutionsSelector } from '../../redux/selectors/referenceSolutions';
 import {
-  canEditExercise,
+  canLoggedUserEditExercise,
   isLoggedAsSuperAdmin
 } from '../../redux/selectors/users';
 import {
@@ -68,12 +66,12 @@ import {
 
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import {
+  supervisorOfSelector,
   groupsSelector,
   groupDataAccessorSelector
 } from '../../redux/selectors/groups';
 
-import withLinks from '../../hoc/withLinks';
-import SupplementaryFilesTableContainer from '../../containers/SupplementaryFilesTableContainer/SupplementaryFilesTableContainer';
+import withLinks from '../../helpers/withLinks';
 import { fetchUser } from '../../redux/modules/users';
 import MultiAssignForm from '../../components/forms/MultiAssignForm';
 
@@ -128,35 +126,13 @@ class Exercise extends Component {
     this.setState({ forkId: Math.random().toString() });
   }
 
-  assignExercise = formData => {
-    const { assignExercise, editAssignment } = this.props;
+  assignExercise = groupId => {
+    const { assignExercise, push } = this.props;
+    const { links: { ASSIGNMENT_EDIT_URI_FACTORY } } = this.context;
 
-    const groups =
-      formData && formData.groups
-        ? Object.keys(formData.groups).filter(key => formData.groups[key])
-        : [];
-
-    let actions = [];
-
-    for (const groupId of groups) {
-      assignExercise(groupId).then(({ value: assigment }) => {
-        let assignmentData = Object.assign({}, assigment, formData, {
-          firstDeadline: moment(formData.firstDeadline).unix(),
-          secondDeadline: moment(formData.secondDeadline).unix(),
-          submissionsCountLimit: Number(formData.submissionsCountLimit),
-          isPublic: true
-        });
-        if (!assignmentData.allowSecondDeadline) {
-          delete assignmentData.secondDeadline;
-          delete assignmentData.maxPointsBeforeSecondDeadline;
-        }
-        delete assignmentData.groups;
-
-        return editAssignment(assigment.id, assignmentData);
-      });
-    }
-
-    return Promise.all(actions);
+    assignExercise(groupId).then(({ value: assigment }) =>
+      push(ASSIGNMENT_EDIT_URI_FACTORY(assigment.id))
+    );
   };
 
   createExercisePipeline = () => {
@@ -195,8 +171,6 @@ class Exercise extends Component {
     const {
       links: {
         EXERCISES_URI,
-        EXERCISE_EDIT_URI_FACTORY,
-        EXERCISE_EDIT_SIMPLE_CONFIG_URI_FACTORY,
         EXERCISE_REFERENCE_SOLUTION_URI_FACTORY,
         PIPELINE_EDIT_URI_FACTORY
       }
@@ -252,49 +226,20 @@ class Exercise extends Component {
                 </Col>
               </Row>}
             <Row>
-              <Col sm={12}>
-                {canEditExercise(exercise.id) &&
-                  <div>
-                    <ButtonGroup>
-                      <LinkContainer
-                        to={EXERCISE_EDIT_URI_FACTORY(exercise.id)}
-                      >
-                        <Button bsStyle="warning" bsSize="sm">
-                          <EditIcon />
-                          &nbsp;
-                          <FormattedMessage
-                            id="app.exercise.editSettings"
-                            defaultMessage="Edit exercise settings"
-                          />
-                        </Button>
-                      </LinkContainer>
-                      <LinkContainer
-                        to={EXERCISE_EDIT_SIMPLE_CONFIG_URI_FACTORY(
-                          exercise.id
-                        )}
-                      >
-                        <Button bsStyle="warning" bsSize="sm">
-                          <EditIcon />
-                          &nbsp;
-                          <FormattedMessage
-                            id="app.exercise.editConfig"
-                            defaultMessage="Edit exercise config"
-                          />
-                        </Button>
-                      </LinkContainer>
-                    </ButtonGroup>
-                    <p />
-                    {isSuperAdmin &&
-                      <ForkExerciseForm
-                        exerciseId={exercise.id}
-                        groups={groups}
-                        forkId={forkId}
-                        onSubmit={formData => forkExercise(forkId, formData)}
-                        groupsAccessor={groupsAccessor}
-                      />}
-                  </div>}
-                <p />
-              </Col>
+              {canEditExercise &&
+                <Col sm={12}>
+                  <ExerciseButtons exerciseId={exercise.id} />
+                  <p />
+                  {isSuperAdmin &&
+                    <ForkExerciseForm
+                      exerciseId={exercise.id}
+                      groups={groups}
+                      forkId={forkId}
+                      onSubmit={formData => forkExercise(forkId, formData)}
+                      groupsAccessor={groupsAccessor}
+                    />}
+                  <p />
+                </Col>}
             </Row>
             <Row>
               <Col lg={6}>
@@ -394,7 +339,7 @@ class Exercise extends Component {
                               >
                                 <DeleteIcon />{' '}
                                 <FormattedMessage
-                                  id="app.exercise.deleteButton"
+                                  id="generic.delete"
                                   defaultMessage="Delete"
                                 />
                               </Button>
@@ -469,7 +414,7 @@ class Exercise extends Component {
                                     >
                                       <DeleteIcon />{' '}
                                       <FormattedMessage
-                                        id="app.exercise.referenceSolution.deleteButton"
+                                        id="generic.delete"
                                         defaultMessage="Delete"
                                       />
                                     </Button>
@@ -519,11 +464,10 @@ Exercise.propTypes = {
   }).isRequired,
   loadAsync: PropTypes.func.isRequired,
   assignExercise: PropTypes.func.isRequired,
-  editAssignment: PropTypes.func.isRequired,
   push: PropTypes.func.isRequired,
   exercise: ImmutablePropTypes.map,
   supervisedGroups: PropTypes.object,
-  canEditExercise: PropTypes.func.isRequired,
+  canEditExercise: PropTypes.bool.isRequired,
   referenceSolutions: ImmutablePropTypes.map,
   intl: intlShape.isRequired,
   submitting: PropTypes.bool,
@@ -543,45 +487,39 @@ Exercise.propTypes = {
 const editMultiAssignFormSelector = formValueSelector('multiAssign');
 
 export default withLinks(
-  injectIntl(
-    connect(
-      (state, { params: { exerciseId } }) => {
-        const userId = loggedInUserIdSelector(state);
+  connect(
+    (state, { params: { exerciseId } }) => {
+      const userId = loggedInUserIdSelector(state);
 
-        return {
-          userId,
-          exercise: exerciseSelector(exerciseId)(state),
-          submitting: isSubmitting(state),
-          canEditExercise: exerciseId =>
-            canEditExercise(userId, exerciseId)(state),
-          referenceSolutions: referenceSolutionsSelector(exerciseId)(state),
-          exercisePipelines: exercisePipelinesSelector(exerciseId)(state),
-          groups: groupsSelector(state),
-          groupsAccessor: groupDataAccessorSelector(state),
-          isSuperAdmin: isLoggedAsSuperAdmin(state),
-          firstDeadline: editMultiAssignFormSelector(state, 'firstDeadline'),
-          allowSecondDeadline: editMultiAssignFormSelector(
-            state,
-            'allowSecondDeadline'
-          )
-        };
-      },
-      (dispatch, { params: { exerciseId } }) => ({
-        loadAsync: userId =>
-          Exercise.loadAsync({ exerciseId }, dispatch, userId),
-        assignExercise: groupId =>
-          dispatch(assignExercise(groupId, exerciseId)),
-        editAssignment: (id, body) => dispatch(editAssignment(id, body)),
-        push: url => dispatch(push(url)),
-        initCreateReferenceSolution: userId =>
-          dispatch(init(userId, exerciseId)),
-        createExercisePipeline: () =>
-          dispatch(createPipeline({ exerciseId: exerciseId })),
-        deleteReferenceSolution: (exerciseId, solutionId) =>
-          dispatch(deleteReferenceSolution(exerciseId, solutionId)),
-        forkExercise: (forkId, data) =>
-          dispatch(forkExercise(exerciseId, forkId, data))
-      })
-    )(Exercise)
-  )
+      return {
+        userId,
+        exercise: exerciseSelector(exerciseId)(state),
+        submitting: isSubmitting(state),
+        supervisedGroups: supervisorOfSelector(userId)(state),
+        canEditExercise: canLoggedUserEditExercise(exerciseId)(state),
+        referenceSolutions: referenceSolutionsSelector(exerciseId)(state),
+        exercisePipelines: exercisePipelinesSelector(exerciseId)(state),
+        groups: groupsSelector(state),
+        groupsAccessor: groupDataAccessorSelector(state),
+        isSuperAdmin: isLoggedAsSuperAdmin(state),
+        firstDeadline: editMultiAssignFormSelector(state, 'firstDeadline'),
+        allowSecondDeadline: editMultiAssignFormSelector(
+          state,
+          'allowSecondDeadline'
+        )
+      };
+    },
+    (dispatch, { params: { exerciseId } }) => ({
+      loadAsync: userId => Exercise.loadAsync({ exerciseId }, dispatch, userId),
+      assignExercise: groupId => dispatch(assignExercise(groupId, exerciseId)),
+      push: url => dispatch(push(url)),
+      initCreateReferenceSolution: userId => dispatch(init(userId, exerciseId)),
+      createExercisePipeline: () =>
+        dispatch(createPipeline({ exerciseId: exerciseId })),
+      deleteReferenceSolution: (exerciseId, solutionId) =>
+        dispatch(deleteReferenceSolution(exerciseId, solutionId)),
+      forkExercise: (forkId, data) =>
+        dispatch(forkExercise(exerciseId, forkId, data))
+    })
+  )(injectIntl(Exercise))
 );

@@ -15,7 +15,7 @@ import {
 } from '../../redux/modules/instances';
 import { instanceSelector } from '../../redux/selectors/instances';
 
-import withLinks from '../../hoc/withLinks';
+import withLinks from '../../helpers/withLinks';
 
 class EditInstance extends Component {
   static loadAsync = ({ instanceId }, dispatch) =>

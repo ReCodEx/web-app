@@ -25,7 +25,7 @@ import { cancel, changeNote } from '../../redux/modules/submission';
 import { reset as resetUpload } from '../../redux/modules/upload';
 import { evaluateReferenceSolution } from '../../redux/modules/referenceSolutions';
 
-import withLinks from '../../hoc/withLinks';
+import withLinks from '../../helpers/withLinks';
 
 class SubmitSolutionContainer extends Component {
   state = {

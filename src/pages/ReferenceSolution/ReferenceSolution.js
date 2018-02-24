@@ -10,7 +10,7 @@ import {
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { Row, Col, Button } from 'react-bootstrap';
 
-import withLinks from '../../hoc/withLinks';
+import withLinks from '../../helpers/withLinks';
 import Page from '../../components/layout/Page';
 
 import {

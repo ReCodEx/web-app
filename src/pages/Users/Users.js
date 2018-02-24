@@ -23,7 +23,7 @@ import { fetchAllUsers } from '../../redux/modules/users';
 import { takeOver } from '../../redux/modules/auth';
 import { searchPeople } from '../../redux/modules/search';
 
-import withLinks from '../../hoc/withLinks';
+import withLinks from '../../helpers/withLinks';
 
 class Users extends Component {
   static loadAsync = (params, dispatch) => dispatch(fetchAllUsers);

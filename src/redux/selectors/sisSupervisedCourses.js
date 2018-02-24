@@ -1,13 +1,12 @@
 import { createSelector } from 'reselect';
 import { Map } from 'immutable';
+import { EMPTY_MAP } from '../../helpers/common';
 import { loggedInUserIdSelector } from './auth';
 
 const getResources = state => state.sisSupervisedCourses.get('resources');
 
 const getSisStateTerms = state =>
   state.sisStatus.getIn(['resources', 'status', 'data', 'terms']);
-
-const EMPTY_MAP = Map();
 
 export const sisSupervisedCoursesSelector = createSelector(
   [getResources, getSisStateTerms, loggedInUserIdSelector],

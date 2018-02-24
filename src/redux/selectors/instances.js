@@ -1,9 +1,8 @@
 import { createSelector } from 'reselect';
 import { List } from 'immutable';
+import { EMPTY_LIST } from '../../helpers/common';
 import { isReady } from '../helpers/resourceManager';
 import { loggedInUserSelector } from './users';
-
-const EMPTY_LIST = List();
 
 const getInstances = state => state.instances;
 const getResources = instances => instances.get('resources');

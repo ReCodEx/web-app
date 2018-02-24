@@ -8,19 +8,16 @@ import {
   defineMessages
 } from 'react-intl';
 import { Alert } from 'react-bootstrap';
-import Icon from 'react-fontawesome';
-import { LinkContainer } from 'react-router-bootstrap';
 import { defaultMemoize } from 'reselect';
 
 import { SelectField, CheckboxField } from '../Fields';
 
 import FormBox from '../../widgets/FormBox';
 import SubmitButton from '../SubmitButton';
-import Button from '../../widgets/FlatButton';
 import LocalizedTextsFormField from '../LocalizedTextsFormField';
 import { LocalizedExerciseName } from '../../helpers/LocalizedNames';
 import { validateExercise } from '../../../redux/modules/exercises';
-import withLinks from '../../../hoc/withLinks';
+import withLinks from '../../../helpers/withLinks';
 
 const messages = defineMessages({
   easy: {
@@ -48,8 +45,8 @@ const EditExerciseForm = ({
   anyTouched,
   submitting,
   handleSubmit,
-  submitFailed: hasFailed,
-  submitSucceeded: hasSucceeded,
+  submitFailed,
+  submitSucceeded,
   invalid,
   asyncValidating,
   localizedTextsLocales = [],
@@ -64,7 +61,7 @@ const EditExerciseForm = ({
         values={{ name: <LocalizedExerciseName entity={exercise} /> }}
       />
     }
-    succeeded={hasSucceeded}
+    succeeded={submitSucceeded}
     dirty={anyTouched}
     footer={
       <div className="text-center">
@@ -73,8 +70,8 @@ const EditExerciseForm = ({
           invalid={invalid}
           submitting={submitting}
           dirty={anyTouched}
-          hasSucceeded={hasSucceeded}
-          hasFailed={hasFailed}
+          hasSucceeded={submitSucceeded}
+          hasFailed={submitFailed}
           handleSubmit={handleSubmit}
           asyncValidating={asyncValidating}
           messages={{
@@ -104,21 +101,10 @@ const EditExerciseForm = ({
             )
           }}
         />
-        <LinkContainer
-          to={EXERCISE_EDIT_SIMPLE_CONFIG_URI_FACTORY(exercise.id)}
-        >
-          <Button bsStyle="info">
-            <Icon name="arrow-right" />{' '}
-            <FormattedMessage
-              id="app.editExerciseForm.gotoConfig"
-              defaultMessage="Go to config"
-            />
-          </Button>
-        </LinkContainer>
       </div>
     }
   >
-    {hasFailed &&
+    {submitFailed &&
       <Alert bsStyle="danger">
         <FormattedMessage
           id="app.editExerciseForm.failed"

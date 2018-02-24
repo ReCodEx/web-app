@@ -8,7 +8,7 @@ import { FormattedMessage } from 'react-intl';
 import ResultsTableRow from './ResultsTableRow';
 import LoadingResultsTableRow from './LoadingResultsTableRow';
 import NoResultsAvailableRow from './NoResultsAvailableRow';
-import withLinks from '../../../hoc/withLinks';
+import withLinks from '../../../helpers/withLinks';
 import ResourceRenderer from '../../helpers/ResourceRenderer';
 import { LocalizedExerciseName } from '../../helpers/LocalizedNames';
 import styles from './ResultsTable.less';

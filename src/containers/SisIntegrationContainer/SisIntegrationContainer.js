@@ -21,7 +21,7 @@ import LeaveJoinGroupButtonContainer from '../LeaveJoinGroupButtonContainer';
 import { getGroupCanonicalLocalizedName } from '../../helpers/getLocalizedData';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 
-import withLinks from '../../hoc/withLinks';
+import withLinks from '../../helpers/withLinks';
 
 class SisIntegrationContainer extends Component {
   componentDidMount() {

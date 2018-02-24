@@ -7,7 +7,7 @@ import UsersNameContainer from '../../../containers/UsersNameContainer';
 import GroupsNameContainer from '../../../containers/GroupsNameContainer';
 import { Link } from 'react-router';
 
-import withLinks from '../../../hoc/withLinks';
+import withLinks from '../../../helpers/withLinks';
 import { LocalizedExerciseName } from '../../helpers/LocalizedNames';
 import { ExercisePrefixIcons } from '../../icons';
 
@@ -47,10 +47,10 @@ const ExercisesListItem = ({
               <GroupsNameContainer groupId={groupId} />
             </div>
           )
-        : <i>
+        : <i className="text-muted">
             <FormattedMessage
-              id="app.exercisesListItem.group.public"
-              defaultMessage="Public"
+              id="app.exercisesListItem.noGroups"
+              defaultMessage="no groups"
             />
           </i>}
     </td>

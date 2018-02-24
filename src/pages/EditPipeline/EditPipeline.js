@@ -22,7 +22,7 @@ import { getPipeline } from '../../redux/selectors/pipelines';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import { getBoxTypes } from '../../redux/selectors/boxes';
 
-import withLinks from '../../hoc/withLinks';
+import withLinks from '../../helpers/withLinks';
 import {
   transformPipelineDataForApi,
   extractVariables

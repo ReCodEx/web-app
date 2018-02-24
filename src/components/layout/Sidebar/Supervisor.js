@@ -8,7 +8,7 @@ import MenuGroup from '../../widgets/Sidebar/MenuGroup';
 import MenuItem from '../../widgets/Sidebar/MenuItem';
 import { getId } from '../../../redux/helpers/resourceManager';
 
-import withLinks from '../../../hoc/withLinks';
+import withLinks from '../../../helpers/withLinks';
 
 const Supervisor = ({
   currentUrl,

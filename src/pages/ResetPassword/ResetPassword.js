@@ -15,7 +15,7 @@ import {
   hasResetingSucceeded as hasSucceeded
 } from '../../redux/selectors/auth';
 
-import withLinks from '../../hoc/withLinks';
+import withLinks from '../../helpers/withLinks';
 
 /**
  * This component enables the user to request reseting password for his/her email address.

@@ -5,7 +5,7 @@ import { FormattedMessage } from 'react-intl';
 import { OverlayTrigger, Tooltip, Table } from 'react-bootstrap';
 
 import Box from '../../widgets/Box';
-import withLinks from '../../../hoc/withLinks';
+import withLinks from '../../../helpers/withLinks';
 
 import ResourceRenderer from '../../helpers/ResourceRenderer';
 import LoadingSubmissionTableRow from './LoadingSubmissionTableRow';

@@ -119,7 +119,7 @@ class SisIntegration extends Component {
                           >
                             <DeleteIcon />{' '}
                             <FormattedMessage
-                              id="app.sisIntegration.deleteButton"
+                              id="generic.delete"
                               defaultMessage="Delete"
                             />
                           </Button>

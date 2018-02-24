@@ -14,7 +14,7 @@ import ResourceRenderer from '../../helpers/ResourceRenderer';
 
 import EditExerciseSimpleConfigTest from './EditExerciseSimpleConfigTest';
 import { getSupplementaryFilesForExercise } from '../../../redux/selectors/supplementaryFiles';
-import { encodeTestId } from '../../../redux/modules/simpleLimits';
+import { encodeNumId } from '../../../helpers/common';
 import { smartFillExerciseConfigForm } from '../../../redux/modules/exerciseConfigs';
 import { exerciseConfigFormErrors } from '../../../redux/selectors/exerciseConfigs';
 
@@ -130,7 +130,7 @@ class EditExerciseSimpleConfigForm extends Component {
                   const testData =
                     formValues &&
                     formValues.config &&
-                    formValues.config[encodeTestId(test.id)];
+                    formValues.config[encodeNumId(test.id)];
                   return (
                     <EditExerciseSimpleConfigTest
                       key={idx}
@@ -142,9 +142,9 @@ class EditExerciseSimpleConfigForm extends Component {
                       useCustomJudge={testData && testData.useCustomJudge}
                       supplementaryFiles={files}
                       testName={test.name}
-                      test={'config.' + encodeTestId(test.id)}
+                      test={'config.' + encodeNumId(test.id)}
                       testErrors={
-                        formErrors && formErrors[encodeTestId(test.id)]
+                        formErrors && formErrors[encodeNumId(test.id)]
                       }
                       smartFill={
                         idx === 0

@@ -12,7 +12,7 @@ import { Link } from 'react-router';
 import Box from '../../widgets/Box';
 import DifficultyIcon from '../DifficultyIcon';
 
-import withLinks from '../../../hoc/withLinks';
+import withLinks from '../../../helpers/withLinks';
 import UsersNameContainer from '../../../containers/UsersNameContainer';
 import GroupsNameContainer from '../../../containers/GroupsNameContainer';
 import styles from './ExerciseDetail.less';

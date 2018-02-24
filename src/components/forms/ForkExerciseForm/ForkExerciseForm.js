@@ -15,7 +15,7 @@ import { getFork } from '../../../redux/selectors/exercises';
 import ResourceRenderer from '../../helpers/ResourceRenderer';
 import { getGroupCanonicalLocalizedName } from '../../../helpers/getLocalizedData';
 
-import withLinks from '../../../hoc/withLinks';
+import withLinks from '../../../helpers/withLinks';
 
 import './ForkExerciseForm.css';
 
@@ -37,8 +37,8 @@ class ForkExerciseForm extends Component {
       anyTouched,
       submitting,
       handleSubmit,
-      hasFailed = false,
-      hasSucceeded = false,
+      submitFailed,
+      submitSucceeded,
       invalid,
       groups,
       groupsAccessor,
@@ -64,7 +64,7 @@ class ForkExerciseForm extends Component {
       default:
         return (
           <div>
-            {hasFailed &&
+            {submitFailed &&
               <Alert bsStyle="danger">
                 <FormattedMessage
                   id="app.forkExerciseForm.failed"
@@ -97,9 +97,9 @@ class ForkExerciseForm extends Component {
                 id="forkExercise"
                 invalid={invalid}
                 submitting={submitting}
-                hasSucceeded={hasSucceeded}
+                hasSucceeded={submitSucceeded}
                 dirty={anyTouched}
-                hasFailed={hasFailed}
+                hasFailed={submitFailed}
                 handleSubmit={handleSubmit}
                 noIcons
                 messages={{
@@ -137,8 +137,8 @@ ForkExerciseForm.propTypes = {
   forkedExerciseId: PropTypes.string,
   anyTouched: PropTypes.bool,
   submitting: PropTypes.bool,
-  hasFailed: PropTypes.bool,
-  hasSucceeded: PropTypes.bool,
+  submitFailed: PropTypes.bool,
+  submitSucceeded: PropTypes.bool,
   invalid: PropTypes.bool,
   handleSubmit: PropTypes.func.isRequired,
   push: PropTypes.func.isRequired,

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import { TextField } from '../Fields';
 
-import styles from './EditSimpleLimitsField.less';
+import styles from './EditLimitsField.less';
 
 const LimitsValueField = ({ input, prettyPrint, ...props }) =>
   <tr>

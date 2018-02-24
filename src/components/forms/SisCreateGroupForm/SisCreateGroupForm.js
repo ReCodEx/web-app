@@ -15,9 +15,9 @@ class SisCreateGroupForm extends Component {
       invalid,
       anyTouched,
       handleSubmit,
-      submitFailed: hasFailed,
+      submitFailed,
       submitting,
-      hasSucceeded,
+      submitSucceeded,
       groups,
       groupsAccessor,
       intl: { locale }
@@ -31,7 +31,7 @@ class SisCreateGroupForm extends Component {
             defaultMessage="Create ReCodEx group from SIS"
           />
         }
-        succeeded={hasSucceeded}
+        succeeded={submitSucceeded}
         dirty={anyTouched}
         footer={
           <div className="text-center">
@@ -40,8 +40,8 @@ class SisCreateGroupForm extends Component {
               invalid={invalid}
               submitting={submitting}
               dirty={anyTouched}
-              hasSucceeded={hasSucceeded}
-              hasFailed={hasFailed}
+              hasSucceeded={submitSucceeded}
+              hasFailed={submitFailed}
               handleSubmit={handleSubmit}
               messages={{
                 submit: (
@@ -67,7 +67,7 @@ class SisCreateGroupForm extends Component {
           </div>
         }
       >
-        {hasFailed &&
+        {submitFailed &&
           <Alert bsStyle="danger">
             <FormattedMessage
               id="app.sisCreateGroupForm.failed"
@@ -108,7 +108,7 @@ SisCreateGroupForm.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
   invalid: PropTypes.bool,
   submitting: PropTypes.bool,
-  hasSucceeded: PropTypes.bool,
+  submitSucceeded: PropTypes.bool,
   submitFailed: PropTypes.bool,
   groups: PropTypes.array,
   groupsAccessor: PropTypes.func.isRequired,

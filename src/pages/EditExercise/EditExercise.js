@@ -14,6 +14,7 @@ import EditExerciseForm from '../../components/forms/EditExerciseForm';
 import AttachmentFilesTableContainer from '../../containers/AttachmentFilesTableContainer';
 import DeleteExerciseButtonContainer from '../../containers/DeleteExerciseButtonContainer';
 import { LocalizedExerciseName } from '../../components/helpers/LocalizedNames';
+import ExerciseButtons from '../../components/Exercises/ExerciseButtons';
 
 import {
   fetchExerciseIfNeeded,
@@ -23,7 +24,7 @@ import { getExercise } from '../../redux/selectors/exercises';
 import { isSubmitting } from '../../redux/selectors/submission';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 
-import withLinks from '../../hoc/withLinks';
+import withLinks from '../../helpers/withLinks';
 import {
   getLocalizedName,
   getLocalizedTextsLocales
@@ -111,6 +112,11 @@ class EditExercise extends Component {
                   </div>
                 </Col>
               </Row>}
+            <Row>
+              <Col sm={12}>
+                <ExerciseButtons exerciseId={exercise.id} />
+              </Col>
+            </Row>
             <Row>
               <Col lg={6}>
                 <EditExerciseForm

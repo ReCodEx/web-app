@@ -1,19 +1,7 @@
 import yaml from 'js-yaml';
 import { defaultMemoize } from 'reselect';
 
-import {
-  endpointDisguisedAsIdFactory,
-  encodeTestId,
-  encodeEnvironmentId
-} from '../redux/modules/simpleLimits';
-
-// safe getter to traverse compex object/array structures
-const _safeGet = (obj, path) => {
-  path.forEach(step => {
-    obj = obj && (typeof step === 'function' ? obj.find(step) : obj[step]);
-  });
-  return obj;
-};
+import { safeGet, encodeNumId } from '../helpers/common';
 
 /*
  * Tests and Score
@@ -217,7 +205,7 @@ const getSimpleConfigCompilationVars = (testObj, config, environments) => {
   const compilation = {};
   for (const environment of environments) {
     const pipelines =
-      _safeGet(config, [
+      safeGet(config, [
         c => c.name === environment.runtimeEnvironmentId,
         'tests',
         t => t.name === testObj.name,
@@ -289,7 +277,7 @@ export const getSimpleConfigInitValues = defaultMemoize(
 
       getSimpleConfigCompilationVars(testObj, config, environments);
 
-      res[encodeTestId(test.id)] = testObj;
+      res[encodeNumId(test.id)] = testObj;
     }
 
     return {
@@ -362,7 +350,7 @@ const mergeOriginalVariables = (newVars, origVars) => {
 };
 
 const mergeCompilationVariables = (origVars, testObj, envId) => {
-  const extraFiles = _safeGet(testObj, ['compilation', envId, 'extra-files']);
+  const extraFiles = safeGet(testObj, ['compilation', envId, 'extra-files']);
   if (!extraFiles) {
     return origVars;
   }
@@ -415,12 +403,12 @@ export const transformConfigValues = (
     let testsCfg = [];
     for (const t of tests) {
       const testName = t.id;
-      const test = formData.config[encodeTestId(testName)];
+      const test = formData.config[encodeNumId(testName)];
       const executionPipeline = test.useOutFile
         ? executionPipelineFiles
         : executionPipelineStdout;
 
-      const originalPipelines = _safeGet(originalConfig, [
+      const originalPipelines = safeGet(originalConfig, [
         config => config.name === envId,
         'tests',
         t => t.name === testName,
@@ -429,7 +417,7 @@ export const transformConfigValues = (
 
       // Prepare variables for compilation pipeline ...
       const origCompilationVars =
-        _safeGet(originalPipelines, [
+        safeGet(originalPipelines, [
           p => p.name === compilationPipeline.id,
           'variables'
         ]) || EMPTY_COMPILATION_PIPELINE_VARS; // if pipeline variables are not present, prepare an empty set
@@ -442,7 +430,7 @@ export const transformConfigValues = (
 
       // Prepare variables for execution pipeline ...
       const testVars = transformConfigTestExecutionVariables(test);
-      const origExecutionVars = _safeGet(originalPipelines, [
+      const origExecutionVars = safeGet(originalPipelines, [
         p => p.name === executionPipeline.id,
         'variables'
       ]);
@@ -472,95 +460,3 @@ export const transformConfigValues = (
 
   return { config: envs };
 };
-
-/*
- * Memory and Time limits
- */
-export const getLimitsInitValues = defaultMemoize(
-  (limits, tests, environments, exerciseId) => {
-    let res = {};
-    let wallTimeCount = 0;
-    let cpuTimeCount = 0;
-
-    tests.forEach(test => {
-      const testEnc = encodeTestId(test.id);
-      res[testEnc] = {};
-      environments.forEach(environment => {
-        const envId = encodeEnvironmentId(environment.id);
-        let lim = limits.getIn([
-          endpointDisguisedAsIdFactory({
-            exerciseId,
-            runtimeEnvironmentId: environment.id
-          }),
-          'data',
-          String(test.id)
-        ]);
-        if (lim) {
-          lim = lim.toJS();
-        }
-
-        // Prepare time object and aggregate data for heuristics ...
-        const time = {};
-        if (lim && lim['wall-time']) {
-          time['wall-time'] = String(lim['wall-time']);
-          ++wallTimeCount;
-        }
-        if (lim && lim['cpu-time']) {
-          time['cpu-time'] = String(lim['cpu-time']);
-          ++cpuTimeCount;
-        }
-        res[testEnc][envId] = {
-          memory: lim ? String(lim.memory) : '0',
-          time
-        };
-      });
-    });
-
-    // Use heuristics to decide, which time will be used, and postprocess the data
-    const preciseTime = cpuTimeCount >= wallTimeCount;
-    const primaryTime = preciseTime ? 'cpu-time' : 'wall-time';
-    const secondaryTime = preciseTime ? 'wall-time' : 'cpu-time';
-    for (const testEnc in res) {
-      for (const envId in res[testEnc]) {
-        const time = res[testEnc][envId].time;
-        res[testEnc][envId].time =
-          time[primaryTime] !== undefined
-            ? time[primaryTime]
-            : time[secondaryTime] !== undefined ? time[secondaryTime] : '0';
-      }
-    }
-
-    return {
-      limits: res,
-      preciseTime
-    };
-  }
-);
-
-const transformLimitsObject = ({ memory, time }, timeField = 'wall-time') => {
-  let res = {
-    memory
-  };
-  res[timeField] = time;
-  return res;
-};
-
-/**
- * Transform form data and pass them to dispatching function.
- * The data have to be re-assembled, since they use different format and keys are encoded.
- * The dispatching function is invoked for every environment and all promise is returned.
- */
-export const transformLimitsValues = (formData, tests, runtimeEnvironments) =>
-  runtimeEnvironments.map(environment => {
-    const envId = encodeEnvironmentId(environment.id);
-    const data = {
-      limits: tests.reduce((acc, test) => {
-        acc[test.id] = transformLimitsObject(
-          formData.limits[encodeTestId(test.id)][envId],
-          formData.preciseTime ? 'cpu-time' : 'wall-time'
-        );
-        return acc;
-      }, {})
-    };
-    return { id: environment.id, data };
-  });

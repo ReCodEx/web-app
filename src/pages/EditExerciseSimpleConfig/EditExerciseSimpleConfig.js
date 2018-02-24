@@ -11,24 +11,16 @@ import Page from '../../components/layout/Page';
 import Box from '../../components/widgets/Box';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import { LocalizedExerciseName } from '../../components/helpers/LocalizedNames';
-import EditSimpleLimitsForm from '../../components/forms/EditSimpleLimitsForm/EditSimpleLimitsForm';
 import SupplementaryFilesTableContainer from '../../containers/SupplementaryFilesTableContainer';
 import EditTestsForm from '../../components/forms/EditTestsForm';
 import EditExerciseSimpleConfigForm from '../../components/forms/EditExerciseSimpleConfigForm';
 import EditEnvironmentSimpleForm from '../../components/forms/EditEnvironmentSimpleForm';
+import ExerciseButtons from '../../components/Exercises/ExerciseButtons';
 
 import {
   fetchExercise,
   fetchExerciseIfNeeded
 } from '../../redux/modules/exercises';
-import {
-  fetchExerciseEnvironmentSimpleLimitsIfNeeded,
-  editEnvironmentSimpleLimits,
-  cloneHorizontally,
-  cloneVertically,
-  cloneAll,
-  fetchExerciseEnvironmentSimpleLimits
-} from '../../redux/modules/simpleLimits';
 import {
   fetchExerciseConfig,
   fetchExerciseConfigIfNeeded,
@@ -39,9 +31,8 @@ import { exerciseConfigSelector } from '../../redux/selectors/exerciseConfigs';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments';
 import { runtimeEnvironmentsSelector } from '../../redux/selectors/runtimeEnvironments';
-import { simpleLimitsSelector } from '../../redux/selectors/simpleLimits';
 
-import withLinks from '../../hoc/withLinks';
+import withLinks from '../../helpers/withLinks';
 import { getLocalizedName } from '../../helpers/getLocalizedData';
 import { exerciseEnvironmentConfigSelector } from '../../redux/selectors/exerciseEnvironmentConfigs';
 import {
@@ -68,9 +59,7 @@ import {
   getTestsInitValues,
   transformTestsValues,
   getSimpleConfigInitValues,
-  transformConfigValues,
-  getLimitsInitValues,
-  transformLimitsValues
+  transformConfigValues
 } from '../../helpers/exerciseSimpleForm';
 
 class EditExerciseSimpleConfig extends Component {
@@ -84,18 +73,7 @@ class EditExerciseSimpleConfig extends Component {
 
   static loadAsync = ({ exerciseId }, dispatch) =>
     Promise.all([
-      dispatch(fetchExerciseIfNeeded(exerciseId)).then(({ value: exercise }) =>
-        Promise.all(
-          exercise.runtimeEnvironments.map(environment =>
-            dispatch(
-              fetchExerciseEnvironmentSimpleLimitsIfNeeded(
-                exerciseId,
-                environment.id
-              )
-            )
-          )
-        )
-      ),
+      dispatch(fetchExerciseIfNeeded(exerciseId)),
       dispatch(fetchExerciseConfigIfNeeded(exerciseId)),
       dispatch(fetchExerciseEnvironmentConfigIfNeeded(exerciseId)),
       dispatch(fetchScoreConfigIfNeeded(exerciseId)),
@@ -105,12 +83,12 @@ class EditExerciseSimpleConfig extends Component {
     ]);
 
   transformAndSendTestsValues = data => {
-    const { editTests, editScoreConfig, reloadConfigAndLimits } = this.props;
+    const { editTests, editScoreConfig, reloadConfig } = this.props;
     const { tests, scoreConfig } = transformTestsValues(data);
     return Promise.all([
       editTests({ tests }),
       editScoreConfig({ scoreConfig })
-    ]).then(reloadConfigAndLimits);
+    ]).then(reloadConfig);
   };
 
   transformAndSendConfigValuesCreator = defaultMemoize(
@@ -125,11 +103,7 @@ class EditExerciseSimpleConfig extends Component {
 
   transformAndSendEnvValues = defaultMemoize(
     (pipelines, environments, tests, config) => {
-      const {
-        editEnvironmentConfigs,
-        reloadConfigAndLimits,
-        setConfig
-      } = this.props;
+      const { editEnvironmentConfigs, reloadConfig, setConfig } = this.props;
 
       return data => {
         const newEnvironments = transformEnvValues(data, environments);
@@ -144,22 +118,8 @@ class EditExerciseSimpleConfig extends Component {
           environmentConfigs: newEnvironments
         })
           .then(() => setConfig(configData))
-          .then(reloadConfigAndLimits);
+          .then(reloadConfig);
       };
-    }
-  );
-
-  transformAndSendLimitsValues = defaultMemoize(
-    (tests, exerciseRuntimeEnvironments) => {
-      const { editEnvironmentSimpleLimits, reloadExercise } = this.props;
-      return formData =>
-        Promise.all(
-          transformLimitsValues(
-            formData,
-            tests,
-            exerciseRuntimeEnvironments
-          ).map(({ id, data }) => editEnvironmentSimpleLimits(id, data))
-        ).then(reloadExercise);
     }
   );
 
@@ -173,11 +133,7 @@ class EditExerciseSimpleConfig extends Component {
       exerciseEnvironmentConfig,
       exerciseScoreConfig,
       exerciseTests,
-      limits,
       pipelines,
-      cloneHorizontally,
-      cloneVertically,
-      cloneAll,
       intl: { locale }
     } = this.props;
 
@@ -188,7 +144,7 @@ class EditExerciseSimpleConfig extends Component {
         description={
           <FormattedMessage
             id="app.editExerciseConfig.description"
-            defaultMessage="Change exercise configuration"
+            defaultMessage="Change exercise tests configuration"
           />
         }
         breadcrumbs={[
@@ -212,7 +168,7 @@ class EditExerciseSimpleConfig extends Component {
             text: (
               <FormattedMessage
                 id="app.editExerciseConfig.title"
-                defaultMessage="Edit exercise config"
+                defaultMessage="Edit tests configuration"
               />
             ),
             iconName: 'pencil'
@@ -244,6 +200,11 @@ class EditExerciseSimpleConfig extends Component {
                         </div>
                       </Col>
                     </Row>}
+                  <Row>
+                    <Col sm={12}>
+                      <ExerciseButtons exerciseId={exercise.id} />
+                    </Col>
+                  </Row>
                   <Row>
                     <Col lg={6}>
                       <Box
@@ -349,47 +310,6 @@ class EditExerciseSimpleConfig extends Component {
                   <br />
                 </div>}
             </ResourceRenderer>
-
-            <Row>
-              <Col sm={12}>
-                <ResourceRenderer
-                  resource={[exerciseEnvironmentConfig, ...limits.toArray()]}
-                >
-                  {envConfig =>
-                    tests.length > 0 && exercise.runtimeEnvironments.length > 0
-                      ? <EditSimpleLimitsForm
-                          onSubmit={this.transformAndSendLimitsValues(
-                            tests,
-                            exercise.runtimeEnvironments
-                          )}
-                          environments={exercise.runtimeEnvironments}
-                          tests={tests}
-                          initialValues={getLimitsInitValues(
-                            limits,
-                            tests,
-                            exercise.runtimeEnvironments,
-                            exercise.id
-                          )}
-                          cloneVertically={cloneVertically}
-                          cloneHorizontally={cloneHorizontally}
-                          cloneAll={cloneAll}
-                        />
-                      : <div className="alert alert-warning">
-                          <h4>
-                            <i className="icon fa fa-warning" />{' '}
-                            <FormattedMessage
-                              id="app.editLimitsBox.title"
-                              defaultMessage="Edit limits"
-                            />
-                          </h4>
-                          <FormattedMessage
-                            id="app.editExerciseSimpleConfig.noTestsOrEnvironments"
-                            defaultMessage="There are no tests or no enabled environments yet. The form cannot be displayed until at least one test is created and one environment is enabled."
-                          />
-                        </div>}
-                </ResourceRenderer>
-              </Col>
-            </Row>
           </div>}
       </Page>
     );
@@ -406,8 +326,6 @@ EditExerciseSimpleConfig.propTypes = {
   exerciseConfig: PropTypes.object,
   exerciseEnvironmentConfig: PropTypes.object,
   editEnvironmentConfigs: PropTypes.func.isRequired,
-  fetchEnvironmentSimpleLimits: PropTypes.func.isRequired,
-  editEnvironmentSimpleLimits: PropTypes.func.isRequired,
   exerciseScoreConfig: PropTypes.object,
   exerciseTests: PropTypes.object,
   editScoreConfig: PropTypes.func.isRequired,
@@ -415,97 +333,45 @@ EditExerciseSimpleConfig.propTypes = {
   fetchConfig: PropTypes.func.isRequired,
   setConfig: PropTypes.func.isRequired,
   links: PropTypes.object.isRequired,
-  limits: PropTypes.object.isRequired,
   pipelines: ImmutablePropTypes.map,
-  cloneHorizontally: PropTypes.func.isRequired,
-  cloneVertically: PropTypes.func.isRequired,
-  cloneAll: PropTypes.func.isRequired,
   reloadExercise: PropTypes.func.isRequired,
-  reloadConfigAndLimits: PropTypes.func.isRequired,
+  reloadConfig: PropTypes.func.isRequired,
   intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired
 };
 
-const cloneVerticallyWrapper = defaultMemoize(
-  dispatch => (formName, testName, runtimeEnvironmentId) => field => () =>
-    dispatch(cloneVertically(formName, testName, runtimeEnvironmentId, field))
-);
-
-const cloneHorizontallyWrapper = defaultMemoize(
-  dispatch => (formName, testName, runtimeEnvironmentId) => field => () =>
-    dispatch(cloneHorizontally(formName, testName, runtimeEnvironmentId, field))
-);
-
-const cloneAllWrapper = defaultMemoize(
-  dispatch => (formName, testName, runtimeEnvironmentId) => field => () =>
-    dispatch(cloneAll(formName, testName, runtimeEnvironmentId, field))
-);
-
-export default injectIntl(
-  withLinks(
-    connect(
-      (state, { params: { exerciseId } }) => {
-        return {
-          exercise: getExercise(exerciseId)(state),
-          userId: loggedInUserIdSelector(state),
-          runtimeEnvironments: runtimeEnvironmentsSelector(state),
-          exerciseConfig: exerciseConfigSelector(exerciseId)(state),
-          limits: simpleLimitsSelector(state),
-          exerciseEnvironmentConfig: exerciseEnvironmentConfigSelector(
-            exerciseId
-          )(state),
-          exerciseScoreConfig: exerciseScoreConfigSelector(exerciseId)(state),
-          exerciseTests: exerciseTestsSelector(exerciseId)(state),
-          pipelines: pipelinesSelector(state)
-        };
-      },
-      (dispatch, { params: { exerciseId } }) => ({
-        loadAsync: () =>
-          EditExerciseSimpleConfig.loadAsync({ exerciseId }, dispatch),
-        fetchEnvironmentSimpleLimits: () =>
-          dispatch(
-            fetchExerciseIfNeeded(exerciseId)
-          ).then(({ value: exercise }) =>
-            Promise.all(
-              exercise.runtimeEnvironments.map(environment =>
-                dispatch(
-                  fetchExerciseEnvironmentSimpleLimits(
-                    exerciseId,
-                    environment.id
-                  )
-                )
-              )
-            )
-          ),
-        editEnvironmentSimpleLimits: (runtimeEnvironmentId, data) =>
-          dispatch(
-            editEnvironmentSimpleLimits(exerciseId, runtimeEnvironmentId, data)
-          ),
-        editEnvironmentConfigs: data =>
-          dispatch(setExerciseEnvironmentConfig(exerciseId, data)),
-        editScoreConfig: data => dispatch(setScoreConfig(exerciseId, data)),
-        editTests: data => dispatch(setExerciseTests(exerciseId, data)),
-        fetchConfig: () => dispatch(fetchExerciseConfig(exerciseId)),
-        setConfig: data => dispatch(setExerciseConfig(exerciseId, data)),
-        cloneVertically: cloneVerticallyWrapper(dispatch),
-        cloneHorizontally: cloneHorizontallyWrapper(dispatch),
-        cloneAll: cloneAllWrapper(dispatch),
-        reloadExercise: () => dispatch(fetchExercise(exerciseId)),
-        reloadConfigAndLimits: () =>
-          dispatch(fetchExercise(exerciseId)).then(({ value: exercise }) =>
-            Promise.all([
-              dispatch(fetchExerciseConfig(exerciseId)),
-              dispatch(fetchExerciseEnvironmentConfig(exerciseId)),
-              ...exercise.runtimeEnvironments.map(environment =>
-                dispatch(
-                  fetchExerciseEnvironmentSimpleLimits(
-                    exerciseId,
-                    environment.id
-                  )
-                )
-              )
-            ])
-          )
-      })
-    )(EditExerciseSimpleConfig)
-  )
+export default withLinks(
+  connect(
+    (state, { params: { exerciseId } }) => {
+      return {
+        exercise: getExercise(exerciseId)(state),
+        userId: loggedInUserIdSelector(state),
+        runtimeEnvironments: runtimeEnvironmentsSelector(state),
+        exerciseConfig: exerciseConfigSelector(exerciseId)(state),
+        exerciseEnvironmentConfig: exerciseEnvironmentConfigSelector(
+          exerciseId
+        )(state),
+        exerciseScoreConfig: exerciseScoreConfigSelector(exerciseId)(state),
+        exerciseTests: exerciseTestsSelector(exerciseId)(state),
+        pipelines: pipelinesSelector(state)
+      };
+    },
+    (dispatch, { params: { exerciseId } }) => ({
+      loadAsync: () =>
+        EditExerciseSimpleConfig.loadAsync({ exerciseId }, dispatch),
+      editEnvironmentConfigs: data =>
+        dispatch(setExerciseEnvironmentConfig(exerciseId, data)),
+      editScoreConfig: data => dispatch(setScoreConfig(exerciseId, data)),
+      editTests: data => dispatch(setExerciseTests(exerciseId, data)),
+      fetchConfig: () => dispatch(fetchExerciseConfig(exerciseId)),
+      setConfig: data => dispatch(setExerciseConfig(exerciseId, data)),
+      reloadExercise: () => dispatch(fetchExercise(exerciseId)),
+      reloadConfig: () =>
+        dispatch(fetchExercise(exerciseId)).then(({ value: exercise }) =>
+          Promise.all([
+            dispatch(fetchExerciseConfig(exerciseId)),
+            dispatch(fetchExerciseEnvironmentConfig(exerciseId))
+          ])
+        )
+    })
+  )(injectIntl(EditExerciseSimpleConfig))
 );

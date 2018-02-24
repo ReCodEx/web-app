@@ -6,7 +6,7 @@ import ExercisesNameContainer from '../../../containers/ExercisesNameContainer';
 import { Link } from 'react-router';
 import { FormattedDate, FormattedTime, FormattedMessage } from 'react-intl';
 
-import withLinks from '../../../hoc/withLinks';
+import withLinks from '../../../helpers/withLinks';
 
 const PipelinesListItem = ({
   id,

@@ -5,7 +5,7 @@ import { FormattedMessage } from 'react-intl';
 import MenuTitle from '../../widgets/Sidebar/MenuTitle';
 import MenuItem from '../../widgets/Sidebar/MenuItem';
 
-import withLinks from '../../../hoc/withLinks';
+import withLinks from '../../../helpers/withLinks';
 
 const Admin = ({
   currentUrl,

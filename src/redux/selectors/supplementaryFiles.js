@@ -1,9 +1,8 @@
 import { createSelector, defaultMemoize } from 'reselect';
-import { Map } from 'immutable';
+
+import { EMPTY_MAP } from '../../helpers/common';
 import { isReady } from '../helpers/resourceManager';
 import { getExercise } from './exercises';
-
-const EMPTY_MAP = Map();
 
 export const supplementaryFilesSelector = state =>
   state.supplementaryFiles.get('resources');
