@@ -11,8 +11,7 @@ import FormBox from '../../widgets/FormBox';
 import Button from '../../widgets/FlatButton';
 import { RefreshIcon } from '../../icons';
 import { encodeId, encodeNumId } from '../../../helpers/common';
-
-import prettyMs from 'pretty-ms';
+import { validateLimitsTimeTotals } from '../../../helpers/exerciseLimits';
 
 import styles from './styles.less';
 
@@ -33,6 +32,7 @@ class EditLimitsForm extends Component {
       invalid,
       intl: { locale }
     } = this.props;
+
     return (
       <FormBox
         title={
@@ -204,6 +204,7 @@ class EditLimitsForm extends Component {
 EditLimitsForm.propTypes = {
   tests: PropTypes.array.isRequired,
   environments: PropTypes.array,
+  constraints: PropTypes.object,
   cloneHorizontally: PropTypes.func.isRequired,
   cloneVertically: PropTypes.func.isRequired,
   cloneAll: PropTypes.func.isRequired,
@@ -218,46 +219,21 @@ EditLimitsForm.propTypes = {
   intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired
 };
 
-const validate = ({ limits }) => {
+const validate = ({ limits }, { constraints }) => {
   const errors = {};
-  const maxSumTime = 300; // 5 minutes
+  const limitsErrors = validateLimitsTimeTotals(limits, constraints.totalTime);
 
-  // Compute sum of wall times for each environment.
-  let sums = {};
-  Object.keys(limits).forEach(test =>
-    Object.keys(limits[test]).forEach(env => {
-      if (limits[test][env]['time']) {
-        const val = Number(limits[test][env]['time']);
-        if (!Number.isNaN(val) && val > 0) {
-          sums[env] = (sums[env] || 0) + val;
-        }
-      }
-    })
-  );
-
-  // Check if some environemnts have exceeded the limit ...
-  const limitsErrors = {};
-  Object.keys(limits).forEach(test => {
-    const testsErrors = {};
-    Object.keys(sums).forEach(env => {
-      if (sums[env] > maxSumTime) {
-        testsErrors[env] = {
-          time: (
-            <FormattedMessage
-              id="app.editLimitsForm.validation.timeSum"
-              defaultMessage="The sum of time limits ({sum}) exceeds allowed maximum ({max})."
-              values={{
-                sum: prettyMs(sums[env] * 1000),
-                max: prettyMs(maxSumTime * 1000)
-              }}
-            />
-          )
-        };
-      }
+  Object.keys(limitsErrors).forEach(test => {
+    Object.keys(limitsErrors[test]).forEach(env => {
+      limitsErrors[test][env] = {
+        time: (
+          <FormattedMessage
+            id="app.editLimitsForm.validation.totalTime"
+            defaultMessage="The time limits total is out of range. See limits constraints for details."
+          />
+        )
+      };
     });
-    if (Object.keys(testsErrors).length > 0) {
-      limitsErrors[test] = testsErrors;
-    }
   });
   if (Object.keys(limitsErrors).length > 0) {
     errors['limits'] = limitsErrors;

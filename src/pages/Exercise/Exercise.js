@@ -455,37 +455,32 @@ Exercise.propTypes = {
 };
 
 export default withLinks(
-  injectIntl(
-    connect(
-      (state, { params: { exerciseId } }) => {
-        const userId = loggedInUserIdSelector(state);
+  connect(
+    (state, { params: { exerciseId } }) => {
+      const userId = loggedInUserIdSelector(state);
 
-        return {
-          userId,
-          exercise: exerciseSelector(exerciseId)(state),
-          submitting: isSubmitting(state),
-          supervisedGroups: supervisorOfSelector(userId)(state),
-          canEditExercise: canLoggedUserEditExercise(exerciseId)(state),
-          referenceSolutions: referenceSolutionsSelector(exerciseId)(state),
-          exercisePipelines: exercisePipelinesSelector(exerciseId)(state),
-          groups: groupsSelector(state)
-        };
-      },
-      (dispatch, { params: { exerciseId } }) => ({
-        loadAsync: userId =>
-          Exercise.loadAsync({ exerciseId }, dispatch, userId),
-        assignExercise: groupId =>
-          dispatch(assignExercise(groupId, exerciseId)),
-        push: url => dispatch(push(url)),
-        initCreateReferenceSolution: userId =>
-          dispatch(init(userId, exerciseId)),
-        createExercisePipeline: () =>
-          dispatch(createPipeline({ exerciseId: exerciseId })),
-        deleteReferenceSolution: (exerciseId, solutionId) =>
-          dispatch(deleteReferenceSolution(exerciseId, solutionId)),
-        forkExercise: (forkId, data) =>
-          dispatch(forkExercise(exerciseId, forkId, data))
-      })
-    )(Exercise)
-  )
+      return {
+        userId,
+        exercise: exerciseSelector(exerciseId)(state),
+        submitting: isSubmitting(state),
+        supervisedGroups: supervisorOfSelector(userId)(state),
+        canEditExercise: canLoggedUserEditExercise(exerciseId)(state),
+        referenceSolutions: referenceSolutionsSelector(exerciseId)(state),
+        exercisePipelines: exercisePipelinesSelector(exerciseId)(state),
+        groups: groupsSelector(state)
+      };
+    },
+    (dispatch, { params: { exerciseId } }) => ({
+      loadAsync: userId => Exercise.loadAsync({ exerciseId }, dispatch, userId),
+      assignExercise: groupId => dispatch(assignExercise(groupId, exerciseId)),
+      push: url => dispatch(push(url)),
+      initCreateReferenceSolution: userId => dispatch(init(userId, exerciseId)),
+      createExercisePipeline: () =>
+        dispatch(createPipeline({ exerciseId: exerciseId })),
+      deleteReferenceSolution: (exerciseId, solutionId) =>
+        dispatch(deleteReferenceSolution(exerciseId, solutionId)),
+      forkExercise: (forkId, data) =>
+        dispatch(forkExercise(exerciseId, forkId, data))
+    })
+  )(injectIntl(Exercise))
 );

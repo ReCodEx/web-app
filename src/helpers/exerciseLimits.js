@@ -1,5 +1,6 @@
 import { defaultMemoize } from 'reselect';
-import { encodeId, encodeNumId } from '../helpers/common';
+
+import { encodeId, encodeNumId, safeGet } from '../helpers/common';
 import { endpointDisguisedAsIdFactory } from '../redux/modules/limits';
 
 /*
@@ -94,3 +95,123 @@ export const transformLimitsValues = (formData, tests, runtimeEnvironments) =>
     };
     return { id: environment.id, data };
   });
+
+/**
+ * Validation
+ */
+
+// Compute limit constraints from hwGroup metadata
+export const getLimitsConstraints = defaultMemoize(
+  (exerciseHwGroups, preciseTime) => {
+    const defaults = {
+      memory: 1024 * 1024,
+      cpuTimePerTest: 60, // 1 minute
+      cpuTimePerExercise: 300, // 5 minutes
+      wallTimePerTest: 60,
+      wallTimePerExercise: 300
+    };
+
+    // Reduce all hwGroup metadata using min function
+    const res = {};
+    exerciseHwGroups.forEach(({ metadata }) =>
+      Object.keys(defaults).forEach(key => {
+        if (metadata[key]) {
+          res[key] =
+            res[key] !== undefined
+              ? Math.min(res[key], metadata[key])
+              : metadata[key];
+        }
+      })
+    );
+
+    // Make sure all keys exists (use defaults for missing ones).
+    Object.keys(defaults).forEach(key => {
+      res[key] = res[key] || defaults[key];
+    });
+
+    return {
+      memory: { min: 128, max: res.memory },
+      time: {
+        min: 0.1,
+        max: res[preciseTime ? 'cpuTimePerTest' : 'wallTimePerTest']
+      },
+      totalTime: {
+        min: 0.1,
+        max: res[preciseTime ? 'cpuTimePerExercise' : 'wallTimePerExercise']
+      }
+    };
+  }
+);
+
+export const validateLimitsField = (value, range) => {
+  const num = Number(value);
+  if (Number.isNaN(num)) {
+    return num;
+  }
+  if (range && (num < range.min || num > range.max)) {
+    return false;
+  }
+  return num;
+};
+
+export const validateLimitsTimeTotals = (limits, range) => {
+  // Compute sum of times for each environment.
+  let sums = {};
+  Object.keys(limits).forEach(test =>
+    Object.keys(limits[test]).forEach(env => {
+      if (limits[test][env]['time']) {
+        const val = Number(limits[test][env]['time']);
+        if (!Number.isNaN(val) && val > 0) {
+          sums[env] = (sums[env] || 0) + val;
+        }
+      }
+    })
+  );
+
+  // Check if some environemnts have exceeded the limit ...
+  const limitsErrors = {};
+  Object.keys(limits).forEach(test => {
+    const testsErrors = {};
+    Object.keys(sums).forEach(env => {
+      if (sums[env] > range.max || sums[env] < range.min) {
+        testsErrors[env] = sums[env];
+      }
+    });
+    if (Object.keys(testsErrors).length > 0) {
+      limitsErrors[test] = testsErrors;
+    }
+  });
+  return limitsErrors;
+};
+
+export const validateLimitsSingleEnvironment = (
+  { limits },
+  env,
+  constraints
+) => {
+  if (!limits || !env || !constraints) {
+    return false;
+  }
+  const envEnc = encodeId(env);
+
+  // Compute sum of times for each environment.
+  let sum = 0;
+  Object.keys(limits).forEach(test => {
+    const memory = validateLimitsField(
+      safeGet(limits, [test, envEnc, 'memory']),
+      constraints.memory
+    );
+    if (Number.isNaN(memory) || memory === false) {
+      return false;
+    }
+
+    const time = safeGet(limits, [test, envEnc, 'time']);
+    const val = validateLimitsField(time, constraints.time);
+    if (Number.isNaN(val) || val === false) {
+      return false;
+    }
+    sum += val;
+  });
+
+  return sum >= constraints.totalTime.min && sum <= constraints.totalTime.max;
+};
