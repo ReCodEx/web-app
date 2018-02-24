@@ -9,6 +9,8 @@ import AssignmentsTable from '../../Assignments/Assignment/AssignmentsTable';
 import StudentsListContainer from '../../../containers/StudentsListContainer';
 import LeaveJoinGroupButtonContainer from '../../../containers/LeaveJoinGroupButtonContainer';
 import { getLocalizedName } from '../../../helpers/getLocalizedData';
+import ResourceRenderer from '../../helpers/ResourceRenderer';
+import ResultsTableContainer from '../../../containers/ResultsTableContainer';
 
 const StudentsView = ({
   group,
@@ -16,6 +18,7 @@ const StudentsView = ({
   assignments,
   bestSubmissions,
   isAdmin = false,
+  users,
   intl: { locale }
 }) =>
   <div>
@@ -78,12 +81,37 @@ const StudentsView = ({
         </Box>
       </Col>
     </Row>
+    <Row>
+      <Col xs={12}>
+        <Box
+          title={
+            <FormattedMessage
+              id="app.group.spervisorsView.resultsTable"
+              defaultMessage="Results"
+            />
+          }
+          isOpen
+          unlimitedHeight
+          noPadding
+        >
+          <ResourceRenderer resource={assignments}>
+            {(...assignments) =>
+              <ResultsTableContainer
+                groupId={group.id}
+                users={users}
+                assignments={assignments}
+              />}
+          </ResourceRenderer>
+        </Box>
+      </Col>
+    </Row>
   </div>;
 
 StudentsView.propTypes = {
   group: PropTypes.object.isRequired,
   assignments: ImmutablePropTypes.list.isRequired,
   statuses: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
+  users: PropTypes.array.isRequired,
   isAdmin: PropTypes.bool,
   bestSubmissions: PropTypes.object,
   intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired

@@ -13,7 +13,7 @@ const { actions, reduceActions } = factory({
     `/exercise-assignments/${assignmentId}/can-submit`
 });
 
-export const canSubmit = actions.fetchOneIfNeeded;
+export const canSubmit = actions.fetchResource;
 
 const reducer = handleActions(
   Object.assign({}, reduceActions, {

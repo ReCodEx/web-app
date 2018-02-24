@@ -14,7 +14,7 @@ const { actions, reduceActions } = factory({
 });
 
 export const fetchGroupsStats = actions.fetchResource;
-export const fetchGroupsStatsIfNeeded = actions.fetchOneIfNeeded;
+export const fetchGroupsStatsIfNeeded = actions.fetchIfNeeded;
 
 const reducer = handleActions(
   Object.assign({}, reduceActions, {

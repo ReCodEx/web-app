@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import ImmutablePropTypes from 'react-immutable-proptypes';
 import Icon from 'react-fontawesome';
 import { Table, Label } from 'react-bootstrap';
 import {
@@ -10,7 +9,6 @@ import {
   FormattedRelative
 } from 'react-intl';
 import classnames from 'classnames';
-import ResourceRenderer from '../../../helpers/ResourceRenderer';
 import { SuccessIcon, MaybeSucceededIcon } from '../../../icons';
 import Box from '../../../widgets/Box';
 
@@ -27,8 +25,7 @@ const AssignmentDetails = ({
   isBonus,
   runtimeEnvironments,
   canSubmit,
-  pointsPercentualThreshold,
-  alreadySubmitted
+  pointsPercentualThreshold
 }) =>
   <Box
     title={
@@ -136,7 +133,7 @@ const AssignmentDetails = ({
             />
           </td>
           <td>
-            {alreadySubmitted}
+            {canSubmit.submittedCount}
           </td>
         </tr>
         <tr>
@@ -150,9 +147,7 @@ const AssignmentDetails = ({
             />
           </td>
           <td>
-            <ResourceRenderer resource={canSubmit}>
-              {canSubmit => <MaybeSucceededIcon success={canSubmit} />}
-            </ResourceRenderer>
+            <MaybeSucceededIcon success={canSubmit.canSubmit} />
           </td>
         </tr>
         {isBonus &&
@@ -218,9 +213,8 @@ AssignmentDetails.propTypes = {
   isAfterSecondDeadline: PropTypes.bool.isRequired,
   isBonus: PropTypes.bool,
   runtimeEnvironments: PropTypes.array,
-  canSubmit: ImmutablePropTypes.map,
-  pointsPercentualThreshold: PropTypes.number,
-  alreadySubmitted: PropTypes.number.isRequired
+  canSubmit: PropTypes.object,
+  pointsPercentualThreshold: PropTypes.number
 };
 
 export default AssignmentDetails;

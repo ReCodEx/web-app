@@ -6,17 +6,15 @@ import { Link } from 'react-router';
 import { FormattedMessage } from 'react-intl';
 
 import ResultsTableRow from './ResultsTableRow';
-import LoadingResultsTableRow from './LoadingResultsTableRow';
 import NoResultsAvailableRow from './NoResultsAvailableRow';
 import withLinks from '../../../helpers/withLinks';
-import ResourceRenderer from '../../helpers/ResourceRenderer';
 import { LocalizedExerciseName } from '../../helpers/LocalizedNames';
 import styles from './ResultsTable.less';
 
 const ResultsTable = ({
   assignments = List(),
   users = [],
-  submissions,
+  stats,
   links: { SUPERVISOR_STATS_URI_FACTORY }
 }) => {
   const assignmentsArray = assignments.sort(
@@ -53,21 +51,12 @@ const ResultsTable = ({
         {users.length !== 0 &&
           assignments.length !== 0 &&
           users.map(user =>
-            <ResourceRenderer
+            <ResultsTableRow
               key={user.id}
-              resource={Object.keys(submissions[user.id]).map(
-                key => submissions[user.id][key]
-              )}
-              loading={<LoadingResultsTableRow />}
-            >
-              {(...userSubmissions) =>
-                <ResultsTableRow
-                  key={user.id}
-                  userId={user.id}
-                  assignmentsIds={assignmentsIds}
-                  submissions={userSubmissions}
-                />}
-            </ResourceRenderer>
+              userId={user.id}
+              assignmentsIds={assignmentsIds}
+              userStats={stats.find(stat => stat.userId === user.id)}
+            />
           )}
       </tbody>
     </Table>
@@ -77,7 +66,7 @@ const ResultsTable = ({
 ResultsTable.propTypes = {
   assignments: PropTypes.array.isRequired,
   users: PropTypes.array.isRequired,
-  submissions: PropTypes.object.isRequired,
+  stats: PropTypes.array.isRequired,
   links: PropTypes.object
 };
 

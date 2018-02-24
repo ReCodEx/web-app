@@ -8,7 +8,7 @@ const UsersStats = ({
   id,
   name,
   localizedTexts,
-  stats: { assignments, points, hasLimit, passesLimit },
+  stats: { points, hasLimit, passesLimit },
   intl: { locale }
 }) => {
   const localizedName = getLocalizedName({ name, localizedTexts }, locale);
@@ -42,10 +42,6 @@ UsersStats.propTypes = {
   name: PropTypes.string.isRequired,
   localizedTexts: PropTypes.array.isRequired,
   stats: PropTypes.shape({
-    assignments: PropTypes.shape({
-      total: PropTypes.number.isRequired,
-      completed: PropTypes.number.isRequired
-    }),
     points: PropTypes.shape({
       total: PropTypes.number.isRequired,
       gained: PropTypes.number.isRequired
