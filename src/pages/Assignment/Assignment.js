@@ -208,8 +208,8 @@ class Assignment extends Component {
                     <LocalizedTexts locales={assignment.localizedTexts} />
                   </div>}
               </Col>
-              <ResourceRenderer resource={runtimeEnvironments}>
-                {(...runtimes) =>
+              <ResourceRenderer resource={[canSubmit, ...runtimeEnvironments]}>
+                {(canSubmitObj, ...runtimes) =>
                   <Col lg={6}>
                     <AssignmentDetails
                       {...assignment}
@@ -219,9 +219,8 @@ class Assignment extends Component {
                       isAfterSecondDeadline={this.isAfter(
                         assignment.secondDeadline
                       )}
-                      canSubmit={canSubmit}
+                      canSubmit={canSubmitObj}
                       runtimeEnvironments={runtimes}
-                      alreadySubmitted={submissions.count()}
                     />
 
                     {isStudentOf(assignment.groupId) &&
@@ -231,10 +230,10 @@ class Assignment extends Component {
                             loading={<SubmitSolutionButton disabled={true} />}
                             resource={canSubmit}
                           >
-                            {canSubmit =>
+                            {canSubmitObj =>
                               <SubmitSolutionButton
                                 onClick={init(assignment.id)}
-                                disabled={!canSubmit}
+                                disabled={!canSubmitObj.canSubmit}
                               />}
                           </ResourceRenderer>
                         </p>

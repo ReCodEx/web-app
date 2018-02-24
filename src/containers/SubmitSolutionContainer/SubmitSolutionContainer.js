@@ -26,6 +26,7 @@ import { reset as resetUpload } from '../../redux/modules/upload';
 import { evaluateReferenceSolution } from '../../redux/modules/referenceSolutions';
 
 import withLinks from '../../hoc/withLinks';
+import { canSubmit } from '../../redux/modules/canSubmit';
 
 class SubmitSolutionContainer extends Component {
   state = {
@@ -68,7 +69,7 @@ class SubmitSolutionContainer extends Component {
       showProgress = true,
       autodetection = true,
       isReferenceSolution = false,
-      fetchSubmissions
+      onEndFetch
     } = this.props;
 
     const { runtimeEnvironment } = this.state;
@@ -100,8 +101,8 @@ class SubmitSolutionContainer extends Component {
             isOpen={isProcessing}
             monitor={monitor}
             link={SUBMISSION_DETAIL_URI_FACTORY(id, submissionId)}
-            onUserClose={fetchSubmissions}
-            onFinish={fetchSubmissions}
+            onUserClose={onEndFetch}
+            onFinish={onEndFetch}
           />}
       </div>
     );
@@ -131,7 +132,7 @@ SubmitSolutionContainer.propTypes = {
   showProgress: PropTypes.bool,
   autodetection: PropTypes.bool,
   isReferenceSolution: PropTypes.bool,
-  fetchSubmissions: PropTypes.func.isRequired
+  onEndFetch: PropTypes.func.isRequired
 };
 
 export default withLinks(
@@ -162,7 +163,11 @@ export default withLinks(
               : Promise.resolve()
         ),
       reset: () => dispatch(resetUpload(id)) && dispatch(onReset(userId, id)),
-      fetchSubmissions: () => dispatch(fetchUsersSubmissions(userId, id))
+      onEndFetch: () =>
+        Promise.all([
+          dispatch(fetchUsersSubmissions(userId, id)),
+          dispatch(canSubmit(id))
+        ])
     })
   )(SubmitSolutionContainer)
 );
