@@ -235,6 +235,7 @@ class Group extends Component {
                 assignments={publicAssignments}
                 bestSubmissions={bestSubmissions}
                 isAdmin={isAdmin || isSuperAdmin}
+                users={students}
               />}
 
             <GroupDetail

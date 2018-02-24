@@ -258,6 +258,7 @@ class Dashboard extends Component {
                                         </LinkContainer>
                                       </p>
                                     }
+                                    unlimitedHeight
                                   >
                                     <AssignmentsTable
                                       userId={user.id}

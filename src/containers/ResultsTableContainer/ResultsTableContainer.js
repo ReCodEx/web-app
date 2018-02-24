@@ -2,9 +2,10 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
+import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import ResultsTable from '../../components/Groups/ResultsTable';
-import { fetchBestSubmissions } from '../../redux/modules/groupResults';
-import { getBestSubmissionsAssoc } from '../../redux/selectors/groupResults';
+import { fetchGroupsStats } from '../../redux/modules/stats';
+import { createGroupsStatsSelector } from '../../redux/selectors/stats';
 
 class ResultsTableContainer extends Component {
   componentWillMount() {
@@ -12,28 +13,25 @@ class ResultsTableContainer extends Component {
   }
 
   componentWillReceiveProps(newProps) {
-    if (
-      this.props.users.length !== newProps.users.length ||
-      this.props.users.some((user, i) => user.id !== newProps.users[i].id)
-    ) {
+    if (this.props.groupId !== newProps.groupId) {
       this.props.loadAsync();
     }
   }
 
-  static loadAsync = ({ users, assignments }, dispatch) => {
-    assignments.map(assignment =>
-      dispatch(fetchBestSubmissions(assignment.id))
-    );
-  };
+  static loadAsync = ({ groupId }, dispatch) =>
+    dispatch(fetchGroupsStats(groupId));
 
   render() {
-    const { users, assignments, submissions } = this.props;
+    const { users, assignments, stats } = this.props;
     return (
-      <ResultsTable
-        users={users}
-        assignments={assignments}
-        submissions={submissions}
-      />
+      <ResourceRenderer resource={stats}>
+        {groupStats =>
+          <ResultsTable
+            users={users}
+            assignments={assignments}
+            stats={groupStats}
+          />}
+      </ResourceRenderer>
     );
   }
 }
@@ -41,16 +39,16 @@ class ResultsTableContainer extends Component {
 ResultsTableContainer.propTypes = {
   users: PropTypes.array.isRequired,
   assignments: PropTypes.array.isRequired,
-  submissions: PropTypes.object,
+  groupId: PropTypes.string.isRequired,
+  stats: PropTypes.object.isRequired,
   loadAsync: PropTypes.func
 };
 
 export default connect(
-  (state, { users, assignments }) => ({
-    submissions: getBestSubmissionsAssoc(assignments, users)(state)
+  (state, { groupId }) => ({
+    stats: createGroupsStatsSelector(groupId)(state)
   }),
-  (dispatch, { users, assignments }) => ({
-    loadAsync: () =>
-      ResultsTableContainer.loadAsync({ users, assignments }, dispatch)
+  (dispatch, { groupId }) => ({
+    loadAsync: () => ResultsTableContainer.loadAsync({ groupId }, dispatch)
   })
 )(ResultsTableContainer);

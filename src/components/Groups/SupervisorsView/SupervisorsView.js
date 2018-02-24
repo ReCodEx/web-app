@@ -12,7 +12,6 @@ import AddStudent from '../AddStudent';
 import SearchExercise from '../SearchExercise';
 import AdminAssignmentsTable from '../../Assignments/AdminAssignmentsTable';
 import ExercisesSimpleList from '../../../components/Exercises/ExercisesSimpleList';
-import ResultsTableContainer from '../../../containers/ResultsTableContainer';
 import Button from '../../../components/widgets/FlatButton';
 import { AddIcon, EditIcon, DeleteIcon } from '../../../components/icons';
 import AssignExerciseButton from '../../../components/buttons/AssignExerciseButton';
@@ -43,26 +42,6 @@ const SupervisorsView = ({
             values={{ groupName: getLocalizedName(group, locale) }}
           />
         </h3>
-      </Col>
-    </Row>
-    <Row>
-      <Col xs={12}>
-        <Box
-          title={
-            <FormattedMessage
-              id="app.group.spervisorsView.resultsTable"
-              defaultMessage="Results"
-            />
-          }
-          isOpen
-          unlimitedHeight
-          noPadding
-        >
-          <ResourceRenderer resource={publicAssignments}>
-            {(...assignments) =>
-              <ResultsTableContainer users={users} assignments={assignments} />}
-          </ResourceRenderer>
-        </Box>
       </Col>
     </Row>
     <Row>
