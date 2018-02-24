@@ -4,7 +4,7 @@ import { FormattedMessage } from 'react-intl';
 import Icon from 'react-fontawesome';
 import { LinkContainer } from 'react-router-bootstrap';
 import { Breadcrumb } from 'react-bootstrap';
-import withLinks from '../../../hoc/withLinks';
+import withLinks from '../../../helpers/withLinks';
 
 const BreadcrumbItem = ({
   text,

@@ -18,7 +18,7 @@ import {
   hasChangingSucceeded as hasSucceeded
 } from '../../redux/selectors/auth';
 
-import withLinks from '../../hoc/withLinks';
+import withLinks from '../../helpers/withLinks';
 
 /**
  * Component for changing old password for a new one for a user with a specific

@@ -6,7 +6,7 @@ import { FormattedDate, FormattedTime, FormattedMessage } from 'react-intl';
 import Box from '../../widgets/Box';
 import AssignmentStatusIcon from '../../Assignments/Assignment/AssignmentStatusIcon';
 import UsersNameContainer from '../../../containers/UsersNameContainer';
-import withLinks from '../../../hoc/withLinks';
+import withLinks from '../../../helpers/withLinks';
 
 const SubmissionStatus = ({
   evaluationStatus,

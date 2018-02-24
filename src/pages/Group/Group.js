@@ -58,7 +58,7 @@ import { getExercisesForGroup } from '../../redux/selectors/exercises';
 import { getStatusesForLoggedUser } from '../../redux/selectors/stats';
 
 import { getLocalizedName } from '../../helpers/getLocalizedData';
-import withLinks from '../../hoc/withLinks';
+import withLinks from '../../helpers/withLinks';
 import { isReady } from '../../redux/helpers/resourceManager/index';
 import { fetchBestSubmission } from '../../redux/modules/groupResults';
 import { getBestSubmissionsForLoggedInUser } from '../../redux/selectors/groupResults';

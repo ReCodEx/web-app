@@ -50,10 +50,7 @@ const SupplementaryFilesTableRow = ({
           >
             <Button bsSize="xs" className="btn-flat" bsStyle="danger">
               <DeleteIcon />{' '}
-              <FormattedMessage
-                id="app.supplementaryFiles.deleteButton"
-                defaultMessage="Delete"
-              />
+              <FormattedMessage id="generic.delete" defaultMessage="Delete" />
             </Button>
           </Confirm>}
       </td>}

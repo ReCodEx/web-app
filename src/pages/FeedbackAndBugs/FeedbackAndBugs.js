@@ -5,7 +5,7 @@ import { Row, Col } from 'react-bootstrap';
 import Icon from 'react-fontawesome';
 
 import PageContent from '../../components/layout/PageContent';
-import withLinks from '../../hoc/withLinks';
+import withLinks from '../../helpers/withLinks';
 
 const FeedbackAndBugs = ({ links: { GITHUB_BUGS_URL } }) =>
   <PageContent

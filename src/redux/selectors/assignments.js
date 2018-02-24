@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect';
-import { List } from 'immutable';
+import { EMPTY_LIST, EMPTY_ARRAY } from '../../helpers/common';
 import { getSubmissions } from './submissions';
 import { runtimeEnvironmentSelector } from './runtimeEnvironments';
 
@@ -11,8 +11,6 @@ export const getAssignment = createSelector(
   getAssignmentResources,
   assignments => id => assignments.get(id)
 );
-
-const EMPTY_ARRAY = [];
 
 export const assignmentEnvironmentsSelector = createSelector(
   [getAssignment, runtimeEnvironmentSelector],
@@ -36,7 +34,7 @@ export const getUserSubmissions = (userId, assignmentId) =>
         userId
       ]);
       if (!assignmentSubmissions) {
-        return List();
+        return EMPTY_LIST;
       }
 
       return assignmentSubmissions.map(id => submissions.get(id));

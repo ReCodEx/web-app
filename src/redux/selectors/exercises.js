@@ -1,9 +1,9 @@
 import { createSelector } from 'reselect';
+import { EMPTY_ARRAY } from '../../helpers/common';
 import { isReady } from '../helpers/resourceManager';
 import { fetchManyEndpoint } from '../modules/exercises';
 
 const getParam = (state, id) => id;
-const EMPTY_ARR = [];
 
 const getExercises = state => state.exercises;
 const getResources = exercises => exercises.get('resources');
@@ -43,7 +43,7 @@ export const getExercisesForGroup = createSelector(
   (exercises, groupExercises, groupId) => {
     const groupExIds = groupExercises[groupId]
       ? groupExercises[groupId]
-      : EMPTY_ARR;
+      : EMPTY_ARRAY;
     return exercises
       .filter(isReady)
       .filter(

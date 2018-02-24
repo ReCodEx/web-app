@@ -21,7 +21,8 @@ const EditGroupForm = ({
   hasThreshold,
   collapsable = false,
   isOpen = true,
-  reset
+  reset,
+  isSuperAdmin
 }) =>
   <FormBox
     title={
@@ -91,18 +92,19 @@ const EditGroupForm = ({
       isGroup={true}
     />
 
-    <Field
-      name="externalId"
-      tabIndex={2}
-      component={TextField}
-      required
-      label={
-        <FormattedMessage
-          id="app.createGroup.externalId"
-          defaultMessage="External ID of the group (e. g. ID of the group in the school IS):"
-        />
-      }
-    />
+    {isSuperAdmin &&
+      <Field
+        name="externalId"
+        tabIndex={2}
+        component={TextField}
+        required
+        label={
+          <FormattedMessage
+            id="app.createGroup.externalId"
+            defaultMessage="External ID of the group (e. g. ID of the group in the school IS):"
+          />
+        }
+      />}
     <Row>
       <Col lg={6}>
         <Field
@@ -182,7 +184,8 @@ EditGroupForm.propTypes = {
   createNew: PropTypes.bool,
   collapsable: PropTypes.bool,
   isOpen: PropTypes.bool,
-  reset: PropTypes.func
+  reset: PropTypes.func,
+  isSuperAdmin: PropTypes.bool
 };
 
 const validate = ({ localizedTexts = [], hasThreshold, threshold }) => {

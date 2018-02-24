@@ -159,8 +159,8 @@ class EditExerciseConfigForm extends Component {
       anyTouched,
       submitting,
       handleSubmit,
-      hasFailed = false,
-      hasSucceeded = false,
+      submitFailed,
+      submitSucceeded,
       invalid
     } = this.props;
     return (
@@ -174,7 +174,7 @@ class EditExerciseConfigForm extends Component {
         unlimitedHeight
       >
         <div>
-          {hasFailed &&
+          {submitFailed &&
             <Alert bsStyle="danger">
               <FormattedMessage
                 id="app.editExerciseConfigForm.failed"
@@ -201,9 +201,9 @@ class EditExerciseConfigForm extends Component {
               id="editExerciseConfig"
               invalid={invalid}
               submitting={submitting}
-              hasSucceeded={hasSucceeded}
+              hasSucceeded={submitSucceeded}
               dirty={anyTouched}
-              hasFailed={hasFailed}
+              hasFailed={submitFailed}
               handleSubmit={handleSubmit}
               messages={{
                 submit: (
@@ -261,8 +261,8 @@ EditExerciseConfigForm.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
   anyTouched: PropTypes.bool,
   submitting: PropTypes.bool,
-  hasFailed: PropTypes.bool,
-  hasSucceeded: PropTypes.bool,
+  submitFailed: PropTypes.bool,
+  submitSucceeded: PropTypes.bool,
   invalid: PropTypes.bool,
   runtimeEnvironments: PropTypes.array.isRequired,
   supplementaryFiles: ImmutablePropTypes.map,

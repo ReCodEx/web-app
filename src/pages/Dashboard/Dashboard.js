@@ -8,6 +8,7 @@ import Button from '../../components/widgets/FlatButton';
 import { Link } from 'react-router';
 import { LinkContainer } from 'react-router-bootstrap';
 
+import { EMPTY_OBJ } from '../../helpers/common';
 import Page from '../../components/layout/Page';
 import Box from '../../components/widgets/Box';
 import { LoadingInfoBox } from '../../components/widgets/InfoBox';
@@ -46,9 +47,7 @@ import SisIntegrationContainer from '../../containers/SisIntegrationContainer';
 import SisSupervisorGroupsContainer from '../../containers/SisSupervisorGroupsContainer';
 
 import { getLocalizedName } from '../../helpers/getLocalizedData';
-import withLinks from '../../hoc/withLinks';
-
-const EMPTY_OBJ = {};
+import withLinks from '../../helpers/withLinks';
 
 class Dashboard extends Component {
   componentDidMount = () => this.props.loadAsync(this.props.userId);

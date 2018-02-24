@@ -20,10 +20,6 @@ import SupplementaryFilesTableContainer from '../../containers/SupplementaryFile
 import { fetchExerciseIfNeeded } from '../../redux/modules/exercises';
 import { fetchPipelines } from '../../redux/modules/pipelines';
 import {
-  fetchExerciseEnvironmentSimpleLimitsIfNeeded,
-  editEnvironmentSimpleLimits
-} from '../../redux/modules/simpleLimits';
-import {
   fetchExerciseConfigIfNeeded,
   setExerciseConfig
 } from '../../redux/modules/exerciseConfigs';
@@ -43,9 +39,8 @@ import { exerciseScoreConfigSelector } from '../../redux/selectors/exerciseScore
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments';
 import { runtimeEnvironmentsSelector } from '../../redux/selectors/runtimeEnvironments';
-import { simpleLimitsSelector } from '../../redux/selectors/simpleLimits';
 
-import withLinks from '../../hoc/withLinks';
+import withLinks from '../../helpers/withLinks';
 import { getLocalizedName } from '../../helpers/getLocalizedData';
 import { isLoggedAsSuperAdmin } from '../../redux/selectors/users';
 
@@ -59,18 +54,7 @@ class EditExerciseConfig extends Component {
 
   static loadAsync = ({ exerciseId }, dispatch) =>
     Promise.all([
-      dispatch(fetchExerciseIfNeeded(exerciseId)).then(({ value: exercise }) =>
-        Promise.all(
-          exercise.runtimeEnvironments.map(environment =>
-            dispatch(
-              fetchExerciseEnvironmentSimpleLimitsIfNeeded(
-                exerciseId,
-                environment.id
-              )
-            )
-          )
-        )
-      ),
+      dispatch(fetchExerciseIfNeeded(exerciseId)),
       dispatch(fetchExerciseConfigIfNeeded(exerciseId)),
       dispatch(fetchRuntimeEnvironments()),
       dispatch(fetchExerciseEnvironmentConfigIfNeeded(exerciseId)),
@@ -90,9 +74,7 @@ class EditExerciseConfig extends Component {
       exerciseConfig,
       exerciseEnvironmentConfig,
       exerciseScoreConfig,
-      // editEnvironmentSimpleLimits,
       pipelines,
-      // limits,
       editScoreConfig,
       superadmin,
       intl: { locale }
@@ -203,16 +185,6 @@ class EditExerciseConfig extends Component {
                           exercise={exercise}
                           pipelines={pipelines}
                         />}
-                      {/* Limit editation was completely redefined in simple form.
-                      <EditSimpleLimitsBox
-                        editLimits={editEnvironmentSimpleLimits}
-                        environments={exercise.runtimeEnvironments}
-                        limits={limits}
-                        config={config}
-                        setVertically={setVertically}
-                        setHorizontally={setHorizontally}
-                        setAll={setAll}
-                      /> */}
                     </div>}
                 </ResourceRenderer>
               </Col>
@@ -236,10 +208,8 @@ EditExerciseConfig.propTypes = {
   exerciseConfig: PropTypes.object,
   exerciseEnvironmentConfig: PropTypes.object,
   exerciseScoreConfig: PropTypes.object,
-  editEnvironmentSimpleLimits: PropTypes.func.isRequired,
   pipelines: ImmutablePropTypes.map,
   links: PropTypes.object.isRequired,
-  limits: PropTypes.func.isRequired,
   editScoreConfig: PropTypes.func.isRequired,
   superadmin: PropTypes.bool.isRequired,
   intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired
@@ -260,8 +230,6 @@ export default injectIntl(
             exerciseId
           )(state),
           pipelines: pipelinesSelector(state),
-          limits: runtimeEnvironmentId =>
-            simpleLimitsSelector(exerciseId, runtimeEnvironmentId)(state),
           superadmin: isLoggedAsSuperAdmin(state)
         };
       },
@@ -269,10 +237,6 @@ export default injectIntl(
         loadAsync: () => EditExerciseConfig.loadAsync({ exerciseId }, dispatch),
         editEnvironmentConfigs: data =>
           dispatch(setExerciseEnvironmentConfig(exerciseId, data)),
-        editEnvironmentSimpleLimits: runtimeEnvironmentId => data =>
-          dispatch(
-            editEnvironmentSimpleLimits(exerciseId, runtimeEnvironmentId, data)
-          ),
         setConfig: data => dispatch(setExerciseConfig(exerciseId, data)),
         editScoreConfig: data => dispatch(setScoreConfig(exerciseId, data))
       })

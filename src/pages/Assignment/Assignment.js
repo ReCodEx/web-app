@@ -48,7 +48,7 @@ import SubmitSolutionContainer from '../../containers/SubmitSolutionContainer';
 import SubmissionsTable from '../../components/Assignments/SubmissionsTable';
 import AssignmentSync from '../../components/Assignments/Assignment/AssignmentSync';
 
-import withLinks from '../../hoc/withLinks';
+import withLinks from '../../helpers/withLinks';
 
 class Assignment extends Component {
   static loadAsync = ({ assignmentId }, dispatch, userId) =>

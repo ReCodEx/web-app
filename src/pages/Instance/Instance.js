@@ -5,6 +5,8 @@ import { connect } from 'react-redux';
 import { getFormValues } from 'redux-form';
 import { FormattedMessage } from 'react-intl';
 import { Row, Col } from 'react-bootstrap';
+
+import { EMPTY_OBJ } from '../../helpers/common';
 import Button from '../../components/widgets/FlatButton';
 import { LinkContainer } from 'react-router-bootstrap';
 
@@ -25,9 +27,7 @@ import { groupsSelector } from '../../redux/selectors/groups';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import { isLoggedAsSuperAdmin } from '../../redux/selectors/users';
 
-import withLinks from '../../hoc/withLinks';
-
-const EMPTY_OBJECT = {};
+import withLinks from '../../helpers/withLinks';
 
 class Instance extends Component {
   static loadAsync = ({ instanceId }, dispatch) =>
@@ -116,7 +116,7 @@ class Instance extends Component {
                     collapsable={true}
                     isOpen={true}
                     formValues={formValues}
-                    initialValues={EMPTY_OBJECT}
+                    initialValues={EMPTY_OBJ}
                   />
                 </Col>
                 <Col sm={6}>

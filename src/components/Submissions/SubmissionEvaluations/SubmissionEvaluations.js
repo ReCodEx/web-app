@@ -5,7 +5,7 @@ import Button from '../../widgets/FlatButton';
 
 import Box from '../../widgets/Box';
 import EvaluationTable from '../../ReferenceSolutions/EvaluationTable';
-import withLinks from '../../../hoc/withLinks';
+import withLinks from '../../../helpers/withLinks';
 
 const SubmissionEvaluations = ({
   evaluations,

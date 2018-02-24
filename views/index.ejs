@@ -9,6 +9,19 @@
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" type="image/png" href="/public/favicon.ico" />
         <style type="text/css">
+          @keyframes loading {
+            0% {
+              filter: blur(8px);
+              color: #cec;
+              text-shadow: #9b9 0px 0px 200px;
+            }
+            100% {
+              filter: blur(0px);
+              color: #9b9;
+              text-shadow: #9b9 0px 0px 0px;
+            }
+          }
+
           #loading-screen {
             font-family: Helvetica, Arial, sans-serif;
             font-size: 32pt;
@@ -25,16 +38,17 @@
             overflow: hidden;
             color: #9b9;
             background-color: #f4fff4;
+            animation: loading 1s;
           }
 
           body.loading {
             position: fixed;
-            overflow: hidden!important;
+            overflow: hidden !important;
           }
 
           body.loading * {
             z-index: 0;
-            overflow: hidden!important;
+            overflow: hidden !important;
           }
 
         </style>

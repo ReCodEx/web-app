@@ -13,9 +13,9 @@ import { SuccessIcon } from '../../../components/icons';
 import { forkStatuses } from '../../../redux/modules/exercises';
 import { getFork } from '../../../redux/selectors/exercises';
 import ResourceRenderer from '../../helpers/ResourceRenderer';
-import { getLocalizedName } from '../../../helpers/getLocalizedData';
+import { getGroupCanonicalLocalizedName } from '../../../helpers/getLocalizedData';
 
-import withLinks from '../../../hoc/withLinks';
+import withLinks from '../../../helpers/withLinks';
 
 import './ForkExerciseForm.css';
 
@@ -37,10 +37,11 @@ class ForkExerciseForm extends Component {
       anyTouched,
       submitting,
       handleSubmit,
-      hasFailed = false,
-      hasSucceeded = false,
+      submitFailed,
+      submitSucceeded,
       invalid,
       groups,
+      groupsAccessor,
       intl: { locale }
     } = this.props;
 
@@ -63,14 +64,14 @@ class ForkExerciseForm extends Component {
       default:
         return (
           <div>
-            {hasFailed &&
+            {submitFailed &&
               <Alert bsStyle="danger">
                 <FormattedMessage
                   id="app.forkExerciseForm.failed"
                   defaultMessage="Saving failed. Please try again later."
                 />
               </Alert>}
-            <Form inline className="formSpace">
+            <Form inline className="forkForm">
               <ResourceRenderer resource={groups.toArray()}>
                 {(...groups) =>
                   <Field
@@ -79,12 +80,15 @@ class ForkExerciseForm extends Component {
                     label={''}
                     options={[{ key: '', name: '_Public_' }].concat(
                       groups
-                        .sort((a, b) => a.name.localeCompare(b.name, locale))
-                        .filter((item, pos, arr) => arr.indexOf(item) === pos)
                         .map(group => ({
                           key: group.id,
-                          name: getLocalizedName(group, locale)
+                          name: getGroupCanonicalLocalizedName(
+                            group,
+                            groupsAccessor,
+                            locale
+                          )
                         }))
+                        .sort((a, b) => a.name.localeCompare(b.name, locale))
                     )}
                   />}
               </ResourceRenderer>
@@ -93,9 +97,9 @@ class ForkExerciseForm extends Component {
                 id="forkExercise"
                 invalid={invalid}
                 submitting={submitting}
-                hasSucceeded={hasSucceeded}
+                hasSucceeded={submitSucceeded}
                 dirty={anyTouched}
-                hasFailed={hasFailed}
+                hasFailed={submitFailed}
                 handleSubmit={handleSubmit}
                 noIcons
                 messages={{
@@ -133,13 +137,14 @@ ForkExerciseForm.propTypes = {
   forkedExerciseId: PropTypes.string,
   anyTouched: PropTypes.bool,
   submitting: PropTypes.bool,
-  hasFailed: PropTypes.bool,
-  hasSucceeded: PropTypes.bool,
+  submitFailed: PropTypes.bool,
+  submitSucceeded: PropTypes.bool,
   invalid: PropTypes.bool,
   handleSubmit: PropTypes.func.isRequired,
   push: PropTypes.func.isRequired,
   links: PropTypes.object,
   groups: ImmutablePropTypes.map,
+  groupsAccessor: PropTypes.func.isRequired,
   intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired
 };
 

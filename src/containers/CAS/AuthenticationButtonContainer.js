@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Authenticate, LoginFailed } from '../../components/buttons/CAS';
 import { openCASWindow } from '../../helpers/cas';
-import withLinks from '../../hoc/withLinks';
+import withLinks from '../../helpers/withLinks';
 import { absolute } from '../../links';
 
 class AuthenticationButtonContainer extends Component {

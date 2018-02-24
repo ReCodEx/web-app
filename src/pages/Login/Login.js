@@ -14,7 +14,7 @@ import CASLoginBox from '../../containers/CAS';
 import { login } from '../../redux/modules/auth';
 import { isLoggedIn } from '../../redux/selectors/auth';
 
-import withLinks from '../../hoc/withLinks';
+import withLinks from '../../helpers/withLinks';
 
 class Login extends Component {
   componentWillMount = () => {

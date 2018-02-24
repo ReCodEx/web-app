@@ -9,7 +9,7 @@ import {
 } from 'react-intl';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 
-import withLinks from '../../hoc/withLinks';
+import withLinks from '../../helpers/withLinks';
 import Page from '../../components/layout/Page';
 
 import { fetchReferenceSolutionsIfNeeded } from '../../redux/modules/referenceSolutions';

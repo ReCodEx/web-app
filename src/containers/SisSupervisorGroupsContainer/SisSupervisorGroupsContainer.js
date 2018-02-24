@@ -29,7 +29,7 @@ import SisCreateGroupForm from '../../components/forms/SisCreateGroupForm';
 import SisBindGroupForm from '../../components/forms/SisBindGroupForm';
 import { getGroupCanonicalLocalizedName } from '../../helpers/getLocalizedData';
 
-import withLinks from '../../hoc/withLinks';
+import withLinks from '../../helpers/withLinks';
 import './SisSupervisorGroupsContainer.css';
 
 const days = {

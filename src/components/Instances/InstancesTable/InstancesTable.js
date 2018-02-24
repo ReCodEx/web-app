@@ -6,7 +6,7 @@ import { Link } from 'react-router';
 import { MaybeSucceededIcon } from '../../icons';
 import UsersNameContainer from '../../../containers/UsersNameContainer';
 
-import withLinks from '../../../hoc/withLinks';
+import withLinks from '../../../helpers/withLinks';
 
 const InstancesTable = ({ instances, links: { INSTANCE_URI_FACTORY }, intl }) =>
   <Table hover>
