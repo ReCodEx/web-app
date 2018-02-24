@@ -2,7 +2,7 @@ import { handleActions } from 'redux-actions';
 import { change } from 'redux-form';
 
 import factory, { initialState } from '../helpers/resourceManager';
-import { encodeTestId } from './simpleLimits';
+import { encodeNumId } from '../../helpers/common';
 
 /**
  * Create actions & reducer
@@ -279,7 +279,7 @@ export const smartFillExerciseConfigForm = (
   files
 ) => (dispatch, getState) => {
   const state = getState();
-  const firstTestKey = encodeTestId(firstTestId);
+  const firstTestKey = encodeNumId(firstTestId);
   const template = getTestConfig(state, formName, firstTestKey);
   const transformations = prepareTransformations(
     template,
@@ -288,8 +288,8 @@ export const smartFillExerciseConfigForm = (
     files
   );
   return Promise.all(
-    tests.filter(({ id }) => encodeTestId(id) !== firstTestKey).map(test => {
-      const testKey = encodeTestId(test.id);
+    tests.filter(({ id }) => encodeNumId(id) !== firstTestKey).map(test => {
+      const testKey = encodeNumId(test.id);
       return Promise.all(
         [
           'inputStdin',

@@ -19,7 +19,7 @@ import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import { isSupervisorOf } from '../../redux/selectors/users';
 import { getLocalizedTextsLocales } from '../../helpers/getLocalizedData';
 
-import withLinks from '../../hoc/withLinks';
+import withLinks from '../../helpers/withLinks';
 
 class EditGroup extends Component {
   componentWillMount = () => this.props.loadAsync();

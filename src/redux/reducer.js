@@ -23,7 +23,6 @@ import groupExercises from './modules/groupExercises';
 import instances from './modules/instances';
 import licences from './modules/licences';
 import limits from './modules/limits';
-import simpleLimits from './modules/simpleLimits';
 import notifications from './modules/notifications';
 import { default as search } from './modules/search'; // because of a named export 'search'
 import sidebar from './modules/sidebar';
@@ -71,7 +70,6 @@ const createRecodexReducers = token => ({
   instances,
   licences,
   limits,
-  simpleLimits,
   notifications,
   search,
   sidebar,

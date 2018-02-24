@@ -18,15 +18,15 @@ class EditTestsForm extends Component {
       submitting,
       handleSubmit,
       reset,
-      hasFailed = false,
-      hasSucceeded = false,
+      submitFailed,
+      submitSucceeded,
       invalid,
       formValues
     } = this.props;
 
     return (
       <div>
-        {hasFailed &&
+        {submitFailed &&
           <Alert bsStyle="danger">
             <FormattedMessage
               id="app.editTestsForm.failed"
@@ -55,7 +55,7 @@ class EditTestsForm extends Component {
         <div className="text-center">
           {dirty &&
             !submitting &&
-            !hasSucceeded &&
+            !submitSucceeded &&
             <span>
               <Button
                 type="reset"
@@ -75,9 +75,9 @@ class EditTestsForm extends Component {
             id="editTests"
             invalid={invalid}
             submitting={submitting}
-            hasSucceeded={hasSucceeded}
+            hasSucceeded={submitSucceeded}
             dirty={dirty}
-            hasFailed={hasFailed}
+            hasFailed={submitFailed}
             handleSubmit={handleSubmit}
             messages={{
               submit: (
@@ -112,8 +112,8 @@ EditTestsForm.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
   dirty: PropTypes.bool,
   submitting: PropTypes.bool,
-  hasFailed: PropTypes.bool,
-  hasSucceeded: PropTypes.bool,
+  submitFailed: PropTypes.bool,
+  submitSucceeded: PropTypes.bool,
   invalid: PropTypes.bool,
   formValues: PropTypes.object
 };

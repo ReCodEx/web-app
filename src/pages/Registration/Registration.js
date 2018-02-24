@@ -19,7 +19,7 @@ import { fetchInstances } from '../../redux/modules/instances';
 import { publicInstancesSelector } from '../../redux/selectors/instances';
 import { hasSucceeded } from '../../redux/selectors/registration';
 
-import withLinks from '../../hoc/withLinks';
+import withLinks from '../../helpers/withLinks';
 
 class Register extends Component {
   componentWillMount = () => {

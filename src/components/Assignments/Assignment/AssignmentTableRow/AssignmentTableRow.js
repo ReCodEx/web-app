@@ -5,7 +5,7 @@ import AssignmentStatusIcon from '../AssignmentStatusIcon/AssignmentStatusIcon';
 import { FormattedDate, FormattedTime } from 'react-intl';
 
 import ResourceRenderer from '../../../helpers/ResourceRenderer';
-import withLinks from '../../../../hoc/withLinks';
+import withLinks from '../../../../helpers/withLinks';
 import { LocalizedExerciseName } from '../../../helpers/LocalizedNames';
 import { MaybeBonusAssignmentIcon } from '../../../icons';
 

@@ -14,9 +14,9 @@ const SisBindGroupForm = ({
   invalid,
   anyTouched,
   handleSubmit,
-  submitFailed: hasFailed,
+  submitFailed,
   submitting,
-  hasSucceeded,
+  submitSucceeded,
   groups,
   groupsAccessor,
   intl: { locale }
@@ -28,7 +28,7 @@ const SisBindGroupForm = ({
         defaultMessage="Bind existing ReCodEx group to SIS"
       />
     }
-    succeeded={hasSucceeded}
+    succeeded={submitSucceeded}
     dirty={anyTouched}
     footer={
       <div className="text-center">
@@ -37,8 +37,8 @@ const SisBindGroupForm = ({
           invalid={invalid}
           submitting={submitting}
           dirty={anyTouched}
-          hasSucceeded={hasSucceeded}
-          hasFailed={hasFailed}
+          hasSucceeded={submitSucceeded}
+          hasFailed={submitFailed}
           handleSubmit={handleSubmit}
           messages={{
             submit: (
@@ -64,7 +64,7 @@ const SisBindGroupForm = ({
       </div>
     }
   >
-    {hasFailed &&
+    {submitFailed &&
       <Alert bsStyle="danger">
         <FormattedMessage
           id="app.sisBindGroupForm.failed"
@@ -98,7 +98,7 @@ SisBindGroupForm.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
   invalid: PropTypes.bool,
   submitting: PropTypes.bool,
-  hasSucceeded: PropTypes.bool,
+  submitSucceeded: PropTypes.bool,
   submitFailed: PropTypes.bool,
   groups: PropTypes.array,
   groupsAccessor: PropTypes.func.isRequired,

@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect';
-import { List, Map } from 'immutable';
+import { EMPTY_LIST, EMPTY_MAP, EMPTY_ARRAY } from '../../helpers/common';
 
 import {
   studentOfGroupsIdsSelector,
@@ -12,8 +12,6 @@ import { isReady, getId, getJsData } from '../helpers/resourceManager';
  * Select groups part of the state
  */
 const getParam = (state, id) => id;
-const EMPTY_MAP = Map();
-const EMPTY_LIST = List();
 
 export const groupsSelector = state => state.groups.get('resources');
 
@@ -81,7 +79,7 @@ const usersOfGroup = (type, groupId) =>
     group =>
       group && isReady(group)
         ? group.getIn(['data', 'privateData', type])
-        : List()
+        : EMPTY_LIST
   );
 
 export const studentsOfGroup = groupId => usersOfGroup('students', groupId);
@@ -94,8 +92,8 @@ export const groupsAssignmentsIdsSelector = (id, type = 'public') =>
     groupSelector(id),
     group =>
       group && isReady(group)
-        ? group.getIn(['data', 'assignments', type]) || List()
-        : List()
+        ? group.getIn(['data', 'assignments', type]) || EMPTY_LIST
+        : EMPTY_LIST
   );
 
 export const groupsPublicAssignmentsSelector = createSelector(
@@ -127,7 +125,7 @@ const getGroupParentIds = (id, groups) => {
         )
       : [data.get('id')];
   } else {
-    return [];
+    return EMPTY_ARRAY;
   }
 };
 

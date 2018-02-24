@@ -7,7 +7,7 @@ import 'react-datetime/css/react-datetime.css';
 import { FormGroup, ControlLabel, HelpBlock } from 'react-bootstrap';
 import classNames from 'classnames';
 
-import withLinks from '../../../hoc/withLinks';
+import withLinks from '../../../helpers/withLinks';
 
 import styles from './commonStyles.less';
 

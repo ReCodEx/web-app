@@ -7,7 +7,7 @@ import { Tooltip, OverlayTrigger } from 'react-bootstrap';
 
 import FailedAvatar from '../Avatar/FailedAvatar';
 
-import withLinks from '../../../hoc/withLinks';
+import withLinks from '../../../helpers/withLinks';
 
 class Badge extends Component {
   state = { failedLoadingImage: false };

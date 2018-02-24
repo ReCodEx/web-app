@@ -58,15 +58,15 @@ class EditEnvironmentConfigForm extends Component {
       anyTouched,
       submitting,
       handleSubmit,
-      hasFailed = false,
-      hasSucceeded = false,
+      submitFailed,
+      submitSucceeded,
       invalid,
       formValues
     } = this.props;
 
     return (
       <div>
-        {hasFailed &&
+        {submitFailed &&
           <Alert bsStyle="danger">
             <FormattedMessage
               id="app.editEnvironmentConfigForm.failed"
@@ -89,9 +89,9 @@ class EditEnvironmentConfigForm extends Component {
             id="editEnvironmentConfig"
             invalid={invalid}
             submitting={submitting}
-            hasSucceeded={hasSucceeded}
+            hasSucceeded={submitSucceeded}
             dirty={anyTouched}
-            hasFailed={hasFailed}
+            hasFailed={submitFailed}
             handleSubmit={handleSubmit}
             messages={{
               submit: (
@@ -126,8 +126,8 @@ EditEnvironmentConfigForm.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
   anyTouched: PropTypes.bool,
   submitting: PropTypes.bool,
-  hasFailed: PropTypes.bool,
-  hasSucceeded: PropTypes.bool,
+  submitFailed: PropTypes.bool,
+  submitSucceeded: PropTypes.bool,
   invalid: PropTypes.bool,
   runtimeEnvironments: PropTypes.object,
   formValues: PropTypes.object

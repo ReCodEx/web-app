@@ -7,7 +7,7 @@ import Button from '../../widgets/FlatButton';
 import { LinkContainer } from 'react-router-bootstrap';
 import DeleteAssignmentButtonContainer from '../../../containers/DeleteAssignmentButtonContainer';
 
-import withLinks from '../../../hoc/withLinks';
+import withLinks from '../../../helpers/withLinks';
 import { LocalizedExerciseName } from '../../helpers/LocalizedNames';
 import {
   EditIcon,

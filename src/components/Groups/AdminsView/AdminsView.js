@@ -5,12 +5,11 @@ import { Row, Col } from 'react-bootstrap';
 import { getFormValues } from 'redux-form';
 import { connect } from 'react-redux';
 
+import { EMPTY_OBJ } from '../../../helpers/common';
 import Box from '../../widgets/Box';
 import AddSupervisor from '../AddSupervisor';
 import EditGroupForm from '../../forms/EditGroupForm';
 import { getLocalizedName } from '../../../helpers/getLocalizedData';
-
-const EMPTY_OBJECT = {};
 
 const AdminsView = ({ group, addSubgroup, formValues, intl: { locale } }) =>
   <div>
@@ -44,7 +43,7 @@ const AdminsView = ({ group, addSubgroup, formValues, intl: { locale } }) =>
       <Col md={6}>
         <EditGroupForm
           onSubmit={addSubgroup}
-          initialValues={EMPTY_OBJECT}
+          initialValues={EMPTY_OBJ}
           createNew
           collapsable
           isOpen={false}

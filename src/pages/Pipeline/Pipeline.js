@@ -23,7 +23,7 @@ import { fetchExercises } from '../../redux/modules/exercises';
 import { exercisesSelector } from '../../redux/selectors/exercises';
 
 import { createGraphFromNodes } from '../../helpers/pipelineGraph';
-import withLinks from '../../hoc/withLinks';
+import withLinks from '../../helpers/withLinks';
 import PipelineDetail from '../../components/Pipelines/PipelineDetail';
 import PipelineVisualisation from '../../components/Pipelines/PipelineVisualisation';
 

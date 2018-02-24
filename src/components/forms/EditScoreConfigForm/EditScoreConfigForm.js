@@ -11,12 +11,12 @@ const EditScoreConfigForm = ({
   anyTouched,
   submitting,
   handleSubmit,
-  hasFailed = false,
-  hasSucceeded = false,
+  submitFailed,
+  submitSucceeded,
   invalid
 }) =>
   <div>
-    {hasFailed &&
+    {submitFailed &&
       <Alert bsStyle="danger">
         <FormattedMessage
           id="app.editScoreConfigForm.failed"
@@ -41,9 +41,9 @@ const EditScoreConfigForm = ({
         id="editEnvironmentConfig"
         invalid={invalid}
         submitting={submitting}
-        hasSucceeded={hasSucceeded}
+        hasSucceeded={submitSucceeded}
         dirty={anyTouched}
-        hasFailed={hasFailed}
+        hasFailed={submitFailed}
         handleSubmit={handleSubmit}
         messages={{
           submit: (
@@ -73,8 +73,8 @@ EditScoreConfigForm.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
   anyTouched: PropTypes.bool,
   submitting: PropTypes.bool,
-  hasFailed: PropTypes.bool,
-  hasSucceeded: PropTypes.bool,
+  submitFailed: PropTypes.bool,
+  submitSucceeded: PropTypes.bool,
   invalid: PropTypes.bool
 };
 

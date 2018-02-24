@@ -5,7 +5,6 @@ import { FormattedMessage } from 'react-intl';
 import Button from '../../components/widgets/FlatButton';
 import { push } from 'react-router-redux';
 import { LinkContainer } from 'react-router-bootstrap';
-import { ButtonGroup } from 'react-bootstrap';
 import DeleteExerciseButtonContainer from '../../containers/DeleteExerciseButtonContainer';
 import SearchContainer from '../../containers/SearchContainer';
 
@@ -14,10 +13,9 @@ import Box from '../../components/widgets/Box';
 import { AddIcon, EditIcon } from '../../components/icons';
 import { fetchManyStatus } from '../../redux/selectors/exercises';
 import {
-  canEditExercise,
+  canLoggedUserEditExercise,
   isLoggedAsSuperAdmin
 } from '../../redux/selectors/users';
-import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import {
   fetchExercises,
   create as createExercise
@@ -26,7 +24,7 @@ import { searchExercises } from '../../redux/modules/search';
 import { getSearchQuery } from '../../redux/selectors/search';
 import ExercisesList from '../../components/Exercises/ExercisesList';
 import FetchManyResourceRenderer from '../../components/helpers/FetchManyResourceRenderer';
-import withLinks from '../../hoc/withLinks';
+import withLinks from '../../helpers/withLinks';
 
 class Exercises extends Component {
   static loadAsync = (params, dispatch) => dispatch(fetchExercises());
@@ -55,7 +53,8 @@ class Exercises extends Component {
       search,
       links: {
         EXERCISE_EDIT_URI_FACTORY,
-        EXERCISE_EDIT_SIMPLE_CONFIG_URI_FACTORY
+        EXERCISE_EDIT_SIMPLE_CONFIG_URI_FACTORY,
+        EXERCISE_EDIT_LIMITS_URI_FACTORY
       }
     } = this.props;
 
@@ -159,13 +158,13 @@ class Exercises extends Component {
                     exercises={exercises}
                     createActions={id =>
                       isAuthorOfExercise(id) &&
-                      <ButtonGroup>
+                      <div>
                         <LinkContainer to={EXERCISE_EDIT_URI_FACTORY(id)}>
                           <Button bsSize="xs" bsStyle="warning">
                             <EditIcon />{' '}
                             <FormattedMessage
                               id="app.exercises.listEdit"
-                              defaultMessage="Edit"
+                              defaultMessage="Settings"
                             />
                           </Button>
                         </LinkContainer>
@@ -176,16 +175,28 @@ class Exercises extends Component {
                             <EditIcon />{' '}
                             <FormattedMessage
                               id="app.exercises.listEditConfig"
-                              defaultMessage="Edit config"
+                              defaultMessage="Configuration"
                             />
                           </Button>
                         </LinkContainer>
+                        <LinkContainer
+                          to={EXERCISE_EDIT_LIMITS_URI_FACTORY(id)}
+                        >
+                          <Button bsSize="xs" bsStyle="warning">
+                            <EditIcon />{' '}
+                            <FormattedMessage
+                              id="app.exercises.listEditLimits"
+                              defaultMessage="Limits"
+                            />
+                          </Button>
+                        </LinkContainer>
+
                         <DeleteExerciseButtonContainer
                           id={id}
                           bsSize="xs"
                           onDeleted={() => search(query)}
                         />
-                      </ButtonGroup>}
+                      </div>}
                   />}
               />
             </Box>
@@ -210,13 +221,12 @@ Exercises.propTypes = {
 export default withLinks(
   connect(
     state => {
-      const userId = loggedInUserIdSelector(state);
       return {
         query: getSearchQuery('exercises-page')(state),
         fetchStatus: fetchManyStatus(state),
         isSuperAdmin: isLoggedAsSuperAdmin(state),
         isAuthorOfExercise: exerciseId =>
-          canEditExercise(userId, exerciseId)(state)
+          canLoggedUserEditExercise(exerciseId)(state)
       };
     },
     dispatch => ({

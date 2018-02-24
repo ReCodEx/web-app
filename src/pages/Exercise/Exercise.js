@@ -9,10 +9,11 @@ import {
   intlShape,
   injectIntl
 } from 'react-intl';
-import { Row, Col, ButtonGroup } from 'react-bootstrap';
+import { Row, Col } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 import Icon from 'react-fontawesome';
 
+import SupplementaryFilesTableContainer from '../../containers/SupplementaryFilesTableContainer/SupplementaryFilesTableContainer';
 import Button from '../../components/widgets/FlatButton';
 import Page from '../../components/layout/Page';
 import ExerciseDetail from '../../components/Exercises/ExerciseDetail';
@@ -31,7 +32,7 @@ import {
 } from '../../components/icons';
 import Confirm from '../../components/forms/Confirm';
 import PipelinesSimpleList from '../../components/Pipelines/PipelinesSimpleList';
-// import ForkExerciseForm from '../../components/forms/ForkExerciseForm';
+import ExerciseButtons from '../../components/Exercises/ExerciseButtons';
 import AssignExerciseButton from '../../components/buttons/AssignExerciseButton';
 
 import { isSubmitting } from '../../redux/selectors/submission';
@@ -48,7 +49,7 @@ import { fetchHardwareGroups } from '../../redux/modules/hwGroups';
 import { create as assignExercise } from '../../redux/modules/assignments';
 import { exerciseSelector } from '../../redux/selectors/exercises';
 import { referenceSolutionsSelector } from '../../redux/selectors/referenceSolutions';
-import { canEditExercise } from '../../redux/selectors/users';
+import { canLoggedUserEditExercise } from '../../redux/selectors/users';
 import {
   deletePipeline,
   fetchExercisePipelines,
@@ -63,8 +64,7 @@ import {
   groupsSelector
 } from '../../redux/selectors/groups';
 
-import withLinks from '../../hoc/withLinks';
-import SupplementaryFilesTableContainer from '../../containers/SupplementaryFilesTableContainer/SupplementaryFilesTableContainer';
+import withLinks from '../../helpers/withLinks';
 
 const messages = defineMessages({
   groupsBox: {
@@ -151,8 +151,6 @@ class Exercise extends Component {
     const {
       links: {
         EXERCISES_URI,
-        EXERCISE_EDIT_URI_FACTORY,
-        EXERCISE_EDIT_SIMPLE_CONFIG_URI_FACTORY,
         EXERCISE_REFERENCE_SOLUTION_URI_FACTORY,
         PIPELINE_EDIT_URI_FACTORY
       }
@@ -209,44 +207,8 @@ class Exercise extends Component {
               </Row>}
             <Row>
               <Col sm={12}>
-                {canEditExercise(exercise.id) &&
-                  <div>
-                    <ButtonGroup>
-                      <LinkContainer
-                        to={EXERCISE_EDIT_URI_FACTORY(exercise.id)}
-                      >
-                        <Button bsStyle="warning" bsSize="sm">
-                          <EditIcon />
-                          &nbsp;
-                          <FormattedMessage
-                            id="app.exercise.editSettings"
-                            defaultMessage="Edit exercise settings"
-                          />
-                        </Button>
-                      </LinkContainer>
-                      <LinkContainer
-                        to={EXERCISE_EDIT_SIMPLE_CONFIG_URI_FACTORY(
-                          exercise.id
-                        )}
-                      >
-                        <Button bsStyle="warning" bsSize="sm">
-                          <EditIcon />
-                          &nbsp;
-                          <FormattedMessage
-                            id="app.exercise.editConfig"
-                            defaultMessage="Edit exercise config"
-                          />
-                        </Button>
-                      </LinkContainer>
-                      {/* <ForkExerciseForm
-                        exerciseId={exercise.id}
-                        groups={groups}
-                        forkId={forkId}
-                        onSubmit={formData => forkExercise(forkId, formData)}
-                      /> */}
-                    </ButtonGroup>
-                  </div>}
-                <p />
+                {canEditExercise &&
+                  <ExerciseButtons exerciseId={exercise.id} />}
               </Col>
             </Row>
             <Row>
@@ -351,7 +313,7 @@ class Exercise extends Component {
                               >
                                 <DeleteIcon />{' '}
                                 <FormattedMessage
-                                  id="app.exercise.deleteButton"
+                                  id="generic.delete"
                                   defaultMessage="Delete"
                                 />
                               </Button>
@@ -426,7 +388,7 @@ class Exercise extends Component {
                                     >
                                       <DeleteIcon />{' '}
                                       <FormattedMessage
-                                        id="app.exercise.referenceSolution.deleteButton"
+                                        id="generic.delete"
                                         defaultMessage="Delete"
                                       />
                                     </Button>
@@ -479,7 +441,7 @@ Exercise.propTypes = {
   push: PropTypes.func.isRequired,
   exercise: ImmutablePropTypes.map,
   supervisedGroups: PropTypes.object,
-  canEditExercise: PropTypes.func.isRequired,
+  canEditExercise: PropTypes.bool.isRequired,
   referenceSolutions: ImmutablePropTypes.map,
   intl: intlShape.isRequired,
   submitting: PropTypes.bool,
@@ -493,38 +455,32 @@ Exercise.propTypes = {
 };
 
 export default withLinks(
-  injectIntl(
-    connect(
-      (state, { params: { exerciseId } }) => {
-        const userId = loggedInUserIdSelector(state);
+  connect(
+    (state, { params: { exerciseId } }) => {
+      const userId = loggedInUserIdSelector(state);
 
-        return {
-          userId,
-          exercise: exerciseSelector(exerciseId)(state),
-          submitting: isSubmitting(state),
-          supervisedGroups: supervisorOfSelector(userId)(state),
-          canEditExercise: exerciseId =>
-            canEditExercise(userId, exerciseId)(state),
-          referenceSolutions: referenceSolutionsSelector(exerciseId)(state),
-          exercisePipelines: exercisePipelinesSelector(exerciseId)(state),
-          groups: groupsSelector(state)
-        };
-      },
-      (dispatch, { params: { exerciseId } }) => ({
-        loadAsync: userId =>
-          Exercise.loadAsync({ exerciseId }, dispatch, userId),
-        assignExercise: groupId =>
-          dispatch(assignExercise(groupId, exerciseId)),
-        push: url => dispatch(push(url)),
-        initCreateReferenceSolution: userId =>
-          dispatch(init(userId, exerciseId)),
-        createExercisePipeline: () =>
-          dispatch(createPipeline({ exerciseId: exerciseId })),
-        deleteReferenceSolution: (exerciseId, solutionId) =>
-          dispatch(deleteReferenceSolution(exerciseId, solutionId)),
-        forkExercise: (forkId, data) =>
-          dispatch(forkExercise(exerciseId, forkId, data))
-      })
-    )(Exercise)
-  )
+      return {
+        userId,
+        exercise: exerciseSelector(exerciseId)(state),
+        submitting: isSubmitting(state),
+        supervisedGroups: supervisorOfSelector(userId)(state),
+        canEditExercise: canLoggedUserEditExercise(exerciseId)(state),
+        referenceSolutions: referenceSolutionsSelector(exerciseId)(state),
+        exercisePipelines: exercisePipelinesSelector(exerciseId)(state),
+        groups: groupsSelector(state)
+      };
+    },
+    (dispatch, { params: { exerciseId } }) => ({
+      loadAsync: userId => Exercise.loadAsync({ exerciseId }, dispatch, userId),
+      assignExercise: groupId => dispatch(assignExercise(groupId, exerciseId)),
+      push: url => dispatch(push(url)),
+      initCreateReferenceSolution: userId => dispatch(init(userId, exerciseId)),
+      createExercisePipeline: () =>
+        dispatch(createPipeline({ exerciseId: exerciseId })),
+      deleteReferenceSolution: (exerciseId, solutionId) =>
+        dispatch(deleteReferenceSolution(exerciseId, solutionId)),
+      forkExercise: (forkId, data) =>
+        dispatch(forkExercise(exerciseId, forkId, data))
+    })
+  )(injectIntl(Exercise))
 );

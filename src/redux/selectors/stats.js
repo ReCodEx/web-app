@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect';
-import { List } from 'immutable';
+import { EMPTY_LIST, EMPTY_OBJ } from '../../helpers/common';
 import { getJsData } from '../helpers/resourceManager';
 import { loggedInUserIdSelector } from './auth';
 
@@ -8,8 +8,6 @@ import { loggedInUserIdSelector } from './auth';
  */
 
 const getParam = (state, id) => id;
-const EMPTY_LIST = List();
-const EMPTY_OBJ = {};
 
 export const statisticsSelector = state => state.stats.get('resources');
 
@@ -29,7 +27,7 @@ export const getUsersStatistics = (groupId, userId) =>
 export const getStatuses = (groupId, userId) =>
   createSelector(
     getUsersStatistics(groupId, userId),
-    stats => (stats ? stats.statuses : {})
+    stats => (stats ? stats.statuses : EMPTY_OBJ)
   );
 
 export const getStatusesForLoggedUser = createSelector(

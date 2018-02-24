@@ -18,8 +18,8 @@ const EditAssignmentForm = ({
   anyTouched,
   submitting,
   handleSubmit,
-  submitFailed: hasFailed,
-  submitSucceeded: hasSucceeded,
+  submitFailed,
+  submitSucceeded,
   asyncValidating,
   invalid,
   firstDeadline,
@@ -35,7 +35,7 @@ const EditAssignmentForm = ({
           values={{ name: <LocalizedExerciseName entity={assignment} /> }}
         />
       }
-      successful={hasSucceeded}
+      successful={submitSucceeded}
       dirty={anyTouched}
       unlimitedHeight
       footer={
@@ -45,8 +45,8 @@ const EditAssignmentForm = ({
             invalid={invalid}
             submitting={submitting}
             dirty={anyTouched}
-            hasSucceeded={hasSucceeded}
-            hasFailed={hasFailed}
+            hasSucceeded={submitSucceeded}
+            hasFailed={submitFailed}
             handleSubmit={handleSubmit}
             asyncValidating={asyncValidating}
             messages={{
@@ -73,7 +73,7 @@ const EditAssignmentForm = ({
         </div>
       }
     >
-      {hasFailed &&
+      {submitFailed &&
         <Alert bsStyle="danger">
           <FormattedMessage
             id="app.editAssignmentForm.failed"

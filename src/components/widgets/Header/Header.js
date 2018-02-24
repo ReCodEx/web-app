@@ -8,7 +8,7 @@ import HeaderNotificationsContainer
 import HeaderLanguageSwitching from '../HeaderLanguageSwitching';
 import ClientOnly from '../../helpers/ClientOnly';
 
-import withLinks from '../../../hoc/withLinks';
+import withLinks from '../../../helpers/withLinks';
 
 class Header extends Component {
   toggleSidebarSize = e => {
