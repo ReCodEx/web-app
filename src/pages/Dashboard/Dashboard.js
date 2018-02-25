@@ -257,6 +257,7 @@ class Dashboard extends Component {
                                         </LinkContainer>
                                       </p>
                                     }
+                                    unlimitedHeight
                                   >
                                     <AssignmentsTable
                                       userId={user.id}
@@ -266,7 +267,7 @@ class Dashboard extends Component {
                                       showGroup={false}
                                       statuses={
                                         this.usersStatistics(statistics)
-                                          .statuses
+                                          .assignments
                                       }
                                     />
                                   </Box>

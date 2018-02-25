@@ -118,7 +118,13 @@ const AssignmentsTable = ({
             item={assignment}
             userId={userId}
             showGroup={showGroup}
-            status={statuses[assignment.id]}
+            status={
+              Array.isArray(statuses)
+                ? statuses.find(
+                    assignStatus => assignStatus.id === assignment.id
+                  ).status
+                : ''
+            }
             locale={locale}
             bestSubmission={bestSubmissions[assignment.id]}
           />

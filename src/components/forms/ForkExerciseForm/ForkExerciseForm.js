@@ -13,7 +13,7 @@ import { SuccessIcon } from '../../../components/icons';
 import { forkStatuses } from '../../../redux/modules/exercises';
 import { getFork } from '../../../redux/selectors/exercises';
 import ResourceRenderer from '../../helpers/ResourceRenderer';
-import { getLocalizedName } from '../../../helpers/getLocalizedData';
+import { getGroupCanonicalLocalizedName } from '../../../helpers/getLocalizedData';
 
 import withLinks from '../../../helpers/withLinks';
 
@@ -41,6 +41,7 @@ class ForkExerciseForm extends Component {
       submitSucceeded,
       invalid,
       groups,
+      groupsAccessor,
       intl: { locale }
     } = this.props;
 
@@ -70,7 +71,7 @@ class ForkExerciseForm extends Component {
                   defaultMessage="Saving failed. Please try again later."
                 />
               </Alert>}
-            <Form inline className="formSpace">
+            <Form inline className="forkForm">
               <ResourceRenderer resource={groups.toArray()}>
                 {(...groups) =>
                   <Field
@@ -79,12 +80,15 @@ class ForkExerciseForm extends Component {
                     label={''}
                     options={[{ key: '', name: '_Public_' }].concat(
                       groups
-                        .sort((a, b) => a.name.localeCompare(b.name, locale))
-                        .filter((item, pos, arr) => arr.indexOf(item) === pos)
                         .map(group => ({
                           key: group.id,
-                          name: getLocalizedName(group, locale)
+                          name: getGroupCanonicalLocalizedName(
+                            group,
+                            groupsAccessor,
+                            locale
+                          )
                         }))
+                        .sort((a, b) => a.name.localeCompare(b.name, locale))
                     )}
                   />}
               </ResourceRenderer>
@@ -140,6 +144,7 @@ ForkExerciseForm.propTypes = {
   push: PropTypes.func.isRequired,
   links: PropTypes.object,
   groups: ImmutablePropTypes.map,
+  groupsAccessor: PropTypes.func.isRequired,
   intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired
 };
 

@@ -3,10 +3,12 @@ import { EMPTY_LIST, EMPTY_MAP, EMPTY_ARRAY } from '../../helpers/common';
 
 import {
   studentOfGroupsIdsSelector,
-  supervisorOfGroupsIdsSelector
+  supervisorOfGroupsIdsSelector,
+  isLoggedAsSuperAdmin
 } from './users';
 import { getAssignments } from './assignments';
 import { isReady, getId, getJsData } from '../helpers/resourceManager';
+import { loggedInUserIdSelector } from './auth';
 
 /**
  * Select groups part of the state
@@ -72,6 +74,26 @@ export const adminOfSelector = userId =>
           group.privateData && group.privateData.admins.indexOf(userId) >= 0
       )
   );
+
+export const groupsUserCanEditSelector = createSelector(
+  [
+    loggedInUserIdSelector,
+    groupsSelector,
+    state => isLoggedAsSuperAdmin(state)
+  ],
+  (userId, groups, isSuperAdmin) =>
+    groups.filter(isReady).filter(group => {
+      if (isSuperAdmin) {
+        return true;
+      }
+      const groupData = getJsData(group);
+      return (
+        groupData.privateData &&
+        (groupData.privateData.supervisors.indexOf(userId) >= 0 ||
+          groupData.privateData.admins.indexOf(userId) >= 0)
+      );
+    })
+);
 
 const usersOfGroup = (type, groupId) =>
   createSelector(
