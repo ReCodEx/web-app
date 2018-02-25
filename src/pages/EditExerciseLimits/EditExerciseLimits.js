@@ -118,41 +118,6 @@ class EditExerciseLimits extends Component {
           true
         );
       };
-      /*
-      setExerciseHardwareGroups(
-        formData.hardwareGroup ? [formData.hardwareGroup] : []
-      ).then(
-        ({ value: exercise }) =>
-          limitsData
-            ? Promise.all(
-                exercise.hardwareGroups.map(({ id: hwgId }, idx) => {
-                  const constraints = getLimitsConstraints(
-                    exercise.hardwareGroups,
-                    limitsData.preciseTime
-                  );
-                  return Promise.all(
-                    transformLimitsValues(
-                      limitsData,
-                      tests,
-                      exerciseRuntimeEnvironments
-                    ).map(
-                      ({ id: envId, data }) =>
-                        validateLimitsSingleEnvironment(
-                          limitsData,
-                          envId,
-                          constraints
-                        )
-                          ? editEnvironmentLimits(hwgId, envId, data)
-                          : idx === 0
-                            ? fetchExerciseEnvironmentLimit(envId, hwgId)
-                            : Promise.resolve()
-                    )
-                  );
-                })
-              )
-            : Promise.resolve()
-      );
-    */
     }
   );
 
