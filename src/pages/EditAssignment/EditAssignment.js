@@ -120,7 +120,7 @@ class EditAssignment extends Component {
                   defaultMessage="Exercise"
                 />
               ),
-              link: EXERCISE_URI_FACTORY(assignment.exerciseId)
+              link: EXERCISE_URI_FACTORY(assignment && assignment.exerciseId)
             })
           },
           {
@@ -135,6 +135,7 @@ class EditAssignment extends Component {
         ]}
       >
         {assignment =>
+          assignment &&
           <div>
             <Row>
               <Col xs={12}>

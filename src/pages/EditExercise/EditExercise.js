@@ -60,7 +60,8 @@ class EditExercise extends Component {
     return (
       <Page
         resource={exercise}
-        title={exercise => <LocalizedExerciseName entity={exercise} />}
+        title={exercise =>
+          exercise ? <LocalizedExerciseName entity={exercise} /> : ''}
         description={
           <FormattedMessage
             id="app.editExercise.description"
@@ -70,13 +71,13 @@ class EditExercise extends Component {
         breadcrumbs={[
           {
             resource: exercise,
-            breadcrumb: ({ name, localizedTexts }) => ({
+            breadcrumb: exercise => ({
               text: (
                 <FormattedMessage
                   id="app.exercise.breadcrumbTitle"
                   defaultMessage="Exercise {name}"
                   values={{
-                    name: getLocalizedName({ name, localizedTexts }, locale)
+                    name: exercise ? getLocalizedName(exercise, locale) : ''
                   }}
                 />
               ),
@@ -96,6 +97,7 @@ class EditExercise extends Component {
         ]}
       >
         {exercise =>
+          exercise &&
           <div>
             {exercise.isBroken &&
               <Row>
