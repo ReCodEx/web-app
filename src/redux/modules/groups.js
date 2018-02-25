@@ -52,6 +52,7 @@ export const additionalActionTypes = {
 
 export const loadGroup = actions.pushResource;
 export const fetchGroupsIfNeeded = actions.fetchIfNeeded;
+export const fetchGroup = actions.fetchResource;
 export const fetchGroupIfNeeded = actions.fetchOneIfNeeded;
 
 export const validateAddGroup = (name, instanceId, parentGroupId = null) =>
@@ -230,7 +231,7 @@ const reducer = handleActions(
       state,
       { payload, meta: { groupId, userId } }
     ) =>
-      state.hasIn(['resources', groupId, 'data'])
+      state.hasIn(['resources', groupId, 'data', 'privateData', 'students'])
         ? state.updateIn(
             ['resources', groupId, 'data', 'privateData', 'students'],
             students => students.push(userId)
@@ -241,7 +242,7 @@ const reducer = handleActions(
       state,
       { payload, meta: { groupId, userId } }
     ) =>
-      state.hasIn(['resources', groupId, 'data'])
+      state.hasIn(['resources', groupId, 'data', 'privateData', 'students'])
         ? state.updateIn(
             ['resources', groupId, 'data', 'privateData', 'students'],
             students => students.filter(id => id !== userId)
