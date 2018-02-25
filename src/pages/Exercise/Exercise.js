@@ -70,9 +70,8 @@ import {
 
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import {
-  supervisorOfSelector,
-  groupsSelector,
-  groupDataAccessorSelector
+  groupDataAccessorSelector,
+  groupsUserCanEditSelector
 } from '../../redux/selectors/groups';
 
 import withLinks from '../../helpers/withLinks';
@@ -104,14 +103,9 @@ class Exercise extends Component {
       dispatch(fetchHardwareGroups()),
       dispatch(fetchExercisePipelines(exerciseId)),
       dispatch(fetchUsersGroupsIfNeeded(userId)),
-      dispatch(fetchUser(userId))
-        .then(res => res.value)
-        .then(
-          data =>
-            data.privateData.role === 'superadmin'
-              ? dispatch(fetchInstanceGroups(data.privateData.instanceId))
-              : Promise.resolve()
-        )
+      dispatch(fetchUser(userId)).then(({ value: data }) =>
+        dispatch(fetchInstanceGroups(data.privateData.instanceId))
+      )
     ]);
 
   componentWillMount() {
@@ -493,7 +487,6 @@ Exercise.propTypes = {
   editAssignment: PropTypes.func.isRequired,
   push: PropTypes.func.isRequired,
   exercise: ImmutablePropTypes.map,
-  supervisedGroups: PropTypes.object,
   canEditExercise: PropTypes.bool.isRequired,
   referenceSolutions: ImmutablePropTypes.map,
   intl: intlShape.isRequired,
@@ -522,11 +515,10 @@ export default withLinks(
         userId,
         exercise: exerciseSelector(exerciseId)(state),
         submitting: isSubmitting(state),
-        supervisedGroups: supervisorOfSelector(userId)(state),
         canEditExercise: canLoggedUserEditExercise(exerciseId)(state),
         referenceSolutions: referenceSolutionsSelector(exerciseId)(state),
         exercisePipelines: exercisePipelinesSelector(exerciseId)(state),
-        groups: groupsSelector(state),
+        groups: groupsUserCanEditSelector(state),
         groupsAccessor: groupDataAccessorSelector(state),
         isSuperAdmin: isLoggedAsSuperAdmin(state),
         firstDeadline: editMultiAssignFormSelector(state, 'firstDeadline'),

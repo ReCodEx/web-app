@@ -39,9 +39,9 @@ const MultiAssignForm = ({
           locale
         )
       )
-      .map(group =>
+      .map((group, i) =>
         <Field
-          key={group.id}
+          key={i}
           name={`groups.${group.id}`}
           component={CheckboxField}
           onOff
