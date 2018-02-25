@@ -99,6 +99,10 @@ class SubmissionDetail extends Component {
                   </a>
                 </Col>
               )}
+              {files.length > 1 &&
+                <Col lg={6} md={12}>
+                  <DownloadSolutionArchiveContainer solutionId={id} />
+                </Col>}
             </Row>
             {evaluation &&
               <CompilationLogs
@@ -137,9 +141,6 @@ class SubmissionDetail extends Component {
                 <Row>
                   <Col lg={6} md={12}>
                     <DownloadResultArchiveContainer submissionId={restSub.id} />
-                  </Col>
-                  <Col lg={6} md={12}>
-                    <DownloadSolutionArchiveContainer solutionId={id} />
                   </Col>
                 </Row>}
               {activeSubmissionId &&

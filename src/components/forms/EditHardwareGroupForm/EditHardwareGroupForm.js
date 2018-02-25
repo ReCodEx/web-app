@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { reduxForm, Field } from 'redux-form';
 import { Alert } from 'react-bootstrap';
-import isInt from 'validator/lib/isInt';
+import Icon from 'react-fontawesome';
+
 import FormBox from '../../widgets/FormBox';
 import SubmitButton from '../SubmitButton';
 import Button from '../../widgets/FlatButton';
@@ -72,6 +73,14 @@ const EditHardwareGroupForm = ({
       </div>
     }
   >
+    <p className="text-muted text-justify small">
+      <Icon name="info-circle" />&nbsp;&nbsp;
+      <FormattedMessage
+        id="app.editHardwareGroupForm.about"
+        defaultMessage="Hardware group is a group of backend workers on which the exercise can be evaluated. The workers are bound to explicit hardware; thus, changing the hardware group of an exercise may affect the performance results. Furthermore, the workers in the group share configuration which implies the constraints for memory and time limits."
+      />
+    </p>
+
     {submitFailed &&
       <Alert bsStyle="danger">
         <FormattedMessage
@@ -107,16 +116,17 @@ EditHardwareGroupForm.propTypes = {
   invalid: PropTypes.bool,
   reset: PropTypes.func.isRequired,
   hardwareGroups: PropTypes.array.isRequired,
-  addEmptyOption: PropTypes.bool
+  addEmptyOption: PropTypes.bool,
+  warnDropLimits: PropTypes.func.isRequired
 };
 
-const validate = ({ bonusPoints }) => {
+const validate = ({ hardwareGroup }) => {
   const errors = {};
-  if (!isInt(String(bonusPoints))) {
-    errors['bonusPoints'] = (
+  if (!hardwareGroup) {
+    errors['hardwareGroup'] = (
       <FormattedMessage
-        id="app.bonusPointsForm.validation.points"
-        defaultMessage="The bonus must be an integer."
+        id="app.editHardwareGroupForm.validationFailed"
+        defaultMessage="Hardware group must be selected."
       />
     );
   }
@@ -124,9 +134,23 @@ const validate = ({ bonusPoints }) => {
   return errors;
 };
 
+const warn = ({ hardwareGroup }, { warnDropLimits }) => {
+  const warnings = {};
+  if (warnDropLimits(hardwareGroup)) {
+    warnings['hardwareGroup'] = (
+      <FormattedMessage
+        id="app.editHardwareGroupForm.warnLimitsDrop"
+        defaultMessage="Limits of some environments do not meet the constraints of the selected hardware group. These limits will be removed when the hardware group is changed."
+      />
+    );
+  }
+  return warnings;
+};
+
 export default reduxForm({
   form: 'editHardwareGroup',
   enableReinitialize: true,
   keepDirtyOnReinitialize: false,
-  validate
+  validate,
+  warn
 })(EditHardwareGroupForm);

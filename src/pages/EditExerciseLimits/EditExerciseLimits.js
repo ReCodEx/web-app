@@ -79,6 +79,48 @@ class EditExerciseLimits extends Component {
       dispatch(fetchExerciseTestsIfNeeded(exerciseId))
     ]);
 
+  doesHardwareGroupChangeDropLimits = defaultMemoize(
+    (
+      exerciseId,
+      currentHwGroupId,
+      limits,
+      tests,
+      exerciseRuntimeEnvironments,
+      hardwareGroups
+    ) => {
+      const limitsData =
+        currentHwGroupId &&
+        getLimitsInitValues(
+          limits,
+          tests,
+          exerciseRuntimeEnvironments,
+          exerciseId,
+          currentHwGroupId
+        );
+
+      return targetHwGroupId => {
+        if (!targetHwGroupId || targetHwGroupId === currentHwGroupId) {
+          return false;
+        }
+        const constraints = getLimitsConstraints(
+          hardwareGroups.filter(h => h.id === targetHwGroupId),
+          limitsData.preciseTime
+        );
+
+        return !transformLimitsValues(
+          limitsData,
+          tests,
+          exerciseRuntimeEnvironments
+        ).reduce(
+          (acc, { id: envId, data }) =>
+            acc &&
+            validateLimitsSingleEnvironment(limitsData, envId, constraints),
+          true
+        );
+      };
+    }
+  );
+
   transformAndSendHardwareGroups = defaultMemoize(
     (exerciseId, hwGroupId, limits, tests, exerciseRuntimeEnvironments) => {
       const {
@@ -274,6 +316,15 @@ class EditExerciseLimits extends Component {
                         !exercise.hardwareGroups ||
                         exercise.hardwareGroups.length !== 1
                       }
+                      warnDropLimits={this.doesHardwareGroupChangeDropLimits(
+                        exercise.id,
+                        exercise.hardwareGroups &&
+                          exercise.hardwareGroups[0].id,
+                        limits,
+                        tests,
+                        exercise.runtimeEnvironments,
+                        hwgs
+                      )}
                       onSubmit={this.transformAndSendHardwareGroups(
                         exercise.id,
                         exercise.hardwareGroups &&
