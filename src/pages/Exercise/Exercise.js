@@ -267,7 +267,8 @@ class Exercise extends Component {
                   {exercise.localizedTexts.length > 0 &&
                     <LocalizedTexts locales={exercise.localizedTexts} />}
                 </div>
-                {!exercise.isBroken &&
+                {isSuperAdmin &&
+                  !exercise.isBroken &&
                   !exercise.isLocked &&
                   <Box
                     title={formatMessage(messages.groupsBox)}
