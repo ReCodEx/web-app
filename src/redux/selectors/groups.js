@@ -100,7 +100,7 @@ const usersOfGroup = (type, groupId) =>
     groupSelector(groupId),
     group =>
       group && isReady(group)
-        ? group.getIn(['data', 'privateData', type])
+        ? group.getIn(['data', 'privateData', type], EMPTY_LIST)
         : EMPTY_LIST
   );
 
@@ -114,7 +114,7 @@ export const groupsAssignmentsIdsSelector = (id, type = 'public') =>
     groupSelector(id),
     group =>
       group && isReady(group)
-        ? group.getIn(['data', 'assignments', type]) || EMPTY_LIST
+        ? group.getIn(['data', 'assignments', type], EMPTY_LIST)
         : EMPTY_LIST
   );
 

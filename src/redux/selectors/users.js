@@ -212,7 +212,7 @@ export const notificationsSelector = createSelector(
   loggedInUserSelector,
   user =>
     user && user.get('data') && user.getIn(['data', 'groupsStats'])
-      ? user.getIn(['data', 'groupsStats']).reduce(
+      ? user.getIn(['data', 'groupsStats'], EMPTY_LIST).reduce(
           (notifications, group) =>
             Object.assign({}, notifications, {
               [group.id]:
