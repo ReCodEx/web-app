@@ -318,7 +318,7 @@ class EditExerciseLimits extends Component {
                       }
                       warnDropLimits={this.doesHardwareGroupChangeDropLimits(
                         exercise.id,
-                        exercise.hardwareGroups &&
+                        exercise.hardwareGroups.length > 0 &&
                           exercise.hardwareGroups[0].id,
                         limits,
                         tests,
@@ -327,7 +327,7 @@ class EditExerciseLimits extends Component {
                       )}
                       onSubmit={this.transformAndSendHardwareGroups(
                         exercise.id,
-                        exercise.hardwareGroups &&
+                        exercise.hardwareGroups.length > 0 &&
                           exercise.hardwareGroups[0].id,
                         limits,
                         tests,

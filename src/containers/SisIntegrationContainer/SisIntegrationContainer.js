@@ -140,9 +140,26 @@ class SisIntegrationContainer extends Component {
                                             )}
                                           </td>
                                           <td>
-                                            <code>
-                                              {group.sisCode}
-                                            </code>
+                                            {group.sisCode &&
+                                            Array.isArray(group.sisCode)
+                                              ? <span>
+                                                  {group.sisCode
+                                                    .sort(
+                                                      (a, b) =>
+                                                        a.localeCompare(b) // locales intentionally ommited
+                                                    )
+                                                    .map((c, idx) =>
+                                                      <span key="{c}">
+                                                        {idx > 0 ? ', ' : ''}
+                                                        <code>
+                                                          {c}
+                                                        </code>
+                                                      </span>
+                                                    )}
+                                                </span>
+                                              : <code>
+                                                  {group.sisCode}
+                                                </code>}
                                           </td>
                                           <td>
                                             {group.primaryAdminsIds.map(id =>
