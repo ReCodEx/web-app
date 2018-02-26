@@ -135,7 +135,9 @@ class Exercise extends Component {
     let actions = [];
 
     for (const groupId of groups) {
-      assignExercise(groupId).then(({ value: assigment }) => {
+      const groupPromise = assignExercise(
+        groupId
+      ).then(({ value: assigment }) => {
         let assignmentData = Object.assign({}, assigment, formData, {
           firstDeadline: moment(formData.firstDeadline).unix(),
           secondDeadline: moment(formData.secondDeadline).unix(),
@@ -150,6 +152,7 @@ class Exercise extends Component {
 
         return editAssignment(assigment.id, assignmentData);
       });
+      actions.push(groupPromise);
     }
 
     return Promise.all(actions);

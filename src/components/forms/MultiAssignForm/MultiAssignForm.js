@@ -15,8 +15,8 @@ const MultiAssignForm = ({
   handleSubmit,
   submitFailed: hasFailed,
   submitSucceeded: hasSucceeded,
-  asyncValidating,
   invalid,
+  reset,
   firstDeadline,
   allowSecondDeadline,
   groups,
@@ -175,8 +175,7 @@ const MultiAssignForm = ({
         dirty={anyTouched}
         hasSucceeded={hasSucceeded}
         hasFailed={hasFailed}
-        handleSubmit={handleSubmit}
-        asyncValidating={asyncValidating}
+        handleSubmit={data => handleSubmit(data).then(() => reset())}
         messages={{
           submit: (
             <FormattedMessage
@@ -209,8 +208,8 @@ MultiAssignForm.propTypes = {
   submitting: PropTypes.bool,
   submitFailed: PropTypes.bool,
   submitSucceeded: PropTypes.bool,
-  asyncValidating: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
   invalid: PropTypes.bool,
+  reset: PropTypes.func.isRequired,
   firstDeadline: PropTypes.oneOfType([PropTypes.number, PropTypes.object]), // object == moment.js instance
   allowSecondDeadline: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
   groups: PropTypes.array.isRequired,
@@ -344,7 +343,6 @@ const validate = ({
 
 export default reduxForm({
   form: 'multiAssign',
-  validate,
   enableReinitialize: true,
-  keepDirtyOnReinitialize: false
+  validate
 })(MultiAssignForm);
