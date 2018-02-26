@@ -140,9 +140,20 @@ class SisIntegrationContainer extends Component {
                                             )}
                                           </td>
                                           <td>
-                                            <code>
-                                              {group.sisCode}
-                                            </code>
+                                            {group.sisCode &&
+                                            Array.isArray(group.sisCode)
+                                              ? <span>
+                                                  {group.sisCode
+                                                    .map(c =>
+                                                      <code key="{c}">
+                                                        {c}
+                                                      </code>
+                                                    )
+                                                    .join(', ')}
+                                                </span>
+                                              : <code>
+                                                  {group.sisCode}
+                                                </code>}
                                           </td>
                                           <td>
                                             {group.primaryAdminsIds.map(id =>
