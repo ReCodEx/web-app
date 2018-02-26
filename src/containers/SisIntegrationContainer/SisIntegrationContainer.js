@@ -144,12 +144,18 @@ class SisIntegrationContainer extends Component {
                                             Array.isArray(group.sisCode)
                                               ? <span>
                                                   {group.sisCode
-                                                    .map(c =>
-                                                      <code key="{c}">
-                                                        {c}
-                                                      </code>
+                                                    .sort(
+                                                      (a, b) =>
+                                                        a.localeCompare(b) // locales intentionally ommited
                                                     )
-                                                    .join(', ')}
+                                                    .map((c, idx) =>
+                                                      <span key="{c}">
+                                                        {idx > 0 ? ', ' : ''}
+                                                        <code>
+                                                          {c}
+                                                        </code>
+                                                      </span>
+                                                    )}
                                                 </span>
                                               : <code>
                                                   {group.sisCode}
