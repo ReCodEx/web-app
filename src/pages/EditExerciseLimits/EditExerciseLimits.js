@@ -99,7 +99,11 @@ class EditExerciseLimits extends Component {
         );
 
       return targetHwGroupId => {
-        if (!targetHwGroupId || targetHwGroupId === currentHwGroupId) {
+        if (
+          !targetHwGroupId ||
+          !currentHwGroupId ||
+          targetHwGroupId === currentHwGroupId
+        ) {
           return false;
         }
         const constraints = getLimitsConstraints(
