@@ -49,6 +49,7 @@ export const additionalActionTypes = {
 export const loadSubmissionData = actions.pushResource;
 export const fetchSubmission = actions.fetchResource;
 export const fetchSubmissionIfNeeded = actions.fetchOneIfNeeded;
+export const deleteSubmission = actions.removeResource;
 
 export const setPoints = (submissionId, bonusPoints) =>
   createApiAction({

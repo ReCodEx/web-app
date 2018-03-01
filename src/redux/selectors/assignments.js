@@ -37,6 +37,8 @@ export const getUserSubmissions = (userId, assignmentId) =>
         return EMPTY_LIST;
       }
 
-      return assignmentSubmissions.map(id => submissions.get(id));
+      return assignmentSubmissions
+        .map(id => submissions.get(id))
+        .filter(a => a);
     }
   );

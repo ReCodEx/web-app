@@ -112,6 +112,14 @@ export const isLoggedAsSuperAdmin = createSelector(
       : false
 );
 
+export const isLoggedAsSupervisor = createSelector(
+  [loggedInUserSelector],
+  loggedInUser =>
+    loggedInUser && isReady(loggedInUser)
+      ? loggedInUser.getIn(['data', 'privateData', 'role']) === 'supervisor'
+      : false
+);
+
 export const memberOfInstancesIdsSelector = userId =>
   createSelector(
     getUser(userId),

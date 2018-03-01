@@ -7,6 +7,10 @@ import { List } from 'immutable';
 import { fetchUsersSubmissions } from '../../redux/modules/submissions';
 import SubmissionsTable from '../../components/Assignments/SubmissionsTable';
 import { getUserSubmissions } from '../../redux/selectors/assignments';
+import {
+  isLoggedAsSuperAdmin,
+  isLoggedAsSupervisor
+} from '../../redux/selectors/users';
 
 class SubmissionsTableContainer extends Component {
   componentWillMount = () => this.props.loadAsync();
@@ -40,7 +44,9 @@ class SubmissionsTableContainer extends Component {
           defaultMessage="Submitted solutions"
         />
       ),
-      noteMaxlen = 32
+      noteMaxlen = 32,
+      superadmin,
+      supervisor
     } = this.props;
 
     return (
@@ -51,6 +57,7 @@ class SubmissionsTableContainer extends Component {
         assignmentId={assignmentId}
         runtimeEnvironments={runtimeEnvironments}
         noteMaxlen={noteMaxlen}
+        canDelete={superadmin || supervisor}
       />
     );
   }
@@ -63,14 +70,18 @@ SubmissionsTableContainer.propTypes = {
   submissions: PropTypes.instanceOf(List),
   runtimeEnvironments: PropTypes.array,
   noteMaxlen: PropTypes.number,
-  loadAsync: PropTypes.func.isRequired
+  loadAsync: PropTypes.func.isRequired,
+  superadmin: PropTypes.bool,
+  supervisor: PropTypes.bool
 };
 
 export default connect(
   (state, { userId, assignmentId }) => {
     return {
       userId,
-      submissions: getUserSubmissions(userId, assignmentId)(state)
+      submissions: getUserSubmissions(userId, assignmentId)(state),
+      superadmin: isLoggedAsSuperAdmin(state),
+      supervisor: isLoggedAsSupervisor(state)
     };
   },
   (dispatch, { userId, assignmentId }) => ({
