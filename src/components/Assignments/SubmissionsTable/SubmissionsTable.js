@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { List } from 'immutable';
 import { FormattedMessage } from 'react-intl';
 import { OverlayTrigger, Tooltip, Table } from 'react-bootstrap';
+import { Link } from 'react-router';
 
 import Box from '../../widgets/Box';
 import withLinks from '../../../helpers/withLinks';
@@ -10,11 +11,9 @@ import withLinks from '../../../helpers/withLinks';
 import ResourceRenderer from '../../helpers/ResourceRenderer';
 import LoadingSubmissionTableRow from './LoadingSubmissionTableRow';
 import NoSolutionYetTableRow from './NoSolutionYetTableRow';
-import SuccessfulSubmissionTableRow from './SuccessfulSubmissionTableRow';
-import FailedSubmissionTableRow from './FailedSubmissionTableRow';
 import FailedLoadingSubmissionTableRow from './FailedLoadingSubmissionTableRow';
-import NotEvaluatedSubmissionTableRow from './NotEvaluatedSubmissionTableRow';
-import EvaluationFailedTableRow from './EvaluationFailedTableRow';
+import SubmissionTableRow from './SubmissionTableRow';
+import DeleteSubmissionButtonContainer from '../../../containers/DeleteSubmissionButtonContainer/DeleteSubmissionButtonContainer';
 
 const SubmissionsTable = ({
   title,
@@ -22,6 +21,7 @@ const SubmissionsTable = ({
   submissions,
   runtimeEnvironments,
   noteMaxlen = 32,
+  canDelete,
   links: { SUBMISSION_DETAIL_URI_FACTORY }
 }) =>
   <Box title={title} collapsable isOpen noPadding unlimitedHeight>
@@ -96,54 +96,34 @@ const SubmissionsTable = ({
                       </span>
                     </OverlayTrigger>;
 
-              switch (data.lastSubmission
-                ? data.lastSubmission.evaluationStatus
-                : null) {
-                case 'done':
-                  return (
-                    <SuccessfulSubmissionTableRow
-                      {...data}
-                      key={id}
-                      link={link}
-                      runtimeEnvironment={runtimeEnvironment}
-                      note={note}
-                    />
-                  );
-                case 'failed':
-                  return (
-                    <FailedSubmissionTableRow
-                      {...data}
-                      key={id}
-                      link={link}
-                      runtimeEnvironment={runtimeEnvironment}
-                      note={note}
-                    />
-                  );
-                case null:
-                case 'work-in-progress':
-                  return (
-                    <NotEvaluatedSubmissionTableRow
-                      {...data}
-                      key={id}
-                      link={link}
-                      lastSubmission={data.lastSubmission}
-                      runtimeEnvironment={runtimeEnvironment}
-                      note={note}
-                    />
-                  );
-                case 'evaluation-failed':
-                  return (
-                    <EvaluationFailedTableRow
-                      {...data}
-                      key={id}
-                      link={link}
-                      runtimeEnvironment={runtimeEnvironment}
-                      note={note}
-                    />
-                  );
-                default:
-                  return null;
-              }
+              return (
+                <SubmissionTableRow
+                  key={id}
+                  id={id}
+                  status={
+                    data.lastSubmission
+                      ? data.lastSubmission.evaluationStatus
+                      : null
+                  }
+                  runtimeEnvironment={runtimeEnvironment}
+                  note={note}
+                  {...data}
+                  renderButtons={id =>
+                    <div>
+                      <Link
+                        to={link}
+                        className="btn btn-flat btn-default btn-xs"
+                      >
+                        <FormattedMessage
+                          id="app.submissionsTable.showDetails"
+                          defaultMessage="Show details"
+                        />
+                      </Link>
+                      {canDelete &&
+                        <DeleteSubmissionButtonContainer id={id} bsSize="xs" />}
+                    </div>}
+                />
+              );
             })}
           </tbody>}
       </ResourceRenderer>
@@ -164,6 +144,7 @@ SubmissionsTable.propTypes = {
   submissions: PropTypes.instanceOf(List),
   runtimeEnvironments: PropTypes.array,
   noteMaxlen: PropTypes.number,
+  canDelete: PropTypes.bool,
   links: PropTypes.object
 };
 
