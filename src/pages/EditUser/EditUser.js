@@ -11,7 +11,7 @@ import {
   updateSettings,
   makeLocalLogin
 } from '../../redux/modules/users';
-import { getUser } from '../../redux/selectors/users';
+import { getUser, isLoggedAsSuperAdmin } from '../../redux/selectors/users';
 import Page from '../../components/layout/Page';
 import Button from '../../components/widgets/FlatButton';
 import { LocalIcon } from '../../components/icons';
@@ -33,8 +33,17 @@ class EditUser extends Component {
     }
   }
 
+  updateProfile(data, changeNames) {
+    const { updateProfile } = this.props;
+    if (!changeNames) {
+      delete data['firstName'];
+      delete data['lastName'];
+    }
+    return updateProfile(data);
+  }
+
   render() {
-    const { user, updateProfile, updateSettings, makeLocalLogin } = this.props;
+    const { user, updateSettings, makeLocalLogin, isSuperAdmin } = this.props;
     return (
       <Page
         resource={user}
@@ -80,14 +89,24 @@ class EditUser extends Component {
             <Row>
               <Col lg={6}>
                 <EditUserProfileForm
-                  onSubmit={updateProfile}
+                  onSubmit={formData =>
+                    this.updateProfile(
+                      formData,
+                      isSuperAdmin || !data.privateData.isExternal
+                    )}
                   initialValues={{
-                    ...data,
+                    firstName: data.name.firstName,
+                    lastName: data.name.lastName,
+                    degreesBeforeName: data.name.degreesBeforeName,
+                    degreesAfterName: data.name.degreesAfterName,
                     email: data.privateData.email,
                     passwordStrength: null
                   }}
                   allowChangePassword={data.privateData.isLocal}
                   emptyLocalPassword={data.privateData.emptyLocalPassword}
+                  disabledNameChange={
+                    data.privateData.isExternal && !isSuperAdmin
+                  }
                 />
               </Col>
               <Col lg={6}>
@@ -109,18 +128,19 @@ EditUser.propTypes = {
   loadAsync: PropTypes.func.isRequired,
   updateProfile: PropTypes.func.isRequired,
   updateSettings: PropTypes.func.isRequired,
-  makeLocalLogin: PropTypes.func.isRequired
+  makeLocalLogin: PropTypes.func.isRequired,
+  isSuperAdmin: PropTypes.bool.isRequired
 };
 
 export default connect(
   (state, { params: { userId } }) => ({
-    user: getUser(userId)(state)
+    user: getUser(userId)(state),
+    isSuperAdmin: isLoggedAsSuperAdmin(state)
   }),
   (dispatch, { params: { userId } }) => ({
     loadAsync: () => EditUser.loadAsync({ userId }, dispatch),
     updateSettings: data => dispatch(updateSettings(userId, data)),
-    updateProfile: ({ name, ...data }) =>
-      dispatch(updateProfile(userId, { ...name, ...data })),
+    updateProfile: data => dispatch(updateProfile(userId, data)),
     makeLocalLogin: () => dispatch(makeLocalLogin(userId))
   })
 )(EditUser);

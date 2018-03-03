@@ -22,6 +22,7 @@ const EditUserProfileForm = ({
   invalid,
   allowChangePassword,
   emptyLocalPassword,
+  disabledNameChange,
   reset
 }) =>
   <FormBox
@@ -77,10 +78,11 @@ const EditUserProfileForm = ({
       </Alert>}
 
     <Field
-      name="name.firstName"
+      name="firstName"
       tabIndex={1}
       component={TextField}
       required
+      disabled={disabledNameChange}
       label={
         <FormattedMessage
           id="app.editUserProfile.firstName"
@@ -90,10 +92,11 @@ const EditUserProfileForm = ({
     />
 
     <Field
-      name="name.lastName"
+      name="lastName"
       tabIndex={2}
       component={TextField}
       required
+      disabled={disabledNameChange}
       label={
         <FormattedMessage
           id="app.editUserProfile.lastName"
@@ -103,7 +106,7 @@ const EditUserProfileForm = ({
     />
 
     <Field
-      name="name.degreesBeforeName"
+      name="degreesBeforeName"
       tabIndex={3}
       component={TextField}
       required
@@ -116,7 +119,7 @@ const EditUserProfileForm = ({
     />
 
     <Field
-      name="name.degreesAfterName"
+      name="degreesAfterName"
       tabIndex={4}
       component={TextField}
       required
@@ -235,7 +238,8 @@ EditUserProfileForm.propTypes = {
   pristine: PropTypes.bool,
   reset: PropTypes.func,
   allowChangePassword: PropTypes.bool.isRequired,
-  emptyLocalPassword: PropTypes.bool.isRequired
+  emptyLocalPassword: PropTypes.bool.isRequired,
+  disabledNameChange: PropTypes.bool
 };
 
 const validate = (
@@ -356,5 +360,6 @@ export default reduxForm({
   form: 'edit-user-profile',
   validate,
   asyncValidate,
-  asyncBlurFields: ['email', 'password', 'passwordConfirm']
+  asyncBlurFields: ['email', 'password', 'passwordConfirm'],
+  enableReinitialize: true
 })(EditUserProfileForm);
