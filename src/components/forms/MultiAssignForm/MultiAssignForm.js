@@ -10,7 +10,7 @@ import SubmitButton from '../SubmitButton';
 import { getGroupCanonicalLocalizedName } from '../../../helpers/getLocalizedData';
 
 const MultiAssignForm = ({
-  anyTouched,
+  dirty,
   submitting,
   handleSubmit,
   submitFailed: hasFailed,
@@ -41,8 +41,8 @@ const MultiAssignForm = ({
       )
       .map((group, i) =>
         <Field
-          key={i}
-          name={`groups.${group.id}`}
+          key={group.id}
+          name={`groups.id${group.id}`}
           component={CheckboxField}
           onOff
           label={getGroupCanonicalLocalizedName(group, groupsAccessor, locale)}
@@ -172,7 +172,7 @@ const MultiAssignForm = ({
         id="multiAssignForm"
         invalid={invalid}
         submitting={submitting}
-        dirty={anyTouched}
+        dirty={dirty}
         hasSucceeded={hasSucceeded}
         hasFailed={hasFailed}
         handleSubmit={data => handleSubmit(data).then(() => reset())}
@@ -180,13 +180,13 @@ const MultiAssignForm = ({
           submit: (
             <FormattedMessage
               id="app.multiAssignForm.submit"
-              defaultMessage="Assign exercise"
+              defaultMessage="Assign Exercise"
             />
           ),
           submitting: (
             <FormattedMessage
               id="app.multiAssignForm.submitting"
-              defaultMessage="Assigning exercise ..."
+              defaultMessage="Assigning Exercise ..."
             />
           ),
           success: (
@@ -204,14 +204,18 @@ MultiAssignForm.propTypes = {
   initialValues: PropTypes.object,
   values: PropTypes.object,
   handleSubmit: PropTypes.func.isRequired,
-  anyTouched: PropTypes.bool,
+  dirty: PropTypes.bool,
   submitting: PropTypes.bool,
   submitFailed: PropTypes.bool,
   submitSucceeded: PropTypes.bool,
   invalid: PropTypes.bool,
   reset: PropTypes.func.isRequired,
-  firstDeadline: PropTypes.oneOfType([PropTypes.number, PropTypes.object]), // object == moment.js instance
-  allowSecondDeadline: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
+  firstDeadline: PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.string,
+    PropTypes.object
+  ]), // object == moment.js instance
+  allowSecondDeadline: PropTypes.bool,
   groups: PropTypes.array.isRequired,
   groupsAccessor: PropTypes.func.isRequired,
   locale: PropTypes.string.isRequired
@@ -238,7 +242,6 @@ const validate = ({
   groups
 }) => {
   const errors = {};
-
   if (
     !groups ||
     Object.keys(groups).length === 0 ||
@@ -344,5 +347,6 @@ const validate = ({
 export default reduxForm({
   form: 'multiAssign',
   enableReinitialize: true,
+  keepDirtyOnReinitialize: false,
   validate
 })(MultiAssignForm);
