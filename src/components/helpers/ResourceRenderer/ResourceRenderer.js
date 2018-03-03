@@ -67,6 +67,12 @@ class ResourceRenderer extends Component {
     this.oldData = null;
   };
 
+  componentWillUpdate = () => {
+    // Reset caching variables ...
+    this.oldResources = null;
+    this.oldData = null;
+  };
+
   // Perform rendering of the childs whilst keeping resource data cached ...
   renderReady = resources => {
     const { children: ready, returnAsArray = false } = this.props;
@@ -81,7 +87,9 @@ class ResourceRenderer extends Component {
         .map(
           (res, idx) =>
             // If a particular resource did not change, re-use its old data
-            this.oldResources && this.oldResources[idx] === res
+            this.oldResources &&
+            this.oldResources[idx] === res &&
+            this.oldResources[idx].get('data') === res.get('data')
               ? this.oldData[idx]
               : getJsData(res)
         );
@@ -129,7 +137,8 @@ ResourceRenderer.propTypes = {
   hiddenUntilReady: PropTypes.bool,
   forceLoading: PropTypes.bool,
   noIcons: PropTypes.bool,
-  returnAsArray: PropTypes.bool
+  returnAsArray: PropTypes.bool,
+  debug: PropTypes.bool
 };
 
 export default ResourceRenderer;
