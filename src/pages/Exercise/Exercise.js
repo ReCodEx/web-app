@@ -14,6 +14,7 @@ import { LinkContainer } from 'react-router-bootstrap';
 import Icon from 'react-fontawesome';
 import { formValueSelector } from 'redux-form';
 import moment from 'moment';
+import { defaultMemoize } from 'reselect';
 
 import SupplementaryFilesTableContainer from '../../containers/SupplementaryFilesTableContainer/SupplementaryFilesTableContainer';
 import Button from '../../components/widgets/FlatButton';
@@ -124,6 +125,26 @@ class Exercise extends Component {
     this.setState({ forkId: Math.random().toString() });
   }
 
+  multiAssignFormInitialValues = defaultMemoize(visibleGroups => {
+    const groups = {};
+    visibleGroups.forEach(g => {
+      groups[`id${g.id}`] = false;
+    });
+
+    return {
+      groups,
+      submissionsCountLimit: '',
+      firstDeadline: '',
+      secondDeadline: '',
+      allowSecondDeadline: false,
+      maxPointsBeforeFirstDeadline: '',
+      maxPointsBeforeSecondDeadline: '',
+      canViewLimitRatios: false,
+      pointsPercentualThreshold: 0,
+      isBonus: false
+    };
+  });
+
   assignExercise = formData => {
     const { assignExercise, editAssignment } = this.props;
 
@@ -134,7 +155,8 @@ class Exercise extends Component {
 
     let actions = [];
 
-    for (const groupId of groups) {
+    for (const groupIdMangled of groups) {
+      const groupId = groupIdMangled.replace(/^id/, '');
       const groupPromise = assignExercise(
         groupId
       ).then(({ value: assigment }) => {
@@ -142,6 +164,13 @@ class Exercise extends Component {
           firstDeadline: moment(formData.firstDeadline).unix(),
           secondDeadline: moment(formData.secondDeadline).unix(),
           submissionsCountLimit: Number(formData.submissionsCountLimit),
+          pointsPercentualThreshold: Number(formData.pointsPercentualThreshold),
+          maxPointsBeforeFirstDeadline: Number(
+            formData.maxPointsBeforeFirstDeadline
+          ),
+          maxPointsBeforeSecondDeadline: Number(
+            formData.maxPointsBeforeSecondDeadline
+          ),
           isPublic: true
         });
         if (!assignmentData.allowSecondDeadline) {
@@ -270,8 +299,7 @@ class Exercise extends Component {
                   {exercise.localizedTexts.length > 0 &&
                     <LocalizedTexts locales={exercise.localizedTexts} />}
                 </div>
-                {isSuperAdmin &&
-                  !exercise.isBroken &&
+                {!exercise.isBroken &&
                   !exercise.isLocked &&
                   <Box
                     title={formatMessage(messages.groupsBox)}
@@ -288,6 +316,9 @@ class Exercise extends Component {
                     <ResourceRenderer resource={groups.toArray()} returnAsArray>
                       {visibleGroups =>
                         <MultiAssignForm
+                          initialValues={this.multiAssignFormInitialValues(
+                            visibleGroups
+                          )}
                           groups={visibleGroups}
                           onSubmit={this.assignExercise}
                           firstDeadline={firstDeadline}
@@ -504,8 +535,12 @@ Exercise.propTypes = {
   groups: ImmutablePropTypes.map,
   isSuperAdmin: PropTypes.bool,
   groupsAccessor: PropTypes.func.isRequired,
-  firstDeadline: PropTypes.oneOfType([PropTypes.number, PropTypes.object]),
-  allowSecondDeadline: PropTypes.oneOfType([PropTypes.bool, PropTypes.string])
+  firstDeadline: PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.string,
+    PropTypes.object
+  ]),
+  allowSecondDeadline: PropTypes.bool
 };
 
 const editMultiAssignFormSelector = formValueSelector('multiAssign');
