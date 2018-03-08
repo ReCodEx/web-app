@@ -79,7 +79,7 @@ class EditAssignment extends Component {
     const {
       links: {
         ASSIGNMENT_DETAIL_URI_FACTORY,
-        GROUP_URI_FACTORY,
+        GROUP_DETAIL_URI_FACTORY,
         SUPERVISOR_STATS_URI_FACTORY,
         EXERCISE_URI_FACTORY
       },
@@ -198,7 +198,8 @@ class EditAssignment extends Component {
                 <p className="text-center">
                   <DeleteAssignmentButtonContainer
                     id={assignmentId}
-                    onDeleted={() => push(GROUP_URI_FACTORY(this.groupId))}
+                    onDeleted={() =>
+                      push(GROUP_DETAIL_URI_FACTORY(this.groupId))}
                   />
                 </p>
               </div>

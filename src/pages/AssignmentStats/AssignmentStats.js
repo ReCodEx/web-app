@@ -82,8 +82,8 @@ class AssignmentStats extends Component {
                   defaultMessage="Group detail"
                 />
               ),
-              link: ({ GROUP_URI_FACTORY }) =>
-                GROUP_URI_FACTORY(assignment.groupId)
+              link: ({ GROUP_DETAIL_URI_FACTORY }) =>
+                GROUP_DETAIL_URI_FACTORY(assignment.groupId)
             })
           },
           {

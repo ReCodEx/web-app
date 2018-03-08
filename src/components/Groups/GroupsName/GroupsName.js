@@ -9,14 +9,14 @@ const GroupsName = ({
   name,
   localizedTexts,
   noLink,
-  links: { GROUP_URI_FACTORY }
+  links: { GROUP_INFO_URI_FACTORY }
 }) =>
   <span>
     {noLink
       ? <span>
           <LocalizedGroupName entity={{ name, localizedTexts }} />
         </span>
-      : <Link to={GROUP_URI_FACTORY(id)}>
+      : <Link to={GROUP_INFO_URI_FACTORY(id)}>
           <LocalizedGroupName entity={{ name, localizedTexts }} />
         </Link>}
   </span>;

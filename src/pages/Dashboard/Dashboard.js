@@ -114,7 +114,7 @@ class Dashboard extends Component {
       groupAssignments,
       statistics,
       allGroups,
-      links: { GROUP_URI_FACTORY },
+      links: { GROUP_DETAIL_URI_FACTORY },
       intl: { locale }
     } = this.props;
 
@@ -230,7 +230,7 @@ class Dashboard extends Component {
                             {statistics =>
                               <Row>
                                 <Col lg={4}>
-                                  <Link to={GROUP_URI_FACTORY(group.id)}>
+                                  <Link to={GROUP_DETAIL_URI_FACTORY(group.id)}>
                                     <UsersStats
                                       {...group}
                                       stats={this.usersStatistics(statistics)}
@@ -246,7 +246,9 @@ class Dashboard extends Component {
                                     footer={
                                       <p className="text-center">
                                         <LinkContainer
-                                          to={GROUP_URI_FACTORY(group.id)}
+                                          to={GROUP_DETAIL_URI_FACTORY(
+                                            group.id
+                                          )}
                                         >
                                           <Button bsSize="sm">
                                             <FormattedMessage
@@ -321,7 +323,9 @@ class Dashboard extends Component {
                                     footer={
                                       <p className="text-center">
                                         <LinkContainer
-                                          to={GROUP_URI_FACTORY(group.id)}
+                                          to={GROUP_DETAIL_URI_FACTORY(
+                                            group.id
+                                          )}
                                         >
                                           <Button bsSize="sm">
                                             <FormattedMessage

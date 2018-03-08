@@ -9,7 +9,7 @@ import { FormattedMessage, injectIntl } from 'react-intl';
 import { List, Map } from 'immutable';
 
 import Page from '../../components/layout/Page';
-import GroupDetail, {
+import GroupDetailComponent, {
   LoadingGroupDetail,
   FailedGroupDetail
 } from '../../components/Groups/GroupDetail';
@@ -63,13 +63,13 @@ import { isReady } from '../../redux/helpers/resourceManager/index';
 import { fetchBestSubmission } from '../../redux/modules/groupResults';
 import { getBestSubmissionsForLoggedInUser } from '../../redux/selectors/groupResults';
 
-class Group extends Component {
+class GroupDetail extends Component {
   static isAdminOrSupervisorOf = (group, userId) =>
     group.privateData.admins.indexOf(userId) >= 0 ||
     group.privateData.supervisors.indexOf(userId) >= 0;
 
   static isMemberOf = (group, userId) =>
-    Group.isAdminOrSupervisorOf(group, userId) ||
+    GroupDetail.isAdminOrSupervisorOf(group, userId) ||
     group.privateData.students.indexOf(userId) >= 0;
 
   static loadAsync = ({ groupId }, dispatch, userId, isSuperAdmin) =>
@@ -80,10 +80,10 @@ class Group extends Component {
           Promise.all([
             dispatch(fetchSupervisors(groupId)),
             dispatch(fetchInstanceGroups(group.privateData.instanceId)),
-            Group.isAdminOrSupervisorOf(group, userId) || isSuperAdmin
+            GroupDetail.isAdminOrSupervisorOf(group, userId) || isSuperAdmin
               ? Promise.all([dispatch(fetchGroupExercises(groupId))])
               : Promise.resolve(),
-            Group.isMemberOf(group, userId) || isSuperAdmin
+            GroupDetail.isMemberOf(group, userId) || isSuperAdmin
               ? Promise.all([
                   dispatch(fetchAssignmentsForGroup(groupId)),
                   dispatch(fetchStudents(groupId)),
@@ -238,13 +238,6 @@ class Group extends Component {
                 users={students}
               />}
 
-            <GroupDetail
-              group={data}
-              supervisors={supervisors}
-              isAdmin={isAdmin || isSuperAdmin}
-              groups={groups}
-            />
-
             {!isAdmin &&
               !isSupervisor &&
               data.isPublic &&
@@ -279,7 +272,7 @@ class Group extends Component {
   }
 }
 
-Group.propTypes = {
+GroupDetail.propTypes = {
   params: PropTypes.shape({ groupId: PropTypes.string.isRequired }).isRequired,
   userId: PropTypes.string.isRequired,
   group: ImmutablePropTypes.map,
@@ -307,7 +300,7 @@ Group.propTypes = {
   intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired
 };
 
-Group.contextTypes = {
+GroupDetail.contextTypes = {
   links: PropTypes.object
 };
 
@@ -342,7 +335,7 @@ const mapDispatchToProps = (dispatch, { params }) => ({
       })
     ),
   loadAsync: (userId, isSuperAdmin) =>
-    Group.loadAsync(params, dispatch, userId, isSuperAdmin),
+    GroupDetail.loadAsync(params, dispatch, userId, isSuperAdmin),
   assignExercise: exerciseId =>
     dispatch(assignExercise(params.groupId, exerciseId)),
   createGroupExercise: () =>
@@ -352,5 +345,5 @@ const mapDispatchToProps = (dispatch, { params }) => ({
 });
 
 export default withLinks(
-  connect(mapStateToProps, mapDispatchToProps)(injectIntl(Group))
+  connect(mapStateToProps, mapDispatchToProps)(injectIntl(GroupDetail))
 );

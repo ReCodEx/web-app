@@ -29,10 +29,10 @@ class GroupTree extends Component {
     </TreeView>;
 
   renderButtons = groupId => {
-    const { links: { GROUP_URI_FACTORY } } = this.props;
+    const { links: { GROUP_INFO_URI_FACTORY } } = this.props;
     return (
       <span>
-        <LinkContainer to={GROUP_URI_FACTORY(groupId)}>
+        <LinkContainer to={GROUP_INFO_URI_FACTORY(groupId)}>
           <Button bsStyle="primary" bsSize="xs" className="btn-flat">
             <Icon name="group" />{' '}
             <FormattedMessage
@@ -81,7 +81,7 @@ class GroupTree extends Component {
       groups,
       currentGroupId = null,
       visibleGroupsMap = null,
-      links: { GROUP_URI_FACTORY }
+      links: { GROUP_INFO_URI_FACTORY }
     } = this.props;
 
     const group = groups.get(id);
@@ -121,7 +121,7 @@ class GroupTree extends Component {
             isOpen={currentGroupId === id || isOpen}
             actions={
               currentGroupId !== id && canView
-                ? this.renderButtons(id, GROUP_URI_FACTORY(id))
+                ? this.renderButtons(id, GROUP_INFO_URI_FACTORY(id))
                 : undefined
             }
           >

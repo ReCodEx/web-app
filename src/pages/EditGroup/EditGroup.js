@@ -54,7 +54,7 @@ class EditGroup extends Component {
       params: { groupId },
       group,
       isSuperAdmin,
-      links: { GROUP_URI_FACTORY },
+      links: { GROUP_INFO_URI_FACTORY, GROUP_DETAIL_URI_FACTORY },
       editGroup,
       hasThreshold,
       localizedTexts,
@@ -73,9 +73,19 @@ class EditGroup extends Component {
         }
         breadcrumbs={[
           {
+            text: (
+              <FormattedMessage
+                id="app.group.info"
+                defaultMessage="Group Info"
+              />
+            ),
+            iconName: 'group',
+            link: GROUP_INFO_URI_FACTORY(groupId)
+          },
+          {
             text: <FormattedMessage id="app.group.title" />,
             iconName: 'group',
-            link: GROUP_URI_FACTORY(groupId)
+            link: GROUP_DETAIL_URI_FACTORY(groupId)
           },
           {
             text: (
@@ -122,7 +132,7 @@ class EditGroup extends Component {
                       (group.childGroups && group.childGroups.length > 0)
                     }
                     onDeleted={() =>
-                      push(GROUP_URI_FACTORY(group.parentGroupId))}
+                      push(GROUP_INFO_URI_FACTORY(group.parentGroupId))}
                   />
 
                   {group.parentGroupId === null &&

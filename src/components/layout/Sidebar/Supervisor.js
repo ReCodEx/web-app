@@ -15,7 +15,7 @@ const Supervisor = ({
   supervisorOf,
   isCollapsed,
   notifications,
-  links: { GROUP_URI_FACTORY, EXERCISES_URI, PIPELINES_URI },
+  links: { GROUP_DETAIL_URI_FACTORY, EXERCISES_URI, PIPELINES_URI },
   intl
 }) =>
   <ul className="sidebar-menu">
@@ -44,7 +44,7 @@ const Supervisor = ({
       notifications={{}}
       icon="wrench"
       currentPath={currentUrl}
-      createLink={item => GROUP_URI_FACTORY(getId(item))}
+      createLink={item => GROUP_DETAIL_URI_FACTORY(getId(item))}
       forceOpen={isCollapsed}
     />
     <MenuItem

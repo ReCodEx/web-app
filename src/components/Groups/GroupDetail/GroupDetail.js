@@ -103,55 +103,8 @@ const GroupDetail = ({
             </Box>
           </Col>
         </Row>
-        {childGroups.all.length > 0 &&
-          <Row>
-            <Col sm={12}>
-              <Box
-                title={
-                  <FormattedMessage
-                    id="app.groupDetail.subgroups"
-                    defaultMessage="Subgroups hierarchy"
-                  />
-                }
-                unlimitedHeight
-              >
-                <GroupTree
-                  id={id}
-                  deletable={false}
-                  isAdmin={isAdmin}
-                  isPublic={isPublic}
-                  isOpen
-                  groups={groups}
-                  level={1}
-                />
-              </Box>
-            </Col>
-          </Row>}
       </Col>
-      <Col lg={6} sm={12}>
-        <Box
-          noPadding
-          collapsable
-          unlimitedHeight
-          title={
-            <FormattedMessage
-              id="app.groupDetail.supervisors"
-              defaultMessage="Supervisors of {groupName}"
-              values={{
-                groupName: getLocalizedName({ name, localizedTexts }, locale)
-              }}
-            />
-          }
-        >
-          <SupervisorsList
-            groupId={id}
-            users={supervisors}
-            isAdmin={isAdmin}
-            primaryAdminsIds={primaryAdminsIds}
-            isLoaded={supervisors.length === privateGroup.supervisors.length}
-          />
-        </Box>
-      </Col>
+      <Col lg={6} sm={12} />
     </Row>
   </div>;
 

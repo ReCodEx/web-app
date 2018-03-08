@@ -6,14 +6,8 @@ import ResourceRenderer from '../../helpers/ResourceRenderer';
 import Icon from 'react-fontawesome';
 
 import GroupsName from '../GroupsName';
-import withLinks from '../../../helpers/withLinks';
 
-const GroupsList = ({
-  groups = [],
-  renderButtons = () => null,
-  links: { GROUP_URI_FACTORY },
-  ...props
-}) =>
+const GroupsList = ({ groups = [], renderButtons = () => null, ...props }) =>
   <ResourceRenderer resource={groups.toArray()}>
     {(...groups) =>
       <Table hover {...props}>
@@ -41,8 +35,7 @@ const GroupsList = ({
 
 GroupsList.propTypes = {
   groups: ImmutablePropTypes.map.isRequired,
-  renderButtons: PropTypes.func,
-  links: PropTypes.object
+  renderButtons: PropTypes.func
 };
 
-export default withLinks(GroupsList);
+export default GroupsList;

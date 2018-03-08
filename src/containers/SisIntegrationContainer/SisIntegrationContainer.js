@@ -56,7 +56,7 @@ class SisIntegrationContainer extends Component {
       currentUserId,
       sisGroups,
       groupsAccessor,
-      links: { GROUP_URI_FACTORY },
+      links: { GROUP_INFO_URI_FACTORY },
       intl: { locale }
     } = this.props;
     return (
@@ -172,7 +172,9 @@ class SisIntegrationContainer extends Component {
                                           <td className="text-right">
                                             <span>
                                               <LinkContainer
-                                                to={GROUP_URI_FACTORY(group.id)}
+                                                to={GROUP_INFO_URI_FACTORY(
+                                                  group.id
+                                                )}
                                               >
                                                 <Button
                                                   bsStyle="primary"
