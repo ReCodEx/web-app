@@ -179,17 +179,15 @@ SubmitSolutionContainer.propTypes = {
 export default withLinks(
   connect(
     (state, { id, userId }) => {
-      const getUploadedFiles = createGetUploadedFiles(id);
-      const allUploaded = createAllUploaded(id);
       return {
         userId: userId || loggedInUserIdSelector(state),
         note: getNote(state),
-        attachedFiles: (getUploadedFiles(state) || List()).toJS(),
+        attachedFiles: createGetUploadedFiles(id)(state),
         isProcessing: isProcessing(state),
         isValidating: isValidating(state),
         isSending: isSending(state),
         hasFailed: hasFailed(state),
-        canSubmit: allUploaded(state) || false,
+        canSubmit: createAllUploaded(id)(state),
         submissionId: getSubmissionId(state),
         monitor: getMonitorParams(state),
         presubmitEnvironments: getPresubmitEnvironments(state)

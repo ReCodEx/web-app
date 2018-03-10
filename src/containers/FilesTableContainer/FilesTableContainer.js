@@ -33,7 +33,7 @@ class FilesTableContainer extends Component {
 FilesTableContainer.propTypes = {
   uploadId: PropTypes.string.isRequired,
   attachments: ImmutablePropTypes.map,
-  newFiles: ImmutablePropTypes.list,
+  newFiles: PropTypes.array,
   canSubmit: PropTypes.bool,
   addFiles: PropTypes.func
 };
@@ -41,10 +41,10 @@ FilesTableContainer.propTypes = {
 export default connect(
   (state, { uploadId }) => ({
     uploadId,
-    newFiles: createGetUploadedFiles(uploadId)(state) || List(),
+    newFiles: createGetUploadedFiles(uploadId)(state),
     canSubmit: createAllUploaded(uploadId)(state)
   }),
   (dispatch, { uploadId, addFiles }) => ({
-    addFiles: files => addFiles(files.toJS()).then(dispatch(reset(uploadId)))
+    addFiles: files => addFiles(files).then(dispatch(reset(uploadId)))
   })
 )(FilesTableContainer);

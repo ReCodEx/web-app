@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { EMPTY_LIST } from '../../helpers/common';
 import Upload from '../../components/Submissions/Upload';
 
 import {
@@ -78,10 +77,10 @@ const appendThen = (promise, action) => {
 
 export default connect(
   (state, { id }) => ({
-    uploadingFiles: (createGetUploadingFiles(id)(state) || EMPTY_LIST).toJS(),
-    attachedFiles: (createGetUploadedFiles(id)(state) || EMPTY_LIST).toJS(),
-    failedFiles: (createGetFailedFiles(id)(state) || EMPTY_LIST).toJS(),
-    removedFiles: (createGetRemovedFiles(id)(state) || EMPTY_LIST).toJS()
+    uploadingFiles: createGetUploadingFiles(id)(state),
+    attachedFiles: createGetUploadedFiles(id)(state),
+    failedFiles: createGetFailedFiles(id)(state),
+    removedFiles: createGetRemovedFiles(id)(state)
   }),
   (dispatch, { id, onChange }) => ({
     init: () => dispatch(init(id)),

@@ -42,7 +42,8 @@ const FilesTable = ({
         </p>}
       {!viewOnly && <UploadContainer id={uploadId} />}
       {!viewOnly &&
-        newFiles.size > 0 &&
+        newFiles &&
+        newFiles.length > 0 &&
         <p className="text-center">
           <Button
             bsStyle="success"
@@ -116,7 +117,7 @@ FilesTable.propTypes = {
   uploadId: PropTypes.string.isRequired,
   attachments: ImmutablePropTypes.map,
   canSubmit: PropTypes.bool,
-  newFiles: ImmutablePropTypes.list,
+  newFiles: PropTypes.array,
   addFiles: PropTypes.func,
   removeFile: PropTypes.func,
   downloadFile: PropTypes.func,
