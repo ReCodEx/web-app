@@ -15,7 +15,8 @@ import {
 import { canSubmit } from '../../redux/modules/canSubmit';
 import {
   init,
-  submitAssignmentSolution as submitSolution
+  submitAssignmentSolution as submitSolution,
+  presubmitAssignmentSolution as presubmitSolution
 } from '../../redux/modules/submission';
 import { fetchUsersSubmissions } from '../../redux/modules/submissions';
 import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments';
@@ -241,6 +242,7 @@ class Assignment extends Component {
                           userId={userId}
                           id={assignment.id}
                           onSubmit={submitSolution}
+                          presubmitValidation={presubmitSolution}
                           onReset={init}
                           isOpen={submitting}
                           runtimeEnvironments={runtimes}

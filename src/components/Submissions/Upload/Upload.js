@@ -27,7 +27,7 @@ const Upload = ({
   returnFile,
   removeFailedFile,
   retryUploadFile
-}) => (
+}) =>
   <div>
     <DropZone onDrop={uploadFiles} style={dropZoneStyles}>
       <p>
@@ -38,11 +38,10 @@ const Upload = ({
       </p>
       <p>
         <Button bsStyle="primary">
-          <UploadIcon />
-          {' '}
+          <UploadIcon />{' '}
           <FormattedMessage
             id="app.submitSolution.addFile"
-            defaultMessage="Add a file"
+            defaultMessage="Add File(s)"
           />
         </Button>
       </p>
@@ -62,8 +61,7 @@ const Upload = ({
         removeFailedFile={removeFailedFile}
         retryUploadFile={retryUploadFile}
       />}
-  </div>
-);
+  </div>;
 
 Upload.propTypes = {
   uploadingFiles: PropTypes.array.isRequired,
