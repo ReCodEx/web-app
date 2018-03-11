@@ -24,7 +24,7 @@ import UsersNameContainer from '../../../containers/UsersNameContainer';
 const commonMessages = defineMessages({
   runtimeEnvironment: {
     id: 'app.submitSolution.runtimeEnvironment',
-    defaultMessage: 'Select runtime environemnt (programming language):'
+    defaultMessage: 'Select runtime environment (programming language):'
   },
   uploadFilesFirst: {
     id: 'app.submitSolution.uploadFilesFirst',

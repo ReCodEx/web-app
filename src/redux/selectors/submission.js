@@ -6,6 +6,7 @@ import { isReady } from '../helpers/resourceManager/status';
 const { CREATING, VALIDATING, SENDING, FAILED } = submissionStatus;
 
 export const getSubmission = state => state.submission;
+
 export const getNote = createSelector(getSubmission, state =>
   state.get('note')
 );

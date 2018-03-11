@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import { List } from 'immutable';
 
 import FilesTable from '../../components/Exercises/FilesTable';
 

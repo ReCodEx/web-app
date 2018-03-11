@@ -181,8 +181,8 @@ class SisIntegrationContainer extends Component {
                                                 >
                                                   <Icon name="group" />{' '}
                                                   <FormattedMessage
-                                                    id="app.sisIntegration.groupDetail"
-                                                    defaultMessage="See group's page"
+                                                    id="app.group.detailButton"
+                                                    defaultMessage="Group Detail"
                                                   />
                                                 </Button>
                                               </LinkContainer>

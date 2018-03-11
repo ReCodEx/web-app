@@ -36,8 +36,8 @@ class GroupTree extends Component {
           <Button bsStyle="primary" bsSize="xs" className="btn-flat">
             <Icon name="group" />{' '}
             <FormattedMessage
-              id="app.groupTree.detailButton"
-              defaultMessage="See group's page"
+              id="app.group.detailButton"
+              defaultMessage="Group Detail"
             />
           </Button>
         </LinkContainer>

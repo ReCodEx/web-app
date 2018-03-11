@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect';
-import { EMPTY_ARRAY } from '../../helpers/common';
+import { EMPTY_ARRAY, EMPTY_LIST } from '../../helpers/common';
 import { isReady } from '../helpers/resourceManager';
 import { fetchManyEndpoint } from '../modules/exercises';
 
@@ -8,6 +8,8 @@ const getParam = (state, id) => id;
 const getExercises = state => state.exercises;
 const getResources = exercises => exercises.get('resources');
 const getGroupExercises = state => state.groupExercises;
+const getRuntimeEnvironments = exercise =>
+  exercise && exercise.getIn(['data', 'runtimeEnvironments'], EMPTY_LIST);
 
 export const exercisesSelector = createSelector(getExercises, getResources);
 export const exerciseSelector = exerciseId =>
@@ -20,11 +22,18 @@ export const fetchManyStatus = createSelector(getExercises, state =>
 export const getExercise = id =>
   createSelector(getExercises, exercises => exercises.getIn(['resources', id]));
 
+export const getExerciseSelector = createSelector(
+  getExercises,
+  exercises => id => exercises.getIn(['resources', id])
+);
+
 export const getExerciseRuntimeEnvironments = id =>
-  createSelector(
-    getExercise(id),
-    exercise => exercise && exercise.getIn(['data', 'runtimeEnvironments'])
-  );
+  createSelector(getExercise(id), getRuntimeEnvironments);
+
+export const getExerciseRuntimeEnvironmentsSelector = createSelector(
+  getExerciseSelector,
+  exerciseSelector => id => getRuntimeEnvironments(exerciseSelector(id))
+);
 
 export const getFork = (id, forkId) =>
   createSelector(getExercise(id), exercise =>

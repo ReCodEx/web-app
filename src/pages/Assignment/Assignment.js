@@ -245,7 +245,6 @@ class Assignment extends Component {
                           presubmitValidation={presubmitSolution}
                           onReset={init}
                           isOpen={submitting}
-                          runtimeEnvironments={runtimes}
                         />
                       </div>}
 

@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import ImmutablePropTypes from 'react-immutable-proptypes';
-import { List } from 'immutable';
 import { connect } from 'react-redux';
 import SubmitSolution from '../../components/Submissions/SubmitSolution';
 import EvaluationProgressContainer from '../EvaluationProgressContainer';
@@ -25,7 +23,7 @@ import {
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import { cancel, changeNote } from '../../redux/modules/submission';
 import { reset as resetUpload } from '../../redux/modules/upload';
-import { evaluateReferenceSolution } from '../../redux/modules/referenceSolutions';
+import { resubmitReferenceSolution } from '../../redux/modules/referenceSolutions';
 
 import withLinks from '../../helpers/withLinks';
 import { canSubmit } from '../../redux/modules/canSubmit';
@@ -170,7 +168,6 @@ SubmitSolutionContainer.propTypes = {
   attachedFiles: PropTypes.array,
   reset: PropTypes.func.isRequired,
   links: PropTypes.object.isRequired,
-  runtimeEnvironments: PropTypes.array,
   showProgress: PropTypes.bool,
   isReferenceSolution: PropTypes.bool,
   onEndFetch: PropTypes.func.isRequired
@@ -178,7 +175,7 @@ SubmitSolutionContainer.propTypes = {
 
 export default withLinks(
   connect(
-    (state, { id, userId }) => {
+    (state, { id, userId, isReferenceSolution }) => {
       return {
         userId: userId || loggedInUserIdSelector(state),
         note: getNote(state),
@@ -210,7 +207,7 @@ export default withLinks(
         dispatch(onSubmit(userId, id, note, files, runtimeEnvironmentId)).then(
           res =>
             isReferenceSolution
-              ? dispatch(evaluateReferenceSolution(res.value.id))
+              ? dispatch(resubmitReferenceSolution(res.value.id))
               : Promise.resolve()
         ),
       presubmitSolution: files => dispatch(presubmitValidation(id, files)),

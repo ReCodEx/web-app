@@ -250,8 +250,8 @@ class Dashboard extends Component {
                                         >
                                           <Button bsSize="sm">
                                             <FormattedMessage
-                                              id="app.user.groupDetail"
-                                              defaultMessage="Show group's detail"
+                                              id="app.group.detailButton"
+                                              defaultMessage="Group Detail"
                                             />
                                           </Button>
                                         </LinkContainer>
@@ -325,8 +325,8 @@ class Dashboard extends Component {
                                         >
                                           <Button bsSize="sm">
                                             <FormattedMessage
-                                              id="app.user.groupDetail"
-                                              defaultMessage="Show group's detail"
+                                              id="app.group.detailButton"
+                                              defaultMessage="Group Detail"
                                             />
                                           </Button>
                                         </LinkContainer>

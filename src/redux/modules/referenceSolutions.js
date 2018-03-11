@@ -27,10 +27,10 @@ export const additionalActionTypes = {
 export const fetchReferenceSolutions = actions.fetchResource;
 export const fetchReferenceSolutionsIfNeeded = actions.fetchOneIfNeeded; // fetch solutions for one exercise
 
-export const evaluateReferenceSolution = (solutionId, isDebug = false) =>
+export const resubmitReferenceSolution = (solutionId, isDebug = false) =>
   createApiAction({
     type: 'SUBMIT_REFERENCE_SOLUTION',
-    endpoint: `/reference-solutions/${solutionId}/evaluate`,
+    endpoint: `/reference-solutions/${solutionId}/resubmit`,
     method: 'POST',
     body: { debug: isDebug },
     meta: { solutionId }

@@ -81,8 +81,8 @@ export const submitAssignmentSolution = submit(
   id => `/exercise-assignments/${id}/submit`
 );
 
-export const createReferenceSolution = submit(
-  id => `/reference-solutions/exercise/${id}`,
+export const submitReferenceSolution = submit(
+  id => `/reference-solutions/exercise/${id}/submit`,
   'referenceSolution'
 );
 
@@ -113,6 +113,10 @@ const presubmit = endpoint => (id, files) => {
 
 export const presubmitAssignmentSolution = presubmit(
   id => `/exercise-assignments/${id}/pre-submit`
+);
+
+export const presubmitReferenceSolution = presubmit(
+  id => `/reference-solutions/exercise/${id}/pre-submit`
 );
 
 /**

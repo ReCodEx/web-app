@@ -36,17 +36,24 @@ import Confirm from '../../components/forms/Confirm';
 import PipelinesSimpleList from '../../components/Pipelines/PipelinesSimpleList';
 import ExerciseButtons from '../../components/Exercises/ExerciseButtons';
 import ForkExerciseForm from '../../components/forms/ForkExerciseForm';
+import MultiAssignForm from '../../components/forms/MultiAssignForm';
 
 import { isSubmitting } from '../../redux/selectors/submission';
 import {
   fetchExerciseIfNeeded,
   forkExercise
 } from '../../redux/modules/exercises';
+import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments';
+import { runtimeEnvironmentsSelector } from '../../redux/selectors/runtimeEnvironments';
 import {
   fetchReferenceSolutionsIfNeeded,
   deleteReferenceSolution
 } from '../../redux/modules/referenceSolutions';
-import { createReferenceSolution, init } from '../../redux/modules/submission';
+import {
+  init,
+  submitReferenceSolution,
+  presubmitReferenceSolution
+} from '../../redux/modules/submission';
 import { fetchHardwareGroups } from '../../redux/modules/hwGroups';
 import {
   create as assignExercise,
@@ -74,23 +81,18 @@ import {
   groupDataAccessorSelector,
   groupsUserCanEditSelector
 } from '../../redux/selectors/groups';
+import { fetchUser } from '../../redux/modules/users';
 
 import withLinks from '../../helpers/withLinks';
-import { fetchUser } from '../../redux/modules/users';
-import MultiAssignForm from '../../components/forms/MultiAssignForm';
 
 const messages = defineMessages({
   groupsBox: {
     id: 'app.exercise.groupsBox',
-    defaultMessage: 'Assign to groups'
+    defaultMessage: 'Assign to Groups'
   },
   referenceSolutionsBox: {
     id: 'app.exercise.referenceSolutionsBox',
-    defaultMessage: 'Reference solutions'
-  },
-  createReferenceSolutionBox: {
-    id: 'app.exercise.uploadReferenceSolutionBox',
-    defaultMessage: 'Create reference solution'
+    defaultMessage: 'Reference Solutions'
   }
 });
 
@@ -100,6 +102,7 @@ class Exercise extends Component {
   static loadAsync = ({ exerciseId }, dispatch, userId) =>
     Promise.all([
       dispatch(fetchExerciseIfNeeded(exerciseId)),
+      dispatch(fetchRuntimeEnvironments()),
       dispatch(fetchReferenceSolutionsIfNeeded(exerciseId)),
       dispatch(fetchHardwareGroups()),
       dispatch(fetchExercisePipelines(exerciseId)),
@@ -202,6 +205,7 @@ class Exercise extends Component {
     const {
       userId,
       exercise,
+      runtimeEnvironments,
       submitting,
       canEditExercise,
       referenceSolutions,
@@ -372,7 +376,7 @@ class Exercise extends Component {
                               >
                                 <EditIcon />{' '}
                                 <FormattedMessage
-                                  id="app.pipeline.editButton"
+                                  id="generic.edit"
                                   defaultMessage="Edit"
                                 />
                               </Button>
@@ -406,84 +410,106 @@ class Exercise extends Component {
               </Col>
               <Col lg={6}>
                 <ExerciseDetail {...exercise} locale={locale} />
-                <Box
-                  title={formatMessage(messages.referenceSolutionsBox)}
-                  noPadding
-                  footer={
-                    <p className="text-center">
-                      <Button
-                        bsStyle="success"
-                        onClick={() => initCreateReferenceSolution(userId)}
-                      >
-                        <FormattedMessage
-                          id="app.exercise.createReferenceSoution"
-                          defaultMessage="Create reference solution"
-                        />
-                      </Button>
-                    </p>
-                  }
+                <ResourceRenderer
+                  resource={runtimeEnvironments.toArray()}
+                  returnAsArray={true}
                 >
-                  <ResourceRenderer resource={referenceSolutions}>
-                    {referenceSolutions =>
-                      referenceSolutions.length > 0
-                        ? <ReferenceSolutionsList
-                            referenceSolutions={referenceSolutions}
-                            renderButtons={(solutionId, permissionHints) =>
-                              <div>
-                                <Button
-                                  bsSize="xs"
-                                  onClick={() =>
-                                    push(
-                                      EXERCISE_REFERENCE_SOLUTION_URI_FACTORY(
-                                        exercise.id,
-                                        solutionId
-                                      )
-                                    )}
-                                >
-                                  <SendIcon />{' '}
-                                  <FormattedMessage
-                                    id="app.exercise.referenceSolutionDetail"
-                                    defaultMessage="View detail"
-                                  />
-                                </Button>
-                                {permissionHints &&
-                                  permissionHints.delete !== false &&
-                                  <Confirm
-                                    id={solutionId}
-                                    onConfirmed={() =>
-                                      deleteReferenceSolution(
-                                        exercise.id,
-                                        solutionId
-                                      )}
-                                    question={
-                                      <FormattedMessage
-                                        id="app.exercise.referenceSolution.deleteConfirm"
-                                        defaultMessage="Are you sure you want to delete the reference solution? This cannot be undone."
-                                      />
-                                    }
-                                  >
-                                    <Button
-                                      bsSize="xs"
-                                      className="btn-flat"
-                                      bsStyle="danger"
-                                    >
-                                      <DeleteIcon />{' '}
-                                      <FormattedMessage
-                                        id="generic.delete"
-                                        defaultMessage="Delete"
-                                      />
-                                    </Button>
-                                  </Confirm>}
-                              </div>}
-                          />
-                        : <p className="text-center">
+                  {runtimes =>
+                    <Box
+                      title={formatMessage(messages.referenceSolutionsBox)}
+                      noPadding
+                      footer={
+                        <p className="text-center">
+                          <Button
+                            bsStyle="success"
+                            onClick={() => initCreateReferenceSolution(userId)}
+                          >
                             <FormattedMessage
-                              id="app.exercise.noReferenceSolutions"
-                              defaultMessage="There are no reference solutions for this exercise yet."
+                              id="app.exercise.submitReferenceSoution"
+                              defaultMessage="Submit New Reference Solution"
                             />
-                          </p>}
-                  </ResourceRenderer>
-                </Box>
+                          </Button>
+                        </p>
+                      }
+                    >
+                      <div>
+                        <ResourceRenderer resource={referenceSolutions}>
+                          {referenceSolutions =>
+                            referenceSolutions.length > 0
+                              ? <ReferenceSolutionsList
+                                  referenceSolutions={referenceSolutions}
+                                  runtimeEnvironments={runtimes}
+                                  renderButtons={(
+                                    solutionId,
+                                    permissionHints
+                                  ) =>
+                                    <div>
+                                      <Button
+                                        bsSize="xs"
+                                        onClick={() =>
+                                          push(
+                                            EXERCISE_REFERENCE_SOLUTION_URI_FACTORY(
+                                              exercise.id,
+                                              solutionId
+                                            )
+                                          )}
+                                      >
+                                        <SendIcon />{' '}
+                                        <FormattedMessage
+                                          id="generic.detail"
+                                          defaultMessage="Detail"
+                                        />
+                                      </Button>
+                                      {permissionHints &&
+                                        permissionHints.delete !== false &&
+                                        <Confirm
+                                          id={solutionId}
+                                          onConfirmed={() =>
+                                            deleteReferenceSolution(
+                                              exercise.id,
+                                              solutionId
+                                            )}
+                                          question={
+                                            <FormattedMessage
+                                              id="app.exercise.referenceSolution.deleteConfirm"
+                                              defaultMessage="Are you sure you want to delete the reference solution? This cannot be undone."
+                                            />
+                                          }
+                                        >
+                                          <Button
+                                            bsSize="xs"
+                                            className="btn-flat"
+                                            bsStyle="danger"
+                                          >
+                                            <DeleteIcon />{' '}
+                                            <FormattedMessage
+                                              id="generic.delete"
+                                              defaultMessage="Delete"
+                                            />
+                                          </Button>
+                                        </Confirm>}
+                                    </div>}
+                                />
+                              : <p className="text-center">
+                                  <FormattedMessage
+                                    id="app.exercise.noReferenceSolutions"
+                                    defaultMessage="There are no reference solutions for this exercise yet."
+                                  />
+                                </p>}
+                        </ResourceRenderer>
+                        <SubmitSolutionContainer
+                          userId={userId}
+                          id={exercise.id}
+                          onSubmit={submitReferenceSolution}
+                          presubmitValidation={presubmitReferenceSolution}
+                          onReset={init}
+                          isOpen={submitting}
+                          showProgress={false}
+                          isReferenceSolution={true}
+                        />
+                      </div>
+                    </Box>}
+                </ResourceRenderer>
                 <SupplementaryFilesTableContainer
                   isOpen={false}
                   viewOnly={true}
@@ -491,17 +517,6 @@ class Exercise extends Component {
                 />
               </Col>
             </Row>
-            <SubmitSolutionContainer
-              userId={userId}
-              id={exercise.id}
-              onSubmit={createReferenceSolution}
-              onReset={init}
-              isOpen={submitting}
-              runtimeEnvironments={exercise.runtimeEnvironments}
-              showProgress={false}
-              autodetection={false}
-              isReferenceSolution={true}
-            />
           </div>}
       </Page>
     );
@@ -522,6 +537,7 @@ Exercise.propTypes = {
   editAssignment: PropTypes.func.isRequired,
   push: PropTypes.func.isRequired,
   exercise: ImmutablePropTypes.map,
+  runtimeEnvironments: ImmutablePropTypes.map,
   canEditExercise: PropTypes.bool.isRequired,
   referenceSolutions: ImmutablePropTypes.map,
   intl: intlShape.isRequired,
@@ -553,6 +569,7 @@ export default withLinks(
       return {
         userId,
         exercise: exerciseSelector(exerciseId)(state),
+        runtimeEnvironments: runtimeEnvironmentsSelector(state),
         submitting: isSubmitting(state),
         canEditExercise: canLoggedUserEditExercise(exerciseId)(state),
         referenceSolutions: referenceSolutionsSelector(exerciseId)(state),
