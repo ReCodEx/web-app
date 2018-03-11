@@ -9,6 +9,7 @@ import ResultsTableRow from './ResultsTableRow';
 import NoResultsAvailableRow from './NoResultsAvailableRow';
 import withLinks from '../../../helpers/withLinks';
 import { LocalizedExerciseName } from '../../helpers/LocalizedNames';
+import { compareAssignments } from '../../helpers/compareAssignments';
 import styles from './ResultsTable.less';
 
 const ResultsTable = ({
@@ -17,9 +18,7 @@ const ResultsTable = ({
   stats,
   links: { SUPERVISOR_STATS_URI_FACTORY }
 }) => {
-  const assignmentsArray = assignments.sort(
-    (a, b) => a.firstDeadline - b.firstDeadline
-  );
+  const assignmentsArray = assignments.sort(compareAssignments);
   const assignmentsIds = assignmentsArray.map(assignment => assignment.id);
   return (
     <Table hover>

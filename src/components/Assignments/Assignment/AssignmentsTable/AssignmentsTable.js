@@ -14,35 +14,7 @@ import AssignmentTableRow, {
   NoAssignmentTableRow,
   LoadingAssignmentTableRow
 } from '../AssignmentTableRow';
-
-const compareAssignments = (a, b) => {
-  // first compare by deadline
-  if (a.firstDeadline < b.firstDeadline) {
-    return -1;
-  } else if (a.firstDeadline === b.firstDeadline) {
-    // then compare by second deadline - if one of them does not have any,
-    // it is lower -> higher position in the table
-    if (a.allowSecondDeadline !== b.allowSecondDeadline) {
-      // one has the second deadline and the other not
-      return a.allowSecondDeadline ? 1 : -1;
-    } else {
-      // if both have second deadline, compare them
-      if (a.allowSecondDeadline === true) {
-        if (a.secondDeadline < b.secondDeadline) {
-          return -1;
-        } else if (a.secondDeadline > b.secondDeadline) {
-          return 1;
-        }
-        // if second deadlines are equal, continue
-      }
-
-      // none of them have second deadline or they are queal, compare creation times
-      return b.createdAt - a.createdAt;
-    }
-  } else {
-    return 1;
-  }
-};
+import { compareAssignments } from '../../../helpers/compareAssignments';
 
 const displayPoints = (bestSubmissions, assignments) => {
   const assignmentIds = assignments
@@ -63,6 +35,7 @@ const AssignmentsTable = ({
   showGroup = true,
   userId = null,
   bestSubmissions = {},
+  isAdmin = false,
   intl: { locale }
 }) =>
   <Table hover>
@@ -82,7 +55,8 @@ const AssignmentsTable = ({
               defaultMessage="Group"
             />
           </th>}
-        {displayPoints(bestSubmissions, assignments) &&
+        {!isAdmin &&
+          displayPoints(bestSubmissions, assignments) &&
           <th>
             <FormattedMessage
               id="app.assignments.points"
@@ -101,6 +75,7 @@ const AssignmentsTable = ({
             defaultMessage="Second deadline"
           />
         </th>
+        {isAdmin && <th />}
       </tr>
     </thead>
     <tbody>
@@ -127,6 +102,7 @@ const AssignmentsTable = ({
             }
             locale={locale}
             bestSubmission={bestSubmissions[assignment.id]}
+            isAdmin={isAdmin}
           />
         )}
     </tbody>
@@ -138,6 +114,7 @@ AssignmentsTable.propTypes = {
   statuses: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
   userId: PropTypes.string,
   bestSubmissions: PropTypes.object,
+  isAdmin: PropTypes.bool,
   intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired
 };
 

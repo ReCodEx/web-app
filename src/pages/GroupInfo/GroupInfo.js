@@ -166,11 +166,19 @@ class GroupInfo extends Component {
                     />
                   </Button>
                 </LinkContainer>}
+              {!isAdmin &&
+                !isSupervisor &&
+                data.isPublic &&
+                <LeaveJoinGroupButtonContainer
+                  userId={userId}
+                  groupId={data.id}
+                  bsSize="normal"
+                />}
             </p>
 
             <Row>
-              <Col sm={6}>
-                {data.childGroups.all.length > 0 &&
+              {data.childGroups.all.length > 0 &&
+                <Col sm={6}>
                   <Box
                     title={
                       <FormattedMessage
@@ -189,17 +197,18 @@ class GroupInfo extends Component {
                       groups={groups}
                       level={1}
                     />
-                  </Box>}
+                  </Box>
 
-                <EditGroupForm
-                  onSubmit={addSubgroup}
-                  initialValues={EMPTY_OBJ}
-                  createNew
-                  collapsable
-                  isOpen={false}
-                  formValues={formValues}
-                />
-              </Col>
+                  {isAdmin &&
+                    <EditGroupForm
+                      onSubmit={addSubgroup}
+                      initialValues={EMPTY_OBJ}
+                      createNew
+                      collapsable
+                      isOpen={false}
+                      formValues={formValues}
+                    />}
+                </Col>}
               <Col sm={6}>
                 <GroupDetail
                   group={data}
@@ -208,6 +217,8 @@ class GroupInfo extends Component {
                   groups={groups}
                   locale={locale}
                 />
+              </Col>
+              <Col sm={6}>
                 <Box
                   noPadding
                   collapsable
@@ -238,31 +249,22 @@ class GroupInfo extends Component {
                     }
                   />
                 </Box>
-                <Box
-                  title={
-                    <FormattedMessage
-                      id="app.group.adminsView.addSupervisor"
-                      defaultMessage="Add supervisor"
+                {isAdmin &&
+                  <Box
+                    title={
+                      <FormattedMessage
+                        id="app.group.adminsView.addSupervisor"
+                        defaultMessage="Add supervisor"
+                      />
+                    }
+                  >
+                    <AddSupervisor
+                      instanceId={data.privateData.instanceId}
+                      groupId={data.id}
                     />
-                  }
-                >
-                  <AddSupervisor
-                    instanceId={data.privateData.instanceId}
-                    groupId={data.id}
-                  />
-                </Box>
+                  </Box>}
               </Col>
             </Row>
-
-            {!isAdmin &&
-              !isSupervisor &&
-              data.isPublic &&
-              <p className="text-center">
-                <LeaveJoinGroupButtonContainer
-                  userId={userId}
-                  groupId={data.id}
-                />
-              </p>}
           </div>}
       </Page>
     );

@@ -29,11 +29,11 @@ const EditGroupForm = ({
       createNew
         ? <FormattedMessage
             id="app.editGroupForm.titleNew"
-            defaultMessage="Create new group"
+            defaultMessage="Create Subgroup"
           />
         : <FormattedMessage
             id="app.editGroupForm.titleEdit"
-            defaultMessage="Edit group"
+            defaultMessage="Edit Group"
           />
     }
     type={submitSucceeded ? 'success' : undefined}

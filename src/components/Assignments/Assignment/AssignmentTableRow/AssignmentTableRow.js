@@ -2,12 +2,20 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router';
 import AssignmentStatusIcon from '../AssignmentStatusIcon/AssignmentStatusIcon';
-import { FormattedDate, FormattedTime } from 'react-intl';
+import { FormattedDate, FormattedTime, FormattedMessage } from 'react-intl';
+import { ButtonGroup } from 'react-bootstrap';
+import { LinkContainer } from 'react-router-bootstrap';
 
 import ResourceRenderer from '../../../helpers/ResourceRenderer';
 import withLinks from '../../../../helpers/withLinks';
 import { LocalizedExerciseName } from '../../../helpers/LocalizedNames';
-import { MaybeBonusAssignmentIcon } from '../../../icons';
+import {
+  EditIcon,
+  MaybeBonusAssignmentIcon,
+  MaybePublicIcon
+} from '../../../icons';
+import DeleteAssignmentButtonContainer from '../../../../containers/DeleteAssignmentButtonContainer';
+import Button from '../../../widgets/FlatButton';
 
 const AssignmentTableRow = ({
   showGroup,
@@ -20,19 +28,24 @@ const AssignmentTableRow = ({
     firstDeadline,
     secondDeadline,
     isBonus,
+    isPublic,
     accepted
   },
   status,
   userId,
   bestSubmission,
+  isAdmin,
   links: {
     ASSIGNMENT_DETAIL_URI_FACTORY,
-    ASSIGNMENT_DETAIL_SPECIFIC_USER_URI_FACTORY
+    ASSIGNMENT_DETAIL_SPECIFIC_USER_URI_FACTORY,
+    ASSIGNMENT_EDIT_URI_FACTORY
   }
 }) =>
   <tr>
     <td className="text-center">
-      <AssignmentStatusIcon id={id} status={status} accepted={accepted} />
+      {isAdmin
+        ? <MaybePublicIcon id={id} isPublic={isPublic} />
+        : <AssignmentStatusIcon id={id} status={status} accepted={accepted} />}
     </td>
     <td>
       <MaybeBonusAssignmentIcon id={id} isBonus={isBonus} />
@@ -50,7 +63,8 @@ const AssignmentTableRow = ({
       <td>
         {group}
       </td>}
-    {bestSubmission &&
+    {!isAdmin &&
+      bestSubmission &&
       <td>
         <ResourceRenderer resource={bestSubmission}>
           {data =>
@@ -83,6 +97,21 @@ const AssignmentTableRow = ({
           </span>
         : <span>-</span>}
     </td>
+    {isAdmin &&
+      <td className="text-right">
+        <ButtonGroup>
+          <LinkContainer to={ASSIGNMENT_EDIT_URI_FACTORY(id)}>
+            <Button bsSize="xs" bsStyle="warning">
+              <EditIcon />{' '}
+              <FormattedMessage
+                id="app.adminAssignmentsTableRow.edit"
+                defaultMessage="Edit"
+              />
+            </Button>
+          </LinkContainer>
+          <DeleteAssignmentButtonContainer id={id} bsSize="xs" />
+        </ButtonGroup>
+      </td>}
   </tr>;
 
 AssignmentTableRow.propTypes = {
@@ -98,6 +127,7 @@ AssignmentTableRow.propTypes = {
   status: PropTypes.string,
   userId: PropTypes.string,
   bestSubmission: PropTypes.object,
+  isAdmin: PropTypes.bool,
   links: PropTypes.object
 };
 
