@@ -9,7 +9,7 @@ import { FormattedMessage, injectIntl } from 'react-intl';
 import { List, Map } from 'immutable';
 
 import Page from '../../components/layout/Page';
-import GroupDetailComponent, {
+import {
   LoadingGroupDetail,
   FailedGroupDetail
 } from '../../components/Groups/GroupDetail';
@@ -177,7 +177,6 @@ class GroupDetail extends Component {
     const {
       group,
       userId,
-      groups,
       students,
       supervisors = List(),
       allAssignments = List(),

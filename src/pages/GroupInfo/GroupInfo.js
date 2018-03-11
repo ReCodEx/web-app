@@ -17,7 +17,7 @@ import GroupDetail, {
 } from '../../components/Groups/GroupDetail';
 import LeaveJoinGroupButtonContainer from '../../containers/LeaveJoinGroupButtonContainer';
 import HierarchyLine from '../../components/Groups/HierarchyLine';
-import { EditIcon } from '../../components/icons';
+import { ResultsIcon, EditIcon } from '../../components/icons';
 import { LocalizedGroupName } from '../../components/helpers/LocalizedNames';
 import SupervisorsList from '../../components/Users/SupervisorsList';
 import { getLocalizedName } from '../../helpers/getLocalizedData';
@@ -119,7 +119,8 @@ class GroupInfo extends Component {
       isSupervisor,
       addSubgroup,
       formValues,
-      links: { GROUP_EDIT_URI_FACTORY }
+      links: { GROUP_EDIT_URI_FACTORY, GROUP_DETAIL_URI_FACTORY },
+      intl: { locale }
     } = this.props;
 
     return (
@@ -143,8 +144,9 @@ class GroupInfo extends Component {
               parentGroupsIds={data.parentGroupsIds}
             />
             <p />
-            {(isAdmin || isSuperAdmin) &&
-              <p>
+
+            <p>
+              {(isAdmin || isSuperAdmin) &&
                 <LinkContainer to={GROUP_EDIT_URI_FACTORY(data.id)}>
                   <Button bsStyle="warning">
                     <EditIcon />{' '}
@@ -153,11 +155,21 @@ class GroupInfo extends Component {
                       defaultMessage="Edit group settings"
                     />
                   </Button>
-                </LinkContainer>
-              </p>}
+                </LinkContainer>}
+              {!data.organizational &&
+                <LinkContainer to={GROUP_DETAIL_URI_FACTORY(data.id)}>
+                  <Button bsStyle="info">
+                    <ResultsIcon />{' '}
+                    <FormattedMessage
+                      id="app.group.seeDetail"
+                      defaultMessage="See Group Detail"
+                    />
+                  </Button>
+                </LinkContainer>}
+            </p>
 
             <Row>
-              <Col xs={6}>
+              <Col sm={6}>
                 {data.childGroups.all.length > 0 &&
                   <Box
                     title={
@@ -188,12 +200,13 @@ class GroupInfo extends Component {
                   formValues={formValues}
                 />
               </Col>
-              <Col xs={6}>
+              <Col sm={6}>
                 <GroupDetail
                   group={data}
                   supervisors={supervisors}
                   isAdmin={isAdmin || isSuperAdmin}
                   groups={groups}
+                  locale={locale}
                 />
                 <Box
                   noPadding
@@ -209,7 +222,7 @@ class GroupInfo extends Component {
                             name: data.name,
                             localizedTexts: data.localizedTexts
                           },
-                          'en' //locale
+                          locale
                         )
                       }}
                     />
