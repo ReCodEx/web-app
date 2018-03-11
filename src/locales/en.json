@@ -465,7 +465,7 @@
   "app.evaluationDetail.title.compilationLogs": "Compilation logs",
   "app.evaluationDetail.title.details": "Evaluation details",
   "app.evaluationDetail.totalScore": "Total score:",
-  "app.evaluationProgress.continue": "See the results",
+  "app.evaluationProgress.continue": "See The Results",
   "app.evaluationProgress.noWebSockets": "Your browser does not support realtime progress monitoring or the connection to the server could not be estabelished or was lost. The evaluation has already started and you will be able to see the results soon.",
   "app.evaluationProgress.title": "The solution is being evaluated",
   "app.evaluationProgressStatus.completed": "COMPLETED",

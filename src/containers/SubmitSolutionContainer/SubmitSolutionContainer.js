@@ -23,7 +23,6 @@ import {
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import { cancel, changeNote } from '../../redux/modules/submission';
 import { reset as resetUpload } from '../../redux/modules/upload';
-import { resubmitReferenceSolution } from '../../redux/modules/referenceSolutions';
 
 import withLinks from '../../helpers/withLinks';
 import { canSubmit } from '../../redux/modules/canSubmit';
@@ -98,7 +97,10 @@ class SubmitSolutionContainer extends Component {
       submissionId,
       monitor,
       reset,
-      links: { SUBMISSION_DETAIL_URI_FACTORY },
+      links: {
+        EXERCISE_REFERENCE_SOLUTION_URI_FACTORY,
+        SUBMISSION_DETAIL_URI_FACTORY
+      },
       showProgress = true,
       isReferenceSolution = false,
       onEndFetch
@@ -136,9 +138,13 @@ class SubmitSolutionContainer extends Component {
           <EvaluationProgressContainer
             isOpen={isProcessing}
             monitor={monitor}
-            link={SUBMISSION_DETAIL_URI_FACTORY(id, submissionId)}
-            onUserClose={onEndFetch}
-            onFinish={onEndFetch}
+            link={
+              isReferenceSolution
+                ? EXERCISE_REFERENCE_SOLUTION_URI_FACTORY(id, submissionId)
+                : SUBMISSION_DETAIL_URI_FACTORY(id, submissionId)
+            }
+            onUserClose={!isReferenceSolution ? onEndFetch : null}
+            onFinish={!isReferenceSolution ? onEndFetch : null}
           />}
       </div>
     );
@@ -175,7 +181,7 @@ SubmitSolutionContainer.propTypes = {
 
 export default withLinks(
   connect(
-    (state, { id, userId, isReferenceSolution }) => {
+    (state, { id, userId }) => {
       return {
         userId: userId || loggedInUserIdSelector(state),
         note: getNote(state),
@@ -190,26 +196,11 @@ export default withLinks(
         presubmitEnvironments: getPresubmitEnvironments(state)
       };
     },
-    (
-      dispatch,
-      {
-        id,
-        userId,
-        onSubmit,
-        onReset,
-        presubmitValidation,
-        isReferenceSolution
-      }
-    ) => ({
+    (dispatch, { id, userId, onSubmit, onReset, presubmitValidation }) => ({
       changeNote: note => dispatch(changeNote(note)),
       cancel: () => dispatch(cancel()),
       submitSolution: (note, files, runtimeEnvironmentId = null) =>
-        dispatch(onSubmit(userId, id, note, files, runtimeEnvironmentId)).then(
-          res =>
-            isReferenceSolution
-              ? dispatch(resubmitReferenceSolution(res.value.id))
-              : Promise.resolve()
-        ),
+        dispatch(onSubmit(userId, id, note, files, runtimeEnvironmentId)),
       presubmitSolution: files => dispatch(presubmitValidation(id, files)),
       reset: () => dispatch(resetUpload(id)) && dispatch(onReset(userId, id)),
       onEndFetch: () =>

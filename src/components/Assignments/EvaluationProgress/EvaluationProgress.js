@@ -113,7 +113,7 @@ class EvaluationProgress extends Component {
             >
               <FormattedMessage
                 id="app.evaluationProgress.continue"
-                defaultMessage="See the results"
+                defaultMessage="See The Results"
               />
             </Button>
           </p>

@@ -143,17 +143,30 @@ const reducer = handleActions(
 
     [actionTypes.SUBMIT_FULFILLED]: (
       state,
-      { payload: { submission, webSocketChannel } }
-    ) =>
-      submission && webSocketChannel
+      { payload, meta: { submissionType } }
+    ) => {
+      // extract submission and ws channel correctly based on the solution type
+      const { submission = null, webSocketChannel = null } =
+        submissionType === 'referenceSolution'
+          ? payload.submissions &&
+            payload.submissions.length > 0 &&
+            payload.submissions[0]
+          : payload;
+      const submissionId =
+        submissionType === 'referenceSolution'
+          ? payload.referenceSolution.id
+          : submission && submission.id;
+
+      return submissionId && webSocketChannel
         ? state
-            .set('submissionId', submission.id)
+            .set('submissionId', submissionId)
             .set('monitor', {
               url: webSocketChannel.monitorUrl,
               id: webSocketChannel.id
             })
             .set('status', submissionStatus.PROCESSING)
-        : state.set('status', submissionStatus.PROCESSING),
+        : state.set('status', submissionStatus.PROCESSING);
+    },
 
     [actionTypes.CANCEL]: (state, { payload }) => initialState,
 

@@ -504,7 +504,6 @@ class Exercise extends Component {
                           presubmitValidation={presubmitReferenceSolution}
                           onReset={init}
                           isOpen={submitting}
-                          showProgress={false}
                           isReferenceSolution={true}
                         />
                       </div>
