@@ -2,7 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import UsersNameContainer from '../../../containers/UsersNameContainer';
 
-const ResultsTableRow = ({ userId, assignmentsIds, userStats }) => {
+const ResultsTableRow = ({
+  userId,
+  assignmentsIds,
+  userStats,
+  isAdmin,
+  renderActions
+}) => {
   return (
     <tr>
       <td>
@@ -39,6 +45,10 @@ const ResultsTableRow = ({ userId, assignmentsIds, userStats }) => {
           {userStats && userStats.points ? userStats.points.gained : '-'}/{userStats && userStats.points ? userStats.points.total : '-'}
         </b>
       </td>
+      {isAdmin &&
+        <td className="text-right">
+          {renderActions && renderActions(userId)}
+        </td>}
     </tr>
   );
 };
@@ -46,7 +56,9 @@ const ResultsTableRow = ({ userId, assignmentsIds, userStats }) => {
 ResultsTableRow.propTypes = {
   userId: PropTypes.string.isRequired,
   assignmentsIds: PropTypes.array.isRequired,
-  userStats: PropTypes.object
+  userStats: PropTypes.object,
+  isAdmin: PropTypes.bool,
+  renderActions: PropTypes.func
 };
 
 export default ResultsTableRow;

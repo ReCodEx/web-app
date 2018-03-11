@@ -2,18 +2,16 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { LoadingIcon } from '../../icons';
 
-const LoadingResultsTableRow = () => (
+const LoadingResultsTableRow = () =>
   <tr>
     <td className="text-center" colSpan={5}>
-      <LoadingIcon />
-      {' '}
+      <LoadingIcon />{' '}
       <FormattedMessage
         id="app.groupResultsTableRow.loading"
         defaultMessage="Loading results ..."
       />
     </td>
-  </tr>
-);
+  </tr>;
 
 LoadingResultsTableRow.propTypes = {};
 

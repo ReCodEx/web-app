@@ -16,6 +16,8 @@ const ResultsTable = ({
   assignments = List(),
   users = [],
   stats,
+  isAdmin = false,
+  renderActions = null,
   links: { SUPERVISOR_STATS_URI_FACTORY }
 }) => {
   const assignmentsArray = assignments.sort(compareAssignments);
@@ -42,6 +44,7 @@ const ResultsTable = ({
               defaultMessage="Total"
             />
           </th>
+          {isAdmin && <th />}
         </tr>
       </thead>
       <tbody key={'body'}>
@@ -55,6 +58,8 @@ const ResultsTable = ({
               userId={user.id}
               assignmentsIds={assignmentsIds}
               userStats={stats.find(stat => stat.userId === user.id)}
+              isAdmin={isAdmin}
+              renderActions={renderActions}
             />
           )}
       </tbody>
@@ -66,6 +71,8 @@ ResultsTable.propTypes = {
   assignments: PropTypes.array.isRequired,
   users: PropTypes.array.isRequired,
   stats: PropTypes.array.isRequired,
+  isAdmin: PropTypes.bool,
+  renderActions: PropTypes.func,
   links: PropTypes.object
 };
 

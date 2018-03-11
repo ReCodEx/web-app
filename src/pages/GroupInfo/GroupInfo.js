@@ -143,7 +143,6 @@ class GroupInfo extends Component {
               groupId={data.id}
               parentGroupsIds={data.parentGroupsIds}
             />
-            <p />
 
             <p>
               {(isAdmin || isSuperAdmin) &&

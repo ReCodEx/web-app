@@ -24,6 +24,7 @@ import AddStudent from '../../components/Groups/AddStudent';
 import DeleteExerciseButtonContainer from '../../containers/DeleteExerciseButtonContainer';
 import ExercisesSimpleList from '../../components/Exercises/ExercisesSimpleList';
 import AssignExerciseButton from '../../components/buttons/AssignExerciseButton';
+import LeaveJoinGroupButtonContainer from '../../containers/LeaveJoinGroupButtonContainer';
 
 import { fetchGroupIfNeeded } from '../../redux/modules/groups';
 import { fetchGroupsStats } from '../../redux/modules/stats';
@@ -206,7 +207,6 @@ class GroupDetail extends Component {
               groupId={data.id}
               parentGroupsIds={data.parentGroupsIds}
             />
-            <p />
 
             <p>
               <LinkContainer to={GROUP_INFO_URI_FACTORY(data.id)}>
@@ -261,6 +261,12 @@ class GroupDetail extends Component {
                         users={students}
                         assignments={pubAssignments}
                         stats={groupStats}
+                        isAdmin={isAdmin}
+                        renderActions={id =>
+                          <LeaveJoinGroupButtonContainer
+                            userId={id}
+                            groupId={data.id}
+                          />}
                       />}
                   </ResourceRenderer>
                 </Box>
