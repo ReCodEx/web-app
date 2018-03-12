@@ -15,7 +15,7 @@ import reducer, {
 
 import { Map } from 'immutable';
 
-describe('Submission of user\'s solution', () => {
+describe("Submission of user's solution", () => {
   describe('(Action creators)', () => {
     it('must initialize the submission', () => {
       const userId = 'abcdefg';
@@ -50,7 +50,8 @@ describe('Submission of user\'s solution', () => {
           note: '',
           monitor: null,
           status: submissionStatus.NONE,
-          warningMsg: null
+          warningMsg: null,
+          presubmit: null
         })
       );
     });
@@ -68,7 +69,8 @@ describe('Submission of user\'s solution', () => {
           note: '',
           monitor: null,
           status: submissionStatus.CREATING,
-          warningMsg: null
+          warningMsg: null,
+          presubmit: null
         })
       );
     });
@@ -84,7 +86,8 @@ describe('Submission of user\'s solution', () => {
         note: '',
         monitor: null,
         status: submissionStatus.PROCESSING,
-        warningMsg: 'This is not gonna end well!'
+        warningMsg: 'This is not gonna end well!',
+        presubmit: []
       });
 
       const state = reducer(oldState, init(userId, id));
@@ -97,7 +100,8 @@ describe('Submission of user\'s solution', () => {
           note: '',
           monitor: null,
           status: submissionStatus.CREATING,
-          warningMsg: null
+          warningMsg: null,
+          presubmit: null
         })
       );
     });
@@ -132,7 +136,8 @@ describe('Submission of user\'s solution', () => {
           payload: {
             submission: { id: '123' },
             webSocketChannel: { monitorUrl: 'ws://xyz.cz' }
-          }
+          },
+          meta: { submissionType: 'assignmentSolution' }
         });
         expect(state.get('status')).to.equal(submissionStatus.PROCESSING);
         expect(state.get('submissionId')).to.equal('123');

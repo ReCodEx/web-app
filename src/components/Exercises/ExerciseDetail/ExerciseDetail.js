@@ -46,10 +46,7 @@ const ExerciseDetail = ({
       <tbody>
         <tr>
           <th>
-            <FormattedMessage
-              id="app.exercise.author"
-              defaultMessage="Author:"
-            />
+            <FormattedMessage id="generic.author" defaultMessage="Author" />:
           </th>
           <td>
             <UsersNameContainer userId={authorId} />

@@ -6,6 +6,7 @@ import { actionTypes as uploadActionTypes } from './upload';
 export const submissionStatus = {
   NONE: 'NONE',
   CREATING: 'CREATING',
+  VALIDATING: 'VALIDATING',
   SENDING: 'SENDING',
   FAILED: 'FAILED',
   PROCESSING: 'PROCESSING',
@@ -20,6 +21,11 @@ export const actionTypes = {
   SUBMIT_PENDING: 'recodex/submission/SUBMIT_PENDING',
   SUBMIT_FULFILLED: 'recodex/submission/SUBMIT_FULFILLED',
   SUBMIT_REJECTED: 'recodex/submission/SUBMIT_REJECTED',
+  PRESUBMIT: 'recodex/submission/PRESUBMIT',
+  PRESUBMIT_RESET: 'recodex/submission/PRESUBMIT_RESET',
+  PRESUBMIT_PENDING: 'recodex/submission/PRESUBMIT_PENDING',
+  PRESUBMIT_FULFILLED: 'recodex/submission/PRESUBMIT_FULFILLED',
+  PRESUBMIT_REJECTED: 'recodex/submission/PRESUBMIT_REJECTED',
   PROCESSING_FINISHED: 'recodex/submission/PROCESSING_FINISHED'
 };
 
@@ -31,7 +37,8 @@ export const initialState = fromJS({
   note: '',
   monitor: null,
   status: submissionStatus.NONE,
-  warningMsg: null
+  warningMsg: null,
+  presubmit: null // results of pre-submit check
 });
 
 /**
@@ -74,12 +81,43 @@ export const submitAssignmentSolution = submit(
   id => `/exercise-assignments/${id}/submit`
 );
 
-export const createReferenceSolution = submit(
-  id => `/reference-solutions/exercise/${id}`,
+export const submitReferenceSolution = submit(
+  id => `/reference-solutions/exercise/${id}/submit`,
   'referenceSolution'
 );
 
 export const finishProcessing = createAction(actionTypes.PROCESSING_FINISHED);
+
+/**
+ * Presubmit endpoints
+ */
+
+const presubmit = endpoint => (id, files) => {
+  if (!files || !files.length) {
+    return createAction(
+      actionTypes.PRESUBMIT_RESET
+    )(/* immediate instantiation without payload */);
+  }
+
+  var submitBody = {
+    files: files.map(file => file.id)
+  };
+  return createApiAction({
+    type: actionTypes.PRESUBMIT,
+    method: 'POST',
+    endpoint: endpoint(id),
+    body: submitBody,
+    meta: { urlId: id }
+  });
+};
+
+export const presubmitAssignmentSolution = presubmit(
+  id => `/exercise-assignments/${id}/pre-submit`
+);
+
+export const presubmitReferenceSolution = presubmit(
+  id => `/reference-solutions/exercise/${id}/pre-submit`
+);
 
 /**
  * Reducer takes mainly care about all the state of individual attachments
@@ -91,7 +129,8 @@ const reducer = handleActions(
       initialState
         .set('userId', userId)
         .set('id', id)
-        .set('status', submissionStatus.CREATING),
+        .set('status', submissionStatus.CREATING)
+        .set('presubmit', null),
 
     [actionTypes.CHANGE_NOTE]: (state, { payload }) =>
       state.set('note', payload).set('status', submissionStatus.CREATING),
@@ -104,17 +143,30 @@ const reducer = handleActions(
 
     [actionTypes.SUBMIT_FULFILLED]: (
       state,
-      { payload: { submission, webSocketChannel } }
-    ) =>
-      submission && webSocketChannel
+      { payload, meta: { submissionType } }
+    ) => {
+      // extract submission and ws channel correctly based on the solution type
+      const { submission = null, webSocketChannel = null } =
+        submissionType === 'referenceSolution'
+          ? payload.submissions &&
+            payload.submissions.length > 0 &&
+            payload.submissions[0]
+          : payload;
+      const submissionId =
+        submissionType === 'referenceSolution'
+          ? payload.referenceSolution.id
+          : submission && submission.id;
+
+      return submissionId && webSocketChannel
         ? state
-            .set('submissionId', submission.id)
+            .set('submissionId', submissionId)
             .set('monitor', {
               url: webSocketChannel.monitorUrl,
               id: webSocketChannel.id
             })
             .set('status', submissionStatus.PROCESSING)
-        : state.set('status', submissionStatus.PROCESSING),
+        : state.set('status', submissionStatus.PROCESSING);
+    },
 
     [actionTypes.CANCEL]: (state, { payload }) => initialState,
 
@@ -137,7 +189,22 @@ const reducer = handleActions(
       state.set('status', submissionStatus.CREATING),
 
     [uploadActionTypes.UPLOAD_FAILED]: (state, { meta: { fileName } }) =>
-      state.set('status', submissionStatus.FAILED)
+      state.set('status', submissionStatus.FAILED),
+
+    // Presubmit check operations
+    [actionTypes.PRESUBMIT_RESET]: state =>
+      state.set('presubmit', null).set('status', submissionStatus.CREATING),
+
+    [actionTypes.PRESUBMIT_PENDING]: state =>
+      state.set('presubmit', null).set('status', submissionStatus.VALIDATING),
+
+    [actionTypes.PRESUBMIT_REJECTED]: state =>
+      state.set('status', submissionStatus.FAILED),
+
+    [actionTypes.PRESUBMIT_FULFILLED]: (state, { payload }) =>
+      state
+        .set('presubmit', fromJS(payload))
+        .set('status', submissionStatus.CREATING)
   },
   initialState
 );

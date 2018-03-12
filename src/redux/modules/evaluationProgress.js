@@ -76,16 +76,24 @@ export default handleActions(
 
     [submissionActionTypes.SUBMIT_FULFILLED]: (
       state,
-      { payload: { webSocketChannel } }
-    ) =>
-      webSocketChannel
+      { payload, meta: { submissionType } }
+    ) => {
+      const webSocketChannel =
+        submissionType === 'referenceSolution'
+          ? payload.submissions &&
+            payload.submissions.length > 0 &&
+            payload.submissions[0].webSocketChannel
+          : payload.webSocketChannel;
+
+      return webSocketChannel
         ? initialState
             .update('webSocketChannelId', () => webSocketChannel.id)
             .update(
               'expectedTasksCount',
               () => webSocketChannel.expectedTasksCount
             )
-        : initialState.set('isFinished', true),
+        : initialState.set('isFinished', true);
+    },
 
     [actionTypes.COMPLETED_TASK]: (state, { payload: msg }) =>
       pushMessage(increment(state, 'completed'), msg),

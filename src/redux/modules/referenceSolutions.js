@@ -18,6 +18,7 @@ const { actions, reduceActions } = factory({
  */
 
 export const additionalActionTypes = {
+  RESUBMIT: 'recodex/referenceSolutions/RESUBMIT',
   REMOVE: 'recodex/referenceSolutions/REMOVE',
   REMOVE_PENDING: 'recodex/referenceSolutions/REMOVE_PENDING',
   REMOVE_FULFILLED: 'recodex/referenceSolutions/REMOVE_FULFILLED',
@@ -27,10 +28,10 @@ export const additionalActionTypes = {
 export const fetchReferenceSolutions = actions.fetchResource;
 export const fetchReferenceSolutionsIfNeeded = actions.fetchOneIfNeeded; // fetch solutions for one exercise
 
-export const evaluateReferenceSolution = (solutionId, isDebug = false) =>
+export const resubmitReferenceSolution = (solutionId, isDebug = false) =>
   createApiAction({
-    type: 'SUBMIT_REFERENCE_SOLUTION',
-    endpoint: `/reference-solutions/${solutionId}/evaluate`,
+    type: additionalActionTypes.RESUBMIT,
+    endpoint: `/reference-solutions/${solutionId}/resubmit`,
     method: 'POST',
     body: { debug: isDebug },
     meta: { solutionId }
@@ -52,14 +53,14 @@ const reducer = handleActions(
   Object.assign({}, reduceActions, {
     [additionalSubmissionActionTypes.SUBMIT_FULFILLED]: (
       state,
-      { payload, meta: { urlId, submissionType } }
+      { payload: { referenceSolution }, meta: { urlId, submissionType } }
     ) =>
       submissionType === 'referenceSolution'
         ? state.updateIn(['resources', urlId, 'data'], data => {
             if (!data) {
               data = List();
             }
-            return data.push(fromJS(payload));
+            return data.push(fromJS(referenceSolution));
           })
         : state,
     [additionalActionTypes.REMOVE_FULFILLED]: (

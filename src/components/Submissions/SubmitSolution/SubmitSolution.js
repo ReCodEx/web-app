@@ -8,7 +8,8 @@ import {
   FormGroup,
   ControlLabel,
   FormControl,
-  HelpBlock
+  HelpBlock,
+  Well
 } from 'react-bootstrap';
 import {
   LoadingIcon,
@@ -23,22 +24,27 @@ import UsersNameContainer from '../../../containers/UsersNameContainer';
 const commonMessages = defineMessages({
   runtimeEnvironment: {
     id: 'app.submitSolution.runtimeEnvironment',
-    defaultMessage: 'Select programming language/tool type/runtime environemnt:'
+    defaultMessage: 'Select runtime environment (programming language):'
   },
-  detectRte: {
-    id: 'app.submitSolution.autodetect',
-    defaultMessage: 'Automatically detect'
+  uploadFilesFirst: {
+    id: 'app.submitSolution.uploadFilesFirst',
+    defaultMessage: 'Upload your files first...'
   },
-  selectOneRte: {
-    id: 'app.submitSolution.noAutodetect',
-    defaultMessage: 'Select one runtime environment'
+  validating: {
+    id: 'app.submitSolution.validating',
+    defaultMessage: 'Performing pre-submit validation...'
+  },
+  noEnvironments: {
+    id: 'app.submitSolution.noEnvironments',
+    defaultMessage:
+      'Uploaded files do not meet criteria of any allowed runtime environment.'
   },
   resetForm: {
-    id: 'app.submitSolution.resetFormButton',
-    defaultMessage: 'Reset form'
+    id: 'generic.reset',
+    defaultMessage: 'Reset'
   },
   closeForm: {
-    id: 'app.submitSolution.closeButton',
+    id: 'generic.close',
     defaultMessage: 'Close'
   },
   instructions: {
@@ -50,44 +56,36 @@ const commonMessages = defineMessages({
     id: 'app.submistSolution.submitFailed',
     defaultMessage:
       'Action was rejected by the server. This usually means you have uploaded incorrect files - do your files have proper file type extensions? If you cannot submit the solution and there is no obvious reason, contact your administrator to sort things out.'
+  },
+  submitButton: {
+    id: 'generic.submit',
+    defaultMessage: 'Submit'
+  },
+  submitting: {
+    id: 'generic.submitting',
+    defaultMessage: 'Submitting ...'
   }
 });
 
 const submissionMessages = defineMessages({
   title: {
     id: 'app.submitSolution.title',
-    defaultMessage: 'Submit the solution'
+    defaultMessage: 'Submit New Solution'
   },
   noteLabel: {
     id: 'app.submitSolution.noteLabel',
-    defaultMessage: 'Note for you and your supervisor(s)'
-  },
-  submitButton: {
-    id: 'app.submitSolution.submitButton',
-    defaultMessage: 'Submit the solution'
-  },
-  submitting: {
-    id: 'app.submitSolution.submittingButtonText',
-    defaultMessage: 'Submitting the solution ...'
+    defaultMessage: 'Note for you and your supervisor(s):'
   }
 });
 
 const referenceSolutionMessages = defineMessages({
   title: {
     id: 'app.submitRefSolution.title',
-    defaultMessage: 'Create reference solution'
+    defaultMessage: 'Create Reference Solution'
   },
   noteLabel: {
     id: 'app.submitRefSolution.noteLabel',
-    defaultMessage: 'Description of the reference solution'
-  },
-  submitButton: {
-    id: 'app.submitRefSolution.submitButton',
-    defaultMessage: 'Create new reference solution'
-  },
-  submitting: {
-    id: 'app.submitRefSolution.submittingButtonText',
-    defaultMessage: 'Creating new reference solution ...'
+    defaultMessage: 'Description of the reference solution:'
   }
 });
 
@@ -95,15 +93,17 @@ const SubmitSolution = ({
   userId,
   isOpen,
   onClose,
+  onFilesChange,
   reset,
   uploadId,
   canSubmit,
   isSending,
+  isValidating,
   hasFailed,
   note = '',
-  runtimeEnvironments,
+  presubmitEnvironments,
+  selectedEnvironment,
   changeRuntimeEnvironment,
-  autodetection,
   saveNote,
   submitSolution,
   isReferenceSolution,
@@ -120,30 +120,36 @@ const SubmitSolution = ({
       <p>
         <UsersNameContainer userId={userId} />
       </p>
-      <UploadContainer id={uploadId} />
+      <UploadContainer id={uploadId} onChange={onFilesChange} />
 
-      {runtimeEnvironments.length > 0 &&
-        <FormGroup>
-          <ControlLabel>
-            {formatMessage(commonMessages.runtimeEnvironment)}
-          </ControlLabel>
-          <FormControl
-            onChange={e => changeRuntimeEnvironment(e.target.value)}
-            componentClass="select"
-            defaultValue={null}
-          >
-            <option value={null}>
-              {autodetection
-                ? formatMessage(commonMessages.detectRte)
-                : formatMessage(commonMessages.selectOneRte)}
-            </option>
-            {runtimeEnvironments.map(rte =>
-              <option key={rte.id} value={rte.id}>
-                {rte.name}
-              </option>
-            )}
-          </FormControl>
-        </FormGroup>}
+      <FormGroup>
+        <ControlLabel>
+          {formatMessage(commonMessages.runtimeEnvironment)}
+        </ControlLabel>
+        {isValidating
+          ? <p>
+              <LoadingIcon /> {formatMessage(commonMessages.validating)}
+            </p>
+          : !presubmitEnvironments
+            ? <p className="text-left callout callout-info">
+                {formatMessage(commonMessages.uploadFilesFirst)}
+              </p>
+            : presubmitEnvironments.length > 0
+              ? <FormControl
+                  onChange={e => changeRuntimeEnvironment(e.target.value)}
+                  componentClass="select"
+                  defaultValue={selectedEnvironment}
+                >
+                  {presubmitEnvironments.map(rte =>
+                    <option key={rte.id} value={rte.id}>
+                      {rte.name}
+                    </option>
+                  )}
+                </FormControl>
+              : <p className="text-left callout callout-danger">
+                  {formatMessage(commonMessages.noEnvironments)}
+                </p>}
+      </FormGroup>
 
       <FormGroup>
         <ControlLabel>
@@ -169,7 +175,7 @@ const SubmitSolution = ({
           bsStyle="success"
           className="btn-flat"
         >
-          <LoadingIcon /> {formatMessage(messages.submitting)}
+          <LoadingIcon /> {formatMessage(commonMessages.submitting)}
         </Button>}
 
       {!isSending &&
@@ -181,7 +187,7 @@ const SubmitSolution = ({
           onClick={submitSolution}
         >
           {hasFailed ? <WarningIcon /> : <SendIcon />}{' '}
-          {formatMessage(messages.submitButton)}
+          {formatMessage(commonMessages.submitButton)}
         </Button>}
 
       <Button bsStyle="default" className="btn-flat" onClick={reset}>
@@ -191,17 +197,22 @@ const SubmitSolution = ({
       <Button bsStyle="default" className="btn-flat" onClick={onClose}>
         <CloseIcon /> {formatMessage(commonMessages.closeForm)}
       </Button>
+      <br />
+      <br />
 
       {!canSubmit &&
-        <HelpBlock className="text-left">
-          {formatMessage(commonMessages.instructions)}
-        </HelpBlock>}
+        <Well>
+          <HelpBlock className="text-left">
+            {formatMessage(commonMessages.instructions)}
+          </HelpBlock>
+        </Well>}
     </Modal.Footer>
   </Modal>;
 
 SubmitSolution.propTypes = {
   userId: PropTypes.string.isRequired,
   onClose: PropTypes.func.isRequired,
+  onFilesChange: PropTypes.func.isRequired,
   reset: PropTypes.func.isRequired,
   uploadId: PropTypes.string.isRequired,
   canSubmit: PropTypes.bool.isRequired,
@@ -211,9 +222,10 @@ SubmitSolution.propTypes = {
   saveNote: PropTypes.func.isRequired,
   hasFailed: PropTypes.bool,
   isProcessing: PropTypes.bool,
+  isValidating: PropTypes.bool,
   isSending: PropTypes.bool,
-  runtimeEnvironments: PropTypes.array,
-  autodetection: PropTypes.bool,
+  presubmitEnvironments: PropTypes.array,
+  selectedEnvironment: PropTypes.string,
   changeRuntimeEnvironment: PropTypes.func.isRequired,
   isReferenceSolution: PropTypes.bool,
   messages: PropTypes.object.isRequired,

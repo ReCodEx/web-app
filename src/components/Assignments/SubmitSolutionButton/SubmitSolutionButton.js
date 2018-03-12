@@ -4,21 +4,19 @@ import Icon from 'react-fontawesome';
 import Button from '../../widgets/FlatButton';
 import { FormattedMessage } from 'react-intl';
 
-const SubmitSolutionButton = ({ disabled = false, onClick }) => (
+const SubmitSolutionButton = ({ disabled = false, onClick }) =>
   <Button
     bsStyle="success"
     className="btn-flat"
     disabled={disabled}
     onClick={onClick}
   >
-    <Icon name="bug" />
-    {' '}
+    <Icon name="bug" />{' '}
     <FormattedMessage
       id="app.submissionsTable.submitNewSolution"
-      defaultMessage="Submit new solution"
+      defaultMessage="Submit New Solution"
     />
-  </Button>
-);
+  </Button>;
 
 SubmitSolutionButton.propTypes = {
   disabled: PropTypes.bool,

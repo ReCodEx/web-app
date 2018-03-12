@@ -16,7 +16,7 @@ import Page from '../../components/layout/Page';
 import {
   fetchReferenceSolutionsIfNeeded,
   fetchReferenceSolutions,
-  evaluateReferenceSolution
+  resubmitReferenceSolution
 } from '../../redux/modules/referenceSolutions';
 import { referenceSolutionsSelector } from '../../redux/selectors/referenceSolutions';
 import ReferenceSolutionDetail from '../../components/ReferenceSolutions/ReferenceSolutionDetail';
@@ -60,8 +60,8 @@ class ReferenceSolution extends Component {
       referenceSolutions,
       params: { exerciseId, referenceSolutionId },
       refreshSolutionEvaluations,
-      evaluateReferenceSolution,
-      evaluateReferenceSolutionInDebugMode,
+      resubmitReferenceSolution,
+      resubmitReferenceSolutionInDebugMode,
       downloadSolutionArchive,
       intl: { formatMessage },
       links: { EXERCISES_URI, EXERCISE_URI_FACTORY }
@@ -167,7 +167,7 @@ class ReferenceSolution extends Component {
                             bsStyle="success"
                             className="btn-flat"
                             onClick={() =>
-                              evaluateReferenceSolution().then(
+                              resubmitReferenceSolution().then(
                                 refreshSolutionEvaluations
                               )}
                           >
@@ -183,7 +183,7 @@ class ReferenceSolution extends Component {
                             bsStyle="danger"
                             className="btn-flat"
                             onClick={() =>
-                              evaluateReferenceSolutionInDebugMode().then(
+                              resubmitReferenceSolutionInDebugMode().then(
                                 refreshSolutionEvaluations
                               )}
                           >
@@ -228,8 +228,8 @@ ReferenceSolution.propTypes = {
   }).isRequired,
   loadAsync: PropTypes.func.isRequired,
   refreshSolutionEvaluations: PropTypes.func.isRequired,
-  evaluateReferenceSolution: PropTypes.func.isRequired,
-  evaluateReferenceSolutionInDebugMode: PropTypes.func.isRequired,
+  resubmitReferenceSolution: PropTypes.func.isRequired,
+  resubmitReferenceSolutionInDebugMode: PropTypes.func.isRequired,
   referenceSolutions: ImmutablePropTypes.map,
   downloadSolutionArchive: PropTypes.func,
   intl: intlShape.isRequired,
@@ -247,10 +247,10 @@ export default withLinks(
         refreshSolutionEvaluations: () => {
           dispatch(fetchReferenceSolutions(params.exerciseId));
         },
-        evaluateReferenceSolution: () =>
-          dispatch(evaluateReferenceSolution(params.referenceSolutionId)),
-        evaluateReferenceSolutionInDebugMode: () =>
-          dispatch(evaluateReferenceSolution(params.referenceSolutionId, true)),
+        resubmitReferenceSolution: () =>
+          dispatch(resubmitReferenceSolution(params.referenceSolutionId)),
+        resubmitReferenceSolutionInDebugMode: () =>
+          dispatch(resubmitReferenceSolution(params.referenceSolutionId, true)),
         downloadSolutionArchive: e => {
           e.preventDefault();
           dispatch(downloadSolutionArchive(params.referenceSolutionId));

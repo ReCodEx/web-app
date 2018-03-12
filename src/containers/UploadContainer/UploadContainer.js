@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { List } from 'immutable';
 import Upload from '../../components/Submissions/Upload';
 
 import {
@@ -24,15 +23,14 @@ class UploadContainer extends Component {
     this.props.init();
   }
 
-  uploadFiles = files => files.map(this.props.uploadFile);
-
   retryUploadFile = payload => {
     this.props.removeFailedFile(payload);
-    this.uploadFiles([payload.file]);
+    this.props.uploadFiles([payload.file]);
   };
 
   render = () => {
     const {
+      uploadFiles,
       attachedFiles,
       uploadingFiles,
       failedFiles,
@@ -44,7 +42,7 @@ class UploadContainer extends Component {
 
     return (
       <Upload
-        uploadFiles={this.uploadFiles}
+        uploadFiles={uploadFiles}
         uploadingFiles={uploadingFiles}
         attachedFiles={attachedFiles}
         failedFiles={failedFiles}
@@ -60,6 +58,7 @@ class UploadContainer extends Component {
 
 UploadContainer.propTypes = {
   id: PropTypes.string.isRequired,
+  onChange: PropTypes.func,
   init: PropTypes.func.isRequired,
   attachedFiles: PropTypes.array,
   uploadingFiles: PropTypes.array,
@@ -68,21 +67,38 @@ UploadContainer.propTypes = {
   removeFailedFile: PropTypes.func.isRequired,
   removeFile: PropTypes.func.isRequired,
   returnFile: PropTypes.func.isRequired,
-  uploadFile: PropTypes.func.isRequired
+  uploadFile: PropTypes.func.isRequired,
+  uploadFiles: PropTypes.func.isRequired
+};
+
+const appendThen = (promise, action) => {
+  return action ? promise.then(action) : promise;
 };
 
 export default connect(
   (state, { id }) => ({
-    uploadingFiles: (createGetUploadingFiles(id)(state) || List()).toJS(),
-    attachedFiles: (createGetUploadedFiles(id)(state) || List()).toJS(),
-    failedFiles: (createGetFailedFiles(id)(state) || List()).toJS(),
-    removedFiles: (createGetRemovedFiles(id)(state) || List()).toJS()
+    uploadingFiles: createGetUploadingFiles(id)(state),
+    attachedFiles: createGetUploadedFiles(id)(state),
+    failedFiles: createGetFailedFiles(id)(state),
+    removedFiles: createGetRemovedFiles(id)(state)
   }),
-  (dispatch, { id }) => ({
+  (dispatch, { id, onChange }) => ({
     init: () => dispatch(init(id)),
-    uploadFile: payload => dispatch(uploadFile(id, payload)),
+    uploadFile: payload =>
+      appendThen(dispatch(uploadFile(id, payload)), onChange),
+    uploadFiles: files =>
+      appendThen(
+        Promise.all(files.map(file => dispatch(uploadFile(id, file)))),
+        onChange
+      ),
     removeFailedFile: payload => dispatch(removeFailedFile(id, payload)),
-    removeFile: payload => dispatch(removeFile(id, payload)),
-    returnFile: payload => dispatch(returnFile(id, payload))
+    removeFile: payload => {
+      dispatch(removeFile(id, payload));
+      onChange({ removeFile: payload });
+    },
+    returnFile: payload => {
+      dispatch(returnFile(id, payload));
+      onChange({ returnFile: payload });
+    }
   })
 )(UploadContainer);

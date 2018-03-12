@@ -14,9 +14,7 @@ import reducer, {
   failedTask
 } from '../../../src/redux/modules/evaluationProgress';
 
-import {
-  actionTypes as submissionActionTypes
-} from '../../../src/redux/modules/submission';
+import { actionTypes as submissionActionTypes } from '../../../src/redux/modules/submission';
 
 describe('Evaluation progress', () => {
   it('must have correct initial state', () => {
@@ -98,7 +96,8 @@ describe('Evaluation progress', () => {
             id: 'abc',
             expectedTasksCount: 123
           }
-        }
+        },
+        meta: { submissionType: 'assignmentSolution' }
       };
       const state = reducer(initialState, action);
 

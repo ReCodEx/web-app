@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { prettyPrintBytes } from '../../helpers/stringFormatters';
+import { FormattedMessage } from 'react-intl';
 import Icon from 'react-fontawesome';
 import { Table, Button, ButtonGroup } from 'react-bootstrap';
+import { prettyPrintBytes } from '../../helpers/stringFormatters';
 
 const UploadsTable = ({
   uploadingFiles = [],
@@ -18,8 +19,18 @@ const UploadsTable = ({
     <thead>
       <tr>
         <th />
-        <th>Název soboru</th>
-        <th>Velikost souboru</th>
+        <th>
+          <FormattedMessage
+            id="app.uploadsTable.fileName"
+            defaultMessage="File Name"
+          />
+        </th>
+        <th>
+          <FormattedMessage
+            id="app.uploadsTable.fileSize"
+            defaultMessage="File Size"
+          />
+        </th>
         <th />
       </tr>
     </thead>

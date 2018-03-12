@@ -1,12 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage, FormattedDate, FormattedTime } from 'react-intl';
-import { Table } from 'react-bootstrap';
+import { Table, Label } from 'react-bootstrap';
 import Icon from 'react-fontawesome';
 import UsersNameContainer from '../../../containers/UsersNameContainer';
 
+const getRuntimeName = (runtimes, id) => {
+  const runtime = runtimes.find(r => r.id === id);
+  return runtime ? runtime.name : id;
+};
+
 const ReferenceSolutionsList = ({
   referenceSolutions = [],
+  runtimeEnvironments,
   renderButtons = () => null,
   ...props
 }) =>
@@ -16,27 +22,36 @@ const ReferenceSolutionsList = ({
         <th />
         <th>
           <FormattedMessage
-            id="app.exercises.referenceSolutionDescription"
+            id="generic.description"
             defaultMessage="Description"
           />
         </th>
         <th>
           <FormattedMessage
-            id="app.exercises.referenceSolutionUploadedAt"
+            id="generic.uploadedAt"
             defaultMessage="Uploaded at"
           />
         </th>
-        <th />
+        <th>
+          <FormattedMessage
+            id="generic.runtimeShort"
+            defaultMessage="Runtime/Language"
+          />
+        </th>
+        <th>
+          <FormattedMessage id="generic.author" defaultMessage="Author" />
+        </th>
         <th />
       </tr>
     </thead>
     <tbody>
       {referenceSolutions
-        .sort((a, b) => a.uploadedAt - b.uploadedAt)
+        .sort((a, b) => a.solution.createdAt - b.solution.createdAt)
         .map(
           ({
             id,
             description,
+            runtimeEnvironmentId,
             permissionHints,
             solution: { userId, createdAt }
           }) =>
@@ -47,14 +62,19 @@ const ReferenceSolutionsList = ({
               <td>
                 {description}
               </td>
-              <td>
+              <td className="text-nowrap">
                 <FormattedDate value={new Date(createdAt * 1000)} /> &nbsp;{' '}
                 <FormattedTime value={new Date(createdAt * 1000)} />
               </td>
               <td>
+                <Label className="text-nowrap">
+                  {getRuntimeName(runtimeEnvironments, runtimeEnvironmentId)}
+                </Label>
+              </td>
+              <td className="text-nowrap">
                 <UsersNameContainer userId={userId} />
               </td>
-              <td className="text-right">
+              <td className="text-right text-nowrap">
                 {renderButtons(id, permissionHints)}
               </td>
             </tr>
@@ -64,6 +84,7 @@ const ReferenceSolutionsList = ({
 
 ReferenceSolutionsList.propTypes = {
   referenceSolutions: PropTypes.array.isRequired,
+  runtimeEnvironments: PropTypes.array.isRequired,
   renderButtons: PropTypes.func
 };
 
