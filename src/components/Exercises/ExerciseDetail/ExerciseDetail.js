@@ -117,7 +117,7 @@ const ExerciseDetail = ({
           <th>
             <FormattedMessage
               id="app.exercise.updatedAt"
-              defaultMessage="Last updateded at:"
+              defaultMessage="Last updated at:"
             />
           </th>
           <td>
