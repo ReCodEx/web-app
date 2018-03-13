@@ -18,7 +18,7 @@ const FeedbackAndBugs = ({ links: { GITHUB_BUGS_URL } }) =>
     description={
       <FormattedMessage
         id="app.feedbackAndBugs.description"
-        defaultMessage="Ooh.. you found a bug?"
+        defaultMessage="Ooh... you found a bug?"
       />
     }
   >

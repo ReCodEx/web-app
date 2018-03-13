@@ -82,7 +82,7 @@ const PipelineDetail = ({
           <th>
             <FormattedMessage
               id="app.pipeline.updatedAt"
-              defaultMessage="Last updateded at:"
+              defaultMessage="Last updated at:"
             />
           </th>
           <td>

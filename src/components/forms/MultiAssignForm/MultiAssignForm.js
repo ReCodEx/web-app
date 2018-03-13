@@ -314,7 +314,7 @@ const validate = ({
     errors['maxPointsBeforeSecondDeadline'] = (
       <FormattedMessage
         id="app.multiAssignForm.validation.maxPointsBeforeSecondDeadline"
-        defaultMessage="Please fill the number of maximu points received after the first and before the second deadline with a nonnegative integer or remove the second deadline."
+        defaultMessage="Please fill the number of maximum points received after the first and before the second deadline with a nonnegative integer or remove the second deadline."
       />
     );
   }
