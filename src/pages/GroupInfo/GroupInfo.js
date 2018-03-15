@@ -4,8 +4,6 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 import { getFormValues } from 'redux-form';
-import { LinkContainer } from 'react-router-bootstrap';
-import Button from '../../components/widgets/FlatButton';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { List } from 'immutable';
 import { Row, Col } from 'react-bootstrap';
@@ -15,13 +13,10 @@ import GroupDetail, {
   LoadingGroupDetail,
   FailedGroupDetail
 } from '../../components/Groups/GroupDetail';
-import LeaveJoinGroupButtonContainer from '../../containers/LeaveJoinGroupButtonContainer';
 import HierarchyLine from '../../components/Groups/HierarchyLine';
-import { ResultsIcon, EditIcon } from '../../components/icons';
 import { LocalizedGroupName } from '../../components/helpers/LocalizedNames';
 import SupervisorsList from '../../components/Users/SupervisorsList';
 import { getLocalizedName } from '../../helpers/getLocalizedData';
-import withLinks from '../../helpers/withLinks';
 import { isReady } from '../../redux/helpers/resourceManager/index';
 import Box from '../../components/widgets/Box';
 import GroupTree from '../../components/Groups/GroupTree/GroupTree';
@@ -44,6 +39,7 @@ import {
 } from '../../redux/selectors/users';
 import { groupSelector, groupsSelector } from '../../redux/selectors/groups';
 import { EMPTY_OBJ } from '../../helpers/common';
+import GroupTopButtons from '../../components/Groups/GroupTopButtons/GroupTopButtons';
 
 class GroupInfo extends Component {
   static loadAsync = ({ groupId }, dispatch, userId, isSuperAdmin) =>
@@ -119,7 +115,6 @@ class GroupInfo extends Component {
       isSupervisor,
       addSubgroup,
       formValues,
-      links: { GROUP_EDIT_URI_FACTORY, GROUP_DETAIL_URI_FACTORY },
       intl: { locale }
     } = this.props;
 
@@ -144,36 +139,12 @@ class GroupInfo extends Component {
               parentGroupsIds={data.parentGroupsIds}
             />
 
-            <p>
-              {(isAdmin || isSuperAdmin) &&
-                <LinkContainer to={GROUP_EDIT_URI_FACTORY(data.id)}>
-                  <Button bsStyle="warning">
-                    <EditIcon />{' '}
-                    <FormattedMessage
-                      id="app.group.edit"
-                      defaultMessage="Edit group settings"
-                    />
-                  </Button>
-                </LinkContainer>}
-              {!data.organizational &&
-                <LinkContainer to={GROUP_DETAIL_URI_FACTORY(data.id)}>
-                  <Button bsStyle="info">
-                    <ResultsIcon />{' '}
-                    <FormattedMessage
-                      id="app.group.seeDetail"
-                      defaultMessage="See Group Detail"
-                    />
-                  </Button>
-                </LinkContainer>}
-              {!isAdmin &&
-                !isSupervisor &&
-                data.isPublic &&
-                <LeaveJoinGroupButtonContainer
-                  userId={userId}
-                  groupId={data.id}
-                  bsSize="normal"
-                />}
-            </p>
+            <GroupTopButtons
+              group={data}
+              userId={userId}
+              canEdit={isAdmin || isSuperAdmin}
+              canLeaveJoin={!isAdmin && !isSupervisor && data.isPublic}
+            />
 
             <Row>
               {data.childGroups.all.length > 0 &&
@@ -319,6 +290,6 @@ const mapDispatchToProps = (dispatch, { params }) => ({
   refetchSupervisors: () => dispatch(fetchSupervisors(params.groupId))
 });
 
-export default withLinks(
-  connect(mapStateToProps, mapDispatchToProps)(injectIntl(GroupInfo))
+export default connect(mapStateToProps, mapDispatchToProps)(
+  injectIntl(GroupInfo)
 );

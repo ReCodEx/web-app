@@ -16,7 +16,7 @@ import {
   FailedGroupDetail
 } from '../../components/Groups/GroupDetail';
 import HierarchyLine from '../../components/Groups/HierarchyLine';
-import { InfoIcon, AddIcon, EditIcon } from '../../components/icons';
+import { AddIcon, EditIcon } from '../../components/icons';
 import { LocalizedGroupName } from '../../components/helpers/LocalizedNames';
 import AssignmentsTable from '../../components/Assignments/Assignment/AssignmentsTable';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
@@ -64,6 +64,7 @@ import { isReady } from '../../redux/helpers/resourceManager/index';
 import { fetchBestSubmission } from '../../redux/modules/groupResults';
 import { getBestSubmissionsForLoggedInUser } from '../../redux/selectors/groupResults';
 import ResultsTable from '../../components/Groups/ResultsTable/ResultsTable';
+import GroupTopButtons from '../../components/Groups/GroupTopButtons/GroupTopButtons';
 
 class GroupDetail extends Component {
   static isAdminOrSupervisorOf = (group, userId) =>
@@ -178,9 +179,10 @@ class GroupDetail extends Component {
       statuses,
       bestSubmissions,
       isAdmin,
+      isSuperAdmin,
       isSupervisor,
+      userId,
       links: {
-        GROUP_INFO_URI_FACTORY,
         EXERCISE_EDIT_URI_FACTORY,
         EXERCISE_EDIT_LIMITS_URI_FACTORY,
         EXERCISE_EDIT_SIMPLE_CONFIG_URI_FACTORY
@@ -208,17 +210,12 @@ class GroupDetail extends Component {
               parentGroupsIds={data.parentGroupsIds}
             />
 
-            <p>
-              <LinkContainer to={GROUP_INFO_URI_FACTORY(data.id)}>
-                <Button bsStyle="info">
-                  <InfoIcon />{' '}
-                  <FormattedMessage
-                    id="app.group.info"
-                    defaultMessage="Group Public Info"
-                  />
-                </Button>
-              </LinkContainer>
-            </p>
+            <GroupTopButtons
+              group={data}
+              userId={userId}
+              canEdit={isAdmin || isSuperAdmin}
+              canLeaveJoin={!isAdmin && !isSupervisor && data.isPublic}
+            />
 
             <Row>
               <Col lg={12}>
