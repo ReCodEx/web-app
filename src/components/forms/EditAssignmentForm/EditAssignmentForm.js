@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { reduxForm, Field, FieldArray, touch } from 'redux-form';
 import { FormattedMessage } from 'react-intl';
-import { Alert, HelpBlock } from 'react-bootstrap';
+import { Alert, HelpBlock, Row, Col } from 'react-bootstrap';
 import isNumeric from 'validator/lib/isNumeric';
 
 import FormBox from '../../widgets/FormBox';
@@ -24,7 +24,8 @@ const EditAssignmentForm = ({
   invalid,
   firstDeadline,
   allowSecondDeadline,
-  localizedTextsLocales
+  localizedTextsLocales,
+  runtimeEnvironments
 }) =>
   <div>
     <FormBox
@@ -214,6 +215,34 @@ const EditAssignmentForm = ({
           />
         }
       />
+
+      <hr />
+
+      <h4>
+        <FormattedMessage
+          id="app.editAssignmentForm.disableEnvironments"
+          defaultMessage="Disabled Runtime Environments"
+        />
+      </h4>
+
+      <Row>
+        {assignment.runtimeEnvironmentsIds.map((item, i) =>
+          <Col key={i} sm={6}>
+            <Field
+              name={`disabledRuntime.${item}`}
+              component={CheckboxField}
+              onOff
+              label={
+                runtimeEnvironments &&
+                Array.isArray(runtimeEnvironments) &&
+                runtimeEnvironments.length > 0
+                  ? runtimeEnvironments.find(env => env.id === item).name
+                  : ''
+              }
+            />
+          </Col>
+        )}
+      </Row>
     </FormBox>
   </div>;
 
@@ -229,7 +258,8 @@ EditAssignmentForm.propTypes = {
   invalid: PropTypes.bool,
   firstDeadline: PropTypes.oneOfType([PropTypes.number, PropTypes.object]), // object == moment.js instance
   allowSecondDeadline: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
-  localizedTextsLocales: PropTypes.array
+  localizedTextsLocales: PropTypes.array,
+  runtimeEnvironments: PropTypes.array
 };
 
 const isNonNegativeInteger = n =>
@@ -251,7 +281,9 @@ const validate = ({
   allowSecondDeadline,
   maxPointsBeforeFirstDeadline,
   maxPointsBeforeSecondDeadline,
-  pointsPercentualThreshold
+  pointsPercentualThreshold,
+  runtimeEnvironmentsIds,
+  disabledRuntime
 }) => {
   const errors = {};
 
@@ -407,6 +439,18 @@ const validate = ({
         />
       );
     }
+  }
+
+  const formDisabledRuntimes = Object.keys(disabledRuntime).filter(
+    key => disabledRuntime[key] === true
+  );
+  if (formDisabledRuntimes.length === runtimeEnvironmentsIds.length) {
+    errors['_error'] = (
+      <FormattedMessage
+        id="app.editAssignmentForm.validation.allRuntimesDisabled"
+        defaultMessage="You cannot disable all available runtime environments."
+      />
+    );
   }
 
   return errors;

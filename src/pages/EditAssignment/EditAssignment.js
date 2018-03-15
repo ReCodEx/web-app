@@ -17,6 +17,7 @@ import DeleteAssignmentButtonContainer from '../../containers/DeleteAssignmentBu
 import Box from '../../components/widgets/Box';
 import HierarchyLineContainer from '../../containers/HierarchyLineContainer';
 import { ResultsIcon } from '../../components/icons';
+import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 
 import {
   fetchAssignment,
@@ -61,17 +62,36 @@ class EditAssignment extends Component {
       firstDeadline,
       secondDeadline,
       pointsPercentualThreshold,
+      disabledRuntimeEnvironmentsIds,
       ...rest
     }) => ({
       firstDeadline: moment.unix(firstDeadline),
       secondDeadline: moment.unix(secondDeadline),
       pointsPercentualThreshold: pointsPercentualThreshold * 100,
+      disabledRuntime: disabledRuntimeEnvironmentsIds.reduce(
+        (result, item, index, array) => {
+          result[item] = true;
+          return result;
+        },
+        {}
+      ),
       ...rest
     })
   );
 
   editAssignmentSubmitHandler = formData => {
     const { assignment, editAssignment } = this.props;
+
+    const disabledEnvironments = formData.disabledRuntime
+      ? Object.keys(formData.disabledRuntime).filter(
+          key => formData.disabledRuntime[key] === true
+        )
+      : [];
+
+    delete formData['disabledRuntime'];
+    delete formData['disabledRuntimeEnvironmentsIds'];
+    formData['disabledRuntimeEnvironments'] = disabledEnvironments;
+
     return editAssignment(assignment.getIn(['data', 'version']), formData);
   };
 
@@ -91,7 +111,8 @@ class EditAssignment extends Component {
       firstDeadline,
       allowSecondDeadline,
       localizedTexts,
-      exerciseSync
+      exerciseSync,
+      runtimeEnvironments
     } = this.props;
 
     return (
@@ -167,16 +188,25 @@ class EditAssignment extends Component {
                 exerciseSync={exerciseSync}
               />}
 
-            <EditAssignmentForm
-              assignment={assignment}
-              initialValues={
-                assignment ? this.getInitialValues(assignment) : {}
-              }
-              onSubmit={this.editAssignmentSubmitHandler}
-              firstDeadline={firstDeadline}
-              allowSecondDeadline={allowSecondDeadline}
-              localizedTextsLocales={getLocalizedTextsLocales(localizedTexts)}
-            />
+            <ResourceRenderer
+              resource={runtimeEnvironments.toArray()}
+              returnAsArray={true}
+            >
+              {envs =>
+                <EditAssignmentForm
+                  assignment={assignment}
+                  initialValues={
+                    assignment ? this.getInitialValues(assignment) : {}
+                  }
+                  onSubmit={this.editAssignmentSubmitHandler}
+                  firstDeadline={firstDeadline}
+                  allowSecondDeadline={allowSecondDeadline}
+                  localizedTextsLocales={getLocalizedTextsLocales(
+                    localizedTexts
+                  )}
+                  runtimeEnvironments={envs}
+                />}
+            </ResourceRenderer>
 
             <br />
             <Box
