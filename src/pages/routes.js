@@ -17,7 +17,8 @@ import EditExerciseConfig from './EditExerciseConfig';
 import EditExerciseSimpleConfig from './EditExerciseSimpleConfig';
 import EditExerciseLimits from './EditExerciseLimits';
 import FeedbackAndBugs from './FeedbackAndBugs';
-import Group from './Group';
+import GroupDetail from './GroupDetail';
+import GroupInfo from './GroupInfo';
 import EditGroup from './EditGroup';
 import Instance from './Instance';
 import Instances from './Instances';
@@ -132,8 +133,9 @@ const createRoutes = getState => {
             </Route>
           </Route>
           <Route path="group/:groupId">
-            <IndexRoute component={Group} />
             <Route path="edit" component={EditGroup} />
+            <Route path="info" component={GroupInfo} />
+            <Route path="detail" component={GroupDetail} />
           </Route>
           <Route path="instance/:instanceId" component={Instance} />
           <Route path="users" component={Users} />

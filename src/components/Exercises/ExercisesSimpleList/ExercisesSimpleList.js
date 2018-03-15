@@ -12,7 +12,7 @@ const ExercisesSimpleList = ({
   intl: { locale },
   ...rest
 }) =>
-  <Table>
+  <Table hover>
     <thead>
       <tr>
         <th>

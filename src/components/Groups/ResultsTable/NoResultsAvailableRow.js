@@ -1,7 +1,7 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-const NoResultsAvailableRow = () => (
+const NoResultsAvailableRow = () =>
   <tr>
     <td className="text-center" colSpan={5}>
       <FormattedMessage
@@ -9,8 +9,7 @@ const NoResultsAvailableRow = () => (
         defaultMessage="There are currently no results available."
       />
     </td>
-  </tr>
-);
+  </tr>;
 
 NoResultsAvailableRow.propTypes = {};
 

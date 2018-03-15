@@ -14,55 +14,15 @@ import AssignmentTableRow, {
   NoAssignmentTableRow,
   LoadingAssignmentTableRow
 } from '../AssignmentTableRow';
-
-const compareAssignments = (a, b) => {
-  // first compare by deadline
-  if (a.firstDeadline < b.firstDeadline) {
-    return -1;
-  } else if (a.firstDeadline === b.firstDeadline) {
-    // then compare by second deadline - if one of them does not have any,
-    // it is lower -> higher position in the table
-    if (a.allowSecondDeadline !== b.allowSecondDeadline) {
-      // one has the second deadline and the other not
-      return a.allowSecondDeadline ? 1 : -1;
-    } else {
-      // if both have second deadline, compare them
-      if (a.allowSecondDeadline === true) {
-        if (a.secondDeadline < b.secondDeadline) {
-          return -1;
-        } else if (a.secondDeadline > b.secondDeadline) {
-          return 1;
-        }
-        // if second deadlines are equal, continue
-      }
-
-      // none of them have second deadline or they are queal, compare creation times
-      return b.createdAt - a.createdAt;
-    }
-  } else {
-    return 1;
-  }
-};
-
-const displayPoints = (bestSubmissions, assignments) => {
-  const assignmentIds = assignments
-    .filter(isReady)
-    .map(getJsData)
-    .map(assignment => assignment.id);
-  return Object.keys(bestSubmissions)
-    .filter(key => assignmentIds.indexOf(key) >= 0)
-    .reduce((acc, key) => {
-      acc = acc || bestSubmissions[key];
-      return acc;
-    }, false);
-};
+import { compareAssignments } from '../../../helpers/compareAssignments';
 
 const AssignmentsTable = ({
   assignments = List(),
   statuses = [],
   showGroup = true,
   userId = null,
-  bestSubmissions = {},
+  stats = {},
+  isAdmin = false,
   intl: { locale }
 }) =>
   <Table hover>
@@ -82,7 +42,8 @@ const AssignmentsTable = ({
               defaultMessage="Group"
             />
           </th>}
-        {displayPoints(bestSubmissions, assignments) &&
+        {!isAdmin &&
+          Object.keys(stats).length !== 0 &&
           <th>
             <FormattedMessage
               id="app.assignments.points"
@@ -101,6 +62,7 @@ const AssignmentsTable = ({
             defaultMessage="Second deadline"
           />
         </th>
+        {isAdmin && <th />}
       </tr>
     </thead>
     <tbody>
@@ -126,7 +88,12 @@ const AssignmentsTable = ({
                 : ''
             }
             locale={locale}
-            bestSubmission={bestSubmissions[assignment.id]}
+            stats={
+              Object.keys(stats).length !== 0
+                ? stats.assignments.find(item => item.id === assignment.id)
+                : null
+            }
+            isAdmin={isAdmin}
           />
         )}
     </tbody>
@@ -137,7 +104,8 @@ AssignmentsTable.propTypes = {
   showGroup: PropTypes.bool,
   statuses: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
   userId: PropTypes.string,
-  bestSubmissions: PropTypes.object,
+  stats: PropTypes.object,
+  isAdmin: PropTypes.bool,
   intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired
 };
 

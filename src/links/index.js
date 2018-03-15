@@ -15,8 +15,9 @@ export const linksFactory = lang => {
   const INSTANCE_URI_FACTORY = id => `${prefix}/app/instance/${id}`;
 
   // group details
-  const GROUP_URI_FACTORY = id => `${prefix}/app/group/${id}`;
-  const GROUP_EDIT_URI_FACTORY = id => `${GROUP_URI_FACTORY(id)}/edit`;
+  const GROUP_INFO_URI_FACTORY = id => `${prefix}/app/group/${id}/info`;
+  const GROUP_DETAIL_URI_FACTORY = id => `${prefix}/app/group/${id}/detail`;
+  const GROUP_EDIT_URI_FACTORY = id => `${prefix}/app/group/${id}/edit`;
 
   // user details
   const USERS_URI = `${prefix}/app/users`;
@@ -105,7 +106,8 @@ export const linksFactory = lang => {
     LOGOUT_URI,
     RESET_PASSWORD_URI,
     INSTANCE_URI_FACTORY,
-    GROUP_URI_FACTORY,
+    GROUP_INFO_URI_FACTORY,
+    GROUP_DETAIL_URI_FACTORY,
     GROUP_EDIT_URI_FACTORY,
     USERS_URI,
     USER_URI_FACTORY,

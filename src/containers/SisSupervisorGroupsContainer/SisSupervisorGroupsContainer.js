@@ -96,7 +96,7 @@ class SisSupervisorGroupsContainer extends Component {
       bindGroup,
       sisPossibleParents,
       groupsAccessor,
-      links: { GROUP_URI_FACTORY },
+      links: { GROUP_INFO_URI_FACTORY },
       intl: { locale }
     } = this.props;
 
@@ -231,7 +231,7 @@ class SisSupervisorGroupsContainer extends Component {
                                                   <td className="text-right">
                                                     <span>
                                                       <LinkContainer
-                                                        to={GROUP_URI_FACTORY(
+                                                        to={GROUP_INFO_URI_FACTORY(
                                                           group.id
                                                         )}
                                                       >

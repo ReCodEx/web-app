@@ -21,6 +21,7 @@ const LeaveJoinGroupButtonContainer = ({
   fetchAssignmentsForGroup,
   fetchGroup,
   fetchGroupsStatsIfNeeded,
+  bsSize = 'xs',
   ...props
 }) =>
   isStudent
@@ -28,12 +29,12 @@ const LeaveJoinGroupButtonContainer = ({
       ? <LeaveGroupButton
           {...props}
           onClick={() => leaveGroup(groupId, userId)}
-          bsSize="xs"
+          bsSize={bsSize}
         />
       : <RemoveFromGroupButton
           {...props}
           onClick={() => leaveGroup(groupId, userId)}
-          bsSize="xs"
+          bsSize={bsSize}
         />
     : <JoinGroupButton
         {...props}
@@ -45,7 +46,7 @@ const LeaveJoinGroupButtonContainer = ({
               fetchGroupsStatsIfNeeded(groupId)
             ])
           )}
-        bsSize="xs"
+        bsSize={bsSize}
       />;
 
 LeaveJoinGroupButtonContainer.propTypes = {
@@ -57,7 +58,8 @@ LeaveJoinGroupButtonContainer.propTypes = {
   leaveGroup: PropTypes.func.isRequired,
   fetchAssignmentsForGroup: PropTypes.func.isRequired,
   fetchGroup: PropTypes.func.isRequired,
-  fetchGroupsStatsIfNeeded: PropTypes.func.isRequired
+  fetchGroupsStatsIfNeeded: PropTypes.func.isRequired,
+  bsSize: PropTypes.string
 };
 
 const mapStateToProps = (state, { userId, groupId }) => ({

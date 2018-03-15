@@ -23,3 +23,4 @@ export {
 export { default as ExercisePrefixIcons } from './ExercisePrefixIcons';
 export { default as CopyIcon } from './CopyIcon';
 export { default as LocalIcon } from './LocalIcon';
+export { default as GroupIcon } from './GroupIcon';

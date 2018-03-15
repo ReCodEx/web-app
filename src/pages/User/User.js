@@ -104,7 +104,7 @@ class User extends Component {
       groupAssignments,
       groupStatistics,
       usersStatistics,
-      links: { GROUP_URI_FACTORY, INSTANCE_URI_FACTORY }
+      links: { GROUP_DETAIL_URI_FACTORY, INSTANCE_URI_FACTORY }
     } = this.props;
 
     return (
@@ -159,7 +159,7 @@ class User extends Component {
                       {statistics =>
                         <Row>
                           <Col lg={4}>
-                            <Link to={GROUP_URI_FACTORY(group.id)}>
+                            <Link to={GROUP_DETAIL_URI_FACTORY(group.id)}>
                               <UsersStats
                                 {...group}
                                 stats={usersStatistics(statistics)}
@@ -176,7 +176,7 @@ class User extends Component {
                               footer={
                                 <p className="text-center">
                                   <LinkContainer
-                                    to={GROUP_URI_FACTORY(group.id)}
+                                    to={GROUP_DETAIL_URI_FACTORY(group.id)}
                                   >
                                     <Button bsSize="sm">
                                       <FormattedMessage
