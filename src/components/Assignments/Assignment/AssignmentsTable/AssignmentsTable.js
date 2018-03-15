@@ -16,25 +16,12 @@ import AssignmentTableRow, {
 } from '../AssignmentTableRow';
 import { compareAssignments } from '../../../helpers/compareAssignments';
 
-const displayPoints = (bestSubmissions, assignments) => {
-  const assignmentIds = assignments
-    .filter(isReady)
-    .map(getJsData)
-    .map(assignment => assignment.id);
-  return Object.keys(bestSubmissions)
-    .filter(key => assignmentIds.indexOf(key) >= 0)
-    .reduce((acc, key) => {
-      acc = acc || bestSubmissions[key];
-      return acc;
-    }, false);
-};
-
 const AssignmentsTable = ({
   assignments = List(),
   statuses = [],
   showGroup = true,
   userId = null,
-  bestSubmissions = {},
+  stats = {},
   isAdmin = false,
   intl: { locale }
 }) =>
@@ -56,7 +43,7 @@ const AssignmentsTable = ({
             />
           </th>}
         {!isAdmin &&
-          displayPoints(bestSubmissions, assignments) &&
+          Object.keys(stats).length !== 0 &&
           <th>
             <FormattedMessage
               id="app.assignments.points"
@@ -101,7 +88,11 @@ const AssignmentsTable = ({
                 : ''
             }
             locale={locale}
-            bestSubmission={bestSubmissions[assignment.id]}
+            stats={
+              Object.keys(stats).length !== 0
+                ? stats.assignments.find(item => item.id === assignment.id)
+                : null
+            }
             isAdmin={isAdmin}
           />
         )}
@@ -113,7 +104,7 @@ AssignmentsTable.propTypes = {
   showGroup: PropTypes.bool,
   statuses: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
   userId: PropTypes.string,
-  bestSubmissions: PropTypes.object,
+  stats: PropTypes.object,
   isAdmin: PropTypes.bool,
   intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired
 };

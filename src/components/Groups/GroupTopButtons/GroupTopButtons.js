@@ -57,7 +57,7 @@ GroupTopButtons.propTypes = {
   group: PropTypes.object.isRequired,
   userId: PropTypes.string.isRequired,
   canEdit: PropTypes.bool.isRequired,
-  canLeaveJoin: PropTypes.bool.isRequired,
+  canLeaveJoin: PropTypes.bool,
   links: PropTypes.object
 };
 

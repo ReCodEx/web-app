@@ -6,7 +6,6 @@ import { FormattedDate, FormattedTime, FormattedMessage } from 'react-intl';
 import { ButtonGroup } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 
-import ResourceRenderer from '../../../helpers/ResourceRenderer';
 import withLinks from '../../../../helpers/withLinks';
 import { LocalizedExerciseName } from '../../../helpers/LocalizedNames';
 import {
@@ -33,7 +32,7 @@ const AssignmentTableRow = ({
   },
   status,
   userId,
-  bestSubmission,
+  stats,
   isAdmin,
   links: {
     ASSIGNMENT_DETAIL_URI_FACTORY,
@@ -64,24 +63,21 @@ const AssignmentTableRow = ({
         {group}
       </td>}
     {!isAdmin &&
-      bestSubmission &&
+      stats &&
       <td>
-        <ResourceRenderer resource={bestSubmission}>
-          {data =>
-            data && data.lastSubmission
-              ? <span>
-                  {data.lastSubmission.evaluation.points}
-                  {data.bonusPoints > 0 &&
-                    <span style={{ color: 'green' }}>
-                      +{data.bonusPoints}
-                    </span>}
-                  {data.bonusPoints < 0 &&
-                    <span style={{ color: 'red' }}>
-                      {data.bonusPoints}
-                    </span>}/{data.maxPoints}
-                </span>
-              : <span />}
-        </ResourceRenderer>
+        {stats.points && stats.points.gained !== null
+          ? <span>
+              {stats.points.gained}
+              {stats.points.bonus > 0 &&
+                <span style={{ color: 'green' }}>
+                  +{stats.points.bonus}
+                </span>}
+              {stats.points.bonus < 0 &&
+                <span style={{ color: 'red' }}>
+                  {stats.points.bonus}
+                </span>}/{stats.points.total}
+            </span>
+          : <span />}
       </td>}
     <td>
       <FormattedDate value={new Date(firstDeadline * 1000)} />
@@ -126,7 +122,7 @@ AssignmentTableRow.propTypes = {
   }),
   status: PropTypes.string,
   userId: PropTypes.string,
-  bestSubmission: PropTypes.object,
+  stats: PropTypes.object,
   isAdmin: PropTypes.bool,
   links: PropTypes.object
 };

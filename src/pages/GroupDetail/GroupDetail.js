@@ -61,8 +61,6 @@ import {
 import { getLocalizedName } from '../../helpers/getLocalizedData';
 import withLinks from '../../helpers/withLinks';
 import { isReady } from '../../redux/helpers/resourceManager/index';
-import { fetchBestSubmission } from '../../redux/modules/groupResults';
-import { getBestSubmissionsForLoggedInUser } from '../../redux/selectors/groupResults';
 import ResultsTable from '../../components/Groups/ResultsTable/ResultsTable';
 import GroupTopButtons from '../../components/Groups/GroupTopButtons/GroupTopButtons';
 
@@ -88,13 +86,6 @@ class GroupDetail extends Component {
                 dispatch(fetchStudents(groupId)),
                 dispatch(fetchGroupsStats(groupId))
               ])
-            : Promise.resolve(),
-          group.privateData.students.indexOf(userId) >= 0
-            ? Promise.all(
-                group.privateData.assignments.all.map(assignmentId =>
-                  dispatch(fetchBestSubmission(userId, assignmentId))
-                )
-              )
             : Promise.resolve()
         ])
       )
@@ -177,7 +168,6 @@ class GroupDetail extends Component {
       publicAssignments = List(),
       stats,
       statuses,
-      bestSubmissions,
       isAdmin,
       isSuperAdmin,
       isSupervisor,
@@ -229,13 +219,16 @@ class GroupDetail extends Component {
                   noPadding
                   unlimitedHeight
                 >
-                  <AssignmentsTable
-                    assignments={allAssignments}
-                    showGroup={false}
-                    statuses={statuses}
-                    bestSubmissions={bestSubmissions}
-                    isAdmin={isAdmin || isSupervisor}
-                  />
+                  <ResourceRenderer resource={stats}>
+                    {groupStats =>
+                      <AssignmentsTable
+                        assignments={allAssignments}
+                        showGroup={false}
+                        statuses={statuses}
+                        stats={groupStats.find(item => item.userId === userId)}
+                        isAdmin={isAdmin || isSupervisor}
+                      />}
+                  </ResourceRenderer>
                 </Box>
               </Col>
             </Row>
@@ -399,7 +392,6 @@ GroupDetail.propTypes = {
   loadAsync: PropTypes.func,
   stats: PropTypes.object,
   statuses: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
-  bestSubmissions: PropTypes.object,
   assignExercise: PropTypes.func.isRequired,
   createGroupExercise: PropTypes.func.isRequired,
   push: PropTypes.func.isRequired,
@@ -419,7 +411,6 @@ const mapStateToProps = (state, { params: { groupId } }) => {
     groupExercises: getExercisesForGroup(state, groupId),
     statuses: getStatusesForLoggedUser(state, groupId),
     stats: createGroupsStatsSelector(groupId)(state),
-    bestSubmissions: getBestSubmissionsForLoggedInUser(state),
     students: studentsOfGroupSelector(state, groupId),
     isSupervisor: isSupervisorOf(userId, groupId)(state),
     isAdmin: isAdminOf(userId, groupId)(state),
