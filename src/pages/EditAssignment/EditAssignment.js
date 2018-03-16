@@ -84,13 +84,12 @@ class EditAssignment extends Component {
 
     const disabledEnvironments = formData.disabledRuntime
       ? Object.keys(formData.disabledRuntime).filter(
-          key => formData.disabledRuntime[key] === true
-        )
+        key => formData.disabledRuntime[key] === true
+      )
       : [];
 
     delete formData['disabledRuntime'];
-    delete formData['disabledRuntimeEnvironmentsIds'];
-    formData['disabledRuntimeEnvironments'] = disabledEnvironments;
+    formData['disabledRuntimeEnvironmentIds'] = disabledEnvironments;
 
     return editAssignment(assignment.getIn(['data', 'version']), formData);
   };
