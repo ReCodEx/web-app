@@ -28,10 +28,7 @@ const PipelineDetail = ({
       <tbody>
         <tr>
           <th>
-            <FormattedMessage
-              id="app.pipeline.author"
-              defaultMessage="Author:"
-            />
+            <FormattedMessage id="generic.author" defaultMessage="Author" />:
           </th>
           <td>
             <UsersNameContainer userId={author} />

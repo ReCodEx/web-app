@@ -109,7 +109,7 @@ class SisIntegrationContainer extends Component {
                                     <tr>
                                       <th>
                                         <FormattedMessage
-                                          id="app.sisIntegration.groupName"
+                                          id="generic.name"
                                           defaultMessage="Name"
                                         />
                                       </th>

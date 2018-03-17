@@ -56,10 +56,7 @@ class EditLimitsForm extends Component {
                   className="btn-flat"
                 >
                   <RefreshIcon /> &nbsp;
-                  <FormattedMessage
-                    id="app.editLimitsForm.reset"
-                    defaultMessage="Reset"
-                  />
+                  <FormattedMessage id="generic.reset" defaultMessage="Reset" />
                 </Button>{' '}
               </span>}
             <SubmitButton
@@ -91,7 +88,7 @@ class EditLimitsForm extends Component {
                 ),
                 validating: (
                   <FormattedMessage
-                    id="app.editLimitsForm.validating"
+                    id="generic.validating"
                     defaultMessage="Validating ..."
                   />
                 )

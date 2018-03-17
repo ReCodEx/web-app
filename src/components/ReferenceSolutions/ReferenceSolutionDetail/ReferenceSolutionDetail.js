@@ -46,9 +46,9 @@ const ReferenceSolutionDetail = ({
           </td>
           <th>
             <FormattedMessage
-              id="app.referenceSolutionDetail.description"
+              id="generic.description"
               defaultMessage="Description"
-            />
+            />:
           </th>
           <td>
             {description}
@@ -60,9 +60,9 @@ const ReferenceSolutionDetail = ({
           </td>
           <th>
             <FormattedMessage
-              id="app.referenceSolutionDetail.uploadedAt"
-              defaultMessage="Uploaded at:"
-            />
+              id="generic.uploadedAt"
+              defaultMessage="Uploaded at"
+            />:
           </th>
           <td>
             <FormattedDate value={createdAt * 1000} />
@@ -75,10 +75,7 @@ const ReferenceSolutionDetail = ({
             <Icon name="user" />
           </td>
           <th>
-            <FormattedMessage
-              id="app.referenceSolution.author"
-              defaultMessage="Author:"
-            />
+            <FormattedMessage id="generic.author" defaultMessage="Author" />:
           </th>
           <td>
             <UsersNameContainer userId={userId} />

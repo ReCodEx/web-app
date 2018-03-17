@@ -11,13 +11,10 @@ const PipelinesList = ({ pipelines = [], createActions, intl }) =>
       <tr>
         <th />
         <th>
-          <FormattedMessage id="app.pipelinesList.name" defaultMessage="Name" />
+          <FormattedMessage id="generic.name" defaultMessage="Name" />
         </th>
         <th>
-          <FormattedMessage
-            id="app.pipelinesList.author"
-            defaultMessage="Author"
-          />
+          <FormattedMessage id="generic.author" defaultMessage="Author" />
         </th>
         <th>
           <FormattedMessage

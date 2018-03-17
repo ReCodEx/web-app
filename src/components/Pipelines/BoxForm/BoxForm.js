@@ -66,10 +66,9 @@ class BoxForm extends Component {
             component={TextField}
             required
             label={
-              <FormattedMessage
-                id="app.pipelineEditor.BoxForm.name"
-                defaultMessage="Name:"
-              />
+              <span>
+                <FormattedMessage id="generic.name" defaultMessage="Name" />:
+              </span>
             }
           />
 
@@ -135,20 +134,14 @@ class BoxForm extends Component {
               reset={reset}
               messages={{
                 success: (
-                  <FormattedMessage
-                    id="app.pipelineEditor.BoxForm.success"
-                    defaultMessage="Saved"
-                  />
+                  <FormattedMessage id="generic.saved" defaultMessage="Saved" />
                 ),
                 submit: (
-                  <FormattedMessage
-                    id="app.pipelineEditor.BoxForm.createGroup"
-                    defaultMessage="Save"
-                  />
+                  <FormattedMessage id="generic.save" defaultMessage="Save" />
                 ),
                 submitting: (
                   <FormattedMessage
-                    id="app.pipelineEditor.BoxForm.processing"
+                    id="generic.saving"
                     defaultMessage="Saving ..."
                   />
                 )
@@ -156,10 +149,7 @@ class BoxForm extends Component {
             />
             <Button onClick={onHide}>
               <CloseIcon />&nbsp;
-              <FormattedMessage
-                id="app.pipelineEditor.BoxForm.close"
-                defaultMessage="Close"
-              />
+              <FormattedMessage id="generic.close" defaultMessage="Close" />
             </Button>
             <span style={{ display: 'inline-block', width: '5px' }} />
             <ConfirmDeleteButton

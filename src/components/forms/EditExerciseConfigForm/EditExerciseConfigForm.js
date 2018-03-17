@@ -177,7 +177,7 @@ class EditExerciseConfigForm extends Component {
           {submitFailed &&
             <Alert bsStyle="danger">
               <FormattedMessage
-                id="app.editExerciseConfigForm.failed"
+                id="generic.savingFailed"
                 defaultMessage="Saving failed. Please try again later."
               />
             </Alert>}

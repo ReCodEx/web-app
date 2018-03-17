@@ -69,7 +69,7 @@ class EditEnvironmentConfigForm extends Component {
         {submitFailed &&
           <Alert bsStyle="danger">
             <FormattedMessage
-              id="app.editEnvironmentConfigForm.failed"
+              id="generic.savingFailed"
               defaultMessage="Saving failed. Please try again later."
             />
           </Alert>}

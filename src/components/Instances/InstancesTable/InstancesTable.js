@@ -13,10 +13,7 @@ const InstancesTable = ({ instances, links: { INSTANCE_URI_FACTORY }, intl }) =>
     <thead>
       <tr>
         <th>
-          <FormattedMessage
-            id="app.instancesTable.name"
-            defaultMessage="Name"
-          />
+          <FormattedMessage id="generic.name" defaultMessage="Name" />
         </th>
         <th>
           <FormattedMessage

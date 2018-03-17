@@ -27,7 +27,7 @@ const MultiAssignForm = ({
     {hasFailed &&
       <Alert bsStyle="danger">
         <FormattedMessage
-          id="app.multiAssignForm.failed"
+          id="generic.savingFailed"
           defaultMessage="Saving failed. Please try again later."
         />
       </Alert>}

@@ -91,7 +91,7 @@ class EditGroup extends Component {
             text: (
               <FormattedMessage
                 id="app.editGroup.title"
-                defaultMessage="Edit group"
+                defaultMessage="Edit Group"
               />
             ),
             iconName: 'pencil'

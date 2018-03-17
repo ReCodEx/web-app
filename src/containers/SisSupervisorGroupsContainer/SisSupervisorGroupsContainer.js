@@ -196,7 +196,7 @@ class SisSupervisorGroupsContainer extends Component {
                                               <tr>
                                                 <th>
                                                   <FormattedMessage
-                                                    id="app.sisSupervisor.groupName"
+                                                    id="generic.name"
                                                     defaultMessage="Name"
                                                   />
                                                 </th>

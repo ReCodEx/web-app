@@ -72,10 +72,9 @@ const EditInstanceForm = ({
       name="name"
       component={TextField}
       label={
-        <FormattedMessage
-          id="app.editInstanceForm.name"
-          defaultMessage="Name:"
-        />
+        <span>
+          <FormattedMessage id="generic.name" defaultMessage="Name" />:
+        </span>
       }
     />
     <Field

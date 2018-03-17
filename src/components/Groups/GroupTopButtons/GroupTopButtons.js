@@ -24,15 +24,15 @@ const GroupTopButtons = ({
         <Button bsStyle="warning">
           <EditIcon />{' '}
           <FormattedMessage
-            id="app.group.edit"
-            defaultMessage="Edit group settings"
+            id="app.editGroup.title"
+            defaultMessage="Edit Group"
           />
         </Button>
       </LinkContainer>}
     <LinkContainer to={GROUP_INFO_URI_FACTORY(group.id)}>
       <Button bsStyle="primary">
         <InfoIcon />{' '}
-        <FormattedMessage id="app.group.seeInfo" defaultMessage="Group Info" />
+        <FormattedMessage id="app.group.info" defaultMessage="Group Info" />
       </Button>
     </LinkContainer>
     {!group.organizational &&
@@ -40,7 +40,7 @@ const GroupTopButtons = ({
         <Button bsStyle="primary">
           <GroupIcon />{' '}
           <FormattedMessage
-            id="app.group.seeDetail"
+            id="app.group.detailButton"
             defaultMessage="Group Detail"
           />
         </Button>

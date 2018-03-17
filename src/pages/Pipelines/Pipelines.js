@@ -155,7 +155,7 @@ class Pipelines extends Component {
                           <Button bsSize="xs" bsStyle="warning">
                             <EditIcon />{' '}
                             <FormattedMessage
-                              id="app.pipelines.listEdit"
+                              id="generic.edit"
                               defaultMessage="Edit"
                             />
                           </Button>
