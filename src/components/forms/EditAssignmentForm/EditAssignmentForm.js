@@ -335,7 +335,9 @@ const validate = ({
       }
     }
 
-    localizedTextsErrors[i] = localeErrors;
+    if (Object.keys(localeErrors).length > 0) {
+      localizedTextsErrors[i] = localeErrors;
+    }
   }
 
   const localeArr = localizedTexts
@@ -343,7 +345,10 @@ const validate = ({
     .map(text => text.locale);
   for (let i = 0; i < localeArr.length; ++i) {
     if (localeArr.indexOf(localeArr[i]) !== i) {
-      if (!localizedTextsErrors[i].locale) {
+      if (localizedTextsErrors[i] && !localizedTextsErrors[i].locale) {
+        if (!localizedTextsErrors[i]) {
+          localizedTextsErrors[i] = {};
+        }
         localizedTextsErrors[i].locale = (
           <FormattedMessage
             id="app.editAssignmentForm.validation.sameLocalizedTexts"
@@ -353,7 +358,10 @@ const validate = ({
       }
     }
   }
-  errors['localizedTexts'] = localizedTextsErrors;
+
+  if (Object.keys(localizedTextsErrors).length > 0) {
+    errors['localizedTexts'] = localizedTextsErrors;
+  }
 
   if (!firstDeadline) {
     errors['firstDeadline'] = (
@@ -456,8 +464,8 @@ const validate = ({
   return errors;
 };
 
-const asyncValidate = (values, dispatch, { assignment: { id, version } }) =>
-  new Promise((resolve, reject) =>
+const asyncValidate = (values, dispatch, { assignment: { id, version } }) => {
+  return new Promise((resolve, reject) =>
     dispatch(validateAssignment(id, version))
       .then(res => res.value)
       .then(({ versionIsUpToDate }) => {
@@ -479,6 +487,7 @@ const asyncValidate = (values, dispatch, { assignment: { id, version } }) =>
       .then(resolve())
       .catch(errors => reject(errors))
   );
+};
 
 export default reduxForm({
   form: 'editAssignment',
