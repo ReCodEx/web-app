@@ -234,8 +234,8 @@ const EditAssignmentForm = ({
               onOff
               label={
                 runtimeEnvironments &&
-                Array.isArray(runtimeEnvironments) &&
-                runtimeEnvironments.length > 0
+                  Array.isArray(runtimeEnvironments) &&
+                  runtimeEnvironments.length > 0
                   ? runtimeEnvironments.find(env => env.id === item).name
                   : ''
               }
