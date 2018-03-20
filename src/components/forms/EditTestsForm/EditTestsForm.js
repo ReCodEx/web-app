@@ -29,7 +29,7 @@ class EditTestsForm extends Component {
         {submitFailed &&
           <Alert bsStyle="danger">
             <FormattedMessage
-              id="app.editTestsForm.failed"
+              id="generic.savingFailed"
               defaultMessage="Saving failed. Please try again later."
             />
           </Alert>}
@@ -64,10 +64,7 @@ class EditTestsForm extends Component {
                 className="btn-flat"
               >
                 <RefreshIcon /> &nbsp;
-                <FormattedMessage
-                  id="app.editTestsForm.reset"
-                  defaultMessage="Reset"
-                />
+                <FormattedMessage id="generic.reset" defaultMessage="Reset" />
               </Button>{' '}
             </span>}
 

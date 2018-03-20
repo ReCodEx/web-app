@@ -27,7 +27,7 @@ class EditEnvironmentSimpleForm extends Component {
         {submitFailed &&
           <Alert bsStyle="danger">
             <FormattedMessage
-              id="app.editEnvironmentSimpleForm.failed"
+              id="generic.savingFailed"
               defaultMessage="Saving failed. Please try again later."
             />
           </Alert>}
@@ -55,10 +55,7 @@ class EditEnvironmentSimpleForm extends Component {
                 className="btn-flat"
               >
                 <RefreshIcon /> &nbsp;
-                <FormattedMessage
-                  id="app.editEnvironmentSimpleForm.reset"
-                  defaultMessage="Reset"
-                />
+                <FormattedMessage id="generic.reset" defaultMessage="Reset" />
               </Button>{' '}
             </span>}
 

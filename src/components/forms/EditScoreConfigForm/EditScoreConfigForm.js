@@ -19,7 +19,7 @@ const EditScoreConfigForm = ({
     {submitFailed &&
       <Alert bsStyle="danger">
         <FormattedMessage
-          id="app.editScoreConfigForm.failed"
+          id="generic.savingFailed"
           defaultMessage="Saving failed. Please try again later."
         />
       </Alert>}

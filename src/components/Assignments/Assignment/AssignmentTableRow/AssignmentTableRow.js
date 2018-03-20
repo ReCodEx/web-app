@@ -99,10 +99,7 @@ const AssignmentTableRow = ({
           <LinkContainer to={ASSIGNMENT_EDIT_URI_FACTORY(id)}>
             <Button bsSize="xs" bsStyle="warning">
               <EditIcon />{' '}
-              <FormattedMessage
-                id="app.adminAssignmentsTableRow.edit"
-                defaultMessage="Edit"
-              />
+              <FormattedMessage id="generic.edit" defaultMessage="Edit" />
             </Button>
           </LinkContainer>
           <DeleteAssignmentButtonContainer id={id} bsSize="xs" />

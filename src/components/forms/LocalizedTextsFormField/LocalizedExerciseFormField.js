@@ -14,10 +14,9 @@ const LocalizedExerciseFormField = ({ prefix }) =>
       name={`${prefix}.name`}
       component={TextField}
       label={
-        <FormattedMessage
-          id="app.editAssignmentForm.localized.name"
-          defaultMessage="Name:"
-        />
+        <span>
+          <FormattedMessage id="generic.name" defaultMessage="Name" />:
+        </span>
       }
     />
 
@@ -37,8 +36,8 @@ const LocalizedExerciseFormField = ({ prefix }) =>
       component={MarkdownTextAreaField}
       label={
         <FormattedMessage
-          id="app.editAssignmentForm.localized.assignment"
-          defaultMessage="Description for the students:"
+          id="app.editAssignmentForm.localized.completeDescription"
+          defaultMessage="Complete description (everything the user needs to solve this exercise):"
         />
       }
     />
@@ -48,8 +47,8 @@ const LocalizedExerciseFormField = ({ prefix }) =>
       component={MarkdownTextAreaField}
       label={
         <FormattedMessage
-          id="app.editAssignmentForm.description"
-          defaultMessage="Description for supervisors:"
+          id="app.editAssignmentForm.localized.abstract"
+          defaultMessage="Short description (abstract):"
         />
       }
     />

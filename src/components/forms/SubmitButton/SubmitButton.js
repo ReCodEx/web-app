@@ -48,33 +48,27 @@ class SubmitButton extends Component {
       disabled = false,
       messages: {
         submit: submitMsg = (
-          <FormattedMessage
-            id="app.editExerciseForm.submit"
-            defaultMessage="Submit"
-          />
+          <FormattedMessage id="generic.submit" defaultMessage="Submit" />
         ),
         success: successMsg = (
-          <FormattedMessage
-            id="app.editExerciseForm.success"
-            defaultMessage="Successfully submitted"
-          />
+          <FormattedMessage id="generic.submitted" defaultMessage="Submitted" />
         ),
         submitting: submittingMsg = (
           <FormattedMessage
-            id="app.editExerciseForm.submitting"
-            defaultMessage="Submitting..."
+            id="generic.submitting"
+            defaultMessage="Submitting ..."
           />
         ),
         validating: validatingMsg = (
           <FormattedMessage
-            id="app.submitButton.validating"
-            defaultMessage="Validating..."
+            id="generic.validating"
+            defaultMessage="Validating ..."
           />
         ),
         invalid: invalidMsg = (
           <FormattedMessage
             id="app.submitButton.invalid"
-            defaultMessage="Some input is invalid"
+            defaultMessage="Some input is invalid."
           />
         )
       }

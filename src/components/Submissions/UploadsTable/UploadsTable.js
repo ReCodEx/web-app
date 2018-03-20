@@ -21,13 +21,13 @@ const UploadsTable = ({
         <th />
         <th>
           <FormattedMessage
-            id="app.uploadsTable.fileName"
+            id="app.filesTable.fileName"
             defaultMessage="File Name"
           />
         </th>
         <th>
           <FormattedMessage
-            id="app.uploadsTable.fileSize"
+            id="app.filesTable.fileSize"
             defaultMessage="File Size"
           />
         </th>

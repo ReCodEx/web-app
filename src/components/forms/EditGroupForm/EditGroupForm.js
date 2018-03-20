@@ -50,24 +50,21 @@ const EditGroupForm = ({
           messages={{
             submit: createNew
               ? <FormattedMessage
-                  id="app.editGroupForm.successNew"
-                  defaultMessage="Create group"
+                  id="app.editGroupForm.createGroup"
+                  defaultMessage="Create Group"
                 />
               : <FormattedMessage
-                  id="app.editGroupForm.set"
-                  defaultMessage="Edit group"
+                  id="app.editGroupForm.saveGroup"
+                  defaultMessage="Save Group"
                 />,
             submitting: (
               <FormattedMessage
-                id="app.editGroupForm.processing"
+                id="generic.saving"
                 defaultMessage="Saving ..."
               />
             ),
             success: (
-              <FormattedMessage
-                id="app.editGroupForm.success"
-                defaultMessage="Group settings has been saved."
-              />
+              <FormattedMessage id="generic.saved" defaultMessage="Saved" />
             )
           }}
         />
@@ -80,8 +77,8 @@ const EditGroupForm = ({
     {submitFailed &&
       <Alert bsStyle="danger">
         <FormattedMessage
-          id="app.editGroupForm.failed"
-          defaultMessage="Cannot save group's settings."
+          id="generic.savingFailed"
+          defaultMessage="Saving failed. Please try again later."
         />
       </Alert>}
 

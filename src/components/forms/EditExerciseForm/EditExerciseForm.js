@@ -76,27 +76,21 @@ const EditExerciseForm = ({
           asyncValidating={asyncValidating}
           messages={{
             submit: (
-              <FormattedMessage
-                id="app.editExerciseForm.submit"
-                defaultMessage="Save changes"
-              />
+              <FormattedMessage id="generic.save" defaultMessage="Save" />
             ),
             submitting: (
               <FormattedMessage
-                id="app.editExerciseForm.submitting"
-                defaultMessage="Saving changes ..."
+                id="generic.saving"
+                defaultMessage="Saving ..."
               />
             ),
             success: (
-              <FormattedMessage
-                id="app.editExerciseForm.success"
-                defaultMessage="Settings were saved."
-              />
+              <FormattedMessage id="generic.saved" defaultMessage="Saved" />
             ),
             validating: (
               <FormattedMessage
-                id="app.editExerciseForm.validating"
-                defaultMessage="Validating..."
+                id="generic.validating"
+                defaultMessage="Validating ..."
               />
             )
           }}
@@ -107,7 +101,7 @@ const EditExerciseForm = ({
     {submitFailed &&
       <Alert bsStyle="danger">
         <FormattedMessage
-          id="app.editExerciseForm.failed"
+          id="generic.savingFailed"
           defaultMessage="Saving failed. Please try again later."
         />
       </Alert>}

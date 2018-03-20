@@ -6,21 +6,18 @@ const SupplementaryFilesTableHeaderRow = ({ viewOnly }) =>
   <tr>
     <th>
       <FormattedMessage
-        id="app.supplementaryFilesTable.fileName"
-        defaultMessage="Original filename"
+        id="app.filesTable.originalFileName"
+        defaultMessage="Original File Name"
       />
     </th>
     <th>
       <FormattedMessage
-        id="app.supplementaryFilesTable.fileSize"
-        defaultMessage="Filesize"
+        id="app.filesTable.fileSize"
+        defaultMessage="File Size"
       />
     </th>
     <th>
-      <FormattedMessage
-        id="app.supplementaryFilesTable.fileUploadedAt"
-        defaultMessage="Uploaded at"
-      />
+      <FormattedMessage id="generic.uploadedAt" defaultMessage="Uploaded at" />
     </th>
     {!viewOnly && <th />}
   </tr>;
