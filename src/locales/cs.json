@@ -1085,7 +1085,7 @@
   "generic.submitted": "Odevzdáno",
   "generic.submitting": "Odevzdávání ...",
   "generic.uploadedAt": "Nahráno",
-  "generic.validating": "Validuji ...",
+  "generic.validating": "Validování ...",
   "recodex-judge-float": "Sudí reálných čísel",
   "recodex-judge-float-newline": "Sudí reálných čísel (ignorující konce řádků)",
   "recodex-judge-normal": "Sudí tokenů",
