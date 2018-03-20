@@ -98,7 +98,7 @@ class SisIntegration extends Component {
                         >
                           <EditIcon />{' '}
                           <FormattedMessage
-                            id="app.sisIntegration.editButton"
+                            id="generic.edit"
                             defaultMessage="Edit"
                           />
                         </Button>

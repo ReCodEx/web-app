@@ -32,7 +32,7 @@ const SupervisorsList = ({
           <td className="text-center">
             <FormattedMessage
               id="app.userList.noSupervisors"
-              defaultMessage="There are no supervisors in this list."
+              defaultMessage="There are no supervisors on the list."
             />
           </td>
         </tr>}

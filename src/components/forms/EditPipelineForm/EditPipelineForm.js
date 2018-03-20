@@ -88,8 +88,8 @@ class EditPipelineForm extends Component {
                 ),
                 validating: (
                   <FormattedMessage
-                    id="app.editPipelineForm.validating"
-                    defaultMessage="Validating..."
+                    id="generic.validating"
+                    defaultMessage="Validating ..."
                   />
                 )
               }}
@@ -100,7 +100,7 @@ class EditPipelineForm extends Component {
         {submitFailed &&
           <Alert bsStyle="danger">
             <FormattedMessage
-              id="app.editPipelineForm.failed"
+              id="generic.savingFailed"
               defaultMessage="Saving failed. Please try again later."
             />
           </Alert>}

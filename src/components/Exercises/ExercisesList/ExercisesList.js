@@ -17,13 +17,10 @@ const ExercisesList = ({
       <tr>
         <th />
         <th>
-          <FormattedMessage id="app.exercisesList.name" defaultMessage="Name" />
+          <FormattedMessage id="generic.name" defaultMessage="Name" />
         </th>
         <th>
-          <FormattedMessage
-            id="app.exercisesList.author"
-            defaultMessage="Author"
-          />
+          <FormattedMessage id="generic.author" defaultMessage="Author" />
         </th>
         <th>
           <FormattedMessage

@@ -5,8 +5,8 @@ const AttachmentFilesTableHeaderRow = () =>
   <tr>
     <th>
       <FormattedMessage
-        id="app.attachmentFilesTable.fileName"
-        defaultMessage="Original filename"
+        id="app.filesTable.originalFileName"
+        defaultMessage="Original File Name"
       />
     </th>
     <th>
@@ -17,15 +17,12 @@ const AttachmentFilesTableHeaderRow = () =>
     </th>
     <th>
       <FormattedMessage
-        id="app.attachmentFilesTable.fileSize"
-        defaultMessage="Filesize"
+        id="app.filesTable.fileSize"
+        defaultMessage="File Size"
       />
     </th>
     <th>
-      <FormattedMessage
-        id="app.attachmentFilesTable.fileUploadedAt"
-        defaultMessage="Uploaded at"
-      />
+      <FormattedMessage id="generic.uploadedAt" defaultMessage="Uploaded at" />
     </th>
     <th />
   </tr>;

@@ -10,16 +10,10 @@ const PipelinesSimpleList = ({ pipelines, createActions, intl, ...rest }) =>
     <thead>
       <tr>
         <th>
-          <FormattedMessage
-            id="app.pipelinesSimpleList.name"
-            defaultMessage="Name"
-          />
+          <FormattedMessage id="generic.name" defaultMessage="Name" />
         </th>
         <th>
-          <FormattedMessage
-            id="app.pipelinesSimpleList.author"
-            defaultMessage="Author"
-          />
+          <FormattedMessage id="generic.author" defaultMessage="Author" />
         </th>
         {createActions &&
           <th>

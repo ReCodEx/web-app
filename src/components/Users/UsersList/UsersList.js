@@ -22,7 +22,7 @@ const UsersList = ({ users = [], createActions, intl, ...rest }) =>
           <td className="text-center">
             <FormattedMessage
               id="app.userList.noUsers"
-              defaultMessage="There are no users in this list."
+              defaultMessage="There are no users on the list."
             />
           </td>
         </tr>}

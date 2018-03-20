@@ -66,10 +66,7 @@ const SubmissionStatus = ({
             <Icon name="user" />
           </td>
           <th>
-            <FormattedMessage
-              id="app.submission.author"
-              defaultMessage="Author:"
-            />
+            <FormattedMessage id="generic.author" defaultMessage="Author" />:
           </th>
           <td>
             <UsersNameContainer userId={userId} />

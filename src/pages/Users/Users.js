@@ -128,7 +128,7 @@ class Users extends Component {
                             <Button bsSize="xs">
                               <SettingsIcon />{' '}
                               <FormattedMessage
-                                id="app.users.settings"
+                                id="generic.settings"
                                 defaultMessage="Settings"
                               />
                             </Button>

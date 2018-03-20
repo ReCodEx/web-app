@@ -69,33 +69,19 @@ const ResolveFailure = ({
         hasFailed={submitFailed}
         invalid={invalid}
         messages={{
-          submit: (
-            <FormattedMessage
-              id="app.submissionFailures.resolveSave"
-              defaultMessage="Save"
-            />
-          ),
+          submit: <FormattedMessage id="generic.save" defaultMessage="Save" />,
           submitting: (
-            <FormattedMessage
-              id="app.submissionFailures.resolveSaving"
-              defaultMessage="Saving ..."
-            />
+            <FormattedMessage id="generic.saving" defaultMessage="Saving ..." />
           ),
           success: (
-            <FormattedMessage
-              id="app.submissionFailures.resolveSuccesss"
-              defaultMessage="Saved"
-            />
+            <FormattedMessage id="generic.saved" defaultMessage="Saved" />
           )
         }}
       />
 
       <Button bsStyle="default" className="btn-flat" onClick={onClose}>
         <CloseIcon />{' '}
-        <FormattedMessage
-          id="app.submissionFailures.resolveClose"
-          defaultMessage="Close"
-        />
+        <FormattedMessage id="generic.close" defaultMessage="Close" />
       </Button>
     </Modal.Footer>
   </Modal>;

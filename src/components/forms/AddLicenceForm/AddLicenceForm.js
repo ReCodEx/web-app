@@ -17,7 +17,7 @@ const AddLicenceForm = ({
   submitSucceeded = false,
   asyncValidating,
   invalid
-}) => (
+}) =>
   <FormBox
     title={
       <FormattedMessage
@@ -88,8 +88,7 @@ const AddLicenceForm = ({
         />
       }
     />
-  </FormBox>
-);
+  </FormBox>;
 
 AddLicenceForm.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
@@ -118,14 +117,14 @@ const validate = ({ note, validUntil }) => {
     errors['validUntil'] = (
       <FormattedMessage
         id="app.addLicence.validation.validUntilEmpty"
-        defaultMessage="End of licence's valid period must be set."
+        defaultMessage="The expiration date of the valid period of the licence must be set."
       />
     );
   } else if (validUntil.isBefore(Date.now())) {
     errors['validUntil'] = (
       <FormattedMessage
         id="app.addLicence.validation.validUntilInThePast"
-        defaultMessage="End of licence's valid period must be in the future."
+        defaultMessage="The expiration date of the valid period of the licence must be in the future."
       />
     );
   }

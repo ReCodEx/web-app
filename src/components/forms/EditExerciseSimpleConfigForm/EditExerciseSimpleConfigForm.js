@@ -69,10 +69,7 @@ class EditExerciseSimpleConfigForm extends Component {
                   className="btn-flat"
                 >
                   <RefreshIcon /> &nbsp;
-                  <FormattedMessage
-                    id="app.editExerciseSimpleConfigForm.reset"
-                    defaultMessage="Reset"
-                  />
+                  <FormattedMessage id="generic.reset" defaultMessage="Reset" />
                 </Button>{' '}
               </span>}
 
@@ -105,7 +102,7 @@ class EditExerciseSimpleConfigForm extends Component {
                 ),
                 validating: (
                   <FormattedMessage
-                    id="app.editExerciseSimpleConfigForm.validating"
+                    id="generic.validating"
                     defaultMessage="Validating ..."
                   />
                 )
@@ -117,7 +114,7 @@ class EditExerciseSimpleConfigForm extends Component {
         {submitFailed &&
           <Alert bsStyle="danger">
             <FormattedMessage
-              id="app.editExerciseConfigForm.failed"
+              id="generic.savingFailed"
               defaultMessage="Saving failed. Please try again later."
             />
           </Alert>}

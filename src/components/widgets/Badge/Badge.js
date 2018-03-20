@@ -49,10 +49,7 @@ class Badge extends Component {
           </p>
           <Link to={EDIT_USER_URI_FACTORY(id)}>
             <Icon name="edit" />
-            <FormattedMessage
-              id="app.badge.settings"
-              defaultMessage="Settings"
-            />
+            <FormattedMessage id="generic.settings" defaultMessage="Settings" />
           </Link>
           &nbsp;
           <OverlayTrigger

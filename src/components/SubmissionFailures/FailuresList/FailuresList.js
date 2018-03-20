@@ -16,7 +16,7 @@ const FailuresList = ({ failures, createActions }) =>
         </th>
         <th>
           <FormattedMessage
-            id="app.failureList.headDescription"
+            id="generic.description"
             defaultMessage="Description"
           />
         </th>

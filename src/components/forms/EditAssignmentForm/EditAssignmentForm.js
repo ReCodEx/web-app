@@ -51,22 +51,16 @@ const EditAssignmentForm = ({
             asyncValidating={asyncValidating}
             messages={{
               submit: (
-                <FormattedMessage
-                  id="app.editAssignmentForm.submit"
-                  defaultMessage="Save settings"
-                />
+                <FormattedMessage id="generic.save" defaultMessage="Save" />
               ),
               submitting: (
                 <FormattedMessage
-                  id="app.editAssignmentForm.submitting"
-                  defaultMessage="Saving changes ..."
+                  id="generic.saving"
+                  defaultMessage="Saving ..."
                 />
               ),
               success: (
-                <FormattedMessage
-                  id="app.editAssignmentForm.success"
-                  defaultMessage="Settings were saved."
-                />
+                <FormattedMessage id="generic.saved" defaultMessage="Saved" />
               )
             }}
           />
@@ -76,7 +70,7 @@ const EditAssignmentForm = ({
       {submitFailed &&
         <Alert bsStyle="danger">
           <FormattedMessage
-            id="app.editAssignmentForm.failed"
+            id="generic.savingFailed"
             defaultMessage="Saving failed. Please try again later."
           />
         </Alert>}

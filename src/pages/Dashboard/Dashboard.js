@@ -130,7 +130,7 @@ class Dashboard extends Component {
         description={
           <FormattedMessage
             id="app.user.description"
-            defaultMessage="All of the user's progress in all groups."
+            defaultMessage="Complete progress of the user in all groups."
           />
         }
         breadcrumbs={[

@@ -69,27 +69,19 @@ const EditTerm = ({
         hasFailed={submitFailed}
         invalid={invalid}
         messages={{
-          submit: (
-            <FormattedMessage id="app.editSisTerm.save" defaultMessage="Save" />
-          ),
+          submit: <FormattedMessage id="generic.save" defaultMessage="Save" />,
           submitting: (
-            <FormattedMessage
-              id="app.editSisTerm.saving"
-              defaultMessage="Saving ..."
-            />
+            <FormattedMessage id="generic.saving" defaultMessage="Saving ..." />
           ),
           success: (
-            <FormattedMessage
-              id="app.editSisTerm.successs"
-              defaultMessage="Saved"
-            />
+            <FormattedMessage id="generic.saved" defaultMessage="Saved" />
           )
         }}
       />
 
       <Button bsStyle="default" className="btn-flat" onClick={onClose}>
         <CloseIcon />{' '}
-        <FormattedMessage id="app.editSisTerm.close" defaultMessage="Close" />
+        <FormattedMessage id="generic.close" defaultMessage="Close" />
       </Button>
     </Modal.Footer>
   </Modal>;
