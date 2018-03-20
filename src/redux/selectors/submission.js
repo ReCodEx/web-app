@@ -2,6 +2,7 @@ import { createSelector } from 'reselect';
 import { submissionStatus } from '../modules/submission';
 import { runtimeEnvironmentsSelector } from './runtimeEnvironments';
 import { isReady } from '../helpers/resourceManager/status';
+import { safeGet, EMPTY_LIST } from '../../helpers/common';
 
 const { CREATING, VALIDATING, SENDING, FAILED } = submissionStatus;
 
@@ -56,3 +57,18 @@ export const getPresubmitEnvironments = createSelector(
           .map(envId => environments.getIn([envId, 'data']).toJS())
       : null
 );
+
+export const getPresubmitVariables = createSelector([getPresubmit], presubmit =>
+  ((presubmit && presubmit.get('submitVariables')) || EMPTY_LIST).toJS()
+);
+
+// Selector helper function for presubmit variables
+export const hasEntryPoint = (vars, env) =>
+  Boolean(
+    env &&
+      safeGet(vars, [
+        v => v.runtimeEnvironmentId === env,
+        'variables',
+        v => v.name === 'entry-point'
+      ])
+  );

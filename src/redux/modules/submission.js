@@ -58,16 +58,25 @@ const submit = (endpoint, submissionType = 'assignmentSolution') => (
   id,
   note,
   files,
-  runtimeEnvironmentId = null
+  runtimeEnvironmentId = null,
+  entryPoint = null
 ) => {
   var submitBody = {
     userId,
     files: files.map(file => file.id),
     note
   };
-  if (runtimeEnvironmentId != null) {
+
+  if (runtimeEnvironmentId) {
     submitBody.runtimeEnvironmentId = runtimeEnvironmentId;
   }
+
+  if (entryPoint) {
+    submitBody.solutionParams = {
+      variables: [{ name: 'entry-point', value: entryPoint }]
+    };
+  }
+
   return createApiAction({
     type: actionTypes.SUBMIT,
     method: 'POST',
