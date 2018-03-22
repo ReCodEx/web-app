@@ -5,7 +5,7 @@ import { FormattedMessage } from 'react-intl';
 import { Col, Row } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
-import { reset, formValueSelector } from 'redux-form';
+import { reset, formValueSelector, SubmissionError } from 'redux-form';
 import moment from 'moment';
 import { LinkContainer } from 'react-router-bootstrap';
 import { defaultMemoize } from 'reselect';
@@ -22,7 +22,8 @@ import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import {
   fetchAssignment,
   editAssignment,
-  syncWithExercise
+  syncWithExercise,
+  validateAssignment
 } from '../../redux/modules/assignments';
 import { getAssignment } from '../../redux/selectors/assignments';
 import { canSubmitSolution } from '../../redux/selectors/canSubmit';
@@ -80,18 +81,37 @@ class EditAssignment extends Component {
   );
 
   editAssignmentSubmitHandler = formData => {
-    const { assignment, editAssignment } = this.props;
+    const { assignment, editAssignment, validateAssignment } = this.props;
+    const version = assignment.getIn(['data', 'version']);
 
-    const disabledEnvironments = formData.disabledRuntime
-      ? Object.keys(formData.disabledRuntime).filter(
-        key => formData.disabledRuntime[key] === true
-      )
-      : [];
+    // validate assignment version
+    return validateAssignment(version)
+      .then(res => res.value)
+      .then(({ versionIsUpToDate }) => {
+        if (versionIsUpToDate === false) {
+          throw SubmissionError({
+            _error: (
+              <FormattedMessage
+                id="app.editExerciseForm.validation.versionDiffers"
+                defaultMessage="Somebody has changed the exercise while you have been editing it. Please reload the page and apply your changes once more."
+              />
+            )
+          });
+        }
+      })
+      .then(() => {
+        // prepare the data and submit them
+        const disabledEnvironments = formData.disabledRuntime
+          ? Object.keys(formData.disabledRuntime).filter(
+              key => formData.disabledRuntime[key] === true
+            )
+          : [];
 
-    delete formData['disabledRuntime'];
-    formData['disabledRuntimeEnvironmentIds'] = disabledEnvironments;
+        delete formData['disabledRuntime'];
+        formData['disabledRuntimeEnvironmentIds'] = disabledEnvironments;
 
-    return editAssignment(assignment.getIn(['data', 'version']), formData);
+        return editAssignment(version, formData);
+      });
   };
 
   render() {
@@ -253,6 +273,7 @@ EditAssignment.propTypes = {
   allowSecondDeadline: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
   localizedTexts: PropTypes.array,
   exerciseSync: PropTypes.func.isRequired,
+  validateAssignment: PropTypes.func.isRequired,
   links: PropTypes.object,
   isSupervisorOf: PropTypes.func.isRequired,
   isAdminOf: PropTypes.func.isRequired
@@ -296,6 +317,8 @@ export default connect(
       }
       return dispatch(editAssignment(assignmentId, processedData));
     },
-    exerciseSync: () => dispatch(syncWithExercise(assignmentId))
+    exerciseSync: () => dispatch(syncWithExercise(assignmentId)),
+    validateAssignment: version =>
+      dispatch(validateAssignment(assignmentId, version))
   })
 )(withLinks(EditAssignment));

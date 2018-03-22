@@ -33,11 +33,7 @@ const TextField = ({
       {...input}
       {...props}
       type={type}
-      value={
-        typeof value === 'string' || typeof value === 'number'
-          ? value
-          : value[0]
-      }
+      value={Array.isArray(value) ? value[0] : value}
       bsClass={classNames({
         'form-control': true,
         [styles.dirty]: dirty && !ignoreDirty && !error && !warning,
