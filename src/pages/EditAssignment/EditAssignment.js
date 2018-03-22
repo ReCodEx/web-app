@@ -63,18 +63,23 @@ class EditAssignment extends Component {
       firstDeadline,
       secondDeadline,
       pointsPercentualThreshold,
-      disabledRuntimeEnvironmentsIds,
+      disabledRuntimeEnvironmentIds,
+      runtimeEnvironmentIds,
       ...rest
     }) => ({
       firstDeadline: moment.unix(firstDeadline),
       secondDeadline: moment.unix(secondDeadline),
       pointsPercentualThreshold: pointsPercentualThreshold * 100,
-      disabledRuntime: disabledRuntimeEnvironmentsIds.reduce(
+      runtimeEnvironmentIds,
+      enabledRuntime: disabledRuntimeEnvironmentIds.reduce(
         (result, item, index, array) => {
-          result[item] = true;
+          result[item] = false;
           return result;
         },
-        {}
+        runtimeEnvironmentIds.reduce((result, item, index, array) => {
+          result[item] = true;
+          return result;
+        }, {})
       ),
       ...rest
     })
@@ -101,13 +106,13 @@ class EditAssignment extends Component {
       })
       .then(() => {
         // prepare the data and submit them
-        const disabledEnvironments = formData.disabledRuntime
-          ? Object.keys(formData.disabledRuntime).filter(
-              key => formData.disabledRuntime[key] === true
+        const disabledEnvironments = formData.enabledRuntime
+          ? Object.keys(formData.enabledRuntime).filter(
+              key => formData.enabledRuntime[key] === false
             )
           : [];
 
-        delete formData['disabledRuntime'];
+        delete formData['enabledRuntime'];
         formData['disabledRuntimeEnvironmentIds'] = disabledEnvironments;
 
         return editAssignment(version, formData);

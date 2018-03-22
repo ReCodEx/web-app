@@ -228,16 +228,16 @@ const EditAssignmentForm = ({
 
       <h4>
         <FormattedMessage
-          id="app.editAssignmentForm.disableEnvironments"
-          defaultMessage="Disabled Runtime Environments"
+          id="app.editAssignmentForm.enabledEnvironments"
+          defaultMessage="Enabled Runtime Environments"
         />
       </h4>
 
       <Row>
-        {assignment.runtimeEnvironmentsIds.map((item, i) =>
+        {assignment.runtimeEnvironmentIds.map((item, i) =>
           <Col key={i} sm={6}>
             <Field
-              name={`disabledRuntime.${item}`}
+              name={`enabledRuntime.${item}`}
               component={CheckboxField}
               onOff
               label={
@@ -291,8 +291,8 @@ const validate = ({
   maxPointsBeforeFirstDeadline,
   maxPointsBeforeSecondDeadline,
   pointsPercentualThreshold,
-  runtimeEnvironmentsIds,
-  disabledRuntime
+  runtimeEnvironmentIds,
+  enabledRuntime
 }) => {
   const errors = {};
 
@@ -458,10 +458,10 @@ const validate = ({
     }
   }
 
-  const formDisabledRuntimes = Object.keys(disabledRuntime).filter(
-    key => disabledRuntime[key] === true
+  const formDisabledRuntimes = Object.keys(enabledRuntime).filter(
+    key => enabledRuntime[key] === false
   );
-  if (formDisabledRuntimes.length === runtimeEnvironmentsIds.length) {
+  if (formDisabledRuntimes.length === runtimeEnvironmentIds.length) {
     errors['_error'] = (
       <FormattedMessage
         id="app.editAssignmentForm.validation.allRuntimesDisabled"
