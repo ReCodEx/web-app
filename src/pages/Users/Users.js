@@ -119,9 +119,10 @@ class Users extends Component {
                   id="users-page"
                   search={search(user.toJS().data.privateData.instanceId)}
                   showAllOnEmptyQuery={true}
-                  renderList={users =>
+                  renderList={(users, onChange) =>
                     <UsersList
                       users={users}
+                      loggedUserId={user.toJS().data.id}
                       createActions={userId =>
                         <div>
                           <LinkContainer to={EDIT_USER_URI_FACTORY(userId)}>
@@ -144,7 +145,11 @@ class Users extends Component {
                                 defaultMessage="Login as"
                               />
                             </Button>}
-                          <DeleteUserButtonContainer id={userId} bsSize="xs" />
+                          <DeleteUserButtonContainer
+                            id={userId}
+                            bsSize="xs"
+                            onDeleted={onChange}
+                          />
                         </div>}
                     />}
                 />
