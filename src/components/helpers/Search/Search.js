@@ -87,7 +87,7 @@ class Search extends Component {
 
             {(!isLoading || foundItems.size > 0) &&
               <div className={styles.list}>
-                {renderList(foundItems.toJS(), () => onChange(this.query))}
+                {renderList(foundItems.toJS())}
               </div>}
           </div>}
       </div>
