@@ -24,6 +24,7 @@ import { takeOver } from '../../redux/modules/auth';
 import { searchPeople } from '../../redux/modules/search';
 
 import withLinks from '../../helpers/withLinks';
+import { getSearchQuery } from '../../redux/selectors/search';
 
 class Users extends Component {
   static loadAsync = (params, dispatch) => dispatch(fetchAllUsers);
@@ -39,6 +40,7 @@ class Users extends Component {
       isSuperAdmin,
       fetchStatus,
       search,
+      query,
       user
     } = this.props;
 
@@ -122,6 +124,7 @@ class Users extends Component {
                   renderList={users =>
                     <UsersList
                       users={users}
+                      loggedUserId={user.toJS().data.id}
                       createActions={userId =>
                         <div>
                           <LinkContainer to={EDIT_USER_URI_FACTORY(userId)}>
@@ -144,7 +147,14 @@ class Users extends Component {
                                 defaultMessage="Login as"
                               />
                             </Button>}
-                          <DeleteUserButtonContainer id={userId} bsSize="xs" />
+                          <DeleteUserButtonContainer
+                            id={userId}
+                            bsSize="xs"
+                            onDeleted={() =>
+                              search(user.toJS().data.privateData.instanceId)(
+                                query
+                              )}
+                          />
                         </div>}
                     />}
                 />
@@ -164,6 +174,7 @@ Users.propTypes = {
   isSuperAdmin: PropTypes.bool,
   fetchStatus: PropTypes.string,
   search: PropTypes.func,
+  query: PropTypes.string,
   user: ImmutablePropTypes.map.isRequired
 };
 
@@ -173,7 +184,8 @@ export default withLinks(
       return {
         isSuperAdmin: isLoggedAsSuperAdmin(state),
         fetchStatus: fetchManyStatus(state),
-        user: loggedInUserSelector(state)
+        user: loggedInUserSelector(state),
+        query: getSearchQuery('users-page')(state)
       };
     },
     dispatch => ({
