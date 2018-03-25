@@ -17,7 +17,7 @@ export const assignmentEnvironmentsSelector = createSelector(
   (assignmentSelector, envSelector) => id => {
     const assignment = assignmentSelector(id);
     const envIds =
-      assignment && assignment.getIn(['data', 'runtimeEnvironmentsIds']);
+      assignment && assignment.getIn(['data', 'runtimeEnvironmentIds']);
     return envIds && envSelector
       ? envIds.toArray().map(envSelector)
       : EMPTY_ARRAY;
