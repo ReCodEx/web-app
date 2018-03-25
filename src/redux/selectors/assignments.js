@@ -18,8 +18,13 @@ export const assignmentEnvironmentsSelector = createSelector(
     const assignment = assignmentSelector(id);
     const envIds =
       assignment && assignment.getIn(['data', 'runtimeEnvironmentIds']);
-    return envIds && envSelector
-      ? envIds.toArray().map(envSelector)
+    const disabledEnvIds =
+      assignment && assignment.getIn(['data', 'disabledRuntimeEnvironmentIds']);
+    return envIds && disabledEnvIds && envSelector
+      ? envIds
+          .toArray()
+          .filter(env => disabledEnvIds.toArray().indexOf(env) < 0)
+          .map(envSelector)
       : EMPTY_ARRAY;
   }
 );
