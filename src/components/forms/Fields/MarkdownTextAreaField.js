@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, FormattedHTMLMessage } from 'react-intl';
 import ReactMarkdown from 'react-remarkable';
 import { Row, Col, HelpBlock } from 'react-bootstrap';
 
@@ -50,9 +50,12 @@ class MarkdownTextAreaField extends Component {
           </Col>
           <Col sm={8}>
             <HelpBlock className="text-right">
-              <FormattedMessage
+              <FormattedHTMLMessage
                 id="app.markdownTextArea.canUseMarkdown"
-                defaultMessage="You can use markdown syntax in this field."
+                defaultMessage="You can use <a href='{markdownUrl}' target='_blank'>markdown syntax</a> in this field."
+                values={{
+                  markdownUrl: 'https://github.com/ReCodEx/wiki/wiki/Markdown'
+                }}
               />
             </HelpBlock>
           </Col>
