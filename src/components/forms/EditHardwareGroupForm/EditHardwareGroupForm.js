@@ -137,7 +137,7 @@ const validate = ({ hardwareGroup }) => {
 const warn = ({ hardwareGroup }, { warnDropLimits }) => {
   const warnings = {};
   if (warnDropLimits(hardwareGroup)) {
-    warnings['hardwareGroup'] = (
+    warnings.hardwareGroup = (
       <FormattedMessage
         id="app.editHardwareGroupForm.warnLimitsDrop"
         defaultMessage="Limits of some environments do not meet the constraints of the selected hardware group. These limits will be removed when the hardware group is changed."

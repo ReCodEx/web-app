@@ -51,7 +51,10 @@ import {
 } from '../../redux/modules/exerciseTests';
 import { exerciseTestsSelector } from '../../redux/selectors/exerciseTests';
 import { fetchPipelines } from '../../redux/modules/pipelines';
-import { pipelinesSelector } from '../../redux/selectors/pipelines';
+import {
+  pipelinesSelector,
+  getPipelinesEnvironmentsWhichHasEntryPoint
+} from '../../redux/selectors/pipelines';
 
 import {
   getEnvInitValues,
@@ -92,23 +95,33 @@ class EditExerciseSimpleConfig extends Component {
   };
 
   transformAndSendConfigValuesCreator = defaultMemoize(
-    (pipelines, environments, tests, config) => {
+    (pipelines, environmentConfigs, tests, config) => {
       const { setConfig, reloadExercise } = this.props;
       return data =>
         setConfig(
-          transformConfigValues(data, pipelines, environments, tests, config)
+          transformConfigValues(
+            data,
+            pipelines,
+            environmentConfigs,
+            tests,
+            config
+          )
         ).then(reloadExercise);
     }
   );
 
-  transformAndSendEnvValues = defaultMemoize(
-    (pipelines, environments, tests, config) => {
+  transformAndSendEnvValuesCreator = defaultMemoize(
+    (pipelines, environments, tests, config, environmentConfigs) => {
       const { editEnvironmentConfigs, reloadConfig, setConfig } = this.props;
 
       return data => {
-        const newEnvironments = transformEnvValues(data, environments);
+        const newEnvironments = transformEnvValues(
+          data,
+          environmentConfigs,
+          environments
+        );
         const configData = transformConfigValues(
-          getSimpleConfigInitValues(config, tests, environments),
+          getSimpleConfigInitValues(config, tests, environmentConfigs),
           pipelines,
           newEnvironments,
           tests,
@@ -134,6 +147,7 @@ class EditExerciseSimpleConfig extends Component {
       exerciseScoreConfig,
       exerciseTests,
       pipelines,
+      environmetnsWithEntryPoints,
       intl: { locale }
     } = this.props;
 
@@ -252,11 +266,12 @@ class EditExerciseSimpleConfig extends Component {
                                     environments
                                   )}
                                   runtimeEnvironments={environments}
-                                  onSubmit={this.transformAndSendEnvValues(
+                                  onSubmit={this.transformAndSendEnvValuesCreator(
                                     pipelines,
                                     environments,
                                     tests,
-                                    config
+                                    config,
+                                    environmentConfigs
                                   )}
                                 />}
                             </ResourceRenderer>}
@@ -284,6 +299,9 @@ class EditExerciseSimpleConfig extends Component {
                                 )}
                                 exercise={exercise}
                                 exerciseTests={tests}
+                                environmetnsWithEntryPoints={
+                                  environmetnsWithEntryPoints
+                                }
                                 onSubmit={this.transformAndSendConfigValuesCreator(
                                   pipelines,
                                   environments,
@@ -334,6 +352,7 @@ EditExerciseSimpleConfig.propTypes = {
   setConfig: PropTypes.func.isRequired,
   links: PropTypes.object.isRequired,
   pipelines: ImmutablePropTypes.map,
+  environmetnsWithEntryPoints: PropTypes.array.isRequired,
   reloadExercise: PropTypes.func.isRequired,
   reloadConfig: PropTypes.func.isRequired,
   intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired
@@ -352,7 +371,10 @@ export default withLinks(
         )(state),
         exerciseScoreConfig: exerciseScoreConfigSelector(exerciseId)(state),
         exerciseTests: exerciseTestsSelector(exerciseId)(state),
-        pipelines: pipelinesSelector(state)
+        pipelines: pipelinesSelector(state),
+        environmetnsWithEntryPoints: getPipelinesEnvironmentsWhichHasEntryPoint(
+          state
+        )
       };
     },
     (dispatch, { params: { exerciseId } }) => ({

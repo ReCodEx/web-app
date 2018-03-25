@@ -5,6 +5,7 @@ import { Well, Row, Col } from 'react-bootstrap';
 import { FormattedMessage, injectIntl, defineMessages } from 'react-intl';
 import Icon from 'react-fontawesome';
 
+import { safeGet, EMPTY_ARRAY } from '../../../helpers/common';
 import Button from '../../widgets/FlatButton';
 import {
   SelectField,
@@ -96,6 +97,27 @@ class EditExerciseSimpleConfigTest extends Component {
     this.setState({ compilationOpen: false });
   };
 
+  getPossibleEntryPoints = envId => {
+    const { compilationParams, environmetnsWithEntryPoints, intl } = this.props;
+    if (!environmetnsWithEntryPoints.find(e => e === envId)) {
+      return EMPTY_ARRAY;
+    }
+
+    const files = safeGet(
+      compilationParams,
+      [envId, 'extra-files'],
+      EMPTY_ARRAY
+    );
+
+    return files
+      .filter(({ file, name }) => file && name)
+      .map(({ name }) => ({
+        key: name,
+        name
+      }))
+      .sort((a, b) => a.name.localeCompare(b.name, intl.locale));
+  };
+
   render() {
     const {
       supplementaryFiles,
@@ -132,9 +154,15 @@ class EditExerciseSimpleConfigTest extends Component {
                 <Icon name="minus-square-o" />&nbsp;&nbsp;
                 <FormattedMessage
                   id="app.editExerciseSimpleConfigTests.compilationTitle"
-                  defaultMessage="Compilation"
+                  defaultMessage="Compilation/Execution"
                 />
               </h4>
+              <p className="text-muted small">
+                <FormattedMessage
+                  id="app.editExerciseSimpleConfigTests.compilationInfo"
+                  defaultMessage="Additional files that are added to compilation (in case of compiled environments) or execution (in case of interpreted environments)."
+                />
+              </p>
               <div className="compilation">
                 <table>
                   <tbody>
@@ -143,30 +171,49 @@ class EditExerciseSimpleConfigTest extends Component {
                         .sort((a, b) =>
                           a.name.localeCompare(b.name, intl.locale)
                         )
-                        .map(env =>
-                          <td key={env.id}>
-                            <h5>
-                              {env.name}
-                            </h5>
-                            <FieldArray
-                              name={`${test}.compilation.${env.id}.extra-files`}
-                              component={ExpandingInputFilesField}
-                              options={supplementaryFilesOptions}
-                              leftLabel={
-                                <FormattedMessage
-                                  id="app.editExerciseSimpleConfigTests.extraFilesActual"
-                                  defaultMessage="Extra file:"
-                                />
-                              }
-                              rightLabel={
-                                <FormattedMessage
-                                  id="app.editExerciseSimpleConfigTests.extraFilesRename"
-                                  defaultMessage="Rename as:"
-                                />
-                              }
-                            />
-                          </td>
-                        )}
+                        .map(env => {
+                          const possibleEntryPoints = this.getPossibleEntryPoints(
+                            env.id
+                          );
+                          return (
+                            <td key={env.id}>
+                              <h5>
+                                {env.name}
+                              </h5>
+                              <FieldArray
+                                name={`${test}.compilation.${env.id}.extra-files`}
+                                component={ExpandingInputFilesField}
+                                options={supplementaryFilesOptions}
+                                leftLabel={
+                                  <FormattedMessage
+                                    id="app.editExerciseSimpleConfigTests.extraFilesActual"
+                                    defaultMessage="Extra file:"
+                                  />
+                                }
+                                rightLabel={
+                                  <FormattedMessage
+                                    id="app.editExerciseSimpleConfigTests.extraFilesRename"
+                                    defaultMessage="Rename as:"
+                                  />
+                                }
+                              />
+                              <br />
+                              {possibleEntryPoints.length > 0 &&
+                                <Field
+                                  name={`${test}.compilation.${env.id}.entryPoint`}
+                                  component={SelectField}
+                                  options={this.getPossibleEntryPoints(env.id)}
+                                  addEmptyOption={true}
+                                  label={
+                                    <FormattedMessage
+                                      id="app.editExerciseSimpleConfigTests.entryPoint"
+                                      defaultMessage="Point of entry (bootstrap file):"
+                                    />
+                                  }
+                                />}
+                            </td>
+                          );
+                        })}
                     </tr>
                   </tbody>
                 </table>
@@ -179,7 +226,7 @@ class EditExerciseSimpleConfigTest extends Component {
               <Icon name="plus-square-o" />&nbsp;&nbsp;
               <FormattedMessage
                 id="app.editExerciseSimpleConfigTests.compilationTitle"
-                defaultMessage="Compilation"
+                defaultMessage="Compilation/Execution"
               />
             </div>}
         <Row>
@@ -223,8 +270,8 @@ class EditExerciseSimpleConfigTest extends Component {
           <Col md={6} lg={3}>
             <h4>
               <FormattedMessage
-                id="app.editExerciseSimpleConfigTests.executionTitle"
-                defaultMessage="Execution"
+                id="app.editExerciseSimpleConfigTests.cmdlineTitle"
+                defaultMessage="Command Line"
               />
             </h4>
             <FieldArray
@@ -414,6 +461,8 @@ EditExerciseSimpleConfigTest.propTypes = {
   hasCompilationExtraFiles: PropTypes.bool,
   useOutFile: PropTypes.bool,
   useCustomJudge: PropTypes.bool,
+  compilationParams: PropTypes.object,
+  environmetnsWithEntryPoints: PropTypes.array.isRequired,
   testErrors: PropTypes.object,
   smartFill: PropTypes.func,
   intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired

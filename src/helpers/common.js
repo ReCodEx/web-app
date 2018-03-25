@@ -26,3 +26,21 @@ export const encodeId = id => {
 export const encodeNumId = id => {
   return 'ID' + id;
 };
+
+export const unique = arr => [...new Set(arr)];
+
+/**
+ * Get an array of strings, return object where keys are that strings
+ * and values are lists of indices refering to the positions in original array.
+ */
+export const createIndex = arr => {
+  const index = {};
+  arr.forEach((name, idx) => {
+    if (index[name] === undefined) {
+      index[name] = [idx];
+    } else {
+      index[name].push(idx);
+    }
+  });
+  return index;
+};
