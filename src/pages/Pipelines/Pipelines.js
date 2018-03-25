@@ -24,6 +24,7 @@ import PipelinesList from '../../components/Pipelines/PipelinesList';
 import FetchManyResourceRenderer from '../../components/helpers/FetchManyResourceRenderer';
 
 import withLinks from '../../helpers/withLinks';
+import { getSearchQuery } from '../../redux/selectors/search';
 
 class Pipelines extends Component {
   static loadAsync = (params, dispatch) => dispatch(fetchPipelines());
@@ -48,6 +49,7 @@ class Pipelines extends Component {
       fetchStatus,
       isAuthorOfPipeline,
       search,
+      query,
       links: { PIPELINE_EDIT_URI_FACTORY }
     } = this.props;
 
@@ -160,7 +162,11 @@ class Pipelines extends Component {
                             />
                           </Button>
                         </LinkContainer>
-                        <DeletePipelineButtonContainer id={id} bsSize="xs" />
+                        <DeletePipelineButtonContainer
+                          id={id}
+                          bsSize="xs"
+                          onDeleted={() => search(query)}
+                        />
                       </ButtonGroup>}
                   />}
               />
@@ -178,7 +184,8 @@ Pipelines.propTypes = {
   push: PropTypes.func.isRequired,
   links: PropTypes.object.isRequired,
   fetchStatus: PropTypes.string,
-  search: PropTypes.func
+  search: PropTypes.func,
+  query: PropTypes.string
 };
 
 export default withLinks(
@@ -189,7 +196,8 @@ export default withLinks(
       return {
         fetchStatus: fetchManyStatus(state),
         isAuthorOfPipeline: pipelineId =>
-          canEditPipeline(userId, pipelineId)(state)
+          canEditPipeline(userId, pipelineId)(state),
+        query: getSearchQuery('pipelines-page')(state)
       };
     },
     dispatch => ({

@@ -1,16 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { reduxForm, Field, FieldArray, touch } from 'redux-form';
+import { reduxForm, Field, FieldArray } from 'redux-form';
 import { FormattedMessage } from 'react-intl';
-import { Alert, HelpBlock } from 'react-bootstrap';
+import { Alert, HelpBlock, Row, Col } from 'react-bootstrap';
 import isNumeric from 'validator/lib/isNumeric';
 
 import FormBox from '../../widgets/FormBox';
 import { DatetimeField, TextField, CheckboxField } from '../Fields';
 import LocalizedTextsFormField from '../LocalizedTextsFormField';
 import SubmitButton from '../SubmitButton';
-
-import { validateAssignment } from '../../../redux/modules/assignments';
 import { LocalizedExerciseName } from '../../helpers/LocalizedNames';
 
 const EditAssignmentForm = ({
@@ -22,9 +20,11 @@ const EditAssignmentForm = ({
   submitSucceeded,
   asyncValidating,
   invalid,
+  error,
   firstDeadline,
   allowSecondDeadline,
-  localizedTextsLocales
+  localizedTextsLocales,
+  runtimeEnvironments
 }) =>
   <div>
     <FormBox
@@ -75,6 +75,11 @@ const EditAssignmentForm = ({
           />
         </Alert>}
 
+      {error &&
+        <Alert bsStyle="danger">
+          {error}
+        </Alert>}
+
       <FieldArray
         name="localizedTexts"
         localizedTextsLocales={localizedTextsLocales}
@@ -95,6 +100,7 @@ const EditAssignmentForm = ({
       <Field
         name="maxPointsBeforeFirstDeadline"
         component={TextField}
+        parse={value => Number(value)}
         label={
           <FormattedMessage
             id="app.editAssignmentForm.maxPointsBeforeFirstDeadline"
@@ -143,6 +149,7 @@ const EditAssignmentForm = ({
           name="maxPointsBeforeSecondDeadline"
           disabled={allowSecondDeadline !== true}
           component={TextField}
+          parse={value => Number(value)}
           label={
             <FormattedMessage
               id="app.editAssignmentForm.maxPointsBeforeSecondDeadline"
@@ -154,6 +161,7 @@ const EditAssignmentForm = ({
       <Field
         name="submissionsCountLimit"
         component={TextField}
+        parse={value => Number(value)}
         label={
           <FormattedMessage
             id="app.editAssignmentForm.submissionsCountLimit"
@@ -177,6 +185,7 @@ const EditAssignmentForm = ({
       <Field
         name="pointsPercentualThreshold"
         component={TextField}
+        parse={value => Number(value)}
         label={
           <FormattedMessage
             id="app.editAssignmentForm.pointsPercentualThreshold"
@@ -208,6 +217,34 @@ const EditAssignmentForm = ({
           />
         }
       />
+
+      <hr />
+
+      <h4>
+        <FormattedMessage
+          id="app.editAssignmentForm.enabledEnvironments"
+          defaultMessage="Enabled Runtime Environments"
+        />
+      </h4>
+
+      <Row>
+        {assignment.runtimeEnvironmentIds.map((item, i) =>
+          <Col key={i} sm={6}>
+            <Field
+              name={`enabledRuntime.${item}`}
+              component={CheckboxField}
+              onOff
+              label={
+                runtimeEnvironments &&
+                Array.isArray(runtimeEnvironments) &&
+                runtimeEnvironments.length > 0
+                  ? runtimeEnvironments.find(env => env.id === item).name
+                  : ''
+              }
+            />
+          </Col>
+        )}
+      </Row>
     </FormBox>
   </div>;
 
@@ -223,7 +260,9 @@ EditAssignmentForm.propTypes = {
   invalid: PropTypes.bool,
   firstDeadline: PropTypes.oneOfType([PropTypes.number, PropTypes.object]), // object == moment.js instance
   allowSecondDeadline: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
-  localizedTextsLocales: PropTypes.array
+  localizedTextsLocales: PropTypes.array,
+  runtimeEnvironments: PropTypes.array,
+  error: PropTypes.object
 };
 
 const isNonNegativeInteger = n =>
@@ -245,7 +284,9 @@ const validate = ({
   allowSecondDeadline,
   maxPointsBeforeFirstDeadline,
   maxPointsBeforeSecondDeadline,
-  pointsPercentualThreshold
+  pointsPercentualThreshold,
+  runtimeEnvironmentIds,
+  enabledRuntime
 }) => {
   const errors = {};
 
@@ -297,7 +338,9 @@ const validate = ({
       }
     }
 
-    localizedTextsErrors[i] = localeErrors;
+    if (Object.keys(localeErrors).length > 0) {
+      localizedTextsErrors[i] = localeErrors;
+    }
   }
 
   const localeArr = localizedTexts
@@ -305,7 +348,10 @@ const validate = ({
     .map(text => text.locale);
   for (let i = 0; i < localeArr.length; ++i) {
     if (localeArr.indexOf(localeArr[i]) !== i) {
-      if (!localizedTextsErrors[i].locale) {
+      if (localizedTextsErrors[i] && !localizedTextsErrors[i].locale) {
+        if (!localizedTextsErrors[i]) {
+          localizedTextsErrors[i] = {};
+        }
         localizedTextsErrors[i].locale = (
           <FormattedMessage
             id="app.editAssignmentForm.validation.sameLocalizedTexts"
@@ -315,7 +361,10 @@ const validate = ({
       }
     }
   }
-  errors['localizedTexts'] = localizedTextsErrors;
+
+  if (Object.keys(localizedTextsErrors).length > 0) {
+    errors['localizedTexts'] = localizedTextsErrors;
+  }
 
   if (!firstDeadline) {
     errors['firstDeadline'] = (
@@ -403,37 +452,24 @@ const validate = ({
     }
   }
 
+  const formDisabledRuntimes = Object.keys(enabledRuntime).filter(
+    key => enabledRuntime[key] === false
+  );
+  if (formDisabledRuntimes.length === runtimeEnvironmentIds.length) {
+    errors['_error'] = (
+      <FormattedMessage
+        id="app.editAssignmentForm.validation.allRuntimesDisabled"
+        defaultMessage="You cannot disable all available runtime environments."
+      />
+    );
+  }
+
   return errors;
 };
-
-const asyncValidate = (values, dispatch, { assignment: { id, version } }) =>
-  new Promise((resolve, reject) =>
-    dispatch(validateAssignment(id, version))
-      .then(res => res.value)
-      .then(({ versionIsUpToDate }) => {
-        var errors = {};
-        if (versionIsUpToDate === false) {
-          errors['name'] = (
-            <FormattedMessage
-              id="app.editExerciseForm.validation.versionDiffers"
-              defaultMessage="Somebody has changed the exercise while you have been editing it. Please reload the page and apply your changes once more."
-            />
-          );
-          dispatch(touch('editAssignment', 'name'));
-        }
-
-        if (Object.keys(errors).length > 0) {
-          throw errors;
-        }
-      })
-      .then(resolve())
-      .catch(errors => reject(errors))
-  );
 
 export default reduxForm({
   form: 'editAssignment',
   validate,
-  asyncValidate,
   enableReinitialize: true,
   keepDirtyOnReinitialize: false
 })(EditAssignmentForm);
