@@ -152,8 +152,11 @@ class GroupDetail extends Component {
   };
 
   assignExercise = exerciseId => {
-    const { assignExercise, push } = this.props;
-    const { links: { ASSIGNMENT_EDIT_URI_FACTORY } } = this.context;
+    const {
+      assignExercise,
+      push,
+      links: { ASSIGNMENT_EDIT_URI_FACTORY }
+    } = this.props;
     assignExercise(exerciseId).then(({ value: assigment }) =>
       push(ASSIGNMENT_EDIT_URI_FACTORY(assigment.id))
     );

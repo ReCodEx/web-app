@@ -1,6 +1,7 @@
 import { createSelector } from 'reselect';
 import { isReady } from '../helpers/resourceManager';
 import { fetchManyEndpoint } from '../modules/pipelines';
+import { unique } from '../../helpers/common';
 
 const getPipelines = state => state.pipelines;
 const getResources = pipelines => pipelines.get('resources');
@@ -27,3 +28,16 @@ export const exercisePipelinesSelector = exerciseId =>
       .filter(isReady)
       .filter(pipeline => pipeline.toJS().data.exerciseId === exerciseId)
   );
+
+export const getPipelinesEnvironmentsWhichHasEntryPoint = createSelector(
+  pipelinesSelector,
+  pipelines =>
+    pipelines &&
+    unique(
+      pipelines
+        .map(p => p.get('data'))
+        .filter(p => p && p.getIn(['parameters', 'hasEntryPoint']))
+        .map(p => p.get('runtimeEnvironmentIds'))
+        .reduce((acc, envs) => acc.concat(envs.toJS()), [])
+    )
+);

@@ -9,8 +9,11 @@ import {
   ControlLabel,
   FormControl,
   HelpBlock,
-  Well
+  Well,
+  Row,
+  Col
 } from 'react-bootstrap';
+
 import {
   LoadingIcon,
   WarningIcon,
@@ -20,6 +23,8 @@ import {
 } from '../../icons';
 import UploadContainer from '../../../containers/UploadContainer';
 import UsersNameContainer from '../../../containers/UsersNameContainer';
+import { createGetUploadedFiles } from '../../../redux/selectors/upload';
+import { hasEntryPoint } from '../../../redux/selectors/submission';
 
 const commonMessages = defineMessages({
   runtimeEnvironment: {
@@ -38,6 +43,11 @@ const commonMessages = defineMessages({
     id: 'app.submitSolution.noEnvironments',
     defaultMessage:
       'Uploaded files do not meet criteria of any allowed runtime environment.'
+  },
+  entryPoint: {
+    id: 'app.submitSolution.entryPoint',
+    defaultMessage:
+      'Select the point of entry (bootstrap file of your application):'
   },
   resetForm: {
     id: 'generic.reset',
@@ -101,16 +111,20 @@ const SubmitSolution = ({
   isValidating,
   hasFailed,
   note = '',
+  attachedFiles,
   presubmitEnvironments,
+  presubmitVariables,
   selectedEnvironment,
   changeRuntimeEnvironment,
+  selectedEntryPoint,
+  changeEntryPoint,
   saveNote,
   submitSolution,
   isReferenceSolution,
   messages,
   intl: { formatMessage }
 }) =>
-  <Modal show={isOpen} backdrop="static" onHide={onClose}>
+  <Modal show={isOpen} backdrop="static" onHide={onClose} bsSize="large">
     <Modal.Header closeButton>
       <Modal.Title>
         {formatMessage(messages.title)}
@@ -120,83 +134,117 @@ const SubmitSolution = ({
       <p>
         <UsersNameContainer userId={userId} />
       </p>
-      <UploadContainer id={uploadId} onChange={onFilesChange} />
 
-      <FormGroup>
-        <ControlLabel>
-          {formatMessage(commonMessages.runtimeEnvironment)}
-        </ControlLabel>
-        {isValidating
-          ? <p>
-              <LoadingIcon /> {formatMessage(commonMessages.validating)}
-            </p>
-          : !presubmitEnvironments
-            ? <p className="text-left callout callout-info">
-                {formatMessage(commonMessages.uploadFilesFirst)}
-              </p>
-            : presubmitEnvironments.length > 0
-              ? <FormControl
-                  onChange={e => changeRuntimeEnvironment(e.target.value)}
-                  componentClass="select"
-                  defaultValue={selectedEnvironment}
-                >
-                  {presubmitEnvironments.map(rte =>
-                    <option key={rte.id} value={rte.id}>
-                      {rte.name}
-                    </option>
-                  )}
-                </FormControl>
-              : <p className="text-left callout callout-danger">
-                  {formatMessage(commonMessages.noEnvironments)}
-                </p>}
-      </FormGroup>
+      <Row>
+        <Col md={12} lg={6}>
+          <UploadContainer id={uploadId} onChange={onFilesChange} />
+        </Col>
+        <Col md={12} lg={6}>
+          <FormGroup>
+            <ControlLabel>
+              {formatMessage(commonMessages.runtimeEnvironment)}
+            </ControlLabel>
+            {isValidating
+              ? <p>
+                  <LoadingIcon /> {formatMessage(commonMessages.validating)}
+                </p>
+              : !presubmitEnvironments
+                ? <p className="text-left callout callout-info">
+                    {formatMessage(commonMessages.uploadFilesFirst)}
+                  </p>
+                : presubmitEnvironments.length > 0
+                  ? <FormControl
+                      onChange={e => changeRuntimeEnvironment(e.target.value)}
+                      componentClass="select"
+                      defaultValue={selectedEnvironment}
+                    >
+                      {presubmitEnvironments.map(rte =>
+                        <option key={rte.id} value={rte.id}>
+                          {rte.name}
+                        </option>
+                      )}
+                    </FormControl>
+                  : <p className="text-left callout callout-danger">
+                      {formatMessage(commonMessages.noEnvironments)}
+                    </p>}
+          </FormGroup>
 
-      <FormGroup>
-        <ControlLabel>
-          {formatMessage(messages.noteLabel)}
-        </ControlLabel>
-        <FormControl
-          onChange={e => saveNote(e.target.value)}
-          value={note}
-          type="text"
-        />
-      </FormGroup>
+          {Boolean(
+            !isValidating &&
+              presubmitVariables &&
+              presubmitVariables.length > 0 &&
+              attachedFiles &&
+              attachedFiles.length > 1 &&
+              hasEntryPoint(presubmitVariables, selectedEnvironment)
+          ) &&
+            <FormGroup>
+              <ControlLabel>
+                {formatMessage(commonMessages.entryPoint)}
+              </ControlLabel>
+              <FormControl
+                onChange={e => changeEntryPoint(e.target.value)}
+                componentClass="select"
+                defaultValue={selectedEntryPoint}
+              >
+                {attachedFiles.map(item => item.name).sort().map(file =>
+                  <option key={file} value={file}>
+                    {file}
+                  </option>
+                )}
+              </FormControl>
+            </FormGroup>}
 
+          <hr />
+
+          <FormGroup>
+            <ControlLabel>
+              {formatMessage(messages.noteLabel)}
+            </ControlLabel>
+            <FormControl
+              onChange={e => saveNote(e.target.value)}
+              value={note}
+              type="text"
+            />
+          </FormGroup>
+        </Col>
+      </Row>
       {hasFailed &&
         <p className="text-left callout callout-danger">
           {formatMessage(commonMessages.submissionRejected)}
         </p>}
     </Modal.Body>
     <Modal.Footer>
-      {isSending &&
-        <Button
-          type="submit"
-          disabled={true}
-          bsStyle="success"
-          className="btn-flat"
-        >
-          <LoadingIcon /> {formatMessage(commonMessages.submitting)}
-        </Button>}
+      <div className="text-center">
+        {isSending &&
+          <Button
+            type="submit"
+            disabled={true}
+            bsStyle="success"
+            className="btn-flat"
+          >
+            <LoadingIcon /> {formatMessage(commonMessages.submitting)}
+          </Button>}
 
-      {!isSending &&
-        <Button
-          type="submit"
-          disabled={!canSubmit}
-          bsStyle={hasFailed ? 'danger' : canSubmit ? 'success' : 'default'}
-          className="btn-flat"
-          onClick={submitSolution}
-        >
-          {hasFailed ? <WarningIcon /> : <SendIcon />}{' '}
-          {formatMessage(commonMessages.submitButton)}
-        </Button>}
+        {!isSending &&
+          <Button
+            type="submit"
+            disabled={!canSubmit}
+            bsStyle={hasFailed ? 'danger' : canSubmit ? 'success' : 'default'}
+            className="btn-flat"
+            onClick={submitSolution}
+          >
+            {hasFailed ? <WarningIcon /> : <SendIcon />}{' '}
+            {formatMessage(commonMessages.submitButton)}
+          </Button>}
 
-      <Button bsStyle="default" className="btn-flat" onClick={reset}>
-        <DeleteIcon /> {formatMessage(commonMessages.resetForm)}
-      </Button>
+        <Button bsStyle="default" className="btn-flat" onClick={reset}>
+          <DeleteIcon /> {formatMessage(commonMessages.resetForm)}
+        </Button>
 
-      <Button bsStyle="default" className="btn-flat" onClick={onClose}>
-        <CloseIcon /> {formatMessage(commonMessages.closeForm)}
-      </Button>
+        <Button bsStyle="default" className="btn-flat" onClick={onClose}>
+          <CloseIcon /> {formatMessage(commonMessages.closeForm)}
+        </Button>
+      </div>
       <br />
       <br />
 
@@ -225,16 +273,21 @@ SubmitSolution.propTypes = {
   isValidating: PropTypes.bool,
   isSending: PropTypes.bool,
   presubmitEnvironments: PropTypes.array,
+  presubmitVariables: PropTypes.array,
   selectedEnvironment: PropTypes.string,
   changeRuntimeEnvironment: PropTypes.func.isRequired,
+  selectedEntryPoint: PropTypes.string,
+  changeEntryPoint: PropTypes.func.isRequired,
   isReferenceSolution: PropTypes.bool,
+  attachedFiles: PropTypes.array,
   messages: PropTypes.object.isRequired,
   intl: intlShape.isRequired
 };
 
 export default injectIntl(
   connect(
-    (state, { isReferenceSolution = false }) => ({
+    (state, { uploadId, isReferenceSolution = false }) => ({
+      attachedFiles: createGetUploadedFiles(uploadId)(state),
       messages: isReferenceSolution
         ? referenceSolutionMessages
         : submissionMessages

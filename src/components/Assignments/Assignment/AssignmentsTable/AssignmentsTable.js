@@ -16,6 +16,14 @@ import AssignmentTableRow, {
 } from '../AssignmentTableRow';
 import { compareAssignments } from '../../../helpers/compareAssignments';
 
+const fetchAssignmentStatus = (statuses, assignmentId) => {
+  const assignStatus =
+    statuses && Array.isArray(statuses)
+      ? statuses.find(assignStatus => assignStatus.id === assignmentId)
+      : null;
+  return assignStatus ? assignStatus.status : '';
+};
+
 const AssignmentsTable = ({
   assignments = List(),
   statuses = [],
@@ -80,13 +88,7 @@ const AssignmentsTable = ({
             item={assignment}
             userId={userId}
             showGroup={showGroup}
-            status={
-              Array.isArray(statuses)
-                ? statuses.find(
-                    assignStatus => assignStatus.id === assignment.id
-                  ).status
-                : ''
-            }
+            status={fetchAssignmentStatus(statuses, assignment.id)}
             locale={locale}
             stats={
               Object.keys(stats).length !== 0

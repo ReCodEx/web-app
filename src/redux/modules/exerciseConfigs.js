@@ -243,6 +243,9 @@ const prepareTransformations = (template, firstTestId, tests, files) => {
       file,
       matches: bestMatchFileNames(file, firstTestId, tests, files)
     }));
+    if (template.compilation[envId].entryPoint !== undefined) {
+      compilation[envId].entryPoint = template.compilation[envId].entryPoint;
+    }
   }
 
   transformations.compilation = testId => {
@@ -256,6 +259,9 @@ const prepareTransformations = (template, firstTestId, tests, files) => {
           }))
           .filter(({ file }) => file) // remove records which do not have apropriate file
       };
+      if (compilation[envId].entryPoint !== undefined) {
+        transformed[envId].entryPoint = compilation[envId].entryPoint;
+      }
     }
     return transformed;
   };

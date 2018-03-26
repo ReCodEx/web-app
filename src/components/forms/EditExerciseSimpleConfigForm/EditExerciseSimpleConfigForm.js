@@ -14,7 +14,7 @@ import ResourceRenderer from '../../helpers/ResourceRenderer';
 
 import EditExerciseSimpleConfigTest from './EditExerciseSimpleConfigTest';
 import { getSupplementaryFilesForExercise } from '../../../redux/selectors/supplementaryFiles';
-import { encodeNumId } from '../../../helpers/common';
+import { encodeNumId, createIndex } from '../../../helpers/common';
 import { smartFillExerciseConfigForm } from '../../../redux/modules/exerciseConfigs';
 import { exerciseConfigFormErrors } from '../../../redux/selectors/exerciseConfigs';
 
@@ -40,6 +40,7 @@ class EditExerciseSimpleConfigForm extends Component {
       formValues,
       formErrors,
       supplementaryFiles,
+      environmetnsWithEntryPoints,
       exercise,
       exerciseTests,
       smartFill,
@@ -137,6 +138,8 @@ class EditExerciseSimpleConfigForm extends Component {
                       )}
                       useOutFile={testData && testData.useOutFile}
                       useCustomJudge={testData && testData.useCustomJudge}
+                      compilationParams={testData && testData.compilation}
+                      environmetnsWithEntryPoints={environmetnsWithEntryPoints}
                       supplementaryFiles={files}
                       testName={test.name}
                       test={'config.' + encodeNumId(test.id)}
@@ -174,6 +177,7 @@ EditExerciseSimpleConfigForm.propTypes = {
   supplementaryFiles: ImmutablePropTypes.map,
   exercise: PropTypes.object,
   exerciseTests: PropTypes.array,
+  environmetnsWithEntryPoints: PropTypes.array.isRequired,
   smartFill: PropTypes.func.isRequired,
   intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired
 };
@@ -185,19 +189,13 @@ const validate = formData => {
 
   for (const testKey in formData.config) {
     const test = formData.config[testKey];
+    // Check the input file names for duplicities
     if (test.inputFiles && test.inputFiles.length > 1) {
-      // Construct a name index to detect duplicates ...
-      const nameIndex = {};
-      test.inputFiles.forEach(({ name }, idx) => {
-        name = name && name.trim();
-        if (name) {
-          if (nameIndex[name] === undefined) {
-            nameIndex[name] = [idx];
-          } else {
-            nameIndex[name].push(idx);
-          }
-        }
-      });
+      const nameIndex = createIndex(
+        test.inputFiles
+          .map(({ name }) => name && name.trim())
+          .filter(name => name)
+      );
 
       // Traverse the index and place an error to all duplicates ...
       for (const name in nameIndex) {
@@ -211,7 +209,7 @@ const validate = formData => {
               (testErrors[testKey].inputFiles[idx] = {
                 name: (
                   <FormattedMessage
-                    id="app.editExerciseConfigForm.validation.duplicateInputFile"
+                    id="app.editExerciseConfigForm.validation.duplicateFileName"
                     defaultMessage="Duplicate name detected."
                   />
                 )
@@ -220,10 +218,88 @@ const validate = formData => {
         }
       }
     }
+
+    // Check the names of extra files for duplicites ...
+    const compilationErrors = {};
+    for (const envId in test.compilation) {
+      const extraFiles = test.compilation[envId]['extra-files'];
+      if (extraFiles && extraFiles.length > 1) {
+        const nameIndex = createIndex(
+          extraFiles.map(({ name }) => name && name.trim()).filter(name => name)
+        );
+
+        // Traverse the index and place an error to all duplicates ...
+        const fileErrors = [];
+        for (const name in nameIndex) {
+          const indices = nameIndex[name];
+          if (indices.length > 1) {
+            indices.forEach(
+              idx =>
+                (fileErrors[idx] = {
+                  name: (
+                    <FormattedMessage
+                      id="app.editExerciseConfigForm.validation.duplicateFileName"
+                      defaultMessage="Duplicate name detected."
+                    />
+                  )
+                })
+            );
+          }
+        }
+
+        if (Object.keys(fileErrors).length > 0) {
+          compilationErrors[envId] = { 'extra-files': fileErrors };
+        }
+      }
+    }
+
+    if (Object.keys(compilationErrors).length > 0) {
+      if (!testErrors[testKey]) {
+        testErrors[testKey] = { compilation: compilationErrors };
+      } else {
+        testErrors[testKey].compilation = compilationErrors;
+      }
+    }
   }
-  return Object.keys(testErrors).length > 0
-    ? { config: testErrors }
-    : undefined;
+  return Object.keys(testErrors).length > 0 ? { config: testErrors } : {};
+};
+
+const warnEntryPointStateFunction = (current, next) =>
+  current === undefined ? next : next === current ? current : 'ambiguous';
+
+const warn = formData => {
+  const envEntryPointDefaults = {};
+  for (const testKey in formData.config) {
+    const test = formData.config[testKey];
+    for (const envId in test.compilation) {
+      const entryPoint = test.compilation[envId].entryPoint;
+      envEntryPointDefaults[envId] = warnEntryPointStateFunction(
+        envEntryPointDefaults[envId],
+        entryPoint === ''
+      );
+    }
+  }
+
+  const warnings = {};
+  for (const envId in envEntryPointDefaults) {
+    if (envEntryPointDefaults[envId] === 'ambiguous') {
+      for (const testKey in formData.config) {
+        if (warnings[testKey] === undefined) {
+          warnings[testKey] = { compilation: {} };
+        }
+        warnings[testKey].compilation[envId] = {
+          entryPoint: (
+            <FormattedMessage
+              id="app.editExerciseConfigForm.validation.ambiguousEntryPoint"
+              defaultMessage="Some entry points of this environment are specified whilst some are left to be specified by the student. This may be quite ambiguous."
+            />
+          )
+        };
+      }
+    }
+  }
+
+  return Object.keys(warnings).length > 0 ? { config: warnings } : {};
 };
 
 export default connect(
@@ -249,6 +325,7 @@ export default connect(
       'exerciseTests',
       'handleSubmit'
     ],
-    validate
+    validate,
+    warn
   })(injectIntl(EditExerciseSimpleConfigForm))
 );

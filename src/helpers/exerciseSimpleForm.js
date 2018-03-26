@@ -83,8 +83,8 @@ export const getEnvInitValues = (environmentConfigs, environments) => {
 
 export const transformEnvValues = (
   formData,
-  environments,
-  editEnvironmentConfigs
+  environmentConfigs,
+  runtimeEnvironments
 ) => {
   let res = [];
   for (const env in formData) {
@@ -94,8 +94,13 @@ export const transformEnvValues = (
     let envObj = {
       runtimeEnvironmentId: env
     };
-    const currentFullEnv = environments.find(e => e.id === env);
-    envObj.variablesTable = currentFullEnv.defaultVariables;
+    const environmentConfig = environmentConfigs.find(
+      e => e.runtimeEnvironmentId === env
+    );
+    const runtimeEnvironment = runtimeEnvironments.find(e => e.id === env);
+    envObj.variablesTable = environmentConfig
+      ? environmentConfig.variablesTable // keep already set variables if they exist
+      : runtimeEnvironment.defaultVariables; // use defaults otherwise
     res.push(envObj);
   }
   return res;
@@ -168,6 +173,8 @@ const EMPTY_COMPILATION_PIPELINE_VARS = [
   }
 ];
 
+const ENTRY_POINT_DEFAULT_VALUE = '$entry-point';
+
 // Fetch one simple variable (string or array) and fill it into the testObj under selected property.
 const getSimpleConfigSimpleVariable = (variables, testObj, variableName) => {
   if (EXEC_PIPELINE_VARS[variableName] === undefined) {
@@ -214,7 +221,8 @@ const getSimpleConfigCompilationVars = (testObj, config, environments) => {
 
     const data = {
       'extra-files': [],
-      'extra-file-names': []
+      'extra-file-names': [],
+      'entry-point': ENTRY_POINT_DEFAULT_VALUE
     };
     pipelines.forEach(
       pipeline =>
@@ -226,11 +234,17 @@ const getSimpleConfigCompilationVars = (testObj, config, environments) => {
         })
     );
 
+    const entryPoint =
+      data['entry-point'] !== ENTRY_POINT_DEFAULT_VALUE
+        ? data['entry-point']
+        : '';
+
     compilation[environment.runtimeEnvironmentId] = {
       'extra-files': postprocInputFiles(
         data['extra-files'],
         data['extra-file-names']
-      )
+      ),
+      entryPoint
     };
   }
   testObj.compilation = compilation;
@@ -316,11 +330,12 @@ const transformConfigInputFiles = files => {
 };
 
 // Prepare variables for execution pipeline of one test in one environment
-const transformConfigTestExecutionVariables = test => {
+const transformConfigTestExecutionVariables = (test, envId, hasEntryPoint) => {
   // Final updates ...
   let overrides = transformConfigInputFiles(test.inputFiles);
-  if (!test.useCustomJudge) {
-    overrides.customJudgeBinary = '';
+  overrides[test.useCustomJudge ? 'judgeBinary' : 'customJudgeBinary'] = '';
+  if (test.useCustomJudge) {
+    overrides.judgeArgs = [];
   }
   overrides.outputFile = test.outputFile && test.outputFile.trim();
 
@@ -337,13 +352,37 @@ const transformConfigTestExecutionVariables = test => {
     }
   }
 
+  // Entry point is a special variable which needs special (per environment) handling.
+  if (hasEntryPoint) {
+    let entryPoint = safeGet(
+      test,
+      ['compilation', envId, 'entryPoint'],
+      ''
+    ).trim();
+
+    const extraFiles = safeGet(test, ['compilation', envId, 'extra-files'], []);
+    if (
+      entryPoint &&
+      !extraFiles.find(({ name }) => entryPoint === name.trim())
+    ) {
+      entryPoint = '';
+    }
+
+    variables.push({
+      name: 'entry-point',
+      type: 'file',
+      value: entryPoint || ENTRY_POINT_DEFAULT_VALUE
+    });
+  }
+
   return variables;
 };
 
 const mergeOriginalVariables = (newVars, origVars) => {
+  const blacklist = new Set(newVars.map(v => v.name));
   origVars.forEach(ov => {
     // Only values unknown to simple form are added
-    if (EXEC_PIPELINE_VARS[ov.name] === undefined) {
+    if (EXEC_PIPELINE_VARS[ov.name] === undefined && !blacklist.has(ov.name)) {
       newVars.push(ov); // add missing variable
     }
   });
@@ -361,12 +400,9 @@ const mergeCompilationVariables = (origVars, testObj, envId) => {
   vars.find(v => v.name === 'extra-file-names').value =
     transformed.actualInputs;
 
-  return [
-    ...origVars.filter(
-      v => v.name !== 'extra-files' && v.name !== 'extra-file-names'
-    ),
-    ...vars
-  ];
+  return origVars
+    .filter(v => v.name !== 'extra-files' && v.name !== 'extra-file-names')
+    .concat(vars);
 };
 
 export const transformConfigValues = (
@@ -429,13 +465,17 @@ export const transformConfigValues = (
       );
 
       // Prepare variables for execution pipeline ...
-      const testVars = transformConfigTestExecutionVariables(test);
+      const execVars = transformConfigTestExecutionVariables(
+        test,
+        envId,
+        executionPipeline.parameters.hasEntryPoint
+      );
       const origExecutionVars = safeGet(originalPipelines, [
         p => p.name === executionPipeline.id,
         'variables'
       ]);
       if (origExecutionVars) {
-        mergeOriginalVariables(testVars, origExecutionVars);
+        mergeOriginalVariables(execVars, origExecutionVars);
       }
 
       testsCfg.push({
@@ -447,7 +487,7 @@ export const transformConfigValues = (
           },
           {
             name: executionPipeline.id,
-            variables: testVars
+            variables: execVars
           }
         ]
       });
