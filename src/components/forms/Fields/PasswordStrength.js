@@ -75,7 +75,7 @@ const PasswordStrength = ({
   input: { name, value: level },
   meta: { dirty },
   label
-}) => (
+}) =>
   <FormGroup controlId={name}>
     {dirty &&
       <ProgressBar
@@ -85,12 +85,12 @@ const PasswordStrength = ({
         striped={level === 0}
         active={level === 0}
       />}
-  </FormGroup>
-);
+  </FormGroup>;
 
 PasswordStrength.propTypes = {
   label: PropTypes.oneOfType([
     PropTypes.string,
+    PropTypes.element,
     PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) })
   ]).isRequired,
   input: PropTypes.shape({

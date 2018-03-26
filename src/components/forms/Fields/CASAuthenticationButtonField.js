@@ -5,19 +5,17 @@ import { change } from 'redux-form';
 
 import { FormGroup } from 'react-bootstrap';
 import { MaybeSucceededIcon } from '../../icons';
-import AuthentictionButtonContianer
-  from '../../../containers/CAS/AuthenticationButtonContainer';
+import AuthentictionButtonContianer from '../../../containers/CAS/AuthenticationButtonContainer';
 
 const CASAuthenticationButtonField = ({
   input: { name, onChange, value: ticket },
   meta: { dirty, form, dispatch },
   label
-}) => (
+}) =>
   <FormGroup controlId={name}>
     {dirty &&
       <span>
-        <MaybeSucceededIcon success={Boolean(ticket)} />
-        {' '}
+        <MaybeSucceededIcon success={Boolean(ticket)} />{' '}
         {ticket
           ? <FormattedMessage
               id="app.casRegistration.ok"
@@ -39,12 +37,12 @@ const CASAuthenticationButtonField = ({
           onFailed={() => onChange(false)}
         />
       </p>}
-  </FormGroup>
-);
+  </FormGroup>;
 
 CASAuthenticationButtonField.propTypes = {
   label: PropTypes.oneOfType([
     PropTypes.string,
+    PropTypes.element,
     PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) })
   ]).isRequired,
   input: PropTypes.shape({

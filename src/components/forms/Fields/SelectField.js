@@ -74,6 +74,7 @@ SelectField.propTypes = {
   type: PropTypes.string,
   label: PropTypes.oneOfType([
     PropTypes.string,
+    PropTypes.element,
     PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) })
   ]).isRequired,
   options: PropTypes.array.isRequired,

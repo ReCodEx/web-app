@@ -28,8 +28,8 @@ const PortsField = ({ label, prefix, ports }) =>
 PortsField.propTypes = {
   label: PropTypes.oneOfType([
     PropTypes.string,
-    PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) }),
-    PropTypes.element
+    PropTypes.element,
+    PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) })
   ]).isRequired,
   prefix: PropTypes.string.isRequired,
   ports: PropTypes.array

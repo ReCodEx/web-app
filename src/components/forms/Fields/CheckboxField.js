@@ -52,6 +52,7 @@ CheckboxField.propTypes = {
   onOff: PropTypes.bool,
   label: PropTypes.oneOfType([
     PropTypes.string,
+    PropTypes.element,
     PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) })
   ]).isRequired
 };

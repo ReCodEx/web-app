@@ -129,10 +129,12 @@ ExpandingInputFilesField.propTypes = {
   }).isRequired,
   leftLabel: PropTypes.oneOfType([
     PropTypes.string,
+    PropTypes.element,
     PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) })
   ]).isRequired,
   rightLabel: PropTypes.oneOfType([
     PropTypes.string,
+    PropTypes.element,
     PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) })
   ]).isRequired,
   options: PropTypes.array
