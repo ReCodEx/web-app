@@ -5,7 +5,7 @@ import { FormattedMessage } from 'react-intl';
 import { Col, Row } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
-import { reset, formValueSelector } from 'redux-form';
+import { reset, formValueSelector, SubmissionError } from 'redux-form';
 import moment from 'moment';
 import { LinkContainer } from 'react-router-bootstrap';
 import { defaultMemoize } from 'reselect';
@@ -17,11 +17,13 @@ import DeleteAssignmentButtonContainer from '../../containers/DeleteAssignmentBu
 import Box from '../../components/widgets/Box';
 import HierarchyLineContainer from '../../containers/HierarchyLineContainer';
 import { ResultsIcon } from '../../components/icons';
+import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 
 import {
   fetchAssignment,
   editAssignment,
-  syncWithExercise
+  syncWithExercise,
+  validateAssignment
 } from '../../redux/modules/assignments';
 import { getAssignment } from '../../redux/selectors/assignments';
 import { canSubmitSolution } from '../../redux/selectors/canSubmit';
@@ -61,18 +63,60 @@ class EditAssignment extends Component {
       firstDeadline,
       secondDeadline,
       pointsPercentualThreshold,
+      disabledRuntimeEnvironmentIds,
+      runtimeEnvironmentIds,
       ...rest
     }) => ({
       firstDeadline: moment.unix(firstDeadline),
       secondDeadline: moment.unix(secondDeadline),
       pointsPercentualThreshold: pointsPercentualThreshold * 100,
+      runtimeEnvironmentIds,
+      enabledRuntime: disabledRuntimeEnvironmentIds.reduce(
+        (result, item, index, array) => {
+          result[item] = false;
+          return result;
+        },
+        runtimeEnvironmentIds.reduce((result, item, index, array) => {
+          result[item] = true;
+          return result;
+        }, {})
+      ),
       ...rest
     })
   );
 
   editAssignmentSubmitHandler = formData => {
-    const { assignment, editAssignment } = this.props;
-    return editAssignment(assignment.getIn(['data', 'version']), formData);
+    const { assignment, editAssignment, validateAssignment } = this.props;
+    const version = assignment.getIn(['data', 'version']);
+
+    // validate assignment version
+    return validateAssignment(version)
+      .then(res => res.value)
+      .then(({ versionIsUpToDate }) => {
+        if (versionIsUpToDate === false) {
+          throw SubmissionError({
+            _error: (
+              <FormattedMessage
+                id="app.editExerciseForm.validation.versionDiffers"
+                defaultMessage="Somebody has changed the exercise while you have been editing it. Please reload the page and apply your changes once more."
+              />
+            )
+          });
+        }
+      })
+      .then(() => {
+        // prepare the data and submit them
+        const disabledEnvironments = formData.enabledRuntime
+          ? Object.keys(formData.enabledRuntime).filter(
+              key => formData.enabledRuntime[key] === false
+            )
+          : [];
+
+        delete formData['enabledRuntime'];
+        formData['disabledRuntimeEnvironmentIds'] = disabledEnvironments;
+
+        return editAssignment(version, formData);
+      });
   };
 
   render() {
@@ -91,7 +135,8 @@ class EditAssignment extends Component {
       firstDeadline,
       allowSecondDeadline,
       localizedTexts,
-      exerciseSync
+      exerciseSync,
+      runtimeEnvironments
     } = this.props;
 
     return (
@@ -167,16 +212,25 @@ class EditAssignment extends Component {
                 exerciseSync={exerciseSync}
               />}
 
-            <EditAssignmentForm
-              assignment={assignment}
-              initialValues={
-                assignment ? this.getInitialValues(assignment) : {}
-              }
-              onSubmit={this.editAssignmentSubmitHandler}
-              firstDeadline={firstDeadline}
-              allowSecondDeadline={allowSecondDeadline}
-              localizedTextsLocales={getLocalizedTextsLocales(localizedTexts)}
-            />
+            <ResourceRenderer
+              resource={runtimeEnvironments.toArray()}
+              returnAsArray={true}
+            >
+              {envs =>
+                <EditAssignmentForm
+                  assignment={assignment}
+                  initialValues={
+                    assignment ? this.getInitialValues(assignment) : {}
+                  }
+                  onSubmit={this.editAssignmentSubmitHandler}
+                  firstDeadline={firstDeadline}
+                  allowSecondDeadline={allowSecondDeadline}
+                  localizedTextsLocales={getLocalizedTextsLocales(
+                    localizedTexts
+                  )}
+                  runtimeEnvironments={envs}
+                />}
+            </ResourceRenderer>
 
             <br />
             <Box
@@ -224,6 +278,7 @@ EditAssignment.propTypes = {
   allowSecondDeadline: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
   localizedTexts: PropTypes.array,
   exerciseSync: PropTypes.func.isRequired,
+  validateAssignment: PropTypes.func.isRequired,
   links: PropTypes.object,
   isSupervisorOf: PropTypes.func.isRequired,
   isAdminOf: PropTypes.func.isRequired
@@ -267,6 +322,8 @@ export default connect(
       }
       return dispatch(editAssignment(assignmentId, processedData));
     },
-    exerciseSync: () => dispatch(syncWithExercise(assignmentId))
+    exerciseSync: () => dispatch(syncWithExercise(assignmentId)),
+    validateAssignment: version =>
+      dispatch(validateAssignment(assignmentId, version))
   })
 )(withLinks(EditAssignment));

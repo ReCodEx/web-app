@@ -12,7 +12,9 @@ import {
   hasFailed,
   getSubmissionId,
   getMonitorParams,
-  getPresubmitEnvironments
+  getPresubmitEnvironments,
+  getPresubmitVariables,
+  hasEntryPoint
 } from '../../redux/selectors/submission';
 
 import {
@@ -31,11 +33,12 @@ class SubmitSolutionContainer extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedEnvironment: null
+      selectedEnvironment: null,
+      entryPoint: null
     };
   }
 
-  componentWillReceiveProps({ presubmitEnvironments }) {
+  componentWillReceiveProps({ presubmitEnvironments, attachedFiles }) {
     // Only check the selection, if presubmit environments are set ...
     if (presubmitEnvironments && presubmitEnvironments.length > 0) {
       let newEnv = this.state.selectedEnvironment;
@@ -50,17 +53,42 @@ class SubmitSolutionContainer extends Component {
         this.setState({ selectedEnvironment: newEnv });
       }
     }
+
+    // If entry point is no longer valid ...
+    if (
+      this.state.entryPoint &&
+      attachedFiles &&
+      !attachedFiles.find(f => f.name === this.state.entryPoint)
+    ) {
+      this.setState({ entryPoint: null });
+    }
   }
+
+  getEntryPoint = () => {
+    const { attachedFiles, presubmitVariables } = this.props;
+    const { selectedEnvironment, entryPoint } = this.state;
+
+    if (!hasEntryPoint(presubmitVariables, selectedEnvironment)) {
+      return null;
+    }
+
+    const defaultEntryPoint =
+      attachedFiles &&
+      attachedFiles.length > 0 &&
+      attachedFiles.map(f => f.name).sort()[0];
+
+    return entryPoint || defaultEntryPoint;
+  };
 
   submit = () => {
     const { attachedFiles, note, submitSolution } = this.props;
-
     const { selectedEnvironment } = this.state;
 
     submitSolution(
       note,
       attachedFiles.map(item => item.file),
-      selectedEnvironment
+      selectedEnvironment,
+      this.getEntryPoint()
     );
   };
 
@@ -80,6 +108,10 @@ class SubmitSolutionContainer extends Component {
     this.setState({ selectedEnvironment });
   };
 
+  changeEntryPoint = entryPoint => {
+    this.setState({ entryPoint });
+  };
+
   render = () => {
     const {
       isOpen = false,
@@ -88,6 +120,7 @@ class SubmitSolutionContainer extends Component {
       cancel,
       id,
       presubmitEnvironments,
+      presubmitVariables,
       changeNote,
       canSubmit,
       hasFailed,
@@ -106,7 +139,7 @@ class SubmitSolutionContainer extends Component {
       onEndFetch
     } = this.props;
 
-    const { selectedEnvironment } = this.state;
+    const { selectedEnvironment, entryPoint } = this.state;
 
     return (
       <div>
@@ -127,8 +160,11 @@ class SubmitSolutionContainer extends Component {
           saveNote={changeNote}
           onClose={cancel}
           presubmitEnvironments={presubmitEnvironments}
+          presubmitVariables={presubmitVariables}
           selectedEnvironment={selectedEnvironment}
           changeRuntimeEnvironment={this.changeRuntimeEnvironment}
+          selectedEntryPoint={entryPoint}
+          changeEntryPoint={this.changeEntryPoint}
           submitSolution={this.submit}
           onFilesChange={this.presubmit}
           isReferenceSolution={isReferenceSolution}
@@ -169,6 +205,7 @@ SubmitSolutionContainer.propTypes = {
   submissionId: PropTypes.string,
   monitor: PropTypes.object,
   presubmitEnvironments: PropTypes.array,
+  presubmitVariables: PropTypes.array,
   submitSolution: PropTypes.func.isRequired,
   presubmitSolution: PropTypes.func.isRequired,
   attachedFiles: PropTypes.array,
@@ -193,14 +230,22 @@ export default withLinks(
         canSubmit: createAllUploaded(id)(state),
         submissionId: getSubmissionId(state),
         monitor: getMonitorParams(state),
-        presubmitEnvironments: getPresubmitEnvironments(state)
+        presubmitEnvironments: getPresubmitEnvironments(state),
+        presubmitVariables: getPresubmitVariables(state)
       };
     },
     (dispatch, { id, userId, onSubmit, onReset, presubmitValidation }) => ({
       changeNote: note => dispatch(changeNote(note)),
       cancel: () => dispatch(cancel()),
-      submitSolution: (note, files, runtimeEnvironmentId = null) =>
-        dispatch(onSubmit(userId, id, note, files, runtimeEnvironmentId)),
+      submitSolution: (
+        note,
+        files,
+        runtimeEnvironmentId = null,
+        entryPoint = null
+      ) =>
+        dispatch(
+          onSubmit(userId, id, note, files, runtimeEnvironmentId, entryPoint)
+        ),
       presubmitSolution: files => dispatch(presubmitValidation(id, files)),
       reset: () => dispatch(resetUpload(id)) && dispatch(onReset(userId, id)),
       onEndFetch: () =>

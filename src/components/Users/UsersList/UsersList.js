@@ -14,7 +14,12 @@ const UsersList = ({ users = [], createActions, intl, ...rest }) =>
           return aName.localeCompare(bName, intl.locale);
         })
         .map((user, i) =>
-          <UsersListItem id={user.id} createActions={createActions} key={i} />
+          <UsersListItem
+            user={user}
+            createActions={createActions}
+            key={i}
+            {...rest}
+          />
         )}
 
       {users.length === 0 &&

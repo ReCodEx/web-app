@@ -23,7 +23,7 @@ class PipelineVisualEditor extends Component {
   state = {
     graph: { dependencies: [], nodes: [] },
     addItem: false,
-    itemToEdit: null
+    nodeToEdit: null
   };
 
   componentWillMount = () => {

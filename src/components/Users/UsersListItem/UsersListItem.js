@@ -1,21 +1,22 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import UsersNameContainer from '../../../containers/UsersNameContainer';
+import UsersName from '../../../components/Users/UsersName';
 
-const UsersListItem = ({ id, createActions }) =>
+const UsersListItem = ({ user, createActions, loggedUserId = '' }) =>
   <tr>
     <td>
-      <UsersNameContainer userId={id} />
+      <UsersName {...user} currentUserId={loggedUserId} />
     </td>
     {createActions &&
       <td className="text-right">
-        {createActions(id)}
+        {createActions(user.id)}
       </td>}
   </tr>;
 
 UsersListItem.propTypes = {
-  id: PropTypes.string.isRequired,
-  createActions: PropTypes.func
+  user: PropTypes.object.isRequired,
+  createActions: PropTypes.func,
+  loggedUserId: PropTypes.string
 };
 
 export default UsersListItem;
