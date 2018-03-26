@@ -421,13 +421,19 @@ class Exercise extends Component {
                       footer={
                         <p className="text-center">
                           <Button
-                            bsStyle="success"
+                            bsStyle={exercise.isBroken ? 'default' : 'success'}
                             onClick={() => initCreateReferenceSolution(userId)}
+                            disabled={exercise.isBroken}
                           >
-                            <FormattedMessage
-                              id="app.exercise.submitReferenceSoution"
-                              defaultMessage="Submit New Reference Solution"
-                            />
+                            {exercise.isBroken
+                              ? <FormattedMessage
+                                  id="app.exercise.isBrokenShort"
+                                  defaultMessage="Exercise is broken ..."
+                                />
+                              : <FormattedMessage
+                                  id="app.exercise.submitReferenceSoution"
+                                  defaultMessage="Submit New Reference Solution"
+                                />}
                           </Button>
                         </p>
                       }

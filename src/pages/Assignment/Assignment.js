@@ -20,6 +20,7 @@ import {
 } from '../../redux/modules/submission';
 import { fetchUsersSubmissions } from '../../redux/modules/submissions';
 import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments';
+import { fetchExerciseIfNeeded } from '../../redux/modules/exercises';
 
 import {
   getAssignment,
@@ -34,6 +35,7 @@ import {
   isSupervisorOf,
   isAdminOf
 } from '../../redux/selectors/users';
+import { getExerciseOfAssignmentJS } from '../../redux/selectors/exercises';
 
 import Page from '../../components/layout/Page';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
@@ -54,7 +56,11 @@ import withLinks from '../../helpers/withLinks';
 class Assignment extends Component {
   static loadAsync = ({ assignmentId }, dispatch, userId) =>
     Promise.all([
-      dispatch(fetchAssignmentIfNeeded(assignmentId)),
+      dispatch(
+        fetchAssignmentIfNeeded(assignmentId)
+      ).then(({ value: assignment }) =>
+        dispatch(fetchExerciseIfNeeded(assignment.exerciseId))
+      ),
       dispatch(fetchRuntimeEnvironments()),
       dispatch(canSubmit(assignmentId)),
       dispatch(fetchUsersSubmissions(userId, assignmentId))
@@ -88,6 +94,7 @@ class Assignment extends Component {
   render() {
     const {
       assignment,
+      exercise,
       submitting,
       userId,
       loggedInUserId,
@@ -200,6 +207,7 @@ class Assignment extends Component {
               <AssignmentSync
                 syncInfo={assignment.exerciseSynchronizationInfo}
                 exerciseSync={exerciseSync}
+                isBroken={exercise && exercise.isBroken}
               />}
 
             <Row>
@@ -283,6 +291,7 @@ Assignment.propTypes = {
   isSupervisorOf: PropTypes.func.isRequired,
   isAdminOf: PropTypes.func.isRequired,
   assignment: PropTypes.object,
+  exercise: PropTypes.object,
   canSubmit: ImmutablePropTypes.map,
   submitting: PropTypes.bool.isRequired,
   init: PropTypes.func.isRequired,
@@ -300,6 +309,7 @@ export default withLinks(
       userId = userId || loggedInUserId;
       return {
         assignment: getAssignment(state)(assignmentId),
+        exercise: getExerciseOfAssignmentJS(state)(assignmentId),
         submitting: isSubmitting(state),
         runtimeEnvironments: assignmentEnvironmentsSelector(state)(
           assignmentId

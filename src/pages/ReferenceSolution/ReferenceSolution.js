@@ -9,6 +9,7 @@ import {
 } from 'react-intl';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { Row, Col, Button } from 'react-bootstrap';
+import Icon from 'react-fontawesome';
 
 import withLinks from '../../helpers/withLinks';
 import Page from '../../components/layout/Page';
@@ -18,7 +19,10 @@ import {
   fetchReferenceSolutions,
   resubmitReferenceSolution
 } from '../../redux/modules/referenceSolutions';
+import { fetchExerciseIfNeeded } from '../../redux/modules/exercises';
+
 import { referenceSolutionsSelector } from '../../redux/selectors/referenceSolutions';
+import { getExercise } from '../../redux/selectors/exercises';
 import ReferenceSolutionDetail from '../../components/ReferenceSolutions/ReferenceSolutionDetail';
 import SourceCodeInfoBox from '../../components/widgets/SourceCodeInfoBox';
 import SourceCodeViewerContainer from '../../containers/SourceCodeViewerContainer';
@@ -26,6 +30,7 @@ import { RefreshIcon, SendIcon } from '../../components/icons';
 import ReferenceSolutionEvaluationsContainer from '../../containers/ReferenceSolutionEvaluationsContainer';
 import SolutionArchiveInfoBox from '../../components/Submissions/SolutionArchiveInfoBox';
 import { downloadSolutionArchive } from '../../redux/modules/referenceSolutionEvaluations';
+import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 
 const messages = defineMessages({
   title: {
@@ -39,8 +44,11 @@ class ReferenceSolution extends Component {
   openFile = id => this.setState({ openFileId: id });
   hideFile = () => this.setState({ openFileId: null });
 
-  static loadAsync = ({ exerciseId, referenceSolutionId }, dispatch) =>
-    Promise.all([dispatch(fetchReferenceSolutionsIfNeeded(exerciseId))]);
+  static loadAsync = ({ exerciseId }, dispatch) =>
+    Promise.all([
+      dispatch(fetchExerciseIfNeeded(exerciseId)),
+      dispatch(fetchReferenceSolutionsIfNeeded(exerciseId))
+    ]);
 
   componentWillMount() {
     this.props.loadAsync();
@@ -58,6 +66,7 @@ class ReferenceSolution extends Component {
   render() {
     const {
       referenceSolutions,
+      exercise,
       params: { exerciseId, referenceSolutionId },
       refreshSolutionEvaluations,
       resubmitReferenceSolution,
@@ -151,7 +160,7 @@ class ReferenceSolution extends Component {
                     <Col xs={12}>
                       <p>
                         <Button
-                          bsStyle="default"
+                          bsStyle="primary"
                           className="btn-flat"
                           onClick={refreshSolutionEvaluations}
                         >
@@ -163,36 +172,53 @@ class ReferenceSolution extends Component {
                         </Button>
                         {permissionHints &&
                           permissionHints.evaluate !== false &&
-                          <Button
-                            bsStyle="success"
-                            className="btn-flat"
-                            onClick={() =>
-                              resubmitReferenceSolution().then(
-                                refreshSolutionEvaluations
-                              )}
-                          >
-                            <SendIcon />{' '}
-                            <FormattedMessage
-                              id="app.referenceSolutionDetail.resubmit"
-                              defaultMessage="Resubmit"
-                            />
-                          </Button>}
-                        {permissionHints &&
-                          permissionHints.evaluate !== false &&
-                          <Button
-                            bsStyle="danger"
-                            className="btn-flat"
-                            onClick={() =>
-                              resubmitReferenceSolutionInDebugMode().then(
-                                refreshSolutionEvaluations
-                              )}
-                          >
-                            <SendIcon />{' '}
-                            <FormattedMessage
-                              id="app.referenceSolutionDetail.resubmitDebug"
-                              defaultMessage="Resubmit in Debug Mode"
-                            />
-                          </Button>}
+                          <ResourceRenderer resource={exercise}>
+                            {exercise =>
+                              <span>
+                                <Button
+                                  bsStyle={
+                                    !exercise || exercise.isBroken
+                                      ? 'default'
+                                      : 'success'
+                                  }
+                                  className="btn-flat"
+                                  disabled={!exercise || exercise.isBroken}
+                                  onClick={() =>
+                                    resubmitReferenceSolution().then(
+                                      refreshSolutionEvaluations
+                                    )}
+                                >
+                                  {!exercise || exercise.isBroken
+                                    ? <Icon name="medkit" />
+                                    : <SendIcon />}{' '}
+                                  <FormattedMessage
+                                    id="app.referenceSolutionDetail.resubmit"
+                                    defaultMessage="Resubmit"
+                                  />
+                                </Button>
+                                <Button
+                                  bsStyle={
+                                    !exercise || exercise.isBroken
+                                      ? 'default'
+                                      : 'danger'
+                                  }
+                                  className="btn-flat"
+                                  disabled={!exercise || exercise.isBroken}
+                                  onClick={() =>
+                                    resubmitReferenceSolutionInDebugMode().then(
+                                      refreshSolutionEvaluations
+                                    )}
+                                >
+                                  {!exercise || exercise.isBroken
+                                    ? <Icon name="medkit" />
+                                    : <SendIcon />}{' '}
+                                  <FormattedMessage
+                                    id="app.referenceSolutionDetail.resubmitDebug"
+                                    defaultMessage="Resubmit in Debug Mode"
+                                  />
+                                </Button>
+                              </span>}
+                          </ResourceRenderer>}
                       </p>
                     </Col>
                   </Row>
@@ -231,6 +257,7 @@ ReferenceSolution.propTypes = {
   resubmitReferenceSolution: PropTypes.func.isRequired,
   resubmitReferenceSolutionInDebugMode: PropTypes.func.isRequired,
   referenceSolutions: ImmutablePropTypes.map,
+  exercise: ImmutablePropTypes.map,
   downloadSolutionArchive: PropTypes.func,
   intl: intlShape.isRequired,
   links: PropTypes.object.isRequired
@@ -240,7 +267,8 @@ export default withLinks(
   injectIntl(
     connect(
       (state, { params: { exerciseId, referenceSolutionId } }) => ({
-        referenceSolutions: referenceSolutionsSelector(exerciseId)(state)
+        referenceSolutions: referenceSolutionsSelector(exerciseId)(state),
+        exercise: getExercise(exerciseId)(state)
       }),
       (dispatch, { params }) => ({
         loadAsync: () => ReferenceSolution.loadAsync(params, dispatch),
