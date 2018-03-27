@@ -44,13 +44,13 @@ const ChangePasswordForm = ({
                 </span>
               : <FormattedMessage
                   id="app.changePasswordForm.changePassword"
-                  defaultMessage="Change password"
+                  defaultMessage="Change Password"
                 />
             : <span>
                 <LoadingIcon /> &nbsp;{' '}
                 <FormattedMessage
                   id="app.changePasswordForm.processing"
-                  defaultMessage="Changing password ..."
+                  defaultMessage="Changing ..."
                 />
               </span>}
         </Button>
@@ -80,7 +80,7 @@ const ChangePasswordForm = ({
       label={
         <FormattedMessage
           id="app.changePasswordForm.password"
-          defaultMessage="New password:"
+          defaultMessage="New Password:"
         />
       }
     />
@@ -90,7 +90,7 @@ const ChangePasswordForm = ({
       label={
         <FormattedMessage
           id="app.changePasswordForm.passwordCheck"
-          defaultMessage="Repeat your password to prevent typos:"
+          defaultMessage="New Password (again):"
         />
       }
     />
@@ -100,7 +100,7 @@ const ChangePasswordForm = ({
       label={
         <FormattedMessage
           id="app.changePasswordForm.passwordStrength"
-          defaultMessage="Password strength:"
+          defaultMessage="Password Strength:"
         />
       }
     />
@@ -130,7 +130,7 @@ const validate = ({ password, passwordCheck }) => {
     errors['passwordCheck'] = (
       <FormattedMessage
         id="app.changePasswordForm.validation.passwordsDontMatch"
-        defaultMessage="Passwords don't match."
+        defaultMessage="Passwords do not match."
       />
     );
   }

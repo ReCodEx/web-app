@@ -3,11 +3,11 @@ import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { reduxForm, Field, change } from 'redux-form';
 import { Alert } from 'react-bootstrap';
+import isEmail from 'validator/lib/isEmail';
+
 import FormBox from '../../widgets/FormBox';
 import SubmitButton from '../SubmitButton';
-
 import { validateRegistrationData } from '../../../redux/modules/users';
-
 import { TextField, PasswordField, PasswordStrength } from '../Fields';
 
 const EditUserProfileForm = ({
@@ -29,7 +29,7 @@ const EditUserProfileForm = ({
     title={
       <FormattedMessage
         id="app.editUserProfileForm.title"
-        defaultMessage="Edit profile"
+        defaultMessage="Edit Profile"
       />
     }
     type={submitSucceeded ? 'success' : undefined}
@@ -47,22 +47,16 @@ const EditUserProfileForm = ({
           tabIndex={9}
           messages={{
             submit: (
-              <FormattedMessage
-                id="app.editUserProfileForm.set"
-                defaultMessage="Save changes"
-              />
+              <FormattedMessage id="generic.save" defaultMessage="Save" />
             ),
             submitting: (
               <FormattedMessage
-                id="app.editUserProfileForm.processing"
+                id="generic.saving"
                 defaultMessage="Saving ..."
               />
             ),
             success: (
-              <FormattedMessage
-                id="app.editUserProfileForm.success"
-                defaultMessage="Profile settings has been saved."
-              />
+              <FormattedMessage id="generic.saved" defaultMessage="Saved" />
             )
           }}
         />
@@ -72,48 +66,48 @@ const EditUserProfileForm = ({
     {submitFailed &&
       <Alert bsStyle="danger">
         <FormattedMessage
-          id="app.editUserProfileForm.failed"
-          defaultMessage="Cannot save profile settings."
+          id="generic.savingFailed"
+          defaultMessage="Saving failed. Please try again later."
         />
       </Alert>}
 
     <Field
-      name="firstName"
+      name="degreesBeforeName"
       tabIndex={1}
       component={TextField}
       required
-      disabled={disabledNameChange}
       label={
         <FormattedMessage
-          id="app.editUserProfile.firstName"
-          defaultMessage="First name:"
+          id="app.editUserProfile.degreesBeforeName"
+          defaultMessage="Prefix Title:"
         />
       }
     />
 
     <Field
-      name="lastName"
+      name="firstName"
       tabIndex={2}
       component={TextField}
       required
       disabled={disabledNameChange}
       label={
         <FormattedMessage
-          id="app.editUserProfile.lastName"
-          defaultMessage="Last name:"
+          id="app.editUserProfile.firstName"
+          defaultMessage="Given Name:"
         />
       }
     />
 
     <Field
-      name="degreesBeforeName"
+      name="lastName"
       tabIndex={3}
       component={TextField}
       required
+      disabled={disabledNameChange}
       label={
         <FormattedMessage
-          id="app.editUserProfile.degreesBeforeName"
-          defaultMessage="Degrees before name:"
+          id="app.editUserProfile.lastName"
+          defaultMessage="Surname:"
         />
       }
     />
@@ -126,14 +120,14 @@ const EditUserProfileForm = ({
       label={
         <FormattedMessage
           id="app.editUserProfile.degreesAfterName"
-          defaultMessage="Degrees after name:"
+          defaultMessage="Suffix Title:"
         />
       }
     />
 
     <Field
       name="email"
-      tabIndex={6}
+      tabIndex={5}
       component={TextField}
       autoComplete="off"
       label={
@@ -152,10 +146,10 @@ const EditUserProfileForm = ({
             defaultMessage="Change your password"
           />
         </h3>
-        <p>
+        <p className="text-muted">
           <FormattedMessage
             id="app.editUserProfile.passwordInstructions"
-            defaultMessage="If you don't want to change your password leave these inputs blank"
+            defaultMessage="If you do not want to change your password leave these inputs blank."
           />
         </p>
 
@@ -164,7 +158,7 @@ const EditUserProfileForm = ({
               <h4>
                 <FormattedMessage
                   id="app.editUserProfile.emptyLocalPassword"
-                  defaultMessage="Local account does not have a password"
+                  defaultMessage="Local account does not have a password."
                 />
               </h4>
               <p>
@@ -182,7 +176,7 @@ const EditUserProfileForm = ({
               label={
                 <FormattedMessage
                   id="app.changePasswordForm.oldPassword"
-                  defaultMessage="Old password:"
+                  defaultMessage="Old Password:"
                 />
               }
             />}
@@ -195,7 +189,7 @@ const EditUserProfileForm = ({
           label={
             <FormattedMessage
               id="app.changePasswordForm.password"
-              defaultMessage="New password:"
+              defaultMessage="New Password:"
             />
           }
         />
@@ -206,7 +200,7 @@ const EditUserProfileForm = ({
           label={
             <FormattedMessage
               id="app.changePasswordForm.passwordStrength"
-              defaultMessage="Password strength:"
+              defaultMessage="Password Strength:"
             />
           }
         />
@@ -218,7 +212,7 @@ const EditUserProfileForm = ({
           label={
             <FormattedMessage
               id="app.changePasswordForm.passwordCheck"
-              defaultMessage="Repeat your password to prevent typos:"
+              defaultMessage="New Password (again):"
             />
           }
         />
@@ -284,6 +278,22 @@ const validate = (
     );
   }
 
+  if (email && isEmail(email) === false) {
+    errors['email'] = (
+      <FormattedMessage
+        id="app.editUserProfile.validation.emailNotValid"
+        defaultMessage="E-mail address is not valid."
+      />
+    );
+  } else if (!email) {
+    errors['email'] = (
+      <FormattedMessage
+        id="app.editUserProfile.validation.emptyEmail"
+        defaultMessage="E-mail address cannot be empty."
+      />
+    );
+  }
+
   if (allowChangePassword) {
     if (oldPassword || password || passwordConfirm) {
       if (!password || password.length === 0) {
@@ -299,7 +309,7 @@ const validate = (
         errors['passwordConfirm'] = (
           <FormattedMessage
             id="app.editUserProfile.validation.passwordsDontMatch"
-            defaultMessage="Passwords don't match."
+            defaultMessage="Passwords do not match."
           />
         );
       }
