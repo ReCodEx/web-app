@@ -51,7 +51,7 @@
   "app.assignment.syncButton": "Update Assignment",
   "app.assignment.syncButton.exerciseBroken": "The update button is disabled since the exercise is broken. The exercise configuration must be mended first.",
   "app.assignment.syncConfigurationType": "Configuration was switched to advanced mode",
-  "app.assignment.syncDescription": "The exercise for this assignment was updated in following categories:",
+  "app.assignment.syncDescription": "The exercise corresponding to this assignment was updated in the following categories:",
   "app.assignment.syncExerciseConfig": "Exercise configuration",
   "app.assignment.syncExerciseEnvironmentConfigs": "Environment configuration",
   "app.assignment.syncExerciseTests": "Exercise tests",

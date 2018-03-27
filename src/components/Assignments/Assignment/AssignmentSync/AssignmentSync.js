@@ -4,7 +4,6 @@ import { FormattedMessage, FormattedDate, FormattedTime } from 'react-intl';
 import { Row, Col, Alert } from 'react-bootstrap';
 
 import Button from '../../../widgets/FlatButton';
-import { LoadingIcon } from '../../../icons';
 
 const syncMessages = {
   supplementaryFiles: (
@@ -97,7 +96,7 @@ const getSyncMessages = syncInfo => {
   return res;
 };
 
-const AssignmentSync = ({ syncInfo, exerciseSync, isBroken = null }) => {
+const AssignmentSync = ({ syncInfo, exerciseSync }) => {
   const messages = getSyncMessages(syncInfo);
   return messages.length > 0
     ? <Row>
@@ -138,34 +137,32 @@ const AssignmentSync = ({ syncInfo, exerciseSync, isBroken = null }) => {
             <div>
               <FormattedMessage
                 id="app.assignment.syncDescription"
-                defaultMessage="The exercise for this assignment was updated in following categories:"
+                defaultMessage="The exercise corresponding to this assignment was updated in the following categories:"
               />
               <ul>
                 {messages}
               </ul>
             </div>
-            {isBroken !== null
-              ? <p>
-                  <Button
-                    bsStyle="primary"
-                    onClick={exerciseSync}
-                    disabled={isBroken}
-                  >
-                    <FormattedMessage
-                      id="app.assignment.syncButton"
-                      defaultMessage="Update Assignment"
-                    />
-                  </Button>
+            <p>
+              <Button
+                bsStyle="primary"
+                onClick={exerciseSync}
+                disabled={!syncInfo.isSynchronizationPossible}
+              >
+                <FormattedMessage
+                  id="app.assignment.syncButton"
+                  defaultMessage="Update Assignment"
+                />
+              </Button>
 
-                  {isBroken &&
-                    <span style={{ marginLeft: '2em' }} className="text-muted">
-                      <FormattedMessage
-                        id="app.assignment.syncButton.exerciseBroken"
-                        defaultMessage="The update button is disabled since the exercise is broken. The exercise configuration must be mended first."
-                      />
-                    </span>}
-                </p>
-              : <LoadingIcon />}
+              {!syncInfo.isSynchronizationPossible &&
+                <span style={{ marginLeft: '2em' }} className="text-muted">
+                  <FormattedMessage
+                    id="app.assignment.syncButton.exerciseBroken"
+                    defaultMessage="The update button is disabled since the exercise is broken. The exercise configuration must be mended first."
+                  />
+                </span>}
+            </p>
           </Alert>
         </Col>
       </Row>
@@ -174,8 +171,7 @@ const AssignmentSync = ({ syncInfo, exerciseSync, isBroken = null }) => {
 
 AssignmentSync.propTypes = {
   syncInfo: PropTypes.object.isRequired,
-  exerciseSync: PropTypes.func.isRequired,
-  isBroken: PropTypes.bool
+  exerciseSync: PropTypes.func.isRequired
 };
 
 export default AssignmentSync;
