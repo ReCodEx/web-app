@@ -324,6 +324,7 @@ class Exercise extends Component {
                             visibleGroups
                           )}
                           groups={visibleGroups}
+                          userId={userId}
                           onSubmit={this.assignExercise}
                           firstDeadline={firstDeadline}
                           allowSecondDeadline={allowSecondDeadline}
