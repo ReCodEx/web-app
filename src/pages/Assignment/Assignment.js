@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
-import { Col, Row } from 'react-bootstrap';
+import { Col, Row, Modal } from 'react-bootstrap';
 
 import Button from '../../components/widgets/FlatButton';
 import { LinkContainer } from 'react-router-bootstrap';
@@ -52,6 +52,7 @@ import AssignmentSync from '../../components/Assignments/Assignment/AssignmentSy
 import withLinks from '../../helpers/withLinks';
 
 class Assignment extends Component {
+  state = { luckyOpen: false };
   static loadAsync = ({ assignmentId }, dispatch, userId) =>
     Promise.all([
       dispatch(fetchAssignmentIfNeeded(assignmentId)),
@@ -237,6 +238,12 @@ class Assignment extends Component {
                                 disabled={!canSubmitObj.canSubmit}
                               />}
                           </ResourceRenderer>
+                          <Button
+                            bsStyle="danger"
+                            onClick={() => this.setState({ luckyOpen: true })}
+                          >
+                            {"I'm Feeling Lucky"}
+                          </Button>
                         </p>
                         <SubmitSolutionContainer
                           userId={userId}
@@ -246,6 +253,24 @@ class Assignment extends Component {
                           onReset={init}
                           isOpen={submitting}
                         />
+                        <Modal
+                          bsSize="large"
+                          show={this.state.luckyOpen}
+                          onHide={() => this.setState({ luckyOpen: false })}
+                        >
+                          <Modal.Header closeButton>
+                            {'Uh oh, no free points today ...'}
+                          </Modal.Header>
+                          <Modal.Body>
+                            <img
+                              style={{ width: '100%' }}
+                              src={
+                                'https://recodex.mff.cuni.cz:4000/yaghob.jpg'
+                              }
+                              alt={'Jakub at the beach'}
+                            />
+                          </Modal.Body>
+                        </Modal>
                       </div>}
 
                     {(isStudentOf(assignment.groupId) ||

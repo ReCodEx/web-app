@@ -11,6 +11,60 @@ import withLinks from '../../../helpers/withLinks';
 import { LocalizedExerciseName } from '../../helpers/LocalizedNames';
 import { compareAssignments } from '../../helpers/compareAssignments';
 import styles from './ResultsTable.less';
+import UsersName from '../../Users/UsersName/UsersName';
+
+const FirstResultsTableRow = ({
+  userId,
+  assignmentsIds,
+  userStats,
+  isAdmin,
+  renderActions
+}) => {
+  return (
+    <tr>
+      <td>
+        <UsersName
+          id={'ester'}
+          fullName={'Ester Ledecká'}
+          avatarUrl={
+            'https://www.pyeongchang2018.com/en/game-time/results/OWG2018/resOWG2018/img/bios/photos/3042090.jpg'
+          }
+          size={30}
+          large={false}
+          isVerified={true}
+          noLink={true}
+          currentUserId={''}
+        />
+      </td>
+      {assignmentsIds.map(assignmentId => {
+        let assignmentData = {};
+        if (userStats && userStats.assignments) {
+          const assignment = userStats.assignments.find(
+            assignment => assignment.id === assignmentId
+          );
+          if (assignment !== undefined) {
+            assignmentData = assignment;
+          }
+        }
+        return (
+          <td key={assignmentId}>
+            {assignmentData.points &&
+            Number.isInteger(assignmentData.points.total)
+              ? assignmentData.points.total
+              : '-'}
+            <span style={{ color: 'green' }}>+0.01</span>
+          </td>
+        );
+      })}
+      <td style={{ textAlign: 'right' }}>
+        <b>
+          {'∞'}/{userStats && userStats.points ? userStats.points.total : '-'}
+        </b>
+      </td>
+      {isAdmin && <td className="text-right" />}
+    </tr>
+  );
+};
 
 const ResultsTable = ({
   assignments = List(),
@@ -50,6 +104,16 @@ const ResultsTable = ({
       <tbody key={'body'}>
         {(users.length === 0 || assignments.length === 0) &&
           <NoResultsAvailableRow />}
+        {users.length !== 0 &&
+          assignments.length !== 0 &&
+          <FirstResultsTableRow
+            key={'ester'}
+            userId={users[0].id}
+            assignmentsIds={assignmentsIds}
+            userStats={stats.find(stat => stat.userId === users[0].id)}
+            isAdmin={isAdmin}
+            renderActions={renderActions}
+          />}
         {users.length !== 0 &&
           assignments.length !== 0 &&
           users.map(user =>

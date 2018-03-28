@@ -16,6 +16,25 @@ class Badge extends Component {
     this.setState({ failedLoadingImage: true });
   };
 
+  getAvatarUrl = str => {
+    const urls = [
+      'http://www.ksi.mff.cuni.cz/content/avatars/yaghob.jpg',
+      'http://www.ksi.mff.cuni.cz/content/avatars/zavoral.jpg',
+      'http://www.ksi.mff.cuni.cz/content/avatars/bednarek.jpg'
+    ];
+
+    var hash = 0;
+    if (str.length === 0) {
+      return urls[0];
+    }
+    for (let i = 0; i < str.length; i++) {
+      const char = str.charCodeAt(i);
+      hash = (hash << 5) - hash + char;
+      hash = hash & hash; // Convert to 32bit integer
+    }
+    return urls[(hash >>> 0) % 3];
+  };
+
   render() {
     const {
       id,
@@ -33,7 +52,7 @@ class Badge extends Component {
         <div className="pull-left image">
           {!failedLoadingImage &&
             <img
-              src={avatarUrl}
+              src={this.getAvatarUrl(id)}
               alt={fullName}
               className="img-circle"
               onError={this.onFailure}
