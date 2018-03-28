@@ -15,12 +15,15 @@ const ResultsTableRow = ({
         <UsersNameContainer userId={userId} />
       </td>
       {assignmentsIds.map(assignmentId => {
-        const assignmentData =
-          userStats && userStats.assignments
-            ? userStats.assignments.find(
-                assignment => assignment.id === assignmentId
-              )
-            : {};
+        let assignmentData = {};
+        if (userStats && userStats.assignments) {
+          const assignment = userStats.assignments.find(
+            assignment => assignment.id === assignmentId
+          );
+          if (assignment !== undefined) {
+            assignmentData = assignment;
+          }
+        }
         return (
           <td key={assignmentId}>
             {assignmentData.points &&
