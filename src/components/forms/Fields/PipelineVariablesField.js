@@ -107,8 +107,8 @@ PipelineVariablesField.propTypes = {
   }).isRequired,
   label: PropTypes.oneOfType([
     PropTypes.string,
-    PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) }),
-    PropTypes.element
+    PropTypes.element,
+    PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) })
   ]).isRequired,
   variables: PropTypes.array,
   supplementaryFiles: ImmutablePropTypes.map,

@@ -42,7 +42,8 @@ import {
   isSupervisorOf,
   isAdminOf,
   isLoggedAsSuperAdmin,
-  studentsOfGroupSelector
+  studentsOfGroupSelector,
+  isStudentOf
 } from '../../redux/selectors/users';
 
 import {
@@ -174,6 +175,7 @@ class GroupDetail extends Component {
       isAdmin,
       isSuperAdmin,
       isSupervisor,
+      isStudent,
       userId,
       links: {
         EXERCISE_EDIT_URI_FACTORY,
@@ -207,7 +209,11 @@ class GroupDetail extends Component {
               group={data}
               userId={userId}
               canEdit={isAdmin || isSuperAdmin}
-              canLeaveJoin={!isAdmin && !isSupervisor && data.isPublic}
+              canLeaveJoin={
+                !isAdmin &&
+                !isSupervisor &&
+                (data.privateData.isPublic || isStudent)
+              }
             />
 
             <Row>
@@ -392,6 +398,7 @@ GroupDetail.propTypes = {
   isAdmin: PropTypes.bool,
   isSupervisor: PropTypes.bool,
   isSuperAdmin: PropTypes.bool,
+  isStudent: PropTypes.bool,
   loadAsync: PropTypes.func,
   stats: PropTypes.object,
   statuses: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
@@ -417,7 +424,8 @@ const mapStateToProps = (state, { params: { groupId } }) => {
     students: studentsOfGroupSelector(state, groupId),
     isSupervisor: isSupervisorOf(userId, groupId)(state),
     isAdmin: isAdminOf(userId, groupId)(state),
-    isSuperAdmin: isLoggedAsSuperAdmin(state)
+    isSuperAdmin: isLoggedAsSuperAdmin(state),
+    isStudent: isStudentOf(userId, groupId)(state)
   };
 };
 

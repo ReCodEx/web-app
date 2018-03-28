@@ -7,9 +7,13 @@ export const loadAceEditor = () => {
     require('brace/theme/monokai');
     require('brace/theme/github');
     require('brace/mode/c_cpp');
-    require('brace/mode/java');
     require('brace/mode/csharp');
+    require('brace/mode/java');
+    require('brace/mode/javascript');
+    require('brace/mode/makefile');
     require('brace/mode/pascal');
+    require('brace/mode/php');
+    require('brace/mode/python');
     require('brace/keybinding/vim');
   }
   return AceEditor;
@@ -26,7 +30,10 @@ export const getAceModeFromExtension = ext => {
     md: 'markdown',
     markdown: 'markdown',
     pas: 'pascal',
-    lpr: 'pascal'
+    lpr: 'pascal',
+    py: 'python',
+    php: 'php',
+    js: 'javascript'
   };
 
   ext = ext.trim().toLowerCase();

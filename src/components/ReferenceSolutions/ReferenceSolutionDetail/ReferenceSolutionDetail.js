@@ -34,7 +34,7 @@ const ReferenceSolutionDetail = ({
             <FormattedMessage
               id="app.referenceSolutionDetail.exercise"
               defaultMessage="Exercise"
-            />
+            />:
           </th>
           <td>
             {exerciseId && <ExercisesNameContainer exerciseId={exerciseId} />}

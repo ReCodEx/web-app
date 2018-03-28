@@ -35,7 +35,8 @@ import {
   isSupervisorOf,
   isAdminOf,
   isLoggedAsSuperAdmin,
-  supervisorsOfGroupSelector
+  supervisorsOfGroupSelector,
+  isStudentOf
 } from '../../redux/selectors/users';
 import { groupSelector, groupsSelector } from '../../redux/selectors/groups';
 import { EMPTY_OBJ } from '../../helpers/common';
@@ -113,6 +114,7 @@ class GroupInfo extends Component {
       isAdmin,
       isSuperAdmin,
       isSupervisor,
+      isStudent,
       addSubgroup,
       formValues,
       intl: { locale }
@@ -143,7 +145,11 @@ class GroupInfo extends Component {
               group={data}
               userId={userId}
               canEdit={isAdmin || isSuperAdmin}
-              canLeaveJoin={!isAdmin && !isSupervisor && data.isPublic}
+              canLeaveJoin={
+                !isAdmin &&
+                !isSupervisor &&
+                (data.privateData.isPublic || isStudent)
+              }
             />
 
             <Row>
@@ -251,6 +257,7 @@ GroupInfo.propTypes = {
   isAdmin: PropTypes.bool,
   isSupervisor: PropTypes.bool,
   isSuperAdmin: PropTypes.bool,
+  isStudent: PropTypes.bool,
   addSubgroup: PropTypes.func,
   loadAsync: PropTypes.func,
   push: PropTypes.func.isRequired,
@@ -271,6 +278,7 @@ const mapStateToProps = (state, { params: { groupId } }) => {
     isSupervisor: isSupervisorOf(userId, groupId)(state),
     isAdmin: isAdminOf(userId, groupId)(state),
     isSuperAdmin: isLoggedAsSuperAdmin(state),
+    isStudent: isStudentOf(userId, groupId)(state),
     formValues: getFormValues('editGroup')(state)
   };
 };

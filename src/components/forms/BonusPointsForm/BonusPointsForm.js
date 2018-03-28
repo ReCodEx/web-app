@@ -12,11 +12,11 @@ import { TextField } from '../Fields';
 const BonusPointsForm = ({
   submitting,
   handleSubmit,
-  anyTouched,
+  dirty,
   submitFailed = false,
   submitSucceeded = false,
   invalid
-}) => (
+}) =>
   <FormBox
     title={
       <FormattedMessage
@@ -33,7 +33,7 @@ const BonusPointsForm = ({
           id="bonus-points"
           handleSubmit={handleSubmit}
           submitting={submitting}
-          dirty={anyTouched}
+          dirty={dirty}
           hasSucceeded={submitSucceeded}
           hasFailed={submitFailed}
           invalid={invalid}
@@ -79,14 +79,13 @@ const BonusPointsForm = ({
         />
       }
     />
-  </FormBox>
-);
+  </FormBox>;
 
 BonusPointsForm.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
   submitFailed: PropTypes.bool,
-  anyTouched: PropTypes.bool,
+  dirty: PropTypes.bool,
   submitSucceeded: PropTypes.bool,
   submitting: PropTypes.bool,
   invalid: PropTypes.bool

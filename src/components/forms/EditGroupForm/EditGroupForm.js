@@ -98,7 +98,7 @@ const EditGroupForm = ({
         label={
           <FormattedMessage
             id="app.createGroup.externalId"
-            defaultMessage="External ID of the group (e. g. ID of the group in the school IS):"
+            defaultMessage="External ID of the group (e.g., ID of schedule event in the school IS):"
           />
         }
       />}
@@ -106,7 +106,7 @@ const EditGroupForm = ({
       <Col lg={6}>
         <Field
           name="isPublic"
-          tabIndex={4}
+          tabIndex={3}
           component={CheckboxField}
           onOff
           label={
@@ -121,7 +121,7 @@ const EditGroupForm = ({
       <Col lg={6}>
         <Field
           name="publicStats"
-          tabIndex={5}
+          tabIndex={4}
           component={CheckboxField}
           onOff
           label={
@@ -139,7 +139,7 @@ const EditGroupForm = ({
       <Col lg={6}>
         <Field
           name="hasThreshold"
-          tabIndex={6}
+          tabIndex={5}
           component={CheckboxField}
           onOff
           label={
@@ -155,7 +155,7 @@ const EditGroupForm = ({
         {hasThreshold &&
           <Field
             name="threshold"
-            tabIndex={7}
+            tabIndex={6}
             component={TextField}
             label={
               <FormattedMessage

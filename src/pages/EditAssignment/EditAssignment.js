@@ -30,7 +30,9 @@ import { canSubmitSolution } from '../../redux/selectors/canSubmit';
 import { runtimeEnvironmentsSelector } from '../../redux/selectors/runtimeEnvironments';
 import { isSubmitting } from '../../redux/selectors/submission';
 import { isSupervisorOf, isAdminOf } from '../../redux/selectors/users';
+import { getExerciseOfAssignmentJS } from '../../redux/selectors/exercises';
 import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments';
+import { fetchExerciseIfNeeded } from '../../redux/modules/exercises';
 import { isReady, getJsData } from '../../redux/helpers/resourceManager';
 import { ResubmitAllSolutionsContainer } from '../../containers/ResubmitSolutionContainer';
 import AssignmentSync from '../../components/Assignments/Assignment/AssignmentSync';
@@ -54,7 +56,9 @@ class EditAssignment extends Component {
 
   static loadAsync = ({ assignmentId }, dispatch) =>
     Promise.all([
-      dispatch(fetchAssignment(assignmentId)),
+      dispatch(fetchAssignment(assignmentId)).then(({ value: assignment }) =>
+        dispatch(fetchExerciseIfNeeded(assignment.exerciseId))
+      ),
       dispatch(fetchRuntimeEnvironments())
     ]);
 
@@ -130,6 +134,7 @@ class EditAssignment extends Component {
       params: { assignmentId },
       push,
       assignment,
+      exercise,
       isSupervisorOf,
       isAdminOf,
       firstDeadline,
@@ -210,6 +215,7 @@ class EditAssignment extends Component {
               <AssignmentSync
                 syncInfo={assignment.exerciseSynchronizationInfo}
                 exerciseSync={exerciseSync}
+                isBroken={exercise && exercise.isBroken}
               />}
 
             <ResourceRenderer
@@ -272,6 +278,7 @@ EditAssignment.propTypes = {
     assignmentId: PropTypes.string.isRequired
   }).isRequired,
   assignment: ImmutablePropTypes.map,
+  exercise: PropTypes.object,
   runtimeEnvironments: ImmutablePropTypes.map,
   editAssignment: PropTypes.func.isRequired,
   firstDeadline: PropTypes.oneOfType([PropTypes.number, PropTypes.object]),
@@ -289,8 +296,10 @@ const editAssignmentFormSelector = formValueSelector('editAssignment');
 export default connect(
   (state, { params: { assignmentId } }) => {
     const loggedInUserId = loggedInUserIdSelector(state);
+    const assignment = getAssignment(state)(assignmentId);
     return {
-      assignment: getAssignment(state)(assignmentId),
+      assignment,
+      exercise: getExerciseOfAssignmentJS(state)(assignmentId),
       runtimeEnvironments: runtimeEnvironmentsSelector(state),
       submitting: isSubmitting(state),
       canSubmit: canSubmitSolution(assignmentId)(state),

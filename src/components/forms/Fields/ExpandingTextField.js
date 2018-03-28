@@ -102,6 +102,7 @@ ExpandingTextField.propTypes = {
   }).isRequired,
   label: PropTypes.oneOfType([
     PropTypes.string,
+    PropTypes.element,
     PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) })
   ]).isRequired
 };

@@ -49,7 +49,7 @@ const GroupTopButtons = ({
       <LeaveJoinGroupButtonContainer
         userId={userId}
         groupId={group.id}
-        bsSize="normal"
+        bsSize={null}
       />}
   </p>;
 

@@ -41,6 +41,7 @@ SingleUploadField.propTypes = {
   meta: PropTypes.shape({ error: PropTypes.string, touched: PropTypes.bool }),
   label: PropTypes.oneOfType([
     PropTypes.string,
+    PropTypes.element,
     PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) })
   ]).isRequired
 };

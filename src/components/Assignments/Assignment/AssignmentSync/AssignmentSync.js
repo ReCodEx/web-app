@@ -137,19 +137,31 @@ const AssignmentSync = ({ syncInfo, exerciseSync }) => {
             <div>
               <FormattedMessage
                 id="app.assignment.syncDescription"
-                defaultMessage="The exercise for this assignment was updated in following categories:"
+                defaultMessage="The exercise corresponding to this assignment was updated in the following categories:"
               />
               <ul>
                 {messages}
               </ul>
             </div>
             <p>
-              <Button bsStyle="primary" onClick={exerciseSync}>
+              <Button
+                bsStyle="primary"
+                onClick={exerciseSync}
+                disabled={!syncInfo.isSynchronizationPossible}
+              >
                 <FormattedMessage
                   id="app.assignment.syncButton"
-                  defaultMessage="Update this assignment"
+                  defaultMessage="Update Assignment"
                 />
               </Button>
+
+              {!syncInfo.isSynchronizationPossible &&
+                <span style={{ marginLeft: '2em' }} className="text-muted">
+                  <FormattedMessage
+                    id="app.assignment.syncButton.exerciseBroken"
+                    defaultMessage="The update button is disabled since the exercise is broken. The exercise configuration must be mended first."
+                  />
+                </span>}
             </p>
           </Alert>
         </Col>

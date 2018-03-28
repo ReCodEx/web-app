@@ -81,6 +81,7 @@ SourceCodeField.propTypes = {
   type: PropTypes.string,
   label: PropTypes.oneOfType([
     PropTypes.string,
+    PropTypes.element,
     PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) })
   ]).isRequired,
   onBlur: PropTypes.func
