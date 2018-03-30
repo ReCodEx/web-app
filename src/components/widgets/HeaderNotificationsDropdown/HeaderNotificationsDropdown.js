@@ -7,6 +7,8 @@ import { Label } from 'react-bootstrap';
 import Icon from 'react-fontawesome';
 import HeaderNotification from '../HeaderNotification';
 
+import styles from './headerNotificationDropdown.less';
+
 const HeaderNotificationsDropdown = ({
   isOpen,
   showAll,
@@ -20,7 +22,7 @@ const HeaderNotificationsDropdown = ({
   <li
     className={classNames({
       'notifications-menu': true,
-      dropdown: true,
+      'dropdown': true,
       open: isOpen
     })}
   >
@@ -36,7 +38,7 @@ const HeaderNotificationsDropdown = ({
         </Label>
       )}
     </a>
-    <ul className="dropdown-menu" onClick={markClick}>
+    <ul className={classNames(['dropdown-menu', styles.dropdownMenu])} onClick={markClick}>
       <li className="header">
         <FormattedMessage
           id="app.notifications.title"
@@ -54,6 +56,7 @@ const HeaderNotificationsDropdown = ({
               key={notification.id}
               hide={hideNotification}
               {...notification}
+              isNew={true}
             />
           ))}
           {showAll &&
