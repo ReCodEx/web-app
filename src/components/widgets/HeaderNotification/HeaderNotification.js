@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Tooltip, OverlayTrigger, Overlay, Badge } from 'react-bootstrap';
 import { FormattedDate, FormattedTime, FormattedMessage } from 'react-intl';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
+import classNames from 'classnames';
 
 import { SuccessIcon, WarningIcon, DeleteIcon, CopyIcon } from '../../icons';
 
@@ -31,13 +32,15 @@ class HeaderNotification extends Component {
   };
 
   render() {
-    const { id, successful = true, msg, hide = null, time, count } = this.props;
+    const { id, successful = true, msg, hide = null, time, count, isNew = false } = this.props;
 
     const { hovering, clickedCopy } = this.state;
     const deleteOnClick = hide && hovering;
 
     return (
-      <li>
+      <li className={classNames({
+        [styles.newNotification]: isNew
+      })}>
         <OverlayTrigger
           placement="bottom"
           overlay={
@@ -111,7 +114,8 @@ HeaderNotification.propTypes = {
   msg: PropTypes.string.isRequired,
   time: PropTypes.number.isRequired,
   count: PropTypes.number.isRequired,
-  hide: PropTypes.func
+  hide: PropTypes.func,
+  isNew: PropTypes.bool
 };
 
 export default HeaderNotification;
