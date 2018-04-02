@@ -1,7 +1,7 @@
 {
   "name": "recodex-web-app",
   "description": "Single page application for the ReCodEx project.",
-  "version": "1.0.0",
+  "version": "0.0.0",
   "license": "MIT",
   "author": "Šimon Rozsíval <simon@rozsival.com>",
   "repository": {
@@ -31,6 +31,7 @@
     "ajv": "5.5.1",
     "ajv-keywords": "2.1.1",
     "babel-plugin-react-intl": "^2.1.3",
+    "babel-plugin-transform-react-inline-elements": "^6.22.0",
     "bluebird": "^3.3.5",
     "browser-cookies": "^1.0.8",
     "buffer": "^5.0.7",
