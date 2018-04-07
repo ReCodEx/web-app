@@ -102,6 +102,7 @@ class User extends Component {
 
   render() {
     const {
+      userId,
       user,
       student,
       isAdmin,
@@ -112,7 +113,11 @@ class User extends Component {
       assignmentEnvironmentsSelector,
       groupStatistics,
       usersStatistics,
-      links: { GROUP_DETAIL_URI_FACTORY, INSTANCE_URI_FACTORY }
+      links: {
+        GROUP_DETAIL_URI_FACTORY,
+        INSTANCE_URI_FACTORY,
+        EDIT_USER_URI_FACTORY
+      }
     } = this.props;
 
     return (
@@ -131,6 +136,16 @@ class User extends Component {
           />
         }
         breadcrumbs={[
+          {
+            iconName: 'user',
+            text: (
+              <FormattedMessage
+                id="app.editUser.title"
+                defaultMessage="Edit user's profile"
+              />
+            ),
+            link: EDIT_USER_URI_FACTORY(userId)
+          },
           {
             text: (
               <FormattedMessage
@@ -274,6 +289,7 @@ class User extends Component {
 }
 
 User.propTypes = {
+  userId: PropTypes.string,
   user: ImmutablePropTypes.map,
   commonGroups: PropTypes.array,
   isAdmin: PropTypes.bool,
@@ -325,6 +341,7 @@ export default withLinks(
             );
 
       return {
+        userId,
         loggedInUserId,
         student: isStudent(userId)(state),
         user: getUser(userId)(state),
