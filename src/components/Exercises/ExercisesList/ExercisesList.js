@@ -24,6 +24,12 @@ const ExercisesList = ({
         </th>
         <th>
           <FormattedMessage
+            id="generic.runtimesShort"
+            defaultMessage="Runtimes/Languages"
+          />
+        </th>
+        <th>
+          <FormattedMessage
             id="app.exercisesList.groups"
             defaultMessage="Groups"
           />

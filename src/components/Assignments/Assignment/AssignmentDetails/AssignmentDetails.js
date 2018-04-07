@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Icon from 'react-fontawesome';
-import { Table, Label } from 'react-bootstrap';
+import { Table } from 'react-bootstrap';
 import {
   FormattedDate,
   FormattedTime,
@@ -11,6 +11,7 @@ import {
 import classnames from 'classnames';
 import { SuccessIcon, MaybeSucceededIcon } from '../../../icons';
 import Box from '../../../widgets/Box';
+import EnvironmentsList from '../../../helpers/EnvironmentsList';
 
 const AssignmentDetails = ({
   isOpen = true,
@@ -51,8 +52,8 @@ const AssignmentDetails = ({
           <td>
             <FormattedMessage
               id="app.assignment.deadline"
-              defaultMessage="Deadline:"
-            />
+              defaultMessage="Deadline"
+            />:
           </td>
           <td>
             <strong>
@@ -190,11 +191,7 @@ const AssignmentDetails = ({
             />
           </td>
           <td>
-            {runtimeEnvironments.map(env =>
-              <Label key={env.id} style={{ margin: '2px' }}>
-                {env.name}
-              </Label>
-            )}
+            <EnvironmentsList runtimeEnvironments={runtimeEnvironments} />
           </td>
         </tr>
       </tbody>

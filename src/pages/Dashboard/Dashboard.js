@@ -18,12 +18,15 @@ import StudentsListContainer from '../../containers/StudentsListContainer';
 import AssignmentsTable from '../../components/Assignments/Assignment/AssignmentsTable';
 import UsersStats from '../../components/Users/UsersStats';
 import GroupsName from '../../components/Groups/GroupsName';
+
 import { fetchAssignmentsForGroup } from '../../redux/modules/assignments';
 import { fetchUserIfNeeded } from '../../redux/modules/users';
 import {
   fetchGroupsIfNeeded,
   fetchInstanceGroups
 } from '../../redux/modules/groups';
+import { fetchGroupsStatsIfNeeded } from '../../redux/modules/stats';
+import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments';
 
 import {
   getUser,
@@ -31,9 +34,7 @@ import {
   isSupervisor,
   isLoggedAsSuperAdmin
 } from '../../redux/selectors/users';
-
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
-import { fetchGroupsStatsIfNeeded } from '../../redux/modules/stats';
 import { statisticsSelector } from '../../redux/selectors/stats';
 import { groupsSelector } from '../../redux/selectors/groups';
 import {
@@ -41,11 +42,12 @@ import {
   loggedInSupervisorOfSelector,
   loggedInStudentOfSelector
 } from '../../redux/selectors/usersGroups';
+import { assignmentEnvironmentsSelector } from '../../redux/selectors/assignments';
+
 import { InfoIcon } from '../../components/icons';
 import { getJsData } from '../../redux/helpers/resourceManager';
 import SisIntegrationContainer from '../../containers/SisIntegrationContainer';
 import SisSupervisorGroupsContainer from '../../containers/SisSupervisorGroupsContainer';
-
 import { getLocalizedName } from '../../helpers/getLocalizedData';
 import withLinks from '../../helpers/withLinks';
 
@@ -68,34 +70,37 @@ class Dashboard extends Component {
    * of user's groups of which the current user is a supervisor.
    */
   static loadAsync = (params, dispatch, userId) =>
-    dispatch((dispatch, getState) =>
-      dispatch(fetchUserIfNeeded(userId)).then(() => {
-        const state = getState();
-        const user = getJsData(getUser(userId)(state));
-        const groups = user.privateData.groups.studentOf.concat(
-          user.privateData.groups.supervisorOf
-        );
-        const isAdmin = isLoggedAsSuperAdmin(state);
+    Promise.all([
+      dispatch(fetchRuntimeEnvironments()),
+      dispatch((dispatch, getState) =>
+        dispatch(fetchUserIfNeeded(userId)).then(() => {
+          const state = getState();
+          const user = getJsData(getUser(userId)(state));
+          const groups = user.privateData.groups.studentOf.concat(
+            user.privateData.groups.supervisorOf
+          );
+          const isAdmin = isLoggedAsSuperAdmin(state);
 
-        return dispatch(fetchGroupsIfNeeded(...groups)).then(groups =>
-          Promise.all(
-            [
-              isAdmin
-                ? dispatch(fetchInstanceGroups(user.privateData.instanceId))
-                : Promise.resolve()
-            ].concat(
-              groups.map(({ value: group }) =>
-                Promise.all([
-                  dispatch(fetchAssignmentsForGroup(group.id)),
-                  dispatch(fetchGroupsStatsIfNeeded(group.id)),
-                  dispatch(fetchGroupsIfNeeded(...group.parentGroupsIds))
-                ])
+          return dispatch(fetchGroupsIfNeeded(...groups)).then(groups =>
+            Promise.all(
+              [
+                isAdmin
+                  ? dispatch(fetchInstanceGroups(user.privateData.instanceId))
+                  : Promise.resolve()
+              ].concat(
+                groups.map(({ value: group }) =>
+                  Promise.all([
+                    dispatch(fetchAssignmentsForGroup(group.id)),
+                    dispatch(fetchGroupsStatsIfNeeded(group.id)),
+                    dispatch(fetchGroupsIfNeeded(...group.parentGroupsIds))
+                  ])
+                )
               )
             )
-          )
-        );
-      })
-    );
+          );
+        })
+      )
+    ]);
 
   usersStatistics(statistics) {
     return (
@@ -112,6 +117,7 @@ class Dashboard extends Component {
       supervisorOf,
       superadmin,
       groupAssignments,
+      assignmentEnvironmentsSelector,
       statistics,
       allGroups,
       links: { GROUP_DETAIL_URI_FACTORY },
@@ -266,6 +272,9 @@ class Dashboard extends Component {
                                       assignments={groupAssignments.get(
                                         group.id
                                       )}
+                                      assignmentEnvironmentsSelector={
+                                        assignmentEnvironmentsSelector
+                                      }
                                       showGroup={false}
                                       statuses={
                                         this.usersStatistics(statistics)
@@ -364,6 +373,7 @@ Dashboard.propTypes = {
   loadAsync: PropTypes.func.isRequired,
   userId: PropTypes.string,
   groupAssignments: ImmutablePropTypes.map,
+  assignmentEnvironmentsSelector: PropTypes.func,
   statistics: ImmutablePropTypes.map,
   allGroups: ImmutablePropTypes.map,
   links: PropTypes.object,
@@ -383,6 +393,7 @@ export default withLinks(
         studentOf: loggedInStudentOfSelector(state),
         supervisorOf: loggedInSupervisorOfSelector(state),
         groupAssignments: loggedInStudentOfGroupsAssignmentsSelector(state),
+        assignmentEnvironmentsSelector: assignmentEnvironmentsSelector(state),
         statistics: statisticsSelector(state),
         allGroups: groupsSelector(state)
       };

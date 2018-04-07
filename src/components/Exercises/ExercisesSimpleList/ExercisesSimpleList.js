@@ -23,6 +23,12 @@ const ExercisesSimpleList = ({
         </th>
         <th>
           <FormattedMessage
+            id="generic.runtimesShort"
+            defaultMessage="Runtimes/Languages"
+          />
+        </th>
+        <th>
+          <FormattedMessage
             id="app.exercisesSimpleList.difficulty"
             defaultMessage="Difficulty"
           />

@@ -66,8 +66,8 @@ const ReferenceSolutionsList = ({
                 <FormattedDate value={new Date(createdAt * 1000)} /> &nbsp;{' '}
                 <FormattedTime value={new Date(createdAt * 1000)} />
               </td>
-              <td>
-                <Label className="text-nowrap">
+              <td className="text-nowrap">
+                <Label>
                   {getRuntimeName(runtimeEnvironments, runtimeEnvironmentId)}
                 </Label>
               </td>

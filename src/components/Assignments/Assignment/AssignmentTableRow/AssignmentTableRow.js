@@ -15,6 +15,8 @@ import {
 } from '../../../icons';
 import DeleteAssignmentButtonContainer from '../../../../containers/DeleteAssignmentButtonContainer';
 import Button from '../../../widgets/FlatButton';
+import EnvironmentsList from '../../../helpers/EnvironmentsList';
+import ResourceRenderer from '../../../helpers/ResourceRenderer';
 
 const AssignmentTableRow = ({
   showGroup,
@@ -30,6 +32,7 @@ const AssignmentTableRow = ({
     isPublic,
     accepted
   },
+  runtimeEnvironments = null,
   status,
   userId,
   stats,
@@ -58,10 +61,19 @@ const AssignmentTableRow = ({
         <LocalizedExerciseName entity={{ name, localizedTexts }} />
       </Link>
     </td>
+
     {showGroup &&
       <td>
         {group}
       </td>}
+
+    {runtimeEnvironments &&
+      <td>
+        <ResourceRenderer resource={runtimeEnvironments}>
+          {(...runtimes) => <EnvironmentsList runtimeEnvironments={runtimes} />}
+        </ResourceRenderer>
+      </td>}
+
     {!isAdmin &&
       stats &&
       <td>
@@ -117,6 +129,7 @@ AssignmentTableRow.propTypes = {
     secondDeadline: PropTypes.number.isRequired,
     groupId: PropTypes.string
   }),
+  runtimeEnvironments: PropTypes.array,
   status: PropTypes.string,
   userId: PropTypes.string,
   stats: PropTypes.object,

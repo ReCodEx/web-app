@@ -17,9 +17,13 @@ import UsersNameContainer from '../../containers/UsersNameContainer';
 import AssignmentsTable from '../../components/Assignments/Assignment/AssignmentsTable';
 import UsersStats from '../../components/Users/UsersStats';
 import GroupsName from '../../components/Groups/GroupsName';
+
 import { fetchAssignmentsForGroup } from '../../redux/modules/assignments';
 import { fetchUserIfNeeded } from '../../redux/modules/users';
 import { fetchInstanceGroups } from '../../redux/modules/groups';
+import { fetchGroupsStatsIfNeeded } from '../../redux/modules/stats';
+import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments';
+
 import {
   getUser,
   studentOfGroupsIdsSelector,
@@ -27,7 +31,6 @@ import {
   isLoggedAsSuperAdmin
 } from '../../redux/selectors/users';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
-import { fetchGroupsStatsIfNeeded } from '../../redux/modules/stats';
 import { createGroupsStatsSelector } from '../../redux/selectors/stats';
 import {
   groupsPublicAssignmentsSelector,
@@ -35,9 +38,10 @@ import {
   supervisorOfSelector2,
   adminOfSelector
 } from '../../redux/selectors/groups';
+import { assignmentEnvironmentsSelector } from '../../redux/selectors/assignments';
+
 import { InfoIcon } from '../../components/icons';
 import { getJsData } from '../../redux/helpers/resourceManager';
-
 import withLinks from '../../helpers/withLinks';
 
 class User extends Component {
@@ -60,38 +64,41 @@ class User extends Component {
    * of user's groups of which the current user is a supervisor.
    */
   static loadAsync = ({ userId }, dispatch, loggedInUserId, isAdmin) =>
-    dispatch((dispatch, getState) =>
-      dispatch(fetchUserIfNeeded(userId))
-        .then(() => dispatch(fetchUserIfNeeded(loggedInUserId)))
-        .then(() => {
-          const state = getState();
-          const instanceId = getJsData(getUser(loggedInUserId)(state))
-            .privateData.instanceId;
+    Promise.all([
+      dispatch(fetchRuntimeEnvironments()),
+      dispatch((dispatch, getState) =>
+        dispatch(fetchUserIfNeeded(userId))
+          .then(() => dispatch(fetchUserIfNeeded(loggedInUserId)))
+          .then(() => {
+            const state = getState();
+            const instanceId = getJsData(getUser(loggedInUserId)(state))
+              .privateData.instanceId;
 
-          return dispatch(fetchInstanceGroups(instanceId)).then(groups =>
-            Promise.all(
-              groups.value.map(group => {
-                if (
-                  group.privateData &&
-                  group.privateData.students.indexOf(userId) >= 0 &&
-                  (isAdmin ||
-                    userId === loggedInUserId ||
-                    group.privateData.supervisors.indexOf(loggedInUserId) >=
-                      0 ||
-                    group.privateData.admins.indexOf(loggedInUserId) >= 0)
-                ) {
-                  return Promise.all([
-                    dispatch(fetchAssignmentsForGroup(group.id)),
-                    dispatch(fetchGroupsStatsIfNeeded(group.id))
-                  ]);
-                } else {
-                  return Promise.resolve();
-                }
-              })
-            )
-          );
-        })
-    );
+            return dispatch(fetchInstanceGroups(instanceId)).then(groups =>
+              Promise.all(
+                groups.value.map(group => {
+                  if (
+                    group.privateData &&
+                    group.privateData.students.indexOf(userId) >= 0 &&
+                    (isAdmin ||
+                      userId === loggedInUserId ||
+                      group.privateData.supervisors.indexOf(loggedInUserId) >=
+                        0 ||
+                      group.privateData.admins.indexOf(loggedInUserId) >= 0)
+                  ) {
+                    return Promise.all([
+                      dispatch(fetchAssignmentsForGroup(group.id)),
+                      dispatch(fetchGroupsStatsIfNeeded(group.id))
+                    ]);
+                  } else {
+                    return Promise.resolve();
+                  }
+                })
+              )
+            );
+          })
+      )
+    ]);
 
   render() {
     const {
@@ -102,6 +109,7 @@ class User extends Component {
       commonGroups,
       loggedInUserId,
       groupAssignments,
+      assignmentEnvironmentsSelector,
       groupStatistics,
       usersStatistics,
       links: { GROUP_DETAIL_URI_FACTORY, INSTANCE_URI_FACTORY }
@@ -191,6 +199,9 @@ class User extends Component {
                               <AssignmentsTable
                                 userId={user.id}
                                 assignments={groupAssignments(group.id)}
+                                assignmentEnvironmentsSelector={
+                                  assignmentEnvironmentsSelector
+                                }
                                 showGroup={false}
                                 statuses={
                                   usersStatistics(statistics).assignments
@@ -272,6 +283,7 @@ User.propTypes = {
   student: PropTypes.bool,
   loggedInUserId: PropTypes.string,
   groupAssignments: PropTypes.func.isRequired,
+  assignmentEnvironmentsSelector: PropTypes.func,
   groupStatistics: PropTypes.func.isRequired,
   usersStatistics: PropTypes.func.isRequired,
   links: PropTypes.object
@@ -320,6 +332,7 @@ export default withLinks(
         studentOfGroupsIds: studentOfGroupsIdsSelector(userId)(state).toArray(),
         groupAssignments: groupId =>
           groupsPublicAssignmentsSelector(state, groupId),
+        assignmentEnvironmentsSelector: assignmentEnvironmentsSelector(state),
         groupStatistics: groupId => createGroupsStatsSelector(groupId)(state),
         usersStatistics: statistics =>
           statistics.find(stat => stat.userId === userId) || {},

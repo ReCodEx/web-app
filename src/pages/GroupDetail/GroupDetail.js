@@ -37,6 +37,8 @@ import {
   fetchGroupExercises,
   create as createExercise
 } from '../../redux/modules/exercises';
+import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments';
+
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import {
   isSupervisorOf,
@@ -45,7 +47,6 @@ import {
   studentsOfGroupSelector,
   isStudentOf
 } from '../../redux/selectors/users';
-
 import {
   groupSelector,
   groupsSelector,
@@ -53,11 +54,11 @@ import {
   groupsAllAssignmentsSelector
 } from '../../redux/selectors/groups';
 import { getExercisesForGroup } from '../../redux/selectors/exercises';
-
 import {
   getStatusesForLoggedUser,
   createGroupsStatsSelector
 } from '../../redux/selectors/stats';
+import { assignmentEnvironmentsSelector } from '../../redux/selectors/assignments';
 
 import { getLocalizedName } from '../../helpers/getLocalizedData';
 import withLinks from '../../helpers/withLinks';
@@ -76,6 +77,7 @@ class GroupDetail extends Component {
 
   static loadAsync = ({ groupId }, dispatch, userId, isSuperAdmin) =>
     Promise.all([
+      dispatch(fetchRuntimeEnvironments()),
       dispatch(fetchGroupIfNeeded(groupId)).then(({ value: group }) =>
         Promise.all([
           GroupDetail.isAdminOrSupervisorOf(group, userId) || isSuperAdmin
@@ -170,6 +172,7 @@ class GroupDetail extends Component {
       allAssignments = List(),
       groupExercises = Map(),
       publicAssignments = List(),
+      assignmentEnvironmentsSelector,
       stats,
       statuses,
       isAdmin,
@@ -232,6 +235,9 @@ class GroupDetail extends Component {
                     {groupStats =>
                       <AssignmentsTable
                         assignments={allAssignments}
+                        assignmentEnvironmentsSelector={
+                          assignmentEnvironmentsSelector
+                        }
                         showGroup={false}
                         statuses={statuses}
                         stats={groupStats.find(item => item.userId === userId)}
@@ -278,7 +284,7 @@ class GroupDetail extends Component {
                     title={
                       <FormattedMessage
                         id="app.group.spervisorsView.addStudent"
-                        defaultMessage="Add student"
+                        defaultMessage="Add Student"
                       />
                     }
                     isOpen
@@ -394,6 +400,7 @@ GroupDetail.propTypes = {
   allAssignments: ImmutablePropTypes.list,
   groupExercises: ImmutablePropTypes.map,
   publicAssignments: ImmutablePropTypes.list,
+  assignmentEnvironmentsSelector: PropTypes.func,
   groups: ImmutablePropTypes.map,
   isAdmin: PropTypes.bool,
   isSupervisor: PropTypes.bool,
@@ -417,6 +424,7 @@ const mapStateToProps = (state, { params: { groupId } }) => {
     userId,
     groups: groupsSelector(state),
     publicAssignments: groupsPublicAssignmentsSelector(state, groupId),
+    assignmentEnvironmentsSelector: assignmentEnvironmentsSelector(state),
     allAssignments: groupsAllAssignmentsSelector(state, groupId),
     groupExercises: getExercisesForGroup(state, groupId),
     statuses: getStatusesForLoggedUser(state, groupId),
