@@ -89,6 +89,7 @@
   "app.bonusPointsForm.title": "Set bonus points",
   "app.bonusPointsForm.validation.points": "The bonus must be an integer.",
   "app.cas.login.description": "After you click on the button below, you will be redirected to CAS UK. After you are authenticated, the popup window will be closed and you will be logged into ReCodEx.",
+  "app.cas.login.failed": "Signing to ReCodEx using UK-CAS authentication process failed. This usually means that you either do not have an account in ReCodEx yet, the account is disabled, or binding between your account and CAS identity has not been created.",
   "app.cas.login.title": "Authenticate throught CAS UK",
   "app.casLoginButton.failed": "Try again",
   "app.casLoginButton.loggingIn": "Logging in ...",

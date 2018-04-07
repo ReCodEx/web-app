@@ -6,7 +6,13 @@
         "enforceDescriptions": false
     }],
     "transform-object-assign",
-    "transform-flow-strip-types",
-    "transform-react-inline-elements"
-  ]
+    "transform-flow-strip-types"
+  ],
+  "env": {
+    "production": {
+      "plugins": [
+      	"transform-react-inline-elements"
+      ]
+	}
+  }
 }

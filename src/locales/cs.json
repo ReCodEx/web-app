@@ -89,6 +89,7 @@
   "app.bonusPointsForm.title": "Přidat bonusové body",
   "app.bonusPointsForm.validation.points": "Bonusové body musí být celé číslo.",
   "app.cas.login.description": "Po kliknutí na následující tlačítko budete přesměrováni na stránku CAS UK. Po úspěšném ověření budete přesměrováni zpět již přihlášeni do ReCodExu.",
+  "app.cas.login.failed": "Přihlášení do ReCodExu pomocí autentizace v UK-CASu selhalo. Pravděpodobně ještě nemáte vytvořený účet v ReCodExu, nebo byl váš účet zablokován, nebo není správně propojen s vaší CAS identitou.",
   "app.cas.login.title": "Autentikace přes CAS UK",
   "app.casLoginButton.failed": "Zkusit znovu",
   "app.casLoginButton.loggingIn": "Přihlašování ...",
