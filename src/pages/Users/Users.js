@@ -6,20 +6,17 @@ import { FormattedMessage } from 'react-intl';
 import { push } from 'react-router-redux';
 import { LinkContainer } from 'react-router-bootstrap';
 
-import FetchManyResourceRenderer from '../../components/helpers/FetchManyResourceRenderer';
 import { SettingsIcon, TransferIcon } from '../../components/icons';
 import Button from '../../components/widgets/FlatButton';
 import DeleteUserButtonContainer from '../../containers/DeleteUserButtonContainer';
-import PageContent from '../../components/layout/PageContent';
+import Page from '../../components/layout/Page';
 import Box from '../../components/widgets/Box';
 import UsersList from '../../components/Users/UsersList';
 import SearchContainer from '../../containers/SearchContainer';
 import {
-  fetchManyStatus,
   loggedInUserSelector,
   isLoggedAsSuperAdmin
 } from '../../redux/selectors/users';
-import { fetchAllUsers } from '../../redux/modules/users';
 import { takeOver } from '../../redux/modules/auth';
 import { searchPeople } from '../../redux/modules/search';
 
@@ -27,152 +24,100 @@ import withLinks from '../../helpers/withLinks';
 import { getSearchQuery } from '../../redux/selectors/search';
 
 class Users extends Component {
-  static loadAsync = (params, dispatch) => dispatch(fetchAllUsers);
-
-  componentWillMount() {
-    this.props.loadAsync();
-  }
-
   render() {
     const {
       links: { EDIT_USER_URI_FACTORY, DASHBOARD_URI },
       takeOver,
       isSuperAdmin,
-      fetchStatus,
       search,
       query,
       user
     } = this.props;
 
     return (
-      <FetchManyResourceRenderer
-        fetchManyStatus={fetchStatus}
-        loading={
-          <PageContent
-            title={
-              <FormattedMessage
-                id="app.page.users.loading"
-                defaultMessage="Loading list of users ..."
-              />
-            }
-            description={
-              <FormattedMessage
-                id="app.page.users.loadingDescription"
-                defaultMessage="Please wait while we are getting the list of users ready."
-              />
-            }
+      <Page
+        title={
+          <FormattedMessage id="app.users.title" defaultMessage="User list" />
+        }
+        resource={user}
+        description={
+          <FormattedMessage
+            id="app.users.description"
+            defaultMessage="Browse all ReCodEx users."
           />
         }
-        failed={
-          <PageContent
-            title={
-              <FormattedMessage
-                id="app.page.users.failed"
-                defaultMessage="Cannot load the list of users"
-              />
-            }
-            description={
-              <FormattedMessage
-                id="app.page.users.failedDescription"
-                defaultMessage="We are sorry for the inconvenience, please try again later."
-              />
-            }
-          />
-        }
+        breadcrumbs={[
+          {
+            text: (
+              <FormattedMessage id="app.users.users" defaultMessage="Users" />
+            ),
+            iconName: 'users'
+          }
+        ]}
       >
-        {() =>
-          <PageContent
-            title={
-              <FormattedMessage
-                id="app.users.title"
-                defaultMessage="User list"
-              />
-            }
-            description={
-              <FormattedMessage
-                id="app.users.description"
-                defaultMessage="Browse all ReCodEx users."
-              />
-            }
-            breadcrumbs={[
-              {
-                text: (
-                  <FormattedMessage
-                    id="app.users.users"
-                    defaultMessage="Users"
-                  />
-                ),
-                iconName: 'users'
-              }
-            ]}
-          >
-            <div>
-              <Box
-                title={
-                  <FormattedMessage
-                    id="app.users.listTitle"
-                    defaultMessage="Users"
-                  />
-                }
-                unlimitedHeight
-              >
-                <SearchContainer
-                  type="users"
-                  id="users-page"
-                  search={search(user.toJS().data.privateData.instanceId)}
-                  showAllOnEmptyQuery={true}
-                  renderList={users =>
-                    <UsersList
-                      users={users}
-                      loggedUserId={user.toJS().data.id}
-                      createActions={userId =>
-                        <div>
-                          <LinkContainer to={EDIT_USER_URI_FACTORY(userId)}>
-                            <Button bsSize="xs">
-                              <SettingsIcon />{' '}
-                              <FormattedMessage
-                                id="generic.settings"
-                                defaultMessage="Settings"
-                              />
-                            </Button>
-                          </LinkContainer>
-                          {isSuperAdmin &&
-                            <Button
-                              bsSize="xs"
-                              onClick={() => takeOver(userId, DASHBOARD_URI)}
-                            >
-                              <TransferIcon />{' '}
-                              <FormattedMessage
-                                id="app.users.takeOver"
-                                defaultMessage="Login as"
-                              />
-                            </Button>}
-                          <DeleteUserButtonContainer
-                            id={userId}
-                            bsSize="xs"
-                            onDeleted={() =>
-                              search(user.toJS().data.privateData.instanceId)(
-                                query
-                              )}
-                          />
-                        </div>}
-                    />}
+        {user =>
+          <div>
+            <Box
+              title={
+                <FormattedMessage
+                  id="app.users.listTitle"
+                  defaultMessage="Users"
                 />
-              </Box>
-            </div>
-          </PageContent>}
-      </FetchManyResourceRenderer>
+              }
+              unlimitedHeight
+            >
+              <SearchContainer
+                type="users"
+                id="users-page"
+                search={search(user.privateData.instanceId)}
+                showAllOnEmptyQuery={true}
+                renderList={users =>
+                  <UsersList
+                    users={users}
+                    loggedUserId={user.id}
+                    createActions={userId =>
+                      <div>
+                        <LinkContainer to={EDIT_USER_URI_FACTORY(userId)}>
+                          <Button bsSize="xs">
+                            <SettingsIcon />{' '}
+                            <FormattedMessage
+                              id="generic.settings"
+                              defaultMessage="Settings"
+                            />
+                          </Button>
+                        </LinkContainer>
+                        {isSuperAdmin &&
+                          <Button
+                            bsSize="xs"
+                            onClick={() => takeOver(userId, DASHBOARD_URI)}
+                          >
+                            <TransferIcon />{' '}
+                            <FormattedMessage
+                              id="app.users.takeOver"
+                              defaultMessage="Login as"
+                            />
+                          </Button>}
+                        <DeleteUserButtonContainer
+                          id={userId}
+                          bsSize="xs"
+                          onDeleted={() =>
+                            search(user.privateData.instanceId)(query)}
+                        />
+                      </div>}
+                  />}
+              />
+            </Box>
+          </div>}
+      </Page>
     );
   }
 }
 
 Users.propTypes = {
-  loadAsync: PropTypes.func.isRequired,
   push: PropTypes.func.isRequired,
   links: PropTypes.object.isRequired,
   takeOver: PropTypes.func.isRequired,
   isSuperAdmin: PropTypes.bool,
-  fetchStatus: PropTypes.string,
   search: PropTypes.func,
   query: PropTypes.string,
   user: ImmutablePropTypes.map.isRequired
@@ -183,14 +128,12 @@ export default withLinks(
     state => {
       return {
         isSuperAdmin: isLoggedAsSuperAdmin(state),
-        fetchStatus: fetchManyStatus(state),
         user: loggedInUserSelector(state),
         query: getSearchQuery('users-page')(state)
       };
     },
     dispatch => ({
       push: url => dispatch(push(url)),
-      loadAsync: () => Users.loadAsync({}, dispatch),
       takeOver: (userId, redirectUrl) =>
         dispatch(takeOver(userId)).then(() => dispatch(push(redirectUrl))),
       search: instanceId => query =>
