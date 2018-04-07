@@ -39,7 +39,7 @@ class EditEnvironmentSimpleForm extends Component {
                 name={`${environment.id}`}
                 component={CheckboxField}
                 onOff
-                label={environment.name}
+                label={environment.longName}
               />
             </Col>
           )}

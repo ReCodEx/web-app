@@ -238,7 +238,7 @@ const EditAssignmentForm = ({
                 runtimeEnvironments &&
                 Array.isArray(runtimeEnvironments) &&
                 runtimeEnvironments.length > 0
-                  ? runtimeEnvironments.find(env => env.id === item).name
+                  ? runtimeEnvironments.find(env => env.id === item).longName
                   : ''
               }
             />
