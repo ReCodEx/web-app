@@ -6,6 +6,7 @@ import { HelpBlock } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 import { reset, formValueSelector } from 'redux-form';
+import { defaultMemoize } from 'reselect';
 
 import Page from '../../components/layout/Page';
 import EditGroupForm from '../../components/forms/EditGroupForm';
@@ -25,29 +26,33 @@ import { getLocalizedTextsLocales } from '../../helpers/getLocalizedData';
 import withLinks from '../../helpers/withLinks';
 
 class EditGroup extends Component {
-  componentWillMount = () => this.props.loadAsync();
-  componentWillReceiveProps = props => {
-    if (this.props.params.groupId !== props.params.groupId) {
-      props.reset();
-      props.loadAsync();
+  componentWillMount() {
+    this.props.loadAsync();
+  }
+  componentWillReceiveProps(nextProps) {
+    if (this.props.params.groupId !== nextProps.params.groupId) {
+      nextProps.reset();
+      nextProps.loadAsync();
     }
-  };
+  }
 
-  getInitialValues = ({
-    localizedTexts,
-    externalId,
-    privateData: { isPublic, publicStats, threshold }
-  }) => ({
-    localizedTexts,
-    externalId,
-    isPublic,
-    publicStats,
-    hasThreshold: threshold !== null && threshold !== undefined,
-    threshold:
-      threshold !== null && threshold !== undefined
-        ? String(Number(threshold) * 100)
-        : '0'
-  });
+  getInitialValues = defaultMemoize(
+    ({
+      localizedTexts,
+      externalId,
+      privateData: { isPublic, publicStats, threshold }
+    }) => ({
+      localizedTexts,
+      externalId,
+      isPublic,
+      publicStats,
+      hasThreshold: threshold !== null && threshold !== undefined,
+      threshold:
+        threshold !== null && threshold !== undefined
+          ? String(Number(threshold) * 100)
+          : '0'
+    })
+  );
 
   render() {
     const {
@@ -101,6 +106,7 @@ class EditGroup extends Component {
         {group =>
           <div>
             <EditGroupForm
+              form="editGroup"
               initialValues={this.getInitialValues(group)}
               onSubmit={editGroup}
               hasThreshold={hasThreshold}

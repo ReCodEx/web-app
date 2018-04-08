@@ -283,7 +283,6 @@ const validate = ({ localizedTexts = [], hasThreshold, threshold }) => {
 };
 
 export default reduxForm({
-  form: 'editGroup',
   enableReinitialize: true,
   keepDirtyOnReinitialize: false,
   validate

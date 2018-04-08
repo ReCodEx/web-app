@@ -232,6 +232,7 @@ class GroupInfo extends Component {
 
                 {isAdmin &&
                   <EditGroupForm
+                    form="addSubgroup"
                     onSubmit={addSubgroup}
                     initialValues={EMPTY_OBJ}
                     createNew
@@ -279,7 +280,7 @@ const mapStateToProps = (state, { params: { groupId } }) => {
     isAdmin: isAdminOf(userId, groupId)(state),
     isSuperAdmin: isLoggedAsSuperAdmin(state),
     isStudent: isStudentOf(userId, groupId)(state),
-    formValues: getFormValues('editGroup')(state)
+    formValues: getFormValues('addSubgroup')(state)
   };
 };
 
