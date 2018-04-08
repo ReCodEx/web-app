@@ -2,14 +2,16 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { FormattedMessage } from 'react-intl';
-import { HelpBlock } from 'react-bootstrap';
+import { HelpBlock, Row, Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 import { reset, formValueSelector } from 'redux-form';
 import { defaultMemoize } from 'reselect';
+import Icon from 'react-fontawesome';
 
 import Page from '../../components/layout/Page';
 import EditGroupForm from '../../components/forms/EditGroupForm';
+import OrganizationalGroupButtonContainer from '../../containers/OrganizationalGroupButtonContainer';
 import DeleteGroupButtonContainer from '../../containers/DeleteGroupButtonContainer';
 import Box from '../../components/widgets/Box';
 import { LocalizedGroupName } from '../../components/helpers/LocalizedNames';
@@ -105,6 +107,23 @@ class EditGroup extends Component {
       >
         {group =>
           <div>
+            <Row>
+              <Col lg={3}>
+                <p>
+                  <OrganizationalGroupButtonContainer id={group.id} />
+                </p>
+              </Col>
+              <Col lg={9}>
+                <p className="small text-muted">
+                  <Icon name="info-circle" />&nbsp;&nbsp;
+                  <FormattedMessage
+                    id="app.editGroup.organizationalExplain"
+                    defaultMessage="Regular groups are containers for students and assignments. Organizational groups are intended to create hierarchy, so they are forbidden to hold any students or assignments."
+                  />
+                </p>
+              </Col>
+            </Row>
+
             <EditGroupForm
               form="editGroup"
               initialValues={this.getInitialValues(group)}

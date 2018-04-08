@@ -1,6 +1,12 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Icon from 'react-fontawesome';
 
-const GroupIcon = props => <Icon {...props} name="users" />;
+const GroupIcon = ({ organizational = false, ...props }) =>
+  <Icon {...props} name={organizational ? 'sitemap' : 'users'} />;
+
+GroupIcon.propTypes = {
+  organizational: PropTypes.bool
+};
 
 export default GroupIcon;
