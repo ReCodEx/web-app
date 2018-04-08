@@ -7,5 +7,12 @@
     }],
     "transform-object-assign",
     "transform-flow-strip-types"
-  ]
+  ],
+  "env": {
+    "production": {
+      "plugins": [
+      	"transform-react-inline-elements"
+      ]
+	}
+  }
 }

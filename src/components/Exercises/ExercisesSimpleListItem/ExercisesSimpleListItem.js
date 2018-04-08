@@ -7,10 +7,12 @@ import { Link } from 'react-router';
 import withLinks from '../../../helpers/withLinks';
 import { LocalizedExerciseName } from '../../helpers/LocalizedNames';
 import { ExercisePrefixIcons } from '../../icons';
+import EnvironmentsList from '../../helpers/EnvironmentsList';
 
 const ExercisesSimpleListItem = ({
   id,
   name,
+  runtimeEnvironments,
   difficulty,
   authorId,
   isLocked,
@@ -33,6 +35,10 @@ const ExercisesSimpleListItem = ({
       <UsersNameContainer userId={authorId} />
     </td>
     <td>
+      {runtimeEnvironments &&
+        <EnvironmentsList runtimeEnvironments={runtimeEnvironments} />}
+    </td>
+    <td>
       <DifficultyIcon difficulty={difficulty} />
     </td>
     {createActions &&
@@ -45,6 +51,7 @@ ExercisesSimpleListItem.propTypes = {
   id: PropTypes.string.isRequired,
   authorId: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
+  runtimeEnvironments: PropTypes.array.isRequired,
   difficulty: PropTypes.string.isRequired,
   isLocked: PropTypes.bool.isRequired,
   isBroken: PropTypes.bool.isRequired,

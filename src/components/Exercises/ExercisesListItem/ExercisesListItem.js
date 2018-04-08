@@ -9,6 +9,7 @@ import { Link } from 'react-router';
 
 import withLinks from '../../../helpers/withLinks';
 import { LocalizedExerciseName } from '../../helpers/LocalizedNames';
+import EnvironmentsList from '../../helpers/EnvironmentsList';
 import { ExercisePrefixIcons } from '../../icons';
 
 const ExercisesListItem = ({
@@ -16,6 +17,7 @@ const ExercisesListItem = ({
   name,
   difficulty,
   authorId,
+  runtimeEnvironments,
   groupsIds = [],
   localizedTexts,
   createdAt,
@@ -41,6 +43,10 @@ const ExercisesListItem = ({
       <UsersNameContainer userId={authorId} />
     </td>
     <td>
+      {runtimeEnvironments &&
+        <EnvironmentsList runtimeEnvironments={runtimeEnvironments} />}
+    </td>
+    <td>
       {groupsIds.length > 0
         ? groupsIds.map((groupId, i) =>
             <div key={i}>
@@ -54,15 +60,15 @@ const ExercisesListItem = ({
             />
           </i>}
     </td>
-    <td>
+    <td className="text-nowrap">
       <DifficultyIcon difficulty={difficulty} />
     </td>
-    <td>
+    <td className="text-nowrap">
       <FormattedDate value={createdAt * 1000} />{' '}
       <FormattedTime value={createdAt * 1000} />
     </td>
     {createActions &&
-      <td className="text-right">
+      <td className="text-right text-nowrap">
         {createActions(id)}
       </td>}
   </tr>;
@@ -70,6 +76,7 @@ const ExercisesListItem = ({
 ExercisesListItem.propTypes = {
   id: PropTypes.string.isRequired,
   authorId: PropTypes.string.isRequired,
+  runtimeEnvironments: PropTypes.array.isRequired,
   groupsIds: PropTypes.array,
   name: PropTypes.string.isRequired,
   difficulty: PropTypes.string.isRequired,

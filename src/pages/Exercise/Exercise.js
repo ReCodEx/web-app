@@ -128,25 +128,31 @@ class Exercise extends Component {
     this.setState({ forkId: Math.random().toString() });
   }
 
-  multiAssignFormInitialValues = defaultMemoize(visibleGroups => {
-    const groups = {};
-    visibleGroups.forEach(g => {
-      groups[`id${g.id}`] = false;
-    });
+  multiAssignFormInitialValues = defaultMemoize(
+    (visibleGroups, runtimeEnvironments) => {
+      const groups = {};
+      visibleGroups.forEach(g => {
+        groups[`id${g.id}`] = false;
+      });
 
-    return {
-      groups,
-      submissionsCountLimit: '',
-      firstDeadline: '',
-      secondDeadline: '',
-      allowSecondDeadline: false,
-      maxPointsBeforeFirstDeadline: '',
-      maxPointsBeforeSecondDeadline: '',
-      canViewLimitRatios: false,
-      pointsPercentualThreshold: 0,
-      isBonus: false
-    };
-  });
+      return {
+        groups,
+        submissionsCountLimit: '',
+        firstDeadline: '',
+        secondDeadline: '',
+        allowSecondDeadline: false,
+        maxPointsBeforeFirstDeadline: '',
+        maxPointsBeforeSecondDeadline: '',
+        canViewLimitRatios: false,
+        pointsPercentualThreshold: 0,
+        isBonus: false,
+        enabledRuntime: runtimeEnvironments.reduce((enabled, { id }) => {
+          enabled[id] = true;
+          return enabled;
+        }, {})
+      };
+    }
+  );
 
   assignExercise = formData => {
     const { assignExercise, editAssignment } = this.props;
@@ -155,6 +161,12 @@ class Exercise extends Component {
       formData && formData.groups
         ? Object.keys(formData.groups).filter(key => formData.groups[key])
         : [];
+
+    const disabledRuntimeEnvironmentIds = formData.enabledRuntime
+      ? Object.keys(formData.enabledRuntime).filter(
+          key => formData.enabledRuntime[key] === false
+        )
+      : [];
 
     let actions = [];
 
@@ -174,13 +186,15 @@ class Exercise extends Component {
           maxPointsBeforeSecondDeadline: Number(
             formData.maxPointsBeforeSecondDeadline
           ),
-          isPublic: true
+          isPublic: true,
+          disabledRuntimeEnvironmentIds
         });
         if (!assignmentData.allowSecondDeadline) {
           delete assignmentData.secondDeadline;
           delete assignmentData.maxPointsBeforeSecondDeadline;
         }
         delete assignmentData.groups;
+        delete assignmentData.enabledRuntime;
 
         return editAssignment(assigment.id, assignmentData);
       });
@@ -321,10 +335,12 @@ class Exercise extends Component {
                       {visibleGroups =>
                         <MultiAssignForm
                           initialValues={this.multiAssignFormInitialValues(
-                            visibleGroups
+                            visibleGroups,
+                            exercise.runtimeEnvironments
                           )}
                           groups={visibleGroups}
                           userId={userId}
+                          runtimeEnvironments={exercise.runtimeEnvironments}
                           onSubmit={this.assignExercise}
                           firstDeadline={firstDeadline}
                           allowSecondDeadline={allowSecondDeadline}

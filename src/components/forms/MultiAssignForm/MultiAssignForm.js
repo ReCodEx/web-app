@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { reduxForm, Field } from 'redux-form';
 import { FormattedMessage } from 'react-intl';
-import { Alert, HelpBlock, Button } from 'react-bootstrap';
+import { Alert, HelpBlock, Button, Row, Col } from 'react-bootstrap';
 import Icon from 'react-fontawesome';
 import isNumeric from 'validator/lib/isNumeric';
 
@@ -60,6 +60,7 @@ class MultiAssignForm extends Component {
       firstDeadline,
       allowSecondDeadline,
       groupsAccessor,
+      runtimeEnvironments,
       locale
     } = this.props;
 
@@ -229,6 +230,28 @@ class MultiAssignForm extends Component {
           }
         />
 
+        <hr />
+
+        <h4>
+          <FormattedMessage
+            id="app.editAssignmentForm.enabledEnvironments"
+            defaultMessage="Enabled Runtime Environments"
+          />
+        </h4>
+
+        <Row>
+          {runtimeEnvironments.map((env, i) =>
+            <Col key={i} sm={6}>
+              <Field
+                name={`enabledRuntime.${env.id}`}
+                component={CheckboxField}
+                onOff
+                label={env.longName}
+              />
+            </Col>
+          )}
+        </Row>
+
         <div className="text-center">
           <SubmitButton
             id="multiAssignForm"
@@ -284,6 +307,7 @@ MultiAssignForm.propTypes = {
   userId: PropTypes.string.isRequired,
   groups: PropTypes.array.isRequired,
   groupsAccessor: PropTypes.func.isRequired,
+  runtimeEnvironments: PropTypes.array.isRequired,
   locale: PropTypes.string.isRequired
 };
 

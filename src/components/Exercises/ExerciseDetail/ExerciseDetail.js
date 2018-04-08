@@ -6,7 +6,7 @@ import {
   FormattedTime,
   FormattedDate
 } from 'react-intl';
-import { Table, Label } from 'react-bootstrap';
+import { Table } from 'react-bootstrap';
 import ReactMarkdown from 'react-remarkable';
 import { Link } from 'react-router';
 import Box from '../../widgets/Box';
@@ -15,10 +15,10 @@ import DifficultyIcon from '../DifficultyIcon';
 import withLinks from '../../../helpers/withLinks';
 import UsersNameContainer from '../../../containers/UsersNameContainer';
 import GroupsNameContainer from '../../../containers/GroupsNameContainer';
-import styles from './ExerciseDetail.less';
 import { MaybeSucceededIcon } from '../../icons';
 import { getLocalizedDescription } from '../../../helpers/getLocalizedData';
 import { LocalizedExerciseName } from '../../helpers/LocalizedNames';
+import EnvironmentsList from '../../helpers/EnvironmentsList';
 
 const ExerciseDetail = ({
   id,
@@ -160,11 +160,7 @@ const ExerciseDetail = ({
             />
           </th>
           <td>
-            {runtimeEnvironments.map(({ id, name }) =>
-              <Label key={id} className={styles.environment}>
-                {name}
-              </Label>
-            )}
+            <EnvironmentsList runtimeEnvironments={runtimeEnvironments} />
           </td>
         </tr>
         <tr>

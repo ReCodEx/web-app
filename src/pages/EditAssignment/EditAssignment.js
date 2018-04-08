@@ -76,11 +76,11 @@ class EditAssignment extends Component {
       pointsPercentualThreshold: pointsPercentualThreshold * 100,
       runtimeEnvironmentIds,
       enabledRuntime: disabledRuntimeEnvironmentIds.reduce(
-        (result, item, index, array) => {
+        (result, item) => {
           result[item] = false;
           return result;
         },
-        runtimeEnvironmentIds.reduce((result, item, index, array) => {
+        runtimeEnvironmentIds.reduce((result, item) => {
           result[item] = true;
           return result;
         }, {})
@@ -110,16 +110,19 @@ class EditAssignment extends Component {
       })
       .then(() => {
         // prepare the data and submit them
-        const disabledEnvironments = formData.enabledRuntime
+        const disabledRuntimeEnvironmentIds = formData.enabledRuntime
           ? Object.keys(formData.enabledRuntime).filter(
               key => formData.enabledRuntime[key] === false
             )
           : [];
 
-        delete formData['enabledRuntime'];
-        formData['disabledRuntimeEnvironmentIds'] = disabledEnvironments;
+        const modifiedData = {
+          ...formData,
+          disabledRuntimeEnvironmentIds
+        };
+        delete modifiedData.enabledRuntime;
 
-        return editAssignment(version, formData);
+        return editAssignment(version, modifiedData);
       });
   };
 

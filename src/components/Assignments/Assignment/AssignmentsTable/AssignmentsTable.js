@@ -26,6 +26,7 @@ const fetchAssignmentStatus = (statuses, assignmentId) => {
 
 const AssignmentsTable = ({
   assignments = List(),
+  assignmentEnvironmentsSelector = null,
   statuses = [],
   showGroup = true,
   userId = null,
@@ -48,6 +49,13 @@ const AssignmentsTable = ({
             <FormattedMessage
               id="app.assignments.group"
               defaultMessage="Group"
+            />
+          </th>}
+        {assignmentEnvironmentsSelector &&
+          <th>
+            <FormattedMessage
+              id="generic.runtimesShort"
+              defaultMessage="Runtimes/Languages"
             />
           </th>}
         {!isAdmin &&
@@ -86,6 +94,10 @@ const AssignmentsTable = ({
           <AssignmentTableRow
             key={assignment.id}
             item={assignment}
+            runtimeEnvironments={
+              assignmentEnvironmentsSelector &&
+              assignmentEnvironmentsSelector(assignment.id)
+            }
             userId={userId}
             showGroup={showGroup}
             status={fetchAssignmentStatus(statuses, assignment.id)}
@@ -103,6 +115,7 @@ const AssignmentsTable = ({
 
 AssignmentsTable.propTypes = {
   assignments: ImmutablePropTypes.list.isRequired,
+  assignmentEnvironmentsSelector: PropTypes.func,
   showGroup: PropTypes.bool,
   statuses: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
   userId: PropTypes.string,

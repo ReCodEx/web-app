@@ -7,7 +7,8 @@ import Box from '../../components/widgets/Box';
 import {
   externalLogin,
   externalLoginFailed,
-  loginServices
+  loginServices,
+  statusTypes
 } from '../../redux/modules/auth';
 import { statusSelector } from '../../redux/selectors/auth';
 
@@ -22,6 +23,13 @@ const LoginBox = ({ login, fail, status }) =>
     footer={
       <div className="text-center">
         <LoginButton onLogin={login} onFailed={fail} loginStatus={status} />
+        {status === statusTypes.LOGIN_FAILED &&
+          <p className="callout callout-danger" style={{ marginTop: '1em' }}>
+            <FormattedMessage
+              id="app.cas.login.failed"
+              defaultMessage="Signing to ReCodEx using UK-CAS authentication process failed. This usually means that you either do not have an account in ReCodEx yet, the account is disabled, or binding between your account and CAS identity has not been created."
+            />
+          </p>}
       </div>
     }
   >
