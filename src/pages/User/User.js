@@ -40,7 +40,7 @@ import {
 } from '../../redux/selectors/groups';
 import { assignmentEnvironmentsSelector } from '../../redux/selectors/assignments';
 
-import { InfoIcon } from '../../components/icons';
+import { InfoIcon, EditIcon } from '../../components/icons';
 import { getJsData } from '../../redux/helpers/resourceManager';
 import withLinks from '../../helpers/withLinks';
 
@@ -137,16 +137,6 @@ class User extends Component {
         }
         breadcrumbs={[
           {
-            iconName: 'user',
-            text: (
-              <FormattedMessage
-                id="app.editUser.title"
-                defaultMessage="Edit user's profile"
-              />
-            ),
-            link: EDIT_USER_URI_FACTORY(userId)
-          },
-          {
             text: (
               <FormattedMessage
                 id="app.user.title"
@@ -162,6 +152,20 @@ class User extends Component {
             <p>
               <UsersNameContainer userId={user.id} large noLink />
             </p>
+
+            {(isAdmin || userId === loggedInUserId) &&
+              <p>
+                <LinkContainer to={EDIT_USER_URI_FACTORY(userId)}>
+                  <Button bsStyle="warning" bsSize="sm" className="float-right">
+                    <EditIcon />
+                    &nbsp;
+                    <FormattedMessage
+                      id="app.editUser.title"
+                      defaultMessage="Edit user's profile"
+                    />
+                  </Button>
+                </LinkContainer>
+              </p>}
 
             {(commonGroups.length > 0 || isAdmin) &&
               <div>
