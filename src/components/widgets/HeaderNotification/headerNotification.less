@@ -18,3 +18,13 @@
 .delete {
   cursor: pointer;
 }
+
+@keyframes notificationShowdown {
+  0% { background-color: white; }
+  50% { background-color: #ffcccc; }
+  100% { background-color: white; }
+}
+
+.newNotification {
+  animation: notificationShowdown 2s linear 0.5s;
+}
