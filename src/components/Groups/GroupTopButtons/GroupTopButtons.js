@@ -29,22 +29,24 @@ const GroupTopButtons = ({
           />
         </Button>
       </LinkContainer>}
+
     <LinkContainer to={GROUP_INFO_URI_FACTORY(group.id)}>
       <Button bsStyle="primary">
         <InfoIcon />{' '}
         <FormattedMessage id="app.group.info" defaultMessage="Group Info" />
       </Button>
     </LinkContainer>
-    {!group.organizational &&
-      <LinkContainer to={GROUP_DETAIL_URI_FACTORY(group.id)}>
-        <Button bsStyle="primary">
-          <GroupIcon />{' '}
-          <FormattedMessage
-            id="app.group.detailButton"
-            defaultMessage="Group Detail"
-          />
-        </Button>
-      </LinkContainer>}
+
+    <LinkContainer to={GROUP_DETAIL_URI_FACTORY(group.id)}>
+      <Button bsStyle="primary">
+        <GroupIcon />{' '}
+        <FormattedMessage
+          id="app.group.detailButton"
+          defaultMessage="Group Detail"
+        />
+      </Button>
+    </LinkContainer>
+
     {canLeaveJoin &&
       <LeaveJoinGroupButtonContainer
         userId={userId}

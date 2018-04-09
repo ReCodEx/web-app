@@ -641,6 +641,7 @@
   "app.group.description": "Group overview and assignments",
   "app.group.detailButton": "Group Detail",
   "app.group.info": "Group Info",
+  "app.group.organizationalExplain": "This group is organizational, so it cannot have any students nor assignments. However, it may have attached exercises which can be assigned in sub-groups.",
   "app.group.spervisorsView.addStudent": "Add Student",
   "app.group.spervisorsView.groupExercises": "Group Exercises",
   "app.group.spervisorsView.resultsTable": "Results",

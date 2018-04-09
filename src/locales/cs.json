@@ -1,6 +1,6 @@
 {
-  "app.EditLimitsForm.cloneAll.yesNoQuestion": "Opravdu chcete použít tyto limity pro všechny testy a všechna běhové prostředí? Povšimněte si prosím, že individuální běhová prostředí mají rozdílné výkonostní charakteristiky.",
-  "app.EditLimitsForm.cloneHorizontal.yesNoQuestion": "Opravdu chcete použít tyto limity pro všechna běhová prostředí tohoto testu? Povšimněte si prosím, že individuální běhová prostředí mají rozdílné výkonostní charakteristiky.",
+  "app.EditLimitsForm.cloneAll.yesNoQuestion": "Opravdu chcete použít tyto limity pro všechny testy a všechna běhové prostředí? Povšimněte si prosím, že individuální běhová prostředí mají rozdílné výkonnostní charakteristiky.",
+  "app.EditLimitsForm.cloneHorizontal.yesNoQuestion": "Opravdu chcete použít tyto limity pro všechna běhová prostředí tohoto testu? Povšimněte si prosím, že individuální běhová prostředí mají rozdílné výkonnostní charakteristiky.",
   "app.EditLimitsForm.validation.NaN": "Poskytnutá hodnota není číslo.",
   "app.EditLimitsForm.validation.outOfRange": "Poskytnutá úloha je mimo rozsah. Prozkoumejte omezení limit pro více informací.",
   "app.ExercisePrefixIcons.isLocked": "Úloha je zamčena autorem a nemůže být zadávána",
@@ -641,6 +641,7 @@
   "app.group.description": "Přehled detailů skupiny a zadaných úloh",
   "app.group.detailButton": "Detail skupiny",
   "app.group.info": "Group Info",
+  "app.group.organizationalExplain": "Tato skupina je organizační, takže nemůže mít žádné studenty ani zadané úlohy. Nicméně úlohy spojené s touto skupinou je možné zadat v podskupinách.",
   "app.group.spervisorsView.addStudent": "Přidat studenta",
   "app.group.spervisorsView.groupExercises": "Skupinové úlohy",
   "app.group.spervisorsView.resultsTable": "Výsledky",
