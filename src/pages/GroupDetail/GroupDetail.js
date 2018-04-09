@@ -253,8 +253,8 @@ class GroupDetail extends Component {
                 <Box
                   title={
                     <FormattedMessage
-                      id="app.group.spervisorsView.resultsTable"
-                      defaultMessage="Results"
+                      id="app.groupDetail.studentsResultsTable"
+                      defaultMessage="Students and Their Results"
                     />
                   }
                   unlimitedHeight

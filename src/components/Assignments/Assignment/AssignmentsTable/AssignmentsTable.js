@@ -35,56 +35,62 @@ const AssignmentsTable = ({
   intl: { locale }
 }) =>
   <Table hover>
-    <thead>
-      <tr>
-        <th />
-        <th>
-          <FormattedMessage
-            id="app.assignments.name"
-            defaultMessage="Assignment name"
-          />
-        </th>
-        {showGroup &&
+    {assignments.size > 0 &&
+      <thead>
+        <tr>
+          <th />
           <th>
             <FormattedMessage
-              id="app.assignments.group"
-              defaultMessage="Group"
+              id="app.assignments.name"
+              defaultMessage="Assignment name"
             />
-          </th>}
-        {assignmentEnvironmentsSelector &&
+          </th>
+          {showGroup &&
+            <th>
+              <FormattedMessage
+                id="app.assignments.group"
+                defaultMessage="Group"
+              />
+            </th>}
+          {assignmentEnvironmentsSelector &&
+            <th>
+              <FormattedMessage
+                id="generic.runtimesShort"
+                defaultMessage="Runtimes/Languages"
+              />
+            </th>}
+          {!isAdmin &&
+            Object.keys(stats).length !== 0 &&
+            <th>
+              <FormattedMessage
+                id="app.assignments.points"
+                defaultMessage="Points"
+              />
+            </th>}
           <th>
             <FormattedMessage
-              id="generic.runtimesShort"
-              defaultMessage="Runtimes/Languages"
+              id="app.assignments.deadline"
+              defaultMessage="Deadline"
             />
-          </th>}
-        {!isAdmin &&
-          Object.keys(stats).length !== 0 &&
+          </th>
           <th>
             <FormattedMessage
-              id="app.assignments.points"
-              defaultMessage="Points"
+              id="app.assignments.secondDeadline"
+              defaultMessage="Second deadline"
             />
-          </th>}
-        <th>
-          <FormattedMessage
-            id="app.assignments.deadline"
-            defaultMessage="Deadline"
-          />
-        </th>
-        <th>
-          <FormattedMessage
-            id="app.assignments.secondDeadline"
-            defaultMessage="Second deadline"
-          />
-        </th>
-        {isAdmin && <th />}
-      </tr>
-    </thead>
+          </th>
+          {isAdmin && <th />}
+        </tr>
+      </thead>}
     <tbody>
       {assignments.size === 0 && <NoAssignmentTableRow />}
 
-      {assignments.some(isLoading) && <LoadingAssignmentTableRow />}
+      {assignments.some(isLoading) &&
+        <LoadingAssignmentTableRow
+          colSpan={
+            5 + (showGroup ? 1 : 0) + (assignmentEnvironmentsSelector ? 1 : 0)
+          }
+        />}
 
       {assignments
         .filter(isReady)
