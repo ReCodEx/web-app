@@ -16,23 +16,13 @@ import {
   canLoggedUserEditExercise,
   isLoggedAsSuperAdmin
 } from '../../redux/selectors/users';
-import {
-  fetchExercises,
-  create as createExercise
-} from '../../redux/modules/exercises';
+import { create as createExercise } from '../../redux/modules/exercises';
 import { searchExercises } from '../../redux/modules/search';
 import { getSearchQuery } from '../../redux/selectors/search';
 import ExercisesList from '../../components/Exercises/ExercisesList';
-import FetchManyResourceRenderer from '../../components/helpers/FetchManyResourceRenderer';
 import withLinks from '../../helpers/withLinks';
 
 class Exercises extends Component {
-  static loadAsync = (params, dispatch) => dispatch(fetchExercises());
-
-  componentWillMount() {
-    this.props.loadAsync();
-  }
-
   newExercise = () => {
     const {
       createExercise,
@@ -49,7 +39,6 @@ class Exercises extends Component {
       query,
       isSuperAdmin,
       isAuthorOfExercise,
-      fetchStatus,
       search,
       links: {
         EXERCISE_EDIT_URI_FACTORY,
@@ -59,155 +48,115 @@ class Exercises extends Component {
     } = this.props;
 
     return (
-      <FetchManyResourceRenderer
-        fetchManyStatus={fetchStatus}
-        loading={
-          <PageContent
-            title={
-              <FormattedMessage
-                id="app.page.exercises.loading"
-                defaultMessage="Loading list of exercises ..."
-              />
-            }
-            description={
-              <FormattedMessage
-                id="app.page.exercises.loadingDescription"
-                defaultMessage="Please wait while we are getting the list of exercises ready."
-              />
-            }
+      <PageContent
+        title={
+          <FormattedMessage
+            id="app.exercises.title"
+            defaultMessage="Exercise list"
           />
         }
-        failed={
-          <PageContent
-            title={
-              <FormattedMessage
-                id="app.page.exercises.failed"
-                defaultMessage="Cannot load the list of exercises"
-              />
-            }
-            description={
-              <FormattedMessage
-                id="app.page.exercises.failedDescription"
-                defaultMessage="We are sorry for the inconvenience, please try again later."
-              />
-            }
+        description={
+          <FormattedMessage
+            id="app.instance.description"
+            defaultMessage="List and assign exercises to your groups."
           />
         }
-      >
-        {() =>
-          <PageContent
-            title={
+        breadcrumbs={[
+          {
+            text: (
               <FormattedMessage
                 id="app.exercises.title"
                 defaultMessage="Exercise list"
               />
-            }
-            description={
-              <FormattedMessage
-                id="app.instance.description"
-                defaultMessage="List and assign exercises to your groups."
-              />
-            }
-            breadcrumbs={[
-              {
-                text: (
+            ),
+            iconName: 'puzzle-piece'
+          }
+        ]}
+      >
+        <Box
+          title={
+            <FormattedMessage
+              id="app.exercises.listTitle"
+              defaultMessage="Exercises"
+            />
+          }
+          footer={
+            <p className="text-center">
+              {isSuperAdmin &&
+                <Button
+                  bsStyle="success"
+                  className="btn-flat"
+                  bsSize="sm"
+                  onClick={() => {
+                    this.newExercise();
+                  }}
+                >
+                  <AddIcon />{' '}
                   <FormattedMessage
-                    id="app.exercises.title"
-                    defaultMessage="Exercise list"
+                    id="app.exercises.add"
+                    defaultMessage="Add exercise"
                   />
-                ),
-                iconName: 'puzzle-piece'
-              }
-            ]}
-          >
-            <Box
-              title={
-                <FormattedMessage
-                  id="app.exercises.listTitle"
-                  defaultMessage="Exercises"
-                />
-              }
-              footer={
-                <p className="text-center">
-                  {isSuperAdmin &&
-                    <Button
-                      bsStyle="success"
-                      className="btn-flat"
-                      bsSize="sm"
-                      onClick={() => {
-                        this.newExercise();
-                      }}
-                    >
-                      <AddIcon />{' '}
-                      <FormattedMessage
-                        id="app.exercises.add"
-                        defaultMessage="Add exercise"
-                      />
-                    </Button>}
-                </p>
-              }
-              unlimitedHeight
-            >
-              <SearchContainer
-                type="exercises"
-                id="exercises-page"
-                search={search}
-                showAllOnEmptyQuery={true}
-                renderList={exercises =>
-                  <ExercisesList
-                    exercises={exercises}
-                    createActions={id =>
-                      isAuthorOfExercise(id) &&
-                      <div>
-                        <LinkContainer to={EXERCISE_EDIT_URI_FACTORY(id)}>
-                          <Button bsSize="xs" bsStyle="warning">
-                            <EditIcon />{' '}
-                            <FormattedMessage
-                              id="app.exercises.listEdit"
-                              defaultMessage="Settings"
-                            />
-                          </Button>
-                        </LinkContainer>
-                        <LinkContainer
-                          to={EXERCISE_EDIT_SIMPLE_CONFIG_URI_FACTORY(id)}
-                        >
-                          <Button bsSize="xs" bsStyle="warning">
-                            <EditIcon />{' '}
-                            <FormattedMessage
-                              id="app.exercises.listEditConfig"
-                              defaultMessage="Configuration"
-                            />
-                          </Button>
-                        </LinkContainer>
-                        <LinkContainer
-                          to={EXERCISE_EDIT_LIMITS_URI_FACTORY(id)}
-                        >
-                          <Button bsSize="xs" bsStyle="warning">
-                            <EditIcon />{' '}
-                            <FormattedMessage
-                              id="app.exercises.listEditLimits"
-                              defaultMessage="Limits"
-                            />
-                          </Button>
-                        </LinkContainer>
-
-                        <DeleteExerciseButtonContainer
-                          id={id}
-                          bsSize="xs"
-                          onDeleted={() => search(query)}
+                </Button>}
+            </p>
+          }
+          unlimitedHeight
+        >
+          <SearchContainer
+            type="exercises"
+            id="exercises-page"
+            search={search}
+            showAllOnEmptyQuery={true}
+            renderList={exercises =>
+              <ExercisesList
+                exercises={exercises}
+                createActions={id =>
+                  isAuthorOfExercise(id) &&
+                  <div>
+                    <LinkContainer to={EXERCISE_EDIT_URI_FACTORY(id)}>
+                      <Button bsSize="xs" bsStyle="warning">
+                        <EditIcon />{' '}
+                        <FormattedMessage
+                          id="app.exercises.listEdit"
+                          defaultMessage="Settings"
                         />
-                      </div>}
-                  />}
-              />
-            </Box>
-          </PageContent>}
-      </FetchManyResourceRenderer>
+                      </Button>
+                    </LinkContainer>
+                    <LinkContainer
+                      to={EXERCISE_EDIT_SIMPLE_CONFIG_URI_FACTORY(id)}
+                    >
+                      <Button bsSize="xs" bsStyle="warning">
+                        <EditIcon />{' '}
+                        <FormattedMessage
+                          id="app.exercises.listEditConfig"
+                          defaultMessage="Configuration"
+                        />
+                      </Button>
+                    </LinkContainer>
+                    <LinkContainer to={EXERCISE_EDIT_LIMITS_URI_FACTORY(id)}>
+                      <Button bsSize="xs" bsStyle="warning">
+                        <EditIcon />{' '}
+                        <FormattedMessage
+                          id="app.exercises.listEditLimits"
+                          defaultMessage="Limits"
+                        />
+                      </Button>
+                    </LinkContainer>
+
+                    <DeleteExerciseButtonContainer
+                      id={id}
+                      bsSize="xs"
+                      onDeleted={() => search(query)}
+                    />
+                  </div>}
+              />}
+          />
+        </Box>
+      </PageContent>
     );
   }
 }
 
 Exercises.propTypes = {
-  loadAsync: PropTypes.func.isRequired,
   query: PropTypes.string,
   createExercise: PropTypes.func.isRequired,
   isSuperAdmin: PropTypes.bool.isRequired,
@@ -232,7 +181,6 @@ export default withLinks(
     dispatch => ({
       push: url => dispatch(push(url)),
       createExercise: () => dispatch(createExercise()),
-      loadAsync: () => Exercises.loadAsync({}, dispatch),
       search: query => dispatch(searchExercises()('exercises-page', query))
     })
   )(Exercises)
