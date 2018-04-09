@@ -100,6 +100,7 @@ class Users extends Component {
                         <DeleteUserButtonContainer
                           id={userId}
                           bsSize="xs"
+                          resourceless={true}
                           onDeleted={() =>
                             search(user.privateData.instanceId)(query)}
                         />

@@ -2,27 +2,42 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
-import Button from '../../components/widgets/FlatButton';
 import { push } from 'react-router-redux';
 import { LinkContainer } from 'react-router-bootstrap';
-import DeleteExerciseButtonContainer from '../../containers/DeleteExerciseButtonContainer';
-import SearchContainer from '../../containers/SearchContainer';
 
 import PageContent from '../../components/layout/PageContent';
 import Box from '../../components/widgets/Box';
+import DeleteExerciseButtonContainer from '../../containers/DeleteExerciseButtonContainer';
+import SearchContainer from '../../containers/SearchContainer';
+import ExercisesList from '../../components/Exercises/ExercisesList';
+import Button from '../../components/widgets/FlatButton';
 import { AddIcon, EditIcon } from '../../components/icons';
-import { fetchManyStatus } from '../../redux/selectors/exercises';
+
+import { create as createExercise } from '../../redux/modules/exercises';
+import { searchExercises } from '../../redux/modules/search';
+import { fetchUser } from '../../redux/modules/users';
+import { fetchInstanceGroups } from '../../redux/modules/groups';
+import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import {
   canLoggedUserEditExercise,
   isLoggedAsSuperAdmin
 } from '../../redux/selectors/users';
-import { create as createExercise } from '../../redux/modules/exercises';
-import { searchExercises } from '../../redux/modules/search';
 import { getSearchQuery } from '../../redux/selectors/search';
-import ExercisesList from '../../components/Exercises/ExercisesList';
+
 import withLinks from '../../helpers/withLinks';
 
 class Exercises extends Component {
+  static loadAsync = (params, dispatch, userId) =>
+    userId
+      ? dispatch(fetchUser(userId)).then(({ value: data }) =>
+          dispatch(fetchInstanceGroups(data.privateData.instanceId))
+        )
+      : Promise.resolve();
+
+  componentWillMount() {
+    this.props.loadAsync(this.props.userId);
+  }
+
   newExercise = () => {
     const {
       createExercise,
@@ -145,6 +160,7 @@ class Exercises extends Component {
                     <DeleteExerciseButtonContainer
                       id={id}
                       bsSize="xs"
+                      resourceless={true}
                       onDeleted={() => search(query)}
                     />
                   </div>}
@@ -157,13 +173,14 @@ class Exercises extends Component {
 }
 
 Exercises.propTypes = {
+  loadAsync: PropTypes.func.isRequired,
+  userId: PropTypes.string.isRequired,
   query: PropTypes.string,
   createExercise: PropTypes.func.isRequired,
   isSuperAdmin: PropTypes.bool.isRequired,
   isAuthorOfExercise: PropTypes.func.isRequired,
   push: PropTypes.func.isRequired,
   links: PropTypes.object.isRequired,
-  fetchStatus: PropTypes.string,
   search: PropTypes.func
 };
 
@@ -171,14 +188,15 @@ export default withLinks(
   connect(
     state => {
       return {
+        userId: loggedInUserIdSelector(state),
         query: getSearchQuery('exercises-page')(state),
-        fetchStatus: fetchManyStatus(state),
         isSuperAdmin: isLoggedAsSuperAdmin(state),
         isAuthorOfExercise: exerciseId =>
           canLoggedUserEditExercise(exerciseId)(state)
       };
     },
     dispatch => ({
+      loadAsync: userId => Exercises.loadAsync({}, dispatch, userId),
       push: url => dispatch(push(url)),
       createExercise: () => dispatch(createExercise()),
       search: query => dispatch(searchExercises()('exercises-page', query))

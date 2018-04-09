@@ -14,7 +14,6 @@ import Box from '../../components/widgets/Box';
 import { canEditPipeline } from '../../redux/selectors/users';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import { AddIcon, EditIcon } from '../../components/icons';
-import { fetchManyStatus } from '../../redux/selectors/pipelines';
 import { create as createPipeline } from '../../redux/modules/pipelines';
 import { searchPipelines } from '../../redux/modules/search';
 import PipelinesList from '../../components/Pipelines/PipelinesList';
@@ -118,6 +117,7 @@ class Pipelines extends Component {
                     <DeletePipelineButtonContainer
                       id={id}
                       bsSize="xs"
+                      resourceless={true}
                       onDeleted={() => search(query)}
                     />
                   </ButtonGroup>}
@@ -134,7 +134,6 @@ Pipelines.propTypes = {
   isAuthorOfPipeline: PropTypes.func.isRequired,
   push: PropTypes.func.isRequired,
   links: PropTypes.object.isRequired,
-  fetchStatus: PropTypes.string,
   search: PropTypes.func,
   query: PropTypes.string
 };
@@ -145,7 +144,6 @@ export default withLinks(
       const userId = loggedInUserIdSelector(state);
 
       return {
-        fetchStatus: fetchManyStatus(state),
         isAuthorOfPipeline: pipelineId =>
           canEditPipeline(userId, pipelineId)(state),
         query: getSearchQuery('pipelines-page')(state)
