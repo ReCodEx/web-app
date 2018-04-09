@@ -40,10 +40,7 @@ const GroupTopButtons = ({
     <LinkContainer to={GROUP_DETAIL_URI_FACTORY(group.id)}>
       <Button bsStyle="primary">
         <GroupIcon />{' '}
-        <FormattedMessage
-          id="app.group.detailButton"
-          defaultMessage="Group Detail"
-        />
+        <FormattedMessage id="app.group.detail" defaultMessage="Group Detail" />
       </Button>
     </LinkContainer>
 

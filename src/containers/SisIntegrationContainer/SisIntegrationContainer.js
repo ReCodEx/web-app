@@ -183,7 +183,7 @@ class SisIntegrationContainer extends Component {
                                                 >
                                                   <Icon name="group" />{' '}
                                                   <FormattedMessage
-                                                    id="app.group.detailButton"
+                                                    id="app.group.detail"
                                                     defaultMessage="Group Detail"
                                                   />
                                                 </Button>

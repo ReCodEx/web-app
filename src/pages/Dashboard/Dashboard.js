@@ -44,7 +44,7 @@ import {
 } from '../../redux/selectors/usersGroups';
 import { assignmentEnvironmentsSelector } from '../../redux/selectors/assignments';
 
-import { InfoIcon } from '../../components/icons';
+import { InfoIcon, GroupIcon } from '../../components/icons';
 import { getJsData } from '../../redux/helpers/resourceManager';
 import SisIntegrationContainer from '../../containers/SisIntegrationContainer';
 import SisSupervisorGroupsContainer from '../../containers/SisSupervisorGroupsContainer';
@@ -120,7 +120,7 @@ class Dashboard extends Component {
       assignmentEnvironmentsSelector,
       statistics,
       allGroups,
-      links: { GROUP_DETAIL_URI_FACTORY },
+      links: { GROUP_INFO_URI_FACTORY, GROUP_DETAIL_URI_FACTORY },
       intl: { locale }
     } = this.props;
 
@@ -252,13 +252,25 @@ class Dashboard extends Component {
                                     footer={
                                       <p className="text-center">
                                         <LinkContainer
+                                          to={GROUP_INFO_URI_FACTORY(group.id)}
+                                        >
+                                          <Button bsSize="sm">
+                                            <InfoIcon />&nbsp;&nbsp;
+                                            <FormattedMessage
+                                              id="app.group.info"
+                                              defaultMessage="Group Info"
+                                            />
+                                          </Button>
+                                        </LinkContainer>
+                                        <LinkContainer
                                           to={GROUP_DETAIL_URI_FACTORY(
                                             group.id
                                           )}
                                         >
                                           <Button bsSize="sm">
+                                            <GroupIcon />&nbsp;&nbsp;
                                             <FormattedMessage
-                                              id="app.group.detailButton"
+                                              id="app.group.detail"
                                               defaultMessage="Group Detail"
                                             />
                                           </Button>
@@ -332,13 +344,25 @@ class Dashboard extends Component {
                                     footer={
                                       <p className="text-center">
                                         <LinkContainer
+                                          to={GROUP_INFO_URI_FACTORY(group.id)}
+                                        >
+                                          <Button bsSize="sm">
+                                            <InfoIcon />&nbsp;&nbsp;
+                                            <FormattedMessage
+                                              id="app.group.info"
+                                              defaultMessage="Group Info"
+                                            />
+                                          </Button>
+                                        </LinkContainer>
+                                        <LinkContainer
                                           to={GROUP_DETAIL_URI_FACTORY(
                                             group.id
                                           )}
                                         >
                                           <Button bsSize="sm">
+                                            <GroupIcon />&nbsp;&nbsp;
                                             <FormattedMessage
-                                              id="app.group.detailButton"
+                                              id="app.group.detail"
                                               defaultMessage="Group Detail"
                                             />
                                           </Button>
