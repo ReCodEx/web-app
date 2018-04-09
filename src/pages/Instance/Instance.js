@@ -110,6 +110,7 @@ class Instance extends Component {
               <Row>
                 <Col sm={6}>
                   <EditGroupForm
+                    form="addGroup"
                     onSubmit={createGroup}
                     instanceId={instanceId}
                     createNew
@@ -154,7 +155,7 @@ export default withLinks(
         groups: groupsSelector(state),
         isAdmin: isAdminOfInstance(userId, instanceId)(state),
         isSuperAdmin: isLoggedAsSuperAdmin(state),
-        formValues: getFormValues('editGroup')(state)
+        formValues: getFormValues('addGroup')(state)
       };
     },
     (dispatch, { params: { instanceId } }) => ({

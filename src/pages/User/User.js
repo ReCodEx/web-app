@@ -207,7 +207,7 @@ class User extends Component {
                                   >
                                     <Button bsSize="sm">
                                       <FormattedMessage
-                                        id="app.group.detailButton"
+                                        id="app.group.detail"
                                         defaultMessage="Group Detail"
                                       />
                                     </Button>

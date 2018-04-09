@@ -153,3 +153,9 @@ const getGroupParentIds = (id, groups) => {
 
 export const allParentIdsForGroup = id =>
   createSelector(groupsSelector, groups => getGroupParentIds(id, groups));
+
+export const groupOrganizationalPendingChange = id =>
+  createSelector(
+    groupsSelector,
+    groups => groups && groups.getIn([id, 'pending-organizational'], false)
+  );

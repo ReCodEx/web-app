@@ -47,7 +47,11 @@ export const additionalActionTypes = {
   REMOVE_ADMIN: 'recodex/groups/REMOVE_ADMIN',
   REMOVE_ADMIN_PENDING: 'recodex/groups/REMOVE_ADMIN_PENDING',
   REMOVE_ADMIN_FULFILLED: 'recodex/groups/REMOVE_ADMIN_FULFILLED',
-  REMOVE_ADMIN_REJECTED: 'recodex/groups/REMOVE_ADMIN_REJECTED'
+  REMOVE_ADMIN_REJECTED: 'recodex/groups/REMOVE_ADMIN_REJECTED',
+  SET_ORGANIZATIONAL: 'recodex/groups/SET_ORGANIZATIONAL',
+  SET_ORGANIZATIONAL_PENDING: 'recodex/groups/SET_ORGANIZATIONAL_PENDING',
+  SET_ORGANIZATIONAL_FULFILLED: 'recodex/groups/SET_ORGANIZATIONAL_FULFILLED',
+  SET_ORGANIZATIONAL_REJECTED: 'recodex/groups/SET_ORGANIZATIONAL_REJECTED'
 };
 
 export const loadGroup = actions.pushResource;
@@ -173,6 +177,15 @@ export const removeAdmin = (groupId, userId) => dispatch =>
     )
   ); // @todo: Make translatable
 
+export const setOrganizational = (groupId, organizational) =>
+  createApiAction({
+    type: additionalActionTypes.SET_ORGANIZATIONAL,
+    method: 'POST',
+    endpoint: `/groups/${groupId}/organizational`,
+    body: { value: organizational },
+    meta: { groupId }
+  });
+
 /**
  * Reducer
  */
@@ -277,7 +290,7 @@ const reducer = handleActions(
         admins => admins.filter(id => id !== userId).concat([userId])
       ),
 
-    [additionalActionTypes.ADD_ADMIN_FAILED]: (
+    [additionalActionTypes.ADD_ADMIN_REJECTED]: (
       state,
       { payload, meta: { groupId, userId } }
     ) =>
@@ -300,7 +313,7 @@ const reducer = handleActions(
         admins => admins.filter(id => id !== userId)
       ),
 
-    [additionalActionTypes.REMOVE_ADMIN_FAILED]: (
+    [additionalActionTypes.REMOVE_ADMIN_REJECTED]: (
       state,
       { payload, meta: { groupId, userId } }
     ) =>
@@ -313,6 +326,24 @@ const reducer = handleActions(
       state,
       { payload, meta: { groupId } }
     ) => state.setIn(['resources', groupId, 'data'], fromJS(payload)),
+
+    [additionalActionTypes.SET_ORGANIZATIONAL_PENDING]: (
+      state,
+      { payload, meta: { groupId } }
+    ) => state.setIn(['resources', groupId, 'pending-organizational'], true),
+
+    [additionalActionTypes.SET_ORGANIZATIONAL_FULFILLED]: (
+      state,
+      { payload, meta: { groupId } }
+    ) =>
+      state
+        .deleteIn(['resources', groupId, 'pending-organizational'])
+        .setIn(['resources', groupId, 'data'], fromJS(payload)),
+
+    [additionalActionTypes.SET_ORGANIZATIONAL_REJECTED]: (
+      state,
+      { payload, meta: { groupId } }
+    ) => state.deleteIn(['resources', groupId, 'pending-organizational']),
 
     [additionalActionTypes.LOAD_USERS_GROUPS_FULFILLED]: (
       state,
