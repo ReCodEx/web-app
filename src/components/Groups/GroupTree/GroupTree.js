@@ -28,17 +28,30 @@ class GroupTree extends Component {
       />
     </TreeView>;
 
-  renderButtons = groupId => {
-    const { links: { GROUP_INFO_URI_FACTORY } } = this.props;
+  renderButtons = (groupId, organizational) => {
+    const {
+      links: { GROUP_INFO_URI_FACTORY, GROUP_DETAIL_URI_FACTORY }
+    } = this.props;
     return (
       <span>
-        <LinkContainer to={GROUP_INFO_URI_FACTORY(groupId)}>
+        <LinkContainer
+          to={
+            organizational
+              ? GROUP_INFO_URI_FACTORY(groupId)
+              : GROUP_DETAIL_URI_FACTORY(groupId)
+          }
+        >
           <Button bsStyle="primary" bsSize="xs" className="btn-flat">
             <Icon name="group" />{' '}
-            <FormattedMessage
-              id="app.group.detailButton"
-              defaultMessage="Group Detail"
-            />
+            {organizational
+              ? <FormattedMessage
+                  id="app.group.info"
+                  defaultMessage="Group Info"
+                />
+              : <FormattedMessage
+                  id="app.group.detail"
+                  defaultMessage="Group Detail"
+                />}
           </Button>
         </LinkContainer>
       </span>
@@ -80,8 +93,7 @@ class GroupTree extends Component {
       isPublic = false,
       groups,
       currentGroupId = null,
-      visibleGroupsMap = null,
-      links: { GROUP_INFO_URI_FACTORY }
+      visibleGroupsMap = null
     } = this.props;
 
     const group = groups.get(id);
@@ -94,7 +106,8 @@ class GroupTree extends Component {
       localizedTexts,
       canView,
       childGroups,
-      primaryAdminsIds
+      primaryAdminsIds,
+      organizational
     } = getJsData(group);
 
     const actualVisibleGroupsMap =
@@ -117,11 +130,12 @@ class GroupTree extends Component {
             id={id}
             level={level}
             admins={primaryAdminsIds}
+            organizational={organizational}
             isPublic={isPublic}
             isOpen={currentGroupId === id || isOpen}
             actions={
               currentGroupId !== id && canView
-                ? this.renderButtons(id, GROUP_INFO_URI_FACTORY(id))
+                ? this.renderButtons(id, organizational)
                 : undefined
             }
           >

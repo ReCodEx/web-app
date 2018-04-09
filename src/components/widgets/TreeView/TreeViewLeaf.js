@@ -4,7 +4,7 @@ import { FormattedMessage } from 'react-intl';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import Icon from 'react-fontawesome';
 
-import { LoadingIcon } from '../../icons';
+import { LoadingIcon, GroupIcon } from '../../icons';
 import LevelGap from './LevelGap';
 import GroupsName from '../../../components/Groups/GroupsName';
 import UsersNameContainer from '../../../containers/UsersNameContainer';
@@ -14,6 +14,7 @@ const TreeViewLeaf = ({
   loading = false,
   title,
   admins,
+  organizational,
   isPublic,
   icon = 'square-o',
   onClick,
@@ -43,6 +44,24 @@ const TreeViewLeaf = ({
           </em>
         </small>)
       </span>}
+    {organizational &&
+      <OverlayTrigger
+        placement="bottom"
+        overlay={
+          <Tooltip id={`${id}-organizational-tooltip`}>
+            <FormattedMessage
+              id="app.groupTree.treeViewLeaf.organizationalTooltip"
+              defaultMessage="The group is organizational (it does not have any students or assignments)"
+            />
+          </Tooltip>
+        }
+      >
+        <GroupIcon
+          organizational={true}
+          className="text-muted"
+          style={{ marginLeft: '0.5em' }}
+        />
+      </OverlayTrigger>}
     {isPublic &&
       <OverlayTrigger
         placement="bottom"
@@ -72,6 +91,7 @@ TreeViewLeaf.propTypes = {
     PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage, GroupsName]) })
   ]).isRequired,
   admins: PropTypes.array,
+  organizational: PropTypes.bool,
   isPublic: PropTypes.bool,
   icon: PropTypes.string,
   onClick: PropTypes.func,

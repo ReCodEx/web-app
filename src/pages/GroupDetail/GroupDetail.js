@@ -218,66 +218,83 @@ class GroupDetail extends Component {
                 (data.privateData.isPublic || isStudent)
               }
             />
-
-            <Row>
-              <Col lg={12}>
-                <Box
-                  title={
+            {data.organizational &&
+              <Row>
+                <Col lg={12}>
+                  <p className="callout callout-info">
                     <FormattedMessage
-                      id="app.studentsView.assignments"
-                      defaultMessage="Assignments"
+                      id="app.group.organizationalExplain"
+                      defaultMessage="This group is organizational, so it cannot have any students nor assignments. However, it may have attached exercises which can be assigned in sub-groups."
                     />
-                  }
-                  noPadding
-                  unlimitedHeight
-                >
-                  <ResourceRenderer resource={stats}>
-                    {groupStats =>
-                      <AssignmentsTable
-                        assignments={allAssignments}
-                        assignmentEnvironmentsSelector={
-                          assignmentEnvironmentsSelector
-                        }
-                        showGroup={false}
-                        statuses={statuses}
-                        stats={groupStats.find(item => item.userId === userId)}
-                        isAdmin={isAdmin || isSupervisor}
-                      />}
-                  </ResourceRenderer>
-                </Box>
-              </Col>
-            </Row>
+                  </p>
+                </Col>
+              </Row>}
 
-            <Row>
-              <Col lg={12}>
-                <Box
-                  title={
-                    <FormattedMessage
-                      id="app.groupDetail.studentsResultsTable"
-                      defaultMessage="Students and Their Results"
-                    />
-                  }
-                  unlimitedHeight
-                  noPadding
-                >
-                  <ResourceRenderer resource={[stats, ...publicAssignments]}>
-                    {(groupStats, ...pubAssignments) =>
-                      <ResultsTable
-                        users={students}
-                        assignments={pubAssignments}
-                        stats={groupStats}
-                        isAdmin={isAdmin}
-                        renderActions={id =>
-                          <LeaveJoinGroupButtonContainer
-                            userId={id}
-                            groupId={data.id}
-                          />}
-                      />}
-                  </ResourceRenderer>
-                </Box>
-              </Col>
-            </Row>
+            {!data.organizational &&
+              <Row>
+                <Col lg={12}>
+                  <Box
+                    title={
+                      <FormattedMessage
+                        id="app.studentsView.assignments"
+                        defaultMessage="Assignments"
+                      />
+                    }
+                    noPadding
+                    unlimitedHeight
+                  >
+                    <ResourceRenderer resource={stats}>
+                      {groupStats =>
+                        <AssignmentsTable
+                          assignments={allAssignments}
+                          assignmentEnvironmentsSelector={
+                            assignmentEnvironmentsSelector
+                          }
+                          showGroup={false}
+                          statuses={statuses}
+                          stats={groupStats.find(
+                            item => item.userId === userId
+                          )}
+                          isAdmin={isAdmin || isSupervisor}
+                        />}
+                    </ResourceRenderer>
+                  </Box>
+                </Col>
+              </Row>}
+
+            {!data.organizational &&
+              <Row>
+                <Col lg={12}>
+                  <Box
+                    title={
+                      <FormattedMessage
+                        id="app.groupDetail.studentsResultsTable"
+                        defaultMessage="Students and Their Results"
+                      />
+                    }
+                    unlimitedHeight
+                    noPadding
+                  >
+                    <ResourceRenderer resource={[stats, ...publicAssignments]}>
+                      {(groupStats, ...pubAssignments) =>
+                        <ResultsTable
+                          users={students}
+                          assignments={pubAssignments}
+                          stats={groupStats}
+                          isAdmin={isAdmin}
+                          renderActions={id =>
+                            <LeaveJoinGroupButtonContainer
+                              userId={id}
+                              groupId={data.id}
+                            />}
+                        />}
+                    </ResourceRenderer>
+                  </Box>
+                </Col>
+              </Row>}
+
             {(isSupervisor || isAdmin) &&
+              !data.organizational &&
               <Row>
                 <Col sm={6}>
                   <Box
@@ -296,6 +313,7 @@ class GroupDetail extends Component {
                   </Box>
                 </Col>
               </Row>}
+
             {(isSupervisor || isAdmin) &&
               <Row>
                 <Col lg={12}>

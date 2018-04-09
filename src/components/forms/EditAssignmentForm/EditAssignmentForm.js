@@ -206,18 +206,6 @@ const EditAssignmentForm = ({
         }
       />
 
-      <Field
-        name="isPublic"
-        component={CheckboxField}
-        onOff
-        label={
-          <FormattedMessage
-            id="app.editAssignmentForm.isPublic"
-            defaultMessage="Visible to students"
-          />
-        }
-      />
-
       <hr />
 
       <h4>
@@ -245,6 +233,20 @@ const EditAssignmentForm = ({
           </Col>
         )}
       </Row>
+
+      <hr />
+
+      <Field
+        name="isPublic"
+        component={CheckboxField}
+        onOff
+        label={
+          <FormattedMessage
+            id="app.editAssignmentForm.isPublic"
+            defaultMessage="Visible to students"
+          />
+        }
+      />
     </FormBox>
   </div>;
 

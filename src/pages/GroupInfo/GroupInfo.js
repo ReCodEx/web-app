@@ -153,38 +153,6 @@ class GroupInfo extends Component {
             />
 
             <Row>
-              {data.childGroups.all.length > 0 &&
-                <Col sm={6}>
-                  <Box
-                    title={
-                      <FormattedMessage
-                        id="app.groupDetail.subgroups"
-                        defaultMessage="Subgroups hierarchy"
-                      />
-                    }
-                    unlimitedHeight
-                  >
-                    <GroupTree
-                      id={data.id}
-                      deletable={false}
-                      isAdmin={isAdmin}
-                      isPublic={data.privateData.isPublic}
-                      isOpen
-                      groups={groups}
-                      level={1}
-                    />
-                  </Box>
-
-                  {isAdmin &&
-                    <EditGroupForm
-                      onSubmit={addSubgroup}
-                      initialValues={EMPTY_OBJ}
-                      createNew
-                      collapsable
-                      isOpen={false}
-                      formValues={formValues}
-                    />}
-                </Col>}
               <Col sm={6}>
                 <GroupDetail
                   group={data}
@@ -193,8 +161,7 @@ class GroupInfo extends Component {
                   groups={groups}
                   locale={locale}
                 />
-              </Col>
-              <Col sm={6}>
+
                 <Box
                   noPadding
                   collapsable
@@ -225,6 +192,7 @@ class GroupInfo extends Component {
                     }
                   />
                 </Box>
+
                 {isAdmin &&
                   <Box
                     title={
@@ -239,6 +207,39 @@ class GroupInfo extends Component {
                       groupId={data.id}
                     />
                   </Box>}
+              </Col>
+              <Col sm={6}>
+                {data.childGroups.all.length > 0 &&
+                  <Box
+                    title={
+                      <FormattedMessage
+                        id="app.groupDetail.subgroups"
+                        defaultMessage="Subgroups hierarchy"
+                      />
+                    }
+                    unlimitedHeight
+                  >
+                    <GroupTree
+                      id={data.id}
+                      deletable={false}
+                      isAdmin={isAdmin}
+                      isPublic={data.privateData.isPublic}
+                      isOpen
+                      groups={groups}
+                      level={1}
+                    />
+                  </Box>}
+
+                {isAdmin &&
+                  <EditGroupForm
+                    form="addSubgroup"
+                    onSubmit={addSubgroup}
+                    initialValues={EMPTY_OBJ}
+                    createNew
+                    collapsable
+                    isOpen={data.childGroups.all.length === 0}
+                    formValues={formValues}
+                  />}
               </Col>
             </Row>
           </div>}
@@ -279,7 +280,7 @@ const mapStateToProps = (state, { params: { groupId } }) => {
     isAdmin: isAdminOf(userId, groupId)(state),
     isSuperAdmin: isLoggedAsSuperAdmin(state),
     isStudent: isStudentOf(userId, groupId)(state),
-    formValues: getFormValues('editGroup')(state)
+    formValues: getFormValues('addSubgroup')(state)
   };
 };
 
