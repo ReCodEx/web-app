@@ -1,8 +1,7 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 
-const NoAssignmentTableRow = ({ showGroup = false }) =>
+const NoAssignmentTableRow = () =>
   <tr>
     <td className="text-center">
       <FormattedMessage
@@ -11,9 +10,5 @@ const NoAssignmentTableRow = ({ showGroup = false }) =>
       />
     </td>
   </tr>;
-
-NoAssignmentTableRow.propTypes = {
-  showGroup: PropTypes.bool
-};
 
 export default NoAssignmentTableRow;
