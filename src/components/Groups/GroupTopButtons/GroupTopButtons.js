@@ -45,6 +45,7 @@ const GroupTopButtons = ({
     </LinkContainer>
 
     {canLeaveJoin &&
+      !group.organizational &&
       <LeaveJoinGroupButtonContainer
         userId={userId}
         groupId={group.id}

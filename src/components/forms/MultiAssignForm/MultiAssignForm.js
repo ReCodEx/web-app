@@ -329,7 +329,9 @@ const validate = ({
   maxPointsBeforeFirstDeadline,
   maxPointsBeforeSecondDeadline,
   pointsPercentualThreshold,
-  groups
+  groups,
+  runtimeEnvironments,
+  enabledRuntime
 }) => {
   const errors = {};
   if (
@@ -429,6 +431,18 @@ const validate = ({
         />
       );
     }
+  }
+
+  const formDisabledRuntimes = Object.keys(enabledRuntime).filter(
+    key => enabledRuntime[key] === false
+  );
+  if (formDisabledRuntimes.length === runtimeEnvironments.length) {
+    errors['_error'] = (
+      <FormattedMessage
+        id="app.multiAssignForm.validation.allRuntimesDisabled"
+        defaultMessage="You cannot disable all available runtime environments."
+      />
+    );
   }
 
   return errors;

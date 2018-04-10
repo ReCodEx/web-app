@@ -3,21 +3,19 @@ import PropTypes from 'prop-types';
 import { LoadingIcon } from '../../../icons';
 import { FormattedMessage } from 'react-intl';
 
-const LoadingAssignmentTableRow = ({ showGroup = false }) => (
+const LoadingAssignmentTableRow = ({ colSpan = 1 }) =>
   <tr>
-    <td className="text-center" colSpan={showGroup ? 5 : 4}>
-      <LoadingIcon />
-      {' '}
+    <td className="text-center" colSpan={colSpan}>
+      <LoadingIcon />{' '}
       <FormattedMessage
         id="app.assignmentsTableRow.loading"
         defaultMessage="Loading assignments ..."
       />
     </td>
-  </tr>
-);
+  </tr>;
 
 LoadingAssignmentTableRow.propTypes = {
-  showGroup: PropTypes.bool
+  colSpan: PropTypes.number
 };
 
 export default LoadingAssignmentTableRow;

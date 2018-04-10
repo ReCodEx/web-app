@@ -146,6 +146,7 @@ class Exercise extends Component {
         canViewLimitRatios: false,
         pointsPercentualThreshold: 0,
         isBonus: false,
+        runtimeEnvironments,
         enabledRuntime: runtimeEnvironments.reduce((enabled, { id }) => {
           enabled[id] = true;
           return enabled;
