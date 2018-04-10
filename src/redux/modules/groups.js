@@ -277,7 +277,7 @@ const reducer = handleActions(
         admins => admins.filter(id => id !== userId).concat([userId])
       ),
 
-    [additionalActionTypes.ADD_ADMIN_FAILED]: (
+    [additionalActionTypes.ADD_ADMIN_REJECTED]: (
       state,
       { payload, meta: { groupId, userId } }
     ) =>
@@ -300,7 +300,7 @@ const reducer = handleActions(
         admins => admins.filter(id => id !== userId)
       ),
 
-    [additionalActionTypes.REMOVE_ADMIN_FAILED]: (
+    [additionalActionTypes.REMOVE_ADMIN_REJECTED]: (
       state,
       { payload, meta: { groupId, userId } }
     ) =>

@@ -18,7 +18,7 @@ export const actionTypes = {
   ADD_FILES: 'recodex/attachmentFiles/ADD_FILES',
   ADD_FILES_PENDING: 'recodex/attachmentFiles/ADD_FILES_PENDING',
   ADD_FILES_FULFILLED: 'recodex/attachmentFiles/ADD_FILES_FULFILLED',
-  ADD_FILES_FAILED: 'recodex/attachmentFiles/ADD_FILES_REJECTED',
+  ADD_FILES_REJECTED: 'recodex/attachmentFiles/ADD_FILES_REJECTED',
   REMOVE_FILE: 'recodex/attachmentFiles/REMOVE_FILE',
   REMOVE_FILE_FULFILLED: 'recodex/attachmentFiles/REMOVE_FILE_FULFILLED',
   DOWNLOAD_ATTACHMENT_ARCHIVE:

@@ -17,7 +17,7 @@ export const actionTypes = {
   ADD_FILES: 'recodex/pipelineFiles/ADD_FILES',
   ADD_FILES_PENDING: 'recodex/pipelineFiles/ADD_FILES_PENDING',
   ADD_FILES_FULFILLED: 'recodex/pipelineFiles/ADD_FILES_FULFILLED',
-  ADD_FILES_FAILED: 'recodex/pipelineFiles/ADD_FILES_REJECTED'
+  ADD_FILES_REJECTED: 'recodex/pipelineFiles/ADD_FILES_REJECTED'
 };
 
 export const fetchSupplementaryFilesForPipeline = pipelineId =>

@@ -28,20 +28,20 @@ export const additionalActionTypes = {
     'recodex/submissions/LOAD_USERS_SUBMISSIONS_PENDING',
   LOAD_USERS_SUBMISSIONS_FULFILLED:
     'recodex/submissions/LOAD_USERS_SUBMISSIONS_FULFILLED',
-  LOAD_USERS_SUBMISSIONS_FAILED:
-    'recodex/submissions/LOAD_USERS_SUBMISSIONS_FAILED',
+  LOAD_USERS_SUBMISSIONS_REJECTED:
+    'recodex/submissions/LOAD_USERS_SUBMISSIONS_REJECTED',
   SET_BONUS_POINTS: 'recodex/submissions/SET_BONUS_POINTS',
   SET_BONUS_POINTS_PENDING: 'recodex/submissions/SET_BONUS_POINTS_PENDING',
   SET_BONUS_POINTS_FULFILLED: 'recodex/submissions/SET_BONUS_POINTS_FULFILLED',
-  SET_BONUS_POINTS_FAILED: 'recodex/submissions/SET_BONUS_POINTS_FAILED',
+  SET_BONUS_POINTS_REJECTED: 'recodex/submissions/SET_BONUS_POINTS_REJECTED',
   ACCEPT: 'recodex/submissions/ACCEPT',
   ACCEPT_PENDING: 'recodex/submissions/ACCEPT_PENDING',
   ACCEPT_FULFILLED: 'recodex/submissions/ACCEPT_FULFILLED',
-  ACCEPT_FAILED: 'recodex/submissions/ACCEPT_FAILED',
+  ACCEPT_REJECTED: 'recodex/submissions/ACCEPT_REJECTED',
   UNACCEPT: 'recodex/submissions/UNACCEPT',
   UNACCEPT_PENDING: 'recodex/submissions/UNACCEPT_PENDING',
   UNACCEPT_FULFILLED: 'recodex/submissions/UNACCEPT_FULFILLED',
-  UNACCEPT_FAILED: 'recodex/submissions/UNACCEPT_FAILED',
+  UNACCEPT_REJECTED: 'recodex/submissions/UNACCEPT_REJECTED',
   RESUBMIT_ALL: 'recodex/submissions/RESUBMIT_ALL',
   DOWNLOAD_RESULT_ARCHIVE: 'recodex/files/DOWNLOAD_RESULT_ARCHIVE'
 };
@@ -124,7 +124,7 @@ const reducer = handleActions(
     [additionalActionTypes.ACCEPT_PENDING]: (state, { meta: { id } }) =>
       state.setIn(['resources', id, 'data', 'accepted-pending'], true),
 
-    [additionalActionTypes.ACCEPT_FAILED]: (state, { meta: { id } }) =>
+    [additionalActionTypes.ACCEPT_REJECTED]: (state, { meta: { id } }) =>
       state.setIn(['resources', id, 'data', 'accepted-pending'], false),
 
     [additionalActionTypes.ACCEPT_FULFILLED]: (state, { meta: { id } }) =>
@@ -149,7 +149,7 @@ const reducer = handleActions(
     [additionalActionTypes.UNACCEPT_PENDING]: (state, { meta: { id } }) =>
       state.setIn(['resources', id, 'data', 'accepted-pending'], true),
 
-    [additionalActionTypes.UNACCEPT_FAILED]: (state, { meta: { id } }) =>
+    [additionalActionTypes.UNACCEPT_REJECTED]: (state, { meta: { id } }) =>
       state.setIn(['resources', id, 'data', 'accepted-pending'], false),
 
     [additionalActionTypes.UNACCEPT_FULFILLED]: (state, { meta: { id } }) =>
