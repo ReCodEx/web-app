@@ -33,7 +33,7 @@ const reducer = handleActions(
         licences.push(fromJS({ id: instanceId, ...payload }))
       ),
 
-    [actionTypes.ADD_FAILED]: (state, { meta: { tmpId: instanceId } }) =>
+    [actionTypes.ADD_REJECTED]: (state, { meta: { tmpId: instanceId } }) =>
       state.updateIn(['resources', instanceId, 'data'], licences =>
         licences.filter(licence => licence.get('id') !== instanceId)
       ),

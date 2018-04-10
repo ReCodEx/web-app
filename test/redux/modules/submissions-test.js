@@ -41,7 +41,7 @@ describe('Submissions', () => {
       ).to.equal(true);
 
       const failedAction = {
-        type: additionalActionTypes.ACCEPT_FAILED,
+        type: additionalActionTypes.ACCEPT_REJECTED,
         meta: { id }
       };
 

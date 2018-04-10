@@ -7,7 +7,7 @@ export const actionTypes = {
   UPLOAD: 'recodex/upload/UPLOAD',
   UPLOAD_PENDING: 'recodex/upload/UPLOAD_PENDING',
   UPLOAD_FULFILLED: 'recodex/upload/UPLOAD_FULFILLED',
-  UPLOAD_FAILED: 'recodex/upload/UPLOAD_REJECTED',
+  UPLOAD_REJECTED: 'recodex/upload/UPLOAD_REJECTED',
   REMOVE_FILE: 'recodex/upload/REMOVE_FILE',
   RETURN_FILE: 'recodex/upload/RETURN_FILE',
   REMOVE_FAILED_FILE: 'recodex/upload/REMOVE_FAILED_FILE'
@@ -54,7 +54,7 @@ export const uploadSuccessful = createAction(
   (id, file) => ({ id, fileName: file.name })
 );
 export const uploadFailed = createAction(
-  actionTypes.UPLOAD_FAILED,
+  actionTypes.UPLOAD_REJECTED,
   wrapWithName,
   (id, file) => ({ id, fileName: file.name })
 );
@@ -105,7 +105,7 @@ const reducer = handleActions(
           list.push({ name: payload.name, file: payload })
         ),
 
-    [actionTypes.UPLOAD_FAILED]: (state, { meta: { id, fileName } }) => {
+    [actionTypes.UPLOAD_REJECTED]: (state, { meta: { id, fileName } }) => {
       const file = state
         .getIn([id, 'uploading'])
         .find(item => item.name === fileName);

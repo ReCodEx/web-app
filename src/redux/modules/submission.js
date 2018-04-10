@@ -197,7 +197,7 @@ const reducer = handleActions(
     [uploadActionTypes.REMOVE_FAILED_FILE]: (state, { payload }) =>
       state.set('status', submissionStatus.CREATING),
 
-    [uploadActionTypes.UPLOAD_FAILED]: (state, { meta: { fileName } }) =>
+    [uploadActionTypes.UPLOAD_REJECTED]: (state, { meta: { fileName } }) =>
       state.set('status', submissionStatus.FAILED),
 
     // Presubmit check operations

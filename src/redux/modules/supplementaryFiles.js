@@ -18,7 +18,7 @@ export const actionTypes = {
   ADD_FILES: 'recodex/supplementaryFiles/ADD_FILES',
   ADD_FILES_PENDING: 'recodex/supplementaryFiles/ADD_FILES_PENDING',
   ADD_FILES_FULFILLED: 'recodex/supplementaryFiles/ADD_FILES_FULFILLED',
-  ADD_FILES_FAILED: 'recodex/supplementaryFiles/ADD_FILES_REJECTED',
+  ADD_FILES_REJECTED: 'recodex/supplementaryFiles/ADD_FILES_REJECTED',
   REMOVE_FILE: 'recodex/supplementaryFiles/REMOVE_FILE',
   REMOVE_FILE_FULFILLED: 'recodex/supplementaryFiles/REMOVE_FILE_FULFILLED',
   DOWNLOAD_SUPPLEMENTARY_ARCHIVE:
