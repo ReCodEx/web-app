@@ -56,7 +56,7 @@ class SisIntegrationContainer extends Component {
       currentUserId,
       sisGroups,
       groupsAccessor,
-      links: { GROUP_INFO_URI_FACTORY },
+      links: { GROUP_INFO_URI_FACTORY, GROUP_DETAIL_URI_FACTORY },
       intl: { locale }
     } = this.props;
     return (
@@ -172,26 +172,33 @@ class SisIntegrationContainer extends Component {
                                           <td className="text-right">
                                             <span>
                                               <LinkContainer
-                                                to={GROUP_INFO_URI_FACTORY(
-                                                  group.id
-                                                )}
+                                                to={
+                                                  group.organizational
+                                                    ? GROUP_INFO_URI_FACTORY(
+                                                        group.id
+                                                      )
+                                                    : GROUP_DETAIL_URI_FACTORY(
+                                                        group.id
+                                                      )
+                                                }
                                               >
                                                 <Button
                                                   bsStyle="primary"
                                                   bsSize="xs"
                                                   className="btn-flat"
                                                 >
-                                                  <Icon name="group" />{' '}
+                                                  <Icon name="group" />&nbsp;&nbsp;
                                                   <FormattedMessage
                                                     id="app.group.detail"
                                                     defaultMessage="Group Detail"
                                                   />
                                                 </Button>
                                               </LinkContainer>
-                                              <LeaveJoinGroupButtonContainer
-                                                userId={currentUserId}
-                                                groupId={group.id}
-                                              />
+                                              {!group.organizational &&
+                                                <LeaveJoinGroupButtonContainer
+                                                  userId={currentUserId}
+                                                  groupId={group.id}
+                                                />}
                                             </span>
                                           </td>
                                         </tr>
