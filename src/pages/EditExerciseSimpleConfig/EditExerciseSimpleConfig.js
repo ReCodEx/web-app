@@ -5,7 +5,7 @@ import { FormattedMessage, injectIntl } from 'react-intl';
 import { Row, Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { defaultMemoize } from 'reselect';
-import Icon from 'react-fontawesome';
+import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 
 import Page from '../../components/layout/Page';
 import Box from '../../components/widgets/Box';
@@ -185,7 +185,7 @@ class EditExerciseSimpleConfig extends Component {
                 defaultMessage="Edit tests configuration"
               />
             ),
-            iconName: 'pencil'
+            iconName: ['far', 'edit']
           }
         ]}
       >
@@ -204,7 +204,7 @@ class EditExerciseSimpleConfig extends Component {
                       <Col sm={12}>
                         <div className="alert alert-warning">
                           <h4>
-                            <Icon name="medkit" />&nbsp;&nbsp;
+                            <FontAwesomeIcon icon="medkit" />&nbsp;&nbsp;
                             <FormattedMessage
                               id="app.exercise.isBroken"
                               defaultMessage="Exercise configuration is incorrect and needs fixing"

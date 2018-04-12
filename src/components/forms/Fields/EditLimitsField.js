@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Field } from 'redux-form';
 import { FormattedMessage } from 'react-intl';
 import { Row, Col, OverlayTrigger, Tooltip } from 'react-bootstrap';
-import Icon from 'react-fontawesome';
+import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 
 import FlatButton from '../../widgets/FlatButton';
 import Confirm from '../../forms/Confirm';
@@ -94,7 +94,7 @@ const EditLimitsField = ({
                         onClick={cloneVertically('memory')}
                         bsSize="xs"
                       >
-                        <Icon name="arrows-v" />
+                        <FontAwesomeIcon icon="arrows-alt-v" />
                       </FlatButton>
                     </OverlayTrigger>}
                   {environmentsCount > 1 &&
@@ -120,7 +120,7 @@ const EditLimitsField = ({
                         }
                       >
                         <FlatButton bsSize="xs">
-                          <Icon name="arrows-h" />
+                          <FontAwesomeIcon icon="arrows-alt-h" />
                         </FlatButton>
                       </OverlayTrigger>
                     </Confirm>}
@@ -148,7 +148,7 @@ const EditLimitsField = ({
                         }
                       >
                         <FlatButton bsSize="xs">
-                          <Icon name="arrows" />
+                          <FontAwesomeIcon icon="arrows-alt" />
                         </FlatButton>
                       </OverlayTrigger>
                     </Confirm>}
@@ -188,7 +188,7 @@ const EditLimitsField = ({
                       }
                     >
                       <FlatButton onClick={cloneVertically('time')} bsSize="xs">
-                        <Icon name="arrows-v" />
+                        <FontAwesomeIcon icon="arrows-alt-v" />
                       </FlatButton>
                     </OverlayTrigger>}
                   {environmentsCount > 1 &&
@@ -214,7 +214,7 @@ const EditLimitsField = ({
                         }
                       >
                         <FlatButton bsSize="xs">
-                          <Icon name="arrows-h" />
+                          <FontAwesomeIcon icon="arrows-alt-h" />
                         </FlatButton>
                       </OverlayTrigger>
                     </Confirm>}
@@ -242,7 +242,7 @@ const EditLimitsField = ({
                         }
                       >
                         <FlatButton bsSize="xs">
-                          <Icon name="arrows" />
+                          <FontAwesomeIcon icon="arrows-alt" />
                         </FlatButton>
                       </OverlayTrigger>
                     </Confirm>}

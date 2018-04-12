@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Icon from 'react-fontawesome';
+import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import { FormattedDate, FormattedTime, FormattedMessage } from 'react-intl';
 import DifficultyIcon from '../DifficultyIcon';
 import UsersNameContainer from '../../../containers/UsersNameContainer';
@@ -29,7 +29,7 @@ const ExercisesListItem = ({
 }) =>
   <tr>
     <td className="text-center">
-      <Icon name="code" />
+      <FontAwesomeIcon icon="code" />
     </td>
     <td>
       <ExercisePrefixIcons id={id} isLocked={isLocked} isBroken={isBroken} />

@@ -1,6 +1,6 @@
 import React from 'react';
-import Icon from 'react-fontawesome';
+import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 
-const SettingsIcon = props => <Icon {...props} name="gear" />;
+const SettingsIcon = props => <FontAwesomeIcon {...props} icon="cog" />;
 
 export default SettingsIcon;

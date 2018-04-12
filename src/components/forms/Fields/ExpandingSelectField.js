@@ -3,10 +3,9 @@ import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { Field } from 'redux-form';
 import { ControlLabel, OverlayTrigger, Tooltip } from 'react-bootstrap';
-import Icon from 'react-fontawesome';
+import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 
 import FlatButton from '../../widgets/FlatButton';
-
 import SelectField from './SelectField';
 
 import styles from './commonStyles.less';
@@ -46,7 +45,7 @@ const ExpandingSelectField = ({
                 }
               >
                 <FlatButton onClick={() => fields.insert(index, '')}>
-                  <Icon name="reply" />
+                  <FontAwesomeIcon icon="reply" />
                 </FlatButton>
               </OverlayTrigger>
             </td>
@@ -63,7 +62,7 @@ const ExpandingSelectField = ({
                 }
               >
                 <FlatButton onClick={() => fields.remove(index)}>
-                  <Icon name="remove" />
+                  <FontAwesomeIcon icon="remove" />
                 </FlatButton>
               </OverlayTrigger>
             </td>
@@ -91,7 +90,7 @@ const ExpandingSelectField = ({
         }
       >
         <FlatButton onClick={() => fields.push('')}>
-          <Icon name="plus" />
+          <FontAwesomeIcon icon="plus" />
         </FlatButton>
       </OverlayTrigger>
     </div>

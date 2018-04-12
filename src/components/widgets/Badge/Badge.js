@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage, FormattedRelative } from 'react-intl';
-import Icon from 'react-fontawesome';
+import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import { Link } from 'react-router';
 import { Tooltip, OverlayTrigger } from 'react-bootstrap';
 
@@ -48,7 +48,7 @@ class Badge extends Component {
             </Link>
           </p>
           <Link to={EDIT_USER_URI_FACTORY(id)}>
-            <Icon name="edit" />
+            <FontAwesomeIcon icon="edit" />&nbsp;
             <FormattedMessage id="generic.settings" defaultMessage="Settings" />
           </Link>
           &nbsp;
@@ -71,7 +71,10 @@ class Badge extends Component {
                 logout();
               }}
             >
-              <Icon name="sign-out" className="text-danger" />{' '}
+              <FontAwesomeIcon
+                icon="sign-out-alt"
+                className="text-danger"
+              />&nbsp;
               <FormattedMessage id="app.logout" defaultMessage="Logout" />
             </a>
           </OverlayTrigger>

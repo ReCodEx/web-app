@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { Row, Col } from 'react-bootstrap';
-import Icon from 'react-fontawesome';
+import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 
 import PageContent from '../../components/layout/PageContent';
 import withLinks from '../../helpers/withLinks';
@@ -63,7 +63,7 @@ const FeedbackAndBugs = ({ links: { GITHUB_BUGS_URL } }) =>
         <Col lg={12}>
           <p className="text-center">
             <a href={GITHUB_BUGS_URL} className="btn btn-flat btn-default">
-              <Icon name="github" />{' '}
+              <FontAwesomeIcon icon={['fab', 'github']} />{' '}
               <FormattedMessage
                 defaultMessage="Open ReCodEx webapp repository"
                 id="app.recodex.bugsAndFeedbackUrl"

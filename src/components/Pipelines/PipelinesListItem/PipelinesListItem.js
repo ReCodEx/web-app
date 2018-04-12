@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Icon from 'react-fontawesome';
+import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import UsersNameContainer from '../../../containers/UsersNameContainer';
 import ExercisesNameContainer from '../../../containers/ExercisesNameContainer';
 import { Link } from 'react-router';
@@ -19,7 +19,7 @@ const PipelinesListItem = ({
 }) =>
   <tr>
     <td className="text-center">
-      <Icon name="code" />
+      <FontAwesomeIcon icon="code" />
     </td>
     <td>
       <strong>

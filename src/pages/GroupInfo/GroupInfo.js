@@ -96,7 +96,7 @@ class GroupInfo extends Component {
       },
       {
         resource: group,
-        iconName: 'group',
+        iconName: 'users',
         breadcrumb: data => ({
           text: getLocalizedName(data, locale)
         })

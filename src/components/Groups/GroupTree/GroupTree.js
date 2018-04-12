@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { LinkContainer } from 'react-router-bootstrap';
-import Icon from 'react-fontawesome';
+import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 
 import Button from '../../widgets/FlatButton';
 import { TreeView, TreeViewItem } from '../../widgets/TreeView';
@@ -42,7 +42,7 @@ class GroupTree extends Component {
           }
         >
           <Button bsStyle="primary" bsSize="xs" className="btn-flat">
-            <Icon name="group" />{' '}
+            <FontAwesomeIcon icon="users" />{' '}
             {organizational
               ? <FormattedMessage
                   id="app.group.info"

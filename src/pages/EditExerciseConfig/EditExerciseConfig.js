@@ -114,7 +114,7 @@ class EditExerciseConfig extends Component {
                 defaultMessage="Edit exercise config"
               />
             ),
-            iconName: 'pencil'
+            iconName: ['far', 'edit']
           }
         ]}
       >

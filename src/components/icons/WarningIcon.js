@@ -1,6 +1,7 @@
 import React from 'react';
-import Icon from 'react-fontawesome';
+import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 
-const WarningIcon = props => <Icon {...props} name="exclamation-triangle" />;
+const WarningIcon = props =>
+  <FontAwesomeIcon {...props} icon="exclamation-triangle" />;
 
 export default WarningIcon;

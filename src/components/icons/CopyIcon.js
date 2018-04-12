@@ -1,6 +1,6 @@
 import React from 'react';
-import Icon from 'react-fontawesome';
+import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 
-const CopyIcon = props => <Icon {...props} name="clipboard" />;
+const CopyIcon = props => <FontAwesomeIcon {...props} icon="clipboard" />;
 
 export default CopyIcon;

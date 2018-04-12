@@ -1,6 +1,6 @@
 import React from 'react';
-import Icon from 'react-fontawesome';
+import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 
-const CloseIcon = props => <Icon {...props} name="times" />;
+const CloseIcon = props => <FontAwesomeIcon {...props} icon="times" />;
 
 export default CloseIcon;

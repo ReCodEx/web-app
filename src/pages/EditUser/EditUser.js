@@ -70,7 +70,7 @@ class EditUser extends Component {
                 defaultMessage="Edit user's profile"
               />
             ),
-            iconName: 'pencil'
+            iconName: ['far', 'edit']
           }
         ]}
       >

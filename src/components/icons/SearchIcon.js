@@ -1,6 +1,6 @@
 import React from 'react';
-import Icon from 'react-fontawesome';
+import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 
-const SearchIcon = props => <Icon {...props} name="search" />;
+const SearchIcon = props => <FontAwesomeIcon {...props} icon="search" />;
 
 export default SearchIcon;

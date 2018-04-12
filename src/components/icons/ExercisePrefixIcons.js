@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import Icon from 'react-fontawesome';
+import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 
 const ExercisePrefixIcons = ({ id, isLocked, isBroken, ...props }) =>
@@ -19,7 +19,7 @@ const ExercisePrefixIcons = ({ id, isLocked, isBroken, ...props }) =>
             </Tooltip>
           }
         >
-          <Icon {...props} name="lock" className="text-warning" />
+          <FontAwesomeIcon {...props} icon="lock" className="text-warning" />
         </OverlayTrigger>
         &nbsp;&nbsp;
       </span>}
@@ -36,7 +36,7 @@ const ExercisePrefixIcons = ({ id, isLocked, isBroken, ...props }) =>
             </Tooltip>
           }
         >
-          <Icon {...props} name="medkit" className="text-danger" />
+          <FontAwesomeIcon {...props} icon="medkit" className="text-danger" />
         </OverlayTrigger>
         &nbsp;&nbsp;
       </span>}

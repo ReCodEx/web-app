@@ -28,7 +28,7 @@ const LoggedIn = ({
           defaultMessage="Dashboard"
         />
       }
-      icon="dashboard"
+      icon="tachometer-alt"
       currentPath={currentUrl}
       link={DASHBOARD_URI}
     />

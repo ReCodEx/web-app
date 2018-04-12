@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Field, FieldArray } from 'redux-form';
 import { Well, Row, Col } from 'react-bootstrap';
 import { FormattedMessage, injectIntl, defineMessages } from 'react-intl';
-import Icon from 'react-fontawesome';
+import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 
 import { safeGet, EMPTY_ARRAY } from '../../../helpers/common';
 import Button from '../../widgets/FlatButton';
@@ -151,7 +151,7 @@ class EditExerciseSimpleConfigTest extends Component {
         (this.state.compilationOpen === null && hasCompilationExtraFiles)
           ? <Well>
               <h4 className="compilation-close" onClick={this.compilationClose}>
-                <Icon name="minus-square-o" />&nbsp;&nbsp;
+                <FontAwesomeIcon icon="minus-square" />&nbsp;&nbsp;
                 <FormattedMessage
                   id="app.editExerciseSimpleConfigTests.compilationTitle"
                   defaultMessage="Compilation/Execution"
@@ -223,7 +223,7 @@ class EditExerciseSimpleConfigTest extends Component {
               className="text-muted compilation-open"
               onClick={this.compilationOpen}
             >
-              <Icon name="plus-square-o" />&nbsp;&nbsp;
+              <FontAwesomeIcon icon="plus-square" />&nbsp;&nbsp;
               <FormattedMessage
                 id="app.editExerciseSimpleConfigTests.compilationTitle"
                 defaultMessage="Compilation/Execution"
@@ -437,7 +437,7 @@ class EditExerciseSimpleConfigTest extends Component {
                     className="btn-flat"
                     disabled={Boolean(testErrors)}
                   >
-                    <Icon name="arrows" />{' '}
+                    <FontAwesomeIcon icon="arrows-alt" />{' '}
                     <FormattedMessage
                       id="app.editExerciseConfigForm.smartFill"
                       defaultMessage="Smart Fill"

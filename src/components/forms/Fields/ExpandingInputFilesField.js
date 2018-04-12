@@ -3,11 +3,9 @@ import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { Field } from 'redux-form';
 import { ControlLabel, OverlayTrigger, Tooltip } from 'react-bootstrap';
-
-import Icon from 'react-fontawesome';
+import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 
 import FlatButton from '../../widgets/FlatButton';
-
 import SelectField from './SelectField';
 import TextField from './TextField';
 
@@ -85,7 +83,7 @@ const ExpandingInputFilesField = ({
                   }
                 >
                   <FlatButton onClick={() => fields.remove(index)}>
-                    <Icon name="remove" />
+                    <FontAwesomeIcon icon="remove" />
                   </FlatButton>
                 </OverlayTrigger>
               </td>
@@ -113,7 +111,7 @@ const ExpandingInputFilesField = ({
         }
       >
         <FlatButton onClick={() => fields.push(EMPTY_VALUE)}>
-          <Icon name="plus" />
+          <FontAwesomeIcon icon="plus" />
         </FlatButton>
       </OverlayTrigger>
     </div>

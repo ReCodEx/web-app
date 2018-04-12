@@ -3,7 +3,7 @@ import { Alert, Table, Row, Col } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { reduxForm, Field } from 'redux-form';
-import Icon from 'react-fontawesome';
+import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 
 import { EditLimitsField, CheckboxField } from '../Fields';
 import SubmitButton from '../SubmitButton';
@@ -123,7 +123,7 @@ class EditLimitsForm extends Component {
           <Col lg={9}>
             <div>
               <p className={styles.preciseTimeTooltip}>
-                <Icon name="info-circle" />
+                <FontAwesomeIcon icon="info-circle" />
                 <FormattedMessage
                   id="app.editLimitsForm.preciseTimeTooltip"
                   defaultMessage="If precise time measurement is selected, ReCodEx will measure the consumed CPU time of tested solutions. Otherwise, the wall time will be measured. CPU is better in cases when serial time complexity of the solution is tested and tight time limits are set. Wall time is better in general cases as it better reflects the actual time consumed by the solution (including I/O), but it is more susceptible to errors of measurement."

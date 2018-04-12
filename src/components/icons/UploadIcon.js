@@ -1,6 +1,7 @@
 import React from 'react';
-import Icon from 'react-fontawesome';
+import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 
-const UploadIcon = props => <Icon {...props} name="cloud-upload" />;
+const UploadIcon = props =>
+  <FontAwesomeIcon {...props} icon="cloud-upload-alt" />;
 
 export default UploadIcon;

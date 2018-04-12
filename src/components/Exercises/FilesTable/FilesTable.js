@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { injectIntl, FormattedMessage } from 'react-intl';
 
-import Icon from 'react-fontawesome';
+import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import { Table } from 'react-bootstrap';
 import Button from '../../widgets/FlatButton';
 import Box from '../../widgets/Box';
@@ -82,7 +82,7 @@ const FilesTable = ({
               </Table>}
             {attachments.length === 0 &&
               <p className="text-center">
-                <Icon name="folder-open-o" />{' '}
+                <FontAwesomeIcon icon={['far', 'folder-open']} />{' '}
                 <FormattedMessage
                   id="app.filesTable.empty"
                   defaultMessage="There are no uploaded files yet."

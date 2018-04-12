@@ -11,6 +11,12 @@ import { isTokenValid, willExpireSoon } from '../../redux/helpers/token';
 import { fetchUsersInstancesIfNeeded } from '../../redux/modules/instances';
 import { fetchUsersGroupsIfNeeded } from '../../redux/modules/groups';
 import { logout, refresh } from '../../redux/modules/auth';
+import fontawesome from '@fortawesome/fontawesome';
+import regularIcons from '@fortawesome/fontawesome-free-regular';
+import solidIcons from '@fortawesome/fontawesome-free-solid';
+import brandIcons from '@fortawesome/fontawesome-free-brands';
+
+fontawesome.library.add(regularIcons, solidIcons, brandIcons);
 
 class App extends Component {
   static loadAsync = (params, dispatch, userId) =>

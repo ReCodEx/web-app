@@ -1,15 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import Icon from 'react-fontawesome';
+import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 
 const DifficultyIcon = ({ difficulty }) => {
   switch (difficulty) {
     case 'easy':
       return (
         <span className="text-success">
-          <Icon name="smile-o" />
-          {' '}
+          <FontAwesomeIcon icon={['far', 'smile']} />{' '}
           <FormattedMessage
             id="app.exercises.difficultyIcon.easy"
             defaultMessage="Easy"
@@ -21,8 +20,7 @@ const DifficultyIcon = ({ difficulty }) => {
     case 'moderate':
       return (
         <span className="text-warning">
-          <Icon name="meh-o" />
-          {' '}
+          <FontAwesomeIcon icon={['far', 'meh']} />{' '}
           <FormattedMessage
             id="app.exercises.difficultyIcon.medium"
             defaultMessage="Medium"
@@ -33,8 +31,7 @@ const DifficultyIcon = ({ difficulty }) => {
     case 'hard':
       return (
         <span className="text-danger">
-          <Icon name="frown-o" />
-          {' '}
+          <FontAwesomeIcon icon={['far', 'frown']} />{' '}
           <FormattedMessage
             id="app.exercises.difficultyIcon.hard"
             defaultMessage="Hard"

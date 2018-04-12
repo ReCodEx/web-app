@@ -79,7 +79,7 @@ class EditPipeline extends Component {
                 defaultMessage="Edit pipeline"
               />
             ),
-            iconName: 'pencil'
+            iconName: ['far', 'edit']
           }
         ]}
       >

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import Icon from 'react-fontawesome';
+import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import classNames from 'classnames';
 import Collapse from 'react-collapse';
 
@@ -96,7 +96,7 @@ class Box extends Component {
                 className="btn btn-box-tool"
                 onClick={this.toggleDetails}
               >
-                <Icon name={isOpen ? 'minus' : 'plus'} />
+                <FontAwesomeIcon icon={isOpen ? 'minus' : 'plus'} />
               </button>
             </div>}
         </div>

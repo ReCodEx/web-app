@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage, FormattedNumber } from 'react-intl';
-import Icon from 'react-fontawesome';
+import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import classNames from 'classnames';
 import GroupsName from '../../../components/Groups/GroupsName';
 
@@ -21,7 +21,7 @@ const InfoBox = ({
     })}
   >
     <span className="info-box-icon">
-      <Icon name={icon} spin={spin} />
+      <FontAwesomeIcon icon={icon} spin={spin} />
     </span>
     <div className="info-box-content">
       <span className="info-box-text">

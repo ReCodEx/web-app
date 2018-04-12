@@ -1,10 +1,9 @@
 import React from 'react';
-import Icon from 'react-fontawesome';
+import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 
-const FailedIcon = props => (
+const FailedIcon = props =>
   <strong className="text-danger">
-    <Icon {...props} name="times" />
-  </strong>
-);
+    <FontAwesomeIcon {...props} icon="times" />
+  </strong>;
 
 export default FailedIcon;

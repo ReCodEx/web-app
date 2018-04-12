@@ -16,7 +16,7 @@ const messages = defineMessages({
 
 const ResultArchiveInfoBox = ({ id, intl: { formatMessage } }) =>
   <SimpleInfoBox
-    icon="file-archive-o"
+    icon={['far', 'file-archive']}
     title={formatMessage(messages.title)}
     description={formatMessage(messages.description)}
     color="green"

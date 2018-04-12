@@ -5,7 +5,7 @@ import { FormattedMessage, injectIntl } from 'react-intl';
 import { Row, Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { defaultMemoize } from 'reselect';
-import Icon from 'react-fontawesome';
+import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import { formValueSelector } from 'redux-form';
 
 import Page from '../../components/layout/Page';
@@ -250,7 +250,7 @@ class EditExerciseLimits extends Component {
                 defaultMessage="Edit tests limits"
               />
             ),
-            iconName: 'pencil'
+            iconName: ['far', 'edit']
           }
         ]}
       >
@@ -261,7 +261,7 @@ class EditExerciseLimits extends Component {
                 <Col sm={12}>
                   <div className="alert alert-warning">
                     <h4>
-                      <Icon name="medkit" />&nbsp;&nbsp;
+                      <FontAwesomeIcon icon="medkit" />&nbsp;&nbsp;
                       <FormattedMessage
                         id="app.exercise.isBroken"
                         defaultMessage="Exercise configuration is incorrect and needs fixing"
@@ -357,7 +357,7 @@ class EditExerciseLimits extends Component {
                           className="text-center text-muted"
                           style={{ marginBottom: '15px' }}
                         >
-                          &nbsp;<Icon name="arrow-down" />&nbsp;
+                          &nbsp;<FontAwesomeIcon icon="arrow-down" />&nbsp;
                         </div>
                         <HardwareGroupMetadata
                           key={targetHardwareGroup}

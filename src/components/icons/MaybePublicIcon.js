@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import Icon from 'react-fontawesome';
+import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 
-const MaybePublicIcon = ({ id, isPublic, ...props }) => (
+const MaybePublicIcon = ({ id, isPublic, ...props }) =>
   <OverlayTrigger
     placement="right"
     overlay={
@@ -22,10 +22,9 @@ const MaybePublicIcon = ({ id, isPublic, ...props }) => (
     }
   >
     {isPublic
-      ? <Icon {...props} name="circle" className="text-success" />
-      : <Icon {...props} name="ban" />}
-  </OverlayTrigger>
-);
+      ? <FontAwesomeIcon {...props} icon="circle" className="text-success" />
+      : <FontAwesomeIcon {...props} icon="ban" />}
+  </OverlayTrigger>;
 
 MaybePublicIcon.propTypes = {
   id: PropTypes.any.isRequired,

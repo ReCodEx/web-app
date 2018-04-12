@@ -2,18 +2,16 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import Button from '../../widgets/FlatButton';
-import Icon from 'react-fontawesome';
+import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 
-const MakeGroupAdminButton = ({ onClick, ...props }) => (
+const MakeGroupAdminButton = ({ onClick, ...props }) =>
   <Button {...props} onClick={onClick} bsStyle="success" className="btn-flat">
-    <Icon name="user-secret" />
-    {' '}
+    <FontAwesomeIcon icon="user-secret" />{' '}
     <FormattedMessage
       id="app.groups.makeGroupAdminButton"
       defaultMessage="Make group admin"
     />
-  </Button>
-);
+  </Button>;
 
 MakeGroupAdminButton.propTypes = {
   onClick: PropTypes.func.isRequired

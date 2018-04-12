@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Icon from 'react-fontawesome';
+import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import { Table } from 'react-bootstrap';
 import {
   FormattedDate,
@@ -45,8 +45,9 @@ const AssignmentDetails = ({
         >
           <td className="text-center">
             <strong>
-              {!isAfterFirstDeadline && <Icon name="hourglass-start" />}
-              {isAfterFirstDeadline && <Icon name="hourglass-end" />}
+              {!isAfterFirstDeadline &&
+                <FontAwesomeIcon icon="hourglass-start" />}
+              {isAfterFirstDeadline && <FontAwesomeIcon icon="hourglass-end" />}
             </strong>
           </td>
           <td>
@@ -71,8 +72,10 @@ const AssignmentDetails = ({
           >
             <td className="text-center">
               <strong>
-                {!isAfterSecondDeadline && <Icon name="hourglass-half" />}
-                {isAfterSecondDeadline && <Icon name="hourglass-end" />}
+                {!isAfterSecondDeadline &&
+                  <FontAwesomeIcon icon="hourglass-half" />}
+                {isAfterSecondDeadline &&
+                  <FontAwesomeIcon icon="hourglass-end" />}
               </strong>
             </td>
             <td>
@@ -93,7 +96,7 @@ const AssignmentDetails = ({
           </tr>}
         <tr>
           <td className="text-center">
-            <Icon name="cloud-upload" />
+            <FontAwesomeIcon icon="cloud-upload-alt" />
           </td>
           <td>
             <FormattedMessage
@@ -111,7 +114,7 @@ const AssignmentDetails = ({
         </tr>
         <tr>
           <td className="text-center">
-            <Icon name="ban" />
+            <FontAwesomeIcon icon="ban" />
           </td>
           <td>
             <FormattedMessage
@@ -125,7 +128,7 @@ const AssignmentDetails = ({
         </tr>
         <tr>
           <td className="text-center">
-            <Icon name="coffee" />
+            <FontAwesomeIcon icon="coffee" />
           </td>
           <td>
             <FormattedMessage
@@ -139,7 +142,7 @@ const AssignmentDetails = ({
         </tr>
         <tr>
           <td className="text-center">
-            <Icon name="unlock-alt" />
+            <FontAwesomeIcon icon="unlock-alt" />
           </td>
           <td>
             <FormattedMessage
@@ -154,7 +157,7 @@ const AssignmentDetails = ({
         {isBonus &&
           <tr>
             <td className="text-center">
-              <Icon name="plus-circle" />
+              <FontAwesomeIcon icon="plus-circle" />
             </td>
             <td>
               <FormattedMessage
@@ -168,7 +171,7 @@ const AssignmentDetails = ({
           </tr>}
         <tr>
           <td className="text-center">
-            <Icon name="percent" />
+            <FontAwesomeIcon icon="percent" />
           </td>
           <td>
             <FormattedMessage
@@ -182,7 +185,7 @@ const AssignmentDetails = ({
         </tr>
         <tr>
           <td className="text-center">
-            <Icon name="code" />
+            <FontAwesomeIcon icon="code" />
           </td>
           <td>
             <FormattedMessage

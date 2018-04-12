@@ -81,7 +81,7 @@ class Submission extends Component {
         breadcrumbs={[
           {
             resource: assignment,
-            iconName: 'group',
+            iconName: 'users',
             breadcrumb: assignment => ({
               text: (
                 <FormattedMessage
