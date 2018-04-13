@@ -4,6 +4,7 @@ import { fromJS } from 'immutable';
 import { decode, isTokenValid } from '../helpers/token';
 import { createApiAction } from '../middleware/apiMiddleware';
 import { actionTypes as registrationActionTypes } from './registration';
+import { actionTypes as usersActionTypes } from './users';
 
 export const actionTypes = {
   LOGIN: 'recodex/auth/LOGIN',
@@ -235,7 +236,21 @@ const auth = (accessToken, now = Date.now()) => {
         state.set('resetPasswordStatus', 'FAILED'),
 
       [actionTypes.RESET_PASSWORD_FULFILLED]: (state, action) =>
-        state.set('resetPasswordStatus', 'FULFILLED')
+        state.set('resetPasswordStatus', 'FULFILLED'),
+
+      [usersActionTypes.UPDATE_FULFILLED]: (
+        state,
+        { payload: { accessToken = null } }
+      ) =>
+        accessToken
+          ? state
+              .set('jwt', accessToken)
+              .set('accessToken', decodeAndValidateAccessToken(accessToken))
+              .set(
+                'userId',
+                getUserId(decodeAndValidateAccessToken(accessToken))
+              )
+          : state
     },
     initialState
   );
