@@ -1,6 +1,8 @@
 import { actionTypes } from '../modules/auth';
 import { jwtSelector } from '../selectors/auth';
 import { actionTypes as registrationActionTypes } from '../modules/registration';
+import { actionTypes as usersActionTypes } from '../modules/users';
+
 import { CALL_API } from './apiMiddleware';
 import cookies from 'browser-cookies';
 import { canUseDOM } from 'exenv';
@@ -48,6 +50,11 @@ export const getToken = () => {
 const middleware = store => next => action => {
   // manage access token storage
   switch (action.type) {
+    case usersActionTypes.UPDATE_FULFILLED:
+      if (!action.payload.accessToken) {
+        break;
+      }
+    /* eslint no-fallthrough: "allow" */
     case actionTypes.LOGIN_SUCCESS:
     case registrationActionTypes.CREATE_ACCOUNT_FULFILLED:
       storeToken(action.payload.accessToken);
@@ -69,7 +76,7 @@ const middleware = store => next => action => {
       if (!action.request.accessToken) {
         const token = jwtSelector(store.getState());
         if (token) {
-          // do not override the token if it was set explicitely and there is none in the state
+          // do not override the token if it was set explicitly and there is none in the state
           action.request.accessToken = token;
         }
       }

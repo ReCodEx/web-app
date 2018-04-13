@@ -16,14 +16,6 @@ export const additionalActionTypes = {
     'recodex/users/VALIDATE_REGISTRATION_DATA_FULFILLED',
   VALIDATE_REGISTRATION_DATA_REJECTED:
     'recodex/users/VALIDATE_REGISTRATION_DATA_REJECTED',
-  UPDATE_PROFILE: 'recodex/users/UPDATE_PROFILE',
-  UPDATE_PROFILE_PENDING: 'recodex/users/UPDATE_PROFILE_PENDING',
-  UPDATE_PROFILE_FULFILLED: 'recodex/users/UPDATE_PROFILE_FULFILLED',
-  UPDATE_PROFILE_REJECTED: 'recodex/users/UPDATE_PROFILE_REJECTED',
-  UPDATE_SETTINGS: 'recodex/users/UPDATE_SETTINGS',
-  UPDATE_SETTINGS_PENDING: 'recodex/users/UPDATE_SETTINGS_PENDING',
-  UPDATE_SETTINGS_FULFILLED: 'recodex/users/UPDATE_SETTINGS_FULFILLED',
-  UPDATE_SETTINGS_REJECTED: 'recodex/users/UPDATE_SETTINGS_REJECTED',
   CREATE_LOCAL_LOGIN: 'recodex/users/CREATE_LOCAL_LOGIN',
   CREATE_LOCAL_LOGIN_PENDING: 'recodex/users/CREATE_LOCAL_LOGIN_PENDING',
   CREATE_LOCAL_LOGIN_FULFILLED: 'recodex/users/CREATE_LOCAL_LOGIN_FULFILLED',
@@ -84,6 +76,16 @@ export const makeLocalLogin = id =>
 
 const reducer = handleActions(
   Object.assign({}, reduceActions, {
+    [actionTypes.UPDATE_FULFILLED]: (state, { payload, meta: { id } }) =>
+      state.setIn(
+        ['resources', id, 'data'],
+        fromJS(
+          payload.user && typeof payload.user === 'object'
+            ? payload.user
+            : payload
+        )
+      ),
+
     [emailVerificationActionTypes.EMAIL_VERIFICATION_FULFILLED]: (
       state,
       { meta: { userId } }
