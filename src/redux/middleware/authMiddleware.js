@@ -54,7 +54,7 @@ const middleware = store => next => action => {
       if (!action.payload.accessToken) {
         break;
       }
-    /* eslint no-fallthrough: "allow" */
+    /* eslint no-fallthrough: "off" */
     case actionTypes.LOGIN_SUCCESS:
     case registrationActionTypes.CREATE_ACCOUNT_FULFILLED:
       storeToken(action.payload.accessToken);
