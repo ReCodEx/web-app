@@ -246,7 +246,11 @@ class GroupDetail extends Component {
                     <ResourceRenderer resource={stats}>
                       {groupStats =>
                         <AssignmentsTable
-                          assignments={allAssignments}
+                          assignments={
+                            isAdmin || isSupervisor
+                              ? allAssignments
+                              : publicAssignments
+                          }
                           assignmentEnvironmentsSelector={
                             assignmentEnvironmentsSelector
                           }
