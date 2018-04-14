@@ -11,6 +11,7 @@ const GroupTopButtons = ({
   group,
   userId,
   canEdit,
+  canSeeDetail,
   canLeaveJoin,
   links: {
     GROUP_EDIT_URI_FACTORY,
@@ -37,12 +38,16 @@ const GroupTopButtons = ({
       </Button>
     </LinkContainer>
 
-    <LinkContainer to={GROUP_DETAIL_URI_FACTORY(group.id)}>
-      <Button bsStyle="primary">
-        <GroupIcon />{' '}
-        <FormattedMessage id="app.group.detail" defaultMessage="Group Detail" />
-      </Button>
-    </LinkContainer>
+    {canSeeDetail &&
+      <LinkContainer to={GROUP_DETAIL_URI_FACTORY(group.id)}>
+        <Button bsStyle="primary">
+          <GroupIcon />{' '}
+          <FormattedMessage
+            id="app.group.detail"
+            defaultMessage="Group Detail"
+          />
+        </Button>
+      </LinkContainer>}
 
     {canLeaveJoin &&
       !group.organizational &&
@@ -57,6 +62,7 @@ GroupTopButtons.propTypes = {
   group: PropTypes.object.isRequired,
   userId: PropTypes.string.isRequired,
   canEdit: PropTypes.bool.isRequired,
+  canSeeDetail: PropTypes.bool,
   canLeaveJoin: PropTypes.bool,
   links: PropTypes.object
 };
