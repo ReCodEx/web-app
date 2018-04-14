@@ -212,6 +212,11 @@ class GroupDetail extends Component {
               group={data}
               userId={userId}
               canEdit={isAdmin || isSuperAdmin}
+              canSeeDetail={
+                isAdmin ||
+                isSuperAdmin ||
+                data.privateData.students.includes(userId)
+              }
               canLeaveJoin={
                 !isAdmin &&
                 !isSupervisor &&
@@ -246,7 +251,11 @@ class GroupDetail extends Component {
                     <ResourceRenderer resource={stats}>
                       {groupStats =>
                         <AssignmentsTable
-                          assignments={allAssignments}
+                          assignments={
+                            isAdmin || isSupervisor
+                              ? allAssignments
+                              : publicAssignments
+                          }
                           assignmentEnvironmentsSelector={
                             assignmentEnvironmentsSelector
                           }
