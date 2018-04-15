@@ -145,6 +145,11 @@ class GroupInfo extends Component {
               group={data}
               userId={userId}
               canEdit={isAdmin || isSuperAdmin}
+              canSeeDetail={
+                isAdmin ||
+                isSuperAdmin ||
+                data.privateData.students.includes(userId)
+              }
               canLeaveJoin={
                 !isAdmin &&
                 !isSupervisor &&

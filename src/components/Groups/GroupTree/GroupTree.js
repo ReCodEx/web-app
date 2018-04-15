@@ -28,7 +28,7 @@ class GroupTree extends Component {
       />
     </TreeView>;
 
-  renderButtons = (groupId, organizational) => {
+  renderButtons = (groupId, showInfoLink) => {
     const {
       links: { GROUP_INFO_URI_FACTORY, GROUP_DETAIL_URI_FACTORY }
     } = this.props;
@@ -36,14 +36,14 @@ class GroupTree extends Component {
       <span>
         <LinkContainer
           to={
-            organizational
+            showInfoLink
               ? GROUP_INFO_URI_FACTORY(groupId)
               : GROUP_DETAIL_URI_FACTORY(groupId)
           }
         >
           <Button bsStyle="primary" bsSize="xs" className="btn-flat">
             <FontAwesomeIcon icon="users" />{' '}
-            {organizational
+            {showInfoLink
               ? <FormattedMessage
                   id="app.group.info"
                   defaultMessage="Group Info"
@@ -135,7 +135,8 @@ class GroupTree extends Component {
             isOpen={currentGroupId === id || isOpen}
             actions={
               currentGroupId !== id && canView
-                ? this.renderButtons(id, organizational)
+                ? // this is inacurate, but public groups are visible to students who cannot see detail until they join
+                  this.renderButtons(id, organizational || isPublic)
                 : undefined
             }
           >

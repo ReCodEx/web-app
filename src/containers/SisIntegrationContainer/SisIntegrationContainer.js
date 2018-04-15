@@ -173,7 +173,10 @@ class SisIntegrationContainer extends Component {
                                             <span>
                                               <LinkContainer
                                                 to={
-                                                  group.organizational
+                                                  group.organizational ||
+                                                  // this is inacurate, but public groups are visible to students who cannot see detail until they join
+                                                  (group.privateData &&
+                                                    group.privateData.isPublic)
                                                     ? GROUP_INFO_URI_FACTORY(
                                                         group.id
                                                       )

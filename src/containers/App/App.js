@@ -7,7 +7,10 @@ import {
 } from '../../redux/selectors/auth';
 import { fetchUserIfNeeded } from '../../redux/modules/users';
 import { getUserSettings } from '../../redux/selectors/users';
-import { isTokenValid, willExpireSoon } from '../../redux/helpers/token';
+import {
+  isTokenValid,
+  isTokenInNeedOfRefreshment
+} from '../../redux/helpers/token';
 import { fetchUsersInstancesIfNeeded } from '../../redux/modules/instances';
 import { fetchUsersGroupsIfNeeded } from '../../redux/modules/groups';
 import { logout, refresh } from '../../redux/modules/auth';
@@ -52,7 +55,7 @@ class App extends Component {
     if (isLoggedIn) {
       if (!isTokenValid(token)) {
         logout();
-      } else if (willExpireSoon(token) && !this.isRefreshingToken) {
+      } else if (isTokenInNeedOfRefreshment(token) && !this.isRefreshingToken) {
         this.isRefreshingToken = true;
         refreshToken().catch(() => logout()).then(() => {
           this.isRefreshingToken = false;
