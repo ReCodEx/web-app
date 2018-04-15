@@ -22,7 +22,7 @@ const MenuItem = (
     })}
   >
     <Link to={link} target={inNewTab ? '_blank' : undefined}>
-      <FontAwesomeIcon icon={icon} />
+      <FontAwesomeIcon icon={icon} fixedWidth />
       &nbsp;&nbsp;
       <span
         style={{
