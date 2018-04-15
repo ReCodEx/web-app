@@ -1,6 +1,7 @@
 import React from 'react';
-import Icon from 'react-fontawesome';
+import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 
-const SendIcon = props => <Icon {...props} name="send-o" />;
+const SendIcon = props =>
+  <FontAwesomeIcon {...props} icon={['far', 'paper-plane']} />;
 
 export default SendIcon;

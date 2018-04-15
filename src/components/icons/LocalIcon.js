@@ -1,6 +1,6 @@
 import React from 'react';
-import Icon from 'react-fontawesome';
+import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 
-const LocalIcon = props => <Icon {...props} name="thumb-tack" />;
+const LocalIcon = props => <FontAwesomeIcon {...props} icon="thumb-tack" />;
 
 export default LocalIcon;

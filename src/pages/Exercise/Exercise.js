@@ -11,7 +11,7 @@ import {
 } from 'react-intl';
 import { Row, Col } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
-import Icon from 'react-fontawesome';
+import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import { formValueSelector } from 'redux-form';
 import moment from 'moment';
 import { defaultMemoize } from 'reselect';
@@ -275,7 +275,7 @@ class Exercise extends Component {
                 defaultMessage="Exercise overview"
               />
             ),
-            iconName: 'lightbulb-o'
+            iconName: ['far', 'lightbulb']
           }
         ]}
       >
@@ -286,7 +286,7 @@ class Exercise extends Component {
                 <Col sm={12}>
                   <div className="alert alert-warning">
                     <h4>
-                      <Icon name="medkit" />&nbsp;&nbsp;
+                      <FontAwesomeIcon icon="medkit" />&nbsp;&nbsp;
                       <FormattedMessage
                         id="app.exercise.isBroken"
                         defaultMessage="Exercise configuration is incorrect and needs fixing"

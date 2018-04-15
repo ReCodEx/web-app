@@ -183,7 +183,7 @@ class EditAssignment extends Component {
           },
           {
             text: <FormattedMessage id="app.editAssignment.title" />,
-            iconName: 'pencil'
+            iconName: ['far', 'edit']
           }
         ]}
       >

@@ -74,7 +74,7 @@ class AssignmentStats extends Component {
         breadcrumbs={[
           {
             resource: assignment,
-            iconName: 'group',
+            iconName: 'users',
             breadcrumb: assignment => ({
               text: (
                 <FormattedMessage
@@ -121,7 +121,7 @@ class AssignmentStats extends Component {
                 defaultMessage="Assignment statistics"
               />
             ),
-            iconName: 'line-chart'
+            iconName: 'chart-line'
           }
         ]}
       >

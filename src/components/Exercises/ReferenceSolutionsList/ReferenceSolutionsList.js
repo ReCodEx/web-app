@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage, FormattedDate, FormattedTime } from 'react-intl';
 import { Table, Label } from 'react-bootstrap';
-import Icon from 'react-fontawesome';
+import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import UsersNameContainer from '../../../containers/UsersNameContainer';
 
 const getRuntimeName = (runtimes, id) => {
@@ -57,7 +57,7 @@ const ReferenceSolutionsList = ({
           }) =>
             <tr key={id}>
               <td className="text-center">
-                <Icon name="file-code-o" />
+                <FontAwesomeIcon icon={['far', 'file-code']} />
               </td>
               <td>
                 {description}

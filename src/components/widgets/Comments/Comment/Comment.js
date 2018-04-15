@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import classNames from 'classnames';
-import Icon from 'react-fontawesome';
+import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { Link } from 'react-router';
 import withLinks from '../../../../helpers/withLinks';
@@ -71,11 +71,9 @@ const Comment = ({
               </Tooltip>
             }
           >
-            <Icon
-              name={
-                isToggling
-                  ? 'circle-o-notch'
-                  : isPrivate ? 'lock' : 'unlock-alt'
+            <FontAwesomeIcon
+              icon={
+                isToggling ? 'circle-notch' : isPrivate ? 'lock' : 'unlock-alt'
               }
               onClick={() => togglePrivacy(id)}
               className="pull-right"

@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import { reduxForm, Field } from 'redux-form';
 import { FormattedMessage } from 'react-intl';
 import isEmail from 'validator/lib/isEmail';
+import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 
 import { SuccessIcon, LoadingIcon } from '../../icons';
-import Icon from 'react-fontawesome';
 import FormBox from '../../widgets/FormBox';
 import { EmailField, PasswordField } from '../Fields';
 
@@ -18,7 +18,7 @@ const LoginForm = ({
   submitFailed: hasFailed,
   submitting,
   hasSucceeded
-}) => (
+}) =>
   <FormBox
     title={
       <FormattedMessage
@@ -37,25 +37,22 @@ const LoginForm = ({
         >
           {!submitting
             ? hasSucceeded
-                ? <span>
-                    <SuccessIcon />
-                    {' '}
-                    <FormattedMessage
-                      id="app.loginForm.success"
-                      defaultMessage="You are successfully signed in"
-                    />
-                  </span>
-                : <span>
-                    <Icon name="sign-in" />
-                    {' '}
-                    <FormattedMessage
-                      id="app.loginForm.login"
-                      defaultMessage="Sign in"
-                    />
-                  </span>
+              ? <span>
+                  <SuccessIcon />{' '}
+                  <FormattedMessage
+                    id="app.loginForm.success"
+                    defaultMessage="You are successfully signed in"
+                  />
+                </span>
+              : <span>
+                  <FontAwesomeIcon icon="sign-in" />{' '}
+                  <FormattedMessage
+                    id="app.loginForm.login"
+                    defaultMessage="Sign in"
+                  />
+                </span>
             : <span>
-                <LoadingIcon />
-                {' '}
+                <LoadingIcon />{' '}
                 <FormattedMessage
                   id="app.loginForm.processing"
                   defaultMessage="Signing in ..."
@@ -95,8 +92,7 @@ const LoginForm = ({
         />
       }
     />
-  </FormBox>
-);
+  </FormBox>;
 
 LoginForm.propTypes = {
   onSubmit: PropTypes.func.isRequired,

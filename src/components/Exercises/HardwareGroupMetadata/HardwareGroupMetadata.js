@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { Table, OverlayTrigger, Tooltip } from 'react-bootstrap';
-import Icon from 'react-fontawesome';
+import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 
 import prettyMs from 'pretty-ms';
 import { prettyPrintBytes } from '../../helpers/stringFormatters';
@@ -75,7 +75,7 @@ const HardwareGroupMetadata = ({ hardwareGroup, isSuperAdmin = false }) => {
                     </Tooltip>
                   }
                 >
-                  <Icon name="braille" />
+                  <FontAwesomeIcon icon="braille" />
                 </OverlayTrigger>&nbsp;&nbsp;
                 {prettyPrintBytes(constraints.memory.min * 1024)} ...{' '}
                 {prettyPrintBytes(constraints.memory.max * 1024)}
@@ -105,7 +105,7 @@ const HardwareGroupMetadata = ({ hardwareGroup, isSuperAdmin = false }) => {
                         </Tooltip>
                       }
                     >
-                      <Icon name="clock-o" />
+                      <FontAwesomeIcon icon={['far', 'clock']} />
                     </OverlayTrigger>&nbsp;&nbsp;
                     {prettyMs(constraints.cpuTimePerTest.min * 1000)} ...{' '}
                     {prettyMs(constraints.cpuTimePerTest.max * 1000)}
@@ -122,7 +122,7 @@ const HardwareGroupMetadata = ({ hardwareGroup, isSuperAdmin = false }) => {
                         </Tooltip>
                       }
                     >
-                      <Icon name="microchip" />
+                      <FontAwesomeIcon icon="microchip" />
                     </OverlayTrigger>&nbsp;&nbsp;
                     {prettyMs(constraints.cpuTimePerTest.min * 1000)} ...{' '}
                     {prettyMs(constraints.cpuTimePerTest.max * 1000)}
@@ -138,7 +138,7 @@ const HardwareGroupMetadata = ({ hardwareGroup, isSuperAdmin = false }) => {
                         </Tooltip>
                       }
                     >
-                      <Icon name="clock-o" />
+                      <FontAwesomeIcon icon={['far', 'clock']} />
                     </OverlayTrigger>&nbsp;&nbsp;
                     {prettyMs(constraints.wallTimePerTest.min * 1000)} ...{' '}
                     {prettyMs(constraints.wallTimePerTest.max * 1000)}
@@ -169,7 +169,7 @@ const HardwareGroupMetadata = ({ hardwareGroup, isSuperAdmin = false }) => {
                         </Tooltip>
                       }
                     >
-                      <Icon name="clock-o" />
+                      <FontAwesomeIcon icon={['far', 'clock']} />
                     </OverlayTrigger>&nbsp;&nbsp;
                     {prettyMs(
                       constraints.cpuTimePerExercise.min * 1000
@@ -187,7 +187,7 @@ const HardwareGroupMetadata = ({ hardwareGroup, isSuperAdmin = false }) => {
                         </Tooltip>
                       }
                     >
-                      <Icon name="microchip" />
+                      <FontAwesomeIcon icon="microchip" />
                     </OverlayTrigger>&nbsp;&nbsp;
                     {prettyMs(
                       constraints.cpuTimePerExercise.min * 1000
@@ -204,7 +204,7 @@ const HardwareGroupMetadata = ({ hardwareGroup, isSuperAdmin = false }) => {
                         </Tooltip>
                       }
                     >
-                      <Icon name="clock-o" />
+                      <FontAwesomeIcon icon={['far', 'clock']} />
                     </OverlayTrigger>&nbsp;&nbsp;
                     {prettyMs(
                       constraints.wallTimePerExercise.min * 1000

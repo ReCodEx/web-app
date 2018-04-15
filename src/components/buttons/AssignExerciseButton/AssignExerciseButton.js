@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import Icon from 'react-fontawesome';
+import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import Button from '../../widgets/FlatButton';
 import { SendIcon, InfoIcon } from '../../../components/icons';
 
@@ -14,7 +14,7 @@ const AssignExerciseButton = ({
   if (isLocked || isBroken) {
     return (
       <Button bsSize="xs" className="btn-flat" disabled={true} {...props}>
-        {isBroken ? <Icon name="medkit" /> : <InfoIcon />}
+        {isBroken ? <FontAwesomeIcon icon="medkit" /> : <InfoIcon />}
         {'  '}
         {isBroken
           ? <FormattedMessage

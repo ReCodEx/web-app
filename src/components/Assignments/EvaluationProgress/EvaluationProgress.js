@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import Icon from 'react-fontawesome';
+import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import classNames from 'classnames';
 import { Modal, ProgressBar, Table } from 'react-bootstrap';
 import Button from '../../widgets/FlatButton';
@@ -78,8 +78,8 @@ class EvaluationProgress extends Component {
                         })}
                       >
                         <strong>
-                          <Icon
-                            name={
+                          <FontAwesomeIcon
+                            icon={
                               wasSuccessful ? 'check-circle' : 'times-circle'
                             }
                           />

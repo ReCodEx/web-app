@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedDate, FormattedTime, FormattedMessage } from 'react-intl';
-import Icon from 'react-fontawesome';
+import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { Link } from 'react-router';
 import withLinks from '../../../helpers/withLinks';
@@ -26,10 +26,12 @@ const FailuresListItem = ({
         }
       >
         <div>
-          {failure.type === 'broker_reject' && <Icon name="exchange" />}
+          {failure.type === 'broker_reject' &&
+            <FontAwesomeIcon icon="exchange-alt" />}
           {failure.type === 'evaluation_failure' &&
-            <Icon name="graduation-cap" />}
-          {failure.type === 'loading_failure' && <Icon name="download" />}
+            <FontAwesomeIcon icon="graduation-cap" />}
+          {failure.type === 'loading_failure' &&
+            <FontAwesomeIcon icon="download" />}
         </div>
       </OverlayTrigger>
     </td>

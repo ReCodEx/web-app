@@ -9,7 +9,7 @@ import {
 } from 'react-intl';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { Row, Col, Button } from 'react-bootstrap';
-import Icon from 'react-fontawesome';
+import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 
 import withLinks from '../../helpers/withLinks';
 import Page from '../../components/layout/Page';
@@ -105,7 +105,7 @@ class ReferenceSolution extends Component {
                 defaultMessage="Exercise overview"
               />
             ),
-            iconName: 'lightbulb-o',
+            iconName: ['far', 'lightbulb'],
             link: EXERCISE_URI_FACTORY(exerciseId)
           },
           {
@@ -189,7 +189,7 @@ class ReferenceSolution extends Component {
                                     )}
                                 >
                                   {!exercise || exercise.isBroken
-                                    ? <Icon name="medkit" />
+                                    ? <FontAwesomeIcon icon="medkit" />
                                     : <SendIcon />}{' '}
                                   <FormattedMessage
                                     id="app.referenceSolutionDetail.resubmit"
@@ -210,7 +210,7 @@ class ReferenceSolution extends Component {
                                     )}
                                 >
                                   {!exercise || exercise.isBroken
-                                    ? <Icon name="medkit" />
+                                    ? <FontAwesomeIcon icon="medkit" />
                                     : <SendIcon />}{' '}
                                   <FormattedMessage
                                     id="app.referenceSolutionDetail.resubmitDebug"

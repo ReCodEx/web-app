@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { reduxForm, Field } from 'redux-form';
 import { Alert } from 'react-bootstrap';
-import Icon from 'react-fontawesome';
+import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 
 import FormBox from '../../widgets/FormBox';
 import SubmitButton from '../SubmitButton';
@@ -74,7 +74,7 @@ const EditHardwareGroupForm = ({
     }
   >
     <p className="text-muted text-justify small">
-      <Icon name="info-circle" />&nbsp;&nbsp;
+      <FontAwesomeIcon icon="info-circle" />&nbsp;&nbsp;
       <FormattedMessage
         id="app.editHardwareGroupForm.about"
         defaultMessage="Hardware group is a group of backend workers on which the exercise can be evaluated. The workers are bound to explicit hardware; thus, changing the hardware group of an exercise may affect the performance results. Furthermore, the workers in the group share configuration which implies the constraints for memory and time limits."

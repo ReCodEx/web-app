@@ -1,20 +1,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import Icon from 'react-fontawesome';
+import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import Button from '../../widgets/FlatButton';
 
 const AcceptSolution = ({ accepted, acceptPending, accept, unaccept }) =>
   accepted === true
     ? <Button bsStyle="info" onClick={unaccept} disabled={acceptPending}>
-        <Icon name="check-circle" />{' '}
+        <FontAwesomeIcon icon="check-circle" />{' '}
         <FormattedMessage
           id="app.acceptSolution.accepted"
           defaultMessage="Revoke as Final"
         />
       </Button>
     : <Button bsStyle="primary" onClick={accept} disabled={acceptPending}>
-        <Icon name="check-circle-o" />{' '}
+        <FontAwesomeIcon icon={['far', 'check-circle']} />{' '}
         <FormattedMessage
           id="app.acceptSolution.notAccepted"
           defaultMessage="Accept as Final"

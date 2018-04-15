@@ -87,7 +87,7 @@ class ReferenceSolutionEvaluation extends Component {
                 defaultMessage="Exercise overview"
               />
             ),
-            iconName: 'lightbulb-o',
+            iconName: ['far', 'lightbulb'],
             link: EXERCISE_URI_FACTORY(exerciseId)
           },
           {

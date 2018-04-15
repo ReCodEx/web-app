@@ -27,6 +27,11 @@
     "format": "./node_modules/prettier/bin/prettier.js --single-quote --write 'src/**/*.js'"
   },
   "dependencies": {
+    "@fortawesome/fontawesome": "^1.1.5",
+    "@fortawesome/fontawesome-free-brands": "^5.0.10",
+    "@fortawesome/fontawesome-free-regular": "^5.0.10",
+    "@fortawesome/fontawesome-free-solid": "^5.0.10",
+    "@fortawesome/react-fontawesome": "^0.0.18",
     "admin-lte": "2.3.11",
     "ajv": "5.5.1",
     "ajv-keywords": "2.1.1",
@@ -65,7 +70,6 @@
     "react-datetime": "^2.8.10",
     "react-dom": "^16.2.0",
     "react-dropzone": "^3.5.3",
-    "react-fontawesome": "1.6.1",
     "react-height": "^3.0.0",
     "react-helmet": "^5.0.3",
     "react-immutable-proptypes": "^2.1.0",

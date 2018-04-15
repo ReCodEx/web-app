@@ -70,16 +70,15 @@ class EditInstance extends Component {
                 defaultMessage="Edit instance"
               />
             ),
-            iconName: 'pencil'
+            iconName: ['far', 'edit']
           }
         ]}
       >
-        {instance => (
+        {instance =>
           <EditInstanceForm
             initialValues={this.getInitialValues(instance)}
             onSubmit={editInstance}
-          />
-        )}
+          />}
       </Page>
     );
   }

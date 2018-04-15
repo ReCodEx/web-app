@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import Icon from 'react-fontawesome';
+import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import { LinkContainer } from 'react-router-bootstrap';
 import { Breadcrumb } from 'react-bootstrap';
 import withLinks from '../../../helpers/withLinks';
@@ -15,7 +15,7 @@ const BreadcrumbItem = ({
 }) => {
   const content = (
     <Breadcrumb.Item active={isActive}>
-      {!!iconName && <Icon name={iconName} />} {text}
+      {!!iconName && <FontAwesomeIcon icon={iconName} />} {text}
     </Breadcrumb.Item>
   );
 
@@ -35,7 +35,7 @@ BreadcrumbItem.propTypes = {
     PropTypes.element,
     FormattedMessage
   ]).isRequired,
-  iconName: PropTypes.string,
+  iconName: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
   link: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
   isActive: PropTypes.bool.isRequired,
   links: PropTypes.object

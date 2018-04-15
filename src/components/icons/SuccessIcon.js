@@ -1,10 +1,9 @@
 import React from 'react';
-import Icon from 'react-fontawesome';
+import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 
-const SuccessIcon = props => (
+const SuccessIcon = props =>
   <strong className="text-success">
-    <Icon {...props} name="check" />
-  </strong>
-);
+    <FontAwesomeIcon {...props} icon="check" />
+  </strong>;
 
 export default SuccessIcon;

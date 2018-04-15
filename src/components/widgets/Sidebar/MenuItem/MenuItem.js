@@ -2,11 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { Link } from 'react-router';
+import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 
 const MenuItem = (
   {
     title,
-    icon = 'circle-o',
+    icon = 'circle',
     link,
     currentPath,
     notificationsCount = 0,
@@ -14,20 +15,15 @@ const MenuItem = (
     onIsActive = isActive => isActive
   },
   { isActive }
-) => (
+) =>
   <li
     className={classNames({
       active: isActive(link)
     })}
   >
     <Link to={link} target={inNewTab ? '_blank' : undefined}>
-      <i
-        className={classNames({
-          fa: true,
-          [`fa-${icon}`]: true,
-          'text-yellow': notificationsCount > 0
-        })}
-      />
+      <FontAwesomeIcon icon={icon} fixedWidth />
+      &nbsp;&nbsp;
       <span
         style={{
           whiteSpace: 'normal',
@@ -42,12 +38,11 @@ const MenuItem = (
           {notificationsCount}
         </small>}
     </Link>
-  </li>
-);
+  </li>;
 
 MenuItem.propTypes = {
   title: PropTypes.oneOfType([PropTypes.element, PropTypes.string]),
-  icon: PropTypes.string,
+  icon: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
   currentPath: PropTypes.string,
   notificationsCount: PropTypes.number,
   link: PropTypes.string,

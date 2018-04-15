@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { FormattedMessage, FormattedNumber } from 'react-intl';
 import { Table, OverlayTrigger, Tooltip } from 'react-bootstrap';
-import Icon from 'react-fontawesome';
+import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import prettyMs from 'pretty-ms';
 import { prettyPrintBytes } from '../../helpers/stringFormatters';
 
@@ -19,7 +19,7 @@ const tickOrCrossAndRatioOrValue = (isOK, ratio, value, pretty, multiplier) =>
       'text-danger': !isOK
     })}
   >
-    <Icon name={isOK ? 'check' : 'times'} />{' '}
+    <FontAwesomeIcon icon={isOK ? 'check' : 'times'} />{' '}
     <small>
       {hasValue(value) && '('}
       {(ratio || ratio === 0) &&
@@ -63,7 +63,10 @@ const showTimeResults = (
                   </Tooltip>
                 }
               >
-                <Icon name="microchip" style={{ marginRight: '10px' }} />
+                <FontAwesomeIcon
+                  icon="microchip"
+                  style={{ marginRight: '10px' }}
+                />
               </OverlayTrigger>
             </td>
             <td className="text-left">
@@ -90,7 +93,10 @@ const showTimeResults = (
                   </Tooltip>
                 }
               >
-                <Icon name="clock-o" style={{ marginRight: '10px' }} />
+                <FontAwesomeIcon
+                  icon={['far', 'clock']}
+                  style={{ marginRight: '10px' }}
+                />
               </OverlayTrigger>
             </td>
             <td className="text-left">
@@ -126,7 +132,7 @@ const TestResultsTable = ({ results, runtimeEnvironmentId }) =>
             }
           >
             <span>
-              <Icon name="check" />/<Icon name="times" />
+              <FontAwesomeIcon icon="check" />/<FontAwesomeIcon icon="times" />
             </span>
           </OverlayTrigger>
         </th>
@@ -142,7 +148,7 @@ const TestResultsTable = ({ results, runtimeEnvironmentId }) =>
               </Tooltip>
             }
           >
-            <Icon name="balance-scale" />
+            <FontAwesomeIcon icon="balance-scale" />
           </OverlayTrigger>
         </th>
         <th className="text-center">
@@ -158,8 +164,8 @@ const TestResultsTable = ({ results, runtimeEnvironmentId }) =>
             }
           >
             <span>
-              <Icon name="thermometer-half" />&nbsp;&nbsp;
-              <Icon name="braille" />
+              <FontAwesomeIcon icon="thermometer-half" />&nbsp;&nbsp;
+              <FontAwesomeIcon icon="braille" />
             </span>
           </OverlayTrigger>
         </th>
@@ -176,8 +182,8 @@ const TestResultsTable = ({ results, runtimeEnvironmentId }) =>
             }
           >
             <span>
-              <Icon name="thermometer-half" />&nbsp;&nbsp;
-              <Icon name="bolt" />
+              <FontAwesomeIcon icon="thermometer-half" />&nbsp;&nbsp;
+              <FontAwesomeIcon icon="bolt" />
             </span>
           </OverlayTrigger>
         </th>
@@ -193,7 +199,7 @@ const TestResultsTable = ({ results, runtimeEnvironmentId }) =>
               </Tooltip>
             }
           >
-            <Icon name="power-off" />
+            <FontAwesomeIcon icon="power-off" />
           </OverlayTrigger>
         </th>
       </tr>

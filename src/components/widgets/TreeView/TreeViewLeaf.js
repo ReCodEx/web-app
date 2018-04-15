@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
-import Icon from 'react-fontawesome';
+import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 
 import { LoadingIcon, GroupIcon } from '../../icons';
 import LevelGap from './LevelGap';
@@ -16,7 +16,7 @@ const TreeViewLeaf = ({
   admins,
   organizational,
   isPublic,
-  icon = 'square-o',
+  icon = ['far', 'square'],
   onClick,
   level,
   actions
@@ -30,7 +30,7 @@ const TreeViewLeaf = ({
   >
     <LevelGap level={level - 1} /> {/* root group is not displayed */}
     <span style={{ width: 30, textAlign: 'center', display: 'inline-block' }}>
-      {loading ? <LoadingIcon /> : <Icon name={icon} />}
+      {loading ? <LoadingIcon /> : <FontAwesomeIcon icon={icon} />}
     </span>
     {title}
     {admins &&
@@ -74,8 +74,8 @@ const TreeViewLeaf = ({
           </Tooltip>
         }
       >
-        <Icon
-          name="eye"
+        <FontAwesomeIcon
+          icon="eye"
           className="text-muted"
           style={{ marginLeft: '0.5em' }}
         />
@@ -93,7 +93,7 @@ TreeViewLeaf.propTypes = {
   admins: PropTypes.array,
   organizational: PropTypes.bool,
   isPublic: PropTypes.bool,
-  icon: PropTypes.string,
+  icon: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
   onClick: PropTypes.func,
   level: PropTypes.number.isRequired,
   actions: PropTypes.element

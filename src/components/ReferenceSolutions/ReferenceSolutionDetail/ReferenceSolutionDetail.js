@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Icon from 'react-fontawesome';
+import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import { FormattedMessage, FormattedDate, FormattedTime } from 'react-intl';
 import { Table } from 'react-bootstrap';
 
@@ -28,7 +28,7 @@ const ReferenceSolutionDetail = ({
       <tbody>
         <tr>
           <td className="text-center">
-            <Icon name="code" />
+            <FontAwesomeIcon icon="code" />
           </td>
           <th>
             <FormattedMessage
@@ -42,7 +42,7 @@ const ReferenceSolutionDetail = ({
         </tr>
         <tr>
           <td className="text-center">
-            <Icon name="pencil" />
+            <FontAwesomeIcon icon={['far', 'edit']} />
           </td>
           <th>
             <FormattedMessage
@@ -56,7 +56,7 @@ const ReferenceSolutionDetail = ({
         </tr>
         <tr>
           <td className="text-center">
-            <Icon name="clock-o" />
+            <FontAwesomeIcon icon={['far', 'clock']} />
           </td>
           <th>
             <FormattedMessage
@@ -72,7 +72,7 @@ const ReferenceSolutionDetail = ({
         </tr>
         <tr>
           <td className="text-center">
-            <Icon name="user" />
+            <FontAwesomeIcon icon="user" />
           </td>
           <th>
             <FormattedMessage id="generic.author" defaultMessage="Author" />:

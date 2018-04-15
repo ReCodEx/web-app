@@ -1,6 +1,6 @@
 import React from 'react';
-import Icon from 'react-fontawesome';
+import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 
-const ResultsIcon = props => <Icon {...props} name="line-chart" />;
+const ResultsIcon = props => <FontAwesomeIcon {...props} icon="chart-line" />;
 
 export default ResultsIcon;

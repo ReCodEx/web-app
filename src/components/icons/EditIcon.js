@@ -1,6 +1,6 @@
 import React from 'react';
-import Icon from 'react-fontawesome';
+import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 
-const EditIcon = props => <Icon {...props} name="pencil" />;
+const EditIcon = props => <FontAwesomeIcon {...props} icon={['far', 'edit']} />;
 
 export default EditIcon;

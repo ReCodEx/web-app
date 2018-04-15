@@ -1,6 +1,6 @@
 import React from 'react';
-import Icon from 'react-fontawesome';
+import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 
-const AddIcon = props => <Icon {...props} name="plus" />;
+const AddIcon = props => <FontAwesomeIcon {...props} icon="plus" />;
 
 export default AddIcon;

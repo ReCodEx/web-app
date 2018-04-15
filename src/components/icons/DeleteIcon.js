@@ -1,6 +1,6 @@
 import React from 'react';
-import Icon from 'react-fontawesome';
+import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 
-const DeleteIcon = props => <Icon {...props} name="trash" />;
+const DeleteIcon = props => <FontAwesomeIcon {...props} icon="trash" />;
 
 export default DeleteIcon;

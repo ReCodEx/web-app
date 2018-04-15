@@ -4,7 +4,7 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import { FormattedMessage } from 'react-intl';
 import classNames from 'classnames';
 import { Label } from 'react-bootstrap';
-import Icon from 'react-fontawesome';
+import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import HeaderNotification from '../HeaderNotification';
 
 import styles from './headerNotificationDropdown.less';
@@ -18,27 +18,27 @@ const HeaderNotificationsDropdown = ({
   hideNotification,
   newNotifications,
   oldNotifications
-}) => (
+}) =>
   <li
     className={classNames({
       'notifications-menu': true,
-      'dropdown': true,
+      dropdown: true,
       open: isOpen
     })}
   >
     <a href="#" className="dropdown-toggle" onClick={toggleOpen}>
-      {newNotifications.size === 0 ? (
-        <Icon name="bell-o" />
-      ) : (
-        <Icon name="bell" />
-      )}
-      {newNotifications.size > 0 && (
+      {newNotifications.size === 0
+        ? <FontAwesomeIcon icon={['far', 'bell']} />
+        : <FontAwesomeIcon icon={['fas', 'bell']} />}
+      {newNotifications.size > 0 &&
         <Label bsStyle="danger">
           {newNotifications.reduce((acc, n) => acc + n.count, 0)}
-        </Label>
-      )}
+        </Label>}
     </a>
-    <ul className={classNames(['dropdown-menu', styles.dropdownMenu])} onClick={markClick}>
+    <ul
+      className={classNames(['dropdown-menu', styles.dropdownMenu])}
+      onClick={markClick}
+    >
       <li className="header">
         <FormattedMessage
           id="app.notifications.title"
@@ -51,47 +51,43 @@ const HeaderNotificationsDropdown = ({
       </li>
       <li>
         <ul className="menu">
-          {newNotifications.map(notification => (
+          {newNotifications.map(notification =>
             <HeaderNotification
               key={notification.id}
               hide={hideNotification}
               {...notification}
               isNew={true}
             />
-          ))}
+          )}
           {showAll &&
-            oldNotifications.map(notification => (
+            oldNotifications.map(notification =>
               <HeaderNotification key={notification.id} {...notification} />
-            ))}
+            )}
         </ul>
       </li>
-      {oldNotifications.size > 0 && (
+      {oldNotifications.size > 0 &&
         <li className="footer">
           <a href="#" onClick={toggleShowAll}>
-            {showAll ? (
-              <FormattedMessage
-                id="app.notifications.hideAll"
-                defaultMessage="Only new notifications"
-              />
-            ) : (
-              <FormattedMessage
-                id="app.notifications.showAll"
-                defaultMessage={`Show {count, plural,
+            {showAll
+              ? <FormattedMessage
+                  id="app.notifications.hideAll"
+                  defaultMessage="Only new notifications"
+                />
+              : <FormattedMessage
+                  id="app.notifications.showAll"
+                  defaultMessage={`Show {count, plural,
                     one {old notification}
                     two {two notifications}
                     other {all # notifications}
                   }`}
-                values={{
-                  count: newNotifications.size + oldNotifications.size
-                }}
-              />
-            )}
+                  values={{
+                    count: newNotifications.size + oldNotifications.size
+                  }}
+                />}
           </a>
-        </li>
-      )}
+        </li>}
     </ul>
-  </li>
-);
+  </li>;
 
 HeaderNotificationsDropdown.propTypes = {
   isOpen: PropTypes.bool,

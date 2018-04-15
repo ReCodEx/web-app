@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { injectIntl } from 'react-intl';
 import classNames from 'classnames';
-import Icon from 'react-fontawesome';
+import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import MenuItem from '../MenuItem';
 import LoadingMenuItem from '../LoadingMenuItem';
 import { isLoading } from '../../../../redux/helpers/resourceManager';
@@ -69,7 +69,7 @@ class MenuGroup extends Component {
         })}
       >
         <a href="#" onClick={this.toggle}>
-          <i className={`fa fa-${icon}`} />
+          <FontAwesomeIcon icon={icon} />&nbsp;&nbsp;
           <span
             style={{
               whiteSpace: 'normal',
@@ -79,12 +79,16 @@ class MenuGroup extends Component {
           >
             {title}
           </span>
-          <span className="pull-right-container pull-right">
+          <span className="pull-right-container">
             {notificationsCount > 0 &&
               <small className="label pull-right bg-blue">
                 {notificationsCount}
               </small>}
-            <Icon name="angle-left" className="pull-right" />
+            <FontAwesomeIcon
+              icon="angle-left"
+              className="pull-right"
+              style={{ height: '15px' }}
+            />
           </span>
         </a>
         <ul className="treeview-menu" style={dropdownStyles}>
@@ -103,7 +107,7 @@ class MenuGroup extends Component {
                       },
                       locale
                     )}
-                    icon="circle-o"
+                    icon={['far', 'circle']}
                     currentPath={currentPath}
                     notificationsCount={itemsNotificationsCount(item)}
                     link={createLink(item)}

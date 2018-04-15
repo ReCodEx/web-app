@@ -6,7 +6,7 @@ import { Row, Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 import { reset, formValueSelector } from 'redux-form';
-import Icon from 'react-fontawesome';
+import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 
 import Page from '../../components/layout/Page';
 import Box from '../../components/widgets/Box';
@@ -92,7 +92,7 @@ class EditExercise extends Component {
                 defaultMessage="Edit exercise"
               />
             ),
-            iconName: 'pencil'
+            iconName: ['far', 'edit']
           }
         ]}
       >
@@ -104,7 +104,7 @@ class EditExercise extends Component {
                 <Col sm={12}>
                   <div className="alert alert-warning">
                     <h4>
-                      <Icon name="medkit" />&nbsp;&nbsp;
+                      <FontAwesomeIcon icon="medkit" />&nbsp;&nbsp;
                       <FormattedMessage
                         id="app.exercise.isBroken"
                         defaultMessage="Exercise configuration is incorrect and needs fixing"

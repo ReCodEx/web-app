@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import Button from '../../widgets/FlatButton';
-import Icon from 'react-fontawesome';
+import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import Confirm from '../../forms/Confirm';
 
 const LeaveGroupButton = ({ onClick, ...props }) =>
@@ -17,7 +17,7 @@ const LeaveGroupButton = ({ onClick, ...props }) =>
     }
   >
     <Button {...props} onClick={onClick} bsStyle="warning" className="btn-flat">
-      <Icon name="user-times" />{' '}
+      <FontAwesomeIcon icon="user-times" />{' '}
       <FormattedMessage
         id="app.groups.leaveGroupButton"
         defaultMessage="Leave group"

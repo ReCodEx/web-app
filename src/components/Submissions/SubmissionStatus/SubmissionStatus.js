@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Table } from 'react-bootstrap';
-import Icon from 'react-fontawesome';
+import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import { FormattedDate, FormattedTime, FormattedMessage } from 'react-intl';
 import Box from '../../widgets/Box';
 import AssignmentStatusIcon from '../../Assignments/Assignment/AssignmentStatusIcon';
@@ -33,7 +33,7 @@ const SubmissionStatus = ({
         {note.length > 0 &&
           <tr>
             <td className="text-center">
-              <Icon name="pencil" />
+              <FontAwesomeIcon icon={['far', 'edit']} />
             </td>
             <th>
               <FormattedMessage
@@ -47,7 +47,7 @@ const SubmissionStatus = ({
           </tr>}
         <tr>
           <td className="text-center">
-            <Icon name="clock-o" />
+            <FontAwesomeIcon icon={['far', 'clock']} />
           </td>
           <th>
             <FormattedMessage
@@ -63,7 +63,7 @@ const SubmissionStatus = ({
         </tr>
         <tr>
           <td className="text-center">
-            <Icon name="user" />
+            <FontAwesomeIcon icon="user" />
           </td>
           <th>
             <FormattedMessage id="generic.author" defaultMessage="Author" />:
@@ -76,7 +76,7 @@ const SubmissionStatus = ({
           submittedBy !== userId &&
           <tr>
             <td className="text-center">
-              <Icon name="user" />
+              <FontAwesomeIcon icon="user" />
             </td>
             <th>
               <FormattedMessage
@@ -92,7 +92,7 @@ const SubmissionStatus = ({
           Boolean(environment.name) &&
           <tr>
             <td className="text-center">
-              <Icon name="code" />
+              <FontAwesomeIcon icon="code" />
             </td>
             <th>
               <FormattedMessage

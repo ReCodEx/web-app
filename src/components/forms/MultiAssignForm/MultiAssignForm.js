@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { reduxForm, Field } from 'redux-form';
 import { FormattedMessage } from 'react-intl';
 import { Alert, HelpBlock, Button, Row, Col } from 'react-bootstrap';
-import Icon from 'react-fontawesome';
+import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import isNumeric from 'validator/lib/isNumeric';
 
 import { DatetimeField, TextField, CheckboxField } from '../Fields';
@@ -97,14 +97,14 @@ class MultiAssignForm extends Component {
           >
             {this.state.open
               ? <span>
-                  <Icon name="minus-square" />&nbsp;&nbsp;
+                  <FontAwesomeIcon icon="minus-square" />&nbsp;&nbsp;
                   <FormattedMessage
                     id="app.multiAssignForm.showMyGroups"
                     defaultMessage="Show My Groups Only"
                   />
                 </span>
               : <span>
-                  <Icon name="plus-square" />&nbsp;&nbsp;
+                  <FontAwesomeIcon icon="plus-square" />&nbsp;&nbsp;
                   <FormattedMessage
                     id="app.multiAssignForm.showAllGroups"
                     defaultMessage="Show All Groups"

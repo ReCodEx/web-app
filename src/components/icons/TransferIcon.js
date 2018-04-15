@@ -1,6 +1,7 @@
 import React from 'react';
-import Icon from 'react-fontawesome';
+import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 
-const TransferIcon = props => <Icon {...props} name="exchange" />;
+const TransferIcon = props =>
+  <FontAwesomeIcon {...props} icon="exchange-alt" />;
 
 export default TransferIcon;

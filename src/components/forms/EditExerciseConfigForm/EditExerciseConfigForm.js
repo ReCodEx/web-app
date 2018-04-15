@@ -5,7 +5,7 @@ import { reduxForm, FieldArray, getFormValues } from 'redux-form';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import { Alert, Button } from 'react-bootstrap';
-import Icon from 'react-fontawesome';
+import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import Box from '../../../components/widgets/Box';
 
 import SubmitButton from '../SubmitButton';
@@ -231,7 +231,7 @@ class EditExerciseConfigForm extends Component {
               bsStyle={'primary'}
               className="btn-flat"
             >
-              <Icon name="plus" />{' '}
+              <FontAwesomeIcon icon="plus" />{' '}
               <FormattedMessage
                 id="app.editExerciseConfigForm.addTest"
                 defaultMessage="Add new test"
@@ -242,7 +242,7 @@ class EditExerciseConfigForm extends Component {
               bsStyle={'danger'}
               className="btn-flat"
             >
-              <Icon name="minus" />{' '}
+              <FontAwesomeIcon icon="minus" />{' '}
               <FormattedMessage
                 id="app.editExerciseConfigForm.removeLastTest"
                 defaultMessage="Remove last test"

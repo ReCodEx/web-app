@@ -1,6 +1,6 @@
 import React from 'react';
-import Icon from 'react-fontawesome';
+import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 
-const RefreshIcon = props => <Icon {...props} name="rotate-right" />;
+const RefreshIcon = props => <FontAwesomeIcon {...props} icon="sync" />;
 
 export default RefreshIcon;

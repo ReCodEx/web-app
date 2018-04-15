@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Icon from 'react-fontawesome';
+import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import classnames from 'classnames';
 import {
   FormattedMessage,
@@ -58,8 +58,8 @@ const EvaluationDetail = ({
           </th>
           <td className="text-center">
             {submittedAt < firstDeadline
-              ? <Icon name="check" className="text-success" />
-              : <Icon name="times" className="text-danger" />}
+              ? <FontAwesomeIcon icon="check" className="text-success" />
+              : <FontAwesomeIcon icon="times" className="text-danger" />}
           </td>
         </tr>
 
