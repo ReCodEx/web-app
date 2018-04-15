@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { IndexLink } from 'react-router';
 import MediaQuery from 'react-responsive';
-import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import HeaderNotificationsContainer from '../../../containers/HeaderNotificationsContainer';
 import HeaderLanguageSwitching from '../HeaderLanguageSwitching';
 import ClientOnly from '../../helpers/ClientOnly';
