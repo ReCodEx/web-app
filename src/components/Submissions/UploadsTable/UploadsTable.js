@@ -101,7 +101,7 @@ const UploadsTable = ({
                 bsStyle="default"
                 onClick={() => retryUploadFile(payload)}
               >
-                <FontAwesomeIcon icon="refresh" />
+                <FontAwesomeIcon icon="sync" />
               </Button>
             </ButtonGroup>
           </td>
@@ -126,7 +126,7 @@ const UploadsTable = ({
                 bsStyle="default"
                 onClick={() => returnFile(payload)}
               >
-                <FontAwesomeIcon icon="refresh" />
+                <FontAwesomeIcon icon="sync" />
               </Button>
             </ButtonGroup>
           </td>
