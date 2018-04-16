@@ -5,6 +5,7 @@ import { FormattedNumber, FormattedDate, FormattedTime } from 'react-intl';
 import AssignmentStatusIcon from '../Assignment/AssignmentStatusIcon';
 import Points from './Points';
 import CommentsIcon from './CommentsIcon';
+import EnvironmentsListItem from '../../helpers/EnvironmentsList/EnvironmentsListItem';
 
 const showScoreAndPoints = status => status === 'done' || status === 'failed';
 
@@ -68,7 +69,12 @@ const SubmissionTableRow = ({
         : <span className="text-danger">-</span>}
     </td>
     <td className="text-center text-nowrap">
-      {runtimeEnvironment ? runtimeEnvironment.name : '-'}
+      {runtimeEnvironment
+        ? <EnvironmentsListItem
+            runtimeEnvironment={runtimeEnvironment}
+            longNames={true}
+          />
+        : '-'}
     </td>
     <td>
       {note}

@@ -1,29 +1,21 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { OverlayTrigger, Tooltip, Label } from 'react-bootstrap';
-import LoadingIcon from '../../icons/LoadingIcon';
-import styles from './EnvironmentsList.less';
 
-const EnvironmentsList = ({ runtimeEnvironments }) => {
+import LoadingIcon from '../../icons/LoadingIcon';
+import EnvironmentsListItem from './EnvironmentsListItem';
+
+const EnvironmentsList = ({ runtimeEnvironments, longNames = false }) => {
   const environments =
     runtimeEnvironments && runtimeEnvironments.filter(e => e);
   return (
     <span>
       {environments && environments.length > 0
         ? environments.map(env =>
-            <OverlayTrigger
+            <EnvironmentsListItem
               key={env.id}
-              placement="bottom"
-              overlay={
-                <Tooltip id={Date.now()}>
-                  {env.description}
-                </Tooltip>
-              }
-            >
-              <Label className={styles.environment}>
-                {env.name}
-              </Label>
-            </OverlayTrigger>
+              runtimeEnvironment={env}
+              longNames={longNames}
+            />
           )
         : <LoadingIcon />}
     </span>
@@ -31,7 +23,8 @@ const EnvironmentsList = ({ runtimeEnvironments }) => {
 };
 
 EnvironmentsList.propTypes = {
-  runtimeEnvironments: PropTypes.array
+  runtimeEnvironments: PropTypes.array,
+  longNames: PropTypes.bool
 };
 
 export default EnvironmentsList;
