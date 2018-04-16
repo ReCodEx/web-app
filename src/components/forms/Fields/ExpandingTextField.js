@@ -41,7 +41,8 @@ const ExpandingTextField = ({
                 }
               >
                 <FlatButton onClick={() => fields.insert(index, '')}>
-                  <FontAwesomeIcon icon="reply" />
+                  <FontAwesomeIcon icon="plus" size="xs" />
+                  <FontAwesomeIcon icon="level-up-alt" />
                 </FlatButton>
               </OverlayTrigger>
             </td>
@@ -58,7 +59,7 @@ const ExpandingTextField = ({
                 }
               >
                 <FlatButton onClick={() => fields.remove(index)}>
-                  <FontAwesomeIcon icon="remove" />
+                  <FontAwesomeIcon icon="times" />
                 </FlatButton>
               </OverlayTrigger>
             </td>

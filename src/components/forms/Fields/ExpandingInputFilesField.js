@@ -83,7 +83,7 @@ const ExpandingInputFilesField = ({
                   }
                 >
                   <FlatButton onClick={() => fields.remove(index)}>
-                    <FontAwesomeIcon icon="remove" />
+                    <FontAwesomeIcon icon="times" />
                   </FlatButton>
                 </OverlayTrigger>
               </td>
