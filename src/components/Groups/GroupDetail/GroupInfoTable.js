@@ -8,7 +8,7 @@ import Box from '../../widgets/Box';
 import { MaybeSucceededIcon } from '../../icons';
 import { getLocalizedDescription } from '../../../helpers/getLocalizedData';
 
-const GroupDetail = ({
+const GroupInfoTable = ({
   group: {
     id,
     externalId,
@@ -94,7 +94,7 @@ const GroupDetail = ({
     </Box>
   </div>;
 
-GroupDetail.propTypes = {
+GroupInfoTable.propTypes = {
   group: PropTypes.shape({
     id: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
@@ -117,4 +117,4 @@ GroupDetail.propTypes = {
   locale: PropTypes.string.isRequired
 };
 
-export default GroupDetail;
+export default GroupInfoTable;
