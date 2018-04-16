@@ -8,12 +8,13 @@ import Button from '../../widgets/FlatButton';
 const OrganizationalGroupButton = ({
   organizational,
   pending,
+  disabled = false,
   setOrganizational
 }) =>
   <Button
-    bsStyle="info"
+    bsStyle={disabled ? 'default' : 'info'}
     onClick={setOrganizational(!organizational)}
-    disabled={pending}
+    disabled={pending || disabled}
   >
     {pending
       ? <LoadingIcon />
@@ -32,6 +33,7 @@ const OrganizationalGroupButton = ({
 OrganizationalGroupButton.propTypes = {
   organizational: PropTypes.bool.isRequired,
   pending: PropTypes.bool.isRequired,
+  disabled: PropTypes.bool,
   setOrganizational: PropTypes.func.isRequired
 };
 
