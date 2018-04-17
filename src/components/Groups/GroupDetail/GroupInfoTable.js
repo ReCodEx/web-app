@@ -5,10 +5,10 @@ import { Table } from 'react-bootstrap';
 import ReactMarkdown from 'react-remarkable';
 
 import Box from '../../widgets/Box';
-import { MaybeSucceededIcon } from '../../icons';
+import { SuccessOrFailureIcon } from '../../icons';
 import { getLocalizedDescription } from '../../../helpers/getLocalizedData';
 
-const GroupDetail = ({
+const GroupInfoTable = ({
   group: {
     id,
     externalId,
@@ -74,7 +74,7 @@ const GroupDetail = ({
               />
             </th>
             <td>
-              <MaybeSucceededIcon success={isPublic} />
+              <SuccessOrFailureIcon success={isPublic} />
             </td>
           </tr>
           {threshold !== null &&
@@ -94,7 +94,7 @@ const GroupDetail = ({
     </Box>
   </div>;
 
-GroupDetail.propTypes = {
+GroupInfoTable.propTypes = {
   group: PropTypes.shape({
     id: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
@@ -117,4 +117,4 @@ GroupDetail.propTypes = {
   locale: PropTypes.string.isRequired
 };
 
-export default GroupDetail;
+export default GroupInfoTable;

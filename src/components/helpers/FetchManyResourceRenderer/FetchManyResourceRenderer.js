@@ -8,16 +8,13 @@ const hasFailed = status => status === 'FAILED';
 
 const defaultLoading = noIcons =>
   <span>
-    {!noIcons && <LoadingIcon />}{' '}
-    <FormattedMessage
-      id="app.resourceRenderer.loading"
-      defaultMessage="Loading ..."
-    />
+    {!noIcons && <LoadingIcon gapRight />}
+    <FormattedMessage id="generic.loading" defaultMessage="Loading ..." />
   </span>;
 
 const defaultFailed = noIcons =>
   <span>
-    {!noIcons && <WarningIcon />}{' '}
+    {!noIcons && <WarningIcon gapRight />}
     <FormattedMessage
       id="app.resourceRenderer.loadingFailed"
       defaultMessage="Loading failed."

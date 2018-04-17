@@ -15,7 +15,7 @@ import DifficultyIcon from '../DifficultyIcon';
 import withLinks from '../../../helpers/withLinks';
 import UsersNameContainer from '../../../containers/UsersNameContainer';
 import GroupsNameContainer from '../../../containers/GroupsNameContainer';
-import { MaybeSucceededIcon } from '../../icons';
+import { SuccessOrFailureIcon } from '../../icons';
 import { getLocalizedDescription } from '../../../helpers/getLocalizedData';
 import { LocalizedExerciseName } from '../../helpers/LocalizedNames';
 import EnvironmentsList from '../../helpers/EnvironmentsList';
@@ -171,7 +171,7 @@ const ExerciseDetail = ({
             />
           </th>
           <td>
-            <MaybeSucceededIcon success={isPublic} />
+            <SuccessOrFailureIcon success={isPublic} />
           </td>
         </tr>
         <tr>
@@ -182,7 +182,7 @@ const ExerciseDetail = ({
             />
           </th>
           <td>
-            <MaybeSucceededIcon success={isLocked} />
+            <SuccessOrFailureIcon success={isLocked} />
           </td>
         </tr>
       </tbody>

@@ -4,11 +4,8 @@ import { LoadingIcon } from '../../icons';
 
 const LoadingGroupsName = () =>
   <span>
-    <LoadingIcon />&nbsp;&nbsp;
-    <FormattedMessage
-      id="app.groupsName.loading"
-      defaultMessage="Loading ..."
-    />
+    <LoadingIcon gapRight />
+    <FormattedMessage id="generic.loading" defaultMessage="Loading ..." />
   </span>;
 
 export default LoadingGroupsName;

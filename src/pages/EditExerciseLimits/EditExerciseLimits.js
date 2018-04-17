@@ -15,6 +15,7 @@ import EditHardwareGroupForm from '../../components/forms/EditHardwareGroupForm'
 import EditLimitsForm from '../../components/forms/EditLimitsForm/EditLimitsForm';
 import ExerciseButtons from '../../components/Exercises/ExerciseButtons';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
+import { NeedFixingIcon } from '../../components/icons';
 
 import {
   fetchExercise,
@@ -261,7 +262,7 @@ class EditExerciseLimits extends Component {
                 <Col sm={12}>
                   <div className="alert alert-warning">
                     <h4>
-                      <FontAwesomeIcon icon="medkit" />&nbsp;&nbsp;
+                      <NeedFixingIcon gapRight />
                       <FormattedMessage
                         id="app.exercise.isBroken"
                         defaultMessage="Exercise configuration is incorrect and needs fixing"

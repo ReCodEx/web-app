@@ -12,7 +12,7 @@ const LoadingPipelineDetail = () =>
       />
     }
   >
-    <LoadingIcon />{' '}
+    <LoadingIcon gapRight />
     <FormattedMessage
       id="app.pipeline.loadingDetail"
       defaultMessage="Loading pipeline detail"

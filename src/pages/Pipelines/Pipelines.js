@@ -84,7 +84,7 @@ class Pipelines extends Component {
                   this.newPipeline();
                 }}
               >
-                <AddIcon />{' '}
+                <AddIcon gapRight />
                 <FormattedMessage
                   id="app.pipelines.add"
                   defaultMessage="Add pipeline"
@@ -107,7 +107,7 @@ class Pipelines extends Component {
                   <ButtonGroup>
                     <LinkContainer to={PIPELINE_EDIT_URI_FACTORY(id)}>
                       <Button bsSize="xs" bsStyle="warning">
-                        <EditIcon />{' '}
+                        <EditIcon gapRight />
                         <FormattedMessage
                           id="generic.edit"
                           defaultMessage="Edit"

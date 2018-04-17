@@ -16,7 +16,7 @@ const LoginCASForm = ({
   submitFailed: hasFailed,
   submitting,
   hasSucceeded
-}) => (
+}) =>
   <FormBox
     title={
       <FormattedMessage
@@ -35,25 +35,19 @@ const LoginCASForm = ({
         >
           {!submitting
             ? hasSucceeded
-                ? <span>
-                    <SuccessIcon />
-                    {' '}
-                    &nbsp;
-                    {' '}
-                    <FormattedMessage
-                      id="app.loginCASForm.success"
-                      defaultMessage="You are successfully signed in"
-                    />
-                  </span>
-                : <FormattedMessage
-                    id="app.loginCASForm.login"
-                    defaultMessage="Sign in"
+              ? <span>
+                  <SuccessIcon gapRight />
+                  <FormattedMessage
+                    id="app.loginCASForm.success"
+                    defaultMessage="You are successfully signed in"
                   />
+                </span>
+              : <FormattedMessage
+                  id="app.loginCASForm.login"
+                  defaultMessage="Sign in"
+                />
             : <span>
-                <LoadingIcon />
-                {' '}
-                &nbsp;
-                {' '}
+                <LoadingIcon gapRight />
                 <FormattedMessage
                   id="app.loginCASForm.processing"
                   defaultMessage="Signing in ..."
@@ -93,8 +87,7 @@ const LoginCASForm = ({
         />
       }
     />
-  </FormBox>
-);
+  </FormBox>;
 
 LoginCASForm.propTypes = {
   onSubmit: PropTypes.func.isRequired,

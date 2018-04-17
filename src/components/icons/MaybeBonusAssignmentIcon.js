@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import FontAwesomeIcon from '@fortawesome/react-fontawesome';
+import Icon from './Icon';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 
 const MaybeBonusAssignmentIcon = ({ id, isBonus, ...props }) =>
@@ -18,7 +18,7 @@ const MaybeBonusAssignmentIcon = ({ id, isBonus, ...props }) =>
         </Tooltip>
       }
     >
-      <FontAwesomeIcon {...props} icon="plus-circle" className="text-gray" />
+      <Icon {...props} icon="plus-circle" className="text-gray" />
     </OverlayTrigger>{' '}
   </span>;
 

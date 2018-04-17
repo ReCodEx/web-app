@@ -5,7 +5,6 @@ import { FormattedMessage, injectIntl } from 'react-intl';
 import { Row, Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { defaultMemoize } from 'reselect';
-import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 
 import Page from '../../components/layout/Page';
 import Box from '../../components/widgets/Box';
@@ -16,6 +15,7 @@ import EditTestsForm from '../../components/forms/EditTestsForm';
 import EditExerciseSimpleConfigForm from '../../components/forms/EditExerciseSimpleConfigForm';
 import EditEnvironmentSimpleForm from '../../components/forms/EditEnvironmentSimpleForm';
 import ExerciseButtons from '../../components/Exercises/ExerciseButtons';
+import { NeedFixingIcon } from '../../components/icons';
 
 import {
   fetchExercise,
@@ -204,7 +204,7 @@ class EditExerciseSimpleConfig extends Component {
                       <Col sm={12}>
                         <div className="alert alert-warning">
                           <h4>
-                            <FontAwesomeIcon icon="medkit" />&nbsp;&nbsp;
+                            <NeedFixingIcon gapRight />
                             <FormattedMessage
                               id="app.exercise.isBroken"
                               defaultMessage="Exercise configuration is incorrect and needs fixing"

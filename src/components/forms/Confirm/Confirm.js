@@ -32,13 +32,13 @@ class Confirm extends Component {
       id,
       yes = (
         <span>
-          <SuccessIcon />{' '}
+          <SuccessIcon gapRight />
           <FormattedMessage id="app.confirm.yes" defaultMessage="Yes" />
         </span>
       ),
       no = (
         <span>
-          <CloseIcon />{' '}
+          <CloseIcon gapRight />
           <FormattedMessage id="app.confirm.no" defaultMessage="No" />
         </span>
       )

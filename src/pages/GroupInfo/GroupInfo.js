@@ -9,7 +9,7 @@ import { List } from 'immutable';
 import { Row, Col } from 'react-bootstrap';
 
 import Page from '../../components/layout/Page';
-import GroupDetail, {
+import GroupInfoTable, {
   LoadingGroupDetail,
   FailedGroupDetail
 } from '../../components/Groups/GroupDetail';
@@ -159,7 +159,7 @@ class GroupInfo extends Component {
 
             <Row>
               <Col sm={6}>
-                <GroupDetail
+                <GroupInfoTable
                   group={data}
                   supervisors={supervisors}
                   isAdmin={isAdmin || isSuperAdmin}

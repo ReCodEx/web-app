@@ -1,23 +1,23 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import GroupIcon from '../../icons/GroupIcon';
-import LoadingIcon from '../../icons/LoadingIcon';
+import { GroupIcon, LoadingIcon } from '../../icons';
 import Button from '../../widgets/FlatButton';
 
 const OrganizationalGroupButton = ({
   organizational,
   pending,
+  disabled = false,
   setOrganizational
 }) =>
   <Button
-    bsStyle="info"
+    bsStyle={disabled ? 'default' : 'info'}
     onClick={setOrganizational(!organizational)}
-    disabled={pending}
+    disabled={pending || disabled}
   >
     {pending
-      ? <LoadingIcon />
-      : <GroupIcon organizational={!organizational} />}&nbsp;&nbsp;
+      ? <LoadingIcon gapRight />
+      : <GroupIcon organizational={!organizational} gapRight />}
     {organizational === true
       ? <FormattedMessage
           id="app.organizationalGroupButton.unset"
@@ -32,6 +32,7 @@ const OrganizationalGroupButton = ({
 OrganizationalGroupButton.propTypes = {
   organizational: PropTypes.bool.isRequired,
   pending: PropTypes.bool.isRequired,
+  disabled: PropTypes.bool,
   setOrganizational: PropTypes.func.isRequired
 };
 

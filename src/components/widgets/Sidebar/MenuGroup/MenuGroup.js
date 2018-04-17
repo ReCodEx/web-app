@@ -4,10 +4,12 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import { injectIntl } from 'react-intl';
 import classNames from 'classnames';
 import FontAwesomeIcon from '@fortawesome/react-fontawesome';
+
 import MenuItem from '../MenuItem';
 import LoadingMenuItem from '../LoadingMenuItem';
 import { isLoading } from '../../../../redux/helpers/resourceManager';
 import { getLocalizedName } from '../../../../helpers/getLocalizedData';
+import Icon from '../../../icons';
 
 class MenuGroup extends Component {
   componentWillMount = () =>
@@ -69,7 +71,7 @@ class MenuGroup extends Component {
         })}
       >
         <a href="#" onClick={this.toggle}>
-          <FontAwesomeIcon icon={icon} />&nbsp;&nbsp;
+          <Icon icon={icon} gapRight />
           <span
             style={{
               whiteSpace: 'normal',

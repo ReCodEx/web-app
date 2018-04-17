@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { LinkContainer } from 'react-router-bootstrap';
-import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import { Table } from 'react-bootstrap';
 import Box from '../../components/widgets/Box';
 import Button from '../../components/widgets/FlatButton';
@@ -21,6 +20,7 @@ import LeaveJoinGroupButtonContainer from '../LeaveJoinGroupButtonContainer';
 import { getGroupCanonicalLocalizedName } from '../../helpers/getLocalizedData';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 
+import { GroupIcon } from '../../components/icons';
 import withLinks from '../../helpers/withLinks';
 
 class SisIntegrationContainer extends Component {
@@ -190,7 +190,7 @@ class SisIntegrationContainer extends Component {
                                                   bsSize="xs"
                                                   className="btn-flat"
                                                 >
-                                                  <FontAwesomeIcon icon="users" />&nbsp;&nbsp;
+                                                  <GroupIcon gapRight />
                                                   <FormattedMessage
                                                     id="app.group.detail"
                                                     defaultMessage="Group Detail"

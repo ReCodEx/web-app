@@ -6,7 +6,6 @@ import { Row, Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 import { reset, formValueSelector } from 'redux-form';
-import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 
 import Page from '../../components/layout/Page';
 import Box from '../../components/widgets/Box';
@@ -15,6 +14,7 @@ import AttachmentFilesTableContainer from '../../containers/AttachmentFilesTable
 import DeleteExerciseButtonContainer from '../../containers/DeleteExerciseButtonContainer';
 import { LocalizedExerciseName } from '../../components/helpers/LocalizedNames';
 import ExerciseButtons from '../../components/Exercises/ExerciseButtons';
+import { NeedFixingIcon } from '../../components/icons';
 
 import {
   fetchExerciseIfNeeded,
@@ -104,7 +104,7 @@ class EditExercise extends Component {
                 <Col sm={12}>
                   <div className="alert alert-warning">
                     <h4>
-                      <FontAwesomeIcon icon="medkit" />&nbsp;&nbsp;
+                      <NeedFixingIcon gapRight />
                       <FormattedMessage
                         id="app.exercise.isBroken"
                         defaultMessage="Exercise configuration is incorrect and needs fixing"

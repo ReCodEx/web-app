@@ -5,7 +5,7 @@ import { WarningIcon } from '../../icons';
 const FailedPipelineDetail = () =>
   <div>
     <p>
-      <WarningIcon />{' '}
+      <WarningIcon gapRight />
       <FormattedMessage
         id="app.pipeline.failedDetail"
         defaultMessage="Loading the details of the pipeline failed. Please make sure you are connected to the Internet and try again later."

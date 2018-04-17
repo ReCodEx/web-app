@@ -2,10 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Field } from 'redux-form';
 import { Button } from 'react-bootstrap';
-import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import { FormattedMessage } from 'react-intl';
 
 import { TextField } from '../Fields';
+import { RemoveIcon } from '../../icons';
 import './EditTests.css';
 
 const EditTestsTestRow = ({ test, onRemove, isUniform, percent }) =>
@@ -37,7 +37,7 @@ const EditTestsTestRow = ({ test, onRemove, isUniform, percent }) =>
         bsSize="xs"
         className="btn-flat pull-right"
       >
-        <FontAwesomeIcon icon="minus" />{' '}
+        <RemoveIcon gapRight />
         <FormattedMessage
           id="app.editTestsTest.remove"
           defaultMessage="Remove"

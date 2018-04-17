@@ -5,7 +5,7 @@ import { SuccessIcon } from '../../icons';
 
 const DeletedGroupButton = props =>
   <Button bsStyle="default" bsSize="sm" {...props}>
-    <SuccessIcon />{' '}
+    <SuccessIcon gapRight />
     <FormattedMessage id="generic.deleted" defaultMessage="Deleted" />
   </Button>;
 

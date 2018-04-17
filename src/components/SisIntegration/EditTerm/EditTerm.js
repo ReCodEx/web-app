@@ -80,7 +80,7 @@ const EditTerm = ({
       />
 
       <Button bsStyle="default" className="btn-flat" onClick={onClose}>
-        <CloseIcon />{' '}
+        <CloseIcon gapRight />
         <FormattedMessage id="generic.close" defaultMessage="Close" />
       </Button>
     </Modal.Footer>

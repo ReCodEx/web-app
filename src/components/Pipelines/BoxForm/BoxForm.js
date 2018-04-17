@@ -148,7 +148,7 @@ class BoxForm extends Component {
               }}
             />
             <Button onClick={onHide}>
-              <CloseIcon />&nbsp;
+              <CloseIcon gapRight />
               <FormattedMessage id="generic.close" defaultMessage="Close" />
             </Button>
             <span style={{ display: 'inline-block', width: '5px' }} />

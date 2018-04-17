@@ -106,7 +106,7 @@ class Exercises extends Component {
                     this.newExercise();
                   }}
                 >
-                  <AddIcon />{' '}
+                  <AddIcon gapRight />
                   <FormattedMessage
                     id="app.exercises.add"
                     defaultMessage="Add exercise"
@@ -129,7 +129,7 @@ class Exercises extends Component {
                   <div>
                     <LinkContainer to={EXERCISE_EDIT_URI_FACTORY(id)}>
                       <Button bsSize="xs" bsStyle="warning">
-                        <EditIcon />{' '}
+                        <EditIcon gapRight />
                         <FormattedMessage
                           id="app.exercises.listEdit"
                           defaultMessage="Settings"
@@ -140,7 +140,7 @@ class Exercises extends Component {
                       to={EXERCISE_EDIT_SIMPLE_CONFIG_URI_FACTORY(id)}
                     >
                       <Button bsSize="xs" bsStyle="warning">
-                        <EditIcon />{' '}
+                        <EditIcon gapRight />
                         <FormattedMessage
                           id="app.exercises.listEditConfig"
                           defaultMessage="Configuration"
@@ -149,7 +149,7 @@ class Exercises extends Component {
                     </LinkContainer>
                     <LinkContainer to={EXERCISE_EDIT_LIMITS_URI_FACTORY(id)}>
                       <Button bsSize="xs" bsStyle="warning">
-                        <EditIcon />{' '}
+                        <EditIcon gapRight />
                         <FormattedMessage
                           id="app.exercises.listEditLimits"
                           defaultMessage="Limits"

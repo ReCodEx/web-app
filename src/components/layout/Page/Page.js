@@ -9,7 +9,7 @@ const Page = ({
   description,
   resource,
   loadingTitle = (
-    <FormattedMessage id="app.page.loading" defaultMessage="Loading ..." />
+    <FormattedMessage id="generic.loading" defaultMessage="Loading ..." />
   ),
   loadingDescription = (
     <FormattedMessage

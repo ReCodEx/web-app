@@ -23,7 +23,7 @@ const GroupTopButtons = ({
     {canEdit &&
       <LinkContainer to={GROUP_EDIT_URI_FACTORY(group.id)}>
         <Button bsStyle="warning">
-          <EditIcon />{' '}
+          <EditIcon gapRight />
           <FormattedMessage
             id="app.editGroup.title"
             defaultMessage="Edit Group"
@@ -33,7 +33,7 @@ const GroupTopButtons = ({
 
     <LinkContainer to={GROUP_INFO_URI_FACTORY(group.id)}>
       <Button bsStyle="primary">
-        <InfoIcon />{' '}
+        <InfoIcon gapRight />
         <FormattedMessage id="app.group.info" defaultMessage="Group Info" />
       </Button>
     </LinkContainer>
@@ -41,7 +41,7 @@ const GroupTopButtons = ({
     {canSeeDetail &&
       <LinkContainer to={GROUP_DETAIL_URI_FACTORY(group.id)}>
         <Button bsStyle="primary">
-          <GroupIcon />{' '}
+          <GroupIcon gapRight />
           <FormattedMessage
             id="app.group.detail"
             defaultMessage="Group Detail"

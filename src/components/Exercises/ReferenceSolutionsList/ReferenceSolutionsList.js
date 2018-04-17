@@ -1,14 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage, FormattedDate, FormattedTime } from 'react-intl';
-import { Table, Label } from 'react-bootstrap';
+import { Table } from 'react-bootstrap';
 import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import UsersNameContainer from '../../../containers/UsersNameContainer';
-
-const getRuntimeName = (runtimes, id) => {
-  const runtime = runtimes.find(r => r.id === id);
-  return runtime ? runtime.name : id;
-};
+import EnvironmentsList from '../../helpers/EnvironmentsList';
 
 const ReferenceSolutionsList = ({
   referenceSolutions = [],
@@ -67,9 +63,12 @@ const ReferenceSolutionsList = ({
                 <FormattedTime value={new Date(createdAt * 1000)} />
               </td>
               <td className="text-nowrap">
-                <Label>
-                  {getRuntimeName(runtimeEnvironments, runtimeEnvironmentId)}
-                </Label>
+                <EnvironmentsList
+                  runtimeEnvironments={runtimeEnvironments.filter(
+                    e => e.id === runtimeEnvironmentId
+                  )}
+                  longNames={true}
+                />
               </td>
               <td className="text-nowrap">
                 <UsersNameContainer userId={userId} />

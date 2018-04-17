@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { LinkContainer } from 'react-router-bootstrap';
-import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 
 import Button from '../../widgets/FlatButton';
 import { TreeView, TreeViewItem } from '../../widgets/TreeView';
@@ -10,7 +9,7 @@ import { isReady, getJsData } from '../../../redux/helpers/resourceManager';
 import GroupsName from '../GroupsName';
 import { computeVisibleGroupsMap } from '../../helpers/group.js';
 import { getLocalizedResourceName } from '../../../helpers/getLocalizedData';
-
+import { GroupIcon } from '../../icons';
 import withLinks from '../../../helpers/withLinks';
 
 class GroupTree extends Component {
@@ -20,10 +19,7 @@ class GroupTree extends Component {
         level={level}
         loading
         title={
-          <FormattedMessage
-            id="app.groupTree.loading"
-            defaultMessage="Loading ..."
-          />
+          <FormattedMessage id="generic.loading" defaultMessage="Loading ..." />
         }
       />
     </TreeView>;
@@ -42,7 +38,7 @@ class GroupTree extends Component {
           }
         >
           <Button bsStyle="primary" bsSize="xs" className="btn-flat">
-            <FontAwesomeIcon icon="users" />{' '}
+            <GroupIcon gapRight />
             {showInfoLink
               ? <FormattedMessage
                   id="app.group.info"

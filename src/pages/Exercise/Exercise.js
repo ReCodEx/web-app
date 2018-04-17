@@ -11,7 +11,6 @@ import {
 } from 'react-intl';
 import { Row, Col } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
-import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import { formValueSelector } from 'redux-form';
 import moment from 'moment';
 import { defaultMemoize } from 'reselect';
@@ -30,7 +29,8 @@ import {
   EditIcon,
   SendIcon,
   DeleteIcon,
-  AddIcon
+  AddIcon,
+  NeedFixingIcon
 } from '../../components/icons';
 import Confirm from '../../components/forms/Confirm';
 import PipelinesSimpleList from '../../components/Pipelines/PipelinesSimpleList';
@@ -286,7 +286,7 @@ class Exercise extends Component {
                 <Col sm={12}>
                   <div className="alert alert-warning">
                     <h4>
-                      <FontAwesomeIcon icon="medkit" />&nbsp;&nbsp;
+                      <NeedFixingIcon gapRight />
                       <FormattedMessage
                         id="app.exercise.isBroken"
                         defaultMessage="Exercise configuration is incorrect and needs fixing"
@@ -365,7 +365,7 @@ class Exercise extends Component {
                         bsSize="sm"
                         onClick={this.createExercisePipeline}
                       >
-                        <AddIcon />{' '}
+                        <AddIcon gapRight />
                         <FormattedMessage
                           id="app.exercise.createPipeline"
                           defaultMessage="Add exercise pipeline"
@@ -392,7 +392,7 @@ class Exercise extends Component {
                                 className="btn-flat"
                                 bsStyle="warning"
                               >
-                                <EditIcon />{' '}
+                                <EditIcon gapRight />
                                 <FormattedMessage
                                   id="generic.edit"
                                   defaultMessage="Edit"
@@ -414,7 +414,7 @@ class Exercise extends Component {
                                 className="btn-flat"
                                 bsStyle="danger"
                               >
-                                <DeleteIcon />{' '}
+                                <DeleteIcon gapRight />
                                 <FormattedMessage
                                   id="generic.delete"
                                   defaultMessage="Delete"
@@ -478,7 +478,7 @@ class Exercise extends Component {
                                             )
                                           )}
                                       >
-                                        <SendIcon />{' '}
+                                        <SendIcon gapRight />
                                         <FormattedMessage
                                           id="generic.detail"
                                           defaultMessage="Detail"
@@ -505,7 +505,7 @@ class Exercise extends Component {
                                             className="btn-flat"
                                             bsStyle="danger"
                                           >
-                                            <DeleteIcon />{' '}
+                                            <DeleteIcon gapRight />
                                             <FormattedMessage
                                               id="generic.delete"
                                               defaultMessage="Delete"

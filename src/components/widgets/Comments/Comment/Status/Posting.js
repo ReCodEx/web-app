@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import { FormattedMessage } from 'react-intl';
 import { LoadingIcon } from '../../../../icons';
 
-const Posting = ({ right }) => (
+const Posting = ({ right }) =>
   <span
     className={classNames({
       'direct-chat-timestamp': true,
@@ -11,9 +12,12 @@ const Posting = ({ right }) => (
       'pull-left': !right
     })}
   >
-    <LoadingIcon /> Publikuji ...
-  </span>
-);
+    <LoadingIcon gapRight />
+    <FormattedMessage
+      id="app.comments.publishing"
+      defaultMessage="Publishing ..."
+    />
+  </span>;
 
 Posting.propTypes = {
   right: PropTypes.bool.isRequired

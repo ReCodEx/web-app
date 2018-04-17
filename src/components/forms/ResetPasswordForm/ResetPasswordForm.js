@@ -16,7 +16,7 @@ const ResetPasswordForm = ({
   hasFailed = false,
   hasSucceeded = false,
   invalid
-}) => (
+}) =>
   <FormBox
     title={
       <FormattedMessage
@@ -35,25 +35,19 @@ const ResetPasswordForm = ({
         >
           {!submitting
             ? hasSucceeded
-                ? <span>
-                    <SuccessIcon />
-                    {' '}
-                    &nbsp;
-                    {' '}
-                    <FormattedMessage
-                      id="app.resetPassword.success"
-                      defaultMessage="Processing was finished."
-                    />
-                  </span>
-                : <FormattedMessage
-                    id="app.resetPassword.resetPassword"
-                    defaultMessage="Reset password"
+              ? <span>
+                  <SuccessIcon gapRight />
+                  <FormattedMessage
+                    id="app.resetPassword.success"
+                    defaultMessage="Processing was finished."
                   />
+                </span>
+              : <FormattedMessage
+                  id="app.resetPassword.resetPassword"
+                  defaultMessage="Reset password"
+                />
             : <span>
-                <LoadingIcon />
-                {' '}
-                &nbsp;
-                {' '}
+                <LoadingIcon gapRight />
                 <FormattedMessage
                   id="app.resetPassword.processing"
                   defaultMessage="Resting your password ..."
@@ -90,8 +84,7 @@ const ResetPasswordForm = ({
         />
       }
     />
-  </FormBox>
-);
+  </FormBox>;
 
 ResetPasswordForm.propTypes = {
   handleSubmit: PropTypes.func.isRequired,

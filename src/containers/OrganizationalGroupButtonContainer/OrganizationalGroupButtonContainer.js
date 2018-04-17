@@ -17,11 +17,12 @@ const OrganizationalGroupButtonContainer = ({
   setOrganizational
 }) =>
   <ResourceRenderer resource={group}>
-    {({ organizational }) =>
+    {({ organizational, privateData: { students, assignments } }) =>
       <OrganizationalGroupButton
         organizational={organizational}
         pending={pending}
         setOrganizational={setOrganizational}
+        disabled={students.length > 0 || assignments.all.length > 0}
       />}
   </ResourceRenderer>;
 

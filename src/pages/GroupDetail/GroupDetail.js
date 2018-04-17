@@ -341,7 +341,7 @@ class GroupDetail extends Component {
                           bsSize="sm"
                           onClick={this.createGroupExercise}
                         >
-                          <AddIcon />{' '}
+                          <AddIcon gapRight />
                           <FormattedMessage
                             id="app.group.createExercise"
                             defaultMessage="Add group exercise"
@@ -368,7 +368,7 @@ class GroupDetail extends Component {
                                 to={EXERCISE_EDIT_URI_FACTORY(exerciseId)}
                               >
                                 <Button bsSize="xs" bsStyle="warning">
-                                  <EditIcon />{' '}
+                                  <EditIcon gapRight />
                                   <FormattedMessage
                                     id="app.exercises.listEdit"
                                     defaultMessage="Settings"
@@ -381,7 +381,7 @@ class GroupDetail extends Component {
                                 )}
                               >
                                 <Button bsSize="xs" bsStyle="warning">
-                                  <EditIcon />{' '}
+                                  <EditIcon gapRight />
                                   <FormattedMessage
                                     id="app.exercises.listEditConfig"
                                     defaultMessage="Configuration"
@@ -394,7 +394,7 @@ class GroupDetail extends Component {
                                 )}
                               >
                                 <Button bsSize="xs" bsStyle="warning">
-                                  <EditIcon />{' '}
+                                  <EditIcon gapRight />
                                   <FormattedMessage
                                     id="app.exercises.listEditLimits"
                                     defaultMessage="Limits"

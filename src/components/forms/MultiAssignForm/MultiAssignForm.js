@@ -3,12 +3,12 @@ import PropTypes from 'prop-types';
 import { reduxForm, Field } from 'redux-form';
 import { FormattedMessage } from 'react-intl';
 import { Alert, HelpBlock, Button, Row, Col } from 'react-bootstrap';
-import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import isNumeric from 'validator/lib/isNumeric';
 
 import { DatetimeField, TextField, CheckboxField } from '../Fields';
 import SubmitButton from '../SubmitButton';
 import { getGroupCanonicalLocalizedName } from '../../../helpers/getLocalizedData';
+import Icon from '../../icons';
 
 class MultiAssignForm extends Component {
   state = { open: false };
@@ -97,14 +97,14 @@ class MultiAssignForm extends Component {
           >
             {this.state.open
               ? <span>
-                  <FontAwesomeIcon icon="minus-square" />&nbsp;&nbsp;
+                  <Icon icon="minus-square" gapRight />
                   <FormattedMessage
                     id="app.multiAssignForm.showMyGroups"
                     defaultMessage="Show My Groups Only"
                   />
                 </span>
               : <span>
-                  <FontAwesomeIcon icon="plus-square" />&nbsp;&nbsp;
+                  <Icon icon="plus-square" gapRight />
                   <FormattedMessage
                     id="app.multiAssignForm.showAllGroups"
                     defaultMessage="Show All Groups"

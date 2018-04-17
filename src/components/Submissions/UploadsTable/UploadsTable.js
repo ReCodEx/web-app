@@ -4,6 +4,7 @@ import { FormattedMessage } from 'react-intl';
 import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import { Table, Button, ButtonGroup } from 'react-bootstrap';
 import { prettyPrintBytes } from '../../helpers/stringFormatters';
+import { DeleteIcon } from '../../icons';
 
 const UploadsTable = ({
   uploadingFiles = [],
@@ -52,7 +53,7 @@ const UploadsTable = ({
               bsStyle="default"
               onClick={() => removeFile(payload)}
             >
-              <FontAwesomeIcon icon="trash" />
+              <DeleteIcon />
             </Button>
           </td>
         </tr>
@@ -94,14 +95,14 @@ const UploadsTable = ({
                 bsStyle="default"
                 onClick={() => removeFailedFile(payload)}
               >
-                <FontAwesomeIcon icon="trash" />
+                <DeleteIcon />
               </Button>
               <Button
                 bsSize="xs"
                 bsStyle="default"
                 onClick={() => retryUploadFile(payload)}
               >
-                <FontAwesomeIcon icon="refresh" />
+                <FontAwesomeIcon icon="sync" />
               </Button>
             </ButtonGroup>
           </td>
@@ -111,7 +112,7 @@ const UploadsTable = ({
       {removedFiles.map(payload =>
         <tr key={'removed' + payload.name}>
           <td className="text-center">
-            <FontAwesomeIcon icon="trash" className="text-warning" />
+            <DeleteIcon className="text-warning" />
           </td>
           <td>
             {payload.name}
@@ -126,7 +127,7 @@ const UploadsTable = ({
                 bsStyle="default"
                 onClick={() => returnFile(payload)}
               >
-                <FontAwesomeIcon icon="refresh" />
+                <FontAwesomeIcon icon="sync" />
               </Button>
             </ButtonGroup>
           </td>

@@ -9,7 +9,6 @@ import {
 } from 'react-intl';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { Row, Col, Button } from 'react-bootstrap';
-import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 
 import withLinks from '../../helpers/withLinks';
 import Page from '../../components/layout/Page';
@@ -26,7 +25,7 @@ import { getExercise } from '../../redux/selectors/exercises';
 import ReferenceSolutionDetail from '../../components/ReferenceSolutions/ReferenceSolutionDetail';
 import SourceCodeInfoBox from '../../components/widgets/SourceCodeInfoBox';
 import SourceCodeViewerContainer from '../../containers/SourceCodeViewerContainer';
-import { RefreshIcon, SendIcon } from '../../components/icons';
+import { RefreshIcon, SendIcon, NeedFixingIcon } from '../../components/icons';
 import ReferenceSolutionEvaluationsContainer from '../../containers/ReferenceSolutionEvaluationsContainer';
 import SolutionArchiveInfoBox from '../../components/Submissions/SolutionArchiveInfoBox';
 import { downloadSolutionArchive } from '../../redux/modules/referenceSolutionEvaluations';
@@ -164,7 +163,7 @@ class ReferenceSolution extends Component {
                           className="btn-flat"
                           onClick={refreshSolutionEvaluations}
                         >
-                          <RefreshIcon />{' '}
+                          <RefreshIcon gapRight />
                           <FormattedMessage
                             id="app.referenceSolutionDetail.refreshEvaluations"
                             defaultMessage="Refresh"
@@ -189,8 +188,8 @@ class ReferenceSolution extends Component {
                                     )}
                                 >
                                   {!exercise || exercise.isBroken
-                                    ? <FontAwesomeIcon icon="medkit" />
-                                    : <SendIcon />}{' '}
+                                    ? <NeedFixingIcon gapRight />
+                                    : <SendIcon gapRight />}
                                   <FormattedMessage
                                     id="app.referenceSolutionDetail.resubmit"
                                     defaultMessage="Resubmit"
@@ -210,8 +209,8 @@ class ReferenceSolution extends Component {
                                     )}
                                 >
                                   {!exercise || exercise.isBroken
-                                    ? <FontAwesomeIcon icon="medkit" />
-                                    : <SendIcon />}{' '}
+                                    ? <NeedFixingIcon gapRight />
+                                    : <SendIcon gapRight />}
                                   <FormattedMessage
                                     id="app.referenceSolutionDetail.resubmitDebug"
                                     defaultMessage="Resubmit in Debug Mode"

@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import { FormattedMessage } from 'react-intl';
 import { WarningIcon } from '../../../../icons';
 
-const Failed = ({ right, repost }) => (
+const Failed = ({ right, repost }) =>
   <span
     className={classNames({
       'direct-chat-timestamp': true,
@@ -12,9 +13,12 @@ const Failed = ({ right, repost }) => (
     })}
     onClick={repost}
   >
-    <WarningIcon /> Publikování selhalo.
-  </span>
-);
+    <WarningIcon gapRight />
+    <FormattedMessage
+      id="app.comments.publishingFailed"
+      defaultMessage="Publishing Failed"
+    />
+  </span>;
 
 Failed.propTypes = {
   right: PropTypes.bool.isRequired,

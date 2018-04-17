@@ -7,7 +7,6 @@ import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 import { reset, formValueSelector } from 'redux-form';
 import { defaultMemoize } from 'reselect';
-import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 
 import Page from '../../components/layout/Page';
 import EditGroupForm from '../../components/forms/EditGroupForm';
@@ -15,6 +14,7 @@ import OrganizationalGroupButtonContainer from '../../containers/OrganizationalG
 import DeleteGroupButtonContainer from '../../containers/DeleteGroupButtonContainer';
 import Box from '../../components/widgets/Box';
 import { LocalizedGroupName } from '../../components/helpers/LocalizedNames';
+import Icon from '../../components/icons';
 
 import { fetchGroupIfNeeded, editGroup } from '../../redux/modules/groups';
 import { groupSelector } from '../../redux/selectors/groups';
@@ -115,7 +115,7 @@ class EditGroup extends Component {
               </Col>
               <Col lg={9}>
                 <p className="small text-muted">
-                  <FontAwesomeIcon icon="info-circle" />&nbsp;&nbsp;
+                  <Icon icon="info-circle" gapRight />
                   <FormattedMessage
                     id="app.editGroup.organizationalExplain"
                     defaultMessage="Regular groups are containers for students and assignments. Organizational groups are intended to create hierarchy, so they are forbidden to hold any students or assignments."

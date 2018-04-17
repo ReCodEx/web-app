@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import Button from '../../widgets/FlatButton';
-import { FailedIcon } from '../../icons';
+import { Failure } from '../../icons';
 
 const DeletingFailedButton = ({ onClick, ...props }) =>
   <Button
@@ -12,7 +12,7 @@ const DeletingFailedButton = ({ onClick, ...props }) =>
     onClick={onClick}
     {...props}
   >
-    <FailedIcon />{' '}
+    <Failure gapRight />
     <FormattedMessage
       id="generic.deleteFailed"
       defaultMessage="Delete Failed"

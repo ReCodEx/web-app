@@ -93,22 +93,26 @@ class SubmitButton extends Component {
         {!submitting
           ? hasSucceeded
             ? <span>
-                {!noIcons && <SuccessIcon />} &nbsp;
+                {!noIcons && <SuccessIcon gapRight />}
                 {successMsg}
               </span>
             : asyncValidating !== false
               ? <span>
-                  {!noIcons && <LoadingIcon />} &nbsp; {validatingMsg}
+                  {!noIcons && <LoadingIcon gapRight />}
+                  {validatingMsg}
                 </span>
               : dirty && invalid
                 ? <span>
-                    {!noIcons && <WarningIcon />} &nbsp; {invalidMsg}
+                    {!noIcons && <WarningIcon gapRight />}
+                    {invalidMsg}
                   </span>
                 : <span>
-                    {!noIcons && <SendIcon />} &nbsp; {submitMsg}
+                    {!noIcons && <SendIcon gapRight />}
+                    {submitMsg}
                   </span>
           : <span>
-              {!noIcons && <LoadingIcon />} &nbsp; {submittingMsg}
+              {!noIcons && <LoadingIcon gapRight />}
+              {submittingMsg}
             </span>}
       </Button>
     );

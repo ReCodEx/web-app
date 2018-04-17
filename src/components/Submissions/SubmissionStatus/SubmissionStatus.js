@@ -3,10 +3,12 @@ import PropTypes from 'prop-types';
 import { Table } from 'react-bootstrap';
 import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import { FormattedDate, FormattedTime, FormattedMessage } from 'react-intl';
+
 import Box from '../../widgets/Box';
 import AssignmentStatusIcon from '../../Assignments/Assignment/AssignmentStatusIcon';
 import UsersNameContainer from '../../../containers/UsersNameContainer';
 import withLinks from '../../../helpers/withLinks';
+import { EditIcon } from '../../icons';
 
 const SubmissionStatus = ({
   evaluationStatus,
@@ -33,7 +35,7 @@ const SubmissionStatus = ({
         {note.length > 0 &&
           <tr>
             <td className="text-center">
-              <FontAwesomeIcon icon={['far', 'edit']} />
+              <EditIcon />
             </td>
             <th>
               <FormattedMessage

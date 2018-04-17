@@ -146,7 +146,8 @@ const SubmitSolution = ({
             </ControlLabel>
             {isValidating
               ? <p>
-                  <LoadingIcon /> {formatMessage(commonMessages.validating)}
+                  <LoadingIcon gapRight />
+                  {formatMessage(commonMessages.validating)}
                 </p>
               : !presubmitEnvironments
                 ? <p className="text-left callout callout-info">
@@ -222,7 +223,8 @@ const SubmitSolution = ({
             bsStyle="success"
             className="btn-flat"
           >
-            <LoadingIcon /> {formatMessage(commonMessages.submitting)}
+            <LoadingIcon gapRight />
+            {formatMessage(commonMessages.submitting)}
           </Button>}
 
         {!isSending &&
@@ -233,16 +235,18 @@ const SubmitSolution = ({
             className="btn-flat"
             onClick={submitSolution}
           >
-            {hasFailed ? <WarningIcon /> : <SendIcon />}{' '}
+            {hasFailed ? <WarningIcon gapRight /> : <SendIcon gapRight />}
             {formatMessage(commonMessages.submitButton)}
           </Button>}
 
         <Button bsStyle="default" className="btn-flat" onClick={reset}>
-          <DeleteIcon /> {formatMessage(commonMessages.resetForm)}
+          <DeleteIcon gapRight />
+          {formatMessage(commonMessages.resetForm)}
         </Button>
 
         <Button bsStyle="default" className="btn-flat" onClick={onClose}>
-          <CloseIcon /> {formatMessage(commonMessages.closeForm)}
+          <CloseIcon gapRight />
+          {formatMessage(commonMessages.closeForm)}
         </Button>
       </div>
       <br />

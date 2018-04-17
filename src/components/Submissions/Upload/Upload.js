@@ -38,7 +38,7 @@ const Upload = ({
       </p>
       <p>
         <Button bsStyle="primary">
-          <UploadIcon />{' '}
+          <UploadIcon gapRight />
           <FormattedMessage
             id="app.submitSolution.addFile"
             defaultMessage="Add File(s)"

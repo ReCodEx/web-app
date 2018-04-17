@@ -4,7 +4,7 @@ import { FormattedMessage } from 'react-intl';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 
-import { LoadingIcon, GroupIcon } from '../../icons';
+import Icon, { LoadingIcon, GroupIcon } from '../../icons';
 import LevelGap from './LevelGap';
 import GroupsName from '../../../components/Groups/GroupsName';
 import UsersNameContainer from '../../../containers/UsersNameContainer';
@@ -30,7 +30,7 @@ const TreeViewLeaf = ({
   >
     <LevelGap level={level - 1} /> {/* root group is not displayed */}
     <span style={{ width: 30, textAlign: 'center', display: 'inline-block' }}>
-      {loading ? <LoadingIcon /> : <FontAwesomeIcon icon={icon} />}
+      {loading ? <LoadingIcon gapRight /> : <Icon icon={icon} gapRight />}
     </span>
     {title}
     {admins &&

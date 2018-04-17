@@ -2,10 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage, FormattedDate, FormattedRelative } from 'react-intl';
 import { Table } from 'react-bootstrap';
-import { MaybeSucceededIcon } from '../../icons';
+import { SuccessOrFailureIcon } from '../../icons';
 import Box from '../../widgets/Box';
 
-const LicencesTable = ({ instance, licences }) => (
+const LicencesTable = ({ instance, licences }) =>
   <Box
     title={
       <FormattedMessage
@@ -22,7 +22,7 @@ const LicencesTable = ({ instance, licences }) => (
           values={{ name: instance.name }}
         />
         &nbsp;
-        <MaybeSucceededIcon success={instance.hasValidLicence} />
+        <SuccessOrFailureIcon success={instance.hasValidLicence} />
       </p>
       <Table condensed hover>
         <thead>
@@ -50,25 +50,25 @@ const LicencesTable = ({ instance, licences }) => (
         <tbody>
           {licences
             .sort((a, b) => (a.validUntil < b.validUntil ? 1 : -1))
-            .map(({ id, validUntil, isValid, note }) => (
+            .map(({ id, validUntil, isValid, note }) =>
               <tr key={id}>
                 <td>
                   {!isValid || validUntil * 1000 < Date.now()
-                    ? <strike>{note}</strike>
+                    ? <strike>
+                        {note}
+                      </strike>
                     : note}
                 </td>
                 <td className="text-center">
-                  <MaybeSucceededIcon success={isValid} />
+                  <SuccessOrFailureIcon success={isValid} />
                 </td>
                 <td>
-                  <FormattedDate value={validUntil * 1000} />
-                  {' '}
-                  (
+                  <FormattedDate value={validUntil * 1000} /> (
                   <FormattedRelative value={validUntil * 1000} />
                   )
                 </td>
               </tr>
-            ))}
+            )}
 
           {licences.length === 0 &&
             <tr>
@@ -82,8 +82,7 @@ const LicencesTable = ({ instance, licences }) => (
         </tbody>
       </Table>
     </div>
-  </Box>
-);
+  </Box>;
 
 LicencesTable.propTypes = {
   instance: PropTypes.shape({

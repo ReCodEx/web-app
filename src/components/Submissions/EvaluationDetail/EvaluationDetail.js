@@ -11,7 +11,7 @@ import {
 import { Table } from 'react-bootstrap';
 
 import Box from '../../widgets/Box';
-import { MaybeSucceededIcon } from '../../icons';
+import { SuccessOrFailureIcon } from '../../icons';
 import BonusPoints from '../../Assignments/SubmissionsTable/BonusPoints';
 
 const EvaluationDetail = ({
@@ -73,7 +73,7 @@ const EvaluationDetail = ({
               />
             </th>
             <td className="text-center">
-              <MaybeSucceededIcon success={submittedAt < secondDeadline} />
+              <SuccessOrFailureIcon success={submittedAt < secondDeadline} />
             </td>
           </tr>}
 
@@ -85,7 +85,7 @@ const EvaluationDetail = ({
             />
           </th>
           <td className="text-center">
-            <MaybeSucceededIcon success={!evaluation.initFailed} />
+            <SuccessOrFailureIcon success={!evaluation.initFailed} />
           </td>
         </tr>
 

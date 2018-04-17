@@ -25,7 +25,7 @@ const ConfirmDeleteButton = ({
       bsSize={small ? 'sm' : undefined}
       {...props}
     >
-      <DeleteIcon />{' '}
+      <DeleteIcon gapRight />
       <FormattedMessage id="generic.delete" defaultMessage="Delete" />
     </Button>
   </Confirm>;

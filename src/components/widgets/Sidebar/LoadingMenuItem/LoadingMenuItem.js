@@ -1,19 +1,19 @@
 import React from 'react';
+import { FormattedMessage } from 'react-intl';
 import { LoadingIcon } from '../../../icons';
 
-const LoadingMenuItem = () => (
+const LoadingMenuItem = () =>
   <li>
     <a>
-      <LoadingIcon />
+      <LoadingIcon gapRight />
       <span
         style={{
           whiteSpace: 'normal'
         }}
       >
-        Načítám ...
+        <FormattedMessage id="generic.loading" defaultMessage="Loading ..." />
       </span>
     </a>
-  </li>
-);
+  </li>;
 
 export default LoadingMenuItem;

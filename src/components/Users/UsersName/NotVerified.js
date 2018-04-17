@@ -3,8 +3,7 @@ import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { OverlayTrigger, Popover } from 'react-bootstrap';
 import { WarningIcon } from '../../icons';
-import ResendVerificationEmail
-  from '../../../containers/ResendVerificationEmailContainer';
+import ResendVerificationEmail from '../../../containers/ResendVerificationEmailContainer';
 
 const NotVerified = ({ userId, currentUserId }) => {
   return (
@@ -34,7 +33,9 @@ const NotVerified = ({ userId, currentUserId }) => {
         </Popover>
       }
     >
-      <span>{' '}<WarningIcon className="text-warning" /></span>
+      <span>
+        <WarningIcon className="text-warning" gapLeft />
+      </span>
     </OverlayTrigger>
   );
 };

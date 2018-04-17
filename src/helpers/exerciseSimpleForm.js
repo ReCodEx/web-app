@@ -334,7 +334,7 @@ const transformConfigTestExecutionVariables = (test, envId, hasEntryPoint) => {
   // Final updates ...
   let overrides = transformConfigInputFiles(test.inputFiles);
   overrides[test.useCustomJudge ? 'judgeBinary' : 'customJudgeBinary'] = '';
-  if (test.useCustomJudge) {
+  if (!test.useCustomJudge) {
     overrides.judgeArgs = [];
   }
   overrides.outputFile = test.outputFile && test.outputFile.trim();

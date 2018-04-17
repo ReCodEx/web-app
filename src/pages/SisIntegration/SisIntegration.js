@@ -96,7 +96,7 @@ class SisIntegration extends Component {
                           bsStyle="warning"
                           onClick={() => this.setState({ openEdit: id })}
                         >
-                          <EditIcon />{' '}
+                          <EditIcon gapRight />
                           <FormattedMessage
                             id="generic.edit"
                             defaultMessage="Edit"
@@ -117,7 +117,7 @@ class SisIntegration extends Component {
                             className="btn-flat"
                             bsStyle="danger"
                           >
-                            <DeleteIcon />{' '}
+                            <DeleteIcon gapRight />
                             <FormattedMessage
                               id="generic.delete"
                               defaultMessage="Delete"

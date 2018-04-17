@@ -10,7 +10,7 @@ import {
 import { Table } from 'react-bootstrap';
 
 import Box from '../../widgets/Box';
-import { MaybeSucceededIcon } from '../../icons';
+import { SuccessOrFailureIcon } from '../../icons';
 
 const EvaluationDetail = ({ evaluation, isCorrect }) =>
   <Box
@@ -48,7 +48,7 @@ const EvaluationDetail = ({ evaluation, isCorrect }) =>
             />
           </th>
           <td className="text-center">
-            <MaybeSucceededIcon success={!evaluation.initFailed} />
+            <SuccessOrFailureIcon success={!evaluation.initFailed} />
           </td>
         </tr>
 

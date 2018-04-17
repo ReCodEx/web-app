@@ -32,15 +32,25 @@ class HeaderNotification extends Component {
   };
 
   render() {
-    const { id, successful = true, msg, hide = null, time, count, isNew = false } = this.props;
+    const {
+      id,
+      successful = true,
+      msg,
+      hide = null,
+      time,
+      count,
+      isNew = false
+    } = this.props;
 
     const { hovering, clickedCopy } = this.state;
     const deleteOnClick = hide && hovering;
 
     return (
-      <li className={classNames({
-        [styles.newNotification]: isNew
-      })}>
+      <li
+        className={classNames({
+          [styles.newNotification]: isNew
+        })}
+      >
         <OverlayTrigger
           placement="bottom"
           overlay={

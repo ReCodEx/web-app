@@ -46,7 +46,7 @@ const AttachmentFilesTableRow = ({
           className="pull-right"
         >
           <Button bsSize="xs" className="btn-flat" bsStyle="danger">
-            <DeleteIcon />{' '}
+            <DeleteIcon gapRight />
             <FormattedMessage id="generic.delete" defaultMessage="Delete" />
           </Button>
         </Confirm>}

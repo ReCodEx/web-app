@@ -2,11 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import Button from '../../widgets/FlatButton';
-import FontAwesomeIcon from '@fortawesome/react-fontawesome';
+import Icon from '../../icons';
 
 const MakeSupervisorButton = ({ onClick, ...props }) =>
   <Button {...props} onClick={onClick} bsStyle="success" className="btn-flat">
-    <FontAwesomeIcon icon="user-plus" />{' '}
+    <Icon icon="user-plus" gapRight />
     <FormattedMessage
       id="app.groups.makeSupervisorButton"
       defaultMessage="Make supervisor"

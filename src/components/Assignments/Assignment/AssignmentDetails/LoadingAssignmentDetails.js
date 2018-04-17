@@ -4,12 +4,11 @@ import { FormattedMessage } from 'react-intl';
 import Box from '../../../widgets/Box';
 import { LoadingIcon } from '../../../icons';
 
-const LoadingAssignmentDetails = () => (
+const LoadingAssignmentDetails = () =>
   <Box
     title={
       <span>
-        <LoadingIcon />
-        {' '}
+        <LoadingIcon gapRight />
         <FormattedMessage
           id="app.assignment.loading"
           defaultMessage="Loading exercise assignment ..."
@@ -26,7 +25,6 @@ const LoadingAssignmentDetails = () => (
         defaultMessage="Loading exercise assignment ..."
       />
     </p>
-  </Box>
-);
+  </Box>;
 
 export default LoadingAssignmentDetails;

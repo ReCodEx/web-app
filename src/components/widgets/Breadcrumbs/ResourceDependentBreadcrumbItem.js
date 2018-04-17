@@ -1,9 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import ResourceRenderer from '../../helpers/ResourceRenderer';
-import { LoadingIcon } from '../../icons';
+import Icon, { LoadingIcon } from '../../icons';
 import BreadcrumbItem from './BreadcrumbItem';
 
 const ResourceDependentBreadcrumbItem = ({
@@ -19,10 +18,10 @@ const ResourceDependentBreadcrumbItem = ({
         text={
           <span>
             {iconName
-              ? <FontAwesomeIcon icon={iconName} />
-              : <LoadingIcon />}{' '}
+              ? <Icon icon={iconName} gapRight />
+              : <LoadingIcon gapRight />}
             <FormattedMessage
-              id="app.resourceDependendBreadcrumbItem.loading"
+              id="generic.loading"
               defaultMessage="Loading ..."
             />
           </span>
