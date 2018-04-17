@@ -5,19 +5,17 @@ import CommentBox from '../CommentBox';
 import AddComment from '../AddComment';
 import { WarningIcon } from '../../../icons';
 
-const LoadingCommentThread = () => (
+const LoadingCommentThread = () =>
   <CommentBox commentsCount={0} footer={<AddComment />}>
     <div>
       <p className="text-center">
-        <WarningIcon />
-        {' '}
+        <WarningIcon gapRight />
         <FormattedMessage
           id="app.comments.loadingCommentThread"
           defaultMessage="The comment thread could not have been loaded."
         />
       </p>
     </div>
-  </CommentBox>
-);
+  </CommentBox>;
 
 export default LoadingCommentThread;

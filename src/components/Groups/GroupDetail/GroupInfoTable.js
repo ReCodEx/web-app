@@ -5,7 +5,7 @@ import { Table } from 'react-bootstrap';
 import ReactMarkdown from 'react-remarkable';
 
 import Box from '../../widgets/Box';
-import { MaybeSucceededIcon } from '../../icons';
+import { SuccessOrFailureIcon } from '../../icons';
 import { getLocalizedDescription } from '../../../helpers/getLocalizedData';
 
 const GroupInfoTable = ({
@@ -74,7 +74,7 @@ const GroupInfoTable = ({
               />
             </th>
             <td>
-              <MaybeSucceededIcon success={isPublic} />
+              <SuccessOrFailureIcon success={isPublic} />
             </td>
           </tr>
           {threshold !== null &&

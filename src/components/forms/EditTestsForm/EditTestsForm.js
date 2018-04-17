@@ -63,9 +63,9 @@ class EditTestsForm extends Component {
                 bsStyle={'danger'}
                 className="btn-flat"
               >
-                <RefreshIcon /> &nbsp;
+                <RefreshIcon gapRight />
                 <FormattedMessage id="generic.reset" defaultMessage="Reset" />
-              </Button>{' '}
+              </Button>
             </span>}
 
           <SubmitButton

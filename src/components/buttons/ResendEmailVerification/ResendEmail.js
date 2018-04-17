@@ -7,8 +7,7 @@ import { FormattedMessage } from 'react-intl';
 const ResendEmail = ({ resend, ...props }) => {
   return (
     <FlatButton onClick={resend} {...props}>
-      <RefreshIcon />
-      {' '}
+      <RefreshIcon gapRight />
       <FormattedMessage
         id="app.resendEmailVerification.resend"
         defaultMessage="Resend verification email"

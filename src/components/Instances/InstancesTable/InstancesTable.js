@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { injectIntl, FormattedMessage } from 'react-intl';
 import { Table } from 'react-bootstrap';
 import { Link } from 'react-router';
-import { MaybeSucceededIcon } from '../../icons';
+import { SuccessOrFailureIcon } from '../../icons';
 import UsersNameContainer from '../../../containers/UsersNameContainer';
 
 import withLinks from '../../../helpers/withLinks';
@@ -43,7 +43,7 @@ const InstancesTable = ({ instances, links: { INSTANCE_URI_FACTORY }, intl }) =>
               <UsersNameContainer userId={admin} />
             </td>
             <td>
-              <MaybeSucceededIcon success={hasValidLicence} />
+              <SuccessOrFailureIcon success={hasValidLicence} />
             </td>
           </tr>
         )}

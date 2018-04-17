@@ -1,14 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FailedIcon } from '../../icons';
+import { Failure } from '../../icons';
 import FlatButton from '../../widgets/FlatButton';
 import { FormattedMessage } from 'react-intl';
 
 const ResendingFailed = ({ resend, ...props }) => {
   return (
     <FlatButton onClick={resend} bsStyle="danger" {...props}>
-      <FailedIcon />
-      {' '}
+      <Failure />{' '}
       <FormattedMessage
         id="app.resendEmailVerification.failed"
         defaultMessage="Resending failed"

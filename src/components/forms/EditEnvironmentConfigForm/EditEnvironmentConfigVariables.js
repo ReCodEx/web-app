@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Field, FieldArray } from 'redux-form';
 import { Table, Button, Row, Col } from 'react-bootstrap';
-import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import {
   defineMessages,
   intlShape,
@@ -11,6 +10,7 @@ import {
 } from 'react-intl';
 
 import { TextField, SelectField, ExpandingTextField } from '../Fields';
+import { AddIcon, RemoveIcon } from '../../icons';
 
 const messages = defineMessages({
   stringType: {
@@ -123,7 +123,7 @@ const EditEnvironmentConfigVariables = ({
                 bsSize="xs"
                 className="btn-flat"
               >
-                <FontAwesomeIcon icon="minus" />{' '}
+                <RemoveIcon gapRight />
                 <FormattedMessage
                   id="app.editEnvironmentConfigVariables.remove"
                   defaultMessage="Remove"
@@ -139,7 +139,7 @@ const EditEnvironmentConfigVariables = ({
       bsStyle={'primary'}
       className="btn-flat"
     >
-      <FontAwesomeIcon icon="plus" />{' '}
+      <AddIcon gapRight />
       <FormattedMessage
         id="app.editEnvironmentConfigVariables.add"
         defaultMessage="Add variable"

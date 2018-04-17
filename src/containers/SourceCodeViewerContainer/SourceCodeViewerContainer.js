@@ -38,7 +38,7 @@ class SourceCodeViewerContainer extends Component {
             <div>
               <Modal.Header closeButton>
                 <Modal.Title>
-                  <LoadingIcon />{' '}
+                  <LoadingIcon gapRight />
                   <FormattedMessage
                     id="app.sourceCodeViewer.loading"
                     defaultMessage="Loading ..."
@@ -56,7 +56,7 @@ class SourceCodeViewerContainer extends Component {
             <div>
               <Modal.Footer>
                 <Button disabled>
-                  <DownloadIcon />{' '}
+                  <DownloadIcon gapRight />
                   <FormattedMessage
                     id="app.sourceCodeViewer.downloadButton"
                     defaultMessage="Download file"
@@ -107,7 +107,7 @@ class SourceCodeViewerContainer extends Component {
             <div>
               <Modal.Footer>
                 <Button onClick={() => download(file.id)}>
-                  <DownloadIcon />{' '}
+                  <DownloadIcon gapRight />
                   <FormattedMessage
                     id="app.sourceCodeViewer.downloadButton"
                     defaultMessage="Download file"

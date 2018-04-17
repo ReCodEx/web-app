@@ -1,14 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Well } from 'react-bootstrap';
-import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import GroupsNameContainer from '../../../containers/GroupsNameContainer';
+import { GroupIcon } from '../../icons';
 
 import './HierarchyLine.css';
 
 const HierarchyLine = ({ groupId, parentGroupsIds }) =>
   <Well bsSize="sm" className="groupParents">
-    <FontAwesomeIcon icon="users" className="slashStyle" />
+    <GroupIcon className="slashStyle" />
     {parentGroupsIds.map(
       (groupId, i) =>
         i !== 0 &&

@@ -5,9 +5,10 @@ import { FormattedMessage, FormattedNumber } from 'react-intl';
 import { Table, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import prettyMs from 'pretty-ms';
-import { prettyPrintBytes } from '../../helpers/stringFormatters';
 
+import { prettyPrintBytes } from '../../helpers/stringFormatters';
 import exitCodeMapping from '../../helpers/exitCodeMapping';
+import Icon from '../../icons';
 
 const hasValue = value => value !== null;
 
@@ -19,7 +20,7 @@ const tickOrCrossAndRatioOrValue = (isOK, ratio, value, pretty, multiplier) =>
       'text-danger': !isOK
     })}
   >
-    <FontAwesomeIcon icon={isOK ? 'check' : 'times'} />{' '}
+    <Icon icon={isOK ? 'check' : 'times'} gapRight />
     <small>
       {hasValue(value) && '('}
       {(ratio || ratio === 0) &&
@@ -164,8 +165,8 @@ const TestResultsTable = ({ results, runtimeEnvironmentId }) =>
             }
           >
             <span>
-              <FontAwesomeIcon icon="thermometer-half" />&nbsp;&nbsp;
-              <FontAwesomeIcon icon="braille" />
+              <Icon icon="thermometer-half" gapRight />
+              <Icon icon="braille" />
             </span>
           </OverlayTrigger>
         </th>
@@ -182,8 +183,8 @@ const TestResultsTable = ({ results, runtimeEnvironmentId }) =>
             }
           >
             <span>
-              <FontAwesomeIcon icon="thermometer-half" />&nbsp;&nbsp;
-              <FontAwesomeIcon icon="bolt" />
+              <Icon icon="thermometer-half" gapRight />
+              <Icon icon="bolt" />
             </span>
           </OverlayTrigger>
         </th>

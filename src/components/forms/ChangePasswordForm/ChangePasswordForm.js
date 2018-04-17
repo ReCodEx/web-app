@@ -36,7 +36,7 @@ const ChangePasswordForm = ({
           {!submitting
             ? hasSucceeded
               ? <span>
-                  <SuccessIcon /> &nbsp;{' '}
+                  <SuccessIcon gapRight />
                   <FormattedMessage
                     id="app.changePasswordForm.success"
                     defaultMessage="Your password has been changed."
@@ -47,7 +47,7 @@ const ChangePasswordForm = ({
                   defaultMessage="Change Password"
                 />
             : <span>
-                <LoadingIcon /> &nbsp;{' '}
+                <LoadingIcon gapRight />
                 <FormattedMessage
                   id="app.changePasswordForm.processing"
                   defaultMessage="Changing ..."

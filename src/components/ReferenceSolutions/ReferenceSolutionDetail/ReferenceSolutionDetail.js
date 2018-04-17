@@ -7,6 +7,7 @@ import { Table } from 'react-bootstrap';
 import Box from '../../widgets/Box';
 import UsersNameContainer from '../../../containers/UsersNameContainer';
 import ExercisesNameContainer from '../../../containers/ExercisesNameContainer';
+import { EditIcon } from '../../icons';
 
 const ReferenceSolutionDetail = ({
   description,
@@ -42,7 +43,7 @@ const ReferenceSolutionDetail = ({
         </tr>
         <tr>
           <td className="text-center">
-            <FontAwesomeIcon icon={['far', 'edit']} />
+            <EditIcon />
           </td>
           <th>
             <FormattedMessage

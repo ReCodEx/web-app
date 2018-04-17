@@ -8,7 +8,7 @@ const LoadingGroupDetail = () =>
     noPadding={false}
     title={
       <span>
-        <LoadingIcon />{' '}
+        <LoadingIcon gapRight />
         <FormattedMessage
           id="app.groupDetail.loading"
           defaultMessage="Loading description of the group ..."

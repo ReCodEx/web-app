@@ -54,7 +54,7 @@ class ForkExerciseForm extends Component {
             className="btn-flat"
             onClick={() => this.viewForkedExercise()}
           >
-            <SuccessIcon />{' '}
+            <SuccessIcon gapRight />
             <FormattedMessage
               id="app.forkExerciseButton.success"
               defaultMessage="Show the forked exercise"

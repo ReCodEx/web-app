@@ -6,8 +6,8 @@ import { Link } from 'react-router';
 import { Tooltip, OverlayTrigger } from 'react-bootstrap';
 
 import FailedAvatar from '../Avatar/FailedAvatar';
-
 import withLinks from '../../../helpers/withLinks';
+import Icon from '../../icons';
 
 class Badge extends Component {
   state = { failedLoadingImage: false };
@@ -48,7 +48,7 @@ class Badge extends Component {
             </Link>
           </p>
           <Link to={EDIT_USER_URI_FACTORY(id)}>
-            <FontAwesomeIcon icon="edit" />&nbsp;
+            <Icon icon="edit" gapRight />
             <FormattedMessage id="generic.settings" defaultMessage="Settings" />
           </Link>
           &nbsp;

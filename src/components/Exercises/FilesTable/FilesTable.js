@@ -3,11 +3,10 @@ import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { injectIntl, FormattedMessage } from 'react-intl';
 
-import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import { Table } from 'react-bootstrap';
 import Button from '../../widgets/FlatButton';
 import Box from '../../widgets/Box';
-import { SendIcon, DownloadIcon } from '../../icons';
+import Icon, { SendIcon, DownloadIcon } from '../../icons';
 
 import UploadContainer from '../../../containers/UploadContainer';
 import ResourceRenderer from '../../helpers/ResourceRenderer';
@@ -50,7 +49,7 @@ const FilesTable = ({
             disabled={!canSubmit}
             onClick={() => addFiles(newFiles)}
           >
-            <SendIcon />{' '}
+            <SendIcon gapRight />
             <FormattedMessage
               id="app.filesTable.addFiles"
               defaultMessage="Save files"
@@ -82,7 +81,7 @@ const FilesTable = ({
               </Table>}
             {attachments.length === 0 &&
               <p className="text-center">
-                <FontAwesomeIcon icon={['far', 'folder-open']} />{' '}
+                <Icon icon={['far', 'folder-open']} gapRight />
                 <FormattedMessage
                   id="app.filesTable.empty"
                   defaultMessage="There are no uploaded files yet."
@@ -93,7 +92,7 @@ const FilesTable = ({
       {downloadArchive &&
         <p>
           <Button bsStyle="primary" onClick={downloadArchive}>
-            <DownloadIcon />{' '}
+            <DownloadIcon gapRight />
             <FormattedMessage
               id="app.filesTable.downloadArchive"
               defaultMessage="Download all"

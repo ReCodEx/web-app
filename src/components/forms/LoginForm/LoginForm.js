@@ -3,9 +3,8 @@ import PropTypes from 'prop-types';
 import { reduxForm, Field } from 'redux-form';
 import { FormattedMessage } from 'react-intl';
 import isEmail from 'validator/lib/isEmail';
-import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 
-import { SuccessIcon, LoadingIcon } from '../../icons';
+import Icon, { SuccessIcon, LoadingIcon } from '../../icons';
 import FormBox from '../../widgets/FormBox';
 import { EmailField, PasswordField } from '../Fields';
 
@@ -38,21 +37,21 @@ const LoginForm = ({
           {!submitting
             ? hasSucceeded
               ? <span>
-                  <SuccessIcon />{' '}
+                  <SuccessIcon gapRight />
                   <FormattedMessage
                     id="app.loginForm.success"
                     defaultMessage="You are successfully signed in"
                   />
                 </span>
               : <span>
-                  <FontAwesomeIcon icon="sign-in" />{' '}
+                  <Icon icon="sign-in" gapRight />
                   <FormattedMessage
                     id="app.loginForm.login"
                     defaultMessage="Sign in"
                   />
                 </span>
             : <span>
-                <LoadingIcon />{' '}
+                <LoadingIcon gapRight />
                 <FormattedMessage
                   id="app.loginForm.processing"
                   defaultMessage="Signing in ..."

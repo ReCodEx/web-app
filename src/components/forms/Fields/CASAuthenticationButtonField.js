@@ -4,7 +4,7 @@ import { FormattedMessage } from 'react-intl';
 import { change } from 'redux-form';
 
 import { FormGroup } from 'react-bootstrap';
-import { MaybeSucceededIcon } from '../../icons';
+import { SuccessOrFailureIcon } from '../../icons';
 import AuthentictionButtonContianer from '../../../containers/CAS/AuthenticationButtonContainer';
 
 const CASAuthenticationButtonField = ({
@@ -15,7 +15,7 @@ const CASAuthenticationButtonField = ({
   <FormGroup controlId={name}>
     {dirty &&
       <span>
-        <MaybeSucceededIcon success={Boolean(ticket)} />{' '}
+        <SuccessOrFailureIcon success={Boolean(ticket)} gapRight />
         {ticket
           ? <FormattedMessage
               id="app.casRegistration.ok"

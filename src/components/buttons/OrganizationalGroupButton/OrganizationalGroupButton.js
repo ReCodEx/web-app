@@ -1,8 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import GroupIcon from '../../icons/GroupIcon';
-import LoadingIcon from '../../icons/LoadingIcon';
+import { GroupIcon, LoadingIcon } from '../../icons';
 import Button from '../../widgets/FlatButton';
 
 const OrganizationalGroupButton = ({
@@ -17,8 +16,8 @@ const OrganizationalGroupButton = ({
     disabled={pending || disabled}
   >
     {pending
-      ? <LoadingIcon />
-      : <GroupIcon organizational={!organizational} />}&nbsp;&nbsp;
+      ? <LoadingIcon gapRight />
+      : <GroupIcon organizational={!organizational} gapRight />}
     {organizational === true
       ? <FormattedMessage
           id="app.organizationalGroupButton.unset"

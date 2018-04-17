@@ -110,7 +110,7 @@ const AssignmentTableRow = ({
         <ButtonGroup>
           <LinkContainer to={ASSIGNMENT_EDIT_URI_FACTORY(id)}>
             <Button bsSize="xs" bsStyle="warning">
-              <EditIcon />{' '}
+              <EditIcon gapRight />
               <FormattedMessage id="generic.edit" defaultMessage="Edit" />
             </Button>
           </LinkContainer>

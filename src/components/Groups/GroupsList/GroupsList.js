@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { Table } from 'react-bootstrap';
 import ResourceRenderer from '../../helpers/ResourceRenderer';
-import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 
 import GroupsName from '../GroupsName';
+import { GroupIcon } from '../../icons';
 
 const GroupsList = ({ groups = [], renderButtons = () => null, ...props }) =>
   <ResourceRenderer resource={groups.toArray()}>
@@ -15,7 +15,7 @@ const GroupsList = ({ groups = [], renderButtons = () => null, ...props }) =>
           {groups.map(({ id, name, localizedTexts, organizational }) =>
             <tr key={id}>
               <td className="text-center">
-                <FontAwesomeIcon icon="users" />
+                <GroupIcon />
               </td>
               <td>
                 <GroupsName

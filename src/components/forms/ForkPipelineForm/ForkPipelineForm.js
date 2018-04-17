@@ -52,7 +52,7 @@ class ForkPipelineForm extends Component {
             className="btn-flat"
             onClick={() => this.viewForkedPipeline()}
           >
-            <SuccessIcon />{' '}
+            <SuccessIcon gapRight />
             <FormattedMessage
               id="app.forkPipelineButton.success"
               defaultMessage="Show the forked pipeline"

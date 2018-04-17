@@ -85,7 +85,7 @@ class Instance extends Component {
                       to={ADMIN_EDIT_INSTANCE_URI_FACTORY(instanceId)}
                     >
                       <Button bsStyle="warning">
-                        <EditIcon />{' '}
+                        <EditIcon gapRight />
                         <FormattedMessage
                           id="app.instance.edit"
                           defaultMessage="Edit instance"

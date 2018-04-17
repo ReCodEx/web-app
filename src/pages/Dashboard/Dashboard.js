@@ -163,7 +163,7 @@ class Dashboard extends Component {
                 <Col sm={12}>
                   <div className="callout callout-success">
                     <h4>
-                      <InfoIcon />{' '}
+                      <InfoIcon gapRight />
                       <FormattedMessage
                         id="app.user.welcomeTitle"
                         defaultMessage="Welcome to ReCodEx"
@@ -186,7 +186,7 @@ class Dashboard extends Component {
                 <Col sm={12}>
                   <div className="callout callout-success">
                     <h4>
-                      <InfoIcon />{' '}
+                      <InfoIcon gapRight />
                       <FormattedMessage
                         id="app.user.welcomeTitle"
                         defaultMessage="Welcome to ReCodEx"
@@ -255,7 +255,7 @@ class Dashboard extends Component {
                                           to={GROUP_INFO_URI_FACTORY(group.id)}
                                         >
                                           <Button bsSize="sm">
-                                            <InfoIcon />&nbsp;&nbsp;
+                                            <InfoIcon gapRight />
                                             <FormattedMessage
                                               id="app.group.info"
                                               defaultMessage="Group Info"
@@ -268,7 +268,7 @@ class Dashboard extends Component {
                                           )}
                                         >
                                           <Button bsSize="sm">
-                                            <GroupIcon />&nbsp;&nbsp;
+                                            <GroupIcon gapRight />
                                             <FormattedMessage
                                               id="app.group.detail"
                                               defaultMessage="Group Detail"
@@ -347,7 +347,7 @@ class Dashboard extends Component {
                                           to={GROUP_INFO_URI_FACTORY(group.id)}
                                         >
                                           <Button bsSize="sm">
-                                            <InfoIcon />&nbsp;&nbsp;
+                                            <InfoIcon gapRight />
                                             <FormattedMessage
                                               id="app.group.info"
                                               defaultMessage="Group Info"
@@ -360,7 +360,7 @@ class Dashboard extends Component {
                                           )}
                                         >
                                           <Button bsSize="sm">
-                                            <GroupIcon />&nbsp;&nbsp;
+                                            <GroupIcon gapRight />
                                             <FormattedMessage
                                               id="app.group.detail"
                                               defaultMessage="Group Detail"

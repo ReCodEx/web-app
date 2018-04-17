@@ -79,7 +79,7 @@ class EditUser extends Component {
             {!data.privateData.isLocal &&
               <p>
                 <Button bsStyle="warning" onClick={makeLocalLogin}>
-                  <LocalIcon />{' '}
+                  <LocalIcon gapRight />
                   <FormattedMessage
                     id="app.editUser.makeLocal"
                     defaultMessage="Create local account"

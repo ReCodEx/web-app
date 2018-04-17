@@ -239,7 +239,7 @@ class User extends Component {
               user.id !== loggedInUserId &&
               <div className="callout callout-warning">
                 <h4>
-                  <InfoIcon />{' '}
+                  <InfoIcon gapRight />
                   <FormattedMessage
                     id="app.user.nothingInCommon.title"
                     defaultMessage="You are not a supervisor of {name}"
@@ -260,7 +260,7 @@ class User extends Component {
                 <Col sm={12}>
                   <div className="callout callout-success">
                     <h4>
-                      <InfoIcon />{' '}
+                      <InfoIcon gapRight />
                       <FormattedMessage
                         id="app.user.welcomeTitle"
                         defaultMessage="Welcome to ReCodEx"

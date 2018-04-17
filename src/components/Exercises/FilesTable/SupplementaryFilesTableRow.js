@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { prettyPrintBytes } from '../../helpers/stringFormatters';
 import { FormattedDate, FormattedTime, FormattedMessage } from 'react-intl';
 import { Button } from 'react-bootstrap';
+
+import { prettyPrintBytes } from '../../helpers/stringFormatters';
 import Confirm from '../../../components/forms/Confirm';
 import { DeleteIcon } from '../../../components/icons';
 
@@ -49,7 +50,7 @@ const SupplementaryFilesTableRow = ({
             className="pull-right"
           >
             <Button bsSize="xs" className="btn-flat" bsStyle="danger">
-              <DeleteIcon />{' '}
+              <DeleteIcon gapRight />
               <FormattedMessage id="generic.delete" defaultMessage="Delete" />
             </Button>
           </Confirm>}

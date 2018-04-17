@@ -79,7 +79,7 @@ class Users extends Component {
                       <div>
                         <LinkContainer to={EDIT_USER_URI_FACTORY(userId)}>
                           <Button bsSize="xs">
-                            <SettingsIcon />{' '}
+                            <SettingsIcon gapRight />
                             <FormattedMessage
                               id="generic.settings"
                               defaultMessage="Settings"
@@ -91,7 +91,7 @@ class Users extends Component {
                             bsSize="xs"
                             onClick={() => takeOver(userId, DASHBOARD_URI)}
                           >
-                            <TransferIcon />{' '}
+                            <TransferIcon gapRight />
                             <FormattedMessage
                               id="app.users.takeOver"
                               defaultMessage="Login as"

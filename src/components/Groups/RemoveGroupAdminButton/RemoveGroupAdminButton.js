@@ -2,11 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import Button from '../../widgets/FlatButton';
-import FontAwesomeIcon from '@fortawesome/react-fontawesome';
+import Icon from '../../icons';
 
 const RemoveGroupAdminButton = ({ onClick, ...props }) =>
   <Button {...props} onClick={onClick} bsStyle="danger" className="btn-flat">
-    <FontAwesomeIcon icon="user-secret" />{' '}
+    <Icon icon="user-secret" gapRight />
     <FormattedMessage
       id="app.groups.removeGroupAdminButton"
       defaultMessage="Remove group admin"

@@ -5,7 +5,7 @@ import { LoadingIcon } from '../../icons';
 const LoadingResultsTableRow = () =>
   <tr>
     <td className="text-center" colSpan={5}>
-      <LoadingIcon />{' '}
+      <LoadingIcon gapRight />
       <FormattedMessage
         id="app.groupResultsTableRow.loading"
         defaultMessage="Loading results ..."

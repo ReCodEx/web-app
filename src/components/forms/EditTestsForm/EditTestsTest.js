@@ -2,10 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Table, Button } from 'react-bootstrap';
 import { formValues } from 'redux-form';
-import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import { FormattedMessage } from 'react-intl';
 import EditTestsTestRow from './EditTestsTestRow';
 import { prettyPrintPercent } from '../../helpers/stringFormatters';
+import { AddIcon } from '../../icons';
 
 const EditTestsTest = ({ fields, isUniform, testValues }) => {
   const weightSum = isUniform
@@ -69,10 +69,10 @@ const EditTestsTest = ({ fields, isUniform, testValues }) => {
             bsStyle={'primary'}
             className="btn-flat"
           >
-            <FontAwesomeIcon icon="plus" />{' '}
+            <AddIcon gapRight />
             <FormattedMessage
               id="app.editTestsTest.add"
-              defaultMessage="Add test"
+              defaultMessage="Add Test"
             />
           </Button>
         </div>}

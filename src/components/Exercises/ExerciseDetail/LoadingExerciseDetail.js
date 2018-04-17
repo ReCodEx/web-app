@@ -12,7 +12,7 @@ const LoadingExerciseDetail = () =>
       />
     }
   >
-    <LoadingIcon />{' '}
+    <LoadingIcon gapRight />
     <FormattedMessage
       id="app.exercises.loadingDetail"
       defaultMessage="Loading the detail of the exercise"

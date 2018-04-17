@@ -9,7 +9,7 @@ import {
   FormattedRelative
 } from 'react-intl';
 import classnames from 'classnames';
-import { SuccessIcon, MaybeSucceededIcon } from '../../../icons';
+import { SuccessIcon, SuccessOrFailureIcon } from '../../../icons';
 import Box from '../../../widgets/Box';
 import EnvironmentsList from '../../../helpers/EnvironmentsList';
 
@@ -151,7 +151,7 @@ const AssignmentDetails = ({
             />
           </td>
           <td>
-            <MaybeSucceededIcon success={canSubmit.canSubmit} />
+            <SuccessOrFailureIcon success={canSubmit.canSubmit} />
           </td>
         </tr>
         {isBonus &&

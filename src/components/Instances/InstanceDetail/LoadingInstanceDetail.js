@@ -12,7 +12,7 @@ const LoadingInstanceDetail = () =>
       />
     }
   >
-    <LoadingIcon />{' '}
+    <LoadingIcon gapRight />
     <FormattedMessage
       id="app.instances.loadingDetail"
       defaultMessage="Loading detail of the instance"

@@ -29,6 +29,7 @@ import SisCreateGroupForm from '../../components/forms/SisCreateGroupForm';
 import SisBindGroupForm from '../../components/forms/SisBindGroupForm';
 import { getGroupCanonicalLocalizedName } from '../../helpers/getLocalizedData';
 
+import { GroupIcon } from '../../components/icons';
 import withLinks from '../../helpers/withLinks';
 import './SisSupervisorGroupsContainer.css';
 
@@ -246,7 +247,7 @@ class SisSupervisorGroupsContainer extends Component {
                                                           bsSize="xs"
                                                           className="btn-flat"
                                                         >
-                                                          <FontAwesomeIcon icon="users" />&nbsp;&nbsp;
+                                                          <GroupIcon gapRight />
                                                           <FormattedMessage
                                                             id="app.group.detail"
                                                             defaultMessage="Group Detail"

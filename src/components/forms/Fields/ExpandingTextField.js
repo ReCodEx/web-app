@@ -6,8 +6,8 @@ import { ControlLabel, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 
 import FlatButton from '../../widgets/FlatButton';
-
 import TextField from './TextField';
+import { AddIcon, CloseIcon } from '../../icons';
 
 import styles from './commonStyles.less';
 
@@ -41,7 +41,7 @@ const ExpandingTextField = ({
                 }
               >
                 <FlatButton onClick={() => fields.insert(index, '')}>
-                  <FontAwesomeIcon icon="plus" size="xs" />
+                  <AddIcon size="xs" />
                   <FontAwesomeIcon icon="level-up-alt" />
                 </FlatButton>
               </OverlayTrigger>
@@ -59,7 +59,7 @@ const ExpandingTextField = ({
                 }
               >
                 <FlatButton onClick={() => fields.remove(index)}>
-                  <FontAwesomeIcon icon="times" />
+                  <CloseIcon />
                 </FlatButton>
               </OverlayTrigger>
             </td>
@@ -87,7 +87,7 @@ const ExpandingTextField = ({
         }
       >
         <FlatButton onClick={() => fields.push('')}>
-          <FontAwesomeIcon icon="plus" />
+          <AddIcon />
         </FlatButton>
       </OverlayTrigger>
     </div>

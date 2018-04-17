@@ -6,7 +6,7 @@ import { FormattedMessage } from 'react-intl';
 const LoadingAssignmentTableRow = ({ colSpan = 1 }) =>
   <tr>
     <td className="text-center" colSpan={colSpan}>
-      <LoadingIcon />{' '}
+      <LoadingIcon gapRight />
       <FormattedMessage
         id="app.assignmentsTableRow.loading"
         defaultMessage="Loading assignments ..."

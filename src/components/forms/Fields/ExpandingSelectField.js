@@ -7,6 +7,7 @@ import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 
 import FlatButton from '../../widgets/FlatButton';
 import SelectField from './SelectField';
+import { AddIcon, CloseIcon } from '../../icons';
 
 import styles from './commonStyles.less';
 
@@ -62,7 +63,7 @@ const ExpandingSelectField = ({
                 }
               >
                 <FlatButton onClick={() => fields.remove(index)}>
-                  <FontAwesomeIcon icon="times" />
+                  <CloseIcon />
                 </FlatButton>
               </OverlayTrigger>
             </td>
@@ -90,7 +91,7 @@ const ExpandingSelectField = ({
         }
       >
         <FlatButton onClick={() => fields.push('')}>
-          <FontAwesomeIcon icon="plus" />
+          <AddIcon />
         </FlatButton>
       </OverlayTrigger>
     </div>

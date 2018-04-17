@@ -370,7 +370,7 @@
   "app.editTestsForm.validation.testNameTaken": "This name is taken, please fill different one.",
   "app.editTestsForm.validation.testWeight": "Test weight must be positive integer.",
   "app.editTestsForm.validation.testWeightEmpty": "Please fill test weight.",
-  "app.editTestsTest.add": "Add test",
+  "app.editTestsTest.add": "Add Test",
   "app.editTestsTest.name": "Test name:",
   "app.editTestsTest.pointsPercentage": "Points Percentage:",
   "app.editTestsTest.remove": "Remove",

@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import FontAwesomeIcon from '@fortawesome/react-fontawesome';
-import Button from '../../widgets/FlatButton';
 import { FormattedMessage } from 'react-intl';
+import Button from '../../widgets/FlatButton';
+import Icon from '../../icons';
 
 const SubmitSolutionButton = ({ disabled = false, onClick }) =>
   <Button
@@ -11,7 +11,7 @@ const SubmitSolutionButton = ({ disabled = false, onClick }) =>
     disabled={disabled}
     onClick={onClick}
   >
-    <FontAwesomeIcon icon="bug" />{' '}
+    <Icon icon="bug" gapRight />
     <FormattedMessage
       id="app.submissionsTable.submitNewSolution"
       defaultMessage="Submit New Solution"

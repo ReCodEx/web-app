@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import FontAwesomeIcon from '@fortawesome/react-fontawesome';
+import Icon from '../../icons';
 import Button from '../../widgets/FlatButton';
 import Confirm from '../../forms/Confirm';
 
@@ -17,7 +17,7 @@ const ResubmitSolution = ({ id, resubmit, isDebug }) =>
     }
   >
     <Button bsStyle={isDebug ? 'danger' : 'success'}>
-      <FontAwesomeIcon icon="redo" />{' '}
+      <Icon icon="redo" gapRight />
       {isDebug &&
         <FormattedMessage
           id="app.resubmitSolution.resubmitDebug"

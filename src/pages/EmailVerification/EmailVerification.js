@@ -8,16 +8,13 @@ import { push } from 'react-router-redux';
 import { Row, Col, Alert } from 'react-bootstrap';
 import Box from '../../components/widgets/Box';
 import PageContent from '../../components/layout/PageContent';
-import ResendVerificationEmailContainer
-  from '../../containers/ResendVerificationEmailContainer';
+import ResendVerificationEmailContainer from '../../containers/ResendVerificationEmailContainer';
 
 import { decode, isTokenValid, isInScope } from '../../redux/helpers/token';
 import { verifyEmail } from '../../redux/modules/emailVerification';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
-import {
-  verificationStatusSelector
-} from '../../redux/selectors/emailVerification';
-import { LoadingIcon, SuccessIcon, FailedIcon } from '../../components/icons';
+import { verificationStatusSelector } from '../../redux/selectors/emailVerification';
+import { LoadingIcon, SuccessIcon, Failure } from '../../components/icons';
 
 import withLinks from '../../helpers/withLinks';
 
@@ -98,13 +95,11 @@ class EmailVerification extends Component {
                       id="app.emailVerification.tokenExpired"
                       defaultMessage="The email address cannot be verified now - your token has probably expired or the URL is broken."
                     />
-                  </strong>
-                  {' '}
+                  </strong>{' '}
                   <FormattedMessage
                     id="app.emailVerification.requestAnotherLink"
                     defaultMessage="Please request (another) link with a unique token."
                   />
-
                 </Alert>
                 {userId !== null &&
                   <p className="text-center">
@@ -127,8 +122,7 @@ class EmailVerification extends Component {
                 <div>
                   {getVerificationStatus(decodedToken.sub) === 'FULFILLED' &&
                     <p>
-                      <SuccessIcon />
-                      {' '}
+                      <SuccessIcon gapRight />
                       <FormattedMessage
                         id="app.emailVerification.verified"
                         defaultMessage="The email address has been verified."
@@ -137,8 +131,7 @@ class EmailVerification extends Component {
 
                   {getVerificationStatus(decodedToken.sub) === 'FAILED' &&
                     <p>
-                      <FailedIcon />
-                      {' '}
+                      <Failure gapRight />
                       <FormattedMessage
                         id="app.emailVerification.failed"
                         defaultMessage="The email address cannot be verified."
@@ -147,8 +140,7 @@ class EmailVerification extends Component {
 
                   {getVerificationStatus(decodedToken.sub) === 'PENDING' &&
                     <p>
-                      <LoadingIcon />
-                      {' '}
+                      <LoadingIcon gapRight />
                       <FormattedMessage
                         id="app.emailVerification.waiting"
                         defaultMessage="The email address is being verified."

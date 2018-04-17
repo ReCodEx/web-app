@@ -200,7 +200,7 @@ class EditAssignment extends Component {
                       to={SUPERVISOR_STATS_URI_FACTORY(assignment.id)}
                     >
                       <Button bsStyle="primary">
-                        <ResultsIcon />{' '}
+                        <ResultsIcon gapRight />
                         <FormattedMessage
                           id="app.assignment.viewResults"
                           defaultMessage="Student Results"

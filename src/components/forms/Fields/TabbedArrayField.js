@@ -73,7 +73,7 @@ class TabbedArrayField extends Component {
                       }}
                     >
                       <Button bsStyle="default">
-                        <WarningIcon />{' '}
+                        <WarningIcon gapRight />
                         <FormattedMessage
                           id="app.tabbedArrayField.remove"
                           defaultMessage="Remove"

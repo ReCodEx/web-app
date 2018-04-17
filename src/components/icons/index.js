@@ -1,26 +1,59 @@
-export { default as AddIcon } from './AddIcon';
-export { default as DownloadIcon } from './DownloadIcon';
-export { default as CloseIcon } from './CloseIcon';
-export { default as EditIcon } from './EditIcon';
-export { default as DeleteIcon } from './DeleteIcon';
-export { default as InfoIcon } from './InfoIcon';
-export { default as LoadingIcon } from './LoadingIcon';
-export { default as ResultsIcon } from './ResultsIcon';
-export { default as FailedIcon } from './FailedIcon';
-export { default as WarningIcon } from './WarningIcon';
-export { default as SearchIcon } from './SearchIcon';
-export { default as SendIcon } from './SendIcon';
-export { default as UploadIcon } from './UploadIcon';
-export { default as SuccessIcon } from './SuccessIcon';
-export { default as TransferIcon } from './TransferIcon';
-export { default as MaybeSucceededIcon } from './MaybeSucceededIcon';
-export { default as MaybePublicIcon } from './MaybePublicIcon';
-export { default as RefreshIcon } from './RefreshIcon';
-export { default as SettingsIcon } from './SettingsIcon';
+import React from 'react';
+import PropTypes from 'prop-types';
+import Icon from './Icon';
+
+/*
+ * Icons with meta-names
+ */
+
+export const AddIcon = props => <Icon {...props} icon="plus" />;
+export const CloseIcon = props => <Icon {...props} icon="times" />;
+export const CopyIcon = props => <Icon {...props} icon="clipboard" />;
+export const DeleteIcon = props => <Icon {...props} icon="trash" />;
+export const DownloadIcon = props =>
+  <Icon {...props} icon="cloud-download-alt" />;
+export const EditIcon = props => <Icon {...props} icon={['far', 'edit']} />;
+export const Failure = props =>
+  <strong className="text-danger">
+    <Icon {...props} icon="times" />
+  </strong>;
+export const GroupIcon = ({ organizational = false, ...props }) =>
+  <Icon {...props} icon={organizational ? 'sitemap' : 'users'} />;
+export const InfoIcon = props => <Icon {...props} icon="info" />;
+export const LoadingIcon = props =>
+  <Icon {...props} icon="spinner" pulse style={{ opacity: 0.8 }} />;
+export const LocalIcon = props => <Icon {...props} icon="thumb-tack" />;
+export const NeedFixingIcon = props => <Icon {...props} icon="medkit" />;
+export const RefreshIcon = props => <Icon {...props} icon="sync" />;
+export const RemoveIcon = props => <Icon {...props} icon="minus" />;
+export const ResultsIcon = props => <Icon {...props} icon="chart-line" />;
+export const SearchIcon = props => <Icon {...props} icon="search" />;
+export const SendIcon = props =>
+  <Icon {...props} icon={['far', 'paper-plane']} />;
+export const SettingsIcon = props => <Icon {...props} icon="cog" />;
+export const SuccessIcon = props =>
+  <strong className="text-success">
+    <Icon {...props} icon="check" />
+  </strong>;
+export const SuccessOrFailureIcon = ({ success = false, ...props }) =>
+  success ? <SuccessIcon {...props} /> : <Failure {...props} />;
+export const TransferIcon = props => <Icon {...props} icon="exchange-alt" />;
+export const UploadIcon = props => <Icon {...props} icon="cloud-upload-alt" />;
+export const WarningIcon = props =>
+  <Icon {...props} icon="exclamation-triangle" />;
+
+GroupIcon.propTypes = {
+  organizational: PropTypes.bool
+};
+
+SuccessOrFailureIcon.propTypes = {
+  success: PropTypes.bool
+};
+
 export {
   default as MaybeBonusAssignmentIcon
 } from './MaybeBonusAssignmentIcon';
+export { default as MaybePublicIcon } from './MaybePublicIcon';
 export { default as ExercisePrefixIcons } from './ExercisePrefixIcons';
-export { default as CopyIcon } from './CopyIcon';
-export { default as LocalIcon } from './LocalIcon';
-export { default as GroupIcon } from './GroupIcon';
+
+export default Icon;
