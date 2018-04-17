@@ -40,7 +40,7 @@ class SourceCodeViewerContainer extends Component {
                 <Modal.Title>
                   <LoadingIcon gapRight />
                   <FormattedMessage
-                    id="app.sourceCodeViewer.loading"
+                    id="generic.loading"
                     defaultMessage="Loading ..."
                   />
                 </Modal.Title>

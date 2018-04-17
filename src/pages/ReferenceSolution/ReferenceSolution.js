@@ -25,11 +25,7 @@ import { getExercise } from '../../redux/selectors/exercises';
 import ReferenceSolutionDetail from '../../components/ReferenceSolutions/ReferenceSolutionDetail';
 import SourceCodeInfoBox from '../../components/widgets/SourceCodeInfoBox';
 import SourceCodeViewerContainer from '../../containers/SourceCodeViewerContainer';
-import Icon, {
-  RefreshIcon,
-  SendIcon,
-  NeedFixingIcon
-} from '../../components/icons';
+import { RefreshIcon, SendIcon, NeedFixingIcon } from '../../components/icons';
 import ReferenceSolutionEvaluationsContainer from '../../containers/ReferenceSolutionEvaluationsContainer';
 import SolutionArchiveInfoBox from '../../components/Submissions/SolutionArchiveInfoBox';
 import { downloadSolutionArchive } from '../../redux/modules/referenceSolutionEvaluations';

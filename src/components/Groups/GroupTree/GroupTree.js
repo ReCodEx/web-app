@@ -19,10 +19,7 @@ class GroupTree extends Component {
         level={level}
         loading
         title={
-          <FormattedMessage
-            id="app.groupTree.loading"
-            defaultMessage="Loading ..."
-          />
+          <FormattedMessage id="generic.loading" defaultMessage="Loading ..." />
         }
       />
     </TreeView>;

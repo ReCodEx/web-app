@@ -21,7 +21,7 @@ const ResourceDependentBreadcrumbItem = ({
               ? <Icon icon={iconName} gapRight />
               : <LoadingIcon gapRight />}
             <FormattedMessage
-              id="app.resourceDependendBreadcrumbItem.loading"
+              id="generic.loading"
               defaultMessage="Loading ..."
             />
           </span>
