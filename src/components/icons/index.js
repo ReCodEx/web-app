@@ -8,7 +8,8 @@ import Icon from './Icon';
 
 export const AddIcon = props => <Icon {...props} icon="plus" />;
 export const CloseIcon = props => <Icon {...props} icon="times" />;
-export const CopyIcon = props => <Icon {...props} icon="clipboard" />;
+export const CopyIcon = props =>
+  <Icon {...props} icon={['far', 'clipboard']} />;
 export const DeleteIcon = props => <Icon {...props} icon="trash" />;
 export const DownloadIcon = props =>
   <Icon {...props} icon="cloud-download-alt" />;
@@ -50,10 +51,10 @@ SuccessOrFailureIcon.propTypes = {
   success: PropTypes.bool
 };
 
+export { default as ExercisePrefixIcons } from './ExercisePrefixIcons';
 export {
   default as MaybeBonusAssignmentIcon
 } from './MaybeBonusAssignmentIcon';
 export { default as MaybePublicIcon } from './MaybePublicIcon';
-export { default as ExercisePrefixIcons } from './ExercisePrefixIcons';
 
 export default Icon;

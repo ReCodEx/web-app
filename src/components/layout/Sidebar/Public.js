@@ -21,7 +21,7 @@ const Public = ({
           defaultMessage="Sign in"
         />
       }
-      icon="sign-in"
+      icon="sign-in-alt"
       currentPath={currentUrl}
       link={LOGIN_URI}
     />

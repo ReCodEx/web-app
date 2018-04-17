@@ -69,7 +69,7 @@ class Login extends Component {
           },
           {
             text: <FormattedMessage id="app.login.title" />,
-            iconName: 'sign-in'
+            iconName: 'sign-in-alt'
           }
         ]}
       >

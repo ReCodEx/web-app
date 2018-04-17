@@ -37,21 +37,21 @@ const LoginForm = ({
           {!submitting
             ? hasSucceeded
               ? <span>
-                  <SuccessIcon gapRight />
+                  <SuccessIcon />{' '}
                   <FormattedMessage
                     id="app.loginForm.success"
                     defaultMessage="You are successfully signed in"
                   />
                 </span>
               : <span>
-                  <Icon icon="sign-in" gapRight />
+                  <Icon icon="sign-in-alt" gapRight />
                   <FormattedMessage
                     id="app.loginForm.login"
                     defaultMessage="Sign in"
                   />
                 </span>
             : <span>
-                <LoadingIcon gapRight />
+                <LoadingIcon />{' '}
                 <FormattedMessage
                   id="app.loginForm.processing"
                   defaultMessage="Signing in ..."

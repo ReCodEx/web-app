@@ -97,7 +97,7 @@ class ReferenceSolutionEvaluation extends Component {
                 defaultMessage="Reference solution detail"
               />
             ),
-            iconName: 'diamond',
+            iconName: ['far', 'gem'],
             link: EXERCISE_REFERENCE_SOLUTION_URI_FACTORY(
               exerciseId,
               referenceSolutionId
@@ -110,7 +110,7 @@ class ReferenceSolutionEvaluation extends Component {
                 defaultMessage="Evaluation detail"
               />
             ),
-            iconName: 'codepen'
+            iconName: ['fab', 'codepen']
           }
         ]}
       >
