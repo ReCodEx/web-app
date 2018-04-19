@@ -106,6 +106,19 @@ const EditUserSettingsForm = ({
     />
 
     <Field
+      name="useGravatar"
+      tabIndex={1}
+      component={CheckboxField}
+      onOff
+      label={
+        <FormattedMessage
+          id="app.editUserSettings.useGravatar"
+          defaultMessage="Use Gravatar service for fetching user avatars."
+        />
+      }
+    />
+
+    <Field
       name="defaultLanguage"
       tabIndex={1}
       component={LanguageSelectField}

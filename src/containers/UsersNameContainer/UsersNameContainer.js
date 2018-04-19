@@ -4,8 +4,7 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 
 import { fetchUserIfNeeded } from '../../redux/modules/users';
-import { getUser } from '../../redux/selectors/users';
-import { loggedInUserIdSelector } from '../../redux/selectors/auth';
+import { getUser, loggedInUserSelector } from '../../redux/selectors/users';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import UsersName, {
   LoadingUsersName,
@@ -31,15 +30,15 @@ class UsersNameContainer extends Component {
   };
 
   render() {
-    const { user, large, noLink, currentUserId, isSimple = false } = this.props;
+    const { user, large, noLink, currentUser, isSimple = false } = this.props;
     const size = large ? 45 : 22;
     return (
       <ResourceRenderer
-        resource={user}
+        resource={[user, currentUser]}
         loading={isSimple ? <LoadingIcon /> : <LoadingUsersName size={size} />}
         failed={isSimple ? <Failure /> : <FailedUsersName size={size} />}
       >
-        {user =>
+        {(user, currentUser) =>
           isSimple
             ? <span className="simpleName text-nowrap">
                 {user.name.firstName} {user.name.lastName}
@@ -49,7 +48,8 @@ class UsersNameContainer extends Component {
                 large={large}
                 size={size}
                 noLink={noLink}
-                currentUserId={currentUserId}
+                currentUserId={currentUser.id}
+                useGravatar={currentUser.privateData.settings.useGravatar}
               />}
       </ResourceRenderer>
     );
@@ -58,7 +58,7 @@ class UsersNameContainer extends Component {
 
 UsersNameContainer.propTypes = {
   userId: PropTypes.string.isRequired,
-  currentUserId: PropTypes.string,
+  currentUser: PropTypes.object,
   large: PropTypes.bool,
   user: ImmutablePropTypes.map,
   noLink: PropTypes.bool,
@@ -69,7 +69,7 @@ UsersNameContainer.propTypes = {
 export default connect(
   (state, { userId }) => ({
     user: getUser(userId)(state),
-    currentUserId: loggedInUserIdSelector(state)
+    currentUser: loggedInUserSelector(state)
   }),
   (dispatch, { userId }) => ({
     loadProfileIfNeeded: () => dispatch(fetchUserIfNeeded(userId)),

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router';
-import Avatar from '../../widgets/Avatar';
+import Avatar, { FakeAvatar } from '../../widgets/Avatar';
 import NotVerified from './NotVerified';
 import withLinks from '../../../helpers/withLinks';
 
@@ -15,12 +15,17 @@ const UsersName = ({
   large = false,
   isVerified,
   noLink,
+  useGravatar,
   links: { USER_URI_FACTORY },
   currentUserId
-}) => (
+}) =>
   <span className={styles.wrapper}>
     <span className={styles.avatar}>
-      <Avatar size={size} src={avatarUrl} title={fullName} />
+      {useGravatar
+        ? <Avatar size={size} src={avatarUrl} title={fullName} />
+        : <FakeAvatar size={size}>
+            {fullName[0]}
+          </FakeAvatar>}
     </span>
     <span
       className={styles.name}
@@ -34,20 +39,23 @@ const UsersName = ({
         <Link to={USER_URI_FACTORY(id)}>
           {fullName}
         </Link>}
-      {noLink && <span>{fullName}</span>}
+      {noLink &&
+        <span>
+          {fullName}
+        </span>}
       <span className={styles.notVerified}>
         {!isVerified &&
           <NotVerified userId={id} currentUserId={currentUserId} />}
       </span>
     </span>
-  </span>
-);
+  </span>;
 
 UsersName.propTypes = {
   id: PropTypes.string.isRequired,
   fullName: PropTypes.string.isRequired,
   avatarUrl: PropTypes.string.isRequired,
   isVerified: PropTypes.bool.isRequired,
+  useGravatar: PropTypes.bool,
   size: PropTypes.number,
   large: PropTypes.bool,
   noLink: PropTypes.bool,
