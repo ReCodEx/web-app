@@ -15,6 +15,7 @@ import ResourceRenderer from '../../helpers/ResourceRenderer';
 
 import EvaluationDetail from '../EvaluationDetail';
 import CompilationLogs from '../CompilationLogs';
+import JudgeLogs from '../JudgeLogs';
 
 class SubmissionDetail extends Component {
   state = { openFileId: null, activeSubmissionId: null };
@@ -108,6 +109,9 @@ class SubmissionDetail extends Component {
               <CompilationLogs
                 initiationOutputs={evaluation.initiationOutputs}
               />}
+            {evaluation &&
+              isSupervisor &&
+              <JudgeLogs testResults={evaluation.testResults} />}
             <CommentThreadContainer threadId={id} />
           </Col>
 

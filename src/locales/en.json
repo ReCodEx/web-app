@@ -426,7 +426,7 @@
   "app.evaluationDetail.evaluatedAt": "Evaluated at:",
   "app.evaluationDetail.isCorrect": "Is correct:",
   "app.evaluationDetail.score": "Score:",
-  "app.evaluationDetail.title.compilationLogs": "Compilation logs",
+  "app.evaluationDetail.title.compilationLogs": "Compilation Logs",
   "app.evaluationDetail.title.details": "Evaluation details",
   "app.evaluationDetail.totalScore": "Total score:",
   "app.evaluationProgress.continue": "See The Results",
