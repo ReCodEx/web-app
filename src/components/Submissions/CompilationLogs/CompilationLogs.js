@@ -8,7 +8,7 @@ const CompilationLogs = ({ initiationOutputs }) =>
     title={
       <FormattedMessage
         id="app.evaluationDetail.title.compilationLogs"
-        defaultMessage="Compilation logs"
+        defaultMessage="Compilation Logs"
       />
     }
     noPadding={true}
@@ -16,7 +16,7 @@ const CompilationLogs = ({ initiationOutputs }) =>
     isOpen={initiationOutputs.trim() !== ''}
   >
     <pre>
-      {initiationOutputs}
+      {initiationOutputs.trim()}
     </pre>
   </Box>;
 
