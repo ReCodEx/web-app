@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import { FormattedDate, FormattedTime, FormattedMessage } from 'react-intl';
+import { OverlayTrigger, Tooltip } from 'react-bootstrap';
+
 import DifficultyIcon from '../DifficultyIcon';
 import UsersNameContainer from '../../../containers/UsersNameContainer';
 import GroupsNameContainer from '../../../containers/GroupsNameContainer';
@@ -28,9 +29,6 @@ const ExercisesListItem = ({
   links: { EXERCISE_URI_FACTORY }
 }) =>
   <tr>
-    <td className="text-center">
-      <FontAwesomeIcon icon="code" />
-    </td>
     <td>
       <ExercisePrefixIcons id={id} isLocked={isLocked} isBroken={isBroken} />
       <strong>
@@ -42,11 +40,11 @@ const ExercisesListItem = ({
     <td>
       <UsersNameContainer userId={authorId} />
     </td>
-    <td>
+    <td className="small">
       {runtimeEnvironments &&
         <EnvironmentsList runtimeEnvironments={runtimeEnvironments} />}
     </td>
-    <td>
+    <td className="small">
       {groupsIds.length > 0
         ? groupsIds.map((groupId, i) =>
             <div key={i}>
@@ -64,8 +62,29 @@ const ExercisesListItem = ({
       <DifficultyIcon difficulty={difficulty} />
     </td>
     <td className="text-nowrap">
-      <FormattedDate value={createdAt * 1000} />{' '}
-      <FormattedTime value={createdAt * 1000} />
+      <OverlayTrigger
+        placement="right"
+        overlay={
+          <Tooltip id={`created-tooltip-${id}`}>
+            <span>
+              <FormattedMessage
+                id="generic.created"
+                defaultMessage="Created"
+              />:
+              <FormattedDate value={createdAt * 1000} />{' '}
+              <FormattedTime value={createdAt * 1000} />
+              <br />
+              <FormattedMessage id="generic.updated" defaultMessage="Updated" />
+              :<FormattedDate value={createdAt * 1000} />{' '}
+              <FormattedTime value={createdAt * 1000} />
+            </span>
+          </Tooltip>
+        }
+      >
+        <span>
+          <FormattedDate value={createdAt * 1000} />
+        </span>
+      </OverlayTrigger>
     </td>
     {createActions &&
       <td className="text-right text-nowrap">

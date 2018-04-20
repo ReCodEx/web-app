@@ -15,7 +15,6 @@ const ExercisesList = ({
   <Table hover>
     <thead>
       <tr>
-        <th />
         <th>
           <FormattedMessage id="generic.name" defaultMessage="Name" />
         </th>
