@@ -3,7 +3,11 @@ import { Map } from 'immutable';
 
 import { EMPTY_MAP, EMPTY_LIST } from '../../helpers/common';
 import { loggedInUserSelector } from './users';
-import { groupsSelector, filterGroups } from './groups';
+import {
+  groupsSelector,
+  filterGroups,
+  filterNonOrganizationalGroups
+} from './groups';
 import { getAssignments } from './assignments';
 import { isReady } from '../helpers/resourceManager';
 
@@ -44,6 +48,11 @@ export const loggedInStudentOfSelector = createSelector(
 export const loggedInSupervisorOfSelector = createSelector(
   [loggedInSupervisorOfGroupsIdsSelector, groupsSelector],
   filterGroups
+);
+
+export const loggedInSupervisorOfNonOrganizationalSelector = createSelector(
+  loggedInSupervisorOfSelector,
+  filterNonOrganizationalGroups
 );
 
 export const loggedInStudentOfGroupsAssignmentsSelector = createSelector(

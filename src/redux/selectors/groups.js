@@ -20,6 +20,9 @@ export const groupsSelector = state => state.groups.get('resources');
 export const filterGroups = (ids, groups) =>
   groups.filter(isReady).filter(group => ids.contains(getId(group)));
 
+export const filterNonOrganizationalGroups = groups =>
+  groups.filter(group => !group.getIn(['data', 'organizational'], false));
+
 export const groupSelector = id =>
   createSelector(groupsSelector, groups => groups.get(id));
 
@@ -93,6 +96,11 @@ export const groupsUserCanEditSelector = createSelector(
           groupData.privateData.admins.indexOf(userId) >= 0)
       );
     })
+);
+
+export const groupsUserCanAssignToSelector = createSelector(
+  groupsUserCanEditSelector,
+  filterNonOrganizationalGroups
 );
 
 const usersOfGroup = (type, groupId) =>
