@@ -22,6 +22,7 @@ const ExercisesListItem = ({
   groupsIds = [],
   localizedTexts,
   createdAt,
+  updatedAt,
   isLocked,
   isBroken,
   createActions,
@@ -75,8 +76,8 @@ const ExercisesListItem = ({
               <FormattedTime value={createdAt * 1000} />
               <br />
               <FormattedMessage id="generic.updated" defaultMessage="Updated" />
-              :<FormattedDate value={createdAt * 1000} />{' '}
-              <FormattedTime value={createdAt * 1000} />
+              :<FormattedDate value={updatedAt * 1000} />{' '}
+              <FormattedTime value={updatedAt * 1000} />
             </span>
           </Tooltip>
         }
@@ -100,6 +101,7 @@ ExercisesListItem.propTypes = {
   name: PropTypes.string.isRequired,
   difficulty: PropTypes.string.isRequired,
   createdAt: PropTypes.number.isRequired,
+  updatedAt: PropTypes.number.isRequired,
   isLocked: PropTypes.bool.isRequired,
   isBroken: PropTypes.bool.isRequired,
   localizedTexts: PropTypes.array.isRequired,
