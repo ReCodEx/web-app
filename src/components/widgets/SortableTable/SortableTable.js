@@ -4,7 +4,7 @@ import { FormattedMessage } from 'react-intl';
 import { Table } from 'react-bootstrap';
 import { defaultMemoize } from 'reselect';
 import { safeGet } from '../../../helpers/common';
-import Icon from '../../icons';
+import Icon, { CloseIcon } from '../../icons';
 
 class SortableTable extends Component {
   constructor(props) {
@@ -36,18 +36,13 @@ class SortableTable extends Component {
 
   // Change internal state that holds sorting parameters.
   orderBy = col => {
-    const { comparators, defaultOrder } = this.props;
-    if (!comparators || !comparators[col]) {
-      return;
-    }
-
+    const { comparators } = this.props;
     const { sortColumn, ascendant } = this.state;
-    if (col === sortColumn) {
-      if (ascendant) {
-        this.setState({ ascendant: false });
-      } else {
-        this.setState({ sortColumn: defaultOrder || null, ascendant: true });
-      }
+
+    if (!col || !comparators || !comparators[col]) {
+      this.setState({ sortColumn: null, ascendant: true });
+    } else if (col === sortColumn) {
+      this.setState({ ascendant: !ascendant });
     } else {
       this.setState({ sortColumn: col, ascendant: true });
     }
@@ -67,6 +62,7 @@ class SortableTable extends Component {
     const {
       header,
       comparators = {},
+      defaultOrder,
       data = [],
       empty = null,
       rowRenderer = this.defaultRowRenderer,
@@ -102,6 +98,15 @@ class SortableTable extends Component {
                         }
                         onClick={() => this.orderBy(key)}
                       />
+
+                      {sortColumn === key &&
+                        !defaultOrder &&
+                        <CloseIcon
+                          smallGapLeft
+                          timid
+                          className="text-danger"
+                          onClick={() => this.orderBy(null)}
+                        />}
                     </span>}
                 </th>
               )}

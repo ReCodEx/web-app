@@ -5,8 +5,12 @@ import classNames from 'classnames';
 import style from './Icon.less';
 
 const Icon = ({
+  smallGapLeft = false,
+  smallGapRight = false,
   gapLeft = false,
   gapRight = false,
+  largeGapLeft = false,
+  largeGapRight = false,
   timid = false,
   className = [],
   onClick,
@@ -20,8 +24,12 @@ const Icon = ({
       {...props}
       className={classNames({
         ...passedClassNames,
+        [style.smallGapLeft]: smallGapLeft,
+        [style.smallGapRight]: smallGapRight,
         [style.gapLeft]: gapLeft,
         [style.gapRight]: gapRight,
+        [style.largeGapLeft]: largeGapLeft,
+        [style.largeGapRight]: largeGapRight,
         [style.timid]: timid,
         [style.clickable]: Boolean(onClick || onDoubleClick)
       })}
@@ -33,8 +41,12 @@ const Icon = ({
 
 Icon.propTypes = {
   className: PropTypes.any,
+  smallGapLeft: PropTypes.bool,
+  smallGapRight: PropTypes.bool,
   gapLeft: PropTypes.bool,
   gapRight: PropTypes.bool,
+  largeGapLeft: PropTypes.bool,
+  largeGapRight: PropTypes.bool,
   timid: PropTypes.bool,
   onClick: PropTypes.func,
   onDoubleClick: PropTypes.func
