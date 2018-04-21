@@ -1,70 +1,141 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { List } from 'immutable';
-import { Table } from 'react-bootstrap';
 import { Link } from 'react-router';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
+import { defaultMemoize } from 'reselect';
 
-import ResultsTableRow from './ResultsTableRow';
-import NoResultsAvailableRow from './NoResultsAvailableRow';
+import { safeGet, EMPTY_ARRAY } from '../../../helpers/common';
+import UsersNameContainer from '../../../containers/UsersNameContainer';
+import SortableTable from '../../widgets/SortableTable';
 import withLinks from '../../../helpers/withLinks';
 import { LocalizedExerciseName } from '../../helpers/LocalizedNames';
 import { compareAssignments } from '../../helpers/compareAssignments';
 import styles from './ResultsTable.less';
 
-const ResultsTable = ({
-  assignments = List(),
-  users = [],
-  stats,
-  isAdmin = false,
-  renderActions = null,
-  links: { SUPERVISOR_STATS_URI_FACTORY }
-}) => {
-  const assignmentsArray = assignments.sort(compareAssignments);
-  const assignmentsIds = assignmentsArray.map(assignment => assignment.id);
-  return (
-    <Table hover>
-      {users.length > 0 &&
-        <thead key={'head'}>
-          <tr>
-            <th />
-            {assignmentsArray.map(assignment =>
-              <th key={assignment.id}>
-                <div className={styles.verticalText}>
-                  <div className={styles.verticalTextInner}>
-                    <Link to={SUPERVISOR_STATS_URI_FACTORY(assignment.id)}>
-                      <LocalizedExerciseName entity={assignment} />
-                    </Link>
-                  </div>
-                </div>
-              </th>
-            )}
-            <th style={{ textAlign: 'right' }}>
-              <FormattedMessage
-                id="app.resultsTable.total"
-                defaultMessage="Total"
-              />
-            </th>
-            {isAdmin && <th />}
-          </tr>
-        </thead>}
-      <tbody key={'body'}>
-        {users.length === 0
-          ? <NoResultsAvailableRow />
-          : users.map(user =>
-              <ResultsTableRow
-                key={user.id}
-                userId={user.id}
-                assignmentsIds={assignmentsIds}
-                userStats={stats.find(stat => stat.userId === user.id)}
-                isAdmin={isAdmin}
-                renderActions={renderActions}
-              />
-            )}
-      </tbody>
-    </Table>
-  );
+// Functors for rendering cells of individual columns.
+const cellRenderers = {
+  // default renderer is used for all assignment points
+  '': points =>
+    points && Number.isInteger(points.gained)
+      ? <span>
+          {points.gained}
+          {points.bonus > 0 &&
+            <span className={styles.bonusPoints}>
+              +{points.bonus}
+            </span>}
+          {points.bonus < 0 &&
+            <span className={styles.malusPoints}>
+              {points.bonus}
+            </span>}
+        </span>
+      : '-',
+  user: user => user && <UsersNameContainer userId={user.id} />,
+  total: points =>
+    <strong>
+      {points ? `${points.gained}/${points.total}` : '-/-'}
+    </strong>,
+  buttons: btns => btns // identity for buttons prevents using default (points) renderer
 };
+
+// Per-col styling for the table
+const tableStyles = {
+  '': { className: 'text-center' },
+  user: { className: 'text-left' },
+  buttons: { className: 'text-right' }
+};
+
+// Create comparators object based on given locale ...
+const prepareTableComparators = defaultMemoize(locale => ({
+  user: ({ user: u1 }, { user: u2 }) =>
+    u1.name.lastName.localeCompare(u2.name.lastName, locale) ||
+    u1.name.firstName.localeCompare(u2.name.firstName, locale) ||
+    u1.privateData.email.localeCompare(u2.privateData.email, locale),
+  total: ({ total: t1 }, { total: t2 }) =>
+    (Number(t2.gained) || -1) - (Number(t1.gained) || -1)
+}));
+
+class ResultsTable extends Component {
+  // Prepare header descriptor object for SortableTable.
+  prepareHeader = defaultMemoize(assignments => {
+    const { isAdmin, links: { SUPERVISOR_STATS_URI_FACTORY } } = this.props;
+    const header = {
+      user: <FormattedMessage id="generic.name" defaultMessage="Name" />
+    };
+
+    assignments.sort(compareAssignments).forEach(
+      assignment =>
+        (header[`${assignment.id}`] = (
+          <div className={styles.verticalText}>
+            <div className={styles.verticalTextInner}>
+              <Link to={SUPERVISOR_STATS_URI_FACTORY(assignment.id)}>
+                <LocalizedExerciseName entity={assignment} />
+              </Link>
+            </div>
+          </div>
+        ))
+    );
+
+    header.total = (
+      <FormattedMessage id="app.resultsTable.total" defaultMessage="Total" />
+    );
+
+    if (isAdmin) {
+      header.buttons = '';
+    }
+    return header;
+  });
+
+  // Re-format the data, so they can be rendered by the SortableTable ...
+  prepareData = defaultMemoize((assignments, users, stats) => {
+    const { isAdmin, renderActions } = this.props;
+
+    return users.map(user => {
+      const userStats = stats.find(stat => stat.userId === user.id);
+      const data = {
+        id: user.id,
+        user: user,
+        total: userStats && userStats.points,
+        buttons: renderActions && isAdmin ? renderActions(user.id) : ''
+      };
+      assignments.forEach(assignment => {
+        const assignmentStats = safeGet(userStats, [
+          'assignments',
+          a => a.id === assignment.id,
+          'points'
+        ]);
+        data[assignment.id] = assignmentStats || {};
+      });
+      return data;
+    });
+  });
+
+  render() {
+    const {
+      assignments = EMPTY_ARRAY,
+      users = EMPTY_ARRAY,
+      stats,
+      intl: { locale }
+    } = this.props;
+    return (
+      <SortableTable
+        header={this.prepareHeader(assignments)}
+        comparators={prepareTableComparators(locale)}
+        defaultOrder="user"
+        styles={tableStyles}
+        cellRenderers={cellRenderers}
+        data={this.prepareData(assignments, users, stats)}
+        empty={
+          <div className="text-center text-muted">
+            <FormattedMessage
+              id="app.groupResultsTableRow.noStudents"
+              defaultMessage="There are currently no students in the group."
+            />
+          </div>
+        }
+      />
+    );
+  }
+}
 
 ResultsTable.propTypes = {
   assignments: PropTypes.array.isRequired,
@@ -72,7 +143,8 @@ ResultsTable.propTypes = {
   stats: PropTypes.array.isRequired,
   isAdmin: PropTypes.bool,
   renderActions: PropTypes.func,
+  intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired,
   links: PropTypes.object
 };
 
-export default withLinks(ResultsTable);
+export default withLinks(injectIntl(ResultsTable));

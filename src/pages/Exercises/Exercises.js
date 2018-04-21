@@ -143,7 +143,7 @@ class Exercises extends Component {
                         <EditIcon gapRight />
                         <FormattedMessage
                           id="app.exercises.listEditConfig"
-                          defaultMessage="Configuration"
+                          defaultMessage="Tests"
                         />
                       </Button>
                     </LinkContainer>
