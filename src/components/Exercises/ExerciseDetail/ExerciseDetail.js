@@ -105,8 +105,8 @@ const ExerciseDetail = ({
           <th>
             <FormattedMessage
               id="app.exercise.createdAt"
-              defaultMessage="Created at:"
-            />
+              defaultMessage="Created at"
+            />:
           </th>
           <td>
             <FormattedDate value={createdAt * 1000} />{' '}
@@ -117,8 +117,8 @@ const ExerciseDetail = ({
           <th>
             <FormattedMessage
               id="app.exercise.updatedAt"
-              defaultMessage="Last updated at:"
-            />
+              defaultMessage="Last updated at"
+            />:
           </th>
           <td>
             <FormattedDate value={updatedAt * 1000} />{' '}

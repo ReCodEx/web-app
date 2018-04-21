@@ -4,7 +4,7 @@ import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import { loggedInUserMemberOfInstances } from '../../redux/selectors/instances';
 import {
   loggedInStudentOfSelector,
-  loggedInSupervisorOfSelector
+  loggedInSupervisorOfNonOrganizationalSelector
 } from '../../redux/selectors/usersGroups';
 import {
   notificationsSelector,
@@ -19,7 +19,7 @@ const mapStateToProps = state => {
     studentOf: loggedInStudentOfSelector(state),
     isAdmin: isLoggedAsSuperAdmin(state),
     isSupervisor: isSupervisor(userId)(state),
-    supervisorOf: loggedInSupervisorOfSelector(state),
+    supervisorOf: loggedInSupervisorOfNonOrganizationalSelector(state),
     notifications: notificationsSelector(state)
   };
 };

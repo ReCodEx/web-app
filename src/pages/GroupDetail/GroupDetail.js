@@ -357,12 +357,13 @@ class GroupDetail extends Component {
                           exercises={exercises}
                           createActions={(exerciseId, isLocked, isBroken) =>
                             <div>
-                              <AssignExerciseButton
-                                isLocked={isLocked}
-                                isBroken={isBroken}
-                                assignExercise={() =>
-                                  this.assignExercise(exerciseId)}
-                              />
+                              {!data.organizational &&
+                                <AssignExerciseButton
+                                  isLocked={isLocked}
+                                  isBroken={isBroken}
+                                  assignExercise={() =>
+                                    this.assignExercise(exerciseId)}
+                                />}
 
                               <LinkContainer
                                 to={EXERCISE_EDIT_URI_FACTORY(exerciseId)}
@@ -384,7 +385,7 @@ class GroupDetail extends Component {
                                   <EditIcon gapRight />
                                   <FormattedMessage
                                     id="app.exercises.listEditConfig"
-                                    defaultMessage="Configuration"
+                                    defaultMessage="Tests"
                                   />
                                 </Button>
                               </LinkContainer>

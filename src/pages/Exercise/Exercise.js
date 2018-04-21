@@ -79,7 +79,8 @@ import {
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import {
   groupDataAccessorSelector,
-  groupsUserCanEditSelector
+  groupsUserCanEditSelector,
+  groupsUserCanAssignToSelector
 } from '../../redux/selectors/groups';
 import { fetchUser } from '../../redux/modules/users';
 
@@ -230,6 +231,7 @@ class Exercise extends Component {
       deleteReferenceSolution,
       push,
       groups,
+      assignableGroups,
       groupsAccessor,
       forkExercise,
       isSuperAdmin,
@@ -332,14 +334,17 @@ class Exercise extends Component {
                     }
                     unlimitedHeight
                   >
-                    <ResourceRenderer resource={groups.toArray()} returnAsArray>
-                      {visibleGroups =>
+                    <ResourceRenderer
+                      resource={assignableGroups.toArray()}
+                      returnAsArray
+                    >
+                      {assignableGroups =>
                         <MultiAssignForm
                           initialValues={this.multiAssignFormInitialValues(
-                            visibleGroups,
+                            assignableGroups,
                             exercise.runtimeEnvironments
                           )}
-                          groups={visibleGroups}
+                          groups={assignableGroups}
                           userId={userId}
                           runtimeEnvironments={exercise.runtimeEnvironments}
                           onSubmit={this.assignExercise}
@@ -572,6 +577,7 @@ Exercise.propTypes = {
   deleteReferenceSolution: PropTypes.func.isRequired,
   forkExercise: PropTypes.func.isRequired,
   groups: ImmutablePropTypes.map,
+  assignableGroups: ImmutablePropTypes.map,
   isSuperAdmin: PropTypes.bool,
   groupsAccessor: PropTypes.func.isRequired,
   firstDeadline: PropTypes.oneOfType([
@@ -598,6 +604,7 @@ export default withLinks(
         referenceSolutions: referenceSolutionsSelector(exerciseId)(state),
         exercisePipelines: exercisePipelinesSelector(exerciseId)(state),
         groups: groupsUserCanEditSelector(state),
+        assignableGroups: groupsUserCanAssignToSelector(state),
         groupsAccessor: groupDataAccessorSelector(state),
         isSuperAdmin: isLoggedAsSuperAdmin(state),
         firstDeadline: editMultiAssignFormSelector(state, 'firstDeadline'),
