@@ -9,7 +9,7 @@ import FlatButton from '../../widgets/FlatButton';
 import Confirm from '../../forms/Confirm';
 import LimitsValueField from './LimitsValueField';
 
-import { validateLimitsField } from '../../../helpers/exerciseLimits';
+import { validateLimitsField } from '../../../helpers/exercise/limits';
 import { prettyPrintBytes } from '../../helpers/stringFormatters';
 import prettyMs from 'pretty-ms';
 

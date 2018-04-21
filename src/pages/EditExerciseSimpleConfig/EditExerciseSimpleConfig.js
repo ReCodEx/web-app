@@ -57,13 +57,17 @@ import {
 } from '../../redux/selectors/pipelines';
 
 import {
-  getEnvInitValues,
-  transformEnvValues,
   getTestsInitValues,
-  transformTestsValues,
+  transformTestsValues
+} from '../../helpers/exercise/tests';
+import {
+  getEnvInitValues,
+  transformEnvValues
+} from '../../helpers/exercise/environments';
+import {
   getSimpleConfigInitValues,
   transformConfigValues
-} from '../../helpers/exerciseSimpleForm';
+} from '../../helpers/exercise/config';
 
 class EditExerciseSimpleConfig extends Component {
   componentWillMount = () => this.props.loadAsync();
@@ -289,13 +293,13 @@ class EditExerciseSimpleConfig extends Component {
                       <ResourceRenderer
                         resource={[exerciseConfig, exerciseEnvironmentConfig]}
                       >
-                        {(config, environments) =>
+                        {(config, envConfig) =>
                           tests.length > 0
                             ? <EditExerciseSimpleConfigForm
                                 initialValues={getSimpleConfigInitValues(
                                   config,
                                   tests,
-                                  environments
+                                  envConfig
                                 )}
                                 exercise={exercise}
                                 exerciseTests={tests}
@@ -304,7 +308,7 @@ class EditExerciseSimpleConfig extends Component {
                                 }
                                 onSubmit={this.transformAndSendConfigValuesCreator(
                                   pipelines,
-                                  environments,
+                                  envConfig,
                                   tests,
                                   config
                                 )}

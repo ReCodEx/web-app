@@ -1,110 +1,5 @@
-import yaml from 'js-yaml';
 import { defaultMemoize } from 'reselect';
-
-import { safeGet, encodeNumId } from '../helpers/common';
-
-/*
- * Tests and Score
- */
-export const getTestsInitValues = (exerciseTests, scoreConfig, locale) => {
-  const jsonScoreConfig = yaml.safeLoad(scoreConfig);
-  const testWeights = jsonScoreConfig.testWeights || {};
-  const sortedTests = exerciseTests.sort((a, b) =>
-    a.name.localeCompare(b.name, locale)
-  );
-
-  let res = [];
-  let allWeightsSame = true;
-  let lastWeight = null;
-  for (const test of sortedTests) {
-    const testWeight = testWeights[test.name] || 100;
-    if (lastWeight !== null && testWeight !== lastWeight) {
-      allWeightsSame = false;
-    }
-    lastWeight = testWeight;
-    res.push({
-      id: test.id,
-      name: test.name,
-      weight: String(testWeight)
-    });
-  }
-
-  return {
-    isUniform: allWeightsSame,
-    tests: res
-  };
-};
-
-export const transformTestsValues = formData => {
-  const uniformScore =
-    formData.isUniform === true || formData.isUniform === 'true';
-  let scoreConfigData = {
-    testWeights: {}
-  };
-  let tests = [];
-
-  for (const test of formData.tests) {
-    const testWeight = uniformScore ? 100 : Number(test.weight);
-    scoreConfigData.testWeights[test.name] = testWeight;
-
-    tests.push(
-      test.id
-        ? {
-            id: test.id,
-            name: test.name
-          }
-        : {
-            name: test.name
-          }
-    );
-  }
-
-  return {
-    tests,
-    scoreConfig: yaml.safeDump(scoreConfigData)
-  };
-};
-
-/*
- * Environments
- */
-export const getEnvInitValues = (environmentConfigs, environments) => {
-  let res = {};
-  // all environments
-  for (const env of environments) {
-    res[env.id] = false; // make sure we have all the environments set
-  }
-  // only environments in the config
-  for (const env of environmentConfigs) {
-    res[env.runtimeEnvironmentId] = true;
-  }
-  return res;
-};
-
-export const transformEnvValues = (
-  formData,
-  environmentConfigs,
-  runtimeEnvironments
-) => {
-  let res = [];
-  for (const env in formData) {
-    if (formData[env] !== true && formData[env] !== 'true') {
-      continue;
-    }
-    let envObj = {
-      runtimeEnvironmentId: env
-    };
-    const environmentConfig = environmentConfigs.find(
-      e => e.runtimeEnvironmentId === env
-    );
-    const runtimeEnvironment = runtimeEnvironments.find(e => e.id === env);
-    envObj.variablesTable = environmentConfig
-      ? environmentConfig.variablesTable // keep already set variables if they exist
-      : runtimeEnvironment.defaultVariables; // use defaults otherwise
-    res.push(envObj);
-  }
-  return res;
-};
+import { safeGet, encodeNumId } from '../../helpers/common';
 
 /*
  * Configuration variables
@@ -253,6 +148,7 @@ const getSimpleConfigCompilationVars = (testObj, config, environments) => {
 // Prepare the initial form data for configuration form ...
 export const getSimpleConfigInitValues = defaultMemoize(
   (config, tests, environments) => {
+    // environments -> exerciseEnvironmentsConfig
     const confTests =
       tests && config[0] && config[0].tests ? config[0].tests : [];
 
