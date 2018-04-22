@@ -22,11 +22,14 @@ export const actionTypes = {
   POST_COMMENT_PENDING: 'redux/comments/POST_COMMENT_PENDING',
   POST_COMMENT_REJECTED: 'redux/comments/POST_COMMENT_REJECTED',
   POST_COMMENT_FULFILLED: 'redux/comments/POST_COMMENT_FULFILLED',
-  REMOVE_COMMENT: 'redux/comment/REMOVE_COMMENT',
   TOGGLE_PRIVACY: 'redux/comment/TOGGLE_PRIVACY',
   TOGGLE_PRIVACY_PENDING: 'redux/comment/TOGGLE_PRIVACY_PENDING',
   TOGGLE_PRIVACY_FULFILLED: 'redux/comment/TOGGLE_PRIVACY_FULFILLED',
-  TOGGLE_PRIVACY_REJECTED: 'redux/comment/TOGGLE_PRIVACY_REJECTED'
+  TOGGLE_PRIVACY_REJECTED: 'redux/comment/TOGGLE_PRIVACY_REJECTED',
+  DELETE_COMMENT: 'redux/comment/DELETE_COMMENT',
+  DELETE_COMMENT_PENDING: 'redux/comment/DELETE_COMMENT_PENDING',
+  DELETE_COMMENT_FULFILLED: 'redux/comment/DELETE_COMMENT_FULFILLED',
+  DELETE_COMMENT_REJECTED: 'redux/comment/DELETE_COMMENT_REJECTED'
 };
 
 export const fetchThreadIfNeeded = actions.fetchOneIfNeeded;
@@ -75,15 +78,22 @@ export const togglePrivacy = (threadId, commentId) =>
     meta: { threadId, commentId }
   });
 
+export const deleteComment = (threadId, commentId) =>
+  createApiAction({
+    type: actionTypes.DELETE_COMMENT,
+    endpoint: `/comments/${threadId}/comment/${commentId}`,
+    method: 'DELETE',
+    meta: { threadId, commentId }
+  });
+
 /**
  * Reducer
  */
 
 const reducer = handleActions(
   Object.assign({}, reduceActions, {
-    [actionTypes.UPDATE_FULFILLED]: reduceActions[
-      resourceActionTypes.FETCH_FULFILLED
-    ],
+    [actionTypes.UPDATE_FULFILLED]:
+      reduceActions[resourceActionTypes.FETCH_FULFILLED],
 
     [actionTypes.POST_COMMENT_PENDING]: (
       state,
@@ -180,10 +190,13 @@ const reducer = handleActions(
       );
     },
 
-    [actionTypes.REMOVE_COMMENT]: (state, { meta: { threadId, id } }) => {
+    [actionTypes.DELETE_COMMENT_FULFILLED]: (
+      state,
+      { meta: { threadId, commentId } }
+    ) => {
       return state.updateIn(
         ['resources', threadId, 'data', 'comments'],
-        comments => comments.filter(cmt => cmt.get('id') !== id)
+        comments => comments.filter(cmt => cmt.get('id') !== commentId)
       );
     }
   }),

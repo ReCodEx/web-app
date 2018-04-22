@@ -7,7 +7,8 @@ import {
   repostComment,
   togglePrivacy,
   fetchThreadIfNeeded,
-  updateThread
+  updateThread,
+  deleteComment
 } from '../../redux/modules/comments';
 import { loggedInUserSelector } from '../../redux/selectors/users';
 import { commentsThreadSelector } from '../../redux/selectors/comments';
@@ -46,7 +47,8 @@ class CommentThreadContainer extends Component {
       addComment,
       repostComment,
       togglePrivacy,
-      refresh
+      refresh,
+      deleteComment
     } = this.props;
 
     return (
@@ -63,6 +65,7 @@ class CommentThreadContainer extends Component {
             togglePrivacy={togglePrivacy}
             repostComment={repostComment}
             refresh={refresh}
+            deleteComment={deleteComment}
           />}
       </ResourceRenderer>
     );
@@ -76,7 +79,8 @@ CommentThreadContainer.propTypes = {
   addComment: PropTypes.func.isRequired,
   repostComment: PropTypes.func,
   togglePrivacy: PropTypes.func,
-  refresh: PropTypes.func.isRequired
+  refresh: PropTypes.func,
+  deleteComment: PropTypes.func
 };
 
 export default connect(
@@ -90,6 +94,7 @@ export default connect(
     repostComment: tmpId => dispatch(repostComment(threadId, tmpId)),
     togglePrivacy: id => dispatch(togglePrivacy(threadId, id)),
     loadThreadIfNeeded: () => dispatch(fetchThreadIfNeeded(threadId)),
-    refresh: () => dispatch(updateThread(threadId))
+    refresh: () => dispatch(updateThread(threadId)),
+    deleteComment: id => dispatch(deleteComment(threadId, id))
   })
 )(CommentThreadContainer);

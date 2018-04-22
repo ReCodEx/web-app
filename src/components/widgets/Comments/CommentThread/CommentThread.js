@@ -12,7 +12,8 @@ const CommentThread = ({
   addComment,
   repostComment,
   togglePrivacy,
-  refresh
+  refresh,
+  deleteComment
 }) =>
   <CommentBox
     commentsCount={comments.length}
@@ -29,6 +30,7 @@ const CommentThread = ({
                 key={comment.id}
                 repost={repostComment}
                 togglePrivacy={togglePrivacy}
+                deleteComment={deleteComment}
               />
             : <SomebodyElsesComment {...comment} key={comment.id} />
       )}
@@ -49,7 +51,8 @@ CommentThread.propTypes = {
   addComment: PropTypes.func,
   repostComment: PropTypes.func,
   togglePrivacy: PropTypes.func,
-  refresh: PropTypes.func
+  refresh: PropTypes.func,
+  deleteComment: PropTypes.func
 };
 
 export default CommentThread;

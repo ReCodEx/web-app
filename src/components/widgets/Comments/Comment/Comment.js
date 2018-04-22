@@ -6,6 +6,7 @@ import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { Link } from 'react-router';
 import withLinks from '../../../../helpers/withLinks';
+import { DeleteIcon } from '../../../icons';
 
 import { Posted, Posting, Failed } from './Status';
 
@@ -21,6 +22,7 @@ const Comment = ({
   repost,
   isToggling = false,
   togglePrivacy,
+  deleteComment,
   links: { USER_URI_FACTORY }
 }) =>
   <div
@@ -54,6 +56,12 @@ const Comment = ({
       <img className="direct-chat-img" src={user.avatarUrl} alt={user.name} />
       <div className="direct-chat-text">
         {isFromCurrentUser &&
+          <DeleteIcon
+            gapLeft
+            className="pull-right"
+            onClick={() => deleteComment(id)}
+          />}
+        {isFromCurrentUser &&
           togglePrivacy &&
           <OverlayTrigger
             placement="left"
@@ -77,7 +85,6 @@ const Comment = ({
               }
               onClick={() => togglePrivacy(id)}
               className="pull-right"
-              style={{ cursor: 'pointer' }}
               spin={isToggling}
             />
           </OverlayTrigger>}{' '}
@@ -106,6 +113,7 @@ Comment.propTypes = {
   isPrivate: PropTypes.bool,
   isToggling: PropTypes.bool,
   togglePrivacy: PropTypes.func,
+  deleteComment: PropTypes.func,
   links: PropTypes.object
 };
 
