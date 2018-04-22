@@ -59,7 +59,6 @@ const Comment = ({
           <DeleteIcon
             gapLeft
             className="pull-right"
-            style={{ cursor: 'pointer' }}
             onClick={() => deleteComment(id)}
           />}
         {isFromCurrentUser &&
@@ -86,7 +85,6 @@ const Comment = ({
               }
               onClick={() => togglePrivacy(id)}
               className="pull-right"
-              style={{ cursor: 'pointer' }}
               spin={isToggling}
             />
           </OverlayTrigger>}{' '}

@@ -79,7 +79,7 @@ CommentThreadContainer.propTypes = {
   addComment: PropTypes.func.isRequired,
   repostComment: PropTypes.func,
   togglePrivacy: PropTypes.func,
-  refresh: PropTypes.func.isRequired,
+  refresh: PropTypes.func,
   deleteComment: PropTypes.func
 };
 
