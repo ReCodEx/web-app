@@ -8,6 +8,7 @@ import { Tooltip, OverlayTrigger } from 'react-bootstrap';
 import FailedAvatar from '../Avatar/FailedAvatar';
 import withLinks from '../../../helpers/withLinks';
 import Icon from '../../icons';
+import Avatar, { FakeAvatar } from '../Avatar';
 
 class Badge extends Component {
   state = { failedLoadingImage: false };
@@ -21,8 +22,10 @@ class Badge extends Component {
       id,
       fullName,
       avatarUrl,
+      privateData: { settings },
       expiration,
       logout,
+      size = 45,
       links: { USER_URI_FACTORY, EDIT_USER_URI_FACTORY }
     } = this.props;
 
@@ -31,13 +34,16 @@ class Badge extends Component {
     return (
       <div className="user-panel">
         <div className="pull-left image">
-          {!failedLoadingImage &&
-            <img
-              src={avatarUrl}
-              alt={fullName}
-              className="img-circle"
-              onError={this.onFailure}
-            />}
+          {!failedLoadingImage && settings.useGravatar
+            ? <Avatar
+                size={size}
+                src={avatarUrl}
+                title={fullName}
+                onError={this.onFailure}
+              />
+            : <FakeAvatar size={size}>
+                {fullName[0]}
+              </FakeAvatar>}
 
           {failedLoadingImage && <FailedAvatar />}
         </div>
@@ -89,7 +95,10 @@ Badge.propTypes = {
   fullName: PropTypes.string.isRequired,
   avatarUrl: PropTypes.string.isRequired,
   expiration: PropTypes.number.isRequired,
+  privateData: PropTypes.shape({ settings: PropTypes.object.isRequired })
+    .isRequired,
   logout: PropTypes.func,
+  size: PropTypes.number,
   links: PropTypes.object
 };
 

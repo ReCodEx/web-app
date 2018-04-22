@@ -75,6 +75,7 @@ class Users extends Component {
                   <UsersList
                     users={users}
                     loggedUserId={user.id}
+                    useGravatar={user.privateData.settings.useGravatar}
                     createActions={userId =>
                       <div>
                         <LinkContainer to={EDIT_USER_URI_FACTORY(userId)}>

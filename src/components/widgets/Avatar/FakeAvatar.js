@@ -23,7 +23,7 @@ const FakeAvatar = ({
       borderWidth,
       borderColor: !light ? 'transparent' : 'gray',
       borderRadius: Math.ceil(getSize(size, small) / 2),
-      fontSize: Math.floor(Math.min(14, getSize(size, small) / 2)),
+      fontSize: Math.floor(Math.max(14, getSize(size, small) / 2)),
       fontWeight: 'bolder'
     }}
   >
