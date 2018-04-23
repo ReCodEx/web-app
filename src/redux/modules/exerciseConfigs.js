@@ -202,7 +202,7 @@ const prepareTransformations = (template, firstTestId, tests, files) => {
   const transformations = {};
 
   // Smart renaming of single file variables ...
-  ['inputStdin', 'expectedOutput'].filter(f => template[f]).forEach(field => {
+  ['stdin-file', 'expected-output'].filter(f => template[f]).forEach(field => {
     const matches = bestMatchFileNames(
       template[field],
       firstTestId,
@@ -216,14 +216,14 @@ const prepareTransformations = (template, firstTestId, tests, files) => {
   });
 
   // Input files
-  if (template.inputFiles && template.inputFiles.length > 0) {
+  if (template['input-files'] && template['input-files'].length > 0) {
     // Matches acts as template for input files
-    const inputFiles = template.inputFiles.map(({ name, file }) => ({
+    const inputFiles = template['input-files'].map(({ name, file }) => ({
       name,
       file,
       matches: bestMatchFileNames(file, firstTestId, tests, files) // instead of one file, it holds all files for all tests
     }));
-    transformations.inputFiles = testId =>
+    transformations['input-files'] = testId =>
       inputFiles
         .map(({ name, file, matches }) => ({
           // convert the template into an instance by selecting appropriate file
@@ -234,6 +234,7 @@ const prepareTransformations = (template, firstTestId, tests, files) => {
   }
 
   // Compilation extra files ...
+  // TODO fixme !!!
   const compilation = {}; // matches for all environments
   for (const envId in template.compilation) {
     compilation[envId] = template.compilation[envId][
@@ -298,17 +299,17 @@ export const smartFillExerciseConfigForm = (
       const testKey = encodeNumId(test.id);
       return Promise.all(
         [
-          'inputStdin',
-          'inputFiles',
-          'runArgs',
-          'expectedOutput',
+          'stdin-file',
+          'input-files',
+          'run-args',
+          'expected-output',
           'useOutFile',
-          'outputFile',
+          'actual-output',
           'useCustomJudge',
-          'judgeBinary',
-          'customJudgeBinary',
-          'judgeArgs',
-          'compilation'
+          'judge-type',
+          'custom-judge',
+          'judge-args',
+          'extra-files'
         ]
           .map(field => {
             const value = transformations[field]

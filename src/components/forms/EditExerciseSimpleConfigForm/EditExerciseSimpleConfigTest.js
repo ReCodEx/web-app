@@ -181,7 +181,7 @@ class EditExerciseSimpleConfigTest extends Component {
                                 {env.name}
                               </h5>
                               <FieldArray
-                                name={`${test}.compilation.${env.id}.extra-files`}
+                                name={`${test}.extra-files.${env.id}`}
                                 component={ExpandingInputFilesField}
                                 options={supplementaryFilesOptions}
                                 leftLabel={
@@ -200,7 +200,7 @@ class EditExerciseSimpleConfigTest extends Component {
                               <br />
                               {possibleEntryPoints.length > 0 &&
                                 <Field
-                                  name={`${test}.compilation.${env.id}.entryPoint`}
+                                  name={`${test}.entry-point.${env.id}.entryPoint`}
                                   component={SelectField}
                                   options={this.getPossibleEntryPoints(env.id)}
                                   addEmptyOption={true}
@@ -238,7 +238,7 @@ class EditExerciseSimpleConfigTest extends Component {
               />
             </h4>
             <FieldArray
-              name={`${test}.inputFiles`}
+              name={`${test}.input-files`}
               component={ExpandingInputFilesField}
               options={supplementaryFilesOptions}
               leftLabel={
@@ -255,7 +255,7 @@ class EditExerciseSimpleConfigTest extends Component {
               }
             />
             <Field
-              name={`${test}.inputStdin`}
+              name={`${test}.stdin-file`}
               component={SelectField}
               options={supplementaryFilesOptions}
               addEmptyOption={true}
@@ -275,7 +275,7 @@ class EditExerciseSimpleConfigTest extends Component {
               />
             </h4>
             <FieldArray
-              name={`${test}.runArgs`}
+              name={`${test}.run-args`}
               component={ExpandingTextField}
               label={
                 <FormattedMessage
@@ -305,7 +305,7 @@ class EditExerciseSimpleConfigTest extends Component {
             />
             {useOutFile &&
               <Field
-                name={`${test}.outputFile`}
+                name={`${test}.actual-output`}
                 component={TextField}
                 validate={validateOutputFile}
                 label={
@@ -316,7 +316,7 @@ class EditExerciseSimpleConfigTest extends Component {
                 }
               />}
             <Field
-              name={`${test}.expectedOutput`}
+              name={`${test}.expected-output`}
               component={SelectField}
               options={supplementaryFilesOptions}
               addEmptyOption={true}
@@ -349,7 +349,7 @@ class EditExerciseSimpleConfigTest extends Component {
             />
             {useCustomJudge
               ? <Field
-                  name={`${test}.customJudgeBinary`}
+                  name={`${test}.custom-judge`}
                   component={SelectField}
                   options={supplementaryFilesOptions}
                   addEmptyOption={true}
@@ -362,7 +362,7 @@ class EditExerciseSimpleConfigTest extends Component {
                   }
                 />
               : <Field
-                  name={`${test}.judgeBinary`}
+                  name={`${test}.judge-type`}
                   component={SelectField}
                   options={[
                     {
@@ -411,7 +411,7 @@ class EditExerciseSimpleConfigTest extends Component {
                 />}
             {useCustomJudge &&
               <FieldArray
-                name={`${test}.judgeArgs`}
+                name={`${test}.judge-args`}
                 component={ExpandingTextField}
                 label={
                   <FormattedMessage
