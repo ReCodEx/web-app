@@ -15,16 +15,15 @@ import ResourceRenderer from '../../helpers/ResourceRenderer';
 import EditExerciseSimpleConfigTest from './EditExerciseSimpleConfigTest';
 import { getSupplementaryFilesForExercise } from '../../../redux/selectors/supplementaryFiles';
 import { encodeNumId, createIndex, safeSet } from '../../../helpers/common';
-import { smartFillExerciseConfigForm } from '../../../redux/modules/exerciseConfigs';
+import {
+  exerciseConfigFormSmartFillAll,
+  exerciseConfigFormSmartFillInput,
+  exerciseConfigFormSmartFillArgs,
+  exerciseConfigFormSmartFillOutput,
+  exerciseConfigFormSmartFillJudge,
+  exerciseConfigFormSmartFillCompilation
+} from '../../../redux/modules/exerciseConfigs';
 import { exerciseConfigFormErrors } from '../../../redux/selectors/exerciseConfigs';
-
-const hasCompilationExtraFiles = testData =>
-  testData &&
-  testData['extra-files'] &&
-  Object.keys(testData['extra-files']).reduce(
-    (res, envId) => res || testData['extra-files'][envId].length > 0,
-    false
-  );
 
 class EditExerciseSimpleConfigForm extends Component {
   render() {
@@ -132,12 +131,9 @@ class EditExerciseSimpleConfigForm extends Component {
                     <EditExerciseSimpleConfigTest
                       key={idx}
                       exercise={exercise}
-                      hasCompilationExtraFiles={hasCompilationExtraFiles(
-                        testData
-                      )}
+                      extraFiles={testData && testData['extra-files']}
                       useOutFile={testData && testData.useOutFile}
                       useCustomJudge={testData && testData.useCustomJudge}
-                      compilationParams={testData && testData.compilation}
                       environmetnsWithEntryPoints={environmetnsWithEntryPoints}
                       supplementaryFiles={files}
                       testName={test.name}
@@ -265,9 +261,6 @@ const warn = formData => {
   for (const envId in envEntryPointDefaults) {
     if (envEntryPointDefaults[envId] === 'ambiguous') {
       for (const testKey in formData.config) {
-        //if (warnings[testKey] === undefined) {
-        //warnings[testKey] = { compilation: {} };
-        //}
         safeSet(
           warnings,
           ['config', testKey, 'entry-point', envId],
@@ -280,7 +273,7 @@ const warn = formData => {
     }
   }
 
-  return warnings; //Object.keys(warnings).length > 0 ? { config: warnings } : {};
+  return warnings;
 };
 
 export default connect(
@@ -292,8 +285,37 @@ export default connect(
     };
   },
   dispatch => ({
-    smartFill: (testId, tests, files) => () =>
-      dispatch(smartFillExerciseConfigForm(FORM_NAME, testId, tests, files))
+    smartFill: (testId, tests, files) => ({
+      all: () =>
+        dispatch(
+          exerciseConfigFormSmartFillAll(FORM_NAME, testId, tests, files)
+        ),
+      input: () =>
+        dispatch(
+          exerciseConfigFormSmartFillInput(FORM_NAME, testId, tests, files)
+        ),
+      args: () =>
+        dispatch(
+          exerciseConfigFormSmartFillArgs(FORM_NAME, testId, tests, files)
+        ),
+      output: () =>
+        dispatch(
+          exerciseConfigFormSmartFillOutput(FORM_NAME, testId, tests, files)
+        ),
+      judge: () =>
+        dispatch(
+          exerciseConfigFormSmartFillJudge(FORM_NAME, testId, tests, files)
+        ),
+      compilation: () =>
+        dispatch(
+          exerciseConfigFormSmartFillCompilation(
+            FORM_NAME,
+            testId,
+            tests,
+            files
+          )
+        )
+    })
   })
 )(
   reduxForm({

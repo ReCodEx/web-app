@@ -127,7 +127,14 @@ const computeMatchingPenaltyAndFinalize = ({ fileTests, testFiles }) => {
 };
 
 // Compute best possible matching between tests and files for given prefix and suffix.
-const computeMatching = (prefix, suffix, firstTestId, tests, files) => {
+const computeMatching = ({
+  prefix,
+  suffix,
+  firstTestId,
+  tests,
+  files,
+  fileName
+}) => {
   const candidates = prepareFileCandidates(prefix, suffix, files);
   if (!candidates) {
     return null;
@@ -138,7 +145,8 @@ const computeMatching = (prefix, suffix, firstTestId, tests, files) => {
 
   if (
     !matching.testFiles[firstTestId] ||
-    Array.isArray(matching.testFiles[firstTestId])
+    Array.isArray(matching.testFiles[firstTestId]) ||
+    matching.testFiles[firstTestId] !== fileName
   ) {
     // First test (template) file was not matched or was mismatched ...
     return null;
@@ -185,19 +193,29 @@ const computePossiblePrefixesSuffixes = fileName => {
   return res;
 };
 
-//
-const bestMatchFileNames = (fileName, firstTestId, tests, files) =>
-  computePossiblePrefixesSuffixes(
+// Find best matching for given fileName for all tests using given list of files.
+const bestMatchFileNames = (fileName, firstTestId, tests, files) => {
+  return computePossiblePrefixesSuffixes(
     fileName
   ).reduce((bestMatching, { prefix, suffix }) => {
-    const matching = computeMatching(prefix, suffix, firstTestId, tests, files);
+    const matching = computeMatching({
+      prefix,
+      suffix,
+      firstTestId,
+      tests,
+      files,
+      fileName
+    });
     return matching !== null &&
     (bestMatching === null || bestMatching.penalty > matching.penalty)
       ? matching // a better matching was found
       : bestMatching;
   }, null);
+};
 
-//
+/**
+ * Construct transformation function based on a template.
+ */
 const prepareTransformations = (template, firstTestId, tests, files) => {
   const transformations = {};
 
@@ -233,39 +251,55 @@ const prepareTransformations = (template, firstTestId, tests, files) => {
         .filter(({ file }) => file); // remove records which do not have apropriate file
   }
 
-  // Compilation extra files ...
-  // TODO fixme !!!
-  const compilation = {}; // matches for all environments
-  for (const envId in template.compilation) {
-    compilation[envId] = template.compilation[envId][
-      'extra-files'
-    ].map(({ name, file }) => ({
-      name,
-      file,
-      matches: bestMatchFileNames(file, firstTestId, tests, files)
-    }));
-    if (template.compilation[envId].entryPoint !== undefined) {
-      compilation[envId].entryPoint = template.compilation[envId].entryPoint;
+  // Compilation extra files and entry points ...
+  if (template['extra-files']) {
+    const extraFiles = {};
+    const entryPoint = {};
+    for (const envId in template['extra-files']) {
+      extraFiles[envId] = template['extra-files'][
+        envId
+      ].map(({ name, file }) => ({
+        name,
+        file,
+        matches: bestMatchFileNames(file, firstTestId, tests, files)
+      }));
+      if (template['entry-point'][envId] !== undefined) {
+        entryPoint[envId] = template['entry-point'][envId];
+      }
     }
-  }
 
-  transformations.compilation = testId => {
-    const transformed = {};
-    for (const envId in compilation) {
-      transformed[envId] = {
-        'extra-files': compilation[envId]
+    transformations['extra-files'] = testId => {
+      const transformed = {};
+      for (const envId in extraFiles) {
+        transformed[envId] = extraFiles[envId]
           .map(({ name, file, matches }) => ({
             name,
             file: (matches && matches.testFiles[testId]) || file
           }))
-          .filter(({ file }) => file) // remove records which do not have apropriate file
-      };
-      if (compilation[envId].entryPoint !== undefined) {
-        transformed[envId].entryPoint = compilation[envId].entryPoint;
+          .filter(({ file }) => file); // remove records which do not have apropriate file
       }
-    }
-    return transformed;
-  };
+      return transformed;
+    };
+
+    transformations['entry-point'] = testId => {
+      const transformed = {};
+      for (const envId in entryPoint) {
+        // Make sure a file with given name will exist after transformation ...
+        const file =
+          entryPoint[envId] &&
+          extraFiles[envId]
+            .map(({ name, file, matches }) => ({
+              name,
+              file: (matches && matches.testFiles[testId]) || file
+            }))
+            .find(({ name, file }) => file && name === entryPoint[envId]);
+        if (file) {
+          transformed[envId] = entryPoint[envId];
+        }
+      }
+      return transformed;
+    };
+  }
 
   return transformations;
 };
@@ -279,11 +313,12 @@ const getTestConfig = ({ form }, formName, testKey) =>
 /*
  * Main filling function. It fills all tests based on the first test template.
  */
-export const smartFillExerciseConfigForm = (
+const exerciseConfigFormSmartFill = (
   formName,
   firstTestId,
   tests,
-  files
+  files,
+  properties
 ) => (dispatch, getState) => {
   const state = getState();
   const firstTestKey = encodeNumId(firstTestId);
@@ -298,19 +333,7 @@ export const smartFillExerciseConfigForm = (
     tests.filter(({ id }) => encodeNumId(id) !== firstTestKey).map(test => {
       const testKey = encodeNumId(test.id);
       return Promise.all(
-        [
-          'stdin-file',
-          'input-files',
-          'run-args',
-          'expected-output',
-          'useOutFile',
-          'actual-output',
-          'useCustomJudge',
-          'judge-type',
-          'custom-judge',
-          'judge-args',
-          'extra-files'
-        ]
+        properties
           .map(field => {
             const value = transformations[field]
               ? transformations[field](test.id, template[field])
@@ -327,5 +350,83 @@ export const smartFillExerciseConfigForm = (
   );
 };
 
-const reducer = handleActions(reduceActions, initialState);
+export const exerciseConfigFormSmartFillAll = (
+  formName,
+  firstTestId,
+  tests,
+  files
+) =>
+  exerciseConfigFormSmartFill(formName, firstTestId, tests, files, [
+    'stdin-file',
+    'input-files',
+    'run-args',
+    'expected-output',
+    'useOutFile',
+    'actual-output',
+    'useCustomJudge',
+    'judge-type',
+    'custom-judge',
+    'judge-args',
+    'extra-files',
+    'entry-point'
+  ]);
+
+export const exerciseConfigFormSmartFillInput = (
+  formName,
+  firstTestId,
+  tests,
+  files
+) =>
+  exerciseConfigFormSmartFill(formName, firstTestId, tests, files, [
+    'stdin-file',
+    'input-files'
+  ]);
+
+export const exerciseConfigFormSmartFillArgs = (
+  formName,
+  firstTestId,
+  tests,
+  files
+) =>
+  exerciseConfigFormSmartFill(formName, firstTestId, tests, files, [
+    'run-args'
+  ]);
+
+export const exerciseConfigFormSmartFillOutput = (
+  formName,
+  firstTestId,
+  tests,
+  files
+) =>
+  exerciseConfigFormSmartFill(formName, firstTestId, tests, files, [
+    'expected-output',
+    'useOutFile',
+    'actual-output'
+  ]);
+
+export const exerciseConfigFormSmartFillJudge = (
+  formName,
+  firstTestId,
+  tests,
+  files
+) =>
+  exerciseConfigFormSmartFill(formName, firstTestId, tests, files, [
+    'useCustomJudge',
+    'judge-type',
+    'custom-judge',
+    'judge-args'
+  ]);
+
+export const exerciseConfigFormSmartFillCompilation = (
+  formName,
+  firstTestId,
+  tests,
+  files
+) =>
+  exerciseConfigFormSmartFill(formName, firstTestId, tests, files, [
+    'extra-files',
+    'entry-point'
+  ]);
+
+export const reducer = handleActions(reduceActions, initialState);
 export default reducer;

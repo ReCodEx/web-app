@@ -1,5 +1,4 @@
 import { List, Map } from 'immutable';
-import { Z_PARTIAL_FLUSH } from 'zlib';
 
 export const EMPTY_ARRAY = [];
 export const EMPTY_OBJ = {};

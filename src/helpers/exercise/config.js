@@ -248,13 +248,9 @@ const PIPELINE_VARS_DESCRIPTORS = [
   ),
   new FileListVariable('input-files', 'actual-inputs'),
   new FileListVariable('extra-files', 'extra-file-names', false, true),
-  new Variable(
-    'entry-point',
-    'file',
-    false,
-    '$entry-point',
-    true
-  ).setPipelineFilter('hasEntryPoint')
+  new Variable('entry-point', 'file', false)
+    .setPipelineFilter('hasEntryPoint')
+    .setTransformPostprocess((value, formDataTest) => value || '$entry-point')
 ];
 
 /**

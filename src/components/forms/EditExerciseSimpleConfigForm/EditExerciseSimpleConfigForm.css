@@ -23,11 +23,16 @@
   margin-bottom: 10px;
 }
 
+.compilation > table > h5 {
+  font-weight: bold;
+}
+
 .compilation > table > tbody > tr > td {
   padding-right: 10px;
   padding-left: 10px;
   border-right: 1px solid #ddd;
   min-width: 250px;
+  vertical-align: top;
 }
 
 .compilation > table > tbody > tr > td:first-of-type {
@@ -47,4 +52,16 @@
 .compilation-close {
   cursor: pointer;
   margin-top: 0;
+}
+
+.smart-fill-bar {
+  text-align: center;
+  padding: 1em;
+  border-top: 1px solid #ddd;
+  margin-top: 1em;
+}
+
+.smart-fill-tinybar {
+  text-align: center;
+  padding-top: 1em;
 }
