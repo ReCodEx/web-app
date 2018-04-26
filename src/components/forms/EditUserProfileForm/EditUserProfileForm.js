@@ -381,5 +381,6 @@ export default reduxForm({
   validate,
   asyncValidate,
   asyncBlurFields: ['email', 'password', 'passwordConfirm'],
-  enableReinitialize: true
+  enableReinitialize: true,
+  keepDirtyOnReinitialize: false
 })(EditUserProfileForm);
