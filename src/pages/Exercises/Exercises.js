@@ -11,9 +11,8 @@ import DeleteExerciseButtonContainer from '../../containers/DeleteExerciseButton
 import SearchContainer from '../../containers/SearchContainer';
 import ExercisesList from '../../components/Exercises/ExercisesList';
 import Button from '../../components/widgets/FlatButton';
-import { AddIcon, EditIcon } from '../../components/icons';
+import { EditIcon } from '../../components/icons';
 
-import { create as createExercise } from '../../redux/modules/exercises';
 import { searchExercises } from '../../redux/modules/search';
 import { fetchUser } from '../../redux/modules/users';
 import { fetchInstanceGroups } from '../../redux/modules/groups';
@@ -38,21 +37,9 @@ class Exercises extends Component {
     this.props.loadAsync(this.props.userId);
   }
 
-  newExercise = () => {
-    const {
-      createExercise,
-      push,
-      links: { EXERCISE_EDIT_URI_FACTORY }
-    } = this.props;
-    createExercise().then(({ value: exercise }) =>
-      push(EXERCISE_EDIT_URI_FACTORY(exercise.id))
-    );
-  };
-
   render() {
     const {
       query,
-      isSuperAdmin,
       isAuthorOfExercise,
       search,
       links: {
@@ -94,25 +81,6 @@ class Exercises extends Component {
               id="app.exercises.listTitle"
               defaultMessage="Exercises"
             />
-          }
-          footer={
-            <p className="text-center">
-              {isSuperAdmin &&
-                <Button
-                  bsStyle="success"
-                  className="btn-flat"
-                  bsSize="sm"
-                  onClick={() => {
-                    this.newExercise();
-                  }}
-                >
-                  <AddIcon gapRight />
-                  <FormattedMessage
-                    id="app.exercises.add"
-                    defaultMessage="Add exercise"
-                  />
-                </Button>}
-            </p>
           }
           unlimitedHeight
         >
@@ -176,8 +144,6 @@ Exercises.propTypes = {
   loadAsync: PropTypes.func.isRequired,
   userId: PropTypes.string.isRequired,
   query: PropTypes.string,
-  createExercise: PropTypes.func.isRequired,
-  isSuperAdmin: PropTypes.bool.isRequired,
   isAuthorOfExercise: PropTypes.func.isRequired,
   push: PropTypes.func.isRequired,
   links: PropTypes.object.isRequired,
@@ -198,7 +164,6 @@ export default withLinks(
     dispatch => ({
       loadAsync: userId => Exercises.loadAsync({}, dispatch, userId),
       push: url => dispatch(push(url)),
-      createExercise: () => dispatch(createExercise()),
       search: query => dispatch(searchExercises()('exercises-page', query))
     })
   )(Exercises)

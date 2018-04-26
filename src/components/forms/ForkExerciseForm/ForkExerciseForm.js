@@ -78,18 +78,16 @@ class ForkExerciseForm extends Component {
                     name={'groupId'}
                     component={SelectField}
                     label={''}
-                    options={[{ key: '', name: '_Public_' }].concat(
-                      groups
-                        .map(group => ({
-                          key: group.id,
-                          name: getGroupCanonicalLocalizedName(
-                            group,
-                            groupsAccessor,
-                            locale
-                          )
-                        }))
-                        .sort((a, b) => a.name.localeCompare(b.name, locale))
-                    )}
+                    options={groups
+                      .map(group => ({
+                        key: group.id,
+                        name: getGroupCanonicalLocalizedName(
+                          group,
+                          groupsAccessor,
+                          locale
+                        )
+                      }))
+                      .sort((a, b) => a.name.localeCompare(b.name, locale))}
                   />}
               </ResourceRenderer>
 
