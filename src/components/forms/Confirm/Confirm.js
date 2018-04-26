@@ -41,12 +41,13 @@ class Confirm extends Component {
           <CloseIcon gapRight />
           <FormattedMessage id="app.confirm.no" defaultMessage="No" />
         </span>
-      )
+      ),
+      placement = 'bottom'
     } = this.props;
     const { target, showPopup } = this.state;
 
     return (
-      <Overlay show={showPopup} target={target} placement="bottom">
+      <Overlay show={showPopup} target={target} placement={placement}>
         <Popover id={id} title={question}>
           <div className="text-center">
             <ButtonGroup bsSize="sm">
@@ -92,6 +93,7 @@ Confirm.propTypes = {
   question: stringOrFormattedMessage.isRequired,
   yes: stringOrFormattedMessage,
   no: stringOrFormattedMessage,
+  placement: PropTypes.string,
   children: PropTypes.element.isRequired,
   className: PropTypes.string
 };
