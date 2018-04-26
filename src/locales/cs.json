@@ -1016,6 +1016,8 @@
   "app.submitRefSolution.title": "Vytvořit referenční řešení",
   "app.submitSolution.addFile": "Přidat soubor",
   "app.submitSolution.dragAndDrop": "Přetahujte soubory do tohoto pole.",
+  "app.submitSolution.emptyNoteSubmitConfirm": "Popis referenčního řešení je prázdný. Je nanejvýš vhodné, aby referenční řešení byla opatřena relevantním popiskem. Opravdu si přejete pokračovat v odevzdání?",
+  "app.submitSolution.emptyNoteWarning": "Popis referenčního řešení je prázdný. Je nanejvýš vhodné, aby referenční řešení byla opatřena relevantním popiskem.",
   "app.submitSolution.entryPoint": "Vyberte vstupní bod (zaváděcí soubor vaší aplikace):",
   "app.submitSolution.noEnvironments": "Nahrané soubory neodpovídají žádnému povolenému běhovému prostředí.",
   "app.submitSolution.noteLabel": "Poznámka pro vás a vašeho vyučujícího:",
