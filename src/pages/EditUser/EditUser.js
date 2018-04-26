@@ -100,7 +100,8 @@ class EditUser extends Component {
                     degreesBeforeName: data.name.degreesBeforeName,
                     degreesAfterName: data.name.degreesAfterName,
                     email: data.privateData.email,
-                    passwordStrength: null
+                    passwordStrength: null,
+                    gravatarUrlEnabled: data.avatarUrl !== null
                   }}
                   allowChangePassword={data.privateData.isLocal}
                   emptyLocalPassword={data.privateData.emptyLocalPassword}

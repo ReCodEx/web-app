@@ -2,10 +2,19 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import UsersName from '../../../components/Users/UsersName';
 
-const UsersListItem = ({ user, createActions, loggedUserId = '' }) =>
+const UsersListItem = ({
+  user,
+  createActions,
+  loggedUserId = '',
+  useGravatar = false
+}) =>
   <tr>
     <td>
-      <UsersName {...user} currentUserId={loggedUserId} />
+      <UsersName
+        {...user}
+        useGravatar={useGravatar}
+        currentUserId={loggedUserId}
+      />
     </td>
     {createActions &&
       <td className="text-right">
@@ -16,7 +25,8 @@ const UsersListItem = ({ user, createActions, loggedUserId = '' }) =>
 UsersListItem.propTypes = {
   user: PropTypes.object.isRequired,
   createActions: PropTypes.func,
-  loggedUserId: PropTypes.string
+  loggedUserId: PropTypes.string,
+  useGravatar: PropTypes.bool
 };
 
 export default UsersListItem;

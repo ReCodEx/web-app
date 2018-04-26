@@ -68,7 +68,6 @@ const EditUserSettingsForm = ({
 
     <Field
       name="vimMode"
-      tabIndex={1}
       component={CheckboxField}
       onOff
       label={
@@ -81,7 +80,6 @@ const EditUserSettingsForm = ({
 
     <Field
       name="darkTheme"
-      tabIndex={1}
       component={CheckboxField}
       onOff
       label={
@@ -94,13 +92,24 @@ const EditUserSettingsForm = ({
 
     <Field
       name="openedSidebar"
-      tabIndex={1}
       component={CheckboxField}
       onOff
       label={
         <FormattedMessage
           id="app.editUserSettings.openedSidebar"
           defaultMessage="Sidebar is unfolded by default."
+        />
+      }
+    />
+
+    <Field
+      name="useGravatar"
+      component={CheckboxField}
+      onOff
+      label={
+        <FormattedMessage
+          id="app.editUserSettings.useGravatar"
+          defaultMessage="Use Gravatar service for fetching user avatars."
         />
       }
     />
@@ -126,7 +135,6 @@ const EditUserSettingsForm = ({
 
     <Field
       name="newAssignmentEmails"
-      tabIndex={1}
       component={CheckboxField}
       onOff
       label={
@@ -139,7 +147,6 @@ const EditUserSettingsForm = ({
 
     <Field
       name="assignmentDeadlineEmails"
-      tabIndex={1}
       component={CheckboxField}
       onOff
       label={
@@ -152,7 +159,6 @@ const EditUserSettingsForm = ({
 
     <Field
       name="submissionEvaluatedEmails"
-      tabIndex={1}
       component={CheckboxField}
       onOff
       label={
@@ -174,4 +180,8 @@ EditUserSettingsForm.propTypes = {
   invalid: PropTypes.bool
 };
 
-export default reduxForm({ form: 'edit-user-settings' })(EditUserSettingsForm);
+export default reduxForm({
+  form: 'edit-user-settings',
+  enableReinitialize: true,
+  keepDirtyOnReinitialize: false
+})(EditUserSettingsForm);

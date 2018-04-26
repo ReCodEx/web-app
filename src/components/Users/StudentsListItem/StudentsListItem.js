@@ -40,7 +40,7 @@ const StudentsListItem = ({ id, fullName, avatarUrl, stats, renderActions }) =>
 StudentsListItem.propTypes = {
   id: PropTypes.string.isRequired,
   fullName: PropTypes.string.isRequired,
-  avatarUrl: PropTypes.string.isRequired,
+  avatarUrl: PropTypes.string,
   stats: PropTypes.shape({
     points: PropTypes.shape({
       total: PropTypes.number.isRequired,

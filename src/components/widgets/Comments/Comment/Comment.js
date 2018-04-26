@@ -104,7 +104,7 @@ Comment.propTypes = {
   user: PropTypes.shape({
     id: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
-    avatarUrl: PropTypes.string.isRequired
+    avatarUrl: PropTypes.string
   }).isRequired,
   postedAt: PropTypes.number,
   id: PropTypes.string.isRequired,

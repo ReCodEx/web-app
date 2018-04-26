@@ -48,7 +48,7 @@ SupervisorsListItem.propTypes = {
   isAdmin: PropTypes.bool.isRequired,
   groupId: PropTypes.string.isRequired,
   fullName: PropTypes.string.isRequired,
-  avatarUrl: PropTypes.string.isRequired,
+  avatarUrl: PropTypes.string,
   addAdmin: PropTypes.func.isRequired,
   removeAdmin: PropTypes.func.isRequired,
   primaryAdminsIds: PropTypes.array.isRequired

@@ -3,12 +3,15 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
 import styles from './MenuAvatar.less';
+import Avatar, { FakeAvatar } from '../../Avatar';
 
 const MenuAvatar = ({
   title,
   avatarUrl,
+  firstName,
   notificationsCount = 0,
   isActive = false,
+  useGravatar = false,
   onClick
 }) =>
   <li
@@ -23,7 +26,16 @@ const MenuAvatar = ({
       }}
       style={{ cursor: 'pointer' }}
     >
-      <img src={avatarUrl} alt={title} className={styles.avatar} />
+      {useGravatar && avatarUrl !== null
+        ? <Avatar
+            size={20}
+            src={avatarUrl}
+            title={title}
+            altClassName={styles.avatar}
+          />
+        : <FakeAvatar size={20} altClassName={styles.avatar}>
+            {firstName[0]}
+          </FakeAvatar>}
       <span
         style={{
           whiteSpace: 'normal',
@@ -43,9 +55,11 @@ const MenuAvatar = ({
 MenuAvatar.propTypes = {
   title: PropTypes.oneOfType([PropTypes.element, PropTypes.string]),
   avatarUrl: PropTypes.string,
+  firstName: PropTypes.string.isRequired,
   onClick: PropTypes.func,
   notificationsCount: PropTypes.number,
-  isActive: PropTypes.bool
+  isActive: PropTypes.bool,
+  useGravatar: PropTypes.bool
 };
 
 export default MenuAvatar;

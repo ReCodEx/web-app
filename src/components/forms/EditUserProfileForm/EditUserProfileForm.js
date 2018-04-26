@@ -8,7 +8,12 @@ import isEmail from 'validator/lib/isEmail';
 import FormBox from '../../widgets/FormBox';
 import SubmitButton from '../SubmitButton';
 import { validateRegistrationData } from '../../../redux/modules/users';
-import { TextField, PasswordField, PasswordStrength } from '../Fields';
+import {
+  TextField,
+  PasswordField,
+  PasswordStrength,
+  CheckboxField
+} from '../Fields';
 
 const EditUserProfileForm = ({
   submitting,
@@ -73,7 +78,6 @@ const EditUserProfileForm = ({
 
     <Field
       name="degreesBeforeName"
-      tabIndex={1}
       component={TextField}
       required
       label={
@@ -86,7 +90,6 @@ const EditUserProfileForm = ({
 
     <Field
       name="firstName"
-      tabIndex={2}
       component={TextField}
       required
       disabled={disabledNameChange}
@@ -100,7 +103,6 @@ const EditUserProfileForm = ({
 
     <Field
       name="lastName"
-      tabIndex={3}
       component={TextField}
       required
       disabled={disabledNameChange}
@@ -114,7 +116,6 @@ const EditUserProfileForm = ({
 
     <Field
       name="degreesAfterName"
-      tabIndex={4}
       component={TextField}
       required
       label={
@@ -127,13 +128,24 @@ const EditUserProfileForm = ({
 
     <Field
       name="email"
-      tabIndex={5}
       component={TextField}
       autoComplete="off"
       label={
         <FormattedMessage
           id="app.changePasswordForm.email"
           defaultMessage="Email:"
+        />
+      }
+    />
+
+    <Field
+      name="gravatarUrlEnabled"
+      component={CheckboxField}
+      onOff
+      label={
+        <FormattedMessage
+          id="app.editUserProfile.gravatarEnabled"
+          defaultMessage="Use Gravatar service for own avatar."
         />
       }
     />
@@ -170,7 +182,6 @@ const EditUserProfileForm = ({
             </div>
           : <Field
               name="oldPassword"
-              tabIndex={6}
               component={PasswordField}
               autoComplete="off"
               label={
@@ -185,7 +196,6 @@ const EditUserProfileForm = ({
           name="password"
           component={PasswordField}
           autoComplete="off"
-          tabIndex={7}
           label={
             <FormattedMessage
               id="app.changePasswordForm.password"
@@ -371,5 +381,6 @@ export default reduxForm({
   validate,
   asyncValidate,
   asyncBlurFields: ['email', 'password', 'passwordConfirm'],
-  enableReinitialize: true
+  enableReinitialize: true,
+  keepDirtyOnReinitialize: false
 })(EditUserProfileForm);
