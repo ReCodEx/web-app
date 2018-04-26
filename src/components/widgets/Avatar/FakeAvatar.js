@@ -9,6 +9,7 @@ const FakeAvatar = ({
   light = false,
   children,
   small = false,
+  altClassName = '',
   ...props
 }) =>
   <span
@@ -27,6 +28,7 @@ const FakeAvatar = ({
       fontSize: Math.floor(Math.max(14, getSize(size, small) / 2)),
       fontWeight: 'bolder'
     }}
+    className={altClassName}
     {...props}
   >
     {children}
@@ -38,7 +40,8 @@ FakeAvatar.propTypes = {
   light: PropTypes.bool,
   children: PropTypes.oneOfType([PropTypes.string, PropTypes.element])
     .isRequired,
-  small: PropTypes.bool
+  small: PropTypes.bool,
+  altClassName: PropTypes.string
 };
 
 export default FakeAvatar;

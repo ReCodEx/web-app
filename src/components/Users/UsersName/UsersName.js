@@ -53,7 +53,7 @@ const UsersName = ({
 UsersName.propTypes = {
   id: PropTypes.string.isRequired,
   fullName: PropTypes.string.isRequired,
-  avatarUrl: PropTypes.string.isRequired,
+  avatarUrl: PropTypes.string,
   isVerified: PropTypes.bool.isRequired,
   useGravatar: PropTypes.bool,
   size: PropTypes.number,

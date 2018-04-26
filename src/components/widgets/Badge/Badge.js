@@ -93,7 +93,7 @@ class Badge extends Component {
 Badge.propTypes = {
   id: PropTypes.string.isRequired,
   fullName: PropTypes.string.isRequired,
-  avatarUrl: PropTypes.string.isRequired,
+  avatarUrl: PropTypes.string,
   expiration: PropTypes.number.isRequired,
   privateData: PropTypes.shape({ settings: PropTypes.object.isRequired })
     .isRequired,

@@ -30,9 +30,9 @@ const MenuAvatar = ({
             size={20}
             src={avatarUrl}
             title={title}
-            className={styles.avatar}
+            altClassName={styles.avatar}
           />
-        : <FakeAvatar size={20} className={styles.avatar}>
+        : <FakeAvatar size={20} altClassName={styles.avatar}>
             {title[0]}
           </FakeAvatar>}
       <span

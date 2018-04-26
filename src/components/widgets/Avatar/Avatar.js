@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 
 /**
  * Used on many places for displaying a round profile picture of a user.
@@ -7,13 +8,26 @@ import PropTypes from 'prop-types';
  * of the avatar while the image is being downloaded or if the download
  * failed for some reason.
  */
-const Avatar = ({ src, size = 45, title = 'avatar', ...props }) =>
-  <img src={src} alt={title} width={size} className="img-circle" {...props} />;
+const Avatar = ({
+  src,
+  size = 45,
+  title = 'avatar',
+  altClassName = '',
+  ...props
+}) =>
+  <img
+    src={src}
+    alt={title}
+    width={size}
+    className={classNames('img-circle', altClassName)}
+    {...props}
+  />;
 
 Avatar.propTypes = {
   src: PropTypes.string.isRequired,
   title: PropTypes.string,
-  size: PropTypes.number
+  size: PropTypes.number,
+  altClassName: PropTypes.string
 };
 
 export default Avatar;
