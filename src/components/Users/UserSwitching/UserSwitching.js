@@ -19,15 +19,17 @@ const UserSwitching = ({ users = [], currentUser, loginAs, open }) =>
               }
             />
 
-            {users.map(({ user: { id, fullName, avatarUrl } }) =>
-              <MenuAvatar
-                avatarUrl={avatarUrl}
-                key={id}
-                title={fullName}
-                useGravatar={activeUser.privateData.settings.useGravatar}
-                onClick={() => loginAs(id)}
-                isActive={id === activeUser.id}
-              />
+            {users.map(
+              ({ user: { id, fullName, name: { firstName }, avatarUrl } }) =>
+                <MenuAvatar
+                  avatarUrl={avatarUrl}
+                  key={id}
+                  title={fullName}
+                  firstName={firstName}
+                  useGravatar={activeUser.privateData.settings.useGravatar}
+                  onClick={() => loginAs(id)}
+                  isActive={id === activeUser.id}
+                />
             )}
           </ul>
         : null}

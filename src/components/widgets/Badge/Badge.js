@@ -21,6 +21,7 @@ class Badge extends Component {
     const {
       id,
       fullName,
+      name: { firstName },
       avatarUrl,
       privateData: { settings },
       expiration,
@@ -42,7 +43,7 @@ class Badge extends Component {
                 onError={this.onFailure}
               />
             : <FakeAvatar size={size}>
-                {fullName[0]}
+                {firstName[0]}
               </FakeAvatar>}
 
           {failedLoadingImage && <FailedAvatar />}
@@ -93,6 +94,7 @@ class Badge extends Component {
 Badge.propTypes = {
   id: PropTypes.string.isRequired,
   fullName: PropTypes.string.isRequired,
+  name: PropTypes.shape({ firstName: PropTypes.string.isRequired }).isRequired,
   avatarUrl: PropTypes.string,
   expiration: PropTypes.number.isRequired,
   privateData: PropTypes.shape({ settings: PropTypes.object.isRequired })

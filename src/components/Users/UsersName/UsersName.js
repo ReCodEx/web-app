@@ -11,6 +11,7 @@ const UsersName = ({
   id,
   fullName,
   avatarUrl,
+  name: { firstName },
   size = 25,
   large = false,
   isVerified,
@@ -24,7 +25,7 @@ const UsersName = ({
       {useGravatar && avatarUrl !== null
         ? <Avatar size={size} src={avatarUrl} title={fullName} />
         : <FakeAvatar size={size}>
-            {fullName[0]}
+            {firstName[0]}
           </FakeAvatar>}
     </span>
     <span
@@ -53,6 +54,7 @@ const UsersName = ({
 UsersName.propTypes = {
   id: PropTypes.string.isRequired,
   fullName: PropTypes.string.isRequired,
+  name: PropTypes.shape({ firstName: PropTypes.string.isRequired }).isRequired,
   avatarUrl: PropTypes.string,
   isVerified: PropTypes.bool.isRequired,
   useGravatar: PropTypes.bool,

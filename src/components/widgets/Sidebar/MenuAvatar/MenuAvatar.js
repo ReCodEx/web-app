@@ -8,6 +8,7 @@ import Avatar, { FakeAvatar } from '../../Avatar';
 const MenuAvatar = ({
   title,
   avatarUrl,
+  firstName,
   notificationsCount = 0,
   isActive = false,
   useGravatar = false,
@@ -33,7 +34,7 @@ const MenuAvatar = ({
             altClassName={styles.avatar}
           />
         : <FakeAvatar size={20} altClassName={styles.avatar}>
-            {title[0]}
+            {firstName[0]}
           </FakeAvatar>}
       <span
         style={{
@@ -54,6 +55,7 @@ const MenuAvatar = ({
 MenuAvatar.propTypes = {
   title: PropTypes.oneOfType([PropTypes.element, PropTypes.string]),
   avatarUrl: PropTypes.string,
+  firstName: PropTypes.string.isRequired,
   onClick: PropTypes.func,
   notificationsCount: PropTypes.number,
   isActive: PropTypes.bool,
