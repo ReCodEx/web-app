@@ -1,7 +1,7 @@
 import { defaultMemoize } from 'reselect';
 
-import { encodeId, encodeNumId, safeGet } from '../helpers/common';
-import { endpointDisguisedAsIdFactory } from '../redux/modules/limits';
+import { encodeId, encodeNumId, safeGet } from '../../helpers/common';
+import { endpointDisguisedAsIdFactory } from '../../redux/modules/limits';
 
 /*
  * Memory and Time limits

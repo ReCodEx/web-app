@@ -47,7 +47,7 @@ import {
   transformLimitsValues,
   getLimitsConstraints,
   validateLimitsSingleEnvironment
-} from '../../helpers/exerciseLimits';
+} from '../../helpers/exercise/limits';
 
 class EditExerciseLimits extends Component {
   componentWillMount = () => this.props.loadAsync();

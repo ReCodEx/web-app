@@ -7,7 +7,7 @@ import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import prettyMs from 'pretty-ms';
 import { prettyPrintBytes } from '../../helpers/stringFormatters';
 import Box from '../../widgets/Box';
-import { getLimitsConstraintsOfSingleGroup } from '../../../helpers/exerciseLimits';
+import { getLimitsConstraintsOfSingleGroup } from '../../../helpers/exercise/limits';
 
 const HardwareGroupMetadata = ({ hardwareGroup, isSuperAdmin = false }) => {
   const constraints = getLimitsConstraintsOfSingleGroup(hardwareGroup);

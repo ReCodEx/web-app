@@ -127,7 +127,14 @@ const computeMatchingPenaltyAndFinalize = ({ fileTests, testFiles }) => {
 };
 
 // Compute best possible matching between tests and files for given prefix and suffix.
-const computeMatching = (prefix, suffix, firstTestId, tests, files) => {
+const computeMatching = ({
+  prefix,
+  suffix,
+  firstTestId,
+  tests,
+  files,
+  fileName
+}) => {
   const candidates = prepareFileCandidates(prefix, suffix, files);
   if (!candidates) {
     return null;
@@ -138,7 +145,8 @@ const computeMatching = (prefix, suffix, firstTestId, tests, files) => {
 
   if (
     !matching.testFiles[firstTestId] ||
-    Array.isArray(matching.testFiles[firstTestId])
+    Array.isArray(matching.testFiles[firstTestId]) ||
+    matching.testFiles[firstTestId] !== fileName
   ) {
     // First test (template) file was not matched or was mismatched ...
     return null;
@@ -148,23 +156,36 @@ const computeMatching = (prefix, suffix, firstTestId, tests, files) => {
   return { penalty, testFiles: matching.testFiles };
 };
 
-// Compute indices where are good split points for a string using Given regex identifies separators.
-const computePossibleSplitPoints = (str, regex) => {
-  const res = [0];
-  let lastIdx;
-  let offset = 0;
-  let s = str;
-  while ((lastIdx = s.search(regex)) >= 0) {
-    if (lastIdx > 0 || offset === 0) {
-      res.push(offset + lastIdx);
-      s = s.substr(++lastIdx); // new search must skip at least first characeter of the separator
-      offset += lastIdx;
-    } else {
-      // separator found at beginning -> it is a continuation of previous separator
-      ++offset;
-      s = s.substr(1);
+// Helper function that returns a category name for given character (letter, diggit, separator, or other).
+const getCharacterCategory = char => {
+  if (!char || char.length > 1) {
+    return null;
+  }
+
+  const letterCategories = {
+    letter: /[a-zA-Z]/,
+    diggit: /[0-9]/,
+    separator: /[-_.]/
+  };
+  for (const cat in letterCategories) {
+    if (char.match(letterCategories[cat])) {
+      return cat;
     }
   }
+  return 'other';
+};
+
+// Compute indices where are good split points for a string using Given regex identifies separators.
+const computePossibleSplitPoints = str => {
+  let lastCategory = null;
+  const res = [];
+  [...str].forEach((char, idx) => {
+    const cat = getCharacterCategory(char);
+    if (cat !== lastCategory) {
+      res.push(idx);
+      lastCategory = cat;
+    }
+  });
   res.push(str.length);
   return res;
 };
@@ -172,7 +193,7 @@ const computePossibleSplitPoints = (str, regex) => {
 // Compute a set of all possible prefix-suffix pairs from given fileName.
 // Each continuous sequence of non-alphanumeric characters is a possible separation point to start/end a suffix/prefix.
 const computePossiblePrefixesSuffixes = fileName => {
-  const splitPoints = computePossibleSplitPoints(fileName, /[^a-z0-9]/);
+  const splitPoints = computePossibleSplitPoints(fileName, /[^a-zA-Z0-9]/);
   const res = [];
   splitPoints.forEach(left =>
     splitPoints.filter(right => left < right).forEach(right =>
@@ -185,24 +206,34 @@ const computePossiblePrefixesSuffixes = fileName => {
   return res;
 };
 
-//
-const bestMatchFileNames = (fileName, firstTestId, tests, files) =>
-  computePossiblePrefixesSuffixes(
+// Find best matching for given fileName for all tests using given list of files.
+const bestMatchFileNames = (fileName, firstTestId, tests, files) => {
+  return computePossiblePrefixesSuffixes(
     fileName
   ).reduce((bestMatching, { prefix, suffix }) => {
-    const matching = computeMatching(prefix, suffix, firstTestId, tests, files);
+    const matching = computeMatching({
+      prefix,
+      suffix,
+      firstTestId,
+      tests,
+      files,
+      fileName
+    });
     return matching !== null &&
     (bestMatching === null || bestMatching.penalty > matching.penalty)
       ? matching // a better matching was found
       : bestMatching;
   }, null);
+};
 
-//
+/**
+ * Construct transformation function based on a template.
+ */
 const prepareTransformations = (template, firstTestId, tests, files) => {
   const transformations = {};
 
   // Smart renaming of single file variables ...
-  ['inputStdin', 'expectedOutput'].filter(f => template[f]).forEach(field => {
+  ['stdin-file', 'expected-output'].filter(f => template[f]).forEach(field => {
     const matches = bestMatchFileNames(
       template[field],
       firstTestId,
@@ -216,55 +247,78 @@ const prepareTransformations = (template, firstTestId, tests, files) => {
   });
 
   // Input files
-  if (template.inputFiles && template.inputFiles.length > 0) {
+  if (template['input-files'] && template['input-files'].length > 0) {
     // Matches acts as template for input files
-    const inputFiles = template.inputFiles.map(({ name, file }) => ({
+    const inputFiles = template['input-files'].map(({ name, file }) => ({
       name,
       file,
       matches: bestMatchFileNames(file, firstTestId, tests, files) // instead of one file, it holds all files for all tests
     }));
-    transformations.inputFiles = testId =>
+    transformations['input-files'] = testId =>
       inputFiles
         .map(({ name, file, matches }) => ({
           // convert the template into an instance by selecting appropriate file
-          name,
+          name:
+            name === file && matches && matches.testFiles[testId]
+              ? matches.testFiles[testId]
+              : name,
           file: matches ? matches.testFiles[testId] || undefined : file // apply matches if possible, use original file name if no matching was established
         }))
         .filter(({ file }) => file); // remove records which do not have apropriate file
   }
 
-  // Compilation extra files ...
-  const compilation = {}; // matches for all environments
-  for (const envId in template.compilation) {
-    compilation[envId] = template.compilation[envId][
-      'extra-files'
-    ].map(({ name, file }) => ({
-      name,
-      file,
-      matches: bestMatchFileNames(file, firstTestId, tests, files)
-    }));
-    if (template.compilation[envId].entryPoint !== undefined) {
-      compilation[envId].entryPoint = template.compilation[envId].entryPoint;
-    }
-  }
-
-  transformations.compilation = testId => {
-    const transformed = {};
-    for (const envId in compilation) {
-      transformed[envId] = {
-        'extra-files': compilation[envId]
-          .map(({ name, file, matches }) => ({
-            name,
-            file: (matches && matches.testFiles[testId]) || file
-          }))
-          .filter(({ file }) => file) // remove records which do not have apropriate file
-      };
-      if (compilation[envId].entryPoint !== undefined) {
-        transformed[envId].entryPoint = compilation[envId].entryPoint;
+  // Compilation extra files and entry points ...
+  if (template['extra-files']) {
+    const extraFiles = {};
+    const entryPoint = {};
+    for (const envId in template['extra-files']) {
+      extraFiles[envId] = template['extra-files'][
+        envId
+      ].map(({ name, file }) => ({
+        name,
+        file,
+        matches: bestMatchFileNames(file, firstTestId, tests, files)
+      }));
+      if (template['entry-point'][envId] !== undefined) {
+        entryPoint[envId] = template['entry-point'][envId];
       }
     }
-    return transformed;
-  };
+
+    transformations['extra-files'] = testId => {
+      const transformed = {};
+      for (const envId in extraFiles) {
+        transformed[envId] = extraFiles[envId]
+          .map(({ name, file, matches }) => ({
+            name:
+              name === file && matches && matches.testFiles[testId]
+                ? matches.testFiles[testId]
+                : name,
+            file: (matches && matches.testFiles[testId]) || file
+          }))
+          .filter(({ file }) => file); // remove records which do not have apropriate file
+      }
+      return transformed;
+    };
+
+    transformations['entry-point'] = testId => {
+      const transformed = {};
+      for (const envId in entryPoint) {
+        // Make sure a file with given name will exist after transformation ...
+        const file =
+          entryPoint[envId] &&
+          extraFiles[envId]
+            .map(({ name, file, matches }) => ({
+              name,
+              file: (matches && matches.testFiles[testId]) || file
+            }))
+            .find(({ name, file }) => file && name === entryPoint[envId]);
+        if (file) {
+          transformed[envId] = entryPoint[envId];
+        }
+      }
+      return transformed;
+    };
+  }
 
   return transformations;
 };
@@ -278,11 +332,12 @@ const getTestConfig = ({ form }, formName, testKey) =>
 /*
  * Main filling function. It fills all tests based on the first test template.
  */
-export const smartFillExerciseConfigForm = (
+const exerciseConfigFormSmartFill = (
   formName,
   firstTestId,
   tests,
-  files
+  files,
+  properties
 ) => (dispatch, getState) => {
   const state = getState();
   const firstTestKey = encodeNumId(firstTestId);
@@ -297,19 +352,7 @@ export const smartFillExerciseConfigForm = (
     tests.filter(({ id }) => encodeNumId(id) !== firstTestKey).map(test => {
       const testKey = encodeNumId(test.id);
       return Promise.all(
-        [
-          'inputStdin',
-          'inputFiles',
-          'runArgs',
-          'expectedOutput',
-          'useOutFile',
-          'outputFile',
-          'useCustomJudge',
-          'judgeBinary',
-          'customJudgeBinary',
-          'judgeArgs',
-          'compilation'
-        ]
+        properties
           .map(field => {
             const value = transformations[field]
               ? transformations[field](test.id, template[field])
@@ -326,5 +369,83 @@ export const smartFillExerciseConfigForm = (
   );
 };
 
-const reducer = handleActions(reduceActions, initialState);
+export const exerciseConfigFormSmartFillAll = (
+  formName,
+  firstTestId,
+  tests,
+  files
+) =>
+  exerciseConfigFormSmartFill(formName, firstTestId, tests, files, [
+    'stdin-file',
+    'input-files',
+    'run-args',
+    'expected-output',
+    'useOutFile',
+    'actual-output',
+    'useCustomJudge',
+    'judge-type',
+    'custom-judge',
+    'judge-args',
+    'extra-files',
+    'entry-point'
+  ]);
+
+export const exerciseConfigFormSmartFillInput = (
+  formName,
+  firstTestId,
+  tests,
+  files
+) =>
+  exerciseConfigFormSmartFill(formName, firstTestId, tests, files, [
+    'stdin-file',
+    'input-files'
+  ]);
+
+export const exerciseConfigFormSmartFillArgs = (
+  formName,
+  firstTestId,
+  tests,
+  files
+) =>
+  exerciseConfigFormSmartFill(formName, firstTestId, tests, files, [
+    'run-args'
+  ]);
+
+export const exerciseConfigFormSmartFillOutput = (
+  formName,
+  firstTestId,
+  tests,
+  files
+) =>
+  exerciseConfigFormSmartFill(formName, firstTestId, tests, files, [
+    'expected-output',
+    'useOutFile',
+    'actual-output'
+  ]);
+
+export const exerciseConfigFormSmartFillJudge = (
+  formName,
+  firstTestId,
+  tests,
+  files
+) =>
+  exerciseConfigFormSmartFill(formName, firstTestId, tests, files, [
+    'useCustomJudge',
+    'judge-type',
+    'custom-judge',
+    'judge-args'
+  ]);
+
+export const exerciseConfigFormSmartFillCompilation = (
+  formName,
+  firstTestId,
+  tests,
+  files
+) =>
+  exerciseConfigFormSmartFill(formName, firstTestId, tests, files, [
+    'extra-files',
+    'entry-point'
+  ]);
+
+export const reducer = handleActions(reduceActions, initialState);
 export default reducer;

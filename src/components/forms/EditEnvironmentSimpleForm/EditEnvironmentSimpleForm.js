@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { reduxForm, Field } from 'redux-form';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, intlShape, injectIntl } from 'react-intl';
 import { Alert, Row, Col } from 'react-bootstrap';
 
 import { CheckboxField } from '../Fields';
@@ -19,11 +19,28 @@ class EditEnvironmentSimpleForm extends Component {
       submitFailed,
       submitSucceeded,
       invalid,
-      runtimeEnvironments
+      error,
+      runtimeEnvironments,
+      intl: { locale }
     } = this.props;
 
     return (
       <div>
+        <Row>
+          {runtimeEnvironments
+            .sort((a, b) => a.longName.localeCompare(b.longName, locale))
+            .map((environment, i) =>
+              <Col key={i} xs={12} sm={6}>
+                <Field
+                  name={`${environment.id}`}
+                  component={CheckboxField}
+                  onOff
+                  label={environment.longName}
+                />
+              </Col>
+            )}
+        </Row>
+
         {submitFailed &&
           <Alert bsStyle="danger">
             <FormattedMessage
@@ -32,18 +49,10 @@ class EditEnvironmentSimpleForm extends Component {
             />
           </Alert>}
 
-        <Row>
-          {runtimeEnvironments.map((environment, i) =>
-            <Col key={i} xs={12} sm={6}>
-              <Field
-                name={`${environment.id}`}
-                component={CheckboxField}
-                onOff
-                label={environment.longName}
-              />
-            </Col>
-          )}
-        </Row>
+        {error &&
+          <Alert bsStyle="danger">
+            {error}
+          </Alert>}
 
         <div className="text-center">
           {dirty &&
@@ -103,28 +112,38 @@ EditEnvironmentSimpleForm.propTypes = {
   submitFailed: PropTypes.bool,
   submitSucceeded: PropTypes.bool,
   invalid: PropTypes.bool,
-  runtimeEnvironments: PropTypes.array
+  error: PropTypes.any,
+  runtimeEnvironments: PropTypes.array,
+  intl: intlShape.isRequired
 };
 
 const validate = formData => {
   const errors = {};
+  const allowedEnvrionmentsCount = Object.values(formData).filter(
+    value => value === true || value === 'true'
+  ).length;
 
-  if (
-    Object.values(formData).filter(value => value === true || value === 'true')
-      .length === 0
-  ) {
+  if (allowedEnvrionmentsCount === 0) {
     errors['_error'] = (
       <FormattedMessage
         id="app.editEnvironmentSimpleForm.validation.environments"
         defaultMessage="Please add at least one runtime environment."
       />
     );
+  } else if (formData['data-linux'] && allowedEnvrionmentsCount > 1) {
+    errors['_error'] = (
+      <FormattedMessage
+        id="app.editEnvironmentSimpleForm.validation.dataOnlyCollision"
+        defaultMessage="Data-Only environment cannot be combined with any other environment."
+      />
+    );
   }
-
   return errors;
 };
 
 export default reduxForm({
   form: 'editEnvironmentSimple',
+  enableReinitialize: true,
+  keepDirtyOnReinitialize: false,
   validate
-})(EditEnvironmentSimpleForm);
+})(injectIntl(EditEnvironmentSimpleForm));

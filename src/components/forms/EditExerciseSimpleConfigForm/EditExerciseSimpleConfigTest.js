@@ -4,7 +4,7 @@ import { Field, FieldArray } from 'redux-form';
 import { Well, Row, Col } from 'react-bootstrap';
 import { FormattedMessage, injectIntl, defineMessages } from 'react-intl';
 
-import { safeGet, EMPTY_ARRAY } from '../../../helpers/common';
+import { EMPTY_ARRAY } from '../../../helpers/common';
 import Button from '../../widgets/FlatButton';
 import Icon from '../../icons';
 import {
@@ -98,17 +98,12 @@ class EditExerciseSimpleConfigTest extends Component {
   };
 
   getPossibleEntryPoints = envId => {
-    const { compilationParams, environmetnsWithEntryPoints, intl } = this.props;
-    if (!environmetnsWithEntryPoints.find(e => e === envId)) {
+    const { extraFiles, environmetnsWithEntryPoints, intl } = this.props;
+    if (!environmetnsWithEntryPoints.includes(envId)) {
       return EMPTY_ARRAY;
     }
 
-    const files = safeGet(
-      compilationParams,
-      [envId, 'extra-files'],
-      EMPTY_ARRAY
-    );
-
+    const files = (extraFiles && extraFiles[envId]) || EMPTY_ARRAY;
     return files
       .filter(({ file, name }) => file && name)
       .map(({ name }) => ({
@@ -118,11 +113,23 @@ class EditExerciseSimpleConfigTest extends Component {
       .sort((a, b) => a.name.localeCompare(b.name, intl.locale));
   };
 
+  hasCompilationExtraFiles() {
+    const { extraFiles } = this.props;
+    if (!extraFiles) {
+      return false;
+    }
+    for (const files of Object.values(extraFiles)) {
+      if (files && files.length > 0) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   render() {
     const {
       supplementaryFiles,
       exercise,
-      hasCompilationExtraFiles,
       useOutFile,
       useCustomJudge,
       testName,
@@ -148,10 +155,10 @@ class EditExerciseSimpleConfigTest extends Component {
           </Col>
         </Row>
         {this.state.compilationOpen === true ||
-        (this.state.compilationOpen === null && hasCompilationExtraFiles)
+        (this.state.compilationOpen === null && this.hasCompilationExtraFiles())
           ? <Well>
               <h4 className="compilation-close" onClick={this.compilationClose}>
-                <Icon icon="minus-square" gapRight />
+                <Icon icon={['far', 'minus-square']} gapRight />
                 <FormattedMessage
                   id="app.editExerciseSimpleConfigTests.compilationTitle"
                   defaultMessage="Compilation/Execution"
@@ -181,7 +188,7 @@ class EditExerciseSimpleConfigTest extends Component {
                                 {env.name}
                               </h5>
                               <FieldArray
-                                name={`${test}.compilation.${env.id}.extra-files`}
+                                name={`${test}.extra-files.${env.id}`}
                                 component={ExpandingInputFilesField}
                                 options={supplementaryFilesOptions}
                                 leftLabel={
@@ -200,7 +207,7 @@ class EditExerciseSimpleConfigTest extends Component {
                               <br />
                               {possibleEntryPoints.length > 0 &&
                                 <Field
-                                  name={`${test}.compilation.${env.id}.entryPoint`}
+                                  name={`${test}.entry-point.${env.id}`}
                                   component={SelectField}
                                   options={this.getPossibleEntryPoints(env.id)}
                                   addEmptyOption={true}
@@ -218,12 +225,38 @@ class EditExerciseSimpleConfigTest extends Component {
                   </tbody>
                 </table>
               </div>
+              {Boolean(smartFill) &&
+                <div className="smart-fill-tinybar">
+                  <Confirm
+                    id="smartFillCompilation"
+                    onConfirmed={smartFill.compilation}
+                    question={
+                      <FormattedMessage
+                        id="app.editExerciseConfigForm.smartFillCompilation.yesNoQuestion"
+                        defaultMessage="Do you really wish to overwrite compilation and execution configuration of all subsequent tests using the first test as a template? Files will be paired to individual test configurations by a heuristics based on matching name substrings."
+                      />
+                    }
+                  >
+                    <Button
+                      bsStyle={'primary'}
+                      className="btn-flat"
+                      bsSize="xs"
+                      disabled={Boolean(testErrors)}
+                    >
+                      <Icon icon="arrows-alt" gapRight />
+                      <FormattedMessage
+                        id="app.editExerciseConfigForm.smartFillCompilation"
+                        defaultMessage="Smart Fill Compilation"
+                      />
+                    </Button>
+                  </Confirm>
+                </div>}
             </Well>
           : <div
               className="text-muted compilation-open"
               onClick={this.compilationOpen}
             >
-              <Icon icon="plus-square" gapRight />
+              <Icon icon={['far', 'plus-square']} gapRight />
               <FormattedMessage
                 id="app.editExerciseSimpleConfigTests.compilationTitle"
                 defaultMessage="Compilation/Execution"
@@ -238,7 +271,7 @@ class EditExerciseSimpleConfigTest extends Component {
               />
             </h4>
             <FieldArray
-              name={`${test}.inputFiles`}
+              name={`${test}.input-files`}
               component={ExpandingInputFilesField}
               options={supplementaryFilesOptions}
               leftLabel={
@@ -255,7 +288,7 @@ class EditExerciseSimpleConfigTest extends Component {
               }
             />
             <Field
-              name={`${test}.inputStdin`}
+              name={`${test}.stdin-file`}
               component={SelectField}
               options={supplementaryFilesOptions}
               addEmptyOption={true}
@@ -266,6 +299,32 @@ class EditExerciseSimpleConfigTest extends Component {
                 />
               }
             />
+            {Boolean(smartFill) &&
+              <div className="smart-fill-tinybar">
+                <Confirm
+                  id="smartFillInput"
+                  onConfirmed={smartFill.input}
+                  question={
+                    <FormattedMessage
+                      id="app.editExerciseConfigForm.smartFillInput.yesNoQuestion"
+                      defaultMessage="Do you really wish to overwrite input configuration of all subsequent tests using the first test as a template? Files will be paired to individual test configurations by a heuristics based on matching name substrings."
+                    />
+                  }
+                >
+                  <Button
+                    bsStyle={'primary'}
+                    className="btn-flat"
+                    bsSize="xs"
+                    disabled={Boolean(testErrors)}
+                  >
+                    <Icon icon="arrows-alt" gapRight />
+                    <FormattedMessage
+                      id="app.editExerciseConfigForm.smartFillInput"
+                      defaultMessage="Smart Fill Inputs"
+                    />
+                  </Button>
+                </Confirm>
+              </div>}
           </Col>
           <Col md={6} lg={3}>
             <h4>
@@ -275,7 +334,7 @@ class EditExerciseSimpleConfigTest extends Component {
               />
             </h4>
             <FieldArray
-              name={`${test}.runArgs`}
+              name={`${test}.run-args`}
               component={ExpandingTextField}
               label={
                 <FormattedMessage
@@ -284,6 +343,32 @@ class EditExerciseSimpleConfigTest extends Component {
                 />
               }
             />
+            {Boolean(smartFill) &&
+              <div className="smart-fill-tinybar">
+                <Confirm
+                  id="smartFillArgs"
+                  onConfirmed={smartFill.args}
+                  question={
+                    <FormattedMessage
+                      id="app.editExerciseConfigForm.smartFillArgs.yesNoQuestion"
+                      defaultMessage="Do you really wish to overwrite command line configuration of all subsequent tests using the first test as a template?"
+                    />
+                  }
+                >
+                  <Button
+                    bsStyle={'primary'}
+                    className="btn-flat"
+                    bsSize="xs"
+                    disabled={Boolean(testErrors)}
+                  >
+                    <Icon icon="arrows-alt" gapRight />
+                    <FormattedMessage
+                      id="app.editExerciseConfigForm.smartFillArgs"
+                      defaultMessage="Smart Fill Arguments"
+                    />
+                  </Button>
+                </Confirm>
+              </div>}
           </Col>
           <Col md={6} lg={3}>
             <h4>
@@ -305,7 +390,7 @@ class EditExerciseSimpleConfigTest extends Component {
             />
             {useOutFile &&
               <Field
-                name={`${test}.outputFile`}
+                name={`${test}.actual-output`}
                 component={TextField}
                 validate={validateOutputFile}
                 label={
@@ -316,7 +401,7 @@ class EditExerciseSimpleConfigTest extends Component {
                 }
               />}
             <Field
-              name={`${test}.expectedOutput`}
+              name={`${test}.expected-output`}
               component={SelectField}
               options={supplementaryFilesOptions}
               addEmptyOption={true}
@@ -328,6 +413,32 @@ class EditExerciseSimpleConfigTest extends Component {
                 />
               }
             />
+            {Boolean(smartFill) &&
+              <div className="smart-fill-tinybar">
+                <Confirm
+                  id="smartFillOutput"
+                  onConfirmed={smartFill.output}
+                  question={
+                    <FormattedMessage
+                      id="app.editExerciseConfigForm.smartFillOutput.yesNoQuestion"
+                      defaultMessage="Do you really wish to overwrite output configuration of all subsequent tests using the first test as a template? Files will be paired to individual test configurations by a heuristics based on matching name substrings."
+                    />
+                  }
+                >
+                  <Button
+                    bsStyle={'primary'}
+                    className="btn-flat"
+                    bsSize="xs"
+                    disabled={Boolean(testErrors)}
+                  >
+                    <Icon icon="arrows-alt" gapRight />
+                    <FormattedMessage
+                      id="app.editExerciseConfigForm.smartFillOutput"
+                      defaultMessage="Smart Fill Outputs"
+                    />
+                  </Button>
+                </Confirm>
+              </div>}
           </Col>
           <Col md={6} lg={3}>
             <h4>
@@ -349,7 +460,7 @@ class EditExerciseSimpleConfigTest extends Component {
             />
             {useCustomJudge
               ? <Field
-                  name={`${test}.customJudgeBinary`}
+                  name={`${test}.custom-judge`}
                   component={SelectField}
                   options={supplementaryFilesOptions}
                   addEmptyOption={true}
@@ -362,7 +473,7 @@ class EditExerciseSimpleConfigTest extends Component {
                   }
                 />
               : <Field
-                  name={`${test}.judgeBinary`}
+                  name={`${test}.judge-type`}
                   component={SelectField}
                   options={[
                     {
@@ -411,7 +522,7 @@ class EditExerciseSimpleConfigTest extends Component {
                 />}
             {useCustomJudge &&
               <FieldArray
-                name={`${test}.judgeArgs`}
+                name={`${test}.judge-args`}
                 component={ExpandingTextField}
                 label={
                   <FormattedMessage
@@ -421,32 +532,58 @@ class EditExerciseSimpleConfigTest extends Component {
                 }
               />}
             {Boolean(smartFill) &&
-              <div style={{ textAlign: 'right', padding: '1em' }}>
+              <div className="smart-fill-tinybar">
                 <Confirm
-                  id={'smartFill'}
-                  onConfirmed={smartFill}
+                  id="smartFillJudge"
+                  onConfirmed={smartFill.judge}
                   question={
                     <FormattedMessage
-                      id="app.editExerciseConfigForm.smartFill.yesNoQuestion"
-                      defaultMessage="Do you really wish to overwrite configuration of all subsequent tests using the first test as a template? Files will be paired to individual test configurations by a heuristics based on matching name substrings."
+                      id="app.editExerciseConfigForm.smartFillJudge.yesNoQuestion"
+                      defaultMessage="Do you really wish to overwrite judge configuration of all subsequent tests using the first test as a template? Files will be paired to individual test configurations by a heuristics based on matching name substrings."
                     />
                   }
                 >
                   <Button
                     bsStyle={'primary'}
                     className="btn-flat"
+                    bsSize="xs"
                     disabled={Boolean(testErrors)}
                   >
                     <Icon icon="arrows-alt" gapRight />
                     <FormattedMessage
-                      id="app.editExerciseConfigForm.smartFill"
-                      defaultMessage="Smart Fill"
+                      id="app.editExerciseConfigForm.smartFillJudge"
+                      defaultMessage="Smart Fill Judges"
                     />
                   </Button>
                 </Confirm>
               </div>}
           </Col>
         </Row>
+        {Boolean(smartFill) &&
+          <div className="smart-fill-bar">
+            <Confirm
+              id="smartFillAll"
+              onConfirmed={smartFill.all}
+              question={
+                <FormattedMessage
+                  id="app.editExerciseConfigForm.smartFillAll.yesNoQuestion"
+                  defaultMessage="Do you really wish to overwrite configuration of all subsequent tests using the first test as a template? Files will be paired to individual test configurations by a heuristics based on matching name substrings."
+                />
+              }
+            >
+              <Button
+                bsStyle={'primary'}
+                className="btn-flat"
+                disabled={Boolean(testErrors)}
+              >
+                <Icon icon="arrows-alt" gapRight />
+                <FormattedMessage
+                  id="app.editExerciseConfigForm.smartFillAll"
+                  defaultMessage="Smart Fill All"
+                />
+              </Button>
+            </Confirm>
+          </div>}
       </div>
     );
   }
@@ -458,13 +595,12 @@ EditExerciseSimpleConfigTest.propTypes = {
   test: PropTypes.string.isRequired,
   supplementaryFiles: PropTypes.array.isRequired,
   exerciseTests: PropTypes.array,
-  hasCompilationExtraFiles: PropTypes.bool,
+  extraFiles: PropTypes.object,
   useOutFile: PropTypes.bool,
   useCustomJudge: PropTypes.bool,
-  compilationParams: PropTypes.object,
   environmetnsWithEntryPoints: PropTypes.array.isRequired,
   testErrors: PropTypes.object,
-  smartFill: PropTypes.func,
+  smartFill: PropTypes.object,
   intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired
 };
 

@@ -11,7 +11,7 @@ import FormBox from '../../widgets/FormBox';
 import Button from '../../widgets/FlatButton';
 import { RefreshIcon } from '../../icons';
 import { encodeId, encodeNumId } from '../../../helpers/common';
-import { validateLimitsTimeTotals } from '../../../helpers/exerciseLimits';
+import { validateLimitsTimeTotals } from '../../../helpers/exercise/limits';
 
 import styles from './styles.less';
 
