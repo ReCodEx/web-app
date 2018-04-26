@@ -344,7 +344,7 @@ class GroupDetail extends Component {
                           <AddIcon gapRight />
                           <FormattedMessage
                             id="app.group.createExercise"
-                            defaultMessage="Add group exercise"
+                            defaultMessage="Create Exercise in Group"
                           />
                         </Button>
                       </p>
