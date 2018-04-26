@@ -2,10 +2,11 @@ import { defaultMemoize } from 'reselect';
 import {
   safeGet,
   encodeNumId,
-  unique,
   identity,
   EMPTY_ARRAY
 } from '../../helpers/common';
+
+export const DATA_ONLY_ID = 'data-linux';
 
 /**
  * Base class for all pipeline variables being edited in the config form.
@@ -27,9 +28,9 @@ class Variable {
       defaultValue !== undefined
         ? defaultValue
         : this.isArray ? EMPTY_ARRAY : '';
-    this.pipelineFilter = [
-      compilationPipeline ? 'isCompilationPipeline' : 'isExecutionPipeline'
-    ]; // list of pipeline properties that must be true (idetify pipeline, where the var belongs to)
+    this.pipelineFilter = {
+      isCompilationPipeline: Boolean(compilationPipeline)
+    };
     this.transformPostprocess = identity;
   }
 
@@ -52,11 +53,21 @@ class Variable {
 
   /**
    * Add pipeline filter (property, that must be set in the pipeline).
-   * Only pipelines matching these properties are searched for the variable
+   * Only pipelines matching these parameters are searched for the variable.
+   * @param {*} parameters Object with property names as keys and bools as false,
+   *                       or an array with property names (their values are set to true).
    */
-  setPipelineFilter(properties) {
-    properties = Array.isArray(properties) ? properties : [properties];
-    this.pipelineFilter = unique([...this.pipelineFilter, ...properties]);
+  setPipelineFilter(parameters) {
+    if (typeof parameters === 'object') {
+      for (const param in parameters) {
+        this.pipelineFilter[param] = Boolean(parameters[param]);
+      }
+    } else {
+      parameters = Array.isArray(parameters) ? parameters : [parameters];
+      parameters.forEach(param => {
+        this.pipelineFilter[param] = true;
+      });
+    }
     return this;
   }
 
@@ -64,10 +75,15 @@ class Variable {
    * Should the variable be searched in/set in a particular pipeline?
    */
   isApplicableForPipeline(pipeline) {
-    return this.pipelineFilter.reduce(
-      (res, param) => res && pipeline.parameters[param],
-      true
-    );
+    for (const param in this.pipelineFilter) {
+      if (
+        pipeline.parameters[param] === undefined ||
+        Boolean(pipeline.parameters[param]) !== this.pipelineFilter[param]
+      ) {
+        return false;
+      }
+    }
+    return true;
   }
 
   // Internal reusable function that fetches value of a variable (by given parameters) from a list of pipelines.
@@ -253,6 +269,16 @@ const PIPELINE_VARS_DESCRIPTORS = [
     .setTransformPostprocess((value, formDataTest) => value || '$entry-point')
 ];
 
+// Restrict all variables except for data-only variables not to enter data-only pipeline...
+const DATA_ONLY_VARS = ['input-files', 'run-args', 'custom-judge'];
+PIPELINE_VARS_DESCRIPTORS.forEach(v => {
+  if (!DATA_ONLY_VARS.includes(v.name)) {
+    v.setPipelineFilter({
+      judgeOnlyPipeline: false
+    });
+  }
+});
+
 /**
  * Prepare the initial form data for configuration form ...
  */
@@ -274,11 +300,15 @@ export const getSimpleConfigInitValues = defaultMemoize(
         }
       });
 
-      // Additional updates after simple variables were set
-      testObj.useOutFile = Boolean(testObj['actual-output']);
-      testObj.useCustomJudge = Boolean(testObj['custom-judge']);
-      if (testObj.useCustomJudge) {
-        testObj['judge-type'] = '';
+      if (!environmentsIds.includes(DATA_ONLY_ID)) {
+        // Special derived properties, which are present only in non-data-only exercises.
+        testObj.useOutFile = Boolean(testObj['actual-output']);
+        testObj.useCustomJudge = Boolean(testObj['custom-judge']);
+        if (testObj.useCustomJudge) {
+          testObj['judge-type'] = '';
+        }
+      } else {
+        testObj.useCustomJudge = true;
       }
 
       res[encodeNumId(test.id)] = testObj;
@@ -296,6 +326,37 @@ const mergeVariables = (newVars, origVars) => {
   origVars.forEach(v => vars.set(v.name, v));
   newVars.forEach(v => vars.set(v.name, v)); // override origs
   return Array.from(vars.values());
+};
+
+// Filter out all pipelines relevant for current environment and settings ...
+const getRelevantPipelines = (pipelines, envId, useOutFile) => {
+  pipelines = pipelines.filter(pipeline =>
+    pipeline.runtimeEnvironmentIds.includes(envId)
+  );
+
+  if (envId === DATA_ONLY_ID) {
+    pipelines = pipelines.filter(
+      pipeline => pipeline.parameters.judgeOnlyPipeline
+    );
+  } else {
+    // We need to select execution pipeline type based on a checkbox (for non-data-only exercises)
+    pipelines = pipelines.filter(
+      pipeline =>
+        !pipeline.parameters.judgeOnlyPipeline &&
+        (!pipeline.parameters.isExecutionPipeline ||
+          (useOutFile
+            ? pipeline.parameters.producesFiles
+            : pipeline.parameters.producesStdout))
+    );
+  }
+
+  return pipelines.sort(
+    // make sure compilation pipeline is first
+    (a, b) =>
+      a.parameters.isCompilationPipeline
+        ? -1
+        : b.parameters.isCompilationPipeline ? 1 : 0
+  );
 };
 
 /**
@@ -318,46 +379,33 @@ export const transformConfigValues = (
       const testName = t.id;
       const test = formData.config[encodeNumId(testName)];
 
-      const pipelinesConfig = pipelines
-        .filter(
-          // get all relevant pipelines ...
-          pipeline =>
-            pipeline.runtimeEnvironmentIds.includes(envId) &&
-            (!pipeline.parameters.isExecutionPipeline ||
-              (test.useOutFile
-                ? pipeline.parameters.producesFiles
-                : pipeline.parameters.producesStdout))
-        )
-        .sort(
-          // make sure compilation pipeline is first
-          (a, b) =>
-            a.parameters.isCompilationPipeline
-              ? -1
-              : b.parameters.isCompilationPipeline ? 1 : 0
-        )
-        .map(pipeline => {
-          // Load original variables from the pipeline conifg ...
-          const originalVariables =
-            safeGet(originalConfig, [
-              config => config.name === envId,
-              'tests',
-              t => t.name === testName,
-              'pipelines',
-              p => p.name === pipeline.id,
-              'variables'
-            ]) || [];
+      const pipelinesConfig = getRelevantPipelines(
+        pipelines,
+        envId,
+        test.useOutFile
+      ).map(pipeline => {
+        // Load original variables from the pipeline conifg ...
+        const originalVariables =
+          safeGet(originalConfig, [
+            config => config.name === envId,
+            'tests',
+            t => t.name === testName,
+            'pipelines',
+            p => p.name === pipeline.id,
+            'variables'
+          ]) || [];
 
-          // Construct new variables from the form data ...
-          const variables = [];
-          PIPELINE_VARS_DESCRIPTORS.filter(v =>
-            v.isApplicableForPipeline(pipeline)
-          ).forEach(v => variables.push(...v.transform(test, envId)));
+        // Construct new variables from the form data ...
+        const variables = [];
+        PIPELINE_VARS_DESCRIPTORS.filter(v =>
+          v.isApplicableForPipeline(pipeline)
+        ).forEach(v => variables.push(...v.transform(test, envId)));
 
-          return {
-            name: pipeline.id,
-            variables: mergeVariables(variables, originalVariables)
-          };
-        });
+        return {
+          name: pipeline.id,
+          variables: mergeVariables(variables, originalVariables)
+        };
+      });
 
       testsCfg.push({
         name: testName,

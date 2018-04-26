@@ -155,12 +155,6 @@ class EditExerciseSimpleConfig extends Component {
       intl: { locale }
     } = this.props;
 
-    /* console.log(
-      Object.values(pipelines.toJS())
-        .map(obj => obj && obj.data)
-        .filter(p => p)
-        .filter(p => p.runtimeEnvironmentIds.includes('cxx-gcc-linux'))
-    ); */
     return (
       <Page
         resource={[exercise, exerciseTests]}
@@ -312,6 +306,11 @@ class EditExerciseSimpleConfig extends Component {
                                 environmetnsWithEntryPoints={
                                   environmetnsWithEntryPoints
                                 }
+                                dataOnly={Boolean(
+                                  exercise.runtimeEnvironments.find(
+                                    env => env.id === 'data-linux'
+                                  )
+                                )}
                                 onSubmit={this.transformAndSendConfigValuesCreator(
                                   pipelines,
                                   envConfig,

@@ -13,6 +13,7 @@ import SubmitButton from '../SubmitButton';
 import ResourceRenderer from '../../helpers/ResourceRenderer';
 
 import EditExerciseSimpleConfigTest from './EditExerciseSimpleConfigTest';
+import EditExerciseSimpleConfigDataTest from './EditExerciseSimpleConfigDataTest';
 import { getSupplementaryFilesForExercise } from '../../../redux/selectors/supplementaryFiles';
 import { encodeNumId, createIndex, safeSet } from '../../../helpers/common';
 import {
@@ -28,6 +29,7 @@ import { exerciseConfigFormErrors } from '../../../redux/selectors/exerciseConfi
 class EditExerciseSimpleConfigForm extends Component {
   render() {
     const {
+      dataOnly,
       reset,
       handleSubmit,
       submitting,
@@ -46,112 +48,144 @@ class EditExerciseSimpleConfigForm extends Component {
     } = this.props;
 
     return (
-      <FormBox
-        title={
-          <FormattedMessage
-            id="app.editExercise.editConfig"
-            defaultMessage="Edit exercise configuration"
-          />
-        }
-        unlimitedHeight
-        noPadding
-        success={submitSucceeded}
-        dirty={dirty}
-        footer={
-          <div className="text-center">
-            {dirty &&
-              <span>
-                <Button
-                  type="reset"
-                  onClick={reset}
-                  bsStyle={'danger'}
-                  className="btn-flat"
-                >
-                  <RefreshIcon gapRight />
-                  <FormattedMessage id="generic.reset" defaultMessage="Reset" />
-                </Button>
-              </span>}
-
-            <SubmitButton
-              id="editExerciseSimpleConfig"
-              invalid={invalid}
-              submitting={submitting}
-              dirty={dirty}
-              hasSucceeded={submitSucceeded}
-              hasFailed={submitFailed}
-              handleSubmit={handleSubmit}
-              messages={{
-                submit: (
-                  <FormattedMessage
-                    id="app.editExerciseSimpleConfigForm.submit"
-                    defaultMessage="Save Configuration"
-                  />
-                ),
-                submitting: (
-                  <FormattedMessage
-                    id="app.editExerciseSimpleConfigForm.submitting"
-                    defaultMessage="Saving Configuration ..."
-                  />
-                ),
-                success: (
-                  <FormattedMessage
-                    id="app.editExerciseSimpleConfigForm.success"
-                    defaultMessage="Configuration Saved."
-                  />
-                ),
-                validating: (
-                  <FormattedMessage
-                    id="generic.validating"
-                    defaultMessage="Validating ..."
-                  />
-                )
-              }}
-            />
-          </div>
-        }
-      >
-        {submitFailed &&
-          <Alert bsStyle="danger">
+      <div>
+        {dataOnly &&
+          <div className="callout callout-info">
+            <p>
+              <FormattedMessage
+                id="app.editExerciseSimpleConfigForm.isDataOnly"
+                defaultMessage="The exercise is configured as data-only. It means there is no compilation, the student submits only data, and the data are verified using custom judge. The time and memory limits are applied on the judge itself."
+              />
+            </p>
+          </div>}
+        <FormBox
+          title={
             <FormattedMessage
-              id="generic.savingFailed"
-              defaultMessage="Saving failed. Please try again later."
+              id="app.editExercise.editConfig"
+              defaultMessage="Edit exercise configuration"
             />
-          </Alert>}
-        <ResourceRenderer resource={supplementaryFiles.toArray()}>
-          {(...files) =>
-            <div>
-              {exerciseTests
-                .sort((a, b) => a.name.localeCompare(b.name, locale))
-                .map((test, idx) => {
-                  const testData =
-                    formValues &&
-                    formValues.config &&
-                    formValues.config[encodeNumId(test.id)];
-                  return (
-                    <EditExerciseSimpleConfigTest
-                      key={idx}
-                      exercise={exercise}
-                      extraFiles={testData && testData['extra-files']}
-                      useOutFile={testData && testData.useOutFile}
-                      useCustomJudge={testData && testData.useCustomJudge}
-                      environmetnsWithEntryPoints={environmetnsWithEntryPoints}
-                      supplementaryFiles={files}
-                      testName={test.name}
-                      test={'config.' + encodeNumId(test.id)}
-                      testErrors={
-                        formErrors && formErrors[encodeNumId(test.id)]
-                      }
-                      smartFill={
-                        idx === 0
-                          ? smartFill(test.id, exerciseTests, files)
-                          : undefined
-                      }
+          }
+          unlimitedHeight
+          noPadding
+          success={submitSucceeded}
+          dirty={dirty}
+          footer={
+            <div className="text-center">
+              {dirty &&
+                <span>
+                  <Button
+                    type="reset"
+                    onClick={reset}
+                    bsStyle={'danger'}
+                    className="btn-flat"
+                  >
+                    <RefreshIcon gapRight />
+                    <FormattedMessage
+                      id="generic.reset"
+                      defaultMessage="Reset"
                     />
-                  );
-                })}
-            </div>}
-        </ResourceRenderer>
-      </FormBox>
+                  </Button>
+                </span>}
+
+              <SubmitButton
+                id="editExerciseSimpleConfig"
+                invalid={invalid}
+                submitting={submitting}
+                dirty={dirty}
+                hasSucceeded={submitSucceeded}
+                hasFailed={submitFailed}
+                handleSubmit={handleSubmit}
+                messages={{
+                  submit: (
+                    <FormattedMessage
+                      id="app.editExerciseSimpleConfigForm.submit"
+                      defaultMessage="Save Configuration"
+                    />
+                  ),
+                  submitting: (
+                    <FormattedMessage
+                      id="app.editExerciseSimpleConfigForm.submitting"
+                      defaultMessage="Saving Configuration ..."
+                    />
+                  ),
+                  success: (
+                    <FormattedMessage
+                      id="app.editExerciseSimpleConfigForm.success"
+                      defaultMessage="Configuration Saved."
+                    />
+                  ),
+                  validating: (
+                    <FormattedMessage
+                      id="generic.validating"
+                      defaultMessage="Validating ..."
+                    />
+                  )
+                }}
+              />
+            </div>
+          }
+        >
+          {submitFailed &&
+            <Alert bsStyle="danger">
+              <FormattedMessage
+                id="generic.savingFailed"
+                defaultMessage="Saving failed. Please try again later."
+              />
+            </Alert>}
+          <ResourceRenderer resource={supplementaryFiles.toArray()}>
+            {(...files) =>
+              <div>
+                {exerciseTests
+                  .sort((a, b) => a.name.localeCompare(b.name, locale))
+                  .map((test, idx) => {
+                    const testData =
+                      formValues &&
+                      formValues.config &&
+                      formValues.config[encodeNumId(test.id)];
+                    return dataOnly
+                      ? <EditExerciseSimpleConfigDataTest
+                          key={idx}
+                          environmetnsWithEntryPoints={
+                            environmetnsWithEntryPoints
+                          }
+                          supplementaryFiles={files}
+                          testName={test.name}
+                          test={'config.' + encodeNumId(test.id)}
+                          testErrors={
+                            formErrors && formErrors[encodeNumId(test.id)]
+                          }
+                          smartFill={
+                            idx === 0
+                              ? smartFill(test.id, exerciseTests, files)
+                              : undefined
+                          }
+                        />
+                      : <EditExerciseSimpleConfigTest
+                          key={idx}
+                          exercise={exercise}
+                          extraFiles={testData && testData['extra-files']}
+                          useOutFile={testData && testData.useOutFile}
+                          useCustomJudge={testData && testData.useCustomJudge}
+                          environmetnsWithEntryPoints={
+                            environmetnsWithEntryPoints
+                          }
+                          supplementaryFiles={files}
+                          testName={test.name}
+                          test={'config.' + encodeNumId(test.id)}
+                          testErrors={
+                            formErrors && formErrors[encodeNumId(test.id)]
+                          }
+                          smartFill={
+                            idx === 0
+                              ? smartFill(test.id, exerciseTests, files)
+                              : undefined
+                          }
+                        />;
+                  })}
+              </div>}
+          </ResourceRenderer>
+        </FormBox>
+      </div>
     );
   }
 }
@@ -159,6 +193,7 @@ class EditExerciseSimpleConfigForm extends Component {
 EditExerciseSimpleConfigForm.propTypes = {
   initialValues: PropTypes.object,
   reset: PropTypes.func.isRequired,
+  dataOnly: PropTypes.bool.isRequired,
   handleSubmit: PropTypes.func.isRequired,
   submitting: PropTypes.bool,
   hasFailed: PropTypes.bool,
@@ -179,7 +214,7 @@ EditExerciseSimpleConfigForm.propTypes = {
 
 const FORM_NAME = 'editExerciseSimpleConfig';
 
-const validate = formData => {
+const validate = (formData, { dataOnly }) => {
   const errors = {};
 
   for (const testKey in formData.config) {

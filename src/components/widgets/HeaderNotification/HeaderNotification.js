@@ -78,14 +78,20 @@ class HeaderNotification extends Component {
                       hide && hide(id);
                     }}
                   >
-                    <DeleteIcon className="fa text-red" />
+                    <DeleteIcon
+                      className="fa text-red"
+                      smallGapRight
+                      fixedWidth
+                    />
                   </span>
-                : successful ? <SuccessIcon /> : <WarningIcon />}
+                : successful
+                  ? <SuccessIcon smallGapRight fixedWidth />
+                  : <WarningIcon smallGapRight fixedWidth />}
             </span>
             <span className="fa">
               <span className={styles.copy} ref={copy => (this.copy = copy)}>
                 <CopyToClipboard text={msg} onCopy={() => this.onCopy()}>
-                  <CopyIcon />
+                  <CopyIcon gapRight fixedWidth />
                 </CopyToClipboard>
               </span>
               <Overlay

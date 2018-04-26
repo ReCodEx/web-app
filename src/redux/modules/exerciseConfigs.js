@@ -156,23 +156,36 @@ const computeMatching = ({
   return { penalty, testFiles: matching.testFiles };
 };
 
-// Compute indices where are good split points for a string using Given regex identifies separators.
-const computePossibleSplitPoints = (str, regex) => {
-  const res = [0];
-  let lastIdx;
-  let offset = 0;
-  let s = str;
-  while ((lastIdx = s.search(regex)) >= 0) {
-    if (lastIdx > 0 || offset === 0) {
-      res.push(offset + lastIdx);
-      s = s.substr(++lastIdx); // new search must skip at least first characeter of the separator
-      offset += lastIdx;
-    } else {
-      // separator found at beginning -> it is a continuation of previous separator
-      ++offset;
-      s = s.substr(1);
+// Helper function that returns a category name for given character (letter, diggit, separator, or other).
+const getCharacterCategory = char => {
+  if (!char || char.length > 1) {
+    return null;
+  }
+
+  const letterCategories = {
+    letter: /[a-zA-Z]/,
+    diggit: /[0-9]/,
+    separator: /[-_.]/
+  };
+  for (const cat in letterCategories) {
+    if (char.match(letterCategories[cat])) {
+      return cat;
     }
   }
+  return 'other';
+};
+
+// Compute indices where are good split points for a string using Given regex identifies separators.
+const computePossibleSplitPoints = str => {
+  let lastCategory = null;
+  const res = [];
+  [...str].forEach((char, idx) => {
+    const cat = getCharacterCategory(char);
+    if (cat !== lastCategory) {
+      res.push(idx);
+      lastCategory = cat;
+    }
+  });
   res.push(str.length);
   return res;
 };
@@ -180,7 +193,7 @@ const computePossibleSplitPoints = (str, regex) => {
 // Compute a set of all possible prefix-suffix pairs from given fileName.
 // Each continuous sequence of non-alphanumeric characters is a possible separation point to start/end a suffix/prefix.
 const computePossiblePrefixesSuffixes = fileName => {
-  const splitPoints = computePossibleSplitPoints(fileName, /[^a-z0-9]/);
+  const splitPoints = computePossibleSplitPoints(fileName, /[^a-zA-Z0-9]/);
   const res = [];
   splitPoints.forEach(left =>
     splitPoints.filter(right => left < right).forEach(right =>
@@ -245,7 +258,10 @@ const prepareTransformations = (template, firstTestId, tests, files) => {
       inputFiles
         .map(({ name, file, matches }) => ({
           // convert the template into an instance by selecting appropriate file
-          name,
+          name:
+            name === file && matches && matches.testFiles[testId]
+              ? matches.testFiles[testId]
+              : name,
           file: matches ? matches.testFiles[testId] || undefined : file // apply matches if possible, use original file name if no matching was established
         }))
         .filter(({ file }) => file); // remove records which do not have apropriate file
@@ -273,7 +289,10 @@ const prepareTransformations = (template, firstTestId, tests, files) => {
       for (const envId in extraFiles) {
         transformed[envId] = extraFiles[envId]
           .map(({ name, file, matches }) => ({
-            name,
+            name:
+              name === file && matches && matches.testFiles[testId]
+                ? matches.testFiles[testId]
+                : name,
             file: (matches && matches.testFiles[testId]) || file
           }))
           .filter(({ file }) => file); // remove records which do not have apropriate file
