@@ -8,7 +8,8 @@ const FakeAvatar = ({
   borderWidth = 2,
   light = false,
   children,
-  small = false
+  small = false,
+  ...props
 }) =>
   <span
     style={{
@@ -26,6 +27,7 @@ const FakeAvatar = ({
       fontSize: Math.floor(Math.max(14, getSize(size, small) / 2)),
       fontWeight: 'bolder'
     }}
+    {...props}
   >
     {children}
   </span>;

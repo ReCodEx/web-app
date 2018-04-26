@@ -21,7 +21,7 @@ const UsersName = ({
 }) =>
   <span className={styles.wrapper}>
     <span className={styles.avatar}>
-      {useGravatar
+      {useGravatar && avatarUrl !== null
         ? <Avatar size={size} src={avatarUrl} title={fullName} />
         : <FakeAvatar size={size}>
             {fullName[0]}

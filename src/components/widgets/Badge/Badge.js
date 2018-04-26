@@ -34,7 +34,7 @@ class Badge extends Component {
     return (
       <div className="user-panel">
         <div className="pull-left image">
-          {!failedLoadingImage && settings.useGravatar
+          {!failedLoadingImage && settings.useGravatar && avatarUrl !== null
             ? <Avatar
                 size={size}
                 src={avatarUrl}
