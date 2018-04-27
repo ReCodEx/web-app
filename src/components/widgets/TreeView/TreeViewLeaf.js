@@ -6,7 +6,6 @@ import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 
 import Icon, { LoadingIcon, GroupIcon } from '../../icons';
 import LevelGap from './LevelGap';
-import GroupsName from '../../../components/Groups/GroupsName';
 import UsersNameContainer from '../../../containers/UsersNameContainer';
 
 const TreeViewLeaf = ({
@@ -86,10 +85,7 @@ const TreeViewLeaf = ({
 TreeViewLeaf.propTypes = {
   id: PropTypes.string,
   loading: PropTypes.bool,
-  title: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage, GroupsName]) })
-  ]).isRequired,
+  title: PropTypes.oneOfType([PropTypes.string, PropTypes.element]).isRequired,
   admins: PropTypes.array,
   organizational: PropTypes.bool,
   isPublic: PropTypes.bool,

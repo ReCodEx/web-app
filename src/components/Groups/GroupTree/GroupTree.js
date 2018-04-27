@@ -12,6 +12,13 @@ import { getLocalizedResourceName } from '../../../helpers/getLocalizedData';
 import { GroupIcon } from '../../icons';
 import withLinks from '../../../helpers/withLinks';
 
+const conditionalEmphasize = (content, condition) =>
+  condition
+    ? <strong>
+        {content}
+      </strong>
+    : content;
+
 class GroupTree extends Component {
   renderLoading = level =>
     <TreeView>
@@ -56,9 +63,10 @@ class GroupTree extends Component {
 
   renderChildGroups = (
     { all: allChildGroups, public: publicChildGroups },
-    visibleGroupsMap
+    visibleGroupsMap,
+    level
   ) => {
-    const { level = 0, isOpen = false, groups, intl: { locale } } = this.props;
+    const { isOpen = false, groups, intl: { locale } } = this.props;
     return allChildGroups
       .filter(id => visibleGroupsMap[id])
       .sort((id1, id2) => {
@@ -89,15 +97,20 @@ class GroupTree extends Component {
       isPublic = false,
       groups,
       currentGroupId = null,
-      visibleGroupsMap = null
+      visibleGroupsMap = null,
+      ancestralPath = null
     } = this.props;
 
-    const group = groups.get(id);
+    const onAncestralPath = ancestralPath && ancestralPath.length > 0;
+    const group = onAncestralPath
+      ? groups.get(ancestralPath[0])
+      : groups.get(id);
     if (!group || !isReady(group)) {
       return this.renderLoading(level);
     }
 
     const {
+      id: groupId,
       name,
       localizedTexts,
       canView,
@@ -113,33 +126,47 @@ class GroupTree extends Component {
 
     return (
       <TreeView>
-        {level !== 0 &&
-          <TreeViewItem
-            title={
-              <GroupsName
-                id={id}
-                name={name}
-                localizedTexts={localizedTexts}
-                noLink
-              />
-            }
-            id={id}
-            level={level}
-            admins={primaryAdminsIds}
-            organizational={organizational}
-            isPublic={isPublic}
-            isOpen={currentGroupId === id || isOpen}
-            actions={
-              currentGroupId !== id && canView
-                ? // this is inacurate, but public groups are visible to students who cannot see detail until they join
-                  this.renderButtons(id, organizational || isPublic)
-                : undefined
-            }
-          >
-            {this.renderChildGroups(childGroups, actualVisibleGroupsMap)}
-          </TreeViewItem>}
-        {level === 0 &&
-          this.renderChildGroups(childGroups, actualVisibleGroupsMap)}
+        {level !== 0 || onAncestralPath
+          ? <TreeViewItem
+              title={conditionalEmphasize(
+                <GroupsName
+                  id={groupId}
+                  name={name}
+                  localizedTexts={localizedTexts}
+                  noLink
+                />,
+                currentGroupId === groupId
+              )}
+              id={groupId}
+              level={level}
+              admins={primaryAdminsIds}
+              organizational={organizational}
+              isPublic={isPublic}
+              forceOpen={onAncestralPath}
+              isOpen={currentGroupId === groupId || isOpen}
+              actions={
+                currentGroupId !== groupId && canView
+                  ? // this is inacurate, but public groups are visible to students who cannot see detail until they join
+                    this.renderButtons(groupId, organizational || isPublic)
+                  : undefined
+              }
+            >
+              {onAncestralPath
+                ? [
+                    <GroupTree
+                      {...this.props}
+                      key={groupId}
+                      level={level + 1}
+                      ancestralPath={ancestralPath.slice(1)}
+                    />
+                  ]
+                : this.renderChildGroups(
+                    childGroups,
+                    actualVisibleGroupsMap,
+                    level
+                  )}
+            </TreeViewItem>
+          : this.renderChildGroups(childGroups, actualVisibleGroupsMap, 0)}
       </TreeView>
     );
   }
@@ -153,6 +180,7 @@ GroupTree.propTypes = {
   isPublic: PropTypes.bool,
   currentGroupId: PropTypes.string,
   visibleGroupsMap: PropTypes.object,
+  ancestralPath: PropTypes.array,
   links: PropTypes.object,
   intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired
 };

@@ -214,7 +214,7 @@ class GroupInfo extends Component {
                   </Box>}
               </Col>
               <Col sm={6}>
-                {data.childGroups.all.length > 0 &&
+                {data.childGroups.all.length > -1 &&
                   <Box
                     title={
                       <FormattedMessage
@@ -226,12 +226,14 @@ class GroupInfo extends Component {
                   >
                     <GroupTree
                       id={data.id}
+                      currentGroupId={data.id}
                       deletable={false}
                       isAdmin={isAdmin}
                       isPublic={data.privateData.isPublic}
                       isOpen
                       groups={groups}
                       level={1}
+                      ancestralPath={data.parentGroupsIds.slice(1)}
                     />
                   </Box>}
 
