@@ -45,14 +45,18 @@ const tableStyles = {
 };
 
 // Create comparators object based on given locale ...
-const prepareTableComparators = defaultMemoize(locale => ({
-  user: ({ user: u1 }, { user: u2 }) =>
+const prepareTableComparators = defaultMemoize(locale => {
+  const nameComparator = (u1, u2) =>
     u1.name.lastName.localeCompare(u2.name.lastName, locale) ||
     u1.name.firstName.localeCompare(u2.name.firstName, locale) ||
-    u1.privateData.email.localeCompare(u2.privateData.email, locale),
-  total: ({ total: t1 }, { total: t2 }) =>
-    (Number(t2.gained) || -1) - (Number(t1.gained) || -1)
-}));
+    u1.privateData.email.localeCompare(u2.privateData.email, locale);
+  return {
+    user: ({ user: u1 }, { user: u2 }) => nameComparator(u1, u2),
+    total: ({ total: t1, user: u1 }, { total: t2, user: u2 }) =>
+      (Number(t1 && t1.gained) || -1) - (Number(t1 && t1.gained) || -1) ||
+      nameComparator(u1, u2)
+  };
+});
 
 class ResultsTable extends Component {
   // Prepare header descriptor object for SortableTable.
@@ -87,7 +91,17 @@ class ResultsTable extends Component {
 
   // Re-format the data, so they can be rendered by the SortableTable ...
   prepareData = defaultMemoize((assignments, users, stats) => {
-    const { isAdmin, renderActions } = this.props;
+    const {
+      isAdmin,
+      isSupervisor,
+      loggedUser,
+      publicStats,
+      renderActions
+    } = this.props;
+
+    if (!isAdmin && !isSupervisor && !publicStats) {
+      users = users.filter(({ id }) => id === loggedUser);
+    }
 
     return users.map(user => {
       const userStats = stats.find(stat => stat.userId === user.id);
@@ -140,8 +154,11 @@ class ResultsTable extends Component {
 ResultsTable.propTypes = {
   assignments: PropTypes.array.isRequired,
   users: PropTypes.array.isRequired,
+  loggedUser: PropTypes.string,
   stats: PropTypes.array.isRequired,
+  publicStats: PropTypes.bool,
   isAdmin: PropTypes.bool,
+  isSupervisor: PropTypes.bool,
   renderActions: PropTypes.func,
   intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired,
   links: PropTypes.object

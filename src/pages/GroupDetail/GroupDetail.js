@@ -288,9 +288,16 @@ class GroupDetail extends Component {
                       {(groupStats, ...pubAssignments) =>
                         <ResultsTable
                           users={students}
+                          loggedUser={userId}
                           assignments={pubAssignments}
                           stats={groupStats}
+                          publicStats={
+                            group &&
+                            group.privateData &&
+                            group.privateData.publicStats
+                          }
                           isAdmin={isAdmin}
+                          isSupervisor={isSupervisor}
                           renderActions={id =>
                             <LeaveJoinGroupButtonContainer
                               userId={id}
@@ -344,7 +351,7 @@ class GroupDetail extends Component {
                           <AddIcon gapRight />
                           <FormattedMessage
                             id="app.group.createExercise"
-                            defaultMessage="Add group exercise"
+                            defaultMessage="Create Exercise in Group"
                           />
                         </Button>
                       </p>

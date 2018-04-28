@@ -24,8 +24,12 @@ class TreeViewInnerNode extends Component {
         <TreeViewLeaf
           {...props}
           loading={loading}
-          onClick={this.toggleOpen}
-          icon={this.isOpen() ? 'minus-square' : 'plus-square'}
+          onClick={!this.props.forceOpen ? this.toggleOpen : undefined}
+          icon={
+            this.props.forceOpen
+              ? 'square'
+              : this.isOpen() ? 'minus-square' : 'plus-square'
+          }
         />
         <Collapse isOpened={this.isOpen()}>
           {children}
