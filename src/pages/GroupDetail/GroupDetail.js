@@ -288,9 +288,16 @@ class GroupDetail extends Component {
                       {(groupStats, ...pubAssignments) =>
                         <ResultsTable
                           users={students}
+                          loggedUser={userId}
                           assignments={pubAssignments}
                           stats={groupStats}
+                          publicStats={
+                            group &&
+                            group.privateData &&
+                            group.privateData.publicStats
+                          }
                           isAdmin={isAdmin}
+                          isSupervisor={isSupervisor}
                           renderActions={id =>
                             <LeaveJoinGroupButtonContainer
                               userId={id}
