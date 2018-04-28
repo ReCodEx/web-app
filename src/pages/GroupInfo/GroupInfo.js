@@ -214,7 +214,7 @@ class GroupInfo extends Component {
                   </Box>}
               </Col>
               <Col sm={6}>
-                {data.childGroups.all.length > -1 &&
+                {data.childGroups.all.length > 0 &&
                   <Box
                     title={
                       <FormattedMessage
