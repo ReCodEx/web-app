@@ -6,6 +6,11 @@ import Button from '../../widgets/FlatButton';
 import Confirm from '../Confirm';
 import { AddIcon, WarningIcon } from '../../icons';
 
+const titleComparator = ({ title: a }, { title: b }) =>
+  typeof a !== 'string'
+    ? typeof b !== 'string' ? 0 : 1
+    : typeof b !== 'string' ? -1 : a.localeCompare(b);
+
 class TabbedArrayField extends Component {
   state = { activeTab: 0 };
   changeTab = n => this.setState({ activeTab: n });
@@ -59,30 +64,39 @@ class TabbedArrayField extends Component {
             activeKey={this.state.activeTab}
             onSelect={this.changeTab}
           >
-            {fields.map((prefix, i) =>
-              <Tab key={i} eventKey={i} title={getTitle(i)}>
-                <ContentComponent {...props} i={i} prefix={prefix} />
-                {remove &&
-                  <p className="text-center">
-                    <Confirm
-                      id={`${id}-remove-${i}`}
-                      question={removeQuestion}
-                      onConfirmed={() => {
-                        fields.remove(i);
-                        this.changeTab(Math.min(i, fields.length - 2));
-                      }}
-                    >
-                      <Button bsStyle="default">
-                        <WarningIcon gapRight />
-                        <FormattedMessage
-                          id="app.tabbedArrayField.remove"
-                          defaultMessage="Remove"
-                        />
-                      </Button>
-                    </Confirm>
-                  </p>}
-              </Tab>
-            )}
+            {fields
+              .map((prefix, i) => ({ prefix, i, title: getTitle(i) }))
+              .sort(titleComparator)
+              .map(({ prefix, i, title }) =>
+                <Tab
+                  key={i}
+                  eventKey={i}
+                  title={title}
+                  mountOnEnter
+                  unmountOnExit
+                >
+                  <ContentComponent {...props} i={i} prefix={prefix} />
+                  {remove &&
+                    <p className="text-center">
+                      <Confirm
+                        id={`${id}-remove-${i}`}
+                        question={removeQuestion}
+                        onConfirmed={() => {
+                          fields.remove(i);
+                          this.changeTab(Math.min(i, fields.length - 2));
+                        }}
+                      >
+                        <Button bsStyle="default">
+                          <WarningIcon gapRight />
+                          <FormattedMessage
+                            id="app.tabbedArrayField.remove"
+                            defaultMessage="Remove"
+                          />
+                        </Button>
+                      </Confirm>
+                    </p>}
+                </Tab>
+              )}
           </Tabs>}
 
         {fields.length === 0 &&

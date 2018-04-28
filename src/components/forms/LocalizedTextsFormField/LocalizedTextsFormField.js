@@ -9,41 +9,44 @@ const LocalizedTextsFormField = ({
   localizedTextsLocales = [],
   isGroup = false,
   ...props
-}) =>
-  <TabbedArrayField
-    {...props}
-    getTitle={i =>
-      localizedTextsLocales && localizedTextsLocales[i]
-        ? localizedTextsLocales[i]
-        : <FormattedMessage
-            id="app.editLocalizedTextForm.newLocale"
-            defaultMessage="New language"
-          />}
-    ContentComponent={
-      isGroup ? LocalizedGroupFormField : LocalizedExerciseFormField
-    }
-    emptyMessage={
-      <FormattedMessage
-        id="app.editLocalizedTextForm.localized.noLanguage"
-        defaultMessage="There is currently no text in any language."
-      />
-    }
-    addMessage={
-      <FormattedMessage
-        id="app.editLocalizedTextForm.addLanguage"
-        defaultMessage="Add language variant"
-      />
-    }
-    removeQuestion={
-      <FormattedMessage
-        id="app.editLocalizedTextForm.localized.reallyRemoveQuestion"
-        defaultMessage="Do you really want to delete this localization?"
-      />
-    }
-    id="localized-texts"
-    add
-    remove
-  />;
+}) => {
+  return (
+    <TabbedArrayField
+      {...props}
+      getTitle={i =>
+        localizedTextsLocales && localizedTextsLocales[i]
+          ? localizedTextsLocales[i]
+          : <FormattedMessage
+              id="app.editLocalizedTextForm.newLocale"
+              defaultMessage="New language"
+            />}
+      ContentComponent={
+        isGroup ? LocalizedGroupFormField : LocalizedExerciseFormField
+      }
+      emptyMessage={
+        <FormattedMessage
+          id="app.editLocalizedTextForm.localized.noLanguage"
+          defaultMessage="There is currently no text in any language."
+        />
+      }
+      addMessage={
+        <FormattedMessage
+          id="app.editLocalizedTextForm.addLanguage"
+          defaultMessage="Add language variant"
+        />
+      }
+      removeQuestion={
+        <FormattedMessage
+          id="app.editLocalizedTextForm.localized.reallyRemoveQuestion"
+          defaultMessage="Do you really want to delete this localization?"
+        />
+      }
+      id="localized-texts"
+      add
+      remove
+    />
+  );
+};
 
 LocalizedTextsFormField.propTypes = {
   localizedTextsLocales: PropTypes.array,

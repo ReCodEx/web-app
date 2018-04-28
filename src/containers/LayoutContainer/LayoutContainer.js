@@ -71,6 +71,7 @@ class LayoutContainer extends Component {
   changeLang = props => {
     const lang = this.getLang(props);
     this.setState({ lang, links: linksFactory(lang) });
+    this.forceUpdate();
   };
 
   /**
@@ -120,7 +121,7 @@ class LayoutContainer extends Component {
     moment.locale(lang);
 
     return (
-      <IntlProvider key={lang} locale={lang} messages={this.getMessages(lang)}>
+      <IntlProvider locale={lang} messages={this.getMessages(lang)}>
         <Layout
           sidebar={sidebar}
           isLoggedIn={isLoggedIn}
