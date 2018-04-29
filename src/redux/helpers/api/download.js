@@ -2,13 +2,15 @@ import { createApiAction } from '../../middleware/apiMiddleware';
 import { saveAs } from 'file-saver';
 import { addNotification } from '../../modules/notifications';
 
+const trivialFileNameSelector = (id, state) => id;
+
 export const downloadHelper = ({
   fetch,
   endpoint,
   actionType,
-  fileNameSelector,
+  fileNameSelector = trivialFileNameSelector,
   contentType
-}) => id => (dispatch, getState) => {
+}) => (id, fileName = null) => (dispatch, getState) => {
   let initial;
   if (fetch !== null) {
     initial = dispatch(fetch(id));
@@ -41,7 +43,7 @@ export const downloadHelper = ({
     .then(({ value }) => value.blob())
     .then(blob => {
       const typedBlob = new Blob([blob], { type: contentType });
-      const fileName = fileNameSelector(id, getState());
+      fileName = fileName || fileNameSelector(id, getState());
       saveAs(typedBlob, fileName);
       return Promise.resolve();
     })
