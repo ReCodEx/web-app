@@ -3,7 +3,9 @@ import PropTypes from 'prop-types';
 import { Row, Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { injectIntl, FormattedMessage } from 'react-intl';
+import { LinkContainer } from 'react-router-bootstrap';
 
+import Button from '../../components/widgets/FlatButton';
 import { usersSelector } from '../../redux/selectors/users';
 import { groupSelector, studentsOfGroup } from '../../redux/selectors/groups';
 import {
@@ -14,14 +16,22 @@ import {
 import { fetchStudents } from '../../redux/modules/users';
 import { isReady, getJsData, getId } from '../../redux/helpers/resourceManager';
 import SubmissionsTableContainer from '../../containers/SubmissionsTableContainer';
-import { fetchAssignmentIfNeeded } from '../../redux/modules/assignments';
+import {
+  fetchAssignmentIfNeeded,
+  downloadBestSolutionsArchive
+} from '../../redux/modules/assignments';
 import { fetchGroupIfNeeded } from '../../redux/modules/groups';
 import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments';
 
 import Page from '../../components/layout/Page';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import { LocalizedExerciseName } from '../../components/helpers/LocalizedNames';
+import { ResubmitAllSolutionsContainer } from '../../containers/ResubmitSolutionContainer';
 import HierarchyLineContainer from '../../containers/HierarchyLineContainer';
+import { EditIcon, DownloadIcon } from '../../components/icons';
+
+import { safeGet } from '../../helpers/common';
+import withLinks from '../../helpers/withLinks';
 
 class AssignmentStats extends Component {
   static loadAsync = ({ assignmentId }, dispatch) =>
@@ -47,6 +57,20 @@ class AssignmentStats extends Component {
     }
   }
 
+  getArchiveFileName = assignment => {
+    const { assignmentId, intl: { locale: pageLocale } } = this.props;
+    const name =
+      assignment &&
+      safeGet(
+        assignment,
+        ['localizedTexts', ({ locale }) => locale === pageLocale, 'name'],
+        assignment.name
+      );
+    const safeName =
+      name && name.normalize('NFD').replace(/[^-_a-zA-Z0-9.()[\] ]/g, '');
+    return `${safeName || assignmentId}.zip`;
+  };
+
   render() {
     const {
       assignmentId,
@@ -54,7 +78,9 @@ class AssignmentStats extends Component {
       getStudents,
       getGroup,
       runtimeEnvironments,
-      intl
+      downloadBestSolutionsArchive,
+      intl: { locale },
+      links: { ASSIGNMENT_EDIT_URI_FACTORY }
     } = this.props;
 
     return (
@@ -127,7 +153,39 @@ class AssignmentStats extends Component {
       >
         {assignment =>
           <div>
-            <HierarchyLineContainer groupId={assignment.groupId} />
+            <Row>
+              <Col xs={12}>
+                <HierarchyLineContainer groupId={assignment.groupId} />
+                <p>
+                  <LinkContainer
+                    to={ASSIGNMENT_EDIT_URI_FACTORY(assignment.id)}
+                  >
+                    <Button bsStyle="warning">
+                      <EditIcon gapRight />
+                      <FormattedMessage
+                        id="app.assignment.editSettings"
+                        defaultMessage="Edit Assignment Settings"
+                      />
+                    </Button>
+                  </LinkContainer>
+                  <a
+                    href="#"
+                    onClick={downloadBestSolutionsArchive(
+                      this.getArchiveFileName(assignment)
+                    )}
+                  >
+                    <Button bsStyle="primary">
+                      <DownloadIcon gapRight />
+                      <FormattedMessage
+                        id="app.assignment.downloadBestSolutionsArchive"
+                        defaultMessage="Download Best Solutions"
+                      />
+                    </Button>
+                  </a>
+                  <ResubmitAllSolutionsContainer assignmentId={assignment.id} />
+                </p>
+              </Col>
+            </Row>
             <ResourceRenderer
               resource={[getGroup(assignment.groupId), ...runtimeEnvironments]}
             >
@@ -137,7 +195,7 @@ class AssignmentStats extends Component {
                     .sort((a, b) => {
                       const aName = a.name.lastName + ' ' + a.name.firstName;
                       const bName = b.name.lastName + ' ' + b.name.firstName;
-                      return aName.localeCompare(bName, intl.locale);
+                      return aName.localeCompare(bName, locale);
                     })
                     .map(user =>
                       <Row key={user.id}>
@@ -167,28 +225,36 @@ AssignmentStats.propTypes = {
   getGroup: PropTypes.func.isRequired,
   runtimeEnvironments: PropTypes.array,
   loadAsync: PropTypes.func.isRequired,
-  intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired
+  downloadBestSolutionsArchive: PropTypes.func.isRequired,
+  intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired,
+  links: PropTypes.object.isRequired
 };
 
-export default connect(
-  (state, { params: { assignmentId } }) => {
-    const assignment = getAssignment(state)(assignmentId);
-    const getStudentsIds = groupId => studentsOfGroup(groupId)(state);
-    const readyUsers = usersSelector(state).toList().filter(isReady);
+export default withLinks(
+  connect(
+    (state, { params: { assignmentId } }) => {
+      const assignment = getAssignment(state)(assignmentId);
+      const getStudentsIds = groupId => studentsOfGroup(groupId)(state);
+      const readyUsers = usersSelector(state).toList().filter(isReady);
 
-    return {
-      assignmentId,
-      assignment,
-      getStudentsIds,
-      getStudents: groupId =>
-        readyUsers
-          .filter(user => getStudentsIds(groupId).includes(getId(user)))
-          .map(getJsData),
-      getGroup: id => groupSelector(id)(state),
-      runtimeEnvironments: assignmentEnvironmentsSelector(state)(assignmentId)
-    };
-  },
-  (dispatch, { params: { assignmentId } }) => ({
-    loadAsync: () => AssignmentStats.loadAsync({ assignmentId }, dispatch)
-  })
-)(injectIntl(AssignmentStats));
+      return {
+        assignmentId,
+        assignment,
+        getStudentsIds,
+        getStudents: groupId =>
+          readyUsers
+            .filter(user => getStudentsIds(groupId).includes(getId(user)))
+            .map(getJsData),
+        getGroup: id => groupSelector(id)(state),
+        runtimeEnvironments: assignmentEnvironmentsSelector(state)(assignmentId)
+      };
+    },
+    (dispatch, { params: { assignmentId } }) => ({
+      loadAsync: () => AssignmentStats.loadAsync({ assignmentId }, dispatch),
+      downloadBestSolutionsArchive: name => ev => {
+        ev.preventDefault();
+        dispatch(downloadBestSolutionsArchive(assignmentId, name));
+      }
+    })
+  )(injectIntl(AssignmentStats))
+);

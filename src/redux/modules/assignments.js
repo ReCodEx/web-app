@@ -1,8 +1,10 @@
 import { handleActions } from 'redux-actions';
 import { fromJS } from 'immutable';
-import { createApiAction } from '../middleware/apiMiddleware';
 
+import { createApiAction } from '../middleware/apiMiddleware';
+import { downloadHelper } from '../helpers/api/download';
 import factory, { initialState } from '../helpers/resourceManager';
+
 import { additionalActionTypes as submissionsActionTypes } from './submissions';
 
 const resourceName = 'assignments';
@@ -17,7 +19,9 @@ export const additionalActionTypes = {
   VALIDATE_ASSIGNMENT: 'recodex/assignment/VALIDATE',
   SYNC_ASSIGNMENT: 'recodex/assignment/SYNC_ASSIGNMENT',
   SYNC_ASSIGNMENT_PENDING: 'recodex/assignment/SYNC_ASSIGNMENT_PENDING',
-  SYNC_ASSIGNMENT_FULFILLED: 'recodex/assignment/SYNC_ASSIGNMENT_FULFILLED'
+  SYNC_ASSIGNMENT_FULFILLED: 'recodex/assignment/SYNC_ASSIGNMENT_FULFILLED',
+  DOWNLOAD_BEST_SOLUTIONS_ARCHIVE:
+    'recodex/assignment/DOWNLOAD_BEST_SOLUTIONS_ARCHIVE'
 };
 
 /**
@@ -54,6 +58,13 @@ export const syncWithExercise = assignmentId =>
     method: 'POST',
     meta: { assignmentId }
   });
+
+export const downloadBestSolutionsArchive = downloadHelper({
+  actionType: additionalActionTypes.DOWNLOAD_BEST_SOLUTIONS_ARCHIVE,
+  fetch: null,
+  endpoint: id => `/exercise-assignments/${id}/download-best-solutions`,
+  contentType: 'application/zip'
+});
 
 /**
  * Reducer
