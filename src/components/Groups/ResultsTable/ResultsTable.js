@@ -53,7 +53,7 @@ const prepareTableComparators = defaultMemoize(locale => {
   return {
     user: ({ user: u1 }, { user: u2 }) => nameComparator(u1, u2),
     total: ({ total: t1, user: u1 }, { total: t2, user: u2 }) =>
-      (Number(t1 && t1.gained) || -1) - (Number(t1 && t1.gained) || -1) ||
+      (Number(t2 && t2.gained) || -1) - (Number(t1 && t1.gained) || -1) ||
       nameComparator(u1, u2)
   };
 });

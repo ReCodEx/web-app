@@ -20,7 +20,7 @@ const getStatusDesc = (status, lastSubmission) => {
 
 const SubmissionTableRow = ({
   id,
-  status,
+  status = null,
   note,
   lastSubmission,
   maxPoints,
@@ -86,7 +86,7 @@ const SubmissionTableRow = ({
 
 SubmissionTableRow.propTypes = {
   id: PropTypes.string.isRequired,
-  status: PropTypes.string.isRequired,
+  status: PropTypes.string,
   note: PropTypes.any.isRequired,
   maxPoints: PropTypes.number.isRequired,
   bonusPoints: PropTypes.number.isRequired,
