@@ -99,7 +99,7 @@ class Assignment extends Component {
       runtimeEnvironments,
       exerciseSync,
       submissions,
-      links: { ASSIGNMENT_EDIT_URI_FACTORY, SUPERVISOR_STATS_URI_FACTORY }
+      links: { ASSIGNMENT_EDIT_URI_FACTORY, ASSIGNMENT_STATS_URI_FACTORY }
     } = this.props;
 
     return (
@@ -179,7 +179,7 @@ class Assignment extends Component {
                       </Button>
                     </LinkContainer>
                     <LinkContainer
-                      to={SUPERVISOR_STATS_URI_FACTORY(assignment.id)}
+                      to={ASSIGNMENT_STATS_URI_FACTORY(assignment.id)}
                     >
                       <Button bsStyle="primary">
                         <ResultsIcon gapRight />

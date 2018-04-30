@@ -1091,6 +1091,7 @@
   "generic.name": "Name",
   "generic.noRecordsInTable": "There are no records in the table.",
   "generic.reset": "Reset",
+  "generic.results": "Results",
   "generic.runtimeShort": "Runtime/Language",
   "generic.runtimesShort": "Runtimes/Languages",
   "generic.save": "Save",

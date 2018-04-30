@@ -10,6 +10,7 @@ import withLinks from '../../../../helpers/withLinks';
 import { LocalizedExerciseName } from '../../../helpers/LocalizedNames';
 import {
   EditIcon,
+  ResultsIcon,
   MaybeBonusAssignmentIcon,
   MaybePublicIcon
 } from '../../../icons';
@@ -40,7 +41,8 @@ const AssignmentTableRow = ({
   links: {
     ASSIGNMENT_DETAIL_URI_FACTORY,
     ASSIGNMENT_DETAIL_SPECIFIC_USER_URI_FACTORY,
-    ASSIGNMENT_EDIT_URI_FACTORY
+    ASSIGNMENT_EDIT_URI_FACTORY,
+    ASSIGNMENT_STATS_URI_FACTORY
   }
 }) =>
   <tr>
@@ -108,6 +110,12 @@ const AssignmentTableRow = ({
     {isAdmin &&
       <td className="text-right">
         <ButtonGroup>
+          <LinkContainer to={ASSIGNMENT_STATS_URI_FACTORY(id)}>
+            <Button bsSize="xs" bsStyle="primary">
+              <ResultsIcon gapRight />
+              <FormattedMessage id="generic.results" defaultMessage="Results" />
+            </Button>
+          </LinkContainer>
           <LinkContainer to={ASSIGNMENT_EDIT_URI_FACTORY(id)}>
             <Button bsSize="xs" bsStyle="warning">
               <EditIcon gapRight />
