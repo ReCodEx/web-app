@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { Link } from 'react-router';
-import FontAwesomeIcon from '@fortawesome/react-fontawesome';
+import Icon from '../../../icons';
 
 const MenuItem = (
   {
@@ -12,18 +12,19 @@ const MenuItem = (
     currentPath,
     notificationsCount = 0,
     inNewTab = false,
+    small = false,
     onIsActive = isActive => isActive
   },
   { isActive }
 ) =>
   <li
     className={classNames({
-      active: isActive(link)
+      active: isActive(link),
+      small
     })}
   >
     <Link to={link} target={inNewTab ? '_blank' : undefined}>
-      <FontAwesomeIcon icon={icon} fixedWidth />
-      &nbsp;&nbsp;
+      <Icon icon={icon} fixedWidth gapRight />
       <span
         style={{
           whiteSpace: 'normal',
@@ -47,6 +48,7 @@ MenuItem.propTypes = {
   notificationsCount: PropTypes.number,
   link: PropTypes.string,
   inNewTab: PropTypes.bool,
+  small: PropTypes.bool,
   onIsActive: PropTypes.func
 };
 
