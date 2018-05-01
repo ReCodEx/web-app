@@ -1,15 +1,19 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { FormattedMessage, FormattedHTMLMessage } from 'react-intl';
 import { Row, Col, Image } from 'react-bootstrap';
 
 import PageContent from '../../components/layout/PageContent';
+import Icon from '../../components/icons';
 
-const Home = () =>
+import withLinks from '../../helpers/withLinks';
+
+const Home = ({ links: { GITHUB_BUGS_URL } }) =>
   <PageContent
     title={
       <FormattedMessage
         id="app.homepage.title"
-        defaultMessage="ReCodEx - Code Examinator Reloaded"
+        defaultMessage="ReCodEx — Code Examinator Reloaded"
         description="Homepage title"
       />
     }
@@ -66,7 +70,7 @@ const Home = () =>
           </p>
           <p>
             <FormattedMessage
-              id="app.feedbackAndBugs.howToGiveFeedback"
+              id="app.homepage.howToGiveFeedback"
               defaultMessage="For any kind of feedback, either positive or negative, feel free to create an issue on GitHub. Just please give your feedback the tag 'feedback' so we can distinguish those from bugs. We will try to respond to your feedback and we will see if there is something that can be done about it. We thank you for all your feedback in advance!"
             />
           </p>
@@ -112,19 +116,36 @@ const Home = () =>
         <Col sm={6}>
           <h2>
             <FormattedMessage
-              id="app.feedbackAndBugs.whereToReportBugs"
+              id="app.homepage.whereToReportBugs"
               defaultMessage="Where can I report bugs?"
             />
           </h2>
           <p>
             <FormattedMessage
-              id="app.feedbackAndBugs.whereToReportBugsText"
+              id="app.homepage.whereToReportBugsText"
               defaultMessage="Every software contains bugs and we are well avare of this fact. From time to time you might find a bug that nobody else has reported and which has not been fixed yet. Please report all bugs to our issue tracker on GitHub - just file a new issue and give it a label 'bug'. We will try to investigate and release a bugfix as soon as possible."
             />
+          </p>
+          <p className="text-center">
+            <a
+              href={GITHUB_BUGS_URL}
+              target="_blank"
+              className="btn btn-flat btn-default"
+            >
+              <Icon icon={['fab', 'github']} gapRight />
+              <FormattedMessage
+                defaultMessage="ReCodEx Webapp Repository"
+                id="app.homepage.githubWebappRepository"
+              />
+            </a>
           </p>
         </Col>
       </Row>
     </div>
   </PageContent>;
 
-export default Home;
+Home.propTypes = {
+  links: PropTypes.object
+};
+
+export default withLinks(Home);

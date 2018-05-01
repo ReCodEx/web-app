@@ -25,7 +25,7 @@ const Student = ({
       }
       items={studentOf.toList()}
       notifications={notifications}
-      icon={['far', 'user-circle']}
+      icon={'user-circle'}
       currentPath={currentUrl}
       createLink={item => GROUP_DETAIL_URI_FACTORY(getId(item))}
       forceOpen={isCollapsed}
