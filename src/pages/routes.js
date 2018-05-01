@@ -16,7 +16,6 @@ import EditExercise from './EditExercise';
 import EditExerciseConfig from './EditExerciseConfig';
 import EditExerciseSimpleConfig from './EditExerciseSimpleConfig';
 import EditExerciseLimits from './EditExerciseLimits';
-import FeedbackAndBugs from './FeedbackAndBugs';
 import GroupDetail from './GroupDetail';
 import GroupInfo from './GroupInfo';
 import EditGroup from './EditGroup';
@@ -93,7 +92,6 @@ const createRoutes = getState => {
           component={Registration}
           onEnter={onlyUnauth}
         />
-        <Route path="bugs-and-feedback" component={FeedbackAndBugs} />
         <Route path="faq" component={FAQ} />
         <Route path="email-verification" component={EmailVerification} />
         <Route path="app" onEnter={requireAuth}>
