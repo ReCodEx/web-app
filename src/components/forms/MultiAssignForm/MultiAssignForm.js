@@ -51,6 +51,7 @@ class MultiAssignForm extends Component {
   render() {
     const {
       dirty,
+      error,
       submitting,
       handleSubmit,
       submitFailed: hasFailed,
@@ -252,6 +253,11 @@ class MultiAssignForm extends Component {
           )}
         </Row>
 
+        {error &&
+          <Alert bsStyle="danger">
+            {error}
+          </Alert>}
+
         <div className="text-center">
           <SubmitButton
             id="multiAssignForm"
@@ -293,6 +299,7 @@ MultiAssignForm.propTypes = {
   values: PropTypes.object,
   handleSubmit: PropTypes.func.isRequired,
   dirty: PropTypes.bool,
+  error: PropTypes.any,
   submitting: PropTypes.bool,
   submitFailed: PropTypes.bool,
   submitSucceeded: PropTypes.bool,

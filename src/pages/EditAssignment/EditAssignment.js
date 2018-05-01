@@ -131,7 +131,7 @@ class EditAssignment extends Component {
       links: {
         ASSIGNMENT_DETAIL_URI_FACTORY,
         GROUP_DETAIL_URI_FACTORY,
-        SUPERVISOR_STATS_URI_FACTORY,
+        ASSIGNMENT_STATS_URI_FACTORY,
         EXERCISE_URI_FACTORY
       },
       params: { assignmentId },
@@ -197,7 +197,7 @@ class EditAssignment extends Component {
                   isSupervisorOf(assignment.groupId)) &&
                   <p>
                     <LinkContainer
-                      to={SUPERVISOR_STATS_URI_FACTORY(assignment.id)}
+                      to={ASSIGNMENT_STATS_URI_FACTORY(assignment.id)}
                     >
                       <Button bsStyle="primary">
                         <ResultsIcon gapRight />

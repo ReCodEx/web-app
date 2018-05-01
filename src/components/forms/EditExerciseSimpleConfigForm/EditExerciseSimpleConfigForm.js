@@ -176,7 +176,7 @@ class EditExerciseSimpleConfigForm extends Component {
                             formErrors && formErrors[encodeNumId(test.id)]
                           }
                           smartFill={
-                            idx === 0
+                            idx === 0 && exerciseTests.length > 1
                               ? smartFill(test.id, exerciseTests, files)
                               : undefined
                           }

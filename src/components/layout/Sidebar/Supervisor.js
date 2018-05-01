@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { injectIntl, FormattedMessage } from 'react-intl';
 
-import MenuTitle from '../../widgets/Sidebar/MenuTitle';
 import MenuGroup from '../../widgets/Sidebar/MenuGroup';
 import MenuItem from '../../widgets/Sidebar/MenuItem';
 import { getId } from '../../../redux/helpers/resourceManager';
@@ -19,19 +18,11 @@ const Supervisor = ({
   intl
 }) =>
   <ul className="sidebar-menu">
-    <MenuTitle
-      title={
-        <FormattedMessage
-          id="app.sudebar.menu.supervisor.title"
-          defaultMessage="Supervisor"
-        />
-      }
-    />
     <MenuGroup
       title={
         <FormattedMessage
-          id="app.sidebar.menu.supervisorOf"
-          defaultMessage="Groups - supervisor"
+          id="app.sidebar.menu.supervisorOfGroups"
+          defaultMessage="Supervisor of Groups"
         />
       }
       items={supervisorOf
@@ -42,7 +33,7 @@ const Supervisor = ({
             .localeCompare(b.getIn(['data', 'name']), intl.locale)
         )}
       notifications={{}}
-      icon="wrench"
+      icon="graduation-cap"
       currentPath={currentUrl}
       createLink={item => GROUP_DETAIL_URI_FACTORY(getId(item))}
       forceOpen={isCollapsed}

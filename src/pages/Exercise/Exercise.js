@@ -138,13 +138,13 @@ class Exercise extends Component {
 
       return {
         groups,
-        submissionsCountLimit: '',
-        firstDeadline: '',
+        submissionsCountLimit: '50',
+        firstDeadline: moment().add(2, 'weeks').endOf('day'),
         secondDeadline: '',
         allowSecondDeadline: false,
-        maxPointsBeforeFirstDeadline: '',
+        maxPointsBeforeFirstDeadline: '10',
         maxPointsBeforeSecondDeadline: '',
-        canViewLimitRatios: false,
+        canViewLimitRatios: true,
         pointsPercentualThreshold: 0,
         isBonus: false,
         runtimeEnvironments,
@@ -355,81 +355,83 @@ class Exercise extends Component {
                         />}
                     </ResourceRenderer>
                   </Box>}
-                <Box
-                  title={
-                    <FormattedMessage
-                      id="app.exercise.exercisePipelines"
-                      defaultMessage="Exercise Pipelines"
-                    />
-                  }
-                  footer={
-                    <p className="text-center">
-                      <Button
-                        bsStyle="success"
-                        className="btn-flat"
-                        bsSize="sm"
-                        onClick={this.createExercisePipeline}
-                      >
-                        <AddIcon gapRight />
-                        <FormattedMessage
-                          id="app.exercise.createPipeline"
-                          defaultMessage="Add exercise pipeline"
-                        />
-                      </Button>
-                    </p>
-                  }
-                  isOpen
-                >
-                  <ResourceRenderer
-                    resource={exercisePipelines.toArray()}
-                    returnAsArray={true}
+
+                {exercise.configurationType !== 'simpleExerciseConfig' &&
+                  <Box
+                    title={
+                      <FormattedMessage
+                        id="app.exercise.exercisePipelines"
+                        defaultMessage="Exercise Pipelines"
+                      />
+                    }
+                    footer={
+                      <p className="text-center">
+                        <Button
+                          bsStyle="success"
+                          className="btn-flat"
+                          bsSize="sm"
+                          onClick={this.createExercisePipeline}
+                        >
+                          <AddIcon gapRight />
+                          <FormattedMessage
+                            id="app.exercise.createPipeline"
+                            defaultMessage="Add exercise pipeline"
+                          />
+                        </Button>
+                      </p>
+                    }
+                    isOpen
                   >
-                    {pipelines =>
-                      <PipelinesSimpleList
-                        pipelines={pipelines}
-                        createActions={pipelineId =>
-                          <div>
-                            <LinkContainer
-                              to={PIPELINE_EDIT_URI_FACTORY(pipelineId)}
-                            >
-                              <Button
-                                bsSize="xs"
-                                className="btn-flat"
-                                bsStyle="warning"
+                    <ResourceRenderer
+                      resource={exercisePipelines.toArray()}
+                      returnAsArray={true}
+                    >
+                      {pipelines =>
+                        <PipelinesSimpleList
+                          pipelines={pipelines}
+                          createActions={pipelineId =>
+                            <div>
+                              <LinkContainer
+                                to={PIPELINE_EDIT_URI_FACTORY(pipelineId)}
                               >
-                                <EditIcon gapRight />
-                                <FormattedMessage
-                                  id="generic.edit"
-                                  defaultMessage="Edit"
-                                />
-                              </Button>
-                            </LinkContainer>
-                            <Confirm
-                              id={pipelineId}
-                              onConfirmed={() => deletePipeline(pipelineId)}
-                              question={
-                                <FormattedMessage
-                                  id="app.pipeline.deleteConfirm"
-                                  defaultMessage="Are you sure you want to delete the pipeline? This cannot be undone."
-                                />
-                              }
-                            >
-                              <Button
-                                bsSize="xs"
-                                className="btn-flat"
-                                bsStyle="danger"
+                                <Button
+                                  bsSize="xs"
+                                  className="btn-flat"
+                                  bsStyle="warning"
+                                >
+                                  <EditIcon gapRight />
+                                  <FormattedMessage
+                                    id="generic.edit"
+                                    defaultMessage="Edit"
+                                  />
+                                </Button>
+                              </LinkContainer>
+                              <Confirm
+                                id={pipelineId}
+                                onConfirmed={() => deletePipeline(pipelineId)}
+                                question={
+                                  <FormattedMessage
+                                    id="app.pipeline.deleteConfirm"
+                                    defaultMessage="Are you sure you want to delete the pipeline? This cannot be undone."
+                                  />
+                                }
                               >
-                                <DeleteIcon gapRight />
-                                <FormattedMessage
-                                  id="generic.delete"
-                                  defaultMessage="Delete"
-                                />
-                              </Button>
-                            </Confirm>
-                          </div>}
-                      />}
-                  </ResourceRenderer>
-                </Box>
+                                <Button
+                                  bsSize="xs"
+                                  className="btn-flat"
+                                  bsStyle="danger"
+                                >
+                                  <DeleteIcon gapRight />
+                                  <FormattedMessage
+                                    id="generic.delete"
+                                    defaultMessage="Delete"
+                                  />
+                                </Button>
+                              </Confirm>
+                            </div>}
+                        />}
+                    </ResourceRenderer>
+                  </Box>}
               </Col>
               <Col lg={6}>
                 <ExerciseDetail {...exercise} locale={locale} />

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { FormattedMessage, FormattedNumber } from 'react-intl';
@@ -6,9 +6,12 @@ import { Table, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import prettyMs from 'pretty-ms';
 
+import Button from '../../widgets/FlatButton';
 import { prettyPrintBytes } from '../../helpers/stringFormatters';
 import exitCodeMapping from '../../helpers/exitCodeMapping';
 import Icon from '../../icons';
+
+import styles from './TestResultsTable.less';
 
 const hasValue = value => value !== null;
 
@@ -115,184 +118,286 @@ const showTimeResults = (
   );
 };
 
-const TestResultsTable = ({ results, runtimeEnvironmentId }) =>
-  <Table responsive>
-    <thead>
-      <tr>
-        <th />
-        <th className="text-center">
-          <OverlayTrigger
-            placement="top"
-            overlay={
-              <Tooltip id="status">
+class TestResultsTable extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
+
+  isLogOpen = testName => Boolean(this.state[testName]);
+
+  toggleLogOpen = testName => {
+    this.setState({ [testName]: !this.isLogOpen(testName) });
+  };
+
+  setAllLogsState = open => () => {
+    const { results } = this.props;
+    results.forEach(({ testName, judgeLog }) => {
+      if (judgeLog) {
+        this.setState({ [testName]: open });
+      }
+    });
+  };
+
+  renderRow = ({
+    id,
+    testName,
+    score,
+    status,
+    memoryExceeded,
+    wallTimeExceeded,
+    cpuTimeExceeded,
+    message,
+    memoryRatio,
+    wallTimeRatio,
+    cpuTimeRatio,
+    memory,
+    wallTime,
+    cpuTime,
+    exitCode,
+    judgeLog = ''
+  }) => {
+    const { runtimeEnvironmentId, isSupervisor = false } = this.props;
+    return (
+      <tr key={testName}>
+        <td>
+          <strong>
+            {testName}
+          </strong>
+        </td>
+        <td
+          className={classNames({
+            'text-center': true,
+            'text-success': score === 1,
+            'text-danger': score === 0,
+            'text-warning': score < 1 && score > 0
+          })}
+        >
+          <b>
+            <FormattedNumber value={score} style="percent" />
+          </b>
+        </td>
+        <td className="text-center">
+          <b>
+            {status === 'OK' &&
+              <span className="text-success">
                 <FormattedMessage
-                  id="app.submissions.testResultsTable.overallTestResult"
-                  defaultMessage="Overall test result"
+                  id="app.submissions.testResultsTable.statusOK"
+                  defaultMessage="OK"
                 />
-              </Tooltip>
-            }
-          >
-            <span>
-              <FontAwesomeIcon icon="check" />/<FontAwesomeIcon icon="times" />
-            </span>
-          </OverlayTrigger>
-        </th>
-        <th className="text-center">
-          <OverlayTrigger
-            placement="top"
-            overlay={
-              <Tooltip id="correctness">
+              </span>}
+            {status === 'SKIPPED' &&
+              <span className="text-warning">
                 <FormattedMessage
-                  id="app.submissions.testResultsTable.correctness"
-                  defaultMessage="Correctness of the result (verdict of the judge)"
+                  id="app.submissions.testResultsTable.statusSkipped"
+                  defaultMessage="SKIPPED"
                 />
-              </Tooltip>
-            }
-          >
-            <FontAwesomeIcon icon="balance-scale" />
-          </OverlayTrigger>
-        </th>
-        <th className="text-center">
-          <OverlayTrigger
-            placement="top"
-            overlay={
-              <Tooltip id="memoryExceeded">
+              </span>}
+            {status === 'FAILED' &&
+              <span className="text-danger">
                 <FormattedMessage
-                  id="app.submissions.testResultsTable.memoryExceeded"
-                  defaultMessage="Measured memory utilization"
+                  id="app.submissions.testResultsTable.statusFailed"
+                  defaultMessage="FAILED"
                 />
-              </Tooltip>
-            }
-          >
-            <span>
-              <Icon icon="thermometer-half" gapRight />
-              <Icon icon="braille" />
-            </span>
-          </OverlayTrigger>
-        </th>
-        <th className="text-center">
-          <OverlayTrigger
-            placement="top"
-            overlay={
-              <Tooltip id="timeExceeded">
-                <FormattedMessage
-                  id="app.submissions.testResultsTable.timeExceeded"
-                  defaultMessage="Measured execution time"
-                />
-              </Tooltip>
-            }
-          >
-            <span>
-              <Icon icon="thermometer-half" gapRight />
-              <Icon icon="bolt" />
-            </span>
-          </OverlayTrigger>
-        </th>
-        <th className="text-center">
-          <OverlayTrigger
-            placement="top"
-            overlay={
-              <Tooltip id="exitCode">
-                <FormattedMessage
-                  id="app.submissions.testResultsTable.exitCode"
-                  defaultMessage="Exit code (possibly translated into error message if translation is available)"
-                />
-              </Tooltip>
-            }
-          >
-            <FontAwesomeIcon icon="power-off" />
-          </OverlayTrigger>
-        </th>
+              </span>}
+          </b>
+        </td>
+
+        <td className="text-center">
+          {tickOrCrossAndRatioOrValue(
+            memoryExceeded === false,
+            memoryRatio,
+            memory,
+            prettyPrintBytes,
+            1024
+          )}
+        </td>
+        <td className="text-center">
+          {showTimeResults(
+            testName,
+            wallTime,
+            wallTimeRatio,
+            wallTimeExceeded,
+            cpuTime,
+            cpuTimeRatio,
+            cpuTimeExceeded
+          )}
+        </td>
+
+        <td className="text-center">
+          {exitCodeMapping(runtimeEnvironmentId, exitCode)}
+        </td>
+
+        {isSupervisor &&
+          <td className="text-right">
+            {judgeLog &&
+              <Button
+                bsStyle={this.isLogOpen(testName) ? 'warning' : 'primary'}
+                className="btn-flat"
+                bsSize="xs"
+                onClick={() => this.toggleLogOpen(testName)}
+              >
+                {this.isLogOpen(testName)
+                  ? <FormattedMessage
+                      id="app.submissions.testResultsTable.hideLog"
+                      defaultMessage="Hide Log"
+                    />
+                  : <FormattedMessage
+                      id="app.submissions.testResultsTable.showLog"
+                      defaultMessage="Show Log"
+                    />}
+              </Button>}
+          </td>}
       </tr>
-    </thead>
-    <tbody>
-      {results.map(
-        ({
-          id,
-          testName,
-          score,
-          status,
-          memoryExceeded,
-          wallTimeExceeded,
-          cpuTimeExceeded,
-          message,
-          memoryRatio,
-          wallTimeRatio,
-          cpuTimeRatio,
-          memory,
-          wallTime,
-          cpuTime,
-          exitCode
-        }) =>
-          <tr key={testName}>
-            <td>
-              {testName}
-            </td>
-            <td
-              className={classNames({
-                'text-center': true,
-                'text-success': score === 1,
-                'text-danger': score !== 1
-              })}
-            >
-              <b>
-                <FormattedNumber value={score} style="percent" />
-              </b>
-            </td>
-            <td className="text-center">
-              <b>
-                {status === 'OK' &&
-                  <span className="text-success">
-                    <FormattedMessage
-                      id="app.submissions.testResultsTable.statusOK"
-                      defaultMessage="OK"
-                    />
-                  </span>}
-                {status === 'SKIPPED' &&
-                  <span className="text-warning">
-                    <FormattedMessage
-                      id="app.submissions.testResultsTable.statusSkipped"
-                      defaultMessage="SKIPPED"
-                    />
-                  </span>}
-                {status === 'FAILED' &&
-                  <span className="text-danger">
-                    <FormattedMessage
-                      id="app.submissions.testResultsTable.statusFailed"
-                      defaultMessage="FAILED"
-                    />
-                  </span>}
-              </b>
-            </td>
+    );
+  };
 
-            <td className="text-center">
-              {tickOrCrossAndRatioOrValue(
-                memoryExceeded === false,
-                memoryRatio,
-                memory,
-                prettyPrintBytes,
-                1024
-              )}
-            </td>
-            <td className="text-center">
-              {showTimeResults(
-                testName,
-                wallTime,
-                wallTimeRatio,
-                wallTimeExceeded,
-                cpuTime,
-                cpuTimeRatio,
-                cpuTimeExceeded
-              )}
-            </td>
+  renderLog = ({ testName, judgeLog = '' }) =>
+    <tr key={`${testName}-log`}>
+      <td colSpan={7}>
+        <pre className={styles.log}>
+          {judgeLog}
+        </pre>
+      </td>
+    </tr>;
 
-            <td className="text-center">
-              {exitCodeMapping(runtimeEnvironmentId, exitCode)}
-            </td>
+  render() {
+    const { results, isSupervisor = false } = this.props;
+    const showLogButton =
+      isSupervisor &&
+      results.reduce(
+        (out, { judgeLog = '' }) => out || Boolean(judgeLog),
+        false
+      );
+    const allLogsClosed =
+      showLogButton &&
+      results.reduce(
+        (out, { testName }) => out && !this.isLogOpen(testName),
+        true
+      );
+
+    return (
+      <Table responsive>
+        <thead>
+          <tr>
+            <th />
+            <th className="text-center">
+              <OverlayTrigger
+                placement="top"
+                overlay={
+                  <Tooltip id="status">
+                    <FormattedMessage
+                      id="app.submissions.testResultsTable.overallTestResult"
+                      defaultMessage="Overall test result"
+                    />
+                  </Tooltip>
+                }
+              >
+                <span>
+                  <FontAwesomeIcon icon="check" />/<FontAwesomeIcon icon="times" />
+                </span>
+              </OverlayTrigger>
+            </th>
+            <th className="text-center">
+              <OverlayTrigger
+                placement="top"
+                overlay={
+                  <Tooltip id="correctness">
+                    <FormattedMessage
+                      id="app.submissions.testResultsTable.correctness"
+                      defaultMessage="Correctness of the result (verdict of the judge)"
+                    />
+                  </Tooltip>
+                }
+              >
+                <FontAwesomeIcon icon="balance-scale" />
+              </OverlayTrigger>
+            </th>
+            <th className="text-center">
+              <OverlayTrigger
+                placement="top"
+                overlay={
+                  <Tooltip id="memoryExceeded">
+                    <FormattedMessage
+                      id="app.submissions.testResultsTable.memoryExceeded"
+                      defaultMessage="Measured memory utilization"
+                    />
+                  </Tooltip>
+                }
+              >
+                <span>
+                  <Icon icon="thermometer-half" gapRight />
+                  <Icon icon="braille" />
+                </span>
+              </OverlayTrigger>
+            </th>
+            <th className="text-center">
+              <OverlayTrigger
+                placement="top"
+                overlay={
+                  <Tooltip id="timeExceeded">
+                    <FormattedMessage
+                      id="app.submissions.testResultsTable.timeExceeded"
+                      defaultMessage="Measured execution time"
+                    />
+                  </Tooltip>
+                }
+              >
+                <span>
+                  <Icon icon="thermometer-half" gapRight />
+                  <Icon icon="bolt" />
+                </span>
+              </OverlayTrigger>
+            </th>
+            <th className="text-center">
+              <OverlayTrigger
+                placement="top"
+                overlay={
+                  <Tooltip id="exitCode">
+                    <FormattedMessage
+                      id="app.submissions.testResultsTable.exitCode"
+                      defaultMessage="Exit code (possibly translated into error message if translation is available)"
+                    />
+                  </Tooltip>
+                }
+              >
+                <FontAwesomeIcon icon="power-off" />
+              </OverlayTrigger>
+            </th>
+            {isSupervisor &&
+              <th className="text-right">
+                {showLogButton &&
+                  <Button
+                    bsStyle={allLogsClosed ? 'primary' : 'warning'}
+                    className="btn-flat"
+                    bsSize="xs"
+                    onClick={this.setAllLogsState(allLogsClosed)}
+                  >
+                    {allLogsClosed
+                      ? <FormattedMessage
+                          id="generic.showAll"
+                          defaultMessage="Show All"
+                        />
+                      : <FormattedMessage
+                          id="generic.hideAll"
+                          defaultMessage="Hide All"
+                        />}
+                  </Button>}
+              </th>}
           </tr>
-      )}
-    </tbody>
-  </Table>;
+        </thead>
+        <tbody>
+          {results.map(
+            result =>
+              this.isLogOpen(result.testName)
+                ? [this.renderRow(result), this.renderLog(result)]
+                : this.renderRow(result)
+          )}
+        </tbody>
+      </Table>
+    );
+  }
+}
 
 TestResultsTable.propTypes = {
   results: PropTypes.arrayOf(
@@ -300,7 +405,8 @@ TestResultsTable.propTypes = {
       testName: PropTypes.string
     })
   ).isRequired,
-  runtimeEnvironmentId: PropTypes.string
+  runtimeEnvironmentId: PropTypes.string,
+  isSupervisor: PropTypes.bool
 };
 
 export default TestResultsTable;

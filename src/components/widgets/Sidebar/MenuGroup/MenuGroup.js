@@ -71,7 +71,7 @@ class MenuGroup extends Component {
         })}
       >
         <a href="#" onClick={this.toggle}>
-          <Icon icon={icon} gapRight />
+          <Icon icon={icon} gapRight fixedWidth />
           <span
             style={{
               whiteSpace: 'normal',
@@ -113,6 +113,7 @@ class MenuGroup extends Component {
                     currentPath={currentPath}
                     notificationsCount={itemsNotificationsCount(item)}
                     link={createLink(item)}
+                    small={true}
                   />
           )}
         </ul>
@@ -123,7 +124,7 @@ class MenuGroup extends Component {
 
 MenuGroup.propTypes = {
   title: PropTypes.oneOfType([PropTypes.string, PropTypes.element]).isRequired,
-  icon: PropTypes.string,
+  icon: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
   link: PropTypes.string,
   items: ImmutablePropTypes.list,
   currentPath: PropTypes.string,

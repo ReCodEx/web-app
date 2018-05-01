@@ -10,7 +10,7 @@ import withLinks from '../../../helpers/withLinks';
 const Public = ({
   isLoggedIn,
   currentUrl,
-  links: { LOGIN_URI, REGISTRATION_URI, BUGS_URL, FAQ_URL }
+  links: { LOGIN_URI, REGISTRATION_URI }
 }) =>
   <ul className="sidebar-menu">
     <MenuTitle title="ReCodEx" />
@@ -36,25 +36,6 @@ const Public = ({
       icon="user-plus"
       currentPath={currentUrl}
       link={REGISTRATION_URI}
-    />
-    <MenuItem
-      title={
-        <FormattedMessage
-          id="app.sidebar.menu.feedbackAndBugs"
-          defaultMessage="Feedback and bug reporting"
-        />
-      }
-      icon="bug"
-      link={BUGS_URL}
-      currentPath={currentUrl}
-    />
-    <MenuItem
-      title={
-        <FormattedMessage id="app.sidebar.menu.faq" defaultMessage="FAQ" />
-      }
-      icon="blind"
-      link={FAQ_URL}
-      currentPath={currentUrl}
     />
   </ul>;
 

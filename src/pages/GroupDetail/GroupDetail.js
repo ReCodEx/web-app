@@ -292,9 +292,9 @@ class GroupDetail extends Component {
                           assignments={pubAssignments}
                           stats={groupStats}
                           publicStats={
-                            group &&
-                            group.privateData &&
-                            group.privateData.publicStats
+                            data &&
+                            data.privateData &&
+                            data.privateData.publicStats
                           }
                           isAdmin={isAdmin}
                           isSupervisor={isSupervisor}

@@ -238,7 +238,7 @@ class EditExerciseSimpleConfigTest extends Component {
                     }
                   >
                     <Button
-                      bsStyle={'primary'}
+                      bsStyle="primary"
                       className="btn-flat"
                       bsSize="xs"
                       disabled={Boolean(testErrors)}

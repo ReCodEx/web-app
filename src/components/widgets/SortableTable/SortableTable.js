@@ -66,12 +66,13 @@ class SortableTable extends Component {
       data = [],
       empty = null,
       rowRenderer = this.defaultRowRenderer,
-      cellRenderers = {}
+      cellRenderers = {},
+      ...props
     } = this.props;
     const headerKeys = Object.keys(header);
     const { sortColumn, ascendant } = this.state;
     return (
-      <Table>
+      <Table {...props}>
         {headerKeys.length > 0 &&
           <thead>
             <tr>

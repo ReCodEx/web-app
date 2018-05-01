@@ -4,12 +4,12 @@ import { FormattedMessage } from 'react-intl';
 import Box from '../../widgets/Box';
 import TestResultsTable from '../TestResultsTable';
 
-const TestResults = ({ evaluation, runtimeEnvironmentId }) =>
+const TestResults = ({ evaluation, runtimeEnvironmentId, isSupervisor }) =>
   <Box
     title={
       <FormattedMessage
         id="app.submission.evaluation.title.testResults"
-        defaultMessage="Test results"
+        defaultMessage="Test Results"
       />
     }
     noPadding={true}
@@ -20,12 +20,14 @@ const TestResults = ({ evaluation, runtimeEnvironmentId }) =>
     <TestResultsTable
       results={evaluation.testResults}
       runtimeEnvironmentId={runtimeEnvironmentId}
+      isSupervisor={isSupervisor}
     />
   </Box>;
 
 TestResults.propTypes = {
   evaluation: PropTypes.object.isRequired,
-  runtimeEnvironmentId: PropTypes.string
+  runtimeEnvironmentId: PropTypes.string,
+  isSupervisor: PropTypes.bool
 };
 
 export default TestResults;
