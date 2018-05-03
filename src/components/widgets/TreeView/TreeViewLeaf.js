@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
-import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 
 import Icon, { LoadingIcon, GroupIcon } from '../../icons';
 import LevelGap from './LevelGap';
@@ -55,11 +54,7 @@ const TreeViewLeaf = ({
           </Tooltip>
         }
       >
-        <GroupIcon
-          organizational={true}
-          className="text-muted"
-          style={{ marginLeft: '0.5em' }}
-        />
+        <GroupIcon organizational={true} className="text-muted" gapLeft />
       </OverlayTrigger>}
     {isPublic &&
       <OverlayTrigger
@@ -73,11 +68,7 @@ const TreeViewLeaf = ({
           </Tooltip>
         }
       >
-        <FontAwesomeIcon
-          icon="eye"
-          className="text-muted"
-          style={{ marginLeft: '0.5em' }}
-        />
+        <Icon icon="eye" className="text-muted" gapLeft />
       </OverlayTrigger>}
     <span className="pull-right">{actions}</span>
   </li>;

@@ -16,13 +16,8 @@ const GroupInfoTable = ({
     localizedTexts,
     primaryAdminsIds,
     childGroups,
-    privateData: {
-      description,
-      threshold,
-      parentGroupId,
-      isPublic = false,
-      ...privateGroup
-    }
+    public: isPublic = false,
+    privateData: { threshold, parentGroupId, ...privateGroup }
   },
   groups,
   supervisors,
@@ -39,10 +34,7 @@ const GroupInfoTable = ({
       }
       description={
         <ReactMarkdown
-          source={getLocalizedDescription(
-            { description, localizedTexts },
-            locale
-          )}
+          source={getLocalizedDescription({ localizedTexts }, locale)}
         />
       }
       type="primary"
@@ -97,7 +89,6 @@ const GroupInfoTable = ({
 GroupInfoTable.propTypes = {
   group: PropTypes.shape({
     id: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired,
     parentGroupId: PropTypes.string,
     childGroups: PropTypes.shape({
       all: PropTypes.array,
@@ -105,9 +96,8 @@ GroupInfoTable.propTypes = {
     }),
     threshold: PropTypes.number,
     primaryAdminsIds: PropTypes.array.isRequired,
+    public: PropTypes.bool,
     privateData: PropTypes.shape({
-      description: PropTypes.string.isRequired,
-      isPublic: PropTypes.bool,
       supervisors: PropTypes.array.isRequired
     })
   }),

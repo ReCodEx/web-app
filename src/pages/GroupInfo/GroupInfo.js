@@ -151,9 +151,7 @@ class GroupInfo extends Component {
                 data.privateData.students.includes(userId)
               }
               canLeaveJoin={
-                !isAdmin &&
-                !isSupervisor &&
-                (data.privateData.isPublic || isStudent)
+                !isAdmin && !isSupervisor && (data.public || isStudent)
               }
             />
 
@@ -214,28 +212,27 @@ class GroupInfo extends Component {
                   </Box>}
               </Col>
               <Col sm={6}>
-                {data.childGroups.all.length > 0 &&
-                  <Box
-                    title={
-                      <FormattedMessage
-                        id="app.groupDetail.subgroups"
-                        defaultMessage="Subgroups hierarchy"
-                      />
-                    }
-                    unlimitedHeight
-                  >
-                    <GroupTree
-                      id={data.id}
-                      currentGroupId={data.id}
-                      deletable={false}
-                      isAdmin={isAdmin}
-                      isPublic={data.privateData.isPublic}
-                      isOpen
-                      groups={groups}
-                      level={1}
-                      ancestralPath={data.parentGroupsIds.slice(1)}
+                <Box
+                  title={
+                    <FormattedMessage
+                      id="app.groupDetail.subgroups"
+                      defaultMessage="Subgroups hierarchy"
                     />
-                  </Box>}
+                  }
+                  unlimitedHeight
+                >
+                  <GroupTree
+                    id={data.id}
+                    currentGroupId={data.id}
+                    deletable={false}
+                    isAdmin={isAdmin}
+                    isPublic={data.public}
+                    isOpen
+                    groups={groups}
+                    level={1}
+                    ancestralPath={data.parentGroupsIds.slice(1)}
+                  />
+                </Box>
 
                 {isAdmin &&
                   <EditGroupForm

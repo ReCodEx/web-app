@@ -1,10 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
 
 import MenuGroup from '../../widgets/Sidebar/MenuGroup';
 import { getId } from '../../../redux/helpers/resourceManager';
+import { getLocalizedResourceName } from '../../../helpers/getLocalizedData';
 
 import withLinks from '../../../helpers/withLinks';
 
@@ -13,7 +14,8 @@ const Student = ({
   studentOf,
   isCollapsed,
   notifications,
-  links: { GROUP_DETAIL_URI_FACTORY }
+  links: { GROUP_DETAIL_URI_FACTORY },
+  intl: { locale }
 }) =>
   <ul className="sidebar-menu">
     <MenuGroup
@@ -23,7 +25,14 @@ const Student = ({
           defaultMessage="Member of Groups"
         />
       }
-      items={studentOf.toList()}
+      items={studentOf
+        .toList()
+        .sort((a, b) =>
+          getLocalizedResourceName(a, locale).localeCompare(
+            getLocalizedResourceName(b, locale),
+            locale
+          )
+        )}
       notifications={notifications}
       icon={'user-circle'}
       currentPath={currentUrl}
@@ -37,7 +46,8 @@ Student.propTypes = {
   studentOf: ImmutablePropTypes.map,
   isCollapsed: PropTypes.bool,
   notifications: PropTypes.object,
-  links: PropTypes.object
+  links: PropTypes.object,
+  intl: intlShape
 };
 
-export default withLinks(Student);
+export default injectIntl(withLinks(Student));

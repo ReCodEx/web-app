@@ -1,5 +1,5 @@
 import { handleActions } from 'redux-actions';
-import { fromJS, List } from 'immutable';
+import { fromJS } from 'immutable';
 
 import { addNotification } from './notifications';
 import { createApiAction } from '../middleware/apiMiddleware';
@@ -358,20 +358,11 @@ const reducer = handleActions(
 
     [assignmentsActionTypes.UPDATE_FULFILLED]: (
       state,
-      { payload: { id: assignmentId, isPublic, groupId } }
+      { payload: { id: assignmentId, groupId } }
     ) =>
       state.updateIn(
-        ['resources', groupId, 'data', 'privateData', 'assignments', 'public'],
-        assignments => {
-          if (isPublic) {
-            return assignments.push(assignmentId).toSet().toList();
-          } else {
-            return assignments
-              .filter(id => id !== assignmentId)
-              .toSet()
-              .toList();
-          }
-        }
+        ['resources', groupId, 'data', 'privateData', 'assignments'],
+        assignments => assignments.push(assignmentId).toSet().toList()
       ),
 
     [assignmentsActionTypes.ADD_FULFILLED]: (
@@ -379,13 +370,8 @@ const reducer = handleActions(
       { payload: { id: assignmentId }, meta: { body: { groupId } } }
     ) =>
       state.updateIn(
-        ['resources', groupId, 'data', 'privateData', 'assignments', 'all'],
-        assignments => {
-          if (!assignments) {
-            assignments = List();
-          }
-          return assignments.push(assignmentId);
-        }
+        ['resources', groupId, 'data', 'privateData', 'assignments'],
+        assignments => assignments.push(assignmentId).toSet().toList()
       ),
 
     [assignmentsActionTypes.REMOVE_FULFILLED]: (
@@ -395,9 +381,7 @@ const reducer = handleActions(
       state.update('resources', groups =>
         groups.map(group =>
           group.updateIn(['data', 'privateData', 'assignments'], assignments =>
-            assignments
-              .update('all', ids => ids.filter(id => id !== assignmentId))
-              .update('public', ids => ids.filter(id => id !== assignmentId))
+            assignments.filter(id => id !== assignmentId)
           )
         )
       ),

@@ -42,7 +42,8 @@ class EditGroup extends Component {
     ({
       localizedTexts,
       externalId,
-      privateData: { isPublic, publicStats, threshold }
+      public: isPublic,
+      privateData: { publicStats, threshold }
     }) => ({
       localizedTexts,
       externalId,

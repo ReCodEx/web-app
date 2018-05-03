@@ -6,7 +6,6 @@ import { push } from 'react-router-redux';
 import { LinkContainer } from 'react-router-bootstrap';
 import Button from '../../components/widgets/FlatButton';
 import { FormattedMessage, injectIntl } from 'react-intl';
-import { List, Map } from 'immutable';
 import { Row, Col } from 'react-bootstrap';
 
 import Page from '../../components/layout/Page';
@@ -50,8 +49,7 @@ import {
 import {
   groupSelector,
   groupsSelector,
-  groupsPublicAssignmentsSelector,
-  groupsAllAssignmentsSelector
+  groupsAssignmentsSelector
 } from '../../redux/selectors/groups';
 import { getExercisesForGroup } from '../../redux/selectors/exercises';
 import {
@@ -65,6 +63,8 @@ import withLinks from '../../helpers/withLinks';
 import { isReady } from '../../redux/helpers/resourceManager/index';
 import ResultsTable from '../../components/Groups/ResultsTable/ResultsTable';
 import GroupTopButtons from '../../components/Groups/GroupTopButtons/GroupTopButtons';
+
+import { EMPTY_LIST, EMPTY_MAP } from '../../helpers/common';
 
 class GroupDetail extends Component {
   static isAdminOrSupervisorOf = (group, userId) =>
@@ -169,9 +169,8 @@ class GroupDetail extends Component {
     const {
       group,
       students,
-      allAssignments = List(),
-      groupExercises = Map(),
-      publicAssignments = List(),
+      assignments = EMPTY_LIST,
+      groupExercises = EMPTY_MAP,
       assignmentEnvironmentsSelector,
       stats,
       statuses,
@@ -218,9 +217,7 @@ class GroupDetail extends Component {
                 data.privateData.students.includes(userId)
               }
               canLeaveJoin={
-                !isAdmin &&
-                !isSupervisor &&
-                (data.privateData.isPublic || isStudent)
+                !isAdmin && !isSupervisor && (data.public || isStudent)
               }
             />
             {data.organizational &&
@@ -251,11 +248,7 @@ class GroupDetail extends Component {
                     <ResourceRenderer resource={stats}>
                       {groupStats =>
                         <AssignmentsTable
-                          assignments={
-                            isAdmin || isSupervisor
-                              ? allAssignments
-                              : publicAssignments
-                          }
+                          assignments={assignments}
                           assignmentEnvironmentsSelector={
                             assignmentEnvironmentsSelector
                           }
@@ -284,12 +277,12 @@ class GroupDetail extends Component {
                     unlimitedHeight
                     noPadding
                   >
-                    <ResourceRenderer resource={[stats, ...publicAssignments]}>
-                      {(groupStats, ...pubAssignments) =>
+                    <ResourceRenderer resource={[stats, ...assignments]}>
+                      {(groupStats, ...assignments) =>
                         <ResultsTable
                           users={students}
                           loggedUser={userId}
-                          assignments={pubAssignments}
+                          assignments={assignments}
                           stats={groupStats}
                           publicStats={
                             data &&
@@ -432,9 +425,8 @@ GroupDetail.propTypes = {
   group: ImmutablePropTypes.map,
   instance: ImmutablePropTypes.map,
   students: PropTypes.array,
-  allAssignments: ImmutablePropTypes.list,
+  assignments: ImmutablePropTypes.list,
   groupExercises: ImmutablePropTypes.map,
-  publicAssignments: ImmutablePropTypes.list,
   assignmentEnvironmentsSelector: PropTypes.func,
   groups: ImmutablePropTypes.map,
   isAdmin: PropTypes.bool,
@@ -458,9 +450,8 @@ const mapStateToProps = (state, { params: { groupId } }) => {
     group: groupSelector(groupId)(state),
     userId,
     groups: groupsSelector(state),
-    publicAssignments: groupsPublicAssignmentsSelector(state, groupId),
+    assignments: groupsAssignmentsSelector(state, groupId),
     assignmentEnvironmentsSelector: assignmentEnvironmentsSelector(state),
-    allAssignments: groupsAllAssignmentsSelector(state, groupId),
     groupExercises: getExercisesForGroup(state, groupId),
     statuses: getStatusesForLoggedUser(state, groupId),
     stats: createGroupsStatsSelector(groupId)(state),
