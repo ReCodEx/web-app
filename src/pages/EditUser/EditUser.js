@@ -18,6 +18,9 @@ import { LocalIcon } from '../../components/icons';
 
 import EditUserProfileForm from '../../components/forms/EditUserProfileForm';
 import EditUserSettingsForm from '../../components/forms/EditUserSettingsForm';
+import GenerateTokenForm from '../../components/forms/GenerateTokenForm';
+import { generateToken } from '../../redux/modules/auth';
+import { lastGeneratedToken } from '../../redux/selectors/auth';
 
 class EditUser extends Component {
   static loadAsync = ({ userId }, dispatch) =>
@@ -43,7 +46,14 @@ class EditUser extends Component {
   }
 
   render() {
-    const { user, updateSettings, makeLocalLogin, isSuperAdmin } = this.props;
+    const {
+      user,
+      updateSettings,
+      makeLocalLogin,
+      isSuperAdmin,
+      generateToken,
+      lastToken
+    } = this.props;
     return (
       <Page
         resource={user}
@@ -117,6 +127,18 @@ class EditUser extends Component {
                 />
               </Col>
             </Row>
+            <Row>
+              <Col lg={12}>
+                <GenerateTokenForm
+                  onSubmit={generateToken}
+                  initialValues={{
+                    expiration: 3600,
+                    scopes: { 'read-all': true }
+                  }}
+                  lastToken={lastToken}
+                />
+              </Col>
+            </Row>
           </div>}
       </Page>
     );
@@ -130,18 +152,30 @@ EditUser.propTypes = {
   updateProfile: PropTypes.func.isRequired,
   updateSettings: PropTypes.func.isRequired,
   makeLocalLogin: PropTypes.func.isRequired,
-  isSuperAdmin: PropTypes.bool.isRequired
+  isSuperAdmin: PropTypes.bool.isRequired,
+  generateToken: PropTypes.func.isRequired,
+  lastToken: PropTypes.string
 };
 
 export default connect(
   (state, { params: { userId } }) => ({
     user: getUser(userId)(state),
-    isSuperAdmin: isLoggedAsSuperAdmin(state)
+    isSuperAdmin: isLoggedAsSuperAdmin(state),
+    lastToken: lastGeneratedToken(state)
   }),
   (dispatch, { params: { userId } }) => ({
     loadAsync: () => EditUser.loadAsync({ userId }, dispatch),
     updateSettings: data => dispatch(updateSettings(userId, data)),
     updateProfile: data => dispatch(updateProfile(userId, data)),
-    makeLocalLogin: () => dispatch(makeLocalLogin(userId))
+    makeLocalLogin: () => dispatch(makeLocalLogin(userId)),
+    generateToken: formData =>
+      dispatch(
+        generateToken(
+          formData.expiration,
+          Object.keys(formData.scopes).filter(
+            key => formData.scopes[key] === true
+          )
+        )
+      )
   })
 )(EditUser);
