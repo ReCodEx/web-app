@@ -15,7 +15,6 @@ const GroupInfoTable = ({
     name,
     localizedTexts,
     primaryAdminsIds,
-    childGroups,
     public: isPublic = false,
     privateData: { threshold, parentGroupId, ...privateGroup }
   },
@@ -90,10 +89,6 @@ GroupInfoTable.propTypes = {
   group: PropTypes.shape({
     id: PropTypes.string.isRequired,
     parentGroupId: PropTypes.string,
-    childGroups: PropTypes.shape({
-      all: PropTypes.array,
-      public: PropTypes.array.isRequired
-    }),
     threshold: PropTypes.number,
     primaryAdminsIds: PropTypes.array.isRequired,
     public: PropTypes.bool,

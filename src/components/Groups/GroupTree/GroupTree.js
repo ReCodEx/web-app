@@ -61,13 +61,9 @@ class GroupTree extends Component {
     );
   };
 
-  renderChildGroups = (
-    { all: allChildGroups, public: publicChildGroups },
-    visibleGroupsMap,
-    level
-  ) => {
+  renderChildGroups = (childGroups, visibleGroupsMap, level) => {
     const { isOpen = false, groups, intl: { locale } } = this.props;
-    return allChildGroups
+    return childGroups
       .filter(id => visibleGroupsMap[id])
       .sort((id1, id2) => {
         const name1 = getLocalizedResourceName(groups.get(id1), locale);
@@ -83,7 +79,6 @@ class GroupTree extends Component {
           id={id}
           isOpen={level !== 0 || isOpen}
           level={level + 1}
-          isPublic={publicChildGroups.indexOf(id) >= 0}
           visibleGroupsMap={visibleGroupsMap}
         />
       );
@@ -94,7 +89,6 @@ class GroupTree extends Component {
       id,
       level = 0,
       isOpen = false,
-      isPublic = false,
       groups,
       currentGroupId = null,
       visibleGroupsMap = null,
@@ -116,7 +110,8 @@ class GroupTree extends Component {
       canView,
       childGroups,
       primaryAdminsIds,
-      organizational
+      organizational,
+      public: isPublic
     } = getJsData(group);
 
     const actualVisibleGroupsMap =
@@ -177,7 +172,6 @@ GroupTree.propTypes = {
   groups: PropTypes.object.isRequired,
   level: PropTypes.number,
   isOpen: PropTypes.bool,
-  isPublic: PropTypes.bool,
   currentGroupId: PropTypes.string,
   visibleGroupsMap: PropTypes.object,
   ancestralPath: PropTypes.array,

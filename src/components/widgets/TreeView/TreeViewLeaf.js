@@ -23,7 +23,7 @@ const TreeViewLeaf = ({
     onClick={onClick}
     style={{
       cursor: onClick ? 'pointer' : undefined,
-      padding: '15px 10px'
+      padding: '10px 10px'
     }}
   >
     <LevelGap level={level - 1} /> {/* root group is not displayed */}

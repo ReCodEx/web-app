@@ -241,7 +241,7 @@ class GroupInfo extends Component {
                     initialValues={EMPTY_OBJ}
                     createNew
                     collapsable
-                    isOpen={data.childGroups.all.length === 0}
+                    isOpen={data.childGroups.length === 0}
                     formValues={formValues}
                   />}
               </Col>

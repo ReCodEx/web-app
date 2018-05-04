@@ -207,7 +207,7 @@ const reducer = handleActions(
       }
 
       return state.updateIn(
-        ['resources', group.parentGroupId, 'data', 'childGroups', 'all'],
+        ['resources', group.parentGroupId, 'data', 'childGroups'],
         children => children.push(group.id)
       );
     },
@@ -218,27 +218,13 @@ const reducer = handleActions(
         groups.map(
           group =>
             group.get('data') !== null
-              ? group.updateIn(['data', 'childGroups', 'all'], all =>
-                  all.filter(groupId => groupId !== action.meta.id)
+              ? group.updateIn(['data', 'childGroups'], children =>
+                  children.filter(groupId => groupId !== action.meta.id)
                 )
               : null
         )
       );
     },
-
-    [additionalActionTypes.UPDATE_GROUP_FULFILLED]: (
-      state,
-      { payload: { parentGroupId, isPublic }, meta: { groupId, userId } }
-    ) =>
-      state.hasIn(['resources', parentGroupId, 'data'])
-        ? state.updateIn(
-            ['resources', parentGroupId, 'data', 'childGroups', 'public'],
-            groups =>
-              isPublic
-                ? groups.push(groupId).toSet().toList()
-                : groups.filter(id => id !== groupId)
-          )
-        : state,
 
     [additionalActionTypes.JOIN_GROUP_PENDING]: (
       state,
