@@ -220,6 +220,7 @@ class GroupInfo extends Component {
                     />
                   }
                   unlimitedHeight
+                  extraPadding
                 >
                   <GroupTree
                     id={data.id}

@@ -37,6 +37,7 @@ class Box extends Component {
     const {
       description = null,
       noPadding = false,
+      extraPadding = false,
       children,
       footer,
       unlimitedHeight = false
@@ -51,6 +52,7 @@ class Box extends Component {
           className={classNames({
             'box-body': true,
             'no-padding': noPadding,
+            [styles.extraPadding]: !noPadding && extraPadding,
             [styles.limited]: !unlimitedHeight,
             [styles.unlimited]: unlimitedHeight
           })}
@@ -127,6 +129,7 @@ Box.propTypes = {
   collapsable: PropTypes.bool,
   unlimitedHeight: PropTypes.bool,
   noPadding: PropTypes.bool,
+  extraPadding: PropTypes.bool,
   solid: PropTypes.bool,
   footer: PropTypes.element,
   children: PropTypes.element,
