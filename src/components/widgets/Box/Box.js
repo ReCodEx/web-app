@@ -102,12 +102,14 @@ class Box extends Component {
               </button>
             </div>}
         </div>
-        {collapsable &&
-          <Collapse isOpened={isOpen}>
-            {this.renderBody()}
-          </Collapse>}
+        <div>
+          {collapsable &&
+            <Collapse isOpened={isOpen}>
+              {this.renderBody()}
+            </Collapse>}
 
-        {!collapsable && this.renderBody()}
+          {!collapsable && this.renderBody()}
+        </div>
       </div>
     );
   }

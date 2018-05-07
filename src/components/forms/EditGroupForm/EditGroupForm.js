@@ -19,6 +19,7 @@ const EditGroupForm = ({
   createNew = false,
   localizedTextsLocales,
   hasThreshold,
+  isPublic,
   collapsable = false,
   isOpen = true,
   reset,
@@ -103,21 +104,22 @@ const EditGroupForm = ({
         }
       />}
     <Row>
-      <Col lg={6}>
-        <Field
-          name="isPublic"
-          tabIndex={3}
-          component={CheckboxField}
-          onOff
-          label={
-            <FormattedMessage
-              id="app.createGroup.isPublic"
-              defaultMessage="Public (everyone can see and join this group)"
-            />
-          }
-          required
-        />
-      </Col>
+      {(isSuperAdmin || isPublic) && // any user can turn public flag off, but only superuser may turn it on :)
+        <Col lg={6}>
+          <Field
+            name="isPublic"
+            tabIndex={3}
+            component={CheckboxField}
+            onOff
+            label={
+              <FormattedMessage
+                id="app.createGroup.isPublic"
+                defaultMessage="Public (everyone can see and join this group)"
+              />
+            }
+            required
+          />
+        </Col>}
       <Col lg={6}>
         <Field
           name="publicStats"
@@ -177,6 +179,7 @@ EditGroupForm.propTypes = {
   submitting: PropTypes.bool,
   invalid: PropTypes.bool,
   hasThreshold: PropTypes.bool,
+  isPublic: PropTypes.bool,
   localizedTextsLocales: PropTypes.array,
   createNew: PropTypes.bool,
   collapsable: PropTypes.bool,

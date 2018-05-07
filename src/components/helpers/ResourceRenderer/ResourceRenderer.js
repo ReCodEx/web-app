@@ -19,6 +19,12 @@ const defaultLoading = noIcons =>
     <FormattedMessage id="generic.loading" defaultMessage="Loading ..." />
   </span>;
 
+const defaultLoadingBulky = noIcons =>
+  <p className="text-center" style={{ fontSize: '120%', padding: '1em' }}>
+    {!noIcons && <LoadingIcon gapRight />}
+    <FormattedMessage id="generic.loading" defaultMessage="Loading ..." />
+  </p>;
+
 const defaultFailed = noIcons =>
   <span>
     {!noIcons && <WarningIcon gapRight />}
@@ -27,6 +33,15 @@ const defaultFailed = noIcons =>
       defaultMessage="Loading failed."
     />
   </span>;
+
+const defaultFailedBulky = noIcons =>
+  <p className="text-center text-danger" style={{ padding: '1em' }}>
+    {!noIcons && <WarningIcon gapRight />}
+    <FormattedMessage
+      id="app.resourceRenderer.loadingFailed"
+      defaultMessage="Loading failed."
+    />
+  </p>;
 
 const shallowResourcesEqual = (oldResources, newResources) => {
   if (oldResources.length !== newResources.length) {
@@ -98,8 +113,13 @@ class ResourceRenderer extends Component {
   render() {
     const {
       noIcons = false,
-      loading = defaultLoading(noIcons),
-      failed = defaultFailed(noIcons),
+      bulkyLoading = false,
+      loading = bulkyLoading
+        ? defaultLoadingBulky(noIcons)
+        : defaultLoading(noIcons),
+      failed = bulkyLoading
+        ? defaultFailedBulky(noIcons)
+        : defaultFailed(noIcons),
       resource,
       hiddenUntilReady = false,
       forceLoading = false
@@ -134,6 +154,7 @@ ResourceRenderer.propTypes = {
   hiddenUntilReady: PropTypes.bool,
   forceLoading: PropTypes.bool,
   noIcons: PropTypes.bool,
+  bulkyLoading: PropTypes.bool,
   returnAsArray: PropTypes.bool,
   debug: PropTypes.bool
 };

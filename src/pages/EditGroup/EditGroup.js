@@ -115,7 +115,7 @@ class EditGroup extends Component {
                 </p>
               </Col>
               <Col lg={9}>
-                <p className="small text-muted">
+                <p className="small text-muted" style={{ padding: '0.75em' }}>
                   <Icon icon="info-circle" gapRight />
                   <FormattedMessage
                     id="app.editGroup.organizationalExplain"
@@ -130,6 +130,7 @@ class EditGroup extends Component {
               initialValues={this.getInitialValues(group)}
               onSubmit={editGroup}
               hasThreshold={hasThreshold}
+              isPublic={group.public}
               localizedTextsLocales={getLocalizedTextsLocales(localizedTexts)}
               isSuperAdmin={isSuperAdmin}
             />

@@ -201,7 +201,7 @@ class GroupInfo extends Component {
                     title={
                       <FormattedMessage
                         id="app.group.adminsView.addSupervisor"
-                        defaultMessage="Add supervisor"
+                        defaultMessage="Add Supervisor"
                       />
                     }
                   >
@@ -216,7 +216,7 @@ class GroupInfo extends Component {
                   title={
                     <FormattedMessage
                       id="app.groupDetail.subgroups"
-                      defaultMessage="Subgroups hierarchy"
+                      defaultMessage="Subgroups Hierarchy"
                     />
                   }
                   unlimitedHeight

@@ -245,7 +245,7 @@ class GroupDetail extends Component {
                     noPadding
                     unlimitedHeight
                   >
-                    <ResourceRenderer resource={stats}>
+                    <ResourceRenderer resource={stats} bulkyLoading>
                       {groupStats =>
                         <AssignmentsTable
                           assignments={assignments}
@@ -277,7 +277,10 @@ class GroupDetail extends Component {
                     unlimitedHeight
                     noPadding
                   >
-                    <ResourceRenderer resource={[stats, ...assignments]}>
+                    <ResourceRenderer
+                      resource={[stats, ...assignments]}
+                      bulkyLoading
+                    >
                       {(groupStats, ...assignments) =>
                         <ResultsTable
                           users={students}
