@@ -35,7 +35,10 @@ const defaultFailed = noIcons =>
   </span>;
 
 const defaultFailedBulky = noIcons =>
-  <p className="text-center text-danger" style={{ padding: '1em' }}>
+  <p
+    className="text-center text-danger"
+    style={{ fontSize: '120%', padding: '1em' }}
+  >
     {!noIcons && <WarningIcon gapRight />}
     <FormattedMessage
       id="app.resourceRenderer.loadingFailed"

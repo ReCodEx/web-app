@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
-import { getFormValues } from 'redux-form';
+import { formValueSelector } from 'redux-form';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { List } from 'immutable';
 import { Row, Col } from 'react-bootstrap';
@@ -20,7 +20,9 @@ import { getLocalizedName } from '../../helpers/getLocalizedData';
 import { isReady } from '../../redux/helpers/resourceManager/index';
 import Box from '../../components/widgets/Box';
 import GroupTree from '../../components/Groups/GroupTree/GroupTree';
-import EditGroupForm from '../../components/forms/EditGroupForm';
+import EditGroupForm, {
+  EDIT_GROUP_FORM_EMPTY_INITIAL_VALUES
+} from '../../components/forms/EditGroupForm';
 import AddSupervisor from '../../components/Groups/AddSupervisor';
 
 import {
@@ -39,7 +41,6 @@ import {
   isStudentOf
 } from '../../redux/selectors/users';
 import { groupSelector, groupsSelector } from '../../redux/selectors/groups';
-import { EMPTY_OBJ } from '../../helpers/common';
 import GroupTopButtons from '../../components/Groups/GroupTopButtons/GroupTopButtons';
 
 class GroupInfo extends Component {
@@ -116,7 +117,7 @@ class GroupInfo extends Component {
       isSupervisor,
       isStudent,
       addSubgroup,
-      formValues,
+      hasThreshold,
       intl: { locale }
     } = this.props;
 
@@ -239,11 +240,12 @@ class GroupInfo extends Component {
                   <EditGroupForm
                     form="addSubgroup"
                     onSubmit={addSubgroup}
-                    initialValues={EMPTY_OBJ}
+                    initialValues={EDIT_GROUP_FORM_EMPTY_INITIAL_VALUES}
                     createNew
                     collapsable
                     isOpen={data.childGroups.length === 0}
-                    formValues={formValues}
+                    hasThreshold={hasThreshold}
+                    isSuperAdmin={isSuperAdmin}
                   />}
               </Col>
             </Row>
@@ -269,9 +271,11 @@ GroupInfo.propTypes = {
   push: PropTypes.func.isRequired,
   refetchSupervisors: PropTypes.func.isRequired,
   links: PropTypes.object,
-  formValues: PropTypes.object,
+  hasThreshold: PropTypes.bool,
   intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired
 };
+
+const addSubgroupFormSelector = formValueSelector('addSubgroup');
 
 const mapStateToProps = (state, { params: { groupId } }) => {
   const userId = loggedInUserIdSelector(state);
@@ -285,7 +289,7 @@ const mapStateToProps = (state, { params: { groupId } }) => {
     isAdmin: isAdminOf(userId, groupId)(state),
     isSuperAdmin: isLoggedAsSuperAdmin(state),
     isStudent: isStudentOf(userId, groupId)(state),
-    formValues: getFormValues('addSubgroup')(state)
+    hasThreshold: addSubgroupFormSelector(state, 'hasThreshold')
   };
 };
 

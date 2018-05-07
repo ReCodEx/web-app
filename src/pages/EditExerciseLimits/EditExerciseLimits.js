@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { FormattedMessage, injectIntl } from 'react-intl';
-import { Row, Col } from 'react-bootstrap';
+import { Grid, Row, Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { defaultMemoize } from 'reselect';
 import FontAwesomeIcon from '@fortawesome/react-fontawesome';
@@ -256,7 +256,7 @@ class EditExerciseLimits extends Component {
         ]}
       >
         {(exercise, tests) =>
-          <div>
+          <Grid fluid>
             {exercise.isBroken &&
               <Row>
                 <Col sm={12}>
@@ -414,7 +414,7 @@ class EditExerciseLimits extends Component {
                     </div>}
               </Col>
             </Row>
-          </div>}
+          </Grid>}
       </Page>
     );
   }
