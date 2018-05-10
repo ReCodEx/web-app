@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { push } from 'react-router-redux';
 import { joinGroup, leaveGroup, fetchGroup } from '../../redux/modules/groups';
 import { fetchGroupsStatsIfNeeded } from '../../redux/modules/stats';
 import { fetchAssignmentsForGroup } from '../../redux/modules/assignments';
@@ -10,6 +11,7 @@ import { isStudentOf } from '../../redux/selectors/users';
 import JoinGroupButton from '../../components/buttons/JoinGroupButton';
 import LeaveGroupButton from '../../components/buttons/LeaveGroupButton';
 import RemoveFromGroupButton from '../../components/buttons/RemoveFromGroupButton';
+import withLinks from '../../helpers/withLinks';
 
 const LeaveJoinGroupButtonContainer = ({
   isStudent,
@@ -22,13 +24,15 @@ const LeaveJoinGroupButtonContainer = ({
   fetchGroup,
   fetchGroupsStatsIfNeeded,
   bsSize = 'xs',
+  push,
+  links: { DASHBOARD_URI },
   ...props
 }) =>
   isStudent
     ? userId === currentUserId
       ? <LeaveGroupButton
           {...props}
-          onClick={() => leaveGroup(groupId, userId)}
+          onClick={() => leaveGroup(groupId, userId).then(push(DASHBOARD_URI))}
           bsSize={bsSize}
         />
       : <RemoveFromGroupButton
@@ -59,7 +63,9 @@ LeaveJoinGroupButtonContainer.propTypes = {
   fetchAssignmentsForGroup: PropTypes.func.isRequired,
   fetchGroup: PropTypes.func.isRequired,
   fetchGroupsStatsIfNeeded: PropTypes.func.isRequired,
-  bsSize: PropTypes.string
+  bsSize: PropTypes.string,
+  push: PropTypes.func.isRequired,
+  links: PropTypes.object
 };
 
 const mapStateToProps = (state, { userId, groupId }) => ({
@@ -67,14 +73,15 @@ const mapStateToProps = (state, { userId, groupId }) => ({
   currentUserId: loggedInUserIdSelector(state)
 });
 
-const mapDispatchToProps = {
-  joinGroup,
-  leaveGroup,
-  fetchAssignmentsForGroup,
-  fetchGroup,
-  fetchGroupsStatsIfNeeded
-};
+const mapDispatchToProps = dispatch => ({
+  joinGroup: (gId, uId) => dispatch(joinGroup(gId, uId)),
+  leaveGroup: (gId, uId) => dispatch(leaveGroup(gId, uId)),
+  fetchAssignmentsForGroup: gId => dispatch(fetchAssignmentsForGroup(gId)),
+  fetchGroup: gId => dispatch(fetchGroup(gId)),
+  fetchGroupsStatsIfNeeded: gId => dispatch(fetchGroupsStatsIfNeeded(gId)),
+  push: url => dispatch(push(url))
+});
 
-export default connect(mapStateToProps, mapDispatchToProps)(
-  LeaveJoinGroupButtonContainer
+export default withLinks(
+  connect(mapStateToProps, mapDispatchToProps)(LeaveJoinGroupButtonContainer)
 );
