@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { reduxForm, Field } from 'redux-form';
 import { FormattedMessage } from 'react-intl';
-import { Alert, HelpBlock, Button, Row, Col } from 'react-bootstrap';
+import { Alert, HelpBlock, Button, Grid, Row, Col } from 'react-bootstrap';
 import isNumeric from 'validator/lib/isNumeric';
 
 import { DatetimeField, TextField, CheckboxField } from '../Fields';
@@ -240,18 +240,20 @@ class MultiAssignForm extends Component {
           />
         </h4>
 
-        <Row>
-          {runtimeEnvironments.map((env, i) =>
-            <Col key={i} sm={6}>
-              <Field
-                name={`enabledRuntime.${env.id}`}
-                component={CheckboxField}
-                onOff
-                label={env.longName}
-              />
-            </Col>
-          )}
-        </Row>
+        <Grid fluid>
+          <Row>
+            {runtimeEnvironments.map((env, i) =>
+              <Col key={i} sm={6}>
+                <Field
+                  name={`enabledRuntime.${env.id}`}
+                  component={CheckboxField}
+                  onOff
+                  label={env.longName}
+                />
+              </Col>
+            )}
+          </Row>
+        </Grid>
 
         {error &&
           <Alert bsStyle="danger">

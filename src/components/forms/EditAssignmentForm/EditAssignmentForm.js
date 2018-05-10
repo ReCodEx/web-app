@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { reduxForm, Field, FieldArray } from 'redux-form';
 import { FormattedMessage } from 'react-intl';
-import { Alert, HelpBlock, Row, Col } from 'react-bootstrap';
+import { Alert, HelpBlock, Grid, Row, Col } from 'react-bootstrap';
 import isNumeric from 'validator/lib/isNumeric';
 
 import FormBox from '../../widgets/FormBox';
@@ -109,17 +109,23 @@ const EditAssignmentForm = ({
         }
       />
 
-      <Field
-        name="allowSecondDeadline"
-        component={CheckboxField}
-        onOff
-        label={
-          <FormattedMessage
-            id="app.editAssignmentForm.allowSecondDeadline"
-            defaultMessage="Allow second deadline."
-          />
-        }
-      />
+      <Grid fluid>
+        <Row>
+          <Col sm={6}>
+            <Field
+              name="allowSecondDeadline"
+              component={CheckboxField}
+              onOff
+              label={
+                <FormattedMessage
+                  id="app.editAssignmentForm.allowSecondDeadline"
+                  defaultMessage="Allow second deadline."
+                />
+              }
+            />
+          </Col>
+        </Row>
+      </Grid>
 
       {allowSecondDeadline &&
         <Field
@@ -158,6 +164,8 @@ const EditAssignmentForm = ({
           }
         />}
 
+      <hr />
+
       <Field
         name="submissionsCountLimit"
         component={TextField}
@@ -166,18 +174,6 @@ const EditAssignmentForm = ({
           <FormattedMessage
             id="app.editAssignmentForm.submissionsCountLimit"
             defaultMessage="Submissions count limit:"
-          />
-        }
-      />
-
-      <Field
-        name="canViewLimitRatios"
-        component={CheckboxField}
-        onOff
-        label={
-          <FormattedMessage
-            id="app.editAssignmentForm.canViewLimitRatios"
-            defaultMessage="Visibility of memory and time ratios"
           />
         }
       />
@@ -194,17 +190,38 @@ const EditAssignmentForm = ({
         }
       />
 
-      <Field
-        name="isBonus"
-        component={CheckboxField}
-        onOff
-        label={
-          <FormattedMessage
-            id="app.editAssignmentForm.isBonus"
-            defaultMessage="Assignment is bonus one and points from it are not included in students overall score"
-          />
-        }
-      />
+      <br />
+
+      <Grid fluid>
+        <Row>
+          <Col sm={6}>
+            <Field
+              name="canViewLimitRatios"
+              component={CheckboxField}
+              onOff
+              label={
+                <FormattedMessage
+                  id="app.editAssignmentForm.canViewLimitRatios"
+                  defaultMessage="Visibility of memory and time ratios"
+                />
+              }
+            />
+          </Col>
+          <Col sm={6}>
+            <Field
+              name="isBonus"
+              component={CheckboxField}
+              onOff
+              label={
+                <FormattedMessage
+                  id="app.editAssignmentForm.isBonus"
+                  defaultMessage="Assignment is bonus one and points from it are not included in students overall score"
+                />
+              }
+            />
+          </Col>
+        </Row>
+      </Grid>
 
       <hr />
 
@@ -214,39 +231,49 @@ const EditAssignmentForm = ({
           defaultMessage="Enabled Runtime Environments"
         />
       </h4>
+      <br />
 
-      <Row>
-        {assignment.runtimeEnvironmentIds.map((item, i) =>
-          <Col key={i} sm={6}>
+      <Grid fluid>
+        <Row>
+          {assignment.runtimeEnvironmentIds.map((item, i) =>
+            <Col key={i} sm={6}>
+              <Field
+                name={`enabledRuntime.${item}`}
+                component={CheckboxField}
+                onOff
+                label={
+                  runtimeEnvironments &&
+                  Array.isArray(runtimeEnvironments) &&
+                  runtimeEnvironments.length > 0
+                    ? runtimeEnvironments.find(env => env.id === item).longName
+                    : ''
+                }
+              />
+            </Col>
+          )}
+        </Row>
+      </Grid>
+
+      <hr />
+      <br />
+
+      <Grid fluid>
+        <Row>
+          <Col sm={6}>
             <Field
-              name={`enabledRuntime.${item}`}
+              name="isPublic"
               component={CheckboxField}
               onOff
               label={
-                runtimeEnvironments &&
-                Array.isArray(runtimeEnvironments) &&
-                runtimeEnvironments.length > 0
-                  ? runtimeEnvironments.find(env => env.id === item).longName
-                  : ''
+                <FormattedMessage
+                  id="app.editAssignmentForm.isPublic"
+                  defaultMessage="Visible to students"
+                />
               }
             />
           </Col>
-        )}
-      </Row>
-
-      <hr />
-
-      <Field
-        name="isPublic"
-        component={CheckboxField}
-        onOff
-        label={
-          <FormattedMessage
-            id="app.editAssignmentForm.isPublic"
-            defaultMessage="Visible to students"
-          />
-        }
-      />
+        </Row>
+      </Grid>
     </FormBox>
   </div>;
 

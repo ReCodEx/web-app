@@ -4,7 +4,7 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { reduxForm, Field, touch, formValueSelector } from 'redux-form';
 import { FormattedMessage } from 'react-intl';
-import { Alert, Row, Col } from 'react-bootstrap';
+import { Alert, Grid, Row, Col } from 'react-bootstrap';
 
 import {
   TextField,
@@ -105,56 +105,58 @@ class EditPipelineForm extends Component {
             />
           </Alert>}
 
-        <Row>
-          <Col lg={6}>
-            <Field
-              name="name"
-              component={TextField}
-              label={
-                <FormattedMessage
-                  id="app.editPipelineForm.name"
-                  defaultMessage="Pipeline name:"
-                />
-              }
-            />
+        <Grid fluid>
+          <Row>
+            <Col lg={6}>
+              <Field
+                name="name"
+                component={TextField}
+                label={
+                  <FormattedMessage
+                    id="app.editPipelineForm.name"
+                    defaultMessage="Pipeline name:"
+                  />
+                }
+              />
 
-            <Field
-              name="description"
-              component={MarkdownTextAreaField}
-              label={
-                <FormattedMessage
-                  id="app.editPipelineForm.description"
-                  defaultMessage="Description for supervisors:"
-                />
-              }
-            />
-          </Col>
-          <Col lg={6}>
-            <Field
-              name="pipeline.boxes"
-              component={PipelineField}
-              label={
-                <FormattedMessage
-                  id="app.editPipelineFields.pipeline"
-                  defaultMessage="The pipeline:"
-                />
-              }
-            />
+              <Field
+                name="description"
+                component={MarkdownTextAreaField}
+                label={
+                  <FormattedMessage
+                    id="app.editPipelineForm.description"
+                    defaultMessage="Description for supervisors:"
+                  />
+                }
+              />
+            </Col>
+            <Col lg={6}>
+              <Field
+                name="pipeline.boxes"
+                component={PipelineField}
+                label={
+                  <FormattedMessage
+                    id="app.editPipelineFields.pipeline"
+                    defaultMessage="The pipeline:"
+                  />
+                }
+              />
 
-            <Field
-              name="pipeline.variables"
-              component={PipelineVariablesField}
-              variables={variables}
-              label={
-                <FormattedMessage
-                  id="app.editPipelineFields.pipelineVariables"
-                  defaultMessage="Pipeline variables:"
-                />
-              }
-              supplementaryFiles={supplementaryFiles}
-            />
-          </Col>
-        </Row>
+              <Field
+                name="pipeline.variables"
+                component={PipelineVariablesField}
+                variables={variables}
+                label={
+                  <FormattedMessage
+                    id="app.editPipelineFields.pipelineVariables"
+                    defaultMessage="Pipeline variables:"
+                  />
+                }
+                supplementaryFiles={supplementaryFiles}
+              />
+            </Col>
+          </Row>
+        </Grid>
       </FormBox>
     );
   }

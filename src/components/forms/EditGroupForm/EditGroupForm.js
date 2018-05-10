@@ -2,12 +2,19 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { reduxForm, Field, FieldArray } from 'redux-form';
-import { Alert, Row, Col } from 'react-bootstrap';
+import { Alert, Grid, Row, Col } from 'react-bootstrap';
 import FormBox from '../../widgets/FormBox';
 import SubmitButton from '../SubmitButton';
 import LocalizedTextsFormField from '../LocalizedTextsFormField';
 
 import { TextField, CheckboxField } from '../Fields';
+
+export const EDIT_GROUP_FORM_EMPTY_INITIAL_VALUES = {
+  isPublic: false,
+  publicStats: false,
+  hasThreshold: false,
+  threshold: ''
+};
 
 const EditGroupForm = ({
   submitting,
@@ -19,6 +26,7 @@ const EditGroupForm = ({
   createNew = false,
   localizedTextsLocales,
   hasThreshold,
+  isPublic,
   collapsable = false,
   isOpen = true,
   reset,
@@ -102,70 +110,74 @@ const EditGroupForm = ({
           />
         }
       />}
-    <Row>
-      <Col lg={6}>
-        <Field
-          name="isPublic"
-          tabIndex={3}
-          component={CheckboxField}
-          onOff
-          label={
-            <FormattedMessage
-              id="app.createGroup.isPublic"
-              defaultMessage="Public (everyone can see and join this group)"
+    <br />
+    <Grid fluid>
+      <Row>
+        {(isSuperAdmin || isPublic) && // any user can turn public flag off, but only superuser may turn it on :)
+          <Col lg={6}>
+            <Field
+              name="isPublic"
+              tabIndex={3}
+              component={CheckboxField}
+              onOff
+              label={
+                <FormattedMessage
+                  id="app.createGroup.isPublic"
+                  defaultMessage="Public (everyone can see and join this group)"
+                />
+              }
+              required
             />
-          }
-          required
-        />
-      </Col>
-      <Col lg={6}>
-        <Field
-          name="publicStats"
-          tabIndex={4}
-          component={CheckboxField}
-          onOff
-          label={
-            <FormattedMessage
-              id="app.createGroup.publicStats"
-              defaultMessage="Students can see statistics of each other"
-            />
-          }
-          required
-        />
-      </Col>
-    </Row>
-
-    <Row>
-      <Col lg={6}>
-        <Field
-          name="hasThreshold"
-          tabIndex={5}
-          component={CheckboxField}
-          onOff
-          label={
-            <FormattedMessage
-              id="app.createGroup.hasThreshold"
-              defaultMessage="Students require cetrain number of points to complete the course"
-            />
-          }
-          required
-        />
-      </Col>
-      <Col lg={6}>
-        {hasThreshold &&
+          </Col>}
+        <Col lg={isSuperAdmin || isPublic ? 6 : 12}>
           <Field
-            name="threshold"
-            tabIndex={6}
-            component={TextField}
+            name="publicStats"
+            tabIndex={4}
+            component={CheckboxField}
+            onOff
             label={
               <FormattedMessage
-                id="app.createGroup.threshold"
-                defaultMessage="Minimum percent of the total points count needed to complete the course:"
+                id="app.createGroup.publicStats"
+                defaultMessage="Students can see statistics of each other"
               />
             }
-          />}
-      </Col>
-    </Row>
+            required
+          />
+        </Col>
+      </Row>
+
+      <Row>
+        <Col lg={6}>
+          <Field
+            name="hasThreshold"
+            tabIndex={5}
+            component={CheckboxField}
+            onOff
+            label={
+              <FormattedMessage
+                id="app.createGroup.hasThreshold"
+                defaultMessage="Students require cetrain number of points to complete the course"
+              />
+            }
+            required
+          />
+        </Col>
+        <Col lg={6}>
+          {hasThreshold &&
+            <Field
+              name="threshold"
+              tabIndex={6}
+              component={TextField}
+              label={
+                <FormattedMessage
+                  id="app.createGroup.threshold"
+                  defaultMessage="Minimum percent of the total points count needed to complete the course:"
+                />
+              }
+            />}
+        </Col>
+      </Row>
+    </Grid>
   </FormBox>;
 
 EditGroupForm.propTypes = {
@@ -177,6 +189,7 @@ EditGroupForm.propTypes = {
   submitting: PropTypes.bool,
   invalid: PropTypes.bool,
   hasThreshold: PropTypes.bool,
+  isPublic: PropTypes.bool,
   localizedTextsLocales: PropTypes.array,
   createNew: PropTypes.bool,
   collapsable: PropTypes.bool,

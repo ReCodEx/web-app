@@ -29,7 +29,7 @@ const InstanceDetail = ({ description, rootGroupId, groups, isAdmin }) =>
             defaultMessage="Groups hierarchy"
           />
         }
-        noPadding
+        extraPadding
         unlimitedHeight
       >
         <div>

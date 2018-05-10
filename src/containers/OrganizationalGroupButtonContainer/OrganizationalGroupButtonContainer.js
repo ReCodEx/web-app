@@ -22,7 +22,7 @@ const OrganizationalGroupButtonContainer = ({
         organizational={organizational}
         pending={pending}
         setOrganizational={setOrganizational}
-        disabled={students.length > 0 || assignments.all.length > 0}
+        disabled={students.length > 0 || assignments.length > 0}
       />}
   </ResourceRenderer>;
 

@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import { Alert, Table, Row, Col } from 'react-bootstrap';
+import { Alert, Table, Grid, Row, Col } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { reduxForm, Field } from 'redux-form';
 import FontAwesomeIcon from '@fortawesome/react-fontawesome';
+import classnames from 'classnames';
 
 import { EditLimitsField, CheckboxField } from '../Fields';
 import SubmitButton from '../SubmitButton';
@@ -104,34 +105,37 @@ class EditLimitsForm extends Component {
               defaultMessage="Cannot save the exercise limits. Please try again later."
             />
           </Alert>}
-        <Row>
-          <Col lg={3}>
-            <div className={styles.preciseTime}>
-              <Field
-                name="preciseTime"
-                component={CheckboxField}
-                onOff
-                label={
-                  <FormattedMessage
-                    id="app.editLimitsForm.preciseTime"
-                    defaultMessage="Precise Time Measurement"
+        {false &&
+          <Grid fluid>
+            <Row>
+              <Col lg={3}>
+                <div className={styles.preciseTime}>
+                  <Field
+                    name="preciseTime"
+                    component={CheckboxField}
+                    onOff
+                    label={
+                      <FormattedMessage
+                        id="app.editLimitsForm.preciseTime"
+                        defaultMessage="Precise Time Measurement"
+                      />
+                    }
                   />
-                }
-              />
-            </div>
-          </Col>
-          <Col lg={9}>
-            <div>
-              <p className={styles.preciseTimeTooltip}>
-                <FontAwesomeIcon icon="info-circle" />
-                <FormattedMessage
-                  id="app.editLimitsForm.preciseTimeTooltip"
-                  defaultMessage="If precise time measurement is selected, ReCodEx will measure the consumed CPU time of tested solutions. Otherwise, the wall time will be measured. CPU is better in cases when serial time complexity of the solution is tested and tight time limits are set. Wall time is better in general cases as it better reflects the actual time consumed by the solution (including I/O), but it is more susceptible to errors of measurement."
-                />
-              </p>
-            </div>
-          </Col>
-        </Row>
+                </div>
+              </Col>
+              <Col lg={9}>
+                <div>
+                  <p className={styles.preciseTimeTooltip}>
+                    <FontAwesomeIcon icon="info-circle" />
+                    <FormattedMessage
+                      id="app.editLimitsForm.preciseTimeTooltip"
+                      defaultMessage="If precise time measurement is selected, ReCodEx will measure the consumed CPU time of tested solutions. Otherwise, the wall time will be measured. CPU is better in cases when serial time complexity of the solution is tested and tight time limits are set. Wall time is better in general cases as it better reflects the actual time consumed by the solution (including I/O), but it is more susceptible to errors of measurement."
+                    />
+                  </p>
+                </div>
+              </Col>
+            </Row>
+          </Grid>}
         <Table striped>
           <thead>
             <tr>
@@ -161,9 +165,10 @@ class EditLimitsForm extends Component {
                     return (
                       <td
                         key={`td.${id}`}
-                        className={
-                          environments.length > 1 ? styles.colSeparator : ''
-                        }
+                        className={classnames({
+                          [styles.colSeparator]: environments.length > 1,
+                          [styles.limitsCell]: true
+                        })}
                       >
                         <EditLimitsField
                           prefix={`limits.${id}`}

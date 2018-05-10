@@ -6,12 +6,11 @@ import { getLocalizedName } from '../../../helpers/getLocalizedData';
 
 const UsersStats = ({
   id,
-  name,
   localizedTexts,
   stats: { points, hasLimit, passesLimit },
   intl: { locale }
 }) => {
-  const localizedName = getLocalizedName({ name, localizedTexts }, locale);
+  const localizedName = getLocalizedName({ localizedTexts }, locale);
   return (
     <InfoBox
       color={!hasLimit ? 'blue' : passesLimit ? 'green' : 'red'}
@@ -39,7 +38,6 @@ const UsersStats = ({
 
 UsersStats.propTypes = {
   id: PropTypes.string.isRequired,
-  name: PropTypes.string.isRequired,
   localizedTexts: PropTypes.array.isRequired,
   stats: PropTypes.shape({
     points: PropTypes.shape({
