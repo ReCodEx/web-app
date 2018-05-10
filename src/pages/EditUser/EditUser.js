@@ -133,7 +133,7 @@ class EditUser extends Component {
                   onSubmit={generateToken}
                   initialValues={{
                     expiration: 3600,
-                    scopes: { 'read-all': true }
+                    scopes: { 'read-all': true, master: false }
                   }}
                   lastToken={lastToken}
                 />

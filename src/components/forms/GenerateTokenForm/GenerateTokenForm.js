@@ -7,13 +7,26 @@ import {
   intlShape
 } from 'react-intl';
 import { reduxForm, Field } from 'redux-form';
-import { Alert } from 'react-bootstrap';
+import {
+  Alert,
+  Well,
+  OverlayTrigger,
+  Tooltip,
+  Grid,
+  Row,
+  Col
+} from 'react-bootstrap';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
+
 import FormBox from '../../widgets/FormBox';
+import Button from '../../widgets/FlatButton';
 import SubmitButton from '../SubmitButton';
-
 import { CheckboxField, SelectField } from '../Fields';
+import { CopyIcon } from '../../icons';
 
-const availableScopes = ['read-all'];
+import './GenerateTokenForm.css';
+
+const availableScopes = ['read-all', 'master'];
 
 const messages = defineMessages({
   hour: {
@@ -101,15 +114,20 @@ const GenerateTokenForm = ({
         defaultMessage="Scopes:"
       />
     </h3>
-    {availableScopes.map((scope, i) =>
-      <Field
-        key={i}
-        name={`scopes.${scope}`}
-        component={CheckboxField}
-        onOff
-        label={scope}
-      />
-    )}
+    <Grid fluid>
+      <Row>
+        {availableScopes.map((scope, i) =>
+          <Col sm={6} key={i}>
+            <Field
+              name={`scopes.${scope}`}
+              component={CheckboxField}
+              onOff
+              label={scope}
+            />
+          </Col>
+        )}
+      </Row>
+    </Grid>
     <hr />
 
     <Field
@@ -139,9 +157,34 @@ const GenerateTokenForm = ({
             defaultMessage="Last Token:"
           />
         </h3>
-        <code>
-          {lastToken}
-        </code>
+        <Well className="tokenWell">
+          <code>
+            {lastToken}
+          </code>
+        </Well>
+        <CopyToClipboard text={lastToken}>
+          <OverlayTrigger
+            trigger="click"
+            rootClose
+            placement="bottom"
+            overlay={
+              <Tooltip id={lastToken}>
+                <FormattedMessage
+                  id="app.generateToken.copied"
+                  defaultMessage="Copied!"
+                />
+              </Tooltip>
+            }
+          >
+            <Button bsStyle="info">
+              <CopyIcon gapRight fixedWidth />
+              <FormattedMessage
+                id="app.generateToken.copyToClipboard"
+                defaultMessage="Copy to clipboard"
+              />
+            </Button>
+          </OverlayTrigger>
+        </CopyToClipboard>
       </div>}
   </FormBox>;
 
