@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { reduxForm, Field } from 'redux-form';
 import { FormattedMessage, intlShape, injectIntl } from 'react-intl';
-import { Alert, Row, Col } from 'react-bootstrap';
+import { Alert, Grid, Row, Col } from 'react-bootstrap';
 
 import { CheckboxField } from '../Fields';
 import SubmitButton from '../SubmitButton';
@@ -26,20 +26,22 @@ class EditEnvironmentSimpleForm extends Component {
 
     return (
       <div>
-        <Row>
-          {runtimeEnvironments
-            .sort((a, b) => a.longName.localeCompare(b.longName, locale))
-            .map((environment, i) =>
-              <Col key={i} xs={12} sm={6}>
-                <Field
-                  name={`${environment.id}`}
-                  component={CheckboxField}
-                  onOff
-                  label={environment.longName}
-                />
-              </Col>
-            )}
-        </Row>
+        <Grid fluid>
+          <Row>
+            {runtimeEnvironments
+              .sort((a, b) => a.longName.localeCompare(b.longName, locale))
+              .map((environment, i) =>
+                <Col key={i} xs={12} sm={6}>
+                  <Field
+                    name={`${environment.id}`}
+                    component={CheckboxField}
+                    onOff
+                    label={environment.longName}
+                  />
+                </Col>
+              )}
+          </Row>
+        </Grid>
 
         {submitFailed &&
           <Alert bsStyle="danger">

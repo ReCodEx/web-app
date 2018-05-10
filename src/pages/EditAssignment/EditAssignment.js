@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { FormattedMessage } from 'react-intl';
-import { Col, Row } from 'react-bootstrap';
+import { Grid, Col, Row } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 import { reset, formValueSelector, SubmissionError } from 'redux-form';
@@ -189,7 +189,7 @@ class EditAssignment extends Component {
       >
         {assignment =>
           assignment &&
-          <div>
+          <Grid fluid>
             <Row>
               <Col xs={12}>
                 <HierarchyLineContainer groupId={assignment.groupId} />
@@ -267,7 +267,7 @@ class EditAssignment extends Component {
                 </p>
               </div>
             </Box>
-          </div>}
+          </Grid>}
       </Page>
     );
   }

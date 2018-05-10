@@ -1,5 +1,5 @@
 import { handleActions } from 'redux-actions';
-import { fromJS, List } from 'immutable';
+import { fromJS } from 'immutable';
 
 import { addNotification } from './notifications';
 import { createApiAction } from '../middleware/apiMiddleware';
@@ -207,7 +207,7 @@ const reducer = handleActions(
       }
 
       return state.updateIn(
-        ['resources', group.parentGroupId, 'data', 'childGroups', 'all'],
+        ['resources', group.parentGroupId, 'data', 'childGroups'],
         children => children.push(group.id)
       );
     },
@@ -218,27 +218,13 @@ const reducer = handleActions(
         groups.map(
           group =>
             group.get('data') !== null
-              ? group.updateIn(['data', 'childGroups', 'all'], all =>
-                  all.filter(groupId => groupId !== action.meta.id)
+              ? group.updateIn(['data', 'childGroups'], children =>
+                  children.filter(groupId => groupId !== action.meta.id)
                 )
               : null
         )
       );
     },
-
-    [additionalActionTypes.UPDATE_GROUP_FULFILLED]: (
-      state,
-      { payload: { parentGroupId, isPublic }, meta: { groupId, userId } }
-    ) =>
-      state.hasIn(['resources', parentGroupId, 'data'])
-        ? state.updateIn(
-            ['resources', parentGroupId, 'data', 'childGroups', 'public'],
-            groups =>
-              isPublic
-                ? groups.push(groupId).toSet().toList()
-                : groups.filter(id => id !== groupId)
-          )
-        : state,
 
     [additionalActionTypes.JOIN_GROUP_PENDING]: (
       state,
@@ -358,20 +344,11 @@ const reducer = handleActions(
 
     [assignmentsActionTypes.UPDATE_FULFILLED]: (
       state,
-      { payload: { id: assignmentId, isPublic, groupId } }
+      { payload: { id: assignmentId, groupId } }
     ) =>
       state.updateIn(
-        ['resources', groupId, 'data', 'privateData', 'assignments', 'public'],
-        assignments => {
-          if (isPublic) {
-            return assignments.push(assignmentId).toSet().toList();
-          } else {
-            return assignments
-              .filter(id => id !== assignmentId)
-              .toSet()
-              .toList();
-          }
-        }
+        ['resources', groupId, 'data', 'privateData', 'assignments'],
+        assignments => assignments.push(assignmentId).toSet().toList()
       ),
 
     [assignmentsActionTypes.ADD_FULFILLED]: (
@@ -379,13 +356,8 @@ const reducer = handleActions(
       { payload: { id: assignmentId }, meta: { body: { groupId } } }
     ) =>
       state.updateIn(
-        ['resources', groupId, 'data', 'privateData', 'assignments', 'all'],
-        assignments => {
-          if (!assignments) {
-            assignments = List();
-          }
-          return assignments.push(assignmentId);
-        }
+        ['resources', groupId, 'data', 'privateData', 'assignments'],
+        assignments => assignments.push(assignmentId).toSet().toList()
       ),
 
     [assignmentsActionTypes.REMOVE_FULFILLED]: (
@@ -395,9 +367,7 @@ const reducer = handleActions(
       state.update('resources', groups =>
         groups.map(group =>
           group.updateIn(['data', 'privateData', 'assignments'], assignments =>
-            assignments
-              .update('all', ids => ids.filter(id => id !== assignmentId))
-              .update('public', ids => ids.filter(id => id !== assignmentId))
+            assignments.filter(id => id !== assignmentId)
           )
         )
       ),

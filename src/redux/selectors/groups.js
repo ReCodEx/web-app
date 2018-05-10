@@ -117,31 +117,11 @@ export const supervisorsOfGroup = groupId =>
   usersOfGroup('supervisors', groupId);
 export const adminsOfGroup = groupId => usersOfGroup('admins', groupId);
 
-export const groupsAssignmentsIdsSelector = (id, type = 'public') =>
-  createSelector(
-    groupSelector(id),
-    group =>
-      group && isReady(group)
-        ? group.getIn(['data', 'assignments', type], EMPTY_LIST)
-        : EMPTY_LIST
-  );
-
-export const groupsPublicAssignmentsSelector = createSelector(
+export const groupsAssignmentsSelector = createSelector(
   [groupsSelector, getAssignments, getParam],
   (groups, assignments, groupId) =>
     groups
-      .getIn(
-        [groupId, 'data', 'privateData', 'assignments', 'public'],
-        EMPTY_LIST
-      )
-      .map(id => assignments.getIn(['resources', id]))
-);
-
-export const groupsAllAssignmentsSelector = createSelector(
-  [groupsSelector, getAssignments, getParam],
-  (groups, assignments, groupId) =>
-    groups
-      .getIn([groupId, 'data', 'privateData', 'assignments', 'all'], EMPTY_LIST)
+      .getIn([groupId, 'data', 'privateData', 'assignments'], EMPTY_LIST)
       .map(id => assignments.getIn(['resources', id]))
 );
 

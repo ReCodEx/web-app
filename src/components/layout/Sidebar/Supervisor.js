@@ -1,11 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import { injectIntl, FormattedMessage } from 'react-intl';
+import { injectIntl, FormattedMessage, intlShape } from 'react-intl';
 
 import MenuGroup from '../../widgets/Sidebar/MenuGroup';
 import MenuItem from '../../widgets/Sidebar/MenuItem';
 import { getId } from '../../../redux/helpers/resourceManager';
+import { getLocalizedResourceName } from '../../../helpers/getLocalizedData';
 
 import withLinks from '../../../helpers/withLinks';
 
@@ -15,7 +16,7 @@ const Supervisor = ({
   isCollapsed,
   notifications,
   links: { GROUP_DETAIL_URI_FACTORY, EXERCISES_URI, PIPELINES_URI },
-  intl
+  intl: { locale }
 }) =>
   <ul className="sidebar-menu">
     <MenuGroup
@@ -28,9 +29,10 @@ const Supervisor = ({
       items={supervisorOf
         .toList()
         .sort((a, b) =>
-          a
-            .getIn(['data', 'name'])
-            .localeCompare(b.getIn(['data', 'name']), intl.locale)
+          getLocalizedResourceName(a, locale).localeCompare(
+            getLocalizedResourceName(b, locale),
+            locale
+          )
         )}
       notifications={{}}
       icon="graduation-cap"
@@ -68,7 +70,7 @@ Supervisor.propTypes = {
   isCollapsed: PropTypes.bool,
   notifications: PropTypes.object,
   links: PropTypes.object,
-  intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired
+  intl: intlShape.isRequired
 };
 
 export default injectIntl(withLinks(Supervisor));

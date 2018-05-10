@@ -1,18 +1,23 @@
 const getLocalizedX = field => (entity, locale) => {
-  const localizedText = entity.localizedTexts.find(
-    text => text.locale === locale
-  );
-  return localizedText ? localizedText[field] : entity[field];
+  const localizedText =
+    entity.localizedTexts.find(text => text.locale === locale) ||
+    entity.localizedTexts.find(text => text.locale === 'en') ||
+    entity.localizedTexts[0];
+  return (localizedText && localizedText[field]) || entity[field] || '';
 };
 
 const getLocalizedResourceX = field => (resource, locale) => {
   const localizedTexts = resource && resource.getIn(['data', 'localizedTexts']);
   const localizedText =
     localizedTexts &&
-    localizedTexts.find(text => text.get('locale') === locale);
-  return localizedText
-    ? localizedText.get(field)
-    : resource ? resource.getIn(['data', field]) : undefined;
+    (localizedTexts.find(text => text.get('locale') === locale) ||
+      localizedTexts.find(text => text.get('locale') === 'en') ||
+      localizedTexts.get(0));
+  return (
+    (localizedText && localizedText.get(field)) ||
+    (resource && resource.getIn(['data', field])) ||
+    ''
+  );
 };
 
 export const getLocalizedName = getLocalizedX('name');

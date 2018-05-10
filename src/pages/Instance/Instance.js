@@ -2,11 +2,10 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
-import { getFormValues } from 'redux-form';
+import { formValueSelector } from 'redux-form';
 import { FormattedMessage } from 'react-intl';
 import { Row, Col } from 'react-bootstrap';
 
-import { EMPTY_OBJ } from '../../helpers/common';
 import Button from '../../components/widgets/FlatButton';
 import { LinkContainer } from 'react-router-bootstrap';
 
@@ -14,7 +13,9 @@ import Page from '../../components/layout/Page';
 import InstanceDetail from '../../components/Instances/InstanceDetail';
 import LicencesTableContainer from '../../containers/LicencesTableContainer';
 import AddLicenceFormContainer from '../../containers/AddLicenceFormContainer';
-import EditGroupForm from '../../components/forms/EditGroupForm';
+import EditGroupForm, {
+  EDIT_GROUP_FORM_EMPTY_INITIAL_VALUES
+} from '../../components/forms/EditGroupForm';
 import { EditIcon } from '../../components/icons';
 
 import { fetchInstanceIfNeeded } from '../../redux/modules/instances';
@@ -54,7 +55,7 @@ class Instance extends Component {
       createGroup,
       isAdmin,
       isSuperAdmin,
-      formValues,
+      hasThreshold,
       links: { ADMIN_EDIT_INSTANCE_URI_FACTORY }
     } = this.props;
 
@@ -113,11 +114,12 @@ class Instance extends Component {
                     form="addGroup"
                     onSubmit={createGroup}
                     instanceId={instanceId}
+                    initialValues={EDIT_GROUP_FORM_EMPTY_INITIAL_VALUES}
                     createNew
-                    collapsable={true}
-                    isOpen={true}
-                    formValues={formValues}
-                    initialValues={EMPTY_OBJ}
+                    collapsable
+                    isOpen
+                    hasThreshold={hasThreshold}
+                    isSuperAdmin={isSuperAdmin}
                   />
                 </Col>
                 <Col sm={6}>
@@ -143,8 +145,10 @@ Instance.propTypes = {
   isAdmin: PropTypes.bool.isRequired,
   isSuperAdmin: PropTypes.bool.isRequired,
   links: PropTypes.object.isRequired,
-  formValues: PropTypes.object
+  hasThreshold: PropTypes.bool
 };
+
+const addGroupFormSelector = formValueSelector('addGroup');
 
 export default withLinks(
   connect(
@@ -155,7 +159,7 @@ export default withLinks(
         groups: groupsSelector(state),
         isAdmin: isAdminOfInstance(userId, instanceId)(state),
         isSuperAdmin: isLoggedAsSuperAdmin(state),
-        formValues: getFormValues('addGroup')(state)
+        hasThreshold: addGroupFormSelector(state, 'hasThreshold')
       };
     },
     (dispatch, { params: { instanceId } }) => ({

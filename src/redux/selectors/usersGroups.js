@@ -63,10 +63,7 @@ export const loggedInStudentOfGroupsAssignmentsSelector = createSelector(
           const groupAssignments =
             group && assignments && isReady(group)
               ? group
-                  .getIn(
-                    ['data', 'privateData', 'assignments', 'public'],
-                    EMPTY_LIST
-                  )
+                  .getIn(['data', 'privateData', 'assignments'], EMPTY_LIST)
                   .map(assignmentId =>
                     assignments.getIn(['resources', assignmentId])
                   )

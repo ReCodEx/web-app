@@ -33,7 +33,7 @@ import {
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import { createGroupsStatsSelector } from '../../redux/selectors/stats';
 import {
-  groupsPublicAssignmentsSelector,
+  groupsAssignmentsSelector,
   studentOfSelector2,
   supervisorOfSelector2,
   adminOfSelector
@@ -351,8 +351,7 @@ export default withLinks(
         user: getUser(userId)(state),
         isAdmin: isSuperadmin,
         studentOfGroupsIds: studentOfGroupsIdsSelector(userId)(state).toArray(),
-        groupAssignments: groupId =>
-          groupsPublicAssignmentsSelector(state, groupId),
+        groupAssignments: groupId => groupsAssignmentsSelector(state, groupId),
         assignmentEnvironmentsSelector: assignmentEnvironmentsSelector(state),
         groupStatistics: groupId => createGroupsStatsSelector(groupId)(state),
         usersStatistics: statistics =>

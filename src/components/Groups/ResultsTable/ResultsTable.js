@@ -61,7 +61,11 @@ const prepareTableComparators = defaultMemoize(locale => {
 class ResultsTable extends Component {
   // Prepare header descriptor object for SortableTable.
   prepareHeader = defaultMemoize(assignments => {
-    const { isAdmin, links: { ASSIGNMENT_STATS_URI_FACTORY } } = this.props;
+    const {
+      isAdmin,
+      isSupervisor,
+      links: { ASSIGNMENT_STATS_URI_FACTORY, ASSIGNMENT_DETAIL_URI_FACTORY }
+    } = this.props;
     const header = {
       user: <FormattedMessage id="generic.name" defaultMessage="Name" />
     };
@@ -71,7 +75,13 @@ class ResultsTable extends Component {
         (header[`${assignment.id}`] = (
           <div className={styles.verticalText}>
             <div className={styles.verticalTextInner}>
-              <Link to={ASSIGNMENT_STATS_URI_FACTORY(assignment.id)}>
+              <Link
+                to={
+                  isAdmin || isSupervisor
+                    ? ASSIGNMENT_STATS_URI_FACTORY(assignment.id)
+                    : ASSIGNMENT_DETAIL_URI_FACTORY(assignment.id)
+                }
+              >
                 <LocalizedExerciseName entity={assignment} />
               </Link>
             </div>
