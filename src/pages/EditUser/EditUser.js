@@ -132,7 +132,7 @@ class EditUser extends Component {
                 <GenerateTokenForm
                   onSubmit={generateToken}
                   initialValues={{
-                    expiration: 3600,
+                    expiration: 7 * 24 * 60 * 60, // one week
                     scopes: { 'read-all': true, master: false }
                   }}
                   lastToken={lastToken}

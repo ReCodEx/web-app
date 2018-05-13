@@ -29,23 +29,23 @@ import './GenerateTokenForm.css';
 const availableScopes = ['read-all', 'master'];
 
 const messages = defineMessages({
-  hour: {
+  [1 * 60 * 60]: {
     id: 'app.generateToken.hour',
     defaultMessage: '1 Hour'
   },
-  day: {
+  [24 * 60 * 60]: {
     id: 'app.generateToken.day',
     defaultMessage: '1 Day'
   },
-  week: {
+  [7 * 24 * 60 * 60]: {
     id: 'app.generateToken.week',
     defaultMessage: '1 Week'
   },
-  month: {
+  [31 * 24 * 60 * 60]: {
     id: 'app.generateToken.month',
     defaultMessage: '1 Month'
   },
-  year: {
+  [365 * 24 * 60 * 60]: {
     id: 'app.generateToken.year',
     defaultMessage: '1 Year'
   }
@@ -134,13 +134,9 @@ const GenerateTokenForm = ({
       name="expiration"
       component={SelectField}
       addEmptyOption
-      options={[
-        { name: formatMessage(messages.hour), key: 1 * 60 * 60 },
-        { name: formatMessage(messages.day), key: 24 * 60 * 60 },
-        { name: formatMessage(messages.week), key: 7 * 24 * 60 * 60 },
-        { name: formatMessage(messages.month), key: 31 * 24 * 60 * 60 },
-        { name: formatMessage(messages.year), key: 365 * 24 * 60 * 60 }
-      ]}
+      options={Object.keys(messages).map(messageKey => {
+        return { name: formatMessage(messages[messageKey]), key: messageKey };
+      })}
       label={
         <FormattedMessage
           id="app.generateToken.expiration"
