@@ -23,10 +23,24 @@ import Button from '../../widgets/FlatButton';
 import SubmitButton from '../SubmitButton';
 import { CheckboxField, SelectField } from '../Fields';
 import { CopyIcon } from '../../icons';
+import { objectMap } from '../../../helpers/common';
 
 import './GenerateTokenForm.css';
 
-const availableScopes = ['read-all', 'master'];
+const availableScopes = defineMessages({
+  'read-all': {
+    id: 'app.generateToken.scope.readAll',
+    defaultMessage: 'Read-only'
+  },
+  master: {
+    id: 'app.generateToken.scope.master',
+    defaultMessage: 'Read-write'
+  },
+  refresh: {
+    id: 'app.generateToken.scope.refresh',
+    defaultMessage: 'Allow refreshing indefinitely'
+  }
+});
 
 const messages = defineMessages({
   [1 * 60 * 60]: {
@@ -56,7 +70,7 @@ const GenerateTokenForm = ({
   handleSubmit,
   submitFailed = false,
   submitSucceeded = false,
-  anyTouched,
+  dirty,
   invalid,
   lastToken,
   intl: { formatMessage }
@@ -78,7 +92,7 @@ const GenerateTokenForm = ({
           hasSucceeded={submitSucceeded}
           hasFailed={submitFailed}
           invalid={invalid}
-          dirty={anyTouched}
+          dirty={dirty}
           messages={{
             submit: (
               <FormattedMessage id="generic.submit" defaultMessage="Submit" />
@@ -108,23 +122,25 @@ const GenerateTokenForm = ({
         />
       </Alert>}
 
-    <h3>
+    <h4>
       <FormattedMessage
         id="app.generateToken.scopes"
         defaultMessage="Scopes:"
       />
-    </h3>
+    </h4>
     <Grid fluid>
       <Row>
-        {availableScopes.map((scope, i) =>
-          <Col sm={6} key={i}>
-            <Field
-              name={`scopes.${scope}`}
-              component={CheckboxField}
-              onOff
-              label={scope}
-            />
-          </Col>
+        {Object.values(
+          objectMap(availableScopes, (message, scope) =>
+            <Col sm={6} key={scope}>
+              <Field
+                name={`scopes.${scope}`}
+                component={CheckboxField}
+                onOff
+                label={formatMessage(message)}
+              />
+            </Col>
+          )
         )}
       </Row>
     </Grid>
@@ -133,10 +149,11 @@ const GenerateTokenForm = ({
     <Field
       name="expiration"
       component={SelectField}
-      addEmptyOption
-      options={Object.keys(messages).map(messageKey => {
-        return { name: formatMessage(messages[messageKey]), key: messageKey };
-      })}
+      options={Object.values(
+        objectMap(messages, (value, key) => {
+          return { name: formatMessage(value), key };
+        })
+      )}
       label={
         <FormattedMessage
           id="app.generateToken.expiration"
@@ -147,12 +164,12 @@ const GenerateTokenForm = ({
     {lastToken !== '' &&
       <div>
         <hr />
-        <h3>
+        <h4>
           <FormattedMessage
             id="app.generateToken.lastToken"
             defaultMessage="Last Token:"
           />
-        </h3>
+        </h4>
         <Well className="tokenWell">
           <code>
             {lastToken}
@@ -190,7 +207,7 @@ GenerateTokenForm.propTypes = {
   submitFailed: PropTypes.bool,
   submitSucceeded: PropTypes.bool,
   submitting: PropTypes.bool,
-  anyTouched: PropTypes.bool,
+  dirty: PropTypes.bool,
   invalid: PropTypes.bool,
   lastToken: PropTypes.string,
   intl: intlShape.isRequired
