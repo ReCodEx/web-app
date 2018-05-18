@@ -40,7 +40,7 @@ class SubmitButton extends Component {
   render() {
     const {
       submitting,
-      dirty,
+      dirty = false,
       hasFailed,
       invalid,
       asyncValidating = false,
@@ -122,7 +122,7 @@ class SubmitButton extends Component {
 SubmitButton.propTypes = {
   id: PropTypes.string.isRequired,
   handleSubmit: PropTypes.func.isRequired,
-  dirty: PropTypes.bool.isRequired,
+  dirty: PropTypes.bool,
   submitting: PropTypes.bool,
   hasSucceeded: PropTypes.bool,
   hasFailed: PropTypes.bool,

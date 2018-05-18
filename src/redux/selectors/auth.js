@@ -75,3 +75,7 @@ export const hasResetingSucceeded = createSelector(
   getResetPasswordStatus,
   status => status === 'FULFILLED'
 );
+
+export const lastGeneratedToken = createSelector(getAuth, auth =>
+  auth.get('lastGeneratedToken', '')
+);

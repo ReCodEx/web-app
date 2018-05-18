@@ -19,7 +19,9 @@ export const actionTypes = {
   CHANGE_PASSWORD_PENDING: 'recodex/auth/CHANGE_PASSWORD_PENDING',
   CHANGE_PASSWORD_FULFILLED: 'recodex/auth/CHANGE_PASSWORD_FULFILLED',
   CHANGE_PASSWORD_REJECTED: 'recodex/auth/CHANGE_PASSWORD_REJECTED',
-  LOGOUT: 'recodex/auth/LOGOUT'
+  LOGOUT: 'recodex/auth/LOGOUT',
+  GENERATE_TOKEN: 'recodex/auth/GENERATE_TOKEN',
+  GENERATE_TOKEN_FULFILLED: 'recodex/auth/GENERATE_TOKEN_FULFILLED'
 };
 
 export const statusTypes = {
@@ -132,6 +134,14 @@ export const decodeAndValidateAccessToken = (token, now = Date.now()) => {
 
   return fromJS(decodedToken);
 };
+
+export const generateToken = (expiration, scopes) =>
+  createApiAction({
+    type: actionTypes.GENERATE_TOKEN,
+    method: 'POST',
+    endpoint: '/login/issue-restricted-token',
+    body: { expiration: Number(expiration), scopes }
+  });
 
 const closeAuthPopupWindow = popupWindow => {
   if (
@@ -250,7 +260,12 @@ const auth = (accessToken, now = Date.now()) => {
                 'userId',
                 getUserId(decodeAndValidateAccessToken(accessToken))
               )
-          : state
+          : state,
+
+      [actionTypes.GENERATE_TOKEN_FULFILLED]: (
+        state,
+        { payload: { accessToken } }
+      ) => state.set('lastGeneratedToken', accessToken)
     },
     initialState
   );
