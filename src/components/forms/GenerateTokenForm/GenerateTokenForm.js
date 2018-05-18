@@ -66,11 +66,11 @@ const messages = defineMessages({
 });
 
 const GenerateTokenForm = ({
+  warning,
   submitting,
   handleSubmit,
   submitFailed = false,
   submitSucceeded = false,
-  dirty,
   invalid,
   lastToken,
   intl: { formatMessage }
@@ -92,7 +92,6 @@ const GenerateTokenForm = ({
           hasSucceeded={submitSucceeded}
           hasFailed={submitFailed}
           invalid={invalid}
-          dirty={dirty}
           messages={{
             submit: (
               <FormattedMessage id="generic.submit" defaultMessage="Submit" />
@@ -138,12 +137,19 @@ const GenerateTokenForm = ({
                 component={CheckboxField}
                 onOff
                 label={formatMessage(message)}
+                ignoreDirty
               />
             </Col>
           )
         )}
       </Row>
     </Grid>
+
+    {warning &&
+      <Alert bsStyle="warning">
+        {warning}
+      </Alert>}
+
     <hr />
 
     <Field
@@ -160,7 +166,9 @@ const GenerateTokenForm = ({
           defaultMessage="Expires In:"
         />
       }
+      ignoreDirty
     />
+
     {lastToken !== '' &&
       <div>
         <hr />
@@ -202,21 +210,35 @@ const GenerateTokenForm = ({
   </FormBox>;
 
 GenerateTokenForm.propTypes = {
+  warning: PropTypes.any,
   handleSubmit: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
   submitFailed: PropTypes.bool,
   submitSucceeded: PropTypes.bool,
   submitting: PropTypes.bool,
-  dirty: PropTypes.bool,
   invalid: PropTypes.bool,
   lastToken: PropTypes.string,
   intl: intlShape.isRequired
+};
+
+const warn = ({ scopes }) => {
+  const warnings = {};
+  if (scopes['read-all'] && scopes.master) {
+    warnings._warning = (
+      <FormattedMessage
+        id="app.generateToken.warnBothMasterAndReadAll"
+        defaultMessage="The 'read-only' scope will have no effect whilst 'read-write' scope is set since 'read-write' implicitly contains 'read-only'."
+      />
+    );
+  }
+  return warnings;
 };
 
 export default injectIntl(
   reduxForm({
     form: 'generate-token',
     enableReinitialize: true,
-    keepDirtyOnReinitialize: false
+    keepDirtyOnReinitialize: false,
+    warn
   })(GenerateTokenForm)
 );

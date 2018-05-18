@@ -10,6 +10,7 @@ const CheckboxField = ({
   input,
   onOff = false,
   meta: { dirty, error, warning },
+  ignoreDirty = false,
   label,
   ...props
 }) => {
@@ -18,7 +19,9 @@ const CheckboxField = ({
   return (
     <FormGroup
       validationState={
-        error ? 'error' : warning ? 'warning' : dirty ? 'success' : undefined
+        error
+          ? 'error'
+          : warning ? 'warning' : dirty && !ignoreDirty ? 'success' : undefined
       }
       controlId={input.name}
     >
@@ -54,7 +57,8 @@ CheckboxField.propTypes = {
     PropTypes.string,
     PropTypes.element,
     PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) })
-  ]).isRequired
+  ]).isRequired,
+  ignoreDirty: PropTypes.bool
 };
 
 export default CheckboxField;
