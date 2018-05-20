@@ -14,10 +14,7 @@ import withLinks from '../../helpers/withLinks';
 import Page from '../../components/layout/Page';
 import Button from '../../components/widgets/FlatButton';
 
-import {
-  fetchReferenceSolutions,
-  fetchReferenceSolutionIfNeeded
-} from '../../redux/modules/referenceSolutions';
+import { fetchReferenceSolutionIfNeeded } from '../../redux/modules/referenceSolutions';
 import { fetchExerciseIfNeeded } from '../../redux/modules/exercises';
 
 import { getReferenceSolution } from '../../redux/selectors/referenceSolutions';
@@ -29,7 +26,7 @@ import {
   evaluationsForReferenceSolutionSelector,
   fetchManyStatus
 } from '../../redux/selectors/referenceSolutionEvaluations';
-import ResubmitReferenceSolutionContainer from '../../containers/ResubmitReferenceSolutionContainer/ResubmitReferenceSolutionContainer';
+import ResubmitReferenceSolutionContainer from '../../containers/ResubmitReferenceSolutionContainer';
 import { RefreshIcon } from '../../components/icons';
 
 const messages = defineMessages({
@@ -138,11 +135,12 @@ class ReferenceSolution extends Component {
               </p>
               <FetchManyResourceRenderer fetchManyStatus={fetchStatus}>
                 {() =>
-                  <div>
-                    {console.log(evaluations)}
-                  </div>}
+                  <ReferenceSolutionDetail
+                    submission={solution}
+                    evaluations={evaluations}
+                    exercise={exercise}
+                  />}
               </FetchManyResourceRenderer>
-              {console.log(solution)}
             </div>}
         </ResourceRenderer>
       </Page>
@@ -179,7 +177,11 @@ export default withLinks(
       (dispatch, { params }) => ({
         loadAsync: () => ReferenceSolution.loadAsync(params, dispatch),
         refreshSolutionEvaluations: () => {
-          dispatch(fetchReferenceSolutions(params.exerciseId));
+          dispatch(
+            fetchReferenceSolutionEvaluationsForSolution(
+              params.referenceSolutionId
+            )
+          );
         }
       })
     )(ReferenceSolution)

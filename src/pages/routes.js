@@ -34,7 +34,6 @@ import Users from './Users';
 import User from './User';
 import EditUser from './EditUser';
 import ReferenceSolution from './ReferenceSolution';
-import ReferenceSolutionEvaluation from './ReferenceSolutionEvaluation';
 import Pipelines from './Pipelines';
 import EditPipeline from './EditPipeline';
 import Pipeline from './Pipeline';
@@ -114,13 +113,10 @@ const createRoutes = getState => {
                 component={EditExerciseSimpleConfig}
               />
               <Route path="edit-limits" component={EditExerciseLimits} />
-              <Route path="reference-solution/:referenceSolutionId">
-                <IndexRoute component={ReferenceSolution} />
-                <Route
-                  path="evaluation/:evaluationId"
-                  component={ReferenceSolutionEvaluation}
-                />
-              </Route>
+              <Route
+                path="reference-solution/:referenceSolutionId"
+                component={ReferenceSolution}
+              />
             </Route>
           </Route>
           <Route path="pipelines">

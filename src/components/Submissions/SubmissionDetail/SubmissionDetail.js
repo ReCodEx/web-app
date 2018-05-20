@@ -153,7 +153,6 @@ class SubmissionDetail extends Component {
                         <SubmissionEvaluations
                           submissionId={id}
                           evaluations={evaluations}
-                          assignmentId={assignment.id}
                           activeSubmissionId={activeSubmissionId}
                           onSelect={id =>
                             this.setState({ activeSubmissionId: id })}

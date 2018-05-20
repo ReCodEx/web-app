@@ -1,1 +1,1 @@
-export default from './ResubmitReferenceSolutioContainer';
+export default from './ResubmitReferenceSolutionContainer';

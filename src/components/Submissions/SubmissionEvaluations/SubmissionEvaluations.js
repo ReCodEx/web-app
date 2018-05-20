@@ -5,15 +5,12 @@ import Button from '../../widgets/FlatButton';
 
 import Box from '../../widgets/Box';
 import EvaluationTable from '../../ReferenceSolutions/EvaluationTable';
-import withLinks from '../../../helpers/withLinks';
 
 const SubmissionEvaluations = ({
   evaluations,
   submissionId,
-  assignmentId,
   activeSubmissionId,
-  onSelect,
-  links: { REFERENCE_SOLUTION_EVALUATION_URI_FACTORY }
+  onSelect
 }) =>
   <Box
     title={
@@ -55,10 +52,8 @@ const SubmissionEvaluations = ({
 SubmissionEvaluations.propTypes = {
   evaluations: PropTypes.array.isRequired,
   submissionId: PropTypes.string.isRequired,
-  assignmentId: PropTypes.string.isRequired,
   activeSubmissionId: PropTypes.string.isRequired,
-  onSelect: PropTypes.func.isRequired,
-  links: PropTypes.object
+  onSelect: PropTypes.func.isRequired
 };
 
-export default withLinks(SubmissionEvaluations);
+export default SubmissionEvaluations;

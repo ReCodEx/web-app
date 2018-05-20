@@ -3,14 +3,12 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import ResubmitSolution from '../../components/buttons/ResubmitSolution';
-import withLinks from '../../helpers/withLinks';
 import { resubmitReferenceSolution } from '../../redux/modules/referenceSolutions';
 
 const ResubmitReferenceSolutionContainer = ({
   id,
   resubmit,
-  isDebug = true,
-  links: { SUBMISSION_DETAIL_URI_FACTORY }
+  isDebug = true
 }) => {
   return (
     <span>
@@ -22,7 +20,6 @@ const ResubmitReferenceSolutionContainer = ({
 ResubmitReferenceSolutionContainer.propTypes = {
   id: PropTypes.string.isRequired,
   resubmit: PropTypes.func.isRequired,
-  links: PropTypes.object.isRequired,
   isDebug: PropTypes.bool
 };
 
@@ -32,8 +29,6 @@ const mapDispatchToProps = (dispatch, { id }) => ({
   resubmit: isDebug => dispatch(resubmitReferenceSolution(id, isDebug))
 });
 
-export default withLinks(
-  connect(mapStateToProps, mapDispatchToProps)(
-    ResubmitReferenceSolutionContainer
-  )
+export default connect(mapStateToProps, mapDispatchToProps)(
+  ResubmitReferenceSolutionContainer
 );
