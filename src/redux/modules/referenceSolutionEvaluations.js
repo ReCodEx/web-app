@@ -23,9 +23,11 @@ export const fetchReferenceSolutionEvaluation = actions.fetchResource;
 export const fetchReferenceSolutionEvaluationIfNeeded =
   actions.fetchOneIfNeeded;
 
+export const fetchManyEndpoint = id => `/reference-solutions/${id}/evaluations`;
+
 export const fetchReferenceSolutionEvaluationsForSolution = solutionId =>
   actions.fetchMany({
-    endpoint: `/reference-solutions/${solutionId}/evaluations`
+    endpoint: fetchManyEndpoint(solutionId)
   });
 
 export const downloadEvaluationArchive = downloadHelper({
