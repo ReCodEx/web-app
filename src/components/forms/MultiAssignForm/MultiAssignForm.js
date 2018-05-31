@@ -42,7 +42,7 @@ class MultiAssignForm extends Component {
 
       this.myGroups = this.allGroups.filter(
         g =>
-          g.privateData.admins.find(id => id === newProps.userId) ||
+          g.primaryAdminsIds.find(id => id === newProps.userId) ||
           g.privateData.supervisors.find(id => id === newProps.userId)
       );
     }
