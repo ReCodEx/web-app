@@ -14,7 +14,10 @@ import withLinks from '../../helpers/withLinks';
 import Page from '../../components/layout/Page';
 import Button from '../../components/widgets/FlatButton';
 
-import { fetchReferenceSolutionIfNeeded } from '../../redux/modules/referenceSolutions';
+import {
+  fetchReferenceSolutionIfNeeded,
+  fetchReferenceSolution
+} from '../../redux/modules/referenceSolutions';
 import { fetchExerciseIfNeeded } from '../../redux/modules/exercises';
 
 import { getReferenceSolution } from '../../redux/selectors/referenceSolutions';
@@ -177,6 +180,7 @@ export default withLinks(
       (dispatch, { params }) => ({
         loadAsync: () => ReferenceSolution.loadAsync(params, dispatch),
         refreshSolutionEvaluations: () => {
+          dispatch(fetchReferenceSolution(params.referenceSolutionId));
           dispatch(
             fetchReferenceSolutionEvaluationsForSolution(
               params.referenceSolutionId

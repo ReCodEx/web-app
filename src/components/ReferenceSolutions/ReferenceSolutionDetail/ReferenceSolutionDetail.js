@@ -17,6 +17,7 @@ import ReferenceSolutionStatus from '../ReferenceSolutionStatus/ReferenceSolutio
 const getLastSubmissionId = evaluations =>
   Object.values(evaluations)
     .map(x => x.data)
+    .filter(a => a.evaluation !== null)
     .sort((a, b) => b.evaluation.evaluatedAt - a.evaluation.evaluatedAt)[0].id;
 
 class ReferenceSolutionDetail extends Component {
