@@ -145,7 +145,7 @@ class Exercise extends Component {
         maxPointsBeforeFirstDeadline: '10',
         maxPointsBeforeSecondDeadline: '',
         canViewLimitRatios: true,
-        pointsPercentualThreshold: 0,
+        pointsPercentualThreshold: '0',
         isBonus: false,
         runtimeEnvironments,
         enabledRuntime: runtimeEnvironments.reduce((enabled, { id }) => {

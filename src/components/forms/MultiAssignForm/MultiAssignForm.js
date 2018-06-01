@@ -88,7 +88,6 @@ class MultiAssignForm extends Component {
 
   render() {
     const {
-      dirty,
       error,
       handleSubmit,
       submitting,
@@ -304,7 +303,6 @@ class MultiAssignForm extends Component {
               id="multiAssignForm"
               invalid={invalid}
               submitting={submitting}
-              dirty={dirty}
               hasSucceeded={hasSucceeded}
               hasFailed={hasFailed}
               handleSubmit={handleSubmit(this.onSubmitWrapper)}
@@ -404,7 +402,6 @@ MultiAssignForm.propTypes = {
   initialValues: PropTypes.object,
   handleSubmit: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
-  dirty: PropTypes.bool,
   error: PropTypes.any,
   submitting: PropTypes.bool,
   submitFailed: PropTypes.bool,
