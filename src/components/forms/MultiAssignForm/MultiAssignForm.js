@@ -2,21 +2,40 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { reduxForm, Field } from 'redux-form';
 import { FormattedMessage } from 'react-intl';
-import { Alert, HelpBlock, Button, Grid, Row, Col } from 'react-bootstrap';
+import {
+  Alert,
+  HelpBlock,
+  Button,
+  Grid,
+  Row,
+  Col,
+  Table
+} from 'react-bootstrap';
+import { LinkContainer } from 'react-router-bootstrap';
 import isNumeric from 'validator/lib/isNumeric';
 
 import { DatetimeField, TextField, CheckboxField } from '../Fields';
 import SubmitButton from '../SubmitButton';
+import Icon, { GroupIcon } from '../../icons';
 import { getGroupCanonicalLocalizedName } from '../../../helpers/getLocalizedData';
-import Icon from '../../icons';
+import { identity } from '../../../helpers/common';
+import withLinks from '../../../helpers/withLinks';
 
 class MultiAssignForm extends Component {
-  state = { open: false };
+  state = {
+    open: false,
+    assignedToGroups: null
+  };
   allGroups = [];
   myGroups = [];
 
   toggleOpenState = () => {
     this.setState({ open: !this.state.open });
+  };
+
+  acknowledgeSuccess = () => {
+    this.setState({ assignedToGroups: null });
+    this.props.reset();
   };
 
   componentWillReceiveProps(newProps) {
@@ -48,258 +67,343 @@ class MultiAssignForm extends Component {
     }
   }
 
+  /**
+   * Wraps the onSubmit callback passed from the parent component.
+   * (note that submitHandler in which this function is used is redux-form internal routine to handle submits)
+   */
+  onSubmitWrapper = formData => {
+    const { onSubmit } = this.props;
+
+    const groups =
+      formData && formData.groups
+        ? Object.keys(formData.groups)
+            .filter(key => formData.groups[key])
+            .map(id => id.replace(/^id/, ''))
+        : [];
+
+    return onSubmit(formData).then(() => {
+      this.setState({ assignedToGroups: groups });
+    });
+  };
+
   render() {
     const {
       dirty,
       error,
-      submitting,
       handleSubmit,
+      submitting,
       submitFailed: hasFailed,
       submitSucceeded: hasSucceeded,
       invalid,
-      reset,
       firstDeadline,
       allowSecondDeadline,
+      groups,
       groupsAccessor,
       runtimeEnvironments,
-      locale
+      locale,
+      links: { GROUP_DETAIL_URI_FACTORY }
     } = this.props;
 
-    return (
-      <div>
-        {hasFailed &&
-          <Alert bsStyle="danger">
-            <FormattedMessage
-              id="generic.savingFailed"
-              defaultMessage="Saving failed. Please try again later."
-            />
-          </Alert>}
+    return this.state.assignedToGroups === null
+      ? <div>
+          {hasFailed &&
+            <Alert bsStyle="danger">
+              <FormattedMessage
+                id="generic.savingFailed"
+                defaultMessage="Saving failed. Please try again later."
+              />
+            </Alert>}
 
-        {(this.state.open ? this.allGroups : this.myGroups).map((group, i) =>
+          {(this.state.open ? this.allGroups : this.myGroups).map((group, i) =>
+            <Field
+              key={group.id}
+              name={`groups.id${group.id}`}
+              component={CheckboxField}
+              onOff
+              label={getGroupCanonicalLocalizedName(
+                group,
+                groupsAccessor,
+                locale
+              )}
+            />
+          )}
+
+          {this.allGroups.length !== this.myGroups.length &&
+            <Button
+              bsSize="xs"
+              bsStyle="primary"
+              className="btn-flat"
+              onClick={this.toggleOpenState}
+            >
+              {this.state.open
+                ? <span>
+                    <Icon icon="minus-square" gapRight />
+                    <FormattedMessage
+                      id="app.multiAssignForm.showMyGroups"
+                      defaultMessage="Show My Groups Only"
+                    />
+                  </span>
+                : <span>
+                    <Icon icon="plus-square" gapRight />
+                    <FormattedMessage
+                      id="app.multiAssignForm.showAllGroups"
+                      defaultMessage="Show All Groups"
+                    />
+                  </span>}
+            </Button>}
+
+          <hr />
+
           <Field
-            key={group.id}
-            name={`groups.id${group.id}`}
-            component={CheckboxField}
-            onOff
-            label={getGroupCanonicalLocalizedName(
-              group,
-              groupsAccessor,
-              locale
-            )}
-          />
-        )}
-
-        {this.allGroups.length !== this.myGroups.length &&
-          <Button
-            bsSize="xs"
-            bsStyle="primary"
-            className="btn-flat"
-            onClick={this.toggleOpenState}
-          >
-            {this.state.open
-              ? <span>
-                  <Icon icon="minus-square" gapRight />
-                  <FormattedMessage
-                    id="app.multiAssignForm.showMyGroups"
-                    defaultMessage="Show My Groups Only"
-                  />
-                </span>
-              : <span>
-                  <Icon icon="plus-square" gapRight />
-                  <FormattedMessage
-                    id="app.multiAssignForm.showAllGroups"
-                    defaultMessage="Show All Groups"
-                  />
-                </span>}
-          </Button>}
-
-        <hr />
-
-        <Field
-          name="firstDeadline"
-          component={DatetimeField}
-          label={
-            <FormattedMessage
-              id="app.multiAssignForm.firstDeadline"
-              defaultMessage="First deadline:"
-            />
-          }
-        />
-
-        <Field
-          name="maxPointsBeforeFirstDeadline"
-          component={TextField}
-          label={
-            <FormattedMessage
-              id="app.multiAssignForm.maxPointsBeforeFirstDeadline"
-              defaultMessage="Maximum amount of points received when submitted before the deadline:"
-            />
-          }
-        />
-
-        <Field
-          name="allowSecondDeadline"
-          component={CheckboxField}
-          onOff
-          label={
-            <FormattedMessage
-              id="app.multiAssignForm.allowSecondDeadline"
-              defaultMessage="Allow second deadline."
-            />
-          }
-        />
-
-        {allowSecondDeadline &&
-          <Field
-            name="secondDeadline"
-            disabled={!firstDeadline || allowSecondDeadline !== true}
-            isValidDate={date => date.isSameOrAfter(firstDeadline)}
+            name="firstDeadline"
             component={DatetimeField}
             label={
               <FormattedMessage
-                id="app.multiAssignForm.secondDeadline"
-                defaultMessage="Second deadline:"
+                id="app.multiAssignForm.firstDeadline"
+                defaultMessage="First deadline:"
               />
             }
-          />}
+          />
 
-        {allowSecondDeadline &&
-          !firstDeadline &&
-          <HelpBlock>
-            <FormattedMessage
-              id="app.multiAssignForm.chooseFirstDeadlineBeforeSecondDeadline"
-              defaultMessage="You must select the date of the first deadline before selecting the date of the second deadline."
-            />
-          </HelpBlock>}
-
-        {allowSecondDeadline &&
           <Field
-            name="maxPointsBeforeSecondDeadline"
-            disabled={allowSecondDeadline !== true}
+            name="maxPointsBeforeFirstDeadline"
             component={TextField}
             label={
               <FormattedMessage
-                id="app.multiAssignForm.maxPointsBeforeSecondDeadline"
-                defaultMessage="Maximum amount of points received when submitted before the second deadline:"
+                id="app.multiAssignForm.maxPointsBeforeFirstDeadline"
+                defaultMessage="Maximum amount of points received when submitted before the deadline:"
               />
             }
-          />}
-
-        <Field
-          name="submissionsCountLimit"
-          component={TextField}
-          label={
-            <FormattedMessage
-              id="app.multiAssignForm.submissionsCountLimit"
-              defaultMessage="Submissions count limit:"
-            />
-          }
-        />
-
-        <Field
-          name="canViewLimitRatios"
-          component={CheckboxField}
-          onOff
-          label={
-            <FormattedMessage
-              id="app.multiAssignForm.canViewLimitRatios"
-              defaultMessage="Visibility of memory and time ratios"
-            />
-          }
-        />
-
-        <Field
-          name="pointsPercentualThreshold"
-          component={TextField}
-          label={
-            <FormattedMessage
-              id="app.multiAssignForm.pointsPercentualThreshold"
-              defaultMessage="Minimum percentage of points which submissions have to gain:"
-            />
-          }
-        />
-
-        <Field
-          name="isBonus"
-          component={CheckboxField}
-          onOff
-          label={
-            <FormattedMessage
-              id="app.multiAssignForm.isBonus"
-              defaultMessage="Assignment is bonus one and points from it are not included in students overall score"
-            />
-          }
-        />
-
-        <hr />
-
-        <h4>
-          <FormattedMessage
-            id="app.editAssignmentForm.enabledEnvironments"
-            defaultMessage="Enabled Runtime Environments"
           />
-        </h4>
 
-        <Grid fluid>
-          <Row>
-            {runtimeEnvironments.map((env, i) =>
-              <Col key={i} sm={6}>
-                <Field
-                  name={`enabledRuntime.${env.id}`}
-                  component={CheckboxField}
-                  onOff
-                  label={env.longName}
-                />
-              </Col>
-            )}
-          </Row>
-        </Grid>
-
-        {error &&
-          <Alert bsStyle="danger">
-            {error}
-          </Alert>}
-
-        <div className="text-center">
-          <SubmitButton
-            id="multiAssignForm"
-            invalid={invalid}
-            submitting={submitting}
-            dirty={dirty}
-            hasSucceeded={hasSucceeded}
-            hasFailed={hasFailed}
-            handleSubmit={data => handleSubmit(data).then(() => reset())}
-            messages={{
-              submit: (
-                <FormattedMessage
-                  id="app.multiAssignForm.submit"
-                  defaultMessage="Assign Exercise"
-                />
-              ),
-              submitting: (
-                <FormattedMessage
-                  id="app.multiAssignForm.submitting"
-                  defaultMessage="Assigning Exercise ..."
-                />
-              ),
-              success: (
-                <FormattedMessage
-                  id="app.multiAssignForm.success"
-                  defaultMessage="Exercise was assigned."
-                />
-              )
-            }}
+          <Field
+            name="allowSecondDeadline"
+            component={CheckboxField}
+            onOff
+            label={
+              <FormattedMessage
+                id="app.multiAssignForm.allowSecondDeadline"
+                defaultMessage="Allow second deadline."
+              />
+            }
           />
+
+          {allowSecondDeadline &&
+            <Field
+              name="secondDeadline"
+              disabled={!firstDeadline || allowSecondDeadline !== true}
+              isValidDate={date => date.isSameOrAfter(firstDeadline)}
+              component={DatetimeField}
+              label={
+                <FormattedMessage
+                  id="app.multiAssignForm.secondDeadline"
+                  defaultMessage="Second deadline:"
+                />
+              }
+            />}
+
+          {allowSecondDeadline &&
+            !firstDeadline &&
+            <HelpBlock>
+              <FormattedMessage
+                id="app.multiAssignForm.chooseFirstDeadlineBeforeSecondDeadline"
+                defaultMessage="You must select the date of the first deadline before selecting the date of the second deadline."
+              />
+            </HelpBlock>}
+
+          {allowSecondDeadline &&
+            <Field
+              name="maxPointsBeforeSecondDeadline"
+              disabled={allowSecondDeadline !== true}
+              component={TextField}
+              label={
+                <FormattedMessage
+                  id="app.multiAssignForm.maxPointsBeforeSecondDeadline"
+                  defaultMessage="Maximum amount of points received when submitted before the second deadline:"
+                />
+              }
+            />}
+
+          <Field
+            name="submissionsCountLimit"
+            component={TextField}
+            label={
+              <FormattedMessage
+                id="app.multiAssignForm.submissionsCountLimit"
+                defaultMessage="Submissions count limit:"
+              />
+            }
+          />
+
+          <Field
+            name="canViewLimitRatios"
+            component={CheckboxField}
+            onOff
+            label={
+              <FormattedMessage
+                id="app.multiAssignForm.canViewLimitRatios"
+                defaultMessage="Visibility of memory and time ratios"
+              />
+            }
+          />
+
+          <Field
+            name="pointsPercentualThreshold"
+            component={TextField}
+            label={
+              <FormattedMessage
+                id="app.multiAssignForm.pointsPercentualThreshold"
+                defaultMessage="Minimum percentage of points which submissions have to gain:"
+              />
+            }
+          />
+
+          <Field
+            name="isBonus"
+            component={CheckboxField}
+            onOff
+            label={
+              <FormattedMessage
+                id="app.multiAssignForm.isBonus"
+                defaultMessage="Assignment is bonus one and points from it are not included in students overall score"
+              />
+            }
+          />
+
+          <hr />
+
+          <h4>
+            <FormattedMessage
+              id="app.editAssignmentForm.enabledEnvironments"
+              defaultMessage="Enabled Runtime Environments"
+            />
+          </h4>
+
+          <Grid fluid>
+            <Row>
+              {runtimeEnvironments.map((env, i) =>
+                <Col key={i} sm={6}>
+                  <Field
+                    name={`enabledRuntime.${env.id}`}
+                    component={CheckboxField}
+                    onOff
+                    label={env.longName}
+                  />
+                </Col>
+              )}
+            </Row>
+          </Grid>
+
+          {error &&
+            <Alert bsStyle="danger">
+              {error}
+            </Alert>}
+
+          <div className="text-center">
+            <SubmitButton
+              id="multiAssignForm"
+              invalid={invalid}
+              submitting={submitting}
+              dirty={dirty}
+              hasSucceeded={hasSucceeded}
+              hasFailed={hasFailed}
+              handleSubmit={handleSubmit(this.onSubmitWrapper)}
+              messages={{
+                submit: (
+                  <FormattedMessage
+                    id="app.multiAssignForm.submit"
+                    defaultMessage="Assign Exercise"
+                  />
+                ),
+                submitting: (
+                  <FormattedMessage
+                    id="app.multiAssignForm.submitting"
+                    defaultMessage="Assigning Exercise ..."
+                  />
+                ),
+                success: (
+                  <FormattedMessage
+                    id="app.multiAssignForm.success"
+                    defaultMessage="Exercise was assigned."
+                  />
+                )
+              }}
+            />
+          </div>
         </div>
-      </div>
-    );
+      : <div>
+          <div className="callout callout-success">
+            <h4>
+              <FormattedMessage
+                id="app.multiAssignForm.successHeading"
+                defaultMessage="Exercise Assigned"
+              />
+            </h4>
+            <p>
+              <FormattedMessage
+                id="app.multiAssignForm.successDescription"
+                defaultMessage="The exercise was successfuly assigned to the following groups. Please note, that all new assignments are immediately visible to the users."
+              />
+            </p>
+          </div>
+          <Table>
+            <tbody>
+              {this.state.assignedToGroups
+                .map(gId => groups.find(({ id }) => id === gId))
+                .filter(identity)
+                .map(group =>
+                  <tr key={group.id}>
+                    <td>
+                      <Icon icon="check" />
+                    </td>
+                    <td>
+                      {getGroupCanonicalLocalizedName(
+                        group,
+                        groupsAccessor,
+                        locale
+                      )}
+                    </td>
+                    <td className="text-right">
+                      <LinkContainer to={GROUP_DETAIL_URI_FACTORY(group.id)}>
+                        <Button
+                          bsSize="xs"
+                          bsStyle="primary"
+                          className="btn-flat"
+                          onClick={this.toggleOpenState}
+                        >
+                          <GroupIcon gapRight />
+                          <FormattedMessage
+                            id="app.group.detail"
+                            defaultMessage="Group Detail"
+                          />
+                        </Button>
+                      </LinkContainer>
+                    </td>
+                  </tr>
+                )}
+            </tbody>
+          </Table>
+          <div className="text-center">
+            <Button
+              bsStyle="warning"
+              className="btn-flat"
+              onClick={this.acknowledgeSuccess}
+            >
+              <Icon icon={['far', 'smile']} gapRight />
+              <FormattedMessage
+                id="generic.acknowledge"
+                defaultMessage="Acknowledge"
+              />
+            </Button>
+          </div>
+        </div>;
   }
 }
 
 MultiAssignForm.propTypes = {
   initialValues: PropTypes.object,
-  values: PropTypes.object,
   handleSubmit: PropTypes.func.isRequired,
+  onSubmit: PropTypes.func.isRequired,
   dirty: PropTypes.bool,
   error: PropTypes.any,
   submitting: PropTypes.bool,
@@ -317,7 +421,8 @@ MultiAssignForm.propTypes = {
   groups: PropTypes.array.isRequired,
   groupsAccessor: PropTypes.func.isRequired,
   runtimeEnvironments: PropTypes.array.isRequired,
-  locale: PropTypes.string.isRequired
+  locale: PropTypes.string.isRequired,
+  links: PropTypes.object
 };
 
 const isNonNegativeInteger = n =>
@@ -457,9 +562,11 @@ const validate = ({
   return errors;
 };
 
-export default reduxForm({
-  form: 'multiAssign',
-  enableReinitialize: true,
-  keepDirtyOnReinitialize: false,
-  validate
-})(MultiAssignForm);
+export default withLinks(
+  reduxForm({
+    form: 'multiAssign',
+    enableReinitialize: true,
+    keepDirtyOnReinitialize: false,
+    validate
+  })(MultiAssignForm)
+);
