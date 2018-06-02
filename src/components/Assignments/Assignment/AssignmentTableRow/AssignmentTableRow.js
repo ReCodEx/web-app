@@ -131,7 +131,6 @@ AssignmentTableRow.propTypes = {
   showGroup: PropTypes.bool,
   item: PropTypes.shape({
     id: PropTypes.any.isRequired,
-    name: PropTypes.string.isRequired,
     localizedTexts: PropTypes.array.isRequired,
     firstDeadline: PropTypes.number.isRequired,
     secondDeadline: PropTypes.number.isRequired,

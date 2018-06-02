@@ -40,7 +40,6 @@ class SubmitButton extends Component {
   render() {
     const {
       submitting,
-      dirty = false,
       hasFailed,
       invalid,
       asyncValidating = false,
@@ -83,7 +82,7 @@ class SubmitButton extends Component {
         bsStyle={
           hasSucceeded
             ? 'success'
-            : hasFailed ? 'danger' : dirty ? 'warning' : 'success'
+            : hasFailed ? 'danger' : invalid ? 'warning' : 'success'
         }
         className="btn-flat"
         disabled={
@@ -101,7 +100,7 @@ class SubmitButton extends Component {
                   {!noIcons && <LoadingIcon gapRight />}
                   {validatingMsg}
                 </span>
-              : dirty && invalid
+              : invalid
                 ? <span>
                     {!noIcons && <WarningIcon gapRight />}
                     {invalidMsg}
@@ -122,7 +121,6 @@ class SubmitButton extends Component {
 SubmitButton.propTypes = {
   id: PropTypes.string.isRequired,
   handleSubmit: PropTypes.func.isRequired,
-  dirty: PropTypes.bool,
   submitting: PropTypes.bool,
   hasSucceeded: PropTypes.bool,
   hasFailed: PropTypes.bool,
