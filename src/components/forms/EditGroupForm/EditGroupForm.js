@@ -19,7 +19,8 @@ export const EDIT_GROUP_FORM_EMPTY_INITIAL_VALUES = {
 const EditGroupForm = ({
   submitting,
   handleSubmit,
-  anyTouched,
+  onSubmit,
+  dirty = false,
   submitFailed = false,
   submitSucceeded = false,
   invalid,
@@ -49,9 +50,9 @@ const EditGroupForm = ({
       <div className="text-center">
         <SubmitButton
           id="editGroup"
-          handleSubmit={data => handleSubmit(data).then(() => reset())}
+          handleSubmit={handleSubmit(data => onSubmit(data).then(reset))}
           submitting={submitting}
-          dirty={anyTouched}
+          dirty={dirty}
           hasSucceeded={submitSucceeded}
           hasFailed={submitFailed}
           invalid={invalid}
@@ -183,7 +184,7 @@ const EditGroupForm = ({
 EditGroupForm.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
-  anyTouched: PropTypes.bool,
+  dirty: PropTypes.bool,
   submitFailed: PropTypes.bool,
   submitSucceeded: PropTypes.bool,
   submitting: PropTypes.bool,
