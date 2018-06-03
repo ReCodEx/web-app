@@ -18,6 +18,7 @@ import {
 const EditUserProfileForm = ({
   submitting,
   handleSubmit,
+  onSubmit,
   dirty,
   submitFailed = false,
   submitSucceeded = false,
@@ -42,7 +43,7 @@ const EditUserProfileForm = ({
       <div className="text-center">
         <SubmitButton
           id="editUserProfile"
-          handleSubmit={data => handleSubmit(data).then(() => reset())}
+          handleSubmit={handleSubmit(data => onSubmit(data).then(reset))}
           submitting={submitting}
           dirty={dirty}
           invalid={invalid}
