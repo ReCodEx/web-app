@@ -13,7 +13,7 @@ import { LocalizedExerciseName } from '../../helpers/LocalizedNames';
 
 const EditAssignmentForm = ({
   initialValues: assignment,
-  anyTouched,
+  dirty,
   submitting,
   handleSubmit,
   submitFailed,
@@ -24,7 +24,8 @@ const EditAssignmentForm = ({
   firstDeadline,
   allowSecondDeadline,
   localizedTextsLocales,
-  runtimeEnvironments
+  runtimeEnvironments,
+  beingPublished
 }) =>
   <div>
     <FormBox
@@ -36,7 +37,7 @@ const EditAssignmentForm = ({
         />
       }
       successful={submitSucceeded}
-      dirty={anyTouched}
+      dirty={dirty}
       unlimitedHeight
       footer={
         <div className="text-center">
@@ -44,7 +45,7 @@ const EditAssignmentForm = ({
             id="editAssignmentForm"
             invalid={invalid}
             submitting={submitting}
-            dirty={anyTouched}
+            dirty={dirty}
             hasSucceeded={submitSucceeded}
             hasFailed={submitFailed}
             handleSubmit={handleSubmit}
@@ -272,6 +273,20 @@ const EditAssignmentForm = ({
               }
             />
           </Col>
+          {beingPublished &&
+            <Col sm={6}>
+              <Field
+                name="sendNotification"
+                component={CheckboxField}
+                onOff
+                label={
+                  <FormattedMessage
+                    id="app.editAssignmentForm.sendNotification"
+                    defaultMessage="Send e-mail notification to students"
+                  />
+                }
+              />
+            </Col>}
         </Row>
       </Grid>
     </FormBox>
@@ -281,7 +296,7 @@ EditAssignmentForm.propTypes = {
   initialValues: PropTypes.object.isRequired,
   values: PropTypes.object,
   handleSubmit: PropTypes.func.isRequired,
-  anyTouched: PropTypes.bool,
+  dirty: PropTypes.bool,
   submitting: PropTypes.bool,
   submitFailed: PropTypes.bool,
   submitSucceeded: PropTypes.bool,
@@ -291,6 +306,7 @@ EditAssignmentForm.propTypes = {
   allowSecondDeadline: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
   localizedTextsLocales: PropTypes.array,
   runtimeEnvironments: PropTypes.array,
+  beingPublished: PropTypes.bool,
   error: PropTypes.object
 };
 
