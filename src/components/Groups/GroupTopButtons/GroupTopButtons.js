@@ -4,7 +4,8 @@ import { LinkContainer } from 'react-router-bootstrap';
 import { FormattedMessage } from 'react-intl';
 import Button from '../../widgets/FlatButton';
 import LeaveJoinGroupButtonContainer from '../../../containers/LeaveJoinGroupButtonContainer';
-import { GroupIcon, EditIcon, InfoIcon } from '../../icons';
+import { GroupIcon, EditIcon, InfoIcon, MailIcon } from '../../icons';
+import { identity } from '../../../helpers/common';
 import withLinks from '../../../helpers/withLinks';
 
 const GroupTopButtons = ({
@@ -13,50 +14,73 @@ const GroupTopButtons = ({
   canEdit,
   canSeeDetail,
   canLeaveJoin,
+  students = null,
   links: {
     GROUP_EDIT_URI_FACTORY,
     GROUP_DETAIL_URI_FACTORY,
     GROUP_INFO_URI_FACTORY
   }
-}) =>
-  <p>
-    {canEdit &&
-      <LinkContainer to={GROUP_EDIT_URI_FACTORY(group.id)}>
-        <Button bsStyle="warning">
-          <EditIcon gapRight />
-          <FormattedMessage
-            id="app.editGroup.title"
-            defaultMessage="Edit Group"
-          />
-        </Button>
-      </LinkContainer>}
+}) => {
+  const studentEmails =
+    students &&
+    students
+      .map(s => s.privateData && s.privateData.email)
+      .filter(identity)
+      .map(encodeURIComponent)
+      .join(',');
 
-    <LinkContainer to={GROUP_INFO_URI_FACTORY(group.id)}>
-      <Button bsStyle="primary">
-        <InfoIcon gapRight />
-        <FormattedMessage id="app.group.info" defaultMessage="Group Info" />
-      </Button>
-    </LinkContainer>
+  return (
+    <p>
+      {canEdit &&
+        <LinkContainer to={GROUP_EDIT_URI_FACTORY(group.id)}>
+          <Button bsStyle="warning">
+            <EditIcon gapRight />
+            <FormattedMessage
+              id="app.editGroup.title"
+              defaultMessage="Edit Group"
+            />
+          </Button>
+        </LinkContainer>}
 
-    {canSeeDetail &&
-      <LinkContainer to={GROUP_DETAIL_URI_FACTORY(group.id)}>
+      <LinkContainer to={GROUP_INFO_URI_FACTORY(group.id)}>
         <Button bsStyle="primary">
-          <GroupIcon gapRight />
-          <FormattedMessage
-            id="app.group.detail"
-            defaultMessage="Group Detail"
-          />
+          <InfoIcon gapRight />
+          <FormattedMessage id="app.group.info" defaultMessage="Group Info" />
         </Button>
-      </LinkContainer>}
+      </LinkContainer>
 
-    {canLeaveJoin &&
-      !group.organizational &&
-      <LeaveJoinGroupButtonContainer
-        userId={userId}
-        groupId={group.id}
-        bsSize={null}
-      />}
-  </p>;
+      {canSeeDetail &&
+        <LinkContainer to={GROUP_DETAIL_URI_FACTORY(group.id)}>
+          <Button bsStyle="primary">
+            <GroupIcon gapRight />
+            <FormattedMessage
+              id="app.group.detail"
+              defaultMessage="Group Detail"
+            />
+          </Button>
+        </LinkContainer>}
+
+      {canLeaveJoin &&
+        !group.organizational &&
+        <LeaveJoinGroupButtonContainer
+          userId={userId}
+          groupId={group.id}
+          bsSize={null}
+        />}
+
+      {studentEmails &&
+        <a href={`mailto:${studentEmails}`} className="pull-right">
+          <Button bsStyle="default">
+            <MailIcon gapRight />
+            <FormattedMessage
+              id="app.group.mailtoAll"
+              defaultMessage="Mail to All Students"
+            />
+          </Button>
+        </a>}
+    </p>
+  );
+};
 
 GroupTopButtons.propTypes = {
   group: PropTypes.object.isRequired,
@@ -64,6 +88,7 @@ GroupTopButtons.propTypes = {
   canEdit: PropTypes.bool.isRequired,
   canSeeDetail: PropTypes.bool,
   canLeaveJoin: PropTypes.bool,
+  students: PropTypes.array,
   links: PropTypes.object
 };
 

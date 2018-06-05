@@ -150,7 +150,12 @@ class User extends Component {
         {user =>
           <div>
             <p>
-              <UsersNameContainer userId={user.id} large noLink />
+              <UsersNameContainer
+                userId={user.id}
+                large
+                noLink
+                showEmail="full"
+              />
             </p>
 
             {(isAdmin || userId === loggedInUserId) &&

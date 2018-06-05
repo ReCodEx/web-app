@@ -14,6 +14,7 @@ const UsersListItem = ({
         {...user}
         useGravatar={useGravatar}
         currentUserId={loggedUserId}
+        showEmail="full"
       />
     </td>
     {createActions &&
