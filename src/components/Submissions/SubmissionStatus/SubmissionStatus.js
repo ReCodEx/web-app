@@ -106,7 +106,7 @@ const SubmissionStatus = ({
             <FormattedMessage id="generic.author" defaultMessage="Author" />:
           </th>
           <td>
-            <UsersNameContainer userId={userId} />
+            <UsersNameContainer userId={userId} showEmail="icon" />
           </td>
         </tr>
 
@@ -123,7 +123,7 @@ const SubmissionStatus = ({
               />
             </th>
             <td>
-              <UsersNameContainer userId={submittedBy} />
+              <UsersNameContainer userId={submittedBy} showEmail="icon" />
             </td>
           </tr>}
 

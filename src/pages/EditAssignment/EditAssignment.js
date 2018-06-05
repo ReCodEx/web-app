@@ -85,6 +85,7 @@ class EditAssignment extends Component {
           return result;
         }, {})
       ),
+      sendNotification: true,
       ...rest
     })
   );
@@ -144,7 +145,8 @@ class EditAssignment extends Component {
       allowSecondDeadline,
       localizedTexts,
       exerciseSync,
-      runtimeEnvironments
+      runtimeEnvironments,
+      isPublic
     } = this.props;
 
     return (
@@ -227,7 +229,6 @@ class EditAssignment extends Component {
             >
               {envs =>
                 <EditAssignmentForm
-                  assignment={assignment}
                   initialValues={
                     assignment ? this.getInitialValues(assignment) : {}
                   }
@@ -238,6 +239,7 @@ class EditAssignment extends Component {
                     localizedTexts
                   )}
                   runtimeEnvironments={envs}
+                  beingPublished={!assignment.isPublic && isPublic}
                 />}
             </ResourceRenderer>
 
@@ -287,6 +289,7 @@ EditAssignment.propTypes = {
   firstDeadline: PropTypes.oneOfType([PropTypes.number, PropTypes.object]),
   allowSecondDeadline: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
   localizedTexts: PropTypes.array,
+  isPublic: PropTypes.bool,
   exerciseSync: PropTypes.func.isRequired,
   validateAssignment: PropTypes.func.isRequired,
   links: PropTypes.object,
@@ -312,6 +315,7 @@ export default connect(
         'allowSecondDeadline'
       ),
       localizedTexts: editAssignmentFormSelector(state, 'localizedTexts'),
+      isPublic: editAssignmentFormSelector(state, 'isPublic'),
       isSupervisorOf: groupId => isSupervisorOf(loggedInUserId, groupId)(state),
       isAdminOf: groupId => isAdminOf(loggedInUserId, groupId)(state)
     };

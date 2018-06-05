@@ -7,6 +7,7 @@ import Icon from './Icon';
  */
 
 export const AddIcon = props => <Icon {...props} icon="plus" />;
+export const AdressIcon = props => <Icon {...props} icon="at" />;
 export const CloseIcon = props => <Icon {...props} icon="times" />;
 export const CopyIcon = props =>
   <Icon {...props} icon={['far', 'clipboard']} />;
@@ -24,6 +25,7 @@ export const InfoIcon = props => <Icon {...props} icon="info" />;
 export const LoadingIcon = props =>
   <Icon {...props} icon="spinner" pulse style={{ opacity: 0.8 }} />;
 export const LocalIcon = props => <Icon {...props} icon="thumb-tack" />;
+export const MailIcon = props => <Icon {...props} icon={['far', 'envelope']} />;
 export const NeedFixingIcon = props => <Icon {...props} icon="medkit" />;
 export const RefreshIcon = props => <Icon {...props} icon="sync" />;
 export const RemoveIcon = props => <Icon {...props} icon="minus" />;
