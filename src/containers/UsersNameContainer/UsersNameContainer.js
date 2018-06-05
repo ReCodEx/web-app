@@ -30,8 +30,15 @@ class UsersNameContainer extends Component {
   };
 
   render() {
-    const { user, large, noLink, currentUser, isSimple = false } = this.props;
-    const size = large ? 45 : 22;
+    const {
+      user,
+      large,
+      noLink,
+      currentUser,
+      isSimple = false,
+      showEmail = null
+    } = this.props;
+    const size = large ? 45 : 20;
     return (
       <ResourceRenderer
         resource={[user, currentUser]}
@@ -50,6 +57,7 @@ class UsersNameContainer extends Component {
                 noLink={noLink}
                 currentUserId={currentUser.id}
                 useGravatar={currentUser.privateData.settings.useGravatar}
+                showEmail={showEmail}
               />}
       </ResourceRenderer>
     );
@@ -63,7 +71,8 @@ UsersNameContainer.propTypes = {
   user: ImmutablePropTypes.map,
   noLink: PropTypes.bool,
   loadAsync: PropTypes.func.isRequired,
-  isSimple: PropTypes.bool
+  isSimple: PropTypes.bool,
+  showEmail: PropTypes.string
 };
 
 export default connect(

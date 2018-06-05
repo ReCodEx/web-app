@@ -29,7 +29,8 @@ const cellRenderers = {
             </span>}
         </span>
       : '-',
-  user: user => user && <UsersNameContainer userId={user.id} />,
+  user: user =>
+    user && <UsersNameContainer userId={user.id} showEmail="icon" />,
   total: points =>
     <strong>
       {points ? `${points.gained}/${points.total}` : '-/-'}

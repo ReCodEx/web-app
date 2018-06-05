@@ -219,6 +219,11 @@ class GroupDetail extends Component {
               canLeaveJoin={
                 !isAdmin && !isSupervisor && (data.public || isStudent)
               }
+              students={
+                (isAdmin || isSuperAdmin) && !data.organizational
+                  ? students
+                  : null
+              }
             />
             {data.organizational &&
               <Row>
