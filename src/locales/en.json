@@ -606,7 +606,7 @@
   "app.externalRegistrationForm.instance": "Instance:",
   "app.externalRegistrationForm.password": "Password:",
   "app.externalRegistrationForm.title": "Create ReCodEx account using CAS",
-  "app.externalRegistrationForm.username": "CAS login (UK�SO):",
+  "app.externalRegistrationForm.username": "CAS login (UKČO):",
   "app.externalRegistrationForm.validation.emptyPassword": "Password cannot be empty.",
   "app.externalRegistrationForm.validation.emptyUsername": "Username cannot be empty.",
   "app.externalRegistrationForm.validation.instanceId": "Please select one of the instances.",
