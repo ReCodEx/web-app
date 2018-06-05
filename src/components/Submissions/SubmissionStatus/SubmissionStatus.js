@@ -8,9 +8,10 @@ import Box from '../../widgets/Box';
 import AssignmentStatusIcon from '../../Assignments/Assignment/AssignmentStatusIcon';
 import UsersNameContainer from '../../../containers/UsersNameContainer';
 import withLinks from '../../../helpers/withLinks';
-import { EditIcon } from '../../icons';
+import { EditIcon, SuccessOrFailureIcon } from '../../icons';
 
 const SubmissionStatus = ({
+  assignment: { firstDeadline, allowSecondDeadline, secondDeadline },
   evaluationStatus,
   submittedAt,
   userId,
@@ -18,13 +19,13 @@ const SubmissionStatus = ({
   note,
   accepted,
   originalSubmissionId = null,
-  assignmentId,
+  assignment,
   environment,
   links: { SUBMISSION_DETAIL_URI_FACTORY }
 }) =>
   <Box
     title={
-      <FormattedMessage id="app.submission.title" defaultMessage="Solution" />
+      <FormattedMessage id="app.solution.title" defaultMessage="The Solution" />
     }
     noPadding={true}
     collapsable={true}
@@ -47,15 +48,16 @@ const SubmissionStatus = ({
               {note}
             </td>
           </tr>}
+
         <tr>
           <td className="text-center">
             <FontAwesomeIcon icon={['far', 'clock']} />
           </td>
           <th>
             <FormattedMessage
-              id="app.submission.submittedAt"
-              defaultMessage="Submitted at:"
-            />
+              id="app.solution.submittedAt"
+              defaultMessage="Submitted at"
+            />:
           </th>
           <td>
             <FormattedDate value={submittedAt * 1000} />
@@ -63,6 +65,39 @@ const SubmissionStatus = ({
             <FormattedTime value={submittedAt * 1000} />
           </td>
         </tr>
+
+        <tr>
+          <td className="text-center">
+            <FontAwesomeIcon icon="hourglass-start" />
+          </td>
+          <th>
+            <FormattedMessage
+              id="app.solution.beforeFirstDeadline"
+              defaultMessage="Before the deadline"
+            />:
+          </th>
+          <td>
+            <SuccessOrFailureIcon success={submittedAt < firstDeadline} />
+          </td>
+        </tr>
+
+        {submittedAt >= firstDeadline &&
+          allowSecondDeadline === true &&
+          <tr>
+            <td className="text-center">
+              <FontAwesomeIcon icon="hourglass-end" />
+            </td>
+            <th>
+              <FormattedMessage
+                id="app.solution.beforeSecondDeadline"
+                defaultMessage="Before the second deadline"
+              />:
+            </th>
+            <td>
+              <SuccessOrFailureIcon success={submittedAt < secondDeadline} />
+            </td>
+          </tr>}
+
         <tr>
           <td className="text-center">
             <FontAwesomeIcon icon="user" />
@@ -74,6 +109,7 @@ const SubmissionStatus = ({
             <UsersNameContainer userId={userId} />
           </td>
         </tr>
+
         {Boolean(submittedBy) &&
           submittedBy !== userId &&
           <tr>
@@ -90,6 +126,7 @@ const SubmissionStatus = ({
               <UsersNameContainer userId={submittedBy} />
             </td>
           </tr>}
+
         {Boolean(environment) &&
           Boolean(environment.name) &&
           <tr>
@@ -106,6 +143,7 @@ const SubmissionStatus = ({
               {environment.name}
             </td>
           </tr>}
+
         <tr>
           <td className="text-center">
             <b>
@@ -157,6 +195,11 @@ const SubmissionStatus = ({
   </Box>;
 
 SubmissionStatus.propTypes = {
+  assignment: PropTypes.shape({
+    firstDeadline: PropTypes.number.isRequired,
+    allowSecondDeadline: PropTypes.bool.isRequired,
+    secondDeadline: PropTypes.number
+  }).isRequired,
   evaluationStatus: PropTypes.string.isRequired,
   submittedAt: PropTypes.number.isRequired,
   userId: PropTypes.string.isRequired,
@@ -164,7 +207,6 @@ SubmissionStatus.propTypes = {
   note: PropTypes.string,
   accepted: PropTypes.bool,
   originalSubmissionId: PropTypes.string,
-  assignmentId: PropTypes.string.isRequired,
   environment: PropTypes.object,
   links: PropTypes.object.isRequired
 };

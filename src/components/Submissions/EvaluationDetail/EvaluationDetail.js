@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import classnames from 'classnames';
 import {
   FormattedMessage,
@@ -12,10 +11,8 @@ import { Table } from 'react-bootstrap';
 
 import Box from '../../widgets/Box';
 import { SuccessOrFailureIcon } from '../../icons';
-import BonusPoints from '../../Assignments/SubmissionsTable/BonusPoints';
 
 const EvaluationDetail = ({
-  assignment: { firstDeadline, allowSecondDeadline, secondDeadline },
   evaluation,
   isCorrect,
   submittedAt,
@@ -48,34 +45,6 @@ const EvaluationDetail = ({
             <FormattedTime value={evaluation.evaluatedAt * 1000} />
           </td>
         </tr>
-
-        <tr>
-          <th>
-            <FormattedMessage
-              id="app.evaluationDetail.beforeFirstDeadline"
-              defaultMessage="Was submitted before the deadline:"
-            />
-          </th>
-          <td className="text-center">
-            {submittedAt < firstDeadline
-              ? <FontAwesomeIcon icon="check" className="text-success" />
-              : <FontAwesomeIcon icon="times" className="text-danger" />}
-          </td>
-        </tr>
-
-        {submittedAt >= firstDeadline &&
-          allowSecondDeadline === true &&
-          <tr>
-            <th>
-              <FormattedMessage
-                id="app.evaluationDetail.beforeSecondDeadline"
-                defaultMessage="Was submitted before the second deadline:"
-              />
-            </th>
-            <td className="text-center">
-              <SuccessOrFailureIcon success={submittedAt < secondDeadline} />
-            </td>
-          </tr>}
 
         <tr>
           <th>
@@ -118,57 +87,24 @@ const EvaluationDetail = ({
           <td
             className={classnames({
               'text-center': true,
-              'text-danger': !isCorrect && bonusPoints === 0,
-              'text-success': isCorrect && bonusPoints === 0,
-              'text-bold': evaluation.bonusPoints === 0
+              'text-danger': !isCorrect || evaluation.points + bonusPoints <= 0,
+              'text-success': isCorrect && evaluation.points + bonusPoints > 0
             })}
           >
-            {evaluation.points}/{maxPoints}
+            <b>
+              {evaluation.points}
+              {bonusPoints !== 0
+                ? (bonusPoints >= 0 ? '+' : '') + bonusPoints
+                : ''}{' '}
+              / {maxPoints}
+            </b>
           </td>
         </tr>
-        {bonusPoints !== 0 &&
-          <tr>
-            <th>
-              <FormattedMessage
-                id="app.evaluationDetail.bonusPoints"
-                defaultMessage="Bonus points:"
-              />
-            </th>
-            <td className="text-center">
-              <BonusPoints bonus={bonusPoints} />
-            </td>
-          </tr>}
-        {bonusPoints !== 0 &&
-          <tr>
-            <th>
-              <FormattedMessage
-                id="app.evaluationDetail.totalScore"
-                defaultMessage="Total score:"
-              />
-            </th>
-            <td
-              className={classnames({
-                'text-center': true,
-                'text-danger':
-                  !isCorrect || evaluation.points + bonusPoints <= 0,
-                'text-success': isCorrect && evaluation.points + bonusPoints > 0
-              })}
-            >
-              <b>
-                {evaluation.points + bonusPoints}/{maxPoints}
-              </b>
-            </td>
-          </tr>}
       </tbody>
     </Table>
   </Box>;
 
 EvaluationDetail.propTypes = {
-  assignment: PropTypes.shape({
-    firstDeadline: PropTypes.number.isRequired,
-    allowSecondDeadline: PropTypes.bool.isRequired,
-    secondDeadline: PropTypes.number
-  }).isRequired,
   isCorrect: PropTypes.bool.isRequired,
   submittedAt: PropTypes.number.isRequired,
   evaluation: PropTypes.object,

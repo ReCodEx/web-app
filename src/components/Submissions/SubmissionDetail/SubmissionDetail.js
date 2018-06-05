@@ -5,7 +5,7 @@ import { Row, Col } from 'react-bootstrap';
 import SubmissionStatus from '../SubmissionStatus';
 import SourceCodeInfoBox from '../../widgets/SourceCodeInfoBox';
 import TestResults from '../TestResults';
-import BonusPointsContainer from '../../../containers/BonusPointsContainer';
+import PointsContainer from '../../../containers/PointsContainer';
 import DownloadResultArchiveContainer from '../../../containers/DownloadResultArchiveContainer';
 import DownloadSolutionArchiveContainer from '../../../containers/DownloadSolutionArchiveContainer';
 import CommentThreadContainer from '../../../containers/CommentThreadContainer';
@@ -15,6 +15,8 @@ import ResourceRenderer from '../../helpers/ResourceRenderer';
 
 import EvaluationDetail from '../EvaluationDetail';
 import CompilationLogs from '../CompilationLogs';
+
+import { safeGet } from '../../../helpers/common';
 
 class SubmissionDetail extends Component {
   state = { openFileId: null, activeSubmissionId: null };
@@ -44,9 +46,11 @@ class SubmissionDetail extends Component {
         note = '',
         solution: { createdAt, userId, files, ...restSolution },
         maxPoints,
+        overriddenPoints,
         bonusPoints,
         accepted,
-        runtimeEnvironmentId
+        runtimeEnvironmentId,
+        lastSubmission
       },
       assignment,
       isSupervisor,
@@ -76,7 +80,7 @@ class SubmissionDetail extends Component {
               note={note}
               accepted={accepted}
               originalSubmissionId={restSolution.id}
-              assignmentId={assignment.id}
+              assignment={assignment}
               environment={
                 runtimeEnvironments &&
                 runtimeEnvironmentId &&
@@ -115,7 +119,6 @@ class SubmissionDetail extends Component {
             <Col md={6} sm={12}>
               {evaluation &&
                 <EvaluationDetail
-                  assignment={assignment}
                   evaluation={evaluation}
                   submittedAt={createdAt}
                   maxPoints={maxPoints}
@@ -125,9 +128,15 @@ class SubmissionDetail extends Component {
 
               {evaluation &&
                 isSupervisor &&
-                <BonusPointsContainer
+                <PointsContainer
                   submissionId={id}
+                  overriddenPoints={overriddenPoints}
                   bonusPoints={bonusPoints}
+                  scoredPoints={safeGet(lastSubmission, [
+                    'evaluation',
+                    'points'
+                  ])}
+                  maxPoints={maxPoints}
                 />}
 
               {evaluation &&
@@ -185,6 +194,8 @@ SubmissionDetail.propTypes = {
       files: PropTypes.array
     }).isRequired,
     maxPoints: PropTypes.number.isRequired,
+    bonusPoints: PropTypes.number.isRequired,
+    overriddenPoints: PropTypes.number.isRequired,
     runtimeEnvironmentId: PropTypes.string
   }).isRequired,
   assignment: PropTypes.object.isRequired,
