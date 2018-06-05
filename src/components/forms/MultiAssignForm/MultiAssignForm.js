@@ -293,6 +293,26 @@ class MultiAssignForm extends Component {
             </Row>
           </Grid>
 
+          <hr />
+
+          <Grid fluid>
+            <Row>
+              <Col sm={6}>
+                <Field
+                  name="sendNotification"
+                  component={CheckboxField}
+                  onOff
+                  label={
+                    <FormattedMessage
+                      id="app.editAssignmentForm.sendNotification"
+                      defaultMessage="Send e-mail notification to students"
+                    />
+                  }
+                />
+              </Col>
+            </Row>
+          </Grid>
+
           {error &&
             <Alert bsStyle="danger">
               {error}

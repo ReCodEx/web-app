@@ -163,6 +163,7 @@
   "app.editAssignmentForm.maxPointsBeforeSecondDeadline": "Maximální počet bodů pro řešení odevzdaná před druhým termínem:",
   "app.editAssignmentForm.pointsPercentualThreshold": "Minimální procentuální správnost řešení, za kterou lze získat nějaké body:",
   "app.editAssignmentForm.secondDeadline": "Druhý termín odevzdání:",
+  "app.editAssignmentForm.sendNotification": "Poslat studentům oznámení e-mailem",
   "app.editAssignmentForm.submissionsCountLimit": "Počet pokusů odevzdání:",
   "app.editAssignmentForm.title": "Upravit zadání {name}",
   "app.editAssignmentForm.validation.allRuntimesDisabled": "Nemůžete zakázat všechna běhová prostředí.",
