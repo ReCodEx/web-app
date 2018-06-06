@@ -54,7 +54,7 @@ class ReferenceSolutionDetail extends Component {
     } = this.props;
     const { openFileId, activeSubmissionId } = this.state;
 
-    if (activeSubmissionId) {
+    if (activeSubmissionId && evaluations.toJS()[activeSubmissionId].data) {
       var {
         submittedBy,
         evaluation,
@@ -122,8 +122,11 @@ class ReferenceSolutionDetail extends Component {
               {activeSubmissionId &&
                 <Row>
                   <Col lg={12}>
-                    <ResourceRenderer resource={evaluations.toArray()}>
-                      {(...evaluations) =>
+                    <ResourceRenderer
+                      resource={evaluations.toArray()}
+                      returnAsArray
+                    >
+                      {evaluations =>
                         <SubmissionEvaluations
                           submissionId={id}
                           evaluations={evaluations}

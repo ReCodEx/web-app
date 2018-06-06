@@ -55,7 +55,7 @@ class SubmissionDetail extends Component {
     } = this.props;
     const { openFileId, activeSubmissionId } = this.state;
 
-    if (activeSubmissionId) {
+    if (activeSubmissionId && evaluations.toJS()[activeSubmissionId].data) {
       var {
         submittedBy,
         evaluation,
