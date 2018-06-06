@@ -73,9 +73,9 @@ const PointsForm = ({
             <b>
               <FormattedMessage
                 id="app.pointsForm.scoredPoints"
-                defaultMessage="Scored points from evaluation"
+                defaultMessage="Scored points from last evaluation"
               />:
-            </b>{' '}
+            </b>&nbsp;&nbsp;
             {scoredPoints !== null ? scoredPoints : '-'} / {maxPoints}
           </p>
         </Col>
@@ -173,6 +173,8 @@ const warn = ({ overriddenPoints }, { maxPoints }) => {
 
 export default reduxForm({
   form: 'bonus-points',
+  enableReinitialize: true,
+  keepDirtyOnReinitialize: false,
   validate,
   warn
 })(PointsForm);

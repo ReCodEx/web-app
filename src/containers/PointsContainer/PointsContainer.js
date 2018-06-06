@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import PointsForm from '../../components/forms/PointsForm';
 
-import { setPoints } from '../../redux/modules/submissions';
+import { setPoints, fetchSubmission } from '../../redux/modules/submissions';
 
 const PointsContainer = ({
   overriddenPoints = null,
@@ -38,6 +38,6 @@ export default connect(
           overriddenPoints.trim() !== '' ? overriddenPoints.trim() : null,
           bonusPoints.trim()
         )
-      )
+      ).then(() => dispatch(fetchSubmission(submissionId)))
   })
 )(PointsContainer);

@@ -25,6 +25,7 @@ const SubmissionTableRow = ({
   lastSubmission,
   maxPoints,
   bonusPoints,
+  actualPoints,
   solution: { createdAt },
   accepted = false,
   runtimeEnvironment = null,
@@ -61,7 +62,7 @@ const SubmissionTableRow = ({
       {showScoreAndPoints(status)
         ? <strong className="text-success">
             <Points
-              points={lastSubmission.evaluation.points}
+              points={actualPoints}
               bonusPoints={bonusPoints}
               maxPoints={maxPoints}
             />
@@ -90,6 +91,7 @@ SubmissionTableRow.propTypes = {
   note: PropTypes.any.isRequired,
   maxPoints: PropTypes.number.isRequired,
   bonusPoints: PropTypes.number.isRequired,
+  actualPoints: PropTypes.number,
   lastSubmission: PropTypes.shape({
     evaluation: PropTypes.shape({
       score: PropTypes.number.isRequired,

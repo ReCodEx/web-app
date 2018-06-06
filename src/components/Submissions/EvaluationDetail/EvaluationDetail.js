@@ -7,17 +7,21 @@ import {
   FormattedDate,
   FormattedTime
 } from 'react-intl';
-import { Table } from 'react-bootstrap';
+import { Table, Well } from 'react-bootstrap';
 
+import AssignmentStatusIcon from '../../Assignments/Assignment/AssignmentStatusIcon';
 import Box from '../../widgets/Box';
-import { SuccessOrFailureIcon } from '../../icons';
+import Icon, { SuccessOrFailureIcon, WarningIcon } from '../../icons';
 
 const EvaluationDetail = ({
   evaluation,
   isCorrect,
   submittedAt,
   maxPoints,
-  bonusPoints
+  bonusPoints,
+  lastSubmissionIsActive = false,
+  accepted,
+  evaluationStatus
 }) =>
   <Box
     title={
@@ -30,78 +34,143 @@ const EvaluationDetail = ({
     collapsable={true}
     isOpen={true}
   >
-    <Table>
-      <tbody>
-        <tr>
-          <th>
-            <FormattedMessage
-              id="app.evaluationDetail.evaluatedAt"
-              defaultMessage="Evaluated at:"
-            />
-          </th>
-          <td className="text-center">
-            <FormattedDate value={evaluation.evaluatedAt * 1000} />
-            &nbsp;
-            <FormattedTime value={evaluation.evaluatedAt * 1000} />
-          </td>
-        </tr>
+    <div>
+      <Table>
+        <tbody>
+          <tr>
+            <td className="text-center">
+              <Icon icon={['far', 'clock']} />
+            </td>
+            <th>
+              <FormattedMessage
+                id="app.evaluationDetail.evaluatedAt"
+                defaultMessage="Evaluated at:"
+              />
+            </th>
+            <td>
+              <FormattedDate value={evaluation.evaluatedAt * 1000} />
+              &nbsp;
+              <FormattedTime value={evaluation.evaluatedAt * 1000} />
+            </td>
+          </tr>
 
-        <tr>
-          <th>
-            <FormattedMessage
-              id="app.evaluationDetail.buildSucceeded"
-              defaultMessage="Build succeeded:"
-            />
-          </th>
-          <td className="text-center">
-            <SuccessOrFailureIcon success={!evaluation.initFailed} />
-          </td>
-        </tr>
+          <tr>
+            <td className="text-center">
+              <Icon icon="cogs" />
+            </td>
+            <th>
+              <FormattedMessage
+                id="app.evaluationDetail.buildSucceeded"
+                defaultMessage="Build succeeded:"
+              />
+            </th>
+            <td>
+              <SuccessOrFailureIcon success={!evaluation.initFailed} />
+            </td>
+          </tr>
 
-        <tr>
-          <th>
-            <FormattedMessage
-              id="app.evaluationDetail.isCorrect"
-              defaultMessage="Is correct:"
-            />
-          </th>
-          <td
-            className={classnames({
-              'text-center': true,
-              'text-danger': !isCorrect,
-              'text-success': isCorrect
-            })}
-          >
-            <b>
-              <FormattedNumber style="percent" value={evaluation.score} />
-            </b>
-          </td>
-        </tr>
-        <tr>
-          <th>
-            <FormattedMessage
-              id="app.evaluationDetail.score"
-              defaultMessage="Score:"
-            />
-          </th>
-          <td
-            className={classnames({
-              'text-center': true,
-              'text-danger': !isCorrect || evaluation.points + bonusPoints <= 0,
-              'text-success': isCorrect && evaluation.points + bonusPoints > 0
-            })}
-          >
-            <b>
-              {evaluation.points}
-              {bonusPoints !== 0
-                ? (bonusPoints >= 0 ? '+' : '') + bonusPoints
-                : ''}{' '}
-              / {maxPoints}
-            </b>
-          </td>
-        </tr>
-      </tbody>
-    </Table>
+          <tr>
+            <td className="text-center">
+              <Icon icon="percent" />
+            </td>
+            <th>
+              <FormattedMessage
+                id="app.evaluationDetail.isCorrect"
+                defaultMessage="Correctness"
+              />:
+            </th>
+            <td
+              className={classnames({
+                'text-danger': !isCorrect,
+                'text-success': isCorrect
+              })}
+            >
+              <b>
+                <FormattedNumber style="percent" value={evaluation.score} />
+              </b>
+            </td>
+          </tr>
+
+          <tr>
+            <td className="text-center">
+              <Icon icon={['far', 'star']} />
+            </td>
+            <th>
+              <FormattedMessage
+                id="app.evaluationDetail.scoredPoints"
+                defaultMessage="Scored points"
+              />:
+            </th>
+            <td
+              className={classnames({
+                'text-danger': !isCorrect || evaluation.points <= 0,
+                'text-success': isCorrect && evaluation.points > 0
+              })}
+            >
+              <b>
+                {evaluation.points} / {maxPoints}
+              </b>
+            </td>
+          </tr>
+
+          <tr>
+            <td className="text-center">
+              <b>
+                <AssignmentStatusIcon
+                  id={String(submittedAt)}
+                  status={evaluationStatus}
+                  accepted={accepted}
+                />
+              </b>
+            </td>
+            <th className="text-nowrap">
+              <FormattedMessage
+                id="app.submission.evaluationStatus"
+                defaultMessage="Evaluation status"
+              />:
+            </th>
+            <td>
+              <em>
+                {evaluationStatus === 'done' &&
+                  <FormattedMessage
+                    id="app.submission.evaluation.status.isCorrect"
+                    defaultMessage="Solution is correct and meets all criteria."
+                  />}
+                {evaluationStatus === 'work-in-progress' &&
+                  <FormattedMessage
+                    id="app.submission.evaluation.status.workInProgress"
+                    defaultMessage="Solution has not been evaluated yet."
+                  />}
+                {evaluationStatus === 'failed' &&
+                  <FormattedMessage
+                    id="app.submission.evaluation.status.failed"
+                    defaultMessage="Solution does not meet the defined criteria."
+                  />}
+                {evaluationStatus === 'evaluation-failed' &&
+                  <FormattedMessage
+                    id="app.submission.evaluation.status.systemFailiure"
+                    defaultMessage="Evaluation process had failed and your submission could not have been evaluated. Please submit the solution once more. If you keep receiving errors please contact the administrator of this project."
+                  />}
+                {evaluationStatus === 'missing-submission' &&
+                  <FormattedMessage
+                    id="app.submission.evaluation.status.solutionMissingSubmission"
+                    defaultMessage="Solution was not submitted for evaluation. This was probably caused by an error in the assignment configuration."
+                  />}
+              </em>
+            </td>
+          </tr>
+        </tbody>
+      </Table>
+
+      {!lastSubmissionIsActive &&
+        <Well className="small">
+          <WarningIcon gapRight className="text-warning" />
+          <FormattedMessage
+            id="app.evaluationDetail.notActualEvaluation"
+            defaultMessage="This is not the last evaluation. Please note, that the solution is scored by the evaluaton of the last submission."
+          />
+        </Well>}
+    </div>
   </Box>;
 
 EvaluationDetail.propTypes = {
@@ -109,7 +178,10 @@ EvaluationDetail.propTypes = {
   submittedAt: PropTypes.number.isRequired,
   evaluation: PropTypes.object,
   maxPoints: PropTypes.number.isRequired,
-  bonusPoints: PropTypes.number.isRequired
+  bonusPoints: PropTypes.number.isRequired,
+  lastSubmissionIsActive: PropTypes.bool,
+  accepted: PropTypes.bool,
+  evaluationStatus: PropTypes.string.isRequired
 };
 
 export default EvaluationDetail;

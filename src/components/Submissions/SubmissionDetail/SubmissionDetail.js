@@ -25,16 +25,22 @@ class SubmissionDetail extends Component {
 
   componentWillMount() {
     this.setState({
-      activeSubmissionId: this.props.submission.lastSubmission
-        ? this.props.submission.lastSubmission.id
-        : null
+      activeSubmissionId: safeGet(
+        this.props.submission.lastSubmission,
+        ['id'],
+        null
+      )
     });
   }
 
   componentWillReceiveProps(newProps) {
     if (this.props.evaluations.size !== newProps.evaluations.size) {
       this.setState({
-        activeSubmissionId: newProps.submission.lastSubmission.id
+        activeSubmissionId: safeGet(
+          newProps.submission.lastSubmission,
+          ['id'],
+          null
+        )
       });
     }
   }
@@ -48,6 +54,7 @@ class SubmissionDetail extends Component {
         maxPoints,
         overriddenPoints,
         bonusPoints,
+        actualPoints,
         accepted,
         runtimeEnvironmentId,
         lastSubmission
@@ -67,13 +74,20 @@ class SubmissionDetail extends Component {
         evaluationStatus,
         ...restSub
       } = evaluations.toJS()[activeSubmissionId].data;
-    } else evaluationStatus = 'missing-submission';
+    } else {
+      evaluationStatus = 'missing-submission';
+    }
+
     return (
       <div>
         <Row>
           <Col md={6} sm={12}>
             <SubmissionStatus
-              evaluationStatus={evaluationStatus}
+              evaluationStatus={safeGet(
+                lastSubmission,
+                ['evaluationStatus'],
+                'missing-submission'
+              )}
               submittedAt={createdAt}
               userId={userId}
               submittedBy={submittedBy}
@@ -81,6 +95,9 @@ class SubmissionDetail extends Component {
               accepted={accepted}
               originalSubmissionId={restSolution.id}
               assignment={assignment}
+              actualPoints={actualPoints}
+              maxPoints={maxPoints}
+              bonusPoints={bonusPoints}
               environment={
                 runtimeEnvironments &&
                 runtimeEnvironmentId &&
@@ -108,10 +125,15 @@ class SubmissionDetail extends Component {
                   <DownloadSolutionArchiveContainer solutionId={id} />
                 </Col>}
             </Row>
-            {evaluation &&
-              <CompilationLogs
-                initiationOutputs={evaluation.initiationOutputs}
+            {isSupervisor &&
+              <PointsContainer
+                submissionId={id}
+                overriddenPoints={overriddenPoints}
+                bonusPoints={bonusPoints}
+                scoredPoints={safeGet(lastSubmission, ['evaluation', 'points'])}
+                maxPoints={maxPoints}
               />}
+
             <CommentThreadContainer threadId={id} />
           </Col>
 
@@ -124,19 +146,16 @@ class SubmissionDetail extends Component {
                   maxPoints={maxPoints}
                   isCorrect={isCorrect}
                   bonusPoints={bonusPoints}
+                  accepted={accepted}
+                  evaluationStatus={evaluationStatus}
+                  lastSubmissionIsActive={
+                    activeSubmissionId === safeGet(lastSubmission, ['id'])
+                  }
                 />}
 
               {evaluation &&
-                isSupervisor &&
-                <PointsContainer
-                  submissionId={id}
-                  overriddenPoints={overriddenPoints}
-                  bonusPoints={bonusPoints}
-                  scoredPoints={safeGet(lastSubmission, [
-                    'evaluation',
-                    'points'
-                  ])}
-                  maxPoints={maxPoints}
+                <CompilationLogs
+                  initiationOutputs={evaluation.initiationOutputs}
                 />}
 
               {evaluation &&
@@ -153,12 +172,18 @@ class SubmissionDetail extends Component {
                     <DownloadResultArchiveContainer submissionId={restSub.id} />
                   </Col>
                 </Row>}
+
               {activeSubmissionId &&
                 isSupervisor &&
+                evaluations &&
+                evaluations.size > 1 &&
                 <Row>
                   <Col lg={12}>
-                    <ResourceRenderer resource={evaluations.toArray()}>
-                      {(...evaluations) =>
+                    <ResourceRenderer
+                      resource={evaluations.toArray()}
+                      returnAsArray
+                    >
+                      {evaluations =>
                         <SubmissionEvaluations
                           submissionId={id}
                           evaluations={evaluations}
@@ -195,7 +220,8 @@ SubmissionDetail.propTypes = {
     }).isRequired,
     maxPoints: PropTypes.number.isRequired,
     bonusPoints: PropTypes.number.isRequired,
-    overriddenPoints: PropTypes.number.isRequired,
+    overriddenPoints: PropTypes.number,
+    actualPoints: PropTypes.number,
     runtimeEnvironmentId: PropTypes.string
   }).isRequired,
   assignment: PropTypes.object.isRequired,

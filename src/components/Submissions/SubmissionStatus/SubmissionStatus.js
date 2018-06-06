@@ -1,14 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Table } from 'react-bootstrap';
-import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import { FormattedDate, FormattedTime, FormattedMessage } from 'react-intl';
+import classnames from 'classnames';
 
 import Box from '../../widgets/Box';
 import AssignmentStatusIcon from '../../Assignments/Assignment/AssignmentStatusIcon';
 import UsersNameContainer from '../../../containers/UsersNameContainer';
+import EnvironmentsListItem from '../../helpers/EnvironmentsList/EnvironmentsListItem';
 import withLinks from '../../../helpers/withLinks';
-import { EditIcon, SuccessOrFailureIcon } from '../../icons';
+import Icon, { EditIcon, SuccessOrFailureIcon } from '../../icons';
 
 const SubmissionStatus = ({
   assignment: { firstDeadline, allowSecondDeadline, secondDeadline },
@@ -21,6 +22,9 @@ const SubmissionStatus = ({
   originalSubmissionId = null,
   assignment,
   environment,
+  maxPoints,
+  bonusPoints,
+  actualPoints,
   links: { SUBMISSION_DETAIL_URI_FACTORY }
 }) =>
   <Box
@@ -38,11 +42,8 @@ const SubmissionStatus = ({
             <td className="text-center">
               <EditIcon />
             </td>
-            <th>
-              <FormattedMessage
-                id="app.submission.note"
-                defaultMessage="Note:"
-              />
+            <th className="text-nowrap">
+              <FormattedMessage id="app.solution.note" defaultMessage="Note:" />
             </th>
             <td>
               {note}
@@ -51,9 +52,9 @@ const SubmissionStatus = ({
 
         <tr>
           <td className="text-center">
-            <FontAwesomeIcon icon={['far', 'clock']} />
+            <Icon icon={['far', 'clock']} />
           </td>
-          <th>
+          <th className="text-nowrap">
             <FormattedMessage
               id="app.solution.submittedAt"
               defaultMessage="Submitted at"
@@ -68,9 +69,9 @@ const SubmissionStatus = ({
 
         <tr>
           <td className="text-center">
-            <FontAwesomeIcon icon="hourglass-start" />
+            <Icon icon="hourglass-start" />
           </td>
-          <th>
+          <th className="text-nowrap">
             <FormattedMessage
               id="app.solution.beforeFirstDeadline"
               defaultMessage="Before the deadline"
@@ -85,9 +86,9 @@ const SubmissionStatus = ({
           allowSecondDeadline === true &&
           <tr>
             <td className="text-center">
-              <FontAwesomeIcon icon="hourglass-end" />
+              <Icon icon="hourglass-end" />
             </td>
-            <th>
+            <th className="text-nowrap">
               <FormattedMessage
                 id="app.solution.beforeSecondDeadline"
                 defaultMessage="Before the second deadline"
@@ -100,9 +101,9 @@ const SubmissionStatus = ({
 
         <tr>
           <td className="text-center">
-            <FontAwesomeIcon icon="user" />
+            <Icon icon="user" />
           </td>
-          <th>
+          <th className="text-nowrap">
             <FormattedMessage id="generic.author" defaultMessage="Author" />:
           </th>
           <td>
@@ -114,13 +115,13 @@ const SubmissionStatus = ({
           submittedBy !== userId &&
           <tr>
             <td className="text-center">
-              <FontAwesomeIcon icon="user" />
+              <Icon icon="user" />
             </td>
-            <th>
+            <th className="text-nowrap">
               <FormattedMessage
-                id="app.submission.reevaluatedBy"
-                defaultMessage="Reevaluated by:"
-              />
+                id="app.solution.reevaluatedBy"
+                defaultMessage="Re-evaluated by"
+              />:
             </th>
             <td>
               <UsersNameContainer userId={submittedBy} showEmail="icon" />
@@ -131,16 +132,19 @@ const SubmissionStatus = ({
           Boolean(environment.name) &&
           <tr>
             <td className="text-center">
-              <FontAwesomeIcon icon="code" />
+              <Icon icon="code" />
             </td>
-            <th>
+            <th className="text-nowrap">
               <FormattedMessage
-                id="app.submission.environment"
+                id="app.solution.environment"
                 defaultMessage="Target language:"
               />
             </th>
             <td>
-              {environment.name}
+              <EnvironmentsListItem
+                runtimeEnvironment={environment}
+                longNames={true}
+              />
             </td>
           </tr>}
 
@@ -154,14 +158,14 @@ const SubmissionStatus = ({
               />
             </b>
           </td>
-          <th>
+          <th className="text-nowrap">
             <FormattedMessage
-              id="app.submission.evaluationStatus"
-              defaultMessage="Evaluation Status:"
-            />
+              id="app.solution.lastEvaluationStatus"
+              defaultMessage="Last evaluation status"
+            />:
           </th>
           <td>
-            <strong>
+            <em>
               {evaluationStatus === 'done' &&
                 <FormattedMessage
                   id="app.submission.evaluation.status.isCorrect"
@@ -187,7 +191,33 @@ const SubmissionStatus = ({
                   id="app.submission.evaluation.status.solutionMissingSubmission"
                   defaultMessage="Solution was not submitted for evaluation. This was probably caused by an error in the assignment configuration."
                 />}
-            </strong>
+            </em>
+          </td>
+        </tr>
+
+        <tr>
+          <td className="text-center">
+            <Icon icon={['far', 'star']} />
+          </td>
+          <th className="text-nowrap">
+            <FormattedMessage
+              id="app.solution.scoredPoints"
+              defaultMessage="Final score"
+            />:
+          </th>
+          <td
+            className={classnames({
+              'text-danger': actualPoints + bonusPoints <= 0,
+              'text-success': actualPoints + bonusPoints > 0
+            })}
+          >
+            <b>
+              {actualPoints || 0}
+              {bonusPoints !== 0
+                ? (bonusPoints >= 0 ? '+' : '') + bonusPoints
+                : ''}{' '}
+              / {maxPoints}
+            </b>
           </td>
         </tr>
       </tbody>
@@ -208,6 +238,9 @@ SubmissionStatus.propTypes = {
   accepted: PropTypes.bool,
   originalSubmissionId: PropTypes.string,
   environment: PropTypes.object,
+  maxPoints: PropTypes.number.isRequired,
+  bonusPoints: PropTypes.number.isRequired,
+  actualPoints: PropTypes.number,
   links: PropTypes.object.isRequired
 };
 

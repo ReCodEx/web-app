@@ -114,12 +114,17 @@ const reducer = handleActions(
 
     [additionalActionTypes.SET_BONUS_POINTS_FULFILLED]: (
       state,
-      { meta: { submissionId, bonusPoints } }
+      { meta: { solutionId, overriddenPoints, bonusPoints } }
     ) =>
-      state.setIn(
-        ['resources', submissionId, 'data', 'bonusPoints'],
-        Number(bonusPoints)
-      ),
+      state
+        .setIn(
+          ['resources', solutionId, 'data', 'bonusPoints'],
+          Number(bonusPoints)
+        )
+        .setIn(
+          ['resources', solutionId, 'data', 'overriddenPoints'],
+          overriddenPoints !== null ? Number(overriddenPoints) : null
+        ),
 
     [additionalActionTypes.ACCEPT_PENDING]: (state, { meta: { id } }) =>
       state.setIn(['resources', id, 'data', 'accepted-pending'], true),
