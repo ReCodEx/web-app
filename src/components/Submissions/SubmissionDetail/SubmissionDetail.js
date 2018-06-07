@@ -66,7 +66,7 @@ class SubmissionDetail extends Component {
     } = this.props;
     const { openFileId, activeSubmissionId } = this.state;
 
-    if (activeSubmissionId) {
+    if (activeSubmissionId && evaluations.toJS()[activeSubmissionId].data) {
       var {
         submittedBy,
         evaluation,
@@ -187,7 +187,6 @@ class SubmissionDetail extends Component {
                         <SubmissionEvaluations
                           submissionId={id}
                           evaluations={evaluations}
-                          assignmentId={assignment.id}
                           activeSubmissionId={activeSubmissionId}
                           onSelect={id =>
                             this.setState({ activeSubmissionId: id })}

@@ -1,7 +1,11 @@
 import { handleActions } from 'redux-actions';
 import { List, fromJS } from 'immutable';
 
-import factory, { initialState } from '../helpers/resourceManager';
+import factory, {
+  initialState,
+  createRecord,
+  resourceStatus
+} from '../helpers/resourceManager';
 import { createApiAction } from '../middleware/apiMiddleware';
 
 import { actionTypes as additionalSubmissionActionTypes } from './submission';
@@ -9,8 +13,7 @@ import { actionTypes as additionalSubmissionActionTypes } from './submission';
 const resourceName = 'referenceSolutions';
 const { actions, reduceActions } = factory({
   resourceName,
-  apiEndpointFactory: exerciseId =>
-    `/reference-solutions/exercise/${exerciseId}`
+  apiEndpointFactory: solutionId => `/reference-solutions/${solutionId}`
 });
 
 /**
@@ -19,30 +22,29 @@ const { actions, reduceActions } = factory({
 
 export const additionalActionTypes = {
   RESUBMIT: 'recodex/referenceSolutions/RESUBMIT',
-  REMOVE: 'recodex/referenceSolutions/REMOVE',
-  REMOVE_PENDING: 'recodex/referenceSolutions/REMOVE_PENDING',
-  REMOVE_FULFILLED: 'recodex/referenceSolutions/REMOVE_FULFILLED',
-  REMOVE_REJECTED: 'recodex/referenceSolutions/REMOVE_REJECTED'
+  FETCHALL: 'recodex/referenceSolutions/FETCHALL',
+  FETCHALL_FULFILLED: 'recodex/referenceSolutions/FETCHALL_FULFILLED'
 };
 
-export const fetchReferenceSolutions = actions.fetchResource;
-export const fetchReferenceSolutionsIfNeeded = actions.fetchOneIfNeeded; // fetch solutions for one exercise
+export const fetchReferenceSolution = actions.fetchResource;
+export const fetchReferenceSolutionIfNeeded = actions.fetchOneIfNeeded;
+export const deleteReferenceSolution = actions.removeResource;
+
+export const fetchReferenceSolutions = exerciseId =>
+  createApiAction({
+    type: additionalActionTypes.FETCHALL,
+    endpoint: `/reference-solutions/exercise/${exerciseId}`,
+    method: 'GET',
+    meta: { exerciseId }
+  });
 
 export const resubmitReferenceSolution = (solutionId, isDebug = false) =>
   createApiAction({
-    type: additionalActionTypes.RESUBMIT,
+    type: additionalSubmissionActionTypes.SUBMIT,
     endpoint: `/reference-solutions/${solutionId}/resubmit`,
     method: 'POST',
     body: { debug: isDebug },
-    meta: { solutionId }
-  });
-
-export const deleteReferenceSolution = (exerciseId, solutionId) =>
-  createApiAction({
-    type: additionalActionTypes.REMOVE,
-    endpoint: `/reference-solutions/${solutionId}`,
-    method: 'DELETE',
-    meta: { exerciseId, solutionId }
+    meta: { solutionId, submissionType: 'referenceSolution' }
   });
 
 /**
@@ -63,12 +65,20 @@ const reducer = handleActions(
             return data.push(fromJS(referenceSolution));
           })
         : state,
-    [additionalActionTypes.REMOVE_FULFILLED]: (
+    [additionalActionTypes.FETCHALL_FULFILLED]: (
       state,
-      { payload, meta: { exerciseId, solutionId } }
+      { payload, meta: { exerciseId } }
     ) =>
-      state.updateIn(['resources', exerciseId, 'data'], solutions =>
-        solutions.filter(solution => solution.toJS().id !== solutionId)
+      payload.reduce(
+        (state, data) =>
+          state.setIn(
+            ['resources', data.id],
+            createRecord({
+              data: { ...data, exerciseId },
+              state: resourceStatus.FULFILLED
+            })
+          ),
+        state
       )
   }),
   initialState

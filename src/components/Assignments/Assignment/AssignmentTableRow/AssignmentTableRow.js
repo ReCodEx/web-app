@@ -130,12 +130,13 @@ const AssignmentTableRow = ({
 AssignmentTableRow.propTypes = {
   showGroup: PropTypes.bool,
   item: PropTypes.shape({
-    id: PropTypes.any.isRequired,
-    localizedTexts: PropTypes.array.isRequired,
-    firstDeadline: PropTypes.number.isRequired,
-    secondDeadline: PropTypes.number.isRequired,
+    id: PropTypes.string,
+    name: PropTypes.string,
+    localizedTexts: PropTypes.array,
+    firstDeadline: PropTypes.number,
+    secondDeadline: PropTypes.number,
     groupId: PropTypes.string
-  }),
+  }).isRequired,
   runtimeEnvironments: PropTypes.array,
   status: PropTypes.string,
   userId: PropTypes.string,

@@ -44,14 +44,6 @@ export const linksFactory = lang => {
     `${EXERCISE_URI_FACTORY(
       exerciseId
     )}/reference-solution/${referenceSolutionId}`;
-  const REFERENCE_SOLUTION_EVALUATION_URI_FACTORY = (
-    exerciseId,
-    solutionId,
-    evaluationId
-  ) =>
-    `${EXERCISE_URI_FACTORY(
-      exerciseId
-    )}/reference-solution/${solutionId}/evaluation/${evaluationId}`;
 
   // pipeline details
   const PIPELINES_URI = `${prefix}/app/pipelines`;
@@ -137,7 +129,6 @@ export const linksFactory = lang => {
     ADMIN_INSTANCES_URI,
     ADMIN_EDIT_INSTANCE_URI_FACTORY,
     DOWNLOAD,
-    REFERENCE_SOLUTION_EVALUATION_URI_FACTORY,
     LOGIN_EXTERN_FINALIZATION,
     FAILURES_URI,
     SIS_INTEGRATION_URI
