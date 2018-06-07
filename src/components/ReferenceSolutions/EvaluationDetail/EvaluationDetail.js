@@ -56,8 +56,8 @@ const EvaluationDetail = ({ evaluation, isCorrect }) =>
           <th>
             <FormattedMessage
               id="app.evaluationDetail.isCorrect"
-              defaultMessage="Is correct:"
-            />
+              defaultMessage="Correctness"
+            />:
           </th>
           <td
             className={classnames({

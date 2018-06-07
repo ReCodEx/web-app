@@ -123,8 +123,8 @@ class Submission extends Component {
           {
             text: (
               <FormattedMessage
-                id="app.submission.title"
-                defaultMessage="Solution"
+                id="app.solution.title"
+                defaultMessage="The Solution"
               />
             ),
             iconName: 'user'

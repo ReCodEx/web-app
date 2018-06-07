@@ -1,16 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Table } from 'react-bootstrap';
-import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import { FormattedDate, FormattedTime, FormattedMessage } from 'react-intl';
+import classnames from 'classnames';
 
 import Box from '../../widgets/Box';
 import AssignmentStatusIcon from '../../Assignments/Assignment/AssignmentStatusIcon';
 import UsersNameContainer from '../../../containers/UsersNameContainer';
+import EnvironmentsListItem from '../../helpers/EnvironmentsList/EnvironmentsListItem';
 import withLinks from '../../../helpers/withLinks';
-import { EditIcon } from '../../icons';
+import Icon, { EditIcon, SuccessOrFailureIcon } from '../../icons';
 
 const SubmissionStatus = ({
+  assignment: { firstDeadline, allowSecondDeadline, secondDeadline },
   evaluationStatus,
   submittedAt,
   userId,
@@ -18,13 +20,16 @@ const SubmissionStatus = ({
   note,
   accepted,
   originalSubmissionId = null,
-  assignmentId,
+  assignment,
   environment,
+  maxPoints,
+  bonusPoints,
+  actualPoints,
   links: { SUBMISSION_DETAIL_URI_FACTORY }
 }) =>
   <Box
     title={
-      <FormattedMessage id="app.submission.title" defaultMessage="Solution" />
+      <FormattedMessage id="app.solution.title" defaultMessage="The Solution" />
     }
     noPadding={true}
     collapsable={true}
@@ -37,25 +42,23 @@ const SubmissionStatus = ({
             <td className="text-center">
               <EditIcon />
             </td>
-            <th>
-              <FormattedMessage
-                id="app.submission.note"
-                defaultMessage="Note:"
-              />
+            <th className="text-nowrap">
+              <FormattedMessage id="app.solution.note" defaultMessage="Note:" />
             </th>
             <td>
               {note}
             </td>
           </tr>}
+
         <tr>
           <td className="text-center">
-            <FontAwesomeIcon icon={['far', 'clock']} />
+            <Icon icon={['far', 'clock']} />
           </td>
-          <th>
+          <th className="text-nowrap">
             <FormattedMessage
-              id="app.submission.submittedAt"
-              defaultMessage="Submitted at:"
-            />
+              id="app.solution.submittedAt"
+              defaultMessage="Submitted at"
+            />:
           </th>
           <td>
             <FormattedDate value={submittedAt * 1000} />
@@ -63,49 +66,88 @@ const SubmissionStatus = ({
             <FormattedTime value={submittedAt * 1000} />
           </td>
         </tr>
+
         <tr>
           <td className="text-center">
-            <FontAwesomeIcon icon="user" />
+            <Icon icon="hourglass-start" />
           </td>
-          <th>
+          <th className="text-nowrap">
+            <FormattedMessage
+              id="app.solution.beforeFirstDeadline"
+              defaultMessage="Before the deadline"
+            />:
+          </th>
+          <td>
+            <SuccessOrFailureIcon success={submittedAt < firstDeadline} />
+          </td>
+        </tr>
+
+        {submittedAt >= firstDeadline &&
+          allowSecondDeadline === true &&
+          <tr>
+            <td className="text-center">
+              <Icon icon="hourglass-end" />
+            </td>
+            <th className="text-nowrap">
+              <FormattedMessage
+                id="app.solution.beforeSecondDeadline"
+                defaultMessage="Before the second deadline"
+              />:
+            </th>
+            <td>
+              <SuccessOrFailureIcon success={submittedAt < secondDeadline} />
+            </td>
+          </tr>}
+
+        <tr>
+          <td className="text-center">
+            <Icon icon="user" />
+          </td>
+          <th className="text-nowrap">
             <FormattedMessage id="generic.author" defaultMessage="Author" />:
           </th>
           <td>
             <UsersNameContainer userId={userId} showEmail="icon" />
           </td>
         </tr>
+
         {Boolean(submittedBy) &&
           submittedBy !== userId &&
           <tr>
             <td className="text-center">
-              <FontAwesomeIcon icon="user" />
+              <Icon icon="user" />
             </td>
-            <th>
+            <th className="text-nowrap">
               <FormattedMessage
-                id="app.submission.reevaluatedBy"
-                defaultMessage="Reevaluated by:"
-              />
+                id="app.solution.reevaluatedBy"
+                defaultMessage="Re-evaluated by"
+              />:
             </th>
             <td>
               <UsersNameContainer userId={submittedBy} showEmail="icon" />
             </td>
           </tr>}
+
         {Boolean(environment) &&
           Boolean(environment.name) &&
           <tr>
             <td className="text-center">
-              <FontAwesomeIcon icon="code" />
+              <Icon icon="code" />
             </td>
-            <th>
+            <th className="text-nowrap">
               <FormattedMessage
-                id="app.submission.environment"
+                id="app.solution.environment"
                 defaultMessage="Target language:"
               />
             </th>
             <td>
-              {environment.name}
+              <EnvironmentsListItem
+                runtimeEnvironment={environment}
+                longNames={true}
+              />
             </td>
           </tr>}
+
         <tr>
           <td className="text-center">
             <b>
@@ -116,14 +158,14 @@ const SubmissionStatus = ({
               />
             </b>
           </td>
-          <th>
+          <th className="text-nowrap">
             <FormattedMessage
-              id="app.submission.evaluationStatus"
-              defaultMessage="Evaluation Status:"
-            />
+              id="app.solution.lastEvaluationStatus"
+              defaultMessage="Last evaluation status"
+            />:
           </th>
           <td>
-            <strong>
+            <em>
               {evaluationStatus === 'done' &&
                 <FormattedMessage
                   id="app.submission.evaluation.status.isCorrect"
@@ -149,7 +191,33 @@ const SubmissionStatus = ({
                   id="app.submission.evaluation.status.solutionMissingSubmission"
                   defaultMessage="Solution was not submitted for evaluation. This was probably caused by an error in the assignment configuration."
                 />}
-            </strong>
+            </em>
+          </td>
+        </tr>
+
+        <tr>
+          <td className="text-center">
+            <Icon icon={['far', 'star']} />
+          </td>
+          <th className="text-nowrap">
+            <FormattedMessage
+              id="app.solution.scoredPoints"
+              defaultMessage="Final score"
+            />:
+          </th>
+          <td
+            className={classnames({
+              'text-danger': actualPoints + bonusPoints <= 0,
+              'text-success': actualPoints + bonusPoints > 0
+            })}
+          >
+            <b>
+              {actualPoints || 0}
+              {bonusPoints !== 0
+                ? (bonusPoints >= 0 ? '+' : '') + bonusPoints
+                : ''}{' '}
+              / {maxPoints}
+            </b>
           </td>
         </tr>
       </tbody>
@@ -157,6 +225,11 @@ const SubmissionStatus = ({
   </Box>;
 
 SubmissionStatus.propTypes = {
+  assignment: PropTypes.shape({
+    firstDeadline: PropTypes.number.isRequired,
+    allowSecondDeadline: PropTypes.bool.isRequired,
+    secondDeadline: PropTypes.number
+  }).isRequired,
   evaluationStatus: PropTypes.string.isRequired,
   submittedAt: PropTypes.number.isRequired,
   userId: PropTypes.string.isRequired,
@@ -164,8 +237,10 @@ SubmissionStatus.propTypes = {
   note: PropTypes.string,
   accepted: PropTypes.bool,
   originalSubmissionId: PropTypes.string,
-  assignmentId: PropTypes.string.isRequired,
   environment: PropTypes.object,
+  maxPoints: PropTypes.number.isRequired,
+  bonusPoints: PropTypes.number.isRequired,
+  actualPoints: PropTypes.number,
   links: PropTypes.object.isRequired
 };
 
