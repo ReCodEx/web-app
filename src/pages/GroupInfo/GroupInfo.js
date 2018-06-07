@@ -239,7 +239,7 @@ class GroupInfo extends Component {
                 {isAdmin &&
                   <EditGroupForm
                     form="addSubgroup"
-                    onSubmit={addSubgroup}
+                    onSubmit={addSubgroup(data.privateData.instanceId)}
                     initialValues={EDIT_GROUP_FORM_EMPTY_INITIAL_VALUES}
                     createNew
                     collapsable

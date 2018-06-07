@@ -51,13 +51,13 @@ export const fetchSubmission = actions.fetchResource;
 export const fetchSubmissionIfNeeded = actions.fetchOneIfNeeded;
 export const deleteSubmission = actions.removeResource;
 
-export const setPoints = (submissionId, bonusPoints) =>
+export const setPoints = (solutionId, overriddenPoints, bonusPoints) =>
   createApiAction({
     type: additionalActionTypes.SET_BONUS_POINTS,
-    endpoint: `/assignment-solutions/${submissionId}/bonus-points`,
+    endpoint: `/assignment-solutions/${solutionId}/bonus-points`,
     method: 'POST',
-    body: { bonusPoints },
-    meta: { submissionId, bonusPoints }
+    body: { overriddenPoints, bonusPoints },
+    meta: { solutionId, overriddenPoints, bonusPoints }
   });
 
 export const acceptSubmission = id =>
@@ -114,12 +114,17 @@ const reducer = handleActions(
 
     [additionalActionTypes.SET_BONUS_POINTS_FULFILLED]: (
       state,
-      { meta: { submissionId, bonusPoints } }
+      { meta: { solutionId, overriddenPoints, bonusPoints } }
     ) =>
-      state.setIn(
-        ['resources', submissionId, 'data', 'bonusPoints'],
-        Number(bonusPoints)
-      ),
+      state
+        .setIn(
+          ['resources', solutionId, 'data', 'bonusPoints'],
+          Number(bonusPoints)
+        )
+        .setIn(
+          ['resources', solutionId, 'data', 'overriddenPoints'],
+          overriddenPoints !== null ? Number(overriddenPoints) : null
+        ),
 
     [additionalActionTypes.ACCEPT_PENDING]: (state, { meta: { id } }) =>
       state.setIn(['resources', id, 'data', 'accepted-pending'], true),

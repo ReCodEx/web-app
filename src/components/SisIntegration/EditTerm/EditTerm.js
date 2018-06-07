@@ -12,7 +12,8 @@ const EditTerm = ({
   onClose,
   submitting,
   handleSubmit,
-  anyTouched,
+  onSubmit,
+  dirty = false,
   submitFailed = false,
   submitSucceeded = false,
   invalid,
@@ -62,9 +63,9 @@ const EditTerm = ({
     <Modal.Footer>
       <SubmitButton
         id="edit-sis-term"
-        handleSubmit={data => handleSubmit(data).then(() => reset())}
+        handleSubmit={handleSubmit(data => onSubmit(data).then(reset))}
         submitting={submitting}
-        dirty={anyTouched}
+        dirty={dirty}
         hasSucceeded={submitSucceeded}
         hasFailed={submitFailed}
         invalid={invalid}
@@ -90,7 +91,7 @@ EditTerm.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
   submitFailed: PropTypes.bool,
-  anyTouched: PropTypes.bool,
+  dirty: PropTypes.bool,
   submitSucceeded: PropTypes.bool,
   submitting: PropTypes.bool,
   invalid: PropTypes.bool,

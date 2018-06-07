@@ -5,7 +5,7 @@ import { Row, Col } from 'react-bootstrap';
 import SubmissionStatus from '../SubmissionStatus';
 import SourceCodeInfoBox from '../../widgets/SourceCodeInfoBox';
 import TestResults from '../TestResults';
-import BonusPointsContainer from '../../../containers/BonusPointsContainer';
+import PointsContainer from '../../../containers/PointsContainer';
 import DownloadResultArchiveContainer from '../../../containers/DownloadResultArchiveContainer';
 import DownloadSolutionArchiveContainer from '../../../containers/DownloadSolutionArchiveContainer';
 import CommentThreadContainer from '../../../containers/CommentThreadContainer';
@@ -16,6 +16,8 @@ import ResourceRenderer from '../../helpers/ResourceRenderer';
 import EvaluationDetail from '../EvaluationDetail';
 import CompilationLogs from '../CompilationLogs';
 
+import { safeGet } from '../../../helpers/common';
+
 class SubmissionDetail extends Component {
   state = { openFileId: null, activeSubmissionId: null };
   openFile = id => this.setState({ openFileId: id });
@@ -23,16 +25,22 @@ class SubmissionDetail extends Component {
 
   componentWillMount() {
     this.setState({
-      activeSubmissionId: this.props.submission.lastSubmission
-        ? this.props.submission.lastSubmission.id
-        : null
+      activeSubmissionId: safeGet(
+        this.props.submission.lastSubmission,
+        ['id'],
+        null
+      )
     });
   }
 
   componentWillReceiveProps(newProps) {
     if (this.props.evaluations.size !== newProps.evaluations.size) {
       this.setState({
-        activeSubmissionId: newProps.submission.lastSubmission.id
+        activeSubmissionId: safeGet(
+          newProps.submission.lastSubmission,
+          ['id'],
+          null
+        )
       });
     }
   }
@@ -44,9 +52,12 @@ class SubmissionDetail extends Component {
         note = '',
         solution: { createdAt, userId, files, ...restSolution },
         maxPoints,
+        overriddenPoints,
         bonusPoints,
+        actualPoints,
         accepted,
-        runtimeEnvironmentId
+        runtimeEnvironmentId,
+        lastSubmission
       },
       assignment,
       isSupervisor,
@@ -63,20 +74,30 @@ class SubmissionDetail extends Component {
         evaluationStatus,
         ...restSub
       } = evaluations.toJS()[activeSubmissionId].data;
-    } else evaluationStatus = 'missing-submission';
+    } else {
+      evaluationStatus = 'missing-submission';
+    }
+
     return (
       <div>
         <Row>
           <Col md={6} sm={12}>
             <SubmissionStatus
-              evaluationStatus={evaluationStatus}
+              evaluationStatus={safeGet(
+                lastSubmission,
+                ['evaluationStatus'],
+                'missing-submission'
+              )}
               submittedAt={createdAt}
               userId={userId}
               submittedBy={submittedBy}
               note={note}
               accepted={accepted}
               originalSubmissionId={restSolution.id}
-              assignmentId={assignment.id}
+              assignment={assignment}
+              actualPoints={actualPoints}
+              maxPoints={maxPoints}
+              bonusPoints={bonusPoints}
               environment={
                 runtimeEnvironments &&
                 runtimeEnvironmentId &&
@@ -104,10 +125,15 @@ class SubmissionDetail extends Component {
                   <DownloadSolutionArchiveContainer solutionId={id} />
                 </Col>}
             </Row>
-            {evaluation &&
-              <CompilationLogs
-                initiationOutputs={evaluation.initiationOutputs}
+            {isSupervisor &&
+              <PointsContainer
+                submissionId={id}
+                overriddenPoints={overriddenPoints}
+                bonusPoints={bonusPoints}
+                scoredPoints={safeGet(lastSubmission, ['evaluation', 'points'])}
+                maxPoints={maxPoints}
               />}
+
             <CommentThreadContainer threadId={id} />
           </Col>
 
@@ -115,19 +141,21 @@ class SubmissionDetail extends Component {
             <Col md={6} sm={12}>
               {evaluation &&
                 <EvaluationDetail
-                  assignment={assignment}
                   evaluation={evaluation}
                   submittedAt={createdAt}
                   maxPoints={maxPoints}
                   isCorrect={isCorrect}
                   bonusPoints={bonusPoints}
+                  accepted={accepted}
+                  evaluationStatus={evaluationStatus}
+                  lastSubmissionIsActive={
+                    activeSubmissionId === safeGet(lastSubmission, ['id'])
+                  }
                 />}
 
               {evaluation &&
-                isSupervisor &&
-                <BonusPointsContainer
-                  submissionId={id}
-                  bonusPoints={bonusPoints}
+                <CompilationLogs
+                  initiationOutputs={evaluation.initiationOutputs}
                 />}
 
               {evaluation &&
@@ -144,12 +172,18 @@ class SubmissionDetail extends Component {
                     <DownloadResultArchiveContainer submissionId={restSub.id} />
                   </Col>
                 </Row>}
+
               {activeSubmissionId &&
                 isSupervisor &&
+                evaluations &&
+                evaluations.size > 1 &&
                 <Row>
                   <Col lg={12}>
-                    <ResourceRenderer resource={evaluations.toArray()}>
-                      {(...evaluations) =>
+                    <ResourceRenderer
+                      resource={evaluations.toArray()}
+                      returnAsArray
+                    >
+                      {evaluations =>
                         <SubmissionEvaluations
                           submissionId={id}
                           evaluations={evaluations}
@@ -184,6 +218,9 @@ SubmissionDetail.propTypes = {
       files: PropTypes.array
     }).isRequired,
     maxPoints: PropTypes.number.isRequired,
+    bonusPoints: PropTypes.number.isRequired,
+    overriddenPoints: PropTypes.number,
+    actualPoints: PropTypes.number,
     runtimeEnvironmentId: PropTypes.string
   }).isRequired,
   assignment: PropTypes.object.isRequired,

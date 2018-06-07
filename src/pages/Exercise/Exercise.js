@@ -145,9 +145,10 @@ class Exercise extends Component {
         maxPointsBeforeFirstDeadline: '10',
         maxPointsBeforeSecondDeadline: '',
         canViewLimitRatios: true,
-        pointsPercentualThreshold: 0,
+        pointsPercentualThreshold: '0',
         isBonus: false,
         runtimeEnvironments,
+        sendNotification: true,
         enabledRuntime: runtimeEnvironments.reduce((enabled, { id }) => {
           enabled[id] = true;
           return enabled;
@@ -189,6 +190,7 @@ class Exercise extends Component {
             formData.maxPointsBeforeSecondDeadline
           ),
           isPublic: true,
+          sendNotification: formData.sendNotification,
           disabledRuntimeEnvironmentIds
         });
         if (!assignmentData.allowSecondDeadline) {
