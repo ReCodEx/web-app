@@ -8,7 +8,7 @@ import {
   TextField
 } from '../Fields';
 
-const LocalizedExerciseFormField = ({ prefix }) =>
+const LocalizedExerciseFormField = ({ isAssignment = false, prefix }) =>
   <div>
     <Field
       name={`${prefix}.name`}
@@ -42,19 +42,33 @@ const LocalizedExerciseFormField = ({ prefix }) =>
       }
     />
 
-    <Field
-      name={`${prefix}.description`}
-      component={MarkdownTextAreaField}
-      label={
-        <FormattedMessage
-          id="app.editAssignmentForm.localized.abstract"
-          defaultMessage="Short description (abstract):"
-        />
-      }
-    />
+    {!isAssignment && // it is an exercise
+      <Field
+        name={`${prefix}.description`}
+        component={MarkdownTextAreaField}
+        label={
+          <FormattedMessage
+            id="app.editAssignmentForm.localized.description"
+            defaultMessage="Short description (visible only to supervisors):"
+          />
+        }
+      />}
+
+    {isAssignment &&
+      <Field
+        name={`${prefix}.studentHint`}
+        component={MarkdownTextAreaField}
+        label={
+          <FormattedMessage
+            id="app.editAssignmentForm.localized.studentHint"
+            defaultMessage="A hint for students (not synchronized with exercise):"
+          />
+        }
+      />}
   </div>;
 
 LocalizedExerciseFormField.propTypes = {
+  isAssignment: PropTypes.bool,
   prefix: PropTypes.string.isRequired
 };
 

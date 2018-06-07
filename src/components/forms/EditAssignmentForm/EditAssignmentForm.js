@@ -85,6 +85,7 @@ const EditAssignmentForm = ({
         name="localizedTexts"
         localizedTextsLocales={localizedTextsLocales}
         component={LocalizedTextsFormField}
+        fieldType="assignment"
       />
 
       <Field

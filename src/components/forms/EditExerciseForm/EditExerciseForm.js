@@ -110,6 +110,7 @@ const EditExerciseForm = ({
       name="localizedTexts"
       localizedTextsLocales={localizedTextsLocales}
       component={LocalizedTextsFormField}
+      fieldType="exercise"
     />
 
     <Field

@@ -5,9 +5,15 @@ import { TabbedArrayField } from '../Fields';
 import LocalizedExerciseFormField from './LocalizedExerciseFormField';
 import LocalizedGroupFormField from './LocalizedGroupFormField';
 
+const fieldTypes = {
+  assignment: LocalizedExerciseFormField,
+  exercise: LocalizedExerciseFormField,
+  group: LocalizedGroupFormField
+};
+
 const LocalizedTextsFormField = ({
   localizedTextsLocales = [],
-  isGroup = false,
+  fieldType,
   ...props
 }) => {
   return (
@@ -20,9 +26,8 @@ const LocalizedTextsFormField = ({
               id="app.editLocalizedTextForm.newLocale"
               defaultMessage="New language"
             />}
-      ContentComponent={
-        isGroup ? LocalizedGroupFormField : LocalizedExerciseFormField
-      }
+      ContentComponent={fieldTypes[fieldType]}
+      isAssignment={fieldType === 'assignment'}
       emptyMessage={
         <FormattedMessage
           id="app.editLocalizedTextForm.localized.noLanguage"
@@ -50,7 +55,7 @@ const LocalizedTextsFormField = ({
 
 LocalizedTextsFormField.propTypes = {
   localizedTextsLocales: PropTypes.array,
-  isGroup: PropTypes.bool
+  fieldType: PropTypes.string.isRequired
 };
 
 export default LocalizedTextsFormField;
