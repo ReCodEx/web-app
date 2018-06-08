@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage, FormattedDate, FormattedTime } from 'react-intl';
 import { Table } from 'react-bootstrap';
-import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import UsersNameContainer from '../../../containers/UsersNameContainer';
 import EnvironmentsList from '../../helpers/EnvironmentsList';
 
@@ -15,7 +14,6 @@ const ReferenceSolutionsList = ({
   <Table hover {...props}>
     <thead>
       <tr>
-        <th />
         <th>
           <FormattedMessage
             id="generic.description"
@@ -30,8 +28,8 @@ const ReferenceSolutionsList = ({
         </th>
         <th>
           <FormattedMessage
-            id="generic.runtimeShort"
-            defaultMessage="Runtime/Language"
+            id="generic.runtimeShortest"
+            defaultMessage="Runtime"
           />
         </th>
         <th>
@@ -52,9 +50,6 @@ const ReferenceSolutionsList = ({
             solution: { userId, createdAt }
           }) =>
             <tr key={id}>
-              <td className="text-center">
-                <FontAwesomeIcon icon={['far', 'file-code']} />
-              </td>
               <td>
                 {description}
               </td>
@@ -71,7 +66,7 @@ const ReferenceSolutionsList = ({
                 />
               </td>
               <td className="text-nowrap">
-                <UsersNameContainer userId={userId} />
+                <UsersNameContainer userId={userId} isSimple />
               </td>
               <td className="text-right text-nowrap">
                 {renderButtons(id, permissionHints)}

@@ -48,7 +48,7 @@ const LocalizedExerciseFormField = ({ isAssignment = false, prefix }) =>
         <WarningIcon gapRight />
         <FormattedMessage
           id="app.editAssignmentForm.localized.assignmentSyncInfo"
-          defaultMessage="Please note that the localized texts are overwritten by actual data from the exercise when exercise synchronization is invoked."
+          defaultMessage="Please note that the localized texts are overwritten by actual data from the exercise when exercise update is invoked."
         />
       </Alert>}
 
