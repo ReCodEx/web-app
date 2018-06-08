@@ -85,6 +85,7 @@ const EditAssignmentForm = ({
         name="localizedTexts"
         localizedTextsLocales={localizedTextsLocales}
         component={LocalizedTextsFormField}
+        fieldType="assignment"
       />
 
       <Field
@@ -373,11 +374,11 @@ const validate = ({
         );
       }
 
-      if (!localizedTexts[i].text) {
+      if (!localizedTexts[i].text && !localizedTexts[i].link) {
         localeErrors['text'] = (
           <FormattedMessage
             id="app.editAssignmentForm.validation.localizedText.text"
-            defaultMessage="Please fill the description in this language."
+            defaultMessage="Please fill the description in this language or provide an external link below."
           />
         );
       }

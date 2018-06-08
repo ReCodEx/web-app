@@ -4,14 +4,16 @@ import {
   FormattedMessage,
   FormattedNumber,
   FormattedTime,
-  FormattedDate
+  FormattedDate,
+  FormattedRelative
 } from 'react-intl';
 import { Table } from 'react-bootstrap';
 import ReactMarkdown from 'react-remarkable';
 import { Link } from 'react-router';
+
 import Box from '../../widgets/Box';
 import DifficultyIcon from '../DifficultyIcon';
-
+import ResourceRenderer from '../../helpers/ResourceRenderer';
 import withLinks from '../../../helpers/withLinks';
 import UsersNameContainer from '../../../containers/UsersNameContainer';
 import GroupsNameContainer from '../../../containers/GroupsNameContainer';
@@ -52,12 +54,151 @@ const ExerciseDetail = ({
             <UsersNameContainer userId={authorId} />
           </td>
         </tr>
+
+        <tr>
+          <th>
+            <FormattedMessage
+              id="app.exercise.description"
+              defaultMessage="Short description"
+            />:
+            <br />
+            <span className="text-muted small">
+              <FormattedMessage
+                id="app.exercise.description.visibleOnlyToSupervisors"
+                defaultMessage="(visible only to supervisors)"
+              />
+            </span>
+          </th>
+          <td>
+            <ReactMarkdown
+              source={getLocalizedDescription(
+                { description, localizedTexts },
+                locale
+              )}
+            />
+          </td>
+        </tr>
+
+        <tr>
+          <th>
+            <FormattedMessage
+              id="app.exercise.difficulty"
+              defaultMessage="Difficulty"
+            />:
+          </th>
+          <td>
+            <DifficultyIcon difficulty={difficulty} />
+          </td>
+        </tr>
+
+        <tr>
+          <th>
+            <FormattedMessage
+              id="app.exercise.runtimes"
+              defaultMessage="Supported runtime environments"
+            />:
+          </th>
+          <td>
+            <EnvironmentsList runtimeEnvironments={runtimeEnvironments} />
+          </td>
+        </tr>
+
+        <tr>
+          <th>
+            <FormattedMessage
+              id="app.exercise.createdAt"
+              defaultMessage="Created at"
+            />:
+          </th>
+          <td>
+            <FormattedDate value={createdAt * 1000} />{' '}
+            <FormattedTime value={createdAt * 1000} />{' '}
+            <span className="text-muted small">
+              (<FormattedRelative value={createdAt * 1000} />)
+            </span>
+          </td>
+        </tr>
+
+        {updatedAt !== createdAt &&
+          <tr>
+            <th>
+              <FormattedMessage
+                id="app.exercise.updatedAt"
+                defaultMessage="Last updated at"
+              />:
+            </th>
+            <td>
+              <FormattedDate value={updatedAt * 1000} />{' '}
+              <FormattedTime value={updatedAt * 1000} />{' '}
+              <span className="text-muted small">
+                (<FormattedRelative value={updatedAt * 1000} />)
+              </span>
+            </td>
+          </tr>}
+
+        <tr>
+          <th>
+            <FormattedMessage
+              id="app.exercise.version"
+              defaultMessage="Version"
+            />:
+          </th>
+          <td>
+            v<FormattedNumber value={version} />
+          </td>
+        </tr>
+        <tr>
+          <th>
+            <FormattedMessage
+              id="app.exercise.isPublic"
+              defaultMessage="Is public"
+            />:
+          </th>
+          <td>
+            <SuccessOrFailureIcon success={isPublic} />
+          </td>
+        </tr>
+        <tr>
+          <th>
+            <FormattedMessage
+              id="app.exercise.isLocked"
+              defaultMessage="Is locked"
+            />:
+          </th>
+          <td>
+            <SuccessOrFailureIcon success={isLocked} />
+          </td>
+        </tr>
+
+        {forkedFrom &&
+          <tr>
+            <th>
+              <FormattedMessage
+                id="app.exercise.forked"
+                defaultMessage="Forked from"
+              />:
+            </th>
+            <td>
+              <ResourceRenderer resource={forkedFrom}>
+                {({ id, name, localizedTexts, version }) =>
+                  <span>
+                    <Link to={EXERCISE_URI_FACTORY(id)}>
+                      <LocalizedExerciseName
+                        entity={{ name, localizedTexts }}
+                      />
+                    </Link>
+                    &nbsp;&nbsp;(v<FormattedNumber value={version} />)
+                  </span>}
+              </ResourceRenderer>
+            </td>
+          </tr>}
+
         <tr>
           <th>
             <FormattedMessage
               id="app.exercise.groups"
-              defaultMessage="Groups:"
-            />
+              defaultMessage="Resident in Groups"
+            />:
           </th>
           <td>
             {groupsIds.length > 0
@@ -72,117 +213,6 @@ const ExerciseDetail = ({
                     defaultMessage="Public"
                   />
                 </i>}
-          </td>
-        </tr>
-        <tr>
-          <th>
-            <FormattedMessage
-              id="app.exercise.difficulty"
-              defaultMessage="Difficulty:"
-            />
-          </th>
-          <td>
-            <DifficultyIcon difficulty={difficulty} />
-          </td>
-        </tr>
-        <tr>
-          <th>
-            <FormattedMessage
-              id="app.exercise.description"
-              defaultMessage="Author's description:"
-            />
-          </th>
-          <td>
-            <ReactMarkdown
-              source={getLocalizedDescription(
-                { description, localizedTexts },
-                locale
-              )}
-            />
-          </td>
-        </tr>
-        <tr>
-          <th>
-            <FormattedMessage
-              id="app.exercise.createdAt"
-              defaultMessage="Created at"
-            />:
-          </th>
-          <td>
-            <FormattedDate value={createdAt * 1000} />{' '}
-            <FormattedTime value={createdAt * 1000} />
-          </td>
-        </tr>
-        <tr>
-          <th>
-            <FormattedMessage
-              id="app.exercise.updatedAt"
-              defaultMessage="Last updated at"
-            />:
-          </th>
-          <td>
-            <FormattedDate value={updatedAt * 1000} />{' '}
-            <FormattedTime value={updatedAt * 1000} />
-          </td>
-        </tr>
-        <tr>
-          <th>
-            <FormattedMessage
-              id="app.exercise.version"
-              defaultMessage="Version:"
-            />
-          </th>
-          <td>
-            v<FormattedNumber value={version} />
-          </td>
-        </tr>
-        {forkedFrom &&
-          <tr>
-            <th>
-              <FormattedMessage
-                id="app.exercise.forked"
-                defaultMessage="Forked from:"
-              />
-            </th>
-            <td>
-              <Link to={EXERCISE_URI_FACTORY(forkedFrom.id)}>
-                {forkedFrom.name} (
-                <FormattedNumber value={forkedFrom.version} />
-                )
-              </Link>
-            </td>
-          </tr>}
-        <tr>
-          <th>
-            <FormattedMessage
-              id="app.exercise.runtimes"
-              defaultMessage="Supported runtime environments:"
-            />
-          </th>
-          <td>
-            <EnvironmentsList runtimeEnvironments={runtimeEnvironments} />
-          </td>
-        </tr>
-        <tr>
-          <th>
-            <FormattedMessage
-              id="app.exercise.isPublic"
-              defaultMessage="Is public:"
-            />
-          </th>
-          <td>
-            <SuccessOrFailureIcon success={isPublic} />
-          </td>
-        </tr>
-        <tr>
-          <th>
-            <FormattedMessage
-              id="app.exercise.isLocked"
-              defaultMessage="Is locked:"
-            />
-          </th>
-          <td>
-            <SuccessOrFailureIcon success={isLocked} />
           </td>
         </tr>
       </tbody>

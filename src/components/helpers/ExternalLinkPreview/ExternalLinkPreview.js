@@ -1,0 +1,171 @@
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { FormattedMessage } from 'react-intl';
+import { Well, Alert } from 'react-bootstrap';
+import ReactMarkdown from 'react-remarkable';
+
+import OnOffCheckbox from '../../forms/OnOffCheckbox';
+import { LoadingIcon } from '../../icons';
+
+class ExternalLinkPreview extends Component {
+  state = {
+    url: null,
+    pending: false,
+    error: null,
+    text: null,
+    isMarkdown: false
+  };
+
+  toggleIsMarkdown = () => {
+    this.setState({
+      isMarkdown: !this.state.isMarkdown
+    });
+  };
+
+  fetchPreview = urlRaw => {
+    // normalize url
+    const url = urlRaw.trim().replace(/#.*$/, '');
+
+    if (url === this.state.url) {
+      return;
+    }
+
+    this.setState({
+      url,
+      pending: true,
+      error: null,
+      text: null
+    });
+
+    fetch(url, { mode: 'cors' })
+      .then(resp => {
+        if (url !== this.state.url) {
+          return; // url was changed whilst fetch was resolved (no longer valid result)
+        }
+
+        // Was the fetch successful?
+        if (resp.status !== 200) {
+          this.setState({
+            pending: false,
+            error: (
+              <FormattedMessage
+                id="app.externalLinkPreview.httpFailed"
+                defaultMessage="Unable to download the refered content. The link may be invalid."
+              />
+            )
+          });
+          return;
+        }
+
+        // Is the contents text-based?
+        const contentType = resp.headers.get('Content-Type');
+        if (!contentType.startsWith('text/')) {
+          this.setState({
+            pending: false,
+            error: (
+              <FormattedMessage
+                id="app.externalLinkPreview.noTextContent"
+                defaultMessage="Only plain text and Markdown contents can be previewed here. The link refers to a '{contentType}' content."
+                values={{ contentType }}
+              />
+            )
+          });
+          return;
+        }
+
+        const isMarkdown =
+          contentType.indexOf('markdown') > 0 ||
+          (contentType.startsWith('text/plain') && url.endsWith('.md'));
+
+        return resp
+          .text()
+          .then(text => this.setState({ pending: false, text, isMarkdown }))
+          .catch(() =>
+            this.setState({
+              pending: false,
+              error: (
+                <FormattedMessage
+                  id="app.externalLinkPreview.readingTextFailed"
+                  defaultMessage="Internal error occured. We are stating this in passive voice to avoid any responsibility."
+                />
+              )
+            })
+          );
+      })
+      .catch(() => {
+        if (url === this.state.url) {
+          this.setState({
+            pending: false,
+            error: (
+              <FormattedMessage
+                id="app.externalLinkPreview.fetchFailed"
+                defaultMessage="The download has failed. Either the network has malfunctioned or CSP prevented us from reaching the content."
+              />
+            )
+          });
+        }
+      });
+  };
+
+  componentDidUpdate() {
+    if (this.state.url !== this.props.url) {
+      this.fetchPreview(this.props.url);
+    }
+  }
+
+  render() {
+    const { url, pending, error, text, isMarkdown } = this.state;
+    return url !== null
+      ? <div>
+          {text &&
+            <OnOffCheckbox
+              checked={isMarkdown}
+              onChange={this.toggleIsMarkdown}
+              className="pull-right"
+            >
+              <FormattedMessage
+                id="app.externalLinkPreview.showAsMarkdown"
+                defaultMessage="Show as makrdown"
+              />
+            </OnOffCheckbox>}
+
+          {(!text || !isMarkdown) &&
+            <h3>
+              <FormattedMessage
+                id="app.externalLinkPreview.title"
+                defaultMessage="Preview"
+              />
+            </h3>}
+
+          {pending &&
+            <Well>
+              <LoadingIcon gapRight />{' '}
+              <FormattedMessage
+                id="generic.loading"
+                defaultMessage="Loading ..."
+              />
+            </Well>}
+
+          {error &&
+            <Alert bsStyle="warning">
+              {error}
+            </Alert>}
+
+          {text &&
+            <div>
+              {isMarkdown
+                ? <ReactMarkdown source={text} />
+                : <pre style={{ marginTop: '20px' }}>
+                    {text}
+                  </pre>}
+            </div>}
+        </div>
+      : <div />;
+  }
+}
+
+ExternalLinkPreview.propTypes = {
+  url: PropTypes.string.isRequired
+};
+
+export default ExternalLinkPreview;

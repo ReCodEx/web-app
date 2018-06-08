@@ -80,7 +80,7 @@ class ReferenceSolution extends Component {
         resource={referenceSolution}
         description={
           <FormattedMessage
-            id="app.exercise.description"
+            id="app.exercise.overview"
             defaultMessage="Exercise overview"
           />
         }
@@ -98,7 +98,7 @@ class ReferenceSolution extends Component {
           {
             text: (
               <FormattedMessage
-                id="app.exercise.description"
+                id="app.exercise.overview"
                 defaultMessage="Exercise overview"
               />
             ),

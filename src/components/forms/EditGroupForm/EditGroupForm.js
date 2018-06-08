@@ -95,7 +95,7 @@ const EditGroupForm = ({
       name="localizedTexts"
       localizedTextsLocales={localizedTextsLocales}
       component={LocalizedTextsFormField}
-      isGroup={true}
+      fieldType="group"
     />
 
     {isSuperAdmin &&

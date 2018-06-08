@@ -110,6 +110,7 @@ const EditExerciseForm = ({
       name="localizedTexts"
       localizedTextsLocales={localizedTextsLocales}
       component={LocalizedTextsFormField}
+      fieldType="exercise"
     />
 
     <Field
@@ -215,20 +216,11 @@ const validate = ({ difficulty, localizedTexts }) => {
         );
       }
 
-      if (!localizedTexts[i].text) {
+      if (!localizedTexts[i].text && !localizedTexts[i].link) {
         localeErrors['text'] = (
           <FormattedMessage
             id="app.editExerciseForm.validation.localizedText.text"
-            defaultMessage="Please fill the description in this language."
-          />
-        );
-      }
-
-      if (!localizedTexts[i].description) {
-        localeErrors['description'] = (
-          <FormattedMessage
-            id="app.editExerciseForm.validation.description"
-            defaultMessage="Please fill the description of the exercise."
+            defaultMessage="Please fill the description in this language or provide an external link below."
           />
         );
       }

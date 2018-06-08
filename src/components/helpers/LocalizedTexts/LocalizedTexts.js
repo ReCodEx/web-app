@@ -1,12 +1,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import { Tabs, Tab } from 'react-bootstrap';
+import { Tabs, Tab, Well } from 'react-bootstrap';
 import ReactMarkdown from 'react-remarkable';
+
+import ExternalLinkPreview from '../ExternalLinkPreview';
+import Icon from '../../icons';
 
 import './LocalizedTexts.css';
 
-const LocalizedTexts = ({ locales = [] }, { lang = 'en' }) => (
+const tabsComparator = ({ locale: a }, { locale: b }) =>
+  typeof a !== 'string'
+    ? typeof b !== 'string' ? 0 : 1
+    : typeof b !== 'string' ? -1 : a.localeCompare(b);
+
+const LocalizedTexts = ({ locales = [] }, { lang = 'en' }) =>
   <Tabs
     defaultActiveKey={
       locales.find(({ locale }) => locale === lang) || locales.length === 0
@@ -16,15 +24,44 @@ const LocalizedTexts = ({ locales = [] }, { lang = 'en' }) => (
     className="nav-tabs-custom"
     id="localized-texts"
   >
-    {locales.map(({ locale, text }, i) => (
-      <Tab
-        key={i}
-        eventKey={locale}
-        title={locale}
-      >
-        <ReactMarkdown source={text} />
-      </Tab>
-    ))}
+    {locales
+      .sort(tabsComparator)
+      .map(({ locale, text, link = '', studentHint = null }, i) =>
+        <Tab key={i} eventKey={locale} title={locale}>
+          {link &&
+            link !== '' &&
+            <div>
+              <Well>
+                <h4>
+                  <FormattedMessage
+                    id="app.localizedTexts.externalLink"
+                    defaultMessage="The description is located beyond the realms of ReCodEx"
+                  />
+                </h4>
+                <Icon icon="link" gapRight />
+                <a href={link} target="_blank">
+                  {link}
+                </a>
+              </Well>
+              <ExternalLinkPreview url={link} />
+            </div>}
+          {text !== '' && <ReactMarkdown source={text} />}
+
+          {studentHint &&
+            studentHint !== '' &&
+            <div>
+              <hr />
+              <h4>
+                <FormattedMessage
+                  id="app.localizedTexts.studentHintHeading"
+                  defaultMessage="Hint"
+                />
+              </h4>
+              <ReactMarkdown source={studentHint} />
+            </div>}
+        </Tab>
+      )}
+
     {locales.length === 0 &&
       <Tab eventKey={lang} title={lang}>
         <FormattedMessage
@@ -32,8 +69,7 @@ const LocalizedTexts = ({ locales = [] }, { lang = 'en' }) => (
           defaultMessage="Localized text has not been published yet."
         />
       </Tab>}
-  </Tabs>
-);
+  </Tabs>;
 
 LocalizedTexts.contextTypes = {
   lang: PropTypes.string

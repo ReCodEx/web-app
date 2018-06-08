@@ -59,7 +59,10 @@ import {
   create as assignExercise,
   editAssignment
 } from '../../redux/modules/assignments';
-import { exerciseSelector } from '../../redux/selectors/exercises';
+import {
+  exerciseSelector,
+  exerciseForkedFromSelector
+} from '../../redux/selectors/exercises';
 import { referenceSolutionsSelector } from '../../redux/selectors/referenceSolutions';
 import {
   canLoggedUserEditExercise,
@@ -102,7 +105,12 @@ class Exercise extends Component {
 
   static loadAsync = ({ exerciseId }, dispatch, userId) =>
     Promise.all([
-      dispatch(fetchExerciseIfNeeded(exerciseId)),
+      dispatch(fetchExerciseIfNeeded(exerciseId)).then(
+        ({ value: data }) =>
+          data &&
+          data.forkedFrom &&
+          dispatch(fetchExerciseIfNeeded(data.forkedFrom))
+      ),
       dispatch(fetchRuntimeEnvironments()),
       dispatch(fetchReferenceSolutions(exerciseId)),
       dispatch(fetchHardwareGroups()),
@@ -223,6 +231,7 @@ class Exercise extends Component {
     const {
       userId,
       exercise,
+      forkedFrom,
       runtimeEnvironments,
       submitting,
       canEditExercise,
@@ -257,7 +266,7 @@ class Exercise extends Component {
         resource={exercise}
         description={
           <FormattedMessage
-            id="app.exercise.description"
+            id="app.exercise.overview"
             defaultMessage="Exercise overview"
           />
         }
@@ -275,7 +284,7 @@ class Exercise extends Component {
           {
             text: (
               <FormattedMessage
-                id="app.exercise.description"
+                id="app.exercise.overview"
                 defaultMessage="Exercise overview"
               />
             ),
@@ -436,7 +445,12 @@ class Exercise extends Component {
                   </Box>}
               </Col>
               <Col lg={6}>
-                <ExerciseDetail {...exercise} locale={locale} />
+                <ExerciseDetail
+                  {...exercise}
+                  forkedFrom={forkedFrom}
+                  locale={locale}
+                />
+
                 <ResourceRenderer
                   resource={runtimeEnvironments.toArray()}
                   returnAsArray={true}
@@ -572,6 +586,7 @@ Exercise.propTypes = {
   editAssignment: PropTypes.func.isRequired,
   push: PropTypes.func.isRequired,
   exercise: ImmutablePropTypes.map,
+  forkedFrom: ImmutablePropTypes.map,
   runtimeEnvironments: ImmutablePropTypes.map,
   canEditExercise: PropTypes.bool.isRequired,
   referenceSolutions: ImmutablePropTypes.map,
@@ -605,6 +620,7 @@ export default withLinks(
       return {
         userId,
         exercise: exerciseSelector(exerciseId)(state),
+        forkedFrom: exerciseForkedFromSelector(exerciseId)(state),
         runtimeEnvironments: runtimeEnvironmentsSelector(state),
         submitting: isSubmitting(state),
         canEditExercise: canLoggedUserEditExercise(exerciseId)(state),
