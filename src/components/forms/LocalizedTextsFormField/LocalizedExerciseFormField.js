@@ -2,11 +2,23 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { Field } from 'redux-form';
+import { Alert } from 'react-bootstrap';
 import {
   MarkdownTextAreaField,
   LanguageSelectField,
   TextField
 } from '../Fields';
+import { WarningIcon } from '../../icons';
+
+const isURL = url => {
+  const pattern = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-/]))?/;
+  return url !== '' && !pattern.test(url)
+    ? <FormattedMessage
+        id="app.editAssignmentForm.localized.urlValidation"
+        defaultMessage="Given string is not a valid URL."
+      />
+    : null;
+};
 
 const LocalizedExerciseFormField = ({ isAssignment = false, prefix }) =>
   <div>
@@ -31,6 +43,15 @@ const LocalizedExerciseFormField = ({ isAssignment = false, prefix }) =>
       }
     />
 
+    {isAssignment &&
+      <Alert bsStyle="info">
+        <WarningIcon gapRight />
+        <FormattedMessage
+          id="app.editAssignmentForm.localized.assignmentSyncInfo"
+          defaultMessage="Please note that the localized texts are overwritten by actual data from the exercise when exercise synchronization is invoked."
+        />
+      </Alert>}
+
     <Field
       name={`${prefix}.text`}
       component={MarkdownTextAreaField}
@@ -40,6 +61,18 @@ const LocalizedExerciseFormField = ({ isAssignment = false, prefix }) =>
           defaultMessage="Complete description (everything the user needs to solve this exercise):"
         />
       }
+    />
+
+    <Field
+      name={`${prefix}.link`}
+      component={TextField}
+      label={
+        <FormattedMessage
+          id="app.editAssignmentForm.localized.link"
+          defaultMessage="Link to an external complete description:"
+        />
+      }
+      validate={isURL}
     />
 
     {!isAssignment && // it is an exercise

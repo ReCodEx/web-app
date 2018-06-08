@@ -83,7 +83,7 @@ class ReferenceSolutionEvaluation extends Component {
           {
             text: (
               <FormattedMessage
-                id="app.exercise.description"
+                id="app.exercise.overview"
                 defaultMessage="Exercise overview"
               />
             ),

@@ -19,6 +19,13 @@ export const exerciseSelector = exerciseId =>
     exercises => exercises && exercises.get(exerciseId)
   );
 
+export const exerciseForkedFromSelector = exerciseId =>
+  createSelector(exercisesSelector, exercises => {
+    const fokredId =
+      exercises && exercises.getIn([exerciseId, 'data', 'forkedFrom']);
+    return fokredId && exercises.get(fokredId);
+  });
+
 export const fetchManyStatus = createSelector(getExercises, state =>
   state.getIn(['fetchManyStatus', fetchManyEndpoint])
 );
