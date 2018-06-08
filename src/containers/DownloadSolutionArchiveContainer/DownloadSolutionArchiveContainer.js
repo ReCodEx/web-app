@@ -3,19 +3,27 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import { downloadSolutionArchive } from '../../redux/modules/submissionEvaluations';
+import { downloadSolutionArchive as downloadRefSolutionArchive } from '../../redux/modules/referenceSolutionEvaluations';
 import SolutionArchiveInfoBox from '../../components/Submissions/SolutionArchiveInfoBox';
 
 const DownloadResultArchiveContainer = ({
   solutionId,
-  downloadSolutionArchive
+  downloadSolutionArchive,
+  downloadRefSolutionArchive,
+  isReference = false
 }) =>
-  <a href="#" onClick={downloadSolutionArchive}>
+  <a
+    href="#"
+    onClick={isReference ? downloadRefSolutionArchive : downloadSolutionArchive}
+  >
     <SolutionArchiveInfoBox id={solutionId} />
   </a>;
 
 DownloadResultArchiveContainer.propTypes = {
   solutionId: PropTypes.string.isRequired,
-  downloadSolutionArchive: PropTypes.func.isRequired
+  downloadSolutionArchive: PropTypes.func.isRequired,
+  downloadRefSolutionArchive: PropTypes.func.isRequired,
+  isReference: PropTypes.bool
 };
 
 export default connect(
@@ -24,6 +32,10 @@ export default connect(
     downloadSolutionArchive: e => {
       e.preventDefault();
       dispatch(downloadSolutionArchive(solutionId));
+    },
+    downloadRefSolutionArchive: e => {
+      e.preventDefault();
+      dispatch(downloadRefSolutionArchive(solutionId));
     }
   })
 )(DownloadResultArchiveContainer);

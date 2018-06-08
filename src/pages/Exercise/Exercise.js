@@ -46,7 +46,7 @@ import {
 import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments';
 import { runtimeEnvironmentsSelector } from '../../redux/selectors/runtimeEnvironments';
 import {
-  fetchReferenceSolutionsIfNeeded,
+  fetchReferenceSolutions,
   deleteReferenceSolution
 } from '../../redux/modules/referenceSolutions';
 import {
@@ -112,7 +112,7 @@ class Exercise extends Component {
           dispatch(fetchExerciseIfNeeded(data.forkedFrom))
       ),
       dispatch(fetchRuntimeEnvironments()),
-      dispatch(fetchReferenceSolutionsIfNeeded(exerciseId)),
+      dispatch(fetchReferenceSolutions(exerciseId)),
       dispatch(fetchHardwareGroups()),
       dispatch(fetchExercisePipelines(exerciseId)),
       dispatch(fetchUsersGroupsIfNeeded(userId)),
@@ -480,7 +480,10 @@ class Exercise extends Component {
                       }
                     >
                       <div>
-                        <ResourceRenderer resource={referenceSolutions}>
+                        <ResourceRenderer
+                          resource={referenceSolutions.toArray()}
+                          returnAsArray
+                        >
                           {referenceSolutions =>
                             referenceSolutions.length > 0
                               ? <ReferenceSolutionsList
