@@ -596,7 +596,7 @@
   "app.externalLinkPreview.fetchFailed": "Stahování selhalo. Pravděpodobně se jedná o poruchu sítě, nebo byl obsah zablokován CSP.",
   "app.externalLinkPreview.httpFailed": "Nebylo možné stáhnout obsah, odkaz je pravděpodobně neplatný.",
   "app.externalLinkPreview.noTextContent": "V tomto náhledu je možné zobrazit pouze čistý text a Markdown. Odkaz vede na obsah, jehož typ je '{contentType}'.",
-  "app.externalLinkPreview.readingTextFailed": Stala se interní chyba. Toto oznámení je v pasivu, abychom se vyhli jakékoli osobní odpovědnosti."
+  "app.externalLinkPreview.readingTextFailed": "Stala se interní chyba. Toto oznámení je v pasivu, abychom se vyhli jakékoli osobní odpovědnosti.",
   "app.externalLinkPreview.showAsMarkdown": "Zobrazit jako makrdown",
   "app.externalLinkPreview.title": "Náhled",
   "app.externalRegistrationForm.failed": "Registrace se nezdařila. Prosíme, zkontrolujte vyplněné informace.",
