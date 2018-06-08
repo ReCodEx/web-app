@@ -4,8 +4,15 @@ import { FormattedMessage } from 'react-intl';
 import { Tabs, Tab, Well } from 'react-bootstrap';
 import ReactMarkdown from 'react-remarkable';
 
-import './LocalizedTexts.css';
+import ExternalLinkPreview from '../ExternalLinkPreview';
 import Icon from '../../icons';
+
+import './LocalizedTexts.css';
+
+const tabsComparator = ({ locale: a }, { locale: b }) =>
+  typeof a !== 'string'
+    ? typeof b !== 'string' ? 0 : 1
+    : typeof b !== 'string' ? -1 : a.localeCompare(b);
 
 const LocalizedTexts = ({ locales = [] }, { lang = 'en' }) =>
   <Tabs
@@ -17,37 +24,43 @@ const LocalizedTexts = ({ locales = [] }, { lang = 'en' }) =>
     className="nav-tabs-custom"
     id="localized-texts"
   >
-    {locales.map(({ locale, text, link = '', studentHint = null }, i) =>
-      <Tab key={i} eventKey={locale} title={locale}>
-        {link !== '' &&
-          <Well>
-            <h4>
-              <FormattedMessage
-                id="app.localizedTexts.externalLink"
-                defaultMessage="The description is located beyond the realms of ReCodEx"
-              />
-            </h4>
-            <Icon icon="link" gapRight />
-            <a href={link} target="_blank">
-              {link}
-            </a>
-          </Well>}
-        {text !== '' && <ReactMarkdown source={text} />}
+    {locales
+      .sort(tabsComparator)
+      .map(({ locale, text, link = '', studentHint = null }, i) =>
+        <Tab key={i} eventKey={locale} title={locale}>
+          {link &&
+            link !== '' &&
+            <div>
+              <Well>
+                <h4>
+                  <FormattedMessage
+                    id="app.localizedTexts.externalLink"
+                    defaultMessage="The description is located beyond the realms of ReCodEx"
+                  />
+                </h4>
+                <Icon icon="link" gapRight />
+                <a href={link} target="_blank">
+                  {link}
+                </a>
+              </Well>
+              <ExternalLinkPreview url={link} />
+            </div>}
+          {text !== '' && <ReactMarkdown source={text} />}
 
-        {studentHint &&
-          studentHint !== '' &&
-          <div>
-            <hr />
-            <h4>
-              <FormattedMessage
-                id="app.localizedTexts.studentHintHeading"
-                defaultMessage="Hint"
-              />
-            </h4>
-            <ReactMarkdown source={studentHint} />
-          </div>}
-      </Tab>
-    )}
+          {studentHint &&
+            studentHint !== '' &&
+            <div>
+              <hr />
+              <h4>
+                <FormattedMessage
+                  id="app.localizedTexts.studentHintHeading"
+                  defaultMessage="Hint"
+                />
+              </h4>
+              <ReactMarkdown source={studentHint} />
+            </div>}
+        </Tab>
+      )}
 
     {locales.length === 0 &&
       <Tab eventKey={lang} title={lang}>
