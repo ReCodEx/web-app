@@ -8,7 +8,6 @@ import Button from '../../components/widgets/FlatButton';
 import { Link } from 'react-router';
 import { LinkContainer } from 'react-router-bootstrap';
 import { Set } from 'immutable';
-import { push } from 'react-router-redux';
 
 import Page from '../../components/layout/Page';
 import Box from '../../components/widgets/Box';
@@ -386,8 +385,7 @@ export default withLinks(
     (dispatch, { params }) => ({
       loadAsync: (loggedInUserId, isAdmin) =>
         User.loadAsync(params, dispatch, loggedInUserId, isAdmin),
-      takeOver: (userId, redirectUrl) =>
-        dispatch(takeOver(userId)).then(() => dispatch(push(redirectUrl)))
+      takeOver: (userId, redirectUrl) => dispatch(takeOver(userId))
     })
   )(User)
 );

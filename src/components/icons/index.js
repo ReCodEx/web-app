@@ -24,7 +24,7 @@ export const GroupIcon = ({ organizational = false, ...props }) =>
 export const InfoIcon = props => <Icon {...props} icon="info" />;
 export const LoadingIcon = props =>
   <Icon {...props} icon="spinner" pulse style={{ opacity: 0.8 }} />;
-export const LocalIcon = props => <Icon {...props} icon="thumb-tack" />;
+export const LocalIcon = props => <Icon {...props} icon="thumbtack" />;
 export const MailIcon = props => <Icon {...props} icon={['far', 'envelope']} />;
 export const NeedFixingIcon = props => <Icon {...props} icon="medkit" />;
 export const RefreshIcon = props => <Icon {...props} icon="sync" />;
