@@ -148,7 +148,7 @@ class EditGroup extends Component {
                 <p>
                   <FormattedMessage
                     id="app.editGroup.deleteGroupWarning"
-                    defaultMessage="Deleting a group will remove all the subgroups, the students submissions and all the assignments and the submissions of the students."
+                    defaultMessage="Deleting a group will make all attached entities (assignments, solutions, ...) inaccessible."
                   />
                 </p>
                 <p className="text-center">
@@ -156,7 +156,7 @@ class EditGroup extends Component {
                     id={group.id}
                     disabled={
                       group.parentGroupId === null ||
-                      (group.childGroups && group.childGroups.length > 0)
+                      (group.childGroups && group.childGroups.length > 0) // TODO whatabout archived sub-groups?
                     }
                     onDeleted={() =>
                       push(GROUP_INFO_URI_FACTORY(group.parentGroupId))}
@@ -167,6 +167,16 @@ class EditGroup extends Component {
                       <FormattedMessage
                         id="app.editGroup.cannotDeleteRootGroup"
                         defaultMessage="This is a so-called root group and it cannot be deleted."
+                      />
+                    </HelpBlock>}
+
+                  {group.parentGroupId !== null &&
+                    group.childGroups &&
+                    group.childGroups.length > 0 &&
+                    <HelpBlock>
+                      <FormattedMessage
+                        id="app.editGroup.cannotDeleteGroupWithSubgroups"
+                        defaultMessage="Group with nested sub-groups cannot be deleted."
                       />
                     </HelpBlock>}
                 </p>

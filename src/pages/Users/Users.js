@@ -79,7 +79,7 @@ class Users extends Component {
                     createActions={userId =>
                       <div>
                         <LinkContainer to={EDIT_USER_URI_FACTORY(userId)}>
-                          <Button bsSize="xs">
+                          <Button bsSize="xs" bsStyle="warning">
                             <SettingsIcon gapRight />
                             <FormattedMessage
                               id="generic.settings"
@@ -90,6 +90,7 @@ class Users extends Component {
                         {isSuperAdmin &&
                           <Button
                             bsSize="xs"
+                            bsStyle="primary"
                             onClick={() => takeOver(userId, DASHBOARD_URI)}
                           >
                             <TransferIcon gapRight />

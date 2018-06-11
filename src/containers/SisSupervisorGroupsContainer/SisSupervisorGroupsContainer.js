@@ -7,7 +7,6 @@ import Box from '../../components/widgets/Box';
 import { Table, Accordion, Panel, Row, Col } from 'react-bootstrap';
 import Button from '../../components/widgets/FlatButton';
 import { LinkContainer } from 'react-router-bootstrap';
-import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 
 import { fetchGroupsIfNeeded } from '../../redux/modules/groups';
 import { fetchSisStatusIfNeeded } from '../../redux/modules/sisStatus';
@@ -154,10 +153,7 @@ class SisSupervisorGroupsContainer extends Component {
                                         <span className="header">
                                           <span className="leftText">
                                             {course.groups.length > 0 &&
-                                              <FontAwesomeIcon
-                                                name="check"
-                                                className="leftIcon"
-                                              />}
+                                              <GroupIcon className="leftIcon" />}
                                             <span>
                                               {getLocalizedData(
                                                 course.course.captions,

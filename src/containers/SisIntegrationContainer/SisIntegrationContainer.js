@@ -21,7 +21,13 @@ import { getGroupCanonicalLocalizedName } from '../../helpers/getLocalizedData';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 
 import { GroupIcon } from '../../components/icons';
+import { safeGet } from '../../helpers/common';
 import withLinks from '../../helpers/withLinks';
+
+const sisGroupBindingsExist = group => {
+  const sis = safeGet(group, ['privateData', 'bindings', 'sis']);
+  return sis && sis.length > 0;
+};
 
 class SisIntegrationContainer extends Component {
   componentDidMount() {
@@ -140,26 +146,21 @@ class SisIntegrationContainer extends Component {
                                             )}
                                           </td>
                                           <td>
-                                            {group.sisCode &&
-                                            Array.isArray(group.sisCode)
-                                              ? <span>
-                                                  {group.sisCode
-                                                    .sort(
-                                                      (a, b) =>
-                                                        a.localeCompare(b) // locales intentionally ommited
-                                                    )
-                                                    .map((c, idx) =>
-                                                      <span key="{c}">
-                                                        {idx > 0 ? ', ' : ''}
-                                                        <code>
-                                                          {c}
-                                                        </code>
-                                                      </span>
-                                                    )}
-                                                </span>
-                                              : <code>
-                                                  {group.sisCode}
-                                                </code>}
+                                            {sisGroupBindingsExist(group) &&
+                                              <span>
+                                                {group.privateData.bindings.sis
+                                                  .sort(
+                                                    (a, b) => a.localeCompare(b) // locales intentionally ommited
+                                                  )
+                                                  .map((c, idx) =>
+                                                    <span key="{c}">
+                                                      {idx > 0 ? ', ' : ''}
+                                                      <code>
+                                                        {c}
+                                                      </code>
+                                                    </span>
+                                                  )}
+                                              </span>}
                                           </td>
                                           <td>
                                             {group.primaryAdminsIds.map(id =>

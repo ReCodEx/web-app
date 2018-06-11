@@ -14,13 +14,18 @@ import {
 import { getUser, isLoggedAsSuperAdmin } from '../../redux/selectors/users';
 import Page from '../../components/layout/Page';
 import Button from '../../components/widgets/FlatButton';
-import { LocalIcon } from '../../components/icons';
+import { LocalIcon, TransferIcon } from '../../components/icons';
 
 import EditUserProfileForm from '../../components/forms/EditUserProfileForm';
 import EditUserSettingsForm from '../../components/forms/EditUserSettingsForm';
 import GenerateTokenForm from '../../components/forms/GenerateTokenForm';
-import { generateToken } from '../../redux/modules/auth';
-import { lastGeneratedToken } from '../../redux/selectors/auth';
+import { generateToken, takeOver } from '../../redux/modules/auth';
+import {
+  lastGeneratedToken,
+  loggedInUserIdSelector
+} from '../../redux/selectors/auth';
+
+import withLinks from '../../helpers/withLinks';
 
 class EditUser extends Component {
   static loadAsync = ({ userId }, dispatch) =>
@@ -48,11 +53,14 @@ class EditUser extends Component {
   render() {
     const {
       user,
+      loggedUserId,
       updateSettings,
       makeLocalLogin,
       isSuperAdmin,
       generateToken,
-      lastToken
+      lastToken,
+      takeOver,
+      links: { DASHBOARD_URI }
     } = this.props;
     return (
       <Page
@@ -86,16 +94,31 @@ class EditUser extends Component {
       >
         {data =>
           <div>
-            {!data.privateData.isLocal &&
-              <p>
+            <p>
+              {!data.privateData.isLocal &&
                 <Button bsStyle="warning" onClick={makeLocalLogin}>
                   <LocalIcon gapRight />
                   <FormattedMessage
                     id="app.editUser.makeLocal"
                     defaultMessage="Create local account"
                   />
-                </Button>
-              </p>}
+                </Button>}
+
+              {isSuperAdmin &&
+                data &&
+                data.id &&
+                <Button
+                  bsStyle="primary"
+                  onClick={() => takeOver(data.id, DASHBOARD_URI)}
+                >
+                  <TransferIcon gapRight />
+                  <FormattedMessage
+                    id="app.users.takeOver"
+                    defaultMessage="Login as"
+                  />
+                </Button>}
+            </p>
+
             <Row>
               <Col lg={6}>
                 <EditUserProfileForm
@@ -127,18 +150,25 @@ class EditUser extends Component {
                 />
               </Col>
             </Row>
-            <Row>
-              <Col lg={12}>
-                <GenerateTokenForm
-                  onSubmit={generateToken}
-                  initialValues={{
-                    expiration: '604800', // one week (in string)
-                    scopes: { 'read-all': true, master: false, refresh: false }
-                  }}
-                  lastToken={lastToken}
-                />
-              </Col>
-            </Row>
+            {data &&
+              data.id &&
+              data.id === loggedUserId &&
+              <Row>
+                <Col lg={12}>
+                  <GenerateTokenForm
+                    onSubmit={generateToken}
+                    initialValues={{
+                      expiration: '604800', // one week (in string)
+                      scopes: {
+                        'read-all': true,
+                        master: false,
+                        refresh: false
+                      }
+                    }}
+                    lastToken={lastToken}
+                  />
+                </Col>
+              </Row>}
           </div>}
       </Page>
     );
@@ -147,6 +177,7 @@ class EditUser extends Component {
 
 EditUser.propTypes = {
   user: ImmutablePropTypes.map,
+  loggedUserId: PropTypes.string.isRequired,
   params: PropTypes.shape({ userId: PropTypes.string.isRequired }).isRequired,
   loadAsync: PropTypes.func.isRequired,
   updateProfile: PropTypes.func.isRequired,
@@ -154,28 +185,34 @@ EditUser.propTypes = {
   makeLocalLogin: PropTypes.func.isRequired,
   isSuperAdmin: PropTypes.bool.isRequired,
   generateToken: PropTypes.func.isRequired,
-  lastToken: PropTypes.string
+  takeOver: PropTypes.func.isRequired,
+  lastToken: PropTypes.string,
+  links: PropTypes.object.isRequired
 };
 
-export default connect(
-  (state, { params: { userId } }) => ({
-    user: getUser(userId)(state),
-    isSuperAdmin: isLoggedAsSuperAdmin(state),
-    lastToken: lastGeneratedToken(state)
-  }),
-  (dispatch, { params: { userId } }) => ({
-    loadAsync: () => EditUser.loadAsync({ userId }, dispatch),
-    updateSettings: data => dispatch(updateSettings(userId, data)),
-    updateProfile: data => dispatch(updateProfile(userId, data)),
-    makeLocalLogin: () => dispatch(makeLocalLogin(userId)),
-    generateToken: formData =>
-      dispatch(
-        generateToken(
-          formData.expiration,
-          Object.keys(formData.scopes).filter(
-            key => formData.scopes[key] === true
+export default withLinks(
+  connect(
+    (state, { params: { userId } }) => ({
+      user: getUser(userId)(state),
+      loggedUserId: loggedInUserIdSelector(state),
+      isSuperAdmin: isLoggedAsSuperAdmin(state),
+      lastToken: lastGeneratedToken(state)
+    }),
+    (dispatch, { params: { userId } }) => ({
+      loadAsync: () => EditUser.loadAsync({ userId }, dispatch),
+      updateSettings: data => dispatch(updateSettings(userId, data)),
+      updateProfile: data => dispatch(updateProfile(userId, data)),
+      makeLocalLogin: () => dispatch(makeLocalLogin(userId)),
+      generateToken: formData =>
+        dispatch(
+          generateToken(
+            formData.expiration,
+            Object.keys(formData.scopes).filter(
+              key => formData.scopes[key] === true
+            )
           )
-        )
-      )
-  })
-)(EditUser);
+        ),
+      takeOver: (userId, redirectUrl) => dispatch(takeOver(userId))
+    })
+  )(EditUser)
+);

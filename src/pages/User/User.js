@@ -23,6 +23,7 @@ import { fetchUserIfNeeded } from '../../redux/modules/users';
 import { fetchInstanceGroups } from '../../redux/modules/groups';
 import { fetchGroupsStatsIfNeeded } from '../../redux/modules/stats';
 import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments';
+import { takeOver } from '../../redux/modules/auth';
 
 import {
   getUser,
@@ -40,7 +41,7 @@ import {
 } from '../../redux/selectors/groups';
 import { assignmentEnvironmentsSelector } from '../../redux/selectors/assignments';
 
-import { InfoIcon, EditIcon } from '../../components/icons';
+import { InfoIcon, EditIcon, TransferIcon } from '../../components/icons';
 import { getJsData } from '../../redux/helpers/resourceManager';
 import withLinks from '../../helpers/withLinks';
 
@@ -113,10 +114,12 @@ class User extends Component {
       assignmentEnvironmentsSelector,
       groupStatistics,
       usersStatistics,
+      takeOver,
       links: {
         GROUP_DETAIL_URI_FACTORY,
         INSTANCE_URI_FACTORY,
-        EDIT_USER_URI_FACTORY
+        EDIT_USER_URI_FACTORY,
+        DASHBOARD_URI
       }
     } = this.props;
 
@@ -158,10 +161,10 @@ class User extends Component {
               />
             </p>
 
-            {(isAdmin || userId === loggedInUserId) &&
-              <p>
+            <p>
+              {(isAdmin || userId === loggedInUserId) &&
                 <LinkContainer to={EDIT_USER_URI_FACTORY(userId)}>
-                  <Button bsStyle="warning" bsSize="sm" className="float-right">
+                  <Button bsStyle="warning" bsSize="sm">
                     <EditIcon />
                     &nbsp;
                     <FormattedMessage
@@ -169,8 +172,22 @@ class User extends Component {
                       defaultMessage="Edit user's profile"
                     />
                   </Button>
-                </LinkContainer>
-              </p>}
+                </LinkContainer>}
+
+              {isAdmin &&
+                userId !== loggedInUserId &&
+                <Button
+                  bsSize="sm"
+                  bsStyle="primary"
+                  onClick={() => takeOver(userId, DASHBOARD_URI)}
+                >
+                  <TransferIcon gapRight />
+                  <FormattedMessage
+                    id="app.users.takeOver"
+                    defaultMessage="Login as"
+                  />
+                </Button>}
+            </p>
 
             {(commonGroups.length > 0 || isAdmin) &&
               <div>
@@ -311,6 +328,7 @@ User.propTypes = {
   assignmentEnvironmentsSelector: PropTypes.func,
   groupStatistics: PropTypes.func.isRequired,
   usersStatistics: PropTypes.func.isRequired,
+  takeOver: PropTypes.func.isRequired,
   links: PropTypes.object
 };
 
@@ -366,7 +384,8 @@ export default withLinks(
     },
     (dispatch, { params }) => ({
       loadAsync: (loggedInUserId, isAdmin) =>
-        User.loadAsync(params, dispatch, loggedInUserId, isAdmin)
+        User.loadAsync(params, dispatch, loggedInUserId, isAdmin),
+      takeOver: (userId, redirectUrl) => dispatch(takeOver(userId))
     })
   )(User)
 );
