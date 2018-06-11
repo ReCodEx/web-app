@@ -20,7 +20,10 @@ import EditUserProfileForm from '../../components/forms/EditUserProfileForm';
 import EditUserSettingsForm from '../../components/forms/EditUserSettingsForm';
 import GenerateTokenForm from '../../components/forms/GenerateTokenForm';
 import { generateToken } from '../../redux/modules/auth';
-import { lastGeneratedToken } from '../../redux/selectors/auth';
+import {
+  lastGeneratedToken,
+  loggedInUserIdSelector
+} from '../../redux/selectors/auth';
 
 class EditUser extends Component {
   static loadAsync = ({ userId }, dispatch) =>
@@ -48,6 +51,7 @@ class EditUser extends Component {
   render() {
     const {
       user,
+      loggedUserId,
       updateSettings,
       makeLocalLogin,
       isSuperAdmin,
@@ -127,18 +131,25 @@ class EditUser extends Component {
                 />
               </Col>
             </Row>
-            <Row>
-              <Col lg={12}>
-                <GenerateTokenForm
-                  onSubmit={generateToken}
-                  initialValues={{
-                    expiration: '604800', // one week (in string)
-                    scopes: { 'read-all': true, master: false, refresh: false }
-                  }}
-                  lastToken={lastToken}
-                />
-              </Col>
-            </Row>
+            {data &&
+              data.id &&
+              data.id === loggedUserId &&
+              <Row>
+                <Col lg={12}>
+                  <GenerateTokenForm
+                    onSubmit={generateToken}
+                    initialValues={{
+                      expiration: '604800', // one week (in string)
+                      scopes: {
+                        'read-all': true,
+                        master: false,
+                        refresh: false
+                      }
+                    }}
+                    lastToken={lastToken}
+                  />
+                </Col>
+              </Row>}
           </div>}
       </Page>
     );
@@ -147,6 +158,7 @@ class EditUser extends Component {
 
 EditUser.propTypes = {
   user: ImmutablePropTypes.map,
+  loggedUserId: PropTypes.string.isRequired,
   params: PropTypes.shape({ userId: PropTypes.string.isRequired }).isRequired,
   loadAsync: PropTypes.func.isRequired,
   updateProfile: PropTypes.func.isRequired,
@@ -160,6 +172,7 @@ EditUser.propTypes = {
 export default connect(
   (state, { params: { userId } }) => ({
     user: getUser(userId)(state),
+    loggedUserId: loggedInUserIdSelector(state),
     isSuperAdmin: isLoggedAsSuperAdmin(state),
     lastToken: lastGeneratedToken(state)
   }),
