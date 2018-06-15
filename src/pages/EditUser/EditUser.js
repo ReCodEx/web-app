@@ -106,7 +106,7 @@ class EditUser extends Component {
 
               {isSuperAdmin &&
                 data &&
-                data.id &&
+                data.id !== loggedUserId &&
                 <Button
                   bsStyle="primary"
                   onClick={() => takeOver(data.id, DASHBOARD_URI)}

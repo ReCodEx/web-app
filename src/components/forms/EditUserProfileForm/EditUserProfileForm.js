@@ -80,6 +80,7 @@ const EditUserProfileForm = ({
     <Field
       name="degreesBeforeName"
       component={TextField}
+      maxLength={42}
       required
       label={
         <FormattedMessage
@@ -118,6 +119,7 @@ const EditUserProfileForm = ({
     <Field
       name="degreesAfterName"
       component={TextField}
+      maxLength={42}
       required
       label={
         <FormattedMessage
