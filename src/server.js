@@ -22,6 +22,10 @@ import { configureStore } from './redux/store';
 import { loggedInUserIdSelector } from './redux/selectors/auth';
 import { isLoggedAsSuperAdmin } from './redux/selectors/users';
 import createRoutes from './pages/routes';
+import {
+  TOKEN_COOKIES_KEY,
+  INSTANCEID_COOKIES_KEY
+} from './redux/middleware/authMiddleware';
 
 addLocaleData([...cs]);
 
@@ -100,8 +104,9 @@ const renderPage = (res, store, renderProps) => {
 app.get('*', (req, res) => {
   const memoryHistory = createHistory(req.originalUrl);
   // Extract the accessToken from the cookies for authenticated API requests from the server.
-  const token = req.cookies.recodex_accessToken; // undefined === the user is not logged in
-  const store = configureStore(memoryHistory, undefined, token);
+  const token = req.cookies[TOKEN_COOKIES_KEY]; // undefined === the user is not logged in
+  const instanceId = req.cookies[INSTANCEID_COOKIES_KEY] || null; // Selected instance
+  const store = configureStore(memoryHistory, undefined, token, instanceId);
   const history = syncHistoryWithStore(memoryHistory, store);
   const location = req.originalUrl;
 
@@ -130,12 +135,11 @@ app.get('*', (req, res) => {
           })
           .filter(component => component.loadAsync)
           .map(component =>
-            component.loadAsync(
-              renderProps.params,
-              store.dispatch,
+            component.loadAsync(renderProps.params, store.dispatch, {
               userId,
-              isSuperadmin
-            )
+              isSuperadmin,
+              instanceId
+            })
           );
 
         Promise.all(loadAsync)

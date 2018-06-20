@@ -79,13 +79,15 @@ import {
   fetchInstanceGroups
 } from '../../redux/modules/groups';
 
-import { loggedInUserIdSelector } from '../../redux/selectors/auth';
+import {
+  loggedInUserIdSelector,
+  selectedInstanceId
+} from '../../redux/selectors/auth';
 import {
   groupDataAccessorSelector,
   groupsUserCanEditSelector,
   groupsUserCanAssignToSelector
 } from '../../redux/selectors/groups';
-import { fetchUser } from '../../redux/modules/users';
 
 import withLinks from '../../helpers/withLinks';
 
@@ -103,7 +105,7 @@ const messages = defineMessages({
 class Exercise extends Component {
   state = { forkId: null };
 
-  static loadAsync = ({ exerciseId }, dispatch, userId) =>
+  static loadAsync = ({ exerciseId }, dispatch, { userId, instanceId }) =>
     Promise.all([
       dispatch(fetchExerciseIfNeeded(exerciseId)).then(
         ({ value: data }) =>
@@ -116,19 +118,20 @@ class Exercise extends Component {
       dispatch(fetchHardwareGroups()),
       dispatch(fetchExercisePipelines(exerciseId)),
       dispatch(fetchUsersGroupsIfNeeded(userId)),
-      dispatch(fetchUser(userId)).then(({ value: data }) =>
-        dispatch(fetchInstanceGroups(data.privateData.instanceId))
-      )
+      instanceId && dispatch(fetchInstanceGroups(instanceId))
     ]);
 
   componentWillMount() {
-    this.props.loadAsync(this.props.userId);
+    this.props.loadAsync(this.props.userId, this.props.instanceId);
     this.reset();
   }
 
   componentWillReceiveProps(newProps) {
-    if (this.props.params.exerciseId !== newProps.params.exerciseId) {
-      newProps.loadAsync(this.props.userId);
+    if (
+      this.props.params.exerciseId !== newProps.params.exerciseId ||
+      this.props.instanceId !== newProps.instanceId
+    ) {
+      newProps.loadAsync(this.props.userId, newProps.instanceId);
       this.reset();
     }
   }
@@ -578,6 +581,7 @@ Exercise.contextTypes = {
 
 Exercise.propTypes = {
   userId: PropTypes.string.isRequired,
+  instanceId: PropTypes.string,
   params: PropTypes.shape({
     exerciseId: PropTypes.string.isRequired
   }).isRequired,
@@ -619,6 +623,7 @@ export default withLinks(
 
       return {
         userId,
+        instanceId: selectedInstanceId(state),
         exercise: exerciseSelector(exerciseId)(state),
         forkedFrom: exerciseForkedFromSelector(exerciseId)(state),
         runtimeEnvironments: runtimeEnvironmentsSelector(state),
@@ -638,7 +643,8 @@ export default withLinks(
       };
     },
     (dispatch, { params: { exerciseId } }) => ({
-      loadAsync: userId => Exercise.loadAsync({ exerciseId }, dispatch, userId),
+      loadAsync: (userId, instanceId) =>
+        Exercise.loadAsync({ exerciseId }, dispatch, { userId, instanceId }),
       assignExercise: groupId => dispatch(assignExercise(groupId, exerciseId)),
       editAssignment: (id, body) => dispatch(editAssignment(id, body)),
       push: url => dispatch(push(url)),

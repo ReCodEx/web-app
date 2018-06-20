@@ -31,7 +31,10 @@ import {
   isStudent,
   isLoggedAsSuperAdmin
 } from '../../redux/selectors/users';
-import { loggedInUserIdSelector } from '../../redux/selectors/auth';
+import {
+  loggedInUserIdSelector,
+  selectedInstanceId
+} from '../../redux/selectors/auth';
 import { createGroupsStatsSelector } from '../../redux/selectors/stats';
 import {
   groupsAssignmentsSelector,
@@ -42,20 +45,29 @@ import {
 import { assignmentEnvironmentsSelector } from '../../redux/selectors/assignments';
 
 import { InfoIcon, EditIcon, TransferIcon } from '../../components/icons';
-import { getJsData } from '../../redux/helpers/resourceManager';
 import withLinks from '../../helpers/withLinks';
 
 class User extends Component {
   componentWillMount = () =>
-    this.props.loadAsync(this.props.loggedInUserId, this.props.isAdmin);
+    this.props.loadAsync(
+      this.props.loggedInUserId,
+      this.props.isAdmin,
+      this.props.instanceId
+    );
+
   componentWillReceiveProps = newProps => {
     if (
       this.props.params.userId !== newProps.params.userId ||
+      this.props.instanceId !== newProps.instanceId ||
       this.props.commonGroups.length > newProps.commonGroups.length ||
       this.props.loggedInUserId !== newProps.loggedInUserId ||
       this.props.isAdmin !== newProps.isAdmin
     ) {
-      newProps.loadAsync(newProps.loggedInUserId, newProps.isAdmin);
+      newProps.loadAsync(
+        newProps.loggedInUserId,
+        newProps.isAdmin,
+        newProps.instanceId
+      );
     }
   };
 
@@ -64,41 +76,39 @@ class User extends Component {
    * to load the groups and necessary data for the intersection
    * of user's groups of which the current user is a supervisor.
    */
-  static loadAsync = ({ userId }, dispatch, loggedInUserId, isAdmin) =>
+  static loadAsync = (
+    { userId },
+    dispatch,
+    { userId: loggedInUserId, isSuperadmin, instanceId }
+  ) =>
     Promise.all([
       dispatch(fetchRuntimeEnvironments()),
-      dispatch((dispatch, getState) =>
-        dispatch(fetchUserIfNeeded(userId))
-          .then(() => dispatch(fetchUserIfNeeded(loggedInUserId)))
-          .then(() => {
-            const state = getState();
-            const instanceId = getJsData(getUser(loggedInUserId)(state))
-              .privateData.instanceId;
-
-            return dispatch(fetchInstanceGroups(instanceId)).then(groups =>
-              Promise.all(
-                groups.value.map(group => {
-                  if (
-                    group.privateData &&
-                    group.privateData.students.indexOf(userId) >= 0 &&
-                    (isAdmin ||
-                      userId === loggedInUserId ||
-                      group.privateData.supervisors.indexOf(loggedInUserId) >=
-                        0 ||
-                      group.privateData.admins.indexOf(loggedInUserId) >= 0)
-                  ) {
-                    return Promise.all([
-                      dispatch(fetchAssignmentsForGroup(group.id)),
-                      dispatch(fetchGroupsStatsIfNeeded(group.id))
-                    ]);
-                  } else {
-                    return Promise.resolve();
-                  }
-                })
-              )
-            );
-          })
-      )
+      dispatch(fetchUserIfNeeded(userId))
+        .then(() => dispatch(fetchUserIfNeeded(loggedInUserId)))
+        .then(() =>
+          dispatch(fetchInstanceGroups(instanceId)).then(groups =>
+            Promise.all(
+              groups.value.map(group => {
+                if (
+                  group.privateData &&
+                  group.privateData.students.indexOf(userId) >= 0 &&
+                  (isSuperadmin ||
+                    userId === loggedInUserId ||
+                    group.privateData.supervisors.indexOf(loggedInUserId) >=
+                      0 ||
+                    group.privateData.admins.indexOf(loggedInUserId) >= 0)
+                ) {
+                  return Promise.all([
+                    dispatch(fetchAssignmentsForGroup(group.id)),
+                    dispatch(fetchGroupsStatsIfNeeded(group.id))
+                  ]);
+                } else {
+                  return Promise.resolve();
+                }
+              })
+            )
+          )
+        )
     ]);
 
   render() {
@@ -118,8 +128,7 @@ class User extends Component {
       links: {
         GROUP_DETAIL_URI_FACTORY,
         INSTANCE_URI_FACTORY,
-        EDIT_USER_URI_FACTORY,
-        DASHBOARD_URI
+        EDIT_USER_URI_FACTORY
       }
     } = this.props;
 
@@ -179,7 +188,7 @@ class User extends Component {
                 <Button
                   bsSize="sm"
                   bsStyle="primary"
-                  onClick={() => takeOver(userId, DASHBOARD_URI)}
+                  onClick={() => takeOver(userId)}
                 >
                   <TransferIcon gapRight />
                   <FormattedMessage
@@ -316,6 +325,7 @@ class User extends Component {
 
 User.propTypes = {
   userId: PropTypes.string,
+  instanceId: PropTypes.string,
   user: ImmutablePropTypes.map,
   commonGroups: PropTypes.array,
   isAdmin: PropTypes.bool,
@@ -370,6 +380,7 @@ export default withLinks(
       return {
         userId,
         loggedInUserId,
+        instanceId: selectedInstanceId(state),
         student: isStudent(userId)(state),
         user: getUser(userId)(state),
         isAdmin: isSuperadmin,
@@ -383,9 +394,9 @@ export default withLinks(
       };
     },
     (dispatch, { params }) => ({
-      loadAsync: (loggedInUserId, isAdmin) =>
-        User.loadAsync(params, dispatch, loggedInUserId, isAdmin),
-      takeOver: (userId, redirectUrl) => dispatch(takeOver(userId))
+      loadAsync: (userId, isSuperadmin, instanceId) =>
+        User.loadAsync(params, dispatch, { userId, isSuperadmin, instanceId }),
+      takeOver: userId => dispatch(takeOver(userId))
     })
   )(User)
 );

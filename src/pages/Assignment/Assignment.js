@@ -52,7 +52,7 @@ import AssignmentSync from '../../components/Assignments/Assignment/AssignmentSy
 import withLinks from '../../helpers/withLinks';
 
 class Assignment extends Component {
-  static loadAsync = ({ assignmentId }, dispatch, userId) =>
+  static loadAsync = ({ assignmentId }, dispatch, { userId }) =>
     Promise.all([
       dispatch(fetchAssignmentIfNeeded(assignmentId)),
       dispatch(fetchRuntimeEnvironments()),
@@ -317,7 +317,7 @@ export default withLinks(
     (dispatch, { params: { assignmentId, userId } }) => ({
       init: userId => () => dispatch(init(userId, assignmentId)),
       loadAsync: userId =>
-        Assignment.loadAsync({ assignmentId }, dispatch, userId),
+        Assignment.loadAsync({ assignmentId }, dispatch, { userId }),
       exerciseSync: () => dispatch(syncWithExercise(assignmentId))
     })
   )(Assignment)

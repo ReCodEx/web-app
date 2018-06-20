@@ -1,10 +1,11 @@
-import { handleActions } from 'redux-actions';
+import { handleActions, createAction } from 'redux-actions';
 import { push } from 'react-router-redux';
 import { fromJS } from 'immutable';
 import { decode, isTokenValid } from '../helpers/token';
 import { createApiAction } from '../middleware/apiMiddleware';
 import { actionTypes as registrationActionTypes } from './registration';
 import { actionTypes as usersActionTypes } from './users';
+import { safeGet } from '../../helpers/common';
 
 export const actionTypes = {
   LOGIN: 'recodex/auth/LOGIN',
@@ -21,7 +22,8 @@ export const actionTypes = {
   CHANGE_PASSWORD_REJECTED: 'recodex/auth/CHANGE_PASSWORD_REJECTED',
   LOGOUT: 'recodex/auth/LOGOUT',
   GENERATE_TOKEN: 'recodex/auth/GENERATE_TOKEN',
-  GENERATE_TOKEN_FULFILLED: 'recodex/auth/GENERATE_TOKEN_FULFILLED'
+  GENERATE_TOKEN_FULFILLED: 'recodex/auth/GENERATE_TOKEN_FULFILLED',
+  SELECT_INSTANCE: 'recodex/auth/SELECT_INSTANCE'
 };
 
 export const statusTypes = {
@@ -160,12 +162,19 @@ const closeAuthPopupWindow = popupWindow => {
   }
 };
 
+export const selectInstance = createAction(
+  actionTypes.SELECT_INSTANCE,
+  instanceId => ({
+    instanceId
+  })
+);
+
 /**
  * Authentication reducer.
  * @param  {string} accessToken An access token to initialise the reducer
  * @return {function} The initialised reducer
  */
-const auth = (accessToken, now = Date.now()) => {
+const auth = (accessToken, instanceId, now = Date.now()) => {
   const decodedToken = decodeAndValidateAccessToken(accessToken, now);
   const initialState =
     accessToken && decodedToken
@@ -173,13 +182,15 @@ const auth = (accessToken, now = Date.now()) => {
           status: {},
           jwt: accessToken,
           accessToken: decodedToken,
-          userId: getUserId(decodedToken)
+          userId: getUserId(decodedToken),
+          instanceId: instanceId
         })
       : fromJS({
           status: {},
           jwt: null,
           accessToken: null,
-          userId: null
+          userId: null,
+          instanceId: null
         });
 
   return handleActions(
@@ -189,14 +200,18 @@ const auth = (accessToken, now = Date.now()) => {
 
       [actionTypes.LOGIN_SUCCESS]: (
         state,
-        { payload: { accessToken }, meta: { service, popupWindow } }
+        { payload: { accessToken, user }, meta: { service, popupWindow } }
       ) => {
         closeAuthPopupWindow(popupWindow);
         return state
           .setIn(['status', service], statusTypes.LOGGED_IN)
           .set('jwt', accessToken)
           .set('accessToken', decodeAndValidateAccessToken(accessToken))
-          .set('userId', getUserId(decodeAndValidateAccessToken(accessToken)));
+          .set('userId', getUserId(decodeAndValidateAccessToken(accessToken)))
+          .set(
+            'instanceId',
+            safeGet(user, ['privateData', 'instancesIds', 0], null)
+          );
       },
 
       [actionTypes.LOGIN_FAILIURE]: (
@@ -208,18 +223,23 @@ const auth = (accessToken, now = Date.now()) => {
           .setIn(['status', service], statusTypes.LOGIN_FAILED)
           .set('jwt', null)
           .set('accessToken', null)
-          .set('userId', null);
+          .set('userId', null)
+          .set('instanceId', null);
       },
 
       [registrationActionTypes.CREATE_ACCOUNT_FULFILLED]: (
         state,
-        { payload: { accessToken }, meta: { service } }
+        {
+          payload: { accessToken },
+          meta: { instanceId = null, service = LOCAL_LOGIN }
+        }
       ) =>
         state
           .setIn(['status', service], statusTypes.LOGGED_IN)
           .set('jwt', accessToken)
           .set('accessToken', decodeAndValidateAccessToken(accessToken))
-          .set('userId', getUserId(decodeAndValidateAccessToken(accessToken))),
+          .set('userId', getUserId(decodeAndValidateAccessToken(accessToken)))
+          .set('instanceId', instanceId),
 
       [actionTypes.LOGOUT]: (state, action) =>
         state
@@ -228,7 +248,8 @@ const auth = (accessToken, now = Date.now()) => {
           )
           .set('jwt', null)
           .set('accessToken', null)
-          .set('userId', null),
+          .set('userId', null)
+          .set('instanceId', null),
 
       [actionTypes.CHANGE_PASSWORD_PENDING]: (state, action) =>
         state.set('changePasswordStatus', 'PENDING'),
@@ -265,7 +286,10 @@ const auth = (accessToken, now = Date.now()) => {
       [actionTypes.GENERATE_TOKEN_FULFILLED]: (
         state,
         { payload: { accessToken } }
-      ) => state.set('lastGeneratedToken', accessToken)
+      ) => state.set('lastGeneratedToken', accessToken),
+
+      [actionTypes.SELECT_INSTANCE]: (state, { payload: { instanceId } }) =>
+        state.set('instanceId', instanceId)
     },
     initialState
   );

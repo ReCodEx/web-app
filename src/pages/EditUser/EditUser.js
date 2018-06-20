@@ -25,8 +25,6 @@ import {
   loggedInUserIdSelector
 } from '../../redux/selectors/auth';
 
-import withLinks from '../../helpers/withLinks';
-
 class EditUser extends Component {
   static loadAsync = ({ userId }, dispatch) =>
     Promise.all([dispatch(fetchUserIfNeeded(userId))]);
@@ -59,8 +57,7 @@ class EditUser extends Component {
       isSuperAdmin,
       generateToken,
       lastToken,
-      takeOver,
-      links: { DASHBOARD_URI }
+      takeOver
     } = this.props;
     return (
       <Page
@@ -107,10 +104,7 @@ class EditUser extends Component {
               {isSuperAdmin &&
                 data &&
                 data.id !== loggedUserId &&
-                <Button
-                  bsStyle="primary"
-                  onClick={() => takeOver(data.id, DASHBOARD_URI)}
-                >
+                <Button bsStyle="primary" onClick={() => takeOver(data.id)}>
                   <TransferIcon gapRight />
                   <FormattedMessage
                     id="app.users.takeOver"
@@ -186,33 +180,30 @@ EditUser.propTypes = {
   isSuperAdmin: PropTypes.bool.isRequired,
   generateToken: PropTypes.func.isRequired,
   takeOver: PropTypes.func.isRequired,
-  lastToken: PropTypes.string,
-  links: PropTypes.object.isRequired
+  lastToken: PropTypes.string
 };
 
-export default withLinks(
-  connect(
-    (state, { params: { userId } }) => ({
-      user: getUser(userId)(state),
-      loggedUserId: loggedInUserIdSelector(state),
-      isSuperAdmin: isLoggedAsSuperAdmin(state),
-      lastToken: lastGeneratedToken(state)
-    }),
-    (dispatch, { params: { userId } }) => ({
-      loadAsync: () => EditUser.loadAsync({ userId }, dispatch),
-      updateSettings: data => dispatch(updateSettings(userId, data)),
-      updateProfile: data => dispatch(updateProfile(userId, data)),
-      makeLocalLogin: () => dispatch(makeLocalLogin(userId)),
-      generateToken: formData =>
-        dispatch(
-          generateToken(
-            formData.expiration,
-            Object.keys(formData.scopes).filter(
-              key => formData.scopes[key] === true
-            )
+export default connect(
+  (state, { params: { userId } }) => ({
+    user: getUser(userId)(state),
+    loggedUserId: loggedInUserIdSelector(state),
+    isSuperAdmin: isLoggedAsSuperAdmin(state),
+    lastToken: lastGeneratedToken(state)
+  }),
+  (dispatch, { params: { userId } }) => ({
+    loadAsync: () => EditUser.loadAsync({ userId }, dispatch),
+    updateSettings: data => dispatch(updateSettings(userId, data)),
+    updateProfile: data => dispatch(updateProfile(userId, data)),
+    makeLocalLogin: () => dispatch(makeLocalLogin(userId)),
+    generateToken: formData =>
+      dispatch(
+        generateToken(
+          formData.expiration,
+          Object.keys(formData.scopes).filter(
+            key => formData.scopes[key] === true
           )
-        ),
-      takeOver: (userId, redirectUrl) => dispatch(takeOver(userId))
-    })
-  )(EditUser)
-);
+        )
+      ),
+    takeOver: userId => dispatch(takeOver(userId))
+  })
+)(EditUser);

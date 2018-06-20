@@ -34,7 +34,10 @@ import {
   isSupervisor,
   isLoggedAsSuperAdmin
 } from '../../redux/selectors/users';
-import { loggedInUserIdSelector } from '../../redux/selectors/auth';
+import {
+  loggedInUserIdSelector,
+  selectedInstanceId
+} from '../../redux/selectors/auth';
 import { statisticsSelector } from '../../redux/selectors/stats';
 import { groupsSelector } from '../../redux/selectors/groups';
 import {
@@ -52,15 +55,17 @@ import { getLocalizedName } from '../../helpers/getLocalizedData';
 import withLinks from '../../helpers/withLinks';
 
 class Dashboard extends Component {
-  componentDidMount = () => this.props.loadAsync(this.props.userId);
+  componentDidMount = () =>
+    this.props.loadAsync(this.props.userId, this.props.instanceId);
 
   componentWillReceiveProps = newProps => {
     if (
       this.props.userId !== newProps.userId ||
+      this.props.instanceId !== newProps.instanceId ||
       this.props.supervisorOf.size > newProps.supervisorOf.size ||
       this.props.studentOf.size > newProps.studentOf.size
     ) {
-      newProps.loadAsync(newProps.userId);
+      newProps.loadAsync(newProps.userId, newProps.instanceId);
     }
   };
 
@@ -69,7 +74,7 @@ class Dashboard extends Component {
    * to load the groups and necessary data for the intersection
    * of user's groups of which the current user is a supervisor.
    */
-  static loadAsync = (params, dispatch, userId) =>
+  static loadAsync = (params, dispatch, { userId, instanceId }) =>
     Promise.all([
       dispatch(fetchRuntimeEnvironments()),
       dispatch((dispatch, getState) =>
@@ -84,8 +89,8 @@ class Dashboard extends Component {
           return dispatch(fetchGroupsIfNeeded(...groups)).then(groups =>
             Promise.all(
               [
-                isAdmin
-                  ? dispatch(fetchInstanceGroups(user.privateData.instanceId))
+                isAdmin && instanceId
+                  ? dispatch(fetchInstanceGroups(instanceId))
                   : Promise.resolve()
               ].concat(
                 groups.map(({ value: group }) =>
@@ -396,6 +401,7 @@ Dashboard.propTypes = {
   superadmin: PropTypes.bool,
   loadAsync: PropTypes.func.isRequired,
   userId: PropTypes.string,
+  instanceId: PropTypes.string,
   groupAssignments: ImmutablePropTypes.map,
   assignmentEnvironmentsSelector: PropTypes.func,
   statistics: ImmutablePropTypes.map,
@@ -410,6 +416,7 @@ export default withLinks(
       const userId = loggedInUserIdSelector(state);
       return {
         userId,
+        instanceId: selectedInstanceId(state),
         student: isStudent(userId)(state),
         supervisor: isSupervisor(userId)(state),
         superadmin: isLoggedAsSuperAdmin(state),
@@ -423,8 +430,8 @@ export default withLinks(
       };
     },
     (dispatch, { params }) => ({
-      loadAsync: loggedInUserId =>
-        Dashboard.loadAsync(params, dispatch, loggedInUserId)
+      loadAsync: (userId, instanceId) =>
+        Dashboard.loadAsync(params, dispatch, { userId, instanceId })
     })
   )(injectIntl(Dashboard))
 );

@@ -75,7 +75,7 @@ class GroupDetail extends Component {
     GroupDetail.isAdminOrSupervisorOf(group, userId) ||
     group.privateData.students.indexOf(userId) >= 0;
 
-  static loadAsync = ({ groupId }, dispatch, userId, isSuperAdmin) =>
+  static loadAsync = ({ groupId }, dispatch, { userId, isSuperAdmin }) =>
     Promise.all([
       dispatch(fetchRuntimeEnvironments()),
       dispatch(fetchGroupIfNeeded(groupId)).then(({ value: group }) =>
@@ -473,7 +473,7 @@ const mapStateToProps = (state, { params: { groupId } }) => {
 
 const mapDispatchToProps = (dispatch, { params }) => ({
   loadAsync: (userId, isSuperAdmin) =>
-    GroupDetail.loadAsync(params, dispatch, userId, isSuperAdmin),
+    GroupDetail.loadAsync(params, dispatch, { userId, isSuperAdmin }),
   assignExercise: exerciseId =>
     dispatch(assignExercise(params.groupId, exerciseId)),
   createGroupExercise: () =>

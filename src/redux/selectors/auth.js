@@ -5,6 +5,7 @@ import { isTokenValid } from '../helpers/token';
 const getAuth = state => state.auth;
 const getAccessToken = auth => auth.get('accessToken');
 const getLoggedInUserId = auth => auth.get('userId');
+const getSelectedInstanceId = auth => auth.get('instanceId');
 const getStatus = createSelector(getAuth, auth => auth.get('status'));
 const getChangePasswordStatus = createSelector(getAuth, auth =>
   auth.get('changePasswordStatus')
@@ -26,6 +27,12 @@ export const loggedInUserIdSelector = createSelector(
   getAuth,
   getLoggedInUserId
 );
+
+export const selectedInstanceId = createSelector(
+  getAuth,
+  getSelectedInstanceId
+);
+
 export const statusSelector = service =>
   createSelector(getStatus, statuses => statuses.get(service));
 export const isLoggingIn = service =>

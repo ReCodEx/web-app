@@ -21,7 +21,7 @@ import { hasSucceeded } from '../../redux/selectors/registration';
 
 import withLinks from '../../helpers/withLinks';
 
-class Register extends Component {
+class Registration extends Component {
   componentWillMount = () => {
     this.checkIfIsDone(this.props);
     this.props.loadAsync();
@@ -100,7 +100,7 @@ class Register extends Component {
   }
 }
 
-Register.propTypes = {
+Registration.propTypes = {
   instances: PropTypes.object.isRequired,
   loadAsync: PropTypes.func.isRequired,
   createAccount: PropTypes.func.isRequired,
@@ -154,5 +154,5 @@ export default withLinks(
         dispatch(reset('external-registration'));
       }
     })
-  )(Register)
+  )(Registration)
 );
