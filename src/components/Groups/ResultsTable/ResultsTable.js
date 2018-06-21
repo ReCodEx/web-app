@@ -75,7 +75,7 @@ class ResultsTable extends Component {
       assignment =>
         (header[`${assignment.id}`] = (
           <div className={styles.verticalText}>
-            <div className={styles.verticalTextInner}>
+            <div>
               <Link
                 to={
                   isAdmin || isSupervisor
@@ -98,6 +98,26 @@ class ResultsTable extends Component {
       header.buttons = '';
     }
     return header;
+  });
+
+  // Prepare header suffix row with assignment max points
+  prepareHeaderMaxPoints = defaultMemoize(assignments => {
+    const { isAdmin } = this.props;
+
+    return (
+      <tr className={styles.maxPointsRow}>
+        <th>Max points:</th>
+        {assignments.map(assignment =>
+          <th key={assignment.id}>
+            {assignment.maxPointsBeforeFirstDeadline}
+            {Boolean(assignment.maxPointsBeforeSecondDeadline) &&
+              ` / ${assignment.maxPointsBeforeSecondDeadline}`}
+          </th>
+        )}
+        <th />
+        {isAdmin && <th />}
+      </tr>
+    );
   });
 
   // Re-format the data, so they can be rendered by the SortableTable ...
@@ -145,6 +165,7 @@ class ResultsTable extends Component {
       <SortableTable
         hover
         header={this.prepareHeader(assignments)}
+        headerSuffixRow={this.prepareHeaderMaxPoints(assignments)}
         comparators={prepareTableComparators(locale)}
         defaultOrder="user"
         styles={tableStyles}
