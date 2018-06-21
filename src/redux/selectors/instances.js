@@ -1,5 +1,4 @@
 import { createSelector } from 'reselect';
-import { List } from 'immutable';
 import { EMPTY_LIST } from '../../helpers/common';
 import { isReady } from '../helpers/resourceManager';
 import { loggedInUserSelector } from './users';
@@ -27,12 +26,13 @@ export const instanceByIdSelector = instanceId =>
 export const loggedInUserMemberOfInstances = createSelector(
   [loggedInUserSelector, instancesSelector],
   (user, instances) => {
-    const instanceId =
+    const instancesIds =
       user &&
       isReady(user) &&
-      user.getIn(['data', 'privateData', 'instanceId']);
-    const instance = instanceId && instances.get(instanceId);
-    return instance ? List([instance]) : EMPTY_LIST;
+      user.getIn(['data', 'privateData', 'instancesIds']);
+    const userInstances =
+      instancesIds && instancesIds.map(id => instances.get(id));
+    return userInstances || EMPTY_LIST;
   }
 );
 

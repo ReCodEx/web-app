@@ -22,16 +22,18 @@ import { searchPeople } from '../../redux/modules/search';
 
 import withLinks from '../../helpers/withLinks';
 import { getSearchQuery } from '../../redux/selectors/search';
+import { selectedInstanceId } from '../../redux/selectors/auth';
 
 class Users extends Component {
   render() {
     const {
-      links: { EDIT_USER_URI_FACTORY, DASHBOARD_URI },
+      instanceId,
       takeOver,
       isSuperAdmin,
       search,
       query,
-      user
+      user,
+      links: { EDIT_USER_URI_FACTORY, DASHBOARD_URI }
     } = this.props;
 
     return (
@@ -57,59 +59,59 @@ class Users extends Component {
       >
         {user =>
           <div>
-            <Box
-              title={
-                <FormattedMessage
-                  id="app.users.listTitle"
-                  defaultMessage="Users"
-                />
-              }
-              unlimitedHeight
-            >
-              <SearchContainer
-                type="users"
-                id="users-page"
-                search={search(user.privateData.instanceId)}
-                showAllOnEmptyQuery={true}
-                renderList={users =>
-                  <UsersList
-                    users={users}
-                    loggedUserId={user.id}
-                    useGravatar={user.privateData.settings.useGravatar}
-                    createActions={userId =>
-                      <div>
-                        <LinkContainer to={EDIT_USER_URI_FACTORY(userId)}>
-                          <Button bsSize="xs" bsStyle="warning">
-                            <SettingsIcon gapRight />
-                            <FormattedMessage
-                              id="generic.settings"
-                              defaultMessage="Settings"
-                            />
-                          </Button>
-                        </LinkContainer>
-                        {isSuperAdmin &&
-                          <Button
+            {instanceId &&
+              <Box
+                title={
+                  <FormattedMessage
+                    id="app.users.listTitle"
+                    defaultMessage="Users"
+                  />
+                }
+                unlimitedHeight
+              >
+                <SearchContainer
+                  type="users"
+                  id="users-page"
+                  search={search(instanceId)}
+                  showAllOnEmptyQuery={true}
+                  renderList={users =>
+                    <UsersList
+                      users={users}
+                      loggedUserId={user.id}
+                      useGravatar={user.privateData.settings.useGravatar}
+                      createActions={userId =>
+                        <div>
+                          <LinkContainer to={EDIT_USER_URI_FACTORY(userId)}>
+                            <Button bsSize="xs" bsStyle="warning">
+                              <SettingsIcon gapRight />
+                              <FormattedMessage
+                                id="generic.settings"
+                                defaultMessage="Settings"
+                              />
+                            </Button>
+                          </LinkContainer>
+                          {isSuperAdmin &&
+                            <Button
+                              bsSize="xs"
+                              bsStyle="primary"
+                              onClick={() => takeOver(userId, DASHBOARD_URI)}
+                            >
+                              <TransferIcon gapRight />
+                              <FormattedMessage
+                                id="app.users.takeOver"
+                                defaultMessage="Login as"
+                              />
+                            </Button>}
+                          <DeleteUserButtonContainer
+                            id={userId}
                             bsSize="xs"
-                            bsStyle="primary"
-                            onClick={() => takeOver(userId, DASHBOARD_URI)}
-                          >
-                            <TransferIcon gapRight />
-                            <FormattedMessage
-                              id="app.users.takeOver"
-                              defaultMessage="Login as"
-                            />
-                          </Button>}
-                        <DeleteUserButtonContainer
-                          id={userId}
-                          bsSize="xs"
-                          resourceless={true}
-                          onDeleted={() =>
-                            search(user.privateData.instanceId)(query)}
-                        />
-                      </div>}
-                  />}
-              />
-            </Box>
+                            resourceless={true}
+                            onDeleted={() => search(instanceId)(query)}
+                          />
+                        </div>}
+                    />}
+                />
+              </Box>}
           </div>}
       </Page>
     );
@@ -117,6 +119,7 @@ class Users extends Component {
 }
 
 Users.propTypes = {
+  instanceId: PropTypes.string,
   push: PropTypes.func.isRequired,
   links: PropTypes.object.isRequired,
   takeOver: PropTypes.func.isRequired,
@@ -130,6 +133,7 @@ export default withLinks(
   connect(
     state => {
       return {
+        instanceId: selectedInstanceId(state),
         isSuperAdmin: isLoggedAsSuperAdmin(state),
         user: loggedInUserSelector(state),
         query: getSearchQuery('users-page')(state)

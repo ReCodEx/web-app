@@ -1,5 +1,4 @@
 import { createSelector } from 'reselect';
-import { List } from 'immutable';
 
 import { EMPTY_LIST, EMPTY_OBJ } from '../../helpers/common';
 import { fetchManyEndpoint } from '../modules/users';
@@ -125,7 +124,7 @@ export const memberOfInstancesIdsSelector = userId =>
     getUser(userId),
     user =>
       user && isReady(user)
-        ? List([user.getIn(['data', 'privateData', 'instanceId'])])
+        ? user.getIn(['data', 'privateData', 'instancesIds'], EMPTY_LIST)
         : EMPTY_LIST // @todo: Change when the user can be member of multiple instances
   );
 

@@ -1,47 +1,115 @@
+import { push } from 'react-router-redux';
+import cookies from 'browser-cookies';
+import { canUseDOM } from 'exenv';
+
 import { actionTypes } from '../modules/auth';
 import { jwtSelector } from '../selectors/auth';
 import { actionTypes as registrationActionTypes } from '../modules/registration';
 import { actionTypes as usersActionTypes } from '../modules/users';
-
 import { CALL_API } from './apiMiddleware';
-import cookies from 'browser-cookies';
-import { canUseDOM } from 'exenv';
 import { changeLanguage } from '../../links';
-import { push } from 'react-router-redux';
+import { safeGet } from '../../helpers/common';
 
-export const LOCAL_STORAGE_KEY = 'recodex/accessToken';
-export const COOKIES_KEY = 'recodex_accessToken';
+export const TOKEN_LOCAL_STORAGE_KEY = 'recodex/accessToken';
+export const TOKEN_COOKIES_KEY = 'recodex_accessToken';
 
+export const INSTANCEID_LOCAL_STORAGE_KEY = 'recodex/instanceId';
+export const INSTANCEID_COOKIES_KEY = 'recodex_instanceId';
+
+/**
+ * Store security token to both local storage and cookies.
+ */
 export const storeToken = accessToken => {
   if (canUseDOM && accessToken) {
     if (typeof localStorage !== 'undefined') {
-      localStorage.setItem(LOCAL_STORAGE_KEY, accessToken);
+      localStorage.setItem(TOKEN_LOCAL_STORAGE_KEY, accessToken);
     }
 
     // @todo: expire after 'exp' in the token
-    cookies.set(COOKIES_KEY, accessToken, { expires: 14 }); // expires after 14 days
+    cookies.set(TOKEN_COOKIES_KEY, accessToken, { expires: 14 }); // expires after 14 days
   }
 };
 
+/**
+ * Remove security token to both local storage and cookies.
+ */
 export const removeToken = () => {
   if (typeof localStorage !== 'undefined') {
-    localStorage.removeItem(LOCAL_STORAGE_KEY);
+    localStorage.removeItem(TOKEN_LOCAL_STORAGE_KEY);
   }
 
   if (typeof document !== 'undefined') {
-    cookies.erase(COOKIES_KEY);
+    cookies.erase(TOKEN_COOKIES_KEY);
   }
 };
 
+/**
+ * Fetch security token from local storage and if it fails, try the cookies.
+ */
 export const getToken = () => {
   if (typeof localStorage !== 'undefined') {
-    const token = localStorage.getItem(LOCAL_STORAGE_KEY);
-    storeToken(token); // make sure the token is stored in cookies for page refreshes
-    return token;
+    const token = localStorage.getItem(TOKEN_LOCAL_STORAGE_KEY);
+    if (token) {
+      storeToken(token); // make sure the token is stored in cookies for page refreshes
+      return token;
+    }
   }
 
   if (typeof document !== 'undefined') {
-    cookies.get(COOKIES_KEY);
+    const token = cookies.get(TOKEN_COOKIES_KEY);
+    if (token) {
+      storeToken(token); // make sure the token is stored in localStorage as well
+      return token;
+    }
+  }
+
+  return null;
+};
+
+/**
+ * Store security token to both local storage and cookies.
+ */
+export const storeInstanceId = instanceId => {
+  if (canUseDOM && instanceId) {
+    if (typeof localStorage !== 'undefined') {
+      localStorage.setItem(INSTANCEID_LOCAL_STORAGE_KEY, instanceId);
+    }
+
+    cookies.set(INSTANCEID_COOKIES_KEY, instanceId, { expires: 365 });
+  }
+};
+
+/**
+ * Remove security token to both local storage and cookies.
+ */
+export const removeInstanceId = () => {
+  if (typeof localStorage !== 'undefined') {
+    localStorage.removeItem(INSTANCEID_LOCAL_STORAGE_KEY);
+  }
+
+  if (typeof document !== 'undefined') {
+    cookies.erase(INSTANCEID_COOKIES_KEY);
+  }
+};
+
+/**
+ * Fetch the selected instance ID from local storage and if it fails, try the cookies.
+ */
+export const getInstanceId = () => {
+  if (typeof localStorage !== 'undefined') {
+    const instanceId = localStorage.getItem(INSTANCEID_LOCAL_STORAGE_KEY);
+    if (instanceId) {
+      storeInstanceId(instanceId); // make sure the instanceId is stored in cookies for page refreshes
+      return instanceId;
+    }
+  }
+
+  if (typeof document !== 'undefined') {
+    const instanceId = cookies.get(INSTANCEID_COOKIES_KEY);
+    if (instanceId) {
+      storeInstanceId(instanceId); // make sure the instanceId is stored in localStorage as well
+      return instanceId;
+    }
   }
 
   return null;
@@ -58,6 +126,13 @@ const middleware = store => next => action => {
     case actionTypes.LOGIN_SUCCESS:
     case registrationActionTypes.CREATE_ACCOUNT_FULFILLED:
       storeToken(action.payload.accessToken);
+      storeInstanceId(
+        safeGet(
+          action,
+          ['meta', 'instanceId'],
+          action.payload.user.privateData.instancesIds[0]
+        )
+      );
       if (typeof window !== 'undefined') {
         store.dispatch(
           push(
@@ -69,9 +144,17 @@ const middleware = store => next => action => {
         );
       }
       break;
+
+    case actionTypes.LOGIN_FAILIURE:
     case actionTypes.LOGOUT:
       removeToken();
+      removeInstanceId();
       break;
+
+    case actionTypes.SELECT_INSTANCE:
+      storeInstanceId(action.payload.instanceId);
+      break;
+
     case CALL_API:
       if (!action.request.accessToken) {
         const token = jwtSelector(store.getState());

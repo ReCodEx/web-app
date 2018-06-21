@@ -6,8 +6,6 @@ import { Row, Col, Button } from 'react-bootstrap';
 import moment from 'moment';
 
 import PageContent from '../../components/layout/PageContent';
-import { isLoggedAsSuperAdmin } from '../../redux/selectors/users';
-import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import {
   fetchAllTerms,
   create,
@@ -29,12 +27,12 @@ import EditTerm from '../../components/SisIntegration/EditTerm';
 class SisIntegration extends Component {
   state = { openEdit: null };
 
-  static loadAsync = (params, dispatch, userId, isSuperAdmin) =>
+  static loadAsync = (params, dispatch) =>
     Promise.all([dispatch(fetchAllTerms)]);
 
   componentWillMount() {
-    const { loadAsync, userId, isSuperAdmin } = this.props;
-    loadAsync(userId, isSuperAdmin);
+    const { loadAsync } = this.props;
+    loadAsync();
   }
 
   render() {
@@ -153,8 +151,6 @@ class SisIntegration extends Component {
 }
 
 SisIntegration.propTypes = {
-  userId: PropTypes.string.isRequired,
-  isSuperAdmin: PropTypes.bool.isRequired,
   loadAsync: PropTypes.func.isRequired,
   fetchStatus: PropTypes.string,
   createNewTerm: PropTypes.func,
@@ -165,16 +161,13 @@ SisIntegration.propTypes = {
 
 const mapStateToProps = state => {
   return {
-    userId: loggedInUserIdSelector(state),
-    isSuperAdmin: isLoggedAsSuperAdmin(state),
     fetchStatus: fetchManyStatus(state),
     sisTerms: readySisTermsSelector(state)
   };
 };
 
 const mapDispatchToProps = (dispatch, { params }) => ({
-  loadAsync: (userId, isSuperAdmin) =>
-    SisIntegration.loadAsync(params, dispatch, userId, isSuperAdmin),
+  loadAsync: () => SisIntegration.loadAsync(params, dispatch),
   createNewTerm: data => dispatch(create(data)),
   deleteTerm: id => dispatch(deleteTerm(id)),
   editTerm: (id, data) => {

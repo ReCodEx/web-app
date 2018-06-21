@@ -48,8 +48,8 @@ import referenceSolutionEvaluations from './modules/referenceSolutionEvaluations
 import submissionEvaluations from './modules/submissionEvaluations';
 import submissionFailures from './modules/submissionFailures';
 
-const createRecodexReducers = token => ({
-  auth: auth(token),
+const createRecodexReducers = (token, instanceId) => ({
+  auth: auth(token, instanceId),
   assignments,
   boxes,
   canSubmit,
@@ -101,9 +101,13 @@ const librariesReducers = {
   form: formReducer
 };
 
-const createReducer = token => {
+const createReducer = (token, instanceId) => {
   const appReducer = combineReducers(
-    Object.assign({}, librariesReducers, createRecodexReducers(token))
+    Object.assign(
+      {},
+      librariesReducers,
+      createRecodexReducers(token, instanceId)
+    )
   );
 
   return (state, action) => {

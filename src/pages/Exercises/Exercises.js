@@ -14,9 +14,8 @@ import Button from '../../components/widgets/FlatButton';
 import { EditIcon } from '../../components/icons';
 
 import { searchExercises } from '../../redux/modules/search';
-import { fetchUser } from '../../redux/modules/users';
 import { fetchInstanceGroups } from '../../redux/modules/groups';
-import { loggedInUserIdSelector } from '../../redux/selectors/auth';
+import { selectedInstanceId } from '../../redux/selectors/auth';
 import {
   canLoggedUserEditExercise,
   isLoggedAsSuperAdmin
@@ -26,15 +25,11 @@ import { getSearchQuery } from '../../redux/selectors/search';
 import withLinks from '../../helpers/withLinks';
 
 class Exercises extends Component {
-  static loadAsync = (params, dispatch, userId) =>
-    userId
-      ? dispatch(fetchUser(userId)).then(({ value: data }) =>
-          dispatch(fetchInstanceGroups(data.privateData.instanceId))
-        )
-      : Promise.resolve();
+  static loadAsync = (params, dispatch, { instanceId }) =>
+    instanceId ? dispatch(fetchInstanceGroups(instanceId)) : Promise.resolve();
 
   componentWillMount() {
-    this.props.loadAsync(this.props.userId);
+    this.props.loadAsync(this.props.instanceId);
   }
 
   render() {
@@ -142,7 +137,7 @@ class Exercises extends Component {
 
 Exercises.propTypes = {
   loadAsync: PropTypes.func.isRequired,
-  userId: PropTypes.string.isRequired,
+  instanceId: PropTypes.string.isRequired,
   query: PropTypes.string,
   isAuthorOfExercise: PropTypes.func.isRequired,
   push: PropTypes.func.isRequired,
@@ -154,7 +149,7 @@ export default withLinks(
   connect(
     state => {
       return {
-        userId: loggedInUserIdSelector(state),
+        instanceId: selectedInstanceId(state),
         query: getSearchQuery('exercises-page')(state),
         isSuperAdmin: isLoggedAsSuperAdmin(state),
         isAuthorOfExercise: exerciseId =>
@@ -162,7 +157,8 @@ export default withLinks(
       };
     },
     dispatch => ({
-      loadAsync: userId => Exercises.loadAsync({}, dispatch, userId),
+      loadAsync: instanceId =>
+        Exercises.loadAsync({}, dispatch, { instanceId }),
       push: url => dispatch(push(url)),
       search: query => dispatch(searchExercises()('exercises-page', query))
     })

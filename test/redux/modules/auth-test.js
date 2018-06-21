@@ -2,9 +2,6 @@ import chai from 'chai';
 import spies from 'chai-spies';
 import { fromJS } from 'immutable';
 
-chai.use(spies);
-const expect = chai.expect;
-
 import reducerFactory, {
   actionTypes,
   statusTypes,
@@ -22,6 +19,9 @@ import {
 import { push } from 'react-router-redux';
 
 import decodeJwt from 'jwt-decode';
+
+chai.use(spies);
+const expect = chai.expect;
 
 describe('Authentication', () => {
   describe('(Action creators)', () => {
@@ -73,25 +73,27 @@ describe('Authentication', () => {
   describe('(Reducer)', () => {
     describe('Initial state', () => {
       it('must return LOGGED OUT initial state with no access token given', () => {
-        const reducer = reducerFactory(null); // no access token
+        const reducer = reducerFactory(null, null); // no access token
         const state = reducer(undefined, {});
         const expectedState = fromJS({
           status: {},
           jwt: null,
           accessToken: null,
-          userId: null
+          userId: null,
+          instanceId: null
         });
         expect(state).to.eql(expectedState);
       });
 
       it('must return LOGGED OUT initial state when an invalid access token is given', () => {
-        const reducer = reducerFactory('abcde'); // invalid access token
+        const reducer = reducerFactory('abcde', null); // invalid access token
         const state = reducer(undefined, {});
         const expectedState = fromJS({
           status: {},
           jwt: null,
           accessToken: null,
-          userId: null
+          userId: null,
+          instanceId: null
         });
         expect(state).to.eql(expectedState);
       });
@@ -102,13 +104,14 @@ describe('Authentication', () => {
         const expiredToken =
           'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE0OTE5MDM2MTh9.3iH9ZXaaACF0Jugajfv4TggeUcqJzPQYqGveh16WHkU';
 
-        const reducer = reducerFactory(expiredToken, exp + 1000); // +1 second
+        const reducer = reducerFactory(expiredToken, null, exp + 1000); // +1 second
         const state = reducer(undefined, {});
         const expectedState = fromJS({
           status: {},
           jwt: null,
           accessToken: null,
-          userId: null
+          userId: null,
+          instanceId: null
         });
         expect(state).to.eql(expectedState);
       });
@@ -117,13 +120,14 @@ describe('Authentication', () => {
         const exp = 1491903618 * 1000;
         const validToken =
           'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE0OTE5MDM2MTgsInN1YiI6MTIzfQ._Er1LBGLVnD3bdg439fgL7E1YcnMgTDYtzfgjQrQrXQ';
-        const reducer = reducerFactory(validToken, exp - 1000); // -1 second
+        const reducer = reducerFactory(validToken, 'instance-id', exp - 1000); // -1 second
         const state = reducer(undefined, {});
         const expectedState = fromJS({
           status: {},
           jwt: validToken,
           accessToken: decodeJwt(validToken),
-          userId: 123
+          userId: 123,
+          instanceId: 'instance-id'
         });
         expect(state).to.eql(expectedState);
       });

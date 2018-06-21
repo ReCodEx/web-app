@@ -32,7 +32,8 @@ export const createAccount = (
     type: actionTypes.CREATE_ACCOUNT,
     method: 'POST',
     endpoint: '/users',
-    body: { firstName, lastName, email, password, passwordConfirm, instanceId }
+    body: { firstName, lastName, email, password, passwordConfirm, instanceId },
+    meta: { instanceId }
   });
 
 export const createExternalAccount = (
@@ -45,7 +46,8 @@ export const createExternalAccount = (
     type: actionTypes.CREATE_ACCOUNT,
     method: 'POST',
     endpoint: '/users/ext',
-    body: { ...credentials, instanceId, serviceId, authType }
+    body: { ...credentials, instanceId, serviceId, authType },
+    meta: { instanceId, service: serviceId }
   });
 
 const initialState = fromJS({

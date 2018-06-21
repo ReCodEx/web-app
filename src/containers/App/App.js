@@ -1,31 +1,44 @@
-import { Component } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import {
   loggedInUserIdSelector,
+  selectedInstanceId,
   accessTokenSelector
 } from '../../redux/selectors/auth';
 import { fetchUserIfNeeded } from '../../redux/modules/users';
-import { getUserSettings } from '../../redux/selectors/users';
+import { getUser, getUserSettings } from '../../redux/selectors/users';
 import {
   isTokenValid,
   isTokenInNeedOfRefreshment
 } from '../../redux/helpers/token';
 import { fetchUsersInstancesIfNeeded } from '../../redux/modules/instances';
 import { fetchUsersGroupsIfNeeded } from '../../redux/modules/groups';
-import { logout, refresh } from '../../redux/modules/auth';
+import { logout, refresh, selectInstance } from '../../redux/modules/auth';
+import { getJsData } from '../../redux/helpers/resourceManager';
+
 import fontawesome from '@fortawesome/fontawesome';
 import regularIcons from '@fortawesome/fontawesome-free-regular';
 import solidIcons from '@fortawesome/fontawesome-free-solid';
 import brandIcons from '@fortawesome/fontawesome-free-brands';
 
+import { LoadingIcon } from '../../components/icons';
+
 fontawesome.library.add(regularIcons, solidIcons, brandIcons);
 
 class App extends Component {
-  static loadAsync = (params, dispatch, userId) =>
+  static loadAsync = (params, dispatch, { userId }) =>
     userId
       ? Promise.all([
-          dispatch(fetchUserIfNeeded(userId)),
+          dispatch((dispatch, getState) =>
+            dispatch(fetchUserIfNeeded(userId)).then(() => {
+              const state = getState();
+              if (!selectedInstanceId(state)) {
+                const user = getJsData(getUser(userId)(state));
+                dispatch(selectInstance(user.privateData.instancesIds[0]));
+              }
+            })
+          ),
           dispatch(fetchUsersGroupsIfNeeded(userId)),
           dispatch(fetchUsersInstancesIfNeeded(userId))
         ])
@@ -65,13 +78,25 @@ class App extends Component {
   };
 
   render() {
-    return this.props.children;
+    const { userId, instanceId } = this.props;
+    return userId && !instanceId
+      ? <div
+          style={{
+            textAlign: 'center',
+            height: '100vh',
+            lineHeight: '100vh'
+          }}
+        >
+          <LoadingIcon size="3x" />
+        </div>
+      : this.props.children;
   }
 }
 
 App.propTypes = {
   isLoggedIn: PropTypes.bool.isRequired,
   userId: PropTypes.string,
+  instanceId: PropTypes.string,
   accessToken: PropTypes.object,
   refreshToken: PropTypes.func,
   logout: PropTypes.func,
@@ -90,12 +115,13 @@ export default connect(
     return {
       accessToken: accessTokenSelector(state),
       userId,
+      instanceId: selectedInstanceId(state),
       isLoggedIn: Boolean(userId),
       userSettings: getUserSettings(userId)(state)
     };
   },
   dispatch => ({
-    loadAsync: userId => App.loadAsync({}, dispatch, userId),
+    loadAsync: userId => App.loadAsync({}, dispatch, { userId }),
     refreshToken: () => dispatch(refresh()),
     logout: () => dispatch(logout('/'))
   })

@@ -48,13 +48,7 @@ class Pipeline extends Component {
     this.setState({ forkId: Math.random().toString() });
   }
 
-  static loadAsync = (
-    { pipelineId },
-    dispatch,
-    userId,
-    isSuperadmin,
-    setState = null
-  ) =>
+  static loadAsync = ({ pipelineId }, dispatch, { setState = null }) =>
     Promise.all([
       dispatch(fetchPipelineIfNeeded(pipelineId))
         .then(res => res.value)
@@ -188,7 +182,7 @@ export default withLinks(
     },
     (dispatch, { params: { pipelineId } }) => ({
       loadAsync: setState =>
-        Pipeline.loadAsync({ pipelineId }, dispatch, null, false, setState),
+        Pipeline.loadAsync({ pipelineId }, dispatch, { setState }),
       forkPipeline: (forkId, data) =>
         dispatch(forkPipeline(pipelineId, forkId, data))
     })

@@ -44,7 +44,7 @@ import { groupSelector, groupsSelector } from '../../redux/selectors/groups';
 import GroupTopButtons from '../../components/Groups/GroupTopButtons/GroupTopButtons';
 
 class GroupInfo extends Component {
-  static loadAsync = ({ groupId }, dispatch, userId, isSuperAdmin) =>
+  static loadAsync = ({ groupId }, dispatch, { userId, isSuperAdmin }) =>
     Promise.all([
       dispatch(fetchGroupIfNeeded(groupId))
         .then(res => res.value)
@@ -303,7 +303,7 @@ const mapDispatchToProps = (dispatch, { params }) => ({
       })
     ),
   loadAsync: (userId, isSuperAdmin) =>
-    GroupInfo.loadAsync(params, dispatch, userId, isSuperAdmin),
+    GroupInfo.loadAsync(params, dispatch, { userId, isSuperAdmin }),
   push: url => dispatch(push(url)),
   refetchSupervisors: () => dispatch(fetchSupervisors(params.groupId))
 });

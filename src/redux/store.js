@@ -69,8 +69,8 @@ const prod = history => compose(applyMiddleware(...getMiddleware(history)));
 
 const isDev = () => process.env.NODE_ENV === 'development';
 
-export const configureStore = (history, initialState, token) => {
-  const reducer = createReducer(token);
+export const configureStore = (history, initialState, token, instanceId) => {
+  const reducer = createReducer(token, instanceId);
   const store = createStore(
     storage.reducer(reducer),
     initialState,
