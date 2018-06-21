@@ -140,14 +140,12 @@ class TestResultsTable extends Component {
   };
 
   renderRow = ({
-    id,
     testName,
     score,
     status,
     memoryExceeded,
     wallTimeExceeded,
     cpuTimeExceeded,
-    message,
     memoryRatio,
     wallTimeRatio,
     cpuTimeRatio,
@@ -255,9 +253,17 @@ class TestResultsTable extends Component {
   renderLog = ({ testName, judgeLog = '' }) =>
     <tr key={`${testName}-log`}>
       <td colSpan={7}>
-        <pre className={styles.log}>
-          {judgeLog}
-        </pre>
+        <table className={styles.logWrapper}>
+          <tbody>
+            <tr>
+              <td>
+                <pre className={styles.log}>
+                  {judgeLog}
+                </pre>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </td>
     </tr>;
 
@@ -277,7 +283,7 @@ class TestResultsTable extends Component {
       );
 
     return (
-      <Table responsive>
+      <Table responsive style={{}}>
         <thead>
           <tr>
             <th />
