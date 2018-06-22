@@ -28,8 +28,10 @@ class SortableTable extends Component {
           className={this.getStyle(key, 'className')}
         >
           {cellRenderers[key]
-            ? cellRenderers[key](row[key])
-            : cellRenderers[''] ? cellRenderers[''](row[key]) : row[key]}
+            ? cellRenderers[key](row[key], idx, key, row)
+            : cellRenderers['']
+              ? cellRenderers[''](row[key], idx, key, row)
+              : row[key]}
         </td>
       )}
     </tr>;

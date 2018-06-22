@@ -44,7 +44,8 @@ import {
   isAdminOf,
   isLoggedAsSuperAdmin,
   studentsOfGroupSelector,
-  isStudentOf
+  isStudentOf,
+  loggedInUserSelector
 } from '../../redux/selectors/users';
 import {
   groupSelector,
@@ -169,6 +170,7 @@ class GroupDetail extends Component {
     const {
       group,
       students,
+      loggedUser,
       assignments = EMPTY_LIST,
       groupExercises = EMPTY_MAP,
       assignmentEnvironmentsSelector,
@@ -283,13 +285,13 @@ class GroupDetail extends Component {
                     noPadding
                   >
                     <ResourceRenderer
-                      resource={[stats, ...assignments]}
+                      resource={[stats, loggedUser, ...assignments]}
                       bulkyLoading
                     >
-                      {(groupStats, ...assignments) =>
+                      {(groupStats, loggedUser, ...assignments) =>
                         <ResultsTable
                           users={students}
-                          loggedUser={userId}
+                          loggedUser={loggedUser}
                           assignments={assignments}
                           stats={groupStats}
                           publicStats={
@@ -430,6 +432,7 @@ class GroupDetail extends Component {
 GroupDetail.propTypes = {
   params: PropTypes.shape({ groupId: PropTypes.string.isRequired }).isRequired,
   userId: PropTypes.string.isRequired,
+  loggedUser: PropTypes.object,
   group: ImmutablePropTypes.map,
   instance: ImmutablePropTypes.map,
   students: PropTypes.array,
@@ -457,6 +460,7 @@ const mapStateToProps = (state, { params: { groupId } }) => {
   return {
     group: groupSelector(groupId)(state),
     userId,
+    loggedUser: loggedInUserSelector(state),
     groups: groupsSelector(state),
     assignments: groupsAssignmentsSelector(state, groupId),
     assignmentEnvironmentsSelector: assignmentEnvironmentsSelector(state),
