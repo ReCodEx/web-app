@@ -28,8 +28,10 @@ class SortableTable extends Component {
           className={this.getStyle(key, 'className')}
         >
           {cellRenderers[key]
-            ? cellRenderers[key](row[key])
-            : cellRenderers[''] ? cellRenderers[''](row[key]) : row[key]}
+            ? cellRenderers[key](row[key], idx, key, row)
+            : cellRenderers['']
+              ? cellRenderers[''](row[key], idx, key, row)
+              : row[key]}
         </td>
       )}
     </tr>;
@@ -61,6 +63,7 @@ class SortableTable extends Component {
   render() {
     const {
       header,
+      headerSuffixRow = null,
       comparators = {},
       defaultOrder,
       data = [],
@@ -112,6 +115,7 @@ class SortableTable extends Component {
                 </th>
               )}
             </tr>
+            {headerSuffixRow}
           </thead>}
         <tbody>
           {data.length > 0
@@ -135,6 +139,7 @@ class SortableTable extends Component {
 
 SortableTable.propTypes = {
   header: PropTypes.object.isRequired,
+  headerSuffixRow: PropTypes.any,
   styles: PropTypes.object,
   comparators: PropTypes.object,
   defaultOrder: PropTypes.string,

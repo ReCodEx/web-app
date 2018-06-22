@@ -13,7 +13,7 @@ const UsersName = ({
   fullName,
   avatarUrl,
   name: { firstName },
-  size = 25,
+  size = 20,
   large = false,
   isVerified,
   noLink,

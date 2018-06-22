@@ -3,40 +3,67 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { defaultMemoize } from 'reselect';
+import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 
 import { safeGet, EMPTY_ARRAY } from '../../../helpers/common';
-import UsersNameContainer from '../../../containers/UsersNameContainer';
+import UsersName from '../../Users/UsersName';
 import SortableTable from '../../widgets/SortableTable';
 import withLinks from '../../../helpers/withLinks';
 import { LocalizedExerciseName } from '../../helpers/LocalizedNames';
+import { getLocalizedName } from '../../../helpers/getLocalizedData';
 import { compareAssignments } from '../../helpers/compareAssignments';
 import styles from './ResultsTable.less';
 
+const getIndexedAssignments = defaultMemoize(assignments => {
+  const res = {};
+  assignments.forEach(a => (res[a.id] = a));
+  return res;
+});
+
 // Functors for rendering cells of individual columns.
-const cellRenderers = {
+const cellRenderers = defaultMemoize((assignments, loggedUser, locale) => ({
   // default renderer is used for all assignment points
-  '': points =>
-    points && Number.isInteger(points.gained)
-      ? <span>
-          {points.gained}
-          {points.bonus > 0 &&
-            <span className={styles.bonusPoints}>
-              +{points.bonus}
-            </span>}
-          {points.bonus < 0 &&
-            <span className={styles.malusPoints}>
-              {points.bonus}
-            </span>}
-        </span>
-      : '-',
+  '': (points, idx, key, row) =>
+    <OverlayTrigger
+      placement="bottom"
+      overlay={
+        <Tooltip id={`results-table-cell-${row.user.id}-${idx}`}>
+          {row.user.name.firstName} {row.user.name.lastName}
+          {', '}
+          {assignments[key] && getLocalizedName(assignments[key], locale)}
+        </Tooltip>
+      }
+    >
+      <span>
+        {points && Number.isInteger(points.gained)
+          ? <span>
+              {points.gained}
+              {points.bonus > 0 &&
+                <span className={styles.bonusPoints}>
+                  +{points.bonus}
+                </span>}
+              {points.bonus < 0 &&
+                <span className={styles.malusPoints}>
+                  {points.bonus}
+                </span>}
+            </span>
+          : '-'}
+      </span>
+    </OverlayTrigger>,
   user: user =>
-    user && <UsersNameContainer userId={user.id} showEmail="icon" />,
+    user &&
+    <UsersName
+      {...user}
+      currentUserId={loggedUser.id}
+      useGravatar={loggedUser.privateData.settings.useGravatar}
+      showEmail="icon"
+    />,
   total: points =>
     <strong>
       {points ? `${points.gained}/${points.total}` : '-/-'}
     </strong>,
   buttons: btns => btns // identity for buttons prevents using default (points) renderer
-};
+}));
 
 // Per-col styling for the table
 const tableStyles = {
@@ -73,9 +100,9 @@ class ResultsTable extends Component {
 
     assignments.sort(compareAssignments).forEach(
       assignment =>
-        (header[`${assignment.id}`] = (
+        (header[assignment.id] = (
           <div className={styles.verticalText}>
-            <div className={styles.verticalTextInner}>
+            <div>
               <Link
                 to={
                   isAdmin || isSupervisor
@@ -100,6 +127,26 @@ class ResultsTable extends Component {
     return header;
   });
 
+  // Prepare header suffix row with assignment max points
+  prepareHeaderMaxPoints = defaultMemoize(assignments => {
+    const { isAdmin } = this.props;
+
+    return (
+      <tr className={styles.maxPointsRow}>
+        <th>Max points:</th>
+        {assignments.map(assignment =>
+          <th key={assignment.id}>
+            {assignment.maxPointsBeforeFirstDeadline}
+            {Boolean(assignment.maxPointsBeforeSecondDeadline) &&
+              ` / ${assignment.maxPointsBeforeSecondDeadline}`}
+          </th>
+        )}
+        <th />
+        {isAdmin && <th />}
+      </tr>
+    );
+  });
+
   // Re-format the data, so they can be rendered by the SortableTable ...
   prepareData = defaultMemoize((assignments, users, stats) => {
     const {
@@ -111,7 +158,7 @@ class ResultsTable extends Component {
     } = this.props;
 
     if (!isAdmin && !isSupervisor && !publicStats) {
-      users = users.filter(({ id }) => id === loggedUser);
+      users = users.filter(({ id }) => id === loggedUser.id);
     }
 
     return users.map(user => {
@@ -138,6 +185,7 @@ class ResultsTable extends Component {
     const {
       assignments = EMPTY_ARRAY,
       users = EMPTY_ARRAY,
+      loggedUser,
       stats,
       intl: { locale }
     } = this.props;
@@ -145,10 +193,15 @@ class ResultsTable extends Component {
       <SortableTable
         hover
         header={this.prepareHeader(assignments)}
+        headerSuffixRow={this.prepareHeaderMaxPoints(assignments)}
         comparators={prepareTableComparators(locale)}
         defaultOrder="user"
         styles={tableStyles}
-        cellRenderers={cellRenderers}
+        cellRenderers={cellRenderers(
+          getIndexedAssignments(assignments),
+          loggedUser,
+          locale
+        )}
         data={this.prepareData(assignments, users, stats)}
         empty={
           <div className="text-center text-muted">
@@ -166,7 +219,7 @@ class ResultsTable extends Component {
 ResultsTable.propTypes = {
   assignments: PropTypes.array.isRequired,
   users: PropTypes.array.isRequired,
-  loggedUser: PropTypes.string,
+  loggedUser: PropTypes.object.isRequired,
   stats: PropTypes.array.isRequired,
   publicStats: PropTypes.bool,
   isAdmin: PropTypes.bool,
