@@ -95,3 +95,17 @@ export const objectMap = (obj, fnc) => {
   }
   return res;
 };
+
+const idSelector = obj => obj.id;
+
+/**
+ * Convert array into object. Values of the array remain the values of the object.
+ * Keys are computed from values using indexer function
+ * (by default, the indexer assumes the values are objects and attempts to fetch "id" property).
+ * Optionally, a mapper function can be provided. Mapper is applied on every value.
+ */
+export const arrayToObject = (arr, indexer = idSelector, mapper = identity) =>
+  arr.reduce((res, val, idx) => {
+    res[indexer(val, idx)] = mapper(val);
+    return res;
+  }, {});

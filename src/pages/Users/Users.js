@@ -4,14 +4,20 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import { push } from 'react-router-redux';
+import { Table } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 
-import { SettingsIcon, TransferIcon } from '../../components/icons';
+import {
+  SettingsIcon,
+  TransferIcon,
+  LoadingIcon
+} from '../../components/icons';
 import Button from '../../components/widgets/FlatButton';
 import DeleteUserButtonContainer from '../../containers/DeleteUserButtonContainer';
 import Page from '../../components/layout/Page';
 import Box from '../../components/widgets/Box';
 import UsersList from '../../components/Users/UsersList';
+import PaginationContainer from '../../containers/PaginationContainer';
 import SearchContainer from '../../containers/SearchContainer';
 import {
   loggedInUserSelector,
@@ -59,7 +65,80 @@ class Users extends Component {
       >
         {user =>
           <div>
-            {instanceId &&
+            <Box
+              title={
+                <FormattedMessage
+                  id="app.users.listTitle"
+                  defaultMessage="Users"
+                />
+              }
+              unlimitedHeight
+            >
+              <PaginationContainer entities="users">
+                {data =>
+                  <UsersList
+                    users={data}
+                    loggedUserId={user.id}
+                    useGravatar={user.privateData.settings.useGravatar}
+                    createActions={userId =>
+                      <div>
+                        <LinkContainer to={EDIT_USER_URI_FACTORY(userId)}>
+                          <Button bsSize="xs" bsStyle="warning">
+                            <SettingsIcon gapRight />
+                            <FormattedMessage
+                              id="generic.settings"
+                              defaultMessage="Settings"
+                            />
+                          </Button>
+                        </LinkContainer>
+                        {isSuperAdmin &&
+                          <Button
+                            bsSize="xs"
+                            bsStyle="primary"
+                            onClick={() => takeOver(userId, DASHBOARD_URI)}
+                          >
+                            <TransferIcon gapRight />
+                            <FormattedMessage
+                              id="app.users.takeOver"
+                              defaultMessage="Login as"
+                            />
+                          </Button>}
+                        <DeleteUserButtonContainer
+                          id={userId}
+                          bsSize="xs"
+                          resourceless={true}
+                          onDeleted={() => search(instanceId)(query)}
+                        />
+                      </div>}
+                  />
+
+                /* <Table>
+                    <tbody>
+                      {data.map(
+                        (user, idx) =>
+                          user
+                            ? <tr key={idx}>
+                                <td>
+                                  {user.id}
+                                </td>
+                                <td>
+                                  {user.fullName}
+                                </td>
+                              </tr>
+                            : <tr key={idx}>
+                                <td colSpan={2}>
+                                  <LoadingIcon />
+                                </td>
+                              </tr>
+                      )}
+                    </tbody>
+                    </Table> */
+                }
+              </PaginationContainer>
+            </Box>
+
+            {false &&
+              instanceId &&
               <Box
                 title={
                   <FormattedMessage

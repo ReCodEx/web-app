@@ -24,6 +24,7 @@ import instances from './modules/instances';
 import licences from './modules/licences';
 import limits from './modules/limits';
 import notifications from './modules/notifications';
+import pagination from './modules/pagination';
 import { default as search } from './modules/search'; // because of a named export 'search'
 import sidebar from './modules/sidebar';
 import stats from './modules/stats';
@@ -71,6 +72,7 @@ const createRecodexReducers = (token, instanceId) => ({
   licences,
   limits,
   notifications,
+  pagination,
   search,
   sidebar,
   stats,

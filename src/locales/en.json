@@ -801,6 +801,7 @@
   "app.page.failed": "Cannot load the page",
   "app.page.failedDescription": "We are sorry for the inconvenience, please try again later.",
   "app.page.loadingDescription": "Please wait while we are getting things ready.",
+  "app.paginationContainer.showingRange": "showing {offset}. - {offsetEnd}. (of {totalCount})",
   "app.passwordStrength.bad": "Are you sure?",
   "app.passwordStrength.good": "Good",
   "app.passwordStrength.ok": "OK",

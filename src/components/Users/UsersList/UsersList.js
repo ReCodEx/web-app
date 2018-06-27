@@ -7,20 +7,14 @@ import UsersListItem from '../UsersListItem';
 const UsersList = ({ users = [], createActions, intl, ...rest }) =>
   <Table hover>
     <tbody>
-      {users
-        .sort((a, b) => {
-          const aName = a.name.lastName + ' ' + a.name.firstName;
-          const bName = b.name.lastName + ' ' + b.name.firstName;
-          return aName.localeCompare(bName, intl.locale);
-        })
-        .map((user, i) =>
-          <UsersListItem
-            user={user}
-            createActions={createActions}
-            key={i}
-            {...rest}
-          />
-        )}
+      {users.map((user, i) =>
+        <UsersListItem
+          user={user}
+          createActions={createActions}
+          key={i}
+          {...rest}
+        />
+      )}
 
       {users.length === 0 &&
         <tr>
