@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import UsersNameContainer from '../../../containers/UsersNameContainer';
 import ExercisesNameContainer from '../../../containers/ExercisesNameContainer';
 import { Link } from 'react-router';
 import { FormattedDate, FormattedTime, FormattedMessage } from 'react-intl';
 
+import Icon from '../../icons';
 import withLinks from '../../../helpers/withLinks';
 
 const PipelinesListItem = ({
@@ -19,7 +19,7 @@ const PipelinesListItem = ({
 }) =>
   <tr>
     <td className="text-center">
-      <FontAwesomeIcon icon="code" />
+      <Icon icon="code" />
     </td>
     <td>
       <strong>

@@ -27,6 +27,18 @@ export const getPaginationTotalCount = entities =>
     pagination => pagination && pagination.get('totalCount')
   );
 
+export const getPaginationOrderBy = entities =>
+  createSelector(
+    getPagination(entities),
+    pagination => pagination && pagination.get('orderBy')
+  );
+
+export const getPaginationFilters = entities =>
+  createSelector(
+    getPagination(entities),
+    pagination => pagination && pagination.get('filters').toJS()
+  );
+
 export const getPaginationIsPending = entities =>
   createSelector(getPagination(entities), pagination =>
     Boolean(pagination && pagination.get('pending'))

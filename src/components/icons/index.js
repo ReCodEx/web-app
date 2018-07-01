@@ -34,12 +34,27 @@ export const SearchIcon = props => <Icon {...props} icon="search" />;
 export const SendIcon = props =>
   <Icon {...props} icon={['far', 'paper-plane']} />;
 export const SettingsIcon = props => <Icon {...props} icon="cog" />;
+export const SortedIcon = ({ active = true, descendant = false, ...props }) =>
+  <Icon
+    icon={!active || !descendant ? 'sort-alpha-down' : 'sort-alpha-up'}
+    timid={!active}
+    className={active ? 'text-success' : 'text-primary'}
+    {...props}
+  />;
 export const SuccessIcon = props =>
   <strong className="text-success">
     <Icon {...props} icon="check" />
   </strong>;
 export const SuccessOrFailureIcon = ({ success = false, ...props }) =>
   success ? <SuccessIcon {...props} /> : <Failure {...props} />;
+export const SuperadminIcon = props => <Icon {...props} icon="chess-queen" />;
+export const SupervisorAdminIcon = props =>
+  <strong className="text-danger">
+    <Icon {...props} icon="user-graduate" />
+  </strong>;
+export const SupervisorIcon = props => <Icon {...props} icon="user-graduate" />;
+export const SupervisorStudentIcon = props =>
+  <Icon {...props} icon="chalkboard-teacher" />;
 export const TransferIcon = props => <Icon {...props} icon="exchange-alt" />;
 export const UploadIcon = props => <Icon {...props} icon="cloud-upload-alt" />;
 export const WarningIcon = props =>
@@ -47,6 +62,11 @@ export const WarningIcon = props =>
 
 GroupIcon.propTypes = {
   organizational: PropTypes.bool
+};
+
+SortedIcon.propTypes = {
+  active: PropTypes.bool,
+  descendant: PropTypes.bool
 };
 
 SuccessOrFailureIcon.propTypes = {

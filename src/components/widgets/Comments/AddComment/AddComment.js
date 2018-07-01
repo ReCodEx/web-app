@@ -14,8 +14,9 @@ import {
   InputGroup,
   HelpBlock
 } from 'react-bootstrap';
+
 import Button from '../../FlatButton';
-import FontAwesomeIcon from '@fortawesome/react-fontawesome';
+import Icon from '../../../icons';
 
 const messages = defineMessages({
   placeholder: {
@@ -82,11 +83,8 @@ class AddComment extends Component {
               disabled={!addComment}
             >
               {isPrivate
-                ? <FontAwesomeIcon icon="lock" className="text-success" />
-                : <FontAwesomeIcon
-                    icon="unlock-alt"
-                    className="text-warning"
-                  />}
+                ? <Icon icon="lock" className="text-success" />
+                : <Icon icon="unlock-alt" className="text-warning" />}
             </Button>{' '}
             {isPrivate &&
               <FormattedHTMLMessage

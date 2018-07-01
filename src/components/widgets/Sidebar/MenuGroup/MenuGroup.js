@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { injectIntl } from 'react-intl';
 import classNames from 'classnames';
-import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 
 import MenuItem from '../MenuItem';
 import LoadingMenuItem from '../LoadingMenuItem';
@@ -86,7 +85,7 @@ class MenuGroup extends Component {
               <small className="label pull-right bg-blue">
                 {notificationsCount}
               </small>}
-            <FontAwesomeIcon
+            <Icon
               icon="angle-left"
               className="pull-right"
               style={{ height: '15px' }}

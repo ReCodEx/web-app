@@ -4,21 +4,16 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import { push } from 'react-router-redux';
-import { Table } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 
-import {
-  SettingsIcon,
-  TransferIcon,
-  LoadingIcon
-} from '../../components/icons';
+import { SettingsIcon, SortedIcon, TransferIcon } from '../../components/icons';
 import Button from '../../components/widgets/FlatButton';
 import DeleteUserButtonContainer from '../../containers/DeleteUserButtonContainer';
 import Page from '../../components/layout/Page';
 import Box from '../../components/widgets/Box';
 import UsersList from '../../components/Users/UsersList';
 import PaginationContainer from '../../containers/PaginationContainer';
-import SearchContainer from '../../containers/SearchContainer';
+// import SearchContainer from '../../containers/SearchContainer'; TODO -- delete whole container
 import {
   loggedInUserSelector,
   isLoggedAsSuperAdmin
@@ -29,6 +24,23 @@ import { searchPeople } from '../../redux/modules/search';
 import withLinks from '../../helpers/withLinks';
 import { getSearchQuery } from '../../redux/selectors/search';
 import { selectedInstanceId } from '../../redux/selectors/auth';
+
+const createSortingIcon = (
+  colName,
+  orderByColumn,
+  orderByDescendant,
+  setOrderBy
+) =>
+  <SortedIcon
+    active={orderByColumn === colName}
+    descendant={orderByDescendant}
+    gapLeft
+    onClick={() =>
+      setOrderBy(
+        colName,
+        orderByColumn === colName ? !orderByDescendant : false
+      )}
+  />;
 
 class Users extends Component {
   render() {
@@ -74,12 +86,76 @@ class Users extends Component {
               }
               unlimitedHeight
             >
-              <PaginationContainer entities="users">
-                {data =>
+              <PaginationContainer entities="users" defaultOrderBy="name">
+                {({
+                  data,
+                  offset,
+                  limit,
+                  totalCount,
+                  orderByColumn,
+                  orderByDescendant,
+                  setOrderBy
+                }) =>
                   <UsersList
                     users={data}
                     loggedUserId={user.id}
                     useGravatar={user.privateData.settings.useGravatar}
+                    emailColumn
+                    createdAtColumn
+                    heading={
+                      <tr>
+                        <th />
+                        <th>
+                          <FormattedMessage
+                            id="generic.nameOfPerson"
+                            defaultMessage="Name"
+                          />
+                          {createSortingIcon(
+                            'name',
+                            orderByColumn,
+                            orderByDescendant,
+                            setOrderBy
+                          )}
+                        </th>
+                        <th>
+                          <FormattedMessage
+                            id="generic.email"
+                            defaultMessage="Email"
+                          />
+                          {createSortingIcon(
+                            'email',
+                            orderByColumn,
+                            orderByDescendant,
+                            setOrderBy
+                          )}
+                        </th>
+                        <th>
+                          <FormattedMessage
+                            id="app.users.userCreatedAt"
+                            defaultMessage="User created"
+                          />
+                          {createSortingIcon(
+                            'createdAt',
+                            orderByColumn,
+                            orderByDescendant,
+                            setOrderBy
+                          )}
+                        </th>
+                        <td>
+                          <div className="text-muted text-right small">
+                            <FormattedMessage
+                              id="app.paginationContainer.showingRange"
+                              defaultMessage="showing {offset}. - {offsetEnd}. (of {totalCount})"
+                              values={{
+                                offset: offset + 1,
+                                offsetEnd: Math.min(offset + limit, totalCount),
+                                totalCount
+                              }}
+                            />
+                          </div>
+                        </td>
+                      </tr>
+                    }
                     createActions={userId =>
                       <div>
                         <LinkContainer to={EDIT_USER_URI_FACTORY(userId)}>
@@ -110,87 +186,9 @@ class Users extends Component {
                           onDeleted={() => search(instanceId)(query)}
                         />
                       </div>}
-                  />
-
-                /* <Table>
-                    <tbody>
-                      {data.map(
-                        (user, idx) =>
-                          user
-                            ? <tr key={idx}>
-                                <td>
-                                  {user.id}
-                                </td>
-                                <td>
-                                  {user.fullName}
-                                </td>
-                              </tr>
-                            : <tr key={idx}>
-                                <td colSpan={2}>
-                                  <LoadingIcon />
-                                </td>
-                              </tr>
-                      )}
-                    </tbody>
-                    </Table> */
-                }
+                  />}
               </PaginationContainer>
             </Box>
-
-            {false &&
-              instanceId &&
-              <Box
-                title={
-                  <FormattedMessage
-                    id="app.users.listTitle"
-                    defaultMessage="Users"
-                  />
-                }
-                unlimitedHeight
-              >
-                <SearchContainer
-                  type="users"
-                  id="users-page"
-                  search={search(instanceId)}
-                  showAllOnEmptyQuery={true}
-                  renderList={users =>
-                    <UsersList
-                      users={users}
-                      loggedUserId={user.id}
-                      useGravatar={user.privateData.settings.useGravatar}
-                      createActions={userId =>
-                        <div>
-                          <LinkContainer to={EDIT_USER_URI_FACTORY(userId)}>
-                            <Button bsSize="xs" bsStyle="warning">
-                              <SettingsIcon gapRight />
-                              <FormattedMessage
-                                id="generic.settings"
-                                defaultMessage="Settings"
-                              />
-                            </Button>
-                          </LinkContainer>
-                          {isSuperAdmin &&
-                            <Button
-                              bsSize="xs"
-                              bsStyle="primary"
-                              onClick={() => takeOver(userId, DASHBOARD_URI)}
-                            >
-                              <TransferIcon gapRight />
-                              <FormattedMessage
-                                id="app.users.takeOver"
-                                defaultMessage="Login as"
-                              />
-                            </Button>}
-                          <DeleteUserButtonContainer
-                            id={userId}
-                            bsSize="xs"
-                            resourceless={true}
-                            onDeleted={() => search(instanceId)(query)}
-                          />
-                        </div>}
-                    />}
-                />
-              </Box>}
           </div>}
       </Page>
     );

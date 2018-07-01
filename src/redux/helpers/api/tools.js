@@ -19,8 +19,38 @@ const maybeQuestionMark = (endpoint, query) =>
     ? ''
     : endpoint.indexOf('?') === -1 ? '?' : '&';
 
-const generateQuery = query =>
-  !query ? '' : Object.keys(query).map(key => `${key}=${query[key]}`).join('&');
+//const generateQuery = query =>
+//  !query ? '' : Object.keys(query).map(key => `${key}=${query[key]}`).join('&');
+
+const encodeQueryItem = (flatten, name, value) => {
+  if (Array.isArray(value)) {
+    // Encode array so PHP wrapper can decode it as array
+    value.forEach(nestedValue =>
+      encodeQueryItem(flatten, `${name}[]`, nestedValue)
+    );
+  } else if (typeof value === 'object') {
+    // Encode object as associative array
+    Object.keys(value).forEach(nestedName =>
+      encodeQueryItem(
+        flatten,
+        `${name}[${encodeURIComponent(nestedName)}]`,
+        value[nestedName]
+      )
+    );
+  } else {
+    flatten.push(name + '=' + encodeURIComponent(value));
+  }
+};
+
+const generateQuery = query => {
+  const flatten = [];
+  if (query) {
+    Object.keys(query).forEach(name =>
+      encodeQueryItem(flatten, encodeURIComponent(name), query[name])
+    );
+  }
+  return flatten.join('&');
+};
 
 export const assembleEndpoint = (endpoint, query = {}) =>
   endpoint + maybeQuestionMark(endpoint, query) + generateQuery(query);

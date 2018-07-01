@@ -4,8 +4,13 @@ import { Table } from 'react-bootstrap';
 import { injectIntl, FormattedMessage } from 'react-intl';
 import UsersListItem from '../UsersListItem';
 
-const UsersList = ({ users = [], createActions, intl, ...rest }) =>
+const UsersList = ({ heading, users = [], createActions, intl, ...rest }) =>
   <Table hover>
+    {heading &&
+      <thead>
+        {heading}
+      </thead>}
+
     <tbody>
       {users.map((user, i) =>
         <UsersListItem
@@ -29,6 +34,7 @@ const UsersList = ({ users = [], createActions, intl, ...rest }) =>
   </Table>;
 
 UsersList.propTypes = {
+  heading: PropTypes.any,
   users: PropTypes.array,
   createActions: PropTypes.func,
   intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired

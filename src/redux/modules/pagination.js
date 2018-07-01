@@ -1,7 +1,12 @@
 import { handleActions, createAction, Identity } from 'redux-actions';
-import { Map, List, fromJS } from 'immutable';
+import { List, fromJS } from 'immutable';
 import { createApiAction } from '../middleware/apiMiddleware';
 import { didInvalidate } from '../helpers/resourceManager';
+import {
+  getPaginationOrderBy,
+  getPaginationFilters
+} from '../selectors/pagination';
+import { selectedInstanceId } from '../selectors/auth';
 
 export const actionTypes = {
   SET_OFFSET: 'recodex/pagination/SET_OFFSET',
@@ -18,8 +23,8 @@ export const actionTypes = {
 const paginationStructure = {
   data: [], // cache for entity IDs
   totalCount: null, // total number of entities for given combination of filters
-  filters: {}, // current combination of applied filters
   orderBy: null, // ordering column
+  filters: {}, // current combination of applied filters
   pending: null, // null if no operation was started, Date.now() when pending operation was started, or false if operation has concluded
   lastUpdate: null, // last update (needed for automated invalidation)
   didInvalidate: false // just for the compatibility with regular resources
@@ -48,20 +53,45 @@ export const setPaginationOffsetLimit = entities =>
     () => ({ entities })
   );
 
-export const setPaginationFilters = entities =>
-  createAction(actionTypes.SET_FILTERS, Identity, () => ({ entities }));
-
 export const setPaginationOrderBy = entities =>
   createAction(actionTypes.SET_ORDERBY, Identity, () => ({ entities }));
 
-export const fetchPaginated = entities => (offset, limit) =>
-  createApiAction({
-    type: actionTypes.FETCH_PAGINATED,
-    endpoint: `/${entities}`,
-    meta: { entities, offset, limit, started: Date.now() },
-    query: { offset, limit } // TODO add filters and orderBy (selected instance ID must be transparently added to filter !!!)
-    // TODO --- we need to be carefull, current middleware can encode only flat query objects (filters need to be encoded/flatten)
-  });
+export const encodeOrderBy = (column, descending = false) =>
+  descending ? `!${column}` : column;
+
+export const decodeOrderBy = orderBy => {
+  const descending = orderBy && orderBy.startsWith('1');
+  const column = descending ? orderBy.substr(1) : orderBy;
+  return { column, descending };
+};
+
+export const setPaginationFilters = entities =>
+  createAction(actionTypes.SET_FILTERS, Identity, () => ({ entities }));
+
+export const fetchPaginated = entities => (offset, limit, locale) => (
+  dispatch,
+  getState
+) => {
+  const orderBy = getPaginationOrderBy(entities)(getState());
+  const filters = getPaginationFilters(entities)(getState());
+  if (!filters.instanceId) {
+    filters.instanceId = selectedInstanceId(getState());
+  }
+
+  const query = { offset, limit, locale, filters };
+  if (orderBy) {
+    query['orderBy'] = orderBy;
+  }
+
+  return dispatch(
+    createApiAction({
+      type: actionTypes.FETCH_PAGINATED,
+      endpoint: `/${entities}`,
+      meta: { entities, offset, limit, started: Date.now() },
+      query
+    })
+  );
+};
 
 /*
  * Reductors
@@ -99,7 +129,7 @@ export default handleActions(
 
     [actionTypes.SET_ORDERBY]: (state, { payload, meta: { entities } }) =>
       state
-        .mergeIn([entities], paginationStructure) // reset
+        .setIn([entities, 'didInvalidate'], true)
         .setIn([entities, 'orderBy'], payload),
 
     [actionTypes.FETCH_PAGINATED_PENDING]: (

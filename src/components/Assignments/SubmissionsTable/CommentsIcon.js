@@ -2,16 +2,16 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
-import FontAwesomeIcon from '@fortawesome/react-fontawesome';
+import Icon from '../../icons';
 
 const createIcon = commentsStats => {
   if (commentsStats.authoredCount === 0) {
-    return <FontAwesomeIcon icon={['far', 'comment']} />;
+    return <Icon icon={['far', 'comment']} />;
   }
   if (commentsStats.authoredCount === commentsStats.count) {
-    return <FontAwesomeIcon icon={['far', 'comment']} flip="horizontal" />;
+    return <Icon icon={['far', 'comment']} flip="horizontal" />;
   }
-  return <FontAwesomeIcon icon={['far', 'comments']} />;
+  return <Icon icon={['far', 'comments']} />;
 };
 
 const CommentsIcon = ({ id, commentsStats = null }) =>

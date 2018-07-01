@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { FormattedMessage, FormattedNumber } from 'react-intl';
 import { Table, OverlayTrigger, Tooltip } from 'react-bootstrap';
-import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import prettyMs from 'pretty-ms';
 
 import Button from '../../widgets/FlatButton';
@@ -67,10 +66,7 @@ const showTimeResults = (
                   </Tooltip>
                 }
               >
-                <FontAwesomeIcon
-                  icon="microchip"
-                  style={{ marginRight: '10px' }}
-                />
+                <Icon icon="microchip" style={{ marginRight: '10px' }} />
               </OverlayTrigger>
             </td>
             <td className="text-left">
@@ -97,10 +93,7 @@ const showTimeResults = (
                   </Tooltip>
                 }
               >
-                <FontAwesomeIcon
-                  icon={['far', 'clock']}
-                  style={{ marginRight: '10px' }}
-                />
+                <Icon icon={['far', 'clock']} style={{ marginRight: '10px' }} />
               </OverlayTrigger>
             </td>
             <td className="text-left">
@@ -300,7 +293,7 @@ class TestResultsTable extends Component {
                 }
               >
                 <span>
-                  <FontAwesomeIcon icon="check" />/<FontAwesomeIcon icon="times" />
+                  <Icon icon="check" />/<Icon icon="times" />
                 </span>
               </OverlayTrigger>
             </th>
@@ -316,7 +309,7 @@ class TestResultsTable extends Component {
                   </Tooltip>
                 }
               >
-                <FontAwesomeIcon icon="balance-scale" />
+                <Icon icon="balance-scale" />
               </OverlayTrigger>
             </th>
             <th className="text-center">
@@ -367,7 +360,7 @@ class TestResultsTable extends Component {
                   </Tooltip>
                 }
               >
-                <FontAwesomeIcon icon="power-off" />
+                <Icon icon="power-off" />
               </OverlayTrigger>
             </th>
             {isSupervisor &&

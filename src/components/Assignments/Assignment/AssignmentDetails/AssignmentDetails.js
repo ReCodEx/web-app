@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import { Table } from 'react-bootstrap';
 import {
   FormattedDate,
@@ -9,7 +8,7 @@ import {
   FormattedRelative
 } from 'react-intl';
 import classnames from 'classnames';
-import { SuccessIcon, SuccessOrFailureIcon } from '../../../icons';
+import Icon, { SuccessIcon, SuccessOrFailureIcon } from '../../../icons';
 import Box from '../../../widgets/Box';
 import EnvironmentsList from '../../../helpers/EnvironmentsList';
 
@@ -45,9 +44,8 @@ const AssignmentDetails = ({
         >
           <td className="text-center">
             <strong>
-              {!isAfterFirstDeadline &&
-                <FontAwesomeIcon icon="hourglass-start" />}
-              {isAfterFirstDeadline && <FontAwesomeIcon icon="hourglass-end" />}
+              {!isAfterFirstDeadline && <Icon icon="hourglass-start" />}
+              {isAfterFirstDeadline && <Icon icon="hourglass-end" />}
             </strong>
           </td>
           <td>
@@ -72,10 +70,8 @@ const AssignmentDetails = ({
           >
             <td className="text-center">
               <strong>
-                {!isAfterSecondDeadline &&
-                  <FontAwesomeIcon icon="hourglass-half" />}
-                {isAfterSecondDeadline &&
-                  <FontAwesomeIcon icon="hourglass-end" />}
+                {!isAfterSecondDeadline && <Icon icon="hourglass-half" />}
+                {isAfterSecondDeadline && <Icon icon="hourglass-end" />}
               </strong>
             </td>
             <td>
@@ -96,7 +92,7 @@ const AssignmentDetails = ({
           </tr>}
         <tr>
           <td className="text-center">
-            <FontAwesomeIcon icon="cloud-upload-alt" />
+            <Icon icon="cloud-upload-alt" />
           </td>
           <td>
             <FormattedMessage
@@ -114,7 +110,7 @@ const AssignmentDetails = ({
         </tr>
         <tr>
           <td className="text-center">
-            <FontAwesomeIcon icon="ban" />
+            <Icon icon="ban" />
           </td>
           <td>
             <FormattedMessage
@@ -128,7 +124,7 @@ const AssignmentDetails = ({
         </tr>
         <tr>
           <td className="text-center">
-            <FontAwesomeIcon icon="coffee" />
+            <Icon icon="coffee" />
           </td>
           <td>
             <FormattedMessage
@@ -142,7 +138,7 @@ const AssignmentDetails = ({
         </tr>
         <tr>
           <td className="text-center">
-            <FontAwesomeIcon icon="unlock-alt" />
+            <Icon icon="unlock-alt" />
           </td>
           <td>
             <FormattedMessage
@@ -157,7 +153,7 @@ const AssignmentDetails = ({
         {isBonus &&
           <tr>
             <td className="text-center">
-              <FontAwesomeIcon icon="plus-circle" />
+              <Icon icon="plus-circle" />
             </td>
             <td>
               <FormattedMessage
@@ -171,7 +167,7 @@ const AssignmentDetails = ({
           </tr>}
         <tr>
           <td className="text-center">
-            <FontAwesomeIcon icon="percent" />
+            <Icon icon="percent" />
           </td>
           <td>
             <FormattedMessage
@@ -185,7 +181,7 @@ const AssignmentDetails = ({
         </tr>
         <tr>
           <td className="text-center">
-            <FontAwesomeIcon icon="code" />
+            <Icon icon="code" />
           </td>
           <td>
             <FormattedMessage

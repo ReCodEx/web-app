@@ -1,10 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import { Table, Button, ButtonGroup } from 'react-bootstrap';
 import { prettyPrintBytes } from '../../helpers/stringFormatters';
-import { DeleteIcon } from '../../icons';
+import Icon, { DeleteIcon } from '../../icons';
 
 const UploadsTable = ({
   uploadingFiles = [],
@@ -39,7 +38,7 @@ const UploadsTable = ({
       {attachedFiles.map(payload =>
         <tr key={'attached-' + payload.name}>
           <td className="text-center">
-            <FontAwesomeIcon icon="check" className="text-success text-bold" />
+            <Icon icon="check" className="text-success text-bold" />
           </td>
           <td>
             {payload.name}
@@ -62,7 +61,7 @@ const UploadsTable = ({
       {uploadingFiles.map(payload =>
         <tr key={'uploading-' + payload.name}>
           <td className="text-center">
-            <FontAwesomeIcon icon="sync" spin />
+            <Icon icon="sync" spin />
           </td>
           <td>
             {payload.name}
@@ -77,10 +76,7 @@ const UploadsTable = ({
       {failedFiles.map(payload =>
         <tr key={'failed-' + payload.name}>
           <td className="text-center">
-            <FontAwesomeIcon
-              icon="exclamation-triangle"
-              className="text-danger"
-            />
+            <Icon icon="exclamation-triangle" className="text-danger" />
           </td>
           <td>
             {payload.name}
@@ -102,7 +98,7 @@ const UploadsTable = ({
                 bsStyle="default"
                 onClick={() => retryUploadFile(payload)}
               >
-                <FontAwesomeIcon icon="sync" />
+                <Icon icon="sync" />
               </Button>
             </ButtonGroup>
           </td>
@@ -127,7 +123,7 @@ const UploadsTable = ({
                 bsStyle="default"
                 onClick={() => returnFile(payload)}
               >
-                <FontAwesomeIcon icon="sync" />
+                <Icon icon="sync" />
               </Button>
             </ButtonGroup>
           </td>

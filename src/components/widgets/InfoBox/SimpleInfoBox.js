@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import FontAwesomeIcon from '@fortawesome/react-fontawesome';
+import Icon from '../../icons';
 
 const SimpleInfoBox = ({
   title,
@@ -10,7 +10,7 @@ const SimpleInfoBox = ({
 }) =>
   <div className="info-box">
     <span className={'info-box-icon bg-' + color}>
-      <FontAwesomeIcon icon={icon} />
+      <Icon icon={icon} />
     </span>
     <div className="info-box-content">
       <span className="info-box-text">

@@ -3,11 +3,10 @@ import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { Field } from 'redux-form';
 import { ControlLabel, OverlayTrigger, Tooltip } from 'react-bootstrap';
-import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 
 import FlatButton from '../../widgets/FlatButton';
 import TextField from './TextField';
-import { AddIcon, CloseIcon } from '../../icons';
+import Icon, { AddIcon, CloseIcon } from '../../icons';
 
 import styles from './commonStyles.less';
 
@@ -42,7 +41,7 @@ const ExpandingTextField = ({
               >
                 <FlatButton onClick={() => fields.insert(index, '')}>
                   <AddIcon size="xs" />
-                  <FontAwesomeIcon icon="level-up-alt" />
+                  <Icon icon="level-up-alt" />
                 </FlatButton>
               </OverlayTrigger>
             </td>

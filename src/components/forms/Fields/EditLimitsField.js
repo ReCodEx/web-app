@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Field } from 'redux-form';
 import { FormattedMessage } from 'react-intl';
 import { Grid, Row, Col, OverlayTrigger, Tooltip } from 'react-bootstrap';
-import FontAwesomeIcon from '@fortawesome/react-fontawesome';
+import prettyMs from 'pretty-ms';
 
 import FlatButton from '../../widgets/FlatButton';
 import Confirm from '../../forms/Confirm';
@@ -11,7 +11,7 @@ import LimitsValueField from './LimitsValueField';
 
 import { validateLimitsField } from '../../../helpers/exercise/limits';
 import { prettyPrintBytes } from '../../helpers/stringFormatters';
-import prettyMs from 'pretty-ms';
+import Icon from '../../icons';
 
 import styles from './EditLimitsField.less';
 
@@ -94,7 +94,7 @@ const EditLimitsField = ({
                         onClick={cloneVertically('memory')}
                         bsSize="xs"
                       >
-                        <FontAwesomeIcon icon="arrows-alt-v" />
+                        <Icon icon="arrows-alt-v" />
                       </FlatButton>
                     </OverlayTrigger>}
                   {environmentsCount > 1 &&
@@ -120,7 +120,7 @@ const EditLimitsField = ({
                         }
                       >
                         <FlatButton bsSize="xs">
-                          <FontAwesomeIcon icon="arrows-alt-h" />
+                          <Icon icon="arrows-alt-h" />
                         </FlatButton>
                       </OverlayTrigger>
                     </Confirm>}
@@ -148,7 +148,7 @@ const EditLimitsField = ({
                         }
                       >
                         <FlatButton bsSize="xs">
-                          <FontAwesomeIcon icon="arrows-alt" />
+                          <Icon icon="arrows-alt" />
                         </FlatButton>
                       </OverlayTrigger>
                     </Confirm>}
@@ -188,7 +188,7 @@ const EditLimitsField = ({
                       }
                     >
                       <FlatButton onClick={cloneVertically('time')} bsSize="xs">
-                        <FontAwesomeIcon icon="arrows-alt-v" />
+                        <Icon icon="arrows-alt-v" />
                       </FlatButton>
                     </OverlayTrigger>}
                   {environmentsCount > 1 &&
@@ -214,7 +214,7 @@ const EditLimitsField = ({
                         }
                       >
                         <FlatButton bsSize="xs">
-                          <FontAwesomeIcon icon="arrows-alt-h" />
+                          <Icon icon="arrows-alt-h" />
                         </FlatButton>
                       </OverlayTrigger>
                     </Confirm>}
@@ -242,7 +242,7 @@ const EditLimitsField = ({
                         }
                       >
                         <FlatButton bsSize="xs">
-                          <FontAwesomeIcon icon="arrows-alt" />
+                          <Icon icon="arrows-alt" />
                         </FlatButton>
                       </OverlayTrigger>
                     </Confirm>}

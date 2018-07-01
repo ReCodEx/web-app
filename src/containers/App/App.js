@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+
 import {
   loggedInUserIdSelector,
   selectedInstanceId,
@@ -18,13 +19,14 @@ import { logout, refresh, selectInstance } from '../../redux/modules/auth';
 import { getJsData } from '../../redux/helpers/resourceManager';
 
 import fontawesome from '@fortawesome/fontawesome';
+import { library } from '@fortawesome/fontawesome-svg-core';
 import regularIcons from '@fortawesome/fontawesome-free-regular';
 import solidIcons from '@fortawesome/fontawesome-free-solid';
 import brandIcons from '@fortawesome/fontawesome-free-brands';
 
 import { LoadingIcon } from '../../components/icons';
 
-fontawesome.library.add(regularIcons, solidIcons, brandIcons);
+library.add(regularIcons, solidIcons, brandIcons);
 
 class App extends Component {
   static loadAsync = (params, dispatch, { userId }) =>

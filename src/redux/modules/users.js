@@ -11,14 +11,7 @@ import { createApiAction } from '../middleware/apiMiddleware';
 import { additionalActionTypes as groupsActionTypes } from './groups';
 import { actionTypes as sisSupervisedCoursesActionTypes } from './sisSupervisedCourses';
 import { actionTypes as emailVerificationActionTypes } from './emailVerification';
-import {
-  actionTypes as paginationActionTypes,
-  setPaginationOffset,
-  setPaginationLimit,
-  setPaginationFilters,
-  setPaginationOrderBy,
-  fetchPaginated
-} from './pagination';
+import { actionTypes as paginationActionTypes } from './pagination';
 
 import { arrayToObject } from '../../helpers/common';
 
@@ -80,15 +73,6 @@ export const makeLocalLogin = id =>
     method: 'POST',
     meta: { id }
   });
-
-/*
- * Pagination
- */
-export const setUsersPaginationOffset = setPaginationOffset('users');
-export const setUsersPaginationLimit = setPaginationLimit('users');
-export const setUsersPaginationFilters = setPaginationFilters('users');
-export const setUsersPaginationOrderBy = setPaginationOrderBy('users');
-export const fetchUsersPaginated = fetchPaginated('users');
 
 /**
  * Reducer
