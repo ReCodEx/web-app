@@ -28,17 +28,17 @@ import { selectedInstanceId } from '../../redux/selectors/auth';
 const createSortingIcon = (
   colName,
   orderByColumn,
-  orderByDescendant,
+  orderByDescending,
   setOrderBy
 ) =>
   <SortedIcon
     active={orderByColumn === colName}
-    descendant={orderByDescendant}
+    descending={orderByDescending}
     gapLeft
     onClick={() =>
       setOrderBy(
         colName,
-        orderByColumn === colName ? !orderByDescendant : false
+        orderByColumn === colName ? !orderByDescending : false
       )}
   />;
 
@@ -93,7 +93,7 @@ class Users extends Component {
                   limit,
                   totalCount,
                   orderByColumn,
-                  orderByDescendant,
+                  orderByDescending,
                   setOrderBy
                 }) =>
                   <UsersList
@@ -113,7 +113,7 @@ class Users extends Component {
                           {createSortingIcon(
                             'name',
                             orderByColumn,
-                            orderByDescendant,
+                            orderByDescending,
                             setOrderBy
                           )}
                         </th>
@@ -125,7 +125,7 @@ class Users extends Component {
                           {createSortingIcon(
                             'email',
                             orderByColumn,
-                            orderByDescendant,
+                            orderByDescending,
                             setOrderBy
                           )}
                         </th>
@@ -137,7 +137,7 @@ class Users extends Component {
                           {createSortingIcon(
                             'createdAt',
                             orderByColumn,
-                            orderByDescendant,
+                            orderByDescending,
                             setOrderBy
                           )}
                         </th>

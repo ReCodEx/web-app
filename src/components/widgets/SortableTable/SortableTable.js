@@ -4,7 +4,7 @@ import { FormattedMessage } from 'react-intl';
 import { Table } from 'react-bootstrap';
 import { defaultMemoize } from 'reselect';
 import { safeGet } from '../../../helpers/common';
-import Icon, { CloseIcon } from '../../icons';
+import Icon, { CloseIcon, SortedIcon } from '../../icons';
 
 class SortableTable extends Component {
   constructor(props) {
@@ -89,17 +89,10 @@ class SortableTable extends Component {
                   {comparators[key] &&
                     data.length > 1 &&
                     <span>
-                      <Icon
-                        icon={
-                          sortColumn !== key || ascendant
-                            ? 'sort-alpha-down'
-                            : 'sort-alpha-up'
-                        }
+                      <SortedIcon
+                        active={sortColumn === key}
+                        descending={!ascendant}
                         gapLeft
-                        timid={sortColumn !== key}
-                        className={
-                          sortColumn === key ? 'text-success' : 'text-primary'
-                        }
                         onClick={() => this.orderBy(key)}
                       />
 

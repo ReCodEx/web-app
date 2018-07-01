@@ -60,7 +60,7 @@ export const encodeOrderBy = (column, descending = false) =>
   descending ? `!${column}` : column;
 
 export const decodeOrderBy = orderBy => {
-  const descending = orderBy && orderBy.startsWith('1');
+  const descending = orderBy && orderBy.startsWith('!');
   const column = descending ? orderBy.substr(1) : orderBy;
   return { column, descending };
 };

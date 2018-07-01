@@ -34,9 +34,9 @@ export const SearchIcon = props => <Icon {...props} icon="search" />;
 export const SendIcon = props =>
   <Icon {...props} icon={['far', 'paper-plane']} />;
 export const SettingsIcon = props => <Icon {...props} icon="cog" />;
-export const SortedIcon = ({ active = true, descendant = false, ...props }) =>
+export const SortedIcon = ({ active = true, descending = false, ...props }) =>
   <Icon
-    icon={!active || !descendant ? 'sort-alpha-down' : 'sort-alpha-up'}
+    icon={!active || !descending ? 'sort-alpha-down' : 'sort-alpha-up'}
     timid={!active}
     className={active ? 'text-success' : 'text-primary'}
     {...props}
@@ -66,7 +66,7 @@ GroupIcon.propTypes = {
 
 SortedIcon.propTypes = {
   active: PropTypes.bool,
-  descendant: PropTypes.bool
+  descending: PropTypes.bool
 };
 
 SuccessOrFailureIcon.propTypes = {
