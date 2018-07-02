@@ -14,7 +14,6 @@ import GroupInfoTable, {
   FailedGroupDetail
 } from '../../components/Groups/GroupDetail';
 import HierarchyLine from '../../components/Groups/HierarchyLine';
-import { LocalizedGroupName } from '../../components/helpers/LocalizedNames';
 import SupervisorsList from '../../components/Users/SupervisorsList';
 import { getLocalizedName } from '../../helpers/getLocalizedData';
 import { isReady } from '../../redux/helpers/resourceManager/index';
@@ -124,7 +123,7 @@ class GroupInfo extends Component {
     return (
       <Page
         resource={group}
-        title={group => <LocalizedGroupName entity={group} />}
+        title={group => getLocalizedName(group, locale)}
         description={
           <FormattedMessage
             id="app.group.description"

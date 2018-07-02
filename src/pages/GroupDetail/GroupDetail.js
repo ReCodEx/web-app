@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 import { LinkContainer } from 'react-router-bootstrap';
 import Button from '../../components/widgets/FlatButton';
-import { FormattedMessage, injectIntl } from 'react-intl';
+import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
 import { Row, Col } from 'react-bootstrap';
 
 import Page from '../../components/layout/Page';
@@ -16,7 +16,6 @@ import {
 } from '../../components/Groups/GroupDetail';
 import HierarchyLine from '../../components/Groups/HierarchyLine';
 import { AddIcon, EditIcon } from '../../components/icons';
-import { LocalizedGroupName } from '../../components/helpers/LocalizedNames';
 import AssignmentsTable from '../../components/Assignments/Assignment/AssignmentsTable';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import AddStudent from '../../components/Groups/AddStudent';
@@ -185,13 +184,14 @@ class GroupDetail extends Component {
         EXERCISE_EDIT_URI_FACTORY,
         EXERCISE_EDIT_LIMITS_URI_FACTORY,
         EXERCISE_EDIT_SIMPLE_CONFIG_URI_FACTORY
-      }
+      },
+      intl: { locale }
     } = this.props;
 
     return (
       <Page
         resource={group}
-        title={group => <LocalizedGroupName entity={group} />}
+        title={group => getLocalizedName(group, locale)}
         description={
           <FormattedMessage
             id="app.group.description"
@@ -451,7 +451,7 @@ GroupDetail.propTypes = {
   createGroupExercise: PropTypes.func.isRequired,
   push: PropTypes.func.isRequired,
   links: PropTypes.object,
-  intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired
+  intl: intlShape
 };
 
 const mapStateToProps = (state, { params: { groupId } }) => {

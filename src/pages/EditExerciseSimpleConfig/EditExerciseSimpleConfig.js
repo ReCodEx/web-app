@@ -9,7 +9,6 @@ import { defaultMemoize } from 'reselect';
 import Page from '../../components/layout/Page';
 import Box from '../../components/widgets/Box';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
-import { LocalizedExerciseName } from '../../components/helpers/LocalizedNames';
 import SupplementaryFilesTableContainer from '../../containers/SupplementaryFilesTableContainer';
 import EditTestsForm from '../../components/forms/EditTestsForm';
 import EditExerciseSimpleConfigForm from '../../components/forms/EditExerciseSimpleConfigForm';
@@ -158,7 +157,7 @@ class EditExerciseSimpleConfig extends Component {
     return (
       <Page
         resource={[exercise, exerciseTests]}
-        title={exercise => <LocalizedExerciseName entity={exercise} />}
+        title={exercise => getLocalizedName(exercise, locale)}
         description={
           <FormattedMessage
             id="app.editExerciseConfig.description"

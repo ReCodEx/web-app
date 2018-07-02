@@ -134,8 +134,8 @@ class Dashboard extends Component {
         resource={user}
         title={
           <FormattedMessage
-            id="app.user.title"
-            defaultMessage="User's profile"
+            id="app.dashboard.title"
+            defaultMessage="Dashboard"
           />
         }
         description={

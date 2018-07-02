@@ -9,7 +9,6 @@ import { formValueSelector } from 'redux-form';
 
 import Page from '../../components/layout/Page';
 import HardwareGroupMetadata from '../../components/Exercises/HardwareGroupMetadata';
-import { LocalizedExerciseName } from '../../components/helpers/LocalizedNames';
 import EditHardwareGroupForm from '../../components/forms/EditHardwareGroupForm';
 import EditLimitsForm from '../../components/forms/EditLimitsForm/EditLimitsForm';
 import ExerciseButtons from '../../components/Exercises/ExerciseButtons';
@@ -219,7 +218,7 @@ class EditExerciseLimits extends Component {
     return (
       <Page
         resource={[exercise, exerciseTests, ...limits.toArray()]}
-        title={exercise => <LocalizedExerciseName entity={exercise} />}
+        title={exercise => getLocalizedName(exercise, locale)}
         description={
           <FormattedMessage
             id="app.editExerciseLimits.description"

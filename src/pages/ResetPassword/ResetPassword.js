@@ -26,7 +26,7 @@ const ResetPassword = ({
   hasFailed,
   hasSucceeded,
   links: { HOME_URI }
-}) => (
+}) =>
   <PageContent
     title={
       <FormattedMessage
@@ -62,8 +62,7 @@ const ResetPassword = ({
         />
       </Col>
     </Row>
-  </PageContent>
-);
+  </PageContent>;
 
 ResetPassword.propTypes = {
   resetPassword: PropTypes.func.isRequired,

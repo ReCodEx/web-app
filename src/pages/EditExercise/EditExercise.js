@@ -12,7 +12,6 @@ import Box from '../../components/widgets/Box';
 import EditExerciseForm from '../../components/forms/EditExerciseForm';
 import AttachmentFilesTableContainer from '../../containers/AttachmentFilesTableContainer';
 import DeleteExerciseButtonContainer from '../../containers/DeleteExerciseButtonContainer';
-import { LocalizedExerciseName } from '../../components/helpers/LocalizedNames';
 import ExerciseButtons from '../../components/Exercises/ExerciseButtons';
 import { NeedFixingIcon } from '../../components/icons';
 
@@ -60,8 +59,7 @@ class EditExercise extends Component {
     return (
       <Page
         resource={exercise}
-        title={exercise =>
-          exercise ? <LocalizedExerciseName entity={exercise} /> : ''}
+        title={exercise => getLocalizedName(exercise, locale)}
         description={
           <FormattedMessage
             id="app.editExercise.description"

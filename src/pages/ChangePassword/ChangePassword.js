@@ -118,7 +118,7 @@ class ChangePassword extends Component {
           },
           {
             text: <FormattedMessage id="app.changePassword.title" />,
-            iconName: 'shield'
+            iconName: 'shield-alt'
           }
         ]}
       >
@@ -132,8 +132,7 @@ class ChangePassword extends Component {
                     id="app.changePassword.tokenExpired"
                     defaultMessage="You cannot reset your now - your token has probably expired or the URL is broken."
                   />
-                </strong>
-                {' '}
+                </strong>{' '}
                 <FormattedMessage
                   id="app.changePassword.requestAnotherLink"
                   defaultMessage="Please request (another) link with an unique token."
@@ -151,8 +150,7 @@ class ChangePassword extends Component {
                   <FormattedMessage
                     id="app.changePassword.tokenExpiresIn"
                     defaultMessage="Token expires: "
-                  />
-                  {' '}
+                  />{' '}
                   <FormattedRelative value={decodedToken.exp * 1000} />
                 </p>
               </div>}
