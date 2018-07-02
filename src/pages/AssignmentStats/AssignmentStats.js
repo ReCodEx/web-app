@@ -25,13 +25,13 @@ import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironment
 
 import Page from '../../components/layout/Page';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
-import { LocalizedExerciseName } from '../../components/helpers/LocalizedNames';
 import { ResubmitAllSolutionsContainer } from '../../containers/ResubmitSolutionContainer';
 import HierarchyLineContainer from '../../containers/HierarchyLineContainer';
 import { EditIcon, DownloadIcon } from '../../components/icons';
 
 import { safeGet } from '../../helpers/common';
 import withLinks from '../../helpers/withLinks';
+import { getLocalizedName } from '../../helpers/getLocalizedData';
 
 class AssignmentStats extends Component {
   static loadAsync = ({ assignmentId }, dispatch) =>
@@ -86,11 +86,7 @@ class AssignmentStats extends Component {
     return (
       <Page
         resource={assignment}
-        title={
-          <ResourceRenderer resource={assignment}>
-            {assignment => <LocalizedExerciseName entity={assignment} />}
-          </ResourceRenderer>
-        }
+        title={assignment => getLocalizedName(assignment, locale)}
         description={
           <FormattedMessage
             id="app.assignmentStats.title"

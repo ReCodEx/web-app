@@ -21,7 +21,6 @@ import Page from '../../components/layout/Page';
 import ExerciseDetail from '../../components/Exercises/ExerciseDetail';
 import LocalizedTexts from '../../components/helpers/LocalizedTexts';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
-import { LocalizedExerciseName } from '../../components/helpers/LocalizedNames';
 import ReferenceSolutionsList from '../../components/Exercises/ReferenceSolutionsList';
 import SubmitSolutionContainer from '../../containers/SubmitSolutionContainer';
 import Box from '../../components/widgets/Box';
@@ -90,6 +89,7 @@ import {
 } from '../../redux/selectors/groups';
 
 import withLinks from '../../helpers/withLinks';
+import { getLocalizedName } from '../../helpers/getLocalizedData';
 
 const messages = defineMessages({
   groupsBox: {
@@ -250,22 +250,19 @@ class Exercise extends Component {
       forkExercise,
       isSuperAdmin,
       firstDeadline,
-      allowSecondDeadline
-    } = this.props;
-
-    const { forkId } = this.state;
-
-    const {
+      allowSecondDeadline,
       links: {
         EXERCISES_URI,
         EXERCISE_REFERENCE_SOLUTION_URI_FACTORY,
         PIPELINE_EDIT_URI_FACTORY
       }
-    } = this.context;
+    } = this.props;
+
+    const { forkId } = this.state;
 
     return (
       <Page
-        title={exercise => <LocalizedExerciseName entity={exercise} />}
+        title={exercise => getLocalizedName(exercise, locale)}
         resource={exercise}
         description={
           <FormattedMessage
