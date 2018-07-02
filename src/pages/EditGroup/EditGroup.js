@@ -209,46 +209,44 @@ EditGroup.propTypes = {
 
 const editGroupFormSelector = formValueSelector('editGroup');
 
-export default injectIntl(
-  withLinks(
-    connect(
-      (state, { params: { groupId } }) => {
-        const selectGroup = groupSelector(groupId);
-        const userId = loggedInUserIdSelector(state);
-        return {
-          group: selectGroup(state),
-          userId,
-          isStudentOf: groupId => isSupervisorOf(userId, groupId)(state),
-          hasThreshold: editGroupFormSelector(state, 'hasThreshold'),
-          localizedTexts: editGroupFormSelector(state, 'localizedTexts'),
-          isSuperAdmin: isLoggedAsSuperAdmin(state)
-        };
-      },
-      (dispatch, { params: { groupId } }) => ({
-        push: url => dispatch(push(url)),
-        reset: () => dispatch(reset('editGroup')),
-        loadAsync: () => dispatch(fetchGroupIfNeeded(groupId)),
-        editGroup: ({
+export default withLinks(
+  connect(
+    (state, { params: { groupId } }) => {
+      const selectGroup = groupSelector(groupId);
+      const userId = loggedInUserIdSelector(state);
+      return {
+        group: selectGroup(state),
+        userId,
+        isStudentOf: groupId => isSupervisorOf(userId, groupId)(state),
+        hasThreshold: editGroupFormSelector(state, 'hasThreshold'),
+        localizedTexts: editGroupFormSelector(state, 'localizedTexts'),
+        isSuperAdmin: isLoggedAsSuperAdmin(state)
+      };
+    },
+    (dispatch, { params: { groupId } }) => ({
+      push: url => dispatch(push(url)),
+      reset: () => dispatch(reset('editGroup')),
+      loadAsync: () => dispatch(fetchGroupIfNeeded(groupId)),
+      editGroup: ({
+        localizedTexts,
+        externalId,
+        isPublic,
+        publicStats,
+        threshold,
+        hasThreshold
+      }) => {
+        let transformedData = {
           localizedTexts,
           externalId,
           isPublic,
           publicStats,
-          threshold,
           hasThreshold
-        }) => {
-          let transformedData = {
-            localizedTexts,
-            externalId,
-            isPublic,
-            publicStats,
-            hasThreshold
-          };
-          if (hasThreshold) {
-            transformedData.threshold = Number(threshold);
-          }
-          return dispatch(editGroup(groupId, transformedData));
+        };
+        if (hasThreshold) {
+          transformedData.threshold = Number(threshold);
         }
-      })
-    )(EditGroup)
-  )
+        return dispatch(editGroup(groupId, transformedData));
+      }
+    })
+  )(injectIntl(EditGroup))
 );

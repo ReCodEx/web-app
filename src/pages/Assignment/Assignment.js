@@ -295,34 +295,32 @@ Assignment.propTypes = {
   intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired
 };
 
-export default injectIntl(
-  withLinks(
-    connect(
-      (state, { params: { assignmentId, userId } }) => {
-        const loggedInUserId = loggedInUserIdSelector(state);
-        userId = userId || loggedInUserId;
-        return {
-          assignment: getAssignment(state)(assignmentId),
-          submitting: isSubmitting(state),
-          runtimeEnvironments: assignmentEnvironmentsSelector(state)(
-            assignmentId
-          ),
-          userId,
-          loggedInUserId,
-          isStudentOf: groupId => isStudentOf(loggedInUserId, groupId)(state),
-          isSupervisorOf: groupId =>
-            isSupervisorOf(loggedInUserId, groupId)(state),
-          isAdminOf: groupId => isAdminOf(loggedInUserId, groupId)(state),
-          canSubmit: canSubmitSolution(assignmentId)(state),
-          submissions: getUserSubmissions(userId, assignmentId)(state)
-        };
-      },
-      (dispatch, { params: { assignmentId, userId } }) => ({
-        init: userId => () => dispatch(init(userId, assignmentId)),
-        loadAsync: userId =>
-          Assignment.loadAsync({ assignmentId }, dispatch, { userId }),
-        exerciseSync: () => dispatch(syncWithExercise(assignmentId))
-      })
-    )(Assignment)
-  )
+export default withLinks(
+  connect(
+    (state, { params: { assignmentId, userId } }) => {
+      const loggedInUserId = loggedInUserIdSelector(state);
+      userId = userId || loggedInUserId;
+      return {
+        assignment: getAssignment(state)(assignmentId),
+        submitting: isSubmitting(state),
+        runtimeEnvironments: assignmentEnvironmentsSelector(state)(
+          assignmentId
+        ),
+        userId,
+        loggedInUserId,
+        isStudentOf: groupId => isStudentOf(loggedInUserId, groupId)(state),
+        isSupervisorOf: groupId =>
+          isSupervisorOf(loggedInUserId, groupId)(state),
+        isAdminOf: groupId => isAdminOf(loggedInUserId, groupId)(state),
+        canSubmit: canSubmitSolution(assignmentId)(state),
+        submissions: getUserSubmissions(userId, assignmentId)(state)
+      };
+    },
+    (dispatch, { params: { assignmentId, userId } }) => ({
+      init: userId => () => dispatch(init(userId, assignmentId)),
+      loadAsync: userId =>
+        Assignment.loadAsync({ assignmentId }, dispatch, { userId }),
+      exerciseSync: () => dispatch(syncWithExercise(assignmentId))
+    })
+  )(injectIntl(Assignment))
 );

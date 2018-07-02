@@ -191,21 +191,19 @@ Submission.propTypes = {
   intl: intlShape
 };
 
-export default injectIntl(
-  connect(
-    (state, { params: { submissionId, assignmentId } }) => ({
-      submission: getSubmission(submissionId)(state),
-      assignment: getAssignment(state)(assignmentId),
-      isSupervisorOrMore: groupId =>
-        isSupervisorOf(loggedInUserIdSelector(state), groupId)(state) ||
-        isAdminOf(loggedInUserIdSelector(state), groupId)(state) ||
-        isLoggedAsSuperAdmin(state),
-      evaluations: evaluationsForSubmissionSelector(submissionId)(state),
-      runtimeEnvironments: assignmentEnvironmentsSelector(state)(assignmentId),
-      fetchStatus: fetchManyStatus(submissionId)(state)
-    }),
-    (dispatch, { params }) => ({
-      loadAsync: () => Submission.loadAsync(params, dispatch)
-    })
-  )(Submission)
-);
+export default connect(
+  (state, { params: { submissionId, assignmentId } }) => ({
+    submission: getSubmission(submissionId)(state),
+    assignment: getAssignment(state)(assignmentId),
+    isSupervisorOrMore: groupId =>
+      isSupervisorOf(loggedInUserIdSelector(state), groupId)(state) ||
+      isAdminOf(loggedInUserIdSelector(state), groupId)(state) ||
+      isLoggedAsSuperAdmin(state),
+    evaluations: evaluationsForSubmissionSelector(submissionId)(state),
+    runtimeEnvironments: assignmentEnvironmentsSelector(state)(assignmentId),
+    fetchStatus: fetchManyStatus(submissionId)(state)
+  }),
+  (dispatch, { params }) => ({
+    loadAsync: () => Submission.loadAsync(params, dispatch)
+  })
+)(injectIntl(Submission));

@@ -214,31 +214,29 @@ EditExerciseConfig.propTypes = {
   intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired
 };
 
-export default injectIntl(
-  withLinks(
-    connect(
-      (state, { params: { exerciseId } }) => {
-        return {
-          exercise: getExercise(exerciseId)(state),
-          userId: loggedInUserIdSelector(state),
-          environmentFormValues: getFormValues('editEnvironmentConfig')(state),
-          runtimeEnvironments: runtimeEnvironmentsSelector(state),
-          exerciseConfig: exerciseConfigSelector(exerciseId)(state),
-          exerciseScoreConfig: exerciseScoreConfigSelector(exerciseId)(state),
-          exerciseEnvironmentConfig: exerciseEnvironmentConfigSelector(
-            exerciseId
-          )(state),
-          pipelines: pipelinesSelector(state),
-          superadmin: isLoggedAsSuperAdmin(state)
-        };
-      },
-      (dispatch, { params: { exerciseId } }) => ({
-        loadAsync: () => EditExerciseConfig.loadAsync({ exerciseId }, dispatch),
-        editEnvironmentConfigs: data =>
-          dispatch(setExerciseEnvironmentConfig(exerciseId, data)),
-        setConfig: data => dispatch(setExerciseConfig(exerciseId, data)),
-        editScoreConfig: data => dispatch(setScoreConfig(exerciseId, data))
-      })
-    )(EditExerciseConfig)
-  )
+export default withLinks(
+  connect(
+    (state, { params: { exerciseId } }) => {
+      return {
+        exercise: getExercise(exerciseId)(state),
+        userId: loggedInUserIdSelector(state),
+        environmentFormValues: getFormValues('editEnvironmentConfig')(state),
+        runtimeEnvironments: runtimeEnvironmentsSelector(state),
+        exerciseConfig: exerciseConfigSelector(exerciseId)(state),
+        exerciseScoreConfig: exerciseScoreConfigSelector(exerciseId)(state),
+        exerciseEnvironmentConfig: exerciseEnvironmentConfigSelector(
+          exerciseId
+        )(state),
+        pipelines: pipelinesSelector(state),
+        superadmin: isLoggedAsSuperAdmin(state)
+      };
+    },
+    (dispatch, { params: { exerciseId } }) => ({
+      loadAsync: () => EditExerciseConfig.loadAsync({ exerciseId }, dispatch),
+      editEnvironmentConfigs: data =>
+        dispatch(setExerciseEnvironmentConfig(exerciseId, data)),
+      setConfig: data => dispatch(setExerciseConfig(exerciseId, data)),
+      editScoreConfig: data => dispatch(setScoreConfig(exerciseId, data))
+    })
+  )(injectIntl(EditExerciseConfig))
 );
