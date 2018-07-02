@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
 
 import Page from '../../components/layout/Page';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
-import { LocalizedExerciseName } from '../../components/helpers/LocalizedNames';
 import SubmissionDetail, {
   FailedSubmissionDetail
 } from '../../components/Submissions/SubmissionDetail';
@@ -35,6 +34,7 @@ import {
   evaluationsForSubmissionSelector,
   fetchManyStatus
 } from '../../redux/selectors/submissionEvaluations';
+import { getLocalizedName } from '../../helpers/getLocalizedData';
 
 class Submission extends Component {
   static loadAsync = ({ submissionId, assignmentId }, dispatch) =>
@@ -65,13 +65,14 @@ class Submission extends Component {
       isSupervisorOrMore,
       evaluations,
       runtimeEnvironments,
-      fetchStatus
+      fetchStatus,
+      intl: { locale }
     } = this.props;
 
     return (
       <Page
         resource={assignment}
-        title={assignment => <LocalizedExerciseName entity={assignment} />}
+        title={assignment => getLocalizedName(assignment, locale)}
         description={
           <FormattedMessage
             id="app.submission.evaluation.title"
@@ -186,22 +187,25 @@ Submission.propTypes = {
   isSupervisorOrMore: PropTypes.func.isRequired,
   evaluations: PropTypes.object,
   runtimeEnvironments: PropTypes.array,
-  fetchStatus: PropTypes.string
+  fetchStatus: PropTypes.string,
+  intl: intlShape
 };
 
-export default connect(
-  (state, { params: { submissionId, assignmentId } }) => ({
-    submission: getSubmission(submissionId)(state),
-    assignment: getAssignment(state)(assignmentId),
-    isSupervisorOrMore: groupId =>
-      isSupervisorOf(loggedInUserIdSelector(state), groupId)(state) ||
-      isAdminOf(loggedInUserIdSelector(state), groupId)(state) ||
-      isLoggedAsSuperAdmin(state),
-    evaluations: evaluationsForSubmissionSelector(submissionId)(state),
-    runtimeEnvironments: assignmentEnvironmentsSelector(state)(assignmentId),
-    fetchStatus: fetchManyStatus(submissionId)(state)
-  }),
-  (dispatch, { params }) => ({
-    loadAsync: () => Submission.loadAsync(params, dispatch)
-  })
-)(Submission);
+export default injectIntl(
+  connect(
+    (state, { params: { submissionId, assignmentId } }) => ({
+      submission: getSubmission(submissionId)(state),
+      assignment: getAssignment(state)(assignmentId),
+      isSupervisorOrMore: groupId =>
+        isSupervisorOf(loggedInUserIdSelector(state), groupId)(state) ||
+        isAdminOf(loggedInUserIdSelector(state), groupId)(state) ||
+        isLoggedAsSuperAdmin(state),
+      evaluations: evaluationsForSubmissionSelector(submissionId)(state),
+      runtimeEnvironments: assignmentEnvironmentsSelector(state)(assignmentId),
+      fetchStatus: fetchManyStatus(submissionId)(state)
+    }),
+    (dispatch, { params }) => ({
+      loadAsync: () => Submission.loadAsync(params, dispatch)
+    })
+  )(Submission)
+);

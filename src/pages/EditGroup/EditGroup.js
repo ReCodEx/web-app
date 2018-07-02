@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
 import { HelpBlock, Row, Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
@@ -13,7 +13,6 @@ import EditGroupForm from '../../components/forms/EditGroupForm';
 import OrganizationalGroupButtonContainer from '../../containers/OrganizationalGroupButtonContainer';
 import DeleteGroupButtonContainer from '../../containers/DeleteGroupButtonContainer';
 import Box from '../../components/widgets/Box';
-import { LocalizedGroupName } from '../../components/helpers/LocalizedNames';
 import Icon from '../../components/icons';
 
 import { fetchGroupIfNeeded, editGroup } from '../../redux/modules/groups';
@@ -23,7 +22,10 @@ import {
   isSupervisorOf,
   isLoggedAsSuperAdmin
 } from '../../redux/selectors/users';
-import { getLocalizedTextsLocales } from '../../helpers/getLocalizedData';
+import {
+  getLocalizedTextsLocales,
+  getLocalizedName
+} from '../../helpers/getLocalizedData';
 
 import withLinks from '../../helpers/withLinks';
 
@@ -66,13 +68,14 @@ class EditGroup extends Component {
       editGroup,
       hasThreshold,
       localizedTexts,
-      push
+      push,
+      intl: { locale }
     } = this.props;
 
     return (
       <Page
         resource={group}
-        title={group => <LocalizedGroupName entity={group} />}
+        title={group => getLocalizedName(group, locale)}
         description={
           <FormattedMessage
             id="app.editGroup.description"
@@ -200,49 +203,52 @@ EditGroup.propTypes = {
   push: PropTypes.func.isRequired,
   hasThreshold: PropTypes.bool,
   localizedTexts: PropTypes.array,
-  isSuperAdmin: PropTypes.bool
+  isSuperAdmin: PropTypes.bool,
+  intl: intlShape
 };
 
 const editGroupFormSelector = formValueSelector('editGroup');
 
-export default withLinks(
-  connect(
-    (state, { params: { groupId } }) => {
-      const selectGroup = groupSelector(groupId);
-      const userId = loggedInUserIdSelector(state);
-      return {
-        group: selectGroup(state),
-        userId,
-        isStudentOf: groupId => isSupervisorOf(userId, groupId)(state),
-        hasThreshold: editGroupFormSelector(state, 'hasThreshold'),
-        localizedTexts: editGroupFormSelector(state, 'localizedTexts'),
-        isSuperAdmin: isLoggedAsSuperAdmin(state)
-      };
-    },
-    (dispatch, { params: { groupId } }) => ({
-      push: url => dispatch(push(url)),
-      reset: () => dispatch(reset('editGroup')),
-      loadAsync: () => dispatch(fetchGroupIfNeeded(groupId)),
-      editGroup: ({
-        localizedTexts,
-        externalId,
-        isPublic,
-        publicStats,
-        threshold,
-        hasThreshold
-      }) => {
-        let transformedData = {
+export default injectIntl(
+  withLinks(
+    connect(
+      (state, { params: { groupId } }) => {
+        const selectGroup = groupSelector(groupId);
+        const userId = loggedInUserIdSelector(state);
+        return {
+          group: selectGroup(state),
+          userId,
+          isStudentOf: groupId => isSupervisorOf(userId, groupId)(state),
+          hasThreshold: editGroupFormSelector(state, 'hasThreshold'),
+          localizedTexts: editGroupFormSelector(state, 'localizedTexts'),
+          isSuperAdmin: isLoggedAsSuperAdmin(state)
+        };
+      },
+      (dispatch, { params: { groupId } }) => ({
+        push: url => dispatch(push(url)),
+        reset: () => dispatch(reset('editGroup')),
+        loadAsync: () => dispatch(fetchGroupIfNeeded(groupId)),
+        editGroup: ({
           localizedTexts,
           externalId,
           isPublic,
           publicStats,
+          threshold,
           hasThreshold
-        };
-        if (hasThreshold) {
-          transformedData.threshold = Number(threshold);
+        }) => {
+          let transformedData = {
+            localizedTexts,
+            externalId,
+            isPublic,
+            publicStats,
+            hasThreshold
+          };
+          if (hasThreshold) {
+            transformedData.threshold = Number(threshold);
+          }
+          return dispatch(editGroup(groupId, transformedData));
         }
-        return dispatch(editGroup(groupId, transformedData));
-      }
-    })
-  )(EditGroup)
+      })
+    )(EditGroup)
+  )
 );
