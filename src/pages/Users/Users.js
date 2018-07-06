@@ -7,7 +7,12 @@ import { push } from 'react-router-redux';
 import { LinkContainer } from 'react-router-bootstrap';
 import { defaultMemoize } from 'reselect';
 
-import { SettingsIcon, SortedIcon, TransferIcon } from '../../components/icons';
+import {
+  SettingsIcon,
+  SortedIcon,
+  TransferIcon,
+  LoadingIcon
+} from '../../components/icons';
 import Button from '../../components/widgets/FlatButton';
 import DeleteUserButtonContainer from '../../containers/DeleteUserButtonContainer';
 import Page from '../../components/layout/Page';
@@ -34,16 +39,18 @@ const createSortingIcon = (
   orderByDescending,
   setOrderBy
 ) =>
-  <SortedIcon
-    active={orderByColumn === colName}
-    descending={orderByDescending}
-    gapLeft
-    onClick={() =>
-      setOrderBy(
-        colName,
-        orderByColumn === colName ? !orderByDescending : false
-      )}
-  />;
+  setOrderBy
+    ? <SortedIcon
+        active={orderByColumn === colName}
+        descending={orderByDescending}
+        gapLeft
+        onClick={() =>
+          setOrderBy(
+            colName,
+            orderByColumn === colName ? !orderByDescending : false
+          )}
+      />
+    : <LoadingIcon gapLeft />;
 
 const filterInitialValues = defaultMemoize(({ search = '', roles = [] }) => {
   const initials = { search, roles: {} };
@@ -68,7 +75,7 @@ const transformAndSetFilterData = defaultMemoize(
 class Users extends Component {
   filtersCreator = (filters, setFilters) =>
     <FilterUsersListForm
-      onSubmit={transformAndSetFilterData(setFilters)}
+      onSubmit={setFilters ? transformAndSetFilterData(setFilters) : null}
       initialValues={filterInitialValues(filters)}
     />;
 

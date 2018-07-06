@@ -132,7 +132,7 @@ class PaginationContainer extends Component {
       <div>
         {filtersCreator &&
           <div>
-            {filtersCreator(filters, this.setFilters)}
+            {filtersCreator(filters, isPending ? null : this.setFilters)}
           </div>}
         {totalCount !== null
           ? <div>
@@ -149,46 +149,48 @@ class PaginationContainer extends Component {
                   totalCount,
                   orderByColumn,
                   orderByDescending,
-                  setOrderBy: this.setOrderBy,
-                  reload: this.reload
+                  setOrderBy: isPending ? null : this.setOrderBy,
+                  reload: isPending ? null : this.reload
                 })}
               </div>
 
-              <Grid fluid>
-                <Row>
-                  <Col md={3}>
-                    {limits &&
-                      limits.length > 0 &&
-                      totalCount > limits[0] &&
-                      <ButtonGroup bsSize="small">
-                        {limits
-                          .map(
-                            (l, idx) =>
-                              idx < 1 || totalCount > limits[idx - 1]
-                                ? this.createLimitButton(l)
-                                : null
-                          )
-                          .filter(identity)}
-                      </ButtonGroup>}
-                  </Col>
-                  {totalCount > limit &&
-                    <Col md={9}>
-                      <div className="text-right">
-                        <Pagination
-                          prev
-                          next
-                          maxButtons={10}
-                          boundaryLinks
-                          items={Math.ceil(totalCount / limit)}
-                          activePage={Math.floor(offset / limit) + 1}
-                          bsSize="small"
-                          className={styles.pagination}
-                          onSelect={this.handlePagination}
-                        />
-                      </div>
-                    </Col>}
-                </Row>
-              </Grid>
+              {((limits && limits.length > 0 && totalCount > limits[0]) ||
+                totalCount > limit) &&
+                <Grid fluid>
+                  <Row>
+                    <Col md={3}>
+                      {limits &&
+                        limits.length > 0 &&
+                        totalCount > limits[0] &&
+                        <ButtonGroup bsSize="small">
+                          {limits
+                            .map(
+                              (l, idx) =>
+                                idx < 1 || totalCount > limits[idx - 1]
+                                  ? this.createLimitButton(l)
+                                  : null
+                            )
+                            .filter(identity)}
+                        </ButtonGroup>}
+                    </Col>
+                    {totalCount > limit &&
+                      <Col md={9}>
+                        <div className="text-right">
+                          <Pagination
+                            prev
+                            next
+                            maxButtons={10}
+                            boundaryLinks
+                            items={Math.ceil(totalCount / limit)}
+                            activePage={Math.floor(offset / limit) + 1}
+                            bsSize="small"
+                            className={styles.pagination}
+                            onSelect={this.handlePagination}
+                          />
+                        </div>
+                      </Col>}
+                  </Row>
+                </Grid>}
             </div>
           : <div className="text-center lead">
               <LoadingIcon gapRight />
