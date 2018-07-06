@@ -68,10 +68,12 @@ export const decodeOrderBy = orderBy => {
 export const setPaginationFilters = entities =>
   createAction(actionTypes.SET_FILTERS, Identity, () => ({ entities }));
 
-export const fetchPaginated = entities => (offset, limit, locale) => (
-  dispatch,
-  getState
-) => {
+export const fetchPaginated = entities => (
+  offset,
+  limit,
+  locale,
+  forceInvalidate = false
+) => (dispatch, getState) => {
   const orderBy = getPaginationOrderBy(entities)(getState());
   const filters = getPaginationFilters(entities)(getState());
   if (!filters.instanceId) {
@@ -80,14 +82,14 @@ export const fetchPaginated = entities => (offset, limit, locale) => (
 
   const query = { offset, limit, locale, filters };
   if (orderBy) {
-    query['orderBy'] = orderBy;
+    query.orderBy = orderBy;
   }
 
   return dispatch(
     createApiAction({
       type: actionTypes.FETCH_PAGINATED,
       endpoint: `/${entities}`,
-      meta: { entities, offset, limit, started: Date.now() },
+      meta: { entities, offset, limit, started: Date.now(), forceInvalidate },
       query
     })
   );
@@ -123,7 +125,7 @@ export default handleActions(
 
     [actionTypes.SET_FILTERS]: (state, { payload, meta: { entities } }) =>
       state
-        .mergeIn([entities], paginationStructure) // reset
+        .setIn([entities, 'didInvalidate'], true)
         .setIn([entities, 'offset'], 0) // modification of filters require
         .setIn([entities, 'filters'], fromJS(payload)),
 
@@ -141,7 +143,7 @@ export default handleActions(
       state,
       {
         payload: { items, totalCount, orderBy, filters, offset },
-        meta: { entities, started }
+        meta: { entities, started, forceInvalidate }
       }
     ) => {
       if (state.getIn([entities, 'pending']) !== started) {
@@ -150,8 +152,8 @@ export default handleActions(
 
       // If important change occured or data are invalid, reset data cache ...
       totalCount = Number(totalCount);
-      // TODO --- also test if filters or orderBy has changed ...
       if (
+        forceInvalidate ||
         state.getIn([entities, 'totalCount']) !== totalCount ||
         didInvalidate(state.get(entities))
       ) {

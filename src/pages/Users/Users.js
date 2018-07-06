@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import { push } from 'react-router-redux';
 import { LinkContainer } from 'react-router-bootstrap';
+import { defaultMemoize } from 'reselect';
 
 import { SettingsIcon, SortedIcon, TransferIcon } from '../../components/icons';
 import Button from '../../components/widgets/FlatButton';
@@ -13,6 +14,7 @@ import Page from '../../components/layout/Page';
 import Box from '../../components/widgets/Box';
 import UsersList from '../../components/Users/UsersList';
 import PaginationContainer from '../../containers/PaginationContainer';
+import FilterUsersListForm from '../../components/forms/FilterUsersListForm';
 // import SearchContainer from '../../containers/SearchContainer'; TODO -- delete whole container
 import {
   loggedInUserSelector,
@@ -24,6 +26,7 @@ import { searchPeople } from '../../redux/modules/search';
 import withLinks from '../../helpers/withLinks';
 import { getSearchQuery } from '../../redux/selectors/search';
 import { selectedInstanceId } from '../../redux/selectors/auth';
+import { knownRoles } from '../../components/helpers/usersRoles.js';
 
 const createSortingIcon = (
   colName,
@@ -42,17 +45,121 @@ const createSortingIcon = (
       )}
   />;
 
+const filterInitialValues = defaultMemoize(({ search = '', roles = [] }) => {
+  const initials = { search, roles: {} };
+  knownRoles.forEach(role => (initials.roles[role] = false));
+  roles.forEach(role => (initials.roles[role] = true));
+  return initials;
+});
+
+const transformAndSetFilterData = defaultMemoize(
+  setFilters => ({ search, roles }) => {
+    const data = {
+      search: search.trim(),
+      roles: Object.keys(roles).filter(role => roles[role])
+    };
+    if (!data.search) {
+      delete data.search;
+    }
+    return setFilters(data);
+  }
+);
+
 class Users extends Component {
-  render() {
+  filtersCreator = (filters, setFilters) =>
+    <FilterUsersListForm
+      onSubmit={transformAndSetFilterData(setFilters)}
+      initialValues={filterInitialValues(filters)}
+    />;
+
+  headingCreator = ({
+    offset,
+    limit,
+    totalCount,
+    orderByColumn,
+    orderByDescending,
+    setOrderBy
+  }) =>
+    <tr>
+      <th />
+      <th>
+        <FormattedMessage id="generic.nameOfPerson" defaultMessage="Name" />
+        {createSortingIcon(
+          'name',
+          orderByColumn,
+          orderByDescending,
+          setOrderBy
+        )}
+      </th>
+      <th>
+        <FormattedMessage id="generic.email" defaultMessage="Email" />
+        {createSortingIcon(
+          'email',
+          orderByColumn,
+          orderByDescending,
+          setOrderBy
+        )}
+      </th>
+      <th>
+        <FormattedMessage
+          id="app.users.userCreatedAt"
+          defaultMessage="User created"
+        />
+        {createSortingIcon(
+          'createdAt',
+          orderByColumn,
+          orderByDescending,
+          setOrderBy
+        )}
+      </th>
+      <td>
+        <div className="text-muted text-right small">
+          <FormattedMessage
+            id="app.paginationContainer.showingRange"
+            defaultMessage="showing {offset}. - {offsetEnd}. (of {totalCount})"
+            values={{
+              offset: offset + 1,
+              offsetEnd: Math.min(offset + limit, totalCount),
+              totalCount
+            }}
+          />
+        </div>
+      </td>
+    </tr>;
+
+  createActions = defaultMemoize(reload => userId => {
     const {
-      instanceId,
       takeOver,
-      isSuperAdmin,
-      search,
-      query,
-      user,
       links: { EDIT_USER_URI_FACTORY, DASHBOARD_URI }
     } = this.props;
+    return (
+      <div>
+        <LinkContainer to={EDIT_USER_URI_FACTORY(userId)}>
+          <Button bsSize="xs" bsStyle="warning">
+            <SettingsIcon gapRight />
+            <FormattedMessage id="generic.settings" defaultMessage="Settings" />
+          </Button>
+        </LinkContainer>
+        <Button
+          bsSize="xs"
+          bsStyle="primary"
+          onClick={() => takeOver(userId, DASHBOARD_URI)}
+        >
+          <TransferIcon gapRight />
+          <FormattedMessage id="app.users.takeOver" defaultMessage="Login as" />
+        </Button>
+        <DeleteUserButtonContainer
+          id={userId}
+          bsSize="xs"
+          resourceless={true}
+          onDeleted={() => reload()}
+        />
+      </div>
+    );
+  });
+
+  render() {
+    const { user } = this.props;
 
     return (
       <Page
@@ -86,108 +193,43 @@ class Users extends Component {
               }
               unlimitedHeight
             >
-              <PaginationContainer entities="users" defaultOrderBy="name">
-                {({
-                  data,
-                  offset,
-                  limit,
-                  totalCount,
-                  orderByColumn,
-                  orderByDescending,
-                  setOrderBy
-                }) =>
-                  <UsersList
-                    users={data}
-                    loggedUserId={user.id}
-                    useGravatar={user.privateData.settings.useGravatar}
-                    emailColumn
-                    createdAtColumn
-                    heading={
-                      <tr>
-                        <th />
-                        <th>
-                          <FormattedMessage
-                            id="generic.nameOfPerson"
-                            defaultMessage="Name"
-                          />
-                          {createSortingIcon(
-                            'name',
-                            orderByColumn,
-                            orderByDescending,
-                            setOrderBy
-                          )}
-                        </th>
-                        <th>
-                          <FormattedMessage
-                            id="generic.email"
-                            defaultMessage="Email"
-                          />
-                          {createSortingIcon(
-                            'email',
-                            orderByColumn,
-                            orderByDescending,
-                            setOrderBy
-                          )}
-                        </th>
-                        <th>
-                          <FormattedMessage
-                            id="app.users.userCreatedAt"
-                            defaultMessage="User created"
-                          />
-                          {createSortingIcon(
-                            'createdAt',
-                            orderByColumn,
-                            orderByDescending,
-                            setOrderBy
-                          )}
-                        </th>
-                        <td>
-                          <div className="text-muted text-right small">
-                            <FormattedMessage
-                              id="app.paginationContainer.showingRange"
-                              defaultMessage="showing {offset}. - {offsetEnd}. (of {totalCount})"
-                              values={{
-                                offset: offset + 1,
-                                offsetEnd: Math.min(offset + limit, totalCount),
-                                totalCount
-                              }}
-                            />
-                          </div>
-                        </td>
-                      </tr>
-                    }
-                    createActions={userId =>
-                      <div>
-                        <LinkContainer to={EDIT_USER_URI_FACTORY(userId)}>
-                          <Button bsSize="xs" bsStyle="warning">
-                            <SettingsIcon gapRight />
-                            <FormattedMessage
-                              id="generic.settings"
-                              defaultMessage="Settings"
-                            />
-                          </Button>
-                        </LinkContainer>
-                        {isSuperAdmin &&
-                          <Button
-                            bsSize="xs"
-                            bsStyle="primary"
-                            onClick={() => takeOver(userId, DASHBOARD_URI)}
-                          >
-                            <TransferIcon gapRight />
-                            <FormattedMessage
-                              id="app.users.takeOver"
-                              defaultMessage="Login as"
-                            />
-                          </Button>}
-                        <DeleteUserButtonContainer
-                          id={userId}
-                          bsSize="xs"
-                          resourceless={true}
-                          onDeleted={() => search(instanceId)(query)}
-                        />
-                      </div>}
-                  />}
-              </PaginationContainer>
+              <div>
+                <PaginationContainer
+                  entities="users"
+                  defaultOrderBy="name"
+                  filtersCreator={this.filtersCreator}
+                >
+                  {({
+                    data,
+                    offset,
+                    limit,
+                    totalCount,
+                    orderByColumn,
+                    orderByDescending,
+                    setOrderBy,
+                    reload
+                  }) => {
+                    return (
+                      <UsersList
+                        users={data}
+                        loggedUserId={user.id}
+                        useGravatar={user.privateData.settings.useGravatar}
+                        emailColumn
+                        createdAtColumn
+                        heading={this.headingCreator({
+                          offset,
+                          limit,
+                          totalCount,
+                          orderByColumn,
+                          orderByDescending,
+                          setOrderBy
+                        })}
+                        createActions={this.createActions(reload)}
+                      />
+                    );
+                  }}
+                </PaginationContainer>
+              </div>
             </Box>
           </div>}
       </Page>

@@ -1,12 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Table } from 'react-bootstrap';
-import { injectIntl, FormattedMessage } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import UsersListItem from '../UsersListItem';
 
-const UsersList = ({ heading, users = [], createActions, intl, ...rest }) =>
-  <Table hover>
+const UsersList = ({ heading = null, users = [], createActions, ...rest }) =>
+  <Table hover={users.length > 0}>
     {heading &&
+      users.length > 0 &&
       <thead>
         {heading}
       </thead>}
@@ -16,7 +17,7 @@ const UsersList = ({ heading, users = [], createActions, intl, ...rest }) =>
         <UsersListItem
           user={user}
           createActions={createActions}
-          key={i}
+          key={`user-${user ? user.id : i}`}
           {...rest}
         />
       )}
@@ -26,7 +27,7 @@ const UsersList = ({ heading, users = [], createActions, intl, ...rest }) =>
           <td className="text-center">
             <FormattedMessage
               id="app.userList.noUsers"
-              defaultMessage="There are no users on the list."
+              defaultMessage="No users match selected filters."
             />
           </td>
         </tr>}
@@ -36,8 +37,7 @@ const UsersList = ({ heading, users = [], createActions, intl, ...rest }) =>
 UsersList.propTypes = {
   heading: PropTypes.any,
   users: PropTypes.array,
-  createActions: PropTypes.func,
-  intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired
+  createActions: PropTypes.func
 };
 
-export default injectIntl(UsersList);
+export default UsersList;

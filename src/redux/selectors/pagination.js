@@ -1,5 +1,6 @@
-import { createSelector } from 'reselect';
+import { createSelector, defaultMemoize } from 'reselect';
 import { EMPTY_ARRAY } from '../../helpers/common';
+import { isReady } from '../helpers/resourceManager';
 
 const getPagination = entities => state => state.pagination.get(entities);
 const getEntitiesResources = entities => state =>
@@ -9,42 +10,48 @@ const getEntitiesResources = entities => state =>
  * Public selectors
  */
 
-export const getPaginationOffset = entities =>
+export const getPaginationOffset = defaultMemoize(entities =>
   createSelector(
     getPagination(entities),
     pagination => pagination && pagination.get('offset')
-  );
+  )
+);
 
-export const getPaginationLimit = entities =>
+export const getPaginationLimit = defaultMemoize(entities =>
   createSelector(
     getPagination(entities),
     pagination => pagination && pagination.get('limit')
-  );
+  )
+);
 
-export const getPaginationTotalCount = entities =>
+export const getPaginationTotalCount = defaultMemoize(entities =>
   createSelector(
     getPagination(entities),
     pagination => pagination && pagination.get('totalCount')
-  );
+  )
+);
 
-export const getPaginationOrderBy = entities =>
+export const getPaginationOrderBy = defaultMemoize(entities =>
   createSelector(
     getPagination(entities),
     pagination => pagination && pagination.get('orderBy')
-  );
+  )
+);
 
-export const getPaginationFilters = entities =>
+export const getPaginationFilters = defaultMemoize(entities =>
   createSelector(
     getPagination(entities),
     pagination => pagination && pagination.get('filters').toJS()
-  );
+  )
+);
 
-export const getPaginationIsPending = entities =>
+export const getPaginationIsPending = defaultMemoize(entities =>
   createSelector(getPagination(entities), pagination =>
     Boolean(pagination && pagination.get('pending'))
-  );
+  )
+);
 
-export const getPaginationDataJS = entities =>
+export const getPaginationDataJS = defaultMemoize(entities =>
   createSelector(
     [getPagination(entities), getEntitiesResources(entities)],
     (pagination, resources) => {
@@ -61,10 +68,12 @@ export const getPaginationDataJS = entities =>
       const res = [];
       while (offset < offsetEnd) {
         const id = pagination.getIn(['data', offset], null);
-        const entity = id && resources.getIn([id, 'data'], null);
-        res.push(entity && entity.toJS());
+        const entity = id && resources.get(id);
+        const entityData = isReady(entity) && entity.get('data');
+        res.push(entityData && entityData.toJS());
         ++offset;
       }
       return res;
     }
-  );
+  )
+);

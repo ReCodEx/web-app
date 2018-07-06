@@ -4,7 +4,7 @@ import { FormattedMessage } from 'react-intl';
 import { Table } from 'react-bootstrap';
 import { defaultMemoize } from 'reselect';
 import { safeGet } from '../../../helpers/common';
-import Icon, { CloseIcon, SortedIcon } from '../../icons';
+import { CloseIcon, SortedIcon } from '../../icons';
 
 class SortableTable extends Component {
   constructor(props) {

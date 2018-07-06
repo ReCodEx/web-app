@@ -78,13 +78,13 @@ class PaginationContainer extends Component {
 
   handlePagination = page => {
     const { limit, intl: { locale }, setPage } = this.props;
-    setPage((page - 1) * limit, limit, locale);
+    return setPage((page - 1) * limit, limit, locale);
   };
 
   // Method passed to filters creator ...
   setFilters = filters => {
     const { limit, intl: { locale }, setPaginationFilters } = this.props;
-    setPaginationFilters(filters, limit, locale);
+    return setPaginationFilters(filters, limit, locale);
   };
 
   // Method passed to children data rendering function, so it can use this for sorting icons in table heading
@@ -95,7 +95,7 @@ class PaginationContainer extends Component {
       intl: { locale },
       setPaginationOrderBy
     } = this.props;
-    setPaginationOrderBy(
+    return setPaginationOrderBy(
       encodeOrderBy(orderBy, descending),
       offset,
       limit,
@@ -103,8 +103,14 @@ class PaginationContainer extends Component {
     );
   };
 
+  reload = () => {
+    const { offset, limit, intl: { locale }, reload } = this.props;
+    return reload(offset, limit, locale);
+  };
+
   render() {
     const {
+      filtersCreator,
       children,
       offset,
       limit,
@@ -113,8 +119,7 @@ class PaginationContainer extends Component {
       orderBy,
       filters,
       data,
-      limits = [25, 50, 100, 200],
-      filtersCreator = null
+      limits = [25, 50, 100, 200]
     } = this.props;
 
     // Decode order by parameter ...
@@ -129,7 +134,6 @@ class PaginationContainer extends Component {
           <div>
             {filtersCreator(filters, this.setFilters)}
           </div>}
-
         {totalCount !== null
           ? <div>
               <div
@@ -145,7 +149,8 @@ class PaginationContainer extends Component {
                   totalCount,
                   orderByColumn,
                   orderByDescending,
-                  setOrderBy: this.setOrderBy
+                  setOrderBy: this.setOrderBy,
+                  reload: this.reload
                 })}
               </div>
 
@@ -185,7 +190,7 @@ class PaginationContainer extends Component {
                 </Row>
               </Grid>
             </div>
-          : <div className="text-center">
+          : <div className="text-center lead">
               <LoadingIcon gapRight />
               <FormattedMessage
                 id="generic.loading"
@@ -211,6 +216,7 @@ PaginationContainer.propTypes = {
   totalCount: PropTypes.number,
   isPending: PropTypes.bool.isRequired,
   data: PropTypes.array.isRequired,
+  reload: PropTypes.func.isRequired,
   setPage: PropTypes.func.isRequired,
   setInitialOrderBy: PropTypes.func.isRequired,
   setInitialFilters: PropTypes.func.isRequired,
@@ -233,17 +239,17 @@ export default connect(
     };
   },
   (dispatch, { entities }) => ({
+    reload: (offset, limit, locale) =>
+      dispatch(fetchPaginated(entities)(offset, limit, locale, true)), // true = force invalidate
     setPage: (offset, limit, locale) =>
       dispatch(fetchPaginated(entities)(offset, limit, locale)).then(() =>
         // fetch the data first, then change the range properties (better visualization)
         dispatch(setPaginationOffsetLimit(entities)(offset, limit))
       ),
-    setInitialOrderBy: orderBy => {
-      dispatch(setPaginationOrderBy(entities)(orderBy));
-    },
-    setInitialFilters: filters => {
-      dispatch(setPaginationFilters(entities)(filters));
-    },
+    setInitialOrderBy: orderBy =>
+      dispatch(setPaginationOrderBy(entities)(orderBy)),
+    setInitialFilters: filters =>
+      dispatch(setPaginationFilters(entities)(filters)),
     setPaginationOrderBy: (orderBy, offset, limit, locale) => {
       dispatch(setPaginationOrderBy(entities)(orderBy));
       return dispatch(fetchPaginated(entities)(offset, limit, locale));

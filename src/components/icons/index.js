@@ -8,6 +8,7 @@ import Icon from './Icon';
 
 export const AddIcon = props => <Icon {...props} icon="plus" />;
 export const AdressIcon = props => <Icon {...props} icon="at" />;
+export const BanIcon = props => <Icon {...props} icon="ban" />;
 export const CloseIcon = props => <Icon {...props} icon="times" />;
 export const CopyIcon = props =>
   <Icon {...props} icon={['far', 'clipboard']} />;
@@ -57,6 +58,7 @@ export const SupervisorStudentIcon = props =>
   <Icon {...props} icon="chalkboard-teacher" />;
 export const TransferIcon = props => <Icon {...props} icon="exchange-alt" />;
 export const UploadIcon = props => <Icon {...props} icon="cloud-upload-alt" />;
+export const UserIcon = props => <Icon {...props} icon={['far', 'user']} />;
 export const WarningIcon = props =>
   <Icon {...props} icon="exclamation-triangle" />;
 

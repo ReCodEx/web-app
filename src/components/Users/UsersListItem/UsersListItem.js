@@ -1,15 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage, FormattedDate, FormattedTime } from 'react-intl';
+import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 
 import UsersName from '../../../components/Users/UsersName';
-import {
-  LoadingIcon,
-  SuperadminIcon,
-  SupervisorAdminIcon,
-  SupervisorIcon,
-  SupervisorStudentIcon
-} from '../../icons';
+import { BanIcon, LoadingIcon } from '../../icons';
+import { UserRoleIcon } from '../../helpers/usersRoles';
 import { safeGet } from '../../../helpers/common';
 
 const createEmailLink = user => {
@@ -34,14 +30,26 @@ const UsersListItem = ({
     ? <tr>
         <td>
           {user.privateData &&
-            <span>
-              {user.privateData.role === 'superadmin' && <SuperadminIcon />}
-              {user.privateData.role === 'supervisor-admin' &&
-                <SupervisorAdminIcon />}
-              {user.privateData.role === 'supervisor' && <SupervisorIcon />}
-              {user.privateData.role === 'supervisor-student' &&
-                <SupervisorStudentIcon />}
-            </span>}
+            <UserRoleIcon
+              showTooltip
+              tooltipId={`role-${user.id}`}
+              role={user.privateData.role}
+            />}
+          {user.privateData &&
+            !user.privateData.isAllowed &&
+            <OverlayTrigger
+              placement="bottom"
+              overlay={
+                <Tooltip id={`ban-${user.id}`}>
+                  <FormattedMessage
+                    id="app.userList.userDeactivated"
+                    defaultMessage="The user account was deactivated. The user may not sign in."
+                  />
+                </Tooltip>
+              }
+            >
+              <BanIcon gapLeft />
+            </OverlayTrigger>}
         </td>
         <td>
           <UsersName
@@ -61,7 +69,7 @@ const UsersListItem = ({
           <td>
             {user.privateData &&
               user.privateData.createdAt &&
-              <span>
+              <span className="small text-nowrap">
                 <FormattedDate
                   value={user.privateData.createdAt * 1000}
                 />&nbsp;&nbsp;
