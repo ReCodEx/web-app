@@ -17,6 +17,7 @@ import Button from '../../widgets/FlatButton';
 import { DownloadIcon } from '../../icons';
 
 import styles from './ResultsTable.less';
+import escapeString from '../../helpers/escapeString';
 
 const getIndexedAssignments = defaultMemoize(assignments => {
   const res = {};
@@ -92,32 +93,53 @@ const prepareTableComparators = defaultMemoize(locale => {
 
 // Prepare data in CSV format
 const getCSVValues = (assignments, data, locale) => {
-  let result = 'userName;userEmail;totalPoints';
+  const QUOTE = '"';
+  const SEPARATOR = ';';
+  const NEWLINE = '\n';
+  let result = [];
+
+  const enquote = string => `${QUOTE}${string}${QUOTE}`;
+
+  let header = [
+    enquote('userName'),
+    enquote('userEmail'),
+    enquote('totalPoints')
+  ];
   assignments.forEach(assignment => {
-    result += `;${getLocalizedName(assignment, locale)}`;
+    header.push(
+      enquote(`${escapeString(getLocalizedName(assignment, locale))}`)
+    );
   });
+  result.push(header);
 
   data.forEach(item => {
-    let row = `${item.user.fullName};${item.user.privateData.email};${item.total
-      .gained}`;
+    let row = [
+      enquote(`${escapeString(item.user.fullName)}`),
+      enquote(`${escapeString(item.user.privateData.email)}`),
+      item.total.gained
+    ];
     assignments.forEach(assignment => {
       if (!Number.isInteger(item[assignment.id].gained)) {
-        row += ';';
+        row.push('');
       } else {
-        row += `;${item[assignment.id].gained}`;
+        const gainedPoints = item[assignment.id].gained;
         const bonusPoints = item[assignment.id].bonus;
         if (Number.isInteger(bonusPoints)) {
           if (bonusPoints > 0) {
-            row += `+${bonusPoints}`;
+            row.push(`${gainedPoints}+${bonusPoints}`);
           } else if (bonusPoints < 0) {
-            row += `-${bonusPoints}`;
+            row.push(`${gainedPoints}-${bonusPoints}`);
+          } else {
+            row.push(gainedPoints);
           }
         }
       }
     });
-    result += `\n${row}`;
+    result.push(row);
   });
-  return result;
+
+  // get string from arrays
+  return result.map(row => row.join(SEPARATOR)).join(NEWLINE);
 };
 
 class ResultsTable extends Component {
@@ -167,7 +189,12 @@ class ResultsTable extends Component {
 
     return (
       <tr className={styles.maxPointsRow}>
-        <th>Max points:</th>
+        <th>
+          <FormattedMessage
+            id="app.groupResultsTable.maxPointsRow"
+            defaultMessage="Max points:"
+          />
+        </th>
         {assignments.map(assignment =>
           <th key={assignment.id}>
             {assignment.maxPointsBeforeFirstDeadline}
@@ -262,7 +289,8 @@ class ResultsTable extends Component {
                   this.prepareData(assignments, users, stats),
                   locale
                 ),
-                'text/csv'
+                'text/csv;charset=utf-8',
+                true // add BOM
               )}
           >
             <DownloadIcon gapRight />

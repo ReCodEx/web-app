@@ -50,8 +50,10 @@ export const downloadHelper = ({
     .catch(e => dispatch(addNotification(e.message, false)));
 };
 
-export const downloadString = (fileName, data, contentType) => {
-  const typedBlob = new Blob([data], { type: contentType });
+export const downloadString = (fileName, data, contentType, addBOM = false) => {
+  let blobData = addBOM ? [new Uint8Array([0xef, 0xbb, 0xbf])] : [];
+  blobData.push(data);
+  const typedBlob = new Blob(blobData, { type: contentType });
   saveAs(typedBlob, fileName);
   return Promise.resolve();
 };
