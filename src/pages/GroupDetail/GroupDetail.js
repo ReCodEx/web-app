@@ -301,6 +301,7 @@ class GroupDetail extends Component {
                           }
                           isAdmin={isAdmin}
                           isSupervisor={isSupervisor}
+                          groupName={getLocalizedName(data, locale)}
                           renderActions={id =>
                             <LeaveJoinGroupButtonContainer
                               userId={id}
