@@ -18,13 +18,15 @@ import { fetchUsersGroupsIfNeeded } from '../../redux/modules/groups';
 import { logout, refresh, selectInstance } from '../../redux/modules/auth';
 import { getJsData } from '../../redux/helpers/resourceManager';
 
-import fontawesome from '@fortawesome/fontawesome';
+// import fontawesome from '@fortawesome/fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import regularIcons from '@fortawesome/fontawesome-free-regular';
 import solidIcons from '@fortawesome/fontawesome-free-solid';
 import brandIcons from '@fortawesome/fontawesome-free-brands';
 
 import { LoadingIcon } from '../../components/icons';
+
+import './recodex.css';
 
 library.add(regularIcons, solidIcons, brandIcons);
 

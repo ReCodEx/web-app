@@ -1,5 +1,5 @@
 import { handleActions, createAction, Identity } from 'redux-actions';
-import { List, fromJS } from 'immutable';
+import { List, Map, fromJS } from 'immutable';
 import { createApiAction } from '../middleware/apiMiddleware';
 import { didInvalidate } from '../helpers/resourceManager';
 import {
@@ -9,6 +9,7 @@ import {
 import { selectedInstanceId } from '../selectors/auth';
 
 export const actionTypes = {
+  REGISTER: 'recodex/pagination/REGISTER',
   SET_OFFSET: 'recodex/pagination/SET_OFFSET',
   SET_LIMIT: 'recodex/pagination/SET_LIMIT',
   SET_OFFSET_LIMIT: 'recodex/pagination/SET_OFFSET_LIMIT',
@@ -22,39 +23,42 @@ export const actionTypes = {
 
 const paginationStructure = {
   data: [], // cache for entity IDs
-  totalCount: null, // total number of entities for given combination of filters
+  totalCount: null, // total number of items available for given combination of filters
   orderBy: null, // ordering column
   filters: {}, // current combination of applied filters
   pending: null, // null if no operation was started, Date.now() when pending operation was started, or false if operation has concluded
   lastUpdate: null, // last update (needed for automated invalidation)
   didInvalidate: false // just for the compatibility with regular resources
 };
-const createPaginationStructure = () => ({
-  offset: 0, // currently selected offset
-  limit: 50, // currently selected amount of data per page
-  ...paginationStructure
-});
-const initialState = fromJS({
-  exercises: createPaginationStructure(),
-  pipelines: createPaginationStructure(),
-  users: createPaginationStructure()
-});
+const createPaginationStructure = init =>
+  fromJS({
+    offset: 0, // currently selected offset
+    limit: 0, // currently selected amount of data per page
+    ...paginationStructure,
+    ...init
+  });
+const initialState = Map();
 
-export const setPaginationOffset = entities =>
-  createAction(actionTypes.SET_OFFSET, Identity, () => ({ entities }));
+/*
+ * Pagination structures are identified by componentId, which is unique string identifying paging component.
+ */
+export const registerPaginationComponent = createAction(actionTypes.REGISTER);
 
-export const setPaginationLimit = entities =>
-  createAction(actionTypes.SET_LIMIT, Identity, () => ({ entities }));
+export const setPaginationOffset = componentId =>
+  createAction(actionTypes.SET_OFFSET, Identity, () => ({ componentId }));
 
-export const setPaginationOffsetLimit = entities =>
+export const setPaginationLimit = componentId =>
+  createAction(actionTypes.SET_LIMIT, Identity, () => ({ componentId }));
+
+export const setPaginationOffsetLimit = componentId =>
   createAction(
     actionTypes.SET_OFFSET_LIMIT,
     (offset, limit) => ({ offset, limit }),
-    () => ({ entities })
+    () => ({ componentId })
   );
 
-export const setPaginationOrderBy = entities =>
-  createAction(actionTypes.SET_ORDERBY, Identity, () => ({ entities }));
+export const setPaginationOrderBy = componentId =>
+  createAction(actionTypes.SET_ORDERBY, Identity, () => ({ componentId }));
 
 export const encodeOrderBy = (column, descending = false) =>
   descending ? `!${column}` : column;
@@ -65,20 +69,18 @@ export const decodeOrderBy = orderBy => {
   return { column, descending };
 };
 
-export const setPaginationFilters = entities =>
-  createAction(actionTypes.SET_FILTERS, Identity, () => ({ entities }));
+export const setPaginationFilters = componentId =>
+  createAction(actionTypes.SET_FILTERS, Identity, () => ({ componentId }));
 
-export const fetchPaginated = entities => (
+export const fetchPaginated = (componentId, endpoint) => (
   offset,
   limit,
   locale,
   forceInvalidate = false
 ) => (dispatch, getState) => {
-  const orderBy = getPaginationOrderBy(entities)(getState());
-  const filters = getPaginationFilters(entities)(getState());
-  if (!filters.instanceId) {
-    filters.instanceId = selectedInstanceId(getState());
-  }
+  const orderBy = getPaginationOrderBy(componentId)(getState());
+  const filters = getPaginationFilters(componentId)(getState());
+  filters.instanceId = selectedInstanceId(getState());
 
   const query = { offset, limit, locale, filters };
   if (orderBy) {
@@ -88,8 +90,15 @@ export const fetchPaginated = entities => (
   return dispatch(
     createApiAction({
       type: actionTypes.FETCH_PAGINATED,
-      endpoint: `/${entities}`,
-      meta: { entities, offset, limit, started: Date.now(), forceInvalidate },
+      endpoint: `/${endpoint}`,
+      meta: {
+        componentId,
+        endpoint,
+        offset,
+        limit,
+        started: Date.now(),
+        forceInvalidate
+      },
       query
     })
   );
@@ -109,44 +118,47 @@ const preprocessItems = (items, offset) => {
 
 export default handleActions(
   {
-    [actionTypes.SET_OFFSET]: (state, { payload, meta: { entities } }) =>
-      state.setIn([entities, 'offset'], Number(payload)),
+    [actionTypes.REGISTER]: (state, { payload: { id, ...init } }) =>
+      state.get(id) ? state : state.set(id, createPaginationStructure(init)),
 
-    [actionTypes.SET_LIMIT]: (state, { payload, meta: { entities } }) =>
-      state.setIn([entities, 'limit'], Number(payload)),
+    [actionTypes.SET_OFFSET]: (state, { payload, meta: { componentId } }) =>
+      state.setIn([componentId, 'offset'], Number(payload)),
+
+    [actionTypes.SET_LIMIT]: (state, { payload, meta: { componentId } }) =>
+      state.setIn([componentId, 'limit'], Number(payload)),
 
     [actionTypes.SET_OFFSET_LIMIT]: (
       state,
-      { payload: { offset, limit }, meta: { entities } }
+      { payload: { offset, limit }, meta: { componentId } }
     ) =>
       state
-        .setIn([entities, 'offset'], Number(offset))
-        .setIn([entities, 'limit'], Number(limit)),
+        .setIn([componentId, 'offset'], Number(offset))
+        .setIn([componentId, 'limit'], Number(limit)),
 
-    [actionTypes.SET_FILTERS]: (state, { payload, meta: { entities } }) =>
+    [actionTypes.SET_FILTERS]: (state, { payload, meta: { componentId } }) =>
       state
-        .setIn([entities, 'didInvalidate'], true)
-        .setIn([entities, 'offset'], 0) // modification of filters require
-        .setIn([entities, 'filters'], fromJS(payload)),
+        .setIn([componentId, 'didInvalidate'], true)
+        .setIn([componentId, 'offset'], 0) // modification of filters require
+        .setIn([componentId, 'filters'], fromJS(payload)),
 
-    [actionTypes.SET_ORDERBY]: (state, { payload, meta: { entities } }) =>
+    [actionTypes.SET_ORDERBY]: (state, { payload, meta: { componentId } }) =>
       state
-        .setIn([entities, 'didInvalidate'], true)
-        .setIn([entities, 'orderBy'], payload),
+        .setIn([componentId, 'didInvalidate'], true)
+        .setIn([componentId, 'orderBy'], payload),
 
     [actionTypes.FETCH_PAGINATED_PENDING]: (
       state,
-      { meta: { entities, started } }
-    ) => state.setIn([entities, 'pending'], Number(started)),
+      { meta: { componentId, started } }
+    ) => state.setIn([componentId, 'pending'], Number(started)),
 
     [actionTypes.FETCH_PAGINATED_FULFILLED]: (
       state,
       {
         payload: { items, totalCount, orderBy, filters, offset },
-        meta: { entities, started, forceInvalidate }
+        meta: { componentId, started, forceInvalidate }
       }
     ) => {
-      if (state.getIn([entities, 'pending']) !== started) {
+      if (state.getIn([componentId, 'pending']) !== started) {
         return state;
       }
 
@@ -154,36 +166,36 @@ export default handleActions(
       totalCount = Number(totalCount);
       if (
         forceInvalidate ||
-        state.getIn([entities, 'totalCount']) !== totalCount ||
-        didInvalidate(state.get(entities))
+        state.getIn([componentId, 'totalCount']) !== totalCount ||
+        didInvalidate(state.get(componentId))
       ) {
         state = state
-          .setIn([entities, 'data'], List()) // remove cached indices (parameters have changed)
-          .setIn([entities, 'lastUpdate'], Date.now())
-          .setIn([entities, 'didInvalidate'], false);
+          .setIn([componentId, 'data'], List()) // remove cached indices (parameters have changed)
+          .setIn([componentId, 'lastUpdate'], Date.now())
+          .setIn([componentId, 'didInvalidate'], false);
       }
 
       // Make sure we have appropriate timestamp for cache expiration ...
-      if (state.getIn([entities, 'lastUpdate']) === null) {
-        state = state.setIn([entities, 'lastUpdate'], Date.now());
+      if (state.getIn([componentId, 'lastUpdate']) === null) {
+        state = state.setIn([componentId, 'lastUpdate'], Date.now());
       }
 
       return state
-        .mergeIn([entities], {
+        .mergeIn([componentId], {
           totalCount,
           orderBy,
           filters,
           pending: false
         })
-        .mergeIn([entities, 'data'], preprocessItems(items, offset));
+        .mergeIn([componentId, 'data'], preprocessItems(items, offset));
     },
 
     [actionTypes.FETCH_PAGINATED_REJECTED]: (
       state,
-      { meta: { entities, started } }
+      { meta: { componentId, started } }
     ) =>
-      state.getIn([entities, 'pending']) === started
-        ? state.setIn([entities, 'pending'], false)
+      state.getIn([componentId, 'pending']) === started
+        ? state.setIn([componentId, 'pending'], false)
         : state
   },
   initialState

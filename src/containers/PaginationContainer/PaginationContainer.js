@@ -23,6 +23,7 @@ import {
   getPaginationDataJS
 } from '../../redux/selectors/pagination';
 import {
+  registerPaginationComponent,
   setPaginationOffsetLimit,
   setPaginationOrderBy,
   encodeOrderBy,
@@ -30,29 +31,52 @@ import {
   setPaginationFilters,
   fetchPaginated
 } from '../../redux/modules/pagination';
-import { identity } from '../../helpers/common';
+import { identity, EMPTY_OBJ } from '../../helpers/common';
 
 import styles from './PaginationContainer.less';
 
+const DEFAULT_LIMITS = [25, 50, 100, 200];
+
 class PaginationContainer extends Component {
+  constructor(props) {
+    super(props);
+
+    const limits = props.limits || DEFAULT_LIMITS;
+    const initials = {
+      limit: props.defaultLimit || limits[0]
+    };
+
+    if (props.defaultOrderBy !== null) {
+      initials.orderBy = encodeOrderBy(
+        props.defaultOrderBy,
+        props.defaultOrderDescending || false
+      );
+    }
+
+    props.register(initials);
+  }
+
+  // Mounting handles also redux state initialization using default values and fetching the first batch.
   componentWillMount() {
     const {
       offset,
       limit,
       intl: { locale },
-      defaultOrderBy = null,
-      defaultOrderDescendant = false,
-      setInitialOrderBy,
+      hideAllItems,
       fetchPaginated
     } = this.props;
-    if (defaultOrderBy !== null) {
-      setInitialOrderBy(encodeOrderBy(defaultOrderBy, defaultOrderDescendant));
+
+    if (!hideAllItems) {
+      fetchPaginated(offset, limit, locale);
     }
-    fetchPaginated(offset, limit, locale);
   }
 
+  // When lang or hideAllItems changes, reload is required ...
   componentWillReceiveProps(newProps) {
-    if (this.props.intl.locale !== newProps.intl.locale) {
+    if (
+      this.props.intl.locale !== newProps.intl.locale ||
+      (!newProps.hideAllItems && this.props.hideAllItems && !newProps.isPending)
+    ) {
       newProps.fetchPaginated(
         newProps.offset,
         newProps.limit,
@@ -61,6 +85,22 @@ class PaginationContainer extends Component {
     }
   }
 
+  /**
+   * Return bool indicating whether it is desirable to show buttons for limit selection.
+   */
+  showLimitsButtons = () => {
+    const { limit, limits, totalCount } = this.props;
+    return (
+      limits &&
+      limits.length > 0 &&
+      (limits.length > 1 || limits[0] !== limit) &&
+      totalCount > limits[0]
+    );
+  };
+
+  /**
+   * Rendering function that creates one limit button for given limit (amount of rows).
+   */
   createLimitButton = amount => {
     const { offset, limit, intl: { locale }, setPage } = this.props;
     return (
@@ -76,18 +116,41 @@ class PaginationContainer extends Component {
     );
   };
 
+  /**
+   * Return the number of total pages in pagination based on total count and limit.
+   */
+  getTotalPages = () => {
+    const { limit, totalCount } = this.props;
+    return Math.ceil(totalCount / limit);
+  };
+
+  /**
+   * Get the (1-based) index of active page (1..totalPages)
+   */
+  getActivePage = () => {
+    const { offset, limit } = this.props;
+    return Math.floor(offset / limit) + 1;
+  };
+
+  /**
+   * Handling function for page selection event.
+   */
   handlePagination = page => {
     const { limit, intl: { locale }, setPage } = this.props;
     return setPage((page - 1) * limit, limit, locale);
   };
 
-  // Method passed to filters creator ...
+  /**
+   * Handler passed to filters creator. It updates the pagination filters and reloads the page.
+   */
   setFilters = filters => {
     const { limit, intl: { locale }, setPaginationFilters } = this.props;
     return setPaginationFilters(filters, limit, locale);
   };
 
-  // Method passed to children data rendering function, so it can use this for sorting icons in table heading
+  /**
+   * Method passed to children data rendering function, so it can use this for sorting icons in table heading.
+   */
   setOrderBy = (orderBy, descending) => {
     const {
       offset,
@@ -103,14 +166,23 @@ class PaginationContainer extends Component {
     );
   };
 
+  /**
+   * Invokes reload of current page (preserving the offset and limit).
+   * Reload is required when item is deleted for instance.
+   */
   reload = () => {
     const { offset, limit, intl: { locale }, reload } = this.props;
     return reload(offset, limit, locale);
   };
 
+  /**
+   * Main rendering function.
+   */
   render() {
     const {
       filtersCreator,
+      hideAllItems,
+      hideAllMessage = '',
       children,
       offset,
       limit,
@@ -119,7 +191,7 @@ class PaginationContainer extends Component {
       orderBy,
       filters,
       data,
-      limits = [25, 50, 100, 200]
+      limits = DEFAULT_LIMITS
     } = this.props;
 
     // Decode order by parameter ...
@@ -134,83 +206,88 @@ class PaginationContainer extends Component {
           <div>
             {filtersCreator(filters, isPending ? null : this.setFilters)}
           </div>}
-        {totalCount !== null
-          ? <div>
-              <div
-                className={classnames({
-                  [styles.paginatedContent]: true,
-                  [styles.changePending]: isPending
-                })}
-              >
-                {children({
-                  data,
-                  offset,
-                  limit,
-                  totalCount,
-                  orderByColumn,
-                  orderByDescending,
-                  setOrderBy: isPending ? null : this.setOrderBy,
-                  reload: isPending ? null : this.reload
-                })}
-              </div>
 
-              {((limits && limits.length > 0 && totalCount > limits[0]) ||
-                totalCount > limit) &&
-                <Grid fluid>
-                  <Row>
-                    <Col md={3}>
-                      {limits &&
-                        limits.length > 0 &&
-                        totalCount > limits[0] &&
-                        <ButtonGroup bsSize="small">
-                          {limits
-                            .map(
-                              (l, idx) =>
-                                idx < 1 || totalCount > limits[idx - 1]
-                                  ? this.createLimitButton(l)
-                                  : null
-                            )
-                            .filter(identity)}
-                        </ButtonGroup>}
-                    </Col>
-                    {totalCount > limit &&
-                      <Col md={9}>
-                        <div className="text-right">
-                          <Pagination
-                            prev
-                            next
-                            maxButtons={10}
-                            boundaryLinks
-                            items={Math.ceil(totalCount / limit)}
-                            activePage={Math.floor(offset / limit) + 1}
-                            bsSize="small"
-                            className={styles.pagination}
-                            onSelect={this.handlePagination}
-                          />
-                        </div>
-                      </Col>}
-                  </Row>
-                </Grid>}
-            </div>
-          : <div className="text-center lead">
-              <LoadingIcon gapRight />
-              <FormattedMessage
-                id="generic.loading"
-                defaultMessage="Loading ..."
-              />
-            </div>}
+        {hideAllItems
+          ? hideAllMessage
+          : totalCount !== null
+            ? <div>
+                <div
+                  className={classnames({
+                    [styles.paginatedContent]: true,
+                    [styles.changePending]: isPending
+                  })}
+                >
+                  {children({
+                    data,
+                    offset,
+                    limit,
+                    totalCount,
+                    orderByColumn,
+                    orderByDescending,
+                    filters,
+                    setOrderBy: isPending ? null : this.setOrderBy,
+                    reload: isPending ? null : this.reload
+                  })}
+                </div>
+
+                {(this.showLimitsButtons() || this.getTotalPages() > 1) &&
+                  <Grid fluid>
+                    <Row>
+                      <Col md={3}>
+                        {this.showLimitsButtons() &&
+                          <ButtonGroup bsSize="small">
+                            {limits
+                              .map(
+                                (l, idx) =>
+                                  idx < 1 || totalCount > limits[idx - 1]
+                                    ? this.createLimitButton(l)
+                                    : null
+                              )
+                              .filter(identity)}
+                          </ButtonGroup>}
+                      </Col>
+                      {totalCount > limit &&
+                        <Col md={9}>
+                          <div className="text-right">
+                            <Pagination
+                              prev
+                              next
+                              maxButtons={10}
+                              boundaryLinks
+                              items={this.getTotalPages()}
+                              activePage={this.getActivePage()}
+                              bsSize="small"
+                              className={styles.pagination}
+                              onSelect={this.handlePagination}
+                            />
+                          </div>
+                        </Col>}
+                    </Row>
+                  </Grid>}
+              </div>
+            : <div className="text-center larger">
+                <LoadingIcon gapRight />
+                <FormattedMessage
+                  id="generic.loading"
+                  defaultMessage="Loading ..."
+                />
+              </div>}
       </div>
     );
   }
 }
 
 PaginationContainer.propTypes = {
-  entities: PropTypes.string.isRequired,
+  id: PropTypes.string.isRequired,
+  endpoint: PropTypes.string.isRequired,
   limits: PropTypes.array,
   filtersCreator: PropTypes.func,
+  defaultLimit: PropTypes.number,
   defaultOrderBy: PropTypes.string,
-  defaultOrderDescendant: PropTypes.bool,
+  defaultOrderDescending: PropTypes.bool,
   children: PropTypes.func.isRequired,
+  hideAllItems: PropTypes.bool,
+  hideAllMessage: PropTypes.any,
   offset: PropTypes.number.isRequired,
   limit: PropTypes.number.isRequired,
   orderBy: PropTypes.string,
@@ -218,10 +295,9 @@ PaginationContainer.propTypes = {
   totalCount: PropTypes.number,
   isPending: PropTypes.bool.isRequired,
   data: PropTypes.array.isRequired,
+  register: PropTypes.func.isRequired,
   reload: PropTypes.func.isRequired,
   setPage: PropTypes.func.isRequired,
-  setInitialOrderBy: PropTypes.func.isRequired,
-  setInitialFilters: PropTypes.func.isRequired,
   setPaginationOrderBy: PropTypes.func.isRequired,
   setPaginationFilters: PropTypes.func.isRequired,
   fetchPaginated: PropTypes.func.isRequired,
@@ -229,38 +305,36 @@ PaginationContainer.propTypes = {
 };
 
 export default connect(
-  (state, { entities }) => {
+  (state, { id, endpoint }) => {
     return {
-      offset: getPaginationOffset(entities)(state),
-      limit: getPaginationLimit(entities)(state),
-      orderBy: getPaginationOrderBy(entities)(state),
-      filters: getPaginationFilters(entities)(state),
-      totalCount: getPaginationTotalCount(entities)(state),
-      isPending: getPaginationIsPending(entities)(state),
-      data: getPaginationDataJS(entities)(state)
+      offset: getPaginationOffset(id)(state) || 0,
+      limit: getPaginationLimit(id)(state) || 0,
+      orderBy: getPaginationOrderBy(id)(state),
+      filters: getPaginationFilters(id)(state) || EMPTY_OBJ,
+      totalCount: getPaginationTotalCount(id)(state),
+      isPending: getPaginationIsPending(id)(state),
+      data: getPaginationDataJS(id, endpoint)(state)
     };
   },
-  (dispatch, { entities }) => ({
+  (dispatch, { id, endpoint }) => ({
+    register: initials =>
+      dispatch(registerPaginationComponent({ id, ...initials })),
     reload: (offset, limit, locale) =>
-      dispatch(fetchPaginated(entities)(offset, limit, locale, true)), // true = force invalidate
+      dispatch(fetchPaginated(id, endpoint)(offset, limit, locale, true)), // true = force invalidate
     setPage: (offset, limit, locale) =>
-      dispatch(fetchPaginated(entities)(offset, limit, locale)).then(() =>
+      dispatch(fetchPaginated(id, endpoint)(offset, limit, locale)).then(() =>
         // fetch the data first, then change the range properties (better visualization)
-        dispatch(setPaginationOffsetLimit(entities)(offset, limit))
+        dispatch(setPaginationOffsetLimit(id)(offset, limit))
       ),
-    setInitialOrderBy: orderBy =>
-      dispatch(setPaginationOrderBy(entities)(orderBy)),
-    setInitialFilters: filters =>
-      dispatch(setPaginationFilters(entities)(filters)),
     setPaginationOrderBy: (orderBy, offset, limit, locale) => {
-      dispatch(setPaginationOrderBy(entities)(orderBy));
-      return dispatch(fetchPaginated(entities)(offset, limit, locale));
+      dispatch(setPaginationOrderBy(id)(orderBy));
+      return dispatch(fetchPaginated(id, endpoint)(offset, limit, locale));
     },
     setPaginationFilters: (filters, limit, locale) => {
-      dispatch(setPaginationFilters(entities)(filters));
-      return dispatch(fetchPaginated(entities)(0, limit, locale)); // offset is 0, change of filters resets the position
+      dispatch(setPaginationFilters(id)(filters));
+      return dispatch(fetchPaginated(id, endpoint)(0, limit, locale)); // offset is 0, change of filters resets the position
     },
     fetchPaginated: (offset, limit, locale) =>
-      dispatch(fetchPaginated(entities)(offset, limit, locale))
+      dispatch(fetchPaginated(id, endpoint)(offset, limit, locale))
   })
 )(injectIntl(PaginationContainer));

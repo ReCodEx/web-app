@@ -109,3 +109,21 @@ export const arrayToObject = (arr, indexer = idSelector, mapper = identity) =>
     res[indexer(val, idx)] = mapper(val);
     return res;
   }, {});
+
+/*
+ * Function Helpers
+ */
+
+/**
+ * Memoize wrapper for functions with single scalar argument.
+ * The function may have more than one argument, but only the first one is caching key.
+ */
+export const simpleScalarMemoize = fnc => {
+  const cache = {};
+  return (key, ...rest) => {
+    if (!(key in cache)) {
+      cache[key] = fnc(key, ...rest);
+    }
+    return cache[key];
+  };
+};

@@ -246,9 +246,9 @@ const reducer = handleActions(
     // Pagination result needs to store entity data here whilst indices are stored in pagination module
     [paginationActionTypes.FETCH_PAGINATED_FULFILLED]: (
       state,
-      { payload: { items }, meta: { entities } }
+      { payload: { items }, meta: { endpoint } }
     ) =>
-      entities === 'users'
+      endpoint === 'users'
         ? state.mergeIn(
             ['resources'],
             arrayToObject(

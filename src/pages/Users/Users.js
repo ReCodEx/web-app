@@ -202,7 +202,9 @@ class Users extends Component {
             >
               <div>
                 <PaginationContainer
-                  entities="users"
+                  id="users-all"
+                  endpoint="users"
+                  defaultLimit={50}
                   defaultOrderBy="name"
                   filtersCreator={this.filtersCreator}
                 >
