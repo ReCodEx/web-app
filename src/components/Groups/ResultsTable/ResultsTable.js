@@ -128,7 +128,7 @@ const getCSVValues = (assignments, data, locale) => {
           if (bonusPoints > 0) {
             row.push(`${gainedPoints}+${bonusPoints}`);
           } else if (bonusPoints < 0) {
-            row.push(`${gainedPoints}-${bonusPoints}`);
+            row.push(`${gainedPoints}${bonusPoints}`); // minus sign comes with the bonusPoints value
           } else {
             row.push(gainedPoints);
           }
