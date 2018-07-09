@@ -69,7 +69,7 @@ const GroupTopButtons = ({
         />}
 
       {studentEmails &&
-        <a href={`mailto:${studentEmails}`} className="pull-right">
+        <a href={`mailto:?bcc=${studentEmails}`} className="pull-right">
           <Button bsStyle="default">
             <MailIcon gapRight />
             <FormattedMessage
