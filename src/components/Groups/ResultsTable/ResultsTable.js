@@ -12,6 +12,10 @@ import withLinks from '../../../helpers/withLinks';
 import { LocalizedExerciseName } from '../../helpers/LocalizedNames';
 import { getLocalizedName } from '../../../helpers/getLocalizedData';
 import { compareAssignments } from '../../helpers/compareAssignments';
+import { downloadString } from '../../../redux/helpers/api/download';
+import Button from '../../widgets/FlatButton';
+import { DownloadIcon } from '../../icons';
+
 import styles from './ResultsTable.less';
 
 const getIndexedAssignments = defaultMemoize(assignments => {
@@ -85,6 +89,36 @@ const prepareTableComparators = defaultMemoize(locale => {
       nameComparator(u1, u2)
   };
 });
+
+// Prepare data in CSV format
+const getCSVValues = (assignments, data, locale) => {
+  let result = 'userName;userEmail;totalPoints';
+  assignments.forEach(assignment => {
+    result += `;${getLocalizedName(assignment, locale)}`;
+  });
+
+  data.forEach(item => {
+    let row = `${item.user.fullName};${item.user.privateData.email};${item.total
+      .gained}`;
+    assignments.forEach(assignment => {
+      if (!Number.isInteger(item[assignment.id].gained)) {
+        row += ';';
+      } else {
+        row += `;${item[assignment.id].gained}`;
+        const bonusPoints = item[assignment.id].bonus;
+        if (Number.isInteger(bonusPoints)) {
+          if (bonusPoints > 0) {
+            row += `+${bonusPoints}`;
+          } else if (bonusPoints < 0) {
+            row += `-${bonusPoints}`;
+          }
+        }
+      }
+    });
+    result += `\n${row}`;
+  });
+  return result;
+};
 
 class ResultsTable extends Component {
   // Prepare header descriptor object for SortableTable.
@@ -187,31 +221,57 @@ class ResultsTable extends Component {
       users = EMPTY_ARRAY,
       loggedUser,
       stats,
+      isAdmin,
+      isSupervisor,
+      groupName,
       intl: { locale }
     } = this.props;
     return (
-      <SortableTable
-        hover
-        header={this.prepareHeader(assignments)}
-        headerSuffixRow={this.prepareHeaderMaxPoints(assignments)}
-        comparators={prepareTableComparators(locale)}
-        defaultOrder="user"
-        styles={tableStyles}
-        cellRenderers={cellRenderers(
-          getIndexedAssignments(assignments),
-          loggedUser,
-          locale
-        )}
-        data={this.prepareData(assignments, users, stats)}
-        empty={
-          <div className="text-center text-muted">
+      <React.Fragment>
+        <SortableTable
+          hover
+          header={this.prepareHeader(assignments)}
+          headerSuffixRow={this.prepareHeaderMaxPoints(assignments)}
+          comparators={prepareTableComparators(locale)}
+          defaultOrder="user"
+          styles={tableStyles}
+          cellRenderers={cellRenderers(
+            getIndexedAssignments(assignments),
+            loggedUser,
+            locale
+          )}
+          data={this.prepareData(assignments, users, stats)}
+          empty={
+            <div className="text-center text-muted">
+              <FormattedMessage
+                id="app.groupResultsTableRow.noStudents"
+                defaultMessage="There are currently no students in the group."
+              />
+            </div>
+          }
+        />
+        {(isAdmin || isSupervisor) &&
+          <Button
+            bsStyle="primary"
+            className={styles.downloadButton}
+            onClick={() =>
+              downloadString(
+                `${groupName}.csv`,
+                getCSVValues(
+                  assignments,
+                  this.prepareData(assignments, users, stats),
+                  locale
+                ),
+                'text/csv'
+              )}
+          >
+            <DownloadIcon gapRight />
             <FormattedMessage
-              id="app.groupResultsTableRow.noStudents"
-              defaultMessage="There are currently no students in the group."
+              id="app.groupResultsTable.downloadCSV"
+              defaultMessage="Download results as CSV"
             />
-          </div>
-        }
-      />
+          </Button>}
+      </React.Fragment>
     );
   }
 }
@@ -225,6 +285,7 @@ ResultsTable.propTypes = {
   isAdmin: PropTypes.bool,
   isSupervisor: PropTypes.bool,
   renderActions: PropTypes.func,
+  groupName: PropTypes.string.isRequired,
   intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired,
   links: PropTypes.object
 };

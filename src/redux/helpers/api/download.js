@@ -49,3 +49,9 @@ export const downloadHelper = ({
     })
     .catch(e => dispatch(addNotification(e.message, false)));
 };
+
+export const downloadString = (fileName, data, contentType) => {
+  const typedBlob = new Blob([data], { type: contentType });
+  saveAs(typedBlob, fileName);
+  return Promise.resolve();
+};
