@@ -10,6 +10,9 @@ import {
   UserIcon
 } from '../icons';
 
+/*
+ * Labels
+ */
 export const roleLabels = {
   student: <FormattedMessage id="app.roles.student" defaultMessage="Student" />,
   'supervisor-student': (
@@ -63,6 +66,21 @@ export const roleLabelsPlural = {
 };
 
 export const knownRoles = Object.keys(roleLabels);
+
+/*
+ * Helper Functions
+ */
+
+export const isStudentRole = role =>
+  role === 'student' || role === 'supervisor-student';
+
+export const isSupervisorRole = role => role !== 'student'; // all other roles are supervisors
+
+export const isSuperadminRole = role => role === 'superadmin';
+
+/*
+ * Icons
+ */
 
 const roleIcons = ({ role, ...props }) => {
   switch (role) {

@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
+import { defaultMemoize } from 'reselect';
 
 import PaginationContainer from '../PaginationContainer';
 import SimpleTextSearch from '../../components/helpers/SimpleTextSearch';
@@ -14,7 +15,21 @@ import { FormattedMessage } from 'react-intl';
 
 const LIMITS = [10];
 
-const AddUserContainer = ({ id, filters, createActions, user }) =>
+const submitHandler = defaultMemoize((rolesFilter, setFilters) => search => {
+  const filters = { search: search.trim() };
+  if (rolesFilter && rolesFilter.length > 0) {
+    filters.roles = rolesFilter;
+  }
+  return setFilters(filters);
+});
+
+const AddUserContainer = ({
+  id,
+  filters,
+  createActions,
+  user,
+  rolesFilter = null
+}) =>
   <ResourceRenderer resource={user}>
     {user =>
       <PaginationContainer
@@ -35,7 +50,7 @@ const AddUserContainer = ({ id, filters, createActions, user }) =>
           <SimpleTextSearch
             query={filters.search || ''}
             isLoading={setFilters === null}
-            onSubmit={search => setFilters({ search: search.trim() })}
+            onSubmit={submitHandler(rolesFilter, setFilters)}
           />}
       >
         {({ data }) => {
@@ -55,6 +70,7 @@ AddUserContainer.propTypes = {
   id: PropTypes.string.isRequired,
   instanceId: PropTypes.string.isRequired,
   createActions: PropTypes.func,
+  rolesFilter: PropTypes.array,
   user: ImmutablePropTypes.map.isRequired,
   filters: PropTypes.object.isRequired
 };

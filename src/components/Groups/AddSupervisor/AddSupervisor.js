@@ -3,11 +3,15 @@ import PropTypes from 'prop-types';
 
 import MakeRemoveSupervisorButtonContainer from '../../../containers/MakeRemoveSupervisorButtonContainer';
 import AddUserContainer from '../../../containers/AddUserContainer';
+import { knownRoles, isSupervisorRole } from '../../helpers/usersRoles';
+
+const ROLES_FILTER = knownRoles.filter(isSupervisorRole);
 
 const AddSupervisor = ({ groupId, instanceId }) =>
   <AddUserContainer
     instanceId={instanceId}
     id={`add-supervisor-${groupId}`}
+    rolesFilter={ROLES_FILTER}
     createActions={userId =>
       <MakeRemoveSupervisorButtonContainer userId={userId} groupId={groupId} />}
   />;
