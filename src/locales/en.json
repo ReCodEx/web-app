@@ -683,6 +683,8 @@
   "app.groupDetail.subgroups": "Subgroups Hierarchy",
   "app.groupDetail.supervisors": "Supervisors of {groupName}",
   "app.groupDetail.threshold": "Minimum percent of the total points count needed to complete the course",
+  "app.groupResultsTable.downloadCSV": "Download results as CSV",
+  "app.groupResultsTable.maxPointsRow": "Max points:",
   "app.groupResultsTableRow.noStudents": "There are currently no students in the group.",
   "app.groupTree.treeViewLeaf.organizationalTooltip": "The group is organizational (it does not have any students or assignments)",
   "app.groupTree.treeViewLeaf.publicTooltip": "The group is public",
