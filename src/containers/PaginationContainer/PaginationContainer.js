@@ -89,12 +89,10 @@ class PaginationContainer extends Component {
    * Return bool indicating whether it is desirable to show buttons for limit selection.
    */
   showLimitsButtons = () => {
-    const { limit, limits, totalCount } = this.props;
+    const { limit, limits = DEFAULT_LIMITS, totalCount } = this.props;
     return (
-      limits &&
       limits.length > 0 &&
-      (limits.length > 1 || limits[0] !== limit) &&
-      totalCount > limits[0]
+      ((limits.length > 1 && totalCount > limits[0]) || limits[0] !== limit)
     );
   };
 
