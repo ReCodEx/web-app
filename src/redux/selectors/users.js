@@ -238,11 +238,3 @@ export const notificationsSelector = createSelector(
         )
       : EMPTY_OBJ
 );
-
-/*
- * Pagination
- */
-export const getUsersPaginationOffset = getPaginationOffset('users');
-export const getUsersPaginationLimit = getPaginationLimit('users');
-export const getUsersPaginationTotalCount = getPaginationTotalCount('users');
-export const getUsersPaginationIsPending = getPaginationIsPending('users');

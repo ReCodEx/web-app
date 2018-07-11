@@ -3,6 +3,8 @@ import { List, Map, fromJS } from 'immutable';
 import { createApiAction } from '../middleware/apiMiddleware';
 import { didInvalidate } from '../helpers/resourceManager';
 import {
+  getPaginationOffset,
+  getPaginationLimit,
   getPaginationOrderBy,
   getPaginationFilters
 } from '../selectors/pagination';
@@ -73,14 +75,22 @@ export const setPaginationFilters = componentId =>
   createAction(actionTypes.SET_FILTERS, Identity, () => ({ componentId }));
 
 export const fetchPaginated = (componentId, endpoint) => (
-  offset,
-  limit,
   locale,
+  offset = null,
+  limit = null,
   forceInvalidate = false
 ) => (dispatch, getState) => {
+  if (offset === null) {
+    offset = getPaginationOffset(componentId)(getState());
+  }
+  if (limit === null) {
+    limit = getPaginationLimit(componentId)(getState());
+  }
   const orderBy = getPaginationOrderBy(componentId)(getState());
   const filters = getPaginationFilters(componentId)(getState());
-  filters.instanceId = selectedInstanceId(getState());
+  if (endpoint === 'users') {
+    filters.instanceId = selectedInstanceId(getState());
+  }
 
   const query = { offset, limit, locale, filters };
   if (orderBy) {

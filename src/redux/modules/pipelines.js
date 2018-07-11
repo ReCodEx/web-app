@@ -1,8 +1,15 @@
 import { handleActions } from 'redux-actions';
-import factory, { initialState } from '../helpers/resourceManager';
+import factory, {
+  initialState,
+  createRecord,
+  resourceStatus
+} from '../helpers/resourceManager';
 import { createApiAction } from '../middleware/apiMiddleware';
 
 import { actionTypes as pipelineFilesActionTypes } from './pipelineFiles';
+import { actionTypes as paginationActionTypes } from './pagination';
+
+import { arrayToObject } from '../../helpers/common';
 
 const resourceName = 'pipelines';
 const { actions, reduceActions } = factory({ resourceName });
@@ -15,7 +22,6 @@ export const additionalActionTypes = {
   FORK_PIPELINE_FULFILLED: 'recodex/pipelines/FORK_PIPELINE_FULFILLED'
 };
 
-export const fetchPipelinesIfNeeded = actions.fetchIfNeeded;
 export const fetchPipeline = actions.fetchResource;
 export const fetchPipelineIfNeeded = actions.fetchOneIfNeeded;
 
@@ -101,7 +107,29 @@ const reducer = handleActions(
       state.setIn(['resources', id, 'data', 'forks', forkId], {
         status: forkStatuses.FULFILLED,
         pipelineId
-      })
+      }),
+
+    // Pagination result needs to store entity data here whilst indices are stored in pagination module
+    [paginationActionTypes.FETCH_PAGINATED_FULFILLED]: (
+      state,
+      { payload: { items }, meta: { endpoint } }
+    ) =>
+      endpoint === 'pipelines'
+        ? state.mergeIn(
+            ['resources'],
+            arrayToObject(
+              items,
+              obj => obj.id,
+              data =>
+                createRecord({
+                  data,
+                  state: resourceStatus.FULFILLED,
+                  didInvalidate: false,
+                  lastUpdate: Date.now()
+                })
+            )
+          )
+        : state
   }),
   initialState
 );

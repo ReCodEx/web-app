@@ -16,7 +16,10 @@ import { FormattedMessage } from 'react-intl';
 const LIMITS = [10];
 
 const submitHandler = defaultMemoize((rolesFilter, setFilters) => search => {
-  const filters = { search: search.trim() };
+  const filters = {};
+  if (search && search.trim()) {
+    filters.search = search.trim();
+  }
   if (rolesFilter && rolesFilter.length > 0) {
     filters.roles = rolesFilter;
   }

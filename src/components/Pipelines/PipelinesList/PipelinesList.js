@@ -1,50 +1,34 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Table } from 'react-bootstrap';
-import { injectIntl, FormattedMessage } from 'react-intl';
+import { injectIntl, FormattedMessage, intlShape } from 'react-intl';
 
 import PipelinesListItem from '../PipelinesListItem';
 
-const PipelinesList = ({ pipelines = [], createActions, intl }) =>
+const PipelinesList = ({
+  pipelines = [],
+  heading = null,
+  createActions,
+  intl: { locale }
+}) =>
   <Table hover>
-    <thead>
-      <tr>
-        <th />
-        <th>
-          <FormattedMessage id="generic.name" defaultMessage="Name" />
-        </th>
-        <th>
-          <FormattedMessage id="generic.author" defaultMessage="Author" />
-        </th>
-        <th>
-          <FormattedMessage
-            id="app.pipelinesList.exercise"
-            defaultMessage="Exercise"
-          />
-        </th>
-        <th>
-          <FormattedMessage
-            id="app.pipelinesList.createdAt"
-            defaultMessage="Created"
-          />
-        </th>
-      </tr>
-    </thead>
+    {Boolean(heading) &&
+      <thead>
+        {heading}
+      </thead>}
+
     <tbody>
-      {pipelines
-        .filter(a => a !== null)
-        .sort((a, b) => a.name.localeCompare(b.name, intl.locale))
-        .map(pipeline =>
-          <PipelinesListItem
-            {...pipeline}
-            createActions={createActions}
-            key={pipeline.id}
-          />
-        )}
+      {pipelines.map((pipeline, idx) =>
+        <PipelinesListItem
+          {...pipeline}
+          createActions={createActions}
+          key={pipeline ? pipeline.id : idx}
+        />
+      )}
 
       {pipelines.length === 0 &&
         <tr>
-          <td className="text-center" colSpan={4}>
+          <td className="text-center" colSpan={7}>
             <FormattedMessage
               id="app.pipelinesList.empty"
               defaultMessage="There are no pipelines in this list."
@@ -56,8 +40,9 @@ const PipelinesList = ({ pipelines = [], createActions, intl }) =>
 
 PipelinesList.propTypes = {
   pipelines: PropTypes.array,
+  heading: PropTypes.any,
   createActions: PropTypes.func,
-  intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired
+  intl: intlShape.isRequired
 };
 
 export default injectIntl(PipelinesList);

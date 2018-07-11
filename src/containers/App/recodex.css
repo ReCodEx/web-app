@@ -11,3 +11,76 @@
 .larger {
   font-size: 120%;
 }
+
+/*
+ * Margin Configurations
+ */
+
+.em-margin {
+  margin: 1em;
+}
+
+.em-margin-horizontal {
+  margin-left: 1em;
+  margin-right: 1em;
+}
+
+.em-margin-vertical {
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+
+.em-margin-left {
+  margin-left: 1em;
+}
+
+.em-margin-right {
+  margin-right: 1em;
+}
+
+.em-margin-top {
+  margin-top: 1em;
+}
+
+.em-margin-bottom {
+  margin-bottom: 1em;
+}
+
+/*
+ * Padding Configurations
+ */
+
+.em-padding {
+  padding: 1em;
+}
+
+.em-padding-horizontal {
+  padding-left: 1em;
+  padding-right: 1em;
+}
+
+.em-padding-vertical {
+  padding-top: 1em;
+  padding-bottom: 1em;
+}
+
+.em-padding-left {
+  padding-left: 1em;
+}
+
+.em-padding-right {
+  padding-right: 1em;
+}
+
+.em-padding-top {
+  padding-top: 1em;
+}
+
+.em-padding-bottom {
+  padding-bottom: 1em;
+}
+
+td.shrink-col,
+th.shrink-col {
+  width: 0;
+}

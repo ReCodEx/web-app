@@ -7,18 +7,16 @@ import { push } from 'react-router-redux';
 import { LinkContainer } from 'react-router-bootstrap';
 import { defaultMemoize } from 'reselect';
 
-import {
-  SettingsIcon,
-  SortedIcon,
-  TransferIcon,
-  LoadingIcon
-} from '../../components/icons';
+import { SettingsIcon, TransferIcon } from '../../components/icons';
 import Button from '../../components/widgets/FlatButton';
 import DeleteUserButtonContainer from '../../containers/DeleteUserButtonContainer';
 import Page from '../../components/layout/Page';
 import Box from '../../components/widgets/Box';
 import UsersList from '../../components/Users/UsersList';
-import PaginationContainer from '../../containers/PaginationContainer';
+import PaginationContainer, {
+  createSortingIcon,
+  showRangeInfo
+} from '../../containers/PaginationContainer';
 import FilterUsersListForm from '../../components/forms/FilterUsersListForm';
 // import SearchContainer from '../../containers/SearchContainer'; TODO -- delete whole container
 import {
@@ -32,25 +30,6 @@ import withLinks from '../../helpers/withLinks';
 import { getSearchQuery } from '../../redux/selectors/search';
 import { selectedInstanceId } from '../../redux/selectors/auth';
 import { knownRoles } from '../../components/helpers/usersRoles.js';
-
-const createSortingIcon = (
-  colName,
-  orderByColumn,
-  orderByDescending,
-  setOrderBy
-) =>
-  setOrderBy
-    ? <SortedIcon
-        active={orderByColumn === colName}
-        descending={orderByDescending}
-        gapLeft
-        onClick={() =>
-          setOrderBy(
-            colName,
-            orderByColumn === colName ? !orderByDescending : false
-          )}
-      />
-    : <LoadingIcon gapLeft />;
 
 const filterInitialValues = defaultMemoize(({ search = '', roles = [] }) => {
   const initials = { search, roles: {} };
@@ -120,17 +99,7 @@ class Users extends Component {
         )}
       </th>
       <td>
-        <div className="text-muted text-right small">
-          <FormattedMessage
-            id="app.paginationContainer.showingRange"
-            defaultMessage="showing {offset}. - {offsetEnd}. (of {totalCount})"
-            values={{
-              offset: offset + 1,
-              offsetEnd: Math.min(offset + limit, totalCount),
-              totalCount
-            }}
-          />
-        </div>
+        {showRangeInfo(offset, limit, totalCount)}
       </td>
     </tr>;
 
@@ -204,7 +173,6 @@ class Users extends Component {
                 <PaginationContainer
                   id="users-all"
                   endpoint="users"
-                  defaultLimit={50}
                   defaultOrderBy="name"
                   filtersCreator={this.filtersCreator}
                 >
@@ -217,26 +185,23 @@ class Users extends Component {
                     orderByDescending,
                     setOrderBy,
                     reload
-                  }) => {
-                    return (
-                      <UsersList
-                        users={data}
-                        loggedUserId={user.id}
-                        useGravatar={user.privateData.settings.useGravatar}
-                        emailColumn
-                        createdAtColumn
-                        heading={this.headingCreator({
-                          offset,
-                          limit,
-                          totalCount,
-                          orderByColumn,
-                          orderByDescending,
-                          setOrderBy
-                        })}
-                        createActions={this.createActions(reload)}
-                      />
-                    );
-                  }}
+                  }) =>
+                    <UsersList
+                      users={data}
+                      loggedUserId={user.id}
+                      useGravatar={user.privateData.settings.useGravatar}
+                      emailColumn
+                      createdAtColumn
+                      heading={this.headingCreator({
+                        offset,
+                        limit,
+                        totalCount,
+                        orderByColumn,
+                        orderByDescending,
+                        setOrderBy
+                      })}
+                      createActions={this.createActions(reload)}
+                    />}
                 </PaginationContainer>
               </div>
             </Box>
