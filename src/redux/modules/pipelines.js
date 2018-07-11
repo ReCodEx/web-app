@@ -7,7 +7,10 @@ import factory, {
 import { createApiAction } from '../middleware/apiMiddleware';
 
 import { actionTypes as pipelineFilesActionTypes } from './pipelineFiles';
-import { actionTypes as paginationActionTypes } from './pagination';
+import {
+  actionTypes as paginationActionTypes,
+  fetchPaginated
+} from './pagination';
 
 import { arrayToObject } from '../../helpers/common';
 
@@ -28,14 +31,19 @@ export const fetchPipelineIfNeeded = actions.fetchOneIfNeeded;
 export const fetchManyEndpoint = '/pipelines';
 
 export const fetchPipelines = () =>
-  actions.fetchMany({
-    endpoint: fetchManyEndpoint
-  });
+  fetchPaginated(null, 'pipelines')(
+    null, // no special locale
+    0, // from index 0
+    0, // limit = 0 means all
+    true // force reload
+  );
 
+/* TODO - awaiting modification (many-to-many relation with exercises)
 export const fetchExercisePipelines = exerciseId =>
   actions.fetchMany({
     endpoint: `/exercises/${exerciseId}/pipelines`
   });
+*/
 
 export const forkStatuses = {
   PENDING: 'PENDING',

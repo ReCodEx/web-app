@@ -17,7 +17,7 @@ import EditScoreConfigForm from '../../components/forms/EditScoreConfigForm';
 import SupplementaryFilesTableContainer from '../../containers/SupplementaryFilesTableContainer';
 
 import { fetchExerciseIfNeeded } from '../../redux/modules/exercises';
-import { fetchPipelines } from '../../redux/modules/pipelines';
+// import { fetchPipelines } from '../../redux/modules/pipelines';
 import {
   fetchExerciseConfigIfNeeded,
   setExerciseConfig
@@ -57,7 +57,7 @@ class EditExerciseConfig extends Component {
       dispatch(fetchExerciseConfigIfNeeded(exerciseId)),
       dispatch(fetchRuntimeEnvironments()),
       dispatch(fetchExerciseEnvironmentConfigIfNeeded(exerciseId)),
-      dispatch(fetchPipelines()),
+      // dispatch(fetchPipelines()), // TODO - awaiting modification of pipelines and reimplementation of this form
       dispatch(fetchScoreConfigIfNeeded(exerciseId))
     ]);
 

@@ -1,5 +1,9 @@
 import { createSelector } from 'reselect';
-import { EMPTY_ARRAY, simpleScalarMemoize } from '../../helpers/common';
+import {
+  EMPTY_OBJ,
+  EMPTY_ARRAY,
+  simpleScalarMemoize
+} from '../../helpers/common';
 import { isReady } from '../helpers/resourceManager';
 
 const getPagination = componentId => state => state.pagination.get(componentId);
@@ -34,14 +38,14 @@ export const getPaginationTotalCount = simpleScalarMemoize(componentId =>
 export const getPaginationOrderBy = simpleScalarMemoize(componentId =>
   createSelector(
     getPagination(componentId),
-    pagination => pagination && pagination.get('orderBy')
+    pagination => (pagination && pagination.get('orderBy')) || null
   )
 );
 
 export const getPaginationFilters = simpleScalarMemoize(componentId =>
   createSelector(
     getPagination(componentId),
-    pagination => pagination && pagination.get('filters').toJS()
+    pagination => (pagination && pagination.get('filters').toJS()) || EMPTY_OBJ
   )
 );
 

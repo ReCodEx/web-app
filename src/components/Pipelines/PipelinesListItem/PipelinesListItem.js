@@ -59,7 +59,7 @@ const PipelinesListItem = ({
 
 PipelinesListItem.propTypes = {
   id: PropTypes.string.isRequired,
-  author: PropTypes.string.isRequired,
+  author: PropTypes.string,
   parameters: PropTypes.object,
   name: PropTypes.string.isRequired,
   createdAt: PropTypes.number.isRequired,

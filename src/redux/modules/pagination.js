@@ -75,7 +75,7 @@ export const setPaginationFilters = componentId =>
   createAction(actionTypes.SET_FILTERS, Identity, () => ({ componentId }));
 
 export const fetchPaginated = (componentId, endpoint) => (
-  locale,
+  locale = null,
   offset = null,
   limit = null,
   forceInvalidate = false
@@ -92,7 +92,10 @@ export const fetchPaginated = (componentId, endpoint) => (
     filters.instanceId = selectedInstanceId(getState());
   }
 
-  const query = { offset, limit, locale, filters };
+  const query = { offset, limit, filters };
+  if (locale) {
+    query.locale = locale;
+  }
   if (orderBy) {
     query.orderBy = orderBy;
   }
@@ -159,7 +162,10 @@ export default handleActions(
     [actionTypes.FETCH_PAGINATED_PENDING]: (
       state,
       { meta: { componentId, started } }
-    ) => state.setIn([componentId, 'pending'], Number(started)),
+    ) =>
+      componentId
+        ? state.setIn([componentId, 'pending'], Number(started))
+        : state,
 
     [actionTypes.FETCH_PAGINATED_FULFILLED]: (
       state,
@@ -168,7 +174,7 @@ export default handleActions(
         meta: { componentId, started, forceInvalidate }
       }
     ) => {
-      if (state.getIn([componentId, 'pending']) !== started) {
+      if (!componentId || state.getIn([componentId, 'pending']) !== started) {
         return state;
       }
 
@@ -194,7 +200,7 @@ export default handleActions(
         .mergeIn([componentId], {
           totalCount,
           orderBy,
-          filters,
+          filters: Array.isArray(filters) ? {} : filters,
           pending: false
         })
         .mergeIn([componentId, 'data'], preprocessItems(items, offset));
@@ -204,7 +210,7 @@ export default handleActions(
       state,
       { meta: { componentId, started } }
     ) =>
-      state.getIn([componentId, 'pending']) === started
+      componentId && state.getIn([componentId, 'pending']) === started
         ? state.setIn([componentId, 'pending'], false)
         : state
   },
