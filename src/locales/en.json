@@ -496,7 +496,7 @@
   "app.exercises.title": "Exercises list",
   "app.exercisesList.created": "Created",
   "app.exercisesList.difficulty": "Difficulty",
-  "app.exercisesList.empty": "There are no exercises in this list.",
+  "app.exercisesList.empty": "No exercises match selected filters.",
   "app.exercisesList.groups": "Groups",
   "app.exercisesListItem.noGroups": "no groups",
   "app.exercisesSimpleList.difficulty": "Difficulty",

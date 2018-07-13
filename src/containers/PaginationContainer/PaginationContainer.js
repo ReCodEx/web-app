@@ -81,11 +81,15 @@ class PaginationContainer extends Component {
       limit: props.defaultLimit || limits[0]
     };
 
-    if (props.defaultOrderBy !== null) {
+    if (props.defaultOrderBy) {
       initials.orderBy = encodeOrderBy(
         props.defaultOrderBy,
         props.defaultOrderDescending || false
       );
+    }
+
+    if (props.defaultFilters) {
+      initials.filters = props.defaultFilters;
     }
 
     props.register(initials);
@@ -298,6 +302,7 @@ PaginationContainer.propTypes = {
   defaultLimit: PropTypes.number,
   defaultOrderBy: PropTypes.string,
   defaultOrderDescending: PropTypes.bool,
+  defaultFilters: PropTypes.object,
   children: PropTypes.func.isRequired,
   hideAllItems: PropTypes.bool,
   hideAllMessage: PropTypes.any,

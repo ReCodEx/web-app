@@ -25,13 +25,15 @@ const ExercisesListItem = ({
   updatedAt,
   isLocked,
   isBroken,
+  showGroups,
   createActions,
-  locale,
   links: { EXERCISE_URI_FACTORY }
 }) =>
   <tr>
-    <td>
+    <td className="shrink-col">
       <ExercisePrefixIcons id={id} isLocked={isLocked} isBroken={isBroken} />
+    </td>
+    <td>
       <strong>
         <Link to={EXERCISE_URI_FACTORY(id)}>
           <LocalizedExerciseName entity={{ name, localizedTexts }} />
@@ -45,20 +47,21 @@ const ExercisesListItem = ({
       {runtimeEnvironments &&
         <EnvironmentsList runtimeEnvironments={runtimeEnvironments} />}
     </td>
-    <td className="small">
-      {groupsIds.length > 0
-        ? groupsIds.map((groupId, i) =>
-            <div key={i}>
-              <GroupsNameContainer groupId={groupId} />
-            </div>
-          )
-        : <i className="text-muted">
-            <FormattedMessage
-              id="app.exercisesListItem.noGroups"
-              defaultMessage="no groups"
-            />
-          </i>}
-    </td>
+    {showGroups &&
+      <td className="small">
+        {groupsIds.length > 0
+          ? groupsIds.map((groupId, i) =>
+              <div key={i}>
+                <GroupsNameContainer groupId={groupId} />
+              </div>
+            )
+          : <i className="text-muted">
+              <FormattedMessage
+                id="app.exercisesListItem.noGroups"
+                defaultMessage="no groups"
+              />
+            </i>}
+      </td>}
     <td className="text-nowrap">
       <DifficultyIcon difficulty={difficulty} />
     </td>
@@ -83,7 +86,8 @@ const ExercisesListItem = ({
         }
       >
         <span>
-          <FormattedDate value={createdAt * 1000} />
+          <FormattedDate value={createdAt * 1000} />&nbsp;&nbsp;
+          <FormattedTime value={createdAt * 1000} />
         </span>
       </OverlayTrigger>
     </td>
@@ -105,8 +109,8 @@ ExercisesListItem.propTypes = {
   isLocked: PropTypes.bool.isRequired,
   isBroken: PropTypes.bool.isRequired,
   localizedTexts: PropTypes.array.isRequired,
+  showGroups: PropTypes.bool,
   createActions: PropTypes.func,
-  locale: PropTypes.string.isRequired,
   links: PropTypes.object
 };
 

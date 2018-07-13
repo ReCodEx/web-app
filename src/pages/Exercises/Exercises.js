@@ -3,24 +3,21 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import { push } from 'react-router-redux';
-import { LinkContainer } from 'react-router-bootstrap';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 
 import PageContent from '../../components/layout/PageContent';
 import Box from '../../components/widgets/Box';
-import DeleteExerciseButtonContainer from '../../containers/DeleteExerciseButtonContainer';
-import SearchContainer from '../../containers/SearchContainer';
-import ExercisesList from '../../components/Exercises/ExercisesList';
-import Button from '../../components/widgets/FlatButton';
-import { EditIcon } from '../../components/icons';
+import ExercisesListContainer from '../../containers/ExercisesListContainer';
+import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 
 import { searchExercises } from '../../redux/modules/search';
 import { fetchInstanceGroups } from '../../redux/modules/groups';
 import { selectedInstanceId } from '../../redux/selectors/auth';
+import { selectedInstance } from '../../redux/selectors/instances';
 import {
   canLoggedUserEditExercise,
   isLoggedAsSuperAdmin
 } from '../../redux/selectors/users';
-import { getSearchQuery } from '../../redux/selectors/search';
 
 import withLinks from '../../helpers/withLinks';
 
@@ -33,16 +30,7 @@ class Exercises extends Component {
   }
 
   render() {
-    const {
-      query,
-      isAuthorOfExercise,
-      search,
-      links: {
-        EXERCISE_EDIT_URI_FACTORY,
-        EXERCISE_EDIT_SIMPLE_CONFIG_URI_FACTORY,
-        EXERCISE_EDIT_LIMITS_URI_FACTORY
-      }
-    } = this.props;
+    const { instance } = this.props;
 
     return (
       <PageContent
@@ -79,6 +67,8 @@ class Exercises extends Component {
           }
           unlimitedHeight
         >
+          <ExercisesListContainer id="exercises-all" showGroups />
+          {/*
           <SearchContainer
             type="exercises"
             id="exercises-page"
@@ -128,7 +118,7 @@ class Exercises extends Component {
                     />
                   </div>}
               />}
-          />
+                /> */}
         </Box>
       </PageContent>
     );
@@ -138,8 +128,8 @@ class Exercises extends Component {
 Exercises.propTypes = {
   loadAsync: PropTypes.func.isRequired,
   instanceId: PropTypes.string.isRequired,
+  instance: ImmutablePropTypes.map,
   query: PropTypes.string,
-  isAuthorOfExercise: PropTypes.func.isRequired,
   push: PropTypes.func.isRequired,
   links: PropTypes.object.isRequired,
   search: PropTypes.func
@@ -150,10 +140,7 @@ export default withLinks(
     state => {
       return {
         instanceId: selectedInstanceId(state),
-        query: getSearchQuery('exercises-page')(state),
-        isSuperAdmin: isLoggedAsSuperAdmin(state),
-        isAuthorOfExercise: exerciseId =>
-          canLoggedUserEditExercise(exerciseId)(state)
+        instance: selectedInstance(state)
       };
     },
     dispatch => ({

@@ -496,7 +496,7 @@
   "app.exercises.title": "Seznam úloh",
   "app.exercisesList.created": "Vytvořeno",
   "app.exercisesList.difficulty": "Obtížnost",
-  "app.exercisesList.empty": "Nenalezeny žádné úlohy k zobrazení.",
+  "app.exercisesList.empty": "Žádné úlohy neodpovídají vybraným filtrům.",
   "app.exercisesList.groups": "Skupiny",
   "app.exercisesListItem.noGroups": "žádné skupiny",
   "app.exercisesSimpleList.difficulty": "Obtížnost",

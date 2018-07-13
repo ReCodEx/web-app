@@ -88,7 +88,7 @@ export const fetchPaginated = (componentId, endpoint) => (
   }
   const orderBy = getPaginationOrderBy(componentId)(getState());
   const filters = getPaginationFilters(componentId)(getState());
-  if (endpoint === 'users') {
+  if (endpoint !== 'pipelines') {
     filters.instanceId = selectedInstanceId(getState());
   }
 

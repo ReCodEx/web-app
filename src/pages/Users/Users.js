@@ -128,7 +128,7 @@ class Users extends Component {
           id={userId}
           bsSize="xs"
           resourceless={true}
-          onDeleted={() => reload()}
+          onDeleted={reload}
         />
       </div>
     );
