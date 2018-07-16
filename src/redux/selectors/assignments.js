@@ -47,3 +47,13 @@ export const getUserSubmissions = (userId, assignmentId) =>
         .filter(a => a);
     }
   );
+
+export const isResubmitAllPending = assignmentId =>
+  createSelector(getAssignment, assignmentSelector => {
+    const assignment = assignmentSelector(assignmentId);
+    return assignment.get('data') === null
+      ? false
+      : assignment.getIn(['data', 'resubmit-all-pending']) !== undefined
+        ? assignment.getIn(['data', 'resubmit-all-pending'])
+        : false;
+  });
