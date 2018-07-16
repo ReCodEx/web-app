@@ -9,8 +9,14 @@ import OnOffCheckbox from '../OnOffCheckbox';
 import styles from './MarkdownTextAreaField.less';
 
 import { canUseDOM } from 'exenv';
+var md;
+var mk;
 if (canUseDOM) {
   require('brace/mode/markdown');
+
+  md = require('markdown-it')();
+  mk = require('@iktakahiro/markdown-it-katex');
+  md.use(mk);
 }
 
 class MarkdownTextAreaField extends Component {
@@ -80,7 +86,8 @@ class MarkdownTextAreaField extends Component {
                     )
                   </small>
                 </p>}
-              <ReactMarkdown source={value} />
+              <div dangerouslySetInnerHTML={{ __html: md.render(value) }} />
+              {/*<ReactMarkdown source={value} />*/}
             </div>
           </div>}
       </div>
