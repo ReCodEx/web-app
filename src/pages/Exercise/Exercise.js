@@ -515,10 +515,7 @@ class Exercise extends Component {
                                         <Confirm
                                           id={solutionId}
                                           onConfirmed={() =>
-                                            deleteReferenceSolution(
-                                              exercise.id,
-                                              solutionId
-                                            )}
+                                            deleteReferenceSolution(solutionId)}
                                           question={
                                             <FormattedMessage
                                               id="app.exercise.referenceSolution.deleteConfirm"
@@ -648,8 +645,8 @@ export default withLinks(
       initCreateReferenceSolution: userId => dispatch(init(userId, exerciseId)),
       createExercisePipeline: () =>
         dispatch(createPipeline({ exerciseId: exerciseId })),
-      deleteReferenceSolution: (exerciseId, solutionId) =>
-        dispatch(deleteReferenceSolution(exerciseId, solutionId)),
+      deleteReferenceSolution: solutionId =>
+        dispatch(deleteReferenceSolution(solutionId)),
       forkExercise: (forkId, data) =>
         dispatch(forkExercise(exerciseId, forkId, data))
     })
