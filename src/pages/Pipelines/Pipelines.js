@@ -19,11 +19,9 @@ import { canEditPipeline } from '../../redux/selectors/users';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import { AddIcon, EditIcon } from '../../components/icons';
 import { create as createPipeline } from '../../redux/modules/pipelines';
-import { searchPipelines } from '../../redux/modules/search';
 import PipelinesList from '../../components/Pipelines/PipelinesList';
 
 import withLinks from '../../helpers/withLinks';
-import { getSearchQuery } from '../../redux/selectors/search';
 
 const submitHandler = defaultMemoize(setFilters => search => {
   const filters = {};
@@ -194,37 +192,6 @@ class Pipelines extends Component {
                   </div>}
               />}
           </PaginationContainer>
-
-          {/*
-          <SearchContainer
-            type="pipelines"
-            id="pipelines-page"
-            search={search}
-            showAllOnEmptyQuery={true}
-            renderList={pipelines =>
-              <PipelinesList
-                pipelines={pipelines}
-                createActions={id =>
-                  isAuthorOfPipeline(id) &&
-                  <ButtonGroup>
-                    <LinkContainer to={PIPELINE_EDIT_URI_FACTORY(id)}>
-                      <Button bsSize="xs" bsStyle="warning">
-                        <EditIcon gapRight />
-                        <FormattedMessage
-                          id="generic.edit"
-                          defaultMessage="Edit"
-                        />
-                      </Button>
-                    </LinkContainer>
-                    <DeletePipelineButtonContainer
-                      id={id}
-                      bsSize="xs"
-                      resourceless={true}
-                      onDeleted={() => search(query)}
-                    />
-                  </ButtonGroup>}
-              />}
-                /> */}
         </Box>
       </PageContent>
     );
@@ -235,9 +202,7 @@ Pipelines.propTypes = {
   createPipeline: PropTypes.func.isRequired,
   isAuthorOfPipeline: PropTypes.func.isRequired,
   push: PropTypes.func.isRequired,
-  links: PropTypes.object.isRequired,
-  search: PropTypes.func,
-  query: PropTypes.string
+  links: PropTypes.object.isRequired
 };
 
 export default withLinks(
@@ -247,14 +212,12 @@ export default withLinks(
 
       return {
         isAuthorOfPipeline: pipelineId =>
-          canEditPipeline(userId, pipelineId)(state),
-        query: getSearchQuery('pipelines-page')(state)
+          canEditPipeline(userId, pipelineId)(state)
       };
     },
     dispatch => ({
       push: url => dispatch(push(url)),
-      createPipeline: () => dispatch(createPipeline()),
-      search: query => dispatch(searchPipelines()('pipelines-page', query))
+      createPipeline: () => dispatch(createPipeline())
     })
   )(Pipelines)
 );

@@ -9,7 +9,6 @@ import PageContent from '../../components/layout/PageContent';
 import Box from '../../components/widgets/Box';
 import ExercisesListContainer from '../../containers/ExercisesListContainer';
 
-import { searchExercises } from '../../redux/modules/search';
 import { fetchInstanceGroups } from '../../redux/modules/groups';
 import { selectedInstanceId } from '../../redux/selectors/auth';
 import { selectedInstance } from '../../redux/selectors/instances';
@@ -73,8 +72,7 @@ Exercises.propTypes = {
   instance: ImmutablePropTypes.map,
   query: PropTypes.string,
   push: PropTypes.func.isRequired,
-  links: PropTypes.object.isRequired,
-  search: PropTypes.func
+  links: PropTypes.object.isRequired
 };
 
 export default withLinks(
@@ -88,8 +86,7 @@ export default withLinks(
     dispatch => ({
       loadAsync: instanceId =>
         Exercises.loadAsync({}, dispatch, { instanceId }),
-      push: url => dispatch(push(url)),
-      search: query => dispatch(searchExercises()('exercises-page', query))
+      push: url => dispatch(push(url))
     })
   )(Exercises)
 );

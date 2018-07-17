@@ -19,9 +19,6 @@ const maybeQuestionMark = (endpoint, query) =>
     ? ''
     : endpoint.indexOf('?') === -1 ? '?' : '&';
 
-//const generateQuery = query =>
-//  !query ? '' : Object.keys(query).map(key => `${key}=${query[key]}`).join('&');
-
 const encodeQueryItem = (flatten, name, value) => {
   if (Array.isArray(value)) {
     // Encode array so PHP wrapper can decode it as array

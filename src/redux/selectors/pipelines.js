@@ -1,5 +1,4 @@
 import { createSelector } from 'reselect';
-import { isReady } from '../helpers/resourceManager';
 import { fetchManyEndpoint } from '../modules/pipelines';
 import { unique } from '../../helpers/common';
 

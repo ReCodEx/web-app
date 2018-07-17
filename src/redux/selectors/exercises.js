@@ -1,7 +1,6 @@
 import { createSelector } from 'reselect';
 import { EMPTY_ARRAY, EMPTY_LIST } from '../../helpers/common';
 import { isReady } from '../helpers/resourceManager';
-import { fetchManyEndpoint } from '../modules/exercises';
 import { getAssignment } from './assignments';
 
 const getParam = (state, id) => id;
@@ -25,10 +24,6 @@ export const exerciseForkedFromSelector = exerciseId =>
       exercises && exercises.getIn([exerciseId, 'data', 'forkedFrom']);
     return fokredId && exercises.get(fokredId);
   });
-
-export const fetchManyStatus = createSelector(getExercises, state =>
-  state.getIn(['fetchManyStatus', fetchManyEndpoint])
-);
 
 export const getExercise = id =>
   createSelector(

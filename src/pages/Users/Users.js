@@ -18,16 +18,13 @@ import PaginationContainer, {
   showRangeInfo
 } from '../../containers/PaginationContainer';
 import FilterUsersListForm from '../../components/forms/FilterUsersListForm';
-// import SearchContainer from '../../containers/SearchContainer'; TODO -- delete whole container
 import {
   loggedInUserSelector,
   isLoggedAsSuperAdmin
 } from '../../redux/selectors/users';
 import { takeOver } from '../../redux/modules/auth';
-import { searchPeople } from '../../redux/modules/search';
 
 import withLinks from '../../helpers/withLinks';
-import { getSearchQuery } from '../../redux/selectors/search';
 import { selectedInstanceId } from '../../redux/selectors/auth';
 import { knownRoles } from '../../components/helpers/usersRoles.js';
 
@@ -217,8 +214,6 @@ Users.propTypes = {
   links: PropTypes.object.isRequired,
   takeOver: PropTypes.func.isRequired,
   isSuperAdmin: PropTypes.bool,
-  search: PropTypes.func,
-  query: PropTypes.string,
   user: ImmutablePropTypes.map.isRequired
 };
 
@@ -228,16 +223,13 @@ export default withLinks(
       return {
         instanceId: selectedInstanceId(state),
         isSuperAdmin: isLoggedAsSuperAdmin(state),
-        user: loggedInUserSelector(state),
-        query: getSearchQuery('users-page')(state)
+        user: loggedInUserSelector(state)
       };
     },
     dispatch => ({
       push: url => dispatch(push(url)),
       takeOver: (userId, redirectUrl) =>
-        dispatch(takeOver(userId)).then(() => dispatch(push(redirectUrl))),
-      search: instanceId => query =>
-        dispatch(searchPeople(instanceId)('users-page', query))
+        dispatch(takeOver(userId)).then(() => dispatch(push(redirectUrl)))
     })
   )(Users)
 );

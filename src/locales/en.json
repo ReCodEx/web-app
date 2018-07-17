@@ -497,8 +497,6 @@
   "app.exercisesList.empty": "No exercises match selected filters.",
   "app.exercisesList.groups": "Groups",
   "app.exercisesListItem.noGroups": "no groups",
-  "app.exercisesSimpleList.difficulty": "Difficulty",
-  "app.exercisesSimpleList.empty": "There are no exercises in this list.",
   "app.exitCodes.java.0": "OK",
   "app.exitCodes.java.1": "Unknown error",
   "app.exitCodes.java.100": "Out of memory exception",

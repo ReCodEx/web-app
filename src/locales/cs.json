@@ -497,8 +497,6 @@
   "app.exercisesList.empty": "Žádné úlohy neodpovídají vybraným filtrům.",
   "app.exercisesList.groups": "Skupiny",
   "app.exercisesListItem.noGroups": "žádné skupiny",
-  "app.exercisesSimpleList.difficulty": "Obtížnost",
-  "app.exercisesSimpleList.empty": "V tomto seznamu nejsou žádné úlohy.",
   "app.exitCodes.java.0": "OK",
   "app.exitCodes.java.1": "Unknown error",
   "app.exitCodes.java.100": "Out of memory exception",

@@ -18,7 +18,6 @@ import { AddIcon } from '../../components/icons';
 import AssignmentsTable from '../../components/Assignments/Assignment/AssignmentsTable';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import AddStudent from '../../components/Groups/AddStudent';
-import ExercisesSimpleList from '../../components/Exercises/ExercisesSimpleList';
 import LeaveJoinGroupButtonContainer from '../../containers/LeaveJoinGroupButtonContainer';
 import ExercisesListContainer from '../../containers/ExercisesListContainer';
 
@@ -344,66 +343,6 @@ class GroupDetail extends Component {
                       rootGroup={data.id}
                       showAssignButton={!data.organizational}
                     />
-                    {/*
-                    <ResourceRenderer resource={groupExercises.toArray()}>
-                      {(...exercises) =>
-                        <ExercisesSimpleList
-                          exercises={exercises}
-                          createActions={(exerciseId, isLocked, isBroken) =>
-                            <div>
-                              {!data.organizational &&
-                                <AssignExerciseButton
-                                  isLocked={isLocked}
-                                  isBroken={isBroken}
-                                  assignExercise={() =>
-                                    this.assignExercise(exerciseId)}
-                                />}
-
-                              <LinkContainer
-                                to={EXERCISE_EDIT_URI_FACTORY(exerciseId)}
-                              >
-                                <Button bsSize="xs" bsStyle="warning">
-                                  <EditIcon gapRight />
-                                  <FormattedMessage
-                                    id="app.exercises.listEdit"
-                                    defaultMessage="Settings"
-                                  />
-                                </Button>
-                              </LinkContainer>
-                              <LinkContainer
-                                to={EXERCISE_EDIT_SIMPLE_CONFIG_URI_FACTORY(
-                                  exerciseId
-                                )}
-                              >
-                                <Button bsSize="xs" bsStyle="warning">
-                                  <EditIcon gapRight />
-                                  <FormattedMessage
-                                    id="app.exercises.listEditConfig"
-                                    defaultMessage="Tests"
-                                  />
-                                </Button>
-                              </LinkContainer>
-                              <LinkContainer
-                                to={EXERCISE_EDIT_LIMITS_URI_FACTORY(
-                                  exerciseId
-                                )}
-                              >
-                                <Button bsSize="xs" bsStyle="warning">
-                                  <EditIcon gapRight />
-                                  <FormattedMessage
-                                    id="app.exercises.listEditLimits"
-                                    defaultMessage="Limits"
-                                  />
-                                </Button>
-                              </LinkContainer>
-
-                              <DeleteExerciseButtonContainer
-                                id={exerciseId}
-                                bsSize="xs"
-                              />
-                            </div>}
-                        />}
-                              </ResourceRenderer> */}
                   </Box>
                 </Col>
               </Row>}
