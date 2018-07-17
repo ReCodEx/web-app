@@ -2,12 +2,15 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage, FormattedNumber } from 'react-intl';
 import { Table } from 'react-bootstrap';
-import ReactMarkdown from 'react-remarkable';
 
 import Box from '../../widgets/Box';
 import { SuccessOrFailureIcon } from '../../icons';
 import { getLocalizedDescription } from '../../../helpers/getLocalizedData';
 import { objectMap, identity } from '../../../helpers/common';
+
+const md = require('markdown-it')().use(
+  require('@iktakahiro/markdown-it-katex')
+);
 
 const knownBindingProviderLabels = {
   sis: (
@@ -21,7 +24,11 @@ const knownBindingProviderLabels = {
 const getDescription = (localizedTexts, locale) => {
   const description = getLocalizedDescription({ localizedTexts }, locale);
   return description
-    ? <ReactMarkdown source={description} />
+    ? <div
+        dangerouslySetInnerHTML={{
+          __html: md.render(description)
+        }}
+      />
     : <p className="small text-muted text-center well well-sm">
         <FormattedMessage
           id="app.groupDetail.noDescription"

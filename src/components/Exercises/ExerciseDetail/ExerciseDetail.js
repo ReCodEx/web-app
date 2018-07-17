@@ -8,7 +8,6 @@ import {
   FormattedRelative
 } from 'react-intl';
 import { Table } from 'react-bootstrap';
-import ReactMarkdown from 'react-remarkable';
 import { Link } from 'react-router';
 
 import Box from '../../widgets/Box';
@@ -21,6 +20,10 @@ import { SuccessOrFailureIcon } from '../../icons';
 import { getLocalizedDescription } from '../../../helpers/getLocalizedData';
 import { LocalizedExerciseName } from '../../helpers/LocalizedNames';
 import EnvironmentsList from '../../helpers/EnvironmentsList';
+
+const md = require('markdown-it')().use(
+  require('@iktakahiro/markdown-it-katex')
+);
 
 const ExerciseDetail = ({
   id,
@@ -70,11 +73,15 @@ const ExerciseDetail = ({
             </span>
           </th>
           <td>
-            <ReactMarkdown
-              source={getLocalizedDescription(
-                { description, localizedTexts },
-                locale
-              )}
+            <div
+              dangerouslySetInnerHTML={{
+                __html: md.render(
+                  getLocalizedDescription(
+                    { description, localizedTexts },
+                    locale
+                  )
+                )
+              }}
             />
           </td>
         </tr>

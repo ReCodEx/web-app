@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage, FormattedHTMLMessage } from 'react-intl';
-import ReactMarkdown from 'react-remarkable';
 import { Row, Col, HelpBlock } from 'react-bootstrap';
 
 import SourceCodeField from './SourceCodeField';
@@ -9,15 +8,13 @@ import OnOffCheckbox from '../OnOffCheckbox';
 import styles from './MarkdownTextAreaField.less';
 
 import { canUseDOM } from 'exenv';
-var md;
-var mk;
 if (canUseDOM) {
   require('brace/mode/markdown');
-
-  md = require('markdown-it')();
-  mk = require('@iktakahiro/markdown-it-katex');
-  md.use(mk);
 }
+
+const md = require('markdown-it')().use(
+  require('@iktakahiro/markdown-it-katex')
+);
 
 class MarkdownTextAreaField extends Component {
   componentWillMount = () => {
@@ -87,7 +84,6 @@ class MarkdownTextAreaField extends Component {
                   </small>
                 </p>}
               <div dangerouslySetInnerHTML={{ __html: md.render(value) }} />
-              {/*<ReactMarkdown source={value} />*/}
             </div>
           </div>}
       </div>

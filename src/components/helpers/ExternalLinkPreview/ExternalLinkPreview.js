@@ -2,10 +2,13 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { Well, Alert } from 'react-bootstrap';
-import ReactMarkdown from 'react-remarkable';
 
 import OnOffCheckbox from '../../forms/OnOffCheckbox';
 import { LoadingIcon } from '../../icons';
+
+const md = require('markdown-it')().use(
+  require('@iktakahiro/markdown-it-katex')
+);
 
 class ExternalLinkPreview extends Component {
   state = {
@@ -154,7 +157,11 @@ class ExternalLinkPreview extends Component {
           {text &&
             <div>
               {isMarkdown
-                ? <ReactMarkdown source={text} />
+                ? <div
+                    dangerouslySetInnerHTML={{
+                      __html: md.render(text)
+                    }}
+                  />
                 : <pre style={{ marginTop: '20px' }}>
                     {text}
                   </pre>}

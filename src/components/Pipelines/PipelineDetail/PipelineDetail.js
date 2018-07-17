@@ -6,12 +6,15 @@ import {
   FormattedTime,
   FormattedDate
 } from 'react-intl';
-import ReactMarkdown from 'react-remarkable';
 import { Table } from 'react-bootstrap';
 import Box from '../../widgets/Box';
 
 import UsersNameContainer from '../../../containers/UsersNameContainer';
 import ExercisesNameContainer from '../../../containers/ExercisesNameContainer';
+
+const md = require('markdown-it')().use(
+  require('@iktakahiro/markdown-it-katex')
+);
 
 const PipelineDetail = ({
   id,
@@ -42,7 +45,11 @@ const PipelineDetail = ({
             />
           </th>
           <td>
-            <ReactMarkdown source={description} />
+            <div
+              dangerouslySetInnerHTML={{
+                __html: md.render(description)
+              }}
+            />
           </td>
         </tr>
         <tr>

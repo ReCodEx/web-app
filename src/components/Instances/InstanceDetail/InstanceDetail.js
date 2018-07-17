@@ -3,9 +3,12 @@ import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { FormattedMessage } from 'react-intl';
 import { Row, Col } from 'react-bootstrap';
-import ReactMarkdown from 'react-remarkable';
 import Box from '../../widgets/Box';
 import GroupTree from '../../Groups/GroupTree';
+
+const md = require('markdown-it')().use(
+  require('@iktakahiro/markdown-it-katex')
+);
 
 const InstanceDetail = ({ description, rootGroupId, groups, isAdmin }) =>
   <Row>
@@ -18,7 +21,11 @@ const InstanceDetail = ({ description, rootGroupId, groups, isAdmin }) =>
           />
         }
       >
-        <ReactMarkdown source={description} />
+        <div
+          dangerouslySetInnerHTML={{
+            __html: md.render(description)
+          }}
+        />
       </Box>
     </Col>
     <Col md={6}>
