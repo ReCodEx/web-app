@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-
 import {
   FormGroup,
   FormControl,
@@ -20,6 +19,7 @@ const SelectField = ({
   addEmptyOption = false,
   emptyOptionCaption = '...',
   ignoreDirty = false,
+  associatedButton = null,
   ...props
 }) =>
   <FormGroup
@@ -30,26 +30,40 @@ const SelectField = ({
       <ControlLabel>
         {label}
       </ControlLabel>}
-    <FormControl
-      {...input}
-      {...props}
-      componentClass="select"
-      bsClass={classNames({
-        'form-control': true,
-        [styles.dirty]: dirty && !ignoreDirty && !error && !warning,
-        [styles.active]: active
-      })}
-    >
-      {addEmptyOption &&
-        <option value={''} key={'-1'}>
-          {emptyOptionCaption}
-        </option>}
-      {options.map(({ key, name }, i) =>
-        <option value={key} key={i}>
-          {name}
-        </option>
-      )}
-    </FormControl>
+
+    <table>
+      <tbody>
+        <tr>
+          <td width="100%" className="valign-top">
+            <FormControl
+              {...input}
+              {...props}
+              componentClass="select"
+              bsClass={classNames({
+                'form-control': true,
+                [styles.dirty]: dirty && !ignoreDirty && !error && !warning,
+                [styles.active]: active
+              })}
+            >
+              {addEmptyOption &&
+                <option value={''} key={'-1'}>
+                  {emptyOptionCaption}
+                </option>}
+              {options.map(({ key, name }, i) =>
+                <option value={key} key={i}>
+                  {name}
+                </option>
+              )}
+            </FormControl>
+          </td>
+          {associatedButton &&
+            <td className="valign-top">
+              {associatedButton}
+            </td>}
+        </tr>
+      </tbody>
+    </table>
+
     {error &&
       <HelpBlock>
         {' '}{error}{' '}
@@ -80,6 +94,7 @@ SelectField.propTypes = {
   options: PropTypes.array.isRequired,
   addEmptyOption: PropTypes.bool,
   emptyOptionCaption: PropTypes.string,
+  associatedButton: PropTypes.any,
   ignoreDirty: PropTypes.bool
 };
 

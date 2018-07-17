@@ -49,8 +49,7 @@ const FilterUsersListForm = ({
             {knownRoles.map(role =>
               <span
                 key={`${role}-${locale}`}
-                className="text-nowrap pull-left"
-                style={{ paddingRight: '20px' }}
+                className="text-nowrap pull-left em-padding-right"
               >
                 <Field
                   name={`roles.${role}`}

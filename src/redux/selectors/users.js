@@ -13,13 +13,6 @@ import {
 } from './groups';
 import { exerciseSelector } from './exercises';
 import { pipelineSelector } from './pipelines';
-import {
-  getPaginationOffset,
-  getPaginationLimit,
-  getPaginationTotalCount,
-  getPaginationIsPending
-} from './pagination';
-
 import { isReady, getJsData } from '../helpers/resourceManager';
 
 const getParam = (state, id) => id;

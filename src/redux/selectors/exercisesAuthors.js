@@ -1,0 +1,41 @@
+import { createSelector, defaultMemoize } from 'reselect';
+import { EMPTY_LIST } from '../../helpers/common';
+import { isReady, isLoading } from '../helpers/resourceManager';
+import { usersSelector } from './users';
+
+const exericsesAuthorsAllSelector = state => state.exercisesAuthors.get('all');
+const exericsesAuthorsOfGroupSelector = groupId => state =>
+  state.exercisesAuthors.getIn(['group', groupId]);
+
+export const getAllExericsesAuthors = createSelector(
+  [exericsesAuthorsAllSelector, usersSelector],
+  (authors, users) =>
+    (authors &&
+      isReady(authors) &&
+      users &&
+      authors.get('data').map(id => users.get(id))) ||
+    EMPTY_LIST
+);
+
+export const getAllExericsesAuthorsIsLoading = createSelector(
+  [exericsesAuthorsAllSelector],
+  authors => Boolean(authors && isLoading(authors))
+);
+
+export const getExercisesAuthorsOfGroup = defaultMemoize(groupId =>
+  createSelector(
+    [exericsesAuthorsOfGroupSelector(groupId), usersSelector],
+    (authors, users) =>
+      (authors &&
+        isReady(authors) &&
+        users &&
+        authors.get('data').map(id => users.get(id))) ||
+      EMPTY_LIST
+  )
+);
+
+export const getExercisesAuthorsOfGroupIsLoading = defaultMemoize(groupId =>
+  createSelector([exericsesAuthorsOfGroupSelector(groupId)], authors =>
+    Boolean(authors && isLoading(authors))
+  )
+);

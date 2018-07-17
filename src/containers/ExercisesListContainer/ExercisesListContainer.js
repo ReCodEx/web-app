@@ -3,19 +3,44 @@ import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { injectIntl, FormattedMessage, intlShape } from 'react-intl';
-import { LinkContainer } from 'react-router-bootstrap';
+import { defaultMemoize } from 'reselect';
 
 import PaginationContainer, {
   createSortingIcon,
   showRangeInfo
-} from '../../containers/PaginationContainer';
-import DeleteExerciseButtonContainer from '../../containers/DeleteExerciseButtonContainer';
+} from '../PaginationContainer';
 import ExercisesList from '../../components/Exercises/ExercisesList';
-import ResourceRenderer from '../../components/helpers/ResourceRenderer';
-import Button from '../../components/widgets/FlatButton';
-import { EditIcon } from '../../components/icons';
+import FilterExercisesListForm from '../../components/forms/FilterExercisesListForm';
+import { fetchExercisesAuthorsIfNeeded } from '../../redux/modules/exercisesAuthors';
+import {
+  getAllExericsesAuthors,
+  getAllExericsesAuthorsIsLoading,
+  getExercisesAuthorsOfGroup,
+  getExercisesAuthorsOfGroupIsLoading
+} from '../../redux/selectors/exercisesAuthors';
+import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 
 import withLinks from '../../helpers/withLinks';
+
+const filterInitialValues = defaultMemoize(
+  ({ search = '', authorsIds = [] }) => ({
+    search,
+    author: authorsIds.length > 0 ? authorsIds[0] : null
+  })
+);
+
+const transformAndSetFilterData = defaultMemoize(
+  setFilters => ({ search, author }) => {
+    const data = {};
+    if (search.trim()) {
+      data.search = search.trim();
+    }
+    if (author) {
+      data.authorsIds = [author];
+    }
+    return setFilters(data);
+  }
+);
 
 class ExercisesListContainer extends Component {
   constructor(props) {
@@ -27,14 +52,17 @@ class ExercisesListContainer extends Component {
   }
 
   componentWillMount() {
-    //    ExercisesNameContainer.loadData(this.props);
+    ExercisesListContainer.loadData(this.props);
   }
 
-  componentWillReceiveProps(newProps) {}
+  componentWillReceiveProps({ rootGroup, fetchExercisesAuthorsIfNeeded }) {
+    if (this.props.rootGroup !== rootGroup) {
+      fetchExercisesAuthorsIfNeeded(rootGroup);
+    }
+  }
 
-  static loadData = ({ loadExerciseIfNeeded }) => {
-    //loadExerciseIfNeeded();
-  };
+  static loadData = ({ rootGroup, fetchExercisesAuthorsIfNeeded }) =>
+    fetchExercisesAuthorsIfNeeded(rootGroup);
 
   headingCreator = ({
     offset,
@@ -99,24 +127,22 @@ class ExercisesListContainer extends Component {
   };
 
   filtersCreator = (filters, setFilters) => {
-    return null;
-    /*
-    <FilterUsersListForm
-      onSubmit={setFilters ? transformAndSetFilterData(setFilters) : null}
-      initialValues={filterInitialValues(filters)}
-    />;*/
+    const { id, authors, authorsLoading, loggedUserId } = this.props;
+
+    return (
+      <FilterExercisesListForm
+        form={`${id}-filterForm`}
+        authors={authors}
+        authorsLoading={authorsLoading}
+        loggedUserId={loggedUserId}
+        onSubmit={setFilters ? transformAndSetFilterData(setFilters) : null}
+        initialValues={filterInitialValues(filters)}
+      />
+    );
   };
 
   render() {
-    const {
-      id,
-      showGroups = false,
-      links: {
-        EXERCISE_EDIT_URI_FACTORY,
-        EXERCISE_EDIT_SIMPLE_CONFIG_URI_FACTORY,
-        EXERCISE_EDIT_LIMITS_URI_FACTORY
-      }
-    } = this.props;
+    const { id, showGroups = false } = this.props;
     return (
       <PaginationContainer
         id={id}
@@ -146,54 +172,9 @@ class ExercisesListContainer extends Component {
               orderByDescending,
               setOrderBy
             })}
-            createActions={id =>
-              <div>
-                <LinkContainer to={EXERCISE_EDIT_URI_FACTORY(id)}>
-                  <Button bsSize="xs" bsStyle="warning">
-                    <EditIcon gapRight />
-                    <FormattedMessage
-                      id="app.exercises.listEdit"
-                      defaultMessage="Settings"
-                    />
-                  </Button>
-                </LinkContainer>
-                <LinkContainer to={EXERCISE_EDIT_SIMPLE_CONFIG_URI_FACTORY(id)}>
-                  <Button bsSize="xs" bsStyle="warning">
-                    <EditIcon gapRight />
-                    <FormattedMessage
-                      id="app.exercises.listEditConfig"
-                      defaultMessage="Tests"
-                    />
-                  </Button>
-                </LinkContainer>
-                <LinkContainer to={EXERCISE_EDIT_LIMITS_URI_FACTORY(id)}>
-                  <Button bsSize="xs" bsStyle="warning">
-                    <EditIcon gapRight />
-                    <FormattedMessage
-                      id="app.exercises.listEditLimits"
-                      defaultMessage="Limits"
-                    />
-                  </Button>
-                </LinkContainer>
-
-                <DeleteExerciseButtonContainer
-                  id={id}
-                  bsSize="xs"
-                  resourceless={true}
-                  onDeleted={reload}
-                />
-              </div>}
           />}
       </PaginationContainer>
     );
-    /*
-    return (
-      <ResourceRenderer resource={exercise} loading={<LoadingExercisesName />}>
-        {exercise =>
-          <ExercisesName {...exercise} noLink={noLink} locale={locale} />}
-      </ResourceRenderer>
-    );
-*/
   }
 }
 
@@ -201,17 +182,28 @@ ExercisesListContainer.propTypes = {
   id: PropTypes.string.isRequired,
   rootGroup: PropTypes.string,
   showGroups: PropTypes.bool,
+  loggedUserId: PropTypes.string.isRequired,
+  authors: ImmutablePropTypes.list,
+  authorsLoading: PropTypes.bool.isRequired,
+  fetchExercisesAuthorsIfNeeded: PropTypes.func.isRequired,
   intl: intlShape.isRequired,
   links: PropTypes.object.isRequired
 };
 
 export default withLinks(
   connect(
-    (state, { exerciseId }) => ({
-      //exercise: exerciseSelector(exerciseId)(state)
+    (state, { rootGroup }) => ({
+      loggedUserId: loggedInUserIdSelector(state),
+      authors: rootGroup
+        ? getExercisesAuthorsOfGroup(rootGroup)(state)
+        : getAllExericsesAuthors(state),
+      authorsLoading: rootGroup
+        ? getExercisesAuthorsOfGroupIsLoading(rootGroup)(state)
+        : getAllExericsesAuthorsIsLoading(state)
     }),
-    (dispatch, { exerciseId }) => ({
-      //loadExerciseIfNeeded: () => dispatch(fetchExerciseIfNeeded(exerciseId))
+    dispatch => ({
+      fetchExercisesAuthorsIfNeeded: groupId =>
+        dispatch(fetchExercisesAuthorsIfNeeded(groupId || null))
     })
   )(injectIntl(ExercisesListContainer))
 );

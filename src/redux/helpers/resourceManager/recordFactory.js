@@ -31,7 +31,7 @@ const createRecord = (
     state,
     data,
     didInvalidate,
-    lastUpdate: lastUpdate || Date.now()
+    lastUpdate: lastUpdate !== null ? lastUpdate : Date.now()
   });
 
 export default createRecord;

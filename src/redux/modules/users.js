@@ -12,6 +12,7 @@ import { additionalActionTypes as groupsActionTypes } from './groups';
 import { actionTypes as sisSupervisedCoursesActionTypes } from './sisSupervisedCourses';
 import { actionTypes as emailVerificationActionTypes } from './emailVerification';
 import { actionTypes as paginationActionTypes } from './pagination';
+import { actionTypes as exercisesAuthorsActionTypes } from './exercisesAuthors';
 
 import { arrayToObject } from '../../helpers/common';
 
@@ -263,7 +264,23 @@ const reducer = handleActions(
                 })
             )
           )
-        : state
+        : state,
+
+    [exercisesAuthorsActionTypes.FETCH_FULFILLED]: (state, { payload }) =>
+      state.mergeIn(
+        ['resources'],
+        arrayToObject(
+          payload,
+          obj => obj.id,
+          data =>
+            createRecord({
+              data,
+              state: resourceStatus.FULFILLED,
+              didInvalidate: false,
+              lastUpdate: Date.now()
+            })
+        )
+      )
   }),
   initialState
 );

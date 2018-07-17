@@ -6,12 +6,7 @@ import { FormattedMessage } from 'react-intl';
 import ExercisesListItem from '../ExercisesListItem';
 import { LoadingIcon } from '../../icons';
 
-const ExercisesList = ({
-  heading = null,
-  exercises = [],
-  showGroups,
-  createActions
-}) =>
+const ExercisesList = ({ heading = null, exercises = [], showGroups }) =>
   <Table hover>
     {Boolean(heading) &&
       <thead>
@@ -24,7 +19,6 @@ const ExercisesList = ({
             ? <ExercisesListItem
                 {...exercise}
                 showGroups
-                createActions={createActions}
                 key={exercise ? exercise.id : idx}
               />
             : <tr key={idx}>
@@ -53,8 +47,7 @@ const ExercisesList = ({
 ExercisesList.propTypes = {
   heading: PropTypes.any,
   exercises: PropTypes.array,
-  showGroups: PropTypes.bool,
-  createActions: PropTypes.func
+  showGroups: PropTypes.bool
 };
 
 export default ExercisesList;

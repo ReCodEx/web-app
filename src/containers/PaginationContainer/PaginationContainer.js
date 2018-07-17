@@ -256,7 +256,9 @@ class PaginationContainer extends Component {
                             {limits
                               .map(
                                 (l, idx) =>
-                                  idx < 1 || totalCount > limits[idx - 1]
+                                  idx < 1 ||
+                                  totalCount > limits[idx - 1] ||
+                                  l === limit
                                     ? this.createLimitButton(l)
                                     : null
                               )

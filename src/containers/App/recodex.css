@@ -85,3 +85,19 @@ th.shrink-col {
   width: 0;
   white-space: nowrap;
 }
+
+/*
+ * Alignment
+ */
+
+.valign-top {
+  vertical-align: top;
+}
+
+.valign-middle {
+  vertical-align: middle;
+}
+
+.valign-bottom {
+  vertical-align: bottom;
+}
