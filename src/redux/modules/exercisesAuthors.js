@@ -60,7 +60,7 @@ export const fetchExercisesAuthorsIfNeeded = groupId => (
   if (!defaultNeedsRefetching(item)) {
     return fakeResult(item);
   }
-  return isLoading(item)
+  return item && isLoading(item)
     ? archivedPromises[groupId]
     : fetchExercisesAuthors(groupId)(dispatch, getState);
 };

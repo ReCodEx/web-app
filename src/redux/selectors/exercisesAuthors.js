@@ -5,7 +5,7 @@ import { usersSelector } from './users';
 
 const exericsesAuthorsAllSelector = state => state.exercisesAuthors.get('all');
 const exericsesAuthorsOfGroupSelector = groupId => state =>
-  state.exercisesAuthors.getIn(['group', groupId]);
+  state.exercisesAuthors.getIn(['groups', groupId]);
 
 export const getAllExericsesAuthors = createSelector(
   [exericsesAuthorsAllSelector, usersSelector],

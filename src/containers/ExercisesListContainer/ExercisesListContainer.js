@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { injectIntl, FormattedMessage, intlShape } from 'react-intl';
+import { push } from 'react-router-redux';
 import { defaultMemoize } from 'reselect';
 
 import PaginationContainer, {
@@ -19,6 +20,7 @@ import {
   getExercisesAuthorsOfGroupIsLoading
 } from '../../redux/selectors/exercisesAuthors';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
+import { create as assignExercise } from '../../redux/modules/assignments';
 
 import withLinks from '../../helpers/withLinks';
 
@@ -141,8 +143,24 @@ class ExercisesListContainer extends Component {
     );
   };
 
+  assignExercise = exerciseId => {
+    const {
+      assignExercise,
+      push,
+      links: { ASSIGNMENT_EDIT_URI_FACTORY }
+    } = this.props;
+    assignExercise(exerciseId).then(({ value: assigment }) =>
+      push(ASSIGNMENT_EDIT_URI_FACTORY(assigment.id))
+    );
+  };
+
   render() {
-    const { id, showGroups = false } = this.props;
+    const {
+      id,
+      showGroups = false,
+      showAssignButton = false,
+      rootGroup = null
+    } = this.props;
     return (
       <PaginationContainer
         id={id}
@@ -164,6 +182,8 @@ class ExercisesListContainer extends Component {
           <ExercisesList
             exercises={data}
             showGroups={showGroups}
+            showAssignButton={Boolean(showAssignButton && rootGroup)}
+            assignExercise={this.assignExercise}
             heading={this.headingCreator({
               offset,
               limit,
@@ -182,17 +202,20 @@ ExercisesListContainer.propTypes = {
   id: PropTypes.string.isRequired,
   rootGroup: PropTypes.string,
   showGroups: PropTypes.bool,
+  showAssignButton: PropTypes.bool,
   loggedUserId: PropTypes.string.isRequired,
   authors: ImmutablePropTypes.list,
   authorsLoading: PropTypes.bool.isRequired,
   fetchExercisesAuthorsIfNeeded: PropTypes.func.isRequired,
+  assignExercise: PropTypes.func.isRequired,
+  push: PropTypes.func.isRequired,
   intl: intlShape.isRequired,
   links: PropTypes.object.isRequired
 };
 
 export default withLinks(
   connect(
-    (state, { rootGroup }) => ({
+    (state, { rootGroup = null }) => ({
       loggedUserId: loggedInUserIdSelector(state),
       authors: rootGroup
         ? getExercisesAuthorsOfGroup(rootGroup)(state)
@@ -201,9 +224,12 @@ export default withLinks(
         ? getExercisesAuthorsOfGroupIsLoading(rootGroup)(state)
         : getAllExericsesAuthorsIsLoading(state)
     }),
-    dispatch => ({
+    (dispatch, { rootGroup = null }) => ({
       fetchExercisesAuthorsIfNeeded: groupId =>
-        dispatch(fetchExercisesAuthorsIfNeeded(groupId || null))
+        dispatch(fetchExercisesAuthorsIfNeeded(groupId || null)),
+      assignExercise: exerciseId =>
+        dispatch(assignExercise(rootGroup, exerciseId)),
+      push: url => dispatch(push(url))
     })
   )(injectIntl(ExercisesListContainer))
 );

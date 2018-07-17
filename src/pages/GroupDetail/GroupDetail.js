@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
-import { LinkContainer } from 'react-router-bootstrap';
 import Button from '../../components/widgets/FlatButton';
 import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
 import { Row, Col } from 'react-bootstrap';
@@ -15,22 +14,18 @@ import {
   FailedGroupDetail
 } from '../../components/Groups/GroupDetail';
 import HierarchyLine from '../../components/Groups/HierarchyLine';
-import { AddIcon, EditIcon } from '../../components/icons';
+import { AddIcon } from '../../components/icons';
 import AssignmentsTable from '../../components/Assignments/Assignment/AssignmentsTable';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import AddStudent from '../../components/Groups/AddStudent';
-import DeleteExerciseButtonContainer from '../../containers/DeleteExerciseButtonContainer';
 import ExercisesSimpleList from '../../components/Exercises/ExercisesSimpleList';
-import AssignExerciseButton from '../../components/buttons/AssignExerciseButton';
 import LeaveJoinGroupButtonContainer from '../../containers/LeaveJoinGroupButtonContainer';
+import ExercisesListContainer from '../../containers/ExercisesListContainer';
 
 import { fetchGroupIfNeeded } from '../../redux/modules/groups';
 import { fetchGroupsStats } from '../../redux/modules/stats';
 import { fetchStudents } from '../../redux/modules/users';
-import {
-  fetchAssignmentsForGroup,
-  create as assignExercise
-} from '../../redux/modules/assignments';
+import { fetchAssignmentsForGroup } from '../../redux/modules/assignments';
 import {
   fetchGroupExercises,
   create as createExercise
@@ -51,7 +46,6 @@ import {
   groupsSelector,
   groupsAssignmentsSelector
 } from '../../redux/selectors/groups';
-import { getExercisesForGroup } from '../../redux/selectors/exercises';
 import {
   getStatusesForLoggedUser,
   createGroupsStatsSelector
@@ -64,7 +58,7 @@ import { isReady } from '../../redux/helpers/resourceManager/index';
 import ResultsTable from '../../components/Groups/ResultsTable/ResultsTable';
 import GroupTopButtons from '../../components/Groups/GroupTopButtons/GroupTopButtons';
 
-import { EMPTY_LIST, EMPTY_MAP } from '../../helpers/common';
+import { EMPTY_LIST } from '../../helpers/common';
 
 class GroupDetail extends Component {
   static isAdminOrSupervisorOf = (group, userId) =>
@@ -154,24 +148,12 @@ class GroupDetail extends Component {
     );
   };
 
-  assignExercise = exerciseId => {
-    const {
-      assignExercise,
-      push,
-      links: { ASSIGNMENT_EDIT_URI_FACTORY }
-    } = this.props;
-    assignExercise(exerciseId).then(({ value: assigment }) =>
-      push(ASSIGNMENT_EDIT_URI_FACTORY(assigment.id))
-    );
-  };
-
   render() {
     const {
       group,
       students,
       loggedUser,
       assignments = EMPTY_LIST,
-      groupExercises = EMPTY_MAP,
       assignmentEnvironmentsSelector,
       stats,
       statuses,
@@ -180,11 +162,6 @@ class GroupDetail extends Component {
       isSupervisor,
       isStudent,
       userId,
-      links: {
-        EXERCISE_EDIT_URI_FACTORY,
-        EXERCISE_EDIT_LIMITS_URI_FACTORY,
-        EXERCISE_EDIT_SIMPLE_CONFIG_URI_FACTORY
-      },
       intl: { locale }
     } = this.props;
 
@@ -362,6 +339,12 @@ class GroupDetail extends Component {
                     }
                     isOpen
                   >
+                    <ExercisesListContainer
+                      id={`exercises-group-${data.id}`}
+                      rootGroup={data.id}
+                      showAssignButton={!data.organizational}
+                    />
+                    {/*
                     <ResourceRenderer resource={groupExercises.toArray()}>
                       {(...exercises) =>
                         <ExercisesSimpleList
@@ -420,7 +403,7 @@ class GroupDetail extends Component {
                               />
                             </div>}
                         />}
-                    </ResourceRenderer>
+                              </ResourceRenderer> */}
                   </Box>
                 </Col>
               </Row>}
@@ -438,7 +421,6 @@ GroupDetail.propTypes = {
   instance: ImmutablePropTypes.map,
   students: PropTypes.array,
   assignments: ImmutablePropTypes.list,
-  groupExercises: ImmutablePropTypes.map,
   assignmentEnvironmentsSelector: PropTypes.func,
   groups: ImmutablePropTypes.map,
   isAdmin: PropTypes.bool,
@@ -448,7 +430,6 @@ GroupDetail.propTypes = {
   loadAsync: PropTypes.func,
   stats: PropTypes.object,
   statuses: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
-  assignExercise: PropTypes.func.isRequired,
   createGroupExercise: PropTypes.func.isRequired,
   push: PropTypes.func.isRequired,
   links: PropTypes.object,
@@ -465,7 +446,6 @@ const mapStateToProps = (state, { params: { groupId } }) => {
     groups: groupsSelector(state),
     assignments: groupsAssignmentsSelector(state, groupId),
     assignmentEnvironmentsSelector: assignmentEnvironmentsSelector(state),
-    groupExercises: getExercisesForGroup(state, groupId),
     statuses: getStatusesForLoggedUser(state, groupId),
     stats: createGroupsStatsSelector(groupId)(state),
     students: studentsOfGroupSelector(state, groupId),
@@ -479,8 +459,6 @@ const mapStateToProps = (state, { params: { groupId } }) => {
 const mapDispatchToProps = (dispatch, { params }) => ({
   loadAsync: (userId, isSuperAdmin) =>
     GroupDetail.loadAsync(params, dispatch, { userId, isSuperAdmin }),
-  assignExercise: exerciseId =>
-    dispatch(assignExercise(params.groupId, exerciseId)),
   createGroupExercise: () =>
     dispatch(createExercise({ groupId: params.groupId })),
   push: url => dispatch(push(url))

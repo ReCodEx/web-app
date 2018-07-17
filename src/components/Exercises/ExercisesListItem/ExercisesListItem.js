@@ -15,6 +15,7 @@ import { LocalizedExerciseName } from '../../helpers/LocalizedNames';
 import EnvironmentsList from '../../helpers/EnvironmentsList';
 import { ExercisePrefixIcons, EditIcon } from '../../icons';
 import Button from '../../widgets/FlatButton';
+import AssignExerciseButton from '../../buttons/AssignExerciseButton';
 
 const ExercisesListItem = ({
   id,
@@ -29,7 +30,9 @@ const ExercisesListItem = ({
   isLocked,
   isBroken,
   permissionHints,
-  showGroups,
+  showGroups = false,
+  showAssignButton = false,
+  assignExercise = null,
   reload,
   links: {
     EXERCISE_URI_FACTORY,
@@ -104,6 +107,13 @@ const ExercisesListItem = ({
     </td>
 
     <td className="text-right text-nowrap">
+      {showAssignButton &&
+        assignExercise &&
+        <AssignExerciseButton
+          isLocked={isLocked}
+          isBroken={isBroken}
+          assignExercise={() => assignExercise(id)}
+        />}
       {permissionHints.update &&
         <LinkContainer to={EXERCISE_EDIT_URI_FACTORY(id)}>
           <Button bsSize="xs" bsStyle="warning">
@@ -141,7 +151,6 @@ const ExercisesListItem = ({
             />
           </Button>
         </LinkContainer>}
-
       {permissionHints.remove &&
         <DeleteExerciseButtonContainer
           id={id}
@@ -166,6 +175,8 @@ ExercisesListItem.propTypes = {
   localizedTexts: PropTypes.array.isRequired,
   permissionHints: PropTypes.object.isRequired,
   showGroups: PropTypes.bool,
+  showAssignButton: PropTypes.bool,
+  assignExercise: PropTypes.func,
   reload: PropTypes.func,
   links: PropTypes.object
 };
