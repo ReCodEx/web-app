@@ -6,9 +6,9 @@ import {
   FormattedTime,
   FormattedDate
 } from 'react-intl';
-import ReactMarkdown from 'react-remarkable';
 import { Table } from 'react-bootstrap';
 import Box from '../../widgets/Box';
+import Markdown from '../../widgets/Markdown';
 
 import UsersNameContainer from '../../../containers/UsersNameContainer';
 import ExercisesNameContainer from '../../../containers/ExercisesNameContainer';
@@ -42,7 +42,7 @@ const PipelineDetail = ({
             />
           </th>
           <td>
-            <ReactMarkdown source={description} />
+            <Markdown source={description} />
           </td>
         </tr>
         <tr>

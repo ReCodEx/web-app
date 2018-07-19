@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage, FormattedHTMLMessage } from 'react-intl';
-import ReactMarkdown from 'react-remarkable';
 import { Row, Col, HelpBlock } from 'react-bootstrap';
 
+import Markdown from '../../widgets/Markdown';
 import SourceCodeField from './SourceCodeField';
 import OnOffCheckbox from '../OnOffCheckbox';
 import styles from './MarkdownTextAreaField.less';
@@ -80,7 +80,7 @@ class MarkdownTextAreaField extends Component {
                     )
                   </small>
                 </p>}
-              <ReactMarkdown source={value} />
+              <Markdown source={value} />
             </div>
           </div>}
       </div>

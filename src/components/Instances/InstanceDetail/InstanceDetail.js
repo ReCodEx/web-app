@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { FormattedMessage } from 'react-intl';
 import { Row, Col } from 'react-bootstrap';
-import ReactMarkdown from 'react-remarkable';
 import Box from '../../widgets/Box';
+import Markdown from '../../widgets/Markdown';
 import GroupTree from '../../Groups/GroupTree';
 
 const InstanceDetail = ({ description, rootGroupId, groups, isAdmin }) =>
@@ -18,7 +18,7 @@ const InstanceDetail = ({ description, rootGroupId, groups, isAdmin }) =>
           />
         }
       >
-        <ReactMarkdown source={description} />
+        <Markdown source={description} />
       </Box>
     </Col>
     <Col md={6}>

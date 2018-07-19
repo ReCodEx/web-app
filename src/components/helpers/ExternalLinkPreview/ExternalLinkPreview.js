@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { Well, Alert } from 'react-bootstrap';
-import ReactMarkdown from 'react-remarkable';
 
 import OnOffCheckbox from '../../forms/OnOffCheckbox';
 import { LoadingIcon } from '../../icons';
+import Markdown from '../../widgets/Markdown';
 
 class ExternalLinkPreview extends Component {
   state = {
@@ -154,7 +154,7 @@ class ExternalLinkPreview extends Component {
           {text &&
             <div>
               {isMarkdown
-                ? <ReactMarkdown source={text} />
+                ? <Markdown source={text} />
                 : <pre style={{ marginTop: '20px' }}>
                     {text}
                   </pre>}
