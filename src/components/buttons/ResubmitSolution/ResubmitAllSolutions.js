@@ -1,13 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import Icon from '../../icons';
+import Icon, { LoadingIcon } from '../../icons';
 import Button from '../../widgets/FlatButton';
 import Confirm from '../../forms/Confirm';
 
 const ResubmitAllSolutions = ({
   id,
   resubmit,
+  isResubmitting,
   question = (
     <FormattedMessage
       id="app.resubmitSolution.resubmitAllConfirm"
@@ -16,8 +17,10 @@ const ResubmitAllSolutions = ({
   )
 }) =>
   <Confirm id={id} onConfirmed={resubmit} question={question}>
-    <Button bsStyle="danger">
-      <Icon icon="redo" gapRight />
+    <Button bsStyle="danger" disabled={isResubmitting}>
+      {isResubmitting
+        ? <LoadingIcon gapRight />
+        : <Icon icon="redo" gapRight />}
       <FormattedMessage
         id="app.resubmitSolution.resubmitAll"
         defaultMessage="Resubmit All Solutions"
@@ -28,6 +31,7 @@ const ResubmitAllSolutions = ({
 ResubmitAllSolutions.propTypes = {
   id: PropTypes.string.isRequired,
   resubmit: PropTypes.func.isRequired,
+  isResubmitting: PropTypes.bool.isRequired,
   question: PropTypes.any
 };
 

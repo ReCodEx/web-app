@@ -83,7 +83,31 @@ const reducer = handleActions(
     [additionalActionTypes.SYNC_ASSIGNMENT_FULFILLED]: (
       state,
       { payload, meta: { assignmentId } }
-    ) => state.setIn(['resources', assignmentId, 'data'], fromJS(payload))
+    ) => state.setIn(['resources', assignmentId, 'data'], fromJS(payload)),
+    [submissionsActionTypes.RESUBMIT_ALL_PENDING]: (
+      state,
+      { meta: { assignmentId } }
+    ) =>
+      state.setIn(
+        ['resources', assignmentId, 'data', 'resubmit-all-pending'],
+        true
+      ),
+    [submissionsActionTypes.RESUBMIT_ALL_REJECTED]: (
+      state,
+      { meta: { assignmentId } }
+    ) =>
+      state.setIn(
+        ['resources', assignmentId, 'data', 'resubmit-all-pending'],
+        false
+      ),
+    [submissionsActionTypes.RESUBMIT_ALL_FULFILLED]: (
+      state,
+      { meta: { assignmentId } }
+    ) =>
+      state.setIn(
+        ['resources', assignmentId, 'data', 'resubmit-all-pending'],
+        false
+      )
   }),
   initialState
 );
