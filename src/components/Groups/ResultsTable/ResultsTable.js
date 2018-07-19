@@ -115,7 +115,9 @@ const getCSVValues = (assignments, data, locale) => {
   data.forEach(item => {
     let row = [
       enquote(`${escapeString(item.user.fullName)}`),
-      enquote(`${escapeString(item.user.privateData.email)}`),
+      item.user.privateData
+        ? enquote(`${escapeString(item.user.privateData.email)}`)
+        : '',
       item.total.gained
     ];
     assignments.forEach(assignment => {

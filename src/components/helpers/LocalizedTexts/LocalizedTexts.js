@@ -2,10 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { Tabs, Tab, Well } from 'react-bootstrap';
-import ReactMarkdown from 'react-remarkable';
 
 import ExternalLinkPreview from '../ExternalLinkPreview';
 import Icon from '../../icons';
+import Markdown from '../../widgets/Markdown';
 
 import './LocalizedTexts.css';
 
@@ -45,7 +45,7 @@ const LocalizedTexts = ({ locales = [] }, { lang = 'en' }) =>
               </Well>
               <ExternalLinkPreview url={link} />
             </div>}
-          {text !== '' && <ReactMarkdown source={text} />}
+          {text !== '' && <Markdown source={text} />}
 
           {studentHint &&
             studentHint !== '' &&
@@ -57,7 +57,7 @@ const LocalizedTexts = ({ locales = [] }, { lang = 'en' }) =>
                   defaultMessage="Hint"
                 />
               </h4>
-              <ReactMarkdown source={studentHint} />
+              <Markdown source={studentHint} />
             </div>}
         </Tab>
       )}

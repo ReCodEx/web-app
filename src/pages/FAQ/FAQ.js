@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import ReactMarkdown from 'react-remarkable';
 
 import PageContent from '../../components/layout/PageContent';
 import withLinks from '../../helpers/withLinks';
+import Markdown from '../../components/widgets/Markdown';
 
 const FAQ_MD_URI = 'https://raw.githubusercontent.com/wiki/ReCodEx/wiki/FAQ.md';
 
@@ -39,7 +39,7 @@ class FAQ extends Component {
           }
         ]}
       >
-        <ReactMarkdown source={this.state.faqText} />
+        <Markdown source={this.state.faqText} />
       </PageContent>
     );
   }

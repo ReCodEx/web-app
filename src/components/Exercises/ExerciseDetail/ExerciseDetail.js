@@ -8,10 +8,10 @@ import {
   FormattedRelative
 } from 'react-intl';
 import { Table } from 'react-bootstrap';
-import ReactMarkdown from 'react-remarkable';
 import { Link } from 'react-router';
 
 import Box from '../../widgets/Box';
+import Markdown from '../../widgets/Markdown';
 import DifficultyIcon from '../DifficultyIcon';
 import ResourceRenderer from '../../helpers/ResourceRenderer';
 import withLinks from '../../../helpers/withLinks';
@@ -70,7 +70,7 @@ const ExerciseDetail = ({
             </span>
           </th>
           <td>
-            <ReactMarkdown
+            <Markdown
               source={getLocalizedDescription(
                 { description, localizedTexts },
                 locale

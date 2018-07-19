@@ -43,6 +43,9 @@ export const additionalActionTypes = {
   UNACCEPT_FULFILLED: 'recodex/submissions/UNACCEPT_FULFILLED',
   UNACCEPT_REJECTED: 'recodex/submissions/UNACCEPT_REJECTED',
   RESUBMIT_ALL: 'recodex/submissions/RESUBMIT_ALL',
+  RESUBMIT_ALL_PENDING: 'recodex/submissions/RESUBMIT_ALL_PENDING',
+  RESUBMIT_ALL_FULFILLED: 'recodex/submissions/RESUBMIT_ALL_FULFILLED',
+  RESUBMIT_ALL_REJECTED: 'recodex/submissions/RESUBMIT_ALL_REJECTED',
   DOWNLOAD_RESULT_ARCHIVE: 'recodex/files/DOWNLOAD_RESULT_ARCHIVE'
 };
 
