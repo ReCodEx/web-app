@@ -4,7 +4,8 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import { FormattedMessage } from 'react-intl';
 import classNames from 'classnames';
 import { Label } from 'react-bootstrap';
-import FontAwesomeIcon from '@fortawesome/react-fontawesome';
+
+import Icon from '../../icons';
 import HeaderNotification from '../HeaderNotification';
 
 import styles from './headerNotificationDropdown.less';
@@ -28,8 +29,8 @@ const HeaderNotificationsDropdown = ({
   >
     <a href="#" className="dropdown-toggle" onClick={toggleOpen}>
       {newNotifications.size === 0
-        ? <FontAwesomeIcon icon={['far', 'bell']} />
-        : <FontAwesomeIcon icon={['fas', 'bell']} />}
+        ? <Icon icon={['far', 'bell']} />
+        : <Icon icon={['fas', 'bell']} />}
       {newNotifications.size > 0 &&
         <Label bsStyle="danger">
           {newNotifications.reduce((acc, n) => acc + n.count, 0)}

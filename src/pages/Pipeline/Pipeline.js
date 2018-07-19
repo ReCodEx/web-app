@@ -10,7 +10,7 @@ import Page from '../../components/layout/Page';
 import Box from '../../components/widgets/Box';
 import Button from '../../components/widgets/FlatButton';
 import { EditIcon } from '../../components/icons';
-import ForkPipelineForm from '../../components/forms/ForkPipelineForm';
+// import ForkPipelineForm from '../../components/forms/ForkPipelineForm';
 
 import {
   fetchPipelineIfNeeded,
@@ -19,8 +19,6 @@ import {
 import { getPipeline } from '../../redux/selectors/pipelines';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import { canEditPipeline } from '../../redux/selectors/users';
-import { fetchExercises } from '../../redux/modules/exercises';
-import { exercisesSelector } from '../../redux/selectors/exercises';
 
 import { createGraphFromNodes } from '../../helpers/pipelineGraph';
 import withLinks from '../../helpers/withLinks';
@@ -57,19 +55,17 @@ class Pipeline extends Component {
           if (setState) {
             setState({ graph });
           }
-        }),
-      dispatch(fetchExercises())
+        })
     ]);
 
   render() {
     const {
       links: { PIPELINES_URI, PIPELINE_EDIT_URI_FACTORY },
       pipeline,
-      exercises,
-      isAuthorOfPipeline,
-      forkPipeline
+      isAuthorOfPipeline
+      // forkPipeline
     } = this.props;
-    const { graph, forkId } = this.state;
+    const { graph } = this.state;
 
     return (
       <Page
@@ -118,12 +114,13 @@ class Pipeline extends Component {
                       />
                     </Button>
                   </LinkContainer>}
+                {/* TODO Fork form needs redesigning (better selection of exercises).
                 <ForkPipelineForm
                   pipelineId={pipeline.id}
                   exercises={exercises}
                   forkId={forkId}
                   onSubmit={formData => forkPipeline(forkId, formData)}
-                />
+                /> */}
               </ButtonGroup>
             </div>
             <p />
@@ -163,8 +160,7 @@ Pipeline.propTypes = {
   }).isRequired,
   isAuthorOfPipeline: PropTypes.func.isRequired,
   links: PropTypes.object.isRequired,
-  forkPipeline: PropTypes.func.isRequired,
-  exercises: ImmutablePropTypes.map
+  forkPipeline: PropTypes.func.isRequired
 };
 
 export default withLinks(
@@ -176,8 +172,7 @@ export default withLinks(
         pipeline: getPipeline(pipelineId)(state),
         userId: loggedInUserIdSelector(state),
         isAuthorOfPipeline: pipelineId =>
-          canEditPipeline(userId, pipelineId)(state),
-        exercises: exercisesSelector(state)
+          canEditPipeline(userId, pipelineId)(state)
       };
     },
     (dispatch, { params: { pipelineId } }) => ({

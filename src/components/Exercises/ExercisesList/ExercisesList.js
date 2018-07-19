@@ -1,77 +1,51 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Table } from 'react-bootstrap';
-import { injectIntl, FormattedMessage } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 
 import ExercisesListItem from '../ExercisesListItem';
-import { getLocalizedName } from '../../../helpers/getLocalizedData';
+import { LoadingIcon } from '../../icons';
 
 const ExercisesList = ({
+  heading = null,
   exercises = [],
-  createActions,
-  intl: { locale },
-  ...rest
+  showGroups = false,
+  showAssignButton = false,
+  assignExercise = null
 }) =>
   <Table hover>
-    <thead>
-      <tr>
-        <th>
-          <FormattedMessage id="generic.name" defaultMessage="Name" />
-        </th>
-        <th>
-          <FormattedMessage id="generic.author" defaultMessage="Author" />
-        </th>
-        <th>
-          <FormattedMessage
-            id="generic.runtimesShort"
-            defaultMessage="Runtimes/Languages"
-          />
-        </th>
-        <th>
-          <FormattedMessage
-            id="app.exercisesList.groups"
-            defaultMessage="Groups"
-          />
-        </th>
-        <th>
-          <FormattedMessage
-            id="app.exercisesList.difficulty"
-            defaultMessage="Difficulty"
-          />
-        </th>
-        <th>
-          <FormattedMessage
-            id="app.exercisesList.created"
-            defaultMessage="Created"
-          />
-        </th>
-      </tr>
-    </thead>
+    {Boolean(heading) &&
+      <thead>
+        {heading}
+      </thead>}
     <tbody>
-      {exercises
-        .filter(e => e !== null)
-        .sort(
-          (a, b) =>
-            getLocalizedName(a, locale).localeCompare(
-              getLocalizedName(b, locale),
-              locale
-            ) || b.createdAt - a.createdAt
-        )
-        .map(exercise =>
-          <ExercisesListItem
-            {...exercise}
-            createActions={createActions}
-            locale={locale}
-            key={exercise.id}
-          />
-        )}
+      {exercises.map(
+        (exercise, idx) =>
+          exercise
+            ? <ExercisesListItem
+                {...exercise}
+                showGroups={showGroups}
+                showAssignButton={showAssignButton}
+                assignExercise={assignExercise}
+                key={exercise ? exercise.id : idx}
+              />
+            : <tr key={idx}>
+                <td colSpan={showGroups ? 8 : 7}>
+                  <LoadingIcon gapRight />
+                  <FormattedMessage
+                    id="generic.loading"
+                    defaultMessage="Loading ..."
+                  />
+                </td>
+              </tr>
+      )}
 
       {exercises.length === 0 &&
         <tr>
-          <td className="text-center" colSpan={6}>
+          <td className="text-center text-muted" colSpan={showGroups ? 8 : 7}>
             <FormattedMessage
               id="app.exercisesList.empty"
-              defaultMessage="There are no exercises in this list."
+              defaultMessage="No exercises match selected filters."
             />
           </td>
         </tr>}
@@ -79,9 +53,11 @@ const ExercisesList = ({
   </Table>;
 
 ExercisesList.propTypes = {
+  heading: PropTypes.any,
   exercises: PropTypes.array,
-  createActions: PropTypes.func,
-  intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired
+  showGroups: PropTypes.bool,
+  showAssignButton: PropTypes.bool,
+  assignExercise: PropTypes.func
 };
 
-export default injectIntl(ExercisesList);
+export default ExercisesList;

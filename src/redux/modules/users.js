@@ -1,12 +1,20 @@
 import { handleActions } from 'redux-actions';
 import { fromJS } from 'immutable';
 
-import factory, { initialState } from '../helpers/resourceManager';
+import factory, {
+  initialState,
+  createRecord,
+  resourceStatus
+} from '../helpers/resourceManager';
 import { createApiAction } from '../middleware/apiMiddleware';
 
 import { additionalActionTypes as groupsActionTypes } from './groups';
 import { actionTypes as sisSupervisedCoursesActionTypes } from './sisSupervisedCourses';
 import { actionTypes as emailVerificationActionTypes } from './emailVerification';
+import { actionTypes as paginationActionTypes } from './pagination';
+import { actionTypes as exercisesAuthorsActionTypes } from './exercisesAuthors';
+
+import { arrayToObject } from '../../helpers/common';
 
 export const additionalActionTypes = {
   VALIDATE_REGISTRATION_DATA: 'recodex/users/VALIDATE_REGISTRATION_DATA',
@@ -33,9 +41,6 @@ export { actionTypes };
 
 export const fetchManyEndpoint = '/users';
 
-export const fetchAllUsers = actions.fetchMany({
-  endpoint: fetchManyEndpoint
-});
 export const loadUserData = actions.pushResource;
 export const fetchUser = actions.fetchResource;
 export const fetchUserIfNeeded = actions.fetchIfNeeded;
@@ -73,7 +78,6 @@ export const makeLocalLogin = id =>
 /**
  * Reducer
  */
-
 const reducer = handleActions(
   Object.assign({}, reduceActions, {
     [actionTypes.UPDATE_FULFILLED]: (state, { payload, meta: { id } }) =>
@@ -238,7 +242,45 @@ const reducer = handleActions(
     [additionalActionTypes.CREATE_LOCAL_LOGIN_FULFILLED]: (
       state,
       { payload, meta: { id } }
-    ) => state.setIn(['resources', id, 'data'], fromJS(payload))
+    ) => state.setIn(['resources', id, 'data'], fromJS(payload)),
+
+    // Pagination result needs to store entity data here whilst indices are stored in pagination module
+    [paginationActionTypes.FETCH_PAGINATED_FULFILLED]: (
+      state,
+      { payload: { items }, meta: { endpoint } }
+    ) =>
+      endpoint === 'users'
+        ? state.mergeIn(
+            ['resources'],
+            arrayToObject(
+              items,
+              obj => obj.id,
+              data =>
+                createRecord({
+                  data,
+                  state: resourceStatus.FULFILLED,
+                  didInvalidate: false,
+                  lastUpdate: Date.now()
+                })
+            )
+          )
+        : state,
+
+    [exercisesAuthorsActionTypes.FETCH_FULFILLED]: (state, { payload }) =>
+      state.mergeIn(
+        ['resources'],
+        arrayToObject(
+          payload,
+          obj => obj.id,
+          data =>
+            createRecord({
+              data,
+              state: resourceStatus.FULFILLED,
+              didInvalidate: false,
+              lastUpdate: Date.now()
+            })
+        )
+      )
   }),
   initialState
 );

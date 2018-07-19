@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import classNames from 'classnames';
 import { Modal, ProgressBar, Table } from 'react-bootstrap';
 import Button from '../../widgets/FlatButton';
 import EvaluationStatusText from './EvaluationStatusText';
+import Icon from '../../icons';
 
 const messagesContainerStyle = {
   maxHeight: 300,
@@ -78,7 +78,7 @@ class EvaluationProgress extends Component {
                         })}
                       >
                         <strong>
-                          <FontAwesomeIcon
+                          <Icon
                             icon={
                               wasSuccessful ? 'check-circle' : 'times-circle'
                             }

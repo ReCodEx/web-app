@@ -5,9 +5,13 @@ import { FormattedMessage } from 'react-intl';
 import Button from '../../components/widgets/FlatButton';
 import { push } from 'react-router-redux';
 import { LinkContainer } from 'react-router-bootstrap';
-import { ButtonGroup } from 'react-bootstrap';
+import { defaultMemoize } from 'reselect';
 
-import SearchContainer from '../../containers/SearchContainer';
+import PaginationContainer, {
+  createSortingIcon,
+  showRangeInfo
+} from '../../containers/PaginationContainer';
+import SimpleTextSearch from '../../components/helpers/SimpleTextSearch';
 import DeletePipelineButtonContainer from '../../containers/DeletePipelineButtonContainer';
 import PageContent from '../../components/layout/PageContent';
 import Box from '../../components/widgets/Box';
@@ -15,13 +19,57 @@ import { canEditPipeline } from '../../redux/selectors/users';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import { AddIcon, EditIcon } from '../../components/icons';
 import { create as createPipeline } from '../../redux/modules/pipelines';
-import { searchPipelines } from '../../redux/modules/search';
 import PipelinesList from '../../components/Pipelines/PipelinesList';
 
 import withLinks from '../../helpers/withLinks';
-import { getSearchQuery } from '../../redux/selectors/search';
+
+const submitHandler = defaultMemoize(setFilters => search => {
+  const filters = {};
+  if (search && search.trim()) {
+    filters.search = search.trim();
+  }
+  return setFilters(filters);
+});
 
 class Pipelines extends Component {
+  headingCreator = ({
+    offset,
+    limit,
+    totalCount,
+    orderByColumn,
+    orderByDescending,
+    setOrderBy
+  }) =>
+    <tr>
+      <th className="shrink-col" />
+      <th className="shrink-col" />
+      <th className="shrink-col" />
+      <th>
+        <FormattedMessage id="generic.name" defaultMessage="Name" />
+        {createSortingIcon(
+          'name',
+          orderByColumn,
+          orderByDescending,
+          setOrderBy
+        )}
+      </th>
+      <th>
+        <FormattedMessage id="generic.author" defaultMessage="Author" />
+      </th>
+      <th>
+        <FormattedMessage id="generic.created" defaultMessage="Created" />
+        {createSortingIcon(
+          'createdAt',
+          orderByColumn,
+          orderByDescending,
+          setOrderBy
+        )}
+      </th>
+      <td>
+        {showRangeInfo(offset, limit, totalCount)}
+      </td>
+    </tr>;
+
   newPipeline = () => {
     const {
       createPipeline,
@@ -36,8 +84,6 @@ class Pipelines extends Component {
   render() {
     const {
       isAuthorOfPipeline,
-      search,
-      query,
       links: { PIPELINE_EDIT_URI_FACTORY }
     } = this.props;
 
@@ -86,25 +132,48 @@ class Pipelines extends Component {
               >
                 <AddIcon gapRight />
                 <FormattedMessage
-                  id="app.pipelines.add"
-                  defaultMessage="Add pipeline"
+                  id="app.pipelines.createNew"
+                  defaultMessage="Create New Pipeline"
                 />
               </Button>
             </p>
           }
           unlimitedHeight
         >
-          <SearchContainer
-            type="pipelines"
-            id="pipelines-page"
-            search={search}
-            showAllOnEmptyQuery={true}
-            renderList={pipelines =>
+          <PaginationContainer
+            id="pipelines-all"
+            endpoint="pipelines"
+            defaultOrderBy="name"
+            filtersCreator={(filters, setFilters) =>
+              <SimpleTextSearch
+                query={filters.search || ''}
+                isLoading={setFilters === null}
+                onSubmit={submitHandler(setFilters)}
+              />}
+          >
+            {({
+              data,
+              offset,
+              limit,
+              totalCount,
+              orderByColumn,
+              orderByDescending,
+              setOrderBy,
+              reload
+            }) =>
               <PipelinesList
-                pipelines={pipelines}
+                pipelines={data}
+                heading={this.headingCreator({
+                  offset,
+                  limit,
+                  totalCount,
+                  orderByColumn,
+                  orderByDescending,
+                  setOrderBy
+                })}
                 createActions={id =>
                   isAuthorOfPipeline(id) &&
-                  <ButtonGroup>
+                  <div>
                     <LinkContainer to={PIPELINE_EDIT_URI_FACTORY(id)}>
                       <Button bsSize="xs" bsStyle="warning">
                         <EditIcon gapRight />
@@ -118,11 +187,11 @@ class Pipelines extends Component {
                       id={id}
                       bsSize="xs"
                       resourceless={true}
-                      onDeleted={() => search(query)}
+                      onDeleted={() => reload()}
                     />
-                  </ButtonGroup>}
+                  </div>}
               />}
-          />
+          </PaginationContainer>
         </Box>
       </PageContent>
     );
@@ -133,9 +202,7 @@ Pipelines.propTypes = {
   createPipeline: PropTypes.func.isRequired,
   isAuthorOfPipeline: PropTypes.func.isRequired,
   push: PropTypes.func.isRequired,
-  links: PropTypes.object.isRequired,
-  search: PropTypes.func,
-  query: PropTypes.string
+  links: PropTypes.object.isRequired
 };
 
 export default withLinks(
@@ -145,14 +212,12 @@ export default withLinks(
 
       return {
         isAuthorOfPipeline: pipelineId =>
-          canEditPipeline(userId, pipelineId)(state),
-        query: getSearchQuery('pipelines-page')(state)
+          canEditPipeline(userId, pipelineId)(state)
       };
     },
     dispatch => ({
       push: url => dispatch(push(url)),
-      createPipeline: () => dispatch(createPipeline()),
-      search: query => dispatch(searchPipelines()('pipelines-page', query))
+      createPipeline: () => dispatch(createPipeline())
     })
   )(Pipelines)
 );

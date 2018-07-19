@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage, FormattedRelative } from 'react-intl';
-import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import { Link } from 'react-router';
 import { Tooltip, OverlayTrigger } from 'react-bootstrap';
 
@@ -78,10 +77,7 @@ class Badge extends Component {
                 logout();
               }}
             >
-              <FontAwesomeIcon
-                icon="sign-out-alt"
-                className="text-danger"
-              />&nbsp;
+              <Icon icon="sign-out-alt" className="text-danger" />&nbsp;
               <FormattedMessage id="app.logout" defaultMessage="Logout" />
             </a>
           </OverlayTrigger>

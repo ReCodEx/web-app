@@ -2,6 +2,7 @@ import { createSelector } from 'reselect';
 import { EMPTY_LIST } from '../../helpers/common';
 import { isReady } from '../helpers/resourceManager';
 import { loggedInUserSelector } from './users';
+import { selectedInstanceId } from './auth';
 
 const getInstances = state => state.instances;
 const getResources = instances => instances.get('resources');
@@ -12,7 +13,10 @@ export const instanceSelector = createSelector(
   (instances, id) => instances.get(id)
 );
 
-// export const instanceForGroupSelector =
+export const selectedInstance = createSelector(
+  [selectedInstanceId, instancesSelector],
+  (id, instances) => id && instances && instances.get(id)
+);
 
 export const publicInstancesSelector = createSelector(
   instancesSelector,

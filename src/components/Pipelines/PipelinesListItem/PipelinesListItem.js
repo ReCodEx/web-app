@@ -1,25 +1,35 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import UsersNameContainer from '../../../containers/UsersNameContainer';
-import ExercisesNameContainer from '../../../containers/ExercisesNameContainer';
 import { Link } from 'react-router';
 import { FormattedDate, FormattedTime, FormattedMessage } from 'react-intl';
 
+import Icon from '../../icons';
 import withLinks from '../../../helpers/withLinks';
 
 const PipelinesListItem = ({
   id,
   name,
   author,
-  exerciseId,
+  parameters,
   createdAt,
   createActions,
   links: { PIPELINE_URI_FACTORY }
 }) =>
   <tr>
-    <td className="text-center">
-      <FontAwesomeIcon icon="code" />
+    <td className="text-nowrap shrink-col">
+      <Icon icon="random" className={author ? 'text-muted' : 'text-primary'} />
+    </td>
+    <td className="text-center shrink-col text-muted">
+      {parameters.isCompilationPipeline && <Icon icon="cogs" />}
+      {parameters.isExecutionPipeline &&
+        !parameters.judgeOnlyPipeline &&
+        <Icon icon="bolt" />}
+      {parameters.judgeOnlyPipeline && <Icon icon="balance-scale" />}
+    </td>
+    <td className="text-center shrink-col text-muted">
+      {parameters.producesStdout && <Icon icon="align-left" gapRight />}
+      {parameters.producesFiles && <Icon icon={['far', 'file-alt']} gapRight />}
     </td>
     <td>
       <strong>
@@ -29,32 +39,28 @@ const PipelinesListItem = ({
       </strong>
     </td>
     <td>
-      <UsersNameContainer userId={author} />
-    </td>
-    <td>
-      {exerciseId
-        ? <ExercisesNameContainer exerciseId={exerciseId} />
+      {author
+        ? <UsersNameContainer userId={author} />
         : <i>
             <FormattedMessage
-              id="app.pipelinesListItem.exercise.public"
-              defaultMessage="Public"
+              id="app.pipelinesList.universalPipeline"
+              defaultMessage="universal pipeline"
             />
           </i>}
     </td>
     <td>
-      <FormattedDate value={createdAt * 1000} />{' '}
+      <FormattedDate value={createdAt * 1000} />&nbsp;&nbsp;
       <FormattedTime value={createdAt * 1000} />
     </td>
-    {createActions &&
-      <td className="text-right">
-        {createActions(id)}
-      </td>}
+    <td className="text-right">
+      {createActions && createActions(id)}
+    </td>
   </tr>;
 
 PipelinesListItem.propTypes = {
   id: PropTypes.string.isRequired,
-  author: PropTypes.string.isRequired,
-  exerciseId: PropTypes.string,
+  author: PropTypes.string,
+  parameters: PropTypes.object,
   name: PropTypes.string.isRequired,
   createdAt: PropTypes.number.isRequired,
   createActions: PropTypes.func,

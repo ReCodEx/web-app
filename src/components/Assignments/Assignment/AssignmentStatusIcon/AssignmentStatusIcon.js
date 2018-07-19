@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import Status from './Status';
+import Icon from '../../../icons';
 
 const AssignmentStatusIcon = ({ id, status, accepted = false }) => {
   switch (status) {
@@ -11,12 +11,7 @@ const AssignmentStatusIcon = ({ id, status, accepted = false }) => {
         <Status
           id={id}
           accepted={accepted}
-          icon={
-            <FontAwesomeIcon
-              icon={['far', 'thumbs-up']}
-              className="text-green"
-            />
-          }
+          icon={<Icon icon={['far', 'thumbs-up']} className="text-green" />}
           message={
             <FormattedMessage
               id="app.assignemntStatusIcon.ok"
@@ -30,7 +25,7 @@ const AssignmentStatusIcon = ({ id, status, accepted = false }) => {
       return (
         <Status
           id={id}
-          icon={<FontAwesomeIcon icon="cogs" className="text-yellow" />}
+          icon={<Icon icon="cogs" className="text-yellow" />}
           message={
             <FormattedMessage
               id="app.assignemntStatusIcon.inProgress"
@@ -45,12 +40,7 @@ const AssignmentStatusIcon = ({ id, status, accepted = false }) => {
         <Status
           id={id}
           accepted={accepted}
-          icon={
-            <FontAwesomeIcon
-              icon={['far', 'thumbs-down']}
-              className="text-red"
-            />
-          }
+          icon={<Icon icon={['far', 'thumbs-down']} className="text-red" />}
           message={
             <FormattedMessage
               id="app.assignemntStatusIcon.failed"
@@ -64,12 +54,7 @@ const AssignmentStatusIcon = ({ id, status, accepted = false }) => {
       return (
         <Status
           id={id}
-          icon={
-            <FontAwesomeIcon
-              icon="exclamation-triangle"
-              className="text-yellow"
-            />
-          }
+          icon={<Icon icon="exclamation-triangle" className="text-yellow" />}
           message={
             <FormattedMessage
               id="app.assignemntStatusIcon.evaluationFailed"
@@ -83,9 +68,7 @@ const AssignmentStatusIcon = ({ id, status, accepted = false }) => {
       return (
         <Status
           id={id}
-          icon={
-            <FontAwesomeIcon icon="exclamation-triangle" className="text-red" />
-          }
+          icon={<Icon icon="exclamation-triangle" className="text-red" />}
           message={
             <FormattedMessage
               id="app.assignemntStatusIcon.solutionMissingSubmission"
@@ -99,7 +82,7 @@ const AssignmentStatusIcon = ({ id, status, accepted = false }) => {
       return (
         <Status
           id={id}
-          icon={<FontAwesomeIcon icon="code" className="text-gray" />}
+          icon={<Icon icon="code" className="text-gray" />}
           message={
             <FormattedMessage
               id="app.assignemntStatusIcon.none"

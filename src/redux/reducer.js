@@ -2,8 +2,9 @@ import { combineReducers } from 'redux';
 import { routerReducer } from 'react-router-redux';
 import { reducer as formReducer } from 'redux-form';
 
-import auth, { actionTypes as authActionTypes } from './modules/auth';
 import assignments from './modules/assignments';
+import attachmentFiles from './modules/attachmentFiles';
+import auth, { actionTypes as authActionTypes } from './modules/auth';
 import boxes from './modules/boxes';
 import { default as canSubmit } from './modules/canSubmit'; // because of a named export 'canSubmit'
 import comments from './modules/comments';
@@ -14,43 +15,44 @@ import exerciseEnvironmentConfigs from './modules/exerciseEnvironmentConfigs';
 import exerciseScoreConfig from './modules/exerciseScoreConfig';
 import exerciseTests from './modules/exerciseTests';
 import exercises from './modules/exercises';
-import pipelines from './modules/pipelines';
+import exercisesAuthors from './modules/exercisesAuthors';
 import files from './modules/files';
 import filesContent from './modules/filesContent';
 import groups from './modules/groups';
 import groupResults from './modules/groupResults';
 import groupExercises from './modules/groupExercises';
+import hwGroups from './modules/hwGroups';
 import instances from './modules/instances';
 import licences from './modules/licences';
 import limits from './modules/limits';
 import notifications from './modules/notifications';
-import { default as search } from './modules/search'; // because of a named export 'search'
-import sidebar from './modules/sidebar';
-import stats from './modules/stats';
-import submission from './modules/submission';
-import submissions from './modules/submissions';
-import registration from './modules/registration';
-import upload from './modules/upload';
-import users from './modules/users';
-import userSwitching from './modules/userSwitching';
-import runtimeEnvironments from './modules/runtimeEnvironments';
-import supplementaryFiles from './modules/supplementaryFiles';
+import pagination from './modules/pagination';
+import pipelines from './modules/pipelines';
 import pipelineFiles from './modules/pipelineFiles';
-import attachmentFiles from './modules/attachmentFiles';
 import referenceSolutions from './modules/referenceSolutions';
-import hwGroups from './modules/hwGroups';
+import referenceSolutionEvaluations from './modules/referenceSolutionEvaluations';
+import registration from './modules/registration';
+import runtimeEnvironments from './modules/runtimeEnvironments';
+import sidebar from './modules/sidebar';
+import sisPossibleParents from './modules/sisPossibleParents';
 import sisStatus from './modules/sisStatus';
 import sisSubscribedGroups from './modules/sisSubscribedGroups';
 import sisSupervisedCourses from './modules/sisSupervisedCourses';
-import sisPossibleParents from './modules/sisPossibleParents';
 import sisTerms from './modules/sisTerms';
-import referenceSolutionEvaluations from './modules/referenceSolutionEvaluations';
+import stats from './modules/stats';
+import submission from './modules/submission';
+import submissions from './modules/submissions';
 import submissionEvaluations from './modules/submissionEvaluations';
 import submissionFailures from './modules/submissionFailures';
+import supplementaryFiles from './modules/supplementaryFiles';
+import upload from './modules/upload';
+import users from './modules/users';
+import userSwitching from './modules/userSwitching';
 
 const createRecodexReducers = (token, instanceId) => ({
-  auth: auth(token, instanceId),
   assignments,
+  attachmentFiles,
+  auth: auth(token, instanceId),
   boxes,
   canSubmit,
   comments,
@@ -61,39 +63,39 @@ const createRecodexReducers = (token, instanceId) => ({
   exerciseScoreConfig,
   exerciseTests,
   exercises,
-  pipelines,
+  exercisesAuthors,
   files,
   filesContent,
   groups,
   groupResults,
   groupExercises,
+  hwGroups,
   instances,
   licences,
   limits,
   notifications,
-  search,
-  sidebar,
-  stats,
-  submission,
-  submissions,
-  registration,
-  users,
-  userSwitching,
-  upload,
-  runtimeEnvironments,
-  supplementaryFiles,
+  pagination,
+  pipelines,
   pipelineFiles,
   referenceSolutions,
   referenceSolutionEvaluations,
-  hwGroups,
-  attachmentFiles,
-  sisStatus,
+  registration,
+  runtimeEnvironments,
+  sidebar,
+  sisPossibleParents,
   sisSubscribedGroups,
   sisSupervisedCourses,
-  sisPossibleParents,
+  sisStatus,
   sisTerms,
+  stats,
+  submission,
+  submissions,
   submissionEvaluations,
-  submissionFailures
+  submissionFailures,
+  supplementaryFiles,
+  users,
+  userSwitching,
+  upload
 });
 
 const librariesReducers = {

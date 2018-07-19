@@ -1,33 +1,33 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Table } from 'react-bootstrap';
-import { injectIntl, FormattedMessage } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import UsersListItem from '../UsersListItem';
 
-const UsersList = ({ users = [], createActions, intl, ...rest }) =>
-  <Table hover>
+const UsersList = ({ heading = null, users = [], createActions, ...rest }) =>
+  <Table hover={users.length > 0}>
+    {heading &&
+      users.length > 0 &&
+      <thead>
+        {heading}
+      </thead>}
+
     <tbody>
-      {users
-        .sort((a, b) => {
-          const aName = a.name.lastName + ' ' + a.name.firstName;
-          const bName = b.name.lastName + ' ' + b.name.firstName;
-          return aName.localeCompare(bName, intl.locale);
-        })
-        .map((user, i) =>
-          <UsersListItem
-            user={user}
-            createActions={createActions}
-            key={i}
-            {...rest}
-          />
-        )}
+      {users.map((user, i) =>
+        <UsersListItem
+          user={user}
+          createActions={createActions}
+          key={`user-${user ? user.id : i}`}
+          {...rest}
+        />
+      )}
 
       {users.length === 0 &&
         <tr>
-          <td className="text-center">
+          <td className="text-center text-muted">
             <FormattedMessage
               id="app.userList.noUsers"
-              defaultMessage="There are no users on the list."
+              defaultMessage="No users match selected filters."
             />
           </td>
         </tr>}
@@ -35,9 +35,9 @@ const UsersList = ({ users = [], createActions, intl, ...rest }) =>
   </Table>;
 
 UsersList.propTypes = {
+  heading: PropTypes.any,
   users: PropTypes.array,
-  createActions: PropTypes.func,
-  intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired
+  createActions: PropTypes.func
 };
 
-export default injectIntl(UsersList);
+export default UsersList;

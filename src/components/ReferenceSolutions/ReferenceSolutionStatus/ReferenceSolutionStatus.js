@@ -1,13 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import { FormattedMessage, FormattedDate, FormattedTime } from 'react-intl';
 import { Table } from 'react-bootstrap';
 
 import Box from '../../widgets/Box';
 import UsersNameContainer from '../../../containers/UsersNameContainer';
 import ExercisesNameContainer from '../../../containers/ExercisesNameContainer';
-import { EditIcon } from '../../icons';
+import Icon, { EditIcon } from '../../icons';
 
 const ReferenceSolutionStatus = ({
   description,
@@ -29,7 +28,7 @@ const ReferenceSolutionStatus = ({
       <tbody>
         <tr>
           <td className="text-center">
-            <FontAwesomeIcon icon="code" />
+            <Icon icon="code" />
           </td>
           <th>
             <FormattedMessage
@@ -57,7 +56,7 @@ const ReferenceSolutionStatus = ({
         </tr>
         <tr>
           <td className="text-center">
-            <FontAwesomeIcon icon={['far', 'clock']} />
+            <Icon icon={['far', 'clock']} />
           </td>
           <th>
             <FormattedMessage
@@ -73,7 +72,7 @@ const ReferenceSolutionStatus = ({
         </tr>
         <tr>
           <td className="text-center">
-            <FontAwesomeIcon icon="user" />
+            <Icon icon="user" />
           </td>
           <th>
             <FormattedMessage id="generic.author" defaultMessage="Author" />:

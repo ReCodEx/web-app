@@ -1,11 +1,9 @@
+import createRecord from '../../../../src/redux/helpers/resourceManager/recordFactory';
+import { resourceStatus } from '../../../../src/redux/helpers/resourceManager/status';
 import chai from 'chai';
 import chaiImmutable from 'chai-immutable';
 chai.use(chaiImmutable);
 const expect = chai.expect;
-
-import { fromJS } from 'immutable';
-import createRecord from '../../../../src/redux/helpers/resourceManager/recordFactory';
-import { resourceStatus } from '../../../../src/redux/helpers/resourceManager/status';
 
 describe('Resource manager', () => {
   describe('(Record factory)', () => {
@@ -42,10 +40,10 @@ describe('Resource manager', () => {
     it('must create a record with specific data and make data deeply an immutable structure', () => {
       const data = {
         name: 'DATA',
-        items: [ 'a', 'b', 'c' ],
+        items: ['a', 'b', 'c'],
         nested: {
           child: 'CHILD',
-          list: [ 'x', 'y', { 'p': 'q' } ]
+          list: ['x', 'y', { p: 'q' }]
         }
       };
       const record = createRecord({ data });

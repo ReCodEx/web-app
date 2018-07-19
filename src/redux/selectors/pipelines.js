@@ -1,5 +1,4 @@
 import { createSelector } from 'reselect';
-import { isReady } from '../helpers/resourceManager';
 import { fetchManyEndpoint } from '../modules/pipelines';
 import { unique } from '../../helpers/common';
 
@@ -22,12 +21,14 @@ export const getFork = (id, forkId) =>
     pipeline.getIn(['data', 'forks', forkId])
   );
 
+/* TODO - reconstruction required (pipelines will be modified to support many-to-many relation with exercises)
 export const exercisePipelinesSelector = exerciseId =>
   createSelector([pipelinesSelector], pipelines =>
     pipelines
       .filter(isReady)
       .filter(pipeline => pipeline.toJS().data.exerciseId === exerciseId)
   );
+*/
 
 export const getPipelinesEnvironmentsWhichHasEntryPoint = createSelector(
   pipelinesSelector,

@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import { LinkContainer } from 'react-router-bootstrap';
 import { Breadcrumb } from 'react-bootstrap';
+
+import Icon from '../../icons';
 import withLinks from '../../../helpers/withLinks';
 
 const BreadcrumbItem = ({
@@ -15,7 +16,7 @@ const BreadcrumbItem = ({
 }) => {
   const content = (
     <Breadcrumb.Item active={isActive}>
-      {!!iconName && <FontAwesomeIcon icon={iconName} />} {text}
+      {!!iconName && <Icon icon={iconName} />} {text}
     </Breadcrumb.Item>
   );
 

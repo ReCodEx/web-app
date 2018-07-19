@@ -1,11 +1,17 @@
 import { handleActions } from 'redux-actions';
 import { Map, List, fromJS } from 'immutable';
-import factory, { initialState } from '../helpers/resourceManager';
+import factory, {
+  initialState,
+  createRecord,
+  resourceStatus
+} from '../helpers/resourceManager';
 import { createApiAction } from '../middleware/apiMiddleware';
 
 import { actionTypes as supplementaryFilesActionTypes } from './supplementaryFiles';
-
 import { actionTypes as attachmentFilesActionTypes } from './attachmentFiles';
+import { actionTypes as paginationActionTypes } from './pagination';
+
+import { arrayToObject } from '../../helpers/common';
 
 const resourceName = 'exercises';
 const { actions, reduceActions, actionTypes } = factory({
@@ -34,13 +40,6 @@ export const loadExercise = actions.pushResource;
 export const fetchExercisesIfNeeded = actions.fetchIfNeeded;
 export const fetchExercise = actions.fetchResource;
 export const fetchExerciseIfNeeded = actions.fetchOneIfNeeded;
-
-export const fetchManyEndpoint = '/exercises';
-
-export const fetchExercises = () =>
-  actions.fetchMany({
-    endpoint: fetchManyEndpoint
-  });
 
 export const fetchGroupExercises = groupId =>
   actions.fetchMany({
@@ -183,7 +182,29 @@ const reducer = handleActions(
     [additionalActionTypes.SET_HARDWARE_GROUPS_FULFILLED]: (
       state,
       { payload, meta: { id } }
-    ) => state.setIn(['resources', id, 'data'], fromJS(payload))
+    ) => state.setIn(['resources', id, 'data'], fromJS(payload)),
+
+    // Pagination result needs to store entity data here whilst indices are stored in pagination module
+    [paginationActionTypes.FETCH_PAGINATED_FULFILLED]: (
+      state,
+      { payload: { items }, meta: { endpoint } }
+    ) =>
+      endpoint === 'exercises'
+        ? state.mergeIn(
+            ['resources'],
+            arrayToObject(
+              items,
+              obj => obj.id,
+              data =>
+                createRecord({
+                  data,
+                  state: resourceStatus.FULFILLED,
+                  didInvalidate: false,
+                  lastUpdate: Date.now()
+                })
+            )
+          )
+        : state
   }),
   initialState
 );

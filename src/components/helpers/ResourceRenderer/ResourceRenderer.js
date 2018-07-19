@@ -20,7 +20,7 @@ const defaultLoading = noIcons =>
   </span>;
 
 const defaultLoadingBulky = noIcons =>
-  <p className="text-center" style={{ fontSize: '120%', padding: '1em' }}>
+  <p className="text-center larger em-padding">
     {!noIcons && <LoadingIcon gapRight />}
     <FormattedMessage id="generic.loading" defaultMessage="Loading ..." />
   </p>;
@@ -35,10 +35,7 @@ const defaultFailed = noIcons =>
   </span>;
 
 const defaultFailedBulky = noIcons =>
-  <p
-    className="text-center text-danger"
-    style={{ fontSize: '120%', padding: '1em' }}
-  >
+  <p className="text-center text-danger larger em-padding">
     {!noIcons && <WarningIcon gapRight />}
     <FormattedMessage
       id="app.resourceRenderer.loadingFailed"

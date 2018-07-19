@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
-import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import { FormattedMessage } from 'react-intl';
+import Icon from '../../../icons';
 
 const Status = ({ id, message, icon, accepted = false }) =>
   <span>
@@ -32,7 +32,7 @@ const Status = ({ id, message, icon, accepted = false }) =>
           </Tooltip>
         }
       >
-        <FontAwesomeIcon icon="check-circle" className="text-green" />
+        <Icon icon="check-circle" className="text-green" />
       </OverlayTrigger>}
   </span>;
 

@@ -2,8 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl } from 'react-intl';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
-import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 
+import Icon from '../../icons';
 import {
   getLocalizedName,
   getOtherLocalizedNames
@@ -28,7 +28,7 @@ const LocalizedGroupName = ({ entity, intl: { locale } }) => {
               </Tooltip>
             }
           >
-            <FontAwesomeIcon icon={['far', 'flag']} className="text-muted" />
+            <Icon icon={['far', 'flag']} className="text-muted" />
           </OverlayTrigger>&nbsp;
         </span>}
     </span>

@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import { push } from 'react-router-redux';
 import { LinkContainer } from 'react-router-bootstrap';
+import { defaultMemoize } from 'reselect';
 
 import { SettingsIcon, TransferIcon } from '../../components/icons';
 import Button from '../../components/widgets/FlatButton';
@@ -12,29 +13,126 @@ import DeleteUserButtonContainer from '../../containers/DeleteUserButtonContaine
 import Page from '../../components/layout/Page';
 import Box from '../../components/widgets/Box';
 import UsersList from '../../components/Users/UsersList';
-import SearchContainer from '../../containers/SearchContainer';
+import PaginationContainer, {
+  createSortingIcon,
+  showRangeInfo
+} from '../../containers/PaginationContainer';
+import FilterUsersListForm from '../../components/forms/FilterUsersListForm';
 import {
   loggedInUserSelector,
   isLoggedAsSuperAdmin
 } from '../../redux/selectors/users';
 import { takeOver } from '../../redux/modules/auth';
-import { searchPeople } from '../../redux/modules/search';
 
 import withLinks from '../../helpers/withLinks';
-import { getSearchQuery } from '../../redux/selectors/search';
 import { selectedInstanceId } from '../../redux/selectors/auth';
+import { knownRoles } from '../../components/helpers/usersRoles.js';
+
+const filterInitialValues = defaultMemoize(({ search = '', roles = [] }) => {
+  const initials = { search, roles: {} };
+  knownRoles.forEach(role => (initials.roles[role] = false));
+  roles.forEach(role => (initials.roles[role] = true));
+  return initials;
+});
+
+const transformAndSetFilterData = defaultMemoize(
+  setFilters => ({ search, roles }) => {
+    const data = {
+      search: search.trim(),
+      roles: Object.keys(roles).filter(role => roles[role])
+    };
+    if (!data.search) {
+      delete data.search;
+    }
+    return setFilters(data);
+  }
+);
 
 class Users extends Component {
-  render() {
+  filtersCreator = (filters, setFilters) =>
+    <FilterUsersListForm
+      onSubmit={setFilters ? transformAndSetFilterData(setFilters) : null}
+      initialValues={filterInitialValues(filters)}
+    />;
+
+  headingCreator = ({
+    offset,
+    limit,
+    totalCount,
+    orderByColumn,
+    orderByDescending,
+    setOrderBy
+  }) =>
+    <tr>
+      <th />
+      <th>
+        <FormattedMessage id="generic.nameOfPerson" defaultMessage="Name" />
+        {createSortingIcon(
+          'name',
+          orderByColumn,
+          orderByDescending,
+          setOrderBy
+        )}
+      </th>
+      <th>
+        <FormattedMessage id="generic.email" defaultMessage="Email" />
+        {createSortingIcon(
+          'email',
+          orderByColumn,
+          orderByDescending,
+          setOrderBy
+        )}
+      </th>
+      <th>
+        <FormattedMessage
+          id="app.users.userCreatedAt"
+          defaultMessage="User created"
+        />
+        {createSortingIcon(
+          'createdAt',
+          orderByColumn,
+          orderByDescending,
+          setOrderBy
+        )}
+      </th>
+      <td>
+        {showRangeInfo(offset, limit, totalCount)}
+      </td>
+    </tr>;
+
+  createActions = defaultMemoize(reload => userId => {
     const {
-      instanceId,
       takeOver,
-      isSuperAdmin,
-      search,
-      query,
-      user,
       links: { EDIT_USER_URI_FACTORY, DASHBOARD_URI }
     } = this.props;
+    return (
+      <div>
+        <LinkContainer to={EDIT_USER_URI_FACTORY(userId)}>
+          <Button bsSize="xs" bsStyle="warning">
+            <SettingsIcon gapRight />
+            <FormattedMessage id="generic.settings" defaultMessage="Settings" />
+          </Button>
+        </LinkContainer>
+        <Button
+          bsSize="xs"
+          bsStyle="primary"
+          onClick={() => takeOver(userId, DASHBOARD_URI)}
+        >
+          <TransferIcon gapRight />
+          <FormattedMessage id="app.users.takeOver" defaultMessage="Login as" />
+        </Button>
+        <DeleteUserButtonContainer
+          id={userId}
+          bsSize="xs"
+          resourceless={true}
+          onDeleted={reload}
+        />
+      </div>
+    );
+  });
+
+  render() {
+    const { user } = this.props;
 
     return (
       <Page
@@ -59,59 +157,51 @@ class Users extends Component {
       >
         {user =>
           <div>
-            {instanceId &&
-              <Box
-                title={
-                  <FormattedMessage
-                    id="app.users.listTitle"
-                    defaultMessage="Users"
-                  />
-                }
-                unlimitedHeight
-              >
-                <SearchContainer
-                  type="users"
-                  id="users-page"
-                  search={search(instanceId)}
-                  showAllOnEmptyQuery={true}
-                  renderList={users =>
+            <Box
+              title={
+                <FormattedMessage
+                  id="app.users.listTitle"
+                  defaultMessage="Users"
+                />
+              }
+              unlimitedHeight
+            >
+              <div>
+                <PaginationContainer
+                  id="users-all"
+                  endpoint="users"
+                  defaultOrderBy="name"
+                  filtersCreator={this.filtersCreator}
+                >
+                  {({
+                    data,
+                    offset,
+                    limit,
+                    totalCount,
+                    orderByColumn,
+                    orderByDescending,
+                    setOrderBy,
+                    reload
+                  }) =>
                     <UsersList
-                      users={users}
+                      users={data}
                       loggedUserId={user.id}
                       useGravatar={user.privateData.settings.useGravatar}
-                      createActions={userId =>
-                        <div>
-                          <LinkContainer to={EDIT_USER_URI_FACTORY(userId)}>
-                            <Button bsSize="xs" bsStyle="warning">
-                              <SettingsIcon gapRight />
-                              <FormattedMessage
-                                id="generic.settings"
-                                defaultMessage="Settings"
-                              />
-                            </Button>
-                          </LinkContainer>
-                          {isSuperAdmin &&
-                            <Button
-                              bsSize="xs"
-                              bsStyle="primary"
-                              onClick={() => takeOver(userId, DASHBOARD_URI)}
-                            >
-                              <TransferIcon gapRight />
-                              <FormattedMessage
-                                id="app.users.takeOver"
-                                defaultMessage="Login as"
-                              />
-                            </Button>}
-                          <DeleteUserButtonContainer
-                            id={userId}
-                            bsSize="xs"
-                            resourceless={true}
-                            onDeleted={() => search(instanceId)(query)}
-                          />
-                        </div>}
+                      emailColumn
+                      createdAtColumn
+                      heading={this.headingCreator({
+                        offset,
+                        limit,
+                        totalCount,
+                        orderByColumn,
+                        orderByDescending,
+                        setOrderBy
+                      })}
+                      createActions={this.createActions(reload)}
                     />}
-                />
-              </Box>}
+                </PaginationContainer>
+              </div>
+            </Box>
           </div>}
       </Page>
     );
@@ -124,8 +214,6 @@ Users.propTypes = {
   links: PropTypes.object.isRequired,
   takeOver: PropTypes.func.isRequired,
   isSuperAdmin: PropTypes.bool,
-  search: PropTypes.func,
-  query: PropTypes.string,
   user: ImmutablePropTypes.map.isRequired
 };
 
@@ -135,16 +223,13 @@ export default withLinks(
       return {
         instanceId: selectedInstanceId(state),
         isSuperAdmin: isLoggedAsSuperAdmin(state),
-        user: loggedInUserSelector(state),
-        query: getSearchQuery('users-page')(state)
+        user: loggedInUserSelector(state)
       };
     },
     dispatch => ({
       push: url => dispatch(push(url)),
       takeOver: (userId, redirectUrl) =>
-        dispatch(takeOver(userId)).then(() => dispatch(push(redirectUrl))),
-      search: instanceId => query =>
-        dispatch(searchPeople(instanceId)('users-page', query))
+        dispatch(takeOver(userId)).then(() => dispatch(push(redirectUrl)))
     })
   )(Users)
 );

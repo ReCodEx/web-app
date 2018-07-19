@@ -10,7 +10,6 @@ import {
   injectIntl
 } from 'react-intl';
 import { Row, Col } from 'react-bootstrap';
-import { LinkContainer } from 'react-router-bootstrap';
 import { formValueSelector } from 'redux-form';
 import moment from 'moment';
 import { defaultMemoize } from 'reselect';
@@ -24,15 +23,9 @@ import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import ReferenceSolutionsList from '../../components/Exercises/ReferenceSolutionsList';
 import SubmitSolutionContainer from '../../containers/SubmitSolutionContainer';
 import Box from '../../components/widgets/Box';
-import {
-  EditIcon,
-  SendIcon,
-  DeleteIcon,
-  AddIcon,
-  NeedFixingIcon
-} from '../../components/icons';
+import { SendIcon, DeleteIcon, NeedFixingIcon } from '../../components/icons';
 import Confirm from '../../components/forms/Confirm';
-import PipelinesSimpleList from '../../components/Pipelines/PipelinesSimpleList';
+// import PipelinesSimpleList from '../../components/Pipelines/PipelinesSimpleList';
 import ExerciseButtons from '../../components/Exercises/ExerciseButtons';
 import ForkExerciseForm from '../../components/forms/ForkExerciseForm';
 import MultiAssignForm from '../../components/forms/MultiAssignForm';
@@ -68,11 +61,11 @@ import {
   isLoggedAsSuperAdmin
 } from '../../redux/selectors/users';
 import {
-  deletePipeline,
-  fetchExercisePipelines,
+  // deletePipeline,
+  // fetchExercisePipelines,
   create as createPipeline
 } from '../../redux/modules/pipelines';
-import { exercisePipelinesSelector } from '../../redux/selectors/pipelines';
+// import { exercisePipelinesSelector } from '../../redux/selectors/pipelines';
 import {
   fetchUsersGroupsIfNeeded,
   fetchInstanceGroups
@@ -116,7 +109,7 @@ class Exercise extends Component {
       dispatch(fetchRuntimeEnvironments()),
       dispatch(fetchReferenceSolutions(exerciseId)),
       dispatch(fetchHardwareGroups()),
-      dispatch(fetchExercisePipelines(exerciseId)),
+      //      dispatch(fetchExercisePipelines(exerciseId)), // TODO - awaiting modification (many-to-many relation with exercises)
       dispatch(fetchUsersGroupsIfNeeded(userId)),
       instanceId && dispatch(fetchInstanceGroups(instanceId))
     ]);
@@ -241,7 +234,7 @@ class Exercise extends Component {
       referenceSolutions,
       intl: { formatMessage, locale },
       initCreateReferenceSolution,
-      exercisePipelines,
+      // exercisePipelines,
       deleteReferenceSolution,
       push,
       groups,
@@ -253,8 +246,8 @@ class Exercise extends Component {
       allowSecondDeadline,
       links: {
         EXERCISES_URI,
-        EXERCISE_REFERENCE_SOLUTION_URI_FACTORY,
-        PIPELINE_EDIT_URI_FACTORY
+        EXERCISE_REFERENCE_SOLUTION_URI_FACTORY
+        // PIPELINE_EDIT_URI_FACTORY
       }
     } = this.props;
 
@@ -367,7 +360,7 @@ class Exercise extends Component {
                     </ResourceRenderer>
                   </Box>}
 
-                {exercise.configurationType !== 'simpleExerciseConfig' &&
+                {/* exercise.configurationType !== 'simpleExerciseConfig' &&
                   <Box
                     title={
                       <FormattedMessage
@@ -442,7 +435,8 @@ class Exercise extends Component {
                             </div>}
                         />}
                     </ResourceRenderer>
-                  </Box>}
+                  </Box>
+                */}
               </Col>
               <Col lg={6}>
                 <ExerciseDetail
@@ -624,7 +618,7 @@ export default withLinks(
         submitting: isSubmitting(state),
         canEditExercise: canLoggedUserEditExercise(exerciseId)(state),
         referenceSolutions: referenceSolutionsSelector(exerciseId)(state),
-        exercisePipelines: exercisePipelinesSelector(exerciseId)(state),
+        //        exercisePipelines: exercisePipelinesSelector(exerciseId)(state),
         groups: groupsUserCanEditSelector(state),
         assignableGroups: groupsUserCanAssignToSelector(state),
         groupsAccessor: groupDataAccessorSelector(state),

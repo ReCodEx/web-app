@@ -5,7 +5,6 @@ import { FormattedMessage, injectIntl } from 'react-intl';
 import { Grid, Row, Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { defaultMemoize } from 'reselect';
-import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import { formValueSelector } from 'redux-form';
 
 import Page from '../../components/layout/Page';
@@ -14,7 +13,7 @@ import EditHardwareGroupForm from '../../components/forms/EditHardwareGroupForm'
 import EditLimitsForm from '../../components/forms/EditLimitsForm/EditLimitsForm';
 import ExerciseButtons from '../../components/Exercises/ExerciseButtons';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
-import { NeedFixingIcon } from '../../components/icons';
+import Icon, { NeedFixingIcon } from '../../components/icons';
 
 import {
   fetchExercise,
@@ -357,7 +356,7 @@ class EditExerciseLimits extends Component {
                           className="text-center text-muted"
                           style={{ marginBottom: '15px' }}
                         >
-                          &nbsp;<FontAwesomeIcon icon="arrow-down" />&nbsp;
+                          &nbsp;<Icon icon="arrow-down" />&nbsp;
                         </div>
                         <HardwareGroupMetadata
                           key={targetHardwareGroup}
