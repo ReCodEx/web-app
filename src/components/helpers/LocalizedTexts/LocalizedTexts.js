@@ -5,12 +5,9 @@ import { Tabs, Tab, Well } from 'react-bootstrap';
 
 import ExternalLinkPreview from '../ExternalLinkPreview';
 import Icon from '../../icons';
+import Markdown from '../../widgets/Markdown';
 
 import './LocalizedTexts.css';
-
-const md = require('markdown-it')().use(
-  require('@iktakahiro/markdown-it-katex')
-);
 
 const tabsComparator = ({ locale: a }, { locale: b }) =>
   typeof a !== 'string'
@@ -48,12 +45,7 @@ const LocalizedTexts = ({ locales = [] }, { lang = 'en' }) =>
               </Well>
               <ExternalLinkPreview url={link} />
             </div>}
-          {text !== '' &&
-            <div
-              dangerouslySetInnerHTML={{
-                __html: md.render(text)
-              }}
-            />}
+          {text !== '' && <Markdown source={text} />}
 
           {studentHint &&
             studentHint !== '' &&
@@ -65,11 +57,7 @@ const LocalizedTexts = ({ locales = [] }, { lang = 'en' }) =>
                   defaultMessage="Hint"
                 />
               </h4>
-              <div
-                dangerouslySetInnerHTML={{
-                  __html: md.render(studentHint)
-                }}
-              />
+              <Markdown source={studentHint} />
             </div>}
         </Tab>
       )}

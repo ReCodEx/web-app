@@ -4,10 +4,7 @@ import { FormattedMessage } from 'react-intl';
 
 import PageContent from '../../components/layout/PageContent';
 import withLinks from '../../helpers/withLinks';
-
-const md = require('markdown-it')().use(
-  require('@iktakahiro/markdown-it-katex')
-);
+import Markdown from '../../components/widgets/Markdown';
 
 const FAQ_MD_URI = 'https://raw.githubusercontent.com/wiki/ReCodEx/wiki/FAQ.md';
 
@@ -42,11 +39,7 @@ class FAQ extends Component {
           }
         ]}
       >
-        <div
-          dangerouslySetInnerHTML={{
-            __html: md.render(this.state.faqText)
-          }}
-        />
+        <Markdown source={this.state.faqText} />
       </PageContent>
     );
   }

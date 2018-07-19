@@ -11,6 +11,7 @@ import { Table } from 'react-bootstrap';
 import { Link } from 'react-router';
 
 import Box from '../../widgets/Box';
+import Markdown from '../../widgets/Markdown';
 import DifficultyIcon from '../DifficultyIcon';
 import ResourceRenderer from '../../helpers/ResourceRenderer';
 import withLinks from '../../../helpers/withLinks';
@@ -20,10 +21,6 @@ import { SuccessOrFailureIcon } from '../../icons';
 import { getLocalizedDescription } from '../../../helpers/getLocalizedData';
 import { LocalizedExerciseName } from '../../helpers/LocalizedNames';
 import EnvironmentsList from '../../helpers/EnvironmentsList';
-
-const md = require('markdown-it')().use(
-  require('@iktakahiro/markdown-it-katex')
-);
 
 const ExerciseDetail = ({
   id,
@@ -73,15 +70,11 @@ const ExerciseDetail = ({
             </span>
           </th>
           <td>
-            <div
-              dangerouslySetInnerHTML={{
-                __html: md.render(
-                  getLocalizedDescription(
-                    { description, localizedTexts },
-                    locale
-                  )
-                )
-              }}
+            <Markdown
+              source={getLocalizedDescription(
+                { description, localizedTexts },
+                locale
+              )}
             />
           </td>
         </tr>

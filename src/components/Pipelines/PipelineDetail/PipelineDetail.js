@@ -8,13 +8,10 @@ import {
 } from 'react-intl';
 import { Table } from 'react-bootstrap';
 import Box from '../../widgets/Box';
+import Markdown from '../../widgets/Markdown';
 
 import UsersNameContainer from '../../../containers/UsersNameContainer';
 import ExercisesNameContainer from '../../../containers/ExercisesNameContainer';
-
-const md = require('markdown-it')().use(
-  require('@iktakahiro/markdown-it-katex')
-);
 
 const PipelineDetail = ({
   id,
@@ -45,11 +42,7 @@ const PipelineDetail = ({
             />
           </th>
           <td>
-            <div
-              dangerouslySetInnerHTML={{
-                __html: md.render(description)
-              }}
-            />
+            <Markdown source={description} />
           </td>
         </tr>
         <tr>

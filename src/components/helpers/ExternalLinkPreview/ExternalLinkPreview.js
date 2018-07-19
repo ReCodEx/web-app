@@ -5,10 +5,7 @@ import { Well, Alert } from 'react-bootstrap';
 
 import OnOffCheckbox from '../../forms/OnOffCheckbox';
 import { LoadingIcon } from '../../icons';
-
-const md = require('markdown-it')().use(
-  require('@iktakahiro/markdown-it-katex')
-);
+import Markdown from '../../widgets/Markdown';
 
 class ExternalLinkPreview extends Component {
   state = {
@@ -157,11 +154,7 @@ class ExternalLinkPreview extends Component {
           {text &&
             <div>
               {isMarkdown
-                ? <div
-                    dangerouslySetInnerHTML={{
-                      __html: md.render(text)
-                    }}
-                  />
+                ? <Markdown source={text} />
                 : <pre style={{ marginTop: '20px' }}>
                     {text}
                   </pre>}
