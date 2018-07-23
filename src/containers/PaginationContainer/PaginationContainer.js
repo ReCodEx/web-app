@@ -59,10 +59,11 @@ export const createSortingIcon = (
 
 // Show label with actually displayed range info ...
 export const showRangeInfo = (offset, limit, totalCount) =>
+  totalCount > limit &&
   <div className="text-muted text-right small">
     <FormattedMessage
       id="app.paginationContainer.showingRange"
-      defaultMessage="showing {offset}. - {offsetEnd}. (of {totalCount})"
+      defaultMessage="showing {offset} - {offsetEnd} (of {totalCount})"
       values={{
         offset: offset + 1,
         offsetEnd: Math.min(offset + limit, totalCount),
