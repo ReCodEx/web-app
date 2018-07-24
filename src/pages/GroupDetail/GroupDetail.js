@@ -337,6 +337,7 @@ class GroupDetail extends Component {
                       </p>
                     }
                     isOpen
+                    unlimitedHeight
                   >
                     <ExercisesListContainer
                       id={`exercises-group-${data.id}`}
