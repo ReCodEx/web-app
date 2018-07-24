@@ -54,6 +54,6 @@ export const downloadString = (fileName, data, contentType, addBOM = false) => {
   let blobData = addBOM ? [new Uint8Array([0xef, 0xbb, 0xbf])] : [];
   blobData.push(data);
   const typedBlob = new Blob(blobData, { type: contentType });
-  saveAs(typedBlob, fileName);
+  saveAs(typedBlob, fileName, true);
   return Promise.resolve();
 };
