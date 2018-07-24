@@ -32,13 +32,16 @@ const filterInitialValues = defaultMemoize(
 );
 
 const transformAndSetFilterData = defaultMemoize(
-  setFilters => ({ search, author }) => {
+  (setFilters, rootGroup) => ({ search, author }) => {
     const data = {};
     if (search.trim()) {
       data.search = search.trim();
     }
     if (author) {
       data.authorsIds = [author];
+    }
+    if (rootGroup) {
+      data.groupsIds = [rootGroup];
     }
     return setFilters(data);
   }
@@ -129,7 +132,7 @@ class ExercisesListContainer extends Component {
   };
 
   filtersCreator = (filters, setFilters) => {
-    const { id, authors, authorsLoading, loggedUserId } = this.props;
+    const { id, authors, authorsLoading, loggedUserId, rootGroup } = this.props;
 
     return (
       <FilterExercisesListForm
@@ -137,7 +140,9 @@ class ExercisesListContainer extends Component {
         authors={authors}
         authorsLoading={authorsLoading}
         loggedUserId={loggedUserId}
-        onSubmit={setFilters ? transformAndSetFilterData(setFilters) : null}
+        onSubmit={
+          setFilters ? transformAndSetFilterData(setFilters, rootGroup) : null
+        }
         initialValues={filterInitialValues(filters)}
       />
     );
