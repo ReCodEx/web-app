@@ -1,4 +1,4 @@
-import { createSelector } from 'reselect';
+import { createSelector, defaultMemoize } from 'reselect';
 import { EMPTY_ARRAY, EMPTY_LIST } from '../../helpers/common';
 import { isReady } from '../helpers/resourceManager';
 import { getAssignment } from './assignments';
@@ -18,12 +18,13 @@ export const exerciseSelector = exerciseId =>
     exercises => exercises && exercises.get(exerciseId)
   );
 
-export const exerciseForkedFromSelector = exerciseId =>
+export const exerciseForkedFromSelector = defaultMemoize(exerciseId =>
   createSelector(exercisesSelector, exercises => {
     const fokredId =
       exercises && exercises.getIn([exerciseId, 'data', 'forkedFrom']);
     return fokredId && exercises.get(fokredId);
-  });
+  })
+);
 
 export const getExercise = id =>
   createSelector(
@@ -48,8 +49,9 @@ export const getExerciseSelector = createSelector(
   exercises => id => exercises.getIn(['resources', id])
 );
 
-export const getExerciseRuntimeEnvironments = id =>
-  createSelector(getExercise(id), getRuntimeEnvironments);
+export const getExerciseRuntimeEnvironments = defaultMemoize(id =>
+  createSelector(getExercise(id), getRuntimeEnvironments)
+);
 
 export const getExerciseRuntimeEnvironmentsSelector = createSelector(
   getExerciseSelector,
@@ -86,4 +88,18 @@ export const getExercisesForGroup = createSelector(
         )
     );
   }
+);
+
+export const getExerciseAttachingGroupId = defaultMemoize(id =>
+  createSelector(
+    getExercise(id),
+    exercise => exercise && exercise.getIn(['data', 'attachingGroupId'], null)
+  )
+);
+
+export const getExerciseDetachingGroupId = defaultMemoize(id =>
+  createSelector(
+    getExercise(id),
+    exercise => exercise && exercise.getIn(['data', 'detachingGroupId'], null)
+  )
 );

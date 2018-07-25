@@ -33,7 +33,21 @@ export const additionalActionTypes = {
   GET_PIPELINE_VARIABLES: 'recodex/exercises/GET_PIPELINE_VARIABLES',
   SET_HARDWARE_GROUPS: 'recodex/exercises/SET_HARDWARE_GROUPS',
   SET_HARDWARE_GROUPS_FULFILLED:
-    'recodex/exercises/SET_HARDWARE_GROUPS_FULFILLED'
+    'recodex/exercises/SET_HARDWARE_GROUPS_FULFILLED',
+  ATTACH_EXERCISE_GROUP: 'recodex/exercises/ATTACH_EXERCISE_GROUP',
+  ATTACH_EXERCISE_GROUP_PENDING:
+    'recodex/exercises/ATTACH_EXERCISE_GROUP_PENDING',
+  ATTACH_EXERCISE_GROUP_REJECTED:
+    'recodex/exercises/ATTACH_EXERCISE_GROUP_REJECTED',
+  ATTACH_EXERCISE_GROUP_FULFILLED:
+    'recodex/exercises/ATTACH_EXERCISE_GROUP_FULFILLED',
+  DETACH_EXERCISE_GROUP: 'recodex/exercises/DETACH_EXERCISE_GROUP',
+  DETACH_EXERCISE_GROUP_PENDING:
+    'recodex/exercises/DETACH_EXERCISE_GROUP_PENDING',
+  DETACH_EXERCISE_GROUP_REJECTED:
+    'recodex/exercises/DETACH_EXERCISE_GROUP_REJECTED',
+  DETACH_EXERCISE_GROUP_FULFILLED:
+    'recodex/exercises/DETACH_EXERCISE_GROUP_FULFILLED'
 };
 
 export const loadExercise = actions.pushResource;
@@ -124,12 +138,43 @@ export const setExerciseHardwareGroups = (id, hwGroups) => {
   return createApiAction(actionData);
 };
 
+export const attachExerciseToGroup = (exerciseId, groupId) => {
+  return createApiAction({
+    type: additionalActionTypes.ATTACH_EXERCISE_GROUP,
+    method: 'POST',
+    endpoint: `/exercises/${exerciseId}/groups/${groupId}`,
+    meta: {
+      exerciseId,
+      groupId
+    }
+  });
+};
+
+export const detachExerciseToGroup = (exerciseId, groupId) => {
+  return createApiAction({
+    type: additionalActionTypes.DETACH_EXERCISE_GROUP,
+    method: 'DELETE',
+    endpoint: `/exercises/${exerciseId}/groups/${groupId}`,
+    meta: {
+      exerciseId,
+      groupId
+    }
+  });
+};
+
 /**
  * Reducer
  */
 
 const reducer = handleActions(
   Object.assign({}, reduceActions, {
+    [additionalActionTypes.SET_HARDWARE_GROUPS_FULFILLED]: (
+      state,
+      { payload, meta: { id } }
+    ) => state.setIn(['resources', id, 'data'], fromJS(payload)),
+
+    // Forking ...
+
     [additionalActionTypes.FORK_EXERCISE_PENDING]: (
       state,
       { meta: { id, forkId } }
@@ -163,6 +208,8 @@ const reducer = handleActions(
         exerciseId
       }),
 
+    // Files ...
+
     [supplementaryFilesActionTypes.ADD_FILES_FULFILLED]: (
       state,
       { payload: files, meta: { exerciseId } }
@@ -179,10 +226,79 @@ const reducer = handleActions(
         ? updateFiles(state, exerciseId, files, 'attachmentFilesIds')
         : state,
 
-    [additionalActionTypes.SET_HARDWARE_GROUPS_FULFILLED]: (
+    // Attach exercise group ...
+
+    [additionalActionTypes.ATTACH_EXERCISE_GROUP_PENDING]: (
       state,
-      { payload, meta: { id } }
-    ) => state.setIn(['resources', id, 'data'], fromJS(payload)),
+      { meta: { exerciseId, groupId } }
+    ) =>
+      state.hasIn('resources', exerciseId, 'data') &&
+      !state.hasIn('resources', exerciseId, 'data', 'groupsIds', groupId)
+        ? state.setIn(
+            ['resources', exerciseId, 'data', 'attachingGroupId'],
+            groupId
+          )
+        : state,
+
+    [additionalActionTypes.ATTACH_EXERCISE_GROUP_FULFILLED]: (
+      state,
+      { meta: { exerciseId, groupId } }
+    ) =>
+      state.getIn('resources', exerciseId, 'data', 'attachingGroupId') ===
+      groupId
+        ? state
+            .deleteIn(['resources', exerciseId, 'data', 'attachingGroupId'])
+            .updateIn(
+              ['resources', exerciseId, 'data', 'groupsIds'],
+              groupsIds => groupsIds.push(groupId)
+            )
+        : state,
+
+    [additionalActionTypes.ATTACH_EXERCISE_GROUP_REJECTED]: (
+      state,
+      { meta: { exerciseId, groupId } }
+    ) =>
+      state.getIn('resources', exerciseId, 'data', 'attachingGroupId') ===
+      groupId
+        ? state.deleteIn(['resources', exerciseId, 'data', 'attachingGroupId'])
+        : state,
+
+    // Detach exercises group ...
+
+    [additionalActionTypes.DETACH_EXERCISE_GROUP_PENDING]: (
+      state,
+      { meta: { exerciseId, groupId } }
+    ) =>
+      state.hasIn('resources', exerciseId, 'data') &&
+      state.hasIn('resources', exerciseId, 'data', 'groupsIds', groupId)
+        ? state.setIn(
+            ['resources', exerciseId, 'data', 'detachingGroupId'],
+            groupId
+          )
+        : state,
+
+    [additionalActionTypes.DETACH_EXERCISE_GROUP_FULFILLED]: (
+      state,
+      { meta: { exerciseId, groupId } }
+    ) =>
+      state.getIn('resources', exerciseId, 'data', 'detachingGroupId') ===
+      groupId
+        ? state
+            .deleteIn(['resources', exerciseId, 'data', 'detachingGroupId'])
+            .updateIn(
+              ['resources', exerciseId, 'data', 'groupsIds'],
+              groupsIds => groupsIds.filter(id => id !== groupId)
+            )
+        : state,
+
+    [additionalActionTypes.DETACH_EXERCISE_GROUP_REJECTED]: (
+      state,
+      { meta: { exerciseId, groupId } }
+    ) =>
+      state.getIn('resources', exerciseId, 'data', 'detachingGroupId') ===
+      groupId
+        ? state.deleteIn(['resources', exerciseId, 'data', 'detachingGroupId'])
+        : state,
 
     // Pagination result needs to store entity data here whilst indices are stored in pagination module
     [paginationActionTypes.FETCH_PAGINATED_FULFILLED]: (
