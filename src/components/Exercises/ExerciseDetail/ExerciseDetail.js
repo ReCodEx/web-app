@@ -16,7 +16,6 @@ import DifficultyIcon from '../DifficultyIcon';
 import ResourceRenderer from '../../helpers/ResourceRenderer';
 import withLinks from '../../../helpers/withLinks';
 import UsersNameContainer from '../../../containers/UsersNameContainer';
-import GroupsNameContainer from '../../../containers/GroupsNameContainer';
 import { SuccessOrFailureIcon } from '../../icons';
 import { getLocalizedDescription } from '../../../helpers/getLocalizedData';
 import { LocalizedExerciseName } from '../../helpers/LocalizedNames';
@@ -56,7 +55,7 @@ const ExerciseDetail = ({
         </tr>
 
         <tr>
-          <th>
+          <th className="text-nowrap">
             <FormattedMessage
               id="app.exercise.description"
               defaultMessage="Short description"
@@ -80,7 +79,7 @@ const ExerciseDetail = ({
         </tr>
 
         <tr>
-          <th>
+          <th className="text-nowrap">
             <FormattedMessage
               id="app.exercise.difficulty"
               defaultMessage="Difficulty"
@@ -92,10 +91,10 @@ const ExerciseDetail = ({
         </tr>
 
         <tr>
-          <th>
+          <th className="text-nowrap">
             <FormattedMessage
               id="app.exercise.runtimes"
-              defaultMessage="Supported runtime environments"
+              defaultMessage="Runtime environments"
             />:
           </th>
           <td>
@@ -104,7 +103,7 @@ const ExerciseDetail = ({
         </tr>
 
         <tr>
-          <th>
+          <th className="text-nowrap">
             <FormattedMessage
               id="app.exercise.createdAt"
               defaultMessage="Created at"
@@ -121,7 +120,7 @@ const ExerciseDetail = ({
 
         {updatedAt !== createdAt &&
           <tr>
-            <th>
+            <th className="text-nowrap">
               <FormattedMessage
                 id="app.exercise.updatedAt"
                 defaultMessage="Last updated at"
@@ -148,7 +147,7 @@ const ExerciseDetail = ({
           </td>
         </tr>
         <tr>
-          <th>
+          <th className="text-nowrap">
             <FormattedMessage
               id="app.exercise.isPublic"
               defaultMessage="Is public"
@@ -159,7 +158,7 @@ const ExerciseDetail = ({
           </td>
         </tr>
         <tr>
-          <th>
+          <th className="text-nowrap">
             <FormattedMessage
               id="app.exercise.isLocked"
               defaultMessage="Is locked"
@@ -172,7 +171,7 @@ const ExerciseDetail = ({
 
         {forkedFrom &&
           <tr>
-            <th>
+            <th className="text-nowrap">
               <FormattedMessage
                 id="app.exercise.forked"
                 defaultMessage="Forked from"
@@ -192,29 +191,6 @@ const ExerciseDetail = ({
               </ResourceRenderer>
             </td>
           </tr>}
-
-        <tr>
-          <th>
-            <FormattedMessage
-              id="app.exercise.groups"
-              defaultMessage="Resident in Groups"
-            />:
-          </th>
-          <td>
-            {groupsIds.length > 0
-              ? groupsIds.map((groupId, i) =>
-                  <div key={i}>
-                    <GroupsNameContainer groupId={groupId} />
-                  </div>
-                )
-              : <i>
-                  <FormattedMessage
-                    id="app.exercise.publicGroup"
-                    defaultMessage="Public"
-                  />
-                </i>}
-          </td>
-        </tr>
       </tbody>
     </Table>
   </Box>;

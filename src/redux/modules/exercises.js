@@ -71,10 +71,7 @@ export const forkExercise = (id, forkId, formData = null) => {
     type: additionalActionTypes.FORK_EXERCISE,
     endpoint: `/exercises/${id}/fork`,
     method: 'POST',
-    meta: {
-      id,
-      forkId
-    }
+    meta: { id, forkId }
   };
   if (formData && formData.groupId) {
     actionData.body = {
@@ -95,9 +92,7 @@ export const validateExercise = (id, version) =>
     type: additionalActionTypes.VALIDATE_EXERCISE,
     endpoint: `/exercises/${id}/validate`,
     method: 'POST',
-    body: {
-      version
-    }
+    body: { version }
   });
 
 export const getVariablesForPipelines = (
@@ -107,13 +102,8 @@ export const getVariablesForPipelines = (
 ) => {
   const body =
     runtimeEnvironmentId === 'default'
-      ? {
-          pipelinesIds
-        }
-      : {
-          runtimeEnvironmentId,
-          pipelinesIds
-        };
+      ? { pipelinesIds }
+      : { runtimeEnvironmentId, pipelinesIds };
   return createApiAction({
     type: additionalActionTypes.GET_PIPELINE_VARIABLES,
     method: 'POST',
@@ -138,29 +128,21 @@ export const setExerciseHardwareGroups = (id, hwGroups) => {
   return createApiAction(actionData);
 };
 
-export const attachExerciseToGroup = (exerciseId, groupId) => {
-  return createApiAction({
+export const attachExerciseToGroup = (exerciseId, groupId) =>
+  createApiAction({
     type: additionalActionTypes.ATTACH_EXERCISE_GROUP,
     method: 'POST',
     endpoint: `/exercises/${exerciseId}/groups/${groupId}`,
-    meta: {
-      exerciseId,
-      groupId
-    }
+    meta: { exerciseId, groupId }
   });
-};
 
-export const detachExerciseToGroup = (exerciseId, groupId) => {
-  return createApiAction({
+export const detachExerciseFromGroup = (exerciseId, groupId) =>
+  createApiAction({
     type: additionalActionTypes.DETACH_EXERCISE_GROUP,
     method: 'DELETE',
     endpoint: `/exercises/${exerciseId}/groups/${groupId}`,
-    meta: {
-      exerciseId,
-      groupId
-    }
+    meta: { exerciseId, groupId }
   });
-};
 
 /**
  * Reducer
@@ -232,8 +214,8 @@ const reducer = handleActions(
       state,
       { meta: { exerciseId, groupId } }
     ) =>
-      state.hasIn('resources', exerciseId, 'data') &&
-      !state.hasIn('resources', exerciseId, 'data', 'groupsIds', groupId)
+      state.hasIn(['resources', exerciseId, 'data']) &&
+      !state.hasIn(['resources', exerciseId, 'data', 'groupsIds', groupId])
         ? state.setIn(
             ['resources', exerciseId, 'data', 'attachingGroupId'],
             groupId
@@ -242,23 +224,23 @@ const reducer = handleActions(
 
     [additionalActionTypes.ATTACH_EXERCISE_GROUP_FULFILLED]: (
       state,
-      { meta: { exerciseId, groupId } }
+      { payload: data, meta: { exerciseId } }
     ) =>
-      state.getIn('resources', exerciseId, 'data', 'attachingGroupId') ===
-      groupId
-        ? state
-            .deleteIn(['resources', exerciseId, 'data', 'attachingGroupId'])
-            .updateIn(
-              ['resources', exerciseId, 'data', 'groupsIds'],
-              groupsIds => groupsIds.push(groupId)
-            )
-        : state,
+      state.setIn(
+        ['resources', exerciseId],
+        createRecord({
+          data,
+          state: resourceStatus.FULFILLED,
+          didInvalidate: false,
+          lastUpdate: Date.now()
+        })
+      ),
 
     [additionalActionTypes.ATTACH_EXERCISE_GROUP_REJECTED]: (
       state,
       { meta: { exerciseId, groupId } }
     ) =>
-      state.getIn('resources', exerciseId, 'data', 'attachingGroupId') ===
+      state.getIn(['resources', exerciseId, 'data', 'attachingGroupId']) ===
       groupId
         ? state.deleteIn(['resources', exerciseId, 'data', 'attachingGroupId'])
         : state,
@@ -269,8 +251,10 @@ const reducer = handleActions(
       state,
       { meta: { exerciseId, groupId } }
     ) =>
-      state.hasIn('resources', exerciseId, 'data') &&
-      state.hasIn('resources', exerciseId, 'data', 'groupsIds', groupId)
+      state.hasIn(['resources', exerciseId, 'data', 'groupsIds']) &&
+      state
+        .getIn(['resources', exerciseId, 'data', 'groupsIds'])
+        .includes(groupId)
         ? state.setIn(
             ['resources', exerciseId, 'data', 'detachingGroupId'],
             groupId
@@ -279,23 +263,23 @@ const reducer = handleActions(
 
     [additionalActionTypes.DETACH_EXERCISE_GROUP_FULFILLED]: (
       state,
-      { meta: { exerciseId, groupId } }
+      { payload: data, meta: { exerciseId } }
     ) =>
-      state.getIn('resources', exerciseId, 'data', 'detachingGroupId') ===
-      groupId
-        ? state
-            .deleteIn(['resources', exerciseId, 'data', 'detachingGroupId'])
-            .updateIn(
-              ['resources', exerciseId, 'data', 'groupsIds'],
-              groupsIds => groupsIds.filter(id => id !== groupId)
-            )
-        : state,
+      state.setIn(
+        ['resources', exerciseId],
+        createRecord({
+          data,
+          state: resourceStatus.FULFILLED,
+          didInvalidate: false,
+          lastUpdate: Date.now()
+        })
+      ),
 
     [additionalActionTypes.DETACH_EXERCISE_GROUP_REJECTED]: (
       state,
       { meta: { exerciseId, groupId } }
     ) =>
-      state.getIn('resources', exerciseId, 'data', 'detachingGroupId') ===
+      state.getIn(['resources', exerciseId, 'data', 'detachingGroupId']) ===
       groupId
         ? state.deleteIn(['resources', exerciseId, 'data', 'detachingGroupId'])
         : state,
