@@ -33,32 +33,33 @@ class GroupTree extends Component {
 
   renderButtons = (groupId, showInfoLink) => {
     const {
+      buttonsCreator = null,
       links: { GROUP_INFO_URI_FACTORY, GROUP_DETAIL_URI_FACTORY }
     } = this.props;
-    return (
-      <span>
-        <LinkContainer
-          to={
-            showInfoLink
-              ? GROUP_INFO_URI_FACTORY(groupId)
-              : GROUP_DETAIL_URI_FACTORY(groupId)
-          }
-        >
-          <Button bsStyle="primary" bsSize="xs" className="btn-flat">
-            <GroupIcon gapRight />
-            {showInfoLink
-              ? <FormattedMessage
-                  id="app.group.info"
-                  defaultMessage="Group Info"
-                />
-              : <FormattedMessage
-                  id="app.group.detail"
-                  defaultMessage="Group Detail"
-                />}
-          </Button>
-        </LinkContainer>
-      </span>
-    );
+    return buttonsCreator
+      ? buttonsCreator(groupId)
+      : <span>
+          <LinkContainer
+            to={
+              showInfoLink
+                ? GROUP_INFO_URI_FACTORY(groupId)
+                : GROUP_DETAIL_URI_FACTORY(groupId)
+            }
+          >
+            <Button bsStyle="primary" bsSize="xs" className="btn-flat">
+              <GroupIcon gapRight />
+              {showInfoLink
+                ? <FormattedMessage
+                    id="app.group.info"
+                    defaultMessage="Group Info"
+                  />
+                : <FormattedMessage
+                    id="app.group.detail"
+                    defaultMessage="Group Detail"
+                  />}
+            </Button>
+          </LinkContainer>
+        </span>;
   };
 
   renderChildGroups = (childGroups, visibleGroupsMap, level) => {
@@ -175,6 +176,7 @@ GroupTree.propTypes = {
   currentGroupId: PropTypes.string,
   visibleGroupsMap: PropTypes.object,
   ancestralPath: PropTypes.array,
+  buttonsCreator: PropTypes.func,
   links: PropTypes.object,
   intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired
 };

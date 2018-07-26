@@ -6,63 +6,69 @@ import { LinkContainer } from 'react-router-bootstrap';
 
 import Button from '../../widgets/FlatButton';
 import { EditIcon } from '../../icons';
-// import Confirm from '../../components/forms/Confirm';
-// import ForkExerciseForm from '../../components/forms/ForkExerciseForm';
 
 import withLinks from '../../../helpers/withLinks';
 
 const ExerciseButtons = ({
   exerciseId,
+  permissionHints,
   links: {
     EXERCISE_EDIT_URI_FACTORY,
     EXERCISE_EDIT_SIMPLE_CONFIG_URI_FACTORY,
     EXERCISE_EDIT_LIMITS_URI_FACTORY
   }
 }) =>
-  <div>
+  <div className="em-margin-bottom em-margin-right">
     <ButtonGroup>
-      <LinkContainer to={EXERCISE_EDIT_URI_FACTORY(exerciseId)}>
-        <Button bsStyle="warning" bsSize="sm">
-          <EditIcon />
-          &nbsp;
-          <FormattedMessage
-            id="app.exercise.editSettings"
-            defaultMessage="Exercise Settings"
-          />
-        </Button>
-      </LinkContainer>
-      <LinkContainer to={EXERCISE_EDIT_SIMPLE_CONFIG_URI_FACTORY(exerciseId)}>
-        <Button bsStyle="warning" bsSize="sm">
-          <EditIcon />
-          &nbsp;
-          <FormattedMessage
-            id="app.exercise.editConfig"
-            defaultMessage="Tests Configuration"
-          />
-        </Button>
-      </LinkContainer>
-      <LinkContainer to={EXERCISE_EDIT_LIMITS_URI_FACTORY(exerciseId)}>
-        <Button bsStyle="warning" bsSize="sm">
-          <EditIcon />
-          &nbsp;
-          <FormattedMessage
-            id="app.exercise.editLimits"
-            defaultMessage="Tests Limits"
-          />
-        </Button>
-      </LinkContainer>
-      {/* <ForkExerciseForm
-  exerciseId={exercise.id}
-  groups={groups}
-  forkId={forkId}
-  onSubmit={formData => forkExercise(forkId, formData)}
-/> */}
+      {permissionHints &&
+        permissionHints.update &&
+        <LinkContainer to={EXERCISE_EDIT_URI_FACTORY(exerciseId)}>
+          <Button bsStyle="warning" bsSize="sm">
+            <EditIcon />
+            &nbsp;
+            <FormattedMessage
+              id="app.exercise.editSettings"
+              defaultMessage="Exercise Settings"
+            />
+          </Button>
+        </LinkContainer>}
+      {permissionHints &&
+        permissionHints.viewPipelines &&
+        permissionHints.viewScoreConfig &&
+        <LinkContainer to={EXERCISE_EDIT_SIMPLE_CONFIG_URI_FACTORY(exerciseId)}>
+          <Button
+            bsStyle={permissionHints.setScoreConfig ? 'warning' : 'default'}
+            bsSize="sm"
+          >
+            <EditIcon />
+            &nbsp;
+            <FormattedMessage
+              id="app.exercise.editConfig"
+              defaultMessage="Tests Configuration"
+            />
+          </Button>
+        </LinkContainer>}
+      {permissionHints &&
+        permissionHints.viewLimits &&
+        <LinkContainer to={EXERCISE_EDIT_LIMITS_URI_FACTORY(exerciseId)}>
+          <Button
+            bsStyle={permissionHints.setLimits ? 'warning' : 'default'}
+            bsSize="sm"
+          >
+            <EditIcon />
+            &nbsp;
+            <FormattedMessage
+              id="app.exercise.editLimits"
+              defaultMessage="Tests Limits"
+            />
+          </Button>
+        </LinkContainer>}
     </ButtonGroup>
-    <p />
   </div>;
 
 ExerciseButtons.propTypes = {
   exerciseId: PropTypes.string.isRequired,
+  permissionHints: PropTypes.object,
   links: PropTypes.object
 };
 

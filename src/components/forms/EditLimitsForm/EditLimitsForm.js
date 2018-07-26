@@ -18,6 +18,7 @@ import styles from './styles.less';
 class EditLimitsForm extends Component {
   render() {
     const {
+      readOnly = false,
       environments,
       tests,
       cloneHorizontally,
@@ -38,7 +39,7 @@ class EditLimitsForm extends Component {
         title={
           <FormattedMessage
             id="app.editLimitsBox.title"
-            defaultMessage="Edit limits"
+            defaultMessage="Execution Limits"
           />
         }
         unlimitedHeight
@@ -46,55 +47,60 @@ class EditLimitsForm extends Component {
         success={submitSucceeded}
         dirty={dirty}
         footer={
-          <div className="text-center">
-            {dirty &&
-              <span>
-                <Button
-                  type="reset"
-                  onClick={reset}
-                  bsStyle={'danger'}
-                  className="btn-flat"
-                >
-                  <RefreshIcon gapRight />
-                  <FormattedMessage id="generic.reset" defaultMessage="Reset" />
-                </Button>
-              </span>}
-            <SubmitButton
-              id="editLimits"
-              invalid={invalid}
-              submitting={submitting}
-              dirty={dirty}
-              hasSucceeded={submitSucceeded}
-              hasFailed={submitFailed}
-              handleSubmit={handleSubmit}
-              messages={{
-                submit: (
-                  <FormattedMessage
-                    id="app.editLimitsForm.submit"
-                    defaultMessage="Save Limits"
-                  />
-                ),
-                submitting: (
-                  <FormattedMessage
-                    id="app.editLimitsForm.submitting"
-                    defaultMessage="Saving Limits ..."
-                  />
-                ),
-                success: (
-                  <FormattedMessage
-                    id="app.editLimitsForm.success"
-                    defaultMessage="Limits Saved"
-                  />
-                ),
-                validating: (
-                  <FormattedMessage
-                    id="generic.validating"
-                    defaultMessage="Validating ..."
-                  />
-                )
-              }}
-            />
-          </div>
+          !readOnly
+            ? <div className="text-center">
+                {dirty &&
+                  <span>
+                    <Button
+                      type="reset"
+                      onClick={reset}
+                      bsStyle={'danger'}
+                      className="btn-flat"
+                    >
+                      <RefreshIcon gapRight />
+                      <FormattedMessage
+                        id="generic.reset"
+                        defaultMessage="Reset"
+                      />
+                    </Button>
+                  </span>}
+                <SubmitButton
+                  id="editLimits"
+                  invalid={invalid}
+                  submitting={submitting}
+                  dirty={dirty}
+                  hasSucceeded={submitSucceeded}
+                  hasFailed={submitFailed}
+                  handleSubmit={handleSubmit}
+                  messages={{
+                    submit: (
+                      <FormattedMessage
+                        id="app.editLimitsForm.submit"
+                        defaultMessage="Save Limits"
+                      />
+                    ),
+                    submitting: (
+                      <FormattedMessage
+                        id="app.editLimitsForm.submitting"
+                        defaultMessage="Saving Limits ..."
+                      />
+                    ),
+                    success: (
+                      <FormattedMessage
+                        id="app.editLimitsForm.success"
+                        defaultMessage="Limits Saved"
+                      />
+                    ),
+                    validating: (
+                      <FormattedMessage
+                        id="generic.validating"
+                        defaultMessage="Validating ..."
+                      />
+                    )
+                  }}
+                />
+              </div>
+            : null
         }
       >
         {submitFailed &&
@@ -104,37 +110,41 @@ class EditLimitsForm extends Component {
               defaultMessage="Cannot save the exercise limits. Please try again later."
             />
           </Alert>}
-        {false &&
-          <Grid fluid>
-            <Row>
-              <Col lg={3}>
-                <div className={styles.preciseTime}>
-                  <Field
-                    name="preciseTime"
-                    component={CheckboxField}
-                    onOff
-                    label={
-                      <FormattedMessage
-                        id="app.editLimitsForm.preciseTime"
-                        defaultMessage="Precise Time Measurement"
-                      />
-                    }
-                  />
-                </div>
-              </Col>
-              <Col lg={9}>
-                <div>
-                  <p className={styles.preciseTimeTooltip}>
-                    <Icon icon="info-circle" />
+
+        <Grid fluid>
+          <Row>
+            <Col lg={3}>
+              <div className={styles.preciseTime}>
+                <Field
+                  name="preciseTime"
+                  component={CheckboxField}
+                  onOff
+                  disabled={readOnly}
+                  label={
                     <FormattedMessage
-                      id="app.editLimitsForm.preciseTimeTooltip"
-                      defaultMessage="If precise time measurement is selected, ReCodEx will measure the consumed CPU time of tested solutions. Otherwise, the wall time will be measured. CPU is better in cases when serial time complexity of the solution is tested and tight time limits are set. Wall time is better in general cases as it better reflects the actual time consumed by the solution (including I/O), but it is more susceptible to errors of measurement."
+                      id="app.editLimitsForm.preciseTime"
+                      defaultMessage="Precise Time Measurement"
                     />
-                  </p>
-                </div>
-              </Col>
-            </Row>
-          </Grid>}
+                  }
+                />
+              </div>
+            </Col>
+            <Col lg={9}>
+              <div>
+                <p className={styles.preciseTimeTooltip}>
+                  <Icon icon="info-circle" />
+                  <FormattedMessage
+                    id="app.editLimitsForm.preciseTimeTooltip"
+                    defaultMessage="If precise time measurement is selected, ReCodEx will measure the consumed CPU time of tested solutions. Otherwise, the wall time will be measured. CPU is better in cases when serial time complexity of the solution is tested and tight time limits are set. Wall time is better in general cases as it better reflects the actual time consumed by the solution (including I/O), but it is more susceptible to errors of measurement."
+                  />
+                </p>
+              </div>
+            </Col>
+          </Row>
+        </Grid>
+
+        <hr />
+
         <Table striped>
           <thead>
             <tr>
@@ -174,6 +184,7 @@ class EditLimitsForm extends Component {
                           id={id}
                           testsCount={tests.length}
                           environmentsCount={environments.length}
+                          disabled={readOnly}
                           cloneVertically={cloneVertically(
                             'editLimits',
                             test.id,
@@ -203,6 +214,7 @@ class EditLimitsForm extends Component {
 }
 
 EditLimitsForm.propTypes = {
+  readOnly: PropTypes.bool,
   tests: PropTypes.array.isRequired,
   environments: PropTypes.array,
   constraints: PropTypes.object,

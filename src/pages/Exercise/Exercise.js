@@ -14,10 +14,10 @@ import { formValueSelector } from 'redux-form';
 import moment from 'moment';
 import { defaultMemoize } from 'reselect';
 
-import SupplementaryFilesTableContainer from '../../containers/SupplementaryFilesTableContainer/SupplementaryFilesTableContainer';
 import Button from '../../components/widgets/FlatButton';
 import Page from '../../components/layout/Page';
 import ExerciseDetail from '../../components/Exercises/ExerciseDetail';
+import ExerciseGroups from '../../components/Exercises/ExerciseGroups';
 import LocalizedTexts from '../../components/helpers/LocalizedTexts';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import ReferenceSolutionsList from '../../components/Exercises/ReferenceSolutionsList';
@@ -33,7 +33,9 @@ import MultiAssignForm from '../../components/forms/MultiAssignForm';
 import { isSubmitting } from '../../redux/selectors/submission';
 import {
   fetchExerciseIfNeeded,
-  forkExercise
+  forkExercise,
+  attachExerciseToGroup,
+  detachExerciseFromGroup
 } from '../../redux/modules/exercises';
 import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments';
 import { runtimeEnvironmentsSelector } from '../../redux/selectors/runtimeEnvironments';
@@ -53,13 +55,11 @@ import {
 } from '../../redux/modules/assignments';
 import {
   exerciseSelector,
-  exerciseForkedFromSelector
+  exerciseForkedFromSelector,
+  getExerciseAttachingGroupId,
+  getExerciseDetachingGroupId
 } from '../../redux/selectors/exercises';
 import { referenceSolutionsSelector } from '../../redux/selectors/referenceSolutions';
-import {
-  canLoggedUserEditExercise,
-  isLoggedAsSuperAdmin
-} from '../../redux/selectors/users';
 import {
   // deletePipeline,
   // fetchExercisePipelines,
@@ -75,6 +75,7 @@ import {
   loggedInUserIdSelector,
   selectedInstanceId
 } from '../../redux/selectors/auth';
+import { instanceSelector } from '../../redux/selectors/instances';
 import {
   groupDataAccessorSelector,
   groupsUserCanEditSelector,
@@ -226,11 +227,11 @@ class Exercise extends Component {
   render() {
     const {
       userId,
+      instance,
       exercise,
       forkedFrom,
       runtimeEnvironments,
       submitting,
-      canEditExercise,
       referenceSolutions,
       intl: { formatMessage, locale },
       initCreateReferenceSolution,
@@ -241,9 +242,12 @@ class Exercise extends Component {
       assignableGroups,
       groupsAccessor,
       forkExercise,
-      isSuperAdmin,
       firstDeadline,
       allowSecondDeadline,
+      attachingGroupId,
+      detachingGroupId,
+      attachExerciseToGroup,
+      detachExerciseFromGroup,
       links: {
         EXERCISES_URI,
         EXERCISE_REFERENCE_SOLUTION_URI_FACTORY
@@ -303,21 +307,25 @@ class Exercise extends Component {
                 </Col>
               </Row>}
             <Row>
-              {canEditExercise &&
-                <Col sm={12}>
-                  <ExerciseButtons exerciseId={exercise.id} />
-                  <p />
-                  {isSuperAdmin &&
-                    <ForkExerciseForm
-                      exerciseId={exercise.id}
-                      groups={groups}
-                      forkId={forkId}
-                      onSubmit={formData => forkExercise(forkId, formData)}
-                      groupsAccessor={groupsAccessor}
-                    />}
-                  <p />
-                </Col>}
+              <Col sm={12}>
+                <ExerciseButtons
+                  exerciseId={exercise.id}
+                  permissionHints={exercise.permissionHints}
+                />
+              </Col>
             </Row>
+            {exercise.permissionHints.fork &&
+              <Row>
+                <Col sm={12} className="em-margin-bottom">
+                  <ForkExerciseForm
+                    exerciseId={exercise.id}
+                    groups={groups}
+                    forkId={forkId}
+                    onSubmit={formData => forkExercise(forkId, formData)}
+                    groupsAccessor={groupsAccessor}
+                  />
+                </Col>
+              </Row>}
             <Row>
               <Col lg={6}>
                 <div>
@@ -445,6 +453,20 @@ class Exercise extends Component {
                   locale={locale}
                 />
 
+                <ResourceRenderer resource={instance}>
+                  {instance =>
+                    <ExerciseGroups
+                      showButtons={exercise.permissionHints.update}
+                      groupsIds={exercise.groupsIds}
+                      rootGroupId={instance.rootGroupId}
+                      attachingGroupId={attachingGroupId}
+                      detachingGroupId={detachingGroupId}
+                      attachExerciseToGroup={attachExerciseToGroup}
+                      detachExerciseFromGroup={detachExerciseFromGroup}
+                      groups={groups}
+                    />}
+                </ResourceRenderer>
+
                 <ResourceRenderer
                   resource={runtimeEnvironments.toArray()}
                   returnAsArray={true}
@@ -454,7 +476,8 @@ class Exercise extends Component {
                       title={formatMessage(messages.referenceSolutionsBox)}
                       noPadding
                       footer={
-                        <p className="text-center">
+                        exercise.permissionHints.addReferenceSolution &&
+                        <div className="text-center">
                           <Button
                             bsStyle={exercise.isBroken ? 'default' : 'success'}
                             onClick={() => initCreateReferenceSolution(userId)}
@@ -470,7 +493,7 @@ class Exercise extends Component {
                                   defaultMessage="Submit New Reference Solution"
                                 />}
                           </Button>
-                        </p>
+                        </div>
                       }
                     >
                       <div>
@@ -550,11 +573,6 @@ class Exercise extends Component {
                       </div>
                     </Box>}
                 </ResourceRenderer>
-                <SupplementaryFilesTableContainer
-                  isOpen={false}
-                  viewOnly={true}
-                  exercise={exercise}
-                />
               </Col>
             </Row>
           </div>}
@@ -570,6 +588,7 @@ Exercise.contextTypes = {
 Exercise.propTypes = {
   userId: PropTypes.string.isRequired,
   instanceId: PropTypes.string,
+  instance: ImmutablePropTypes.map,
   params: PropTypes.shape({
     exerciseId: PropTypes.string.isRequired
   }).isRequired,
@@ -580,7 +599,6 @@ Exercise.propTypes = {
   exercise: ImmutablePropTypes.map,
   forkedFrom: ImmutablePropTypes.map,
   runtimeEnvironments: ImmutablePropTypes.map,
-  canEditExercise: PropTypes.bool.isRequired,
   referenceSolutions: ImmutablePropTypes.map,
   intl: intlShape.isRequired,
   submitting: PropTypes.bool,
@@ -592,14 +610,17 @@ Exercise.propTypes = {
   forkExercise: PropTypes.func.isRequired,
   groups: ImmutablePropTypes.map,
   assignableGroups: ImmutablePropTypes.map,
-  isSuperAdmin: PropTypes.bool,
   groupsAccessor: PropTypes.func.isRequired,
   firstDeadline: PropTypes.oneOfType([
     PropTypes.number,
     PropTypes.string,
     PropTypes.object
   ]),
-  allowSecondDeadline: PropTypes.bool
+  allowSecondDeadline: PropTypes.bool,
+  attachingGroupId: PropTypes.string,
+  detachingGroupId: PropTypes.string,
+  attachExerciseToGroup: PropTypes.func.isRequired,
+  detachExerciseFromGroup: PropTypes.func.isRequired
 };
 
 const editMultiAssignFormSelector = formValueSelector('multiAssign');
@@ -608,26 +629,27 @@ export default withLinks(
   connect(
     (state, { params: { exerciseId } }) => {
       const userId = loggedInUserIdSelector(state);
-
+      const instanceId = selectedInstanceId(state);
       return {
         userId,
-        instanceId: selectedInstanceId(state),
+        instanceId,
+        instance: instanceSelector(state, instanceId),
         exercise: exerciseSelector(exerciseId)(state),
         forkedFrom: exerciseForkedFromSelector(exerciseId)(state),
         runtimeEnvironments: runtimeEnvironmentsSelector(state),
         submitting: isSubmitting(state),
-        canEditExercise: canLoggedUserEditExercise(exerciseId)(state),
         referenceSolutions: referenceSolutionsSelector(exerciseId)(state),
         //        exercisePipelines: exercisePipelinesSelector(exerciseId)(state),
         groups: groupsUserCanEditSelector(state),
         assignableGroups: groupsUserCanAssignToSelector(state),
         groupsAccessor: groupDataAccessorSelector(state),
-        isSuperAdmin: isLoggedAsSuperAdmin(state),
         firstDeadline: editMultiAssignFormSelector(state, 'firstDeadline'),
         allowSecondDeadline: editMultiAssignFormSelector(
           state,
           'allowSecondDeadline'
-        )
+        ),
+        attachingGroupId: getExerciseAttachingGroupId(exerciseId)(state),
+        detachingGroupId: getExerciseDetachingGroupId(exerciseId)(state)
       };
     },
     (dispatch, { params: { exerciseId } }) => ({
@@ -642,7 +664,11 @@ export default withLinks(
       deleteReferenceSolution: solutionId =>
         dispatch(deleteReferenceSolution(solutionId)),
       forkExercise: (forkId, data) =>
-        dispatch(forkExercise(exerciseId, forkId, data))
+        dispatch(forkExercise(exerciseId, forkId, data)),
+      attachExerciseToGroup: groupId =>
+        dispatch(attachExerciseToGroup(exerciseId, groupId)),
+      detachExerciseFromGroup: groupId =>
+        dispatch(detachExerciseFromGroup(exerciseId, groupId))
     })
   )(injectIntl(Exercise))
 );

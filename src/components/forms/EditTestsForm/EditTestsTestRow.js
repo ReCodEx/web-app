@@ -8,7 +8,13 @@ import { TextField } from '../Fields';
 import { RemoveIcon } from '../../icons';
 import './EditTests.css';
 
-const EditTestsTestRow = ({ test, onRemove, isUniform, percent }) =>
+const EditTestsTestRow = ({
+  test,
+  onRemove,
+  isUniform,
+  percent,
+  readOnly = false
+}) =>
   <tr>
     <td>
       <Field
@@ -16,6 +22,7 @@ const EditTestsTestRow = ({ test, onRemove, isUniform, percent }) =>
         component={TextField}
         label={''}
         groupClassName="testRow"
+        disabled={readOnly}
       />
     </td>
     {!isUniform &&
@@ -25,32 +32,35 @@ const EditTestsTestRow = ({ test, onRemove, isUniform, percent }) =>
           component={TextField}
           label={''}
           groupClassName="testRow"
+          disabled={readOnly}
         />
       </td>}
     <td style={{ textAlign: 'center', verticalAlign: 'middle' }}>
       {percent}
     </td>
-    <td style={{ verticalAlign: 'middle' }}>
-      <Button
-        onClick={onRemove}
-        bsStyle={'danger'}
-        bsSize="xs"
-        className="btn-flat pull-right"
-      >
-        <RemoveIcon gapRight />
-        <FormattedMessage
-          id="app.editTestsTest.remove"
-          defaultMessage="Remove"
-        />
-      </Button>
-    </td>
+    {!readOnly &&
+      <td style={{ verticalAlign: 'middle' }}>
+        <Button
+          onClick={onRemove}
+          bsStyle={'danger'}
+          bsSize="xs"
+          className="btn-flat pull-right"
+        >
+          <RemoveIcon gapRight />
+          <FormattedMessage
+            id="app.editTestsTest.remove"
+            defaultMessage="Remove"
+          />
+        </Button>
+      </td>}
   </tr>;
 
 EditTestsTestRow.propTypes = {
   test: PropTypes.string.isRequired,
   onRemove: PropTypes.func.isRequired,
   isUniform: PropTypes.bool.isRequired,
-  percent: PropTypes.string.isRequired
+  percent: PropTypes.string.isRequired,
+  readOnly: PropTypes.bool
 };
 
 export default EditTestsTestRow;
