@@ -26,10 +26,7 @@ import {
   validateAssignment
 } from '../../redux/modules/assignments';
 import { getAssignment } from '../../redux/selectors/assignments';
-import { canSubmitSolution } from '../../redux/selectors/canSubmit';
 import { runtimeEnvironmentsSelector } from '../../redux/selectors/runtimeEnvironments';
-import { isSubmitting } from '../../redux/selectors/submission';
-import { isSupervisorOf, isAdminOf } from '../../redux/selectors/users';
 import { getExerciseOfAssignmentJS } from '../../redux/selectors/exercises';
 import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments';
 import { fetchExerciseIfNeeded } from '../../redux/modules/exercises';
@@ -39,7 +36,6 @@ import AssignmentSync from '../../components/Assignments/Assignment/AssignmentSy
 import { getLocalizedTextsLocales } from '../../helpers/getLocalizedData';
 
 import withLinks from '../../helpers/withLinks';
-import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 
 class EditAssignment extends Component {
   componentWillMount = () => this.props.loadAsync();
@@ -139,8 +135,6 @@ class EditAssignment extends Component {
       push,
       assignment,
       exercise,
-      isSupervisorOf,
-      isAdminOf,
       firstDeadline,
       allowSecondDeadline,
       localizedTexts,
@@ -195,8 +189,7 @@ class EditAssignment extends Component {
             <Row>
               <Col xs={12}>
                 <HierarchyLineContainer groupId={assignment.groupId} />
-                {(isAdminOf(assignment.groupId) ||
-                  isSupervisorOf(assignment.groupId)) &&
+                {assignment.permissionHints.viewDetail &&
                   <p>
                     <LinkContainer
                       to={ASSIGNMENT_STATS_URI_FACTORY(assignment.id)}
@@ -209,14 +202,14 @@ class EditAssignment extends Component {
                         />
                       </Button>
                     </LinkContainer>
-                    <ResubmitAllSolutionsContainer
-                      assignmentId={assignment.id}
-                    />
+                    {assignment.permissionHints.resubmitSubmissions &&
+                      <ResubmitAllSolutionsContainer
+                        assignmentId={assignment.id}
+                      />}
                   </p>}
               </Col>
             </Row>
-            {(isAdminOf(assignment.groupId) ||
-              isSupervisorOf(assignment.groupId)) &&
+            {assignment.permissionHints.update &&
               <AssignmentSync
                 syncInfo={assignment.exerciseSynchronizationInfo}
                 exerciseSync={exerciseSync}
@@ -244,31 +237,32 @@ class EditAssignment extends Component {
             </ResourceRenderer>
 
             <br />
-            <Box
-              type="danger"
-              title={
-                <FormattedMessage
-                  id="app.editAssignment.deleteAssignment"
-                  defaultMessage="Delete the assignment"
-                />
-              }
-            >
-              <div>
-                <p>
+            {assignment.permissionHints.remove &&
+              <Box
+                type="danger"
+                title={
                   <FormattedMessage
-                    id="app.editAssignment.deleteAssignmentWarning"
-                    defaultMessage="Deleting an assignment will remove all the students submissions and you will have to contact the administrator of ReCodEx if you wanted to restore the assignment in the future."
+                    id="app.editAssignment.deleteAssignment"
+                    defaultMessage="Delete the assignment"
                   />
-                </p>
-                <p className="text-center">
-                  <DeleteAssignmentButtonContainer
-                    id={assignmentId}
-                    onDeleted={() =>
-                      push(GROUP_DETAIL_URI_FACTORY(this.groupId))}
-                  />
-                </p>
-              </div>
-            </Box>
+                }
+              >
+                <div>
+                  <p>
+                    <FormattedMessage
+                      id="app.editAssignment.deleteAssignmentWarning"
+                      defaultMessage="Deleting an assignment will remove all the students submissions and you will have to contact the administrator of ReCodEx if you wanted to restore the assignment in the future."
+                    />
+                  </p>
+                  <p className="text-center">
+                    <DeleteAssignmentButtonContainer
+                      id={assignmentId}
+                      onDeleted={() =>
+                        push(GROUP_DETAIL_URI_FACTORY(this.groupId))}
+                    />
+                  </p>
+                </div>
+              </Box>}
           </Grid>}
       </Page>
     );
@@ -286,38 +280,31 @@ EditAssignment.propTypes = {
   exercise: PropTypes.object,
   runtimeEnvironments: ImmutablePropTypes.map,
   editAssignment: PropTypes.func.isRequired,
-  firstDeadline: PropTypes.oneOfType([PropTypes.number, PropTypes.object]),
+  firstDeadline: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   allowSecondDeadline: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
   localizedTexts: PropTypes.array,
   isPublic: PropTypes.bool,
   exerciseSync: PropTypes.func.isRequired,
   validateAssignment: PropTypes.func.isRequired,
-  links: PropTypes.object,
-  isSupervisorOf: PropTypes.func.isRequired,
-  isAdminOf: PropTypes.func.isRequired
+  links: PropTypes.object
 };
 
 const editAssignmentFormSelector = formValueSelector('editAssignment');
 
 export default connect(
   (state, { params: { assignmentId } }) => {
-    const loggedInUserId = loggedInUserIdSelector(state);
     const assignment = getAssignment(state)(assignmentId);
     return {
       assignment,
       exercise: getExerciseOfAssignmentJS(state)(assignmentId),
       runtimeEnvironments: runtimeEnvironmentsSelector(state),
-      submitting: isSubmitting(state),
-      canSubmit: canSubmitSolution(assignmentId)(state),
       firstDeadline: editAssignmentFormSelector(state, 'firstDeadline'),
       allowSecondDeadline: editAssignmentFormSelector(
         state,
         'allowSecondDeadline'
       ),
       localizedTexts: editAssignmentFormSelector(state, 'localizedTexts'),
-      isPublic: editAssignmentFormSelector(state, 'isPublic'),
-      isSupervisorOf: groupId => isSupervisorOf(loggedInUserId, groupId)(state),
-      isAdminOf: groupId => isAdminOf(loggedInUserId, groupId)(state)
+      isPublic: editAssignmentFormSelector(state, 'isPublic')
     };
   },
   (dispatch, { params: { assignmentId } }) => ({
