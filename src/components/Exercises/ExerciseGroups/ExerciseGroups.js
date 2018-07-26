@@ -38,13 +38,15 @@ class ExerciseGroups extends Component {
   };
 
   detachButton = groupId => {
-    const { detachingGroupId, detachExerciseFromGroup } = this.props;
-
+    const { groupsIds, detachingGroupId, detachExerciseFromGroup } = this.props;
     return (
       <Button
         bsStyle="danger"
         bsSize="xs"
-        disabled={Boolean(detachingGroupId)}
+        disabled={
+          Boolean(detachingGroupId) ||
+          groupsIds.length <= 1 /* last one standing */
+        }
         onClick={ev => {
           ev.stopPropagation();
           detachExerciseFromGroup(groupId);
