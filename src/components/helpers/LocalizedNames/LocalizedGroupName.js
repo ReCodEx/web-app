@@ -15,22 +15,20 @@ const LocalizedGroupName = ({ entity, intl: { locale } }) => {
     <span>
       {getLocalizedName(entity, locale)}
       {otherNames.length > 0 &&
-        <span>
-          &nbsp;<OverlayTrigger
-            placement="right"
-            overlay={
-              <Tooltip id={otherNames.map(n => n.name).join(', ')}>
-                {otherNames.map((name, i) =>
-                  <div key={i}>
-                    <strong>{name.name}</strong>&nbsp;[{name.locale}]
-                  </div>
-                )}
-              </Tooltip>
-            }
-          >
-            <Icon icon={['far', 'flag']} className="text-muted" />
-          </OverlayTrigger>&nbsp;
-        </span>}
+        <OverlayTrigger
+          placement="right"
+          overlay={
+            <Tooltip id={otherNames.map(n => n.name).join(', ')}>
+              {otherNames.map((name, i) =>
+                <div key={i}>
+                  <strong>{name.name}</strong>&nbsp;[{name.locale}]
+                </div>
+              )}
+            </Tooltip>
+          }
+        >
+          <Icon icon={['far', 'flag']} className="text-muted" gapLeft />
+        </OverlayTrigger>}
     </span>
   );
 };

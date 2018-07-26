@@ -27,7 +27,6 @@ const SupplementaryFilesTableContainer = ({
   addFiles,
   removeFile,
   downloadFile,
-  viewOnly = false,
   downloadArchive,
   ...props
 }) =>
@@ -52,7 +51,7 @@ const SupplementaryFilesTableContainer = ({
     }
     HeaderComponent={SupplementaryFilesTableHeaderRow}
     RowComponent={SupplementaryFilesTableRow}
-    viewOnly={viewOnly}
+    viewOnly={!exercise.permissionHints.update}
     downloadArchive={downloadArchive}
     {...props}
   />;
@@ -60,14 +59,14 @@ const SupplementaryFilesTableContainer = ({
 SupplementaryFilesTableContainer.propTypes = {
   exercise: PropTypes.shape({
     id: PropTypes.string.isRequired,
-    supplementaryFilesIds: PropTypes.array.isRequired
+    supplementaryFilesIds: PropTypes.array.isRequired,
+    permissionHints: PropTypes.object.isRequired
   }).isRequired,
   supplementaryFiles: ImmutablePropTypes.map,
   loadFiles: PropTypes.func.isRequired,
   addFiles: PropTypes.func.isRequired,
   removeFile: PropTypes.func.isRequired,
   downloadFile: PropTypes.func.isRequired,
-  viewOnly: PropTypes.bool,
   downloadArchive: PropTypes.func
 };
 

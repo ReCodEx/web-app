@@ -7,7 +7,7 @@ import EditTestsTestRow from './EditTestsTestRow';
 import { prettyPrintPercent } from '../../helpers/stringFormatters';
 import { AddIcon } from '../../icons';
 
-const EditTestsTest = ({ fields, isUniform, testValues }) => {
+const EditTestsTest = ({ fields, isUniform, testValues, readOnly = false }) => {
   const weightSum = isUniform
     ? fields.length
     : testValues.reduce((acc, val) => acc + Number(val.weight), 0);
@@ -36,7 +36,7 @@ const EditTestsTest = ({ fields, isUniform, testValues }) => {
                 defaultMessage="Points Percentage:"
               />
             </th>
-            <th />
+            {!readOnly && <th />}
           </tr>
         </thead>
         <tbody>
@@ -45,6 +45,7 @@ const EditTestsTest = ({ fields, isUniform, testValues }) => {
               key={index}
               test={test}
               isUniform={isUniform}
+              readOnly={readOnly}
               percent={
                 testValues[index] && testValues[index].weight
                   ? prettyPrintPercent(
@@ -59,6 +60,7 @@ const EditTestsTest = ({ fields, isUniform, testValues }) => {
         </tbody>
       </Table>
       {fields.length < 99 &&
+        !readOnly &&
         <div style={{ textAlign: 'right' }}>
           <Button
             onClick={() =>
@@ -81,6 +83,7 @@ const EditTestsTest = ({ fields, isUniform, testValues }) => {
 };
 
 EditTestsTest.propTypes = {
+  readOnly: PropTypes.bool,
   fields: PropTypes.object.isRequired,
   isUniform: PropTypes.bool.isRequired,
   testValues: PropTypes.array.isRequired

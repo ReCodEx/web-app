@@ -90,7 +90,8 @@ const FilesTable = ({
           </div>}
       </ResourceRenderer>
       {downloadArchive &&
-        <p>
+        attachments.length > 0 &&
+        <div className="text-center">
           <Button bsStyle="primary" onClick={downloadArchive}>
             <DownloadIcon gapRight />
             <FormattedMessage
@@ -98,7 +99,7 @@ const FilesTable = ({
               defaultMessage="Download all"
             />
           </Button>
-        </p>}
+        </div>}
     </div>
   </Box>;
 

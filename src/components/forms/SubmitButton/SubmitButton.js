@@ -44,6 +44,7 @@ class SubmitButton extends Component {
       invalid,
       asyncValidating = false,
       noIcons = false,
+      defaultIcon = null,
       disabled = false,
       messages: {
         submit: submitMsg = (
@@ -106,7 +107,7 @@ class SubmitButton extends Component {
                     {invalidMsg}
                   </span>
                 : <span>
-                    {!noIcons && <SendIcon gapRight />}
+                    {!noIcons && (defaultIcon || <SendIcon gapRight />)}
                     {submitMsg}
                   </span>
           : <span>
@@ -126,6 +127,7 @@ SubmitButton.propTypes = {
   hasFailed: PropTypes.bool,
   asyncValidating: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
   noIcons: PropTypes.bool,
+  defaultIcon: PropTypes.any,
   invalid: PropTypes.bool,
   disabled: PropTypes.bool,
   reset: PropTypes.func,

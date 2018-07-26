@@ -272,7 +272,10 @@ class EditExerciseLimits extends Component {
               </Row>}
             <Row>
               <Col sm={12}>
-                <ExerciseButtons exerciseId={exercise.id} />
+                <ExerciseButtons
+                  exerciseId={exercise.id}
+                  permissionHints={exercise.permissionHints}
+                />
               </Col>
             </Row>
 
@@ -305,39 +308,40 @@ class EditExerciseLimits extends Component {
             >
               {hwgs =>
                 <Row>
-                  <Col sm={12} md={6}>
-                    <EditHardwareGroupForm
-                      initialValues={{
-                        hardwareGroup:
-                          exercise.hardwareGroups &&
-                          exercise.hardwareGroups.length === 1
-                            ? exercise.hardwareGroups[0].id
-                            : ''
-                      }}
-                      hardwareGroups={hwgs}
-                      addEmptyOption={
-                        !exercise.hardwareGroups ||
-                        exercise.hardwareGroups.length !== 1
-                      }
-                      warnDropLimits={this.doesHardwareGroupChangeDropLimits(
-                        exercise.id,
-                        exercise.hardwareGroups.length > 0 &&
-                          exercise.hardwareGroups[0].id,
-                        limits,
-                        tests,
-                        exercise.runtimeEnvironments,
-                        hwgs
-                      )}
-                      onSubmit={this.transformAndSendHardwareGroups(
-                        exercise.id,
-                        exercise.hardwareGroups.length > 0 &&
-                          exercise.hardwareGroups[0].id,
-                        limits,
-                        tests,
-                        exercise.runtimeEnvironments
-                      )}
-                    />
-                  </Col>
+                  {exercise.permissionHints.setLimits &&
+                    <Col sm={12} md={6}>
+                      <EditHardwareGroupForm
+                        initialValues={{
+                          hardwareGroup:
+                            exercise.hardwareGroups &&
+                            exercise.hardwareGroups.length === 1
+                              ? exercise.hardwareGroups[0].id
+                              : ''
+                        }}
+                        hardwareGroups={hwgs}
+                        addEmptyOption={
+                          !exercise.hardwareGroups ||
+                          exercise.hardwareGroups.length !== 1
+                        }
+                        warnDropLimits={this.doesHardwareGroupChangeDropLimits(
+                          exercise.id,
+                          exercise.hardwareGroups.length > 0 &&
+                            exercise.hardwareGroups[0].id,
+                          limits,
+                          tests,
+                          exercise.runtimeEnvironments,
+                          hwgs
+                        )}
+                        onSubmit={this.transformAndSendHardwareGroups(
+                          exercise.id,
+                          exercise.hardwareGroups.length > 0 &&
+                            exercise.hardwareGroups[0].id,
+                          limits,
+                          tests,
+                          exercise.runtimeEnvironments
+                        )}
+                      />
+                    </Col>}
                   <Col sm={12} md={6}>
                     {exercise.hardwareGroups.map(h =>
                       <HardwareGroupMetadata
@@ -396,6 +400,7 @@ class EditExerciseLimits extends Component {
                       cloneVertically={cloneVertically}
                       cloneHorizontally={cloneHorizontally}
                       cloneAll={cloneAll}
+                      readOnly={!exercise.permissionHints.setLimits}
                     />
                   : <div className="alert alert-warning">
                       <h4>

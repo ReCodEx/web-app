@@ -9,7 +9,7 @@ import { reduxForm, Field } from 'redux-form';
 import { SelectField } from '../Fields';
 import SubmitButton from '../SubmitButton';
 import Button from '../../../components/widgets/FlatButton';
-import { SuccessIcon } from '../../../components/icons';
+import Icon, { SuccessIcon, WarningIcon } from '../../../components/icons';
 import { forkStatuses } from '../../../redux/modules/exercises';
 import { getFork } from '../../../redux/selectors/exercises';
 import ResourceRenderer from '../../helpers/ResourceRenderer';
@@ -66,6 +66,7 @@ class ForkExerciseForm extends Component {
           <div>
             {submitFailed &&
               <Alert bsStyle="danger">
+                <WarningIcon gapRight />
                 <FormattedMessage
                   id="generic.savingFailed"
                   defaultMessage="Saving failed. Please try again later."
@@ -99,7 +100,7 @@ class ForkExerciseForm extends Component {
                 dirty={anyTouched}
                 hasFailed={submitFailed}
                 handleSubmit={handleSubmit}
-                noIcons
+                defaultIcon={<Icon icon="code-branch" gapRight />}
                 messages={{
                   submit: (
                     <FormattedMessage

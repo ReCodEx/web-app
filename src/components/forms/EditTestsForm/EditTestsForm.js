@@ -14,6 +14,7 @@ import { RefreshIcon } from '../../icons';
 class EditTestsForm extends Component {
   render() {
     const {
+      readOnly = false,
       dirty,
       submitting,
       handleSubmit,
@@ -34,76 +35,80 @@ class EditTestsForm extends Component {
             />
           </Alert>}
 
-        <Field
-          name="isUniform"
-          component={CheckboxField}
-          onOff
-          label={
-            <FormattedMessage
-              id="app.editTestsForm.isUniform"
-              defaultMessage="Using uniform point distribution for all tests"
-            />
-          }
-        />
+        {!readOnly &&
+          <Field
+            name="isUniform"
+            component={CheckboxField}
+            onOff
+            label={
+              <FormattedMessage
+                id="app.editTestsForm.isUniform"
+                defaultMessage="Using uniform point distribution for all tests"
+              />
+            }
+          />}
 
         <FieldArray
           name="tests"
           component={EditTestsTest}
+          readOnly={readOnly}
           isUniform={formValues ? formValues.isUniform === true : true}
         />
 
-        <div className="text-center">
-          {dirty &&
-            !submitting &&
-            !submitSucceeded &&
-            <span>
-              <Button
-                type="reset"
-                onClick={reset}
-                bsStyle={'danger'}
-                className="btn-flat"
-              >
-                <RefreshIcon gapRight />
-                <FormattedMessage id="generic.reset" defaultMessage="Reset" />
-              </Button>
-            </span>}
+        {!readOnly &&
+          <div className="text-center">
+            {dirty &&
+              !submitting &&
+              !submitSucceeded &&
+              <span>
+                <Button
+                  type="reset"
+                  onClick={reset}
+                  bsStyle={'danger'}
+                  className="btn-flat"
+                >
+                  <RefreshIcon gapRight />
+                  <FormattedMessage id="generic.reset" defaultMessage="Reset" />
+                </Button>
+              </span>}
 
-          <SubmitButton
-            id="editTests"
-            invalid={invalid}
-            submitting={submitting}
-            hasSucceeded={submitSucceeded}
-            dirty={dirty}
-            hasFailed={submitFailed}
-            handleSubmit={handleSubmit}
-            messages={{
-              submit: (
-                <FormattedMessage
-                  id="app.editTestsForm.submit"
-                  defaultMessage="Save Tests"
-                />
-              ),
-              submitting: (
-                <FormattedMessage
-                  id="app.editTestsForm.submitting"
-                  defaultMessage="Saving Tests ..."
-                />
-              ),
-              success: (
-                <FormattedMessage
-                  id="app.editTestsForm.success"
-                  defaultMessage="Tests Saved."
-                />
-              )
-            }}
-          />
-        </div>
+            <SubmitButton
+              id="editTests"
+              invalid={invalid}
+              submitting={submitting}
+              hasSucceeded={submitSucceeded}
+              dirty={dirty}
+              hasFailed={submitFailed}
+              handleSubmit={handleSubmit}
+              messages={{
+                submit: (
+                  <FormattedMessage
+                    id="app.editTestsForm.submit"
+                    defaultMessage="Save Tests"
+                  />
+                ),
+                submitting: (
+                  <FormattedMessage
+                    id="app.editTestsForm.submitting"
+                    defaultMessage="Saving Tests ..."
+                  />
+                ),
+                success: (
+                  <FormattedMessage
+                    id="app.editTestsForm.success"
+                    defaultMessage="Tests Saved."
+                  />
+                )
+              }}
+            />
+          </div>}
       </div>
     );
   }
 }
 
 EditTestsForm.propTypes = {
+  readOnly: PropTypes.bool,
   values: PropTypes.array,
   reset: PropTypes.func.isRequired,
   handleSubmit: PropTypes.func.isRequired,
