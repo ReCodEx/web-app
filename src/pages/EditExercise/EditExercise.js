@@ -6,6 +6,7 @@ import { Row, Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 import { reset, formValueSelector } from 'redux-form';
+import { defaultMemoize } from 'reselect';
 
 import Page from '../../components/layout/Page';
 import Box from '../../components/widgets/Box';
@@ -28,6 +29,17 @@ import {
   getLocalizedName,
   getLocalizedTextsLocales
 } from '../../helpers/getLocalizedData';
+
+const prepareInitialValues = defaultMemoize(
+  (id, version, localizedTexts, difficulty, isPublic, isLocked) => ({
+    id,
+    version,
+    localizedTexts,
+    difficulty,
+    isPublic,
+    isLocked
+  })
+);
 
 class EditExercise extends Component {
   componentWillMount = () => this.props.loadAsync();
@@ -120,7 +132,14 @@ class EditExercise extends Component {
             <Row>
               <Col lg={6}>
                 <EditExerciseForm
-                  initialValues={exercise}
+                  initialValues={prepareInitialValues(
+                    exercise.id,
+                    exercise.version,
+                    exercise.localizedTexts,
+                    exercise.difficulty,
+                    exercise.isPublic,
+                    exercise.isLocked
+                  )}
                   onSubmit={this.editExerciseSubmitHandler}
                   localizedTextsLocales={getLocalizedTextsLocales(
                     localizedTexts
