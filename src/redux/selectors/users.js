@@ -11,7 +11,6 @@ import {
   supervisorsOfGroup,
   groupsSelector
 } from './groups';
-import { exerciseSelector } from './exercises';
 import { pipelineSelector } from './pipelines';
 import { isReady, getJsData } from '../helpers/resourceManager';
 
@@ -187,22 +186,6 @@ export const usersGroupsIds = userId =>
   createSelector(
     [studentOfGroupsIdsSelector(userId), supervisorOfGroupsIdsSelector(userId)],
     (student, supervisor) => student.concat(supervisor)
-  );
-
-export const canLoggedUserEditExercise = exerciseId =>
-  createSelector(
-    [
-      exerciseSelector(exerciseId),
-      loggedInUserIdSelector,
-      isLoggedAsSuperAdmin
-    ],
-    (exercise, userId, isSuperAdmin) =>
-      Boolean(
-        isSuperAdmin ||
-          (exercise &&
-            isReady(exercise) &&
-            exercise.getIn(['data', 'authorId']) === userId)
-      )
   );
 
 export const canEditPipeline = (userId, pipelineId) =>

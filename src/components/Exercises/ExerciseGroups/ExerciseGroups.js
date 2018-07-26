@@ -69,7 +69,12 @@ class ExerciseGroups extends Component {
   };
 
   render() {
-    const { groupsIds = [], rootGroupId, groups } = this.props;
+    const {
+      groupsIds = [],
+      rootGroupId,
+      groups,
+      showButtons = false
+    } = this.props;
     return (
       <Box
         title={
@@ -79,15 +84,17 @@ class ExerciseGroups extends Component {
           />
         }
         footer={
-          <div className="text-center">
-            <Button bsStyle="primary" onClick={this.openDialog}>
-              <Icon icon="paperclip" gapRight />
-              <FormattedMessage
-                id="app.exercise.manageGroupAttachments"
-                defaultMessage="Manage Group Attachments"
-              />
-            </Button>
-          </div>
+          showButtons
+            ? <div className="text-center">
+                <Button bsStyle="primary" onClick={this.openDialog}>
+                  <Icon icon="paperclip" gapRight />
+                  <FormattedMessage
+                    id="app.exercise.manageGroupAttachments"
+                    defaultMessage="Manage Group Attachments"
+                  />
+                </Button>
+              </div>
+            : null
         }
         noPadding
       >
@@ -103,37 +110,38 @@ class ExerciseGroups extends Component {
                     <GroupsNameContainer groupId={groupId} />
                   </td>
                   <td className="text-right">
-                    {this.detachButton(groupId)}
+                    {showButtons && this.detachButton(groupId)}
                   </td>
                 </tr>
               )}
             </tbody>
           </Table>
 
-          <Modal
-            show={this.state.dialogOpen}
-            backdrop="static"
-            onHide={this.closeDialog}
-            bsSize="large"
-          >
-            <Modal.Header closeButton>
-              <Modal.Title>
-                <FormattedMessage
-                  id="app.exercise.manageGroupAttachments"
-                  defaultMessage="Manage Group Attachments"
+          {showButtons &&
+            <Modal
+              show={this.state.dialogOpen}
+              backdrop="static"
+              onHide={this.closeDialog}
+              bsSize="large"
+            >
+              <Modal.Header closeButton>
+                <Modal.Title>
+                  <FormattedMessage
+                    id="app.exercise.manageGroupAttachments"
+                    defaultMessage="Manage Group Attachments"
+                  />
+                </Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+                <GroupTree
+                  id={rootGroupId}
+                  groups={groups}
+                  buttonsCreator={this.buttonsCreator(
+                    arrayToObject(groupsIds, identity, () => true)
+                  )}
                 />
-              </Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-              <GroupTree
-                id={rootGroupId}
-                groups={groups}
-                buttonsCreator={this.buttonsCreator(
-                  arrayToObject(groupsIds, identity, () => true)
-                )}
-              />
-            </Modal.Body>
-          </Modal>
+              </Modal.Body>
+            </Modal>}
         </React.Fragment>
       </Box>
     );
@@ -141,6 +149,7 @@ class ExerciseGroups extends Component {
 }
 
 ExerciseGroups.propTypes = {
+  showButtons: PropTypes.bool,
   groupsIds: PropTypes.array,
   attachingGroupId: PropTypes.string,
   detachingGroupId: PropTypes.string,

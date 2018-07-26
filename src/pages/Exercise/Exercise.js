@@ -14,7 +14,6 @@ import { formValueSelector } from 'redux-form';
 import moment from 'moment';
 import { defaultMemoize } from 'reselect';
 
-import SupplementaryFilesTableContainer from '../../containers/SupplementaryFilesTableContainer/SupplementaryFilesTableContainer';
 import Button from '../../components/widgets/FlatButton';
 import Page from '../../components/layout/Page';
 import ExerciseDetail from '../../components/Exercises/ExerciseDetail';
@@ -61,10 +60,6 @@ import {
   getExerciseDetachingGroupId
 } from '../../redux/selectors/exercises';
 import { referenceSolutionsSelector } from '../../redux/selectors/referenceSolutions';
-import {
-  canLoggedUserEditExercise,
-  isLoggedAsSuperAdmin
-} from '../../redux/selectors/users';
 import {
   // deletePipeline,
   // fetchExercisePipelines,
@@ -237,7 +232,6 @@ class Exercise extends Component {
       forkedFrom,
       runtimeEnvironments,
       submitting,
-      canEditExercise,
       referenceSolutions,
       intl: { formatMessage, locale },
       initCreateReferenceSolution,
@@ -248,7 +242,6 @@ class Exercise extends Component {
       assignableGroups,
       groupsAccessor,
       forkExercise,
-      isSuperAdmin,
       firstDeadline,
       allowSecondDeadline,
       attachingGroupId,
@@ -314,21 +307,25 @@ class Exercise extends Component {
                 </Col>
               </Row>}
             <Row>
-              {canEditExercise &&
-                <Col sm={12}>
-                  <ExerciseButtons exerciseId={exercise.id} />
-                  <p />
-                  {isSuperAdmin &&
-                    <ForkExerciseForm
-                      exerciseId={exercise.id}
-                      groups={groups}
-                      forkId={forkId}
-                      onSubmit={formData => forkExercise(forkId, formData)}
-                      groupsAccessor={groupsAccessor}
-                    />}
-                  <p />
-                </Col>}
+              <Col sm={12}>
+                <ExerciseButtons
+                  exerciseId={exercise.id}
+                  permissionHints={exercise.permissionHints}
+                />
+              </Col>
             </Row>
+            {exercise.permissionHints.fork &&
+              <Row>
+                <Col sm={12} className="em-margin-bottom">
+                  <ForkExerciseForm
+                    exerciseId={exercise.id}
+                    groups={groups}
+                    forkId={forkId}
+                    onSubmit={formData => forkExercise(forkId, formData)}
+                    groupsAccessor={groupsAccessor}
+                  />
+                </Col>
+              </Row>}
             <Row>
               <Col lg={6}>
                 <div>
@@ -459,6 +456,7 @@ class Exercise extends Component {
                 <ResourceRenderer resource={instance}>
                   {instance =>
                     <ExerciseGroups
+                      showButtons={exercise.permissionHints.update}
                       groupsIds={exercise.groupsIds}
                       rootGroupId={instance.rootGroupId}
                       attachingGroupId={attachingGroupId}
@@ -478,7 +476,8 @@ class Exercise extends Component {
                       title={formatMessage(messages.referenceSolutionsBox)}
                       noPadding
                       footer={
-                        <p className="text-center">
+                        exercise.permissionHints.addReferenceSolution &&
+                        <div className="text-center">
                           <Button
                             bsStyle={exercise.isBroken ? 'default' : 'success'}
                             onClick={() => initCreateReferenceSolution(userId)}
@@ -494,7 +493,7 @@ class Exercise extends Component {
                                   defaultMessage="Submit New Reference Solution"
                                 />}
                           </Button>
-                        </p>
+                        </div>
                       }
                     >
                       <div>
@@ -574,11 +573,6 @@ class Exercise extends Component {
                       </div>
                     </Box>}
                 </ResourceRenderer>
-                <SupplementaryFilesTableContainer
-                  isOpen={false}
-                  viewOnly={true}
-                  exercise={exercise}
-                />
               </Col>
             </Row>
           </div>}
@@ -605,7 +599,6 @@ Exercise.propTypes = {
   exercise: ImmutablePropTypes.map,
   forkedFrom: ImmutablePropTypes.map,
   runtimeEnvironments: ImmutablePropTypes.map,
-  canEditExercise: PropTypes.bool.isRequired,
   referenceSolutions: ImmutablePropTypes.map,
   intl: intlShape.isRequired,
   submitting: PropTypes.bool,
@@ -617,7 +610,6 @@ Exercise.propTypes = {
   forkExercise: PropTypes.func.isRequired,
   groups: ImmutablePropTypes.map,
   assignableGroups: ImmutablePropTypes.map,
-  isSuperAdmin: PropTypes.bool,
   groupsAccessor: PropTypes.func.isRequired,
   firstDeadline: PropTypes.oneOfType([
     PropTypes.number,
@@ -646,13 +638,11 @@ export default withLinks(
         forkedFrom: exerciseForkedFromSelector(exerciseId)(state),
         runtimeEnvironments: runtimeEnvironmentsSelector(state),
         submitting: isSubmitting(state),
-        canEditExercise: canLoggedUserEditExercise(exerciseId)(state),
         referenceSolutions: referenceSolutionsSelector(exerciseId)(state),
         //        exercisePipelines: exercisePipelinesSelector(exerciseId)(state),
         groups: groupsUserCanEditSelector(state),
         assignableGroups: groupsUserCanAssignToSelector(state),
         groupsAccessor: groupDataAccessorSelector(state),
-        isSuperAdmin: isLoggedAsSuperAdmin(state),
         firstDeadline: editMultiAssignFormSelector(state, 'firstDeadline'),
         allowSecondDeadline: editMultiAssignFormSelector(
           state,

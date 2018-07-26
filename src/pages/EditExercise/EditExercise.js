@@ -114,7 +114,10 @@ class EditExercise extends Component {
               </Row>}
             <Row>
               <Col sm={12}>
-                <ExerciseButtons exerciseId={exercise.id} />
+                <ExerciseButtons
+                  exerciseId={exercise.id}
+                  permissionHints={exercise.permissionHints}
+                />
               </Col>
             </Row>
             <Row>
@@ -132,34 +135,35 @@ class EditExercise extends Component {
               </Col>
             </Row>
             <br />
-            <Row>
-              <Col lg={12}>
-                <Box
-                  type="danger"
-                  title={
-                    <FormattedMessage
-                      id="app.editExercise.deleteExercise"
-                      defaultMessage="Delete the exercise"
-                    />
-                  }
-                >
-                  <div>
-                    <p>
+            {exercise.permissionHints.remove &&
+              <Row>
+                <Col lg={12}>
+                  <Box
+                    type="danger"
+                    title={
                       <FormattedMessage
-                        id="app.editExercise.deleteExerciseWarning"
-                        defaultMessage="Deleting an exercise will remove all the students submissions and all assignments."
+                        id="app.editExercise.deleteExercise"
+                        defaultMessage="Delete the exercise"
                       />
-                    </p>
-                    <p className="text-center">
-                      <DeleteExerciseButtonContainer
-                        id={exercise.id}
-                        onDeleted={() => push(EXERCISES_URI)}
-                      />
-                    </p>
-                  </div>
-                </Box>
-              </Col>
-            </Row>
+                    }
+                  >
+                    <div>
+                      <p>
+                        <FormattedMessage
+                          id="app.editExercise.deleteExerciseWarning"
+                          defaultMessage="Deleting an exercise will remove all the students submissions and all assignments."
+                        />
+                      </p>
+                      <p className="text-center">
+                        <DeleteExerciseButtonContainer
+                          id={exercise.id}
+                          onDeleted={() => push(EXERCISES_URI)}
+                        />
+                      </p>
+                    </div>
+                  </Box>
+                </Col>
+              </Row>}
           </div>}
       </Page>
     );
