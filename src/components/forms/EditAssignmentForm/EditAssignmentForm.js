@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { reduxForm, Field, FieldArray } from 'redux-form';
 import { FormattedMessage } from 'react-intl';
 import { Alert, HelpBlock, Grid, Row, Col } from 'react-bootstrap';
+import moment from 'moment';
 import isNumeric from 'validator/lib/isNumeric';
 
 import FormBox from '../../widgets/FormBox';
@@ -303,7 +304,7 @@ EditAssignmentForm.propTypes = {
   submitSucceeded: PropTypes.bool,
   asyncValidating: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
   invalid: PropTypes.bool,
-  firstDeadline: PropTypes.oneOfType([PropTypes.number, PropTypes.object]), // object == moment.js instance
+  firstDeadline: PropTypes.oneOfType([PropTypes.string, PropTypes.object]), // object == moment.js instance
   allowSecondDeadline: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
   localizedTextsLocales: PropTypes.array,
   runtimeEnvironments: PropTypes.array,
@@ -412,13 +413,68 @@ const validate = ({
     errors['localizedTexts'] = localizedTextsErrors;
   }
 
+  const deadlineFutureLimit = moment().endOf('year').add(1, 'year');
+
   if (!firstDeadline) {
-    errors['firstDeadline'] = (
+    errors.firstDeadline = (
       <FormattedMessage
         id="app.editAssignmentForm.validation.emptyDeadline"
         defaultMessage="Please fill the date and time of the deadline."
       />
     );
+  } else if (!moment.isMoment(firstDeadline)) {
+    errors.firstDeadline = (
+      <FormattedMessage
+        id="app.editAssignmentForm.validation.invalidDateTime"
+        defaultMessage="Invalid date or time format."
+      />
+    );
+  } else if (deadlineFutureLimit.isSameOrBefore(firstDeadline)) {
+    errors.firstDeadline = (
+      <FormattedMessage
+        id="app.editAssignmentForm.validation.deadlineInFarFuture"
+        defaultMessage="The deadline is too far in the future. At present, the furthest possible deadline is {deadlineFutureLimit, date} {deadlineFutureLimit, time, short}."
+        values={{ deadlineFutureLimit }}
+      />
+    );
+  }
+
+  if (allowSecondDeadline) {
+    if (!secondDeadline) {
+      errors['secondDeadline'] = (
+        <FormattedMessage
+          id="app.editAssignmentForm.validation.secondDeadline"
+          defaultMessage="Please fill the date and time of the second deadline."
+        />
+      );
+    } else if (!moment.isMoment(secondDeadline)) {
+      errors['secondDeadline'] = (
+        <FormattedMessage
+          id="app.editAssignmentForm.validation.invalidDateTime"
+          defaultMessage="Invalid date or time format."
+        />
+      );
+    } else if (deadlineFutureLimit.isSameOrBefore(secondDeadline)) {
+      errors['secondDeadline'] = (
+        <FormattedMessage
+          id="app.editAssignmentForm.validation.deadlineInFarFuture"
+          defaultMessage="The deadline is too far in the future. At present, the furthest possible deadline is {deadlineFutureLimit, date} {deadlineFutureLimit, time, short}."
+          values={{ deadlineFutureLimit }}
+        />
+      );
+    } else if (
+      !errors.firstDeadline &&
+      !firstDeadline.isSameOrBefore(secondDeadline) &&
+      !firstDeadline.isSameOrBefore(secondDeadline, 'hour')
+    ) {
+      errors['secondDeadline'] = (
+        <FormattedMessage
+          id="app.editAssignmentForm.validation.secondDeadlineBeforeFirstDeadline"
+          defaultMessage="The second deadline is before the first deadline. Please set the second deadline after {firstDeadline, date} {firstDeadline, time, short}."
+          values={{ firstDeadline }}
+        />
+      );
+    }
   }
 
   if (!isPositiveInteger(submissionsCountLimit)) {
@@ -435,31 +491,6 @@ const validate = ({
       <FormattedMessage
         id="app.editAssignmentForm.validation.maxPointsBeforeFirstDeadline"
         defaultMessage="Please fill the maximum number of points received when submitted before the deadline with a nonnegative integer."
-      />
-    );
-  }
-
-  if (allowSecondDeadline && !secondDeadline) {
-    errors['secondDeadline'] = (
-      <FormattedMessage
-        id="app.editAssignmentForm.validation.secondDeadline"
-        defaultMessage="Please fill the date and time of the second deadline."
-      />
-    );
-  }
-
-  if (
-    allowSecondDeadline &&
-    firstDeadline &&
-    secondDeadline &&
-    !firstDeadline.isSameOrBefore(secondDeadline) &&
-    !firstDeadline.isSameOrBefore(secondDeadline, 'hour')
-  ) {
-    errors['secondDeadline'] = (
-      <FormattedMessage
-        id="app.editAssignmentForm.validation.secondDeadlineBeforeFirstDeadline"
-        defaultMessage="Please fill the date and time of the second deadline with a value which is after {firstDeadline, date} {firstDeadline, time, short}."
-        values={{ firstDeadline }}
       />
     );
   }
