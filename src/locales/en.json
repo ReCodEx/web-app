@@ -953,7 +953,7 @@
   "app.roles.superadmin": "Main Administrator",
   "app.roles.superadmins": "Main Administrators",
   "app.roles.supervisor": "Supervisor",
-  "app.roles.supervisorEmpowered": "Empowered Supervisor",
+  "app.roles.empoweredSupervisor": "Empowered Supervisor",
   "app.roles.supervisorStudent": "Supervisor-student",
   "app.roles.supervisorStudents": "Supervisor-students",
   "app.roles.supervisors": "Supervisors",

@@ -24,9 +24,9 @@ export const roleLabels = {
   supervisor: (
     <FormattedMessage id="app.roles.supervisor" defaultMessage="Supervisor" />
   ),
-  'supervisor-empowered': (
+  'empowered-supervisor': (
     <FormattedMessage
-      id="app.roles.supervisorEmpowered"
+      id="app.roles.empoweredSupervisor"
       defaultMessage="Empowered Supervisor"
     />
   ),
@@ -51,7 +51,7 @@ export const roleLabelsPlural = {
   supervisor: (
     <FormattedMessage id="app.roles.supervisors" defaultMessage="Supervisors" />
   ),
-  'supervisor-empowered': (
+  'empowered-supervisor': (
     <FormattedMessage
       id="app.roles.supervisorsEmpowered"
       defaultMessage="Empowered Supervisors"
@@ -86,7 +86,7 @@ const roleIcons = ({ role, ...props }) => {
   switch (role) {
     case 'superadmin':
       return <SuperadminIcon {...props} />;
-    case 'supervisor-empowered':
+    case 'empowered-supervisor':
       return <SupervisorAdminIcon {...props} />;
     case 'supervisor':
       return <SupervisorIcon {...props} />;

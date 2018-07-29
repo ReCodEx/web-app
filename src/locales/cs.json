@@ -953,7 +953,7 @@
   "app.roles.superadmin": "Hlavní administrátor",
   "app.roles.superadmins": "Hlavní administrátoři",
   "app.roles.supervisor": "Vedoucí",
-  "app.roles.supervisorEmpowered": "Zplnomocněný vedoucí",
+  "app.roles.empoweredSupervisor": "Zplnomocněný vedoucí",
   "app.roles.supervisorStudent": "Vedoucí-student",
   "app.roles.supervisorStudents": "Vedoucí-studenti",
   "app.roles.supervisors": "Vedoucí",
