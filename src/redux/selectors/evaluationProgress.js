@@ -30,3 +30,6 @@ export const isFinished = state =>
   getEvaluationProgress(state).get('isFinished');
 export const getMessages = state =>
   getEvaluationProgress(state).get('messages');
+
+export const getProgressObserverId = state =>
+  getEvaluationProgress(state).get('progressObserverId') || null;

@@ -1,10 +1,7 @@
 import chai from 'chai';
 import spies from 'chai-spies';
-
-chai.use(spies);
-const expect = chai.expect;
-
 import { Map, List } from 'immutable';
+
 import reducer, {
   actionTypes,
   initialState,
@@ -13,8 +10,10 @@ import reducer, {
   skippedTask,
   failedTask
 } from '../../../src/redux/modules/evaluationProgress';
-
 import { actionTypes as submissionActionTypes } from '../../../src/redux/modules/submission';
+
+chai.use(spies);
+const expect = chai.expect;
 
 describe('Evaluation progress', () => {
   it('must have correct initial state', () => {
@@ -33,7 +32,8 @@ describe('Evaluation progress', () => {
           skipped: 0,
           failed: 0
         }),
-        messages: List()
+        messages: List(),
+        progressObserverId: null
       })
     );
   });

@@ -5,10 +5,10 @@ import Icon from '../../icons';
 import Button from '../../widgets/FlatButton';
 import Confirm from '../../forms/Confirm';
 
-const ResubmitSolution = ({ id, resubmit, isDebug }) =>
+const ResubmitSolution = ({ id, resubmit, progressObserverId, isDebug }) =>
   <Confirm
     id={id}
-    onConfirmed={() => resubmit(isDebug)}
+    onConfirmed={() => resubmit(progressObserverId, isDebug)}
     question={
       <FormattedMessage
         id="app.resubmitSolution.confirm"
@@ -34,6 +34,7 @@ const ResubmitSolution = ({ id, resubmit, isDebug }) =>
 ResubmitSolution.propTypes = {
   id: PropTypes.string.isRequired,
   resubmit: PropTypes.func.isRequired,
+  progressObserverId: PropTypes.string,
   isDebug: PropTypes.bool.isRequired
 };
 
