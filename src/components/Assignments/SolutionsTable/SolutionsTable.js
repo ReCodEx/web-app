@@ -3,26 +3,20 @@ import PropTypes from 'prop-types';
 import { List } from 'immutable';
 import { FormattedMessage } from 'react-intl';
 import { OverlayTrigger, Tooltip, Table } from 'react-bootstrap';
-import { Link } from 'react-router';
 
 import Box from '../../widgets/Box';
-import withLinks from '../../../helpers/withLinks';
-
 import ResourceRenderer from '../../helpers/ResourceRenderer';
 import LoadingSolutionsTableRow from './LoadingSolutionsTableRow';
 import NoSolutionYetTableRow from './NoSolutionYetTableRow';
 import FailedLoadingSolutionsTableRow from './FailedLoadingSolutionsTableRow';
 import SolutionsTableRow from './SolutionsTableRow';
-import DeleteSolutionButtonContainer from '../../../containers/DeleteSolutionButtonContainer/DeleteSolutionButtonContainer';
 
 const SolutionsTable = ({
   title,
   assignmentId,
   solutions,
   runtimeEnvironments,
-  noteMaxlen = 32,
-  canDelete,
-  links: { SOLUTION_DETAIL_URI_FACTORY }
+  noteMaxlen = 32
 }) =>
   <Box title={title} collapsable isOpen noPadding unlimitedHeight>
     <Table responsive>
@@ -71,9 +65,8 @@ const SolutionsTable = ({
       >
         {solutions =>
           <tbody>
-            {solutions.map((data, i) => {
+            {solutions.map(data => {
               const id = data.id;
-              const link = SOLUTION_DETAIL_URI_FACTORY(assignmentId, id);
               const runtimeEnvironment =
                 data.runtimeEnvironmentId &&
                 runtimeEnvironments &&
@@ -108,21 +101,8 @@ const SolutionsTable = ({
                   }
                   runtimeEnvironment={runtimeEnvironment}
                   note={note}
+                  assignmentId={assignmentId}
                   {...data}
-                  renderButtons={id =>
-                    <div>
-                      <Link
-                        to={link}
-                        className="btn btn-flat btn-default btn-xs"
-                      >
-                        <FormattedMessage
-                          id="app.solutionsTable.showDetails"
-                          defaultMessage="Show details"
-                        />
-                      </Link>
-                      {canDelete &&
-                        <DeleteSolutionButtonContainer id={id} bsSize="xs" />}
-                    </div>}
                 />
               );
             })}
@@ -144,9 +124,7 @@ SolutionsTable.propTypes = {
   assignmentId: PropTypes.string.isRequired,
   solutions: PropTypes.instanceOf(List),
   runtimeEnvironments: PropTypes.array,
-  noteMaxlen: PropTypes.number,
-  canDelete: PropTypes.bool,
-  links: PropTypes.object
+  noteMaxlen: PropTypes.number
 };
 
-export default withLinks(SolutionsTable);
+export default SolutionsTable;

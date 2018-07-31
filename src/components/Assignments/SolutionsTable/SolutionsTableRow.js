@@ -1,11 +1,21 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FormattedNumber, FormattedDate, FormattedTime } from 'react-intl';
+import {
+  FormattedMessage,
+  FormattedNumber,
+  FormattedDate,
+  FormattedTime
+} from 'react-intl';
+import { Link } from 'react-router';
 
 import AssignmentStatusIcon from '../Assignment/AssignmentStatusIcon';
 import Points from './Points';
 import CommentsIcon from './CommentsIcon';
 import EnvironmentsListItem from '../../helpers/EnvironmentsList/EnvironmentsListItem';
+import DeleteSolutionButtonContainer from '../../../containers/DeleteSolutionButtonContainer/DeleteSolutionButtonContainer';
+import { SendIcon } from '../../icons';
+
+import withLinks from '../../../helpers/withLinks';
 
 const showScoreAndPoints = status => status === 'done' || status === 'failed';
 
@@ -20,6 +30,7 @@ const getStatusDesc = (status, lastSubmission) => {
 
 const SolutionsTableRow = ({
   id,
+  assignmentId,
   status = null,
   note,
   lastSubmission,
@@ -30,7 +41,9 @@ const SolutionsTableRow = ({
   accepted = false,
   runtimeEnvironment = null,
   commentsStats = null,
-  renderButtons
+  permissionHints = null,
+  renderButtons,
+  links: { SOLUTION_DETAIL_URI_FACTORY }
 }) =>
   <tr>
     <td>
@@ -71,22 +84,33 @@ const SolutionsTableRow = ({
     </td>
     <td className="text-center text-nowrap">
       {runtimeEnvironment
-        ? <EnvironmentsListItem
-            runtimeEnvironment={runtimeEnvironment}
-            longNames={true}
-          />
+        ? <EnvironmentsListItem runtimeEnvironment={runtimeEnvironment} />
         : '-'}
     </td>
     <td>
       {note}
     </td>
     <td className="text-right">
-      {renderButtons && renderButtons(id)}
+      {permissionHints &&
+        permissionHints.viewDetail &&
+        <Link
+          to={SOLUTION_DETAIL_URI_FACTORY(assignmentId, id)}
+          className="btn btn-flat btn-default btn-xs"
+        >
+          <SendIcon gapRight />
+          <FormattedMessage id="generic.detail" defaultMessage="Detail" />
+        </Link>}
+      {permissionHints &&
+        permissionHints.delete &&
+        <DeleteSolutionButtonContainer id={id} bsSize="xs" />}
+
+      {false && renderButtons && renderButtons(id)}
     </td>
   </tr>;
 
 SolutionsTableRow.propTypes = {
   id: PropTypes.string.isRequired,
+  assignmentId: PropTypes.string.isRequired,
   status: PropTypes.string,
   note: PropTypes.any.isRequired,
   maxPoints: PropTypes.number.isRequired,
@@ -104,7 +128,9 @@ SolutionsTableRow.propTypes = {
   accepted: PropTypes.bool,
   commentsStats: PropTypes.object,
   runtimeEnvironment: PropTypes.object,
-  renderButtons: PropTypes.func
+  permissionHints: PropTypes.object,
+  renderButtons: PropTypes.func,
+  links: PropTypes.object
 };
 
-export default SolutionsTableRow;
+export default withLinks(SolutionsTableRow);
