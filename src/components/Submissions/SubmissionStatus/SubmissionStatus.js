@@ -25,7 +25,7 @@ const SubmissionStatus = ({
   maxPoints,
   bonusPoints,
   actualPoints,
-  links: { SUBMISSION_DETAIL_URI_FACTORY }
+  links: { SOLUTION_DETAIL_URI_FACTORY }
 }) =>
   <Box
     title={

@@ -24,7 +24,7 @@ const CommentsIcon = ({ id, commentsStats = null }) =>
           <Tooltip id={`${id}-comment`}>
             <div>
               <FormattedMessage
-                id="app.submissionsTable.commentsIcon.count"
+                id="app.solutionsTable.commentsIcon.count"
                 defaultMessage="Total Comments: {count}"
                 values={{ count: commentsStats.count }}
               />
@@ -33,7 +33,7 @@ const CommentsIcon = ({ id, commentsStats = null }) =>
               commentsStats.last.text &&
               <div>
                 <FormattedMessage
-                  id="app.submissionsTable.commentsIcon.last"
+                  id="app.solutionsTable.commentsIcon.last"
                   defaultMessage="Last Comment: {last}"
                   values={{ last: commentsStats.last.text }}
                 />

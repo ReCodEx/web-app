@@ -5,7 +5,7 @@ import { createApiAction } from '../middleware/apiMiddleware';
 import { downloadHelper } from '../helpers/api/download';
 import factory, { initialState } from '../helpers/resourceManager';
 
-import { additionalActionTypes as submissionsActionTypes } from './submissions';
+import { additionalActionTypes as solutionsActionTypes } from './solutions';
 
 const resourceName = 'assignments';
 const { actions, actionTypes, reduceActions } = factory({
@@ -72,19 +72,19 @@ export const downloadBestSolutionsArchive = downloadHelper({
 
 const reducer = handleActions(
   Object.assign({}, reduceActions, {
-    [submissionsActionTypes.LOAD_USERS_SUBMISSIONS_FULFILLED]: (
+    [solutionsActionTypes.LOAD_USERS_SOLUTIONS_FULFILLED]: (
       state,
       { payload, meta: { userId, assignmentId } }
     ) =>
       state.setIn(
-        ['submissions', assignmentId, userId],
+        ['solutions', assignmentId, userId],
         fromJS(payload.map(submission => submission.id))
       ),
     [additionalActionTypes.SYNC_ASSIGNMENT_FULFILLED]: (
       state,
       { payload, meta: { assignmentId } }
     ) => state.setIn(['resources', assignmentId, 'data'], fromJS(payload)),
-    [submissionsActionTypes.RESUBMIT_ALL_PENDING]: (
+    [solutionsActionTypes.RESUBMIT_ALL_PENDING]: (
       state,
       { meta: { assignmentId } }
     ) =>
@@ -92,7 +92,7 @@ const reducer = handleActions(
         ['resources', assignmentId, 'data', 'resubmit-all-pending'],
         true
       ),
-    [submissionsActionTypes.RESUBMIT_ALL_REJECTED]: (
+    [solutionsActionTypes.RESUBMIT_ALL_REJECTED]: (
       state,
       { meta: { assignmentId } }
     ) =>
@@ -100,7 +100,7 @@ const reducer = handleActions(
         ['resources', assignmentId, 'data', 'resubmit-all-pending'],
         false
       ),
-    [submissionsActionTypes.RESUBMIT_ALL_FULFILLED]: (
+    [solutionsActionTypes.RESUBMIT_ALL_FULFILLED]: (
       state,
       { meta: { assignmentId } }
     ) =>

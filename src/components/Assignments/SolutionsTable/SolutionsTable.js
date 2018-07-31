@@ -9,20 +9,20 @@ import Box from '../../widgets/Box';
 import withLinks from '../../../helpers/withLinks';
 
 import ResourceRenderer from '../../helpers/ResourceRenderer';
-import LoadingSubmissionTableRow from './LoadingSubmissionTableRow';
+import LoadingSolutionsTableRow from './LoadingSolutionsTableRow';
 import NoSolutionYetTableRow from './NoSolutionYetTableRow';
-import FailedLoadingSubmissionTableRow from './FailedLoadingSubmissionTableRow';
-import SubmissionTableRow from './SubmissionTableRow';
-import DeleteSubmissionButtonContainer from '../../../containers/DeleteSubmissionButtonContainer/DeleteSubmissionButtonContainer';
+import FailedLoadingSolutionsTableRow from './FailedLoadingSolutionsTableRow';
+import SolutionsTableRow from './SolutionsTableRow';
+import DeleteSolutionButtonContainer from '../../../containers/DeleteSolutionButtonContainer/DeleteSolutionButtonContainer';
 
-const SubmissionsTable = ({
+const SolutionsTable = ({
   title,
   assignmentId,
-  submissions,
+  solutions,
   runtimeEnvironments,
   noteMaxlen = 32,
   canDelete,
-  links: { SUBMISSION_DETAIL_URI_FACTORY }
+  links: { SOLUTION_DETAIL_URI_FACTORY }
 }) =>
   <Box title={title} collapsable isOpen noPadding unlimitedHeight>
     <Table responsive>
@@ -32,31 +32,31 @@ const SubmissionsTable = ({
           <th />
           <th>
             <FormattedMessage
-              id="app.submissionsTable.submissionDate"
+              id="app.solutionsTable.submissionDate"
               defaultMessage="Date of submission"
             />
           </th>
           <th className="text-center">
             <FormattedMessage
-              id="app.submissionsTable.solutionValidity"
+              id="app.solutionsTable.solutionValidity"
               defaultMessage="Solution validity"
             />
           </th>
           <th className="text-center">
             <FormattedMessage
-              id="app.submissionsTable.receivedPoints"
+              id="app.solutionsTable.receivedPoints"
               defaultMessage="Received points"
             />
           </th>
           <th className="text-center">
             <FormattedMessage
-              id="app.submissionsTable.environment"
+              id="app.solutionsTable.environment"
               defaultMessage="Target language"
             />
           </th>
           <th>
             <FormattedMessage
-              id="app.submissionsTable.note"
+              id="app.solutionsTable.note"
               defaultMessage="Note"
             />
           </th>
@@ -64,15 +64,16 @@ const SubmissionsTable = ({
         </tr>
       </thead>
       <ResourceRenderer
-        resource={submissions.toArray()}
-        loading={<LoadingSubmissionTableRow />}
-        failed={<FailedLoadingSubmissionTableRow />}
+        resource={solutions.toArray()}
+        loading={<LoadingSolutionsTableRow />}
+        failed={<FailedLoadingSolutionsTableRow />}
+        returnAsArray
       >
-        {(...submissions) =>
+        {solutions =>
           <tbody>
-            {submissions.map((data, i) => {
+            {solutions.map((data, i) => {
               const id = data.id;
-              const link = SUBMISSION_DETAIL_URI_FACTORY(assignmentId, id);
+              const link = SOLUTION_DETAIL_URI_FACTORY(assignmentId, id);
               const runtimeEnvironment =
                 data.runtimeEnvironmentId &&
                 runtimeEnvironments &&
@@ -97,7 +98,7 @@ const SubmissionsTable = ({
                     </OverlayTrigger>;
 
               return (
-                <SubmissionTableRow
+                <SolutionsTableRow
                   key={id}
                   id={id}
                   status={
@@ -115,37 +116,37 @@ const SubmissionsTable = ({
                         className="btn btn-flat btn-default btn-xs"
                       >
                         <FormattedMessage
-                          id="app.submissionsTable.showDetails"
+                          id="app.solutionsTable.showDetails"
                           defaultMessage="Show details"
                         />
                       </Link>
                       {canDelete &&
-                        <DeleteSubmissionButtonContainer id={id} bsSize="xs" />}
+                        <DeleteSolutionButtonContainer id={id} bsSize="xs" />}
                     </div>}
                 />
               );
             })}
           </tbody>}
       </ResourceRenderer>
-      {submissions.size === 0 &&
+      {solutions.size === 0 &&
         <tbody>
           <NoSolutionYetTableRow />
         </tbody>}
     </Table>
   </Box>;
 
-SubmissionsTable.propTypes = {
+SolutionsTable.propTypes = {
   title: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) }),
     PropTypes.element
   ]).isRequired,
   assignmentId: PropTypes.string.isRequired,
-  submissions: PropTypes.instanceOf(List),
+  solutions: PropTypes.instanceOf(List),
   runtimeEnvironments: PropTypes.array,
   noteMaxlen: PropTypes.number,
   canDelete: PropTypes.bool,
   links: PropTypes.object
 };
 
-export default withLinks(SubmissionsTable);
+export default withLinks(SolutionsTable);

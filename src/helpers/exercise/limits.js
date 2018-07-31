@@ -1,6 +1,6 @@
 import { defaultMemoize } from 'reselect';
 
-import { encodeId, encodeNumId, safeGet } from '../../helpers/common';
+import { encodeId, encodeNumId, safeGet } from '../common';
 import { endpointDisguisedAsIdFactory } from '../../redux/modules/limits';
 
 /*

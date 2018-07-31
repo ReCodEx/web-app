@@ -4,15 +4,11 @@ import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import { List } from 'immutable';
 
-import { fetchUsersSubmissions } from '../../redux/modules/submissions';
-import SubmissionsTable from '../../components/Assignments/SubmissionsTable';
-import { getUserSubmissions } from '../../redux/selectors/assignments';
-import {
-  isLoggedAsSuperAdmin,
-  isLoggedAsSupervisor
-} from '../../redux/selectors/users';
+import { fetchUsersSolutions } from '../../redux/modules/solutions';
+import SolutionsTable from '../../components/Assignments/SolutionsTable';
+import { getUserSolutions } from '../../redux/selectors/assignments';
 
-class SubmissionsTableContainer extends Component {
+class SolutionsTableContainer extends Component {
   componentWillMount = () => this.props.loadAsync();
 
   componentWillReceiveProps(newProps) {
@@ -24,8 +20,8 @@ class SubmissionsTableContainer extends Component {
     }
   }
 
-  sortSubmissions(submissions) {
-    return submissions.sort((a, b) => {
+  sortSolutions(solutions) {
+    return solutions.sort((a, b) => {
       var aTimestamp = a.getIn(['data', 'solution', 'createdAt']);
       var bTimestamp = b.getIn(['data', 'solution', 'createdAt']);
       return bTimestamp - aTimestamp;
@@ -36,55 +32,48 @@ class SubmissionsTableContainer extends Component {
     const {
       userId,
       assignmentId,
-      submissions,
+      solutions,
       runtimeEnvironments,
       title = (
         <FormattedMessage
-          id="app.submissionsTableContainer.title"
-          defaultMessage="Submitted solutions"
+          id="app.solutionsTableContainer.title"
+          defaultMessage="Submitted Solutions"
         />
       ),
-      noteMaxlen = 32,
-      superadmin,
-      supervisor
+      noteMaxlen = 32
     } = this.props;
 
     return (
-      <SubmissionsTable
+      <SolutionsTable
         title={title}
         userId={userId}
-        submissions={this.sortSubmissions(submissions)}
+        solutions={this.sortSolutions(solutions)}
         assignmentId={assignmentId}
         runtimeEnvironments={runtimeEnvironments}
         noteMaxlen={noteMaxlen}
-        canDelete={superadmin || supervisor}
       />
     );
   }
 }
 
-SubmissionsTableContainer.propTypes = {
+SolutionsTableContainer.propTypes = {
   userId: PropTypes.string.isRequired,
   title: PropTypes.string,
   assignmentId: PropTypes.string.isRequired,
-  submissions: PropTypes.instanceOf(List),
+  solutions: PropTypes.instanceOf(List),
   runtimeEnvironments: PropTypes.array,
   noteMaxlen: PropTypes.number,
-  loadAsync: PropTypes.func.isRequired,
-  superadmin: PropTypes.bool,
-  supervisor: PropTypes.bool
+  loadAsync: PropTypes.func.isRequired
 };
 
 export default connect(
   (state, { userId, assignmentId }) => {
     return {
       userId,
-      submissions: getUserSubmissions(userId, assignmentId)(state),
-      superadmin: isLoggedAsSuperAdmin(state),
-      supervisor: isLoggedAsSupervisor(state)
+      solutions: getUserSolutions(userId, assignmentId)(state)
     };
   },
   (dispatch, { userId, assignmentId }) => ({
-    loadAsync: () => dispatch(fetchUsersSubmissions(userId, assignmentId))
+    loadAsync: () => dispatch(fetchUsersSolutions(userId, assignmentId))
   })
-)(SubmissionsTableContainer);
+)(SolutionsTableContainer);

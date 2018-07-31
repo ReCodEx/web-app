@@ -26,7 +26,7 @@ class SubmissionDetail extends Component {
   componentWillMount() {
     this.setState({
       activeSubmissionId: safeGet(
-        this.props.submission.lastSubmission,
+        this.props.solution.lastSubmission,
         ['id'],
         null
       )
@@ -37,7 +37,7 @@ class SubmissionDetail extends Component {
     if (this.props.evaluations.size !== newProps.evaluations.size) {
       this.setState({
         activeSubmissionId: safeGet(
-          newProps.submission.lastSubmission,
+          newProps.solution.lastSubmission,
           ['id'],
           null
         )
@@ -47,7 +47,7 @@ class SubmissionDetail extends Component {
 
   render() {
     const {
-      submission: {
+      solution: {
         id,
         note = '',
         solution: { createdAt, userId, files, ...restSolution },
@@ -208,7 +208,7 @@ class SubmissionDetail extends Component {
 }
 
 SubmissionDetail.propTypes = {
-  submission: PropTypes.shape({
+  solution: PropTypes.shape({
     id: PropTypes.string.isRequired,
     note: PropTypes.string,
     lastSubmission: PropTypes.shape({ id: PropTypes.string.isRequired }),

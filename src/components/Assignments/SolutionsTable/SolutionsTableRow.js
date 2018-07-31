@@ -18,7 +18,7 @@ const getStatusDesc = (status, lastSubmission) => {
     : status;
 };
 
-const SubmissionTableRow = ({
+const SolutionsTableRow = ({
   id,
   status = null,
   note,
@@ -85,7 +85,7 @@ const SubmissionTableRow = ({
     </td>
   </tr>;
 
-SubmissionTableRow.propTypes = {
+SolutionsTableRow.propTypes = {
   id: PropTypes.string.isRequired,
   status: PropTypes.string,
   note: PropTypes.any.isRequired,
@@ -107,4 +107,4 @@ SubmissionTableRow.propTypes = {
   renderButtons: PropTypes.func
 };
 
-export default SubmissionTableRow;
+export default SolutionsTableRow;

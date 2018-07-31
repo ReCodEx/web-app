@@ -12,7 +12,7 @@ const FailuresListItem = ({
   createActions,
   failure,
   links: {
-    SUBMISSION_DETAIL_URI_FACTORY,
+    SOLUTION_DETAIL_URI_FACTORY,
     EXERCISE_REFERENCE_SOLUTION_URI_FACTORY
   }
 }) =>
@@ -40,7 +40,7 @@ const FailuresListItem = ({
     <td>
       {failure.assignmentSolutionId &&
         <Link
-          to={SUBMISSION_DETAIL_URI_FACTORY(
+          to={SOLUTION_DETAIL_URI_FACTORY(
             failure.assignmentId,
             failure.assignmentSolutionId
           )}

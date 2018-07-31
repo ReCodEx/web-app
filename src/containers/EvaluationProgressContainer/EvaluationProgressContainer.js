@@ -102,10 +102,10 @@ class EvaluationProgressContainer extends Component {
     task_state = 'OK', // eslint-disable-line camelcase
     text = null
   }) => ({
-      wasSuccessful: command !== 'TASK' || task_state === 'COMPLETED', // eslint-disable-line camelcase
-      text: text || this.props.intl.formatMessage(this.getRandomMessage()),
-      status: task_state // eslint-disable-line camelcase
-    });
+    wasSuccessful: command !== 'TASK' || task_state === 'COMPLETED', // eslint-disable-line camelcase
+    text: text || this.props.intl.formatMessage(this.getRandomMessage()),
+    status: task_state // eslint-disable-line camelcase
+  });
 
   getRandomMessage = () => {
     if (!this.availableMessages || this.availableMessages.length === 0) {
@@ -172,38 +172,38 @@ class EvaluationProgressContainer extends Component {
 
     return this.state.realTimeProcessing === true
       ? <EvaluationProgress
-        isOpen={isOpen}
-        messages={displayedMessages}
-        completed={progress.completed}
-        skipped={progress.skipped}
-        failed={progress.failed}
-        finished={isFinished}
-        showContinueButton={isFinished || this.isClosed}
-        finishProcessing={this.finish}
-        onClose={this.userCloseAction}
-      />
+          isOpen={isOpen}
+          messages={displayedMessages}
+          completed={progress.completed}
+          skipped={progress.skipped}
+          failed={progress.failed}
+          finished={isFinished}
+          showContinueButton={isFinished || this.isClosed}
+          finishProcessing={this.finish}
+          onClose={this.userCloseAction}
+        />
       : <EvaluationProgress
-        isOpen={isOpen}
-        completed={0}
-        skipped={100}
-        failed={0}
-        finished={false}
-        showContinueButton={true}
-        finishProcessing={this.finish}
-        onClose={this.userCloseAction}
-        messages={List([
-          this.formatMessage({
-            command: 'TASK',
-            task_state: 'SKIPPED',
-            text: (
-              <FormattedMessage
-                id="app.evaluationProgress.noWebSockets"
-                defaultMessage="Your browser does not support realtime progress monitoring or the connection to the server could not be estabelished or was lost. The evaluation has already started and you will be able to see the results soon."
-              />
-            )
-          })
-        ])}
-      />;
+          isOpen={isOpen}
+          completed={0}
+          skipped={100}
+          failed={0}
+          finished={false}
+          showContinueButton={true}
+          finishProcessing={this.finish}
+          onClose={this.userCloseAction}
+          messages={List([
+            this.formatMessage({
+              command: 'TASK',
+              task_state: 'SKIPPED',
+              text: (
+                <FormattedMessage
+                  id="app.evaluationProgress.noWebSockets"
+                  defaultMessage="Your browser does not support realtime progress monitoring or the connection to the server could not be estabelished or was lost. The evaluation has already started and you will be able to see the results soon."
+                />
+              )
+            })
+          ])}
+        />;
   };
 }
 

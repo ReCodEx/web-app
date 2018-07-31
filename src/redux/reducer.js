@@ -39,9 +39,9 @@ import sisStatus from './modules/sisStatus';
 import sisSubscribedGroups from './modules/sisSubscribedGroups';
 import sisSupervisedCourses from './modules/sisSupervisedCourses';
 import sisTerms from './modules/sisTerms';
+import solutions from './modules/solutions';
 import stats from './modules/stats';
 import submission from './modules/submission';
-import submissions from './modules/submissions';
 import submissionEvaluations from './modules/submissionEvaluations';
 import submissionFailures from './modules/submissionFailures';
 import supplementaryFiles from './modules/supplementaryFiles';
@@ -87,9 +87,9 @@ const createRecodexReducers = (token, instanceId) => ({
   sisSupervisedCourses,
   sisStatus,
   sisTerms,
+  solutions,
   stats,
   submission,
-  submissions,
   submissionEvaluations,
   submissionFailures,
   supplementaryFiles,

@@ -16,9 +16,9 @@ import FetchManyResourceRenderer from '../../components/helpers/FetchManyResourc
 import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments';
 import { fetchGroupsStats } from '../../redux/modules/stats';
 import { fetchAssignmentIfNeeded } from '../../redux/modules/assignments';
-import { fetchSubmissionIfNeeded } from '../../redux/modules/submissions';
+import { fetchSolutionIfNeeded } from '../../redux/modules/solutions';
 import { fetchSubmissionEvaluationsForSolution } from '../../redux/modules/submissionEvaluations';
-import { getSubmission } from '../../redux/selectors/submissions';
+import { getSolution } from '../../redux/selectors/solutions';
 import {
   getAssignment,
   assignmentEnvironmentsSelector
@@ -40,7 +40,7 @@ class Submission extends Component {
   static loadAsync = ({ submissionId, assignmentId }, dispatch) =>
     Promise.all([
       dispatch(fetchRuntimeEnvironments()),
-      dispatch(fetchSubmissionIfNeeded(submissionId)),
+      dispatch(fetchSolutionIfNeeded(submissionId)),
       dispatch(fetchSubmissionEvaluationsForSolution(submissionId)),
       dispatch(fetchAssignmentIfNeeded(assignmentId))
         .then(res => res.value)
@@ -60,7 +60,7 @@ class Submission extends Component {
   render() {
     const {
       assignment,
-      submission,
+      solution,
       params: { assignmentId },
       isSupervisorOrMore,
       evaluations,
@@ -114,7 +114,7 @@ class Submission extends Component {
             text: (
               <FormattedMessage
                 id="app.assignment.title"
-                defaultMessage="Exercise assignment"
+                defaultMessage="Exercise Assignment"
               />
             ),
             iconName: 'hourglass-start',
@@ -134,25 +134,25 @@ class Submission extends Component {
       >
         <ResourceRenderer
           failed={<FailedSubmissionDetail />}
-          resource={[submission, assignment]}
+          resource={[solution, assignment]}
         >
-          {(submission, assignment) =>
+          {(solution, assignment) =>
             <div>
               <HierarchyLineContainer groupId={assignment.groupId} />
               {isSupervisorOrMore(assignment.groupId) &&
                 <p>
-                  <AcceptSolutionContainer id={submission.id} />
+                  <AcceptSolutionContainer id={solution.id} />
                   <ResubmitSolutionContainer
-                    id={submission.id}
+                    id={solution.id}
                     assignmentId={assignment.id}
                     isDebug={false}
-                    userId={submission.solution.userId}
+                    userId={solution.solution.userId}
                   />
                   <ResubmitSolutionContainer
-                    id={submission.id}
+                    id={solution.id}
                     assignmentId={assignment.id}
                     isDebug={true}
-                    userId={submission.solution.userId}
+                    userId={solution.solution.userId}
                   />
                 </p>}
               <ResourceRenderer resource={runtimeEnvironments}>
@@ -160,7 +160,7 @@ class Submission extends Component {
                   <FetchManyResourceRenderer fetchManyStatus={fetchStatus}>
                     {() =>
                       <SubmissionDetail
-                        submission={submission}
+                        solution={solution}
                         assignment={assignment}
                         isSupervisor={isSupervisorOrMore(assignment.groupId)}
                         evaluations={evaluations}
@@ -182,7 +182,7 @@ Submission.propTypes = {
   }).isRequired,
   assignment: PropTypes.object,
   children: PropTypes.element,
-  submission: PropTypes.object,
+  solution: PropTypes.object,
   loadAsync: PropTypes.func.isRequired,
   isSupervisorOrMore: PropTypes.func.isRequired,
   evaluations: PropTypes.object,
@@ -193,7 +193,7 @@ Submission.propTypes = {
 
 export default connect(
   (state, { params: { submissionId, assignmentId } }) => ({
-    submission: getSubmission(submissionId)(state),
+    solution: getSolution(submissionId)(state),
     assignment: getAssignment(state)(assignmentId),
     isSupervisorOrMore: groupId =>
       isSupervisorOf(loggedInUserIdSelector(state), groupId)(state) ||

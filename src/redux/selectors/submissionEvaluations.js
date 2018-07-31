@@ -1,7 +1,7 @@
 import { createSelector } from 'reselect';
 import { isReady } from '../helpers/resourceManager';
 import { fetchManyEndpoint } from '../modules/submissionEvaluations';
-import { getSubmission } from './submissions';
+import { getSolution } from './solutions';
 
 const getSubmissionEvaluations = state => state.submissionEvaluations;
 const getResources = submissionEvaluations =>
@@ -19,7 +19,7 @@ export const submissionEvaluationSelector = evaluationId =>
 
 export const evaluationsForSubmissionSelector = submissionId =>
   createSelector(
-    [getSubmission(submissionId), submissionEvaluationsSelector],
+    [getSolution(submissionId), submissionEvaluationsSelector],
     (submission, evaluations) =>
       evaluations
         .filter(isReady)

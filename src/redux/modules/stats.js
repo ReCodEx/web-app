@@ -1,7 +1,7 @@
 import { handleActions } from 'redux-actions';
 import { fromJS, List } from 'immutable';
 import factory, { initialState } from '../helpers/resourceManager';
-import { additionalActionTypes as additionalSubmissionActionTypes } from './submissions';
+import { additionalActionTypes as additionalSolutionsActionTypes } from './solutions';
 
 /**
  * Create actions & reducer
@@ -18,7 +18,7 @@ export const fetchGroupsStatsIfNeeded = actions.fetchIfNeeded;
 
 const reducer = handleActions(
   Object.assign({}, reduceActions, {
-    [additionalSubmissionActionTypes.ACCEPT_FULFILLED]: (state, { payload }) =>
+    [additionalSolutionsActionTypes.ACCEPT_FULFILLED]: (state, { payload }) =>
       state.updateIn(['resources', payload.groupId, 'data'], stats => {
         if (!stats) {
           stats = List();
@@ -27,10 +27,7 @@ const reducer = handleActions(
           .filter(userStats => userStats.get('userId') !== payload.userId)
           .push(fromJS(payload));
       }),
-    [additionalSubmissionActionTypes.UNACCEPT_FULFILLED]: (
-      state,
-      { payload }
-    ) =>
+    [additionalSolutionsActionTypes.UNACCEPT_FULFILLED]: (state, { payload }) =>
       state.updateIn(['resources', payload.groupId, 'data'], stats => {
         if (!stats) {
           stats = List();

@@ -4,9 +4,9 @@ import { connect } from 'react-redux';
 
 import ResubmitSolution from '../../components/buttons/ResubmitSolution';
 import {
-  resubmitSubmission,
-  fetchUsersSubmissions
-} from '../../redux/modules/submissions';
+  resubmitSolution,
+  fetchUsersSolutions
+} from '../../redux/modules/solutions';
 import {
   isProcessing,
   getMonitorParams,
@@ -26,7 +26,7 @@ const ResubmitSolutionContainer = ({
   newSubmissionId,
   fetchSubmissions,
   isDebug = true,
-  links: { SUBMISSION_DETAIL_URI_FACTORY }
+  links: { SOLUTION_DETAIL_URI_FACTORY }
 }) => {
   return (
     <span>
@@ -34,7 +34,7 @@ const ResubmitSolutionContainer = ({
       <EvaluationProgressContainer
         isOpen={isProcessing}
         monitor={monitor}
-        link={SUBMISSION_DETAIL_URI_FACTORY(assignmentId, newSubmissionId)}
+        link={SOLUTION_DETAIL_URI_FACTORY(assignmentId, newSubmissionId)}
         onFinish={() => fetchSubmissions(userId)}
         onUserClose={() => fetchSubmissions(userId)}
       />
@@ -66,11 +66,11 @@ const mapDispatchToProps = (
   dispatch,
   { id, isPrivate = false, assignmentId }
 ) => ({
-  resubmit: isDebug => dispatch(resubmitSubmission(id, isPrivate, isDebug)),
+  resubmit: isDebug => dispatch(resubmitSolution(id, isPrivate, isDebug)),
   fetchSubmissions: userId =>
     Promise.all([
       dispatch(fetchSubmissionEvaluationsForSolution(id)),
-      dispatch(fetchUsersSubmissions(userId, assignmentId))
+      dispatch(fetchUsersSolutions(userId, assignmentId))
     ])
 });
 

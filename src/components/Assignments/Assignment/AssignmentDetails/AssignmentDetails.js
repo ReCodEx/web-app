@@ -28,9 +28,7 @@ const AssignmentDetails = ({
   pointsPercentualThreshold
 }) =>
   <Box
-    title={
-      <FormattedMessage id="app.assignment.title" defaultMessage="Details" />
-    }
+    title={<FormattedMessage id="generic.details" defaultMessage="Details" />}
     noPadding
     collapsable
     isOpen={isOpen}

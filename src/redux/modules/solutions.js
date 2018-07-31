@@ -7,7 +7,7 @@ import factory, {
 } from '../helpers/resourceManager';
 import { actionTypes as submissionActionTypes } from './submission';
 
-const resourceName = 'submissions';
+const resourceName = 'solutions';
 const needsRefetching = item =>
   defaultNeedsRefetching(item) ||
   item.getIn(['data', 'evaluationStatus']) === 'work-in-progress';
@@ -23,36 +23,35 @@ const { actions, actionTypes, reduceActions } = factory({
  */
 
 export const additionalActionTypes = {
-  LOAD_USERS_SUBMISSIONS: 'recodex/submissions/LOAD_USERS_SUBMISSIONS',
-  LOAD_USERS_SUBMISSIONS_PENDING:
-    'recodex/submissions/LOAD_USERS_SUBMISSIONS_PENDING',
-  LOAD_USERS_SUBMISSIONS_FULFILLED:
-    'recodex/submissions/LOAD_USERS_SUBMISSIONS_FULFILLED',
-  LOAD_USERS_SUBMISSIONS_REJECTED:
-    'recodex/submissions/LOAD_USERS_SUBMISSIONS_REJECTED',
-  SET_BONUS_POINTS: 'recodex/submissions/SET_BONUS_POINTS',
-  SET_BONUS_POINTS_PENDING: 'recodex/submissions/SET_BONUS_POINTS_PENDING',
-  SET_BONUS_POINTS_FULFILLED: 'recodex/submissions/SET_BONUS_POINTS_FULFILLED',
-  SET_BONUS_POINTS_REJECTED: 'recodex/submissions/SET_BONUS_POINTS_REJECTED',
-  ACCEPT: 'recodex/submissions/ACCEPT',
-  ACCEPT_PENDING: 'recodex/submissions/ACCEPT_PENDING',
-  ACCEPT_FULFILLED: 'recodex/submissions/ACCEPT_FULFILLED',
-  ACCEPT_REJECTED: 'recodex/submissions/ACCEPT_REJECTED',
-  UNACCEPT: 'recodex/submissions/UNACCEPT',
-  UNACCEPT_PENDING: 'recodex/submissions/UNACCEPT_PENDING',
-  UNACCEPT_FULFILLED: 'recodex/submissions/UNACCEPT_FULFILLED',
-  UNACCEPT_REJECTED: 'recodex/submissions/UNACCEPT_REJECTED',
-  RESUBMIT_ALL: 'recodex/submissions/RESUBMIT_ALL',
-  RESUBMIT_ALL_PENDING: 'recodex/submissions/RESUBMIT_ALL_PENDING',
-  RESUBMIT_ALL_FULFILLED: 'recodex/submissions/RESUBMIT_ALL_FULFILLED',
-  RESUBMIT_ALL_REJECTED: 'recodex/submissions/RESUBMIT_ALL_REJECTED',
+  LOAD_USERS_SOLUTIONS: 'recodex/solutions/LOAD_USERS_SOLUTIONS',
+  LOAD_USERS_SOLUTIONS_PENDING:
+    'recodex/solutions/LOAD_USERS_SOLUTIONS_PENDING',
+  LOAD_USERS_SOLUTIONS_FULFILLED:
+    'recodex/solutions/LOAD_USERS_SOLUTIONS_FULFILLED',
+  LOAD_USERS_SOLUTIONS_REJECTED:
+    'recodex/solutions/LOAD_USERS_SOLUTIONS_REJECTED',
+  SET_BONUS_POINTS: 'recodex/solutions/SET_BONUS_POINTS',
+  SET_BONUS_POINTS_PENDING: 'recodex/solutions/SET_BONUS_POINTS_PENDING',
+  SET_BONUS_POINTS_FULFILLED: 'recodex/solutions/SET_BONUS_POINTS_FULFILLED',
+  SET_BONUS_POINTS_REJECTED: 'recodex/solutions/SET_BONUS_POINTS_REJECTED',
+  ACCEPT: 'recodex/solutions/ACCEPT',
+  ACCEPT_PENDING: 'recodex/solutions/ACCEPT_PENDING',
+  ACCEPT_FULFILLED: 'recodex/solutions/ACCEPT_FULFILLED',
+  ACCEPT_REJECTED: 'recodex/solutions/ACCEPT_REJECTED',
+  UNACCEPT: 'recodex/solutions/UNACCEPT',
+  UNACCEPT_PENDING: 'recodex/solutions/UNACCEPT_PENDING',
+  UNACCEPT_FULFILLED: 'recodex/solutions/UNACCEPT_FULFILLED',
+  UNACCEPT_REJECTED: 'recodex/solutions/UNACCEPT_REJECTED',
+  RESUBMIT_ALL: 'recodex/solutions/RESUBMIT_ALL',
+  RESUBMIT_ALL_PENDING: 'recodex/solutions/RESUBMIT_ALL_PENDING',
+  RESUBMIT_ALL_FULFILLED: 'recodex/solutions/RESUBMIT_ALL_FULFILLED',
+  RESUBMIT_ALL_REJECTED: 'recodex/solutions/RESUBMIT_ALL_REJECTED',
   DOWNLOAD_RESULT_ARCHIVE: 'recodex/files/DOWNLOAD_RESULT_ARCHIVE'
 };
 
-export const loadSubmissionData = actions.pushResource;
-export const fetchSubmission = actions.fetchResource;
-export const fetchSubmissionIfNeeded = actions.fetchOneIfNeeded;
-export const deleteSubmission = actions.removeResource;
+export const fetchSolution = actions.fetchResource;
+export const fetchSolutionIfNeeded = actions.fetchOneIfNeeded;
+export const deleteSolution = actions.removeResource;
 
 export const setPoints = (solutionId, overriddenPoints, bonusPoints) =>
   createApiAction({
@@ -63,7 +62,7 @@ export const setPoints = (solutionId, overriddenPoints, bonusPoints) =>
     meta: { solutionId, overriddenPoints, bonusPoints }
   });
 
-export const acceptSubmission = id =>
+export const acceptSolution = id =>
   createApiAction({
     type: additionalActionTypes.ACCEPT,
     method: 'POST',
@@ -71,7 +70,7 @@ export const acceptSubmission = id =>
     meta: { id }
   });
 
-export const unacceptSubmission = id =>
+export const unacceptSolution = id =>
   createApiAction({
     type: additionalActionTypes.UNACCEPT,
     method: 'DELETE',
@@ -79,7 +78,7 @@ export const unacceptSubmission = id =>
     meta: { id }
   });
 
-export const resubmitSubmission = (id, isPrivate, isDebug = true) =>
+export const resubmitSolution = (id, isPrivate, isDebug = true) =>
   createApiAction({
     type: submissionActionTypes.SUBMIT,
     method: 'POST',
@@ -88,7 +87,7 @@ export const resubmitSubmission = (id, isPrivate, isDebug = true) =>
     meta: { id }
   });
 
-export const resubmitAllSubmissions = assignmentId =>
+export const resubmitAllSolutions = assignmentId =>
   createApiAction({
     type: additionalActionTypes.RESUBMIT_ALL,
     method: 'POST',
@@ -96,9 +95,9 @@ export const resubmitAllSubmissions = assignmentId =>
     meta: { assignmentId }
   });
 
-export const fetchUsersSubmissions = (userId, assignmentId) =>
+export const fetchUsersSolutions = (userId, assignmentId) =>
   actions.fetchMany({
-    type: additionalActionTypes.LOAD_USERS_SUBMISSIONS,
+    type: additionalActionTypes.LOAD_USERS_SOLUTIONS,
     endpoint: `/exercise-assignments/${assignmentId}/users/${userId}/solutions`,
     meta: {
       assignmentId,
@@ -112,7 +111,7 @@ export const fetchUsersSubmissions = (userId, assignmentId) =>
 
 const reducer = handleActions(
   Object.assign({}, reduceActions, {
-    [additionalActionTypes.LOAD_USERS_SUBMISSIONS_FULFILLED]:
+    [additionalActionTypes.LOAD_USERS_SOLUTIONS_FULFILLED]:
       reduceActions[actionTypes.FETCH_MANY_FULFILLED],
 
     [additionalActionTypes.SET_BONUS_POINTS_FULFILLED]: (

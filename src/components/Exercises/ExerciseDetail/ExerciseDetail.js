@@ -22,10 +22,7 @@ import { LocalizedExerciseName } from '../../helpers/LocalizedNames';
 import EnvironmentsList from '../../helpers/EnvironmentsList';
 
 const ExerciseDetail = ({
-  id,
-  name,
   authorId,
-  groupsIds = [],
   description = '',
   difficulty,
   createdAt,
@@ -40,10 +37,10 @@ const ExerciseDetail = ({
   links: { EXERCISE_URI_FACTORY }
 }) =>
   <Box
-    title={<LocalizedExerciseName entity={{ name, localizedTexts }} />}
+    title={<FormattedMessage id="generic.details" defaultMessage="Details" />}
     noPadding
   >
-    <Table>
+    <Table responsive condensed>
       <tbody>
         <tr>
           <th>

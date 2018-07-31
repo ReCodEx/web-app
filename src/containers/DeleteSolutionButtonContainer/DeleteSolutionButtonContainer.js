@@ -3,39 +3,39 @@ import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import DeleteButton from '../../components/buttons/DeleteButton';
-import { getSubmission } from '../../redux/selectors/submissions';
-import { deleteSubmission } from '../../redux/modules/submissions';
+import { getSolution } from '../../redux/selectors/solutions';
+import { deleteSolution } from '../../redux/modules/solutions';
 
-const DeleteSubmissionButtonContainer = ({
+const DeleteSolutionButtonContainer = ({
   submission,
-  deleteSubmission,
+  deleteSolution,
   onDeleted,
   ...props
 }) =>
   <DeleteButton
     {...props}
     resource={submission}
-    deleteResource={deleteSubmission}
+    deleteResource={deleteSolution}
   />;
 
-DeleteSubmissionButtonContainer.propTypes = {
+DeleteSolutionButtonContainer.propTypes = {
   id: PropTypes.string.isRequired,
   submission: ImmutablePropTypes.map,
-  deleteSubmission: PropTypes.func.isRequired,
+  deleteSolution: PropTypes.func.isRequired,
   onDeleted: PropTypes.func
 };
 
 export default connect(
   (state, { id }) => ({
-    submission: getSubmission(id)(state)
+    submission: getSolution(id)(state)
   }),
   (dispatch, { id, onDeleted }) => ({
-    deleteSubmission: () => {
-      const promise = dispatch(deleteSubmission(id));
+    deleteSolution: () => {
+      const promise = dispatch(deleteSolution(id));
       if (onDeleted) {
         promise.then(onDeleted);
       }
       return promise;
     }
   })
-)(DeleteSubmissionButtonContainer);
+)(DeleteSolutionButtonContainer);
