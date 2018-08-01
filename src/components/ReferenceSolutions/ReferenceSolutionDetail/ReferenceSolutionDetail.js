@@ -3,15 +3,15 @@ import PropTypes from 'prop-types';
 import { Row, Col } from 'react-bootstrap';
 
 import SourceCodeInfoBox from '../../widgets/SourceCodeInfoBox';
-import TestResults from '../../Submissions/TestResults';
+import TestResults from '../../Solutions/TestResults';
 import DownloadResultArchiveContainer from '../../../containers/DownloadResultArchiveContainer';
 import DownloadSolutionArchiveContainer from '../../../containers/DownloadSolutionArchiveContainer';
 import CommentThreadContainer from '../../../containers/CommentThreadContainer';
 import SourceCodeViewerContainer from '../../../containers/SourceCodeViewerContainer';
-import SubmissionEvaluations from '../../Submissions/SubmissionEvaluations';
+import SubmissionEvaluations from '../../Solutions/SubmissionEvaluations';
 import ResourceRenderer from '../../helpers/ResourceRenderer';
 
-import CompilationLogs from '../../Submissions/CompilationLogs';
+import CompilationLogs from '../../Solutions/CompilationLogs';
 import ReferenceSolutionStatus from '../ReferenceSolutionStatus/ReferenceSolutionStatus';
 
 const getLastSubmissionId = evaluations =>

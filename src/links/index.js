@@ -60,11 +60,9 @@ export const linksFactory = lang => {
   const SUBMIT_SOLUTION_URI_FACTORY = id =>
     `${prefix}/app/assignment/${id}/submit`;
   const SOLUTION_DETAIL_URI_FACTORY = (assignmentId, submissionId) =>
-    `${prefix}/app/assignment/${assignmentId}/submission/${submissionId}`;
+    `${prefix}/app/assignment/${assignmentId}/solution/${submissionId}`;
   const ASSIGNMENT_STATS_URI_FACTORY = assignmentId =>
     `${prefix}/app/assignment/${assignmentId}/stats`;
-  const SOURCE_CODE_DETAIL_URI_FACTORY = (assignmentId, submissionId, fileId) =>
-    `${prefix}/app/assignment/${assignmentId}/submission/${submissionId}/file/${fileId}`;
 
   // external links
   const BUGS_URL = `${prefix}/bugs-and-feedback`;
@@ -122,7 +120,6 @@ export const linksFactory = lang => {
     SUBMIT_SOLUTION_URI_FACTORY,
     SOLUTION_DETAIL_URI_FACTORY,
     ASSIGNMENT_STATS_URI_FACTORY,
-    SOURCE_CODE_DETAIL_URI_FACTORY,
     BUGS_URL,
     FAQ_URL,
     GITHUB_BUGS_URL,

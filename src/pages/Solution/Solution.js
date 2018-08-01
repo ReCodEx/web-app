@@ -7,7 +7,7 @@ import Page from '../../components/layout/Page';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import SubmissionDetail, {
   FailedSubmissionDetail
-} from '../../components/Submissions/SubmissionDetail';
+} from '../../components/Solutions/SubmissionDetail';
 import AcceptSolutionContainer from '../../containers/AcceptSolutionContainer';
 import ResubmitSolutionContainer from '../../containers/ResubmitSolutionContainer';
 import HierarchyLineContainer from '../../containers/HierarchyLineContainer';
@@ -36,12 +36,12 @@ import {
 } from '../../redux/selectors/submissionEvaluations';
 import { getLocalizedName } from '../../helpers/getLocalizedData';
 
-class Submission extends Component {
-  static loadAsync = ({ submissionId, assignmentId }, dispatch) =>
+class Solution extends Component {
+  static loadAsync = ({ solutionId, assignmentId }, dispatch) =>
     Promise.all([
       dispatch(fetchRuntimeEnvironments()),
-      dispatch(fetchSolutionIfNeeded(submissionId)),
-      dispatch(fetchSubmissionEvaluationsForSolution(submissionId)),
+      dispatch(fetchSolutionIfNeeded(solutionId)),
+      dispatch(fetchSubmissionEvaluationsForSolution(solutionId)),
       dispatch(fetchAssignmentIfNeeded(assignmentId))
         .then(res => res.value)
         .then(assignment => dispatch(fetchGroupsStats(assignment.groupId)))
@@ -52,7 +52,7 @@ class Submission extends Component {
   }
 
   componentWillReceiveProps(newProps) {
-    if (this.props.params.submissionId !== newProps.params.submissionId) {
+    if (this.props.params.solutionId !== newProps.params.solutionId) {
       newProps.loadAsync();
     }
   }
@@ -175,10 +175,10 @@ class Submission extends Component {
   }
 }
 
-Submission.propTypes = {
+Solution.propTypes = {
   params: PropTypes.shape({
     assignmentId: PropTypes.string.isRequired,
-    submissionId: PropTypes.string.isRequired
+    solutionId: PropTypes.string.isRequired
   }).isRequired,
   assignment: PropTypes.object,
   children: PropTypes.element,
@@ -192,18 +192,18 @@ Submission.propTypes = {
 };
 
 export default connect(
-  (state, { params: { submissionId, assignmentId } }) => ({
-    solution: getSolution(submissionId)(state),
+  (state, { params: { solutionId, assignmentId } }) => ({
+    solution: getSolution(solutionId)(state),
     assignment: getAssignment(state)(assignmentId),
     isSupervisorOrMore: groupId =>
       isSupervisorOf(loggedInUserIdSelector(state), groupId)(state) ||
       isAdminOf(loggedInUserIdSelector(state), groupId)(state) ||
       isLoggedAsSuperAdmin(state),
-    evaluations: evaluationsForSubmissionSelector(submissionId)(state),
+    evaluations: evaluationsForSubmissionSelector(solutionId)(state),
     runtimeEnvironments: assignmentEnvironmentsSelector(state)(assignmentId),
-    fetchStatus: fetchManyStatus(submissionId)(state)
+    fetchStatus: fetchManyStatus(solutionId)(state)
   }),
   (dispatch, { params }) => ({
-    loadAsync: () => Submission.loadAsync(params, dispatch)
+    loadAsync: () => Solution.loadAsync(params, dispatch)
   })
-)(injectIntl(Submission));
+)(injectIntl(Solution));

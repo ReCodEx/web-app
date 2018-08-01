@@ -28,7 +28,7 @@ import Assignment from './Assignment';
 import EditAssignment from './EditAssignment';
 import AssignmentStats from './AssignmentStats';
 import NotFound from './NotFound';
-import Submission from './Submission';
+import Solution from './Solution';
 import Registration from './Registration';
 import Users from './Users';
 import User from './User';
@@ -100,7 +100,7 @@ const createRoutes = getState => {
             <Route path="user/:userId" component={Assignment} />
             <Route path="edit" component={EditAssignment} />
             <Route path="stats" component={AssignmentStats} />
-            <Route path="submission/:submissionId" component={Submission} />
+            <Route path="solution/:solutionId" component={Solution} />
           </Route>
           <Route path="exercises">
             <IndexRoute component={Exercises} />

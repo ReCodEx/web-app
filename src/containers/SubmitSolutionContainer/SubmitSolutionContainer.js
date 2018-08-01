@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import SubmitSolution from '../../components/Submissions/SubmitSolution';
+import SubmitSolution from '../../components/Solutions/SubmitSolution';
 import EvaluationProgressContainer from '../EvaluationProgressContainer';
 import { fetchUsersSolutions } from '../../redux/modules/solutions';
 import {
