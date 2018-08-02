@@ -7,19 +7,17 @@ import {
   FormattedDate,
   FormattedTime
 } from 'react-intl';
-import { Table, Well } from 'react-bootstrap';
+import { Table } from 'react-bootstrap';
 
 import AssignmentStatusIcon from '../../Assignments/Assignment/AssignmentStatusIcon';
 import Box from '../../widgets/Box';
-import Icon, { SuccessOrFailureIcon, WarningIcon } from '../../icons';
+import Icon, { SuccessOrFailureIcon } from '../../icons';
 
 const EvaluationDetail = ({
   evaluation,
   isCorrect,
   submittedAt,
   maxPoints,
-  bonusPoints,
-  lastSubmissionIsActive = false,
   accepted,
   evaluationStatus
 }) =>
@@ -161,15 +159,6 @@ const EvaluationDetail = ({
           </tr>
         </tbody>
       </Table>
-
-      {!lastSubmissionIsActive &&
-        <Well className="small">
-          <WarningIcon gapRight className="text-warning" />
-          <FormattedMessage
-            id="app.evaluationDetail.notActualEvaluation"
-            defaultMessage="This is not the last evaluation. Please note, that the solution is scored by the evaluaton of the last submission."
-          />
-        </Well>}
     </div>
   </Box>;
 
@@ -178,8 +167,6 @@ EvaluationDetail.propTypes = {
   submittedAt: PropTypes.number.isRequired,
   evaluation: PropTypes.object,
   maxPoints: PropTypes.number.isRequired,
-  bonusPoints: PropTypes.number.isRequired,
-  lastSubmissionIsActive: PropTypes.bool,
   accepted: PropTypes.bool,
   evaluationStatus: PropTypes.string.isRequired
 };

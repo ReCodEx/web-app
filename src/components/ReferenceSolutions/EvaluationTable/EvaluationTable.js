@@ -34,10 +34,13 @@ const EvaluationTable = ({ evaluations, renderButtons, selectedRowId = '' }) =>
     <tbody>
       {evaluations
         .sort((a, b) => {
-          if (a.evaluation == null || b.evaluation == null) {
+          if (!a.submittedAt || !b.submittedAt) {
             return a.evaluationStatus.localeCompare(b.evaluationStatus);
           }
-          return b.evaluation.evaluatedAt - a.evaluation.evaluatedAt;
+          return (
+            ((b.evaluation && b.evaluation.evaluatedAt) || b.submittedAt) -
+            ((a.evaluation && a.evaluation.evaluatedAt) || a.submittedAt)
+          );
         })
         .map(e =>
           <tr key={e.id} className={selectedRowId === e.id ? 'activeRow' : ''}>

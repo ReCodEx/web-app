@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Row, Col } from 'react-bootstrap';
+import { FormattedMessage } from 'react-intl';
 
 import SubmissionStatus from '../SubmissionStatus';
 import SourceCodeInfoBox from '../../widgets/SourceCodeInfoBox';
@@ -15,6 +16,7 @@ import ResourceRenderer from '../../helpers/ResourceRenderer';
 
 import EvaluationDetail from '../EvaluationDetail';
 import CompilationLogs from '../CompilationLogs';
+import { WarningIcon } from '../../icons';
 
 import { safeGet } from '../../../helpers/common';
 
@@ -22,28 +24,6 @@ class SubmissionDetail extends Component {
   state = { openFileId: null, activeSubmissionId: null };
   openFile = id => this.setState({ openFileId: id });
   hideFile = () => this.setState({ openFileId: null });
-
-  componentWillMount() {
-    this.setState({
-      activeSubmissionId: safeGet(
-        this.props.solution.lastSubmission,
-        ['id'],
-        null
-      )
-    });
-  }
-
-  componentWillReceiveProps(newProps) {
-    if (this.props.evaluations.size !== newProps.evaluations.size) {
-      this.setState({
-        activeSubmissionId: safeGet(
-          newProps.solution.lastSubmission,
-          ['id'],
-          null
-        )
-      });
-    }
-  }
 
   render() {
     const {
@@ -57,23 +37,32 @@ class SubmissionDetail extends Component {
         actualPoints,
         accepted,
         runtimeEnvironmentId,
-        lastSubmission
+        lastSubmission,
+        permissionHints
       },
       assignment,
       isSupervisor,
       evaluations,
-      runtimeEnvironments
+      runtimeEnvironments,
+      deleteEvaluation = null
     } = this.props;
-    const { openFileId, activeSubmissionId } = this.state;
 
-    if (activeSubmissionId && evaluations.toJS()[activeSubmissionId].data) {
+    const { openFileId } = this.state;
+    const activeSubmissionId =
+      this.state.activeSubmissionId || safeGet(lastSubmission, ['id'], null);
+    const evaluationsJS = evaluations.toJS();
+    if (
+      activeSubmissionId &&
+      evaluationsJS[activeSubmissionId] &&
+      evaluationsJS[activeSubmissionId].data
+    ) {
       var {
         submittedBy,
         evaluation,
         isCorrect,
         evaluationStatus,
         ...restSub
-      } = evaluations.toJS()[activeSubmissionId].data;
+      } = evaluationsJS[activeSubmissionId].data;
     } else {
       evaluationStatus = 'missing-submission';
     }
@@ -139,18 +128,23 @@ class SubmissionDetail extends Component {
 
           {evaluations &&
             <Col md={6} sm={12}>
+              {activeSubmissionId !== safeGet(lastSubmission, ['id']) &&
+                <p className="callout callout-warning">
+                  <WarningIcon gapRight />
+                  <FormattedMessage
+                    id="app.evaluationDetail.notActualEvaluation"
+                    defaultMessage="This is not the last evaluation. Please note, that the solution is scored by the evaluaton of the last submission. You may change the selection of the evaluation being displayed in the table at the bottom."
+                  />
+                </p>}
+
               {evaluation &&
                 <EvaluationDetail
                   evaluation={evaluation}
                   submittedAt={createdAt}
                   maxPoints={maxPoints}
                   isCorrect={isCorrect}
-                  bonusPoints={bonusPoints}
                   accepted={accepted}
                   evaluationStatus={evaluationStatus}
-                  lastSubmissionIsActive={
-                    activeSubmissionId === safeGet(lastSubmission, ['id'])
-                  }
                 />}
 
               {evaluation &&
@@ -190,6 +184,11 @@ class SubmissionDetail extends Component {
                           activeSubmissionId={activeSubmissionId}
                           onSelect={id =>
                             this.setState({ activeSubmissionId: id })}
+                          onDelete={
+                            permissionHints.deleteEvaluation
+                              ? deleteEvaluation
+                              : null
+                          }
                         />}
                     </ResourceRenderer>
                   </Col>
@@ -221,12 +220,14 @@ SubmissionDetail.propTypes = {
     bonusPoints: PropTypes.number.isRequired,
     overriddenPoints: PropTypes.number,
     actualPoints: PropTypes.number,
-    runtimeEnvironmentId: PropTypes.string
+    runtimeEnvironmentId: PropTypes.string,
+    permissionHints: PropTypes.object
   }).isRequired,
   assignment: PropTypes.object.isRequired,
   isSupervisor: PropTypes.bool,
   evaluations: PropTypes.object.isRequired,
-  runtimeEnvironments: PropTypes.array
+  runtimeEnvironments: PropTypes.array,
+  deleteEvaluation: PropTypes.func
 };
 
 export default SubmissionDetail;

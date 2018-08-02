@@ -6,6 +6,7 @@ import factory, {
   defaultNeedsRefetching
 } from '../helpers/resourceManager';
 import { actionTypes as submissionActionTypes } from './submission';
+import { actionTypes as submissionEvaluationActionTypes } from './submissionEvaluations';
 
 const resourceName = 'solutions';
 const needsRefetching = item =>
@@ -153,6 +154,7 @@ const reducer = handleActions(
               : item
         )
       ),
+
     [additionalActionTypes.UNACCEPT_PENDING]: (state, { meta: { id } }) =>
       state.setIn(['resources', id, 'data', 'accepted-pending'], true),
 
@@ -177,7 +179,34 @@ const reducer = handleActions(
                 )
               : item
         )
-      )
+      ),
+
+    [submissionEvaluationActionTypes.REMOVE_FULFILLED]: (
+      state,
+      { meta: { solutionId, id: evaluationId } }
+    ) => {
+      if (!solutionId || !evaluationId) {
+        return state;
+      }
+
+      // Remove the submit from internal list
+      let newState = state.updateIn(
+        ['resources', solutionId, 'data', 'submissions'],
+        submissions =>
+          submissions.filter(submission => submission !== evaluationId)
+      );
+
+      // If last submit was deleted, this whole entity is invalid (needs reloading)
+      return state.getIn([
+        'resources',
+        solutionId,
+        'data',
+        'lastSubmission',
+        'id'
+      ]) === evaluationId
+        ? newState.setIn(['resources', solutionId, 'didInvalidate'], true)
+        : newState;
+    }
   }),
   initialState
 );
