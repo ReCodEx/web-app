@@ -41,7 +41,6 @@ class SubmissionDetail extends Component {
         permissionHints = EMPTY_OBJ
       },
       assignment,
-      isSupervisor,
       evaluations,
       runtimeEnvironments,
       deleteEvaluation = null
@@ -114,7 +113,7 @@ class SubmissionDetail extends Component {
                   <DownloadSolutionArchiveContainer solutionId={id} />
                 </Col>}
             </Row>
-            {isSupervisor &&
+            {permissionHints.setBonusPoints &&
               <PointsContainer
                 submissionId={id}
                 overriddenPoints={overriddenPoints}
@@ -156,11 +155,11 @@ class SubmissionDetail extends Component {
                 <TestResults
                   evaluation={evaluation}
                   runtimeEnvironmentId={runtimeEnvironmentId}
-                  isSupervisor={isSupervisor}
+                  showJudgeLog={permissionHints.viewEvaluationJudgeOutput}
                 />}
 
               {evaluation &&
-                isSupervisor &&
+                permissionHints.downloadResultsArchive &&
                 <Row>
                   <Col lg={6} md={12}>
                     <DownloadResultArchiveContainer submissionId={restSub.id} />
@@ -168,7 +167,7 @@ class SubmissionDetail extends Component {
                 </Row>}
 
               {activeSubmissionId &&
-                isSupervisor &&
+                permissionHints.viewResubmissions &&
                 evaluations &&
                 evaluations.size > 1 &&
                 <Row>
@@ -224,7 +223,6 @@ SubmissionDetail.propTypes = {
     permissionHints: PropTypes.object
   }).isRequired,
   assignment: PropTypes.object.isRequired,
-  isSupervisor: PropTypes.bool,
   evaluations: PropTypes.object.isRequired,
   runtimeEnvironments: PropTypes.array,
   deleteEvaluation: PropTypes.func

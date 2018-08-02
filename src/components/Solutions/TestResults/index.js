@@ -1,1 +1,2 @@
-export default from './TestResults';
+import TestResults from './TestResults';
+export default TestResults;

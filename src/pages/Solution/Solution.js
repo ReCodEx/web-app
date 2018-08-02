@@ -28,12 +28,6 @@ import {
 } from '../../redux/selectors/assignments';
 
 import {
-  isSupervisorOf,
-  isAdminOf,
-  isLoggedAsSuperAdmin
-} from '../../redux/selectors/users';
-import { loggedInUserIdSelector } from '../../redux/selectors/auth';
-import {
   evaluationsForSubmissionSelector,
   fetchManyStatus
 } from '../../redux/selectors/submissionEvaluations';
@@ -65,7 +59,6 @@ class Solution extends Component {
       assignment,
       solution,
       params: { assignmentId },
-      isSupervisorOrMore,
       evaluations,
       runtimeEnvironments,
       fetchStatus,
@@ -109,7 +102,8 @@ class Solution extends Component {
                 />
               ),
               link: ({ EXERCISE_URI_FACTORY }) =>
-                isSupervisorOrMore(assignment.groupId)
+                assignment.permissionHints &&
+                assignment.permissionHints.viewDescription // not ideal, but closest we can get with permissions
                   ? EXERCISE_URI_FACTORY(assignment.exerciseId)
                   : '#'
             })
@@ -143,30 +137,39 @@ class Solution extends Component {
           {(solution, assignment) =>
             <div>
               <HierarchyLineContainer groupId={assignment.groupId} />
-              {isSupervisorOrMore(assignment.groupId) &&
+              {((solution.permissionHints &&
+                solution.permissionHints.setAccepted) ||
+                (assignment.permissionHints &&
+                  assignment.permissionHints.resubmitSubmissions)) &&
                 <p>
-                  <AcceptSolutionContainer id={solution.id} />
-                  <ResubmitSolutionContainer
-                    id={solution.id}
-                    assignmentId={assignment.id}
-                    isDebug={false}
-                    userId={solution.solution.userId}
-                  />
-                  <ResubmitSolutionContainer
-                    id={solution.id}
-                    assignmentId={assignment.id}
-                    isDebug={true}
-                    userId={solution.solution.userId}
-                  />
+                  {solution.permissionHints &&
+                    solution.permissionHints.setAccepted &&
+                    <AcceptSolutionContainer id={solution.id} />}
+
+                  {assignment.permissionHints &&
+                    assignment.permissionHints.resubmitSubmissions &&
+                    <React.Fragment>
+                      <ResubmitSolutionContainer
+                        id={solution.id}
+                        assignmentId={assignment.id}
+                        isDebug={false}
+                        userId={solution.solution.userId}
+                      />
+                      <ResubmitSolutionContainer
+                        id={solution.id}
+                        assignmentId={assignment.id}
+                        isDebug={true}
+                        userId={solution.solution.userId}
+                      />
+                    </React.Fragment>}
                 </p>}
-              <ResourceRenderer resource={runtimeEnvironments}>
-                {(...runtimes) =>
+              <ResourceRenderer resource={runtimeEnvironments} returnAsArray>
+                {runtimes =>
                   <FetchManyResourceRenderer fetchManyStatus={fetchStatus}>
                     {() =>
                       <SubmissionDetail
                         solution={solution}
                         assignment={assignment}
-                        isSupervisor={isSupervisorOrMore(assignment.groupId)}
                         evaluations={evaluations}
                         runtimeEnvironments={runtimes}
                         deleteEvaluation={deleteEvaluation}
@@ -189,7 +192,6 @@ Solution.propTypes = {
   children: PropTypes.element,
   solution: PropTypes.object,
   loadAsync: PropTypes.func.isRequired,
-  isSupervisorOrMore: PropTypes.func.isRequired,
   evaluations: PropTypes.object,
   runtimeEnvironments: PropTypes.array,
   fetchStatus: PropTypes.string,
@@ -201,10 +203,6 @@ export default connect(
   (state, { params: { solutionId, assignmentId } }) => ({
     solution: getSolution(solutionId)(state),
     assignment: getAssignment(state)(assignmentId),
-    isSupervisorOrMore: groupId =>
-      isSupervisorOf(loggedInUserIdSelector(state), groupId)(state) ||
-      isAdminOf(loggedInUserIdSelector(state), groupId)(state) ||
-      isLoggedAsSuperAdmin(state),
     evaluations: evaluationsForSubmissionSelector(solutionId)(state),
     runtimeEnvironments: assignmentEnvironmentsSelector(state)(assignmentId),
     fetchStatus: fetchManyStatus(solutionId)(state)

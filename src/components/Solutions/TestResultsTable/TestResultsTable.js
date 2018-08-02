@@ -148,7 +148,7 @@ class TestResultsTable extends Component {
     exitCode,
     judgeLog = ''
   }) => {
-    const { runtimeEnvironmentId, isSupervisor = false } = this.props;
+    const { runtimeEnvironmentId, showJudgeLog = false } = this.props;
     return (
       <tr key={testName}>
         <td>
@@ -219,7 +219,7 @@ class TestResultsTable extends Component {
           {exitCodeMapping(runtimeEnvironmentId, exitCode)}
         </td>
 
-        {isSupervisor &&
+        {showJudgeLog &&
           <td className="text-right">
             {judgeLog &&
               <Button
@@ -261,9 +261,9 @@ class TestResultsTable extends Component {
     </tr>;
 
   render() {
-    const { results, isSupervisor = false } = this.props;
+    const { results, showJudgeLog = false } = this.props;
     const showLogButton =
-      isSupervisor &&
+      showJudgeLog &&
       results.reduce(
         (out, { judgeLog = '' }) => out || Boolean(judgeLog),
         false
@@ -363,7 +363,7 @@ class TestResultsTable extends Component {
                 <Icon icon="power-off" />
               </OverlayTrigger>
             </th>
-            {isSupervisor &&
+            {showJudgeLog &&
               <th className="text-right">
                 {showLogButton &&
                   <Button
@@ -405,7 +405,7 @@ TestResultsTable.propTypes = {
     })
   ).isRequired,
   runtimeEnvironmentId: PropTypes.string,
-  isSupervisor: PropTypes.bool
+  showJudgeLog: PropTypes.bool
 };
 
 export default TestResultsTable;
