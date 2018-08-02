@@ -10,6 +10,7 @@ import Icon, { DeleteIcon } from '../../icons';
 const SubmissionEvaluations = ({
   evaluations,
   activeSubmissionId,
+  showInfo = true,
   onSelect,
   onDelete = null
 }) =>
@@ -25,12 +26,13 @@ const SubmissionEvaluations = ({
     isOpen={true}
   >
     <React.Fragment>
-      <p className="callout callout-info small em-margin">
-        <FormattedMessage
-          id="app.submissionEvaluation.tableInfo"
-          defaultMessage="This table shows the history of evaluations. You may select which evaluation you would like to display, but only the most recent evaluation is considered the valid one (and it is also the only one visible to the student)."
-        />
-      </p>
+      {showInfo &&
+        <p className="callout callout-info small em-margin">
+          <FormattedMessage
+            id="app.submissionEvaluation.tableInfo"
+            defaultMessage="This table shows the history of evaluations. You may select which evaluation you would like to display, but only the most recent evaluation is considered the valid one (and it is also the only one visible to the student)."
+          />
+        </p>}
       <EvaluationTable
         evaluations={evaluations}
         selectedRowId={activeSubmissionId}
@@ -78,6 +80,7 @@ SubmissionEvaluations.propTypes = {
   evaluations: PropTypes.array.isRequired,
   submissionId: PropTypes.string.isRequired,
   activeSubmissionId: PropTypes.string.isRequired,
+  showInfo: PropTypes.bool,
   onSelect: PropTypes.func.isRequired,
   onDelete: PropTypes.func
 };

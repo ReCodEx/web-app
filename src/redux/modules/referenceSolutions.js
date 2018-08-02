@@ -9,6 +9,7 @@ import factory, {
 import { createApiAction } from '../middleware/apiMiddleware';
 
 import { actionTypes as additionalSubmissionActionTypes } from './submission';
+import { actionTypes as referenceSolutionEvaluationsActionTypes } from './referenceSolutionEvaluations';
 
 const resourceName = 'referenceSolutions';
 const { actions, reduceActions } = factory({
@@ -79,7 +80,19 @@ const reducer = handleActions(
             })
           ),
         state
-      )
+      ),
+
+    [referenceSolutionEvaluationsActionTypes.REMOVE_FULFILLED]: (
+      state,
+      { meta: { solutionId, id: evaluationId } }
+    ) =>
+      solutionId && evaluationId
+        ? state.updateIn(
+            ['resources', solutionId, 'data', 'submissions'],
+            submissions =>
+              submissions.filter(submission => submission !== evaluationId)
+          )
+        : state
   }),
   initialState
 );

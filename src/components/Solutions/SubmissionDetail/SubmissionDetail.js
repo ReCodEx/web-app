@@ -18,7 +18,7 @@ import EvaluationDetail from '../EvaluationDetail';
 import CompilationLogs from '../CompilationLogs';
 import { WarningIcon } from '../../icons';
 
-import { safeGet } from '../../../helpers/common';
+import { safeGet, EMPTY_OBJ } from '../../../helpers/common';
 
 class SubmissionDetail extends Component {
   state = { openFileId: null, activeSubmissionId: null };
@@ -38,7 +38,7 @@ class SubmissionDetail extends Component {
         accepted,
         runtimeEnvironmentId,
         lastSubmission,
-        permissionHints
+        permissionHints = EMPTY_OBJ
       },
       assignment,
       isSupervisor,

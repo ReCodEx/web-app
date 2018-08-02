@@ -62,7 +62,6 @@ const ReferenceSolutionsList = ({
                   runtimeEnvironments={runtimeEnvironments.filter(
                     e => e.id === runtimeEnvironmentId
                   )}
-                  longNames={true}
                 />
               </td>
               <td className="text-nowrap">

@@ -23,7 +23,10 @@ import { fetchExerciseIfNeeded } from '../../redux/modules/exercises';
 import { getReferenceSolution } from '../../redux/selectors/referenceSolutions';
 import { getExercise } from '../../redux/selectors/exercises';
 import ReferenceSolutionDetail from '../../components/ReferenceSolutions/ReferenceSolutionDetail';
-import { fetchReferenceSolutionEvaluationsForSolution } from '../../redux/modules/referenceSolutionEvaluations';
+import {
+  fetchReferenceSolutionEvaluationsForSolution,
+  deleteReferenceSolutionEvaluation
+} from '../../redux/modules/referenceSolutionEvaluations';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import {
   evaluationsForReferenceSolutionSelector,
@@ -70,6 +73,7 @@ class ReferenceSolution extends Component {
       fetchStatus,
       evaluations,
       refreshSolutionEvaluations,
+      deleteEvaluation,
       intl: { formatMessage },
       links: { EXERCISES_URI, EXERCISE_URI_FACTORY }
     } = this.props;
@@ -141,9 +145,10 @@ class ReferenceSolution extends Component {
               <FetchManyResourceRenderer fetchManyStatus={fetchStatus}>
                 {() =>
                   <ReferenceSolutionDetail
-                    submission={solution}
+                    solution={solution}
                     evaluations={evaluations}
                     exercise={exercise}
+                    deleteEvaluation={deleteEvaluation}
                   />}
               </FetchManyResourceRenderer>
             </div>}
@@ -162,6 +167,7 @@ ReferenceSolution.propTypes = {
   referenceSolution: ImmutablePropTypes.map,
   exercise: ImmutablePropTypes.map,
   refreshSolutionEvaluations: PropTypes.func,
+  deleteEvaluation: PropTypes.func.isRequired,
   fetchStatus: PropTypes.string,
   evaluations: ImmutablePropTypes.map,
   intl: intlShape.isRequired,
@@ -188,7 +194,14 @@ export default withLinks(
               params.referenceSolutionId
             )
           );
-        }
+        },
+        deleteEvaluation: evaluationId =>
+          dispatch(
+            deleteReferenceSolutionEvaluation(
+              params.referenceSolutionId,
+              evaluationId
+            )
+          )
       })
     )(ReferenceSolution)
   )

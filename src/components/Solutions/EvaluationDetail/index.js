@@ -1,1 +1,2 @@
-export default from './EvaluationDetail';
+import EvaluationDetail from './EvaluationDetail';
+export default EvaluationDetail;

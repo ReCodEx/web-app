@@ -1,1 +1,2 @@
-export default from './EvaluationTable';
+import EvaluationTable from './EvaluationTable';
+export default EvaluationTable;

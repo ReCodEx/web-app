@@ -14,6 +14,8 @@ import ResourceRenderer from '../../helpers/ResourceRenderer';
 import CompilationLogs from '../../Solutions/CompilationLogs';
 import ReferenceSolutionStatus from '../ReferenceSolutionStatus/ReferenceSolutionStatus';
 
+import { EMPTY_OBJ } from '../../../helpers/common';
+
 const getLastSubmissionId = evaluations =>
   Object.values(evaluations)
     .map(x => x.data)
@@ -25,44 +27,38 @@ class ReferenceSolutionDetail extends Component {
   openFile = id => this.setState({ openFileId: id });
   hideFile = () => this.setState({ openFileId: null });
 
-  componentWillMount() {
-    this.setState({
-      activeSubmissionId: this.props.submission.submissions
-        ? getLastSubmissionId(this.props.evaluations.toJS())
-        : null
-    });
-  }
-
-  componentWillReceiveProps(newProps) {
-    if (this.props.evaluations.size !== newProps.evaluations.size) {
-      this.setState({
-        activeSubmissionId: getLastSubmissionId(newProps.evaluations.toJS())
-      });
-    }
-  }
-
   render() {
     const {
-      submission: {
+      solution: {
         id,
         description,
         runtimeEnvironmentId,
-        solution: { createdAt, userId, files }
+        solution: { createdAt, userId, files },
+        permissionHints = EMPTY_OBJ
       },
       exercise,
-      evaluations
+      evaluations,
+      deleteEvaluation = null
     } = this.props;
-    const { openFileId, activeSubmissionId } = this.state;
+    const { openFileId } = this.state;
+    const evaluationsJS = evaluations && evaluations.toJS();
+    const activeSubmissionId =
+      this.state.activeSubmissionId || getLastSubmissionId(evaluationsJS);
 
-    if (activeSubmissionId && evaluations.toJS()[activeSubmissionId].data) {
+    if (
+      activeSubmissionId &&
+      evaluationsJS[activeSubmissionId] &&
+      evaluationsJS[activeSubmissionId].data
+    ) {
       var {
         submittedBy,
         evaluation,
         isCorrect,
         evaluationStatus,
         ...restSub
-      } = evaluations.toJS()[activeSubmissionId].data;
+      } = evaluationsJS[activeSubmissionId].data;
     } else evaluationStatus = 'missing-submission';
+
     return (
       <div>
         <Row>
@@ -131,8 +127,14 @@ class ReferenceSolutionDetail extends Component {
                           submissionId={id}
                           evaluations={evaluations}
                           activeSubmissionId={activeSubmissionId}
+                          showInfo={false}
                           onSelect={id =>
                             this.setState({ activeSubmissionId: id })}
+                          onDelete={
+                            permissionHints.deleteEvaluation
+                              ? deleteEvaluation
+                              : null
+                          }
                         />}
                     </ResourceRenderer>
                   </Col>
@@ -151,7 +153,7 @@ class ReferenceSolutionDetail extends Component {
 }
 
 ReferenceSolutionDetail.propTypes = {
-  submission: PropTypes.shape({
+  solution: PropTypes.shape({
     id: PropTypes.string.isRequired,
     note: PropTypes.string,
     lastSubmission: PropTypes.shape({ id: PropTypes.string.isRequired }),
@@ -160,10 +162,12 @@ ReferenceSolutionDetail.propTypes = {
       userId: PropTypes.string.isRequired,
       files: PropTypes.array
     }).isRequired,
-    submissions: PropTypes.array.isRequired
+    submissions: PropTypes.array.isRequired,
+    permissionHints: PropTypes.object
   }).isRequired,
   exercise: PropTypes.object.isRequired,
-  evaluations: PropTypes.object.isRequired
+  evaluations: PropTypes.object.isRequired,
+  deleteEvaluation: PropTypes.func
 };
 
 export default ReferenceSolutionDetail;
