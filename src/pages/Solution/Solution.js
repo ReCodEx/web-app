@@ -5,9 +5,9 @@ import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
 
 import Page from '../../components/layout/Page';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
-import SubmissionDetail, {
+import SolutionDetail, {
   FailedSubmissionDetail
-} from '../../components/Solutions/SubmissionDetail';
+} from '../../components/Solutions/SolutionDetail';
 import AcceptSolutionContainer from '../../containers/AcceptSolutionContainer';
 import ResubmitSolutionContainer from '../../containers/ResubmitSolutionContainer';
 import HierarchyLineContainer from '../../containers/HierarchyLineContainer';
@@ -167,7 +167,7 @@ class Solution extends Component {
                 {runtimes =>
                   <FetchManyResourceRenderer fetchManyStatus={fetchStatus}>
                     {() =>
-                      <SubmissionDetail
+                      <SolutionDetail
                         solution={solution}
                         assignment={assignment}
                         evaluations={evaluations}

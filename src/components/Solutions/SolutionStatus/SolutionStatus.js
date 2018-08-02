@@ -11,7 +11,7 @@ import EnvironmentsListItem from '../../helpers/EnvironmentsList/EnvironmentsLis
 import withLinks from '../../../helpers/withLinks';
 import Icon, { EditIcon, SuccessOrFailureIcon } from '../../icons';
 
-const SubmissionStatus = ({
+const SolutionStatus = ({
   assignment: { firstDeadline, allowSecondDeadline, secondDeadline },
   evaluationStatus,
   submittedAt,
@@ -224,7 +224,7 @@ const SubmissionStatus = ({
     </Table>
   </Box>;
 
-SubmissionStatus.propTypes = {
+SolutionStatus.propTypes = {
   assignment: PropTypes.shape({
     firstDeadline: PropTypes.number.isRequired,
     allowSecondDeadline: PropTypes.bool.isRequired,
@@ -244,4 +244,4 @@ SubmissionStatus.propTypes = {
   links: PropTypes.object.isRequired
 };
 
-export default withLinks(SubmissionStatus);
+export default withLinks(SolutionStatus);

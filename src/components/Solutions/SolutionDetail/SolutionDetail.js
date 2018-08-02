@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Row, Col } from 'react-bootstrap';
 import { FormattedMessage } from 'react-intl';
 
-import SubmissionStatus from '../SubmissionStatus';
+import SolutionStatus from '../SolutionStatus';
 import SourceCodeInfoBox from '../../widgets/SourceCodeInfoBox';
 import TestResults from '../TestResults';
 import PointsContainer from '../../../containers/PointsContainer';
@@ -20,7 +20,7 @@ import { WarningIcon } from '../../icons';
 
 import { safeGet, EMPTY_OBJ } from '../../../helpers/common';
 
-class SubmissionDetail extends Component {
+class SolutionDetail extends Component {
   state = { openFileId: null, activeSubmissionId: null };
   openFile = id => this.setState({ openFileId: id });
   hideFile = () => this.setState({ openFileId: null });
@@ -70,7 +70,7 @@ class SubmissionDetail extends Component {
       <div>
         <Row>
           <Col md={6} sm={12}>
-            <SubmissionStatus
+            <SolutionStatus
               evaluationStatus={safeGet(
                 lastSubmission,
                 ['evaluationStatus'],
@@ -205,7 +205,7 @@ class SubmissionDetail extends Component {
   }
 }
 
-SubmissionDetail.propTypes = {
+SolutionDetail.propTypes = {
   solution: PropTypes.shape({
     id: PropTypes.string.isRequired,
     note: PropTypes.string,
@@ -228,4 +228,4 @@ SubmissionDetail.propTypes = {
   deleteEvaluation: PropTypes.func
 };
 
-export default SubmissionDetail;
+export default SolutionDetail;
