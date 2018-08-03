@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import classNames from 'classnames';
 import { Modal, ProgressBar, Table } from 'react-bootstrap';
+import ImmutablePropTypes from 'react-immutable-proptypes';
+
 import Button from '../../widgets/FlatButton';
 import EvaluationStatusText from './EvaluationStatusText';
 import Icon from '../../icons';
@@ -16,7 +18,10 @@ class EvaluationProgress extends Component {
   state = { messagesCount: 0 };
 
   componentDidUpdate() {
-    if (this.state.messagesCount < this.props.messages.size) {
+    if (
+      this.props.messages &&
+      this.state.messagesCount < this.props.messages.size
+    ) {
       this.setState({ messagesCount: this.props.messages.size });
       setTimeout(this.scrollToBottom, 10);
     }
@@ -35,7 +40,7 @@ class EvaluationProgress extends Component {
       isOpen,
       finished = false,
       showContinueButton = false,
-      messages = [],
+      messages,
       completed = 0,
       skipped = 0,
       failed = 0,
@@ -127,7 +132,7 @@ EvaluationProgress.propTypes = {
   isOpen: PropTypes.bool,
   showContinueButton: PropTypes.bool,
   finished: PropTypes.bool.isRequired,
-  messages: PropTypes.object.isRequired,
+  messages: ImmutablePropTypes.list,
   completed: PropTypes.number.isRequired,
   skipped: PropTypes.number.isRequired,
   failed: PropTypes.number.isRequired,

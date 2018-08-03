@@ -13,7 +13,8 @@ export const initialState = fromJS({
     skipped: 0,
     failed: 0
   },
-  messages: []
+  messages: [],
+  progressObserverId: null
 });
 
 /**
@@ -70,13 +71,13 @@ export default handleActions(
     ) =>
       webSocketChannelId
         ? initialState
-            .update('webSocketChannelId', () => webSocketChannelId)
-            .update('expectedTasksCount', () => expectedTasksCount)
+            .set('webSocketChannelId', webSocketChannelId)
+            .set('expectedTasksCount', expectedTasksCount)
         : initialState.set('isFinished', true),
 
     [submissionActionTypes.SUBMIT_FULFILLED]: (
       state,
-      { payload, meta: { submissionType } }
+      { payload, meta: { submissionType, progressObserverId = null } }
     ) => {
       const webSocketChannel =
         submissionType === 'referenceSolution'
@@ -85,14 +86,12 @@ export default handleActions(
             payload.submissions[0].webSocketChannel
           : payload.webSocketChannel;
 
-      return webSocketChannel
+      const newState = webSocketChannel
         ? initialState
-            .update('webSocketChannelId', () => webSocketChannel.id)
-            .update(
-              'expectedTasksCount',
-              () => webSocketChannel.expectedTasksCount
-            )
+            .set('webSocketChannelId', webSocketChannel.id)
+            .set('expectedTasksCount', webSocketChannel.expectedTasksCount)
         : initialState.set('isFinished', true);
+      return newState.set('progressObserverId', progressObserverId);
     },
 
     [actionTypes.COMPLETED_TASK]: (state, { payload: msg }) =>

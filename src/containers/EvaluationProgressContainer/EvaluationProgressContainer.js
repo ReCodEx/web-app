@@ -4,6 +4,7 @@ import { injectIntl, FormattedMessage } from 'react-intl';
 import { List } from 'immutable';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 
 import {
   addMessage,
@@ -30,7 +31,9 @@ import randomMessages, { extraMessages } from './randomMessages';
 class EvaluationProgressContainer extends Component {
   state = { realTimeProcessing: true, monitor: null };
   socket = null;
+
   componentWillMount = () => this.init(this.props);
+
   componentWillReceiveProps = newProps => {
     if (newProps.monitor && newProps.monitor.id) {
       if (this.props.monitor && this.props.monitor.id) {
@@ -43,24 +46,26 @@ class EvaluationProgressContainer extends Component {
   };
   componentWillUnmount = () => {
     this.closeSocket();
-    this.socket = null;
   };
 
   init = props => {
     const { monitor } = props;
-
     if (this.socket !== null) {
       this.closeSocket();
     }
-    this.setState({ realTimeProcessing: true });
 
-    if (monitor !== null && monitor !== this.state.monitor) {
+    if (
+      monitor !== null &&
+      (!this.state.monitor ||
+        monitor.url !== this.state.monitor.url ||
+        monitor.id !== this.state.monitor.id)
+    ) {
       if (typeof WebSocket === 'function') {
+        this.setState({ monitor, realTimeProcessing: true });
         this.socket = new WebSocket(monitor.url);
         this.socket.onopen = () => this.socket.send(monitor.id);
         this.socket.onmessage = this.onMessage;
         this.socket.onerror = err => this.onError(err);
-        this.setState({ monitor });
       } else {
         this.setState({ realTimeProcessing: false });
       }
@@ -102,10 +107,10 @@ class EvaluationProgressContainer extends Component {
     task_state = 'OK', // eslint-disable-line camelcase
     text = null
   }) => ({
-      wasSuccessful: command !== 'TASK' || task_state === 'COMPLETED', // eslint-disable-line camelcase
-      text: text || this.props.intl.formatMessage(this.getRandomMessage()),
-      status: task_state // eslint-disable-line camelcase
-    });
+    wasSuccessful: command !== 'TASK' || task_state === 'COMPLETED', // eslint-disable-line camelcase
+    text: text || this.props.intl.formatMessage(this.getRandomMessage()),
+    status: task_state // eslint-disable-line camelcase
+  });
 
   getRandomMessage = () => {
     if (!this.availableMessages || this.availableMessages.length === 0) {
@@ -163,47 +168,43 @@ class EvaluationProgressContainer extends Component {
 
   render = () => {
     const { isOpen, messages, progress, isFinished } = this.props;
-    let displayedMessages = new List();
     const now = new Date();
-    if (now.getDate() === 1 && now.getMonth() === 3) {
-      // April fools day
-      displayedMessages = messages;
-    }
+    const isAprilFoolsDay = now.getDate() === 1 && now.getMonth() === 3;
 
     return this.state.realTimeProcessing === true
       ? <EvaluationProgress
-        isOpen={isOpen}
-        messages={displayedMessages}
-        completed={progress.completed}
-        skipped={progress.skipped}
-        failed={progress.failed}
-        finished={isFinished}
-        showContinueButton={isFinished || this.isClosed}
-        finishProcessing={this.finish}
-        onClose={this.userCloseAction}
-      />
+          isOpen={isOpen}
+          messages={isAprilFoolsDay ? messages : null}
+          completed={progress.completed}
+          skipped={progress.skipped}
+          failed={progress.failed}
+          finished={isFinished}
+          showContinueButton={isFinished || this.isClosed}
+          finishProcessing={this.finish}
+          onClose={this.userCloseAction}
+        />
       : <EvaluationProgress
-        isOpen={isOpen}
-        completed={0}
-        skipped={100}
-        failed={0}
-        finished={false}
-        showContinueButton={true}
-        finishProcessing={this.finish}
-        onClose={this.userCloseAction}
-        messages={List([
-          this.formatMessage({
-            command: 'TASK',
-            task_state: 'SKIPPED',
-            text: (
-              <FormattedMessage
-                id="app.evaluationProgress.noWebSockets"
-                defaultMessage="Your browser does not support realtime progress monitoring or the connection to the server could not be estabelished or was lost. The evaluation has already started and you will be able to see the results soon."
-              />
-            )
-          })
-        ])}
-      />;
+          isOpen={isOpen}
+          completed={0}
+          skipped={100}
+          failed={0}
+          finished={false}
+          showContinueButton={true}
+          finishProcessing={this.finish}
+          onClose={this.userCloseAction}
+          messages={List([
+            this.formatMessage({
+              command: 'TASK',
+              task_state: 'SKIPPED',
+              text: (
+                <FormattedMessage
+                  id="app.evaluationProgress.noWebSockets"
+                  defaultMessage="Your browser does not support realtime progress monitoring or the connection to the server could not be estabelished or was lost. The evaluation has already started and you will be able to see the results soon."
+                />
+              )
+            })
+          ])}
+        />;
   };
 }
 
@@ -232,7 +233,7 @@ EvaluationProgressContainer.propTypes = {
   skippedTask: PropTypes.func.isRequired,
   failedTask: PropTypes.func.isRequired,
   goToEvaluationDetails: PropTypes.func,
-  messages: PropTypes.object,
+  messages: ImmutablePropTypes.list,
   intl: PropTypes.object.isRequired,
   push: PropTypes.func.isRequired,
   onUserClose: PropTypes.func,

@@ -21,7 +21,7 @@ import {
   createGetUploadedFiles,
   createAllUploaded
 } from '../../redux/selectors/upload';
-
+import { getProgressObserverId } from '../../redux/selectors/evaluationProgress';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import { cancel, changeNote } from '../../redux/modules/submission';
 import { reset as resetUpload } from '../../redux/modules/upload';
@@ -88,7 +88,8 @@ class SubmitSolutionContainer extends Component {
       note,
       attachedFiles.map(item => item.file),
       selectedEnvironment,
-      this.getEntryPoint()
+      this.getEntryPoint(),
+      this.getMyObserverId()
     );
   };
 
@@ -110,6 +111,13 @@ class SubmitSolutionContainer extends Component {
 
   changeEntryPoint = entryPoint => {
     this.setState({ entryPoint });
+  };
+
+  getMyObserverId = () => 'submit_' + this.props.id;
+
+  isMeTheObserver = () => {
+    const { progressObserverId } = this.props;
+    return progressObserverId === this.getMyObserverId();
   };
 
   render = () => {
@@ -172,8 +180,8 @@ class SubmitSolutionContainer extends Component {
 
         {showProgress &&
           <EvaluationProgressContainer
-            isOpen={isProcessing}
-            monitor={monitor}
+            isOpen={isProcessing && this.isMeTheObserver()}
+            monitor={this.isMeTheObserver() ? monitor : null}
             link={
               isReferenceSolution
                 ? EXERCISE_REFERENCE_SOLUTION_URI_FACTORY(id, submissionId)
@@ -206,6 +214,7 @@ SubmitSolutionContainer.propTypes = {
   monitor: PropTypes.object,
   presubmitEnvironments: PropTypes.array,
   presubmitVariables: PropTypes.array,
+  progressObserverId: PropTypes.string,
   submitSolution: PropTypes.func.isRequired,
   presubmitSolution: PropTypes.func.isRequired,
   attachedFiles: PropTypes.array,
@@ -231,7 +240,8 @@ export default withLinks(
         submissionId: getSubmissionId(state),
         monitor: getMonitorParams(state),
         presubmitEnvironments: getPresubmitEnvironments(state),
-        presubmitVariables: getPresubmitVariables(state)
+        presubmitVariables: getPresubmitVariables(state),
+        progressObserverId: getProgressObserverId(state)
       };
     },
     (dispatch, { id, userId, onSubmit, onReset, presubmitValidation }) => ({
@@ -241,10 +251,19 @@ export default withLinks(
         note,
         files,
         runtimeEnvironmentId = null,
-        entryPoint = null
+        entryPoint = null,
+        progressObserverId = null
       ) =>
         dispatch(
-          onSubmit(userId, id, note, files, runtimeEnvironmentId, entryPoint)
+          onSubmit(
+            userId,
+            id,
+            note,
+            files,
+            runtimeEnvironmentId,
+            entryPoint,
+            progressObserverId
+          )
         ),
       presubmitSolution: files => dispatch(presubmitValidation(id, files)),
       reset: () => dispatch(resetUpload(id)) && dispatch(onReset(userId, id)),
