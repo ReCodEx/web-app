@@ -39,13 +39,21 @@ export const fetchReferenceSolutions = exerciseId =>
     meta: { exerciseId }
   });
 
-export const resubmitReferenceSolution = (solutionId, isDebug = false) =>
+export const resubmitReferenceSolution = (
+  solutionId,
+  progressObserverId = null,
+  isDebug = false
+) =>
   createApiAction({
     type: additionalSubmissionActionTypes.SUBMIT,
     endpoint: `/reference-solutions/${solutionId}/resubmit`,
     method: 'POST',
     body: { debug: isDebug },
-    meta: { solutionId, submissionType: 'referenceSolution' }
+    meta: {
+      solutionId,
+      submissionType: 'referenceSolution',
+      progressObserverId
+    }
   });
 
 /**

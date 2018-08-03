@@ -59,7 +59,8 @@ const submit = (endpoint, submissionType = 'assignmentSolution') => (
   note,
   files,
   runtimeEnvironmentId = null,
-  entryPoint = null
+  entryPoint = null,
+  progressObserverId = null
 ) => {
   var submitBody = {
     userId,
@@ -82,7 +83,7 @@ const submit = (endpoint, submissionType = 'assignmentSolution') => (
     method: 'POST',
     endpoint: endpoint(id),
     body: submitBody,
-    meta: { urlId: id, submissionType }
+    meta: { urlId: id, submissionType, progressObserverId }
   });
 };
 

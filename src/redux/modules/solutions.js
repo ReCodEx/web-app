@@ -79,13 +79,18 @@ export const unacceptSolution = id =>
     meta: { id }
   });
 
-export const resubmitSolution = (id, isPrivate, isDebug = true) =>
+export const resubmitSubmission = (
+  id,
+  isPrivate,
+  progressObserverId = null,
+  isDebug = true
+) =>
   createApiAction({
     type: submissionActionTypes.SUBMIT,
     method: 'POST',
     endpoint: `/assignment-solutions/${id}/resubmit`,
     body: { private: isPrivate, debug: isDebug },
-    meta: { id }
+    meta: { id, progressObserverId }
   });
 
 export const resubmitAllSolutions = assignmentId =>
