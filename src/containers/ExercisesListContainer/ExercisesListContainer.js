@@ -62,6 +62,7 @@ class ExercisesListContainer extends Component {
 
   componentWillReceiveProps({ rootGroup, fetchExercisesAuthorsIfNeeded }) {
     if (this.props.rootGroup !== rootGroup) {
+      this.defaultFilters.groupsIds = [rootGroup];
       fetchExercisesAuthorsIfNeeded(rootGroup);
     }
   }
@@ -181,8 +182,7 @@ class ExercisesListContainer extends Component {
           totalCount,
           orderByColumn,
           orderByDescending,
-          setOrderBy,
-          reload
+          setOrderBy
         }) =>
           <ExercisesList
             exercises={data}

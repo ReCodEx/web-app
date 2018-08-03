@@ -1,1 +1,2 @@
-export default from './MultiAssignForm';
+import MultiAssignForm from './MultiAssignForm';
+export default MultiAssignForm;
