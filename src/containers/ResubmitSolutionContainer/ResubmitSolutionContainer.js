@@ -39,7 +39,7 @@ class ResubmitSolutionContainer extends Component {
       newSubmissionId,
       fetchSubmissions,
       isDebug = true,
-      links: { SUBMISSION_DETAIL_URI_FACTORY }
+      links: { SOLUTION_DETAIL_URI_FACTORY }
     } = this.props;
 
     return (
@@ -53,7 +53,7 @@ class ResubmitSolutionContainer extends Component {
         <EvaluationProgressContainer
           isOpen={isProcessing && this.isMeTheObserver()}
           monitor={this.isMeTheObserver() ? monitor : null}
-          link={SUBMISSION_DETAIL_URI_FACTORY(assignmentId, newSubmissionId)}
+          link={SOLUTION_DETAIL_URI_FACTORY(assignmentId, newSubmissionId)}
           onFinish={() => fetchSubmissions(userId)}
           onUserClose={() => fetchSubmissions(userId)}
         />
@@ -89,7 +89,7 @@ const mapDispatchToProps = (
   { id, isPrivate = false, assignmentId }
 ) => ({
   resubmit: (progressObserverId, isDebug) =>
-    dispatch(resubmitSubmission(id, isPrivate, progressObserverId, isDebug)),
+    dispatch(resubmitSolution(id, isPrivate, progressObserverId, isDebug)),
   fetchSubmissions: userId =>
     Promise.all([
       dispatch(fetchSubmissionEvaluationsForSolution(id)),

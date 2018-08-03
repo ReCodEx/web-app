@@ -79,7 +79,7 @@ export const unacceptSolution = id =>
     meta: { id }
   });
 
-export const resubmitSubmission = (
+export const resubmitSolution = (
   id,
   isPrivate,
   progressObserverId = null,
