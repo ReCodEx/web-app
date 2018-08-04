@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import Upload from '../../components/Submissions/Upload';
+import Upload from '../../components/Solutions/Upload';
 
 import {
   createGetUploadingFiles,

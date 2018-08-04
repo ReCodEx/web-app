@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import SubmitSolution from '../../components/Submissions/SubmitSolution';
+import SubmitSolution from '../../components/Solutions/SubmitSolution';
 import EvaluationProgressContainer from '../EvaluationProgressContainer';
-import { fetchUsersSubmissions } from '../../redux/modules/submissions';
+import { fetchUsersSolutions } from '../../redux/modules/solutions';
 import {
   getNote,
   isProcessing,
@@ -140,7 +140,7 @@ class SubmitSolutionContainer extends Component {
       reset,
       links: {
         EXERCISE_REFERENCE_SOLUTION_URI_FACTORY,
-        SUBMISSION_DETAIL_URI_FACTORY
+        SOLUTION_DETAIL_URI_FACTORY
       },
       showProgress = true,
       isReferenceSolution = false,
@@ -185,7 +185,7 @@ class SubmitSolutionContainer extends Component {
             link={
               isReferenceSolution
                 ? EXERCISE_REFERENCE_SOLUTION_URI_FACTORY(id, submissionId)
-                : SUBMISSION_DETAIL_URI_FACTORY(id, submissionId)
+                : SOLUTION_DETAIL_URI_FACTORY(id, submissionId)
             }
             onUserClose={!isReferenceSolution ? onEndFetch : null}
             onFinish={!isReferenceSolution ? onEndFetch : null}
@@ -269,7 +269,7 @@ export default withLinks(
       reset: () => dispatch(resetUpload(id)) && dispatch(onReset(userId, id)),
       onEndFetch: () =>
         Promise.all([
-          dispatch(fetchUsersSubmissions(userId, id)),
+          dispatch(fetchUsersSolutions(userId, id)),
           dispatch(canSubmit(id))
         ])
     })

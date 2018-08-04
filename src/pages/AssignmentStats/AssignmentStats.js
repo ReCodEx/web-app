@@ -15,7 +15,7 @@ import {
 
 import { fetchStudents } from '../../redux/modules/users';
 import { isReady, getJsData, getId } from '../../redux/helpers/resourceManager';
-import SubmissionsTableContainer from '../../containers/SubmissionsTableContainer';
+import SolutionsTableContainer from '../../containers/SolutionsTableContainer';
 import {
   fetchAssignmentIfNeeded,
   downloadBestSolutionsArchive
@@ -196,7 +196,7 @@ class AssignmentStats extends Component {
                     .map(user =>
                       <Row key={user.id}>
                         <Col sm={12}>
-                          <SubmissionsTableContainer
+                          <SolutionsTableContainer
                             title={user.fullName}
                             userId={user.id}
                             assignmentId={assignmentId}

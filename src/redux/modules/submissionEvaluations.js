@@ -1,10 +1,13 @@
 import { handleActions } from 'redux-actions';
 
-import factory, { initialState } from '../helpers/resourceManager';
+import factory, {
+  initialState,
+  resourceStatus
+} from '../helpers/resourceManager';
 import { downloadHelper } from '../helpers/api/download';
 
 const resourceName = 'submissionEvaluations';
-const { actions, reduceActions } = factory({
+const { actionTypes, actions, reduceActions } = factory({
   resourceName,
   apiEndpointFactory: evaluationId =>
     `/assignment-solutions/evaluation/${evaluationId}`
@@ -14,6 +17,7 @@ const { actions, reduceActions } = factory({
  * Actions
  */
 
+export { actionTypes };
 export const additionalActionTypes = {
   DOWNLOAD_EVALUATION_ARCHIVE: 'recodex/files/DOWNLOAD_EVALUATION_ARCHIVE',
   DOWNLOAD_SOLUTION_ARCHIVE: 'recodex/files/DOWNLOAD_SOLUTION_ARCHIVE'
@@ -21,6 +25,11 @@ export const additionalActionTypes = {
 
 export const fetchSubmissionEvaluation = actions.fetchResource;
 export const fetchSubmissionEvaluationIfNeeded = actions.fetchOneIfNeeded;
+export const deleteSubmissionEvaluation = (solutionId, evaluationId) => {
+  const action = actions.removeResource(evaluationId);
+  action.request.meta.solutionId = solutionId;
+  return action;
+};
 
 export const fetchManyEndpoint = id =>
   `/assignment-solutions/${id}/evaluations`;
@@ -50,5 +59,41 @@ export const downloadSolutionArchive = downloadHelper({
  * Reducer
  */
 
-const reducer = handleActions(reduceActions, initialState);
+const reducer = handleActions(
+  Object.assign({}, reduceActions, {
+    [additionalActionTypes.DELETE_EVALUATION_PENDING]: (
+      state,
+      { meta: { id } }
+    ) => state.setIn(['resources', id, 'state'], resourceStatus.DELETING),
+
+    [additionalActionTypes.DELETE_EVALUATION_REJECTED]: (
+      state,
+      { meta: { id } }
+    ) => state.setIn(['resources', id, 'state'], resourceStatus.FULFILLED),
+
+    [additionalActionTypes.DELETE_EVALUATION_FULFILLED]: (
+      state,
+      { meta: { id } }
+    ) =>
+      state.update('resources', resources =>
+        resources.map(
+          (item, itemId) =>
+            item.get('data') !== null
+              ? item.update(
+                  'data',
+                  data =>
+                    itemId === id
+                      ? data
+                          .set('accepted', true)
+                          .set('accepted-pending', false)
+                      : data
+                          .set('accepted', false)
+                          .set('accepted-pending', false)
+                )
+              : item
+        )
+      )
+  }),
+  initialState
+);
 export default reducer;

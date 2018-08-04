@@ -1,1 +1,2 @@
-export default from './ReferenceSolutionsList';
+import ReferenceSolutionsList from './ReferenceSolutionsList';
+export default ReferenceSolutionsList;

@@ -4,10 +4,10 @@ import { connect } from 'react-redux';
 
 import AcceptSolution from '../../components/buttons/AcceptSolution';
 import {
-  acceptSubmission,
-  unacceptSubmission
-} from '../../redux/modules/submissions';
-import { isAccepted, isAcceptPending } from '../../redux/selectors/submissions';
+  acceptSolution,
+  unacceptSolution
+} from '../../redux/modules/solutions';
+import { isAccepted, isAcceptPending } from '../../redux/selectors/solutions';
 
 const AcceptSolutionContainer = ({
   accepted,
@@ -39,8 +39,8 @@ const mapStateToProps = (state, { id }) => ({
 });
 
 const mapDispatchToProps = (dispatch, { id }) => ({
-  accept: () => dispatch(acceptSubmission(id)),
-  unaccept: () => dispatch(unacceptSubmission(id))
+  accept: () => dispatch(acceptSolution(id)),
+  unaccept: () => dispatch(unacceptSolution(id))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(

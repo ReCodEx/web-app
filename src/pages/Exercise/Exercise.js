@@ -363,7 +363,6 @@ class Exercise extends Component {
                           firstDeadline={firstDeadline}
                           allowSecondDeadline={allowSecondDeadline}
                           groupsAccessor={groupsAccessor}
-                          locale={locale}
                         />}
                     </ResourceRenderer>
                   </Box>}

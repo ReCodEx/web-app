@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 
 import { downloadSolutionArchive } from '../../redux/modules/submissionEvaluations';
 import { downloadSolutionArchive as downloadRefSolutionArchive } from '../../redux/modules/referenceSolutionEvaluations';
-import SolutionArchiveInfoBox from '../../components/Submissions/SolutionArchiveInfoBox';
+import SolutionArchiveInfoBox from '../../components/Solutions/SolutionArchiveInfoBox';
 
 const DownloadResultArchiveContainer = ({
   solutionId,

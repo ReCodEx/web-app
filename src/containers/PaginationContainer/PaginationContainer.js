@@ -74,44 +74,57 @@ export const showRangeInfo = (offset, limit, totalCount) =>
 
 // Pagination container for paginating generic contents loaded via endpoints following pagination protocol...
 class PaginationContainer extends Component {
-  constructor(props) {
-    super(props);
-
-    const limits = props.limits || DEFAULT_LIMITS;
+  static init(props) {
+    const {
+      defaultOrderBy,
+      defaultOrderDescending = false,
+      defaultFilters,
+      limits = DEFAULT_LIMITS,
+      register
+    } = props;
     const initials = {
       limit: props.defaultLimit || limits[0]
     };
 
-    if (props.defaultOrderBy) {
-      initials.orderBy = encodeOrderBy(
-        props.defaultOrderBy,
-        props.defaultOrderDescending || false
-      );
+    if (defaultOrderBy) {
+      initials.orderBy = encodeOrderBy(defaultOrderBy, defaultOrderDescending);
     }
 
-    if (props.defaultFilters) {
-      initials.filters = props.defaultFilters;
+    if (defaultFilters) {
+      initials.filters = defaultFilters;
     }
 
-    props.register(initials);
+    register(initials);
+  }
+
+  constructor(props) {
+    super(props);
+    PaginationContainer.init(props);
   }
 
   // Mounting handles also redux state initialization using default values and fetching the first batch.
   componentWillMount() {
-    const { intl: { locale }, hideAllItems, reload } = this.props;
-
+    const { hideAllItems } = this.props;
     if (!hideAllItems) {
-      reload(locale);
+      this.reload();
     }
   }
 
   // When lang or hideAllItems changes, reload is required ...
   componentWillReceiveProps(newProps) {
+    if (newProps.id !== this.props.id) {
+      PaginationContainer.init(newProps);
+    }
+
     if (
       this.props.intl.locale !== newProps.intl.locale ||
-      (!newProps.hideAllItems && this.props.hideAllItems && !newProps.isPending)
+      (!newProps.hideAllItems &&
+        this.props.hideAllItems &&
+        !newProps.isPending) ||
+      newProps.id !== this.props.id ||
+      newProps.endpoint !== this.props.endpoint
     ) {
-      newProps.reload(newProps.intl.locale);
+      newProps.reload(newProps.id, newProps.endpoint, newProps.intl.locale);
     }
   }
 
@@ -189,8 +202,8 @@ class PaginationContainer extends Component {
    * Reload is required when item is deleted for instance.
    */
   reload = () => {
-    const { intl: { locale }, reload } = this.props;
-    return reload(locale);
+    const { id, endpoint, intl: { locale }, reload } = this.props;
+    return reload(id, endpoint, locale);
   };
 
   /**
@@ -340,8 +353,8 @@ export default connect(
   (dispatch, { id, endpoint }) => ({
     register: initials =>
       dispatch(registerPaginationComponent({ id, ...initials })),
-    reload: locale =>
-      dispatch(fetchPaginated(id, endpoint)(locale, null, null, true)), // true = force invalidate
+    reload: (_id, _endpoint, locale) =>
+      dispatch(fetchPaginated(_id, _endpoint)(locale, null, null, true)), // true = force invalidate
     setPage: (locale, offset, limit) =>
       dispatch(fetchPaginated(id, endpoint)(locale, offset, limit)).then(() =>
         // fetch the data first, then change the range properties (better visualization)

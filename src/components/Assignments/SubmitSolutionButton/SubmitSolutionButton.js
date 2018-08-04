@@ -13,7 +13,7 @@ const SubmitSolutionButton = ({ disabled = false, onClick }) =>
   >
     <Icon icon="bug" gapRight />
     <FormattedMessage
-      id="app.submissionsTable.submitNewSolution"
+      id="app.solutionsTable.submitNewSolution"
       defaultMessage="Submit New Solution"
     />
   </Button>;

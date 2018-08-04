@@ -4,6 +4,7 @@ import { Table } from 'react-bootstrap';
 import { injectIntl, FormattedMessage, intlShape } from 'react-intl';
 
 import PipelinesListItem from '../PipelinesListItem';
+import { identity } from '../../../helpers/common';
 
 const PipelinesList = ({
   pipelines = [],
@@ -18,13 +19,17 @@ const PipelinesList = ({
       </thead>}
 
     <tbody>
-      {pipelines.map((pipeline, idx) =>
-        <PipelinesListItem
-          {...pipeline}
-          createActions={createActions}
-          key={pipeline ? pipeline.id : idx}
-        />
-      )}
+      {pipelines
+        .filter(identity)
+        .map(
+          (pipeline, idx) =>
+            pipeline &&
+            <PipelinesListItem
+              {...pipeline}
+              createActions={createActions}
+              key={pipeline ? pipeline.id : idx}
+            />
+        )}
 
       {pipelines.length === 0 &&
         <tr>

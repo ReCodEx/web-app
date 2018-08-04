@@ -18,13 +18,13 @@ import {
   submitAssignmentSolution as submitSolution,
   presubmitAssignmentSolution as presubmitSolution
 } from '../../redux/modules/submission';
-import { fetchUsersSubmissions } from '../../redux/modules/submissions';
+import { fetchUsersSolutions } from '../../redux/modules/solutions';
 import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments';
 
 import {
   getAssignment,
   assignmentEnvironmentsSelector,
-  getUserSubmissions
+  getUserSolutions
 } from '../../redux/selectors/assignments';
 import { canSubmitSolution } from '../../redux/selectors/canSubmit';
 import { isSubmitting } from '../../redux/selectors/submission';
@@ -45,7 +45,7 @@ import { EditIcon, ResultsIcon } from '../../components/icons';
 import LocalizedTexts from '../../components/helpers/LocalizedTexts';
 import SubmitSolutionButton from '../../components/Assignments/SubmitSolutionButton';
 import SubmitSolutionContainer from '../../containers/SubmitSolutionContainer';
-import SubmissionsTable from '../../components/Assignments/SubmissionsTable';
+import SolutionsTable from '../../components/Assignments/SolutionsTable';
 import AssignmentSync from '../../components/Assignments/Assignment/AssignmentSync';
 
 import withLinks from '../../helpers/withLinks';
@@ -57,7 +57,7 @@ class Assignment extends Component {
       dispatch(fetchAssignmentIfNeeded(assignmentId)),
       dispatch(fetchRuntimeEnvironments()),
       dispatch(canSubmit(assignmentId)),
-      dispatch(fetchUsersSubmissions(userId, assignmentId))
+      dispatch(fetchUsersSolutions(userId, assignmentId))
     ]);
 
   componentWillMount() {
@@ -77,8 +77,8 @@ class Assignment extends Component {
     return unixTime * 1000 < Date.now();
   };
 
-  sortSubmissions(submissions) {
-    return submissions.sort((a, b) => {
+  sortSolutions(solutions) {
+    return solutions.sort((a, b) => {
       var aTimestamp = a.getIn(['data', 'solution', 'createdAt']);
       var bTimestamp = b.getIn(['data', 'solution', 'createdAt']);
       return bTimestamp - aTimestamp;
@@ -98,7 +98,7 @@ class Assignment extends Component {
       canSubmit,
       runtimeEnvironments,
       exerciseSync,
-      submissions,
+      solutions,
       links: { ASSIGNMENT_EDIT_URI_FACTORY, ASSIGNMENT_STATS_URI_FACTORY },
       intl: { locale }
     } = this.props;
@@ -110,7 +110,7 @@ class Assignment extends Component {
         description={
           <FormattedMessage
             id="app.assignment.title"
-            defaultMessage="Exercise assignment"
+            defaultMessage="Exercise Assignment"
           />
         }
         breadcrumbs={[
@@ -149,7 +149,7 @@ class Assignment extends Component {
             text: (
               <FormattedMessage
                 id="app.assignment.title"
-                defaultMessage="Exercise assignment"
+                defaultMessage="Exercise Assignment"
               />
             ),
             iconName: 'hourglass-start'
@@ -252,15 +252,15 @@ class Assignment extends Component {
                     {(isStudentOf(assignment.groupId) ||
                       isSupervisorOf(assignment.groupId) ||
                       isAdminOf(assignment.groupId)) && // includes superadmin
-                      <SubmissionsTable
+                      <SolutionsTable
                         title={
                           <FormattedMessage
-                            id="app.submissionsTable.title"
-                            defaultMessage="Submitted solutions"
+                            id="app.solutionsTable.title"
+                            defaultMessage="Submitted Solutions"
                           />
                         }
                         userId={userId}
-                        submissions={this.sortSubmissions(submissions)}
+                        solutions={this.sortSolutions(solutions)}
                         assignmentId={assignment.id}
                         runtimeEnvironments={runtimes}
                         noteMaxlen={32}
@@ -291,7 +291,7 @@ Assignment.propTypes = {
   links: PropTypes.object.isRequired,
   runtimeEnvironments: PropTypes.array,
   exerciseSync: PropTypes.func.isRequired,
-  submissions: ImmutablePropTypes.list.isRequired,
+  solutions: ImmutablePropTypes.list.isRequired,
   intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired
 };
 
@@ -313,7 +313,7 @@ export default withLinks(
           isSupervisorOf(loggedInUserId, groupId)(state),
         isAdminOf: groupId => isAdminOf(loggedInUserId, groupId)(state),
         canSubmit: canSubmitSolution(assignmentId)(state),
-        submissions: getUserSubmissions(userId, assignmentId)(state)
+        solutions: getUserSolutions(userId, assignmentId)(state)
       };
     },
     (dispatch, { params: { assignmentId, userId } }) => ({

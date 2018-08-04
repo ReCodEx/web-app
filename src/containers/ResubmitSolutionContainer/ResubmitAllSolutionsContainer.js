@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import { ResubmitAllSolutions } from '../../components/buttons/ResubmitSolution';
-import { resubmitAllSubmissions } from '../../redux/modules/submissions';
+import { resubmitAllSolutions } from '../../redux/modules/solutions';
 import { isResubmitAllPending } from '../../redux/selectors/assignments';
 
 const ResubmitAllSolutionsContainer = ({
@@ -31,7 +31,7 @@ const mapStateToProps = (state, { assignmentId }) => ({
 });
 
 const mapDispatchToProps = (dispatch, { assignmentId }) => ({
-  resubmit: () => dispatch(resubmitAllSubmissions(assignmentId))
+  resubmit: () => dispatch(resubmitAllSolutions(assignmentId))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(

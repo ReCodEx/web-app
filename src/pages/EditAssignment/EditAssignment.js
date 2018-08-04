@@ -202,7 +202,7 @@ class EditAssignment extends Component {
                         />
                       </Button>
                     </LinkContainer>
-                    {assignment.permissionHints.resubmitSubmissions &&
+                    {assignment.permissionHints.resubmitSolutions &&
                       <ResubmitAllSolutionsContainer
                         assignmentId={assignment.id}
                       />}

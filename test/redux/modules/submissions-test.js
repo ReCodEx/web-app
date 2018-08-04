@@ -3,15 +3,15 @@ import { fromJS } from 'immutable';
 
 import reducer, {
   additionalActionTypes,
-  acceptSubmission
-} from '../../../src/redux/modules/submissions';
+  acceptSolution
+} from '../../../src/redux/modules/solutions';
 
 describe('Submissions', () => {
   describe('Mark as accepted', () => {
     it('must create propper API action', () => {
       const id = 'abc';
 
-      const action = acceptSubmission(id);
+      const action = acceptSolution(id);
 
       expect(action.request).to.eql({
         type: additionalActionTypes.ACCEPT,

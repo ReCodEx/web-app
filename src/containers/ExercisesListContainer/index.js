@@ -1,1 +1,2 @@
-export default from './ExercisesListContainer';
+import ExercisesListContainer from './ExercisesListContainer';
+export default ExercisesListContainer;

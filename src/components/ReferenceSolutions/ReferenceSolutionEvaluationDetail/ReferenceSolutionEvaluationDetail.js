@@ -4,10 +4,10 @@ import { Row, Col } from 'react-bootstrap';
 
 import ReferenceSolutionDetail from '../ReferenceSolutionDetail';
 import SourceCodeInfoBox from '../../widgets/SourceCodeInfoBox';
-import TestResults from '../../Submissions/TestResults';
+import TestResults from '../../Solutions/TestResults';
 import SourceCodeViewerContainer from '../../../containers/SourceCodeViewerContainer';
-import ResultArchiveInfoBox from '../../../components/Submissions/ResultArchiveInfoBox';
-import CompilationLogs from '../../../components/Submissions/CompilationLogs';
+import ResultArchiveInfoBox from '../../../components/Solutions/ResultArchiveInfoBox';
+import CompilationLogs from '../../../components/Solutions/CompilationLogs';
 import EvaluationDetail from '../EvaluationDetail';
 
 class ReferenceSolutionEvaluationDetail extends Component {

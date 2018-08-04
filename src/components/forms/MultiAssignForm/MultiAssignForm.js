@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { reduxForm, Field } from 'redux-form';
-import { FormattedMessage } from 'react-intl';
+import { injectIntl, intlShape, FormattedMessage } from 'react-intl';
 import {
   Alert,
   HelpBlock,
@@ -20,6 +20,7 @@ import Icon, { GroupIcon } from '../../icons';
 import { getGroupCanonicalLocalizedName } from '../../../helpers/getLocalizedData';
 import { identity } from '../../../helpers/common';
 import withLinks from '../../../helpers/withLinks';
+import { validateTwoDeadlines } from '../../helpers/deadlineValidation';
 
 class MultiAssignForm extends Component {
   state = {
@@ -43,9 +44,9 @@ class MultiAssignForm extends Component {
       this.props.groups !== newProps.groups ||
       this.props.userId !== newProps.userId ||
       this.props.groupsAccessor !== newProps.groupsAccessor ||
-      this.props.locale !== newProps.locale
+      this.props.intl.locale !== newProps.intl.locale
     ) {
-      const { groupsAccessor, locale } = newProps;
+      const { groupsAccessor, intl: { locale } } = newProps;
       this.allGroups = newProps.groups
         .filter(g => !g.organizational)
         .sort((a, b) =>
@@ -99,8 +100,8 @@ class MultiAssignForm extends Component {
       groups,
       groupsAccessor,
       runtimeEnvironments,
-      locale,
-      links: { GROUP_DETAIL_URI_FACTORY }
+      links: { GROUP_DETAIL_URI_FACTORY },
+      intl: { locale }
     } = this.props;
 
     return this.state.assignedToGroups === null
@@ -438,8 +439,8 @@ MultiAssignForm.propTypes = {
   groups: PropTypes.array.isRequired,
   groupsAccessor: PropTypes.func.isRequired,
   runtimeEnvironments: PropTypes.array.isRequired,
-  locale: PropTypes.string.isRequired,
-  links: PropTypes.object
+  links: PropTypes.object,
+  intl: intlShape.isRequired
 };
 
 const isNonNegativeInteger = n =>
@@ -452,18 +453,21 @@ const isPositiveInteger = n =>
   (typeof n === 'number' || isNumeric(n)) &&
   parseInt(n) > 0;
 
-const validate = ({
-  submissionsCountLimit,
-  firstDeadline,
-  secondDeadline,
-  allowSecondDeadline,
-  maxPointsBeforeFirstDeadline,
-  maxPointsBeforeSecondDeadline,
-  pointsPercentualThreshold,
-  groups,
-  runtimeEnvironments,
-  enabledRuntime
-}) => {
+const validate = (
+  {
+    submissionsCountLimit,
+    firstDeadline,
+    secondDeadline,
+    allowSecondDeadline,
+    maxPointsBeforeFirstDeadline,
+    maxPointsBeforeSecondDeadline,
+    pointsPercentualThreshold,
+    groups,
+    runtimeEnvironments,
+    enabledRuntime
+  },
+  { intl: { formatMessage } }
+) => {
   const errors = {};
   if (
     !groups ||
@@ -478,14 +482,13 @@ const validate = ({
     );
   }
 
-  if (!firstDeadline) {
-    errors['firstDeadline'] = (
-      <FormattedMessage
-        id="app.multiAssignForm.validation.emptyDeadline"
-        defaultMessage="Please fill the date and time of the deadline."
-      />
-    );
-  }
+  validateTwoDeadlines(
+    errors,
+    formatMessage,
+    firstDeadline,
+    secondDeadline,
+    allowSecondDeadline
+  );
 
   if (!isPositiveInteger(submissionsCountLimit)) {
     errors['submissionsCountLimit'] = (
@@ -501,31 +504,6 @@ const validate = ({
       <FormattedMessage
         id="app.multiAssignForm.validation.maxPointsBeforeFirstDeadline"
         defaultMessage="Please fill the maximum number of points received when submitted before the deadline with a nonnegative integer."
-      />
-    );
-  }
-
-  if (allowSecondDeadline && !secondDeadline) {
-    errors['secondDeadline'] = (
-      <FormattedMessage
-        id="app.multiAssignForm.validation.secondDeadline"
-        defaultMessage="Please fill the date and time of the second deadline."
-      />
-    );
-  }
-
-  if (
-    allowSecondDeadline &&
-    firstDeadline &&
-    secondDeadline &&
-    !firstDeadline.isSameOrBefore(secondDeadline) &&
-    !firstDeadline.isSameOrBefore(secondDeadline, 'hour')
-  ) {
-    errors['secondDeadline'] = (
-      <FormattedMessage
-        id="app.multiAssignForm.validation.secondDeadlineBeforeFirstDeadline"
-        defaultMessage="Please fill the date and time of the second deadline with a value which is after {firstDeadline, date} {firstDeadline, time, short}."
-        values={{ firstDeadline }}
       />
     );
   }
@@ -579,11 +557,13 @@ const validate = ({
   return errors;
 };
 
-export default withLinks(
-  reduxForm({
-    form: 'multiAssign',
-    enableReinitialize: true,
-    keepDirtyOnReinitialize: false,
-    validate
-  })(MultiAssignForm)
+export default injectIntl(
+  withLinks(
+    reduxForm({
+      form: 'multiAssign',
+      enableReinitialize: true,
+      keepDirtyOnReinitialize: false,
+      validate
+    })(MultiAssignForm)
+  )
 );

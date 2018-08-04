@@ -4,7 +4,7 @@ import factory, { initialState } from '../helpers/resourceManager';
 import { downloadHelper } from '../helpers/api/download';
 
 const resourceName = 'referenceSolutionEvaluations';
-const { actions, reduceActions } = factory({
+const { actionTypes, actions, reduceActions } = factory({
   resourceName,
   apiEndpointFactory: evaluationId =>
     `/reference-solutions/evaluation/${evaluationId}`
@@ -14,6 +14,7 @@ const { actions, reduceActions } = factory({
  * Actions
  */
 
+export { actionTypes };
 export const additionalActionTypes = {
   DOWNLOAD_EVALUATION_ARCHIVE: 'recodex/files/DOWNLOAD_EVALUATION_ARCHIVE',
   DOWNLOAD_SOLUTION_ARCHIVE: 'recodex/files/DOWNLOAD_SOLUTION_ARCHIVE'
@@ -22,6 +23,11 @@ export const additionalActionTypes = {
 export const fetchReferenceSolutionEvaluation = actions.fetchResource;
 export const fetchReferenceSolutionEvaluationIfNeeded =
   actions.fetchOneIfNeeded;
+export const deleteReferenceSolutionEvaluation = (solutionId, evaluationId) => {
+  const action = actions.removeResource(evaluationId);
+  action.request.meta.solutionId = solutionId;
+  return action;
+};
 
 export const fetchManyEndpoint = id => `/reference-solutions/${id}/evaluations`;
 
