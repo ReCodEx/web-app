@@ -1036,7 +1036,7 @@
   "app.submissionEvaluation.select": "Select",
   "app.submissionEvaluation.selected": "Selected",
   "app.submissionEvaluation.tableInfo": "This table shows the history of evaluations. You may select which evaluation you would like to display, but only the most recent evaluation is considered the valid one (and it is also the only one visible to the student).",
-  "app.submissionEvaluation.title": "All Submissions (Evaluations) of The Solution",
+  "app.submissionEvaluation.title": "All Submission Evaluations of The Solution",
   "app.submissionFailures.description": "Browse all submission failures",
   "app.submissionFailures.failed": "Cannot load the list of failures",
   "app.submissionFailures.failedDescription": "We are sorry for the inconvenience, please try again later.",

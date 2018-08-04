@@ -18,7 +18,7 @@ const SubmissionEvaluations = ({
     title={
       <FormattedMessage
         id="app.submissionEvaluation.title"
-        defaultMessage="All Submissions (Evaluations) of The Solution"
+        defaultMessage="All Submission Evaluations of The Solution"
       />
     }
     noPadding={true}

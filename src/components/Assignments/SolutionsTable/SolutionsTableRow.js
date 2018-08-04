@@ -103,8 +103,6 @@ const SolutionsTableRow = ({
       {permissionHints &&
         permissionHints.delete &&
         <DeleteSolutionButtonContainer id={id} bsSize="xs" />}
-
-      {false && renderButtons && renderButtons(id)}
     </td>
   </tr>;
 

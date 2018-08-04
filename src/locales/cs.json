@@ -1036,7 +1036,7 @@
   "app.submissionEvaluation.select": "Vybrat",
   "app.submissionEvaluation.selected": "Vybráno",
   "app.submissionEvaluation.tableInfo": "Tato tabulka zobrazuje historii vyhodnocení. Libovolné vyhodnocení můžete nechat zobrazit, avšak pouze poslední je považováno za platné (a poslední je také jediné, které student vidí).",
-  "app.submissionEvaluation.title": "Všechna odevzdání (vyhodnocení) tohoto řešení",
+  "app.submissionEvaluation.title": "Všechna vyhodnocení odevzdání tohoto řešení",
   "app.submissionFailures.description": "Procházet všechna neúspěšná odevzdání",
   "app.submissionFailures.failed": "Nepodařilo se načíst seznam neúspěšných odevzdání",
   "app.submissionFailures.failedDescription": "Omlouváme se za nepříjemnosti, zkuste to prosím později.",
