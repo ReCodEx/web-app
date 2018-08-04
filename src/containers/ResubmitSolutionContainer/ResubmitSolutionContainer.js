@@ -11,7 +11,7 @@ import {
 import {
   isProcessing,
   getMonitorParams,
-  getSubmissionId
+  getSubmittedSolutionId
 } from '../../redux/selectors/submission';
 import EvaluationProgressContainer from '../EvaluationProgressContainer';
 import withLinks from '../../helpers/withLinks';
@@ -79,7 +79,7 @@ ResubmitSolutionContainer.propTypes = {
 const mapStateToProps = state => ({
   isProcessing: isProcessing(state),
   monitor: getMonitorParams(state),
-  newSubmissionId: getSubmissionId(state),
+  newSubmissionId: getSubmittedSolutionId(state),
   progressObserverId: getProgressObserverId(state)
 });
 

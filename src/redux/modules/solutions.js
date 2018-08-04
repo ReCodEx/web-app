@@ -3,7 +3,9 @@ import { handleActions } from 'redux-actions';
 import { createApiAction } from '../middleware/apiMiddleware';
 import factory, {
   initialState,
-  defaultNeedsRefetching
+  defaultNeedsRefetching,
+  createRecord,
+  resourceStatus
 } from '../helpers/resourceManager';
 import { actionTypes as submissionActionTypes } from './submission';
 import { actionTypes as submissionEvaluationActionTypes } from './submissionEvaluations';
@@ -117,6 +119,20 @@ export const fetchUsersSolutions = (userId, assignmentId) =>
 
 const reducer = handleActions(
   Object.assign({}, reduceActions, {
+    [submissionActionTypes.SUBMIT_FULFILLED]: (
+      state,
+      { payload: { solution }, meta: { submissionType } }
+    ) =>
+      submissionType !== 'referenceSolution' && solution && solution.id
+        ? state.setIn(
+            ['resources', solution.id],
+            createRecord({
+              state: resourceStatus.FULFILLED,
+              data: solution
+            })
+          )
+        : state,
+
     [additionalActionTypes.LOAD_USERS_SOLUTIONS_FULFILLED]:
       reduceActions[actionTypes.FETCH_MANY_FULFILLED],
 

@@ -2,9 +2,11 @@ import { handleActions } from 'redux-actions';
 
 import factory, {
   initialState,
-  resourceStatus
+  resourceStatus,
+  createRecord
 } from '../helpers/resourceManager';
 import { downloadHelper } from '../helpers/api/download';
+import { actionTypes as additionalSubmissionActionTypes } from './submission';
 
 const resourceName = 'submissionEvaluations';
 const { actionTypes, actions, reduceActions } = factory({
@@ -61,6 +63,20 @@ export const downloadSolutionArchive = downloadHelper({
 
 const reducer = handleActions(
   Object.assign({}, reduceActions, {
+    [additionalSubmissionActionTypes.SUBMIT_FULFILLED]: (
+      state,
+      { payload: { submission }, meta: { submissionType } }
+    ) =>
+      submissionType !== 'referenceSolution' && submission && submission.id
+        ? state.setIn(
+            ['resources', submission.id],
+            createRecord({
+              state: resourceStatus.FULFILLED,
+              data: submission
+            })
+          )
+        : state,
+
     [additionalActionTypes.DELETE_EVALUATION_PENDING]: (
       state,
       { meta: { id } }

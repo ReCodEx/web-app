@@ -1,5 +1,4 @@
 import { handleActions } from 'redux-actions';
-import { List, fromJS } from 'immutable';
 
 import factory, {
   initialState,
@@ -64,26 +63,27 @@ const reducer = handleActions(
   Object.assign({}, reduceActions, {
     [additionalSubmissionActionTypes.SUBMIT_FULFILLED]: (
       state,
-      { payload: { referenceSolution }, meta: { urlId, submissionType } }
+      { payload: { referenceSolution }, meta: { submissionType } }
     ) =>
-      submissionType === 'referenceSolution'
-        ? state.updateIn(['resources', urlId, 'data'], data => {
-            if (!data) {
-              data = List();
-            }
-            return data.push(fromJS(referenceSolution));
-          })
+      submissionType === 'referenceSolution' &&
+      referenceSolution &&
+      referenceSolution.id
+        ? state.setIn(
+            ['resources', referenceSolution.id],
+            createRecord({
+              state: resourceStatus.FULFILLED,
+              data: referenceSolution
+            })
+          )
         : state,
-    [additionalActionTypes.FETCHALL_FULFILLED]: (
-      state,
-      { payload, meta: { exerciseId } }
-    ) =>
+
+    [additionalActionTypes.FETCHALL_FULFILLED]: (state, { payload }) =>
       payload.reduce(
         (state, data) =>
           state.setIn(
             ['resources', data.id],
             createRecord({
-              data: { ...data, exerciseId },
+              data,
               state: resourceStatus.FULFILLED
             })
           ),
