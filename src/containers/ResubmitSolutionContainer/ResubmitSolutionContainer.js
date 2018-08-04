@@ -55,7 +55,6 @@ class ResubmitSolutionContainer extends Component {
           monitor={this.isMeTheObserver() ? monitor : null}
           link={SOLUTION_DETAIL_URI_FACTORY(assignmentId, newSubmissionId)}
           onFinish={() => fetchSubmissions(userId)}
-          onUserClose={() => fetchSubmissions(userId)}
         />
       </span>
     );

@@ -56,7 +56,6 @@ class ResubmitReferenceSolutionContainer extends Component {
             newSolutionId
           )}
           onFinish={refreshSolutionEvaluations}
-          onUserClose={refreshSolutionEvaluations}
         />
       </span>
     );

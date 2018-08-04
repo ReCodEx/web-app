@@ -187,7 +187,6 @@ class SubmitSolutionContainer extends Component {
                 ? EXERCISE_REFERENCE_SOLUTION_URI_FACTORY(id, submissionId)
                 : SOLUTION_DETAIL_URI_FACTORY(id, submissionId)
             }
-            onUserClose={!isReferenceSolution ? onEndFetch : null}
             onFinish={!isReferenceSolution ? onEndFetch : null}
           />}
       </div>
