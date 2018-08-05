@@ -134,6 +134,7 @@ export const extraMessages = defineMessages({
   },
   error: {
     id: 'app.randomMessages.error',
-    defaultMessage: 'Nastala chyba při komunikaci se serverem a bohužel Vám nemůžeme ukázat, jaký ja aktuální průběh, ale nic hrozného se neděje. Výsledky budou dostupné tak jako tak již brzy po skončení vyhodnocení.'
+    defaultMessage:
+      'Nastala chyba při komunikaci se serverem a bohužel Vám nemůžeme ukázat, jaký ja aktuální průběh, ale nic hrozného se neděje. Výsledky budou dostupné tak jako tak již brzy po skončení vyhodnocení.'
   }
 });

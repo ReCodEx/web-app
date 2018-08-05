@@ -2,9 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { resendVerificationEmail } from '../../redux/modules/emailVerification';
-import {
-  resendingStatusSelector
-} from '../../redux/selectors/emailVerification';
+import { resendingStatusSelector } from '../../redux/selectors/emailVerification';
 import ResendEmail, {
   EmailResent,
   ResendingFailed,

@@ -10,8 +10,8 @@ const EditEnvironmentConfigTabs = ({ environmentValues, ...props }) =>
     environmentValues={environmentValues}
     getTitle={i =>
       environmentValues &&
-        environmentValues[i] &&
-        environmentValues[i].runtimeEnvironmentId
+      environmentValues[i] &&
+      environmentValues[i].runtimeEnvironmentId
         ? environmentValues[i].runtimeEnvironmentId
         : <FormattedMessage
             id="app.editEnvironmentConfigTabs.newConfig"
