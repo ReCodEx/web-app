@@ -49,7 +49,6 @@ export const resubmitReferenceSolution = (
     method: 'POST',
     body: { debug: isDebug },
     meta: {
-      solutionId,
       submissionType: 'referenceSolution',
       progressObserverId
     }

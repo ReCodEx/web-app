@@ -92,7 +92,7 @@ export const resubmitSolution = (
     method: 'POST',
     endpoint: `/assignment-solutions/${id}/resubmit`,
     body: { private: isPrivate, debug: isDebug },
-    meta: { id, progressObserverId }
+    meta: { submissionType: 'assignmentSolution', progressObserverId }
   });
 
 export const resubmitAllSolutions = assignmentId =>
@@ -123,7 +123,7 @@ const reducer = handleActions(
       state,
       { payload: { solution }, meta: { submissionType } }
     ) =>
-      submissionType !== 'referenceSolution' && solution && solution.id
+      submissionType === 'assignmentSolution' && solution && solution.id
         ? state.setIn(
             ['resources', solution.id],
             createRecord({

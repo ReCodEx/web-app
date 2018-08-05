@@ -67,7 +67,7 @@ const reducer = handleActions(
       state,
       { payload: { submission }, meta: { submissionType } }
     ) =>
-      submissionType !== 'referenceSolution' && submission && submission.id
+      submissionType === 'assignmentSolution' && submission && submission.id
         ? state.setIn(
             ['resources', submission.id],
             createRecord({

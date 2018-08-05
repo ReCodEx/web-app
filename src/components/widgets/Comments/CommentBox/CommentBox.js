@@ -33,7 +33,7 @@ class CommentBox extends Component {
         title={
           <FormattedMessage
             id="app.comments.title"
-            defaultMessage="Comments and notes"
+            defaultMessage="Comments and Notes"
           />
         }
         noPadding={false}

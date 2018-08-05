@@ -1,5 +1,5 @@
 import { handleActions } from 'redux-actions';
-import { fromJS } from 'immutable';
+import { fromJS, List } from 'immutable';
 
 import { createApiAction } from '../middleware/apiMiddleware';
 import { downloadHelper } from '../helpers/api/download';
@@ -75,18 +75,38 @@ const reducer = handleActions(
   Object.assign({}, reduceActions, {
     [submissionActionTypes.SUBMIT_FULFILLED]: (
       state,
-      { payload: { solution }, meta: { submissionType, urlId } }
-    ) =>
-      submissionType !== 'referenceSolution' && solution && solution.id
-        ? state.updateIn(
-            [
-              'solutions',
-              solution.exerciseAssignmentId,
-              solution.solution.userId
-            ],
-            solutions => solutions.push(solution.id)
-          )
-        : state,
+      { payload: { solution }, meta: { submissionType } }
+    ) => {
+      if (
+        submissionType !== 'assignmentSolution' ||
+        !solution ||
+        !solution.id
+      ) {
+        return state;
+      }
+
+      if (
+        !state.hasIn([
+          'solutions',
+          solution.exerciseAssignmentId,
+          solution.solution.userId
+        ])
+      ) {
+        state = state.setIn(
+          [
+            'solutions',
+            solution.exerciseAssignmentId,
+            solution.solution.userId
+          ],
+          List()
+        );
+      }
+
+      return state.updateIn(
+        ['solutions', solution.exerciseAssignmentId, solution.solution.userId],
+        solutions => solutions.push(solution.id)
+      );
+    },
 
     [solutionsActionTypes.LOAD_USERS_SOLUTIONS_FULFILLED]: (
       state,

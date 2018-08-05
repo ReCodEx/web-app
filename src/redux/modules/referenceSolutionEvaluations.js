@@ -73,7 +73,7 @@ const reducer = handleActions(
             ['resources'],
             arrayToObject(
               submissions,
-              s => s.id,
+              ({ submission }) => submission.id,
               ({ submission }) =>
                 createRecord({
                   state: resourceStatus.FULFILLED,

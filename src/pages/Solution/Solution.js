@@ -16,7 +16,10 @@ import FetchManyResourceRenderer from '../../components/helpers/FetchManyResourc
 import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments';
 import { fetchGroupsStats } from '../../redux/modules/stats';
 import { fetchAssignmentIfNeeded } from '../../redux/modules/assignments';
-import { fetchSolutionIfNeeded } from '../../redux/modules/solutions';
+import {
+  fetchSolution,
+  fetchSolutionIfNeeded
+} from '../../redux/modules/solutions';
 import {
   fetchSubmissionEvaluationsForSolution,
   deleteSubmissionEvaluation
@@ -63,6 +66,7 @@ class Solution extends Component {
       runtimeEnvironments,
       fetchStatus,
       deleteEvaluation,
+      refreshSolutionEvaluations,
       intl: { locale }
     } = this.props;
 
@@ -173,6 +177,7 @@ class Solution extends Component {
                         evaluations={evaluations}
                         runtimeEnvironments={runtimes}
                         deleteEvaluation={deleteEvaluation}
+                        refreshSolutionEvaluations={refreshSolutionEvaluations}
                       />}
                   </FetchManyResourceRenderer>}
               </ResourceRenderer>
@@ -196,6 +201,7 @@ Solution.propTypes = {
   runtimeEnvironments: PropTypes.array,
   fetchStatus: PropTypes.string,
   deleteEvaluation: PropTypes.func,
+  refreshSolutionEvaluations: PropTypes.func,
   intl: intlShape
 };
 
@@ -209,6 +215,11 @@ export default connect(
   }),
   (dispatch, { params }) => ({
     loadAsync: () => Solution.loadAsync(params, dispatch),
+    refreshSolutionEvaluations: () =>
+      Promise.all([
+        dispatch(fetchSolution(params.solutionId)),
+        dispatch(fetchSubmissionEvaluationsForSolution(params.solutionId))
+      ]),
     deleteEvaluation: evaluationId =>
       dispatch(
         deleteSubmissionEvaluation(params.solutionId, evaluationId)

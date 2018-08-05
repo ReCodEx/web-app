@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Row, Col } from 'react-bootstrap';
+import { FormattedMessage } from 'react-intl';
 
 import SourceCodeInfoBox from '../../widgets/SourceCodeInfoBox';
 import TestResults from '../../Solutions/TestResults';
@@ -10,6 +11,8 @@ import CommentThreadContainer from '../../../containers/CommentThreadContainer';
 import SourceCodeViewerContainer from '../../../containers/SourceCodeViewerContainer';
 import SubmissionEvaluations from '../../Solutions/SubmissionEvaluations';
 import ResourceRenderer from '../../helpers/ResourceRenderer';
+import Button from '../../widgets/FlatButton';
+import { RefreshIcon } from '../../icons';
 
 import CompilationLogs from '../../Solutions/CompilationLogs';
 import ReferenceSolutionStatus from '../ReferenceSolutionStatus/ReferenceSolutionStatus';
@@ -38,7 +41,8 @@ class ReferenceSolutionDetail extends Component {
       },
       exercise,
       evaluations,
-      deleteEvaluation = null
+      deleteEvaluation = null,
+      refreshSolutionEvaluations = null
     } = this.props;
     const { openFileId } = this.state;
     const evaluationsJS = evaluations && evaluations.toJS();
@@ -99,6 +103,34 @@ class ReferenceSolutionDetail extends Component {
 
           {evaluations &&
             <Col md={6} sm={12}>
+              {!evaluation &&
+                refreshSolutionEvaluations &&
+                <div className="callout callout-warning">
+                  <table>
+                    <tbody>
+                      <tr>
+                        <td width="100%" className="em-padding-right">
+                          <FormattedMessage
+                            id="app.submissionEvaluation.noEvaluationYet"
+                            defaultMessage="The evaluation is not available yet. Click the refresh button for an update."
+                          />
+                        </td>
+                        <td>
+                          <Button
+                            onClick={refreshSolutionEvaluations}
+                            bsStyle="primary"
+                          >
+                            <RefreshIcon gapRight />
+                            <FormattedMessage
+                              id="generic.refresh"
+                              defaultMessage="Refresh"
+                            />
+                          </Button>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>}
               {evaluation &&
                 <TestResults
                   evaluation={evaluation}
@@ -167,7 +199,8 @@ ReferenceSolutionDetail.propTypes = {
   }).isRequired,
   exercise: PropTypes.object.isRequired,
   evaluations: PropTypes.object.isRequired,
-  deleteEvaluation: PropTypes.func
+  deleteEvaluation: PropTypes.func,
+  refreshSolutionEvaluations: PropTypes.func
 };
 
 export default ReferenceSolutionDetail;

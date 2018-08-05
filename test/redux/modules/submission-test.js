@@ -1,8 +1,5 @@
 import chai from 'chai';
 import chaiImmutable from 'chai-immutable';
-chai.use(chaiImmutable);
-
-const expect = chai.expect;
 
 import reducer, {
   submissionStatus,
@@ -14,6 +11,9 @@ import reducer, {
 } from '../../../src/redux/modules/submission';
 
 import { Map } from 'immutable';
+
+chai.use(chaiImmutable);
+const expect = chai.expect;
 
 describe("Submission of user's solution", () => {
   describe('(Action creators)', () => {
@@ -43,7 +43,7 @@ describe("Submission of user's solution", () => {
       expect(state).to.be.an.instanceof(Map);
       expect(state).to.equal(
         Map({
-          submissionId: null,
+          solutionId: null,
           userId: null,
           id: null,
           submittedOn: null,
@@ -62,7 +62,7 @@ describe("Submission of user's solution", () => {
       const state = reducer(initialState, init(userId, id));
       expect(state).to.equal(
         Map({
-          submissionId: null,
+          solutionId: null,
           userId,
           id,
           submittedOn: null,
@@ -79,7 +79,7 @@ describe("Submission of user's solution", () => {
       const userId = 'asdad123';
       const id = 'asdajhaskjh45655';
       const oldState = Map({
-        submissionId: null,
+        solutionId: null,
         userId,
         id,
         submittedOn: null,
@@ -93,7 +93,7 @@ describe("Submission of user's solution", () => {
       const state = reducer(oldState, init(userId, id));
       expect(state).to.equal(
         Map({
-          submissionId: null,
+          solutionId: null,
           userId,
           id,
           submittedOn: null,
@@ -134,13 +134,13 @@ describe("Submission of user's solution", () => {
         state = reducer(state, {
           type: actionTypes.SUBMIT_FULFILLED,
           payload: {
-            submission: { id: '123' },
+            solution: { id: '123' },
             webSocketChannel: { monitorUrl: 'ws://xyz.cz' }
           },
           meta: { submissionType: 'assignmentSolution' }
         });
         expect(state.get('status')).to.equal(submissionStatus.PROCESSING);
-        expect(state.get('submissionId')).to.equal('123');
+        expect(state.get('solutionId')).to.equal('123');
 
         state = reducer(state, finishProcessing());
         expect(state.get('status')).to.equal(submissionStatus.FINISHED);

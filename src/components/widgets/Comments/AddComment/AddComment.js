@@ -70,7 +70,7 @@ class AddComment extends Component {
               </Button>
               <Button bsStyle="default" onClick={refresh}>
                 <FormattedMessage
-                  id="app.comments.refresh"
+                  id="generic.refresh"
                   defaultMessage="Refresh"
                 />
               </Button>
