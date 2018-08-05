@@ -10,7 +10,11 @@ class ClientOnly extends Component {
 
   render() {
     if (this.state.isBrowser) {
-      return <span>{this.props.children}</span>;
+      return (
+        <span>
+          {this.props.children}
+        </span>
+      );
     } else {
       return <span />;
     }

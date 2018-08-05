@@ -19,7 +19,7 @@ const ExternalRegistrationForm = ({
   anyTouched,
   instances = Map(),
   invalid
-}) => (
+}) =>
   <FormBox
     title={
       <FormattedMessage
@@ -94,7 +94,7 @@ const ExternalRegistrationForm = ({
     />
 
     <ResourceRenderer resource={instances.toArray()}>
-      {(...instances) => (
+      {(...instances) =>
         <Field
           name="instanceId"
           required
@@ -109,11 +109,9 @@ const ExternalRegistrationForm = ({
             { key: '', name: '...' },
             ...instances.map(({ id: key, name }) => ({ key, name }))
           ]}
-        />
-      )}
+        />}
     </ResourceRenderer>
-  </FormBox>
-);
+  </FormBox>;
 
 ExternalRegistrationForm.propTypes = {
   instances: ImmutablePropTypes.map.isRequired,
