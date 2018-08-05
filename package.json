@@ -24,7 +24,7 @@
     "start": "node bin/server.js",
     "deploy": "mkdir -p ./prod && cp -rf ./views ./prod && cp -rf ./bin ./prod && rm -f ./prod/public/bundle* && rm -f ./prod/public/style* && cp -rf ./public ./prod",
     "exportStrings": "babel-node bin/manageTranslations.js",
-    "format": "./node_modules/prettier/bin/prettier.js --single-quote --write 'src/**/*.js'"
+    "format": "prettier --single-quote --write \"src/**/*.js\""
   },
   "dependencies": {
     "@fortawesome/fontawesome": "^1.1.8",
