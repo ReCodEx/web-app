@@ -17,33 +17,33 @@
  */
 
 .em-margin {
-  margin: 1em;
+  margin: 1em !important;
 }
 
 .em-margin-horizontal {
-  margin-left: 1em;
-  margin-right: 1em;
+  margin-left: 1em !important;
+  margin-right: 1em !important;
 }
 
 .em-margin-vertical {
-  margin-top: 1em;
-  margin-bottom: 1em;
+  margin-top: 1em !important;
+  margin-bottom: 1em !important;
 }
 
 .em-margin-left {
-  margin-left: 1em;
+  margin-left: 1em !important;
 }
 
 .em-margin-right {
-  margin-right: 1em;
+  margin-right: 1em !important;
 }
 
 .em-margin-top {
-  margin-top: 1em;
+  margin-top: 1em !important;
 }
 
 .em-margin-bottom {
-  margin-bottom: 1em;
+  margin-bottom: 1em !important;
 }
 
 /*
@@ -51,39 +51,39 @@
  */
 
 .em-padding {
-  padding: 1em;
+  padding: 1em !important;
 }
 
 .em-padding-horizontal {
-  padding-left: 1em;
-  padding-right: 1em;
+  padding-left: 1em !important;
+  padding-right: 1em !important;
 }
 
 .em-padding-vertical {
-  padding-top: 1em;
-  padding-bottom: 1em;
+  padding-top: 1em !important;
+  padding-bottom: 1em !important;
 }
 
 .em-padding-left {
-  padding-left: 1em;
+  padding-left: 1em !important;
 }
 
 .em-padding-right {
-  padding-right: 1em;
+  padding-right: 1em !important;
 }
 
 .em-padding-top {
-  padding-top: 1em;
+  padding-top: 1em !important;
 }
 
 .em-padding-bottom {
-  padding-bottom: 1em;
+  padding-bottom: 1em !important;
 }
 
 td.shrink-col,
 th.shrink-col {
-  width: 0;
-  white-space: nowrap;
+  width: 0 !important;
+  white-space: nowrap !important;
 }
 
 /*
@@ -91,13 +91,13 @@ th.shrink-col {
  */
 
 .valign-top {
-  vertical-align: top;
+  vertical-align: top !important;
 }
 
 .valign-middle {
-  vertical-align: middle;
+  vertical-align: middle !important;
 }
 
 .valign-bottom {
-  vertical-align: bottom;
+  vertical-align: bottom !important;
 }

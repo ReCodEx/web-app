@@ -4,17 +4,17 @@ import { FormattedMessage } from 'react-intl';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import Icon from '../../icons';
 
-const createIcon = commentsStats => {
+const createIcon = (commentsStats, props) => {
   if (commentsStats.authoredCount === 0) {
-    return <Icon icon={['far', 'comment']} />;
+    return <Icon icon={['far', 'comment']} {...props} />;
   }
   if (commentsStats.authoredCount === commentsStats.count) {
-    return <Icon icon={['far', 'comment']} flip="horizontal" />;
+    return <Icon icon={['far', 'comment']} flip="horizontal" {...props} />;
   }
-  return <Icon icon={['far', 'comments']} />;
+  return <Icon icon={['far', 'comments']} {...props} />;
 };
 
-const CommentsIcon = ({ id, commentsStats = null }) =>
+const CommentsIcon = ({ id, commentsStats = null, ...props }) =>
   <span>
     {Boolean(commentsStats) &&
       commentsStats.count > 0 &&
@@ -41,7 +41,7 @@ const CommentsIcon = ({ id, commentsStats = null }) =>
           </Tooltip>
         }
       >
-        {createIcon(commentsStats)}
+        {createIcon(commentsStats, props)}
       </OverlayTrigger>}
   </span>;
 
