@@ -333,6 +333,100 @@ const pascalCodes = {
   )
 };
 
+const python3Codes = {
+  0: <FormattedMessage id="app.exitCodes.python3.0" defaultMessage="OK" />,
+  1: (
+    <FormattedMessage
+      id="app.exitCodes.python3.1"
+      defaultMessage="Base exception"
+    />
+  ),
+  101: (
+    <FormattedMessage
+      id="app.exitCodes.python3.101"
+      defaultMessage="Assertion error"
+    />
+  ),
+  102: (
+    <FormattedMessage
+      id="app.exitCodes.python3.102"
+      defaultMessage="Type error"
+    />
+  ),
+  103: (
+    <FormattedMessage
+      id="app.exitCodes.python3.103"
+      defaultMessage="Name error"
+    />
+  ),
+  104: (
+    <FormattedMessage
+      id="app.exitCodes.python3.104"
+      defaultMessage="End of file error"
+    />
+  ),
+  105: (
+    <FormattedMessage
+      id="app.exitCodes.python3.105"
+      defaultMessage="Attribute error"
+    />
+  ),
+  106: (
+    <FormattedMessage
+      id="app.exitCodes.python3.106"
+      defaultMessage="IO error"
+    />
+  ),
+  107: (
+    <FormattedMessage
+      id="app.exitCodes.python3.107"
+      defaultMessage="OS error"
+    />
+  ),
+  108: (
+    <FormattedMessage
+      id="app.exitCodes.python3.108"
+      defaultMessage="Lookup error"
+    />
+  ),
+  109: (
+    <FormattedMessage
+      id="app.exitCodes.python3.109"
+      defaultMessage="Value error"
+    />
+  ),
+  110: (
+    <FormattedMessage
+      id="app.exitCodes.python3.110"
+      defaultMessage="Zero division error"
+    />
+  ),
+  111: (
+    <FormattedMessage
+      id="app.exitCodes.python3.111"
+      defaultMessage="Arithmetic error"
+    />
+  ),
+  112: (
+    <FormattedMessage
+      id="app.exitCodes.python3.112"
+      defaultMessage="Import error"
+    />
+  ),
+  113: (
+    <FormattedMessage
+      id="app.exitCodes.python3.113"
+      defaultMessage="Memory error"
+    />
+  ),
+  114: (
+    <FormattedMessage
+      id="app.exitCodes.python3.114"
+      defaultMessage="Syntax error"
+    />
+  )
+};
+
 const exitCodeMapping = (runtimeEnvironmentId, exitCode) => {
   if (exitCode === -1) {
     return (
@@ -348,6 +442,12 @@ const exitCodeMapping = (runtimeEnvironmentId, exitCode) => {
     case 'freepascal-linux':
       if (pascalCodes[exitCode]) {
         return pascalCodes[exitCode];
+      } else {
+        return exitCode;
+      }
+    case 'python3':
+      if (python3Codes[exitCode]) {
+        return python3Codes[exitCode];
       } else {
         return exitCode;
       }
