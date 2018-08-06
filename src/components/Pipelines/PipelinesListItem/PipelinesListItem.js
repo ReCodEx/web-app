@@ -2,10 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import UsersNameContainer from '../../../containers/UsersNameContainer';
 import { Link } from 'react-router';
-import { FormattedDate, FormattedTime, FormattedMessage } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 
 import Icon from '../../icons';
+import DateTime from '../../widgets/DateTime';
 import withLinks from '../../../helpers/withLinks';
 
 const PipelinesListItem = ({
@@ -134,8 +135,7 @@ const PipelinesListItem = ({
           </i>}
     </td>
     <td>
-      <FormattedDate value={createdAt * 1000} />&nbsp;&nbsp;
-      <FormattedTime value={createdAt * 1000} />
+      <DateTime unixts={createdAt} showRelative />
     </td>
     <td className="text-right">
       {createActions && createActions(id)}

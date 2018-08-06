@@ -1,10 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage, FormattedDate, FormattedTime } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 
 import EnvironmentsListItem from '../../helpers/EnvironmentsList/EnvironmentsListItem';
 import Icon from '../../icons';
 import UsersNameContainer from '../../../containers/UsersNameContainer';
+import DateTime from '../../widgets/DateTime';
 
 const ReferenceSolutionsTableRow = ({
   id,
@@ -38,8 +39,11 @@ const ReferenceSolutionsTableRow = ({
       </tr>
       <tr>
         <td className="text-nowrap">
-          <FormattedDate value={new Date(createdAt * 1000)} /> &nbsp;{' '}
-          <FormattedTime value={new Date(createdAt * 1000)} />
+          <DateTime
+            unixts={createdAt}
+            showOverlay
+            overlayTooltipId={`datetime-${id}`}
+          />
         </td>
         <td className="text-nowrap">
           {rte

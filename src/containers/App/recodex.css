@@ -1,3 +1,4 @@
+@import '../../../node_modules/font-awesome-animation/dist/font-awesome-animation.min.css';
 /*
  * Global shared repository of additional CSS styles.
  * Primarily, styles should be created by the means of Bootstrap and AdminLTE,
@@ -5,11 +6,15 @@
  */
 
 /*
- * Oposite to 'small' from bootstrap.
+ * Additional text modifications
  */
 
 .larger {
   font-size: 120%;
+}
+
+.text-bold {
+  font-weight: bold !important;
 }
 
 /*
@@ -44,6 +49,36 @@
 
 .em-margin-bottom {
   margin-bottom: 1em !important;
+}
+
+.halfem-margin {
+  margin: 0.5em !important;
+}
+
+.halfem-margin-horizontal {
+  margin-left: 0.5em !important;
+  margin-right: 0.5em !important;
+}
+
+.halfem-margin-vertical {
+  margin-top: 0.5em !important;
+  margin-bottom: 0.5em !important;
+}
+
+.halfem-margin-left {
+  margin-left: 0.5em !important;
+}
+
+.halfem-margin-right {
+  margin-right: 0.5em !important;
+}
+
+.halfem-margin-top {
+  margin-top: 0.5em !important;
+}
+
+.halfem-margin-bottom {
+  margin-bottom: 0.5em !important;
 }
 
 /*
@@ -100,4 +135,20 @@ th.shrink-col {
 
 .valign-bottom {
   vertical-align: bottom !important;
+}
+
+/*
+ * Opacity, transparency, ...
+ */
+
+.half-opaque {
+  opacity: 0.5 !important;
+}
+
+.almost-transparent {
+  opacity: 0.2 !important;
+}
+
+.almost-opaque {
+  opacity: 0.8 !important;
 }

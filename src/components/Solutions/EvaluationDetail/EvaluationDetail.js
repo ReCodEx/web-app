@@ -1,16 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import {
-  FormattedMessage,
-  FormattedNumber,
-  FormattedDate,
-  FormattedTime
-} from 'react-intl';
+import { FormattedMessage, FormattedNumber } from 'react-intl';
 import { Table } from 'react-bootstrap';
 
 import AssignmentStatusIcon from '../../Assignments/Assignment/AssignmentStatusIcon';
 import Box from '../../widgets/Box';
+import DateTime from '../../widgets/DateTime';
 import Icon, { SuccessOrFailureIcon } from '../../icons';
 
 const EvaluationDetail = ({
@@ -46,9 +42,11 @@ const EvaluationDetail = ({
               />
             </th>
             <td>
-              <FormattedDate value={evaluation.evaluatedAt * 1000} />
-              &nbsp;
-              <FormattedTime value={evaluation.evaluatedAt * 1000} />
+              <DateTime
+                unixts={evaluation.evaluatedAt}
+                showRelative
+                showSeconds
+              />
             </td>
           </tr>
 

@@ -1,10 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Table } from 'react-bootstrap';
-import { FormattedDate, FormattedTime, FormattedMessage } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import classnames from 'classnames';
 
 import Box from '../../widgets/Box';
+import DateTime from '../../widgets/DateTime';
 import AssignmentStatusIcon from '../../Assignments/Assignment/AssignmentStatusIcon';
 import UsersNameContainer from '../../../containers/UsersNameContainer';
 import EnvironmentsListItem from '../../helpers/EnvironmentsList/EnvironmentsListItem';
@@ -19,8 +20,6 @@ const SolutionStatus = ({
   submittedBy,
   note,
   accepted,
-  originalSubmissionId = null,
-  assignment,
   environment,
   maxPoints,
   bonusPoints,
@@ -61,9 +60,7 @@ const SolutionStatus = ({
             />:
           </th>
           <td>
-            <FormattedDate value={submittedAt * 1000} />
-            &nbsp;
-            <FormattedTime value={submittedAt * 1000} />
+            <DateTime unixts={submittedAt} showRelative />
           </td>
         </tr>
 
@@ -236,7 +233,6 @@ SolutionStatus.propTypes = {
   submittedBy: PropTypes.string,
   note: PropTypes.string,
   accepted: PropTypes.bool,
-  originalSubmissionId: PropTypes.string,
   environment: PropTypes.object,
   maxPoints: PropTypes.number.isRequired,
   bonusPoints: PropTypes.number.isRequired,

@@ -1,21 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {
-  FormattedMessage,
-  FormattedNumber,
-  FormattedDate,
-  FormattedTime
-} from 'react-intl';
+import { FormattedMessage, FormattedNumber } from 'react-intl';
 import { Link } from 'react-router';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import classnames from 'classnames';
 
 import AssignmentStatusIcon from '../Assignment/AssignmentStatusIcon';
 import Points from './Points';
-import CommentsIcon from './CommentsIcon';
 import EnvironmentsListItem from '../../helpers/EnvironmentsList/EnvironmentsListItem';
 import DeleteSolutionButtonContainer from '../../../containers/DeleteSolutionButtonContainer/DeleteSolutionButtonContainer';
+import CommentsIcon from './CommentsIcon';
 import { SendIcon } from '../../icons';
+import DateTime from '../../widgets/DateTime';
 
 import withLinks from '../../../helpers/withLinks';
 import styles from './SolutionsTable.less';
@@ -91,9 +87,11 @@ const SolutionsTableRow = ({
         </td>
 
         <td className="text-nowrap">
-          <FormattedDate value={createdAt * 1000} />
-          &nbsp;
-          <FormattedTime value={createdAt * 1000} />
+          <DateTime
+            unixts={createdAt}
+            showOverlay
+            overlayTooltipId={`datetime-${id}`}
+          />
         </td>
 
         <td className="text-center text-nowrap">

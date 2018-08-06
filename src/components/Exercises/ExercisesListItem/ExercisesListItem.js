@@ -1,21 +1,22 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FormattedDate, FormattedTime, FormattedMessage } from 'react-intl';
-import { OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { FormattedMessage } from 'react-intl';
 import { LinkContainer } from 'react-router-bootstrap';
+import { Link } from 'react-router';
 
 import DifficultyIcon from '../DifficultyIcon';
 import UsersNameContainer from '../../../containers/UsersNameContainer';
 import GroupsNameContainer from '../../../containers/GroupsNameContainer';
 import DeleteExerciseButtonContainer from '../../../containers/DeleteExerciseButtonContainer';
-import { Link } from 'react-router';
 
-import withLinks from '../../../helpers/withLinks';
 import { LocalizedExerciseName } from '../../helpers/LocalizedNames';
 import EnvironmentsList from '../../helpers/EnvironmentsList';
 import { ExercisePrefixIcons, EditIcon } from '../../icons';
 import Button from '../../widgets/FlatButton';
+import DateTime from '../../widgets/DateTime';
 import AssignExerciseButton from '../../buttons/AssignExerciseButton';
+
+import withLinks from '../../../helpers/withLinks';
 
 const ExercisesListItem = ({
   id,
@@ -80,30 +81,20 @@ const ExercisesListItem = ({
       <DifficultyIcon difficulty={difficulty} />
     </td>
     <td className="text-nowrap">
-      <OverlayTrigger
-        placement="right"
-        overlay={
-          <Tooltip id={`created-tooltip-${id}`}>
-            <span>
-              <FormattedMessage
-                id="generic.created"
-                defaultMessage="Created"
-              />:
-              <FormattedDate value={createdAt * 1000} />{' '}
-              <FormattedTime value={createdAt * 1000} />
-              <br />
-              <FormattedMessage id="generic.updated" defaultMessage="Updated" />
-              :<FormattedDate value={updatedAt * 1000} />{' '}
-              <FormattedTime value={updatedAt * 1000} />
-            </span>
-          </Tooltip>
+      <DateTime
+        unixts={createdAt}
+        showOverlay
+        overlayTooltipId={`created-tooltip-${id}`}
+        customTooltip={
+          <span>
+            <FormattedMessage id="generic.created" defaultMessage="Created" />
+            : <DateTime unixts={createdAt} noWrap={false} />
+            <br />
+            <FormattedMessage id="generic.updated" defaultMessage="Updated" />
+            : <DateTime unixts={updatedAt} noWrap={false} />
+          </span>
         }
-      >
-        <span>
-          <FormattedDate value={createdAt * 1000} />&nbsp;&nbsp;
-          <FormattedTime value={createdAt * 1000} />
-        </span>
-      </OverlayTrigger>
+      />
     </td>
 
     <td className="text-right text-nowrap">

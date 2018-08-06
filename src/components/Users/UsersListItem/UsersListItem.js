@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage, FormattedDate, FormattedTime } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 
 import UsersName from '../../../components/Users/UsersName';
+import DateTime from '../../widgets/DateTime';
 import { BanIcon, LoadingIcon } from '../../icons';
 import { UserRoleIcon } from '../../helpers/usersRoles';
 import { safeGet } from '../../../helpers/common';
@@ -69,11 +70,13 @@ const UsersListItem = ({
           <td>
             {user.privateData &&
               user.privateData.createdAt &&
-              <span className="small text-nowrap">
-                <FormattedDate
-                  value={user.privateData.createdAt * 1000}
-                />&nbsp;&nbsp;
-                <FormattedTime value={user.privateData.createdAt * 1000} />
+              <span className="small">
+                <DateTime
+                  unixts={user.privateData.createdAt}
+                  showTime={false}
+                  showOverlay
+                  overlayTooltipId={`createdat-${user.id}`}
+                />
               </span>}
           </td>}
 
