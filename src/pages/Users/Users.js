@@ -4,10 +4,11 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import { push } from 'react-router-redux';
+import { Row, Col } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 import { defaultMemoize } from 'reselect';
 
-import { SettingsIcon, TransferIcon } from '../../components/icons';
+import { SettingsIcon, TransferIcon, BanIcon } from '../../components/icons';
 import Button from '../../components/widgets/FlatButton';
 import DeleteUserButtonContainer from '../../containers/DeleteUserButtonContainer';
 import Page from '../../components/layout/Page';
@@ -23,10 +24,14 @@ import {
   isLoggedAsSuperAdmin
 } from '../../redux/selectors/users';
 import { takeOver } from '../../redux/modules/auth';
+import { selectedInstanceId } from '../../redux/selectors/auth';
 
 import withLinks from '../../helpers/withLinks';
-import { selectedInstanceId } from '../../redux/selectors/auth';
-import { knownRoles } from '../../components/helpers/usersRoles.js';
+import {
+  knownRoles,
+  isSupervisorRole,
+  isStudentRole
+} from '../../components/helpers/usersRoles.js';
 
 const filterInitialValues = defaultMemoize(({ search = '', roles = [] }) => {
   const initials = { search, roles: {} };
@@ -100,29 +105,38 @@ class Users extends Component {
       </td>
     </tr>;
 
-  createActions = defaultMemoize(reload => userId => {
+  createActions = defaultMemoize(reload => ({ id, privateData }) => {
     const {
       takeOver,
+      isSuperAdmin,
       links: { EDIT_USER_URI_FACTORY, DASHBOARD_URI }
     } = this.props;
     return (
+      isSuperAdmin &&
       <div>
-        <LinkContainer to={EDIT_USER_URI_FACTORY(userId)}>
+        {privateData &&
+          privateData.isAllowed &&
+          <Button
+            bsSize="xs"
+            bsStyle="primary"
+            onClick={() => takeOver(id, DASHBOARD_URI)}
+          >
+            <TransferIcon gapRight />
+            <FormattedMessage
+              id="app.users.takeOver"
+              defaultMessage="Login as"
+            />
+          </Button>}
+
+        <LinkContainer to={EDIT_USER_URI_FACTORY(id)}>
           <Button bsSize="xs" bsStyle="warning">
             <SettingsIcon gapRight />
             <FormattedMessage id="generic.settings" defaultMessage="Settings" />
           </Button>
         </LinkContainer>
-        <Button
-          bsSize="xs"
-          bsStyle="primary"
-          onClick={() => takeOver(userId, DASHBOARD_URI)}
-        >
-          <TransferIcon gapRight />
-          <FormattedMessage id="app.users.takeOver" defaultMessage="Login as" />
-        </Button>
+
         <DeleteUserButtonContainer
-          id={userId}
+          id={id}
           bsSize="xs"
           resourceless={true}
           onDeleted={reload}
@@ -157,51 +171,67 @@ class Users extends Component {
       >
         {user =>
           <div>
-            <Box
-              title={
-                <FormattedMessage
-                  id="app.users.listTitle"
-                  defaultMessage="Users"
-                />
-              }
-              unlimitedHeight
-            >
-              <div>
-                <PaginationContainer
-                  id="users-all"
-                  endpoint="users"
-                  defaultOrderBy="name"
-                  filtersCreator={this.filtersCreator}
-                >
-                  {({
-                    data,
-                    offset,
-                    limit,
-                    totalCount,
-                    orderByColumn,
-                    orderByDescending,
-                    setOrderBy,
-                    reload
-                  }) =>
-                    <UsersList
-                      users={data}
-                      loggedUserId={user.id}
-                      useGravatar={user.privateData.settings.useGravatar}
-                      emailColumn
-                      createdAtColumn
-                      heading={this.headingCreator({
-                        offset,
-                        limit,
-                        totalCount,
-                        orderByColumn,
-                        orderByDescending,
-                        setOrderBy
-                      })}
-                      createActions={this.createActions(reload)}
-                    />}
-                </PaginationContainer>
-              </div>
-            </Box>
+            {(!isSupervisorRole(user.privateData.role) ||
+              isStudentRole(user.privateData.role)) &&
+              <Row>
+                <Col sm={12}>
+                  <p className="callout callout-warning larger">
+                    <BanIcon gapRight />
+                    <FormattedMessage
+                      id="generic.accessDenied"
+                      defaultMessage="You do not have permissions to see this page. If you got to this page via a seemingly legitimate link or button, please report a bug."
+                    />
+                  </p>
+                </Col>
+              </Row>}
+
+            {isSupervisorRole(user.privateData.role) &&
+              !isStudentRole(user.privateData.role) &&
+              <Box
+                title={
+                  <FormattedMessage
+                    id="app.users.listTitle"
+                    defaultMessage="Users"
+                  />
+                }
+                unlimitedHeight
+              >
+                <div>
+                  <PaginationContainer
+                    id="users-all"
+                    endpoint="users"
+                    defaultOrderBy="name"
+                    filtersCreator={this.filtersCreator}
+                  >
+                    {({
+                      data,
+                      offset,
+                      limit,
+                      totalCount,
+                      orderByColumn,
+                      orderByDescending,
+                      setOrderBy,
+                      reload
+                    }) =>
+                      <UsersList
+                        users={data}
+                        loggedUserId={user.id}
+                        useGravatar={user.privateData.settings.useGravatar}
+                        emailColumn
+                        createdAtColumn
+                        heading={this.headingCreator({
+                          offset,
+                          limit,
+                          totalCount,
+                          orderByColumn,
+                          orderByDescending,
+                          setOrderBy
+                        })}
+                        createActions={this.createActions(reload)}
+                      />}
+                  </PaginationContainer>
+                </div>
+              </Box>}
           </div>}
       </Page>
     );
