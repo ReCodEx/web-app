@@ -14,7 +14,7 @@ import {
   FailedGroupDetail
 } from '../../components/Groups/GroupDetail';
 import HierarchyLine from '../../components/Groups/HierarchyLine';
-import { AddIcon } from '../../components/icons';
+import { AddIcon, BanIcon } from '../../components/icons';
 import AssignmentsTable from '../../components/Assignments/Assignment/AssignmentsTable';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import AddStudent from '../../components/Groups/AddStudent';
@@ -35,7 +35,6 @@ import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import {
   isSupervisorOf,
   isAdminOf,
-  isLoggedAsSuperAdmin,
   studentsOfGroupSelector,
   isStudentOf,
   loggedInUserSelector
@@ -57,50 +56,48 @@ import { isReady } from '../../redux/helpers/resourceManager/index';
 import ResultsTable from '../../components/Groups/ResultsTable/ResultsTable';
 import GroupTopButtons from '../../components/Groups/GroupTopButtons/GroupTopButtons';
 
-import { EMPTY_LIST } from '../../helpers/common';
+import {
+  isSupervisorRole,
+  isStudentRole
+} from '../../components/helpers/usersRoles';
+import {
+  EMPTY_LIST,
+  hasPermissions,
+  hasOneOfPermissions
+} from '../../helpers/common';
 
 class GroupDetail extends Component {
-  static isAdminOrSupervisorOf = (group, userId) =>
-    group.privateData.admins.indexOf(userId) >= 0 ||
-    group.privateData.supervisors.indexOf(userId) >= 0;
-
-  static isMemberOf = (group, userId) =>
-    GroupDetail.isAdminOrSupervisorOf(group, userId) ||
-    group.privateData.students.indexOf(userId) >= 0;
-
-  static loadAsync = ({ groupId }, dispatch, { userId, isSuperAdmin }) =>
+  static loadAsync = ({ groupId }, dispatch) =>
     Promise.all([
       dispatch(fetchRuntimeEnvironments()),
       dispatch(fetchGroupIfNeeded(groupId)).then(({ value: group }) =>
         Promise.all([
-          GroupDetail.isAdminOrSupervisorOf(group, userId) || isSuperAdmin
+          hasPermissions(group, 'viewExercises')
             ? dispatch(fetchGroupExercises(groupId))
             : Promise.resolve(),
-          GroupDetail.isMemberOf(group, userId) || isSuperAdmin
-            ? Promise.all([
-                dispatch(fetchAssignmentsForGroup(groupId)),
-                dispatch(fetchStudents(groupId)),
-                dispatch(fetchGroupsStats(groupId))
-              ])
+          hasPermissions(group, 'viewAssignments')
+            ? dispatch(fetchAssignmentsForGroup(groupId))
+            : Promise.resolve(),
+          hasPermissions(group, 'viewStudents')
+            ? dispatch(fetchStudents(groupId))
+            : Promise.resolve(),
+          hasPermissions(group, 'viewStats')
+            ? dispatch(fetchGroupsStats(groupId))
             : Promise.resolve()
         ])
       )
     ]);
 
   componentWillMount() {
-    const { loadAsync, userId, isSuperAdmin } = this.props;
-    loadAsync(userId, isSuperAdmin);
+    const { loadAsync } = this.props;
+    loadAsync();
   }
 
   componentWillReceiveProps(newProps) {
-    const { params: { groupId }, userId, isSuperAdmin } = this.props;
+    const { params: { groupId } } = this.props;
 
-    if (
-      groupId !== newProps.params.groupId ||
-      userId !== newProps.userId ||
-      isSuperAdmin !== newProps.isSuperAdmin
-    ) {
-      newProps.loadAsync(newProps.userId, newProps.isSuperAdmin);
+    if (groupId !== newProps.params.groupId) {
+      newProps.loadAsync();
       return;
     }
 
@@ -156,10 +153,9 @@ class GroupDetail extends Component {
       assignmentEnvironmentsSelector,
       stats,
       statuses,
-      isAdmin,
-      isSuperAdmin,
-      isSupervisor,
-      isStudent,
+      isGroupAdmin,
+      isGroupSupervisor,
+      isGroupStudent,
       userId,
       intl: { locale }
     } = this.props;
@@ -188,21 +184,26 @@ class GroupDetail extends Component {
             <GroupTopButtons
               group={data}
               userId={userId}
-              canEdit={isAdmin || isSuperAdmin}
-              canSeeDetail={
-                isAdmin ||
-                isSuperAdmin ||
-                data.privateData.students.includes(userId)
-              }
               canLeaveJoin={
-                !isAdmin && !isSupervisor && (data.public || isStudent)
+                !isGroupAdmin &&
+                !isGroupSupervisor &&
+                (data.public || isGroupStudent)
               }
-              students={
-                (isAdmin || isSuperAdmin) && !data.organizational
-                  ? students
-                  : null
-              }
+              students={students}
             />
+            {!hasOneOfPermissions(data, 'viewAssignments', 'viewExercises') &&
+              <Row>
+                <Col sm={12}>
+                  <p className="callout callout-warning larger">
+                    <BanIcon gapRight />
+                    <FormattedMessage
+                      id="generic.accessDenied"
+                      defaultMessage="You do not have permissions to see this page. If you got to this page via a seemingly legitimate link or button, please report a bug."
+                    />
+                  </p>
+                </Col>
+              </Row>}
+
             {data.organizational &&
               <Row>
                 <Col lg={12}>
@@ -216,6 +217,7 @@ class GroupDetail extends Component {
               </Row>}
 
             {!data.organizational &&
+              hasPermissions(data, 'viewAssignments') &&
               <Row>
                 <Col lg={12}>
                   <Box
@@ -240,77 +242,86 @@ class GroupDetail extends Component {
                           stats={groupStats.find(
                             item => item.userId === userId
                           )}
-                          isAdmin={isAdmin || isSupervisor}
+                          isGroupAdmin={isGroupAdmin || isGroupSupervisor}
                         />}
                     </ResourceRenderer>
                   </Box>
                 </Col>
               </Row>}
 
-            {!data.organizational &&
-              <Row>
-                <Col lg={12}>
-                  <Box
-                    title={
-                      <FormattedMessage
-                        id="app.groupDetail.studentsResultsTable"
-                        defaultMessage="Students and Their Results"
-                      />
-                    }
-                    unlimitedHeight
-                    noPadding
-                  >
-                    <ResourceRenderer
-                      resource={[stats, loggedUser, ...assignments]}
-                      bulkyLoading
-                    >
-                      {(groupStats, loggedUser, ...assignments) =>
-                        <ResultsTable
-                          users={students}
-                          loggedUser={loggedUser}
-                          assignments={assignments}
-                          stats={groupStats}
-                          publicStats={
-                            data &&
-                            data.privateData &&
-                            data.privateData.publicStats
+            <ResourceRenderer resource={loggedUser}>
+              {loggedUser =>
+                <React.Fragment>
+                  {!data.organizational &&
+                    hasPermissions(data, 'viewAssignments', 'viewStudents') &&
+                    <Row>
+                      <Col lg={12}>
+                        <Box
+                          title={
+                            <FormattedMessage
+                              id="app.groupDetail.studentsResultsTable"
+                              defaultMessage="Students and Their Results"
+                            />
                           }
-                          isAdmin={isAdmin}
-                          isSupervisor={isSupervisor}
-                          groupName={getLocalizedName(data, locale)}
-                          renderActions={id =>
-                            <LeaveJoinGroupButtonContainer
-                              userId={id}
-                              groupId={data.id}
-                            />}
-                        />}
-                    </ResourceRenderer>
-                  </Box>
-                </Col>
-              </Row>}
+                          unlimitedHeight
+                          noPadding
+                        >
+                          <ResourceRenderer
+                            resource={[stats, ...assignments]}
+                            bulkyLoading
+                          >
+                            {(groupStats, ...assignments) =>
+                              <ResultsTable
+                                users={students}
+                                loggedUser={loggedUser}
+                                assignments={assignments}
+                                stats={groupStats}
+                                publicStats={
+                                  data &&
+                                  data.privateData &&
+                                  data.privateData.publicStats
+                                }
+                                isGroupAdmin={isGroupAdmin}
+                                isGroupSupervisor={isGroupSupervisor}
+                                groupName={getLocalizedName(data, locale)}
+                                renderActions={id =>
+                                  <LeaveJoinGroupButtonContainer
+                                    userId={id}
+                                    groupId={data.id}
+                                  />}
+                              />}
+                          </ResourceRenderer>
+                        </Box>
+                      </Col>
+                    </Row>}
 
-            {(isSupervisor || isAdmin) &&
-              !data.organizational &&
-              <Row>
-                <Col sm={6}>
-                  <Box
-                    title={
-                      <FormattedMessage
-                        id="app.group.spervisorsView.addStudent"
-                        defaultMessage="Add Student"
-                      />
-                    }
-                    isOpen
-                  >
-                    <AddStudent
-                      instanceId={data.privateData.instanceId}
-                      groupId={data.id}
-                    />
-                  </Box>
-                </Col>
-              </Row>}
+                  {// unfortunatelly, this cannot be covered by permission hints at the moment, since addStudent involes both student and group
+                  (isGroupSupervisor || isGroupAdmin) &&
+                    !data.organizational &&
+                    isSupervisorRole(loggedUser.privateData.role) &&
+                    !isStudentRole(loggedUser.privateData.role) &&
+                    <Row>
+                      <Col sm={6}>
+                        <Box
+                          title={
+                            <FormattedMessage
+                              id="app.group.spervisorsView.addStudent"
+                              defaultMessage="Add Student"
+                            />
+                          }
+                          isOpen
+                        >
+                          <AddStudent
+                            instanceId={data.privateData.instanceId}
+                            groupId={data.id}
+                          />
+                        </Box>
+                      </Col>
+                    </Row>}
+                </React.Fragment>}
+            </ResourceRenderer>
 
-            {(isSupervisor || isAdmin) &&
+            {hasPermissions(data, 'viewExercises') &&
               <Row>
                 <Col lg={12}>
                   <Box
@@ -321,6 +332,7 @@ class GroupDetail extends Component {
                       />
                     }
                     footer={
+                      hasPermissions(data, 'createExercise') &&
                       <p className="text-center">
                         <Button
                           bsStyle="success"
@@ -356,17 +368,16 @@ class GroupDetail extends Component {
 GroupDetail.propTypes = {
   params: PropTypes.shape({ groupId: PropTypes.string.isRequired }).isRequired,
   userId: PropTypes.string.isRequired,
-  loggedUser: PropTypes.object,
+  loggedUser: ImmutablePropTypes.map,
   group: ImmutablePropTypes.map,
   instance: ImmutablePropTypes.map,
   students: PropTypes.array,
   assignments: ImmutablePropTypes.list,
   assignmentEnvironmentsSelector: PropTypes.func,
   groups: ImmutablePropTypes.map,
-  isAdmin: PropTypes.bool,
-  isSupervisor: PropTypes.bool,
-  isSuperAdmin: PropTypes.bool,
-  isStudent: PropTypes.bool,
+  isGroupAdmin: PropTypes.bool,
+  isGroupSupervisor: PropTypes.bool,
+  isGroupStudent: PropTypes.bool,
   loadAsync: PropTypes.func,
   stats: PropTypes.object,
   statuses: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
@@ -389,16 +400,14 @@ const mapStateToProps = (state, { params: { groupId } }) => {
     statuses: getStatusesForLoggedUser(state, groupId),
     stats: createGroupsStatsSelector(groupId)(state),
     students: studentsOfGroupSelector(state, groupId),
-    isSupervisor: isSupervisorOf(userId, groupId)(state),
-    isAdmin: isAdminOf(userId, groupId)(state),
-    isSuperAdmin: isLoggedAsSuperAdmin(state),
-    isStudent: isStudentOf(userId, groupId)(state)
+    isGroupSupervisor: isSupervisorOf(userId, groupId)(state),
+    isGroupAdmin: isAdminOf(userId, groupId)(state),
+    isGroupStudent: isStudentOf(userId, groupId)(state)
   };
 };
 
 const mapDispatchToProps = (dispatch, { params }) => ({
-  loadAsync: (userId, isSuperAdmin) =>
-    GroupDetail.loadAsync(params, dispatch, { userId, isSuperAdmin }),
+  loadAsync: () => GroupDetail.loadAsync(params, dispatch),
   createGroupExercise: () =>
     dispatch(createExercise({ groupId: params.groupId })),
   push: url => dispatch(push(url))

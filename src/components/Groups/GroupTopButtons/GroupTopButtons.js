@@ -2,17 +2,16 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { LinkContainer } from 'react-router-bootstrap';
 import { FormattedMessage } from 'react-intl';
+
 import Button from '../../widgets/FlatButton';
 import LeaveJoinGroupButtonContainer from '../../../containers/LeaveJoinGroupButtonContainer';
 import { GroupIcon, EditIcon, InfoIcon, MailIcon } from '../../icons';
-import { identity } from '../../../helpers/common';
+import { identity, hasPermissions } from '../../../helpers/common';
 import withLinks from '../../../helpers/withLinks';
 
 const GroupTopButtons = ({
   group,
   userId,
-  canEdit,
-  canSeeDetail,
   canLeaveJoin,
   students = null,
   links: {
@@ -22,12 +21,16 @@ const GroupTopButtons = ({
   }
 }) => {
   const studentEmails =
+    !group.organizational &&
+    hasPermissions(group, 'viewStudents', 'sendEmail') &&
     students &&
     students
       .map(s => s.privateData && s.privateData.email)
       .filter(identity)
       .map(encodeURIComponent)
       .join(',');
+  const canEdit = hasPermissions(group, 'update');
+  const canSeeDetail = hasPermissions(group, 'viewDetail');
 
   return (
     <p>
@@ -85,8 +88,6 @@ const GroupTopButtons = ({
 GroupTopButtons.propTypes = {
   group: PropTypes.object.isRequired,
   userId: PropTypes.string.isRequired,
-  canEdit: PropTypes.bool.isRequired,
-  canSeeDetail: PropTypes.bool,
   canLeaveJoin: PropTypes.bool,
   students: PropTypes.array,
   links: PropTypes.object
