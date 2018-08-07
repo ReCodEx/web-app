@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Tooltip, OverlayTrigger, Overlay, Badge } from 'react-bootstrap';
-import { FormattedDate, FormattedTime, FormattedMessage } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import classNames from 'classnames';
 
 import { SuccessIcon, WarningIcon, DeleteIcon, CopyIcon } from '../../icons';
+import DateTime from '../../widgets/DateTime';
 
 import styles from './headerNotification.less';
 
@@ -56,7 +57,7 @@ class HeaderNotification extends Component {
           overlay={
             <Tooltip id={`notification-${id}-tooltip`}>
               <span>
-                <FormattedDate value={time} /> <FormattedTime value={time} />
+                <DateTime unixts={Math.round(time / 1000)} />
                 <br />
                 {msg}
               </span>

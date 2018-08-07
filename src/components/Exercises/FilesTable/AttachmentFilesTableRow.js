@@ -1,9 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { FormattedMessage } from 'react-intl';
+
 import { prettyPrintBytes } from '../../helpers/stringFormatters';
-import { FormattedDate, FormattedTime, FormattedMessage } from 'react-intl';
 import withLinks from '../../../helpers/withLinks';
-import { Button } from 'react-bootstrap';
+import Button from '../../widgets/FlatButton';
+import DateTime from '../../widgets/DateTime';
 import Confirm from '../../../components/forms/Confirm';
 import { DeleteIcon } from '../../../components/icons';
 
@@ -28,9 +30,7 @@ const AttachmentFilesTableRow = ({
       {prettyPrintBytes(size)}
     </td>
     <td>
-      <FormattedDate value={uploadedAt * 1000} />
-      &nbsp;
-      <FormattedTime value={uploadedAt * 1000} />
+      <DateTime unixts={uploadedAt} showRelative />
     </td>
     <td>
       {removeFile &&
@@ -45,7 +45,7 @@ const AttachmentFilesTableRow = ({
           }
           className="pull-right"
         >
-          <Button bsSize="xs" className="btn-flat" bsStyle="danger">
+          <Button bsSize="xs" bsStyle="danger">
             <DeleteIcon gapRight />
             <FormattedMessage id="generic.delete" defaultMessage="Delete" />
           </Button>

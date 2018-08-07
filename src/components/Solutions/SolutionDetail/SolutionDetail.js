@@ -31,7 +31,7 @@ class SolutionDetail extends Component {
       solution: {
         id,
         note = '',
-        solution: { createdAt, userId, files, ...restSolution },
+        solution: { createdAt, userId, files },
         maxPoints,
         overriddenPoints,
         bonusPoints,
@@ -83,7 +83,6 @@ class SolutionDetail extends Component {
               submittedBy={submittedBy}
               note={note}
               accepted={accepted}
-              originalSubmissionId={restSolution.id}
               assignment={assignment}
               actualPoints={actualPoints}
               maxPoints={maxPoints}

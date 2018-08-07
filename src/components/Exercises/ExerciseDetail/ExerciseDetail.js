@@ -1,17 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {
-  FormattedMessage,
-  FormattedNumber,
-  FormattedTime,
-  FormattedDate,
-  FormattedRelative
-} from 'react-intl';
+import { FormattedMessage, FormattedNumber } from 'react-intl';
 import { Table } from 'react-bootstrap';
 import { Link } from 'react-router';
 
 import Box from '../../widgets/Box';
 import Markdown from '../../widgets/Markdown';
+import DateTime from '../../widgets/DateTime';
 import DifficultyIcon from '../DifficultyIcon';
 import ResourceRenderer from '../../helpers/ResourceRenderer';
 import withLinks from '../../../helpers/withLinks';
@@ -107,11 +102,7 @@ const ExerciseDetail = ({
             />:
           </th>
           <td>
-            <FormattedDate value={createdAt * 1000} />{' '}
-            <FormattedTime value={createdAt * 1000} />{' '}
-            <span className="text-muted small">
-              (<FormattedRelative value={createdAt * 1000} />)
-            </span>
+            <DateTime unixts={createdAt} showRelative />
           </td>
         </tr>
 
@@ -124,11 +115,7 @@ const ExerciseDetail = ({
               />:
             </th>
             <td>
-              <FormattedDate value={updatedAt * 1000} />{' '}
-              <FormattedTime value={updatedAt * 1000} />{' '}
-              <span className="text-muted small">
-                (<FormattedRelative value={updatedAt * 1000} />)
-              </span>
+              <DateTime unixts={updatedAt} showRelative />
             </td>
           </tr>}
 

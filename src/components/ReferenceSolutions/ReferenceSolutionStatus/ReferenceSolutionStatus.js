@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage, FormattedDate, FormattedTime } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { Table } from 'react-bootstrap';
 
 import Box from '../../widgets/Box';
+import DateTime from '../../widgets/DateTime';
 import UsersNameContainer from '../../../containers/UsersNameContainer';
 import ExercisesNameContainer from '../../../containers/ExercisesNameContainer';
 import Icon, { EditIcon } from '../../icons';
@@ -65,9 +66,7 @@ const ReferenceSolutionStatus = ({
             />:
           </th>
           <td>
-            <FormattedDate value={createdAt * 1000} />
-            &nbsp;
-            <FormattedTime value={createdAt * 1000} />
+            <DateTime unixts={createdAt} showRelative />
           </td>
         </tr>
         <tr>

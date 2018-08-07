@@ -1,14 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import Status from './Status';
+import StatusIcon from '../../../widgets/StatusIcon';
 import Icon from '../../../icons';
 
 const AssignmentStatusIcon = ({ id, status, accepted = false }) => {
   switch (status) {
     case 'done':
       return (
-        <Status
+        <StatusIcon
           id={id}
           accepted={accepted}
           icon={<Icon icon={['far', 'thumbs-up']} className="text-green" />}
@@ -23,7 +23,7 @@ const AssignmentStatusIcon = ({ id, status, accepted = false }) => {
 
     case 'work-in-progress':
       return (
-        <Status
+        <StatusIcon
           id={id}
           icon={<Icon icon="cogs" className="text-yellow" />}
           message={
@@ -37,7 +37,7 @@ const AssignmentStatusIcon = ({ id, status, accepted = false }) => {
 
     case 'failed':
       return (
-        <Status
+        <StatusIcon
           id={id}
           accepted={accepted}
           icon={<Icon icon={['far', 'thumbs-down']} className="text-red" />}
@@ -52,7 +52,7 @@ const AssignmentStatusIcon = ({ id, status, accepted = false }) => {
 
     case 'evaluation-failed':
       return (
-        <Status
+        <StatusIcon
           id={id}
           icon={<Icon icon="exclamation-triangle" className="text-yellow" />}
           message={
@@ -66,7 +66,7 @@ const AssignmentStatusIcon = ({ id, status, accepted = false }) => {
 
     case 'missing-submission':
       return (
-        <Status
+        <StatusIcon
           id={id}
           icon={<Icon icon="exclamation-triangle" className="text-red" />}
           message={
@@ -80,7 +80,7 @@ const AssignmentStatusIcon = ({ id, status, accepted = false }) => {
 
     default:
       return (
-        <Status
+        <StatusIcon
           id={id}
           icon={<Icon icon="code" className="text-gray" />}
           message={

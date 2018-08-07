@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router';
 import AssignmentStatusIcon from '../AssignmentStatusIcon/AssignmentStatusIcon';
-import { FormattedDate, FormattedTime, FormattedMessage } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { ButtonGroup } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 
@@ -16,6 +16,7 @@ import {
 } from '../../../icons';
 import DeleteAssignmentButtonContainer from '../../../../containers/DeleteAssignmentButtonContainer';
 import Button from '../../../widgets/FlatButton';
+import DateTime from '../../../widgets/DateTime';
 import EnvironmentsList from '../../../helpers/EnvironmentsList';
 import ResourceRenderer from '../../../helpers/ResourceRenderer';
 
@@ -94,18 +95,13 @@ const AssignmentTableRow = ({
           : <span />}
       </td>}
     <td>
-      <FormattedDate value={new Date(firstDeadline * 1000)} />
-      {', '}
-      <FormattedTime value={new Date(firstDeadline * 1000)} />
+      <DateTime unixts={firstDeadline} isDeadline />
     </td>
     <td>
-      {allowSecondDeadline
-        ? <span>
-            <FormattedDate value={new Date(secondDeadline * 1000)} />
-            {', '}
-            <FormattedTime value={new Date(secondDeadline * 1000)} />
-          </span>
-        : <span>-</span>}
+      <DateTime
+        unixts={allowSecondDeadline ? secondDeadline : null}
+        isDeadline
+      />
     </td>
     {isAdmin &&
       <td className="text-right">

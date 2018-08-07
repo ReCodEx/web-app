@@ -1,16 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Table } from 'react-bootstrap';
-import {
-  FormattedDate,
-  FormattedTime,
-  FormattedMessage,
-  FormattedRelative
-} from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import classnames from 'classnames';
 import Icon, { SuccessIcon, SuccessOrFailureIcon } from '../../../icons';
 import Box from '../../../widgets/Box';
 import EnvironmentsList from '../../../helpers/EnvironmentsList';
+import DateTime from '../../../widgets/DateTime';
 
 const AssignmentDetails = ({
   isOpen = true,
@@ -53,11 +49,7 @@ const AssignmentDetails = ({
             />:
           </td>
           <td>
-            <strong>
-              <FormattedDate value={new Date(firstDeadline * 1000)} /> &nbsp;{' '}
-              <FormattedTime value={new Date(firstDeadline * 1000)} />
-            </strong>{' '}
-            (<FormattedRelative value={new Date(firstDeadline * 1000)} />)
+            <DateTime unixts={firstDeadline} isDeadline showRelative />
           </td>
         </tr>
         {allowSecondDeadline &&
@@ -79,13 +71,7 @@ const AssignmentDetails = ({
               />
             </td>
             <td>
-              <strong>
-                <FormattedDate value={new Date(secondDeadline * 1000)} /> &nbsp;{' '}
-                <FormattedTime value={new Date(secondDeadline * 1000)} />
-              </strong>{' '}
-              (
-              <FormattedRelative value={new Date(secondDeadline * 1000)} />
-              )
+              <DateTime unixts={secondDeadline} isDeadline showRelative />
             </td>
           </tr>}
         <tr>
