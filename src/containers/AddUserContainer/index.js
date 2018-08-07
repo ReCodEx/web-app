@@ -1,1 +1,2 @@
-export default from './AddUserContainer';
+import AddUserContainer from './AddUserContainer';
+export default AddUserContainer;

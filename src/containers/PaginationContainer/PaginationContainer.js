@@ -117,12 +117,11 @@ class PaginationContainer extends Component {
     }
 
     if (
-      this.props.intl.locale !== newProps.intl.locale ||
-      (!newProps.hideAllItems &&
-        this.props.hideAllItems &&
-        !newProps.isPending) ||
-      newProps.id !== this.props.id ||
-      newProps.endpoint !== this.props.endpoint
+      (this.props.intl.locale !== newProps.intl.locale ||
+        newProps.id !== this.props.id ||
+        newProps.endpoint !== this.props.endpoint) &&
+      !newProps.hideAllItems &&
+      !newProps.isPending
     ) {
       newProps.reload(newProps.id, newProps.endpoint, newProps.intl.locale);
     }

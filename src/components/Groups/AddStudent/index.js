@@ -1,1 +1,2 @@
-export default from './AddStudent';
+import AddStudent from './AddStudent';
+export default AddStudent;
