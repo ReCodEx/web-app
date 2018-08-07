@@ -6,11 +6,13 @@ import { safeGet, EMPTY_LIST } from '../../helpers/common';
 
 const { CREATING, VALIDATING, SENDING, FAILED } = submissionStatus;
 
-export const getSolution = state => state.submission;
+const getSubmission = state => state.submission;
 
-export const getNote = createSelector(getSolution, state => state.get('note'));
+export const getNote = createSelector(getSubmission, state =>
+  state.get('note')
+);
 
-export const getStatus = createSelector(getSolution, state =>
+export const getStatus = createSelector(getSubmission, state =>
   state.get('status')
 );
 export const isProcessing = createSelector(
@@ -32,15 +34,16 @@ export const isValidating = createSelector(
 export const isSending = createSelector(getStatus, state => state === SENDING);
 export const hasFailed = createSelector(getStatus, state => state === FAILED);
 
-export const getSubmissionId = createSelector(getSolution, submission =>
-  submission.get('submissionId')
+export const getSubmittedSolutionId = createSelector(
+  getSubmission,
+  submission => submission.get('solutionId')
 );
 
-export const getMonitorParams = createSelector(getSolution, submission =>
+export const getMonitorParams = createSelector(getSubmission, submission =>
   submission.get('monitor')
 );
 
-export const getPresubmit = createSelector(getSolution, submission =>
+export const getPresubmit = createSelector(getSubmission, submission =>
   submission.get('presubmit')
 );
 

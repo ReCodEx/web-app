@@ -16,7 +16,8 @@ import ResourceRenderer from '../../helpers/ResourceRenderer';
 
 import EvaluationDetail from '../EvaluationDetail';
 import CompilationLogs from '../CompilationLogs';
-import { WarningIcon } from '../../icons';
+import { WarningIcon, RefreshIcon } from '../../icons';
+import Button from '../../widgets/FlatButton';
 
 import { safeGet, EMPTY_OBJ } from '../../../helpers/common';
 
@@ -43,7 +44,8 @@ class SolutionDetail extends Component {
       assignment,
       evaluations,
       runtimeEnvironments,
-      deleteEvaluation = null
+      deleteEvaluation = null,
+      refreshSolutionEvaluations = null
     } = this.props;
 
     const { openFileId } = this.state;
@@ -127,6 +129,35 @@ class SolutionDetail extends Component {
 
           {evaluations &&
             <Col md={6} sm={12}>
+              {!evaluation &&
+                refreshSolutionEvaluations &&
+                <div className="callout callout-warning">
+                  <table>
+                    <tbody>
+                      <tr>
+                        <td width="100%" className="em-padding-right">
+                          <FormattedMessage
+                            id="app.submissionEvaluation.noEvaluationYet"
+                            defaultMessage="The evaluation is not available yet. Click the refresh button for an update."
+                          />
+                        </td>
+                        <td>
+                          <Button
+                            onClick={refreshSolutionEvaluations}
+                            bsStyle="primary"
+                          >
+                            <RefreshIcon gapRight />
+                            <FormattedMessage
+                              id="generic.refresh"
+                              defaultMessage="Refresh"
+                            />
+                          </Button>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>}
+
               {activeSubmissionId !== safeGet(lastSubmission, ['id']) &&
                 <p className="callout callout-warning">
                   <WarningIcon gapRight />
@@ -188,6 +219,7 @@ class SolutionDetail extends Component {
                               ? deleteEvaluation
                               : null
                           }
+                          confirmDeleteLastSubmit
                         />}
                     </ResourceRenderer>
                   </Col>
@@ -225,7 +257,8 @@ SolutionDetail.propTypes = {
   assignment: PropTypes.object.isRequired,
   evaluations: PropTypes.object.isRequired,
   runtimeEnvironments: PropTypes.array,
-  deleteEvaluation: PropTypes.func
+  deleteEvaluation: PropTypes.func,
+  refreshSolutionEvaluations: PropTypes.func
 };
 
 export default SolutionDetail;

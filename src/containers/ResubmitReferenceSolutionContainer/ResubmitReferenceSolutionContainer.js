@@ -14,7 +14,7 @@ import { fetchReferenceSolutionEvaluationsForSolution } from '../../redux/module
 import {
   isProcessing,
   getMonitorParams,
-  getSubmissionId
+  getSubmittedSolutionId
 } from '../../redux/selectors/submission';
 import { getProgressObserverId } from '../../redux/selectors/evaluationProgress';
 
@@ -56,7 +56,6 @@ class ResubmitReferenceSolutionContainer extends Component {
             newSolutionId
           )}
           onFinish={refreshSolutionEvaluations}
-          onUserClose={refreshSolutionEvaluations}
         />
       </span>
     );
@@ -79,7 +78,7 @@ ResubmitReferenceSolutionContainer.propTypes = {
 const mapStateToProps = state => ({
   isProcessing: isProcessing(state),
   monitor: getMonitorParams(state),
-  newSolutionId: getSubmissionId(state),
+  newSolutionId: getSubmittedSolutionId(state),
   progressObserverId: getProgressObserverId(state)
 });
 

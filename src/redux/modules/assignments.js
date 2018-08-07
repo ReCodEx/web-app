@@ -1,11 +1,12 @@
 import { handleActions } from 'redux-actions';
-import { fromJS } from 'immutable';
+import { fromJS, List } from 'immutable';
 
 import { createApiAction } from '../middleware/apiMiddleware';
 import { downloadHelper } from '../helpers/api/download';
 import factory, { initialState } from '../helpers/resourceManager';
 
 import { additionalActionTypes as solutionsActionTypes } from './solutions';
+import { actionTypes as submissionActionTypes } from './submission';
 
 const resourceName = 'assignments';
 const { actions, actionTypes, reduceActions } = factory({
@@ -72,18 +73,55 @@ export const downloadBestSolutionsArchive = downloadHelper({
 
 const reducer = handleActions(
   Object.assign({}, reduceActions, {
+    [submissionActionTypes.SUBMIT_FULFILLED]: (
+      state,
+      { payload: { solution }, meta: { submissionType } }
+    ) => {
+      if (
+        submissionType !== 'assignmentSolution' ||
+        !solution ||
+        !solution.id
+      ) {
+        return state;
+      }
+
+      if (
+        !state.hasIn([
+          'solutions',
+          solution.exerciseAssignmentId,
+          solution.solution.userId
+        ])
+      ) {
+        state = state.setIn(
+          [
+            'solutions',
+            solution.exerciseAssignmentId,
+            solution.solution.userId
+          ],
+          List()
+        );
+      }
+
+      return state.updateIn(
+        ['solutions', solution.exerciseAssignmentId, solution.solution.userId],
+        solutions => solutions.push(solution.id)
+      );
+    },
+
     [solutionsActionTypes.LOAD_USERS_SOLUTIONS_FULFILLED]: (
       state,
       { payload, meta: { userId, assignmentId } }
     ) =>
       state.setIn(
         ['solutions', assignmentId, userId],
-        fromJS(payload.map(submission => submission.id))
+        fromJS(payload.map(solution => solution.id))
       ),
+
     [additionalActionTypes.SYNC_ASSIGNMENT_FULFILLED]: (
       state,
       { payload, meta: { assignmentId } }
     ) => state.setIn(['resources', assignmentId, 'data'], fromJS(payload)),
+
     [solutionsActionTypes.RESUBMIT_ALL_PENDING]: (
       state,
       { meta: { assignmentId } }
@@ -92,6 +130,7 @@ const reducer = handleActions(
         ['resources', assignmentId, 'data', 'resubmit-all-pending'],
         true
       ),
+
     [solutionsActionTypes.RESUBMIT_ALL_REJECTED]: (
       state,
       { meta: { assignmentId } }
@@ -100,6 +139,7 @@ const reducer = handleActions(
         ['resources', assignmentId, 'data', 'resubmit-all-pending'],
         false
       ),
+
     [solutionsActionTypes.RESUBMIT_ALL_FULFILLED]: (
       state,
       { meta: { assignmentId } }

@@ -12,7 +12,6 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import FetchManyResourceRenderer from '../../components/helpers/FetchManyResourceRenderer';
 import withLinks from '../../helpers/withLinks';
 import Page from '../../components/layout/Page';
-import Button from '../../components/widgets/FlatButton';
 
 import {
   fetchReferenceSolutionIfNeeded,
@@ -33,7 +32,6 @@ import {
   fetchManyStatus
 } from '../../redux/selectors/referenceSolutionEvaluations';
 import ResubmitReferenceSolutionContainer from '../../containers/ResubmitReferenceSolutionContainer';
-import { RefreshIcon } from '../../components/icons';
 
 const messages = defineMessages({
   title: {
@@ -134,13 +132,6 @@ class ReferenceSolution extends Component {
                   exerciseId={exerciseId}
                   isDebug={true}
                 />
-                <Button onClick={refreshSolutionEvaluations} bsStyle="primary">
-                  <RefreshIcon gapRight />
-                  <FormattedMessage
-                    id="app.referenceSolution.refreshEvaluations"
-                    defaultMessage="Refresh"
-                  />
-                </Button>
               </p>
               <FetchManyResourceRenderer fetchManyStatus={fetchStatus}>
                 {() =>
@@ -149,6 +140,7 @@ class ReferenceSolution extends Component {
                     evaluations={evaluations}
                     exercise={exercise}
                     deleteEvaluation={deleteEvaluation}
+                    refreshSolutionEvaluations={refreshSolutionEvaluations}
                   />}
               </FetchManyResourceRenderer>
             </div>}

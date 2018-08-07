@@ -25,7 +25,7 @@ const EvaluationDetail = ({
     title={
       <FormattedMessage
         id="app.evaluationDetail.title.details"
-        defaultMessage="Evaluation details"
+        defaultMessage="Evaluation Details"
       />
     }
     noPadding={true}

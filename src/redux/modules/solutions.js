@@ -3,7 +3,9 @@ import { handleActions } from 'redux-actions';
 import { createApiAction } from '../middleware/apiMiddleware';
 import factory, {
   initialState,
-  defaultNeedsRefetching
+  defaultNeedsRefetching,
+  createRecord,
+  resourceStatus
 } from '../helpers/resourceManager';
 import { actionTypes as submissionActionTypes } from './submission';
 import { actionTypes as submissionEvaluationActionTypes } from './submissionEvaluations';
@@ -90,7 +92,7 @@ export const resubmitSolution = (
     method: 'POST',
     endpoint: `/assignment-solutions/${id}/resubmit`,
     body: { private: isPrivate, debug: isDebug },
-    meta: { id, progressObserverId }
+    meta: { submissionType: 'assignmentSolution', progressObserverId }
   });
 
 export const resubmitAllSolutions = assignmentId =>
@@ -117,6 +119,20 @@ export const fetchUsersSolutions = (userId, assignmentId) =>
 
 const reducer = handleActions(
   Object.assign({}, reduceActions, {
+    [submissionActionTypes.SUBMIT_FULFILLED]: (
+      state,
+      { payload: { solution }, meta: { submissionType } }
+    ) =>
+      submissionType === 'assignmentSolution' && solution && solution.id
+        ? state.setIn(
+            ['resources', solution.id],
+            createRecord({
+              state: resourceStatus.FULFILLED,
+              data: solution
+            })
+          )
+        : state,
+
     [additionalActionTypes.LOAD_USERS_SOLUTIONS_FULFILLED]:
       reduceActions[actionTypes.FETCH_MANY_FULFILLED],
 

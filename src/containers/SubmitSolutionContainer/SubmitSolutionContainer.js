@@ -10,7 +10,7 @@ import {
   isSending,
   isValidating,
   hasFailed,
-  getSubmissionId,
+  getSubmittedSolutionId,
   getMonitorParams,
   getPresubmitEnvironments,
   getPresubmitVariables,
@@ -187,7 +187,6 @@ class SubmitSolutionContainer extends Component {
                 ? EXERCISE_REFERENCE_SOLUTION_URI_FACTORY(id, submissionId)
                 : SOLUTION_DETAIL_URI_FACTORY(id, submissionId)
             }
-            onUserClose={!isReferenceSolution ? onEndFetch : null}
             onFinish={!isReferenceSolution ? onEndFetch : null}
           />}
       </div>
@@ -237,7 +236,7 @@ export default withLinks(
         isSending: isSending(state),
         hasFailed: hasFailed(state),
         canSubmit: createAllUploaded(id)(state),
-        submissionId: getSubmissionId(state),
+        submissionId: getSubmittedSolutionId(state),
         monitor: getMonitorParams(state),
         presubmitEnvironments: getPresubmitEnvironments(state),
         presubmitVariables: getPresubmitVariables(state),

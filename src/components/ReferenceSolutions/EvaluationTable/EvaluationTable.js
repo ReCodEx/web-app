@@ -8,6 +8,7 @@ import {
 } from 'react-intl';
 import { Table } from 'react-bootstrap';
 import classnames from 'classnames';
+
 import AssignmentStatusIcon from '../../Assignments/Assignment/AssignmentStatusIcon';
 import './EvaluationTable.css';
 
@@ -42,7 +43,7 @@ const EvaluationTable = ({ evaluations, renderButtons, selectedRowId = '' }) =>
             ((a.evaluation && a.evaluation.evaluatedAt) || a.submittedAt)
           );
         })
-        .map(e =>
+        .map((e, idx) =>
           <tr key={e.id} className={selectedRowId === e.id ? 'activeRow' : ''}>
             <td>
               <AssignmentStatusIcon
@@ -77,7 +78,7 @@ const EvaluationTable = ({ evaluations, renderButtons, selectedRowId = '' }) =>
                   />
                 </i>
               </td>}
-            {renderButtons && renderButtons(e.id)}
+            {renderButtons && renderButtons(e.id, idx)}
           </tr>
         )}
 
