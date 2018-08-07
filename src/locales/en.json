@@ -844,7 +844,7 @@
   "app.pipelinesList.executionIconTooltip": "Execution (testing) pipeline",
   "app.pipelinesList.fileIconTooltip": "Tested solution is expected to yield results into a specific file",
   "app.pipelinesList.judgeOnlyIconTooltip": "Judge-only pipeline",
-  "app.pipelinesList.stdoutIconTooltip": "Tested solution is expected to yield results to stdandard output",
+  "app.pipelinesList.stdoutIconTooltip": "Tested solution is expected to yield results to standard output",
   "app.pipelinesList.universalPipeline": "universal pipeline",
   "app.pipelinesList.universalPipelineIconTooltip": "Universal pipeline which is used in common (simple) exercise configurations.",
   "app.pointsForm.bonusPoints": "Bonus points:",
