@@ -1,14 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {
-  FormattedMessage,
-  FormattedDate,
-  FormattedTime,
-  FormattedNumber
-} from 'react-intl';
+import { FormattedMessage, FormattedNumber } from 'react-intl';
 import { Table } from 'react-bootstrap';
 import classnames from 'classnames';
+
 import AssignmentStatusIcon from '../../Assignments/Assignment/AssignmentStatusIcon';
+import DateTime from '../../widgets/DateTime';
 import './EvaluationTable.css';
 
 const EvaluationTable = ({ evaluations, renderButtons, selectedRowId = '' }) =>
@@ -42,7 +39,7 @@ const EvaluationTable = ({ evaluations, renderButtons, selectedRowId = '' }) =>
             ((a.evaluation && a.evaluation.evaluatedAt) || a.submittedAt)
           );
         })
-        .map(e =>
+        .map((e, idx) =>
           <tr key={e.id} className={selectedRowId === e.id ? 'activeRow' : ''}>
             <td>
               <AssignmentStatusIcon
@@ -53,9 +50,11 @@ const EvaluationTable = ({ evaluations, renderButtons, selectedRowId = '' }) =>
             </td>
             {e.evaluation &&
               <td>
-                <FormattedDate value={e.evaluation.evaluatedAt * 1000} />
-                &nbsp;
-                <FormattedTime value={e.evaluation.evaluatedAt * 1000} />
+                <DateTime
+                  unixts={e.evaluation.evaluatedAt}
+                  showRelative
+                  showSeconds
+                />
               </td>}
             {e.evaluation &&
               <td
@@ -77,7 +76,7 @@ const EvaluationTable = ({ evaluations, renderButtons, selectedRowId = '' }) =>
                   />
                 </i>
               </td>}
-            {renderButtons && renderButtons(e.id)}
+            {renderButtons && renderButtons(e.id, idx)}
           </tr>
         )}
 

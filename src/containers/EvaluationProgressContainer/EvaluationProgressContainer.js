@@ -11,7 +11,8 @@ import {
   completedTask,
   skippedTask,
   failedTask,
-  finish
+  finish,
+  dropObserver
 } from '../../redux/modules/evaluationProgress';
 
 import {
@@ -160,9 +161,10 @@ class EvaluationProgressContainer extends Component {
   };
 
   userCloseAction = () => {
-    const { onUserClose, finishProcessing } = this.props;
+    const { finishProcessing, dropObserver, onUserClose } = this.props;
     finishProcessing();
     this.closeSocket();
+    dropObserver();
     onUserClose && onUserClose();
   };
 
@@ -236,6 +238,7 @@ EvaluationProgressContainer.propTypes = {
   messages: ImmutablePropTypes.list,
   intl: PropTypes.object.isRequired,
   push: PropTypes.func.isRequired,
+  dropObserver: PropTypes.func.isRequired,
   onUserClose: PropTypes.func,
   onFinish: PropTypes.func
 };
@@ -258,6 +261,7 @@ export default connect(
     skippedTask,
     failedTask,
     addMessage,
-    push
+    push,
+    dropObserver
   }
 )(injectIntl(EvaluationProgressContainer));

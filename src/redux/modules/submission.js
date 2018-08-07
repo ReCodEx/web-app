@@ -30,7 +30,7 @@ export const actionTypes = {
 };
 
 export const initialState = fromJS({
-  submissionId: null,
+  solutionId: null,
   userId: null,
   id: null,
   submittedOn: null,
@@ -156,20 +156,20 @@ const reducer = handleActions(
       { payload, meta: { submissionType } }
     ) => {
       // extract submission and ws channel correctly based on the solution type
-      const { submission = null, webSocketChannel = null } =
+      const { webSocketChannel = null } =
         submissionType === 'referenceSolution'
           ? payload.submissions &&
             payload.submissions.length > 0 &&
             payload.submissions[0]
           : payload;
-      const submissionId =
+      const solution =
         submissionType === 'referenceSolution'
-          ? payload.referenceSolution.id
-          : submission && submission.id;
-
-      return submissionId && webSocketChannel
+          ? payload.referenceSolution
+          : payload.solution;
+      const solutionId = solution && solution.id;
+      return solutionId && webSocketChannel
         ? state
-            .set('submissionId', submissionId)
+            .set('solutionId', solutionId)
             .set('monitor', {
               url: webSocketChannel.monitorUrl,
               id: webSocketChannel.id

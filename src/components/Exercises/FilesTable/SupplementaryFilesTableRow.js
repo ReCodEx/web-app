@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FormattedDate, FormattedTime, FormattedMessage } from 'react-intl';
-import { Button } from 'react-bootstrap';
+import { FormattedMessage } from 'react-intl';
 
+import Button from '../../widgets/FlatButton';
+import DateTime from '../../widgets/DateTime';
 import { prettyPrintBytes } from '../../helpers/stringFormatters';
 import Confirm from '../../../components/forms/Confirm';
 import { DeleteIcon } from '../../../components/icons';
@@ -10,7 +11,6 @@ import { DeleteIcon } from '../../../components/icons';
 const SupplementaryFilesTableRow = ({
   id,
   name,
-  hashName,
   size,
   uploadedAt,
   downloadFile,
@@ -31,9 +31,7 @@ const SupplementaryFilesTableRow = ({
       {prettyPrintBytes(size)}
     </td>
     <td>
-      <FormattedDate value={uploadedAt * 1000} />
-      &nbsp;
-      <FormattedTime value={uploadedAt * 1000} />
+      <DateTime unixts={uploadedAt} showRelative />
     </td>
     {!viewOnly &&
       <td>
@@ -49,7 +47,7 @@ const SupplementaryFilesTableRow = ({
             }
             className="pull-right"
           >
-            <Button bsSize="xs" className="btn-flat" bsStyle="danger">
+            <Button bsSize="xs" bsStyle="danger">
               <DeleteIcon gapRight />
               <FormattedMessage id="generic.delete" defaultMessage="Delete" />
             </Button>
@@ -60,7 +58,6 @@ const SupplementaryFilesTableRow = ({
 SupplementaryFilesTableRow.propTypes = {
   id: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
-  hashName: PropTypes.string.isRequired,
   size: PropTypes.number.isRequired,
   uploadedAt: PropTypes.number.isRequired,
   downloadFile: PropTypes.func,

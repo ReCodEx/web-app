@@ -1,15 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {
-  FormattedMessage,
-  FormattedNumber,
-  FormattedTime,
-  FormattedDate
-} from 'react-intl';
+import { FormattedMessage, FormattedNumber } from 'react-intl';
 import { Table } from 'react-bootstrap';
+
 import Box from '../../widgets/Box';
 import Markdown from '../../widgets/Markdown';
-
+import DateTime from '../../widgets/DateTime';
 import UsersNameContainer from '../../../containers/UsersNameContainer';
 import ExercisesNameContainer from '../../../containers/ExercisesNameContainer';
 
@@ -67,24 +63,22 @@ const PipelineDetail = ({
           <th>
             <FormattedMessage
               id="app.pipeline.createdAt"
-              defaultMessage="Created at:"
-            />
+              defaultMessage="Created at"
+            />:
           </th>
           <td>
-            <FormattedDate value={createdAt * 1000} />{' '}
-            <FormattedTime value={createdAt * 1000} />
+            <DateTime unixts={createdAt} showRelative />
           </td>
         </tr>
         <tr>
           <th>
             <FormattedMessage
               id="app.pipeline.updatedAt"
-              defaultMessage="Last updated at:"
-            />
+              defaultMessage="Last updated at"
+            />:
           </th>
           <td>
-            <FormattedDate value={updatedAt * 1000} />{' '}
-            <FormattedTime value={updatedAt * 1000} />
+            <DateTime unixts={updatedAt} showRelative />
           </td>
         </tr>
         <tr>

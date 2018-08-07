@@ -20,7 +20,7 @@ import ExerciseDetail from '../../components/Exercises/ExerciseDetail';
 import ExerciseGroups from '../../components/Exercises/ExerciseGroups';
 import LocalizedTexts from '../../components/helpers/LocalizedTexts';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
-import ReferenceSolutionsList from '../../components/Exercises/ReferenceSolutionsList';
+import ReferenceSolutionsTable from '../../components/Exercises/ReferenceSolutionsTable';
 import SubmitSolutionContainer from '../../containers/SubmitSolutionContainer';
 import Box from '../../components/widgets/Box';
 import { SendIcon, DeleteIcon, NeedFixingIcon } from '../../components/icons';
@@ -502,7 +502,7 @@ class Exercise extends Component {
                         >
                           {referenceSolutions =>
                             referenceSolutions.length > 0
-                              ? <ReferenceSolutionsList
+                              ? <ReferenceSolutionsTable
                                   referenceSolutions={referenceSolutions}
                                   runtimeEnvironments={runtimes}
                                   renderButtons={(

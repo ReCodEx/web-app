@@ -1,9 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage, FormattedDate, FormattedRelative } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { Table } from 'react-bootstrap';
+
 import { SuccessOrFailureIcon } from '../../icons';
 import Box from '../../widgets/Box';
+import DateTime from '../../widgets/DateTime';
 
 const LicencesTable = ({ instance, licences }) =>
   <Box
@@ -63,9 +65,12 @@ const LicencesTable = ({ instance, licences }) =>
                   <SuccessOrFailureIcon success={isValid} />
                 </td>
                 <td>
-                  <FormattedDate value={validUntil * 1000} /> (
-                  <FormattedRelative value={validUntil * 1000} />
-                  )
+                  <DateTime
+                    unixts={validUntil}
+                    showTime={false}
+                    showRelative
+                    isDeadline
+                  />
                 </td>
               </tr>
             )}

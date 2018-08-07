@@ -263,7 +263,8 @@ class Assignment extends Component {
                         solutions={this.sortSolutions(solutions)}
                         assignmentId={assignment.id}
                         runtimeEnvironments={runtimes}
-                        noteMaxlen={32}
+                        noteMaxlen={64}
+                        compact
                       />}
                   </Col>}
               </ResourceRenderer>

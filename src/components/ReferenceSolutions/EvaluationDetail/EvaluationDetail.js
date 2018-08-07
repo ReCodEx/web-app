@@ -1,15 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import {
-  FormattedMessage,
-  FormattedNumber,
-  FormattedDate,
-  FormattedTime
-} from 'react-intl';
+import { FormattedMessage, FormattedNumber } from 'react-intl';
 import { Table } from 'react-bootstrap';
 
 import Box from '../../widgets/Box';
+import DateTime from '../../widgets/DateTime';
 import { SuccessOrFailureIcon } from '../../icons';
 
 const EvaluationDetail = ({ evaluation, isCorrect }) =>
@@ -17,7 +13,7 @@ const EvaluationDetail = ({ evaluation, isCorrect }) =>
     title={
       <FormattedMessage
         id="app.evaluationDetail.title.details"
-        defaultMessage="Evaluation details"
+        defaultMessage="Evaluation Details"
       />
     }
     noPadding={true}
@@ -34,9 +30,7 @@ const EvaluationDetail = ({ evaluation, isCorrect }) =>
             />
           </th>
           <td className="text-center">
-            <FormattedDate value={evaluation.evaluatedAt * 1000} />
-            &nbsp;
-            <FormattedTime value={evaluation.evaluatedAt * 1000} />
+            <DateTime unixts={evaluation.evaluatedAt} showRelative />
           </td>
         </tr>
 

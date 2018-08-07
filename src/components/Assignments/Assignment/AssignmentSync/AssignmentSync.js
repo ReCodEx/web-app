@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage, FormattedDate, FormattedTime } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { Row, Col, Alert } from 'react-bootstrap';
 
 import Button from '../../../widgets/FlatButton';
+import DateTime from '../../../widgets/DateTime';
 
 const syncMessages = {
   supplementaryFiles: (
@@ -107,30 +108,18 @@ const AssignmentSync = ({ syncInfo, exerciseSync }) => {
                 id="app.assignment.syncRequired"
                 defaultMessage="The exercise data are newer than assignment data. Exercise was updated {exerciseUpdated}, but the assignment was last updated {assignmentUpdated}!"
                 values={{
-                  exerciseUpdated: syncInfo.updatedAt.exercise
-                    ? <span>
-                        <FormattedDate
-                          value={new Date(syncInfo.updatedAt.exercise * 1000)}
-                        />
-                        {' ('}
-                        <FormattedTime
-                          value={new Date(syncInfo.updatedAt.exercise * 1000)}
-                        />
-                        {')'}
-                      </span>
-                    : '??',
-                  assignmentUpdated: syncInfo.updatedAt.assignment
-                    ? <span>
-                        <FormattedDate
-                          value={new Date(syncInfo.updatedAt.assignment * 1000)}
-                        />
-                        {' ('}
-                        <FormattedTime
-                          value={new Date(syncInfo.updatedAt.assignment * 1000)}
-                        />
-                        {')'}
-                      </span>
-                    : '??'
+                  exerciseUpdated: (
+                    <DateTime
+                      unixts={syncInfo.updatedAt.exercise}
+                      emptyPlaceholder="??"
+                    />
+                  ),
+                  assignmentUpdated: (
+                    <DateTime
+                      unixts={syncInfo.updatedAt.assignment}
+                      emptyPlaceholder="??"
+                    />
+                  )
                 }}
               />
             </h4>

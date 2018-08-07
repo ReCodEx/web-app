@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage, FormattedDate, FormattedTime } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
+
+import DateTime from '../../widgets/DateTime';
 
 const TermsListItem = ({ data, createActions }) =>
   <tr>
@@ -19,23 +21,13 @@ const TermsListItem = ({ data, createActions }) =>
         </span>}
     </td>
     <td>
-      {data.beginning
-        ? <FormattedDate value={new Date(data.beginning * 1000)} />
-        : <span>&mdash;</span>}
+      <DateTime unixts={data.beginning} showTime={false} />
     </td>
     <td>
-      {data.end
-        ? <FormattedDate value={new Date(data.end * 1000)} />
-        : <span>&mdash;</span>}
+      <DateTime unixts={data.end} showTime={false} />
     </td>
     <td>
-      {data.advertiseUntil
-        ? <span>
-            <FormattedDate value={new Date(data.advertiseUntil * 1000)} />
-            {', '}
-            <FormattedTime value={new Date(data.advertiseUntil * 1000)} />
-          </span>
-        : <span>&mdash;</span>}
+      <DateTime unixts={data.advertiseUntil} showTime={false} />
     </td>
     <td className="text-right">
       {createActions && createActions(data.id, data)}

@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FormattedDate, FormattedTime, FormattedMessage } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { Link } from 'react-router';
 
+import DateTime from '../../widgets/DateTime';
 import Icon from '../../icons';
 import withLinks from '../../../helpers/withLinks';
 
@@ -67,18 +68,10 @@ const FailuresListItem = ({
         <span>&mdash;</span>}
     </td>
     <td>
-      <FormattedDate value={new Date(failure.createdAt * 1000)} />
-      {', '}
-      <FormattedTime value={new Date(failure.createdAt * 1000)} />
+      <DateTime unixts={failure.createdAt} />
     </td>
     <td>
-      {failure.resolvedAt
-        ? <span>
-            <FormattedDate value={new Date(failure.resolvedAt * 1000)} />
-            {', '}
-            <FormattedTime value={new Date(failure.resolvedAt * 1000)} />
-          </span>
-        : <span>&mdash;</span>}
+      <DateTime unixts={failure.resolvedAt} />
     </td>
     <td>
       {failure.resolutionNote

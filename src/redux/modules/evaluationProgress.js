@@ -27,7 +27,8 @@ export const actionTypes = {
   COMPLETED_TASK: 'recodex/evaluationProgress/COMPLETED_TASK',
   SKIPPED_TASK: 'recodex/evaluationProgress/SKIPPED_TASK',
   FAILED_TASK: 'recodex/evaluationProgress/FAILED_TASK',
-  ADD_MESSAGE: 'recodex/evaluationProgress/ADD_MESSAGE'
+  ADD_MESSAGE: 'recodex/evaluationProgress/ADD_MESSAGE',
+  DROP_OBSERVER: 'recodex/evaluationProgress/DROP_OBSERVER'
 };
 
 export const init = createAction(
@@ -42,6 +43,7 @@ export const skippedTask = createAction(actionTypes.SKIPPED_TASK);
 export const failedTask = createAction(actionTypes.FAILED_TASK);
 export const addMessage = createAction(actionTypes.ADD_MESSAGE);
 export const finish = createAction(actionTypes.FINISH);
+export const dropObserver = createAction(actionTypes.DROP_OBSERVER);
 
 /**
  * Reducer
@@ -109,7 +111,9 @@ export default handleActions(
     [actionTypes.FINISH]: state =>
       state
         .set('isFinished', true)
-        .set('expectedTasksCount', state.getIn(['progress', 'total'])) // maybe all the expected tasks did not arrive, stretch the progress to 100%
+        .set('expectedTasksCount', state.getIn(['progress', 'total'])), // maybe all the expected tasks did not arrive, stretch the progress to 100%
+
+    [actionTypes.DROP_OBSERVER]: state => state.set('progressObserverId', null)
   },
   initialState
 );

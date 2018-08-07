@@ -19,6 +19,18 @@ import { linksFactory, isAbsolute } from '../../links';
 import 'admin-lte/dist/css/AdminLTE.min.css';
 import 'admin-lte/dist/css/skins/_all-skins.min.css';
 
+const ADDITIONAL_INTL_FORMATS = {
+  time: {
+    '24hour': { hour12: false, hour: 'numeric', minute: 'numeric' },
+    '24hourWithSeconds': {
+      hour12: false,
+      hour: 'numeric',
+      minute: 'numeric',
+      second: 'numeric'
+    }
+  }
+};
+
 /**
  * Handles the dependency injection of the localized links based on the current language stated in the URL.
  * Also controls the state of the sidebar - collapsing and showing the sidebar.
@@ -121,7 +133,11 @@ class LayoutContainer extends Component {
     moment.locale(lang);
 
     return (
-      <IntlProvider locale={lang} messages={this.getMessages(lang)}>
+      <IntlProvider
+        locale={lang}
+        messages={this.getMessages(lang)}
+        formats={ADDITIONAL_INTL_FORMATS}
+      >
         <Layout
           sidebar={sidebar}
           isLoggedIn={isLoggedIn}
