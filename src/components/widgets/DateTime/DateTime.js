@@ -57,7 +57,8 @@ const dateTime = ({
         })}
       >
         <FormattedDate value={unixts * 1000} />
-      </span>}{' '}
+      </span>}
+    &#8203;
     {showTime &&
       <span
         className={classnames({
@@ -69,7 +70,8 @@ const dateTime = ({
           value={unixts * 1000}
           format={showSeconds ? '24hourWithSeconds' : '24hour'}
         />
-      </span>}{' '}
+      </span>}
+    &#8203;
     {showRelative &&
       <span
         className={classnames({
