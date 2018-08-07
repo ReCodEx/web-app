@@ -135,7 +135,7 @@ class ReferenceSolutionDetail extends Component {
                 <TestResults
                   evaluation={evaluation}
                   runtimeEnvironmentId={runtimeEnvironmentId}
-                  isSupervisor={true}
+                  showJudgeLog={true}
                 />}
 
               {evaluation &&
