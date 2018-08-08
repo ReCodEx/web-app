@@ -101,7 +101,12 @@ class GroupDetail extends Component {
       return;
     }
 
-    if (isReady(this.props.group) && isReady(newProps.group)) {
+    if (
+      isReady(this.props.group) &&
+      isReady(newProps.group) &&
+      this.props.group.hasIn(['data', 'privateData', 'students']) &&
+      newProps.group.hasIn(['data', 'privateData', 'students'])
+    ) {
       const thisData = this.props.group.toJS().data.privateData;
       const newData = newProps.group.toJS().data.privateData;
       if (thisData.students.length !== newData.students.length) {
@@ -116,18 +121,22 @@ class GroupDetail extends Component {
       {
         resource: group,
         iconName: 'university',
-        breadcrumb: data => ({
-          link: ({ INSTANCE_URI_FACTORY }) =>
-            INSTANCE_URI_FACTORY(data.privateData.instanceId),
-          text: 'Instance'
-        })
+        breadcrumb: data =>
+          data &&
+          data.privateData && {
+            link: ({ INSTANCE_URI_FACTORY }) =>
+              INSTANCE_URI_FACTORY(data.privateData.instanceId),
+            text: 'Instance'
+          }
       },
       {
         resource: group,
         iconName: 'users',
-        breadcrumb: data => ({
-          text: getLocalizedName(data, locale)
-        })
+        breadcrumb: data =>
+          data &&
+          data.privateData && {
+            text: getLocalizedName(data, locale)
+          }
       }
     ];
     return breadcrumbs;
@@ -281,8 +290,8 @@ class GroupDetail extends Component {
                                   data.privateData &&
                                   data.privateData.publicStats
                                 }
-                                isGroupAdmin={isGroupAdmin}
-                                isGroupSupervisor={isGroupSupervisor}
+                                isAdmin={isGroupAdmin}
+                                isSupervisor={isGroupSupervisor}
                                 groupName={getLocalizedName(data, locale)}
                                 renderActions={id =>
                                   <LeaveJoinGroupButtonContainer

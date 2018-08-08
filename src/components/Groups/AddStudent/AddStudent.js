@@ -8,8 +8,8 @@ const AddStudent = ({ groupId, instanceId }) =>
   <AddUserContainer
     instanceId={instanceId}
     id={`add-student-${groupId}`}
-    createActions={userId =>
-      <LeaveJoinGroupButtonContainer userId={userId} groupId={groupId} />}
+    createActions={({ id }) =>
+      <LeaveJoinGroupButtonContainer userId={id} groupId={groupId} />}
   />;
 
 AddStudent.propTypes = {
