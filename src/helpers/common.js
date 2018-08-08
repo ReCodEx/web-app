@@ -143,7 +143,8 @@ export const hasPermissions = (entity, ...fields) => {
   }
   return fields.reduce(
     (acc, field) =>
-      acc && Boolean(safeGet(entity, ['permissionHints', field], false), true)
+      acc && Boolean(safeGet(entity, ['permissionHints', field], false)),
+    true
   );
 };
 
@@ -158,6 +159,7 @@ export const hasOneOfPermissions = (entity, ...fields) => {
   }
   return fields.reduce(
     (acc, field) =>
-      acc || Boolean(safeGet(entity, ['permissionHints', field], false), false)
+      acc || Boolean(safeGet(entity, ['permissionHints', field], false)),
+    false
   );
 };
