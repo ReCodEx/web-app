@@ -13,7 +13,7 @@ import EditGroupForm from '../../components/forms/EditGroupForm';
 import OrganizationalGroupButtonContainer from '../../containers/OrganizationalGroupButtonContainer';
 import DeleteGroupButtonContainer from '../../containers/DeleteGroupButtonContainer';
 import Box from '../../components/widgets/Box';
-import Icon from '../../components/icons';
+import Icon, { BanIcon } from '../../components/icons';
 
 import { fetchGroupIfNeeded, editGroup } from '../../redux/modules/groups';
 import { groupSelector } from '../../redux/selectors/groups';
@@ -28,6 +28,7 @@ import {
 } from '../../helpers/getLocalizedData';
 
 import withLinks from '../../helpers/withLinks';
+import { hasPermissions } from '../../helpers/common';
 
 class EditGroup extends Component {
   componentWillMount() {
@@ -111,80 +112,96 @@ class EditGroup extends Component {
       >
         {group =>
           <div>
-            <Row>
-              <Col lg={3}>
-                <p>
-                  <OrganizationalGroupButtonContainer id={group.id} />
-                </p>
-              </Col>
-              <Col lg={9}>
-                <p className="small text-muted" style={{ padding: '0.75em' }}>
-                  <Icon icon="info-circle" gapRight />
+            {!hasPermissions(group, 'update') &&
+              <Row>
+                <Col sm={12}>
+                  <p className="callout callout-warning larger">
+                    <BanIcon gapRight />
+                    <FormattedMessage
+                      id="generic.accessDenied"
+                      defaultMessage="You do not have permissions to see this page. If you got to this page via a seemingly legitimate link or button, please report a bug."
+                    />
+                  </p>
+                </Col>
+              </Row>}
+
+            {hasPermissions(group, 'update') &&
+              <Row>
+                <Col lg={3}>
+                  <p>
+                    <OrganizationalGroupButtonContainer id={group.id} />
+                  </p>
+                </Col>
+                <Col lg={9}>
+                  <p className="small text-muted" style={{ padding: '0.75em' }}>
+                    <Icon icon="info-circle" gapRight />
+                    <FormattedMessage
+                      id="app.editGroup.organizationalExplain"
+                      defaultMessage="Regular groups are containers for students and assignments. Organizational groups are intended to create hierarchy, so they are forbidden to hold any students or assignments."
+                    />
+                  </p>
+                </Col>
+              </Row>}
+
+            {hasPermissions(group, 'update') &&
+              <EditGroupForm
+                form="editGroup"
+                initialValues={this.getInitialValues(group)}
+                onSubmit={editGroup}
+                hasThreshold={hasThreshold}
+                isPublic={group.public}
+                localizedTextsLocales={getLocalizedTextsLocales(localizedTexts)}
+                isSuperAdmin={isSuperAdmin}
+              />}
+
+            {hasPermissions(group, 'remove') &&
+              <Box
+                type="danger"
+                title={
                   <FormattedMessage
-                    id="app.editGroup.organizationalExplain"
-                    defaultMessage="Regular groups are containers for students and assignments. Organizational groups are intended to create hierarchy, so they are forbidden to hold any students or assignments."
+                    id="app.editGroup.deleteGroup"
+                    defaultMessage="Delete the group"
                   />
-                </p>
-              </Col>
-            </Row>
+                }
+              >
+                <div>
+                  <p>
+                    <FormattedMessage
+                      id="app.editGroup.deleteGroupWarning"
+                      defaultMessage="Deleting a group will make all attached entities (assignments, solutions, ...) inaccessible."
+                    />
+                  </p>
+                  <p className="text-center">
+                    <DeleteGroupButtonContainer
+                      id={group.id}
+                      disabled={
+                        group.parentGroupId === null ||
+                        (group.childGroups && group.childGroups.length > 0) // TODO whatabout archived sub-groups?
+                      }
+                      onDeleted={() =>
+                        push(GROUP_INFO_URI_FACTORY(group.parentGroupId))}
+                    />
 
-            <EditGroupForm
-              form="editGroup"
-              initialValues={this.getInitialValues(group)}
-              onSubmit={editGroup}
-              hasThreshold={hasThreshold}
-              isPublic={group.public}
-              localizedTextsLocales={getLocalizedTextsLocales(localizedTexts)}
-              isSuperAdmin={isSuperAdmin}
-            />
+                    {group.parentGroupId === null &&
+                      <HelpBlock>
+                        <FormattedMessage
+                          id="app.editGroup.cannotDeleteRootGroup"
+                          defaultMessage="This is a so-called root group and it cannot be deleted."
+                        />
+                      </HelpBlock>}
 
-            <Box
-              type="danger"
-              title={
-                <FormattedMessage
-                  id="app.editGroup.deleteGroup"
-                  defaultMessage="Delete the group"
-                />
-              }
-            >
-              <div>
-                <p>
-                  <FormattedMessage
-                    id="app.editGroup.deleteGroupWarning"
-                    defaultMessage="Deleting a group will make all attached entities (assignments, solutions, ...) inaccessible."
-                  />
-                </p>
-                <p className="text-center">
-                  <DeleteGroupButtonContainer
-                    id={group.id}
-                    disabled={
-                      group.parentGroupId === null ||
-                      (group.childGroups && group.childGroups.length > 0) // TODO whatabout archived sub-groups?
-                    }
-                    onDeleted={() =>
-                      push(GROUP_INFO_URI_FACTORY(group.parentGroupId))}
-                  />
-
-                  {group.parentGroupId === null &&
-                    <HelpBlock>
-                      <FormattedMessage
-                        id="app.editGroup.cannotDeleteRootGroup"
-                        defaultMessage="This is a so-called root group and it cannot be deleted."
-                      />
-                    </HelpBlock>}
-
-                  {group.parentGroupId !== null &&
-                    group.childGroups &&
-                    group.childGroups.length > 0 &&
-                    <HelpBlock>
-                      <FormattedMessage
-                        id="app.editGroup.cannotDeleteGroupWithSubgroups"
-                        defaultMessage="Group with nested sub-groups cannot be deleted."
-                      />
-                    </HelpBlock>}
-                </p>
-              </div>
-            </Box>
+                    {group.parentGroupId !== null &&
+                      group.childGroups &&
+                      group.childGroups.length > 0 &&
+                      <HelpBlock>
+                        <FormattedMessage
+                          id="app.editGroup.cannotDeleteGroupWithSubgroups"
+                          defaultMessage="Group with nested sub-groups cannot be deleted."
+                        />
+                      </HelpBlock>}
+                  </p>
+                </div>
+              </Box>}
           </div>}
       </Page>
     );

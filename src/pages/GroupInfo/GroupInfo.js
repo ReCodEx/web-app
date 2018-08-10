@@ -8,22 +8,6 @@ import { FormattedMessage, injectIntl } from 'react-intl';
 import { List } from 'immutable';
 import { Row, Col } from 'react-bootstrap';
 
-import Page from '../../components/layout/Page';
-import GroupInfoTable, {
-  LoadingGroupDetail,
-  FailedGroupDetail
-} from '../../components/Groups/GroupDetail';
-import HierarchyLine from '../../components/Groups/HierarchyLine';
-import SupervisorsList from '../../components/Users/SupervisorsList';
-import { getLocalizedName } from '../../helpers/getLocalizedData';
-import { isReady } from '../../redux/helpers/resourceManager/index';
-import Box from '../../components/widgets/Box';
-import GroupTree from '../../components/Groups/GroupTree/GroupTree';
-import EditGroupForm, {
-  EDIT_GROUP_FORM_EMPTY_INITIAL_VALUES
-} from '../../components/forms/EditGroupForm';
-import AddSupervisor from '../../components/Groups/AddSupervisor';
-
 import {
   createGroup,
   fetchGroupIfNeeded,
@@ -40,10 +24,28 @@ import {
   isStudentOf
 } from '../../redux/selectors/users';
 import { groupSelector, groupsSelector } from '../../redux/selectors/groups';
+
+import Page from '../../components/layout/Page';
+import GroupInfoTable, {
+  LoadingGroupDetail,
+  FailedGroupDetail
+} from '../../components/Groups/GroupDetail';
+import HierarchyLine from '../../components/Groups/HierarchyLine';
+import SupervisorsList from '../../components/Users/SupervisorsList';
+import { getLocalizedName } from '../../helpers/getLocalizedData';
+import { isReady } from '../../redux/helpers/resourceManager/index';
+import Box from '../../components/widgets/Box';
+import GroupTree from '../../components/Groups/GroupTree/GroupTree';
+import EditGroupForm, {
+  EDIT_GROUP_FORM_EMPTY_INITIAL_VALUES
+} from '../../components/forms/EditGroupForm';
+import AddSupervisor from '../../components/Groups/AddSupervisor';
 import GroupTopButtons from '../../components/Groups/GroupTopButtons/GroupTopButtons';
+import { BanIcon } from '../../components/icons';
+import { hasPermissions } from '../../helpers/common';
 
 class GroupInfo extends Component {
-  static loadAsync = ({ groupId }, dispatch, { userId, isSuperAdmin }) =>
+  static loadAsync = ({ groupId }, dispatch) =>
     Promise.all([
       dispatch(fetchGroupIfNeeded(groupId))
         .then(res => res.value)
@@ -57,19 +59,15 @@ class GroupInfo extends Component {
     ]);
 
   componentWillMount() {
-    const { loadAsync, userId, isSuperAdmin } = this.props;
-    loadAsync(userId, isSuperAdmin);
+    const { loadAsync } = this.props;
+    loadAsync();
   }
 
   componentWillReceiveProps(newProps) {
-    const { params: { groupId }, userId, isSuperAdmin } = this.props;
+    const { params: { groupId } } = this.props;
 
-    if (
-      groupId !== newProps.params.groupId ||
-      userId !== newProps.userId ||
-      isSuperAdmin !== newProps.isSuperAdmin
-    ) {
-      newProps.loadAsync(newProps.userId, newProps.isSuperAdmin);
+    if (groupId !== newProps.params.groupId) {
+      newProps.loadAsync();
       return;
     }
 
@@ -144,59 +142,69 @@ class GroupInfo extends Component {
             <GroupTopButtons
               group={data}
               userId={userId}
-              canEdit={isAdmin || isSuperAdmin}
-              canSeeDetail={
-                isAdmin ||
-                isSuperAdmin ||
-                data.privateData.students.includes(userId)
-              }
               canLeaveJoin={
                 !isAdmin && !isSupervisor && (data.public || isStudent)
               }
             />
 
+            {!hasPermissions(data, 'viewDetail') &&
+              <Row>
+                <Col sm={12}>
+                  <p className="callout callout-warning larger">
+                    <BanIcon gapRight />
+                    <FormattedMessage
+                      id="generic.accessDenied"
+                      defaultMessage="You do not have permissions to see this page. If you got to this page via a seemingly legitimate link or button, please report a bug."
+                    />
+                  </p>
+                </Col>
+              </Row>}
+
             <Row>
               <Col sm={6}>
-                <GroupInfoTable
-                  group={data}
-                  supervisors={supervisors}
-                  isAdmin={isAdmin || isSuperAdmin}
-                  groups={groups}
-                  locale={locale}
-                />
+                {hasPermissions(data, 'viewDetail') &&
+                  <GroupInfoTable
+                    group={data}
+                    supervisors={supervisors}
+                    isAdmin={isAdmin || isSuperAdmin}
+                    groups={groups}
+                    locale={locale}
+                  />}
 
-                <Box
-                  noPadding
-                  collapsable
-                  unlimitedHeight
-                  title={
-                    <FormattedMessage
-                      id="app.groupDetail.supervisors"
-                      defaultMessage="Supervisors of {groupName}"
-                      values={{
-                        groupName: getLocalizedName(
-                          {
-                            name: data.name,
-                            localizedTexts: data.localizedTexts
-                          },
-                          locale
-                        )
-                      }}
-                    />
-                  }
-                >
-                  <SupervisorsList
-                    groupId={data.id}
-                    users={supervisors}
-                    isAdmin={isAdmin}
-                    primaryAdminsIds={data.primaryAdminsIds}
-                    isLoaded={
-                      supervisors.length === data.privateData.supervisors.length
+                {hasPermissions(data, 'viewSupervisors') &&
+                  <Box
+                    noPadding
+                    collapsable
+                    unlimitedHeight
+                    title={
+                      <FormattedMessage
+                        id="app.groupDetail.supervisors"
+                        defaultMessage="Supervisors of {groupName}"
+                        values={{
+                          groupName: getLocalizedName(
+                            {
+                              name: data.name,
+                              localizedTexts: data.localizedTexts
+                            },
+                            locale
+                          )
+                        }}
+                      />
                     }
-                  />
-                </Box>
+                  >
+                    <SupervisorsList
+                      groupId={data.id}
+                      users={supervisors}
+                      isAdmin={isAdmin}
+                      primaryAdminsIds={data.primaryAdminsIds}
+                      isLoaded={
+                        supervisors.length ===
+                        data.privateData.supervisors.length
+                      }
+                    />
+                  </Box>}
 
-                {isAdmin &&
+                {hasPermissions(data, 'setAdmin') &&
                   <Box
                     title={
                       <FormattedMessage
@@ -212,30 +220,31 @@ class GroupInfo extends Component {
                   </Box>}
               </Col>
               <Col sm={6}>
-                <Box
-                  title={
-                    <FormattedMessage
-                      id="app.groupDetail.subgroups"
-                      defaultMessage="Subgroups Hierarchy"
+                {hasPermissions(data, 'viewSubgroups') &&
+                  <Box
+                    title={
+                      <FormattedMessage
+                        id="app.groupDetail.subgroups"
+                        defaultMessage="Subgroups Hierarchy"
+                      />
+                    }
+                    unlimitedHeight
+                    extraPadding
+                  >
+                    <GroupTree
+                      id={data.id}
+                      currentGroupId={data.id}
+                      deletable={false}
+                      isAdmin={isAdmin}
+                      isPublic={data.public}
+                      isOpen
+                      groups={groups}
+                      level={1}
+                      ancestralPath={data.parentGroupsIds.slice(1)}
                     />
-                  }
-                  unlimitedHeight
-                  extraPadding
-                >
-                  <GroupTree
-                    id={data.id}
-                    currentGroupId={data.id}
-                    deletable={false}
-                    isAdmin={isAdmin}
-                    isPublic={data.public}
-                    isOpen
-                    groups={groups}
-                    level={1}
-                    ancestralPath={data.parentGroupsIds.slice(1)}
-                  />
-                </Box>
+                  </Box>}
 
-                {isAdmin &&
+                {hasPermissions(data, 'addSubgroup') &&
                   <EditGroupForm
                     form="addSubgroup"
                     onSubmit={addSubgroup(data.privateData.instanceId)}
@@ -301,8 +310,7 @@ const mapDispatchToProps = (dispatch, { params }) => ({
         parentGroupId: params.groupId
       })
     ),
-  loadAsync: (userId, isSuperAdmin) =>
-    GroupInfo.loadAsync(params, dispatch, { userId, isSuperAdmin }),
+  loadAsync: () => GroupInfo.loadAsync(params, dispatch),
   push: url => dispatch(push(url)),
   refetchSupervisors: () => dispatch(fetchSupervisors(params.groupId))
 });

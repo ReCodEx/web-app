@@ -169,6 +169,7 @@ export const isAdminOf = (userId, groupId) =>
       isSuperAdmin === true ||
       (group &&
         isReady(group) &&
+        group.hasIn(['data', 'privateData', 'admins']) &&
         group.getIn(['data', 'privateData', 'admins']).indexOf(userId) >= 0)
   );
 

@@ -82,7 +82,7 @@ const UsersListItem = ({
 
         {createActions &&
           <td className="text-right">
-            {createActions(user.id)}
+            {createActions(user)}
           </td>}
       </tr>
     : <tr>

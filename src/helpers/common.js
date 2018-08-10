@@ -127,3 +127,39 @@ export const simpleScalarMemoize = fnc => {
     return cache[key];
   };
 };
+
+/*
+ * ACL Helpers
+ */
+
+/**
+ * Check whether given entity has all specified permissions.
+ * @param {object} entity The entity loaded from API which is augmented with permissionHints.
+ * @param fields The rest of the arguments are permission names -- fields in permissionHints.
+ */
+export const hasPermissions = (entity, ...fields) => {
+  if (!entity || fields.length === 0) {
+    return false;
+  }
+  return fields.reduce(
+    (acc, field) =>
+      acc && Boolean(safeGet(entity, ['permissionHints', field], false)),
+    true
+  );
+};
+
+/**
+ * Check whether given entity has at least one of the specified permissions.
+ * @param {object} entity The entity loaded from API which is augmented with permissionHints.
+ * @param fields The rest of the arguments are permission names -- fields in permissionHints.
+ */
+export const hasOneOfPermissions = (entity, ...fields) => {
+  if (!entity || fields.length === 0) {
+    return false;
+  }
+  return fields.reduce(
+    (acc, field) =>
+      acc || Boolean(safeGet(entity, ['permissionHints', field], false)),
+    false
+  );
+};

@@ -95,7 +95,7 @@ const PipelinesListItem = ({
             <Tooltip id={`${id}-stdout`}>
               <FormattedMessage
                 id="app.pipelinesList.stdoutIconTooltip"
-                defaultMessage="Tested solution is expected to yield results to stdandard output"
+                defaultMessage="Tested solution is expected to yield results to standard output"
               />
             </Tooltip>
           }

@@ -1,1 +1,2 @@
-export default from './OrganizationalGroupButtonContainer';
+import OrganizationalGroupButtonContainer from './OrganizationalGroupButtonContainer';
+export default OrganizationalGroupButtonContainer;
