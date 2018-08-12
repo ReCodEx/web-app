@@ -11,6 +11,7 @@ import { defaultMemoize } from 'reselect';
 import { SettingsIcon, TransferIcon, BanIcon } from '../../components/icons';
 import Button from '../../components/widgets/FlatButton';
 import DeleteUserButtonContainer from '../../containers/DeleteUserButtonContainer';
+import AllowUserButtonContainer from '../../containers/AllowUserButtonContainer';
 import Page from '../../components/layout/Page';
 import Box from '../../components/widgets/Box';
 import UsersList from '../../components/Users/UsersList';
@@ -134,6 +135,8 @@ class Users extends Component {
             <FormattedMessage id="generic.settings" defaultMessage="Settings" />
           </Button>
         </LinkContainer>
+
+        <AllowUserButtonContainer id={id} bsSize="xs" />
 
         <DeleteUserButtonContainer
           id={id}

@@ -1,1 +1,2 @@
-export default from './DeleteUserButtonContainer';
+import DeleteUserButtonContainer from './DeleteUserButtonContainer';
+export default DeleteUserButtonContainer;

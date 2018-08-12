@@ -27,7 +27,11 @@ export const additionalActionTypes = {
   CREATE_LOCAL_LOGIN: 'recodex/users/CREATE_LOCAL_LOGIN',
   CREATE_LOCAL_LOGIN_PENDING: 'recodex/users/CREATE_LOCAL_LOGIN_PENDING',
   CREATE_LOCAL_LOGIN_FULFILLED: 'recodex/users/CREATE_LOCAL_LOGIN_FULFILLED',
-  CREATE_LOCAL_LOGIN_REJECTED: 'recodex/users/CREATE_LOCAL_LOGIN_REJECTED'
+  CREATE_LOCAL_LOGIN_REJECTED: 'recodex/users/CREATE_LOCAL_LOGIN_REJECTED',
+  SET_IS_ALLOWED: 'recodex/users/SET_IS_ALLOWED',
+  SET_IS_ALLOWED_PENDING: 'recodex/users/SET_IS_ALLOWED_PENDING',
+  SET_IS_ALLOWED_FULFILLED: 'recodex/users/SET_IS_ALLOWED_FULFILLED',
+  SET_IS_ALLOWED_REJECTED: 'recodex/users/SET_IS_ALLOWED_REJECTED'
 };
 
 const resourceName = 'users';
@@ -73,6 +77,15 @@ export const makeLocalLogin = id =>
     endpoint: `/users/${id}/create-local`,
     method: 'POST',
     meta: { id }
+  });
+
+export const setIsAllowed = (id, isAllowed = true) =>
+  createApiAction({
+    type: additionalActionTypes.SET_IS_ALLOWED,
+    endpoint: `/users/${id}/allowed`,
+    method: 'POST',
+    meta: { id, isAllowed },
+    body: { isAllowed }
   });
 
 /**
@@ -280,7 +293,31 @@ const reducer = handleActions(
               lastUpdate: Date.now()
             })
         )
-      )
+      ),
+
+    [additionalActionTypes.SET_IS_ALLOWED_PENDING]: (state, { meta: { id } }) =>
+      state.setIn(['resources', id, 'data', 'isAllowed-pending'], true),
+
+    [additionalActionTypes.SET_IS_ALLOWED_REJECTED]: (
+      state,
+      { meta: { id } }
+    ) => state.setIn(['resources', id, 'data', 'isAllowed-pending'], false),
+
+    [additionalActionTypes.SET_IS_ALLOWED_FULFILLED]: (
+      state,
+      { payload: data, meta: { id } }
+    ) =>
+      data && data.id
+        ? state.setIn(
+            ['resources', data.id],
+            createRecord({
+              data,
+              state: resourceStatus.FULFILLED,
+              didInvalidate: false,
+              lastUpdate: Date.now()
+            })
+          )
+        : state.setIn(['resources', id, 'data', 'isAllowed-pending'], false)
   }),
   initialState
 );
