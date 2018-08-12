@@ -1,9 +1,15 @@
 import { createSelector } from 'reselect';
 
 import { EMPTY_LIST, EMPTY_OBJ } from '../../helpers/common';
-import { fetchManyEndpoint } from '../modules/users';
-
+import { isReady, getJsData } from '../helpers/resourceManager';
 import { extractLanguageFromUrl } from '../../links';
+import {
+  isStudentRole,
+  isSupervisorRole,
+  isSuperadminRole
+} from '../../components/helpers/usersRoles';
+
+import { fetchManyEndpoint } from '../modules/users';
 import { loggedInUserIdSelector } from './auth';
 import {
   groupSelector,
@@ -12,7 +18,6 @@ import {
   groupsSelector
 } from './groups';
 import { pipelineSelector } from './pipelines';
-import { isReady, getJsData } from '../helpers/resourceManager';
 
 const getParam = (state, id) => id;
 
@@ -83,10 +88,10 @@ export const getRole = userId =>
   );
 
 export const isStudent = userId =>
-  createSelector(getRole(userId), role => role === 'student');
+  createSelector(getRole(userId), role => isStudentRole(role));
 
 export const isSupervisor = userId =>
-  createSelector(getRole(userId), role => role === 'supervisor');
+  createSelector(getRole(userId), role => isSupervisorRole(role));
 
 export const getUserSettings = userId =>
   createSelector(
@@ -106,7 +111,7 @@ export const isLoggedAsSuperAdmin = createSelector(
   [loggedInUserSelector],
   loggedInUser =>
     loggedInUser && isReady(loggedInUser)
-      ? loggedInUser.getIn(['data', 'privateData', 'role']) === 'superadmin'
+      ? isSuperadminRole(loggedInUser.getIn(['data', 'privateData', 'role']))
       : false
 );
 
@@ -114,7 +119,7 @@ export const isLoggedAsSupervisor = createSelector(
   [loggedInUserSelector],
   loggedInUser =>
     loggedInUser && isReady(loggedInUser)
-      ? loggedInUser.getIn(['data', 'privateData', 'role']) === 'supervisor'
+      ? isSupervisorRole(loggedInUser.getIn(['data', 'privateData', 'role']))
       : false
 );
 
@@ -124,7 +129,7 @@ export const memberOfInstancesIdsSelector = userId =>
     user =>
       user && isReady(user)
         ? user.getIn(['data', 'privateData', 'instancesIds'], EMPTY_LIST)
-        : EMPTY_LIST // @todo: Change when the user can be member of multiple instances
+        : EMPTY_LIST
   );
 
 export const studentOfGroupsIdsSelector = userId =>
@@ -214,4 +219,21 @@ export const notificationsSelector = createSelector(
           {}
         )
       : EMPTY_OBJ
+);
+
+export const userIsAllowed = createSelector(usersSelector, users => id => {
+  const user = users && users.get(id);
+  return user && isReady(user)
+    ? user.getIn(['data', 'privateData', 'isAllowed'], null)
+    : null;
+});
+
+export const userIsAllowedPending = createSelector(
+  usersSelector,
+  users => id => {
+    const user = users && users.get(id);
+    return user && isReady(user)
+      ? user.getIn(['data', 'isAllowed-pending'], false)
+      : null;
+  }
 );

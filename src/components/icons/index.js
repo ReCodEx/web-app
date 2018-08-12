@@ -26,6 +26,7 @@ export const InfoIcon = props => <Icon {...props} icon="info" />;
 export const LoadingIcon = props =>
   <Icon {...props} icon="spinner" pulse style={{ opacity: 0.8 }} />;
 export const LocalIcon = props => <Icon {...props} icon="thumbtack" />;
+export const LockIcon = props => <Icon {...props} icon="lock" />;
 export const MailIcon = props => <Icon {...props} icon={['far', 'envelope']} />;
 export const NeedFixingIcon = props => <Icon {...props} icon="medkit" />;
 export const RefreshIcon = props => <Icon {...props} icon="sync" />;
@@ -57,6 +58,7 @@ export const SupervisorIcon = props => <Icon {...props} icon="user-graduate" />;
 export const SupervisorStudentIcon = props =>
   <Icon {...props} icon="chalkboard-teacher" />;
 export const TransferIcon = props => <Icon {...props} icon="exchange-alt" />;
+export const UnlockIcon = props => <Icon {...props} icon="unlock" />;
 export const UploadIcon = props => <Icon {...props} icon="cloud-upload-alt" />;
 export const UserIcon = props => <Icon {...props} icon={['far', 'user']} />;
 export const WarningIcon = props =>
