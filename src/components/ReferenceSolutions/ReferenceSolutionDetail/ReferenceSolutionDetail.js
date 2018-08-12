@@ -19,11 +19,16 @@ import ReferenceSolutionStatus from '../ReferenceSolutionStatus/ReferenceSolutio
 
 import { EMPTY_OBJ } from '../../../helpers/common';
 
-const getLastSubmissionId = evaluations =>
-  Object.values(evaluations)
-    .map(x => x.data)
-    .filter(a => a.evaluation !== null)
-    .sort((a, b) => b.evaluation.evaluatedAt - a.evaluation.evaluatedAt)[0].id;
+const getLastSubmissionId = evaluations => {
+  const evalArray = Object.values(evaluations);
+  return evalArray && evalArray.length > 0
+    ? evalArray
+        .map(x => x.data)
+        .filter(a => a.evaluation !== null)
+        .sort((a, b) => b.evaluation.evaluatedAt - a.evaluation.evaluatedAt)[0]
+        .id
+    : null;
+};
 
 class ReferenceSolutionDetail extends Component {
   state = { openFileId: null, activeSubmissionId: null };
@@ -47,7 +52,8 @@ class ReferenceSolutionDetail extends Component {
     const { openFileId } = this.state;
     const evaluationsJS = evaluations && evaluations.toJS();
     const activeSubmissionId =
-      this.state.activeSubmissionId || getLastSubmissionId(evaluationsJS);
+      evaluationsJS &&
+      (this.state.activeSubmissionId || getLastSubmissionId(evaluationsJS));
 
     if (
       activeSubmissionId &&

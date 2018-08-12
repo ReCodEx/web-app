@@ -29,7 +29,7 @@ const ReferenceSolutionsTableRow = ({
             <i className="text-muted small">
               <FormattedMessage
                 id="app.referenceSolutionTable.noDescription"
-                defaultMessage="no desrciption given"
+                defaultMessage="no description given"
               />
             </i>}
         </td>
