@@ -25,10 +25,7 @@ import { fetchGroupIfNeeded } from '../../redux/modules/groups';
 import { fetchGroupsStats } from '../../redux/modules/stats';
 import { fetchStudents } from '../../redux/modules/users';
 import { fetchAssignmentsForGroup } from '../../redux/modules/assignments';
-import {
-  fetchGroupExercises,
-  create as createExercise
-} from '../../redux/modules/exercises';
+import { create as createExercise } from '../../redux/modules/exercises';
 import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments';
 
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
@@ -72,9 +69,6 @@ class GroupDetail extends Component {
       dispatch(fetchRuntimeEnvironments()),
       dispatch(fetchGroupIfNeeded(groupId)).then(({ value: group }) =>
         Promise.all([
-          hasPermissions(group, 'viewExercises')
-            ? dispatch(fetchGroupExercises(groupId))
-            : Promise.resolve(),
           hasPermissions(group, 'viewAssignments')
             ? dispatch(fetchAssignmentsForGroup(groupId))
             : Promise.resolve(),
