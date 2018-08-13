@@ -12,8 +12,8 @@ const AddSupervisor = ({ groupId, instanceId }) =>
     instanceId={instanceId}
     id={`add-supervisor-${groupId}`}
     rolesFilter={ROLES_FILTER}
-    createActions={userId =>
-      <MakeRemoveSupervisorButtonContainer userId={userId} groupId={groupId} />}
+    createActions={({ id }) =>
+      <MakeRemoveSupervisorButtonContainer userId={id} groupId={groupId} />}
   />;
 
 AddSupervisor.propTypes = {
