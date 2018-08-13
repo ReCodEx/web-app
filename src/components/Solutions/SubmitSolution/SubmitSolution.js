@@ -273,7 +273,7 @@ class SubmitSolution extends Component {
             </p>}
         </Modal.Body>
         <Modal.Footer>
-          <div className="text-center">
+          <div className="text-center em-margin-bottomm">
             {isSending &&
               <Button
                 type="submit"
@@ -297,8 +297,6 @@ class SubmitSolution extends Component {
               {formatMessage(commonMessages.closeForm)}
             </Button>
           </div>
-          <br />
-          <br />
 
           {!canSubmit &&
             <Well>

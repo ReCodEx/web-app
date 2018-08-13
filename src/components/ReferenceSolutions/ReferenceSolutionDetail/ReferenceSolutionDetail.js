@@ -12,22 +12,22 @@ import SourceCodeViewerContainer from '../../../containers/SourceCodeViewerConta
 import SubmissionEvaluations from '../../Solutions/SubmissionEvaluations';
 import ResourceRenderer from '../../helpers/ResourceRenderer';
 import Button from '../../widgets/FlatButton';
-import { RefreshIcon } from '../../icons';
+import { RefreshIcon, WarningIcon } from '../../icons';
 
 import CompilationLogs from '../../Solutions/CompilationLogs';
 import ReferenceSolutionStatus from '../ReferenceSolutionStatus/ReferenceSolutionStatus';
 
-import { EMPTY_OBJ } from '../../../helpers/common';
+import { EMPTY_OBJ, getFirstItemInOrder } from '../../../helpers/common';
 
 const getLastSubmissionId = evaluations => {
-  const evalArray = Object.values(evaluations);
-  return evalArray && evalArray.length > 0
-    ? evalArray
-        .map(x => x.data)
-        .filter(a => a.evaluation !== null)
-        .sort((a, b) => b.evaluation.evaluatedAt - a.evaluation.evaluatedAt)[0]
-        .id
-    : null;
+  const evalArray = Object.values(evaluations)
+    .map(x => x.data)
+    .filter(a => a.evaluation !== null);
+  const first = getFirstItemInOrder(
+    evalArray,
+    (a, b) => b.evaluation.evaluatedAt - a.evaluation.evaluatedAt
+  );
+  return first && first.id;
 };
 
 class ReferenceSolutionDetail extends Component {
@@ -110,6 +110,18 @@ class ReferenceSolutionDetail extends Component {
           {evaluations &&
             <Col md={6} sm={12}>
               {!evaluation &&
+                (!evaluationsJS || Object.values(evaluationsJS).length === 0) &&
+                <div className="callout callout-danger">
+                  <WarningIcon gapRight />
+                  <FormattedMessage
+                    id="app.submissionEvaluation.noEvaluationsWhatSoEver"
+                    defaultMessage="There are no submission evaluations. This is higly unusual, since the solution is submitted for evaluation as soon as it is created. Check the configuration of the exercise and try to resubmit this solution again."
+                  />
+                </div>}
+
+              {!evaluation &&
+                evaluationsJS &&
+                Object.values(evaluationsJS).length > 0 &&
                 refreshSolutionEvaluations &&
                 <div className="callout callout-warning">
                   <table>
@@ -137,6 +149,7 @@ class ReferenceSolutionDetail extends Component {
                     </tbody>
                   </table>
                 </div>}
+
               {evaluation &&
                 <TestResults
                   evaluation={evaluation}

@@ -1,1 +1,2 @@
-export default from './ResubmitReferenceSolutionContainer';
+import ResubmitReferenceSolutionContainer from './ResubmitReferenceSolutionContainer';
+export default ResubmitReferenceSolutionContainer;
