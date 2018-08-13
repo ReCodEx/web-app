@@ -1,1 +1,2 @@
-export default from './MakeSupervisorButton';
+import MakeSupervisorButton from './MakeSupervisorButton';
+export default MakeSupervisorButton;

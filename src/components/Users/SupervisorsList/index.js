@@ -1,1 +1,2 @@
-export default from './SupervisorsList';
+import SupervisorsList from './SupervisorsList';
+export default SupervisorsList;

@@ -1,1 +1,2 @@
-export default from './AttachmentFilesTableContainer';
+import AttachmentFilesTableContainer from './AttachmentFilesTableContainer';
+export default AttachmentFilesTableContainer;

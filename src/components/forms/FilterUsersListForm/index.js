@@ -1,1 +1,2 @@
-export default from './FilterUsersListForm';
+import FilterUsersListForm from './FilterUsersListForm';
+export default FilterUsersListForm;

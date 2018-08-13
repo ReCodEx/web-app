@@ -1,1 +1,2 @@
-export default from './EditExercise';
+import EditExercise from './EditExercise';
+export default EditExercise;

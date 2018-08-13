@@ -1,1 +1,2 @@
-export default from './EditPipelineForm';
+import EditPipelineForm from './EditPipelineForm';
+export default EditPipelineForm;

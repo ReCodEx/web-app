@@ -1,2 +1,3 @@
-export default from './StudentsListItem';
+import StudentsListItem from './StudentsListItem';
+export default StudentsListItem;
 export { default as LoadingStudentsListItem } from './LoadingStudentsListItem';

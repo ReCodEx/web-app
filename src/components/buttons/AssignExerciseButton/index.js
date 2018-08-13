@@ -1,1 +1,2 @@
-export default from './AssignExerciseButton';
+import AssignExerciseButton from './AssignExerciseButton';
+export default AssignExerciseButton;

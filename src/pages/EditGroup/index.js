@@ -1,1 +1,2 @@
-export default from './EditGroup';
+import EditGroup from './EditGroup';
+export default EditGroup;

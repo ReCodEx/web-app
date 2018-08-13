@@ -1,1 +1,2 @@
-export default from './AddSupervisor';
+import AddSupervisor from './AddSupervisor';
+export default AddSupervisor;

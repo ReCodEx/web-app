@@ -1,1 +1,2 @@
-export default from './EditPipeline';
+import EditPipeline from './EditPipeline';
+export default EditPipeline;

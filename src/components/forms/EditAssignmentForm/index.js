@@ -1,1 +1,2 @@
-export default from './EditAssignmentForm';
+import EditAssignmentForm from './EditAssignmentForm';
+export default EditAssignmentForm;

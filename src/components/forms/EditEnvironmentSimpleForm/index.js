@@ -1,1 +1,2 @@
-export default from './EditEnvironmentSimpleForm';
+import EditEnvironmentSimpleForm from './EditEnvironmentSimpleForm';
+export default EditEnvironmentSimpleForm;

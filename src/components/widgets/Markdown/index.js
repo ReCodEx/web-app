@@ -1,1 +1,2 @@
-export default from './Markdown';
+import Markdown from './Markdown';
+export default Markdown;

@@ -1,1 +1,2 @@
-export default from './LeaveJoinGroupButtonContainer';
+import LeaveJoinGroupButtonContainer from './LeaveJoinGroupButtonContainer';
+export default LeaveJoinGroupButtonContainer;

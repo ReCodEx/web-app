@@ -1,1 +1,2 @@
-export default from './SisSupervisorGroupsContainer';
+import SisSupervisorGroupsContainer from './SisSupervisorGroupsContainer';
+export default SisSupervisorGroupsContainer;

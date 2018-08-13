@@ -1,1 +1,2 @@
-export default from './SolutionArchiveInfoBox';
+import SolutionArchiveInfoBox from './SolutionArchiveInfoBox';
+export default SolutionArchiveInfoBox;

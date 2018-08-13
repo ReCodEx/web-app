@@ -1,1 +1,2 @@
-export default from './StudentsListContainer';
+import StudentsListContainer from './StudentsListContainer';
+export default StudentsListContainer;

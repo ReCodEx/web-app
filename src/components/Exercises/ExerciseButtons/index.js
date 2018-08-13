@@ -1,1 +1,2 @@
-export default from './ExerciseButtons';
+import ExerciseButtons from './ExerciseButtons';
+export default ExerciseButtons;

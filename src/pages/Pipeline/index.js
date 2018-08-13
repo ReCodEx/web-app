@@ -1,1 +1,2 @@
-export default from './Pipeline';
+import Pipeline from './Pipeline';
+export default Pipeline;

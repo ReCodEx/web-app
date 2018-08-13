@@ -1,1 +1,2 @@
-export default from './UsersNameContainer';
+import UsersNameContainer from './UsersNameContainer';
+export default UsersNameContainer;

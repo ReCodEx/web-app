@@ -1,1 +1,2 @@
-export default from './HeaderNotification';
+import HeaderNotification from './HeaderNotification';
+export default HeaderNotification;

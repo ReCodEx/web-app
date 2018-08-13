@@ -1,1 +1,2 @@
-export default from './ResultsTable';
+import ResultsTable from './ResultsTable';
+export default ResultsTable;

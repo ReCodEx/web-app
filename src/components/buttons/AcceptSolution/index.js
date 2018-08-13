@@ -1,1 +1,2 @@
-export default from './AcceptSolution';
+import AcceptSolution from './AcceptSolution';
+export default AcceptSolution;

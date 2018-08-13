@@ -1,1 +1,2 @@
-export default from './PointsContainer';
+import PointsContainer from './PointsContainer';
+export default PointsContainer;

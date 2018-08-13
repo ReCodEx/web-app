@@ -1,1 +1,2 @@
-export default from './InstancesTable';
+import InstancesTable from './InstancesTable';
+export default InstancesTable;

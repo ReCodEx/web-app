@@ -1,1 +1,2 @@
-export default from './ExercisesNameContainer';
+import ExercisesNameContainer from './ExercisesNameContainer';
+export default ExercisesNameContainer;

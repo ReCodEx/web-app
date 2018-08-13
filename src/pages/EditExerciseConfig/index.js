@@ -1,1 +1,2 @@
-export default from './EditExerciseConfig';
+import EditExerciseConfig from './EditExerciseConfig';
+export default EditExerciseConfig;

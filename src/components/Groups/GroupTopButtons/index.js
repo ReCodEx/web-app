@@ -1,1 +1,2 @@
-export default from './GroupTopButtons';
+import GroupTopButtons from './GroupTopButtons';
+export default GroupTopButtons;

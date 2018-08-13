@@ -1,1 +1,2 @@
-export default from './DeleteSolutionButtonContainer';
+import DeleteSolutionButtonContainer from './DeleteSolutionButtonContainer';
+export default DeleteSolutionButtonContainer;

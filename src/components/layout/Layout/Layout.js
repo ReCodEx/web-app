@@ -10,7 +10,7 @@ import SidebarContainer from '../../../containers/SidebarContainer';
 
 const title = process.env.TITLE || 'ReCodEx';
 
-export const Layout = ({
+const Layout = ({
   toggleSize,
   toggleVisibility,
   sidebar,

@@ -1,1 +1,2 @@
-export default from './ForkExerciseForm';
+import ForkExerciseForm from './ForkExerciseForm';
+export default ForkExerciseForm;

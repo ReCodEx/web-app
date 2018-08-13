@@ -1,1 +1,2 @@
-export default from './EditTestsForm';
+import EditTestsForm from './EditTestsForm';
+export default EditTestsForm;

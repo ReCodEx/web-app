@@ -1,1 +1,2 @@
-export default from './FailuresListItem';
+import FailuresListItem from './FailuresListItem';
+export default FailuresListItem;

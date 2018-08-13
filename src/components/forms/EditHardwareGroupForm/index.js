@@ -1,1 +1,2 @@
-export default from './EditHardwareGroupForm';
+import EditHardwareGroupForm from './EditHardwareGroupForm';
+export default EditHardwareGroupForm;

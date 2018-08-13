@@ -1,1 +1,2 @@
-export default from './AcceptedSolutionContainer';
+import AcceptedSolutionContainer from './AcceptedSolutionContainer';
+export default AcceptedSolutionContainer;

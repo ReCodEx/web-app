@@ -1,1 +1,2 @@
-export default from './MakeGroupAdminButton';
+import MakeGroupAdminButton from './MakeGroupAdminButton';
+export default MakeGroupAdminButton;

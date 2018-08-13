@@ -1,1 +1,2 @@
-export default from './ExternalRegistrationForm';
+import ExternalRegistrationForm from './ExternalRegistrationForm';
+export default ExternalRegistrationForm;

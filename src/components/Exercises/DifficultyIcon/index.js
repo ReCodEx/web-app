@@ -1,1 +1,2 @@
-export default from './DifficultyIcon';
+import DifficultyIcon from './DifficultyIcon';
+export default DifficultyIcon;

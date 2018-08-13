@@ -1,1 +1,2 @@
-export default from './AssignmentSync';
+import AssignmentSync from './AssignmentSync';
+export default AssignmentSync;

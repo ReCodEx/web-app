@@ -1,1 +1,2 @@
-export default from './PipelineVisualisation';
+import PipelineVisualisation from './PipelineVisualisation';
+export default PipelineVisualisation;

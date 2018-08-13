@@ -1,1 +1,2 @@
-export default from './EditExerciseForm';
+import EditExerciseForm from './EditExerciseForm';
+export default EditExerciseForm;

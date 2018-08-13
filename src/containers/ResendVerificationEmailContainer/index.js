@@ -1,1 +1,2 @@
-export default from './ResendVerificationEmailContainer';
+import ResendVerificationEmailContainer from './ResendVerificationEmailContainer';
+export default ResendVerificationEmailContainer;

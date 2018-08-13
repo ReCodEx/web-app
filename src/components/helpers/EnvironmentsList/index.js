@@ -1,1 +1,2 @@
-export default from './EnvironmentsList';
+import EnvironmentsList from './EnvironmentsList';
+export default EnvironmentsList;

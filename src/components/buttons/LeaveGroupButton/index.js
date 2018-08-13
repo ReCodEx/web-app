@@ -1,1 +1,2 @@
-export default from './LeaveGroupButton';
+import LeaveGroupButton from './LeaveGroupButton';
+export default LeaveGroupButton;

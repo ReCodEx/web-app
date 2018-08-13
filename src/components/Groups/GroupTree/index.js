@@ -1,1 +1,2 @@
-export default from './GroupTree';
+import GroupTree from './GroupTree';
+export default GroupTree;

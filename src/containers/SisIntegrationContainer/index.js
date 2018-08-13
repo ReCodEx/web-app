@@ -1,1 +1,2 @@
-export default from './SisIntegrationContainer';
+import SisIntegrationContainer from './SisIntegrationContainer';
+export default SisIntegrationContainer;
