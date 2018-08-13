@@ -110,6 +110,40 @@ export const arrayToObject = (arr, indexer = idSelector, mapper = identity) =>
     return res;
   }, {});
 
+// This is default comparator which is written based on the default behavior of default sort.
+const _defaultComparator = (a, b) => {
+  if (a === b) {
+    return 0;
+  }
+  if (b === undefined) {
+    return -1;
+  }
+  if (a === undefined) {
+    return 1;
+  }
+  return String(a).localeCompare(String(b));
+};
+
+/**
+ * Get the first (the smallest) item of ordered array without actually sorting it.
+ * @param {array} arr The array to be searched.
+ * @param {function} comparator Comparator that determines ordering. Same as in case of sort() method.
+ * @return Smallest (the first) item of the array in given ordering.
+ */
+export const getFirstItemInOrder = (arr, comarator = _defaultComparator) => {
+  if (!arr || !Array.isArray(arr) || arr.length === 0) {
+    return null;
+  }
+
+  let res = arr[0];
+  arr.forEach((item, idx) => {
+    if (idx > 0 && comarator(res, item) > 0) {
+      res = item;
+    }
+  });
+  return res;
+};
+
 /*
  * Function Helpers
  */

@@ -120,19 +120,27 @@ class ReferenceSolution extends Component {
       >
         <ResourceRenderer resource={[referenceSolution, exercise]}>
           {(solution, exercise) =>
-            <div>
-              <p>
-                <ResubmitReferenceSolutionContainer
-                  id={solution.id}
-                  exerciseId={exerciseId}
-                  isDebug={false}
-                />
-                <ResubmitReferenceSolutionContainer
-                  id={solution.id}
-                  exerciseId={exerciseId}
-                  isDebug={true}
-                />
-              </p>
+            <React.Fragment>
+              {exercise.isBroken
+                ? <p className="callout callout-warning">
+                    <FormattedMessage
+                      id="app.referenceSolution.exerciseBroken"
+                      defaultMessage="The exercise is broken. This reference solution may not be resubmitted at the moment."
+                    />
+                  </p>
+                : <div>
+                    <ResubmitReferenceSolutionContainer
+                      id={solution.id}
+                      exerciseId={exerciseId}
+                      isDebug={false}
+                    />
+                    <ResubmitReferenceSolutionContainer
+                      id={solution.id}
+                      exerciseId={exerciseId}
+                      isDebug={true}
+                    />
+                  </div>}
+
               <FetchManyResourceRenderer fetchManyStatus={fetchStatus}>
                 {() =>
                   <ReferenceSolutionDetail
@@ -143,7 +151,7 @@ class ReferenceSolution extends Component {
                     refreshSolutionEvaluations={refreshSolutionEvaluations}
                   />}
               </FetchManyResourceRenderer>
-            </div>}
+            </React.Fragment>}
         </ResourceRenderer>
       </Page>
     );
