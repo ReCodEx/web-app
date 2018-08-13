@@ -1,1 +1,2 @@
-export default from './GroupDetail';
+import GroupDetail from './GroupDetail';
+export default GroupDetail;

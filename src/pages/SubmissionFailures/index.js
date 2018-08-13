@@ -1,1 +1,2 @@
-export default from './SubmissionFailures';
+import SubmissionFailures from './SubmissionFailures';
+export default SubmissionFailures;

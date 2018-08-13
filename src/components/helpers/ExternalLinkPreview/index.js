@@ -1,1 +1,2 @@
-export default from './ExternalLinkPreview';
+import ExternalLinkPreview from './ExternalLinkPreview';
+export default ExternalLinkPreview;

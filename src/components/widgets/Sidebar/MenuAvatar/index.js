@@ -1,1 +1,2 @@
-export default from './MenuAvatar';
+import MenuAvatar from './MenuAvatar';
+export default MenuAvatar;

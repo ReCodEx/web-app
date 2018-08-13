@@ -1,1 +1,2 @@
-export default from './HierarchyLineContainer';
+import HierarchyLineContainer from './HierarchyLineContainer';
+export default HierarchyLineContainer;

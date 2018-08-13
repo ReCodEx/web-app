@@ -1,1 +1,2 @@
-export default from './DeleteGroupButtonContainer';
+import DeleteGroupButtonContainer from './DeleteGroupButtonContainer';
+export default DeleteGroupButtonContainer;

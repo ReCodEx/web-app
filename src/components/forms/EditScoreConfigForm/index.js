@@ -1,1 +1,2 @@
-export default from './EditScoreConfigForm';
+import EditScoreConfigForm from './EditScoreConfigForm';
+export default EditScoreConfigForm;

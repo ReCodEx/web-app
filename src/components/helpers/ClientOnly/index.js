@@ -1,1 +1,2 @@
-export default from './ClientOnly';
+import ClientOnly from './ClientOnly';
+export default ClientOnly;

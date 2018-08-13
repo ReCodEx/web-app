@@ -1,1 +1,2 @@
-export default from './EditAssignment';
+import EditAssignment from './EditAssignment';
+export default EditAssignment;

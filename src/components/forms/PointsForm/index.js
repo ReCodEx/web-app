@@ -1,1 +1,2 @@
-export default from './PointsForm';
+import PointsForm from './PointsForm';
+export default PointsForm;

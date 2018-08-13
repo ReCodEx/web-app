@@ -1,1 +1,2 @@
-export default from './EditExerciseLimits';
+import EditExerciseLimits from './EditExerciseLimits';
+export default EditExerciseLimits;

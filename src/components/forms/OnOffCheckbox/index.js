@@ -1,1 +1,2 @@
-export default from './OnOffCheckbox';
+import OnOffCheckbox from './OnOffCheckbox';
+export default OnOffCheckbox;

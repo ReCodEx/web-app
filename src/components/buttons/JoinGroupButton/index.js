@@ -1,1 +1,2 @@
-export default from './JoinGroupButton';
+import JoinGroupButton from './JoinGroupButton';
+export default JoinGroupButton;

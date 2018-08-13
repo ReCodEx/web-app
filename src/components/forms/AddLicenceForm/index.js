@@ -1,1 +1,2 @@
-export default from './AddLicenceForm';
+import AddLicenceForm from './AddLicenceForm';
+export default AddLicenceForm;

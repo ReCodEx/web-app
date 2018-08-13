@@ -1,1 +1,2 @@
-export default from './ExercisesListItem';
+import ExercisesListItem from './ExercisesListItem';
+export default ExercisesListItem;

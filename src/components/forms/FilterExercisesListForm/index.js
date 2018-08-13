@@ -1,1 +1,2 @@
-export default from './FilterExercisesListForm';
+import FilterExercisesListForm from './FilterExercisesListForm';
+export default FilterExercisesListForm;

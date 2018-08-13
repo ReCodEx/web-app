@@ -1,1 +1,2 @@
-export default from './GenerateTokenForm';
+import GenerateTokenForm from './GenerateTokenForm';
+export default GenerateTokenForm;

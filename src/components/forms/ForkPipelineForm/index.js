@@ -1,1 +1,2 @@
-export default from './ForkPipelineForm';
+import ForkPipelineForm from './ForkPipelineForm';
+export default ForkPipelineForm;

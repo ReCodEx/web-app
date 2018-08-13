@@ -1,1 +1,2 @@
-export default from './RegistrationCAS';
+import RegistrationCAS from './RegistrationCAS';
+export default RegistrationCAS;

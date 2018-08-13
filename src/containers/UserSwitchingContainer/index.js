@@ -1,1 +1,2 @@
-export default from './UserSwitchingContainer';
+import UserSwitchingContainer from './UserSwitchingContainer';
+export default UserSwitchingContainer;

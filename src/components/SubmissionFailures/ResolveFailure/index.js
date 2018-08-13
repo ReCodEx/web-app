@@ -1,1 +1,2 @@
-export default from './ResolveFailure';
+import ResolveFailure from './ResolveFailure';
+export default ResolveFailure;

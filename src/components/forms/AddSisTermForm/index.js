@@ -1,1 +1,2 @@
-export default from './AddSisTermForm';
+import AddSisTermForm from './AddSisTermForm';
+export default AddSisTermForm;

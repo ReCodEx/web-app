@@ -1,1 +1,2 @@
-export default from './OrganizationalGroupButton';
+import OrganizationalGroupButton from './OrganizationalGroupButton';
+export default OrganizationalGroupButton;

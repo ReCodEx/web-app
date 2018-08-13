@@ -1,1 +1,2 @@
-export default from './HeaderNotificationsDropdown';
+import HeaderNotificationsDropdown from './HeaderNotificationsDropdown';
+export default HeaderNotificationsDropdown;

@@ -1,1 +1,2 @@
-export default from './HeaderNotificationsContainer';
+import HeaderNotificationsContainer from './HeaderNotificationsContainer';
+export default HeaderNotificationsContainer;

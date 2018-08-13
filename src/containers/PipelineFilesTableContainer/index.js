@@ -1,1 +1,2 @@
-export default from './PipelineFilesTableContainer';
+import PipelineFilesTableContainer from './PipelineFilesTableContainer';
+export default PipelineFilesTableContainer;

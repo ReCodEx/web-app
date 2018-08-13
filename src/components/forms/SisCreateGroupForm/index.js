@@ -1,1 +1,2 @@
-export default from './SisCreateGroupForm';
+import SisCreateGroupForm from './SisCreateGroupForm';
+export default SisCreateGroupForm;

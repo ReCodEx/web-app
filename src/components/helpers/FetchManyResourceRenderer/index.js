@@ -1,1 +1,2 @@
-export default from './FetchManyResourceRenderer';
+import FetchManyResourceRenderer from './FetchManyResourceRenderer';
+export default FetchManyResourceRenderer;

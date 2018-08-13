@@ -1,1 +1,2 @@
-export default from './HardwareGroupMetadata';
+import HardwareGroupMetadata from './HardwareGroupMetadata';
+export default HardwareGroupMetadata;

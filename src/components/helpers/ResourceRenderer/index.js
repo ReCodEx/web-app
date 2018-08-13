@@ -1,1 +1,2 @@
-export default from './ResourceRenderer';
+import ResourceRenderer from './ResourceRenderer';
+export default ResourceRenderer;

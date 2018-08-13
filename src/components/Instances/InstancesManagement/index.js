@@ -1,1 +1,2 @@
-export default from './InstancesManagement';
+import InstancesManagement from './InstancesManagement';
+export default InstancesManagement;

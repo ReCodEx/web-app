@@ -1,1 +1,2 @@
-export default from './DeletePipelineButtonContainer';
+import DeletePipelineButtonContainer from './DeletePipelineButtonContainer';
+export default DeletePipelineButtonContainer;

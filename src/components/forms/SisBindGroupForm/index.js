@@ -1,1 +1,2 @@
-export default from './SisBindGroupForm';
+import SisBindGroupForm from './SisBindGroupForm';
+export default SisBindGroupForm;

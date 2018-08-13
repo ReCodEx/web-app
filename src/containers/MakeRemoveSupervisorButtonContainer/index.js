@@ -1,1 +1,2 @@
-export default from './MakeRemoveSupervisorButtonContainer';
+import MakeRemoveSupervisorButtonContainer from './MakeRemoveSupervisorButtonContainer';
+export default MakeRemoveSupervisorButtonContainer;

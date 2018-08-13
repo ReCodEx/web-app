@@ -1,1 +1,2 @@
-export default from './PipelineVisualEditor';
+import PipelineVisualEditor from './PipelineVisualEditor';
+export default PipelineVisualEditor;

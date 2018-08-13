@@ -1,1 +1,2 @@
-export default from './DeleteExerciseButtonContainer';
+import DeleteExerciseButtonContainer from './DeleteExerciseButtonContainer';
+export default DeleteExerciseButtonContainer;

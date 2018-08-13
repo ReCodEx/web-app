@@ -1,1 +1,2 @@
-export default from './LocalizedTextsFormField';
+import LocalizedTextsFormField from './LocalizedTextsFormField';
+export default LocalizedTextsFormField;

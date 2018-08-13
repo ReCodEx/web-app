@@ -1,1 +1,2 @@
-export default from './RemoveFromGroupButton';
+import RemoveFromGroupButton from './RemoveFromGroupButton';
+export default RemoveFromGroupButton;

@@ -1,1 +1,2 @@
-export default from './Exercise';
+import Exercise from './Exercise';
+export default Exercise;

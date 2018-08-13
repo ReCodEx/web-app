@@ -1,1 +1,2 @@
-export default from './ResetPasswordForm';
+import ResetPasswordForm from './ResetPasswordForm';
+export default ResetPasswordForm;

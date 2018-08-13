@@ -1,1 +1,2 @@
-export default from './HeaderLanguageSwitching';
+import HeaderLanguageSwitching from './HeaderLanguageSwitching';
+export default HeaderLanguageSwitching;

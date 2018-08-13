@@ -1,1 +1,2 @@
-export default from './FAQ.js';
+import FAQ from './FAQ';
+export default FAQ;

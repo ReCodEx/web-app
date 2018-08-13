@@ -1,1 +1,2 @@
-export default from './CompilationLogs';
+import CompilationLogs from './CompilationLogs';
+export default CompilationLogs;

@@ -1,1 +1,2 @@
-export default from './ResultArchiveInfoBox';
+import ResultArchiveInfoBox from './ResultArchiveInfoBox';
+export default ResultArchiveInfoBox;

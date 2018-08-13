@@ -1,4 +1,5 @@
-export default from './FilesTable';
+import FilesTable from './FilesTable';
+export default FilesTable;
 
 export {
   default as SupplementaryFilesTableRow

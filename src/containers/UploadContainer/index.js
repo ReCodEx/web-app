@@ -1,1 +1,2 @@
-export default from './UploadContainer';
+import UploadContainer from './UploadContainer';
+export default UploadContainer;

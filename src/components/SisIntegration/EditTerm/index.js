@@ -1,1 +1,2 @@
-export default from './EditTerm';
+import EditTerm from './EditTerm';
+export default EditTerm;

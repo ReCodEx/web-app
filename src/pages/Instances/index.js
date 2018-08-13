@@ -1,1 +1,2 @@
-export default from './Instances';
+import Instances from './Instances';
+export default Instances;

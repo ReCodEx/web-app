@@ -1,1 +1,2 @@
-export default from './LicencesTableContainer';
+import LicencesTableContainer from './LicencesTableContainer';
+export default LicencesTableContainer;

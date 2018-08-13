@@ -1,1 +1,2 @@
-export default from './LoginCASForm';
+import LoginCASForm from './LoginCASForm';
+export default LoginCASForm;

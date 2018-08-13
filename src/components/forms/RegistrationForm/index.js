@@ -1,1 +1,2 @@
-export default from './RegistrationForm';
+import RegistrationForm from './RegistrationForm';
+export default RegistrationForm;

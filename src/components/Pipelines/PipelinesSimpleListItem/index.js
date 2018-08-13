@@ -1,1 +1,2 @@
-export default from './PipelinesSimpleListItem';
+import PipelinesSimpleListItem from './PipelinesSimpleListItem';
+export default PipelinesSimpleListItem;

@@ -1,1 +1,2 @@
-export default from './EditEnvironmentConfigForm';
+import EditEnvironmentConfigForm from './EditEnvironmentConfigForm';
+export default EditEnvironmentConfigForm;

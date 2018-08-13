@@ -1,1 +1,2 @@
-export default from './EditUser';
+import EditUser from './EditUser';
+export default EditUser;

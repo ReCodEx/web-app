@@ -1,1 +1,2 @@
-export default from './GroupsNameContainer';
+import GroupsNameContainer from './GroupsNameContainer';
+export default GroupsNameContainer;

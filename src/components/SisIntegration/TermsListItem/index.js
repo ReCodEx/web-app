@@ -1,1 +1,2 @@
-export default from './TermsListItem';
+import TermsListItem from './TermsListItem';
+export default TermsListItem;

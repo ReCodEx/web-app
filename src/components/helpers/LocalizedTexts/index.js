@@ -1,1 +1,2 @@
-export default from './LocalizedTexts';
+import LocalizedTexts from './LocalizedTexts';
+export default LocalizedTexts;

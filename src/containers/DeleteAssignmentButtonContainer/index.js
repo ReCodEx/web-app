@@ -1,1 +1,2 @@
-export default from './DeleteAssignmentButtonContainer';
+import DeleteAssignmentButtonContainer from './DeleteAssignmentButtonContainer';
+export default DeleteAssignmentButtonContainer;

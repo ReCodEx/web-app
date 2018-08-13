@@ -1,1 +1,2 @@
-export default from './DownloadSolutionArchiveContainer';
+import DownloadSolutionArchiveContainer from './DownloadSolutionArchiveContainer';
+export default DownloadSolutionArchiveContainer;

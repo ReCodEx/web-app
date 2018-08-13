@@ -1,1 +1,2 @@
-export default from './EditUserProfileForm';
+import EditUserProfileForm from './EditUserProfileForm';
+export default EditUserProfileForm;

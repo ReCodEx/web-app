@@ -1,1 +1,2 @@
-export default from './AddLicenceFormContainer';
+import AddLicenceFormContainer from './AddLicenceFormContainer';
+export default AddLicenceFormContainer;

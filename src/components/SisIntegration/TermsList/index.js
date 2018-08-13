@@ -1,1 +1,2 @@
-export default from './TermsList';
+import TermsList from './TermsList';
+export default TermsList;

@@ -1,1 +1,2 @@
-export default from './GroupInfo';
+import GroupInfo from './GroupInfo';
+export default GroupInfo;
