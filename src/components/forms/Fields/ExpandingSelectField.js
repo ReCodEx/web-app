@@ -8,75 +8,79 @@ import FlatButton from '../../widgets/FlatButton';
 import SelectField from './SelectField';
 import Icon, { AddIcon, CloseIcon } from '../../icons';
 
-import styles from './commonStyles.less';
-
 const ExpandingSelectField = ({
   fields,
   meta: { active, dirty, error, warning },
   label,
+  noItems = null,
   ...props
 }) =>
   <div>
-    <ControlLabel>
-      {label}
-    </ControlLabel>
-    <table>
-      <tbody>
-        {fields.map((field, index) =>
-          <tr key={index}>
-            <td width="100%" className={styles.alignTop}>
-              <Field
-                name={field}
-                component={SelectField}
-                label={''}
-                {...props}
-              />
-            </td>
-            <td className={styles.alignTop}>
-              <OverlayTrigger
-                placement="top"
-                overlay={
-                  <Tooltip id={Date.now()}>
-                    <FormattedMessage
-                      id="app.expandingTextField.tooltip.addAbove"
-                      defaultMessage="Insert new item right above."
-                    />
-                  </Tooltip>
-                }
-              >
-                <FlatButton onClick={() => fields.insert(index, '')}>
-                  <Icon icon="reply" />
-                </FlatButton>
-              </OverlayTrigger>
-            </td>
-            <td className={styles.alignTop}>
-              <OverlayTrigger
-                placement="top"
-                overlay={
-                  <Tooltip id={Date.now()}>
-                    <FormattedMessage
-                      id="app.expandingTextField.tooltip.remove"
-                      defaultMessage="Remove this item from the list."
-                    />
-                  </Tooltip>
-                }
-              >
-                <FlatButton onClick={() => fields.remove(index)}>
-                  <CloseIcon />
-                </FlatButton>
-              </OverlayTrigger>
-            </td>
-          </tr>
-        )}
-      </tbody>
-    </table>
+    {fields.length > 0 &&
+      <React.Fragment>
+        <ControlLabel>
+          {label}
+        </ControlLabel>
+        <table>
+          <tbody>
+            {fields.map((field, index) =>
+              <tr key={index}>
+                <td width="100%" className="valign-top">
+                  <Field
+                    name={field}
+                    component={SelectField}
+                    label={''}
+                    addEmptyOption
+                    {...props}
+                  />
+                </td>
+                <td className="valign-top">
+                  <OverlayTrigger
+                    placement="top"
+                    overlay={
+                      <Tooltip id={Date.now()}>
+                        <FormattedMessage
+                          id="app.expandingTextField.tooltip.addAbove"
+                          defaultMessage="Insert new item right above."
+                        />
+                      </Tooltip>
+                    }
+                  >
+                    <FlatButton onClick={() => fields.insert(index, '')}>
+                      <Icon icon="reply" />
+                    </FlatButton>
+                  </OverlayTrigger>
+                </td>
+                <td className="valign-top">
+                  <OverlayTrigger
+                    placement="top"
+                    overlay={
+                      <Tooltip id={Date.now()}>
+                        <FormattedMessage
+                          id="app.expandingTextField.tooltip.remove"
+                          defaultMessage="Remove this item from the list."
+                        />
+                      </Tooltip>
+                    }
+                  >
+                    <FlatButton onClick={() => fields.remove(index)}>
+                      <CloseIcon />
+                    </FlatButton>
+                  </OverlayTrigger>
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </React.Fragment>}
     <div style={{ textAlign: 'center' }}>
       {fields.length === 0 &&
         <span style={{ paddingRight: '2em' }}>
-          <FormattedMessage
-            id="app.expandingTextField.noItems"
-            defaultMessage="There are no items yet..."
-          />
+          {noItems ||
+            <FormattedMessage
+              id="app.expandingTextField.noItems"
+              defaultMessage="There are no items yet..."
+            />}
         </span>}
       <OverlayTrigger
         placement="right"
@@ -109,6 +113,11 @@ ExpandingSelectField.propTypes = {
     PropTypes.element,
     PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) })
   ]).isRequired,
+  noItems: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.element,
+    PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) })
+  ]),
   options: PropTypes.array
 };
 

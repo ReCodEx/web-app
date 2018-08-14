@@ -23,7 +23,7 @@ class Variable {
     this.formProp = name; // redux-form property name
     this.type = type; // variable type (in pipeline)
     this.isArray = type.endsWith('[]');
-    this.allEnvs = allEnvs; // whether the variable is the same in all environments
+    this.allEnvs = allEnvs; // whether the value of the variable is the same in all environments
     this.defaultValue =
       defaultValue !== undefined
         ? defaultValue
@@ -31,6 +31,7 @@ class Variable {
     this.pipelineFilter = {
       isCompilationPipeline: Boolean(compilationPipeline)
     };
+    this.runtimeFilter = null;
     this.transformPostprocess = identity;
   }
 
@@ -72,9 +73,22 @@ class Variable {
   }
 
   /**
+   * Add runtime filter -- a list of runtime IDs where the variable is present.
+   * @param {*} runtimes Either a single string or an array of strings with runtime ID(s).
+   */
+  setRuntimeFilter(runtimes) {
+    if (!Array.isArray(runtimes)) {
+      runtimes = [runtimes];
+    }
+    this.runtimeFilter = runtimes;
+    return this;
+  }
+
+  /**
    * Should the variable be searched in/set in a particular pipeline?
    */
   isApplicableForPipeline(pipeline) {
+    // If one of the parameters is not matched, the pipeline is not applicable.
     for (const param in this.pipelineFilter) {
       if (
         pipeline.parameters[param] === undefined ||
@@ -83,7 +97,16 @@ class Variable {
         return false;
       }
     }
-    return true;
+
+    if (this.runtimeFilter === null) {
+      return true; // no more filters, all checks have passed.
+    }
+
+    // At least one of the runtimes must match.
+    return this.runtimeFilter.reduce(
+      (res, runtime) => res || pipeline.runtimeEnvironmentIds.includes(runtime),
+      false
+    );
   }
 
   // Internal reusable function that fetches value of a variable (by given parameters) from a list of pipelines.
@@ -160,7 +183,7 @@ class Variable {
   }
 
   /**
-   * Transform a form data into pipeline variables.
+   * Transform form data of the variable into pipeline variable value.
    * Returns an array of variables to be set.
    */
   transform(formDataTest, environmentId) {
@@ -170,6 +193,7 @@ class Variable {
     value = value === undefined ? this.defaultValue : value;
     value = this.isArray ? value : value.trim();
     value = this.transformPostprocess(value, formDataTest, environmentId);
+
     return value !== undefined
       ? [
           // simple variables set only one value
@@ -264,9 +288,12 @@ const PIPELINE_VARS_DESCRIPTORS = [
   ),
   new FileListVariable('input-files', 'actual-inputs'),
   new FileListVariable('extra-files', 'extra-file-names', false, true),
+  new Variable('jar-files', 'remote-file[]', false, [], true).setRuntimeFilter(
+    'java'
+  ),
   new Variable('entry-point', 'file', false)
     .setPipelineFilter('hasEntryPoint')
-    .setTransformPostprocess((value, formDataTest) => value || '$entry-point')
+    .setTransformPostprocess(value => value || '$entry-point')
 ];
 
 // Restrict all variables except for data-only variables not to enter data-only pipeline...

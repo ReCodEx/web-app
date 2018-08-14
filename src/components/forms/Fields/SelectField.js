@@ -31,10 +31,10 @@ const SelectField = ({
         {label}
       </ControlLabel>}
 
-    <table>
+    <table className="full-width">
       <tbody>
         <tr>
-          <td width="100%" className="valign-top">
+          <td className="full-width valign-top">
             <FormControl
               {...input}
               {...props}
@@ -42,7 +42,8 @@ const SelectField = ({
               bsClass={classNames({
                 'form-control': true,
                 [styles.dirty]: dirty && !ignoreDirty && !error && !warning,
-                [styles.active]: active
+                [styles.active]: active,
+                'full-width': true
               })}
             >
               {addEmptyOption &&

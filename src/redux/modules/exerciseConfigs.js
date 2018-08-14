@@ -387,7 +387,8 @@ export const exerciseConfigFormSmartFillAll = (
     'custom-judge',
     'judge-args',
     'extra-files',
-    'entry-point'
+    'entry-point',
+    'jar-files'
   ]);
 
 export const exerciseConfigFormSmartFillInput = (
@@ -444,7 +445,8 @@ export const exerciseConfigFormSmartFillCompilation = (
 ) =>
   exerciseConfigFormSmartFill(formName, firstTestId, tests, files, [
     'extra-files',
-    'entry-point'
+    'entry-point',
+    'jar-files'
   ]);
 
 export const reducer = handleActions(reduceActions, initialState);

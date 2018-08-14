@@ -40,7 +40,7 @@ class EditExerciseSimpleConfigForm extends Component {
       formValues,
       formErrors,
       supplementaryFiles,
-      environmetnsWithEntryPoints,
+      environmentsWithEntryPoints,
       exercise,
       exerciseTests,
       smartFill,
@@ -145,8 +145,8 @@ class EditExerciseSimpleConfigForm extends Component {
                     return dataOnly
                       ? <EditExerciseSimpleConfigDataTest
                           key={idx}
-                          environmetnsWithEntryPoints={
-                            environmetnsWithEntryPoints
+                          environmentsWithEntryPoints={
+                            environmentsWithEntryPoints
                           }
                           supplementaryFiles={files}
                           testName={test.name}
@@ -164,10 +164,11 @@ class EditExerciseSimpleConfigForm extends Component {
                           key={idx}
                           exercise={exercise}
                           extraFiles={testData && testData['extra-files']}
+                          jarFiles={testData && testData['jar-files']}
                           useOutFile={testData && testData.useOutFile}
                           useCustomJudge={testData && testData.useCustomJudge}
-                          environmetnsWithEntryPoints={
-                            environmetnsWithEntryPoints
+                          environmentsWithEntryPoints={
+                            environmentsWithEntryPoints
                           }
                           supplementaryFiles={files}
                           testName={test.name}
@@ -207,7 +208,7 @@ EditExerciseSimpleConfigForm.propTypes = {
   supplementaryFiles: ImmutablePropTypes.map,
   exercise: PropTypes.object,
   exerciseTests: PropTypes.array,
-  environmetnsWithEntryPoints: PropTypes.array.isRequired,
+  environmentsWithEntryPoints: PropTypes.array.isRequired,
   smartFill: PropTypes.func.isRequired,
   intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired
 };
@@ -268,6 +269,46 @@ const validate = (formData, { dataOnly }) => {
               );
             });
           }
+        }
+      }
+    }
+
+    // Special test for Java JAR files only !!!
+    const jarFiles = test['jar-files']['java'];
+    if (jarFiles) {
+      jarFiles.forEach(
+        (file, idx) =>
+          file.trim() === '' &&
+          safeSet(
+            errors,
+            ['config', testKey, 'jar-files', 'java', idx],
+            <FormattedMessage
+              id="app.editExerciseConfigForm.validation.noFileSelected"
+              defaultMessage="Please select a file."
+            />
+          )
+      );
+    }
+
+    if (jarFiles && jarFiles.length > 1) {
+      const nameIndex = createIndex(
+        jarFiles.map(name => name && name.trim()).filter(name => name)
+      );
+
+      // Traverse the index and place an error to all duplicates ...
+      for (const name in nameIndex) {
+        const indices = nameIndex[name];
+        if (indices.length > 1) {
+          indices.forEach(idx => {
+            safeSet(
+              errors,
+              ['config', testKey, 'jar-files', 'java', idx],
+              <FormattedMessage
+                id="app.editExerciseConfigForm.validation.duplicateFile"
+                defaultMessage="Duplicate file detected."
+              />
+            );
+          });
         }
       }
     }
