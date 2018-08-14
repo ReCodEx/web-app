@@ -156,7 +156,7 @@ class EditExerciseSimpleConfig extends Component {
       exerciseScoreConfig,
       exerciseTests,
       pipelines,
-      environmetnsWithEntryPoints,
+      environmentsWithEntryPoints,
       intl: { locale }
     } = this.props;
 
@@ -322,8 +322,8 @@ class EditExerciseSimpleConfig extends Component {
                                     )}
                                     exercise={exercise}
                                     exerciseTests={tests}
-                                    environmetnsWithEntryPoints={
-                                      environmetnsWithEntryPoints
+                                    environmentsWithEntryPoints={
+                                      environmentsWithEntryPoints
                                     }
                                     dataOnly={Boolean(
                                       exercise.runtimeEnvironments.find(
@@ -380,7 +380,7 @@ EditExerciseSimpleConfig.propTypes = {
   setConfig: PropTypes.func.isRequired,
   links: PropTypes.object.isRequired,
   pipelines: ImmutablePropTypes.map,
-  environmetnsWithEntryPoints: PropTypes.array.isRequired,
+  environmentsWithEntryPoints: PropTypes.array.isRequired,
   reloadExercise: PropTypes.func.isRequired,
   reloadConfig: PropTypes.func.isRequired,
   intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired
@@ -400,7 +400,7 @@ export default withLinks(
         exerciseScoreConfig: exerciseScoreConfigSelector(exerciseId)(state),
         exerciseTests: exerciseTestsSelector(exerciseId)(state),
         pipelines: pipelinesSelector(state),
-        environmetnsWithEntryPoints: getPipelinesEnvironmentsWhichHasEntryPoint(
+        environmentsWithEntryPoints: getPipelinesEnvironmentsWhichHasEntryPoint(
           state
         )
       };

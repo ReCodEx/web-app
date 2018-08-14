@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Field, FieldArray } from 'redux-form';
-import { Well, Row, Col } from 'react-bootstrap';
+import { Well, Grid, Row, Col } from 'react-bootstrap';
 import { FormattedMessage, injectIntl, defineMessages } from 'react-intl';
 
+import EnvironmentsListItem from '../../helpers/EnvironmentsList/EnvironmentsListItem';
 import { EMPTY_ARRAY } from '../../../helpers/common';
 import Button from '../../widgets/FlatButton';
 import Icon from '../../icons';
@@ -12,6 +13,7 @@ import {
   TextField,
   ExpandingTextField,
   ExpandingInputFilesField,
+  ExpandingSelectField,
   CheckboxField
 } from '../Fields';
 import Confirm from '../../forms/Confirm';
@@ -98,8 +100,8 @@ class EditExerciseSimpleConfigTest extends Component {
   };
 
   getPossibleEntryPoints = envId => {
-    const { extraFiles, environmetnsWithEntryPoints, intl } = this.props;
-    if (!environmetnsWithEntryPoints.includes(envId)) {
+    const { extraFiles, environmentsWithEntryPoints, intl } = this.props;
+    if (!environmentsWithEntryPoints.includes(envId)) {
       return EMPTY_ARRAY;
     }
 
@@ -114,11 +116,16 @@ class EditExerciseSimpleConfigTest extends Component {
   };
 
   hasCompilationExtraFiles() {
-    const { extraFiles } = this.props;
-    if (!extraFiles) {
+    const { extraFiles, jarFiles } = this.props;
+    if (!extraFiles && !jarFiles) {
       return false;
     }
     for (const files of Object.values(extraFiles)) {
+      if (files && files.length > 0) {
+        return true;
+      }
+    }
+    for (const files of Object.values(jarFiles)) {
       if (files && files.length > 0) {
         return true;
       }
@@ -184,40 +191,103 @@ class EditExerciseSimpleConfigTest extends Component {
                           );
                           return (
                             <td key={env.id}>
-                              <h5>
-                                {env.name}
-                              </h5>
-                              <FieldArray
-                                name={`${test}.extra-files.${env.id}`}
-                                component={ExpandingInputFilesField}
-                                options={supplementaryFilesOptions}
-                                leftLabel={
-                                  <FormattedMessage
-                                    id="app.editExerciseSimpleConfigTests.extraFilesActual"
-                                    defaultMessage="Extra file:"
+                              {exercise.runtimeEnvironments.length > 1 &&
+                                <h4>
+                                  <EnvironmentsListItem
+                                    runtimeEnvironment={env}
+                                    longNames
                                   />
-                                }
-                                rightLabel={
-                                  <FormattedMessage
-                                    id="app.editExerciseSimpleConfigTests.extraFilesRename"
-                                    defaultMessage="Rename as:"
-                                  />
-                                }
-                              />
-                              <br />
-                              {possibleEntryPoints.length > 0 &&
-                                <Field
-                                  name={`${test}.entry-point.${env.id}`}
-                                  component={SelectField}
-                                  options={this.getPossibleEntryPoints(env.id)}
-                                  addEmptyOption={true}
-                                  label={
-                                    <FormattedMessage
-                                      id="app.editExerciseSimpleConfigTests.entryPoint"
-                                      defaultMessage="Point of entry (bootstrap file):"
-                                    />
+                                </h4>}
+
+                              <Grid fluid>
+                                <Row>
+                                  {env.id === 'java' &&
+                                    /*
+                                     * A special case for Java only !!!
+                                     */
+                                    <Col
+                                      lg={
+                                        exercise.runtimeEnvironments.length ===
+                                        1
+                                          ? 6
+                                          : 12
+                                      }
+                                    >
+                                      <FieldArray
+                                        name={`${test}.jar-files.${env.id}`}
+                                        component={ExpandingSelectField}
+                                        options={supplementaryFilesOptions}
+                                        label={
+                                          <FormattedMessage
+                                            id="app.editExerciseSimpleConfigTests.jarFiles"
+                                            defaultMessage="Additional JAR file:"
+                                          />
+                                        }
+                                        noItems={
+                                          <FormattedMessage
+                                            id="app.editExerciseSimpleConfigTests.noJarFiles"
+                                            defaultMessage="There are no additional JAR files yet..."
+                                          />
+                                        }
+                                      />
+                                      {exercise.runtimeEnvironments.length !==
+                                        1 && <hr />}
+                                    </Col>
+                                  /*
+                                   * End of special case.
+                                   */
                                   }
-                                />}
+
+                                  <Col
+                                    lg={
+                                      exercise.runtimeEnvironments.length ===
+                                        1 && env.id === 'java'
+                                        ? 6
+                                        : 12
+                                    }
+                                  >
+                                    <FieldArray
+                                      name={`${test}.extra-files.${env.id}`}
+                                      component={ExpandingInputFilesField}
+                                      options={supplementaryFilesOptions}
+                                      leftLabel={
+                                        <FormattedMessage
+                                          id="app.editExerciseSimpleConfigTests.extraFilesActual"
+                                          defaultMessage="Extra file:"
+                                        />
+                                      }
+                                      rightLabel={
+                                        <FormattedMessage
+                                          id="app.editExerciseSimpleConfigTests.extraFilesRename"
+                                          defaultMessage="Rename as:"
+                                        />
+                                      }
+                                      noItems={
+                                        <FormattedMessage
+                                          id="app.editExerciseSimpleConfigTests.noExtraFiles"
+                                          defaultMessage="There are no extra files yet..."
+                                        />
+                                      }
+                                    />
+                                    <br />
+                                    {possibleEntryPoints.length > 0 &&
+                                      <Field
+                                        name={`${test}.entry-point.${env.id}`}
+                                        component={SelectField}
+                                        options={this.getPossibleEntryPoints(
+                                          env.id
+                                        )}
+                                        addEmptyOption={true}
+                                        label={
+                                          <FormattedMessage
+                                            id="app.editExerciseSimpleConfigTests.entryPoint"
+                                            defaultMessage="Point of entry (bootstrap file):"
+                                          />
+                                        }
+                                      />}
+                                  </Col>
+                                </Row>
+                              </Grid>
                             </td>
                           );
                         })}
@@ -596,9 +666,10 @@ EditExerciseSimpleConfigTest.propTypes = {
   supplementaryFiles: PropTypes.array.isRequired,
   exerciseTests: PropTypes.array,
   extraFiles: PropTypes.object,
+  jarFiles: PropTypes.object,
   useOutFile: PropTypes.bool,
   useCustomJudge: PropTypes.bool,
-  environmetnsWithEntryPoints: PropTypes.array.isRequired,
+  environmentsWithEntryPoints: PropTypes.array.isRequired,
   testErrors: PropTypes.object,
   smartFill: PropTypes.object,
   intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired

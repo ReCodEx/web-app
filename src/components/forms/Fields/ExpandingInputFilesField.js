@@ -9,8 +9,6 @@ import SelectField from './SelectField';
 import TextField from './TextField';
 import { AddIcon, CloseIcon } from '../../icons';
 
-import styles from './commonStyles.less';
-
 const EMPTY_VALUE = { file: '', name: '' };
 
 const validate = value =>
@@ -26,6 +24,7 @@ const ExpandingInputFilesField = ({
   meta: { active, dirty, error, warning },
   leftLabel = '',
   rightLabel = '',
+  noItems = null,
   options,
   ...props
 }) =>
@@ -50,7 +49,7 @@ const ExpandingInputFilesField = ({
         <tbody>
           {fields.map((field, index) =>
             <tr key={index}>
-              <td className={styles.alignTop}>
+              <td className="valign-top">
                 <Field
                   name={`${field}.file`}
                   component={SelectField}
@@ -61,7 +60,7 @@ const ExpandingInputFilesField = ({
                   {...props}
                 />
               </td>
-              <td className={styles.alignTop}>
+              <td className="valign-top">
                 <Field
                   name={`${field}.name`}
                   component={TextField}
@@ -70,7 +69,7 @@ const ExpandingInputFilesField = ({
                   {...props}
                 />
               </td>
-              <td className={styles.alignTop}>
+              <td className="valign-top">
                 <OverlayTrigger
                   placement="top"
                   overlay={
@@ -94,10 +93,11 @@ const ExpandingInputFilesField = ({
     <div className="text-center">
       {fields.length === 0 &&
         <span style={{ paddingRight: '2em' }}>
-          <FormattedMessage
-            id="app.expandingInputFilesField.noFiles"
-            defaultMessage="There are no files yet..."
-          />
+          {noItems ||
+            <FormattedMessage
+              id="app.expandingInputFilesField.noFiles"
+              defaultMessage="There are no files yet..."
+            />}
         </span>}
       <OverlayTrigger
         placement="right"
@@ -105,7 +105,7 @@ const ExpandingInputFilesField = ({
           <Tooltip id={Date.now()}>
             <FormattedMessage
               id="app.expandingInputFilesField.tooltip.add"
-              defaultMessage="Add another input file."
+              defaultMessage="Add another file."
             />
           </Tooltip>
         }
@@ -135,6 +135,11 @@ ExpandingInputFilesField.propTypes = {
     PropTypes.element,
     PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) })
   ]).isRequired,
+  noItems: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.element,
+    PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) })
+  ]),
   options: PropTypes.array
 };
 

@@ -8,12 +8,11 @@ import FlatButton from '../../widgets/FlatButton';
 import TextField from './TextField';
 import Icon, { AddIcon, CloseIcon } from '../../icons';
 
-import styles from './commonStyles.less';
-
 const ExpandingTextField = ({
   fields,
   meta: { active, dirty, error, warning },
   label,
+  noItems = null,
   ...props
 }) =>
   <div>
@@ -24,10 +23,10 @@ const ExpandingTextField = ({
       <tbody>
         {fields.map((field, index) =>
           <tr key={index}>
-            <td width="100%" className={styles.alignTop}>
+            <td width="100%" className="valign-top">
               <Field name={field} component={TextField} label={''} {...props} />
             </td>
-            <td className={styles.alignTop}>
+            <td className="valign-top">
               <OverlayTrigger
                 placement="top"
                 overlay={
@@ -45,7 +44,7 @@ const ExpandingTextField = ({
                 </FlatButton>
               </OverlayTrigger>
             </td>
-            <td className={styles.alignTop}>
+            <td className="valign-top">
               <OverlayTrigger
                 placement="top"
                 overlay={
@@ -69,10 +68,11 @@ const ExpandingTextField = ({
     <div style={{ textAlign: 'center' }}>
       {fields.length === 0 &&
         <span style={{ paddingRight: '2em' }}>
-          <FormattedMessage
-            id="app.expandingTextField.noItems"
-            defaultMessage="There are no items yet..."
-          />
+          {noItems ||
+            <FormattedMessage
+              id="app.expandingTextField.noItems"
+              defaultMessage="There are no items yet..."
+            />}
         </span>}
       <OverlayTrigger
         placement="right"
@@ -104,7 +104,12 @@ ExpandingTextField.propTypes = {
     PropTypes.string,
     PropTypes.element,
     PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) })
-  ]).isRequired
+  ]).isRequired,
+  noItems: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.element,
+    PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) })
+  ])
 };
 
 export default ExpandingTextField;

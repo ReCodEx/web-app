@@ -121,6 +121,10 @@ th.shrink-col {
   white-space: nowrap !important;
 }
 
+.full-width {
+  width: 100%;
+}
+
 /*
  * Alignment
  */
