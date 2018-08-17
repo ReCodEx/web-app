@@ -74,7 +74,7 @@ export const knownRoles = Object.keys(roleLabels);
 export const isStudentRole = role =>
   role === 'student' || role === 'supervisor-student';
 
-export const isSupervisorRole = role => role !== 'student'; // all other roles are supervisors
+export const isSupervisorRole = role => role && role !== 'student'; // all other roles are supervisors
 
 export const isSuperadminRole = role => role === 'superadmin';
 
