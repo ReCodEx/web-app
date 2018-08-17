@@ -111,6 +111,7 @@ class EditExerciseSimpleConfigDataTest extends Component {
             <FieldArray
               name={`${test}.run-args`}
               component={ExpandingTextField}
+              maxLength={64}
               label={
                 <FormattedMessage
                   id="app.editExerciseSimpleConfigTests.executionArguments"

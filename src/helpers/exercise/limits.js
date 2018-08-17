@@ -178,8 +178,8 @@ export const validateLimitsTimeTotals = (limits, range) => {
   let sums = {};
   Object.keys(limits).forEach(test =>
     Object.keys(limits[test]).forEach(env => {
-      if (limits[test][env]['time']) {
-        const val = Number(limits[test][env]['time']);
+      if (limits[test][env].time) {
+        const val = Number(limits[test][env].time);
         if (!Number.isNaN(val) && val > 0) {
           sums[env] = (sums[env] || 0) + val;
         }
@@ -187,20 +187,9 @@ export const validateLimitsTimeTotals = (limits, range) => {
     })
   );
 
-  // Check if some environemnts have exceeded the limit ...
-  const limitsErrors = {};
-  Object.keys(limits).forEach(test => {
-    const testsErrors = {};
-    Object.keys(sums).forEach(env => {
-      if (sums[env] > range.max || sums[env] < range.min) {
-        testsErrors[env] = sums[env];
-      }
-    });
-    if (Object.keys(testsErrors).length > 0) {
-      limitsErrors[test] = testsErrors;
-    }
-  });
-  return limitsErrors;
+  return Object.keys(sums).filter(
+    env => sums[env] > range.max || sums[env] < range.min
+  );
 };
 
 export const validateLimitsSingleEnvironment = (
