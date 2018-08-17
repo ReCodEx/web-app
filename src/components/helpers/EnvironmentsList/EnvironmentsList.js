@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { injectIntl } from 'react-intl';
-import { LoadingIcon } from '../../icons';
+import { FormattedMessage, injectIntl } from 'react-intl';
+import { LoadingIcon, WarningIcon } from '../../icons';
 import EnvironmentsListItem from './EnvironmentsListItem';
 
 const EnvironmentsList = ({
-  runtimeEnvironments,
+  runtimeEnvironments = null,
   longNames = false,
   intl: { locale }
 }) => {
@@ -20,14 +20,22 @@ const EnvironmentsList = ({
       );
   return (
     <span>
-      {environments && environments.length > 0
-        ? environments.map(env =>
-            <EnvironmentsListItem
-              key={env.id}
-              runtimeEnvironment={env}
-              longNames={longNames}
-            />
-          )
+      {environments !== null
+        ? environments.length > 0
+          ? environments.map(env =>
+              <EnvironmentsListItem
+                key={env.id}
+                runtimeEnvironment={env}
+                longNames={longNames}
+              />
+            )
+          : <i className="small text-muted">
+              <WarningIcon gapRight />
+              <FormattedMessage
+                id="app.environmentsList.noEnvironments"
+                defaultMessage="no runtime environments"
+              />
+            </i>
         : <LoadingIcon />}
     </span>
   );
