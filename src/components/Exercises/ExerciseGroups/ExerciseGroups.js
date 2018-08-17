@@ -138,6 +138,7 @@ class ExerciseGroups extends Component {
                 <GroupTree
                   id={rootGroupId}
                   groups={groups}
+                  onlyEditable
                   buttonsCreator={this.buttonsCreator(
                     arrayToObject(groupsIds, identity, () => true)
                   )}
