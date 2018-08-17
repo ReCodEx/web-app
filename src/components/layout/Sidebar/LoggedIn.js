@@ -11,7 +11,6 @@ import withLinks from '../../../helpers/withLinks';
 
 const LoggedIn = ({
   instances,
-  isCollapsed,
   currentUrl,
   links: { DASHBOARD_URI, INSTANCE_URI_FACTORY }
 }) =>
@@ -52,7 +51,6 @@ const LoggedIn = ({
 
 LoggedIn.propTypes = {
   instances: ImmutablePropTypes.list,
-  isCollapsed: PropTypes.bool,
   currentUrl: PropTypes.string.isRequired,
   links: PropTypes.object
 };
