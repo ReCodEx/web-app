@@ -1,9 +1,13 @@
 const getLocalizedX = field => (entity, locale) => {
   const localizedText =
-    entity.localizedTexts.find(text => text.locale === locale) ||
-    entity.localizedTexts.find(text => text.locale === 'en') ||
-    entity.localizedTexts[0];
-  return (localizedText && localizedText[field]) || entity[field] || '';
+    entity &&
+    entity.localizedTexts &&
+    (entity.localizedTexts.find(text => text.locale === locale) ||
+      entity.localizedTexts.find(text => text.locale === 'en') ||
+      entity.localizedTexts[0]);
+  return (
+    (localizedText && localizedText[field]) || (entity && entity[field]) || ''
+  );
 };
 
 const getLocalizedResourceX = field => (resource, locale) => {
@@ -27,9 +31,12 @@ export const getLocalizedResourceName = getLocalizedResourceX('name');
 
 export const getOtherLocalizedNames = (entity, locale) => {
   const name = getLocalizedName(entity, locale);
-  return entity.localizedTexts
-    .filter(text => text.name && text.name !== name)
-    .map(({ name, locale }) => ({ name, locale }));
+  return (
+    entity &&
+    entity.localizedTexts
+      .filter(text => text.name && text.name !== name)
+      .map(({ name, locale }) => ({ name, locale }))
+  );
 };
 
 export const getGroupCanonicalLocalizedName = (
