@@ -553,7 +553,7 @@ class Exercise extends Component {
                                         </Confirm>}
                                     </div>}
                                 />
-                              : <p className="text-center">
+                              : <p className="text-center em-padding text-muted">
                                   <FormattedMessage
                                     id="app.exercise.noReferenceSolutions"
                                     defaultMessage="There are no reference solutions for this exercise yet."

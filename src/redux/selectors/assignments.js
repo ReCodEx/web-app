@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect';
-import { EMPTY_LIST, EMPTY_ARRAY } from '../../helpers/common';
+import { EMPTY_LIST } from '../../helpers/common';
 import { getSolutions } from './solutions';
 import { runtimeEnvironmentSelector } from './runtimeEnvironments';
 
@@ -25,7 +25,7 @@ export const assignmentEnvironmentsSelector = createSelector(
           .toArray()
           .filter(env => disabledEnvIds.toArray().indexOf(env) < 0)
           .map(envSelector)
-      : EMPTY_ARRAY;
+      : null;
   }
 );
 
