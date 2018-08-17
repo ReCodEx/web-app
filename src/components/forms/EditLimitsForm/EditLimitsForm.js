@@ -10,7 +10,7 @@ import SubmitButton from '../SubmitButton';
 import FormBox from '../../widgets/FormBox';
 import Button from '../../widgets/FlatButton';
 import Icon, { RefreshIcon } from '../../icons';
-import { encodeId, encodeNumId } from '../../../helpers/common';
+import { encodeId, encodeNumId, identity } from '../../../helpers/common';
 import { validateLimitsTimeTotals } from '../../../helpers/exercise/limits';
 
 import styles from './styles.less';
@@ -31,6 +31,7 @@ class EditLimitsForm extends Component {
       submitFailed,
       submitSucceeded,
       invalid,
+      error,
       intl: { locale }
     } = this.props;
 
@@ -103,14 +104,6 @@ class EditLimitsForm extends Component {
             : null
         }
       >
-        {submitFailed &&
-          <Alert bsStyle="danger">
-            <FormattedMessage
-              id="app.editLimitsForm.failed"
-              defaultMessage="Cannot save the exercise limits. Please try again later."
-            />
-          </Alert>}
-
         <Grid fluid>
           <Row>
             <Col lg={3}>
@@ -151,7 +144,7 @@ class EditLimitsForm extends Component {
               <th />
               {environments.map(environment =>
                 <th
-                  key={'th-' + environment.id}
+                  key={`th-${environment.id}`}
                   className={styles.limitsTableHeading}
                 >
                   {environment.name}
@@ -208,6 +201,21 @@ class EditLimitsForm extends Component {
               )}
           </tbody>
         </Table>
+
+        {submitFailed &&
+          <Alert bsStyle="danger">
+            <FormattedMessage
+              id="app.editLimitsForm.failed"
+              defaultMessage="Cannot save the exercise limits. Please try again later."
+            />
+          </Alert>}
+
+        {error &&
+          <div className="em-padding-horizontal">
+            <Alert bsStyle="danger">
+              {error}
+            </Alert>
+          </div>}
       </FormBox>
     );
   }
@@ -229,29 +237,32 @@ EditLimitsForm.propTypes = {
   submitFailed: PropTypes.bool,
   submitSucceeded: PropTypes.bool,
   invalid: PropTypes.bool,
+  error: PropTypes.any,
   intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired
 };
 
-const validate = ({ limits }, { constraints }) => {
+const validate = ({ limits }, { constraints, environments }) => {
   const errors = {};
-  const limitsErrors = validateLimitsTimeTotals(limits, constraints.totalTime);
+  const brokenEnvironments = validateLimitsTimeTotals(
+    limits,
+    constraints.totalTime
+  );
 
-  Object.keys(limitsErrors).forEach(test => {
-    Object.keys(limitsErrors[test]).forEach(env => {
-      limitsErrors[test][env] = {
-        time: (
-          <FormattedMessage
-            id="app.editLimitsForm.validation.totalTime"
-            defaultMessage="The time limits total is out of range. See limits constraints for details."
-          />
-        )
-      };
-    });
-  });
-  if (Object.keys(limitsErrors).length > 0) {
-    errors['limits'] = limitsErrors;
+  if (brokenEnvironments && brokenEnvironments.length > 0) {
+    errors._error = (
+      <FormattedMessage
+        id="app.editLimitsForm.validation.totalTime"
+        defaultMessage="The time limits for some environments ({environments}) are violating the total alowed time per exercise constraint. Please, make sure that the total sum of the time limits is within the constraints of the selected hardware group."
+        values={{
+          environments: brokenEnvironments
+            .map(env => environments.find(({ id }) => encodeId(id) === env))
+            .filter(identity)
+            .map(env => env.name)
+            .join(', ')
+        }}
+      />
+    );
   }
-
   return errors;
 };
 

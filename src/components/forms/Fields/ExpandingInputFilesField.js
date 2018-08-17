@@ -66,6 +66,7 @@ const ExpandingInputFilesField = ({
                   component={TextField}
                   label={''}
                   validate={validate}
+                  maxLength={64}
                   {...props}
                 />
               </td>

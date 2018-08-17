@@ -77,6 +77,7 @@ const EditLimitsField = ({
                 }
                 validate={validateMemory}
                 disabled={disabled}
+                maxLength={12}
                 {...props}
               />
               {!disabled &&
@@ -86,7 +87,7 @@ const EditLimitsField = ({
                       <OverlayTrigger
                         placement="bottom"
                         overlay={
-                          <Tooltip id={Date.now()}>
+                          <Tooltip id={`tooltip.${id}.memory.vertical`}>
                             <FormattedMessage
                               id="app.editLimitsField.tooltip.cloneVertical"
                               defaultMessage="Copy this value vertically to all tests within the environment."
@@ -115,7 +116,7 @@ const EditLimitsField = ({
                         <OverlayTrigger
                           placement="bottom"
                           overlay={
-                            <Tooltip id={Date.now()}>
+                            <Tooltip id={`tooltip.${id}.memory.horizontal`}>
                               <FormattedMessage
                                 id="app.editLimitsField.tooltip.cloneHorizontal"
                                 defaultMessage="Copy this value horizontally to all environments of the test."
@@ -143,7 +144,7 @@ const EditLimitsField = ({
                         <OverlayTrigger
                           placement="bottom"
                           overlay={
-                            <Tooltip id={Date.now()}>
+                            <Tooltip id={`tooltip.${id}.memory.all`}>
                               <FormattedMessage
                                 id="app.editLimitsField.tooltip.cloneAll"
                                 defaultMessage="Copy this value to all tests in all environments."
@@ -175,6 +176,7 @@ const EditLimitsField = ({
                     defaultMessage="Time [s]:"
                   />
                 }
+                maxLength={6}
                 disabled={disabled}
                 {...props}
               />
@@ -185,7 +187,7 @@ const EditLimitsField = ({
                       <OverlayTrigger
                         placement="bottom"
                         overlay={
-                          <Tooltip id={Date.now()}>
+                          <Tooltip id={`tooltip.${id}.time.vertical`}>
                             <FormattedMessage
                               id="app.editLimitsField.tooltip.cloneVertical"
                               defaultMessage="Copy this value vertically to all tests within the environment."
@@ -214,7 +216,7 @@ const EditLimitsField = ({
                         <OverlayTrigger
                           placement="bottom"
                           overlay={
-                            <Tooltip id={Date.now()}>
+                            <Tooltip id={`tooltip.${id}.time.horizontal`}>
                               <FormattedMessage
                                 id="app.editLimitsField.tooltip.cloneHorizontal"
                                 defaultMessage="Copy this value horizontally to all environments of the test."
@@ -242,7 +244,7 @@ const EditLimitsField = ({
                         <OverlayTrigger
                           placement="bottom"
                           overlay={
-                            <Tooltip id={Date.now()}>
+                            <Tooltip id={`tooltip.${id}.time.all`}>
                               <FormattedMessage
                                 id="app.editLimitsField.tooltip.cloneAll"
                                 defaultMessage="Copy this value to all tests in all environments."

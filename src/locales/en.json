@@ -349,7 +349,7 @@
   "app.editLimitsForm.submit": "Save Limits",
   "app.editLimitsForm.submitting": "Saving Limits ...",
   "app.editLimitsForm.success": "Limits Saved",
-  "app.editLimitsForm.validation.totalTime": "The time limits total is out of range. See limits constraints for details.",
+  "app.editLimitsForm.validation.totalTime": "The time limits for some environments ({environments}) are violating the total alowed time per exercise constraint. Please, make sure that the total sum of the time limits is within the constraints of the selected hardware group.",
   "app.editLocalizedTextForm.addLanguage": "Add language variant",
   "app.editLocalizedTextForm.localized.noLanguage": "There is currently no text in any language.",
   "app.editLocalizedTextForm.localized.reallyRemoveQuestion": "Do you really want to delete this localization?",

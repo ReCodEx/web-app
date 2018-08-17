@@ -349,7 +349,7 @@
   "app.editLimitsForm.submit": "Uložit limity",
   "app.editLimitsForm.submitting": "Ukládám limity ...",
   "app.editLimitsForm.success": "Limity uloženy.",
-  "app.editLimitsForm.validation.totalTime": "Celkový časový limit je mimo rozsah. Zkontrolujete omezení limit pro detaily.",
+  "app.editLimitsForm.validation.totalTime": "Součet časových limitů pro některá běhová prostředí ({environments}) porušuje omezení celkového času na úlohu. Prosíme zajistěte, aby součet časových limitů byl v rozsahu daném vybranou hardwarovou skupinou.",
   "app.editLocalizedTextForm.addLanguage": "Přidat jazykovou variantu",
   "app.editLocalizedTextForm.localized.noLanguage": "V současnosti zde není žádný jazyk.",
   "app.editLocalizedTextForm.localized.reallyRemoveQuestion": "Opravdu chcete smazat tuto lokalizaci?",

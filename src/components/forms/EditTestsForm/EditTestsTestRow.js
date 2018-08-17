@@ -21,6 +21,7 @@ const EditTestsTestRow = ({
         name={`${test}.name`}
         component={TextField}
         label={''}
+        maxLength={64}
         groupClassName="testRow"
         disabled={readOnly}
       />
@@ -31,6 +32,7 @@ const EditTestsTestRow = ({
           name={`${test}.weight`}
           component={TextField}
           label={''}
+          maxLength={5}
           groupClassName="testRow"
           disabled={readOnly}
         />
