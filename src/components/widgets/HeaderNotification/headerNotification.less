@@ -1,7 +1,11 @@
-.container {
+.notification {
+  position: relative;
+}
+
+.badgeContainer {
   position: absolute;
   right: 10px;
-  top: 11px;
+  top: 8px;
   margin-top: 0px;
 }
 
@@ -20,9 +24,15 @@
 }
 
 @keyframes notificationShowdown {
-  0% { background-color: white; }
-  50% { background-color: #ffcccc; }
-  100% { background-color: white; }
+  0% {
+    background-color: white;
+  }
+  50% {
+    background-color: #ffcccc;
+  }
+  100% {
+    background-color: white;
+  }
 }
 
 .newNotification {
