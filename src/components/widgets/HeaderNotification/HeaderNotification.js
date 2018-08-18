@@ -49,6 +49,7 @@ class HeaderNotification extends Component {
     return (
       <li
         className={classNames({
+          [styles.notification]: true,
           [styles.newNotification]: isNew
         })}
       >
@@ -113,8 +114,8 @@ class HeaderNotification extends Component {
               {msg}
             </span>
             {count > 1 &&
-              <span className={styles.container}>
-                <Badge pullRight>
+              <span className={styles.badgeContainer}>
+                <Badge>
                   {count}
                 </Badge>
               </span>}

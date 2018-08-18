@@ -30,7 +30,7 @@ const HeaderNotificationsDropdown = ({
     <a href="#" className="dropdown-toggle" onClick={toggleOpen}>
       {newNotifications.size === 0
         ? <Icon icon={['far', 'bell']} />
-        : <Icon icon={['fas', 'bell']} />}
+        : <Icon icon={['fas', 'bell']} className="faa-shake animated" />}
       {newNotifications.size > 0 &&
         <Label bsStyle="danger">
           {newNotifications.reduce((acc, n) => acc + n.count, 0)}
