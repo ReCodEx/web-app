@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import { fetchGroupIfNeeded } from '../../redux/modules/groups';
 import { groupSelector } from '../../redux/selectors/groups';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
+import { hasPermissions } from '../../helpers/common';
 import GroupsName, {
   LoadingGroupsName
 } from '../../components/Groups/GroupsName';
@@ -29,7 +30,7 @@ class GroupsNameContainer extends Component {
     const { group, noLink } = this.props;
     return (
       <ResourceRenderer resource={group} loading={<LoadingGroupsName />}>
-        {group => <GroupsName {...group} noLink={noLink || !group.canView} />}
+        {group => <GroupsName {...group} noLink={noLink || !hasPermissions(group, 'viewDetail')} />}
       </ResourceRenderer>
     );
   }
