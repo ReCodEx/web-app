@@ -112,11 +112,11 @@ class GroupTree extends Component {
       id: groupId,
       name,
       localizedTexts,
-      canView,
       childGroups,
       primaryAdminsIds,
       organizational,
-      public: isPublic
+      public: isPublic,
+      permissionHints
     } = getJsData(group);
 
     const actualVisibleGroupsMap =
@@ -147,7 +147,7 @@ class GroupTree extends Component {
               forceOpen={onAncestralPath}
               isOpen={currentGroupId === groupId || isOpen}
               actions={
-                currentGroupId !== groupId && canView
+                currentGroupId !== groupId && permissionHints.viewDetail
                   ? // this is inacurate, but public groups are visible to students who cannot see detail until they join
                     this.renderButtons(groupId, organizational || isPublic)
                   : undefined
