@@ -11,6 +11,7 @@ import { defaultMemoize } from 'reselect';
 import Page from '../../components/layout/Page';
 import EditGroupForm from '../../components/forms/EditGroupForm';
 import OrganizationalGroupButtonContainer from '../../containers/OrganizationalGroupButtonContainer';
+import ArchiveGroupButtonContainer from '../../containers/ArchiveGroupButtonContainer';
 import DeleteGroupButtonContainer from '../../containers/DeleteGroupButtonContainer';
 import Box from '../../components/widgets/Box';
 import Icon, { BanIcon } from '../../components/icons';
@@ -126,6 +127,7 @@ class EditGroup extends Component {
               </Row>}
 
             {hasPermissions(group, 'update') &&
+            <React.Fragment>
               <Row>
                 <Col lg={3}>
                   <p>
@@ -141,7 +143,24 @@ class EditGroup extends Component {
                     />
                   </p>
                 </Col>
-              </Row>}
+              </Row>
+              <Row>
+                <Col lg={3}>
+                  <p>
+                    <ArchiveGroupButtonContainer id={group.id} />
+                  </p>
+                </Col>
+                <Col lg={9}>
+                  <p className="small text-muted" style={{ padding: '0.75em' }}>
+                    <Icon icon="info-circle" gapRight />
+                    <FormattedMessage
+                      id="app.editGroup.archivedExplain"
+                      defaultMessage="Archived groups are containers for students, assignments and results after the course is finished. They are immutable and can be accessed through separate Archive page."
+                    />
+                  </p>
+                </Col>
+              </Row>
+              </React.Fragment>}
 
             {hasPermissions(group, 'update') &&
               <EditGroupForm
