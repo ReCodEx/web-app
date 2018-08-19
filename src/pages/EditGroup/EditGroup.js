@@ -126,43 +126,62 @@ class EditGroup extends Component {
                 </Col>
               </Row>}
 
+            {group.archived &&
+              <Row>
+                <Col lg={12}>
+                  <p className="callout callout-warning">
+                    <FormattedMessage
+                      id="app.group.archivedExplain"
+                      defaultMessage="This group is archived, so it cannot be modified."
+                    />
+                  </p>
+                </Col>
+              </Row>}
+
             {hasPermissions(group, 'update') &&
-            <React.Fragment>
-              <Row>
-                <Col lg={3}>
-                  <p>
-                    <OrganizationalGroupButtonContainer id={group.id} />
-                  </p>
-                </Col>
-                <Col lg={9}>
-                  <p className="small text-muted" style={{ padding: '0.75em' }}>
-                    <Icon icon="info-circle" gapRight />
-                    <FormattedMessage
-                      id="app.editGroup.organizationalExplain"
-                      defaultMessage="Regular groups are containers for students and assignments. Organizational groups are intended to create hierarchy, so they are forbidden to hold any students or assignments."
-                    />
-                  </p>
-                </Col>
-              </Row>
-              <Row>
-                <Col lg={3}>
-                  <p>
-                    <ArchiveGroupButtonContainer id={group.id} />
-                  </p>
-                </Col>
-                <Col lg={9}>
-                  <p className="small text-muted" style={{ padding: '0.75em' }}>
-                    <Icon icon="info-circle" gapRight />
-                    <FormattedMessage
-                      id="app.editGroup.archivedExplain"
-                      defaultMessage="Archived groups are containers for students, assignments and results after the course is finished. They are immutable and can be accessed through separate Archive page."
-                    />
-                  </p>
-                </Col>
-              </Row>
+              <React.Fragment>
+                <Row>
+                  <Col lg={3}>
+                    <p>
+                      <OrganizationalGroupButtonContainer id={group.id} />
+                    </p>
+                  </Col>
+                  <Col lg={9}>
+                    <p
+                      className="small text-muted"
+                      style={{ padding: '0.75em' }}
+                    >
+                      <Icon icon="info-circle" gapRight />
+                      <FormattedMessage
+                        id="app.editGroup.organizationalExplain"
+                        defaultMessage="Regular groups are containers for students and assignments. Organizational groups are intended to create hierarchy, so they are forbidden to hold any students or assignments."
+                      />
+                    </p>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col lg={3}>
+                    <p>
+                      <ArchiveGroupButtonContainer id={group.id} />
+                    </p>
+                  </Col>
+                  <Col lg={9}>
+                    <p
+                      className="small text-muted"
+                      style={{ padding: '0.75em' }}
+                    >
+                      <Icon icon="info-circle" gapRight />
+                      <FormattedMessage
+                        id="app.editGroup.archivedExplain"
+                        defaultMessage="Archived groups are containers for students, assignments and results after the course is finished. They are immutable and can be accessed through separate Archive page."
+                      />
+                    </p>
+                  </Col>
+                </Row>
               </React.Fragment>}
 
             {hasPermissions(group, 'update') &&
+              !group.archived &&
               <EditGroupForm
                 form="editGroup"
                 initialValues={this.getInitialValues(group)}

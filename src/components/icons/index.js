@@ -20,8 +20,15 @@ export const Failure = props =>
   <strong className="text-danger">
     <Icon {...props} icon="times" />
   </strong>;
-export const GroupIcon = ({ organizational = false, archived = false, ...props }) =>
-  <Icon {...props} icon={organizational ? 'sitemap' : (archived ? 'archive' : 'users')} />;
+export const GroupIcon = ({
+  organizational = false,
+  archived = false,
+  ...props
+}) =>
+  <Icon
+    {...props}
+    icon={organizational ? 'sitemap' : archived ? 'archive' : 'users'}
+  />;
 export const InfoIcon = props => <Icon {...props} icon="info" />;
 export const LoadingIcon = props =>
   <Icon {...props} icon="spinner" pulse style={{ opacity: 0.8 }} />;

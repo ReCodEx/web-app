@@ -11,16 +11,9 @@ import {
 } from '../../redux/selectors/groups';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 
-const ArchiveGroupButtonContainer = ({
-  group,
-  pending,
-  setArchived
-}) =>
+const ArchiveGroupButtonContainer = ({ group, pending, setArchived }) =>
   <ResourceRenderer resource={group}>
-    {({
-      archived,
-      permissionHints
-    }) =>
+    {({ archived, permissionHints }) =>
       <ArchiveGroupButton
         archived={archived}
         pending={pending}
@@ -42,8 +35,7 @@ const mapStateToProps = (state, { id }) => ({
 });
 
 const mapDispatchToProps = (dispatch, { id }) => ({
-  setArchived: archived => () =>
-    dispatch(setArchived(id, archived))
+  setArchived: archived => () => dispatch(setArchived(id, archived))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(

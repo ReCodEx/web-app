@@ -147,6 +147,18 @@ class GroupInfo extends Component {
               }
             />
 
+            {data.archived &&
+              <Row>
+                <Col lg={12}>
+                  <p className="callout callout-warning">
+                    <FormattedMessage
+                      id="app.group.archivedExplain"
+                      defaultMessage="This group is archived, so it cannot be modified."
+                    />
+                  </p>
+                </Col>
+              </Row>}
+
             {!hasPermissions(data, 'viewDetail') &&
               <Row>
                 <Col sm={12}>
@@ -205,6 +217,7 @@ class GroupInfo extends Component {
                   </Box>}
 
                 {hasPermissions(data, 'setAdmin') &&
+                  !data.archived &&
                   <Box
                     title={
                       <FormattedMessage
@@ -245,6 +258,7 @@ class GroupInfo extends Component {
                   </Box>}
 
                 {hasPermissions(data, 'addSubgroup') &&
+                  !data.archived &&
                   <EditGroupForm
                     form="addSubgroup"
                     onSubmit={addSubgroup(data.privateData.instanceId)}

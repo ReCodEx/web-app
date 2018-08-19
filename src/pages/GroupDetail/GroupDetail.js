@@ -219,6 +219,18 @@ class GroupDetail extends Component {
                 </Col>
               </Row>}
 
+            {data.archived &&
+              <Row>
+                <Col lg={12}>
+                  <p className="callout callout-warning">
+                    <FormattedMessage
+                      id="app.group.archivedExplain"
+                      defaultMessage="This group is archived, so it cannot be modified."
+                    />
+                  </p>
+                </Col>
+              </Row>}
+
             {!data.organizational &&
               hasPermissions(data, 'viewAssignments') &&
               <Row>
@@ -301,6 +313,7 @@ class GroupDetail extends Component {
                   {// unfortunatelly, this cannot be covered by permission hints at the moment, since addStudent involes both student and group
                   (isGroupSupervisor || isGroupAdmin) &&
                     !data.organizational &&
+                    !data.archived &&
                     isSupervisorRole(loggedUser.privateData.role) &&
                     !isStudentRole(loggedUser.privateData.role) &&
                     <Row>
@@ -335,21 +348,22 @@ class GroupDetail extends Component {
                       />
                     }
                     footer={
-                      hasPermissions(data, 'createExercise') &&
-                      <p className="text-center">
-                        <Button
-                          bsStyle="success"
-                          className="btn-flat"
-                          bsSize="sm"
-                          onClick={this.createGroupExercise}
-                        >
-                          <AddIcon gapRight />
-                          <FormattedMessage
-                            id="app.group.createExercise"
-                            defaultMessage="Create Exercise in Group"
-                          />
-                        </Button>
-                      </p>
+                      hasPermissions(data, 'createExercise') && !data.archived
+                        ? <p className="text-center">
+                            <Button
+                              bsStyle="success"
+                              className="btn-flat"
+                              bsSize="sm"
+                              onClick={this.createGroupExercise}
+                            >
+                              <AddIcon gapRight />
+                              <FormattedMessage
+                                id="app.group.createExercise"
+                                defaultMessage="Create Exercise in Group"
+                              />
+                            </Button>
+                          </p>
+                        : undefined
                     }
                     isOpen
                     unlimitedHeight
@@ -357,7 +371,7 @@ class GroupDetail extends Component {
                     <ExercisesListContainer
                       id={`exercises-group-${data.id}`}
                       rootGroup={data.id}
-                      showAssignButton={!data.organizational}
+                      showAssignButton={!data.organizational && !data.archived}
                     />
                   </Box>
                 </Col>
