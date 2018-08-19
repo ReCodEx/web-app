@@ -15,7 +15,12 @@ const Supervisor = ({
   supervisorOf,
   isCollapsed,
   notifications,
-  links: { GROUP_DETAIL_URI_FACTORY, EXERCISES_URI, PIPELINES_URI },
+  links: {
+    GROUP_DETAIL_URI_FACTORY,
+    EXERCISES_URI,
+    PIPELINES_URI,
+    ARCHIVE_URI
+  },
   intl: { locale }
 }) =>
   <ul className="sidebar-menu">
@@ -61,6 +66,17 @@ const Supervisor = ({
       icon="random"
       currentPath={currentUrl}
       link={PIPELINES_URI}
+    />
+    <MenuItem
+      title={
+        <FormattedMessage
+          id="app.sidebar.menu.archive"
+          defaultMessage="Archive"
+        />
+      }
+      icon="archive"
+      currentPath={currentUrl}
+      link={ARCHIVE_URI}
     />
   </ul>;
 

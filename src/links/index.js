@@ -64,6 +64,9 @@ export const linksFactory = lang => {
   const ASSIGNMENT_STATS_URI_FACTORY = assignmentId =>
     `${prefix}/app/assignment/${assignmentId}/stats`;
 
+  // group archive
+  const ARCHIVE_URI = `${prefix}/app/archive`;
+
   // external links
   const BUGS_URL = `${prefix}/bugs-and-feedback`;
   const FAQ_URL = `${prefix}/faq`;
@@ -128,7 +131,8 @@ export const linksFactory = lang => {
     DOWNLOAD,
     LOGIN_EXTERN_FINALIZATION,
     FAILURES_URI,
-    SIS_INTEGRATION_URI
+    SIS_INTEGRATION_URI,
+    ARCHIVE_URI
   };
 };
 

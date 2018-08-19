@@ -63,6 +63,11 @@ export const fetchGroupsIfNeeded = actions.fetchIfNeeded;
 export const fetchGroup = actions.fetchResource;
 export const fetchGroupIfNeeded = actions.fetchOneIfNeeded;
 
+export const fetchAllGroups = () =>
+  actions.fetchMany({
+    endpoint: '/groups/all'
+  });
+
 export const validateAddGroup = (name, instanceId, parentGroupId = null) =>
   createApiAction({
     type: 'VALIDATE_ADD_GROUP_DATA',
