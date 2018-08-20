@@ -15,6 +15,7 @@ const Layout = ({
   toggleVisibility,
   sidebar,
   isLoggedIn,
+  pendingFetchOperations,
   children,
   lang,
   currentUrl,
@@ -39,6 +40,7 @@ const Layout = ({
       availableLangs={availableLangs}
       currentLang={lang}
       currentUrl={currentUrl}
+      pendingFetchOperations={pendingFetchOperations}
     />
     <SidebarContainer
       isLoggedIn={isLoggedIn}
@@ -61,6 +63,7 @@ Layout.propTypes = {
     isOpen: PropTypes.bool
   }),
   isLoggedIn: PropTypes.bool,
+  pendingFetchOperations: PropTypes.bool,
   onCloseSidebar: PropTypes.func,
   children: PropTypes.element,
   lang: PropTypes.string,

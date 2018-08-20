@@ -3,10 +3,11 @@ import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { IndexLink } from 'react-router';
 import MediaQuery from 'react-responsive';
+
 import HeaderNotificationsContainer from '../../../containers/HeaderNotificationsContainer';
 import HeaderLanguageSwitching from '../HeaderLanguageSwitching';
 import ClientOnly from '../../helpers/ClientOnly';
-
+import { LoadingIcon } from '../../icons';
 import withLinks from '../../../helpers/withLinks';
 
 class Header extends Component {
@@ -25,6 +26,7 @@ class Header extends Component {
       availableLangs = [],
       currentLang,
       currentUrl = '',
+      pendingFetchOperations,
       links: { HOME_URI }
     } = this.props;
 
@@ -32,9 +34,17 @@ class Header extends Component {
       <header className="main-header fixed">
         <IndexLink to={HOME_URI} className="logo">
           <span className="logo-mini">
-            Re<b>C</b>
+            {pendingFetchOperations
+              ? <LoadingIcon gapRight />
+              : <React.Fragment>
+                  Re<b>C</b>
+                </React.Fragment>}
           </span>
           <span className="logo-lg">
+            {pendingFetchOperations &&
+              <span style={{ position: 'absolute', left: '1em' }}>
+                <LoadingIcon gapRight />
+              </span>}
             Re<b>CodEx</b>
           </span>
         </IndexLink>
@@ -98,6 +108,7 @@ Header.propTypes = {
   currentLang: PropTypes.string.isRequired,
   availableLangs: PropTypes.array,
   currentUrl: PropTypes.string,
+  pendingFetchOperations: PropTypes.bool,
   links: PropTypes.object
 };
 

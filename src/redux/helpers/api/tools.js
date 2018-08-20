@@ -2,6 +2,10 @@ import statusCode from 'statuscode';
 import { addNotification } from '../../modules/notifications';
 import { flatten } from 'flat';
 
+import {
+  newPendingFetchOperation,
+  completedFetchOperation
+} from '../../modules/app';
 import { logout } from '../../modules/auth';
 import { isTokenValid, decode } from '../../helpers/token';
 
@@ -149,6 +153,7 @@ export const createApiCallPromise = (
   let call = createRequest(endpoint, query, method, headers, body, uploadFiles)
     .catch(err => detectUnreachableServer(err, dispatch))
     .then(res => {
+      dispatch(completedFetchOperation());
       if (
         res.status === 401 &&
         !isTokenValid(decode(accessToken)) &&
@@ -167,6 +172,8 @@ export const createApiCallPromise = (
       return res;
     });
 
+  dispatch(newPendingFetchOperation());
+
   // this processing can be manually skipped
   return doNotProcess === true ? call : processResponse(call, dispatch);
 };
@@ -177,6 +184,7 @@ export const createApiCallPromise = (
  * @param {Function} dispatch
  */
 const detectUnreachableServer = (err, dispatch) => {
+  dispatch(completedFetchOperation());
   if (err.message && err.message === 'Failed to fetch') {
     dispatch(
       addNotification(
