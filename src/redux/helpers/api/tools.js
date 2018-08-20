@@ -87,6 +87,9 @@ const encodeBody = (body, method, encodeAsMultipart) => {
   }
 };
 
+let requestAbortController =
+  'AbortController' in window ? new window.AbortController() : null;
+
 export const createRequest = (
   endpoint,
   query = {},
@@ -98,8 +101,17 @@ export const createRequest = (
   fetch(getUrl(assembleEndpoint(endpoint, query)), {
     method,
     headers,
-    body: encodeBody(body, method, uploadFiles)
+    body: encodeBody(body, method, uploadFiles),
+    signal: requestAbortController && requestAbortController.signal
   });
+
+export const abortAllPendingRequests = () => {
+  if (requestAbortController) {
+    requestAbortController.abort();
+  }
+  requestAbortController =
+    'AbortController' in window ? new window.AbortController() : null;
+};
 
 export const getHeaders = (headers, accessToken, skipContentType) => {
   const usedHeaders = skipContentType

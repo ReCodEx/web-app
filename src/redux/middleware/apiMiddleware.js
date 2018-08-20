@@ -1,8 +1,10 @@
 import {
   createApiCallPromise,
   getHeaders,
-  isTwoHundredCode
+  isTwoHundredCode,
+  abortAllPendingRequests
 } from '../helpers/api/tools';
+import { actionTypes as authActionTypes } from '../modules/auth';
 
 export const CALL_API = 'recodex-api/CALL';
 export const createApiAction = request => ({ type: CALL_API, request });
@@ -51,6 +53,11 @@ const middleware = ({ dispatch }) => next => action => {
       }
 
       action = apiCall(action.request, dispatch);
+      break;
+
+    case authActionTypes.LOGOUT:
+    case '@@router/LOCATION_CHANGE':
+      abortAllPendingRequests();
       break;
   }
 
