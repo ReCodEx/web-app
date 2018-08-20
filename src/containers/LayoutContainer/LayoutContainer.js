@@ -6,6 +6,7 @@ import moment from 'moment';
 import Layout from '../../components/layout/Layout';
 
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
+import { anyPendingFetchOperations } from '../../redux/selectors/app';
 import {
   toggleSize,
   toggleVisibility,
@@ -125,7 +126,8 @@ class LayoutContainer extends Component {
       sidebar,
       toggleSize,
       toggleVisibility,
-      isLoggedIn
+      isLoggedIn,
+      pendingFetchOperations
     } = this.props;
 
     const { lang } = this.state;
@@ -147,6 +149,7 @@ class LayoutContainer extends Component {
           lang={lang}
           availableLangs={Object.keys(messages)}
           currentUrl={pathname}
+          pendingFetchOperations={pendingFetchOperations}
         >
           {children}
         </Layout>
@@ -175,6 +178,7 @@ LayoutContainer.propTypes = {
   collapse: PropTypes.func.isRequired,
   unroll: PropTypes.func.isRequired,
   isLoggedIn: PropTypes.bool,
+  pendingFetchOperations: PropTypes.bool,
   sidebar: PropTypes.object,
   location: PropTypes.shape({
     pathname: PropTypes.string.isRequired
@@ -187,7 +191,8 @@ const mapStateToProps = (state, props) => ({
     isOpen: isVisible(state),
     isCollapsed: isCollapsed(state)
   },
-  isLoggedIn: !!loggedInUserIdSelector(state)
+  isLoggedIn: !!loggedInUserIdSelector(state),
+  pendingFetchOperations: anyPendingFetchOperations(state)
 });
 
 const mapDispatchToProps = { toggleVisibility, toggleSize, collapse, unroll };
