@@ -25,7 +25,7 @@ const AllowUserButtonContainer = ({
         setIsAllowed={setIsAllowed}
         {...props}
       />
-    : <React.Fragment />;
+    : null;
 
 AllowUserButtonContainer.propTypes = {
   id: PropTypes.string.isRequired,
