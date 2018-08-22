@@ -1,15 +1,15 @@
 import chai from 'chai';
 import spies from 'chai-spies';
 
-chai.use(spies);
-const expect = chai.expect;
-
 import fetchMock from 'fetch-mock';
 import middleware, {
   CALL_API,
   createApiAction
 } from '../../../src/redux/middleware/apiMiddleware';
 import { API_BASE } from '../../../src/redux/helpers/api/tools';
+
+chai.use(spies);
+const expect = chai.expect;
 
 describe('API middleware and helper functions', () => {
   it('must create correct api call action', () => {
@@ -51,8 +51,8 @@ describe('API middleware and helper functions', () => {
 
       const alteredAction = middleware({ dispatch })(next)(action);
       alteredAction.payload.promise.then(resp => {
-        // no errors, no dispatch call
-        expect(dispatchSpy).to.not.have.been.called();
+        // exactly one dispatch incrementing and one decrementing the number of pending api calls ...
+        expect(dispatchSpy).to.have.been.called.twice();
 
         // examine the HTTP request
         expect(fetchMock.calls().matched.length).to.equal(1);

@@ -16,6 +16,8 @@ export const DeleteIcon = props => <Icon {...props} icon="trash" />;
 export const DownloadIcon = props =>
   <Icon {...props} icon="cloud-download-alt" />;
 export const EditIcon = props => <Icon {...props} icon={['far', 'edit']} />;
+export const EmpoweredSupervisorIcon = props =>
+  <Icon {...props} icon="user-ninja" />;
 export const Failure = props =>
   <strong className="text-danger">
     <Icon {...props} icon="times" />
@@ -50,10 +52,6 @@ export const SuccessIcon = props =>
 export const SuccessOrFailureIcon = ({ success = false, ...props }) =>
   success ? <SuccessIcon {...props} /> : <Failure {...props} />;
 export const SuperadminIcon = props => <Icon {...props} icon="chess-queen" />;
-export const SupervisorAdminIcon = props =>
-  <strong className="text-danger">
-    <Icon {...props} icon="user-graduate" />
-  </strong>;
 export const SupervisorIcon = props => <Icon {...props} icon="user-graduate" />;
 export const SupervisorStudentIcon = props =>
   <Icon {...props} icon="chalkboard-teacher" />;

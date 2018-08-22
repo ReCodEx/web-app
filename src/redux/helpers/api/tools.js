@@ -1,7 +1,12 @@
 import statusCode from 'statuscode';
 import { addNotification } from '../../modules/notifications';
 import { flatten } from 'flat';
+import { canUseDOM } from 'exenv';
 
+import {
+  newPendingFetchOperation,
+  completedFetchOperation
+} from '../../modules/app';
 import { logout } from '../../modules/auth';
 import { isTokenValid, decode } from '../../helpers/token';
 
@@ -87,6 +92,11 @@ const encodeBody = (body, method, encodeAsMultipart) => {
   }
 };
 
+let requestAbortController =
+  canUseDOM && 'AbortController' in window
+    ? new window.AbortController()
+    : null;
+
 export const createRequest = (
   endpoint,
   query = {},
@@ -98,8 +108,19 @@ export const createRequest = (
   fetch(getUrl(assembleEndpoint(endpoint, query)), {
     method,
     headers,
-    body: encodeBody(body, method, uploadFiles)
+    body: encodeBody(body, method, uploadFiles),
+    signal: requestAbortController && requestAbortController.signal
   });
+
+export const abortAllPendingRequests = () => {
+  if (requestAbortController) {
+    requestAbortController.abort();
+  }
+  requestAbortController =
+    canUseDOM && 'AbortController' in window
+      ? new window.AbortController()
+      : null;
+};
 
 export const getHeaders = (headers, accessToken, skipContentType) => {
   const usedHeaders = skipContentType
@@ -137,6 +158,7 @@ export const createApiCallPromise = (
   let call = createRequest(endpoint, query, method, headers, body, uploadFiles)
     .catch(err => detectUnreachableServer(err, dispatch))
     .then(res => {
+      dispatch(completedFetchOperation());
       if (
         res.status === 401 &&
         !isTokenValid(decode(accessToken)) &&
@@ -155,6 +177,8 @@ export const createApiCallPromise = (
       return res;
     });
 
+  dispatch(newPendingFetchOperation());
+
   // this processing can be manually skipped
   return doNotProcess === true ? call : processResponse(call, dispatch);
 };
@@ -165,6 +189,7 @@ export const createApiCallPromise = (
  * @param {Function} dispatch
  */
 const detectUnreachableServer = (err, dispatch) => {
+  dispatch(completedFetchOperation());
   if (err.message && err.message === 'Failed to fetch') {
     dispatch(
       addNotification(

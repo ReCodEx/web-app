@@ -37,6 +37,41 @@ class SubmitButton extends Component {
     reset && reset();
   };
 
+  getMessages() {
+    const { messages = {} } = this.props;
+    const messageDefaults = {
+      submit: <FormattedMessage id="generic.submit" defaultMessage="Submit" />,
+      success: (
+        <FormattedMessage id="generic.submitted" defaultMessage="Submitted" />
+      ),
+      submitting: (
+        <FormattedMessage
+          id="generic.submitting"
+          defaultMessage="Submitting ..."
+        />
+      ),
+      validating: (
+        <FormattedMessage
+          id="generic.validating"
+          defaultMessage="Validating ..."
+        />
+      ),
+      invalid: (
+        <FormattedMessage
+          id="app.submitButton.invalid"
+          defaultMessage="Some input is invalid."
+        />
+      )
+    };
+
+    Object.keys(messageDefaults).forEach(key => {
+      if (messages[key] === undefined) {
+        messages[key] = messageDefaults[key];
+      }
+    });
+    return messages;
+  }
+
   render() {
     const {
       submitting,
@@ -45,36 +80,17 @@ class SubmitButton extends Component {
       asyncValidating = false,
       noIcons = false,
       defaultIcon = null,
-      disabled = false,
-      messages: {
-        submit: submitMsg = (
-          <FormattedMessage id="generic.submit" defaultMessage="Submit" />
-        ),
-        success: successMsg = (
-          <FormattedMessage id="generic.submitted" defaultMessage="Submitted" />
-        ),
-        submitting: submittingMsg = (
-          <FormattedMessage
-            id="generic.submitting"
-            defaultMessage="Submitting ..."
-          />
-        ),
-        validating: validatingMsg = (
-          <FormattedMessage
-            id="generic.validating"
-            defaultMessage="Validating ..."
-          />
-        ),
-        invalid: invalidMsg = (
-          <FormattedMessage
-            id="app.submitButton.invalid"
-            defaultMessage="Some input is invalid."
-          />
-        )
-      }
+      disabled = false
     } = this.props;
-
     const { saved: hasSucceeded } = this.state;
+
+    const {
+      submit: submitMsg,
+      success: successMsg,
+      submitting: submittingMsg,
+      validating: validatingMsg,
+      invalid: invalidMsg
+    } = this.getMessages();
 
     return (
       <Button
