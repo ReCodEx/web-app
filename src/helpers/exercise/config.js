@@ -6,6 +6,12 @@ import {
   EMPTY_ARRAY
 } from '../../helpers/common';
 
+export const SIMPLE_CONFIG_TYPE = 'simpleExerciseConfig';
+export const ADVANCED_CONFIG_TYPE = 'advancedExerciseConfig';
+
+export const isSimple = exercise =>
+  exercise && exercise.configurationType === 'simpleExerciseConfig';
+
 export const DATA_ONLY_ID = 'data-linux';
 
 /**

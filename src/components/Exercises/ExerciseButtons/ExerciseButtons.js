@@ -6,15 +6,17 @@ import { LinkContainer } from 'react-router-bootstrap';
 
 import Button from '../../widgets/FlatButton';
 import { EditIcon } from '../../icons';
-
+import { SIMPLE_CONFIG_TYPE } from '../../../helpers/exercise/config';
 import withLinks from '../../../helpers/withLinks';
 
 const ExerciseButtons = ({
-  exerciseId,
+  id: exerciseId,
+  configurationType,
   permissionHints,
   links: {
     EXERCISE_EDIT_URI_FACTORY,
     EXERCISE_EDIT_SIMPLE_CONFIG_URI_FACTORY,
+    EXERCISE_EDIT_CONFIG_URI_FACTORY,
     EXERCISE_EDIT_LIMITS_URI_FACTORY
   }
 }) =>
@@ -32,7 +34,10 @@ const ExerciseButtons = ({
             />
           </Button>
         </LinkContainer>}
-      {permissionHints &&
+
+      {// TODO -- Remove simple link when were done
+      configurationType === SIMPLE_CONFIG_TYPE &&
+        permissionHints &&
         permissionHints.viewPipelines &&
         permissionHints.viewScoreConfig &&
         <LinkContainer to={EXERCISE_EDIT_SIMPLE_CONFIG_URI_FACTORY(exerciseId)}>
@@ -43,11 +48,29 @@ const ExerciseButtons = ({
             <EditIcon />
             &nbsp;
             <FormattedMessage
-              id="app.exercise.editConfig"
+              id="app.exercise.editSimpleConfig"
               defaultMessage="Tests Configuration"
             />
           </Button>
         </LinkContainer>}
+
+      {permissionHints &&
+        permissionHints.viewPipelines &&
+        permissionHints.viewScoreConfig &&
+        <LinkContainer to={EXERCISE_EDIT_CONFIG_URI_FACTORY(exerciseId)}>
+          <Button
+            bsStyle={permissionHints.setScoreConfig ? 'danger' : 'default'}
+            bsSize="sm"
+          >
+            <EditIcon />
+            &nbsp;
+            <FormattedMessage
+              id="app.exercise.editConfig"
+              defaultMessage="Tests Configuration (WiP)"
+            />
+          </Button>
+        </LinkContainer>}
+
       {permissionHints &&
         permissionHints.viewLimits &&
         <LinkContainer to={EXERCISE_EDIT_LIMITS_URI_FACTORY(exerciseId)}>
@@ -67,7 +90,8 @@ const ExerciseButtons = ({
   </div>;
 
 ExerciseButtons.propTypes = {
-  exerciseId: PropTypes.string.isRequired,
+  id: PropTypes.string.isRequired,
+  configurationType: PropTypes.string.isRequired,
   permissionHints: PropTypes.object,
   links: PropTypes.object
 };

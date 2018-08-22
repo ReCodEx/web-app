@@ -471,7 +471,7 @@
   "app.exercise.detach": "Detach",
   "app.exercise.detailTitle": "Exercise description",
   "app.exercise.difficulty": "Difficulty",
-  "app.exercise.editConfig": "Tests Configuration",
+  "app.exercise.editSimpleConfig": "Tests Configuration",
   "app.exercise.editLimits": "Tests Limits",
   "app.exercise.editSettings": "Exercise Settings",
   "app.exercise.forked": "Forked from",
