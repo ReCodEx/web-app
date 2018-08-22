@@ -25,7 +25,6 @@ import SubmitSolutionContainer from '../../containers/SubmitSolutionContainer';
 import Box from '../../components/widgets/Box';
 import { SendIcon, DeleteIcon, NeedFixingIcon } from '../../components/icons';
 import Confirm from '../../components/forms/Confirm';
-// import PipelinesSimpleList from '../../components/Pipelines/PipelinesSimpleList';
 import ExerciseButtons from '../../components/Exercises/ExerciseButtons';
 import ForkExerciseForm from '../../components/forms/ForkExerciseForm';
 import MultiAssignForm from '../../components/forms/MultiAssignForm';
@@ -60,12 +59,6 @@ import {
   getExerciseDetachingGroupId
 } from '../../redux/selectors/exercises';
 import { referenceSolutionsSelector } from '../../redux/selectors/referenceSolutions';
-import {
-  // deletePipeline,
-  // fetchExercisePipelines,
-  create as createPipeline
-} from '../../redux/modules/pipelines';
-// import { exercisePipelinesSelector } from '../../redux/selectors/pipelines';
 import {
   fetchUsersGroupsIfNeeded,
   fetchInstanceGroups
@@ -213,17 +206,6 @@ class Exercise extends Component {
     return Promise.all(actions);
   };
 
-  createExercisePipeline = () => {
-    const {
-      createExercisePipeline,
-      push,
-      links: { PIPELINE_EDIT_URI_FACTORY }
-    } = this.props;
-    createExercisePipeline().then(({ value: pipeline }) =>
-      push(PIPELINE_EDIT_URI_FACTORY(pipeline.id))
-    );
-  };
-
   render() {
     const {
       userId,
@@ -235,7 +217,6 @@ class Exercise extends Component {
       referenceSolutions,
       intl: { formatMessage, locale },
       initCreateReferenceSolution,
-      // exercisePipelines,
       deleteReferenceSolution,
       push,
       groups,
@@ -248,11 +229,7 @@ class Exercise extends Component {
       detachingGroupId,
       attachExerciseToGroup,
       detachExerciseFromGroup,
-      links: {
-        EXERCISES_URI,
-        EXERCISE_REFERENCE_SOLUTION_URI_FACTORY
-        // PIPELINE_EDIT_URI_FACTORY
-      }
+      links: { EXERCISES_URI, EXERCISE_REFERENCE_SOLUTION_URI_FACTORY }
     } = this.props;
 
     const { forkId } = this.state;
@@ -308,10 +285,7 @@ class Exercise extends Component {
               </Row>}
             <Row>
               <Col sm={12}>
-                <ExerciseButtons
-                  exerciseId={exercise.id}
-                  permissionHints={exercise.permissionHints}
-                />
+                <ExerciseButtons {...exercise} />
               </Col>
             </Row>
             {exercise.permissionHints.fork &&
@@ -366,84 +340,6 @@ class Exercise extends Component {
                         />}
                     </ResourceRenderer>
                   </Box>}
-
-                {/* exercise.configurationType !== 'simpleExerciseConfig' &&
-                  <Box
-                    title={
-                      <FormattedMessage
-                        id="app.exercise.exercisePipelines"
-                        defaultMessage="Exercise Pipelines"
-                      />
-                    }
-                    footer={
-                      <p className="text-center">
-                        <Button
-                          bsStyle="success"
-                          className="btn-flat"
-                          bsSize="sm"
-                          onClick={this.createExercisePipeline}
-                        >
-                          <AddIcon gapRight />
-                          <FormattedMessage
-                            id="app.exercise.createPipeline"
-                            defaultMessage="Add exercise pipeline"
-                          />
-                        </Button>
-                      </p>
-                    }
-                    isOpen
-                  >
-                    <ResourceRenderer
-                      resource={exercisePipelines.toArray()}
-                      returnAsArray={true}
-                    >
-                      {pipelines =>
-                        <PipelinesSimpleList
-                          pipelines={pipelines}
-                          createActions={pipelineId =>
-                            <div>
-                              <LinkContainer
-                                to={PIPELINE_EDIT_URI_FACTORY(pipelineId)}
-                              >
-                                <Button
-                                  bsSize="xs"
-                                  className="btn-flat"
-                                  bsStyle="warning"
-                                >
-                                  <EditIcon gapRight />
-                                  <FormattedMessage
-                                    id="generic.edit"
-                                    defaultMessage="Edit"
-                                  />
-                                </Button>
-                              </LinkContainer>
-                              <Confirm
-                                id={pipelineId}
-                                onConfirmed={() => deletePipeline(pipelineId)}
-                                question={
-                                  <FormattedMessage
-                                    id="app.pipeline.deleteConfirm"
-                                    defaultMessage="Are you sure you want to delete the pipeline? This cannot be undone."
-                                  />
-                                }
-                              >
-                                <Button
-                                  bsSize="xs"
-                                  className="btn-flat"
-                                  bsStyle="danger"
-                                >
-                                  <DeleteIcon gapRight />
-                                  <FormattedMessage
-                                    id="generic.delete"
-                                    defaultMessage="Delete"
-                                  />
-                                </Button>
-                              </Confirm>
-                            </div>}
-                        />}
-                    </ResourceRenderer>
-                  </Box>
-                */}
               </Col>
               <Col lg={6}>
                 <ExerciseDetail
@@ -602,8 +498,6 @@ Exercise.propTypes = {
   intl: intlShape.isRequired,
   submitting: PropTypes.bool,
   initCreateReferenceSolution: PropTypes.func.isRequired,
-  exercisePipelines: ImmutablePropTypes.map,
-  createExercisePipeline: PropTypes.func,
   links: PropTypes.object,
   deleteReferenceSolution: PropTypes.func.isRequired,
   forkExercise: PropTypes.func.isRequired,
@@ -638,7 +532,6 @@ export default withLinks(
         runtimeEnvironments: runtimeEnvironmentsSelector(state),
         submitting: isSubmitting(state),
         referenceSolutions: referenceSolutionsSelector(exerciseId)(state),
-        //        exercisePipelines: exercisePipelinesSelector(exerciseId)(state),
         groups: groupsSelector(state),
         assignableGroups: groupsUserCanAssignToSelector(state),
         groupsAccessor: groupDataAccessorSelector(state),
@@ -658,8 +551,6 @@ export default withLinks(
       editAssignment: (id, body) => dispatch(editAssignment(id, body)),
       push: url => dispatch(push(url)),
       initCreateReferenceSolution: userId => dispatch(init(userId, exerciseId)),
-      createExercisePipeline: () =>
-        dispatch(createPipeline({ exerciseId: exerciseId })),
       deleteReferenceSolution: solutionId =>
         dispatch(deleteReferenceSolution(solutionId)),
       forkExercise: (forkId, data) =>

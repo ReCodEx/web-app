@@ -470,7 +470,7 @@
   "app.exercise.detach": "Odpojit",
   "app.exercise.detailTitle": "Popis úlohy",
   "app.exercise.difficulty": "Obtížnost",
-  "app.exercise.editConfig": "Konfigurace testů",
+  "app.exercise.editSimpleConfig": "Konfigurace testů",
   "app.exercise.editLimits": "Limity testů",
   "app.exercise.editSettings": "Nastavení úlohy",
   "app.exercise.forked": "Duplikováno z",

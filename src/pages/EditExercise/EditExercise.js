@@ -126,10 +126,7 @@ class EditExercise extends Component {
               </Row>}
             <Row>
               <Col sm={12}>
-                <ExerciseButtons
-                  exerciseId={exercise.id}
-                  permissionHints={exercise.permissionHints}
-                />
+                <ExerciseButtons {...exercise} />
               </Col>
             </Row>
             <Row>

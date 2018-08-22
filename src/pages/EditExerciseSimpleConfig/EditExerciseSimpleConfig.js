@@ -223,14 +223,13 @@ class EditExerciseSimpleConfig extends Component {
                         </div>
                       </Col>
                     </Row>}
+
                   <Row>
                     <Col sm={12}>
-                      <ExerciseButtons
-                        exerciseId={exercise.id}
-                        permissionHints={exercise.permissionHints}
-                      />
+                      <ExerciseButtons {...exercise} />
                     </Col>
                   </Row>
+
                   <Row>
                     <Col lg={6}>
                       <Box
@@ -257,6 +256,7 @@ class EditExerciseSimpleConfig extends Component {
                             />}
                         </ResourceRenderer>
                       </Box>
+
                       {exercise.permissionHints.update &&
                         <Box
                           title={
