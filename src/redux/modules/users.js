@@ -28,6 +28,10 @@ export const additionalActionTypes = {
   CREATE_LOCAL_LOGIN_PENDING: 'recodex/users/CREATE_LOCAL_LOGIN_PENDING',
   CREATE_LOCAL_LOGIN_FULFILLED: 'recodex/users/CREATE_LOCAL_LOGIN_FULFILLED',
   CREATE_LOCAL_LOGIN_REJECTED: 'recodex/users/CREATE_LOCAL_LOGIN_REJECTED',
+  SET_ROLE: 'recodex/users/SET_ROLE',
+  SET_ROLE_PENDING: 'recodex/users/SET_ROLE_PENDING',
+  SET_ROLE_FULFILLED: 'recodex/users/SET_ROLE_FULFILLED',
+  SET_ROLE_REJECTED: 'recodex/users/SET_ROLE_REJECTED',
   SET_IS_ALLOWED: 'recodex/users/SET_IS_ALLOWED',
   SET_IS_ALLOWED_PENDING: 'recodex/users/SET_IS_ALLOWED_PENDING',
   SET_IS_ALLOWED_FULFILLED: 'recodex/users/SET_IS_ALLOWED_FULFILLED',
@@ -77,6 +81,15 @@ export const makeLocalLogin = id =>
     endpoint: `/users/${id}/create-local`,
     method: 'POST',
     meta: { id }
+  });
+
+export const setRole = (id, role) =>
+  createApiAction({
+    type: additionalActionTypes.SET_ROLE,
+    endpoint: `/users/${id}/role`,
+    method: 'POST',
+    meta: { id, role },
+    body: { role }
   });
 
 export const setIsAllowed = (id, isAllowed = true) =>
@@ -294,6 +307,19 @@ const reducer = handleActions(
             })
         )
       ),
+
+    [additionalActionTypes.SET_ROLE_FULFILLED]: (state, { payload: data }) =>
+      data && data.id
+        ? state.setIn(
+            ['resources', data.id],
+            createRecord({
+              data,
+              state: resourceStatus.FULFILLED,
+              didInvalidate: false,
+              lastUpdate: Date.now()
+            })
+          )
+        : state,
 
     [additionalActionTypes.SET_IS_ALLOWED_PENDING]: (state, { meta: { id } }) =>
       state.setIn(['resources', id, 'data', 'isAllowed-pending'], true),
