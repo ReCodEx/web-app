@@ -9,21 +9,25 @@ import {
   fetchUserIfNeeded,
   updateProfile,
   updateSettings,
-  makeLocalLogin
+  makeLocalLogin,
+  setRole
 } from '../../redux/modules/users';
 import { getUser, isLoggedAsSuperAdmin } from '../../redux/selectors/users';
 import Page from '../../components/layout/Page';
 import Button from '../../components/widgets/FlatButton';
-import { LocalIcon, TransferIcon } from '../../components/icons';
+import { LocalIcon, TransferIcon, BanIcon } from '../../components/icons';
+import { UserRoleIcon } from '../../components/helpers/usersRoles';
 
 import EditUserProfileForm from '../../components/forms/EditUserProfileForm';
 import EditUserSettingsForm from '../../components/forms/EditUserSettingsForm';
 import GenerateTokenForm from '../../components/forms/GenerateTokenForm';
+import EditUserRoleForm from '../../components/forms/EditUserRoleForm';
 import { generateToken, takeOver } from '../../redux/modules/auth';
 import {
   lastGeneratedToken,
   loggedInUserIdSelector
 } from '../../redux/selectors/auth';
+import { safeGet } from '../../helpers/common';
 
 class EditUser extends Component {
   static loadAsync = ({ userId }, dispatch) =>
@@ -48,6 +52,11 @@ class EditUser extends Component {
     return updateProfile(data);
   }
 
+  setRole = ({ role }) => {
+    const { setRole } = this.props;
+    return setRole(role);
+  };
+
   render() {
     const {
       user,
@@ -62,7 +71,21 @@ class EditUser extends Component {
     return (
       <Page
         resource={user}
-        title={user => user.fullName}
+        title={user =>
+          <span>
+            {!safeGet(user, ['privateData', 'isAllowed']) &&
+              <BanIcon gapRight />}
+
+            {safeGet(user, ['privateData', 'role']) &&
+              <UserRoleIcon
+                role={user.privateData.role}
+                showTooltip
+                tooltipId={'user-role'}
+                gapRight
+              />}
+
+            {user.fullName}
+          </span>}
         description={
           <FormattedMessage
             id="app.editUser.description"
@@ -144,6 +167,7 @@ class EditUser extends Component {
                 />
               </Col>
             </Row>
+
             {data &&
               data.id &&
               data.id === loggedUserId &&
@@ -163,6 +187,19 @@ class EditUser extends Component {
                   />
                 </Col>
               </Row>}
+
+            {isSuperAdmin &&
+              data.id !== loggedUserId &&
+              data.privateData &&
+              <Row>
+                <Col lg={12}>
+                  <EditUserRoleForm
+                    currentRole={data.privateData.role}
+                    initialValues={{ role: data.privateData.role }}
+                    onSubmit={this.setRole}
+                  />
+                </Col>
+              </Row>}
           </div>}
       </Page>
     );
@@ -179,6 +216,7 @@ EditUser.propTypes = {
   makeLocalLogin: PropTypes.func.isRequired,
   isSuperAdmin: PropTypes.bool.isRequired,
   generateToken: PropTypes.func.isRequired,
+  setRole: PropTypes.func.isRequired,
   takeOver: PropTypes.func.isRequired,
   lastToken: PropTypes.string
 };
@@ -204,6 +242,7 @@ export default connect(
           )
         )
       ),
+    setRole: role => dispatch(setRole(userId, role)),
     takeOver: userId => dispatch(takeOver(userId))
   })
 )(EditUser);

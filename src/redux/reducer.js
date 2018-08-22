@@ -2,6 +2,7 @@ import { combineReducers } from 'redux';
 import { routerReducer } from 'react-router-redux';
 import { reducer as formReducer } from 'redux-form';
 
+import app from './modules/app';
 import assignments from './modules/assignments';
 import attachmentFiles from './modules/attachmentFiles';
 import auth, { actionTypes as authActionTypes } from './modules/auth';
@@ -50,6 +51,7 @@ import users from './modules/users';
 import userSwitching from './modules/userSwitching';
 
 const createRecodexReducers = (token, instanceId) => ({
+  app,
   assignments,
   attachmentFiles,
   auth: auth(token, instanceId),

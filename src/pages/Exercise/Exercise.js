@@ -77,8 +77,8 @@ import {
 } from '../../redux/selectors/auth';
 import { instanceSelector } from '../../redux/selectors/instances';
 import {
+  groupsSelector,
   groupDataAccessorSelector,
-  groupsUserCanEditSelector,
   groupsUserCanAssignToSelector
 } from '../../redux/selectors/groups';
 
@@ -553,7 +553,7 @@ class Exercise extends Component {
                                         </Confirm>}
                                     </div>}
                                 />
-                              : <p className="text-center">
+                              : <p className="text-center em-padding text-muted">
                                   <FormattedMessage
                                     id="app.exercise.noReferenceSolutions"
                                     defaultMessage="There are no reference solutions for this exercise yet."
@@ -639,7 +639,7 @@ export default withLinks(
         submitting: isSubmitting(state),
         referenceSolutions: referenceSolutionsSelector(exerciseId)(state),
         //        exercisePipelines: exercisePipelinesSelector(exerciseId)(state),
-        groups: groupsUserCanEditSelector(state),
+        groups: groupsSelector(state),
         assignableGroups: groupsUserCanAssignToSelector(state),
         groupsAccessor: groupDataAccessorSelector(state),
         firstDeadline: editMultiAssignFormSelector(state, 'firstDeadline'),

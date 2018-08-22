@@ -45,7 +45,17 @@ const LocalizedTexts = ({ locales = [] }, { lang = 'en' }) =>
               </Well>
               <ExternalLinkPreview url={link} />
             </div>}
-          {text !== '' && <Markdown source={text} />}
+
+          {text.trim() !== '' && <Markdown source={text} />}
+
+          {!text.trim() &&
+            !link &&
+            <div className="callout callout-warning em-margin">
+              <FormattedMessage
+                id="app.localizedTexts.noText"
+                defaultMessage="There is no text nor link for given localization. The exercise is not fully specified yet."
+              />
+            </div>}
 
           {studentHint &&
             studentHint !== '' &&

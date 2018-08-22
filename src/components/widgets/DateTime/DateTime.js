@@ -41,11 +41,7 @@ const dateTime = ({
     {isDeadline &&
       isAfter(unixts - deadlineAlertTime) &&
       !isAfter(unixts) &&
-      <Icon
-        icon={['far', 'bell']}
-        className={classnames({ 'faa-shake': true, animated: true })}
-        gapRight
-      />}
+      <Icon icon={['far', 'bell']} className="faa-shake animated" gapRight />}
     {isDeadline &&
       isAfter(unixts) &&
       <Icon icon="skull" className="half-opaque" gapRight />}

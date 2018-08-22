@@ -406,6 +406,7 @@ class EditExerciseSimpleConfigTest extends Component {
             <FieldArray
               name={`${test}.run-args`}
               component={ExpandingTextField}
+              maxLength={64}
               label={
                 <FormattedMessage
                   id="app.editExerciseSimpleConfigTests.executionArguments"
@@ -463,6 +464,7 @@ class EditExerciseSimpleConfigTest extends Component {
                 name={`${test}.actual-output`}
                 component={TextField}
                 validate={validateOutputFile}
+                maxLength={64}
                 label={
                   <FormattedMessage
                     id="app.editExerciseSimpleConfigTests.outputFile"
@@ -594,6 +596,7 @@ class EditExerciseSimpleConfigTest extends Component {
               <FieldArray
                 name={`${test}.judge-args`}
                 component={ExpandingTextField}
+                maxLength={64}
                 label={
                   <FormattedMessage
                     id="app.editExerciseSimpleConfigTests.judgeArgs"

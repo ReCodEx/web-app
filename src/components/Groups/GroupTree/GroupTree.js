@@ -7,7 +7,10 @@ import Button from '../../widgets/FlatButton';
 import { TreeView, TreeViewItem } from '../../widgets/TreeView';
 import { isReady, getJsData } from '../../../redux/helpers/resourceManager';
 import GroupsName from '../GroupsName';
-import { computeVisibleGroupsMap } from '../../helpers/group.js';
+import {
+  computeVisibleGroupsMap,
+  computeEditableGroupsMap
+} from '../../helpers/group.js';
 import { getLocalizedResourceName } from '../../../helpers/getLocalizedData';
 import { GroupIcon } from '../../icons';
 import withLinks from '../../../helpers/withLinks';
@@ -91,6 +94,7 @@ class GroupTree extends Component {
       level = 0,
       isOpen = false,
       groups,
+      onlyEditable = false,
       currentGroupId = null,
       visibleGroupsMap = null,
       ancestralPath = null
@@ -108,17 +112,19 @@ class GroupTree extends Component {
       id: groupId,
       name,
       localizedTexts,
-      canView,
       childGroups,
       primaryAdminsIds,
       organizational,
-      public: isPublic
+      public: isPublic,
+      permissionHints
     } = getJsData(group);
 
     const actualVisibleGroupsMap =
       visibleGroupsMap !== null
         ? visibleGroupsMap
-        : computeVisibleGroupsMap(groups);
+        : onlyEditable
+          ? computeEditableGroupsMap(groups)
+          : computeVisibleGroupsMap(groups);
 
     return (
       <TreeView>
@@ -141,7 +147,7 @@ class GroupTree extends Component {
               forceOpen={onAncestralPath}
               isOpen={currentGroupId === groupId || isOpen}
               actions={
-                currentGroupId !== groupId && canView
+                currentGroupId !== groupId && permissionHints.viewDetail
                   ? // this is inacurate, but public groups are visible to students who cannot see detail until they join
                     this.renderButtons(groupId, organizational || isPublic)
                   : undefined
@@ -154,6 +160,7 @@ class GroupTree extends Component {
                       key={groupId}
                       level={level + 1}
                       ancestralPath={ancestralPath.slice(1)}
+                      visibleGroupsMap={visibleGroupsMap}
                     />
                   ]
                 : this.renderChildGroups(
@@ -173,6 +180,7 @@ GroupTree.propTypes = {
   groups: PropTypes.object.isRequired,
   level: PropTypes.number,
   isOpen: PropTypes.bool,
+  onlyEditable: PropTypes.bool,
   currentGroupId: PropTypes.string,
   visibleGroupsMap: PropTypes.object,
   ancestralPath: PropTypes.array,

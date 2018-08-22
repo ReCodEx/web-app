@@ -4,7 +4,7 @@ import { FormattedMessage } from 'react-intl';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import {
   SuperadminIcon,
-  SupervisorAdminIcon,
+  EmpoweredSupervisorIcon,
   SupervisorIcon,
   SupervisorStudentIcon,
   UserIcon
@@ -65,6 +65,39 @@ export const roleLabelsPlural = {
   )
 };
 
+export const roleDescriptions = {
+  student: (
+    <FormattedMessage
+      id="app.roles.description.student"
+      defaultMessage="Student is the least priviledged user who can see only groups he/she is member of and solve assignments inside these groups."
+    />
+  ),
+  'supervisor-student': (
+    <FormattedMessage
+      id="app.roles.description.supervisorStudent"
+      defaultMessage="A hybrid role, which combines supervisor and student. This role is almost as priviledged as regular supervisor, but the user is also expected to be a student. The role typically covers students nearing the completion of their study programme or graduate students who help T.A. first-year courses whilst attending advanced courses."
+    />
+  ),
+  supervisor: (
+    <FormattedMessage
+      id="app.roles.description.supervisor"
+      defaultMessage="Supervisor of a group is basically a teacher who manages own groups and assigns exercises to students in these groups. Supervisor is also capable of creating new exercises."
+    />
+  ),
+  'empowered-supervisor': (
+    <FormattedMessage
+      id="app.roles.description.empoweredSupervisor"
+      defaultMessage="A more priviledges version of supervisor who is also capable of creating custom pipelines and configure exercises using these pipelines."
+    />
+  ),
+  superadmin: (
+    <FormattedMessage
+      id="app.roles.description.superadmin"
+      defaultMessage="Omnipotent and omniscient user who can do anything in the instances to which he/she belongs to. Similar to root in linux or Q in Startrek."
+    />
+  )
+};
+
 export const knownRoles = Object.keys(roleLabels);
 
 /*
@@ -74,7 +107,7 @@ export const knownRoles = Object.keys(roleLabels);
 export const isStudentRole = role =>
   role === 'student' || role === 'supervisor-student';
 
-export const isSupervisorRole = role => role !== 'student'; // all other roles are supervisors
+export const isSupervisorRole = role => role && role !== 'student'; // all other roles are supervisors
 
 export const isSuperadminRole = role => role === 'superadmin';
 
@@ -87,7 +120,7 @@ const roleIcons = ({ role, ...props }) => {
     case 'superadmin':
       return <SuperadminIcon {...props} />;
     case 'empowered-supervisor':
-      return <SupervisorAdminIcon {...props} />;
+      return <EmpoweredSupervisorIcon {...props} />;
     case 'supervisor':
       return <SupervisorIcon {...props} />;
     case 'supervisor-student':

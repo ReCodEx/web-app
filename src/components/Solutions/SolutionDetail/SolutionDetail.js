@@ -189,7 +189,7 @@ class SolutionDetail extends Component {
                 />}
 
               {evaluation &&
-                permissionHints.downloadResultsArchive &&
+                permissionHints.downloadResultArchive &&
                 <Row>
                   <Col lg={6} md={12}>
                     <DownloadResultArchiveContainer submissionId={restSub.id} />
