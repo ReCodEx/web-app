@@ -1,6 +1,7 @@
 import statusCode from 'statuscode';
 import { addNotification } from '../../modules/notifications';
 import { flatten } from 'flat';
+import { canUseDOM } from 'exenv';
 
 import {
   newPendingFetchOperation,
@@ -92,7 +93,9 @@ const encodeBody = (body, method, encodeAsMultipart) => {
 };
 
 let requestAbortController =
-  'AbortController' in window ? new window.AbortController() : null;
+  canUseDOM && 'AbortController' in window
+    ? new window.AbortController()
+    : null;
 
 export const createRequest = (
   endpoint,
@@ -114,7 +117,9 @@ export const abortAllPendingRequests = () => {
     requestAbortController.abort();
   }
   requestAbortController =
-    'AbortController' in window ? new window.AbortController() : null;
+    canUseDOM && 'AbortController' in window
+      ? new window.AbortController()
+      : null;
 };
 
 export const getHeaders = (headers, accessToken, skipContentType) => {
