@@ -115,6 +115,7 @@ class GroupTree extends Component {
       childGroups,
       primaryAdminsIds,
       organizational,
+      archived,
       public: isPublic,
       permissionHints
     } = getJsData(group);
@@ -143,6 +144,7 @@ class GroupTree extends Component {
               level={level}
               admins={primaryAdminsIds}
               organizational={organizational}
+              archived={archived}
               isPublic={isPublic}
               forceOpen={onAncestralPath}
               isOpen={currentGroupId === groupId || isOpen}

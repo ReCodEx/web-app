@@ -15,8 +15,26 @@ import { selectedInstanceId } from '../../redux/selectors/auth';
 import { selectedInstance } from '../../redux/selectors/instances';
 import { groupsSelector } from '../../redux/selectors/groups';
 import GroupTree from '../../components/Groups/GroupTree';
+import { getJsData } from '../../redux/helpers/resourceManager';
+import FilterArchiveGroupsForm from '../../components/forms/FilterArchiveGroupsForm/FilterArchiveGroupsForm';
+
+const getVisibleArchiveGroupsMap = groups => {
+  var result = {};
+  groups.toArray().forEach(groupObj => {
+    const group = getJsData(groupObj);
+    if (group.archived) {
+      result[group.id] = true;
+      group.parentGroupsIds.forEach(parentGroupId => {
+        result[parentGroupId] = true;
+      });
+    }
+  });
+  return result;
+};
 
 class Archive extends Component {
+  state = { showAll: false, search: '' };
+
   static loadAsync = (params, dispatch, { instanceId }) =>
     Promise.all([
       dispatch(fetchInstancesIfNeeded(instanceId)),
@@ -59,17 +77,32 @@ class Archive extends Component {
             title={
               <FormattedMessage
                 id="app.archive.archivedGroups"
-                defaultMessage="All Groups Including Archived"
+                defaultMessage="Archived Groups"
               />
             }
             unlimitedHeight
           >
-            {data.rootGroupId !== null &&
-              <GroupTree
-                id={data.rootGroupId}
-                isAdmin={false}
-                groups={groups}
-              />}
+            <React.Fragment>
+              <FilterArchiveGroupsForm
+                form="archive-filters"
+                onSubmit={data => {
+                  this.setState({ showAll: Boolean(data.showAll) });
+                  return Promise.resolve();
+                }}
+              />
+
+              {data.rootGroupId !== null &&
+                <GroupTree
+                  id={data.rootGroupId}
+                  isAdmin={false}
+                  groups={groups}
+                  visibleGroupsMap={
+                    this.state.showAll
+                      ? null
+                      : getVisibleArchiveGroupsMap(groups)
+                  }
+                />}
+            </React.Fragment>
           </Box>}
       </Page>
     );
