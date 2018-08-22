@@ -125,14 +125,7 @@ const PipelinesListItem = ({
       </strong>
     </td>
     <td>
-      {author
-        ? <UsersNameContainer userId={author} />
-        : <i>
-            <FormattedMessage
-              id="app.pipelinesList.universalPipeline"
-              defaultMessage="universal pipeline"
-            />
-          </i>}
+      {author ? <UsersNameContainer userId={author} /> : <i>ReCodEx</i>}
     </td>
     <td>
       <DateTime unixts={createdAt} showRelative />
