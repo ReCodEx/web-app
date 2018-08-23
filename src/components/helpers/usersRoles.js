@@ -10,27 +10,35 @@ import {
   UserIcon
 } from '../icons';
 
+export const STUDENT_ROLE = 'student';
+export const SUPERVISOR_STUDENT_ROLE = 'supervisor-student';
+export const SUPERVISOR_ROLE = 'supervisor';
+export const EMPOWERED_SUPERVISOR_ROLE = 'empowered-supervisor';
+export const SUPERADMIN_ROLE = 'superadmin';
+
 /*
  * Labels
  */
 export const roleLabels = {
-  student: <FormattedMessage id="app.roles.student" defaultMessage="Student" />,
-  'supervisor-student': (
+  [STUDENT_ROLE]: (
+    <FormattedMessage id="app.roles.student" defaultMessage="Student" />
+  ),
+  [SUPERVISOR_STUDENT_ROLE]: (
     <FormattedMessage
       id="app.roles.supervisorStudent"
       defaultMessage="Supervisor-student"
     />
   ),
-  supervisor: (
+  [SUPERVISOR_ROLE]: (
     <FormattedMessage id="app.roles.supervisor" defaultMessage="Supervisor" />
   ),
-  'empowered-supervisor': (
+  [EMPOWERED_SUPERVISOR_ROLE]: (
     <FormattedMessage
       id="app.roles.empoweredSupervisor"
       defaultMessage="Empowered Supervisor"
     />
   ),
-  superadmin: (
+  [SUPERADMIN_ROLE]: (
     <FormattedMessage
       id="app.roles.superadmin"
       defaultMessage="Main Administrator"
@@ -39,25 +47,25 @@ export const roleLabels = {
 };
 
 export const roleLabelsPlural = {
-  student: (
+  [STUDENT_ROLE]: (
     <FormattedMessage id="app.roles.students" defaultMessage="Students" />
   ),
-  'supervisor-student': (
+  [SUPERVISOR_STUDENT_ROLE]: (
     <FormattedMessage
       id="app.roles.supervisorStudents"
       defaultMessage="Supervisor-students"
     />
   ),
-  supervisor: (
+  [SUPERVISOR_ROLE]: (
     <FormattedMessage id="app.roles.supervisors" defaultMessage="Supervisors" />
   ),
-  'empowered-supervisor': (
+  [EMPOWERED_SUPERVISOR_ROLE]: (
     <FormattedMessage
       id="app.roles.supervisorsEmpowered"
       defaultMessage="Empowered Supervisors"
     />
   ),
-  superadmin: (
+  [SUPERADMIN_ROLE]: (
     <FormattedMessage
       id="app.roles.superadmins"
       defaultMessage="Main Administrators"
@@ -66,31 +74,31 @@ export const roleLabelsPlural = {
 };
 
 export const roleDescriptions = {
-  student: (
+  [STUDENT_ROLE]: (
     <FormattedMessage
       id="app.roles.description.student"
       defaultMessage="Student is the least priviledged user who can see only groups he/she is member of and solve assignments inside these groups."
     />
   ),
-  'supervisor-student': (
+  [SUPERVISOR_STUDENT_ROLE]: (
     <FormattedMessage
       id="app.roles.description.supervisorStudent"
       defaultMessage="A hybrid role, which combines supervisor and student. This role is almost as priviledged as regular supervisor, but the user is also expected to be a student. The role typically covers students nearing the completion of their study programme or graduate students who help T.A. first-year courses whilst attending advanced courses."
     />
   ),
-  supervisor: (
+  [SUPERVISOR_ROLE]: (
     <FormattedMessage
       id="app.roles.description.supervisor"
       defaultMessage="Supervisor of a group is basically a teacher who manages own groups and assigns exercises to students in these groups. Supervisor is also capable of creating new exercises."
     />
   ),
-  'empowered-supervisor': (
+  [EMPOWERED_SUPERVISOR_ROLE]: (
     <FormattedMessage
       id="app.roles.description.empoweredSupervisor"
       defaultMessage="A more priviledges version of supervisor who is also capable of creating custom pipelines and configure exercises using these pipelines."
     />
   ),
-  superadmin: (
+  [SUPERADMIN_ROLE]: (
     <FormattedMessage
       id="app.roles.description.superadmin"
       defaultMessage="Omnipotent and omniscient user who can do anything in the instances to which he/she belongs to. Similar to root in linux or Q in Startrek."
@@ -105,11 +113,14 @@ export const knownRoles = Object.keys(roleLabels);
  */
 
 export const isStudentRole = role =>
-  role === 'student' || role === 'supervisor-student';
+  role === STUDENT_ROLE || role === SUPERVISOR_STUDENT_ROLE;
 
-export const isSupervisorRole = role => role && role !== 'student'; // all other roles are supervisors
+export const isSupervisorRole = role => role && role !== STUDENT_ROLE; // all other roles are supervisors
 
-export const isSuperadminRole = role => role === 'superadmin';
+export const isEmpoweredSupervisorRole = role =>
+  role === SUPERADMIN_ROLE || role === EMPOWERED_SUPERVISOR_ROLE;
+
+export const isSuperadminRole = role => role === SUPERADMIN_ROLE;
 
 /*
  * Icons
@@ -117,13 +128,13 @@ export const isSuperadminRole = role => role === 'superadmin';
 
 const roleIcons = ({ role, ...props }) => {
   switch (role) {
-    case 'superadmin':
+    case SUPERADMIN_ROLE:
       return <SuperadminIcon {...props} />;
-    case 'empowered-supervisor':
+    case [EMPOWERED_SUPERVISOR_ROLE]:
       return <EmpoweredSupervisorIcon {...props} />;
     case 'supervisor':
       return <SupervisorIcon {...props} />;
-    case 'supervisor-student':
+    case [SUPERVISOR_STUDENT_ROLE]:
       return <SupervisorStudentIcon {...props} />;
     default:
       return (

@@ -16,11 +16,13 @@ import EditEnvironmentSimpleForm from '../../components/forms/EditEnvironmentSim
 // import EditEnvironmentConfigForm from '../../components/forms/EditEnvironmentConfigForm';
 // import PipelinesSimpleList from '../../components/Pipelines/PipelinesSimpleList';
 import ExerciseButtons from '../../components/Exercises/ExerciseButtons';
-import { NeedFixingIcon } from '../../components/icons';
+import ExerciseConfigTypeButton from '../../components/buttons/ExerciseConfigTypeButton';
+import Icon, { NeedFixingIcon } from '../../components/icons';
 
 import {
   fetchExercise,
-  fetchExerciseIfNeeded
+  fetchExerciseIfNeeded,
+  editExercise
 } from '../../redux/modules/exercises';
 import {
   fetchExerciseConfig,
@@ -29,7 +31,7 @@ import {
 } from '../../redux/modules/exerciseConfigs';
 import { getExercise } from '../../redux/selectors/exercises';
 import { exerciseConfigSelector } from '../../redux/selectors/exerciseConfigs';
-import { loggedInUserIdSelector } from '../../redux/selectors/auth';
+import { loggedInUserSelector } from '../../redux/selectors/users';
 import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments';
 import { runtimeEnvironmentsSelector } from '../../redux/selectors/runtimeEnvironments';
 /*
@@ -74,9 +76,12 @@ import {
 } from '../../helpers/exercise/environments';
 import {
   isSimple,
+  SIMPLE_CONFIG_TYPE,
+  ADVANCED_CONFIG_TYPE,
   getSimpleConfigInitValues,
   transformConfigValues
 } from '../../helpers/exercise/config';
+import { isEmpoweredSupervisorRole } from '../../components/helpers/usersRoles';
 import { hasPermissions } from '../../helpers/common';
 
 class EditExerciseConfig extends Component {
@@ -159,6 +164,7 @@ class EditExerciseConfig extends Component {
     const {
       params: { exerciseId },
       exercise,
+      loggedUser,
       runtimeEnvironments,
       exerciseConfig,
       exerciseEnvironmentConfig,
@@ -167,6 +173,7 @@ class EditExerciseConfig extends Component {
       pipelines,
       // exercisePipelines,
       environmentsWithEntryPoints,
+      setExerciseConfigType,
       intl: { locale },
       links: {
         EXERCISE_URI_FACTORY
@@ -176,7 +183,7 @@ class EditExerciseConfig extends Component {
 
     return (
       <Page
-        resource={[exercise, exerciseTests]}
+        resource={[exercise, exerciseTests, loggedUser]}
         title={exercise => getLocalizedName(exercise, locale)}
         description={
           <FormattedMessage
@@ -212,7 +219,7 @@ class EditExerciseConfig extends Component {
           }
         ]}
       >
-        {(exercise, tests) =>
+        {(exercise, tests, loggedUser) =>
           <div>
             <ResourceRenderer
               resource={pipelines.toArray()}
@@ -244,11 +251,41 @@ class EditExerciseConfig extends Component {
                     </Col>
                   </Row>
 
-                  {isSimple(exercise) &&
-                    hasPermissions(exercise, 'update') &&
-                    <Row>
-                      <Col sm={12}>TODO button</Col>
-                    </Row>}
+                  {hasPermissions(exercise, 'update') &&
+                    isEmpoweredSupervisorRole(loggedUser.privateData.role) &&
+                    <table className="em-margin-vertical">
+                      <tbody>
+                        <tr>
+                          <td className="valing-middle em-padding-right">
+                            <ExerciseConfigTypeButton
+                              isSimple={isSimple(exercise)}
+                              setExerciseConfigType={setExerciseConfigType(
+                                exercise,
+                                isSimple(exercise)
+                                  ? ADVANCED_CONFIG_TYPE
+                                  : SIMPLE_CONFIG_TYPE
+                              )}
+                              disabled={
+                                exercise.runtimeEnvironments.length >
+                                (isSimple(exercise) ? 1 : 0)
+                              }
+                            />
+                          </td>
+                          <td className="em-padding-left small text-muted">
+                            <Icon icon="info-circle" gapRight />
+                            {isSimple(exercise)
+                              ? <FormattedMessage
+                                  id="app.editExerciseConfig.changeConfigAdvancedExplain"
+                                  defaultMessage="Changing to advanced configuration will allow you to use custom pipelines and manually configure their parameters. The exercise may also have a custom environment configuration alowing arbitrary constraints on which files are submitted by the students. A deeper understanding of the ReCodEx evaluation process is required to set the configuration correctly. Please note that advanced configurations may have only one runtime environment (so it is not possible to convert simple configurations with multiple environments set)."
+                                />
+                              : <FormattedMessage
+                                  id="app.editExerciseConfig.changeConfigSimpleExplain"
+                                  defaultMessage="Changing back to simple configuration requires that the exercise have no runtime environment (and thus no configuration) set since it is not possible to convert advanced configuration with custom pipelines into simple configuration."
+                                />}
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>}
 
                   <Row>
                     <Col lg={6}>
@@ -510,6 +547,7 @@ class EditExerciseConfig extends Component {
 
 EditExerciseConfig.propTypes = {
   exercise: ImmutablePropTypes.map,
+  loggedUser: ImmutablePropTypes.map,
   runtimeEnvironments: PropTypes.object.isRequired,
   loadAsync: PropTypes.func.isRequired,
   params: PropTypes.shape({
@@ -517,17 +555,18 @@ EditExerciseConfig.propTypes = {
   }).isRequired,
   exerciseConfig: PropTypes.object,
   exerciseEnvironmentConfig: PropTypes.object,
-  editEnvironmentConfigs: PropTypes.func.isRequired,
   exerciseScoreConfig: PropTypes.object,
   exerciseTests: PropTypes.object,
+  pipelines: ImmutablePropTypes.map,
+  exercisePipelines: ImmutablePropTypes.map,
+  environmentsWithEntryPoints: PropTypes.array.isRequired,
+  links: PropTypes.object.isRequired,
+  setExerciseConfigType: PropTypes.func.isRequired,
+  editEnvironmentConfigs: PropTypes.func.isRequired,
   editScoreConfig: PropTypes.func.isRequired,
   editTests: PropTypes.func.isRequired,
   fetchConfig: PropTypes.func.isRequired,
   setConfig: PropTypes.func.isRequired,
-  links: PropTypes.object.isRequired,
-  pipelines: ImmutablePropTypes.map,
-  exercisePipelines: ImmutablePropTypes.map,
-  environmentsWithEntryPoints: PropTypes.array.isRequired,
   reloadExercise: PropTypes.func.isRequired,
   reloadConfig: PropTypes.func.isRequired,
   intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired
@@ -538,7 +577,7 @@ export default withLinks(
     (state, { params: { exerciseId } }) => {
       return {
         exercise: getExercise(exerciseId)(state),
-        userId: loggedInUserIdSelector(state),
+        loggedUser: loggedInUserSelector(state),
         runtimeEnvironments: runtimeEnvironmentsSelector(state),
         exerciseConfig: exerciseConfigSelector(exerciseId)(state),
         exerciseEnvironmentConfig: exerciseEnvironmentConfigSelector(
@@ -555,6 +594,8 @@ export default withLinks(
     },
     (dispatch, { params: { exerciseId } }) => ({
       loadAsync: () => EditExerciseConfig.loadAsync({ exerciseId }, dispatch),
+      setExerciseConfigType: (exercise, configurationType) => () =>
+        dispatch(editExercise(exercise.id, { ...exercise, configurationType })),
       editEnvironmentConfigs: data =>
         dispatch(setExerciseEnvironmentConfig(exerciseId, data)),
       editScoreConfig: data => dispatch(setScoreConfig(exerciseId, data)),
