@@ -27,6 +27,8 @@ const PipelinesList = ({
             <PipelinesListItem
               {...pipeline}
               createActions={createActions}
+              showAuthor
+              showCreatedAt
               key={pipeline ? pipeline.id : idx}
             />
         )}

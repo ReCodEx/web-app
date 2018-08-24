@@ -83,6 +83,7 @@ import {
 } from '../../helpers/exercise/config';
 import { isEmpoweredSupervisorRole } from '../../components/helpers/usersRoles';
 import { hasPermissions } from '../../helpers/common';
+import EditExercisePipelinesForm from '../../components/forms/EditExercisePipelinesForm/EditExercisePipelinesForm';
 
 class EditExerciseConfig extends Component {
   componentWillMount = () => this.props.loadAsync();
@@ -396,10 +397,12 @@ class EditExerciseConfig extends Component {
 
                     <Col lg={6}>
                       <SupplementaryFilesTableContainer exercise={exercise} />
+
                       {!isSimple(exercise) &&
-                        <div className="callout callout-warning">
-                          Pipelines - TODO
-                        </div>}
+                        <EditExercisePipelinesForm
+                          pipelines={pipelines}
+                          initialValues={{ pipelines: [] }}
+                        />}
 
                       {/* exercise.configurationType !== 'simpleExerciseConfig' &&
                   <Box

@@ -14,7 +14,7 @@ import { decode, isTokenValid, isInScope } from '../../redux/helpers/token';
 import { verifyEmail } from '../../redux/modules/emailVerification';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import { verificationStatusSelector } from '../../redux/selectors/emailVerification';
-import { LoadingIcon, SuccessIcon, Failure } from '../../components/icons';
+import { LoadingIcon, SuccessIcon, FailureIcon } from '../../components/icons';
 
 import withLinks from '../../helpers/withLinks';
 
@@ -131,7 +131,7 @@ class EmailVerification extends Component {
 
                   {getVerificationStatus(decodedToken.sub) === 'FAILED' &&
                     <p>
-                      <Failure gapRight />
+                      <FailureIcon gapRight />
                       <FormattedMessage
                         id="app.emailVerification.failed"
                         defaultMessage="The email address cannot be verified."
