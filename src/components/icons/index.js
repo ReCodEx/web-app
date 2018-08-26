@@ -24,7 +24,7 @@ export const FailureIcon = props =>
   </strong>;
 export const GroupIcon = ({ organizational = false, ...props }) =>
   <Icon {...props} icon={organizational ? 'sitemap' : 'users'} />;
-export const InfoIcon = props => <Icon {...props} icon="info" />;
+export const InfoIcon = props => <Icon {...props} icon="info-circle" />;
 export const LoadingIcon = props =>
   <Icon {...props} icon="spinner" pulse style={{ opacity: 0.8 }} />;
 export const LocalIcon = props => <Icon {...props} icon="thumbtack" />;

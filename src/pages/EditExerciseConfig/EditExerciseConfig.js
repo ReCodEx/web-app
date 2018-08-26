@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import { FormattedMessage, injectIntl } from 'react-intl';
+import { FormattedMessage, intlShape, injectIntl } from 'react-intl';
 import { Row, Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { defaultMemoize } from 'reselect';
@@ -13,11 +13,11 @@ import SupplementaryFilesTableContainer from '../../containers/SupplementaryFile
 import EditTestsForm from '../../components/forms/EditTestsForm';
 import EditExerciseSimpleConfigForm from '../../components/forms/EditExerciseSimpleConfigForm';
 import EditEnvironmentSimpleForm from '../../components/forms/EditEnvironmentSimpleForm';
-// import EditEnvironmentConfigForm from '../../components/forms/EditEnvironmentConfigForm';
+import EditEnvironmentConfigForm from '../../components/forms/EditEnvironmentConfigForm';
 // import PipelinesSimpleList from '../../components/Pipelines/PipelinesSimpleList';
 import ExerciseButtons from '../../components/Exercises/ExerciseButtons';
 import ExerciseConfigTypeButton from '../../components/buttons/ExerciseConfigTypeButton';
-import Icon, { NeedFixingIcon } from '../../components/icons';
+import { InfoIcon, NeedFixingIcon } from '../../components/icons';
 
 import {
   fetchExercise,
@@ -71,8 +71,10 @@ import {
   transformTestsValues
 } from '../../helpers/exercise/tests';
 import {
-  getEnvInitValues,
-  transformEnvValues
+  getSimpleEnvironmentsInitValues,
+  getEnvironmentInitValues,
+  transformSimpleEnvironmentsValues,
+  transformEnvironmentValues
 } from '../../helpers/exercise/environments';
 import {
   isSimple,
@@ -135,12 +137,12 @@ class EditExerciseConfig extends Component {
     }
   );
 
-  transformAndSendEnvValuesCreator = defaultMemoize(
+  transformAndSendSimpleRuntimesValuesCreator = defaultMemoize(
     (pipelines, environments, tests, config, environmentConfigs) => {
       const { editEnvironmentConfigs, reloadConfig, setConfig } = this.props;
 
       return data => {
-        const newEnvironments = transformEnvValues(
+        const newEnvironments = transformSimpleEnvironmentsValues(
           data,
           environmentConfigs,
           environments
@@ -157,6 +159,29 @@ class EditExerciseConfig extends Component {
         })
           .then(() => setConfig(configData))
           .then(reloadConfig);
+      };
+    }
+  );
+
+  // TODO this needs finalization...
+  transformAndSendRuntimesValuesCreator = defaultMemoize(
+    (pipelines, environments, tests, config, environmentConfigs) => {
+      const { editEnvironmentConfigs } = this.props;
+
+      return data => {
+        const environmentConfigs = transformEnvironmentValues(data);
+        /*
+        const configData = transformConfigValues(
+          getSimpleConfigInitValues(config, tests, environmentConfigs),
+          pipelines,
+          newEnvironments,
+          tests,
+          config
+        );
+        */
+        return editEnvironmentConfigs({ environmentConfigs });
+        //.then(() => setConfig(configData))
+        //.then(reloadConfig);
       };
     }
   );
@@ -273,7 +298,7 @@ class EditExerciseConfig extends Component {
                             />
                           </td>
                           <td className="em-padding-left small text-muted">
-                            <Icon icon="info-circle" gapRight />
+                            <InfoIcon gapRight />
                             {isSimple(exercise)
                               ? <FormattedMessage
                                   id="app.editExerciseConfig.changeConfigAdvancedExplain"
@@ -339,12 +364,11 @@ class EditExerciseConfig extends Component {
                               >
                                 {environments =>
                                   <EditEnvironmentSimpleForm
-                                    initialValues={getEnvInitValues(
-                                      environmentConfigs,
-                                      environments
+                                    initialValues={getSimpleEnvironmentsInitValues(
+                                      environmentConfigs
                                     )}
                                     runtimeEnvironments={environments}
-                                    onSubmit={this.transformAndSendEnvValuesCreator(
+                                    onSubmit={this.transformAndSendSimpleRuntimesValuesCreator(
                                       pipelines,
                                       environments,
                                       tests,
@@ -355,17 +379,16 @@ class EditExerciseConfig extends Component {
                               </ResourceRenderer>}
                           </ResourceRenderer>
                         </Box>}
+                    </Col>
+                    <Col lg={6}>
+                      <SupplementaryFilesTableContainer exercise={exercise} />
+                    </Col>
+                  </Row>
 
-                      {!isSimple(exercise) &&
-                        <Box
-                          title={
-                            <FormattedMessage
-                              id="app.editExercise.runtimeEnvironment"
-                              defaultMessage="Runtime Environment"
-                            />
-                          }
-                          unlimitedHeight
-                        >
+                  {!isSimple(exercise) &&
+                    <Row>
+                      <Col lg={6}>
+                        {!isSimple(exercise) &&
                           <ResourceRenderer
                             resource={[
                               exerciseConfig,
@@ -373,38 +396,37 @@ class EditExerciseConfig extends Component {
                             ]}
                           >
                             {(config, environmentConfigs) =>
-                              <div className="callout callout-warning">
-                                EditEnvironmentConfigForm - TODO
-                              </div>
-                            /* <EditEnvironmentConfigForm
-                                initialValues={getEnvInitValues(
-                                  environmentConfigs,
-                                  environments
-                                )}
-                                runtimeEnvironments={environments}
-                                onSubmit={this.transformAndSendEnvValuesCreator(
-                                  pipelines,
-                                  environments,
-                                  tests,
-                                  config,
-                                  environmentConfigs
-                                )}
-                              /> */
-                            }
-                          </ResourceRenderer>
-                        </Box>}
-                    </Col>
+                              <ResourceRenderer
+                                resource={runtimeEnvironments.toArray()}
+                                returnAsArray={true}
+                              >
+                                {environments =>
+                                  <EditEnvironmentConfigForm
+                                    initialValues={getEnvironmentInitValues(
+                                      environmentConfigs
+                                    )}
+                                    runtimeEnvironments={environments}
+                                    onSubmit={this.transformAndSendRuntimesValuesCreator(
+                                      pipelines,
+                                      environments,
+                                      tests,
+                                      config,
+                                      environmentConfigs
+                                    )}
+                                  />}
+                              </ResourceRenderer>}
+                          </ResourceRenderer>}
+                      </Col>
 
-                    <Col lg={6}>
-                      <SupplementaryFilesTableContainer exercise={exercise} />
+                      <Col lg={6}>
+                        {
+                          <EditExercisePipelinesForm
+                            pipelines={pipelines}
+                            initialValues={{ pipelines: [] }}
+                          />
+                        }
 
-                      {!isSimple(exercise) &&
-                        <EditExercisePipelinesForm
-                          pipelines={pipelines}
-                          initialValues={{ pipelines: [] }}
-                        />}
-
-                      {/* exercise.configurationType !== 'simpleExerciseConfig' &&
+                        {/* exercise.configurationType !== 'simpleExerciseConfig' &&
                   <Box
                     title={
                       <FormattedMessage
@@ -481,8 +503,8 @@ class EditExerciseConfig extends Component {
                     </ResourceRenderer>
                   </Box>
                 */}
-                    </Col>
-                  </Row>
+                      </Col>
+                    </Row>}
 
                   {hasPermissions(exercise, 'update') &&
                     <div className="em-margin-vertical">
@@ -572,7 +594,7 @@ EditExerciseConfig.propTypes = {
   setConfig: PropTypes.func.isRequired,
   reloadExercise: PropTypes.func.isRequired,
   reloadConfig: PropTypes.func.isRequired,
-  intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired
+  intl: intlShape.isRequired
 };
 
 export default withLinks(
