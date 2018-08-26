@@ -34,6 +34,7 @@ import { exerciseConfigSelector } from '../../redux/selectors/exerciseConfigs';
 import { loggedInUserSelector } from '../../redux/selectors/users';
 import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments';
 import { runtimeEnvironmentsSelector } from '../../redux/selectors/runtimeEnvironments';
+import { fetchExercisePipelinesVariables } from '../../redux/modules/exercisePipelinesVariables';
 /*
 import {
   deletePipeline,
@@ -79,12 +80,18 @@ import {
 import {
   isSimple,
   SIMPLE_CONFIG_TYPE,
-  ADVANCED_CONFIG_TYPE,
+  ADVANCED_CONFIG_TYPE
+} from '../../helpers/exercise/config';
+import {
   getSimpleConfigInitValues,
   transformConfigValues
-} from '../../helpers/exercise/config';
+} from '../../helpers/exercise/configSimple';
+import {
+  getPipelinesInitialValues,
+  assembleNewConfig
+} from '../../helpers/exercise/configAdvanced';
 import { isEmpoweredSupervisorRole } from '../../components/helpers/usersRoles';
-import { hasPermissions } from '../../helpers/common';
+import { hasPermissions, safeGet } from '../../helpers/common';
 import EditExercisePipelinesForm from '../../components/forms/EditExercisePipelinesForm/EditExercisePipelinesForm';
 
 class EditExerciseConfig extends Component {
@@ -96,11 +103,12 @@ class EditExerciseConfig extends Component {
     }
   };
 
+  // TODO -- update load to fetch PipelineVarialbes (if exercise is not simple and env + pipelines has already been set)
   static loadAsync = ({ exerciseId }, dispatch) =>
     Promise.all([
       dispatch(fetchExerciseIfNeeded(exerciseId)).then(
-        ({ value: data }) =>
-          hasPermissions(data, 'update') &&
+        ({ value: exercise }) =>
+          hasPermissions(exercise, 'update') &&
           Promise.all([
             dispatch(fetchExerciseConfigIfNeeded(exerciseId)),
             dispatch(fetchExerciseEnvironmentConfigIfNeeded(exerciseId)),
@@ -163,26 +171,61 @@ class EditExerciseConfig extends Component {
     }
   );
 
-  // TODO this needs finalization...
-  transformAndSendRuntimesValuesCreator = defaultMemoize(
-    (pipelines, environments, tests, config, environmentConfigs) => {
-      const { editEnvironmentConfigs } = this.props;
+  transformAndSendRuntimesValuesCreator = defaultMemoize((tests, config) => {
+    const {
+      editEnvironmentConfigs,
+      fetchPipelinesVariables,
+      setConfig,
+      reloadConfig
+    } = this.props;
+    const pipelines = getPipelinesInitialValues(config).pipelines;
+    return data => {
+      const environmentConfigs = transformEnvironmentValues(data);
+      const runtimeId = safeGet(
+        environmentConfigs,
+        [0, 'runtimeEnvironmentId'],
+        null
+      );
 
-      return data => {
-        const environmentConfigs = transformEnvironmentValues(data);
-        /*
-        const configData = transformConfigValues(
-          getSimpleConfigInitValues(config, tests, environmentConfigs),
-          pipelines,
-          newEnvironments,
-          tests,
-          config
-        );
-        */
-        return editEnvironmentConfigs({ environmentConfigs });
-        //.then(() => setConfig(configData))
-        //.then(reloadConfig);
-      };
+      return editEnvironmentConfigs({ environmentConfigs })
+        .then(() => fetchPipelinesVariables(runtimeId, pipelines))
+        .then(({ value: pipelineVariables }) =>
+          setConfig(
+            assembleNewConfig(
+              config,
+              runtimeId,
+              tests,
+              pipelines,
+              pipelineVariables
+            )
+          )
+        )
+        .then(reloadConfig);
+    };
+  });
+
+  transformAndSendPipelinesCreator = defaultMemoize(
+    (tests, config, environmentConfigs) => ({ pipelines }) => {
+      const { setConfig, fetchPipelinesVariables, reloadConfig } = this.props;
+      const runtimeId = safeGet(
+        environmentConfigs,
+        [0, 'runtimeEnvironmentId'],
+        null
+      );
+
+      return fetchPipelinesVariables(runtimeId, pipelines)
+        .then(({ value: pipelineVariables }) =>
+          setConfig(
+            assembleNewConfig(
+              config,
+              runtimeId,
+              tests,
+              pipelines,
+              pipelineVariables
+            )
+          )
+        )
+        .then(reloadConfig);
     }
   );
 
@@ -318,7 +361,7 @@ class EditExerciseConfig extends Component {
                       <Box
                         title={
                           <FormattedMessage
-                            id="app.editExercise.testsAndScoring"
+                            id="app.editExerciseConfig.testsAndScoring"
                             defaultMessage="Tests and Scoring"
                           />
                         }
@@ -345,7 +388,7 @@ class EditExerciseConfig extends Component {
                         <Box
                           title={
                             <FormattedMessage
-                              id="app.editExercise.runtimeEnvironments"
+                              id="app.editExerciseConfig.runtimeEnvironments"
                               defaultMessage="Runtime Environments"
                             />
                           }
@@ -386,47 +429,51 @@ class EditExerciseConfig extends Component {
                   </Row>
 
                   {!isSimple(exercise) &&
-                    <Row>
-                      <Col lg={6}>
-                        {!isSimple(exercise) &&
-                          <ResourceRenderer
-                            resource={[
-                              exerciseConfig,
-                              exerciseEnvironmentConfig
-                            ]}
-                          >
-                            {(config, environmentConfigs) =>
-                              <ResourceRenderer
-                                resource={runtimeEnvironments.toArray()}
-                                returnAsArray={true}
-                              >
-                                {environments =>
-                                  <EditEnvironmentConfigForm
-                                    initialValues={getEnvironmentInitValues(
-                                      environmentConfigs
-                                    )}
-                                    runtimeEnvironments={environments}
-                                    onSubmit={this.transformAndSendRuntimesValuesCreator(
-                                      pipelines,
-                                      environments,
-                                      tests,
-                                      config,
-                                      environmentConfigs
-                                    )}
-                                  />}
-                              </ResourceRenderer>}
-                          </ResourceRenderer>}
-                      </Col>
+                    <ResourceRenderer
+                      resource={[exerciseConfig, exerciseEnvironmentConfig]}
+                    >
+                      {(config, environmentConfigs) =>
+                        <Row>
+                          <Col lg={6}>
+                            <ResourceRenderer
+                              resource={runtimeEnvironments.toArray()}
+                              returnAsArray={true}
+                            >
+                              {environments =>
+                                <EditEnvironmentConfigForm
+                                  initialValues={getEnvironmentInitValues(
+                                    environmentConfigs
+                                  )}
+                                  runtimeEnvironments={environments}
+                                  onSubmit={this.transformAndSendRuntimesValuesCreator(
+                                    tests,
+                                    config
+                                  )}
+                                />}
+                            </ResourceRenderer>
+                          </Col>
 
-                      <Col lg={6}>
-                        {
-                          <EditExercisePipelinesForm
-                            pipelines={pipelines}
-                            initialValues={{ pipelines: [] }}
-                          />
-                        }
+                          <Col lg={6}>
+                            {environmentConfigs.length === 1
+                              ? <EditExercisePipelinesForm
+                                  pipelines={pipelines}
+                                  initialValues={getPipelinesInitialValues(
+                                    config
+                                  )}
+                                  onSubmit={this.transformAndSendPipelinesCreator(
+                                    tests,
+                                    config,
+                                    environmentConfigs
+                                  )}
+                                />
+                              : <p className="callout callout-warning">
+                                  <FormattedMessage
+                                    id="app.editExerciseConfig.noRuntimes"
+                                    defaultMessage="The runtime environment is not properly configured yet. A runtime must be selected before pipeline configuration becomes available."
+                                  />
+                                </p>}
 
-                        {/* exercise.configurationType !== 'simpleExerciseConfig' &&
+                            {/* exercise.configurationType !== 'simpleExerciseConfig' &&
                   <Box
                     title={
                       <FormattedMessage
@@ -503,8 +550,9 @@ class EditExerciseConfig extends Component {
                     </ResourceRenderer>
                   </Box>
                 */}
-                      </Col>
-                    </Row>}
+                          </Col>
+                        </Row>}
+                    </ResourceRenderer>}
 
                   {hasPermissions(exercise, 'update') &&
                     <div className="em-margin-vertical">
@@ -549,12 +597,12 @@ class EditExerciseConfig extends Component {
                                     <h4>
                                       <i className="icon fa fa-warning" />{' '}
                                       <FormattedMessage
-                                        id="app.editExercise.editConfig"
+                                        id="app.editExerciseConfig.editConfig"
                                         defaultMessage="Edit exercise configuration"
                                       />
                                     </h4>
                                     <FormattedMessage
-                                      id="app.editExerciseSimpleConfig.noTests"
+                                      id="app.editExerciseConfig.noTests"
                                       defaultMessage="There are no tests yet. The form cannot be displayed until at least one test is created."
                                     />
                                   </div>}
@@ -574,7 +622,6 @@ EditExerciseConfig.propTypes = {
   exercise: ImmutablePropTypes.map,
   loggedUser: ImmutablePropTypes.map,
   runtimeEnvironments: PropTypes.object.isRequired,
-  loadAsync: PropTypes.func.isRequired,
   params: PropTypes.shape({
     exerciseId: PropTypes.string.isRequired
   }).isRequired,
@@ -586,6 +633,9 @@ EditExerciseConfig.propTypes = {
   exercisePipelines: ImmutablePropTypes.map,
   environmentsWithEntryPoints: PropTypes.array.isRequired,
   links: PropTypes.object.isRequired,
+  intl: intlShape.isRequired,
+  loadAsync: PropTypes.func.isRequired,
+  fetchPipelinesVariables: PropTypes.func.isRequired,
   setExerciseConfigType: PropTypes.func.isRequired,
   editEnvironmentConfigs: PropTypes.func.isRequired,
   editScoreConfig: PropTypes.func.isRequired,
@@ -593,8 +643,7 @@ EditExerciseConfig.propTypes = {
   fetchConfig: PropTypes.func.isRequired,
   setConfig: PropTypes.func.isRequired,
   reloadExercise: PropTypes.func.isRequired,
-  reloadConfig: PropTypes.func.isRequired,
-  intl: intlShape.isRequired
+  reloadConfig: PropTypes.func.isRequired
 };
 
 export default withLinks(
@@ -619,6 +668,10 @@ export default withLinks(
     },
     (dispatch, { params: { exerciseId } }) => ({
       loadAsync: () => EditExerciseConfig.loadAsync({ exerciseId }, dispatch),
+      fetchPipelinesVariables: (runtimeId, pipelinesIds) =>
+        dispatch(
+          fetchExercisePipelinesVariables(exerciseId, runtimeId, pipelinesIds)
+        ),
       setExerciseConfigType: (exercise, configurationType) => () =>
         dispatch(editExercise(exercise.id, { ...exercise, configurationType })),
       editEnvironmentConfigs: data =>

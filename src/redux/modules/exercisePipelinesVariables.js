@@ -1,4 +1,5 @@
 import { handleActions } from 'redux-actions';
+import { Map } from 'immutable';
 import { createRecord, resourceStatus } from '../helpers/resourceManager';
 import { createApiAction } from '../middleware/apiMiddleware';
 
