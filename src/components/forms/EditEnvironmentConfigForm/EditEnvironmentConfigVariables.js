@@ -10,7 +10,13 @@ import { AddIcon, CloseIcon } from '../../icons';
 
 const EMPTY_VALUE = { file: '', name: '' };
 
-const validateName = value => value.match(/^[-a-zA-Z0-9_]+$/);
+const validateName = value =>
+  value && value.match(/^[-a-zA-Z0-9_]+$/)
+    ? undefined
+    : <FormattedMessage
+        id="app.editEnvironmentConfig.validateName"
+        defaultMessage="This is not a valid variable name."
+      />;
 
 const _validateBrackets = value => {
   const [prefix, ...tokens] = value.split('{');
@@ -29,7 +35,7 @@ const validateWildcard = value => {
   !value.match(/^[-a-zA-Z0-9_.,{}*?]+$/) ||
   !_validateBrackets(value)
     ? <FormattedMessage
-        id="app.editEnvironmentConfig.validateNotWildcard"
+        id="app.editEnvironmentConfig.validateWildcard"
         defaultMessage="This value is not a valid file name or wildcard."
       />
     : undefined;

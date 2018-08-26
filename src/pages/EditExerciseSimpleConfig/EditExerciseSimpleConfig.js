@@ -235,7 +235,7 @@ class EditExerciseSimpleConfig extends Component {
                       <Box
                         title={
                           <FormattedMessage
-                            id="app.editExercise.testsAndScoring"
+                            id="app.editExerciseConfig.testsAndScoring"
                             defaultMessage="Tests and Scoring"
                           />
                         }
@@ -261,7 +261,7 @@ class EditExerciseSimpleConfig extends Component {
                         <Box
                           title={
                             <FormattedMessage
-                              id="app.editExercise.runtimeEnvironments"
+                              id="app.editExerciseConfig.runtimeEnvironments"
                               defaultMessage="Runtime Environments"
                             />
                           }
