@@ -1,156 +1,173 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Field, FieldArray } from 'redux-form';
-import { Table, Button, Row, Col } from 'react-bootstrap';
-import {
-  defineMessages,
-  intlShape,
-  injectIntl,
-  FormattedMessage
-} from 'react-intl';
+import { FormattedMessage } from 'react-intl';
+import { Field } from 'redux-form';
+import { ControlLabel, OverlayTrigger, Tooltip } from 'react-bootstrap';
 
-import { TextField, SelectField, ExpandingTextField } from '../Fields';
-import { AddIcon, RemoveIcon } from '../../icons';
+import FlatButton from '../../widgets/FlatButton';
+import TextField from '../Fields/TextField';
+import { AddIcon, CloseIcon } from '../../icons';
 
-const messages = defineMessages({
-  stringType: {
-    id: 'app.editEnvironmentConfigVariables.stringType',
-    defaultMessage: 'String'
-  },
-  fileType: {
-    id: 'app.editEnvironmentConfigVariables.fileType',
-    defaultMessage: 'File'
-  },
-  remoteFileType: {
-    id: 'app.editEnvironmentConfigVariables.remoteFileType',
-    defaultMessage: 'Remote file'
-  },
-  stringArrayType: {
-    id: 'app.editEnvironmentConfigVariables.stringArrayType',
-    defaultMessage: 'Array of strings'
-  },
-  fileArrayType: {
-    id: 'app.editEnvironmentConfigVariables.fileArrayType',
-    defaultMessage: 'Array of files'
-  },
-  remoteFileArrayType: {
-    id: 'app.editEnvironmentConfigVariables.remoteFileArrayType',
-    defaultMessage: 'Array of remote files'
-  }
-});
+const EMPTY_VALUE = { file: '', name: '' };
+
+const validateName = value => value.match(/^[-a-zA-Z0-9_]+$/);
+
+const _validateBrackets = value => {
+  const [prefix, ...tokens] = value.split('{');
+  return (
+    prefix.match(/^[-a-zA-Z0-9_.,*?]*$/) &&
+    tokens.reduce(
+      (res, token) =>
+        res && token.match(/^[-a-zA-Z0-9_.,]+}[-a-zA-Z0-9_.,*?]*$/),
+      true
+    )
+  );
+};
+
+const validateWildcard = value => {
+  return !value ||
+  !value.match(/^[-a-zA-Z0-9_.,{}*?]+$/) ||
+  !_validateBrackets(value)
+    ? <FormattedMessage
+        id="app.editEnvironmentConfig.validateNotWildcard"
+        defaultMessage="This value is not a valid file name or wildcard."
+      />
+    : undefined;
+};
 
 const EditEnvironmentConfigVariables = ({
+  nameSuggestions = [],
   fields,
-  formValues,
-  intl: { formatMessage }
+  meta: { active, dirty, error, warning },
+  leftLabel = '',
+  rightLabel = '',
+  noItems = null,
+  options,
+  ...props
 }) =>
   <div>
-    <Table>
-      <thead>
-        <tr>
-          <th>
-            <FormattedMessage
-              id="app.editEnvironmentConfigVariables.variables"
-              defaultMessage="Variables:"
-            />
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        {fields.map((variable, index) =>
-          <tr key={index}>
-            <td>
-              <Field
-                name={`${variable}.name`}
-                component={TextField}
-                label={''}
-              />
-            </td>
-            <td>
-              <Row>
-                <Col xs={4} style={{ paddingRight: '0px' }}>
-                  <Field
-                    name={`${variable}.type`}
-                    component={SelectField}
-                    options={[
-                      { key: '', name: '...' },
-                      {
-                        key: 'string',
-                        name: formatMessage(messages.stringType)
-                      },
-                      { key: 'file', name: formatMessage(messages.fileType) },
-                      {
-                        key: 'remote-file',
-                        name: formatMessage(messages.remoteFileType)
-                      },
-                      {
-                        key: 'string[]',
-                        name: formatMessage(messages.stringArrayType)
-                      },
-                      {
-                        key: 'file[]',
-                        name: formatMessage(messages.fileArrayType)
-                      },
-                      {
-                        key: 'remote-file[]',
-                        name: formatMessage(messages.remoteFileArrayType)
-                      }
-                    ]}
-                    label={''}
-                  />
-                </Col>
-                <Col xs={8} style={{ paddingLeft: '0px' }}>
-                  {formValues[index] &&
-                    (formValues[index].type === 'string[]' ||
-                    formValues[index].type === 'remote-file[]'
-                      ? <FieldArray
-                          name={`${variable}.value`}
-                          component={ExpandingTextField}
-                          label={''}
-                        />
-                      : <Field
-                          name={`${variable}.value`}
-                          component={TextField}
-                          label={''}
-                        />)}
-                </Col>
-              </Row>
-            </td>
-            <td style={{ verticalAlign: 'middle' }}>
-              <Button
-                onClick={() => fields.remove(index)}
-                bsStyle={'danger'}
-                bsSize="xs"
-                className="btn-flat"
-              >
-                <RemoveIcon gapRight />
-                <FormattedMessage
-                  id="app.editEnvironmentConfigVariables.remove"
-                  defaultMessage="Remove"
-                />
-              </Button>
-            </td>
+    <datalist id="editEnvironmentConfigVariablesNames">
+      {nameSuggestions.map(name =>
+        <option key={name}>
+          {name}
+        </option>
+      )}
+    </datalist>
+
+    {fields.length > 0 &&
+      <table>
+        <thead>
+          <tr>
+            <th width="50%">
+              <ControlLabel>
+                {leftLabel}
+              </ControlLabel>
+            </th>
+            <th width="50%">
+              <ControlLabel>
+                {rightLabel}
+              </ControlLabel>
+            </th>
+            <th />
           </tr>
-        )}
-      </tbody>
-    </Table>
-    <Button
-      onClick={() => fields.push()}
-      bsStyle={'primary'}
-      className="btn-flat"
-    >
-      <AddIcon gapRight />
-      <FormattedMessage
-        id="app.editEnvironmentConfigVariables.add"
-        defaultMessage="Add variable"
-      />
-    </Button>
+        </thead>
+        <tbody>
+          {fields.map((field, index) =>
+            <tr key={index}>
+              <td className="valign-top">
+                <Field
+                  name={`${field}.name`}
+                  component={TextField}
+                  label={''}
+                  validate={validateName}
+                  maxLength={64}
+                  list="editEnvironmentConfigVariablesNames"
+                  {...props}
+                />
+              </td>
+              <td className="valign-top">
+                <Field
+                  name={`${field}.value`}
+                  component={TextField}
+                  label={''}
+                  validate={validateWildcard}
+                  maxLength={64}
+                  {...props}
+                />
+              </td>
+              <td className="valign-top">
+                <OverlayTrigger
+                  placement="top"
+                  overlay={
+                    <Tooltip id={Date.now()}>
+                      <FormattedMessage
+                        id="app.editEnvironmentConfig.tooltip.remove"
+                        defaultMessage="Remove this variable."
+                      />
+                    </Tooltip>
+                  }
+                >
+                  <FlatButton onClick={() => fields.remove(index)}>
+                    <CloseIcon />
+                  </FlatButton>
+                </OverlayTrigger>
+              </td>
+            </tr>
+          )}
+        </tbody>
+      </table>}
+    <div className="text-center">
+      {fields.length === 0 &&
+        <span style={{ paddingRight: '2em' }}>
+          {noItems ||
+            <FormattedMessage
+              id="app.editEnvironmentConfig.noVariables"
+              defaultMessage="There are no variables yet ..."
+            />}
+        </span>}
+      <OverlayTrigger
+        placement="right"
+        overlay={
+          <Tooltip id={Date.now()}>
+            <FormattedMessage
+              id="app.editEnvironmentConfig.tooltip.add"
+              defaultMessage="Add another variable."
+            />
+          </Tooltip>
+        }
+      >
+        <FlatButton onClick={() => fields.push(EMPTY_VALUE)}>
+          <AddIcon />
+        </FlatButton>
+      </OverlayTrigger>
+    </div>
   </div>;
 
 EditEnvironmentConfigVariables.propTypes = {
-  fields: PropTypes.object,
-  formValues: PropTypes.array,
-  intl: intlShape.isRequired
+  nameSuggestions: PropTypes.array,
+  fields: PropTypes.object.isRequired,
+  meta: PropTypes.shape({
+    active: PropTypes.bool,
+    dirty: PropTypes.bool,
+    error: PropTypes.any,
+    warning: PropTypes.any
+  }).isRequired,
+  leftLabel: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.element,
+    PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) })
+  ]).isRequired,
+  rightLabel: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.element,
+    PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) })
+  ]).isRequired,
+  noItems: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.element,
+    PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) })
+  ]),
+  options: PropTypes.array
 };
 
-export default injectIntl(EditEnvironmentConfigVariables);
+export default EditEnvironmentConfigVariables;

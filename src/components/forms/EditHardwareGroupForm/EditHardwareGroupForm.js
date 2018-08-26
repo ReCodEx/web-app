@@ -7,7 +7,7 @@ import { Alert } from 'react-bootstrap';
 import FormBox from '../../widgets/FormBox';
 import SubmitButton from '../SubmitButton';
 import Button from '../../widgets/FlatButton';
-import Icon, { RefreshIcon } from '../../icons';
+import { InfoIcon, RefreshIcon } from '../../icons';
 
 import { SelectField } from '../Fields';
 
@@ -73,7 +73,7 @@ const EditHardwareGroupForm = ({
     }
   >
     <p className="text-muted text-justify small">
-      <Icon icon="info-circle" gapRight />
+      <InfoIcon gapRight />
       <FormattedMessage
         id="app.editHardwareGroupForm.about"
         defaultMessage="Hardware group is a group of backend workers on which the exercise can be evaluated. The workers are bound to explicit hardware; thus, changing the hardware group of an exercise may affect the performance results. Furthermore, the workers in the group share configuration which implies the constraints for memory and time limits."

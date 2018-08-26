@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { reduxForm, FieldArray } from 'redux-form';
-import { FormattedMessage, intlShape, injectIntl } from 'react-intl';
-import { Alert, Grid, Row, Col } from 'react-bootstrap';
+import { FormattedMessage } from 'react-intl';
+import { Alert } from 'react-bootstrap';
 
 import FormBox from '../../widgets/FormBox';
 import EditExercisePipelinesTable from './EditExercisePipelinesTable';
@@ -22,8 +22,7 @@ class EditExercisePipelinesForm extends Component {
       submitFailed,
       submitSucceeded,
       invalid,
-      error,
-      intl: { locale }
+      error
     } = this.props;
 
     return (
@@ -48,7 +47,7 @@ class EditExercisePipelinesForm extends Component {
                 >
                   <RefreshIcon gapRight />
                   <FormattedMessage id="generic.reset" defaultMessage="Reset" />
-                </Button>{' '}
+                </Button>
               </span>}
 
             <SubmitButton
@@ -90,7 +89,6 @@ class EditExercisePipelinesForm extends Component {
 EditExercisePipelinesForm.propTypes = {
   pipelines: PropTypes.array,
   readOnly: PropTypes.bool,
-  values: PropTypes.array,
   reset: PropTypes.func.isRequired,
   handleSubmit: PropTypes.func.isRequired,
   dirty: PropTypes.bool,
@@ -98,8 +96,7 @@ EditExercisePipelinesForm.propTypes = {
   submitFailed: PropTypes.bool,
   submitSucceeded: PropTypes.bool,
   invalid: PropTypes.bool,
-  error: PropTypes.any,
-  intl: intlShape.isRequired
+  error: PropTypes.any
 };
 
 const validate = formData => {
@@ -133,4 +130,4 @@ export default reduxForm({
   enableReinitialize: true,
   keepDirtyOnReinitialize: false,
   validate
-})(injectIntl(EditExercisePipelinesForm));
+})(EditExercisePipelinesForm);

@@ -60,8 +60,8 @@ import {
   transformTestsValues
 } from '../../helpers/exercise/tests';
 import {
-  getEnvInitValues,
-  transformEnvValues
+  getSimpleEnvironmentsInitValues,
+  transformSimpleEnvironmentsValues
 } from '../../helpers/exercise/environments';
 import {
   getSimpleConfigInitValues,
@@ -124,7 +124,7 @@ class EditExerciseSimpleConfig extends Component {
       const { editEnvironmentConfigs, reloadConfig, setConfig } = this.props;
 
       return data => {
-        const newEnvironments = transformEnvValues(
+        const newEnvironments = transformSimpleEnvironmentsValues(
           data,
           environmentConfigs,
           environments
@@ -280,9 +280,8 @@ class EditExerciseSimpleConfig extends Component {
                               >
                                 {environments =>
                                   <EditEnvironmentSimpleForm
-                                    initialValues={getEnvInitValues(
-                                      environmentConfigs,
-                                      environments
+                                    initialValues={getSimpleEnvironmentsInitValues(
+                                      environmentConfigs
                                     )}
                                     runtimeEnvironments={environments}
                                     onSubmit={this.transformAndSendEnvValuesCreator(

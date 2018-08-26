@@ -13,7 +13,7 @@ import EditGroupForm from '../../components/forms/EditGroupForm';
 import OrganizationalGroupButtonContainer from '../../containers/OrganizationalGroupButtonContainer';
 import DeleteGroupButtonContainer from '../../containers/DeleteGroupButtonContainer';
 import Box from '../../components/widgets/Box';
-import Icon, { BanIcon } from '../../components/icons';
+import { BanIcon, InfoIcon } from '../../components/icons';
 
 import { fetchGroupIfNeeded, editGroup } from '../../redux/modules/groups';
 import { groupSelector } from '../../redux/selectors/groups';
@@ -134,7 +134,7 @@ class EditGroup extends Component {
                 </Col>
                 <Col lg={9}>
                   <p className="small text-muted" style={{ padding: '0.75em' }}>
-                    <Icon icon="info-circle" gapRight />
+                    <InfoIcon gapRight />
                     <FormattedMessage
                       id="app.editGroup.organizationalExplain"
                       defaultMessage="Regular groups are containers for students and assignments. Organizational groups are intended to create hierarchy, so they are forbidden to hold any students or assignments."
