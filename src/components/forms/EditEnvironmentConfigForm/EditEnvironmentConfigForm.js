@@ -17,7 +17,7 @@ import SubmitButton from '../SubmitButton';
 import Button from '../../widgets/FlatButton';
 import { InfoIcon, RefreshIcon } from '../../icons';
 import { compareVariablesForEquality } from '../../../helpers/exercise/environments';
-import { safeGet } from '../../../helpers/common';
+import { safeGet, safeSet } from '../../../helpers/common';
 
 class EditEnvironmentConfigForm extends Component {
   setDefaultVariables = () => {
@@ -33,6 +33,7 @@ class EditEnvironmentConfigForm extends Component {
   render() {
     const {
       runtimeEnvironments,
+      possibleVariables = null,
       selectedRuntimeId,
       hasDefaultVariables,
       dirty,
@@ -43,6 +44,7 @@ class EditEnvironmentConfigForm extends Component {
       submitSucceeded,
       invalid,
       error,
+      warning,
       intl: { locale }
     } = this.props;
 
@@ -85,6 +87,15 @@ class EditEnvironmentConfigForm extends Component {
           </div>
         }
       >
+        {possibleVariables &&
+          <datalist id="editEnvironmentConfigVariablesNames">
+            {Object.keys(possibleVariables).map(name =>
+              <option key={name}>
+                {name}
+              </option>
+            )}
+          </datalist>}
+
         <p className="text-muted small em-padding-horizontal">
           <InfoIcon gapRight />
           <FormattedMessage
@@ -137,7 +148,7 @@ class EditEnvironmentConfigForm extends Component {
           </React.Fragment>}
 
         {!selectedRuntimeId &&
-          <Alert bsStyle="warning">
+          <Alert bsStyle="warning" className="em-margin-top">
             <FormattedMessage
               id="app.editEnvironmentConfig.noRuntimeSelected"
               defaultMessage="There must be a runtime environment selected before you can proceed with exercise configuration."
@@ -145,7 +156,7 @@ class EditEnvironmentConfigForm extends Component {
           </Alert>}
 
         {submitFailed &&
-          <Alert bsStyle="danger">
+          <Alert bsStyle="danger" className="em-margin-top">
             <FormattedMessage
               id="generic.savingFailed"
               defaultMessage="Saving failed. Please try again later."
@@ -153,8 +164,13 @@ class EditEnvironmentConfigForm extends Component {
           </Alert>}
 
         {error &&
-          <Alert bsStyle="danger">
+          <Alert bsStyle="danger" className="em-margin-top">
             {error}
+          </Alert>}
+
+        {warning &&
+          <Alert bsStyle="warning" className="em-margin-top">
+            {warning}
           </Alert>}
       </FormBox>
     );
@@ -164,6 +180,7 @@ class EditEnvironmentConfigForm extends Component {
 EditEnvironmentConfigForm.propTypes = {
   selectedPipelines: PropTypes.array,
   runtimeEnvironments: PropTypes.array.isRequired,
+  possibleVariables: PropTypes.object,
   readOnly: PropTypes.bool,
   selectedRuntimeId: PropTypes.string,
   defaultVariables: PropTypes.array,
@@ -177,12 +194,87 @@ EditEnvironmentConfigForm.propTypes = {
   submitSucceeded: PropTypes.bool,
   invalid: PropTypes.bool,
   error: PropTypes.any,
+  warning: PropTypes.any,
   intl: intlShape.isRequired
 };
 
-const warn = formData => {
+const validate = ({ variables }) => {
+  const errors = {};
+
+  // Check variable names.
+  const index = {};
+  variables.forEach(({ name }, idx) => {
+    if (!name || !name.match(/^[-a-zA-Z0-9_]+$/)) {
+      safeSet(
+        errors,
+        ['variables', idx, 'name'],
+        <FormattedMessage
+          id="app.editEnvironmentConfig.validateName"
+          defaultMessage="This is not a valid variable name."
+        />
+      );
+    } else {
+      if (!index[name]) {
+        index[name] = [];
+      }
+      index[name].push(idx);
+    }
+  });
+
+  // Check variable name duplicities
+  Object.keys(index).forEach(name => {
+    if (index[name].length > 1) {
+      index[name].forEach(idx =>
+        safeSet(
+          errors,
+          ['variables', idx, 'name'],
+          <FormattedMessage
+            id="app.editEnvironmentConfig.duplicateVariable"
+            defaultMessage="Duplicate variable name."
+          />
+        )
+      );
+    }
+  });
+
+  return errors;
+};
+
+const warn = ({ variables }, { possibleVariables = null }) => {
   const warnings = {};
-  // TODO -- complete validation against pipeline variables, warn if variable does not exist.
+  if (possibleVariables) {
+    variables
+      .filter(({ name }) => name && name.match(/^[-a-zA-Z0-9_]+$/))
+      .forEach(({ name }, idx) => {
+        if (!possibleVariables[name]) {
+          safeSet(
+            warnings,
+            ['variables', idx, 'name'],
+            <FormattedMessage
+              id="app.editEnvironmentConfig.warnings.unknownVariable"
+              defaultMessage="This variable is not defined in any pipeline."
+            />
+          );
+        } else if (possibleVariables[name] > 1) {
+          safeSet(
+            warnings,
+            ['variables', idx, 'name'],
+            <FormattedMessage
+              id="app.editEnvironmentConfig.warnings.ambiguousVariable"
+              defaultMessage="This variable is defined in multiple pipelines. The value will be used in all of them."
+            />
+          );
+        }
+      });
+  } else {
+    warnings._warning = (
+      <FormattedMessage
+        id="app.editEnvironmentConfig.warnings.noPipelinesVariables"
+        defaultMessage="There are no pipelines set. Name of the variables may not be verified."
+      />
+    );
+  }
+
   return warnings;
 };
 
@@ -208,6 +300,7 @@ export default connect((state, { runtimeEnvironments }) => {
     form: 'editEnvironmentConfig',
     enableReinitialize: true,
     keepDirtyOnReinitialize: false,
+    validate,
     warn
   })(injectIntl(EditEnvironmentConfigForm))
 );

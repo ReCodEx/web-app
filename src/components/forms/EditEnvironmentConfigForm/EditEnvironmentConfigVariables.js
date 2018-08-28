@@ -10,14 +10,6 @@ import { AddIcon, CloseIcon } from '../../icons';
 
 const EMPTY_VALUE = { file: '', name: '' };
 
-const validateName = value =>
-  value && value.match(/^[-a-zA-Z0-9_]+$/)
-    ? undefined
-    : <FormattedMessage
-        id="app.editEnvironmentConfig.validateName"
-        defaultMessage="This is not a valid variable name."
-      />;
-
 const _validateBrackets = value => {
   const [prefix, ...tokens] = value.split('{');
   return (
@@ -52,14 +44,6 @@ const EditEnvironmentConfigVariables = ({
   ...props
 }) =>
   <div>
-    <datalist id="editEnvironmentConfigVariablesNames">
-      {nameSuggestions.map(name =>
-        <option key={name}>
-          {name}
-        </option>
-      )}
-    </datalist>
-
     {fields.length > 0 &&
       <table>
         <thead>
@@ -85,7 +69,6 @@ const EditEnvironmentConfigVariables = ({
                   name={`${field}.name`}
                   component={TextField}
                   label={''}
-                  validate={validateName}
                   maxLength={64}
                   list="editEnvironmentConfigVariablesNames"
                   {...props}

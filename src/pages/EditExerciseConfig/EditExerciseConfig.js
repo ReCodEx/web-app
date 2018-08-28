@@ -35,6 +35,7 @@ import { loggedInUserSelector } from '../../redux/selectors/users';
 import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments';
 import { runtimeEnvironmentsSelector } from '../../redux/selectors/runtimeEnvironments';
 import { fetchExercisePipelinesVariables } from '../../redux/modules/exercisePipelinesVariables';
+import { getExercisePielinesVariablesJS } from '../../redux/selectors/exercisePipelinesVariables';
 /*
 import {
   deletePipeline,
@@ -75,7 +76,8 @@ import {
   getSimpleEnvironmentsInitValues,
   getEnvironmentInitValues,
   transformSimpleEnvironmentsValues,
-  transformEnvironmentValues
+  transformEnvironmentValues,
+  getPossibleVariablesNames
 } from '../../helpers/exercise/environments';
 import {
   isSimple,
@@ -87,6 +89,7 @@ import {
   transformConfigValues
 } from '../../helpers/exercise/configSimple';
 import {
+  getPipelines,
   getPipelinesInitialValues,
   assembleNewConfig
 } from '../../helpers/exercise/configAdvanced';
@@ -178,7 +181,7 @@ class EditExerciseConfig extends Component {
       setConfig,
       reloadConfig
     } = this.props;
-    const pipelines = getPipelinesInitialValues(config).pipelines;
+    const pipelines = getPipelines(config);
     return data => {
       const environmentConfigs = transformEnvironmentValues(data);
       const runtimeId = safeGet(
@@ -187,20 +190,23 @@ class EditExerciseConfig extends Component {
         null
       );
 
-      return editEnvironmentConfigs({ environmentConfigs })
-        .then(() => fetchPipelinesVariables(runtimeId, pipelines))
-        .then(({ value: pipelineVariables }) =>
-          setConfig(
-            assembleNewConfig(
-              config,
-              runtimeId,
-              tests,
-              pipelines,
-              pipelineVariables
+      const res = editEnvironmentConfigs({ environmentConfigs });
+      return pipelines && pipelines.length > 0
+        ? res
+            .then(() => fetchPipelinesVariables(runtimeId, pipelines))
+            .then(({ value: pipelinesVariables }) =>
+              setConfig(
+                assembleNewConfig(
+                  config,
+                  runtimeId,
+                  tests,
+                  pipelines,
+                  pipelinesVariables
+                )
+              )
             )
-          )
-        )
-        .then(reloadConfig);
+            .then(reloadConfig)
+        : res;
     };
   });
 
@@ -214,14 +220,14 @@ class EditExerciseConfig extends Component {
       );
 
       return fetchPipelinesVariables(runtimeId, pipelines)
-        .then(({ value: pipelineVariables }) =>
+        .then(({ value: pipelinesVariables }) =>
           setConfig(
             assembleNewConfig(
               config,
               runtimeId,
               tests,
               pipelines,
-              pipelineVariables
+              pipelinesVariables
             )
           )
         )
@@ -242,6 +248,7 @@ class EditExerciseConfig extends Component {
       pipelines,
       // exercisePipelines,
       environmentsWithEntryPoints,
+      pipelinesVariables,
       setExerciseConfigType,
       intl: { locale },
       links: {
@@ -445,6 +452,11 @@ class EditExerciseConfig extends Component {
                                     environmentConfigs
                                   )}
                                   runtimeEnvironments={environments}
+                                  possibleVariables={getPossibleVariablesNames(
+                                    pipelines,
+                                    getPipelines(config)
+                                  )}
+                                  readOnly={!hasPermissions(exercise, 'update')}
                                   onSubmit={this.transformAndSendRuntimesValuesCreator(
                                     tests,
                                     config
@@ -460,6 +472,7 @@ class EditExerciseConfig extends Component {
                                   initialValues={getPipelinesInitialValues(
                                     config
                                   )}
+                                  readOnly={!hasPermissions(exercise, 'update')}
                                   onSubmit={this.transformAndSendPipelinesCreator(
                                     tests,
                                     config,
@@ -632,6 +645,7 @@ EditExerciseConfig.propTypes = {
   pipelines: ImmutablePropTypes.map,
   exercisePipelines: ImmutablePropTypes.map,
   environmentsWithEntryPoints: PropTypes.array.isRequired,
+  pipelinesVariables: PropTypes.object,
   links: PropTypes.object.isRequired,
   intl: intlShape.isRequired,
   loadAsync: PropTypes.func.isRequired,
@@ -663,7 +677,8 @@ export default withLinks(
         //        exercisePipelines: exercisePipelinesSelector(exerciseId)(state),
         environmentsWithEntryPoints: getPipelinesEnvironmentsWhichHasEntryPoint(
           state
-        )
+        ),
+        pipelinesVariables: getExercisePielinesVariablesJS(exerciseId)(state)
       };
     },
     (dispatch, { params: { exerciseId } }) => ({

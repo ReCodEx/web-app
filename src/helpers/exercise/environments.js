@@ -1,3 +1,4 @@
+import { defaultMemoize } from 'reselect';
 import { safeGet, arrayToObject } from '../../helpers/common';
 
 /**
@@ -123,3 +124,37 @@ export const compareVariablesForEquality = (vars1, vars2) => {
     return res && value === v.value && (!type || !v.type || type === v.type);
   }, true);
 };
+
+/**
+ * Get possible variables of file[] type, which can be used in advanced environmentConfig.
+ * The variables are returned in an object, names are the keys values are numbers of pipelines in which a variable of that name is present.
+ * @param {object} pipelines All pipelines descriptors.
+ * @param {array} selectedPipelinesIds Selected pipelines IDs.
+ * @returns {object} Variable names and how many times they are present in the pipeline sequence.
+ */
+export const getPossibleVariablesNames = defaultMemoize(
+  (pipelines, selectedPipelinesIds) => {
+    if (
+      !pipelines ||
+      !selectedPipelinesIds ||
+      selectedPipelinesIds.length === 0
+    ) {
+      return null;
+    }
+
+    const res = {};
+    selectedPipelinesIds &&
+      selectedPipelinesIds.forEach(pid => {
+        const pipelineVariables = safeGet(pipelines, [
+          ({ id }) => id === pid,
+          'pipeline',
+          'variables'
+        ]);
+        pipelineVariables &&
+          pipelineVariables
+            .filter(({ type }) => type === 'file[]')
+            .forEach(({ name }) => (res[name] = res[name] ? res[name] + 1 : 1));
+      });
+    return res;
+  }
+);
