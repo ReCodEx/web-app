@@ -22,7 +22,8 @@ class EditExercisePipelinesForm extends Component {
       submitFailed,
       submitSucceeded,
       invalid,
-      error
+      error,
+      warning
     } = this.props;
 
     return (
@@ -62,8 +63,15 @@ class EditExercisePipelinesForm extends Component {
           </div>
         }
       >
+        <FieldArray
+          name="pipelines"
+          component={EditExercisePipelinesTable}
+          pipelines={pipelines}
+          readOnly={readOnly}
+        />
+
         {submitFailed &&
-          <Alert bsStyle="danger">
+          <Alert bsStyle="danger" className="em-margin">
             <FormattedMessage
               id="generic.savingFailed"
               defaultMessage="Saving failed. Please try again later."
@@ -71,16 +79,14 @@ class EditExercisePipelinesForm extends Component {
           </Alert>}
 
         {error &&
-          <Alert bsStyle="danger">
+          <Alert bsStyle="danger" className="em-margin">
             {error}
           </Alert>}
 
-        <FieldArray
-          name="pipelines"
-          component={EditExercisePipelinesTable}
-          pipelines={pipelines}
-          readOnly={readOnly}
-        />
+        {warning &&
+          <Alert bsStyle="warning" className="em-margin">
+            {warning}
+          </Alert>}
       </FormBox>
     );
   }
@@ -96,7 +102,8 @@ EditExercisePipelinesForm.propTypes = {
   submitFailed: PropTypes.bool,
   submitSucceeded: PropTypes.bool,
   invalid: PropTypes.bool,
-  error: PropTypes.any
+  error: PropTypes.any,
+  warning: PropTypes.any
 };
 
 const validate = formData => {
