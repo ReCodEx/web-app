@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
 import { push } from 'react-router-redux';
 
 import Page from '../../components/layout/Page';
@@ -17,18 +17,49 @@ import { groupsSelector } from '../../redux/selectors/groups';
 import GroupTree from '../../components/Groups/GroupTree';
 import { getJsData } from '../../redux/helpers/resourceManager';
 import FilterArchiveGroupsForm from '../../components/forms/FilterArchiveGroupsForm/FilterArchiveGroupsForm';
+import { getLocalizedName } from '../../helpers/getLocalizedData';
 
-const getVisibleArchiveGroupsMap = groups => {
+// lowercase and remove accents and this kind of stuff
+const normalizeString = str =>
+  str.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+
+const getVisibleArchiveGroupsMap = (groups, showAll, search, locale) => {
   var result = {};
-  groups.toArray().forEach(groupObj => {
+  const groupArray = groups.toArray();
+
+  // first mark all possibly visible
+  groupArray.forEach(groupObj => {
     const group = getJsData(groupObj);
-    if (group.archived) {
+    if (showAll) {
+      result[group.id] = true;
+    } else if (group.archived) {
       result[group.id] = true;
       group.parentGroupsIds.forEach(parentGroupId => {
         result[parentGroupId] = true;
       });
     }
   });
+
+  // then remove that not matching search pattern
+  groupArray.forEach(groupObj => {
+    const group = getJsData(groupObj);
+    if (result[group.id] && search && search !== '') {
+      const name = getLocalizedName(group, locale);
+      result[group.id] =
+        normalizeString(name).indexOf(normalizeString(search)) !== -1;
+    }
+  });
+
+  // and finally add parent groups of selected ones
+  groupArray.forEach(groupObj => {
+    const group = getJsData(groupObj);
+    if (result[group.id]) {
+      group.parentGroupsIds.forEach(parentGroupId => {
+        result[parentGroupId] = true;
+      });
+    }
+  });
+
   return result;
 };
 
@@ -46,7 +77,7 @@ class Archive extends Component {
   }
 
   render() {
-    const { instance, groups } = this.props;
+    const { instance, groups, intl: { locale } } = this.props;
 
     return (
       <Page
@@ -85,8 +116,12 @@ class Archive extends Component {
             <React.Fragment>
               <FilterArchiveGroupsForm
                 form="archive-filters"
+                initialValues={{ showAll: false, search: '' }}
                 onSubmit={data => {
-                  this.setState({ showAll: Boolean(data.showAll) });
+                  this.setState({
+                    showAll: Boolean(data.showAll),
+                    search: data.search || ''
+                  });
                   return Promise.resolve();
                 }}
               />
@@ -96,11 +131,12 @@ class Archive extends Component {
                   id={data.rootGroupId}
                   isAdmin={false}
                   groups={groups}
-                  visibleGroupsMap={
-                    this.state.showAll
-                      ? null
-                      : getVisibleArchiveGroupsMap(groups)
-                  }
+                  visibleGroupsMap={getVisibleArchiveGroupsMap(
+                    groups,
+                    this.state.showAll,
+                    this.state.search,
+                    locale
+                  )}
                 />}
             </React.Fragment>
           </Box>}
@@ -115,7 +151,8 @@ Archive.propTypes = {
   links: PropTypes.object.isRequired,
   instanceId: PropTypes.string.isRequired,
   instance: ImmutablePropTypes.map,
-  groups: ImmutablePropTypes.map
+  groups: ImmutablePropTypes.map,
+  intl: intlShape
 };
 
 export default withLinks(
@@ -131,5 +168,5 @@ export default withLinks(
       loadAsync: instanceId => Archive.loadAsync({}, dispatch, { instanceId }),
       push: url => dispatch(push(url))
     })
-  )(Archive)
+  )(injectIntl(Archive))
 );
