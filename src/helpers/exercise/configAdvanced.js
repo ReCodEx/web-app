@@ -1,9 +1,9 @@
 import { defaultMemoize } from 'reselect';
-import { safeGet, arrayToObject } from '../common';
+import { safeGet, arrayToObject, encodeNumId, encodeId } from '../common';
 
 /**
  * Return ordered list of pipeline IDs used in exercise config.
- * @param {object} config Exercise configuration object.
+ * @param {Object[]} config Exercise configuration object.
  */
 export const getPipelines = defaultMemoize(config =>
   // There should be only one environment and all tests have the same pipelines (hence we take first and first)
@@ -12,11 +12,79 @@ export const getPipelines = defaultMemoize(config =>
 
 /**
  * Return initial values (list of pipeline IDs) for EditExercisePipelinesForm.
- * @param {object} config Exercise configuration object.
+ * @param {Object[]} config Exercise configuration object.
  */
 export const getPipelinesInitialValues = defaultMemoize(config => ({
   pipelines: getPipelines(config)
 }));
+
+/**
+ * Get list of variables from exercise config (for given runtime, test, and pipeline).
+ * @param {Object[]} config
+ * @param {string} runtimeId
+ * @param {number} testId
+ * @param {number} pipelineIdx
+ * @param {string} pipelineId
+ */
+const getConfigVariables = (
+  config,
+  runtimeId,
+  testId,
+  pipelineIdx,
+  pipelineId
+) => {
+  const pipeline = safeGet(config, [
+    ({ name }) => name === runtimeId,
+    'tests',
+    ({ name }) => name === testId,
+    'pipelines',
+    pipelineIdx
+  ]);
+  return pipeline && pipeline.name === pipelineId ? pipeline.variables : null;
+};
+
+/**
+ * Safe way to get value of specific variable (of given runtime, test, and pipeline) in exercise config.
+ * Variable type may be optionally tested. If not present (or type does not match), defaultValue is returned.
+ * @param {Object[]} config
+ * @param {string} runtimeId
+ * @param {number} testId
+ * @param {number} pipelineIdx
+ * @param {string} pipelineId
+ * @param {string} variableName
+ * @param {?string} variableType
+ * @param {*} defaultValue
+ * */
+const getConfigVariableValue = (
+  config,
+  runtimeId,
+  testId,
+  pipelineIdx,
+  pipelineId,
+  variableName,
+  variableType = null,
+  defaultValue = undefined
+) => {
+  const variables = getConfigVariables(
+    config,
+    runtimeId,
+    testId,
+    pipelineIdx,
+    pipelineId
+  );
+  return (
+    variables &&
+    safeGet(
+      variables,
+      [
+        ({ name, type }) =>
+          name === variableName && (!variableType || type === variableType),
+        'value'
+      ],
+      defaultValue
+    )
+  );
+};
 
 /**
  * Merge variable list from old config and prescribed defaults from pipelinesVariables.
@@ -29,16 +97,12 @@ const mergeConfigVariables = (oldVars, pipelineVars) => {
     return oldVars;
   }
 
-  const mustHave = arrayToObject(pipelineVars, ({ name }) => name);
+  const olds = arrayToObject(oldVars, ({ name }) => name);
   const res = [];
-  oldVars
-    .filter(({ name, type }) => mustHave[name] && mustHave[name].type === type)
-    .forEach(v => {
-      res.push(v);
-      delete mustHave[v.name];
-    });
-
-  Object.values(mustHave).forEach(v => res.push(v));
+  pipelineVars.forEach(v => {
+    // Use old value if appropriate variable exists or pipelines variable with default value.
+    res.push(olds[v.name] && olds[v.name].type === v.type ? olds[v.name] : v);
+  });
   return res;
 };
 
@@ -48,35 +112,34 @@ const mergeConfigVariables = (oldVars, pipelineVars) => {
  * @param {object} oldConfig Original (current) exercise configuration.
  * @param {string} runtimeId Selected environment runtime ID.
  * @param {array} tests List of tests of the exercise.
- * @param {array} pipelines Sequence of pipeline IDs used in the configuration.
- * @param {object} pipelinesVariables Descriptors of variables which are expected to be set for each pipeline.
+ * @param {array} pipelinesVariables Descriptors of variables which are expected to be set for each pipeline.
  */
 export const assembleNewConfig = (
   oldConfig,
   runtimeId,
   tests,
-  pipelines,
   pipelinesVariables
 ) => ({
   config: [
     {
       name: runtimeId,
-      tests: tests.map(test => ({
-        name: test.id,
-        pipelines: pipelines.map(pid => ({
-          name: pid,
-          variables: mergeConfigVariables(
-            safeGet(oldConfig, [
-              ({ name }) => name === runtimeId,
-              'tests',
-              ({ name }) => name === test.id,
-              'pipelines',
-              ({ name }) => name === pid,
-              'variables'
-            ]),
-            safeGet(pipelinesVariables, [pid])
-          )
-        }))
+      tests: tests.map(({ id: testId }) => ({
+        name: testId,
+        pipelines: pipelinesVariables.map(
+          ({ id: pipelineId, variables }, pipelineIdx) => ({
+            name: pipelineId,
+            variables: mergeConfigVariables(
+              getConfigVariables(
+                oldConfig,
+                runtimeId,
+                testId,
+                pipelineIdx,
+                pipelineId
+              ),
+              variables
+            )
+          })
+        )
       }))
     }
   ]
@@ -85,4 +148,67 @@ export const assembleNewConfig = (
 /**
  *
  */
-export const getAdvancedConfigInitialValues = () => {};
+export const getAdvancedConfigInitValues = (
+  exerciseConfig,
+  runtimeId,
+  tests,
+  pipelinesVariables
+) => {
+  const config = {};
+
+  if (runtimeId && tests && pipelinesVariables) {
+    tests.forEach(({ id: testId }) => {
+      config[
+        encodeNumId(testId)
+      ] = pipelinesVariables.map(
+        ({ id: pipelineId, variables }, pipelineIdx) => {
+          const res = {};
+          variables.forEach(({ name, type, value }) => {
+            res[encodeId(name)] = getConfigVariableValue(
+              exerciseConfig,
+              runtimeId,
+              testId,
+              pipelineIdx,
+              pipelineId,
+              name,
+              type,
+              value
+            );
+          });
+          return res;
+        }
+      );
+    });
+  }
+  return { config };
+};
+
+export const transformAdvancedConfigValues = (
+  { config },
+  runtimeId,
+  tests,
+  pipelinesVariables
+) => ({
+  config: [
+    {
+      name: runtimeId,
+      tests: tests.map(({ id: testId }) => ({
+        name: testId,
+        pipelines: pipelinesVariables.map(
+          ({ id: pipelineId, variables }, pipelineIdx) => ({
+            name: pipelineId,
+            variables: variables.map(({ name, type }) => ({
+              name,
+              type,
+              value: safeGet(config, [
+                encodeNumId(testId),
+                pipelineIdx,
+                encodeId(name)
+              ])
+            }))
+          })
+        )
+      }))
+    }
+  ]
+});

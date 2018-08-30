@@ -12,12 +12,14 @@ import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import SupplementaryFilesTableContainer from '../../containers/SupplementaryFilesTableContainer';
 import EditTestsForm from '../../components/forms/EditTestsForm';
 import EditExerciseSimpleConfigForm from '../../components/forms/EditExerciseSimpleConfigForm';
+import EditExerciseAdvancedConfigForm from '../../components/forms/EditExerciseAdvancedConfigForm';
 import EditEnvironmentSimpleForm from '../../components/forms/EditEnvironmentSimpleForm';
 import EditEnvironmentConfigForm from '../../components/forms/EditEnvironmentConfigForm';
+import EditExercisePipelinesForm from '../../components/forms/EditExercisePipelinesForm/EditExercisePipelinesForm';
 // import PipelinesSimpleList from '../../components/Pipelines/PipelinesSimpleList';
 import ExerciseButtons from '../../components/Exercises/ExerciseButtons';
 import ExerciseConfigTypeButton from '../../components/buttons/ExerciseConfigTypeButton';
-import { InfoIcon, NeedFixingIcon } from '../../components/icons';
+import { InfoIcon, NeedFixingIcon, WarningIcon } from '../../components/icons';
 
 import {
   fetchExercise,
@@ -74,6 +76,7 @@ import {
 } from '../../helpers/exercise/tests';
 import {
   getSimpleEnvironmentsInitValues,
+  getFirstEnvironmentId,
   getEnvironmentInitValues,
   transformSimpleEnvironmentsValues,
   transformEnvironmentValues,
@@ -86,16 +89,18 @@ import {
 } from '../../helpers/exercise/config';
 import {
   getSimpleConfigInitValues,
-  transformConfigValues
+  transformSimpleConfigValues,
+  DATA_ONLY_ID
 } from '../../helpers/exercise/configSimple';
 import {
   getPipelines,
   getPipelinesInitialValues,
-  assembleNewConfig
+  assembleNewConfig,
+  getAdvancedConfigInitValues,
+  transformAdvancedConfigValues
 } from '../../helpers/exercise/configAdvanced';
 import { isEmpoweredSupervisorRole } from '../../components/helpers/usersRoles';
 import { hasPermissions, safeGet } from '../../helpers/common';
-import EditExercisePipelinesForm from '../../components/forms/EditExercisePipelinesForm/EditExercisePipelinesForm';
 
 class EditExerciseConfig extends Component {
   componentWillMount = () => this.props.loadAsync();
@@ -116,7 +121,22 @@ class EditExerciseConfig extends Component {
             dispatch(fetchExerciseConfigIfNeeded(exerciseId)),
             dispatch(fetchExerciseEnvironmentConfigIfNeeded(exerciseId)),
             dispatch(fetchRuntimeEnvironments())
-          ])
+          ]).then(([{ value: config }, { value: environmentConfig }]) => {
+            const runtimeId = safeGet(environmentConfig, [
+              0,
+              'runtimeEnvironmentId'
+            ]);
+            const pipelinesIds = getPipelines(config);
+            return runtimeId && pipelinesIds && pipelinesIds.length > 0
+              ? dispatch(
+                  fetchExercisePipelinesVariables(
+                    exerciseId,
+                    runtimeId,
+                    pipelinesIds
+                  )
+                )
+              : null;
+          })
       ),
       dispatch(fetchScoreConfigIfNeeded(exerciseId)),
       dispatch(fetchExerciseTestsIfNeeded(exerciseId)),
@@ -133,18 +153,10 @@ class EditExerciseConfig extends Component {
   };
 
   transformAndSendConfigValuesCreator = defaultMemoize(
-    (pipelines, environmentConfigs, tests, config) => {
+    (transform, ...transformArgs) => {
       const { setConfig, reloadExercise } = this.props;
       return data =>
-        setConfig(
-          transformConfigValues(
-            data,
-            pipelines,
-            environmentConfigs,
-            tests,
-            config
-          )
-        ).then(reloadExercise);
+        setConfig(transform(data, ...transformArgs)).then(reloadExercise);
     }
   );
 
@@ -158,7 +170,7 @@ class EditExerciseConfig extends Component {
           environmentConfigs,
           environments
         );
-        const configData = transformConfigValues(
+        const configData = transformSimpleConfigValues(
           getSimpleConfigInitValues(config, tests, environmentConfigs),
           pipelines,
           newEnvironments,
@@ -181,7 +193,7 @@ class EditExerciseConfig extends Component {
       setConfig,
       reloadConfig
     } = this.props;
-    const pipelines = getPipelines(config);
+    const selectedPipelines = getPipelines(config);
     return data => {
       const environmentConfigs = transformEnvironmentValues(data);
       const runtimeId = safeGet(
@@ -191,18 +203,12 @@ class EditExerciseConfig extends Component {
       );
 
       const res = editEnvironmentConfigs({ environmentConfigs });
-      return pipelines && pipelines.length > 0
+      return selectedPipelines && selectedPipelines.length > 0
         ? res
-            .then(() => fetchPipelinesVariables(runtimeId, pipelines))
+            .then(() => fetchPipelinesVariables(runtimeId, selectedPipelines))
             .then(({ value: pipelinesVariables }) =>
               setConfig(
-                assembleNewConfig(
-                  config,
-                  runtimeId,
-                  tests,
-                  pipelines,
-                  pipelinesVariables
-                )
+                assembleNewConfig(config, runtimeId, tests, pipelinesVariables)
               )
             )
             .then(reloadConfig)
@@ -222,13 +228,7 @@ class EditExerciseConfig extends Component {
       return fetchPipelinesVariables(runtimeId, pipelines)
         .then(({ value: pipelinesVariables }) =>
           setConfig(
-            assembleNewConfig(
-              config,
-              runtimeId,
-              tests,
-              pipelines,
-              pipelinesVariables
-            )
+            assembleNewConfig(config, runtimeId, tests, pipelinesVariables)
           )
         )
         .then(reloadConfig);
@@ -308,7 +308,7 @@ class EditExerciseConfig extends Component {
                   {exercise.isBroken &&
                     <Row>
                       <Col sm={12}>
-                        <div className="alert alert-warning">
+                        <div className="callout callout-warning">
                           <h4>
                             <NeedFixingIcon gapRight />
                             <FormattedMessage
@@ -593,25 +593,56 @@ class EditExerciseConfig extends Component {
                                       }
                                       dataOnly={Boolean(
                                         exercise.runtimeEnvironments.find(
-                                          env => env.id === 'data-linux'
+                                          env => env.id === DATA_ONLY_ID
                                         )
                                       )}
                                       onSubmit={this.transformAndSendConfigValuesCreator(
+                                        transformSimpleConfigValues,
                                         pipelines,
                                         envConfig,
                                         tests,
                                         config
                                       )}
                                     />
-                                  : <div className="callout callout-warning">
-                                      EditExerciseConfigForm - TODO
-                                    </div>
-                                : <div className="alert alert-warning">
+                                  : pipelinesVariables &&
+                                    pipelinesVariables.length > 0
+                                    ? <EditExerciseAdvancedConfigForm
+                                        exerciseId={exerciseId}
+                                        exerciseTests={tests}
+                                        pipelines={pipelines}
+                                        pipelinesVariables={pipelinesVariables}
+                                        initialValues={getAdvancedConfigInitValues(
+                                          config,
+                                          getFirstEnvironmentId(envConfig),
+                                          tests,
+                                          pipelinesVariables
+                                        )}
+                                        onSubmit={this.transformAndSendConfigValuesCreator(
+                                          transformAdvancedConfigValues,
+                                          getFirstEnvironmentId(envConfig),
+                                          tests,
+                                          pipelinesVariables
+                                        )}
+                                      />
+                                    : <div className="callout callout-warning">
+                                        <h4>
+                                          <WarningIcon gapRight />
+                                          <FormattedMessage
+                                            id="app.editExercise.editConfig"
+                                            defaultMessage="Edit Exercise Configuration"
+                                          />
+                                        </h4>
+                                        <FormattedMessage
+                                          id="app.editExerciseConfig.noPipelines"
+                                          defaultMessage="There are no pipelines selected yet. The form cannot be displayed until at least one pipeline is selected."
+                                        />
+                                      </div>
+                                : <div className="callout callout-warning">
                                     <h4>
-                                      <i className="icon fa fa-warning" />{' '}
+                                      <WarningIcon gapRight />
                                       <FormattedMessage
-                                        id="app.editExerciseConfig.editConfig"
-                                        defaultMessage="Edit exercise configuration"
+                                        id="app.editExercise.editConfig"
+                                        defaultMessage="Edit Exercise Configuration"
                                       />
                                     </h4>
                                     <FormattedMessage
@@ -645,7 +676,7 @@ EditExerciseConfig.propTypes = {
   pipelines: ImmutablePropTypes.map,
   exercisePipelines: ImmutablePropTypes.map,
   environmentsWithEntryPoints: PropTypes.array.isRequired,
-  pipelinesVariables: PropTypes.object,
+  pipelinesVariables: PropTypes.array,
   links: PropTypes.object.isRequired,
   intl: intlShape.isRequired,
   loadAsync: PropTypes.func.isRequired,

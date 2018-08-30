@@ -31,6 +31,7 @@ export const LocalIcon = props => <Icon {...props} icon="thumbtack" />;
 export const LockIcon = props => <Icon {...props} icon="lock" />;
 export const MailIcon = props => <Icon {...props} icon={['far', 'envelope']} />;
 export const NeedFixingIcon = props => <Icon {...props} icon="medkit" />;
+export const PipelineIcon = props => <Icon {...props} icon="random" />;
 export const RefreshIcon = props => <Icon {...props} icon="sync" />;
 export const RemoveIcon = props => <Icon {...props} icon="minus" />;
 export const ResultsIcon = props => <Icon {...props} icon="chart-line" />;

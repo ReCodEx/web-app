@@ -4,9 +4,9 @@ import UsersNameContainer from '../../../containers/UsersNameContainer';
 import { Link } from 'react-router';
 import { FormattedMessage } from 'react-intl';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
-import classNames from 'classnames';
+import classnames from 'classnames';
 
-import Icon from '../../icons';
+import Icon, { PipelineIcon } from '../../icons';
 import DateTime from '../../widgets/DateTime';
 import withLinks from '../../../helpers/withLinks';
 
@@ -40,10 +40,7 @@ const PipelinesListItem = ({
           </Tooltip>
         }
       >
-        <Icon
-          icon="random"
-          className={author ? 'text-muted' : 'text-primary'}
-        />
+        <PipelineIcon className={author ? 'text-muted' : 'text-primary'} />
       </OverlayTrigger>
     </td>
 
@@ -125,7 +122,7 @@ const PipelinesListItem = ({
     </td>
 
     <td
-      className={classNames({ 'text-bold': true, 'full-width': fullWidthName })}
+      className={classnames({ 'text-bold': true, 'full-width': fullWidthName })}
     >
       <Link to={PIPELINE_URI_FACTORY(id)}>
         {name}

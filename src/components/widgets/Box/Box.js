@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import classNames from 'classnames';
+import classnames from 'classnames';
 import Collapse from 'react-collapse';
 
 import Icon from '../../icons';
@@ -50,7 +50,7 @@ class Box extends Component {
             {description}
           </div>}
         <div
-          className={classNames({
+          className={classnames({
             'box-body': true,
             'no-padding': noPadding,
             [styles.extraPadding]: !noPadding && extraPadding,
@@ -80,7 +80,7 @@ class Box extends Component {
 
     return (
       <div
-        className={classNames({
+        className={classnames({
           box: true,
           [`box-${type}`]: typeof type !== 'undefined',
           panel: true,

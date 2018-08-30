@@ -11,20 +11,28 @@ import Icon, { AddIcon, CloseIcon } from '../../icons';
 const ExpandingTextField = ({
   fields,
   meta: { active, dirty, error, warning },
-  label,
+  label = null,
   noItems = null,
+  validateEach,
   ...props
 }) =>
   <div>
-    <ControlLabel>
-      {label}
-    </ControlLabel>
+    {Boolean(label) &&
+      <ControlLabel>
+        {label}
+      </ControlLabel>}
     <table>
       <tbody>
         {fields.map((field, index) =>
           <tr key={index}>
             <td width="100%" className="valign-top">
-              <Field name={field} component={TextField} label={''} {...props} />
+              <Field
+                name={field}
+                component={TextField}
+                label={''}
+                validate={validateEach}
+                {...props}
+              />
             </td>
             <td className="valign-top">
               <OverlayTrigger
@@ -104,12 +112,13 @@ ExpandingTextField.propTypes = {
     PropTypes.string,
     PropTypes.element,
     PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) })
-  ]).isRequired,
+  ]),
   noItems: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.element,
     PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) })
-  ])
+  ]),
+  validateEach: PropTypes.func
 };
 
 export default ExpandingTextField;

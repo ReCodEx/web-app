@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
+import classnames from 'classnames';
 import { FormattedRelative } from 'react-intl';
 
 const Posted = ({ right, postedAt }) =>
   <span
-    className={classNames({
+    className={classnames({
       'direct-chat-timestamp': true,
       'pull-right': right,
       'pull-left': !right

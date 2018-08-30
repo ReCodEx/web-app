@@ -65,8 +65,8 @@ import {
 } from '../../helpers/exercise/environments';
 import {
   getSimpleConfigInitValues,
-  transformConfigValues
-} from '../../helpers/exercise/config';
+  transformSimpleConfigValues
+} from '../../helpers/exercise/configSimple';
 import { safeGet } from '../../helpers/common';
 
 class EditExerciseSimpleConfig extends Component {
@@ -108,7 +108,7 @@ class EditExerciseSimpleConfig extends Component {
       const { setConfig, reloadExercise } = this.props;
       return data =>
         setConfig(
-          transformConfigValues(
+          transformSimpleConfigValues(
             data,
             pipelines,
             environmentConfigs,
@@ -129,7 +129,7 @@ class EditExerciseSimpleConfig extends Component {
           environmentConfigs,
           environments
         );
-        const configData = transformConfigValues(
+        const configData = transformSimpleConfigValues(
           getSimpleConfigInitValues(config, tests, environmentConfigs),
           pipelines,
           newEnvironments,
@@ -211,7 +211,7 @@ class EditExerciseSimpleConfig extends Component {
                   {exercise.isBroken &&
                     <Row>
                       <Col sm={12}>
-                        <div className="alert alert-warning">
+                        <div className="callout callout-warning">
                           <h4>
                             <NeedFixingIcon gapRight />
                             <FormattedMessage
@@ -336,12 +336,12 @@ class EditExerciseSimpleConfig extends Component {
                                       config
                                     )}
                                   />
-                                : <div className="alert alert-warning">
+                                : <div className="callout callout-warning">
                                     <h4>
                                       <i className="icon fa fa-warning" />{' '}
                                       <FormattedMessage
                                         id="app.editExercise.editConfig"
-                                        defaultMessage="Edit exercise configuration"
+                                        defaultMessage="Edit Exercise Configuration"
                                       />
                                     </h4>
                                     <FormattedMessage

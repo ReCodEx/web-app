@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { FormattedMessage } from 'react-intl';
-import classNames from 'classnames';
+import classnames from 'classnames';
 import { Label } from 'react-bootstrap';
 
 import Icon from '../../icons';
@@ -21,7 +21,7 @@ const HeaderNotificationsDropdown = ({
   oldNotifications
 }) =>
   <li
-    className={classNames({
+    className={classnames({
       'notifications-menu': true,
       dropdown: true,
       open: isOpen
@@ -37,7 +37,7 @@ const HeaderNotificationsDropdown = ({
         </Label>}
     </a>
     <ul
-      className={classNames(['dropdown-menu', styles.dropdownMenu])}
+      className={classnames(['dropdown-menu', styles.dropdownMenu])}
       onClick={markClick}
     >
       <li className="header">

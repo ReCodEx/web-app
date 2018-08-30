@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
+import classnames from 'classnames';
 import { Link } from 'react-router';
 import { changeLanguage } from '../../../links';
 
 const HeaderLanguageSwitching = ({ currentUrl, lang, active = false }) =>
-  <li className={classNames({ active })}>
+  <li className={classnames({ active })}>
     <Link to={changeLanguage(currentUrl, lang)}>
       {lang}
     </Link>

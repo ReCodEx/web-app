@@ -389,7 +389,7 @@ const getRelevantPipelines = (pipelines, envId, useOutFile) => {
 /**
  * Assemble the data to be sent to the endpoint from the form data ...
  */
-export const transformConfigValues = (
+export const transformSimpleConfigValues = (
   formData,
   pipelines,
   environments,

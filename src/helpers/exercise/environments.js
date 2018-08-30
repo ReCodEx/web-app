@@ -37,17 +37,16 @@ export const getSimpleEnvironmentsInitValues = environmentConfigs => {
   return res;
 };
 
+export const getFirstEnvironmentId = environmentConfigs =>
+  safeGet(environmentConfigs, [0, 'runtimeEnvironmentId'], null);
+
 /**
  * Prepare inital values for EditEnvironmentForm used in advanced configuration.
  * Note that advanced config allows only one environment. If multiple environments are defined, only the first is loaded.
  * @param {*} environmentConfigs
  */
 export const getEnvironmentInitValues = environmentConfigs => {
-  const environmentId = safeGet(
-    environmentConfigs,
-    [0, 'runtimeEnvironmentId'],
-    null
-  );
+  const environmentId = getFirstEnvironmentId(environmentConfigs);
   const variables = safeGet(
     environmentConfigs,
     [0, 'variablesTable'],

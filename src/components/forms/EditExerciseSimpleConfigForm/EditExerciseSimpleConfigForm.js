@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { reduxForm, getFormValues } from 'redux-form';
 import { connect } from 'react-redux';
-import { FormattedMessage, injectIntl } from 'react-intl';
+import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
 import { Alert } from 'react-bootstrap';
 
 import FormBox from '../../widgets/FormBox';
@@ -16,6 +16,7 @@ import EditExerciseSimpleConfigTest from './EditExerciseSimpleConfigTest';
 import EditExerciseSimpleConfigDataTest from './EditExerciseSimpleConfigDataTest';
 import { getSupplementaryFilesForExercise } from '../../../redux/selectors/supplementaryFiles';
 import { encodeNumId, createIndex, safeSet } from '../../../helpers/common';
+import { SUBMIT_BUTTON_MESSAGES } from '../../../helpers/exercise/config';
 import {
   exerciseConfigFormSmartFillAll,
   exerciseConfigFormSmartFillInput,
@@ -62,7 +63,7 @@ class EditExerciseSimpleConfigForm extends Component {
           title={
             <FormattedMessage
               id="app.editExercise.editConfig"
-              defaultMessage="Edit exercise configuration"
+              defaultMessage="Edit Exercise Configuration"
             />
           }
           unlimitedHeight
@@ -73,12 +74,7 @@ class EditExerciseSimpleConfigForm extends Component {
             <div className="text-center">
               {dirty &&
                 <span>
-                  <Button
-                    type="reset"
-                    onClick={reset}
-                    bsStyle={'danger'}
-                    className="btn-flat"
-                  >
+                  <Button type="reset" onClick={reset} bsStyle="danger">
                     <RefreshIcon gapRight />
                     <FormattedMessage
                       id="generic.reset"
@@ -95,32 +91,7 @@ class EditExerciseSimpleConfigForm extends Component {
                 hasSucceeded={submitSucceeded}
                 hasFailed={submitFailed}
                 handleSubmit={handleSubmit}
-                messages={{
-                  submit: (
-                    <FormattedMessage
-                      id="app.editExerciseSimpleConfigForm.submit"
-                      defaultMessage="Save Configuration"
-                    />
-                  ),
-                  submitting: (
-                    <FormattedMessage
-                      id="app.editExerciseSimpleConfigForm.submitting"
-                      defaultMessage="Saving Configuration ..."
-                    />
-                  ),
-                  success: (
-                    <FormattedMessage
-                      id="app.editExerciseSimpleConfigForm.success"
-                      defaultMessage="Configuration Saved."
-                    />
-                  ),
-                  validating: (
-                    <FormattedMessage
-                      id="generic.validating"
-                      defaultMessage="Validating ..."
-                    />
-                  )
-                }}
+                messages={SUBMIT_BUTTON_MESSAGES}
               />
             </div>
           }
@@ -210,10 +181,8 @@ EditExerciseSimpleConfigForm.propTypes = {
   exerciseTests: PropTypes.array,
   environmentsWithEntryPoints: PropTypes.array.isRequired,
   smartFill: PropTypes.func.isRequired,
-  intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired
+  intl: intlShape.isRequired
 };
-
-const FORM_NAME = 'editExerciseSimpleConfig';
 
 const validate = (formData, { dataOnly }) => {
   const errors = {};
@@ -317,6 +286,8 @@ const validate = (formData, { dataOnly }) => {
   return errors;
 };
 
+const FORM_NAME = 'editExerciseSimpleConfig';
+
 const warnEntryPointStateFunction = (current, next) =>
   current === undefined ? next : next === current ? current : 'ambiguous';
 
@@ -353,7 +324,7 @@ const warn = formData => {
 };
 
 export default connect(
-  (state, { exercise, exerciseTests }) => {
+  (state, { exercise }) => {
     return {
       supplementaryFiles: getSupplementaryFilesForExercise(exercise.id)(state),
       formValues: getFormValues(FORM_NAME)(state),

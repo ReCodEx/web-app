@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import classNames from 'classnames';
+import classnames from 'classnames';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { Link } from 'react-router';
 
@@ -26,20 +26,20 @@ const Comment = ({
   links: { USER_URI_FACTORY }
 }) =>
   <div
-    className={classNames({
+    className={classnames({
       'direct-chat-success': isPrivate,
       'direct-chat-primary': !isPrivate
     })}
   >
     <div
-      className={classNames({
+      className={classnames({
         'direct-chat-msg': true,
         right: right
       })}
     >
       <div className="direct-chat-info clearfix">
         <span
-          className={classNames({
+          className={classnames({
             'direct-chat-name': true,
             'pull-right': right
           })}

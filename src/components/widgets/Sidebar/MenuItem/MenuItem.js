@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
+import classnames from 'classnames';
 import { Link } from 'react-router';
 import Icon from '../../../icons';
 
@@ -18,7 +18,7 @@ const MenuItem = (
   { isActive }
 ) =>
   <li
-    className={classNames({
+    className={classnames({
       active: isActive(link),
       small
     })}

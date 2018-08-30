@@ -100,7 +100,7 @@ class EditEnvironmentConfigForm extends Component {
           <InfoIcon gapRight />
           <FormattedMessage
             id="app.editEnvironmentConfig.selectedRuntimeInfo"
-            defaultMessage="In the advanced configuration, selected runtime environemnt is used only to ensure that the backend worker has necessary compilers, tools, or libraries required by the environment. Everything else (source files patterns, pipelines) is configured separately."
+            defaultMessage="In the advanced configuration, selected runtime environment is used only to ensure that the backend worker has necessary compilers, tools, or libraries required by the environment. Everything else (source files patterns, pipelines) is configured separately."
           />
         </p>
         <Field
