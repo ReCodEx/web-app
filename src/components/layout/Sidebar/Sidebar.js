@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import classNames from 'classnames';
+import classnames from 'classnames';
 import { FormattedMessage } from 'react-intl';
 
 import Public from './Public';
@@ -26,7 +26,7 @@ const Sidebar = ({
   links: { FAQ_URL },
   ...props
 }) =>
-  <aside className={classNames(['main-sidebar', styles.mainSidebar])}>
+  <aside className={classnames(['main-sidebar', styles.mainSidebar])}>
     <section className="sidebar">
       {isLoggedIn && <BadgeContainer small={small} />}
       {isLoggedIn && <LoggedIn {...props} />}

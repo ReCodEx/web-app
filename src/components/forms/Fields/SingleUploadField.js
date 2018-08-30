@@ -12,16 +12,17 @@ import {
 const SingleUploadField = ({
   input,
   meta: { touched, error },
-  label,
+  label = null,
   ...props
 }) =>
   <FormGroup
     controlId={input.name}
     validationState={error ? (touched ? 'error' : 'warning') : undefined}
   >
-    <ControlLabel>
-      {label}
-    </ControlLabel>
+    {Boolean(label) &&
+      <ControlLabel>
+        {label}
+      </ControlLabel>}
     <FormControl {...input} {...props} type="upload" />
     {error &&
       <HelpBlock>
@@ -43,7 +44,7 @@ SingleUploadField.propTypes = {
     PropTypes.string,
     PropTypes.element,
     PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) })
-  ]).isRequired
+  ])
 };
 
 export default SingleUploadField;

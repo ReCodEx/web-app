@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { injectIntl } from 'react-intl';
-import classNames from 'classnames';
+import classnames from 'classnames';
 
 import MenuItem from '../MenuItem';
 import LoadingMenuItem from '../LoadingMenuItem';
@@ -64,7 +64,7 @@ class MenuGroup extends Component {
 
     return (
       <li
-        className={classNames({
+        className={classnames({
           active: open || forceOpen,
           treeview: true
         })}

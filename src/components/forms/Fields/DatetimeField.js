@@ -5,7 +5,7 @@ import Datetime from 'react-datetime';
 import 'react-datetime/css/react-datetime.css';
 
 import { FormGroup, ControlLabel, HelpBlock } from 'react-bootstrap';
-import classNames from 'classnames';
+import classnames from 'classnames';
 
 import withLinks from '../../../helpers/withLinks';
 
@@ -29,7 +29,7 @@ class DatetimeField extends Component {
       input,
       meta: { active, dirty, error, warning },
       disabled,
-      label,
+      label = null,
       ignoreDirty = false,
       ...props
     } = this.props;
@@ -41,14 +41,17 @@ class DatetimeField extends Component {
         controlId={input.name}
         validationState={error ? 'error' : warning ? 'warning' : undefined}
       >
-        <ControlLabel>{label}</ControlLabel>
+        {Boolean(label) &&
+          <ControlLabel>
+            {label}
+          </ControlLabel>}
         <Datetime
           {...input}
           {...props}
           locale={lang}
           onFocus={() => this.onFocus()}
           inputProps={{ disabled }}
-          bsClass={classNames({
+          bsClass={classnames({
             'form-control': true,
             [styles.dirty]: dirty && !ignoreDirty && !error && !warning,
             [styles.active]: active
@@ -75,7 +78,7 @@ DatetimeField.propTypes = {
     PropTypes.string,
     PropTypes.element,
     PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) })
-  ]).isRequired,
+  ]),
   input: PropTypes.shape({
     name: PropTypes.string.isRequired,
     value: PropTypes.oneOfType([

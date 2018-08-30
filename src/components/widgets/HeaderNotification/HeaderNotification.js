@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Tooltip, OverlayTrigger, Overlay, Badge } from 'react-bootstrap';
 import { FormattedMessage } from 'react-intl';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
-import classNames from 'classnames';
+import classnames from 'classnames';
 
 import { SuccessIcon, WarningIcon, DeleteIcon, CopyIcon } from '../../icons';
 import DateTime from '../../widgets/DateTime';
@@ -48,7 +48,7 @@ class HeaderNotification extends Component {
 
     return (
       <li
-        className={classNames({
+        className={classnames({
           [styles.notification]: true,
           [styles.newNotification]: isNew
         })}

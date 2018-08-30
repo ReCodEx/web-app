@@ -9,7 +9,7 @@ import {
   HelpBlock,
   Label
 } from 'react-bootstrap';
-import classNames from 'classnames';
+import classnames from 'classnames';
 
 import { isArrayType } from '../../../helpers/boxes';
 
@@ -42,7 +42,7 @@ const PortField = ({
       {...input}
       {...props}
       type="text"
-      bsClass={classNames({
+      bsClass={classnames({
         'form-control': true,
         [styles.dirty]: dirty && !ignoreDirty && !error && !warning,
         [styles.active]: active

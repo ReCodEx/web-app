@@ -2,7 +2,12 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Field, FieldArray } from 'redux-form';
 import { Well, Grid, Row, Col } from 'react-bootstrap';
-import { FormattedMessage, injectIntl, defineMessages } from 'react-intl';
+import {
+  FormattedMessage,
+  injectIntl,
+  defineMessages,
+  intlShape
+} from 'react-intl';
 
 import EnvironmentsListItem from '../../helpers/EnvironmentsList/EnvironmentsListItem';
 import { EMPTY_ARRAY } from '../../../helpers/common';
@@ -675,7 +680,7 @@ EditExerciseSimpleConfigTest.propTypes = {
   environmentsWithEntryPoints: PropTypes.array.isRequired,
   testErrors: PropTypes.object,
   smartFill: PropTypes.object,
-  intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired
+  intl: intlShape.isRequired
 };
 
 export default injectIntl(EditExerciseSimpleConfigTest);

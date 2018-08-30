@@ -258,7 +258,7 @@ class EditExerciseLimits extends Component {
             {exercise.isBroken &&
               <Row>
                 <Col sm={12}>
-                  <div className="alert alert-warning">
+                  <div className="callout callout-warning">
                     <h4>
                       <NeedFixingIcon gapRight />
                       <FormattedMessage
@@ -399,7 +399,7 @@ class EditExerciseLimits extends Component {
                       cloneAll={cloneAll}
                       readOnly={!exercise.permissionHints.setLimits}
                     />
-                  : <div className="alert alert-warning">
+                  : <div className="callout callout-warning">
                       <h4>
                         <i className="icon fa fa-warning" />{' '}
                         <FormattedMessage

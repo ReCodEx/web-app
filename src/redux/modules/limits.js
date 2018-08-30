@@ -145,7 +145,7 @@ export const cloneHorizontally = (
       state,
       formName,
       testId,
-      null, // no environemnt ID => all environments accepted
+      null, // no environment ID => all environments accepted
       field
     ).map(key => dispatch(change(formName, key, value)));
   }
@@ -171,7 +171,7 @@ export const cloneAll = (
       state,
       formName,
       null, // no test name ...
-      null, // ... nor environemnt ID => all fields
+      null, // ... nor environment ID => all fields
       field
     ).map(key => dispatch(change(formName, key, value)));
   }
