@@ -32,6 +32,7 @@ class EditExerciseSimpleConfigForm extends Component {
     const {
       dataOnly,
       reset,
+      change,
       handleSubmit,
       submitting,
       submitFailed,
@@ -130,6 +131,7 @@ class EditExerciseSimpleConfigForm extends Component {
                               ? smartFill(test.id, exerciseTests, files)
                               : undefined
                           }
+                          change={change}
                         />
                       : <EditExerciseSimpleConfigTest
                           key={idx}
@@ -152,6 +154,7 @@ class EditExerciseSimpleConfigForm extends Component {
                               ? smartFill(test.id, exerciseTests, files)
                               : undefined
                           }
+                          change={change}
                         />;
                   })}
               </div>}
@@ -165,6 +168,7 @@ class EditExerciseSimpleConfigForm extends Component {
 EditExerciseSimpleConfigForm.propTypes = {
   initialValues: PropTypes.object,
   reset: PropTypes.func.isRequired,
+  change: PropTypes.func.isRequired,
   dataOnly: PropTypes.bool.isRequired,
   handleSubmit: PropTypes.func.isRequired,
   submitting: PropTypes.bool,

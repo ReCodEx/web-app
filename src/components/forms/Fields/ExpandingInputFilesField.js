@@ -19,13 +19,19 @@ const validate = value =>
       />
     : undefined;
 
+const handleSelectChange = (oldValue, fieldName, change) => e => {
+  if (oldValue.file === oldValue.name || (!oldValue.file && !oldValue.name)) {
+    change(fieldName, e.target.value);
+  }
+};
+
 const ExpandingInputFilesField = ({
   fields,
-  meta: { active, dirty, error, warning },
   leftLabel = null,
   rightLabel = null,
   noItems = null,
   options,
+  change,
   ...props
 }) =>
   <div>
@@ -59,6 +65,11 @@ const ExpandingInputFilesField = ({
                   options={options}
                   addEmptyOption={true}
                   validate={validate}
+                  onChange={handleSelectChange(
+                    fields.get(index),
+                    `${field}.name`,
+                    change
+                  )}
                   {...props}
                 />
               </td>
@@ -143,7 +154,8 @@ ExpandingInputFilesField.propTypes = {
     PropTypes.element,
     PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) })
   ]),
-  options: PropTypes.array
+  options: PropTypes.array,
+  change: PropTypes.func.isRequired
 };
 
 export default ExpandingInputFilesField;

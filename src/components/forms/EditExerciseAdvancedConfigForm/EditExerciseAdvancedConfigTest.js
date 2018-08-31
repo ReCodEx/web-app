@@ -156,7 +156,7 @@ class EditExerciseAdvancedConfigTest extends Component {
                     <Button
                       bsStyle="primary"
                       bsSize="xs"
-                      disabled={Boolean(testErrors)}
+                      disabled={Boolean(safeGet(testErrors, [idx]))}
                     >
                       <Icon icon="arrows-alt" gapRight />
                       <FormattedMessage
@@ -204,7 +204,9 @@ class EditExerciseAdvancedConfigTest extends Component {
                         <Button
                           bsStyle="primary"
                           bsSize="xs"
-                          disabled={Boolean(testErrors)}
+                          disabled={Boolean(
+                            safeGet(testErrors, [idx, encodeId(name)])
+                          )}
                         >
                           <Icon icon="arrows-alt" gapRight />
                           <FormattedMessage
