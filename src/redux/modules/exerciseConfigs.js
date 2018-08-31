@@ -2,7 +2,7 @@ import { handleActions } from 'redux-actions';
 import { change } from 'redux-form';
 
 import factory, { initialState } from '../helpers/resourceManager';
-import { encodeNumId } from '../../helpers/common';
+import { encodeId, encodeNumId, safeGet, range } from '../../helpers/common';
 
 /**
  * Create actions & reducer
@@ -448,6 +448,64 @@ export const exerciseConfigFormSmartFillCompilation = (
     'entry-point',
     'jar-files'
   ]);
+
+/*
+ * Advanced config form.
+ */
+
+/**
+ * Advanced config uses only raw fill (since smart fill requires knownledge of variable semantics).
+ * Copies given value, pipeline values or whole test values accross all tests.
+ * @param {string} formName Identifier of the redux-form.
+ * @param {string} sourceTestId ID of the test being used as template.
+ * @param {Object[]} tests List of all tests.
+ * @param {number|number[]|null} pipelineIdx Index/indices of the pipeline(s) of which the variables are being copied.
+ *                                           If null, all pipelines are copied.
+ * @param {string|string[]|null} variableName Name(s) of the variable(s) being copied. If null, all variables are copied.
+ */
+export const advancedExerciseConfigFormFill = (
+  formName,
+  sourceTestId,
+  tests,
+  pipelineIdx = null,
+  variableName = null
+) => (dispatch, getState) => {
+  const formData = safeGet(getState(), ['form', formName, 'values', 'config']);
+  if (!formData) {
+    return Promise.resolve();
+  }
+
+  const sourceTestKey = encodeNumId(sourceTestId);
+  const pipelines =
+    pipelineIdx === null
+      ? range(0, safeGet(formData, [sourceTestKey], []).length) // all pipeline indices
+      : Array.isArray(pipelineIdx) ? pipelineIdx : [pipelineIdx];
+
+  pipelines.forEach(idx => {
+    const variableValues = safeGet(formData, [sourceTestKey, idx], {});
+    const variableKeys =
+      variableName === null
+        ? Object.keys(variableValues) // all variable names
+        : (Array.isArray(variableName)
+            ? variableName
+            : [variableName]).map(name => encodeId(name));
+
+    variableKeys.forEach(variableKey =>
+      tests
+        .map(({ id }) => encodeNumId(id))
+        .filter(key => key !== sourceTestKey)
+        .forEach(testKey =>
+          dispatch(
+            change(
+              formName,
+              `config.${testKey}[${idx}].${variableKey}`,
+              variableValues[variableKey]
+            )
+          )
+        )
+    );
+  });
+};
 
 export const reducer = handleActions(reduceActions, initialState);
 export default reducer;

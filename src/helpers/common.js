@@ -63,6 +63,16 @@ export const encodeNumId = id => {
  * Array Helpers
  */
 
+/**
+ * Create numeric index range [start, end). If start > end, the range goes in descending order from start to end-1.
+ * @param {*} start
+ * @param {*} end
+ */
+export const range = (start, end) =>
+  start < end
+    ? [...Array(end - start).keys()].map(i => i + start)
+    : [...Array(start - end).keys()].map(i => i + end + 1).reverse();
+
 // Gets an array and returns array with unique items.
 export const unique = arr => [...new Set(arr)];
 

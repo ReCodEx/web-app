@@ -117,7 +117,7 @@ export const getInstanceId = () => {
 
 const middleware = store => next => action => {
   // manage access token storage
-  switch (action.type) {
+  switch (action && action.type) {
     case usersActionTypes.UPDATE_FULFILLED:
       if (!action.payload.accessToken) {
         break;

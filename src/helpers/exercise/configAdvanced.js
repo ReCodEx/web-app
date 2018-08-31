@@ -146,7 +146,11 @@ export const assembleNewConfig = (
 });
 
 /**
- *
+ * Prepare initial values for advanced config form.
+ * @param {Object} exerciseConfig,
+ * @param {string} runtimeId
+ * @param {Object[]} tests
+ * @param {Object[]} pipelinesVariables
  */
 export const getAdvancedConfigInitValues = (
   exerciseConfig,
@@ -183,6 +187,13 @@ export const getAdvancedConfigInitValues = (
   return { config };
 };
 
+/**
+ * Convert form data of the advanced config form into exercise config API format.
+ * @param {Object} formData.config
+ * @param {string} runtimeId
+ * @param {Object[]} tests
+ * @param {Object[]} pipelinesVariables
+ */
 export const transformAdvancedConfigValues = (
   { config },
   runtimeId,
