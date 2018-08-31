@@ -46,7 +46,7 @@ export const apiCall = (
 });
 
 const middleware = ({ dispatch }) => next => action => {
-  switch (action.type) {
+  switch (action && action.type) {
     case CALL_API:
       if (!action.request) {
         throw new Error('API middleware requires request data in the action');

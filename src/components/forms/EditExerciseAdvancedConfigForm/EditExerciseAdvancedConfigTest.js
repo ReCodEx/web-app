@@ -5,7 +5,7 @@ import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
 import { defaultMemoize } from 'reselect';
 
 import Button from '../../widgets/FlatButton';
-import { PipelineIcon } from '../../icons';
+import Icon, { PipelineIcon } from '../../icons';
 import {
   SelectField,
   TextField,
@@ -13,12 +13,7 @@ import {
   ExpandingSelectField
 } from '../Fields';
 import Confirm from '../../forms/Confirm';
-import {
-  EMPTY_ARRAY,
-  encodeId,
-  safeGet,
-  unique
-} from '../../../helpers/common';
+import { encodeId, safeGet, unique } from '../../../helpers/common';
 
 import styles from './EditExerciseAdvancedConfig.less';
 
@@ -99,7 +94,7 @@ class EditExerciseAdvancedConfigTest extends Component {
       testName,
       test,
       testErrors,
-      smartFill
+      rawFill
     } = this.props;
     return (
       <tbody>
@@ -108,6 +103,31 @@ class EditExerciseAdvancedConfigTest extends Component {
             <h3>
               {testName}
             </h3>
+          </td>
+          <td className="shrink-col text-right">
+            {Boolean(rawFill) &&
+              <Confirm
+                id="rawFill-all"
+                onConfirmed={rawFill.all}
+                question={
+                  <FormattedMessage
+                    id="app.editExerciseConfigForm.rawFillTest.yesNoQuestion"
+                    defaultMessage="Do you really wish to spread all values of this test to every other test?"
+                  />
+                }
+              >
+                <Button
+                  bsStyle="primary"
+                  bsSize="sm"
+                  disabled={Boolean(testErrors)}
+                >
+                  <Icon icon="arrows-alt" gapRight />
+                  <FormattedMessage
+                    id="app.editExerciseConfigForm.rawFillTest"
+                    defaultMessage="Spread Test"
+                  />
+                </Button>
+              </Confirm>}
           </td>
         </tr>
         {Object.values(
@@ -120,6 +140,31 @@ class EditExerciseAdvancedConfigTest extends Component {
                   <PipelineIcon gapRight />
                   {safeGet(pipelines, [({ id }) => id === pipelineId, 'name'])}
                 </h5>
+              </td>
+              <td className="shrink-col text-right">
+                {Boolean(rawFill) &&
+                  <Confirm
+                    id={`rawFill-${idx}`}
+                    onConfirmed={rawFill.pipeline(idx)}
+                    question={
+                      <FormattedMessage
+                        id="app.editExerciseConfigForm.rawFillPipeline.yesNoQuestion"
+                        defaultMessage="Do you really wish to spread all values of this pipeline to every other test?"
+                      />
+                    }
+                  >
+                    <Button
+                      bsStyle="primary"
+                      bsSize="xs"
+                      disabled={Boolean(testErrors)}
+                    >
+                      <Icon icon="arrows-alt" gapRight />
+                      <FormattedMessage
+                        id="app.editExerciseConfigForm.rawFillPipeline"
+                        defaultMessage="Spread Pipeline"
+                      />
+                    </Button>
+                  </Confirm>}
               </td>
             </tr>
 
@@ -144,41 +189,36 @@ class EditExerciseAdvancedConfigTest extends Component {
                   <td className="text-muted small">
                     {/* TODO -- description once additional metadata are added to pipelines */}
                   </td>
-                  {/* TODO -- Smart fill buttons */}
+                  <td className="shrink-col text-right">
+                    {Boolean(rawFill) &&
+                      <Confirm
+                        id={`rawFill-${idx}-${name}`}
+                        onConfirmed={rawFill.variable(idx, name)}
+                        question={
+                          <FormattedMessage
+                            id="app.editExerciseConfigForm.rawFillVariable.yesNoQuestion"
+                            defaultMessage="Do you really wish to spread this value to every other test?"
+                          />
+                        }
+                      >
+                        <Button
+                          bsStyle="primary"
+                          bsSize="xs"
+                          disabled={Boolean(testErrors)}
+                        >
+                          <Icon icon="arrows-alt" gapRight />
+                          <FormattedMessage
+                            id="app.editExerciseConfigForm.rawFill"
+                            defaultMessage="Spread"
+                          />
+                        </Button>
+                      </Confirm>}
+                  </td>
                 </tr>
               )}
           </React.Fragment>
         )}
       </tbody>
-
-      /*
-              Boolean(smartFill) &&
-              <div className="smart-fill-tinybar">
-                <Confirm
-                  id="smartFillJudge"
-                  onConfirmed={smartFill.judge}
-                  question={
-                    <FormattedMessage
-                      id="app.editExerciseConfigForm.smartFillJudge.yesNoQuestion"
-                      defaultMessage="Do you really wish to overwrite judge configuration of all subsequent tests using the first test as a template? Files will be paired to individual test configurations by a heuristics based on matching name substrings."
-                    />
-                  }
-                >
-                  <Button
-                    bsStyle={'primary'}
-                    className="btn-flat"
-                    bsSize="xs"
-                    disabled={Boolean(testErrors)}
-                  >
-                    <Icon icon="arrows-alt" gapRight />
-                    <FormattedMessage
-                      id="app.editExerciseConfigForm.smartFillJudge"
-                      defaultMessage="Smart Fill Judges"
-                    />
-                  </Button>
-                </Confirm>
-              </div>
-                */
     );
   }
 }
@@ -191,7 +231,7 @@ EditExerciseAdvancedConfigTest.propTypes = {
   pipelines: PropTypes.array.isRequired,
   pipelinesVariables: PropTypes.array,
   testErrors: PropTypes.array,
-  smartFill: PropTypes.object,
+  rawFill: PropTypes.object,
   intl: intlShape.isRequired
 };
 

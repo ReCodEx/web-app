@@ -17,14 +17,7 @@ import EditExerciseAdvancedConfigTest from './EditExerciseAdvancedConfigTest';
 import { getSupplementaryFilesForExercise } from '../../../redux/selectors/supplementaryFiles';
 import { encodeNumId, createIndex, safeSet } from '../../../helpers/common';
 import { SUBMIT_BUTTON_MESSAGES } from '../../../helpers/exercise/config';
-import {
-  exerciseConfigFormSmartFillAll,
-  exerciseConfigFormSmartFillInput,
-  exerciseConfigFormSmartFillArgs,
-  exerciseConfigFormSmartFillOutput,
-  exerciseConfigFormSmartFillJudge,
-  exerciseConfigFormSmartFillCompilation
-} from '../../../redux/modules/exerciseConfigs';
+import { advancedExerciseConfigFormFill } from '../../../redux/modules/exerciseConfigs';
 import { exerciseConfigFormErrors } from '../../../redux/selectors/exerciseConfigs';
 
 import styles from './EditExerciseAdvancedConfig.less';
@@ -44,7 +37,7 @@ class EditExerciseAdvancedConfigForm extends Component {
       formErrors,
       supplementaryFiles,
       exerciseTests,
-      smartFill,
+      rawFill,
       intl: { locale }
     } = this.props;
 
@@ -113,9 +106,9 @@ class EditExerciseAdvancedConfigForm extends Component {
                       testErrors={
                         formErrors && formErrors[encodeNumId(test.id)]
                       }
-                      smartFill={
-                        idx === 0 && exerciseTests.length > 1
-                          ? smartFill(test.id, exerciseTests, files)
+                      rawFill={
+                        exerciseTests.length > 1
+                          ? rawFill(test.id, exerciseTests)
                           : undefined
                       }
                     />
@@ -143,7 +136,7 @@ EditExerciseAdvancedConfigForm.propTypes = {
   invalid: PropTypes.bool,
   formErrors: PropTypes.object,
   supplementaryFiles: ImmutablePropTypes.map,
-  smartFill: PropTypes.func.isRequired,
+  rawFill: PropTypes.func.isRequired,
   intl: intlShape.isRequired
 };
 
@@ -169,35 +162,21 @@ export default connect(
     };
   },
   dispatch => ({
-    // TODO -- fix smart fill for advanced form
-    smartFill: (testId, tests, files) => ({
+    rawFill: (testId, tests) => ({
       all: () =>
+        dispatch(advancedExerciseConfigFormFill(FORM_NAME, testId, tests)),
+      pipeline: pipelineIdx => () =>
         dispatch(
-          exerciseConfigFormSmartFillAll(FORM_NAME, testId, tests, files)
+          advancedExerciseConfigFormFill(FORM_NAME, testId, tests, pipelineIdx)
         ),
-      input: () =>
+      variable: (pipelineIdx, variableName) => () =>
         dispatch(
-          exerciseConfigFormSmartFillInput(FORM_NAME, testId, tests, files)
-        ),
-      args: () =>
-        dispatch(
-          exerciseConfigFormSmartFillArgs(FORM_NAME, testId, tests, files)
-        ),
-      output: () =>
-        dispatch(
-          exerciseConfigFormSmartFillOutput(FORM_NAME, testId, tests, files)
-        ),
-      judge: () =>
-        dispatch(
-          exerciseConfigFormSmartFillJudge(FORM_NAME, testId, tests, files)
-        ),
-      compilation: () =>
-        dispatch(
-          exerciseConfigFormSmartFillCompilation(
+          advancedExerciseConfigFormFill(
             FORM_NAME,
             testId,
             tests,
-            files
+            pipelineIdx,
+            variableName
           )
         )
     })
