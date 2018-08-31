@@ -15,7 +15,7 @@ import ResourceRenderer from '../../helpers/ResourceRenderer';
 
 import EditExerciseAdvancedConfigTest from './EditExerciseAdvancedConfigTest';
 import { getSupplementaryFilesForExercise } from '../../../redux/selectors/supplementaryFiles';
-import { encodeNumId, createIndex, safeSet } from '../../../helpers/common';
+import { encodeNumId } from '../../../helpers/common';
 import { SUBMIT_BUTTON_MESSAGES } from '../../../helpers/exercise/config';
 import { advancedExerciseConfigFormFill } from '../../../redux/modules/exerciseConfigs';
 import { exerciseConfigFormErrors } from '../../../redux/selectors/exerciseConfigs';
@@ -140,18 +140,6 @@ EditExerciseAdvancedConfigForm.propTypes = {
   intl: intlShape.isRequired
 };
 
-const validate = (formData, { dataOnly }) => {
-  const errors = {};
-
-  return errors;
-};
-
-const warn = formData => {
-  const warnings = {};
-
-  return warnings;
-};
-
 const FORM_NAME = 'editExerciseAdvancedConfig';
 
 export default connect(
@@ -191,8 +179,6 @@ export default connect(
       'supplementaryFiles',
       'exerciseTests',
       'handleSubmit'
-    ],
-    validate,
-    warn
+    ]
   })(injectIntl(EditExerciseAdvancedConfigForm))
 );

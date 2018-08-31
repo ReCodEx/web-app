@@ -111,7 +111,6 @@ class EditExerciseConfig extends Component {
     }
   };
 
-  // TODO -- update load to fetch PipelineVarialbes (if exercise is not simple and env + pipelines has already been set)
   static loadAsync = ({ exerciseId }, dispatch) =>
     Promise.all([
       dispatch(fetchExerciseIfNeeded(exerciseId)).then(
