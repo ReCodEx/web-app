@@ -66,9 +66,9 @@ export const transformSimpleEnvironmentsValues = (
   runtimeEnvironments
 ) => {
   let res = [];
-  for (const env in SIMPLE_FORM_ENVIRONMENTS) {
+  SIMPLE_FORM_ENVIRONMENTS.forEach(env => {
     if (formData[env] !== true && formData[env] !== 'true') {
-      continue;
+      return;
     }
     const envObj = {
       runtimeEnvironmentId: env
@@ -81,7 +81,7 @@ export const transformSimpleEnvironmentsValues = (
       ? environmentConfig.variablesTable // keep already set variables if they exist
       : runtimeEnvironment.defaultVariables; // use defaults otherwise
     res.push(envObj);
-  }
+  });
   return res;
 };
 
