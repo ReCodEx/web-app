@@ -142,6 +142,49 @@ class EditExerciseConfig extends Component {
       dispatch(fetchPipelines())
     ]);
 
+  setConfigTypeCreator = defaultMemoize(
+    (
+      exercise,
+      configurationType,
+      pipelines,
+      environments,
+      tests,
+      config,
+      environmentConfigs
+    ) => {
+      const {
+        setExerciseConfigType,
+        editEnvironmentConfigs,
+        setConfig,
+        reloadConfig
+      } = this.props;
+      return () => {
+        if (configurationType === SIMPLE_CONFIG_TYPE) {
+          const newEnvironments = transformSimpleEnvironmentsValues(
+            getSimpleEnvironmentsInitValues(environmentConfigs),
+            [],
+            environments
+          );
+          const configData = transformSimpleConfigValues(
+            getSimpleConfigInitValues(config, tests, newEnvironments),
+            pipelines,
+            newEnvironments,
+            tests,
+            config
+          );
+          return editEnvironmentConfigs({
+            environmentConfigs: newEnvironments
+          })
+            .then(() => setConfig(configData))
+            .then(() => setExerciseConfigType(exercise, configurationType))
+            .then(reloadConfig);
+        } else {
+          return setExerciseConfigType(exercise, configurationType);
+        }
+      };
+    }
+  );
+
   transformAndSendTestsValues = data => {
     const { editTests, editScoreConfig, reloadConfig } = this.props;
     const { tests, scoreConfig } = transformTestsValues(data);
@@ -248,7 +291,6 @@ class EditExerciseConfig extends Component {
       // exercisePipelines,
       environmentsWithEntryPoints,
       pipelinesVariables,
-      setExerciseConfigType,
       intl: { locale },
       links: {
         EXERCISE_URI_FACTORY
@@ -332,19 +374,38 @@ class EditExerciseConfig extends Component {
                       <tbody>
                         <tr>
                           <td className="valing-middle em-padding-right">
-                            <ExerciseConfigTypeButton
-                              isSimple={isSimple(exercise)}
-                              setExerciseConfigType={setExerciseConfigType(
-                                exercise,
-                                isSimple(exercise)
-                                  ? ADVANCED_CONFIG_TYPE
-                                  : SIMPLE_CONFIG_TYPE
-                              )}
-                              disabled={
-                                exercise.runtimeEnvironments.length >
-                                (isSimple(exercise) ? 1 : 0)
-                              }
-                            />
+                            <ResourceRenderer
+                              resource={[
+                                exerciseConfig,
+                                exerciseEnvironmentConfig
+                              ]}
+                            >
+                              {(config, environmentConfigs) =>
+                                <ResourceRenderer
+                                  resource={runtimeEnvironments.toArray()}
+                                  returnAsArray={true}
+                                >
+                                  {environments =>
+                                    <ExerciseConfigTypeButton
+                                      isSimple={isSimple(exercise)}
+                                      setExerciseConfigType={this.setConfigTypeCreator(
+                                        exercise,
+                                        isSimple(exercise)
+                                          ? ADVANCED_CONFIG_TYPE
+                                          : SIMPLE_CONFIG_TYPE,
+                                        pipelines,
+                                        environments,
+                                        tests,
+                                        config,
+                                        environmentConfigs
+                                      )}
+                                      disabled={
+                                        isSimple(exercise) &&
+                                        exercise.runtimeEnvironments.length > 1
+                                      }
+                                    />}
+                                </ResourceRenderer>}
+                            </ResourceRenderer>
                           </td>
                           <td className="em-padding-left small text-muted">
                             <InfoIcon gapRight />
@@ -355,7 +416,7 @@ class EditExerciseConfig extends Component {
                                 />
                               : <FormattedMessage
                                   id="app.editExerciseConfig.changeConfigSimpleExplain"
-                                  defaultMessage="Changing back to simple configuration requires that the exercise have no runtime environment (and thus no configuration) set since it is not possible to convert advanced configuration with custom pipelines into simple configuration."
+                                  defaultMessage="Changing back to simple configuration requires that certain constraints are imposed. This may significantly alter the runtime environment configuration, pipelines selection, and exercise configuration."
                                 />}
                           </td>
                         </tr>
@@ -717,7 +778,7 @@ export default withLinks(
         dispatch(
           fetchExercisePipelinesVariables(exerciseId, runtimeId, pipelinesIds)
         ),
-      setExerciseConfigType: (exercise, configurationType) => () =>
+      setExerciseConfigType: (exercise, configurationType) =>
         dispatch(editExercise(exercise.id, { ...exercise, configurationType })),
       editEnvironmentConfigs: data =>
         dispatch(setExerciseEnvironmentConfig(exerciseId, data)),

@@ -211,7 +211,7 @@
   "app.editExercise.title": "Změna nastavení úlohy",
   "app.editExerciseAdvancedConfigForm.validation.emptyFileName": "Please, fill in a vaild file name.",
   "app.editExerciseConfig.changeConfigAdvancedExplain": "Po změně na pokročilou konfiguraci bude možné použít libovolné pipelines a ručně nakonfigurovat jejich parametry. Úloha bude také moci definovat vlastní omezení, jaké soubory smí studenti odevzdávat. Pro správné nastavení pokročilé konfigurace je ale zapotřebí hlubší vhled do vyhodnocovacího procesu ReCodExu. Pokročilá konfigurace může mít nastavené pouze jedno běhové prostředí, takže není možné změnit typ konfigurace, pokud má úloha nastaveno více běhových prostředí.",
-  "app.editExerciseConfig.changeConfigSimpleExplain": "Návrat k jednoduché konfiguraci vyžaduje, aby úloha neměla žádné běhové prostředí (a tedy ani konfiguraci), protože není možné konvertovat libovolnou kombinaci pipeline tak, aby výsledek vyhovoval omezením formuláře pro jednoduchou konfiguraci.",
+  "app.editExerciseConfig.changeConfigSimpleExplain": "Návrat k jednoduché konfiguraci vyžaduje vynucení jistých omezení. Tato transformace může značně změnit konfiguraci běhových prostředí, pipeline a celkového nastavení testů.",
   "app.editExerciseConfig.description": "Změnit nastavení testů úlohy",
   "app.editExerciseConfig.noPipelines": "Nebyly vybrány žádné pipelines. Formulář není možné zobrazit, dokud nebude alespoň jedna pipeline vybrána.",
   "app.editExerciseConfig.noRuntimes": "Běhová prostředí úlohy ještě nebyla nastavena. Prostředí musí být nastavena, aby bylo možné pracovat s konfigurací pipelines.",

@@ -211,7 +211,7 @@
   "app.editExercise.title": "Edit exercise settings",
   "app.editExerciseAdvancedConfigForm.validation.emptyFileName": "Please, fill in a vaild file name.",
   "app.editExerciseConfig.changeConfigAdvancedExplain": "Changing to advanced configuration will allow you to use custom pipelines and manually configure their parameters. The exercise may also have a custom environment configuration alowing arbitrary constraints on which files are submitted by the students. A deeper understanding of the ReCodEx evaluation process is required to set the configuration correctly. Please note that advanced configurations may have only one runtime environment (so it is not possible to convert simple configurations with multiple environments set).",
-  "app.editExerciseConfig.changeConfigSimpleExplain": "Changing back to simple configuration requires that the exercise have no runtime environment (and thus no configuration) set since it is not possible to convert advanced configuration with custom pipelines into simple configuration.",
+  "app.editExerciseConfig.changeConfigSimpleExplain": "Changing back to simple configuration requires that certain constraints are imposed. This may significantly alter the runtime environment configuration, pipelines selection, and exercise configuration.",
   "app.editExerciseConfig.description": "Change exercise tests configuration",
   "app.editExerciseConfig.noPipelines": "There are no pipelines selected yet. The form cannot be displayed until at least one pipeline is selected.",
   "app.editExerciseConfig.noRuntimes": "The runtime environment is not properly configured yet. A runtime must be selected before pipeline configuration becomes available.",
