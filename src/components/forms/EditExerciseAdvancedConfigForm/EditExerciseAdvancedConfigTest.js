@@ -38,53 +38,33 @@ const prepareFilesOptions = defaultMemoize((supplementaryFiles, locale) => {
 });
 
 class EditExerciseAdvancedConfigTest extends Component {
-  createField = (fieldName, type) => {
+  createField = (name, type) => {
     const { supplementaryFiles, intl: { locale } } = this.props;
-    // TODO replace this ugly switch with something worthy of the author...
-    switch (type) {
-      case 'string':
-      case 'file':
-        return (
-          <Field
-            name={fieldName}
-            component={TextField}
-            validate={type === 'file' ? validateFileName : undefined}
-            maxLength={64}
-          />
-        );
+    const isArray = type.endsWith('[]');
+    const baseType = isArray ? type.substring(0, type.length - 2) : type;
 
-      case 'string[]':
-      case 'file[]':
-        return (
-          <FieldArray
-            name={fieldName}
-            component={ExpandingTextField}
-            maxLength={64}
-            validateEach={type === 'file[]' ? validateFileName : undefined}
-          />
-        );
-
-      case 'remote-file':
-        return (
-          <Field
-            name={fieldName}
-            component={SelectField}
-            options={prepareFilesOptions(supplementaryFiles, locale)}
-            addEmptyOption
-          />
-        );
-
-      case 'remote-file[]':
-        return (
-          <FieldArray
-            name={fieldName}
-            component={ExpandingSelectField}
-            options={prepareFilesOptions(supplementaryFiles, locale)}
-            addEmptyOption
-          />
-        );
+    const commonProps = { name };
+    if (baseType === 'remote-file') {
+      commonProps.addEmptyOption = true;
+      commonProps.options = prepareFilesOptions(supplementaryFiles, locale);
+    } else {
+      commonProps.maxLength = 64;
+      if (type === 'file') {
+        commonProps[isArray ? 'validateEach' : 'validate'] = validateFileName;
+      }
     }
-    return null;
+
+    return isArray
+      ? <FieldArray
+          {...commonProps}
+          component={
+            type === 'remote-file[]' ? ExpandingSelectField : ExpandingTextField
+          }
+        />
+      : <Field
+          {...commonProps}
+          component={type === 'remote-file' ? SelectField : TextField}
+        />;
   };
 
   render() {
