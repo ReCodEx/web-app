@@ -155,6 +155,12 @@ class GroupInfo extends Component {
                       id="app.group.archivedExplain"
                       defaultMessage="This group is archived, so it cannot be modified."
                     />
+                    <br />
+                    {!data.directlyArchived &&
+                      <FormattedMessage
+                        id="app.group.notDirectlyArchived"
+                        defaultMessage="This group inherits archivation flag from one of its parent groups."
+                      />}
                   </p>
                 </Col>
               </Row>}

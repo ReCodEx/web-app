@@ -8,6 +8,8 @@ import { push } from 'react-router-redux';
 import Page from '../../components/layout/Page';
 import Box from '../../components/widgets/Box';
 
+import { LinkContainer } from 'react-router-bootstrap';
+import Button from '../../components/widgets/FlatButton';
 import withLinks from '../../helpers/withLinks';
 import { fetchAllGroups } from '../../redux/modules/groups';
 import { fetchInstancesIfNeeded } from '../../redux/modules/instances';
@@ -18,6 +20,8 @@ import GroupTree from '../../components/Groups/GroupTree';
 import { getJsData } from '../../redux/helpers/resourceManager';
 import FilterArchiveGroupsForm from '../../components/forms/FilterArchiveGroupsForm/FilterArchiveGroupsForm';
 import { getLocalizedName } from '../../helpers/getLocalizedData';
+import ArchiveGroupButtonContainer from '../../containers/ArchiveGroupButtonContainer/ArchiveGroupButtonContainer';
+import { GroupIcon } from '../../components/icons';
 
 // lowercase and remove accents and this kind of stuff
 const normalizeString = str =>
@@ -63,6 +67,26 @@ const getVisibleArchiveGroupsMap = (groups, showAll, search, locale) => {
   return result;
 };
 
+const buttonsCreator = ({
+  GROUP_INFO_URI_FACTORY,
+  GROUP_DETAIL_URI_FACTORY
+}) => groupId =>
+  <span>
+    <LinkContainer to={GROUP_INFO_URI_FACTORY(groupId)}>
+      <Button bsStyle="primary" bsSize="xs" className="btn-flat">
+        <GroupIcon gapRight />
+        <FormattedMessage id="app.group.info" defaultMessage="Group Info" />
+      </Button>
+    </LinkContainer>
+    <LinkContainer to={GROUP_DETAIL_URI_FACTORY(groupId)}>
+      <Button bsStyle="primary" bsSize="xs" className="btn-flat">
+        <GroupIcon gapRight />
+        <FormattedMessage id="app.group.detail" defaultMessage="Group Detail" />
+      </Button>
+    </LinkContainer>
+    <ArchiveGroupButtonContainer id={groupId} bsSize="xsmall" />
+  </span>;
+
 class Archive extends Component {
   state = { showAll: false, search: '' };
 
@@ -77,7 +101,7 @@ class Archive extends Component {
   }
 
   render() {
-    const { instance, groups, intl: { locale } } = this.props;
+    const { instance, groups, intl: { locale }, links } = this.props;
 
     return (
       <Page
@@ -137,6 +161,7 @@ class Archive extends Component {
                     this.state.search,
                     locale
                   )}
+                  buttonsCreator={buttonsCreator(links)}
                 />}
             </React.Fragment>
           </Box>}

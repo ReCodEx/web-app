@@ -11,14 +11,20 @@ import {
 } from '../../redux/selectors/groups';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 
-const ArchiveGroupButtonContainer = ({ group, pending, setArchived }) =>
+const ArchiveGroupButtonContainer = ({
+  group,
+  pending,
+  setArchived,
+  bsSize = undefined
+}) =>
   <ResourceRenderer resource={group}>
-    {({ archived, permissionHints }) =>
+    {({ directlyArchived, permissionHints }) =>
       <ArchiveGroupButton
-        archived={archived}
+        archived={directlyArchived}
         pending={pending}
         setArchived={setArchived}
         disabled={!permissionHints.update}
+        bsSize={bsSize}
       />}
   </ResourceRenderer>;
 
@@ -26,7 +32,8 @@ ArchiveGroupButtonContainer.propTypes = {
   id: PropTypes.string.isRequired,
   group: ImmutablePropTypes.map,
   pending: PropTypes.bool.isRequired,
-  setArchived: PropTypes.func.isRequired
+  setArchived: PropTypes.func.isRequired,
+  bsSize: PropTypes.string
 };
 
 const mapStateToProps = (state, { id }) => ({

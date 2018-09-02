@@ -31,6 +31,9 @@ export const GroupIcon = ({
     {...props}
     icon={organizational ? 'sitemap' : archived ? 'archive' : 'users'}
   />;
+
+export const ArchiveGroupIcon = ({ archived = false, ...props }) =>
+  <Icon {...props} icon={archived ? 'backward' : 'archive'} />;
 export const InfoIcon = props => <Icon {...props} icon="info" />;
 export const LoadingIcon = props =>
   <Icon {...props} icon="spinner" pulse style={{ opacity: 0.8 }} />;
@@ -71,6 +74,10 @@ export const WarningIcon = props =>
 
 GroupIcon.propTypes = {
   organizational: PropTypes.bool,
+  archived: PropTypes.bool
+};
+
+ArchiveGroupIcon.propTypes = {
   archived: PropTypes.bool
 };
 
