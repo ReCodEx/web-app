@@ -36,7 +36,6 @@ const validateWildcard = value => {
 const EditEnvironmentConfigVariables = ({
   nameSuggestions = [],
   fields,
-  meta: { active, dirty, error, warning },
   leftLabel = '',
   rightLabel = '',
   noItems = null,

@@ -269,6 +269,8 @@
   "app.editExercisePipelines.availablePipelines": "Dostupné pipelines",
   "app.editExercisePipelines.noPipelines": "Nejsou vybrané žádné pipelines.",
   "app.editExercisePipelines.title": "Vybrané pipelines",
+  "app.editExercisePipelinesForm.validation.duplicatePipelineWarning": "Některé pipelines jsou ve výběru vícekrát. Tato konfigurace je sice možná, avšak krajně neobvyklá. Zkontrolujte, že jsou vybrány správné pipelines.",
+  "app.editExercisePipelinesForm.validation.noPipelines": "Nejsou vybrané žádné pipelines.",
   "app.editExerciseSimpleConfig.noTests": "Zatím zde nejsou žádné test. Formulář nemůže být zobrazen dokud není vytvořen alespoň jeden test.",
   "app.editExerciseSimpleConfigForm.isDataOnly": "Úloha je nakonfigurivaná jako data-only. To znamená, že nemá kompilační část a student odevzdává pouze data. Data jsou následně zkontrolována daným sudím. Časové a paměťové limity se aplikují přímo na sudího.",
   "app.editExerciseSimpleConfigForm.validation.customJudge": "Prosím, zvolte spustitelný soubor sudího, nebo si vyberte z předpřipravené množiny vestavěných sudí.",

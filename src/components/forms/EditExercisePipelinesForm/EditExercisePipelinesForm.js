@@ -9,6 +9,7 @@ import EditExercisePipelinesTable from './EditExercisePipelinesTable';
 import SubmitButton from '../SubmitButton';
 import Button from '../../widgets/FlatButton';
 import { RefreshIcon } from '../../icons';
+import { createIndex } from '../../../helpers/common';
 
 class EditExercisePipelinesForm extends Component {
   render() {
@@ -106,35 +107,38 @@ EditExercisePipelinesForm.propTypes = {
   warning: PropTypes.any
 };
 
-const validate = formData => {
+const validate = ({ pipelines }) => {
   const errors = {};
-  /*
-  const allowedEnvrionmentsCount = Object.values(formData).filter(
-    value => value === true || value === 'true'
-  ).length;
-
-  if (allowedEnvrionmentsCount === 0) {
-    errors['_error'] = (
+  if (pipelines.length === 0) {
+    errors._error = (
       <FormattedMessage
-        id="app.editEnvironmentSimpleForm.validation.environments"
-        defaultMessage="Please add at least one runtime environment."
-      />
-    );
-  } else if (formData['data-linux'] && allowedEnvrionmentsCount > 1) {
-    errors['_error'] = (
-      <FormattedMessage
-        id="app.editEnvironmentSimpleForm.validation.dataOnlyCollision"
-        defaultMessage="Data-Only environment cannot be combined with any other environment."
+        id="app.editExercisePipelinesForm.validation.noPipelines"
+        defaultMessage="There are no pipelines selected."
       />
     );
   }
-  */
   return errors;
+};
+
+const warn = ({ pipelines }) => {
+  const warnings = {};
+  const index = createIndex(pipelines);
+
+  if (pipelines.length !== Object.keys(index).length) {
+    warnings._warning = (
+      <FormattedMessage
+        id="app.editExercisePipelinesForm.validation.duplicatePipelineWarning"
+        defaultMessage="Some pipelines are selected multiple times. Although such configuration is possilbe, it is very uncommon. Make sure you have selected the right pipelines."
+      />
+    );
+  }
+  return warnings;
 };
 
 export default reduxForm({
   form: 'editExercisePipelines',
   enableReinitialize: true,
   keepDirtyOnReinitialize: false,
-  validate
+  validate,
+  warn
 })(EditExercisePipelinesForm);

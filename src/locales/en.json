@@ -269,6 +269,8 @@
   "app.editExercisePipelines.availablePipelines": "Available pipelines",
   "app.editExercisePipelines.noPipelines": "There are currently no pipelines.",
   "app.editExercisePipelines.title": "Selected Pipelines",
+  "app.editExercisePipelinesForm.validation.duplicatePipelineWarning": "Some pipelines are selected multiple times. Although such configuration is possilbe, it is very uncommon. Make sure you have selected the right pipelines.",
+  "app.editExercisePipelinesForm.validation.noPipelines": "There are no pipelines selected.",
   "app.editExerciseSimpleConfig.noTests": "There are no tests yet. The form cannot be displayed until at least one test is created.",
   "app.editExerciseSimpleConfigForm.isDataOnly": "The exercise is configured as data-only. It means there is no compilation, the student submits only data, and the data are verified using custom judge. The time and memory limits are applied on the judge itself.",
   "app.editExerciseSimpleConfigForm.validation.customJudge": "Please, select the custom judge binary for this test or use one of the standard judges instead.",
