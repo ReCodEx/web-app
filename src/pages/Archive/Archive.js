@@ -4,6 +4,7 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
 import { push } from 'react-router-redux';
+import { Grid, Row, Col } from 'react-bootstrap';
 
 import Page from '../../components/layout/Page';
 import Box from '../../components/widgets/Box';
@@ -21,26 +22,32 @@ import { getJsData } from '../../redux/helpers/resourceManager';
 import FilterArchiveGroupsForm from '../../components/forms/FilterArchiveGroupsForm/FilterArchiveGroupsForm';
 import { getLocalizedName } from '../../helpers/getLocalizedData';
 import ArchiveGroupButtonContainer from '../../containers/ArchiveGroupButtonContainer/ArchiveGroupButtonContainer';
-import { GroupIcon } from '../../components/icons';
+import { GroupIcon, Failure, SuccessIcon } from '../../components/icons';
 
 // lowercase and remove accents and this kind of stuff
 const normalizeString = str =>
   str.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
 
-const getVisibleArchiveGroupsMap = (groups, showAll, search, locale) => {
+const getVisibleArchiveGroupsMap = (
+  groups,
+  showAll,
+  search,
+  locale,
+  rootGroup
+) => {
   var result = {};
   const groupArray = groups.toArray();
 
   // first mark all possibly visible
   groupArray.forEach(groupObj => {
     const group = getJsData(groupObj);
-    if (showAll) {
-      result[group.id] = true;
-    } else if (group.archived) {
-      result[group.id] = true;
-      group.parentGroupsIds.forEach(parentGroupId => {
-        result[parentGroupId] = true;
-      });
+    const rootGroupIncludes =
+      rootGroup === null
+        ? true
+        : group.parentGroupsIds.indexOf(rootGroup) >= 0 ||
+          rootGroup === group.id;
+    if (showAll || group.archived) {
+      result[group.id] = rootGroupIncludes;
     }
   });
 
@@ -67,28 +74,42 @@ const getVisibleArchiveGroupsMap = (groups, showAll, search, locale) => {
   return result;
 };
 
-const buttonsCreator = ({
-  GROUP_INFO_URI_FACTORY,
-  GROUP_DETAIL_URI_FACTORY
-}) => groupId =>
+const buttonsCreator = (
+  { GROUP_INFO_URI_FACTORY, GROUP_DETAIL_URI_FACTORY },
+  setRootGroup
+) => groupId =>
   <span>
+    <Button
+      bsStyle="default"
+      bsSize="xs"
+      onClick={ev => {
+        ev.stopPropagation();
+        setRootGroup(groupId);
+      }}
+    >
+      <SuccessIcon gapRight />
+      <FormattedMessage
+        id="app.group.setRoot"
+        defaultMessage="Set Root Group"
+      />
+    </Button>
     <LinkContainer to={GROUP_INFO_URI_FACTORY(groupId)}>
-      <Button bsStyle="primary" bsSize="xs" className="btn-flat">
+      <Button bsStyle="primary" bsSize="xs">
         <GroupIcon gapRight />
         <FormattedMessage id="app.group.info" defaultMessage="Group Info" />
       </Button>
     </LinkContainer>
     <LinkContainer to={GROUP_DETAIL_URI_FACTORY(groupId)}>
-      <Button bsStyle="primary" bsSize="xs" className="btn-flat">
+      <Button bsStyle="primary" bsSize="xs">
         <GroupIcon gapRight />
         <FormattedMessage id="app.group.detail" defaultMessage="Group Detail" />
       </Button>
     </LinkContainer>
-    <ArchiveGroupButtonContainer id={groupId} bsSize="xsmall" />
+    <ArchiveGroupButtonContainer id={groupId} bsSize="xs" />
   </span>;
 
 class Archive extends Component {
-  state = { showAll: false, search: '' };
+  state = { showAll: false, search: '', rootGroup: null };
 
   static loadAsync = (params, dispatch, { instanceId }) =>
     Promise.all([
@@ -149,6 +170,24 @@ class Archive extends Component {
                   return Promise.resolve();
                 }}
               />
+              <Grid fluid>
+                <Row>
+                  <Col xs={12} style={{ padding: '0' }}>
+                    <Button
+                      className="pull-right"
+                      bsStyle="link"
+                      disabled={this.state.rootGroup === null}
+                      onClick={() => this.setState({ rootGroup: null })}
+                    >
+                      <Failure gapRight />
+                      <FormattedMessage
+                        id="app.group.unsetRoot"
+                        defaultMessage="Unset Root Group"
+                      />
+                    </Button>
+                  </Col>
+                </Row>
+              </Grid>
 
               {data.rootGroupId !== null &&
                 <GroupTree
@@ -159,9 +198,13 @@ class Archive extends Component {
                     groups,
                     this.state.showAll,
                     this.state.search,
-                    locale
+                    locale,
+                    this.state.rootGroup
                   )}
-                  buttonsCreator={buttonsCreator(links)}
+                  buttonsCreator={buttonsCreator(links, groupId =>
+                    this.setState({ rootGroup: groupId })
+                  )}
+                  currentGroupId={this.state.rootGroup}
                 />}
             </React.Fragment>
           </Box>}

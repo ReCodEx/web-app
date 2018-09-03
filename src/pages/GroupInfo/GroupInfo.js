@@ -12,7 +12,8 @@ import {
   createGroup,
   fetchGroupIfNeeded,
   fetchInstanceGroups,
-  fetchSubgroups
+  fetchSubgroups,
+  fetchAllGroups
 } from '../../redux/modules/groups';
 import { fetchSupervisors } from '../../redux/modules/users';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
@@ -52,7 +53,11 @@ class GroupInfo extends Component {
         .then(group =>
           Promise.all([
             dispatch(fetchSupervisors(groupId)),
-            dispatch(fetchInstanceGroups(group.privateData.instanceId))
+            dispatch(
+              group.archived
+                ? fetchAllGroups()
+                : fetchInstanceGroups(group.privateData.instanceId)
+            )
           ])
         ),
       dispatch(fetchSubgroups(groupId))
