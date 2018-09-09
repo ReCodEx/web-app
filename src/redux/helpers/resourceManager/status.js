@@ -70,7 +70,7 @@ export const isReady = item =>
  * @param {Object} item The item
  * @return {boolean} True when the item has been loaded or is currently reloading (but data are available).
  */
-export const isReadyOrRealoading = item =>
+export const isReadyOrReloading = item =>
   Boolean(item) &&
   Boolean(item.get('data')) &&
   (item.get('state') === resourceStatus.FULFILLED ||

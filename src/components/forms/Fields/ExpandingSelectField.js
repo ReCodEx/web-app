@@ -48,7 +48,8 @@ const ExpandingSelectField = ({
                     }
                   >
                     <FlatButton onClick={() => fields.insert(index, '')}>
-                      <Icon icon="reply" />
+                      <AddIcon size="xs" />
+                      <Icon icon="level-up-alt" />
                     </FlatButton>
                   </OverlayTrigger>
                 </td>
