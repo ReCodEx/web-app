@@ -5,7 +5,7 @@ import { FormattedMessage, intlShape, injectIntl } from 'react-intl';
 
 import Button from '../../widgets/FlatButton';
 import PipelinesListItem from '../../Pipelines/PipelinesListItem';
-import { AddIcon, DeleteIcon, RefreshIcon } from '../../icons';
+import { AddIcon, DeleteIcon, TransferIcon } from '../../icons';
 import { EMPTY_FNC } from '../../../helpers/common';
 
 class EditExercisePipelinesTable extends Component {
@@ -22,7 +22,7 @@ class EditExercisePipelinesTable extends Component {
             bsSize="xs"
             style={{ position: 'relative', top: '-20px', marginRight: '1em' }}
           >
-            <RefreshIcon />
+            <TransferIcon rotation={90} />
           </Button>}
         <Button onClick={() => fields.remove(idx)} bsStyle="danger" bsSize="xs">
           <DeleteIcon />
