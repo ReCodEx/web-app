@@ -17,6 +17,7 @@ import { EMPTY_OBJ } from '../../../helpers/common';
 
 const EditUserRoleForm = ({
   currentRole = null,
+  change,
   submitting,
   handleSubmit,
   submitFailed = false,
@@ -62,6 +63,7 @@ const EditUserRoleForm = ({
             className={classnames({
               'bg-info': role === currentRole
             })}
+            onClick={() => change('role', role)}
           >
             <td className="shrink-col text-nowrap text-center">
               <Field name="role" component="input" type="radio" value={role} />
@@ -89,6 +91,7 @@ const EditUserRoleForm = ({
 
 EditUserRoleForm.propTypes = {
   currentRole: PropTypes.string,
+  change: PropTypes.func.isRequired,
   handleSubmit: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
   submitFailed: PropTypes.bool,
