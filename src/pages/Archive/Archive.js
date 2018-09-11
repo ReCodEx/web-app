@@ -22,7 +22,7 @@ import { getJsData } from '../../redux/helpers/resourceManager';
 import FilterArchiveGroupsForm from '../../components/forms/FilterArchiveGroupsForm/FilterArchiveGroupsForm';
 import { getLocalizedName } from '../../helpers/getLocalizedData';
 import ArchiveGroupButtonContainer from '../../containers/ArchiveGroupButtonContainer/ArchiveGroupButtonContainer';
-import { GroupIcon, Failure, SuccessIcon } from '../../components/icons';
+import { GroupIcon, FailureIcon, SuccessIcon } from '../../components/icons';
 
 // lowercase and remove accents and this kind of stuff
 const normalizeString = str =>
@@ -178,7 +178,7 @@ class Archive extends Component {
                       disabled={this.state.rootGroup === null}
                       onClick={() => this.setState({ rootGroup: null })}
                     >
-                      <Failure gapRight />
+                      <FailureIcon gapRight />
                       <FormattedMessage
                         id="app.group.unsetRoot"
                         defaultMessage="Unset Root Group"

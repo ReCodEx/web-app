@@ -145,7 +145,7 @@ class EditGroup extends Component {
                       className="small text-muted"
                       style={{ padding: '0.75em' }}
                     >
-                      <Icon icon="info-circle" gapRight />
+                      <InfoIcon gapRight />
                       <FormattedMessage
                         id="app.editGroup.organizationalExplain"
                         defaultMessage="Regular groups are containers for students and assignments. Organizational groups are intended to create hierarchy, so they are forbidden to hold any students or assignments."
@@ -165,7 +165,7 @@ class EditGroup extends Component {
                         className="small text-muted"
                         style={{ padding: '0.75em' }}
                       >
-                        <Icon icon="info-circle" gapRight />
+                        <InfoIcon gapRight />
                         <FormattedMessage
                           id="app.editGroup.archivedExplain"
                           defaultMessage="Archived groups are containers for students, assignments and results after the course is finished. They are immutable and can be accessed through separate Archive page."
