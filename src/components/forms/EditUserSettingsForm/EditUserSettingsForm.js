@@ -36,22 +36,16 @@ const EditUserSettingsForm = ({
           dirty={anyTouched}
           messages={{
             submit: (
-              <FormattedMessage
-                id="app.editUserSettings.set"
-                defaultMessage="Save changes"
-              />
+              <FormattedMessage id="generic.save" defaultMessage="Save" />
             ),
             submitting: (
               <FormattedMessage
-                id="app.editUserSettings.processing"
+                id="generic.saving"
                 defaultMessage="Saving ..."
               />
             ),
             success: (
-              <FormattedMessage
-                id="app.editUserSettings.success"
-                defaultMessage="Account settings has been saved."
-              />
+              <FormattedMessage id="generic.saved" defaultMessage="Saved" />
             )
           }}
         />

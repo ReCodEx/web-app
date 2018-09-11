@@ -126,15 +126,15 @@ export const isSuperadminRole = role => role === SUPERADMIN_ROLE;
  * Icons
  */
 
-const roleIcons = ({ role, ...props }) => {
+const roleIcon = ({ role, ...props }) => {
   switch (role) {
     case SUPERADMIN_ROLE:
       return <SuperadminIcon {...props} />;
-    case [EMPOWERED_SUPERVISOR_ROLE]:
+    case EMPOWERED_SUPERVISOR_ROLE:
       return <EmpoweredSupervisorIcon {...props} />;
-    case 'supervisor':
+    case SUPERVISOR_ROLE:
       return <SupervisorIcon {...props} />;
-    case [SUPERVISOR_STUDENT_ROLE]:
+    case SUPERVISOR_STUDENT_ROLE:
       return <SupervisorStudentIcon {...props} />;
     default:
       return (
@@ -145,7 +145,7 @@ const roleIcons = ({ role, ...props }) => {
   }
 };
 
-roleIcons.propTypes = {
+roleIcon.propTypes = {
   role: PropTypes.string.isRequired
 };
 
@@ -164,9 +164,9 @@ export const UserRoleIcon = ({
           </Tooltip>
         }
       >
-        {roleIcons({ role, ...props })}
+        {roleIcon({ role, ...props })}
       </OverlayTrigger>
-    : roleIcons({ role, ...props });
+    : roleIcon({ role, ...props });
 
 UserRoleIcon.propTypes = {
   role: PropTypes.string.isRequired,
