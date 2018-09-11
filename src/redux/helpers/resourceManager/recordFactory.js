@@ -4,7 +4,7 @@
  */
 
 import { fromJS } from 'immutable';
-import { resourceStatus, isReady } from './status';
+import { resourceStatus, isReadyOrReloading } from './status';
 
 /**
  * @typedef RecordDescriptor
@@ -41,14 +41,14 @@ export default createRecord;
  * @return  {object|null}
  */
 export const getData = resource =>
-  isReady(resource) ? resource.get('data') : null;
+  isReadyOrReloading(resource) ? resource.get('data') : null;
 
 /**
  * @param   {object}      resource  Resource's data
  * @return  {Immutable.Map|null}
  */
 export const getJsData = resource => {
-  const data = isReady(resource) ? getData(resource) : null;
+  const data = isReadyOrReloading(resource) ? getData(resource) : null;
   return data && data.toJS ? data.toJS() : data;
 };
 
@@ -57,4 +57,4 @@ export const getJsData = resource => {
  * @return  {string|null}
  */
 export const getId = resource =>
-  isReady(resource) ? getJsData(resource).id : null;
+  isReadyOrReloading(resource) ? getJsData(resource).id : null;

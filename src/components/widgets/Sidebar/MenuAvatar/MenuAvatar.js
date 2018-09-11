@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
+import classnames from 'classnames';
 
 import styles from './MenuAvatar.less';
 import Avatar, { FakeAvatar } from '../../Avatar';
@@ -15,7 +15,7 @@ const MenuAvatar = ({
   onClick
 }) =>
   <li
-    className={classNames({
+    className={classnames({
       active: isActive
     })}
   >

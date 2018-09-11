@@ -1,244 +1,306 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { reduxForm, FieldArray, getFormValues } from 'redux-form';
+import { reduxForm, Field, FieldArray, getFormValues } from 'redux-form';
 import { connect } from 'react-redux';
-import { FormattedMessage } from 'react-intl';
+import {
+  FormattedMessage,
+  FormattedHTMLMessage,
+  intlShape,
+  injectIntl
+} from 'react-intl';
 import { Alert } from 'react-bootstrap';
 
+import EditEnvironmentConfigVariables from './EditEnvironmentConfigVariables';
+import FormBox from '../../widgets/FormBox';
+import { SelectField } from '../Fields';
 import SubmitButton from '../SubmitButton';
-import EditEnvironmentConfigTabs from './EditEnvironmentConfigTabs';
+import Button from '../../widgets/FlatButton';
+import { InfoIcon, RefreshIcon } from '../../icons';
+import { compareVariablesForEquality } from '../../../helpers/exercise/environments';
+import { safeGet, safeSet } from '../../../helpers/common';
 
 class EditEnvironmentConfigForm extends Component {
-  fillDefaultVariablesIfNeeded(index) {
-    const { formValues, runtimeEnvironments } = this.props;
-
-    const envId =
-      formValues &&
-      formValues.environmentConfigs &&
-      formValues.environmentConfigs[index] &&
-      formValues.environmentConfigs[index].runtimeEnvironmentId
-        ? formValues.environmentConfigs[index].runtimeEnvironmentId
-        : '';
-    let currentVariables =
-      formValues &&
-      formValues.environmentConfigs &&
-      formValues.environmentConfigs[index] &&
-      formValues.environmentConfigs[index].variablesTable
-        ? formValues.environmentConfigs[index].variablesTable
-        : [];
-
-    const environment =
-      runtimeEnvironments &&
-      runtimeEnvironments.toJS()[envId] &&
-      runtimeEnvironments.toJS()[envId]
-        ? runtimeEnvironments.toJS()[envId].data
-        : {};
-    const envDefaults = environment.defaultVariables
-      ? environment.defaultVariables
-      : [];
-
-    for (const envVariable of envDefaults) {
-      let isPresent = false;
-      for (const curVariable of currentVariables) {
-        if (curVariable.name === envVariable.name) {
-          isPresent = true;
-        }
-      }
-
-      if (!isPresent) {
-        currentVariables.push(envVariable);
-      }
+  setDefaultVariables = () => {
+    const { defaultVariables = null, change } = this.props;
+    if (defaultVariables) {
+      change(
+        'variables',
+        defaultVariables.map(({ name, value }) => ({ name, value }))
+      );
     }
-  }
+  };
 
   render() {
     const {
-      runtimeEnvironments = [],
-      environmentFormValues: { environmentConfigs = [] } = {},
-      anyTouched,
+      runtimeEnvironments,
+      possibleVariables = null,
+      selectedRuntimeId,
+      hasDefaultVariables,
+      dirty,
+      reset,
       submitting,
       handleSubmit,
       submitFailed,
       submitSucceeded,
       invalid,
-      formValues
+      error,
+      warning,
+      intl: { locale }
     } = this.props;
 
     return (
-      <div>
+      <FormBox
+        title={
+          <FormattedMessage
+            id="app.editEnvironmentConfig.title"
+            defaultMessage="Runtime Environment Configuration"
+          />
+        }
+        type={submitSucceeded ? 'success' : undefined}
+        footer={
+          <div className="text-center">
+            {dirty &&
+              <Button type="reset" onClick={reset} bsStyle="danger">
+                <RefreshIcon gapRight />
+                <FormattedMessage id="generic.reset" defaultMessage="Reset" />
+              </Button>}
+
+            <SubmitButton
+              id="editRuntimeConfig"
+              invalid={invalid}
+              submitting={submitting}
+              hasSucceeded={submitSucceeded}
+              dirty={dirty}
+              hasFailed={submitFailed}
+              handleSubmit={handleSubmit}
+            />
+
+            {Boolean(selectedRuntimeId) &&
+              !hasDefaultVariables &&
+              <Button onClick={this.setDefaultVariables} bsStyle="primary">
+                <RefreshIcon gapRight />
+                <FormattedMessage
+                  id="app.editEnvironmentConfig.setDefaultVariables"
+                  defaultMessage="Set Default Variables"
+                />
+              </Button>}
+          </div>
+        }
+      >
+        {possibleVariables &&
+          <datalist id="editEnvironmentConfigVariablesNames">
+            {Object.keys(possibleVariables).map(name =>
+              <option key={name}>
+                {name}
+              </option>
+            )}
+          </datalist>}
+
+        <p className="text-muted small em-padding-horizontal">
+          <InfoIcon gapRight />
+          <FormattedMessage
+            id="app.editEnvironmentConfig.selectedRuntimeInfo"
+            defaultMessage="In the advanced configuration, selected runtime environment is used only to ensure that the backend worker has necessary compilers, tools, or libraries required by the environment. Everything else (source files patterns, pipelines) is configured separately."
+          />
+        </p>
+        <Field
+          name="environmentId"
+          component={SelectField}
+          label={
+            <FormattedMessage
+              id="app.editEnvironmentConfig.selectedRuntime"
+              defaultMessage="Selected Runtime Environment:"
+            />
+          }
+          options={runtimeEnvironments
+            .map(({ id, longName }) => ({
+              key: id,
+              name: longName
+            }))
+            .sort((a, b) => a.name.localeCompare(b.name, locale))}
+        />
+
+        {Boolean(selectedRuntimeId) &&
+          <React.Fragment>
+            <p className="text-muted small em-padding-horizontal">
+              <InfoIcon gapRight />
+              <FormattedHTMLMessage
+                id="app.editEnvironmentConfig.variablesInfo"
+                defaultMessage="These variables cover the submitted files and how they are associated with pipeline inputs. Each value may hold a file name or a wildcard (e.g., <code>solution.cpp</code>, <code>*.py</code>, <code>my-*.\{c,h\}</code>). Only variables of type <code>file[]</code> are allowed here."
+              />
+            </p>
+            <FieldArray
+              name="variables"
+              component={EditEnvironmentConfigVariables}
+              leftLabel={
+                <FormattedMessage
+                  id="app.editEnvironmentConfig.variableName"
+                  defaultMessage="Source Files Variable:"
+                />
+              }
+              rightLabel={
+                <FormattedMessage
+                  id="app.editEnvironmentConfig.variableValue"
+                  defaultMessage="Wildcard Pattern:"
+                />
+              }
+            />
+          </React.Fragment>}
+
+        {!selectedRuntimeId &&
+          <Alert bsStyle="warning" className="em-margin-top">
+            <FormattedMessage
+              id="app.editEnvironmentConfig.noRuntimeSelected"
+              defaultMessage="There must be a runtime environment selected before you can proceed with exercise configuration."
+            />
+          </Alert>}
+
         {submitFailed &&
-          <Alert bsStyle="danger">
+          <Alert bsStyle="danger" className="em-margin-top">
             <FormattedMessage
               id="generic.savingFailed"
               defaultMessage="Saving failed. Please try again later."
             />
           </Alert>}
 
-        <FieldArray
-          name="environmentConfigs"
-          component={EditEnvironmentConfigTabs}
-          environmentValues={environmentConfigs}
-          runtimeEnvironments={runtimeEnvironments}
-          formValues={formValues}
-          fillDefaultVariablesIfNeeded={i =>
-            this.fillDefaultVariablesIfNeeded(i)}
-        />
+        {error &&
+          <Alert bsStyle="danger" className="em-margin-top">
+            {error}
+          </Alert>}
 
-        <div className="text-center">
-          <SubmitButton
-            id="editEnvironmentConfig"
-            invalid={invalid}
-            submitting={submitting}
-            hasSucceeded={submitSucceeded}
-            dirty={anyTouched}
-            hasFailed={submitFailed}
-            handleSubmit={handleSubmit}
-            messages={{
-              submit: (
-                <FormattedMessage
-                  id="app.editEnvironmentConfigForm.submit"
-                  defaultMessage="Change configuration"
-                />
-              ),
-              submitting: (
-                <FormattedMessage
-                  id="app.editEnvironmentConfigForm.submitting"
-                  defaultMessage="Saving configuration ..."
-                />
-              ),
-              success: (
-                <FormattedMessage
-                  id="app.editEnvironmentConfigForm.success"
-                  defaultMessage="Configuration was changed."
-                />
-              )
-            }}
-          />
-        </div>
-      </div>
+        {warning &&
+          <Alert bsStyle="warning" className="em-margin-top">
+            {warning}
+          </Alert>}
+      </FormBox>
     );
   }
 }
 
 EditEnvironmentConfigForm.propTypes = {
-  environmentFormValues: PropTypes.object,
-  values: PropTypes.array,
+  selectedPipelines: PropTypes.array,
+  runtimeEnvironments: PropTypes.array.isRequired,
+  possibleVariables: PropTypes.object,
+  readOnly: PropTypes.bool,
+  selectedRuntimeId: PropTypes.string,
+  defaultVariables: PropTypes.array,
+  hasDefaultVariables: PropTypes.bool,
+  reset: PropTypes.func.isRequired,
+  change: PropTypes.func.isRequired,
   handleSubmit: PropTypes.func.isRequired,
-  anyTouched: PropTypes.bool,
+  dirty: PropTypes.bool,
   submitting: PropTypes.bool,
   submitFailed: PropTypes.bool,
   submitSucceeded: PropTypes.bool,
   invalid: PropTypes.bool,
-  runtimeEnvironments: PropTypes.object,
-  formValues: PropTypes.object
+  error: PropTypes.any,
+  warning: PropTypes.any,
+  intl: intlShape.isRequired
 };
 
-const validate = ({ environmentConfigs }) => {
+const validate = ({ variables }) => {
   const errors = {};
 
-  if (environmentConfigs.length < 1) {
-    errors['_error'] = (
-      <FormattedMessage
-        id="app.editEnvironmentConfigForm.validation.noEnvironments"
-        defaultMessage="Please add at least one environment config for the exercise."
-      />
-    );
-  }
-
-  const environmentConfigsErrors = {};
-  for (let i = 0; i < environmentConfigs.length; ++i) {
-    const environmentErrors = {};
-    if (!environmentConfigs[i]) {
-      environmentErrors['runtimeEnvironmentId'] = (
+  // Check variable names.
+  const index = {};
+  variables.forEach(({ name }, idx) => {
+    if (!name || !name.match(/^[-a-zA-Z0-9_]+$/)) {
+      safeSet(
+        errors,
+        ['variables', idx, 'name'],
         <FormattedMessage
-          id="app.editEnvironmentConfigForm.validation.environments"
-          defaultMessage="Please fill environment information."
+          id="app.editEnvironmentConfig.validateName"
+          defaultMessage="This is not a valid variable name."
         />
       );
     } else {
-      if (!environmentConfigs[i].runtimeEnvironmentId) {
-        environmentErrors['runtimeEnvironmentId'] = (
-          <FormattedMessage
-            id="app.editEnvironmentConfigForm.validation.environments.runtime"
-            defaultMessage="Please select the runtime environment."
-          />
-        );
+      if (!index[name]) {
+        index[name] = [];
       }
+      index[name].push(idx);
     }
+  });
 
-    const variablesErrors = {};
-    const variables = environmentConfigs[i]
-      ? environmentConfigs[i].variablesTable
-      : [];
-    for (let j = 0; j < variables.length; ++j) {
-      const variableErrors = {};
-      if (!variables[j]) {
-        variableErrors['name'] = (
+  // Check variable name duplicities
+  Object.keys(index).forEach(name => {
+    if (index[name].length > 1) {
+      index[name].forEach(idx =>
+        safeSet(
+          errors,
+          ['variables', idx, 'name'],
           <FormattedMessage
-            id="app.editEnvironmentConfigForm.validation.environments.variableNameType"
-            defaultMessage="Please specify variable name, type and value."
+            id="app.editEnvironmentConfig.duplicateVariable"
+            defaultMessage="Duplicate variable name."
           />
-        );
-      }
-      if (variables[j] && !variables[j].name) {
-        variableErrors['name'] = (
-          <FormattedMessage
-            id="app.editEnvironmentConfigForm.validation.environments.variableName"
-            defaultMessage="Please specify variable name."
-          />
-        );
-      }
-      if (variables[j] && !variables[j].type) {
-        variableErrors['type'] = (
-          <FormattedMessage
-            id="app.editEnvironmentConfigForm.validation.environments.variableType"
-            defaultMessage="Please specify variable type."
-          />
-        );
-      }
-      if (variables[j] && !variables[j].value) {
-        variableErrors['value'] = (
-          <FormattedMessage
-            id="app.editEnvironmentConfigForm.validation.environments.variableValue"
-            defaultMessage="Please specify variable value."
-          />
-        );
-      }
-      variablesErrors[j] = variableErrors;
+        )
+      );
     }
-    environmentErrors['variablesTable'] = variablesErrors;
-
-    environmentConfigsErrors[i] = environmentErrors;
-  }
-
-  const environmentArr = environmentConfigs
-    .filter(config => config !== undefined)
-    .map(config => config.runtimeEnvironmentId);
-  for (let i = 0; i < environmentArr.length; ++i) {
-    if (environmentArr.indexOf(environmentArr[i]) !== i) {
-      if (!environmentConfigsErrors[i].runtimeEnvironmentId) {
-        environmentConfigsErrors[i].runtimeEnvironmentId = (
-          <FormattedMessage
-            id="app.editEnvironmentConfigForm.validation.sameEnvironments"
-            defaultMessage="There are more environment specifications for the same environment. Please make sure environments are unique."
-          />
-        );
-      }
-    }
-  }
-
-  errors['environmentConfigs'] = environmentConfigsErrors;
+  });
 
   return errors;
 };
 
-export default connect(state => {
+const warn = ({ variables }, { possibleVariables = null }) => {
+  const warnings = {};
+  if (possibleVariables) {
+    variables
+      .filter(({ name }) => name && name.match(/^[-a-zA-Z0-9_]+$/))
+      .forEach(({ name }, idx) => {
+        if (!possibleVariables[name]) {
+          safeSet(
+            warnings,
+            ['variables', idx, 'name'],
+            <FormattedMessage
+              id="app.editEnvironmentConfig.warnings.unknownVariable"
+              defaultMessage="This variable is not defined in any pipeline."
+            />
+          );
+        } else if (possibleVariables[name] > 1) {
+          safeSet(
+            warnings,
+            ['variables', idx, 'name'],
+            <FormattedMessage
+              id="app.editEnvironmentConfig.warnings.ambiguousVariable"
+              defaultMessage="This variable is defined in multiple pipelines. The value will be used in all of them."
+            />
+          );
+        }
+      });
+  } else {
+    warnings._warning = (
+      <FormattedMessage
+        id="app.editEnvironmentConfig.warnings.noPipelinesVariables"
+        defaultMessage="There are no pipelines set. Name of the variables may not be verified."
+      />
+    );
+  }
+
+  return warnings;
+};
+
+export default connect((state, { runtimeEnvironments }) => {
+  const values = getFormValues('editEnvironmentConfig')(state);
+  const selectedRuntimeId = values && values.environmentId;
+  const defaultVariables =
+    selectedRuntimeId &&
+    safeGet(runtimeEnvironments, [
+      ({ id }) => id === selectedRuntimeId,
+      'defaultVariables'
+    ]);
+
   return {
-    formValues: getFormValues('editEnvironmentConfig')(state)
+    selectedRuntimeId,
+    defaultVariables,
+    hasDefaultVariables:
+      defaultVariables &&
+      compareVariablesForEquality(values.variables, defaultVariables)
   };
 })(
   reduxForm({
     form: 'editEnvironmentConfig',
-    validate
-  })(EditEnvironmentConfigForm)
+    enableReinitialize: true,
+    keepDirtyOnReinitialize: false,
+    validate,
+    warn
+  })(injectIntl(EditEnvironmentConfigForm))
 );

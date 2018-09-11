@@ -4,8 +4,9 @@ import UsersNameContainer from '../../../containers/UsersNameContainer';
 import { Link } from 'react-router';
 import { FormattedMessage } from 'react-intl';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
+import classnames from 'classnames';
 
-import Icon from '../../icons';
+import Icon, { PipelineIcon } from '../../icons';
 import DateTime from '../../widgets/DateTime';
 import withLinks from '../../../helpers/withLinks';
 
@@ -15,6 +16,9 @@ const PipelinesListItem = ({
   author,
   parameters,
   createdAt,
+  showAuthor = false,
+  showCreatedAt = false,
+  fullWidthName = false,
   createActions,
   links: { PIPELINE_URI_FACTORY }
 }) =>
@@ -36,12 +40,10 @@ const PipelinesListItem = ({
           </Tooltip>
         }
       >
-        <Icon
-          icon="random"
-          className={author ? 'text-muted' : 'text-primary'}
-        />
+        <PipelineIcon className={author ? 'text-muted' : 'text-primary'} />
       </OverlayTrigger>
     </td>
+
     <td className="text-center shrink-col text-muted">
       {parameters.isCompilationPipeline &&
         <OverlayTrigger
@@ -87,6 +89,7 @@ const PipelinesListItem = ({
           <Icon icon="balance-scale" />
         </OverlayTrigger>}
     </td>
+
     <td className="text-center shrink-col text-muted">
       {parameters.producesStdout &&
         <OverlayTrigger
@@ -117,27 +120,26 @@ const PipelinesListItem = ({
           <Icon icon={['far', 'file-alt']} gapRight />
         </OverlayTrigger>}
     </td>
-    <td>
-      <strong>
-        <Link to={PIPELINE_URI_FACTORY(id)}>
-          {name}
-        </Link>
-      </strong>
+
+    <td
+      className={classnames({ 'text-bold': true, 'full-width': fullWidthName })}
+    >
+      <Link to={PIPELINE_URI_FACTORY(id)}>
+        {name}
+      </Link>
     </td>
-    <td>
-      {author
-        ? <UsersNameContainer userId={author} />
-        : <i>
-            <FormattedMessage
-              id="app.pipelinesList.universalPipeline"
-              defaultMessage="universal pipeline"
-            />
-          </i>}
-    </td>
-    <td>
-      <DateTime unixts={createdAt} showRelative />
-    </td>
-    <td className="text-right">
+
+    {showAuthor &&
+      <td>
+        {author ? <UsersNameContainer userId={author} /> : <i>ReCodEx</i>}
+      </td>}
+
+    {showCreatedAt &&
+      <td>
+        <DateTime unixts={createdAt} showRelative />
+      </td>}
+
+    <td className="text-right text-nowrap">
       {createActions && createActions(id)}
     </td>
   </tr>;
@@ -148,6 +150,9 @@ PipelinesListItem.propTypes = {
   parameters: PropTypes.object,
   name: PropTypes.string.isRequired,
   createdAt: PropTypes.number.isRequired,
+  showAuthor: PropTypes.bool,
+  showCreatedAt: PropTypes.bool,
+  fullWidthName: PropTypes.bool,
   createActions: PropTypes.func,
   links: PropTypes.object
 };

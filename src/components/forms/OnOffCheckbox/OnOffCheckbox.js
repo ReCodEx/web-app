@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Toggle from 'react-toggle';
 import { ControlLabel } from 'react-bootstrap';
-import classNames from 'classnames';
+import classnames from 'classnames';
 
 import styles from './Checkbox.less';
 import 'react-toggle/style.css';
@@ -19,7 +19,7 @@ const OnOffCheckbox = ({
 }) =>
   <ControlLabel
     htmlFor={name}
-    className={classNames({
+    className={classnames({
       [className]: className && className.length > 0,
       [styles.labelDisabled]: disabled,
       [styles.label]: !disabled

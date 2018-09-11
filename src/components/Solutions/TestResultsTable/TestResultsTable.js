@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
+import classnames from 'classnames';
 import { FormattedMessage, FormattedNumber } from 'react-intl';
 import { Table, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import prettyMs from 'pretty-ms';
@@ -16,7 +16,7 @@ const hasValue = value => value !== null;
 
 const tickOrCrossAndRatioOrValue = (isOK, ratio, value, pretty, multiplier) =>
   <span
-    className={classNames({
+    className={classnames({
       'text-center': true,
       'text-success': isOK,
       'text-danger': !isOK
@@ -157,7 +157,7 @@ class TestResultsTable extends Component {
           </strong>
         </td>
         <td
-          className={classNames({
+          className={classnames({
             'text-center': true,
             'text-success': score === 1,
             'text-danger': score === 0,

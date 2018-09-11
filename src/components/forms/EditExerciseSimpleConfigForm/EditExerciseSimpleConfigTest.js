@@ -2,7 +2,12 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Field, FieldArray } from 'redux-form';
 import { Well, Grid, Row, Col } from 'react-bootstrap';
-import { FormattedMessage, injectIntl, defineMessages } from 'react-intl';
+import {
+  FormattedMessage,
+  injectIntl,
+  defineMessages,
+  intlShape
+} from 'react-intl';
 
 import EnvironmentsListItem from '../../helpers/EnvironmentsList/EnvironmentsListItem';
 import { EMPTY_ARRAY } from '../../../helpers/common';
@@ -143,6 +148,7 @@ class EditExerciseSimpleConfigTest extends Component {
       test,
       testErrors,
       smartFill,
+      change,
       intl
     } = this.props;
     const supplementaryFilesOptions = supplementaryFiles
@@ -250,6 +256,7 @@ class EditExerciseSimpleConfigTest extends Component {
                                       name={`${test}.extra-files.${env.id}`}
                                       component={ExpandingInputFilesField}
                                       options={supplementaryFilesOptions}
+                                      change={change}
                                       leftLabel={
                                         <FormattedMessage
                                           id="app.editExerciseSimpleConfigTests.extraFilesActual"
@@ -344,6 +351,7 @@ class EditExerciseSimpleConfigTest extends Component {
               name={`${test}.input-files`}
               component={ExpandingInputFilesField}
               options={supplementaryFilesOptions}
+              change={change}
               leftLabel={
                 <FormattedMessage
                   id="app.editExerciseSimpleConfigTests.inputFilesActual"
@@ -675,7 +683,8 @@ EditExerciseSimpleConfigTest.propTypes = {
   environmentsWithEntryPoints: PropTypes.array.isRequired,
   testErrors: PropTypes.object,
   smartFill: PropTypes.object,
-  intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired
+  change: PropTypes.func.isRequired,
+  intl: intlShape.isRequired
 };
 
 export default injectIntl(EditExerciseSimpleConfigTest);

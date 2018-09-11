@@ -10,7 +10,7 @@ import UsersName, {
   LoadingUsersName,
   FailedUsersName
 } from '../../components/Users/UsersName';
-import { LoadingIcon, Failure } from '../../components/icons';
+import { LoadingIcon, FailureIcon } from '../../components/icons';
 
 import './UsersNameContainer.css';
 
@@ -43,7 +43,7 @@ class UsersNameContainer extends Component {
       <ResourceRenderer
         resource={[user, currentUser]}
         loading={isSimple ? <LoadingIcon /> : <LoadingUsersName size={size} />}
-        failed={isSimple ? <Failure /> : <FailedUsersName size={size} />}
+        failed={isSimple ? <FailureIcon /> : <FailedUsersName size={size} />}
       >
         {(user, currentUser) =>
           isSimple

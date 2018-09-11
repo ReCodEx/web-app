@@ -19,13 +19,19 @@ const validate = value =>
       />
     : undefined;
 
+const handleSelectChange = (oldValue, fieldName, change) => e => {
+  if (oldValue.file === oldValue.name || (!oldValue.file && !oldValue.name)) {
+    change(fieldName, e.target.value);
+  }
+};
+
 const ExpandingInputFilesField = ({
   fields,
-  meta: { active, dirty, error, warning },
-  leftLabel = '',
-  rightLabel = '',
+  leftLabel = null,
+  rightLabel = null,
   noItems = null,
   options,
+  change,
   ...props
 }) =>
   <div>
@@ -34,14 +40,16 @@ const ExpandingInputFilesField = ({
         <thead>
           <tr>
             <th width="50%">
-              <ControlLabel>
-                {leftLabel}
-              </ControlLabel>
+              {Boolean(leftLabel) &&
+                <ControlLabel>
+                  {leftLabel}
+                </ControlLabel>}
             </th>
             <th width="50%">
-              <ControlLabel>
-                {rightLabel}
-              </ControlLabel>
+              {Boolean(rightLabel) &&
+                <ControlLabel>
+                  {rightLabel}
+                </ControlLabel>}
             </th>
             <th />
           </tr>
@@ -57,6 +65,11 @@ const ExpandingInputFilesField = ({
                   options={options}
                   addEmptyOption={true}
                   validate={validate}
+                  onChange={handleSelectChange(
+                    fields.get(index),
+                    `${field}.name`,
+                    change
+                  )}
                   {...props}
                 />
               </td>
@@ -77,7 +90,7 @@ const ExpandingInputFilesField = ({
                     <Tooltip id={Date.now()}>
                       <FormattedMessage
                         id="app.expandingInputFilesField.tooltip.remove"
-                        defaultMessage="Remove this file from input files."
+                        defaultMessage="Remove this file."
                       />
                     </Tooltip>
                   }
@@ -130,18 +143,19 @@ ExpandingInputFilesField.propTypes = {
     PropTypes.string,
     PropTypes.element,
     PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) })
-  ]).isRequired,
+  ]),
   rightLabel: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.element,
     PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) })
-  ]).isRequired,
+  ]),
   noItems: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.element,
     PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) })
   ]),
-  options: PropTypes.array
+  options: PropTypes.array,
+  change: PropTypes.func.isRequired
 };
 
 export default ExpandingInputFilesField;

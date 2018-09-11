@@ -5,6 +5,7 @@
 
 export const resourceStatus = {
   PENDING: 'PENDING',
+  RELOADING: 'RELOADING', // similar to pending, but the old record data are still available whilst being re-fetched
   FAILED: 'FAILED',
   FULFILLED: 'FULFILLED',
   POSTING: 'POSTING',
@@ -14,10 +15,19 @@ export const resourceStatus = {
 
 /**
  * @param {Object} item The item
- * @return {boolean} True when the item is loading.
+ * @return {boolean} True when the item is loading or reloaing.
  */
 export const isLoading = item =>
-  !item || item.get('state') === resourceStatus.PENDING;
+  !item ||
+  item.get('state') === resourceStatus.PENDING ||
+  item.get('state') === resourceStatus.RELOADING;
+
+/**
+ * @param {Object} item The item
+ * @return {boolean} True when the item is reloading (i.e., loading, but old record still exists).
+ */
+export const isReloading = item =>
+  Boolean(item) && item.get('state') === resourceStatus.RELOADING;
 
 /**
  * @param {Object} item The item
@@ -45,16 +55,26 @@ export const isDeleted = item =>
  * @return {boolean} True when the item could not be loaded, written, updated or deleted.
  */
 export const hasFailed = item =>
-  !!item && item.get('state') === resourceStatus.FAILED;
+  Boolean(item) && item.get('state') === resourceStatus.FAILED;
 
 /**
  * @param {Object} item The item
  * @return {boolean} True when the item has been loaded.
  */
 export const isReady = item =>
-  !!item &&
+  Boolean(item) &&
   item.get('state') === resourceStatus.FULFILLED &&
-  !!item.get('data');
+  Boolean(item.get('data'));
+
+/**
+ * @param {Object} item The item
+ * @return {boolean} True when the item has been loaded or is currently reloading (but data are available).
+ */
+export const isReadyOrReloading = item =>
+  Boolean(item) &&
+  Boolean(item.get('data')) &&
+  (item.get('state') === resourceStatus.FULFILLED ||
+    item.get('state') === resourceStatus.RELOADING);
 
 /**
  * @param {number} Number of milliseconds since Jan 1 1970

@@ -11,16 +11,17 @@ import Icon, { AddIcon, CloseIcon } from '../../icons';
 const ExpandingSelectField = ({
   fields,
   meta: { active, dirty, error, warning },
-  label,
+  label = null,
   noItems = null,
   ...props
 }) =>
   <div>
     {fields.length > 0 &&
       <React.Fragment>
-        <ControlLabel>
-          {label}
-        </ControlLabel>
+        {Boolean(label) &&
+          <ControlLabel>
+            {label}
+          </ControlLabel>}
         <table>
           <tbody>
             {fields.map((field, index) =>
@@ -47,7 +48,8 @@ const ExpandingSelectField = ({
                     }
                   >
                     <FlatButton onClick={() => fields.insert(index, '')}>
-                      <Icon icon="reply" />
+                      <AddIcon size="xs" />
+                      <Icon icon="level-up-alt" />
                     </FlatButton>
                   </OverlayTrigger>
                 </td>
@@ -112,7 +114,7 @@ ExpandingSelectField.propTypes = {
     PropTypes.string,
     PropTypes.element,
     PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) })
-  ]).isRequired,
+  ]),
   noItems: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.element,

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
-import classNames from 'classnames';
+import classnames from 'classnames';
 
 import Header from '../../widgets/Header';
 import Footer from '../../widgets/Footer';
@@ -23,7 +23,7 @@ const Layout = ({
   onCloseSidebar
 }) =>
   <div
-    className={classNames({
+    className={classnames({
       wrapper: true,
       'sidebar-mini': true,
       'sidebar-collapse': sidebar.isCollapsed,

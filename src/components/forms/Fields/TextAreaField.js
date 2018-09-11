@@ -7,7 +7,7 @@ import {
   ControlLabel,
   HelpBlock
 } from 'react-bootstrap';
-import classNames from 'classnames';
+import classnames from 'classnames';
 
 import styles from './commonStyles.less';
 
@@ -15,7 +15,7 @@ const TextAreaField = ({
   input,
   meta: { active, dirty, error, warning },
   type = 'text',
-  label,
+  label = null,
   children,
   ignoreDirty = false,
   ...props
@@ -24,15 +24,16 @@ const TextAreaField = ({
     controlId={input.name}
     validationState={error ? 'error' : warning ? 'warning' : undefined}
   >
-    <ControlLabel>
-      {label}
-    </ControlLabel>
+    {Boolean(label) &&
+      <ControlLabel>
+        {label}
+      </ControlLabel>}
     <FormControl
       {...input}
       {...props}
       componentClass="textarea"
       rows={8}
-      bsClass={classNames({
+      bsClass={classnames({
         'form-control': true,
         [styles.dirty]: dirty && !ignoreDirty && !error && !warning,
         [styles.active]: active
@@ -59,7 +60,7 @@ TextAreaField.propTypes = {
     PropTypes.string,
     PropTypes.element,
     PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) })
-  ]).isRequired,
+  ]),
   children: PropTypes.any,
   meta: PropTypes.shape({
     active: PropTypes.bool,

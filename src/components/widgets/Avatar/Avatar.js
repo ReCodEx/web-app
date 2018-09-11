@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
+import classnames from 'classnames';
 
 /**
  * Used on many places for displaying a round profile picture of a user.
@@ -19,7 +19,7 @@ const Avatar = ({
     src={src}
     alt={title}
     width={size}
-    className={classNames('img-circle', altClassName)}
+    className={classnames('img-circle', altClassName)}
     {...props}
   />;
 

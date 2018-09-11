@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
+import classnames from 'classnames';
 import { FormattedMessage } from 'react-intl';
 import { LoadingIcon } from '../../../../icons';
 
 const Posting = ({ right }) =>
   <span
-    className={classNames({
+    className={classnames({
       'direct-chat-timestamp': true,
       'pull-right': right,
       'pull-left': !right

@@ -112,7 +112,7 @@ class EditExercise extends Component {
             {exercise.isBroken &&
               <Row>
                 <Col sm={12}>
-                  <div className="alert alert-warning">
+                  <div className="callout callout-warning">
                     <h4>
                       <NeedFixingIcon gapRight />
                       <FormattedMessage
@@ -126,10 +126,7 @@ class EditExercise extends Component {
               </Row>}
             <Row>
               <Col sm={12}>
-                <ExerciseButtons
-                  exerciseId={exercise.id}
-                  permissionHints={exercise.permissionHints}
-                />
+                <ExerciseButtons {...exercise} />
               </Col>
             </Row>
             <Row>

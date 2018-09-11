@@ -60,13 +60,13 @@ import {
   transformTestsValues
 } from '../../helpers/exercise/tests';
 import {
-  getEnvInitValues,
-  transformEnvValues
+  getSimpleEnvironmentsInitValues,
+  transformSimpleEnvironmentsValues
 } from '../../helpers/exercise/environments';
 import {
   getSimpleConfigInitValues,
-  transformConfigValues
-} from '../../helpers/exercise/config';
+  transformSimpleConfigValues
+} from '../../helpers/exercise/configSimple';
 import { safeGet } from '../../helpers/common';
 
 class EditExerciseSimpleConfig extends Component {
@@ -108,7 +108,7 @@ class EditExerciseSimpleConfig extends Component {
       const { setConfig, reloadExercise } = this.props;
       return data =>
         setConfig(
-          transformConfigValues(
+          transformSimpleConfigValues(
             data,
             pipelines,
             environmentConfigs,
@@ -124,12 +124,12 @@ class EditExerciseSimpleConfig extends Component {
       const { editEnvironmentConfigs, reloadConfig, setConfig } = this.props;
 
       return data => {
-        const newEnvironments = transformEnvValues(
+        const newEnvironments = transformSimpleEnvironmentsValues(
           data,
           environmentConfigs,
           environments
         );
-        const configData = transformConfigValues(
+        const configData = transformSimpleConfigValues(
           getSimpleConfigInitValues(config, tests, environmentConfigs),
           pipelines,
           newEnvironments,
@@ -211,7 +211,7 @@ class EditExerciseSimpleConfig extends Component {
                   {exercise.isBroken &&
                     <Row>
                       <Col sm={12}>
-                        <div className="alert alert-warning">
+                        <div className="callout callout-warning">
                           <h4>
                             <NeedFixingIcon gapRight />
                             <FormattedMessage
@@ -223,20 +223,19 @@ class EditExerciseSimpleConfig extends Component {
                         </div>
                       </Col>
                     </Row>}
+
                   <Row>
                     <Col sm={12}>
-                      <ExerciseButtons
-                        exerciseId={exercise.id}
-                        permissionHints={exercise.permissionHints}
-                      />
+                      <ExerciseButtons {...exercise} />
                     </Col>
                   </Row>
+
                   <Row>
                     <Col lg={6}>
                       <Box
                         title={
                           <FormattedMessage
-                            id="app.editExercise.testsAndScoring"
+                            id="app.editExerciseConfig.testsAndScoring"
                             defaultMessage="Tests and Scoring"
                           />
                         }
@@ -257,11 +256,12 @@ class EditExerciseSimpleConfig extends Component {
                             />}
                         </ResourceRenderer>
                       </Box>
+
                       {exercise.permissionHints.update &&
                         <Box
                           title={
                             <FormattedMessage
-                              id="app.editExercise.runtimeEnvironments"
+                              id="app.editExerciseConfig.runtimeEnvironments"
                               defaultMessage="Runtime Environments"
                             />
                           }
@@ -280,9 +280,8 @@ class EditExerciseSimpleConfig extends Component {
                               >
                                 {environments =>
                                   <EditEnvironmentSimpleForm
-                                    initialValues={getEnvInitValues(
-                                      environmentConfigs,
-                                      environments
+                                    initialValues={getSimpleEnvironmentsInitValues(
+                                      environmentConfigs
                                     )}
                                     runtimeEnvironments={environments}
                                     onSubmit={this.transformAndSendEnvValuesCreator(
@@ -337,12 +336,12 @@ class EditExerciseSimpleConfig extends Component {
                                       config
                                     )}
                                   />
-                                : <div className="alert alert-warning">
+                                : <div className="callout callout-warning">
                                     <h4>
                                       <i className="icon fa fa-warning" />{' '}
                                       <FormattedMessage
                                         id="app.editExercise.editConfig"
-                                        defaultMessage="Edit exercise configuration"
+                                        defaultMessage="Edit Exercise Configuration"
                                       />
                                     </h4>
                                     <FormattedMessage

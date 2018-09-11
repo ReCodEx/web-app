@@ -10,7 +10,6 @@ import UsersNameContainer from '../../../containers/UsersNameContainer';
 import ExercisesNameContainer from '../../../containers/ExercisesNameContainer';
 
 const PipelineDetail = ({
-  id,
   author,
   exerciseId,
   name,
@@ -22,14 +21,15 @@ const PipelineDetail = ({
   <Box title={name} noPadding>
     <Table>
       <tbody>
-        <tr>
-          <th>
-            <FormattedMessage id="generic.author" defaultMessage="Author" />:
-          </th>
-          <td>
-            <UsersNameContainer userId={author} />
-          </td>
-        </tr>
+        {Boolean(author) &&
+          <tr>
+            <th>
+              <FormattedMessage id="generic.author" defaultMessage="Author" />:
+            </th>
+            <td>
+              <UsersNameContainer userId={author} />
+            </td>
+          </tr>}
         <tr>
           <th>
             <FormattedMessage
@@ -99,7 +99,7 @@ const PipelineDetail = ({
 PipelineDetail.propTypes = {
   id: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
-  author: PropTypes.string.isRequired,
+  author: PropTypes.string,
   exerciseId: PropTypes.string,
   description: PropTypes.string,
   createdAt: PropTypes.number.isRequired,

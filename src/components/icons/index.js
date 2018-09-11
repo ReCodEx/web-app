@@ -18,7 +18,7 @@ export const DownloadIcon = props =>
 export const EditIcon = props => <Icon {...props} icon={['far', 'edit']} />;
 export const EmpoweredSupervisorIcon = props =>
   <Icon {...props} icon="user-ninja" />;
-export const Failure = props =>
+export const FailureIcon = props =>
   <strong className="text-danger">
     <Icon {...props} icon="times" />
   </strong>;
@@ -34,13 +34,14 @@ export const GroupIcon = ({
 
 export const ArchiveGroupIcon = ({ archived = false, ...props }) =>
   <Icon {...props} icon={archived ? 'dolly' : 'archive'} />;
-export const InfoIcon = props => <Icon {...props} icon="info" />;
+export const InfoIcon = props => <Icon {...props} icon="info-circle" />;
 export const LoadingIcon = props =>
   <Icon {...props} icon="spinner" pulse style={{ opacity: 0.8 }} />;
 export const LocalIcon = props => <Icon {...props} icon="thumbtack" />;
 export const LockIcon = props => <Icon {...props} icon="lock" />;
 export const MailIcon = props => <Icon {...props} icon={['far', 'envelope']} />;
 export const NeedFixingIcon = props => <Icon {...props} icon="medkit" />;
+export const PipelineIcon = props => <Icon {...props} icon="random" />;
 export const RefreshIcon = props => <Icon {...props} icon="sync" />;
 export const RemoveIcon = props => <Icon {...props} icon="minus" />;
 export const ResultsIcon = props => <Icon {...props} icon="chart-line" />;
@@ -60,7 +61,7 @@ export const SuccessIcon = props =>
     <Icon {...props} icon="check" />
   </strong>;
 export const SuccessOrFailureIcon = ({ success = false, ...props }) =>
-  success ? <SuccessIcon {...props} /> : <Failure {...props} />;
+  success ? <SuccessIcon {...props} /> : <FailureIcon {...props} />;
 export const SuperadminIcon = props => <Icon {...props} icon="chess-queen" />;
 export const SupervisorIcon = props => <Icon {...props} icon="user-graduate" />;
 export const SupervisorStudentIcon = props =>

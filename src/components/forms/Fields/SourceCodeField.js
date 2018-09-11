@@ -19,7 +19,7 @@ const SourceCodeField = (
     mode,
     meta: { dirty, error, warning },
     type = 'text',
-    label,
+    label = null,
     children,
     tabIndex,
     onBlur,
@@ -31,9 +31,10 @@ const SourceCodeField = (
     controlId={input.name}
     validationState={error ? 'error' : warning ? 'warning' : undefined}
   >
-    <ControlLabel>
-      {label}
-    </ControlLabel>
+    {Boolean(label) &&
+      <ControlLabel>
+        {label}
+      </ControlLabel>}
     <ClientOnly>
       <AceEditor
         {...input}
@@ -83,7 +84,7 @@ SourceCodeField.propTypes = {
     PropTypes.string,
     PropTypes.element,
     PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) })
-  ]).isRequired,
+  ]),
   onBlur: PropTypes.func
 };
 

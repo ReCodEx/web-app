@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import classNames from 'classnames';
+import classnames from 'classnames';
 import { Modal, ProgressBar, Table } from 'react-bootstrap';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 
@@ -76,7 +76,7 @@ class EvaluationProgress extends Component {
                   {messages.map(({ wasSuccessful, text, status }, i) =>
                     <tr key={i}>
                       <td
-                        className={classNames({
+                        className={classnames({
                           'text-center': true,
                           'text-success': wasSuccessful,
                           'text-danger': !wasSuccessful
@@ -94,7 +94,7 @@ class EvaluationProgress extends Component {
                         {text}
                       </td>
                       <td
-                        className={classNames({
+                        className={classnames({
                           'text-center': true,
                           'text-success': wasSuccessful,
                           'text-danger': !wasSuccessful,

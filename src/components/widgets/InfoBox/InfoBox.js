@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage, FormattedNumber } from 'react-intl';
-import classNames from 'classnames';
+import classnames from 'classnames';
 
 import Icon from '../../icons';
 import GroupsName from '../../Groups/GroupsName';
@@ -16,7 +16,7 @@ const InfoBox = ({
   color = 'green'
 }) =>
   <div
-    className={classNames({
+    className={classnames({
       'info-box': true,
       [`bg-${color}`]: true
     })}

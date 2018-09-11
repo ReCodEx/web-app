@@ -9,7 +9,7 @@ import { EditLimitsField, CheckboxField } from '../Fields';
 import SubmitButton from '../SubmitButton';
 import FormBox from '../../widgets/FormBox';
 import Button from '../../widgets/FlatButton';
-import Icon, { RefreshIcon } from '../../icons';
+import { InfoIcon, RefreshIcon } from '../../icons';
 import { encodeId, encodeNumId, identity } from '../../../helpers/common';
 import { validateLimitsTimeTotals } from '../../../helpers/exercise/limits';
 
@@ -125,7 +125,7 @@ class EditLimitsForm extends Component {
             <Col lg={9}>
               <div>
                 <p className={styles.preciseTimeTooltip}>
-                  <Icon icon="info-circle" />
+                  <InfoIcon gapRight />
                   <FormattedMessage
                     id="app.editLimitsForm.preciseTimeTooltip"
                     defaultMessage="If precise time measurement is selected, ReCodEx will measure the consumed CPU time of tested solutions. Otherwise, the wall time will be measured. CPU is better in cases when serial time complexity of the solution is tested and tight time limits are set. Wall time is better in general cases as it better reflects the actual time consumed by the solution (including I/O), but it is more susceptible to errors of measurement."

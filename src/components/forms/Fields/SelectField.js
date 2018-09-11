@@ -7,14 +7,14 @@ import {
   ControlLabel,
   HelpBlock
 } from 'react-bootstrap';
-import classNames from 'classnames';
+import classnames from 'classnames';
 
 import styles from './commonStyles.less';
 
 const SelectField = ({
   input,
   meta: { active, dirty, warning, error },
-  label,
+  label = null,
   options,
   addEmptyOption = false,
   emptyOptionCaption = '...',
@@ -26,7 +26,7 @@ const SelectField = ({
     controlId={input.name}
     validationState={error ? 'error' : warning ? 'warning' : undefined}
   >
-    {label &&
+    {Boolean(label) &&
       <ControlLabel>
         {label}
       </ControlLabel>}
@@ -39,7 +39,7 @@ const SelectField = ({
               {...input}
               {...props}
               componentClass="select"
-              bsClass={classNames({
+              bsClass={classnames({
                 'form-control': true,
                 [styles.dirty]: dirty && !ignoreDirty && !error && !warning,
                 [styles.active]: active,
@@ -91,7 +91,7 @@ SelectField.propTypes = {
     PropTypes.string,
     PropTypes.element,
     PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) })
-  ]).isRequired,
+  ]),
   options: PropTypes.array.isRequired,
   addEmptyOption: PropTypes.bool,
   emptyOptionCaption: PropTypes.string,

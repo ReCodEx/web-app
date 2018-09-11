@@ -31,6 +31,7 @@ class EditExerciseSimpleConfigDataTest extends Component {
       test,
       testErrors,
       smartFill,
+      change,
       intl
     } = this.props;
     const supplementaryFilesOptions = supplementaryFiles
@@ -61,6 +62,7 @@ class EditExerciseSimpleConfigDataTest extends Component {
               name={`${test}.input-files`}
               component={ExpandingInputFilesField}
               options={supplementaryFilesOptions}
+              change={change}
               leftLabel={
                 <FormattedMessage
                   id="app.editExerciseSimpleConfigTests.inputFilesActual"
@@ -231,6 +233,7 @@ EditExerciseSimpleConfigDataTest.propTypes = {
   exerciseTests: PropTypes.array,
   testErrors: PropTypes.object,
   smartFill: PropTypes.object,
+  change: PropTypes.func.isRequired,
   intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired
 };
 

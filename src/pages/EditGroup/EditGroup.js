@@ -14,7 +14,7 @@ import OrganizationalGroupButtonContainer from '../../containers/OrganizationalG
 import ArchiveGroupButtonContainer from '../../containers/ArchiveGroupButtonContainer';
 import DeleteGroupButtonContainer from '../../containers/DeleteGroupButtonContainer';
 import Box from '../../components/widgets/Box';
-import Icon, { BanIcon } from '../../components/icons';
+import { BanIcon, InfoIcon } from '../../components/icons';
 
 import { fetchGroupIfNeeded, editGroup } from '../../redux/modules/groups';
 import { groupSelector } from '../../redux/selectors/groups';
