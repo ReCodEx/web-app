@@ -158,7 +158,7 @@ export const createApiCallPromise = (
   let call = createRequest(endpoint, query, method, headers, body, uploadFiles)
     .catch(err => detectUnreachableServer(err, dispatch))
     .then(res => {
-      dispatch(completedFetchOperation());
+      canUseDOM && dispatch(completedFetchOperation());
       if (
         res.status === 401 &&
         !isTokenValid(decode(accessToken)) &&
@@ -177,7 +177,7 @@ export const createApiCallPromise = (
       return res;
     });
 
-  dispatch(newPendingFetchOperation());
+  canUseDOM && dispatch(newPendingFetchOperation());
 
   // this processing can be manually skipped
   return doNotProcess === true ? call : processResponse(call, dispatch);
@@ -189,7 +189,7 @@ export const createApiCallPromise = (
  * @param {Function} dispatch
  */
 const detectUnreachableServer = (err, dispatch) => {
-  dispatch(completedFetchOperation());
+  canUseDOM && dispatch(completedFetchOperation());
   if (err.message && err.message === 'Failed to fetch') {
     dispatch(
       addNotification(
