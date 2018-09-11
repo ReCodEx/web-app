@@ -18,12 +18,11 @@ const ArchiveGroupButtonContainer = ({
   bsSize = undefined
 }) =>
   <ResourceRenderer resource={group}>
-    {({ directlyArchived, permissionHints }) =>
+    {({ directlyArchived }) =>
       <ArchiveGroupButton
         archived={directlyArchived}
         pending={pending}
         setArchived={setArchived}
-        disabled={!permissionHints.update}
         bsSize={bsSize}
       />}
   </ResourceRenderer>;

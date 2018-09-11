@@ -44,8 +44,7 @@ const getVisibleArchiveGroupsMap = (
     const rootGroupIncludes =
       rootGroup === null
         ? true
-        : group.parentGroupsIds.indexOf(rootGroup) >= 0 ||
-          rootGroup === group.id;
+        : group.parentGroupsIds.includes(rootGroup) || rootGroup === group.id;
     if (showAll || group.archived) {
       result[group.id] = rootGroupIncludes;
     }
@@ -172,7 +171,7 @@ class Archive extends Component {
               />
               <Grid fluid>
                 <Row>
-                  <Col xs={12} style={{ padding: '0' }}>
+                  <Col xs={12} className="no-padding">
                     <Button
                       className="pull-right"
                       bsStyle="link"

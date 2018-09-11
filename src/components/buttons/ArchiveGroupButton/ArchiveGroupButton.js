@@ -23,7 +23,7 @@ const ArchiveGroupButton = ({
     {archived === true
       ? <FormattedMessage
           id="app.archiveGroupButton.unset"
-          defaultMessage="Unarchive this Group"
+          defaultMessage="Excavate from Archive"
         />
       : <FormattedMessage
           id="app.archiveGroupButton.set"

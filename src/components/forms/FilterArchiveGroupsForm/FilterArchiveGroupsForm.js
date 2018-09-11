@@ -6,10 +6,9 @@ import { Alert, Well, Grid, Row, Col, Form } from 'react-bootstrap';
 
 import SubmitButton from '../SubmitButton';
 import { TextField, CheckboxField } from '../Fields';
-import { identity } from '../../../helpers/common';
 
 const FilterArchiveGroupsForm = ({
-  onSubmit = identity,
+  onSubmit,
   handleSubmit,
   submitFailed = false,
   submitSucceeded = false,
@@ -41,7 +40,7 @@ const FilterArchiveGroupsForm = ({
               }
             />
           </Col>
-          <Col sm={12} md={6} style={{ paddingTop: '28px' }}>
+          <Col sm={12} md={6} style={{ marginTop: '28px' }}>
             <Field
               name="showAll"
               component={CheckboxField}
@@ -89,7 +88,7 @@ const FilterArchiveGroupsForm = ({
 
 FilterArchiveGroupsForm.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
-  onSubmit: PropTypes.func,
+  onSubmit: PropTypes.func.isRequired,
   submitFailed: PropTypes.bool,
   submitSucceeded: PropTypes.bool,
   invalid: PropTypes.bool,

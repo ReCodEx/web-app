@@ -33,7 +33,7 @@ export const GroupIcon = ({
   />;
 
 export const ArchiveGroupIcon = ({ archived = false, ...props }) =>
-  <Icon {...props} icon={archived ? 'backward' : 'archive'} />;
+  <Icon {...props} icon={archived ? 'dolly' : 'archive'} />;
 export const InfoIcon = props => <Icon {...props} icon="info" />;
 export const LoadingIcon = props =>
   <Icon {...props} icon="spinner" pulse style={{ opacity: 0.8 }} />;

@@ -44,6 +44,7 @@ import AddSupervisor from '../../components/Groups/AddSupervisor';
 import GroupTopButtons from '../../components/Groups/GroupTopButtons/GroupTopButtons';
 import { BanIcon } from '../../components/icons';
 import { hasPermissions } from '../../helpers/common';
+import GroupArchivedWarning from '../../components/Groups/GroupArchivedWarning/GroupArchivedWarning';
 
 class GroupInfo extends Component {
   static loadAsync = ({ groupId }, dispatch) =>
@@ -152,23 +153,10 @@ class GroupInfo extends Component {
               }
             />
 
-            {data.archived &&
-              <Row>
-                <Col lg={12}>
-                  <p className="callout callout-warning">
-                    <FormattedMessage
-                      id="app.group.archivedExplain"
-                      defaultMessage="This group is archived, so it cannot be modified."
-                    />
-                    <br />
-                    {!data.directlyArchived &&
-                      <FormattedMessage
-                        id="app.group.notDirectlyArchived"
-                        defaultMessage="This group inherits archivation flag from one of its parent groups."
-                      />}
-                  </p>
-                </Col>
-              </Row>}
+            <GroupArchivedWarning
+              archived={data.archived}
+              directlyArchived={data.directlyArchived}
+            />
 
             {!hasPermissions(data, 'viewDetail') &&
               <Row>

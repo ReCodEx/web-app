@@ -30,6 +30,7 @@ import {
 
 import withLinks from '../../helpers/withLinks';
 import { hasPermissions } from '../../helpers/common';
+import GroupArchivedWarning from '../../components/Groups/GroupArchivedWarning/GroupArchivedWarning';
 
 class EditGroup extends Component {
   componentWillMount() {
@@ -126,23 +127,10 @@ class EditGroup extends Component {
                 </Col>
               </Row>}
 
-            {group.archived &&
-              <Row>
-                <Col lg={12}>
-                  <p className="callout callout-warning">
-                    <FormattedMessage
-                      id="app.group.archivedExplain"
-                      defaultMessage="This group is archived, so it cannot be modified."
-                    />
-                    <br />
-                    {!group.directlyArchived &&
-                      <FormattedMessage
-                        id="app.group.notDirectlyArchived"
-                        defaultMessage="This group inherits archivation flag from one of its parent groups."
-                      />}
-                  </p>
-                </Col>
-              </Row>}
+            <GroupArchivedWarning
+              archived={group.archived}
+              directlyArchived={group.directlyArchived}
+            />
 
             {hasPermissions(group, 'update') &&
               <React.Fragment>
@@ -165,25 +153,26 @@ class EditGroup extends Component {
                     </p>
                   </Col>
                 </Row>
-                <Row>
-                  <Col lg={3}>
-                    <p>
-                      <ArchiveGroupButtonContainer id={group.id} />
-                    </p>
-                  </Col>
-                  <Col lg={9}>
-                    <p
-                      className="small text-muted"
-                      style={{ padding: '0.75em' }}
-                    >
-                      <Icon icon="info-circle" gapRight />
-                      <FormattedMessage
-                        id="app.editGroup.archivedExplain"
-                        defaultMessage="Archived groups are containers for students, assignments and results after the course is finished. They are immutable and can be accessed through separate Archive page."
-                      />
-                    </p>
-                  </Col>
-                </Row>
+                {group.permissionHints.update &&
+                  <Row>
+                    <Col lg={3}>
+                      <p>
+                        <ArchiveGroupButtonContainer id={group.id} />
+                      </p>
+                    </Col>
+                    <Col lg={9}>
+                      <p
+                        className="small text-muted"
+                        style={{ padding: '0.75em' }}
+                      >
+                        <Icon icon="info-circle" gapRight />
+                        <FormattedMessage
+                          id="app.editGroup.archivedExplain"
+                          defaultMessage="Archived groups are containers for students, assignments and results after the course is finished. They are immutable and can be accessed through separate Archive page."
+                        />
+                      </p>
+                    </Col>
+                  </Row>}
               </React.Fragment>}
 
             {hasPermissions(group, 'update') &&

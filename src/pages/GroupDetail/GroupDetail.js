@@ -62,6 +62,7 @@ import {
   hasPermissions,
   hasOneOfPermissions
 } from '../../helpers/common';
+import GroupArchivedWarning from '../../components/Groups/GroupArchivedWarning/GroupArchivedWarning';
 
 class GroupDetail extends Component {
   static loadAsync = ({ groupId }, dispatch) =>
@@ -219,23 +220,10 @@ class GroupDetail extends Component {
                 </Col>
               </Row>}
 
-            {data.archived &&
-              <Row>
-                <Col lg={12}>
-                  <p className="callout callout-warning">
-                    <FormattedMessage
-                      id="app.group.archivedExplain"
-                      defaultMessage="This group is archived, so it cannot be modified."
-                    />
-                    <br />
-                    {!data.directlyArchived &&
-                      <FormattedMessage
-                        id="app.group.notDirectlyArchived"
-                        defaultMessage="This group inherits archivation flag from one of its parent groups."
-                      />}
-                  </p>
-                </Col>
-              </Row>}
+            <GroupArchivedWarning
+              archived={data.archived}
+              directlyArchived={data.directlyArchived}
+            />
 
             {!data.organizational &&
               hasPermissions(data, 'viewAssignments') &&
