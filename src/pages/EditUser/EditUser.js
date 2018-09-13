@@ -17,6 +17,7 @@ import Page from '../../components/layout/Page';
 import Button from '../../components/widgets/FlatButton';
 import { LocalIcon, TransferIcon, BanIcon } from '../../components/icons';
 import { UserRoleIcon } from '../../components/helpers/usersRoles';
+import AllowUserButtonContainer from '../../containers/AllowUserButtonContainer';
 
 import EditUserProfileForm from '../../components/forms/EditUserProfileForm';
 import EditUserSettingsForm from '../../components/forms/EditUserSettingsForm';
@@ -114,27 +115,32 @@ class EditUser extends Component {
       >
         {data =>
           <div>
-            <p>
-              {!data.privateData.isLocal &&
-                <Button bsStyle="warning" onClick={makeLocalLogin}>
-                  <LocalIcon gapRight />
-                  <FormattedMessage
-                    id="app.editUser.makeLocal"
-                    defaultMessage="Create local account"
-                  />
-                </Button>}
+            {data &&
+              <p>
+                {!data.privateData.isLocal &&
+                  <Button bsStyle="warning" onClick={makeLocalLogin}>
+                    <LocalIcon gapRight />
+                    <FormattedMessage
+                      id="app.editUser.makeLocal"
+                      defaultMessage="Create local account"
+                    />
+                  </Button>}
 
-              {isSuperAdmin &&
-                data &&
-                data.id !== loggedUserId &&
-                <Button bsStyle="primary" onClick={() => takeOver(data.id)}>
-                  <TransferIcon gapRight />
-                  <FormattedMessage
-                    id="app.users.takeOver"
-                    defaultMessage="Login as"
-                  />
-                </Button>}
-            </p>
+                {isSuperAdmin &&
+                  data.id !== loggedUserId &&
+                  data.privateData.isAllowed &&
+                  <Button bsStyle="primary" onClick={() => takeOver(data.id)}>
+                    <TransferIcon gapRight />
+                    <FormattedMessage
+                      id="app.users.takeOver"
+                      defaultMessage="Login as"
+                    />
+                  </Button>}
+
+                {isSuperAdmin &&
+                  data.id !== loggedUserId &&
+                  <AllowUserButtonContainer id={data.id} />}
+              </p>}
 
             <Row>
               <Col lg={6}>
