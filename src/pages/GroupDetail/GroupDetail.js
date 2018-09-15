@@ -25,6 +25,10 @@ import { fetchGroupIfNeeded } from '../../redux/modules/groups';
 import { fetchGroupsStats } from '../../redux/modules/stats';
 import { fetchStudents } from '../../redux/modules/users';
 import { fetchAssignmentsForGroup } from '../../redux/modules/assignments';
+import {
+  fetchShadowAssignmentsForGroup,
+  createShadowAssignment
+} from '../../redux/modules/shadowAssignments';
 import { create as createExercise } from '../../redux/modules/exercises';
 import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments';
 
@@ -70,7 +74,10 @@ class GroupDetail extends Component {
       dispatch(fetchGroupIfNeeded(groupId)).then(({ value: group }) =>
         Promise.all([
           hasPermissions(group, 'viewAssignments')
-            ? dispatch(fetchAssignmentsForGroup(groupId))
+            ? Promise.all([
+                dispatch(fetchAssignmentsForGroup(groupId)),
+                dispatch(fetchShadowAssignmentsForGroup(groupId))
+              ])
             : Promise.resolve(),
           hasPermissions(group, 'viewStudents')
             ? dispatch(fetchStudents(groupId))
@@ -134,6 +141,17 @@ class GroupDetail extends Component {
       }
     ];
     return breadcrumbs;
+  };
+
+  createShadowAssignment = () => {
+    const {
+      createShadowAssignment,
+      push,
+      links: { SHADOW_ASSIGNMENT_EDIT_URI_FACTORY }
+    } = this.props;
+    createShadowAssignment().then(({ value: shadowAssignment }) =>
+      push(SHADOW_ASSIGNMENT_EDIT_URI_FACTORY(shadowAssignment.id))
+    );
   };
 
   createGroupExercise = () => {
@@ -221,36 +239,76 @@ class GroupDetail extends Component {
 
             {!data.organizational &&
               hasPermissions(data, 'viewAssignments') &&
-              <Row>
-                <Col lg={12}>
-                  <Box
-                    title={
-                      <FormattedMessage
-                        id="app.studentsView.assignments"
-                        defaultMessage="Assignments"
-                      />
-                    }
-                    noPadding
-                    unlimitedHeight
-                  >
-                    <ResourceRenderer resource={stats} bulkyLoading>
-                      {groupStats =>
-                        <AssignmentsTable
-                          assignments={assignments}
-                          assignmentEnvironmentsSelector={
-                            assignmentEnvironmentsSelector
-                          }
-                          showGroup={false}
-                          statuses={statuses}
-                          stats={groupStats.find(
-                            item => item.userId === userId
-                          )}
-                          isGroupAdmin={isGroupAdmin || isGroupSupervisor}
-                        />}
-                    </ResourceRenderer>
-                  </Box>
-                </Col>
-              </Row>}
+              <React.Fragment>
+                <Row>
+                  <Col lg={12}>
+                    <Box
+                      title={
+                        <FormattedMessage
+                          id="app.groupDetail.assignments"
+                          defaultMessage="Assignments"
+                        />
+                      }
+                      noPadding
+                      unlimitedHeight
+                    >
+                      <ResourceRenderer resource={stats} bulkyLoading>
+                        {groupStats =>
+                          <AssignmentsTable
+                            assignments={assignments}
+                            assignmentEnvironmentsSelector={
+                              assignmentEnvironmentsSelector
+                            }
+                            showGroup={false}
+                            statuses={statuses}
+                            stats={groupStats.find(
+                              item => item.userId === userId
+                            )}
+                            isGroupAdmin={isGroupAdmin || isGroupSupervisor}
+                          />}
+                      </ResourceRenderer>
+                    </Box>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col lg={12}>
+                    <Box
+                      title={
+                        <FormattedMessage
+                          id="app.groupDetail.shadowAssignments"
+                          defaultMessage="Shadow Assignments"
+                        />
+                      }
+                      noPadding
+                      unlimitedHeight
+                      collapsable
+                      isOpen={false}
+                    >
+                      <ResourceRenderer resource={stats} bulkyLoading>
+                        {groupStats =>
+                          /*<ShadowAssignmentsTable
+                            assignments={assignments}
+                            assignmentEnvironmentsSelector={
+                              assignmentEnvironmentsSelector
+                            }
+                            showGroup={false}
+                            statuses={statuses}
+                            stats={groupStats.find(
+                              item => item.userId === userId
+                            )}
+                            isGroupAdmin={isGroupAdmin || isGroupSupervisor}
+                            />*/
+                          <Button onClick={this.createShadowAssignment}>
+                            <FormattedMessage
+                              id="app.groupDetail.newShadowAssignment"
+                              defaultMessage="New Shadow Assignment"
+                            />
+                          </Button>}
+                      </ResourceRenderer>
+                    </Box>
+                  </Col>
+                </Row>
+              </React.Fragment>}
 
             <ResourceRenderer resource={loggedUser}>
               {loggedUser =>
@@ -384,6 +442,7 @@ GroupDetail.propTypes = {
   loadAsync: PropTypes.func,
   stats: PropTypes.object,
   statuses: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
+  createShadowAssignment: PropTypes.func.isRequired,
   createGroupExercise: PropTypes.func.isRequired,
   push: PropTypes.func.isRequired,
   links: PropTypes.object,
@@ -411,6 +470,8 @@ const mapStateToProps = (state, { params: { groupId } }) => {
 
 const mapDispatchToProps = (dispatch, { params }) => ({
   loadAsync: () => GroupDetail.loadAsync(params, dispatch),
+  createShadowAssignment: () =>
+    dispatch(createShadowAssignment({ groupId: params.groupId })),
   createGroupExercise: () =>
     dispatch(createExercise({ groupId: params.groupId })),
   push: url => dispatch(push(url))

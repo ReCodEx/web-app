@@ -20,7 +20,7 @@ const isURL = url => {
     : null;
 };
 
-const LocalizedExerciseFormField = ({ isAssignment = false, prefix }) =>
+const LocalizedExerciseFormField = ({ fieldType, prefix }) =>
   <div>
     <Field
       name={`${prefix}.name`}
@@ -43,7 +43,7 @@ const LocalizedExerciseFormField = ({ isAssignment = false, prefix }) =>
       }
     />
 
-    {isAssignment &&
+    {fieldType === 'assignment' &&
       <Alert bsStyle="info">
         <WarningIcon gapRight />
         <FormattedMessage
@@ -75,7 +75,7 @@ const LocalizedExerciseFormField = ({ isAssignment = false, prefix }) =>
       validate={isURL}
     />
 
-    {!isAssignment && // it is an exercise
+    {fieldType === 'exercise' &&
       <Field
         name={`${prefix}.description`}
         component={MarkdownTextAreaField}
@@ -87,7 +87,7 @@ const LocalizedExerciseFormField = ({ isAssignment = false, prefix }) =>
         }
       />}
 
-    {isAssignment &&
+    {fieldType === 'assignment' &&
       <Field
         name={`${prefix}.studentHint`}
         component={MarkdownTextAreaField}
@@ -101,7 +101,7 @@ const LocalizedExerciseFormField = ({ isAssignment = false, prefix }) =>
   </div>;
 
 LocalizedExerciseFormField.propTypes = {
-  isAssignment: PropTypes.bool,
+  fieldType: PropTypes.string.isRequired,
   prefix: PropTypes.string.isRequired
 };
 

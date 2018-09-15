@@ -27,6 +27,8 @@ import LoginExternFinalization from './LoginExternFinalization';
 import Assignment from './Assignment';
 import EditAssignment from './EditAssignment';
 import AssignmentStats from './AssignmentStats';
+import ShadowAssignment from './ShadowAssignment';
+import EditShadowAssignment from './EditShadowAssignment';
 import NotFound from './NotFound';
 import Solution from './Solution';
 import Registration from './Registration';
@@ -101,6 +103,10 @@ const createRoutes = getState => {
             <Route path="edit" component={EditAssignment} />
             <Route path="stats" component={AssignmentStats} />
             <Route path="solution/:solutionId" component={Solution} />
+          </Route>
+          <Route path="shadow-assignment/:assignmentId">
+            <IndexRoute component={ShadowAssignment} />
+            <Route path="edit" component={EditShadowAssignment} />
           </Route>
           <Route path="exercises">
             <IndexRoute component={Exercises} />

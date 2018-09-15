@@ -2,7 +2,6 @@ import { handleActions } from 'redux-actions';
 import { fromJS, List } from 'immutable';
 
 import { createApiAction } from '../middleware/apiMiddleware';
-import { downloadHelper } from '../helpers/api/download';
 import factory, { initialState } from '../helpers/resourceManager';
 
 const resourceName = 'shadowAssignments';
@@ -25,14 +24,25 @@ export const loadShadowAssignment = actions.pushResource;
 export const fetchShadowAssignment = actions.fetchResource;
 export const fetchShadowAssignmentIfNeeded = actions.fetchOneIfNeeded;
 
-export const fetchAssignmentsForGroup = groupId =>
+export const fetchShadowAssignmentsForGroup = groupId =>
   actions.fetchMany({
     endpoint: `/groups/${groupId}/shadow-assignments`
   });
 
-export const create = groupId => actions.addResource({ groupId });
+export const createShadowAssignment = groupId =>
+  actions.addResource({ groupId });
 export const editShadowAssignment = actions.updateResource;
 export const deleteShadowAssignment = actions.removeResource;
+
+/*
+export const validateAssignment = (id, version) =>
+  createApiAction({
+    type: additionalActionTypes.VALIDATE_ASSIGNMENT,
+    endpoint: `/exercise-assignments/${id}/validate`,
+    method: 'POST',
+    body: { version }
+  });
+*/
 
 /**
  * Reducer

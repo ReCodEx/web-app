@@ -20,7 +20,7 @@ import Icon, { GroupIcon } from '../../icons';
 import { getGroupCanonicalLocalizedName } from '../../../helpers/getLocalizedData';
 import { identity } from '../../../helpers/common';
 import withLinks from '../../../helpers/withLinks';
-import { validateTwoDeadlines } from '../../helpers/deadlineValidation';
+import { validateTwoDeadlines } from '../../helpers/validation';
 
 class MultiAssignForm extends Component {
   state = {

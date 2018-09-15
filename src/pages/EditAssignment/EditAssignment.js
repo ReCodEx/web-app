@@ -98,8 +98,8 @@ class EditAssignment extends Component {
           throw SubmissionError({
             _error: (
               <FormattedMessage
-                id="app.editExerciseForm.validation.versionDiffers"
-                defaultMessage="Somebody has changed the exercise while you have been editing it. Please reload the page and apply your changes once more."
+                id="app.editAssignment.validation.versionDiffers"
+                defaultMessage="Somebody has changed the assignment while you have been editing it. Please reload the page and apply your changes once more."
               />
             )
           });
@@ -213,7 +213,7 @@ class EditAssignment extends Component {
               <AssignmentSync
                 syncInfo={assignment.exerciseSynchronizationInfo}
                 exerciseSync={exerciseSync}
-                isBroken={exercise && exercise.isBroken}
+                isBroken={Boolean(exercise) && exercise.isBroken}
               />}
 
             <ResourceRenderer

@@ -64,6 +64,11 @@ export const linksFactory = lang => {
   const ASSIGNMENT_STATS_URI_FACTORY = assignmentId =>
     `${prefix}/app/assignment/${assignmentId}/stats`;
 
+  const SHADOW_ASSIGNMENT_DETAIL_URI_FACTORY = id =>
+    `${prefix}/app/shadow-assignment/${id}`;
+  const SHADOW_ASSIGNMENT_EDIT_URI_FACTORY = id =>
+    `${SHADOW_ASSIGNMENT_DETAIL_URI_FACTORY(id)}/edit`;
+
   // external links
   const BUGS_URL = `${prefix}/bugs-and-feedback`;
   const FAQ_URL = `${prefix}/faq`;
@@ -117,6 +122,8 @@ export const linksFactory = lang => {
     ASSIGNMENT_EDIT_URI_FACTORY,
     ASSIGNMENT_DETAIL_URI_FACTORY,
     ASSIGNMENT_DETAIL_SPECIFIC_USER_URI_FACTORY,
+    SHADOW_ASSIGNMENT_DETAIL_URI_FACTORY,
+    SHADOW_ASSIGNMENT_EDIT_URI_FACTORY,
     SUBMIT_SOLUTION_URI_FACTORY,
     SOLUTION_DETAIL_URI_FACTORY,
     ASSIGNMENT_STATS_URI_FACTORY,

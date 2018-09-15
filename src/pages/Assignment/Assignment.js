@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
-import { FormattedMessage, injectIntl } from 'react-intl';
+import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
 import { Col, Row } from 'react-bootstrap';
 
 import Button from '../../components/widgets/FlatButton';
@@ -293,7 +293,7 @@ Assignment.propTypes = {
   runtimeEnvironments: PropTypes.array,
   exerciseSync: PropTypes.func.isRequired,
   solutions: ImmutablePropTypes.list.isRequired,
-  intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired
+  intl: intlShape.isRequired
 };
 
 export default withLinks(

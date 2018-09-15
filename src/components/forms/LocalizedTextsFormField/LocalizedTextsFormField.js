@@ -27,7 +27,7 @@ const LocalizedTextsFormField = ({
               defaultMessage="New language"
             />}
       ContentComponent={fieldTypes[fieldType]}
-      isAssignment={fieldType === 'assignment'}
+      fieldType={fieldType}
       emptyMessage={
         <FormattedMessage
           id="app.editLocalizedTextForm.localized.noLanguage"

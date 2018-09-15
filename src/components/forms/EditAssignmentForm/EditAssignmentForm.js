@@ -10,7 +10,11 @@ import { DatetimeField, TextField, CheckboxField } from '../Fields';
 import LocalizedTextsFormField from '../LocalizedTextsFormField';
 import SubmitButton from '../SubmitButton';
 import { LocalizedExerciseName } from '../../helpers/LocalizedNames';
-import { validateTwoDeadlines } from '../../helpers/deadlineValidation';
+import {
+  isNonNegativeInteger,
+  isPositiveInteger,
+  validateTwoDeadlines
+} from '../../helpers/validation';
 
 const EditAssignmentForm = ({
   initialValues: assignment,
@@ -311,16 +315,6 @@ EditAssignmentForm.propTypes = {
   beingPublished: PropTypes.bool,
   error: PropTypes.object
 };
-
-const isNonNegativeInteger = n =>
-  typeof n !== 'undefined' &&
-  (typeof n === 'number' || isNumeric(n)) &&
-  parseInt(n) >= 0;
-
-const isPositiveInteger = n =>
-  typeof n !== 'undefined' &&
-  (typeof n === 'number' || isNumeric(n)) &&
-  parseInt(n) > 0;
 
 const validate = (
   {
