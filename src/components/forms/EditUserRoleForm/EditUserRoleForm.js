@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import { reduxForm, Field } from 'redux-form';
 import { Alert, Table } from 'react-bootstrap';
 import classnames from 'classnames';
@@ -13,7 +13,6 @@ import {
 } from '../../helpers/usersRoles';
 import FormBox from '../../widgets/FormBox';
 import SubmitButton from '../SubmitButton';
-import { EMPTY_OBJ } from '../../../helpers/common';
 
 const EditUserRoleForm = ({
   currentRole = null,
@@ -42,7 +41,20 @@ const EditUserRoleForm = ({
           hasSucceeded={submitSucceeded}
           hasFailed={submitFailed}
           invalid={invalid}
-          messages={EMPTY_OBJ}
+          messages={{
+            submit: (
+              <FormattedMessage id="generic.save" defaultMessage="Save" />
+            ),
+            submitting: (
+              <FormattedMessage
+                id="generic.saving"
+                defaultMessage="Saving ..."
+              />
+            ),
+            success: (
+              <FormattedMessage id="generic.saved" defaultMessage="Saved" />
+            )
+          }}
         />
       </div>
     }
@@ -100,8 +112,10 @@ EditUserRoleForm.propTypes = {
   invalid: PropTypes.bool
 };
 
-export default reduxForm({
-  form: 'user-role',
-  enableReinitialize: true,
-  keepDirtyOnReinitialize: false
-})(EditUserRoleForm);
+export default injectIntl(
+  reduxForm({
+    form: 'user-role',
+    enableReinitialize: true,
+    keepDirtyOnReinitialize: false
+  })(EditUserRoleForm)
+);

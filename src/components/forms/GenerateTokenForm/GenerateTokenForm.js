@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {
   FormattedMessage,
+  FormattedHTMLMessage,
   injectIntl,
   defineMessages,
   intlShape
@@ -29,44 +30,51 @@ import './GenerateTokenForm.css';
 
 const availableScopes = defineMessages({
   'read-all': {
-    id: 'app.generateToken.scope.readAll',
+    id: 'app.generateTokenForm.scope.readAll',
     defaultMessage: 'Read-only'
   },
   master: {
-    id: 'app.generateToken.scope.master',
+    id: 'app.generateTokenForm.scope.master',
     defaultMessage: 'Read-write'
   },
   refresh: {
-    id: 'app.generateToken.scope.refresh',
+    id: 'app.generateTokenForm.scope.refresh',
     defaultMessage: 'Allow refreshing indefinitely'
   }
 });
 
+const HOUR_SEC = 3600;
+const DAY_SEC = 24 * HOUR_SEC;
+const WEEK_SEC = 7 * DAY_SEC;
+const MONTH_SEC = 31 * DAY_SEC;
+const YEAR_SEC = 356 * DAY_SEC;
+
 const messages = defineMessages({
-  [1 * 60 * 60]: {
-    id: 'app.generateToken.hour',
+  [HOUR_SEC]: {
+    id: 'app.generateTokenForm.hour',
     defaultMessage: '1 Hour'
   },
-  [24 * 60 * 60]: {
-    id: 'app.generateToken.day',
+  [DAY_SEC]: {
+    id: 'app.generateTokenForm.day',
     defaultMessage: '1 Day'
   },
-  [7 * 24 * 60 * 60]: {
-    id: 'app.generateToken.week',
+  [WEEK_SEC]: {
+    id: 'app.generateTokenForm.week',
     defaultMessage: '1 Week'
   },
-  [31 * 24 * 60 * 60]: {
-    id: 'app.generateToken.month',
+  [MONTH_SEC]: {
+    id: 'app.generateTokenForm.month',
     defaultMessage: '1 Month'
   },
-  [365 * 24 * 60 * 60]: {
-    id: 'app.generateToken.year',
+  [YEAR_SEC]: {
+    id: 'app.generateTokenForm.year',
     defaultMessage: '1 Year'
   }
 });
 
 const GenerateTokenForm = ({
   warning,
+  error,
   submitting,
   handleSubmit,
   submitFailed = false,
@@ -85,6 +93,31 @@ const GenerateTokenForm = ({
     type={submitSucceeded ? 'success' : undefined}
     footer={
       <div className="text-center">
+        {lastToken &&
+          <CopyToClipboard text={lastToken}>
+            <OverlayTrigger
+              trigger="click"
+              rootClose
+              placement="bottom"
+              overlay={
+                <Tooltip id={lastToken}>
+                  <FormattedMessage
+                    id="app.generateTokenForm.copied"
+                    defaultMessage="Copied!"
+                  />
+                </Tooltip>
+              }
+            >
+              <Button bsStyle="info">
+                <CopyIcon gapRight fixedWidth />
+                <FormattedMessage
+                  id="app.generateTokenForm.copyToClipboard"
+                  defaultMessage="Copy to Clipboard"
+                />
+              </Button>
+            </OverlayTrigger>
+          </CopyToClipboard>}
+
         <SubmitButton
           id="generateToken"
           handleSubmit={handleSubmit}
@@ -94,18 +127,21 @@ const GenerateTokenForm = ({
           invalid={invalid}
           messages={{
             submit: (
-              <FormattedMessage id="generic.submit" defaultMessage="Submit" />
+              <FormattedMessage
+                id="app.generateTokenForm.generate"
+                defaultMessage="Generate"
+              />
             ),
             submitting: (
               <FormattedMessage
-                id="generic.submitting"
-                defaultMessage="Submitting"
+                id="app.generateTokenForm.generating"
+                defaultMessage="Generating ..."
               />
             ),
             success: (
               <FormattedMessage
-                id="generic.submitted"
-                defaultMessage="Submitted"
+                id="app.generateTokenForm.generated"
+                defaultMessage="Generated"
               />
             )
           }}
@@ -123,7 +159,7 @@ const GenerateTokenForm = ({
 
     <h4>
       <FormattedMessage
-        id="app.generateToken.scopes"
+        id="app.generateTokenForm.scopes"
         defaultMessage="Scopes:"
       />
     </h4>
@@ -150,6 +186,11 @@ const GenerateTokenForm = ({
         {warning}
       </Alert>}
 
+    {error &&
+      <Alert bsStyle="danger">
+        {error}
+      </Alert>}
+
     <hr />
 
     <Field
@@ -162,7 +203,7 @@ const GenerateTokenForm = ({
       )}
       label={
         <FormattedMessage
-          id="app.generateToken.expiration"
+          id="app.generateTokenForm.expiration"
           defaultMessage="Expires In:"
         />
       }
@@ -174,7 +215,7 @@ const GenerateTokenForm = ({
         <hr />
         <h4>
           <FormattedMessage
-            id="app.generateToken.lastToken"
+            id="app.generateTokenForm.lastToken"
             defaultMessage="Last Token:"
           />
         </h4>
@@ -183,34 +224,12 @@ const GenerateTokenForm = ({
             {lastToken}
           </code>
         </Well>
-        <CopyToClipboard text={lastToken}>
-          <OverlayTrigger
-            trigger="click"
-            rootClose
-            placement="bottom"
-            overlay={
-              <Tooltip id={lastToken}>
-                <FormattedMessage
-                  id="app.generateToken.copied"
-                  defaultMessage="Copied!"
-                />
-              </Tooltip>
-            }
-          >
-            <Button bsStyle="info">
-              <CopyIcon gapRight fixedWidth />
-              <FormattedMessage
-                id="app.generateToken.copyToClipboard"
-                defaultMessage="Copy to clipboard"
-              />
-            </Button>
-          </OverlayTrigger>
-        </CopyToClipboard>
       </div>}
   </FormBox>;
 
 GenerateTokenForm.propTypes = {
   warning: PropTypes.any,
+  error: PropTypes.any,
   handleSubmit: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
   submitFailed: PropTypes.bool,
@@ -221,13 +240,33 @@ GenerateTokenForm.propTypes = {
   intl: intlShape.isRequired
 };
 
+const validate = ({ scopes, expiration }) => {
+  const errors = {};
+  if (!scopes['read-all'] && !scopes.master) {
+    errors._error = (
+      <FormattedHTMLMessage
+        id="app.generateTokenForm.validate.noScopes"
+        defaultMessage="At least one main scope (<i>read-only</i> or <i>read-write</i>) has to be selected."
+      />
+    );
+  } else if (scopes.master && expiration > WEEK_SEC) {
+    errors._error = (
+      <FormattedHTMLMessage
+        id="app.generateTokenForm.validate.expirationTooLong"
+        defaultMessage="The <i>read-write</i> scope has restricted maximal expiration time to one week at the moment."
+      />
+    );
+  }
+  return errors;
+};
+
 const warn = ({ scopes }) => {
   const warnings = {};
   if (scopes['read-all'] && scopes.master) {
     warnings._warning = (
-      <FormattedMessage
-        id="app.generateToken.warnBothMasterAndReadAll"
-        defaultMessage="The 'read-only' scope will have no effect whilst 'read-write' scope is set since 'read-write' implicitly contains 'read-only'."
+      <FormattedHTMLMessage
+        id="app.generateTokenForm.warnBothMasterAndReadAll"
+        defaultMessage="The <i>read-only</i> scope will have no effect whilst <i>read-write</i> scope is set since <i>read-write</i> implicitly contains <i>read-only</i>."
       />
     );
   }
@@ -239,6 +278,7 @@ export default injectIntl(
     form: 'generate-token',
     enableReinitialize: true,
     keepDirtyOnReinitialize: false,
+    validate,
     warn
   })(GenerateTokenForm)
 );

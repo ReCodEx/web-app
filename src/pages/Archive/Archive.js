@@ -158,7 +158,10 @@ class Archive extends Component {
             <React.Fragment>
               <FilterArchiveGroupsForm
                 form="archive-filters"
-                initialValues={{ showAll: false, search: '' }}
+                initialValues={{
+                  showAll: this.state.showAll,
+                  search: this.state.search
+                }}
                 onSubmit={data => {
                   this.setState({
                     showAll: Boolean(data.showAll),
