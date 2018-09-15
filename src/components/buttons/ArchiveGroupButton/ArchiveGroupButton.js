@@ -9,7 +9,8 @@ const ArchiveGroupButton = ({
   pending,
   disabled = false,
   setArchived,
-  bsSize = undefined
+  bsSize = undefined,
+  shortLabels = false
 }) =>
   <Button
     bsStyle={disabled ? 'default' : 'info'}
@@ -21,14 +22,24 @@ const ArchiveGroupButton = ({
       ? <LoadingIcon gapRight />
       : <ArchiveGroupIcon archived={archived} gapRight />}
     {archived === true
-      ? <FormattedMessage
-          id="app.archiveGroupButton.unset"
-          defaultMessage="Excavate from Archive"
-        />
-      : <FormattedMessage
-          id="app.archiveGroupButton.set"
-          defaultMessage="Archive this Group"
-        />}
+      ? shortLabels
+        ? <FormattedMessage
+            id="app.archiveGroupButton.unsetShort"
+            defaultMessage="Excavate"
+          />
+        : <FormattedMessage
+            id="app.archiveGroupButton.unset"
+            defaultMessage="Excavate from Archive"
+          />
+      : shortLabels
+        ? <FormattedMessage
+            id="app.archiveGroupButton.setShort"
+            defaultMessage="Archive"
+          />
+        : <FormattedMessage
+            id="app.archiveGroupButton.set"
+            defaultMessage="Archive this Group"
+          />}
   </Button>;
 
 ArchiveGroupButton.propTypes = {
@@ -36,7 +47,8 @@ ArchiveGroupButton.propTypes = {
   pending: PropTypes.bool.isRequired,
   disabled: PropTypes.bool,
   setArchived: PropTypes.func.isRequired,
-  bsSize: PropTypes.string
+  bsSize: PropTypes.string,
+  shortLabels: PropTypes.bool
 };
 
 export default ArchiveGroupButton;

@@ -293,11 +293,14 @@ class GroupDetail extends Component {
                                 isAdmin={isGroupAdmin}
                                 isSupervisor={isGroupSupervisor}
                                 groupName={getLocalizedName(data, locale)}
-                                renderActions={id =>
-                                  <LeaveJoinGroupButtonContainer
-                                    userId={id}
-                                    groupId={data.id}
-                                  />}
+                                renderActions={id => {
+                                  return data.archived
+                                    ? null
+                                    : <LeaveJoinGroupButtonContainer
+                                        userId={id}
+                                        groupId={data.id}
+                                      />;
+                                }}
                               />}
                           </ResourceRenderer>
                         </Box>

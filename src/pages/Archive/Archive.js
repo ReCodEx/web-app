@@ -4,7 +4,6 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
 import { push } from 'react-router-redux';
-import { Grid, Row, Col } from 'react-bootstrap';
 
 import Page from '../../components/layout/Page';
 import Box from '../../components/widgets/Box';
@@ -22,7 +21,7 @@ import { getJsData } from '../../redux/helpers/resourceManager';
 import FilterArchiveGroupsForm from '../../components/forms/FilterArchiveGroupsForm/FilterArchiveGroupsForm';
 import { getLocalizedName } from '../../helpers/getLocalizedData';
 import ArchiveGroupButtonContainer from '../../containers/ArchiveGroupButtonContainer/ArchiveGroupButtonContainer';
-import { GroupIcon, FailureIcon, SuccessIcon } from '../../components/icons';
+import { GroupIcon, SuccessOrFailureIcon } from '../../components/icons';
 
 // lowercase and remove accents and this kind of stuff
 const normalizeString = str =>
@@ -76,21 +75,20 @@ const getVisibleArchiveGroupsMap = (
 const buttonsCreator = (
   { GROUP_INFO_URI_FACTORY, GROUP_DETAIL_URI_FACTORY },
   setRootGroup
-) => groupId =>
+) => (groupId, isRoot) =>
   <span>
     <Button
       bsStyle="default"
       bsSize="xs"
       onClick={ev => {
         ev.stopPropagation();
-        setRootGroup(groupId);
+        setRootGroup(isRoot ? null : groupId);
       }}
     >
-      <SuccessIcon gapRight />
-      <FormattedMessage
-        id="app.group.setRoot"
-        defaultMessage="Set Root Group"
-      />
+      <SuccessOrFailureIcon success={!isRoot} gapRight />
+      {isRoot
+        ? <FormattedMessage id="app.group.unsetRoot" defaultMessage="Unset" />
+        : <FormattedMessage id="app.group.setRoot" defaultMessage="Select" />}
     </Button>
     <LinkContainer to={GROUP_INFO_URI_FACTORY(groupId)}>
       <Button bsStyle="primary" bsSize="xs">
@@ -104,7 +102,7 @@ const buttonsCreator = (
         <FormattedMessage id="app.group.detail" defaultMessage="Group Detail" />
       </Button>
     </LinkContainer>
-    <ArchiveGroupButtonContainer id={groupId} bsSize="xs" />
+    <ArchiveGroupButtonContainer id={groupId} bsSize="xs" shortLabels />
   </span>;
 
 class Archive extends Component {
@@ -169,24 +167,6 @@ class Archive extends Component {
                   return Promise.resolve();
                 }}
               />
-              <Grid fluid>
-                <Row>
-                  <Col xs={12} className="no-padding">
-                    <Button
-                      className="pull-right"
-                      bsStyle="link"
-                      disabled={this.state.rootGroup === null}
-                      onClick={() => this.setState({ rootGroup: null })}
-                    >
-                      <FailureIcon gapRight />
-                      <FormattedMessage
-                        id="app.group.unsetRoot"
-                        defaultMessage="Unset Root Group"
-                      />
-                    </Button>
-                  </Col>
-                </Row>
-              </Grid>
 
               {data.rootGroupId !== null &&
                 <GroupTree
@@ -204,6 +184,7 @@ class Archive extends Component {
                     this.setState({ rootGroup: groupId })
                   )}
                   currentGroupId={this.state.rootGroup}
+                  forceRootButtons={true}
                 />}
             </React.Fragment>
           </Box>}

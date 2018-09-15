@@ -12,7 +12,8 @@ const FilterArchiveGroupsForm = ({
   handleSubmit,
   submitFailed = false,
   submitSucceeded = false,
-  invalid
+  invalid,
+  dirty
 }) =>
   <Form method="POST" onSubmit={onSubmit}>
     <Well bsSize="sm">
@@ -63,7 +64,7 @@ const FilterArchiveGroupsForm = ({
                 hasSucceeded={submitSucceeded}
                 hasFailed={submitFailed}
                 invalid={invalid}
-                disabled={onSubmit === null}
+                dirty={dirty}
                 messages={{
                   submit: (
                     <FormattedMessage
@@ -92,6 +93,7 @@ FilterArchiveGroupsForm.propTypes = {
   submitFailed: PropTypes.bool,
   submitSucceeded: PropTypes.bool,
   invalid: PropTypes.bool,
+  dirty: PropTypes.bool,
   change: PropTypes.func.isRequired
 };
 

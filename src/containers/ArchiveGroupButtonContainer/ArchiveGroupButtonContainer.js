@@ -15,7 +15,8 @@ const ArchiveGroupButtonContainer = ({
   group,
   pending,
   setArchived,
-  bsSize = undefined
+  bsSize = undefined,
+  ...props
 }) =>
   <ResourceRenderer resource={group}>
     {({ directlyArchived }) =>
@@ -24,6 +25,7 @@ const ArchiveGroupButtonContainer = ({
         pending={pending}
         setArchived={setArchived}
         bsSize={bsSize}
+        {...props}
       />}
   </ResourceRenderer>;
 
