@@ -119,6 +119,10 @@
   padding-bottom: 1em !important;
 }
 
+.no-padding {
+  padding: 0 !important;
+}
+
 td.shrink-col,
 th.shrink-col {
   width: 0 !important;

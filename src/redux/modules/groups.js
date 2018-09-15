@@ -51,13 +51,22 @@ export const additionalActionTypes = {
   SET_ORGANIZATIONAL: 'recodex/groups/SET_ORGANIZATIONAL',
   SET_ORGANIZATIONAL_PENDING: 'recodex/groups/SET_ORGANIZATIONAL_PENDING',
   SET_ORGANIZATIONAL_FULFILLED: 'recodex/groups/SET_ORGANIZATIONAL_FULFILLED',
-  SET_ORGANIZATIONAL_REJECTED: 'recodex/groups/SET_ORGANIZATIONAL_REJECTED'
+  SET_ORGANIZATIONAL_REJECTED: 'recodex/groups/SET_ORGANIZATIONAL_REJECTED',
+  SET_ARCHIVED: 'recodex/groups/SET_ARCHIVED',
+  SET_ARCHIVED_PENDING: 'recodex/groups/SET_ARCHIVED_PENDING',
+  SET_ARCHIVED_FULFILLED: 'recodex/groups/SET_ARCHIVED_FULFILLED',
+  SET_ARCHIVED_REJECTED: 'recodex/groups/SET_ARCHIVED_REJECTED'
 };
 
 export const loadGroup = actions.pushResource;
 export const fetchGroupsIfNeeded = actions.fetchIfNeeded;
 export const fetchGroup = actions.fetchResource;
 export const fetchGroupIfNeeded = actions.fetchOneIfNeeded;
+
+export const fetchAllGroups = () =>
+  actions.fetchMany({
+    endpoint: '/groups/all'
+  });
 
 export const validateAddGroup = (name, instanceId, parentGroupId = null) =>
   createApiAction({
@@ -183,6 +192,15 @@ export const setOrganizational = (groupId, organizational) =>
     method: 'POST',
     endpoint: `/groups/${groupId}/organizational`,
     body: { value: organizational },
+    meta: { groupId }
+  });
+
+export const setArchived = (groupId, archived) =>
+  createApiAction({
+    type: additionalActionTypes.SET_ARCHIVED,
+    method: 'POST',
+    endpoint: `/groups/${groupId}/archived`,
+    body: { value: archived },
     meta: { groupId }
   });
 
@@ -330,6 +348,24 @@ const reducer = handleActions(
       state,
       { payload, meta: { groupId } }
     ) => state.deleteIn(['resources', groupId, 'pending-organizational']),
+
+    [additionalActionTypes.SET_ARCHIVED_PENDING]: (
+      state,
+      { payload, meta: { groupId } }
+    ) => state.setIn(['resources', groupId, 'pending-archived'], true),
+
+    [additionalActionTypes.SET_ARCHIVED_FULFILLED]: (
+      state,
+      { payload, meta: { groupId } }
+    ) =>
+      state
+        .deleteIn(['resources', groupId, 'pending-archived'])
+        .setIn(['resources', groupId, 'data'], fromJS(payload)),
+
+    [additionalActionTypes.SET_ARCHIVED_REJECTED]: (
+      state,
+      { payload, meta: { groupId } }
+    ) => state.deleteIn(['resources', groupId, 'pending-archived']),
 
     [additionalActionTypes.LOAD_USERS_GROUPS_FULFILLED]: (
       state,

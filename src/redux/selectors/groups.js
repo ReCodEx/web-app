@@ -147,3 +147,9 @@ export const groupOrganizationalPendingChange = id =>
     groupsSelector,
     groups => groups && groups.getIn([id, 'pending-organizational'], false)
   );
+
+export const groupArchivedPendingChange = id =>
+  createSelector(
+    groupsSelector,
+    groups => groups && groups.getIn([id, 'pending-archived'], false)
+  );

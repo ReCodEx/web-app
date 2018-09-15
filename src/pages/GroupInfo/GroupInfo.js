@@ -12,7 +12,8 @@ import {
   createGroup,
   fetchGroupIfNeeded,
   fetchInstanceGroups,
-  fetchSubgroups
+  fetchSubgroups,
+  fetchAllGroups
 } from '../../redux/modules/groups';
 import { fetchSupervisors } from '../../redux/modules/users';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
@@ -43,6 +44,7 @@ import AddSupervisor from '../../components/Groups/AddSupervisor';
 import GroupTopButtons from '../../components/Groups/GroupTopButtons/GroupTopButtons';
 import { BanIcon } from '../../components/icons';
 import { hasPermissions } from '../../helpers/common';
+import GroupArchivedWarning from '../../components/Groups/GroupArchivedWarning/GroupArchivedWarning';
 
 class GroupInfo extends Component {
   static loadAsync = ({ groupId }, dispatch) =>
@@ -52,7 +54,11 @@ class GroupInfo extends Component {
         .then(group =>
           Promise.all([
             dispatch(fetchSupervisors(groupId)),
-            dispatch(fetchInstanceGroups(group.privateData.instanceId))
+            dispatch(
+              group.archived
+                ? fetchAllGroups()
+                : fetchInstanceGroups(group.privateData.instanceId)
+            )
           ])
         ),
       dispatch(fetchSubgroups(groupId))
@@ -147,6 +153,11 @@ class GroupInfo extends Component {
               }
             />
 
+            <GroupArchivedWarning
+              archived={data.archived}
+              directlyArchived={data.directlyArchived}
+            />
+
             {!hasPermissions(data, 'viewDetail') &&
               <Row>
                 <Col sm={12}>
@@ -205,6 +216,7 @@ class GroupInfo extends Component {
                   </Box>}
 
                 {hasPermissions(data, 'setAdmin') &&
+                  !data.archived &&
                   <Box
                     title={
                       <FormattedMessage
@@ -245,6 +257,7 @@ class GroupInfo extends Component {
                   </Box>}
 
                 {hasPermissions(data, 'addSubgroup') &&
+                  !data.archived &&
                   <EditGroupForm
                     form="addSubgroup"
                     onSubmit={addSubgroup(data.privateData.instanceId)}

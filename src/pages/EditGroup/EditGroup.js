@@ -11,6 +11,7 @@ import { defaultMemoize } from 'reselect';
 import Page from '../../components/layout/Page';
 import EditGroupForm from '../../components/forms/EditGroupForm';
 import OrganizationalGroupButtonContainer from '../../containers/OrganizationalGroupButtonContainer';
+import ArchiveGroupButtonContainer from '../../containers/ArchiveGroupButtonContainer';
 import DeleteGroupButtonContainer from '../../containers/DeleteGroupButtonContainer';
 import Box from '../../components/widgets/Box';
 import { BanIcon, InfoIcon } from '../../components/icons';
@@ -29,6 +30,7 @@ import {
 
 import withLinks from '../../helpers/withLinks';
 import { hasPermissions } from '../../helpers/common';
+import GroupArchivedWarning from '../../components/Groups/GroupArchivedWarning/GroupArchivedWarning';
 
 class EditGroup extends Component {
   componentWillMount() {
@@ -125,25 +127,56 @@ class EditGroup extends Component {
                 </Col>
               </Row>}
 
-            {hasPermissions(group, 'update') &&
-              <Row>
-                <Col lg={3}>
-                  <p>
-                    <OrganizationalGroupButtonContainer id={group.id} />
-                  </p>
-                </Col>
-                <Col lg={9}>
-                  <p className="small text-muted" style={{ padding: '0.75em' }}>
-                    <InfoIcon gapRight />
-                    <FormattedMessage
-                      id="app.editGroup.organizationalExplain"
-                      defaultMessage="Regular groups are containers for students and assignments. Organizational groups are intended to create hierarchy, so they are forbidden to hold any students or assignments."
-                    />
-                  </p>
-                </Col>
-              </Row>}
+            <GroupArchivedWarning
+              archived={group.archived}
+              directlyArchived={group.directlyArchived}
+            />
 
             {hasPermissions(group, 'update') &&
+              <React.Fragment>
+                <Row>
+                  <Col lg={3}>
+                    <p>
+                      <OrganizationalGroupButtonContainer id={group.id} />
+                    </p>
+                  </Col>
+                  <Col lg={9}>
+                    <p
+                      className="small text-muted"
+                      style={{ padding: '0.75em' }}
+                    >
+                      <InfoIcon gapRight />
+                      <FormattedMessage
+                        id="app.editGroup.organizationalExplain"
+                        defaultMessage="Regular groups are containers for students and assignments. Organizational groups are intended to create hierarchy, so they are forbidden to hold any students or assignments."
+                      />
+                    </p>
+                  </Col>
+                </Row>
+                {group.permissionHints.update &&
+                  <Row>
+                    <Col lg={3}>
+                      <p>
+                        <ArchiveGroupButtonContainer id={group.id} />
+                      </p>
+                    </Col>
+                    <Col lg={9}>
+                      <p
+                        className="small text-muted"
+                        style={{ padding: '0.75em' }}
+                      >
+                        <InfoIcon gapRight />
+                        <FormattedMessage
+                          id="app.editGroup.archivedExplain"
+                          defaultMessage="Archived groups are containers for students, assignments and results after the course is finished. They are immutable and can be accessed through separate Archive page."
+                        />
+                      </p>
+                    </Col>
+                  </Row>}
+              </React.Fragment>}
+
+            {hasPermissions(group, 'update') &&
+              !group.archived &&
               <EditGroupForm
                 form="editGroup"
                 initialValues={this.getInitialValues(group)}

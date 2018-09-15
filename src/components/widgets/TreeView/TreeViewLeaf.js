@@ -13,6 +13,7 @@ const TreeViewLeaf = ({
   title,
   admins,
   organizational,
+  archived,
   isPublic,
   icon = ['far', 'square'],
   onClick,
@@ -25,6 +26,7 @@ const TreeViewLeaf = ({
       cursor: onClick ? 'pointer' : undefined,
       padding: '10px 0px'
     }}
+    className={archived ? 'text-muted' : undefined}
   >
     <LevelGap level={level - 1} /> {/* root group is not displayed */}
     <span style={{ width: 30, textAlign: 'center', display: 'inline-block' }}>
@@ -56,6 +58,20 @@ const TreeViewLeaf = ({
       >
         <GroupIcon organizational={true} className="text-muted" gapLeft />
       </OverlayTrigger>}
+    {archived &&
+      <OverlayTrigger
+        placement="bottom"
+        overlay={
+          <Tooltip id={`${id}-archived-tooltip`}>
+            <FormattedMessage
+              id="app.groupTree.treeViewLeaf.archivedTooltip"
+              defaultMessage="The group is archived"
+            />
+          </Tooltip>
+        }
+      >
+        <GroupIcon archived={true} className="text-muted" gapLeft />
+      </OverlayTrigger>}
     {isPublic &&
       <OverlayTrigger
         placement="bottom"
@@ -79,6 +95,7 @@ TreeViewLeaf.propTypes = {
   title: PropTypes.oneOfType([PropTypes.string, PropTypes.element]).isRequired,
   admins: PropTypes.array,
   organizational: PropTypes.bool,
+  archived: PropTypes.bool,
   isPublic: PropTypes.bool,
   icon: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
   onClick: PropTypes.func,
