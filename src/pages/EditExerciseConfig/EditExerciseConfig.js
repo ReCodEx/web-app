@@ -516,6 +516,11 @@ class EditExerciseConfig extends Component {
                                     pipelines,
                                     getPipelines(config)
                                   )}
+                                  firstTimeSelection={
+                                    getFirstEnvironmentId(
+                                      environmentConfigs
+                                    ) === null
+                                  }
                                   readOnly={!hasPermissions(exercise, 'update')}
                                   onSubmit={this.transformAndSendRuntimesValuesCreator(
                                     tests,
