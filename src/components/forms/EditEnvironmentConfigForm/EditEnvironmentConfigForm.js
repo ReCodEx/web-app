@@ -34,6 +34,7 @@ class EditEnvironmentConfigForm extends Component {
     const {
       runtimeEnvironments,
       possibleVariables = null,
+      firstTimeSelection = false,
       selectedRuntimeId,
       hasDefaultVariables,
       dirty,
@@ -118,6 +119,7 @@ class EditEnvironmentConfigForm extends Component {
               name: longName
             }))
             .sort((a, b) => a.name.localeCompare(b.name, locale))}
+          addEmptyOption={firstTimeSelection}
         />
 
         {Boolean(selectedRuntimeId) &&
@@ -181,6 +183,7 @@ EditEnvironmentConfigForm.propTypes = {
   selectedPipelines: PropTypes.array,
   runtimeEnvironments: PropTypes.array.isRequired,
   possibleVariables: PropTypes.object,
+  firstTimeSelection: PropTypes.bool,
   readOnly: PropTypes.bool,
   selectedRuntimeId: PropTypes.string,
   defaultVariables: PropTypes.array,
@@ -198,8 +201,17 @@ EditEnvironmentConfigForm.propTypes = {
   intl: intlShape.isRequired
 };
 
-const validate = ({ variables }) => {
+const validate = ({ environmentId, variables }) => {
   const errors = {};
+
+  if (!environmentId) {
+    errors.environmentId = (
+      <FormattedMessage
+        id="app.editEnvironmentConfig.validateEnvironment"
+        defaultMessage="A runtime environment must be selected."
+      />
+    );
+  }
 
   // Check variable names.
   const index = {};
@@ -281,18 +293,18 @@ const warn = ({ variables }, { possibleVariables = null }) => {
 export default connect((state, { runtimeEnvironments }) => {
   const values = getFormValues('editEnvironmentConfig')(state);
   const selectedRuntimeId = values && values.environmentId;
-  const defaultVariables =
-    selectedRuntimeId &&
-    safeGet(runtimeEnvironments, [
-      ({ id }) => id === selectedRuntimeId,
-      'defaultVariables'
-    ]);
+  const defaultVariables = selectedRuntimeId
+    ? safeGet(runtimeEnvironments, [
+        ({ id }) => id === selectedRuntimeId,
+        'defaultVariables'
+      ])
+    : null;
 
   return {
     selectedRuntimeId,
     defaultVariables,
     hasDefaultVariables:
-      defaultVariables &&
+      Boolean(defaultVariables) &&
       compareVariablesForEquality(values.variables, defaultVariables)
   };
 })(
