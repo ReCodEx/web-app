@@ -153,7 +153,7 @@ class EditGroup extends Component {
                     </p>
                   </Col>
                 </Row>
-                {group.permissionHints.update &&
+                {group.permissionHints.archive &&
                   <Row>
                     <Col lg={3}>
                       <p>
