@@ -19,14 +19,16 @@ const ArchiveGroupButtonContainer = ({
   ...props
 }) =>
   <ResourceRenderer resource={group}>
-    {({ directlyArchived }) =>
-      <ArchiveGroupButton
-        archived={directlyArchived}
-        pending={pending}
-        setArchived={setArchived}
-        bsSize={bsSize}
-        {...props}
-      />}
+    {({ directlyArchived, permissionHints }) =>
+      permissionHints.archive
+        ? <ArchiveGroupButton
+            archived={directlyArchived}
+            pending={pending}
+            setArchived={setArchived}
+            bsSize={bsSize}
+            {...props}
+          />
+        : null}
   </ResourceRenderer>;
 
 ArchiveGroupButtonContainer.propTypes = {
