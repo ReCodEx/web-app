@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
@@ -11,31 +11,34 @@ import {
 } from '../../redux/selectors/groups';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 
-const ArchiveGroupButtonContainer = ({
-  group,
-  pending,
-  setArchived,
-  bsSize = undefined,
-  ...props
-}) =>
-  <ResourceRenderer resource={group}>
-    {({ directlyArchived, permissionHints }) =>
-      permissionHints.archive
-        ? <ArchiveGroupButton
-            archived={directlyArchived}
-            pending={pending}
-            setArchived={setArchived}
-            bsSize={bsSize}
-            {...props}
-          />
-        : null}
-  </ResourceRenderer>;
+import { identity } from '../../helpers/common';
+
+class ArchiveGroupButtonContainer extends Component {
+  render() {
+    const { group, pending, setArchived, bsSize = undefined } = this.props;
+    return (
+      <ResourceRenderer resource={group}>
+        {({ directlyArchived, permissionHints }) =>
+          permissionHints.archive
+            ? <ArchiveGroupButton
+                archived={directlyArchived}
+                pending={pending}
+                setArchived={setArchived}
+                bsSize={bsSize}
+                {...this.props}
+              />
+            : null}
+      </ResourceRenderer>
+    );
+  }
+}
 
 ArchiveGroupButtonContainer.propTypes = {
   id: PropTypes.string.isRequired,
   group: ImmutablePropTypes.map,
   pending: PropTypes.bool.isRequired,
   setArchived: PropTypes.func.isRequired,
+  onChange: PropTypes.func,
   bsSize: PropTypes.string
 };
 
@@ -44,8 +47,11 @@ const mapStateToProps = (state, { id }) => ({
   pending: groupArchivedPendingChange(id)(state)
 });
 
-const mapDispatchToProps = (dispatch, { id }) => ({
-  setArchived: archived => () => dispatch(setArchived(id, archived))
+const mapDispatchToProps = (dispatch, { id, onChange = identity }) => ({
+  setArchived: archived => ev => {
+    ev && ev.stopPropagation();
+    return dispatch(setArchived(id, archived)).then(onChange);
+  }
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(
