@@ -72,39 +72,6 @@ const getVisibleArchiveGroupsMap = (
   return result;
 };
 
-const buttonsCreator = (
-  { GROUP_INFO_URI_FACTORY, GROUP_DETAIL_URI_FACTORY },
-  setRootGroup
-) => (groupId, isRoot) =>
-  <span>
-    <Button
-      bsStyle="default"
-      bsSize="xs"
-      onClick={ev => {
-        ev.stopPropagation();
-        setRootGroup(isRoot ? null : groupId);
-      }}
-    >
-      <SuccessOrFailureIcon success={!isRoot} gapRight />
-      {isRoot
-        ? <FormattedMessage id="app.group.unsetRoot" defaultMessage="Unset" />
-        : <FormattedMessage id="app.group.setRoot" defaultMessage="Select" />}
-    </Button>
-    <LinkContainer to={GROUP_INFO_URI_FACTORY(groupId)}>
-      <Button bsStyle="primary" bsSize="xs">
-        <GroupIcon gapRight />
-        <FormattedMessage id="app.group.info" defaultMessage="Group Info" />
-      </Button>
-    </LinkContainer>
-    <LinkContainer to={GROUP_DETAIL_URI_FACTORY(groupId)}>
-      <Button bsStyle="primary" bsSize="xs">
-        <GroupIcon gapRight />
-        <FormattedMessage id="app.group.detail" defaultMessage="Group Detail" />
-      </Button>
-    </LinkContainer>
-    <ArchiveGroupButtonContainer id={groupId} bsSize="xs" shortLabels />
-  </span>;
-
 class Archive extends Component {
   state = { showAll: false, search: '', rootGroup: null };
 
@@ -118,8 +85,61 @@ class Archive extends Component {
     this.props.loadAsync(this.props.instanceId);
   }
 
+  buttonsCreator = (groupId, isRoot) => {
+    const {
+      instanceId,
+      loadAsync,
+      links: { GROUP_INFO_URI_FACTORY, GROUP_DETAIL_URI_FACTORY }
+    } = this.props;
+
+    return (
+      <span>
+        <Button
+          bsStyle="default"
+          bsSize="xs"
+          onClick={ev => {
+            ev.stopPropagation();
+            this.setState({ rootGroup: isRoot ? null : groupId });
+          }}
+        >
+          <SuccessOrFailureIcon success={!isRoot} gapRight />
+          {isRoot
+            ? <FormattedMessage
+                id="app.group.unsetRoot"
+                defaultMessage="Unset"
+              />
+            : <FormattedMessage
+                id="app.group.setRoot"
+                defaultMessage="Select"
+              />}
+        </Button>
+        <LinkContainer to={GROUP_INFO_URI_FACTORY(groupId)}>
+          <Button bsStyle="primary" bsSize="xs">
+            <GroupIcon gapRight />
+            <FormattedMessage id="app.group.info" defaultMessage="Group Info" />
+          </Button>
+        </LinkContainer>
+        <LinkContainer to={GROUP_DETAIL_URI_FACTORY(groupId)}>
+          <Button bsStyle="primary" bsSize="xs">
+            <GroupIcon gapRight />
+            <FormattedMessage
+              id="app.group.detail"
+              defaultMessage="Group Detail"
+            />
+          </Button>
+        </LinkContainer>
+        <ArchiveGroupButtonContainer
+          id={groupId}
+          bsSize="xs"
+          shortLabels
+          onChange={() => loadAsync(instanceId)}
+        />
+      </span>
+    );
+  };
+
   render() {
-    const { instance, groups, intl: { locale }, links } = this.props;
+    const { instance, groups, intl: { locale } } = this.props;
 
     return (
       <Page
@@ -183,9 +203,7 @@ class Archive extends Component {
                     locale,
                     this.state.rootGroup
                   )}
-                  buttonsCreator={buttonsCreator(links, groupId =>
-                    this.setState({ rootGroup: groupId })
-                  )}
+                  buttonsCreator={this.buttonsCreator}
                   currentGroupId={this.state.rootGroup}
                   forceRootButtons={true}
                 />}

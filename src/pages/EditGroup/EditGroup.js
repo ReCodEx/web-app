@@ -16,7 +16,11 @@ import DeleteGroupButtonContainer from '../../containers/DeleteGroupButtonContai
 import Box from '../../components/widgets/Box';
 import { BanIcon, InfoIcon } from '../../components/icons';
 
-import { fetchGroupIfNeeded, editGroup } from '../../redux/modules/groups';
+import {
+  fetchGroup,
+  fetchGroupIfNeeded,
+  editGroup
+} from '../../redux/modules/groups';
 import { groupSelector } from '../../redux/selectors/groups';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import {
@@ -72,6 +76,7 @@ class EditGroup extends Component {
       hasThreshold,
       localizedTexts,
       push,
+      reload,
       intl: { locale }
     } = this.props;
 
@@ -157,7 +162,10 @@ class EditGroup extends Component {
                   <Row>
                     <Col lg={3}>
                       <p>
-                        <ArchiveGroupButtonContainer id={group.id} />
+                        <ArchiveGroupButtonContainer
+                          id={group.id}
+                          onChange={reload}
+                        />
                       </p>
                     </Col>
                     <Col lg={9}>
@@ -244,6 +252,7 @@ class EditGroup extends Component {
 EditGroup.propTypes = {
   links: PropTypes.object.isRequired,
   loadAsync: PropTypes.func.isRequired,
+  reload: PropTypes.func.isRequired,
   reset: PropTypes.func.isRequired,
   params: PropTypes.shape({
     groupId: PropTypes.string.isRequired
@@ -277,6 +286,7 @@ export default withLinks(
       push: url => dispatch(push(url)),
       reset: () => dispatch(reset('editGroup')),
       loadAsync: () => dispatch(fetchGroupIfNeeded(groupId)),
+      reload: () => dispatch(fetchGroup(groupId)),
       editGroup: ({
         localizedTexts,
         externalId,
