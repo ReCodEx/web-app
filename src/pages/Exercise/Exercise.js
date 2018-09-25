@@ -59,10 +59,6 @@ import {
   getExerciseDetachingGroupId
 } from '../../redux/selectors/exercises';
 import { referenceSolutionsSelector } from '../../redux/selectors/referenceSolutions';
-import {
-  fetchUsersGroupsIfNeeded,
-  fetchInstanceGroups
-} from '../../redux/modules/groups';
 
 import {
   loggedInUserIdSelector,
@@ -92,7 +88,7 @@ const messages = defineMessages({
 class Exercise extends Component {
   state = { forkId: null };
 
-  static loadAsync = ({ exerciseId }, dispatch, { userId, instanceId }) =>
+  static loadAsync = ({ exerciseId }, dispatch, { userId }) =>
     Promise.all([
       dispatch(fetchExerciseIfNeeded(exerciseId)).then(
         ({ value: data }) =>
@@ -102,23 +98,18 @@ class Exercise extends Component {
       ),
       dispatch(fetchRuntimeEnvironments()),
       dispatch(fetchReferenceSolutions(exerciseId)),
-      dispatch(fetchHardwareGroups()),
+      dispatch(fetchHardwareGroups())
       //      dispatch(fetchExercisePipelines(exerciseId)), // TODO - awaiting modification (many-to-many relation with exercises)
-      dispatch(fetchUsersGroupsIfNeeded(userId)),
-      instanceId && dispatch(fetchInstanceGroups(instanceId))
     ]);
 
   componentWillMount() {
-    this.props.loadAsync(this.props.userId, this.props.instanceId);
+    this.props.loadAsync(this.props.userId);
     this.reset();
   }
 
   componentWillReceiveProps(newProps) {
-    if (
-      this.props.params.exerciseId !== newProps.params.exerciseId ||
-      this.props.instanceId !== newProps.instanceId
-    ) {
-      newProps.loadAsync(this.props.userId, newProps.instanceId);
+    if (this.props.params.exerciseId !== newProps.params.exerciseId) {
+      newProps.loadAsync(this.props.userId);
       this.reset();
     }
   }
@@ -482,7 +473,6 @@ Exercise.contextTypes = {
 
 Exercise.propTypes = {
   userId: PropTypes.string.isRequired,
-  instanceId: PropTypes.string,
   instance: ImmutablePropTypes.map,
   params: PropTypes.shape({
     exerciseId: PropTypes.string.isRequired
@@ -525,7 +515,6 @@ export default withLinks(
       const instanceId = selectedInstanceId(state);
       return {
         userId,
-        instanceId,
         instance: instanceSelector(state, instanceId),
         exercise: exerciseSelector(exerciseId)(state),
         forkedFrom: exerciseForkedFromSelector(exerciseId)(state),
@@ -545,8 +534,8 @@ export default withLinks(
       };
     },
     (dispatch, { params: { exerciseId } }) => ({
-      loadAsync: (userId, instanceId) =>
-        Exercise.loadAsync({ exerciseId }, dispatch, { userId, instanceId }),
+      loadAsync: userId =>
+        Exercise.loadAsync({ exerciseId }, dispatch, { userId }),
       assignExercise: groupId => dispatch(assignExercise(groupId, exerciseId)),
       editAssignment: (id, body) => dispatch(editAssignment(id, body)),
       push: url => dispatch(push(url)),

@@ -32,7 +32,7 @@ import { safeGet } from '../../helpers/common';
 
 class EditUser extends Component {
   static loadAsync = ({ userId }, dispatch) =>
-    Promise.all([dispatch(fetchUserIfNeeded(userId))]);
+    dispatch(fetchUserIfNeeded(userId));
 
   componentWillMount() {
     this.props.loadAsync();

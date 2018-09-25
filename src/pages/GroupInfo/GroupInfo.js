@@ -11,8 +11,6 @@ import { Row, Col } from 'react-bootstrap';
 import {
   createGroup,
   fetchGroupIfNeeded,
-  fetchInstanceGroups,
-  fetchSubgroups,
   fetchAllGroups
 } from '../../redux/modules/groups';
 import { fetchSupervisors } from '../../redux/modules/users';
@@ -48,21 +46,14 @@ import GroupArchivedWarning from '../../components/Groups/GroupArchivedWarning/G
 
 class GroupInfo extends Component {
   static loadAsync = ({ groupId }, dispatch) =>
-    Promise.all([
-      dispatch(fetchGroupIfNeeded(groupId))
-        .then(res => res.value)
-        .then(group =>
-          Promise.all([
-            dispatch(fetchSupervisors(groupId)),
-            dispatch(
-              group.archived
-                ? fetchAllGroups()
-                : fetchInstanceGroups(group.privateData.instanceId)
-            )
-          ])
-        ),
-      dispatch(fetchSubgroups(groupId))
-    ]);
+    dispatch(fetchGroupIfNeeded(groupId))
+      .then(res => res.value)
+      .then(group =>
+        Promise.all([
+          dispatch(fetchSupervisors(groupId)),
+          group.archived ? dispatch(fetchAllGroups({ archived: true })) : null
+        ])
+      );
 
   componentWillMount() {
     const { loadAsync } = this.props;
