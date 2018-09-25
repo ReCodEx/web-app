@@ -9,6 +9,9 @@ import createRecord from '../helpers/resourceManager/recordFactory';
 import { resourceStatus } from '../helpers/resourceManager/status';
 import { actionTypes as assignmentsActionTypes } from './assignments';
 import { actionTypes as sisSupervisedCoursesActionTypes } from './sisSupervisedCourses';
+import { selectedInstanceId } from '../selectors/auth';
+
+import { objectMap } from '../../helpers/common';
 
 const resourceName = 'groups';
 const { actions, actionTypes, reduceActions } = factory({ resourceName });
@@ -63,10 +66,38 @@ export const fetchGroupsIfNeeded = actions.fetchIfNeeded;
 export const fetchGroup = actions.fetchResource;
 export const fetchGroupIfNeeded = actions.fetchOneIfNeeded;
 
-export const fetchAllGroups = () =>
-  actions.fetchMany({
-    endpoint: '/groups/all'
-  });
+const prepareFetchGroupsParams = params => {
+  const known = {
+    instanceId: null,
+    ancestors: false,
+    search: null,
+    archived: false,
+    onlyArchived: false,
+    archivedAgeLimit: null
+  };
+  const res = { ancestors: true };
+  if (params) {
+    for (const key in known) {
+      if (params[key] !== undefined && params[key] !== known[key]) {
+        res[key] = params[key];
+      }
+    }
+  }
+  return objectMap(res, val => (typeof val === 'boolean' ? Number(val) : val));
+};
+
+export const fetchAllGroups = params => (dispatch, getState) =>
+  dispatch(
+    actions.fetchMany({
+      endpoint: '/groups',
+      query: prepareFetchGroupsParams({
+        instanceId: selectedInstanceId(getState()),
+        ...params
+      })
+    })
+  );
+
+// TODO fetchGroupsIfNeeded would be nice to have ...
 
 export const validateAddGroup = (name, instanceId, parentGroupId = null) =>
   createApiAction({
@@ -78,33 +109,6 @@ export const validateAddGroup = (name, instanceId, parentGroupId = null) =>
         ? { name, instanceId }
         : { name, instanceId, parentGroupId }
   });
-
-export const fetchSubgroups = groupId =>
-  actions.fetchMany({
-    endpoint: `/groups/${groupId}/subgroups`,
-    meta: { groupId }
-  });
-
-export const fetchUsersGroups = userId =>
-  createApiAction({
-    type: additionalActionTypes.LOAD_USERS_GROUPS,
-    endpoint: `/users/${userId}/groups`,
-    method: 'GET',
-    meta: { userId }
-  });
-
-export const fetchInstanceGroups = instanceId =>
-  actions.fetchMany({
-    endpoint: `/instances/${instanceId}/groups`,
-    meta: { instanceId }
-  });
-
-export const fetchUsersGroupsIfNeeded = userId => (dispatch, getState) => {
-  const user = getState().users.getIn(['resources', userId]);
-  if (user) {
-    dispatch(fetchUsersGroups(userId));
-  }
-};
 
 export const createGroup = actions.addResource;
 export const editGroup = actions.updateResource;

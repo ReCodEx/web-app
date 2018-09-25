@@ -21,10 +21,6 @@ import GroupsName from '../../components/Groups/GroupsName';
 
 import { fetchAssignmentsForGroup } from '../../redux/modules/assignments';
 import { fetchUserIfNeeded } from '../../redux/modules/users';
-import {
-  fetchGroupsIfNeeded,
-  fetchInstanceGroups
-} from '../../redux/modules/groups';
 import { fetchGroupsStatsIfNeeded } from '../../redux/modules/stats';
 import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments';
 
@@ -34,10 +30,7 @@ import {
   isSupervisor,
   isLoggedAsSuperAdmin
 } from '../../redux/selectors/users';
-import {
-  loggedInUserIdSelector,
-  selectedInstanceId
-} from '../../redux/selectors/auth';
+import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import { statisticsSelector } from '../../redux/selectors/stats';
 import { groupsSelector } from '../../redux/selectors/groups';
 import {
@@ -55,17 +48,15 @@ import { getLocalizedName } from '../../helpers/getLocalizedData';
 import withLinks from '../../helpers/withLinks';
 
 class Dashboard extends Component {
-  componentDidMount = () =>
-    this.props.loadAsync(this.props.userId, this.props.instanceId);
+  componentDidMount = () => this.props.loadAsync(this.props.userId);
 
   componentWillReceiveProps = newProps => {
     if (
       this.props.userId !== newProps.userId ||
-      this.props.instanceId !== newProps.instanceId ||
       this.props.supervisorOf.size > newProps.supervisorOf.size ||
       this.props.studentOf.size > newProps.studentOf.size
     ) {
-      newProps.loadAsync(newProps.userId, newProps.instanceId);
+      newProps.loadAsync(newProps.userId);
     }
   };
 
@@ -74,7 +65,7 @@ class Dashboard extends Component {
    * to load the groups and necessary data for the intersection
    * of user's groups of which the current user is a supervisor.
    */
-  static loadAsync = (params, dispatch, { userId, instanceId }) =>
+  static loadAsync = (params, dispatch, { userId }) =>
     Promise.all([
       dispatch(fetchRuntimeEnvironments()),
       dispatch((dispatch, getState) =>
@@ -84,23 +75,12 @@ class Dashboard extends Component {
           const groups = user.privateData.groups.studentOf.concat(
             user.privateData.groups.supervisorOf
           );
-          const isAdmin = isLoggedAsSuperAdmin(state);
-
-          return dispatch(fetchGroupsIfNeeded(...groups)).then(groups =>
-            Promise.all(
-              [
-                isAdmin && instanceId
-                  ? dispatch(fetchInstanceGroups(instanceId))
-                  : Promise.resolve()
-              ].concat(
-                groups.map(({ value: group }) =>
-                  Promise.all([
-                    dispatch(fetchAssignmentsForGroup(group.id)),
-                    dispatch(fetchGroupsStatsIfNeeded(group.id)),
-                    dispatch(fetchGroupsIfNeeded(...group.parentGroupsIds))
-                  ])
-                )
-              )
+          return Promise.all(
+            groups.map(groupId =>
+              Promise.all([
+                dispatch(fetchAssignmentsForGroup(groupId)),
+                dispatch(fetchGroupsStatsIfNeeded(groupId))
+              ])
             )
           );
         })
@@ -401,7 +381,6 @@ Dashboard.propTypes = {
   superadmin: PropTypes.bool,
   loadAsync: PropTypes.func.isRequired,
   userId: PropTypes.string,
-  instanceId: PropTypes.string,
   groupAssignments: ImmutablePropTypes.map,
   assignmentEnvironmentsSelector: PropTypes.func,
   statistics: ImmutablePropTypes.map,
@@ -416,7 +395,6 @@ export default withLinks(
       const userId = loggedInUserIdSelector(state);
       return {
         userId,
-        instanceId: selectedInstanceId(state),
         student: isStudent(userId)(state),
         supervisor: isSupervisor(userId)(state),
         superadmin: isLoggedAsSuperAdmin(state),
@@ -430,8 +408,7 @@ export default withLinks(
       };
     },
     (dispatch, { params }) => ({
-      loadAsync: (userId, instanceId) =>
-        Dashboard.loadAsync(params, dispatch, { userId, instanceId })
+      loadAsync: userId => Dashboard.loadAsync(params, dispatch, { userId })
     })
   )(injectIntl(Dashboard))
 );

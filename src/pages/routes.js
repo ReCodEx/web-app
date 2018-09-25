@@ -135,12 +135,12 @@ const createRoutes = getState => {
           <Route path="instance/:instanceId" component={Instance} />
           <Route path="users" component={Users} />
           <Route path="user/:userId">
-            <IndexRoute component={User} />
+            <IndexRoute component={User} customLoadGroups={true} />
             <Route path="edit" component={EditUser} />
           </Route>
           <Route path="submission-failures" component={SubmissionFailures} />
           <Route path="sis-integration" component={SisIntegration} />
-          <Route path="archive" component={Archive} />
+          <Route path="archive" component={Archive} customLoadGroups={true} />
         </Route>
         <Route path="forgotten-password">
           <IndexRoute component={ResetPassword} />

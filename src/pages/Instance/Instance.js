@@ -23,7 +23,7 @@ import {
   instanceSelector,
   isAdminOfInstance
 } from '../../redux/selectors/instances';
-import { createGroup, fetchInstanceGroups } from '../../redux/modules/groups';
+import { createGroup } from '../../redux/modules/groups';
 import { groupsSelector } from '../../redux/selectors/groups';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import { isLoggedAsSuperAdmin } from '../../redux/selectors/users';
@@ -32,10 +32,7 @@ import withLinks from '../../helpers/withLinks';
 
 class Instance extends Component {
   static loadAsync = ({ instanceId }, dispatch) =>
-    Promise.all([
-      dispatch(fetchInstanceIfNeeded(instanceId)),
-      dispatch(fetchInstanceGroups(instanceId))
-    ]);
+    Promise.all([dispatch(fetchInstanceIfNeeded(instanceId))]);
 
   componentWillMount() {
     this.props.loadAsync();

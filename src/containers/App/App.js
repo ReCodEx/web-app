@@ -14,7 +14,7 @@ import {
   isTokenInNeedOfRefreshment
 } from '../../redux/helpers/token';
 import { fetchUsersInstancesIfNeeded } from '../../redux/modules/instances';
-import { fetchUsersGroupsIfNeeded } from '../../redux/modules/groups';
+import { fetchAllGroups } from '../../redux/modules/groups';
 import { logout, refresh, selectInstance } from '../../redux/modules/auth';
 import { getJsData } from '../../redux/helpers/resourceManager';
 
@@ -30,8 +30,11 @@ import './recodex.css';
 
 library.add(regularIcons, solidIcons, brandIcons);
 
+const customLoadGroups = routes =>
+  routes.filter(route => route.customLoadGroups).length > 0;
+
 class App extends Component {
-  static loadAsync = (params, dispatch, { userId }) =>
+  static loadAsync = (params, dispatch, { userId, routes }) =>
     userId
       ? Promise.all([
           dispatch((dispatch, getState) =>
@@ -41,20 +44,22 @@ class App extends Component {
                 const user = getJsData(getUser(userId)(state));
                 dispatch(selectInstance(user.privateData.instancesIds[0]));
               }
+              return !customLoadGroups(routes)
+                ? dispatch(fetchAllGroups())
+                : Promise.resolve();
             })
           ),
-          dispatch(fetchUsersGroupsIfNeeded(userId)),
           dispatch(fetchUsersInstancesIfNeeded(userId))
         ])
       : Promise.resolve();
 
   componentWillMount() {
-    this.props.loadAsync(this.props.userId);
+    this.props.loadAsync(this.props.userId, this.props.routes);
   }
 
   componentWillReceiveProps(newProps) {
     if (this.props.userId !== newProps.userId) {
-      newProps.loadAsync(newProps.userId);
+      newProps.loadAsync(newProps.userId, newProps.routes);
     }
   }
 
@@ -105,6 +110,7 @@ App.propTypes = {
   refreshToken: PropTypes.func,
   logout: PropTypes.func,
   children: PropTypes.element,
+  routes: PropTypes.array,
   loadAsync: PropTypes.func,
   userSettings: PropTypes.object
 };
@@ -125,7 +131,8 @@ export default connect(
     };
   },
   dispatch => ({
-    loadAsync: userId => App.loadAsync({}, dispatch, { userId }),
+    loadAsync: (userId, routes) =>
+      App.loadAsync({}, dispatch, { userId, routes }),
     refreshToken: () => dispatch(refresh()),
     logout: () => dispatch(logout('/'))
   })
