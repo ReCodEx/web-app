@@ -9,7 +9,7 @@ const LoginFailed = ({ onClick }) =>
     <WarningIcon gapRight />
     <FormattedMessage
       id="app.casLoginButton.failed"
-      defaultMessage="Try again"
+      defaultMessage="Try Again"
     />
   </Button>;
 

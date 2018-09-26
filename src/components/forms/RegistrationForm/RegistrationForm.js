@@ -5,7 +5,6 @@ import { FormattedMessage } from 'react-intl';
 import { Alert } from 'react-bootstrap';
 import isEmail from 'validator/lib/isEmail';
 
-import ResourceRenderer from '../../helpers/ResourceRenderer';
 import { eventAggregator } from '../../../helpers/eventAggregator';
 import FormBox from '../../widgets/FormBox';
 import {
@@ -47,7 +46,7 @@ const RegistrationForm = ({
           hasFailed={submitFailed}
           dirty={anyTouched}
           asyncValidating={asyncValidating}
-          invalid={invalid || instances.size === 0}
+          invalid={invalid || instances.length === 0}
           messages={{
             submit: (
               <FormattedMessage
@@ -146,28 +145,23 @@ const RegistrationForm = ({
       }
     />
 
-    <ResourceRenderer resource={instances.toArray()}>
-      {(...instances) =>
-        <Field
-          name="instanceId"
-          required
-          component={SelectField}
-          label={
-            <FormattedMessage
-              id="app.externalRegistrationForm.instance"
-              defaultMessage="Instance:"
-            />
-          }
-          options={[
-            { key: '', name: '...' },
-            ...instances.map(({ id: key, name }) => ({ key, name }))
-          ]}
-        />}
-    </ResourceRenderer>
+    <Field
+      name="instanceId"
+      required
+      component={SelectField}
+      label={
+        <FormattedMessage
+          id="app.externalRegistrationForm.instance"
+          defaultMessage="Instance:"
+        />
+      }
+      addEmptyOption
+      options={instances.map(({ id: key, name }) => ({ key, name }))}
+    />
   </FormBox>;
 
 RegistrationForm.propTypes = {
-  instances: PropTypes.object.isRequired,
+  instances: PropTypes.array.isRequired,
   handleSubmit: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
   submitFailed: PropTypes.bool,

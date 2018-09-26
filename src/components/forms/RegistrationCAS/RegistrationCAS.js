@@ -1,149 +1,97 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import ImmutablePropTypes from 'react-immutable-proptypes';
-import { reduxForm, Field } from 'redux-form';
-import { Map } from 'immutable';
 import { FormattedMessage } from 'react-intl';
-import { Alert } from 'react-bootstrap';
+import { Alert, FormControl, ControlLabel, Well } from 'react-bootstrap';
 
-import ResourceRenderer from '../../helpers/ResourceRenderer';
-import FormBox from '../../widgets/FormBox';
-import { CASAuthenticationButtonField, SelectField } from '../Fields';
-import SubmitButton from '../SubmitButton';
+import Box from '../../widgets/Box';
+import AuthenticationButtonContainer from '../../../containers/CAS/AuthenticationButtonContainer';
+import { safeGet } from '../../../helpers/common';
 
-const RegistrationCAS = ({
-  submitting,
-  handleSubmit,
-  submitSucceeded,
-  submitFailed,
-  anyTouched,
-  instances = Map(),
-  invalid
-}) =>
-  <FormBox
-    title={
-      <FormattedMessage
-        id="app.externalRegistrationForm.title"
-        defaultMessage="Create ReCodEx account using CAS"
-      />
-    }
-    type={submitSucceeded ? 'success' : undefined}
-    footer={
-      <div className="text-center">
-        <SubmitButton
-          id="casRegistrationButton"
-          handleSubmit={handleSubmit}
-          submitting={submitting}
-          hasSucceeded={submitSucceeded}
-          hasFailed={submitFailed}
-          dirty={anyTouched}
-          invalid={invalid || instances.size === 0}
-          messages={{
-            submit: (
+class RegistrationCAS extends Component {
+  state = { instanceId: null, failed: false };
+
+  changeInstance = ev => {
+    this.setState({ instanceId: ev.target.value });
+  };
+
+  ticketObtainedHandler = (ticket, clientUrl) => {
+    const { instances, onSubmit } = this.props;
+    this.setState({ failed: false });
+    onSubmit({
+      instanceId: this.state.instanceId || safeGet(instances, [0, 'id']),
+      serviceId: 'cas-uk',
+      clientUrl,
+      ticket
+    });
+  };
+
+  failedHandler = () => {
+    this.setState({ failed: true });
+  };
+
+  render() {
+    const { instances } = this.props;
+    return (
+      <Box
+        title={
+          <FormattedMessage
+            id="app.cas.registration.title"
+            defaultMessage="Register Account Bound to CAS"
+          />
+        }
+        footer={
+          <div className="text-center">
+            <AuthenticationButtonContainer
+              retry={this.state.failed}
+              onTicketObtained={this.ticketObtainedHandler}
+              onFailed={this.failedHandler}
+            />
+          </div>
+        }
+      >
+        <div>
+          {this.state.failed &&
+            <Alert bsStyle="danger">
               <FormattedMessage
-                id="app.registrationForm.createAccount"
-                defaultMessage="Create account"
+                id="app.externalRegistrationForm.failed"
+                defaultMessage="Registration failed. Please check your information."
               />
-            ),
-            submitting: (
-              <FormattedMessage
-                id="app.registrationForm.processing"
-                defaultMessage="Creating account ..."
-              />
-            ),
-            success: (
-              <FormattedMessage
-                id="app.registrationForm.success"
-                defaultMessage="Your account has been created."
-              />
-            )
-          }}
-        />
-      </div>
-    }
-  >
-    {submitFailed &&
-      <Alert bsStyle="danger">
-        <FormattedMessage
-          id="app.externalRegistrationForm.failed"
-          defaultMessage="Registration failed. Please check your information."
-        />
-      </Alert>}
+            </Alert>}
 
-    <Field
-      name="ticket"
-      required
-      component={CASAuthenticationButtonField}
-      label={
-        <FormattedMessage
-          id="app.externalRegistrationForm.username"
-          defaultMessage="CAS login (UKČO):"
-        />
-      }
-    />
+          <Well>
+            <FormattedMessage
+              id="app.cas.registration.description"
+              defaultMessage="Created account will be bound to external identifier provided by UK CAS. Such account may use both external CAS authentication or locally created credentials. Furthermore, accounts bound to CAS may use additional features provided by SIS bindings."
+            />
+          </Well>
 
-    <ResourceRenderer resource={instances.toArray()}>
-      {(...instances) =>
-        <Field
-          name="instanceId"
-          required
-          component={SelectField}
-          label={
+          {/* We are NOT creating a redux-form here, so we build FormControl manually (instead of using SelectField). */}
+          <ControlLabel>
             <FormattedMessage
               id="app.externalRegistrationForm.instance"
               defaultMessage="Instance:"
             />
-          }
-          options={[
-            { key: '', name: '...' },
-            ...instances.map(({ id: key, name }) => ({ key, name }))
-          ]}
-        />}
-    </ResourceRenderer>
-  </FormBox>;
+          </ControlLabel>
+          <FormControl
+            componentClass="select"
+            bsClass="form-control full-width"
+            onChange={this.changeInstance}
+          >
+            {instances.map(({ id, name }) =>
+              <option key={id} value={id}>
+                {name}
+              </option>
+            )}
+          </FormControl>
+        </div>
+      </Box>
+    );
+  }
+}
 
 RegistrationCAS.propTypes = {
-  instances: ImmutablePropTypes.map.isRequired,
-  handleSubmit: PropTypes.func.isRequired,
-  onSubmit: PropTypes.func.isRequired,
-  submitFailed: PropTypes.bool,
-  submitSucceeded: PropTypes.bool,
-  submitting: PropTypes.bool,
-  anyTouched: PropTypes.bool,
-  invalid: PropTypes.bool
+  instances: PropTypes.array.isRequired,
+  onSubmit: PropTypes.func.isRequired
 };
 
-const validate = ({ ticket, instanceId }) => {
-  const errors = {};
-
-  if (!ticket) {
-    errors['ticket'] = (
-      <FormattedMessage
-        id="app.externalRegistrationForm.validation.ticket"
-        defaultMessage="You must verify your CAS credentials."
-      />
-    );
-  }
-
-  if (!instanceId) {
-    errors['instanceId'] = (
-      <FormattedMessage
-        id="app.externalRegistrationForm.validation.instanceId"
-        defaultMessage="Please select one of the instances."
-      />
-    );
-  }
-
-  return errors;
-};
-
-const initialValues = {
-  serviceId: 'cas-uk',
-  clientUrl: null
-};
-
-export default reduxForm({
-  form: 'registration-cas',
-  initialValues,
-  validate
-})(RegistrationCAS);
+export default RegistrationCAS;
