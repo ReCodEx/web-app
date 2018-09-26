@@ -22,6 +22,3 @@ export { default as ExpandingSelectField } from './ExpandingSelectField';
 export {
   default as ExpandingInputFilesField
 } from './ExpandingInputFilesField';
-export {
-  default as CASAuthenticationButtonField
-} from './CASAuthenticationButtonField';
