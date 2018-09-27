@@ -4,7 +4,16 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import Box from '../../components/widgets/Box';
-import { Table, Accordion, Panel, Row, Col } from 'react-bootstrap';
+import {
+  Table,
+  Accordion,
+  Panel,
+  Row,
+  Col,
+  OverlayTrigger,
+  Tooltip
+} from 'react-bootstrap';
+
 import Button from '../../components/widgets/FlatButton';
 import { LinkContainer } from 'react-router-bootstrap';
 
@@ -28,9 +37,8 @@ import SisCreateGroupForm from '../../components/forms/SisCreateGroupForm';
 import SisBindGroupForm from '../../components/forms/SisBindGroupForm';
 import { getGroupCanonicalLocalizedName } from '../../helpers/getLocalizedData';
 
-import { GroupIcon } from '../../components/icons';
+import Icon, { GroupIcon } from '../../components/icons';
 import withLinks from '../../helpers/withLinks';
-import './SisSupervisorGroupsContainer.css';
 
 const days = {
   cs: ['Po', 'Út', 'St', 'Čt', 'Pá', 'So', 'Ne'],
@@ -150,35 +158,76 @@ class SisSupervisorGroupsContainer extends Component {
                                     <Panel
                                       key={i}
                                       header={
-                                        <span className="header">
-                                          <span className="leftText">
-                                            {course.groups.length > 0 &&
-                                              <GroupIcon className="leftIcon" />}
-                                            <span>
-                                              {getLocalizedData(
-                                                course.course.captions,
-                                                locale
-                                              )}{' '}
-                                              (<code>{course.course.code}</code>){' '}
-                                            </span>
-                                          </span>
-                                          <span className="pull-right">
-                                            {
-                                              getLocalizedData(days, locale)[
-                                                course.course.dayOfWeek
-                                              ]
-                                            }{' '}
-                                            {course.course.time}{' '}
-                                            {course.course.fortnightly
-                                              ? getLocalizedData(
-                                                  oddEven,
-                                                  locale
-                                                )[
-                                                  course.course.oddWeeks ? 0 : 1
-                                                ]
-                                              : ''}
-                                          </span>
-                                        </span>
+                                        <div>
+                                          <table className="small full-width">
+                                            <tbody>
+                                              <tr>
+                                                <td>
+                                                  <OverlayTrigger
+                                                    placement="bottom"
+                                                    overlay={
+                                                      <Tooltip
+                                                        id={`course-tooltip-${i}`}
+                                                      >
+                                                        {course.course.type ===
+                                                        'lecture'
+                                                          ? <FormattedMessage
+                                                              id="app.sisSupervisor.lecture"
+                                                              defaultMessage="Lecture"
+                                                            />
+                                                          : <FormattedMessage
+                                                              id="app.sisSupervisor.lab"
+                                                              defaultMessage="Lab (seminar)"
+                                                            />}
+                                                      </Tooltip>
+                                                    }
+                                                  >
+                                                    {course.course.type ===
+                                                    'lecture'
+                                                      ? <Icon
+                                                          icon="chalkboard-teacher"
+                                                          gapRight
+                                                          fixedWidth
+                                                        />
+                                                      : <Icon
+                                                          icon="laptop"
+                                                          gapRight
+                                                          fixedWidth
+                                                        />}
+                                                  </OverlayTrigger>
+                                                </td>
+                                                <td className="full-width">
+                                                  {getLocalizedData(course.course.captions, locale)}{' '}
+                                                  (<code>{course.course.code}</code>)
+                                                  {course.groups.length > 0 &&
+                                                    <GroupIcon gapLeft />}
+                                                </td>
+                                                <td className="text-nowrap">
+                                                  {
+                                                    getLocalizedData(
+                                                      days,
+                                                      locale
+                                                    )[course.course.dayOfWeek]
+                                                  }{' '}
+                                                  {course.course.time}{' '}
+                                                  {course.course.fortnightly
+                                                    ? getLocalizedData(
+                                                        oddEven,
+                                                        locale
+                                                      )[
+                                                        course.course.oddWeeks
+                                                          ? 0
+                                                          : 1
+                                                      ]
+                                                    : ''}
+                                                </td>
+                                                <td className="text-nowrap em-padding-left">
+                                                  {course.course.room}
+                                                </td>
+                                              </tr>
+                                            </tbody>
+                                          </table>
+                                        </div>
                                       }
                                       eventKey={i}
                                       bsStyle={
