@@ -75,6 +75,7 @@ import {
   transformTestsValues
 } from '../../helpers/exercise/tests';
 import {
+  onlySimpleEnvironments,
   getSimpleEnvironmentsInitValues,
   getFirstEnvironmentId,
   getEnvironmentInitValues,
@@ -477,7 +478,9 @@ class EditExerciseConfig extends Component {
                                     initialValues={getSimpleEnvironmentsInitValues(
                                       environmentConfigs
                                     )}
-                                    runtimeEnvironments={environments}
+                                    runtimeEnvironments={onlySimpleEnvironments(
+                                      environments
+                                    )}
                                     onSubmit={this.transformAndSendSimpleRuntimesValuesCreator(
                                       pipelines,
                                       environments,
