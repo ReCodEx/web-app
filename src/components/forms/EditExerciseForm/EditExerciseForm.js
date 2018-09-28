@@ -81,7 +81,7 @@ const EditExerciseForm = ({
             submitting: (
               <FormattedMessage
                 id="generic.saving"
-                defaultMessage="Saving ..."
+                defaultMessage="Saving..."
               />
             ),
             success: (
@@ -90,7 +90,7 @@ const EditExerciseForm = ({
             validating: (
               <FormattedMessage
                 id="generic.validating"
-                defaultMessage="Validating ..."
+                defaultMessage="Validating..."
               />
             )
           }}

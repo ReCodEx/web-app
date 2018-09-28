@@ -94,7 +94,7 @@ const UsersListItem = ({
           }
         >
           <LoadingIcon gapRight />
-          <FormattedMessage id="generic.loading" defaultMessage="Loading ..." />
+          <FormattedMessage id="generic.loading" defaultMessage="Loading..." />
         </td>
       </tr>;
 

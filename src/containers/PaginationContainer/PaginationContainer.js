@@ -301,7 +301,7 @@ class PaginationContainer extends Component {
                 <LoadingIcon gapRight />
                 <FormattedMessage
                   id="generic.loading"
-                  defaultMessage="Loading ..."
+                  defaultMessage="Loading..."
                 />
               </div>}
       </div>

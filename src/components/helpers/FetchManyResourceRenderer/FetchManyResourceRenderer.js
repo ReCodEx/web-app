@@ -9,7 +9,7 @@ const hasFailed = status => status === 'FAILED';
 const defaultLoading = noIcons =>
   <span>
     {!noIcons && <LoadingIcon gapRight />}
-    <FormattedMessage id="generic.loading" defaultMessage="Loading ..." />
+    <FormattedMessage id="generic.loading" defaultMessage="Loading..." />
   </span>;
 
 const defaultFailed = noIcons =>

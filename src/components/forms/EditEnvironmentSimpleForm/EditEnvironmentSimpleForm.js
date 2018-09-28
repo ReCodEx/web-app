@@ -88,7 +88,7 @@ class EditEnvironmentSimpleForm extends Component {
               submitting: (
                 <FormattedMessage
                   id="app.editEnvironmentSimpleForm.submitting"
-                  defaultMessage="Saving Environments ..."
+                  defaultMessage="Saving Environments..."
                 />
               ),
               success: (

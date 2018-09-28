@@ -372,7 +372,7 @@ class Exercise extends Component {
                             {exercise.isBroken
                               ? <FormattedMessage
                                   id="app.exercise.isBrokenShort"
-                                  defaultMessage="Exercise is broken ..."
+                                  defaultMessage="Exercise is broken..."
                                 />
                               : <FormattedMessage
                                   id="app.exercise.submitReferenceSoution"

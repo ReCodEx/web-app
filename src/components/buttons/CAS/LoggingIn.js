@@ -8,7 +8,7 @@ const LoggingIn = () =>
     <LoadingIcon gapRight />
     <FormattedMessage
       id="app.casLoginButton.loggingIn"
-      defaultMessage="Logging in ..."
+      defaultMessage="Logging in..."
     />
   </Button>;
 

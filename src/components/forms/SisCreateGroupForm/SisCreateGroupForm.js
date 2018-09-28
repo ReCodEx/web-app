@@ -53,7 +53,7 @@ class SisCreateGroupForm extends Component {
                 submitting: (
                   <FormattedMessage
                     id="app.sisCreateGroupForm.submitting"
-                    defaultMessage="Creating ..."
+                    defaultMessage="Creating..."
                   />
                 ),
                 success: (

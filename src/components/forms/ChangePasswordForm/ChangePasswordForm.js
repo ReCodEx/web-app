@@ -50,7 +50,7 @@ const ChangePasswordForm = ({
                 <LoadingIcon gapRight />
                 <FormattedMessage
                   id="app.changePasswordForm.processing"
-                  defaultMessage="Changing ..."
+                  defaultMessage="Changing..."
                 />
               </span>}
         </Button>

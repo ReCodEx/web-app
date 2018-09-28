@@ -11,14 +11,14 @@ const LoadingGroupDetail = () =>
         <LoadingIcon gapRight />
         <FormattedMessage
           id="app.groupDetail.loading"
-          defaultMessage="Loading description of the group ..."
+          defaultMessage="Loading description of the group..."
         />
       </span>
     }
   >
     <FormattedMessage
       id="app.groupDetail.loading"
-      defaultMessage="Loading description of the group ..."
+      defaultMessage="Loading description of the group..."
     />
   </Box>;
 

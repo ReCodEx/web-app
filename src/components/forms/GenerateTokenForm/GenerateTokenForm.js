@@ -135,7 +135,7 @@ const GenerateTokenForm = ({
             submitting: (
               <FormattedMessage
                 id="app.generateTokenForm.generating"
-                defaultMessage="Generating ..."
+                defaultMessage="Generating..."
               />
             ),
             success: (

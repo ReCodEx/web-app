@@ -83,7 +83,7 @@ class EditLimitsForm extends Component {
                     submitting: (
                       <FormattedMessage
                         id="app.editLimitsForm.submitting"
-                        defaultMessage="Saving Limits ..."
+                        defaultMessage="Saving Limits..."
                       />
                     ),
                     success: (
@@ -95,7 +95,7 @@ class EditLimitsForm extends Component {
                     validating: (
                       <FormattedMessage
                         id="generic.validating"
-                        defaultMessage="Validating ..."
+                        defaultMessage="Validating..."
                       />
                     )
                   }}

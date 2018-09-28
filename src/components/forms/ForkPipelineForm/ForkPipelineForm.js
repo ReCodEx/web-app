@@ -109,7 +109,7 @@ class ForkPipelineForm extends Component {
                   submitting: (
                     <FormattedMessage
                       id="app.forkPipelineForm.submitting"
-                      defaultMessage="Forking ..."
+                      defaultMessage="Forking..."
                     />
                   ),
                   success: (

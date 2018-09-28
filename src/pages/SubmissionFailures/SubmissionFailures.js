@@ -39,7 +39,7 @@ class SubmissionFailures extends Component {
             title={
               <FormattedMessage
                 id="app.submissionFailures.loading"
-                defaultMessage="Loading list of failures ..."
+                defaultMessage="Loading list of failures..."
               />
             }
             description={

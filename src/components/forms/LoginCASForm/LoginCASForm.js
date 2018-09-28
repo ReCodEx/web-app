@@ -50,7 +50,7 @@ const LoginCASForm = ({
                 <LoadingIcon gapRight />
                 <FormattedMessage
                   id="app.loginCASForm.processing"
-                  defaultMessage="Signing in ..."
+                  defaultMessage="Signing in..."
                 />
               </span>}
         </Button>

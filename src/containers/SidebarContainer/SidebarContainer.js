@@ -6,19 +6,14 @@ import {
   loggedInStudentOfSelector,
   loggedInSupervisorOfNonOrganizationalSelector
 } from '../../redux/selectors/usersGroups';
-import {
-  notificationsSelector,
-  isSupervisor,
-  isLoggedAsSuperAdmin
-} from '../../redux/selectors/users';
+import { notificationsSelector, getRole } from '../../redux/selectors/users';
 
 const mapStateToProps = state => {
   const userId = loggedInUserIdSelector(state);
   return {
     instances: loggedInUserMemberOfInstances(state),
+    role: getRole(userId)(state),
     studentOf: loggedInStudentOfSelector(state),
-    isAdmin: isLoggedAsSuperAdmin(state),
-    isSupervisor: isSupervisor(userId)(state),
     supervisorOf: loggedInSupervisorOfNonOrganizationalSelector(state),
     notifications: notificationsSelector(state)
   };

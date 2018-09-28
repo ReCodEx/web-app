@@ -110,7 +110,7 @@ const EditEnvironmentConfigVariables = ({
           {noItems ||
             <FormattedMessage
               id="app.editEnvironmentConfig.noVariables"
-              defaultMessage="There are no variables yet ..."
+              defaultMessage="There are no variables yet..."
             />}
         </span>}
       <OverlayTrigger

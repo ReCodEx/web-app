@@ -11,7 +11,7 @@ const LoadingMenuItem = () =>
           whiteSpace: 'normal'
         }}
       >
-        <FormattedMessage id="generic.loading" defaultMessage="Loading ..." />
+        <FormattedMessage id="generic.loading" defaultMessage="Loading..." />
       </span>
     </a>
   </li>;

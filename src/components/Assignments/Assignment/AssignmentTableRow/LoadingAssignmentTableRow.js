@@ -9,7 +9,7 @@ const LoadingAssignmentTableRow = ({ colSpan = 1 }) =>
       <LoadingIcon gapRight />
       <FormattedMessage
         id="app.assignmentsTableRow.loading"
-        defaultMessage="Loading assignments ..."
+        defaultMessage="Loading assignments..."
       />
     </td>
   </tr>;
