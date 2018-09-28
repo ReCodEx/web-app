@@ -77,7 +77,7 @@ class EditPipelineForm extends Component {
                 submitting: (
                   <FormattedMessage
                     id="app.editPipelineForm.submitting"
-                    defaultMessage="Saving changes ..."
+                    defaultMessage="Saving changes..."
                   />
                 ),
                 success: (
@@ -89,7 +89,7 @@ class EditPipelineForm extends Component {
                 validating: (
                   <FormattedMessage
                     id="generic.validating"
-                    defaultMessage="Validating ..."
+                    defaultMessage="Validating..."
                   />
                 )
               }}

@@ -12,7 +12,7 @@ const LoadingCommentThread = () =>
         <LoadingIcon gapRight />
         <FormattedMessage
           id="app.comments.loadingCommentThread"
-          defaultMessage="Loading comments ..."
+          defaultMessage="Loading comments..."
         />
       </p>
     </div>

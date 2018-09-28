@@ -9,7 +9,7 @@ import withLinks from '../../../helpers/withLinks';
 
 const Admin = ({
   currentUrl,
-  links: { ADMIN_INSTANCES_URI, USERS_URI, FAILURES_URI, SIS_INTEGRATION_URI }
+  links: { ADMIN_INSTANCES_URI, USERS_URI, FAILURES_URI }
 }) =>
   <ul className="sidebar-menu">
     <MenuTitle
@@ -52,17 +52,6 @@ const Admin = ({
       }
       currentPath={currentUrl}
       link={FAILURES_URI}
-    />
-    <MenuItem
-      icon="id-badge"
-      title={
-        <FormattedMessage
-          id="app.sidebar.menu.admin.sis"
-          defaultMessage="SIS Integration"
-        />
-      }
-      currentPath={currentUrl}
-      link={SIS_INTEGRATION_URI}
     />
   </ul>;
 

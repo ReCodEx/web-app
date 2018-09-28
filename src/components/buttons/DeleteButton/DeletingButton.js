@@ -6,7 +6,7 @@ import { LoadingIcon } from '../../icons';
 const DeletingGroupButton = props =>
   <Button bsStyle="default" bsSize="sm" className="btn-flat" {...props}>
     <LoadingIcon gapRight />
-    <FormattedMessage id="generic.deleting" defaultMessage="Deleting ..." />
+    <FormattedMessage id="generic.deleting" defaultMessage="Deleting..." />
   </Button>;
 
 export default DeletingGroupButton;

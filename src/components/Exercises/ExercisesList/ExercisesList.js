@@ -34,7 +34,7 @@ const ExercisesList = ({
                   <LoadingIcon gapRight />
                   <FormattedMessage
                     id="generic.loading"
-                    defaultMessage="Loading ..."
+                    defaultMessage="Loading..."
                   />
                 </td>
               </tr>

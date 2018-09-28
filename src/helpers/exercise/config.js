@@ -17,7 +17,7 @@ export const SUBMIT_BUTTON_MESSAGES = {
   submitting: (
     <FormattedMessage
       id="app.editExerciseConfig.submitting"
-      defaultMessage="Saving Configuration ..."
+      defaultMessage="Saving Configuration..."
     />
   ),
   success: (
@@ -27,6 +27,6 @@ export const SUBMIT_BUTTON_MESSAGES = {
     />
   ),
   validating: (
-    <FormattedMessage id="generic.validating" defaultMessage="Validating ..." />
+    <FormattedMessage id="generic.validating" defaultMessage="Validating..." />
   )
 };

@@ -47,13 +47,13 @@ class SubmitButton extends Component {
       submitting: (
         <FormattedMessage
           id="generic.submitting"
-          defaultMessage="Submitting ..."
+          defaultMessage="Submitting..."
         />
       ),
       validating: (
         <FormattedMessage
           id="generic.validating"
-          defaultMessage="Validating ..."
+          defaultMessage="Validating..."
         />
       ),
       invalid: (

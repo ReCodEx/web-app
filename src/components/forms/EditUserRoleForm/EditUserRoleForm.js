@@ -48,7 +48,7 @@ const EditUserRoleForm = ({
             submitting: (
               <FormattedMessage
                 id="generic.saving"
-                defaultMessage="Saving ..."
+                defaultMessage="Saving..."
               />
             ),
             success: (

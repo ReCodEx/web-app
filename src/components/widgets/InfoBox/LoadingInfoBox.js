@@ -5,10 +5,10 @@ import InfoBox from './InfoBox';
 
 const LoadingInfoBox = ({
   title = (
-    <FormattedMessage id="generic.loading" defaultMessage="Loading ..." />
+    <FormattedMessage id="generic.loading" defaultMessage="Loading..." />
   ),
   description = (
-    <FormattedMessage id="generic.loading" defaultMessage="Loading ..." />
+    <FormattedMessage id="generic.loading" defaultMessage="Loading..." />
   ),
   ...props
 }) =>

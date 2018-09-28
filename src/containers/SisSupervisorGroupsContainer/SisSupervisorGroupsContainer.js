@@ -310,7 +310,7 @@ class SisSupervisorGroupsContainer extends Component {
                                               <b>
                                                 <FormattedMessage
                                                   id="app.sisSupervisor.noSisGroups"
-                                                  defaultMessage="Currently there are no ReCodEx groups matching this SIS lecture."
+                                                  defaultMessage="Currently there are no ReCodEx groups matching this SIS course."
                                                 />
                                               </b>
                                             </p>

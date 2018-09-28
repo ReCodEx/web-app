@@ -11,7 +11,7 @@ const LoadingUsersName = ({ size = 22 }) =>
       <LoadingAvatar light size={size} />
     </span>
     <span className={styles.name} style={{ lineHeight: `${size}px` }}>
-      <FormattedMessage id="generic.loading" defaultMessage="Loading ..." />
+      <FormattedMessage id="generic.loading" defaultMessage="Loading..." />
     </span>
   </span>;
 

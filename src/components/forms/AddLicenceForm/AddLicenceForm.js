@@ -49,7 +49,7 @@ const AddLicenceForm = ({
             submitting: (
               <FormattedMessage
                 id="app.addLicence.processing"
-                defaultMessage="Adding ..."
+                defaultMessage="Adding..."
               />
             ),
             success: (

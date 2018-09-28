@@ -63,7 +63,7 @@ const AddSisTermForm = ({
             submitting: (
               <FormattedMessage
                 id="app.addSisTermForm.processing"
-                defaultMessage="Saving ..."
+                defaultMessage="Saving..."
               />
             ),
             success: (

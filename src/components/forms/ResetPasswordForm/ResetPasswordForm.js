@@ -50,7 +50,7 @@ const ResetPasswordForm = ({
                 <LoadingIcon gapRight />
                 <FormattedMessage
                   id="app.resetPassword.processing"
-                  defaultMessage="Resting your password ..."
+                  defaultMessage="Resting your password..."
                 />
               </span>}
         </Button>

@@ -46,7 +46,7 @@ const ExternalRegistrationForm = ({
             submitting: (
               <FormattedMessage
                 id="app.registrationForm.processing"
-                defaultMessage="Creating account ..."
+                defaultMessage="Creating account..."
               />
             ),
             success: (

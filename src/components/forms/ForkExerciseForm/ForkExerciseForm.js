@@ -111,7 +111,7 @@ class ForkExerciseForm extends Component {
                         submitting: (
                           <FormattedMessage
                             id="app.forkExerciseForm.submitting"
-                            defaultMessage="Forking ..."
+                            defaultMessage="Forking..."
                           />
                         ),
                         success: (

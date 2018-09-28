@@ -337,7 +337,7 @@ class MultiAssignForm extends Component {
                 submitting: (
                   <FormattedMessage
                     id="app.multiAssignForm.submitting"
-                    defaultMessage="Assigning Exercise ..."
+                    defaultMessage="Assigning Exercise..."
                   />
                 ),
                 success: (

@@ -50,7 +50,7 @@ const SisBindGroupForm = ({
             submitting: (
               <FormattedMessage
                 id="app.sisBindGroupForm.submitting"
-                defaultMessage="Binding ..."
+                defaultMessage="Binding..."
               />
             ),
             success: (

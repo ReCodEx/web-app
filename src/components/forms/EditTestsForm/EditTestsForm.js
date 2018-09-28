@@ -90,7 +90,7 @@ class EditTestsForm extends Component {
                 submitting: (
                   <FormattedMessage
                     id="app.editTestsForm.submitting"
-                    defaultMessage="Saving Tests ..."
+                    defaultMessage="Saving Tests..."
                   />
                 ),
                 success: (
