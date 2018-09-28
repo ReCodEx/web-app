@@ -1,12 +1,13 @@
 {
-  "presets": ["es2015", "react", "stage-1"],
+  "presets": ["@babel/preset-env", "@babel/preset-react"],
   "plugins": [
     ["react-intl", {
         "messagesDir": "./tmp/messages/",
         "enforceDescriptions": false
     }],
     "transform-object-assign",
-    "transform-flow-strip-types"
+    "transform-flow-strip-types",
+    "@babel/plugin-proposal-class-properties"
   ],
   "env": {
     "production": {
