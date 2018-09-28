@@ -1,5 +1,5 @@
 import { defaultMemoize } from 'reselect';
-import { safeGet, arrayToObject } from '../../helpers/common';
+import { safeGet, arrayToObject, createIndex } from '../../helpers/common';
 
 /**
  * List of environment IDs allowed in simple form.
@@ -16,6 +16,14 @@ const SIMPLE_FORM_ENVIRONMENTS = [
   'php-linux',
   'python3'
 ];
+
+const SIMPLE_FORM_ENVIRONMENTS_INDEX = createIndex(SIMPLE_FORM_ENVIRONMENTS);
+
+export const onlySimpleEnvironments = defaultMemoize(environments =>
+  environments.filter(
+    env => SIMPLE_FORM_ENVIRONMENTS_INDEX[env.id] !== undefined
+  )
+);
 
 /**
  * Prepare inital values for the EditEnvironmentSimpleForm of the exercise.
