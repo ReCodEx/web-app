@@ -1,6 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const GitRevisionPlugin = require('git-revision-webpack-plugin');
 
 // load variables from .env
@@ -13,7 +13,7 @@ try {
   require('os').networkInterfaces = () => ({});
 }
 
-const extractCss = new ExtractTextPlugin('style-[contenthash].css');
+const extractCss = new MiniCssExtractPlugin({filename: 'style-[contenthash].css'});
 const gitRevisionPlugin = new GitRevisionPlugin({
   versionCommand: 'describe --always --tags'
 });
@@ -32,24 +32,23 @@ module.exports = {
     }
   },
   module: {
-    loaders: [
-      { test: /\.jsx?$/, exclude: /node_modules/, loaders: ['babel-loader'] },
-      { test: /\.json$/, loader: 'json-loader' },
+    rules: [
+      { test: /\.jsx?$/, exclude: /node_modules/, use: ['babel-loader'] },
       {
         test: /\.css$/,
-        loader: extractCss.extract(['css-loader'])
+        use: [MiniCssExtractPlugin.loader, 'css-loader']
       },
       {
         test: /\.less$/,
-        loader: extractCss.extract(['css-loader?modules', 'less-loader'])
+        use: [MiniCssExtractPlugin.loader, 'css-loader?modules', 'less-loader']
       },
       {
         test: /\.scss$/,
-        loader: extractCss.extract(['css-loader?modules', 'sass-loader'])
+        use: [MiniCssExtractPlugin.loader, 'css-loader?modules', 'sass-loader']
       },
       {
         test: /.*\.(gif|png|jpe?g|svg)$/i,
-        loaders: ['file-loader']
+        use: ['file-loader']
       }
     ]
   },
