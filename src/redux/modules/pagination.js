@@ -1,4 +1,4 @@
-import { handleActions, createAction, Identity } from 'redux-actions';
+import { handleActions, createAction } from 'redux-actions';
 import { List, Map, fromJS } from 'immutable';
 import { createApiAction } from '../middleware/apiMiddleware';
 import { didInvalidate } from '../helpers/resourceManager';
@@ -47,10 +47,10 @@ const initialState = Map();
 export const registerPaginationComponent = createAction(actionTypes.REGISTER);
 
 export const setPaginationOffset = componentId =>
-  createAction(actionTypes.SET_OFFSET, Identity, () => ({ componentId }));
+  createAction(actionTypes.SET_OFFSET, null, () => ({ componentId }));
 
 export const setPaginationLimit = componentId =>
-  createAction(actionTypes.SET_LIMIT, Identity, () => ({ componentId }));
+  createAction(actionTypes.SET_LIMIT, null, () => ({ componentId }));
 
 export const setPaginationOffsetLimit = componentId =>
   createAction(
@@ -60,7 +60,7 @@ export const setPaginationOffsetLimit = componentId =>
   );
 
 export const setPaginationOrderBy = componentId =>
-  createAction(actionTypes.SET_ORDERBY, Identity, () => ({ componentId }));
+  createAction(actionTypes.SET_ORDERBY, null, () => ({ componentId }));
 
 export const encodeOrderBy = (column, descending = false) =>
   descending ? `!${column}` : column;
@@ -72,7 +72,7 @@ export const decodeOrderBy = orderBy => {
 };
 
 export const setPaginationFilters = componentId =>
-  createAction(actionTypes.SET_FILTERS, Identity, () => ({ componentId }));
+  createAction(actionTypes.SET_FILTERS, null, () => ({ componentId }));
 
 export const fetchPaginated = (componentId, endpoint) => (
   locale = null,

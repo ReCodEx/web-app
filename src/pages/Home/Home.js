@@ -130,6 +130,7 @@ const Home = ({ links: { GITHUB_BUGS_URL } }) =>
             <a
               href={GITHUB_BUGS_URL}
               target="_blank"
+              rel="noopener noreferrer"
               className="btn btn-flat btn-default"
             >
               <Icon icon={['fab', 'github']} gapRight />

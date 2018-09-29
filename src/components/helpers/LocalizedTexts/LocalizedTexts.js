@@ -39,7 +39,7 @@ const LocalizedTexts = ({ locales = [] }, { lang = 'en' }) =>
                   />
                 </h4>
                 <Icon icon="link" gapRight />
-                <a href={link} target="_blank">
+                <a href={link} target="_blank" rel="noopener noreferrer">
                   {link}
                 </a>
               </Well>

@@ -1,6 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const GitRevisionPlugin = require('git-revision-webpack-plugin');
 
 // load variables from .env
@@ -13,43 +13,44 @@ try {
   require('os').networkInterfaces = () => ({});
 }
 
-const extractCss = new ExtractTextPlugin('style-[contenthash].css');
+const extractCss = new MiniCssExtractPlugin({
+  filename: 'style-[contenthash].css'
+});
 const gitRevisionPlugin = new GitRevisionPlugin({
   versionCommand: 'describe --always --tags'
 });
 
 module.exports = {
-  devtool: process.env.NODE_ENV === 'development' ? 'source-map' : 'none',
   entry: path.join(__dirname, '..', 'src/client.js'),
   output: {
     filename: 'bundle-[hash].js',
     path: path.join(__dirname, '..', 'public'),
     publicPath: '/public/'
   },
+  mode: process.env.NODE_ENV,
   resolve: {
     alias: {
       moment: 'moment/moment.js'
     }
   },
   module: {
-    loaders: [
-      { test: /\.jsx?$/, exclude: /node_modules/, loaders: ['babel-loader'] },
-      { test: /\.json$/, loader: 'json-loader' },
+    rules: [
+      { test: /\.jsx?$/, exclude: /node_modules/, use: ['babel-loader'] },
       {
         test: /\.css$/,
-        loader: extractCss.extract(['css-loader'])
+        use: [MiniCssExtractPlugin.loader, 'css-loader']
       },
       {
         test: /\.less$/,
-        loader: extractCss.extract(['css-loader?modules', 'less-loader'])
+        use: [MiniCssExtractPlugin.loader, 'css-loader?modules', 'less-loader']
       },
       {
         test: /\.scss$/,
-        loader: extractCss.extract(['css-loader?modules', 'sass-loader'])
+        use: [MiniCssExtractPlugin.loader, 'css-loader?modules', 'sass-loader']
       },
       {
         test: /.*\.(gif|png|jpe?g|svg)$/i,
-        loaders: ['file-loader']
+        use: ['file-loader']
       }
     ]
   },
@@ -67,8 +68,10 @@ module.exports = {
         ALLOW_LDAP_REGISTRATION:
           "'" + process.env.ALLOW_LDAP_REGISTRATION + "'",
         ALLOW_CAS_REGISTRATION: "'" + process.env.ALLOW_CAS_REGISTRATION + "'",
-        LOGGER_MIDDLEWARE_VERBOSE: "'" + process.env.LOGGER_MIDDLEWARE_VERBOSE + "'",
-        LOGGER_MIDDLEWARE_EXCEPTIONS: "'" + process.env.LOGGER_MIDDLEWARE_EXCEPTIONS + "'",
+        LOGGER_MIDDLEWARE_VERBOSE:
+          "'" + process.env.LOGGER_MIDDLEWARE_VERBOSE + "'",
+        LOGGER_MIDDLEWARE_EXCEPTIONS:
+          "'" + process.env.LOGGER_MIDDLEWARE_EXCEPTIONS + "'"
       },
       gitRevision: {
         VERSION: JSON.stringify(gitRevisionPlugin.version()),

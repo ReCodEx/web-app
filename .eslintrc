@@ -40,7 +40,7 @@
     "no-unused-vars": 2,
     "no-alert": 2,
     "no-labels": 2,
-    "semi": [
+    "babel/semi": [
       2,
       "always"
     ],
@@ -49,7 +49,8 @@
   },
   "plugins": [
     "react",
-    "import"
+    "import",
+    "babel"
   ],
   "settings": {
     "import/parser": "babel-eslint",
@@ -62,7 +63,10 @@
     "import/ignore": [
       "node_modules",
       ".less$"
-    ]
+    ],
+    "react": {
+      "version": 16.2.0
+    }
   },
   "globals": {
     "__DEVELOPMENT__": true,
