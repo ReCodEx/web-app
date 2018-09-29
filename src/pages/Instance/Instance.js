@@ -24,7 +24,7 @@ import {
   isAdminOfInstance
 } from '../../redux/selectors/instances';
 import { createGroup } from '../../redux/modules/groups';
-import { groupsSelector } from '../../redux/selectors/groups';
+import { notArchivedGroupsSelector } from '../../redux/selectors/groups';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import { isLoggedAsSuperAdmin } from '../../redux/selectors/users';
 
@@ -153,7 +153,7 @@ export default withLinks(
       const userId = loggedInUserIdSelector(state);
       return {
         instance: instanceSelector(state, instanceId),
-        groups: groupsSelector(state),
+        groups: notArchivedGroupsSelector(state),
         isAdmin: isAdminOfInstance(userId, instanceId)(state),
         isSuperAdmin: isLoggedAsSuperAdmin(state),
         hasThreshold: addGroupFormSelector(state, 'hasThreshold')

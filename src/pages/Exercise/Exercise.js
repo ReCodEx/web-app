@@ -66,7 +66,7 @@ import {
 } from '../../redux/selectors/auth';
 import { instanceSelector } from '../../redux/selectors/instances';
 import {
-  groupsSelector,
+  notArchivedGroupsSelector,
   groupDataAccessorSelector,
   groupsUserCanAssignToSelector
 } from '../../redux/selectors/groups';
@@ -521,7 +521,7 @@ export default withLinks(
         runtimeEnvironments: runtimeEnvironmentsSelector(state),
         submitting: isSubmitting(state),
         referenceSolutions: referenceSolutionsSelector(exerciseId)(state),
-        groups: groupsSelector(state),
+        groups: notArchivedGroupsSelector(state),
         assignableGroups: groupsUserCanAssignToSelector(state),
         groupsAccessor: groupDataAccessorSelector(state),
         firstDeadline: editMultiAssignFormSelector(state, 'firstDeadline'),

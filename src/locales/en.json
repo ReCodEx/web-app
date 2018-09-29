@@ -702,7 +702,7 @@
   "app.group.info": "Group Info",
   "app.group.isPublicWarning": "The group is public, which means that everyone can see this group and join it.",
   "app.group.mailtoAll": "Mail to All Students",
-  "app.group.notDirectlyArchived": "This group inherits archivation flag from one of its parent groups.",
+  "app.group.notDirectlyArchived": "This group inherits the archived flag from one of its parent groups.",
   "app.group.organizationalExplain": "This group is organizational, so it cannot have any students nor assignments. However, it may have attached exercises which can be assigned in sub-groups.",
   "app.group.setRoot": "Select",
   "app.group.spervisorsView.addStudent": "Add Student",
