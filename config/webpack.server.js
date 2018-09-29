@@ -17,9 +17,10 @@ module.exports = {
     }
   },
   optimization: {
-    minimize: false
+    minimize: true
   },
   target: 'node',
+  mode: 'production',
   module: clientConfig.module,
   plugins: clientConfig.plugins
 };

@@ -13,19 +13,21 @@ try {
   require('os').networkInterfaces = () => ({});
 }
 
-const extractCss = new MiniCssExtractPlugin({filename: 'style-[contenthash].css'});
+const extractCss = new MiniCssExtractPlugin({
+  filename: 'style-[contenthash].css'
+});
 const gitRevisionPlugin = new GitRevisionPlugin({
   versionCommand: 'describe --always --tags'
 });
 
 module.exports = {
-  devtool: process.env.NODE_ENV === 'development' ? 'source-map' : 'none',
   entry: path.join(__dirname, '..', 'src/client.js'),
   output: {
     filename: 'bundle-[hash].js',
     path: path.join(__dirname, '..', 'public'),
     publicPath: '/public/'
   },
+  mode: 'production',
   resolve: {
     alias: {
       moment: 'moment/moment.js'
@@ -66,8 +68,10 @@ module.exports = {
         ALLOW_LDAP_REGISTRATION:
           "'" + process.env.ALLOW_LDAP_REGISTRATION + "'",
         ALLOW_CAS_REGISTRATION: "'" + process.env.ALLOW_CAS_REGISTRATION + "'",
-        LOGGER_MIDDLEWARE_VERBOSE: "'" + process.env.LOGGER_MIDDLEWARE_VERBOSE + "'",
-        LOGGER_MIDDLEWARE_EXCEPTIONS: "'" + process.env.LOGGER_MIDDLEWARE_EXCEPTIONS + "'",
+        LOGGER_MIDDLEWARE_VERBOSE:
+          "'" + process.env.LOGGER_MIDDLEWARE_VERBOSE + "'",
+        LOGGER_MIDDLEWARE_EXCEPTIONS:
+          "'" + process.env.LOGGER_MIDDLEWARE_EXCEPTIONS + "'"
       },
       gitRevision: {
         VERSION: JSON.stringify(gitRevisionPlugin.version()),
