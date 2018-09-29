@@ -8,7 +8,6 @@ import Button from '../../components/widgets/FlatButton';
 import { Link } from 'react-router';
 import { LinkContainer } from 'react-router-bootstrap';
 
-import { EMPTY_OBJ } from '../../helpers/common';
 import Page from '../../components/layout/Page';
 import Box from '../../components/widgets/Box';
 import { LoadingInfoBox } from '../../components/widgets/InfoBox';
@@ -32,7 +31,6 @@ import {
 } from '../../redux/selectors/users';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import { statisticsSelector } from '../../redux/selectors/stats';
-import { groupsSelector } from '../../redux/selectors/groups';
 import {
   loggedInStudentOfGroupsAssignmentsSelector,
   loggedInSupervisorOfSelector,
@@ -42,10 +40,9 @@ import { assignmentEnvironmentsSelector } from '../../redux/selectors/assignment
 
 import { InfoIcon, GroupIcon } from '../../components/icons';
 import { getJsData } from '../../redux/helpers/resourceManager';
-import SisIntegrationContainer from '../../containers/SisIntegrationContainer';
-import SisSupervisorGroupsContainer from '../../containers/SisSupervisorGroupsContainer';
 import { getLocalizedName } from '../../helpers/getLocalizedData';
 import withLinks from '../../helpers/withLinks';
+import { EMPTY_OBJ, safeGet } from '../../helpers/common';
 
 class Dashboard extends Component {
   componentDidMount = () => this.props.loadAsync(this.props.userId);
@@ -100,11 +97,9 @@ class Dashboard extends Component {
       studentOf,
       supervisor,
       supervisorOf,
-      superadmin,
       groupAssignments,
       assignmentEnvironmentsSelector,
       statistics,
-      allGroups,
       links: { GROUP_INFO_URI_FACTORY, GROUP_DETAIL_URI_FACTORY },
       intl: { locale }
     } = this.props;
@@ -142,23 +137,39 @@ class Dashboard extends Component {
               <UsersNameContainer userId={user.id} large noLink />
             </p>
 
+            <Row>
+              <Col sm={12}>
+                <div className="callout callout-warning">
+                  <p>
+                    <FormattedMessage
+                      id="app.dashboard.tmpDashboardNotification"
+                      defaultMessage="The dashboard is under reconstruction. New version will appear soon...."
+                    />
+                  </p>
+                </div>
+              </Col>
+            </Row>
+
             {student &&
-              studentOf.size === 0 &&
+              safeGet(
+                user,
+                ['privateData', 'groups', 'studentOf', 'length'],
+                0
+              ) === 0 &&
               <Row>
                 <Col sm={12}>
                   <div className="callout callout-success">
                     <h4>
                       <InfoIcon gapRight />
                       <FormattedMessage
-                        id="app.user.welcomeTitle"
-                        defaultMessage="Welcome to ReCodEx"
+                        id="app.dashboard.studentNoGroupsTitle"
+                        defaultMessage="No Group Memberships"
                       />
                     </h4>
                     <p>
                       <FormattedMessage
-                        id="app.user.newAccount"
-                        defaultMessage="Your account is ready, but you are not a member of any group yet. You should see the list of all the available groups and join some of them."
-                        values={{ name: user.name }}
+                        id="app.dashboard.studentNoGroups"
+                        defaultMessage="You are not a member of any group yet. A group supervisor may add you into his/her group, or you can use other mechanisms (like the dialog on the SIS integration page) to join some groups that apply to you."
                       />
                     </p>
                   </div>
@@ -166,28 +177,30 @@ class Dashboard extends Component {
               </Row>}
 
             {supervisor &&
-              supervisorOf.size === 0 &&
+              safeGet(
+                user,
+                ['privateData', 'groups', 'supervisorOf', 'length'],
+                0
+              ) === 0 &&
               <Row>
                 <Col sm={12}>
                   <div className="callout callout-success">
                     <h4>
                       <InfoIcon gapRight />
                       <FormattedMessage
-                        id="app.user.welcomeTitle"
-                        defaultMessage="Welcome to ReCodEx"
+                        id="app.dashboard.supervisorNoGroupsTitle"
+                        defaultMessage="No Groups"
                       />
                     </h4>
                     <p>
                       <FormattedMessage
-                        id="app.user.newSupervisorAccount"
-                        defaultMessage="Your account is ready, but you are not a member of any group yet. The administrator will assign you to a group and you will be able to manage the group afterwards."
+                        id="app.dashboard.supervisorNoGroups"
+                        defaultMessage="You are currently not supervising any groups. An administrator may create a group for you or you can use other mechanisms (like the dialog on the SIS integration page) to create groups for your students."
                       />
                     </p>
                   </div>
                 </Col>
               </Row>}
-
-            <SisIntegrationContainer />
 
             {studentOf.size > 0 &&
               <ResourceRenderer
@@ -203,99 +216,100 @@ class Dashboard extends Component {
                       />
                     </h2>
 
-                    {groups.map(group =>
-                      <div key={group.id}>
-                        {
-                          <ResourceRenderer
-                            loading={
-                              <Row>
-                                <Col lg={4}>
-                                  <LoadingInfoBox
-                                    title={getLocalizedName(group, locale)}
-                                  />
-                                </Col>
-                              </Row>
-                            }
-                            resource={statistics.get(group.id)}
-                          >
-                            {statistics =>
-                              <Row>
-                                <Col lg={4}>
-                                  <Link to={GROUP_DETAIL_URI_FACTORY(group.id)}>
-                                    <UsersStats
-                                      {...group}
-                                      stats={this.usersStatistics(statistics)}
+                    {groups
+                      .sort((a, b) =>
+                        getLocalizedName(a, locale).localeCompare(
+                          getLocalizedName(b, locale),
+                          locale
+                        )
+                      )
+                      .map(group =>
+                        <div key={group.id}>
+                          {
+                            <ResourceRenderer
+                              loading={
+                                <Row>
+                                  <Col lg={4}>
+                                    <LoadingInfoBox
+                                      title={getLocalizedName(group, locale)}
                                     />
-                                  </Link>
-                                </Col>
-                                <Col lg={8}>
-                                  <Box
-                                    title={getLocalizedName(group, locale)}
-                                    collapsable
-                                    noPadding
-                                    isOpen
-                                    footer={
-                                      <p className="text-center">
-                                        <LinkContainer
-                                          to={GROUP_INFO_URI_FACTORY(group.id)}
-                                        >
-                                          <Button bsSize="sm">
-                                            <InfoIcon gapRight />
-                                            <FormattedMessage
-                                              id="app.group.info"
-                                              defaultMessage="Group Info"
-                                            />
-                                          </Button>
-                                        </LinkContainer>
-                                        <LinkContainer
-                                          to={GROUP_DETAIL_URI_FACTORY(
-                                            group.id
-                                          )}
-                                        >
-                                          <Button bsSize="sm">
-                                            <GroupIcon gapRight />
-                                            <FormattedMessage
-                                              id="app.group.detail"
-                                              defaultMessage="Group Detail"
-                                            />
-                                          </Button>
-                                        </LinkContainer>
-                                      </p>
-                                    }
-                                    unlimitedHeight
-                                  >
-                                    <AssignmentsTable
-                                      userId={user.id}
-                                      assignments={groupAssignments.get(
-                                        group.id
-                                      )}
-                                      assignmentEnvironmentsSelector={
-                                        assignmentEnvironmentsSelector
+                                  </Col>
+                                </Row>
+                              }
+                              resource={statistics.get(group.id)}
+                            >
+                              {statistics =>
+                                <Row>
+                                  <Col lg={4}>
+                                    <Link
+                                      to={GROUP_DETAIL_URI_FACTORY(group.id)}
+                                    >
+                                      <UsersStats
+                                        {...group}
+                                        stats={this.usersStatistics(statistics)}
+                                      />
+                                    </Link>
+                                  </Col>
+                                  <Col lg={8}>
+                                    <Box
+                                      title={getLocalizedName(group, locale)}
+                                      collapsable
+                                      noPadding
+                                      isOpen
+                                      footer={
+                                        <p className="text-center">
+                                          <LinkContainer
+                                            to={GROUP_INFO_URI_FACTORY(
+                                              group.id
+                                            )}
+                                          >
+                                            <Button bsSize="sm">
+                                              <InfoIcon gapRight />
+                                              <FormattedMessage
+                                                id="app.group.info"
+                                                defaultMessage="Group Info"
+                                              />
+                                            </Button>
+                                          </LinkContainer>
+                                          <LinkContainer
+                                            to={GROUP_DETAIL_URI_FACTORY(
+                                              group.id
+                                            )}
+                                          >
+                                            <Button bsSize="sm">
+                                              <GroupIcon gapRight />
+                                              <FormattedMessage
+                                                id="app.group.detail"
+                                                defaultMessage="Group Detail"
+                                              />
+                                            </Button>
+                                          </LinkContainer>
+                                        </p>
                                       }
-                                      showGroup={false}
-                                      statuses={
-                                        this.usersStatistics(statistics)
-                                          .assignments
-                                      }
-                                    />
-                                  </Box>
-                                </Col>
-                              </Row>}
-                          </ResourceRenderer>
-                        }
-                      </div>
-                    )}
+                                      unlimitedHeight
+                                    >
+                                      <AssignmentsTable
+                                        userId={user.id}
+                                        assignments={groupAssignments.get(
+                                          group.id
+                                        )}
+                                        assignmentEnvironmentsSelector={
+                                          assignmentEnvironmentsSelector
+                                        }
+                                        showGroup={false}
+                                        statuses={
+                                          this.usersStatistics(statistics)
+                                            .assignments
+                                        }
+                                      />
+                                    </Box>
+                                  </Col>
+                                </Row>}
+                            </ResourceRenderer>
+                          }
+                        </div>
+                      )}
                   </div>}
-              </ResourceRenderer>}
-
-            {(supervisor || superadmin) &&
-              <ResourceRenderer
-                resource={
-                  superadmin ? allGroups.toArray() : supervisorOf.toArray()
-                }
-                returnAsArray={true}
-              >
-                {groups => <SisSupervisorGroupsContainer groups={groups} />}
               </ResourceRenderer>}
 
             {supervisorOf.size > 0 &&
@@ -314,53 +328,64 @@ class Dashboard extends Component {
                   >
                     {groups =>
                       <div>
-                        {groups.map(group =>
-                          <Row key={group.id}>
-                            <Col lg={12}>
-                              <ResourceRenderer
-                                resource={statistics.get(group.id)}
-                              >
-                                {statistics =>
-                                  <Box
-                                    title={<GroupsName {...group} noLink />}
-                                    collapsable
-                                    noPadding
-                                    isOpen
-                                    footer={
-                                      <p className="text-center">
-                                        <LinkContainer
-                                          to={GROUP_INFO_URI_FACTORY(group.id)}
-                                        >
-                                          <Button bsSize="sm">
-                                            <InfoIcon gapRight />
-                                            <FormattedMessage
-                                              id="app.group.info"
-                                              defaultMessage="Group Info"
-                                            />
-                                          </Button>
-                                        </LinkContainer>
-                                        <LinkContainer
-                                          to={GROUP_DETAIL_URI_FACTORY(
-                                            group.id
-                                          )}
-                                        >
-                                          <Button bsSize="sm">
-                                            <GroupIcon gapRight />
-                                            <FormattedMessage
-                                              id="app.group.detail"
-                                              defaultMessage="Group Detail"
-                                            />
-                                          </Button>
-                                        </LinkContainer>
-                                      </p>
-                                    }
-                                  >
-                                    <StudentsListContainer groupId={group.id} />
-                                  </Box>}
-                              </ResourceRenderer>
-                            </Col>
-                          </Row>
-                        )}
+                        {groups
+                          .sort((a, b) =>
+                            getLocalizedName(a, locale).localeCompare(
+                              getLocalizedName(b, locale),
+                              locale
+                            )
+                          )
+                          .map(group =>
+                            <Row key={group.id}>
+                              <Col lg={12}>
+                                <ResourceRenderer
+                                  resource={statistics.get(group.id)}
+                                >
+                                  {statistics =>
+                                    <Box
+                                      title={<GroupsName {...group} noLink />}
+                                      collapsable
+                                      noPadding
+                                      isOpen
+                                      footer={
+                                        <p className="text-center">
+                                          <LinkContainer
+                                            to={GROUP_INFO_URI_FACTORY(
+                                              group.id
+                                            )}
+                                          >
+                                            <Button bsSize="sm">
+                                              <InfoIcon gapRight />
+                                              <FormattedMessage
+                                                id="app.group.info"
+                                                defaultMessage="Group Info"
+                                              />
+                                            </Button>
+                                          </LinkContainer>
+                                          <LinkContainer
+                                            to={GROUP_DETAIL_URI_FACTORY(
+                                              group.id
+                                            )}
+                                          >
+                                            <Button bsSize="sm">
+                                              <GroupIcon gapRight />
+                                              <FormattedMessage
+                                                id="app.group.detail"
+                                                defaultMessage="Group Detail"
+                                              />
+                                            </Button>
+                                          </LinkContainer>
+                                        </p>
+                                      }
+                                    >
+                                      <StudentsListContainer
+                                        groupId={group.id}
+                                      />
+                                    </Box>}
+                                </ResourceRenderer>
+                              </Col>
+                            </Row>
+                          )}
                       </div>}
                   </ResourceRenderer>
                 </Col>
@@ -384,7 +409,6 @@ Dashboard.propTypes = {
   groupAssignments: ImmutablePropTypes.map,
   assignmentEnvironmentsSelector: PropTypes.func,
   statistics: ImmutablePropTypes.map,
-  allGroups: ImmutablePropTypes.map,
   links: PropTypes.object,
   intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired
 };
@@ -403,8 +427,7 @@ export default withLinks(
         supervisorOf: loggedInSupervisorOfSelector(state),
         groupAssignments: loggedInStudentOfGroupsAssignmentsSelector(state),
         assignmentEnvironmentsSelector: assignmentEnvironmentsSelector(state),
-        statistics: statisticsSelector(state),
-        allGroups: groupsSelector(state)
+        statistics: statisticsSelector(state)
       };
     },
     (dispatch, { params }) => ({
