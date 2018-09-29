@@ -17,6 +17,12 @@ const getParam = (state, id) => id;
 
 export const groupsSelector = state => state.groups.get('resources');
 
+export const notArchivedGroupsSelector = state =>
+  state.groups
+    .get('resources')
+    .filter(isReady)
+    .filter(group => group.getIn(['data', 'archived']) === false);
+
 export const filterGroups = (ids, groups) =>
   groups.filter(isReady).filter(group => ids.contains(getId(group)));
 

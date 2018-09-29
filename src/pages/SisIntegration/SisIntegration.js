@@ -30,7 +30,7 @@ import {
   fetchManyStatus,
   readySisTermsSelector
 } from '../../redux/selectors/sisTerms';
-import { groupsSelector } from '../../redux/selectors/groups';
+import { notArchivedGroupsSelector } from '../../redux/selectors/groups';
 import { loggedInSupervisorOfSelector } from '../../redux/selectors/usersGroups';
 
 import {
@@ -219,7 +219,7 @@ const mapStateToProps = state => {
     fetchStatus: fetchManyStatus(state),
     sisTerms: readySisTermsSelector(state),
     supervisorOfGroups: loggedInSupervisorOfSelector(state),
-    allGroups: groupsSelector(state)
+    allGroups: notArchivedGroupsSelector(state)
   };
 };
 

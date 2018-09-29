@@ -58,7 +58,11 @@ class App extends Component {
   }
 
   componentWillReceiveProps(newProps) {
-    if (this.props.userId !== newProps.userId) {
+    if (
+      this.props.userId !== newProps.userId ||
+      (customLoadGroups(this.props.routes) &&
+        !customLoadGroups(newProps.routes))
+    ) {
       newProps.loadAsync(newProps.userId, newProps.routes);
     }
   }
