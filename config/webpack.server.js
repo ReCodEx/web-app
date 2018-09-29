@@ -20,7 +20,7 @@ module.exports = {
     minimize: true
   },
   target: 'node',
-  mode: 'production',
+  mode: process.env.NODE_ENV,
   module: clientConfig.module,
   plugins: clientConfig.plugins
 };

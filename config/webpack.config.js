@@ -27,7 +27,7 @@ module.exports = {
     path: path.join(__dirname, '..', 'public'),
     publicPath: '/public/'
   },
-  mode: 'production',
+  mode: process.env.NODE_ENV,
   resolve: {
     alias: {
       moment: 'moment/moment.js'
