@@ -113,12 +113,10 @@ class SisSupervisorGroupsContainer extends Component {
         title={
           <FormattedMessage
             id="app.dashboard.sisGroupsTeacher"
-            defaultMessage="SIS Courses - Teacher"
+            defaultMessage="Create Groups Associated with UK SIS Courses"
           />
         }
-        collapsable
         unlimitedHeight
-        isOpen={false}
       >
         <div>
           <p className="text-muted">

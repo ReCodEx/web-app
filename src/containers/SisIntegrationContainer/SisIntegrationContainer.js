@@ -70,12 +70,10 @@ class SisIntegrationContainer extends Component {
         title={
           <FormattedMessage
             id="app.dashboard.sisGroupsStudent"
-            defaultMessage="SIS Courses - Student"
+            defaultMessage="Join Groups Associated with UK SIS Courses"
           />
         }
-        collapsable
         unlimitedHeight
-        isOpen={false}
       >
         <div>
           <p className="text-muted">
