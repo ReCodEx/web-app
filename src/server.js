@@ -60,7 +60,7 @@ const bundle =
 const style = getFileName('public/style-*.css', '/') || '/style.css';
 
 let app = new Express();
-const ejs = require("ejs").__express;
+const ejs = require('ejs').__express;
 app.set('view engine', 'ejs');
 app.engine('.ejs', ejs);
 app.use(
