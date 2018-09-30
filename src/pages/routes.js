@@ -95,7 +95,7 @@ const createRoutes = getState => {
         <Route path="faq" component={FAQ} />
         <Route path="email-verification" component={EmailVerification} />
         <Route path="app" onEnter={requireAuth}>
-          <IndexRoute component={Dashboard} />
+          <IndexRoute component={Dashboard} customLoadGroups={true} />
           <Route path="assignment/:assignmentId">
             <IndexRoute component={Assignment} />
             <Route path="user/:userId" component={Assignment} />
