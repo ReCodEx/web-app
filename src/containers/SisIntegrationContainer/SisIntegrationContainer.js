@@ -40,20 +40,23 @@ class SisIntegrationContainer extends Component {
       .then(
         ({ accessible, terms }) =>
           accessible &&
-          terms.map(({ year, term }) =>
-            dispatch(fetchSisSubscribedGroups(loggedInUserId, year, term))
-              .then(res => res.value)
-              .then(groups =>
-                groups
-                  .filter(
-                    group =>
-                      group.parentGroupsIds && group.parentGroupsIds.length > 0
-                  )
-                  .map(group =>
-                    dispatch(fetchGroupsIfNeeded(...group.parentGroupsIds))
-                  )
-              )
-          )
+          terms
+            .filter(({ isAdvertised }) => isAdvertised)
+            .map(({ year, term, isAdvertised }) =>
+              dispatch(fetchSisSubscribedGroups(loggedInUserId, year, term))
+                .then(res => res.value)
+                .then(groups =>
+                  groups
+                    .filter(
+                      group =>
+                        group.parentGroupsIds &&
+                        group.parentGroupsIds.length > 0
+                    )
+                    .map(group =>
+                      dispatch(fetchGroupsIfNeeded(...group.parentGroupsIds))
+                    )
+                )
+            )
       );
 
   render() {
@@ -93,133 +96,136 @@ class SisIntegrationContainer extends Component {
                     />
                   </p>}
                 {sisStatus.accessible &&
-                  sisStatus.terms.map((term, i) =>
-                    <div key={i}>
-                      <h4>
-                        <FormattedMessage
-                          id="app.sisIntegration.yearTerm"
-                          defaultMessage="Year and term:"
-                        />{' '}
-                        {`${term.year}-${term.term}`}
-                      </h4>
-                      <ResourceRenderer
-                        resource={sisGroups(term.year, term.term)}
-                      >
-                        {groups =>
-                          <div>
-                            {groups && groups.length > 0
-                              ? <Table hover>
-                                  <thead>
-                                    <tr>
-                                      <th>
-                                        <FormattedMessage
-                                          id="generic.name"
-                                          defaultMessage="Name"
-                                        />
-                                      </th>
-                                      <th>
-                                        <FormattedMessage
-                                          id="app.sisIntegration.courseId"
-                                          defaultMessage="Course ID"
-                                        />
-                                      </th>
-                                      <th>
-                                        <FormattedMessage
-                                          id="app.sisIntegration.groupAdmins"
-                                          defaultMessage="Group Administrators"
-                                        />
-                                      </th>
-                                      <th />
-                                    </tr>
-                                  </thead>
-                                  <tbody>
-                                    {groups &&
-                                      groups.map((group, i) =>
-                                        <tr key={i}>
-                                          <td>
-                                            {getGroupCanonicalLocalizedName(
-                                              group,
-                                              groupsAccessor,
-                                              locale
-                                            )}
-                                          </td>
-                                          <td>
-                                            {sisGroupBindingsExist(group) &&
+                  sisStatus.terms
+                    .filter(({ isAdvertised }) => isAdvertised)
+                    .map((term, i) =>
+                      <div key={i}>
+                        <h4>
+                          <FormattedMessage
+                            id="app.sisIntegration.yearTerm"
+                            defaultMessage="Year and term:"
+                          />{' '}
+                          {`${term.year}-${term.term}`}
+                        </h4>
+                        <ResourceRenderer
+                          resource={sisGroups(term.year, term.term)}
+                        >
+                          {groups =>
+                            <div>
+                              {groups && groups.length > 0
+                                ? <Table hover>
+                                    <thead>
+                                      <tr>
+                                        <th>
+                                          <FormattedMessage
+                                            id="generic.name"
+                                            defaultMessage="Name"
+                                          />
+                                        </th>
+                                        <th>
+                                          <FormattedMessage
+                                            id="app.sisIntegration.courseId"
+                                            defaultMessage="Course ID"
+                                          />
+                                        </th>
+                                        <th>
+                                          <FormattedMessage
+                                            id="app.sisIntegration.groupAdmins"
+                                            defaultMessage="Group Administrators"
+                                          />
+                                        </th>
+                                        <th />
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+                                      {groups &&
+                                        groups.map((group, i) =>
+                                          <tr key={i}>
+                                            <td>
+                                              {getGroupCanonicalLocalizedName(
+                                                group,
+                                                groupsAccessor,
+                                                locale
+                                              )}
+                                            </td>
+                                            <td>
+                                              {sisGroupBindingsExist(group) &&
+                                                <span>
+                                                  {group.privateData.bindings.sis
+                                                    .sort(
+                                                      (a, b) =>
+                                                        a.localeCompare(b) // locales intentionally ommited
+                                                    )
+                                                    .map((c, idx) =>
+                                                      <span key="{c}">
+                                                        {idx > 0 ? ', ' : ''}
+                                                        <code>
+                                                          {c}
+                                                        </code>
+                                                      </span>
+                                                    )}
+                                                </span>}
+                                            </td>
+                                            <td>
+                                              {group.primaryAdminsIds.map(id =>
+                                                <UsersNameContainer
+                                                  key={id}
+                                                  userId={id}
+                                                />
+                                              )}
+                                            </td>
+                                            <td className="text-right">
                                               <span>
-                                                {group.privateData.bindings.sis
-                                                  .sort(
-                                                    (a, b) => a.localeCompare(b) // locales intentionally ommited
-                                                  )
-                                                  .map((c, idx) =>
-                                                    <span key="{c}">
-                                                      {idx > 0 ? ', ' : ''}
-                                                      <code>
-                                                        {c}
-                                                      </code>
-                                                    </span>
-                                                  )}
-                                              </span>}
-                                          </td>
-                                          <td>
-                                            {group.primaryAdminsIds.map(id =>
-                                              <UsersNameContainer
-                                                key={id}
-                                                userId={id}
-                                              />
-                                            )}
-                                          </td>
-                                          <td className="text-right">
-                                            <span>
-                                              <LinkContainer
-                                                to={
-                                                  group.organizational ||
-                                                  // this is inacurate, but public groups are visible to students who cannot see detail until they join
-                                                  group.public
-                                                    ? GROUP_INFO_URI_FACTORY(
-                                                        group.id
-                                                      )
-                                                    : GROUP_DETAIL_URI_FACTORY(
-                                                        group.id
-                                                      )
-                                                }
-                                              >
-                                                <Button
-                                                  bsStyle="primary"
-                                                  bsSize="xs"
-                                                  className="btn-flat"
+                                                <LinkContainer
+                                                  to={
+                                                    group.organizational ||
+                                                    // this is inacurate, but public groups are visible to students who cannot see detail until they join
+                                                    group.public
+                                                      ? GROUP_INFO_URI_FACTORY(
+                                                          group.id
+                                                        )
+                                                      : GROUP_DETAIL_URI_FACTORY(
+                                                          group.id
+                                                        )
+                                                  }
                                                 >
-                                                  <GroupIcon gapRight />
-                                                  <FormattedMessage
-                                                    id="app.group.detail"
-                                                    defaultMessage="Group Detail"
-                                                  />
-                                                </Button>
-                                              </LinkContainer>
-                                              {!group.organizational &&
-                                                <LeaveJoinGroupButtonContainer
-                                                  userId={currentUserId}
-                                                  groupId={group.id}
-                                                />}
-                                            </span>
-                                          </td>
-                                        </tr>
-                                      )}
-                                  </tbody>
-                                </Table>
-                              : <div className="text-center">
-                                  <p>
-                                    <b>
-                                      <FormattedMessage
-                                        id="app.sisIntegration.noSisGroups"
-                                        defaultMessage="Currently there are no ReCodEx groups matching your SIS subjects for this time period."
-                                      />
-                                    </b>
-                                  </p>
-                                </div>}
-                          </div>}
-                      </ResourceRenderer>
-                    </div>
-                  )}
+                                                  <Button
+                                                    bsStyle="primary"
+                                                    bsSize="xs"
+                                                    className="btn-flat"
+                                                  >
+                                                    <GroupIcon gapRight />
+                                                    <FormattedMessage
+                                                      id="app.group.detail"
+                                                      defaultMessage="Group Detail"
+                                                    />
+                                                  </Button>
+                                                </LinkContainer>
+                                                {!group.organizational &&
+                                                  <LeaveJoinGroupButtonContainer
+                                                    userId={currentUserId}
+                                                    groupId={group.id}
+                                                  />}
+                                              </span>
+                                            </td>
+                                          </tr>
+                                        )}
+                                    </tbody>
+                                  </Table>
+                                : <div className="text-center">
+                                    <p>
+                                      <b>
+                                        <FormattedMessage
+                                          id="app.sisIntegration.noSisGroups"
+                                          defaultMessage="Currently there are no ReCodEx groups matching your SIS subjects for this time period."
+                                        />
+                                      </b>
+                                    </p>
+                                  </div>}
+                            </div>}
+                        </ResourceRenderer>
+                      </div>
+                    )}
               </div>}
           </ResourceRenderer>
         </div>
