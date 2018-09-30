@@ -9,8 +9,11 @@ import BadgeContainer from '../../../containers/BadgeContainer';
 import MenuGroup from '../../widgets/Sidebar/MenuGroup';
 import MenuTitle from '../../widgets/Sidebar/MenuTitle';
 import MenuItem from '../../widgets/Sidebar/MenuItem';
-import { isReady, getJsData } from '../../../redux/helpers/resourceManager';
-import { getId } from '../../../redux/helpers/resourceManager';
+import {
+  isReady,
+  getJsData,
+  getId
+} from '../../../redux/helpers/resourceManager';
 import { getLocalizedResourceName } from '../../../helpers/getLocalizedData';
 import {
   isSupervisorRole,
