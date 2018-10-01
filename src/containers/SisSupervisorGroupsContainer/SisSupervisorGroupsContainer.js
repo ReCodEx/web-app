@@ -17,7 +17,7 @@ import {
 import Button from '../../components/widgets/FlatButton';
 import { LinkContainer } from 'react-router-bootstrap';
 
-import { fetchGroupsIfNeeded } from '../../redux/modules/groups';
+import { fetchAllGroups } from '../../redux/modules/groups';
 import { fetchSisStatusIfNeeded } from '../../redux/modules/sisStatus';
 import {
   fetchSisSupervisedCourses,
@@ -81,17 +81,6 @@ class SisSupervisorGroupsContainer extends Component {
                     dispatch(
                       fetchSisPossibleParentsIfNeeded(course.course.code)
                     )
-                      .then(res => res.value)
-                      .then(parents =>
-                        parents.map(parent =>
-                          dispatch(
-                            fetchGroupsIfNeeded(
-                              parent.id,
-                              ...parent.parentGroupsIds
-                            )
-                          )
-                        )
-                      )
                   )
                 )
             )
@@ -423,7 +412,9 @@ export default injectIntl(
         loadData: loggedInUserId =>
           SisSupervisorGroupsContainer.loadData(dispatch, loggedInUserId),
         createGroup: (courseId, data, userId, year, term) =>
-          dispatch(sisCreateGroup(courseId, data, userId, year, term)),
+          dispatch(
+            sisCreateGroup(courseId, data, userId, year, term)
+          ).then(() => dispatch(fetchAllGroups())),
         bindGroup: (courseId, data, userId, year, term) =>
           dispatch(sisBindGroup(courseId, data, userId, year, term))
       })

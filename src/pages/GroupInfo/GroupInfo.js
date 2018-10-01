@@ -13,7 +13,7 @@ import {
   fetchGroupIfNeeded,
   fetchAllGroups
 } from '../../redux/modules/groups';
-import { fetchSupervisors } from '../../redux/modules/users';
+import { fetchSupervisors, fetchUser } from '../../redux/modules/users';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import {
   isSupervisorOf,
@@ -251,7 +251,7 @@ class GroupInfo extends Component {
                   !data.archived &&
                   <EditGroupForm
                     form="addSubgroup"
-                    onSubmit={addSubgroup(data.privateData.instanceId)}
+                    onSubmit={addSubgroup(data.privateData.instanceId, userId)}
                     initialValues={EDIT_GROUP_FORM_EMPTY_INITIAL_VALUES}
                     createNew
                     collapsable
@@ -306,13 +306,15 @@ const mapStateToProps = (state, { params: { groupId } }) => {
 };
 
 const mapDispatchToProps = (dispatch, { params }) => ({
-  addSubgroup: instanceId => data =>
+  addSubgroup: (instanceId, userId) => data =>
     dispatch(
       createGroup({
         ...data,
         instanceId,
         parentGroupId: params.groupId
       })
+    ).then(() =>
+      Promise.all([dispatch(fetchAllGroups()), dispatch(fetchUser(userId))])
     ),
   loadAsync: () => GroupInfo.loadAsync(params, dispatch),
   push: url => dispatch(push(url)),

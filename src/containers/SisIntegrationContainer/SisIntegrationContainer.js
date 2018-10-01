@@ -7,7 +7,6 @@ import { Table } from 'react-bootstrap';
 import Box from '../../components/widgets/Box';
 import Button from '../../components/widgets/FlatButton';
 
-import { fetchGroupsIfNeeded } from '../../redux/modules/groups';
 import { fetchSisStatusIfNeeded } from '../../redux/modules/sisStatus';
 import { fetchSisSubscribedGroups } from '../../redux/modules/sisSubscribedGroups';
 import { sisStateSelector } from '../../redux/selectors/sisStatus';
@@ -42,20 +41,8 @@ class SisIntegrationContainer extends Component {
           accessible &&
           terms
             .filter(({ isAdvertised }) => isAdvertised)
-            .map(({ year, term, isAdvertised }) =>
+            .map(({ year, term }) =>
               dispatch(fetchSisSubscribedGroups(loggedInUserId, year, term))
-                .then(res => res.value)
-                .then(groups =>
-                  groups
-                    .filter(
-                      group =>
-                        group.parentGroupsIds &&
-                        group.parentGroupsIds.length > 0
-                    )
-                    .map(group =>
-                      dispatch(fetchGroupsIfNeeded(...group.parentGroupsIds))
-                    )
-                )
             )
       );
 
