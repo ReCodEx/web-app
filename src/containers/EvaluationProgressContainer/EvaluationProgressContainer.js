@@ -11,7 +11,7 @@ import {
   completedTask,
   skippedTask,
   failedTask,
-  finish,
+  finish as finishEvaluationProgress,
   dropObserver
 } from '../../redux/modules/evaluationProgress';
 
@@ -24,7 +24,7 @@ import {
   isFinished
 } from '../../redux/selectors/evaluationProgress';
 
-import { finishProcessing } from '../../redux/modules/submission';
+import { finishProcessing as finishSubmissionProcessing } from '../../redux/modules/submission';
 
 import EvaluationProgress from '../../components/Assignments/EvaluationProgress';
 import randomMessages, { extraMessages } from './randomMessages';
@@ -51,9 +51,7 @@ class EvaluationProgressContainer extends Component {
 
   init = props => {
     const { monitor } = props;
-    if (this.socket !== null) {
-      this.closeSocket();
-    }
+    this.closeSocket();
 
     if (
       monitor !== null &&
@@ -141,28 +139,41 @@ class EvaluationProgressContainer extends Component {
   };
 
   closeSocket = () => {
-    this.isClosed = true;
     if (this.socket) {
       this.socket.close();
-    }
-    this.socket = null;
+      this.socket = null;
 
-    // fire a callback if any
-    const { finish } = this.props;
-    finish && finish();
+      // fire a callback if any
+      const { finishEvaluationProgress } = this.props;
+      finishEvaluationProgress && finishEvaluationProgress();
+    }
   };
 
   finish = () => {
-    const { push, link, finishProcessing, onFinish } = this.props;
-    finishProcessing();
+    const { push, link, finishSubmissionProcessing, onFinish } = this.props;
+    finishSubmissionProcessing();
     this.closeSocket();
-    onFinish && onFinish();
-    push(link);
+
+    // Call on finish handler; if it yields a promise, make sure the push() is done afterwards.
+    const promise = onFinish && onFinish();
+    if (
+      promise &&
+      typeof promise === 'object' &&
+      typeof promise.then === 'function'
+    ) {
+      promise.then(() => push(link));
+    } else {
+      push(link);
+    }
   };
 
   userCloseAction = () => {
-    const { finishProcessing, dropObserver, onUserClose } = this.props;
-    finishProcessing();
+    const {
+      finishSubmissionProcessing,
+      dropObserver,
+      onUserClose
+    } = this.props;
+    finishSubmissionProcessing();
     this.closeSocket();
     dropObserver();
     onUserClose && onUserClose();
@@ -181,7 +192,7 @@ class EvaluationProgressContainer extends Component {
           skipped={progress.skipped}
           failed={progress.failed}
           finished={isFinished}
-          showContinueButton={isFinished || this.isClosed}
+          showContinueButton={isFinished || !this.socket}
           finishProcessing={this.finish}
           onClose={this.userCloseAction}
         />
@@ -221,8 +232,8 @@ EvaluationProgressContainer.propTypes = {
   port: PropTypes.number,
   url: PropTypes.string,
   path: PropTypes.string,
-  finish: PropTypes.func,
-  finishProcessing: PropTypes.func.isRequired,
+  finishEvaluationProgress: PropTypes.func,
+  finishSubmissionProcessing: PropTypes.func.isRequired,
   link: PropTypes.string.isRequired,
   addMessage: PropTypes.func.isRequired,
   expectedTasksCount: PropTypes.number.isRequired,
@@ -255,8 +266,8 @@ export default connect(
     messages: getMessages(state)
   }),
   {
-    finish,
-    finishProcessing,
+    finishEvaluationProgress,
+    finishSubmissionProcessing,
     completedTask,
     skippedTask,
     failedTask,
