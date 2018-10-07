@@ -14,7 +14,6 @@ import Exercise from './Exercise';
 import Exercises from './Exercises';
 import EditExercise from './EditExercise';
 import EditExerciseConfig from './EditExerciseConfig';
-import EditExerciseSimpleConfig from './EditExerciseSimpleConfig';
 import EditExerciseLimits from './EditExerciseLimits';
 import GroupDetail from './GroupDetail';
 import GroupInfo from './GroupInfo';
@@ -109,10 +108,6 @@ const createRoutes = getState => {
               <IndexRoute component={Exercise} />
               <Route path="edit" component={EditExercise} />
               <Route path="edit-config" component={EditExerciseConfig} />
-              <Route
-                path="edit-simple-config"
-                component={EditExerciseSimpleConfig}
-              />
               <Route path="edit-limits" component={EditExerciseLimits} />
               <Route
                 path="reference-solution/:referenceSolutionId"

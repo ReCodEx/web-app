@@ -38,7 +38,7 @@ const ExercisesListItem = ({
   links: {
     EXERCISE_URI_FACTORY,
     EXERCISE_EDIT_URI_FACTORY,
-    EXERCISE_EDIT_SIMPLE_CONFIG_URI_FACTORY,
+    EXERCISE_EDIT_CONFIG_URI_FACTORY,
     EXERCISE_EDIT_LIMITS_URI_FACTORY
   }
 }) =>
@@ -117,7 +117,7 @@ const ExercisesListItem = ({
         </LinkContainer>}
       {permissionHints.viewPipelines &&
         permissionHints.viewScoreConfig &&
-        <LinkContainer to={EXERCISE_EDIT_SIMPLE_CONFIG_URI_FACTORY(id)}>
+        <LinkContainer to={EXERCISE_EDIT_CONFIG_URI_FACTORY(id)}>
           <Button
             bsSize="xs"
             bsStyle={permissionHints.setScoreConfig ? 'warning' : 'default'}
