@@ -55,11 +55,7 @@ export const getFirstEnvironmentId = environmentConfigs =>
  */
 export const getEnvironmentInitValues = environmentConfigs => {
   const environmentId = getFirstEnvironmentId(environmentConfigs);
-  const variables = safeGet(
-    environmentConfigs,
-    [0, 'variablesTable'],
-    []
-  ).map(({ name, value }) => ({ name, value }));
+  const variables = safeGet(environmentConfigs, [0, 'variablesTable'], []);
   return { environmentId, variables };
 };
 
@@ -103,11 +99,7 @@ export const transformEnvironmentValues = formData => {
   if (formData.environmentId) {
     res.push({
       runtimeEnvironmentId: formData.environmentId,
-      variablesTable: formData.variables.map(({ name, value }) => ({
-        name,
-        type: 'file[]',
-        value
-      }))
+      variablesTable: formData.variables
     });
   }
   return res;
@@ -159,7 +151,7 @@ export const getPossibleVariablesNames = defaultMemoize(
         ]);
         pipelineVariables &&
           pipelineVariables
-            .filter(({ type }) => type === 'file[]')
+            .filter(({ type }) => type === 'file' || type === 'file[]')
             .forEach(({ name }) => (res[name] = res[name] ? res[name] + 1 : 1));
       });
     return res;

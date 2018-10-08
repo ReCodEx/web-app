@@ -6,9 +6,10 @@ import { ControlLabel, OverlayTrigger, Tooltip } from 'react-bootstrap';
 
 import FlatButton from '../../widgets/FlatButton';
 import TextField from '../Fields/TextField';
+import SelectField from '../Fields/SelectField';
 import { AddIcon, CloseIcon } from '../../icons';
 
-const EMPTY_VALUE = { file: '', name: '' };
+const EMPTY_VALUE = { file: '', name: '', type: 'file[]' };
 
 const _validateBrackets = value => {
   const [prefix, ...tokens] = value.split('{');
@@ -33,28 +34,39 @@ const validateWildcard = value => {
     : undefined;
 };
 
-const EditEnvironmentConfigVariables = ({
-  nameSuggestions = [],
-  fields,
-  leftLabel = '',
-  rightLabel = '',
-  noItems = null,
-  options,
-  ...props
-}) =>
+const VARIABLE_TYPES_OPTIONS = [
+  { name: 'file', key: 'file' },
+  { name: 'file[]', key: 'file[]' }
+];
+
+const EditEnvironmentConfigVariables = ({ fields, noItems = null }) =>
   <div>
     {fields.length > 0 &&
       <table>
         <thead>
           <tr>
-            <th width="50%">
+            <th width="40%">
               <ControlLabel>
-                {leftLabel}
+                <FormattedMessage
+                  id="app.editEnvironmentConfig.variableName"
+                  defaultMessage="Source Files Variable"
+                />:
               </ControlLabel>
             </th>
-            <th width="50%">
+            <th width="40%">
               <ControlLabel>
-                {rightLabel}
+                <FormattedMessage
+                  id="app.editEnvironmentConfig.variableValue"
+                  defaultMessage="Wildcard Pattern"
+                />:
+              </ControlLabel>
+            </th>
+            <th width="20%">
+              <ControlLabel>
+                <FormattedMessage
+                  id="app.editEnvironmentConfig.variableType"
+                  defaultMessage="Type"
+                />:
               </ControlLabel>
             </th>
             <th />
@@ -70,7 +82,6 @@ const EditEnvironmentConfigVariables = ({
                   label={''}
                   maxLength={64}
                   list="editEnvironmentConfigVariablesNames"
-                  {...props}
                 />
               </td>
               <td className="valign-top">
@@ -80,7 +91,14 @@ const EditEnvironmentConfigVariables = ({
                   label={''}
                   validate={validateWildcard}
                   maxLength={64}
-                  {...props}
+                />
+              </td>
+              <td className="valign-top">
+                <Field
+                  name={`${field}.type`}
+                  component={SelectField}
+                  label={''}
+                  options={VARIABLE_TYPES_OPTIONS}
                 />
               </td>
               <td className="valign-top">
@@ -132,7 +150,6 @@ const EditEnvironmentConfigVariables = ({
   </div>;
 
 EditEnvironmentConfigVariables.propTypes = {
-  nameSuggestions: PropTypes.array,
   fields: PropTypes.object.isRequired,
   meta: PropTypes.shape({
     active: PropTypes.bool,
@@ -140,22 +157,11 @@ EditEnvironmentConfigVariables.propTypes = {
     error: PropTypes.any,
     warning: PropTypes.any
   }).isRequired,
-  leftLabel: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.element,
-    PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) })
-  ]).isRequired,
-  rightLabel: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.element,
-    PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) })
-  ]).isRequired,
   noItems: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.element,
     PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) })
-  ]),
-  options: PropTypes.array
+  ])
 };
 
 export default EditEnvironmentConfigVariables;
