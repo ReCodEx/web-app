@@ -146,19 +146,6 @@ class Dashboard extends Component {
               <UsersNameContainer userId={user.id} large noLink />
             </p>
 
-            <Row>
-              <Col sm={12}>
-                <div className="callout callout-warning">
-                  <p>
-                    <FormattedMessage
-                      id="app.dashboard.tmpDashboardNotification"
-                      defaultMessage="The dashboard is under reconstruction. New version will appear soon...."
-                    />
-                  </p>
-                </div>
-              </Col>
-            </Row>
-
             {student &&
               studentOfCount(user) === 0 &&
               <Row>

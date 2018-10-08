@@ -17,7 +17,7 @@ import {
 import Button from '../../components/widgets/FlatButton';
 import { LinkContainer } from 'react-router-bootstrap';
 
-import { fetchGroupsIfNeeded } from '../../redux/modules/groups';
+import { fetchAllGroups } from '../../redux/modules/groups';
 import { fetchSisStatusIfNeeded } from '../../redux/modules/sisStatus';
 import {
   fetchSisSupervisedCourses,
@@ -81,17 +81,6 @@ class SisSupervisorGroupsContainer extends Component {
                     dispatch(
                       fetchSisPossibleParentsIfNeeded(course.course.code)
                     )
-                      .then(res => res.value)
-                      .then(parents =>
-                        parents.map(parent =>
-                          dispatch(
-                            fetchGroupsIfNeeded(
-                              parent.id,
-                              ...parent.parentGroupsIds
-                            )
-                          )
-                        )
-                      )
                   )
                 )
             )
@@ -116,7 +105,7 @@ class SisSupervisorGroupsContainer extends Component {
       <Box
         title={
           <FormattedMessage
-            id="app.dashboard.sisGroupsTeacher"
+            id="app.sisSupervisor.sisGroupsCreate"
             defaultMessage="Create Groups Associated with UK SIS Courses"
           />
         }
@@ -125,10 +114,17 @@ class SisSupervisorGroupsContainer extends Component {
         <div>
           <p className="text-muted">
             <FormattedMessage
-              id="app.dashboard.sisGroupsTeacherExplain"
+              id="app.sisSupervisor.sisGroupsCreateExplain"
               defaultMessage="SIS courses you teach in particular semesters and which have mapping to ReCodEx. You may create new groups with binding or bind existing groups to these courses."
             />
           </p>
+          <p className="callout callout-warning">
+            <FormattedMessage
+              id="app.sisSupervisor.noUsersInNewGroupsWarning"
+              defaultMessage="Please note that when a group is created from or bound to a SIS course, no students are added to this group. The binding process only ensures that the group is visible to the students and they are allowed to join it."
+            />
+          </p>
+
           <ResourceRenderer resource={sisStatus}>
             {sisStatus =>
               <div>
@@ -423,7 +419,9 @@ export default injectIntl(
         loadData: loggedInUserId =>
           SisSupervisorGroupsContainer.loadData(dispatch, loggedInUserId),
         createGroup: (courseId, data, userId, year, term) =>
-          dispatch(sisCreateGroup(courseId, data, userId, year, term)),
+          dispatch(
+            sisCreateGroup(courseId, data, userId, year, term)
+          ).then(() => dispatch(fetchAllGroups())),
         bindGroup: (courseId, data, userId, year, term) =>
           dispatch(sisBindGroup(courseId, data, userId, year, term))
       })

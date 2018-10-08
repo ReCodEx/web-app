@@ -4,7 +4,7 @@ export const getVariablesTypes = (boxTypes, boxes) => {
   const variablesTypes = {};
   for (let box of boxes) {
     let boxType = boxTypes.find(boxType => boxType.type === box.type);
-    for (let port of Object.keys(box.portsIn)) {
+    for (let port of Object.keys(box.portsIn || {})) {
       const { value } = box.portsIn[port];
       const { type } = boxType.portsIn[port];
       variablesTypes[value] = {

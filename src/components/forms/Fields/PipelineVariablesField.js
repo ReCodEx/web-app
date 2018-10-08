@@ -12,6 +12,7 @@ import {
 import ResourceRenderer from '../../helpers/ResourceRenderer';
 
 const isArray = (firstVal, type = '') =>
+  firstVal &&
   firstVal.length > 0 &&
   firstVal[0] !== '$' &&
   typeof type === 'string' &&

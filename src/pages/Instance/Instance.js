@@ -18,12 +18,13 @@ import EditGroupForm, {
 } from '../../components/forms/EditGroupForm';
 import { EditIcon } from '../../components/icons';
 
+import { fetchUser } from '../../redux/modules/users';
 import { fetchInstanceIfNeeded } from '../../redux/modules/instances';
 import {
   instanceSelector,
   isAdminOfInstance
 } from '../../redux/selectors/instances';
-import { createGroup } from '../../redux/modules/groups';
+import { createGroup, fetchAllGroups } from '../../redux/modules/groups';
 import { notArchivedGroupsSelector } from '../../redux/selectors/groups';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import { isLoggedAsSuperAdmin } from '../../redux/selectors/users';
@@ -47,6 +48,7 @@ class Instance extends Component {
   render() {
     const {
       params: { instanceId },
+      userId,
       instance,
       groups,
       createGroup,
@@ -109,7 +111,7 @@ class Instance extends Component {
                 <Col sm={6}>
                   <EditGroupForm
                     form="addGroup"
-                    onSubmit={createGroup}
+                    onSubmit={createGroup(userId)}
                     instanceId={instanceId}
                     initialValues={EDIT_GROUP_FORM_EMPTY_INITIAL_VALUES}
                     createNew
@@ -136,6 +138,7 @@ Instance.propTypes = {
   params: PropTypes.shape({
     instanceId: PropTypes.string.isRequired
   }).isRequired,
+  userId: PropTypes.string.isRequired,
   instance: ImmutablePropTypes.map,
   groups: ImmutablePropTypes.map,
   createGroup: PropTypes.func.isRequired,
@@ -152,6 +155,7 @@ export default withLinks(
     (state, { params: { instanceId } }) => {
       const userId = loggedInUserIdSelector(state);
       return {
+        userId,
         instance: instanceSelector(state, instanceId),
         groups: notArchivedGroupsSelector(state),
         isAdmin: isAdminOfInstance(userId, instanceId)(state),
@@ -160,7 +164,10 @@ export default withLinks(
       };
     },
     (dispatch, { params: { instanceId } }) => ({
-      createGroup: data => dispatch(createGroup({ instanceId, ...data })),
+      createGroup: userId => data =>
+        dispatch(createGroup({ instanceId, ...data })).then(() =>
+          Promise.all([dispatch(fetchAllGroups()), dispatch(fetchUser(userId))])
+        ),
       loadAsync: () => Instance.loadAsync({ instanceId }, dispatch)
     })
   )(Instance)

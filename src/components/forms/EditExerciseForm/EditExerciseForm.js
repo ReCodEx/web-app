@@ -50,8 +50,7 @@ const EditExerciseForm = ({
   invalid,
   asyncValidating,
   localizedTextsLocales = [],
-  intl: { formatMessage },
-  links: { EXERCISE_EDIT_SIMPLE_CONFIG_URI_FACTORY }
+  intl: { formatMessage }
 }) =>
   <FormBox
     title={
