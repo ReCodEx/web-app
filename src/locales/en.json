@@ -394,6 +394,7 @@
   "app.editTestsForm.validation.testWeightEmpty": "Please fill test weight.",
   "app.editTestsTest.add": "Add Test",
   "app.editTestsTest.name": "Test name:",
+  "app.editTestsTest.noTests": "There are no tests yet. It is highly recommended to set up the tests first since most of the remaining configurations depends on them.",
   "app.editTestsTest.pointsPercentage": "Points Percentage:",
   "app.editTestsTest.remove": "Remove",
   "app.editTestsTest.weight": "Test weight:",
