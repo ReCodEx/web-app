@@ -394,6 +394,7 @@
   "app.editTestsForm.validation.testWeightEmpty": "Prosím, vyplňte váhu testu.",
   "app.editTestsTest.add": "Přidat test",
   "app.editTestsTest.name": "Název testu:",
+  "app.editTestsTest.noTests": "Dosud nebyly přidány žádné testy. Je velmi vhodné definovat seznam testů jako první krok, neboť většina konfigurace na nich závisí.",
   "app.editTestsTest.pointsPercentage": "Body v procentech:",
   "app.editTestsTest.remove": "Odebrat",
   "app.editTestsTest.weight": "Váha testu:",
