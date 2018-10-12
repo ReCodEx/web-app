@@ -23,10 +23,7 @@ class EditEnvironmentConfigForm extends Component {
   setDefaultVariables = () => {
     const { defaultVariables = null, change } = this.props;
     if (defaultVariables) {
-      change(
-        'variables',
-        defaultVariables.map(({ name, value }) => ({ name, value }))
-      );
+      change('variables', defaultVariables);
     }
   };
 
