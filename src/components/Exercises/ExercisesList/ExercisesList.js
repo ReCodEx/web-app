@@ -11,7 +11,8 @@ const ExercisesList = ({
   exercises = [],
   showGroups = false,
   showAssignButton = false,
-  assignExercise = null
+  assignExercise = null,
+  reload
 }) =>
   <Table hover>
     {Boolean(heading) &&
@@ -28,6 +29,7 @@ const ExercisesList = ({
                 showAssignButton={showAssignButton}
                 assignExercise={assignExercise}
                 key={exercise ? exercise.id : idx}
+                reload={reload}
               />
             : <tr key={idx}>
                 <td colSpan={showGroups ? 8 : 7}>
@@ -57,7 +59,8 @@ ExercisesList.propTypes = {
   exercises: PropTypes.array,
   showGroups: PropTypes.bool,
   showAssignButton: PropTypes.bool,
-  assignExercise: PropTypes.func
+  assignExercise: PropTypes.func,
+  reload: PropTypes.func
 };
 
 export default ExercisesList;

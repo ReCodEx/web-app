@@ -182,7 +182,8 @@ class ExercisesListContainer extends Component {
           totalCount,
           orderByColumn,
           orderByDescending,
-          setOrderBy
+          setOrderBy,
+          reload
         }) =>
           <ExercisesList
             exercises={data}
@@ -197,6 +198,7 @@ class ExercisesListContainer extends Component {
               orderByDescending,
               setOrderBy
             })}
+            reload={reload}
           />}
       </PaginationContainer>
     );
