@@ -23,7 +23,7 @@ const SupervisorsListItem = ({
       <UsersNameContainer userId={id} />
     </td>
     {isAdmin &&
-      <td>
+      <td className="text-right text-nowrap">
         {primaryAdminsIds.indexOf(id) < 0 &&
           <div>
             <MakeRemoveSupervisorButtonContainer
