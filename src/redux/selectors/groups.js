@@ -26,8 +26,12 @@ export const notArchivedGroupsSelector = state =>
 export const filterGroups = (ids, groups) =>
   groups.filter(isReady).filter(group => ids.contains(getId(group)));
 
-export const filterNonOrganizationalGroups = groups =>
-  groups.filter(group => !group.getIn(['data', 'organizational'], false));
+export const filterNonOrganizationalActiveGroups = groups =>
+  groups.filter(
+    group =>
+      !group.getIn(['data', 'organizational'], false) &&
+      !group.getIn(['data', 'archived'], false)
+  );
 
 export const groupSelector = id =>
   createSelector(groupsSelector, groups => groups.get(id));
@@ -106,7 +110,7 @@ export const groupsUserCanEditSelector = createSelector(
 
 export const groupsUserCanAssignToSelector = createSelector(
   groupsUserCanEditSelector,
-  filterNonOrganizationalGroups
+  filterNonOrganizationalActiveGroups
 );
 
 const usersOfGroup = (type, groupId) =>
