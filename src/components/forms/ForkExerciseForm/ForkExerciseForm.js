@@ -14,6 +14,7 @@ import { forkStatuses } from '../../../redux/modules/exercises';
 import { getFork } from '../../../redux/selectors/exercises';
 import ResourceRenderer from '../../helpers/ResourceRenderer';
 import { getGroupCanonicalLocalizedName } from '../../../helpers/getLocalizedData';
+import { hasPermissions } from '../../../helpers/common';
 
 import withLinks from '../../../helpers/withLinks';
 
@@ -34,7 +35,6 @@ class ForkExerciseForm extends Component {
   render() {
     const {
       forkStatus,
-      anyTouched,
       submitting,
       handleSubmit,
       submitFailed,
@@ -73,14 +73,18 @@ class ForkExerciseForm extends Component {
                 />
               </Alert>}
             <Form inline className="forkForm">
-              <ResourceRenderer resource={groups.toArray()}>
-                {(...groups) =>
+              <ResourceRenderer resource={groups.toArray()} returnAsArray>
+                {groups =>
                   <React.Fragment>
                     <Field
                       name={'groupId'}
                       component={SelectField}
                       label={''}
+                      ignoreDirty
                       options={groups
+                        .filter(group =>
+                          hasPermissions(group, 'createExercise')
+                        )
                         .map(group => ({
                           key: group.id,
                           name: getGroupCanonicalLocalizedName(
@@ -97,7 +101,6 @@ class ForkExerciseForm extends Component {
                       invalid={invalid}
                       submitting={submitting}
                       hasSucceeded={submitSucceeded}
-                      dirty={anyTouched}
                       hasFailed={submitFailed}
                       handleSubmit={handleSubmit}
                       defaultIcon={<Icon icon="code-branch" gapRight />}
@@ -136,7 +139,6 @@ ForkExerciseForm.propTypes = {
   forkId: PropTypes.string.isRequired,
   forkStatus: PropTypes.string,
   forkedExerciseId: PropTypes.string,
-  anyTouched: PropTypes.bool,
   submitting: PropTypes.bool,
   submitFailed: PropTypes.bool,
   submitSucceeded: PropTypes.bool,
