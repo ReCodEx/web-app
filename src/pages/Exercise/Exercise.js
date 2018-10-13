@@ -73,6 +73,7 @@ import {
 
 import withLinks from '../../helpers/withLinks';
 import { getLocalizedName } from '../../helpers/getLocalizedData';
+import { hasPermissions } from '../../helpers/common';
 
 const messages = defineMessages({
   groupsBox: {
@@ -279,7 +280,7 @@ class Exercise extends Component {
                 <ExerciseButtons {...exercise} />
               </Col>
             </Row>
-            {exercise.permissionHints.fork &&
+            {hasPermissions(exercise, 'fork') &&
               <Row>
                 <Col sm={12} className="em-margin-bottom">
                   <ForkExerciseForm
@@ -342,7 +343,7 @@ class Exercise extends Component {
                 <ResourceRenderer resource={instance}>
                   {instance =>
                     <ExerciseGroups
-                      showButtons={exercise.permissionHints.update}
+                      showButtons={hasPermissions(exercise, 'update')}
                       groupsIds={exercise.groupsIds}
                       rootGroupId={instance.rootGroupId}
                       attachingGroupId={attachingGroupId}
@@ -362,7 +363,7 @@ class Exercise extends Component {
                       title={formatMessage(messages.referenceSolutionsBox)}
                       noPadding
                       footer={
-                        exercise.permissionHints.addReferenceSolution &&
+                        hasPermissions(exercise, 'addReferenceSolution') &&
                         <div className="text-center">
                           <Button
                             bsStyle={exercise.isBroken ? 'default' : 'success'}
