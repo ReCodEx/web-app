@@ -9,7 +9,7 @@ import {
   intlShape,
   injectIntl
 } from 'react-intl';
-import { Row, Col } from 'react-bootstrap';
+import { Row, Col, Alert } from 'react-bootstrap';
 import { formValueSelector } from 'redux-form';
 import moment from 'moment';
 import { defaultMemoize } from 'reselect';
@@ -302,12 +302,12 @@ class Exercise extends Component {
                   <Box
                     title={formatMessage(messages.groupsBox)}
                     description={
-                      <p>
+                      <Alert bsStyle="info">
                         <FormattedMessage
                           id="app.exercise.assignToGroup"
-                          defaultMessage="You can assign this exercise to some of the groups you supervise."
+                          defaultMessage="You can assign this exercise to multiple groups you supervise. The exercise can also be assigned from within the groups individually. Please note that an exercise may be assigned multiple times and this form does not track existing assignments."
                         />
-                      </p>
+                      </Alert>
                     }
                     unlimitedHeight
                   >
