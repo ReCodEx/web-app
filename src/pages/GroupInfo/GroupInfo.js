@@ -255,7 +255,7 @@ class GroupInfo extends Component {
                     initialValues={EDIT_GROUP_FORM_EMPTY_INITIAL_VALUES}
                     createNew
                     collapsable
-                    isOpen={data.childGroups.length === 0}
+                    isOpen={false}
                     hasThreshold={hasThreshold}
                     isSuperAdmin={isSuperAdmin}
                   />}
