@@ -14,7 +14,6 @@ import {
   getSubmittedSolutionId
 } from '../../redux/selectors/submission';
 import EvaluationProgressContainer from '../EvaluationProgressContainer';
-import withLinks from '../../helpers/withLinks';
 import { fetchSubmissionEvaluationsForSolution } from '../../redux/modules/submissionEvaluations';
 import { getProgressObserverId } from '../../redux/selectors/evaluationProgress';
 
@@ -31,15 +30,12 @@ class ResubmitSolutionContainer extends Component {
   render() {
     const {
       id,
-      assignmentId,
       userId,
       resubmit,
       monitor,
       isProcessing,
-      newSubmissionId,
       fetchSubmissions,
-      isDebug = true,
-      links: { SOLUTION_DETAIL_URI_FACTORY }
+      isDebug = true
     } = this.props;
 
     return (
@@ -53,7 +49,6 @@ class ResubmitSolutionContainer extends Component {
         <EvaluationProgressContainer
           isOpen={isProcessing && this.isMeTheObserver()}
           monitor={this.isMeTheObserver() ? monitor : null}
-          link={SOLUTION_DETAIL_URI_FACTORY(assignmentId, newSubmissionId)}
           onFinish={() => fetchSubmissions(userId)}
         />
       </span>
@@ -68,9 +63,7 @@ ResubmitSolutionContainer.propTypes = {
   isPrivate: PropTypes.bool,
   monitor: PropTypes.object,
   isProcessing: PropTypes.bool,
-  newSubmissionId: PropTypes.string,
   progressObserverId: PropTypes.string,
-  links: PropTypes.object.isRequired,
   isDebug: PropTypes.bool,
   userId: PropTypes.string,
   fetchSubmissions: PropTypes.func
@@ -96,6 +89,6 @@ const mapDispatchToProps = (
     ])
 });
 
-export default withLinks(
-  connect(mapStateToProps, mapDispatchToProps)(ResubmitSolutionContainer)
+export default connect(mapStateToProps, mapDispatchToProps)(
+  ResubmitSolutionContainer
 );

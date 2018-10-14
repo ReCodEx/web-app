@@ -150,21 +150,11 @@ class EvaluationProgressContainer extends Component {
   };
 
   finish = () => {
-    const { push, link, finishSubmissionProcessing, onFinish } = this.props;
+    const { finishSubmissionProcessing, dropObserver, onFinish } = this.props;
     finishSubmissionProcessing();
     this.closeSocket();
-
-    // Call on finish handler; if it yields a promise, make sure the push() is done afterwards.
-    const promise = onFinish && onFinish();
-    if (
-      promise &&
-      typeof promise === 'object' &&
-      typeof promise.then === 'function'
-    ) {
-      promise.then(() => push(link));
-    } else {
-      push(link);
-    }
+    dropObserver();
+    onFinish && onFinish();
   };
 
   userCloseAction = () => {
@@ -234,7 +224,6 @@ EvaluationProgressContainer.propTypes = {
   path: PropTypes.string,
   finishEvaluationProgress: PropTypes.func,
   finishSubmissionProcessing: PropTypes.func.isRequired,
-  link: PropTypes.string.isRequired,
   addMessage: PropTypes.func.isRequired,
   expectedTasksCount: PropTypes.number.isRequired,
   progress: PropTypes.shape({

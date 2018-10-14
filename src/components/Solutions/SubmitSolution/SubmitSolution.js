@@ -299,7 +299,7 @@ class SubmitSolution extends Component {
           </div>
 
           {!canSubmit &&
-            <Well>
+            <Well className="em-margin-top">
               <HelpBlock className="text-left">
                 {formatMessage(commonMessages.instructions)}
               </HelpBlock>

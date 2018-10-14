@@ -5,9 +5,7 @@ import { formValues } from 'redux-form';
 import { FormattedMessage } from 'react-intl';
 
 import EditTestsTestRow from './EditTestsTestRow';
-import Button from '../../widgets/FlatButton';
 import { prettyPrintPercent } from '../../helpers/stringFormatters';
-import { AddIcon } from '../../icons';
 
 const EditTestsTest = ({ fields, isUniform, testValues, readOnly = false }) => {
   const weightSum = isUniform
