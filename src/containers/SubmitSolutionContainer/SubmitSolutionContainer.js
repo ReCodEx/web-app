@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { push } from 'react-router-redux';
+
 import SubmitSolution from '../../components/Solutions/SubmitSolution';
 import EvaluationProgressContainer from '../EvaluationProgressContainer';
 import { fetchUsersSolutions } from '../../redux/modules/solutions';
@@ -120,6 +122,23 @@ class SubmitSolutionContainer extends Component {
     return progressObserverId === this.getMyObserverId();
   };
 
+  afterEvaluationFinishes = () => {
+    const {
+      id,
+      submissionId,
+      isReferenceSolution = false,
+      afterEvaluationFinishes,
+      push,
+      links: {
+        EXERCISE_REFERENCE_SOLUTION_URI_FACTORY,
+        SOLUTION_DETAIL_URI_FACTORY
+      }
+    } = this.props;
+    return isReferenceSolution
+      ? push(EXERCISE_REFERENCE_SOLUTION_URI_FACTORY(id, submissionId))
+      : afterEvaluationFinishes(SOLUTION_DETAIL_URI_FACTORY(id, submissionId));
+  };
+
   render = () => {
     const {
       isOpen = false,
@@ -135,16 +154,10 @@ class SubmitSolutionContainer extends Component {
       isProcessing,
       isValidating,
       isSending,
-      submissionId,
       monitor,
       reset,
-      links: {
-        EXERCISE_REFERENCE_SOLUTION_URI_FACTORY,
-        SOLUTION_DETAIL_URI_FACTORY
-      },
       showProgress = true,
-      isReferenceSolution = false,
-      onEndFetch
+      isReferenceSolution = false
     } = this.props;
 
     const { selectedEnvironment, entryPoint } = this.state;
@@ -182,12 +195,7 @@ class SubmitSolutionContainer extends Component {
           <EvaluationProgressContainer
             isOpen={isProcessing && this.isMeTheObserver()}
             monitor={this.isMeTheObserver() ? monitor : null}
-            link={
-              isReferenceSolution
-                ? EXERCISE_REFERENCE_SOLUTION_URI_FACTORY(id, submissionId)
-                : SOLUTION_DETAIL_URI_FACTORY(id, submissionId)
-            }
-            onFinish={!isReferenceSolution ? onEndFetch : null}
+            onFinish={this.afterEvaluationFinishes}
           />}
       </div>
     );
@@ -221,7 +229,8 @@ SubmitSolutionContainer.propTypes = {
   links: PropTypes.object.isRequired,
   showProgress: PropTypes.bool,
   isReferenceSolution: PropTypes.bool,
-  onEndFetch: PropTypes.func.isRequired
+  afterEvaluationFinishes: PropTypes.func.isRequired,
+  push: PropTypes.func.isRequired
 };
 
 export default withLinks(
@@ -266,11 +275,12 @@ export default withLinks(
         ),
       presubmitSolution: files => dispatch(presubmitValidation(id, files)),
       reset: () => dispatch(resetUpload(id)) && dispatch(onReset(userId, id)),
-      onEndFetch: () =>
+      afterEvaluationFinishes: link =>
         Promise.all([
           dispatch(fetchUsersSolutions(userId, id)),
           dispatch(canSubmit(id))
-        ])
+        ]).then(() => dispatch(push(link))),
+      push: url => dispatch(push(url))
     })
   )(SubmitSolutionContainer)
 );

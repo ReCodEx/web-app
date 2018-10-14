@@ -131,12 +131,10 @@ class ReferenceSolution extends Component {
                 : <p>
                     <ResubmitReferenceSolutionContainer
                       id={solution.id}
-                      exerciseId={exerciseId}
                       isDebug={false}
                     />
                     <ResubmitReferenceSolutionContainer
                       id={solution.id}
-                      exerciseId={exerciseId}
                       isDebug={true}
                     />
                   </p>}

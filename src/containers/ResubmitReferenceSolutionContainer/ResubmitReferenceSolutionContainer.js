@@ -9,7 +9,6 @@ import {
   fetchReferenceSolution
 } from '../../redux/modules/referenceSolutions';
 import EvaluationProgressContainer from '../EvaluationProgressContainer';
-import withLinks from '../../helpers/withLinks';
 import { fetchReferenceSolutionEvaluationsForSolution } from '../../redux/modules/referenceSolutionEvaluations';
 import {
   isProcessing,
@@ -31,14 +30,11 @@ class ResubmitReferenceSolutionContainer extends Component {
   render() {
     const {
       id,
-      exerciseId,
       resubmit,
       isProcessing,
       monitor,
-      newSolutionId,
       refreshSolutionEvaluations,
-      isDebug = true,
-      links: { EXERCISE_REFERENCE_SOLUTION_URI_FACTORY }
+      isDebug = true
     } = this.props;
     return (
       <span>
@@ -51,10 +47,6 @@ class ResubmitReferenceSolutionContainer extends Component {
         <EvaluationProgressContainer
           isOpen={isProcessing && this.isMeTheObserver()}
           monitor={this.isMeTheObserver() ? monitor : null}
-          link={EXERCISE_REFERENCE_SOLUTION_URI_FACTORY(
-            exerciseId,
-            newSolutionId
-          )}
           onFinish={refreshSolutionEvaluations}
         />
       </span>
@@ -66,12 +58,9 @@ ResubmitReferenceSolutionContainer.propTypes = {
   id: PropTypes.string.isRequired,
   resubmit: PropTypes.func.isRequired,
   isDebug: PropTypes.bool,
-  exerciseId: PropTypes.string.isRequired,
   monitor: PropTypes.object,
   isProcessing: PropTypes.bool,
-  newSolutionId: PropTypes.string,
   progressObserverId: PropTypes.string,
-  links: PropTypes.object.isRequired,
   refreshSolutionEvaluations: PropTypes.func
 };
 
@@ -92,8 +81,6 @@ const mapDispatchToProps = (dispatch, { id }) => ({
     ])
 });
 
-export default withLinks(
-  connect(mapStateToProps, mapDispatchToProps)(
-    ResubmitReferenceSolutionContainer
-  )
+export default connect(mapStateToProps, mapDispatchToProps)(
+  ResubmitReferenceSolutionContainer
 );
