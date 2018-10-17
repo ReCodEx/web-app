@@ -4,68 +4,68 @@
 <head <%- head.htmlAttributes.toString() %>>
   <meta charset="utf-8">
   <%- head.title.toString() %>
-    <%- head.meta.toString() %>
-      <%- head.link.toString() %>
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" type="image/png" href="/public/favicon.ico" />
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
-          crossorigin="anonymous">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.9.0/katex.min.css">
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/github-markdown-css/2.2.1/github-markdown.css" />
-        <link rel="stylesheet" href="/node_modules/font-awesome-animation/dist/font-awesome-animation.min.css" />
-        <link rel="stylesheet" href="<%= style %>">
-        <style type="text/css">
-          @keyframes loading {
-            0% {
-              filter: blur(8px);
-              color: #cec;
-              text-shadow: #9b9 0px 0px 200px;
-            }
-            100% {
-              filter: blur(0px);
-              color: #9b9;
-              text-shadow: #9b9 0px 0px 0px;
-            }
-          }
+  <%- head.meta.toString() %>
+  <%- head.link.toString() %>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" type="image/png" href="/public/favicon.ico" />
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+    crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.9.0/katex.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/github-markdown-css/2.2.1/github-markdown.css" />
+  <link rel="stylesheet" href="<%= style %>">
+  <style type="text/css">
+    @keyframes loading {
+      0% {
+        filter: blur(8px);
+        color: #cec;
+        text-shadow: #9b9 0px 0px 200px;
+      }
 
-          #loading-screen {
-            font-family: Helvetica, Arial, sans-serif;
-            font-size: 32pt;
-            font-variant: small-caps;
-            position: fixed;
-            top: 0;
-            left: 0;
-            bottom: 0;
-            right: 0;
-            text-align: center;
-            line-height: 100vh;
-            z-index: 100;
-            opacity: 0.95;
-            overflow: hidden;
-            color: #9b9;
-            background-color: #f4fff4;
-            animation: loading 1s;
-          }
+      100% {
+        filter: blur(0px);
+        color: #9b9;
+        text-shadow: #9b9 0px 0px 0px;
+      }
+    }
 
-          body.loading {
-            position: fixed;
-            overflow: hidden !important;
-          }
+    #loading-screen {
+      font-family: Helvetica, Arial, sans-serif;
+      font-size: 32pt;
+      font-variant: small-caps;
+      position: fixed;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      right: 0;
+      text-align: center;
+      line-height: 100vh;
+      z-index: 100;
+      opacity: 0.95;
+      overflow: hidden;
+      color: #9b9;
+      background-color: #f4fff4;
+      animation: loading 1s;
+    }
 
-          body.loading * {
-            z-index: 0;
-            overflow: hidden !important;
-          }
+    body.loading {
+      position: fixed;
+      overflow: hidden !important;
+    }
 
-          .main-header .sidebar-toggle:before {
-            filter: invert(100%);
-            content: url(data:image/svg+xml;charset=utf-8;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0NDggNTEyIj48cGF0aCBkPSJNMTYgMTMyaDQxNmM4LjgzNyAwIDE2LTcuMTYzIDE2LTE2Vjc2YzAtOC44MzctNy4xNjMtMTYtMTYtMTZIMTZDNy4xNjMgNjAgMCA2Ny4xNjMgMCA3NnY0MGMwIDguODM3IDcuMTYzIDE2IDE2IDE2em0wIDE2MGg0MTZjOC44MzcgMCAxNi03LjE2MyAxNi0xNnYtNDBjMC04LjgzNy03LjE2My0xNi0xNi0xNkgxNmMtOC44MzcgMC0xNiA3LjE2My0xNiAxNnY0MGMwIDguODM3IDcuMTYzIDE2IDE2IDE2em0wIDE2MGg0MTZjOC44MzcgMCAxNi03LjE2MyAxNi0xNnYtNDBjMC04LjgzNy03LjE2My0xNi0xNi0xNkgxNmMtOC44MzcgMC0xNiA3LjE2My0xNiAxNnY0MGMwIDguODM3IDcuMTYzIDE2IDE2IDE2eiIvPjwvc3ZnPg==);
-            width: 0.8em;
-            height: auto;
-            display: inline-block;
-          }
+    body.loading * {
+      z-index: 0;
+      overflow: hidden !important;
+    }
 
-        </style>
+    .main-header .sidebar-toggle:before {
+      filter: invert(100%);
+      content: url(data:image/svg+xml;charset=utf-8;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0NDggNTEyIj48cGF0aCBkPSJNMTYgMTMyaDQxNmM4LjgzNyAwIDE2LTcuMTYzIDE2LTE2Vjc2YzAtOC44MzctNy4xNjMtMTYtMTYtMTZIMTZDNy4xNjMgNjAgMCA2Ny4xNjMgMCA3NnY0MGMwIDguODM3IDcuMTYzIDE2IDE2IDE2em0wIDE2MGg0MTZjOC44MzcgMCAxNi03LjE2MyAxNi0xNnYtNDBjMC04LjgzNy03LjE2My0xNi0xNi0xNkgxNmMtOC44MzcgMC0xNiA3LjE2My0xNiAxNnY0MGMwIDguODM3IDcuMTYzIDE2IDE2IDE2em0wIDE2MGg0MTZjOC44MzcgMCAxNi03LjE2MyAxNi0xNnYtNDBjMC04LjgzNy03LjE2My0xNi0xNi0xNkgxNmMtOC44MzcgMC0xNiA3LjE2My0xNiAxNnY0MGMwIDguODM3IDcuMTYzIDE2IDE2IDE2eiIvPjwvc3ZnPg==);
+      width: 0.8em;
+      height: auto;
+      display: inline-block;
+    }
+
+  </style>
 </head>
 
 <body class="loading">
@@ -77,19 +77,19 @@
     <%- html %>
   </div>
   <% if (reduxState) { %>
-    <script>
-      window.__INITIAL_STATE__ = <%- reduxState %>;
+  <script>
+    window.__INITIAL_STATE__ = <%- reduxState %>;
 
-    </script>
-    <% } %>
+  </script>
+  <% } %>
 
-      <script src="<%= bundle %>"></script>
+  <script src="<%= bundle %>"></script>
 
-      <script>
-        document.getElementById('loading-screen').remove();
-        document.body.className = "<%- skin ? skin : 'skin-green' %> fixed";
+  <script>
+    document.getElementById('loading-screen').remove();
+    document.body.className = "<%- skin ? skin : 'skin-green' %> fixed";
 
-      </script>
+  </script>
 
 </body>
 
