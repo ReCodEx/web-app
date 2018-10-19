@@ -79,10 +79,9 @@ const reducer = handleActions(
           ),
         state
       ),
-    [actionTypes.REMOVE_FILE_FULFILLED]: (
-      state,
-      { payload, meta: { fileId } }
-    ) => state.deleteIn(['resources', fileId])
+
+    [actionTypes.REMOVE_FILE_FULFILLED]: (state, { meta: { fileId } }) =>
+      state.deleteIn(['resources', fileId])
   }),
   initialState
 );
