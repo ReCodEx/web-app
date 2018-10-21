@@ -2,6 +2,7 @@ const path = require('path');
 const webpack = require('webpack');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const GitRevisionPlugin = require('git-revision-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
 
 // load variables from .env
 require('dotenv').config();
@@ -35,7 +36,12 @@ module.exports = {
   },
   module: {
     rules: [
-      { test: /\.jsx?$/, exclude: /node_modules/, use: ['babel-loader'] },
+      {
+        test: /\.jsx?$/,
+        exclude: /node_modules/,
+        include: /src/,
+        use: ['babel-loader?cacheDirectory']
+      },
       {
         test: /\.css$/,
         use: [MiniCssExtractPlugin.loader, 'css-loader']
@@ -52,6 +58,15 @@ module.exports = {
         test: /.*\.(gif|png|jpe?g|svg)$/i,
         use: ['file-loader']
       }
+    ]
+  },
+  optimization: {
+    minimize: true,
+    minimizer: [
+      new TerserPlugin({
+        cache: true,
+        parallel: true
+      })
     ]
   },
   plugins: [

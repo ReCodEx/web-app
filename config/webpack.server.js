@@ -16,9 +16,7 @@ module.exports = {
       moment: 'moment/moment.js'
     }
   },
-  optimization: {
-    minimize: true
-  },
+  optimization: clientConfig.optimization,
   target: 'node',
   mode: process.env.NODE_ENV,
   module: clientConfig.module,
