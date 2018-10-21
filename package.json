@@ -3,7 +3,7 @@
   "description": "Single page application for the ReCodEx project.",
   "version": "0.0.0",
   "license": "MIT",
-  "author": "Šimon Rozsíval <simon@rozsival.com>",
+  "author": "ReCodEx team <recodex@ksi.mff.cuni.cz>",
   "repository": {
     "type": "git",
     "url": "https://github.com/recodex/web-app.git"
@@ -11,12 +11,10 @@
   "private": true,
   "scripts": {
     "clean": "rm -f public/bundle* && rm -f public/style* && rm -f bin/server.js && rm -f bin/style* && rm -fr tmp",
-    "build:server": "webpack -p --config config/webpack.server.js",
-    "build:client": "webpack -p --config config/webpack.config.js",
-    "build:server:test": "webpack --config config/webpack.server.js",
-    "build:client:test": "webpack --config config/webpack.config.js",
+    "build:server": "webpack --config config/webpack.server.js",
+    "build:client": "webpack --config config/webpack.config.js",
     "build": "npm run clean && npm run build:server && npm run build:client",
-    "build:test": "npm run clean && npm run build:server:test && npm run build:client:test",
+    "build:test": "npm run clean && npm run build:server && npm run build:client",
     "lint": "eslint src",
     "test": "npm run lint && mocha",
     "test:watch": "mocha --watch --reporter nyan",
@@ -155,6 +153,7 @@
     "scroll-behavior": "^0.4.0",
     "strip-loader": "^0.1.2",
     "style-loader": "^0.17.0",
+    "terser-webpack-plugin": "^1.1.0",
     "webpack": "^4.20.2",
     "webpack-cli": "^3.1.1",
     "webpack-dev-middleware": "^3.4.0",
