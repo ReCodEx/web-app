@@ -12,22 +12,28 @@ import {
 
 import {
   fetchSupplementaryFilesForPipeline,
-  addPipelineFiles
+  addPipelineFiles,
+  removePipelineFile
 } from '../../redux/modules/pipelineFiles';
+import { downloadSupplementaryFile } from '../../redux/modules/files';
 
-import { createGetPipelineFiles } from '../../redux/selectors/pipelineFiles';
+import { getSupplementaryFilesForPipeline } from '../../redux/selectors/pipelineFiles';
 
 const PipelineFilesTableContainer = ({
   pipeline,
   supplementaryFiles,
   loadFiles,
-  addFiles
+  addFiles,
+  removeFile,
+  downloadFile
 }) =>
   <FilesTableContainer
-    uploadId={`supplementary-files-${pipeline.id}`}
+    uploadId={`pipeline-files-${pipeline.id}`}
     attachments={supplementaryFiles}
     loadFiles={loadFiles}
     addFiles={addFiles}
+    removeFile={removeFile}
+    downloadFile={downloadFile}
     title={
       <FormattedMessage
         id="app.pipelineFilesTable.title"
@@ -51,20 +57,24 @@ PipelineFilesTableContainer.propTypes = {
   }).isRequired,
   supplementaryFiles: ImmutablePropTypes.map,
   loadFiles: PropTypes.func.isRequired,
-  addFiles: PropTypes.func.isRequired
+  addFiles: PropTypes.func.isRequired,
+  removeFile: PropTypes.func.isRequired,
+  downloadFile: PropTypes.func.isRequired
 };
 
 export default connect(
   (state, { pipeline }) => {
-    const getSupplementaryFilesForPipeline = createGetPipelineFiles(
-      pipeline.supplementaryFilesIds
-    );
     return {
-      supplementaryFiles: getSupplementaryFilesForPipeline(state)
+      supplementaryFiles: getSupplementaryFilesForPipeline(pipeline.id)(state)
     };
   },
   (dispatch, { pipeline }) => ({
     loadFiles: () => dispatch(fetchSupplementaryFilesForPipeline(pipeline.id)),
-    addFiles: files => dispatch(addPipelineFiles(pipeline.id, files))
+    addFiles: files => dispatch(addPipelineFiles(pipeline.id, files)),
+    removeFile: id => dispatch(removePipelineFile(pipeline.id, id)),
+    downloadFile: (ev, id) => {
+      ev.preventDefault();
+      dispatch(downloadSupplementaryFile(id));
+    }
   })
 )(PipelineFilesTableContainer);

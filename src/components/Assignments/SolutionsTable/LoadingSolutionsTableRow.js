@@ -7,7 +7,7 @@ const LoadingSolutionsTableRow = () =>
     <LoadingIcon gapRight />
     <FormattedMessage
       id="app.solutionsTable.loading"
-      defaultMessage="Loading submitted solutions ..."
+      defaultMessage="Loading submitted solutions..."
     />
   </div>;
 

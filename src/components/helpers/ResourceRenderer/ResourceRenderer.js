@@ -16,13 +16,13 @@ import {
 const defaultLoading = noIcons =>
   <span>
     {!noIcons && <LoadingIcon gapRight />}
-    <FormattedMessage id="generic.loading" defaultMessage="Loading ..." />
+    <FormattedMessage id="generic.loading" defaultMessage="Loading..." />
   </span>;
 
 const defaultLoadingBulky = noIcons =>
   <p className="text-center larger em-padding">
     {!noIcons && <LoadingIcon gapRight />}
-    <FormattedMessage id="generic.loading" defaultMessage="Loading ..." />
+    <FormattedMessage id="generic.loading" defaultMessage="Loading..." />
   </p>;
 
 const defaultFailed = noIcons =>

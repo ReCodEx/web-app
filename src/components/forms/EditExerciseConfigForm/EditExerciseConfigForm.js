@@ -215,7 +215,7 @@ class EditExerciseConfigForm extends Component {
                 submitting: (
                   <FormattedMessage
                     id="app.editExerciseConfigForm.submitting"
-                    defaultMessage="Saving configuration ..."
+                    defaultMessage="Saving configuration..."
                   />
                 ),
                 success: (

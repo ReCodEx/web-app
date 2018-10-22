@@ -72,7 +72,7 @@ const EditTerm = ({
         messages={{
           submit: <FormattedMessage id="generic.save" defaultMessage="Save" />,
           submitting: (
-            <FormattedMessage id="generic.saving" defaultMessage="Saving ..." />
+            <FormattedMessage id="generic.saving" defaultMessage="Saving..." />
           ),
           success: (
             <FormattedMessage id="generic.saved" defaultMessage="Saved" />

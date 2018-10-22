@@ -46,7 +46,7 @@ const EditInstanceForm = ({
             submitting: (
               <FormattedMessage
                 id="app.editInstanceForm.processing"
-                defaultMessage="Saving ..."
+                defaultMessage="Saving..."
               />
             ),
             success: (

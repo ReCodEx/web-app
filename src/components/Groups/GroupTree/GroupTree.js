@@ -29,18 +29,18 @@ class GroupTree extends Component {
         level={level}
         loading
         title={
-          <FormattedMessage id="generic.loading" defaultMessage="Loading ..." />
+          <FormattedMessage id="generic.loading" defaultMessage="Loading..." />
         }
       />
     </TreeView>;
 
-  renderButtons = (groupId, showInfoLink) => {
+  renderButtons = (groupId, showInfoLink, isRoot) => {
     const {
       buttonsCreator = null,
       links: { GROUP_INFO_URI_FACTORY, GROUP_DETAIL_URI_FACTORY }
     } = this.props;
     return buttonsCreator
-      ? buttonsCreator(groupId)
+      ? buttonsCreator(groupId, isRoot)
       : <span>
           <LinkContainer
             to={
@@ -97,7 +97,8 @@ class GroupTree extends Component {
       onlyEditable = false,
       currentGroupId = null,
       visibleGroupsMap = null,
-      ancestralPath = null
+      ancestralPath = null,
+      forceRootButtons = false
     } = this.props;
 
     const onAncestralPath = ancestralPath && ancestralPath.length > 0;
@@ -115,6 +116,7 @@ class GroupTree extends Component {
       childGroups,
       primaryAdminsIds,
       organizational,
+      archived,
       public: isPublic,
       permissionHints
     } = getJsData(group);
@@ -143,13 +145,19 @@ class GroupTree extends Component {
               level={level}
               admins={primaryAdminsIds}
               organizational={organizational}
+              archived={archived}
               isPublic={isPublic}
               forceOpen={onAncestralPath}
               isOpen={currentGroupId === groupId || isOpen}
               actions={
-                currentGroupId !== groupId && permissionHints.viewDetail
+                (currentGroupId !== groupId || forceRootButtons) &&
+                permissionHints.viewDetail
                   ? // this is inacurate, but public groups are visible to students who cannot see detail until they join
-                    this.renderButtons(groupId, organizational || isPublic)
+                    this.renderButtons(
+                      groupId,
+                      organizational || isPublic,
+                      currentGroupId === groupId
+                    )
                   : undefined
               }
             >
@@ -185,6 +193,7 @@ GroupTree.propTypes = {
   visibleGroupsMap: PropTypes.object,
   ancestralPath: PropTypes.array,
   buttonsCreator: PropTypes.func,
+  forceRootButtons: PropTypes.bool,
   links: PropTypes.object,
   intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired
 };

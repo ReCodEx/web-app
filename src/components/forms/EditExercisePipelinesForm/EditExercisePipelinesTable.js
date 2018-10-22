@@ -57,19 +57,6 @@ class EditExercisePipelinesTable extends Component {
       <div>
         <Table>
           <tbody>
-            {fields.length === 0 &&
-              <tr>
-                <td
-                  colSpan={5}
-                  className="text-center text-muted small em-padding"
-                >
-                  <FormattedMessage
-                    id="app.editExercisePipelines.noPipelines"
-                    defaultMessage="There are currently no pipelines."
-                  />
-                </td>
-              </tr>}
-
             {fields.map(this.renderRow)}
 
             {!readOnly &&
@@ -85,7 +72,7 @@ class EditExercisePipelinesTable extends Component {
                     componentClass="select"
                     onChange={e =>
                       this.setState({ selectedPipeline: e.target.value })}
-                    defaultValue={this.state.selectedPipeline}
+                    value={this.state.selectedPipeline || ''}
                   >
                     <option value={null} />
                     {pipelines
@@ -99,10 +86,14 @@ class EditExercisePipelinesTable extends Component {
                 </td>
                 <td className="valign-bottom">
                   <Button
-                    onClick={() =>
-                      this.state.selectedPipeline &&
-                      fields.push(this.state.selectedPipeline)}
+                    onClick={() => {
+                      if (this.state.selectedPipeline) {
+                        fields.push(this.state.selectedPipeline);
+                        this.setState({ selectedPipeline: null });
+                      }
+                    }}
                     bsStyle="primary"
+                    disabled={!this.state.selectedPipeline}
                   >
                     <AddIcon gapRight />
                     <FormattedMessage

@@ -7,7 +7,7 @@ import assignments from './modules/assignments';
 import attachmentFiles from './modules/attachmentFiles';
 import auth, { actionTypes as authActionTypes } from './modules/auth';
 import boxes from './modules/boxes';
-import { default as canSubmit } from './modules/canSubmit'; // because of a named export 'canSubmit'
+import canSubmitModule from './modules/canSubmit'; // because of a named export 'canSubmit'
 import comments from './modules/comments';
 import emailVerification from './modules/emailVerification';
 import evaluationProgress from './modules/evaluationProgress';
@@ -58,7 +58,7 @@ const createRecodexReducers = (token, instanceId) => ({
   attachmentFiles,
   auth: auth(token, instanceId),
   boxes,
-  canSubmit,
+  canSubmit: canSubmitModule,
   comments,
   emailVerification,
   evaluationProgress,

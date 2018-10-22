@@ -11,7 +11,7 @@ const LoadingAssignmentDetails = () =>
         <LoadingIcon gapRight />
         <FormattedMessage
           id="app.assignment.loading"
-          defaultMessage="Loading exercise assignment ..."
+          defaultMessage="Loading exercise assignment..."
         />
       </span>
     }
@@ -22,7 +22,7 @@ const LoadingAssignmentDetails = () =>
     <p>
       <FormattedMessage
         id="app.assignment.loading"
-        defaultMessage="Loading exercise assignment ..."
+        defaultMessage="Loading exercise assignment..."
       />
     </p>
   </Box>;

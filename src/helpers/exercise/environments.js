@@ -1,5 +1,5 @@
 import { defaultMemoize } from 'reselect';
-import { safeGet, arrayToObject } from '../../helpers/common';
+import { safeGet, arrayToObject, createIndex } from '../../helpers/common';
 
 /**
  * List of environment IDs allowed in simple form.
@@ -16,6 +16,14 @@ const SIMPLE_FORM_ENVIRONMENTS = [
   'php-linux',
   'python3'
 ];
+
+const SIMPLE_FORM_ENVIRONMENTS_INDEX = createIndex(SIMPLE_FORM_ENVIRONMENTS);
+
+export const onlySimpleEnvironments = defaultMemoize(environments =>
+  environments.filter(
+    env => SIMPLE_FORM_ENVIRONMENTS_INDEX[env.id] !== undefined
+  )
+);
 
 /**
  * Prepare inital values for the EditEnvironmentSimpleForm of the exercise.
@@ -47,11 +55,7 @@ export const getFirstEnvironmentId = environmentConfigs =>
  */
 export const getEnvironmentInitValues = environmentConfigs => {
   const environmentId = getFirstEnvironmentId(environmentConfigs);
-  const variables = safeGet(
-    environmentConfigs,
-    [0, 'variablesTable'],
-    []
-  ).map(({ name, value }) => ({ name, value }));
+  const variables = safeGet(environmentConfigs, [0, 'variablesTable'], []);
   return { environmentId, variables };
 };
 
@@ -95,11 +99,7 @@ export const transformEnvironmentValues = formData => {
   if (formData.environmentId) {
     res.push({
       runtimeEnvironmentId: formData.environmentId,
-      variablesTable: formData.variables.map(({ name, value }) => ({
-        name,
-        type: 'file[]',
-        value
-      }))
+      variablesTable: formData.variables
     });
   }
   return res;
@@ -151,7 +151,7 @@ export const getPossibleVariablesNames = defaultMemoize(
         ]);
         pipelineVariables &&
           pipelineVariables
-            .filter(({ type }) => type === 'file[]')
+            .filter(({ type }) => type === 'file' || type === 'file[]')
             .forEach(({ name }) => (res[name] = res[name] ? res[name] + 1 : 1));
       });
     return res;

@@ -1,12 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import ImmutablePropTypes from 'react-immutable-proptypes';
 import { reduxForm, Field } from 'redux-form';
 import { Map } from 'immutable';
 import { FormattedMessage } from 'react-intl';
 import { Alert } from 'react-bootstrap';
 
-import ResourceRenderer from '../../helpers/ResourceRenderer';
 import FormBox from '../../widgets/FormBox';
 import { TextField, PasswordField, SelectField } from '../Fields';
 import SubmitButton from '../SubmitButton';
@@ -48,7 +46,7 @@ const ExternalRegistrationForm = ({
             submitting: (
               <FormattedMessage
                 id="app.registrationForm.processing"
-                defaultMessage="Creating account ..."
+                defaultMessage="Creating account..."
               />
             ),
             success: (
@@ -93,28 +91,23 @@ const ExternalRegistrationForm = ({
       }
     />
 
-    <ResourceRenderer resource={instances.toArray()}>
-      {(...instances) =>
-        <Field
-          name="instanceId"
-          required
-          component={SelectField}
-          label={
-            <FormattedMessage
-              id="app.externalRegistrationForm.instance"
-              defaultMessage="Instance:"
-            />
-          }
-          options={[
-            { key: '', name: '...' },
-            ...instances.map(({ id: key, name }) => ({ key, name }))
-          ]}
-        />}
-    </ResourceRenderer>
+    <Field
+      name="instanceId"
+      required
+      component={SelectField}
+      label={
+        <FormattedMessage
+          id="app.externalRegistrationForm.instance"
+          defaultMessage="Instance:"
+        />
+      }
+      addEmptyOption
+      options={instances.map(({ id: key, name }) => ({ key, name }))}
+    />
   </FormBox>;
 
 ExternalRegistrationForm.propTypes = {
-  instances: ImmutablePropTypes.map.isRequired,
+  instances: PropTypes.array.isRequired,
   handleSubmit: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
   submitFailed: PropTypes.bool,

@@ -10,7 +10,7 @@ const LoadingBadge = props =>
     <div className="pull-left info">
       <p>
         <a>
-          <FormattedMessage id="generic.loading" defaultMessage="Loading ..." />
+          <FormattedMessage id="generic.loading" defaultMessage="Loading..." />
         </a>
       </p>
       <a />

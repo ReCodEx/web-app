@@ -128,18 +128,16 @@ class ReferenceSolution extends Component {
                       defaultMessage="The exercise is broken. This reference solution may not be resubmitted at the moment."
                     />
                   </p>
-                : <div>
+                : <p>
                     <ResubmitReferenceSolutionContainer
                       id={solution.id}
-                      exerciseId={exerciseId}
                       isDebug={false}
                     />
                     <ResubmitReferenceSolutionContainer
                       id={solution.id}
-                      exerciseId={exerciseId}
                       isDebug={true}
                     />
-                  </div>}
+                  </p>}
 
               <FetchManyResourceRenderer fetchManyStatus={fetchStatus}>
                 {() =>

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
@@ -7,6 +8,7 @@ import { reset, startAsyncValidation } from 'redux-form';
 
 import { Row, Col } from 'react-bootstrap';
 import PageContent from '../../components/layout/PageContent';
+import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import RegistrationForm from '../../components/forms/RegistrationForm';
 import ExternalRegistrationForm from '../../components/forms/ExternalRegistrationForm';
 import RegistrationCAS from '../../components/forms/RegistrationCAS';
@@ -72,36 +74,39 @@ class Registration extends Component {
           }
         ]}
       >
-        <Row>
-          {process.env.ALLOW_NORMAL_REGISTRATION === 'true' &&
-            <Col lg={4} md={6} mdOffset={0} sm={8} smOffset={2}>
-              <RegistrationForm
-                instances={instances}
-                onSubmit={createAccount}
-              />
-            </Col>}
-          {process.env.ALLOW_LDAP_REGISTRATION === 'true' &&
-            <Col lg={4} md={6} mdOffset={0} sm={8} smOffset={2}>
-              <ExternalRegistrationForm
-                instances={instances}
-                onSubmit={createExternalAccount()}
-              />
-            </Col>}
-          {process.env.ALLOW_CAS_REGISTRATION === 'true' &&
-            <Col lg={4} md={6} mdOffset={0} sm={8} smOffset={2}>
-              <RegistrationCAS
-                instances={instances}
-                onSubmit={createExternalAccount('cas')}
-              />
-            </Col>}
-        </Row>
+        <ResourceRenderer resource={instances.toArray()} returnAsArray>
+          {instances =>
+            <Row>
+              {process.env.ALLOW_NORMAL_REGISTRATION === 'true' &&
+                <Col lg={4} md={6} mdOffset={0} sm={8} smOffset={2}>
+                  <RegistrationForm
+                    instances={instances}
+                    onSubmit={createAccount}
+                  />
+                </Col>}
+              {process.env.ALLOW_LDAP_REGISTRATION === 'true' &&
+                <Col lg={4} md={6} mdOffset={0} sm={8} smOffset={2}>
+                  <ExternalRegistrationForm
+                    instances={instances}
+                    onSubmit={createExternalAccount()}
+                  />
+                </Col>}
+              {process.env.ALLOW_CAS_REGISTRATION === 'true' &&
+                <Col lg={4} md={6} mdOffset={0} sm={8} smOffset={2}>
+                  <RegistrationCAS
+                    instances={instances}
+                    onSubmit={createExternalAccount('cas')}
+                  />
+                </Col>}
+            </Row>}
+        </ResourceRenderer>
       </PageContent>
     );
   }
 }
 
 Registration.propTypes = {
-  instances: PropTypes.object.isRequired,
+  instances: ImmutablePropTypes.map.isRequired,
   loadAsync: PropTypes.func.isRequired,
   createAccount: PropTypes.func.isRequired,
   createExternalAccount: PropTypes.func.isRequired,

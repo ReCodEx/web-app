@@ -142,7 +142,7 @@ class ExternalLinkPreview extends Component {
               <LoadingIcon gapRight />
               <FormattedMessage
                 id="generic.loading"
-                defaultMessage="Loading ..."
+                defaultMessage="Loading..."
               />
             </Well>}
 

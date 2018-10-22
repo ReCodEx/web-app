@@ -11,10 +11,9 @@ import { Row, Col } from 'react-bootstrap';
 import {
   createGroup,
   fetchGroupIfNeeded,
-  fetchInstanceGroups,
-  fetchSubgroups
+  fetchAllGroups
 } from '../../redux/modules/groups';
-import { fetchSupervisors } from '../../redux/modules/users';
+import { fetchSupervisors, fetchUser } from '../../redux/modules/users';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import {
   isSupervisorOf,
@@ -43,20 +42,18 @@ import AddSupervisor from '../../components/Groups/AddSupervisor';
 import GroupTopButtons from '../../components/Groups/GroupTopButtons/GroupTopButtons';
 import { BanIcon } from '../../components/icons';
 import { hasPermissions } from '../../helpers/common';
+import GroupArchivedWarning from '../../components/Groups/GroupArchivedWarning/GroupArchivedWarning';
 
 class GroupInfo extends Component {
   static loadAsync = ({ groupId }, dispatch) =>
-    Promise.all([
-      dispatch(fetchGroupIfNeeded(groupId))
-        .then(res => res.value)
-        .then(group =>
-          Promise.all([
-            dispatch(fetchSupervisors(groupId)),
-            dispatch(fetchInstanceGroups(group.privateData.instanceId))
-          ])
-        ),
-      dispatch(fetchSubgroups(groupId))
-    ]);
+    dispatch(fetchGroupIfNeeded(groupId))
+      .then(res => res.value)
+      .then(group =>
+        Promise.all([
+          dispatch(fetchSupervisors(groupId)),
+          group.archived ? dispatch(fetchAllGroups({ archived: true })) : null
+        ])
+      );
 
   componentWillMount() {
     const { loadAsync } = this.props;
@@ -147,6 +144,11 @@ class GroupInfo extends Component {
               }
             />
 
+            <GroupArchivedWarning
+              archived={data.archived}
+              directlyArchived={data.directlyArchived}
+            />
+
             {!hasPermissions(data, 'viewDetail') &&
               <Row>
                 <Col sm={12}>
@@ -205,6 +207,7 @@ class GroupInfo extends Component {
                   </Box>}
 
                 {hasPermissions(data, 'setAdmin') &&
+                  !data.archived &&
                   <Box
                     title={
                       <FormattedMessage
@@ -245,13 +248,14 @@ class GroupInfo extends Component {
                   </Box>}
 
                 {hasPermissions(data, 'addSubgroup') &&
+                  !data.archived &&
                   <EditGroupForm
                     form="addSubgroup"
-                    onSubmit={addSubgroup(data.privateData.instanceId)}
+                    onSubmit={addSubgroup(data.privateData.instanceId, userId)}
                     initialValues={EDIT_GROUP_FORM_EMPTY_INITIAL_VALUES}
                     createNew
                     collapsable
-                    isOpen={data.childGroups.length === 0}
+                    isOpen={false}
                     hasThreshold={hasThreshold}
                     isSuperAdmin={isSuperAdmin}
                   />}
@@ -302,13 +306,15 @@ const mapStateToProps = (state, { params: { groupId } }) => {
 };
 
 const mapDispatchToProps = (dispatch, { params }) => ({
-  addSubgroup: instanceId => data =>
+  addSubgroup: (instanceId, userId) => data =>
     dispatch(
       createGroup({
         ...data,
         instanceId,
         parentGroupId: params.groupId
       })
+    ).then(() =>
+      Promise.all([dispatch(fetchAllGroups()), dispatch(fetchUser(userId))])
     ),
   loadAsync: () => GroupInfo.loadAsync(params, dispatch),
   push: url => dispatch(push(url)),

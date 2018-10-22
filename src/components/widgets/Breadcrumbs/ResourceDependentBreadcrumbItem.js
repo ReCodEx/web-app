@@ -22,7 +22,7 @@ const ResourceDependentBreadcrumbItem = ({
               : <LoadingIcon gapRight />}
             <FormattedMessage
               id="generic.loading"
-              defaultMessage="Loading ..."
+              defaultMessage="Loading..."
             />
           </span>
         }

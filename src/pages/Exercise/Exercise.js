@@ -9,7 +9,7 @@ import {
   intlShape,
   injectIntl
 } from 'react-intl';
-import { Row, Col } from 'react-bootstrap';
+import { Row, Col, Alert } from 'react-bootstrap';
 import { formValueSelector } from 'redux-form';
 import moment from 'moment';
 import { defaultMemoize } from 'reselect';
@@ -59,10 +59,6 @@ import {
   getExerciseDetachingGroupId
 } from '../../redux/selectors/exercises';
 import { referenceSolutionsSelector } from '../../redux/selectors/referenceSolutions';
-import {
-  fetchUsersGroupsIfNeeded,
-  fetchInstanceGroups
-} from '../../redux/modules/groups';
 
 import {
   loggedInUserIdSelector,
@@ -70,13 +66,14 @@ import {
 } from '../../redux/selectors/auth';
 import { instanceSelector } from '../../redux/selectors/instances';
 import {
-  groupsSelector,
+  notArchivedGroupsSelector,
   groupDataAccessorSelector,
   groupsUserCanAssignToSelector
 } from '../../redux/selectors/groups';
 
 import withLinks from '../../helpers/withLinks';
 import { getLocalizedName } from '../../helpers/getLocalizedData';
+import { hasPermissions } from '../../helpers/common';
 
 const messages = defineMessages({
   groupsBox: {
@@ -92,7 +89,7 @@ const messages = defineMessages({
 class Exercise extends Component {
   state = { forkId: null };
 
-  static loadAsync = ({ exerciseId }, dispatch, { userId, instanceId }) =>
+  static loadAsync = ({ exerciseId }, dispatch, { userId }) =>
     Promise.all([
       dispatch(fetchExerciseIfNeeded(exerciseId)).then(
         ({ value: data }) =>
@@ -102,23 +99,18 @@ class Exercise extends Component {
       ),
       dispatch(fetchRuntimeEnvironments()),
       dispatch(fetchReferenceSolutions(exerciseId)),
-      dispatch(fetchHardwareGroups()),
+      dispatch(fetchHardwareGroups())
       //      dispatch(fetchExercisePipelines(exerciseId)), // TODO - awaiting modification (many-to-many relation with exercises)
-      dispatch(fetchUsersGroupsIfNeeded(userId)),
-      instanceId && dispatch(fetchInstanceGroups(instanceId))
     ]);
 
   componentWillMount() {
-    this.props.loadAsync(this.props.userId, this.props.instanceId);
+    this.props.loadAsync(this.props.userId);
     this.reset();
   }
 
   componentWillReceiveProps(newProps) {
-    if (
-      this.props.params.exerciseId !== newProps.params.exerciseId ||
-      this.props.instanceId !== newProps.instanceId
-    ) {
-      newProps.loadAsync(this.props.userId, newProps.instanceId);
+    if (this.props.params.exerciseId !== newProps.params.exerciseId) {
+      newProps.loadAsync(this.props.userId);
       this.reset();
     }
   }
@@ -288,7 +280,7 @@ class Exercise extends Component {
                 <ExerciseButtons {...exercise} />
               </Col>
             </Row>
-            {exercise.permissionHints.fork &&
+            {hasPermissions(exercise, 'fork') &&
               <Row>
                 <Col sm={12} className="em-margin-bottom">
                   <ForkExerciseForm
@@ -311,12 +303,12 @@ class Exercise extends Component {
                   <Box
                     title={formatMessage(messages.groupsBox)}
                     description={
-                      <p>
+                      <Alert bsStyle="info">
                         <FormattedMessage
                           id="app.exercise.assignToGroup"
-                          defaultMessage="You can assign this exercise to some of the groups you supervise."
+                          defaultMessage="You can assign this exercise to multiple groups you supervise. The exercise can also be assigned from within the groups individually. Please note that an exercise may be assigned multiple times and this form does not track existing assignments."
                         />
-                      </p>
+                      </Alert>
                     }
                     unlimitedHeight
                   >
@@ -351,7 +343,7 @@ class Exercise extends Component {
                 <ResourceRenderer resource={instance}>
                   {instance =>
                     <ExerciseGroups
-                      showButtons={exercise.permissionHints.update}
+                      showButtons={hasPermissions(exercise, 'update')}
                       groupsIds={exercise.groupsIds}
                       rootGroupId={instance.rootGroupId}
                       attachingGroupId={attachingGroupId}
@@ -371,7 +363,7 @@ class Exercise extends Component {
                       title={formatMessage(messages.referenceSolutionsBox)}
                       noPadding
                       footer={
-                        exercise.permissionHints.addReferenceSolution &&
+                        hasPermissions(exercise, 'addReferenceSolution') &&
                         <div className="text-center">
                           <Button
                             bsStyle={exercise.isBroken ? 'default' : 'success'}
@@ -381,7 +373,7 @@ class Exercise extends Component {
                             {exercise.isBroken
                               ? <FormattedMessage
                                   id="app.exercise.isBrokenShort"
-                                  defaultMessage="Exercise is broken ..."
+                                  defaultMessage="Exercise is broken..."
                                 />
                               : <FormattedMessage
                                   id="app.exercise.submitReferenceSoution"
@@ -482,7 +474,6 @@ Exercise.contextTypes = {
 
 Exercise.propTypes = {
   userId: PropTypes.string.isRequired,
-  instanceId: PropTypes.string,
   instance: ImmutablePropTypes.map,
   params: PropTypes.shape({
     exerciseId: PropTypes.string.isRequired
@@ -525,14 +516,13 @@ export default withLinks(
       const instanceId = selectedInstanceId(state);
       return {
         userId,
-        instanceId,
         instance: instanceSelector(state, instanceId),
         exercise: exerciseSelector(exerciseId)(state),
         forkedFrom: exerciseForkedFromSelector(exerciseId)(state),
         runtimeEnvironments: runtimeEnvironmentsSelector(state),
         submitting: isSubmitting(state),
         referenceSolutions: referenceSolutionsSelector(exerciseId)(state),
-        groups: groupsSelector(state),
+        groups: notArchivedGroupsSelector(state),
         assignableGroups: groupsUserCanAssignToSelector(state),
         groupsAccessor: groupDataAccessorSelector(state),
         firstDeadline: editMultiAssignFormSelector(state, 'firstDeadline'),
@@ -545,8 +535,8 @@ export default withLinks(
       };
     },
     (dispatch, { params: { exerciseId } }) => ({
-      loadAsync: (userId, instanceId) =>
-        Exercise.loadAsync({ exerciseId }, dispatch, { userId, instanceId }),
+      loadAsync: userId =>
+        Exercise.loadAsync({ exerciseId }, dispatch, { userId }),
       assignExercise: groupId => dispatch(assignExercise(groupId, exerciseId)),
       editAssignment: (id, body) => dispatch(editAssignment(id, body)),
       push: url => dispatch(push(url)),

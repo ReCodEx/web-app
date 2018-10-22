@@ -22,10 +22,10 @@ import { EMPTY_OBJ, getFirstItemInOrder } from '../../../helpers/common';
 const getLastSubmissionId = evaluations => {
   const evalArray = Object.values(evaluations)
     .map(x => x.data)
-    .filter(a => a.evaluation !== null);
+    .filter(a => a.submittedAt);
   const first = getFirstItemInOrder(
     evalArray,
-    (a, b) => b.evaluation.evaluatedAt - a.evaluation.evaluatedAt
+    (a, b) => b.submittedAt - a.submittedAt
   );
   return first && first.id;
 };
@@ -110,7 +110,7 @@ class ReferenceSolutionDetail extends Component {
           {evaluations &&
             <Col md={6} sm={12}>
               {!evaluation &&
-                (!evaluationsJS || Object.values(evaluationsJS).length === 0) &&
+                (!evaluations || evaluations.size === 0) &&
                 <div className="callout callout-danger">
                   <WarningIcon gapRight />
                   <FormattedMessage
@@ -120,8 +120,8 @@ class ReferenceSolutionDetail extends Component {
                 </div>}
 
               {!evaluation &&
-                evaluationsJS &&
-                Object.values(evaluationsJS).length > 0 &&
+                evaluations &&
+                evaluations.size > 0 &&
                 refreshSolutionEvaluations &&
                 <div className="callout callout-warning">
                   <table>

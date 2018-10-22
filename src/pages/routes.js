@@ -14,7 +14,6 @@ import Exercise from './Exercise';
 import Exercises from './Exercises';
 import EditExercise from './EditExercise';
 import EditExerciseConfig from './EditExerciseConfig';
-import EditExerciseSimpleConfig from './EditExerciseSimpleConfig';
 import EditExerciseLimits from './EditExerciseLimits';
 import GroupDetail from './GroupDetail';
 import GroupInfo from './GroupInfo';
@@ -42,6 +41,7 @@ import Pipeline from './Pipeline';
 import FAQ from './FAQ';
 import SubmissionFailures from './SubmissionFailures';
 import SisIntegration from './SisIntegration';
+import Archive from './Archive';
 
 import ChangePassword from './ChangePassword';
 import ResetPassword from './ResetPassword';
@@ -96,7 +96,7 @@ const createRoutes = getState => {
         <Route path="faq" component={FAQ} />
         <Route path="email-verification" component={EmailVerification} />
         <Route path="app" onEnter={requireAuth}>
-          <IndexRoute component={Dashboard} />
+          <IndexRoute component={Dashboard} customLoadGroups={true} />
           <Route path="assignment/:assignmentId">
             <IndexRoute component={Assignment} />
             <Route path="user/:userId" component={Assignment} />
@@ -114,10 +114,6 @@ const createRoutes = getState => {
               <IndexRoute component={Exercise} />
               <Route path="edit" component={EditExercise} />
               <Route path="edit-config" component={EditExerciseConfig} />
-              <Route
-                path="edit-simple-config"
-                component={EditExerciseSimpleConfig}
-              />
               <Route path="edit-limits" component={EditExerciseLimits} />
               <Route
                 path="reference-solution/:referenceSolutionId"
@@ -140,15 +136,12 @@ const createRoutes = getState => {
           <Route path="instance/:instanceId" component={Instance} />
           <Route path="users" component={Users} />
           <Route path="user/:userId">
-            <IndexRoute component={User} />
+            <IndexRoute component={User} customLoadGroups={true} />
             <Route path="edit" component={EditUser} />
           </Route>
-          <Route path="submission-failures">
-            <IndexRoute component={SubmissionFailures} />
-          </Route>
-          <Route path="sis-integration">
-            <IndexRoute component={SisIntegration} />
-          </Route>
+          <Route path="submission-failures" component={SubmissionFailures} />
+          <Route path="sis-integration" component={SisIntegration} />
+          <Route path="archive" component={Archive} customLoadGroups={true} />
         </Route>
         <Route path="forgotten-password">
           <IndexRoute component={ResetPassword} />

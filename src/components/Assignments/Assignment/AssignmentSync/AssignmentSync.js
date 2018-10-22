@@ -82,7 +82,6 @@ const getSyncMessages = syncInfo => {
   const res = [];
   for (const field in syncMessages) {
     if (!syncInfo[field]) {
-      // console.log('Field ' + field + ' not present.');
       continue;
     }
 

@@ -6,7 +6,7 @@ import { loggedInUserSelector } from './users';
 import {
   groupsSelector,
   filterGroups,
-  filterNonOrganizationalGroups
+  filterNonOrganizationalActiveGroups
 } from './groups';
 import { getAssignments } from './assignments';
 import { isReady } from '../helpers/resourceManager';
@@ -52,7 +52,7 @@ export const loggedInSupervisorOfSelector = createSelector(
 
 export const loggedInSupervisorOfNonOrganizationalSelector = createSelector(
   loggedInSupervisorOfSelector,
-  filterNonOrganizationalGroups
+  filterNonOrganizationalActiveGroups
 );
 
 export const loggedInStudentOfGroupsAssignmentsSelector = createSelector(

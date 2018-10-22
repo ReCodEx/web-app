@@ -75,6 +75,7 @@ import {
   transformTestsValues
 } from '../../helpers/exercise/tests';
 import {
+  onlySimpleEnvironments,
   getSimpleEnvironmentsInitValues,
   getFirstEnvironmentId,
   getEnvironmentInitValues,
@@ -477,7 +478,9 @@ class EditExerciseConfig extends Component {
                                     initialValues={getSimpleEnvironmentsInitValues(
                                       environmentConfigs
                                     )}
-                                    runtimeEnvironments={environments}
+                                    runtimeEnvironments={onlySimpleEnvironments(
+                                      environments
+                                    )}
                                     onSubmit={this.transformAndSendSimpleRuntimesValuesCreator(
                                       pipelines,
                                       environments,
@@ -516,6 +519,11 @@ class EditExerciseConfig extends Component {
                                     pipelines,
                                     getPipelines(config)
                                   )}
+                                  firstTimeSelection={
+                                    getFirstEnvironmentId(
+                                      environmentConfigs
+                                    ) === null
+                                  }
                                   readOnly={!hasPermissions(exercise, 'update')}
                                   onSubmit={this.transformAndSendRuntimesValuesCreator(
                                     tests,
@@ -526,7 +534,7 @@ class EditExerciseConfig extends Component {
                           </Col>
 
                           <Col lg={6}>
-                            {environmentConfigs.length === 1
+                            {environmentConfigs.length === 1 && tests.length > 0
                               ? <EditExercisePipelinesForm
                                   pipelines={pipelines}
                                   initialValues={getPipelinesInitialValues(
@@ -539,12 +547,37 @@ class EditExerciseConfig extends Component {
                                     environmentConfigs
                                   )}
                                 />
-                              : <p className="callout callout-warning">
-                                  <FormattedMessage
-                                    id="app.editExerciseConfig.noRuntimes"
-                                    defaultMessage="The runtime environment is not properly configured yet. A runtime must be selected before pipeline configuration becomes available."
-                                  />
-                                </p>}
+                              : <div className="callout callout-warning">
+                                  <h4>
+                                    <WarningIcon gapRight />
+                                    <FormattedMessage
+                                      id="app.editExercisePipelines.title"
+                                      defaultMessage="Selected Pipelines"
+                                    />
+                                  </h4>
+                                  <ul className="em-padding-left">
+                                    {environmentConfigs.length !== 1 &&
+                                      <li>
+                                        <FormattedMessage
+                                          id="app.editExerciseConfig.noRuntimes"
+                                          defaultMessage="The runtime environment is not properly configured yet."
+                                        />
+                                      </li>}
+                                    {tests.length === 0 &&
+                                      <li>
+                                        <FormattedMessage
+                                          id="app.editExerciseConfig.noTests"
+                                          defaultMessage="There are no tests yet."
+                                        />
+                                      </li>}
+                                  </ul>
+                                  <p>
+                                    <FormattedMessage
+                                      id="app.editExerciseConfig.cannotDisplayPipelinesForm"
+                                      defaultMessage="The tests and runtime environment must be correctly defined before the pipeline configuration becomes available."
+                                    />
+                                  </p>
+                                </div>}
 
                             {/* exercise.configurationType !== 'simpleExerciseConfig' &&
                   <Box
@@ -707,7 +740,11 @@ class EditExerciseConfig extends Component {
                                     </h4>
                                     <FormattedMessage
                                       id="app.editExerciseConfig.noTests"
-                                      defaultMessage="There are no tests yet. The form cannot be displayed until at least one test is created."
+                                      defaultMessage="There are no tests yet."
+                                    />
+                                    <FormattedMessage
+                                      id="app.editExerciseConfig.cannotDisplayConfigForm"
+                                      defaultMessage="The exercise configuration form cannot be displayed until at least one test is defined."
                                     />
                                   </div>}
                           </ResourceRenderer>

@@ -80,8 +80,8 @@ export default connect(
     loadFiles: () => dispatch(fetchSupplementaryFilesForExercise(exercise.id)),
     addFiles: files => dispatch(addSupplementaryFiles(exercise.id, files)),
     removeFile: id => dispatch(removeSupplementaryFile(exercise.id, id)),
-    downloadFile: (event, id) => {
-      event.preventDefault();
+    downloadFile: (ev, id) => {
+      ev.preventDefault();
       dispatch(downloadSupplementaryFile(id));
     },
     downloadArchive: e => {

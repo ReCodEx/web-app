@@ -9,7 +9,7 @@ import EditTestsTest from './EditTestsTest';
 import { CheckboxField } from '../Fields';
 import SubmitButton from '../SubmitButton';
 import Button from '../../widgets/FlatButton';
-import { RefreshIcon } from '../../icons';
+import { AddIcon, RefreshIcon } from '../../icons';
 
 class EditTestsForm extends Component {
   render() {
@@ -19,6 +19,7 @@ class EditTestsForm extends Component {
       submitting,
       handleSubmit,
       reset,
+      change,
       submitFailed,
       submitSucceeded,
       invalid,
@@ -36,6 +37,8 @@ class EditTestsForm extends Component {
           </Alert>}
 
         {!readOnly &&
+          formValues &&
+          formValues.tests.length > 0 &&
           <Field
             name="isUniform"
             component={CheckboxField}
@@ -57,6 +60,30 @@ class EditTestsForm extends Component {
 
         {!readOnly &&
           <div className="text-center">
+            {formValues &&
+              formValues.tests.length < 99 &&
+              <Button
+                onClick={() =>
+                  change('tests', [
+                    ...formValues.tests,
+                    {
+                      name:
+                        'Test ' +
+                        (formValues.tests.length + 1)
+                          .toString()
+                          .padStart(2, '0'),
+                      weight: '100'
+                    }
+                  ])}
+                bsStyle={'primary'}
+              >
+                <AddIcon gapRight />
+                <FormattedMessage
+                  id="app.editTestsTest.add"
+                  defaultMessage="Add Test"
+                />
+              </Button>}
+
             {dirty &&
               !submitting &&
               !submitSucceeded &&
@@ -90,7 +117,7 @@ class EditTestsForm extends Component {
                 submitting: (
                   <FormattedMessage
                     id="app.editTestsForm.submitting"
-                    defaultMessage="Saving Tests ..."
+                    defaultMessage="Saving Tests..."
                   />
                 ),
                 success: (
@@ -111,6 +138,7 @@ EditTestsForm.propTypes = {
   readOnly: PropTypes.bool,
   values: PropTypes.array,
   reset: PropTypes.func.isRequired,
+  change: PropTypes.func.isRequired,
   handleSubmit: PropTypes.func.isRequired,
   dirty: PropTypes.bool,
   submitting: PropTypes.bool,

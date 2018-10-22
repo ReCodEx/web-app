@@ -22,8 +22,18 @@ export const FailureIcon = props =>
   <strong className="text-danger">
     <Icon {...props} icon="times" />
   </strong>;
-export const GroupIcon = ({ organizational = false, ...props }) =>
-  <Icon {...props} icon={organizational ? 'sitemap' : 'users'} />;
+export const GroupIcon = ({
+  organizational = false,
+  archived = false,
+  ...props
+}) =>
+  <Icon
+    {...props}
+    icon={organizational ? 'sitemap' : archived ? 'archive' : 'users'}
+  />;
+
+export const ArchiveGroupIcon = ({ archived = false, ...props }) =>
+  <Icon {...props} icon={archived ? 'dolly' : 'archive'} />;
 export const InfoIcon = props => <Icon {...props} icon="info-circle" />;
 export const LoadingIcon = props =>
   <Icon {...props} icon="spinner" pulse style={{ opacity: 0.8 }} />;
@@ -66,7 +76,12 @@ export const WarningIcon = props =>
   <Icon {...props} icon="exclamation-triangle" />;
 
 GroupIcon.propTypes = {
-  organizational: PropTypes.bool
+  organizational: PropTypes.bool,
+  archived: PropTypes.bool
+};
+
+ArchiveGroupIcon.propTypes = {
+  archived: PropTypes.bool
 };
 
 SortedIcon.propTypes = {

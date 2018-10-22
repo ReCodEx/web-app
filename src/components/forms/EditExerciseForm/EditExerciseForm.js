@@ -50,8 +50,7 @@ const EditExerciseForm = ({
   invalid,
   asyncValidating,
   localizedTextsLocales = [],
-  intl: { formatMessage },
-  links: { EXERCISE_EDIT_SIMPLE_CONFIG_URI_FACTORY }
+  intl: { formatMessage }
 }) =>
   <FormBox
     title={
@@ -81,7 +80,7 @@ const EditExerciseForm = ({
             submitting: (
               <FormattedMessage
                 id="generic.saving"
-                defaultMessage="Saving ..."
+                defaultMessage="Saving..."
               />
             ),
             success: (
@@ -90,7 +89,7 @@ const EditExerciseForm = ({
             validating: (
               <FormattedMessage
                 id="generic.validating"
-                defaultMessage="Validating ..."
+                defaultMessage="Validating..."
               />
             )
           }}

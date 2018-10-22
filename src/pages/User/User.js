@@ -20,7 +20,7 @@ import GroupsName from '../../components/Groups/GroupsName';
 
 import { fetchAssignmentsForGroup } from '../../redux/modules/assignments';
 import { fetchUserIfNeeded } from '../../redux/modules/users';
-import { fetchInstanceGroups } from '../../redux/modules/groups';
+import { fetchAllGroups } from '../../redux/modules/groups';
 import { fetchGroupsStatsIfNeeded } from '../../redux/modules/stats';
 import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments';
 import { takeOver } from '../../redux/modules/auth';
@@ -37,6 +37,7 @@ import {
 } from '../../redux/selectors/auth';
 import { createGroupsStatsSelector } from '../../redux/selectors/stats';
 import {
+  groupSelector,
   groupsAssignmentsSelector,
   studentOfSelector2,
   supervisorOfSelector2,
@@ -45,29 +46,18 @@ import {
 import { assignmentEnvironmentsSelector } from '../../redux/selectors/assignments';
 
 import { InfoIcon, EditIcon, TransferIcon } from '../../components/icons';
+import { safeGet } from '../../helpers/common';
 import withLinks from '../../helpers/withLinks';
 
 class User extends Component {
-  componentWillMount = () =>
-    this.props.loadAsync(
-      this.props.loggedInUserId,
-      this.props.isAdmin,
-      this.props.instanceId
-    );
+  componentWillMount = () => this.props.loadAsync();
 
   componentWillReceiveProps = newProps => {
     if (
       this.props.params.userId !== newProps.params.userId ||
-      this.props.instanceId !== newProps.instanceId ||
-      this.props.commonGroups.length > newProps.commonGroups.length ||
-      this.props.loggedInUserId !== newProps.loggedInUserId ||
-      this.props.isAdmin !== newProps.isAdmin
+      this.props.loggedInUserId !== newProps.loggedInUserId
     ) {
-      newProps.loadAsync(
-        newProps.loggedInUserId,
-        newProps.isAdmin,
-        newProps.instanceId
-      );
+      newProps.loadAsync();
     }
   };
 
@@ -76,39 +66,41 @@ class User extends Component {
    * to load the groups and necessary data for the intersection
    * of user's groups of which the current user is a supervisor.
    */
-  static loadAsync = (
-    { userId },
-    dispatch,
-    { userId: loggedInUserId, isSuperadmin, instanceId }
-  ) =>
+  static loadAsync = ({ userId }, dispatch) =>
     Promise.all([
       dispatch(fetchRuntimeEnvironments()),
-      dispatch(fetchUserIfNeeded(userId))
-        .then(() => dispatch(fetchUserIfNeeded(loggedInUserId)))
-        .then(() =>
-          dispatch(fetchInstanceGroups(instanceId)).then(groups =>
+      dispatch(fetchAllGroups()).then(() =>
+        dispatch(fetchUserIfNeeded(userId)).then(({ value: user }) => {
+          const studentOf = safeGet(
+            user,
+            ['privateData', 'groups', 'studentOf'],
+            []
+          );
+          const supervisorOf = safeGet(
+            user,
+            ['privateData', 'groups', 'supervisorOf'],
+            []
+          );
+          dispatch((dispatch, getState) =>
             Promise.all(
-              groups.value.map(group => {
-                if (
-                  group.privateData &&
-                  group.privateData.students.indexOf(userId) >= 0 &&
-                  (isSuperadmin ||
-                    userId === loggedInUserId ||
-                    group.privateData.supervisors.indexOf(loggedInUserId) >=
-                      0 ||
-                    group.privateData.admins.indexOf(loggedInUserId) >= 0)
-                ) {
-                  return Promise.all([
-                    dispatch(fetchAssignmentsForGroup(group.id)),
-                    dispatch(fetchGroupsStatsIfNeeded(group.id))
-                  ]);
-                } else {
-                  return Promise.resolve();
-                }
-              })
+              [...studentOf, ...supervisorOf]
+                .filter(groupId => {
+                  const group = groupSelector(groupId)(getState());
+                  return (
+                    group &&
+                    group.getIn(['data', 'permissionHints', 'viewStats'])
+                  );
+                })
+                .map(groupId =>
+                  Promise.all([
+                    dispatch(fetchAssignmentsForGroup(groupId)),
+                    dispatch(fetchGroupsStatsIfNeeded(groupId))
+                  ])
+                )
             )
-          )
-        )
+          );
+        })
+      )
     ]);
 
   render() {
@@ -394,8 +386,7 @@ export default withLinks(
       };
     },
     (dispatch, { params }) => ({
-      loadAsync: (userId, isSuperadmin, instanceId) =>
-        User.loadAsync(params, dispatch, { userId, isSuperadmin, instanceId }),
+      loadAsync: () => User.loadAsync(params, dispatch),
       takeOver: userId => dispatch(takeOver(userId))
     })
   )(User)

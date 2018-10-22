@@ -48,7 +48,7 @@ class MultiAssignForm extends Component {
     ) {
       const { groupsAccessor, intl: { locale } } = newProps;
       this.allGroups = newProps.groups
-        .filter(g => !g.organizational)
+        .filter(g => !g.organizational && !g.archived)
         .sort((a, b) =>
           getGroupCanonicalLocalizedName(
             a,
@@ -90,6 +90,7 @@ class MultiAssignForm extends Component {
   render() {
     const {
       error,
+      dirty,
       handleSubmit,
       submitting,
       submitFailed: hasFailed,
@@ -128,40 +129,46 @@ class MultiAssignForm extends Component {
             />
           )}
 
-          {this.allGroups.length !== this.myGroups.length &&
-            <Button
-              bsSize="xs"
-              bsStyle="primary"
-              className="btn-flat"
-              onClick={this.toggleOpenState}
-            >
-              {this.state.open
-                ? <span>
-                    <Icon icon="minus-square" gapRight />
-                    <FormattedMessage
-                      id="app.multiAssignForm.showMyGroups"
-                      defaultMessage="Show My Groups Only"
-                    />
-                  </span>
-                : <span>
-                    <Icon icon="plus-square" gapRight />
-                    <FormattedMessage
-                      id="app.multiAssignForm.showAllGroups"
-                      defaultMessage="Show All Groups"
-                    />
-                  </span>}
-            </Button>}
-
+          <div className="text-center">
+            {this.allGroups.length !== this.myGroups.length &&
+              <Button
+                bsSize="xs"
+                bsStyle="primary"
+                className="btn-flat"
+                onClick={this.toggleOpenState}
+              >
+                {this.state.open
+                  ? <span>
+                      <Icon icon="minus-square" gapRight />
+                      <FormattedMessage
+                        id="app.multiAssignForm.showMyGroups"
+                        defaultMessage="Show My Groups Only"
+                      />
+                    </span>
+                  : <span>
+                      <Icon icon="plus-square" gapRight />
+                      <FormattedMessage
+                        id="app.multiAssignForm.showAllGroups"
+                        defaultMessage="Show All Groups"
+                      />
+                    </span>}
+              </Button>}
+          </div>
           <hr />
 
           <Field
             name="firstDeadline"
             component={DatetimeField}
             label={
-              <FormattedMessage
-                id="app.multiAssignForm.firstDeadline"
-                defaultMessage="First deadline:"
-              />
+              allowSecondDeadline
+                ? <FormattedMessage
+                    id="app.multiAssignForm.firstDeadline"
+                    defaultMessage="First deadline:"
+                  />
+                : <FormattedMessage
+                    id="app.multiAssignForm.deadline"
+                    defaultMessage="Deadline:"
+                  />
             }
           />
 
@@ -169,10 +176,15 @@ class MultiAssignForm extends Component {
             name="maxPointsBeforeFirstDeadline"
             component={TextField}
             label={
-              <FormattedMessage
-                id="app.multiAssignForm.maxPointsBeforeFirstDeadline"
-                defaultMessage="Maximum amount of points received when submitted before the deadline:"
-              />
+              allowSecondDeadline
+                ? <FormattedMessage
+                    id="app.multiAssignForm.maxPointsBeforeFirstDeadline"
+                    defaultMessage="Maximal amount of points (before the first deadline):"
+                  />
+                : <FormattedMessage
+                    id="app.multiAssignForm.maxPoints"
+                    defaultMessage="Maximal amount of points:"
+                  />
             }
           />
 
@@ -183,7 +195,7 @@ class MultiAssignForm extends Component {
             label={
               <FormattedMessage
                 id="app.multiAssignForm.allowSecondDeadline"
-                defaultMessage="Allow second deadline."
+                defaultMessage="Second deadline enabled"
               />
             }
           />
@@ -219,7 +231,7 @@ class MultiAssignForm extends Component {
               label={
                 <FormattedMessage
                   id="app.multiAssignForm.maxPointsBeforeSecondDeadline"
-                  defaultMessage="Maximum amount of points received when submitted before the second deadline:"
+                  defaultMessage="Maximal amount of points (before the second deadline):"
                 />
               }
             />}
@@ -230,7 +242,7 @@ class MultiAssignForm extends Component {
             label={
               <FormattedMessage
                 id="app.multiAssignForm.submissionsCountLimit"
-                defaultMessage="Submissions count limit:"
+                defaultMessage="Maximal number of submissions:"
               />
             }
           />
@@ -242,7 +254,7 @@ class MultiAssignForm extends Component {
             label={
               <FormattedMessage
                 id="app.multiAssignForm.canViewLimitRatios"
-                defaultMessage="Visibility of memory and time ratios"
+                defaultMessage="Students may see relative time and memory consumption of their solutions"
               />
             }
           />
@@ -253,7 +265,7 @@ class MultiAssignForm extends Component {
             label={
               <FormattedMessage
                 id="app.multiAssignForm.pointsPercentualThreshold"
-                defaultMessage="Minimum percentage of points which submissions have to gain:"
+                defaultMessage="Minimal percentual threshold of correctness:"
               />
             }
           />
@@ -265,7 +277,7 @@ class MultiAssignForm extends Component {
             label={
               <FormattedMessage
                 id="app.multiAssignForm.isBonus"
-                defaultMessage="Assignment is bonus one and points from it are not included in students overall score"
+                defaultMessage="Bonus assignment"
               />
             }
           />
@@ -315,6 +327,7 @@ class MultiAssignForm extends Component {
           </Grid>
 
           {error &&
+            dirty &&
             <Alert bsStyle="danger">
               {error}
             </Alert>}
@@ -337,7 +350,7 @@ class MultiAssignForm extends Component {
                 submitting: (
                   <FormattedMessage
                     id="app.multiAssignForm.submitting"
-                    defaultMessage="Assigning Exercise ..."
+                    defaultMessage="Assigning Exercise..."
                   />
                 ),
                 success: (
@@ -424,6 +437,7 @@ MultiAssignForm.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
   error: PropTypes.any,
+  dirty: PropTypes.bool.isRequired,
   submitting: PropTypes.bool,
   submitFailed: PropTypes.bool,
   submitSucceeded: PropTypes.bool,
@@ -474,7 +488,7 @@ const validate = (
     Object.keys(groups).length === 0 ||
     Object.values(groups).filter(val => val).length < 1
   ) {
-    errors['_error'] = (
+    errors._error = (
       <FormattedMessage
         id="app.multiAssignForm.validation.emptyGroups"
         defaultMessage="Please select one or more groups to assign exercise."
@@ -491,7 +505,7 @@ const validate = (
   );
 
   if (!isPositiveInteger(submissionsCountLimit)) {
-    errors['submissionsCountLimit'] = (
+    errors.submissionsCountLimit = (
       <FormattedMessage
         id="app.multiAssignForm.validation.submissionsCountLimit"
         defaultMessage="Please fill the submissions count limit field with a positive integer."
@@ -500,7 +514,7 @@ const validate = (
   }
 
   if (!isNonNegativeInteger(maxPointsBeforeFirstDeadline)) {
-    errors['maxPointsBeforeFirstDeadline'] = (
+    errors.maxPointsBeforeFirstDeadline = (
       <FormattedMessage
         id="app.multiAssignForm.validation.maxPointsBeforeFirstDeadline"
         defaultMessage="Please fill the maximum number of points received when submitted before the deadline with a nonnegative integer."
@@ -512,7 +526,7 @@ const validate = (
     allowSecondDeadline &&
     !isNonNegativeInteger(maxPointsBeforeSecondDeadline)
   ) {
-    errors['maxPointsBeforeSecondDeadline'] = (
+    errors.maxPointsBeforeSecondDeadline = (
       <FormattedMessage
         id="app.multiAssignForm.validation.maxPointsBeforeSecondDeadline"
         defaultMessage="Please fill the number of maximum points received after the first and before the second deadline with a nonnegative integer or remove the second deadline."
@@ -526,14 +540,14 @@ const validate = (
       pointsPercentualThreshold.toString() !==
       Math.round(numericThreshold).toString()
     ) {
-      errors['pointsPercentualThreshold'] = (
+      errors.pointsPercentualThreshold = (
         <FormattedMessage
           id="app.multiAssignForm.validation.pointsPercentualThresholdMustBeInteger"
           defaultMessage="Points percentual threshold must be an integer."
         />
       );
     } else if (numericThreshold < 0 || numericThreshold > 100) {
-      errors['pointsPercentualThreshold'] = (
+      errors.pointsPercentualThreshold = (
         <FormattedMessage
           id="app.multiAssignForm.validation.pointsPercentualThresholdBetweenZeroHundred"
           defaultMessage="Points percentual threshold must be an integer in between 0 and 100."
@@ -546,7 +560,7 @@ const validate = (
     key => enabledRuntime[key] === false
   );
   if (formDisabledRuntimes.length === runtimeEnvironments.length) {
-    errors['_error'] = (
+    errors._error = (
       <FormattedMessage
         id="app.multiAssignForm.validation.allRuntimesDisabled"
         defaultMessage="You cannot disable all available runtime environments."

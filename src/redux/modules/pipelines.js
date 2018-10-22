@@ -1,4 +1,5 @@
 import { handleActions } from 'redux-actions';
+import { Map, List } from 'immutable';
 import factory, {
   initialState,
   createRecord,
@@ -83,7 +84,7 @@ const reducer = handleActions(
       { payload: files, meta: { pipelineId } }
     ) =>
       state.hasIn(['resources', pipelineId])
-        ? addFiles(state, pipelineId, files, 'supplementaryFilesIds')
+        ? updateFiles(state, pipelineId, files, 'supplementaryFilesIds')
         : state,
 
     [additionalActionTypes.FORK_PIPELINE_PENDING]: (
@@ -142,9 +143,9 @@ const reducer = handleActions(
   initialState
 );
 
-const addFiles = (state, pipelineId, files, field) =>
+const updateFiles = (state, pipelineId, files, field) =>
   state.updateIn(['resources', pipelineId, 'data', field], list =>
-    list.push(...files.map(file => file.id))
+    List(files.map(file => file.id))
   );
 
 export default reducer;

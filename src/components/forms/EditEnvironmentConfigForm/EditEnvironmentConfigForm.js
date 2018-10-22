@@ -23,10 +23,7 @@ class EditEnvironmentConfigForm extends Component {
   setDefaultVariables = () => {
     const { defaultVariables = null, change } = this.props;
     if (defaultVariables) {
-      change(
-        'variables',
-        defaultVariables.map(({ name, value }) => ({ name, value }))
-      );
+      change('variables', defaultVariables);
     }
   };
 
@@ -34,6 +31,7 @@ class EditEnvironmentConfigForm extends Component {
     const {
       runtimeEnvironments,
       possibleVariables = null,
+      firstTimeSelection = false,
       selectedRuntimeId,
       hasDefaultVariables,
       dirty,
@@ -118,6 +116,7 @@ class EditEnvironmentConfigForm extends Component {
               name: longName
             }))
             .sort((a, b) => a.name.localeCompare(b.name, locale))}
+          addEmptyOption={firstTimeSelection}
         />
 
         {Boolean(selectedRuntimeId) &&
@@ -126,24 +125,12 @@ class EditEnvironmentConfigForm extends Component {
               <InfoIcon gapRight />
               <FormattedHTMLMessage
                 id="app.editEnvironmentConfig.variablesInfo"
-                defaultMessage="These variables cover the submitted files and how they are associated with pipeline inputs. Each value may hold a file name or a wildcard (e.g., <code>solution.cpp</code>, <code>*.py</code>, <code>my-*.\{c,h\}</code>). Only variables of type <code>file[]</code> are allowed here."
+                defaultMessage="These variables cover the submitted files and how they are associated with pipeline inputs. Each value may hold a file name or a wildcard (e.g., <code>solution.cpp</code>, <code>*.py</code>, <code>my-*.\{c,h\}</code>). Only <code>file</code> and <code>file[]</code> variables are allowed here."
               />
             </p>
             <FieldArray
               name="variables"
               component={EditEnvironmentConfigVariables}
-              leftLabel={
-                <FormattedMessage
-                  id="app.editEnvironmentConfig.variableName"
-                  defaultMessage="Source Files Variable:"
-                />
-              }
-              rightLabel={
-                <FormattedMessage
-                  id="app.editEnvironmentConfig.variableValue"
-                  defaultMessage="Wildcard Pattern:"
-                />
-              }
             />
           </React.Fragment>}
 
@@ -181,6 +168,7 @@ EditEnvironmentConfigForm.propTypes = {
   selectedPipelines: PropTypes.array,
   runtimeEnvironments: PropTypes.array.isRequired,
   possibleVariables: PropTypes.object,
+  firstTimeSelection: PropTypes.bool,
   readOnly: PropTypes.bool,
   selectedRuntimeId: PropTypes.string,
   defaultVariables: PropTypes.array,
@@ -198,8 +186,17 @@ EditEnvironmentConfigForm.propTypes = {
   intl: intlShape.isRequired
 };
 
-const validate = ({ variables }) => {
+const validate = ({ environmentId, variables }) => {
   const errors = {};
+
+  if (!environmentId) {
+    errors.environmentId = (
+      <FormattedMessage
+        id="app.editEnvironmentConfig.validateEnvironment"
+        defaultMessage="A runtime environment must be selected."
+      />
+    );
+  }
 
   // Check variable names.
   const index = {};
@@ -281,18 +278,18 @@ const warn = ({ variables }, { possibleVariables = null }) => {
 export default connect((state, { runtimeEnvironments }) => {
   const values = getFormValues('editEnvironmentConfig')(state);
   const selectedRuntimeId = values && values.environmentId;
-  const defaultVariables =
-    selectedRuntimeId &&
-    safeGet(runtimeEnvironments, [
-      ({ id }) => id === selectedRuntimeId,
-      'defaultVariables'
-    ]);
+  const defaultVariables = selectedRuntimeId
+    ? safeGet(runtimeEnvironments, [
+        ({ id }) => id === selectedRuntimeId,
+        'defaultVariables'
+      ])
+    : null;
 
   return {
     selectedRuntimeId,
     defaultVariables,
     hasDefaultVariables:
-      defaultVariables &&
+      Boolean(defaultVariables) &&
       compareVariablesForEquality(values.variables, defaultVariables)
   };
 })(

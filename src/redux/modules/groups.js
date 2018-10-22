@@ -9,6 +9,9 @@ import createRecord from '../helpers/resourceManager/recordFactory';
 import { resourceStatus } from '../helpers/resourceManager/status';
 import { actionTypes as assignmentsActionTypes } from './assignments';
 import { actionTypes as sisSupervisedCoursesActionTypes } from './sisSupervisedCourses';
+import { selectedInstanceId } from '../selectors/auth';
+
+import { objectMap } from '../../helpers/common';
 
 const resourceName = 'groups';
 const { actions, actionTypes, reduceActions } = factory({ resourceName });
@@ -51,13 +54,50 @@ export const additionalActionTypes = {
   SET_ORGANIZATIONAL: 'recodex/groups/SET_ORGANIZATIONAL',
   SET_ORGANIZATIONAL_PENDING: 'recodex/groups/SET_ORGANIZATIONAL_PENDING',
   SET_ORGANIZATIONAL_FULFILLED: 'recodex/groups/SET_ORGANIZATIONAL_FULFILLED',
-  SET_ORGANIZATIONAL_REJECTED: 'recodex/groups/SET_ORGANIZATIONAL_REJECTED'
+  SET_ORGANIZATIONAL_REJECTED: 'recodex/groups/SET_ORGANIZATIONAL_REJECTED',
+  SET_ARCHIVED: 'recodex/groups/SET_ARCHIVED',
+  SET_ARCHIVED_PENDING: 'recodex/groups/SET_ARCHIVED_PENDING',
+  SET_ARCHIVED_FULFILLED: 'recodex/groups/SET_ARCHIVED_FULFILLED',
+  SET_ARCHIVED_REJECTED: 'recodex/groups/SET_ARCHIVED_REJECTED'
 };
 
 export const loadGroup = actions.pushResource;
 export const fetchGroupsIfNeeded = actions.fetchIfNeeded;
 export const fetchGroup = actions.fetchResource;
 export const fetchGroupIfNeeded = actions.fetchOneIfNeeded;
+
+const prepareFetchGroupsParams = params => {
+  const known = {
+    instanceId: null,
+    ancestors: false,
+    search: null,
+    archived: false,
+    onlyArchived: false,
+    archivedAgeLimit: null
+  };
+  const res = { ancestors: true };
+  if (params) {
+    for (const key in known) {
+      if (params[key] !== undefined && params[key] !== known[key]) {
+        res[key] = params[key];
+      }
+    }
+  }
+  return objectMap(res, val => (typeof val === 'boolean' ? Number(val) : val));
+};
+
+export const fetchAllGroups = params => (dispatch, getState) =>
+  dispatch(
+    actions.fetchMany({
+      endpoint: '/groups',
+      query: prepareFetchGroupsParams({
+        instanceId: selectedInstanceId(getState()),
+        ...params
+      })
+    })
+  );
+
+// TODO fetchGroupsIfNeeded would be nice to have ...
 
 export const validateAddGroup = (name, instanceId, parentGroupId = null) =>
   createApiAction({
@@ -69,33 +109,6 @@ export const validateAddGroup = (name, instanceId, parentGroupId = null) =>
         ? { name, instanceId }
         : { name, instanceId, parentGroupId }
   });
-
-export const fetchSubgroups = groupId =>
-  actions.fetchMany({
-    endpoint: `/groups/${groupId}/subgroups`,
-    meta: { groupId }
-  });
-
-export const fetchUsersGroups = userId =>
-  createApiAction({
-    type: additionalActionTypes.LOAD_USERS_GROUPS,
-    endpoint: `/users/${userId}/groups`,
-    method: 'GET',
-    meta: { userId }
-  });
-
-export const fetchInstanceGroups = instanceId =>
-  actions.fetchMany({
-    endpoint: `/instances/${instanceId}/groups`,
-    meta: { instanceId }
-  });
-
-export const fetchUsersGroupsIfNeeded = userId => (dispatch, getState) => {
-  const user = getState().users.getIn(['resources', userId]);
-  if (user) {
-    dispatch(fetchUsersGroups(userId));
-  }
-};
 
 export const createGroup = actions.addResource;
 export const editGroup = actions.updateResource;
@@ -183,6 +196,15 @@ export const setOrganizational = (groupId, organizational) =>
     method: 'POST',
     endpoint: `/groups/${groupId}/organizational`,
     body: { value: organizational },
+    meta: { groupId }
+  });
+
+export const setArchived = (groupId, archived) =>
+  createApiAction({
+    type: additionalActionTypes.SET_ARCHIVED,
+    method: 'POST',
+    endpoint: `/groups/${groupId}/archived`,
+    body: { value: archived },
     meta: { groupId }
   });
 
@@ -330,6 +352,24 @@ const reducer = handleActions(
       state,
       { payload, meta: { groupId } }
     ) => state.deleteIn(['resources', groupId, 'pending-organizational']),
+
+    [additionalActionTypes.SET_ARCHIVED_PENDING]: (
+      state,
+      { payload, meta: { groupId } }
+    ) => state.setIn(['resources', groupId, 'pending-archived'], true),
+
+    [additionalActionTypes.SET_ARCHIVED_FULFILLED]: (
+      state,
+      { payload, meta: { groupId } }
+    ) =>
+      state
+        .deleteIn(['resources', groupId, 'pending-archived'])
+        .setIn(['resources', groupId, 'data'], fromJS(payload)),
+
+    [additionalActionTypes.SET_ARCHIVED_REJECTED]: (
+      state,
+      { payload, meta: { groupId } }
+    ) => state.deleteIn(['resources', groupId, 'pending-archived']),
 
     [additionalActionTypes.LOAD_USERS_GROUPS_FULFILLED]: (
       state,

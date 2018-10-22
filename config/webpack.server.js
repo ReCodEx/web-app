@@ -1,20 +1,9 @@
 const path = require('path');
-const fs = require('fs');
 
 // load variables from .env
 require('dotenv').config();
 
 const clientConfig = require('./webpack.config.js');
-
-var nodeModules = {};
-fs
-  .readdirSync('node_modules')
-  .filter(function(x) {
-    return ['.bin'].indexOf(x) === -1;
-  })
-  .forEach(function(mod) {
-    nodeModules[mod] = 'commonjs ' + mod;
-  });
 
 module.exports = {
   entry: path.join(__dirname, '..', 'src/server.js'),
@@ -27,7 +16,9 @@ module.exports = {
       moment: 'moment/moment.js'
     }
   },
+  optimization: clientConfig.optimization,
+  target: 'node',
+  mode: process.env.NODE_ENV,
   module: clientConfig.module,
-  externals: nodeModules,
   plugins: clientConfig.plugins
 };

@@ -15,7 +15,7 @@ const Posting = ({ right }) =>
     <LoadingIcon gapRight />
     <FormattedMessage
       id="app.comments.publishing"
-      defaultMessage="Publishing ..."
+      defaultMessage="Publishing..."
     />
   </span>;
 

@@ -17,7 +17,9 @@ export const actionTypes = {
   ADD_FILES: 'recodex/pipelineFiles/ADD_FILES',
   ADD_FILES_PENDING: 'recodex/pipelineFiles/ADD_FILES_PENDING',
   ADD_FILES_FULFILLED: 'recodex/pipelineFiles/ADD_FILES_FULFILLED',
-  ADD_FILES_REJECTED: 'recodex/pipelineFiles/ADD_FILES_REJECTED'
+  ADD_FILES_REJECTED: 'recodex/pipelineFiles/ADD_FILES_REJECTED',
+  REMOVE_FILE: 'recodex/pipelineFiles/REMOVE_FILE',
+  REMOVE_FILE_FULFILLED: 'recodex/pipelineFiles/REMOVE_FILE_FULFILLED'
 };
 
 export const fetchSupplementaryFilesForPipeline = pipelineId =>
@@ -43,6 +45,14 @@ export const addPipelineFiles = (pipelineId, files) =>
     uploadFiles: true
   });
 
+export const removePipelineFile = (pipelineId, fileId) =>
+  createApiAction({
+    type: actionTypes.REMOVE_FILE,
+    endpoint: `/pipelines/${pipelineId}/supplementary-files/${fileId}`,
+    method: 'DELETE',
+    meta: { pipelineId, fileId }
+  });
+
 /**
  * Reducer
  */
@@ -57,7 +67,10 @@ const reducer = handleActions(
             createRecord({ data, state: resourceStatus.FULFILLED })
           ),
         state
-      )
+      ),
+
+    [actionTypes.REMOVE_FILE_FULFILLED]: (state, { meta: { fileId } }) =>
+      state.deleteIn(['resources', fileId])
   }),
   initialState
 );

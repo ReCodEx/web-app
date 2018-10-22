@@ -22,8 +22,6 @@ const EditUserProfileForm = ({
   dirty,
   submitFailed = false,
   submitSucceeded = false,
-  asyncValidate,
-  pristine,
   asyncValidating,
   invalid,
   allowChangePassword,
@@ -58,7 +56,7 @@ const EditUserProfileForm = ({
             submitting: (
               <FormattedMessage
                 id="generic.saving"
-                defaultMessage="Saving ..."
+                defaultMessage="Saving..."
               />
             ),
             success: (
@@ -379,6 +377,7 @@ const asyncValidate = ({ email, password = '' }, dispatch) => {
       .catch(errors => reject(errors))
   );
 };
+
 export default reduxForm({
   form: 'edit-user-profile',
   validate,

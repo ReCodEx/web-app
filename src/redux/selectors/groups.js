@@ -17,11 +17,21 @@ const getParam = (state, id) => id;
 
 export const groupsSelector = state => state.groups.get('resources');
 
+export const notArchivedGroupsSelector = state =>
+  state.groups
+    .get('resources')
+    .filter(isReady)
+    .filter(group => group.getIn(['data', 'archived']) === false);
+
 export const filterGroups = (ids, groups) =>
   groups.filter(isReady).filter(group => ids.contains(getId(group)));
 
-export const filterNonOrganizationalGroups = groups =>
-  groups.filter(group => !group.getIn(['data', 'organizational'], false));
+export const filterNonOrganizationalActiveGroups = groups =>
+  groups.filter(
+    group =>
+      !group.getIn(['data', 'organizational'], false) &&
+      !group.getIn(['data', 'archived'], false)
+  );
 
 export const groupSelector = id =>
   createSelector(groupsSelector, groups => groups.get(id));
@@ -100,7 +110,7 @@ export const groupsUserCanEditSelector = createSelector(
 
 export const groupsUserCanAssignToSelector = createSelector(
   groupsUserCanEditSelector,
-  filterNonOrganizationalGroups
+  filterNonOrganizationalActiveGroups
 );
 
 const usersOfGroup = (type, groupId) =>
@@ -146,4 +156,10 @@ export const groupOrganizationalPendingChange = id =>
   createSelector(
     groupsSelector,
     groups => groups && groups.getIn([id, 'pending-organizational'], false)
+  );
+
+export const groupArchivedPendingChange = id =>
+  createSelector(
+    groupsSelector,
+    groups => groups && groups.getIn([id, 'pending-archived'], false)
   );

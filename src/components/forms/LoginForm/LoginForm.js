@@ -54,7 +54,7 @@ const LoginForm = ({
                 <LoadingIcon />{' '}
                 <FormattedMessage
                   id="app.loginForm.processing"
-                  defaultMessage="Signing in ..."
+                  defaultMessage="Signing in..."
                 />
               </span>}
         </Button>
