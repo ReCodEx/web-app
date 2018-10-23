@@ -7,6 +7,7 @@ import {
   isLoggedAsSuperAdmin
 } from './users';
 import { getAssignments } from './assignments';
+import { getShadowAssignments } from './shadowAssignments';
 import { isReady, getId, getJsData } from '../helpers/resourceManager';
 import { loggedInUserIdSelector } from './auth';
 
@@ -133,6 +134,14 @@ export const groupsAssignmentsSelector = createSelector(
     groups
       .getIn([groupId, 'data', 'privateData', 'assignments'], EMPTY_LIST)
       .map(id => assignments.getIn(['resources', id]))
+);
+
+export const groupsShadowAssignmentsSelector = createSelector(
+  [groupsSelector, getShadowAssignments, getParam],
+  (groups, shadowAssignments, groupId) =>
+    groups
+      .getIn([groupId, 'data', 'privateData', 'shadowAssignments'], EMPTY_LIST)
+      .map(id => shadowAssignments.getIn(['resources', id]))
 );
 
 const getGroupParentIds = (id, groups) => {

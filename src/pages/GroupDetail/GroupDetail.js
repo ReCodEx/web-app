@@ -16,6 +16,7 @@ import {
 import HierarchyLine from '../../components/Groups/HierarchyLine';
 import { AddIcon, BanIcon } from '../../components/icons';
 import AssignmentsTable from '../../components/Assignments/Assignment/AssignmentsTable';
+import ShadowAssignmentsTable from '../../components/Assignments/ShadowAssignment/ShadowAssignmentsTable';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import AddStudent from '../../components/Groups/AddStudent';
 import LeaveJoinGroupButtonContainer from '../../containers/LeaveJoinGroupButtonContainer';
@@ -43,7 +44,8 @@ import {
 import {
   groupSelector,
   groupsSelector,
-  groupsAssignmentsSelector
+  groupsAssignmentsSelector,
+  groupsShadowAssignmentsSelector
 } from '../../redux/selectors/groups';
 import {
   getStatusesForLoggedUser,
@@ -172,6 +174,7 @@ class GroupDetail extends Component {
       students,
       loggedUser,
       assignments = EMPTY_LIST,
+      shadowAssignments = EMPTY_LIST,
       assignmentEnvironmentsSelector,
       stats,
       statuses,
@@ -265,12 +268,12 @@ class GroupDetail extends Component {
                             assignmentEnvironmentsSelector={
                               assignmentEnvironmentsSelector
                             }
-                            showGroup={false}
                             statuses={statuses}
                             stats={groupStats.find(
                               item => item.userId === userId
                             )}
-                            isGroupAdmin={isGroupAdmin || isGroupSupervisor}
+                            userId={userId}
+                            isAdmin={isGroupAdmin || isGroupSupervisor}
                           />}
                       </ResourceRenderer>
                     </Box>
@@ -289,27 +292,31 @@ class GroupDetail extends Component {
                       unlimitedHeight
                       collapsable
                       isOpen={false}
-                    >
-                      <ResourceRenderer resource={stats} bulkyLoading>
-                        {groupStats =>
-                          /*<ShadowAssignmentsTable
-                            assignments={assignments}
-                            assignmentEnvironmentsSelector={
-                              assignmentEnvironmentsSelector
-                            }
-                            showGroup={false}
-                            statuses={statuses}
-                            stats={groupStats.find(
-                              item => item.userId === userId
-                            )}
-                            isGroupAdmin={isGroupAdmin || isGroupSupervisor}
-                            />*/
-                          <Button onClick={this.createShadowAssignment}>
+                      footer={
+                        <p className=" text-center">
+                          <Button
+                            onClick={this.createShadowAssignment}
+                            bsStyle="success"
+                            bsSize="sm"
+                          >
+                            <AddIcon gapRight />
                             <FormattedMessage
                               id="app.groupDetail.newShadowAssignment"
                               defaultMessage="New Shadow Assignment"
                             />
-                          </Button>}
+                          </Button>
+                        </p>
+                      }
+                    >
+                      <ResourceRenderer resource={stats} bulkyLoading>
+                        {groupStats =>
+                          <ShadowAssignmentsTable
+                            shadowAssignments={shadowAssignments}
+                            stats={groupStats.find(
+                              item => item.userId === userId
+                            )}
+                            isAdmin={isGroupAdmin || isGroupSupervisor}
+                          />}
                       </ResourceRenderer>
                     </Box>
                   </Col>
@@ -407,7 +414,6 @@ class GroupDetail extends Component {
                         ? <p className="text-center">
                             <Button
                               bsStyle="success"
-                              className="btn-flat"
                               bsSize="sm"
                               onClick={this.createGroupExercise}
                             >
@@ -445,6 +451,7 @@ GroupDetail.propTypes = {
   instance: ImmutablePropTypes.map,
   students: PropTypes.array,
   assignments: ImmutablePropTypes.list,
+  shadowAssignments: ImmutablePropTypes.list,
   assignmentEnvironmentsSelector: PropTypes.func,
   groups: ImmutablePropTypes.map,
   isGroupAdmin: PropTypes.bool,
@@ -469,6 +476,7 @@ const mapStateToProps = (state, { params: { groupId } }) => {
     loggedUser: loggedInUserSelector(state),
     groups: groupsSelector(state),
     assignments: groupsAssignmentsSelector(state, groupId),
+    shadowAssignments: groupsShadowAssignmentsSelector(state, groupId),
     assignmentEnvironmentsSelector: assignmentEnvironmentsSelector(state),
     statuses: getStatusesForLoggedUser(state, groupId),
     stats: createGroupsStatsSelector(groupId)(state),

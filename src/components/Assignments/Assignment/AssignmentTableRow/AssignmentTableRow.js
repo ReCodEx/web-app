@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router';
 import AssignmentStatusIcon from '../AssignmentStatusIcon/AssignmentStatusIcon';
 import { FormattedMessage } from 'react-intl';
-import { ButtonGroup } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 
 import withLinks from '../../../../helpers/withLinks';
@@ -21,11 +20,8 @@ import EnvironmentsList from '../../../helpers/EnvironmentsList';
 import ResourceRenderer from '../../../helpers/ResourceRenderer';
 
 const AssignmentTableRow = ({
-  showGroup,
   item: {
     id,
-    name,
-    group,
     localizedTexts,
     allowSecondDeadline,
     firstDeadline,
@@ -61,14 +57,9 @@ const AssignmentTableRow = ({
             : ASSIGNMENT_DETAIL_URI_FACTORY(id)
         }
       >
-        <LocalizedExerciseName entity={{ name, localizedTexts }} />
+        <LocalizedExerciseName entity={{ name: '??', localizedTexts }} />
       </Link>
     </td>
-
-    {showGroup &&
-      <td>
-        {group}
-      </td>}
 
     {runtimeEnvironments &&
       <td>
@@ -105,33 +96,28 @@ const AssignmentTableRow = ({
     </td>
     {isAdmin &&
       <td className="text-right">
-        <ButtonGroup>
-          <LinkContainer to={ASSIGNMENT_STATS_URI_FACTORY(id)}>
-            <Button bsSize="xs" bsStyle="primary">
-              <ResultsIcon gapRight />
-              <FormattedMessage id="generic.results" defaultMessage="Results" />
-            </Button>
-          </LinkContainer>
-          <LinkContainer to={ASSIGNMENT_EDIT_URI_FACTORY(id)}>
-            <Button bsSize="xs" bsStyle="warning">
-              <EditIcon gapRight />
-              <FormattedMessage id="generic.edit" defaultMessage="Edit" />
-            </Button>
-          </LinkContainer>
-          <DeleteAssignmentButtonContainer id={id} bsSize="xs" />
-        </ButtonGroup>
+        <LinkContainer to={ASSIGNMENT_STATS_URI_FACTORY(id)}>
+          <Button bsSize="xs" bsStyle="primary">
+            <ResultsIcon gapRight />
+            <FormattedMessage id="generic.results" defaultMessage="Results" />
+          </Button>
+        </LinkContainer>
+        <LinkContainer to={ASSIGNMENT_EDIT_URI_FACTORY(id)}>
+          <Button bsSize="xs" bsStyle="warning">
+            <EditIcon gapRight />
+            <FormattedMessage id="generic.edit" defaultMessage="Edit" />
+          </Button>
+        </LinkContainer>
+        <DeleteAssignmentButtonContainer id={id} bsSize="xs" />
       </td>}
   </tr>;
 
 AssignmentTableRow.propTypes = {
-  showGroup: PropTypes.bool,
   item: PropTypes.shape({
     id: PropTypes.string,
-    name: PropTypes.string,
     localizedTexts: PropTypes.array,
     firstDeadline: PropTypes.number,
-    secondDeadline: PropTypes.number,
-    groupId: PropTypes.string
+    secondDeadline: PropTypes.number
   }).isRequired,
   runtimeEnvironments: PropTypes.array,
   status: PropTypes.string,

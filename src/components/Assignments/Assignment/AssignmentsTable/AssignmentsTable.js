@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { List } from 'immutable';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { Table } from 'react-bootstrap';
 import { FormattedMessage, injectIntl } from 'react-intl';
+import { EMPTY_LIST, EMPTY_OBJ, EMPTY_ARRAY } from '../../../../helpers/common';
 
 import {
   isReady,
@@ -25,12 +25,11 @@ const fetchAssignmentStatus = (statuses, assignmentId) => {
 };
 
 const AssignmentsTable = ({
-  assignments = List(),
+  assignments = EMPTY_LIST,
   assignmentEnvironmentsSelector = null,
-  statuses = [],
-  showGroup = true,
+  statuses = EMPTY_ARRAY,
   userId = null,
-  stats = {},
+  stats = EMPTY_OBJ,
   isAdmin = false,
   intl: { locale }
 }) =>
@@ -45,13 +44,7 @@ const AssignmentsTable = ({
               defaultMessage="Assignment name"
             />
           </th>
-          {showGroup &&
-            <th>
-              <FormattedMessage
-                id="app.assignments.group"
-                defaultMessage="Group"
-              />
-            </th>}
+
           {assignmentEnvironmentsSelector &&
             <th>
               <FormattedMessage
@@ -59,6 +52,7 @@ const AssignmentsTable = ({
                 defaultMessage="Runtimes/Languages"
               />
             </th>}
+
           {!isAdmin &&
             Object.keys(stats).length !== 0 &&
             <th>
@@ -67,18 +61,21 @@ const AssignmentsTable = ({
                 defaultMessage="Points"
               />
             </th>}
+
           <th>
             <FormattedMessage
               id="app.assignments.deadline"
               defaultMessage="Deadline"
             />
           </th>
+
           <th>
             <FormattedMessage
               id="app.assignments.secondDeadline"
               defaultMessage="Second deadline"
             />
           </th>
+
           {isAdmin && <th />}
         </tr>
       </thead>}
@@ -87,9 +84,7 @@ const AssignmentsTable = ({
 
       {assignments.some(isLoading) &&
         <LoadingAssignmentTableRow
-          colSpan={
-            5 + (showGroup ? 1 : 0) + (assignmentEnvironmentsSelector ? 1 : 0)
-          }
+          colSpan={5 + (assignmentEnvironmentsSelector ? 1 : 0)}
         />}
 
       {assignments
@@ -105,7 +100,6 @@ const AssignmentsTable = ({
               assignmentEnvironmentsSelector(assignment.id)
             }
             userId={userId}
-            showGroup={showGroup}
             status={fetchAssignmentStatus(statuses, assignment.id)}
             locale={locale}
             stats={
@@ -122,7 +116,6 @@ const AssignmentsTable = ({
 AssignmentsTable.propTypes = {
   assignments: ImmutablePropTypes.list.isRequired,
   assignmentEnvironmentsSelector: PropTypes.func,
-  showGroup: PropTypes.bool,
   statuses: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
   userId: PropTypes.string,
   stats: PropTypes.object,

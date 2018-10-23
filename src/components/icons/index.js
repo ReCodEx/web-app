@@ -72,6 +72,10 @@ export const TransferIcon = props => <Icon {...props} icon="exchange-alt" />;
 export const UnlockIcon = props => <Icon {...props} icon="unlock" />;
 export const UploadIcon = props => <Icon {...props} icon="cloud-upload-alt" />;
 export const UserIcon = props => <Icon {...props} icon={['far', 'user']} />;
+export const VisibleIcon = ({ visible = true, ...props }) =>
+  visible
+    ? <Icon {...props} icon={['far', 'eye']} />
+    : <Icon {...props} icon={['far', 'eye-slash']} />;
 export const WarningIcon = props =>
   <Icon {...props} icon="exclamation-triangle" />;
 

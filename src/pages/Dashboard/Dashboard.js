@@ -290,7 +290,6 @@ class Dashboard extends Component {
                                         assignmentEnvironmentsSelector={
                                           assignmentEnvironmentsSelector
                                         }
-                                        showGroup={false}
                                         statuses={
                                           this.usersStatistics(statistics)
                                             .assignments

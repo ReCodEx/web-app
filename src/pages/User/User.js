@@ -244,7 +244,6 @@ class User extends Component {
                                 assignmentEnvironmentsSelector={
                                   assignmentEnvironmentsSelector
                                 }
-                                showGroup={false}
                                 statuses={
                                   usersStatistics(statistics).assignments
                                 }
