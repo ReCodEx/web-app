@@ -15,8 +15,8 @@ const LocalizedExerciseName = ({ entity, intl: { locale } }) => {
     <span>
       {getLocalizedName(entity, locale)}
       {otherNames.length > 0 &&
-        <span>
-          &nbsp;<OverlayTrigger
+        <span className="small">
+          <OverlayTrigger
             placement="right"
             overlay={
               <Tooltip id={otherNames.map(n => n.name).join(', ')}>
@@ -28,7 +28,7 @@ const LocalizedExerciseName = ({ entity, intl: { locale } }) => {
               </Tooltip>
             }
           >
-            <Icon icon={['far', 'flag']} className="text-muted" />
+            <Icon icon={['far', 'flag']} className="text-muted" gapLeft />
           </OverlayTrigger>&nbsp;
         </span>}
     </span>
