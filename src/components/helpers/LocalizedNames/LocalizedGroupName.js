@@ -7,7 +7,7 @@ import Icon from '../../icons';
 import {
   getLocalizedName,
   getOtherLocalizedNames
-} from '../../../helpers/getLocalizedData';
+} from '../../../helpers/localizedData';
 
 const LocalizedGroupName = ({ entity, intl: { locale } }) => {
   const otherNames = getOtherLocalizedNames(entity, locale);

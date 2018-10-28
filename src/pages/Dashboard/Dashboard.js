@@ -41,7 +41,7 @@ import { assignmentEnvironmentsSelector } from '../../redux/selectors/assignment
 
 import { InfoIcon, GroupIcon, LoadingIcon } from '../../components/icons';
 import { getJsData } from '../../redux/helpers/resourceManager';
-import { getLocalizedName } from '../../helpers/getLocalizedData';
+import { getLocalizedName } from '../../helpers/localizedData';
 import withLinks from '../../helpers/withLinks';
 import { EMPTY_OBJ, safeGet } from '../../helpers/common';
 

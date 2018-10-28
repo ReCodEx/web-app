@@ -34,7 +34,7 @@ import {
   evaluationsForSubmissionSelector,
   fetchManyStatus
 } from '../../redux/selectors/submissionEvaluations';
-import { getLocalizedName } from '../../helpers/getLocalizedData';
+import { getLocalizedName } from '../../helpers/localizedData';
 
 class Solution extends Component {
   static loadAsync = ({ solutionId, assignmentId }, dispatch) =>

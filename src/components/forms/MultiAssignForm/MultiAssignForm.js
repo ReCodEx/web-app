@@ -17,7 +17,7 @@ import isNumeric from 'validator/lib/isNumeric';
 import { DatetimeField, TextField, CheckboxField } from '../Fields';
 import SubmitButton from '../SubmitButton';
 import Icon, { GroupIcon } from '../../icons';
-import { getGroupCanonicalLocalizedName } from '../../../helpers/getLocalizedData';
+import { getGroupCanonicalLocalizedName } from '../../../helpers/localizedData';
 import { identity } from '../../../helpers/common';
 import withLinks from '../../../helpers/withLinks';
 import { validateTwoDeadlines } from '../../helpers/validation';

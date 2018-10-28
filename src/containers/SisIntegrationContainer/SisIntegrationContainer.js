@@ -16,7 +16,7 @@ import { groupDataAccessorSelector } from '../../redux/selectors/groups';
 
 import UsersNameContainer from '../UsersNameContainer';
 import LeaveJoinGroupButtonContainer from '../LeaveJoinGroupButtonContainer';
-import { getGroupCanonicalLocalizedName } from '../../helpers/getLocalizedData';
+import { getGroupCanonicalLocalizedName } from '../../helpers/localizedData';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 
 import { GroupIcon } from '../../components/icons';

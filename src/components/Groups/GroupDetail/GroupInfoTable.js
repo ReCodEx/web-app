@@ -6,7 +6,7 @@ import { Table } from 'react-bootstrap';
 import Box from '../../widgets/Box';
 import Markdown from '../../widgets/Markdown';
 import { SuccessOrFailureIcon } from '../../icons';
-import { getLocalizedDescription } from '../../../helpers/getLocalizedData';
+import { getLocalizedDescription } from '../../../helpers/localizedData';
 import { objectMap, identity } from '../../../helpers/common';
 
 const knownBindingProviderLabels = {

@@ -20,7 +20,7 @@ import { EditIcon, ResultsIcon } from '../../components/icons';
 import LocalizedTexts from '../../components/helpers/LocalizedTexts';
 
 import withLinks from '../../helpers/withLinks';
-import { getLocalizedName } from '../../helpers/getLocalizedData';
+import { getLocalizedName } from '../../helpers/localizedData';
 
 class ShadowAssignment extends Component {
   static loadAsync = ({ assignmentId }, dispatch) =>

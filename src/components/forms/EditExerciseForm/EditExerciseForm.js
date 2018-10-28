@@ -17,6 +17,7 @@ import SubmitButton from '../SubmitButton';
 import LocalizedTextsFormField from '../LocalizedTextsFormField';
 import { LocalizedExerciseName } from '../../helpers/LocalizedNames';
 import { validateExercise } from '../../../redux/modules/exercises';
+import { validateLocalizedTextsFormData } from '../../../helpers/localizedData';
 import withLinks from '../../../helpers/withLinks';
 
 const messages = defineMessages({
@@ -42,14 +43,14 @@ const difficultyOptions = defaultMemoize(formatMessage => [
 
 const EditExerciseForm = ({
   initialValues: exercise,
-  anyTouched,
+  error,
+  dirty,
   submitting,
   handleSubmit,
   submitFailed,
   submitSucceeded,
   invalid,
   asyncValidating,
-  localizedTextsLocales = [],
   intl: { formatMessage }
 }) =>
   <FormBox
@@ -61,14 +62,14 @@ const EditExerciseForm = ({
       />
     }
     succeeded={submitSucceeded}
-    dirty={anyTouched}
+    dirty={dirty}
     footer={
       <div className="text-center">
         <SubmitButton
           id="editExercise"
           invalid={invalid}
           submitting={submitting}
-          dirty={anyTouched}
+          dirty={dirty}
           hasSucceeded={submitSucceeded}
           hasFailed={submitFailed}
           handleSubmit={handleSubmit}
@@ -107,7 +108,6 @@ const EditExerciseForm = ({
 
     <FieldArray
       name="localizedTexts"
-      localizedTextsLocales={localizedTextsLocales}
       component={LocalizedTextsFormField}
       fieldType="exercise"
     />
@@ -148,57 +148,38 @@ const EditExerciseForm = ({
         />
       }
     />
+
+    {error &&
+      dirty &&
+      <Alert bsStyle="danger">
+        {error}
+      </Alert>}
   </FormBox>;
 
 EditExerciseForm.propTypes = {
+  error: PropTypes.any,
   initialValues: PropTypes.object.isRequired,
   values: PropTypes.object,
   handleSubmit: PropTypes.func.isRequired,
   intl: intlShape.isRequired,
-  anyTouched: PropTypes.bool,
+  dirty: PropTypes.bool,
   submitting: PropTypes.bool,
   submitFailed: PropTypes.bool,
   submitSucceeded: PropTypes.bool,
   invalid: PropTypes.bool,
   asyncValidating: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
-  localizedTextsLocales: PropTypes.array,
   links: PropTypes.object
 };
 
 const validate = ({ difficulty, localizedTexts }) => {
   const errors = {};
-
-  if (!difficulty) {
-    errors['difficulty'] = (
-      <FormattedMessage
-        id="app.editExerciseForm.validation.difficulty"
-        defaultMessage="Please select the difficulty of the exercise."
-      />
-    );
-  }
-
-  if (localizedTexts.length < 1) {
-    errors['_error'] = (
-      <FormattedMessage
-        id="app.editExerciseForm.validation.noLocalizedText"
-        defaultMessage="Please add at least one localized text describing the exercise."
-      />
-    );
-  }
-
-  const localizedTextsErrors = {};
-  for (let i = 0; i < localizedTexts.length; ++i) {
-    const localeErrors = {};
-    if (!localizedTexts[i]) {
-      localeErrors['locale'] = (
-        <FormattedMessage
-          id="app.editExerciseForm.validation.localizedText"
-          defaultMessage="Please fill localized information."
-        />
-      );
-    } else {
-      if (!localizedTexts[i].name) {
-        localeErrors['name'] = (
+  validateLocalizedTextsFormData(
+    errors,
+    localizedTexts,
+    ({ name, text, link }) => {
+      const textErrors = {};
+      if (!name.trim()) {
+        textErrors.name = (
           <FormattedMessage
             id="app.editExerciseForm.validation.emptyName"
             defaultMessage="Please fill the name of the exercise."
@@ -206,44 +187,27 @@ const validate = ({ difficulty, localizedTexts }) => {
         );
       }
 
-      if (!localizedTexts[i].locale) {
-        localeErrors['locale'] = (
+      if (!text.trim() && !link.trim()) {
+        textErrors.text = (
           <FormattedMessage
-            id="app.editExerciseForm.validation.localizedText.locale"
-            defaultMessage="Please select the language."
+            id="app.editAssignmentForm.validation.localizedText.text"
+            defaultMessage="Please fill the description or provide an external link below."
           />
         );
       }
 
-      if (!localizedTexts[i].text && !localizedTexts[i].link) {
-        localeErrors['text'] = (
-          <FormattedMessage
-            id="app.editExerciseForm.validation.localizedText.text"
-            defaultMessage="Please fill the description in this language or provide an external link below."
-          />
-        );
-      }
+      return textErrors;
     }
+  );
 
-    localizedTextsErrors[i] = localeErrors;
+  if (!difficulty) {
+    errors.difficulty = (
+      <FormattedMessage
+        id="app.editExerciseForm.validation.difficulty"
+        defaultMessage="Please select the difficulty of the exercise."
+      />
+    );
   }
-
-  const localeArr = localizedTexts
-    .filter(text => text !== undefined)
-    .map(text => text.locale);
-  for (let i = 0; i < localeArr.length; ++i) {
-    if (localeArr.indexOf(localeArr[i]) !== i) {
-      if (!localizedTextsErrors[i].locale) {
-        localizedTextsErrors[i].locale = (
-          <FormattedMessage
-            id="app.editExerciseForm.validation.sameLocalizedTexts"
-            defaultMessage="There are more language variants with the same locale. Please make sure locales are unique."
-          />
-        );
-      }
-    }
-  }
-  errors['localizedTexts'] = localizedTextsErrors;
 
   return errors;
 };

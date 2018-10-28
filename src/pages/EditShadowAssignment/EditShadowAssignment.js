@@ -25,7 +25,6 @@ import {
 } from '../../redux/modules/shadowAssignments';
 import { getShadowAssignment } from '../../redux/selectors/shadowAssignments';
 import { isReady, getJsData } from '../../redux/helpers/resourceManager';
-import { getLocalizedTextsLocales } from '../../helpers/getLocalizedData';
 
 import withLinks from '../../helpers/withLinks';
 
@@ -140,7 +139,6 @@ class EditShadowAssignment extends Component {
                 shadowAssignment ? this.getInitialValues(shadowAssignment) : {}
               }
               onSubmit={this.editAssignmentSubmitHandler}
-              localizedTextsLocales={getLocalizedTextsLocales(localizedTexts)}
               beingPublished={!shadowAssignment.isPublic && isPublic}
             />
             {shadowAssignment.permissionHints.remove &&

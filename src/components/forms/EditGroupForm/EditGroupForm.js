@@ -8,15 +8,29 @@ import SubmitButton from '../SubmitButton';
 import LocalizedTextsFormField from '../LocalizedTextsFormField';
 
 import { TextField, CheckboxField } from '../Fields';
+import {
+  getLocalizedTextsInitialValues,
+  validateLocalizedTextsFormData
+} from '../../../helpers/localizedData';
+
+export const EDIT_GROUP_FORM_LOCALIZED_TEXTS_DEFAULT = {
+  name: '',
+  description: ''
+};
 
 export const EDIT_GROUP_FORM_EMPTY_INITIAL_VALUES = {
   isPublic: false,
   publicStats: false,
   hasThreshold: false,
-  threshold: ''
+  threshold: '',
+  localizedTexts: getLocalizedTextsInitialValues(
+    [],
+    EDIT_GROUP_FORM_LOCALIZED_TEXTS_DEFAULT
+  )
 };
 
 const EditGroupForm = ({
+  error,
   submitting,
   handleSubmit,
   onSubmit,
@@ -25,7 +39,6 @@ const EditGroupForm = ({
   submitSucceeded = false,
   invalid,
   createNew = false,
-  localizedTextsLocales,
   hasThreshold,
   isPublic,
   collapsable = false,
@@ -93,7 +106,6 @@ const EditGroupForm = ({
 
     <FieldArray
       name="localizedTexts"
-      localizedTextsLocales={localizedTextsLocales}
       component={LocalizedTextsFormField}
       fieldType="group"
     />
@@ -179,9 +191,16 @@ const EditGroupForm = ({
         </Col>
       </Row>
     </Grid>
+
+    {error &&
+      dirty &&
+      <Alert bsStyle="danger">
+        {error}
+      </Alert>}
   </FormBox>;
 
 EditGroupForm.propTypes = {
+  error: PropTypes.any,
   handleSubmit: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
   dirty: PropTypes.bool,
@@ -191,7 +210,6 @@ EditGroupForm.propTypes = {
   invalid: PropTypes.bool,
   hasThreshold: PropTypes.bool,
   isPublic: PropTypes.bool,
-  localizedTextsLocales: PropTypes.array,
   createNew: PropTypes.bool,
   collapsable: PropTypes.bool,
   isOpen: PropTypes.bool,
@@ -199,8 +217,20 @@ EditGroupForm.propTypes = {
   isSuperAdmin: PropTypes.bool
 };
 
-const validate = ({ localizedTexts = [], hasThreshold, threshold }) => {
+const validate = ({ localizedTexts, hasThreshold, threshold }) => {
   const errors = {};
+  validateLocalizedTextsFormData(errors, localizedTexts, ({ name }) => {
+    const textErrors = {};
+    if (!name.trim()) {
+      textErrors.name = (
+        <FormattedMessage
+          id="app.editGroupForm.validation.emptyName"
+          defaultMessage="Please fill the name of the group."
+        />
+      );
+    }
+    return textErrors;
+  });
 
   if (hasThreshold) {
     threshold = String(threshold);
@@ -209,14 +239,14 @@ const validate = ({ localizedTexts = [], hasThreshold, threshold }) => {
       isNaN(numericThreshold) ||
       threshold !== Math.round(numericThreshold).toString()
     ) {
-      errors['threshold'] = (
+      errors.threshold = (
         <FormattedMessage
           id="app.createGroup.validation.thresholdMustBeInteger"
           defaultMessage="Threshold must be an integer."
         />
       );
     } else if (numericThreshold < 0 || numericThreshold > 100) {
-      errors['threshold'] = (
+      errors.threshold = (
         <FormattedMessage
           id="app.createGroup.validation.thresholdBetweenZeroHundred"
           defaultMessage="Threshold must be an integer in between 0 and 100."
@@ -224,74 +254,6 @@ const validate = ({ localizedTexts = [], hasThreshold, threshold }) => {
       );
     }
   }
-
-  if (localizedTexts.length < 1) {
-    errors['_error'] = (
-      <FormattedMessage
-        id="app.createGroupForm.validation.noLocalizedText"
-        defaultMessage="Please add at least one localized text describing the group."
-      />
-    );
-  }
-
-  const localizedTextsErrors = {};
-  for (let i = 0; i < localizedTexts.length; ++i) {
-    const localeErrors = {};
-    if (!localizedTexts[i]) {
-      localeErrors['locale'] = (
-        <FormattedMessage
-          id="app.editGroupForm.validation.localizedText"
-          defaultMessage="Please fill localized information."
-        />
-      );
-    } else {
-      if (!localizedTexts[i].name) {
-        localeErrors['name'] = (
-          <FormattedMessage
-            id="app.editGroupForm.validation.emptyName"
-            defaultMessage="Please fill the name of the group."
-          />
-        );
-      }
-
-      if (!localizedTexts[i].locale) {
-        localeErrors['locale'] = (
-          <FormattedMessage
-            id="app.editGroupForm.validation.localizedText.locale"
-            defaultMessage="Please select the language."
-          />
-        );
-      }
-
-      if (!localizedTexts[i].text) {
-        localeErrors['text'] = (
-          <FormattedMessage
-            id="app.editGroupForm.validation.localizedText.text"
-            defaultMessage="Please fill the description in this language."
-          />
-        );
-      }
-    }
-
-    localizedTextsErrors[i] = localeErrors;
-  }
-
-  const localeArr = localizedTexts
-    .filter(text => text !== undefined)
-    .map(text => text.locale);
-  for (let i = 0; i < localeArr.length; ++i) {
-    if (localeArr.indexOf(localeArr[i]) !== i) {
-      if (!localizedTextsErrors[i].locale) {
-        localizedTextsErrors[i].locale = (
-          <FormattedMessage
-            id="app.editGroupForm.validation.sameLocalizedTexts"
-            defaultMessage="There are more language variants with the same locale. Please make sure locales are unique."
-          />
-        );
-      }
-    }
-  }
-  errors['localizedTexts'] = localizedTextsErrors;
 
   return errors;
 };

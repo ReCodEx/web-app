@@ -49,7 +49,7 @@ import SolutionsTable from '../../components/Assignments/SolutionsTable';
 import AssignmentSync from '../../components/Assignments/Assignment/AssignmentSync';
 
 import withLinks from '../../helpers/withLinks';
-import { getLocalizedName } from '../../helpers/getLocalizedData';
+import { getLocalizedName } from '../../helpers/localizedData';
 
 class Assignment extends Component {
   static loadAsync = ({ assignmentId }, dispatch, { userId }) =>

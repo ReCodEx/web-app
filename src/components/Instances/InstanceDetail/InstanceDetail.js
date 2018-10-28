@@ -26,7 +26,7 @@ const InstanceDetail = ({ description, rootGroupId, groups, isAdmin }) =>
         title={
           <FormattedMessage
             id="app.instance.groupsTitle"
-            defaultMessage="Groups hierarchy"
+            defaultMessage="Groups Hierarchy"
           />
         }
         extraPadding

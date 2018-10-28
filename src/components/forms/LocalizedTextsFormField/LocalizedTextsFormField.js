@@ -1,43 +1,69 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
+import { OverlayTrigger, Tooltip } from 'react-bootstrap';
+
 import { TabbedArrayField } from '../Fields';
+import LocalizedAssignmentFormField from './LocalizedAssignmentFormField';
 import LocalizedExerciseFormField from './LocalizedExerciseFormField';
 import LocalizedGroupFormField from './LocalizedGroupFormField';
+import { WarningIcon } from '../../icons';
+import { knownLocalesNames } from '../../../helpers/localizedData';
 
 const fieldTypes = {
-  assignment: LocalizedExerciseFormField,
+  assignment: LocalizedAssignmentFormField,
   exercise: LocalizedExerciseFormField,
   group: LocalizedGroupFormField
 };
 
-const LocalizedTextsFormField = ({
-  localizedTextsLocales = [],
-  fieldType,
-  ...props
-}) => {
+const renderTitle = ({ locale, _enabled }) =>
+  <span>
+    <OverlayTrigger
+      placement="bottom"
+      overlay={
+        <Tooltip id={`editLocalizedTextForm-${locale}`}>
+          {knownLocalesNames[locale] || '??'}
+        </Tooltip>
+      }
+    >
+      <span>
+        {locale}
+      </span>
+    </OverlayTrigger>
+
+    {!_enabled &&
+      <OverlayTrigger
+        placement="bottom"
+        overlay={
+          <Tooltip id={`editLocalizedTextForm-${locale}-disabled`}>
+            <FormattedMessage
+              id="app.editLocalizedTextForm.localizationTabDisabled"
+              defaultMessage="This locale is currently disabled."
+            />
+          </Tooltip>
+        }
+      >
+        <WarningIcon gapLeft />
+      </OverlayTrigger>}
+  </span>;
+
+const tabComparator = ({ locale: a }, { locale: b }) => a.localeCompare(b);
+
+const tabDataSelector = ({ _enabled }) => _enabled;
+
+const LocalizedTextsFormField = ({ fieldType, ...props }) => {
   return (
     <TabbedArrayField
       {...props}
-      getTitle={i =>
-        localizedTextsLocales && localizedTextsLocales[i]
-          ? localizedTextsLocales[i]
-          : <FormattedMessage
-              id="app.editLocalizedTextForm.newLocale"
-              defaultMessage="New language"
-            />}
+      id="localized-texts"
       ContentComponent={fieldTypes[fieldType]}
-      fieldType={fieldType}
+      renderTitle={renderTitle}
+      tabComparator={tabComparator}
+      tabDataSelector={tabDataSelector}
       emptyMessage={
         <FormattedMessage
           id="app.editLocalizedTextForm.localized.noLanguage"
           defaultMessage="There is currently no text in any language."
-        />
-      }
-      addMessage={
-        <FormattedMessage
-          id="app.editLocalizedTextForm.addLanguage"
-          defaultMessage="Add language variant"
         />
       }
       removeQuestion={
@@ -46,11 +72,13 @@ const LocalizedTextsFormField = ({
           defaultMessage="Do you really want to delete this localization?"
         />
       }
-      id="localized-texts"
-      add
-      remove
     />
   );
+};
+
+renderTitle.propTypes = {
+  locale: PropTypes.string.isRequired,
+  _enabled: PropTypes.bool.isRequired
 };
 
 LocalizedTextsFormField.propTypes = {

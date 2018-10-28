@@ -11,7 +11,7 @@ import {
   computeVisibleGroupsMap,
   computeEditableGroupsMap
 } from '../../helpers/group.js';
-import { getLocalizedResourceName } from '../../../helpers/getLocalizedData';
+import { getLocalizedResourceName } from '../../../helpers/localizedData';
 import { GroupIcon } from '../../icons';
 import withLinks from '../../../helpers/withLinks';
 

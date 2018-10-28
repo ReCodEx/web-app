@@ -7,7 +7,7 @@ import Icon from '../../icons';
 import {
   getLocalizedName,
   getOtherLocalizedNames
-} from '../../../helpers/getLocalizedData';
+} from '../../../helpers/localizedData';
 
 const LocalizedExerciseName = ({ entity, intl: { locale } }) => {
   const otherNames = getOtherLocalizedNames(entity, locale);
@@ -29,7 +29,7 @@ const LocalizedExerciseName = ({ entity, intl: { locale } }) => {
             }
           >
             <Icon icon={['far', 'flag']} className="text-muted" gapLeft />
-          </OverlayTrigger>&nbsp;
+          </OverlayTrigger>
         </span>}
     </span>
   );

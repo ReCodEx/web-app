@@ -17,8 +17,7 @@ const SourceCodeField = (
   {
     input,
     mode,
-    meta: { dirty, error, warning },
-    type = 'text',
+    meta: { error, warning },
     label = null,
     children,
     tabIndex,
@@ -37,6 +36,7 @@ const SourceCodeField = (
       </ControlLabel>}
     <ClientOnly>
       <AceEditor
+        {...props}
         {...input}
         mode={getAceModeFromExtension(mode)}
         theme={darkTheme ? 'monokai' : 'github'}
@@ -79,7 +79,6 @@ SourceCodeField.propTypes = {
     dirty: PropTypes.bool
   }),
   tabIndex: PropTypes.number,
-  type: PropTypes.string,
   label: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.element,

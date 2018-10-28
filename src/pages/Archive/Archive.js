@@ -19,7 +19,7 @@ import { groupsSelector } from '../../redux/selectors/groups';
 import GroupTree from '../../components/Groups/GroupTree';
 import { getJsData } from '../../redux/helpers/resourceManager';
 import FilterArchiveGroupsForm from '../../components/forms/FilterArchiveGroupsForm/FilterArchiveGroupsForm';
-import { getLocalizedName } from '../../helpers/getLocalizedData';
+import { getLocalizedName } from '../../helpers/localizedData';
 import ArchiveGroupButtonContainer from '../../containers/ArchiveGroupButtonContainer/ArchiveGroupButtonContainer';
 import { GroupIcon, SuccessOrFailureIcon } from '../../components/icons';
 

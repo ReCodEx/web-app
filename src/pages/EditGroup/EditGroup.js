@@ -9,7 +9,9 @@ import { reset, formValueSelector } from 'redux-form';
 import { defaultMemoize } from 'reselect';
 
 import Page from '../../components/layout/Page';
-import EditGroupForm from '../../components/forms/EditGroupForm';
+import EditGroupForm, {
+  EDIT_GROUP_FORM_LOCALIZED_TEXTS_DEFAULT
+} from '../../components/forms/EditGroupForm';
 import OrganizationalGroupButtonContainer from '../../containers/OrganizationalGroupButtonContainer';
 import ArchiveGroupButtonContainer from '../../containers/ArchiveGroupButtonContainer';
 import DeleteGroupButtonContainer from '../../containers/DeleteGroupButtonContainer';
@@ -28,9 +30,10 @@ import {
   isLoggedAsSuperAdmin
 } from '../../redux/selectors/users';
 import {
-  getLocalizedTextsLocales,
-  getLocalizedName
-} from '../../helpers/getLocalizedData';
+  getLocalizedName,
+  getLocalizedTextsInitialValues,
+  transformLocalizedTextsFormData
+} from '../../helpers/localizedData';
 
 import withLinks from '../../helpers/withLinks';
 import { hasPermissions } from '../../helpers/common';
@@ -54,7 +57,10 @@ class EditGroup extends Component {
       public: isPublic,
       privateData: { publicStats, threshold }
     }) => ({
-      localizedTexts,
+      localizedTexts: getLocalizedTextsInitialValues(
+        localizedTexts,
+        EDIT_GROUP_FORM_LOCALIZED_TEXTS_DEFAULT
+      ),
       externalId,
       isPublic,
       publicStats,
@@ -74,7 +80,6 @@ class EditGroup extends Component {
       links: { GROUP_INFO_URI_FACTORY, GROUP_DETAIL_URI_FACTORY },
       editGroup,
       hasThreshold,
-      localizedTexts,
       push,
       reload,
       intl: { locale }
@@ -191,7 +196,6 @@ class EditGroup extends Component {
                 onSubmit={editGroup}
                 hasThreshold={hasThreshold}
                 isPublic={group.public}
-                localizedTextsLocales={getLocalizedTextsLocales(localizedTexts)}
                 isSuperAdmin={isSuperAdmin}
               />}
 
@@ -261,7 +265,6 @@ EditGroup.propTypes = {
   editGroup: PropTypes.func.isRequired,
   push: PropTypes.func.isRequired,
   hasThreshold: PropTypes.bool,
-  localizedTexts: PropTypes.array,
   isSuperAdmin: PropTypes.bool,
   intl: intlShape
 };
@@ -278,7 +281,6 @@ export default withLinks(
         userId,
         isStudentOf: groupId => isSupervisorOf(userId, groupId)(state),
         hasThreshold: editGroupFormSelector(state, 'hasThreshold'),
-        localizedTexts: editGroupFormSelector(state, 'localizedTexts'),
         isSuperAdmin: isLoggedAsSuperAdmin(state)
       };
     },
@@ -296,7 +298,7 @@ export default withLinks(
         hasThreshold
       }) => {
         let transformedData = {
-          localizedTexts,
+          localizedTexts: transformLocalizedTextsFormData(localizedTexts),
           externalId,
           isPublic,
           publicStats,

@@ -53,7 +53,7 @@ import {
 } from '../../redux/selectors/stats';
 import { assignmentEnvironmentsSelector } from '../../redux/selectors/assignments';
 
-import { getLocalizedName } from '../../helpers/getLocalizedData';
+import { getLocalizedName } from '../../helpers/localizedData';
 import withLinks from '../../helpers/withLinks';
 import { isReady } from '../../redux/helpers/resourceManager/index';
 import ResultsTable from '../../components/Groups/ResultsTable/ResultsTable';

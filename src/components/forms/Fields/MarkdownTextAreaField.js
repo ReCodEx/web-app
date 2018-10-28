@@ -30,11 +30,11 @@ class MarkdownTextAreaField extends Component {
   };
 
   render() {
-    const { input: { name, value } } = this.props;
+    const { input: { name, value }, disabled } = this.props;
     const { showPreview } = this.state;
     return (
       <div>
-        <SourceCodeField {...this.props} mode="markdown" />
+        <SourceCodeField {...this.props} mode="markdown" readOnly={disabled} />
         <Row>
           <Col sm={4}>
             <OnOffCheckbox
@@ -60,6 +60,7 @@ class MarkdownTextAreaField extends Component {
             </HelpBlock>
           </Col>
         </Row>
+
         {showPreview &&
           <div>
             <h4>

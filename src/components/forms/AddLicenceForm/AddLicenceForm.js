@@ -22,7 +22,7 @@ const AddLicenceForm = ({
     title={
       <FormattedMessage
         id="app.addLicence.addLicenceTitle"
-        defaultMessage="Add new licence"
+        defaultMessage="Add New Licence"
       />
     }
     type={submitSucceeded ? 'success' : undefined}

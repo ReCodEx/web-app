@@ -7,7 +7,7 @@ import { Alert } from 'react-bootstrap';
 import FormBox from '../../widgets/FormBox';
 import { SelectField } from '../Fields';
 import SubmitButton from '../SubmitButton';
-import { getGroupCanonicalLocalizedName } from '../../../helpers/getLocalizedData';
+import { getGroupCanonicalLocalizedName } from '../../../helpers/localizedData';
 
 class SisCreateGroupForm extends Component {
   render() {
