@@ -13,7 +13,7 @@ import { defaultMemoize } from 'reselect';
 import Button from '../../components/widgets/FlatButton';
 import Page from '../../components/layout/Page';
 import EditShadowAssignmentForm from '../../components/forms/EditShadowAssignmentForm';
-import DeleteAssignmentButtonContainer from '../../containers/DeleteAssignmentButtonContainer';
+import DeleteShadowAssignmentButtonContainer from '../../containers/DeleteShadowAssignmentButtonContainer';
 import Box from '../../components/widgets/Box';
 import HierarchyLineContainer from '../../containers/HierarchyLineContainer';
 import { ResultsIcon } from '../../components/icons';
@@ -175,13 +175,11 @@ class EditShadowAssignment extends Component {
                     />
                   </p>
                   <p className="text-center">
-                    {/*
-                    <DeleteAssignmentButtonContainer
+                    <DeleteShadowAssignmentButtonContainer
                       id={assignmentId}
                       onDeleted={() =>
                         push(GROUP_DETAIL_URI_FACTORY(this.groupId))}
                     />
-                      */}
                   </p>
                 </div>
               </Box>}

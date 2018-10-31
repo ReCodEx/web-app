@@ -1,0 +1,2 @@
+import DeleteShadowAssignmentButtonContainer from './DeleteShadowAssignmentButtonContainer';
+export default DeleteShadowAssignmentButtonContainer;

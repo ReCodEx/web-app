@@ -291,7 +291,7 @@ class GroupDetail extends Component {
                       noPadding
                       unlimitedHeight
                       collapsable
-                      isOpen={false}
+                      isOpen={shadowAssignments && shadowAssignments.size > 0}
                       footer={
                         <p className=" text-center">
                           <Button

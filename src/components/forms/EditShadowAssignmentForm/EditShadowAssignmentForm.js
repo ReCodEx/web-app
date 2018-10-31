@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { reduxForm, Field, FieldArray } from 'redux-form';
 import { injectIntl, FormattedMessage } from 'react-intl';
-import { Alert, HelpBlock, Grid, Row, Col } from 'react-bootstrap';
+import { Alert, Grid, Row, Col } from 'react-bootstrap';
 
 import FormBox from '../../widgets/FormBox';
 import { TextField, CheckboxField } from '../Fields';
@@ -17,6 +17,8 @@ const EditShadowAssignmentForm = ({
   dirty,
   submitting,
   handleSubmit,
+  onSubmit,
+  reset,
   submitFailed,
   submitSucceeded,
   asyncValidating,
@@ -47,7 +49,7 @@ const EditShadowAssignmentForm = ({
             dirty={dirty}
             hasSucceeded={submitSucceeded}
             hasFailed={submitFailed}
-            handleSubmit={handleSubmit}
+            handleSubmit={handleSubmit(data => onSubmit(data).then(reset))}
             asyncValidating={asyncValidating}
             messages={{
               submit: (
@@ -151,6 +153,8 @@ EditShadowAssignmentForm.propTypes = {
   initialValues: PropTypes.object.isRequired,
   values: PropTypes.object,
   handleSubmit: PropTypes.func.isRequired,
+  onSubmit: PropTypes.func.isRequired,
+  reset: PropTypes.func.isRequired,
   dirty: PropTypes.bool,
   submitting: PropTypes.bool,
   submitFailed: PropTypes.bool,
@@ -162,28 +166,21 @@ EditShadowAssignmentForm.propTypes = {
   error: PropTypes.object
 };
 
-const validate = (
-  { localizedTexts, maxPoints },
-  { intl: { formatMessage } }
-) => {
+const validate = ({ localizedTexts, maxPoints }) => {
   const errors = {};
-  validateLocalizedTextsFormData(
-    errors,
-    localizedTexts,
-    ({ name, text, link }) => {
-      const textErrors = {};
-      if (!name.trim()) {
-        textErrors.name = (
-          <FormattedMessage
-            id="app.editAssignmentForm.validation.emptyName"
-            defaultMessage="Please fill the name of the assignment."
-          />
-        );
-      }
-
-      return textErrors;
+  validateLocalizedTextsFormData(errors, localizedTexts, ({ name }) => {
+    const textErrors = {};
+    if (!name.trim()) {
+      textErrors.name = (
+        <FormattedMessage
+          id="app.editAssignmentForm.validation.emptyName"
+          defaultMessage="Please fill the name of the assignment."
+        />
+      );
     }
-  );
+
+    return textErrors;
+  });
 
   if (!isNonNegativeInteger(maxPoints)) {
     errors.maxPoints = (
@@ -194,6 +191,7 @@ const validate = (
     );
   }
 
+  console.log(errors);
   return errors;
 };
 

@@ -11,7 +11,7 @@ import {
   MaybeBonusAssignmentIcon,
   VisibleIcon
 } from '../../../icons';
-import DeleteAssignmentButtonContainer from '../../../../containers/DeleteAssignmentButtonContainer';
+import DeleteShadowAssignmentButtonContainer from '../../../../containers/DeleteShadowAssignmentButtonContainer';
 import Button from '../../../widgets/FlatButton';
 import DateTime from '../../../widgets/DateTime';
 
@@ -70,7 +70,7 @@ const ShadowAssignmentsTableRow = ({
             <FormattedMessage id="generic.edit" defaultMessage="Edit" />
           </Button>
         </LinkContainer>
-        <DeleteAssignmentButtonContainer id={id} bsSize="xs" />
+        <DeleteShadowAssignmentButtonContainer id={id} bsSize="xs" />
       </td>}
   </tr>;
 

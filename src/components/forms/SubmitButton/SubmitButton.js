@@ -83,7 +83,7 @@ class SubmitButton extends Component {
       disabled = false
     } = this.props;
     const { saved: hasSucceeded } = this.state;
-
+    console.log(invalid);
     const {
       submit: submitMsg,
       success: successMsg,
