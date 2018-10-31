@@ -170,7 +170,7 @@ class Archive extends Component {
             title={
               <FormattedMessage
                 id="app.archive.archivedGroups"
-                defaultMessage="Archived Groups"
+                defaultMessage="All Groups Including Archived"
               />
             }
             unlimitedHeight

@@ -318,7 +318,7 @@ class MultiAssignForm extends Component {
                   label={
                     <FormattedMessage
                       id="app.editAssignmentForm.sendNotification"
-                      defaultMessage="Send e-mail notification to students"
+                      defaultMessage="Send e-mail notification to students about new assignment"
                     />
                   }
                 />

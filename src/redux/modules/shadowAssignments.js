@@ -13,7 +13,8 @@ const { actions, actionTypes, reduceActions } = factory({
 export { actionTypes };
 
 export const additionalActionTypes = {
-  TODO: 'recodex/shadow-assignments/TODO'
+  VALIDATE_SHADOW_ASSIGNMENT: 'recodex/shadow-assignments/VALIDATE'
+  //TODO: 'recodex/shadow-assignments/TODO'
 };
 
 /**
@@ -34,15 +35,13 @@ export const createShadowAssignment = groupId =>
 export const editShadowAssignment = actions.updateResource;
 export const deleteShadowAssignment = actions.removeResource;
 
-/*
-export const validateAssignment = (id, version) =>
+export const validateShadowAssignment = (id, version) =>
   createApiAction({
-    type: additionalActionTypes.VALIDATE_ASSIGNMENT,
-    endpoint: `/exercise-assignments/${id}/validate`,
+    type: additionalActionTypes.VALIDATE_SHADOW_ASSIGNMENT,
+    endpoint: `/shadow-assignments/${id}/validate`,
     method: 'POST',
     body: { version }
   });
-*/
 
 /**
  * Reducer

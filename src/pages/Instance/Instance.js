@@ -123,7 +123,7 @@ class Instance extends Component {
                     title={
                       <FormattedMessage
                         id="app.instance.groupsTitle"
-                        defaultMessage="Groups hierarchy"
+                        defaultMessage="Groups Hierarchy"
                       />
                     }
                     extraPadding

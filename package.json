@@ -10,7 +10,7 @@
   },
   "private": true,
   "scripts": {
-    "clean": "rm -f public/bundle* && rm -f public/style* && rm -f bin/server.js && rm -f bin/style* && rm -fr tmp",
+    "clean": "rm -f public/bundle* && rm -f public/style* && rm -f bin/server.js && rm -f bin/style* && rm -fr tmp/messages/*",
     "build:server": "webpack --config config/webpack.server.js",
     "build:client": "webpack --config config/webpack.config.js",
     "build": "npm run clean && npm run build:server && npm run build:client",

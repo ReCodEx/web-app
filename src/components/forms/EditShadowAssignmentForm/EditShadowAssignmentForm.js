@@ -10,9 +10,10 @@ import LocalizedTextsFormField from '../LocalizedTextsFormField';
 import SubmitButton from '../SubmitButton';
 import { LocalizedExerciseName } from '../../helpers/LocalizedNames';
 import { isNonNegativeInteger } from '../../helpers/validation';
+import { validateLocalizedTextsFormData } from '../../../helpers/localizedData';
 
 const EditShadowAssignmentForm = ({
-  initialValues: assignment,
+  initialValues: shadowAssignment,
   dirty,
   submitting,
   handleSubmit,
@@ -21,15 +22,17 @@ const EditShadowAssignmentForm = ({
   asyncValidating,
   invalid,
   error,
-  localizedTextsLocales,
   beingPublished
 }) =>
   <div>
     <FormBox
       title={
         <FormattedMessage
-          id="app.editShadowAssignment.title"
-          defaultMessage="Edit Shadow Assignment"
+          id="app.editShadowAssignment.titleName"
+          defaultMessage="Edit Shadow Assignment — {name}"
+          values={{
+            name: <LocalizedExerciseName entity={shadowAssignment} />
+          }}
         />
       }
       successful={submitSucceeded}
@@ -72,16 +75,10 @@ const EditShadowAssignmentForm = ({
           />
         </Alert>}
 
-      {error &&
-        <Alert bsStyle="danger">
-          {error}
-        </Alert>}
-
       <FieldArray
         name="localizedTexts"
-        localizedTextsLocales={localizedTextsLocales}
         component={LocalizedTextsFormField}
-        fieldType="assignment"
+        fieldType="shadowAssignment"
       />
 
       <Field
@@ -135,13 +132,18 @@ const EditShadowAssignmentForm = ({
                 label={
                   <FormattedMessage
                     id="app.editShadowAssignmentForm.sendNotification"
-                    defaultMessage="Send e-mail notification to students"
+                    defaultMessage="Send e-mail notification to students about new shadow assignment"
                   />
                 }
               />
             </Col>}
         </Row>
       </Grid>
+
+      {error &&
+        <Alert bsStyle="danger">
+          {error}
+        </Alert>}
     </FormBox>
   </div>;
 
@@ -165,82 +167,23 @@ const validate = (
   { intl: { formatMessage } }
 ) => {
   const errors = {};
-
-  if (localizedTexts.length < 1) {
-    errors['_error'] = (
-      <FormattedMessage
-        id="app.editShadowAssignmentForm.validation.noLocalizedText"
-        defaultMessage="Please add at least one localized text describing the assignment."
-      />
-    );
-  }
-
-  const localizedTextsErrors = {};
-  for (let i = 0; i < localizedTexts.length; ++i) {
-    const localeErrors = {};
-    if (!localizedTexts[i]) {
-      localeErrors['locale'] = (
-        <FormattedMessage
-          id="app.editShadowAssignmentForm.validation.localizedText"
-          defaultMessage="Please fill localized information."
-        />
-      );
-    } else {
-      if (!localizedTexts[i].name) {
-        localeErrors['name'] = (
+  validateLocalizedTextsFormData(
+    errors,
+    localizedTexts,
+    ({ name, text, link }) => {
+      const textErrors = {};
+      if (!name.trim()) {
+        textErrors.name = (
           <FormattedMessage
-            id="app.editShadowAssignmentForm.validation.emptyName"
+            id="app.editAssignmentForm.validation.emptyName"
             defaultMessage="Please fill the name of the assignment."
           />
         );
       }
 
-      if (!localizedTexts[i].locale) {
-        localeErrors['locale'] = (
-          <FormattedMessage
-            id="app.editShadowAssignmentForm.validation.localizedText.locale"
-            defaultMessage="Please select the language."
-          />
-        );
-      }
-
-      if (!localizedTexts[i].text && !localizedTexts[i].link) {
-        localeErrors['text'] = (
-          <FormattedMessage
-            id="app.editShadowAssignmentForm.validation.localizedText.text"
-            defaultMessage="Please fill the description in this language or provide an external link below."
-          />
-        );
-      }
+      return textErrors;
     }
-
-    if (Object.keys(localeErrors).length > 0) {
-      localizedTextsErrors[i] = localeErrors;
-    }
-  }
-
-  const localeArr = localizedTexts
-    .filter(text => text !== undefined)
-    .map(text => text.locale);
-  for (let i = 0; i < localeArr.length; ++i) {
-    if (localeArr.indexOf(localeArr[i]) !== i) {
-      if (localizedTextsErrors[i] && !localizedTextsErrors[i].locale) {
-        if (!localizedTextsErrors[i]) {
-          localizedTextsErrors[i] = {};
-        }
-        localizedTextsErrors[i].locale = (
-          <FormattedMessage
-            id="app.editShadowAssignmentForm.validation.sameLocalizedTexts"
-            defaultMessage="There are more language variants with the same locale. Please make sure locales are unique."
-          />
-        );
-      }
-    }
-  }
-
-  if (Object.keys(localizedTextsErrors).length > 0) {
-    errors['localizedTexts'] = localizedTextsErrors;
-  }
+  );
 
   if (!isNonNegativeInteger(maxPoints)) {
     errors.maxPoints = (

@@ -5,6 +5,7 @@ import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 
 import { TabbedArrayField } from '../Fields';
 import LocalizedAssignmentFormField from './LocalizedAssignmentFormField';
+import LocalizedShadowAssignmentFormField from './LocalizedShadowAssignmentFormField';
 import LocalizedExerciseFormField from './LocalizedExerciseFormField';
 import LocalizedGroupFormField from './LocalizedGroupFormField';
 import { WarningIcon } from '../../icons';
@@ -12,6 +13,7 @@ import { knownLocalesNames } from '../../../helpers/localizedData';
 
 const fieldTypes = {
   assignment: LocalizedAssignmentFormField,
+  shadowAssignment: LocalizedShadowAssignmentFormField,
   exercise: LocalizedExerciseFormField,
   group: LocalizedGroupFormField
 };

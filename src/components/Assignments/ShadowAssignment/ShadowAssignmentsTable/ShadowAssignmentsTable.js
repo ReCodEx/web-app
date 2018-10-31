@@ -34,7 +34,7 @@ const ShadowAssignmentsTable = ({
           </th>
           <th>
             <FormattedMessage
-              id="app.assignments.deadline"
+              id="app.assignments.created"
               defaultMessage="Created"
             />
           </th>

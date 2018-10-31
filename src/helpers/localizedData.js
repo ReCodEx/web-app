@@ -13,9 +13,13 @@ const getLocalizedX = field => (entity, locale) => {
     entity &&
     entity.localizedTexts &&
     entity.localizedTexts.length > 0 &&
-    (entity.localizedTexts.find(text => text && text.locale === locale) ||
-      entity.localizedTexts.find(text => text && text.locale === 'en') ||
-      entity.localizedTexts[0]);
+    (entity.localizedTexts.find(
+      text => text && text.locale === locale && text._enabled !== false
+    ) ||
+      entity.localizedTexts.find(
+        text => text && text.locale === 'en' && text._enabled !== false
+      ) ||
+      entity.localizedTexts.find(text => text && text._enabled !== false));
   return (
     (localizedText && localizedText[field]) || (entity && entity[field]) || ''
   );
@@ -47,7 +51,10 @@ export const getOtherLocalizedNames = (entity, locale) => {
     entity &&
     entity.localizedTexts &&
     entity.localizedTexts
-      .filter(text => text && text.name && text.name !== name)
+      .filter(
+        text =>
+          text && text.name && text.name !== name && text._enabled !== false
+      )
       .map(({ name, locale }) => ({ name, locale }))
   );
 };

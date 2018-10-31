@@ -75,7 +75,7 @@ const RegistrationForm = ({
       <Alert bsStyle="danger">
         <FormattedMessage
           id="app.registrationForm.failed"
-          defaultMessage="Registration failed. Please check your information."
+          defaultMessage="Login failed. Please check your credentials."
         />
       </Alert>}
 

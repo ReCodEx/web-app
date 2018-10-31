@@ -43,10 +43,7 @@ const HeaderNotificationsDropdown = ({
       <li className="header">
         <FormattedMessage
           id="app.notifications.title"
-          defaultMessage={`You have {count, number} new {count, plural,
-            one {notification}
-            other {notifications}
-          }`}
+          defaultMessage="You have {count, number} new {count, plural, one {notification} two {notifications} other {notifications}}"
           values={{ count: newNotifications.size }}
         />
       </li>
@@ -76,11 +73,7 @@ const HeaderNotificationsDropdown = ({
                 />
               : <FormattedMessage
                   id="app.notifications.showAll"
-                  defaultMessage={`Show {count, plural,
-                    one {old notification}
-                    two {two notifications}
-                    other {all # notifications}
-                  }`}
+                  defaultMessage="Show {count, plural, one {old notification} two {two old notifications} other {all # notifications}}"
                   values={{
                     count: newNotifications.size + oldNotifications.size
                   }}

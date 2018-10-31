@@ -18,15 +18,26 @@ import Box from '../../components/widgets/Box';
 import HierarchyLineContainer from '../../containers/HierarchyLineContainer';
 import { ResultsIcon } from '../../components/icons';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
+import {
+  getLocalizedTextsInitialValues,
+  transformLocalizedTextsFormData
+} from '../../helpers/localizedData';
 
 import {
   fetchShadowAssignment,
-  editShadowAssignment
+  editShadowAssignment,
+  validateShadowAssignment
 } from '../../redux/modules/shadowAssignments';
 import { getShadowAssignment } from '../../redux/selectors/shadowAssignments';
 import { isReady, getJsData } from '../../redux/helpers/resourceManager';
 
 import withLinks from '../../helpers/withLinks';
+
+const localizedTextDefaults = {
+  name: '',
+  text: '',
+  link: ''
+};
 
 class EditShadowAssignment extends Component {
   componentWillMount = () => this.props.loadAsync();
@@ -44,25 +55,32 @@ class EditShadowAssignment extends Component {
   static loadAsync = ({ assignmentId }, dispatch) =>
     dispatch(fetchShadowAssignment(assignmentId));
 
-  getInitialValues = defaultMemoize(({ ...rest }) => ({
+  getInitialValues = defaultMemoize(({ localizedTexts, ...rest }) => ({
     sendNotification: true,
-    ...rest
+    ...rest,
+    localizedTexts: getLocalizedTextsInitialValues(
+      localizedTexts,
+      localizedTextDefaults
+    )
   }));
 
-  editAssignmentSubmitHandler = formData => {
-    /*
-    const { shadowAssignment, editAssignment, validateAssignment } = this.props;
+  editShadowAssignmentSubmitHandler = formData => {
+    const {
+      shadowAssignment,
+      editShadowAssignment,
+      validateShadowAssignment
+    } = this.props;
     const version = shadowAssignment.getIn(['data', 'version']);
 
-    // validate shadowAssignment version
-    return validateAssignment(version)
+    // validate assignment version
+    return validateShadowAssignment(version)
       .then(res => res.value)
       .then(({ versionIsUpToDate }) => {
         if (versionIsUpToDate === false) {
-          throw SubmissionError({
+          throw new SubmissionError({
             _error: (
               <FormattedMessage
-                id="app.editShadowAssignmentForm.validation.versionDiffers"
+                id="app.editShadowAssignment.validation.versionDiffers"
                 defaultMessage="Somebody has changed the shadow assignment while you have been editing it. Please reload the page and apply your changes once more."
               />
             )
@@ -71,27 +89,19 @@ class EditShadowAssignment extends Component {
       })
       .then(() => {
         // prepare the data and submit them
-        const disabledRuntimeEnvironmentIds = formData.enabledRuntime
-          ? Object.keys(formData.enabledRuntime).filter(
-              key => formData.enabledRuntime[key] === false
-            )
-          : [];
-
-        const modifiedData = {
-          ...formData,
-          disabledRuntimeEnvironmentIds
-        };
-        delete modifiedData.enabledRuntime;
-
-        return editAssignment(version, modifiedData);
+        const { localizedTexts, ...data } = formData;
+        return editShadowAssignment(version, {
+          ...data,
+          localizedTexts: transformLocalizedTextsFormData(
+            formData.localizedTexts
+          )
+        });
       });
-      */
   };
 
   render() {
     const {
       shadowAssignment,
-      localizedTexts,
       isPublic,
       params: { assignmentId },
       push,
@@ -120,14 +130,19 @@ class EditShadowAssignment extends Component {
             link: SHADOW_ASSIGNMENT_DETAIL_URI_FACTORY(assignmentId)
           },
           {
-            text: <FormattedMessage id="app.editShadowAssignment.title" />,
+            text: (
+              <FormattedMessage
+                id="app.editShadowAssignment.title"
+                defaultMessage="Edit Shadow Assignment"
+              />
+            ),
             iconName: ['far', 'edit']
           }
         ]}
       >
         {shadowAssignment =>
           shadowAssignment &&
-          <Grid fluid>
+          <React.Fragment>
             <Row>
               <Col xs={12}>
                 <HierarchyLineContainer groupId={shadowAssignment.groupId} />
@@ -138,9 +153,10 @@ class EditShadowAssignment extends Component {
               initialValues={
                 shadowAssignment ? this.getInitialValues(shadowAssignment) : {}
               }
-              onSubmit={this.editAssignmentSubmitHandler}
+              onSubmit={this.editShadowAssignmentSubmitHandler}
               beingPublished={!shadowAssignment.isPublic && isPublic}
             />
+
             {shadowAssignment.permissionHints.remove &&
               <Box
                 type="danger"
@@ -169,7 +185,7 @@ class EditShadowAssignment extends Component {
                   </p>
                 </div>
               </Box>}
-          </Grid>}
+          </React.Fragment>}
       </Page>
     );
   }
@@ -184,9 +200,8 @@ EditShadowAssignment.propTypes = {
   }).isRequired,
   shadowAssignment: ImmutablePropTypes.map,
   editShadowAssignment: PropTypes.func.isRequired,
-  localizedTexts: PropTypes.array,
   isPublic: PropTypes.bool,
-  //validateAssignment: PropTypes.func.isRequired,
+  validateShadowAssignment: PropTypes.func.isRequired,
   links: PropTypes.object
 };
 
@@ -197,7 +212,6 @@ export default connect(
     const shadowAssignment = getShadowAssignment(state)(assignmentId);
     return {
       shadowAssignment,
-      localizedTexts: editAssignmentFormSelector(state, 'localizedTexts'),
       isPublic: editAssignmentFormSelector(state, 'isPublic')
     };
   },
@@ -211,8 +225,8 @@ export default connect(
         version
       });
       return dispatch(editShadowAssignment(assignmentId, processedData));
-    }
-    //validateAssignment: version =>
-    //  dispatch(validateAssignment(assignmentId, version))
+    },
+    validateShadowAssignment: version =>
+      dispatch(validateShadowAssignment(assignmentId, version))
   })
 )(withLinks(EditShadowAssignment));

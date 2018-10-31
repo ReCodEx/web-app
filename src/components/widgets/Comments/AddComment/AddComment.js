@@ -21,7 +21,7 @@ import Icon from '../../../icons';
 const messages = defineMessages({
   placeholder: {
     id: 'app.comments.commentPlaceholder',
-    defaultMessage: 'Your comment ...'
+    defaultMessage: 'Your comment...'
   }
 });
 

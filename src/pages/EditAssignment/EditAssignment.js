@@ -110,7 +110,7 @@ class EditAssignment extends Component {
       .then(res => res.value)
       .then(({ versionIsUpToDate }) => {
         if (versionIsUpToDate === false) {
-          throw SubmissionError({
+          throw new SubmissionError({
             _error: (
               <FormattedMessage
                 id="app.editAssignment.validation.versionDiffers"

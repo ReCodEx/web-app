@@ -36,7 +36,7 @@ const EditAssignmentForm = ({
       title={
         <FormattedMessage
           id="app.editAssignmentForm.title"
-          defaultMessage="Edit assignment {name}"
+          defaultMessage="Edit Assignment — {name}"
           values={{ name: <LocalizedExerciseName entity={assignment} /> }}
         />
       }
@@ -281,7 +281,7 @@ const EditAssignmentForm = ({
                 label={
                   <FormattedMessage
                     id="app.editAssignmentForm.sendNotification"
-                    defaultMessage="Send e-mail notification to students"
+                    defaultMessage="Send e-mail notification to students about new assignment"
                   />
                 }
               />

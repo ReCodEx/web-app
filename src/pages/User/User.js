@@ -136,7 +136,7 @@ class User extends Component {
         description={
           <FormattedMessage
             id="app.user.description"
-            defaultMessage="All of the user's progress in all groups."
+            defaultMessage="Complete progress of the user in all groups."
           />
         }
         breadcrumbs={[
@@ -264,7 +264,7 @@ class User extends Component {
                   <InfoIcon gapRight />
                   <FormattedMessage
                     id="app.user.nothingInCommon.title"
-                    defaultMessage="You are not a supervisor of {name}"
+                    defaultMessage="{name} is not one of your students"
                     values={{ name: user.fullName }}
                   />
                 </h4>

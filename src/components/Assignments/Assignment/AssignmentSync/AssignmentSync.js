@@ -40,13 +40,13 @@ const syncMessages = {
   scoreConfig: (
     <FormattedMessage
       id="app.assignment.syncScoreConfig"
-      defaultMessage="Test score configuration"
+      defaultMessage="Score configuration"
     />
   ),
   scoreCalculator: (
     <FormattedMessage
       id="app.assignment.syncScoreCalculator"
-      defaultMessage="Test score calculator"
+      defaultMessage="Score calculator"
     />
   ),
   exerciseConfig: (

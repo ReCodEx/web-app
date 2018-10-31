@@ -40,7 +40,7 @@ const SupplementaryFilesTableContainer = ({
     title={
       <FormattedMessage
         id="app.supplementaryFilesTable.title"
-        defaultMessage="Supplementary files"
+        defaultMessage="Supplementary Files"
       />
     }
     description={
