@@ -10,7 +10,7 @@ import {
   getJsData
 } from '../../../../redux/helpers/resourceManager';
 import ShadowAssignmentsTableRow from '../ShadowAssignmentsTableRow';
-import { compareAssignments } from '../../../helpers/compareAssignments';
+import { compareShadowAssignments } from '../../../helpers/compareAssignments';
 import { LoadingIcon } from '../../../icons';
 import { EMPTY_LIST, EMPTY_OBJ } from '../../../../helpers/common';
 
@@ -25,18 +25,12 @@ const ShadowAssignmentsTable = ({
     {shadowAssignments.size > 0 &&
       <thead>
         <tr>
-          {isAdmin && <th className="shrink-col" />}
+          <th className="shrink-col" />
           <th>
-            <FormattedMessage
-              id="app.assignments.name"
-              defaultMessage="Assignment name"
-            />
+            <FormattedMessage id="generic.name" defaultMessage="Name" />
           </th>
           <th>
-            <FormattedMessage
-              id="app.assignments.created"
-              defaultMessage="Created"
-            />
+            <FormattedMessage id="generic.created" defaultMessage="Created" />
           </th>
           {!isAdmin &&
             Object.keys(stats).length !== 0 &&
@@ -46,7 +40,15 @@ const ShadowAssignmentsTable = ({
                 defaultMessage="Points"
               />
             </th>}
-          {isAdmin && <th />}
+
+          <th>
+            <FormattedMessage
+              id="app.assignments.maxPoints"
+              defaultMessage="Max. Points"
+            />
+          </th>
+
+          <th className="shrink-col" />
         </tr>
       </thead>}
     <tbody>
@@ -74,7 +76,7 @@ const ShadowAssignmentsTable = ({
       {shadowAssignments
         .filter(isReady)
         .map(getJsData)
-        .sort(compareAssignments)
+        .sort(compareShadowAssignments)
         .map(assignment =>
           <ShadowAssignmentsTableRow
             key={assignment.id}

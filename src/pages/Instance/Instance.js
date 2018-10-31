@@ -12,7 +12,6 @@ import Markdown from '../../components/widgets/Markdown';
 import GroupTree from '../../components/Groups/GroupTree';
 import Button from '../../components/widgets/FlatButton';
 import Page from '../../components/layout/Page';
-import InstanceDetail from '../../components/Instances/InstanceDetail';
 import LicencesTableContainer from '../../containers/LicencesTableContainer';
 import AddLicenceFormContainer from '../../containers/AddLicenceFormContainer';
 import EditGroupForm, {

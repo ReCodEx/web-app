@@ -2,22 +2,17 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { FormattedMessage } from 'react-intl';
-import { Grid, Col, Row } from 'react-bootstrap';
+import { Col, Row } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 import { reset, formValueSelector, SubmissionError } from 'redux-form';
-import moment from 'moment';
-import { LinkContainer } from 'react-router-bootstrap';
 import { defaultMemoize } from 'reselect';
 
-import Button from '../../components/widgets/FlatButton';
 import Page from '../../components/layout/Page';
 import EditShadowAssignmentForm from '../../components/forms/EditShadowAssignmentForm';
 import DeleteShadowAssignmentButtonContainer from '../../containers/DeleteShadowAssignmentButtonContainer';
 import Box from '../../components/widgets/Box';
 import HierarchyLineContainer from '../../containers/HierarchyLineContainer';
-import { ResultsIcon } from '../../components/icons';
-import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import {
   getLocalizedTextsInitialValues,
   transformLocalizedTextsFormData
@@ -55,14 +50,18 @@ class EditShadowAssignment extends Component {
   static loadAsync = ({ assignmentId }, dispatch) =>
     dispatch(fetchShadowAssignment(assignmentId));
 
-  getInitialValues = defaultMemoize(({ localizedTexts, ...rest }) => ({
-    sendNotification: true,
-    ...rest,
-    localizedTexts: getLocalizedTextsInitialValues(
-      localizedTexts,
-      localizedTextDefaults
-    )
-  }));
+  getInitialValues = defaultMemoize(
+    ({ localizedTexts, isPublic, isBonus, maxPoints }) => ({
+      sendNotification: true,
+      isPublic,
+      isBonus,
+      maxPoints,
+      localizedTexts: getLocalizedTextsInitialValues(
+        localizedTexts,
+        localizedTextDefaults
+      )
+    })
+  );
 
   editShadowAssignmentSubmitHandler = formData => {
     const {
@@ -90,11 +89,12 @@ class EditShadowAssignment extends Component {
       .then(() => {
         // prepare the data and submit them
         const { localizedTexts, ...data } = formData;
-        return editShadowAssignment(version, {
+        return editShadowAssignment({
           ...data,
           localizedTexts: transformLocalizedTextsFormData(
             formData.localizedTexts
-          )
+          ),
+          version
         });
       });
   };
@@ -217,12 +217,8 @@ export default connect(
     push: url => dispatch(push(url)),
     reset: () => dispatch(reset('editShadowAssignment')),
     loadAsync: () => EditShadowAssignment.loadAsync({ assignmentId }, dispatch),
-    editShadowAssignment: (version, data) => {
-      // convert deadline times to timestamps
-      const processedData = Object.assign({}, data, {
-        version
-      });
-      return dispatch(editShadowAssignment(assignmentId, processedData));
+    editShadowAssignment: data => {
+      return dispatch(editShadowAssignment(assignmentId, data));
     },
     validateShadowAssignment: version =>
       dispatch(validateShadowAssignment(assignmentId, version))

@@ -11,7 +11,7 @@ import DifficultyIcon from '../DifficultyIcon';
 import ResourceRenderer from '../../helpers/ResourceRenderer';
 import withLinks from '../../../helpers/withLinks';
 import UsersNameContainer from '../../../containers/UsersNameContainer';
-import { SuccessOrFailureIcon } from '../../icons';
+import Icon, { SuccessOrFailureIcon, UserIcon, VisibleIcon } from '../../icons';
 import { getLocalizedDescription } from '../../../helpers/localizedData';
 import { LocalizedExerciseName } from '../../helpers/LocalizedNames';
 import EnvironmentsList from '../../helpers/EnvironmentsList';
@@ -38,6 +38,9 @@ const ExerciseDetail = ({
     <Table responsive condensed>
       <tbody>
         <tr>
+          <td className="text-center shrink-col em-padding-left em-padding-right">
+            <UserIcon />
+          </td>
           <th>
             <FormattedMessage id="generic.author" defaultMessage="Author" />:
           </th>
@@ -47,6 +50,9 @@ const ExerciseDetail = ({
         </tr>
 
         <tr>
+          <td className="text-center shrink-col em-padding-left em-padding-right">
+            <Icon icon={['far', 'file-alt']} />
+          </td>
           <th className="text-nowrap">
             <FormattedMessage
               id="app.exercise.description"
@@ -71,6 +77,9 @@ const ExerciseDetail = ({
         </tr>
 
         <tr>
+          <td className="text-center shrink-col em-padding-left em-padding-right">
+            <Icon icon="graduation-cap" />
+          </td>
           <th className="text-nowrap">
             <FormattedMessage
               id="app.exercise.difficulty"
@@ -83,6 +92,9 @@ const ExerciseDetail = ({
         </tr>
 
         <tr>
+          <td className="text-center shrink-col em-padding-left em-padding-right">
+            <Icon icon="code" />
+          </td>
           <th className="text-nowrap">
             <FormattedMessage
               id="app.exercise.runtimes"
@@ -95,9 +107,12 @@ const ExerciseDetail = ({
         </tr>
 
         <tr>
+          <td className="text-center shrink-col em-padding-left em-padding-right">
+            <Icon icon={['far', 'clock']} />
+          </td>
           <th className="text-nowrap">
             <FormattedMessage
-              id="app.exercise.createdAt"
+              id="generic.createdAt"
               defaultMessage="Created at"
             />:
           </th>
@@ -106,31 +121,32 @@ const ExerciseDetail = ({
           </td>
         </tr>
 
-        {updatedAt !== createdAt &&
-          <tr>
-            <th className="text-nowrap">
-              <FormattedMessage
-                id="app.exercise.updatedAt"
-                defaultMessage="Last updated at"
-              />:
-            </th>
-            <td>
-              <DateTime unixts={updatedAt} showRelative />
-            </td>
-          </tr>}
-
         <tr>
+          <td className="text-center shrink-col em-padding-left em-padding-right">
+            <Icon icon={['far', 'copy']} />
+          </td>
           <th>
-            <FormattedMessage
-              id="app.exercise.version"
-              defaultMessage="Version"
-            />:
+            <FormattedMessage id="generic.version" defaultMessage="Version" />:
           </th>
           <td>
-            v<FormattedNumber value={version} />
+            <span className="em-padding-right">
+              v<FormattedNumber value={version} />
+            </span>
+            {updatedAt !== createdAt &&
+              <small className="text-muted">
+                <FormattedMessage
+                  id="generic.lastUpdatedAt"
+                  defaultMessage="updated"
+                />{' '}
+                <DateTime unixts={updatedAt} showRelative />
+              </small>}
           </td>
         </tr>
+
         <tr>
+          <td className="text-center shrink-col em-padding-left em-padding-right">
+            <VisibleIcon />
+          </td>
           <th className="text-nowrap">
             <FormattedMessage
               id="app.exercise.isPublic"
@@ -141,7 +157,11 @@ const ExerciseDetail = ({
             <SuccessOrFailureIcon success={isPublic} />
           </td>
         </tr>
+
         <tr>
+          <td className="text-center shrink-col em-padding-left em-padding-right">
+            <Icon icon="unlock-alt" />
+          </td>
           <th className="text-nowrap">
             <FormattedMessage
               id="app.exercise.isLocked"
@@ -155,6 +175,9 @@ const ExerciseDetail = ({
 
         {forkedFrom &&
           <tr>
+            <td className="text-center shrink-col em-padding-left em-padding-right">
+              <Icon icon="code-branch" />
+            </td>
             <th className="text-nowrap">
               <FormattedMessage
                 id="app.exercise.forked"

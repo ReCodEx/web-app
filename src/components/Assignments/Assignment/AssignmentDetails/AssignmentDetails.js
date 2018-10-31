@@ -36,54 +36,56 @@ const AssignmentDetails = ({
             'text-danger': isAfterFirstDeadline
           })}
         >
-          <td className="text-center">
+          <td className="text-center shrink-col em-padding-left em-padding-right">
             <strong>
               {!isAfterFirstDeadline && <Icon icon="hourglass-start" />}
               {isAfterFirstDeadline && <Icon icon="hourglass-end" />}
             </strong>
           </td>
-          <td>
+          <th>
             <FormattedMessage
               id="app.assignment.deadline"
               defaultMessage="Deadline"
             />:
-          </td>
+          </th>
           <td>
             <DateTime unixts={firstDeadline} isDeadline showRelative />
           </td>
         </tr>
+
         {allowSecondDeadline &&
           <tr
             className={classnames({
               'text-danger': isAfterSecondDeadline
             })}
           >
-            <td className="text-center">
+            <td className="text-center shrink-col em-padding-left em-padding-right">
               <strong>
                 {!isAfterSecondDeadline && <Icon icon="hourglass-half" />}
                 {isAfterSecondDeadline && <Icon icon="hourglass-end" />}
               </strong>
             </td>
-            <td>
+            <th>
               <FormattedMessage
                 id="app.assignment.secondDeadline"
                 defaultMessage="Second deadline:"
               />
-            </td>
+            </th>
             <td>
               <DateTime unixts={secondDeadline} isDeadline showRelative />
             </td>
           </tr>}
+
         <tr>
-          <td className="text-center">
+          <td className="text-center shrink-col em-padding-left em-padding-right">
             <Icon icon="cloud-upload-alt" />
           </td>
-          <td>
+          <th>
             <FormattedMessage
               id="app.assignment.maxPoints"
               defaultMessage="Maximum number of points for a correct solution:"
             />
-          </td>
+          </th>
           <td>
             {!isAfterFirstDeadline
               ? maxPointsBeforeFirstDeadline
@@ -92,87 +94,93 @@ const AssignmentDetails = ({
                 : 0}
           </td>
         </tr>
+
         <tr>
-          <td className="text-center">
+          <td className="text-center shrink-col em-padding-left em-padding-right">
             <Icon icon="ban" />
           </td>
-          <td>
+          <th>
             <FormattedMessage
               id="app.assignment.submissionsCountLimit"
               defaultMessage="Submission count limit:"
             />
-          </td>
+          </th>
           <td>
             {submissionsCountLimit === null ? '-' : submissionsCountLimit}
           </td>
         </tr>
+
         <tr>
-          <td className="text-center">
+          <td className="text-center shrink-col em-padding-left em-padding-right">
             <Icon icon="coffee" />
           </td>
-          <td>
+          <th>
             <FormattedMessage
               id="app.assignment.alreadySubmitted"
               defaultMessage="Already submitted:"
             />
-          </td>
+          </th>
           <td>
             {canSubmit.submittedCount}
           </td>
         </tr>
+
         <tr>
-          <td className="text-center">
+          <td className="text-center shrink-col em-padding-left em-padding-right">
             <Icon icon="unlock-alt" />
           </td>
-          <td>
+          <th>
             <FormattedMessage
               id="app.assignment.canSubmit"
               defaultMessage="You can submit more solutions:"
             />
-          </td>
+          </th>
           <td>
             <SuccessOrFailureIcon success={canSubmit.canSubmit} />
           </td>
         </tr>
+
         {isBonus &&
           <tr>
-            <td className="text-center">
+            <td className="text-center shrink-col em-padding-left em-padding-right">
               <Icon icon="plus-circle" />
             </td>
-            <td>
+            <th>
               <FormattedMessage
                 id="app.assignment.isBonus"
                 defaultMessage="Bonus assignment: "
               />
-            </td>
+            </th>
             <td>
               <SuccessIcon />
             </td>
           </tr>}
+
         <tr>
-          <td className="text-center">
+          <td className="text-center shrink-col em-padding-left em-padding-right">
             <Icon icon="percent" />
           </td>
-          <td>
+          <th>
             <FormattedMessage
               id="app.assignment.pointsPercentualThreshold"
               defaultMessage="Points percentual threshold:"
             />
-          </td>
+          </th>
           <td>
             {pointsPercentualThreshold * 100} %
           </td>
         </tr>
+
         <tr>
-          <td className="text-center">
+          <td className="text-center shrink-col em-padding-left em-padding-right">
             <Icon icon="code" />
           </td>
-          <td>
+          <th>
             <FormattedMessage
               id="app.assignment.runtimeEnvironmentsIds"
               defaultMessage="Allowed languages/frameworks/technologies: "
             />
-          </td>
+          </th>
           <td>
             <EnvironmentsList runtimeEnvironments={runtimeEnvironments} />
           </td>

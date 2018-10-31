@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, FormattedNumber } from 'react-intl';
 import { LinkContainer } from 'react-router-bootstrap';
 
 import withLinks from '../../../../helpers/withLinks';
@@ -9,42 +9,57 @@ import { LocalizedExerciseName } from '../../../helpers/LocalizedNames';
 import {
   EditIcon,
   MaybeBonusAssignmentIcon,
-  VisibleIcon
+  VisibleIcon,
+  WarningIcon
 } from '../../../icons';
 import DeleteShadowAssignmentButtonContainer from '../../../../containers/DeleteShadowAssignmentButtonContainer';
 import Button from '../../../widgets/FlatButton';
 import DateTime from '../../../widgets/DateTime';
 
 const ShadowAssignmentsTableRow = ({
-  item: { id, localizedTexts, createdAt, isBonus, isPublic },
-  userId,
+  item: {
+    id,
+    localizedTexts,
+    createdAt,
+    isBonus,
+    isPublic,
+    maxPoints,
+    permissionHints
+  },
+  // TODO userId,
   stats,
-  isAdmin,
   links: {
     SHADOW_ASSIGNMENT_DETAIL_URI_FACTORY,
-    //ASSIGNMENT_DETAIL_SPECIFIC_USER_URI_FACTORY,
+    // TODO ASSIGNMENT_DETAIL_SPECIFIC_USER_URI_FACTORY,
     SHADOW_ASSIGNMENT_EDIT_URI_FACTORY
   }
 }) =>
   <tr>
-    {isAdmin &&
-      <td className="text-center shrink-col">
-        <VisibleIcon visible={isPublic} />
-      </td>}
-
+    <td className="text-nowrap shrink-col">
+      {permissionHints.update &&
+        <VisibleIcon visible={isPublic} gapLeft gapRight />}
+      <MaybeBonusAssignmentIcon id={id} isBonus={isBonus} gapLeft gapRight />
+    </td>
     <td>
-      <MaybeBonusAssignmentIcon id={id} isBonus={isBonus} />
       <Link to={SHADOW_ASSIGNMENT_DETAIL_URI_FACTORY(id)}>
         <LocalizedExerciseName
-          entity={{ name: '-- undefined --', localizedTexts }}
+          entity={{ localizedTexts }}
+          noNameMessage={
+            <i>
+              <WarningIcon className="text-warning" gapRight />
+              <FormattedMessage
+                id="app.shadowAssignment.noName"
+                defaultMessage="no name"
+              />
+            </i>
+          }
         />
       </Link>
     </td>
     <td>
       <DateTime unixts={createdAt} />
     </td>
-
-    {!isAdmin &&
+    {!permissionHints.update &&
       stats &&
       <td>
         {/* TODO stats.points && stats.points.gained !== null
@@ -61,28 +76,35 @@ const ShadowAssignmentsTableRow = ({
             </span>
               : <span /> */}
       </td>}
-
-    {isAdmin &&
-      <td className="text-right">
+    <td className="text-center">
+      <FormattedNumber value={maxPoints} />
+    </td>
+    <td className="text-right shrink-col text-nowrap">
+      {permissionHints.update &&
         <LinkContainer to={SHADOW_ASSIGNMENT_EDIT_URI_FACTORY(id)}>
           <Button bsSize="xs" bsStyle="warning">
             <EditIcon gapRight />
             <FormattedMessage id="generic.edit" defaultMessage="Edit" />
           </Button>
-        </LinkContainer>
-        <DeleteShadowAssignmentButtonContainer id={id} bsSize="xs" />
-      </td>}
+        </LinkContainer>}
+
+      {permissionHints.remove &&
+        <DeleteShadowAssignmentButtonContainer id={id} bsSize="xs" />}
+    </td>
   </tr>;
 
 ShadowAssignmentsTableRow.propTypes = {
   item: PropTypes.shape({
     id: PropTypes.string,
     localizedTexts: PropTypes.array,
-    createdAt: PropTypes.number
+    createdAt: PropTypes.number,
+    isBonus: PropTypes.bool,
+    isPublic: PropTypes.bool,
+    maxPoints: PropTypes.number,
+    permissionHints: PropTypes.object
   }).isRequired,
   userId: PropTypes.string,
   stats: PropTypes.object,
-  isAdmin: PropTypes.bool,
   links: PropTypes.object
 };
 

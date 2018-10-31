@@ -8,7 +8,10 @@ import Icon from './Icon';
 
 export const AddIcon = props => <Icon {...props} icon="plus" />;
 export const AdressIcon = props => <Icon {...props} icon="at" />;
+export const ArchiveGroupIcon = ({ archived = false, ...props }) =>
+  <Icon {...props} icon={archived ? 'dolly' : 'archive'} />;
 export const BanIcon = props => <Icon {...props} icon="ban" />;
+export const BonusIcon = props => <Icon {...props} icon="hand-holding-usd" />;
 export const CloseIcon = props => <Icon {...props} icon="times" />;
 export const CopyIcon = props =>
   <Icon {...props} icon={['far', 'clipboard']} />;
@@ -31,9 +34,6 @@ export const GroupIcon = ({
     {...props}
     icon={organizational ? 'sitemap' : archived ? 'archive' : 'users'}
   />;
-
-export const ArchiveGroupIcon = ({ archived = false, ...props }) =>
-  <Icon {...props} icon={archived ? 'dolly' : 'archive'} />;
 export const InfoIcon = props => <Icon {...props} icon="info-circle" />;
 export const LoadingIcon = props =>
   <Icon {...props} icon="spinner" pulse style={{ opacity: 0.8 }} />;

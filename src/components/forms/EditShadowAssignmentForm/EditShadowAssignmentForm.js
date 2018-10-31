@@ -191,7 +191,6 @@ const validate = ({ localizedTexts, maxPoints }) => {
     );
   }
 
-  console.log(errors);
   return errors;
 };
 

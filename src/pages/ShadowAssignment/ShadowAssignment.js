@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
 import { Col, Row } from 'react-bootstrap';
@@ -12,15 +11,14 @@ import { fetchShadowAssignmentIfNeeded } from '../../redux/modules/shadowAssignm
 import { getShadowAssignment } from '../../redux/selectors/shadowAssignments';
 
 import Page from '../../components/layout/Page';
-import ResourceRenderer from '../../components/helpers/ResourceRenderer';
-import UsersNameContainer from '../../containers/UsersNameContainer';
 import HierarchyLineContainer from '../../containers/HierarchyLineContainer';
-import AssignmentDetails from '../../components/Assignments/Assignment/AssignmentDetails';
-import { EditIcon, ResultsIcon } from '../../components/icons';
+import ShadowAssignmentDetails from '../../components/Assignments/ShadowAssignment/ShadowAssignmentDetails';
+import { EditIcon } from '../../components/icons';
 import LocalizedTexts from '../../components/helpers/LocalizedTexts';
 
 import withLinks from '../../helpers/withLinks';
 import { getLocalizedName } from '../../helpers/localizedData';
+import { hasPermissions } from '../../helpers/common';
 
 class ShadowAssignment extends Component {
   static loadAsync = ({ assignmentId }, dispatch) =>
@@ -84,10 +82,7 @@ class ShadowAssignment extends Component {
             <Row>
               <Col xs={12}>
                 <HierarchyLineContainer groupId={shadowAssignment.groupId} />
-                {// (isSupervisorOf(shadowAssignment.groupId) ||
-                // isAdminOf(shadowAssignment.groupId)) && // includes superadmin
-                // TODO
-                true &&
+                {hasPermissions(shadowAssignment, 'update') &&
                   <p>
                     <LinkContainer
                       to={SHADOW_ASSIGNMENT_EDIT_URI_FACTORY(
@@ -114,7 +109,7 @@ class ShadowAssignment extends Component {
                   </div>}
               </Col>
               <Col lg={6}>
-                {/* TODO <AssignmentDetails {...shadowAssignment} /> */}
+                <ShadowAssignmentDetails {...shadowAssignment} />
               </Col>
             </Row>
           </div>}

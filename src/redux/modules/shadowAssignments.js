@@ -1,5 +1,4 @@
 import { handleActions } from 'redux-actions';
-import { fromJS, List } from 'immutable';
 
 import { createApiAction } from '../middleware/apiMiddleware';
 import factory, { initialState } from '../helpers/resourceManager';
@@ -14,7 +13,6 @@ export { actionTypes };
 
 export const additionalActionTypes = {
   VALIDATE_SHADOW_ASSIGNMENT: 'recodex/shadow-assignments/VALIDATE'
-  //TODO: 'recodex/shadow-assignments/TODO'
 };
 
 /**
