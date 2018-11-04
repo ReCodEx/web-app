@@ -8,7 +8,10 @@ import Icon from './Icon';
 
 export const AddIcon = props => <Icon {...props} icon="plus" />;
 export const AdressIcon = props => <Icon {...props} icon="at" />;
+export const ArchiveGroupIcon = ({ archived = false, ...props }) =>
+  <Icon {...props} icon={archived ? 'dolly' : 'archive'} />;
 export const BanIcon = props => <Icon {...props} icon="ban" />;
+export const BonusIcon = props => <Icon {...props} icon="hand-holding-usd" />;
 export const CloseIcon = props => <Icon {...props} icon="times" />;
 export const CopyIcon = props =>
   <Icon {...props} icon={['far', 'clipboard']} />;
@@ -31,9 +34,6 @@ export const GroupIcon = ({
     {...props}
     icon={organizational ? 'sitemap' : archived ? 'archive' : 'users'}
   />;
-
-export const ArchiveGroupIcon = ({ archived = false, ...props }) =>
-  <Icon {...props} icon={archived ? 'dolly' : 'archive'} />;
 export const InfoIcon = props => <Icon {...props} icon="info-circle" />;
 export const LoadingIcon = props =>
   <Icon {...props} icon="spinner" pulse style={{ opacity: 0.8 }} />;
@@ -49,6 +49,8 @@ export const SearchIcon = props => <Icon {...props} icon="search" />;
 export const SendIcon = props =>
   <Icon {...props} icon={['far', 'paper-plane']} />;
 export const SettingsIcon = props => <Icon {...props} icon="cog" />;
+export const ShadowAssignmentIcon = props =>
+  <Icon {...props} icon="user-secret" />;
 export const SortedIcon = ({ active = true, descending = false, ...props }) =>
   <Icon
     icon={!active || !descending ? 'sort-alpha-down' : 'sort-alpha-up'}
@@ -70,6 +72,10 @@ export const TransferIcon = props => <Icon {...props} icon="exchange-alt" />;
 export const UnlockIcon = props => <Icon {...props} icon="unlock" />;
 export const UploadIcon = props => <Icon {...props} icon="cloud-upload-alt" />;
 export const UserIcon = props => <Icon {...props} icon={['far', 'user']} />;
+export const VisibleIcon = ({ visible = true, ...props }) =>
+  visible
+    ? <Icon {...props} icon={['far', 'eye']} />
+    : <Icon {...props} icon={['far', 'eye-slash']} />;
 export const WarningIcon = props =>
   <Icon {...props} icon="exclamation-triangle" />;
 

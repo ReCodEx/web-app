@@ -36,7 +36,7 @@ import { hardwareGroupsSelector } from '../../redux/selectors/hwGroups';
 import { isLoggedAsSuperAdmin } from '../../redux/selectors/users';
 
 import withLinks from '../../helpers/withLinks';
-import { getLocalizedName } from '../../helpers/getLocalizedData';
+import { getLocalizedName } from '../../helpers/localizedData';
 import { fetchExerciseTestsIfNeeded } from '../../redux/modules/exerciseTests';
 import { exerciseTestsSelector } from '../../redux/selectors/exerciseTests';
 

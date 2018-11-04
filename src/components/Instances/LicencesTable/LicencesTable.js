@@ -38,7 +38,7 @@ const LicencesTable = ({ instance, licences }) =>
             <th>
               <FormattedMessage
                 id="app.licencesTable.isValid"
-                defaultMessage="Is valid"
+                defaultMessage="Without revocation"
               />
             </th>
             <th>

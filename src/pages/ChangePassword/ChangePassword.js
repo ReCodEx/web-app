@@ -130,7 +130,7 @@ class ChangePassword extends Component {
                 <strong>
                   <FormattedMessage
                     id="app.changePassword.tokenExpired"
-                    defaultMessage="You cannot reset your now - your token has probably expired or the URL is broken."
+                    defaultMessage="You cannot reset your password now - your token has probably expired or the URL is broken."
                   />
                 </strong>{' '}
                 <FormattedMessage

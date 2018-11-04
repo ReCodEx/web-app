@@ -17,10 +17,10 @@ import isNumeric from 'validator/lib/isNumeric';
 import { DatetimeField, TextField, CheckboxField } from '../Fields';
 import SubmitButton from '../SubmitButton';
 import Icon, { GroupIcon } from '../../icons';
-import { getGroupCanonicalLocalizedName } from '../../../helpers/getLocalizedData';
+import { getGroupCanonicalLocalizedName } from '../../../helpers/localizedData';
 import { identity } from '../../../helpers/common';
 import withLinks from '../../../helpers/withLinks';
-import { validateTwoDeadlines } from '../../helpers/deadlineValidation';
+import { validateTwoDeadlines } from '../../helpers/validation';
 
 class MultiAssignForm extends Component {
   state = {
@@ -318,7 +318,7 @@ class MultiAssignForm extends Component {
                   label={
                     <FormattedMessage
                       id="app.editAssignmentForm.sendNotification"
-                      defaultMessage="Send e-mail notification to students"
+                      defaultMessage="Send e-mail notification to students about new assignment"
                     />
                   }
                 />

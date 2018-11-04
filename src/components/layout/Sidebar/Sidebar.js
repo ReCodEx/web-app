@@ -14,7 +14,7 @@ import {
   getJsData,
   getId
 } from '../../../redux/helpers/resourceManager';
-import { getLocalizedResourceName } from '../../../helpers/getLocalizedData';
+import { getLocalizedResourceName } from '../../../helpers/localizedData';
 import {
   isSupervisorRole,
   isEmpoweredSupervisorRole,

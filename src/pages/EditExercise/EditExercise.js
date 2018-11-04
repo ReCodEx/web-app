@@ -5,7 +5,7 @@ import { FormattedMessage, injectIntl } from 'react-intl';
 import { Row, Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
-import { reset, formValueSelector } from 'redux-form';
+import { reset } from 'redux-form';
 import { defaultMemoize } from 'reselect';
 
 import Page from '../../components/layout/Page';
@@ -27,14 +27,25 @@ import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import withLinks from '../../helpers/withLinks';
 import {
   getLocalizedName,
-  getLocalizedTextsLocales
-} from '../../helpers/getLocalizedData';
+  getLocalizedTextsInitialValues,
+  transformLocalizedTextsFormData
+} from '../../helpers/localizedData';
+
+const localizedTextDefaults = {
+  name: '',
+  text: '',
+  link: '',
+  description: ''
+};
 
 const prepareInitialValues = defaultMemoize(
   (id, version, localizedTexts, difficulty, isPublic, isLocked) => ({
     id,
     version,
-    localizedTexts,
+    localizedTexts: getLocalizedTextsInitialValues(
+      localizedTexts,
+      localizedTextDefaults
+    ),
     difficulty,
     isPublic,
     isLocked
@@ -55,7 +66,11 @@ class EditExercise extends Component {
 
   editExerciseSubmitHandler = formData => {
     const { exercise, editExercise } = this.props;
-    return editExercise(exercise.getIn(['data', 'version']), formData);
+    const { localizedTexts, ...data } = formData;
+    return editExercise(exercise.getIn(['data', 'version']), {
+      localizedTexts: transformLocalizedTextsFormData(localizedTexts),
+      ...data
+    });
   };
 
   render() {
@@ -63,7 +78,6 @@ class EditExercise extends Component {
       links: { EXERCISES_URI, EXERCISE_URI_FACTORY },
       params: { exerciseId },
       exercise,
-      localizedTexts,
       push,
       intl: { locale }
     } = this.props;
@@ -141,9 +155,6 @@ class EditExercise extends Component {
                     exercise.isLocked
                   )}
                   onSubmit={this.editExerciseSubmitHandler}
-                  localizedTextsLocales={getLocalizedTextsLocales(
-                    localizedTexts
-                  )}
                 />
               </Col>
               <Col lg={6}>
@@ -194,13 +205,10 @@ EditExercise.propTypes = {
   params: PropTypes.shape({
     exerciseId: PropTypes.string.isRequired
   }).isRequired,
-  localizedTexts: PropTypes.array,
   links: PropTypes.object.isRequired,
   push: PropTypes.func.isRequired,
   intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired
 };
-
-const editExerciseFormSelector = formValueSelector('editExercise');
 
 export default withLinks(
   connect(
@@ -208,8 +216,7 @@ export default withLinks(
       return {
         exercise: getExercise(exerciseId)(state),
         submitting: isSubmitting(state),
-        userId: loggedInUserIdSelector(state),
-        localizedTexts: editExerciseFormSelector(state, 'localizedTexts')
+        userId: loggedInUserIdSelector(state)
       };
     },
     (dispatch, { params: { exerciseId } }) => ({

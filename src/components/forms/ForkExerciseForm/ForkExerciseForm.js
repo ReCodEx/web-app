@@ -13,7 +13,7 @@ import Icon, { SuccessIcon, WarningIcon } from '../../../components/icons';
 import { forkStatuses } from '../../../redux/modules/exercises';
 import { getFork } from '../../../redux/selectors/exercises';
 import ResourceRenderer from '../../helpers/ResourceRenderer';
-import { getGroupCanonicalLocalizedName } from '../../../helpers/getLocalizedData';
+import { getGroupCanonicalLocalizedName } from '../../../helpers/localizedData';
 import { hasPermissions } from '../../../helpers/common';
 
 import withLinks from '../../../helpers/withLinks';

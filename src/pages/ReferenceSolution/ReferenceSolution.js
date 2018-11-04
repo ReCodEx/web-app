@@ -91,7 +91,7 @@ class ReferenceSolution extends Component {
             text: (
               <FormattedMessage
                 id="app.exercises.title"
-                defaultMessage="Exercises"
+                defaultMessage="Exercises List"
               />
             ),
             iconName: 'puzzle-piece',

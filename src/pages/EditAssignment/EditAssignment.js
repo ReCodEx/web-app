@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { FormattedMessage } from 'react-intl';
-import { Grid, Col, Row } from 'react-bootstrap';
+import { Col, Row } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 import { reset, formValueSelector, SubmissionError } from 'redux-form';
@@ -33,9 +33,19 @@ import { fetchExerciseIfNeeded } from '../../redux/modules/exercises';
 import { isReady, getJsData } from '../../redux/helpers/resourceManager';
 import { ResubmitAllSolutionsContainer } from '../../containers/ResubmitSolutionContainer';
 import AssignmentSync from '../../components/Assignments/Assignment/AssignmentSync';
-import { getLocalizedTextsLocales } from '../../helpers/getLocalizedData';
+import {
+  getLocalizedTextsInitialValues,
+  transformLocalizedTextsFormData
+} from '../../helpers/localizedData';
 
 import withLinks from '../../helpers/withLinks';
+
+const localizedTextDefaults = {
+  name: '',
+  text: '',
+  link: '',
+  studentHint: ''
+};
 
 class EditAssignment extends Component {
   componentWillMount = () => this.props.loadAsync();
@@ -60,6 +70,7 @@ class EditAssignment extends Component {
 
   getInitialValues = defaultMemoize(
     ({
+      localizedTexts,
       firstDeadline,
       secondDeadline,
       pointsPercentualThreshold,
@@ -67,6 +78,10 @@ class EditAssignment extends Component {
       runtimeEnvironmentIds,
       ...rest
     }) => ({
+      localizedTexts: getLocalizedTextsInitialValues(
+        localizedTexts,
+        localizedTextDefaults
+      ),
       firstDeadline: moment.unix(firstDeadline),
       secondDeadline: moment.unix(secondDeadline),
       pointsPercentualThreshold: pointsPercentualThreshold * 100,
@@ -95,11 +110,11 @@ class EditAssignment extends Component {
       .then(res => res.value)
       .then(({ versionIsUpToDate }) => {
         if (versionIsUpToDate === false) {
-          throw SubmissionError({
+          throw new SubmissionError({
             _error: (
               <FormattedMessage
-                id="app.editExerciseForm.validation.versionDiffers"
-                defaultMessage="Somebody has changed the exercise while you have been editing it. Please reload the page and apply your changes once more."
+                id="app.editAssignment.validation.versionDiffers"
+                defaultMessage="Somebody has changed the assignment while you have been editing it. Please reload the page and apply your changes once more."
               />
             )
           });
@@ -107,19 +122,20 @@ class EditAssignment extends Component {
       })
       .then(() => {
         // prepare the data and submit them
-        const disabledRuntimeEnvironmentIds = formData.enabledRuntime
-          ? Object.keys(formData.enabledRuntime).filter(
-              key => formData.enabledRuntime[key] === false
+        const { localizedTexts, enabledRuntime, ...data } = formData;
+        const disabledRuntimeEnvironmentIds = enabledRuntime
+          ? Object.keys(enabledRuntime).filter(
+              key => enabledRuntime[key] === false
             )
           : [];
 
-        const modifiedData = {
-          ...formData,
+        return editAssignment(version, {
+          ...data,
+          localizedTexts: transformLocalizedTextsFormData(
+            formData.localizedTexts
+          ),
           disabledRuntimeEnvironmentIds
-        };
-        delete modifiedData.enabledRuntime;
-
-        return editAssignment(version, modifiedData);
+        });
       });
   };
 
@@ -137,7 +153,6 @@ class EditAssignment extends Component {
       exercise,
       firstDeadline,
       allowSecondDeadline,
-      localizedTexts,
       exerciseSync,
       runtimeEnvironments,
       isPublic
@@ -185,7 +200,7 @@ class EditAssignment extends Component {
       >
         {assignment =>
           assignment &&
-          <Grid fluid>
+          <React.Fragment>
             <Row>
               <Col xs={12}>
                 <HierarchyLineContainer groupId={assignment.groupId} />
@@ -213,7 +228,7 @@ class EditAssignment extends Component {
               <AssignmentSync
                 syncInfo={assignment.exerciseSynchronizationInfo}
                 exerciseSync={exerciseSync}
-                isBroken={exercise && exercise.isBroken}
+                isBroken={Boolean(exercise) && exercise.isBroken}
               />}
 
             <ResourceRenderer
@@ -228,9 +243,6 @@ class EditAssignment extends Component {
                   onSubmit={this.editAssignmentSubmitHandler}
                   firstDeadline={firstDeadline}
                   allowSecondDeadline={allowSecondDeadline}
-                  localizedTextsLocales={getLocalizedTextsLocales(
-                    localizedTexts
-                  )}
                   runtimeEnvironments={envs}
                   beingPublished={!assignment.isPublic && isPublic}
                 />}
@@ -263,7 +275,7 @@ class EditAssignment extends Component {
                   </p>
                 </div>
               </Box>}
-          </Grid>}
+          </React.Fragment>}
       </Page>
     );
   }
@@ -282,7 +294,6 @@ EditAssignment.propTypes = {
   editAssignment: PropTypes.func.isRequired,
   firstDeadline: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   allowSecondDeadline: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
-  localizedTexts: PropTypes.array,
   isPublic: PropTypes.bool,
   exerciseSync: PropTypes.func.isRequired,
   validateAssignment: PropTypes.func.isRequired,
@@ -303,7 +314,6 @@ export default connect(
         state,
         'allowSecondDeadline'
       ),
-      localizedTexts: editAssignmentFormSelector(state, 'localizedTexts'),
       isPublic: editAssignmentFormSelector(state, 'isPublic')
     };
   },

@@ -166,27 +166,27 @@ const SolutionStatus = ({
               {evaluationStatus === 'done' &&
                 <FormattedMessage
                   id="app.submission.evaluation.status.isCorrect"
-                  defaultMessage="Solution is correct and meets all criteria."
+                  defaultMessage="The solution is correct and meets all criteria."
                 />}
               {evaluationStatus === 'work-in-progress' &&
                 <FormattedMessage
                   id="app.submission.evaluation.status.workInProgress"
-                  defaultMessage="Solution has not been evaluated yet."
+                  defaultMessage="The solution has not been evaluated yet."
                 />}
               {evaluationStatus === 'failed' &&
                 <FormattedMessage
                   id="app.submission.evaluation.status.failed"
-                  defaultMessage="Solution does not meet the defined criteria."
+                  defaultMessage="The solution does not meet the defined criteria."
                 />}
               {evaluationStatus === 'evaluation-failed' &&
                 <FormattedMessage
                   id="app.submission.evaluation.status.systemFailiure"
-                  defaultMessage="Evaluation process had failed and your submission could not have been evaluated. Please submit the solution once more. If you keep receiving errors please contact the administrator of this project."
+                  defaultMessage="Evaluation process failed and your submission could not have been evaluated. Please submit the solution once more. If you keep receiving errors please contact the administrator of this project."
                 />}
               {evaluationStatus === 'missing-submission' &&
                 <FormattedMessage
                   id="app.submission.evaluation.status.solutionMissingSubmission"
-                  defaultMessage="Solution was not submitted for evaluation. This was probably caused by an error in the assignment configuration."
+                  defaultMessage="The solution was not submitted for evaluation. This was probably caused by an error in the assignment configuration."
                 />}
             </em>
           </td>

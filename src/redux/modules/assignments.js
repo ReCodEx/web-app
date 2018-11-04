@@ -30,7 +30,6 @@ export const additionalActionTypes = {
  */
 
 export const loadAssignment = actions.pushResource;
-export const fetchAssignmentsIfNeeded = actions.fetchIfNeeded;
 export const fetchAssignment = actions.fetchResource;
 export const fetchAssignmentIfNeeded = actions.fetchOneIfNeeded;
 

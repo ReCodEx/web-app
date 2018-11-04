@@ -35,7 +35,7 @@ import UsersNameContainer from '../UsersNameContainer';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import SisCreateGroupForm from '../../components/forms/SisCreateGroupForm';
 import SisBindGroupForm from '../../components/forms/SisBindGroupForm';
-import { getGroupCanonicalLocalizedName } from '../../helpers/getLocalizedData';
+import { getGroupCanonicalLocalizedName } from '../../helpers/localizedData';
 
 import Icon, { GroupIcon } from '../../components/icons';
 import withLinks from '../../helpers/withLinks';

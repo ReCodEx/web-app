@@ -31,7 +31,10 @@ import GroupInfoTable, {
 } from '../../components/Groups/GroupDetail';
 import HierarchyLine from '../../components/Groups/HierarchyLine';
 import SupervisorsList from '../../components/Users/SupervisorsList';
-import { getLocalizedName } from '../../helpers/getLocalizedData';
+import {
+  getLocalizedName,
+  transformLocalizedTextsFormData
+} from '../../helpers/localizedData';
 import { isReady } from '../../redux/helpers/resourceManager/index';
 import Box from '../../components/widgets/Box';
 import GroupTree from '../../components/Groups/GroupTree/GroupTree';
@@ -306,10 +309,11 @@ const mapStateToProps = (state, { params: { groupId } }) => {
 };
 
 const mapDispatchToProps = (dispatch, { params }) => ({
-  addSubgroup: (instanceId, userId) => data =>
+  addSubgroup: (instanceId, userId) => ({ localizedTexts, ...data }) =>
     dispatch(
       createGroup({
         ...data,
+        localizedTexts: transformLocalizedTextsFormData(localizedTexts),
         instanceId,
         parentGroupId: params.groupId
       })

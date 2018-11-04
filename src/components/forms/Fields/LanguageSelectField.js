@@ -1,10 +1,11 @@
 import React from 'react';
 import SelectField from './SelectField';
+import { objectMap } from '../../../helpers/common';
+import { knownLocalesNames } from '../../../helpers/localizedData';
 
-const languageOptions = [
-  { key: 'en', name: 'English' },
-  { key: 'cs', name: 'Čeština' }
-];
+const languageOptions = Object.values(
+  objectMap(knownLocalesNames, (name, key) => ({ key, name }))
+);
 
 const LanguageSelectField = ({ ...props }) =>
   <SelectField {...props} options={languageOptions} addEmptyOption={true} />;

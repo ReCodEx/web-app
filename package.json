@@ -10,7 +10,7 @@
   },
   "private": true,
   "scripts": {
-    "clean": "rm -f public/bundle* && rm -f public/style* && rm -f bin/server.js && rm -f bin/style* && rm -fr tmp",
+    "clean": "rm -f public/bundle* && rm -f public/style* && rm -f bin/server.js && rm -f bin/style* && rm -fr tmp/messages/*",
     "build:server": "webpack --config config/webpack.server.js",
     "build:client": "webpack --config config/webpack.config.js",
     "build": "npm run clean && npm run build:server && npm run build:client",
@@ -21,7 +21,7 @@
     "dev": "babel-node bin/dev.js --max-old-space-size=4096",
     "start": "node bin/server.js",
     "deploy": "mkdir -p ./prod && cp -rf ./views ./prod && cp -rf ./bin ./prod && rm -f ./prod/public/bundle* && rm -f ./prod/public/style* && cp -rf ./public ./prod",
-    "exportStrings": "babel-node bin/manageTranslations.js",
+    "exportStrings": "rm -rf node_modules/.cache/babel-loader/* && rm -rf tmp/messages/* && npm run build && babel-node bin/manageTranslations.js",
     "format": "prettier --single-quote --write \"src/**/*.js\""
   },
   "dependencies": {

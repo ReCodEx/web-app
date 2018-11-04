@@ -72,12 +72,12 @@ const commonMessages = defineMessages({
   instructions: {
     id: 'app.submistSolution.instructions',
     defaultMessage:
-      'You must attach at least one file with source code and wait, until all your files are uploaded to the server. If there is a problem uploading any of the files, please try uploading it again or remove the file. This form cannot be submitted until there are any files which have not been successfully uploaded or which could not have been uploaded to the server.'
+      'You must attach at least one file with source code and wait, until all your files are uploaded to the server. If there is a problem uploading any of the files, check the name of the file. The name MUST NOT contain non-standard characters (like UTF-8 ones). Then try to upload it again.'
   },
   submissionRejected: {
     id: 'app.submistSolution.submitFailed',
     defaultMessage:
-      'Action was rejected by the server. This usually means you have uploaded incorrect files - do your files have proper file type extensions? If you cannot submit the solution and there is no obvious reason, contact your administrator to sort things out.'
+      'Submission was rejected by the server. This usually means you have uploaded incorrect files - do your files have name with ASCII characters only and proper file type extensions? If you cannot submit the solution and there is no obvious reason, contact your supervisor to sort things out.'
   },
   submitButton: {
     id: 'generic.submit',
@@ -85,7 +85,7 @@ const commonMessages = defineMessages({
   },
   submitting: {
     id: 'generic.submitting',
-    defaultMessage: 'Submitting ...'
+    defaultMessage: 'Submitting...'
   }
 });
 

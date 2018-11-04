@@ -5,12 +5,13 @@ import { connect } from 'react-redux';
 import { formValueSelector } from 'redux-form';
 import { FormattedMessage } from 'react-intl';
 import { Row, Col } from 'react-bootstrap';
-
-import Button from '../../components/widgets/FlatButton';
 import { LinkContainer } from 'react-router-bootstrap';
 
+import Box from '../../components/widgets/Box';
+import Markdown from '../../components/widgets/Markdown';
+import GroupTree from '../../components/Groups/GroupTree';
+import Button from '../../components/widgets/FlatButton';
 import Page from '../../components/layout/Page';
-import InstanceDetail from '../../components/Instances/InstanceDetail';
 import LicencesTableContainer from '../../containers/LicencesTableContainer';
 import AddLicenceFormContainer from '../../containers/AddLicenceFormContainer';
 import EditGroupForm, {
@@ -28,6 +29,7 @@ import { createGroup, fetchAllGroups } from '../../redux/modules/groups';
 import { notArchivedGroupsSelector } from '../../redux/selectors/groups';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import { isLoggedAsSuperAdmin } from '../../redux/selectors/users';
+import { transformLocalizedTextsFormData } from '../../helpers/localizedData';
 
 import withLinks from '../../helpers/withLinks';
 
@@ -79,7 +81,7 @@ class Instance extends Component {
           <div>
             {isSuperAdmin &&
               <Row>
-                <Col sm={12}>
+                <Col sm={12} md={6}>
                   <p>
                     <LinkContainer
                       to={ADMIN_EDIT_INSTANCE_URI_FACTORY(instanceId)}
@@ -97,18 +99,51 @@ class Instance extends Component {
               </Row>}
 
             <Row>
-              <Col sm={12}>
-                <InstanceDetail
-                  {...data}
-                  groups={groups}
-                  isAdmin={isSuperAdmin || isAdmin}
-                />
-              </Col>
-            </Row>
+              <Col sm={12} md={6}>
+                <Box
+                  title={
+                    <FormattedMessage
+                      id="app.instance.detailTitle"
+                      defaultMessage="Instance Description"
+                    />
+                  }
+                >
+                  <Markdown source={data.description} />
+                </Box>
 
-            {(isSuperAdmin || isAdmin) &&
-              <Row>
-                <Col sm={6}>
+                <LicencesTableContainer instance={data} />
+                {isSuperAdmin &&
+                  <AddLicenceFormContainer instanceId={data.id} />}
+              </Col>
+
+              {(isSuperAdmin || isAdmin) &&
+                <Col sm={12} md={6}>
+                  <Box
+                    title={
+                      <FormattedMessage
+                        id="app.instance.groupsTitle"
+                        defaultMessage="Groups Hierarchy"
+                      />
+                    }
+                    extraPadding
+                    unlimitedHeight
+                  >
+                    <div>
+                      {data.rootGroupId !== null &&
+                        <GroupTree
+                          id={data.rootGroupId}
+                          isAdmin={isSuperAdmin || isAdmin}
+                          groups={groups}
+                        />}
+
+                      {data.rootGroupId === null &&
+                        <FormattedMessage
+                          id="app.instance.groups.noGroups"
+                          defaultMessage="There are no groups in this ReCodEx instance."
+                        />}
+                    </div>
+                  </Box>
+
                   <EditGroupForm
                     form="addGroup"
                     onSubmit={createGroup(userId)}
@@ -116,17 +151,12 @@ class Instance extends Component {
                     initialValues={EDIT_GROUP_FORM_EMPTY_INITIAL_VALUES}
                     createNew
                     collapsable
-                    isOpen
+                    isOpen={false}
                     hasThreshold={hasThreshold}
                     isSuperAdmin={isSuperAdmin}
                   />
-                </Col>
-                <Col sm={6}>
-                  <LicencesTableContainer instance={data} />
-                  {isSuperAdmin &&
-                    <AddLicenceFormContainer instanceId={data.id} />}
-                </Col>
-              </Row>}
+                </Col>}
+            </Row>
           </div>}
       </Page>
     );
@@ -164,8 +194,14 @@ export default withLinks(
       };
     },
     (dispatch, { params: { instanceId } }) => ({
-      createGroup: userId => data =>
-        dispatch(createGroup({ instanceId, ...data })).then(() =>
+      createGroup: userId => ({ localizedTexts, ...data }) =>
+        dispatch(
+          createGroup({
+            ...data,
+            localizedTexts: transformLocalizedTextsFormData(localizedTexts),
+            instanceId
+          })
+        ).then(() =>
           Promise.all([dispatch(fetchAllGroups()), dispatch(fetchUser(userId))])
         ),
       loadAsync: () => Instance.loadAsync({ instanceId }, dispatch)

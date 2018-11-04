@@ -31,7 +31,7 @@ import { EditIcon, DownloadIcon } from '../../components/icons';
 
 import { safeGet } from '../../helpers/common';
 import withLinks from '../../helpers/withLinks';
-import { getLocalizedName } from '../../helpers/getLocalizedData';
+import { getLocalizedName } from '../../helpers/localizedData';
 
 class AssignmentStats extends Component {
   static loadAsync = ({ assignmentId }, dispatch) =>

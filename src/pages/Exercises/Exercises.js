@@ -17,7 +17,7 @@ class Exercises extends Component {
         title={
           <FormattedMessage
             id="app.exercises.title"
-            defaultMessage="Exercise list"
+            defaultMessage="Exercise List"
           />
         }
         description={
@@ -31,7 +31,7 @@ class Exercises extends Component {
             text: (
               <FormattedMessage
                 id="app.exercises.title"
-                defaultMessage="Exercise list"
+                defaultMessage="Exercise List"
               />
             ),
             iconName: 'puzzle-piece'

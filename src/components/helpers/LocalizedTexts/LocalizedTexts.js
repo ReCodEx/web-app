@@ -6,27 +6,41 @@ import { Tabs, Tab, Well } from 'react-bootstrap';
 import ExternalLinkPreview from '../ExternalLinkPreview';
 import Icon from '../../icons';
 import Markdown from '../../widgets/Markdown';
+import { knownLocales } from '../../../helpers/localizedData';
 
 import './LocalizedTexts.css';
 
-const tabsComparator = ({ locale: a }, { locale: b }) =>
-  typeof a !== 'string'
-    ? typeof b !== 'string' ? 0 : 1
-    : typeof b !== 'string' ? -1 : a.localeCompare(b);
+const LocalizedTexts = (
+  { locales = [], noLocalesMessage = null },
+  { lang = 'en' }
+) => {
+  const localeTabs = knownLocales
+    .map(locale => locales.find(l => l.locale === locale))
+    .filter(
+      tabData =>
+        tabData && (tabData.text || tabData.link || tabData.studentHint)
+    );
 
-const LocalizedTexts = ({ locales = [] }, { lang = 'en' }) =>
-  <Tabs
-    defaultActiveKey={
-      locales.find(({ locale }) => locale === lang) || locales.length === 0
-        ? lang
-        : locales[0].locale
-    }
-    className="nav-tabs-custom"
-    id="localized-texts"
-  >
-    {locales
-      .sort(tabsComparator)
-      .map(({ locale, text, link = '', studentHint = null }, i) =>
+  if (localeTabs.length === 0) {
+    return noLocalesMessage
+      ? <div className="callout callout-info">
+          {noLocalesMessage}
+        </div>
+      : null;
+  }
+
+  return (
+    <Tabs
+      defaultActiveKey={
+        localeTabs.find(({ locale }) => locale === lang) ||
+        localeTabs.length === 0
+          ? lang
+          : localeTabs[0].locale
+      }
+      className="nav-tabs-custom"
+      id="localized-texts"
+    >
+      {localeTabs.map(({ locale, text, link = '', studentHint = null }, i) =>
         <Tab key={i} eventKey={locale} title={locale}>
           {link &&
             link !== '' &&
@@ -71,15 +85,9 @@ const LocalizedTexts = ({ locales = [] }, { lang = 'en' }) =>
             </div>}
         </Tab>
       )}
-
-    {locales.length === 0 &&
-      <Tab eventKey={lang} title={lang}>
-        <FormattedMessage
-          id="app.localizedTexts.missingText"
-          defaultMessage="Localized text has not been published yet."
-        />
-      </Tab>}
-  </Tabs>;
+    </Tabs>
+  );
+};
 
 LocalizedTexts.contextTypes = {
   lang: PropTypes.string
@@ -91,7 +99,8 @@ LocalizedTexts.propTypes = {
       locale: PropTypes.string.isRequried,
       text: PropTypes.string.isRequried
     })
-  )
+  ),
+  noLocalesMessage: PropTypes.any
 };
 
 export default LocalizedTexts;

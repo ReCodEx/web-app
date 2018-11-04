@@ -10,7 +10,7 @@ import UsersName from '../../Users/UsersName';
 import SortableTable from '../../widgets/SortableTable';
 import withLinks from '../../../helpers/withLinks';
 import { LocalizedExerciseName } from '../../helpers/LocalizedNames';
-import { getLocalizedName } from '../../../helpers/getLocalizedData';
+import { getLocalizedName } from '../../../helpers/localizedData';
 import { compareAssignments } from '../../helpers/compareAssignments';
 import { downloadString } from '../../../redux/helpers/api/download';
 import Button from '../../widgets/FlatButton';

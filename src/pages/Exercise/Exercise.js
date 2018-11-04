@@ -72,7 +72,7 @@ import {
 } from '../../redux/selectors/groups';
 
 import withLinks from '../../helpers/withLinks';
-import { getLocalizedName } from '../../helpers/getLocalizedData';
+import { getLocalizedName } from '../../helpers/localizedData';
 import { hasPermissions } from '../../helpers/common';
 
 const messages = defineMessages({
@@ -241,7 +241,7 @@ class Exercise extends Component {
             text: (
               <FormattedMessage
                 id="app.exercises.title"
-                defaultMessage="Exercises"
+                defaultMessage="Exercises List"
               />
             ),
             iconName: 'puzzle-piece',

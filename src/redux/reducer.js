@@ -35,6 +35,7 @@ import referenceSolutions from './modules/referenceSolutions';
 import referenceSolutionEvaluations from './modules/referenceSolutionEvaluations';
 import registration from './modules/registration';
 import runtimeEnvironments from './modules/runtimeEnvironments';
+import shadowAssignments from './modules/shadowAssignments';
 import sidebar from './modules/sidebar';
 import sisPossibleParents from './modules/sisPossibleParents';
 import sisStatus from './modules/sisStatus';
@@ -85,6 +86,7 @@ const createRecodexReducers = (token, instanceId) => ({
   referenceSolutionEvaluations,
   registration,
   runtimeEnvironments,
+  shadowAssignments,
   sidebar,
   sisPossibleParents,
   sisSubscribedGroups,

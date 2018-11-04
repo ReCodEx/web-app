@@ -3,14 +3,18 @@ import PropTypes from 'prop-types';
 import { reduxForm, Field, FieldArray } from 'redux-form';
 import { injectIntl, FormattedMessage } from 'react-intl';
 import { Alert, HelpBlock, Grid, Row, Col } from 'react-bootstrap';
-import isNumeric from 'validator/lib/isNumeric';
 
 import FormBox from '../../widgets/FormBox';
 import { DatetimeField, TextField, CheckboxField } from '../Fields';
 import LocalizedTextsFormField from '../LocalizedTextsFormField';
 import SubmitButton from '../SubmitButton';
 import { LocalizedExerciseName } from '../../helpers/LocalizedNames';
-import { validateTwoDeadlines } from '../../helpers/deadlineValidation';
+import {
+  isNonNegativeInteger,
+  isPositiveInteger,
+  validateTwoDeadlines
+} from '../../helpers/validation';
+import { validateLocalizedTextsFormData } from '../../../helpers/localizedData';
 
 const EditAssignmentForm = ({
   initialValues: assignment,
@@ -24,7 +28,6 @@ const EditAssignmentForm = ({
   error,
   firstDeadline,
   allowSecondDeadline,
-  localizedTextsLocales,
   runtimeEnvironments,
   beingPublished
 }) =>
@@ -33,7 +36,7 @@ const EditAssignmentForm = ({
       title={
         <FormattedMessage
           id="app.editAssignmentForm.title"
-          defaultMessage="Edit assignment {name}"
+          defaultMessage="Edit Assignment — {name}"
           values={{ name: <LocalizedExerciseName entity={assignment} /> }}
         />
       }
@@ -77,14 +80,8 @@ const EditAssignmentForm = ({
           />
         </Alert>}
 
-      {error &&
-        <Alert bsStyle="danger">
-          {error}
-        </Alert>}
-
       <FieldArray
         name="localizedTexts"
-        localizedTextsLocales={localizedTextsLocales}
         component={LocalizedTextsFormField}
         fieldType="assignment"
       />
@@ -284,13 +281,18 @@ const EditAssignmentForm = ({
                 label={
                   <FormattedMessage
                     id="app.editAssignmentForm.sendNotification"
-                    defaultMessage="Send e-mail notification to students"
+                    defaultMessage="Send e-mail notification to students about new assignment"
                   />
                 }
               />
             </Col>}
         </Row>
       </Grid>
+
+      {error &&
+        <Alert bsStyle="danger">
+          {error}
+        </Alert>}
     </FormBox>
   </div>;
 
@@ -306,21 +308,10 @@ EditAssignmentForm.propTypes = {
   invalid: PropTypes.bool,
   firstDeadline: PropTypes.oneOfType([PropTypes.string, PropTypes.object]), // object == moment.js instance
   allowSecondDeadline: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
-  localizedTextsLocales: PropTypes.array,
   runtimeEnvironments: PropTypes.array,
   beingPublished: PropTypes.bool,
   error: PropTypes.object
 };
-
-const isNonNegativeInteger = n =>
-  typeof n !== 'undefined' &&
-  (typeof n === 'number' || isNumeric(n)) &&
-  parseInt(n) >= 0;
-
-const isPositiveInteger = n =>
-  typeof n !== 'undefined' &&
-  (typeof n === 'number' || isNumeric(n)) &&
-  parseInt(n) > 0;
 
 const validate = (
   {
@@ -338,29 +329,13 @@ const validate = (
   { intl: { formatMessage } }
 ) => {
   const errors = {};
-
-  if (localizedTexts.length < 1) {
-    errors['_error'] = (
-      <FormattedMessage
-        id="app.editAssignmentForm.validation.noLocalizedText"
-        defaultMessage="Please add at least one localized text describing the assignment."
-      />
-    );
-  }
-
-  const localizedTextsErrors = {};
-  for (let i = 0; i < localizedTexts.length; ++i) {
-    const localeErrors = {};
-    if (!localizedTexts[i]) {
-      localeErrors['locale'] = (
-        <FormattedMessage
-          id="app.editAssignmentForm.validation.localizedText"
-          defaultMessage="Please fill localized information."
-        />
-      );
-    } else {
-      if (!localizedTexts[i].name) {
-        localeErrors['name'] = (
+  validateLocalizedTextsFormData(
+    errors,
+    localizedTexts,
+    ({ name, text, link }) => {
+      const textErrors = {};
+      if (!name.trim()) {
+        textErrors.name = (
           <FormattedMessage
             id="app.editAssignmentForm.validation.emptyName"
             defaultMessage="Please fill the name of the assignment."
@@ -368,52 +343,18 @@ const validate = (
         );
       }
 
-      if (!localizedTexts[i].locale) {
-        localeErrors['locale'] = (
-          <FormattedMessage
-            id="app.editAssignmentForm.validation.localizedText.locale"
-            defaultMessage="Please select the language."
-          />
-        );
-      }
-
-      if (!localizedTexts[i].text && !localizedTexts[i].link) {
-        localeErrors['text'] = (
+      if (!text.trim() && !link.trim()) {
+        textErrors.text = (
           <FormattedMessage
             id="app.editAssignmentForm.validation.localizedText.text"
-            defaultMessage="Please fill the description in this language or provide an external link below."
+            defaultMessage="Please fill the description or provide an external link below."
           />
         );
       }
-    }
 
-    if (Object.keys(localeErrors).length > 0) {
-      localizedTextsErrors[i] = localeErrors;
+      return textErrors;
     }
-  }
-
-  const localeArr = localizedTexts
-    .filter(text => text !== undefined)
-    .map(text => text.locale);
-  for (let i = 0; i < localeArr.length; ++i) {
-    if (localeArr.indexOf(localeArr[i]) !== i) {
-      if (localizedTextsErrors[i] && !localizedTextsErrors[i].locale) {
-        if (!localizedTextsErrors[i]) {
-          localizedTextsErrors[i] = {};
-        }
-        localizedTextsErrors[i].locale = (
-          <FormattedMessage
-            id="app.editAssignmentForm.validation.sameLocalizedTexts"
-            defaultMessage="There are more language variants with the same locale. Please make sure locales are unique."
-          />
-        );
-      }
-    }
-  }
-
-  if (Object.keys(localizedTextsErrors).length > 0) {
-    errors['localizedTexts'] = localizedTextsErrors;
-  }
+  );
 
   validateTwoDeadlines(
     errors,
@@ -424,7 +365,7 @@ const validate = (
   );
 
   if (!isPositiveInteger(submissionsCountLimit)) {
-    errors['submissionsCountLimit'] = (
+    errors.submissionsCountLimit = (
       <FormattedMessage
         id="app.editAssignmentForm.validation.submissionsCountLimit"
         defaultMessage="Please fill the submissions count limit field with a positive integer."
@@ -433,7 +374,7 @@ const validate = (
   }
 
   if (!isNonNegativeInteger(maxPointsBeforeFirstDeadline)) {
-    errors['maxPointsBeforeFirstDeadline'] = (
+    errors.maxPointsBeforeFirstDeadline = (
       <FormattedMessage
         id="app.editAssignmentForm.validation.maxPointsBeforeFirstDeadline"
         defaultMessage="Please fill the maximum number of points received when submitted before the deadline with a nonnegative integer."
@@ -445,7 +386,7 @@ const validate = (
     allowSecondDeadline &&
     !isNonNegativeInteger(maxPointsBeforeSecondDeadline)
   ) {
-    errors['maxPointsBeforeSecondDeadline'] = (
+    errors.maxPointsBeforeSecondDeadline = (
       <FormattedMessage
         id="app.editAssignmentForm.validation.maxPointsBeforeSecondDeadline"
         defaultMessage="Please fill the number of maximum points received after the first and before the second deadline with a nonnegative integer or remove the second deadline."
@@ -459,14 +400,14 @@ const validate = (
       pointsPercentualThreshold.toString() !==
       Math.round(numericThreshold).toString()
     ) {
-      errors['pointsPercentualThreshold'] = (
+      errors.pointsPercentualThreshold = (
         <FormattedMessage
           id="app.editAssignmentForm.validation.pointsPercentualThresholdMustBeInteger"
           defaultMessage="Points percentual threshold must be an integer."
         />
       );
     } else if (numericThreshold < 0 || numericThreshold > 100) {
-      errors['pointsPercentualThreshold'] = (
+      errors.pointsPercentualThreshold = (
         <FormattedMessage
           id="app.editAssignmentForm.validation.pointsPercentualThresholdBetweenZeroHundred"
           defaultMessage="Points percentual threshold must be an integer in between 0 and 100."
@@ -479,7 +420,7 @@ const validate = (
     key => enabledRuntime[key] === false
   );
   if (formDisabledRuntimes.length === runtimeEnvironmentIds.length) {
-    errors['_error'] = (
+    errors._error = (
       <FormattedMessage
         id="app.editAssignmentForm.validation.allRuntimesDisabled"
         defaultMessage="You cannot disable all available runtime environments."

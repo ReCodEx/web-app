@@ -8,6 +8,7 @@ import factory, { initialState } from '../helpers/resourceManager';
 import createRecord from '../helpers/resourceManager/recordFactory';
 import { resourceStatus } from '../helpers/resourceManager/status';
 import { actionTypes as assignmentsActionTypes } from './assignments';
+import { actionTypes as shadowAssignmentsActionTypes } from './shadowAssignments';
 import { actionTypes as sisSupervisedCoursesActionTypes } from './sisSupervisedCourses';
 import { selectedInstanceId } from '../selectors/auth';
 
@@ -408,6 +409,37 @@ const reducer = handleActions(
         groups.map(group =>
           group.updateIn(['data', 'privateData', 'assignments'], assignments =>
             assignments.filter(id => id !== assignmentId)
+          )
+        )
+      ),
+
+    [shadowAssignmentsActionTypes.UPDATE_FULFILLED]: (
+      state,
+      { payload: { id: shadowAssignmentId, groupId } }
+    ) =>
+      state.updateIn(
+        ['resources', groupId, 'data', 'privateData', 'shadowAssignments'],
+        assignments => assignments.push(shadowAssignmentId).toSet().toList()
+      ),
+
+    [shadowAssignmentsActionTypes.ADD_FULFILLED]: (
+      state,
+      { payload: { id: shadowAssignmentId, groupId } }
+    ) =>
+      state.updateIn(
+        ['resources', groupId, 'data', 'privateData', 'shadowAssignments'],
+        assignments => assignments.push(shadowAssignmentId).toSet().toList()
+      ),
+
+    [shadowAssignmentsActionTypes.REMOVE_FULFILLED]: (
+      state,
+      { meta: { id: shadowAssignmentId } }
+    ) =>
+      state.update('resources', groups =>
+        groups.map(group =>
+          group.updateIn(
+            ['data', 'privateData', 'shadowAssignments'],
+            assignments => assignments.filter(id => id !== shadowAssignmentId)
           )
         )
       ),

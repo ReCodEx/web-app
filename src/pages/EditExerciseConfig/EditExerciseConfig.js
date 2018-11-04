@@ -47,7 +47,7 @@ import { exercisePipelinesSelector } from '../../redux/selectors/pipelines';
 */
 
 import withLinks from '../../helpers/withLinks';
-import { getLocalizedName } from '../../helpers/getLocalizedData';
+import { getLocalizedName } from '../../helpers/localizedData';
 import { exerciseEnvironmentConfigSelector } from '../../redux/selectors/exerciseEnvironmentConfigs';
 import {
   fetchExerciseEnvironmentConfig,

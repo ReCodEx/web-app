@@ -11,7 +11,7 @@ const BonusPoints = ({ bonus }) =>
       <Tooltip id={Date.now()}>
         <FormattedMessage
           id="app.submission.evaluation.bonusPoints"
-          defaultMessage="Your supervisor gave you these aditional points manually."
+          defaultMessage="Bonus points:"
         />
       </Tooltip>
     }

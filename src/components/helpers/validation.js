@@ -1,6 +1,25 @@
 import moment from 'moment';
 import { defineMessages } from 'react-intl';
+import isNumeric from 'validator/lib/isNumeric';
 
+export const isPositiveInteger = n =>
+  typeof n !== 'undefined' &&
+  (typeof n === 'number' || isNumeric(n)) &&
+  parseInt(n) > 0;
+
+export const isNegativeInteger = n =>
+  typeof n !== 'undefined' &&
+  (typeof n === 'number' || isNumeric(n)) &&
+  parseInt(n) < 0;
+
+export const isNonNegativeInteger = n =>
+  typeof n !== 'undefined' &&
+  (typeof n === 'number' || isNumeric(n)) &&
+  parseInt(n) >= 0;
+
+/*
+ * Deadline Validators
+ */
 export const deadlineFutureLimit = moment().endOf('year').add(1, 'year');
 
 const messages = defineMessages({

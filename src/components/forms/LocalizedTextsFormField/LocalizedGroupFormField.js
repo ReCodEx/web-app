@@ -2,38 +2,19 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { Field } from 'redux-form';
-import {
-  MarkdownTextAreaField,
-  LanguageSelectField,
-  TextField
-} from '../Fields';
+import { Well } from 'react-bootstrap';
 
-const LocalizedGroupFormField = ({ prefix }) =>
-  <div>
-    <Field
-      name={`${prefix}.name`}
-      component={TextField}
-      label={
-        <span>
-          <FormattedMessage id="generic.name" defaultMessage="Name" />:
-        </span>
-      }
-    />
+import SharedLocalizedFields from './SharedLocalizedFields';
+import { MarkdownTextAreaField } from '../Fields';
 
-    <Field
-      name={`${prefix}.locale`}
-      component={LanguageSelectField}
-      label={
-        <FormattedMessage
-          id="app.editGroupForm.localized.locale"
-          defaultMessage="The language:"
-        />
-      }
-    />
+const LocalizedGroupFormField = ({ prefix, data: enabled }) =>
+  <Well>
+    <SharedLocalizedFields prefix={prefix} enabled={enabled} />
 
     <Field
       name={`${prefix}.description`}
       component={MarkdownTextAreaField}
+      disabled={!enabled}
       label={
         <FormattedMessage
           id="app.editGroupForm.description"
@@ -41,10 +22,11 @@ const LocalizedGroupFormField = ({ prefix }) =>
         />
       }
     />
-  </div>;
+  </Well>;
 
 LocalizedGroupFormField.propTypes = {
-  prefix: PropTypes.string.isRequired
+  prefix: PropTypes.string.isRequired,
+  data: PropTypes.bool.isRequired
 };
 
 export default LocalizedGroupFormField;
