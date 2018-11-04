@@ -17,7 +17,8 @@ const LocalizedTexts = (
   const localeTabs = knownLocales
     .map(locale => locales.find(l => l.locale === locale))
     .filter(
-      tabData => tabData && (tabData.text || tabData.link || tabData.stuentHint)
+      tabData =>
+        tabData && (tabData.text || tabData.link || tabData.studentHint)
     );
 
   if (localeTabs.length === 0) {

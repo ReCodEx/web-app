@@ -22,7 +22,7 @@ import { hasPermissions } from '../../helpers/common';
 
 class ShadowAssignment extends Component {
   static loadAsync = ({ assignmentId }, dispatch) =>
-    Promise.all([dispatch(fetchShadowAssignmentIfNeeded(assignmentId))]);
+    dispatch(fetchShadowAssignmentIfNeeded(assignmentId));
 
   componentWillMount() {
     this.props.loadAsync();
@@ -93,7 +93,7 @@ class ShadowAssignment extends Component {
                         <EditIcon gapRight />
                         <FormattedMessage
                           id="app.shadowAssignment.editSettings"
-                          defaultMessage="Edit Assignment Settings"
+                          defaultMessage="Edit Shadow Assignment Settings"
                         />
                       </Button>
                     </LinkContainer>

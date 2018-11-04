@@ -10,7 +10,7 @@ export const isPositiveInteger = n =>
 export const isNegativeInteger = n =>
   typeof n !== 'undefined' &&
   (typeof n === 'number' || isNumeric(n)) &&
-  parseInt(n) > 0;
+  parseInt(n) < 0;
 
 export const isNonNegativeInteger = n =>
   typeof n !== 'undefined' &&

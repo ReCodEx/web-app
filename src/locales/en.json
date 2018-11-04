@@ -994,7 +994,7 @@
   "app.roles.supervisorStudents": "Supervisor-students",
   "app.roles.supervisors": "Supervisors",
   "app.roles.supervisorsEmpowered": "Empowered Supervisors",
-  "app.shadowAssignment.editSettings": "Edit Assignment Settings",
+  "app.shadowAssignment.editSettings": "Edit Shadow Assignment Settings",
   "app.shadowAssignment.isBonus": "Is bonus",
   "app.shadowAssignment.isPublic": "Is visible to students",
   "app.shadowAssignment.maxPoints": "Points limit",
