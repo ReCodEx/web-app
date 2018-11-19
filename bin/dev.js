@@ -4,9 +4,11 @@ import WebpackDevServer from 'webpack-dev-server';
 import path from 'path';
 import config from '../config/webpack.config-dev';
 import colors from 'colors';
+import fs from 'fs';
 
 const PORT = process.env.PORT || 8080;
 const WEBPACK_DEV_SERVER_PORT = process.env.WEBPACK_DEV_SERVER_PORT || 8081;
+const fileConfig = fs.readFileSync('public/public/env.json', 'utf8');
 
 let app = new Express();
 app.set('view engine', 'ejs');
@@ -24,7 +26,8 @@ app.get('*', (req, res) => {
     reduxState: undefined,
     skin: process.env.SKIN,
     style: `http://localhost:${WEBPACK_DEV_SERVER_PORT}/style.css`,
-    bundle: `http://localhost:${WEBPACK_DEV_SERVER_PORT}/bundle.js`
+    bundle: `http://localhost:${WEBPACK_DEV_SERVER_PORT}/bundle.js`,
+    config: fileConfig
   });
 });
 
@@ -52,4 +55,3 @@ app.listen(PORT, () => {
     )}`
   );
 });
-

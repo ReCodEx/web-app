@@ -33,7 +33,8 @@ const getMiddleware = history => [
   )
 ];
 
-const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+const composeEnhancers =
+  (canUseDOM && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) || compose;
 
 const dev = history =>
   composeEnhancers(

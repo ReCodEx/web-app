@@ -9,6 +9,7 @@ import Express from 'express';
 import Promise from 'bluebird';
 import Helmet from 'react-helmet';
 import cookieParser from 'cookie-parser';
+import fs from 'fs';
 
 import { match, RouterContext } from 'react-router';
 
@@ -58,6 +59,7 @@ function getFileName(pattern, addPrefix = '') {
 const bundle =
   process.env.BUNDLE || getFileName('public/bundle-*.js', '/') || '/bundle.js';
 const style = getFileName('public/style-*.css', '/') || '/style.css';
+const config = fs.readFileSync('public/public/env.json', 'utf8');
 
 let app = new Express();
 const ejs = require('ejs').__express;
@@ -80,7 +82,8 @@ const renderWithoutSSR = (res, renderProps) => {
     reduxState: 'undefined',
     skin: process.env.SKIN,
     bundle,
-    style
+    style,
+    config
   });
 };
 
@@ -99,7 +102,8 @@ const renderPage = (res, store, renderProps) => {
     reduxState,
     skin: process.env.SKIN,
     bundle,
-    style
+    style,
+    config
   });
 };
 

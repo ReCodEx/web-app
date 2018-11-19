@@ -34,6 +34,9 @@ module.exports = {
       moment: 'moment/moment.js'
     }
   },
+  node: {
+    fs: 'empty'
+  },
   module: {
     rules: [
       {

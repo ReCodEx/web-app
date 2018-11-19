@@ -1,6 +1,6 @@
 # ReCodEx web-app systemd configuration file
 #
-# This file should be placed in /etc/systemd/system/ directory
+# This file should be placed in /lib/systemd/system/ directory
 
 [Unit]
 Description=Recodex Web App
