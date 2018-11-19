@@ -14,7 +14,16 @@ export const isTwoHundredCode = status => statusCode.accept(status, '2xx');
 export const isServerError = status => statusCode.accept(status, '5xx');
 export const isUnauthorized = status => status === 403;
 
-export const API_BASE = process.env.API_BASE || 'http://localhost:4000/v1';
+var API_BASE_VAR = '';
+if (canUseDOM) {
+  API_BASE_VAR = window.env.API_BASE;
+} else {
+  const fs = require('fs');
+  API_BASE_VAR = JSON.parse(fs.readFileSync('public/public/env.json', 'utf8'))[
+    'API_BASE'
+  ];
+}
+export const API_BASE = API_BASE_VAR;
 
 const maybeShash = endpoint => (endpoint.indexOf('/') === 0 ? '' : '/');
 const getUrl = endpoint => API_BASE + maybeShash(endpoint) + endpoint;
