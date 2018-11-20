@@ -7,8 +7,9 @@ import Header from '../../widgets/Header';
 import Footer from '../../widgets/Footer';
 
 import SidebarContainer from '../../../containers/SidebarContainer';
+import { getConfigVar } from '../../../redux/helpers/api/tools';
 
-const title = process.env.TITLE || 'ReCodEx';
+const title = getConfigVar('TITLE');
 
 const Layout = ({
   toggleSize,

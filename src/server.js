@@ -60,6 +60,7 @@ const bundle =
   process.env.BUNDLE || getFileName('public/bundle-*.js', '/') || '/bundle.js';
 const style = getFileName('public/style-*.css', '/') || '/style.css';
 const config = fs.readFileSync('public/public/env.json', 'utf8');
+const parsedConfig = JSON.parse(config);
 
 let app = new Express();
 const ejs = require('ejs').__express;
@@ -80,7 +81,7 @@ const renderWithoutSSR = (res, renderProps) => {
     html: '',
     head,
     reduxState: 'undefined',
-    skin: process.env.SKIN,
+    skin: parsedConfig['SKIN'],
     bundle,
     style,
     config
@@ -100,7 +101,7 @@ const renderPage = (res, store, renderProps) => {
     html,
     head,
     reduxState,
-    skin: process.env.SKIN,
+    skin: parsedConfig['SKIN'],
     bundle,
     style,
     config
@@ -156,7 +157,7 @@ app.get('*', (req, res) => {
   );
 });
 
-const port = process.env.PORT || 8080;
+const port = parsedConfig['PORT'];
 app.listen(port, () => {
   console.log('Server is running on port ' + port); // eslint-disable-line no-console
 });

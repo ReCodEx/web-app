@@ -6,9 +6,11 @@ import config from '../config/webpack.config-dev';
 import colors from 'colors';
 import fs from 'fs';
 
-const PORT = process.env.PORT || 8080;
 const WEBPACK_DEV_SERVER_PORT = process.env.WEBPACK_DEV_SERVER_PORT || 8081;
 const fileConfig = fs.readFileSync('public/public/env.json', 'utf8');
+const parsedConfig = JSON.parse(fileConfig);
+const PORT = parsedConfig['PORT'];
+const SKIN = parsedConfig['SKIN'];
 
 let app = new Express();
 app.set('view engine', 'ejs');
@@ -24,7 +26,7 @@ app.get('*', (req, res) => {
       link: ''
     },
     reduxState: undefined,
-    skin: process.env.SKIN,
+    skin: SKIN,
     style: `http://localhost:${WEBPACK_DEV_SERVER_PORT}/style.css`,
     bundle: `http://localhost:${WEBPACK_DEV_SERVER_PORT}/bundle.js`,
     config: fileConfig
