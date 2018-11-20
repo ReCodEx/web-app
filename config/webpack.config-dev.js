@@ -66,15 +66,7 @@ module.exports = {
     new webpack.DefinePlugin({
       'process.env': {
         NODE_ENV: "'" + process.env.NODE_ENV + "'",
-        API_BASE: "'" + process.env.API_BASE + "'",
-        TITLE: "'" + process.env.TITLE + "'",
-        SKIN: "'" + process.env.SKIN + "'",
         REDUX_DEV_SERVER_PORT: "'" + process.env.REDUX_DEV_SERVER_PORT + "'",
-        ALLOW_NORMAL_REGISTRATION:
-          "'" + process.env.ALLOW_NORMAL_REGISTRATION + "'",
-        ALLOW_LDAP_REGISTRATION:
-          "'" + process.env.ALLOW_LDAP_REGISTRATION + "'",
-        ALLOW_CAS_REGISTRATION: "'" + process.env.ALLOW_CAS_REGISTRATION + "'",
         LOGGER_MIDDLEWARE_VERBOSE:
           "'" + process.env.LOGGER_MIDDLEWARE_VERBOSE + "'",
         LOGGER_MIDDLEWARE_EXCEPTIONS:

@@ -14,16 +14,20 @@ export const isTwoHundredCode = status => statusCode.accept(status, '2xx');
 export const isServerError = status => statusCode.accept(status, '5xx');
 export const isUnauthorized = status => status === 403;
 
-var API_BASE_VAR = '';
-if (canUseDOM) {
-  API_BASE_VAR = window.env.API_BASE;
-} else {
-  const fs = require('fs');
-  API_BASE_VAR = JSON.parse(fs.readFileSync('public/public/env.json', 'utf8'))[
-    'API_BASE'
-  ];
-}
-export const API_BASE = API_BASE_VAR;
+export const getConfigVar = name => {
+  var MY_VAR = '';
+  if (canUseDOM) {
+    MY_VAR = window.env[name];
+  } else {
+    const fs = require('fs');
+    MY_VAR = JSON.parse(fs.readFileSync('public/public/env.json', 'utf8'))[
+      name
+    ];
+  }
+  return MY_VAR;
+};
+
+export const API_BASE = getConfigVar('API_BASE');
 
 const maybeShash = endpoint => (endpoint.indexOf('/') === 0 ? '' : '/');
 const getUrl = endpoint => API_BASE + maybeShash(endpoint) + endpoint;

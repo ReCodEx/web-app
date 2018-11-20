@@ -33,14 +33,9 @@ $ npm install yarn -g
 $ yarn
 ```
 
-For easy production usage there is an additional package for managing NodeJS
-processes, `pm2`. This tool can run your application as a daemon, monitor
-occupied resources, gather logs and provide simple console interface for
-managing state of the app. To install it globally into your system run:
-
-```
-# npm install pm2 -g
-```
+The app is built into self-contained bundle for NodeJS server. There is
+a prepared SystemD unit file for control over the app. Another option is
+to use `pm2` process manager, but we had some problems with it.
 
 ## Environment variables
 
@@ -50,13 +45,26 @@ Create a `.env` file in the root directory and put environment variables into th
 
 ```
 NODE_ENV=development
-API_BASE=http://localhost:4000/v1
-PORT=8080
 WEBPACK_DEV_SERVER_PORT=8081
-TITLE=ReCodEx
-ALLOW_NORMAL_REGISTRATION=true
-ALLOW_LDAP_REGISTRATION=false
-ALLOW_CAS_REGISTRATION=true
+LOGGER_MIDDLEWARE_VERBOSE=false
+LOGGER_MIDDLEWARE_EXCEPTIONS=true
+```
+
+## Configuration
+
+Compiled bundle properties can be modified by runtime configuration file. Sample
+content of this file is following:
+
+```
+{
+  "PORT": 8080,
+  "API_BASE": "https://recodex-devel.ms.mff.cuni.cz:4000/v1",
+  "TITLE": "ReCodEx",
+  "SKIN": "skin-green",
+  "ALLOW_NORMAL_REGISTRATION": true,
+  "ALLOW_LDAP_REGISTRATION": false,
+  "ALLOW_CAS_REGISTRATION": true
+}
 ```
 
 ## Usage
@@ -82,25 +90,14 @@ $ yarn dev
 
 ```
 $ yarn build
-$ yarn start
+$ yarn deploy  # copies all neccessary files to prod/ directory
+$ cd prod
+$ node bin/server.js
 ```
 
 Both modes can be configured to use different ports or set base address of used
 API server. This can be configured in `.env` file in root of the repository.
 There is `.env-sample` file which can be just copied and altered.
-
-The production mode can be run also as a demon controlled by `pm2` tool. First
-the web application has to be built and then the server javascript file can run
-as a daemon.
-
-```
-$ npm run build
-$ pm2 start bin/server.js
-```
-
-The `pm2` tool has several options, most notably _status_, _stop_, _restart_ and
-_logs_. Further description is available on project
-[website](http://pm2.keymetrics.io).
 
 ## Documentation
 

@@ -21,7 +21,13 @@ import { fetchInstances } from '../../redux/modules/instances';
 import { publicInstancesSelector } from '../../redux/selectors/instances';
 import { hasSucceeded } from '../../redux/selectors/registration';
 
+import { getConfigVar } from '../../redux/helpers/api/tools';
 import withLinks from '../../helpers/withLinks';
+
+// Configuration properties
+const ALLOW_NORMAL_REGISTRATION = getConfigVar('ALLOW_NORMAL_REGISTRATION');
+const ALLOW_LDAP_REGISTRATION = getConfigVar('ALLOW_LDAP_REGISTRATION');
+const ALLOW_CAS_REGISTRATION = getConfigVar('ALLOW_CAS_REGISTRATION');
 
 class Registration extends Component {
   componentWillMount = () => {
@@ -77,21 +83,21 @@ class Registration extends Component {
         <ResourceRenderer resource={instances.toArray()} returnAsArray>
           {instances =>
             <Row>
-              {process.env.ALLOW_NORMAL_REGISTRATION === 'true' &&
+              {ALLOW_NORMAL_REGISTRATION === 'true' &&
                 <Col lg={4} md={6} mdOffset={0} sm={8} smOffset={2}>
                   <RegistrationForm
                     instances={instances}
                     onSubmit={createAccount}
                   />
                 </Col>}
-              {process.env.ALLOW_LDAP_REGISTRATION === 'true' &&
+              {ALLOW_LDAP_REGISTRATION === 'true' &&
                 <Col lg={4} md={6} mdOffset={0} sm={8} smOffset={2}>
                   <ExternalRegistrationForm
                     instances={instances}
                     onSubmit={createExternalAccount()}
                   />
                 </Col>}
-              {process.env.ALLOW_CAS_REGISTRATION === 'true' &&
+              {ALLOW_CAS_REGISTRATION === 'true' &&
                 <Col lg={4} md={6} mdOffset={0} sm={8} smOffset={2}>
                   <RegistrationCAS
                     instances={instances}
