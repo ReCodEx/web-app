@@ -9,6 +9,7 @@ import {
 } from '../../modules/app';
 import { logout } from '../../modules/auth';
 import { isTokenValid, decode } from '../../helpers/token';
+import { safeGet } from '../../../helpers/common';
 
 export const isTwoHundredCode = status => statusCode.accept(status, '2xx');
 export const isServerError = status => statusCode.accept(status, '5xx');
@@ -17,7 +18,7 @@ export const isUnauthorized = status => status === 403;
 export const getConfigVar = name => {
   var MY_VAR = '';
   if (canUseDOM) {
-    MY_VAR = window.env[name];
+    MY_VAR = safeGet(window, ['env', name], '');
   } else {
     const fs = require('fs');
     MY_VAR = JSON.parse(fs.readFileSync('public/public/env.json', 'utf8'))[
