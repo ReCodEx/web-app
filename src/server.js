@@ -59,7 +59,7 @@ function getFileName(pattern, addPrefix = '') {
 const bundle =
   process.env.BUNDLE || getFileName('public/bundle-*.js', '/') || '/bundle.js';
 const style = getFileName('public/style-*.css', '/') || '/style.css';
-const config = fs.readFileSync('public/public/env.json', 'utf8');
+const config = fs.readFileSync('etc/env.json', 'utf8');
 const parsedConfig = JSON.parse(config);
 
 let app = new Express();
