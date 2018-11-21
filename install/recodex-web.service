@@ -14,8 +14,8 @@ StandardOutput=null
 StandardError=journal
 User=recodex
 Group=recodex
-WorkingDirectory=/usr/lib/node_modules/recodex-web
-ExecStart=/usr/bin/node /usr/lib/node_modules/recodex-web/bin/server.js
+WorkingDirectory=/opt/recodex-web
+ExecStart=/usr/bin/node /opt/recodex-web/bin/server.js
 
 [Install]
 WantedBy=multi-user.target

@@ -21,9 +21,7 @@ export const getConfigVar = name => {
     MY_VAR = safeGet(window, ['env', name], '');
   } else {
     const fs = require('fs');
-    MY_VAR = JSON.parse(fs.readFileSync('public/public/env.json', 'utf8'))[
-      name
-    ];
+    MY_VAR = JSON.parse(fs.readFileSync('etc/env.json', 'utf8'))[name];
   }
   return MY_VAR;
 };

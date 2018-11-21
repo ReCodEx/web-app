@@ -38,18 +38,14 @@ rm -f .gitignore
 rm -rf node_modules
 cat <<__EOF > .env
 NODE_ENV=production
-API_BASE=https://recodex.projekty.ms.mff.cuni.cz:4040/v1
-PORT=8080
 __EOF
 npm -q install
 npm run build
+npm run deploy
 
 %install
-install -d  %{buildroot}%{nodejs_sitelib}/%{name}
-cp -r ./bin %{buildroot}%{nodejs_sitelib}/%{name}/bin
-cp -r ./public %{buildroot}%{nodejs_sitelib}/%{name}/public
-cp -r ./node_modules %{buildroot}%{nodejs_sitelib}/%{name}/node_modules
-cp -r ./views %{buildroot}%{nodejs_sitelib}/%{name}/views
+install -d  %{buildroot}/opt/%{name}
+cp -r ./prod %{buildroot}/opt/%{name}
 install -d %{buildroot}/lib/systemd/system
 cp -r install/recodex-web.service %{buildroot}/lib/systemd/system/recodex-web.service
 
@@ -73,15 +69,9 @@ exit 0
 %files
 %defattr(-,root,root)
 #%dir %attr(-,recodex,recodex) %{_sysconfdir}/recodex/worker
-%dir %attr(-, recodex,recodex) %{nodejs_sitelib}/%{name}
+%dir %attr(-, recodex,recodex) /opt/%{name}
 
-%{nodejs_sitelib}/%{name}/bin/*.jpg
-%{nodejs_sitelib}/%{name}/bin/dev.js
-%{nodejs_sitelib}/%{name}/bin/server.js
-%{nodejs_sitelib}/%{name}/bin/manageTranslations.js
-%{nodejs_sitelib}/%{name}/public/
-%{nodejs_sitelib}/%{name}/node_modules/
-%{nodejs_sitelib}/%{name}/views/
+/opt/%{name}/*
 
 #%config(noreplace) %attr(-,recodex,recodex) %{_sysconfdir}/recodex/worker/config-1.yml
 #%{_unitdir}/recodex-web.service
