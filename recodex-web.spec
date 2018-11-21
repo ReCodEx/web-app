@@ -1,7 +1,7 @@
 %define name recodex-web
 %define short_name web-app
-%define version 1.0.0
-%define unmangled_version 2776688ada9de1b39fc70c4cc754ae63122ab103
+%define version 1.12.4
+%define unmangled_version 51c083759702c89dcc4abea5a4b985bb467984d5
 %define release 1
 
 Summary: ReCodEx web-app component
@@ -34,20 +34,22 @@ Web-app of ReCodEx programmer testing solution.
 rm -rf %{short_name}-%{unmangled_version}
 git clone https://github.com/ReCodEx/web-app.git %{short_name}-%{unmangled_version}
 cd %{short_name}-%{unmangled_version}
+#git checkout dynamic-config
 git reset --hard %{unmangled_version}
 
 
 %build
 cd %{short_name}-%{unmangled_version}
-npm i yarn
 rm -f .gitignore
 rm -rf node_modules
+npm i yarn
+mv ./node_modules ./yarn_modules
 cat <<__EOF > .env
 NODE_ENV=production
 __EOF
-yarn install
-yarn build
-yarn deploy
+./yarn_modules/yarn/bin/yarn install
+./yarn_modules/yarn/bin/yarn build
+./yarn_modules/yarn/bin/yarn deploy
 
 %install
 cd %{short_name}-%{unmangled_version}
@@ -74,7 +76,7 @@ exit 0
 %systemd_preun 'recodex-web.service'
 
 %files
-%defattr(-,recodex,recpdex)
+%defattr(-,recodex,recodex)
 %dir /opt/%{name}
 
 /opt/%{name}/bin/*
