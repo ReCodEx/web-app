@@ -1,7 +1,7 @@
 %define name recodex-web
 %define short_name web-app
 %define version 1.0.0
-%define unmangled_version 418315b23946956810749814c1ab5e0eebf37901
+%define unmangled_version 2776688ada9de1b39fc70c4cc754ae63122ab103
 %define release 1
 
 Summary: ReCodEx web-app component
@@ -14,7 +14,7 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 Prefix: %{_prefix}
 Vendor: Petr Stefan <UNKNOWN>
 Url: https://github.com/ReCodEx/web-app
-BuildRequires: systemd nodejs-packaging npm
+BuildRequires: systemd nodejs-packaging npm git
 Requires(post): systemd
 Requires(preun): systemd
 Requires(postun): systemd
@@ -22,7 +22,7 @@ AutoReq: no
 AutoProv: no
 
 #Source0: %{name}-%{unmangled_version}.tar.gz
-Source0: https://github.com/ReCodEx/%{short_name}/archive/%{unmangled_version}.tar.gz#/%{short_name}-%{unmangled_version}.tar.gz
+#Source0: https://github.com/ReCodEx/%{short_name}/archive/%{unmangled_version}.tar.gz#/%{short_name}-%{unmangled_version}.tar.gz
 
 %define debug_package %{nil}
 
@@ -30,22 +30,29 @@ Source0: https://github.com/ReCodEx/%{short_name}/archive/%{unmangled_version}.t
 Web-app of ReCodEx programmer testing solution.
 
 %prep
-%setup -n %{short_name}-%{unmangled_version}
+#%setup -n %{short_name}-%{unmangled_version}
+rm -rf %{short_name}-%{unmangled_version}
+git clone https://github.com/ReCodEx/web-app.git %{short_name}-%{unmangled_version}
+cd %{short_name}-%{unmangled_version}
+git reset --hard %{unmangled_version}
 
 
 %build
+cd %{short_name}-%{unmangled_version}
+npm i yarn
 rm -f .gitignore
 rm -rf node_modules
 cat <<__EOF > .env
 NODE_ENV=production
 __EOF
-npm -q install
-npm run build
-npm run deploy
+yarn install
+yarn build
+yarn deploy
 
 %install
+cd %{short_name}-%{unmangled_version}
 install -d  %{buildroot}/opt/%{name}
-cp -r ./prod %{buildroot}/opt/%{name}
+cp -r ./prod/* %{buildroot}/opt/%{name}
 install -d %{buildroot}/lib/systemd/system
 cp -r install/recodex-web.service %{buildroot}/lib/systemd/system/recodex-web.service
 
@@ -67,15 +74,16 @@ exit 0
 %systemd_preun 'recodex-web.service'
 
 %files
-%defattr(-,root,root)
-#%dir %attr(-,recodex,recodex) %{_sysconfdir}/recodex/worker
-%dir %attr(-, recodex,recodex) /opt/%{name}
+%defattr(-,recodex,recpdex)
+%dir /opt/%{name}
 
-/opt/%{name}/*
+/opt/%{name}/bin/*
+/opt/%{name}/public/*
+/opt/%{name}/views/*
+%config(noreplace) /opt/%{name}/etc/env.json
 
-#%config(noreplace) %attr(-,recodex,recodex) %{_sysconfdir}/recodex/worker/config-1.yml
 #%{_unitdir}/recodex-web.service
-/lib/systemd/system/recodex-web.service
+%attr(-,root,root) /lib/systemd/system/recodex-web.service
 
 %changelog
 
