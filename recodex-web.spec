@@ -18,8 +18,7 @@ BuildRequires: systemd nodejs-packaging npm git
 Requires(post): systemd
 Requires(preun): systemd
 Requires(postun): systemd
-AutoReq: no
-AutoProv: no
+Requires: nodejs
 
 #Source0: %{name}-%{unmangled_version}.tar.gz
 #Source0: https://github.com/ReCodEx/%{short_name}/archive/%{unmangled_version}.tar.gz#/%{short_name}-%{unmangled_version}.tar.gz
