@@ -3,6 +3,7 @@
 [![Build Status](https://travis-ci.org/ReCodEx/web-app.svg?branch=master)](https://travis-ci.org/ReCodEx/web-app)
 [![styled with prettier](https://img.shields.io/badge/styled_with-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
 [![GitHub release](https://img.shields.io/github/release/recodex/web-app.svg)](https://github.com/ReCodEx/wiki/wiki/Changelog)
+[![COPR](https://copr.fedorainfracloud.org/coprs/semai/ReCodEx/package/recodex-web/status_image/last_build.png)](https://copr.fedorainfracloud.org/coprs/semai/ReCodEx/)
 
 ## Installation
 
@@ -17,29 +18,43 @@ or *Nginx*, so the common practice is to use a tandem of both. *NodeJS* takes
 care of basic functionality of the app while the other server (Apache) is set as
 reverse proxy and providing additional functionality like SSL encryption, load
 balancing or caching of static files. The recommended setup contains both NodeJS
-and one of Apache and Nginx web servers for the reasons discussed above. 
+and one of Apache and Nginx web servers for the reasons discussed above.
 
-Stable versions of 4th and 6th series of NodeJS server are sufficient, using at
-least 6th series is highly recommended. Please check the most recent version of
+Stable versions of 6th and 8th series of NodeJS server are sufficient, using at
+least 8th series is highly recommended. Please check the most recent version of
 the packages in your distribution's repositories, there are often outdated ones.
 However, there are some third party repositories for all main Linux
 distributions.
 
 The app depends on several libraries and components, all of them are listed in
-`package.json` file in source repository. For managing dependencies is used dependency manager `yarn`, which has to be installed separately. To fetch and install all dependencies run:
+`package.json` file in source repository. For managing dependencies is used
+dependency manager `yarn`, which has to be installed separately. To fetch and
+install all dependencies run:
 
 ```
 $ npm install yarn -g
-$ yarn
+$ yarn install
 ```
 
 The app is built into self-contained bundle for NodeJS server. There is
 a prepared SystemD unit file for control over the app. Another option is
-to use `pm2` process manager, but we had some problems with it.
+to use `pm2` process manager, but we had some problems with it (it won't
+automatically start on boot on one of our computers for no reason).
+
+### RPM package
+
+For Linux systems with RPM packages (CentOS, Fedora) we provide prebuilt
+packages. They install production bundle to `/opt/recodex-web` directory.
+Provided unit file can be used to run the app with SystemD. The app itself do
+not care about certificates, so it is recommended to use the app behind reverse
+proxy of your choice.
 
 ## Environment variables
 
-Create a `.env` file in the root directory and put environment variables into this file. Look at `.env-sample` file for an example settings. The `.env` file should not be published in the git repository.
+Create a `.env` file in the root directory and put environment variables into
+this file. Look at `.env-sample` file for an example settings. The `.env` file
+should not be published in the git repository. Environment variables are aplied
+before build of the app, so they cannot be changed on finished bundle.
 
 ### Supported variables and their default values
 
@@ -52,8 +67,13 @@ LOGGER_MIDDLEWARE_EXCEPTIONS=true
 
 ## Configuration
 
-Compiled bundle properties can be modified by runtime configuration file. Sample
-content of this file is following:
+Compiled bundle properties can be modified by runtime configuration file. The
+file is located in `etc/env.json` file. New values of these properties are
+applied after restart of the app. Note, that all these values are directly
+accesible to JavaScript code in browsers, so it is not a good place to store any
+kind of secrets.
+
+Sample content of this file is following:
 
 ```
 {
