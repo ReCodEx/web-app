@@ -84,7 +84,8 @@
   <% } %>
 
   <script>
-    window.env = <%- config %>;
+    window.__RECODEX_CONFIG__ = <%- config %>;
+
   </script>
   <script src="<%= bundle %>"></script>
 

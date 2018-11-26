@@ -18,7 +18,7 @@ export const isUnauthorized = status => status === 403;
 export const getConfigVar = name => {
   var MY_VAR = '';
   if (canUseDOM) {
-    MY_VAR = safeGet(window, ['env', name], '');
+    MY_VAR = safeGet(window, ['__RECODEX_CONFIG__', name], '');
   } else {
     const fs = require('fs');
     MY_VAR = JSON.parse(fs.readFileSync('etc/env.json', 'utf8'))[name];
