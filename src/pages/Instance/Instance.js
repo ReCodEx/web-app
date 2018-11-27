@@ -111,39 +111,40 @@ class Instance extends Component {
                   <Markdown source={data.description} />
                 </Box>
 
-                <LicencesTableContainer instance={data} />
-                {isSuperAdmin &&
-                  <AddLicenceFormContainer instanceId={data.id} />}
+                {(isSuperAdmin || isAdmin) &&
+                  <React.Fragment>
+                    <LicencesTableContainer instance={data} />
+                    <AddLicenceFormContainer instanceId={data.id} />
+                  </React.Fragment>}
               </Col>
+              <Col sm={12} md={6}>
+                <Box
+                  title={
+                    <FormattedMessage
+                      id="app.instance.groupsTitle"
+                      defaultMessage="Groups Hierarchy"
+                    />
+                  }
+                  extraPadding
+                  unlimitedHeight
+                >
+                  <div>
+                    {data.rootGroupId !== null &&
+                      <GroupTree
+                        id={data.rootGroupId}
+                        isAdmin={isSuperAdmin || isAdmin}
+                        groups={groups}
+                      />}
 
-              {(isSuperAdmin || isAdmin) &&
-                <Col sm={12} md={6}>
-                  <Box
-                    title={
+                    {data.rootGroupId === null &&
                       <FormattedMessage
-                        id="app.instance.groupsTitle"
-                        defaultMessage="Groups Hierarchy"
-                      />
-                    }
-                    extraPadding
-                    unlimitedHeight
-                  >
-                    <div>
-                      {data.rootGroupId !== null &&
-                        <GroupTree
-                          id={data.rootGroupId}
-                          isAdmin={isSuperAdmin || isAdmin}
-                          groups={groups}
-                        />}
+                        id="app.instance.groups.noGroups"
+                        defaultMessage="There are no groups in this ReCodEx instance."
+                      />}
+                  </div>
+                </Box>
 
-                      {data.rootGroupId === null &&
-                        <FormattedMessage
-                          id="app.instance.groups.noGroups"
-                          defaultMessage="There are no groups in this ReCodEx instance."
-                        />}
-                    </div>
-                  </Box>
-
+                {(isSuperAdmin || isAdmin) &&
                   <EditGroupForm
                     form="addGroup"
                     onSubmit={createGroup(userId)}
@@ -154,8 +155,8 @@ class Instance extends Component {
                     isOpen={false}
                     hasThreshold={hasThreshold}
                     isSuperAdmin={isSuperAdmin}
-                  />
-                </Col>}
+                  />}
+              </Col>
             </Row>
           </div>}
       </Page>
