@@ -20,7 +20,7 @@
     "test:watch": "mocha --watch --reporter nyan",
     "dev": "babel-node bin/dev.js --max-old-space-size=4096",
     "start": "node bin/server.js",
-    "deploy": "mkdir -p ./prod && mkdir -p ./prod/etc && cp -rf ./views ./prod && cp -rf ./bin ./prod && cp -n ./etc/env.json.example ./prod/env.json && rm -f ./prod/public/bundle* && rm -f ./prod/public/style* && cp -rf ./public ./prod",
+    "deploy": "mkdir -p ./prod && mkdir -p ./prod/etc && cp -rf ./views ./prod && cp -rf ./bin ./prod && cp -n ./etc/env.json.example ./prod/etc/env.json && rm -f ./prod/public/bundle* && rm -f ./prod/public/style* && cp -rf ./public ./prod",
     "exportStrings": "rm -rf node_modules/.cache/babel-loader/* && rm -rf tmp/messages/* && npm run build && babel-node bin/manageTranslations.js",
     "format": "prettier --single-quote --write \"src/**/*.js\""
   },
