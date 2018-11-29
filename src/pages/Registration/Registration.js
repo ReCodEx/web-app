@@ -83,21 +83,21 @@ class Registration extends Component {
         <ResourceRenderer resource={instances.toArray()} returnAsArray>
           {instances =>
             <Row>
-              {ALLOW_NORMAL_REGISTRATION === 'true' &&
+              {ALLOW_NORMAL_REGISTRATION &&
                 <Col lg={4} md={6} mdOffset={0} sm={8} smOffset={2}>
                   <RegistrationForm
                     instances={instances}
                     onSubmit={createAccount}
                   />
                 </Col>}
-              {ALLOW_LDAP_REGISTRATION === 'true' &&
+              {ALLOW_LDAP_REGISTRATION &&
                 <Col lg={4} md={6} mdOffset={0} sm={8} smOffset={2}>
                   <ExternalRegistrationForm
                     instances={instances}
                     onSubmit={createExternalAccount()}
                   />
                 </Col>}
-              {ALLOW_CAS_REGISTRATION === 'true' &&
+              {ALLOW_CAS_REGISTRATION &&
                 <Col lg={4} md={6} mdOffset={0} sm={8} smOffset={2}>
                   <RegistrationCAS
                     instances={instances}
