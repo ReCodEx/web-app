@@ -426,6 +426,7 @@
   "app.editUserSettings.failed": "Uložení uživatelského profilu se nezdařilo.",
   "app.editUserSettings.newAssignmentEmails": "Informovat o nově zadané úloze",
   "app.editUserSettings.openedSidebar": "Postraní panel je ve výchozím stavu rozbalený.",
+  "app.editUserSettings.solutionCommentsEmails": "Informovat o novém komentáři k řešení",
   "app.editUserSettings.submissionEvaluatedEmails": "Informovat o vyhodnocení řešení",
   "app.editUserSettings.title": "Změnit nastavení",
   "app.editUserSettings.useGravatar": "Používat službu Gravatar pro zobrazování avatarů ostatních uživatelů.",
