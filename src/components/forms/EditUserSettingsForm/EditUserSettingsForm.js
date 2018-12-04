@@ -146,7 +146,7 @@ const EditUserSettingsForm = ({
       label={
         <FormattedMessage
           id="app.editUserSettings.assignmentDeadlineEmails"
-          defaultMessage="Notify about near assignments deadline"
+          defaultMessage="Notify about approaching assignments deadline"
         />
       }
     />
@@ -159,6 +159,18 @@ const EditUserSettingsForm = ({
         <FormattedMessage
           id="app.editUserSettings.submissionEvaluatedEmails"
           defaultMessage="Notify about submission evaluation"
+        />
+      }
+    />
+
+    <Field
+      name="solutionCommentsEmails"
+      component={CheckboxField}
+      onOff
+      label={
+        <FormattedMessage
+          id="app.editUserSettings.solutionCommentsEmails"
+          defaultMessage="Notify about new submission comments"
         />
       }
     />

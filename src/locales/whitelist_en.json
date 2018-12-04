@@ -426,6 +426,7 @@
   "app.editUserSettings.failed",
   "app.editUserSettings.newAssignmentEmails",
   "app.editUserSettings.openedSidebar",
+  "app.editUserSettings.solutionCommentsEmails",
   "app.editUserSettings.submissionEvaluatedEmails",
   "app.editUserSettings.title",
   "app.editUserSettings.useGravatar",
