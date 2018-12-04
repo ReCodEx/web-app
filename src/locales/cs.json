@@ -647,7 +647,7 @@
   "app.fields.limits.memory": "Paměť [KiB]:",
   "app.fields.limits.time": "Čas [s]:",
   "app.filesTable.addFiles": "Uložit soubory",
-  "app.filesTable.downloadArchive": "Stáhnout všechny",
+  "app.filesTable.downloadArchive": "Stáhnout vše",
   "app.filesTable.empty": "Zatím zde nejsou žádné nahrané soubory.",
   "app.filesTable.fileName": "Název souboru",
   "app.filesTable.fileSize": "Velikost souboru",

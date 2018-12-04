@@ -79,27 +79,29 @@ const FilesTable = ({
                     )}
                 </tbody>
               </Table>}
+
             {attachments.length === 0 &&
-              <p className="text-center">
+              <p className="text-center em-padding">
                 <Icon icon={['far', 'folder-open']} gapRight />
                 <FormattedMessage
                   id="app.filesTable.empty"
                   defaultMessage="There are no uploaded files yet."
                 />
               </p>}
+
+            {downloadArchive &&
+              attachments.length > 1 &&
+              <div className="text-center">
+                <Button bsStyle="primary" onClick={downloadArchive}>
+                  <DownloadIcon gapRight />
+                  <FormattedMessage
+                    id="app.filesTable.downloadArchive"
+                    defaultMessage="Download All"
+                  />
+                </Button>
+              </div>}
           </div>}
       </ResourceRenderer>
-      {downloadArchive &&
-        attachments.length > 0 &&
-        <div className="text-center">
-          <Button bsStyle="primary" onClick={downloadArchive}>
-            <DownloadIcon gapRight />
-            <FormattedMessage
-              id="app.filesTable.downloadArchive"
-              defaultMessage="Download all"
-            />
-          </Button>
-        </div>}
     </div>
   </Box>;
 

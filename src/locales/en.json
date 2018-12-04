@@ -647,7 +647,7 @@
   "app.fields.limits.memory": "Memory [KiB]:",
   "app.fields.limits.time": "Time [s]:",
   "app.filesTable.addFiles": "Save files",
-  "app.filesTable.downloadArchive": "Download all",
+  "app.filesTable.downloadArchive": "Download All",
   "app.filesTable.empty": "There are no uploaded files yet.",
   "app.filesTable.fileName": "File Name",
   "app.filesTable.fileSize": "File Size",
