@@ -86,6 +86,10 @@ const messages = defineMessages({
   }
 });
 
+export const FORK_EXERCISE_FORM_INITIAL_VALUES = {
+  groupId: ''
+};
+
 class Exercise extends Component {
   state = { forkId: null };
 
@@ -289,6 +293,7 @@ class Exercise extends Component {
                     forkId={forkId}
                     onSubmit={formData => forkExercise(forkId, formData)}
                     groupsAccessor={groupsAccessor}
+                    initialValues={FORK_EXERCISE_FORM_INITIAL_VALUES}
                   />
                 </Col>
               </Row>}
