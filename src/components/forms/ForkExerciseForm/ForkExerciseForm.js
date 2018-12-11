@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import { injectIntl, FormattedMessage } from 'react-intl';
+import { injectIntl, FormattedMessage, defineMessages } from 'react-intl';
 import { Alert, Form } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
@@ -19,6 +19,13 @@ import { hasPermissions } from '../../../helpers/common';
 import withLinks from '../../../helpers/withLinks';
 
 import './ForkExerciseForm.css';
+
+const messages = defineMessages({
+  emptyOption: {
+    id: 'app.forkExerciseForm.selectGroupFirst',
+    defaultMessage: '... select group of residence first ...'
+  }
+});
 
 class ForkExerciseForm extends Component {
   viewForkedExercise() {
@@ -42,25 +49,42 @@ class ForkExerciseForm extends Component {
       invalid,
       groups,
       groupsAccessor,
-      intl: { locale }
+      intl: { locale, formatMessage }
     } = this.props;
 
     switch (forkStatus) {
       case forkStatuses.FULFILLED:
         return (
-          <Button
-            bsStyle="success"
-            bsSize="sm"
-            className="btn-flat"
-            onClick={() => this.viewForkedExercise()}
-          >
-            <SuccessIcon gapRight />
-            <FormattedMessage
-              id="app.forkExerciseButton.success"
-              defaultMessage="Show the forked exercise"
-            />
-          </Button>
+          <div className="callout callout-success">
+            <table className="full-width">
+              <tbody>
+                <tr>
+                  <td className="valign-middle">
+                    <p>
+                      <SuccessIcon gapRight />
+                      <FormattedMessage
+                        id="app.forkExerciseForm.successMessage"
+                        defaultMessage="A copy of the exercise was successfully created in the designated group."
+                      />
+                    </p>
+                  </td>
+                  <td className="text-right">
+                    <Button
+                      bsStyle="primary"
+                      onClick={() => this.viewForkedExercise()}
+                    >
+                      <FormattedMessage
+                        id="app.forkExerciseForm.showForkedExerciseButton"
+                        defaultMessage="Show the Forked Exercise"
+                      />
+                    </Button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         );
+
       default:
         return (
           <div>
@@ -81,6 +105,8 @@ class ForkExerciseForm extends Component {
                       component={SelectField}
                       label={''}
                       ignoreDirty
+                      addEmptyOption={true}
+                      emptyOptionCaption={formatMessage(messages.emptyOption)}
                       options={groups
                         .filter(group =>
                           hasPermissions(group, 'createExercise')
@@ -98,7 +124,7 @@ class ForkExerciseForm extends Component {
 
                     <SubmitButton
                       id="forkExercise"
-                      invalid={invalid}
+                      disabled={invalid}
                       submitting={submitting}
                       hasSucceeded={submitSucceeded}
                       hasFailed={submitFailed}
@@ -164,7 +190,18 @@ const mapDispatchToProps = (dispatch, { exerciseId, forkId }) => ({
   push: url => dispatch(push(url))
 });
 
-const validate = () => {};
+const validate = ({ groupId }) => {
+  const errors = {};
+  if (!groupId) {
+    errors._error = (
+      <FormattedMessage
+        id="app.forkExerciseForm.validation.noGroupSelected"
+        defaultMessage="No group of residence has been selected."
+      />
+    );
+  }
+  return errors;
+};
 
 export default withLinks(
   connect(mapStateToProps, mapDispatchToProps)(
