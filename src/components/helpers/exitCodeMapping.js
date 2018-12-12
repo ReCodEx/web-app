@@ -493,14 +493,14 @@ const javaMapping = exitCode => {
       return (
         <FormattedMessage
           id="app.exitCodes.java.102"
-          defaultMessage="Class not found exception"
+          defaultMessage="Main class not found exception"
         />
       );
     case 103:
       return (
         <FormattedMessage
           id="app.exitCodes.java.103"
-          defaultMessage="No such method exception"
+          defaultMessage="Multiple main classes found"
         />
       );
     case 104:
