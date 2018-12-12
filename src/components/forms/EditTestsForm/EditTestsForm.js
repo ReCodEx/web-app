@@ -163,16 +163,24 @@ const validate = ({ isUniform, tests }) => {
           defaultMessage="Please fill test name."
         />
       );
-    }
-    if (knownTests.has(test.name)) {
+    } else if (!test.name.match(/^[-a-zA-Z0-9_()[\].! ]+$/)) {
+      testErrors['name'] = (
+        <FormattedMessage
+          id="app.editTestsForm.validation.testNameInvalidCharacters"
+          defaultMessage="The test name contains invalid characters. The test name must follow certain restrictions since it is used as a name of directory."
+        />
+      );
+    } else if (knownTests.has(test.name)) {
       testErrors['name'] = (
         <FormattedMessage
           id="app.editTestsForm.validation.testNameTaken"
           defaultMessage="This name is taken, please fill different one."
         />
       );
+    } else {
+      knownTests.add(test.name);
     }
-    knownTests.add(test.name);
+
     if (!isUniform && (!test.weight || test.weight === '')) {
       testErrors['weight'] = (
         <FormattedMessage
