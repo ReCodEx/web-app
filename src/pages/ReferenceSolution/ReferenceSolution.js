@@ -32,6 +32,7 @@ import {
   fetchManyStatus
 } from '../../redux/selectors/referenceSolutionEvaluations';
 import ResubmitReferenceSolutionContainer from '../../containers/ResubmitReferenceSolutionContainer';
+import { hasPermissions } from '../../helpers/common';
 
 const messages = defineMessages({
   title: {
@@ -118,39 +119,43 @@ class ReferenceSolution extends Component {
           }
         ]}
       >
-        <ResourceRenderer resource={[referenceSolution, exercise]}>
-          {(solution, exercise) =>
-            <React.Fragment>
-              {exercise.isBroken
-                ? <p className="callout callout-warning">
-                    <FormattedMessage
-                      id="app.referenceSolution.exerciseBroken"
-                      defaultMessage="The exercise is broken. This reference solution may not be resubmitted at the moment."
-                    />
-                  </p>
-                : <p>
-                    <ResubmitReferenceSolutionContainer
-                      id={solution.id}
-                      isDebug={false}
-                    />
-                    <ResubmitReferenceSolutionContainer
-                      id={solution.id}
-                      isDebug={true}
-                    />
-                  </p>}
+        {referenceSolution =>
+          <ResourceRenderer resource={exercise}>
+            {exercise =>
+              <React.Fragment>
+                {hasPermissions(referenceSolution, 'evaluate') &&
+                  <React.Fragment>
+                    {exercise.isBroken
+                      ? <p className="callout callout-warning">
+                          <FormattedMessage
+                            id="app.referenceSolution.exerciseBroken"
+                            defaultMessage="The exercise is broken. This reference solution may not be resubmitted at the moment."
+                          />
+                        </p>
+                      : <p>
+                          <ResubmitReferenceSolutionContainer
+                            id={referenceSolution.id}
+                            isDebug={false}
+                          />
+                          <ResubmitReferenceSolutionContainer
+                            id={referenceSolution.id}
+                            isDebug={true}
+                          />
+                        </p>}
+                  </React.Fragment>}
 
-              <FetchManyResourceRenderer fetchManyStatus={fetchStatus}>
-                {() =>
-                  <ReferenceSolutionDetail
-                    solution={solution}
-                    evaluations={evaluations}
-                    exercise={exercise}
-                    deleteEvaluation={deleteEvaluation}
-                    refreshSolutionEvaluations={refreshSolutionEvaluations}
-                  />}
-              </FetchManyResourceRenderer>
-            </React.Fragment>}
-        </ResourceRenderer>
+                <FetchManyResourceRenderer fetchManyStatus={fetchStatus}>
+                  {() =>
+                    <ReferenceSolutionDetail
+                      solution={referenceSolution}
+                      evaluations={evaluations}
+                      exercise={exercise}
+                      deleteEvaluation={deleteEvaluation}
+                      refreshSolutionEvaluations={refreshSolutionEvaluations}
+                    />}
+                </FetchManyResourceRenderer>
+              </React.Fragment>}
+          </ResourceRenderer>}
       </Page>
     );
   }
