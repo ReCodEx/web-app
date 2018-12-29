@@ -51,8 +51,7 @@ const Layout = ({
     />
     <div onClick={onCloseSidebar}>
       {children}
-      {/* global gitRevision */}
-      <Footer version={gitRevision.VERSION} />
+      <Footer version={process.env.VERSION} />
     </div>
   </div>;
 

@@ -1,8 +1,19 @@
 const path = require('path');
 const webpack = require('webpack');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const GitRevisionPlugin = require('git-revision-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
+
+const getVersion = () => {
+  if (process.env.VERSION) {
+    return process.env.VERSION;
+  } else {
+    const GitRevisionPlugin = require('git-revision-webpack-plugin');
+    const gitRevisionPlugin = new GitRevisionPlugin({
+      versionCommand: 'describe --always --tags'
+    });
+    return JSON.stringify(gitRevisionPlugin.version());
+  }
+};
 
 // load variables from .env
 require('dotenv').config();
@@ -16,9 +27,6 @@ try {
 
 const extractCss = new MiniCssExtractPlugin({
   filename: 'style-[contenthash].css'
-});
-const gitRevisionPlugin = new GitRevisionPlugin({
-  versionCommand: 'describe --always --tags'
 });
 
 module.exports = {
@@ -80,12 +88,8 @@ module.exports = {
         LOGGER_MIDDLEWARE_VERBOSE:
           "'" + process.env.LOGGER_MIDDLEWARE_VERBOSE + "'",
         LOGGER_MIDDLEWARE_EXCEPTIONS:
-          "'" + process.env.LOGGER_MIDDLEWARE_EXCEPTIONS + "'"
-      },
-      gitRevision: {
-        VERSION: JSON.stringify(gitRevisionPlugin.version()),
-        COMMITHASH: JSON.stringify(gitRevisionPlugin.commithash()),
-        BRANCH: JSON.stringify(gitRevisionPlugin.branch())
+          "'" + process.env.LOGGER_MIDDLEWARE_EXCEPTIONS + "'",
+        VERSION: getVersion()
       }
     })
   ]
