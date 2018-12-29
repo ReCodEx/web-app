@@ -5,7 +5,7 @@ const TerserPlugin = require('terser-webpack-plugin');
 
 const getVersion = () => {
   if (process.env.VERSION) {
-    return process.env.VERSION;
+    return JSON.stringify(process.env.VERSION);
   } else {
     const GitRevisionPlugin = require('git-revision-webpack-plugin');
     const gitRevisionPlugin = new GitRevisionPlugin({
