@@ -30,7 +30,11 @@ class GroupsNameContainer extends Component {
     const { group, noLink } = this.props;
     return (
       <ResourceRenderer resource={group} loading={<LoadingGroupsName />}>
-        {group => <GroupsName {...group} noLink={noLink || !hasPermissions(group, 'viewDetail')} />}
+        {group =>
+          <GroupsName
+            {...group}
+            noLink={noLink || !hasPermissions(group, 'viewDetail')}
+          />}
       </ResourceRenderer>
     );
   }
@@ -45,7 +49,7 @@ GroupsNameContainer.propTypes = {
 
 export default connect(
   (state, { groupId }) => ({
-    group: groupSelector(groupId)(state)
+    group: groupSelector(state, groupId)
   }),
   (dispatch, { groupId }) => ({
     loadAsync: () => GroupsNameContainer.loadAsync({ groupId }, dispatch)

@@ -43,7 +43,7 @@ ArchiveGroupButtonContainer.propTypes = {
 };
 
 const mapStateToProps = (state, { id }) => ({
-  group: groupSelector(id)(state),
+  group: groupSelector(state, id),
   pending: groupArchivedPendingChange(id)(state)
 });
 

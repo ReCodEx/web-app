@@ -46,7 +46,7 @@ StudentsListContainer.propTypes = {
 
 export default connect(
   (state, { groupId }) => {
-    const group = groupSelector(groupId)(state);
+    const group = groupSelector(state, groupId);
     const studentsIds = studentsOfGroup(groupId)(state);
     const readyUsers = readyUsersDataSelector(state);
     const students = readyUsers.filter(user => studentsIds.includes(user.id));
