@@ -34,7 +34,12 @@ export const filterNonOrganizationalActiveGroups = groups =>
       !group.getIn(['data', 'archived'], false)
   );
 
-export const groupSelector = id =>
+export const groupSelector = createSelector(
+  [groupsSelector, getParam],
+  (groups, id) => groups.get(id)
+);
+
+export const groupSelectorCreator = id =>
   createSelector(groupsSelector, groups => groups.get(id));
 
 // This is perhaps the best way how to create simple accessor (selector with parameter).
@@ -116,7 +121,7 @@ export const groupsUserCanAssignToSelector = createSelector(
 
 const usersOfGroup = (type, groupId) =>
   createSelector(
-    groupSelector(groupId),
+    groupSelectorCreator(groupId),
     group =>
       group && isReady(group)
         ? group.getIn(['data', 'privateData', type], EMPTY_LIST)

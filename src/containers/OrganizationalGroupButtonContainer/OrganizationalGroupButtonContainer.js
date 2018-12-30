@@ -42,7 +42,7 @@ OrganizationalGroupButtonContainer.propTypes = {
 };
 
 const mapStateToProps = (state, { id }) => ({
-  group: groupSelector(id)(state),
+  group: groupSelector(state, id),
   pending: groupOrganizationalPendingChange(id)(state)
 });
 

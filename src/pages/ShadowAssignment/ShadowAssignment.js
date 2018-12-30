@@ -12,6 +12,7 @@ import { getShadowAssignment } from '../../redux/selectors/shadowAssignments';
 
 import Page from '../../components/layout/Page';
 import HierarchyLineContainer from '../../containers/HierarchyLineContainer';
+import ShadowAssignmentPointsContainer from '../../containers/ShadowAssignmentPointsContainer';
 import ShadowAssignmentDetails from '../../components/Assignments/ShadowAssignment/ShadowAssignmentDetails';
 import { EditIcon } from '../../components/icons';
 import LocalizedTexts from '../../components/helpers/LocalizedTexts';
@@ -112,6 +113,13 @@ class ShadowAssignment extends Component {
                 <ShadowAssignmentDetails {...shadowAssignment} />
               </Col>
             </Row>
+
+            {hasPermissions(shadowAssignment, 'viewAllPoints') &&
+              <Row>
+                <Col xs={12}>
+                  <ShadowAssignmentPointsContainer {...shadowAssignment} />
+                </Col>
+              </Row>}
           </div>}
       </Page>
     );
@@ -123,6 +131,7 @@ ShadowAssignment.propTypes = {
     assignmentId: PropTypes.string.isRequired
   }),
   shadowAssignment: PropTypes.object,
+  group: PropTypes.func,
   loadAsync: PropTypes.func.isRequired,
   links: PropTypes.object.isRequired,
   intl: intlShape.isRequired

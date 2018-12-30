@@ -12,7 +12,7 @@ import {
 import { fetchManyEndpoint } from '../modules/users';
 import { loggedInUserIdSelector } from './auth';
 import {
-  groupSelector,
+  groupSelectorCreator,
   studentsOfGroup,
   supervisorsOfGroup,
   groupsSelector
@@ -169,7 +169,7 @@ export const isSupervisorOf = (userId, groupId) =>
 
 export const isAdminOf = (userId, groupId) =>
   createSelector(
-    [groupSelector(groupId), isLoggedAsSuperAdmin],
+    [groupSelectorCreator(groupId), isLoggedAsSuperAdmin],
     (group, isSuperAdmin) =>
       isSuperAdmin === true ||
       (group &&

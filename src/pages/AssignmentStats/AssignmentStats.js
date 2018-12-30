@@ -241,7 +241,7 @@ export default withLinks(
           readyUsers
             .filter(user => getStudentsIds(groupId).includes(getId(user)))
             .map(getJsData),
-        getGroup: id => groupSelector(id)(state),
+        getGroup: id => groupSelector(state, id),
         runtimeEnvironments: assignmentEnvironmentsSelector(state)(assignmentId)
       };
     },

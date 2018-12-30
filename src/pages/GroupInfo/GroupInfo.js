@@ -296,7 +296,7 @@ const mapStateToProps = (state, { params: { groupId } }) => {
   const userId = loggedInUserIdSelector(state);
 
   return {
-    group: groupSelector(groupId)(state),
+    group: groupSelector(state, groupId),
     userId,
     groups: groupsSelector(state),
     supervisors: supervisorsOfGroupSelector(state, groupId),
