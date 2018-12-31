@@ -65,7 +65,7 @@ const ShadowAssignmentPointsDetail = ({
             </td>
           </tr>}
 
-        {authorId &&
+        {Boolean(authorId) &&
           <tr>
             <td className="text-center shrink-col em-padding-left em-padding-right">
               <SupervisorIcon />
@@ -81,7 +81,7 @@ const ShadowAssignmentPointsDetail = ({
             </td>
           </tr>}
 
-        {note &&
+        {Boolean(note) &&
           <tr>
             <td className="text-center shrink-col em-padding-left em-padding-right">
               <Icon icon={['far', 'sticky-note']} />

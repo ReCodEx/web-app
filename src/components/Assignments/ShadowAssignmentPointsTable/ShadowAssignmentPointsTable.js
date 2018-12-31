@@ -99,7 +99,7 @@ class ShadowAssignmentPointsTable extends Component {
                     defaultMessage="Points"
                   />
                 </th>
-                <th className="text-center">
+                <th className="text-nowrap">
                   <FormattedMessage
                     id="app.shadowAssignmentPointsTable.awardedAt"
                     defaultMessage="Awarded At"

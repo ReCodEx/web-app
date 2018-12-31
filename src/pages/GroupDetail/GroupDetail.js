@@ -85,9 +85,7 @@ class GroupDetail extends Component {
           hasPermissions(group, 'viewStudents')
             ? dispatch(fetchStudents(groupId))
             : Promise.resolve(),
-          hasPermissions(group, 'viewStats')
-            ? dispatch(fetchGroupsStats(groupId))
-            : Promise.resolve()
+          dispatch(fetchGroupsStats(groupId))
         ])
       )
     ]);
@@ -295,11 +293,10 @@ class GroupDetail extends Component {
                       isOpen={shadowAssignments && shadowAssignments.size > 0}
                       footer={
                         hasPermissions(data, 'createShadowAssignment')
-                          ? <p className=" text-center">
+                          ? <p className="em-margin-top text-center">
                               <Button
                                 onClick={this.createShadowAssignment}
                                 bsStyle="success"
-                                bsSize="sm"
                               >
                                 <AddIcon gapRight />
                                 <FormattedMessage
@@ -311,16 +308,11 @@ class GroupDetail extends Component {
                           : null
                       }
                     >
-                      <ResourceRenderer resource={stats} bulkyLoading>
-                        {groupStats =>
-                          <ShadowAssignmentsTable
-                            shadowAssignments={shadowAssignments}
-                            stats={groupStats.find(
-                              item => item.userId === userId
-                            )}
-                            isAdmin={isGroupAdmin || isGroupSupervisor}
-                          />}
-                      </ResourceRenderer>
+                      <ShadowAssignmentsTable
+                        shadowAssignments={shadowAssignments}
+                        isAdmin={isGroupAdmin || isGroupSupervisor}
+                        userId={userId}
+                      />
                     </Box>
                   </Col>
                 </Row>
