@@ -30,6 +30,7 @@ class ShadowAssignmentPointsContainer extends Component {
     const {
       group,
       points,
+      maxPoints,
       permissionHints,
       createPoints,
       updatePoints,
@@ -41,6 +42,7 @@ class ShadowAssignmentPointsContainer extends Component {
           <ShadowAssignmentPointsTable
             students={safeGet(group, ['privateData', 'students'], EMPTY_ARRAY)}
             points={points}
+            maxPoints={maxPoints}
             permissionHints={permissionHints}
             createPoints={createPoints}
             updatePoints={updatePoints}
@@ -55,6 +57,7 @@ ShadowAssignmentPointsContainer.propTypes = {
   id: PropTypes.string.isRequired,
   groupId: PropTypes.string.isRequired,
   points: PropTypes.array.isRequired,
+  maxPoints: PropTypes.number.isRequired,
   permissionHints: PropTypes.object.isRequired,
   group: ImmutablePropTypes.map,
   loadAsync: PropTypes.func.isRequired,

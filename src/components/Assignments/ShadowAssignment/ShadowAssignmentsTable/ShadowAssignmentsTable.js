@@ -9,14 +9,14 @@ import {
   isLoading,
   getJsData
 } from '../../../../redux/helpers/resourceManager';
-import ShadowAssignmentsTableRow from '../ShadowAssignmentsTableRow';
+import ShadowAssignmentsTableRow from './ShadowAssignmentsTableRow';
 import { compareShadowAssignments } from '../../../helpers/compareAssignments';
 import { LoadingIcon } from '../../../icons';
 import { EMPTY_LIST, EMPTY_OBJ } from '../../../../helpers/common';
 
 const ShadowAssignmentsTable = ({
   shadowAssignments = EMPTY_LIST,
-  userId = null,
+  userId,
   stats = EMPTY_OBJ,
   isAdmin = false,
   intl: { locale }
@@ -32,21 +32,26 @@ const ShadowAssignmentsTable = ({
           <th>
             <FormattedMessage id="generic.created" defaultMessage="Created" />
           </th>
+
+          <th className="text-center text-nowrap">
+            {!isAdmin
+              ? <FormattedMessage
+                  id="app.assignments.points"
+                  defaultMessage="Points"
+                />
+              : <FormattedMessage
+                  id="app.assignments.maxPoints"
+                  defaultMessage="Max. Points"
+                />}
+          </th>
+
           {!isAdmin &&
-            Object.keys(stats).length !== 0 &&
             <th>
               <FormattedMessage
-                id="app.assignments.points"
-                defaultMessage="Points"
+                id="app.shadowAssignmentPointsDetail.note"
+                defaultMessage="Note"
               />
             </th>}
-
-          <th>
-            <FormattedMessage
-              id="app.assignments.maxPoints"
-              defaultMessage="Max. Points"
-            />
-          </th>
 
           <th className="shrink-col" />
         </tr>
@@ -96,7 +101,7 @@ const ShadowAssignmentsTable = ({
 
 ShadowAssignmentsTable.propTypes = {
   shadowAssignments: ImmutablePropTypes.list.isRequired,
-  userId: PropTypes.string,
+  userId: PropTypes.string.isRequired,
   stats: PropTypes.object,
   isAdmin: PropTypes.bool,
   intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired
