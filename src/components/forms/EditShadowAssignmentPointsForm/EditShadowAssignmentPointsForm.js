@@ -21,7 +21,7 @@ const EditShadowAssignmentPointsForm = ({
       <Alert bsStyle="danger">
         <FormattedMessage
           id="app.editShadowAssignmentPointsForm.failed"
-          defaultMessage="Cannot save the bonus points."
+          defaultMessage="Cannot save the shadow assignment points."
         />
       </Alert>}
 
