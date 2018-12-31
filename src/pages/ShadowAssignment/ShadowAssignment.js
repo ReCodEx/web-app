@@ -15,7 +15,7 @@ import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import Page from '../../components/layout/Page';
 import HierarchyLineContainer from '../../containers/HierarchyLineContainer';
 import ShadowAssignmentPointsContainer from '../../containers/ShadowAssignmentPointsContainer';
-import ShadowAssignmentDetails from '../../components/Assignments/ShadowAssignment/ShadowAssignmentDetails';
+import ShadowAssignmentDetail from '../../components/Assignments/ShadowAssignment/ShadowAssignmentDetail';
 import ShadowAssignmentPointsDetail from '../../components/Assignments/ShadowAssignmentPointsDetail';
 import { EditIcon } from '../../components/icons';
 import LocalizedTexts from '../../components/helpers/LocalizedTexts';
@@ -118,7 +118,7 @@ class ShadowAssignment extends Component {
                   </div>}
               </Col>
               <Col lg={6}>
-                <ShadowAssignmentDetails {...shadowAssignment} />
+                <ShadowAssignmentDetail {...shadowAssignment} />
                 {!hasPermissions(shadowAssignment, 'viewAllPoints') &&
                   <ShadowAssignmentPointsDetail
                     {...this.findPoints(shadowAssignment.points)}
