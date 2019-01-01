@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { List } from 'immutable';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 import { FormattedMessage } from 'react-intl';
 import { Table } from 'react-bootstrap';
 
@@ -23,7 +23,7 @@ const SolutionsTable = ({
 }) =>
   <Box title={title} collapsable isOpen noPadding unlimitedHeight>
     <ResourceRenderer
-      resource={solutions.toArray()}
+      resource={solutions}
       loading={<LoadingSolutionsTableRow />}
       failed={<FailedLoadingSolutionsTableRow />}
       returnAsArray
@@ -105,7 +105,7 @@ SolutionsTable.propTypes = {
     PropTypes.element
   ]).isRequired,
   assignmentId: PropTypes.string.isRequired,
-  solutions: PropTypes.instanceOf(List),
+  solutions: ImmutablePropTypes.list.isRequired,
   runtimeEnvironments: PropTypes.array,
   noteMaxlen: PropTypes.number,
   compact: PropTypes.bool

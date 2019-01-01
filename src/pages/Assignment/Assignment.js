@@ -259,7 +259,6 @@ class Assignment extends Component {
                             defaultMessage="Submitted Solutions"
                           />
                         }
-                        userId={userId}
                         solutions={this.sortSolutions(solutions)}
                         assignmentId={assignment.id}
                         runtimeEnvironments={runtimes}

@@ -10,12 +10,12 @@ import { usersSelector } from '../../redux/selectors/users';
 import { groupSelector, studentsOfGroup } from '../../redux/selectors/groups';
 import {
   getAssignment,
-  assignmentEnvironmentsSelector
+  assignmentEnvironmentsSelector,
+  getUserSolutions
 } from '../../redux/selectors/assignments';
 
 import { fetchStudents } from '../../redux/modules/users';
 import { isReady, getJsData, getId } from '../../redux/helpers/resourceManager';
-import SolutionsTableContainer from '../../containers/SolutionsTableContainer';
 import {
   fetchAssignmentIfNeeded,
   downloadBestSolutionsArchive
@@ -32,6 +32,8 @@ import { EditIcon, DownloadIcon } from '../../components/icons';
 import { safeGet } from '../../helpers/common';
 import withLinks from '../../helpers/withLinks';
 import { getLocalizedName } from '../../helpers/localizedData';
+import SolutionsTable from '../../components/Assignments/SolutionsTable';
+import { fetchAssignmentSolutions } from '../../redux/modules/solutions';
 
 class AssignmentStats extends Component {
   static loadAsync = ({ assignmentId }, dispatch) =>
@@ -44,7 +46,8 @@ class AssignmentStats extends Component {
             dispatch(fetchStudents(assignment.groupId))
           ])
         ),
-      dispatch(fetchRuntimeEnvironments())
+      dispatch(fetchRuntimeEnvironments()),
+      dispatch(fetchAssignmentSolutions(assignmentId))
     ]);
 
   componentWillMount() {
@@ -71,12 +74,21 @@ class AssignmentStats extends Component {
     return `${safeName || assignmentId}.zip`;
   };
 
+  sortSolutions(solutions) {
+    return solutions.sort((a, b) => {
+      var aTimestamp = a.getIn(['data', 'solution', 'createdAt']);
+      var bTimestamp = b.getIn(['data', 'solution', 'createdAt']);
+      return bTimestamp - aTimestamp;
+    });
+  }
+
   render() {
     const {
       assignmentId,
       assignment,
       getStudents,
       getGroup,
+      getUserSolutions,
       runtimeEnvironments,
       downloadBestSolutionsArchive,
       intl: { locale },
@@ -196,9 +208,9 @@ class AssignmentStats extends Component {
                     .map(user =>
                       <Row key={user.id}>
                         <Col sm={12}>
-                          <SolutionsTableContainer
+                          <SolutionsTable
                             title={user.fullName}
-                            userId={user.id}
+                            solutions={this.sortSolutions(getUserSolutions(user.id))}
                             assignmentId={assignmentId}
                             runtimeEnvironments={runtimes}
                             noteMaxlen={160}
@@ -219,6 +231,7 @@ AssignmentStats.propTypes = {
   assignment: PropTypes.object,
   getStudents: PropTypes.func.isRequired,
   getGroup: PropTypes.func.isRequired,
+  getUserSolutions: PropTypes.func.isRequired,
   runtimeEnvironments: PropTypes.array,
   loadAsync: PropTypes.func.isRequired,
   downloadBestSolutionsArchive: PropTypes.func.isRequired,
@@ -241,6 +254,7 @@ export default withLinks(
           readyUsers
             .filter(user => getStudentsIds(groupId).includes(getId(user)))
             .map(getJsData),
+        getUserSolutions: userId => getUserSolutions(userId, assignmentId)(state),
         getGroup: id => groupSelector(id)(state),
         runtimeEnvironments: assignmentEnvironmentsSelector(state)(assignmentId)
       };

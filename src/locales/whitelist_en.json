@@ -1075,7 +1075,6 @@
   "app.solutionsTable.submissionDate",
   "app.solutionsTable.submitNewSolution",
   "app.solutionsTable.title",
-  "app.solutionsTableContainer.title",
   "app.sourceCodeViewer.downloadButton",
   "app.sourceCodeViewer.incompleteWarning",
   "app.sourceCodeViewer.utf8Warning",

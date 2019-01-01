@@ -1075,7 +1075,6 @@
   "app.solutionsTable.submissionDate": "Datum odevzdání",
   "app.solutionsTable.submitNewSolution": "Odevzdat nové řešení",
   "app.solutionsTable.title": "Odevzdaná řešení",
-  "app.solutionsTableContainer.title": "Odevzdaná řešení",
   "app.sourceCodeViewer.downloadButton": "Stáhnout soubor",
   "app.sourceCodeViewer.incompleteWarning": "Zdrojový soubor je příliš velký, a proto zde nemůže být zobrazen. Použijte tlačítko 'Stáhnout soubor', pokud si jej chcete prohlédnout celý.",
   "app.sourceCodeViewer.utf8Warning": "Zdrojový soubor není v platném UTF-8 kódování. Některé znaky proto nemusí být zobrazeny správně. Pokud potřebujete soubor v původním kódování, použijte tlačítko k jeho stažení.",
