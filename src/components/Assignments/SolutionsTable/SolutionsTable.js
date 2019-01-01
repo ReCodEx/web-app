@@ -1,14 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import ImmutablePropTypes from 'react-immutable-proptypes';
 import { FormattedMessage } from 'react-intl';
 import { Table } from 'react-bootstrap';
 
 import Box from '../../widgets/Box';
-import ResourceRenderer from '../../helpers/ResourceRenderer';
-import LoadingSolutionsTableRow from './LoadingSolutionsTableRow';
 import NoSolutionYetTableRow from './NoSolutionYetTableRow';
-import FailedLoadingSolutionsTableRow from './FailedLoadingSolutionsTableRow';
 import SolutionsTableRow from './SolutionsTableRow';
 
 import styles from './SolutionsTable.less';
@@ -18,56 +14,52 @@ const SolutionsTable = ({
   assignmentId,
   solutions,
   runtimeEnvironments,
+  fetchStatus,
   noteMaxlen = null,
   compact = false
 }) =>
   <Box title={title} collapsable isOpen noPadding unlimitedHeight>
-    <ResourceRenderer
-      resource={solutions}
-      loading={<LoadingSolutionsTableRow />}
-      failed={<FailedLoadingSolutionsTableRow />}
-      returnAsArray
-    >
-      {solutions =>
-        <Table responsive className={styles.solutionsTable}>
-          <thead>
-            <tr>
-              <th />
-              <th>
-                <FormattedMessage
-                  id="app.solutionsTable.submissionDate"
-                  defaultMessage="Date of submission"
-                />
-              </th>
-              <th className="text-center">
-                <FormattedMessage
-                  id="app.solutionsTable.solutionValidity"
-                  defaultMessage="Validity"
-                />
-              </th>
-              <th className="text-center">
-                <FormattedMessage
-                  id="app.solutionsTable.receivedPoints"
-                  defaultMessage="Points"
-                />
-              </th>
-              <th className="text-center">
-                <FormattedMessage
-                  id="app.solutionsTable.environment"
-                  defaultMessage="Target language"
-                />
-              </th>
-              {!compact &&
-                <th>
-                  <FormattedMessage
-                    id="app.solutionsTable.note"
-                    defaultMessage="Note"
-                  />
-                </th>}
-              <th />
-            </tr>
-          </thead>
-          {solutions.map(data => {
+    <Table responsive className={styles.solutionsTable}>
+      <thead>
+        <tr>
+          <th />
+          <th>
+            <FormattedMessage
+              id="app.solutionsTable.submissionDate"
+              defaultMessage="Date of submission"
+            />
+          </th>
+          <th className="text-center">
+            <FormattedMessage
+              id="app.solutionsTable.solutionValidity"
+              defaultMessage="Validity"
+            />
+          </th>
+          <th className="text-center">
+            <FormattedMessage
+              id="app.solutionsTable.receivedPoints"
+              defaultMessage="Points"
+            />
+          </th>
+          <th className="text-center">
+            <FormattedMessage
+              id="app.solutionsTable.environment"
+              defaultMessage="Target language"
+            />
+          </th>
+          {!compact &&
+            <th>
+              <FormattedMessage
+                id="app.solutionsTable.note"
+                defaultMessage="Note"
+              />
+            </th>}
+          <th />
+        </tr>
+      </thead>
+      {solutions.length === 0
+        ? <NoSolutionYetTableRow />
+        : solutions.map(data => {
             const id = data.id;
             const runtimeEnvironment =
               data.runtimeEnvironmentId &&
@@ -93,9 +85,7 @@ const SolutionsTable = ({
               />
             );
           })}
-          {solutions.length === 0 && <NoSolutionYetTableRow />}
-        </Table>}
-    </ResourceRenderer>
+    </Table>
   </Box>;
 
 SolutionsTable.propTypes = {
@@ -105,10 +95,11 @@ SolutionsTable.propTypes = {
     PropTypes.element
   ]).isRequired,
   assignmentId: PropTypes.string.isRequired,
-  solutions: ImmutablePropTypes.list.isRequired,
+  solutions: PropTypes.array.isRequired,
   runtimeEnvironments: PropTypes.array,
   noteMaxlen: PropTypes.number,
-  compact: PropTypes.bool
+  compact: PropTypes.bool,
+  fetchStatus: PropTypes.string
 };
 
 export default SolutionsTable;

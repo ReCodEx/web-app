@@ -110,10 +110,12 @@ export const resubmitAllSolutions = assignmentId =>
     meta: { assignmentId }
   });
 
-export const fetchAssignmentSolutions = (assignmentId) =>
+export const fetchManyAssignmentSolutionsEndpoint = assignmentId =>
+  `/exercise-assignments/${assignmentId}/solutions`;
+export const fetchAssignmentSolutions = assignmentId =>
   actions.fetchMany({
     type: additionalActionTypes.LOAD_ASSIGNMENT_SOLUTIONS,
-    endpoint: `/exercise-assignments/${assignmentId}/solutions`,
+    endpoint: fetchManyAssignmentSolutionsEndpoint(assignmentId),
     meta: {
       assignmentId
     }
@@ -149,9 +151,13 @@ const reducer = handleActions(
           )
         : state,
 
+    [additionalActionTypes.LOAD_USERS_SOLUTIONS_PENDING]:
+      reduceActions[actionTypes.FETCH_MANY_PENDING],
     [additionalActionTypes.LOAD_USERS_SOLUTIONS_FULFILLED]:
       reduceActions[actionTypes.FETCH_MANY_FULFILLED],
 
+    [additionalActionTypes.LOAD_ASSIGNMENT_SOLUTIONS_PENDING]:
+      reduceActions[actionTypes.FETCH_MANY_PENDING],
     [additionalActionTypes.LOAD_ASSIGNMENT_SOLUTIONS_FULFILLED]:
       reduceActions[actionTypes.FETCH_MANY_FULFILLED],
 

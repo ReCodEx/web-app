@@ -34,6 +34,7 @@ import {
   isSupervisorOf,
   isAdminOf
 } from '../../redux/selectors/users';
+import { fetchManyStatus } from '../../redux/selectors/solutions';
 
 import Page from '../../components/layout/Page';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
@@ -99,6 +100,7 @@ class Assignment extends Component {
       runtimeEnvironments,
       exerciseSync,
       solutions,
+      fetchManyStatus,
       links: { ASSIGNMENT_EDIT_URI_FACTORY, ASSIGNMENT_STATS_URI_FACTORY },
       intl: { locale }
     } = this.props;
@@ -252,19 +254,26 @@ class Assignment extends Component {
                     {(isStudentOf(assignment.groupId) ||
                       isSupervisorOf(assignment.groupId) ||
                       isAdminOf(assignment.groupId)) && // includes superadmin
-                      <SolutionsTable
-                        title={
-                          <FormattedMessage
-                            id="app.solutionsTable.title"
-                            defaultMessage="Submitted Solutions"
-                          />
-                        }
-                        solutions={this.sortSolutions(solutions)}
-                        assignmentId={assignment.id}
-                        runtimeEnvironments={runtimes}
-                        noteMaxlen={64}
-                        compact
-                      />}
+                      <ResourceRenderer
+                        resource={this.sortSolutions(solutions)}
+                        returnAsArray
+                      >
+                        {solutions =>
+                          <SolutionsTable
+                            title={
+                              <FormattedMessage
+                                id="app.solutionsTable.title"
+                                defaultMessage="Submitted Solutions"
+                              />
+                            }
+                            solutions={solutions}
+                            assignmentId={assignment.id}
+                            runtimeEnvironments={runtimes}
+                            noteMaxlen={64}
+                            compact
+                            fetchStatus={fetchManyStatus}
+                          />}
+                      </ResourceRenderer>}
                   </Col>}
               </ResourceRenderer>
             </Row>
@@ -313,7 +322,8 @@ export default withLinks(
           isSupervisorOf(loggedInUserId, groupId)(state),
         isAdminOf: groupId => isAdminOf(loggedInUserId, groupId)(state),
         canSubmit: canSubmitSolution(assignmentId)(state),
-        solutions: getUserSolutions(userId, assignmentId)(state)
+        solutions: getUserSolutions(userId, assignmentId)(state),
+        fetchManyStatus: fetchManyStatus(assignmentId)(state)
       };
     },
     (dispatch, { params: { assignmentId, userId } }) => ({

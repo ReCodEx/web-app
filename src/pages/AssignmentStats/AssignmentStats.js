@@ -25,6 +25,7 @@ import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironment
 
 import Page from '../../components/layout/Page';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
+import FetchManyResourceRenderer from '../../components/helpers/FetchManyResourceRenderer';
 import { ResubmitAllSolutionsContainer } from '../../containers/ResubmitSolutionContainer';
 import HierarchyLineContainer from '../../containers/HierarchyLineContainer';
 import { EditIcon, DownloadIcon } from '../../components/icons';
@@ -34,6 +35,7 @@ import withLinks from '../../helpers/withLinks';
 import { getLocalizedName } from '../../helpers/localizedData';
 import SolutionsTable from '../../components/Assignments/SolutionsTable';
 import { fetchAssignmentSolutions } from '../../redux/modules/solutions';
+import { fetchManyStatus } from '../../redux/selectors/solutions';
 
 class AssignmentStats extends Component {
   static loadAsync = ({ assignmentId }, dispatch) =>
@@ -91,6 +93,7 @@ class AssignmentStats extends Component {
       getUserSolutions,
       runtimeEnvironments,
       downloadBestSolutionsArchive,
+      fetchManyStatus,
       intl: { locale },
       links: { ASSIGNMENT_EDIT_URI_FACTORY }
     } = this.props;
@@ -198,27 +201,36 @@ class AssignmentStats extends Component {
               resource={[getGroup(assignment.groupId), ...runtimeEnvironments]}
             >
               {(group, ...runtimes) =>
-                <div>
-                  {getStudents(group.id)
-                    .sort((a, b) => {
-                      const aName = a.name.lastName + ' ' + a.name.firstName;
-                      const bName = b.name.lastName + ' ' + b.name.firstName;
-                      return aName.localeCompare(bName, locale);
-                    })
-                    .map(user =>
-                      <Row key={user.id}>
-                        <Col sm={12}>
-                          <SolutionsTable
-                            title={user.fullName}
-                            solutions={this.sortSolutions(getUserSolutions(user.id))}
-                            assignmentId={assignmentId}
-                            runtimeEnvironments={runtimes}
-                            noteMaxlen={160}
-                          />
-                        </Col>
-                      </Row>
-                    )}
-                </div>}
+                <FetchManyResourceRenderer fetchManyStatus={fetchManyStatus}>
+                  {() =>
+                    <div>
+                      {getStudents(group.id)
+                        .sort((a, b) => {
+                          const aName =
+                            a.name.lastName + ' ' + a.name.firstName;
+                          const bName =
+                            b.name.lastName + ' ' + b.name.firstName;
+                          return aName.localeCompare(bName, locale);
+                        })
+                        .map(user =>
+                          <Row key={user.id}>
+                            <Col sm={12}>
+                              <SolutionsTable
+                                title={user.fullName}
+                                solutions={this.sortSolutions(
+                                  getUserSolutions(user.id)
+                                )
+                                  .toJS()
+                                  .map(x => x['data'])}
+                                assignmentId={assignmentId}
+                                runtimeEnvironments={runtimes}
+                                noteMaxlen={160}
+                              />
+                            </Col>
+                          </Row>
+                        )}
+                    </div>}
+                </FetchManyResourceRenderer>}
             </ResourceRenderer>
           </div>}
       </Page>
@@ -235,6 +247,7 @@ AssignmentStats.propTypes = {
   runtimeEnvironments: PropTypes.array,
   loadAsync: PropTypes.func.isRequired,
   downloadBestSolutionsArchive: PropTypes.func.isRequired,
+  fetchManyStatus: PropTypes.string,
   intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired,
   links: PropTypes.object.isRequired
 };
@@ -254,9 +267,13 @@ export default withLinks(
           readyUsers
             .filter(user => getStudentsIds(groupId).includes(getId(user)))
             .map(getJsData),
-        getUserSolutions: userId => getUserSolutions(userId, assignmentId)(state),
+        getUserSolutions: userId =>
+          getUserSolutions(userId, assignmentId)(state),
         getGroup: id => groupSelector(id)(state),
-        runtimeEnvironments: assignmentEnvironmentsSelector(state)(assignmentId)
+        runtimeEnvironments: assignmentEnvironmentsSelector(state)(
+          assignmentId
+        ),
+        fetchManyStatus: fetchManyStatus(assignmentId)(state)
       };
     },
     (dispatch, { params: { assignmentId } }) => ({
