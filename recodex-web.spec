@@ -14,14 +14,14 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 Prefix: %{_prefix}
 Vendor: Petr Stefan <UNKNOWN>
 Url: https://github.com/ReCodEx/web-app
-BuildRequires: systemd nodejs-packaging npm git
+BuildRequires: systemd nodejs-packaging npm
 Requires(post): systemd
 Requires(preun): systemd
 Requires(postun): systemd
 Requires: nodejs
 
 #Source0: %{name}-%{unmangled_version}.tar.gz
-#Source0: https://github.com/ReCodEx/%{short_name}/archive/%{unmangled_version}.tar.gz#/%{short_name}-%{unmangled_version}.tar.gz
+Source0: https://github.com/ReCodEx/%{short_name}/archive/%{unmangled_version}.tar.gz#/%{short_name}-%{unmangled_version}.tar.gz
 
 %define debug_package %{nil}
 
@@ -29,29 +29,22 @@ Requires: nodejs
 Web-app of ReCodEx programmer testing solution.
 
 %prep
-#%setup -n %{short_name}-%{unmangled_version}
-rm -rf %{short_name}-%{unmangled_version}
-git clone https://github.com/ReCodEx/web-app.git %{short_name}-%{unmangled_version}
-cd %{short_name}-%{unmangled_version}
-#git checkout dynamic-config
-git reset --hard %{unmangled_version}
-
+%setup -n %{short_name}-%{unmangled_version}
 
 %build
-cd %{short_name}-%{unmangled_version}
 rm -f .gitignore
 rm -rf node_modules
 npm i yarn
 mv ./node_modules ./yarn_modules
 cat <<__EOF > .env
 NODE_ENV=production
+VERSION=v%{version}
 __EOF
 ./yarn_modules/yarn/bin/yarn install
 ./yarn_modules/yarn/bin/yarn build
 ./yarn_modules/yarn/bin/yarn deploy
 
 %install
-cd %{short_name}-%{unmangled_version}
 install -d  %{buildroot}/opt/%{name}
 cp -r ./prod/* %{buildroot}/opt/%{name}
 install -d %{buildroot}/lib/systemd/system
