@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { Table } from 'react-bootstrap';
 import { defaultMemoize } from 'reselect';
-import { safeGet } from '../../../helpers/common';
 import { CloseIcon, SortedIcon } from '../../icons';
 
 class SortableTable extends Component {
@@ -12,91 +11,102 @@ class SortableTable extends Component {
     this.state = { sortColumn: props.defaultOrder || null, ascendant: true };
   }
 
-  // Helper function that fetches style property field (style or className) for given column.
-  getStyle = (columnKey, styleField) =>
-    safeGet(this.props.styles, [columnKey, styleField]) ||
-    safeGet(this.props.styles, ['', styleField]) ||
-    null;
-
   // Default row rendering fucntion (if the user does not provide custom function)
-  defaultRowRenderer = (row, idx, { headerKeys, cellRenderers }) =>
+  defaultRowRenderer = (row, idx, columns) =>
     <tr key={row.id || idx}>
-      {headerKeys.map(key =>
-        <td
-          key={key}
-          style={this.getStyle(key, 'style')}
-          className={this.getStyle(key, 'className')}
-        >
-          {cellRenderers[key]
-            ? cellRenderers[key](row[key], idx, key, row)
-            : cellRenderers['']
-              ? cellRenderers[''](row[key], idx, key, row)
-              : row[key]}
+      {columns.map(({ id: colId, cellRenderer, style, className }) =>
+        <td key={colId} style={style} className={className}>
+          {cellRenderer(row[colId], idx, colId, row)}
         </td>
       )}
     </tr>;
 
   // Change internal state that holds sorting parameters.
-  orderBy = col => {
-    const { comparators } = this.props;
+  orderBy = colId => {
+    const { columns } = this.props;
     const { sortColumn, ascendant } = this.state;
+    const column = columns && columns.find(({ id }) => id === colId);
 
-    if (!col || !comparators || !comparators[col]) {
+    if (!colId || !column) {
       this.setState({ sortColumn: null, ascendant: true });
-    } else if (col === sortColumn) {
+    } else if (colId === sortColumn) {
       this.setState({ ascendant: !ascendant });
     } else {
-      this.setState({ sortColumn: col, ascendant: true });
+      this.setState({ sortColumn: colId, ascendant: true });
     }
   };
 
   // Helper function that actually sorts the data according to internal state
-  sortData = defaultMemoize((data, col, ascendant) => {
-    const { comparators } = this.props;
-    return col === null || !comparators || !comparators[col]
+  sortData = defaultMemoize((data, colId, ascendant) => {
+    const { columns } = this.props;
+    const column = columns && columns.find(({ id }) => id === colId);
+    return column === null || column.comparator === null
       ? data
       : ascendant
-        ? data.sort(comparators[col])
-        : data.sort(comparators[col]).reverse();
+        ? data.sort(column.comparator)
+        : data.sort(column.comparator).reverse();
   });
+
+  getHeaderSuffixRow = () => {
+    const { columns } = this.props;
+    if (
+      columns.reduce(
+        (res, { headerSuffix }) => res || headerSuffix !== null,
+        false
+      )
+    ) {
+      return (
+        <tr>
+          {columns.map(column =>
+            <th
+              key={column.id}
+              style={column.getHeaderSuffixStyle()}
+              className={column.getHeaderSuffixClassName()}
+            >
+              {column.headerSuffix}
+            </th>
+          )}
+        </tr>
+      );
+    } else {
+      return null;
+    }
+  };
 
   render() {
     const {
-      header,
-      headerSuffixRow = null,
-      comparators = {},
+      columns,
       defaultOrder,
       data = [],
       empty = null,
       rowRenderer = this.defaultRowRenderer,
-      cellRenderers = {},
       ...props
     } = this.props;
-    const headerKeys = Object.keys(header);
     const { sortColumn, ascendant } = this.state;
+
     return (
       <Table {...props}>
-        {headerKeys.length > 0 &&
+        {columns.length > 0 &&
           <thead>
             <tr>
-              {headerKeys.map(key =>
+              {columns.map(column =>
                 <th
-                  key={`header-${key}`}
-                  style={this.getStyle(key, 'style')}
-                  className={this.getStyle(key, 'className')}
+                  key={`header-${column.id}`}
+                  style={column.getHeaderStyle()}
+                  className={column.getHeaderClassName()}
                 >
-                  {header[key]}
-                  {comparators[key] &&
+                  {column.header}
+                  {column.comparator &&
                     data.length > 1 &&
                     <span>
                       <SortedIcon
-                        active={sortColumn === key}
+                        active={sortColumn === column.id}
                         descending={!ascendant}
                         gapLeft
-                        onClick={() => this.orderBy(key)}
+                        onClick={() => this.orderBy(column.id)}
                       />
 
-                      {sortColumn === key &&
+                      {sortColumn === column.id &&
                         !defaultOrder &&
                         <CloseIcon
                           smallGapLeft
@@ -108,15 +118,15 @@ class SortableTable extends Component {
                 </th>
               )}
             </tr>
-            {headerSuffixRow}
+            {this.getHeaderSuffixRow()}
           </thead>}
         <tbody>
           {data.length > 0
             ? this.sortData(data, sortColumn, ascendant).map((row, idx) =>
-                rowRenderer(row, idx, { headerKeys, cellRenderers })
+                rowRenderer(row, idx, columns)
               )
             : <tr>
-                <td colSpan={headerKeys.length}>
+                <td colSpan={columns.length}>
                   {empty ||
                     <FormattedMessage
                       id="generic.noRecordsInTable"
@@ -131,15 +141,11 @@ class SortableTable extends Component {
 }
 
 SortableTable.propTypes = {
-  header: PropTypes.object.isRequired,
-  headerSuffixRow: PropTypes.any,
-  styles: PropTypes.object,
-  comparators: PropTypes.object,
+  columns: PropTypes.array.isRequired,
   defaultOrder: PropTypes.string,
   data: PropTypes.array,
   empty: PropTypes.any,
-  rowRenderer: PropTypes.func,
-  cellRenderers: PropTypes.object
+  rowRenderer: PropTypes.func
 };
 
 export default SortableTable;
