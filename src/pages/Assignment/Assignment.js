@@ -34,10 +34,11 @@ import {
   isSupervisorOf,
   isAdminOf
 } from '../../redux/selectors/users';
-import { fetchManyStatus } from '../../redux/selectors/solutions';
+import { fetchManyUserSolutionsStatus } from '../../redux/selectors/solutions';
 
 import Page from '../../components/layout/Page';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
+import FetchManyResourceRenderer from '../../components/helpers/FetchManyResourceRenderer';
 import UsersNameContainer from '../../containers/UsersNameContainer';
 import { ResubmitAllSolutionsContainer } from '../../containers/ResubmitSolutionContainer';
 import HierarchyLineContainer from '../../containers/HierarchyLineContainer';
@@ -51,6 +52,9 @@ import AssignmentSync from '../../components/Assignments/Assignment/AssignmentSy
 
 import withLinks from '../../helpers/withLinks';
 import { getLocalizedName } from '../../helpers/localizedData';
+import LoadingSolutionsTable from '../../components/Assignments/SolutionsTable/LoadingSolutionsTable';
+import FailedLoadingSolutionsTable from '../../components/Assignments/SolutionsTable/FailedLoadingSolutionsTable';
+import { getJsData } from '../../redux/helpers/resourceManager';
 
 class Assignment extends Component {
   static loadAsync = ({ assignmentId }, dispatch, { userId }) =>
@@ -254,11 +258,12 @@ class Assignment extends Component {
                     {(isStudentOf(assignment.groupId) ||
                       isSupervisorOf(assignment.groupId) ||
                       isAdminOf(assignment.groupId)) && // includes superadmin
-                      <ResourceRenderer
-                        resource={this.sortSolutions(solutions)}
-                        returnAsArray
+                      <FetchManyResourceRenderer
+                        fetchManyStatus={fetchManyStatus}
+                        loading={<LoadingSolutionsTable />}
+                        failed={<FailedLoadingSolutionsTable />}
                       >
-                        {solutions =>
+                        {() =>
                           <SolutionsTable
                             title={
                               <FormattedMessage
@@ -266,14 +271,15 @@ class Assignment extends Component {
                                 defaultMessage="Submitted Solutions"
                               />
                             }
-                            solutions={solutions}
+                            solutions={this.sortSolutions(solutions).map(
+                              getJsData
+                            )}
                             assignmentId={assignment.id}
                             runtimeEnvironments={runtimes}
                             noteMaxlen={64}
                             compact
-                            fetchStatus={fetchManyStatus}
                           />}
-                      </ResourceRenderer>}
+                      </FetchManyResourceRenderer>}
                   </Col>}
               </ResourceRenderer>
             </Row>
@@ -323,7 +329,9 @@ export default withLinks(
         isAdminOf: groupId => isAdminOf(loggedInUserId, groupId)(state),
         canSubmit: canSubmitSolution(assignmentId)(state),
         solutions: getUserSolutions(userId, assignmentId)(state),
-        fetchManyStatus: fetchManyStatus(assignmentId)(state)
+        fetchManyStatus: fetchManyUserSolutionsStatus(userId, assignmentId)(
+          state
+        )
       };
     },
     (dispatch, { params: { assignmentId, userId } }) => ({

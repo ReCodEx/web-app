@@ -35,7 +35,9 @@ import withLinks from '../../helpers/withLinks';
 import { getLocalizedName } from '../../helpers/localizedData';
 import SolutionsTable from '../../components/Assignments/SolutionsTable';
 import { fetchAssignmentSolutions } from '../../redux/modules/solutions';
-import { fetchManyStatus } from '../../redux/selectors/solutions';
+import { fetchManyAssignmentSolutionsStatus } from '../../redux/selectors/solutions';
+import LoadingSolutionsTable from '../../components/Assignments/SolutionsTable/LoadingSolutionsTable';
+import FailedLoadingSolutionsTable from '../../components/Assignments/SolutionsTable/FailedLoadingSolutionsTable';
 
 class AssignmentStats extends Component {
   static loadAsync = ({ assignmentId }, dispatch) =>
@@ -201,7 +203,11 @@ class AssignmentStats extends Component {
               resource={[getGroup(assignment.groupId), ...runtimeEnvironments]}
             >
               {(group, ...runtimes) =>
-                <FetchManyResourceRenderer fetchManyStatus={fetchManyStatus}>
+                <FetchManyResourceRenderer
+                  fetchManyStatus={fetchManyStatus}
+                  loading={<LoadingSolutionsTable />}
+                  failed={<FailedLoadingSolutionsTable />}
+                >
                   {() =>
                     <div>
                       {getStudents(group.id)
@@ -219,9 +225,7 @@ class AssignmentStats extends Component {
                                 title={user.fullName}
                                 solutions={this.sortSolutions(
                                   getUserSolutions(user.id)
-                                )
-                                  .toJS()
-                                  .map(x => x['data'])}
+                                ).map(getJsData)}
                                 assignmentId={assignmentId}
                                 runtimeEnvironments={runtimes}
                                 noteMaxlen={160}
@@ -273,7 +277,7 @@ export default withLinks(
         runtimeEnvironments: assignmentEnvironmentsSelector(state)(
           assignmentId
         ),
-        fetchManyStatus: fetchManyStatus(assignmentId)(state)
+        fetchManyStatus: fetchManyAssignmentSolutionsStatus(assignmentId)(state)
       };
     },
     (dispatch, { params: { assignmentId } }) => ({

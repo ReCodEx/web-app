@@ -1,5 +1,8 @@
 import { createSelector } from 'reselect';
-import { fetchManyAssignmentSolutionsEndpoint } from '../modules/solutions';
+import {
+  fetchManyAssignmentSolutionsEndpoint,
+  fetchManyUserSolutionsEndpoint
+} from '../modules/solutions';
 
 const getSolutionsRaw = state => state.solutions;
 export const getSolutions = state => getSolutionsRaw(state).get('resources');
@@ -16,10 +19,18 @@ export const isAcceptPending = id =>
     solution.getIn(['data', 'accepted-pending'], false)
   );
 
-export const fetchManyStatus = assignmentId =>
+export const fetchManyAssignmentSolutionsStatus = assignmentId =>
   createSelector(getSolutionsRaw, state =>
     state.getIn([
       'fetchManyStatus',
       fetchManyAssignmentSolutionsEndpoint(assignmentId)
+    ])
+  );
+
+export const fetchManyUserSolutionsStatus = (userId, assignmentId) =>
+  createSelector(getSolutionsRaw, state =>
+    state.getIn([
+      'fetchManyStatus',
+      fetchManyUserSolutionsEndpoint(userId, assignmentId)
     ])
   );

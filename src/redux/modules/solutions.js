@@ -112,6 +112,10 @@ export const resubmitAllSolutions = assignmentId =>
 
 export const fetchManyAssignmentSolutionsEndpoint = assignmentId =>
   `/exercise-assignments/${assignmentId}/solutions`;
+
+export const fetchManyUserSolutionsEndpoint = (userId, assignmentId) =>
+  `/exercise-assignments/${assignmentId}/users/${userId}/solutions`;
+
 export const fetchAssignmentSolutions = assignmentId =>
   actions.fetchMany({
     type: additionalActionTypes.LOAD_ASSIGNMENT_SOLUTIONS,
@@ -124,7 +128,7 @@ export const fetchAssignmentSolutions = assignmentId =>
 export const fetchUsersSolutions = (userId, assignmentId) =>
   actions.fetchMany({
     type: additionalActionTypes.LOAD_USERS_SOLUTIONS,
-    endpoint: `/exercise-assignments/${assignmentId}/users/${userId}/solutions`,
+    endpoint: fetchManyUserSolutionsEndpoint(userId, assignmentId),
     meta: {
       assignmentId,
       userId
@@ -155,11 +159,15 @@ const reducer = handleActions(
       reduceActions[actionTypes.FETCH_MANY_PENDING],
     [additionalActionTypes.LOAD_USERS_SOLUTIONS_FULFILLED]:
       reduceActions[actionTypes.FETCH_MANY_FULFILLED],
+    [additionalActionTypes.LOAD_USERS_SOLUTIONS_REJECTED]:
+      reduceActions[actionTypes.FETCH_MANY_REJECTED],
 
     [additionalActionTypes.LOAD_ASSIGNMENT_SOLUTIONS_PENDING]:
       reduceActions[actionTypes.FETCH_MANY_PENDING],
     [additionalActionTypes.LOAD_ASSIGNMENT_SOLUTIONS_FULFILLED]:
       reduceActions[actionTypes.FETCH_MANY_FULFILLED],
+    [additionalActionTypes.LOAD_ASSIGNMENT_SOLUTIONS_REJECTED]:
+      reduceActions[actionTypes.FETCH_MANY_REJECTED],
 
     [additionalActionTypes.SET_BONUS_POINTS_FULFILLED]: (
       state,

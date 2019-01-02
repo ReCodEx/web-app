@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 import { FormattedMessage } from 'react-intl';
 import { Table } from 'react-bootstrap';
 
@@ -14,7 +15,6 @@ const SolutionsTable = ({
   assignmentId,
   solutions,
   runtimeEnvironments,
-  fetchStatus,
   noteMaxlen = null,
   compact = false
 }) =>
@@ -57,7 +57,7 @@ const SolutionsTable = ({
           <th />
         </tr>
       </thead>
-      {solutions.length === 0
+      {solutions.size === 0
         ? <NoSolutionYetTableRow />
         : solutions.map(data => {
             const id = data.id;
@@ -95,11 +95,10 @@ SolutionsTable.propTypes = {
     PropTypes.element
   ]).isRequired,
   assignmentId: PropTypes.string.isRequired,
-  solutions: PropTypes.array.isRequired,
+  solutions: ImmutablePropTypes.list.isRequired,
   runtimeEnvironments: PropTypes.array,
   noteMaxlen: PropTypes.number,
-  compact: PropTypes.bool,
-  fetchStatus: PropTypes.string
+  compact: PropTypes.bool
 };
 
 export default SolutionsTable;
