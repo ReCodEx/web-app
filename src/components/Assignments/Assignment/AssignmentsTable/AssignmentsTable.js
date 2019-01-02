@@ -14,7 +14,7 @@ import AssignmentTableRow, {
   NoAssignmentTableRow,
   LoadingAssignmentTableRow
 } from '../AssignmentTableRow';
-import { compareAssignments } from '../../../helpers/compareAssignments';
+import { compareAssignments } from '../../../helpers/assignments';
 
 const fetchAssignmentStatus = (statuses, assignmentId) => {
   const assignStatus =

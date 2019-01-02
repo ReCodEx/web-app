@@ -10,7 +10,7 @@ import {
   getJsData
 } from '../../../../redux/helpers/resourceManager';
 import ShadowAssignmentsTableRow from './ShadowAssignmentsTableRow';
-import { compareShadowAssignments } from '../../../helpers/compareAssignments';
+import { compareShadowAssignments } from '../../../helpers/assignments';
 import { LoadingIcon } from '../../../icons';
 import { EMPTY_LIST, EMPTY_OBJ } from '../../../../helpers/common';
 

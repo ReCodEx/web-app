@@ -16,7 +16,7 @@ index 61722596..05eecaff 100644
 +++ b/src/components/Groups/ResultsTable/ResultsTable.js
 @@ -11,6 +11,60 @@ import withLinks from '../../../helpers/withLinks';
  import { LocalizedExerciseName } from '../../helpers/LocalizedNames';
- import { compareAssignments } from '../../helpers/compareAssignments';
+ import { compareAssignments } from '../../helpers/assignments';
  import styles from './ResultsTable.less';
 +import UsersName from '../../Users/UsersName/UsersName';
 +

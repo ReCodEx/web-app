@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 
-import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import ShadowAssignmentPointsTable from '../../components/Assignments/ShadowAssignmentPointsTable';
 
 import { fetchStudents } from '../../redux/modules/users';
@@ -12,8 +10,7 @@ import {
   updateShadowAssignmentPoints,
   removeShadowAssignmentPoints
 } from '../../redux/modules/shadowAssignments';
-import { groupSelector } from '../../redux/selectors/groups';
-import { safeGet, EMPTY_ARRAY } from '../../helpers/common';
+import { studentsOfGroupSelector } from '../../redux/selectors/users';
 
 class ShadowAssignmentPointsContainer extends Component {
   static loadAsync = ({ groupId }, dispatch) =>
@@ -28,7 +25,7 @@ class ShadowAssignmentPointsContainer extends Component {
 
   render() {
     const {
-      group,
+      students,
       points,
       maxPoints,
       permissionHints,
@@ -37,18 +34,15 @@ class ShadowAssignmentPointsContainer extends Component {
       removePoints
     } = this.props;
     return (
-      <ResourceRenderer resource={group}>
-        {group =>
-          <ShadowAssignmentPointsTable
-            students={safeGet(group, ['privateData', 'students'], EMPTY_ARRAY)}
-            points={points}
-            maxPoints={maxPoints}
-            permissionHints={permissionHints}
-            createPoints={createPoints}
-            updatePoints={updatePoints}
-            removePoints={removePoints}
-          />}
-      </ResourceRenderer>
+      <ShadowAssignmentPointsTable
+        students={students}
+        points={points}
+        maxPoints={maxPoints}
+        permissionHints={permissionHints}
+        createPoints={createPoints}
+        updatePoints={updatePoints}
+        removePoints={removePoints}
+      />
     );
   }
 }
@@ -59,7 +53,7 @@ ShadowAssignmentPointsContainer.propTypes = {
   points: PropTypes.array.isRequired,
   maxPoints: PropTypes.number.isRequired,
   permissionHints: PropTypes.object.isRequired,
-  group: ImmutablePropTypes.map,
+  students: PropTypes.array,
   loadAsync: PropTypes.func.isRequired,
   createPoints: PropTypes.func.isRequired,
   updatePoints: PropTypes.func.isRequired,
@@ -68,7 +62,7 @@ ShadowAssignmentPointsContainer.propTypes = {
 
 export default connect(
   (state, { groupId }) => ({
-    group: groupSelector(state, groupId)
+    students: studentsOfGroupSelector(state, groupId)
   }),
   (dispatch, { groupId, id }) => ({
     loadAsync: () =>
