@@ -335,33 +335,48 @@ class GroupDetail extends Component {
                           unlimitedHeight
                           noPadding
                         >
-                          <ResourceRenderer
-                            resource={[stats, ...assignments]}
-                            bulkyLoading
-                          >
-                            {(groupStats, ...assignments) =>
-                              <ResultsTable
-                                users={students}
-                                loggedUser={loggedUser}
-                                assignments={assignments}
-                                stats={groupStats}
-                                publicStats={
-                                  data &&
-                                  data.privateData &&
-                                  data.privateData.publicStats
-                                }
-                                isAdmin={isGroupAdmin}
-                                isSupervisor={isGroupSupervisor}
-                                groupName={getLocalizedName(data, locale)}
-                                renderActions={id => {
-                                  return data.archived
-                                    ? null
-                                    : <LeaveJoinGroupButtonContainer
-                                        userId={id}
-                                        groupId={data.id}
-                                      />;
-                                }}
-                              />}
+                          <ResourceRenderer resource={stats} bulkyLoading>
+                            {groupStats =>
+                              <ResourceRenderer
+                                resource={assignments}
+                                returnAsArray
+                                bulkyLoading
+                              >
+                                {assignments =>
+                                  <ResourceRenderer
+                                    resource={shadowAssignments}
+                                    returnAsArray
+                                    bulkyLoading
+                                  >
+                                    {shadowAssignments =>
+                                      <ResultsTable
+                                        users={students}
+                                        loggedUser={loggedUser}
+                                        assignments={assignments}
+                                        shadowAssignments={shadowAssignments}
+                                        stats={groupStats}
+                                        publicStats={
+                                          data &&
+                                          data.privateData &&
+                                          data.privateData.publicStats
+                                        }
+                                        isAdmin={isGroupAdmin}
+                                        isSupervisor={isGroupSupervisor}
+                                        groupName={getLocalizedName(
+                                          data,
+                                          locale
+                                        )}
+                                        renderActions={id => {
+                                          return data.archived
+                                            ? null
+                                            : <LeaveJoinGroupButtonContainer
+                                                userId={id}
+                                                groupId={data.id}
+                                              />;
+                                        }}
+                                      />}
+                                  </ResourceRenderer>}
+                              </ResourceRenderer>}
                           </ResourceRenderer>
                         </Box>
                       </Col>
