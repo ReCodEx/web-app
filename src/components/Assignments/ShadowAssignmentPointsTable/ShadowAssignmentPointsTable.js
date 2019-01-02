@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
+
 import { Table, Modal } from 'react-bootstrap';
 import { defaultMemoize } from 'reselect';
 import moment from 'moment';
@@ -12,7 +13,10 @@ import DateTime from '../../widgets/DateTime';
 import Button from '../../widgets/FlatButton';
 import Confirm from '../../forms/Confirm';
 import Icon, { EditIcon, DeleteIcon } from '../../icons';
+import { createUserNameComparator } from '../../helpers/users';
 import { arrayToObject, safeGet } from '../../../helpers/common';
+
+//
 
 class ShadowAssignmentPointsTable extends Component {
   state = { dialogOpen: false, dialogStudentId: null, dialogPointsId: null };
@@ -67,8 +71,15 @@ class ShadowAssignmentPointsTable extends Component {
   };
 
   render() {
-    const { students, points, permissionHints, maxPoints } = this.props;
+    const {
+      students,
+      points,
+      permissionHints,
+      maxPoints,
+      intl: { locale }
+    } = this.props;
     const studentPoints = arrayToObject(points, ({ awardeeId }) => awardeeId);
+    const nameComparator = createUserNameComparator(locale);
 
     return (
       <Box
@@ -115,26 +126,29 @@ class ShadowAssignmentPointsTable extends Component {
               </tr>
             </thead>
             <tbody>
-              {students.map(studentId => {
+              {students.sort(nameComparator).map(student => {
                 const points = safeGet(
                   studentPoints,
-                  [studentId, 'points'],
+                  [student.id, 'points'],
                   null
                 );
                 const pointsId = safeGet(
                   studentPoints,
-                  [studentId, 'id'],
+                  [student.id, 'id'],
                   null
                 );
                 const awardedAt = safeGet(
                   studentPoints,
-                  [studentId, 'awardedAt'],
+                  [student.id, 'awardedAt'],
                   null
                 );
                 return (
-                  <tr key={studentId}>
+                  <tr key={student.id}>
                     <td className="text-nowrap">
-                      <UsersNameContainer userId={studentId} showEmail="icon" />
+                      <UsersNameContainer
+                        userId={student.id}
+                        showEmail="icon"
+                      />
                     </td>
                     <td className="text-center text-nowrap">
                       {points !== null ? points : <span>&mdash;</span>}
@@ -144,14 +158,14 @@ class ShadowAssignmentPointsTable extends Component {
                         <DateTime unixts={awardedAt} showRelative />}
                     </td>
                     <td>
-                      {safeGet(studentPoints, [studentId, 'note'], null)}
+                      {safeGet(studentPoints, [student.id, 'note'], null)}
                     </td>
                     {points === null
                       ? <td className="shrink-col text-nowrap text-right">
                           {permissionHints.createPoints &&
                             <Button
                               bsStyle="success"
-                              onClick={() => this.openDialog(studentId)}
+                              onClick={() => this.openDialog(student.id)}
                               bsSize="xs"
                             >
                               <Icon gapRight icon={['far', 'star']} />
@@ -166,7 +180,7 @@ class ShadowAssignmentPointsTable extends Component {
                             <Button
                               bsStyle="warning"
                               onClick={() =>
-                                this.openDialog(studentId, pointsId)}
+                                this.openDialog(student.id, pointsId)}
                               bsSize="xs"
                             >
                               <EditIcon gapRight />
@@ -245,7 +259,8 @@ ShadowAssignmentPointsTable.propTypes = {
   maxPoints: PropTypes.number.isRequired,
   createPoints: PropTypes.func.isRequired,
   updatePoints: PropTypes.func.isRequired,
-  removePoints: PropTypes.func.isRequired
+  removePoints: PropTypes.func.isRequired,
+  intl: intlShape.isRequired
 };
 
-export default ShadowAssignmentPointsTable;
+export default injectIntl(ShadowAssignmentPointsTable);

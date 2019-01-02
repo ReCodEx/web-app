@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router';
-import { FormattedMessage, injectIntl } from 'react-intl';
+import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
 import { defaultMemoize } from 'reselect';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 
@@ -13,10 +13,11 @@ import SortableTable, {
 import withLinks from '../../../helpers/withLinks';
 import { LocalizedExerciseName } from '../../helpers/LocalizedNames';
 import { getLocalizedName } from '../../../helpers/localizedData';
+import { createUserNameComparator } from '../../helpers/users';
 import {
   compareAssignments,
   compareShadowAssignments
-} from '../../helpers/compareAssignments';
+} from '../../helpers/assignments';
 import { downloadString } from '../../../redux/helpers/api/download';
 import Button from '../../widgets/FlatButton';
 import { DownloadIcon } from '../../icons';
@@ -124,10 +125,7 @@ class ResultsTable extends Component {
         }
       } = this.props;
 
-      const nameComparator = (u1, u2) =>
-        u1.name.lastName.localeCompare(u2.name.lastName, locale) ||
-        u1.name.firstName.localeCompare(u2.name.firstName, locale) ||
-        u1.privateData.email.localeCompare(u2.privateData.email, locale);
+      const nameComparator = createUserNameComparator(locale);
 
       /*
        * User Name (First Column)
@@ -382,7 +380,7 @@ ResultsTable.propTypes = {
   isSupervisor: PropTypes.bool,
   renderActions: PropTypes.func,
   groupName: PropTypes.string.isRequired,
-  intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired,
+  intl: intlShape.isRequired,
   links: PropTypes.object
 };
 
