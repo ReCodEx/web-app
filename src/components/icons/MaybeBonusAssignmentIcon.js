@@ -18,7 +18,7 @@ const MaybeBonusAssignmentIcon = ({ id, isBonus, ...props }) =>
         </Tooltip>
       }
     >
-      <BonusIcon {...props} gapRight className="text-muted" />
+      <BonusIcon {...props} className="text-muted" />
     </OverlayTrigger>
   </span>;
 

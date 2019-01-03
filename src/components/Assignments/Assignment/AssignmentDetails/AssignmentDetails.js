@@ -3,7 +3,11 @@ import PropTypes from 'prop-types';
 import { Table } from 'react-bootstrap';
 import { FormattedMessage } from 'react-intl';
 import classnames from 'classnames';
-import Icon, { SuccessIcon, SuccessOrFailureIcon } from '../../../icons';
+import Icon, {
+  SuccessIcon,
+  SuccessOrFailureIcon,
+  VisibleIcon
+} from '../../../icons';
 import Box from '../../../widgets/Box';
 import EnvironmentsList from '../../../helpers/EnvironmentsList';
 import DateTime from '../../../widgets/DateTime';
@@ -21,7 +25,8 @@ const AssignmentDetails = ({
   isBonus,
   runtimeEnvironments,
   canSubmit,
-  pointsPercentualThreshold
+  pointsPercentualThreshold,
+  visibleFrom
 }) =>
   <Box
     title={<FormattedMessage id="generic.details" defaultMessage="Details" />}
@@ -140,6 +145,22 @@ const AssignmentDetails = ({
           </td>
         </tr>
 
+        {visibleFrom &&
+          <tr>
+            <td className="text-center shrink-col em-padding-left em-padding-right">
+              <VisibleIcon />
+            </td>
+            <th>
+              <FormattedMessage
+                id="app.assignment.visibleFrom"
+                defaultMessage="Visible from"
+              />:
+            </th>
+            <td>
+              <DateTime unixts={visibleFrom} showRelative />
+            </td>
+          </tr>}
+
         {isBonus &&
           <tr>
             <td className="text-center shrink-col em-padding-left em-padding-right">
@@ -202,7 +223,8 @@ AssignmentDetails.propTypes = {
   isBonus: PropTypes.bool,
   runtimeEnvironments: PropTypes.array,
   canSubmit: PropTypes.object,
-  pointsPercentualThreshold: PropTypes.number
+  pointsPercentualThreshold: PropTypes.number,
+  visibleFrom: PropTypes.number.isRequired
 };
 
 export default AssignmentDetails;
