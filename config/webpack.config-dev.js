@@ -70,7 +70,8 @@ module.exports = {
         LOGGER_MIDDLEWARE_VERBOSE:
           "'" + process.env.LOGGER_MIDDLEWARE_VERBOSE + "'",
         LOGGER_MIDDLEWARE_EXCEPTIONS:
-          "'" + process.env.LOGGER_MIDDLEWARE_EXCEPTIONS + "'"
+          "'" + process.env.LOGGER_MIDDLEWARE_EXCEPTIONS + "'",
+        VERSION: JSON.stringify(gitRevisionPlugin.version())
       },
       gitRevision: {
         VERSION: JSON.stringify(gitRevisionPlugin.version()),

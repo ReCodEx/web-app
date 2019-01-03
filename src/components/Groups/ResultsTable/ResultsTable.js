@@ -218,7 +218,11 @@ class ResultsTable extends Component {
                 headerSuffix: shadowAssignment.maxPoints,
                 headerSuffixClassName: styles.maxPointsRow,
                 cellRenderer: points =>
-                  points.points !== undefined ? points.points : '-'
+                  points && Number.isInteger(points.gained)
+                    ? <span>
+                        {points.gained}
+                      </span>
+                    : '-'
               }
             )
           )
@@ -297,8 +301,8 @@ class ResultsTable extends Component {
 
         shadowAssignments.forEach(shadowAssignment => {
           data[shadowAssignment.id] = safeGet(
-            shadowAssignment,
-            ['points', ({ awardeeId }) => awardeeId === user.id],
+            userStats,
+            ['shadowAssignments', a => a.id === shadowAssignment.id, 'points'],
             EMPTY_OBJ
           );
         });
