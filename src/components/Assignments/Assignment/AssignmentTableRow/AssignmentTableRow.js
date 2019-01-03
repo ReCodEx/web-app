@@ -11,7 +11,7 @@ import {
   EditIcon,
   ResultsIcon,
   MaybeBonusAssignmentIcon,
-  MaybePublicIcon
+  MaybeVisibleAssignmentIcon
 } from '../../../icons';
 import DeleteAssignmentButtonContainer from '../../../../containers/DeleteAssignmentButtonContainer';
 import Button from '../../../widgets/FlatButton';
@@ -28,6 +28,7 @@ const AssignmentTableRow = ({
     secondDeadline,
     isBonus,
     isPublic,
+    visibleFrom,
     accepted
   },
   runtimeEnvironments = null,
@@ -43,13 +44,19 @@ const AssignmentTableRow = ({
   }
 }) =>
   <tr>
-    <td className="text-center">
+    <td className="text-nowrap shrink-col">
       {isAdmin
-        ? <MaybePublicIcon id={id} isPublic={isPublic} />
+        ? <MaybeVisibleAssignmentIcon
+            id={id}
+            isPublic={isPublic}
+            visibleFrom={visibleFrom}
+            gapLeft
+            gapRight
+          />
         : <AssignmentStatusIcon id={id} status={status} accepted={accepted} />}
+      <MaybeBonusAssignmentIcon gapLeft id={id} isBonus={isBonus} />
     </td>
     <td>
-      <MaybeBonusAssignmentIcon id={id} isBonus={isBonus} />
       <Link
         to={
           userId

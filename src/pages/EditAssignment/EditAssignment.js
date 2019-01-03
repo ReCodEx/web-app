@@ -338,7 +338,7 @@ export default connect(
       const processedData = Object.assign({}, data, {
         firstDeadline: moment(data.firstDeadline).unix(),
         secondDeadline: moment(data.secondDeadline).unix(),
-        isPublic: !data.allowVisibleFrom ? data.isPublic : false,
+        isPublic: !data.allowVisibleFrom ? data.isPublic : true,
         visibleFrom: moment(data.visibleFrom).unix(),
         submissionsCountLimit: Number(data.submissionsCountLimit),
         version
