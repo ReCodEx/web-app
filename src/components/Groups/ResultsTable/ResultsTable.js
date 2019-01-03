@@ -60,7 +60,7 @@ const assignmentCellRendererCreator = defaultMemoize(
 );
 
 // Prepare data in CSV format
-const getCSVValues = (assignments, data, locale) => {
+const getCSVValues = (assignments, shadowAssignments, data, locale) => {
   const QUOTE = '"';
   const SEPARATOR = ';';
   const NEWLINE = '\n';
@@ -74,8 +74,11 @@ const getCSVValues = (assignments, data, locale) => {
     enquote('totalPoints')
   ];
   assignments.forEach(assignment => {
+    header.push(enquote(escapeString(getLocalizedName(assignment, locale))));
+  });
+  shadowAssignments.forEach(shadowAssignment => {
     header.push(
-      enquote(`${escapeString(getLocalizedName(assignment, locale))}`)
+      enquote(escapeString(getLocalizedName(shadowAssignment, locale)))
     );
   });
   result.push(header);
@@ -104,6 +107,13 @@ const getCSVValues = (assignments, data, locale) => {
           }
         }
       }
+    });
+    shadowAssignments.forEach(shadowAssignment => {
+      row.push(
+        Number.isInteger(item[shadowAssignment.id].gained)
+          ? item[shadowAssignment.id].gained
+          : ''
+      );
     });
     result.push(row);
   });
@@ -346,27 +356,35 @@ class ResultsTable extends Component {
           }
         />
         {(isAdmin || isSupervisor) &&
-          <Button
-            bsStyle="primary"
-            className={styles.downloadButton}
-            onClick={() =>
-              downloadString(
-                `${groupName}.csv`,
-                getCSVValues(
-                  assignments,
-                  this.prepareData(assignments, users, stats),
-                  locale
-                ),
-                'text/csv;charset=utf-8',
-                true // add BOM
-              )}
-          >
-            <DownloadIcon gapRight />
-            <FormattedMessage
-              id="app.groupResultsTable.downloadCSV"
-              defaultMessage="Download results as CSV"
-            />
-          </Button>}
+          <div className="text-center">
+            <Button
+              bsStyle="primary"
+              className={styles.downloadButton}
+              onClick={() =>
+                downloadString(
+                  `${groupName}.csv`,
+                  getCSVValues(
+                    assignments,
+                    shadowAssignments,
+                    this.prepareData(
+                      assignments,
+                      shadowAssignments,
+                      users,
+                      stats
+                    ),
+                    locale
+                  ),
+                  'text/csv;charset=utf-8',
+                  true // add BOM
+                )}
+            >
+              <DownloadIcon gapRight />
+              <FormattedMessage
+                id="app.groupResultsTable.downloadCSV"
+                defaultMessage="Download results as CSV"
+              />
+            </Button>
+          </div>}
       </React.Fragment>
     );
   }
