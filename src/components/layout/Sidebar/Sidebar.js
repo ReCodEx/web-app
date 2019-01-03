@@ -225,7 +225,7 @@ const Sidebar = ({
               link={FAQ_URL}
               currentPath={currentUrl}
             />
-          </ul>;
+          </ul>
         </React.Fragment>}
 
       {isSuperadminRole(role) && <Admin currentUrl={currentUrl} />}

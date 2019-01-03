@@ -29,7 +29,8 @@ const EditAssignmentForm = ({
   firstDeadline,
   allowSecondDeadline,
   runtimeEnvironments,
-  beingPublished
+  beingPublished,
+  allowVisibleFrom
 }) =>
   <div>
     <FormBox
@@ -261,17 +262,44 @@ const EditAssignmentForm = ({
         <Row>
           <Col sm={6}>
             <Field
-              name="isPublic"
+              name="allowVisibleFrom"
               component={CheckboxField}
               onOff
               label={
                 <FormattedMessage
-                  id="app.editAssignmentForm.isPublic"
-                  defaultMessage="Visible to students"
+                  id="app.editAssignmentForm.allowVisibleFrom"
+                  defaultMessage="Allow precise publication date"
                 />
               }
             />
           </Col>
+          {!allowVisibleFrom &&
+            <Col sm={6}>
+              <Field
+                name="isPublic"
+                component={CheckboxField}
+                onOff
+                label={
+                  <FormattedMessage
+                    id="app.editAssignmentForm.isPublic"
+                    defaultMessage="Visible to students"
+                  />
+                }
+              />
+            </Col>}
+          {allowVisibleFrom &&
+            <Col sm={12}>
+              <Field
+                name="visibleFrom"
+                component={DatetimeField}
+                label={
+                  <FormattedMessage
+                    id="app.editAssignmentForm.visibleFrom"
+                    defaultMessage="Visible to students from"
+                  />
+                }
+              />
+            </Col>}
           {beingPublished &&
             <Col sm={6}>
               <Field
@@ -310,6 +338,7 @@ EditAssignmentForm.propTypes = {
   allowSecondDeadline: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
   runtimeEnvironments: PropTypes.array,
   beingPublished: PropTypes.bool,
+  allowVisibleFrom: PropTypes.bool,
   error: PropTypes.object
 };
 
