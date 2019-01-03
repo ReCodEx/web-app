@@ -76,6 +76,7 @@ class EditAssignment extends Component {
       pointsPercentualThreshold,
       disabledRuntimeEnvironmentIds,
       runtimeEnvironmentIds,
+      visibleFrom,
       ...rest
     }) => ({
       localizedTexts: getLocalizedTextsInitialValues(
@@ -97,6 +98,10 @@ class EditAssignment extends Component {
         }, {})
       ),
       sendNotification: true,
+      allowVisibleFrom: visibleFrom !== null,
+      visibleFrom: visibleFrom
+        ? moment.unix(visibleFrom)
+        : moment().endOf('day'),
       ...rest
     })
   );
@@ -155,7 +160,8 @@ class EditAssignment extends Component {
       allowSecondDeadline,
       exerciseSync,
       runtimeEnvironments,
-      isPublic
+      isPublic,
+      allowVisibleFrom
     } = this.props;
 
     return (
@@ -244,7 +250,11 @@ class EditAssignment extends Component {
                   firstDeadline={firstDeadline}
                   allowSecondDeadline={allowSecondDeadline}
                   runtimeEnvironments={envs}
-                  beingPublished={!assignment.isPublic && isPublic}
+                  beingPublished={
+                    (!assignment.isPublic && isPublic) ||
+                    (!assignment.visibleFrom && allowVisibleFrom)
+                  }
+                  allowVisibleFrom={allowVisibleFrom}
                 />}
             </ResourceRenderer>
 
@@ -295,6 +305,7 @@ EditAssignment.propTypes = {
   firstDeadline: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   allowSecondDeadline: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
   isPublic: PropTypes.bool,
+  allowVisibleFrom: PropTypes.bool,
   exerciseSync: PropTypes.func.isRequired,
   validateAssignment: PropTypes.func.isRequired,
   links: PropTypes.object
@@ -314,7 +325,8 @@ export default connect(
         state,
         'allowSecondDeadline'
       ),
-      isPublic: editAssignmentFormSelector(state, 'isPublic')
+      isPublic: editAssignmentFormSelector(state, 'isPublic'),
+      allowVisibleFrom: editAssignmentFormSelector(state, 'allowVisibleFrom')
     };
   },
   (dispatch, { params: { assignmentId } }) => ({
@@ -326,12 +338,17 @@ export default connect(
       const processedData = Object.assign({}, data, {
         firstDeadline: moment(data.firstDeadline).unix(),
         secondDeadline: moment(data.secondDeadline).unix(),
+        isPublic: !data.allowVisibleFrom ? data.isPublic : false,
+        visibleFrom: moment(data.visibleFrom).unix(),
         submissionsCountLimit: Number(data.submissionsCountLimit),
         version
       });
       if (!processedData.allowSecondDeadline) {
         delete processedData.secondDeadline;
         delete processedData.maxPointsBeforeSecondDeadline;
+      }
+      if (!data.allowVisibleFrom) {
+        delete processedData.visibleFrom;
       }
       return dispatch(editAssignment(assignmentId, processedData));
     },
