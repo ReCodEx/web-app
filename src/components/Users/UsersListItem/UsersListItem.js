@@ -24,8 +24,7 @@ const UsersListItem = ({
   emailColumn = false,
   createdAtColumn = false,
   createActions,
-  loggedUserId = '',
-  useGravatar = false
+  loggedUserId = ''
 }) =>
   user
     ? <tr>
@@ -55,7 +54,6 @@ const UsersListItem = ({
         <td>
           <UsersName
             {...user}
-            useGravatar={useGravatar}
             currentUserId={loggedUserId}
             showEmail={emailColumn ? null : 'full'}
           />
@@ -103,8 +101,7 @@ UsersListItem.propTypes = {
   emailColumn: PropTypes.bool,
   createdAtColumn: PropTypes.bool,
   createActions: PropTypes.func,
-  loggedUserId: PropTypes.string,
-  useGravatar: PropTypes.bool
+  loggedUserId: PropTypes.string
 };
 
 export default UsersListItem;

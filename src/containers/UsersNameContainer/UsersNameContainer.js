@@ -56,7 +56,6 @@ class UsersNameContainer extends Component {
                 size={size}
                 noLink={noLink}
                 currentUserId={currentUser.id}
-                useGravatar={currentUser.privateData.settings.useGravatar}
                 showEmail={showEmail}
               />}
       </ResourceRenderer>

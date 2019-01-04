@@ -219,7 +219,6 @@ class Users extends Component {
                       <UsersList
                         users={data}
                         loggedUserId={user.id}
-                        useGravatar={user.privateData.settings.useGravatar}
                         emailColumn
                         createdAtColumn
                         heading={this.headingCreator({
