@@ -9,6 +9,7 @@ import withLinks from '../../../../helpers/withLinks';
 import Icon, { DeleteIcon } from '../../../icons';
 
 import { Posted, Posting, Failed } from './Status';
+import AvatarContainer from '../../../../containers/AvatarContainer/AvatarContainer';
 
 const Comment = ({
   isFromCurrentUser = false,
@@ -53,7 +54,13 @@ const Comment = ({
           <Failed right={!right} repost={() => repost && repost(id)} />}
         {status === 'pending' && <Posting right={!right} />}
       </div>
-      <img className="direct-chat-img" src={user.avatarUrl} alt={user.name} />
+      <AvatarContainer
+        avatarUrl={user.avatarUrl}
+        fullName={user.name}
+        firstName={user.avatarLetter}
+        size={40}
+        altClassName="direct-chat-img"
+      />
       <div className="direct-chat-text">
         {isFromCurrentUser &&
           <DeleteIcon

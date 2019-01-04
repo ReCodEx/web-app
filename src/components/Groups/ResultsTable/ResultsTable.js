@@ -149,7 +149,6 @@ class ResultsTable extends Component {
               <UsersName
                 {...user}
                 currentUserId={loggedUser.id}
-                useGravatar={loggedUser.privateData.settings.useGravatar}
                 showEmail="icon"
               />
           }

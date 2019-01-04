@@ -27,10 +27,10 @@ const BadgeContainer = ({
     failed={<FailedBadge color="black" small={small} />}
     resource={user}
   >
-    {data =>
+    {user =>
       <span>
         <Badge
-          {...data}
+          {...user}
           logout={() => logout(HOME_URI)}
           expiration={expiration}
           small={small}

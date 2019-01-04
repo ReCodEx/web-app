@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
 import styles from './MenuAvatar.less';
-import Avatar, { FakeAvatar } from '../../Avatar';
+import AvatarContainer from '../../../../containers/AvatarContainer/AvatarContainer';
 
 const MenuAvatar = ({
   title,
@@ -26,16 +26,13 @@ const MenuAvatar = ({
       }}
       style={{ cursor: 'pointer' }}
     >
-      {useGravatar && avatarUrl !== null
-        ? <Avatar
-            size={20}
-            src={avatarUrl}
-            title={title}
-            altClassName={styles.avatar}
-          />
-        : <FakeAvatar size={20} altClassName={styles.avatar}>
-            {firstName[0]}
-          </FakeAvatar>}
+      <AvatarContainer
+        avatarUrl={avatarUrl}
+        fullName={title}
+        firstName={firstName}
+        size={20}
+        altClassName={styles.avatar}
+      />
       <span
         style={{
           whiteSpace: 'normal',
