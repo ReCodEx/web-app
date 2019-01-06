@@ -426,6 +426,7 @@
   "app.editUserProfileForm.title": "Upravit profil",
   "app.editUserRoleForm.title": "Nastavení uživatelské role",
   "app.editUserSettings.assignmentDeadlineEmails": "Informovat o blížícím se termínu u zadané úlohy",
+  "app.editUserSettings.assignmentPointsEmails": "Informovat o změně bodů u zadané úlohy",
   "app.editUserSettings.darkTheme": "Použít tmavý motiv pro editor zdrojového kódu.",
   "app.editUserSettings.defaultLanguage": "Výchozí jazyk:",
   "app.editUserSettings.emailsTitle": "Emaily:",
