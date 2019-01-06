@@ -426,6 +426,7 @@
   "app.editUserProfileForm.title": "Edit Profile",
   "app.editUserRoleForm.title": "Set User's Role",
   "app.editUserSettings.assignmentDeadlineEmails": "Notify about approaching assignments deadline",
+  "app.editUserSettings.assignmentPointsEmails": "Notify about assignment points change",
   "app.editUserSettings.darkTheme": "Use a dark theme for the source code viewers and editors.",
   "app.editUserSettings.defaultLanguage": "Default language:",
   "app.editUserSettings.emailsTitle": "Emails:",
