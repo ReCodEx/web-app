@@ -12,6 +12,7 @@ export const ArchiveGroupIcon = ({ archived = false, ...props }) =>
   <Icon {...props} icon={archived ? 'dolly' : 'archive'} />;
 export const BanIcon = props => <Icon {...props} icon="ban" />;
 export const BonusIcon = props => <Icon {...props} icon="hand-holding-usd" />;
+export const BugIcon = props => <Icon {...props} icon="bug" />;
 export const CloseIcon = props => <Icon {...props} icon="times" />;
 export const CopyIcon = props =>
   <Icon {...props} icon={['far', 'clipboard']} />;
