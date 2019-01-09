@@ -1,11 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage, FormattedNumber } from 'react-intl';
-import { Table } from 'react-bootstrap';
+import { Table, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import classnames from 'classnames';
 
 import AssignmentStatusIcon from '../../Assignments/Assignment/AssignmentStatusIcon';
 import DateTime from '../../widgets/DateTime';
+import { BugIcon } from '../../icons';
 import './EvaluationTable.css';
 
 const EvaluationTable = ({ evaluations, renderButtons, selectedRowId = '' }) =>
@@ -47,6 +48,20 @@ const EvaluationTable = ({ evaluations, renderButtons, selectedRowId = '' }) =>
                 status={e.evaluationStatus}
                 accepted={false}
               />
+              {e.isDebug &&
+                <OverlayTrigger
+                  placement="bottom"
+                  overlay={
+                    <Tooltip id={`debug-mode-${e.id}`}>
+                      <FormattedMessage
+                        id="app.evaluationTable.evaluationIsDebug"
+                        defaultMessage="Evaluated in debug mode (complete logs and dumps)"
+                      />
+                    </Tooltip>
+                  }
+                >
+                  <BugIcon gapLeft className="text-danger" />
+                </OverlayTrigger>}
             </td>
             {e.evaluation &&
               <td>

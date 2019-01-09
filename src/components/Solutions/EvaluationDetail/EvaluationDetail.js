@@ -7,7 +7,7 @@ import { Table } from 'react-bootstrap';
 import AssignmentStatusIcon from '../../Assignments/Assignment/AssignmentStatusIcon';
 import Box from '../../widgets/Box';
 import DateTime from '../../widgets/DateTime';
-import Icon, { SuccessOrFailureIcon } from '../../icons';
+import Icon, { SuccessOrFailureIcon, BugIcon } from '../../icons';
 
 const EvaluationDetail = ({
   evaluation,
@@ -15,7 +15,9 @@ const EvaluationDetail = ({
   submittedAt,
   maxPoints,
   accepted,
-  evaluationStatus
+  evaluationStatus,
+  isDebug,
+  viewResumbissions = false
 }) =>
   <Box
     title={
@@ -155,6 +157,22 @@ const EvaluationDetail = ({
               </em>
             </td>
           </tr>
+
+          {viewResumbissions &&
+            <tr>
+              <td className="text-center">
+                <BugIcon />
+              </td>
+              <th>
+                <FormattedMessage
+                  id="app.evaluationDetail.isDebug"
+                  defaultMessage="Debug Mode"
+                />:
+              </th>
+              <td>
+                <SuccessOrFailureIcon success={isDebug} />
+              </td>
+            </tr>}
         </tbody>
       </Table>
     </div>
@@ -166,7 +184,9 @@ EvaluationDetail.propTypes = {
   evaluation: PropTypes.object,
   maxPoints: PropTypes.number.isRequired,
   accepted: PropTypes.bool,
-  evaluationStatus: PropTypes.string.isRequired
+  evaluationStatus: PropTypes.string.isRequired,
+  isDebug: PropTypes.bool.isRequired,
+  viewResumbissions: PropTypes.bool
 };
 
 export default EvaluationDetail;

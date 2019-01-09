@@ -62,6 +62,7 @@ class SolutionDetail extends Component {
         evaluation,
         isCorrect,
         evaluationStatus,
+        isDebug,
         ...restSub
       } = evaluationsJS[activeSubmissionId].data;
     } else {
@@ -174,6 +175,8 @@ class SolutionDetail extends Component {
                   isCorrect={isCorrect}
                   accepted={accepted}
                   evaluationStatus={evaluationStatus}
+                  isDebug={isDebug}
+                  viewResumbissions={permissionHints.viewResubmissions}
                 />}
 
               {evaluation &&
