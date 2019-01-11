@@ -22,7 +22,7 @@ DeleteGroupButtonContainer.propTypes = {
 
 export default connect(
   (state, { id }) => ({
-    group: groupSelector(id)(state)
+    group: groupSelector(state, id)
   }),
   (dispatch, { id, onDeleted }) => ({
     deleteGroup: () => {

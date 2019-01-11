@@ -27,7 +27,7 @@ import { fetchGroupsStats } from '../../redux/modules/stats';
 import { fetchStudents } from '../../redux/modules/users';
 import { fetchAssignmentsForGroup } from '../../redux/modules/assignments';
 import {
-  // fetchShadowAssignmentsForGroup,
+  fetchShadowAssignmentsForGroup,
   createShadowAssignment
 } from '../../redux/modules/shadowAssignments';
 import { create as createExercise } from '../../redux/modules/exercises';
@@ -78,16 +78,14 @@ class GroupDetail extends Component {
         Promise.all([
           hasPermissions(group, 'viewAssignments')
             ? Promise.all([
-                dispatch(fetchAssignmentsForGroup(groupId))
-                // dispatch(fetchShadowAssignmentsForGroup(groupId))
+                dispatch(fetchAssignmentsForGroup(groupId)),
+                dispatch(fetchShadowAssignmentsForGroup(groupId))
               ])
             : Promise.resolve(),
           hasPermissions(group, 'viewStudents')
             ? dispatch(fetchStudents(groupId))
             : Promise.resolve(),
-          hasPermissions(group, 'viewStats')
-            ? dispatch(fetchGroupsStats(groupId))
-            : Promise.resolve()
+          dispatch(fetchGroupsStats(groupId))
         ])
       )
     ]);
@@ -279,49 +277,45 @@ class GroupDetail extends Component {
                     </Box>
                   </Col>
                 </Row>
-                {false &&
-                  <Row>
-                    <Col lg={12}>
-                      <Box
-                        title={
-                          <FormattedMessage
-                            id="app.groupDetail.shadowAssignments"
-                            defaultMessage="Shadow Assignments"
-                          />
-                        }
-                        noPadding
-                        unlimitedHeight
-                        collapsable
-                        isOpen={shadowAssignments && shadowAssignments.size > 0}
-                        footer={
-                          <p className=" text-center">
-                            <Button
-                              onClick={this.createShadowAssignment}
-                              bsStyle="success"
-                              bsSize="sm"
-                            >
-                              <AddIcon gapRight />
-                              <FormattedMessage
-                                id="app.groupDetail.newShadowAssignment"
-                                defaultMessage="New Shadow Assignment"
-                              />
-                            </Button>
-                          </p>
-                        }
-                      >
-                        <ResourceRenderer resource={stats} bulkyLoading>
-                          {groupStats =>
-                            <ShadowAssignmentsTable
-                              shadowAssignments={shadowAssignments}
-                              stats={groupStats.find(
-                                item => item.userId === userId
-                              )}
-                              isAdmin={isGroupAdmin || isGroupSupervisor}
-                            />}
-                        </ResourceRenderer>
-                      </Box>
-                    </Col>
-                  </Row>}
+
+                <Row>
+                  <Col lg={12}>
+                    <Box
+                      title={
+                        <FormattedMessage
+                          id="app.groupDetail.shadowAssignments"
+                          defaultMessage="Shadow Assignments"
+                        />
+                      }
+                      noPadding
+                      unlimitedHeight
+                      collapsable
+                      isOpen={shadowAssignments && shadowAssignments.size > 0}
+                      footer={
+                        hasPermissions(data, 'createShadowAssignment')
+                          ? <p className="em-margin-top text-center">
+                              <Button
+                                onClick={this.createShadowAssignment}
+                                bsStyle="success"
+                              >
+                                <AddIcon gapRight />
+                                <FormattedMessage
+                                  id="app.groupDetail.newShadowAssignment"
+                                  defaultMessage="New Shadow Assignment"
+                                />
+                              </Button>
+                            </p>
+                          : null
+                      }
+                    >
+                      <ShadowAssignmentsTable
+                        shadowAssignments={shadowAssignments}
+                        isAdmin={isGroupAdmin || isGroupSupervisor}
+                        userId={userId}
+                      />
+                    </Box>
+                  </Col>
+                </Row>
               </React.Fragment>}
 
             <ResourceRenderer resource={loggedUser}>
@@ -341,33 +335,48 @@ class GroupDetail extends Component {
                           unlimitedHeight
                           noPadding
                         >
-                          <ResourceRenderer
-                            resource={[stats, ...assignments]}
-                            bulkyLoading
-                          >
-                            {(groupStats, ...assignments) =>
-                              <ResultsTable
-                                users={students}
-                                loggedUser={loggedUser}
-                                assignments={assignments}
-                                stats={groupStats}
-                                publicStats={
-                                  data &&
-                                  data.privateData &&
-                                  data.privateData.publicStats
-                                }
-                                isAdmin={isGroupAdmin}
-                                isSupervisor={isGroupSupervisor}
-                                groupName={getLocalizedName(data, locale)}
-                                renderActions={id => {
-                                  return data.archived
-                                    ? null
-                                    : <LeaveJoinGroupButtonContainer
-                                        userId={id}
-                                        groupId={data.id}
-                                      />;
-                                }}
-                              />}
+                          <ResourceRenderer resource={stats} bulkyLoading>
+                            {groupStats =>
+                              <ResourceRenderer
+                                resource={assignments}
+                                returnAsArray
+                                bulkyLoading
+                              >
+                                {assignments =>
+                                  <ResourceRenderer
+                                    resource={shadowAssignments}
+                                    returnAsArray
+                                    bulkyLoading
+                                  >
+                                    {shadowAssignments =>
+                                      <ResultsTable
+                                        users={students}
+                                        loggedUser={loggedUser}
+                                        assignments={assignments}
+                                        shadowAssignments={shadowAssignments}
+                                        stats={groupStats}
+                                        publicStats={
+                                          data &&
+                                          data.privateData &&
+                                          data.privateData.publicStats
+                                        }
+                                        isAdmin={isGroupAdmin}
+                                        isSupervisor={isGroupSupervisor}
+                                        groupName={getLocalizedName(
+                                          data,
+                                          locale
+                                        )}
+                                        renderActions={id => {
+                                          return data.archived
+                                            ? null
+                                            : <LeaveJoinGroupButtonContainer
+                                                userId={id}
+                                                groupId={data.id}
+                                              />;
+                                        }}
+                                      />}
+                                  </ResourceRenderer>}
+                              </ResourceRenderer>}
                           </ResourceRenderer>
                         </Box>
                       </Col>
@@ -472,7 +481,7 @@ const mapStateToProps = (state, { params: { groupId } }) => {
   const userId = loggedInUserIdSelector(state);
 
   return {
-    group: groupSelector(groupId)(state),
+    group: groupSelector(state, groupId),
     userId,
     loggedUser: loggedInUserSelector(state),
     groups: groupsSelector(state),

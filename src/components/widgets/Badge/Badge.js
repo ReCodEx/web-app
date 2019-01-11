@@ -7,7 +7,7 @@ import { Tooltip, OverlayTrigger } from 'react-bootstrap';
 import FailedAvatar from '../Avatar/FailedAvatar';
 import withLinks from '../../../helpers/withLinks';
 import Icon from '../../icons';
-import Avatar, { FakeAvatar } from '../Avatar';
+import AvatarContainer from '../../../containers/AvatarContainer/AvatarContainer';
 
 class Badge extends Component {
   state = { failedLoadingImage: false };
@@ -22,7 +22,6 @@ class Badge extends Component {
       fullName,
       name: { firstName },
       avatarUrl,
-      privateData: { settings },
       expiration,
       logout,
       size = 45,
@@ -34,16 +33,14 @@ class Badge extends Component {
     return (
       <div className="user-panel">
         <div className="pull-left image">
-          {!failedLoadingImage && settings.useGravatar && avatarUrl !== null
-            ? <Avatar
-                size={size}
-                src={avatarUrl}
-                title={fullName}
-                onError={this.onFailure}
-              />
-            : <FakeAvatar size={size}>
-                {firstName[0]}
-              </FakeAvatar>}
+          {!failedLoadingImage &&
+            <AvatarContainer
+              avatarUrl={avatarUrl}
+              fullName={fullName}
+              firstName={firstName}
+              size={size}
+              onError={this.onFailure}
+            />}
 
           {failedLoadingImage && <FailedAvatar />}
         </div>

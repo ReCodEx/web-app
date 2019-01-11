@@ -274,10 +274,9 @@ const editGroupFormSelector = formValueSelector('editGroup');
 export default withLinks(
   connect(
     (state, { params: { groupId } }) => {
-      const selectGroup = groupSelector(groupId);
       const userId = loggedInUserIdSelector(state);
       return {
-        group: selectGroup(state),
+        group: groupSelector(state, groupId),
         userId,
         isStudentOf: groupId => isSupervisorOf(userId, groupId)(state),
         hasThreshold: editGroupFormSelector(state, 'hasThreshold'),

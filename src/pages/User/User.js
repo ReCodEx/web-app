@@ -85,7 +85,7 @@ class User extends Component {
             Promise.all(
               [...studentOf, ...supervisorOf]
                 .filter(groupId => {
-                  const group = groupSelector(groupId)(getState());
+                  const group = groupSelector(getState(), groupId);
                   return (
                     group &&
                     group.getIn(['data', 'permissionHints', 'viewStats'])

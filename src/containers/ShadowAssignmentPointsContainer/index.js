@@ -1,0 +1,2 @@
+import ShadowAssignmentPointsContainer from './ShadowAssignmentPointsContainer';
+export default ShadowAssignmentPointsContainer;

@@ -3,22 +3,26 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
 import { Col, Row } from 'react-bootstrap';
+import { defaultMemoize } from 'reselect';
 
 import Button from '../../components/widgets/FlatButton';
 import { LinkContainer } from 'react-router-bootstrap';
 
 import { fetchShadowAssignmentIfNeeded } from '../../redux/modules/shadowAssignments';
 import { getShadowAssignment } from '../../redux/selectors/shadowAssignments';
+import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 
 import Page from '../../components/layout/Page';
 import HierarchyLineContainer from '../../containers/HierarchyLineContainer';
-import ShadowAssignmentDetails from '../../components/Assignments/ShadowAssignment/ShadowAssignmentDetails';
+import ShadowAssignmentPointsContainer from '../../containers/ShadowAssignmentPointsContainer';
+import ShadowAssignmentDetail from '../../components/Assignments/ShadowAssignment/ShadowAssignmentDetail';
+import ShadowAssignmentPointsDetail from '../../components/Assignments/ShadowAssignmentPointsDetail';
 import { EditIcon } from '../../components/icons';
 import LocalizedTexts from '../../components/helpers/LocalizedTexts';
 
 import withLinks from '../../helpers/withLinks';
 import { getLocalizedName } from '../../helpers/localizedData';
-import { hasPermissions } from '../../helpers/common';
+import { hasPermissions, EMPTY_OBJ } from '../../helpers/common';
 
 class ShadowAssignment extends Component {
   static loadAsync = ({ assignmentId }, dispatch) =>
@@ -33,6 +37,11 @@ class ShadowAssignment extends Component {
       newProps.loadAsync();
     }
   }
+
+  findPoints = defaultMemoize(points => {
+    const { loggedUserId } = this.props;
+    return points.find(p => p.awardeeId === loggedUserId) || EMPTY_OBJ;
+  });
 
   render() {
     const {
@@ -109,9 +118,20 @@ class ShadowAssignment extends Component {
                   </div>}
               </Col>
               <Col lg={6}>
-                <ShadowAssignmentDetails {...shadowAssignment} />
+                <ShadowAssignmentDetail {...shadowAssignment} />
+                {!hasPermissions(shadowAssignment, 'viewAllPoints') &&
+                  <ShadowAssignmentPointsDetail
+                    {...this.findPoints(shadowAssignment.points)}
+                  />}
               </Col>
             </Row>
+
+            {hasPermissions(shadowAssignment, 'viewAllPoints') &&
+              <Row>
+                <Col xs={12}>
+                  <ShadowAssignmentPointsContainer {...shadowAssignment} />
+                </Col>
+              </Row>}
           </div>}
       </Page>
     );
@@ -123,6 +143,8 @@ ShadowAssignment.propTypes = {
     assignmentId: PropTypes.string.isRequired
   }),
   shadowAssignment: PropTypes.object,
+  loggedUserId: PropTypes.string,
+  group: PropTypes.func,
   loadAsync: PropTypes.func.isRequired,
   links: PropTypes.object.isRequired,
   intl: intlShape.isRequired
@@ -132,7 +154,8 @@ export default withLinks(
   connect(
     (state, { params: { assignmentId } }) => {
       return {
-        shadowAssignment: getShadowAssignment(state)(assignmentId)
+        shadowAssignment: getShadowAssignment(state)(assignmentId),
+        loggedUserId: loggedInUserIdSelector(state)
       };
     },
     (dispatch, { params: { assignmentId } }) => ({

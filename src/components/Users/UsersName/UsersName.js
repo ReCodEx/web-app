@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router';
-import Avatar, { FakeAvatar } from '../../widgets/Avatar';
 import NotVerified from './NotVerified';
 import { MailIcon } from '../../icons';
 import withLinks from '../../../helpers/withLinks';
 
 import styles from './usersName.less';
+import AvatarContainer from '../../../containers/AvatarContainer/AvatarContainer';
 
 const UsersName = ({
   id,
@@ -17,7 +17,6 @@ const UsersName = ({
   large = false,
   isVerified,
   noLink,
-  useGravatar,
   privateData = null,
   showEmail = null,
   links: { USER_URI_FACTORY },
@@ -31,11 +30,12 @@ const UsersName = ({
   return (
     <span className={styles.wrapper}>
       <span className={styles.avatar}>
-        {useGravatar && avatarUrl !== null
-          ? <Avatar size={size} src={avatarUrl} title={fullName} />
-          : <FakeAvatar size={size}>
-              {firstName[0]}
-            </FakeAvatar>}
+        <AvatarContainer
+          avatarUrl={avatarUrl}
+          fullName={fullName}
+          firstName={firstName}
+          size={size}
+        />
       </span>
       {}
       <span
@@ -84,7 +84,6 @@ UsersName.propTypes = {
   name: PropTypes.shape({ firstName: PropTypes.string.isRequired }).isRequired,
   avatarUrl: PropTypes.string,
   isVerified: PropTypes.bool.isRequired,
-  useGravatar: PropTypes.bool,
   privateData: PropTypes.object,
   size: PropTypes.number,
   large: PropTypes.bool,

@@ -61,7 +61,6 @@ const AddUserContainer = ({
             <UsersList
               users={data}
               loggedUserId={user.id}
-              useGravatar={user.privateData.settings.useGravatar}
               createActions={createActions}
             />
           );

@@ -44,7 +44,7 @@ HierarchyLineContainer.propTypes = {
 
 export default connect(
   (state, { groupId }) => ({
-    group: groupSelector(groupId)(state)
+    group: groupSelector(state, groupId)
   }),
   (dispatch, { groupId }) => ({
     loadGroupIfNeeded: () => dispatch(fetchGroupIfNeeded(groupId))

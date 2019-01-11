@@ -10,7 +10,7 @@ import Icon, {
 import Box from '../../../widgets/Box';
 import DateTime from '../../../widgets/DateTime';
 
-const ShadowAssignmentDetails = ({
+const ShadowAssignmentDetail = ({
   maxPoints,
   isBonus,
   isPublic,
@@ -111,7 +111,7 @@ const ShadowAssignmentDetails = ({
     </Table>
   </Box>;
 
-ShadowAssignmentDetails.propTypes = {
+ShadowAssignmentDetail.propTypes = {
   maxPoints: PropTypes.number.isRequired,
   isBonus: PropTypes.bool,
   isPublic: PropTypes.bool,
@@ -121,4 +121,4 @@ ShadowAssignmentDetails.propTypes = {
   permissionHints: PropTypes.object
 };
 
-export default ShadowAssignmentDetails;
+export default ShadowAssignmentDetail;
