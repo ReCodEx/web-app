@@ -116,6 +116,27 @@ const reducer = handleActions(
         fromJS(payload.map(solution => solution.id))
       ),
 
+    [solutionsActionTypes.LOAD_ASSIGNMENT_SOLUTIONS_FULFILLED]: (
+      state,
+      { payload, meta: { assignmentId } }
+    ) => {
+      payload.forEach(function(solution) {
+        if (!state.hasIn(['solutions', assignmentId, solution.solution.userId])) {
+          state = state.setIn(
+            ['solutions', assignmentId, solution.solution.userId],
+            List()
+          );
+        }
+
+        state = state.updateIn(
+          ['solutions', assignmentId, solution.solution.userId],
+          solutions => solutions.push(solution.id)
+        );
+      });
+
+      return state;
+    },
+
     [additionalActionTypes.SYNC_ASSIGNMENT_FULFILLED]: (
       state,
       { payload, meta: { assignmentId } }

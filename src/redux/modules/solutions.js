@@ -33,6 +33,13 @@ export const additionalActionTypes = {
     'recodex/solutions/LOAD_USERS_SOLUTIONS_FULFILLED',
   LOAD_USERS_SOLUTIONS_REJECTED:
     'recodex/solutions/LOAD_USERS_SOLUTIONS_REJECTED',
+  LOAD_ASSIGNMENT_SOLUTIONS: 'recodex/solutions/LOAD_ASSIGNMENT_SOLUTIONS',
+  LOAD_ASSIGNMENT_SOLUTIONS_PENDING:
+    'recodex/solutions/LOAD_ASSIGNMENT_SOLUTIONS_PENDING',
+  LOAD_ASSIGNMENT_SOLUTIONS_FULFILLED:
+    'recodex/solutions/LOAD_ASSIGNMENT_SOLUTIONS_FULFILLED',
+  LOAD_ASSIGNMENT_SOLUTIONS_REJECTED:
+    'recodex/solutions/LOAD_ASSIGNMENT_SOLUTIONS_REJECTED',
   SET_BONUS_POINTS: 'recodex/solutions/SET_BONUS_POINTS',
   SET_BONUS_POINTS_PENDING: 'recodex/solutions/SET_BONUS_POINTS_PENDING',
   SET_BONUS_POINTS_FULFILLED: 'recodex/solutions/SET_BONUS_POINTS_FULFILLED',
@@ -103,10 +110,25 @@ export const resubmitAllSolutions = assignmentId =>
     meta: { assignmentId }
   });
 
+export const fetchManyAssignmentSolutionsEndpoint = assignmentId =>
+  `/exercise-assignments/${assignmentId}/solutions`;
+
+export const fetchManyUserSolutionsEndpoint = (userId, assignmentId) =>
+  `/exercise-assignments/${assignmentId}/users/${userId}/solutions`;
+
+export const fetchAssignmentSolutions = assignmentId =>
+  actions.fetchMany({
+    type: additionalActionTypes.LOAD_ASSIGNMENT_SOLUTIONS,
+    endpoint: fetchManyAssignmentSolutionsEndpoint(assignmentId),
+    meta: {
+      assignmentId
+    }
+  });
+
 export const fetchUsersSolutions = (userId, assignmentId) =>
   actions.fetchMany({
     type: additionalActionTypes.LOAD_USERS_SOLUTIONS,
-    endpoint: `/exercise-assignments/${assignmentId}/users/${userId}/solutions`,
+    endpoint: fetchManyUserSolutionsEndpoint(userId, assignmentId),
     meta: {
       assignmentId,
       userId
@@ -133,8 +155,19 @@ const reducer = handleActions(
           )
         : state,
 
+    [additionalActionTypes.LOAD_USERS_SOLUTIONS_PENDING]:
+      reduceActions[actionTypes.FETCH_MANY_PENDING],
     [additionalActionTypes.LOAD_USERS_SOLUTIONS_FULFILLED]:
       reduceActions[actionTypes.FETCH_MANY_FULFILLED],
+    [additionalActionTypes.LOAD_USERS_SOLUTIONS_REJECTED]:
+      reduceActions[actionTypes.FETCH_MANY_REJECTED],
+
+    [additionalActionTypes.LOAD_ASSIGNMENT_SOLUTIONS_PENDING]:
+      reduceActions[actionTypes.FETCH_MANY_PENDING],
+    [additionalActionTypes.LOAD_ASSIGNMENT_SOLUTIONS_FULFILLED]:
+      reduceActions[actionTypes.FETCH_MANY_FULFILLED],
+    [additionalActionTypes.LOAD_ASSIGNMENT_SOLUTIONS_REJECTED]:
+      reduceActions[actionTypes.FETCH_MANY_REJECTED],
 
     [additionalActionTypes.SET_BONUS_POINTS_FULFILLED]: (
       state,

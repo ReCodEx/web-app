@@ -2,7 +2,7 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { WarningIcon } from '../../icons';
 
-const FailedLoadingSolutionsTableRow = () =>
+const FailedLoadingSolutionsTable = () =>
   <div className="text-center em-padding">
     <WarningIcon gapRight />
     <FormattedMessage
@@ -11,4 +11,4 @@ const FailedLoadingSolutionsTableRow = () =>
     />
   </div>;
 
-export default FailedLoadingSolutionsTableRow;
+export default FailedLoadingSolutionsTable;

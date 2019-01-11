@@ -34,9 +34,11 @@ import {
   isSupervisorOf,
   isAdminOf
 } from '../../redux/selectors/users';
+import { fetchManyUserSolutionsStatus } from '../../redux/selectors/solutions';
 
 import Page from '../../components/layout/Page';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
+import FetchManyResourceRenderer from '../../components/helpers/FetchManyResourceRenderer';
 import UsersNameContainer from '../../containers/UsersNameContainer';
 import { ResubmitAllSolutionsContainer } from '../../containers/ResubmitSolutionContainer';
 import HierarchyLineContainer from '../../containers/HierarchyLineContainer';
@@ -50,6 +52,9 @@ import AssignmentSync from '../../components/Assignments/Assignment/AssignmentSy
 
 import withLinks from '../../helpers/withLinks';
 import { getLocalizedName } from '../../helpers/localizedData';
+import LoadingSolutionsTable from '../../components/Assignments/SolutionsTable/LoadingSolutionsTable';
+import FailedLoadingSolutionsTable from '../../components/Assignments/SolutionsTable/FailedLoadingSolutionsTable';
+import { getJsData } from '../../redux/helpers/resourceManager';
 
 class Assignment extends Component {
   static loadAsync = ({ assignmentId }, dispatch, { userId }) =>
@@ -99,6 +104,7 @@ class Assignment extends Component {
       runtimeEnvironments,
       exerciseSync,
       solutions,
+      fetchManyStatus,
       links: { ASSIGNMENT_EDIT_URI_FACTORY, ASSIGNMENT_STATS_URI_FACTORY },
       intl: { locale }
     } = this.props;
@@ -252,20 +258,28 @@ class Assignment extends Component {
                     {(isStudentOf(assignment.groupId) ||
                       isSupervisorOf(assignment.groupId) ||
                       isAdminOf(assignment.groupId)) && // includes superadmin
-                      <SolutionsTable
-                        title={
-                          <FormattedMessage
-                            id="app.solutionsTable.title"
-                            defaultMessage="Submitted Solutions"
-                          />
-                        }
-                        userId={userId}
-                        solutions={this.sortSolutions(solutions)}
-                        assignmentId={assignment.id}
-                        runtimeEnvironments={runtimes}
-                        noteMaxlen={64}
-                        compact
-                      />}
+                      <FetchManyResourceRenderer
+                        fetchManyStatus={fetchManyStatus}
+                        loading={<LoadingSolutionsTable />}
+                        failed={<FailedLoadingSolutionsTable />}
+                      >
+                        {() =>
+                          <SolutionsTable
+                            title={
+                              <FormattedMessage
+                                id="app.solutionsTable.title"
+                                defaultMessage="Submitted Solutions"
+                              />
+                            }
+                            solutions={this.sortSolutions(solutions).map(
+                              getJsData
+                            )}
+                            assignmentId={assignment.id}
+                            runtimeEnvironments={runtimes}
+                            noteMaxlen={64}
+                            compact
+                          />}
+                      </FetchManyResourceRenderer>}
                   </Col>}
               </ResourceRenderer>
             </Row>
@@ -314,7 +328,10 @@ export default withLinks(
           isSupervisorOf(loggedInUserId, groupId)(state),
         isAdminOf: groupId => isAdminOf(loggedInUserId, groupId)(state),
         canSubmit: canSubmitSolution(assignmentId)(state),
-        solutions: getUserSolutions(userId, assignmentId)(state)
+        solutions: getUserSolutions(userId, assignmentId)(state),
+        fetchManyStatus: fetchManyUserSolutionsStatus(userId, assignmentId)(
+          state
+        )
       };
     },
     (dispatch, { params: { assignmentId, userId } }) => ({
