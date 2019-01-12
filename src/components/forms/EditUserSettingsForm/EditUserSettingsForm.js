@@ -176,12 +176,12 @@ const EditUserSettingsForm = ({
     />
 
     <Field
-      name="assignmentPointsEmails"
+      name="pointsChangedEmails"
       component={CheckboxField}
       onOff
       label={
         <FormattedMessage
-          id="app.editUserSettings.assignmentPointsEmails"
+          id="app.editUserSettings.pointsChangedEmails"
           defaultMessage="Notify about assignment points change"
         />
       }
