@@ -273,7 +273,7 @@ export default withLinks(
             .map(getJsData),
         getUserSolutions: userId =>
           getUserSolutions(userId, assignmentId)(state),
-        getGroup: id => groupSelector(id)(state),
+        getGroup: id => groupSelector(state, id),
         runtimeEnvironments: assignmentEnvironmentsSelector(state)(
           assignmentId
         ),
