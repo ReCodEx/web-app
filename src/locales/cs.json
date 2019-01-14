@@ -858,7 +858,7 @@
   "app.pipeline.description": "Přehled pipeline",
   "app.pipeline.detailTitle": "Podrobnosti pipeline",
   "app.pipeline.editSettings": "Upravit pipeline",
-  "app.pipeline.exercise": "Úloha:",
+  "app.pipeline.exercises": "Úlohy:",
   "app.pipeline.failedDetail": "Načítání detailů pipeline selhalo. Ujistěte se prosím, že jste připojeni k Internetu a zkuste to později.",
   "app.pipeline.loadingDetail": "Načítám podrobnosti pipeline",
   "app.pipeline.publicExercise": "Veřejná",

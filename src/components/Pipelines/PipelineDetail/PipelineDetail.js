@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage, FormattedNumber } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { Table } from 'react-bootstrap';
 
 import Box from '../../widgets/Box';
@@ -22,7 +22,7 @@ const PipelineDetail = ({
   version,
   runtimeEnvironments
 }) =>
-  <Box title={name} noPadding>
+  <Box title={name} noPadding unlimitedHeight>
     <Table responsive condensed>
       <tbody>
         {Boolean(author) &&
@@ -59,8 +59,8 @@ const PipelineDetail = ({
           </td>
           <th>
             <FormattedMessage
-              id="app.pipeline.exercise"
-              defaultMessage="Exercise:"
+              id="app.pipeline.exercises"
+              defaultMessage="Exercises:"
             />
           </th>
           <td>
