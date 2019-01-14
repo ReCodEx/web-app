@@ -8,6 +8,8 @@ import Markdown from '../../widgets/Markdown';
 import DateTime from '../../widgets/DateTime';
 import UsersNameContainer from '../../../containers/UsersNameContainer';
 import ExercisesNameContainer from '../../../containers/ExercisesNameContainer';
+import Icon, { UserIcon } from '../../icons';
+import EnvironmentsList from '../../helpers/EnvironmentsList';
 
 const PipelineDetail = ({
   author,
@@ -16,13 +18,17 @@ const PipelineDetail = ({
   description = '',
   createdAt,
   updatedAt,
-  version
+  version,
+  runtimeEnvironments
 }) =>
   <Box title={name} noPadding>
-    <Table>
+    <Table responsive condensed>
       <tbody>
         {Boolean(author) &&
           <tr>
+            <td className="text-center shrink-col em-padding-left em-padding-right">
+              <UserIcon />
+            </td>
             <th>
               <FormattedMessage id="generic.author" defaultMessage="Author" />:
             </th>
@@ -30,18 +36,26 @@ const PipelineDetail = ({
               <UsersNameContainer userId={author} />
             </td>
           </tr>}
+
         <tr>
-          <th>
+          <td className="text-center shrink-col em-padding-left em-padding-right">
+            <Icon icon={['far', 'file-alt']} />
+          </td>
+          <th className="text-nowrap">
             <FormattedMessage
               id="app.pipeline.description"
-              defaultMessage="Author's description:"
+              defaultMessage="Pipeline overview:"
             />
           </th>
           <td>
             <Markdown source={description} />
           </td>
         </tr>
+
         <tr>
+          <td className="text-center shrink-col em-padding-left em-padding-right">
+            <Icon icon="puzzle-piece" />
+          </td>
           <th>
             <FormattedMessage
               id="app.pipeline.exercise"
@@ -59,7 +73,26 @@ const PipelineDetail = ({
                 </i>}
           </td>
         </tr>
+
         <tr>
+          <td className="text-center shrink-col em-padding-left em-padding-right">
+            <Icon icon="code" />
+          </td>
+          <th className="text-nowrap">
+            <FormattedMessage
+              id="app.pipeline.runtimes"
+              defaultMessage="Runtime environments"
+            />:
+          </th>
+          <td>
+            <EnvironmentsList runtimeEnvironments={runtimeEnvironments} />
+          </td>
+        </tr>
+
+        <tr>
+          <td className="text-center shrink-col em-padding-left em-padding-right">
+            <Icon icon={['far', 'clock']} />
+          </td>
           <th>
             <FormattedMessage
               id="app.pipeline.createdAt"
@@ -70,18 +103,11 @@ const PipelineDetail = ({
             <DateTime unixts={createdAt} showRelative />
           </td>
         </tr>
+
         <tr>
-          <th>
-            <FormattedMessage
-              id="app.pipeline.updatedAt"
-              defaultMessage="Last updated at"
-            />:
-          </th>
-          <td>
-            <DateTime unixts={updatedAt} showRelative />
+          <td className="text-center shrink-col em-padding-left em-padding-right">
+            <Icon icon={['far', 'copy']} />
           </td>
-        </tr>
-        <tr>
           <th>
             <FormattedMessage
               id="app.pipeline.version"
@@ -104,7 +130,8 @@ PipelineDetail.propTypes = {
   description: PropTypes.string,
   createdAt: PropTypes.number.isRequired,
   updatedAt: PropTypes.number.isRequired,
-  version: PropTypes.number.isRequired
+  version: PropTypes.number.isRequired,
+  runtimeEnvironments: PropTypes.array.isRequired
 };
 
 export default PipelineDetail;
