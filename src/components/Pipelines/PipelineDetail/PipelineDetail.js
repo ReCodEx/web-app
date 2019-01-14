@@ -10,6 +10,7 @@ import UsersNameContainer from '../../../containers/UsersNameContainer';
 import ExercisesNameContainer from '../../../containers/ExercisesNameContainer';
 import Icon, { UserIcon } from '../../icons';
 import EnvironmentsList from '../../helpers/EnvironmentsList';
+import Version from '../../widgets/Version/Version';
 
 const PipelineDetail = ({
   author,
@@ -115,7 +116,11 @@ const PipelineDetail = ({
             />
           </th>
           <td>
-            v<FormattedNumber value={version} />
+            <Version
+              version={version}
+              createdAt={createdAt}
+              updatedAt={updatedAt}
+            />
           </td>
         </tr>
       </tbody>

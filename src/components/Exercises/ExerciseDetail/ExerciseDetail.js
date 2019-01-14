@@ -15,6 +15,7 @@ import Icon, { SuccessOrFailureIcon, UserIcon, VisibleIcon } from '../../icons';
 import { getLocalizedDescription } from '../../../helpers/localizedData';
 import { LocalizedExerciseName } from '../../helpers/LocalizedNames';
 import EnvironmentsList from '../../helpers/EnvironmentsList';
+import Version from '../../widgets/Version/Version';
 
 const ExerciseDetail = ({
   authorId,
@@ -129,17 +130,11 @@ const ExerciseDetail = ({
             <FormattedMessage id="generic.version" defaultMessage="Version" />:
           </th>
           <td>
-            <span className="em-padding-right">
-              v<FormattedNumber value={version} />
-            </span>
-            {updatedAt !== createdAt &&
-              <small className="text-muted">
-                <FormattedMessage
-                  id="generic.lastUpdatedAt"
-                  defaultMessage="updated"
-                />{' '}
-                <DateTime unixts={updatedAt} showRelative />
-              </small>}
+            <Version
+              version={version}
+              createdAt={createdAt}
+              updatedAt={updatedAt}
+            />
           </td>
         </tr>
 
