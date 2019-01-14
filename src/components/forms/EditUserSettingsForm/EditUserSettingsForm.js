@@ -182,7 +182,7 @@ const EditUserSettingsForm = ({
       label={
         <FormattedMessage
           id="app.editUserSettings.pointsChangedEmails"
-          defaultMessage="Notify about assignment points change"
+          defaultMessage="Notify about modifications of awarded points"
         />
       }
     />
