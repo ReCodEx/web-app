@@ -11,6 +11,7 @@ import ExercisesNameContainer from '../../../containers/ExercisesNameContainer';
 import Icon, { UserIcon } from '../../icons';
 import EnvironmentsList from '../../helpers/EnvironmentsList';
 import Version from '../../widgets/Version/Version';
+import ParametersList from '../ParametersList/ParametersList';
 
 const PipelineDetail = ({
   author,
@@ -20,7 +21,8 @@ const PipelineDetail = ({
   createdAt,
   updatedAt,
   version,
-  runtimeEnvironments
+  runtimeEnvironments,
+  parameters
 }) =>
   <Box title={name} noPadding unlimitedHeight>
     <Table responsive condensed>
@@ -96,6 +98,21 @@ const PipelineDetail = ({
 
         <tr>
           <td className="text-center shrink-col em-padding-left em-padding-right">
+            <Icon icon="stream" />
+          </td>
+          <th className="text-nowrap">
+            <FormattedMessage
+              id="app.pipeline.parameters"
+              defaultMessage="Parameters"
+            />:
+          </th>
+          <td>
+            <ParametersList parameters={parameters} />
+          </td>
+        </tr>
+
+        <tr>
+          <td className="text-center shrink-col em-padding-left em-padding-right">
             <Icon icon={['far', 'clock']} />
           </td>
           <th>
@@ -140,7 +157,8 @@ PipelineDetail.propTypes = {
   createdAt: PropTypes.number.isRequired,
   updatedAt: PropTypes.number.isRequired,
   version: PropTypes.number.isRequired,
-  runtimeEnvironments: PropTypes.array.isRequired
+  runtimeEnvironments: PropTypes.array.isRequired,
+  parameters: PropTypes.object.isRequired
 };
 
 export default PipelineDetail;
