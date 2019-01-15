@@ -9,6 +9,7 @@ import Icon, {
 } from '../../../icons';
 import Box from '../../../widgets/Box';
 import DateTime from '../../../widgets/DateTime';
+import Version from '../../../widgets/Version/Version';
 
 const ShadowAssignmentDetail = ({
   maxPoints,
@@ -63,17 +64,11 @@ const ShadowAssignmentDetail = ({
             <FormattedMessage id="generic.version" defaultMessage="Version" />:
           </th>
           <td>
-            <span className="em-padding-right">
-              v<FormattedNumber value={version} />
-            </span>
-            {updatedAt !== createdAt &&
-              <small className="text-muted">
-                <FormattedMessage
-                  id="generic.lastUpdatedAt"
-                  defaultMessage="updated"
-                />{' '}
-                <DateTime unixts={updatedAt} showRelative />
-              </small>}
+            <Version
+              version={version}
+              createdAt={createdAt}
+              updatedAt={updatedAt}
+            />
           </td>
         </tr>
 
