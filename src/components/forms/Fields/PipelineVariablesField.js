@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Field, FieldArray } from 'redux-form';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { injectIntl, FormattedMessage } from 'react-intl';
+import { Row, Col } from 'react-bootstrap';
 import {
   TextField,
   SelectField,
@@ -27,7 +28,7 @@ const PipelineVariablesField = ({
   supplementaryFiles,
   intl
 }) =>
-  <div>
+  <Row>
     <h4>
       {label}
     </h4>
@@ -45,7 +46,7 @@ const PipelineVariablesField = ({
         []
       )
       .map(({ value, type }, i) =>
-        <div key={i}>
+        <Col lg={6} key={i}>
           {(type === 'remote-file' || type === 'remote-file[]') &&
             <ResourceRenderer resource={supplementaryFiles.toArray()}>
               {(...supplementaryFiles) =>
@@ -98,9 +99,9 @@ const PipelineVariablesField = ({
                   component={TextField}
                   label={`${atob(value)}: `}
                 />)}
-        </div>
+        </Col>
       )}
-  </div>;
+  </Row>;
 
 PipelineVariablesField.propTypes = {
   input: PropTypes.shape({

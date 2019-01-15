@@ -134,14 +134,14 @@ class Pipeline extends Component {
             <Row>
               <ResourceRenderer resource={[...runtimeEnvironments]}>
                 {(...runtimes) =>
-                  <Col lg={6}>
+                  <Col lg={12}>
                     <PipelineDetail
                       {...pipeline}
                       runtimeEnvironments={runtimes}
                     />
                   </Col>}
               </ResourceRenderer>
-              <Col lg={6}>
+              <Col lg={12}>
                 <Box
                   title={
                     <FormattedMessage
