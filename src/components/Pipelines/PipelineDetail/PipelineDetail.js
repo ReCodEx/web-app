@@ -14,7 +14,7 @@ import Version from '../../widgets/Version/Version';
 
 const PipelineDetail = ({
   author,
-  exerciseId,
+  exercisesIds,
   name,
   description = '',
   createdAt,
@@ -64,8 +64,12 @@ const PipelineDetail = ({
             />
           </th>
           <td>
-            {exerciseId
-              ? <ExercisesNameContainer exerciseId={exerciseId} />
+            {exercisesIds.length !== 0
+              ? exercisesIds.map(exerciseId =>
+                  <div key={exerciseId}>
+                    <ExercisesNameContainer exerciseId={exerciseId} />
+                  </div>
+                )
               : <i>
                   <FormattedMessage
                     id="app.pipeline.publicExercise"
@@ -131,7 +135,7 @@ PipelineDetail.propTypes = {
   id: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   author: PropTypes.string,
-  exerciseId: PropTypes.string,
+  exercisesIds: PropTypes.array.isRequired,
   description: PropTypes.string,
   createdAt: PropTypes.number.isRequired,
   updatedAt: PropTypes.number.isRequired,
