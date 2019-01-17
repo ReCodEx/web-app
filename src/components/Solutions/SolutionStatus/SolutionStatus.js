@@ -10,7 +10,7 @@ import AssignmentStatusIcon from '../../Assignments/Assignment/AssignmentStatusI
 import UsersNameContainer from '../../../containers/UsersNameContainer';
 import EnvironmentsListItem from '../../helpers/EnvironmentsList/EnvironmentsListItem';
 import withLinks from '../../../helpers/withLinks';
-import Icon, { EditIcon, SuccessOrFailureIcon } from '../../icons';
+import Icon, { EditIcon, SuccessOrFailureIcon, CodeIcon } from '../../icons';
 
 const SolutionStatus = ({
   assignment: { firstDeadline, allowSecondDeadline, secondDeadline },
@@ -129,7 +129,7 @@ const SolutionStatus = ({
           Boolean(environment.name) &&
           <tr>
             <td className="text-center">
-              <Icon icon="code" />
+              <CodeIcon />
             </td>
             <th className="text-nowrap">
               <FormattedMessage

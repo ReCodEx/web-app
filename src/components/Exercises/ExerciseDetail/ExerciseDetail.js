@@ -11,7 +11,12 @@ import DifficultyIcon from '../DifficultyIcon';
 import ResourceRenderer from '../../helpers/ResourceRenderer';
 import withLinks from '../../../helpers/withLinks';
 import UsersNameContainer from '../../../containers/UsersNameContainer';
-import Icon, { SuccessOrFailureIcon, UserIcon, VisibleIcon } from '../../icons';
+import Icon, {
+  SuccessOrFailureIcon,
+  UserIcon,
+  VisibleIcon,
+  CodeIcon
+} from '../../icons';
 import { getLocalizedDescription } from '../../../helpers/localizedData';
 import { LocalizedExerciseName } from '../../helpers/LocalizedNames';
 import EnvironmentsList from '../../helpers/EnvironmentsList';
@@ -94,7 +99,7 @@ const ExerciseDetail = ({
 
         <tr>
           <td className="text-center shrink-col em-padding-left em-padding-right">
-            <Icon icon="code" />
+            <CodeIcon />
           </td>
           <th className="text-nowrap">
             <FormattedMessage

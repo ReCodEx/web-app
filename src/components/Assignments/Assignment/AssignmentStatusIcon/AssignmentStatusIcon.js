@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import StatusIcon from '../../../widgets/StatusIcon';
-import Icon from '../../../icons';
+import Icon, { CodeIcon } from '../../../icons';
 
 const AssignmentStatusIcon = ({ id, status, accepted = false }) => {
   switch (status) {
@@ -82,7 +82,7 @@ const AssignmentStatusIcon = ({ id, status, accepted = false }) => {
       return (
         <StatusIcon
           id={id}
-          icon={<Icon icon="code" className="text-gray" />}
+          icon={<CodeIcon className="text-gray" />}
           message={
             <FormattedMessage
               id="app.assignemntStatusIcon.none"

@@ -78,6 +78,7 @@ export const VisibleIcon = ({ visible = true, ...props }) =>
     : <Icon {...props} icon={['far', 'eye-slash']} />;
 export const WarningIcon = props =>
   <Icon {...props} icon="exclamation-triangle" />;
+export const CodeIcon = props => <Icon {...props} icon="code" />;
 
 GroupIcon.propTypes = {
   organizational: PropTypes.bool,

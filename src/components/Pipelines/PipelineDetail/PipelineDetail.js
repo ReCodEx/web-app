@@ -8,7 +8,7 @@ import Markdown from '../../widgets/Markdown';
 import DateTime from '../../widgets/DateTime';
 import UsersNameContainer from '../../../containers/UsersNameContainer';
 import ExercisesNameContainer from '../../../containers/ExercisesNameContainer';
-import Icon, { UserIcon } from '../../icons';
+import Icon, { UserIcon, CodeIcon } from '../../icons';
 import EnvironmentsList from '../../helpers/EnvironmentsList';
 import Version from '../../widgets/Version/Version';
 import ParametersList from '../ParametersList/ParametersList';
@@ -83,7 +83,7 @@ const PipelineDetail = ({
 
         <tr>
           <td className="text-center shrink-col em-padding-left em-padding-right">
-            <Icon icon="code" />
+            <CodeIcon />
           </td>
           <th className="text-nowrap">
             <FormattedMessage

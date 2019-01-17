@@ -7,7 +7,7 @@ import Box from '../../widgets/Box';
 import DateTime from '../../widgets/DateTime';
 import UsersNameContainer from '../../../containers/UsersNameContainer';
 import ExercisesNameContainer from '../../../containers/ExercisesNameContainer';
-import Icon, { EditIcon } from '../../icons';
+import Icon, { EditIcon, CodeIcon } from '../../icons';
 
 const ReferenceSolutionStatus = ({
   description,
@@ -29,7 +29,7 @@ const ReferenceSolutionStatus = ({
       <tbody>
         <tr>
           <td className="text-center">
-            <Icon icon="code" />
+            <CodeIcon />
           </td>
           <th>
             <FormattedMessage

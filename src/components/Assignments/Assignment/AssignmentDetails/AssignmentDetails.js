@@ -3,7 +3,11 @@ import PropTypes from 'prop-types';
 import { Table } from 'react-bootstrap';
 import { FormattedMessage } from 'react-intl';
 import classnames from 'classnames';
-import Icon, { SuccessIcon, SuccessOrFailureIcon } from '../../../icons';
+import Icon, {
+  SuccessIcon,
+  SuccessOrFailureIcon,
+  CodeIcon
+} from '../../../icons';
 import Box from '../../../widgets/Box';
 import EnvironmentsList from '../../../helpers/EnvironmentsList';
 import DateTime from '../../../widgets/DateTime';
@@ -173,7 +177,7 @@ const AssignmentDetails = ({
 
         <tr>
           <td className="text-center shrink-col em-padding-left em-padding-right">
-            <Icon icon="code" />
+            <CodeIcon />
           </td>
           <th>
             <FormattedMessage
