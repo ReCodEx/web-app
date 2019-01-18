@@ -37,7 +37,7 @@ const AssignmentsTable = ({
     {assignments.size > 0 &&
       <thead>
         <tr>
-          <th />
+          <th className="shrink-col" />
           <th>
             <FormattedMessage
               id="app.assignments.name"

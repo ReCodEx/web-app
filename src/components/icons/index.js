@@ -75,7 +75,7 @@ export const UserIcon = props => <Icon {...props} icon={['far', 'user']} />;
 export const VisibleIcon = ({ visible = true, ...props }) =>
   visible
     ? <Icon {...props} icon={['far', 'eye']} />
-    : <Icon {...props} icon={['far', 'eye-slash']} />;
+    : <Icon {...props} icon={['far', 'eye-slash']} className="text-muted" />;
 export const WarningIcon = props =>
   <Icon {...props} icon="exclamation-triangle" />;
 export const CodeIcon = props => <Icon {...props} icon="code" />;
@@ -102,6 +102,8 @@ export { default as ExercisePrefixIcons } from './ExercisePrefixIcons';
 export {
   default as MaybeBonusAssignmentIcon
 } from './MaybeBonusAssignmentIcon';
-export { default as MaybePublicIcon } from './MaybePublicIcon';
+export {
+  default as MaybeVisibleAssignmentIcon
+} from './MaybeVisibleAssignmentIcon';
 
 export default Icon;

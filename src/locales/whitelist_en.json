@@ -426,6 +426,7 @@
   "app.editUserProfileForm.title",
   "app.editUserRoleForm.title",
   "app.editUserSettings.assignmentDeadlineEmails",
+  "app.editUserSettings.pointsChangedEmails",
   "app.editUserSettings.darkTheme",
   "app.editUserSettings.defaultLanguage",
   "app.editUserSettings.emailsTitle",

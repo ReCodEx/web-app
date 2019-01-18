@@ -174,6 +174,18 @@ const EditUserSettingsForm = ({
         />
       }
     />
+
+    <Field
+      name="pointsChangedEmails"
+      component={CheckboxField}
+      onOff
+      label={
+        <FormattedMessage
+          id="app.editUserSettings.pointsChangedEmails"
+          defaultMessage="Notify about modifications of awarded points"
+        />
+      }
+    />
   </FormBox>;
 
 EditUserSettingsForm.propTypes = {

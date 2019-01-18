@@ -6,7 +6,8 @@ import classnames from 'classnames';
 import Icon, {
   SuccessIcon,
   SuccessOrFailureIcon,
-  CodeIcon
+  CodeIcon,
+  VisibleIcon
 } from '../../../icons';
 import Box from '../../../widgets/Box';
 import EnvironmentsList from '../../../helpers/EnvironmentsList';
@@ -25,7 +26,8 @@ const AssignmentDetails = ({
   isBonus,
   runtimeEnvironments,
   canSubmit,
-  pointsPercentualThreshold
+  pointsPercentualThreshold,
+  visibleFrom
 }) =>
   <Box
     title={<FormattedMessage id="generic.details" defaultMessage="Details" />}
@@ -144,6 +146,22 @@ const AssignmentDetails = ({
           </td>
         </tr>
 
+        {visibleFrom &&
+          <tr>
+            <td className="text-center shrink-col em-padding-left em-padding-right">
+              <VisibleIcon />
+            </td>
+            <th>
+              <FormattedMessage
+                id="app.assignment.visibleFrom"
+                defaultMessage="Visible from"
+              />:
+            </th>
+            <td>
+              <DateTime unixts={visibleFrom} showRelative />
+            </td>
+          </tr>}
+
         {isBonus &&
           <tr>
             <td className="text-center shrink-col em-padding-left em-padding-right">
@@ -206,7 +224,8 @@ AssignmentDetails.propTypes = {
   isBonus: PropTypes.bool,
   runtimeEnvironments: PropTypes.array,
   canSubmit: PropTypes.object,
-  pointsPercentualThreshold: PropTypes.number
+  pointsPercentualThreshold: PropTypes.number,
+  visibleFrom: PropTypes.number.isRequired
 };
 
 export default AssignmentDetails;

@@ -4,9 +4,7 @@ import { FormattedMessage } from 'react-intl';
 import InfoBox from './InfoBox';
 
 const LoadingInfoBox = ({
-  title = (
-    <FormattedMessage id="generic.loading" defaultMessage="Loading..." />
-  ),
+  title = <FormattedMessage id="generic.loading" defaultMessage="Loading..." />,
   description = (
     <FormattedMessage id="generic.loading" defaultMessage="Loading..." />
   ),
