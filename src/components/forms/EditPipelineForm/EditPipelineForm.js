@@ -107,7 +107,7 @@ class EditPipelineForm extends Component {
 
         <Grid fluid>
           <Row>
-            <Col lg={6}>
+            <Col lg={12}>
               <Field
                 name="name"
                 component={TextField}
@@ -130,7 +130,10 @@ class EditPipelineForm extends Component {
                 }
               />
             </Col>
-            <Col lg={6}>
+          </Row>
+
+          <Row>
+            <Col lg={12}>
               <Field
                 name="pipeline.boxes"
                 component={PipelineField}
@@ -141,7 +144,9 @@ class EditPipelineForm extends Component {
                   />
                 }
               />
+            </Col>
 
+            <Col lg={12}>
               <Field
                 name="pipeline.variables"
                 component={PipelineVariablesField}

@@ -16,7 +16,10 @@ import {
   fetchPipelineIfNeeded,
   forkPipeline
 } from '../../redux/modules/pipelines';
-import { getPipeline } from '../../redux/selectors/pipelines';
+import {
+  getPipeline,
+  pipelineEnvironmentsSelector
+} from '../../redux/selectors/pipelines';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import { canEditPipeline } from '../../redux/selectors/users';
 
@@ -24,6 +27,8 @@ import { createGraphFromNodes } from '../../helpers/pipelineGraph';
 import withLinks from '../../helpers/withLinks';
 import PipelineDetail from '../../components/Pipelines/PipelineDetail';
 import PipelineVisualisation from '../../components/Pipelines/PipelineVisualisation';
+import ResourceRenderer from '../../components/helpers/ResourceRenderer';
+import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments';
 
 class Pipeline extends Component {
   state = {
@@ -55,15 +60,17 @@ class Pipeline extends Component {
           if (setState) {
             setState({ graph });
           }
-        })
+        }),
+      dispatch(fetchRuntimeEnvironments())
     ]);
 
   render() {
     const {
       links: { PIPELINES_URI, PIPELINE_EDIT_URI_FACTORY },
       pipeline,
-      isAuthorOfPipeline
-      // forkPipeline
+      isAuthorOfPipeline,
+      // forkPipeline,
+      runtimeEnvironments
     } = this.props;
     const { graph } = this.state;
 
@@ -125,10 +132,16 @@ class Pipeline extends Component {
             </div>
             <p />
             <Row>
-              <Col lg={6}>
-                <PipelineDetail {...pipeline} />
-              </Col>
-              <Col lg={6}>
+              <ResourceRenderer resource={[...runtimeEnvironments]}>
+                {(...runtimes) =>
+                  <Col lg={12}>
+                    <PipelineDetail
+                      {...pipeline}
+                      runtimeEnvironments={runtimes}
+                    />
+                  </Col>}
+              </ResourceRenderer>
+              <Col lg={12}>
                 <Box
                   title={
                     <FormattedMessage
@@ -160,7 +173,8 @@ Pipeline.propTypes = {
   }).isRequired,
   isAuthorOfPipeline: PropTypes.func.isRequired,
   links: PropTypes.object.isRequired,
-  forkPipeline: PropTypes.func.isRequired
+  forkPipeline: PropTypes.func.isRequired,
+  runtimeEnvironments: PropTypes.array
 };
 
 export default withLinks(
@@ -172,7 +186,8 @@ export default withLinks(
         pipeline: getPipeline(pipelineId)(state),
         userId: loggedInUserIdSelector(state),
         isAuthorOfPipeline: pipelineId =>
-          canEditPipeline(userId, pipelineId)(state)
+          canEditPipeline(userId, pipelineId)(state),
+        runtimeEnvironments: pipelineEnvironmentsSelector(pipelineId)(state)
       };
     },
     (dispatch, { params: { pipelineId } }) => ({

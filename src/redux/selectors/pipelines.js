@@ -1,6 +1,7 @@
 import { createSelector } from 'reselect';
 import { fetchManyEndpoint } from '../modules/pipelines';
 import { unique } from '../../helpers/common';
+import { runtimeEnvironmentSelector } from './runtimeEnvironments';
 
 const getPipelines = state => state.pipelines;
 const getResources = pipelines => pipelines.get('resources');
@@ -42,3 +43,13 @@ export const getPipelinesEnvironmentsWhichHasEntryPoint = createSelector(
         .reduce((acc, envs) => acc.concat(envs.toJS()), [])
     )
 );
+
+export const pipelineEnvironmentsSelector = id =>
+  createSelector(
+    [getPipeline(id), runtimeEnvironmentSelector],
+    (pipeline, envSelector) => {
+      const envIds =
+        pipeline && pipeline.getIn(['data', 'runtimeEnvironmentIds']);
+      return envIds && envSelector ? envIds.toArray().map(envSelector) : null;
+    }
+  );

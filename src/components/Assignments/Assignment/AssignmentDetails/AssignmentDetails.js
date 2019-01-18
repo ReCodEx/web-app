@@ -6,6 +6,7 @@ import classnames from 'classnames';
 import Icon, {
   SuccessIcon,
   SuccessOrFailureIcon,
+  CodeIcon,
   VisibleIcon
 } from '../../../icons';
 import Box from '../../../widgets/Box';
@@ -194,7 +195,7 @@ const AssignmentDetails = ({
 
         <tr>
           <td className="text-center shrink-col em-padding-left em-padding-right">
-            <Icon icon="code" />
+            <CodeIcon />
           </td>
           <th>
             <FormattedMessage

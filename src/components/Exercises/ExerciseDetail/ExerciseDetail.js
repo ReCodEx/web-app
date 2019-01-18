@@ -11,10 +11,16 @@ import DifficultyIcon from '../DifficultyIcon';
 import ResourceRenderer from '../../helpers/ResourceRenderer';
 import withLinks from '../../../helpers/withLinks';
 import UsersNameContainer from '../../../containers/UsersNameContainer';
-import Icon, { SuccessOrFailureIcon, UserIcon, VisibleIcon } from '../../icons';
+import Icon, {
+  SuccessOrFailureIcon,
+  UserIcon,
+  VisibleIcon,
+  CodeIcon
+} from '../../icons';
 import { getLocalizedDescription } from '../../../helpers/localizedData';
 import { LocalizedExerciseName } from '../../helpers/LocalizedNames';
 import EnvironmentsList from '../../helpers/EnvironmentsList';
+import Version from '../../widgets/Version/Version';
 
 const ExerciseDetail = ({
   authorId,
@@ -93,7 +99,7 @@ const ExerciseDetail = ({
 
         <tr>
           <td className="text-center shrink-col em-padding-left em-padding-right">
-            <Icon icon="code" />
+            <CodeIcon />
           </td>
           <th className="text-nowrap">
             <FormattedMessage
@@ -129,17 +135,11 @@ const ExerciseDetail = ({
             <FormattedMessage id="generic.version" defaultMessage="Version" />:
           </th>
           <td>
-            <span className="em-padding-right">
-              v<FormattedNumber value={version} />
-            </span>
-            {updatedAt !== createdAt &&
-              <small className="text-muted">
-                <FormattedMessage
-                  id="generic.lastUpdatedAt"
-                  defaultMessage="updated"
-                />{' '}
-                <DateTime unixts={updatedAt} showRelative />
-              </small>}
+            <Version
+              version={version}
+              createdAt={createdAt}
+              updatedAt={updatedAt}
+            />
           </td>
         </tr>
 
