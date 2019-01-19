@@ -72,11 +72,6 @@ module.exports = {
         LOGGER_MIDDLEWARE_EXCEPTIONS:
           "'" + process.env.LOGGER_MIDDLEWARE_EXCEPTIONS + "'",
         VERSION: JSON.stringify(gitRevisionPlugin.version())
-      },
-      gitRevision: {
-        VERSION: JSON.stringify(gitRevisionPlugin.version()),
-        COMMITHASH: JSON.stringify(gitRevisionPlugin.commithash()),
-        BRANCH: JSON.stringify(gitRevisionPlugin.branch())
       }
     })
   ]
