@@ -53,15 +53,16 @@ export const validateDeadline = (
   errors,
   formatMessage,
   deadline,
-  deadlineErrorKey = 'deadline'
+  deadlineErrorKey = 'deadline',
+  futureLimit = deadlineFutureLimit
 ) => {
   if (!deadline) {
     errors[deadlineErrorKey] = formatMessage(messages.emptyDeadline);
   } else if (!moment.isMoment(deadline)) {
     errors[deadlineErrorKey] = formatMessage(messages.invalidDateTime);
-  } else if (deadlineFutureLimit.isSameOrBefore(deadline)) {
+  } else if (futureLimit && futureLimit.isSameOrBefore(deadline)) {
     errors[deadlineErrorKey] = formatMessage(messages.deadlineInFarFuture, {
-      deadlineFutureLimit
+      futureLimit
     });
   }
 };

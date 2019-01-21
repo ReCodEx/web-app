@@ -8,19 +8,12 @@ import classnames from 'classnames';
  * of the avatar while the image is being downloaded or if the download
  * failed for some reason.
  */
-const Avatar = ({
-  src,
-  size = 45,
-  title = 'avatar',
-  altClassName = '',
-  ...props
-}) =>
+const Avatar = ({ src, size = 45, title = 'avatar', altClassName = '' }) =>
   <img
     src={src}
     alt={title}
     width={size}
     className={classnames('img-circle', altClassName)}
-    {...props}
   />;
 
 Avatar.propTypes = {
