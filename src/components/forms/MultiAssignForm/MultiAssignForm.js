@@ -536,21 +536,11 @@ const validate = (
 
   if (pointsPercentualThreshold) {
     const numericThreshold = Number(pointsPercentualThreshold);
-    if (
-      pointsPercentualThreshold.toString() !==
-      Math.round(numericThreshold).toString()
-    ) {
-      errors.pointsPercentualThreshold = (
-        <FormattedMessage
-          id="app.multiAssignForm.validation.pointsPercentualThresholdMustBeInteger"
-          defaultMessage="Points percentual threshold must be an integer."
-        />
-      );
-    } else if (numericThreshold < 0 || numericThreshold > 100) {
+    if (numericThreshold < 0 || numericThreshold > 100) {
       errors.pointsPercentualThreshold = (
         <FormattedMessage
           id="app.multiAssignForm.validation.pointsPercentualThresholdBetweenZeroHundred"
-          defaultMessage="Points percentual threshold must be an integer in between 0 and 100."
+          defaultMessage="Points percentual threshold must be in between 0 and 100."
         />
       );
     }
