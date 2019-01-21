@@ -11,6 +11,7 @@ export { default as PipelineField } from './PipelineField';
 export { default as PipelineVariablesField } from './PipelineVariablesField';
 export { default as PortField } from './PortField';
 export { default as PortsField } from './PortsField';
+export { default as RadioField } from './RadioField';
 export { default as SelectField } from './SelectField';
 export { default as SingleUploadField } from './SingleUploadField';
 export { default as SourceCodeField } from './SourceCodeField';

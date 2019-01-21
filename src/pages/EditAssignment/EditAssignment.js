@@ -72,20 +72,34 @@ class EditAssignment extends Component {
     ({
       localizedTexts,
       firstDeadline,
+      maxPointsBeforeFirstDeadline,
+      allowSecondDeadline,
       secondDeadline,
+      maxPointsBeforeSecondDeadline,
+      submissionsCountLimit,
       pointsPercentualThreshold,
+      canViewLimitRatios,
+      isBonus,
       disabledRuntimeEnvironmentIds,
       runtimeEnvironmentIds,
-      visibleFrom,
-      ...rest
+      isPublic,
+      visibleFrom
     }) => ({
       localizedTexts: getLocalizedTextsInitialValues(
         localizedTexts,
         localizedTextDefaults
       ),
       firstDeadline: moment.unix(firstDeadline),
-      secondDeadline: moment.unix(secondDeadline),
+      maxPointsBeforeFirstDeadline,
+      allowSecondDeadline,
+      secondDeadline: secondDeadline
+        ? moment.unix(secondDeadline)
+        : moment.unix(firstDeadline).add(2, 'weeks'),
+      maxPointsBeforeSecondDeadline,
+      submissionsCountLimit,
       pointsPercentualThreshold: pointsPercentualThreshold * 100,
+      canViewLimitRatios,
+      isBonus,
       runtimeEnvironmentIds,
       enabledRuntime: disabledRuntimeEnvironmentIds.reduce(
         (result, item) => {
@@ -97,12 +111,13 @@ class EditAssignment extends Component {
           return result;
         }, {})
       ),
-      sendNotification: true,
-      allowVisibleFrom: visibleFrom !== null,
+      visibility: isPublic
+        ? visibleFrom ? 'visibleFrom' : 'visible'
+        : 'hidden',
       visibleFrom: visibleFrom
         ? moment.unix(visibleFrom)
         : moment().endOf('day'),
-      ...rest
+      sendNotification: true
     })
   );
 
@@ -127,19 +142,46 @@ class EditAssignment extends Component {
       })
       .then(() => {
         // prepare the data and submit them
-        const { localizedTexts, enabledRuntime, ...data } = formData;
+        const {
+          localizedTexts,
+          firstDeadline,
+          allowSecondDeadline,
+          secondDeadline,
+          maxPointsBeforeSecondDeadline,
+          submissionsCountLimit,
+          enabledRuntime,
+          visibility,
+          visibleFrom,
+          ...data
+        } = formData;
+
         const disabledRuntimeEnvironmentIds = enabledRuntime
           ? Object.keys(enabledRuntime).filter(
               key => enabledRuntime[key] === false
             )
           : [];
 
-        return editAssignment(version, {
+        return editAssignment({
           ...data,
           localizedTexts: transformLocalizedTextsFormData(
             formData.localizedTexts
           ),
-          disabledRuntimeEnvironmentIds
+          firstDeadline: moment(firstDeadline).unix(),
+          allowSecondDeadline,
+          secondDeadline: allowSecondDeadline
+            ? moment(secondDeadline).unix()
+            : undefined,
+          maxPointsBeforeSecondDeadline: allowSecondDeadline
+            ? maxPointsBeforeSecondDeadline
+            : undefined,
+          submissionsCountLimit: Number(submissionsCountLimit),
+          disabledRuntimeEnvironmentIds,
+          isPublic: visibility !== 'hidden',
+          visibleFrom:
+            visibility === 'visibleFrom'
+              ? moment(visibleFrom).unix()
+              : undefined,
+          version
         });
       });
   };
@@ -160,8 +202,7 @@ class EditAssignment extends Component {
       allowSecondDeadline,
       exerciseSync,
       runtimeEnvironments,
-      isPublic,
-      allowVisibleFrom
+      visibility
     } = this.props;
 
     return (
@@ -250,11 +291,8 @@ class EditAssignment extends Component {
                   firstDeadline={firstDeadline}
                   allowSecondDeadline={allowSecondDeadline}
                   runtimeEnvironments={envs}
-                  beingPublished={
-                    (!assignment.isPublic && isPublic) ||
-                    (!assignment.visibleFrom && allowVisibleFrom)
-                  }
-                  allowVisibleFrom={allowVisibleFrom}
+                  visibility={visibility}
+                  assignmentIsPublic={assignment.isPublic}
                 />}
             </ResourceRenderer>
 
@@ -304,7 +342,7 @@ EditAssignment.propTypes = {
   editAssignment: PropTypes.func.isRequired,
   firstDeadline: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   allowSecondDeadline: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
-  isPublic: PropTypes.bool,
+  visibility: PropTypes.string,
   allowVisibleFrom: PropTypes.bool,
   exerciseSync: PropTypes.func.isRequired,
   validateAssignment: PropTypes.func.isRequired,
@@ -325,7 +363,7 @@ export default connect(
         state,
         'allowSecondDeadline'
       ),
-      isPublic: editAssignmentFormSelector(state, 'isPublic'),
+      visibility: editAssignmentFormSelector(state, 'visibility'),
       allowVisibleFrom: editAssignmentFormSelector(state, 'allowVisibleFrom')
     };
   },
@@ -333,25 +371,7 @@ export default connect(
     push: url => dispatch(push(url)),
     reset: () => dispatch(reset('editAssignment')),
     loadAsync: () => EditAssignment.loadAsync({ assignmentId }, dispatch),
-    editAssignment: (version, data) => {
-      // convert deadline times to timestamps
-      const processedData = Object.assign({}, data, {
-        firstDeadline: moment(data.firstDeadline).unix(),
-        secondDeadline: moment(data.secondDeadline).unix(),
-        isPublic: !data.allowVisibleFrom ? data.isPublic : true,
-        visibleFrom: moment(data.visibleFrom).unix(),
-        submissionsCountLimit: Number(data.submissionsCountLimit),
-        version
-      });
-      if (!processedData.allowSecondDeadline) {
-        delete processedData.secondDeadline;
-        delete processedData.maxPointsBeforeSecondDeadline;
-      }
-      if (!data.allowVisibleFrom) {
-        delete processedData.visibleFrom;
-      }
-      return dispatch(editAssignment(assignmentId, processedData));
-    },
+    editAssignment: data => dispatch(editAssignment(assignmentId, data)),
     exerciseSync: () => dispatch(syncWithExercise(assignmentId)),
     validateAssignment: version =>
       dispatch(validateAssignment(assignmentId, version))

@@ -5,16 +5,47 @@ import { injectIntl, FormattedMessage } from 'react-intl';
 import { Alert, HelpBlock, Grid, Row, Col } from 'react-bootstrap';
 
 import FormBox from '../../widgets/FormBox';
-import { DatetimeField, TextField, CheckboxField } from '../Fields';
+import { DatetimeField, TextField, CheckboxField, RadioField } from '../Fields';
 import LocalizedTextsFormField from '../LocalizedTextsFormField';
 import SubmitButton from '../SubmitButton';
 import { LocalizedExerciseName } from '../../helpers/LocalizedNames';
 import {
   isNonNegativeInteger,
   isPositiveInteger,
+  validateDeadline,
   validateTwoDeadlines
 } from '../../helpers/validation';
 import { validateLocalizedTextsFormData } from '../../../helpers/localizedData';
+
+const VISIBILITY_STATES = [
+  {
+    key: 'hidden',
+    name: (
+      <FormattedMessage
+        id="app.editAssignmentForm.visibility.hidden"
+        defaultMessage="Hidden (not visible to students)"
+      />
+    )
+  },
+  {
+    key: 'visible',
+    name: (
+      <FormattedMessage
+        id="app.editAssignmentForm.visibility.visible"
+        defaultMessage="Visible to students"
+      />
+    )
+  },
+  {
+    key: 'visibleFrom',
+    name: (
+      <FormattedMessage
+        id="app.editAssignmentForm.visibility.visibleFrom"
+        defaultMessage="Become visible on exact date"
+      />
+    )
+  }
+];
 
 const EditAssignmentForm = ({
   initialValues: assignment,
@@ -29,8 +60,8 @@ const EditAssignmentForm = ({
   firstDeadline,
   allowSecondDeadline,
   runtimeEnvironments,
-  beingPublished,
-  allowVisibleFrom
+  visibility,
+  assignmentIsPublic
 }) =>
   <div>
     <FormBox
@@ -195,7 +226,7 @@ const EditAssignmentForm = ({
 
       <Grid fluid>
         <Row>
-          <Col sm={6}>
+          <Col md={5}>
             <Field
               name="canViewLimitRatios"
               component={CheckboxField}
@@ -208,7 +239,7 @@ const EditAssignmentForm = ({
               }
             />
           </Col>
-          <Col sm={6}>
+          <Col md={7}>
             <Field
               name="isBonus"
               component={CheckboxField}
@@ -256,52 +287,59 @@ const EditAssignmentForm = ({
       </Grid>
 
       <hr />
-      <br />
 
+      <h4>
+        <FormattedMessage
+          id="app.editAssignmentForm.visibility"
+          defaultMessage="Visibility"
+        />
+      </h4>
       <Grid fluid>
         <Row>
-          <Col sm={6}>
+          <Col md={5}>
             <Field
-              name="allowVisibleFrom"
-              component={CheckboxField}
-              onOff
-              label={
-                <FormattedMessage
-                  id="app.editAssignmentForm.allowVisibleFrom"
-                  defaultMessage="Allow precise publication date"
-                />
-              }
+              name="visibility"
+              component={RadioField}
+              options={VISIBILITY_STATES}
             />
+
+            {false &&
+              <table>
+                <tbody>
+                  {Object.keys(VISIBILITY_STATES).map(state =>
+                    <tr key={state}>
+                      <td className="em-padding valign-middle">
+                        <Field
+                          name="visibility"
+                          component="input"
+                          type="radio"
+                          value={state}
+                        />
+                      </td>
+                      <td className="valign-middle">
+                        {VISIBILITY_STATES[state]}
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>}
           </Col>
-          {!allowVisibleFrom &&
-            <Col sm={6}>
-              <Field
-                name="isPublic"
-                component={CheckboxField}
-                onOff
-                label={
-                  <FormattedMessage
-                    id="app.editAssignmentForm.isPublic"
-                    defaultMessage="Visible to students"
-                  />
-                }
-              />
-            </Col>}
-          {allowVisibleFrom &&
-            <Col sm={12}>
+          {visibility === 'visibleFrom' &&
+            <Col md={7}>
               <Field
                 name="visibleFrom"
                 component={DatetimeField}
                 label={
                   <FormattedMessage
                     id="app.editAssignmentForm.visibleFrom"
-                    defaultMessage="Visible to students from"
+                    defaultMessage="Publish date"
                   />
                 }
               />
             </Col>}
-          {beingPublished &&
-            <Col sm={6}>
+          {visibility === 'visible' &&
+            !assignmentIsPublic &&
+            <Col md={6}>
               <Field
                 name="sendNotification"
                 component={CheckboxField}
@@ -337,8 +375,8 @@ EditAssignmentForm.propTypes = {
   firstDeadline: PropTypes.oneOfType([PropTypes.string, PropTypes.object]), // object == moment.js instance
   allowSecondDeadline: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
   runtimeEnvironments: PropTypes.array,
-  beingPublished: PropTypes.bool,
-  allowVisibleFrom: PropTypes.bool,
+  visibility: PropTypes.string,
+  assignmentIsPublic: PropTypes.bool,
   error: PropTypes.object
 };
 
@@ -353,7 +391,9 @@ const validate = (
     maxPointsBeforeSecondDeadline,
     pointsPercentualThreshold,
     runtimeEnvironmentIds,
-    enabledRuntime
+    enabledRuntime,
+    visibility,
+    visibleFrom
   },
   { intl: { formatMessage } }
 ) => {
@@ -455,6 +495,10 @@ const validate = (
         defaultMessage="You cannot disable all available runtime environments."
       />
     );
+  }
+
+  if (visibility === 'visibleFrom') {
+    validateDeadline(errors, formatMessage, visibleFrom, 'visibleFrom', null); // null - no max. future limit
   }
 
   return errors;
