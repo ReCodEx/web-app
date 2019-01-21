@@ -97,7 +97,7 @@ class EditAssignment extends Component {
         : moment.unix(firstDeadline).add(2, 'weeks'),
       maxPointsBeforeSecondDeadline,
       submissionsCountLimit,
-      pointsPercentualThreshold: pointsPercentualThreshold * 100,
+      pointsPercentualThreshold,
       canViewLimitRatios,
       isBonus,
       runtimeEnvironmentIds,

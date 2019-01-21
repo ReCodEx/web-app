@@ -189,7 +189,7 @@ const AssignmentDetails = ({
             />
           </th>
           <td>
-            {pointsPercentualThreshold * 100} %
+            {pointsPercentualThreshold} %
           </td>
         </tr>
 
