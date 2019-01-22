@@ -50,8 +50,6 @@ const AssignmentTableRow = ({
             id={id}
             isPublic={isPublic}
             visibleFrom={visibleFrom}
-            gapLeft
-            gapRight
           />
         : <AssignmentStatusIcon id={id} status={status} accepted={accepted} />}
       <MaybeBonusAssignmentIcon gapLeft id={id} isBonus={isBonus} />

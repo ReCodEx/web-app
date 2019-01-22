@@ -55,6 +55,7 @@ import { getLocalizedName } from '../../helpers/localizedData';
 import LoadingSolutionsTable from '../../components/Assignments/SolutionsTable/LoadingSolutionsTable';
 import FailedLoadingSolutionsTable from '../../components/Assignments/SolutionsTable/FailedLoadingSolutionsTable';
 import { getJsData } from '../../redux/helpers/resourceManager';
+import { hasPermissions } from '../../helpers/common';
 
 class Assignment extends Component {
   static loadAsync = ({ assignmentId }, dispatch, { userId }) =>
@@ -66,15 +67,17 @@ class Assignment extends Component {
     ]);
 
   componentWillMount() {
-    this.props.loadAsync(this.props.userId);
+    this.props.loadAsync(this.props.userId || this.props.loggedInUserId);
   }
 
   componentWillReceiveProps(newProps) {
     if (
       this.props.params.assignmentId !== newProps.params.assignmentId ||
-      this.props.userId !== newProps.userId
+      this.props.userId !== newProps.userId ||
+      (!this.props.userId &&
+        this.props.loggedInUserId !== newProps.loggedInUserId)
     ) {
-      newProps.loadAsync(newProps.userId);
+      newProps.loadAsync(newProps.userId || newProps.loggedInUserId);
     }
   }
 
@@ -167,7 +170,7 @@ class Assignment extends Component {
             <Row>
               <Col xs={12}>
                 <HierarchyLineContainer groupId={assignment.groupId} />
-                {loggedInUserId !== userId &&
+                {userId &&
                   <p>
                     <UsersNameContainer userId={userId} />
                   </p>}
@@ -229,6 +232,7 @@ class Assignment extends Component {
                       )}
                       canSubmit={canSubmitObj}
                       runtimeEnvironments={runtimes}
+                      isStudent={isStudentOf(assignment.groupId)}
                     />
 
                     {isStudentOf(assignment.groupId) &&
@@ -246,7 +250,7 @@ class Assignment extends Component {
                           </ResourceRenderer>
                         </p>
                         <SubmitSolutionContainer
-                          userId={userId}
+                          userId={loggedInUserId}
                           id={assignment.id}
                           onSubmit={submitSolution}
                           presubmitValidation={presubmitSolution}
@@ -256,8 +260,11 @@ class Assignment extends Component {
                       </div>}
 
                     {(isStudentOf(assignment.groupId) ||
-                      isSupervisorOf(assignment.groupId) ||
-                      isAdminOf(assignment.groupId)) && // includes superadmin
+                      (userId &&
+                        hasPermissions(
+                          assignment,
+                          'viewAssignmentSolutions'
+                        ))) && // includes superadmin
                       <FetchManyResourceRenderer
                         fetchManyStatus={fetchManyStatus}
                         loading={<LoadingSolutionsTable />}
@@ -290,7 +297,7 @@ class Assignment extends Component {
 }
 
 Assignment.propTypes = {
-  userId: PropTypes.string.isRequired,
+  userId: PropTypes.string,
   loggedInUserId: PropTypes.string,
   params: PropTypes.shape({
     assignmentId: PropTypes.string.isRequired
@@ -312,9 +319,8 @@ Assignment.propTypes = {
 
 export default withLinks(
   connect(
-    (state, { params: { assignmentId, userId } }) => {
+    (state, { params: { assignmentId, userId = null } }) => {
       const loggedInUserId = loggedInUserIdSelector(state);
-      userId = userId || loggedInUserId;
       return {
         assignment: getAssignment(state)(assignmentId),
         submitting: isSubmitting(state),
@@ -328,13 +334,16 @@ export default withLinks(
           isSupervisorOf(loggedInUserId, groupId)(state),
         isAdminOf: groupId => isAdminOf(loggedInUserId, groupId)(state),
         canSubmit: canSubmitSolution(assignmentId)(state),
-        solutions: getUserSolutions(userId, assignmentId)(state),
-        fetchManyStatus: fetchManyUserSolutionsStatus(userId, assignmentId)(
+        solutions: getUserSolutions(userId || loggedInUserId, assignmentId)(
           state
-        )
+        ),
+        fetchManyStatus: fetchManyUserSolutionsStatus(
+          userId || loggedInUserId,
+          assignmentId
+        )(state)
       };
     },
-    (dispatch, { params: { assignmentId, userId } }) => ({
+    (dispatch, { params: { assignmentId } }) => ({
       init: userId => () => dispatch(init(userId, assignmentId)),
       loadAsync: userId =>
         Assignment.loadAsync({ assignmentId }, dispatch, { userId }),

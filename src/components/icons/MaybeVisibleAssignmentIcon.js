@@ -6,43 +6,55 @@ import Icon, { VisibleIcon } from '.';
 import moment from 'moment';
 import DateTime from '../widgets/DateTime';
 
-const MaybeVisibleAssignmentIcon = ({ id, isPublic, visibleFrom, ...props }) =>
-  <span>
-    <OverlayTrigger
-      placement="right"
-      overlay={
-        <Tooltip id={id}>
-          {isPublic
-            ? <FormattedMessage
-                id="app.maybePublicIcon.isPublic"
-                defaultMessage="Is public"
-              />
-            : <FormattedMessage
-                id="app.maybePublicIcon.isNotPublic"
-                defaultMessage="Is not public"
-              />}
-        </Tooltip>
-      }
-    >
-      <VisibleIcon {...props} visible={isPublic} />
-    </OverlayTrigger>
-    {visibleFrom &&
-      visibleFrom > moment().unix() &&
+const MaybeVisibleAssignmentIcon = ({
+  id,
+  isPublic,
+  visibleFrom,
+  ...props
+}) => {
+  const isVisible =
+    isPublic && (!visibleFrom || visibleFrom <= moment().unix());
+  return (
+    <span>
       <OverlayTrigger
         placement="right"
         overlay={
           <Tooltip id={id}>
-            <FormattedMessage
-              id="app.maybePublicIcon.visibleFrom"
-              defaultMessage="Visible from {date}"
-              values={{ date: <DateTime unixts={visibleFrom} showRelative /> }}
-            />
+            {isVisible
+              ? <FormattedMessage
+                  id="app.maybeVisibleIcon.isVisible"
+                  defaultMessage="Is visible to students"
+                />
+              : <FormattedMessage
+                  id="app.maybeVisibleIcon.isHidden"
+                  defaultMessage="Is hidden from student"
+                />}
           </Tooltip>
         }
       >
-        <Icon {...props} icon="hourglass-start" />
-      </OverlayTrigger>}
-  </span>;
+        <VisibleIcon visible={isVisible} />
+      </OverlayTrigger>
+      {!isVisible &&
+        visibleFrom &&
+        <OverlayTrigger
+          placement="right"
+          overlay={
+            <Tooltip id={id}>
+              <FormattedMessage
+                id="app.maybePublicIcon.visibleFrom"
+                defaultMessage="Visible from {date}"
+                values={{
+                  date: <DateTime unixts={visibleFrom} showRelative />
+                }}
+              />
+            </Tooltip>
+          }
+        >
+          <Icon gapLeft icon={['far', 'clock']} />
+        </OverlayTrigger>}
+    </span>
+  );
+};
 
 MaybeVisibleAssignmentIcon.propTypes = {
   id: PropTypes.any.isRequired,

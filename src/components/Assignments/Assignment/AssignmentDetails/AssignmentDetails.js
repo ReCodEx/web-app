@@ -27,7 +27,10 @@ const AssignmentDetails = ({
   runtimeEnvironments,
   canSubmit,
   pointsPercentualThreshold,
-  visibleFrom
+  isPublic,
+  visibleFrom,
+  permissionHints,
+  isStudent
 }) =>
   <Box
     title={<FormattedMessage id="generic.details" defaultMessage="Details" />}
@@ -37,6 +40,45 @@ const AssignmentDetails = ({
   >
     <Table responsive condensed>
       <tbody>
+        {permissionHints.update &&
+          <tr>
+            <td className="text-center shrink-col em-padding-left em-padding-right">
+              <VisibleIcon />
+            </td>
+            <th>
+              <FormattedMessage
+                id="app.assignment.visible"
+                defaultMessage="Visible"
+              />:
+            </th>
+            <td>
+              <SuccessOrFailureIcon
+                success={
+                  isPublic && (!visibleFrom || visibleFrom * 1000 <= Date.now())
+                }
+              />
+            </td>
+          </tr>}
+
+        {permissionHints.update &&
+          isPublic &&
+          visibleFrom &&
+          visibleFrom * 1000 > Date.now() &&
+          <tr>
+            <td className="text-center shrink-col em-padding-left em-padding-right">
+              <Icon icon={['far', 'clock']} />
+            </td>
+            <th>
+              <FormattedMessage
+                id="app.assignment.visibleFrom"
+                defaultMessage="Visible from"
+              />:
+            </th>
+            <td>
+              <DateTime unixts={visibleFrom} showRelative />
+            </td>
+          </tr>}
+
         <tr
           className={classnames({
             'text-danger': isAfterFirstDeadline
@@ -89,8 +131,8 @@ const AssignmentDetails = ({
           <th>
             <FormattedMessage
               id="app.assignment.maxPoints"
-              defaultMessage="Maximum number of points for a correct solution:"
-            />
+              defaultMessage="Maximum points"
+            />:
           </th>
           <td>
             {!isAfterFirstDeadline
@@ -116,49 +158,35 @@ const AssignmentDetails = ({
           </td>
         </tr>
 
-        <tr>
-          <td className="text-center shrink-col em-padding-left em-padding-right">
-            <Icon icon="coffee" />
-          </td>
-          <th>
-            <FormattedMessage
-              id="app.assignment.alreadySubmitted"
-              defaultMessage="Already submitted:"
-            />
-          </th>
-          <td>
-            {canSubmit.submittedCount}
-          </td>
-        </tr>
-
-        <tr>
-          <td className="text-center shrink-col em-padding-left em-padding-right">
-            <Icon icon="unlock-alt" />
-          </td>
-          <th>
-            <FormattedMessage
-              id="app.assignment.canSubmit"
-              defaultMessage="You can submit more solutions:"
-            />
-          </th>
-          <td>
-            <SuccessOrFailureIcon success={canSubmit.canSubmit} />
-          </td>
-        </tr>
-
-        {visibleFrom &&
+        {isStudent &&
           <tr>
             <td className="text-center shrink-col em-padding-left em-padding-right">
-              <VisibleIcon />
+              <Icon icon="coffee" />
             </td>
             <th>
               <FormattedMessage
-                id="app.assignment.visibleFrom"
-                defaultMessage="Visible from"
-              />:
+                id="app.assignment.alreadySubmitted"
+                defaultMessage="Already submitted:"
+              />
             </th>
             <td>
-              <DateTime unixts={visibleFrom} showRelative />
+              {canSubmit.submittedCount}
+            </td>
+          </tr>}
+
+        {isStudent &&
+          <tr>
+            <td className="text-center shrink-col em-padding-left em-padding-right">
+              <Icon icon="unlock-alt" />
+            </td>
+            <th>
+              <FormattedMessage
+                id="app.assignment.canSubmit"
+                defaultMessage="You can submit more solutions:"
+              />
+            </th>
+            <td>
+              <SuccessOrFailureIcon success={canSubmit.canSubmit} />
             </td>
           </tr>}
 
@@ -225,7 +253,10 @@ AssignmentDetails.propTypes = {
   runtimeEnvironments: PropTypes.array,
   canSubmit: PropTypes.object,
   pointsPercentualThreshold: PropTypes.number,
-  visibleFrom: PropTypes.number.isRequired
+  visibleFrom: PropTypes.number,
+  isPublic: PropTypes.bool.isRequired,
+  permissionHints: PropTypes.object.isRequired,
+  isStudent: PropTypes.bool.isRequired
 };
 
 export default AssignmentDetails;

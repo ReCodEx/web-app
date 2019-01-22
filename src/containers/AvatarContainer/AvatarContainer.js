@@ -33,7 +33,7 @@ const AvatarContainer = ({
 
 AvatarContainer.propTypes = {
   currentUser: PropTypes.object.isRequired,
-  avatarUrl: PropTypes.string.isRequired,
+  avatarUrl: PropTypes.string,
   fullName: PropTypes.string.isRequired,
   firstName: PropTypes.string.isRequired,
   size: PropTypes.number
