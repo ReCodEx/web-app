@@ -9,8 +9,7 @@ const FakeAvatar = ({
   light = false,
   children,
   small = false,
-  altClassName = '',
-  ...props
+  altClassName = ''
 }) =>
   <span
     style={{
@@ -29,7 +28,6 @@ const FakeAvatar = ({
       fontWeight: 'bolder'
     }}
     className={altClassName}
-    {...props}
   >
     {children}
   </span>;
