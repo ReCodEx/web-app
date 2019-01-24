@@ -16,7 +16,7 @@ const RadioField = ({ input, meta: { error, warning }, options }) => {
           name={input.name}
           value={key}
           checked={input.value === key}
-          onClick={input.onChange}
+          onChange={input.onChange}
         >
           {name}
         </Radio>

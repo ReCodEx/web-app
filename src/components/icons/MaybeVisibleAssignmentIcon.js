@@ -6,12 +6,7 @@ import Icon, { VisibleIcon } from '.';
 import moment from 'moment';
 import DateTime from '../widgets/DateTime';
 
-const MaybeVisibleAssignmentIcon = ({
-  id,
-  isPublic,
-  visibleFrom,
-  ...props
-}) => {
+const MaybeVisibleAssignmentIcon = ({ id, isPublic, visibleFrom = null }) => {
   const isVisible =
     isPublic && (!visibleFrom || visibleFrom <= moment().unix());
   return (
@@ -59,7 +54,7 @@ const MaybeVisibleAssignmentIcon = ({
 MaybeVisibleAssignmentIcon.propTypes = {
   id: PropTypes.any.isRequired,
   isPublic: PropTypes.bool.isRequired,
-  visibleFrom: PropTypes.number.isRequired
+  visibleFrom: PropTypes.number
 };
 
 export default MaybeVisibleAssignmentIcon;

@@ -11,6 +11,7 @@ import Dashboard from './Dashboard';
 import Home from './Home';
 import EmailVerification from './EmailVerification';
 import Exercise from './Exercise';
+import ExerciseAssignments from './ExerciseAssignments';
 import Exercises from './Exercises';
 import EditExercise from './EditExercise';
 import EditExerciseConfig from './EditExerciseConfig';
@@ -113,6 +114,7 @@ const createRoutes = getState => {
             <Route path=":exerciseId">
               <IndexRoute component={Exercise} />
               <Route path="edit" component={EditExercise} />
+              <Route path="assignments" component={ExerciseAssignments} />
               <Route path="edit-config" component={EditExerciseConfig} />
               <Route path="edit-limits" component={EditExerciseLimits} />
               <Route

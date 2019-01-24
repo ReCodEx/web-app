@@ -6,19 +6,21 @@ import { Col, Row } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 import { reset, formValueSelector, SubmissionError } from 'redux-form';
-import moment from 'moment';
 import { LinkContainer } from 'react-router-bootstrap';
-import { defaultMemoize } from 'reselect';
 
 import Button from '../../components/widgets/FlatButton';
 import Page from '../../components/layout/Page';
-import EditAssignmentForm from '../../components/forms/EditAssignmentForm';
+import EditAssignmentForm, {
+  prepareInitialValues as prepareEditFormInitialValues
+} from '../../components/forms/EditAssignmentForm';
 import DeleteAssignmentButtonContainer from '../../containers/DeleteAssignmentButtonContainer';
 import Box from '../../components/widgets/Box';
 import HierarchyLineContainer from '../../containers/HierarchyLineContainer';
 import { ResultsIcon } from '../../components/icons';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
+import { LocalizedExerciseName } from '../../components/helpers/LocalizedNames';
 
+import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import {
   fetchAssignment,
   editAssignment,
@@ -33,19 +35,8 @@ import { fetchExerciseIfNeeded } from '../../redux/modules/exercises';
 import { isReady, getJsData } from '../../redux/helpers/resourceManager';
 import { ResubmitAllSolutionsContainer } from '../../containers/ResubmitSolutionContainer';
 import AssignmentSync from '../../components/Assignments/Assignment/AssignmentSync';
-import {
-  getLocalizedTextsInitialValues,
-  transformLocalizedTextsFormData
-} from '../../helpers/localizedData';
 
 import withLinks from '../../helpers/withLinks';
-
-const localizedTextDefaults = {
-  name: '',
-  text: '',
-  link: '',
-  studentHint: ''
-};
 
 class EditAssignment extends Component {
   componentWillMount = () => this.props.loadAsync();
@@ -68,59 +59,6 @@ class EditAssignment extends Component {
       dispatch(fetchRuntimeEnvironments())
     ]);
 
-  getInitialValues = defaultMemoize(
-    ({
-      localizedTexts,
-      firstDeadline,
-      maxPointsBeforeFirstDeadline,
-      allowSecondDeadline,
-      secondDeadline,
-      maxPointsBeforeSecondDeadline,
-      submissionsCountLimit,
-      pointsPercentualThreshold,
-      canViewLimitRatios,
-      isBonus,
-      disabledRuntimeEnvironmentIds,
-      runtimeEnvironmentIds,
-      isPublic,
-      visibleFrom
-    }) => ({
-      localizedTexts: getLocalizedTextsInitialValues(
-        localizedTexts,
-        localizedTextDefaults
-      ),
-      firstDeadline: moment.unix(firstDeadline),
-      maxPointsBeforeFirstDeadline,
-      allowSecondDeadline,
-      secondDeadline: secondDeadline
-        ? moment.unix(secondDeadline)
-        : moment.unix(firstDeadline).add(2, 'weeks'),
-      maxPointsBeforeSecondDeadline,
-      submissionsCountLimit,
-      pointsPercentualThreshold,
-      canViewLimitRatios,
-      isBonus,
-      runtimeEnvironmentIds,
-      enabledRuntime: disabledRuntimeEnvironmentIds.reduce(
-        (result, item) => {
-          result[item] = false;
-          return result;
-        },
-        runtimeEnvironmentIds.reduce((result, item) => {
-          result[item] = true;
-          return result;
-        }, {})
-      ),
-      visibility: isPublic
-        ? visibleFrom ? 'visibleFrom' : 'visible'
-        : 'hidden',
-      visibleFrom: visibleFrom
-        ? moment.unix(visibleFrom)
-        : moment().endOf('day'),
-      sendNotification: true
-    })
-  );
-
   editAssignmentSubmitHandler = formData => {
     const { assignment, editAssignment, validateAssignment } = this.props;
     const version = assignment.getIn(['data', 'version']);
@@ -140,50 +78,7 @@ class EditAssignment extends Component {
           });
         }
       })
-      .then(() => {
-        // prepare the data and submit them
-        const {
-          localizedTexts,
-          firstDeadline,
-          allowSecondDeadline,
-          secondDeadline,
-          maxPointsBeforeSecondDeadline,
-          submissionsCountLimit,
-          enabledRuntime,
-          visibility,
-          visibleFrom,
-          ...data
-        } = formData;
-
-        const disabledRuntimeEnvironmentIds = enabledRuntime
-          ? Object.keys(enabledRuntime).filter(
-              key => enabledRuntime[key] === false
-            )
-          : [];
-
-        return editAssignment({
-          ...data,
-          localizedTexts: transformLocalizedTextsFormData(
-            formData.localizedTexts
-          ),
-          firstDeadline: moment(firstDeadline).unix(),
-          allowSecondDeadline,
-          secondDeadline: allowSecondDeadline
-            ? moment(secondDeadline).unix()
-            : undefined,
-          maxPointsBeforeSecondDeadline: allowSecondDeadline
-            ? maxPointsBeforeSecondDeadline
-            : undefined,
-          submissionsCountLimit: Number(submissionsCountLimit),
-          disabledRuntimeEnvironmentIds,
-          isPublic: visibility !== 'hidden',
-          visibleFrom:
-            visibility === 'visibleFrom'
-              ? moment(visibleFrom).unix()
-              : undefined,
-          version
-        });
-      });
+      .then(() => editAssignment({ ...formData, version }));
   };
 
   render() {
@@ -197,6 +92,7 @@ class EditAssignment extends Component {
       params: { assignmentId },
       push,
       assignment,
+      userId,
       exercise,
       firstDeadline,
       allowSecondDeadline,
@@ -278,23 +174,39 @@ class EditAssignment extends Component {
                 isBroken={Boolean(exercise) && exercise.isBroken}
               />}
 
-            <ResourceRenderer
-              resource={runtimeEnvironments.toArray()}
-              returnAsArray={true}
+            <Box
+              title={
+                <FormattedMessage
+                  id="app.editAssignmentForm.title"
+                  defaultMessage="Edit Assignment — {name}"
+                  values={{
+                    name: <LocalizedExerciseName entity={assignment} />
+                  }}
+                />
+              }
+              unlimitedHeight
             >
-              {envs =>
-                <EditAssignmentForm
-                  initialValues={
-                    assignment ? this.getInitialValues(assignment) : {}
-                  }
-                  onSubmit={this.editAssignmentSubmitHandler}
-                  firstDeadline={firstDeadline}
-                  allowSecondDeadline={allowSecondDeadline}
-                  runtimeEnvironments={envs}
-                  visibility={visibility}
-                  assignmentIsPublic={assignment.isPublic}
-                />}
-            </ResourceRenderer>
+              <ResourceRenderer
+                resource={runtimeEnvironments.toArray()}
+                returnAsArray={true}
+              >
+                {envs =>
+                  <EditAssignmentForm
+                    form="editAssignment"
+                    userId={userId}
+                    editTexts
+                    initialValues={
+                      assignment ? prepareEditFormInitialValues(assignment) : {}
+                    }
+                    onSubmit={this.editAssignmentSubmitHandler}
+                    firstDeadline={firstDeadline}
+                    allowSecondDeadline={allowSecondDeadline}
+                    runtimeEnvironments={envs}
+                    visibility={visibility}
+                    assignmentIsPublic={assignment.isPublic}
+                  />}
+              </ResourceRenderer>
+            </Box>
 
             <br />
             {assignment.permissionHints.remove &&
@@ -337,6 +249,7 @@ EditAssignment.propTypes = {
     assignmentId: PropTypes.string.isRequired
   }).isRequired,
   assignment: ImmutablePropTypes.map,
+  userId: PropTypes.string.isRequired,
   exercise: PropTypes.object,
   runtimeEnvironments: ImmutablePropTypes.map,
   editAssignment: PropTypes.func.isRequired,
@@ -356,6 +269,7 @@ export default connect(
     const assignment = getAssignment(state)(assignmentId);
     return {
       assignment,
+      userId: loggedInUserIdSelector(state),
       exercise: getExerciseOfAssignmentJS(state)(assignmentId),
       runtimeEnvironments: runtimeEnvironmentsSelector(state),
       firstDeadline: editAssignmentFormSelector(state, 'firstDeadline'),

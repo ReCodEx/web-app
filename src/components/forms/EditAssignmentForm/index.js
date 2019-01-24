@@ -1,2 +1,3 @@
-import EditAssignmentForm from './EditAssignmentForm';
+import EditAssignmentForm, { prepareInitialValues } from './EditAssignmentForm';
 export default EditAssignmentForm;
+export { prepareInitialValues };

@@ -125,7 +125,7 @@ class ExternalLinkPreview extends Component {
             >
               <FormattedMessage
                 id="app.externalLinkPreview.showAsMarkdown"
-                defaultMessage="Show as makrdown"
+                defaultMessage="Show as markdown"
               />
             </OnOffCheckbox>}
 
