@@ -94,7 +94,7 @@ class ShadowAssignmentPointsTable extends Component {
         noPadding
         unlimitedHeight
       >
-        <div>
+        <React.Fragment>
           <Table responsive hover>
             <thead>
               <tr>
@@ -246,7 +246,7 @@ class ShadowAssignmentPointsTable extends Component {
               />
             </Modal.Body>
           </Modal>
-        </div>
+        </React.Fragment>
       </Box>
     );
   }
