@@ -36,7 +36,7 @@ const EvaluationDetail = ({
           <td className="text-center">
             <Icon icon={['far', 'clock']} />
           </td>
-          <th>
+          <th className="text-nowrap">
             <FormattedMessage
               id="app.evaluationDetail.evaluatedAt"
               defaultMessage="Evaluated at:"
@@ -55,7 +55,7 @@ const EvaluationDetail = ({
           <td className="text-center">
             <Icon icon="cogs" />
           </td>
-          <th>
+          <th className="text-nowrap">
             <FormattedMessage
               id="app.evaluationDetail.buildSucceeded"
               defaultMessage="Build succeeded:"
@@ -70,7 +70,7 @@ const EvaluationDetail = ({
           <td className="text-center">
             <Icon icon="percent" />
           </td>
-          <th>
+          <th className="text-nowrap">
             <FormattedMessage
               id="app.evaluationDetail.isCorrect"
               defaultMessage="Correctness"
@@ -92,7 +92,7 @@ const EvaluationDetail = ({
           <td className="text-center">
             <Icon icon={['far', 'star']} />
           </td>
-          <th>
+          <th className="text-nowrap">
             <FormattedMessage
               id="app.evaluationDetail.scoredPoints"
               defaultMessage="Scored points"
@@ -162,7 +162,7 @@ const EvaluationDetail = ({
             <td className="text-center">
               <BugIcon />
             </td>
-            <th>
+            <th className="text-nowrap">
               <FormattedMessage
                 id="app.evaluationDetail.isDebug"
                 defaultMessage="Debug Mode"
