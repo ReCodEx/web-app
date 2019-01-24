@@ -165,3 +165,11 @@ th.shrink-col {
 .almost-opaque {
   opacity: 0.8 !important;
 }
+
+/*
+ * AdminLTE Boxes
+ */
+
+.box-body > .table-responsive > .table {
+  margin-bottom: 0;
+}
