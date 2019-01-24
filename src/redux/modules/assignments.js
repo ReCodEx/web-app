@@ -121,7 +121,9 @@ const reducer = handleActions(
       { payload, meta: { assignmentId } }
     ) => {
       payload.forEach(function(solution) {
-        if (!state.hasIn(['solutions', assignmentId, solution.solution.userId])) {
+        if (
+          !state.hasIn(['solutions', assignmentId, solution.solution.userId])
+        ) {
           state = state.setIn(
             ['solutions', assignmentId, solution.solution.userId],
             List()
@@ -130,7 +132,12 @@ const reducer = handleActions(
 
         state = state.updateIn(
           ['solutions', assignmentId, solution.solution.userId],
-          solutions => solutions.push(solution.id)
+          solutions => {
+            if (!solutions.includes(solution.id)) {
+              return solutions.push(solution.id);
+            }
+            return solutions;
+          }
         );
       });
 
