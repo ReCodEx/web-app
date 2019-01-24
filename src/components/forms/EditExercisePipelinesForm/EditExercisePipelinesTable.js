@@ -54,58 +54,56 @@ class EditExercisePipelinesTable extends Component {
     } = this.props;
 
     return (
-      <div>
-        <Table>
-          <tbody>
-            {fields.map(this.renderRow)}
+      <Table>
+        <tbody>
+          {fields.map(this.renderRow)}
 
-            {!readOnly &&
-              <tr>
-                <td colSpan={4} className="full-width">
-                  <ControlLabel>
-                    <FormattedMessage
-                      id="app.editExercisePipelines.availablePipelines"
-                      defaultMessage="Available pipelines"
-                    />:
-                  </ControlLabel>
-                  <FormControl
-                    componentClass="select"
-                    onChange={e =>
-                      this.setState({ selectedPipeline: e.target.value })}
-                    value={this.state.selectedPipeline || ''}
-                  >
-                    <option value={null} />
-                    {pipelines
-                      .sort((a, b) => a.name.localeCompare(b.name, locale))
-                      .map(({ id, name }) =>
-                        <option value={id} key={id}>
-                          {name}
-                        </option>
-                      )}
-                  </FormControl>
-                </td>
-                <td className="valign-bottom">
-                  <Button
-                    onClick={() => {
-                      if (this.state.selectedPipeline) {
-                        fields.push(this.state.selectedPipeline);
-                        this.setState({ selectedPipeline: null });
-                      }
-                    }}
-                    bsStyle="primary"
-                    disabled={!this.state.selectedPipeline}
-                  >
-                    <AddIcon gapRight />
-                    <FormattedMessage
-                      id="app.editExercisePipelines.addPipeline"
-                      defaultMessage="Add Pipeline"
-                    />
-                  </Button>
-                </td>
-              </tr>}
-          </tbody>
-        </Table>
-      </div>
+          {!readOnly &&
+            <tr>
+              <td colSpan={4} className="full-width">
+                <ControlLabel>
+                  <FormattedMessage
+                    id="app.editExercisePipelines.availablePipelines"
+                    defaultMessage="Available pipelines"
+                  />:
+                </ControlLabel>
+                <FormControl
+                  componentClass="select"
+                  onChange={e =>
+                    this.setState({ selectedPipeline: e.target.value })}
+                  value={this.state.selectedPipeline || ''}
+                >
+                  <option value={null} />
+                  {pipelines
+                    .sort((a, b) => a.name.localeCompare(b.name, locale))
+                    .map(({ id, name }) =>
+                      <option value={id} key={id}>
+                        {name}
+                      </option>
+                    )}
+                </FormControl>
+              </td>
+              <td className="valign-bottom">
+                <Button
+                  onClick={() => {
+                    if (this.state.selectedPipeline) {
+                      fields.push(this.state.selectedPipeline);
+                      this.setState({ selectedPipeline: null });
+                    }
+                  }}
+                  bsStyle="primary"
+                  disabled={!this.state.selectedPipeline}
+                >
+                  <AddIcon gapRight />
+                  <FormattedMessage
+                    id="app.editExercisePipelines.addPipeline"
+                    defaultMessage="Add Pipeline"
+                  />
+                </Button>
+              </td>
+            </tr>}
+        </tbody>
+      </Table>
     );
   }
 }

@@ -16,7 +16,7 @@ const LicencesTable = ({ instance, licences }) =>
       />
     }
   >
-    <div>
+    <React.Fragment>
       <p>
         <FormattedMessage
           id="app.instance.hasValidLicence"
@@ -86,7 +86,7 @@ const LicencesTable = ({ instance, licences }) =>
             </tr>}
         </tbody>
       </Table>
-    </div>
+    </React.Fragment>
   </Box>;
 
 LicencesTable.propTypes = {
