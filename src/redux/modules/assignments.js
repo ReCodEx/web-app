@@ -132,7 +132,12 @@ const reducer = handleActions(
 
         state = state.updateIn(
           ['solutions', assignmentId, solution.solution.userId],
-          solutions => solutions.push(solution.id)
+          solutions => {
+            if (!solutions.includes(solution.id)) {
+              return solutions.push(solution.id);
+            }
+            return solutions;
+          }
         );
       });
 
