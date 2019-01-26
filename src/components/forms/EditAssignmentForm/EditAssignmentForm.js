@@ -48,6 +48,7 @@ export const prepareInitialValues = defaultMemoize(
     submissionsCountLimit = '50',
     pointsPercentualThreshold = '0',
     canViewLimitRatios = true,
+    canViewJudgeOutputs = false,
     isBonus = false,
     disabledRuntimeEnvironmentIds = [],
     runtimeEnvironmentIds,
@@ -73,6 +74,7 @@ export const prepareInitialValues = defaultMemoize(
     submissionsCountLimit,
     pointsPercentualThreshold,
     canViewLimitRatios,
+    canViewJudgeOutputs,
     isBonus,
     runtimeEnvironmentIds,
     enabledRuntime: disabledRuntimeEnvironmentIds.reduce(
@@ -102,6 +104,7 @@ const transformSubmittedData = ({
   submissionsCountLimit,
   pointsPercentualThreshold,
   canViewLimitRatios,
+  canViewJudgeOutputs,
   isBonus,
   enabledRuntime,
   visibility,
@@ -119,6 +122,7 @@ const transformSubmittedData = ({
     submissionsCountLimit: Number(submissionsCountLimit),
     pointsPercentualThreshold,
     canViewLimitRatios,
+    canViewJudgeOutputs,
     isBonus,
     disabledRuntimeEnvironmentIds,
     isPublic: visibility !== 'hidden',
@@ -407,7 +411,7 @@ class EditAssignmentForm extends Component {
 
           <Grid fluid>
             <Row>
-              <Col md={5}>
+              <Col md={6}>
                 <Field
                   name="canViewLimitRatios"
                   component={CheckboxField}
@@ -420,7 +424,20 @@ class EditAssignmentForm extends Component {
                   }
                 />
               </Col>
-              <Col md={7}>
+              <Col md={6}>
+                <Field
+                  name="canViewJudgeOutputs"
+                  component={CheckboxField}
+                  onOff
+                  label={
+                    <FormattedMessage
+                      id="app.editAssignmentForm.canViewJudgeOutputs"
+                      defaultMessage="Visibility of judge outputs"
+                    />
+                  }
+                />
+              </Col>
+              <Col md={12}>
                 <Field
                   name="isBonus"
                   component={CheckboxField}
