@@ -27,7 +27,9 @@ const AssignmentTableRow = ({
     localizedTexts,
     allowSecondDeadline,
     firstDeadline,
+    maxPointsBeforeFirstDeadline,
     secondDeadline,
+    maxPointsBeforeSecondDeadline,
     isBonus,
     isPublic,
     visibleFrom,
@@ -92,7 +94,7 @@ const AssignmentTableRow = ({
 
     {!isAdmin &&
       stats &&
-      <td>
+      <td className="text-center text-nowrap">
         {stats.points && stats.points.gained !== null
           ? <span>
               {stats.points.gained}
@@ -103,18 +105,24 @@ const AssignmentTableRow = ({
               {stats.points.bonus < 0 &&
                 <span style={{ color: 'red' }}>
                   {stats.points.bonus}
-                </span>}/{stats.points.total}
+                </span>}
             </span>
-          : <span />}
+          : null}
       </td>}
-    <td>
+    <td className="text-nowrap">
       <DateTime unixts={firstDeadline} isDeadline />
     </td>
-    <td>
+    <td className="text-center text-nowrap shrink-col">
+      {maxPointsBeforeFirstDeadline}
+    </td>
+    <td className="text-nowrap">
       <DateTime
         unixts={allowSecondDeadline ? secondDeadline : null}
         isDeadline
       />
+    </td>
+    <td className="text-center text-nowrap shrink-col">
+      {allowSecondDeadline ? maxPointsBeforeSecondDeadline : ''}
     </td>
     {isAdmin &&
       <td className="text-right">

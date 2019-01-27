@@ -69,24 +69,38 @@ const AssignmentsTable = ({
 
           {!isAdmin &&
             Object.keys(stats).length !== 0 &&
-            <th>
+            <th className="text-center text-nowrap">
               <FormattedMessage
                 id="app.assignments.points"
                 defaultMessage="Points"
               />
             </th>}
 
-          <th>
+          <th className="text-nowrap shrink-col">
             <FormattedMessage
               id="app.assignments.deadline"
               defaultMessage="Deadline"
             />
           </th>
 
-          <th>
+          <th className="text-nowrap shrink-col">
+            <FormattedMessage
+              id="app.assignments.maxPointsShort"
+              defaultMessage="Max. points"
+            />
+          </th>
+
+          <th className="text-nowrap shrink-col">
             <FormattedMessage
               id="app.assignments.secondDeadline"
               defaultMessage="Second deadline"
+            />
+          </th>
+
+          <th className="text-nowrap shrink-col">
+            <FormattedMessage
+              id="app.assignments.maxPointsShort"
+              defaultMessage="Max. points"
             />
           </th>
 
