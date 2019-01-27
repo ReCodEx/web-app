@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { FormattedMessage, injectIntl } from 'react-intl';
+import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
 import { LinkContainer } from 'react-router-bootstrap';
 import { Table } from 'react-bootstrap';
 import Box from '../../components/widgets/Box';
@@ -228,7 +228,7 @@ SisIntegrationContainer.propTypes = {
   sisGroups: PropTypes.func.isRequired,
   groupsAccessor: PropTypes.func.isRequired,
   links: PropTypes.object,
-  intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired
+  intl: intlShape.isRequired
 };
 
 export default withLinks(

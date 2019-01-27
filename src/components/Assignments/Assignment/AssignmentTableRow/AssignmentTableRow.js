@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router';
 import AssignmentStatusIcon from '../AssignmentStatusIcon/AssignmentStatusIcon';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, intlShape, injectIntl } from 'react-intl';
 import { LinkContainer } from 'react-router-bootstrap';
 
 import withLinks from '../../../../helpers/withLinks';
@@ -18,10 +18,12 @@ import Button from '../../../widgets/FlatButton';
 import DateTime from '../../../widgets/DateTime';
 import EnvironmentsList from '../../../helpers/EnvironmentsList';
 import ResourceRenderer from '../../../helpers/ResourceRenderer';
+import { getGroupCanonicalLocalizedName } from '../../../../helpers/localizedData';
 
 const AssignmentTableRow = ({
   item: {
     id,
+    groupId,
     localizedTexts,
     allowSecondDeadline,
     firstDeadline,
@@ -36,11 +38,16 @@ const AssignmentTableRow = ({
   userId,
   stats,
   isAdmin,
+  showNames = true,
+  showGroups = false,
+  groupsAccessor = null,
+  intl: { locale },
   links: {
     ASSIGNMENT_DETAIL_URI_FACTORY,
     ASSIGNMENT_DETAIL_SPECIFIC_USER_URI_FACTORY,
     ASSIGNMENT_EDIT_URI_FACTORY,
-    ASSIGNMENT_STATS_URI_FACTORY
+    ASSIGNMENT_STATS_URI_FACTORY,
+    GROUP_DETAIL_URI_FACTORY
   }
 }) =>
   <tr>
@@ -54,17 +61,27 @@ const AssignmentTableRow = ({
         : <AssignmentStatusIcon id={id} status={status} accepted={accepted} />}
       <MaybeBonusAssignmentIcon gapLeft id={id} isBonus={isBonus} />
     </td>
-    <td>
-      <Link
-        to={
-          userId
-            ? ASSIGNMENT_DETAIL_SPECIFIC_USER_URI_FACTORY(id, userId)
-            : ASSIGNMENT_DETAIL_URI_FACTORY(id)
-        }
-      >
-        <LocalizedExerciseName entity={{ name: '??', localizedTexts }} />
-      </Link>
-    </td>
+
+    {showNames &&
+      <td>
+        <Link
+          to={
+            userId
+              ? ASSIGNMENT_DETAIL_SPECIFIC_USER_URI_FACTORY(id, userId)
+              : ASSIGNMENT_DETAIL_URI_FACTORY(id)
+          }
+        >
+          <LocalizedExerciseName entity={{ name: '??', localizedTexts }} />
+        </Link>
+      </td>}
+
+    {showGroups &&
+      groupsAccessor &&
+      <td>
+        <Link to={GROUP_DETAIL_URI_FACTORY(groupId)}>
+          {getGroupCanonicalLocalizedName(groupId, groupsAccessor, locale)}
+        </Link>
+      </td>}
 
     {runtimeEnvironments &&
       <td>
@@ -129,7 +146,11 @@ AssignmentTableRow.propTypes = {
   userId: PropTypes.string,
   stats: PropTypes.object,
   isAdmin: PropTypes.bool,
-  links: PropTypes.object
+  showNames: PropTypes.bool,
+  showGroups: PropTypes.bool,
+  groupsAccessor: PropTypes.func,
+  links: PropTypes.object,
+  intl: intlShape.isRequired
 };
 
-export default withLinks(AssignmentTableRow);
+export default injectIntl(withLinks(AssignmentTableRow));

@@ -65,6 +65,12 @@ export const getGroupCanonicalLocalizedName = (
   locale,
   separator = ' / '
 ) => {
+  if (typeof group === 'string') {
+    group = groupsAccessor(group);
+    group = group && group.toJS();
+    console.log(group);
+  }
+
   var res = getLocalizedName(group, locale);
   if (group.parentGroupsIds && groupsAccessor) {
     const parentRes = group.parentGroupsIds

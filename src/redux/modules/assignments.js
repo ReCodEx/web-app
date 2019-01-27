@@ -3,7 +3,12 @@ import { fromJS, List } from 'immutable';
 
 import { createApiAction } from '../middleware/apiMiddleware';
 import { downloadHelper } from '../helpers/api/download';
-import factory, { initialState } from '../helpers/resourceManager';
+import factory, {
+  initialState,
+  createRecord,
+  resourceStatus
+} from '../helpers/resourceManager';
+import { arrayToObject } from '../../helpers/common';
 
 import { additionalActionTypes as solutionsActionTypes } from './solutions';
 import { actionTypes as submissionActionTypes } from './submission';
@@ -22,7 +27,10 @@ export const additionalActionTypes = {
   SYNC_ASSIGNMENT_PENDING: 'recodex/assignment/SYNC_ASSIGNMENT_PENDING',
   SYNC_ASSIGNMENT_FULFILLED: 'recodex/assignment/SYNC_ASSIGNMENT_FULFILLED',
   DOWNLOAD_BEST_SOLUTIONS_ARCHIVE:
-    'recodex/assignment/DOWNLOAD_BEST_SOLUTIONS_ARCHIVE'
+    'recodex/assignment/DOWNLOAD_BEST_SOLUTIONS_ARCHIVE',
+  LOAD_EXERCISE_ASSIGNMENTS: 'recodex/exercises/LOAD_EXERCISE_ASSIGNMENTS',
+  LOAD_EXERCISE_ASSIGNMENTS_FULFILLED:
+    'recodex/exercises/LOAD_EXERCISE_ASSIGNMENTS_FULFILLED'
 };
 
 /**
@@ -66,12 +74,38 @@ export const downloadBestSolutionsArchive = downloadHelper({
   contentType: 'application/zip'
 });
 
+export const fetchExerciseAssignments = exerciseId =>
+  createApiAction({
+    type: additionalActionTypes.LOAD_EXERCISE_ASSIGNMENTS,
+    method: 'GET',
+    endpoint: `/exercises/${exerciseId}/assignments`,
+    meta: { exerciseId }
+  });
+
 /**
  * Reducer
  */
 
 const reducer = handleActions(
   Object.assign({}, reduceActions, {
+    [additionalActionTypes.SYNC_ASSIGNMENT_FULFILLED]: (
+      state,
+      { payload, meta: { assignmentId } }
+    ) => state.setIn(['resources', assignmentId, 'data'], fromJS(payload)),
+
+    [additionalActionTypes.LOAD_EXERCISE_ASSIGNMENTS_FULFILLED]: (
+      state,
+      { payload }
+    ) =>
+      state.mergeIn(
+        ['resources'],
+        arrayToObject(
+          payload,
+          ({ id }) => id,
+          data => createRecord({ state: resourceStatus.FULFILLED, data })
+        )
+      ),
+
     [submissionActionTypes.SUBMIT_FULFILLED]: (
       state,
       { payload: { solution }, meta: { submissionType } }
@@ -143,11 +177,6 @@ const reducer = handleActions(
 
       return state;
     },
-
-    [additionalActionTypes.SYNC_ASSIGNMENT_FULFILLED]: (
-      state,
-      { payload, meta: { assignmentId } }
-    ) => state.setIn(['resources', assignmentId, 'data'], fromJS(payload)),
 
     [solutionsActionTypes.RESUBMIT_ALL_PENDING]: (
       state,
