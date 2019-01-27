@@ -162,6 +162,7 @@
   "app.editAssignment.title": "Edit assignment settings",
   "app.editAssignment.validation.versionDiffers": "Somebody has changed the assignment while you have been editing it. Please reload the page and apply your changes once more.",
   "app.editAssignmentForm.allowSecondDeadline": "Allow second deadline",
+  "app.editAssignmentForm.canViewJudgeOutputs": "Visibility of judge outputs",
   "app.editAssignmentForm.canViewLimitRatios": "Visibility of memory and time ratios",
   "app.editAssignmentForm.chooseFirstDeadlineBeforeSecondDeadline": "You must select the date of the first deadline before selecting the date of the second deadline.",
   "app.editAssignmentForm.enabledEnvironments": "Enabled Runtime Environments",

@@ -162,6 +162,7 @@
   "app.editAssignment.title": "Upravit zadání úlohy",
   "app.editAssignment.validation.versionDiffers": "Někdo změnil tuto zadanou úlohu v průběhu její editace. Prosíme obnovte tuto stránku a proveďte své změny znovu.",
   "app.editAssignmentForm.allowSecondDeadline": "Povolit druhý termín odevzdání",
+  "app.editAssignmentForm.canViewJudgeOutputs": "Viditelnost výstupů ze sudího",
   "app.editAssignmentForm.canViewLimitRatios": "Viditelnost poměrů dosažených výsledků vůči limitům",
   "app.editAssignmentForm.chooseFirstDeadlineBeforeSecondDeadline": "Před nastavením druhého termínu odevzdání je nutné zvolit první termín.",
   "app.editAssignmentForm.enabledEnvironments": "Povolená běhová prostředí",

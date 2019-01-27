@@ -162,6 +162,7 @@
   "app.editAssignment.title",
   "app.editAssignment.validation.versionDiffers",
   "app.editAssignmentForm.allowSecondDeadline",
+  "app.editAssignmentForm.canViewJudgeOutputs",
   "app.editAssignmentForm.canViewLimitRatios",
   "app.editAssignmentForm.chooseFirstDeadlineBeforeSecondDeadline",
   "app.editAssignmentForm.enabledEnvironments",
