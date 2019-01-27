@@ -171,6 +171,7 @@ class Assignment extends Component {
               <Col xs={12}>
                 <HierarchyLineContainer groupId={assignment.groupId} />
                 {userId &&
+                  userId !== loggedInUserId &&
                   <p>
                     <UsersNameContainer userId={userId} />
                   </p>}

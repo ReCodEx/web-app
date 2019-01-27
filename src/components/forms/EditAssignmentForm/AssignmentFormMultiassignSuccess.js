@@ -40,7 +40,7 @@ const AssignmentFormMultiassignSuccess = ({
           .filter(identity)
           .map(group =>
             <tr key={group.id}>
-              <td>
+              <td className="text-nowrap shrink-col">
                 <Icon icon="check" />
               </td>
               <td>

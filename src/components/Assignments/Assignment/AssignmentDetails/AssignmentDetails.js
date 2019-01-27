@@ -101,28 +101,60 @@ const AssignmentDetails = ({
           </td>
         </tr>
 
+        <tr>
+          <td className="text-center shrink-col em-padding-left em-padding-right">
+            <Icon icon="cloud-upload-alt" />
+          </td>
+          <th>
+            <FormattedMessage
+              id="app.assignment.maxPointsFirst"
+              defaultMessage="Max. points before 1st deadline"
+            />:
+          </th>
+          <td>
+            {maxPointsBeforeFirstDeadline}
+          </td>
+        </tr>
+
         {allowSecondDeadline &&
-          <tr
-            className={classnames({
-              'text-danger': isAfterSecondDeadline
-            })}
-          >
-            <td className="text-center shrink-col em-padding-left em-padding-right">
-              <strong>
-                {!isAfterSecondDeadline && <Icon icon="hourglass-half" />}
-                {isAfterSecondDeadline && <Icon icon="hourglass-end" />}
-              </strong>
-            </td>
-            <th>
-              <FormattedMessage
-                id="app.assignment.secondDeadline"
-                defaultMessage="Second deadline:"
-              />
-            </th>
-            <td>
-              <DateTime unixts={secondDeadline} isDeadline showRelative />
-            </td>
-          </tr>}
+          <React.Fragment>
+            <tr
+              className={classnames({
+                'text-danger': isAfterSecondDeadline
+              })}
+            >
+              <td className="text-center shrink-col em-padding-left em-padding-right">
+                <strong>
+                  {!isAfterSecondDeadline && <Icon icon="hourglass-half" />}
+                  {isAfterSecondDeadline && <Icon icon="hourglass-end" />}
+                </strong>
+              </td>
+              <th>
+                <FormattedMessage
+                  id="app.assignment.secondDeadline"
+                  defaultMessage="Second deadline"
+                />:
+              </th>
+              <td>
+                <DateTime unixts={secondDeadline} isDeadline showRelative />
+              </td>
+            </tr>
+
+            <tr>
+              <td className="text-center shrink-col em-padding-left em-padding-right">
+                <Icon icon="cloud-upload-alt" />
+              </td>
+              <th>
+                <FormattedMessage
+                  id="app.assignment.maxPointsSecond"
+                  defaultMessage="Max. points before 2nd deadline"
+                />:
+              </th>
+              <td>
+                {maxPointsBeforeSecondDeadline}
+              </td>
+            </tr>
+          </React.Fragment>}
 
         <tr>
           <td className="text-center shrink-col em-padding-left em-padding-right">
@@ -130,8 +162,8 @@ const AssignmentDetails = ({
           </td>
           <th>
             <FormattedMessage
-              id="app.assignment.maxPoints"
-              defaultMessage="Maximum points"
+              id="app.assignment.maxPointsCurrent"
+              defaultMessage="Max. points (at present time)"
             />:
           </th>
           <td>
@@ -150,8 +182,8 @@ const AssignmentDetails = ({
           <th>
             <FormattedMessage
               id="app.assignment.submissionsCountLimit"
-              defaultMessage="Submission count limit:"
-            />
+              defaultMessage="Submission count limit"
+            />:
           </th>
           <td>
             {submissionsCountLimit === null ? '-' : submissionsCountLimit}
@@ -166,8 +198,8 @@ const AssignmentDetails = ({
             <th>
               <FormattedMessage
                 id="app.assignment.alreadySubmitted"
-                defaultMessage="Already submitted:"
-              />
+                defaultMessage="Already submitted"
+              />:
             </th>
             <td>
               {canSubmit.submittedCount}
@@ -182,8 +214,8 @@ const AssignmentDetails = ({
             <th>
               <FormattedMessage
                 id="app.assignment.canSubmit"
-                defaultMessage="You can submit more solutions:"
-              />
+                defaultMessage="Can submit more solutions"
+              />:
             </th>
             <td>
               <SuccessOrFailureIcon success={canSubmit.canSubmit} />
@@ -198,8 +230,8 @@ const AssignmentDetails = ({
             <th>
               <FormattedMessage
                 id="app.assignment.isBonus"
-                defaultMessage="Bonus assignment: "
-              />
+                defaultMessage="Bonus assignment"
+              />:
             </th>
             <td>
               <SuccessIcon />
@@ -213,8 +245,8 @@ const AssignmentDetails = ({
           <th>
             <FormattedMessage
               id="app.assignment.pointsPercentualThreshold"
-              defaultMessage="Points percentual threshold:"
-            />
+              defaultMessage="Points percentual threshold"
+            />:
           </th>
           <td>
             {pointsPercentualThreshold} %
@@ -228,8 +260,8 @@ const AssignmentDetails = ({
           <th>
             <FormattedMessage
               id="app.assignment.runtimeEnvironmentsIds"
-              defaultMessage="Allowed languages/frameworks/technologies: "
-            />
+              defaultMessage="Allowed languages/frameworks/technologies"
+            />:
           </th>
           <td>
             <EnvironmentsList runtimeEnvironments={runtimeEnvironments} />

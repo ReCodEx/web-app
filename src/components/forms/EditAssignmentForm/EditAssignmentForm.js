@@ -432,7 +432,7 @@ class EditAssignmentForm extends Component {
                   label={
                     <FormattedMessage
                       id="app.editAssignmentForm.canViewJudgeOutputs"
-                      defaultMessage="Visibility of judge outputs"
+                      defaultMessage="Visibility of judge logs"
                     />
                   }
                 />
@@ -495,7 +495,7 @@ class EditAssignmentForm extends Component {
           </h4>
           <Grid fluid>
             <Row>
-              <Col md={5}>
+              <Col md={4}>
                 <Field
                   name="visibility"
                   component={RadioField}
@@ -524,7 +524,7 @@ class EditAssignmentForm extends Component {
                   </table>}
               </Col>
               {visibility === 'visibleFrom' &&
-                <Col md={7}>
+                <Col md={8}>
                   <Field
                     name="visibleFrom"
                     component={DatetimeField}

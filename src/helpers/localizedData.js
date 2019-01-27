@@ -68,10 +68,10 @@ export const getGroupCanonicalLocalizedName = (
   if (typeof group === 'string') {
     group = groupsAccessor(group);
     group = group && group.toJS();
-    console.log(group);
   }
 
-  var res = getLocalizedName(group, locale);
+  var res =
+    group && group.localizedTexts ? getLocalizedName(group, locale) : '??';
   if (group.parentGroupsIds && groupsAccessor) {
     const parentRes = group.parentGroupsIds
       .filter((_, i) => i > 0) // skip the first one (the root group)

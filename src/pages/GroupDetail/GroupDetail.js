@@ -270,7 +270,9 @@ class GroupDetail extends Component {
                             stats={groupStats.find(
                               item => item.userId === userId
                             )}
-                            userId={userId}
+                            userId={
+                              isGroupAdmin || isGroupSupervisor ? null : userId
+                            }
                             isAdmin={isGroupAdmin || isGroupSupervisor}
                           />}
                       </ResourceRenderer>
