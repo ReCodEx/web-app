@@ -31,6 +31,9 @@ const AssignmentsTable = ({
   userId = null,
   stats = EMPTY_OBJ,
   isAdmin = false,
+  showNames = true,
+  showGroups = false,
+  groupsAccessor = null,
   intl: { locale }
 }) =>
   <Table hover>
@@ -38,12 +41,23 @@ const AssignmentsTable = ({
       <thead>
         <tr>
           <th className="shrink-col" />
-          <th>
-            <FormattedMessage
-              id="app.assignments.name"
-              defaultMessage="Assignment name"
-            />
-          </th>
+
+          {showNames &&
+            <th>
+              <FormattedMessage
+                id="app.assignments.name"
+                defaultMessage="Assignment name"
+              />
+            </th>}
+
+          {showGroups &&
+            groupsAccessor &&
+            <th>
+              <FormattedMessage
+                id="app.assignments.group"
+                defaultMessage="Assigned in group"
+              />
+            </th>}
 
           {assignmentEnvironmentsSelector &&
             <th>
@@ -108,6 +122,9 @@ const AssignmentsTable = ({
                 : null
             }
             isAdmin={isAdmin}
+            showNames={showNames}
+            showGroups={showGroups}
+            groupsAccessor={groupsAccessor}
           />
         )}
     </tbody>
@@ -120,6 +137,9 @@ AssignmentsTable.propTypes = {
   userId: PropTypes.string,
   stats: PropTypes.object,
   isAdmin: PropTypes.bool,
+  showNames: PropTypes.bool,
+  showGroups: PropTypes.bool,
+  groupsAccessor: PropTypes.func,
   intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired
 };
 

@@ -2,6 +2,7 @@ import { createSelector } from 'reselect';
 import { EMPTY_LIST } from '../../helpers/common';
 import { getSolutions } from './solutions';
 import { runtimeEnvironmentSelector } from './runtimeEnvironments';
+import { isReady } from '../helpers/resourceManager';
 
 export const getAssignments = state => state.assignments;
 
@@ -10,6 +11,16 @@ const getAssignmentResources = state => getAssignments(state).get('resources');
 export const getAssignment = createSelector(
   getAssignmentResources,
   assignments => id => assignments.get(id)
+);
+
+export const getExerciseAssignments = createSelector(
+  [getAssignmentResources, (state, exerciseId) => exerciseId],
+  (assignments, exerciseId) =>
+    assignments.filter(
+      assignment =>
+        isReady(assignment) &&
+        assignment.getIn(['data', 'exerciseId']) === exerciseId
+    )
 );
 
 export const assignmentEnvironmentsSelector = createSelector(

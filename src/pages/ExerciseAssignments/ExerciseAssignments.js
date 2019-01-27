@@ -17,6 +17,7 @@ import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import Box from '../../components/widgets/Box';
 import { NeedFixingIcon } from '../../components/icons';
 import ExerciseButtons from '../../components/Exercises/ExerciseButtons';
+import AssignmentsTable from '../../components/Assignments/Assignment/AssignmentsTable';
 import EditAssignmentForm, {
   prepareInitialValues as prepareEditFormInitialValues
 } from '../../components/forms/EditAssignmentForm';
@@ -25,7 +26,8 @@ import { fetchExerciseIfNeeded } from '../../redux/modules/exercises';
 import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments';
 import {
   create as assignExercise,
-  editAssignment
+  editAssignment,
+  fetchExerciseAssignments
 } from '../../redux/modules/assignments';
 import { exerciseSelector } from '../../redux/selectors/exercises';
 
@@ -34,18 +36,19 @@ import {
   groupDataAccessorSelector,
   groupsUserCanAssignToSelector
 } from '../../redux/selectors/groups';
+import {
+  assignmentEnvironmentsSelector,
+  getExerciseAssignments
+} from '../../redux/selectors/assignments';
 
 import { getLocalizedName } from '../../helpers/localizedData';
+import { hasPermissions } from '../../helpers/common';
 import withLinks from '../../helpers/withLinks';
 
 const messages = defineMessages({
-  groupsBox: {
-    id: 'app.exercise.groupsBox',
+  groupsBoxTitle: {
+    id: 'app.exerciseAssignments.multiAssignBox',
     defaultMessage: 'Assign to Groups'
-  },
-  referenceSolutionsBox: {
-    id: 'app.exercise.referenceSolutionsBox',
-    defaultMessage: 'Reference Solutions'
   }
 });
 
@@ -73,20 +76,21 @@ const SUBMIT_BUTTON_MESSAGES = {
 class ExerciseAssignments extends Component {
   state = { forkId: null };
 
-  static loadAsync = ({ exerciseId }, dispatch, { userId }) =>
+  static loadAsync = ({ exerciseId }, dispatch) =>
     Promise.all([
       dispatch(fetchExerciseIfNeeded(exerciseId)),
-      dispatch(fetchRuntimeEnvironments())
+      dispatch(fetchRuntimeEnvironments()),
+      dispatch(fetchExerciseAssignments(exerciseId))
     ]);
 
   componentWillMount() {
-    this.props.loadAsync(this.props.userId);
+    this.props.loadAsync();
     this.reset();
   }
 
   componentWillReceiveProps(newProps) {
     if (this.props.params.exerciseId !== newProps.params.exerciseId) {
-      newProps.loadAsync(this.props.userId);
+      newProps.loadAsync();
       this.reset();
     }
   }
@@ -136,6 +140,8 @@ class ExerciseAssignments extends Component {
     const {
       userId,
       exercise,
+      assignments,
+      assignmentEnvironmentsSelector,
       assignableGroups,
       groupsAccessor,
       firstDeadline,
@@ -207,12 +213,40 @@ class ExerciseAssignments extends Component {
               </Col>
             </Row>
 
+            {hasPermissions(exercise, 'viewAssignments') &&
+              <Row>
+                <Col lg={12}>
+                  <Box
+                    title={
+                      <FormattedMessage
+                        id="app.exerciseAssignments.description"
+                        defaultMessage="Exercise Assignments"
+                      />
+                    }
+                    noPadding
+                    unlimitedHeight
+                  >
+                    <AssignmentsTable
+                      assignments={assignments.toList()}
+                      assignmentEnvironmentsSelector={
+                        assignmentEnvironmentsSelector
+                      }
+                      userId={userId}
+                      isAdmin={true}
+                      showNames={false}
+                      groupsAccessor={groupsAccessor}
+                      showGroups={true}
+                    />
+                  </Box>
+                </Col>
+              </Row>}
+
             <Row>
               <Col sm={12}>
                 {!exercise.isBroken &&
                   !exercise.isLocked &&
                   <Box
-                    title={formatMessage(messages.groupsBox)}
+                    title={formatMessage(messages.groupsBoxTitle)}
                     description={
                       <Alert bsStyle="info">
                         <FormattedMessage
@@ -265,6 +299,8 @@ ExerciseAssignments.propTypes = {
     exerciseId: PropTypes.string.isRequired
   }).isRequired,
   exercise: ImmutablePropTypes.map,
+  assignments: ImmutablePropTypes.map,
+  assignmentEnvironmentsSelector: PropTypes.func,
   assignableGroups: ImmutablePropTypes.map,
   groupsAccessor: PropTypes.func.isRequired,
   firstDeadline: PropTypes.oneOfType([
@@ -290,6 +326,8 @@ export default withLinks(
       return {
         userId,
         exercise: exerciseSelector(exerciseId)(state),
+        assignments: getExerciseAssignments(state, exerciseId),
+        assignmentEnvironmentsSelector: assignmentEnvironmentsSelector(state),
         assignableGroups: groupsUserCanAssignToSelector(state),
         groupsAccessor: groupDataAccessorSelector(state),
         firstDeadline: multiAssignFormSelector(state, 'firstDeadline'),
@@ -301,8 +339,7 @@ export default withLinks(
       };
     },
     (dispatch, { params: { exerciseId } }) => ({
-      loadAsync: userId =>
-        ExerciseAssignments.loadAsync({ exerciseId }, dispatch, { userId }),
+      loadAsync: () => ExerciseAssignments.loadAsync({ exerciseId }, dispatch),
       assignExercise: groupId => dispatch(assignExercise(groupId, exerciseId)),
       editAssignment: (id, body) => dispatch(editAssignment(id, body))
     })
