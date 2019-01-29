@@ -73,6 +73,10 @@ const SUBMIT_BUTTON_MESSAGES = {
   )
 };
 
+const getAssignmentsGroups = defaultMemoize(assignments =>
+  assignments.map(({ groupId }) => groupId)
+);
+
 class ExerciseAssignments extends Component {
   state = { forkId: null };
 
@@ -263,23 +267,32 @@ class ExerciseAssignments extends Component {
                       returnAsArray
                     >
                       {assignableGroups =>
-                        <EditAssignmentForm
-                          form="multiAssign"
-                          userId={userId}
-                          initialValues={this.multiAssignFormInitialValues(
-                            assignableGroups,
-                            exercise.runtimeEnvironments
-                          )}
-                          onSubmit={this.assignExercise}
-                          groups={assignableGroups}
-                          groupsAccessor={groupsAccessor}
-                          runtimeEnvironments={exercise.runtimeEnvironments}
-                          firstDeadline={firstDeadline}
-                          allowSecondDeadline={allowSecondDeadline}
-                          visibility={visibility}
-                          assignmentIsPublic={false}
-                          submitButtonMessages={SUBMIT_BUTTON_MESSAGES}
-                        />}
+                        <ResourceRenderer
+                          resource={assignments.toList()}
+                          returnAsArray
+                        >
+                          {assignments =>
+                            <EditAssignmentForm
+                              form="multiAssign"
+                              userId={userId}
+                              initialValues={this.multiAssignFormInitialValues(
+                                assignableGroups,
+                                exercise.runtimeEnvironments
+                              )}
+                              onSubmit={this.assignExercise}
+                              groups={assignableGroups}
+                              groupsAccessor={groupsAccessor}
+                              alreadyAssignedGroups={getAssignmentsGroups(
+                                assignments
+                              )}
+                              runtimeEnvironments={exercise.runtimeEnvironments}
+                              firstDeadline={firstDeadline}
+                              allowSecondDeadline={allowSecondDeadline}
+                              visibility={visibility}
+                              assignmentIsPublic={false}
+                              submitButtonMessages={SUBMIT_BUTTON_MESSAGES}
+                            />}
+                        </ResourceRenderer>}
                     </ResourceRenderer>
                   </Box>
                 </Col>

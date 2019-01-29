@@ -2,9 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 
-import { FormGroup, HelpBlock, Checkbox } from 'react-bootstrap';
+import { FormGroup, Checkbox, OverlayTrigger, Tooltip } from 'react-bootstrap';
 
 import OnOffCheckbox from '../OnOffCheckbox';
+import { WarningIcon } from '../../icons';
 
 const CheckboxField = ({
   input,
@@ -27,16 +28,21 @@ const CheckboxField = ({
     >
       <Component {...props} {...input} checked={input.value ? true : false}>
         {label}
+        {Boolean(error || warning) &&
+          <OverlayTrigger
+            placement="bottom"
+            overlay={
+              <Tooltip id={input.name} className="wider-tooltip">
+                {error || warning}
+              </Tooltip>
+            }
+          >
+            <WarningIcon
+              gapLeft
+              className={error ? 'text-danger' : 'text-warning'}
+            />
+          </OverlayTrigger>}
       </Component>
-      {error &&
-        <HelpBlock>
-          {' '}{error}{' '}
-        </HelpBlock>}
-      {!error &&
-        warning &&
-        <HelpBlock>
-          {' '}{warning}{' '}
-        </HelpBlock>}
     </FormGroup>
   );
 };
@@ -48,8 +54,8 @@ CheckboxField.propTypes = {
   }).isRequired,
   meta: PropTypes.shape({
     dirty: PropTypes.bool,
-    error: PropTypes.oneOfType([PropTypes.string, FormattedMessage]),
-    warning: PropTypes.oneOfType([PropTypes.string, FormattedMessage])
+    error: PropTypes.any,
+    warning: PropTypes.any
   }).isRequired,
   type: PropTypes.string,
   onOff: PropTypes.bool,
