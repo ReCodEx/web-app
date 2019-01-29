@@ -20,17 +20,15 @@ const ExerciseButtons = ({
 }) =>
   <div className="em-margin-bottom em-margin-right">
     <ButtonGroup>
-      {permissionHints &&
-        permissionHints.update &&
-        <LinkContainer to={EXERCISE_ASSIGNMENTS_URI_FACTORY(exerciseId)}>
-          <Button bsStyle="primary" bsSize="sm">
-            <Icon icon="tasks" gapRight />
-            <FormattedMessage
-              id="app.exercise.assignments"
-              defaultMessage="Assignments"
-            />
-          </Button>
-        </LinkContainer>}
+      <LinkContainer to={EXERCISE_ASSIGNMENTS_URI_FACTORY(exerciseId)}>
+        <Button bsStyle="primary" bsSize="sm">
+          <Icon icon="tasks" gapRight />
+          <FormattedMessage
+            id="app.exercise.assignments"
+            defaultMessage="Assignments"
+          />
+        </Button>
+      </LinkContainer>
 
       {permissionHints &&
         permissionHints.update &&

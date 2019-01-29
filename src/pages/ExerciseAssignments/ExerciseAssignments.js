@@ -241,10 +241,11 @@ class ExerciseAssignments extends Component {
                 </Col>
               </Row>}
 
-            <Row>
-              <Col sm={12}>
-                {!exercise.isBroken &&
-                  !exercise.isLocked &&
+            {!exercise.isBroken &&
+              !exercise.isLocked &&
+              hasPermissions(exercise, 'viewDetail') &&
+              <Row>
+                <Col sm={12}>
                   <Box
                     title={formatMessage(messages.groupsBoxTitle)}
                     description={
@@ -280,9 +281,9 @@ class ExerciseAssignments extends Component {
                           submitButtonMessages={SUBMIT_BUTTON_MESSAGES}
                         />}
                     </ResourceRenderer>
-                  </Box>}
-              </Col>
-            </Row>
+                  </Box>
+                </Col>
+              </Row>}
           </div>}
       </Page>
     );
