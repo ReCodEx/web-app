@@ -170,6 +170,17 @@ th.shrink-col {
  * AdminLTE Boxes
  */
 
-.box-body > .table-responsive > .table {
+.box-body>.table-responsive>.table {
   margin-bottom: 0;
+}
+
+/*
+ * Bootstrap tooltip enhancments
+ */
+.wider-tooltip {
+  width: 300px;
+}
+
+.wider-tooltip>.tooltip-inner {
+  max-width: 300px;
 }

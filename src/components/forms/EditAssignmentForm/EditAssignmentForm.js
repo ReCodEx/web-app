@@ -23,6 +23,7 @@ import {
   validateLocalizedTextsFormData,
   transformLocalizedTextsFormData
 } from '../../../helpers/localizedData';
+import { safeSet } from '../../../helpers/common';
 
 const localizedTextDefaults = {
   name: '',
@@ -185,6 +186,11 @@ const SUBMIT_BUTTON_MESSAGES_DEFAULT = {
   success: <FormattedMessage id="generic.saved" defaultMessage="Saved" />
 };
 
+const parseNumber = value => {
+  const num = Number(value);
+  return isNaN(num) ? value : num;
+};
+
 class EditAssignmentForm extends Component {
   state = {
     open: false,
@@ -260,6 +266,7 @@ class EditAssignmentForm extends Component {
       asyncValidating = false,
       invalid,
       error,
+      warning,
       firstDeadline,
       allowSecondDeadline,
       runtimeEnvironments,
@@ -317,7 +324,8 @@ class EditAssignmentForm extends Component {
           <Field
             name="maxPointsBeforeFirstDeadline"
             component={TextField}
-            parse={value => Number(value)}
+            parse={parseNumber}
+            maxLength={5}
             label={
               <FormattedMessage
                 id="app.editAssignmentForm.maxPointsBeforeFirstDeadline"
@@ -372,7 +380,8 @@ class EditAssignmentForm extends Component {
               name="maxPointsBeforeSecondDeadline"
               disabled={allowSecondDeadline !== true}
               component={TextField}
-              parse={value => Number(value)}
+              parse={parseNumber}
+              maxLength={5}
               label={
                 <FormattedMessage
                   id="app.editAssignmentForm.maxPointsBeforeSecondDeadline"
@@ -386,7 +395,8 @@ class EditAssignmentForm extends Component {
           <Field
             name="submissionsCountLimit"
             component={TextField}
-            parse={value => Number(value)}
+            parse={parseNumber}
+            maxLength={3}
             label={
               <FormattedMessage
                 id="app.editAssignmentForm.submissionsCountLimit"
@@ -398,7 +408,8 @@ class EditAssignmentForm extends Component {
           <Field
             name="pointsPercentualThreshold"
             component={TextField}
-            parse={value => Number(value)}
+            parse={parseNumber}
+            maxLength={3}
             label={
               <FormattedMessage
                 id="app.editAssignmentForm.pointsPercentualThreshold"
@@ -559,6 +570,12 @@ class EditAssignmentForm extends Component {
               {error}
             </Alert>}
 
+          {warning &&
+            !error &&
+            <Alert bsStyle="warning">
+              {warning}
+            </Alert>}
+
           <div className="text-center">
             <SubmitButton
               id="editAssignmentForm"
@@ -581,10 +598,12 @@ EditAssignmentForm.propTypes = {
   editTexts: PropTypes.bool,
   groups: PropTypes.array,
   groupsAccessor: PropTypes.func,
+  alreadyAssignedGroups: PropTypes.array,
   initialValues: PropTypes.object.isRequired,
   handleSubmit: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
   error: PropTypes.object,
+  warning: PropTypes.object,
   dirty: PropTypes.bool,
   submitting: PropTypes.bool,
   submitFailed: PropTypes.bool,
@@ -633,7 +652,7 @@ const validate = (
   ) {
     errors._error = (
       <FormattedMessage
-        id="app.multiAssignForm.validation.emptyGroups"
+        id="app.editAssignmentForm.validation.emptyGroups"
         defaultMessage="Please select one or more groups to assign exercise."
       />
     );
@@ -683,6 +702,13 @@ const validate = (
         defaultMessage="Please fill the submissions count limit field with a positive integer."
       />
     );
+  } else if (submissionsCountLimit > 100) {
+    errors.submissionsCountLimit = (
+      <FormattedMessage
+        id="app.editAssignmentForm.validation.submissionsCountLimitTooHigh"
+        defaultMessage="The submissions count limit must not exceed 100 for security reasons."
+      />
+    );
   }
 
   if (!isNonNegativeInteger(maxPointsBeforeFirstDeadline)) {
@@ -690,6 +716,13 @@ const validate = (
       <FormattedMessage
         id="app.editAssignmentForm.validation.maxPointsBeforeFirstDeadline"
         defaultMessage="Please fill the maximum number of points received when submitted before the deadline with a nonnegative integer."
+      />
+    );
+  } else if (maxPointsBeforeFirstDeadline > 10000) {
+    errors.maxPointsBeforeFirstDeadline = (
+      <FormattedMessage
+        id="app.editAssignmentForm.validation.maxPointsBeforeFirstDeadlineTooHigh"
+        defaultMessage="The maximum number of points must not exceed 10,000 due to some technical limitations."
       />
     );
   }
@@ -702,6 +735,13 @@ const validate = (
       <FormattedMessage
         id="app.editAssignmentForm.validation.maxPointsBeforeSecondDeadline"
         defaultMessage="Please fill the number of maximum points received after the first and before the second deadline with a nonnegative integer or remove the second deadline."
+      />
+    );
+  } else if (allowSecondDeadline && maxPointsBeforeSecondDeadline > 10000) {
+    errors.maxPointsBeforeSecondDeadline = (
+      <FormattedMessage
+        id="app.editAssignmentForm.validation.maxPointsBeforeFirstDeadlineTooHigh"
+        defaultMessage="The maximum number of points must not exceed 10,000 due to some technical limitations."
       />
     );
   }
@@ -737,9 +777,55 @@ const validate = (
   return errors;
 };
 
+const warn = (
+  { groups, canViewJudgeOutputs, submissionsCountLimit },
+  { groupsAccessor, alreadyAssignedGroups = [] }
+) => {
+  const warnings = {};
+
+  if (canViewJudgeOutputs) {
+    warnings.canViewJudgeOutputs = (
+      <FormattedMessage
+        id="app.editAssignmentForm.warninigs.canViewJudgeOutputs"
+        defaultMessage="Allowing the students to see judge logs has its security risks. In case of simple exercises, the students may use this channel to retrieve the test inputs and expected outputs and design a trivial solution which embeds the correct outputs directly into the source code. Use this option wisely."
+      />
+    );
+  }
+
+  if (groupsAccessor) {
+    let alreadyAssigned = false;
+    alreadyAssignedGroups.forEach(id => {
+      const key = `id${id}`;
+      if (groups[key]) {
+        safeSet(
+          warnings,
+          ['groups', key],
+          <FormattedMessage
+            id="app.editAssignmentForm.warninigs.alreadyAssigned"
+            defaultMessage="The exercise has been already assigned in this group."
+          />
+        );
+        alreadyAssigned = true;
+      }
+    });
+
+    if (alreadyAssigned) {
+      warnings._warning = (
+        <FormattedMessage
+          id="app.editAssignmentForm.warninigs.alreadyAssignedGlobal"
+          defaultMessage="The exercise has been already assigned in some of the selected groups. It will be assigned again."
+        />
+      );
+    }
+  }
+
+  return warnings;
+};
+
 export default injectIntl(
   reduxForm({
     validate,
+    warn,
     enableReinitialize: true,
     keepDirtyOnReinitialize: false
   })(EditAssignmentForm)

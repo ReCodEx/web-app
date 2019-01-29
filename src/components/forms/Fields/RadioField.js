@@ -42,8 +42,8 @@ RadioField.propTypes = {
   }).isRequired,
   meta: PropTypes.shape({
     dirty: PropTypes.bool,
-    error: PropTypes.oneOfType([PropTypes.string, FormattedMessage]),
-    warning: PropTypes.oneOfType([PropTypes.string, FormattedMessage])
+    error: PropTypes.any,
+    warning: PropTypes.any
   }).isRequired,
   options: PropTypes.array.isRequired
 };
