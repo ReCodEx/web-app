@@ -80,7 +80,7 @@ class ReferenceSolution extends Component {
       evaluations,
       refreshSolutionEvaluations,
       deleteEvaluation,
-      intl: { formatMessage },
+      intl: { formatMessage, locale },
       links: { EXERCISES_URI, EXERCISE_URI_FACTORY }
     } = this.props;
 
@@ -153,10 +153,12 @@ class ReferenceSolution extends Component {
                             <ResubmitReferenceSolutionContainer
                               id={referenceSolution.id}
                               isDebug={false}
+                              locale={locale}
                             />
                             <ResubmitReferenceSolutionContainer
                               id={referenceSolution.id}
                               isDebug={true}
+                              locale={locale}
                             />
                           </p>}
                   </React.Fragment>}

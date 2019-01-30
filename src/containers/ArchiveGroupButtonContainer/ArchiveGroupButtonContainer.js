@@ -15,7 +15,13 @@ import { identity } from '../../helpers/common';
 
 class ArchiveGroupButtonContainer extends Component {
   render() {
-    const { group, pending, setArchived, bsSize = undefined } = this.props;
+    const {
+      group,
+      pending,
+      setArchived,
+      bsSize = undefined,
+      ...props
+    } = this.props;
     return (
       <ResourceRenderer resource={group}>
         {({ directlyArchived, permissionHints }) =>
@@ -25,7 +31,7 @@ class ArchiveGroupButtonContainer extends Component {
                 pending={pending}
                 setArchived={setArchived}
                 bsSize={bsSize}
-                {...this.props}
+                {...props}
               />
             : null}
       </ResourceRenderer>
