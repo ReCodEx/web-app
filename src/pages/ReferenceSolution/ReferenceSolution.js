@@ -8,6 +8,7 @@ import {
   injectIntl
 } from 'react-intl';
 import ImmutablePropTypes from 'react-immutable-proptypes';
+import { defaultMemoize } from 'reselect';
 
 import FetchManyResourceRenderer from '../../components/helpers/FetchManyResourceRenderer';
 import withLinks from '../../helpers/withLinks';
@@ -40,6 +41,12 @@ const messages = defineMessages({
     defaultMessage: 'Reference solution overview'
   }
 });
+
+const exerciseHasRuntime = defaultMemoize(
+  (exercise, runtimeId) =>
+    exercise.runtimeEnvironments.find(({ id }) => id === runtimeId) !==
+    undefined
+);
 
 class ReferenceSolution extends Component {
   static loadAsync = ({ exerciseId, referenceSolutionId }, dispatch) =>
@@ -132,16 +139,26 @@ class ReferenceSolution extends Component {
                             defaultMessage="The exercise is broken. This reference solution may not be resubmitted at the moment."
                           />
                         </p>
-                      : <p>
-                          <ResubmitReferenceSolutionContainer
-                            id={referenceSolution.id}
-                            isDebug={false}
-                          />
-                          <ResubmitReferenceSolutionContainer
-                            id={referenceSolution.id}
-                            isDebug={true}
-                          />
-                        </p>}
+                      : !exerciseHasRuntime(
+                          exercise,
+                          referenceSolution.runtimeEnvironmentId
+                        )
+                        ? <p className="callout callout-info">
+                            <FormattedMessage
+                              id="app.referenceSolution.exerciseNoLongerHasEnvironment"
+                              defaultMessage="The exercise no longer supports the environment for which this solution was evaluated. Resubmission is not possible."
+                            />
+                          </p>
+                        : <p>
+                            <ResubmitReferenceSolutionContainer
+                              id={referenceSolution.id}
+                              isDebug={false}
+                            />
+                            <ResubmitReferenceSolutionContainer
+                              id={referenceSolution.id}
+                              isDebug={true}
+                            />
+                          </p>}
                   </React.Fragment>}
 
                 <FetchManyResourceRenderer fetchManyStatus={fetchStatus}>
