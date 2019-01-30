@@ -147,7 +147,10 @@ class EditGroup extends Component {
                 <Row>
                   <Col lg={3}>
                     <p>
-                      <OrganizationalGroupButtonContainer id={group.id} />
+                      <OrganizationalGroupButtonContainer
+                        id={group.id}
+                        locale={locale}
+                      />
                     </p>
                   </Col>
                   <Col lg={9}>

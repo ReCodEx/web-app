@@ -158,7 +158,10 @@ class Solution extends Component {
                 <p>
                   {solution.permissionHints &&
                     solution.permissionHints.setAccepted &&
-                    <AcceptSolutionContainer id={solution.id} />}
+                    <AcceptSolutionContainer
+                      id={solution.id}
+                      locale={locale}
+                    />}
 
                   {assignment.permissionHints &&
                   assignment.permissionHints.resubmitSubmissions &&
@@ -172,12 +175,14 @@ class Solution extends Component {
                           assignmentId={assignment.id}
                           isDebug={false}
                           userId={solution.solution.userId}
+                          locale={locale}
                         />
                         <ResubmitSolutionContainer
                           id={solution.id}
                           assignmentId={assignment.id}
                           isDebug={true}
                           userId={solution.solution.userId}
+                          locale={locale}
                         />
                       </React.Fragment>
                     : <span>

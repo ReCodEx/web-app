@@ -14,7 +14,8 @@ import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 const OrganizationalGroupButtonContainer = ({
   group,
   pending,
-  setOrganizational
+  setOrganizational,
+  ...props
 }) =>
   <ResourceRenderer resource={group}>
     {({
@@ -31,6 +32,7 @@ const OrganizationalGroupButtonContainer = ({
           students.length > 0 ||
           assignments.length > 0
         }
+        {...props}
       />}
   </ResourceRenderer>;
 

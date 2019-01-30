@@ -18,7 +18,7 @@ const OrganizationalGroupButton = ({
     {pending
       ? <LoadingIcon gapRight />
       : <GroupIcon organizational={!organizational} gapRight />}
-    {organizational === true
+    {organizational
       ? <FormattedMessage
           id="app.organizationalGroupButton.unset"
           defaultMessage="Change to Regular Group"
