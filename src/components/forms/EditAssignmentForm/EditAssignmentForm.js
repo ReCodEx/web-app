@@ -758,10 +758,10 @@ const validate = (
     }
   }
 
-  const formDisabledRuntimes = Object.keys(enabledRuntime).filter(
-    key => enabledRuntime[key] === false
+  const formEnabledRuntimes = runtimeEnvironmentIds.filter(
+    key => enabledRuntime[key]
   );
-  if (formDisabledRuntimes.length === runtimeEnvironmentIds.length) {
+  if (formEnabledRuntimes.length === 0) {
     errors._error = (
       <FormattedMessage
         id="app.editAssignmentForm.validation.allRuntimesDisabled"
