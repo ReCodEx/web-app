@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
+import { defaultMemoize } from 'reselect';
 
 import Page from '../../components/layout/Page';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
@@ -35,6 +36,15 @@ import {
   fetchManyStatus
 } from '../../redux/selectors/submissionEvaluations';
 import { getLocalizedName } from '../../helpers/localizedData';
+import { WarningIcon } from '../../components/icons';
+
+const assignmentHasRuntime = defaultMemoize(
+  (assignment, runtimeId) =>
+    assignment.runtimeEnvironmentIds.find(id => id === runtimeId) !==
+      undefined &&
+    assignment.disabledRuntimeEnvironmentIds.find(id => id === runtimeId) ===
+      undefined
+);
 
 class Solution extends Component {
   static loadAsync = ({ solutionId, assignmentId }, dispatch) =>
@@ -151,21 +161,36 @@ class Solution extends Component {
                     <AcceptSolutionContainer id={solution.id} />}
 
                   {assignment.permissionHints &&
-                    assignment.permissionHints.resubmitSubmissions &&
-                    <React.Fragment>
-                      <ResubmitSolutionContainer
-                        id={solution.id}
-                        assignmentId={assignment.id}
-                        isDebug={false}
-                        userId={solution.solution.userId}
-                      />
-                      <ResubmitSolutionContainer
-                        id={solution.id}
-                        assignmentId={assignment.id}
-                        isDebug={true}
-                        userId={solution.solution.userId}
-                      />
-                    </React.Fragment>}
+                  assignment.permissionHints.resubmitSubmissions &&
+                  assignmentHasRuntime(
+                    assignment,
+                    solution.runtimeEnvironmentId
+                  )
+                    ? <React.Fragment>
+                        <ResubmitSolutionContainer
+                          id={solution.id}
+                          assignmentId={assignment.id}
+                          isDebug={false}
+                          userId={solution.solution.userId}
+                        />
+                        <ResubmitSolutionContainer
+                          id={solution.id}
+                          assignmentId={assignment.id}
+                          isDebug={true}
+                          userId={solution.solution.userId}
+                        />
+                      </React.Fragment>
+                    : <span>
+                        <WarningIcon
+                          largeGapLeft
+                          gapRight
+                          className="text-warning"
+                        />
+                        <FormattedMessage
+                          id="app.solution.environmentNotAllowedCannotResubmit"
+                          defaultMessage="The assignment no longer supports the environment for which this solution was evaluated. Resubmission is not possible."
+                        />
+                      </span>}
                 </p>}
               <ResourceRenderer resource={runtimeEnvironments} returnAsArray>
                 {runtimes =>
