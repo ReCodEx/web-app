@@ -71,6 +71,7 @@ const EditInstanceForm = ({
     <Field
       name="name"
       component={TextField}
+      maxLength={255}
       label={
         <span>
           <FormattedMessage id="generic.name" defaultMessage="Name" />:

@@ -111,6 +111,7 @@ class EditPipelineForm extends Component {
               <Field
                 name="name"
                 component={TextField}
+                maxLength={255}
                 label={
                   <FormattedMessage
                     id="app.editPipelineForm.name"

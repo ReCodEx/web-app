@@ -69,6 +69,7 @@ const LoginCASForm = ({
       name="ukco"
       required
       component={TextField}
+      maxLength={64}
       label={
         <FormattedMessage
           id="app.loginCASForm.ukco"

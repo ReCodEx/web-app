@@ -21,6 +21,7 @@ const SharedLocalizedFields = ({ prefix, enabled }) =>
     <Field
       name={`${prefix}.name`}
       component={TextField}
+      maxLength={255}
       disabled={!enabled}
       label={
         <span>

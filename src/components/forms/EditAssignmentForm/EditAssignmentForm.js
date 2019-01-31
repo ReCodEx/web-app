@@ -6,14 +6,17 @@ import { Alert, HelpBlock, Grid, Row, Col } from 'react-bootstrap';
 import moment from 'moment';
 import { defaultMemoize } from 'reselect';
 
-import { DatetimeField, TextField, CheckboxField, RadioField } from '../Fields';
+import {
+  DatetimeField,
+  CheckboxField,
+  RadioField,
+  NumericTextField
+} from '../Fields';
 import LocalizedTextsFormField from '../LocalizedTextsFormField';
 import SubmitButton from '../SubmitButton';
 import AssignmentFormGroupsList from './AssignmentFormGroupsList';
 import AssignmentFormMultiassignSuccess from './AssignmentFormMultiassignSuccess';
 import {
-  isNonNegativeInteger,
-  isPositiveInteger,
   validateDeadline,
   validateTwoDeadlines
 } from '../../helpers/validation';
@@ -186,11 +189,6 @@ const SUBMIT_BUTTON_MESSAGES_DEFAULT = {
   success: <FormattedMessage id="generic.saved" defaultMessage="Saved" />
 };
 
-const parseNumber = value => {
-  const num = Number(value);
-  return isNaN(num) ? value : num;
-};
-
 class EditAssignmentForm extends Component {
   state = {
     open: false,
@@ -321,10 +319,10 @@ class EditAssignmentForm extends Component {
             }
           />
 
-          <Field
+          <NumericTextField
             name="maxPointsBeforeFirstDeadline"
-            component={TextField}
-            parse={parseNumber}
+            validateMin={0}
+            validateMax={10000}
             maxLength={5}
             label={
               <FormattedMessage
@@ -376,11 +374,11 @@ class EditAssignmentForm extends Component {
             </HelpBlock>}
 
           {allowSecondDeadline &&
-            <Field
+            <NumericTextField
               name="maxPointsBeforeSecondDeadline"
               disabled={allowSecondDeadline !== true}
-              component={TextField}
-              parse={parseNumber}
+              validateMin={0}
+              validateMax={10000}
               maxLength={5}
               label={
                 <FormattedMessage
@@ -392,10 +390,10 @@ class EditAssignmentForm extends Component {
 
           <hr />
 
-          <Field
+          <NumericTextField
             name="submissionsCountLimit"
-            component={TextField}
-            parse={parseNumber}
+            validateMin={1}
+            validateMax={100}
             maxLength={3}
             label={
               <FormattedMessage
@@ -405,10 +403,10 @@ class EditAssignmentForm extends Component {
             }
           />
 
-          <Field
+          <NumericTextField
             name="pointsPercentualThreshold"
-            component={TextField}
-            parse={parseNumber}
+            validateMin={0}
+            validateMax={100}
             maxLength={3}
             label={
               <FormattedMessage
@@ -628,13 +626,9 @@ const validate = (
   {
     groups,
     localizedTexts,
-    submissionsCountLimit,
     firstDeadline,
     secondDeadline,
     allowSecondDeadline,
-    maxPointsBeforeFirstDeadline,
-    maxPointsBeforeSecondDeadline,
-    pointsPercentualThreshold,
     runtimeEnvironmentIds,
     enabledRuntime,
     visibility,
@@ -694,69 +688,6 @@ const validate = (
     secondDeadline,
     allowSecondDeadline
   );
-
-  if (!isPositiveInteger(submissionsCountLimit)) {
-    errors.submissionsCountLimit = (
-      <FormattedMessage
-        id="app.editAssignmentForm.validation.submissionsCountLimit"
-        defaultMessage="Please fill the submissions count limit field with a positive integer."
-      />
-    );
-  } else if (submissionsCountLimit > 100) {
-    errors.submissionsCountLimit = (
-      <FormattedMessage
-        id="app.editAssignmentForm.validation.submissionsCountLimitTooHigh"
-        defaultMessage="The submissions count limit must not exceed 100 for security reasons."
-      />
-    );
-  }
-
-  if (!isNonNegativeInteger(maxPointsBeforeFirstDeadline)) {
-    errors.maxPointsBeforeFirstDeadline = (
-      <FormattedMessage
-        id="app.editAssignmentForm.validation.maxPointsBeforeFirstDeadline"
-        defaultMessage="Please fill the maximum number of points received when submitted before the deadline with a nonnegative integer."
-      />
-    );
-  } else if (maxPointsBeforeFirstDeadline > 10000) {
-    errors.maxPointsBeforeFirstDeadline = (
-      <FormattedMessage
-        id="app.editAssignmentForm.validation.maxPointsBeforeFirstDeadlineTooHigh"
-        defaultMessage="The maximum number of points must not exceed 10,000 due to some technical limitations."
-      />
-    );
-  }
-
-  if (
-    allowSecondDeadline &&
-    !isNonNegativeInteger(maxPointsBeforeSecondDeadline)
-  ) {
-    errors.maxPointsBeforeSecondDeadline = (
-      <FormattedMessage
-        id="app.editAssignmentForm.validation.maxPointsBeforeSecondDeadline"
-        defaultMessage="Please fill the number of maximum points received after the first and before the second deadline with a nonnegative integer or remove the second deadline."
-      />
-    );
-  } else if (allowSecondDeadline && maxPointsBeforeSecondDeadline > 10000) {
-    errors.maxPointsBeforeSecondDeadline = (
-      <FormattedMessage
-        id="app.editAssignmentForm.validation.maxPointsBeforeFirstDeadlineTooHigh"
-        defaultMessage="The maximum number of points must not exceed 10,000 due to some technical limitations."
-      />
-    );
-  }
-
-  if (pointsPercentualThreshold) {
-    const numericThreshold = Number(pointsPercentualThreshold);
-    if (numericThreshold < 0 || numericThreshold > 100) {
-      errors.pointsPercentualThreshold = (
-        <FormattedMessage
-          id="app.editAssignmentForm.validation.pointsPercentualThresholdBetweenZeroHundred"
-          defaultMessage="Points percentual threshold must be in between 0 and 100."
-        />
-      );
-    }
-  }
 
   const formEnabledRuntimes = runtimeEnvironmentIds.filter(
     key => enabledRuntime[key]

@@ -64,6 +64,7 @@ class BoxForm extends Component {
             name="name"
             tabIndex={1}
             component={TextField}
+            maxLength={255}
             required
             label={
               <span>

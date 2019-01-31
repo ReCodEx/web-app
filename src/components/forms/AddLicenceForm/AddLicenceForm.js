@@ -74,6 +74,7 @@ const AddLicenceForm = ({
     <Field
       name="note"
       component={TextField}
+      maxLength={255}
       label={
         <FormattedMessage id="app.addLicence.note" defaultMessage="Note:" />
       }

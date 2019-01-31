@@ -8,10 +8,9 @@ import {
 } from 'react-intl';
 import { reduxForm, Field } from 'redux-form';
 import { Alert } from 'react-bootstrap';
-import isInt from 'validator/lib/isInt';
 import FormBox from '../../widgets/FormBox';
 import SubmitButton from '../SubmitButton';
-import { TextField, SelectField } from '../Fields';
+import { SelectField, NumericTextField } from '../Fields';
 
 const messages = defineMessages({
   summerTerm: {
@@ -85,9 +84,11 @@ const AddSisTermForm = ({
         />
       </Alert>}
 
-    <Field
+    <NumericTextField
       name="year"
-      component={TextField}
+      validateMin={2000}
+      validateMax={2099}
+      maxLength={4}
       label={
         <FormattedMessage id="app.addSisTermForm.year" defaultMessage="Year:" />
       }
@@ -117,23 +118,8 @@ AddSisTermForm.propTypes = {
   intl: intlShape.isRequired
 };
 
-const validate = ({ year, term }) => {
-  const errors = {};
-  if (year && !isInt(String(year))) {
-    errors['year'] = (
-      <FormattedMessage
-        id="app.addSisTermForm.validation.year"
-        defaultMessage="The year must be an integer."
-      />
-    );
-  }
-
-  return errors;
-};
-
 export default injectIntl(
   reduxForm({
-    form: 'add-sis-term',
-    validate
+    form: 'add-sis-term'
   })(AddSisTermForm)
 );

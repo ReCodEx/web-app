@@ -40,6 +40,7 @@ const ResolveFailure = ({
       <Field
         name="note"
         component={TextField}
+        maxLength={255}
         label={
           <FormattedMessage
             id="app.submissionFailures.resolveNote"

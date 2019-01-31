@@ -5,11 +5,10 @@ import { injectIntl, FormattedMessage } from 'react-intl';
 import { Alert, Grid, Row, Col } from 'react-bootstrap';
 
 import FormBox from '../../widgets/FormBox';
-import { TextField, CheckboxField } from '../Fields';
+import { CheckboxField, NumericTextField } from '../Fields';
 import LocalizedTextsFormField from '../LocalizedTextsFormField';
 import SubmitButton from '../SubmitButton';
 import { LocalizedExerciseName } from '../../helpers/LocalizedNames';
-import { isNonNegativeInteger } from '../../helpers/validation';
 import { validateLocalizedTextsFormData } from '../../../helpers/localizedData';
 
 const EditShadowAssignmentForm = ({
@@ -83,10 +82,11 @@ const EditShadowAssignmentForm = ({
         fieldType="shadowAssignment"
       />
 
-      <Field
+      <NumericTextField
         name="maxPoints"
-        component={TextField}
-        parse={value => Number(value)}
+        validateMin={0}
+        validateMax={10000}
+        maxLength={5}
         label={
           <FormattedMessage
             id="app.editShadowAssignmentForm.maxPoints"
@@ -166,7 +166,7 @@ EditShadowAssignmentForm.propTypes = {
   error: PropTypes.object
 };
 
-const validate = ({ localizedTexts, maxPoints }) => {
+const validate = ({ localizedTexts }) => {
   const errors = {};
   validateLocalizedTextsFormData(errors, localizedTexts, ({ name }) => {
     const textErrors = {};
@@ -181,15 +181,6 @@ const validate = ({ localizedTexts, maxPoints }) => {
 
     return textErrors;
   });
-
-  if (!isNonNegativeInteger(maxPoints)) {
-    errors.maxPoints = (
-      <FormattedMessage
-        id="app.editShadowAssignmentForm.validation.maxPoints"
-        defaultMessage="Please fill the maximal number of points."
-      />
-    );
-  }
 
   return errors;
 };

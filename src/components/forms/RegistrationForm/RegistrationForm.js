@@ -82,6 +82,7 @@ const RegistrationForm = ({
     <Field
       name="firstName"
       component={TextField}
+      maxLength={100}
       label={
         <FormattedMessage
           id="app.registrationForm.firstName"
@@ -92,6 +93,7 @@ const RegistrationForm = ({
     <Field
       name="lastName"
       component={TextField}
+      maxLength={100}
       label={
         <FormattedMessage
           id="app.registrationForm.lastName"
