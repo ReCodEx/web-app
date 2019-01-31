@@ -15,7 +15,10 @@ export const getTestsInitValues = (exerciseTests, scoreConfig, locale) => {
   let allWeightsSame = true;
   let lastWeight = null;
   for (const test of sortedTests) {
-    const testWeight = testWeights[test.name] || 100;
+    const testWeight =
+      testWeights[test.name] !== undefined
+        ? Number(testWeights[test.name])
+        : 100;
     if (lastWeight !== null && testWeight !== lastWeight) {
       allWeightsSame = false;
     }
@@ -23,7 +26,7 @@ export const getTestsInitValues = (exerciseTests, scoreConfig, locale) => {
     res.push({
       id: test.id,
       name: test.name,
-      weight: String(testWeight)
+      weight: testWeight
     });
   }
 

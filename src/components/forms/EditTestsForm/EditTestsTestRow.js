@@ -4,7 +4,7 @@ import { Field } from 'redux-form';
 import { Button } from 'react-bootstrap';
 import { FormattedMessage } from 'react-intl';
 
-import { TextField } from '../Fields';
+import { TextField, NumericTextField } from '../Fields';
 import { RemoveIcon } from '../../icons';
 import './EditTests.css';
 
@@ -28,10 +28,11 @@ const EditTestsTestRow = ({
     </td>
     {!isUniform &&
       <td>
-        <Field
+        <NumericTextField
           name={`${test}.weight`}
-          component={TextField}
           label={''}
+          validateMin={0}
+          validateMax={10000}
           maxLength={5}
           groupClassName="testRow"
           disabled={readOnly}

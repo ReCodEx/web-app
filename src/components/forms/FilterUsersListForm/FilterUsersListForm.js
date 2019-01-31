@@ -33,6 +33,7 @@ const FilterUsersListForm = ({
             <Field
               name="search"
               component={TextField}
+              maxLength={255}
               label={
                 <span>
                   <FormattedMessage

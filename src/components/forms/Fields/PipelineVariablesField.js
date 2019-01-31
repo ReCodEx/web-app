@@ -102,6 +102,7 @@ const PipelineVariablesField = ({
                     key={value}
                     name={`${input.name}.${value}`}
                     component={TextField}
+                    maxLength={255}
                     label={`${atob(value)}: `}
                   />)}
           </Col>

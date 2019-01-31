@@ -1,13 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import { reduxForm, Field } from 'redux-form';
+import { reduxForm } from 'redux-form';
 import { Alert, Grid, Row, Col } from 'react-bootstrap';
 import isInt from 'validator/lib/isInt';
 import FormBox from '../../widgets/FormBox';
 import SubmitButton from '../SubmitButton';
 
-import { TextField } from '../Fields';
+import { NumericTextField } from '../Fields';
 
 const PointsForm = ({
   submitting,
@@ -82,9 +82,11 @@ const PointsForm = ({
       </Row>
       <Row>
         <Col sm={6}>
-          <Field
+          <NumericTextField
             name="overriddenPoints"
-            component={TextField}
+            validateMin={-10000}
+            validateMax={10000}
+            maxLength={6}
             label={
               <FormattedMessage
                 id="app.pointsForm.pointsOverride"
@@ -94,9 +96,11 @@ const PointsForm = ({
           />
         </Col>
         <Col sm={6}>
-          <Field
+          <NumericTextField
             name="bonusPoints"
-            component={TextField}
+            validateMin={-10000}
+            validateMax={10000}
+            maxLength={6}
             label={
               <FormattedMessage
                 id="app.pointsForm.bonusPoints"
@@ -127,33 +131,6 @@ PointsForm.propTypes = {
   maxPoints: PropTypes.number.isRequired
 };
 
-const validate = ({ overriddenPoints, bonusPoints }) => {
-  const errors = {};
-
-  if (
-    overriddenPoints.trim() !== '' &&
-    !isInt(String(overriddenPoints.trim()))
-  ) {
-    errors['overriddenPoints'] = (
-      <FormattedMessage
-        id="app.pointsForm.validation.overriddenPointsNaN"
-        defaultMessage="The override must be an integer."
-      />
-    );
-  }
-
-  if (!isInt(String(bonusPoints.trim()))) {
-    errors['bonusPoints'] = (
-      <FormattedMessage
-        id="app.pointsForm.validation.bonusPointsNaN"
-        defaultMessage="The bonus must be an integer."
-      />
-    );
-  }
-
-  return errors;
-};
-
 const warn = ({ overriddenPoints }, { maxPoints }) => {
   const warnings = {};
   if (isInt(overriddenPoints.trim())) {
@@ -175,6 +152,5 @@ export default reduxForm({
   form: 'bonus-points',
   enableReinitialize: true,
   keepDirtyOnReinitialize: false,
-  validate,
   warn
 })(PointsForm);

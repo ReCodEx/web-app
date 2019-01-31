@@ -72,6 +72,7 @@ const ExternalRegistrationForm = ({
       name="username"
       required
       component={TextField}
+      maxLength={64}
       label={
         <FormattedMessage
           id="app.externalRegistrationForm.username"

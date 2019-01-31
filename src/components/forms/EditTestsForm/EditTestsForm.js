@@ -157,21 +157,21 @@ const validate = ({ isUniform, tests }) => {
     const test = tests[i];
     const testErrors = {};
     if (!test.name || test.name === '') {
-      testErrors['name'] = (
+      testErrors.name = (
         <FormattedMessage
           id="app.editTestsForm.validation.testName"
           defaultMessage="Please fill test name."
         />
       );
     } else if (!test.name.match(/^[-a-zA-Z0-9_()[\].! ]+$/)) {
-      testErrors['name'] = (
+      testErrors.name = (
         <FormattedMessage
           id="app.editTestsForm.validation.testNameInvalidCharacters"
           defaultMessage="The test name contains invalid characters. The test name must follow certain restrictions since it is used as a name of directory."
         />
       );
     } else if (knownTests.has(test.name)) {
-      testErrors['name'] = (
+      testErrors.name = (
         <FormattedMessage
           id="app.editTestsForm.validation.testNameTaken"
           defaultMessage="This name is taken, please fill different one."
@@ -181,26 +181,9 @@ const validate = ({ isUniform, tests }) => {
       knownTests.add(test.name);
     }
 
-    if (!isUniform && (!test.weight || test.weight === '')) {
-      testErrors['weight'] = (
-        <FormattedMessage
-          id="app.editTestsForm.validation.testWeightEmpty"
-          defaultMessage="Please fill test weight."
-        />
-      );
-    }
-    const weight = Number.parseInt(test.weight);
-    if (!isUniform && (!Number.isFinite(weight) || weight < 0)) {
-      testErrors['weight'] = (
-        <FormattedMessage
-          id="app.editTestsForm.validation.testWeight"
-          defaultMessage="Test weight must be positive integer."
-        />
-      );
-    }
     testsErrors[i] = testErrors;
   }
-  errors['tests'] = testsErrors;
+  errors.tests = testsErrors;
   return errors;
 };
 

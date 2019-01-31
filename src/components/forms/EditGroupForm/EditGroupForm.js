@@ -7,7 +7,7 @@ import FormBox from '../../widgets/FormBox';
 import SubmitButton from '../SubmitButton';
 import LocalizedTextsFormField from '../LocalizedTextsFormField';
 
-import { TextField, CheckboxField } from '../Fields';
+import { TextField, CheckboxField, NumericTextField } from '../Fields';
 import {
   getLocalizedTextsInitialValues,
   validateLocalizedTextsFormData
@@ -115,6 +115,7 @@ const EditGroupForm = ({
         name="externalId"
         tabIndex={2}
         component={TextField}
+        maxLength={255}
         required
         label={
           <FormattedMessage
@@ -177,10 +178,12 @@ const EditGroupForm = ({
         </Col>
         <Col lg={6}>
           {hasThreshold &&
-            <Field
+            <NumericTextField
               name="threshold"
               tabIndex={6}
-              component={TextField}
+              validateMin={0}
+              validateMax={100}
+              maxLength={3}
               label={
                 <FormattedMessage
                   id="app.createGroup.threshold"
@@ -217,7 +220,7 @@ EditGroupForm.propTypes = {
   isSuperAdmin: PropTypes.bool
 };
 
-const validate = ({ localizedTexts, hasThreshold, threshold }) => {
+const validate = ({ localizedTexts }) => {
   const errors = {};
   validateLocalizedTextsFormData(errors, localizedTexts, ({ name }) => {
     const textErrors = {};
@@ -231,29 +234,6 @@ const validate = ({ localizedTexts, hasThreshold, threshold }) => {
     }
     return textErrors;
   });
-
-  if (hasThreshold) {
-    threshold = String(threshold);
-    const numericThreshold = Number(threshold);
-    if (
-      isNaN(numericThreshold) ||
-      threshold !== Math.round(numericThreshold).toString()
-    ) {
-      errors.threshold = (
-        <FormattedMessage
-          id="app.createGroup.validation.thresholdMustBeInteger"
-          defaultMessage="Threshold must be an integer."
-        />
-      );
-    } else if (numericThreshold < 0 || numericThreshold > 100) {
-      errors.threshold = (
-        <FormattedMessage
-          id="app.createGroup.validation.thresholdBetweenZeroHundred"
-          defaultMessage="Threshold must be an integer in between 0 and 100."
-        />
-      );
-    }
-  }
 
   return errors;
 };

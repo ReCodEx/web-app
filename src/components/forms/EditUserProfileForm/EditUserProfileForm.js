@@ -91,6 +91,7 @@ const EditUserProfileForm = ({
     <Field
       name="firstName"
       component={TextField}
+      maxLength={100}
       required
       disabled={disabledNameChange}
       label={
@@ -104,6 +105,7 @@ const EditUserProfileForm = ({
     <Field
       name="lastName"
       component={TextField}
+      maxLength={255}
       required
       disabled={disabledNameChange}
       label={
@@ -131,6 +133,7 @@ const EditUserProfileForm = ({
       name="email"
       component={TextField}
       autoComplete="off"
+      maxLength={255}
       label={
         <FormattedMessage
           id="app.changePasswordForm.email"

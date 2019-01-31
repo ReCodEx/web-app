@@ -5,7 +5,7 @@ import { reduxForm, Field } from 'redux-form';
 import { Form, Alert, Grid, Row, Col } from 'react-bootstrap';
 import SubmitButton from '../SubmitButton';
 
-import { TextField, DatetimeField } from '../Fields';
+import { TextField, DatetimeField, NumericTextField } from '../Fields';
 
 const EditShadowAssignmentPointsForm = ({
   submitting,
@@ -28,12 +28,11 @@ const EditShadowAssignmentPointsForm = ({
     <Grid fluid>
       <Row>
         <Col md={12} lg={6}>
-          <Field
+          <NumericTextField
             name="points"
-            component={TextField}
-            parse={value =>
-              isNaN(Number(value)) ? 0 : Math.round(Number(value))}
-            maxLength={10}
+            maxLength={6}
+            validateMin={-10000}
+            validateMax={10000}
             label={
               <FormattedMessage
                 id="app.editShadowAssignmentPointsForm.points"

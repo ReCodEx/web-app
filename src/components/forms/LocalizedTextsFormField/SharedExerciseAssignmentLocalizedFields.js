@@ -31,6 +31,7 @@ const SharedExerciseAssignmentLocalizedFields = ({ prefix, enabled }) =>
     <Field
       name={`${prefix}.link`}
       component={TextField}
+      maxLength={1024}
       disabled={!enabled}
       label={
         <FormattedMessage

@@ -39,6 +39,11 @@ import {
   isSuperadminRole
 } from '../../components/helpers/usersRoles';
 
+const ADD_SIS_TERM_INITIAL_VALUES = {
+  year: new Date(new Date().getTime() - 86400000 * 180).getFullYear(), // actual year (shifted by 180 days back)
+  term: ''
+};
+
 class SisIntegration extends Component {
   state = { openEdit: null };
 
@@ -191,7 +196,10 @@ class SisIntegration extends Component {
                 </FetchManyResourceRenderer>
               </Col>
               <Col lg={4}>
-                <AddSisTermForm onSubmit={createNewTerm} />
+                <AddSisTermForm
+                  onSubmit={createNewTerm}
+                  initialValues={ADD_SIS_TERM_INITIAL_VALUES}
+                />
               </Col>
             </Row>}
         </React.Fragment>
