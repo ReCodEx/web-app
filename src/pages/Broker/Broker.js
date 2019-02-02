@@ -7,7 +7,8 @@ import Page from '../../components/layout/Page';
 import { fetchBrokerStats } from '../../redux/modules/brokerStats';
 import { brokerStatsSelector } from '../../redux/selectors/brokerStats';
 import { FormattedMessage } from 'react-intl';
-import Box from '../../components/widgets/Box';
+import BrokerButtons from '../../components/Broker/BrokerButtons/BrokerButtons';
+import StatsList from '../../components/Broker/StatsList/StatsList';
 
 class Broker extends Component {
   static loadAsync = (params, dispatch) =>
@@ -16,7 +17,7 @@ class Broker extends Component {
   componentWillMount = () => this.props.loadAsync();
 
   render() {
-    const { stats } = this.props;
+    const { stats, refreshBrokerStats } = this.props;
     return (
       <Page
         title={
@@ -34,37 +35,14 @@ class Broker extends Component {
         resource={stats}
       >
         {stats =>
-          <Row>
-            <Col lg={6}>
-              <Box
-                title={
-                  <FormattedMessage
-                    id="app.broker.stats"
-                    defaultMessage="Current Statistics"
-                  />
-                }
-              >
-                <table>
-                  <tbody>
-                    {Object.keys(stats).map(name =>
-                      <tr key={name}>
-                        <td>
-                          <i>
-                            {name}
-                          </i>
-                        </td>
-                        <td className="em-padding-left">
-                          <code>
-                            {String(stats[name])}
-                          </code>
-                        </td>
-                      </tr>
-                    )}
-                  </tbody>
-                </table>
-              </Box>
-            </Col>
-          </Row>}
+          <div>
+            <BrokerButtons refreshBrokerStats={refreshBrokerStats} />
+            <Row>
+              <Col lg={6}>
+                <StatsList stats={stats} />
+              </Col>
+            </Row>
+          </div>}
       </Page>
     );
   }
@@ -72,7 +50,8 @@ class Broker extends Component {
 
 Broker.propTypes = {
   loadAsync: PropTypes.func.isRequired,
-  stats: ImmutablePropTypes.map
+  stats: ImmutablePropTypes.map,
+  refreshBrokerStats: PropTypes.func
 };
 
 export default connect(
@@ -80,6 +59,7 @@ export default connect(
     stats: brokerStatsSelector(state)
   }),
   dispatch => ({
-    loadAsync: () => Broker.loadAsync({}, dispatch)
+    loadAsync: () => Broker.loadAsync({}, dispatch),
+    refreshBrokerStats: () => Promise.all([dispatch(fetchBrokerStats())])
   })
 )(Broker);
