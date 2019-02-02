@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
-import { Table, Row, Col } from 'react-bootstrap';
+import { Row, Col } from 'react-bootstrap';
 import Page from '../../components/layout/Page';
 import { fetchBrokerStats } from '../../redux/modules/brokerStats';
 import { brokerStatsSelector } from '../../redux/selectors/brokerStats';
@@ -33,33 +33,38 @@ class Broker extends Component {
         }
         resource={stats}
       >
-        {(...stats) => {
-          console.log(stats);
-          return (
-            <Row>
-              <Col lg={6}>
-                <Box
-                  title={
-                    <FormattedMessage
-                      id="app.broker.stats"
-                      defaultMessage="Current Statistics"
-                    />
-                  }
-                >
-                  <Table>
-                    {stats.map(statsItem =>
-                      <tr key={statsItem}>
+        {stats =>
+          <Row>
+            <Col lg={6}>
+              <Box
+                title={
+                  <FormattedMessage
+                    id="app.broker.stats"
+                    defaultMessage="Current Statistics"
+                  />
+                }
+              >
+                <table>
+                  <tbody>
+                    {Object.keys(stats).map(name =>
+                      <tr key={name}>
                         <td>
-                          {statsItem}
+                          <i>
+                            {name}
+                          </i>
+                        </td>
+                        <td className="em-padding-left">
+                          <code>
+                            {String(stats[name])}
+                          </code>
                         </td>
                       </tr>
                     )}
-                  </Table>
-                </Box>
-              </Col>
-            </Row>
-          );
-        }}
+                  </tbody>
+                </table>
+              </Box>
+            </Col>
+          </Row>}
       </Page>
     );
   }
