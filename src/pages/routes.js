@@ -46,6 +46,7 @@ import Archive from './Archive';
 
 import ChangePassword from './ChangePassword';
 import ResetPassword from './ResetPassword';
+import Broker from './Broker/Broker';
 
 import { URL_PATH_PREFIX } from '../redux/helpers/api/tools';
 
@@ -146,6 +147,7 @@ const createRoutes = getState => {
           <Route path="submission-failures" component={SubmissionFailures} />
           <Route path="sis-integration" component={SisIntegration} />
           <Route path="archive" component={Archive} customLoadGroups={true} />
+          <Route path="broker" component={Broker} />
         </Route>
         <Route path="forgotten-password">
           <IndexRoute component={ResetPassword} />

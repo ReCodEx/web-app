@@ -9,7 +9,7 @@ import withLinks from '../../../helpers/withLinks';
 
 const Admin = ({
   currentUrl,
-  links: { ADMIN_INSTANCES_URI, USERS_URI, FAILURES_URI }
+  links: { ADMIN_INSTANCES_URI, USERS_URI, FAILURES_URI, BROKER_URI }
 }) =>
   <ul className="sidebar-menu">
     <MenuTitle
@@ -52,6 +52,17 @@ const Admin = ({
       }
       currentPath={currentUrl}
       link={FAILURES_URI}
+    />
+    <MenuItem
+      icon="server"
+      title={
+        <FormattedMessage
+          id="app.sidebar.menu.admin.broker"
+          defaultMessage="Broker Management"
+        />
+      }
+      currentPath={currentUrl}
+      link={BROKER_URI}
     />
   </ul>;
 
