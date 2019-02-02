@@ -1,10 +1,7 @@
 import { handleActions } from 'redux-actions';
-import {
-  initialState,
-  createRecord,
-  resourceStatus
-} from '../helpers/resourceManager';
+import { createRecord, resourceStatus } from '../helpers/resourceManager';
 import { createApiAction } from '../middleware/apiMiddleware';
+import { fromJS } from 'immutable';
 
 export const actionTypes = {
   BROKER_STATS_FETCH: 'recodex/brokerStats/FETCH',
@@ -48,7 +45,7 @@ const reducer = handleActions(
         )
     }
   ),
-  initialState
+  fromJS({}) // initial state is empty, because this is special resource
 );
 
 export default reducer;
