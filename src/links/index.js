@@ -86,7 +86,7 @@ export const linksFactory = lang => {
   // failures details
   const FAILURES_URI = `${prefix}/app/submission-failures`;
 
-  // failures details
+  // sis integration
   const SIS_INTEGRATION_URI = `${prefix}/app/sis-integration`;
 
   // download files
@@ -94,6 +94,9 @@ export const linksFactory = lang => {
 
   // special links
   const LOGIN_EXTERN_FINALIZATION = service => `/login-extern/${service}`;
+
+  // broker links
+  const BROKER_URI = `${prefix}/app/broker`;
 
   return {
     API_BASE,
@@ -139,7 +142,8 @@ export const linksFactory = lang => {
     LOGIN_EXTERN_FINALIZATION,
     FAILURES_URI,
     SIS_INTEGRATION_URI,
-    ARCHIVE_URI
+    ARCHIVE_URI,
+    BROKER_URI
   };
 };
 

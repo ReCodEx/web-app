@@ -46,6 +46,7 @@ import Archive from './Archive';
 
 import ChangePassword from './ChangePassword';
 import ResetPassword from './ResetPassword';
+import Broker from './Broker/Broker';
 
 const createRoutes = getState => {
   const getLang = state => state.params.lang;
@@ -144,6 +145,7 @@ const createRoutes = getState => {
           <Route path="submission-failures" component={SubmissionFailures} />
           <Route path="sis-integration" component={SisIntegration} />
           <Route path="archive" component={Archive} customLoadGroups={true} />
+          <Route path="broker" component={Broker} />
         </Route>
         <Route path="forgotten-password">
           <IndexRoute component={ResetPassword} />

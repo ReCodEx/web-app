@@ -51,6 +51,7 @@ import supplementaryFiles from './modules/supplementaryFiles';
 import upload from './modules/upload';
 import users from './modules/users';
 import userSwitching from './modules/userSwitching';
+import brokerStats from './modules/brokerStats';
 
 const createRecodexReducers = (token, instanceId) => ({
   app,
@@ -101,7 +102,8 @@ const createRecodexReducers = (token, instanceId) => ({
   supplementaryFiles,
   users,
   userSwitching,
-  upload
+  upload,
+  brokerStats
 });
 
 const librariesReducers = {
