@@ -13,8 +13,14 @@ import createEngine from 'redux-storage-engine-localstorage';
 import filter from 'redux-storage-decorator-filter';
 import { actionTypes as authActionTypes } from './modules/auth';
 import { actionTypes as switchingActionTypes } from './modules/userSwitching';
+import { getConfigVar } from './helpers/api/tools';
 
-const engine = filter(createEngine('recodex/store'), ['userSwitching']);
+const PERSISTENT_TOKENS_KEY_PREFIX =
+  getConfigVar('PERSISTENT_TOKENS_KEY_PREFIX') || 'recodex';
+
+const engine = filter(createEngine(`${PERSISTENT_TOKENS_KEY_PREFIX}/store`), [
+  'userSwitching'
+]);
 
 const getMiddleware = history => [
   authMiddleware,

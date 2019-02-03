@@ -1,14 +1,14 @@
-import { API_BASE } from '../redux/helpers/api/tools';
+import { API_BASE, URL_PATH_PREFIX } from '../redux/helpers/api/tools';
 
 export const linksFactory = lang => {
-  const prefix = `/${lang}`;
+  const prefix = `${URL_PATH_PREFIX}/${lang}`;
 
   // basic links
   const HOME_URI = prefix;
   const DASHBOARD_URI = `${prefix}/app`;
   const LOGIN_URI = `${prefix}/login`;
   const REGISTRATION_URI = `${prefix}/registration`;
-  const LOGOUT_URI = '/logout';
+  const LOGOUT_URI = `${URL_PATH_PREFIX}/logout`;
   const RESET_PASSWORD_URI = `${prefix}/forgotten-password`;
 
   // instance detail
@@ -93,7 +93,8 @@ export const linksFactory = lang => {
   const DOWNLOAD = fileId => `${API_BASE}/uploaded-files/${fileId}/download`;
 
   // special links
-  const LOGIN_EXTERN_FINALIZATION = service => `/login-extern/${service}`;
+  const LOGIN_EXTERN_FINALIZATION = service =>
+    `${URL_PATH_PREFIX}/login-extern/${service}`;
 
   return {
     API_BASE,
@@ -148,17 +149,26 @@ export const removeFirstSegment = url => {
     return '';
   }
 
+  if (url.startsWith(URL_PATH_PREFIX)) {
+    url = url.substr(URL_PATH_PREFIX.length);
+  }
+
   const lang = extractLanguageFromUrl(url);
   const firstSlash = url[0] === '/' ? 1 : 0;
   const langPartLength = firstSlash + lang.length;
   return url.substr(langPartLength);
 };
+
 export const changeLanguage = (url, lang) =>
-  `/${lang}${removeFirstSegment(url)}`;
+  `${URL_PATH_PREFIX}/${lang}${removeFirstSegment(url)}`;
 
 export const extractLanguageFromUrl = url => {
   if (url.length === 0) {
     return null;
+  }
+
+  if (url.startsWith(URL_PATH_PREFIX)) {
+    url = url.substr(URL_PATH_PREFIX.length);
   }
 
   url = url[0] === '/' ? url.substr(1) : url; // trim leading slash
@@ -171,8 +181,8 @@ export const isAbsolute = url => url.match('^(https?:)?//.+') !== null;
 export const makeAbsolute = url =>
   typeof window === 'undefined'
     ? url
-    : `${window.location.origin}/${url.indexOf('/') === 0
-        ? url.substr(1)
-        : url}`;
+    : `${window.location.origin}/${
+        url.indexOf('/') === 0 ? url.substr(1) : url
+      }`;
 
 export const absolute = url => (isAbsolute(url) ? url : makeAbsolute(url));

@@ -27,6 +27,7 @@ export const getConfigVar = name => {
 };
 
 export const API_BASE = getConfigVar('API_BASE');
+export const URL_PATH_PREFIX = getConfigVar('URL_PATH_PREFIX') || '';
 
 const maybeShash = endpoint => (endpoint.indexOf('/') === 0 ? '' : '/');
 const getUrl = endpoint => API_BASE + maybeShash(endpoint) + endpoint;
@@ -34,7 +35,9 @@ const getUrl = endpoint => API_BASE + maybeShash(endpoint) + endpoint;
 const maybeQuestionMark = (endpoint, query) =>
   Object.keys(query).length === 0
     ? ''
-    : endpoint.indexOf('?') === -1 ? '?' : '&';
+    : endpoint.indexOf('?') === -1
+    ? '?'
+    : '&';
 
 const encodeQueryItem = (flatten, name, value) => {
   if (Array.isArray(value)) {
