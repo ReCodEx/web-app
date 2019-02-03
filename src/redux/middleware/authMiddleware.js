@@ -9,12 +9,19 @@ import { actionTypes as usersActionTypes } from '../modules/users';
 import { CALL_API } from './apiMiddleware';
 import { changeLanguage } from '../../links';
 import { safeGet } from '../../helpers/common';
+import { getConfigVar } from '../helpers/api/tools';
 
-export const TOKEN_LOCAL_STORAGE_KEY = 'recodex/accessToken';
-export const TOKEN_COOKIES_KEY = 'recodex_accessToken';
+const PERSISTENT_TOKENS_KEY_PREFIX =
+  getConfigVar('PERSISTENT_TOKENS_KEY_PREFIX') || 'recodex';
 
-export const INSTANCEID_LOCAL_STORAGE_KEY = 'recodex/instanceId';
-export const INSTANCEID_COOKIES_KEY = 'recodex_instanceId';
+export const TOKEN_LOCAL_STORAGE_KEY =
+  PERSISTENT_TOKENS_KEY_PREFIX + '/accessToken';
+export const TOKEN_COOKIES_KEY = PERSISTENT_TOKENS_KEY_PREFIX + '_accessToken';
+
+export const INSTANCEID_LOCAL_STORAGE_KEY =
+  PERSISTENT_TOKENS_KEY_PREFIX + '/instanceId';
+export const INSTANCEID_COOKIES_KEY =
+  PERSISTENT_TOKENS_KEY_PREFIX + '_instanceId';
 
 /**
  * Store security token to both local storage and cookies.

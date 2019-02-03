@@ -47,6 +47,8 @@ import Archive from './Archive';
 import ChangePassword from './ChangePassword';
 import ResetPassword from './ResetPassword';
 
+import { URL_PATH_PREFIX } from '../redux/helpers/api/tools';
+
 const createRoutes = getState => {
   const getLang = state => state.params.lang;
   const getLinks = state => linksFactory(getLang(state));
@@ -66,7 +68,7 @@ const createRoutes = getState => {
   const checkEmptyRoute = (nextState, replace) => {
     // Make sure an empty route leads to default language
     const url = nextState.location.pathname;
-    if (url === '/') {
+    if (url === URL_PATH_PREFIX || url === `${URL_PATH_PREFIX}/`) {
       replace(changeLanguage(url, defaultLanguage));
     }
   };
@@ -80,13 +82,13 @@ const createRoutes = getState => {
   };
 
   return (
-    <Route path="/" component={App} onEnter={checkEmptyRoute}>
+    <Route path={`${URL_PATH_PREFIX}/`} component={App} onEnter={checkEmptyRoute}>
       <Route
         exact
-        path="/login-extern/:service"
+        path={`${URL_PATH_PREFIX}/login-extern/:service`}
         component={LoginExternFinalization}
       />
-      <Route path="/:lang" component={LayoutContainer} onEnter={checkLanguage}>
+      <Route path={`${URL_PATH_PREFIX}/:lang`} component={LayoutContainer} onEnter={checkLanguage}>
         <IndexRoute component={Home} />
         <Route path="login" component={Login} onEnter={onlyUnauth} />
         <Route

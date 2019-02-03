@@ -56,17 +56,24 @@ function getFileName(pattern, addPrefix = '') {
   return fileName ? addPrefix + fileName : null;
 }
 
-const bundle =
-  process.env.BUNDLE || getFileName('public/bundle-*.js', '/') || '/bundle.js';
-const style = getFileName('public/style-*.css', '/') || '/style.css';
 const config = fs.readFileSync('etc/env.json', 'utf8');
 const parsedConfig = JSON.parse(config);
+const urlPrefix = parsedConfig.URL_PATH_PREFIX || '/';
+
+const bundle =
+  process.env.BUNDLE ||
+  getFileName('public/bundle-*.js', `${urlPrefix}/`) ||
+  `${urlPrefix}/bundle.js`;
+const style =
+  getFileName('public/style-*.css', `${urlPrefix}/`) ||
+  `${urlPrefix}/style.css`;
 
 let app = new Express();
 const ejs = require('ejs').__express;
 app.set('view engine', 'ejs');
 app.engine('.ejs', ejs);
 app.use(
+  urlPrefix,
   Express.static('public', {
     immutable: true,
     maxAge: '30d',

@@ -9,12 +9,13 @@ import fs from 'fs';
 const WEBPACK_DEV_SERVER_PORT = process.env.WEBPACK_DEV_SERVER_PORT || 8081;
 const fileConfig = fs.readFileSync('etc/env.json', 'utf8');
 const parsedConfig = JSON.parse(fileConfig);
-const PORT = parsedConfig['PORT'];
-const SKIN = parsedConfig['SKIN'];
+const PORT = parsedConfig.PORT;
+const SKIN = parsedConfig.SKIN;
+const URL_PATH_PREFIX = parsedConfig.URL_PATH_PREFIX || '';
 
 let app = new Express();
 app.set('view engine', 'ejs');
-app.use(Express.static(path.join(__dirname, '../public')));
+app.use(URL_PATH_PREFIX, Express.static(path.join(__dirname, '../public')));
 
 app.get('*', (req, res) => {
   res.render('index', {
