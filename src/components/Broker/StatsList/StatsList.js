@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Box from '../../widgets/Box';
 import { FormattedMessage } from 'react-intl';
+import { Table } from 'react-bootstrap';
 
 const StatsList = ({ stats }) =>
   <Box
@@ -11,15 +12,16 @@ const StatsList = ({ stats }) =>
         defaultMessage="Current Statistics"
       />
     }
+    noPadding
   >
-    <table>
+    <Table responsive condensed hover>
       <tbody>
         {Object.keys(stats).map(name =>
           <tr key={name}>
-            <td>
-              <i>
+            <td className="em-padding-left">
+              <b>
                 {name}
-              </i>
+              </b>
             </td>
             <td className="em-padding-left">
               <code>
@@ -29,7 +31,7 @@ const StatsList = ({ stats }) =>
           </tr>
         )}
       </tbody>
-    </table>
+    </Table>
   </Box>;
 
 StatsList.propTypes = {

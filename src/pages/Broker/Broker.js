@@ -4,8 +4,12 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { Row, Col } from 'react-bootstrap';
 import Page from '../../components/layout/Page';
-import { fetchBrokerStats } from '../../redux/modules/brokerStats';
-import { brokerStatsSelector } from '../../redux/selectors/brokerStats';
+import {
+  fetchBrokerStats,
+  freezeBroker,
+  unfreezeBroker
+} from '../../redux/modules/broker';
+import { brokerStatsSelector } from '../../redux/selectors/broker';
 import { FormattedMessage } from 'react-intl';
 import BrokerButtons from '../../components/Broker/BrokerButtons/BrokerButtons';
 import StatsList from '../../components/Broker/StatsList/StatsList';
@@ -17,7 +21,12 @@ class Broker extends Component {
   componentWillMount = () => this.props.loadAsync();
 
   render() {
-    const { stats, refreshBrokerStats } = this.props;
+    const {
+      stats,
+      refreshBrokerStats,
+      freezeBroker,
+      unfreezeBroker
+    } = this.props;
     return (
       <Page
         title={
@@ -36,7 +45,11 @@ class Broker extends Component {
       >
         {stats =>
           <div>
-            <BrokerButtons refreshBrokerStats={refreshBrokerStats} />
+            <BrokerButtons
+              refreshBrokerStats={refreshBrokerStats}
+              freezeBroker={freezeBroker}
+              unfreezeBroker={unfreezeBroker}
+            />
             <Row>
               <Col lg={6}>
                 <StatsList stats={stats} />
@@ -51,7 +64,9 @@ class Broker extends Component {
 Broker.propTypes = {
   loadAsync: PropTypes.func.isRequired,
   stats: ImmutablePropTypes.map,
-  refreshBrokerStats: PropTypes.func
+  refreshBrokerStats: PropTypes.func.isRequired,
+  freezeBroker: PropTypes.func.isRequired,
+  unfreezeBroker: PropTypes.func.isRequired
 };
 
 export default connect(
@@ -60,6 +75,10 @@ export default connect(
   }),
   dispatch => ({
     loadAsync: () => Broker.loadAsync({}, dispatch),
-    refreshBrokerStats: () => Promise.all([dispatch(fetchBrokerStats())])
+    refreshBrokerStats: () => dispatch(fetchBrokerStats()),
+    freezeBroker: () =>
+      dispatch(freezeBroker()).then(() => dispatch(fetchBrokerStats())),
+    unfreezeBroker: () =>
+      dispatch(unfreezeBroker()).then(() => dispatch(fetchBrokerStats()))
   })
 )(Broker);
