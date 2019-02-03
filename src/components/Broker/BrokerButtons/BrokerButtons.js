@@ -12,7 +12,7 @@ const BrokerButtons = ({ refreshBrokerStats, freezeBroker, unfreezeBroker }) =>
     <ButtonGroup>
       <Button onClick={refreshBrokerStats} bsStyle="primary">
         <RefreshIcon gapRight />
-        <FormattedMessage id="app.broker.refresh" defaultMessage="Refresh" />
+        <FormattedMessage id="generic.refresh" defaultMessage="Refresh" />
       </Button>
 
       <Confirm
