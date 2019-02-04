@@ -58,7 +58,7 @@ function getFileName(pattern, addPrefix = '') {
 
 const config = fs.readFileSync('etc/env.json', 'utf8');
 const parsedConfig = JSON.parse(config);
-const urlPrefix = parsedConfig.URL_PATH_PREFIX || '/';
+const urlPrefix = parsedConfig.URL_PATH_PREFIX || '';
 
 const bundle =
   process.env.BUNDLE ||
@@ -91,7 +91,8 @@ const renderWithoutSSR = (res, renderProps) => {
     skin: parsedConfig['SKIN'],
     bundle,
     style,
-    config
+	config,
+	urlPrefix
   });
 };
 
@@ -111,7 +112,8 @@ const renderPage = (res, store, renderProps) => {
     skin: parsedConfig['SKIN'],
     bundle,
     style,
-    config
+	config,
+	urlPrefix
   });
 };
 

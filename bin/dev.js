@@ -11,11 +11,11 @@ const fileConfig = fs.readFileSync('etc/env.json', 'utf8');
 const parsedConfig = JSON.parse(fileConfig);
 const PORT = parsedConfig.PORT;
 const SKIN = parsedConfig.SKIN;
-const URL_PATH_PREFIX = parsedConfig.URL_PATH_PREFIX || '';
+const urlPrefix = parsedConfig.URL_PATH_PREFIX || '';
 
 let app = new Express();
 app.set('view engine', 'ejs');
-app.use(URL_PATH_PREFIX, Express.static(path.join(__dirname, '../public')));
+app.use(urlPrefix, Express.static(path.join(__dirname, '../public')));
 
 app.get('*', (req, res) => {
   res.render('index', {
@@ -30,7 +30,8 @@ app.get('*', (req, res) => {
     skin: SKIN,
     style: `http://localhost:${WEBPACK_DEV_SERVER_PORT}/style.css`,
     bundle: `http://localhost:${WEBPACK_DEV_SERVER_PORT}/bundle.js`,
-    config: fileConfig
+	config: fileConfig,
+	urlPrefix
   });
 });
 
