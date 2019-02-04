@@ -7,6 +7,7 @@ import PageContent from '../../components/layout/PageContent';
 import Icon from '../../components/icons';
 
 import withLinks from '../../helpers/withLinks';
+import { URL_PATH_PREFIX } from '../../redux/helpers/api/tools';
 
 const Home = ({ links: { GITHUB_BUGS_URL } }) =>
   <PageContent
@@ -29,7 +30,7 @@ const Home = ({ links: { GITHUB_BUGS_URL } }) =>
       <Row style={{ marginTop: '80px' }}>
         <Col sm={6}>
           <Image
-            src={'/public/logo.png'}
+            src={`${URL_PATH_PREFIX}/public/logo.png`}
             className="img-responsive center-block"
           />
         </Col>
@@ -93,7 +94,7 @@ const Home = ({ links: { GITHUB_BUGS_URL } }) =>
             </Col>
             <Col sm={6}>
               <Image
-                src={'/public/matfyz_logo.png'}
+                src={`${URL_PATH_PREFIX}/public/matfyz_logo.png`}
                 className="img-responsive center-block"
                 width={250}
               />
