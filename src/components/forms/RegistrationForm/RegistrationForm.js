@@ -12,7 +12,8 @@ import {
   TextField,
   PasswordField,
   PasswordStrength,
-  SelectField
+  SelectField,
+  CheckboxField
 } from '../Fields';
 import { validateRegistrationData } from '../../../redux/modules/users';
 import SubmitButton from '../SubmitButton';
@@ -26,13 +27,14 @@ const RegistrationForm = ({
   anyTouched,
   instances,
   asyncValidating,
-  invalid
-}) =>
+  invalid,
+  error
+}) => (
   <FormBox
     title={
       <FormattedMessage
         id="app.registrationForm.title"
-        defaultMessage="Create ReCodEx account"
+        defaultMessage="Create ReCodEx Account"
       />
     }
     type={submitSucceeded ? 'success' : undefined}
@@ -71,18 +73,20 @@ const RegistrationForm = ({
       </div>
     }
   >
-    {submitFailed &&
+    {submitFailed && (
       <Alert bsStyle="danger">
         <FormattedMessage
           id="app.registrationForm.failed"
           defaultMessage="Login failed. Please check your credentials."
         />
-      </Alert>}
+      </Alert>
+    )}
 
     <Field
       name="firstName"
       component={TextField}
       maxLength={100}
+      ignoreDirty
       label={
         <FormattedMessage
           id="app.registrationForm.firstName"
@@ -94,6 +98,7 @@ const RegistrationForm = ({
       name="lastName"
       component={TextField}
       maxLength={100}
+      ignoreDirty
       label={
         <FormattedMessage
           id="app.registrationForm.lastName"
@@ -104,6 +109,8 @@ const RegistrationForm = ({
     <Field
       name="email"
       component={EmailField}
+      maxLength={100}
+      ignoreDirty
       label={
         <FormattedMessage
           id="app.registrationForm.email"
@@ -115,8 +122,11 @@ const RegistrationForm = ({
     <Field
       name="password"
       component={PasswordField}
+      maxLength={100}
+      ignoreDirty
       onKeyDown={() =>
-        eventAggregator('RegistrationFormAsyncValidate', asyncValidate, 500)}
+        eventAggregator('RegistrationFormAsyncValidate', asyncValidate, 500)
+      }
       label={
         <FormattedMessage
           id="app.registrationForm.password"
@@ -139,6 +149,8 @@ const RegistrationForm = ({
     <Field
       name="passwordConfirm"
       component={PasswordField}
+      maxLength={100}
+      ignoreDirty
       label={
         <FormattedMessage
           id="app.registrationForm.passwordConfirm"
@@ -151,16 +163,31 @@ const RegistrationForm = ({
       name="instanceId"
       required
       component={SelectField}
+      ignoreDirty
       label={
         <FormattedMessage
           id="app.externalRegistrationForm.instance"
           defaultMessage="Instance:"
         />
       }
-      addEmptyOption
       options={instances.map(({ id: key, name }) => ({ key, name }))}
     />
-  </FormBox>;
+
+    <Field
+      name="gdpr"
+      component={CheckboxField}
+      ignoreDirty
+      label={
+        <FormattedMessage
+          id="app.externalRegistrationForm.gdprConfirm"
+          defaultMessage="I agree that my personal data will be processed by ReCodEx in accordance with GDPR policy."
+        />
+      }
+    />
+
+    {error && <Alert bsStyle="danger">{error}</Alert>}
+  </FormBox>
+);
 
 RegistrationForm.propTypes = {
   instances: PropTypes.array.isRequired,
@@ -173,7 +200,8 @@ RegistrationForm.propTypes = {
   anyTouched: PropTypes.bool,
   asyncValidating: PropTypes.oneOfType([PropTypes.bool, PropTypes.string])
     .isRequired,
-  invalid: PropTypes.bool
+  invalid: PropTypes.bool,
+  error: PropTypes.object
 };
 
 const validate = ({
@@ -182,12 +210,13 @@ const validate = ({
   email,
   password,
   passwordConfirm,
-  instanceId
+  instanceId,
+  gdpr
 }) => {
   const errors = {};
 
   if (!firstName) {
-    errors['firstName'] = (
+    errors.firstName = (
       <FormattedMessage
         id="app.registrationForm.validation.emptyFirstName"
         defaultMessage="First name cannot be empty."
@@ -196,7 +225,7 @@ const validate = ({
   }
 
   if (firstName && firstName.length < 2) {
-    errors['firstName'] = (
+    errors.firstName = (
       <FormattedMessage
         id="app.registrationForm.validation.shortFirstName"
         defaultMessage="First name must contain at least 2 characters."
@@ -205,7 +234,7 @@ const validate = ({
   }
 
   if (!lastName) {
-    errors['lastName'] = (
+    errors.lastName = (
       <FormattedMessage
         id="app.registrationForm.validation.emptyLastName"
         defaultMessage="Last name cannot be empty."
@@ -214,7 +243,7 @@ const validate = ({
   }
 
   if (lastName && lastName.length < 2) {
-    errors['lastName'] = (
+    errors.lastName = (
       <FormattedMessage
         id="app.registrationForm.validation.shortLastName"
         defaultMessage="Last name must contain at least 2 characters."
@@ -223,14 +252,14 @@ const validate = ({
   }
 
   if (!email) {
-    errors['email'] = (
+    errors.email = (
       <FormattedMessage
         id="app.registrationForm.validation.emptyEmail"
         defaultMessage="E-mail address cannot be empty."
       />
     );
   } else if (!isEmail(email)) {
-    errors['email'] = (
+    errors.email = (
       <FormattedMessage
         id="app.registrationForm.validation.emailIsNotAnEmail"
         defaultMessage="E-mail address is not valid."
@@ -239,7 +268,7 @@ const validate = ({
   }
 
   if (!password) {
-    errors['password'] = (
+    errors.password = (
       <FormattedMessage
         id="app.registrationForm.validation.emptyPassword"
         defaultMessage="Password cannot be empty."
@@ -248,7 +277,7 @@ const validate = ({
   }
 
   if (!passwordConfirm) {
-    errors['passwordConfirm'] = (
+    errors.passwordConfirm = (
       <FormattedMessage
         id="app.registrationForm.validation.emptyPassword"
         defaultMessage="Password cannot be empty."
@@ -257,19 +286,28 @@ const validate = ({
   }
 
   if (password !== passwordConfirm) {
-    errors['passwordConfirm'] = (
+    errors.passwordConfirm = (
       <FormattedMessage
         id="app.registrationForm.validation.passwordDontMatch"
-        defaultMessage="Passwords don't match."
+        defaultMessage="Passwords do not match."
       />
     );
   }
 
   if (!instanceId) {
-    errors['instanceId'] = (
+    errors.instanceId = (
       <FormattedMessage
         id="app.externalRegistrationForm.validation.instanceId"
         defaultMessage="Please select one of the instances."
+      />
+    );
+  }
+
+  if (!gdpr) {
+    errors._error = (
+      <FormattedMessage
+        id="app.externalRegistrationForm.validation.gdpr"
+        defaultMessage="Your agreement is required prior to registration."
       />
     );
   }
@@ -304,6 +342,8 @@ const asyncValidate = ({ email = '', password = '' }, dispatch) =>
 
 export default reduxForm({
   form: 'registration',
+  enableReinitialize: true,
+  keepDirtyOnReinitialize: false,
   validate,
   asyncValidate,
   asyncBlurFields: ['email', 'password', 'passwordConfirm']

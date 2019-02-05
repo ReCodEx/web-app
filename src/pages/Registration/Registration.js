@@ -5,6 +5,7 @@ import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 import { reset, startAsyncValidation } from 'redux-form';
+import { defaultMemoize } from 'reselect';
 
 import { Row, Col } from 'react-bootstrap';
 import PageContent from '../../components/layout/PageContent';
@@ -28,6 +29,20 @@ import withLinks from '../../helpers/withLinks';
 const ALLOW_NORMAL_REGISTRATION = getConfigVar('ALLOW_NORMAL_REGISTRATION');
 const ALLOW_LDAP_REGISTRATION = getConfigVar('ALLOW_LDAP_REGISTRATION');
 const ALLOW_CAS_REGISTRATION = getConfigVar('ALLOW_CAS_REGISTRATION');
+
+const getInitialValues = defaultMemoize(instances => {
+  const firstInstance = instances && instances[0];
+  return {
+    firstName: '',
+    lastName: '',
+    email: '',
+    password: '',
+    passwordConfirm: '',
+    passwordStrength: null,
+    instanceId: firstInstance && firstInstance.id,
+    gdpr: false
+  };
+});
 
 class Registration extends Component {
   componentWillMount = () => {
@@ -54,6 +69,10 @@ class Registration extends Component {
       links: { HOME_URI }
     } = this.props;
 
+    const registratorsCount =
+      (ALLOW_NORMAL_REGISTRATION ? 1 : 0) +
+      (ALLOW_LDAP_REGISTRATION ? 1 : 0) +
+      (ALLOW_CAS_REGISTRATION ? 1 : 0);
     return (
       <PageContent
         title={
@@ -81,30 +100,56 @@ class Registration extends Component {
         ]}
       >
         <ResourceRenderer resource={instances.toArray()} returnAsArray>
-          {instances =>
+          {instances => (
             <Row>
-              {ALLOW_NORMAL_REGISTRATION &&
-                <Col lg={4} md={6} mdOffset={0} sm={8} smOffset={2}>
+              {ALLOW_NORMAL_REGISTRATION && (
+                <Col
+                  lg={4}
+                  lgOffset={registratorsCount === 1 ? 4 : 0}
+                  md={6}
+                  mdOffset={registratorsCount === 1 ? 3 : 0}
+                  sm={12}
+                  smOffset={0}
+                >
                   <RegistrationForm
                     instances={instances}
+                    initialValues={getInitialValues(instances)}
                     onSubmit={createAccount}
                   />
-                </Col>}
-              {ALLOW_LDAP_REGISTRATION &&
-                <Col lg={4} md={6} mdOffset={0} sm={8} smOffset={2}>
+                </Col>
+              )}
+              {ALLOW_LDAP_REGISTRATION && (
+                <Col
+                  lg={4}
+                  lgOffset={registratorsCount === 1 ? 4 : 0}
+                  md={6}
+                  mdOffset={registratorsCount === 1 ? 3 : 0}
+                  sm={12}
+                  smOffset={0}
+                >
                   <ExternalRegistrationForm
                     instances={instances}
                     onSubmit={createExternalAccount()}
                   />
-                </Col>}
-              {ALLOW_CAS_REGISTRATION &&
-                <Col lg={4} md={6} mdOffset={0} sm={8} smOffset={2}>
+                </Col>
+              )}
+              {ALLOW_CAS_REGISTRATION && (
+                <Col
+                  lg={4}
+                  lgOffset={registratorsCount === 1 ? 4 : 0}
+                  md={6}
+                  mdOffset={registratorsCount === 1 ? 3 : 0}
+                  sm={12}
+                  smOffset={0}
+                >
                   <RegistrationCAS
                     instances={instances}
                     onSubmit={createExternalAccount('cas')}
                   />
-                </Col>}
-            </Row>}
+                </Col>
+              )}
+            </Row>
+          )}
         </ResourceRenderer>
       </PageContent>
     );

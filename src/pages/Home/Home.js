@@ -9,7 +9,7 @@ import Icon from '../../components/icons';
 import withLinks from '../../helpers/withLinks';
 import { URL_PATH_PREFIX } from '../../redux/helpers/api/tools';
 
-const Home = ({ links: { GITHUB_BUGS_URL } }) =>
+const Home = ({ links: { GITHUB_BUGS_URL } }) => (
   <PageContent
     title={
       <FormattedMessage
@@ -60,13 +60,13 @@ const Home = ({ links: { GITHUB_BUGS_URL } }) =>
           <p>
             <FormattedHTMLMessage
               id="app.homepage.aboutContentP1"
-              defaultMessage="ReCodEx was born in 2016 as final work for <i>Software project</i> class. It is replacement for old system CodEx used at MFF UK since 2006. The project is opensource under <a href=&quot;https://opensource.org/licenses/MIT&quot;>MIT</a> licence hosted on <a href=&quot;https://github.com/ReCodEx&quot;>GitHub</a>. More detailed info is on <a href=&quot;https://github.com/ReCodEx/wiki/wiki&quot;>Wiki</a> page of the project."
+              defaultMessage='ReCodEx was born in 2016 as final work for <i>Software project</i> class. It is replacement for old system CodEx used at MFF UK since 2006. The project is opensource under <a href="https://opensource.org/licenses/MIT">MIT</a> licence hosted on <a href="https://github.com/ReCodEx">GitHub</a>. More detailed info is on <a href="https://github.com/ReCodEx/wiki/wiki">Wiki</a> page of the project.'
             />
           </p>
           <p>
             <FormattedHTMLMessage
               id="app.homepage.aboutContentP2"
-              defaultMessage="During development was found number of <a href=&quot;https://github.com/ReCodEx/wiki/wiki/Conclusion#further-improvements&quot;>topics</a> for following student works of differend kinds. In case of interest in make this project more awesome, please contact one of the <a href=&quot;https://github.com/orgs/ReCodEx/people&quot;>authors</a> or teachers."
+              defaultMessage='During development was found number of <a href="https://github.com/ReCodEx/wiki/wiki/Conclusion#further-improvements">topics</a> for following student works of differend kinds. In case of interest in make this project more awesome, please contact one of the <a href="https://github.com/orgs/ReCodEx/people">authors</a> or teachers.'
             />
           </p>
           <p>
@@ -110,7 +110,7 @@ const Home = ({ links: { GITHUB_BUGS_URL } }) =>
           <p>
             <FormattedHTMLMessage
               id="app.homepage.helpContent"
-              defaultMessage="If you have any issues with ReCodEx, please consult the <a href=&quot;https://github.com/ReCodEx/wiki/wiki/User-documentation&quot;>user documentation</a> first."
+              defaultMessage='If you have any issues with ReCodEx, please consult the <a href="https://github.com/ReCodEx/wiki/wiki/User-documentation">user documentation</a> first.'
             />
           </p>
         </Col>
@@ -144,7 +144,8 @@ const Home = ({ links: { GITHUB_BUGS_URL } }) =>
         </Col>
       </Row>
     </div>
-  </PageContent>;
+  </PageContent>
+);
 
 Home.propTypes = {
   links: PropTypes.object
