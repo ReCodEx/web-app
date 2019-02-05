@@ -13,8 +13,11 @@ import CASLoginBox from '../../containers/CAS';
 
 import { login } from '../../redux/modules/auth';
 import { isLoggedIn } from '../../redux/selectors/auth';
+import { getConfigVar } from '../../redux/helpers/api/tools';
 
 import withLinks from '../../helpers/withLinks';
+
+const ALLOW_CAS_REGISTRATION = getConfigVar('ALLOW_CAS_REGISTRATION');
 
 class Login extends Component {
   componentWillMount = () => {
@@ -48,7 +51,10 @@ class Login extends Component {
   }
 
   render() {
-    const { login, links: { HOME_URI, RESET_PASSWORD_URI } } = this.props;
+    const {
+      login,
+      links: { HOME_URI, RESET_PASSWORD_URI }
+    } = this.props;
 
     return (
       <PageContent
@@ -74,7 +80,14 @@ class Login extends Component {
         ]}
       >
         <Row>
-          <Col lg={4} lgOffset={1} md={6} mdOffset={0} sm={8} smOffset={2}>
+          <Col
+            lg={4}
+            lgOffset={ALLOW_CAS_REGISTRATION ? 1 : 4}
+            md={6}
+            mdOffset={ALLOW_CAS_REGISTRATION ? 0 : 3}
+            sm={8}
+            smOffset={2}
+          >
             <LoginForm onSubmit={login} />
             <p className="text-center">
               <FormattedMessage
@@ -89,9 +102,11 @@ class Login extends Component {
               </Link>
             </p>
           </Col>
-          <Col lg={4} lgOffset={1} md={6} mdOffset={0} sm={8} smOffset={2}>
-            <CASLoginBox />
-          </Col>
+          {ALLOW_CAS_REGISTRATION && (
+            <Col lg={4} lgOffset={2} md={6} mdOffset={0} sm={8} smOffset={2}>
+              <CASLoginBox />
+            </Col>
+          )}
         </Row>
       </PageContent>
     );
