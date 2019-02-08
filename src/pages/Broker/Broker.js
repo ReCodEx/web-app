@@ -13,6 +13,7 @@ import { brokerStatsSelector } from '../../redux/selectors/broker';
 import { FormattedMessage } from 'react-intl';
 import BrokerButtons from '../../components/Broker/BrokerButtons/BrokerButtons';
 import StatsList from '../../components/Broker/StatsList/StatsList';
+import { isLoggedAsSuperAdmin } from '../../redux/selectors/users';
 
 class Broker extends Component {
   static loadAsync = (params, dispatch) =>
@@ -23,6 +24,7 @@ class Broker extends Component {
   render() {
     const {
       stats,
+      isSuperAdmin,
       refreshBrokerStats,
       freezeBroker,
       unfreezeBroker
@@ -44,6 +46,7 @@ class Broker extends Component {
         resource={stats}
       >
         {stats =>
+          isSuperAdmin &&
           <React.Fragment>
             <BrokerButtons
               refreshBrokerStats={refreshBrokerStats}
@@ -64,6 +67,7 @@ class Broker extends Component {
 Broker.propTypes = {
   loadAsync: PropTypes.func.isRequired,
   stats: ImmutablePropTypes.map,
+  isSuperAdmin: PropTypes.bool.isRequired,
   refreshBrokerStats: PropTypes.func.isRequired,
   freezeBroker: PropTypes.func.isRequired,
   unfreezeBroker: PropTypes.func.isRequired
@@ -71,7 +75,8 @@ Broker.propTypes = {
 
 export default connect(
   state => ({
-    stats: brokerStatsSelector(state)
+    stats: brokerStatsSelector(state),
+    isSuperAdmin: isLoggedAsSuperAdmin(state)
   }),
   dispatch => ({
     loadAsync: () => Broker.loadAsync({}, dispatch),
