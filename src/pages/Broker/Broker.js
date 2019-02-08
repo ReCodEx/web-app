@@ -44,7 +44,7 @@ class Broker extends Component {
         resource={stats}
       >
         {stats =>
-          <div>
+          <React.Fragment>
             <BrokerButtons
               refreshBrokerStats={refreshBrokerStats}
               freezeBroker={freezeBroker}
@@ -55,7 +55,7 @@ class Broker extends Component {
                 <StatsList stats={stats} />
               </Col>
             </Row>
-          </div>}
+          </React.Fragment>}
       </Page>
     );
   }
