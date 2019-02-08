@@ -17,7 +17,7 @@ const BrokerButtons = ({ refreshBrokerStats, freezeBroker, unfreezeBroker }) =>
 
       <Confirm
         id={'freeze-broker'}
-        onConfirmed={() => freezeBroker()}
+        onConfirmed={freezeBroker}
         question={
           <FormattedMessage
             id="app.broker.confirmFreeze"
@@ -33,7 +33,7 @@ const BrokerButtons = ({ refreshBrokerStats, freezeBroker, unfreezeBroker }) =>
 
       <Confirm
         id={'unfreeze-broker'}
-        onConfirmed={() => unfreezeBroker()}
+        onConfirmed={unfreezeBroker}
         question={
           <FormattedMessage
             id="app.broker.confirmUnfreeze"
