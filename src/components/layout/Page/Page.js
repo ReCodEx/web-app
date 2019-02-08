@@ -7,7 +7,7 @@ import ResourceRenderer from '../../helpers/ResourceRenderer';
 const Page = ({
   title,
   description,
-  resource,
+  resource = null,
   loadingTitle = (
     <FormattedMessage id="generic.loading" defaultMessage="Loading..." />
   ),
@@ -32,26 +32,41 @@ const Page = ({
   children,
   ...props
 }) =>
-  <ResourceRenderer
-    resource={resource}
-    loading={
-      <PageContent title={loadingTitle} description={loadingDescription} />
-    }
-    failed={<PageContent title={failedTitle} description={failedDescription} />}
-  >
-    {(...resources) =>
-      <PageContent
-        {...props}
-        title={typeof title === 'function' ? title(...resources) : title}
-        description={
-          typeof description === 'function'
-            ? description(...resources)
-            : description
-        }
-      >
-        {typeof children === 'function' ? children(...resources) : children}
-      </PageContent>}
-  </ResourceRenderer>;
+  resource ? (
+    <ResourceRenderer
+      resource={resource}
+      loading={
+        <PageContent title={loadingTitle} description={loadingDescription} />
+      }
+      failed={
+        <PageContent title={failedTitle} description={failedDescription} />
+      }
+    >
+      {(...resources) => (
+        <PageContent
+          {...props}
+          title={typeof title === 'function' ? title(...resources) : title}
+          description={
+            typeof description === 'function'
+              ? description(...resources)
+              : description
+          }
+        >
+          {typeof children === 'function' ? children(...resources) : children}
+        </PageContent>
+      )}
+    </ResourceRenderer>
+  ) : (
+    <PageContent
+      {...props}
+      title={typeof title === 'function' ? title() : title}
+      description={
+        typeof description === 'function' ? description() : description
+      }
+    >
+      {typeof children === 'function' ? children() : children}
+    </PageContent>
+  );
 
 const stringOrFormattedMessage = PropTypes.oneOfType([
   PropTypes.string,

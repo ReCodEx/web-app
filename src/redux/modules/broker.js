@@ -52,48 +52,41 @@ const reducer = handleActions(
     {},
     {
       [actionTypes.BROKER_STATS_FETCH_PENDING]: state =>
-        state.setIn(['resources', 'stats'], createRecord()),
+        state.set('stats', createRecord()),
 
       [actionTypes.BROKER_STATS_FETCH_FULFILLED]: (state, { payload }) =>
-        state.setIn(
-          ['resources', 'stats'],
+        state.set(
+          'stats',
           createRecord({ state: resourceStatus.FULFILLED, data: payload })
         ),
 
       [actionTypes.BROKER_STATS_FETCH_REJECTED]: state =>
-        state.setIn(
-          ['resources', 'stats'],
-          createRecord({ state: resourceStatus.FAILED })
-        ),
+        state.set('stats', createRecord({ state: resourceStatus.FAILED })),
 
       [actionTypes.BROKER_FREEZE_PENDING]: state =>
-        state.setIn(['resources', 'freeze'], createRecord()),
+        state.set('freezeActionStatus', resourceStatus.PENDING),
+
       [actionTypes.BROKER_FREEZE_FULFILLED]: state =>
-        state.setIn(
-          ['resources', 'freeze'],
-          createRecord({ state: resourceStatus.FULFILLED })
-        ),
+        state.set('freezeActionStatus', resourceStatus.FULFILLED),
+
       [actionTypes.BROKER_FREEZE_REJECTED]: state =>
-        state.setIn(
-          ['resources', 'freeze'],
-          createRecord({ state: resourceStatus.FAILED })
-        ),
+        state.set('freezeActionStatus', resourceStatus.FAILED),
 
       [actionTypes.BROKER_UNFREEZE_PENDING]: state =>
-        state.setIn(['resources', 'unfreeze'], createRecord()),
+        state.set('unfreezeActionStatus', resourceStatus.PENDING),
+
       [actionTypes.BROKER_UNFREEZE_FULFILLED]: state =>
-        state.setIn(
-          ['resources', 'unfreeze'],
-          createRecord({ state: resourceStatus.FULFILLED })
-        ),
+        state.set('unfreezeActionStatus', resourceStatus.FULFILLED),
+
       [actionTypes.BROKER_UNFREEZE_REJECTED]: state =>
-        state.setIn(
-          ['resources', 'unfreeze'],
-          createRecord({ state: resourceStatus.FAILED })
-        )
+        state.set('unfreezeActionStatus', resourceStatus.FAILED)
     }
   ),
-  fromJS({}) // initial state is empty, because this is special resource
+  fromJS({
+    stats: null,
+    freezeActionStatus: null,
+    unfreezeActionStatus: null
+  })
 );
 
 export default reducer;
