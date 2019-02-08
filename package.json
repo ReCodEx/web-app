@@ -22,7 +22,7 @@
     "start": "node bin/server.js",
     "deploy": "mkdir -p ./prod && mkdir -p ./prod/etc && cp -rf ./views ./prod && cp -rf ./bin ./prod && cp -n ./etc/env.json.example ./prod/etc/env.json && rm -f ./prod/public/bundle* && rm -f ./prod/public/style* && cp -rf ./public ./prod",
     "exportStrings": "rm -rf node_modules/.cache/babel-loader/* && rm -rf tmp/messages/* && npm run build && babel-node bin/manageTranslations.js",
-    "format": "prettier --single-quote --write \"src/**/*.js\""
+    "format": "prettier --config .prettierrc --write \"src/**/*.js\""
   },
   "dependencies": {
     "@babel/plugin-transform-react-inline-elements": "^7.0.0",
@@ -145,7 +145,7 @@
     "mock-local-storage": "^1.0.2",
     "node-sass": "^4.9.3",
     "postcss-loader": "^2.0.5",
-    "prettier": "^1.6.4",
+    "prettier": "^1.16.4",
     "react-intl-translations-manager": "^5.0.0",
     "request": "^2.61.0",
     "scroll-behavior": "^0.4.0",
