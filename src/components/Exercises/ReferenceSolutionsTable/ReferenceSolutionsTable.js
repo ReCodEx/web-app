@@ -11,7 +11,7 @@ const ReferenceSolutionsTable = ({
   runtimeEnvironments,
   renderButtons = () => null,
   ...props
-}) =>
+}) => (
   <Table {...props} className={styles.refSolutions}>
     <thead>
       <tr>
@@ -36,20 +36,21 @@ const ReferenceSolutionsTable = ({
     </thead>
     {referenceSolutions
       .sort((a, b) => a.solution.createdAt - b.solution.createdAt)
-      .map(solution =>
+      .map(solution => (
         <ReferenceSolutionsTableRow
           key={solution.id}
           {...solution}
           runtimeEnvironments={runtimeEnvironments}
           renderButtons={renderButtons}
         />
-      )}
-  </Table>;
+      ))}
+  </Table>
+);
 
 ReferenceSolutionsTable.propTypes = {
   referenceSolutions: PropTypes.array.isRequired,
   runtimeEnvironments: PropTypes.array.isRequired,
-  renderButtons: PropTypes.func
+  renderButtons: PropTypes.func,
 };
 
 export default ReferenceSolutionsTable;

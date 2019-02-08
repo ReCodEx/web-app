@@ -9,7 +9,7 @@ const resourceName = 'boxes';
 const { actions, reduceActions } = factory({
   resourceName,
   idFieldName: 'name',
-  apiEndpointFactory: (name = '') => `/pipelines/boxes/${name}`
+  apiEndpointFactory: (name = '') => `/pipelines/boxes/${name}`,
 });
 
 export const fetchBoxTypes = actions.fetchMany;

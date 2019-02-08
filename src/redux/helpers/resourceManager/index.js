@@ -16,13 +16,13 @@ import {
   didInvalidate,
   isTooOld,
   afterTenMinutesIsTooOld,
-  isReady
+  isReady,
 } from './status';
 
 import {
   defaultApiEndpointFactory,
   defaultSelectorFactory,
-  defaultNeedsRefetching
+  defaultNeedsRefetching,
 } from './utils';
 
 export {
@@ -44,7 +44,7 @@ export {
   getJsData,
   getId,
   defaultNeedsRefetching,
-  createRecord
+  createRecord,
 };
 
 /**
@@ -55,7 +55,7 @@ const createResourceManager = ({
   resourceName,
   selector = defaultSelectorFactory(resourceName),
   apiEndpointFactory = defaultApiEndpointFactory(resourceName),
-  needsRefetching = defaultNeedsRefetching
+  needsRefetching = defaultNeedsRefetching,
 }) => {
   const actionTypes = actionTypesFactory(resourceName);
   return {
@@ -66,9 +66,9 @@ const createResourceManager = ({
       apiEndpointFactory,
       needsRefetching,
       createAction,
-      createApiAction
+      createApiAction,
     }), // @todo rename to actionCreators
-    reduceActions: reducerFactory(actionTypes, idFieldName)
+    reduceActions: reducerFactory(actionTypes, idFieldName),
   };
 };
 

@@ -5,7 +5,7 @@ const resourceName = 'sisPossibleParents';
 const { actions, reduceActions } = factory({
   resourceName,
   apiEndpointFactory: courseId =>
-    `/extensions/sis/remote-courses/${courseId}/possible-parents`
+    `/extensions/sis/remote-courses/${courseId}/possible-parents`,
 });
 
 /**

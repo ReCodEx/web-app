@@ -14,7 +14,7 @@ const dropZoneStyles = {
   marginBottom: 20,
   borderRadius: 5,
   fontSize: 20,
-  textAlign: 'center'
+  textAlign: 'center',
 };
 
 const Upload = ({
@@ -26,8 +26,8 @@ const Upload = ({
   removeFile,
   returnFile,
   removeFailedFile,
-  retryUploadFile
-}) =>
+  retryUploadFile,
+}) => (
   <div>
     <DropZone onDrop={uploadFiles} style={dropZoneStyles}>
       <p>
@@ -50,7 +50,7 @@ const Upload = ({
     {(uploadingFiles.length > 0 ||
       attachedFiles.length > 0 ||
       failedFiles.length > 0 ||
-      removedFiles.length > 0) &&
+      removedFiles.length > 0) && (
       <UploadsTable
         uploadingFiles={uploadingFiles}
         attachedFiles={attachedFiles}
@@ -60,8 +60,10 @@ const Upload = ({
         returnFile={returnFile}
         removeFailedFile={removeFailedFile}
         retryUploadFile={retryUploadFile}
-      />}
-  </div>;
+      />
+    )}
+  </div>
+);
 
 Upload.propTypes = {
   uploadingFiles: PropTypes.array.isRequired,
@@ -72,7 +74,7 @@ Upload.propTypes = {
   removeFile: PropTypes.func.isRequired,
   returnFile: PropTypes.func.isRequired,
   removeFailedFile: PropTypes.func.isRequired,
-  retryUploadFile: PropTypes.func.isRequired
+  retryUploadFile: PropTypes.func.isRequired,
 };
 
 export default Upload;

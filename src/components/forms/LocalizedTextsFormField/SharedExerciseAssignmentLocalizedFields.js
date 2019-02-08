@@ -6,15 +6,15 @@ import { TextField, MarkdownTextAreaField } from '../Fields';
 
 const isURL = url => {
   const pattern = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-/]))?/;
-  return url.trim() !== '' && !pattern.test(url.trim())
-    ? <FormattedMessage
-        id="app.editAssignmentForm.localized.urlValidation"
-        defaultMessage="Given string is not a valid URL."
-      />
-    : null;
+  return url.trim() !== '' && !pattern.test(url.trim()) ? (
+    <FormattedMessage
+      id="app.editAssignmentForm.localized.urlValidation"
+      defaultMessage="Given string is not a valid URL."
+    />
+  ) : null;
 };
 
-const SharedExerciseAssignmentLocalizedFields = ({ prefix, enabled }) =>
+const SharedExerciseAssignmentLocalizedFields = ({ prefix, enabled }) => (
   <React.Fragment>
     <Field
       name={`${prefix}.text`}
@@ -41,11 +41,12 @@ const SharedExerciseAssignmentLocalizedFields = ({ prefix, enabled }) =>
       }
       validate={isURL}
     />
-  </React.Fragment>;
+  </React.Fragment>
+);
 
 SharedExerciseAssignmentLocalizedFields.propTypes = {
   prefix: PropTypes.string.isRequired,
-  enabled: PropTypes.bool.isRequired
+  enabled: PropTypes.bool.isRequired,
 };
 
 export default SharedExerciseAssignmentLocalizedFields;

@@ -41,29 +41,22 @@ class Box extends Component {
       extraPadding = false,
       children,
       footer,
-      unlimitedHeight = false
+      unlimitedHeight = false,
     } = this.props;
     return (
       <div>
-        {description &&
-          <div className={styles.description}>
-            {description}
-          </div>}
+        {description && <div className={styles.description}>{description}</div>}
         <div
           className={classnames({
             'box-body': true,
             'no-padding': noPadding,
             [styles.extraPadding]: !noPadding && extraPadding,
             [styles.limited]: !unlimitedHeight,
-            [styles.unlimited]: unlimitedHeight
-          })}
-        >
+            [styles.unlimited]: unlimitedHeight,
+          })}>
           {children}
         </div>
-        {footer &&
-          <div className={'box-footer'}>
-            {footer}
-          </div>}
+        {footer && <div className={'box-footer'}>{footer}</div>}
       </div>
     );
   }
@@ -74,7 +67,7 @@ class Box extends Component {
       type = 'default',
       solid = false,
       collapsable = false,
-      className = ''
+      className = '',
     } = this.props;
     const { isOpen = true } = this.state;
 
@@ -85,29 +78,25 @@ class Box extends Component {
           [`box-${type}`]: typeof type !== 'undefined',
           panel: true,
           'box-solid': solid,
-          [className]: className.length > 0
-        })}
-      >
+          [className]: className.length > 0,
+        })}>
         <div className="box-header with-border" onClick={this.toggleDetails}>
-          <h3 className="box-title">
-            {title}
-          </h3>
-          {collapsable &&
+          <h3 className="box-title">{title}</h3>
+          {collapsable && (
             <div className="box-tools pull-right">
               <button
                 type="button"
                 className="btn btn-box-tool"
-                onClick={this.toggleDetails}
-              >
+                onClick={this.toggleDetails}>
                 <Icon icon={isOpen ? 'minus' : 'plus'} />
               </button>
-            </div>}
+            </div>
+          )}
         </div>
         <div>
-          {collapsable &&
-            <Collapse isOpened={isOpen}>
-              {this.renderBody()}
-            </Collapse>}
+          {collapsable && (
+            <Collapse isOpened={isOpen}>{this.renderBody()}</Collapse>
+          )}
 
           {!collapsable && this.renderBody()}
         </div>
@@ -120,12 +109,12 @@ Box.propTypes = {
   title: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) }),
-    PropTypes.element
+    PropTypes.element,
   ]).isRequired,
   description: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) }),
-    PropTypes.element
+    PropTypes.element,
   ]),
   type: PropTypes.string,
   isOpen: PropTypes.bool,
@@ -136,7 +125,7 @@ Box.propTypes = {
   solid: PropTypes.bool,
   footer: PropTypes.element,
   children: PropTypes.element,
-  className: PropTypes.string
+  className: PropTypes.string,
 };
 
 export default Box;

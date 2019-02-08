@@ -66,36 +66,36 @@ class SourceCodeViewerContainer extends Component {
             </div>
           </Modal>
         }
-        resource={[file, content]}
-      >
-        {(file, content) =>
+        resource={[file, content]}>
+        {(file, content) => (
           <Modal show={show} onHide={onHide} dialogClassName={styles.modal}>
             <div>
               <Modal.Header closeButton>
-                <Modal.Title>
-                  {file.name}
-                </Modal.Title>
+                <Modal.Title>{file.name}</Modal.Title>
               </Modal.Header>
             </div>
             <div>
               <Modal.Body className={styles.modalBody}>
-                {(content.malformedCharacters || content.tooLarge) &&
+                {(content.malformedCharacters || content.tooLarge) && (
                   <div className="callout callout-warning">
-                    {content.malformedCharacters &&
+                    {content.malformedCharacters && (
                       <p>
                         <FormattedMessage
                           id="app.sourceCodeViewer.utf8Warning"
                           defaultMessage="The source file is not a valid UTF-8 file. Some characters may be displayed incorrectly. Use the download button to see unaltered source file."
                         />
-                      </p>}
-                    {content.tooLarge &&
+                      </p>
+                    )}
+                    {content.tooLarge && (
                       <p>
                         <FormattedMessage
                           id="app.sourceCodeViewer.incompleteWarning"
                           defaultMessage="The selected source file is too large. Only a leading part of the file is displayed here. Use the download button to get the whole file."
                         />
-                      </p>}
-                  </div>}
+                      </p>
+                    )}
+                  </div>
+                )}
                 <div>
                   <SourceCodeViewer
                     content={content.content}
@@ -115,7 +115,8 @@ class SourceCodeViewerContainer extends Component {
                 </Button>
               </Modal.Footer>
             </div>
-          </Modal>}
+          </Modal>
+        )}
       </ResourceRenderer>
     );
   }
@@ -128,20 +129,20 @@ SourceCodeViewerContainer.propTypes = {
   onHide: PropTypes.func.isRequired,
   loadAsync: PropTypes.func.isRequired,
   download: PropTypes.func.isRequired,
-  content: ImmutablePropTypes.map
+  content: ImmutablePropTypes.map,
 };
 
 export default connect(
   (state, { fileId }) => ({
     file: getFile(fileId)(state),
-    content: getFilesContent(fileId)(state)
+    content: getFilesContent(fileId)(state),
   }),
   (dispatch, { fileId }) => ({
     loadAsync: () =>
       Promise.all([
         dispatch(fetchFileIfNeeded(fileId)),
-        dispatch(fetchContentIfNeeded(fileId))
+        dispatch(fetchContentIfNeeded(fileId)),
       ]),
-    download: id => dispatch(download(id))
+    download: id => dispatch(download(id)),
   })
 )(SourceCodeViewerContainer);

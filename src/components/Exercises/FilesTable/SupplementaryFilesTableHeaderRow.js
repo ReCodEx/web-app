@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 
-const SupplementaryFilesTableHeaderRow = ({ viewOnly }) =>
+const SupplementaryFilesTableHeaderRow = ({ viewOnly }) => (
   <tr>
     <th>
       <FormattedMessage
@@ -20,10 +20,11 @@ const SupplementaryFilesTableHeaderRow = ({ viewOnly }) =>
       <FormattedMessage id="generic.uploadedAt" defaultMessage="Uploaded at" />
     </th>
     {!viewOnly && <th />}
-  </tr>;
+  </tr>
+);
 
 SupplementaryFilesTableHeaderRow.propTypes = {
-  viewOnly: PropTypes.bool
+  viewOnly: PropTypes.bool,
 };
 
 export default SupplementaryFilesTableHeaderRow;

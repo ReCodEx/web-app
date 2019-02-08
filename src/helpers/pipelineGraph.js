@@ -25,7 +25,7 @@ export const addDependencies = (graph, node) => {
           candidates.push({
             from: node.name,
             to: old.name,
-            name: portIn.value
+            name: portIn.value,
           });
         }
       }
@@ -43,7 +43,7 @@ export const addDependencies = (graph, node) => {
           candidates.push({
             from: old.name,
             to: node.name,
-            name: portIn.value
+            name: portIn.value,
           });
         }
       }
@@ -70,7 +70,7 @@ export const addDependencies = (graph, node) => {
 
   return {
     nodes: graph.nodes,
-    dependencies
+    dependencies,
   };
 };
 
@@ -78,7 +78,7 @@ export const removeNode = ({ nodes, dependencies }, node) => ({
   nodes: nodes.filter(n => n.name !== node.name),
   dependencies: dependencies.filter(
     dep => dep.from !== node.name && dep.to !== node.name
-  )
+  ),
 });
 
 export const replaceNode = (graph, oldNode, newNode) =>

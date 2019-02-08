@@ -9,12 +9,12 @@ import Page from '../../components/layout/Page';
 import {
   fetchBrokerStats,
   freezeBroker,
-  unfreezeBroker
+  unfreezeBroker,
 } from '../../redux/modules/broker';
 import {
   brokerStatsSelector,
   brokerFreezeSelector,
-  brokerUnfreezeSelector
+  brokerUnfreezeSelector,
 } from '../../redux/selectors/broker';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import BrokerButtons from '../../components/Broker/BrokerButtons/BrokerButtons';
@@ -35,7 +35,7 @@ class Broker extends Component {
       freezeBroker,
       unfreezeBroker,
       freezeActionStatus,
-      unfreezeActionStatus
+      unfreezeActionStatus,
     } = this.props;
     return (
       <Page
@@ -50,8 +50,7 @@ class Broker extends Component {
             id="app.broker.description"
             defaultMessage="Management of broker backend service"
           />
-        }
-      >
+        }>
         {isSuperAdmin && (
           <React.Fragment>
             <BrokerButtons
@@ -83,7 +82,7 @@ Broker.propTypes = {
   freezeBroker: PropTypes.func.isRequired,
   unfreezeBroker: PropTypes.func.isRequired,
   freezeActionStatus: PropTypes.string,
-  unfreezeActionStatus: PropTypes.string
+  unfreezeActionStatus: PropTypes.string,
 };
 
 export default connect(
@@ -91,7 +90,7 @@ export default connect(
     stats: brokerStatsSelector(state),
     freezeActionStatus: brokerFreezeSelector(state),
     unfreezeActionStatus: brokerUnfreezeSelector(state),
-    isSuperAdmin: isLoggedAsSuperAdmin(state)
+    isSuperAdmin: isLoggedAsSuperAdmin(state),
   }),
   dispatch => ({
     loadAsync: () => Broker.loadAsync({}, dispatch),
@@ -99,6 +98,6 @@ export default connect(
     freezeBroker: () =>
       dispatch(freezeBroker()).then(() => dispatch(fetchBrokerStats())),
     unfreezeBroker: () =>
-      dispatch(unfreezeBroker()).then(() => dispatch(fetchBrokerStats()))
+      dispatch(unfreezeBroker()).then(() => dispatch(fetchBrokerStats())),
   })
 )(Broker);

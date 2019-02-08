@@ -16,15 +16,14 @@ const OnOffCheckbox = ({
   disabled,
   checked,
   ...props
-}) =>
+}) => (
   <ControlLabel
     htmlFor={name}
     className={classnames({
       [className]: className && className.length > 0,
       [styles.labelDisabled]: disabled,
-      [styles.label]: !disabled
-    })}
-  >
+      [styles.label]: !disabled,
+    })}>
     <span className={styles.inputWrapper}>
       <Toggle
         {...props}
@@ -35,17 +34,16 @@ const OnOffCheckbox = ({
         disabled={disabled}
       />
     </span>
-    <span className={styles.labelText}>
-      {children}
-    </span>
-  </ControlLabel>;
+    <span className={styles.labelText}>{children}</span>
+  </ControlLabel>
+);
 
 OnOffCheckbox.propTypes = {
   checked: PropTypes.bool,
   children: PropTypes.any,
   disabled: PropTypes.bool,
   name: PropTypes.string,
-  className: PropTypes.string
+  className: PropTypes.string,
 };
 
 export default OnOffCheckbox;

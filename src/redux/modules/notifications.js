@@ -4,12 +4,12 @@ import { fromJS, List } from 'immutable';
 export const actionTypes = {
   ADD_NOTIFICATION: 'recodex/notifications/ADD_NOTIFICATION',
   HIDE_NOTIFICATION: 'recodex/notifications/HIDE_NOTIFICATION',
-  HIDE_ALL: 'recodex/notifications/HIDE_ALL'
+  HIDE_ALL: 'recodex/notifications/HIDE_ALL',
 };
 
 export const initialState = fromJS({
   visible: [],
-  hidden: []
+  hidden: [],
 });
 
 export const addNotification = createAction(
@@ -45,7 +45,7 @@ const reducer = handleActions(
       } else {
         return state.updateIn(['visible', index], oldMsg => ({
           ...oldMsg,
-          count: oldMsg.count + 1
+          count: oldMsg.count + 1,
         }));
       }
     },
@@ -64,7 +64,7 @@ const reducer = handleActions(
     [actionTypes.HIDE_ALL]: state =>
       state
         .update('hidden', hidden => hidden.concat(state.get('visible')))
-        .set('visible', List())
+        .set('visible', List()),
   },
   initialState
 );

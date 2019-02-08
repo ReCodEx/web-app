@@ -16,15 +16,15 @@ const SupervisorsListItem = ({
   groupId,
   addAdmin,
   removeAdmin,
-  primaryAdminsIds
-}) =>
+  primaryAdminsIds,
+}) => (
   <tr>
     <td>
       <UsersNameContainer userId={id} />
     </td>
-    {isAdmin &&
+    {isAdmin && (
       <td className="text-right text-nowrap">
-        {primaryAdminsIds.indexOf(id) < 0 &&
+        {primaryAdminsIds.indexOf(id) < 0 && (
           <div>
             <MakeRemoveSupervisorButtonContainer
               userId={id}
@@ -34,14 +34,18 @@ const SupervisorsListItem = ({
               onClick={() => addAdmin(groupId, id)}
               bsSize="xs"
             />
-          </div>}
-        {primaryAdminsIds.indexOf(id) >= 0 &&
+          </div>
+        )}
+        {primaryAdminsIds.indexOf(id) >= 0 && (
           <RemoveGroupAdminButton
             onClick={() => removeAdmin(groupId, id)}
             bsSize="xs"
-          />}
-      </td>}
-  </tr>;
+          />
+        )}
+      </td>
+    )}
+  </tr>
+);
 
 SupervisorsListItem.propTypes = {
   id: PropTypes.string.isRequired,
@@ -51,18 +55,19 @@ SupervisorsListItem.propTypes = {
   avatarUrl: PropTypes.string,
   addAdmin: PropTypes.func.isRequired,
   removeAdmin: PropTypes.func.isRequired,
-  primaryAdminsIds: PropTypes.array.isRequired
+  primaryAdminsIds: PropTypes.array.isRequired,
 };
 
 const mapStateToProps = (state, { groupId }) => ({
-  groupAdmins: adminsOfGroup(groupId)(state)
+  groupAdmins: adminsOfGroup(groupId)(state),
 });
 
 const mapDispatchToProps = {
   addAdmin,
-  removeAdmin
+  removeAdmin,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(
-  SupervisorsListItem
-);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(SupervisorsListItem);

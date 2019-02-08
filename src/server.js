@@ -25,7 +25,7 @@ import { isLoggedAsSuperAdmin } from './redux/selectors/users';
 import createRoutes from './pages/routes';
 import {
   TOKEN_COOKIES_KEY,
-  INSTANCEID_COOKIES_KEY
+  INSTANCEID_COOKIES_KEY,
 } from './redux/middleware/authMiddleware';
 
 addLocaleData([...cs]);
@@ -77,7 +77,7 @@ app.use(
   Express.static('public', {
     immutable: true,
     maxAge: '30d',
-    lastModified: true
+    lastModified: true,
   })
 );
 app.use(cookieParser());
@@ -91,8 +91,8 @@ const renderWithoutSSR = (res, renderProps) => {
     skin: parsedConfig['SKIN'],
     bundle,
     style,
-	config,
-	urlPrefix
+    config,
+    urlPrefix,
   });
 };
 
@@ -112,8 +112,8 @@ const renderPage = (res, store, renderProps) => {
     skin: parsedConfig['SKIN'],
     bundle,
     style,
-	config,
-	urlPrefix
+    config,
+    urlPrefix,
   });
 };
 
@@ -154,7 +154,7 @@ app.get('*', (req, res) => {
             component.loadAsync(renderProps.params, store.dispatch, {
               userId,
               isSuperadmin,
-              instanceId
+              instanceId,
             })
           );
 

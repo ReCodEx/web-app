@@ -6,23 +6,25 @@ import { GroupIcon } from '../../icons';
 
 import './HierarchyLine.css';
 
-const HierarchyLine = ({ groupId, parentGroupsIds }) =>
+const HierarchyLine = ({ groupId, parentGroupsIds }) => (
   <Well bsSize="sm" className="groupParents">
     <GroupIcon className="slashStyle" />
     {parentGroupsIds.map(
       (groupId, i) =>
-        i !== 0 &&
-        <span key={i}>
-          <GroupsNameContainer groupId={groupId} />{' '}
-          <span className="slashStyle">/</span>
-        </span>
+        i !== 0 && (
+          <span key={i}>
+            <GroupsNameContainer groupId={groupId} />{' '}
+            <span className="slashStyle">/</span>
+          </span>
+        )
     )}
     <GroupsNameContainer groupId={groupId} />
-  </Well>;
+  </Well>
+);
 
 HierarchyLine.propTypes = {
   groupId: PropTypes.string.isRequired,
-  parentGroupsIds: PropTypes.array
+  parentGroupsIds: PropTypes.array,
 };
 
 export default HierarchyLine;

@@ -7,11 +7,11 @@ import PageContent from '../../components/layout/PageContent';
 import FetchManyResourceRenderer from '../../components/helpers/FetchManyResourceRenderer';
 import {
   fetchAllFailures,
-  resolveFailure
+  resolveFailure,
 } from '../../redux/modules/submissionFailures';
 import {
   fetchManyStatus,
-  readySubmissionFailuresSelector
+  readySubmissionFailuresSelector,
 } from '../../redux/selectors/submissionFailures';
 import FailuresList from '../../components/SubmissionFailures/FailuresList/FailuresList';
 import Box from '../../components/widgets/Box/Box';
@@ -65,9 +65,8 @@ class SubmissionFailures extends Component {
               />
             }
           />
-        }
-      >
-        {() =>
+        }>
+        {() => (
           <PageContent
             title={
               <FormattedMessage
@@ -89,10 +88,9 @@ class SubmissionFailures extends Component {
                     defaultMessage="Submission Failures"
                   />
                 ),
-                iconName: 'bomb'
-              }
-            ]}
-          >
+                iconName: 'bomb',
+              },
+            ]}>
             <Box
               title={
                 <FormattedMessage
@@ -101,38 +99,41 @@ class SubmissionFailures extends Component {
                 />
               }
               unlimitedHeight
-              noPadding
-            >
+              noPadding>
               <div>
                 <FailuresList
                   failures={submissionFailures}
-                  createActions={id =>
+                  createActions={id => (
                     <Button
                       bsStyle="warning"
                       className="btn-flat"
                       bsSize="xs"
                       onClick={() =>
-                        this.setState({ isOpen: true, activeId: id })}
-                    >
+                        this.setState({ isOpen: true, activeId: id })
+                      }>
                       <FormattedMessage
                         id="app.submissionFailures.resolve"
                         defaultMessage="Resolve"
                       />
-                    </Button>}
+                    </Button>
+                  )}
                 />
                 <ResolveFailure
                   isOpen={this.state.isOpen}
                   onClose={() =>
-                    this.setState({ isOpen: false, activeId: null })}
+                    this.setState({ isOpen: false, activeId: null })
+                  }
                   onSubmit={data =>
                     resolveFailure(this.state.activeId, data).then(() =>
                       this.setState({ isOpen: false, activeId: null })
-                    )}
+                    )
+                  }
                   initialValues={{ sendEmail: true }}
                 />
               </div>
             </Box>
-          </PageContent>}
+          </PageContent>
+        )}
       </FetchManyResourceRenderer>
     );
   }
@@ -142,16 +143,16 @@ SubmissionFailures.propTypes = {
   loadAsync: PropTypes.func.isRequired,
   fetchStatus: PropTypes.string,
   submissionFailures: PropTypes.array,
-  resolveFailure: PropTypes.func
+  resolveFailure: PropTypes.func,
 };
 
 export default connect(
   state => ({
     fetchStatus: fetchManyStatus(state),
-    submissionFailures: readySubmissionFailuresSelector(state)
+    submissionFailures: readySubmissionFailuresSelector(state),
   }),
   dispatch => ({
     loadAsync: () => SubmissionFailures.loadAsync({}, dispatch),
-    resolveFailure: (id, data) => dispatch(resolveFailure(id, data))
+    resolveFailure: (id, data) => dispatch(resolveFailure(id, data)),
   })
 )(SubmissionFailures);

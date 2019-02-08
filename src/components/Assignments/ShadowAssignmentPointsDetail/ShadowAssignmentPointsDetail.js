@@ -12,8 +12,8 @@ const ShadowAssignmentPointsDetail = ({
   points = null,
   awardedAt = null,
   authorId = null,
-  note = ''
-}) =>
+  note = '',
+}) => (
   <Box
     title={
       <FormattedMessage
@@ -21,8 +21,7 @@ const ShadowAssignmentPointsDetail = ({
         defaultMessage="Awarded Points"
       />
     }
-    noPadding
-  >
+    noPadding>
     <Table responsive condensed>
       <tbody>
         <tr>
@@ -33,21 +32,24 @@ const ShadowAssignmentPointsDetail = ({
             <FormattedMessage
               id="app.shadowAssignmentPointsDetail.points"
               defaultMessage="Points"
-            />:
+            />
+            :
           </th>
           <td>
-            {points !== null
-              ? <FormattedNumber value={points} />
-              : <small className="text-muted">
-                  <FormattedMessage
-                    id="app.shadowAssignmentPointsDetail.noPoints"
-                    defaultMessage="no awarded points yet"
-                  />
-                </small>}
+            {points !== null ? (
+              <FormattedNumber value={points} />
+            ) : (
+              <small className="text-muted">
+                <FormattedMessage
+                  id="app.shadowAssignmentPointsDetail.noPoints"
+                  defaultMessage="no awarded points yet"
+                />
+              </small>
+            )}
           </td>
         </tr>
 
-        {points !== null &&
+        {points !== null && (
           <tr>
             <td className="text-center shrink-col em-padding-left em-padding-right">
               <Icon icon={['far', 'clock']} />
@@ -56,16 +58,20 @@ const ShadowAssignmentPointsDetail = ({
               <FormattedMessage
                 id="app.shadowAssignmentPointsDetail.awardedAt"
                 defaultMessage="Awarded at"
-              />:
+              />
+              :
             </th>
             <td>
-              {awardedAt !== null
-                ? <DateTime unixts={awardedAt} showRelative />
-                : <span>&mdash;</span>}
+              {awardedAt !== null ? (
+                <DateTime unixts={awardedAt} showRelative />
+              ) : (
+                <span>&mdash;</span>
+              )}
             </td>
-          </tr>}
+          </tr>
+        )}
 
-        {Boolean(authorId) &&
+        {Boolean(authorId) && (
           <tr>
             <td className="text-center shrink-col em-padding-left em-padding-right">
               <SupervisorIcon />
@@ -74,14 +80,16 @@ const ShadowAssignmentPointsDetail = ({
               <FormattedMessage
                 id="app.shadowAssignmentPointsDetail.awardedBy"
                 defaultMessage="Awarded by"
-              />:
+              />
+              :
             </th>
             <td>
               <UsersNameContainer userId={authorId} showEmail="icon" />
             </td>
-          </tr>}
+          </tr>
+        )}
 
-        {Boolean(note) &&
+        {Boolean(note) && (
           <tr>
             <td className="text-center shrink-col em-padding-left em-padding-right">
               <Icon icon={['far', 'sticky-note']} />
@@ -90,21 +98,22 @@ const ShadowAssignmentPointsDetail = ({
               <FormattedMessage
                 id="app.shadowAssignmentPointsDetail.note"
                 defaultMessage="Note"
-              />:
+              />
+              :
             </th>
-            <td>
-              {note}
-            </td>
-          </tr>}
+            <td>{note}</td>
+          </tr>
+        )}
       </tbody>
     </Table>
-  </Box>;
+  </Box>
+);
 
 ShadowAssignmentPointsDetail.propTypes = {
   points: PropTypes.number,
   awardedAt: PropTypes.number,
   authorId: PropTypes.string,
-  note: PropTypes.string
+  note: PropTypes.string,
 };
 
 export default ShadowAssignmentPointsDetail;

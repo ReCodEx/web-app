@@ -7,14 +7,14 @@ import { FormattedMessage } from 'react-intl';
 import FilesTableContainer from '../FilesTableContainer';
 import {
   AttachmentFilesTableRow,
-  AttachmentFilesTableHeaderRow
+  AttachmentFilesTableHeaderRow,
 } from '../../components/Exercises/FilesTable';
 
 import {
   fetchAttachmentFiles,
   addAttachmentFiles,
   removeAttachmentFile,
-  downloadAttachmentArchive
+  downloadAttachmentArchive,
 } from '../../redux/modules/attachmentFiles';
 
 import { getAttachmentFilesForExercise } from '../../redux/selectors/attachmentFiles';
@@ -25,8 +25,8 @@ const AttachmentFilesTableContainer = ({
   loadFiles,
   addFiles,
   removeFile,
-  downloadArchive
-}) =>
+  downloadArchive,
+}) => (
   <FilesTableContainer
     uploadId={`attachment-exercise-files-${exercise.id}`}
     attachments={attachmentFiles}
@@ -48,24 +48,25 @@ const AttachmentFilesTableContainer = ({
     HeaderComponent={AttachmentFilesTableHeaderRow}
     RowComponent={AttachmentFilesTableRow}
     downloadArchive={downloadArchive}
-  />;
+  />
+);
 
 AttachmentFilesTableContainer.propTypes = {
   exercise: PropTypes.shape({
     id: PropTypes.string.isRequired,
-    attachmentFilesIds: PropTypes.array.isRequired
+    attachmentFilesIds: PropTypes.array.isRequired,
   }).isRequired,
   attachmentFiles: ImmutablePropTypes.map,
   loadFiles: PropTypes.func.isRequired,
   addFiles: PropTypes.func.isRequired,
   removeFile: PropTypes.func.isRequired,
-  downloadArchive: PropTypes.func
+  downloadArchive: PropTypes.func,
 };
 
 export default connect(
   (state, { exercise }) => {
     return {
-      attachmentFiles: getAttachmentFilesForExercise(exercise.id)(state)
+      attachmentFiles: getAttachmentFilesForExercise(exercise.id)(state),
     };
   },
   (dispatch, { exercise }) => ({
@@ -75,6 +76,6 @@ export default connect(
     downloadArchive: e => {
       e.preventDefault();
       dispatch(downloadAttachmentArchive(exercise.id));
-    }
+    },
   })
 )(AttachmentFilesTableContainer);

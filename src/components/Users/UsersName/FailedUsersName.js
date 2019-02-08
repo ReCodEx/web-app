@@ -5,7 +5,7 @@ import { FailedAvatar } from '../../widgets/Avatar';
 
 import styles from './usersName.less';
 
-const FailedUsersName = ({ size = 25 }) =>
+const FailedUsersName = ({ size = 25 }) => (
   <span className={styles.wrapper}>
     <span className={styles.avatar}>
       <FailedAvatar size={size} />
@@ -13,10 +13,11 @@ const FailedUsersName = ({ size = 25 }) =>
     <span className={styles.name} style={{ lineHeight: `${size}px` }}>
       <FormattedMessage id="generic.loading" defaultMessage="Loading..." />
     </span>
-  </span>;
+  </span>
+);
 
 FailedUsersName.propTypes = {
-  size: PropTypes.number
+  size: PropTypes.number,
 };
 
 export default FailedUsersName;

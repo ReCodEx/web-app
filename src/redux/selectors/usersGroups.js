@@ -6,7 +6,7 @@ import { loggedInUserSelector } from './users';
 import {
   groupsSelector,
   filterGroups,
-  filterNonOrganizationalActiveGroups
+  filterNonOrganizationalActiveGroups,
 } from './groups';
 import { getAssignments } from './assignments';
 import { isReady } from '../helpers/resourceManager';

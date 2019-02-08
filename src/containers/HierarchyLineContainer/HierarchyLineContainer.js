@@ -27,11 +27,12 @@ class HierarchyLineContainer extends Component {
     const { group } = this.props;
     return (
       <ResourceRenderer resource={group}>
-        {group =>
+        {group => (
           <HierarchyLine
             groupId={group.id}
             parentGroupsIds={group.parentGroupsIds}
-          />}
+          />
+        )}
       </ResourceRenderer>
     );
   }
@@ -39,14 +40,14 @@ class HierarchyLineContainer extends Component {
 
 HierarchyLineContainer.propTypes = {
   groupId: PropTypes.string.isRequired,
-  group: ImmutablePropTypes.map
+  group: ImmutablePropTypes.map,
 };
 
 export default connect(
   (state, { groupId }) => ({
-    group: groupSelector(state, groupId)
+    group: groupSelector(state, groupId),
   }),
   (dispatch, { groupId }) => ({
-    loadGroupIfNeeded: () => dispatch(fetchGroupIfNeeded(groupId))
+    loadGroupIfNeeded: () => dispatch(fetchGroupIfNeeded(groupId)),
   })
 )(HierarchyLineContainer);

@@ -15,12 +15,12 @@ export const fetchInstanceIfNeeded = actions.fetchOneIfNeeded;
 
 export const fetchInstances = () =>
   actions.fetchMany({
-    endpoint: '/instances'
+    endpoint: '/instances',
   });
 
 export const fetchUsersInstancesIfNeeded = userId =>
   actions.fetchMany({
-    endpoint: `/users/${userId}/instances`
+    endpoint: `/users/${userId}/instances`,
   });
 
 export const editInstance = actions.updateResource;
@@ -40,7 +40,7 @@ const reducer = handleActions(
       return state.updateIn(['resources', group.instanceId, 'data'], instance =>
         instance.update('topLevelGroups', groups => groups.push(group.id))
       );
-    }
+    },
   }),
   initialState
 );

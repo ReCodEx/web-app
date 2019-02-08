@@ -12,7 +12,7 @@ const BreadcrumbItem = ({
   link = null,
   iconName = null,
   isActive = false,
-  links
+  links,
 }) => {
   const content = (
     <Breadcrumb.Item active={isActive}>
@@ -20,26 +20,27 @@ const BreadcrumbItem = ({
     </Breadcrumb.Item>
   );
 
-  return link !== null
-    ? <LinkContainer
-        to={typeof link === 'function' ? link(links) : link}
-        active={isActive}
-      >
-        {content}
-      </LinkContainer>
-    : content;
+  return link !== null ? (
+    <LinkContainer
+      to={typeof link === 'function' ? link(links) : link}
+      active={isActive}>
+      {content}
+    </LinkContainer>
+  ) : (
+    content
+  );
 };
 
 BreadcrumbItem.propTypes = {
   text: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.element,
-    FormattedMessage
+    FormattedMessage,
   ]).isRequired,
   iconName: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
   link: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
   isActive: PropTypes.bool.isRequired,
-  links: PropTypes.object
+  links: PropTypes.object,
 };
 
 export default withLinks(BreadcrumbItem);

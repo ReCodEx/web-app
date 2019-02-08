@@ -4,17 +4,18 @@ import { FormattedMessage } from 'react-intl';
 import Button from '../../widgets/FlatButton';
 import Icon from '../../icons';
 
-const Login = ({ onClick }) =>
+const Login = ({ onClick }) => (
   <Button bsStyle="success" onClick={onClick}>
     <Icon icon="university" gapRight />
     <FormattedMessage
       id="app.casLoginButton.login"
       defaultMessage="Authenticate through CAS"
     />
-  </Button>;
+  </Button>
+);
 
 Login.propTypes = {
-  onClick: PropTypes.func.isRequired
+  onClick: PropTypes.func.isRequired,
 };
 
 export default Login;

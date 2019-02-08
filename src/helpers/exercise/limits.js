@@ -21,10 +21,10 @@ export const getLimitsInitValues = defaultMemoize(
           endpointDisguisedAsIdFactory({
             exerciseId,
             hwGroup,
-            runtimeEnvironmentId: environment.id
+            runtimeEnvironmentId: environment.id,
           }),
           'data',
-          String(test.id)
+          String(test.id),
         ]);
         if (lim) {
           lim = lim.toJS();
@@ -42,7 +42,7 @@ export const getLimitsInitValues = defaultMemoize(
         }
         res[testEnc][envId] = {
           memory: lim ? String(lim.memory) : '0',
-          time
+          time,
         };
       });
     });
@@ -57,20 +57,22 @@ export const getLimitsInitValues = defaultMemoize(
         res[testEnc][envId].time =
           time[primaryTime] !== undefined
             ? time[primaryTime]
-            : time[secondaryTime] !== undefined ? time[secondaryTime] : '0';
+            : time[secondaryTime] !== undefined
+            ? time[secondaryTime]
+            : '0';
       }
     }
 
     return {
       limits: res,
-      preciseTime
+      preciseTime,
     };
   }
 );
 
 const transformLimitsObject = ({ memory, time }, timeField = 'wall-time') => {
   let res = {
-    memory
+    memory,
   };
   res[timeField] = time;
   return res;
@@ -91,7 +93,7 @@ export const transformLimitsValues = (formData, tests, runtimeEnvironments) =>
           formData.preciseTime ? 'cpu-time' : 'wall-time'
         );
         return acc;
-      }, {})
+      }, {}),
     };
     return { id: environment.id, data };
   });
@@ -105,7 +107,7 @@ const LIMITS_CONSTRAINTS_DEFAULTS = {
   cpuTimePerTest: 60, // 1 minute
   cpuTimePerExercise: 300, // 5 minutes
   wallTimePerTest: 60,
-  wallTimePerExercise: 300
+  wallTimePerExercise: 300,
 };
 
 const combineHardwareGroupLimitsConstraints = exerciseHwGroups => {
@@ -138,12 +140,12 @@ export const getLimitsConstraints = defaultMemoize(
       memory: { min: 128, max: res.memory },
       time: {
         min: 0.1,
-        max: res[preciseTime ? 'cpuTimePerTest' : 'wallTimePerTest']
+        max: res[preciseTime ? 'cpuTimePerTest' : 'wallTimePerTest'],
       },
       totalTime: {
         min: 0.1,
-        max: res[preciseTime ? 'cpuTimePerExercise' : 'wallTimePerExercise']
-      }
+        max: res[preciseTime ? 'cpuTimePerExercise' : 'wallTimePerExercise'],
+      },
     };
   }
 );
@@ -155,7 +157,7 @@ export const getLimitsConstraintsOfSingleGroup = defaultMemoize(
     for (const key in res) {
       res[key] = {
         min: key === 'memory' ? 128 : 0.1,
-        max: res[key]
+        max: res[key],
       };
     }
     return res;

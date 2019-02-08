@@ -90,7 +90,7 @@ AuthenticationButtonContainer.propTypes = {
   links: PropTypes.object.isRequired,
   retry: PropTypes.bool,
   onTicketObtained: PropTypes.func.isRequired,
-  onFailed: PropTypes.func.isRequired
+  onFailed: PropTypes.func.isRequired,
 };
 
 export default withLinks(AuthenticationButtonContainer);

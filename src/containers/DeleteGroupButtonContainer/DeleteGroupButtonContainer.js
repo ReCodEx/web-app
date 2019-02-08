@@ -17,17 +17,17 @@ DeleteGroupButtonContainer.propTypes = {
   id: PropTypes.string.isRequired,
   group: ImmutablePropTypes.map,
   deleteGroup: PropTypes.func.isRequired,
-  onDeleted: PropTypes.func
+  onDeleted: PropTypes.func,
 };
 
 export default connect(
   (state, { id }) => ({
-    group: groupSelector(state, id)
+    group: groupSelector(state, id),
   }),
   (dispatch, { id, onDeleted }) => ({
     deleteGroup: () => {
       onDeleted && onDeleted();
       return dispatch(deleteGroup(id));
-    }
+    },
   })
 )(DeleteGroupButtonContainer);

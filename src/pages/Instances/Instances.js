@@ -21,14 +21,14 @@ class Instances extends Component {
 
 Instances.propTypes = {
   loadAsync: PropTypes.func.isRequired,
-  instances: ImmutablePropTypes.map
+  instances: ImmutablePropTypes.map,
 };
 
 export default connect(
   state => ({
-    instances: instancesSelector(state)
+    instances: instancesSelector(state),
   }),
   dispatch => ({
-    loadAsync: () => Instances.loadAsync({}, dispatch)
+    loadAsync: () => Instances.loadAsync({}, dispatch),
   })
 )(Instances);

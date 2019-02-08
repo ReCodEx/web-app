@@ -14,11 +14,11 @@ import { EditIcon } from '../../components/icons';
 
 import {
   fetchPipelineIfNeeded,
-  forkPipeline
+  forkPipeline,
 } from '../../redux/modules/pipelines';
 import {
   getPipeline,
-  pipelineEnvironmentsSelector
+  pipelineEnvironmentsSelector,
 } from '../../redux/selectors/pipelines';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import { canEditPipeline } from '../../redux/selectors/users';
@@ -33,7 +33,7 @@ import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironment
 class Pipeline extends Component {
   state = {
     graph: { dependencies: [], nodes: [] },
-    forkId: null
+    forkId: null,
   };
 
   componentWillMount() {
@@ -61,7 +61,7 @@ class Pipeline extends Component {
             setState({ graph });
           }
         }),
-      dispatch(fetchRuntimeEnvironments())
+      dispatch(fetchRuntimeEnvironments()),
     ]);
 
   render() {
@@ -70,7 +70,7 @@ class Pipeline extends Component {
       pipeline,
       isAuthorOfPipeline,
       // forkPipeline,
-      runtimeEnvironments
+      runtimeEnvironments,
     } = this.props;
     const { graph } = this.state;
 
@@ -93,7 +93,7 @@ class Pipeline extends Component {
               />
             ),
             iconName: 'random',
-            link: PIPELINES_URI
+            link: PIPELINES_URI,
           },
           {
             text: (
@@ -102,15 +102,14 @@ class Pipeline extends Component {
                 defaultMessage="Pipeline"
               />
             ),
-            iconName: 'random'
-          }
-        ]}
-      >
-        {pipeline =>
+            iconName: 'random',
+          },
+        ]}>
+        {pipeline => (
           <div>
             <div>
               <ButtonGroup>
-                {isAuthorOfPipeline(pipeline.id) &&
+                {isAuthorOfPipeline(pipeline.id) && (
                   <LinkContainer to={PIPELINE_EDIT_URI_FACTORY(pipeline.id)}>
                     <Button bsStyle="warning" bsSize="sm">
                       <EditIcon />
@@ -120,7 +119,8 @@ class Pipeline extends Component {
                         defaultMessage="Edit pipeline"
                       />
                     </Button>
-                  </LinkContainer>}
+                  </LinkContainer>
+                )}
                 {/* TODO Fork form needs redesigning (better selection of exercises).
                 <ForkPipelineForm
                   pipelineId={pipeline.id}
@@ -133,13 +133,14 @@ class Pipeline extends Component {
             <p />
             <Row>
               <ResourceRenderer resource={[...runtimeEnvironments]}>
-                {(...runtimes) =>
+                {(...runtimes) => (
                   <Col lg={12}>
                     <PipelineDetail
                       {...pipeline}
                       runtimeEnvironments={runtimes}
                     />
-                  </Col>}
+                  </Col>
+                )}
               </ResourceRenderer>
               <Col lg={12}>
                 <Box
@@ -150,16 +151,17 @@ class Pipeline extends Component {
                     />
                   }
                   noPadding
-                  unlimitedHeight
-                >
+                  unlimitedHeight>
                   <Well className="pipeline">
-                    {graph.nodes.length > 0 &&
-                      <PipelineVisualisation graph={graph} />}
+                    {graph.nodes.length > 0 && (
+                      <PipelineVisualisation graph={graph} />
+                    )}
                   </Well>
                 </Box>
               </Col>
             </Row>
-          </div>}
+          </div>
+        )}
       </Page>
     );
   }
@@ -169,12 +171,12 @@ Pipeline.propTypes = {
   pipeline: ImmutablePropTypes.map,
   loadAsync: PropTypes.func.isRequired,
   params: PropTypes.shape({
-    pipelineId: PropTypes.string.isRequired
+    pipelineId: PropTypes.string.isRequired,
   }).isRequired,
   isAuthorOfPipeline: PropTypes.func.isRequired,
   links: PropTypes.object.isRequired,
   forkPipeline: PropTypes.func.isRequired,
-  runtimeEnvironments: PropTypes.array
+  runtimeEnvironments: PropTypes.array,
 };
 
 export default withLinks(
@@ -187,14 +189,14 @@ export default withLinks(
         userId: loggedInUserIdSelector(state),
         isAuthorOfPipeline: pipelineId =>
           canEditPipeline(userId, pipelineId)(state),
-        runtimeEnvironments: pipelineEnvironmentsSelector(pipelineId)(state)
+        runtimeEnvironments: pipelineEnvironmentsSelector(pipelineId)(state),
       };
     },
     (dispatch, { params: { pipelineId } }) => ({
       loadAsync: setState =>
         Pipeline.loadAsync({ pipelineId }, dispatch, { setState }),
       forkPipeline: (forkId, data) =>
-        dispatch(forkPipeline(pipelineId, forkId, data))
+        dispatch(forkPipeline(pipelineId, forkId, data)),
     })
   )(Pipeline)
 );

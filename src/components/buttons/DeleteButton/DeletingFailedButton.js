@@ -4,23 +4,23 @@ import { FormattedMessage } from 'react-intl';
 import Button from '../../widgets/FlatButton';
 import { FailureIcon } from '../../icons';
 
-const DeletingFailedButton = ({ onClick, ...props }) =>
+const DeletingFailedButton = ({ onClick, ...props }) => (
   <Button
     bsStyle="default"
     bsSize="sm"
     className="btn-flat"
     onClick={onClick}
-    {...props}
-  >
+    {...props}>
     <FailureIcon gapRight />
     <FormattedMessage
       id="generic.deleteFailed"
       defaultMessage="Delete Failed"
     />
-  </Button>;
+  </Button>
+);
 
 DeletingFailedButton.propTypes = {
-  onClick: PropTypes.func
+  onClick: PropTypes.func,
 };
 
 export default DeletingFailedButton;

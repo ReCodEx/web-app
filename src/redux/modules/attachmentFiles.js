@@ -2,7 +2,7 @@ import { handleActions } from 'redux-actions';
 import factory, {
   initialState,
   createRecord,
-  resourceStatus
+  resourceStatus,
 } from '../helpers/resourceManager';
 import { createApiAction } from '../middleware/apiMiddleware';
 import { downloadHelper } from '../helpers/api/download';
@@ -22,12 +22,12 @@ export const actionTypes = {
   REMOVE_FILE: 'recodex/attachmentFiles/REMOVE_FILE',
   REMOVE_FILE_FULFILLED: 'recodex/attachmentFiles/REMOVE_FILE_FULFILLED',
   DOWNLOAD_ATTACHMENT_ARCHIVE:
-    'recodex/attachmentFiles/DOWNLOAD_ATTACHMENT_ARCHIVE'
+    'recodex/attachmentFiles/DOWNLOAD_ATTACHMENT_ARCHIVE',
 };
 
 export const fetchAttachmentFiles = exerciseId =>
   actions.fetchMany({
-    endpoint: `/exercises/${exerciseId}/attachment-files`
+    endpoint: `/exercises/${exerciseId}/attachment-files`,
   });
 
 export const addAttachmentFiles = (exerciseId, files) =>
@@ -36,16 +36,16 @@ export const addAttachmentFiles = (exerciseId, files) =>
     endpoint: `/exercises/${exerciseId}/attachment-files`,
     method: 'POST',
     body: {
-      files: files.map(uploaded => uploaded.file.id)
+      files: files.map(uploaded => uploaded.file.id),
     },
     meta: {
       exerciseId,
       files: files.map(uploaded => ({
         tmpId: Math.random().toString(),
-        file: uploaded.file
-      }))
+        file: uploaded.file,
+      })),
     },
-    uploadFiles: true
+    uploadFiles: true,
   });
 
 export const removeAttachmentFile = (exerciseId, fileId) =>
@@ -53,7 +53,7 @@ export const removeAttachmentFile = (exerciseId, fileId) =>
     type: actionTypes.REMOVE_FILE,
     endpoint: `/exercises/${exerciseId}/attachment-files/${fileId}`,
     method: 'DELETE',
-    meta: { exerciseId, fileId }
+    meta: { exerciseId, fileId },
   });
 
 export const downloadAttachmentArchive = downloadHelper({
@@ -61,7 +61,7 @@ export const downloadAttachmentArchive = downloadHelper({
   fetch: null,
   endpoint: id => `/exercises/${id}/attachment-files/download-archive`,
   fileNameSelector: (id, state) => `${id}.zip`,
-  contentType: 'application/zip'
+  contentType: 'application/zip',
 });
 
 /**
@@ -82,7 +82,7 @@ const reducer = handleActions(
     [actionTypes.REMOVE_FILE_FULFILLED]: (
       state,
       { payload, meta: { fileId } }
-    ) => state.deleteIn(['resources', fileId])
+    ) => state.deleteIn(['resources', fileId]),
   }),
   initialState
 );

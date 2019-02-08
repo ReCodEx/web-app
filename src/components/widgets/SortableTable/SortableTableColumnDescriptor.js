@@ -13,7 +13,7 @@ class SortableTableColumnDescriptor {
       headerClassName = null,
       headerSuffix = null,
       headerSuffixStyle = null,
-      headerSuffixClassName = null
+      headerSuffixClassName = null,
     }
   ) {
     this.id = id;

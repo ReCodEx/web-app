@@ -11,7 +11,7 @@ import Icon from '../../icons';
 
 const messagesContainerStyle = {
   maxHeight: 300,
-  overflowY: 'scroll'
+  overflowY: 'scroll',
 };
 
 class EvaluationProgress extends Component {
@@ -45,7 +45,7 @@ class EvaluationProgress extends Component {
       skipped = 0,
       failed = 0,
       finishProcessing,
-      onClose
+      onClose,
     } = this.props;
 
     return (
@@ -64,24 +64,22 @@ class EvaluationProgress extends Component {
             <ProgressBar now={skipped} bsStyle="warning" active={!finished} />
             <ProgressBar now={failed} bsStyle="danger" active={!finished} />
           </ProgressBar>
-          {messages &&
+          {messages && (
             <div
               style={messagesContainerStyle}
               ref={c => {
                 this.bodyContainer = c;
-              }}
-            >
+              }}>
               <Table responsive>
                 <tbody>
-                  {messages.map(({ wasSuccessful, text, status }, i) =>
+                  {messages.map(({ wasSuccessful, text, status }, i) => (
                     <tr key={i}>
                       <td
                         className={classnames({
                           'text-center': true,
                           'text-success': wasSuccessful,
-                          'text-danger': !wasSuccessful
-                        })}
-                      >
+                          'text-danger': !wasSuccessful,
+                        })}>
                         <strong>
                           <Icon
                             icon={
@@ -90,32 +88,29 @@ class EvaluationProgress extends Component {
                           />
                         </strong>
                       </td>
-                      <td>
-                        {text}
-                      </td>
+                      <td>{text}</td>
                       <td
                         className={classnames({
                           'text-center': true,
                           'text-success': wasSuccessful,
                           'text-danger': !wasSuccessful,
-                          'text-bold': true
-                        })}
-                      >
+                          'text-bold': true,
+                        })}>
                         <EvaluationStatusText status={status} />
                       </td>
                     </tr>
-                  )}
+                  ))}
                 </tbody>
               </Table>
-            </div>}
+            </div>
+          )}
         </Modal.Body>
         <Modal.Footer>
           <p className="text-center">
             <Button
               bsStyle={finished ? 'success' : 'default'}
               onClick={finishProcessing}
-              disabled={!showContinueButton}
-            >
+              disabled={!showContinueButton}>
               <FormattedMessage
                 id="app.evaluationProgress.continue"
                 defaultMessage="See The Results"
@@ -137,7 +132,7 @@ EvaluationProgress.propTypes = {
   skipped: PropTypes.number.isRequired,
   failed: PropTypes.number.isRequired,
   finishProcessing: PropTypes.func.isRequired,
-  onClose: PropTypes.func.isRequired
+  onClose: PropTypes.func.isRequired,
 };
 
 export default EvaluationProgress;

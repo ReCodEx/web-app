@@ -8,10 +8,10 @@ const getMessage = (item, formatMessage) =>
   !item
     ? ''
     : typeof item === 'string'
-      ? item
-      : item.type === FormattedMessage
-        ? formatMessage(item.props)
-        : getMessage(item.children, formatMessage);
+    ? item
+    : item.type === FormattedMessage
+    ? formatMessage(item.props)
+    : getMessage(item.children, formatMessage);
 
 /**
  * Holds the main content of a page with the common structure for
@@ -24,8 +24,8 @@ const PageContent = ({
   title,
   description = '',
   breadcrumbs = [],
-  children
-}) =>
+  children,
+}) => (
   <div className="content-wrapper">
     <Helmet
       title={getMessage(title, formatMessage)}
@@ -34,16 +34,13 @@ const PageContent = ({
     <section className="content-header">
       <h1>
         {title}
-        <small>
-          {description}
-        </small>
+        <small>{description}</small>
       </h1>
       {breadcrumbs.length > 0 && <Breadcrumbs items={breadcrumbs} />}
     </section>
-    <section className="content">
-      {children}
-    </section>
-  </div>;
+    <section className="content">{children}</section>
+  </div>
+);
 
 PageContent.propTypes = {
   title: PropTypes.oneOfType([PropTypes.string, PropTypes.element]).isRequired,
@@ -51,7 +48,7 @@ PageContent.propTypes = {
     .isRequired,
   breadcrumbs: PropTypes.array,
   children: PropTypes.element,
-  intl: intlShape.isRequired
+  intl: intlShape.isRequired,
 };
 
 export default injectIntl(PageContent);

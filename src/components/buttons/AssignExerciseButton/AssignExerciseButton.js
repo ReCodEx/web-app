@@ -14,15 +14,17 @@ const AssignExerciseButton = ({
     return (
       <Button bsSize="xs" className="btn-flat" disabled={true} {...props}>
         {isBroken ? <NeedFixingIcon gapRight /> : <InfoIcon gapRight />}
-        {isBroken
-          ? <FormattedMessage
-              id="app.assignExerciseButton.isBroken"
-              defaultMessage="Broken"
-            />
-          : <FormattedMessage
-              id="app.assignExerciseButton.isLocked"
-              defaultMessage="Locked"
-            />}
+        {isBroken ? (
+          <FormattedMessage
+            id="app.assignExerciseButton.isBroken"
+            defaultMessage="Broken"
+          />
+        ) : (
+          <FormattedMessage
+            id="app.assignExerciseButton.isLocked"
+            defaultMessage="Locked"
+          />
+        )}
       </Button>
     );
   } else {
@@ -41,7 +43,7 @@ const AssignExerciseButton = ({
 AssignExerciseButton.propTypes = {
   isLocked: PropTypes.bool.isRequired,
   isBroken: PropTypes.bool.isRequired,
-  assignExercise: PropTypes.func.isRequired
+  assignExercise: PropTypes.func.isRequired,
 };
 
 export default AssignExerciseButton;

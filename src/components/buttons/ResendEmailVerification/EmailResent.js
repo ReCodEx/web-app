@@ -17,7 +17,7 @@ const EmailResent = ({ resend, ...props }) => {
 };
 
 EmailResent.propTypes = {
-  resend: PropTypes.func.isRequired
+  resend: PropTypes.func.isRequired,
 };
 
 export default EmailResent;

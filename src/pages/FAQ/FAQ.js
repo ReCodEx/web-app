@@ -10,7 +10,7 @@ const FAQ_MD_URI = 'https://raw.githubusercontent.com/wiki/ReCodEx/wiki/FAQ.md';
 
 class FAQ extends Component {
   state = {
-    faqText: ''
+    faqText: '',
   };
 
   componentDidMount() {
@@ -20,7 +20,9 @@ class FAQ extends Component {
   }
 
   render() {
-    const { links: { FAQ_URI } } = this.props;
+    const {
+      links: { FAQ_URI },
+    } = this.props;
 
     return (
       <PageContent
@@ -35,10 +37,9 @@ class FAQ extends Component {
           {
             text: <FormattedMessage id="app.faq.title" defaultMessage="FAQ" />,
             iconName: 'blind',
-            link: FAQ_URI
-          }
-        ]}
-      >
+            link: FAQ_URI,
+          },
+        ]}>
         <Markdown source={this.state.faqText} />
       </PageContent>
     );
@@ -46,7 +47,7 @@ class FAQ extends Component {
 }
 
 FAQ.propTypes = {
-  links: PropTypes.object.isRequired
+  links: PropTypes.object.isRequired,
 };
 
 export default withLinks(FAQ);

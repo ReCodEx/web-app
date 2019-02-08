@@ -17,19 +17,21 @@ const MakeRemoveSupervisorButtonContainer = ({
   fetchUserIfNeeded,
   ...props
 }) =>
-  isSupervisor
-    ? <RemoveSupervisorButton
-        {...props}
-        onClick={() => removeSupervisor(groupId, userId)}
-        bsSize="xs"
-      />
-    : <MakeSupervisorButton
-        {...props}
-        onClick={() => {
-          fetchUserIfNeeded(userId).then(() => makeSupervisor(groupId, userId));
-        }}
-        bsSize="xs"
-      />;
+  isSupervisor ? (
+    <RemoveSupervisorButton
+      {...props}
+      onClick={() => removeSupervisor(groupId, userId)}
+      bsSize="xs"
+    />
+  ) : (
+    <MakeSupervisorButton
+      {...props}
+      onClick={() => {
+        fetchUserIfNeeded(userId).then(() => makeSupervisor(groupId, userId));
+      }}
+      bsSize="xs"
+    />
+  );
 
 MakeRemoveSupervisorButtonContainer.propTypes = {
   groupId: PropTypes.string.isRequired,
@@ -37,19 +39,20 @@ MakeRemoveSupervisorButtonContainer.propTypes = {
   isSupervisor: PropTypes.bool.isRequired,
   makeSupervisor: PropTypes.func.isRequired,
   removeSupervisor: PropTypes.func.isRequired,
-  fetchUserIfNeeded: PropTypes.func.isRequired
+  fetchUserIfNeeded: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state, { groupId, userId }) => ({
-  isSupervisor: isSupervisorOf(userId, groupId)(state)
+  isSupervisor: isSupervisorOf(userId, groupId)(state),
 });
 
 const mapDispatchToProps = {
   makeSupervisor,
   removeSupervisor,
-  fetchUserIfNeeded
+  fetchUserIfNeeded,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(
-  MakeRemoveSupervisorButtonContainer
-);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(MakeRemoveSupervisorButtonContainer);

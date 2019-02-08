@@ -45,7 +45,7 @@ const pipelineParams = {
       id="app.pipelineParams.hasExtraFiles"
       defaultMessage="Extra source files can be added to tested solution"
     />
-  )
+  ),
 };
 
 const pipelineParameterMapping = parameter => {
@@ -56,24 +56,23 @@ const pipelineParameterMapping = parameter => {
   }
 };
 
-const ParametersList = ({ parameters }) =>
+const ParametersList = ({ parameters }) => (
   <Table>
-    {Object.keys(parameters).map(parameterName =>
+    {Object.keys(parameters).map(parameterName => (
       <tr key={parameterName}>
         <td className="shrink-col">
           <i>{pipelineParameterMapping(parameterName)}</i>:
         </td>
         <td className="em-padding-left">
-          <code>
-            {String(parameters[parameterName])}
-          </code>
+          <code>{String(parameters[parameterName])}</code>
         </td>
       </tr>
-    )}
-  </Table>;
+    ))}
+  </Table>
+);
 
 ParametersList.propTypes = {
-  parameters: PropTypes.object.isRequired
+  parameters: PropTypes.object.isRequired,
 };
 
 export default ParametersList;

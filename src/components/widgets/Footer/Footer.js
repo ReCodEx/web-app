@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedHTMLMessage } from 'react-intl';
 
-const Footer = ({ version }) =>
+const Footer = ({ version }) => (
   <footer className="main-footer">
     <div className="pull-right hidden-xs">
       <FormattedHTMLMessage
@@ -10,7 +10,7 @@ const Footer = ({ version }) =>
         defaultMessage="<strong>Version</strong> {version} (<a href='{changelogUrl}' target='_blank'>changelog</a>)"
         values={{
           version,
-          changelogUrl: 'https://github.com/ReCodEx/wiki/wiki/Changelog'
+          changelogUrl: 'https://github.com/ReCodEx/wiki/wiki/Changelog',
         }}
       />
     </div>
@@ -19,13 +19,14 @@ const Footer = ({ version }) =>
       defaultMessage="Copyright © 2016-{year} <a href='{website}' target='_blank'>ReCodEx</a>. All rights reserved."
       values={{
         website: 'http://github.com/recodex',
-        year: Math.max(new Date().getFullYear(), 2018)
+        year: Math.max(new Date().getFullYear(), 2018),
       }}
     />
-  </footer>;
+  </footer>
+);
 
 Footer.propTypes = {
-  version: PropTypes.string.isRequired
+  version: PropTypes.string.isRequired,
 };
 
 export default Footer;

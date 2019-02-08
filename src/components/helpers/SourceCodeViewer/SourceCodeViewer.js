@@ -3,14 +3,14 @@ import PropTypes from 'prop-types';
 
 import {
   loadAceEditor,
-  getAceModeFromExtension
+  getAceModeFromExtension,
 } from '../../helpers/AceEditorLoader';
 let AceEditor = loadAceEditor();
 
 const SourceCodeViewer = (
   { name, content = '', lineNumbers = true },
   { userSettings: { vimMode = false, darkTheme = false } }
-) =>
+) => (
   <AceEditor
     value={content}
     mode={getAceModeFromExtension(name.split('.').pop())}
@@ -20,16 +20,17 @@ const SourceCodeViewer = (
     width="100%"
     height="100%"
     editorProps={{ $blockScrolling: true, $autoScrollEditorIntoView: true }}
-  />;
+  />
+);
 
 SourceCodeViewer.propTypes = {
   name: PropTypes.string.isRequired,
   content: PropTypes.string,
-  lineNumbers: PropTypes.bool
+  lineNumbers: PropTypes.bool,
 };
 
 SourceCodeViewer.contextTypes = {
-  userSettings: PropTypes.object
+  userSettings: PropTypes.object,
 };
 
 export default SourceCodeViewer;

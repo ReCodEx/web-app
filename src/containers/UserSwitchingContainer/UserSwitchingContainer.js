@@ -10,15 +10,15 @@ UserSwitching.propTypes = {
   currentUser: PropTypes.object.isRequired,
   users: PropTypes.array.isRequired,
   open: PropTypes.bool,
-  loginAs: PropTypes.func.isRequired
+  loginAs: PropTypes.func.isRequired,
 };
 
 export default connect(
   state => ({
     currentUser: loggedInUserSelector(state),
-    users: usersSelector(state)
+    users: usersSelector(state),
   }),
   dispatch => ({
-    loginAs: id => dispatch(switchUser(id))
+    loginAs: id => dispatch(switchUser(id)),
   })
 )(UserSwitching);

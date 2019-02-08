@@ -14,7 +14,7 @@ const ReferenceSolutionsTableRow = ({
   permissionHints = null,
   solution: { userId, createdAt },
   runtimeEnvironments,
-  renderButtons
+  renderButtons,
 }) => {
   const rte = runtimeEnvironments.find(e => e.id === runtimeEnvironmentId);
 
@@ -25,13 +25,14 @@ const ReferenceSolutionsTableRow = ({
           <Icon icon="book" size="lg" gapLeft gapRight />
         </td>
         <td colSpan={3}>
-          {description ||
+          {description || (
             <i className="text-muted small">
               <FormattedMessage
                 id="app.referenceSolutionTable.noDescription"
                 defaultMessage="no description given"
               />
-            </i>}
+            </i>
+          )}
         </td>
         <td className="text-right valign-middle" rowSpan={2}>
           {renderButtons(id, permissionHints)}
@@ -46,9 +47,11 @@ const ReferenceSolutionsTableRow = ({
           />
         </td>
         <td className="text-nowrap">
-          {rte
-            ? <EnvironmentsListItem runtimeEnvironment={rte} longNames />
-            : '-'}
+          {rte ? (
+            <EnvironmentsListItem runtimeEnvironment={rte} longNames />
+          ) : (
+            '-'
+          )}
         </td>
         <td className="text-nowrap">
           <UsersNameContainer userId={userId} isSimple />
@@ -64,11 +67,11 @@ ReferenceSolutionsTableRow.propTypes = {
   runtimeEnvironmentId: PropTypes.string.isRequired,
   solution: PropTypes.shape({
     userId: PropTypes.string.isRequired,
-    createdAt: PropTypes.number.isRequired
+    createdAt: PropTypes.number.isRequired,
   }),
   runtimeEnvironments: PropTypes.array.isRequired,
   permissionHints: PropTypes.object,
-  renderButtons: PropTypes.func.isRequired
+  renderButtons: PropTypes.func.isRequired,
 };
 
 export default ReferenceSolutionsTableRow;

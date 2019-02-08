@@ -16,12 +16,12 @@ import {
   getMonitorParams,
   getPresubmitEnvironments,
   getPresubmitVariables,
-  hasEntryPoint
+  hasEntryPoint,
 } from '../../redux/selectors/submission';
 
 import {
   createGetUploadedFiles,
-  createAllUploaded
+  createAllUploaded,
 } from '../../redux/selectors/upload';
 import { getProgressObserverId } from '../../redux/selectors/evaluationProgress';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
@@ -36,7 +36,7 @@ class SubmitSolutionContainer extends Component {
     super(props);
     this.state = {
       selectedEnvironment: null,
-      entryPoint: null
+      entryPoint: null,
     };
   }
 
@@ -131,8 +131,8 @@ class SubmitSolutionContainer extends Component {
       push,
       links: {
         EXERCISE_REFERENCE_SOLUTION_URI_FACTORY,
-        SOLUTION_DETAIL_URI_FACTORY
-      }
+        SOLUTION_DETAIL_URI_FACTORY,
+      },
     } = this.props;
     return isReferenceSolution
       ? push(EXERCISE_REFERENCE_SOLUTION_URI_FACTORY(id, submissionId))
@@ -157,7 +157,7 @@ class SubmitSolutionContainer extends Component {
       monitor,
       reset,
       showProgress = true,
-      isReferenceSolution = false
+      isReferenceSolution = false,
     } = this.props;
 
     const { selectedEnvironment, entryPoint } = this.state;
@@ -191,12 +191,13 @@ class SubmitSolutionContainer extends Component {
           isReferenceSolution={isReferenceSolution}
         />
 
-        {showProgress &&
+        {showProgress && (
           <EvaluationProgressContainer
             isOpen={isProcessing && this.isMeTheObserver()}
             monitor={this.isMeTheObserver() ? monitor : null}
             onFinish={this.afterEvaluationFinishes}
-          />}
+          />
+        )}
       </div>
     );
   };
@@ -230,7 +231,7 @@ SubmitSolutionContainer.propTypes = {
   showProgress: PropTypes.bool,
   isReferenceSolution: PropTypes.bool,
   afterEvaluationFinishes: PropTypes.func.isRequired,
-  push: PropTypes.func.isRequired
+  push: PropTypes.func.isRequired,
 };
 
 export default withLinks(
@@ -249,7 +250,7 @@ export default withLinks(
         monitor: getMonitorParams(state),
         presubmitEnvironments: getPresubmitEnvironments(state),
         presubmitVariables: getPresubmitVariables(state),
-        progressObserverId: getProgressObserverId(state)
+        progressObserverId: getProgressObserverId(state),
       };
     },
     (dispatch, { id, userId, onSubmit, onReset, presubmitValidation }) => ({
@@ -278,9 +279,9 @@ export default withLinks(
       afterEvaluationFinishes: link =>
         Promise.all([
           dispatch(fetchUsersSolutions(userId, id)),
-          dispatch(canSubmit(id))
+          dispatch(canSubmit(id)),
         ]).then(() => dispatch(push(link))),
-      push: url => dispatch(push(url))
+      push: url => dispatch(push(url)),
     })
   )(SubmitSolutionContainer)
 );

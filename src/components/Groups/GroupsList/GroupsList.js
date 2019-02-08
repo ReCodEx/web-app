@@ -7,13 +7,19 @@ import ResourceRenderer from '../../helpers/ResourceRenderer';
 import GroupsName from '../GroupsName';
 import { GroupIcon } from '../../icons';
 
-const GroupsList = ({ groups = [], renderButtons = () => null, ...props }) =>
+const GroupsList = ({ groups = [], renderButtons = () => null, ...props }) => (
   <ResourceRenderer resource={groups.toArray()}>
-    {(...groups) =>
+    {(...groups) => (
       <Table hover {...props}>
         <tbody>
           {groups.map(
-            ({ id, name, localizedTexts, organizational, public: isPublic }) =>
+            ({
+              id,
+              name,
+              localizedTexts,
+              organizational,
+              public: isPublic,
+            }) => (
               <tr key={id}>
                 <td className="text-center">
                   <GroupIcon />
@@ -27,18 +33,19 @@ const GroupsList = ({ groups = [], renderButtons = () => null, ...props }) =>
                     isPublic={isPublic}
                   />
                 </td>
-                <td className="text-right">
-                  {renderButtons(id)}
-                </td>
+                <td className="text-right">{renderButtons(id)}</td>
               </tr>
+            )
           )}
         </tbody>
-      </Table>}
-  </ResourceRenderer>;
+      </Table>
+    )}
+  </ResourceRenderer>
+);
 
 GroupsList.propTypes = {
   groups: ImmutablePropTypes.map.isRequired,
-  renderButtons: PropTypes.func
+  renderButtons: PropTypes.func,
 };
 
 export default GroupsList;

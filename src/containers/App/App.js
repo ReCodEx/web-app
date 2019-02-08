@@ -5,13 +5,13 @@ import { connect } from 'react-redux';
 import {
   loggedInUserIdSelector,
   selectedInstanceId,
-  accessTokenSelector
+  accessTokenSelector,
 } from '../../redux/selectors/auth';
 import { fetchUserIfNeeded } from '../../redux/modules/users';
 import { getUser, getUserSettings } from '../../redux/selectors/users';
 import {
   isTokenValid,
-  isTokenInNeedOfRefreshment
+  isTokenInNeedOfRefreshment,
 } from '../../redux/helpers/token';
 import { fetchUsersInstancesIfNeeded } from '../../redux/modules/instances';
 import { fetchAllGroups } from '../../redux/modules/groups';
@@ -49,7 +49,7 @@ class App extends Component {
                 : Promise.resolve();
             })
           ),
-          dispatch(fetchUsersInstancesIfNeeded(userId))
+          dispatch(fetchUsersInstancesIfNeeded(userId)),
         ])
       : Promise.resolve();
 
@@ -68,7 +68,7 @@ class App extends Component {
   }
 
   getChildContext = () => ({
-    userSettings: this.props.userSettings
+    userSettings: this.props.userSettings,
   });
 
   /**
@@ -83,26 +83,29 @@ class App extends Component {
         logout();
       } else if (isTokenInNeedOfRefreshment(token) && !this.isRefreshingToken) {
         this.isRefreshingToken = true;
-        refreshToken().catch(() => logout()).then(() => {
-          this.isRefreshingToken = false;
-        });
+        refreshToken()
+          .catch(() => logout())
+          .then(() => {
+            this.isRefreshingToken = false;
+          });
       }
     }
   };
 
   render() {
     const { userId, instanceId } = this.props;
-    return userId && !instanceId
-      ? <div
-          style={{
-            textAlign: 'center',
-            height: '100vh',
-            lineHeight: '100vh'
-          }}
-        >
-          <LoadingIcon size="3x" />
-        </div>
-      : this.props.children;
+    return userId && !instanceId ? (
+      <div
+        style={{
+          textAlign: 'center',
+          height: '100vh',
+          lineHeight: '100vh',
+        }}>
+        <LoadingIcon size="3x" />
+      </div>
+    ) : (
+      this.props.children
+    );
   }
 }
 
@@ -116,11 +119,11 @@ App.propTypes = {
   children: PropTypes.element,
   routes: PropTypes.array,
   loadAsync: PropTypes.func,
-  userSettings: PropTypes.object
+  userSettings: PropTypes.object,
 };
 
 App.childContextTypes = {
-  userSettings: PropTypes.object
+  userSettings: PropTypes.object,
 };
 
 export default connect(
@@ -131,13 +134,13 @@ export default connect(
       userId,
       instanceId: selectedInstanceId(state),
       isLoggedIn: Boolean(userId),
-      userSettings: getUserSettings(userId)(state)
+      userSettings: getUserSettings(userId)(state),
     };
   },
   dispatch => ({
     loadAsync: (userId, routes) =>
       App.loadAsync({}, dispatch, { userId, routes }),
     refreshToken: () => dispatch(refresh()),
-    logout: () => dispatch(logout('/'))
+    logout: () => dispatch(logout('/')),
   })
 )(App);

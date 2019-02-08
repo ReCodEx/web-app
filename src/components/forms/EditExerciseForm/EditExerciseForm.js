@@ -5,7 +5,7 @@ import {
   injectIntl,
   intlShape,
   FormattedMessage,
-  defineMessages
+  defineMessages,
 } from 'react-intl';
 import { Alert } from 'react-bootstrap';
 import { defaultMemoize } from 'reselect';
@@ -23,22 +23,22 @@ import withLinks from '../../../helpers/withLinks';
 const messages = defineMessages({
   easy: {
     id: 'app.editExerciseForm.easy',
-    defaultMessage: 'Easy'
+    defaultMessage: 'Easy',
   },
   medium: {
     id: 'app.editExerciseForm.medium',
-    defaultMessage: 'Medium'
+    defaultMessage: 'Medium',
   },
   hard: {
     id: 'app.editExerciseForm.hard',
-    defaultMessage: 'Hard'
-  }
+    defaultMessage: 'Hard',
+  },
 });
 
 const difficultyOptions = defaultMemoize(formatMessage => [
   { key: 'easy', name: formatMessage(messages.easy) },
   { key: 'medium', name: formatMessage(messages.medium) },
-  { key: 'hard', name: formatMessage(messages.hard) }
+  { key: 'hard', name: formatMessage(messages.hard) },
 ]);
 
 const EditExerciseForm = ({
@@ -51,8 +51,8 @@ const EditExerciseForm = ({
   submitSucceeded,
   invalid,
   asyncValidating,
-  intl: { formatMessage }
-}) =>
+  intl: { formatMessage },
+}) => (
   <FormBox
     title={
       <FormattedMessage
@@ -92,19 +92,19 @@ const EditExerciseForm = ({
                 id="generic.validating"
                 defaultMessage="Validating..."
               />
-            )
+            ),
           }}
         />
       </div>
-    }
-  >
-    {submitFailed &&
+    }>
+    {submitFailed && (
       <Alert bsStyle="danger">
         <FormattedMessage
           id="generic.savingFailed"
           defaultMessage="Saving failed. Please try again later."
         />
-      </Alert>}
+      </Alert>
+    )}
 
     <FieldArray
       name="localizedTexts"
@@ -149,12 +149,9 @@ const EditExerciseForm = ({
       }
     />
 
-    {error &&
-      dirty &&
-      <Alert bsStyle="danger">
-        {error}
-      </Alert>}
-  </FormBox>;
+    {error && dirty && <Alert bsStyle="danger">{error}</Alert>}
+  </FormBox>
+);
 
 EditExerciseForm.propTypes = {
   error: PropTypes.any,
@@ -168,7 +165,7 @@ EditExerciseForm.propTypes = {
   submitSucceeded: PropTypes.bool,
   invalid: PropTypes.bool,
   asyncValidating: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
-  links: PropTypes.object
+  links: PropTypes.object,
 };
 
 const validate = ({ difficulty, localizedTexts }) => {
@@ -242,7 +239,7 @@ const shouldAsyncValidate = ({
   syncValidationPasses,
   trigger,
   pristine,
-  initialized
+  initialized,
 }) => {
   if (!syncValidationPasses) {
     return false;
@@ -264,6 +261,6 @@ export default withLinks(
     asyncValidate,
     shouldAsyncValidate,
     enableReinitialize: true,
-    keepDirtyOnReinitialize: false
+    keepDirtyOnReinitialize: false,
   })(injectIntl(EditExerciseForm))
 );

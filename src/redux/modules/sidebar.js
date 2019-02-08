@@ -5,12 +5,12 @@ export const actionTypes = {
   TOGGLE_VISIBILITY: 'sidebar/TOGGLE_VISIBILITY',
   TOGGLE_SIZE: 'sidebar/TOGGLE_SIZE',
   COLLAPSE: 'sidebar/COLLAPSE',
-  UNROLL: 'sidebar/UNROLL'
+  UNROLL: 'sidebar/UNROLL',
 };
 
 const initialState = fromJS({
   visible: false,
-  collapsed: false
+  collapsed: false,
 });
 
 export default handleActions(
@@ -23,7 +23,7 @@ export default handleActions(
 
     [actionTypes.COLLAPSE]: state => state.set('collapsed', true),
 
-    [actionTypes.UNROLL]: state => state.set('collapsed', false)
+    [actionTypes.UNROLL]: state => state.set('collapsed', false),
   },
   initialState
 );

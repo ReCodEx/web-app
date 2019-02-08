@@ -18,21 +18,20 @@ const NotVerified = ({ userId, currentUserId }) => {
               id="app.usersName.notVerified.title"
               defaultMessage="This account does not have a verified email address yet."
             />
-          }
-        >
+          }>
           <p>
             <FormattedMessage
               id="app.usersname.notVerified.description"
               defaultMessage="This user has not verified his/her email address via an activation link he has received to his email address."
             />
           </p>
-          {userId === currentUserId &&
+          {userId === currentUserId && (
             <p className="text-center">
               <ResendVerificationEmail userId={userId} />
-            </p>}
+            </p>
+          )}
         </Popover>
-      }
-    >
+      }>
       <span>
         <WarningIcon className="text-warning" gapLeft />
       </span>
@@ -42,7 +41,7 @@ const NotVerified = ({ userId, currentUserId }) => {
 
 NotVerified.propTypes = {
   userId: PropTypes.string.isRequired,
-  currentUserId: PropTypes.string.isRequired
+  currentUserId: PropTypes.string.isRequired,
 };
 
 export default NotVerified;

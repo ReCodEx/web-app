@@ -12,13 +12,13 @@ import MenuItem from '../../widgets/Sidebar/MenuItem';
 import {
   isReady,
   getJsData,
-  getId
+  getId,
 } from '../../../redux/helpers/resourceManager';
 import { getLocalizedResourceName } from '../../../helpers/localizedData';
 import {
   isSupervisorRole,
   isEmpoweredSupervisorRole,
-  isSuperadminRole
+  isSuperadminRole,
 } from '../../helpers/usersRoles';
 import withLinks from '../../../helpers/withLinks';
 import { EMPTY_OBJ } from '../../../helpers/common';
@@ -43,13 +43,13 @@ const Sidebar = ({
     EXERCISES_URI,
     PIPELINES_URI,
     ARCHIVE_URI,
-    SIS_INTEGRATION_URI
+    SIS_INTEGRATION_URI,
   },
-  intl: { locale }
-}) =>
+  intl: { locale },
+}) => (
   <aside className={classnames(['main-sidebar', styles.mainSidebar])}>
     <section className="sidebar">
-      {!isLoggedIn &&
+      {!isLoggedIn && (
         <ul className="sidebar-menu">
           <MenuTitle title="ReCodEx" />
           <MenuItem
@@ -75,9 +75,10 @@ const Sidebar = ({
             currentPath={currentUrl}
             link={REGISTRATION_URI}
           />
-        </ul>}
+        </ul>
+      )}
 
-      {isLoggedIn &&
+      {isLoggedIn && (
         <React.Fragment>
           <BadgeContainer small={small} />
           <ul className="sidebar-menu">
@@ -107,7 +108,7 @@ const Sidebar = ({
                 .toArray()
                 .filter(isReady)
                 .map(getJsData)
-                .map(({ id, name }) =>
+                .map(({ id, name }) => (
                   <MenuItem
                     key={id}
                     title={name}
@@ -115,10 +116,9 @@ const Sidebar = ({
                     currentPath={currentUrl}
                     link={INSTANCE_URI_FACTORY(id)}
                   />
-                )}
+                ))}
 
-            {studentOf &&
-              studentOf.size > 0 &&
+            {studentOf && studentOf.size > 0 && (
               <MenuGroup
                 title={
                   <FormattedMessage
@@ -139,9 +139,10 @@ const Sidebar = ({
                 currentPath={currentUrl}
                 createLink={item => GROUP_DETAIL_URI_FACTORY(getId(item))}
                 forceOpen={false}
-              />}
+              />
+            )}
 
-            {isSupervisorRole(role) &&
+            {isSupervisorRole(role) && (
               <MenuGroup
                 title={
                   <FormattedMessage
@@ -162,9 +163,10 @@ const Sidebar = ({
                 currentPath={currentUrl}
                 createLink={item => GROUP_DETAIL_URI_FACTORY(getId(item))}
                 forceOpen={false}
-              />}
+              />
+            )}
 
-            {isSupervisorRole(role) &&
+            {isSupervisorRole(role) && (
               <MenuItem
                 title={
                   <FormattedMessage
@@ -175,9 +177,10 @@ const Sidebar = ({
                 icon="puzzle-piece"
                 currentPath={currentUrl}
                 link={EXERCISES_URI}
-              />}
+              />
+            )}
 
-            {isEmpoweredSupervisorRole(role) &&
+            {isEmpoweredSupervisorRole(role) && (
               <MenuItem
                 title={
                   <FormattedMessage
@@ -188,7 +191,8 @@ const Sidebar = ({
                 icon="random"
                 currentPath={currentUrl}
                 link={PIPELINES_URI}
-              />}
+              />
+            )}
 
             <MenuItem
               title={
@@ -226,11 +230,13 @@ const Sidebar = ({
               currentPath={currentUrl}
             />
           </ul>
-        </React.Fragment>}
+        </React.Fragment>
+      )}
 
       {isSuperadminRole(role) && <Admin currentUrl={currentUrl} />}
     </section>
-  </aside>;
+  </aside>
+);
 
 Sidebar.propTypes = {
   isLoggedIn: PropTypes.bool,
@@ -241,7 +247,7 @@ Sidebar.propTypes = {
   instances: ImmutablePropTypes.list,
   small: PropTypes.bool,
   links: PropTypes.object,
-  intl: intlShape
+  intl: intlShape,
 };
 
 export default withLinks(injectIntl(Sidebar));

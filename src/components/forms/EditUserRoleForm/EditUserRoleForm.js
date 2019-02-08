@@ -9,7 +9,7 @@ import {
   knownRoles,
   roleLabels,
   roleDescriptions,
-  UserRoleIcon
+  UserRoleIcon,
 } from '../../helpers/usersRoles';
 import FormBox from '../../widgets/FormBox';
 import SubmitButton from '../SubmitButton';
@@ -21,8 +21,8 @@ const EditUserRoleForm = ({
   handleSubmit,
   submitFailed = false,
   submitSucceeded = false,
-  invalid
-}) =>
+  invalid,
+}) => (
   <FormBox
     title={
       <FormattedMessage
@@ -53,30 +53,29 @@ const EditUserRoleForm = ({
             ),
             success: (
               <FormattedMessage id="generic.saved" defaultMessage="Saved" />
-            )
+            ),
           }}
         />
       </div>
-    }
-  >
-    {submitFailed &&
+    }>
+    {submitFailed && (
       <Alert bsStyle="danger">
         <FormattedMessage
           id="generic.savingFailed"
           defaultMessage="Saving failed. Please try again later."
         />
-      </Alert>}
+      </Alert>
+    )}
 
     <Table hover className="no-margin">
       <tbody>
-        {knownRoles.map(role =>
+        {knownRoles.map(role => (
           <tr
             key={role}
             className={classnames({
-              'bg-info': role === currentRole
+              'bg-info': role === currentRole,
             })}
-            onClick={() => change('role', role)}
-          >
+            onClick={() => change('role', role)}>
             <td className="shrink-col text-nowrap text-center">
               <Field name="role" component="input" type="radio" value={role} />
             </td>
@@ -87,19 +86,19 @@ const EditUserRoleForm = ({
               className={classnames({
                 'text-bold': role === currentRole,
                 'shrink-col': true,
-                'text-nowrap': true
-              })}
-            >
+                'text-nowrap': true,
+              })}>
               {roleLabels[role]}
             </td>
             <td className="small text-muted valign-middle">
               {roleDescriptions[role]}
             </td>
           </tr>
-        )}
+        ))}
       </tbody>
     </Table>
-  </FormBox>;
+  </FormBox>
+);
 
 EditUserRoleForm.propTypes = {
   currentRole: PropTypes.string,
@@ -109,13 +108,13 @@ EditUserRoleForm.propTypes = {
   submitFailed: PropTypes.bool,
   submitSucceeded: PropTypes.bool,
   submitting: PropTypes.bool,
-  invalid: PropTypes.bool
+  invalid: PropTypes.bool,
 };
 
 export default injectIntl(
   reduxForm({
     form: 'user-role',
     enableReinitialize: true,
-    keepDirtyOnReinitialize: false
+    keepDirtyOnReinitialize: false,
   })(EditUserRoleForm)
 );

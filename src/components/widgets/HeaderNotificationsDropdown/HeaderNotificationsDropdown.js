@@ -18,28 +18,29 @@ const HeaderNotificationsDropdown = ({
   markClick,
   hideNotification,
   newNotifications,
-  oldNotifications
-}) =>
+  oldNotifications,
+}) => (
   <li
     className={classnames({
       'notifications-menu': true,
       dropdown: true,
-      open: isOpen
-    })}
-  >
+      open: isOpen,
+    })}>
     <a href="#" className="dropdown-toggle" onClick={toggleOpen}>
-      {newNotifications.size === 0
-        ? <Icon icon={['far', 'bell']} />
-        : <Icon icon={['fas', 'bell']} className="faa-shake animated" />}
-      {newNotifications.size > 0 &&
+      {newNotifications.size === 0 ? (
+        <Icon icon={['far', 'bell']} />
+      ) : (
+        <Icon icon={['fas', 'bell']} className="faa-shake animated" />
+      )}
+      {newNotifications.size > 0 && (
         <Label bsStyle="danger">
           {newNotifications.reduce((acc, n) => acc + n.count, 0)}
-        </Label>}
+        </Label>
+      )}
     </a>
     <ul
       className={classnames(['dropdown-menu', styles.dropdownMenu])}
-      onClick={markClick}
-    >
+      onClick={markClick}>
       <li className="header">
         <FormattedMessage
           id="app.notifications.title"
@@ -49,39 +50,43 @@ const HeaderNotificationsDropdown = ({
       </li>
       <li>
         <ul className="menu">
-          {newNotifications.map(notification =>
+          {newNotifications.map(notification => (
             <HeaderNotification
               key={notification.id}
               hide={hideNotification}
               {...notification}
               isNew={true}
             />
-          )}
+          ))}
           {showAll &&
-            oldNotifications.map(notification =>
+            oldNotifications.map(notification => (
               <HeaderNotification key={notification.id} {...notification} />
-            )}
+            ))}
         </ul>
       </li>
-      {oldNotifications.size > 0 &&
+      {oldNotifications.size > 0 && (
         <li className="footer">
           <a href="#" onClick={toggleShowAll}>
-            {showAll
-              ? <FormattedMessage
-                  id="app.notifications.hideAll"
-                  defaultMessage="Only new notifications"
-                />
-              : <FormattedMessage
-                  id="app.notifications.showAll"
-                  defaultMessage="Show {count, plural, one {old notification} two {two old notifications} other {all # notifications}}"
-                  values={{
-                    count: newNotifications.size + oldNotifications.size
-                  }}
-                />}
+            {showAll ? (
+              <FormattedMessage
+                id="app.notifications.hideAll"
+                defaultMessage="Only new notifications"
+              />
+            ) : (
+              <FormattedMessage
+                id="app.notifications.showAll"
+                defaultMessage="Show {count, plural, one {old notification} two {two old notifications} other {all # notifications}}"
+                values={{
+                  count: newNotifications.size + oldNotifications.size,
+                }}
+              />
+            )}
           </a>
-        </li>}
+        </li>
+      )}
     </ul>
-  </li>;
+  </li>
+);
 
 HeaderNotificationsDropdown.propTypes = {
   isOpen: PropTypes.bool,
@@ -91,7 +96,7 @@ HeaderNotificationsDropdown.propTypes = {
   markClick: PropTypes.func.isRequired,
   hideNotification: PropTypes.func.isRequired,
   newNotifications: ImmutablePropTypes.list,
-  oldNotifications: ImmutablePropTypes.list
+  oldNotifications: ImmutablePropTypes.list,
 };
 
 export default HeaderNotificationsDropdown;

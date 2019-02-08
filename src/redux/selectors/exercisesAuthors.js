@@ -35,7 +35,8 @@ export const getExercisesAuthorsOfGroup = defaultMemoize(groupId =>
 );
 
 export const getExercisesAuthorsOfGroupIsLoading = defaultMemoize(groupId =>
-  createSelector([exericsesAuthorsOfGroupSelector(groupId)], authors =>
-    Boolean(authors && isLoading(authors))
+  createSelector(
+    [exericsesAuthorsOfGroupSelector(groupId)],
+    authors => Boolean(authors && isLoading(authors))
   )
 );

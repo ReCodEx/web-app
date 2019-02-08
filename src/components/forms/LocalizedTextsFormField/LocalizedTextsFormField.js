@@ -15,10 +15,10 @@ const fieldTypes = {
   assignment: LocalizedAssignmentFormField,
   shadowAssignment: LocalizedShadowAssignmentFormField,
   exercise: LocalizedExerciseFormField,
-  group: LocalizedGroupFormField
+  group: LocalizedGroupFormField,
 };
 
-const renderTitle = ({ locale, _enabled }) =>
+const renderTitle = ({ locale, _enabled }) => (
   <span>
     <OverlayTrigger
       placement="bottom"
@@ -26,14 +26,11 @@ const renderTitle = ({ locale, _enabled }) =>
         <Tooltip id={`editLocalizedTextForm-${locale}`}>
           {knownLocalesNames[locale] || '??'}
         </Tooltip>
-      }
-    >
-      <span>
-        {locale}
-      </span>
+      }>
+      <span>{locale}</span>
     </OverlayTrigger>
 
-    {!_enabled &&
+    {!_enabled && (
       <OverlayTrigger
         placement="bottom"
         overlay={
@@ -43,11 +40,12 @@ const renderTitle = ({ locale, _enabled }) =>
               defaultMessage="This locale is currently disabled."
             />
           </Tooltip>
-        }
-      >
+        }>
         <WarningIcon gapLeft />
-      </OverlayTrigger>}
-  </span>;
+      </OverlayTrigger>
+    )}
+  </span>
+);
 
 const tabComparator = ({ locale: a }, { locale: b }) => a.localeCompare(b);
 
@@ -80,12 +78,12 @@ const LocalizedTextsFormField = ({ fieldType, ...props }) => {
 
 renderTitle.propTypes = {
   locale: PropTypes.string.isRequired,
-  _enabled: PropTypes.bool.isRequired
+  _enabled: PropTypes.bool.isRequired,
 };
 
 LocalizedTextsFormField.propTypes = {
   localizedTextsLocales: PropTypes.array,
-  fieldType: PropTypes.string.isRequired
+  fieldType: PropTypes.string.isRequired,
 };
 
 export default LocalizedTextsFormField;

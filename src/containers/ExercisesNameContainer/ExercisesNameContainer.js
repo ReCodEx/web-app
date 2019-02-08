@@ -8,7 +8,7 @@ import { fetchExerciseIfNeeded } from '../../redux/modules/exercises';
 import { exerciseSelector } from '../../redux/selectors/exercises';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import ExercisesName, {
-  LoadingExercisesName
+  LoadingExercisesName,
 } from '../../components/Exercises/ExercisesName';
 
 class ExercisesNameContainer extends Component {
@@ -27,11 +27,16 @@ class ExercisesNameContainer extends Component {
   };
 
   render() {
-    const { exercise, noLink, intl: { locale } } = this.props;
+    const {
+      exercise,
+      noLink,
+      intl: { locale },
+    } = this.props;
     return (
       <ResourceRenderer resource={exercise} loading={<LoadingExercisesName />}>
-        {exercise =>
-          <ExercisesName {...exercise} noLink={noLink} locale={locale} />}
+        {exercise => (
+          <ExercisesName {...exercise} noLink={noLink} locale={locale} />
+        )}
       </ResourceRenderer>
     );
   }
@@ -41,16 +46,16 @@ ExercisesNameContainer.propTypes = {
   exerciseId: PropTypes.string.isRequired,
   exercise: ImmutablePropTypes.map,
   noLink: PropTypes.bool,
-  intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired
+  intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired,
 };
 
 export default injectIntl(
   connect(
     (state, { exerciseId }) => ({
-      exercise: exerciseSelector(exerciseId)(state)
+      exercise: exerciseSelector(exerciseId)(state),
     }),
     (dispatch, { exerciseId }) => ({
-      loadExerciseIfNeeded: () => dispatch(fetchExerciseIfNeeded(exerciseId))
+      loadExerciseIfNeeded: () => dispatch(fetchExerciseIfNeeded(exerciseId)),
     })
   )(ExercisesNameContainer)
 );

@@ -15,8 +15,8 @@ const ResetPasswordForm = ({
   handleSubmit,
   hasFailed = false,
   hasSucceeded = false,
-  invalid
-}) =>
+  invalid,
+}) => (
   <FormBox
     title={
       <FormattedMessage
@@ -31,47 +31,51 @@ const ResetPasswordForm = ({
           type="submit"
           onClick={handleSubmit}
           bsStyle="success"
-          disabled={invalid || submitting || hasSucceeded}
-        >
-          {!submitting
-            ? hasSucceeded
-              ? <span>
-                  <SuccessIcon gapRight />
-                  <FormattedMessage
-                    id="app.resetPassword.success"
-                    defaultMessage="Processing was finished."
-                  />
-                </span>
-              : <FormattedMessage
-                  id="app.resetPassword.resetPassword"
-                  defaultMessage="Reset password"
-                />
-            : <span>
-                <LoadingIcon gapRight />
+          disabled={invalid || submitting || hasSucceeded}>
+          {!submitting ? (
+            hasSucceeded ? (
+              <span>
+                <SuccessIcon gapRight />
                 <FormattedMessage
-                  id="app.resetPassword.processing"
-                  defaultMessage="Resetting your password..."
+                  id="app.resetPassword.success"
+                  defaultMessage="Processing was finished."
                 />
-              </span>}
+              </span>
+            ) : (
+              <FormattedMessage
+                id="app.resetPassword.resetPassword"
+                defaultMessage="Reset password"
+              />
+            )
+          ) : (
+            <span>
+              <LoadingIcon gapRight />
+              <FormattedMessage
+                id="app.resetPassword.processing"
+                defaultMessage="Resetting your password..."
+              />
+            </span>
+          )}
         </Button>
       </div>
-    }
-  >
-    {hasFailed &&
+    }>
+    {hasFailed && (
       <Alert bsStyle="danger">
         <FormattedMessage
           id="app.resetPassword.failed"
           defaultMessage="Resetting password failed. Please check your email address."
         />
-      </Alert>}
+      </Alert>
+    )}
 
-    {hasSucceeded &&
+    {hasSucceeded && (
       <Alert bsStyle="success">
         <FormattedMessage
           id="app.resetPassword.succeeded"
           defaultMessage="Resetting password succeeded. Please check your email for further instructions."
         />
-      </Alert>}
+      </Alert>
+    )}
 
     <Field
       name="username"
@@ -84,7 +88,8 @@ const ResetPasswordForm = ({
         />
       }
     />
-  </FormBox>;
+  </FormBox>
+);
 
 ResetPasswordForm.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
@@ -92,7 +97,7 @@ ResetPasswordForm.propTypes = {
   hasFailed: PropTypes.bool,
   hasSucceeded: PropTypes.bool,
   submitting: PropTypes.bool,
-  invalid: PropTypes.bool
+  invalid: PropTypes.bool,
 };
 
 const validate = ({ username }) => {
@@ -118,5 +123,5 @@ const validate = ({ username }) => {
 
 export default reduxForm({
   form: 'resetPassword',
-  validate
+  validate,
 })(ResetPasswordForm);

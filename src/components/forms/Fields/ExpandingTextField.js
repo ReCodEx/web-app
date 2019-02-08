@@ -15,15 +15,12 @@ const ExpandingTextField = ({
   noItems = null,
   validateEach,
   ...props
-}) =>
+}) => (
   <div>
-    {Boolean(label) &&
-      <ControlLabel>
-        {label}
-      </ControlLabel>}
+    {Boolean(label) && <ControlLabel>{label}</ControlLabel>}
     <table>
       <tbody>
-        {fields.map((field, index) =>
+        {fields.map((field, index) => (
           <tr key={index}>
             <td width="100%" className="valign-top">
               <Field
@@ -44,8 +41,7 @@ const ExpandingTextField = ({
                       defaultMessage="Insert new item right above."
                     />
                   </Tooltip>
-                }
-              >
+                }>
                 <FlatButton onClick={() => fields.insert(index, '')}>
                   <AddIcon size="xs" />
                   <Icon icon="level-up-alt" />
@@ -62,26 +58,27 @@ const ExpandingTextField = ({
                       defaultMessage="Remove this item from the list."
                     />
                   </Tooltip>
-                }
-              >
+                }>
                 <FlatButton onClick={() => fields.remove(index)}>
                   <CloseIcon />
                 </FlatButton>
               </OverlayTrigger>
             </td>
           </tr>
-        )}
+        ))}
       </tbody>
     </table>
     <div style={{ textAlign: 'center' }}>
-      {fields.length === 0 &&
+      {fields.length === 0 && (
         <span style={{ paddingRight: '2em' }}>
-          {noItems ||
+          {noItems || (
             <FormattedMessage
               id="app.expandingTextField.noItems"
               defaultMessage="There are no items yet..."
-            />}
-        </span>}
+            />
+          )}
+        </span>
+      )}
       <OverlayTrigger
         placement="right"
         overlay={
@@ -91,14 +88,14 @@ const ExpandingTextField = ({
               defaultMessage="Append a new item."
             />
           </Tooltip>
-        }
-      >
+        }>
         <FlatButton onClick={() => fields.push('')}>
           <AddIcon />
         </FlatButton>
       </OverlayTrigger>
     </div>
-  </div>;
+  </div>
+);
 
 ExpandingTextField.propTypes = {
   fields: PropTypes.object.isRequired,
@@ -106,19 +103,19 @@ ExpandingTextField.propTypes = {
     active: PropTypes.bool,
     dirty: PropTypes.bool,
     error: PropTypes.any,
-    warning: PropTypes.any
+    warning: PropTypes.any,
   }).isRequired,
   label: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.element,
-    PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) })
+    PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) }),
   ]),
   noItems: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.element,
-    PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) })
+    PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) }),
   ]),
-  validateEach: PropTypes.func
+  validateEach: PropTypes.func,
 };
 
 export default ExpandingTextField;

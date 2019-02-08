@@ -24,12 +24,12 @@ import { InfoIcon, NeedFixingIcon, WarningIcon } from '../../components/icons';
 import {
   fetchExercise,
   fetchExerciseIfNeeded,
-  editExercise
+  editExercise,
 } from '../../redux/modules/exercises';
 import {
   fetchExerciseConfig,
   fetchExerciseConfigIfNeeded,
-  setExerciseConfig
+  setExerciseConfig,
 } from '../../redux/modules/exerciseConfigs';
 import { getExercise } from '../../redux/selectors/exercises';
 import { exerciseConfigSelector } from '../../redux/selectors/exerciseConfigs';
@@ -52,27 +52,27 @@ import { exerciseEnvironmentConfigSelector } from '../../redux/selectors/exercis
 import {
   fetchExerciseEnvironmentConfig,
   fetchExerciseEnvironmentConfigIfNeeded,
-  setExerciseEnvironmentConfig
+  setExerciseEnvironmentConfig,
 } from '../../redux/modules/exerciseEnvironmentConfigs';
 import { exerciseScoreConfigSelector } from '../../redux/selectors/exerciseScoreConfig';
 import {
   fetchScoreConfigIfNeeded,
-  setScoreConfig
+  setScoreConfig,
 } from '../../redux/modules/exerciseScoreConfig';
 import {
   fetchExerciseTestsIfNeeded,
-  setExerciseTests
+  setExerciseTests,
 } from '../../redux/modules/exerciseTests';
 import { exerciseTestsSelector } from '../../redux/selectors/exerciseTests';
 import { fetchPipelines } from '../../redux/modules/pipelines';
 import {
   pipelinesSelector,
-  getPipelinesEnvironmentsWhichHasEntryPoint
+  getPipelinesEnvironmentsWhichHasEntryPoint,
 } from '../../redux/selectors/pipelines';
 
 import {
   getTestsInitValues,
-  transformTestsValues
+  transformTestsValues,
 } from '../../helpers/exercise/tests';
 import {
   onlySimpleEnvironments,
@@ -81,24 +81,24 @@ import {
   getEnvironmentInitValues,
   transformSimpleEnvironmentsValues,
   transformEnvironmentValues,
-  getPossibleVariablesNames
+  getPossibleVariablesNames,
 } from '../../helpers/exercise/environments';
 import {
   isSimple,
   SIMPLE_CONFIG_TYPE,
-  ADVANCED_CONFIG_TYPE
+  ADVANCED_CONFIG_TYPE,
 } from '../../helpers/exercise/config';
 import {
   getSimpleConfigInitValues,
   transformSimpleConfigValues,
-  DATA_ONLY_ID
+  DATA_ONLY_ID,
 } from '../../helpers/exercise/configSimple';
 import {
   getPipelines,
   getPipelinesInitialValues,
   assembleNewConfig,
   getAdvancedConfigInitValues,
-  transformAdvancedConfigValues
+  transformAdvancedConfigValues,
 } from '../../helpers/exercise/configAdvanced';
 import { isEmpoweredSupervisorRole } from '../../components/helpers/usersRoles';
 import { hasPermissions, safeGet } from '../../helpers/common';
@@ -120,11 +120,11 @@ class EditExerciseConfig extends Component {
           Promise.all([
             dispatch(fetchExerciseConfigIfNeeded(exerciseId)),
             dispatch(fetchExerciseEnvironmentConfigIfNeeded(exerciseId)),
-            dispatch(fetchRuntimeEnvironments())
+            dispatch(fetchRuntimeEnvironments()),
           ]).then(([{ value: config }, { value: environmentConfig }]) => {
             const runtimeId = safeGet(environmentConfig, [
               0,
-              'runtimeEnvironmentId'
+              'runtimeEnvironmentId',
             ]);
             const pipelinesIds = getPipelines(config);
             return runtimeId && pipelinesIds && pipelinesIds.length > 0
@@ -140,7 +140,7 @@ class EditExerciseConfig extends Component {
       ),
       dispatch(fetchScoreConfigIfNeeded(exerciseId)),
       dispatch(fetchExerciseTestsIfNeeded(exerciseId)),
-      dispatch(fetchPipelines())
+      dispatch(fetchPipelines()),
     ]);
 
   setConfigTypeCreator = defaultMemoize(
@@ -157,7 +157,7 @@ class EditExerciseConfig extends Component {
         setExerciseConfigType,
         editEnvironmentConfigs,
         setConfig,
-        reloadConfig
+        reloadConfig,
       } = this.props;
       return () => {
         if (configurationType === SIMPLE_CONFIG_TYPE) {
@@ -174,7 +174,7 @@ class EditExerciseConfig extends Component {
             config
           );
           return editEnvironmentConfigs({
-            environmentConfigs: newEnvironments
+            environmentConfigs: newEnvironments,
           })
             .then(() => setConfig(configData))
             .then(() => setExerciseConfigType(exercise, configurationType))
@@ -191,7 +191,7 @@ class EditExerciseConfig extends Component {
     const { tests, scoreConfig } = transformTestsValues(data);
     return Promise.all([
       editTests({ tests }),
-      editScoreConfig({ scoreConfig })
+      editScoreConfig({ scoreConfig }),
     ]).then(reloadConfig);
   };
 
@@ -221,7 +221,7 @@ class EditExerciseConfig extends Component {
           config
         );
         return editEnvironmentConfigs({
-          environmentConfigs: newEnvironments
+          environmentConfigs: newEnvironments,
         })
           .then(() => setConfig(configData))
           .then(reloadConfig);
@@ -234,7 +234,7 @@ class EditExerciseConfig extends Component {
       editEnvironmentConfigs,
       fetchPipelinesVariables,
       setConfig,
-      reloadConfig
+      reloadConfig,
     } = this.props;
     const selectedPipelines = getPipelines(config);
     return data => {
@@ -294,9 +294,9 @@ class EditExerciseConfig extends Component {
       pipelinesVariables,
       intl: { locale },
       links: {
-        EXERCISE_URI_FACTORY
+        EXERCISE_URI_FACTORY,
         // PIPELINE_EDIT_URI_FACTORY
-      }
+      },
     } = this.props;
 
     return (
@@ -318,13 +318,13 @@ class EditExerciseConfig extends Component {
                   id="app.exercise.breadcrumbTitle"
                   defaultMessage="Exercise {name}"
                   values={{
-                    name: getLocalizedName({ name, localizedTexts }, locale)
+                    name: getLocalizedName({ name, localizedTexts }, locale),
                   }}
                 />
               ),
               iconName: 'puzzle-piece',
-              link: EXERCISE_URI_FACTORY(exerciseId)
-            })
+              link: EXERCISE_URI_FACTORY(exerciseId),
+            }),
           },
           {
             text: (
@@ -333,21 +333,19 @@ class EditExerciseConfig extends Component {
                 defaultMessage="Edit tests configuration"
               />
             ),
-            iconName: ['far', 'edit']
-          }
-        ]}
-      >
-        {(exercise, tests, loggedUser) =>
+            iconName: ['far', 'edit'],
+          },
+        ]}>
+        {(exercise, tests, loggedUser) => (
           <div>
             <ResourceRenderer
               resource={pipelines.toArray()}
-              returnAsArray={true}
-            >
+              returnAsArray={true}>
               {(
                 pipelines // pipelines are returned as a whole array (so they can be cached properly)
-              ) =>
+              ) => (
                 <div>
-                  {exercise.isBroken &&
+                  {exercise.isBroken && (
                     <Row>
                       <Col sm={12}>
                         <div className="callout callout-warning">
@@ -361,7 +359,8 @@ class EditExerciseConfig extends Component {
                           {exercise.validationError}
                         </div>
                       </Col>
-                    </Row>}
+                    </Row>
+                  )}
 
                   <Row>
                     <Col sm={12}>
@@ -370,59 +369,63 @@ class EditExerciseConfig extends Component {
                   </Row>
 
                   {hasPermissions(exercise, 'update') &&
-                    isEmpoweredSupervisorRole(loggedUser.privateData.role) &&
-                    <table className="em-margin-vertical">
-                      <tbody>
-                        <tr>
-                          <td className="valing-middle em-padding-right">
-                            <ResourceRenderer
-                              resource={[
-                                exerciseConfig,
-                                exerciseEnvironmentConfig
-                              ]}
-                            >
-                              {(config, environmentConfigs) =>
-                                <ResourceRenderer
-                                  resource={runtimeEnvironments.toArray()}
-                                  returnAsArray={true}
-                                >
-                                  {environments =>
-                                    <ExerciseConfigTypeButton
-                                      isSimple={isSimple(exercise)}
-                                      setExerciseConfigType={this.setConfigTypeCreator(
-                                        exercise,
-                                        isSimple(exercise)
-                                          ? ADVANCED_CONFIG_TYPE
-                                          : SIMPLE_CONFIG_TYPE,
-                                        pipelines,
-                                        environments,
-                                        tests,
-                                        config,
-                                        environmentConfigs
-                                      )}
-                                      disabled={
-                                        isSimple(exercise) &&
-                                        exercise.runtimeEnvironments.length > 1
-                                      }
-                                    />}
-                                </ResourceRenderer>}
-                            </ResourceRenderer>
-                          </td>
-                          <td className="em-padding-left small text-muted">
-                            <InfoIcon gapRight />
-                            {isSimple(exercise)
-                              ? <FormattedMessage
+                    isEmpoweredSupervisorRole(loggedUser.privateData.role) && (
+                      <table className="em-margin-vertical">
+                        <tbody>
+                          <tr>
+                            <td className="valing-middle em-padding-right">
+                              <ResourceRenderer
+                                resource={[
+                                  exerciseConfig,
+                                  exerciseEnvironmentConfig,
+                                ]}>
+                                {(config, environmentConfigs) => (
+                                  <ResourceRenderer
+                                    resource={runtimeEnvironments.toArray()}
+                                    returnAsArray={true}>
+                                    {environments => (
+                                      <ExerciseConfigTypeButton
+                                        isSimple={isSimple(exercise)}
+                                        setExerciseConfigType={this.setConfigTypeCreator(
+                                          exercise,
+                                          isSimple(exercise)
+                                            ? ADVANCED_CONFIG_TYPE
+                                            : SIMPLE_CONFIG_TYPE,
+                                          pipelines,
+                                          environments,
+                                          tests,
+                                          config,
+                                          environmentConfigs
+                                        )}
+                                        disabled={
+                                          isSimple(exercise) &&
+                                          exercise.runtimeEnvironments.length >
+                                            1
+                                        }
+                                      />
+                                    )}
+                                  </ResourceRenderer>
+                                )}
+                              </ResourceRenderer>
+                            </td>
+                            <td className="em-padding-left small text-muted">
+                              <InfoIcon gapRight />
+                              {isSimple(exercise) ? (
+                                <FormattedMessage
                                   id="app.editExerciseConfig.changeConfigAdvancedExplain"
                                   defaultMessage="Changing to advanced configuration will allow you to use custom pipelines and manually configure their parameters. The exercise may also have a custom environment configuration alowing arbitrary constraints on which files are submitted by the students. A deeper understanding of the ReCodEx evaluation process is required to set the configuration correctly. Please note that advanced configurations may have only one runtime environment (so it is not possible to convert simple configurations with multiple environments set)."
                                 />
-                              : <FormattedMessage
+                              ) : (
+                                <FormattedMessage
                                   id="app.editExerciseConfig.changeConfigSimpleExplain"
                                   defaultMessage="Changing back to simple configuration requires that certain constraints are imposed. This may significantly alter the runtime environment configuration, pipelines selection, and exercise configuration."
-                                />}
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>}
+                                />
+                              )}
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    )}
 
                   <Row>
                     <Col lg={6}>
@@ -433,10 +436,9 @@ class EditExerciseConfig extends Component {
                             defaultMessage="Tests and Scoring"
                           />
                         }
-                        unlimitedHeight
-                      >
+                        unlimitedHeight>
                         <ResourceRenderer resource={exerciseScoreConfig}>
-                          {scoreConfig =>
+                          {scoreConfig => (
                             <EditTestsForm
                               readOnly={
                                 !hasPermissions(exercise, 'setScoreConfig')
@@ -447,69 +449,68 @@ class EditExerciseConfig extends Component {
                                 locale
                               )}
                               onSubmit={this.transformAndSendTestsValues}
-                            />}
+                            />
+                          )}
                         </ResourceRenderer>
                       </Box>
 
                       {isSimple(exercise) &&
-                        hasPermissions(exercise, 'update') &&
-                        <Box
-                          title={
-                            <FormattedMessage
-                              id="app.editExerciseConfig.runtimeEnvironments"
-                              defaultMessage="Runtime Environments"
-                            />
-                          }
-                          unlimitedHeight
-                        >
-                          <ResourceRenderer
-                            resource={[
-                              exerciseConfig,
-                              exerciseEnvironmentConfig
-                            ]}
-                          >
-                            {(config, environmentConfigs) =>
-                              <ResourceRenderer
-                                resource={runtimeEnvironments.toArray()}
-                                returnAsArray={true}
-                              >
-                                {environments =>
-                                  <EditEnvironmentSimpleForm
-                                    initialValues={getSimpleEnvironmentsInitValues(
-                                      environmentConfigs
-                                    )}
-                                    runtimeEnvironments={onlySimpleEnvironments(
-                                      environments
-                                    )}
-                                    onSubmit={this.transformAndSendSimpleRuntimesValuesCreator(
-                                      pipelines,
-                                      environments,
-                                      tests,
-                                      config,
-                                      environmentConfigs
-                                    )}
-                                  />}
-                              </ResourceRenderer>}
-                          </ResourceRenderer>
-                        </Box>}
+                        hasPermissions(exercise, 'update') && (
+                          <Box
+                            title={
+                              <FormattedMessage
+                                id="app.editExerciseConfig.runtimeEnvironments"
+                                defaultMessage="Runtime Environments"
+                              />
+                            }
+                            unlimitedHeight>
+                            <ResourceRenderer
+                              resource={[
+                                exerciseConfig,
+                                exerciseEnvironmentConfig,
+                              ]}>
+                              {(config, environmentConfigs) => (
+                                <ResourceRenderer
+                                  resource={runtimeEnvironments.toArray()}
+                                  returnAsArray={true}>
+                                  {environments => (
+                                    <EditEnvironmentSimpleForm
+                                      initialValues={getSimpleEnvironmentsInitValues(
+                                        environmentConfigs
+                                      )}
+                                      runtimeEnvironments={onlySimpleEnvironments(
+                                        environments
+                                      )}
+                                      onSubmit={this.transformAndSendSimpleRuntimesValuesCreator(
+                                        pipelines,
+                                        environments,
+                                        tests,
+                                        config,
+                                        environmentConfigs
+                                      )}
+                                    />
+                                  )}
+                                </ResourceRenderer>
+                              )}
+                            </ResourceRenderer>
+                          </Box>
+                        )}
                     </Col>
                     <Col lg={6}>
                       <SupplementaryFilesTableContainer exercise={exercise} />
                     </Col>
                   </Row>
 
-                  {!isSimple(exercise) &&
+                  {!isSimple(exercise) && (
                     <ResourceRenderer
-                      resource={[exerciseConfig, exerciseEnvironmentConfig]}
-                    >
-                      {(config, environmentConfigs) =>
+                      resource={[exerciseConfig, exerciseEnvironmentConfig]}>
+                      {(config, environmentConfigs) => (
                         <Row>
                           <Col lg={6}>
                             <ResourceRenderer
                               resource={runtimeEnvironments.toArray()}
-                              returnAsArray={true}
-                            >
-                              {environments =>
+                              returnAsArray={true}>
+                              {environments => (
                                 <EditEnvironmentConfigForm
                                   initialValues={getEnvironmentInitValues(
                                     environmentConfigs
@@ -529,55 +530,61 @@ class EditExerciseConfig extends Component {
                                     tests,
                                     config
                                   )}
-                                />}
+                                />
+                              )}
                             </ResourceRenderer>
                           </Col>
 
                           <Col lg={6}>
-                            {environmentConfigs.length === 1 && tests.length > 0
-                              ? <EditExercisePipelinesForm
-                                  pipelines={pipelines}
-                                  initialValues={getPipelinesInitialValues(
-                                    config
+                            {environmentConfigs.length === 1 &&
+                            tests.length > 0 ? (
+                              <EditExercisePipelinesForm
+                                pipelines={pipelines}
+                                initialValues={getPipelinesInitialValues(
+                                  config
+                                )}
+                                readOnly={!hasPermissions(exercise, 'update')}
+                                onSubmit={this.transformAndSendPipelinesCreator(
+                                  tests,
+                                  config,
+                                  environmentConfigs
+                                )}
+                              />
+                            ) : (
+                              <div className="callout callout-warning">
+                                <h4>
+                                  <WarningIcon gapRight />
+                                  <FormattedMessage
+                                    id="app.editExercisePipelines.title"
+                                    defaultMessage="Selected Pipelines"
+                                  />
+                                </h4>
+                                <ul className="em-padding-left">
+                                  {environmentConfigs.length !== 1 && (
+                                    <li>
+                                      <FormattedMessage
+                                        id="app.editExerciseConfig.noRuntimes"
+                                        defaultMessage="The runtime environment is not properly configured yet."
+                                      />
+                                    </li>
                                   )}
-                                  readOnly={!hasPermissions(exercise, 'update')}
-                                  onSubmit={this.transformAndSendPipelinesCreator(
-                                    tests,
-                                    config,
-                                    environmentConfigs
+                                  {tests.length === 0 && (
+                                    <li>
+                                      <FormattedMessage
+                                        id="app.editExerciseConfig.noTests"
+                                        defaultMessage="There are no tests yet."
+                                      />
+                                    </li>
                                   )}
-                                />
-                              : <div className="callout callout-warning">
-                                  <h4>
-                                    <WarningIcon gapRight />
-                                    <FormattedMessage
-                                      id="app.editExercisePipelines.title"
-                                      defaultMessage="Selected Pipelines"
-                                    />
-                                  </h4>
-                                  <ul className="em-padding-left">
-                                    {environmentConfigs.length !== 1 &&
-                                      <li>
-                                        <FormattedMessage
-                                          id="app.editExerciseConfig.noRuntimes"
-                                          defaultMessage="The runtime environment is not properly configured yet."
-                                        />
-                                      </li>}
-                                    {tests.length === 0 &&
-                                      <li>
-                                        <FormattedMessage
-                                          id="app.editExerciseConfig.noTests"
-                                          defaultMessage="There are no tests yet."
-                                        />
-                                      </li>}
-                                  </ul>
-                                  <p>
-                                    <FormattedMessage
-                                      id="app.editExerciseConfig.cannotDisplayPipelinesForm"
-                                      defaultMessage="The tests and runtime environment must be correctly defined before the pipeline configuration becomes available."
-                                    />
-                                  </p>
-                                </div>}
+                                </ul>
+                                <p>
+                                  <FormattedMessage
+                                    id="app.editExerciseConfig.cannotDisplayPipelinesForm"
+                                    defaultMessage="The tests and runtime environment must be correctly defined before the pipeline configuration becomes available."
+                                  />
+                                </p>
+                              </div>
+                            )}
 
                             {/* exercise.configurationType !== 'simpleExerciseConfig' &&
                   <Box
@@ -657,80 +664,69 @@ class EditExerciseConfig extends Component {
                   </Box>
                 */}
                           </Col>
-                        </Row>}
-                    </ResourceRenderer>}
+                        </Row>
+                      )}
+                    </ResourceRenderer>
+                  )}
 
-                  {hasPermissions(exercise, 'update') &&
+                  {hasPermissions(exercise, 'update') && (
                     <div className="em-margin-vertical">
                       <Row>
                         <Col sm={12}>
                           <ResourceRenderer
                             resource={[
                               exerciseConfig,
-                              exerciseEnvironmentConfig
-                            ]}
-                          >
+                              exerciseEnvironmentConfig,
+                            ]}>
                             {(config, envConfig) =>
-                              tests.length > 0
-                                ? isSimple(exercise)
-                                  ? <EditExerciseSimpleConfigForm
-                                      initialValues={getSimpleConfigInitValues(
-                                        config,
-                                        tests,
-                                        envConfig
-                                      )}
-                                      exercise={exercise}
-                                      exerciseTests={tests}
-                                      environmentsWithEntryPoints={
-                                        environmentsWithEntryPoints
-                                      }
-                                      dataOnly={Boolean(
-                                        exercise.runtimeEnvironments.find(
-                                          env => env.id === DATA_ONLY_ID
-                                        )
-                                      )}
-                                      onSubmit={this.transformAndSendConfigValuesCreator(
-                                        transformSimpleConfigValues,
-                                        pipelines,
-                                        envConfig,
-                                        tests,
-                                        config
-                                      )}
-                                    />
-                                  : pipelinesVariables &&
-                                    pipelinesVariables.length > 0
-                                    ? <EditExerciseAdvancedConfigForm
-                                        exerciseId={exerciseId}
-                                        exerciseTests={tests}
-                                        pipelines={pipelines}
-                                        pipelinesVariables={pipelinesVariables}
-                                        initialValues={getAdvancedConfigInitValues(
-                                          config,
-                                          getFirstEnvironmentId(envConfig),
-                                          tests,
-                                          pipelinesVariables
-                                        )}
-                                        onSubmit={this.transformAndSendConfigValuesCreator(
-                                          transformAdvancedConfigValues,
-                                          getFirstEnvironmentId(envConfig),
-                                          tests,
-                                          pipelinesVariables
-                                        )}
-                                      />
-                                    : <div className="callout callout-warning">
-                                        <h4>
-                                          <WarningIcon gapRight />
-                                          <FormattedMessage
-                                            id="app.editExercise.editConfig"
-                                            defaultMessage="Edit Exercise Configuration"
-                                          />
-                                        </h4>
-                                        <FormattedMessage
-                                          id="app.editExerciseConfig.noPipelines"
-                                          defaultMessage="There are no pipelines selected yet. The form cannot be displayed until at least one pipeline is selected."
-                                        />
-                                      </div>
-                                : <div className="callout callout-warning">
+                              tests.length > 0 ? (
+                                isSimple(exercise) ? (
+                                  <EditExerciseSimpleConfigForm
+                                    initialValues={getSimpleConfigInitValues(
+                                      config,
+                                      tests,
+                                      envConfig
+                                    )}
+                                    exercise={exercise}
+                                    exerciseTests={tests}
+                                    environmentsWithEntryPoints={
+                                      environmentsWithEntryPoints
+                                    }
+                                    dataOnly={Boolean(
+                                      exercise.runtimeEnvironments.find(
+                                        env => env.id === DATA_ONLY_ID
+                                      )
+                                    )}
+                                    onSubmit={this.transformAndSendConfigValuesCreator(
+                                      transformSimpleConfigValues,
+                                      pipelines,
+                                      envConfig,
+                                      tests,
+                                      config
+                                    )}
+                                  />
+                                ) : pipelinesVariables &&
+                                  pipelinesVariables.length > 0 ? (
+                                  <EditExerciseAdvancedConfigForm
+                                    exerciseId={exerciseId}
+                                    exerciseTests={tests}
+                                    pipelines={pipelines}
+                                    pipelinesVariables={pipelinesVariables}
+                                    initialValues={getAdvancedConfigInitValues(
+                                      config,
+                                      getFirstEnvironmentId(envConfig),
+                                      tests,
+                                      pipelinesVariables
+                                    )}
+                                    onSubmit={this.transformAndSendConfigValuesCreator(
+                                      transformAdvancedConfigValues,
+                                      getFirstEnvironmentId(envConfig),
+                                      tests,
+                                      pipelinesVariables
+                                    )}
+                                  />
+                                ) : (
+                                  <div className="callout callout-warning">
                                     <h4>
                                       <WarningIcon gapRight />
                                       <FormattedMessage
@@ -739,21 +735,41 @@ class EditExerciseConfig extends Component {
                                       />
                                     </h4>
                                     <FormattedMessage
-                                      id="app.editExerciseConfig.noTests"
-                                      defaultMessage="There are no tests yet."
+                                      id="app.editExerciseConfig.noPipelines"
+                                      defaultMessage="There are no pipelines selected yet. The form cannot be displayed until at least one pipeline is selected."
                                     />
+                                  </div>
+                                )
+                              ) : (
+                                <div className="callout callout-warning">
+                                  <h4>
+                                    <WarningIcon gapRight />
                                     <FormattedMessage
-                                      id="app.editExerciseConfig.cannotDisplayConfigForm"
-                                      defaultMessage="The exercise configuration form cannot be displayed until at least one test is defined."
+                                      id="app.editExercise.editConfig"
+                                      defaultMessage="Edit Exercise Configuration"
                                     />
-                                  </div>}
+                                  </h4>
+                                  <FormattedMessage
+                                    id="app.editExerciseConfig.noTests"
+                                    defaultMessage="There are no tests yet."
+                                  />
+                                  <FormattedMessage
+                                    id="app.editExerciseConfig.cannotDisplayConfigForm"
+                                    defaultMessage="The exercise configuration form cannot be displayed until at least one test is defined."
+                                  />
+                                </div>
+                              )
+                            }
                           </ResourceRenderer>
                         </Col>
                       </Row>
-                    </div>}
-                </div>}
+                    </div>
+                  )}
+                </div>
+              )}
             </ResourceRenderer>
-          </div>}
+          </div>
+        )}
       </Page>
     );
   }
@@ -764,7 +780,7 @@ EditExerciseConfig.propTypes = {
   loggedUser: ImmutablePropTypes.map,
   runtimeEnvironments: PropTypes.object.isRequired,
   params: PropTypes.shape({
-    exerciseId: PropTypes.string.isRequired
+    exerciseId: PropTypes.string.isRequired,
   }).isRequired,
   exerciseConfig: PropTypes.object,
   exerciseEnvironmentConfig: PropTypes.object,
@@ -785,7 +801,7 @@ EditExerciseConfig.propTypes = {
   fetchConfig: PropTypes.func.isRequired,
   setConfig: PropTypes.func.isRequired,
   reloadExercise: PropTypes.func.isRequired,
-  reloadConfig: PropTypes.func.isRequired
+  reloadConfig: PropTypes.func.isRequired,
 };
 
 export default withLinks(
@@ -806,7 +822,7 @@ export default withLinks(
         environmentsWithEntryPoints: getPipelinesEnvironmentsWhichHasEntryPoint(
           state
         ),
-        pipelinesVariables: getExercisePielinesVariablesJS(exerciseId)(state)
+        pipelinesVariables: getExercisePielinesVariablesJS(exerciseId)(state),
       };
     },
     (dispatch, { params: { exerciseId } }) => ({
@@ -828,9 +844,9 @@ export default withLinks(
         dispatch(fetchExercise(exerciseId)).then(({ value: exercise }) =>
           Promise.all([
             dispatch(fetchExerciseConfig(exerciseId)),
-            dispatch(fetchExerciseEnvironmentConfig(exerciseId))
+            dispatch(fetchExerciseEnvironmentConfig(exerciseId)),
           ])
-        )
+        ),
     })
   )(injectIntl(EditExerciseConfig))
 );

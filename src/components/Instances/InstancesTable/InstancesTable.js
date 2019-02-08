@@ -8,7 +8,11 @@ import UsersNameContainer from '../../../containers/UsersNameContainer';
 
 import withLinks from '../../../helpers/withLinks';
 
-const InstancesTable = ({ instances, links: { INSTANCE_URI_FACTORY }, intl }) =>
+const InstancesTable = ({
+  instances,
+  links: { INSTANCE_URI_FACTORY },
+  intl,
+}) => (
   <Table hover>
     <thead>
       <tr>
@@ -32,12 +36,10 @@ const InstancesTable = ({ instances, links: { INSTANCE_URI_FACTORY }, intl }) =>
     <tbody>
       {instances
         .sort((a, b) => a.name.localeCompare(b.name, intl.locale))
-        .map(({ id, name, admin, hasValidLicence }) =>
+        .map(({ id, name, admin, hasValidLicence }) => (
           <tr key={id}>
             <td>
-              <Link to={INSTANCE_URI_FACTORY(id)}>
-                {name}
-              </Link>
+              <Link to={INSTANCE_URI_FACTORY(id)}>{name}</Link>
             </td>
             <td>
               <UsersNameContainer userId={admin} />
@@ -46,14 +48,15 @@ const InstancesTable = ({ instances, links: { INSTANCE_URI_FACTORY }, intl }) =>
               <SuccessOrFailureIcon success={hasValidLicence} />
             </td>
           </tr>
-        )}
+        ))}
     </tbody>
-  </Table>;
+  </Table>
+);
 
 InstancesTable.propTypes = {
   instances: PropTypes.array.isRequired,
   links: PropTypes.object,
-  intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired
+  intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired,
 };
 
 export default injectIntl(withLinks(InstancesTable));

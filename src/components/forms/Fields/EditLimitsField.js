@@ -80,10 +80,10 @@ const EditLimitsField = ({
                 maxLength={12}
                 {...props}
               />
-              {!disabled &&
+              {!disabled && (
                 <tr>
                   <td className={styles.buttonsCol}>
-                    {testsCount > 1 &&
+                    {testsCount > 1 && (
                       <OverlayTrigger
                         placement="bottom"
                         overlay={
@@ -93,16 +93,15 @@ const EditLimitsField = ({
                               defaultMessage="Copy this value vertically to all tests within the environment."
                             />
                           </Tooltip>
-                        }
-                      >
+                        }>
                         <FlatButton
                           onClick={cloneVertically('memory')}
-                          bsSize="xs"
-                        >
+                          bsSize="xs">
                           <Icon icon="arrows-alt-v" />
                         </FlatButton>
-                      </OverlayTrigger>}
-                    {environmentsCount > 1 &&
+                      </OverlayTrigger>
+                    )}
+                    {environmentsCount > 1 && (
                       <Confirm
                         id={`confirm.${id}.memory.horizontal`}
                         onConfirmed={cloneHorizontally('memory')}
@@ -111,8 +110,7 @@ const EditLimitsField = ({
                             id="app.EditLimitsForm.cloneHorizontal.yesNoQuestion"
                             defaultMessage="Do you really want to use these limits for all runtime environments of this test? Please note, that individual environments have different performance characteristics."
                           />
-                        }
-                      >
+                        }>
                         <OverlayTrigger
                           placement="bottom"
                           overlay={
@@ -122,15 +120,14 @@ const EditLimitsField = ({
                                 defaultMessage="Copy this value horizontally to all environments of the test."
                               />
                             </Tooltip>
-                          }
-                        >
+                          }>
                           <FlatButton bsSize="xs">
                             <Icon icon="arrows-alt-h" />
                           </FlatButton>
                         </OverlayTrigger>
-                      </Confirm>}
-                    {testsCount > 1 &&
-                      environmentsCount > 1 &&
+                      </Confirm>
+                    )}
+                    {testsCount > 1 && environmentsCount > 1 && (
                       <Confirm
                         id={`confirm.${id}.memory.all`}
                         onConfirmed={cloneAll('memory')}
@@ -139,8 +136,7 @@ const EditLimitsField = ({
                             id="app.EditLimitsForm.cloneAll.yesNoQuestion"
                             defaultMessage="Do you really want to use these limits for all the tests of all runtime environments? Please note, that individual environments have different performance characteristics."
                           />
-                        }
-                      >
+                        }>
                         <OverlayTrigger
                           placement="bottom"
                           overlay={
@@ -150,15 +146,16 @@ const EditLimitsField = ({
                                 defaultMessage="Copy this value to all tests in all environments."
                               />
                             </Tooltip>
-                          }
-                        >
+                          }>
                           <FlatButton bsSize="xs">
                             <Icon icon="arrows-alt" />
                           </FlatButton>
                         </OverlayTrigger>
-                      </Confirm>}
+                      </Confirm>
+                    )}
                   </td>
-                </tr>}
+                </tr>
+              )}
             </tbody>
           </table>
         </Col>
@@ -180,10 +177,10 @@ const EditLimitsField = ({
                 disabled={disabled}
                 {...props}
               />
-              {!disabled &&
+              {!disabled && (
                 <tr>
                   <td className={styles.buttonsCol}>
-                    {testsCount > 1 &&
+                    {testsCount > 1 && (
                       <OverlayTrigger
                         placement="bottom"
                         overlay={
@@ -193,16 +190,15 @@ const EditLimitsField = ({
                               defaultMessage="Copy this value vertically to all tests within the environment."
                             />
                           </Tooltip>
-                        }
-                      >
+                        }>
                         <FlatButton
                           onClick={cloneVertically('time')}
-                          bsSize="xs"
-                        >
+                          bsSize="xs">
                           <Icon icon="arrows-alt-v" />
                         </FlatButton>
-                      </OverlayTrigger>}
-                    {environmentsCount > 1 &&
+                      </OverlayTrigger>
+                    )}
+                    {environmentsCount > 1 && (
                       <Confirm
                         id={`confirm.${id}.time.horizontal`}
                         onConfirmed={cloneHorizontally('time')}
@@ -211,8 +207,7 @@ const EditLimitsField = ({
                             id="app.EditLimitsForm.cloneHorizontal.yesNoQuestion"
                             defaultMessage="Do you really want to use these limits for all runtime environments of this test? Please note, that individual environments have different performance characteristics."
                           />
-                        }
-                      >
+                        }>
                         <OverlayTrigger
                           placement="bottom"
                           overlay={
@@ -222,15 +217,14 @@ const EditLimitsField = ({
                                 defaultMessage="Copy this value horizontally to all environments of the test."
                               />
                             </Tooltip>
-                          }
-                        >
+                          }>
                           <FlatButton bsSize="xs">
                             <Icon icon="arrows-alt-h" />
                           </FlatButton>
                         </OverlayTrigger>
-                      </Confirm>}
-                    {testsCount > 1 &&
-                      environmentsCount > 1 &&
+                      </Confirm>
+                    )}
+                    {testsCount > 1 && environmentsCount > 1 && (
                       <Confirm
                         id={`confirm.${id}.time.all`}
                         onConfirmed={cloneAll('time')}
@@ -239,8 +233,7 @@ const EditLimitsField = ({
                             id="app.EditLimitsForm.cloneAll.yesNoQuestion"
                             defaultMessage="Do you really want to use these limits for all the tests of all runtime environments? Please note, that individual environments have different performance characteristics."
                           />
-                        }
-                      >
+                        }>
                         <OverlayTrigger
                           placement="bottom"
                           overlay={
@@ -250,15 +243,16 @@ const EditLimitsField = ({
                                 defaultMessage="Copy this value to all tests in all environments."
                               />
                             </Tooltip>
-                          }
-                        >
+                          }>
                           <FlatButton bsSize="xs">
                             <Icon icon="arrows-alt" />
                           </FlatButton>
                         </OverlayTrigger>
-                      </Confirm>}
+                      </Confirm>
+                    )}
                   </td>
-                </tr>}
+                </tr>
+              )}
             </tbody>
           </table>
         </Col>
@@ -275,7 +269,7 @@ EditLimitsField.propTypes = {
   prefix: PropTypes.string.isRequired,
   testsCount: PropTypes.number.isRequired,
   environmentsCount: PropTypes.number.isRequired,
-  disabled: PropTypes.bool
+  disabled: PropTypes.bool,
 };
 
 export default EditLimitsField;

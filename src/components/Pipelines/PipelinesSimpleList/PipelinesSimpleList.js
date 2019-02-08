@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 
 import ExercisePipelinesListItem from '../PipelinesSimpleListItem';
 
-const PipelinesSimpleList = ({ pipelines, createActions, intl, ...rest }) =>
+const PipelinesSimpleList = ({ pipelines, createActions, intl, ...rest }) => (
   <Table>
     <thead>
       <tr>
@@ -15,13 +15,14 @@ const PipelinesSimpleList = ({ pipelines, createActions, intl, ...rest }) =>
         <th>
           <FormattedMessage id="generic.author" defaultMessage="Author" />
         </th>
-        {createActions &&
+        {createActions && (
           <th>
             <FormattedMessage
               id="app.pipelinesSimpleList.actions"
               defaultMessage="Actions"
             />
-          </th>}
+          </th>
+        )}
       </tr>
     </thead>
     <tbody>
@@ -31,15 +32,15 @@ const PipelinesSimpleList = ({ pipelines, createActions, intl, ...rest }) =>
             a.name.localeCompare(b.name, intl.locale) ||
             b.createdAt - a.createdAt
         )
-        .map((pipeline, i) =>
+        .map((pipeline, i) => (
           <ExercisePipelinesListItem
             {...pipeline}
             createActions={createActions}
             key={i}
           />
-        )}
+        ))}
 
-      {pipelines.length === 0 &&
+      {pipelines.length === 0 && (
         <tr>
           <td className="text-center" colSpan={3}>
             <FormattedMessage
@@ -47,14 +48,16 @@ const PipelinesSimpleList = ({ pipelines, createActions, intl, ...rest }) =>
               defaultMessage="There are no pipelines in this list."
             />
           </td>
-        </tr>}
+        </tr>
+      )}
     </tbody>
-  </Table>;
+  </Table>
+);
 
 PipelinesSimpleList.propTypes = {
   pipelines: PropTypes.array.isRequired,
   createActions: PropTypes.func,
-  intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired
+  intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired,
 };
 
 export default injectIntl(PipelinesSimpleList);

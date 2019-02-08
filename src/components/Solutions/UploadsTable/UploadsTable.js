@@ -13,8 +13,8 @@ const UploadsTable = ({
   removeFile,
   returnFile,
   removeFailedFile,
-  retryUploadFile
-}) =>
+  retryUploadFile,
+}) => (
   <Table responsive>
     <thead>
       <tr>
@@ -35,102 +35,83 @@ const UploadsTable = ({
       </tr>
     </thead>
     <tbody>
-      {attachedFiles.map(payload =>
+      {attachedFiles.map(payload => (
         <tr key={'attached-' + payload.name}>
           <td className="text-center">
             <Icon icon="check" className="text-success text-bold" />
           </td>
-          <td>
-            {payload.name}
-          </td>
-          <td>
-            {prettyPrintBytes(payload.file.size)}
-          </td>
+          <td>{payload.name}</td>
+          <td>{prettyPrintBytes(payload.file.size)}</td>
           <td>
             <Button
               bsSize="xs"
               bsStyle="default"
-              onClick={() => removeFile(payload)}
-            >
+              onClick={() => removeFile(payload)}>
               <DeleteIcon />
             </Button>
           </td>
         </tr>
-      )}
+      ))}
 
-      {uploadingFiles.map(payload =>
+      {uploadingFiles.map(payload => (
         <tr key={'uploading-' + payload.name}>
           <td className="text-center">
             <Icon icon="sync" spin />
           </td>
-          <td>
-            {payload.name}
-          </td>
-          <td>
-            {prettyPrintBytes(payload.file.size)}
-          </td>
+          <td>{payload.name}</td>
+          <td>{prettyPrintBytes(payload.file.size)}</td>
           <td />
         </tr>
-      )}
+      ))}
 
-      {failedFiles.map(payload =>
+      {failedFiles.map(payload => (
         <tr key={'failed-' + payload.name}>
           <td className="text-center">
             <Icon icon="exclamation-triangle" className="text-danger" />
           </td>
-          <td>
-            {payload.name}
-          </td>
-          <td>
-            {prettyPrintBytes(payload.file.size)}
-          </td>
+          <td>{payload.name}</td>
+          <td>{prettyPrintBytes(payload.file.size)}</td>
           <td>
             <ButtonGroup>
               <Button
                 bsSize="xs"
                 bsStyle="default"
-                onClick={() => removeFailedFile(payload)}
-              >
+                onClick={() => removeFailedFile(payload)}>
                 <DeleteIcon />
               </Button>
               <Button
                 bsSize="xs"
                 bsStyle="default"
-                onClick={() => retryUploadFile(payload)}
-              >
+                onClick={() => retryUploadFile(payload)}>
                 <Icon icon="sync" />
               </Button>
             </ButtonGroup>
           </td>
         </tr>
-      )}
+      ))}
 
-      {removedFiles.map(payload =>
+      {removedFiles.map(payload => (
         <tr key={'removed' + payload.name}>
           <td className="text-center">
             <DeleteIcon className="text-warning" />
           </td>
-          <td>
-            {payload.name}
-          </td>
-          <td>
-            {prettyPrintBytes(payload.file.size)}
-          </td>
+          <td>{payload.name}</td>
+          <td>{prettyPrintBytes(payload.file.size)}</td>
           <td>
             <ButtonGroup>
               <Button
                 bsSize="xs"
                 bsStyle="default"
-                onClick={() => returnFile(payload)}
-              >
+                onClick={() => returnFile(payload)}>
                 <Icon icon="sync" />
               </Button>
             </ButtonGroup>
           </td>
         </tr>
-      )}
+      ))}
     </tbody>
-  </Table>;
+  </Table>
+);
 
 UploadsTable.propTypes = {
   uploadingFiles: PropTypes.array.isRequired,
@@ -140,7 +121,7 @@ UploadsTable.propTypes = {
   removeFile: PropTypes.func.isRequired,
   removeFailedFile: PropTypes.func.isRequired,
   retryUploadFile: PropTypes.func.isRequired,
-  returnFile: PropTypes.func.isRequired
+  returnFile: PropTypes.func.isRequired,
 };
 
 export default UploadsTable;

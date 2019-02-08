@@ -13,33 +13,33 @@ const MenuItem = (
     notificationsCount = 0,
     inNewTab = false,
     small = false,
-    onIsActive = isActive => isActive
+    onIsActive = isActive => isActive,
   },
   { isActive }
-) =>
+) => (
   <li
     className={classnames({
       active: isActive(link),
-      small
-    })}
-  >
+      small,
+    })}>
     <Link to={link} target={inNewTab ? '_blank' : undefined}>
       <Icon icon={icon} fixedWidth gapRight />
       <span
         style={{
           whiteSpace: 'normal',
           display: 'inline-block',
-          verticalAlign: 'top'
-        }}
-      >
+          verticalAlign: 'top',
+        }}>
         {title}
       </span>
-      {notificationsCount > 0 &&
+      {notificationsCount > 0 && (
         <small className="label pull-right bg-yellow">
           {notificationsCount}
-        </small>}
+        </small>
+      )}
     </Link>
-  </li>;
+  </li>
+);
 
 MenuItem.propTypes = {
   title: PropTypes.oneOfType([PropTypes.element, PropTypes.string]),
@@ -49,11 +49,11 @@ MenuItem.propTypes = {
   link: PropTypes.string,
   inNewTab: PropTypes.bool,
   small: PropTypes.bool,
-  onIsActive: PropTypes.func
+  onIsActive: PropTypes.func,
 };
 
 MenuItem.contextTypes = {
-  isActive: PropTypes.func
+  isActive: PropTypes.func,
 };
 
 export default MenuItem;

@@ -41,21 +41,27 @@ export const assignmentEnvironmentsSelector = createSelector(
 );
 
 export const getUserSolutions = (userId, assignmentId) =>
-  createSelector([getSolutions, getAssignments], (solutions, assignments) => {
-    const assignmentSolutions = assignments.getIn([
-      'solutions',
-      assignmentId,
-      userId
-    ]);
-    if (!assignmentSolutions) {
-      return EMPTY_LIST;
-    }
+  createSelector(
+    [getSolutions, getAssignments],
+    (solutions, assignments) => {
+      const assignmentSolutions = assignments.getIn([
+        'solutions',
+        assignmentId,
+        userId,
+      ]);
+      if (!assignmentSolutions) {
+        return EMPTY_LIST;
+      }
 
-    return assignmentSolutions.map(id => solutions.get(id)).filter(a => a);
-  });
+      return assignmentSolutions.map(id => solutions.get(id)).filter(a => a);
+    }
+  );
 
 export const isResubmitAllPending = assignmentId =>
-  createSelector(getAssignment, assignmentSelector => {
-    const assignment = assignmentSelector(assignmentId);
-    return assignment.getIn(['data', 'resubmit-all-pending'], false);
-  });
+  createSelector(
+    getAssignment,
+    assignmentSelector => {
+      const assignment = assignmentSelector(assignmentId);
+      return assignment.getIn(['data', 'resubmit-all-pending'], false);
+    }
+  );

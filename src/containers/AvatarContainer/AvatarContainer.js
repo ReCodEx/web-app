@@ -7,7 +7,7 @@ import { loggedInUserSelector } from '../../redux/selectors/users';
 import Avatar, {
   LoadingAvatar,
   FailedAvatar,
-  FakeAvatar
+  FakeAvatar,
 } from '../../components/widgets/Avatar';
 
 const AvatarContainer = ({
@@ -17,28 +17,31 @@ const AvatarContainer = ({
   firstName,
   size = 45,
   ...props
-}) =>
+}) => (
   <ResourceRenderer
     loading={<LoadingAvatar size={size} />}
     failed={<FailedAvatar size={size} />}
-    resource={currentUser}
-  >
+    resource={currentUser}>
     {currentUser =>
-      currentUser.privateData.settings.useGravatar && avatarUrl !== null
-        ? <Avatar size={size} src={avatarUrl} title={fullName} {...props} />
-        : <FakeAvatar size={size} {...props}>
-            {firstName[0]}
-          </FakeAvatar>}
-  </ResourceRenderer>;
+      currentUser.privateData.settings.useGravatar && avatarUrl !== null ? (
+        <Avatar size={size} src={avatarUrl} title={fullName} {...props} />
+      ) : (
+        <FakeAvatar size={size} {...props}>
+          {firstName[0]}
+        </FakeAvatar>
+      )
+    }
+  </ResourceRenderer>
+);
 
 AvatarContainer.propTypes = {
   currentUser: PropTypes.object.isRequired,
   avatarUrl: PropTypes.string,
   fullName: PropTypes.string.isRequired,
   firstName: PropTypes.string.isRequired,
-  size: PropTypes.number
+  size: PropTypes.number,
 };
 
 export default connect(state => ({
-  currentUser: loggedInUserSelector(state)
+  currentUser: loggedInUserSelector(state),
 }))(AvatarContainer);

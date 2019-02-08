@@ -28,30 +28,35 @@ const LeaveJoinGroupButtonContainer = ({
   links: { DASHBOARD_URI },
   ...props
 }) =>
-  isStudent
-    ? userId === currentUserId
-      ? <LeaveGroupButton
-          {...props}
-          onClick={() => leaveGroup(groupId, userId).then(push(DASHBOARD_URI))}
-          bsSize={bsSize}
-        />
-      : <RemoveFromGroupButton
-          {...props}
-          onClick={() => leaveGroup(groupId, userId)}
-          bsSize={bsSize}
-        />
-    : <JoinGroupButton
+  isStudent ? (
+    userId === currentUserId ? (
+      <LeaveGroupButton
         {...props}
-        onClick={() =>
-          joinGroup(groupId, userId).then(() =>
-            Promise.all([
-              fetchGroup(groupId),
-              fetchAssignmentsForGroup(groupId),
-              fetchGroupsStatsIfNeeded(groupId)
-            ])
-          )}
+        onClick={() => leaveGroup(groupId, userId).then(push(DASHBOARD_URI))}
         bsSize={bsSize}
-      />;
+      />
+    ) : (
+      <RemoveFromGroupButton
+        {...props}
+        onClick={() => leaveGroup(groupId, userId)}
+        bsSize={bsSize}
+      />
+    )
+  ) : (
+    <JoinGroupButton
+      {...props}
+      onClick={() =>
+        joinGroup(groupId, userId).then(() =>
+          Promise.all([
+            fetchGroup(groupId),
+            fetchAssignmentsForGroup(groupId),
+            fetchGroupsStatsIfNeeded(groupId),
+          ])
+        )
+      }
+      bsSize={bsSize}
+    />
+  );
 
 LeaveJoinGroupButtonContainer.propTypes = {
   groupId: PropTypes.string.isRequired,
@@ -65,12 +70,12 @@ LeaveJoinGroupButtonContainer.propTypes = {
   fetchGroupsStatsIfNeeded: PropTypes.func.isRequired,
   bsSize: PropTypes.string,
   push: PropTypes.func.isRequired,
-  links: PropTypes.object
+  links: PropTypes.object,
 };
 
 const mapStateToProps = (state, { userId, groupId }) => ({
   isStudent: isStudentOf(userId, groupId)(state),
-  currentUserId: loggedInUserIdSelector(state)
+  currentUserId: loggedInUserIdSelector(state),
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -79,9 +84,12 @@ const mapDispatchToProps = dispatch => ({
   fetchAssignmentsForGroup: gId => dispatch(fetchAssignmentsForGroup(gId)),
   fetchGroup: gId => dispatch(fetchGroup(gId)),
   fetchGroupsStatsIfNeeded: gId => dispatch(fetchGroupsStatsIfNeeded(gId)),
-  push: url => dispatch(push(url))
+  push: url => dispatch(push(url)),
 });
 
 export default withLinks(
-  connect(mapStateToProps, mapDispatchToProps)(LeaveJoinGroupButtonContainer)
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(LeaveJoinGroupButtonContainer)
 );

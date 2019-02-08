@@ -16,7 +16,7 @@ const PipelineVisualisation = ({ graph }) => {
       <div
         className={style.pipeline}
         dangerouslySetInnerHTML={{
-          __html: svg
+          __html: svg,
         }}
       />
     </ClientOnly>
@@ -24,7 +24,7 @@ const PipelineVisualisation = ({ graph }) => {
 };
 
 PipelineVisualisation.propTypes = {
-  graph: PropTypes.object
+  graph: PropTypes.object,
 };
 
 export default PipelineVisualisation;

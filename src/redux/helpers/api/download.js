@@ -9,7 +9,7 @@ export const downloadHelper = ({
   endpoint,
   actionType,
   fileNameSelector = trivialFileNameSelector,
-  contentType
+  contentType,
 }) => (id, fileName = null) => (dispatch, getState) => {
   let initial;
   if (fetch !== null) {
@@ -24,12 +24,14 @@ export const downloadHelper = ({
           type: actionType,
           method: 'GET',
           endpoint: endpoint(id),
-          doNotProcess: true // the response is not (does not have to be) a JSON
+          doNotProcess: true, // the response is not (does not have to be) a JSON
         })
       )
     )
     .then(result => {
-      const { value: { ok, status } } = result;
+      const {
+        value: { ok, status },
+      } = result;
       if (ok === false) {
         const msg =
           status === 404

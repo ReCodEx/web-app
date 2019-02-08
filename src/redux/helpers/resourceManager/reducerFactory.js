@@ -73,7 +73,7 @@ const reducerFactory = (actionTypes, id = 'id') => ({
   [actionTypes.INVALIDATE]: (state, { payload }) =>
     state.updateIn(['resources', payload], data =>
       createRecord({ data, didInvalidate: true })
-    )
+    ),
 });
 
 export default reducerFactory;

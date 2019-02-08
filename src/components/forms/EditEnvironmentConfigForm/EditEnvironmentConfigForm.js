@@ -6,7 +6,7 @@ import {
   FormattedMessage,
   FormattedHTMLMessage,
   intlShape,
-  injectIntl
+  injectIntl,
 } from 'react-intl';
 import { Alert } from 'react-bootstrap';
 
@@ -43,7 +43,7 @@ class EditEnvironmentConfigForm extends Component {
       invalid,
       error,
       warning,
-      intl: { locale }
+      intl: { locale },
     } = this.props;
 
     return (
@@ -57,11 +57,12 @@ class EditEnvironmentConfigForm extends Component {
         type={submitSucceeded ? 'success' : undefined}
         footer={
           <div className="text-center">
-            {dirty &&
+            {dirty && (
               <Button type="reset" onClick={reset} bsStyle="danger">
                 <RefreshIcon gapRight />
                 <FormattedMessage id="generic.reset" defaultMessage="Reset" />
-              </Button>}
+              </Button>
+            )}
 
             <SubmitButton
               id="editRuntimeConfig"
@@ -73,26 +74,24 @@ class EditEnvironmentConfigForm extends Component {
               handleSubmit={handleSubmit}
             />
 
-            {Boolean(selectedRuntimeId) &&
-              !hasDefaultVariables &&
+            {Boolean(selectedRuntimeId) && !hasDefaultVariables && (
               <Button onClick={this.setDefaultVariables} bsStyle="primary">
                 <RefreshIcon gapRight />
                 <FormattedMessage
                   id="app.editEnvironmentConfig.setDefaultVariables"
                   defaultMessage="Set Default Variables"
                 />
-              </Button>}
-          </div>
-        }
-      >
-        {possibleVariables &&
-          <datalist id="editEnvironmentConfigVariablesNames">
-            {Object.keys(possibleVariables).map(name =>
-              <option key={name}>
-                {name}
-              </option>
+              </Button>
             )}
-          </datalist>}
+          </div>
+        }>
+        {possibleVariables && (
+          <datalist id="editEnvironmentConfigVariablesNames">
+            {Object.keys(possibleVariables).map(name => (
+              <option key={name}>{name}</option>
+            ))}
+          </datalist>
+        )}
 
         <p className="text-muted small em-padding-horizontal">
           <InfoIcon gapRight />
@@ -113,13 +112,13 @@ class EditEnvironmentConfigForm extends Component {
           options={runtimeEnvironments
             .map(({ id, longName }) => ({
               key: id,
-              name: longName
+              name: longName,
             }))
             .sort((a, b) => a.name.localeCompare(b.name, locale))}
           addEmptyOption={firstTimeSelection}
         />
 
-        {Boolean(selectedRuntimeId) &&
+        {Boolean(selectedRuntimeId) && (
           <React.Fragment>
             <p className="text-muted small em-padding-horizontal">
               <InfoIcon gapRight />
@@ -132,33 +131,38 @@ class EditEnvironmentConfigForm extends Component {
               name="variables"
               component={EditEnvironmentConfigVariables}
             />
-          </React.Fragment>}
+          </React.Fragment>
+        )}
 
-        {!selectedRuntimeId &&
+        {!selectedRuntimeId && (
           <Alert bsStyle="warning" className="em-margin-top">
             <FormattedMessage
               id="app.editEnvironmentConfig.noRuntimeSelected"
               defaultMessage="There must be a runtime environment selected before you can proceed with exercise configuration."
             />
-          </Alert>}
+          </Alert>
+        )}
 
-        {submitFailed &&
+        {submitFailed && (
           <Alert bsStyle="danger" className="em-margin-top">
             <FormattedMessage
               id="generic.savingFailed"
               defaultMessage="Saving failed. Please try again later."
             />
-          </Alert>}
+          </Alert>
+        )}
 
-        {error &&
+        {error && (
           <Alert bsStyle="danger" className="em-margin-top">
             {error}
-          </Alert>}
+          </Alert>
+        )}
 
-        {warning &&
+        {warning && (
           <Alert bsStyle="warning" className="em-margin-top">
             {warning}
-          </Alert>}
+          </Alert>
+        )}
       </FormBox>
     );
   }
@@ -183,7 +187,7 @@ EditEnvironmentConfigForm.propTypes = {
   invalid: PropTypes.bool,
   error: PropTypes.any,
   warning: PropTypes.any,
-  intl: intlShape.isRequired
+  intl: intlShape.isRequired,
 };
 
 const validate = ({ environmentId, variables }) => {
@@ -281,7 +285,7 @@ export default connect((state, { runtimeEnvironments }) => {
   const defaultVariables = selectedRuntimeId
     ? safeGet(runtimeEnvironments, [
         ({ id }) => id === selectedRuntimeId,
-        'defaultVariables'
+        'defaultVariables',
       ])
     : null;
 
@@ -290,7 +294,7 @@ export default connect((state, { runtimeEnvironments }) => {
     defaultVariables,
     hasDefaultVariables:
       Boolean(defaultVariables) &&
-      compareVariablesForEquality(values.variables, defaultVariables)
+      compareVariablesForEquality(values.variables, defaultVariables),
   };
 })(
   reduxForm({
@@ -298,6 +302,6 @@ export default connect((state, { runtimeEnvironments }) => {
     enableReinitialize: true,
     keepDirtyOnReinitialize: false,
     validate,
-    warn
+    warn,
   })(injectIntl(EditEnvironmentConfigForm))
 );

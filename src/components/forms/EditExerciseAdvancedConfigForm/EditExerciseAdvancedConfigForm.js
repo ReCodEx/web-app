@@ -38,7 +38,7 @@ class EditExerciseAdvancedConfigForm extends Component {
       supplementaryFiles,
       exerciseTests,
       rawFill,
-      intl: { locale }
+      intl: { locale },
     } = this.props;
 
     return (
@@ -55,13 +55,14 @@ class EditExerciseAdvancedConfigForm extends Component {
         dirty={dirty}
         footer={
           <div className="text-center">
-            {dirty &&
+            {dirty && (
               <span>
                 <Button type="reset" onClick={reset} bsStyle="danger">
                   <RefreshIcon gapRight />
                   <FormattedMessage id="generic.reset" defaultMessage="Reset" />
                 </Button>
-              </span>}
+              </span>
+            )}
 
             <SubmitButton
               id="editExerciseAdvancedConfig"
@@ -74,28 +75,27 @@ class EditExerciseAdvancedConfigForm extends Component {
               messages={SUBMIT_BUTTON_MESSAGES}
             />
           </div>
-        }
-      >
-        {submitFailed &&
+        }>
+        {submitFailed && (
           <Alert bsStyle="danger">
             <FormattedMessage
               id="generic.savingFailed"
               defaultMessage="Saving failed. Please try again later."
             />
-          </Alert>}
+          </Alert>
+        )}
 
-        {pipelinesVariables &&
+        {pipelinesVariables && (
           <ResourceRenderer resource={supplementaryFiles.toArray()}>
-            {(...files) =>
+            {(...files) => (
               <Table
                 className={classnames({
                   'no-margin': true,
-                  [styles.configTable]: true
-                })}
-              >
+                  [styles.configTable]: true,
+                })}>
                 {exerciseTests
                   .sort((a, b) => a.name.localeCompare(b.name, locale))
-                  .map((test, idx) =>
+                  .map((test, idx) => (
                     <EditExerciseAdvancedConfigTest
                       key={idx}
                       pipelines={pipelines}
@@ -112,9 +112,11 @@ class EditExerciseAdvancedConfigForm extends Component {
                           : undefined
                       }
                     />
-                  )}
-              </Table>}
-          </ResourceRenderer>}
+                  ))}
+              </Table>
+            )}
+          </ResourceRenderer>
+        )}
       </FormBox>
     );
   }
@@ -137,7 +139,7 @@ EditExerciseAdvancedConfigForm.propTypes = {
   formErrors: PropTypes.object,
   supplementaryFiles: ImmutablePropTypes.map,
   rawFill: PropTypes.func.isRequired,
-  intl: intlShape.isRequired
+  intl: intlShape.isRequired,
 };
 
 const FORM_NAME = 'editExerciseAdvancedConfig';
@@ -146,7 +148,7 @@ export default connect(
   (state, { exerciseId }) => {
     return {
       supplementaryFiles: getSupplementaryFilesForExercise(exerciseId)(state),
-      formErrors: exerciseConfigFormErrors(state, FORM_NAME)
+      formErrors: exerciseConfigFormErrors(state, FORM_NAME),
     };
   },
   dispatch => ({
@@ -166,8 +168,8 @@ export default connect(
             pipelineIdx,
             variableName
           )
-        )
-    })
+        ),
+    }),
   })
 )(
   reduxForm({
@@ -178,7 +180,7 @@ export default connect(
       'formValues',
       'supplementaryFiles',
       'exerciseTests',
-      'handleSubmit'
-    ]
+      'handleSubmit',
+    ],
   })(injectIntl(EditExerciseAdvancedConfigForm))
 );

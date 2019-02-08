@@ -97,7 +97,7 @@ const AssignmentStatusIcon = ({ id, status, accepted = false }) => {
 AssignmentStatusIcon.propTypes = {
   id: PropTypes.string.isRequired,
   status: PropTypes.string,
-  accepted: PropTypes.bool
+  accepted: PropTypes.bool,
 };
 
 export default AssignmentStatusIcon;

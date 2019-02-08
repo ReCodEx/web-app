@@ -2,12 +2,12 @@ import FilesTable from './FilesTable';
 export default FilesTable;
 
 export {
-  default as SupplementaryFilesTableRow
+  default as SupplementaryFilesTableRow,
 } from './SupplementaryFilesTableRow';
 export {
-  default as SupplementaryFilesTableHeaderRow
+  default as SupplementaryFilesTableHeaderRow,
 } from './SupplementaryFilesTableHeaderRow';
 export { default as AttachmentFilesTableRow } from './AttachmentFilesTableRow';
 export {
-  default as AttachmentFilesTableHeaderRow
+  default as AttachmentFilesTableHeaderRow,
 } from './AttachmentFilesTableHeaderRow';

@@ -7,7 +7,7 @@ import { defaultMemoize } from 'reselect';
 import Page from '../../components/layout/Page';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import SolutionDetail, {
-  FailedSubmissionDetail
+  FailedSubmissionDetail,
 } from '../../components/Solutions/SolutionDetail';
 import AcceptSolutionContainer from '../../containers/AcceptSolutionContainer';
 import ResubmitSolutionContainer from '../../containers/ResubmitSolutionContainer';
@@ -19,21 +19,21 @@ import { fetchGroupsStats } from '../../redux/modules/stats';
 import { fetchAssignmentIfNeeded } from '../../redux/modules/assignments';
 import {
   fetchSolution,
-  fetchSolutionIfNeeded
+  fetchSolutionIfNeeded,
 } from '../../redux/modules/solutions';
 import {
   fetchSubmissionEvaluationsForSolution,
-  deleteSubmissionEvaluation
+  deleteSubmissionEvaluation,
 } from '../../redux/modules/submissionEvaluations';
 import { getSolution } from '../../redux/selectors/solutions';
 import {
   getAssignment,
-  assignmentEnvironmentsSelector
+  assignmentEnvironmentsSelector,
 } from '../../redux/selectors/assignments';
 
 import {
   evaluationsForSubmissionSelector,
-  fetchManyStatus
+  fetchManyStatus,
 } from '../../redux/selectors/submissionEvaluations';
 import { getLocalizedName } from '../../helpers/localizedData';
 import { WarningIcon } from '../../components/icons';
@@ -54,7 +54,7 @@ class Solution extends Component {
       dispatch(fetchSubmissionEvaluationsForSolution(solutionId)),
       dispatch(fetchAssignmentIfNeeded(assignmentId))
         .then(res => res.value)
-        .then(assignment => dispatch(fetchGroupsStats(assignment.groupId)))
+        .then(assignment => dispatch(fetchGroupsStats(assignment.groupId))),
     ]);
 
   componentWillMount() {
@@ -77,7 +77,7 @@ class Solution extends Component {
       fetchStatus,
       deleteEvaluation,
       refreshSolutionEvaluations,
-      intl: { locale }
+      intl: { locale },
     } = this.props;
 
     return (
@@ -102,8 +102,8 @@ class Solution extends Component {
                 />
               ),
               link: ({ GROUP_DETAIL_URI_FACTORY }) =>
-                GROUP_DETAIL_URI_FACTORY(assignment.groupId)
-            })
+                GROUP_DETAIL_URI_FACTORY(assignment.groupId),
+            }),
           },
           {
             resource: assignment,
@@ -119,8 +119,8 @@ class Solution extends Component {
                 assignment.permissionHints &&
                 assignment.permissionHints.viewDescription // not ideal, but closest we can get with permissions
                   ? EXERCISE_URI_FACTORY(assignment.exerciseId)
-                  : '#'
-            })
+                  : '#',
+            }),
           },
           {
             text: (
@@ -131,7 +131,7 @@ class Solution extends Component {
             ),
             iconName: 'hourglass-start',
             link: ({ ASSIGNMENT_DETAIL_URI_FACTORY }) =>
-              ASSIGNMENT_DETAIL_URI_FACTORY(assignmentId)
+              ASSIGNMENT_DETAIL_URI_FACTORY(assignmentId),
           },
           {
             text: (
@@ -140,67 +140,69 @@ class Solution extends Component {
                 defaultMessage="The Solution"
               />
             ),
-            iconName: 'user'
-          }
-        ]}
-      >
+            iconName: 'user',
+          },
+        ]}>
         <ResourceRenderer
           failed={<FailedSubmissionDetail />}
-          resource={[solution, assignment]}
-        >
-          {(solution, assignment) =>
+          resource={[solution, assignment]}>
+          {(solution, assignment) => (
             <div>
               <HierarchyLineContainer groupId={assignment.groupId} />
               {((solution.permissionHints &&
                 solution.permissionHints.setAccepted) ||
                 (assignment.permissionHints &&
-                  assignment.permissionHints.resubmitSubmissions)) &&
+                  assignment.permissionHints.resubmitSubmissions)) && (
                 <p>
                   {solution.permissionHints &&
-                    solution.permissionHints.setAccepted &&
-                    <AcceptSolutionContainer
-                      id={solution.id}
-                      locale={locale}
-                    />}
+                    solution.permissionHints.setAccepted && (
+                      <AcceptSolutionContainer
+                        id={solution.id}
+                        locale={locale}
+                      />
+                    )}
 
                   {assignment.permissionHints &&
                   assignment.permissionHints.resubmitSubmissions &&
                   assignmentHasRuntime(
                     assignment,
                     solution.runtimeEnvironmentId
-                  )
-                    ? <React.Fragment>
-                        <ResubmitSolutionContainer
-                          id={solution.id}
-                          assignmentId={assignment.id}
-                          isDebug={false}
-                          userId={solution.solution.userId}
-                          locale={locale}
-                        />
-                        <ResubmitSolutionContainer
-                          id={solution.id}
-                          assignmentId={assignment.id}
-                          isDebug={true}
-                          userId={solution.solution.userId}
-                          locale={locale}
-                        />
-                      </React.Fragment>
-                    : <span>
-                        <WarningIcon
-                          largeGapLeft
-                          gapRight
-                          className="text-warning"
-                        />
-                        <FormattedMessage
-                          id="app.solution.environmentNotAllowedCannotResubmit"
-                          defaultMessage="The assignment no longer supports the environment for which this solution was evaluated. Resubmission is not possible."
-                        />
-                      </span>}
-                </p>}
+                  ) ? (
+                    <React.Fragment>
+                      <ResubmitSolutionContainer
+                        id={solution.id}
+                        assignmentId={assignment.id}
+                        isDebug={false}
+                        userId={solution.solution.userId}
+                        locale={locale}
+                      />
+                      <ResubmitSolutionContainer
+                        id={solution.id}
+                        assignmentId={assignment.id}
+                        isDebug={true}
+                        userId={solution.solution.userId}
+                        locale={locale}
+                      />
+                    </React.Fragment>
+                  ) : (
+                    <span>
+                      <WarningIcon
+                        largeGapLeft
+                        gapRight
+                        className="text-warning"
+                      />
+                      <FormattedMessage
+                        id="app.solution.environmentNotAllowedCannotResubmit"
+                        defaultMessage="The assignment no longer supports the environment for which this solution was evaluated. Resubmission is not possible."
+                      />
+                    </span>
+                  )}
+                </p>
+              )}
               <ResourceRenderer resource={runtimeEnvironments} returnAsArray>
-                {runtimes =>
+                {runtimes => (
                   <FetchManyResourceRenderer fetchManyStatus={fetchStatus}>
-                    {() =>
+                    {() => (
                       <SolutionDetail
                         solution={solution}
                         assignment={assignment}
@@ -208,10 +210,13 @@ class Solution extends Component {
                         runtimeEnvironments={runtimes}
                         deleteEvaluation={deleteEvaluation}
                         refreshSolutionEvaluations={refreshSolutionEvaluations}
-                      />}
-                  </FetchManyResourceRenderer>}
+                      />
+                    )}
+                  </FetchManyResourceRenderer>
+                )}
               </ResourceRenderer>
-            </div>}
+            </div>
+          )}
         </ResourceRenderer>
       </Page>
     );
@@ -221,7 +226,7 @@ class Solution extends Component {
 Solution.propTypes = {
   params: PropTypes.shape({
     assignmentId: PropTypes.string.isRequired,
-    solutionId: PropTypes.string.isRequired
+    solutionId: PropTypes.string.isRequired,
   }).isRequired,
   assignment: PropTypes.object,
   children: PropTypes.element,
@@ -232,7 +237,7 @@ Solution.propTypes = {
   fetchStatus: PropTypes.string,
   deleteEvaluation: PropTypes.func,
   refreshSolutionEvaluations: PropTypes.func,
-  intl: intlShape
+  intl: intlShape,
 };
 
 export default connect(
@@ -241,18 +246,18 @@ export default connect(
     assignment: getAssignment(state)(assignmentId),
     evaluations: evaluationsForSubmissionSelector(solutionId)(state),
     runtimeEnvironments: assignmentEnvironmentsSelector(state)(assignmentId),
-    fetchStatus: fetchManyStatus(solutionId)(state)
+    fetchStatus: fetchManyStatus(solutionId)(state),
   }),
   (dispatch, { params }) => ({
     loadAsync: () => Solution.loadAsync(params, dispatch),
     refreshSolutionEvaluations: () =>
       Promise.all([
         dispatch(fetchSolution(params.solutionId)),
-        dispatch(fetchSubmissionEvaluationsForSolution(params.solutionId))
+        dispatch(fetchSubmissionEvaluationsForSolution(params.solutionId)),
       ]),
     deleteEvaluation: evaluationId =>
       dispatch(
         deleteSubmissionEvaluation(params.solutionId, evaluationId)
-      ).then(() => dispatch(fetchSolutionIfNeeded(params.solutionId)))
+      ).then(() => dispatch(fetchSolutionIfNeeded(params.solutionId))),
   })
 )(injectIntl(Solution));

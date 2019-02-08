@@ -14,10 +14,9 @@ const createIcon = (commentsStats, props) => {
   return <Icon icon={['far', 'comments']} {...props} />;
 };
 
-const CommentsIcon = ({ id, commentsStats = null, ...props }) =>
+const CommentsIcon = ({ id, commentsStats = null, ...props }) => (
   <span>
-    {Boolean(commentsStats) &&
-      commentsStats.count > 0 &&
+    {Boolean(commentsStats) && commentsStats.count > 0 && (
       <OverlayTrigger
         placement="right"
         overlay={
@@ -29,25 +28,26 @@ const CommentsIcon = ({ id, commentsStats = null, ...props }) =>
                 values={{ count: commentsStats.count }}
               />
             </div>
-            {commentsStats.last &&
-              commentsStats.last.text &&
+            {commentsStats.last && commentsStats.last.text && (
               <div>
                 <FormattedMessage
                   id="app.solutionsTable.commentsIcon.last"
                   defaultMessage="Last Comment: {last}"
                   values={{ last: commentsStats.last.text }}
                 />
-              </div>}
+              </div>
+            )}
           </Tooltip>
-        }
-      >
+        }>
         {createIcon(commentsStats, props)}
-      </OverlayTrigger>}
-  </span>;
+      </OverlayTrigger>
+    )}
+  </span>
+);
 
 CommentsIcon.propTypes = {
   id: PropTypes.string.isRequired,
-  commentsStats: PropTypes.object
+  commentsStats: PropTypes.object,
 };
 
 export default CommentsIcon;

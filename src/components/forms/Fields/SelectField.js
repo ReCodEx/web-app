@@ -5,7 +5,7 @@ import {
   FormGroup,
   FormControl,
   ControlLabel,
-  HelpBlock
+  HelpBlock,
 } from 'react-bootstrap';
 import classnames from 'classnames';
 
@@ -21,15 +21,11 @@ const SelectField = ({
   ignoreDirty = false,
   associatedButton = null,
   ...props
-}) =>
+}) => (
   <FormGroup
     controlId={input.name}
-    validationState={error ? 'error' : warning ? 'warning' : undefined}
-  >
-    {Boolean(label) &&
-      <ControlLabel>
-        {label}
-      </ControlLabel>}
+    validationState={error ? 'error' : warning ? 'warning' : undefined}>
+    {Boolean(label) && <ControlLabel>{label}</ControlLabel>}
 
     <table className="full-width">
       <tbody>
@@ -43,60 +39,53 @@ const SelectField = ({
                 'form-control': true,
                 [styles.dirty]: dirty && !ignoreDirty && !error && !warning,
                 [styles.active]: active,
-                'full-width': true
-              })}
-            >
-              {addEmptyOption &&
+                'full-width': true,
+              })}>
+              {addEmptyOption && (
                 <option value={''} key={'-1'}>
                   {emptyOptionCaption}
-                </option>}
-              {options.map(({ key, name }, i) =>
+                </option>
+              )}
+              {options.map(({ key, name }, i) => (
                 <option value={key} key={i}>
                   {name}
                 </option>
-              )}
+              ))}
             </FormControl>
           </td>
-          {associatedButton &&
-            <td className="valign-top">
-              {associatedButton}
-            </td>}
+          {associatedButton && (
+            <td className="valign-top">{associatedButton}</td>
+          )}
         </tr>
       </tbody>
     </table>
 
-    {error &&
-      <HelpBlock>
-        {' '}{error}{' '}
-      </HelpBlock>}
-    {!error &&
-      warning &&
-      <HelpBlock>
-        {' '}{warning}{' '}
-      </HelpBlock>}
-  </FormGroup>;
+    {error && <HelpBlock> {error} </HelpBlock>}
+    {!error && warning && <HelpBlock> {warning} </HelpBlock>}
+  </FormGroup>
+);
 
 SelectField.propTypes = {
   input: PropTypes.shape({
-    name: PropTypes.string.isRequired
+    name: PropTypes.string.isRequired,
   }).isRequired,
   meta: PropTypes.shape({
     active: PropTypes.bool,
     dirty: PropTypes.bool,
     error: PropTypes.any,
-    warning: PropTypes.any
+    warning: PropTypes.any,
   }).isRequired,
   type: PropTypes.string,
   label: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.element,
-    PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) })
+    PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) }),
   ]),
   options: PropTypes.array.isRequired,
   addEmptyOption: PropTypes.bool,
   emptyOptionCaption: PropTypes.string,
   associatedButton: PropTypes.any,
-  ignoreDirty: PropTypes.bool
+  ignoreDirty: PropTypes.bool,
 };
 
 export default SelectField;

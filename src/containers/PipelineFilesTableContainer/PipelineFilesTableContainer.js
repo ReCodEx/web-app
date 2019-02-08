@@ -7,13 +7,13 @@ import { FormattedMessage } from 'react-intl';
 import FilesTableContainer from '../FilesTableContainer';
 import {
   SupplementaryFilesTableHeaderRow,
-  SupplementaryFilesTableRow
+  SupplementaryFilesTableRow,
 } from '../../components/Exercises/FilesTable';
 
 import {
   fetchSupplementaryFilesForPipeline,
   addPipelineFiles,
-  removePipelineFile
+  removePipelineFile,
 } from '../../redux/modules/pipelineFiles';
 import { downloadSupplementaryFile } from '../../redux/modules/files';
 
@@ -25,8 +25,8 @@ const PipelineFilesTableContainer = ({
   loadFiles,
   addFiles,
   removeFile,
-  downloadFile
-}) =>
+  downloadFile,
+}) => (
   <FilesTableContainer
     uploadId={`pipeline-files-${pipeline.id}`}
     attachments={supplementaryFiles}
@@ -48,24 +48,25 @@ const PipelineFilesTableContainer = ({
     }
     HeaderComponent={SupplementaryFilesTableHeaderRow}
     RowComponent={SupplementaryFilesTableRow}
-  />;
+  />
+);
 
 PipelineFilesTableContainer.propTypes = {
   pipeline: PropTypes.shape({
     id: PropTypes.string.isRequired,
-    supplementaryFilesIds: PropTypes.array.isRequired
+    supplementaryFilesIds: PropTypes.array.isRequired,
   }).isRequired,
   supplementaryFiles: ImmutablePropTypes.map,
   loadFiles: PropTypes.func.isRequired,
   addFiles: PropTypes.func.isRequired,
   removeFile: PropTypes.func.isRequired,
-  downloadFile: PropTypes.func.isRequired
+  downloadFile: PropTypes.func.isRequired,
 };
 
 export default connect(
   (state, { pipeline }) => {
     return {
-      supplementaryFiles: getSupplementaryFilesForPipeline(pipeline.id)(state)
+      supplementaryFiles: getSupplementaryFilesForPipeline(pipeline.id)(state),
     };
   },
   (dispatch, { pipeline }) => ({
@@ -75,6 +76,6 @@ export default connect(
     downloadFile: (ev, id) => {
       ev.preventDefault();
       dispatch(downloadSupplementaryFile(id));
-    }
+    },
   })
 )(PipelineFilesTableContainer);

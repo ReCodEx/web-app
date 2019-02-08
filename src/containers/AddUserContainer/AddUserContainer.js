@@ -31,10 +31,10 @@ const AddUserContainer = ({
   filters,
   createActions,
   user,
-  rolesFilter = null
-}) =>
+  rolesFilter = null,
+}) => (
   <ResourceRenderer resource={user}>
-    {user =>
+    {user => (
       <PaginationContainer
         id={id}
         endpoint="users"
@@ -49,13 +49,13 @@ const AddUserContainer = ({
             />
           </div>
         }
-        filtersCreator={(filters, setFilters) =>
+        filtersCreator={(filters, setFilters) => (
           <SimpleTextSearch
             query={filters.search || ''}
             isLoading={setFilters === null}
             onSubmit={submitHandler(rolesFilter, setFilters)}
-          />}
-      >
+          />
+        )}>
         {({ data }) => {
           return (
             <UsersList
@@ -65,8 +65,10 @@ const AddUserContainer = ({
             />
           );
         }}
-      </PaginationContainer>}
-  </ResourceRenderer>;
+      </PaginationContainer>
+    )}
+  </ResourceRenderer>
+);
 
 AddUserContainer.propTypes = {
   id: PropTypes.string.isRequired,
@@ -74,12 +76,12 @@ AddUserContainer.propTypes = {
   createActions: PropTypes.func,
   rolesFilter: PropTypes.array,
   user: ImmutablePropTypes.map.isRequired,
-  filters: PropTypes.object.isRequired
+  filters: PropTypes.object.isRequired,
 };
 
 export default connect((state, { id }) => {
   return {
     user: loggedInUserSelector(state),
-    filters: getPaginationFilters(id)(state) || EMPTY_OBJ
+    filters: getPaginationFilters(id)(state) || EMPTY_OBJ,
   };
 })(AddUserContainer);

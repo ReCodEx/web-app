@@ -7,7 +7,7 @@ import Icon, {
   SuccessIcon,
   SuccessOrFailureIcon,
   CodeIcon,
-  VisibleIcon
+  VisibleIcon,
 } from '../../../icons';
 import Box from '../../../widgets/Box';
 import EnvironmentsList from '../../../helpers/EnvironmentsList';
@@ -30,17 +30,16 @@ const AssignmentDetails = ({
   isPublic,
   visibleFrom,
   permissionHints,
-  isStudent
-}) =>
+  isStudent,
+}) => (
   <Box
     title={<FormattedMessage id="generic.details" defaultMessage="Details" />}
     noPadding
     collapsable
-    isOpen={isOpen}
-  >
+    isOpen={isOpen}>
     <Table responsive condensed>
       <tbody>
-        {permissionHints.update &&
+        {permissionHints.update && (
           <tr>
             <td className="text-center shrink-col em-padding-left em-padding-right">
               <VisibleIcon />
@@ -49,7 +48,8 @@ const AssignmentDetails = ({
               <FormattedMessage
                 id="app.assignment.visible"
                 defaultMessage="Visible"
-              />:
+              />
+              :
             </th>
             <td>
               <SuccessOrFailureIcon
@@ -58,32 +58,34 @@ const AssignmentDetails = ({
                 }
               />
             </td>
-          </tr>}
+          </tr>
+        )}
 
         {permissionHints.update &&
           isPublic &&
           visibleFrom &&
-          visibleFrom * 1000 > Date.now() &&
-          <tr>
-            <td className="text-center shrink-col em-padding-left em-padding-right">
-              <Icon icon={['far', 'clock']} />
-            </td>
-            <th>
-              <FormattedMessage
-                id="app.assignment.visibleFrom"
-                defaultMessage="Visible from"
-              />:
-            </th>
-            <td>
-              <DateTime unixts={visibleFrom} showRelative />
-            </td>
-          </tr>}
+          visibleFrom * 1000 > Date.now() && (
+            <tr>
+              <td className="text-center shrink-col em-padding-left em-padding-right">
+                <Icon icon={['far', 'clock']} />
+              </td>
+              <th>
+                <FormattedMessage
+                  id="app.assignment.visibleFrom"
+                  defaultMessage="Visible from"
+                />
+                :
+              </th>
+              <td>
+                <DateTime unixts={visibleFrom} showRelative />
+              </td>
+            </tr>
+          )}
 
         <tr
           className={classnames({
-            'text-danger': isAfterFirstDeadline
-          })}
-        >
+            'text-danger': isAfterFirstDeadline,
+          })}>
           <td className="text-center shrink-col em-padding-left em-padding-right">
             <strong>
               {!isAfterFirstDeadline && <Icon icon="hourglass-start" />}
@@ -94,7 +96,8 @@ const AssignmentDetails = ({
             <FormattedMessage
               id="app.assignment.deadline"
               defaultMessage="Deadline"
-            />:
+            />
+            :
           </th>
           <td>
             <DateTime unixts={firstDeadline} isDeadline showRelative />
@@ -109,20 +112,18 @@ const AssignmentDetails = ({
             <FormattedMessage
               id="app.assignment.maxPointsFirst"
               defaultMessage="Max. points before 1st deadline"
-            />:
+            />
+            :
           </th>
-          <td>
-            {maxPointsBeforeFirstDeadline}
-          </td>
+          <td>{maxPointsBeforeFirstDeadline}</td>
         </tr>
 
-        {allowSecondDeadline &&
+        {allowSecondDeadline && (
           <React.Fragment>
             <tr
               className={classnames({
-                'text-danger': isAfterSecondDeadline
-              })}
-            >
+                'text-danger': isAfterSecondDeadline,
+              })}>
               <td className="text-center shrink-col em-padding-left em-padding-right">
                 <strong>
                   {!isAfterSecondDeadline && <Icon icon="hourglass-half" />}
@@ -133,7 +134,8 @@ const AssignmentDetails = ({
                 <FormattedMessage
                   id="app.assignment.secondDeadline"
                   defaultMessage="Second deadline"
-                />:
+                />
+                :
               </th>
               <td>
                 <DateTime unixts={secondDeadline} isDeadline showRelative />
@@ -148,13 +150,13 @@ const AssignmentDetails = ({
                 <FormattedMessage
                   id="app.assignment.maxPointsSecond"
                   defaultMessage="Max. points before 2nd deadline"
-                />:
+                />
+                :
               </th>
-              <td>
-                {maxPointsBeforeSecondDeadline}
-              </td>
+              <td>{maxPointsBeforeSecondDeadline}</td>
             </tr>
-          </React.Fragment>}
+          </React.Fragment>
+        )}
 
         <tr>
           <td className="text-center shrink-col em-padding-left em-padding-right">
@@ -164,14 +166,15 @@ const AssignmentDetails = ({
             <FormattedMessage
               id="app.assignment.maxPointsCurrent"
               defaultMessage="Max. points (at present time)"
-            />:
+            />
+            :
           </th>
           <td>
             {!isAfterFirstDeadline
               ? maxPointsBeforeFirstDeadline
               : !isAfterSecondDeadline && allowSecondDeadline
-                ? maxPointsBeforeSecondDeadline
-                : 0}
+              ? maxPointsBeforeSecondDeadline
+              : 0}
           </td>
         </tr>
 
@@ -183,14 +186,15 @@ const AssignmentDetails = ({
             <FormattedMessage
               id="app.assignment.submissionsCountLimit"
               defaultMessage="Submission count limit"
-            />:
+            />
+            :
           </th>
           <td>
             {submissionsCountLimit === null ? '-' : submissionsCountLimit}
           </td>
         </tr>
 
-        {isStudent &&
+        {isStudent && (
           <tr>
             <td className="text-center shrink-col em-padding-left em-padding-right">
               <Icon icon="coffee" />
@@ -199,14 +203,14 @@ const AssignmentDetails = ({
               <FormattedMessage
                 id="app.assignment.alreadySubmitted"
                 defaultMessage="Already submitted"
-              />:
+              />
+              :
             </th>
-            <td>
-              {canSubmit.submittedCount}
-            </td>
-          </tr>}
+            <td>{canSubmit.submittedCount}</td>
+          </tr>
+        )}
 
-        {isStudent &&
+        {isStudent && (
           <tr>
             <td className="text-center shrink-col em-padding-left em-padding-right">
               <Icon icon="unlock-alt" />
@@ -215,14 +219,16 @@ const AssignmentDetails = ({
               <FormattedMessage
                 id="app.assignment.canSubmit"
                 defaultMessage="Can submit more solutions"
-              />:
+              />
+              :
             </th>
             <td>
               <SuccessOrFailureIcon success={canSubmit.canSubmit} />
             </td>
-          </tr>}
+          </tr>
+        )}
 
-        {isBonus &&
+        {isBonus && (
           <tr>
             <td className="text-center shrink-col em-padding-left em-padding-right">
               <Icon icon="plus-circle" />
@@ -231,12 +237,14 @@ const AssignmentDetails = ({
               <FormattedMessage
                 id="app.assignment.isBonus"
                 defaultMessage="Bonus assignment"
-              />:
+              />
+              :
             </th>
             <td>
               <SuccessIcon />
             </td>
-          </tr>}
+          </tr>
+        )}
 
         <tr>
           <td className="text-center shrink-col em-padding-left em-padding-right">
@@ -246,11 +254,10 @@ const AssignmentDetails = ({
             <FormattedMessage
               id="app.assignment.pointsPercentualThreshold"
               defaultMessage="Points percentual threshold"
-            />:
+            />
+            :
           </th>
-          <td>
-            {pointsPercentualThreshold} %
-          </td>
+          <td>{pointsPercentualThreshold} %</td>
         </tr>
 
         <tr>
@@ -261,7 +268,8 @@ const AssignmentDetails = ({
             <FormattedMessage
               id="app.assignment.runtimeEnvironmentsIds"
               defaultMessage="Allowed languages/frameworks/technologies"
-            />:
+            />
+            :
           </th>
           <td>
             <EnvironmentsList runtimeEnvironments={runtimeEnvironments} />
@@ -269,7 +277,8 @@ const AssignmentDetails = ({
         </tr>
       </tbody>
     </Table>
-  </Box>;
+  </Box>
+);
 
 AssignmentDetails.propTypes = {
   isOpen: PropTypes.bool,
@@ -288,7 +297,7 @@ AssignmentDetails.propTypes = {
   visibleFrom: PropTypes.number,
   isPublic: PropTypes.bool.isRequired,
   permissionHints: PropTypes.object.isRequired,
-  isStudent: PropTypes.bool.isRequired
+  isStudent: PropTypes.bool.isRequired,
 };
 
 export default AssignmentDetails;

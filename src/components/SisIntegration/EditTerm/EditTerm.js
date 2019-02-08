@@ -17,8 +17,8 @@ const EditTerm = ({
   submitFailed = false,
   submitSucceeded = false,
   invalid,
-  reset
-}) =>
+  reset,
+}) => (
   <Modal show={isOpen} backdrop="static" onHide={onClose}>
     <Modal.Header closeButton>
       <Modal.Title>
@@ -76,7 +76,7 @@ const EditTerm = ({
           ),
           success: (
             <FormattedMessage id="generic.saved" defaultMessage="Saved" />
-          )
+          ),
         }}
       />
 
@@ -85,7 +85,8 @@ const EditTerm = ({
         <FormattedMessage id="generic.close" defaultMessage="Close" />
       </Button>
     </Modal.Footer>
-  </Modal>;
+  </Modal>
+);
 
 EditTerm.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
@@ -97,7 +98,7 @@ EditTerm.propTypes = {
   invalid: PropTypes.bool,
   reset: PropTypes.func,
   onClose: PropTypes.func.isRequired,
-  isOpen: PropTypes.bool.isRequired
+  isOpen: PropTypes.bool.isRequired,
 };
 
 const validate = ({ beginning, end, advertiseUntil }) => {
@@ -150,5 +151,5 @@ export default reduxForm({
   form: 'edit-sis-term',
   enableReinitialize: true,
   keepDirtyOnReinitialize: false,
-  validate
+  validate,
 })(EditTerm);

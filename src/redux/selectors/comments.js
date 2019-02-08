@@ -11,6 +11,7 @@ export const commentsThreadSelector = createSelector(
   (comments, threadId) => comments.getIn(['resources', threadId])
 );
 
-export const commentsSelector = createSelector(commentsThreadSelector, thread =>
-  thread.getIn(['data', 'comments'])
+export const commentsSelector = createSelector(
+  commentsThreadSelector,
+  thread => thread.getIn(['data', 'comments'])
 );

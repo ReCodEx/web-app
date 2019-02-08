@@ -16,8 +16,8 @@ const ExternalRegistrationForm = ({
   submitFailed,
   anyTouched,
   instances = Map(),
-  invalid
-}) =>
+  invalid,
+}) => (
   <FormBox
     title={
       <FormattedMessage
@@ -54,19 +54,19 @@ const ExternalRegistrationForm = ({
                 id="app.registrationForm.success"
                 defaultMessage="Your account has been created."
               />
-            )
+            ),
           }}
         />
       </div>
-    }
-  >
-    {submitFailed &&
+    }>
+    {submitFailed && (
       <Alert bsStyle="danger">
         <FormattedMessage
           id="app.externalRegistrationForm.failed"
           defaultMessage="Registration failed. Please check your information."
         />
-      </Alert>}
+      </Alert>
+    )}
 
     <Field
       name="username"
@@ -105,7 +105,8 @@ const ExternalRegistrationForm = ({
       addEmptyOption
       options={instances.map(({ id: key, name }) => ({ key, name }))}
     />
-  </FormBox>;
+  </FormBox>
+);
 
 ExternalRegistrationForm.propTypes = {
   instances: PropTypes.array.isRequired,
@@ -115,7 +116,7 @@ ExternalRegistrationForm.propTypes = {
   submitSucceeded: PropTypes.bool,
   submitting: PropTypes.bool,
   anyTouched: PropTypes.bool,
-  invalid: PropTypes.bool
+  invalid: PropTypes.bool,
 };
 
 const validate = ({ username, password, instanceId }) => {
@@ -152,12 +153,12 @@ const validate = ({ username, password, instanceId }) => {
 };
 
 const initialValues = {
-  serviceId: 'cas-uk'
+  serviceId: 'cas-uk',
 };
 
 export default reduxForm({
   form: 'external-registration',
   initialValues,
   validate,
-  asyncBlurFields: ['password']
+  asyncBlurFields: ['password'],
 })(ExternalRegistrationForm);

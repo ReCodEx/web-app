@@ -3,7 +3,7 @@ import {
   safeGet,
   encodeNumId,
   identity,
-  EMPTY_ARRAY
+  EMPTY_ARRAY,
 } from '../../helpers/common';
 
 export const DATA_ONLY_ID = 'data-linux';
@@ -27,9 +27,11 @@ class Variable {
     this.defaultValue =
       defaultValue !== undefined
         ? defaultValue
-        : this.isArray ? EMPTY_ARRAY : '';
+        : this.isArray
+        ? EMPTY_ARRAY
+        : '';
     this.pipelineFilter = {
-      isCompilationPipeline: Boolean(compilationPipeline)
+      isCompilationPipeline: Boolean(compilationPipeline),
     };
     this.runtimeFilter = null;
     this.transformPostprocess = identity;
@@ -121,7 +123,9 @@ class Variable {
     if (variable) {
       if (variable.type !== type) {
         throw new Error(
-          `Variable '${name}' is of type '${variable.type}', but type '${type}' expected.`
+          `Variable '${name}' is of type '${
+            variable.type
+          }', but type '${type}' expected.`
         );
       }
       value = variable.value;
@@ -135,7 +139,9 @@ class Variable {
     }
 
     return value !== undefined
-      ? isArray && !Array.isArray(value) ? [value] : value
+      ? isArray && !Array.isArray(value)
+        ? [value]
+        : value
       : null;
   }
 
@@ -200,8 +206,8 @@ class Variable {
           {
             name: this.name,
             type: this.type,
-            value
-          }
+            value,
+          },
         ]
       : [];
   }
@@ -230,7 +236,7 @@ class FileListVariable extends Variable {
 
     return files.map((value, i) => ({
       file: value,
-      name: names && names[i] ? names[i].trim() : ''
+      name: names && names[i] ? names[i].trim() : '',
     }));
   }
 
@@ -253,13 +259,13 @@ class FileListVariable extends Variable {
       {
         name: this.name,
         type: this.type,
-        value: inputFiles
+        value: inputFiles,
       },
       {
         name: this.nameActuals,
         type: 'file[]',
-        value: actualInputs
-      }
+        value: actualInputs,
+      },
     ];
   }
 }
@@ -277,8 +283,8 @@ const PIPELINE_VARS_DESCRIPTORS = [
     'string',
     true,
     'recodex-judge-normal'
-  ).setTransformPostprocess(
-    (value, formDataTest) => (formDataTest.useCustomJudge ? '' : value)
+  ).setTransformPostprocess((value, formDataTest) =>
+    formDataTest.useCustomJudge ? '' : value
   ),
   new Variable('custom-judge', 'remote-file').setTransformPostprocess(
     (value, formDataTest) => (formDataTest.useCustomJudge ? value : '')
@@ -293,7 +299,7 @@ const PIPELINE_VARS_DESCRIPTORS = [
   ),
   new Variable('entry-point', 'file', false)
     .setPipelineFilter('hasEntryPoint')
-    .setTransformPostprocess(value => value || '$entry-point')
+    .setTransformPostprocess(value => value || '$entry-point'),
 ];
 
 // Restrict all variables except for data-only variables not to enter data-only pipeline...
@@ -301,7 +307,7 @@ const DATA_ONLY_VARS = ['input-files', 'run-args', 'custom-judge'];
 PIPELINE_VARS_DESCRIPTORS.forEach(v => {
   if (!DATA_ONLY_VARS.includes(v.name)) {
     v.setPipelineFilter({
-      judgeOnlyPipeline: false
+      judgeOnlyPipeline: false,
     });
   }
 });
@@ -342,7 +348,7 @@ export const getSimpleConfigInitValues = defaultMemoize(
     }
 
     return {
-      config: res
+      config: res,
     };
   }
 );
@@ -382,7 +388,9 @@ const getRelevantPipelines = (pipelines, envId, useOutFile) => {
     (a, b) =>
       a.parameters.isCompilationPipeline
         ? -1
-        : b.parameters.isCompilationPipeline ? 1 : 0
+        : b.parameters.isCompilationPipeline
+        ? 1
+        : 0
   );
 };
 
@@ -419,7 +427,7 @@ export const transformSimpleConfigValues = (
             t => t.name === testName,
             'pipelines',
             p => p.name === pipeline.id,
-            'variables'
+            'variables',
           ]) || [];
 
         // Construct new variables from the form data ...
@@ -430,18 +438,18 @@ export const transformSimpleConfigValues = (
 
         return {
           name: pipeline.id,
-          variables: mergeVariables(variables, originalVariables)
+          variables: mergeVariables(variables, originalVariables),
         };
       });
 
       testsCfg.push({
         name: testName,
-        pipelines: pipelinesConfig
+        pipelines: pipelinesConfig,
       });
     }
     envs.push({
       name: envId,
-      tests: testsCfg
+      tests: testsCfg,
     });
   }
 

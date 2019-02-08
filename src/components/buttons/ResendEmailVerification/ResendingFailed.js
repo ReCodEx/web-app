@@ -17,7 +17,7 @@ const ResendingFailed = ({ resend, ...props }) => {
 };
 
 ResendingFailed.propTypes = {
-  resend: PropTypes.func.isRequired
+  resend: PropTypes.func.isRequired,
 };
 
 export default ResendingFailed;

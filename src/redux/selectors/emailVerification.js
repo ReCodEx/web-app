@@ -3,8 +3,9 @@ import { createSelector } from 'reselect';
 export const getEmailVerification = state => state.emailVerification;
 
 export const userSelector = userId =>
-  createSelector(getEmailVerification, emailVerification =>
-    emailVerification.get(userId)
+  createSelector(
+    getEmailVerification,
+    emailVerification => emailVerification.get(userId)
   );
 
 export const verificationStatusSelector = userId =>

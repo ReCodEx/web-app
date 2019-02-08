@@ -4,17 +4,18 @@ import { FormattedMessage } from 'react-intl';
 import Button from '../../widgets/FlatButton';
 import Icon from '../../icons';
 
-const RemoveSupervisorButton = ({ onClick, ...props }) =>
+const RemoveSupervisorButton = ({ onClick, ...props }) => (
   <Button {...props} onClick={onClick} bsStyle="warning" className="btn-flat">
     <Icon icon="user-times" gapRight />
     <FormattedMessage
       id="app.groups.removeSupervisorButton"
       defaultMessage="Remove supervisor"
     />
-  </Button>;
+  </Button>
+);
 
 RemoveSupervisorButton.propTypes = {
-  onClick: PropTypes.func.isRequired
+  onClick: PropTypes.func.isRequired,
 };
 
 export default RemoveSupervisorButton;

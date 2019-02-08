@@ -39,7 +39,7 @@ class BoxForm extends Component {
       submitting = false,
       reset,
       onHide,
-      onDelete
+      onDelete,
     } = this.props;
 
     const currentBoxType = boxTypes.find(box => box.type === selectedType);
@@ -48,17 +48,16 @@ class BoxForm extends Component {
 
     return (
       <Modal show={show} onHide={onHide} keyboard>
-        <Modal.Header closeButton>
-          {title}
-        </Modal.Header>
+        <Modal.Header closeButton>{title}</Modal.Header>
         <Modal.Body>
-          {submitFailed &&
+          {submitFailed && (
             <Alert bsStyle="danger">
               <FormattedMessage
                 id="app.pipelineEditor.BoxForm.failed"
                 defaultMessage="We are sorry but we weren't able to save the box."
               />
-            </Alert>}
+            </Alert>
+          )}
 
           <Field
             name="name"
@@ -79,7 +78,7 @@ class BoxForm extends Component {
             component={SelectField}
             options={[
               { key: '', name: '...' },
-              ...boxTypes.map(({ name, type }) => ({ key: type, name }))
+              ...boxTypes.map(({ name, type }) => ({ key: type, name })),
             ]}
             required
             label={
@@ -90,7 +89,7 @@ class BoxForm extends Component {
             }
           />
 
-          {currentBoxType &&
+          {currentBoxType && (
             <Field
               name="portsIn"
               prefix="portsIn"
@@ -102,9 +101,10 @@ class BoxForm extends Component {
                   defaultMessage="Inputs:"
                 />
               }
-            />}
+            />
+          )}
 
-          {currentBoxType &&
+          {currentBoxType && (
             <Field
               name="portsOut"
               prefix="portsOut"
@@ -116,7 +116,8 @@ class BoxForm extends Component {
                   defaultMessage="Outputs:"
                 />
               }
-            />}
+            />
+          )}
         </Modal.Body>
         <Modal.Footer>
           <p className="text-center">
@@ -145,7 +146,7 @@ class BoxForm extends Component {
                     id="generic.saving"
                     defaultMessage="Saving..."
                   />
-                )
+                ),
               }}
             />
             <Button onClick={onHide}>
@@ -170,7 +171,7 @@ BoxForm.propTypes = {
   title: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) }),
-    PropTypes.element
+    PropTypes.element,
   ]).isRequired,
   selectedType: PropTypes.string,
   boxTypes: PropTypes.array.isRequired,
@@ -186,7 +187,7 @@ BoxForm.propTypes = {
   submitting: PropTypes.bool,
   fetchBoxTypes: PropTypes.func.isRequired,
   onHide: PropTypes.func.isRequired,
-  onDelete: PropTypes.func.isRequired
+  onDelete: PropTypes.func.isRequired,
 };
 
 const validate = (
@@ -239,10 +240,10 @@ const validate = (
                     variable: intendedVariableName,
                     portType,
                     variableType: existingVariableType.type,
-                    exampleBox: existingVariableType.examplePort
+                    exampleBox: existingVariableType.examplePort,
                   }}
                 />
-              )
+              ),
             };
           }
         }
@@ -269,7 +270,7 @@ const validate = (
                   id="app.pipelineEditor.BoxForm.loop"
                   defaultMessage="Box can't use its own output as its input."
                 />
-              )
+              ),
             };
           }
         }
@@ -287,16 +288,19 @@ const validate = (
 const mapStateToProps = state => ({
   boxTypes: getBoxTypes(state),
   existingBoxes: formValueSelector('editPipeline')(state, 'pipeline.boxes'),
-  selectedType: formValueSelector('boxForm')(state, 'type')
+  selectedType: formValueSelector('boxForm')(state, 'type'),
 });
 
 const mapDispatchToProps = dispatch => ({
-  fetchBoxTypes: () => dispatch(fetchBoxTypes())
+  fetchBoxTypes: () => dispatch(fetchBoxTypes()),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(
   reduxForm({
     form: 'boxForm',
-    validate
+    validate,
   })(BoxForm)
 );

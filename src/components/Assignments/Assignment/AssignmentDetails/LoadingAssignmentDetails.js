@@ -4,7 +4,7 @@ import { FormattedMessage } from 'react-intl';
 import Box from '../../../widgets/Box';
 import { LoadingIcon } from '../../../icons';
 
-const LoadingAssignmentDetails = () =>
+const LoadingAssignmentDetails = () => (
   <Box
     title={
       <span>
@@ -17,14 +17,14 @@ const LoadingAssignmentDetails = () =>
     }
     noPadding={false}
     collapsable={true}
-    isOpen={false}
-  >
+    isOpen={false}>
     <p>
       <FormattedMessage
         id="app.assignment.loading"
         defaultMessage="Loading exercise assignment..."
       />
     </p>
-  </Box>;
+  </Box>
+);
 
 export default LoadingAssignmentDetails;

@@ -9,19 +9,21 @@ import Icon from '../../icons';
 import {
   SelectField,
   ExpandingTextField,
-  ExpandingInputFilesField
+  ExpandingInputFilesField,
 } from '../Fields';
 import Confirm from '../../forms/Confirm';
 
 import './EditExerciseSimpleConfigForm.css';
 
 const validateCustomJudge = value =>
-  !value || value.trim() === ''
-    ? <FormattedMessage
-        id="app.editExerciseSimpleConfigForm.validation.customJudge"
-        defaultMessage="Please, select the custom judge binary for this test or use one of the standard judges instead."
-      />
-    : undefined;
+  !value || value.trim() === '' ? (
+    <FormattedMessage
+      id="app.editExerciseSimpleConfigForm.validation.customJudge"
+      defaultMessage="Please, select the custom judge binary for this test or use one of the standard judges instead."
+    />
+  ) : (
+    undefined
+  );
 
 class EditExerciseSimpleConfigDataTest extends Component {
   render() {
@@ -32,22 +34,20 @@ class EditExerciseSimpleConfigDataTest extends Component {
       testErrors,
       smartFill,
       change,
-      intl
+      intl,
     } = this.props;
     const supplementaryFilesOptions = supplementaryFiles
       .sort((a, b) => a.name.localeCompare(b.name, intl.locale))
       .filter((item, pos, arr) => arr.indexOf(item) === pos) // WTF?
       .map(data => ({
         key: data.name,
-        name: data.name
+        name: data.name,
       }));
     return (
       <div className="configRow">
         <Row>
           <Col sm={12}>
-            <h3>
-              {testName}
-            </h3>
+            <h3>{testName}</h3>
           </Col>
         </Row>
         <Row>
@@ -76,7 +76,7 @@ class EditExerciseSimpleConfigDataTest extends Component {
                 />
               }
             />
-            {Boolean(smartFill) &&
+            {Boolean(smartFill) && (
               <div className="smart-fill-tinybar">
                 <Confirm
                   id="smartFillInput"
@@ -86,14 +86,12 @@ class EditExerciseSimpleConfigDataTest extends Component {
                       id="app.editExerciseConfigForm.smartFillInput.yesNoQuestion"
                       defaultMessage="Do you really wish to overwrite input configuration of all subsequent tests using the first test as a template? Files will be paired to individual test configurations by a heuristics based on matching name substrings."
                     />
-                  }
-                >
+                  }>
                   <Button
                     bsStyle={'primary'}
                     className="btn-flat"
                     bsSize="xs"
-                    disabled={Boolean(testErrors)}
-                  >
+                    disabled={Boolean(testErrors)}>
                     <Icon icon="arrows-alt" gapRight />
                     <FormattedMessage
                       id="app.editExerciseConfigForm.smartFillInput"
@@ -101,7 +99,8 @@ class EditExerciseSimpleConfigDataTest extends Component {
                     />
                   </Button>
                 </Confirm>
-              </div>}
+              </div>
+            )}
           </Col>
           <Col sm={12} lg={4}>
             <h4>
@@ -121,7 +120,7 @@ class EditExerciseSimpleConfigDataTest extends Component {
                 />
               }
             />
-            {Boolean(smartFill) &&
+            {Boolean(smartFill) && (
               <div className="smart-fill-tinybar">
                 <Confirm
                   id="smartFillArgs"
@@ -131,14 +130,12 @@ class EditExerciseSimpleConfigDataTest extends Component {
                       id="app.editExerciseConfigForm.smartFillArgs.yesNoQuestion"
                       defaultMessage="Do you really wish to overwrite command line configuration of all subsequent tests using the first test as a template?"
                     />
-                  }
-                >
+                  }>
                   <Button
                     bsStyle={'primary'}
                     className="btn-flat"
                     bsSize="xs"
-                    disabled={Boolean(testErrors)}
-                  >
+                    disabled={Boolean(testErrors)}>
                     <Icon icon="arrows-alt" gapRight />
                     <FormattedMessage
                       id="app.editExerciseConfigForm.smartFillArgs"
@@ -146,7 +143,8 @@ class EditExerciseSimpleConfigDataTest extends Component {
                     />
                   </Button>
                 </Confirm>
-              </div>}
+              </div>
+            )}
           </Col>
           <Col sm={12} lg={4}>
             <h4>
@@ -168,7 +166,7 @@ class EditExerciseSimpleConfigDataTest extends Component {
                 />
               }
             />
-            {Boolean(smartFill) &&
+            {Boolean(smartFill) && (
               <div className="smart-fill-tinybar">
                 <Confirm
                   id="smartFillJudge"
@@ -178,14 +176,12 @@ class EditExerciseSimpleConfigDataTest extends Component {
                       id="app.editExerciseConfigForm.smartFillJudge.yesNoQuestion"
                       defaultMessage="Do you really wish to overwrite judge configuration of all subsequent tests using the first test as a template? Files will be paired to individual test configurations by a heuristics based on matching name substrings."
                     />
-                  }
-                >
+                  }>
                   <Button
                     bsStyle={'primary'}
                     className="btn-flat"
                     bsSize="xs"
-                    disabled={Boolean(testErrors)}
-                  >
+                    disabled={Boolean(testErrors)}>
                     <Icon icon="arrows-alt" gapRight />
                     <FormattedMessage
                       id="app.editExerciseConfigForm.smartFillJudge"
@@ -193,10 +189,11 @@ class EditExerciseSimpleConfigDataTest extends Component {
                     />
                   </Button>
                 </Confirm>
-              </div>}
+              </div>
+            )}
           </Col>
         </Row>
-        {Boolean(smartFill) &&
+        {Boolean(smartFill) && (
           <div className="smart-fill-bar">
             <Confirm
               id="smartFillAll"
@@ -206,13 +203,11 @@ class EditExerciseSimpleConfigDataTest extends Component {
                   id="app.editExerciseConfigForm.smartFillAll.yesNoQuestion"
                   defaultMessage="Do you really wish to overwrite configuration of all subsequent tests using the first test as a template? Files will be paired to individual test configurations by a heuristics based on matching name substrings."
                 />
-              }
-            >
+              }>
               <Button
                 bsStyle={'primary'}
                 className="btn-flat"
-                disabled={Boolean(testErrors)}
-              >
+                disabled={Boolean(testErrors)}>
                 <Icon icon="arrows-alt" gapRight />
                 <FormattedMessage
                   id="app.editExerciseConfigForm.smartFillAll"
@@ -220,7 +215,8 @@ class EditExerciseSimpleConfigDataTest extends Component {
                 />
               </Button>
             </Confirm>
-          </div>}
+          </div>
+        )}
       </div>
     );
   }
@@ -234,7 +230,7 @@ EditExerciseSimpleConfigDataTest.propTypes = {
   testErrors: PropTypes.object,
   smartFill: PropTypes.object,
   change: PropTypes.func.isRequired,
-  intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired
+  intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired,
 };
 
 export default injectIntl(EditExerciseSimpleConfigDataTest);

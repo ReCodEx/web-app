@@ -8,7 +8,7 @@ import Box from '../../widgets/Box';
 import DateTime from '../../widgets/DateTime';
 import { SuccessOrFailureIcon } from '../../icons';
 
-const EvaluationDetail = ({ evaluation, isCorrect }) =>
+const EvaluationDetail = ({ evaluation, isCorrect }) => (
   <Box
     title={
       <FormattedMessage
@@ -18,8 +18,7 @@ const EvaluationDetail = ({ evaluation, isCorrect }) =>
     }
     noPadding={true}
     collapsable={true}
-    isOpen={true}
-  >
+    isOpen={true}>
     <Table>
       <tbody>
         <tr>
@@ -51,15 +50,15 @@ const EvaluationDetail = ({ evaluation, isCorrect }) =>
             <FormattedMessage
               id="app.evaluationDetail.isCorrect"
               defaultMessage="Correctness"
-            />:
+            />
+            :
           </th>
           <td
             className={classnames({
               'text-center': true,
               'text-danger': !isCorrect,
-              'text-success': isCorrect
-            })}
-          >
+              'text-success': isCorrect,
+            })}>
             <b>
               <FormattedNumber style="percent" value={evaluation.score} />
             </b>
@@ -67,11 +66,12 @@ const EvaluationDetail = ({ evaluation, isCorrect }) =>
         </tr>
       </tbody>
     </Table>
-  </Box>;
+  </Box>
+);
 
 EvaluationDetail.propTypes = {
   evaluation: PropTypes.object.isRequired,
-  isCorrect: PropTypes.bool.isRequired
+  isCorrect: PropTypes.bool.isRequired,
 };
 
 export default EvaluationDetail;

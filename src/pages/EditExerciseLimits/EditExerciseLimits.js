@@ -18,7 +18,7 @@ import Icon, { NeedFixingIcon } from '../../components/icons';
 import {
   fetchExercise,
   fetchExerciseIfNeeded,
-  setExerciseHardwareGroups
+  setExerciseHardwareGroups,
 } from '../../redux/modules/exercises';
 import {
   fetchExerciseEnvironmentLimits,
@@ -26,7 +26,7 @@ import {
   editEnvironmentLimits,
   cloneHorizontally,
   cloneVertically,
-  cloneAll
+  cloneAll,
 } from '../../redux/modules/limits';
 import { fetchHardwareGroups } from '../../redux/modules/hwGroups';
 import { getExercise } from '../../redux/selectors/exercises';
@@ -44,7 +44,7 @@ import {
   getLimitsInitValues,
   transformLimitsValues,
   getLimitsConstraints,
-  validateLimitsSingleEnvironment
+  validateLimitsSingleEnvironment,
 } from '../../helpers/exercise/limits';
 
 class EditExerciseLimits extends Component {
@@ -59,23 +59,22 @@ class EditExerciseLimits extends Component {
   static loadAsync = ({ exerciseId }, dispatch) =>
     Promise.all([
       dispatch(fetchHardwareGroups()),
-      dispatch(fetchExerciseIfNeeded(exerciseId)).then(
-        ({ value: exercise }) =>
-          exercise.hardwareGroups && exercise.hardwareGroups.length === 1
-            ? Promise.all(
-                exercise.runtimeEnvironments.map(environment =>
-                  dispatch(
-                    fetchExerciseEnvironmentLimitsIfNeeded(
-                      exerciseId,
-                      environment.id,
-                      exercise.hardwareGroups[0].id
-                    )
+      dispatch(fetchExerciseIfNeeded(exerciseId)).then(({ value: exercise }) =>
+        exercise.hardwareGroups && exercise.hardwareGroups.length === 1
+          ? Promise.all(
+              exercise.runtimeEnvironments.map(environment =>
+                dispatch(
+                  fetchExerciseEnvironmentLimitsIfNeeded(
+                    exerciseId,
+                    environment.id,
+                    exercise.hardwareGroups[0].id
                   )
                 )
               )
-            : Promise.resolve()
+            )
+          : Promise.resolve()
       ),
-      dispatch(fetchExerciseTestsIfNeeded(exerciseId))
+      dispatch(fetchExerciseTestsIfNeeded(exerciseId)),
     ]);
 
   doesHardwareGroupChangeDropLimits = defaultMemoize(
@@ -129,7 +128,7 @@ class EditExerciseLimits extends Component {
       const {
         setExerciseHardwareGroups,
         editEnvironmentLimits,
-        fetchExerciseEnvironmentLimit
+        fetchExerciseEnvironmentLimit,
       } = this.props;
       const limitsData =
         hwGroupId &&
@@ -144,36 +143,34 @@ class EditExerciseLimits extends Component {
       return formData =>
         setExerciseHardwareGroups(
           formData.hardwareGroup ? [formData.hardwareGroup] : []
-        ).then(
-          ({ value: exercise }) =>
-            limitsData
-              ? Promise.all(
-                  exercise.hardwareGroups.map(({ id: hwgId }, idx) => {
-                    const constraints = getLimitsConstraints(
-                      exercise.hardwareGroups,
-                      limitsData.preciseTime
-                    );
-                    return Promise.all(
-                      transformLimitsValues(
+        ).then(({ value: exercise }) =>
+          limitsData
+            ? Promise.all(
+                exercise.hardwareGroups.map(({ id: hwgId }, idx) => {
+                  const constraints = getLimitsConstraints(
+                    exercise.hardwareGroups,
+                    limitsData.preciseTime
+                  );
+                  return Promise.all(
+                    transformLimitsValues(
+                      limitsData,
+                      tests,
+                      exerciseRuntimeEnvironments
+                    ).map(({ id: envId, data }) =>
+                      validateLimitsSingleEnvironment(
                         limitsData,
-                        tests,
-                        exerciseRuntimeEnvironments
-                      ).map(
-                        ({ id: envId, data }) =>
-                          validateLimitsSingleEnvironment(
-                            limitsData,
-                            envId,
-                            constraints
-                          )
-                            ? editEnvironmentLimits(hwgId, envId, data)
-                            : idx === 0
-                              ? fetchExerciseEnvironmentLimit(envId, hwgId)
-                              : Promise.resolve()
+                        envId,
+                        constraints
                       )
-                    );
-                  })
-                )
-              : Promise.resolve()
+                        ? editEnvironmentLimits(hwgId, envId, data)
+                        : idx === 0
+                        ? fetchExerciseEnvironmentLimit(envId, hwgId)
+                        : Promise.resolve()
+                    )
+                  );
+                })
+              )
+            : Promise.resolve()
         );
     }
   );
@@ -212,7 +209,7 @@ class EditExerciseLimits extends Component {
       cloneHorizontally,
       cloneVertically,
       cloneAll,
-      intl: { locale }
+      intl: { locale },
     } = this.props;
 
     return (
@@ -234,13 +231,13 @@ class EditExerciseLimits extends Component {
                   id="app.exercise.breadcrumbTitle"
                   defaultMessage="Exercise {name}"
                   values={{
-                    name: getLocalizedName({ name, localizedTexts }, locale)
+                    name: getLocalizedName({ name, localizedTexts }, locale),
                   }}
                 />
               ),
               iconName: 'puzzle-piece',
-              link: EXERCISE_URI_FACTORY(exerciseId)
-            })
+              link: EXERCISE_URI_FACTORY(exerciseId),
+            }),
           },
           {
             text: (
@@ -249,13 +246,12 @@ class EditExerciseLimits extends Component {
                 defaultMessage="Edit tests limits"
               />
             ),
-            iconName: ['far', 'edit']
-          }
-        ]}
-      >
-        {(exercise, tests) =>
+            iconName: ['far', 'edit'],
+          },
+        ]}>
+        {(exercise, tests) => (
           <Grid fluid>
-            {exercise.isBroken &&
+            {exercise.isBroken && (
               <Row>
                 <Col sm={12}>
                   <div className="callout callout-warning">
@@ -269,7 +265,8 @@ class EditExerciseLimits extends Component {
                     {exercise.validationError}
                   </div>
                 </Col>
-              </Row>}
+              </Row>
+            )}
             <Row>
               <Col sm={12}>
                 <ExerciseButtons {...exercise} />
@@ -278,7 +275,7 @@ class EditExerciseLimits extends Component {
 
             {Boolean(
               exercise.hardwareGroups && exercise.hardwareGroups.length > 1
-            ) &&
+            ) && (
               <Row>
                 <Col sm={12}>
                   <div className="alert alert-danger">
@@ -297,15 +294,15 @@ class EditExerciseLimits extends Component {
                     </p>
                   </div>
                 </Col>
-              </Row>}
+              </Row>
+            )}
 
             <ResourceRenderer
               resource={hardwareGroups.toArray()}
-              returnAsArray={true}
-            >
-              {hwgs =>
+              returnAsArray={true}>
+              {hwgs => (
                 <Row>
-                  {exercise.permissionHints.setLimits &&
+                  {exercise.permissionHints.setLimits && (
                     <Col sm={12} md={6}>
                       <EditHardwareGroupForm
                         initialValues={{
@@ -313,7 +310,7 @@ class EditExerciseLimits extends Component {
                             exercise.hardwareGroups &&
                             exercise.hardwareGroups.length === 1
                               ? exercise.hardwareGroups[0].id
-                              : ''
+                              : '',
                         }}
                         hardwareGroups={hwgs}
                         addEmptyOption={
@@ -338,26 +335,28 @@ class EditExerciseLimits extends Component {
                           exercise.runtimeEnvironments
                         )}
                       />
-                    </Col>}
+                    </Col>
+                  )}
                   <Col sm={12} md={6}>
-                    {exercise.hardwareGroups.map(h =>
+                    {exercise.hardwareGroups.map(h => (
                       <HardwareGroupMetadata
                         key={h.id}
                         hardwareGroup={h}
                         isSuperAdmin={isSuperAdmin}
                       />
-                    )}
+                    ))}
                     {Boolean(
                       targetHardwareGroup &&
                         (exercise.hardwareGroups.length !== 1 ||
                           targetHardwareGroup !== exercise.hardwareGroups[0].id)
-                    ) &&
+                    ) && (
                       <div>
                         <div
                           className="text-center text-muted"
-                          style={{ marginBottom: '15px' }}
-                        >
-                          &nbsp;<Icon icon="arrow-down" />&nbsp;
+                          style={{ marginBottom: '15px' }}>
+                          &nbsp;
+                          <Icon icon="arrow-down" />
+                          &nbsp;
                         </div>
                         <HardwareGroupMetadata
                           key={targetHardwareGroup}
@@ -366,55 +365,60 @@ class EditExerciseLimits extends Component {
                           )}
                           isSuperAdmin={isSuperAdmin}
                         />
-                      </div>}
+                      </div>
+                    )}
                   </Col>
-                </Row>}
+                </Row>
+              )}
             </ResourceRenderer>
 
             <Row>
               <Col sm={12}>
                 {tests.length > 0 &&
                 exercise.runtimeEnvironments.length > 0 &&
-                exercise.hardwareGroups.length > 0
-                  ? <EditLimitsForm
-                      onSubmit={this.transformAndSendLimitsValues(
-                        tests,
-                        exercise.runtimeEnvironments
-                      )}
-                      environments={exercise.runtimeEnvironments}
-                      tests={tests}
-                      constraints={getLimitsConstraints(
-                        exercise.hardwareGroups,
-                        preciseTime
-                      )}
-                      initialValues={getLimitsInitValues(
-                        limits,
-                        tests,
-                        exercise.runtimeEnvironments,
-                        exercise.id,
-                        exercise.hardwareGroups[0].id
-                      )}
-                      cloneVertically={cloneVertically}
-                      cloneHorizontally={cloneHorizontally}
-                      cloneAll={cloneAll}
-                      readOnly={!exercise.permissionHints.setLimits}
-                    />
-                  : <div className="callout callout-warning">
-                      <h4>
-                        <i className="icon fa fa-warning" />{' '}
-                        <FormattedMessage
-                          id="app.editExerciseLimits.missingSomethingTitle"
-                          defaultMessage="Exercise configuration is incomplete"
-                        />
-                      </h4>
+                exercise.hardwareGroups.length > 0 ? (
+                  <EditLimitsForm
+                    onSubmit={this.transformAndSendLimitsValues(
+                      tests,
+                      exercise.runtimeEnvironments
+                    )}
+                    environments={exercise.runtimeEnvironments}
+                    tests={tests}
+                    constraints={getLimitsConstraints(
+                      exercise.hardwareGroups,
+                      preciseTime
+                    )}
+                    initialValues={getLimitsInitValues(
+                      limits,
+                      tests,
+                      exercise.runtimeEnvironments,
+                      exercise.id,
+                      exercise.hardwareGroups[0].id
+                    )}
+                    cloneVertically={cloneVertically}
+                    cloneHorizontally={cloneHorizontally}
+                    cloneAll={cloneAll}
+                    readOnly={!exercise.permissionHints.setLimits}
+                  />
+                ) : (
+                  <div className="callout callout-warning">
+                    <h4>
+                      <i className="icon fa fa-warning" />{' '}
                       <FormattedMessage
-                        id="app.editExerciseLimits.missingSomething"
-                        defaultMessage="The limits can be set only when the exercise configuration is complete. The tests, runtime environments, and a hardware group must be properly set aprior to setting limits."
+                        id="app.editExerciseLimits.missingSomethingTitle"
+                        defaultMessage="Exercise configuration is incomplete"
                       />
-                    </div>}
+                    </h4>
+                    <FormattedMessage
+                      id="app.editExerciseLimits.missingSomething"
+                      defaultMessage="The limits can be set only when the exercise configuration is complete. The tests, runtime environments, and a hardware group must be properly set aprior to setting limits."
+                    />
+                  </div>
+                )}
               </Col>
             </Row>
-          </Grid>}
+          </Grid>
+        )}
       </Page>
     );
   }
@@ -424,7 +428,7 @@ EditExerciseLimits.propTypes = {
   exercise: ImmutablePropTypes.map,
   loadAsync: PropTypes.func.isRequired,
   params: PropTypes.shape({
-    exerciseId: PropTypes.string.isRequired
+    exerciseId: PropTypes.string.isRequired,
   }).isRequired,
   editEnvironmentLimits: PropTypes.func.isRequired,
   setExerciseHardwareGroups: PropTypes.func.isRequired,
@@ -440,7 +444,7 @@ EditExerciseLimits.propTypes = {
   cloneAll: PropTypes.func.isRequired,
   reloadExercise: PropTypes.func.isRequired,
   links: PropTypes.object.isRequired,
-  intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired
+  intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired,
 };
 
 const cloneVerticallyWrapper = defaultMemoize(
@@ -475,7 +479,7 @@ export default withLinks(
           state,
           'hardwareGroup'
         ),
-        isSuperAdmin: isLoggedAsSuperAdmin(state)
+        isSuperAdmin: isLoggedAsSuperAdmin(state),
       };
     },
     (dispatch, { params: { exerciseId } }) => ({
@@ -496,7 +500,7 @@ export default withLinks(
       cloneAll: cloneAllWrapper(dispatch),
       fetchExerciseEnvironmentLimit: (envId, hwgId) =>
         dispatch(fetchExerciseEnvironmentLimits(exerciseId, envId, hwgId)),
-      reloadExercise: () => dispatch(fetchExercise(exerciseId))
+      reloadExercise: () => dispatch(fetchExercise(exerciseId)),
     })
   )(injectIntl(EditExerciseLimits))
 );

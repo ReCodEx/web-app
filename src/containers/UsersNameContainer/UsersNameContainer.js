@@ -8,7 +8,7 @@ import { getUser, loggedInUserSelector } from '../../redux/selectors/users';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import UsersName, {
   LoadingUsersName,
-  FailedUsersName
+  FailedUsersName,
 } from '../../components/Users/UsersName';
 import { LoadingIcon, FailureIcon } from '../../components/icons';
 
@@ -36,28 +36,30 @@ class UsersNameContainer extends Component {
       noLink,
       currentUser,
       isSimple = false,
-      showEmail = null
+      showEmail = null,
     } = this.props;
     const size = large ? 45 : 20;
     return (
       <ResourceRenderer
         resource={[user, currentUser]}
         loading={isSimple ? <LoadingIcon /> : <LoadingUsersName size={size} />}
-        failed={isSimple ? <FailureIcon /> : <FailedUsersName size={size} />}
-      >
+        failed={isSimple ? <FailureIcon /> : <FailedUsersName size={size} />}>
         {(user, currentUser) =>
-          isSimple
-            ? <span className="simpleName text-nowrap">
-                {user.name.firstName} {user.name.lastName}
-              </span>
-            : <UsersName
-                {...user}
-                large={large}
-                size={size}
-                noLink={noLink}
-                currentUserId={currentUser.id}
-                showEmail={showEmail}
-              />}
+          isSimple ? (
+            <span className="simpleName text-nowrap">
+              {user.name.firstName} {user.name.lastName}
+            </span>
+          ) : (
+            <UsersName
+              {...user}
+              large={large}
+              size={size}
+              noLink={noLink}
+              currentUserId={currentUser.id}
+              showEmail={showEmail}
+            />
+          )
+        }
       </ResourceRenderer>
     );
   }
@@ -71,16 +73,16 @@ UsersNameContainer.propTypes = {
   noLink: PropTypes.bool,
   loadAsync: PropTypes.func.isRequired,
   isSimple: PropTypes.bool,
-  showEmail: PropTypes.string
+  showEmail: PropTypes.string,
 };
 
 export default connect(
   (state, { userId }) => ({
     user: getUser(userId)(state),
-    currentUser: loggedInUserSelector(state)
+    currentUser: loggedInUserSelector(state),
   }),
   (dispatch, { userId }) => ({
     loadProfileIfNeeded: () => dispatch(fetchUserIfNeeded(userId)),
-    loadAsync: () => UsersNameContainer.loadAsync({ userId }, dispatch)
+    loadAsync: () => UsersNameContainer.loadAsync({ userId }, dispatch),
   })
 )(UsersNameContainer);

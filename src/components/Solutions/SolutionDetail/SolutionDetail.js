@@ -39,13 +39,13 @@ class SolutionDetail extends Component {
         accepted,
         runtimeEnvironmentId,
         lastSubmission,
-        permissionHints = EMPTY_OBJ
+        permissionHints = EMPTY_OBJ,
       },
       assignment,
       evaluations,
       runtimeEnvironments,
       deleteEvaluation = null,
-      refreshSolutionEvaluations = null
+      refreshSolutionEvaluations = null,
     } = this.props;
 
     const { openFileId } = this.state;
@@ -97,40 +97,40 @@ class SolutionDetail extends Component {
               }
             />
             <Row>
-              {files.map(file =>
+              {files.map(file => (
                 <Col lg={6} md={12} key={file.id}>
                   <a
                     href="#"
                     onClick={e => {
                       e.preventDefault();
                       this.openFile(file.id);
-                    }}
-                  >
+                    }}>
                     <SourceCodeInfoBox {...file} />
                   </a>
                 </Col>
-              )}
-              {files.length > 1 &&
+              ))}
+              {files.length > 1 && (
                 <Col lg={6} md={12}>
                   <DownloadSolutionArchiveContainer solutionId={id} />
-                </Col>}
+                </Col>
+              )}
             </Row>
-            {permissionHints.setBonusPoints &&
+            {permissionHints.setBonusPoints && (
               <PointsContainer
                 submissionId={id}
                 overriddenPoints={overriddenPoints}
                 bonusPoints={bonusPoints}
                 scoredPoints={safeGet(lastSubmission, ['evaluation', 'points'])}
                 maxPoints={maxPoints}
-              />}
+              />
+            )}
 
             <CommentThreadContainer threadId={id} />
           </Col>
 
-          {evaluations &&
+          {evaluations && (
             <Col md={6} sm={12}>
-              {!evaluation &&
-                refreshSolutionEvaluations &&
+              {!evaluation && refreshSolutionEvaluations && (
                 <div className="callout callout-warning">
                   <table>
                     <tbody>
@@ -144,8 +144,7 @@ class SolutionDetail extends Component {
                         <td>
                           <Button
                             onClick={refreshSolutionEvaluations}
-                            bsStyle="primary"
-                          >
+                            bsStyle="primary">
                             <RefreshIcon gapRight />
                             <FormattedMessage
                               id="generic.refresh"
@@ -156,18 +155,20 @@ class SolutionDetail extends Component {
                       </tr>
                     </tbody>
                   </table>
-                </div>}
+                </div>
+              )}
 
-              {activeSubmissionId !== safeGet(lastSubmission, ['id']) &&
+              {activeSubmissionId !== safeGet(lastSubmission, ['id']) && (
                 <p className="callout callout-warning">
                   <WarningIcon gapRight />
                   <FormattedMessage
                     id="app.evaluationDetail.notActualEvaluation"
                     defaultMessage="This is not the last evaluation. Please note, that the solution is scored by the evaluaton of the last submission. You may change the selection of the evaluation being displayed in the table at the bottom."
                   />
-                </p>}
+                </p>
+              )}
 
-              {evaluation &&
+              {evaluation && (
                 <EvaluationDetail
                   evaluation={evaluation}
                   submittedAt={createdAt}
@@ -177,56 +178,62 @@ class SolutionDetail extends Component {
                   evaluationStatus={evaluationStatus}
                   isDebug={isDebug}
                   viewResumbissions={permissionHints.viewResubmissions}
-                />}
+                />
+              )}
 
-              {evaluation &&
+              {evaluation && (
                 <CompilationLogs
                   initiationOutputs={evaluation.initiationOutputs}
-                />}
+                />
+              )}
 
-              {evaluation &&
+              {evaluation && (
                 <TestResults
                   evaluation={evaluation}
                   runtimeEnvironmentId={runtimeEnvironmentId}
                   showJudgeLog={permissionHints.viewEvaluationJudgeOutput}
-                />}
+                />
+              )}
 
-              {evaluation &&
-                permissionHints.downloadResultArchive &&
+              {evaluation && permissionHints.downloadResultArchive && (
                 <Row>
                   <Col lg={6} md={12}>
                     <DownloadResultArchiveContainer submissionId={restSub.id} />
                   </Col>
-                </Row>}
+                </Row>
+              )}
 
               {activeSubmissionId &&
                 permissionHints.viewResubmissions &&
                 evaluations &&
-                evaluations.size > 1 &&
-                <Row>
-                  <Col lg={12}>
-                    <ResourceRenderer
-                      resource={evaluations.toArray()}
-                      returnAsArray
-                    >
-                      {evaluations =>
-                        <SubmissionEvaluations
-                          submissionId={id}
-                          evaluations={evaluations}
-                          activeSubmissionId={activeSubmissionId}
-                          onSelect={id =>
-                            this.setState({ activeSubmissionId: id })}
-                          onDelete={
-                            permissionHints.deleteEvaluation
-                              ? deleteEvaluation
-                              : null
-                          }
-                          confirmDeleteLastSubmit
-                        />}
-                    </ResourceRenderer>
-                  </Col>
-                </Row>}
-            </Col>}
+                evaluations.size > 1 && (
+                  <Row>
+                    <Col lg={12}>
+                      <ResourceRenderer
+                        resource={evaluations.toArray()}
+                        returnAsArray>
+                        {evaluations => (
+                          <SubmissionEvaluations
+                            submissionId={id}
+                            evaluations={evaluations}
+                            activeSubmissionId={activeSubmissionId}
+                            onSelect={id =>
+                              this.setState({ activeSubmissionId: id })
+                            }
+                            onDelete={
+                              permissionHints.deleteEvaluation
+                                ? deleteEvaluation
+                                : null
+                            }
+                            confirmDeleteLastSubmit
+                          />
+                        )}
+                      </ResourceRenderer>
+                    </Col>
+                  </Row>
+                )}
+            </Col>
+          )}
         </Row>
 
         <SourceCodeViewerContainer
@@ -247,20 +254,20 @@ SolutionDetail.propTypes = {
     solution: PropTypes.shape({
       createdAt: PropTypes.number.isRequired,
       userId: PropTypes.string.isRequired,
-      files: PropTypes.array
+      files: PropTypes.array,
     }).isRequired,
     maxPoints: PropTypes.number.isRequired,
     bonusPoints: PropTypes.number.isRequired,
     overriddenPoints: PropTypes.number,
     actualPoints: PropTypes.number,
     runtimeEnvironmentId: PropTypes.string,
-    permissionHints: PropTypes.object
+    permissionHints: PropTypes.object,
   }).isRequired,
   assignment: PropTypes.object.isRequired,
   evaluations: PropTypes.object.isRequired,
   runtimeEnvironments: PropTypes.array,
   deleteEvaluation: PropTypes.func,
-  refreshSolutionEvaluations: PropTypes.func
+  refreshSolutionEvaluations: PropTypes.func,
 };
 
 export default SolutionDetail;

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import Box from '../../widgets/Box';
 
-const CompilationLogs = ({ initiationOutputs }) =>
+const CompilationLogs = ({ initiationOutputs }) => (
   <Box
     title={
       <FormattedMessage
@@ -13,15 +13,13 @@ const CompilationLogs = ({ initiationOutputs }) =>
     }
     noPadding={true}
     collapsable={true}
-    isOpen={initiationOutputs.trim() !== ''}
-  >
-    <pre>
-      {initiationOutputs.trim()}
-    </pre>
-  </Box>;
+    isOpen={initiationOutputs.trim() !== ''}>
+    <pre>{initiationOutputs.trim()}</pre>
+  </Box>
+);
 
 CompilationLogs.propTypes = {
-  initiationOutputs: PropTypes.string.isRequired
+  initiationOutputs: PropTypes.string.isRequired,
 };
 
 export default CompilationLogs;

@@ -34,10 +34,9 @@ class Exercises extends Component {
                 defaultMessage="Exercise List"
               />
             ),
-            iconName: 'puzzle-piece'
-          }
-        ]}
-      >
+            iconName: 'puzzle-piece',
+          },
+        ]}>
         <Box
           title={
             <FormattedMessage
@@ -45,8 +44,7 @@ class Exercises extends Component {
               defaultMessage="Exercises"
             />
           }
-          unlimitedHeight
-        >
+          unlimitedHeight>
           <ExercisesListContainer id="exercises-all" showGroups />
         </Box>
       </PageContent>
@@ -57,14 +55,14 @@ class Exercises extends Component {
 Exercises.propTypes = {
   query: PropTypes.string,
   push: PropTypes.func.isRequired,
-  links: PropTypes.object.isRequired
+  links: PropTypes.object.isRequired,
 };
 
 export default withLinks(
   connect(
     state => EMPTY_OBJ,
     dispatch => ({
-      push: url => dispatch(push(url))
+      push: url => dispatch(push(url)),
     })
   )(Exercises)
 );

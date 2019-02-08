@@ -39,14 +39,12 @@ class CommentBox extends Component {
         noPadding={false}
         collapsable
         footer={footer}
-        className="direct-chat"
-      >
+        className="direct-chat">
         <div
           className="direct-chat-messages"
           ref={c => {
             this.commentsContainer = c;
-          }}
-        >
+          }}>
           {children}
         </div>
       </Box>
@@ -57,7 +55,7 @@ class CommentBox extends Component {
 CommentBox.propTypes = {
   commentsCount: PropTypes.number.isRequired,
   footer: PropTypes.element,
-  children: PropTypes.element
+  children: PropTypes.element,
 };
 
 export default CommentBox;

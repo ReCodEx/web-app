@@ -8,12 +8,14 @@ import SubmitButton from '../../forms/SubmitButton';
 import { TextField, CheckboxField } from '../../forms/Fields';
 
 const maxNoteLength = value =>
-  value && value.length >= 255
-    ? <FormattedMessage
-        id="app.submissionFailures.resolveMaxLengthExceeded"
-        defaultMessage="Maximum length of the note exceeded."
-      />
-    : undefined;
+  value && value.length >= 255 ? (
+    <FormattedMessage
+      id="app.submissionFailures.resolveMaxLengthExceeded"
+      defaultMessage="Maximum length of the note exceeded."
+    />
+  ) : (
+    undefined
+  );
 
 const ResolveFailure = ({
   isOpen,
@@ -25,8 +27,8 @@ const ResolveFailure = ({
   submitFailed = false,
   submitSucceeded = false,
   invalid,
-  reset
-}) =>
+  reset,
+}) => (
   <Modal show={isOpen} backdrop="static" onHide={onClose}>
     <Modal.Header closeButton>
       <Modal.Title>
@@ -77,7 +79,7 @@ const ResolveFailure = ({
           ),
           success: (
             <FormattedMessage id="generic.saved" defaultMessage="Saved" />
-          )
+          ),
         }}
       />
 
@@ -86,7 +88,8 @@ const ResolveFailure = ({
         <FormattedMessage id="generic.close" defaultMessage="Close" />
       </Button>
     </Modal.Footer>
-  </Modal>;
+  </Modal>
+);
 
 ResolveFailure.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
@@ -98,7 +101,7 @@ ResolveFailure.propTypes = {
   invalid: PropTypes.bool,
   reset: PropTypes.func,
   onClose: PropTypes.func.isRequired,
-  isOpen: PropTypes.bool.isRequired
+  isOpen: PropTypes.bool.isRequired,
 };
 
 export default reduxForm({ form: 'resolve-failure' })(ResolveFailure);

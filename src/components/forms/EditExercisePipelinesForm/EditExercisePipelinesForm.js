@@ -24,7 +24,7 @@ class EditExercisePipelinesForm extends Component {
       submitSucceeded,
       invalid,
       error,
-      warning
+      warning,
     } = this.props;
 
     return (
@@ -39,18 +39,18 @@ class EditExercisePipelinesForm extends Component {
         noPadding
         footer={
           <div className="text-center">
-            {dirty &&
+            {dirty && (
               <span>
                 <Button
                   type="reset"
                   onClick={reset}
                   bsStyle={'danger'}
-                  className="btn-flat"
-                >
+                  className="btn-flat">
                   <RefreshIcon gapRight />
                   <FormattedMessage id="generic.reset" defaultMessage="Reset" />
                 </Button>
-              </span>}
+              </span>
+            )}
 
             <SubmitButton
               id="editExercisePipelines"
@@ -62,8 +62,7 @@ class EditExercisePipelinesForm extends Component {
               handleSubmit={handleSubmit}
             />
           </div>
-        }
-      >
+        }>
         <FieldArray
           name="pipelines"
           component={EditExercisePipelinesTable}
@@ -71,23 +70,26 @@ class EditExercisePipelinesForm extends Component {
           readOnly={readOnly}
         />
 
-        {submitFailed &&
+        {submitFailed && (
           <Alert bsStyle="danger" className="em-margin">
             <FormattedMessage
               id="generic.savingFailed"
               defaultMessage="Saving failed. Please try again later."
             />
-          </Alert>}
+          </Alert>
+        )}
 
-        {error &&
+        {error && (
           <Alert bsStyle="danger" className="em-margin">
             {error}
-          </Alert>}
+          </Alert>
+        )}
 
-        {warning &&
+        {warning && (
           <Alert bsStyle="warning" className="em-margin">
             {warning}
-          </Alert>}
+          </Alert>
+        )}
       </FormBox>
     );
   }
@@ -104,7 +106,7 @@ EditExercisePipelinesForm.propTypes = {
   submitSucceeded: PropTypes.bool,
   invalid: PropTypes.bool,
   error: PropTypes.any,
-  warning: PropTypes.any
+  warning: PropTypes.any,
 };
 
 const validate = ({ pipelines }) => {
@@ -140,5 +142,5 @@ export default reduxForm({
   enableReinitialize: true,
   keepDirtyOnReinitialize: false,
   validate,
-  warn
+  warn,
 })(EditExercisePipelinesForm);

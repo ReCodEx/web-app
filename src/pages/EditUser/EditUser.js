@@ -10,7 +10,7 @@ import {
   updateProfile,
   updateSettings,
   makeLocalLogin,
-  setRole
+  setRole,
 } from '../../redux/modules/users';
 import { getUser, isLoggedAsSuperAdmin } from '../../redux/selectors/users';
 import Page from '../../components/layout/Page';
@@ -26,7 +26,7 @@ import EditUserRoleForm from '../../components/forms/EditUserRoleForm';
 import { generateToken, takeOver } from '../../redux/modules/auth';
 import {
   lastGeneratedToken,
-  loggedInUserIdSelector
+  loggedInUserIdSelector,
 } from '../../redux/selectors/auth';
 import { safeGet } from '../../helpers/common';
 
@@ -67,26 +67,29 @@ class EditUser extends Component {
       isSuperAdmin,
       generateToken,
       lastToken,
-      takeOver
+      takeOver,
     } = this.props;
     return (
       <Page
         resource={user}
-        title={user =>
+        title={user => (
           <span>
-            {!safeGet(user, ['privateData', 'isAllowed']) &&
-              <BanIcon gapRight />}
+            {!safeGet(user, ['privateData', 'isAllowed']) && (
+              <BanIcon gapRight />
+            )}
 
-            {safeGet(user, ['privateData', 'role']) &&
+            {safeGet(user, ['privateData', 'role']) && (
               <UserRoleIcon
                 role={user.privateData.role}
                 showTooltip
                 tooltipId={'user-role'}
                 gapRight
-              />}
+              />
+            )}
 
             {user.fullName}
-          </span>}
+          </span>
+        )}
         description={
           <FormattedMessage
             id="app.editUser.description"
@@ -99,8 +102,8 @@ class EditUser extends Component {
             iconName: 'user',
             breadcrumb: user => ({
               text: <FormattedMessage id="app.user.title" />,
-              link: ({ USER_URI_FACTORY }) => USER_URI_FACTORY(user.id)
-            })
+              link: ({ USER_URI_FACTORY }) => USER_URI_FACTORY(user.id),
+            }),
           },
           {
             text: (
@@ -109,38 +112,40 @@ class EditUser extends Component {
                 defaultMessage="Edit user's profile"
               />
             ),
-            iconName: ['far', 'edit']
-          }
-        ]}
-      >
-        {data =>
+            iconName: ['far', 'edit'],
+          },
+        ]}>
+        {data => (
           <div>
-            {data &&
+            {data && (
               <p>
-                {!data.privateData.isLocal &&
+                {!data.privateData.isLocal && (
                   <Button bsStyle="warning" onClick={makeLocalLogin}>
                     <LocalIcon gapRight />
                     <FormattedMessage
                       id="app.editUser.makeLocal"
                       defaultMessage="Create local account"
                     />
-                  </Button>}
+                  </Button>
+                )}
 
                 {isSuperAdmin &&
                   data.id !== loggedUserId &&
-                  data.privateData.isAllowed &&
-                  <Button bsStyle="primary" onClick={() => takeOver(data.id)}>
-                    <TransferIcon gapRight />
-                    <FormattedMessage
-                      id="app.users.takeOver"
-                      defaultMessage="Login as"
-                    />
-                  </Button>}
+                  data.privateData.isAllowed && (
+                    <Button bsStyle="primary" onClick={() => takeOver(data.id)}>
+                      <TransferIcon gapRight />
+                      <FormattedMessage
+                        id="app.users.takeOver"
+                        defaultMessage="Login as"
+                      />
+                    </Button>
+                  )}
 
-                {isSuperAdmin &&
-                  data.id !== loggedUserId &&
-                  <AllowUserButtonContainer id={data.id} />}
-              </p>}
+                {isSuperAdmin && data.id !== loggedUserId && (
+                  <AllowUserButtonContainer id={data.id} />
+                )}
+              </p>
+            )}
 
             <Row>
               <Col lg={6}>
@@ -149,7 +154,8 @@ class EditUser extends Component {
                     this.updateProfile(
                       formData,
                       isSuperAdmin || !data.privateData.isExternal
-                    )}
+                    )
+                  }
                   initialValues={{
                     firstName: data.name.firstName,
                     lastName: data.name.lastName,
@@ -157,7 +163,7 @@ class EditUser extends Component {
                     degreesAfterName: data.name.degreesAfterName,
                     email: data.privateData.email,
                     passwordStrength: null,
-                    gravatarUrlEnabled: data.avatarUrl !== null
+                    gravatarUrlEnabled: data.avatarUrl !== null,
                   }}
                   allowChangePassword={data.privateData.isLocal}
                   emptyLocalPassword={data.privateData.emptyLocalPassword}
@@ -174,9 +180,7 @@ class EditUser extends Component {
               </Col>
             </Row>
 
-            {data &&
-              data.id &&
-              data.id === loggedUserId &&
+            {data && data.id && data.id === loggedUserId && (
               <Row>
                 <Col lg={12}>
                   <GenerateTokenForm
@@ -186,17 +190,16 @@ class EditUser extends Component {
                       scopes: {
                         'read-all': true,
                         master: false,
-                        refresh: false
-                      }
+                        refresh: false,
+                      },
                     }}
                     lastToken={lastToken}
                   />
                 </Col>
-              </Row>}
+              </Row>
+            )}
 
-            {isSuperAdmin &&
-              data.id !== loggedUserId &&
-              data.privateData &&
+            {isSuperAdmin && data.id !== loggedUserId && data.privateData && (
               <Row>
                 <Col lg={12}>
                   <EditUserRoleForm
@@ -205,8 +208,10 @@ class EditUser extends Component {
                     onSubmit={this.setRole}
                   />
                 </Col>
-              </Row>}
-          </div>}
+              </Row>
+            )}
+          </div>
+        )}
       </Page>
     );
   }
@@ -224,7 +229,7 @@ EditUser.propTypes = {
   generateToken: PropTypes.func.isRequired,
   setRole: PropTypes.func.isRequired,
   takeOver: PropTypes.func.isRequired,
-  lastToken: PropTypes.string
+  lastToken: PropTypes.string,
 };
 
 export default connect(
@@ -232,7 +237,7 @@ export default connect(
     user: getUser(userId)(state),
     loggedUserId: loggedInUserIdSelector(state),
     isSuperAdmin: isLoggedAsSuperAdmin(state),
-    lastToken: lastGeneratedToken(state)
+    lastToken: lastGeneratedToken(state),
   }),
   (dispatch, { params: { userId } }) => ({
     loadAsync: () => EditUser.loadAsync({ userId }, dispatch),
@@ -249,6 +254,6 @@ export default connect(
         )
       ),
     setRole: role => dispatch(setRole(userId, role)),
-    takeOver: userId => dispatch(takeOver(userId))
+    takeOver: userId => dispatch(takeOver(userId)),
   })
 )(EditUser);

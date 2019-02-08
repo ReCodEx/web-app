@@ -7,7 +7,7 @@ import {
   createGetUploadingFiles,
   createGetUploadedFiles,
   createGetRemovedFiles,
-  createGetFailedFiles
+  createGetFailedFiles,
 } from '../../redux/selectors/upload';
 
 import {
@@ -15,7 +15,7 @@ import {
   uploadFile,
   removeFile,
   returnFile,
-  removeFailedFile
+  removeFailedFile,
 } from '../../redux/modules/upload';
 
 class UploadContainer extends Component {
@@ -37,7 +37,7 @@ class UploadContainer extends Component {
       removedFiles,
       removeFailedFile,
       removeFile,
-      returnFile
+      returnFile,
     } = this.props;
 
     return (
@@ -68,7 +68,7 @@ UploadContainer.propTypes = {
   removeFile: PropTypes.func.isRequired,
   returnFile: PropTypes.func.isRequired,
   uploadFile: PropTypes.func.isRequired,
-  uploadFiles: PropTypes.func.isRequired
+  uploadFiles: PropTypes.func.isRequired,
 };
 
 const appendThen = (promise, action) => {
@@ -80,7 +80,7 @@ export default connect(
     uploadingFiles: createGetUploadingFiles(id)(state),
     attachedFiles: createGetUploadedFiles(id)(state),
     failedFiles: createGetFailedFiles(id)(state),
-    removedFiles: createGetRemovedFiles(id)(state)
+    removedFiles: createGetRemovedFiles(id)(state),
   }),
   (dispatch, { id, onChange }) => ({
     init: () => dispatch(init(id)),
@@ -99,6 +99,6 @@ export default connect(
     returnFile: payload => {
       dispatch(returnFile(id, payload));
       onChange({ returnFile: payload });
-    }
+    },
   })
 )(UploadContainer);

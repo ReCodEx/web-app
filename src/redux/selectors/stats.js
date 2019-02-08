@@ -12,10 +12,16 @@ const getParam = (state, id) => id;
 export const statisticsSelector = state => state.stats.get('resources');
 
 export const createGroupsStatsSelector = groupId =>
-  createSelector(statisticsSelector, stats => stats.get(groupId));
+  createSelector(
+    statisticsSelector,
+    stats => stats.get(groupId)
+  );
 
 const getGroupsStatsData = groupId =>
-  createSelector(createGroupsStatsSelector(groupId), getJsData);
+  createSelector(
+    createGroupsStatsSelector(groupId),
+    getJsData
+  );
 
 export const getUsersStatistics = (groupId, userId) =>
   createSelector(

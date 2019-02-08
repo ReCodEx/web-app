@@ -11,14 +11,14 @@ import { groupSelector, studentsOfGroup } from '../../redux/selectors/groups';
 import {
   getAssignment,
   assignmentEnvironmentsSelector,
-  getUserSolutions
+  getUserSolutions,
 } from '../../redux/selectors/assignments';
 
 import { fetchStudents } from '../../redux/modules/users';
 import { isReady, getJsData, getId } from '../../redux/helpers/resourceManager';
 import {
   fetchAssignmentIfNeeded,
-  downloadBestSolutionsArchive
+  downloadBestSolutionsArchive,
 } from '../../redux/modules/assignments';
 import { fetchGroupIfNeeded } from '../../redux/modules/groups';
 import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments';
@@ -47,11 +47,11 @@ class AssignmentStats extends Component {
         .then(assignment =>
           Promise.all([
             dispatch(fetchGroupIfNeeded(assignment.groupId)),
-            dispatch(fetchStudents(assignment.groupId))
+            dispatch(fetchStudents(assignment.groupId)),
           ])
         ),
       dispatch(fetchRuntimeEnvironments()),
-      dispatch(fetchAssignmentSolutions(assignmentId))
+      dispatch(fetchAssignmentSolutions(assignmentId)),
     ]);
 
   componentWillMount() {
@@ -65,7 +65,10 @@ class AssignmentStats extends Component {
   }
 
   getArchiveFileName = assignment => {
-    const { assignmentId, intl: { locale: pageLocale } } = this.props;
+    const {
+      assignmentId,
+      intl: { locale: pageLocale },
+    } = this.props;
     const name =
       assignment &&
       safeGet(
@@ -97,7 +100,7 @@ class AssignmentStats extends Component {
       downloadBestSolutionsArchive,
       fetchManyStatus,
       intl: { locale },
-      links: { ASSIGNMENT_EDIT_URI_FACTORY }
+      links: { ASSIGNMENT_EDIT_URI_FACTORY },
     } = this.props;
 
     return (
@@ -122,8 +125,8 @@ class AssignmentStats extends Component {
                 />
               ),
               link: ({ GROUP_DETAIL_URI_FACTORY }) =>
-                GROUP_DETAIL_URI_FACTORY(assignment.groupId)
-            })
+                GROUP_DETAIL_URI_FACTORY(assignment.groupId),
+            }),
           },
           {
             resource: assignment,
@@ -136,8 +139,8 @@ class AssignmentStats extends Component {
                 />
               ),
               link: ({ EXERCISE_URI_FACTORY }) =>
-                EXERCISE_URI_FACTORY(assignment.exerciseId)
-            })
+                EXERCISE_URI_FACTORY(assignment.exerciseId),
+            }),
           },
           {
             resource: assignment,
@@ -150,8 +153,8 @@ class AssignmentStats extends Component {
                 />
               ),
               link: ({ ASSIGNMENT_DETAIL_URI_FACTORY }) =>
-                ASSIGNMENT_DETAIL_URI_FACTORY(assignment.id)
-            })
+                ASSIGNMENT_DETAIL_URI_FACTORY(assignment.id),
+            }),
           },
           {
             text: (
@@ -160,19 +163,17 @@ class AssignmentStats extends Component {
                 defaultMessage="Assignment statistics"
               />
             ),
-            iconName: 'chart-line'
-          }
-        ]}
-      >
-        {assignment =>
+            iconName: 'chart-line',
+          },
+        ]}>
+        {assignment => (
           <div>
             <Row>
               <Col xs={12}>
                 <HierarchyLineContainer groupId={assignment.groupId} />
                 <p>
                   <LinkContainer
-                    to={ASSIGNMENT_EDIT_URI_FACTORY(assignment.id)}
-                  >
+                    to={ASSIGNMENT_EDIT_URI_FACTORY(assignment.id)}>
                     <Button bsStyle="warning">
                       <EditIcon gapRight />
                       <FormattedMessage
@@ -185,8 +186,7 @@ class AssignmentStats extends Component {
                     href="#"
                     onClick={downloadBestSolutionsArchive(
                       this.getArchiveFileName(assignment)
-                    )}
-                  >
+                    )}>
                     <Button bsStyle="primary">
                       <DownloadIcon gapRight />
                       <FormattedMessage
@@ -200,15 +200,13 @@ class AssignmentStats extends Component {
               </Col>
             </Row>
             <ResourceRenderer
-              resource={[getGroup(assignment.groupId), ...runtimeEnvironments]}
-            >
-              {(group, ...runtimes) =>
+              resource={[getGroup(assignment.groupId), ...runtimeEnvironments]}>
+              {(group, ...runtimes) => (
                 <FetchManyResourceRenderer
                   fetchManyStatus={fetchManyStatus}
                   loading={<LoadingSolutionsTable />}
-                  failed={<FailedLoadingSolutionsTable />}
-                >
-                  {() =>
+                  failed={<FailedLoadingSolutionsTable />}>
+                  {() => (
                     <div>
                       {getStudents(group.id)
                         .sort((a, b) => {
@@ -218,7 +216,7 @@ class AssignmentStats extends Component {
                             b.name.lastName + ' ' + b.name.firstName;
                           return aName.localeCompare(bName, locale);
                         })
-                        .map(user =>
+                        .map(user => (
                           <Row key={user.id}>
                             <Col sm={12}>
                               <SolutionsTable
@@ -232,11 +230,14 @@ class AssignmentStats extends Component {
                               />
                             </Col>
                           </Row>
-                        )}
-                    </div>}
-                </FetchManyResourceRenderer>}
+                        ))}
+                    </div>
+                  )}
+                </FetchManyResourceRenderer>
+              )}
             </ResourceRenderer>
-          </div>}
+          </div>
+        )}
       </Page>
     );
   }
@@ -253,7 +254,7 @@ AssignmentStats.propTypes = {
   downloadBestSolutionsArchive: PropTypes.func.isRequired,
   fetchManyStatus: PropTypes.string,
   intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired,
-  links: PropTypes.object.isRequired
+  links: PropTypes.object.isRequired,
 };
 
 export default withLinks(
@@ -261,7 +262,9 @@ export default withLinks(
     (state, { params: { assignmentId } }) => {
       const assignment = getAssignment(state)(assignmentId);
       const getStudentsIds = groupId => studentsOfGroup(groupId)(state);
-      const readyUsers = usersSelector(state).toList().filter(isReady);
+      const readyUsers = usersSelector(state)
+        .toList()
+        .filter(isReady);
 
       return {
         assignmentId,
@@ -277,7 +280,9 @@ export default withLinks(
         runtimeEnvironments: assignmentEnvironmentsSelector(state)(
           assignmentId
         ),
-        fetchManyStatus: fetchManyAssignmentSolutionsStatus(assignmentId)(state)
+        fetchManyStatus: fetchManyAssignmentSolutionsStatus(assignmentId)(
+          state
+        ),
       };
     },
     (dispatch, { params: { assignmentId } }) => ({
@@ -285,7 +290,7 @@ export default withLinks(
       downloadBestSolutionsArchive: name => ev => {
         ev.preventDefault();
         dispatch(downloadBestSolutionsArchive(assignmentId, name));
-      }
+      },
     })
   )(injectIntl(AssignmentStats))
 );

@@ -12,14 +12,15 @@ class SortableTable extends Component {
   }
 
   // Default row rendering fucntion (if the user does not provide custom function)
-  defaultRowRenderer = (row, idx, columns) =>
+  defaultRowRenderer = (row, idx, columns) => (
     <tr key={row.id || idx}>
-      {columns.map(({ id: colId, cellRenderer, style, className }) =>
+      {columns.map(({ id: colId, cellRenderer, style, className }) => (
         <td key={colId} style={style} className={className}>
           {cellRenderer(row[colId], idx, colId, row)}
         </td>
-      )}
-    </tr>;
+      ))}
+    </tr>
+  );
 
   // Change internal state that holds sorting parameters.
   orderBy = colId => {
@@ -43,8 +44,8 @@ class SortableTable extends Component {
     return column === null || column.comparator === null
       ? data
       : ascendant
-        ? data.sort(column.comparator)
-        : data.sort(column.comparator).reverse();
+      ? data.sort(column.comparator)
+      : data.sort(column.comparator).reverse();
   });
 
   getHeaderSuffixRow = () => {
@@ -57,15 +58,14 @@ class SortableTable extends Component {
     ) {
       return (
         <tr>
-          {columns.map(column =>
+          {columns.map(column => (
             <th
               key={column.id}
               style={column.getHeaderSuffixStyle()}
-              className={column.getHeaderSuffixClassName()}
-            >
+              className={column.getHeaderSuffixClassName()}>
               {column.headerSuffix}
             </th>
-          )}
+          ))}
         </tr>
       );
     } else {
@@ -86,18 +86,16 @@ class SortableTable extends Component {
 
     return (
       <Table {...props}>
-        {columns.length > 0 &&
+        {columns.length > 0 && (
           <thead>
             <tr>
-              {columns.map(column =>
+              {columns.map(column => (
                 <th
                   key={`header-${column.id}`}
                   style={column.getHeaderStyle()}
-                  className={column.getHeaderClassName()}
-                >
+                  className={column.getHeaderClassName()}>
                   {column.header}
-                  {column.comparator &&
-                    data.length > 1 &&
+                  {column.comparator && data.length > 1 && (
                     <span>
                       <SortedIcon
                         active={sortColumn === column.id}
@@ -106,34 +104,39 @@ class SortableTable extends Component {
                         onClick={() => this.orderBy(column.id)}
                       />
 
-                      {sortColumn === column.id &&
-                        !defaultOrder &&
+                      {sortColumn === column.id && !defaultOrder && (
                         <CloseIcon
                           smallGapLeft
                           timid
                           className="text-danger"
                           onClick={() => this.orderBy(null)}
-                        />}
-                    </span>}
+                        />
+                      )}
+                    </span>
+                  )}
                 </th>
-              )}
+              ))}
             </tr>
             {this.getHeaderSuffixRow()}
-          </thead>}
+          </thead>
+        )}
         <tbody>
-          {data.length > 0
-            ? this.sortData(data, sortColumn, ascendant).map((row, idx) =>
-                rowRenderer(row, idx, columns)
-              )
-            : <tr>
-                <td colSpan={columns.length}>
-                  {empty ||
-                    <FormattedMessage
-                      id="generic.noRecordsInTable"
-                      defaultMessage="There are no records in the table."
-                    />}
-                </td>
-              </tr>}
+          {data.length > 0 ? (
+            this.sortData(data, sortColumn, ascendant).map((row, idx) =>
+              rowRenderer(row, idx, columns)
+            )
+          ) : (
+            <tr>
+              <td colSpan={columns.length}>
+                {empty || (
+                  <FormattedMessage
+                    id="generic.noRecordsInTable"
+                    defaultMessage="There are no records in the table."
+                  />
+                )}
+              </td>
+            </tr>
+          )}
         </tbody>
       </Table>
     );
@@ -145,7 +148,7 @@ SortableTable.propTypes = {
   defaultOrder: PropTypes.string,
   data: PropTypes.array,
   empty: PropTypes.any,
-  rowRenderer: PropTypes.func
+  rowRenderer: PropTypes.func,
 };
 
 export default SortableTable;

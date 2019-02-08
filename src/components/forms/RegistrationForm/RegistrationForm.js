@@ -13,7 +13,7 @@ import {
   PasswordField,
   PasswordStrength,
   SelectField,
-  CheckboxField
+  CheckboxField,
 } from '../Fields';
 import { validateRegistrationData } from '../../../redux/modules/users';
 import SubmitButton from '../SubmitButton';
@@ -28,7 +28,7 @@ const RegistrationForm = ({
   instances,
   asyncValidating,
   invalid,
-  error
+  error,
 }) => (
   <FormBox
     title={
@@ -67,12 +67,11 @@ const RegistrationForm = ({
                 id="app.registrationForm.success"
                 defaultMessage="Your account has been created."
               />
-            )
+            ),
           }}
         />
       </div>
-    }
-  >
+    }>
     {submitFailed && (
       <Alert bsStyle="danger">
         <FormattedMessage
@@ -201,7 +200,7 @@ RegistrationForm.propTypes = {
   asyncValidating: PropTypes.oneOfType([PropTypes.bool, PropTypes.string])
     .isRequired,
   invalid: PropTypes.bool,
-  error: PropTypes.object
+  error: PropTypes.object,
 };
 
 const validate = ({
@@ -211,7 +210,7 @@ const validate = ({
   password,
   passwordConfirm,
   instanceId,
-  gdpr
+  gdpr,
 }) => {
   const errors = {};
 
@@ -346,5 +345,5 @@ export default reduxForm({
   keepDirtyOnReinitialize: false,
   validate,
   asyncValidate,
-  asyncBlurFields: ['email', 'password', 'passwordConfirm']
+  asyncBlurFields: ['email', 'password', 'passwordConfirm'],
 })(RegistrationForm);

@@ -33,7 +33,7 @@ class Login extends Component {
     isLoggedIn,
     push,
     reset,
-    links: { DASHBOARD_URI }
+    links: { DASHBOARD_URI },
   }) => {
     if (isLoggedIn) {
       this.timeout = setTimeout(() => {
@@ -53,7 +53,7 @@ class Login extends Component {
   render() {
     const {
       login,
-      links: { HOME_URI, RESET_PASSWORD_URI }
+      links: { HOME_URI, RESET_PASSWORD_URI },
     } = this.props;
 
     return (
@@ -71,14 +71,13 @@ class Login extends Component {
           {
             text: <FormattedMessage id="app.homepage.title" />,
             link: HOME_URI,
-            iconName: 'home'
+            iconName: 'home',
           },
           {
             text: <FormattedMessage id="app.login.title" />,
-            iconName: 'sign-in-alt'
-          }
-        ]}
-      >
+            iconName: 'sign-in-alt',
+          },
+        ]}>
         <Row>
           <Col
             lg={4}
@@ -86,8 +85,7 @@ class Login extends Component {
             md={6}
             mdOffset={ALLOW_CAS_REGISTRATION ? 0 : 3}
             sm={8}
-            smOffset={2}
-          >
+            smOffset={2}>
             <LoginForm onSubmit={login} />
             <p className="text-center">
               <FormattedMessage
@@ -118,20 +116,20 @@ Login.propTypes = {
   isLoggedIn: PropTypes.bool.isRequired,
   push: PropTypes.func.isRequired,
   reset: PropTypes.func.isRequired,
-  links: PropTypes.object.isRequired
+  links: PropTypes.object.isRequired,
 };
 
 export default withLinks(
   connect(
     state => ({
-      isLoggedIn: isLoggedIn(state)
+      isLoggedIn: isLoggedIn(state),
     }),
     dispatch => ({
       login: ({ email, password }) => dispatch(login(email, password)),
       push: url => dispatch(push(url)),
       reset: () => {
         dispatch(reset('login'));
-      }
+      },
     })
   )(Login)
 );

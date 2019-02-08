@@ -1,7 +1,7 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-const NoSolutionYetTableRow = () =>
+const NoSolutionYetTableRow = () => (
   <tbody>
     <tr>
       <td colSpan={8} className="text-center text-muted em-padding">
@@ -11,6 +11,7 @@ const NoSolutionYetTableRow = () =>
         />
       </td>
     </tr>
-  </tbody>;
+  </tbody>
+);
 
 export default NoSolutionYetTableRow;

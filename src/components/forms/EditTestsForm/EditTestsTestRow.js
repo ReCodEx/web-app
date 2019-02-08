@@ -13,8 +13,8 @@ const EditTestsTestRow = ({
   onRemove,
   isUniform,
   percent,
-  readOnly = false
-}) =>
+  readOnly = false,
+}) => (
   <tr>
     <td>
       <Field
@@ -26,7 +26,7 @@ const EditTestsTestRow = ({
         disabled={readOnly}
       />
     </td>
-    {!isUniform &&
+    {!isUniform && (
       <td>
         <NumericTextField
           name={`${test}.weight`}
@@ -37,33 +37,33 @@ const EditTestsTestRow = ({
           groupClassName="testRow"
           disabled={readOnly}
         />
-      </td>}
-    <td style={{ textAlign: 'center', verticalAlign: 'middle' }}>
-      {percent}
-    </td>
-    {!readOnly &&
+      </td>
+    )}
+    <td style={{ textAlign: 'center', verticalAlign: 'middle' }}>{percent}</td>
+    {!readOnly && (
       <td style={{ verticalAlign: 'middle' }}>
         <Button
           onClick={onRemove}
           bsStyle={'danger'}
           bsSize="xs"
-          className="btn-flat pull-right"
-        >
+          className="btn-flat pull-right">
           <RemoveIcon gapRight />
           <FormattedMessage
             id="app.editTestsTest.remove"
             defaultMessage="Remove"
           />
         </Button>
-      </td>}
-  </tr>;
+      </td>
+    )}
+  </tr>
+);
 
 EditTestsTestRow.propTypes = {
   test: PropTypes.string.isRequired,
   onRemove: PropTypes.func.isRequired,
   isUniform: PropTypes.bool.isRequired,
   percent: PropTypes.string.isRequired,
-  readOnly: PropTypes.bool
+  readOnly: PropTypes.bool,
 };
 
 export default EditTestsTestRow;

@@ -2,9 +2,10 @@ import React from 'react';
 import { FailureIcon } from '../../icons';
 import FakeAvatar from './FakeAvatar';
 
-const FailedAvatar = props =>
+const FailedAvatar = props => (
   <FakeAvatar {...props}>
     <FailureIcon />
-  </FakeAvatar>;
+  </FakeAvatar>
+);
 
 export default FailedAvatar;

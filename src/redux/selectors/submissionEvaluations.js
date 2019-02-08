@@ -13,28 +13,28 @@ export const submissionEvaluationsSelector = createSelector(
 );
 
 export const submissionEvaluationSelector = evaluationId =>
-  createSelector(submissionEvaluationsSelector, submissionEvaluations =>
-    submissionEvaluations.get(evaluationId)
+  createSelector(
+    submissionEvaluationsSelector,
+    submissionEvaluations => submissionEvaluations.get(evaluationId)
   );
 
 export const evaluationsForSubmissionSelector = submissionId =>
   createSelector(
     [getSolution(submissionId), submissionEvaluationsSelector],
     (submission, evaluations) =>
-      evaluations
-        .filter(isReady)
-        .filter(
-          evaluation =>
-            submission &&
-            submission.getIn(['data', 'submissions']) &&
-            submission
-              .get('data')
-              .get('submissions')
-              .indexOf(evaluation.getIn(['data', 'id'])) >= 0
-        )
+      evaluations.filter(isReady).filter(
+        evaluation =>
+          submission &&
+          submission.getIn(['data', 'submissions']) &&
+          submission
+            .get('data')
+            .get('submissions')
+            .indexOf(evaluation.getIn(['data', 'id'])) >= 0
+      )
   );
 
 export const fetchManyStatus = id =>
-  createSelector(getSubmissionEvaluations, state =>
-    state.getIn(['fetchManyStatus', fetchManyEndpoint(id)])
+  createSelector(
+    getSubmissionEvaluations,
+    state => state.getIn(['fetchManyStatus', fetchManyEndpoint(id)])
   );

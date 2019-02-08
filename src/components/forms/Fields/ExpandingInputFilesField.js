@@ -12,12 +12,14 @@ import { AddIcon, CloseIcon } from '../../icons';
 const EMPTY_VALUE = { file: '', name: '' };
 
 const validate = value =>
-  !value || value.trim() === ''
-    ? <FormattedMessage
-        id="app.expandingInputFilesField.validateEmpty"
-        defaultMessage="This value must not be empty."
-      />
-    : undefined;
+  !value || value.trim() === '' ? (
+    <FormattedMessage
+      id="app.expandingInputFilesField.validateEmpty"
+      defaultMessage="This value must not be empty."
+    />
+  ) : (
+    undefined
+  );
 
 const handleSelectChange = (oldValue, fieldName, change) => e => {
   if (oldValue.file === oldValue.name || (!oldValue.file && !oldValue.name)) {
@@ -33,29 +35,23 @@ const ExpandingInputFilesField = ({
   options,
   change,
   ...props
-}) =>
+}) => (
   <div>
-    {fields.length > 0 &&
+    {fields.length > 0 && (
       <table>
         <thead>
           <tr>
             <th width="50%">
-              {Boolean(leftLabel) &&
-                <ControlLabel>
-                  {leftLabel}
-                </ControlLabel>}
+              {Boolean(leftLabel) && <ControlLabel>{leftLabel}</ControlLabel>}
             </th>
             <th width="50%">
-              {Boolean(rightLabel) &&
-                <ControlLabel>
-                  {rightLabel}
-                </ControlLabel>}
+              {Boolean(rightLabel) && <ControlLabel>{rightLabel}</ControlLabel>}
             </th>
             <th />
           </tr>
         </thead>
         <tbody>
-          {fields.map((field, index) =>
+          {fields.map((field, index) => (
             <tr key={index}>
               <td className="valign-top">
                 <Field
@@ -93,26 +89,28 @@ const ExpandingInputFilesField = ({
                         defaultMessage="Remove this file."
                       />
                     </Tooltip>
-                  }
-                >
+                  }>
                   <FlatButton onClick={() => fields.remove(index)}>
                     <CloseIcon />
                   </FlatButton>
                 </OverlayTrigger>
               </td>
             </tr>
-          )}
+          ))}
         </tbody>
-      </table>}
+      </table>
+    )}
     <div className="text-center">
-      {fields.length === 0 &&
+      {fields.length === 0 && (
         <span style={{ paddingRight: '2em' }}>
-          {noItems ||
+          {noItems || (
             <FormattedMessage
               id="app.expandingInputFilesField.noFiles"
               defaultMessage="There are no files yet..."
-            />}
-        </span>}
+            />
+          )}
+        </span>
+      )}
       <OverlayTrigger
         placement="right"
         overlay={
@@ -122,14 +120,14 @@ const ExpandingInputFilesField = ({
               defaultMessage="Add another file."
             />
           </Tooltip>
-        }
-      >
+        }>
         <FlatButton onClick={() => fields.push(EMPTY_VALUE)}>
           <AddIcon />
         </FlatButton>
       </OverlayTrigger>
     </div>
-  </div>;
+  </div>
+);
 
 ExpandingInputFilesField.propTypes = {
   fields: PropTypes.object.isRequired,
@@ -137,25 +135,25 @@ ExpandingInputFilesField.propTypes = {
     active: PropTypes.bool,
     dirty: PropTypes.bool,
     error: PropTypes.any,
-    warning: PropTypes.any
+    warning: PropTypes.any,
   }).isRequired,
   leftLabel: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.element,
-    PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) })
+    PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) }),
   ]),
   rightLabel: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.element,
-    PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) })
+    PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) }),
   ]),
   noItems: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.element,
-    PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) })
+    PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) }),
   ]),
   options: PropTypes.array,
-  change: PropTypes.func.isRequired
+  change: PropTypes.func.isRequired,
 };
 
 export default ExpandingInputFilesField;

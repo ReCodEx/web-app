@@ -103,12 +103,12 @@ const createRecodexReducers = (token, instanceId) => ({
   users,
   userSwitching,
   upload,
-  broker
+  broker,
 });
 
 const librariesReducers = {
   routing: routerReducer,
-  form: formReducer
+  form: formReducer,
 };
 
 const createReducer = (token, instanceId) => {

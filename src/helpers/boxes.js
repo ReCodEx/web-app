@@ -9,7 +9,7 @@ export const getVariablesTypes = (boxTypes, boxes) => {
       const { type } = boxType.portsIn[port];
       variablesTypes[value] = {
         type,
-        examplePort: box.name
+        examplePort: box.name,
       };
     }
     for (let port of Object.keys(box.portsOut)) {
@@ -17,7 +17,7 @@ export const getVariablesTypes = (boxTypes, boxes) => {
       const { type } = boxType.portsOut[port];
       variablesTypes[value] = {
         type,
-        examplePort: box.name
+        examplePort: box.name,
       };
     }
   }
@@ -31,7 +31,7 @@ const transformPortTypes = (ports, boxTypePorts, variableTypes) =>
       ...acc,
       [name]: ports[name]
         ? ports[name]
-        : { value: '', type: boxTypePorts[name].type }
+        : { value: '', type: boxTypePorts[name].type },
     }),
     {}
   );
@@ -72,14 +72,14 @@ export const transformPipelineDataForApi = (
       .map(({ value }) => value)
       .map(key => ({
         name: atob(key),
-        value: variables[key] ? variables[key] : ''
+        value: variables[key] ? variables[key] : '',
       }))
       .filter(({ name }) => variableTypes[name])
       .map(({ name, ...variable }) => ({
         ...variable,
         name,
-        type: variableTypes[name].type
-      }))
+        type: variableTypes[name].type,
+      })),
   };
 
   return transformedData;
@@ -102,8 +102,8 @@ export const createBoxFromFormInputs = (data, boxTypes) => {
                 ...acc,
                 [port]: {
                   ...data.portsIn[port],
-                  type: boxType.portsIn[port].type
-                }
+                  type: boxType.portsIn[port].type,
+                },
               }
             : acc,
         {}
@@ -118,8 +118,8 @@ export const createBoxFromFormInputs = (data, boxTypes) => {
                 ...acc,
                 [port]: {
                   ...data.portsOut[port],
-                  type: boxType.portsOut[port].type
-                }
+                  type: boxType.portsOut[port].type,
+                },
               }
             : acc,
         {}
@@ -136,8 +136,8 @@ const flattenPorts = boxes =>
       ...Object.keys(ports).map(port => ({
         name: port,
         type: ports[port].type,
-        value: btoa(ports[port].value)
-      }))
+        value: btoa(ports[port].value),
+      })),
     ],
     []
   );

@@ -8,7 +8,7 @@ import factory, { initialState } from '../helpers/resourceManager';
 const resourceName = 'sisStatus';
 const { actions, reduceActions } = factory({
   resourceName,
-  apiEndpointFactory: () => '/extensions/sis/status'
+  apiEndpointFactory: () => '/extensions/sis/status',
 });
 
 export const fetchSisStatusIfNeeded = () => actions.fetchOneIfNeeded('status');

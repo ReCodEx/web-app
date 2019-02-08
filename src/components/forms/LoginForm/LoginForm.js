@@ -16,8 +16,8 @@ const LoginForm = ({
   handleSubmit,
   submitFailed: hasFailed,
   submitting,
-  hasSucceeded
-}) =>
+  hasSucceeded,
+}) => (
   <FormBox
     title={
       <FormattedMessage
@@ -32,42 +32,45 @@ const LoginForm = ({
           type="submit"
           bsStyle="success"
           onClick={handleSubmit}
-          disabled={invalid || submitting || hasSucceeded}
-        >
-          {!submitting
-            ? hasSucceeded
-              ? <span>
-                  <SuccessIcon />{' '}
-                  <FormattedMessage
-                    id="app.loginForm.success"
-                    defaultMessage="You are successfully signed in"
-                  />
-                </span>
-              : <span>
-                  <Icon icon="sign-in-alt" gapRight />
-                  <FormattedMessage
-                    id="app.loginForm.login"
-                    defaultMessage="Sign in"
-                  />
-                </span>
-            : <span>
-                <LoadingIcon />{' '}
+          disabled={invalid || submitting || hasSucceeded}>
+          {!submitting ? (
+            hasSucceeded ? (
+              <span>
+                <SuccessIcon />{' '}
                 <FormattedMessage
-                  id="app.loginForm.processing"
-                  defaultMessage="Signing in..."
+                  id="app.loginForm.success"
+                  defaultMessage="You are successfully signed in"
                 />
-              </span>}
+              </span>
+            ) : (
+              <span>
+                <Icon icon="sign-in-alt" gapRight />
+                <FormattedMessage
+                  id="app.loginForm.login"
+                  defaultMessage="Sign in"
+                />
+              </span>
+            )
+          ) : (
+            <span>
+              <LoadingIcon />{' '}
+              <FormattedMessage
+                id="app.loginForm.processing"
+                defaultMessage="Signing in..."
+              />
+            </span>
+          )}
         </Button>
       </div>
-    }
-  >
-    {hasFailed &&
+    }>
+    {hasFailed && (
       <Alert bsStyle="danger">
         <FormattedMessage
           id="app.loginForm.failed"
           defaultMessage="Login failed. Please check your credentials."
         />
-      </Alert>}
+      </Alert>
+    )}
 
     <Field
       name="email"
@@ -91,7 +94,8 @@ const LoginForm = ({
         />
       }
     />
-  </FormBox>;
+  </FormBox>
+);
 
 LoginForm.propTypes = {
   onSubmit: PropTypes.func.isRequired,
@@ -99,7 +103,7 @@ LoginForm.propTypes = {
   invalid: PropTypes.bool,
   submitting: PropTypes.bool,
   hasSucceeded: PropTypes.bool,
-  submitFailed: PropTypes.bool
+  submitFailed: PropTypes.bool,
 };
 
 const validate = ({ email, password }) => {
@@ -134,5 +138,5 @@ const validate = ({ email, password }) => {
 
 export default reduxForm({
   form: 'login',
-  validate
+  validate,
 })(LoginForm);

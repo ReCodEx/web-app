@@ -42,12 +42,12 @@ class ReferenceSolutionDetail extends Component {
         description,
         runtimeEnvironmentId,
         solution: { createdAt, userId, files },
-        permissionHints = EMPTY_OBJ
+        permissionHints = EMPTY_OBJ,
       },
       exercise,
       evaluations,
       deleteEvaluation = null,
-      refreshSolutionEvaluations = null
+      refreshSolutionEvaluations = null,
     } = this.props;
     const { openFileId } = this.state;
     const evaluationsJS = evaluations && evaluations.toJS();
@@ -79,85 +79,87 @@ class ReferenceSolutionDetail extends Component {
               exerciseId={exercise.id}
             />
             <Row>
-              {files.map(file =>
+              {files.map(file => (
                 <Col lg={6} md={12} key={file.id}>
                   <a
                     href="#"
                     onClick={e => {
                       e.preventDefault();
                       this.openFile(file.id);
-                    }}
-                  >
+                    }}>
                     <SourceCodeInfoBox {...file} />
                   </a>
                 </Col>
-              )}
-              {files.length > 1 &&
+              ))}
+              {files.length > 1 && (
                 <Col lg={6} md={12}>
                   <DownloadSolutionArchiveContainer
                     solutionId={id}
                     isReference={true}
                   />
-                </Col>}
+                </Col>
+              )}
             </Row>
-            {evaluation &&
+            {evaluation && (
               <CompilationLogs
                 initiationOutputs={evaluation.initiationOutputs}
-              />}
+              />
+            )}
             <CommentThreadContainer threadId={id} />
           </Col>
 
-          {evaluations &&
+          {evaluations && (
             <Col md={6} sm={12}>
-              {!evaluation &&
-                (!evaluations || evaluations.size === 0) &&
+              {!evaluation && (!evaluations || evaluations.size === 0) && (
                 <div className="callout callout-danger">
                   <WarningIcon gapRight />
                   <FormattedMessage
                     id="app.submissionEvaluation.noEvaluationsWhatSoEver"
                     defaultMessage="There are no submission evaluations. This is higly unusual, since the solution is submitted for evaluation as soon as it is created. Check the configuration of the exercise and try to resubmit this solution again."
                   />
-                </div>}
+                </div>
+              )}
 
               {!evaluation &&
                 evaluations &&
                 evaluations.size > 0 &&
-                refreshSolutionEvaluations &&
-                <div className="callout callout-warning">
-                  <table>
-                    <tbody>
-                      <tr>
-                        <td width="100%" className="em-padding-right">
-                          <FormattedMessage
-                            id="app.submissionEvaluation.noEvaluationYet"
-                            defaultMessage="The evaluation is not available yet. Click the refresh button for an update."
-                          />
-                        </td>
-                        <td>
-                          <Button
-                            onClick={refreshSolutionEvaluations}
-                            bsStyle="primary"
-                          >
-                            <RefreshIcon gapRight />
+                refreshSolutionEvaluations && (
+                  <div className="callout callout-warning">
+                    <table>
+                      <tbody>
+                        <tr>
+                          <td width="100%" className="em-padding-right">
                             <FormattedMessage
-                              id="generic.refresh"
-                              defaultMessage="Refresh"
+                              id="app.submissionEvaluation.noEvaluationYet"
+                              defaultMessage="The evaluation is not available yet. Click the refresh button for an update."
                             />
-                          </Button>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>}
+                          </td>
+                          <td>
+                            <Button
+                              onClick={refreshSolutionEvaluations}
+                              bsStyle="primary">
+                              <RefreshIcon gapRight />
+                              <FormattedMessage
+                                id="generic.refresh"
+                                defaultMessage="Refresh"
+                              />
+                            </Button>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                )}
 
-              {evaluation &&
+              {evaluation && (
                 <TestResults
                   evaluation={evaluation}
                   runtimeEnvironmentId={runtimeEnvironmentId}
                   showJudgeLog={true}
-                />}
+                />
+              )}
 
-              {evaluation &&
+              {evaluation && (
                 <Row>
                   <Col lg={6} md={12}>
                     <DownloadResultArchiveContainer
@@ -165,32 +167,36 @@ class ReferenceSolutionDetail extends Component {
                       isReference={true}
                     />
                   </Col>
-                </Row>}
-              {activeSubmissionId &&
+                </Row>
+              )}
+              {activeSubmissionId && (
                 <Row>
                   <Col lg={12}>
                     <ResourceRenderer
                       resource={evaluations.toArray()}
-                      returnAsArray
-                    >
-                      {evaluations =>
+                      returnAsArray>
+                      {evaluations => (
                         <SubmissionEvaluations
                           submissionId={id}
                           evaluations={evaluations}
                           activeSubmissionId={activeSubmissionId}
                           showInfo={false}
                           onSelect={id =>
-                            this.setState({ activeSubmissionId: id })}
+                            this.setState({ activeSubmissionId: id })
+                          }
                           onDelete={
                             permissionHints.deleteEvaluation
                               ? deleteEvaluation
                               : null
                           }
-                        />}
+                        />
+                      )}
                     </ResourceRenderer>
                   </Col>
-                </Row>}
-            </Col>}
+                </Row>
+              )}
+            </Col>
+          )}
         </Row>
 
         <SourceCodeViewerContainer
@@ -211,15 +217,15 @@ ReferenceSolutionDetail.propTypes = {
     solution: PropTypes.shape({
       createdAt: PropTypes.number.isRequired,
       userId: PropTypes.string.isRequired,
-      files: PropTypes.array
+      files: PropTypes.array,
     }).isRequired,
     submissions: PropTypes.array.isRequired,
-    permissionHints: PropTypes.object
+    permissionHints: PropTypes.object,
   }).isRequired,
   exercise: PropTypes.object.isRequired,
   evaluations: PropTypes.object.isRequired,
   deleteEvaluation: PropTypes.func,
-  refreshSolutionEvaluations: PropTypes.func
+  refreshSolutionEvaluations: PropTypes.func,
 };
 
 export default ReferenceSolutionDetail;

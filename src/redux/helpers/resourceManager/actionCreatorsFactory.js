@@ -12,7 +12,7 @@ const actionCreatorsFactory = ({
   apiEndpointFactory,
   needsRefetching,
   createAction,
-  createApiAction
+  createApiAction,
 }) => {
   const archivedPromises = {};
 
@@ -26,11 +26,11 @@ const actionCreatorsFactory = ({
       type: actionTypes.FETCH_MANY,
       method: 'GET',
       endpoint: apiEndpointFactory(),
-      ...apiOptions
+      ...apiOptions,
     });
 
   const fakeResult = item => ({
-    value: getJsData(item)
+    value: getJsData(item),
   });
 
   const fetchIfNeeded = (...ids) => (dispatch, getState) =>
@@ -52,7 +52,7 @@ const actionCreatorsFactory = ({
       type: actionTypes.FETCH,
       method: 'GET',
       endpoint: apiEndpointFactory(id),
-      meta: { id }
+      meta: { id },
     });
 
   const pushResource = createAction(
@@ -71,7 +71,7 @@ const actionCreatorsFactory = ({
       method: 'POST',
       endpoint,
       body,
-      meta: { tmpId, body }
+      meta: { tmpId, body },
     });
 
   const updateResource = (id, body, endpoint = apiEndpointFactory(id)) =>
@@ -80,7 +80,7 @@ const actionCreatorsFactory = ({
       method: 'POST',
       endpoint,
       body,
-      meta: { id, body }
+      meta: { id, body },
     });
 
   const removeResource = (id, endpoint = apiEndpointFactory(id)) =>
@@ -88,7 +88,7 @@ const actionCreatorsFactory = ({
       type: actionTypes.REMOVE,
       method: 'DELETE',
       endpoint,
-      meta: { id }
+      meta: { id },
     });
 
   const invalidate = createAction(actionTypes.INVALIDATE);
@@ -102,7 +102,7 @@ const actionCreatorsFactory = ({
     removeResource,
     updateResource,
     invalidate,
-    pushResource
+    pushResource,
   };
 };
 

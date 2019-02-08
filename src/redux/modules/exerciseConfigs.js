@@ -11,7 +11,7 @@ import { encodeId, encodeNumId, safeGet, range } from '../../helpers/common';
 const resourceName = 'exerciseConfigs';
 const { actions, reduceActions } = factory({
   resourceName,
-  apiEndpointFactory: id => `/exercises/${id}/config`
+  apiEndpointFactory: id => `/exercises/${id}/config`,
 });
 
 export const fetchExerciseConfig = actions.fetchResource;
@@ -133,7 +133,7 @@ const computeMatching = ({
   firstTestId,
   tests,
   files,
-  fileName
+  fileName,
 }) => {
   const candidates = prepareFileCandidates(prefix, suffix, files);
   if (!candidates) {
@@ -165,7 +165,7 @@ const getCharacterCategory = char => {
   const letterCategories = {
     letter: /[a-zA-Z]/,
     diggit: /[0-9]/,
-    separator: /[-_.]/
+    separator: /[-_.]/,
   };
   for (const cat in letterCategories) {
     if (char.match(letterCategories[cat])) {
@@ -196,34 +196,37 @@ const computePossiblePrefixesSuffixes = fileName => {
   const splitPoints = computePossibleSplitPoints(fileName, /[^a-zA-Z0-9]/);
   const res = [];
   splitPoints.forEach(left =>
-    splitPoints.filter(right => left < right).forEach(right =>
-      res.push({
-        prefix: fileName.substr(0, left),
-        suffix: fileName.substr(right)
-      })
-    )
+    splitPoints
+      .filter(right => left < right)
+      .forEach(right =>
+        res.push({
+          prefix: fileName.substr(0, left),
+          suffix: fileName.substr(right),
+        })
+      )
   );
   return res;
 };
 
 // Find best matching for given fileName for all tests using given list of files.
 const bestMatchFileNames = (fileName, firstTestId, tests, files) => {
-  return computePossiblePrefixesSuffixes(
-    fileName
-  ).reduce((bestMatching, { prefix, suffix }) => {
-    const matching = computeMatching({
-      prefix,
-      suffix,
-      firstTestId,
-      tests,
-      files,
-      fileName
-    });
-    return matching !== null &&
-    (bestMatching === null || bestMatching.penalty > matching.penalty)
-      ? matching // a better matching was found
-      : bestMatching;
-  }, null);
+  return computePossiblePrefixesSuffixes(fileName).reduce(
+    (bestMatching, { prefix, suffix }) => {
+      const matching = computeMatching({
+        prefix,
+        suffix,
+        firstTestId,
+        tests,
+        files,
+        fileName,
+      });
+      return matching !== null &&
+        (bestMatching === null || bestMatching.penalty > matching.penalty)
+        ? matching // a better matching was found
+        : bestMatching;
+    },
+    null
+  );
 };
 
 /**
@@ -233,18 +236,21 @@ const prepareTransformations = (template, firstTestId, tests, files) => {
   const transformations = {};
 
   // Smart renaming of single file variables ...
-  ['stdin-file', 'expected-output'].filter(f => template[f]).forEach(field => {
-    const matches = bestMatchFileNames(
-      template[field],
-      firstTestId,
-      tests,
-      files
-    );
+  ['stdin-file', 'expected-output']
+    .filter(f => template[f])
+    .forEach(field => {
+      const matches = bestMatchFileNames(
+        template[field],
+        firstTestId,
+        tests,
+        files
+      );
 
-    if (matches) {
-      transformations[field] = testId => matches.testFiles[testId] || undefined;
-    }
-  });
+      if (matches) {
+        transformations[field] = testId =>
+          matches.testFiles[testId] || undefined;
+      }
+    });
 
   // Input files
   if (template['input-files'] && template['input-files'].length > 0) {
@@ -252,7 +258,7 @@ const prepareTransformations = (template, firstTestId, tests, files) => {
     const inputFiles = template['input-files'].map(({ name, file }) => ({
       name,
       file,
-      matches: bestMatchFileNames(file, firstTestId, tests, files) // instead of one file, it holds all files for all tests
+      matches: bestMatchFileNames(file, firstTestId, tests, files), // instead of one file, it holds all files for all tests
     }));
     transformations['input-files'] = testId =>
       inputFiles
@@ -262,7 +268,7 @@ const prepareTransformations = (template, firstTestId, tests, files) => {
             name === file && matches && matches.testFiles[testId]
               ? matches.testFiles[testId]
               : name,
-          file: matches ? matches.testFiles[testId] || undefined : file // apply matches if possible, use original file name if no matching was established
+          file: matches ? matches.testFiles[testId] || undefined : file, // apply matches if possible, use original file name if no matching was established
         }))
         .filter(({ file }) => file); // remove records which do not have apropriate file
   }
@@ -272,13 +278,13 @@ const prepareTransformations = (template, firstTestId, tests, files) => {
     const extraFiles = {};
     const entryPoint = {};
     for (const envId in template['extra-files']) {
-      extraFiles[envId] = template['extra-files'][
-        envId
-      ].map(({ name, file }) => ({
-        name,
-        file,
-        matches: bestMatchFileNames(file, firstTestId, tests, files)
-      }));
+      extraFiles[envId] = template['extra-files'][envId].map(
+        ({ name, file }) => ({
+          name,
+          file,
+          matches: bestMatchFileNames(file, firstTestId, tests, files),
+        })
+      );
       if (template['entry-point'][envId] !== undefined) {
         entryPoint[envId] = template['entry-point'][envId];
       }
@@ -293,7 +299,7 @@ const prepareTransformations = (template, firstTestId, tests, files) => {
               name === file && matches && matches.testFiles[testId]
                 ? matches.testFiles[testId]
                 : name,
-            file: (matches && matches.testFiles[testId]) || file
+            file: (matches && matches.testFiles[testId]) || file,
           }))
           .filter(({ file }) => file); // remove records which do not have apropriate file
       }
@@ -309,7 +315,7 @@ const prepareTransformations = (template, firstTestId, tests, files) => {
           extraFiles[envId]
             .map(({ name, file, matches }) => ({
               name,
-              file: (matches && matches.testFiles[testId]) || file
+              file: (matches && matches.testFiles[testId]) || file,
             }))
             .find(({ name, file }) => file && name === entryPoint[envId]);
         if (file) {
@@ -349,23 +355,29 @@ const exerciseConfigFormSmartFill = (
     files
   );
   return Promise.all(
-    tests.filter(({ id }) => encodeNumId(id) !== firstTestKey).map(test => {
-      const testKey = encodeNumId(test.id);
-      return Promise.all(
-        properties
-          .map(field => {
-            const value = transformations[field]
-              ? transformations[field](test.id, template[field])
-              : template[field];
-            return value !== undefined
-              ? dispatch(
-                  change(formName, ['config', testKey, field].join('.'), value)
-                )
-              : undefined;
-          })
-          .filter(d => d)
-      );
-    })
+    tests
+      .filter(({ id }) => encodeNumId(id) !== firstTestKey)
+      .map(test => {
+        const testKey = encodeNumId(test.id);
+        return Promise.all(
+          properties
+            .map(field => {
+              const value = transformations[field]
+                ? transformations[field](test.id, template[field])
+                : template[field];
+              return value !== undefined
+                ? dispatch(
+                    change(
+                      formName,
+                      ['config', testKey, field].join('.'),
+                      value
+                    )
+                  )
+                : undefined;
+            })
+            .filter(d => d)
+        );
+      })
   );
 };
 
@@ -388,7 +400,7 @@ export const exerciseConfigFormSmartFillAll = (
     'judge-args',
     'extra-files',
     'entry-point',
-    'jar-files'
+    'jar-files',
   ]);
 
 export const exerciseConfigFormSmartFillInput = (
@@ -399,7 +411,7 @@ export const exerciseConfigFormSmartFillInput = (
 ) =>
   exerciseConfigFormSmartFill(formName, firstTestId, tests, files, [
     'stdin-file',
-    'input-files'
+    'input-files',
   ]);
 
 export const exerciseConfigFormSmartFillArgs = (
@@ -409,7 +421,7 @@ export const exerciseConfigFormSmartFillArgs = (
   files
 ) =>
   exerciseConfigFormSmartFill(formName, firstTestId, tests, files, [
-    'run-args'
+    'run-args',
   ]);
 
 export const exerciseConfigFormSmartFillOutput = (
@@ -421,7 +433,7 @@ export const exerciseConfigFormSmartFillOutput = (
   exerciseConfigFormSmartFill(formName, firstTestId, tests, files, [
     'expected-output',
     'useOutFile',
-    'actual-output'
+    'actual-output',
   ]);
 
 export const exerciseConfigFormSmartFillJudge = (
@@ -434,7 +446,7 @@ export const exerciseConfigFormSmartFillJudge = (
     'useCustomJudge',
     'judge-type',
     'custom-judge',
-    'judge-args'
+    'judge-args',
   ]);
 
 export const exerciseConfigFormSmartFillCompilation = (
@@ -446,7 +458,7 @@ export const exerciseConfigFormSmartFillCompilation = (
   exerciseConfigFormSmartFill(formName, firstTestId, tests, files, [
     'extra-files',
     'entry-point',
-    'jar-files'
+    'jar-files',
   ]);
 
 /*
@@ -479,16 +491,18 @@ export const advancedExerciseConfigFormFill = (
   const pipelines =
     pipelineIdx === null
       ? range(0, safeGet(formData, [sourceTestKey], []).length) // all pipeline indices
-      : Array.isArray(pipelineIdx) ? pipelineIdx : [pipelineIdx];
+      : Array.isArray(pipelineIdx)
+      ? pipelineIdx
+      : [pipelineIdx];
 
   pipelines.forEach(idx => {
     const variableValues = safeGet(formData, [sourceTestKey, idx], {});
     const variableKeys =
       variableName === null
         ? Object.keys(variableValues) // all variable names
-        : (Array.isArray(variableName)
-            ? variableName
-            : [variableName]).map(name => encodeId(name));
+        : (Array.isArray(variableName) ? variableName : [variableName]).map(
+            name => encodeId(name)
+          );
 
     variableKeys.forEach(variableKey =>
       tests

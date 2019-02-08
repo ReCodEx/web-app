@@ -330,7 +330,7 @@ const pascalCodes = {
       id="app.exitCodes.pascal.232"
       defaultMessage="Threads not supported"
     />
-  )
+  ),
 };
 
 const python3Codes = {
@@ -424,7 +424,7 @@ const python3Codes = {
       id="app.exitCodes.python3.114"
       defaultMessage="Syntax error"
     />
-  )
+  ),
 };
 
 const exitCodeMapping = (runtimeEnvironmentId, exitCode) => {

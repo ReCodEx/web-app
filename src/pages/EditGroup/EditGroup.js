@@ -10,7 +10,7 @@ import { defaultMemoize } from 'reselect';
 
 import Page from '../../components/layout/Page';
 import EditGroupForm, {
-  EDIT_GROUP_FORM_LOCALIZED_TEXTS_DEFAULT
+  EDIT_GROUP_FORM_LOCALIZED_TEXTS_DEFAULT,
 } from '../../components/forms/EditGroupForm';
 import OrganizationalGroupButtonContainer from '../../containers/OrganizationalGroupButtonContainer';
 import ArchiveGroupButtonContainer from '../../containers/ArchiveGroupButtonContainer';
@@ -21,18 +21,18 @@ import { BanIcon, InfoIcon } from '../../components/icons';
 import {
   fetchGroup,
   fetchGroupIfNeeded,
-  editGroup
+  editGroup,
 } from '../../redux/modules/groups';
 import { groupSelector } from '../../redux/selectors/groups';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import {
   isSupervisorOf,
-  isLoggedAsSuperAdmin
+  isLoggedAsSuperAdmin,
 } from '../../redux/selectors/users';
 import {
   getLocalizedName,
   getLocalizedTextsInitialValues,
-  transformLocalizedTextsFormData
+  transformLocalizedTextsFormData,
 } from '../../helpers/localizedData';
 
 import withLinks from '../../helpers/withLinks';
@@ -55,7 +55,7 @@ class EditGroup extends Component {
       localizedTexts,
       externalId,
       public: isPublic,
-      privateData: { publicStats, threshold }
+      privateData: { publicStats, threshold },
     }) => ({
       localizedTexts: getLocalizedTextsInitialValues(
         localizedTexts,
@@ -68,7 +68,7 @@ class EditGroup extends Component {
       threshold:
         threshold !== null && threshold !== undefined
           ? String(Number(threshold) * 100)
-          : '0'
+          : '0',
     })
   );
 
@@ -82,7 +82,7 @@ class EditGroup extends Component {
       hasThreshold,
       push,
       reload,
-      intl: { locale }
+      intl: { locale },
     } = this.props;
 
     return (
@@ -104,12 +104,12 @@ class EditGroup extends Component {
               />
             ),
             iconName: 'users',
-            link: GROUP_INFO_URI_FACTORY(groupId)
+            link: GROUP_INFO_URI_FACTORY(groupId),
           },
           {
             text: <FormattedMessage id="app.group.title" />,
             iconName: 'users',
-            link: GROUP_DETAIL_URI_FACTORY(groupId)
+            link: GROUP_DETAIL_URI_FACTORY(groupId),
           },
           {
             text: (
@@ -118,13 +118,12 @@ class EditGroup extends Component {
                 defaultMessage="Edit Group"
               />
             ),
-            iconName: ['far', 'edit']
-          }
-        ]}
-      >
-        {group =>
+            iconName: ['far', 'edit'],
+          },
+        ]}>
+        {group => (
           <div>
-            {!hasPermissions(group, 'update') &&
+            {!hasPermissions(group, 'update') && (
               <Row>
                 <Col sm={12}>
                   <p className="callout callout-warning larger">
@@ -135,14 +134,15 @@ class EditGroup extends Component {
                     />
                   </p>
                 </Col>
-              </Row>}
+              </Row>
+            )}
 
             <GroupArchivedWarning
               archived={group.archived}
               directlyArchived={group.directlyArchived}
             />
 
-            {hasPermissions(group, 'update') &&
+            {hasPermissions(group, 'update') && (
               <React.Fragment>
                 <Row>
                   <Col lg={3}>
@@ -156,8 +156,7 @@ class EditGroup extends Component {
                   <Col lg={9}>
                     <p
                       className="small text-muted"
-                      style={{ padding: '0.75em' }}
-                    >
+                      style={{ padding: '0.75em' }}>
                       <InfoIcon gapRight />
                       <FormattedMessage
                         id="app.editGroup.organizationalExplain"
@@ -166,7 +165,7 @@ class EditGroup extends Component {
                     </p>
                   </Col>
                 </Row>
-                {group.permissionHints.archive &&
+                {group.permissionHints.archive && (
                   <Row>
                     <Col lg={3}>
                       <p>
@@ -179,8 +178,7 @@ class EditGroup extends Component {
                     <Col lg={9}>
                       <p
                         className="small text-muted"
-                        style={{ padding: '0.75em' }}
-                      >
+                        style={{ padding: '0.75em' }}>
                         <InfoIcon gapRight />
                         <FormattedMessage
                           id="app.editGroup.archivedExplain"
@@ -188,11 +186,12 @@ class EditGroup extends Component {
                         />
                       </p>
                     </Col>
-                  </Row>}
-              </React.Fragment>}
+                  </Row>
+                )}
+              </React.Fragment>
+            )}
 
-            {hasPermissions(group, 'update') &&
-              !group.archived &&
+            {hasPermissions(group, 'update') && !group.archived && (
               <EditGroupForm
                 form="editGroup"
                 initialValues={this.getInitialValues(group)}
@@ -200,9 +199,10 @@ class EditGroup extends Component {
                 hasThreshold={hasThreshold}
                 isPublic={group.public}
                 isSuperAdmin={isSuperAdmin}
-              />}
+              />
+            )}
 
-            {hasPermissions(group, 'remove') &&
+            {hasPermissions(group, 'remove') && (
               <Box
                 type="danger"
                 title={
@@ -210,8 +210,7 @@ class EditGroup extends Component {
                     id="app.editGroup.deleteGroup"
                     defaultMessage="Delete the group"
                   />
-                }
-              >
+                }>
                 <div>
                   <p>
                     <FormattedMessage
@@ -227,30 +226,35 @@ class EditGroup extends Component {
                         (group.childGroups && group.childGroups.length > 0) // TODO whatabout archived sub-groups?
                       }
                       onDeleted={() =>
-                        push(GROUP_INFO_URI_FACTORY(group.parentGroupId))}
+                        push(GROUP_INFO_URI_FACTORY(group.parentGroupId))
+                      }
                     />
 
-                    {group.parentGroupId === null &&
+                    {group.parentGroupId === null && (
                       <HelpBlock>
                         <FormattedMessage
                           id="app.editGroup.cannotDeleteRootGroup"
                           defaultMessage="This is a so-called root group and it cannot be deleted."
                         />
-                      </HelpBlock>}
+                      </HelpBlock>
+                    )}
 
                     {group.parentGroupId !== null &&
                       group.childGroups &&
-                      group.childGroups.length > 0 &&
-                      <HelpBlock>
-                        <FormattedMessage
-                          id="app.editGroup.cannotDeleteGroupWithSubgroups"
-                          defaultMessage="Group with nested sub-groups cannot be deleted."
-                        />
-                      </HelpBlock>}
+                      group.childGroups.length > 0 && (
+                        <HelpBlock>
+                          <FormattedMessage
+                            id="app.editGroup.cannotDeleteGroupWithSubgroups"
+                            defaultMessage="Group with nested sub-groups cannot be deleted."
+                          />
+                        </HelpBlock>
+                      )}
                   </p>
                 </div>
-              </Box>}
-          </div>}
+              </Box>
+            )}
+          </div>
+        )}
       </Page>
     );
   }
@@ -262,14 +266,14 @@ EditGroup.propTypes = {
   reload: PropTypes.func.isRequired,
   reset: PropTypes.func.isRequired,
   params: PropTypes.shape({
-    groupId: PropTypes.string.isRequired
+    groupId: PropTypes.string.isRequired,
   }).isRequired,
   group: ImmutablePropTypes.map,
   editGroup: PropTypes.func.isRequired,
   push: PropTypes.func.isRequired,
   hasThreshold: PropTypes.bool,
   isSuperAdmin: PropTypes.bool,
-  intl: intlShape
+  intl: intlShape,
 };
 
 const editGroupFormSelector = formValueSelector('editGroup');
@@ -283,7 +287,7 @@ export default withLinks(
         userId,
         isStudentOf: groupId => isSupervisorOf(userId, groupId)(state),
         hasThreshold: editGroupFormSelector(state, 'hasThreshold'),
-        isSuperAdmin: isLoggedAsSuperAdmin(state)
+        isSuperAdmin: isLoggedAsSuperAdmin(state),
       };
     },
     (dispatch, { params: { groupId } }) => ({
@@ -297,20 +301,20 @@ export default withLinks(
         isPublic,
         publicStats,
         threshold,
-        hasThreshold
+        hasThreshold,
       }) => {
         let transformedData = {
           localizedTexts: transformLocalizedTextsFormData(localizedTexts),
           externalId,
           isPublic,
           publicStats,
-          hasThreshold
+          hasThreshold,
         };
         if (hasThreshold) {
           transformedData.threshold = Number(threshold);
         }
         return dispatch(editGroup(groupId, transformedData));
-      }
+      },
     })
   )(injectIntl(EditGroup))
 );

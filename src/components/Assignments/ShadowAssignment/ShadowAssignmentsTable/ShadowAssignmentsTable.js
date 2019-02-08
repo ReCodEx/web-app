@@ -7,7 +7,7 @@ import { FormattedMessage, injectIntl } from 'react-intl';
 import {
   isReady,
   isLoading,
-  getJsData
+  getJsData,
 } from '../../../../redux/helpers/resourceManager';
 import ShadowAssignmentsTableRow from './ShadowAssignmentsTableRow';
 import { compareShadowAssignments } from '../../../helpers/assignments';
@@ -19,10 +19,10 @@ const ShadowAssignmentsTable = ({
   userId,
   stats = EMPTY_OBJ,
   isAdmin = false,
-  intl: { locale }
-}) =>
+  intl: { locale },
+}) => (
   <Table hover={shadowAssignments.size > 0}>
-    {shadowAssignments.size > 0 &&
+    {shadowAssignments.size > 0 && (
       <thead>
         <tr>
           <th className="shrink-col" />
@@ -34,30 +34,34 @@ const ShadowAssignmentsTable = ({
           </th>
 
           <th className="text-center text-nowrap">
-            {!isAdmin
-              ? <FormattedMessage
-                  id="app.assignments.points"
-                  defaultMessage="Points"
-                />
-              : <FormattedMessage
-                  id="app.assignments.maxPoints"
-                  defaultMessage="Max. Points"
-                />}
+            {!isAdmin ? (
+              <FormattedMessage
+                id="app.assignments.points"
+                defaultMessage="Points"
+              />
+            ) : (
+              <FormattedMessage
+                id="app.assignments.maxPoints"
+                defaultMessage="Max. Points"
+              />
+            )}
           </th>
 
-          {!isAdmin &&
+          {!isAdmin && (
             <th>
               <FormattedMessage
                 id="app.shadowAssignmentPointsDetail.note"
                 defaultMessage="Note"
               />
-            </th>}
+            </th>
+          )}
 
           <th className="shrink-col" />
         </tr>
-      </thead>}
+      </thead>
+    )}
     <tbody>
-      {shadowAssignments.size === 0 &&
+      {shadowAssignments.size === 0 && (
         <tr>
           <td className="text-center em-padding text-muted">
             <FormattedMessage
@@ -65,9 +69,10 @@ const ShadowAssignmentsTable = ({
               defaultMessage="There are no shadow assignments."
             />
           </td>
-        </tr>}
+        </tr>
+      )}
 
-      {shadowAssignments.some(isLoading) &&
+      {shadowAssignments.some(isLoading) && (
         <tr>
           <td className="text-center em-padding" colSpan={isAdmin ? 4 : 3}>
             <LoadingIcon gapRight />
@@ -76,13 +81,14 @@ const ShadowAssignmentsTable = ({
               defaultMessage="Loading shadow assignments..."
             />
           </td>
-        </tr>}
+        </tr>
+      )}
 
       {shadowAssignments
         .filter(isReady)
         .map(getJsData)
         .sort(compareShadowAssignments)
-        .map(assignment =>
+        .map(assignment => (
           <ShadowAssignmentsTableRow
             key={assignment.id}
             item={assignment}
@@ -95,16 +101,17 @@ const ShadowAssignmentsTable = ({
             }
             isAdmin={isAdmin}
           />
-        )}
+        ))}
     </tbody>
-  </Table>;
+  </Table>
+);
 
 ShadowAssignmentsTable.propTypes = {
   shadowAssignments: ImmutablePropTypes.list.isRequired,
   userId: PropTypes.string.isRequired,
   stats: PropTypes.object,
   isAdmin: PropTypes.bool,
-  intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired
+  intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired,
 };
 
 export default injectIntl(ShadowAssignmentsTable);

@@ -10,7 +10,7 @@ export const submissionStatus = {
   SENDING: 'SENDING',
   FAILED: 'FAILED',
   PROCESSING: 'PROCESSING',
-  FINISHED: 'FINISHED'
+  FINISHED: 'FINISHED',
 };
 
 export const actionTypes = {
@@ -26,7 +26,7 @@ export const actionTypes = {
   PRESUBMIT_PENDING: 'recodex/submission/PRESUBMIT_PENDING',
   PRESUBMIT_FULFILLED: 'recodex/submission/PRESUBMIT_FULFILLED',
   PRESUBMIT_REJECTED: 'recodex/submission/PRESUBMIT_REJECTED',
-  PROCESSING_FINISHED: 'recodex/submission/PROCESSING_FINISHED'
+  PROCESSING_FINISHED: 'recodex/submission/PROCESSING_FINISHED',
 };
 
 export const initialState = fromJS({
@@ -38,7 +38,7 @@ export const initialState = fromJS({
   monitor: null,
   status: submissionStatus.NONE,
   warningMsg: null,
-  presubmit: null // results of pre-submit check
+  presubmit: null, // results of pre-submit check
 });
 
 /**
@@ -47,7 +47,7 @@ export const initialState = fromJS({
 
 export const init = createAction(actionTypes.INIT, (userId, id) => ({
   userId,
-  id
+  id,
 }));
 export const cancel = createAction(actionTypes.CANCEL);
 
@@ -65,7 +65,7 @@ const submit = (endpoint, submissionType = 'assignmentSolution') => (
   var submitBody = {
     userId,
     files: files.map(file => file.id),
-    note
+    note,
   };
 
   if (runtimeEnvironmentId) {
@@ -74,7 +74,7 @@ const submit = (endpoint, submissionType = 'assignmentSolution') => (
 
   if (entryPoint) {
     submitBody.solutionParams = {
-      variables: [{ name: 'entry-point', value: entryPoint }]
+      variables: [{ name: 'entry-point', value: entryPoint }],
     };
   }
 
@@ -83,7 +83,7 @@ const submit = (endpoint, submissionType = 'assignmentSolution') => (
     method: 'POST',
     endpoint: endpoint(id),
     body: submitBody,
-    meta: { urlId: id, submissionType, progressObserverId }
+    meta: { urlId: id, submissionType, progressObserverId },
   });
 };
 
@@ -110,14 +110,14 @@ const presubmit = endpoint => (id, files) => {
   }
 
   var submitBody = {
-    files: files.map(file => file.id)
+    files: files.map(file => file.id),
   };
   return createApiAction({
     type: actionTypes.PRESUBMIT,
     method: 'POST',
     endpoint: endpoint(id),
     body: submitBody,
-    meta: { urlId: id }
+    meta: { urlId: id },
   });
 };
 
@@ -172,7 +172,7 @@ const reducer = handleActions(
             .set('solutionId', solutionId)
             .set('monitor', {
               url: webSocketChannel.monitorUrl,
-              id: webSocketChannel.id
+              id: webSocketChannel.id,
             })
             .set('status', submissionStatus.PROCESSING)
         : state.set('status', submissionStatus.PROCESSING);
@@ -214,7 +214,7 @@ const reducer = handleActions(
     [actionTypes.PRESUBMIT_FULFILLED]: (state, { payload }) =>
       state
         .set('presubmit', fromJS(payload))
-        .set('status', submissionStatus.CREATING)
+        .set('status', submissionStatus.CREATING),
   },
   initialState
 );

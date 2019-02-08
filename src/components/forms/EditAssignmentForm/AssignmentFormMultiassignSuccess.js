@@ -16,8 +16,8 @@ const AssignmentFormMultiassignSuccess = ({
   groupsAccessor,
   acknowledgeSuccess,
   intl: { locale },
-  links: { GROUP_DETAIL_URI_FACTORY }
-}) =>
+  links: { GROUP_DETAIL_URI_FACTORY },
+}) => (
   <React.Fragment>
     <div className="callout callout-success">
       <h4>
@@ -38,7 +38,7 @@ const AssignmentFormMultiassignSuccess = ({
         {assignedToGroups
           .map(gId => groups.find(({ id }) => id === gId))
           .filter(identity)
-          .map(group =>
+          .map(group => (
             <tr key={group.id}>
               <td className="text-nowrap shrink-col">
                 <Icon icon="check" />
@@ -58,7 +58,7 @@ const AssignmentFormMultiassignSuccess = ({
                 </LinkContainer>
               </td>
             </tr>
-          )}
+          ))}
       </tbody>
     </Table>
 
@@ -66,8 +66,7 @@ const AssignmentFormMultiassignSuccess = ({
       <Button
         bsStyle="warning"
         className="btn-flat"
-        onClick={acknowledgeSuccess}
-      >
+        onClick={acknowledgeSuccess}>
         <Icon icon={['far', 'smile']} gapRight />
         <FormattedMessage
           id="generic.acknowledge"
@@ -75,7 +74,8 @@ const AssignmentFormMultiassignSuccess = ({
         />
       </Button>
     </div>
-  </React.Fragment>;
+  </React.Fragment>
+);
 
 AssignmentFormMultiassignSuccess.propTypes = {
   assignedToGroups: PropTypes.array.isRequired,
@@ -83,7 +83,7 @@ AssignmentFormMultiassignSuccess.propTypes = {
   groupsAccessor: PropTypes.func.isRequired,
   acknowledgeSuccess: PropTypes.func,
   intl: intlShape.isRequired,
-  links: PropTypes.object.isRequired
+  links: PropTypes.object.isRequired,
 };
 
 export default injectIntl(withLinks(AssignmentFormMultiassignSuccess));

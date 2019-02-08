@@ -14,18 +14,21 @@ const ExercisesName = ({
   isLocked,
   isBroken,
   noLink,
-  links: { EXERCISE_URI_FACTORY }
-}) =>
+  links: { EXERCISE_URI_FACTORY },
+}) => (
   <span>
     <ExercisePrefixIcons id={id} isLocked={isLocked} isBroken={isBroken} />
-    {noLink
-      ? <span>
-          <LocalizedExerciseName entity={{ name, localizedTexts }} />
-        </span>
-      : <Link to={EXERCISE_URI_FACTORY(id)}>
-          <LocalizedExerciseName entity={{ name, localizedTexts }} />
-        </Link>}
-  </span>;
+    {noLink ? (
+      <span>
+        <LocalizedExerciseName entity={{ name, localizedTexts }} />
+      </span>
+    ) : (
+      <Link to={EXERCISE_URI_FACTORY(id)}>
+        <LocalizedExerciseName entity={{ name, localizedTexts }} />
+      </Link>
+    )}
+  </span>
+);
 
 ExercisesName.propTypes = {
   id: PropTypes.string.isRequired,
@@ -34,7 +37,7 @@ ExercisesName.propTypes = {
   isLocked: PropTypes.bool.isRequired,
   isBroken: PropTypes.bool.isRequired,
   noLink: PropTypes.bool,
-  links: PropTypes.object
+  links: PropTypes.object,
 };
 
 export default withLinks(ExercisesName);

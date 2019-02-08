@@ -16,8 +16,8 @@ const SolutionsTable = ({
   solutions,
   runtimeEnvironments,
   noteMaxlen = null,
-  compact = false
-}) =>
+  compact = false,
+}) => (
   <Box title={title} collapsable isOpen noPadding unlimitedHeight>
     <Table responsive className={styles.solutionsTable}>
       <thead>
@@ -47,58 +47,62 @@ const SolutionsTable = ({
               defaultMessage="Target language"
             />
           </th>
-          {!compact &&
+          {!compact && (
             <th>
               <FormattedMessage
                 id="app.solutionsTable.note"
                 defaultMessage="Note"
               />
-            </th>}
+            </th>
+          )}
           <th />
         </tr>
       </thead>
-      {solutions.size === 0
-        ? <NoSolutionYetTableRow />
-        : solutions.map(data => {
-            const id = data.id;
-            const runtimeEnvironment =
-              data.runtimeEnvironmentId &&
-              runtimeEnvironments &&
-              runtimeEnvironments.find(
-                ({ id }) => id === data.runtimeEnvironmentId
-              );
-
-            return (
-              <SolutionsTableRow
-                key={id}
-                id={id}
-                status={
-                  data.lastSubmission
-                    ? data.lastSubmission.evaluationStatus
-                    : null
-                }
-                runtimeEnvironment={runtimeEnvironment}
-                assignmentId={assignmentId}
-                noteMaxlen={noteMaxlen}
-                compact={compact}
-                {...data}
-              />
+      {solutions.size === 0 ? (
+        <NoSolutionYetTableRow />
+      ) : (
+        solutions.map(data => {
+          const id = data.id;
+          const runtimeEnvironment =
+            data.runtimeEnvironmentId &&
+            runtimeEnvironments &&
+            runtimeEnvironments.find(
+              ({ id }) => id === data.runtimeEnvironmentId
             );
-          })}
+
+          return (
+            <SolutionsTableRow
+              key={id}
+              id={id}
+              status={
+                data.lastSubmission
+                  ? data.lastSubmission.evaluationStatus
+                  : null
+              }
+              runtimeEnvironment={runtimeEnvironment}
+              assignmentId={assignmentId}
+              noteMaxlen={noteMaxlen}
+              compact={compact}
+              {...data}
+            />
+          );
+        })
+      )}
     </Table>
-  </Box>;
+  </Box>
+);
 
 SolutionsTable.propTypes = {
   title: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) }),
-    PropTypes.element
+    PropTypes.element,
   ]).isRequired,
   assignmentId: PropTypes.string.isRequired,
   solutions: ImmutablePropTypes.list.isRequired,
   runtimeEnvironments: PropTypes.array,
   noteMaxlen: PropTypes.number,
-  compact: PropTypes.bool
+  compact: PropTypes.bool,
 };
 
 export default SolutionsTable;

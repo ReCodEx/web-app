@@ -8,7 +8,7 @@ import factory, { initialState } from '../helpers/resourceManager';
 const resourceName = 'exerciseTests';
 const { actions, reduceActions } = factory({
   resourceName,
-  apiEndpointFactory: id => `/exercises/${id}/tests`
+  apiEndpointFactory: id => `/exercises/${id}/tests`,
 });
 
 export const fetchExerciseTests = actions.fetchResource;

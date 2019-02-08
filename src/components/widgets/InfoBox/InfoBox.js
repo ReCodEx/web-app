@@ -13,52 +13,46 @@ const InfoBox = ({
   spin = false,
   progress,
   description = '',
-  color = 'green'
-}) =>
+  color = 'green',
+}) => (
   <div
     className={classnames({
       'info-box': true,
-      [`bg-${color}`]: true
-    })}
-  >
+      [`bg-${color}`]: true,
+    })}>
     <span className="info-box-icon">
       <Icon icon={icon} spin={spin} />
     </span>
     <div className="info-box-content">
-      <span className="info-box-text">
-        {title}
-      </span>
-      <span className="info-box-number">
-        {value}
-      </span>
+      <span className="info-box-text">{title}</span>
+      <span className="info-box-number">{value}</span>
       <div className="progress">
         <div className="progress-bar" style={{ width: `${progress * 100}%` }} />
       </div>
-      <span className="progress-description">
-        {description}
-      </span>
+      <span className="progress-description">{description}</span>
     </div>
-  </div>;
+  </div>
+);
 
 InfoBox.propTypes = {
   title: PropTypes.oneOfType([
     PropTypes.string,
-    PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage, GroupsName]) })
+    PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage, GroupsName]) }),
   ]).isRequired,
   value: PropTypes.oneOfType([
     PropTypes.number,
     PropTypes.string,
     PropTypes.shape({ type: PropTypes.oneOf([FormattedNumber]) }),
-    PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) })
+    PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) }),
   ]),
   icon: PropTypes.string,
   spin: PropTypes.bool,
   description: PropTypes.oneOfType([
     PropTypes.string,
-    PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) })
+    PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) }),
   ]),
   progress: PropTypes.number,
-  color: PropTypes.string
+  color: PropTypes.string,
 };
 
 export default InfoBox;

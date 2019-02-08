@@ -10,7 +10,7 @@ export const actionTypes = {
   UPLOAD_REJECTED: 'recodex/upload/UPLOAD_REJECTED',
   REMOVE_FILE: 'recodex/upload/REMOVE_FILE',
   RETURN_FILE: 'recodex/upload/RETURN_FILE',
-  REMOVE_FAILED_FILE: 'recodex/upload/REMOVE_FAILED_FILE'
+  REMOVE_FAILED_FILE: 'recodex/upload/REMOVE_FAILED_FILE',
 };
 
 export const initialState = fromJS({});
@@ -22,7 +22,7 @@ export const uploadFile = (id, file, endpoint = '/uploaded-files') =>
     endpoint,
     body: { [file.name]: file },
     meta: { id, fileName: file.name },
-    uploadFiles: true
+    uploadFiles: true,
   });
 
 const wrapWithName = (id, file) => ({ [file.name]: file });
@@ -68,7 +68,7 @@ const reducer = handleActions(
           uploading: [],
           failed: [],
           removed: [],
-          uploaded: []
+          uploaded: [],
         })
       ),
 
@@ -133,7 +133,7 @@ const reducer = handleActions(
     [actionTypes.REMOVE_FAILED_FILE]: (state, { payload, meta: { id } }) =>
       state.updateIn([id, 'failed'], list =>
         list.filter(item => item.name !== payload.name)
-      )
+      ),
   },
   initialState
 );

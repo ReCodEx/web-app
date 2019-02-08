@@ -16,7 +16,7 @@ import RegistrationCAS from '../../components/forms/RegistrationCAS';
 
 import {
   createAccount,
-  createExternalAccount
+  createExternalAccount,
 } from '../../redux/modules/registration';
 import { fetchInstances } from '../../redux/modules/instances';
 import { publicInstancesSelector } from '../../redux/selectors/instances';
@@ -40,7 +40,7 @@ const getInitialValues = defaultMemoize(instances => {
     passwordConfirm: '',
     passwordStrength: null,
     instanceId: firstInstance && firstInstance.id,
-    gdpr: false
+    gdpr: false,
   };
 });
 
@@ -66,7 +66,7 @@ class Registration extends Component {
       instances,
       createAccount,
       createExternalAccount,
-      links: { HOME_URI }
+      links: { HOME_URI },
     } = this.props;
 
     const registratorsCount =
@@ -91,14 +91,13 @@ class Registration extends Component {
           {
             text: <FormattedMessage id="app.homepage.title" />,
             link: HOME_URI,
-            iconName: 'home'
+            iconName: 'home',
           },
           {
             text: <FormattedMessage id="app.registration.title" />,
-            iconName: 'user-plus'
-          }
-        ]}
-      >
+            iconName: 'user-plus',
+          },
+        ]}>
         <ResourceRenderer resource={instances.toArray()} returnAsArray>
           {instances => (
             <Row>
@@ -109,8 +108,7 @@ class Registration extends Component {
                   md={6}
                   mdOffset={registratorsCount === 1 ? 3 : 0}
                   sm={12}
-                  smOffset={0}
-                >
+                  smOffset={0}>
                   <RegistrationForm
                     instances={instances}
                     initialValues={getInitialValues(instances)}
@@ -125,8 +123,7 @@ class Registration extends Component {
                   md={6}
                   mdOffset={registratorsCount === 1 ? 3 : 0}
                   sm={12}
-                  smOffset={0}
-                >
+                  smOffset={0}>
                   <ExternalRegistrationForm
                     instances={instances}
                     onSubmit={createExternalAccount()}
@@ -140,8 +137,7 @@ class Registration extends Component {
                   md={6}
                   mdOffset={registratorsCount === 1 ? 3 : 0}
                   sm={12}
-                  smOffset={0}
-                >
+                  smOffset={0}>
                   <RegistrationCAS
                     instances={instances}
                     onSubmit={createExternalAccount('cas')}
@@ -165,14 +161,14 @@ Registration.propTypes = {
   push: PropTypes.func.isRequired,
   reset: PropTypes.func.isRequired,
   triggerAsyncValidation: PropTypes.func.isRequired,
-  links: PropTypes.object.isRequired
+  links: PropTypes.object.isRequired,
 };
 
 export default withLinks(
   connect(
     state => ({
       instances: publicInstancesSelector(state),
-      hasSucceeded: hasSucceeded(state)
+      hasSucceeded: hasSucceeded(state),
     }),
     dispatch => ({
       loadAsync: () => Promise.all([dispatch(fetchInstances())]),
@@ -182,7 +178,7 @@ export default withLinks(
         email,
         password,
         passwordConfirm,
-        instanceId
+        instanceId,
       }) =>
         dispatch(
           createAccount(
@@ -208,7 +204,7 @@ export default withLinks(
       reset: () => {
         dispatch(reset('registration'));
         dispatch(reset('external-registration'));
-      }
+      },
     })
   )(Registration)
 );

@@ -15,7 +15,7 @@ import Icon, {
   SuccessOrFailureIcon,
   UserIcon,
   VisibleIcon,
-  CodeIcon
+  CodeIcon,
 } from '../../icons';
 import { getLocalizedDescription } from '../../../helpers/localizedData';
 import { LocalizedExerciseName } from '../../helpers/LocalizedNames';
@@ -35,12 +35,11 @@ const ExerciseDetail = ({
   isPublic,
   isLocked,
   locale,
-  links: { EXERCISE_URI_FACTORY }
-}) =>
+  links: { EXERCISE_URI_FACTORY },
+}) => (
   <Box
     title={<FormattedMessage id="generic.details" defaultMessage="Details" />}
-    noPadding
-  >
+    noPadding>
     <Table responsive condensed>
       <tbody>
         <tr>
@@ -63,7 +62,8 @@ const ExerciseDetail = ({
             <FormattedMessage
               id="app.exercise.description"
               defaultMessage="Short description"
-            />:
+            />
+            :
             <br />
             <span className="text-muted small">
               <FormattedMessage
@@ -90,7 +90,8 @@ const ExerciseDetail = ({
             <FormattedMessage
               id="app.exercise.difficulty"
               defaultMessage="Difficulty"
-            />:
+            />
+            :
           </th>
           <td>
             <DifficultyIcon difficulty={difficulty} />
@@ -105,7 +106,8 @@ const ExerciseDetail = ({
             <FormattedMessage
               id="app.exercise.runtimes"
               defaultMessage="Runtime environments"
-            />:
+            />
+            :
           </th>
           <td>
             <EnvironmentsList runtimeEnvironments={runtimeEnvironments} />
@@ -120,7 +122,8 @@ const ExerciseDetail = ({
             <FormattedMessage
               id="generic.createdAt"
               defaultMessage="Created at"
-            />:
+            />
+            :
           </th>
           <td>
             <DateTime unixts={createdAt} showRelative />
@@ -151,7 +154,8 @@ const ExerciseDetail = ({
             <FormattedMessage
               id="app.exercise.isPublic"
               defaultMessage="Is public"
-            />:
+            />
+            :
           </th>
           <td>
             <SuccessOrFailureIcon success={isPublic} />
@@ -166,14 +170,15 @@ const ExerciseDetail = ({
             <FormattedMessage
               id="app.exercise.isLocked"
               defaultMessage="Is locked"
-            />:
+            />
+            :
           </th>
           <td>
             <SuccessOrFailureIcon success={isLocked} />
           </td>
         </tr>
 
-        {forkedFrom &&
+        {forkedFrom && (
           <tr>
             <td className="text-center shrink-col em-padding-left em-padding-right">
               <Icon icon="code-branch" />
@@ -182,25 +187,30 @@ const ExerciseDetail = ({
               <FormattedMessage
                 id="app.exercise.forked"
                 defaultMessage="Forked from"
-              />:
+              />
+              :
             </th>
             <td>
               <ResourceRenderer resource={forkedFrom}>
-                {({ id, name, localizedTexts, version }) =>
+                {({ id, name, localizedTexts, version }) => (
                   <span>
                     <Link to={EXERCISE_URI_FACTORY(id)}>
                       <LocalizedExerciseName
                         entity={{ name, localizedTexts }}
                       />
                     </Link>
-                    &nbsp;&nbsp;(v<FormattedNumber value={version} />)
-                  </span>}
+                    &nbsp;&nbsp;(v
+                    <FormattedNumber value={version} />)
+                  </span>
+                )}
               </ResourceRenderer>
             </td>
-          </tr>}
+          </tr>
+        )}
       </tbody>
     </Table>
-  </Box>;
+  </Box>
+);
 
 ExerciseDetail.propTypes = {
   id: PropTypes.string.isRequired,
@@ -218,7 +228,7 @@ ExerciseDetail.propTypes = {
   isPublic: PropTypes.bool.isRequired,
   isLocked: PropTypes.bool.isRequired,
   locale: PropTypes.string.isRequired,
-  links: PropTypes.object
+  links: PropTypes.object,
 };
 
 export default withLinks(ExerciseDetail);

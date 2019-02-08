@@ -14,24 +14,26 @@ const DeleteUserButtonContainer = ({
   onDeleted,
   ...props
 }) =>
-  resourceless
-    ? <ConfirmDeleteButton {...props} onClick={deleteUser} />
-    : <DeleteButton {...props} resource={user} deleteResource={deleteUser} />;
+  resourceless ? (
+    <ConfirmDeleteButton {...props} onClick={deleteUser} />
+  ) : (
+    <DeleteButton {...props} resource={user} deleteResource={deleteUser} />
+  );
 
 DeleteUserButtonContainer.propTypes = {
   id: PropTypes.string.isRequired,
   resourceless: PropTypes.bool,
   user: ImmutablePropTypes.map,
   deleteUser: PropTypes.func.isRequired,
-  onDeleted: PropTypes.func
+  onDeleted: PropTypes.func,
 };
 
 export default connect(
   (state, { id }) => ({
-    user: getUser(id)(state)
+    user: getUser(id)(state),
   }),
   (dispatch, { id, onDeleted }) => ({
     deleteUser: () =>
-      dispatch(deleteUser(id)).then(() => onDeleted && onDeleted())
+      dispatch(deleteUser(id)).then(() => onDeleted && onDeleted()),
   })
 )(DeleteUserButtonContainer);

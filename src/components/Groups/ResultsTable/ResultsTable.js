@@ -8,7 +8,7 @@ import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { safeGet, EMPTY_ARRAY, EMPTY_OBJ } from '../../../helpers/common';
 import UsersName from '../../Users/UsersName';
 import SortableTable, {
-  SortableTableColumnDescriptor
+  SortableTableColumnDescriptor,
 } from '../../widgets/SortableTable';
 import withLinks from '../../../helpers/withLinks';
 import { LocalizedExerciseName } from '../../helpers/LocalizedNames';
@@ -16,7 +16,7 @@ import { getLocalizedName } from '../../../helpers/localizedData';
 import { createUserNameComparator } from '../../helpers/users';
 import {
   compareAssignments,
-  compareShadowAssignments
+  compareShadowAssignments,
 } from '../../helpers/assignments';
 import { downloadString } from '../../../redux/helpers/api/download';
 import Button from '../../widgets/FlatButton';
@@ -29,7 +29,7 @@ const assignmentCellRendererCreator = defaultMemoize(
   (rawAssignments, locale) => {
     const assignments = {};
     rawAssignments.forEach(a => (assignments[a.id] = a));
-    return (points, idx, key, row) =>
+    return (points, idx, key, row) => (
       <OverlayTrigger
         placement="bottom"
         overlay={
@@ -38,24 +38,24 @@ const assignmentCellRendererCreator = defaultMemoize(
             {', '}
             {assignments[key] && getLocalizedName(assignments[key], locale)}
           </Tooltip>
-        }
-      >
+        }>
         <span>
-          {points && Number.isInteger(points.gained)
-            ? <span>
-                {points.gained}
-                {points.bonus > 0 &&
-                  <span className={styles.bonusPoints}>
-                    +{points.bonus}
-                  </span>}
-                {points.bonus < 0 &&
-                  <span className={styles.malusPoints}>
-                    {points.bonus}
-                  </span>}
-              </span>
-            : '-'}
+          {points && Number.isInteger(points.gained) ? (
+            <span>
+              {points.gained}
+              {points.bonus > 0 && (
+                <span className={styles.bonusPoints}>+{points.bonus}</span>
+              )}
+              {points.bonus < 0 && (
+                <span className={styles.malusPoints}>{points.bonus}</span>
+              )}
+            </span>
+          ) : (
+            '-'
+          )}
         </span>
-      </OverlayTrigger>;
+      </OverlayTrigger>
+    );
   }
 );
 
@@ -71,7 +71,7 @@ const getCSVValues = (assignments, shadowAssignments, data, locale) => {
   let header = [
     enquote('userName'),
     enquote('userEmail'),
-    enquote('totalPoints')
+    enquote('totalPoints'),
   ];
   assignments.forEach(assignment => {
     header.push(enquote(escapeString(getLocalizedName(assignment, locale))));
@@ -89,7 +89,7 @@ const getCSVValues = (assignments, shadowAssignments, data, locale) => {
       item.user.privateData
         ? enquote(`${escapeString(item.user.privateData.email)}`)
         : '',
-      item.total.gained
+      item.total.gained,
     ];
     assignments.forEach(assignment => {
       if (!Number.isInteger(item[assignment.id].gained)) {
@@ -131,8 +131,8 @@ class ResultsTable extends Component {
         links: {
           ASSIGNMENT_STATS_URI_FACTORY,
           ASSIGNMENT_DETAIL_URI_FACTORY,
-          SHADOW_ASSIGNMENT_DETAIL_URI_FACTORY
-        }
+          SHADOW_ASSIGNMENT_DETAIL_URI_FACTORY,
+        },
       } = this.props;
 
       const nameComparator = createUserNameComparator(locale);
@@ -155,14 +155,15 @@ class ResultsTable extends Component {
             className: 'text-left',
             comparator: ({ user: u1 }, { user: u2 }) => nameComparator(u1, u2),
             cellRenderer: user =>
-              user &&
-              <UsersName
-                {...user}
-                currentUserId={loggedUser.id}
-                showEmail="icon"
-              />
+              user && (
+                <UsersName
+                  {...user}
+                  currentUserId={loggedUser.id}
+                  showEmail="icon"
+                />
+              ),
           }
-        )
+        ),
       ];
 
       /*
@@ -180,8 +181,7 @@ class ResultsTable extends Component {
                       isAdmin || isSupervisor
                         ? ASSIGNMENT_STATS_URI_FACTORY(assignment.id)
                         : ASSIGNMENT_DETAIL_URI_FACTORY(assignment.id)
-                    }
-                  >
+                    }>
                     <LocalizedExerciseName entity={assignment} />
                   </Link>
                 </div>
@@ -195,7 +195,7 @@ class ResultsTable extends Component {
                   ? ` / ${assignment.maxPointsBeforeSecondDeadline}`
                   : ''),
               headerSuffixClassName: styles.maxPointsRow,
-              cellRenderer: assignmentCellRendererCreator(assignments, locale)
+              cellRenderer: assignmentCellRendererCreator(assignments, locale),
             }
           )
         )
@@ -216,8 +216,7 @@ class ResultsTable extends Component {
                     <Link
                       to={SHADOW_ASSIGNMENT_DETAIL_URI_FACTORY(
                         shadowAssignment.id
-                      )}
-                    >
+                      )}>
                       <LocalizedExerciseName entity={shadowAssignment} />
                     </Link>
                   </div>
@@ -228,11 +227,11 @@ class ResultsTable extends Component {
                 headerSuffix: shadowAssignment.maxPoints,
                 headerSuffixClassName: styles.maxPointsRow,
                 cellRenderer: points =>
-                  points && Number.isInteger(points.gained)
-                    ? <span>
-                        {points.gained}
-                      </span>
-                    : '-'
+                  points && Number.isInteger(points.gained) ? (
+                    <span>{points.gained}</span>
+                  ) : (
+                    '-'
+                  ),
               }
             )
           )
@@ -256,10 +255,11 @@ class ResultsTable extends Component {
             comparator: ({ total: t1, user: u1 }, { total: t2, user: u2 }) =>
               (Number(t2 && t2.gained) || -1) -
                 (Number(t1 && t1.gained) || -1) || nameComparator(u1, u2),
-            cellRenderer: points =>
+            cellRenderer: points => (
               <strong>
                 {points ? `${points.gained}/${points.total}` : '-/-'}
               </strong>
+            ),
           }
         )
       );
@@ -268,7 +268,7 @@ class ResultsTable extends Component {
         columns.push(
           new SortableTableColumnDescriptor('buttons', '', {
             headerSuffixClassName: styles.maxPointsRow,
-            className: 'text-right'
+            className: 'text-right',
           })
         );
       }
@@ -285,7 +285,7 @@ class ResultsTable extends Component {
         isSupervisor,
         loggedUser,
         publicStats,
-        renderActions
+        renderActions,
       } = this.props;
 
       if (!isAdmin && !isSupervisor && !publicStats) {
@@ -298,7 +298,7 @@ class ResultsTable extends Component {
           id: user.id,
           user: user,
           total: userStats && userStats.points,
-          buttons: renderActions && isAdmin ? renderActions(user.id) : ''
+          buttons: renderActions && isAdmin ? renderActions(user.id) : '',
         };
 
         assignments.forEach(assignment => {
@@ -332,7 +332,7 @@ class ResultsTable extends Component {
       isAdmin,
       isSupervisor,
       groupName,
-      intl: { locale }
+      intl: { locale },
     } = this.props;
     return (
       <React.Fragment>
@@ -355,7 +355,7 @@ class ResultsTable extends Component {
             </div>
           }
         />
-        {(isAdmin || isSupervisor) &&
+        {(isAdmin || isSupervisor) && (
           <div className="text-center">
             <Button
               bsStyle="primary"
@@ -376,15 +376,16 @@ class ResultsTable extends Component {
                   ),
                   'text/csv;charset=utf-8',
                   true // add BOM
-                )}
-            >
+                )
+              }>
               <DownloadIcon gapRight />
               <FormattedMessage
                 id="app.groupResultsTable.downloadCSV"
                 defaultMessage="Download results as CSV"
               />
             </Button>
-          </div>}
+          </div>
+        )}
       </React.Fragment>
     );
   }
@@ -402,7 +403,7 @@ ResultsTable.propTypes = {
   renderActions: PropTypes.func,
   groupName: PropTypes.string.isRequired,
   intl: intlShape.isRequired,
-  links: PropTypes.object
+  links: PropTypes.object,
 };
 
 export default withLinks(injectIntl(ResultsTable));

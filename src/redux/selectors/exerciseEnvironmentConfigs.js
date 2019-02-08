@@ -9,6 +9,7 @@ export const exerciseEnvironmentConfigsSelector = createSelector(
   getResources
 );
 export const exerciseEnvironmentConfigSelector = exerciseId =>
-  createSelector(exerciseEnvironmentConfigsSelector, configs =>
-    configs.get(exerciseId)
+  createSelector(
+    exerciseEnvironmentConfigsSelector,
+    configs => configs.get(exerciseId)
   );

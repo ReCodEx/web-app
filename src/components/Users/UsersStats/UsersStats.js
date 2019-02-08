@@ -8,7 +8,7 @@ const UsersStats = ({
   id,
   localizedTexts,
   stats: { points, hasLimit, passesLimit },
-  intl: { locale }
+  intl: { locale },
 }) => {
   const localizedName = getLocalizedName({ localizedTexts }, locale);
   return (
@@ -42,10 +42,10 @@ UsersStats.propTypes = {
   stats: PropTypes.shape({
     points: PropTypes.shape({
       total: PropTypes.number.isRequired,
-      gained: PropTypes.number.isRequired
-    })
+      gained: PropTypes.number.isRequired,
+    }),
   }).isRequired,
-  intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired
+  intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired,
 };
 
 export default injectIntl(UsersStats);

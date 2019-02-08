@@ -7,14 +7,14 @@ import { FormattedMessage } from 'react-intl';
 import FilesTableContainer from '../FilesTableContainer';
 import {
   SupplementaryFilesTableHeaderRow,
-  SupplementaryFilesTableRow
+  SupplementaryFilesTableRow,
 } from '../../components/Exercises/FilesTable';
 
 import {
   fetchSupplementaryFilesForExercise,
   addSupplementaryFiles,
   removeSupplementaryFile,
-  downloadSupplementaryArchive
+  downloadSupplementaryArchive,
 } from '../../redux/modules/supplementaryFiles';
 import { downloadSupplementaryFile } from '../../redux/modules/files';
 
@@ -29,7 +29,7 @@ const SupplementaryFilesTableContainer = ({
   downloadFile,
   downloadArchive,
   ...props
-}) =>
+}) => (
   <FilesTableContainer
     uploadId={`supplementary-files-${exercise.id}`}
     attachments={supplementaryFiles}
@@ -54,26 +54,27 @@ const SupplementaryFilesTableContainer = ({
     viewOnly={!exercise.permissionHints.update}
     downloadArchive={downloadArchive}
     {...props}
-  />;
+  />
+);
 
 SupplementaryFilesTableContainer.propTypes = {
   exercise: PropTypes.shape({
     id: PropTypes.string.isRequired,
     supplementaryFilesIds: PropTypes.array.isRequired,
-    permissionHints: PropTypes.object.isRequired
+    permissionHints: PropTypes.object.isRequired,
   }).isRequired,
   supplementaryFiles: ImmutablePropTypes.map,
   loadFiles: PropTypes.func.isRequired,
   addFiles: PropTypes.func.isRequired,
   removeFile: PropTypes.func.isRequired,
   downloadFile: PropTypes.func.isRequired,
-  downloadArchive: PropTypes.func
+  downloadArchive: PropTypes.func,
 };
 
 export default connect(
   (state, { exercise }) => {
     return {
-      supplementaryFiles: getSupplementaryFilesForExercise(exercise.id)(state)
+      supplementaryFiles: getSupplementaryFilesForExercise(exercise.id)(state),
     };
   },
   (dispatch, { exercise }) => ({
@@ -87,6 +88,6 @@ export default connect(
     downloadArchive: e => {
       e.preventDefault();
       dispatch(downloadSupplementaryArchive(exercise.id));
-    }
+    },
   })
 )(SupplementaryFilesTableContainer);

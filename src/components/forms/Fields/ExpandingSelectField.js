@@ -14,17 +14,14 @@ const ExpandingSelectField = ({
   label = null,
   noItems = null,
   ...props
-}) =>
+}) => (
   <div>
-    {fields.length > 0 &&
+    {fields.length > 0 && (
       <React.Fragment>
-        {Boolean(label) &&
-          <ControlLabel>
-            {label}
-          </ControlLabel>}
+        {Boolean(label) && <ControlLabel>{label}</ControlLabel>}
         <table>
           <tbody>
-            {fields.map((field, index) =>
+            {fields.map((field, index) => (
               <tr key={index}>
                 <td width="100%" className="valign-top">
                   <Field
@@ -45,8 +42,7 @@ const ExpandingSelectField = ({
                           defaultMessage="Insert new item right above."
                         />
                       </Tooltip>
-                    }
-                  >
+                    }>
                     <FlatButton onClick={() => fields.insert(index, '')}>
                       <AddIcon size="xs" />
                       <Icon icon="level-up-alt" />
@@ -63,27 +59,29 @@ const ExpandingSelectField = ({
                           defaultMessage="Remove this item from the list."
                         />
                       </Tooltip>
-                    }
-                  >
+                    }>
                     <FlatButton onClick={() => fields.remove(index)}>
                       <CloseIcon />
                     </FlatButton>
                   </OverlayTrigger>
                 </td>
               </tr>
-            )}
+            ))}
           </tbody>
         </table>
-      </React.Fragment>}
+      </React.Fragment>
+    )}
     <div style={{ textAlign: 'center' }}>
-      {fields.length === 0 &&
+      {fields.length === 0 && (
         <span style={{ paddingRight: '2em' }}>
-          {noItems ||
+          {noItems || (
             <FormattedMessage
               id="app.expandingTextField.noItems"
               defaultMessage="There are no items yet..."
-            />}
-        </span>}
+            />
+          )}
+        </span>
+      )}
       <OverlayTrigger
         placement="right"
         overlay={
@@ -93,14 +91,14 @@ const ExpandingSelectField = ({
               defaultMessage="Append a new item."
             />
           </Tooltip>
-        }
-      >
+        }>
         <FlatButton onClick={() => fields.push('')}>
           <AddIcon />
         </FlatButton>
       </OverlayTrigger>
     </div>
-  </div>;
+  </div>
+);
 
 ExpandingSelectField.propTypes = {
   fields: PropTypes.object.isRequired,
@@ -108,19 +106,19 @@ ExpandingSelectField.propTypes = {
     active: PropTypes.bool,
     dirty: PropTypes.bool,
     error: PropTypes.any,
-    warning: PropTypes.any
+    warning: PropTypes.any,
   }).isRequired,
   label: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.element,
-    PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) })
+    PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) }),
   ]),
   noItems: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.element,
-    PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) })
+    PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) }),
   ]),
-  options: PropTypes.array
+  options: PropTypes.array,
 };
 
 export default ExpandingSelectField;

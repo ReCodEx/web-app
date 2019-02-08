@@ -14,8 +14,8 @@ const EditUserSettingsForm = ({
   submitFailed = false,
   submitSucceeded = false,
   anyTouched,
-  invalid
-}) =>
+  invalid,
+}) => (
   <FormBox
     title={
       <FormattedMessage
@@ -46,19 +46,19 @@ const EditUserSettingsForm = ({
             ),
             success: (
               <FormattedMessage id="generic.saved" defaultMessage="Saved" />
-            )
+            ),
           }}
         />
       </div>
-    }
-  >
-    {submitFailed &&
+    }>
+    {submitFailed && (
       <Alert bsStyle="danger">
         <FormattedMessage
           id="app.editUserSettings.failed"
           defaultMessage="Cannot save profile settings."
         />
-      </Alert>}
+      </Alert>
+    )}
 
     <Field
       name="vimMode"
@@ -186,7 +186,8 @@ const EditUserSettingsForm = ({
         />
       }
     />
-  </FormBox>;
+  </FormBox>
+);
 
 EditUserSettingsForm.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
@@ -195,11 +196,11 @@ EditUserSettingsForm.propTypes = {
   submitSucceeded: PropTypes.bool,
   submitting: PropTypes.bool,
   anyTouched: PropTypes.bool,
-  invalid: PropTypes.bool
+  invalid: PropTypes.bool,
 };
 
 export default reduxForm({
   form: 'edit-user-settings',
   enableReinitialize: true,
-  keepDirtyOnReinitialize: false
+  keepDirtyOnReinitialize: false,
 })(EditUserSettingsForm);

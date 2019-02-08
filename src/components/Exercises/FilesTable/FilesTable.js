@@ -31,36 +31,31 @@ const FilesTable = ({
   intl,
   isOpen = true,
   viewOnly = false,
-  downloadArchive
-}) =>
+  downloadArchive,
+}) => (
   <Box title={title} collapsable isOpen={isOpen} unlimitedHeight>
     <div>
-      {description &&
-        <p>
-          {description}
-        </p>}
+      {description && <p>{description}</p>}
       {!viewOnly && <UploadContainer id={uploadId} />}
-      {!viewOnly &&
-        newFiles &&
-        newFiles.length > 0 &&
+      {!viewOnly && newFiles && newFiles.length > 0 && (
         <p className="text-center">
           <Button
             bsStyle="success"
             disabled={!canSubmit}
-            onClick={() => addFiles(newFiles)}
-          >
+            onClick={() => addFiles(newFiles)}>
             <SendIcon gapRight />
             <FormattedMessage
               id="app.filesTable.addFiles"
               defaultMessage="Save files"
             />
           </Button>
-        </p>}
+        </p>
+      )}
 
       <ResourceRenderer resource={attachments.toArray()} returnAsArray={true}>
-        {attachments =>
+        {attachments => (
           <div>
-            {attachments.length > 0 &&
+            {attachments.length > 0 && (
               <Table responsive>
                 <thead>
                   <HeaderComponent viewOnly={viewOnly} />
@@ -68,7 +63,7 @@ const FilesTable = ({
                 <tbody>
                   {attachments
                     .sort((a, b) => a.name.localeCompare(b.name, intl.locale))
-                    .map((data, i) =>
+                    .map((data, i) => (
                       <RowComponent
                         {...data}
                         removeFile={removeFile}
@@ -76,21 +71,22 @@ const FilesTable = ({
                         viewOnly={viewOnly}
                         key={i}
                       />
-                    )}
+                    ))}
                 </tbody>
-              </Table>}
+              </Table>
+            )}
 
-            {attachments.length === 0 &&
+            {attachments.length === 0 && (
               <p className="text-center em-padding">
                 <Icon icon={['far', 'folder-open']} gapRight />
                 <FormattedMessage
                   id="app.filesTable.empty"
                   defaultMessage="There are no uploaded files yet."
                 />
-              </p>}
+              </p>
+            )}
 
-            {downloadArchive &&
-              attachments.length > 1 &&
+            {downloadArchive && attachments.length > 1 && (
               <div className="text-center">
                 <Button bsStyle="primary" onClick={downloadArchive}>
                   <DownloadIcon gapRight />
@@ -99,22 +95,25 @@ const FilesTable = ({
                     defaultMessage="Download All"
                   />
                 </Button>
-              </div>}
-          </div>}
+              </div>
+            )}
+          </div>
+        )}
       </ResourceRenderer>
     </div>
-  </Box>;
+  </Box>
+);
 
 FilesTable.propTypes = {
   title: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) }),
-    PropTypes.element
+    PropTypes.element,
   ]),
   description: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) }),
-    PropTypes.element
+    PropTypes.element,
   ]),
   uploadId: PropTypes.string.isRequired,
   attachments: ImmutablePropTypes.map,
@@ -128,7 +127,7 @@ FilesTable.propTypes = {
   intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired,
   isOpen: PropTypes.bool,
   viewOnly: PropTypes.bool,
-  downloadArchive: PropTypes.func
+  downloadArchive: PropTypes.func,
 };
 
 export default injectIntl(FilesTable);

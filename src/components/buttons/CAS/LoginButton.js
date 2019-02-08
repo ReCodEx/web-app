@@ -26,7 +26,7 @@ const LoginButton = ({ loginStatus, onLogin, onFailed }) => {
 LoginButton.propTypes = {
   loginStatus: PropTypes.string,
   onLogin: PropTypes.func.isRequired,
-  onFailed: PropTypes.func.isRequired
+  onFailed: PropTypes.func.isRequired,
 };
 
 export default LoginButton;

@@ -2,7 +2,7 @@ import { createSelector } from 'reselect';
 import {
   EMPTY_OBJ,
   EMPTY_ARRAY,
-  simpleScalarMemoize
+  simpleScalarMemoize,
 } from '../../helpers/common';
 import { isReady } from '../helpers/resourceManager';
 
@@ -50,8 +50,9 @@ export const getPaginationFilters = simpleScalarMemoize(componentId =>
 );
 
 export const getPaginationIsPending = simpleScalarMemoize(componentId =>
-  createSelector(getPagination(componentId), pagination =>
-    Boolean(pagination && pagination.get('pending'))
+  createSelector(
+    getPagination(componentId),
+    pagination => Boolean(pagination && pagination.get('pending'))
   )
 );
 

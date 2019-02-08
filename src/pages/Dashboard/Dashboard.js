@@ -28,14 +28,14 @@ import {
   getUser,
   isStudent,
   isSupervisor,
-  isLoggedAsSuperAdmin
+  isLoggedAsSuperAdmin,
 } from '../../redux/selectors/users';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import { statisticsSelector } from '../../redux/selectors/stats';
 import {
   loggedInStudentOfGroupsAssignmentsSelector,
   loggedInSupervisorOfSelector,
-  loggedInStudentOfSelector
+  loggedInStudentOfSelector,
 } from '../../redux/selectors/usersGroups';
 import { assignmentEnvironmentsSelector } from '../../redux/selectors/assignments';
 
@@ -84,13 +84,13 @@ class Dashboard extends Component {
               groups.map(groupId =>
                 Promise.all([
                   dispatch(fetchAssignmentsForGroup(groupId)),
-                  dispatch(fetchGroupsStatsIfNeeded(groupId))
+                  dispatch(fetchGroupsStatsIfNeeded(groupId)),
                 ])
               )
             );
           })
         )
-      )
+      ),
     ]);
 
   usersStatistics(statistics) {
@@ -110,7 +110,7 @@ class Dashboard extends Component {
       assignmentEnvironmentsSelector,
       statistics,
       links: { GROUP_INFO_URI_FACTORY, GROUP_DETAIL_URI_FACTORY },
-      intl: { locale }
+      intl: { locale },
     } = this.props;
 
     return (
@@ -136,18 +136,16 @@ class Dashboard extends Component {
                 defaultMessage="User's profile"
               />
             ),
-            iconName: 'user'
-          }
-        ]}
-      >
-        {user =>
+            iconName: 'user',
+          },
+        ]}>
+        {user => (
           <div>
             <p>
               <UsersNameContainer userId={user.id} large noLink />
             </p>
 
-            {student &&
-              studentOfCount(user) === 0 &&
+            {student && studentOfCount(user) === 0 && (
               <Row>
                 <Col sm={12}>
                   <div className="callout callout-success">
@@ -166,10 +164,10 @@ class Dashboard extends Component {
                     </p>
                   </div>
                 </Col>
-              </Row>}
+              </Row>
+            )}
 
-            {supervisor &&
-              supervisorOfCount(user) === 0 &&
+            {supervisor && supervisorOfCount(user) === 0 && (
               <Row>
                 <Col sm={12}>
                   <div className="callout callout-success">
@@ -188,20 +186,21 @@ class Dashboard extends Component {
                     </p>
                   </div>
                 </Col>
-              </Row>}
+              </Row>
+            )}
 
             {(studentOf.size !== studentOfCount(user) ||
-              supervisorOf.size !== supervisorOfCount(user)) &&
+              supervisorOf.size !== supervisorOfCount(user)) && (
               <div className="text-center">
                 <LoadingIcon size="2x" />
-              </div>}
+              </div>
+            )}
 
-            {studentOf.size > 0 &&
+            {studentOf.size > 0 && (
               <ResourceRenderer
                 resource={studentOf.toArray()}
-                returnAsArray={true}
-              >
-                {groups =>
+                returnAsArray={true}>
+                {groups => (
                   <div>
                     <h2 className="page-heading">
                       <FormattedMessage
@@ -217,7 +216,7 @@ class Dashboard extends Component {
                           locale
                         )
                       )
-                      .map(group =>
+                      .map(group => (
                         <div key={group.id}>
                           {
                             <ResourceRenderer
@@ -230,14 +229,12 @@ class Dashboard extends Component {
                                   </Col>
                                 </Row>
                               }
-                              resource={statistics.get(group.id)}
-                            >
-                              {statistics =>
+                              resource={statistics.get(group.id)}>
+                              {statistics => (
                                 <Row>
                                   <Col lg={4}>
                                     <Link
-                                      to={GROUP_DETAIL_URI_FACTORY(group.id)}
-                                    >
+                                      to={GROUP_DETAIL_URI_FACTORY(group.id)}>
                                       <UsersStats
                                         {...group}
                                         stats={this.usersStatistics(statistics)}
@@ -255,8 +252,7 @@ class Dashboard extends Component {
                                           <LinkContainer
                                             to={GROUP_INFO_URI_FACTORY(
                                               group.id
-                                            )}
-                                          >
+                                            )}>
                                             <Button bsSize="sm">
                                               <InfoIcon gapRight />
                                               <FormattedMessage
@@ -268,8 +264,7 @@ class Dashboard extends Component {
                                           <LinkContainer
                                             to={GROUP_DETAIL_URI_FACTORY(
                                               group.id
-                                            )}
-                                          >
+                                            )}>
                                             <Button bsSize="sm">
                                               <GroupIcon gapRight />
                                               <FormattedMessage
@@ -280,8 +275,7 @@ class Dashboard extends Component {
                                           </LinkContainer>
                                         </p>
                                       }
-                                      unlimitedHeight
-                                    >
+                                      unlimitedHeight>
                                       <AssignmentsTable
                                         userId={user.id}
                                         assignments={groupAssignments.get(
@@ -297,15 +291,18 @@ class Dashboard extends Component {
                                       />
                                     </Box>
                                   </Col>
-                                </Row>}
+                                </Row>
+                              )}
                             </ResourceRenderer>
                           }
                         </div>
-                      )}
-                  </div>}
-              </ResourceRenderer>}
+                      ))}
+                  </div>
+                )}
+              </ResourceRenderer>
+            )}
 
-            {supervisorOf.size > 0 &&
+            {supervisorOf.size > 0 && (
               <Row>
                 <Col sm={12}>
                   <h2 className="page-heading">
@@ -317,9 +314,8 @@ class Dashboard extends Component {
 
                   <ResourceRenderer
                     resource={supervisorOf.toArray()}
-                    returnAsArray={true}
-                  >
-                    {groups =>
+                    returnAsArray={true}>
+                    {groups => (
                       <div>
                         {groups
                           .sort((a, b) =>
@@ -328,13 +324,12 @@ class Dashboard extends Component {
                               locale
                             )
                           )
-                          .map(group =>
+                          .map(group => (
                             <Row key={group.id}>
                               <Col lg={12}>
                                 <ResourceRenderer
-                                  resource={statistics.get(group.id)}
-                                >
-                                  {statistics =>
+                                  resource={statistics.get(group.id)}>
+                                  {statistics => (
                                     <Box
                                       title={<GroupsName {...group} noLink />}
                                       collapsable
@@ -345,8 +340,7 @@ class Dashboard extends Component {
                                           <LinkContainer
                                             to={GROUP_INFO_URI_FACTORY(
                                               group.id
-                                            )}
-                                          >
+                                            )}>
                                             <Button bsSize="sm">
                                               <InfoIcon gapRight />
                                               <FormattedMessage
@@ -358,8 +352,7 @@ class Dashboard extends Component {
                                           <LinkContainer
                                             to={GROUP_DETAIL_URI_FACTORY(
                                               group.id
-                                            )}
-                                          >
+                                            )}>
                                             <Button bsSize="sm">
                                               <GroupIcon gapRight />
                                               <FormattedMessage
@@ -369,21 +362,24 @@ class Dashboard extends Component {
                                             </Button>
                                           </LinkContainer>
                                         </p>
-                                      }
-                                    >
+                                      }>
                                       <StudentsListContainer
                                         groupId={group.id}
                                       />
-                                    </Box>}
+                                    </Box>
+                                  )}
                                 </ResourceRenderer>
                               </Col>
                             </Row>
-                          )}
-                      </div>}
+                          ))}
+                      </div>
+                    )}
                   </ResourceRenderer>
                 </Col>
-              </Row>}
-          </div>}
+              </Row>
+            )}
+          </div>
+        )}
       </Page>
     );
   }
@@ -403,7 +399,7 @@ Dashboard.propTypes = {
   assignmentEnvironmentsSelector: PropTypes.func,
   statistics: ImmutablePropTypes.map,
   links: PropTypes.object,
-  intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired
+  intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired,
 };
 
 export default withLinks(
@@ -420,11 +416,11 @@ export default withLinks(
         supervisorOf: loggedInSupervisorOfSelector(state),
         groupAssignments: loggedInStudentOfGroupsAssignmentsSelector(state),
         assignmentEnvironmentsSelector: assignmentEnvironmentsSelector(state),
-        statistics: statisticsSelector(state)
+        statistics: statisticsSelector(state),
       };
     },
     (dispatch, { params }) => ({
-      loadAsync: userId => Dashboard.loadAsync(params, dispatch, { userId })
+      loadAsync: userId => Dashboard.loadAsync(params, dispatch, { userId }),
     })
   )(injectIntl(Dashboard))
 );

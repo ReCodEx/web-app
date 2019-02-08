@@ -4,13 +4,19 @@ import { FormattedHTMLMessage } from 'react-intl';
 import { ProgressBar } from 'react-bootstrap';
 import UsersNameContainer from '../../../containers/UsersNameContainer';
 
-const StudentsListItem = ({ id, fullName, avatarUrl, stats, renderActions }) =>
+const StudentsListItem = ({
+  id,
+  fullName,
+  avatarUrl,
+  stats,
+  renderActions,
+}) => (
   <tr>
     <td>
       <UsersNameContainer userId={id} />
     </td>
     <td width={150}>
-      {stats &&
+      {stats && (
         <ProgressBar
           className="progress-xs"
           now={
@@ -21,21 +27,21 @@ const StudentsListItem = ({ id, fullName, avatarUrl, stats, renderActions }) =>
           bsStyle={
             !stats.hasLimit ? 'info' : stats.passesLimit ? 'success' : 'danger'
           }
-        />}
+        />
+      )}
     </td>
     <td>
-      {stats &&
+      {stats && (
         <FormattedHTMLMessage
           id="app.studentsList.gainedPointsOfWithoutBreakingSpaces"
           defaultMessage="{gained, number}&nbsp;of&nbsp;{total, number}"
           values={{ ...stats.points }}
-        />}
+        />
+      )}
     </td>
-    {renderActions &&
-      <td>
-        {renderActions(id)}
-      </td>}
-  </tr>;
+    {renderActions && <td>{renderActions(id)}</td>}
+  </tr>
+);
 
 StudentsListItem.propTypes = {
   id: PropTypes.string.isRequired,
@@ -44,10 +50,10 @@ StudentsListItem.propTypes = {
   stats: PropTypes.shape({
     points: PropTypes.shape({
       total: PropTypes.number.isRequired,
-      gained: PropTypes.number.isRequired
-    })
+      gained: PropTypes.number.isRequired,
+    }),
   }),
-  renderActions: PropTypes.func
+  renderActions: PropTypes.func,
 };
 
 export default StudentsListItem;

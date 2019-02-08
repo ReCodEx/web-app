@@ -29,23 +29,25 @@ class NumericTextField extends Component {
       (validateMin !== null && validateMin > value) ||
       (validateMax !== null && value > validateMax)
     ) {
-      return validateMin !== null && validateMax !== null
-        ? <FormattedMessage
-            id="app.numericTextField.validationFailedMinMax"
-            defaultMessage="The value must be in between {validateMin} and {validateMax}."
-            values={{ validateMin, validateMax }}
-          />
-        : validateMin !== null
-          ? <FormattedMessage
-              id="app.numericTextField.validationFailedMin"
-              defaultMessage="The value must not be lesser than {validateMin}."
-              values={{ validateMin }}
-            />
-          : <FormattedMessage
-              id="app.numericTextField.validationFailedMax"
-              defaultMessage="The value must not be greater than {validateMax}."
-              values={{ validateMax }}
-            />;
+      return validateMin !== null && validateMax !== null ? (
+        <FormattedMessage
+          id="app.numericTextField.validationFailedMinMax"
+          defaultMessage="The value must be in between {validateMin} and {validateMax}."
+          values={{ validateMin, validateMax }}
+        />
+      ) : validateMin !== null ? (
+        <FormattedMessage
+          id="app.numericTextField.validationFailedMin"
+          defaultMessage="The value must not be lesser than {validateMin}."
+          values={{ validateMin }}
+        />
+      ) : (
+        <FormattedMessage
+          id="app.numericTextField.validationFailedMax"
+          defaultMessage="The value must not be greater than {validateMax}."
+          values={{ validateMax }}
+        />
+      );
     } else {
       return undefined;
     }
@@ -80,7 +82,7 @@ NumericTextField.propTypes = {
   name: PropTypes.string.isRequired,
   maxLength: PropTypes.number,
   validateMin: PropTypes.number,
-  validateMax: PropTypes.number
+  validateMax: PropTypes.number,
 };
 
 export default NumericTextField;

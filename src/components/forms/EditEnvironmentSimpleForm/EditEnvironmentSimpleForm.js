@@ -21,7 +21,7 @@ class EditEnvironmentSimpleForm extends Component {
       invalid,
       error,
       runtimeEnvironments,
-      intl: { locale }
+      intl: { locale },
     } = this.props;
 
     return (
@@ -30,7 +30,7 @@ class EditEnvironmentSimpleForm extends Component {
           <Row>
             {runtimeEnvironments
               .sort((a, b) => a.longName.localeCompare(b.longName, locale))
-              .map((environment, i) =>
+              .map((environment, i) => (
                 <Col key={i} xs={12} sm={6}>
                   <Field
                     name={`${environment.id}`}
@@ -39,36 +39,34 @@ class EditEnvironmentSimpleForm extends Component {
                     label={environment.longName}
                   />
                 </Col>
-              )}
+              ))}
           </Row>
         </Grid>
 
-        {submitFailed &&
+        {submitFailed && (
           <Alert bsStyle="danger">
             <FormattedMessage
               id="generic.savingFailed"
               defaultMessage="Saving failed. Please try again later."
             />
-          </Alert>}
+          </Alert>
+        )}
 
-        {error &&
-          <Alert bsStyle="danger">
-            {error}
-          </Alert>}
+        {error && <Alert bsStyle="danger">{error}</Alert>}
 
         <div className="text-center">
-          {dirty &&
+          {dirty && (
             <span>
               <Button
                 type="reset"
                 onClick={reset}
                 bsStyle={'danger'}
-                className="btn-flat"
-              >
+                className="btn-flat">
                 <RefreshIcon gapRight />
                 <FormattedMessage id="generic.reset" defaultMessage="Reset" />
               </Button>{' '}
-            </span>}
+            </span>
+          )}
 
           <SubmitButton
             id="editTests"
@@ -96,7 +94,7 @@ class EditEnvironmentSimpleForm extends Component {
                   id="app.editEnvironmentSimpleForm.success"
                   defaultMessage="Environments Saved."
                 />
-              )
+              ),
             }}
           />
         </div>
@@ -116,7 +114,7 @@ EditEnvironmentSimpleForm.propTypes = {
   invalid: PropTypes.bool,
   error: PropTypes.any,
   runtimeEnvironments: PropTypes.array,
-  intl: intlShape.isRequired
+  intl: intlShape.isRequired,
 };
 
 const validate = formData => {
@@ -147,5 +145,5 @@ export default reduxForm({
   form: 'editEnvironmentSimple',
   enableReinitialize: true,
   keepDirtyOnReinitialize: false,
-  validate
+  validate,
 })(injectIntl(EditEnvironmentSimpleForm));

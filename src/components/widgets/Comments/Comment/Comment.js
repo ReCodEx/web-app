@@ -24,34 +24,30 @@ const Comment = ({
   isToggling = false,
   togglePrivacy,
   deleteComment,
-  links: { USER_URI_FACTORY }
-}) =>
+  links: { USER_URI_FACTORY },
+}) => (
   <div
     className={classnames({
       'direct-chat-success': isPrivate,
-      'direct-chat-primary': !isPrivate
-    })}
-  >
+      'direct-chat-primary': !isPrivate,
+    })}>
     <div
       className={classnames({
         'direct-chat-msg': true,
-        right: right
-      })}
-    >
+        right: right,
+      })}>
       <div className="direct-chat-info clearfix">
         <span
           className={classnames({
             'direct-chat-name': true,
-            'pull-right': right
-          })}
-        >
-          <Link to={USER_URI_FACTORY(user.id)}>
-            {user.name}
-          </Link>
+            'pull-right': right,
+          })}>
+          <Link to={USER_URI_FACTORY(user.id)}>{user.name}</Link>
         </span>
         {status === 'posted' && <Posted right={!right} postedAt={postedAt} />}
-        {status === 'failed' &&
-          <Failed right={!right} repost={() => repost && repost(id)} />}
+        {status === 'failed' && (
+          <Failed right={!right} repost={() => repost && repost(id)} />
+        )}
         {status === 'pending' && <Posting right={!right} />}
       </div>
       <AvatarContainer
@@ -62,30 +58,31 @@ const Comment = ({
         altClassName="direct-chat-img"
       />
       <div className="direct-chat-text">
-        {isFromCurrentUser &&
+        {isFromCurrentUser && (
           <DeleteIcon
             gapLeft
             className="pull-right"
             onClick={() => deleteComment(id)}
-          />}
-        {isFromCurrentUser &&
-          togglePrivacy &&
+          />
+        )}
+        {isFromCurrentUser && togglePrivacy && (
           <OverlayTrigger
             placement="left"
             overlay={
               <Tooltip id={id}>
-                {isPrivate
-                  ? <FormattedMessage
-                      id="app.comments.onlyYouCanSeeThisComment"
-                      defaultMessage="Only you can see this comment"
-                    />
-                  : <FormattedMessage
-                      id="app.comments.everyoneCanSeeThisComment"
-                      defaultMessage="This comment is visible to everyone."
-                    />}
+                {isPrivate ? (
+                  <FormattedMessage
+                    id="app.comments.onlyYouCanSeeThisComment"
+                    defaultMessage="Only you can see this comment"
+                  />
+                ) : (
+                  <FormattedMessage
+                    id="app.comments.everyoneCanSeeThisComment"
+                    defaultMessage="This comment is visible to everyone."
+                  />
+                )}
               </Tooltip>
-            }
-          >
+            }>
             <Icon
               icon={
                 isToggling ? 'circle-notch' : isPrivate ? 'lock' : 'unlock-alt'
@@ -94,15 +91,17 @@ const Comment = ({
               className="pull-right"
               spin={isToggling}
             />
-          </OverlayTrigger>}{' '}
-        {text.split('\n').map((line, idx) =>
+          </OverlayTrigger>
+        )}{' '}
+        {text.split('\n').map((line, idx) => (
           <div key={idx} style={{ minHeight: '1em' }}>
             {line}
           </div>
-        )}
+        ))}
       </div>
     </div>
-  </div>;
+  </div>
+);
 
 Comment.propTypes = {
   isFromCurrentUser: PropTypes.bool,
@@ -111,7 +110,7 @@ Comment.propTypes = {
   user: PropTypes.shape({
     id: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
-    avatarUrl: PropTypes.string
+    avatarUrl: PropTypes.string,
   }).isRequired,
   postedAt: PropTypes.number,
   id: PropTypes.string.isRequired,
@@ -121,7 +120,7 @@ Comment.propTypes = {
   isToggling: PropTypes.bool,
   togglePrivacy: PropTypes.func,
   deleteComment: PropTypes.func,
-  links: PropTypes.object
+  links: PropTypes.object,
 };
 
 export default withLinks(Comment);

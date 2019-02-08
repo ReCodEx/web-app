@@ -12,24 +12,22 @@ const FormBox = ({
   dirty = false,
   children,
   ...props
-}) =>
+}) => (
   <Form method="POST" onSubmit={onSubmit}>
     <Box
       type={succeeded ? 'success' : dirty ? 'warning' : 'default'}
       {...props}
-      unlimitedHeight
-    >
-      <div>
-        {children}
-      </div>
+      unlimitedHeight>
+      <div>{children}</div>
     </Box>
-  </Form>;
+  </Form>
+);
 
 FormBox.propTypes = {
   onSubmit: PropTypes.func,
   succeeded: PropTypes.bool,
   dirty: PropTypes.bool,
-  children: PropTypes.any
+  children: PropTypes.any,
 };
 
 export default FormBox;

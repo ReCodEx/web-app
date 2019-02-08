@@ -13,17 +13,18 @@ const FilterArchiveGroupsForm = ({
   submitFailed = false,
   submitSucceeded = false,
   invalid,
-  dirty
-}) =>
+  dirty,
+}) => (
   <Form method="POST" onSubmit={onSubmit}>
     <Well bsSize="sm">
-      {submitFailed &&
+      {submitFailed && (
         <Alert bsStyle="danger">
           <FormattedMessage
             id="generic.operationFailed"
             defaultMessage="Operation failed. Please try again later."
           />
-        </Alert>}
+        </Alert>
+      )}
 
       <Grid fluid>
         <Row>
@@ -37,7 +38,8 @@ const FilterArchiveGroupsForm = ({
                   <FormattedMessage
                     id="app.filterArchiveGroupsForm.searchName"
                     defaultMessage="Search by name"
-                  />:
+                  />
+                  :
                 </span>
               }
             />
@@ -52,7 +54,8 @@ const FilterArchiveGroupsForm = ({
                   <FormattedMessage
                     id="app.filterArchiveGroupsForm.showAll"
                     defaultMessage="Show also nonarchived groups"
-                  />:
+                  />
+                  :
                 </span>
               }
             />
@@ -78,7 +81,7 @@ const FilterArchiveGroupsForm = ({
                       id="generic.filtersSet"
                       defaultMessage="Filters Set"
                     />
-                  )
+                  ),
                 }}
               />
             </div>
@@ -86,7 +89,8 @@ const FilterArchiveGroupsForm = ({
         </Row>
       </Grid>
     </Well>
-  </Form>;
+  </Form>
+);
 
 FilterArchiveGroupsForm.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
@@ -95,10 +99,10 @@ FilterArchiveGroupsForm.propTypes = {
   submitSucceeded: PropTypes.bool,
   invalid: PropTypes.bool,
   dirty: PropTypes.bool,
-  change: PropTypes.func.isRequired
+  change: PropTypes.func.isRequired,
 };
 
 export default reduxForm({
   enableReinitialize: true,
-  keepDirtyOnReinitialize: false
+  keepDirtyOnReinitialize: false,
 })(FilterArchiveGroupsForm);

@@ -15,27 +15,25 @@ const SupplementaryFilesTableRow = ({
   uploadedAt,
   downloadFile,
   removeFile,
-  viewOnly
-}) =>
+  viewOnly,
+}) => (
   <tr>
     <td>
-      {downloadFile
-        ? <a href="#" onClick={e => downloadFile(e, id)}>
-            {name}
-          </a>
-        : <span>
-            {name}
-          </span>}
+      {downloadFile ? (
+        <a href="#" onClick={e => downloadFile(e, id)}>
+          {name}
+        </a>
+      ) : (
+        <span>{name}</span>
+      )}
     </td>
-    <td>
-      {prettyPrintBytes(size)}
-    </td>
+    <td>{prettyPrintBytes(size)}</td>
     <td>
       <DateTime unixts={uploadedAt} showRelative />
     </td>
-    {!viewOnly &&
+    {!viewOnly && (
       <td>
-        {removeFile &&
+        {removeFile && (
           <Confirm
             id={id}
             onConfirmed={() => removeFile(id)}
@@ -45,15 +43,17 @@ const SupplementaryFilesTableRow = ({
                 defaultMessage="Are you sure you want to delete the file? This cannot be undone."
               />
             }
-            className="pull-right"
-          >
+            className="pull-right">
             <Button bsSize="xs" bsStyle="danger">
               <DeleteIcon gapRight />
               <FormattedMessage id="generic.delete" defaultMessage="Delete" />
             </Button>
-          </Confirm>}
-      </td>}
-  </tr>;
+          </Confirm>
+        )}
+      </td>
+    )}
+  </tr>
+);
 
 SupplementaryFilesTableRow.propTypes = {
   id: PropTypes.string.isRequired,
@@ -62,7 +62,7 @@ SupplementaryFilesTableRow.propTypes = {
   uploadedAt: PropTypes.number.isRequired,
   downloadFile: PropTypes.func,
   removeFile: PropTypes.func,
-  viewOnly: PropTypes.bool
+  viewOnly: PropTypes.bool,
 };
 
 export default SupplementaryFilesTableRow;

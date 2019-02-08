@@ -12,20 +12,18 @@ const MenuAvatar = ({
   notificationsCount = 0,
   isActive = false,
   useGravatar = false,
-  onClick
-}) =>
+  onClick,
+}) => (
   <li
     className={classnames({
-      active: isActive
-    })}
-  >
+      active: isActive,
+    })}>
     <a
       onClick={e => {
         e.preventDefault();
         onClick();
       }}
-      style={{ cursor: 'pointer' }}
-    >
+      style={{ cursor: 'pointer' }}>
       <AvatarContainer
         avatarUrl={avatarUrl}
         fullName={title}
@@ -37,17 +35,18 @@ const MenuAvatar = ({
         style={{
           whiteSpace: 'normal',
           display: 'inline-block',
-          verticalAlign: 'top'
-        }}
-      >
+          verticalAlign: 'top',
+        }}>
         {title}
       </span>
-      {notificationsCount > 0 &&
+      {notificationsCount > 0 && (
         <small className="label pull-right bg-yellow">
           {notificationsCount}
-        </small>}
+        </small>
+      )}
     </a>
-  </li>;
+  </li>
+);
 
 MenuAvatar.propTypes = {
   title: PropTypes.oneOfType([PropTypes.element, PropTypes.string]),
@@ -56,7 +55,7 @@ MenuAvatar.propTypes = {
   onClick: PropTypes.func,
   notificationsCount: PropTypes.number,
   isActive: PropTypes.bool,
-  useGravatar: PropTypes.bool
+  useGravatar: PropTypes.bool,
 };
 
 export default MenuAvatar;

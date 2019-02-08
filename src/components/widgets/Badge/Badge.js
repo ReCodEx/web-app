@@ -18,7 +18,7 @@ class Badge extends Component {
       expiration,
       logout,
       size = 45,
-      links: { USER_URI_FACTORY, EDIT_USER_URI_FACTORY }
+      links: { USER_URI_FACTORY, EDIT_USER_URI_FACTORY },
     } = this.props;
 
     return (
@@ -33,9 +33,7 @@ class Badge extends Component {
         </div>
         <div className="info">
           <p>
-            <Link to={USER_URI_FACTORY(id)}>
-              {fullName}
-            </Link>
+            <Link to={USER_URI_FACTORY(id)}>{fullName}</Link>
           </p>
           <Link to={EDIT_USER_URI_FACTORY(id)}>
             <Icon icon="edit" gapRight />
@@ -52,16 +50,15 @@ class Badge extends Component {
                 />{' '}
                 <FormattedRelative value={expiration} />
               </Tooltip>
-            }
-          >
+            }>
             <a
               href="#"
               onClick={e => {
                 e.preventDefault();
                 logout();
-              }}
-            >
-              <Icon icon="sign-out-alt" className="text-danger" />&nbsp;
+              }}>
+              <Icon icon="sign-out-alt" className="text-danger" />
+              &nbsp;
               <FormattedMessage id="app.logout" defaultMessage="Logout" />
             </a>
           </OverlayTrigger>
@@ -81,7 +78,7 @@ Badge.propTypes = {
     .isRequired,
   logout: PropTypes.func,
   size: PropTypes.number,
-  links: PropTypes.object
+  links: PropTypes.object,
 };
 
 export default withLinks(Badge);

@@ -28,5 +28,5 @@ export const SUBMIT_BUTTON_MESSAGES = {
   ),
   validating: (
     <FormattedMessage id="generic.validating" defaultMessage="Validating..." />
-  )
+  ),
 };

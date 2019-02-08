@@ -1,7 +1,7 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-const NoAssignmentTableRow = () =>
+const NoAssignmentTableRow = () => (
   <tr>
     <td className="text-center">
       <FormattedMessage
@@ -9,6 +9,7 @@ const NoAssignmentTableRow = () =>
         defaultMessage="There are no assignments."
       />
     </td>
-  </tr>;
+  </tr>
+);
 
 export default NoAssignmentTableRow;

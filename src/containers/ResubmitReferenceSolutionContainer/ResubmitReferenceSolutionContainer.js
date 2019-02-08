@@ -6,14 +6,14 @@ import { defaultMemoize } from 'reselect';
 import ResubmitSolution from '../../components/buttons/ResubmitSolution';
 import {
   resubmitReferenceSolution,
-  fetchReferenceSolution
+  fetchReferenceSolution,
 } from '../../redux/modules/referenceSolutions';
 import EvaluationProgressContainer from '../EvaluationProgressContainer';
 import { fetchReferenceSolutionEvaluationsForSolution } from '../../redux/modules/referenceSolutionEvaluations';
 import {
   isProcessing,
   getMonitorParams,
-  getSubmittedSolutionId
+  getSubmittedSolutionId,
 } from '../../redux/selectors/submission';
 import { getProgressObserverId } from '../../redux/selectors/evaluationProgress';
 
@@ -34,7 +34,7 @@ class ResubmitReferenceSolutionContainer extends Component {
       isProcessing,
       monitor,
       refreshSolutionEvaluations,
-      isDebug = true
+      isDebug = true,
     } = this.props;
     return (
       <span>
@@ -61,14 +61,14 @@ ResubmitReferenceSolutionContainer.propTypes = {
   monitor: PropTypes.object,
   isProcessing: PropTypes.bool,
   progressObserverId: PropTypes.string,
-  refreshSolutionEvaluations: PropTypes.func
+  refreshSolutionEvaluations: PropTypes.func,
 };
 
 const mapStateToProps = state => ({
   isProcessing: isProcessing(state),
   monitor: getMonitorParams(state),
   newSolutionId: getSubmittedSolutionId(state),
-  progressObserverId: getProgressObserverId(state)
+  progressObserverId: getProgressObserverId(state),
 });
 
 const mapDispatchToProps = (dispatch, { id }) => ({
@@ -77,10 +77,11 @@ const mapDispatchToProps = (dispatch, { id }) => ({
   refreshSolutionEvaluations: () =>
     Promise.all([
       dispatch(fetchReferenceSolution(id)),
-      dispatch(fetchReferenceSolutionEvaluationsForSolution(id))
-    ])
+      dispatch(fetchReferenceSolutionEvaluationsForSolution(id)),
+    ]),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(
-  ResubmitReferenceSolutionContainer
-);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(ResubmitReferenceSolutionContainer);

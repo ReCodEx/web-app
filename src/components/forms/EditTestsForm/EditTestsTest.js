@@ -14,58 +14,61 @@ const EditTestsTest = ({ fields, isUniform, testValues, readOnly = false }) => {
 
   return (
     <div>
-      {fields.length > 0
-        ? <Table>
-            <thead>
-              <tr>
-                <th>
-                  <FormattedMessage
-                    id="app.editTestsTest.name"
-                    defaultMessage="Test name:"
-                  />
-                </th>
-                {!isUniform &&
-                  <th>
-                    <FormattedMessage
-                      id="app.editTestsTest.weight"
-                      defaultMessage="Test weight:"
-                    />
-                  </th>}
-                <th>
-                  <FormattedMessage
-                    id="app.editTestsTest.pointsPercentage"
-                    defaultMessage="Points Percentage:"
-                  />
-                </th>
-                {!readOnly && <th />}
-              </tr>
-            </thead>
-            <tbody>
-              {fields.map((test, index) =>
-                <EditTestsTestRow
-                  key={index}
-                  test={test}
-                  isUniform={isUniform}
-                  readOnly={readOnly}
-                  percent={
-                    testValues[index] && testValues[index].weight
-                      ? prettyPrintPercent(
-                          (isUniform ? 1 : Number(testValues[index].weight)) /
-                            weightSum
-                        )
-                      : '?'
-                  }
-                  onRemove={() => fields.remove(index)}
+      {fields.length > 0 ? (
+        <Table>
+          <thead>
+            <tr>
+              <th>
+                <FormattedMessage
+                  id="app.editTestsTest.name"
+                  defaultMessage="Test name:"
                 />
+              </th>
+              {!isUniform && (
+                <th>
+                  <FormattedMessage
+                    id="app.editTestsTest.weight"
+                    defaultMessage="Test weight:"
+                  />
+                </th>
               )}
-            </tbody>
-          </Table>
-        : <Alert bsStyle="warning">
-            <FormattedMessage
-              id="app.editTestsTest.noTests"
-              defaultMessage="There are no tests yet. It is highly recommended to set up the tests first since most of the remaining configurations depends on them."
-            />
-          </Alert>}
+              <th>
+                <FormattedMessage
+                  id="app.editTestsTest.pointsPercentage"
+                  defaultMessage="Points Percentage:"
+                />
+              </th>
+              {!readOnly && <th />}
+            </tr>
+          </thead>
+          <tbody>
+            {fields.map((test, index) => (
+              <EditTestsTestRow
+                key={index}
+                test={test}
+                isUniform={isUniform}
+                readOnly={readOnly}
+                percent={
+                  testValues[index] && testValues[index].weight
+                    ? prettyPrintPercent(
+                        (isUniform ? 1 : Number(testValues[index].weight)) /
+                          weightSum
+                      )
+                    : '?'
+                }
+                onRemove={() => fields.remove(index)}
+              />
+            ))}
+          </tbody>
+        </Table>
+      ) : (
+        <Alert bsStyle="warning">
+          <FormattedMessage
+            id="app.editTestsTest.noTests"
+            defaultMessage="There are no tests yet. It is highly recommended to set up the tests first since most of the remaining configurations depends on them."
+          />
+        </Alert>
+      )}
     </div>
   );
 };
@@ -74,9 +77,9 @@ EditTestsTest.propTypes = {
   readOnly: PropTypes.bool,
   fields: PropTypes.object.isRequired,
   isUniform: PropTypes.bool.isRequired,
-  testValues: PropTypes.array.isRequired
+  testValues: PropTypes.array.isRequired,
 };
 
 export default formValues({
-  testValues: 'tests'
+  testValues: 'tests',
 })(EditTestsTest);

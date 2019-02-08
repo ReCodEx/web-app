@@ -5,7 +5,7 @@ import { FormattedMessage, FormattedNumber } from 'react-intl';
 import Icon, {
   BonusIcon,
   VisibleIcon,
-  SuccessOrFailureIcon
+  SuccessOrFailureIcon,
 } from '../../../icons';
 import Box from '../../../widgets/Box';
 import DateTime from '../../../widgets/DateTime';
@@ -18,12 +18,11 @@ const ShadowAssignmentDetail = ({
   createdAt,
   updatedAt,
   version,
-  permissionHints
-}) =>
+  permissionHints,
+}) => (
   <Box
     title={<FormattedMessage id="generic.details" defaultMessage="Details" />}
-    noPadding
-  >
+    noPadding>
     <Table responsive condensed>
       <tbody>
         <tr>
@@ -34,7 +33,8 @@ const ShadowAssignmentDetail = ({
             <FormattedMessage
               id="app.shadowAssignment.maxPoints"
               defaultMessage="Points limit"
-            />:
+            />
+            :
           </th>
           <td>
             <FormattedNumber value={maxPoints} />
@@ -49,7 +49,8 @@ const ShadowAssignmentDetail = ({
             <FormattedMessage
               id="generic.createdAt"
               defaultMessage="Created at"
-            />:
+            />
+            :
           </th>
           <td>
             <DateTime unixts={createdAt} />
@@ -80,14 +81,15 @@ const ShadowAssignmentDetail = ({
             <FormattedMessage
               id="app.shadowAssignment.isBonus"
               defaultMessage="Is bonus"
-            />:
+            />
+            :
           </th>
           <td>
             <SuccessOrFailureIcon success={isBonus} />
           </td>
         </tr>
 
-        {permissionHints.update &&
+        {permissionHints.update && (
           <tr>
             <td className="text-center shrink-col em-padding-left em-padding-right">
               <VisibleIcon />
@@ -96,15 +98,18 @@ const ShadowAssignmentDetail = ({
               <FormattedMessage
                 id="app.shadowAssignment.isPublic"
                 defaultMessage="Is visible to students"
-              />:
+              />
+              :
             </th>
             <td>
               <SuccessOrFailureIcon success={isPublic} />
             </td>
-          </tr>}
+          </tr>
+        )}
       </tbody>
     </Table>
-  </Box>;
+  </Box>
+);
 
 ShadowAssignmentDetail.propTypes = {
   maxPoints: PropTypes.number.isRequired,
@@ -113,7 +118,7 @@ ShadowAssignmentDetail.propTypes = {
   createdAt: PropTypes.number.isRequired,
   updatedAt: PropTypes.number.isRequired,
   version: PropTypes.number.isRequired,
-  permissionHints: PropTypes.object
+  permissionHints: PropTypes.object,
 };
 
 export default ShadowAssignmentDetail;

@@ -9,7 +9,7 @@ import {
   isReady,
   isLoading,
   isDeleting,
-  isDeleted
+  isDeleted,
 } from '../../../redux/helpers/resourceManager';
 
 const DeleteButton = ({ resource, deleteResource, disabled, ...props }) => {
@@ -49,7 +49,7 @@ const DeleteButton = ({ resource, deleteResource, disabled, ...props }) => {
 DeleteButton.propTypes = {
   resource: ImmutablePropTypes.map,
   deleteResource: PropTypes.func.isRequired,
-  disabled: PropTypes.bool
+  disabled: PropTypes.bool,
 };
 
 export default DeleteButton;

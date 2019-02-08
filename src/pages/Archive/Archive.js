@@ -25,7 +25,10 @@ import { GroupIcon, SuccessOrFailureIcon } from '../../components/icons';
 
 // lowercase and remove accents and this kind of stuff
 const normalizeString = str =>
-  str.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  str
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '');
 
 const getVisibleArchiveGroupsMap = (
   groups,
@@ -78,7 +81,7 @@ class Archive extends Component {
   static loadAsync = (params, dispatch, { instanceId }) =>
     Promise.all([
       dispatch(fetchInstancesIfNeeded(instanceId)),
-      dispatch(fetchAllGroups({ archived: true }))
+      dispatch(fetchAllGroups({ archived: true })),
     ]);
 
   componentWillMount() {
@@ -89,7 +92,7 @@ class Archive extends Component {
     const {
       instanceId,
       loadAsync,
-      links: { GROUP_INFO_URI_FACTORY, GROUP_DETAIL_URI_FACTORY }
+      links: { GROUP_INFO_URI_FACTORY, GROUP_DETAIL_URI_FACTORY },
     } = this.props;
 
     return (
@@ -100,18 +103,13 @@ class Archive extends Component {
           onClick={ev => {
             ev.stopPropagation();
             this.setState({ rootGroup: isRoot ? null : groupId });
-          }}
-        >
+          }}>
           <SuccessOrFailureIcon success={!isRoot} gapRight />
-          {isRoot
-            ? <FormattedMessage
-                id="app.group.unsetRoot"
-                defaultMessage="Unset"
-              />
-            : <FormattedMessage
-                id="app.group.setRoot"
-                defaultMessage="Select"
-              />}
+          {isRoot ? (
+            <FormattedMessage id="app.group.unsetRoot" defaultMessage="Unset" />
+          ) : (
+            <FormattedMessage id="app.group.setRoot" defaultMessage="Select" />
+          )}
         </Button>
         <LinkContainer to={GROUP_INFO_URI_FACTORY(groupId)}>
           <Button bsStyle="primary" bsSize="xs">
@@ -139,7 +137,11 @@ class Archive extends Component {
   };
 
   render() {
-    const { instance, groups, intl: { locale } } = this.props;
+    const {
+      instance,
+      groups,
+      intl: { locale },
+    } = this.props;
 
     return (
       <Page
@@ -161,11 +163,10 @@ class Archive extends Component {
                 defaultMessage="Archive"
               />
             ),
-            iconName: 'archive'
-          }
-        ]}
-      >
-        {data =>
+            iconName: 'archive',
+          },
+        ]}>
+        {data => (
           <Box
             title={
               <FormattedMessage
@@ -173,25 +174,24 @@ class Archive extends Component {
                 defaultMessage="All Groups Including Archived"
               />
             }
-            unlimitedHeight
-          >
+            unlimitedHeight>
             <React.Fragment>
               <FilterArchiveGroupsForm
                 form="archive-filters"
                 initialValues={{
                   showAll: this.state.showAll,
-                  search: this.state.search
+                  search: this.state.search,
                 }}
                 onSubmit={data => {
                   this.setState({
                     showAll: Boolean(data.showAll),
-                    search: data.search || ''
+                    search: data.search || '',
                   });
                   return Promise.resolve();
                 }}
               />
 
-              {data.rootGroupId !== null &&
+              {data.rootGroupId !== null && (
                 <GroupTree
                   id={data.rootGroupId}
                   isAdmin={false}
@@ -206,9 +206,11 @@ class Archive extends Component {
                   buttonsCreator={this.buttonsCreator}
                   currentGroupId={this.state.rootGroup}
                   forceRootButtons={true}
-                />}
+                />
+              )}
             </React.Fragment>
-          </Box>}
+          </Box>
+        )}
       </Page>
     );
   }
@@ -221,7 +223,7 @@ Archive.propTypes = {
   instanceId: PropTypes.string.isRequired,
   instance: ImmutablePropTypes.map,
   groups: ImmutablePropTypes.map,
-  intl: intlShape
+  intl: intlShape,
 };
 
 export default withLinks(
@@ -230,12 +232,12 @@ export default withLinks(
       return {
         instanceId: selectedInstanceId(state),
         instance: selectedInstance(state),
-        groups: groupsSelector(state)
+        groups: groupsSelector(state),
       };
     },
     dispatch => ({
       loadAsync: instanceId => Archive.loadAsync({}, dispatch, { instanceId }),
-      push: url => dispatch(push(url))
+      push: url => dispatch(push(url)),
     })
   )(injectIntl(Archive))
 );

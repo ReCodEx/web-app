@@ -13,37 +13,39 @@ const CommentThread = ({
   repostComment,
   togglePrivacy,
   refresh,
-  deleteComment
-}) =>
+  deleteComment,
+}) => (
   <CommentBox
     commentsCount={comments.length}
     footer={
       addComment && <AddComment addComment={addComment} refresh={refresh} />
-    }
-  >
+    }>
     <div>
-      {comments.map(
-        (comment, i) =>
-          comment.user.id === currentUserId
-            ? <UsersComment
-                {...comment}
-                key={comment.id}
-                repost={repostComment}
-                togglePrivacy={togglePrivacy}
-                deleteComment={deleteComment}
-              />
-            : <SomebodyElsesComment {...comment} key={comment.id} />
+      {comments.map((comment, i) =>
+        comment.user.id === currentUserId ? (
+          <UsersComment
+            {...comment}
+            key={comment.id}
+            repost={repostComment}
+            togglePrivacy={togglePrivacy}
+            deleteComment={deleteComment}
+          />
+        ) : (
+          <SomebodyElsesComment {...comment} key={comment.id} />
+        )
       )}
 
-      {comments.length === 0 &&
+      {comments.length === 0 && (
         <p className="text-center">
           <FormattedMessage
             id="app.comments.noCommentsYet"
             defaultMessage="There are no comments in this thread yet."
           />
-        </p>}
+        </p>
+      )}
     </div>
-  </CommentBox>;
+  </CommentBox>
+);
 
 CommentThread.propTypes = {
   comments: PropTypes.array,
@@ -52,7 +54,7 @@ CommentThread.propTypes = {
   repostComment: PropTypes.func,
   togglePrivacy: PropTypes.func,
   refresh: PropTypes.func,
-  deleteComment: PropTypes.func
+  deleteComment: PropTypes.func,
 };
 
 export default CommentThread;

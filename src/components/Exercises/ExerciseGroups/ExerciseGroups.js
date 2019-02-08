@@ -27,11 +27,12 @@ class ExerciseGroups extends Component {
         onClick={ev => {
           ev.stopPropagation();
           attachExerciseToGroup(groupId);
-        }}
-      >
-        {groupId === attachingGroupId
-          ? <LoadingIcon gapRight />
-          : <Icon icon="paperclip" gapRight />}
+        }}>
+        {groupId === attachingGroupId ? (
+          <LoadingIcon gapRight />
+        ) : (
+          <Icon icon="paperclip" gapRight />
+        )}
         <FormattedMessage id="app.exercise.attach" defaultMessage="Attach" />
       </Button>
     );
@@ -50,11 +51,12 @@ class ExerciseGroups extends Component {
         onClick={ev => {
           ev.stopPropagation();
           detachExerciseFromGroup(groupId);
-        }}
-      >
-        {groupId === detachingGroupId
-          ? <LoadingIcon gapRight />
-          : <Icon icon="unlink" gapRight />}
+        }}>
+        {groupId === detachingGroupId ? (
+          <LoadingIcon gapRight />
+        ) : (
+          <Icon icon="unlink" gapRight />
+        )}
         <FormattedMessage id="app.exercise.detach" defaultMessage="Detach" />
       </Button>
     );
@@ -75,7 +77,7 @@ class ExerciseGroups extends Component {
       groupsIds = [],
       rootGroupId,
       groups,
-      showButtons = false
+      showButtons = false,
     } = this.props;
     return (
       <Box
@@ -86,24 +88,23 @@ class ExerciseGroups extends Component {
           />
         }
         footer={
-          showButtons
-            ? <div className="text-center">
-                <Button bsStyle="primary" onClick={this.openDialog}>
-                  <Icon icon="paperclip" gapRight />
-                  <FormattedMessage
-                    id="app.exercise.manageGroupAttachments"
-                    defaultMessage="Manage Group Attachments"
-                  />
-                </Button>
-              </div>
-            : null
+          showButtons ? (
+            <div className="text-center">
+              <Button bsStyle="primary" onClick={this.openDialog}>
+                <Icon icon="paperclip" gapRight />
+                <FormattedMessage
+                  id="app.exercise.manageGroupAttachments"
+                  defaultMessage="Manage Group Attachments"
+                />
+              </Button>
+            </div>
+          ) : null
         }
-        noPadding
-      >
+        noPadding>
         <React.Fragment>
           <Table hover>
             <tbody>
-              {groupsIds.map(groupId =>
+              {groupsIds.map(groupId => (
                 <tr key={groupId}>
                   <td className="shrink-col">
                     <GroupIcon className="text-muted" />
@@ -115,17 +116,16 @@ class ExerciseGroups extends Component {
                     {showButtons && this.detachButton(groupId)}
                   </td>
                 </tr>
-              )}
+              ))}
             </tbody>
           </Table>
 
-          {showButtons &&
+          {showButtons && (
             <Modal
               show={this.state.dialogOpen}
               backdrop="static"
               onHide={this.closeDialog}
-              bsSize="large"
-            >
+              bsSize="large">
               <Modal.Header closeButton>
                 <Modal.Title>
                   <FormattedMessage
@@ -144,7 +144,8 @@ class ExerciseGroups extends Component {
                   )}
                 />
               </Modal.Body>
-            </Modal>}
+            </Modal>
+          )}
         </React.Fragment>
       </Box>
     );
@@ -159,7 +160,7 @@ ExerciseGroups.propTypes = {
   attachExerciseToGroup: PropTypes.func.isRequired,
   detachExerciseFromGroup: PropTypes.func.isRequired,
   rootGroupId: PropTypes.string.isRequired,
-  groups: ImmutablePropTypes.map
+  groups: ImmutablePropTypes.map,
 };
 
 export default ExerciseGroups;

@@ -15,8 +15,8 @@ const LoginCASForm = ({
   handleSubmit,
   submitFailed: hasFailed,
   submitting,
-  hasSucceeded
-}) =>
+  hasSucceeded,
+}) => (
   <FormBox
     title={
       <FormattedMessage
@@ -31,39 +31,42 @@ const LoginCASForm = ({
           type="submit"
           bsStyle="success"
           onClick={handleSubmit}
-          disabled={invalid || submitting || hasSucceeded}
-        >
-          {!submitting
-            ? hasSucceeded
-              ? <span>
-                  <SuccessIcon gapRight />
-                  <FormattedMessage
-                    id="app.loginCASForm.success"
-                    defaultMessage="You are successfully signed in"
-                  />
-                </span>
-              : <FormattedMessage
-                  id="app.loginCASForm.login"
-                  defaultMessage="Sign in"
-                />
-            : <span>
-                <LoadingIcon gapRight />
+          disabled={invalid || submitting || hasSucceeded}>
+          {!submitting ? (
+            hasSucceeded ? (
+              <span>
+                <SuccessIcon gapRight />
                 <FormattedMessage
-                  id="app.loginCASForm.processing"
-                  defaultMessage="Signing in..."
+                  id="app.loginCASForm.success"
+                  defaultMessage="You are successfully signed in"
                 />
-              </span>}
+              </span>
+            ) : (
+              <FormattedMessage
+                id="app.loginCASForm.login"
+                defaultMessage="Sign in"
+              />
+            )
+          ) : (
+            <span>
+              <LoadingIcon gapRight />
+              <FormattedMessage
+                id="app.loginCASForm.processing"
+                defaultMessage="Signing in..."
+              />
+            </span>
+          )}
         </Button>
       </div>
-    }
-  >
-    {hasFailed &&
+    }>
+    {hasFailed && (
       <Alert bsStyle="danger">
         <FormattedMessage
           id="app.loginCASForm.failed"
           defaultMessage="Login failed. Please check your credentials."
         />
-      </Alert>}
+      </Alert>
+    )}
 
     <Field
       name="ukco"
@@ -88,7 +91,8 @@ const LoginCASForm = ({
         />
       }
     />
-  </FormBox>;
+  </FormBox>
+);
 
 LoginCASForm.propTypes = {
   onSubmit: PropTypes.func.isRequired,
@@ -96,7 +100,7 @@ LoginCASForm.propTypes = {
   submitFailed: PropTypes.bool,
   submitting: PropTypes.bool,
   hasSucceeded: PropTypes.bool,
-  invalid: PropTypes.bool
+  invalid: PropTypes.bool,
 };
 
 const validate = ({ ukco, password }) => {
@@ -124,5 +128,5 @@ const validate = ({ ukco, password }) => {
 
 export default reduxForm({
   form: 'login-cas',
-  validate
+  validate,
 })(LoginCASForm);

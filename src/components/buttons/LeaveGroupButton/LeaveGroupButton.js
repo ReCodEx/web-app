@@ -5,7 +5,7 @@ import Button from '../../widgets/FlatButton';
 import Icon from '../../icons';
 import Confirm from '../../forms/Confirm';
 
-const LeaveGroupButton = ({ onClick, ...props }) =>
+const LeaveGroupButton = ({ onClick, ...props }) => (
   <Confirm
     id={'confirm'}
     onConfirmed={onClick}
@@ -14,8 +14,7 @@ const LeaveGroupButton = ({ onClick, ...props }) =>
         id="app.leaveGroup.confirm"
         defaultMessage="Are you sure you want to leave this group?"
       />
-    }
-  >
+    }>
     <Button {...props} onClick={onClick} bsStyle="warning" className="btn-flat">
       <Icon icon="user-times" gapRight />
       <FormattedMessage
@@ -23,10 +22,11 @@ const LeaveGroupButton = ({ onClick, ...props }) =>
         defaultMessage="Leave group"
       />
     </Button>
-  </Confirm>;
+  </Confirm>
+);
 
 LeaveGroupButton.propTypes = {
-  onClick: PropTypes.func.isRequired
+  onClick: PropTypes.func.isRequired,
 };
 
 export default LeaveGroupButton;

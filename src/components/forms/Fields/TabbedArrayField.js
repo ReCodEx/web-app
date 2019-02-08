@@ -49,13 +49,12 @@ class TabbedArrayField extends Component {
 
     return (
       <div>
-        {fields.length > 0 &&
+        {fields.length > 0 && (
           <Tabs
             id={id}
             className="nav-tabs-custom"
             activeKey={this.state.activeTab}
-            onSelect={this.changeTab}
-          >
+            onSelect={this.changeTab}>
             {indices.map((fieldIdx, tabIdx) => {
               const prefix = `${fields.name}[${fieldIdx}]`;
               const fieldData = fields.get(fieldIdx);
@@ -66,22 +65,21 @@ class TabbedArrayField extends Component {
                   title={
                     <span>
                       {renderTitle(fieldData)}
-                      {removableTabs &&
+                      {removableTabs && (
                         <Confirm
                           id={`${id}-remove-${fieldIdx}`}
                           question={removeQuestion}
                           onConfirmed={() => {
                             fields.remove(fieldIdx);
                             this.changeTab(Math.min(tabIdx, fields.length - 2));
-                          }}
-                        >
+                          }}>
                           <CloseIcon gapLeft />
-                        </Confirm>}
+                        </Confirm>
+                      )}
                     </span>
                   }
                   mountOnEnter
-                  unmountOnExit
-                >
+                  unmountOnExit>
                   <ContentComponent
                     {...props}
                     prefix={prefix}
@@ -92,12 +90,10 @@ class TabbedArrayField extends Component {
                 </Tab>
               );
             })}
-          </Tabs>}
+          </Tabs>
+        )}
 
-        {fields.length === 0 &&
-          <Well>
-            {emptyMessage}
-          </Well>}
+        {fields.length === 0 && <Well>{emptyMessage}</Well>}
       </div>
     );
   }
@@ -112,7 +108,7 @@ TabbedArrayField.propTypes = {
   fields: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
   ContentComponent: PropTypes.any,
   emptyMessage: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
-  removeQuestion: PropTypes.oneOfType([PropTypes.string, PropTypes.element])
+  removeQuestion: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
 };
 
 export default TabbedArrayField;

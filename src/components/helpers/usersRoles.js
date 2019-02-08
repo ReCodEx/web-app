@@ -7,7 +7,7 @@ import {
   EmpoweredSupervisorIcon,
   SupervisorIcon,
   SupervisorStudentIcon,
-  UserIcon
+  UserIcon,
 } from '../icons';
 
 export const STUDENT_ROLE = 'student';
@@ -43,7 +43,7 @@ export const roleLabels = {
       id="app.roles.superadmin"
       defaultMessage="Main Administrator"
     />
-  )
+  ),
 };
 
 export const roleLabelsPlural = {
@@ -70,7 +70,7 @@ export const roleLabelsPlural = {
       id="app.roles.superadmins"
       defaultMessage="Main Administrators"
     />
-  )
+  ),
 };
 
 export const roleDescriptions = {
@@ -103,7 +103,7 @@ export const roleDescriptions = {
       id="app.roles.description.superadmin"
       defaultMessage="Omnipotent and omniscient user who can do anything in the instances to which he/she belongs to. Similar to root in linux or Q in Startrek."
     />
-  )
+  ),
 };
 
 export const knownRoles = Object.keys(roleLabels);
@@ -146,7 +146,7 @@ const roleIcon = ({ role, ...props }) => {
 };
 
 roleIcon.propTypes = {
-  role: PropTypes.string.isRequired
+  role: PropTypes.string.isRequired,
 };
 
 export const UserRoleIcon = ({
@@ -155,21 +155,18 @@ export const UserRoleIcon = ({
   tooltipId = null,
   ...props
 }) =>
-  showTooltip
-    ? <OverlayTrigger
-        placement="bottom"
-        overlay={
-          <Tooltip id={tooltipId}>
-            {roleLabels[role]}
-          </Tooltip>
-        }
-      >
-        {roleIcon({ role, ...props })}
-      </OverlayTrigger>
-    : roleIcon({ role, ...props });
+  showTooltip ? (
+    <OverlayTrigger
+      placement="bottom"
+      overlay={<Tooltip id={tooltipId}>{roleLabels[role]}</Tooltip>}>
+      {roleIcon({ role, ...props })}
+    </OverlayTrigger>
+  ) : (
+    roleIcon({ role, ...props })
+  );
 
 UserRoleIcon.propTypes = {
   role: PropTypes.string.isRequired,
   showTooltip: PropTypes.bool,
-  tooltipId: PropTypes.string
+  tooltipId: PropTypes.string,
 };

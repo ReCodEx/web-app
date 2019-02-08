@@ -9,7 +9,7 @@ import { FormGroup, ControlLabel, HelpBlock } from 'react-bootstrap';
 // load the ACE editor only when rendering in the browser
 import {
   loadAceEditor,
-  getAceModeFromExtension
+  getAceModeFromExtension,
 } from '../../helpers/AceEditorLoader';
 let AceEditor = loadAceEditor();
 
@@ -25,15 +25,11 @@ const SourceCodeField = (
     ...props
   },
   { userSettings: { vimMode = false, darkTheme = false } }
-) =>
+) => (
   <FormGroup
     controlId={input.name}
-    validationState={error ? 'error' : warning ? 'warning' : undefined}
-  >
-    {Boolean(label) &&
-      <ControlLabel>
-        {label}
-      </ControlLabel>}
+    validationState={error ? 'error' : warning ? 'warning' : undefined}>
+    {Boolean(label) && <ControlLabel>{label}</ControlLabel>}
     <ClientOnly>
       <AceEditor
         {...props}
@@ -47,48 +43,43 @@ const SourceCodeField = (
         height="100%"
         minLines={5}
         maxLines={20}
-        onBlur={() => input.onBlur() // this is a hack that will ensure blur call witout distorting the contents
+        onBlur={
+          () => input.onBlur() // this is a hack that will ensure blur call witout distorting the contents
         }
         editorProps={{
           $blockScrolling: Infinity,
-          $autoScrollEditorIntoView: true
+          $autoScrollEditorIntoView: true,
         }}
       />
     </ClientOnly>
-    {error &&
-      <HelpBlock>
-        {' '}{error}{' '}
-      </HelpBlock>}
-    {!error &&
-      warning &&
-      <HelpBlock>
-        {' '}{warning}{' '}
-      </HelpBlock>}
+    {error && <HelpBlock> {error} </HelpBlock>}
+    {!error && warning && <HelpBlock> {warning} </HelpBlock>}
     {children}
-  </FormGroup>;
+  </FormGroup>
+);
 
 SourceCodeField.propTypes = {
   input: PropTypes.shape({
-    name: PropTypes.string.isRequired
+    name: PropTypes.string.isRequired,
   }).isRequired,
   mode: PropTypes.string.isRequired,
   children: PropTypes.any,
   meta: PropTypes.shape({
     error: PropTypes.any,
     warning: PropTypes.any,
-    dirty: PropTypes.bool
+    dirty: PropTypes.bool,
   }),
   tabIndex: PropTypes.number,
   label: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.element,
-    PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) })
+    PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) }),
   ]),
-  onBlur: PropTypes.func
+  onBlur: PropTypes.func,
 };
 
 SourceCodeField.contextTypes = {
-  userSettings: PropTypes.object
+  userSettings: PropTypes.object,
 };
 
 export default SourceCodeField;

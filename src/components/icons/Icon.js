@@ -31,7 +31,7 @@ const Icon = ({
         [style.largeGapLeft]: largeGapLeft,
         [style.largeGapRight]: largeGapRight,
         [style.timid]: timid,
-        [style.clickable]: Boolean(onClick || onDoubleClick)
+        [style.clickable]: Boolean(onClick || onDoubleClick),
       })}
       onClick={onClick}
       onDoubleClick={onDoubleClick}
@@ -49,7 +49,7 @@ Icon.propTypes = {
   largeGapRight: PropTypes.bool,
   timid: PropTypes.bool,
   onClick: PropTypes.func,
-  onDoubleClick: PropTypes.func
+  onDoubleClick: PropTypes.func,
 };
 
 export default Icon;

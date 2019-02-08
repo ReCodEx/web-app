@@ -23,7 +23,7 @@ class ForkPipelineForm extends Component {
     const {
       forkedPipelineId: id,
       push,
-      links: { PIPELINE_URI_FACTORY }
+      links: { PIPELINE_URI_FACTORY },
     } = this.props;
 
     const url = PIPELINE_URI_FACTORY(id);
@@ -40,7 +40,7 @@ class ForkPipelineForm extends Component {
       submitSucceeded,
       invalid,
       exercises,
-      intl
+      intl,
     } = this.props;
 
     switch (forkStatus) {
@@ -50,8 +50,7 @@ class ForkPipelineForm extends Component {
             bsStyle="success"
             bsSize="sm"
             className="btn-flat"
-            onClick={() => this.viewForkedPipeline()}
-          >
+            onClick={() => this.viewForkedPipeline()}>
             <SuccessIcon gapRight />
             <FormattedMessage
               id="app.forkPipelineButton.success"
@@ -62,16 +61,17 @@ class ForkPipelineForm extends Component {
       default:
         return (
           <div>
-            {submitFailed &&
+            {submitFailed && (
               <Alert bsStyle="danger">
                 <FormattedMessage
                   id="generic.savingFailed"
                   defaultMessage="Saving failed. Please try again later."
                 />
-              </Alert>}
+              </Alert>
+            )}
             <Form inline className="formSpace">
               <ResourceRenderer resource={exercises.toArray()}>
-                {(...exercises) =>
+                {(...exercises) => (
                   <Field
                     name={'exerciseId'}
                     component={SelectField}
@@ -84,10 +84,11 @@ class ForkPipelineForm extends Component {
                         .filter((item, pos, arr) => arr.indexOf(item) === pos)
                         .map(exercise => ({
                           key: exercise.id,
-                          name: exercise.name
+                          name: exercise.name,
                         }))
                     )}
-                  />}
+                  />
+                )}
               </ResourceRenderer>
 
               <SubmitButton
@@ -117,7 +118,7 @@ class ForkPipelineForm extends Component {
                       id="app.forkPipelineForm.success"
                       defaultMessage="Pipeline forked"
                     />
-                  )
+                  ),
                 }}
               />
             </Form>
@@ -141,7 +142,7 @@ ForkPipelineForm.propTypes = {
   push: PropTypes.func.isRequired,
   links: PropTypes.object,
   exercises: ImmutablePropTypes.map,
-  intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired
+  intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired,
 };
 
 const mapStateToProps = (state, { pipelineId, forkId }) => {
@@ -149,21 +150,24 @@ const mapStateToProps = (state, { pipelineId, forkId }) => {
   return {
     forkStatus: fork ? fork.status : null,
     forkedPipelineId:
-      fork && fork.status === forkStatuses.FULFILLED ? fork.pipelineId : null
+      fork && fork.status === forkStatuses.FULFILLED ? fork.pipelineId : null,
   };
 };
 
 const mapDispatchToProps = (dispatch, { pipelineId, forkId }) => ({
-  push: url => dispatch(push(url))
+  push: url => dispatch(push(url)),
 });
 
 const validate = () => {};
 
 export default withLinks(
-  connect(mapStateToProps, mapDispatchToProps)(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(
     reduxForm({
       form: 'forkPipeline',
-      validate
+      validate,
     })(injectIntl(ForkPipelineForm))
   )
 );

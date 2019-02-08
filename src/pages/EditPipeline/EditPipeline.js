@@ -16,7 +16,7 @@ import DeletePipelineButtonContainer from '../../containers/DeletePipelineButton
 
 import {
   fetchPipelineIfNeeded,
-  editPipeline
+  editPipeline,
 } from '../../redux/modules/pipelines';
 import { getPipeline } from '../../redux/selectors/pipelines';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
@@ -25,7 +25,7 @@ import { getBoxTypes } from '../../redux/selectors/boxes';
 import withLinks from '../../helpers/withLinks';
 import {
   transformPipelineDataForApi,
-  extractVariables
+  extractVariables,
 } from '../../helpers/boxes';
 
 class EditPipeline extends Component {
@@ -48,7 +48,7 @@ class EditPipeline extends Component {
       boxTypes,
       editPipeline,
       push,
-      variables: extractedVariables
+      variables: extractedVariables,
     } = this.props;
 
     return (
@@ -70,7 +70,7 @@ class EditPipeline extends Component {
               />
             ),
             iconName: 'random',
-            link: PIPELINE_URI_FACTORY(pipelineId)
+            link: PIPELINE_URI_FACTORY(pipelineId),
           },
           {
             text: (
@@ -79,11 +79,10 @@ class EditPipeline extends Component {
                 defaultMessage="Edit pipeline"
               />
             ),
-            iconName: ['far', 'edit']
-          }
-        ]}
-      >
-        {({ pipeline: { boxes, variables }, ...data }) =>
+            iconName: ['far', 'edit'],
+          },
+        ]}>
+        {({ pipeline: { boxes, variables }, ...data }) => (
           <div>
             <Row>
               <Col lg={12}>
@@ -115,11 +114,11 @@ class EditPipeline extends Component {
                           variables: variables.reduce(
                             (acc, variable) => ({
                               ...acc,
-                              [btoa(variable.name)]: variable.value
+                              [btoa(variable.name)]: variable.value,
                             }),
                             {}
-                          )
-                        }
+                          ),
+                        },
                       }}
                       onSubmit={({ pipeline, ...formData }) =>
                         editPipeline(data.version, {
@@ -128,8 +127,9 @@ class EditPipeline extends Component {
                             pipeline,
                             extractedVariables
                           ),
-                          ...formData
-                        })}
+                          ...formData,
+                        })
+                      }
                       pipeline={data}
                     />
                   </Col>
@@ -153,8 +153,7 @@ class EditPipeline extends Component {
                       id="app.editPipeline.delete"
                       defaultMessage="Delete the pipeline"
                     />
-                  }
-                >
+                  }>
                   <div>
                     <p>
                       <FormattedMessage
@@ -172,7 +171,8 @@ class EditPipeline extends Component {
                 </Box>
               </Col>
             </Row>
-          </div>}
+          </div>
+        )}
       </Page>
     );
   }
@@ -184,12 +184,12 @@ EditPipeline.propTypes = {
   reset: PropTypes.func.isRequired,
   editPipeline: PropTypes.func.isRequired,
   params: PropTypes.shape({
-    pipelineId: PropTypes.string.isRequired
+    pipelineId: PropTypes.string.isRequired,
   }).isRequired,
   links: PropTypes.object.isRequired,
   boxTypes: PropTypes.array.isRequired,
   push: PropTypes.func.isRequired,
-  variables: PropTypes.array
+  variables: PropTypes.array,
 };
 
 export default withLinks(
@@ -201,7 +201,7 @@ export default withLinks(
         userId: loggedInUserIdSelector(state),
         variables: extractVariables(
           formValueSelector('editPipeline')(state, 'pipeline.boxes')
-        )
+        ),
       };
     },
     (dispatch, { params: { pipelineId } }) => ({
@@ -209,7 +209,7 @@ export default withLinks(
       reset: () => dispatch(reset('editPipeline')),
       loadAsync: () => EditPipeline.loadAsync({ pipelineId }, dispatch),
       editPipeline: (version, data) =>
-        dispatch(editPipeline(pipelineId, { ...data, version }))
+        dispatch(editPipeline(pipelineId, { ...data, version })),
     })
   )(EditPipeline)
 );

@@ -8,7 +8,7 @@ var { actions, reduceActions } = factory({ resourceName });
 
 export const additionalActionTypes = {
   RESOLVE: 'recodex/submissionFailures/RESOLVE',
-  RESOLVE_FULFILLED: 'recodex/submissionFailures/RESOLVE_FULFILLED'
+  RESOLVE_FULFILLED: 'recodex/submissionFailures/RESOLVE_FULFILLED',
 };
 
 /**
@@ -17,7 +17,7 @@ export const additionalActionTypes = {
 export const fetchManyEndpoint = '/submission-failures';
 
 export const fetchAllFailures = actions.fetchMany({
-  endpoint: fetchManyEndpoint
+  endpoint: fetchManyEndpoint,
 });
 
 export const resolveFailure = (id, data) =>
@@ -26,7 +26,7 @@ export const resolveFailure = (id, data) =>
     method: 'POST',
     endpoint: `/submission-failures/${id}/resolve`,
     body: { ...data },
-    meta: { id }
+    meta: { id },
   });
 
 /**
@@ -38,7 +38,7 @@ const reducer = handleActions(
     [additionalActionTypes.RESOLVE_FULFILLED]: (
       state,
       { meta: { id }, payload }
-    ) => state.setIn(['resources', id, 'data'], fromJS(payload))
+    ) => state.setIn(['resources', id, 'data'], fromJS(payload)),
   }),
   initialState
 );

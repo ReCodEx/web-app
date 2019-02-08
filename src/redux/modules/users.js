@@ -4,7 +4,7 @@ import { fromJS } from 'immutable';
 import factory, {
   initialState,
   createRecord,
-  resourceStatus
+  resourceStatus,
 } from '../helpers/resourceManager';
 import { createApiAction } from '../middleware/apiMiddleware';
 
@@ -35,7 +35,7 @@ export const additionalActionTypes = {
   SET_IS_ALLOWED: 'recodex/users/SET_IS_ALLOWED',
   SET_IS_ALLOWED_PENDING: 'recodex/users/SET_IS_ALLOWED_PENDING',
   SET_IS_ALLOWED_FULFILLED: 'recodex/users/SET_IS_ALLOWED_FULFILLED',
-  SET_IS_ALLOWED_REJECTED: 'recodex/users/SET_IS_ALLOWED_REJECTED'
+  SET_IS_ALLOWED_REJECTED: 'recodex/users/SET_IS_ALLOWED_REJECTED',
 };
 
 const resourceName = 'users';
@@ -57,7 +57,7 @@ export const validateRegistrationData = (email, password) =>
     type: additionalActionTypes.VALIDATE_REGISTRATION_DATA,
     endpoint: '/users/validate-registration-data',
     method: 'POST',
-    body: { email, password }
+    body: { email, password },
   });
 
 export const updateProfile = actions.updateResource;
@@ -67,12 +67,12 @@ export const deleteUser = actions.removeResource;
 
 export const fetchSupervisors = groupId =>
   actions.fetchMany({
-    endpoint: `/groups/${groupId}/supervisors`
+    endpoint: `/groups/${groupId}/supervisors`,
   });
 
 export const fetchStudents = groupId =>
   actions.fetchMany({
-    endpoint: `/groups/${groupId}/students`
+    endpoint: `/groups/${groupId}/students`,
   });
 
 export const makeLocalLogin = id =>
@@ -80,7 +80,7 @@ export const makeLocalLogin = id =>
     type: additionalActionTypes.CREATE_LOCAL_LOGIN,
     endpoint: `/users/${id}/create-local`,
     method: 'POST',
-    meta: { id }
+    meta: { id },
   });
 
 export const setRole = (id, role) =>
@@ -89,7 +89,7 @@ export const setRole = (id, role) =>
     endpoint: `/users/${id}/role`,
     method: 'POST',
     meta: { id, role },
-    body: { role }
+    body: { role },
   });
 
 export const setIsAllowed = (id, isAllowed = true) =>
@@ -98,7 +98,7 @@ export const setIsAllowed = (id, isAllowed = true) =>
     endpoint: `/users/${id}/allowed`,
     method: 'POST',
     meta: { id, isAllowed },
-    body: { isAllowed }
+    body: { isAllowed },
   });
 
 /**
@@ -121,10 +121,8 @@ const reducer = handleActions(
       { meta: { userId } }
     ) =>
       state.hasIn(['resources', userId])
-        ? state.updateIn(
-            ['resources', userId, 'data'],
-            userData =>
-              userData === null ? null : userData.set('isVerified', true)
+        ? state.updateIn(['resources', userId, 'data'], userData =>
+            userData === null ? null : userData.set('isVerified', true)
           )
         : state,
 
@@ -286,7 +284,7 @@ const reducer = handleActions(
                   data,
                   state: resourceStatus.FULFILLED,
                   didInvalidate: false,
-                  lastUpdate: Date.now()
+                  lastUpdate: Date.now(),
                 })
             )
           )
@@ -303,7 +301,7 @@ const reducer = handleActions(
               data,
               state: resourceStatus.FULFILLED,
               didInvalidate: false,
-              lastUpdate: Date.now()
+              lastUpdate: Date.now(),
             })
         )
       ),
@@ -316,7 +314,7 @@ const reducer = handleActions(
               data,
               state: resourceStatus.FULFILLED,
               didInvalidate: false,
-              lastUpdate: Date.now()
+              lastUpdate: Date.now(),
             })
           )
         : state,
@@ -340,10 +338,10 @@ const reducer = handleActions(
               data,
               state: resourceStatus.FULFILLED,
               didInvalidate: false,
-              lastUpdate: Date.now()
+              lastUpdate: Date.now(),
             })
           )
-        : state.setIn(['resources', id, 'data', 'isAllowed-pending'], false)
+        : state.setIn(['resources', id, 'data', 'isAllowed-pending'], false),
   }),
   initialState
 );

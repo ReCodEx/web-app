@@ -11,7 +11,7 @@ import { LinkContainer } from 'react-router-bootstrap';
 import Button from '../../components/widgets/FlatButton';
 import Page from '../../components/layout/Page';
 import EditAssignmentForm, {
-  prepareInitialValues as prepareEditFormInitialValues
+  prepareInitialValues as prepareEditFormInitialValues,
 } from '../../components/forms/EditAssignmentForm';
 import DeleteAssignmentButtonContainer from '../../containers/DeleteAssignmentButtonContainer';
 import Box from '../../components/widgets/Box';
@@ -25,7 +25,7 @@ import {
   fetchAssignment,
   editAssignment,
   syncWithExercise,
-  validateAssignment
+  validateAssignment,
 } from '../../redux/modules/assignments';
 import { getAssignment } from '../../redux/selectors/assignments';
 import { runtimeEnvironmentsSelector } from '../../redux/selectors/runtimeEnvironments';
@@ -56,7 +56,7 @@ class EditAssignment extends Component {
       dispatch(fetchAssignment(assignmentId)).then(({ value: assignment }) =>
         dispatch(fetchExerciseIfNeeded(assignment.exerciseId))
       ),
-      dispatch(fetchRuntimeEnvironments())
+      dispatch(fetchRuntimeEnvironments()),
     ]);
 
   editAssignmentSubmitHandler = formData => {
@@ -74,7 +74,7 @@ class EditAssignment extends Component {
                 id="app.editAssignment.validation.versionDiffers"
                 defaultMessage="Somebody has changed the assignment while you have been editing it. Please reload the page and apply your changes once more."
               />
-            )
+            ),
           });
         }
       })
@@ -87,7 +87,7 @@ class EditAssignment extends Component {
         ASSIGNMENT_DETAIL_URI_FACTORY,
         GROUP_DETAIL_URI_FACTORY,
         ASSIGNMENT_STATS_URI_FACTORY,
-        EXERCISE_URI_FACTORY
+        EXERCISE_URI_FACTORY,
       },
       params: { assignmentId },
       push,
@@ -98,7 +98,7 @@ class EditAssignment extends Component {
       allowSecondDeadline,
       exerciseSync,
       runtimeEnvironments,
-      visibility
+      visibility,
     } = this.props;
 
     return (
@@ -127,115 +127,120 @@ class EditAssignment extends Component {
                   defaultMessage="Exercise"
                 />
               ),
-              link: EXERCISE_URI_FACTORY(assignment && assignment.exerciseId)
-            })
+              link: EXERCISE_URI_FACTORY(assignment && assignment.exerciseId),
+            }),
           },
           {
             text: <FormattedMessage id="app.assignment.title" />,
             iconName: 'hourglass-start',
-            link: ASSIGNMENT_DETAIL_URI_FACTORY(assignmentId)
+            link: ASSIGNMENT_DETAIL_URI_FACTORY(assignmentId),
           },
           {
             text: <FormattedMessage id="app.editAssignment.title" />,
-            iconName: ['far', 'edit']
-          }
-        ]}
-      >
+            iconName: ['far', 'edit'],
+          },
+        ]}>
         {assignment =>
-          assignment &&
-          <React.Fragment>
-            <Row>
-              <Col xs={12}>
-                <HierarchyLineContainer groupId={assignment.groupId} />
-                {assignment.permissionHints.viewDetail &&
-                  <p>
-                    <LinkContainer
-                      to={ASSIGNMENT_STATS_URI_FACTORY(assignment.id)}
-                    >
-                      <Button bsStyle="primary">
-                        <ResultsIcon gapRight />
-                        <FormattedMessage
-                          id="app.assignment.viewResults"
-                          defaultMessage="Student Results"
+          assignment && (
+            <React.Fragment>
+              <Row>
+                <Col xs={12}>
+                  <HierarchyLineContainer groupId={assignment.groupId} />
+                  {assignment.permissionHints.viewDetail && (
+                    <p>
+                      <LinkContainer
+                        to={ASSIGNMENT_STATS_URI_FACTORY(assignment.id)}>
+                        <Button bsStyle="primary">
+                          <ResultsIcon gapRight />
+                          <FormattedMessage
+                            id="app.assignment.viewResults"
+                            defaultMessage="Student Results"
+                          />
+                        </Button>
+                      </LinkContainer>
+                      {assignment.permissionHints.resubmitSolutions && (
+                        <ResubmitAllSolutionsContainer
+                          assignmentId={assignment.id}
                         />
-                      </Button>
-                    </LinkContainer>
-                    {assignment.permissionHints.resubmitSolutions &&
-                      <ResubmitAllSolutionsContainer
-                        assignmentId={assignment.id}
-                      />}
-                  </p>}
-              </Col>
-            </Row>
-            {assignment.permissionHints.update &&
-              <AssignmentSync
-                syncInfo={assignment.exerciseSynchronizationInfo}
-                exerciseSync={exerciseSync}
-                isBroken={Boolean(exercise) && exercise.isBroken}
-              />}
-
-            <Box
-              title={
-                <FormattedMessage
-                  id="app.editAssignmentForm.title"
-                  defaultMessage="Edit Assignment — {name}"
-                  values={{
-                    name: <LocalizedExerciseName entity={assignment} />
-                  }}
+                      )}
+                    </p>
+                  )}
+                </Col>
+              </Row>
+              {assignment.permissionHints.update && (
+                <AssignmentSync
+                  syncInfo={assignment.exerciseSynchronizationInfo}
+                  exerciseSync={exerciseSync}
+                  isBroken={Boolean(exercise) && exercise.isBroken}
                 />
-              }
-              unlimitedHeight
-            >
-              <ResourceRenderer
-                resource={runtimeEnvironments.toArray()}
-                returnAsArray={true}
-              >
-                {envs =>
-                  <EditAssignmentForm
-                    form="editAssignment"
-                    userId={userId}
-                    editTexts
-                    initialValues={
-                      assignment ? prepareEditFormInitialValues(assignment) : {}
-                    }
-                    onSubmit={this.editAssignmentSubmitHandler}
-                    firstDeadline={firstDeadline}
-                    allowSecondDeadline={allowSecondDeadline}
-                    runtimeEnvironments={envs}
-                    visibility={visibility}
-                    assignmentIsPublic={assignment.isPublic}
-                  />}
-              </ResourceRenderer>
-            </Box>
+              )}
 
-            <br />
-            {assignment.permissionHints.remove &&
               <Box
-                type="danger"
                 title={
                   <FormattedMessage
-                    id="app.editAssignment.deleteAssignment"
-                    defaultMessage="Delete the assignment"
+                    id="app.editAssignmentForm.title"
+                    defaultMessage="Edit Assignment — {name}"
+                    values={{
+                      name: <LocalizedExerciseName entity={assignment} />,
+                    }}
                   />
                 }
-              >
-                <div>
-                  <p>
+                unlimitedHeight>
+                <ResourceRenderer
+                  resource={runtimeEnvironments.toArray()}
+                  returnAsArray={true}>
+                  {envs => (
+                    <EditAssignmentForm
+                      form="editAssignment"
+                      userId={userId}
+                      editTexts
+                      initialValues={
+                        assignment
+                          ? prepareEditFormInitialValues(assignment)
+                          : {}
+                      }
+                      onSubmit={this.editAssignmentSubmitHandler}
+                      firstDeadline={firstDeadline}
+                      allowSecondDeadline={allowSecondDeadline}
+                      runtimeEnvironments={envs}
+                      visibility={visibility}
+                      assignmentIsPublic={assignment.isPublic}
+                    />
+                  )}
+                </ResourceRenderer>
+              </Box>
+
+              <br />
+              {assignment.permissionHints.remove && (
+                <Box
+                  type="danger"
+                  title={
                     <FormattedMessage
-                      id="app.editAssignment.deleteAssignmentWarning"
-                      defaultMessage="Deleting an assignment will remove all the students submissions and you will have to contact the administrator of ReCodEx if you wanted to restore the assignment in the future."
+                      id="app.editAssignment.deleteAssignment"
+                      defaultMessage="Delete the assignment"
                     />
-                  </p>
-                  <p className="text-center">
-                    <DeleteAssignmentButtonContainer
-                      id={assignmentId}
-                      onDeleted={() =>
-                        push(GROUP_DETAIL_URI_FACTORY(this.groupId))}
-                    />
-                  </p>
-                </div>
-              </Box>}
-          </React.Fragment>}
+                  }>
+                  <div>
+                    <p>
+                      <FormattedMessage
+                        id="app.editAssignment.deleteAssignmentWarning"
+                        defaultMessage="Deleting an assignment will remove all the students submissions and you will have to contact the administrator of ReCodEx if you wanted to restore the assignment in the future."
+                      />
+                    </p>
+                    <p className="text-center">
+                      <DeleteAssignmentButtonContainer
+                        id={assignmentId}
+                        onDeleted={() =>
+                          push(GROUP_DETAIL_URI_FACTORY(this.groupId))
+                        }
+                      />
+                    </p>
+                  </div>
+                </Box>
+              )}
+            </React.Fragment>
+          )
+        }
       </Page>
     );
   }
@@ -246,7 +251,7 @@ EditAssignment.propTypes = {
   reset: PropTypes.func.isRequired,
   push: PropTypes.func.isRequired,
   params: PropTypes.shape({
-    assignmentId: PropTypes.string.isRequired
+    assignmentId: PropTypes.string.isRequired,
   }).isRequired,
   assignment: ImmutablePropTypes.map,
   userId: PropTypes.string.isRequired,
@@ -259,7 +264,7 @@ EditAssignment.propTypes = {
   allowVisibleFrom: PropTypes.bool,
   exerciseSync: PropTypes.func.isRequired,
   validateAssignment: PropTypes.func.isRequired,
-  links: PropTypes.object
+  links: PropTypes.object,
 };
 
 const editAssignmentFormSelector = formValueSelector('editAssignment');
@@ -278,7 +283,7 @@ export default connect(
         'allowSecondDeadline'
       ),
       visibility: editAssignmentFormSelector(state, 'visibility'),
-      allowVisibleFrom: editAssignmentFormSelector(state, 'allowVisibleFrom')
+      allowVisibleFrom: editAssignmentFormSelector(state, 'allowVisibleFrom'),
     };
   },
   (dispatch, { params: { assignmentId } }) => ({
@@ -288,6 +293,6 @@ export default connect(
     editAssignment: data => dispatch(editAssignment(assignmentId, data)),
     exerciseSync: () => dispatch(syncWithExercise(assignmentId)),
     validateAssignment: version =>
-      dispatch(validateAssignment(assignmentId, version))
+      dispatch(validateAssignment(assignmentId, version)),
   })
 )(withLinks(EditAssignment));

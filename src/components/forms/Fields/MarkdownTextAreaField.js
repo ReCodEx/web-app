@@ -17,7 +17,7 @@ class MarkdownTextAreaField extends Component {
   componentWillMount = () => {
     const { showPreview = false } = this.props;
     this.setState({
-      showPreview
+      showPreview,
     });
   };
 
@@ -30,7 +30,10 @@ class MarkdownTextAreaField extends Component {
   };
 
   render() {
-    const { input: { name, value }, disabled } = this.props;
+    const {
+      input: { name, value },
+      disabled,
+    } = this.props;
     const { showPreview } = this.state;
     return (
       <div>
@@ -40,8 +43,7 @@ class MarkdownTextAreaField extends Component {
             <OnOffCheckbox
               name={`${name}.togglePreview`}
               checked={showPreview}
-              onChange={() => this.toggleShowPreview()}
-            >
+              onChange={() => this.toggleShowPreview()}>
               <FormattedMessage
                 id="app.markdownTextArea.showPreview"
                 defaultMessage="Preview"
@@ -54,14 +56,14 @@ class MarkdownTextAreaField extends Component {
                 id="app.markdownTextArea.canUseMarkdown"
                 defaultMessage="You can use <a href='{markdownUrl}' target='_blank'>markdown syntax</a> in this field."
                 values={{
-                  markdownUrl: 'https://github.com/ReCodEx/wiki/wiki/Markdown'
+                  markdownUrl: 'https://github.com/ReCodEx/wiki/wiki/Markdown',
                 }}
               />
             </HelpBlock>
           </Col>
         </Row>
 
-        {showPreview &&
+        {showPreview && (
           <div>
             <h4>
               <FormattedMessage
@@ -70,7 +72,7 @@ class MarkdownTextAreaField extends Component {
               />
             </h4>
             <div className={styles.preview}>
-              {value.length === 0 &&
+              {value.length === 0 && (
                 <p>
                   <small>
                     (
@@ -80,10 +82,12 @@ class MarkdownTextAreaField extends Component {
                     />
                     )
                   </small>
-                </p>}
+                </p>
+              )}
               <Markdown source={value} />
             </div>
-          </div>}
+          </div>
+        )}
       </div>
     );
   }
@@ -93,8 +97,8 @@ MarkdownTextAreaField.propTypes = {
   showPreview: PropTypes.string,
   input: PropTypes.shape({
     name: PropTypes.string.isRequired,
-    value: PropTypes.string.isRequired
-  }).isRequired
+    value: PropTypes.string.isRequired,
+  }).isRequired,
 };
 
 export default MarkdownTextAreaField;

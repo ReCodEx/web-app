@@ -23,8 +23,8 @@ const EditShadowAssignmentForm = ({
   asyncValidating,
   invalid,
   error,
-  beingPublished
-}) =>
+  beingPublished,
+}) => (
   <div>
     <FormBox
       title={
@@ -32,7 +32,7 @@ const EditShadowAssignmentForm = ({
           id="app.editShadowAssignment.titleName"
           defaultMessage="Edit Shadow Assignment — {name}"
           values={{
-            name: <LocalizedExerciseName entity={shadowAssignment} />
+            name: <LocalizedExerciseName entity={shadowAssignment} />,
           }}
         />
       }
@@ -62,19 +62,19 @@ const EditShadowAssignmentForm = ({
               ),
               success: (
                 <FormattedMessage id="generic.saved" defaultMessage="Saved" />
-              )
+              ),
             }}
           />
         </div>
-      }
-    >
-      {submitFailed &&
+      }>
+      {submitFailed && (
         <Alert bsStyle="danger">
           <FormattedMessage
             id="generic.savingFailed"
             defaultMessage="Saving failed. Please try again later."
           />
-        </Alert>}
+        </Alert>
+      )}
 
       <FieldArray
         name="localizedTexts"
@@ -125,7 +125,7 @@ const EditShadowAssignmentForm = ({
               }
             />
           </Col>
-          {beingPublished &&
+          {beingPublished && (
             <Col sm={6}>
               <Field
                 name="sendNotification"
@@ -138,16 +138,15 @@ const EditShadowAssignmentForm = ({
                   />
                 }
               />
-            </Col>}
+            </Col>
+          )}
         </Row>
       </Grid>
 
-      {error &&
-        <Alert bsStyle="danger">
-          {error}
-        </Alert>}
+      {error && <Alert bsStyle="danger">{error}</Alert>}
     </FormBox>
-  </div>;
+  </div>
+);
 
 EditShadowAssignmentForm.propTypes = {
   initialValues: PropTypes.object.isRequired,
@@ -163,7 +162,7 @@ EditShadowAssignmentForm.propTypes = {
   invalid: PropTypes.bool,
   localizedTextsLocales: PropTypes.array,
   beingPublished: PropTypes.bool,
-  error: PropTypes.object
+  error: PropTypes.object,
 };
 
 const validate = ({ localizedTexts }) => {
@@ -190,6 +189,6 @@ export default injectIntl(
     form: 'editShadowAssignment',
     validate,
     enableReinitialize: true,
-    keepDirtyOnReinitialize: false
+    keepDirtyOnReinitialize: false,
   })(EditShadowAssignmentForm)
 );

@@ -14,16 +14,17 @@ const EditShadowAssignmentPointsForm = ({
   submitFailed = false,
   submitSucceeded = false,
   invalid,
-  warning
-}) =>
+  warning,
+}) => (
   <Form method="POST">
-    {submitFailed &&
+    {submitFailed && (
       <Alert bsStyle="danger">
         <FormattedMessage
           id="app.editShadowAssignmentPointsForm.failed"
           defaultMessage="Cannot save the shadow assignment points."
         />
-      </Alert>}
+      </Alert>
+    )}
 
     <Grid fluid>
       <Row>
@@ -73,10 +74,7 @@ const EditShadowAssignmentPointsForm = ({
 
     <hr />
 
-    {warning &&
-      <Alert bsStyle="warning">
-        {warning}
-      </Alert>}
+    {warning && <Alert bsStyle="warning">{warning}</Alert>}
 
     <div className="text-center">
       <SubmitButton
@@ -94,11 +92,12 @@ const EditShadowAssignmentPointsForm = ({
           ),
           success: (
             <FormattedMessage id="generic.saved" defaultMessage="Saved" />
-          )
+          ),
         }}
       />
     </div>
-  </Form>;
+  </Form>
+);
 
 EditShadowAssignmentPointsForm.propTypes = {
   maxPoints: PropTypes.number.isRequired,
@@ -108,7 +107,7 @@ EditShadowAssignmentPointsForm.propTypes = {
   submitSucceeded: PropTypes.bool,
   submitting: PropTypes.bool,
   invalid: PropTypes.bool,
-  warning: PropTypes.any
+  warning: PropTypes.any,
 };
 
 const warn = ({ points }, { maxPoints }) => {
@@ -133,5 +132,5 @@ export default reduxForm({
   form: 'shadow-assignment-points',
   enableReinitialize: true,
   keepDirtyOnReinitialize: false,
-  warn
+  warn,
 })(EditShadowAssignmentPointsForm);

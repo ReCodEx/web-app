@@ -13,12 +13,12 @@ class ExternalLinkPreview extends Component {
     pending: false,
     error: null,
     text: null,
-    isMarkdown: false
+    isMarkdown: false,
   };
 
   toggleIsMarkdown = () => {
     this.setState({
-      isMarkdown: !this.state.isMarkdown
+      isMarkdown: !this.state.isMarkdown,
     });
   };
 
@@ -34,7 +34,7 @@ class ExternalLinkPreview extends Component {
       url,
       pending: true,
       error: null,
-      text: null
+      text: null,
     });
 
     fetch(url, { mode: 'cors' })
@@ -52,7 +52,7 @@ class ExternalLinkPreview extends Component {
                 id="app.externalLinkPreview.httpFailed"
                 defaultMessage="Unable to download the refered content. The link may be invalid."
               />
-            )
+            ),
           });
           return;
         }
@@ -68,7 +68,7 @@ class ExternalLinkPreview extends Component {
                 defaultMessage="Only plain text and Markdown contents can be previewed here. The link refers to a '{contentType}' content."
                 values={{ contentType }}
               />
-            )
+            ),
           });
           return;
         }
@@ -88,7 +88,7 @@ class ExternalLinkPreview extends Component {
                   id="app.externalLinkPreview.readingTextFailed"
                   defaultMessage="Internal error occured. We are stating this in passive voice to avoid any responsibility."
                 />
-              )
+              ),
             })
           );
       })
@@ -101,7 +101,7 @@ class ExternalLinkPreview extends Component {
                 id="app.externalLinkPreview.fetchFailed"
                 defaultMessage="The download has failed. Either the network has malfunctioned or CSP prevented us from reaching the content."
               />
-            )
+            ),
           });
         }
       });
@@ -115,57 +115,59 @@ class ExternalLinkPreview extends Component {
 
   render() {
     const { url, pending, error, text, isMarkdown } = this.state;
-    return url !== null
-      ? <div>
-          {text &&
-            <OnOffCheckbox
-              checked={isMarkdown}
-              onChange={this.toggleIsMarkdown}
-              className="pull-right"
-            >
-              <FormattedMessage
-                id="app.externalLinkPreview.showAsMarkdown"
-                defaultMessage="Show as markdown"
-              />
-            </OnOffCheckbox>}
+    return url !== null ? (
+      <div>
+        {text && (
+          <OnOffCheckbox
+            checked={isMarkdown}
+            onChange={this.toggleIsMarkdown}
+            className="pull-right">
+            <FormattedMessage
+              id="app.externalLinkPreview.showAsMarkdown"
+              defaultMessage="Show as markdown"
+            />
+          </OnOffCheckbox>
+        )}
 
-          {(!text || !isMarkdown) &&
-            <h3>
-              <FormattedMessage
-                id="app.externalLinkPreview.title"
-                defaultMessage="Preview"
-              />
-            </h3>}
+        {(!text || !isMarkdown) && (
+          <h3>
+            <FormattedMessage
+              id="app.externalLinkPreview.title"
+              defaultMessage="Preview"
+            />
+          </h3>
+        )}
 
-          {pending &&
-            <Well>
-              <LoadingIcon gapRight />
-              <FormattedMessage
-                id="generic.loading"
-                defaultMessage="Loading..."
-              />
-            </Well>}
+        {pending && (
+          <Well>
+            <LoadingIcon gapRight />
+            <FormattedMessage
+              id="generic.loading"
+              defaultMessage="Loading..."
+            />
+          </Well>
+        )}
 
-          {error &&
-            <Alert bsStyle="warning">
-              {error}
-            </Alert>}
+        {error && <Alert bsStyle="warning">{error}</Alert>}
 
-          {text &&
-            <div>
-              {isMarkdown
-                ? <Markdown source={text} />
-                : <pre style={{ marginTop: '20px' }}>
-                    {text}
-                  </pre>}
-            </div>}
-        </div>
-      : <div />;
+        {text && (
+          <div>
+            {isMarkdown ? (
+              <Markdown source={text} />
+            ) : (
+              <pre style={{ marginTop: '20px' }}>{text}</pre>
+            )}
+          </div>
+        )}
+      </div>
+    ) : (
+      <div />
+    );
   }
 }
 
 ExternalLinkPreview.propTypes = {
-  url: PropTypes.string.isRequired
+  url: PropTypes.string.isRequired,
 };
 
 export default ExternalLinkPreview;

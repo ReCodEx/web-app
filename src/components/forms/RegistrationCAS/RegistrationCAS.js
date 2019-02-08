@@ -21,7 +21,7 @@ class RegistrationCAS extends Component {
       instanceId: this.state.instanceId || safeGet(instances, [0, 'id']),
       serviceId: 'cas-uk',
       clientUrl,
-      ticket
+      ticket,
     });
   };
 
@@ -47,16 +47,16 @@ class RegistrationCAS extends Component {
               onFailed={this.failedHandler}
             />
           </div>
-        }
-      >
+        }>
         <div>
-          {this.state.failed &&
+          {this.state.failed && (
             <Alert bsStyle="danger">
               <FormattedMessage
                 id="app.externalRegistrationForm.failed"
                 defaultMessage="Registration failed. Please check your information."
               />
-            </Alert>}
+            </Alert>
+          )}
 
           <Well>
             <FormattedMessage
@@ -75,13 +75,12 @@ class RegistrationCAS extends Component {
           <FormControl
             componentClass="select"
             bsClass="form-control full-width"
-            onChange={this.changeInstance}
-          >
-            {instances.map(({ id, name }) =>
+            onChange={this.changeInstance}>
+            {instances.map(({ id, name }) => (
               <option key={id} value={id}>
                 {name}
               </option>
-            )}
+            ))}
           </FormControl>
         </div>
       </Box>
@@ -91,7 +90,7 @@ class RegistrationCAS extends Component {
 
 RegistrationCAS.propTypes = {
   instances: PropTypes.array.isRequired,
-  onSubmit: PropTypes.func.isRequired
+  onSubmit: PropTypes.func.isRequired,
 };
 
 export default RegistrationCAS;

@@ -20,8 +20,8 @@ const EditHardwareGroupForm = ({
   invalid,
   reset,
   hardwareGroups,
-  addEmptyOption = true
-}) =>
+  addEmptyOption = true,
+}) => (
   <FormBox
     title={
       <FormattedMessage
@@ -32,20 +32,18 @@ const EditHardwareGroupForm = ({
     type={submitSucceeded ? 'success' : undefined}
     footer={
       <div className="text-center">
-        {dirty &&
-          !submitting &&
-          !submitSucceeded &&
+        {dirty && !submitting && !submitSucceeded && (
           <span>
             <Button
               type="reset"
               onClick={reset}
               bsStyle={'danger'}
-              className="btn-flat"
-            >
+              className="btn-flat">
               <RefreshIcon gapRight />
               <FormattedMessage id="generic.reset" defaultMessage="Reset" />
             </Button>
-          </span>}
+          </span>
+        )}
         <SubmitButton
           id="edit-hardware-groups"
           handleSubmit={handleSubmit}
@@ -66,12 +64,11 @@ const EditHardwareGroupForm = ({
             ),
             success: (
               <FormattedMessage id="generic.saved" defaultMessage="Saved" />
-            )
+            ),
           }}
         />
       </div>
-    }
-  >
+    }>
     <p className="text-muted text-justify small">
       <InfoIcon gapRight />
       <FormattedMessage
@@ -80,20 +77,22 @@ const EditHardwareGroupForm = ({
       />
     </p>
 
-    {submitFailed &&
+    {submitFailed && (
       <Alert bsStyle="danger">
         <FormattedMessage
           id="app.editHardwareGroupForm.failed"
           defaultMessage="Cannot change the hardware group of the exercise."
         />
-      </Alert>}
+      </Alert>
+    )}
 
     <Field
       name="hardwareGroup"
       component={SelectField}
-      options={hardwareGroups
-        .map(hwg => ({ key: hwg.id, name: hwg.name }))
-        .sort((a, b) => a.key.localeCompare(b.key)) // intentionally no locale (key is our identifier)
+      options={
+        hardwareGroups
+          .map(hwg => ({ key: hwg.id, name: hwg.name }))
+          .sort((a, b) => a.key.localeCompare(b.key)) // intentionally no locale (key is our identifier)
       }
       addEmptyOption={addEmptyOption}
       label={
@@ -103,7 +102,8 @@ const EditHardwareGroupForm = ({
         />
       }
     />
-  </FormBox>;
+  </FormBox>
+);
 
 EditHardwareGroupForm.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
@@ -116,7 +116,7 @@ EditHardwareGroupForm.propTypes = {
   reset: PropTypes.func.isRequired,
   hardwareGroups: PropTypes.array.isRequired,
   addEmptyOption: PropTypes.bool,
-  warnDropLimits: PropTypes.func.isRequired
+  warnDropLimits: PropTypes.func.isRequired,
 };
 
 const validate = ({ hardwareGroup }) => {
@@ -151,5 +151,5 @@ export default reduxForm({
   enableReinitialize: true,
   keepDirtyOnReinitialize: false,
   validate,
-  warn
+  warn,
 })(EditHardwareGroupForm);

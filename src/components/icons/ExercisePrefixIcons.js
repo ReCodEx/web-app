@@ -4,9 +4,9 @@ import { FormattedMessage } from 'react-intl';
 import Icon from './Icon';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 
-const ExercisePrefixIcons = ({ id, isLocked, isBroken, ...props }) =>
+const ExercisePrefixIcons = ({ id, isLocked, isBroken, ...props }) => (
   <span>
-    {isLocked &&
+    {isLocked && (
       <span>
         <OverlayTrigger
           placement="right"
@@ -17,13 +17,13 @@ const ExercisePrefixIcons = ({ id, isLocked, isBroken, ...props }) =>
                 defaultMessage="Exercise is locked by the author and cannot be assigned."
               />
             </Tooltip>
-          }
-        >
+          }>
           <Icon {...props} icon="lock" className="text-warning" />
         </OverlayTrigger>
         &nbsp;&nbsp;
-      </span>}
-    {isBroken &&
+      </span>
+    )}
+    {isBroken && (
       <span>
         <OverlayTrigger
           placement="right"
@@ -34,18 +34,19 @@ const ExercisePrefixIcons = ({ id, isLocked, isBroken, ...props }) =>
                 defaultMessage="Exercise configuration is incorrect and needs fixing"
               />
             </Tooltip>
-          }
-        >
+          }>
           <Icon {...props} icon="medkit" className="text-danger" />
         </OverlayTrigger>
         &nbsp;&nbsp;
-      </span>}
-  </span>;
+      </span>
+    )}
+  </span>
+);
 
 ExercisePrefixIcons.propTypes = {
   id: PropTypes.any.isRequired,
   isLocked: PropTypes.bool.isRequired,
-  isBroken: PropTypes.bool.isRequired
+  isBroken: PropTypes.bool.isRequired,
 };
 
 export default ExercisePrefixIcons;

@@ -98,28 +98,28 @@ export const WarningIcon = props => (
 
 GroupIcon.propTypes = {
   organizational: PropTypes.bool,
-  archived: PropTypes.bool
+  archived: PropTypes.bool,
 };
 
 ArchiveGroupIcon.propTypes = {
-  archived: PropTypes.bool
+  archived: PropTypes.bool,
 };
 
 SortedIcon.propTypes = {
   active: PropTypes.bool,
-  descending: PropTypes.bool
+  descending: PropTypes.bool,
 };
 
 SuccessOrFailureIcon.propTypes = {
-  success: PropTypes.bool
+  success: PropTypes.bool,
 };
 
 export { default as ExercisePrefixIcons } from './ExercisePrefixIcons';
 export {
-  default as MaybeBonusAssignmentIcon
+  default as MaybeBonusAssignmentIcon,
 } from './MaybeBonusAssignmentIcon';
 export {
-  default as MaybeVisibleAssignmentIcon
+  default as MaybeVisibleAssignmentIcon,
 } from './MaybeVisibleAssignmentIcon';
 
 export default Icon;

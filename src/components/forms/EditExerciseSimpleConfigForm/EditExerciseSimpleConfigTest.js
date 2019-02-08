@@ -6,7 +6,7 @@ import {
   FormattedMessage,
   injectIntl,
   defineMessages,
-  intlShape
+  intlShape,
 } from 'react-intl';
 
 import EnvironmentsListItem from '../../helpers/EnvironmentsList/EnvironmentsListItem';
@@ -19,7 +19,7 @@ import {
   ExpandingTextField,
   ExpandingInputFilesField,
   ExpandingSelectField,
-  CheckboxField
+  CheckboxField,
 } from '../Fields';
 import Confirm from '../../forms/Confirm';
 
@@ -28,65 +28,71 @@ import './EditExerciseSimpleConfigForm.css';
 const messages = defineMessages({
   normal: {
     id: 'recodex-judge-normal',
-    defaultMessage: 'Token judge'
+    defaultMessage: 'Token judge',
   },
   float: {
     id: 'recodex-judge-float',
-    defaultMessage: 'Float-numbers judge'
+    defaultMessage: 'Float-numbers judge',
   },
   normalNewline: {
     id: 'recodex-judge-normal-newline',
-    defaultMessage: 'Token judge (ignoring ends of lines)'
+    defaultMessage: 'Token judge (ignoring ends of lines)',
   },
   floatNewline: {
     id: 'recodex-judge-float-newline',
-    defaultMessage: 'Float-numbers judge (ignoring ends of lines)'
+    defaultMessage: 'Float-numbers judge (ignoring ends of lines)',
   },
   shuffle: {
     id: 'recodex-judge-shuffle',
-    defaultMessage: 'Unordered-tokens judge'
+    defaultMessage: 'Unordered-tokens judge',
   },
   shuffleRows: {
     id: 'recodex-judge-shuffle-rows',
-    defaultMessage: 'Unordered-rows judge'
+    defaultMessage: 'Unordered-rows judge',
   },
   shuffleAll: {
     id: 'recodex-judge-shuffle-all',
-    defaultMessage: 'Unordered-tokens-and-rows judge'
+    defaultMessage: 'Unordered-tokens-and-rows judge',
   },
   shuffleNewline: {
     id: 'recodex-judge-shuffle-newline',
-    defaultMessage: 'Unordered-tokens judge (ignoring ends of lines)'
+    defaultMessage: 'Unordered-tokens judge (ignoring ends of lines)',
   },
   diff: {
     id: 'diff',
-    defaultMessage: 'Binary-safe judge'
-  }
+    defaultMessage: 'Binary-safe judge',
+  },
 });
 
 const validateExpectedOutput = value =>
-  !value || value.trim() === ''
-    ? <FormattedMessage
-        id="app.editExerciseSimpleConfigForm.validation.expectedOutput"
-        defaultMessage="Please, fill in the expected output file."
-      />
-    : undefined;
+  !value || value.trim() === '' ? (
+    <FormattedMessage
+      id="app.editExerciseSimpleConfigForm.validation.expectedOutput"
+      defaultMessage="Please, fill in the expected output file."
+    />
+  ) : (
+    undefined
+  );
 
 const validateOutputFile = value =>
-  !value || value.trim() === ''
-    ? <FormattedMessage
-        id="app.editExerciseSimpleConfigForm.validation.outputFile"
-        defaultMessage="Please, fill in the name of the output file."
-      />
-    : undefined;
+  !value || value.trim() === '' ? (
+    <FormattedMessage
+      id="app.editExerciseSimpleConfigForm.validation.outputFile"
+      defaultMessage="Please, fill in the name of the output file."
+    />
+  ) : (
+    undefined
+  );
 
 const validateCustomJudge = value =>
-  !value || value.trim() === ''
-    ? <FormattedMessage
-        id="app.editExerciseSimpleConfigForm.validation.customJudge"
-        defaultMessage="Please, select the custom judge binary for this test or use one of the standard judges instead."
-      />
-    : undefined;
+  !value || value.trim() === '' ? (
+    <FormattedMessage
+      id="app.editExerciseSimpleConfigForm.validation.customJudge"
+      defaultMessage="Please, select the custom judge binary for this test or use one of the standard judges instead."
+    />
+  ) : (
+    undefined
+  );
 
 class EditExerciseSimpleConfigTest extends Component {
   constructor(props) {
@@ -115,7 +121,7 @@ class EditExerciseSimpleConfigTest extends Component {
       .filter(({ file, name }) => file && name)
       .map(({ name }) => ({
         key: name,
-        name
+        name,
       }))
       .sort((a, b) => a.name.localeCompare(b.name, intl.locale));
   };
@@ -149,196 +155,193 @@ class EditExerciseSimpleConfigTest extends Component {
       testErrors,
       smartFill,
       change,
-      intl
+      intl,
     } = this.props;
     const supplementaryFilesOptions = supplementaryFiles
       .sort((a, b) => a.name.localeCompare(b.name, intl.locale))
       .filter((item, pos, arr) => arr.indexOf(item) === pos) // WTF?
       .map(data => ({
         key: data.name,
-        name: data.name
+        name: data.name,
       }));
     return (
       <div className="configRow">
         <Row>
           <Col sm={12}>
-            <h3>
-              {testName}
-            </h3>
+            <h3>{testName}</h3>
           </Col>
         </Row>
         {this.state.compilationOpen === true ||
-        (this.state.compilationOpen === null && this.hasCompilationExtraFiles())
-          ? <Well>
-              <h4 className="compilation-close" onClick={this.compilationClose}>
-                <Icon icon={['far', 'minus-square']} gapRight />
-                <FormattedMessage
-                  id="app.editExerciseSimpleConfigTests.compilationTitle"
-                  defaultMessage="Compilation/Execution"
-                />
-              </h4>
-              <p className="text-muted small">
-                <FormattedMessage
-                  id="app.editExerciseSimpleConfigTests.compilationInfo"
-                  defaultMessage="Additional files that are added to compilation (in case of compiled environments) or execution (in case of interpreted environments)."
-                />
-              </p>
-              <div className="compilation">
-                <table>
-                  <tbody>
-                    <tr>
-                      {exercise.runtimeEnvironments
-                        .sort((a, b) =>
-                          a.name.localeCompare(b.name, intl.locale)
-                        )
-                        .map(env => {
-                          const possibleEntryPoints = this.getPossibleEntryPoints(
-                            env.id
-                          );
-                          return (
-                            <td key={env.id}>
-                              {exercise.runtimeEnvironments.length > 1 &&
-                                <h4>
-                                  <EnvironmentsListItem
-                                    runtimeEnvironment={env}
-                                    longNames
-                                  />
-                                </h4>}
-
-                              <Grid fluid>
-                                <Row>
-                                  {env.id === 'java' &&
-                                    /*
-                                     * A special case for Java only !!!
-                                     */
-                                    <Col
-                                      lg={
-                                        exercise.runtimeEnvironments.length ===
-                                        1
-                                          ? 6
-                                          : 12
-                                      }
-                                    >
-                                      <FieldArray
-                                        name={`${test}.jar-files.${env.id}`}
-                                        component={ExpandingSelectField}
-                                        options={supplementaryFilesOptions}
-                                        label={
-                                          <FormattedMessage
-                                            id="app.editExerciseSimpleConfigTests.jarFiles"
-                                            defaultMessage="Additional JAR file:"
-                                          />
-                                        }
-                                        noItems={
-                                          <FormattedMessage
-                                            id="app.editExerciseSimpleConfigTests.noJarFiles"
-                                            defaultMessage="There are no additional JAR files yet..."
-                                          />
-                                        }
-                                      />
-                                      {exercise.runtimeEnvironments.length !==
-                                        1 && <hr />}
-                                    </Col>
-                                  /*
-                                   * End of special case.
-                                   */
-                                  }
-
-                                  <Col
-                                    lg={
-                                      exercise.runtimeEnvironments.length ===
-                                        1 && env.id === 'java'
-                                        ? 6
-                                        : 12
-                                    }
-                                  >
-                                    <FieldArray
-                                      name={`${test}.extra-files.${env.id}`}
-                                      component={ExpandingInputFilesField}
-                                      options={supplementaryFilesOptions}
-                                      change={change}
-                                      leftLabel={
-                                        <FormattedMessage
-                                          id="app.editExerciseSimpleConfigTests.extraFilesActual"
-                                          defaultMessage="Extra file:"
-                                        />
-                                      }
-                                      rightLabel={
-                                        <FormattedMessage
-                                          id="app.editExerciseSimpleConfigTests.extraFilesRename"
-                                          defaultMessage="Rename as:"
-                                        />
-                                      }
-                                      noItems={
-                                        <FormattedMessage
-                                          id="app.editExerciseSimpleConfigTests.noExtraFiles"
-                                          defaultMessage="There are no extra files yet..."
-                                        />
-                                      }
-                                    />
-                                    <br />
-                                    {possibleEntryPoints.length > 0 &&
-                                      <Field
-                                        name={`${test}.entry-point.${env.id}`}
-                                        component={SelectField}
-                                        options={this.getPossibleEntryPoints(
-                                          env.id
-                                        )}
-                                        addEmptyOption={true}
-                                        label={
-                                          <FormattedMessage
-                                            id="app.editExerciseSimpleConfigTests.entryPoint"
-                                            defaultMessage="Point of entry (bootstrap file):"
-                                          />
-                                        }
-                                      />}
-                                  </Col>
-                                </Row>
-                              </Grid>
-                            </td>
-                          );
-                        })}
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-              {Boolean(smartFill) &&
-                <div className="smart-fill-tinybar">
-                  <Confirm
-                    id="smartFillCompilation"
-                    onConfirmed={smartFill.compilation}
-                    question={
-                      <FormattedMessage
-                        id="app.editExerciseConfigForm.smartFillCompilation.yesNoQuestion"
-                        defaultMessage="Do you really wish to overwrite compilation and execution configuration of all subsequent tests using the first test as a template? Files will be paired to individual test configurations by a heuristics based on matching name substrings."
-                      />
-                    }
-                  >
-                    <Button
-                      bsStyle="primary"
-                      className="btn-flat"
-                      bsSize="xs"
-                      disabled={Boolean(testErrors)}
-                    >
-                      <Icon icon="arrows-alt" gapRight />
-                      <FormattedMessage
-                        id="app.editExerciseConfigForm.smartFillCompilation"
-                        defaultMessage="Smart Fill Compilation"
-                      />
-                    </Button>
-                  </Confirm>
-                </div>}
-            </Well>
-          : <div
-              className="text-muted compilation-open"
-              onClick={this.compilationOpen}
-            >
-              <Icon icon={['far', 'plus-square']} gapRight />
+        (this.state.compilationOpen === null &&
+          this.hasCompilationExtraFiles()) ? (
+          <Well>
+            <h4 className="compilation-close" onClick={this.compilationClose}>
+              <Icon icon={['far', 'minus-square']} gapRight />
               <FormattedMessage
                 id="app.editExerciseSimpleConfigTests.compilationTitle"
                 defaultMessage="Compilation/Execution"
               />
-            </div>}
+            </h4>
+            <p className="text-muted small">
+              <FormattedMessage
+                id="app.editExerciseSimpleConfigTests.compilationInfo"
+                defaultMessage="Additional files that are added to compilation (in case of compiled environments) or execution (in case of interpreted environments)."
+              />
+            </p>
+            <div className="compilation">
+              <table>
+                <tbody>
+                  <tr>
+                    {exercise.runtimeEnvironments
+                      .sort((a, b) => a.name.localeCompare(b.name, intl.locale))
+                      .map(env => {
+                        const possibleEntryPoints = this.getPossibleEntryPoints(
+                          env.id
+                        );
+                        return (
+                          <td key={env.id}>
+                            {exercise.runtimeEnvironments.length > 1 && (
+                              <h4>
+                                <EnvironmentsListItem
+                                  runtimeEnvironment={env}
+                                  longNames
+                                />
+                              </h4>
+                            )}
+
+                            <Grid fluid>
+                              <Row>
+                                {env.id === 'java' && (
+                                  /*
+                                   * A special case for Java only !!!
+                                   */
+                                  <Col
+                                    lg={
+                                      exercise.runtimeEnvironments.length === 1
+                                        ? 6
+                                        : 12
+                                    }>
+                                    <FieldArray
+                                      name={`${test}.jar-files.${env.id}`}
+                                      component={ExpandingSelectField}
+                                      options={supplementaryFilesOptions}
+                                      label={
+                                        <FormattedMessage
+                                          id="app.editExerciseSimpleConfigTests.jarFiles"
+                                          defaultMessage="Additional JAR file:"
+                                        />
+                                      }
+                                      noItems={
+                                        <FormattedMessage
+                                          id="app.editExerciseSimpleConfigTests.noJarFiles"
+                                          defaultMessage="There are no additional JAR files yet..."
+                                        />
+                                      }
+                                    />
+                                    {exercise.runtimeEnvironments.length !==
+                                      1 && <hr />}
+                                  </Col>
+                                )
+                                /*
+                                 * End of special case.
+                                 */
+                                }
+
+                                <Col
+                                  lg={
+                                    exercise.runtimeEnvironments.length === 1 &&
+                                    env.id === 'java'
+                                      ? 6
+                                      : 12
+                                  }>
+                                  <FieldArray
+                                    name={`${test}.extra-files.${env.id}`}
+                                    component={ExpandingInputFilesField}
+                                    options={supplementaryFilesOptions}
+                                    change={change}
+                                    leftLabel={
+                                      <FormattedMessage
+                                        id="app.editExerciseSimpleConfigTests.extraFilesActual"
+                                        defaultMessage="Extra file:"
+                                      />
+                                    }
+                                    rightLabel={
+                                      <FormattedMessage
+                                        id="app.editExerciseSimpleConfigTests.extraFilesRename"
+                                        defaultMessage="Rename as:"
+                                      />
+                                    }
+                                    noItems={
+                                      <FormattedMessage
+                                        id="app.editExerciseSimpleConfigTests.noExtraFiles"
+                                        defaultMessage="There are no extra files yet..."
+                                      />
+                                    }
+                                  />
+                                  <br />
+                                  {possibleEntryPoints.length > 0 && (
+                                    <Field
+                                      name={`${test}.entry-point.${env.id}`}
+                                      component={SelectField}
+                                      options={this.getPossibleEntryPoints(
+                                        env.id
+                                      )}
+                                      addEmptyOption={true}
+                                      label={
+                                        <FormattedMessage
+                                          id="app.editExerciseSimpleConfigTests.entryPoint"
+                                          defaultMessage="Point of entry (bootstrap file):"
+                                        />
+                                      }
+                                    />
+                                  )}
+                                </Col>
+                              </Row>
+                            </Grid>
+                          </td>
+                        );
+                      })}
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            {Boolean(smartFill) && (
+              <div className="smart-fill-tinybar">
+                <Confirm
+                  id="smartFillCompilation"
+                  onConfirmed={smartFill.compilation}
+                  question={
+                    <FormattedMessage
+                      id="app.editExerciseConfigForm.smartFillCompilation.yesNoQuestion"
+                      defaultMessage="Do you really wish to overwrite compilation and execution configuration of all subsequent tests using the first test as a template? Files will be paired to individual test configurations by a heuristics based on matching name substrings."
+                    />
+                  }>
+                  <Button
+                    bsStyle="primary"
+                    className="btn-flat"
+                    bsSize="xs"
+                    disabled={Boolean(testErrors)}>
+                    <Icon icon="arrows-alt" gapRight />
+                    <FormattedMessage
+                      id="app.editExerciseConfigForm.smartFillCompilation"
+                      defaultMessage="Smart Fill Compilation"
+                    />
+                  </Button>
+                </Confirm>
+              </div>
+            )}
+          </Well>
+        ) : (
+          <div
+            className="text-muted compilation-open"
+            onClick={this.compilationOpen}>
+            <Icon icon={['far', 'plus-square']} gapRight />
+            <FormattedMessage
+              id="app.editExerciseSimpleConfigTests.compilationTitle"
+              defaultMessage="Compilation/Execution"
+            />
+          </div>
+        )}
         <Row>
           <Col md={6} lg={3}>
             <h4>
@@ -377,7 +380,7 @@ class EditExerciseSimpleConfigTest extends Component {
                 />
               }
             />
-            {Boolean(smartFill) &&
+            {Boolean(smartFill) && (
               <div className="smart-fill-tinybar">
                 <Confirm
                   id="smartFillInput"
@@ -387,14 +390,12 @@ class EditExerciseSimpleConfigTest extends Component {
                       id="app.editExerciseConfigForm.smartFillInput.yesNoQuestion"
                       defaultMessage="Do you really wish to overwrite input configuration of all subsequent tests using the first test as a template? Files will be paired to individual test configurations by a heuristics based on matching name substrings."
                     />
-                  }
-                >
+                  }>
                   <Button
                     bsStyle={'primary'}
                     className="btn-flat"
                     bsSize="xs"
-                    disabled={Boolean(testErrors)}
-                  >
+                    disabled={Boolean(testErrors)}>
                     <Icon icon="arrows-alt" gapRight />
                     <FormattedMessage
                       id="app.editExerciseConfigForm.smartFillInput"
@@ -402,7 +403,8 @@ class EditExerciseSimpleConfigTest extends Component {
                     />
                   </Button>
                 </Confirm>
-              </div>}
+              </div>
+            )}
           </Col>
           <Col md={6} lg={3}>
             <h4>
@@ -422,7 +424,7 @@ class EditExerciseSimpleConfigTest extends Component {
                 />
               }
             />
-            {Boolean(smartFill) &&
+            {Boolean(smartFill) && (
               <div className="smart-fill-tinybar">
                 <Confirm
                   id="smartFillArgs"
@@ -432,14 +434,12 @@ class EditExerciseSimpleConfigTest extends Component {
                       id="app.editExerciseConfigForm.smartFillArgs.yesNoQuestion"
                       defaultMessage="Do you really wish to overwrite command line configuration of all subsequent tests using the first test as a template?"
                     />
-                  }
-                >
+                  }>
                   <Button
                     bsStyle={'primary'}
                     className="btn-flat"
                     bsSize="xs"
-                    disabled={Boolean(testErrors)}
-                  >
+                    disabled={Boolean(testErrors)}>
                     <Icon icon="arrows-alt" gapRight />
                     <FormattedMessage
                       id="app.editExerciseConfigForm.smartFillArgs"
@@ -447,7 +447,8 @@ class EditExerciseSimpleConfigTest extends Component {
                     />
                   </Button>
                 </Confirm>
-              </div>}
+              </div>
+            )}
           </Col>
           <Col md={6} lg={3}>
             <h4>
@@ -467,7 +468,7 @@ class EditExerciseSimpleConfigTest extends Component {
                 />
               }
             />
-            {useOutFile &&
+            {useOutFile && (
               <Field
                 name={`${test}.actual-output`}
                 component={TextField}
@@ -479,7 +480,8 @@ class EditExerciseSimpleConfigTest extends Component {
                     defaultMessage="Output file:"
                   />
                 }
-              />}
+              />
+            )}
             <Field
               name={`${test}.expected-output`}
               component={SelectField}
@@ -493,7 +495,7 @@ class EditExerciseSimpleConfigTest extends Component {
                 />
               }
             />
-            {Boolean(smartFill) &&
+            {Boolean(smartFill) && (
               <div className="smart-fill-tinybar">
                 <Confirm
                   id="smartFillOutput"
@@ -503,14 +505,12 @@ class EditExerciseSimpleConfigTest extends Component {
                       id="app.editExerciseConfigForm.smartFillOutput.yesNoQuestion"
                       defaultMessage="Do you really wish to overwrite output configuration of all subsequent tests using the first test as a template? Files will be paired to individual test configurations by a heuristics based on matching name substrings."
                     />
-                  }
-                >
+                  }>
                   <Button
                     bsStyle={'primary'}
                     className="btn-flat"
                     bsSize="xs"
-                    disabled={Boolean(testErrors)}
-                  >
+                    disabled={Boolean(testErrors)}>
                     <Icon icon="arrows-alt" gapRight />
                     <FormattedMessage
                       id="app.editExerciseConfigForm.smartFillOutput"
@@ -518,7 +518,8 @@ class EditExerciseSimpleConfigTest extends Component {
                     />
                   </Button>
                 </Confirm>
-              </div>}
+              </div>
+            )}
           </Col>
           <Col md={6} lg={3}>
             <h4>
@@ -538,69 +539,71 @@ class EditExerciseSimpleConfigTest extends Component {
                 />
               }
             />
-            {useCustomJudge
-              ? <Field
-                  name={`${test}.custom-judge`}
-                  component={SelectField}
-                  options={supplementaryFilesOptions}
-                  addEmptyOption={true}
-                  validate={validateCustomJudge}
-                  label={
-                    <FormattedMessage
-                      id="app.editExerciseSimpleConfigTests.customJudgeBinary"
-                      defaultMessage="Custom judge executable:"
-                    />
-                  }
-                />
-              : <Field
-                  name={`${test}.judge-type`}
-                  component={SelectField}
-                  options={[
-                    {
-                      key: 'recodex-judge-normal',
-                      name: intl.formatMessage(messages.normal)
-                    },
-                    {
-                      key: 'recodex-judge-float',
-                      name: intl.formatMessage(messages.float)
-                    },
-                    {
-                      key: 'recodex-judge-normal-newline',
-                      name: intl.formatMessage(messages.normalNewline)
-                    },
-                    {
-                      key: 'recodex-judge-float-newline',
-                      name: intl.formatMessage(messages.floatNewline)
-                    },
-                    {
-                      key: 'recodex-judge-shuffle',
-                      name: intl.formatMessage(messages.shuffle)
-                    },
-                    {
-                      key: 'recodex-judge-shuffle-rows',
-                      name: intl.formatMessage(messages.shuffleRows)
-                    },
-                    {
-                      key: 'recodex-judge-shuffle-all',
-                      name: intl.formatMessage(messages.shuffleAll)
-                    },
-                    {
-                      key: 'recodex-judge-shuffle-newline',
-                      name: intl.formatMessage(messages.shuffleNewline)
-                    },
-                    {
-                      key: 'diff',
-                      name: intl.formatMessage(messages.diff)
-                    }
-                  ]}
-                  label={
-                    <FormattedMessage
-                      id="app.editExerciseSimpleConfigTests.judgeType"
-                      defaultMessage="Judge:"
-                    />
-                  }
-                />}
-            {useCustomJudge &&
+            {useCustomJudge ? (
+              <Field
+                name={`${test}.custom-judge`}
+                component={SelectField}
+                options={supplementaryFilesOptions}
+                addEmptyOption={true}
+                validate={validateCustomJudge}
+                label={
+                  <FormattedMessage
+                    id="app.editExerciseSimpleConfigTests.customJudgeBinary"
+                    defaultMessage="Custom judge executable:"
+                  />
+                }
+              />
+            ) : (
+              <Field
+                name={`${test}.judge-type`}
+                component={SelectField}
+                options={[
+                  {
+                    key: 'recodex-judge-normal',
+                    name: intl.formatMessage(messages.normal),
+                  },
+                  {
+                    key: 'recodex-judge-float',
+                    name: intl.formatMessage(messages.float),
+                  },
+                  {
+                    key: 'recodex-judge-normal-newline',
+                    name: intl.formatMessage(messages.normalNewline),
+                  },
+                  {
+                    key: 'recodex-judge-float-newline',
+                    name: intl.formatMessage(messages.floatNewline),
+                  },
+                  {
+                    key: 'recodex-judge-shuffle',
+                    name: intl.formatMessage(messages.shuffle),
+                  },
+                  {
+                    key: 'recodex-judge-shuffle-rows',
+                    name: intl.formatMessage(messages.shuffleRows),
+                  },
+                  {
+                    key: 'recodex-judge-shuffle-all',
+                    name: intl.formatMessage(messages.shuffleAll),
+                  },
+                  {
+                    key: 'recodex-judge-shuffle-newline',
+                    name: intl.formatMessage(messages.shuffleNewline),
+                  },
+                  {
+                    key: 'diff',
+                    name: intl.formatMessage(messages.diff),
+                  },
+                ]}
+                label={
+                  <FormattedMessage
+                    id="app.editExerciseSimpleConfigTests.judgeType"
+                    defaultMessage="Judge:"
+                  />
+                }
+              />
+            )}
+            {useCustomJudge && (
               <FieldArray
                 name={`${test}.judge-args`}
                 component={ExpandingTextField}
@@ -611,8 +614,9 @@ class EditExerciseSimpleConfigTest extends Component {
                     defaultMessage="Judge arguments:"
                   />
                 }
-              />}
-            {Boolean(smartFill) &&
+              />
+            )}
+            {Boolean(smartFill) && (
               <div className="smart-fill-tinybar">
                 <Confirm
                   id="smartFillJudge"
@@ -622,14 +626,12 @@ class EditExerciseSimpleConfigTest extends Component {
                       id="app.editExerciseConfigForm.smartFillJudge.yesNoQuestion"
                       defaultMessage="Do you really wish to overwrite judge configuration of all subsequent tests using the first test as a template? Files will be paired to individual test configurations by a heuristics based on matching name substrings."
                     />
-                  }
-                >
+                  }>
                   <Button
                     bsStyle={'primary'}
                     className="btn-flat"
                     bsSize="xs"
-                    disabled={Boolean(testErrors)}
-                  >
+                    disabled={Boolean(testErrors)}>
                     <Icon icon="arrows-alt" gapRight />
                     <FormattedMessage
                       id="app.editExerciseConfigForm.smartFillJudge"
@@ -637,10 +639,11 @@ class EditExerciseSimpleConfigTest extends Component {
                     />
                   </Button>
                 </Confirm>
-              </div>}
+              </div>
+            )}
           </Col>
         </Row>
-        {Boolean(smartFill) &&
+        {Boolean(smartFill) && (
           <div className="smart-fill-bar">
             <Confirm
               id="smartFillAll"
@@ -650,13 +653,11 @@ class EditExerciseSimpleConfigTest extends Component {
                   id="app.editExerciseConfigForm.smartFillAll.yesNoQuestion"
                   defaultMessage="Do you really wish to overwrite configuration of all subsequent tests using the first test as a template? Files will be paired to individual test configurations by a heuristics based on matching name substrings."
                 />
-              }
-            >
+              }>
               <Button
                 bsStyle={'primary'}
                 className="btn-flat"
-                disabled={Boolean(testErrors)}
-              >
+                disabled={Boolean(testErrors)}>
                 <Icon icon="arrows-alt" gapRight />
                 <FormattedMessage
                   id="app.editExerciseConfigForm.smartFillAll"
@@ -664,7 +665,8 @@ class EditExerciseSimpleConfigTest extends Component {
                 />
               </Button>
             </Confirm>
-          </div>}
+          </div>
+        )}
       </div>
     );
   }
@@ -684,7 +686,7 @@ EditExerciseSimpleConfigTest.propTypes = {
   testErrors: PropTypes.object,
   smartFill: PropTypes.object,
   change: PropTypes.func.isRequired,
-  intl: intlShape.isRequired
+  intl: intlShape.isRequired,
 };
 
 export default injectIntl(EditExerciseSimpleConfigTest);

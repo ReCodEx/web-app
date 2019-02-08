@@ -8,7 +8,7 @@ import {
   Col,
   Pagination,
   ButtonGroup,
-  Button
+  Button,
 } from 'react-bootstrap';
 import classnames from 'classnames';
 
@@ -20,7 +20,7 @@ import {
   getPaginationFilters,
   getPaginationTotalCount,
   getPaginationIsPending,
-  getPaginationDataJS
+  getPaginationDataJS,
 } from '../../redux/selectors/pagination';
 import {
   registerPaginationComponent,
@@ -29,7 +29,7 @@ import {
   encodeOrderBy,
   decodeOrderBy,
   setPaginationFilters,
-  fetchPaginated
+  fetchPaginated,
 } from '../../redux/modules/pagination';
 import { identity, EMPTY_OBJ } from '../../helpers/common';
 
@@ -44,33 +44,37 @@ export const createSortingIcon = (
   orderByDescending,
   setOrderBy
 ) =>
-  setOrderBy
-    ? <SortedIcon
-        active={orderByColumn === colName}
-        descending={orderByDescending}
-        gapLeft
-        onClick={() =>
-          setOrderBy(
-            colName,
-            orderByColumn === colName ? !orderByDescending : false
-          )}
-      />
-    : <LoadingIcon gapLeft />;
+  setOrderBy ? (
+    <SortedIcon
+      active={orderByColumn === colName}
+      descending={orderByDescending}
+      gapLeft
+      onClick={() =>
+        setOrderBy(
+          colName,
+          orderByColumn === colName ? !orderByDescending : false
+        )
+      }
+    />
+  ) : (
+    <LoadingIcon gapLeft />
+  );
 
 // Show label with actually displayed range info ...
 export const showRangeInfo = (offset, limit, totalCount) =>
-  totalCount > limit &&
-  <div className="text-muted text-right small">
-    <FormattedMessage
-      id="app.paginationContainer.showingRange"
-      defaultMessage="showing {offset} - {offsetEnd} (of {totalCount})"
-      values={{
-        offset: offset + 1,
-        offsetEnd: Math.min(offset + limit, totalCount),
-        totalCount
-      }}
-    />
-  </div>;
+  totalCount > limit && (
+    <div className="text-muted text-right small">
+      <FormattedMessage
+        id="app.paginationContainer.showingRange"
+        defaultMessage="showing {offset} - {offsetEnd} (of {totalCount})"
+        values={{
+          offset: offset + 1,
+          offsetEnd: Math.min(offset + limit, totalCount),
+          totalCount,
+        }}
+      />
+    </div>
+  );
 
 // Pagination container for paginating generic contents loaded via endpoints following pagination protocol...
 class PaginationContainer extends Component {
@@ -80,10 +84,10 @@ class PaginationContainer extends Component {
       defaultOrderDescending = false,
       defaultFilters,
       limits = DEFAULT_LIMITS,
-      register
+      register,
     } = props;
     const initials = {
-      limit: props.defaultLimit || limits[0]
+      limit: props.defaultLimit || limits[0],
     };
 
     if (defaultOrderBy) {
@@ -142,15 +146,20 @@ class PaginationContainer extends Component {
    * Rendering function that creates one limit button for given limit (amount of rows).
    */
   createLimitButton = amount => {
-    const { offset, limit, intl: { locale }, setPage } = this.props;
+    const {
+      offset,
+      limit,
+      intl: { locale },
+      setPage,
+    } = this.props;
     return (
       <Button
         key={amount}
         active={limit === amount}
         bsStyle={limit === amount ? 'primary' : 'default'}
         onClick={() =>
-          setPage(locale, Math.floor(offset / amount) * amount, amount)}
-      >
+          setPage(locale, Math.floor(offset / amount) * amount, amount)
+        }>
         {amount}
       </Button>
     );
@@ -176,7 +185,11 @@ class PaginationContainer extends Component {
    * Handling function for page selection event.
    */
   handlePagination = page => {
-    const { limit, intl: { locale }, setPage } = this.props;
+    const {
+      limit,
+      intl: { locale },
+      setPage,
+    } = this.props;
     return setPage(locale, (page - 1) * limit, limit);
   };
 
@@ -184,7 +197,10 @@ class PaginationContainer extends Component {
    * Handler passed to filters creator. It updates the pagination filters and reloads the page.
    */
   setFilters = filters => {
-    const { intl: { locale }, setPaginationFilters } = this.props;
+    const {
+      intl: { locale },
+      setPaginationFilters,
+    } = this.props;
     return setPaginationFilters(filters, locale);
   };
 
@@ -192,7 +208,10 @@ class PaginationContainer extends Component {
    * Method passed to children data rendering function, so it can use this for sorting icons in table heading.
    */
   setOrderBy = (orderBy, descending) => {
-    const { intl: { locale }, setPaginationOrderBy } = this.props;
+    const {
+      intl: { locale },
+      setPaginationOrderBy,
+    } = this.props;
     return setPaginationOrderBy(encodeOrderBy(orderBy, descending), locale);
   };
 
@@ -201,7 +220,12 @@ class PaginationContainer extends Component {
    * Reload is required when item is deleted for instance.
    */
   reload = () => {
-    const { id, endpoint, intl: { locale }, reload } = this.props;
+    const {
+      id,
+      endpoint,
+      intl: { locale },
+      reload,
+    } = this.props;
     return reload(id, endpoint, locale);
   };
 
@@ -221,89 +245,93 @@ class PaginationContainer extends Component {
       orderBy,
       filters,
       data,
-      limits = DEFAULT_LIMITS
+      limits = DEFAULT_LIMITS,
     } = this.props;
 
     // Decode order by parameter ...
     const {
       column: orderByColumn,
-      descending: orderByDescending
+      descending: orderByDescending,
     } = decodeOrderBy(orderBy);
 
     return (
       <div>
-        {filtersCreator &&
+        {filtersCreator && (
           <div>
             {filtersCreator(filters, isPending ? null : this.setFilters)}
-          </div>}
+          </div>
+        )}
 
-        {hideAllItems
-          ? hideAllMessage
-          : totalCount !== null
-            ? <div>
-                <div
-                  className={classnames({
-                    [styles.paginatedContent]: true,
-                    [styles.changePending]: isPending
-                  })}
-                >
-                  {children({
-                    data,
-                    offset,
-                    limit,
-                    totalCount,
-                    orderByColumn,
-                    orderByDescending,
-                    filters,
-                    setOrderBy: isPending ? null : this.setOrderBy,
-                    reload: isPending ? null : this.reload
-                  })}
-                </div>
+        {hideAllItems ? (
+          hideAllMessage
+        ) : totalCount !== null ? (
+          <div>
+            <div
+              className={classnames({
+                [styles.paginatedContent]: true,
+                [styles.changePending]: isPending,
+              })}>
+              {children({
+                data,
+                offset,
+                limit,
+                totalCount,
+                orderByColumn,
+                orderByDescending,
+                filters,
+                setOrderBy: isPending ? null : this.setOrderBy,
+                reload: isPending ? null : this.reload,
+              })}
+            </div>
 
-                {(this.showLimitsButtons() || this.getTotalPages() > 1) &&
-                  <Grid fluid>
-                    <Row>
-                      <Col md={3}>
-                        {this.showLimitsButtons() &&
-                          <ButtonGroup bsSize="small">
-                            {limits
-                              .map(
-                                (l, idx) =>
-                                  idx < 1 ||
-                                  totalCount > limits[idx - 1] ||
-                                  l === limit
-                                    ? this.createLimitButton(l)
-                                    : null
-                              )
-                              .filter(identity)}
-                          </ButtonGroup>}
-                      </Col>
-                      {totalCount > limit &&
-                        <Col md={9}>
-                          <div className="text-right">
-                            <Pagination
-                              prev
-                              next
-                              maxButtons={10}
-                              boundaryLinks
-                              items={this.getTotalPages()}
-                              activePage={this.getActivePage()}
-                              bsSize="small"
-                              className={styles.pagination}
-                              onSelect={this.handlePagination}
-                            />
-                          </div>
-                        </Col>}
-                    </Row>
-                  </Grid>}
-              </div>
-            : <div className="text-center larger em-maring">
-                <LoadingIcon gapRight />
-                <FormattedMessage
-                  id="generic.loading"
-                  defaultMessage="Loading..."
-                />
-              </div>}
+            {(this.showLimitsButtons() || this.getTotalPages() > 1) && (
+              <Grid fluid>
+                <Row>
+                  <Col md={3}>
+                    {this.showLimitsButtons() && (
+                      <ButtonGroup bsSize="small">
+                        {limits
+                          .map((l, idx) =>
+                            idx < 1 ||
+                            totalCount > limits[idx - 1] ||
+                            l === limit
+                              ? this.createLimitButton(l)
+                              : null
+                          )
+                          .filter(identity)}
+                      </ButtonGroup>
+                    )}
+                  </Col>
+                  {totalCount > limit && (
+                    <Col md={9}>
+                      <div className="text-right">
+                        <Pagination
+                          prev
+                          next
+                          maxButtons={10}
+                          boundaryLinks
+                          items={this.getTotalPages()}
+                          activePage={this.getActivePage()}
+                          bsSize="small"
+                          className={styles.pagination}
+                          onSelect={this.handlePagination}
+                        />
+                      </div>
+                    </Col>
+                  )}
+                </Row>
+              </Grid>
+            )}
+          </div>
+        ) : (
+          <div className="text-center larger em-maring">
+            <LoadingIcon gapRight />
+            <FormattedMessage
+              id="generic.loading"
+              defaultMessage="Loading..."
+            />
+          </div>
+        )}
       </div>
     );
   }
@@ -334,7 +362,7 @@ PaginationContainer.propTypes = {
   setPaginationOrderBy: PropTypes.func.isRequired,
   setPaginationFilters: PropTypes.func.isRequired,
   fetchPaginated: PropTypes.func.isRequired,
-  intl: intlShape.isRequired
+  intl: intlShape.isRequired,
 };
 
 export default connect(
@@ -346,7 +374,7 @@ export default connect(
       filters: getPaginationFilters(id)(state) || EMPTY_OBJ,
       totalCount: getPaginationTotalCount(id)(state),
       isPending: getPaginationIsPending(id)(state),
-      data: getPaginationDataJS(id, endpoint)(state)
+      data: getPaginationDataJS(id, endpoint)(state),
     };
   },
   (dispatch, { id, endpoint }) => ({
@@ -368,6 +396,6 @@ export default connect(
       return dispatch(fetchPaginated(id, endpoint)(locale, 0)); // offset is 0, change of filters resets the position
     },
     fetchPaginated: (locale, offset, limit) =>
-      dispatch(fetchPaginated(id, endpoint)(locale, offset, limit))
+      dispatch(fetchPaginated(id, endpoint)(locale, offset, limit)),
   })
 )(injectIntl(PaginationContainer));

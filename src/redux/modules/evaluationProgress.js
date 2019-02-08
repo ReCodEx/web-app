@@ -11,10 +11,10 @@ export const initialState = fromJS({
     total: 0,
     completed: 0,
     skipped: 0,
-    failed: 0
+    failed: 0,
   },
   messages: [],
-  progressObserverId: null
+  progressObserverId: null,
 });
 
 /**
@@ -28,14 +28,14 @@ export const actionTypes = {
   SKIPPED_TASK: 'recodex/evaluationProgress/SKIPPED_TASK',
   FAILED_TASK: 'recodex/evaluationProgress/FAILED_TASK',
   ADD_MESSAGE: 'recodex/evaluationProgress/ADD_MESSAGE',
-  DROP_OBSERVER: 'recodex/evaluationProgress/DROP_OBSERVER'
+  DROP_OBSERVER: 'recodex/evaluationProgress/DROP_OBSERVER',
 };
 
 export const init = createAction(
   actionTypes.INIT,
   (webSocketChannelId, expectedTasksCount) => ({
     webSocketChannelId,
-    expectedTasksCount
+    expectedTasksCount,
   })
 );
 export const completedTask = createAction(actionTypes.COMPLETED_TASK);
@@ -113,7 +113,7 @@ export default handleActions(
         .set('isFinished', true)
         .set('expectedTasksCount', state.getIn(['progress', 'total'])), // maybe all the expected tasks did not arrive, stretch the progress to 100%
 
-    [actionTypes.DROP_OBSERVER]: state => state.set('progressObserverId', null)
+    [actionTypes.DROP_OBSERVER]: state => state.set('progressObserverId', null),
   },
   initialState
 );

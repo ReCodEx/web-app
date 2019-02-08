@@ -10,7 +10,7 @@ export const resourceStatus = {
   FULFILLED: 'FULFILLED',
   POSTING: 'POSTING',
   DELETING: 'DELETING',
-  DELETED: 'DELETED'
+  DELETED: 'DELETED',
 };
 
 /**

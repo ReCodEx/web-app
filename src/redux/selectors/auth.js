@@ -6,19 +6,30 @@ const getAuth = state => state.auth;
 const getAccessToken = auth => auth.get('accessToken');
 const getLoggedInUserId = auth => auth.get('userId');
 const getSelectedInstanceId = auth => auth.get('instanceId');
-const getStatus = createSelector(getAuth, auth => auth.get('status'));
-const getChangePasswordStatus = createSelector(getAuth, auth =>
-  auth.get('changePasswordStatus')
+const getStatus = createSelector(
+  getAuth,
+  auth => auth.get('status')
 );
-const getResetPasswordStatus = createSelector(getAuth, auth =>
-  auth.get('resetPasswordStatus')
+const getChangePasswordStatus = createSelector(
+  getAuth,
+  auth => auth.get('changePasswordStatus')
+);
+const getResetPasswordStatus = createSelector(
+  getAuth,
+  auth => auth.get('resetPasswordStatus')
 );
 
 /**
  * Select access token from the state.
  */
-export const jwtSelector = createSelector(getAuth, auth => auth.get('jwt'));
-export const accessTokenSelector = createSelector(getAuth, getAccessToken);
+export const jwtSelector = createSelector(
+  getAuth,
+  auth => auth.get('jwt')
+);
+export const accessTokenSelector = createSelector(
+  getAuth,
+  getAccessToken
+);
 export const accessTokenExpiration = createSelector(
   accessTokenSelector,
   token => (token ? token.get('exp') * 1000 : 0)
@@ -34,7 +45,10 @@ export const selectedInstanceId = createSelector(
 );
 
 export const statusSelector = service =>
-  createSelector(getStatus, statuses => statuses.get(service));
+  createSelector(
+    getStatus,
+    statuses => statuses.get(service)
+  );
 export const isLoggingIn = service =>
   createSelector(
     statusSelector(service),
@@ -83,6 +97,7 @@ export const hasResetingSucceeded = createSelector(
   status => status === 'FULFILLED'
 );
 
-export const lastGeneratedToken = createSelector(getAuth, auth =>
-  auth.get('lastGeneratedToken', '')
+export const lastGeneratedToken = createSelector(
+  getAuth,
+  auth => auth.get('lastGeneratedToken', '')
 );

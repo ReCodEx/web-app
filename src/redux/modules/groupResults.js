@@ -8,7 +8,7 @@ import { resourceStatus } from '../helpers/resourceManager/status';
 
 const resourceName = 'groupResults';
 const { reduceActions } = factory({
-  resourceName
+  resourceName,
 });
 
 /**
@@ -20,7 +20,7 @@ export const additionalActionTypes = {
   BEST_SUBMISSION_FULFILLED: 'recodex/groupResults/BEST_SUBMISSION_FULFILLED',
   BEST_SUBMISSIONS: 'recodex/groupResults/BEST_SUBMISSIONS',
   BEST_SUBMISSIONS_PENDING: 'recodex/groupResults/BEST_SUBMISSIONS_PENDING',
-  BEST_SUBMISSIONS_FULFILLED: 'recodex/groupResults/BEST_SUBMISSIONS_FULFILLED'
+  BEST_SUBMISSIONS_FULFILLED: 'recodex/groupResults/BEST_SUBMISSIONS_FULFILLED',
 };
 
 export const fetchBestSubmission = (userId, assignmentId) =>
@@ -28,7 +28,7 @@ export const fetchBestSubmission = (userId, assignmentId) =>
     type: additionalActionTypes.BEST_SUBMISSION,
     endpoint: `/exercise-assignments/${assignmentId}/users/${userId}/best-solution`,
     method: 'GET',
-    meta: { userId, assignmentId }
+    meta: { userId, assignmentId },
   });
 
 export const fetchBestSubmissions = assignmentId =>
@@ -36,7 +36,7 @@ export const fetchBestSubmissions = assignmentId =>
     type: additionalActionTypes.BEST_SUBMISSION,
     endpoint: `/exercise-assignments/${assignmentId}/best-solutions`,
     method: 'GET',
-    meta: { assignmentId }
+    meta: { assignmentId },
   });
 
 /**
@@ -72,13 +72,13 @@ const reducer = handleActions(
             ['resources', assignmentId, uId],
             createRecord({
               data: fromJS(payload[uId]),
-              state: resourceStatus.FULFILLED
+              state: resourceStatus.FULFILLED,
             })
           );
         }
         return state;
       }
-    }
+    },
   }),
   initialState
 );

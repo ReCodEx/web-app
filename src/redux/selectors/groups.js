@@ -4,7 +4,7 @@ import { EMPTY_LIST, EMPTY_MAP, EMPTY_ARRAY } from '../../helpers/common';
 import {
   studentOfGroupsIdsSelector,
   supervisorOfGroupsIdsSelector,
-  isLoggedAsSuperAdmin
+  isLoggedAsSuperAdmin,
 } from './users';
 import { getAssignments } from './assignments';
 import { getShadowAssignments } from './shadowAssignments';
@@ -40,7 +40,10 @@ export const groupSelector = createSelector(
 );
 
 export const groupSelectorCreator = id =>
-  createSelector(groupsSelector, groups => groups.get(id));
+  createSelector(
+    groupsSelector,
+    groups => groups.get(id)
+  );
 
 // This is perhaps the best way how to create simple accessor (selector with parameter).
 export const groupDataAccessorSelector = createSelector(
@@ -61,44 +64,50 @@ export const supervisorOfSelector = userId =>
   );
 
 export const studentOfSelector2 = userId =>
-  createSelector(groupsSelector, groups =>
-    groups
-      .filter(isReady)
-      .map(getJsData)
-      .filter(
-        group =>
-          group.privateData && group.privateData.students.indexOf(userId) >= 0
-      )
+  createSelector(
+    groupsSelector,
+    groups =>
+      groups
+        .filter(isReady)
+        .map(getJsData)
+        .filter(
+          group =>
+            group.privateData && group.privateData.students.indexOf(userId) >= 0
+        )
   );
 
 export const supervisorOfSelector2 = userId =>
-  createSelector(groupsSelector, groups =>
-    groups
-      .filter(isReady)
-      .map(getJsData)
-      .filter(
-        group =>
-          group.privateData &&
-          group.privateData.supervisors.indexOf(userId) >= 0
-      )
+  createSelector(
+    groupsSelector,
+    groups =>
+      groups
+        .filter(isReady)
+        .map(getJsData)
+        .filter(
+          group =>
+            group.privateData &&
+            group.privateData.supervisors.indexOf(userId) >= 0
+        )
   );
 
 export const adminOfSelector = userId =>
-  createSelector(groupsSelector, groups =>
-    groups
-      .filter(isReady)
-      .map(getJsData)
-      .filter(
-        group =>
-          group.privateData && group.privateData.admins.indexOf(userId) >= 0
-      )
+  createSelector(
+    groupsSelector,
+    groups =>
+      groups
+        .filter(isReady)
+        .map(getJsData)
+        .filter(
+          group =>
+            group.privateData && group.privateData.admins.indexOf(userId) >= 0
+        )
   );
 
 export const groupsUserCanEditSelector = createSelector(
   [
     loggedInUserIdSelector,
     groupsSelector,
-    state => isLoggedAsSuperAdmin(state)
+    state => isLoggedAsSuperAdmin(state),
   ],
   (userId, groups, isSuperAdmin) =>
     groups.filter(isReady).filter(group => {
@@ -164,7 +173,10 @@ const getGroupParentIds = (id, groups) => {
 };
 
 export const allParentIdsForGroup = id =>
-  createSelector(groupsSelector, groups => getGroupParentIds(id, groups));
+  createSelector(
+    groupsSelector,
+    groups => getGroupParentIds(id, groups)
+  );
 
 export const groupOrganizationalPendingChange = id =>
   createSelector(

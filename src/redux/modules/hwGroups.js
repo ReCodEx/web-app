@@ -13,7 +13,7 @@ export const fetchHardwareGroupIfNeeded = actions.fetchOneIfNeeded;
 
 export const fetchHardwareGroups = () =>
   actions.fetchMany({
-    endpoint: '/hardware-groups'
+    endpoint: '/hardware-groups',
   });
 
 /**

@@ -3,7 +3,7 @@ import { Map, List, fromJS } from 'immutable';
 import factory, {
   initialState,
   createRecord,
-  resourceStatus
+  resourceStatus,
 } from '../helpers/resourceManager';
 import { createApiAction } from '../middleware/apiMiddleware';
 
@@ -15,7 +15,7 @@ import { arrayToObject } from '../../helpers/common';
 
 const resourceName = 'exercises';
 const { actions, reduceActions, actionTypes } = factory({
-  resourceName
+  resourceName,
 });
 
 export { actionTypes };
@@ -47,7 +47,7 @@ export const additionalActionTypes = {
   DETACH_EXERCISE_GROUP_REJECTED:
     'recodex/exercises/DETACH_EXERCISE_GROUP_REJECTED',
   DETACH_EXERCISE_GROUP_FULFILLED:
-    'recodex/exercises/DETACH_EXERCISE_GROUP_FULFILLED'
+    'recodex/exercises/DETACH_EXERCISE_GROUP_FULFILLED',
 };
 
 export const loadExercise = actions.pushResource;
@@ -57,13 +57,13 @@ export const fetchExerciseIfNeeded = actions.fetchOneIfNeeded;
 
 export const fetchGroupExercises = groupId =>
   actions.fetchMany({
-    endpoint: `/groups/${groupId}/exercises`
+    endpoint: `/groups/${groupId}/exercises`,
   });
 
 export const forkStatuses = {
   PENDING: 'PENDING',
   REJECTED: 'REJECTED',
-  FULFILLED: 'FULFILLED'
+  FULFILLED: 'FULFILLED',
 };
 
 export const forkExercise = (id, forkId, formData = null) => {
@@ -71,11 +71,11 @@ export const forkExercise = (id, forkId, formData = null) => {
     type: additionalActionTypes.FORK_EXERCISE,
     endpoint: `/exercises/${id}/fork`,
     method: 'POST',
-    meta: { id, forkId }
+    meta: { id, forkId },
   };
   if (formData && formData.groupId) {
     actionData.body = {
-      groupId: formData.groupId
+      groupId: formData.groupId,
     };
   }
   return createApiAction(actionData);
@@ -92,7 +92,7 @@ export const validateExercise = (id, version) =>
     type: additionalActionTypes.VALIDATE_EXERCISE,
     endpoint: `/exercises/${id}/validate`,
     method: 'POST',
-    body: { version }
+    body: { version },
   });
 
 export const getVariablesForPipelines = (
@@ -111,9 +111,9 @@ export const getVariablesForPipelines = (
     meta: {
       exerciseId,
       runtimeEnvironmentId,
-      pipelinesIds
+      pipelinesIds,
     },
-    body
+    body,
   });
 };
 
@@ -123,7 +123,7 @@ export const setExerciseHardwareGroups = (id, hwGroups) => {
     endpoint: `/exercises/${id}/hardware-groups`,
     method: 'POST',
     meta: { id },
-    body: { hwGroups }
+    body: { hwGroups },
   };
   return createApiAction(actionData);
 };
@@ -133,7 +133,7 @@ export const attachExerciseToGroup = (exerciseId, groupId) =>
     type: additionalActionTypes.ATTACH_EXERCISE_GROUP,
     method: 'POST',
     endpoint: `/exercises/${exerciseId}/groups/${groupId}`,
-    meta: { exerciseId, groupId }
+    meta: { exerciseId, groupId },
   });
 
 export const detachExerciseFromGroup = (exerciseId, groupId) =>
@@ -141,7 +141,7 @@ export const detachExerciseFromGroup = (exerciseId, groupId) =>
     type: additionalActionTypes.DETACH_EXERCISE_GROUP,
     method: 'DELETE',
     endpoint: `/exercises/${exerciseId}/groups/${groupId}`,
-    meta: { exerciseId, groupId }
+    meta: { exerciseId, groupId },
   });
 
 /**
@@ -168,7 +168,7 @@ const reducer = handleActions(
 
         return exercise.update('forks', forks =>
           forks.set(forkId, {
-            status: forkStatuses.PENDING
+            status: forkStatuses.PENDING,
           })
         );
       }),
@@ -178,7 +178,7 @@ const reducer = handleActions(
       { meta: { id, forkId } }
     ) =>
       state.setIn(['resources', id, 'data', 'forks', forkId], {
-        status: forkStatuses.REJECTED
+        status: forkStatuses.REJECTED,
       }),
 
     [additionalActionTypes.FORK_EXERCISE_FULFILLED]: (
@@ -187,7 +187,7 @@ const reducer = handleActions(
     ) =>
       state.setIn(['resources', id, 'data', 'forks', forkId], {
         status: forkStatuses.FULFILLED,
-        exerciseId
+        exerciseId,
       }),
 
     // Files ...
@@ -232,7 +232,7 @@ const reducer = handleActions(
           data,
           state: resourceStatus.FULFILLED,
           didInvalidate: false,
-          lastUpdate: Date.now()
+          lastUpdate: Date.now(),
         })
       ),
 
@@ -271,7 +271,7 @@ const reducer = handleActions(
           data,
           state: resourceStatus.FULFILLED,
           didInvalidate: false,
-          lastUpdate: Date.now()
+          lastUpdate: Date.now(),
         })
       ),
 
@@ -300,11 +300,11 @@ const reducer = handleActions(
                   data,
                   state: resourceStatus.FULFILLED,
                   didInvalidate: false,
-                  lastUpdate: Date.now()
+                  lastUpdate: Date.now(),
                 })
             )
           )
-        : state
+        : state,
   }),
   initialState
 );

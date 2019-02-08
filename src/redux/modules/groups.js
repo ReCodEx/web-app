@@ -59,7 +59,7 @@ export const additionalActionTypes = {
   SET_ARCHIVED: 'recodex/groups/SET_ARCHIVED',
   SET_ARCHIVED_PENDING: 'recodex/groups/SET_ARCHIVED_PENDING',
   SET_ARCHIVED_FULFILLED: 'recodex/groups/SET_ARCHIVED_FULFILLED',
-  SET_ARCHIVED_REJECTED: 'recodex/groups/SET_ARCHIVED_REJECTED'
+  SET_ARCHIVED_REJECTED: 'recodex/groups/SET_ARCHIVED_REJECTED',
 };
 
 export const loadGroup = actions.pushResource;
@@ -74,7 +74,7 @@ const prepareFetchGroupsParams = params => {
     search: null,
     archived: false,
     onlyArchived: false,
-    archivedAgeLimit: null
+    archivedAgeLimit: null,
   };
   const res = { ancestors: true };
   if (params) {
@@ -93,8 +93,8 @@ export const fetchAllGroups = params => (dispatch, getState) =>
       endpoint: '/groups',
       query: prepareFetchGroupsParams({
         instanceId: selectedInstanceId(getState()),
-        ...params
-      })
+        ...params,
+      }),
     })
   );
 
@@ -108,7 +108,7 @@ export const validateAddGroup = (name, instanceId, parentGroupId = null) =>
     body:
       parentGroupId === null
         ? { name, instanceId }
-        : { name, instanceId, parentGroupId }
+        : { name, instanceId, parentGroupId },
   });
 
 export const createGroup = actions.addResource;
@@ -121,7 +121,7 @@ export const joinGroup = (groupId, userId) => dispatch =>
       type: additionalActionTypes.JOIN_GROUP,
       endpoint: `/groups/${groupId}/students/${userId}`,
       method: 'POST',
-      meta: { groupId, userId }
+      meta: { groupId, userId },
     })
   ).catch(() => dispatch(addNotification('Cannot join group.', false))); // @todo: Make translatable
 
@@ -131,7 +131,7 @@ export const leaveGroup = (groupId, userId) => dispatch =>
       type: additionalActionTypes.LEAVE_GROUP,
       endpoint: `/groups/${groupId}/students/${userId}`,
       method: 'DELETE',
-      meta: { groupId, userId }
+      meta: { groupId, userId },
     })
   ).catch(() => dispatch(addNotification('Cannot leave group.', false))); // @todo: Make translatable
 
@@ -141,7 +141,7 @@ export const makeSupervisor = (groupId, userId) => dispatch =>
       type: additionalActionTypes.MAKE_SUPERVISOR,
       endpoint: `/groups/${groupId}/supervisors/${userId}`,
       method: 'POST',
-      meta: { groupId, userId }
+      meta: { groupId, userId },
     })
   ).catch(() =>
     dispatch(
@@ -155,7 +155,7 @@ export const removeSupervisor = (groupId, userId) => dispatch =>
       type: additionalActionTypes.REMOVE_SUPERVISOR,
       endpoint: `/groups/${groupId}/supervisors/${userId}`,
       method: 'DELETE',
-      meta: { groupId, userId }
+      meta: { groupId, userId },
     })
   ).catch(() => dispatch(addNotification('Cannot remove supervisor.', false))); // @todo: Make translatable
 
@@ -166,7 +166,7 @@ export const addAdmin = (groupId, userId) => dispatch =>
       endpoint: `/groups/${groupId}/admin`,
       method: 'POST',
       meta: { groupId, userId },
-      body: { userId }
+      body: { userId },
     })
   ).catch(() =>
     dispatch(
@@ -180,7 +180,7 @@ export const removeAdmin = (groupId, userId) => dispatch =>
       type: additionalActionTypes.REMOVE_ADMIN,
       endpoint: `/groups/${groupId}/admin/${userId}`,
       method: 'DELETE',
-      meta: { groupId, userId }
+      meta: { groupId, userId },
     })
   ).catch(() =>
     dispatch(
@@ -197,7 +197,7 @@ export const setOrganizational = (groupId, organizational) =>
     method: 'POST',
     endpoint: `/groups/${groupId}/organizational`,
     body: { value: organizational },
-    meta: { groupId }
+    meta: { groupId },
   });
 
 export const setArchived = (groupId, archived) =>
@@ -206,7 +206,7 @@ export const setArchived = (groupId, archived) =>
     method: 'POST',
     endpoint: `/groups/${groupId}/archived`,
     body: { value: archived },
-    meta: { groupId }
+    meta: { groupId },
   });
 
 /**
@@ -238,13 +238,12 @@ const reducer = handleActions(
     [actionTypes.REMOVE_FULFILLED]: (state, action) => {
       const removeFulfilled = reduceActions[actionTypes.REMOVE_FULFILLED];
       return removeFulfilled(state, action).update('resources', groups =>
-        groups.map(
-          group =>
-            group.get('data') !== null
-              ? group.updateIn(['data', 'childGroups'], children =>
-                  children.filter(groupId => groupId !== action.meta.id)
-                )
-              : null
+        groups.map(group =>
+          group.get('data') !== null
+            ? group.updateIn(['data', 'childGroups'], children =>
+                children.filter(groupId => groupId !== action.meta.id)
+              )
+            : null
         )
       );
     },
@@ -379,7 +378,7 @@ const reducer = handleActions(
       const groups = [...payload.supervisor, ...payload.student];
       return reduceActions[actionTypes.FETCH_MANY_FULFILLED](state, {
         ...rest,
-        payload: groups
+        payload: groups,
       });
     },
 
@@ -389,16 +388,29 @@ const reducer = handleActions(
     ) =>
       state.updateIn(
         ['resources', groupId, 'data', 'privateData', 'assignments'],
-        assignments => assignments.push(assignmentId).toSet().toList()
+        assignments =>
+          assignments
+            .push(assignmentId)
+            .toSet()
+            .toList()
       ),
 
     [assignmentsActionTypes.ADD_FULFILLED]: (
       state,
-      { payload: { id: assignmentId }, meta: { body: { groupId } } }
+      {
+        payload: { id: assignmentId },
+        meta: {
+          body: { groupId },
+        },
+      }
     ) =>
       state.updateIn(
         ['resources', groupId, 'data', 'privateData', 'assignments'],
-        assignments => assignments.push(assignmentId).toSet().toList()
+        assignments =>
+          assignments
+            .push(assignmentId)
+            .toSet()
+            .toList()
       ),
 
     [assignmentsActionTypes.REMOVE_FULFILLED]: (
@@ -419,7 +431,11 @@ const reducer = handleActions(
     ) =>
       state.updateIn(
         ['resources', groupId, 'data', 'privateData', 'shadowAssignments'],
-        assignments => assignments.push(shadowAssignmentId).toSet().toList()
+        assignments =>
+          assignments
+            .push(shadowAssignmentId)
+            .toSet()
+            .toList()
       ),
 
     [shadowAssignmentsActionTypes.ADD_FULFILLED]: (
@@ -428,7 +444,11 @@ const reducer = handleActions(
     ) =>
       state.updateIn(
         ['resources', groupId, 'data', 'privateData', 'shadowAssignments'],
-        assignments => assignments.push(shadowAssignmentId).toSet().toList()
+        assignments =>
+          assignments
+            .push(shadowAssignmentId)
+            .toSet()
+            .toList()
       ),
 
     [shadowAssignmentsActionTypes.REMOVE_FULFILLED]: (
@@ -451,7 +471,7 @@ const reducer = handleActions(
       state.setIn(
         ['resources', data.id],
         createRecord({ state: resourceStatus.FULFILLED, data })
-      )
+      ),
   }),
   initialState
 );

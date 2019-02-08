@@ -15,8 +15,8 @@ const ChangePasswordForm = ({
   handleSubmit,
   hasFailed = false,
   hasSucceeded = false,
-  invalid
-}) =>
+  invalid,
+}) => (
   <FormBox
     title={
       <FormattedMessage
@@ -31,47 +31,51 @@ const ChangePasswordForm = ({
           type="submit"
           onClick={handleSubmit}
           bsStyle="success"
-          disabled={invalid || submitting || hasSucceeded}
-        >
-          {!submitting
-            ? hasSucceeded
-              ? <span>
-                  <SuccessIcon gapRight />
-                  <FormattedMessage
-                    id="app.changePasswordForm.success"
-                    defaultMessage="Your password has been changed."
-                  />
-                </span>
-              : <FormattedMessage
-                  id="app.changePasswordForm.changePassword"
-                  defaultMessage="Change Password"
-                />
-            : <span>
-                <LoadingIcon gapRight />
+          disabled={invalid || submitting || hasSucceeded}>
+          {!submitting ? (
+            hasSucceeded ? (
+              <span>
+                <SuccessIcon gapRight />
                 <FormattedMessage
-                  id="app.changePasswordForm.processing"
-                  defaultMessage="Changing..."
+                  id="app.changePasswordForm.success"
+                  defaultMessage="Your password has been changed."
                 />
-              </span>}
+              </span>
+            ) : (
+              <FormattedMessage
+                id="app.changePasswordForm.changePassword"
+                defaultMessage="Change Password"
+              />
+            )
+          ) : (
+            <span>
+              <LoadingIcon gapRight />
+              <FormattedMessage
+                id="app.changePasswordForm.processing"
+                defaultMessage="Changing..."
+              />
+            </span>
+          )}
         </Button>
       </div>
-    }
-  >
-    {hasSucceeded &&
+    }>
+    {hasSucceeded && (
       <Alert bsStyle="success">
         <FormattedMessage
           id="app.changePasswordForm.succeeded"
           defaultMessage="You can now log in with your new password."
         />
-      </Alert>}
+      </Alert>
+    )}
 
-    {hasFailed &&
+    {hasFailed && (
       <Alert bsStyle="danger">
         <FormattedMessage
           id="app.changePasswordForm.failed"
           defaultMessage="Changing password failed."
         />
-      </Alert>}
+      </Alert>
+    )}
 
     <Field
       name="password"
@@ -104,7 +108,8 @@ const ChangePasswordForm = ({
         />
       }
     />
-  </FormBox>;
+  </FormBox>
+);
 
 ChangePasswordForm.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
@@ -112,7 +117,7 @@ ChangePasswordForm.propTypes = {
   hasFailed: PropTypes.bool,
   hasSucceeded: PropTypes.bool,
   submitting: PropTypes.bool,
-  invalid: PropTypes.bool
+  invalid: PropTypes.bool,
 };
 
 const validate = ({ password, passwordCheck }) => {
@@ -166,5 +171,5 @@ export default reduxForm({
   form: 'changePassword',
   validate,
   asyncValidate,
-  asyncBlurFields: ['password']
+  asyncBlurFields: ['password'],
 })(ChangePasswordForm);

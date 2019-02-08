@@ -11,19 +11,19 @@ import factory, { initialState } from '../helpers/resourceManager';
 const resourceName = 'exerciseEnvironmentLimits';
 const { actions, reduceActions } = factory({
   resourceName,
-  apiEndpointFactory: id => id
+  apiEndpointFactory: id => id,
 });
 
 export const additionalActionTypes = {
   CLONE_VERTICAL: 'recodex/limits/CLONE_VERTICAL',
   CLONE_HORIZONTAL: 'recodex/limits/CLONE_HORIZONTAL',
-  CLONE_ALL: 'recodex/limits/CLONE_ALL'
+  CLONE_ALL: 'recodex/limits/CLONE_ALL',
 };
 
 export const endpointDisguisedAsIdFactory = ({
   exerciseId,
   hwGroup,
-  runtimeEnvironmentId
+  runtimeEnvironmentId,
 }) =>
   `/exercises/${exerciseId}/environment/${runtimeEnvironmentId}/hwgroup/${hwGroup}/limits`;
 
