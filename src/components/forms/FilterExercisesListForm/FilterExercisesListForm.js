@@ -21,7 +21,7 @@ const authorsToOptions = defaultMemoize((authors, locale) =>
     )
     .map(author => ({
       key: author.id,
-      name: author.fullName
+      name: author.fullName,
     }))
 );
 
@@ -35,25 +35,25 @@ const FilterExercisesListForm = ({
   submitSucceeded = false,
   invalid,
   change,
-  intl: { locale }
-}) =>
+  intl: { locale },
+}) => (
   <Form method="POST" onSubmit={onSubmit}>
     <Well bsSize="sm">
-      {submitFailed &&
+      {submitFailed && (
         <Alert bsStyle="danger">
           <FormattedMessage
             id="generic.operationFailed"
             defaultMessage="Operation failed. Please try again later."
           />
-        </Alert>}
+        </Alert>
+      )}
 
       <ResourceRenderer
         resource={authors}
         returnAsArray
         forceLoading={authorsLoading}
-        bulkyLoading
-      >
-        {authors =>
+        bulkyLoading>
+        {authors => (
           <Grid fluid>
             <Row>
               <Col sm={12} md={4}>
@@ -66,7 +66,8 @@ const FilterExercisesListForm = ({
                       <FormattedMessage
                         id="app.filterExercisesListForm.searchName"
                         defaultMessage="Search by name"
-                      />:
+                      />
+                      :
                     </span>
                   }
                 />
@@ -83,30 +84,30 @@ const FilterExercisesListForm = ({
                       <FormattedMessage
                         id="app.filterExercisesListForm.author"
                         defaultMessage="Author"
-                      />:
+                      />
+                      :
                     </span>
                   }
                   associatedButton={
                     <div className="text-nowrap">
                       <Button
                         className="btn-flat"
-                        onClick={() => change('author', null)}
-                      >
+                        onClick={() => change('author', null)}>
                         <FormattedMessage
                           id="app.filterExercisesListForm.allButton"
                           defaultMessage="All"
                         />
                       </Button>
-                      {authors.find(author => author.id === loggedUserId) &&
+                      {authors.find(author => author.id === loggedUserId) && (
                         <Button
                           className="btn-flat"
-                          onClick={() => change('author', loggedUserId)}
-                        >
+                          onClick={() => change('author', loggedUserId)}>
                           <FormattedMessage
                             id="app.filterExercisesListForm.mineButton"
                             defaultMessage="Mine"
                           />
-                        </Button>}
+                        </Button>
+                      )}
                     </div>
                   }
                 />
@@ -132,16 +133,18 @@ const FilterExercisesListForm = ({
                           id="generic.filtersSet"
                           defaultMessage="Filters Set"
                         />
-                      )
+                      ),
                     }}
                   />
                 </div>
               </Col>
             </Row>
-          </Grid>}
+          </Grid>
+        )}
       </ResourceRenderer>
     </Well>
-  </Form>;
+  </Form>
+);
 
 FilterExercisesListForm.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
@@ -153,12 +156,12 @@ FilterExercisesListForm.propTypes = {
   authors: ImmutablePropTypes.list,
   authorsLoading: PropTypes.bool.isRequired,
   loggedUserId: PropTypes.string.isRequired,
-  intl: intlShape.isRequired
+  intl: intlShape.isRequired,
 };
 
 export default injectIntl(
   reduxForm({
     enableReinitialize: true,
-    keepDirtyOnReinitialize: false
+    keepDirtyOnReinitialize: false,
   })(FilterExercisesListForm)
 );

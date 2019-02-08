@@ -7,7 +7,7 @@ import { Well } from 'react-bootstrap';
 import SharedLocalizedFields from './SharedLocalizedFields';
 import { MarkdownTextAreaField } from '../Fields';
 
-const LocalizedGroupFormField = ({ prefix, data: enabled }) =>
+const LocalizedGroupFormField = ({ prefix, data: enabled }) => (
   <Well>
     <SharedLocalizedFields prefix={prefix} enabled={enabled} />
 
@@ -22,11 +22,12 @@ const LocalizedGroupFormField = ({ prefix, data: enabled }) =>
         />
       }
     />
-  </Well>;
+  </Well>
+);
 
 LocalizedGroupFormField.propTypes = {
   prefix: PropTypes.string.isRequired,
-  data: PropTypes.bool.isRequired
+  data: PropTypes.bool.isRequired,
 };
 
 export default LocalizedGroupFormField;

@@ -14,25 +14,27 @@ const DeleteExerciseButtonContainer = ({
   onDeleted,
   ...props
 }) =>
-  resourceless
-    ? <ConfirmDeleteButton {...props} onClick={deleteExercise} />
-    : <DeleteButton
-        {...props}
-        resource={exercise}
-        deleteResource={deleteExercise}
-      />;
+  resourceless ? (
+    <ConfirmDeleteButton {...props} onClick={deleteExercise} />
+  ) : (
+    <DeleteButton
+      {...props}
+      resource={exercise}
+      deleteResource={deleteExercise}
+    />
+  );
 
 DeleteExerciseButtonContainer.propTypes = {
   id: PropTypes.string.isRequired,
   resourceless: PropTypes.bool,
   exercise: ImmutablePropTypes.map,
   deleteExercise: PropTypes.func.isRequired,
-  onDeleted: PropTypes.func
+  onDeleted: PropTypes.func,
 };
 
 export default connect(
   (state, { id }) => ({
-    exercise: getExercise(id)(state)
+    exercise: getExercise(id)(state),
   }),
   (dispatch, { id, onDeleted }) => ({
     deleteExercise: () => {
@@ -41,6 +43,6 @@ export default connect(
         promise.then(onDeleted);
       }
       return promise;
-    }
+    },
   })
 )(DeleteExerciseButtonContainer);

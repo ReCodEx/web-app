@@ -11,26 +11,27 @@ const DeleteAssignmentButtonContainer = ({
   deleteAssignment,
   onDeleted,
   ...props
-}) =>
+}) => (
   <DeleteButton
     {...props}
     resource={assignment}
     deleteResource={deleteAssignment}
-  />;
+  />
+);
 
 DeleteAssignmentButtonContainer.propTypes = {
   id: PropTypes.string.isRequired,
   assignment: ImmutablePropTypes.map,
   deleteAssignment: PropTypes.func.isRequired,
-  onDeleted: PropTypes.func
+  onDeleted: PropTypes.func,
 };
 
 export default connect(
   (state, { id }) => ({
-    assignment: getAssignment(state)(id)
+    assignment: getAssignment(state)(id),
   }),
   (dispatch, { id, onDeleted }) => ({
     deleteAssignment: () =>
-      dispatch(deleteAssignment(id)).then(() => onDeleted && onDeleted())
+      dispatch(deleteAssignment(id)).then(() => onDeleted && onDeleted()),
   })
 )(DeleteAssignmentButtonContainer);

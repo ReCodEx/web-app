@@ -7,7 +7,7 @@ import ArchiveGroupButton from '../../components/buttons/ArchiveGroupButton';
 import { setArchived } from '../../redux/modules/groups';
 import {
   groupSelector,
-  groupArchivedPendingChange
+  groupArchivedPendingChange,
 } from '../../redux/selectors/groups';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 
@@ -25,15 +25,16 @@ class ArchiveGroupButtonContainer extends Component {
     return (
       <ResourceRenderer resource={group}>
         {({ directlyArchived, permissionHints }) =>
-          permissionHints.archive
-            ? <ArchiveGroupButton
-                archived={directlyArchived}
-                pending={pending}
-                setArchived={setArchived}
-                bsSize={bsSize}
-                {...props}
-              />
-            : null}
+          permissionHints.archive ? (
+            <ArchiveGroupButton
+              archived={directlyArchived}
+              pending={pending}
+              setArchived={setArchived}
+              bsSize={bsSize}
+              {...props}
+            />
+          ) : null
+        }
       </ResourceRenderer>
     );
   }
@@ -45,21 +46,22 @@ ArchiveGroupButtonContainer.propTypes = {
   pending: PropTypes.bool.isRequired,
   setArchived: PropTypes.func.isRequired,
   onChange: PropTypes.func,
-  bsSize: PropTypes.string
+  bsSize: PropTypes.string,
 };
 
 const mapStateToProps = (state, { id }) => ({
   group: groupSelector(state, id),
-  pending: groupArchivedPendingChange(id)(state)
+  pending: groupArchivedPendingChange(id)(state),
 });
 
 const mapDispatchToProps = (dispatch, { id, onChange = identity }) => ({
   setArchived: archived => ev => {
     ev && ev.stopPropagation();
     return dispatch(setArchived(id, archived)).then(onChange);
-  }
+  },
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(
-  ArchiveGroupButtonContainer
-);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(ArchiveGroupButtonContainer);

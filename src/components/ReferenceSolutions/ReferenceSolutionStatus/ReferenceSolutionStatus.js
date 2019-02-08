@@ -12,8 +12,8 @@ import Icon, { EditIcon, CodeIcon } from '../../icons';
 const ReferenceSolutionStatus = ({
   description,
   solution: { userId, createdAt },
-  exerciseId
-}) =>
+  exerciseId,
+}) => (
   <Box
     title={
       <FormattedMessage
@@ -23,8 +23,7 @@ const ReferenceSolutionStatus = ({
     }
     noPadding={true}
     collapsable={true}
-    isOpen={true}
-  >
+    isOpen={true}>
     <Table>
       <tbody>
         <tr>
@@ -35,7 +34,8 @@ const ReferenceSolutionStatus = ({
             <FormattedMessage
               id="app.referenceSolutionDetail.exercise"
               defaultMessage="Exercise"
-            />:
+            />
+            :
           </th>
           <td>
             {exerciseId && <ExercisesNameContainer exerciseId={exerciseId} />}
@@ -49,11 +49,10 @@ const ReferenceSolutionStatus = ({
             <FormattedMessage
               id="generic.description"
               defaultMessage="Description"
-            />:
+            />
+            :
           </th>
-          <td>
-            {description}
-          </td>
+          <td>{description}</td>
         </tr>
         <tr>
           <td className="text-center">
@@ -63,7 +62,8 @@ const ReferenceSolutionStatus = ({
             <FormattedMessage
               id="generic.uploadedAt"
               defaultMessage="Uploaded at"
-            />:
+            />
+            :
           </th>
           <td>
             <DateTime unixts={createdAt} showRelative />
@@ -82,15 +82,16 @@ const ReferenceSolutionStatus = ({
         </tr>
       </tbody>
     </Table>
-  </Box>;
+  </Box>
+);
 
 ReferenceSolutionStatus.propTypes = {
   description: PropTypes.string.isRequired,
   solution: PropTypes.shape({
     userId: PropTypes.string.isRequired,
-    createdAt: PropTypes.number.isRequired
+    createdAt: PropTypes.number.isRequired,
   }).isRequired,
-  exerciseId: PropTypes.string.isRequired
+  exerciseId: PropTypes.string.isRequired,
 };
 
 export default ReferenceSolutionStatus;

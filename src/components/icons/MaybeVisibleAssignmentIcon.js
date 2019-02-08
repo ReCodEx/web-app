@@ -15,22 +15,22 @@ const MaybeVisibleAssignmentIcon = ({ id, isPublic, visibleFrom = null }) => {
         placement="right"
         overlay={
           <Tooltip id={id}>
-            {isVisible
-              ? <FormattedMessage
-                  id="app.maybeVisibleIcon.isVisible"
-                  defaultMessage="Is visible to students"
-                />
-              : <FormattedMessage
-                  id="app.maybeVisibleIcon.isHidden"
-                  defaultMessage="Is hidden from student"
-                />}
+            {isVisible ? (
+              <FormattedMessage
+                id="app.maybeVisibleIcon.isVisible"
+                defaultMessage="Is visible to students"
+              />
+            ) : (
+              <FormattedMessage
+                id="app.maybeVisibleIcon.isHidden"
+                defaultMessage="Is hidden from student"
+              />
+            )}
           </Tooltip>
-        }
-      >
+        }>
         <VisibleIcon visible={isVisible} />
       </OverlayTrigger>
-      {!isVisible &&
-        visibleFrom &&
+      {!isVisible && visibleFrom && (
         <OverlayTrigger
           placement="right"
           overlay={
@@ -39,14 +39,14 @@ const MaybeVisibleAssignmentIcon = ({ id, isPublic, visibleFrom = null }) => {
                 id="app.maybePublicIcon.visibleFrom"
                 defaultMessage="Visible from {date}"
                 values={{
-                  date: <DateTime unixts={visibleFrom} showRelative />
+                  date: <DateTime unixts={visibleFrom} showRelative />,
                 }}
               />
             </Tooltip>
-          }
-        >
+          }>
           <Icon gapLeft icon={['far', 'clock']} />
-        </OverlayTrigger>}
+        </OverlayTrigger>
+      )}
     </span>
   );
 };
@@ -54,7 +54,7 @@ const MaybeVisibleAssignmentIcon = ({ id, isPublic, visibleFrom = null }) => {
 MaybeVisibleAssignmentIcon.propTypes = {
   id: PropTypes.any.isRequired,
   isPublic: PropTypes.bool.isRequired,
-  visibleFrom: PropTypes.number
+  visibleFrom: PropTypes.number,
 };
 
 export default MaybeVisibleAssignmentIcon;

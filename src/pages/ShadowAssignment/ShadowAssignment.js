@@ -47,7 +47,7 @@ class ShadowAssignment extends Component {
     const {
       shadowAssignment,
       links: { SHADOW_ASSIGNMENT_EDIT_URI_FACTORY },
-      intl: { locale }
+      intl: { locale },
     } = this.props;
 
     return (
@@ -72,8 +72,8 @@ class ShadowAssignment extends Component {
                 />
               ),
               link: ({ GROUP_DETAIL_URI_FACTORY }) =>
-                GROUP_DETAIL_URI_FACTORY(shadowAssignment.groupId)
-            })
+                GROUP_DETAIL_URI_FACTORY(shadowAssignment.groupId),
+            }),
           },
           {
             text: (
@@ -82,22 +82,20 @@ class ShadowAssignment extends Component {
                 defaultMessage="Shadow Assignment"
               />
             ),
-            iconName: 'hourglass-start'
-          }
-        ]}
-      >
-        {shadowAssignment =>
+            iconName: 'hourglass-start',
+          },
+        ]}>
+        {shadowAssignment => (
           <div>
             <Row>
               <Col xs={12}>
                 <HierarchyLineContainer groupId={shadowAssignment.groupId} />
-                {hasPermissions(shadowAssignment, 'update') &&
+                {hasPermissions(shadowAssignment, 'update') && (
                   <p>
                     <LinkContainer
                       to={SHADOW_ASSIGNMENT_EDIT_URI_FACTORY(
                         shadowAssignment.id
-                      )}
-                    >
+                      )}>
                       <Button bsStyle="warning">
                         <EditIcon gapRight />
                         <FormattedMessage
@@ -106,33 +104,38 @@ class ShadowAssignment extends Component {
                         />
                       </Button>
                     </LinkContainer>
-                  </p>}
+                  </p>
+                )}
               </Col>
             </Row>
 
             <Row>
               <Col lg={6}>
-                {shadowAssignment.localizedTexts.length > 0 &&
+                {shadowAssignment.localizedTexts.length > 0 && (
                   <div>
                     <LocalizedTexts locales={shadowAssignment.localizedTexts} />
-                  </div>}
+                  </div>
+                )}
               </Col>
               <Col lg={6}>
                 <ShadowAssignmentDetail {...shadowAssignment} />
-                {!hasPermissions(shadowAssignment, 'viewAllPoints') &&
+                {!hasPermissions(shadowAssignment, 'viewAllPoints') && (
                   <ShadowAssignmentPointsDetail
                     {...this.findPoints(shadowAssignment.points)}
-                  />}
+                  />
+                )}
               </Col>
             </Row>
 
-            {hasPermissions(shadowAssignment, 'viewAllPoints') &&
+            {hasPermissions(shadowAssignment, 'viewAllPoints') && (
               <Row>
                 <Col xs={12}>
                   <ShadowAssignmentPointsContainer {...shadowAssignment} />
                 </Col>
-              </Row>}
-          </div>}
+              </Row>
+            )}
+          </div>
+        )}
       </Page>
     );
   }
@@ -140,14 +143,14 @@ class ShadowAssignment extends Component {
 
 ShadowAssignment.propTypes = {
   params: PropTypes.shape({
-    assignmentId: PropTypes.string.isRequired
+    assignmentId: PropTypes.string.isRequired,
   }),
   shadowAssignment: PropTypes.object,
   loggedUserId: PropTypes.string,
   group: PropTypes.func,
   loadAsync: PropTypes.func.isRequired,
   links: PropTypes.object.isRequired,
-  intl: intlShape.isRequired
+  intl: intlShape.isRequired,
 };
 
 export default withLinks(
@@ -155,11 +158,11 @@ export default withLinks(
     (state, { params: { assignmentId } }) => {
       return {
         shadowAssignment: getShadowAssignment(state)(assignmentId),
-        loggedUserId: loggedInUserIdSelector(state)
+        loggedUserId: loggedInUserIdSelector(state),
       };
     },
     (dispatch, { params: { assignmentId } }) => ({
-      loadAsync: () => ShadowAssignment.loadAsync({ assignmentId }, dispatch)
+      loadAsync: () => ShadowAssignment.loadAsync({ assignmentId }, dispatch),
     })
   )(injectIntl(ShadowAssignment))
 );

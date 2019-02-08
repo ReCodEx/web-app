@@ -13,7 +13,7 @@ export const actionTypes = {
   EMAIL_VERIFICATION_FULFILLED:
     'recodex/email-verification/EMAIL_VERIFICATION_FULFILLED',
   EMAIL_VERIFICATION_REJECTED:
-    'recodex/email-verification/EMAIL_VERIFICATION_REJECTED'
+    'recodex/email-verification/EMAIL_VERIFICATION_REJECTED',
 };
 
 export const resendVerificationEmail = userId =>
@@ -21,7 +21,7 @@ export const resendVerificationEmail = userId =>
     type: actionTypes.RESEND_EMAIL,
     method: 'POST',
     endpoint: '/email-verification/resend',
-    meta: { userId }
+    meta: { userId },
   });
 
 export const verifyEmail = (userId, accessToken) =>
@@ -30,7 +30,7 @@ export const verifyEmail = (userId, accessToken) =>
     method: 'POST',
     endpoint: '/email-verification/verify',
     accessToken,
-    meta: { userId }
+    meta: { userId },
   });
 
 export const initialState = fromJS({});
@@ -53,7 +53,7 @@ const reducer = handleActions(
       state.setIn([userId, 'resending'], 'FAILED'),
 
     [actionTypes.RESEND_EMAIL_FULFILLED]: (state, { meta: { userId } }) =>
-      state.setIn([userId, 'resending'], 'FULFILLED')
+      state.setIn([userId, 'resending'], 'FULFILLED'),
   },
   initialState
 );

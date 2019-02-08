@@ -6,7 +6,7 @@ import { downloadHelper } from '../helpers/api/download';
 const resourceName = 'files';
 const { actions, reduceActions } = factory({
   resourceName,
-  apiEndpointFactory: id => `/uploaded-files/${id}`
+  apiEndpointFactory: id => `/uploaded-files/${id}`,
 });
 
 /**
@@ -14,7 +14,7 @@ const { actions, reduceActions } = factory({
  */
 
 const actionTypes = {
-  DOWNLOAD: 'recodex/files/DOWNLOAD'
+  DOWNLOAD: 'recodex/files/DOWNLOAD',
 };
 
 export const loadFile = actions.pushResource;
@@ -25,14 +25,14 @@ export const download = downloadHelper({
   fetch: fetchFileIfNeeded,
   actionType: actionTypes.DOWNLOAD,
   fileNameSelector: (id, state) => getJsData(getFile(id)(state)).name,
-  contentType: 'application/octet-stream'
+  contentType: 'application/octet-stream',
 });
 export const downloadSupplementaryFile = downloadHelper({
   endpoint: id => `/uploaded-files/supplementary-file/${id}/download`,
   fetch: fetchFileIfNeeded,
   actionType: actionTypes.DOWNLOAD,
   fileNameSelector: (id, state) => getJsData(getFile(id)(state)).name,
-  contentType: 'application/octet-stream'
+  contentType: 'application/octet-stream',
 });
 
 /**

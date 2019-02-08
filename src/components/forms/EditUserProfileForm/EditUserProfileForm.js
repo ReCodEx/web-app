@@ -12,7 +12,7 @@ import {
   TextField,
   PasswordField,
   PasswordStrength,
-  CheckboxField
+  CheckboxField,
 } from '../Fields';
 
 const EditUserProfileForm = ({
@@ -27,8 +27,8 @@ const EditUserProfileForm = ({
   allowChangePassword,
   emptyLocalPassword,
   disabledNameChange,
-  reset
-}) =>
+  reset,
+}) => (
   <FormBox
     title={
       <FormattedMessage
@@ -61,19 +61,19 @@ const EditUserProfileForm = ({
             ),
             success: (
               <FormattedMessage id="generic.saved" defaultMessage="Saved" />
-            )
+            ),
           }}
         />
       </div>
-    }
-  >
-    {submitFailed &&
+    }>
+    {submitFailed && (
       <Alert bsStyle="danger">
         <FormattedMessage
           id="generic.savingFailed"
           defaultMessage="Saving failed. Please try again later."
         />
-      </Alert>}
+      </Alert>
+    )}
 
     <Field
       name="degreesBeforeName"
@@ -154,7 +154,7 @@ const EditUserProfileForm = ({
       }
     />
 
-    {allowChangePassword &&
+    {allowChangePassword && (
       <div>
         <h3>
           <FormattedMessage
@@ -169,32 +169,34 @@ const EditUserProfileForm = ({
           />
         </p>
 
-        {emptyLocalPassword
-          ? <div className="callout callout-warning">
-              <h4>
-                <FormattedMessage
-                  id="app.editUserProfile.emptyLocalPassword"
-                  defaultMessage="Local account does not have a password."
-                />
-              </h4>
-              <p>
-                <FormattedMessage
-                  id="app.editUserProfile.emptyLocalPasswordExplain"
-                  defaultMessage="You may not sign in to ReCodEx using local account until you set the password."
-                />
-              </p>
-            </div>
-          : <Field
-              name="oldPassword"
-              component={PasswordField}
-              autoComplete="off"
-              label={
-                <FormattedMessage
-                  id="app.changePasswordForm.oldPassword"
-                  defaultMessage="Old Password:"
-                />
-              }
-            />}
+        {emptyLocalPassword ? (
+          <div className="callout callout-warning">
+            <h4>
+              <FormattedMessage
+                id="app.editUserProfile.emptyLocalPassword"
+                defaultMessage="Local account does not have a password."
+              />
+            </h4>
+            <p>
+              <FormattedMessage
+                id="app.editUserProfile.emptyLocalPasswordExplain"
+                defaultMessage="You may not sign in to ReCodEx using local account until you set the password."
+              />
+            </p>
+          </div>
+        ) : (
+          <Field
+            name="oldPassword"
+            component={PasswordField}
+            autoComplete="off"
+            label={
+              <FormattedMessage
+                id="app.changePasswordForm.oldPassword"
+                defaultMessage="Old Password:"
+              />
+            }
+          />
+        )}
 
         <Field
           name="password"
@@ -230,8 +232,10 @@ const EditUserProfileForm = ({
             />
           }
         />
-      </div>}
-  </FormBox>;
+      </div>
+    )}
+  </FormBox>
+);
 
 EditUserProfileForm.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
@@ -247,7 +251,7 @@ EditUserProfileForm.propTypes = {
   reset: PropTypes.func,
   allowChangePassword: PropTypes.bool.isRequired,
   emptyLocalPassword: PropTypes.bool.isRequired,
-  disabledNameChange: PropTypes.bool
+  disabledNameChange: PropTypes.bool,
 };
 
 const validate = (
@@ -387,5 +391,5 @@ export default reduxForm({
   asyncValidate,
   asyncBlurFields: ['email', 'password', 'passwordConfirm'],
   enableReinitialize: true,
-  keepDirtyOnReinitialize: false
+  keepDirtyOnReinitialize: false,
 })(EditUserProfileForm);

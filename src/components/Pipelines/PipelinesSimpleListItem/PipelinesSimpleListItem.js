@@ -10,24 +10,20 @@ const PipelinesSimpleListItem = ({
   name,
   author,
   createActions,
-  links: { PIPELINE_URI_FACTORY }
-}) =>
+  links: { PIPELINE_URI_FACTORY },
+}) => (
   <tr>
     <td>
       <strong>
-        <Link to={PIPELINE_URI_FACTORY(id)}>
-          {name}
-        </Link>
+        <Link to={PIPELINE_URI_FACTORY(id)}>{name}</Link>
       </strong>
     </td>
     <td>
       <UsersNameContainer userId={author} />
     </td>
-    {createActions &&
-      <td>
-        {createActions(id)}
-      </td>}
-  </tr>;
+    {createActions && <td>{createActions(id)}</td>}
+  </tr>
+);
 
 PipelinesSimpleListItem.propTypes = {
   id: PropTypes.string.isRequired,
@@ -35,7 +31,7 @@ PipelinesSimpleListItem.propTypes = {
   name: PropTypes.string.isRequired,
   createdAt: PropTypes.number.isRequired,
   createActions: PropTypes.func,
-  links: PropTypes.object
+  links: PropTypes.object,
 };
 
 export default withLinks(PipelinesSimpleListItem);

@@ -10,7 +10,7 @@ const resourceName = 'canSubmit';
 const { actions, reduceActions } = factory({
   resourceName,
   apiEndpointFactory: assignmentId =>
-    `/exercise-assignments/${assignmentId}/can-submit`
+    `/exercise-assignments/${assignmentId}/can-submit`,
 });
 
 export const canSubmit = actions.fetchResource;
@@ -19,7 +19,7 @@ const reducer = handleActions(
   Object.assign({}, reduceActions, {
     [assignmentActionTypes.UPDATE_FULFILLED]: (state, { meta: { id } }) => {
       return state.removeIn(['resources', id]);
-    }
+    },
   }),
   initialState
 );

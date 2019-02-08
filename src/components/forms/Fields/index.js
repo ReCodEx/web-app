@@ -22,5 +22,5 @@ export { default as TextField } from './TextField';
 export { default as ExpandingTextField } from './ExpandingTextField';
 export { default as ExpandingSelectField } from './ExpandingSelectField';
 export {
-  default as ExpandingInputFilesField
+  default as ExpandingInputFilesField,
 } from './ExpandingInputFilesField';

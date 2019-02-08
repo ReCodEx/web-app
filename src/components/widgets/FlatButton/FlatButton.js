@@ -16,7 +16,7 @@ const FlatButton = ({
       <Button
         className={classnames({
           'btn-flat': true,
-          [className]: className.length > 0
+          [className]: className.length > 0,
         })}
         {...props}
       />
@@ -25,7 +25,7 @@ const FlatButton = ({
     <Button
       className={classnames({
         'btn-flat': true,
-        [className]: className.length > 0
+        [className]: className.length > 0,
       })}
       onClick={onClick}
       {...props}
@@ -36,7 +36,7 @@ FlatButton.propTypes = {
   className: PropTypes.string,
   onClick: PropTypes.func,
   confirm: PropTypes.any,
-  confirmId: PropTypes.string
+  confirmId: PropTypes.string,
 };
 
 export default FlatButton;

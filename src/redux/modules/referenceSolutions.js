@@ -3,7 +3,7 @@ import { handleActions } from 'redux-actions';
 import factory, {
   initialState,
   createRecord,
-  resourceStatus
+  resourceStatus,
 } from '../helpers/resourceManager';
 import { createApiAction } from '../middleware/apiMiddleware';
 
@@ -13,7 +13,7 @@ import { actionTypes as referenceSolutionEvaluationsActionTypes } from './refere
 const resourceName = 'referenceSolutions';
 const { actions, reduceActions } = factory({
   resourceName,
-  apiEndpointFactory: solutionId => `/reference-solutions/${solutionId}`
+  apiEndpointFactory: solutionId => `/reference-solutions/${solutionId}`,
 });
 
 /**
@@ -23,7 +23,7 @@ const { actions, reduceActions } = factory({
 export const additionalActionTypes = {
   RESUBMIT: 'recodex/referenceSolutions/RESUBMIT',
   FETCHALL: 'recodex/referenceSolutions/FETCHALL',
-  FETCHALL_FULFILLED: 'recodex/referenceSolutions/FETCHALL_FULFILLED'
+  FETCHALL_FULFILLED: 'recodex/referenceSolutions/FETCHALL_FULFILLED',
 };
 
 export const fetchReferenceSolution = actions.fetchResource;
@@ -35,7 +35,7 @@ export const fetchReferenceSolutions = exerciseId =>
     type: additionalActionTypes.FETCHALL,
     endpoint: `/reference-solutions/exercise/${exerciseId}`,
     method: 'GET',
-    meta: { exerciseId }
+    meta: { exerciseId },
   });
 
 export const resubmitReferenceSolution = (
@@ -50,8 +50,8 @@ export const resubmitReferenceSolution = (
     body: { debug: isDebug },
     meta: {
       submissionType: 'referenceSolution',
-      progressObserverId
-    }
+      progressObserverId,
+    },
   });
 
 /**
@@ -71,7 +71,7 @@ const reducer = handleActions(
             ['resources', referenceSolution.id],
             createRecord({
               state: resourceStatus.FULFILLED,
-              data: referenceSolution
+              data: referenceSolution,
             })
           )
         : state,
@@ -83,7 +83,7 @@ const reducer = handleActions(
             ['resources', data.id],
             createRecord({
               data,
-              state: resourceStatus.FULFILLED
+              state: resourceStatus.FULFILLED,
             })
           ),
         state
@@ -99,7 +99,7 @@ const reducer = handleActions(
             submissions =>
               submissions.filter(submission => submission !== evaluationId)
           )
-        : state
+        : state,
   }),
   initialState
 );

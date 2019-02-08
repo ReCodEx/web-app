@@ -20,32 +20,33 @@ const PipelinesListItem = ({
   showCreatedAt = false,
   fullWidthName = false,
   createActions,
-  links: { PIPELINE_URI_FACTORY }
-}) =>
+  links: { PIPELINE_URI_FACTORY },
+}) => (
   <tr>
     <td className="text-nowrap shrink-col">
       <OverlayTrigger
         placement="bottom"
         overlay={
           <Tooltip id={`${id}-pipeline`}>
-            {author
-              ? <FormattedMessage
-                  id="app.pipelinesList.authoredPipelineIconTooltip"
-                  defaultMessage="Authored pipeline which can be used in custom exercise configurations."
-                />
-              : <FormattedMessage
-                  id="app.pipelinesList.universalPipelineIconTooltip"
-                  defaultMessage="Universal pipeline which is used in common (simple) exercise configurations."
-                />}
+            {author ? (
+              <FormattedMessage
+                id="app.pipelinesList.authoredPipelineIconTooltip"
+                defaultMessage="Authored pipeline which can be used in custom exercise configurations."
+              />
+            ) : (
+              <FormattedMessage
+                id="app.pipelinesList.universalPipelineIconTooltip"
+                defaultMessage="Universal pipeline which is used in common (simple) exercise configurations."
+              />
+            )}
           </Tooltip>
-        }
-      >
+        }>
         <PipelineIcon className={author ? 'text-muted' : 'text-primary'} />
       </OverlayTrigger>
     </td>
 
     <td className="text-center shrink-col text-muted">
-      {parameters.isCompilationPipeline &&
+      {parameters.isCompilationPipeline && (
         <OverlayTrigger
           placement="bottom"
           overlay={
@@ -55,12 +56,11 @@ const PipelinesListItem = ({
                 defaultMessage="Compilation pipeline"
               />
             </Tooltip>
-          }
-        >
+          }>
           <Icon icon="cogs" />
-        </OverlayTrigger>}
-      {parameters.isExecutionPipeline &&
-        !parameters.judgeOnlyPipeline &&
+        </OverlayTrigger>
+      )}
+      {parameters.isExecutionPipeline && !parameters.judgeOnlyPipeline && (
         <OverlayTrigger
           placement="bottom"
           overlay={
@@ -70,11 +70,11 @@ const PipelinesListItem = ({
                 defaultMessage="Execution (testing) pipeline"
               />
             </Tooltip>
-          }
-        >
+          }>
           <Icon icon="bolt" />
-        </OverlayTrigger>}
-      {parameters.judgeOnlyPipeline &&
+        </OverlayTrigger>
+      )}
+      {parameters.judgeOnlyPipeline && (
         <OverlayTrigger
           placement="bottom"
           overlay={
@@ -84,14 +84,14 @@ const PipelinesListItem = ({
                 defaultMessage="Judge-only pipeline"
               />
             </Tooltip>
-          }
-        >
+          }>
           <Icon icon="balance-scale" />
-        </OverlayTrigger>}
+        </OverlayTrigger>
+      )}
     </td>
 
     <td className="text-center shrink-col text-muted">
-      {parameters.producesStdout &&
+      {parameters.producesStdout && (
         <OverlayTrigger
           placement="bottom"
           overlay={
@@ -101,11 +101,11 @@ const PipelinesListItem = ({
                 defaultMessage="Tested solution is expected to yield results to standard output"
               />
             </Tooltip>
-          }
-        >
+          }>
           <Icon icon="align-left" gapRight />
-        </OverlayTrigger>}
-      {parameters.producesFiles &&
+        </OverlayTrigger>
+      )}
+      {parameters.producesFiles && (
         <OverlayTrigger
           placement="bottom"
           overlay={
@@ -115,34 +115,37 @@ const PipelinesListItem = ({
                 defaultMessage="Tested solution is expected to yield results into a specific file"
               />
             </Tooltip>
-          }
-        >
+          }>
           <Icon icon={['far', 'file-alt']} gapRight />
-        </OverlayTrigger>}
+        </OverlayTrigger>
+      )}
     </td>
 
     <td
-      className={classnames({ 'text-bold': true, 'full-width': fullWidthName })}
-    >
-      <Link to={PIPELINE_URI_FACTORY(id)}>
-        {name}
-      </Link>
+      className={classnames({
+        'text-bold': true,
+        'full-width': fullWidthName,
+      })}>
+      <Link to={PIPELINE_URI_FACTORY(id)}>{name}</Link>
     </td>
 
-    {showAuthor &&
+    {showAuthor && (
       <td>
         {author ? <UsersNameContainer userId={author} /> : <i>ReCodEx</i>}
-      </td>}
+      </td>
+    )}
 
-    {showCreatedAt &&
+    {showCreatedAt && (
       <td>
         <DateTime unixts={createdAt} showRelative />
-      </td>}
+      </td>
+    )}
 
     <td className="text-right text-nowrap">
       {createActions && createActions(id)}
     </td>
-  </tr>;
+  </tr>
+);
 
 PipelinesListItem.propTypes = {
   id: PropTypes.string.isRequired,
@@ -154,7 +157,7 @@ PipelinesListItem.propTypes = {
   showCreatedAt: PropTypes.bool,
   fullWidthName: PropTypes.bool,
   createActions: PropTypes.func,
-  links: PropTypes.object
+  links: PropTypes.object,
 };
 
 export default withLinks(PipelinesListItem);

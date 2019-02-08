@@ -21,19 +21,18 @@ const Layout = ({
   lang,
   currentUrl,
   availableLangs,
-  onCloseSidebar
-}) =>
+  onCloseSidebar,
+}) => (
   <div
     className={classnames({
       wrapper: true,
       'sidebar-mini': true,
       'sidebar-collapse': sidebar.isCollapsed,
-      'sidebar-open': sidebar.isOpen
+      'sidebar-open': sidebar.isOpen,
     })}
     style={{
-      overflow: 'visible'
-    }}
-  >
+      overflow: 'visible',
+    }}>
     <Helmet defaultTitle={`${title}`} titleTemplate={`%s | ${title}`} />
     <Header
       toggleSidebarSize={toggleSize}
@@ -53,14 +52,15 @@ const Layout = ({
       {children}
       <Footer version={process.env.VERSION} />
     </div>
-  </div>;
+  </div>
+);
 
 Layout.propTypes = {
   toggleSize: PropTypes.func,
   toggleVisibility: PropTypes.func,
   sidebar: PropTypes.shape({
     isCollapsed: PropTypes.bool,
-    isOpen: PropTypes.bool
+    isOpen: PropTypes.bool,
   }),
   isLoggedIn: PropTypes.bool,
   pendingFetchOperations: PropTypes.bool,
@@ -68,7 +68,7 @@ Layout.propTypes = {
   children: PropTypes.element,
   lang: PropTypes.string,
   currentUrl: PropTypes.string,
-  availableLangs: PropTypes.array
+  availableLangs: PropTypes.array,
 };
 
 export default Layout;

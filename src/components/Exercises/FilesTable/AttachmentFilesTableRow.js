@@ -15,25 +15,21 @@ const AttachmentFilesTableRow = ({
   size,
   uploadedAt,
   removeFile,
-  links: { DOWNLOAD }
-}) =>
+  links: { DOWNLOAD },
+}) => (
   <tr>
-    <td>
-      {name}
-    </td>
+    <td>{name}</td>
     <td>
       <a href={DOWNLOAD(id)} target="_blank" rel="noopener noreferrer">
         {DOWNLOAD(id)}
       </a>
     </td>
-    <td>
-      {prettyPrintBytes(size)}
-    </td>
+    <td>{prettyPrintBytes(size)}</td>
     <td>
       <DateTime unixts={uploadedAt} showRelative />
     </td>
     <td>
-      {removeFile &&
+      {removeFile && (
         <Confirm
           id={id}
           onConfirmed={() => removeFile(id)}
@@ -43,15 +39,16 @@ const AttachmentFilesTableRow = ({
               defaultMessage="Are you sure you want to delete the file? This cannot be undone."
             />
           }
-          className="pull-right"
-        >
+          className="pull-right">
           <Button bsSize="xs" bsStyle="danger">
             <DeleteIcon gapRight />
             <FormattedMessage id="generic.delete" defaultMessage="Delete" />
           </Button>
-        </Confirm>}
+        </Confirm>
+      )}
     </td>
-  </tr>;
+  </tr>
+);
 
 AttachmentFilesTableRow.propTypes = {
   id: PropTypes.string.isRequired,
@@ -59,7 +56,7 @@ AttachmentFilesTableRow.propTypes = {
   size: PropTypes.number.isRequired,
   uploadedAt: PropTypes.number.isRequired,
   links: PropTypes.object.isRequired,
-  removeFile: PropTypes.func
+  removeFile: PropTypes.func,
 };
 
 export default withLinks(AttachmentFilesTableRow);

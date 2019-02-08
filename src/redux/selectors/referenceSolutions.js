@@ -9,11 +9,17 @@ export const allReferenceSolutionsSelector = createSelector(
 );
 
 export const getReferenceSolution = id =>
-  createSelector(allReferenceSolutionsSelector, solutions => solutions.get(id));
+  createSelector(
+    allReferenceSolutionsSelector,
+    solutions => solutions.get(id)
+  );
 
 export const referenceSolutionsSelector = exerciseId =>
-  createSelector(allReferenceSolutionsSelector, referenceSolutions => {
-    return referenceSolutions.filter(
-      solution => solution.getIn(['data', 'exerciseId']) === exerciseId
-    );
-  });
+  createSelector(
+    allReferenceSolutionsSelector,
+    referenceSolutions => {
+      return referenceSolutions.filter(
+        solution => solution.getIn(['data', 'exerciseId']) === exerciseId
+      );
+    }
+  );

@@ -8,7 +8,7 @@ import FilesTable from '../../components/Exercises/FilesTable';
 import { reset } from '../../redux/modules/upload';
 import {
   createGetUploadedFiles,
-  createAllUploaded
+  createAllUploaded,
 } from '../../redux/selectors/upload';
 
 class FilesTableContainer extends Component {
@@ -34,16 +34,16 @@ FilesTableContainer.propTypes = {
   attachments: ImmutablePropTypes.map,
   newFiles: PropTypes.array,
   canSubmit: PropTypes.bool,
-  addFiles: PropTypes.func
+  addFiles: PropTypes.func,
 };
 
 export default connect(
   (state, { uploadId }) => ({
     uploadId,
     newFiles: createGetUploadedFiles(uploadId)(state),
-    canSubmit: createAllUploaded(uploadId)(state)
+    canSubmit: createAllUploaded(uploadId)(state),
   }),
   (dispatch, { uploadId, addFiles }) => ({
-    addFiles: files => addFiles(files).then(dispatch(reset(uploadId)))
+    addFiles: files => addFiles(files).then(dispatch(reset(uploadId))),
   })
 )(FilesTableContainer);

@@ -5,7 +5,7 @@ import {
   FormGroup,
   FormControl,
   ControlLabel,
-  HelpBlock
+  HelpBlock,
 } from 'react-bootstrap';
 import classnames from 'classnames';
 
@@ -19,16 +19,12 @@ const TextField = ({
   groupClassName = '',
   ignoreDirty = false,
   ...props
-}) =>
+}) => (
   <FormGroup
     controlId={input.name}
     validationState={error ? 'error' : warning ? 'warning' : undefined}
-    className={groupClassName}
-  >
-    {Boolean(label) &&
-      <ControlLabel>
-        {label}
-      </ControlLabel>}
+    className={groupClassName}>
+    {Boolean(label) && <ControlLabel>{label}</ControlLabel>}
     <FormControl
       {...input}
       {...props}
@@ -37,19 +33,13 @@ const TextField = ({
       bsClass={classnames({
         'form-control': true,
         [styles.dirty]: dirty && !ignoreDirty && !error && !warning,
-        [styles.active]: active
+        [styles.active]: active,
       })}
     />
-    {error &&
-      <HelpBlock>
-        {' '}{error}{' '}
-      </HelpBlock>}
-    {!error &&
-      warning &&
-      <HelpBlock>
-        {' '}{warning}{' '}
-      </HelpBlock>}
-  </FormGroup>;
+    {error && <HelpBlock> {error} </HelpBlock>}
+    {!error && warning && <HelpBlock> {warning} </HelpBlock>}
+  </FormGroup>
+);
 
 TextField.propTypes = {
   type: PropTypes.string,
@@ -57,22 +47,22 @@ TextField.propTypes = {
     value: PropTypes.oneOfType([
       PropTypes.array,
       PropTypes.string,
-      PropTypes.number
-    ]).isRequired
+      PropTypes.number,
+    ]).isRequired,
   }).isRequired,
   meta: PropTypes.shape({
     active: PropTypes.bool,
     dirty: PropTypes.bool,
     error: PropTypes.any,
-    warning: PropTypes.any
+    warning: PropTypes.any,
   }).isRequired,
   label: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.element,
-    PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) })
+    PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) }),
   ]),
   groupClassName: PropTypes.string,
-  ignoreDirty: PropTypes.bool
+  ignoreDirty: PropTypes.bool,
 };
 
 export default TextField;

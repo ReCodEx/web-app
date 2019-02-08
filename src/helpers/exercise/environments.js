@@ -14,7 +14,7 @@ const SIMPLE_FORM_ENVIRONMENTS = [
   'mono',
   'node-linux',
   'php-linux',
-  'python3'
+  'python3',
 ];
 
 const SIMPLE_FORM_ENVIRONMENTS_INDEX = createIndex(SIMPLE_FORM_ENVIRONMENTS);
@@ -75,7 +75,7 @@ export const transformSimpleEnvironmentsValues = (
       return;
     }
     const envObj = {
-      runtimeEnvironmentId: env
+      runtimeEnvironmentId: env,
     };
     const environmentConfig = environmentConfigs.find(
       e => e.runtimeEnvironmentId === env
@@ -99,7 +99,7 @@ export const transformEnvironmentValues = formData => {
   if (formData.environmentId) {
     res.push({
       runtimeEnvironmentId: formData.environmentId,
-      variablesTable: formData.variables
+      variablesTable: formData.variables,
     });
   }
   return res;
@@ -147,7 +147,7 @@ export const getPossibleVariablesNames = defaultMemoize(
         const pipelineVariables = safeGet(pipelines, [
           ({ id }) => id === pid,
           'pipeline',
-          'variables'
+          'variables',
         ]);
         pipelineVariables &&
           pipelineVariables

@@ -16,31 +16,33 @@ const ExerciseConfigTypeButton = ({
     />
   ),
   ...props
-}) =>
+}) => (
   <Confirm
     id="confirm-exercise-config-type-change"
     onConfirmed={setExerciseConfigType}
-    question={question}
-  >
+    question={question}>
     <Button disabled={disabled} bsStyle="primary" {...props}>
       <Icon icon={isSimple ? 'cubes' : 'cube'} gapRight />
-      {isSimple
-        ? <FormattedMessage
-            id="app.exerciseConfigTypeButton.advancedConfiguration"
-            defaultMessage="Advanced Configuration"
-          />
-        : <FormattedMessage
-            id="app.exerciseConfigTypeButton.simpleConfiguration"
-            defaultMessage="Simple Configuration"
-          />}
+      {isSimple ? (
+        <FormattedMessage
+          id="app.exerciseConfigTypeButton.advancedConfiguration"
+          defaultMessage="Advanced Configuration"
+        />
+      ) : (
+        <FormattedMessage
+          id="app.exerciseConfigTypeButton.simpleConfiguration"
+          defaultMessage="Simple Configuration"
+        />
+      )}
     </Button>
-  </Confirm>;
+  </Confirm>
+);
 
 ExerciseConfigTypeButton.propTypes = {
   isSimple: PropTypes.bool.isRequired,
   setExerciseConfigType: PropTypes.func,
   disabled: PropTypes.bool,
-  question: PropTypes.any
+  question: PropTypes.any,
 };
 
 export default ExerciseConfigTypeButton;

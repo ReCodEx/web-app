@@ -13,13 +13,13 @@ import Icon from '../../../icons';
 class MenuGroup extends Component {
   componentWillMount = () =>
     this.setState({
-      open: this.isActive(this.props)
+      open: this.isActive(this.props),
     });
 
   componentWillReceiveProps = newProps => {
     if (this.isActive(this.props) !== this.isActive(newProps)) {
       this.setState({
-        open: this.isActive(newProps)
+        open: this.isActive(newProps),
       });
     }
   };
@@ -27,7 +27,7 @@ class MenuGroup extends Component {
   toggle = e => {
     e.preventDefault();
     this.setState({
-      open: !this.state.open
+      open: !this.state.open,
     });
   };
 
@@ -47,12 +47,12 @@ class MenuGroup extends Component {
       currentPath,
       notifications,
       forceOpen = false,
-      intl: { locale }
+      intl: { locale },
     } = this.props;
 
     const dropdownStyles = {
       overflowY: 'auto',
-      overflowX: 'hidden'
+      overflowX: 'hidden',
     };
 
     const itemsNotificationsCount = item =>
@@ -66,25 +66,24 @@ class MenuGroup extends Component {
       <li
         className={classnames({
           active: open || forceOpen,
-          treeview: true
-        })}
-      >
+          treeview: true,
+        })}>
         <a href="#" onClick={this.toggle}>
           <Icon icon={icon} gapRight fixedWidth />
           <span
             style={{
               whiteSpace: 'normal',
               display: 'inline-block',
-              verticalAlign: 'top'
-            }}
-          >
+              verticalAlign: 'top',
+            }}>
             {title}
           </span>
           <span className="pull-right-container">
-            {notificationsCount > 0 &&
+            {notificationsCount > 0 && (
               <small className="label pull-right bg-blue">
                 {notificationsCount}
-              </small>}
+              </small>
+            )}
             <Icon
               icon="angle-left"
               className="pull-right"
@@ -93,27 +92,28 @@ class MenuGroup extends Component {
           </span>
         </a>
         <ul className="treeview-menu" style={dropdownStyles}>
-          {items.map(
-            (item, key) =>
-              isLoading(item)
-                ? <LoadingMenuItem key={key} />
-                : <MenuItem
-                    key={key}
-                    title={getLocalizedName(
-                      {
-                        name: item.getIn(['data', 'name']),
-                        localizedTexts: item
-                          .getIn(['data', 'localizedTexts'])
-                          .toJS()
-                      },
-                      locale
-                    )}
-                    icon={['far', 'circle']}
-                    currentPath={currentPath}
-                    notificationsCount={itemsNotificationsCount(item)}
-                    link={createLink(item)}
-                    small={true}
-                  />
+          {items.map((item, key) =>
+            isLoading(item) ? (
+              <LoadingMenuItem key={key} />
+            ) : (
+              <MenuItem
+                key={key}
+                title={getLocalizedName(
+                  {
+                    name: item.getIn(['data', 'name']),
+                    localizedTexts: item
+                      .getIn(['data', 'localizedTexts'])
+                      .toJS(),
+                  },
+                  locale
+                )}
+                icon={['far', 'circle']}
+                currentPath={currentPath}
+                notificationsCount={itemsNotificationsCount(item)}
+                link={createLink(item)}
+                small={true}
+              />
+            )
           )}
         </ul>
       </li>
@@ -130,11 +130,11 @@ MenuGroup.propTypes = {
   forceOpen: PropTypes.bool,
   createLink: PropTypes.func.isRequired,
   notifications: PropTypes.object,
-  intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired
+  intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired,
 };
 
 MenuGroup.contextTypes = {
-  isActive: PropTypes.func
+  isActive: PropTypes.func,
 };
 
 export default injectIntl(MenuGroup);

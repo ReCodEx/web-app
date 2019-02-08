@@ -5,7 +5,7 @@ import { canUseDOM } from 'exenv';
 
 import {
   newPendingFetchOperation,
-  completedFetchOperation
+  completedFetchOperation,
 } from '../../modules/app';
 import { logout } from '../../modules/auth';
 import { isTokenValid, decode } from '../../helpers/token';
@@ -124,7 +124,7 @@ export const createRequest = (
     method,
     headers,
     body: encodeBody(body, method, uploadFiles),
-    signal: requestAbortController && requestAbortController.signal
+    signal: requestAbortController && requestAbortController.signal,
   });
 
 export const abortAllPendingRequests = () => {
@@ -144,7 +144,7 @@ export const getHeaders = (headers, accessToken, skipContentType) => {
   if (accessToken) {
     return {
       Authorization: `Bearer ${accessToken}`,
-      ...usedHeaders
+      ...usedHeaders,
     };
   }
 
@@ -166,7 +166,7 @@ export const createApiCallPromise = (
     body = undefined,
     wasSuccessful = () => true,
     doNotProcess = false,
-    uploadFiles = false
+    uploadFiles = false,
   },
   dispatch = undefined
 ) => {

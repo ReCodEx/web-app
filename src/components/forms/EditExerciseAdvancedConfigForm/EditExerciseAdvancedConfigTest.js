@@ -10,7 +10,7 @@ import {
   SelectField,
   TextField,
   ExpandingTextField,
-  ExpandingSelectField
+  ExpandingSelectField,
 } from '../Fields';
 import Confirm from '../../forms/Confirm';
 import { encodeId, safeGet, unique } from '../../../helpers/common';
@@ -18,12 +18,14 @@ import { encodeId, safeGet, unique } from '../../../helpers/common';
 import styles from './EditExerciseAdvancedConfig.less';
 
 const validateFileName = value =>
-  !value || value.trim() === ''
-    ? <FormattedMessage
-        id="app.editExerciseAdvancedConfigForm.validation.emptyFileName"
-        defaultMessage="Please, fill in a vaild file name."
-      />
-    : undefined;
+  !value || value.trim() === '' ? (
+    <FormattedMessage
+      id="app.editExerciseAdvancedConfigForm.validation.emptyFileName"
+      defaultMessage="Please, fill in a vaild file name."
+    />
+  ) : (
+    undefined
+  );
 
 const prepareFilesOptions = defaultMemoize((supplementaryFiles, locale) => {
   const supplementaryFilesOptions = unique(
@@ -32,14 +34,17 @@ const prepareFilesOptions = defaultMemoize((supplementaryFiles, locale) => {
     .sort((a, b) => a.localeCompare(b, locale))
     .map(name => ({
       key: name,
-      name
+      name,
     }));
   return supplementaryFilesOptions;
 });
 
 class EditExerciseAdvancedConfigTest extends Component {
   createField = (name, type) => {
-    const { supplementaryFiles, intl: { locale } } = this.props;
+    const {
+      supplementaryFiles,
+      intl: { locale },
+    } = this.props;
     const isArray = type.endsWith('[]');
     const baseType = isArray ? type.substring(0, type.length - 2) : type;
 
@@ -54,17 +59,19 @@ class EditExerciseAdvancedConfigTest extends Component {
       }
     }
 
-    return isArray
-      ? <FieldArray
-          {...commonProps}
-          component={
-            type === 'remote-file[]' ? ExpandingSelectField : ExpandingTextField
-          }
-        />
-      : <Field
-          {...commonProps}
-          component={type === 'remote-file' ? SelectField : TextField}
-        />;
+    return isArray ? (
+      <FieldArray
+        {...commonProps}
+        component={
+          type === 'remote-file[]' ? ExpandingSelectField : ExpandingTextField
+        }
+      />
+    ) : (
+      <Field
+        {...commonProps}
+        component={type === 'remote-file' ? SelectField : TextField}
+      />
+    );
   };
 
   render() {
@@ -74,18 +81,16 @@ class EditExerciseAdvancedConfigTest extends Component {
       testName,
       test,
       testErrors,
-      rawFill
+      rawFill,
     } = this.props;
     return (
       <tbody>
         <tr>
           <td colSpan={4}>
-            <h3>
-              {testName}
-            </h3>
+            <h3>{testName}</h3>
           </td>
           <td className="shrink-col text-right">
-            {Boolean(rawFill) &&
+            {Boolean(rawFill) && (
               <Confirm
                 id="rawFill-all"
                 onConfirmed={rawFill.all}
@@ -94,111 +99,107 @@ class EditExerciseAdvancedConfigTest extends Component {
                     id="app.editExerciseConfigForm.rawFillTest.yesNoQuestion"
                     defaultMessage="Do you really wish to spread all values of this test to every other test?"
                   />
-                }
-              >
+                }>
                 <Button
                   bsStyle="primary"
                   bsSize="sm"
-                  disabled={Boolean(testErrors)}
-                >
+                  disabled={Boolean(testErrors)}>
                   <Icon icon="arrows-alt" gapRight />
                   <FormattedMessage
                     id="app.editExerciseConfigForm.rawFillTest"
                     defaultMessage="Spread Test"
                   />
                 </Button>
-              </Confirm>}
+              </Confirm>
+            )}
           </td>
         </tr>
-        {Object.values(
-          pipelinesVariables
-        ).map(({ id: pipelineId, variables }, idx) =>
-          <React.Fragment key={idx}>
-            <tr className={styles.pipelineName}>
-              <td colSpan={4}>
-                <h5>
-                  <PipelineIcon gapRight />
-                  {safeGet(pipelines, [({ id }) => id === pipelineId, 'name'])}
-                </h5>
-              </td>
-              <td className="shrink-col text-right">
-                {Boolean(rawFill) &&
-                  <Confirm
-                    id={`rawFill-${idx}`}
-                    onConfirmed={rawFill.pipeline(idx)}
-                    question={
-                      <FormattedMessage
-                        id="app.editExerciseConfigForm.rawFillPipeline.yesNoQuestion"
-                        defaultMessage="Do you really wish to spread all values of this pipeline to every other test?"
-                      />
-                    }
-                  >
-                    <Button
-                      bsStyle="primary"
-                      bsSize="xs"
-                      disabled={Boolean(safeGet(testErrors, [idx]))}
-                    >
-                      <Icon icon="arrows-alt" gapRight />
-                      <FormattedMessage
-                        id="app.editExerciseConfigForm.rawFillPipeline"
-                        defaultMessage="Spread Pipeline"
-                      />
-                    </Button>
-                  </Confirm>}
-              </td>
-            </tr>
+        {Object.values(pipelinesVariables).map(
+          ({ id: pipelineId, variables }, idx) => (
+            <React.Fragment key={idx}>
+              <tr className={styles.pipelineName}>
+                <td colSpan={4}>
+                  <h5>
+                    <PipelineIcon gapRight />
+                    {safeGet(pipelines, [
+                      ({ id }) => id === pipelineId,
+                      'name',
+                    ])}
+                  </h5>
+                </td>
+                <td className="shrink-col text-right">
+                  {Boolean(rawFill) && (
+                    <Confirm
+                      id={`rawFill-${idx}`}
+                      onConfirmed={rawFill.pipeline(idx)}
+                      question={
+                        <FormattedMessage
+                          id="app.editExerciseConfigForm.rawFillPipeline.yesNoQuestion"
+                          defaultMessage="Do you really wish to spread all values of this pipeline to every other test?"
+                        />
+                      }>
+                      <Button
+                        bsStyle="primary"
+                        bsSize="xs"
+                        disabled={Boolean(safeGet(testErrors, [idx]))}>
+                        <Icon icon="arrows-alt" gapRight />
+                        <FormattedMessage
+                          id="app.editExerciseConfigForm.rawFillPipeline"
+                          defaultMessage="Spread Pipeline"
+                        />
+                      </Button>
+                    </Confirm>
+                  )}
+                </td>
+              </tr>
 
-            {variables
-              .sort((a, b) => a.name.localeCompare(b.name))
-              .map(({ name, type }) =>
-                <tr key={name}>
-                  <td className="shrink-col text-nowrap">
-                    {name}
-                  </td>
-                  <td className="shrink-col text-nowrap">
-                    <code>
-                      {type}
-                    </code>
-                  </td>
-                  <td>
-                    {this.createField(
-                      `${test}[${idx}].${encodeId(name)}`,
-                      type
-                    )}
-                  </td>
-                  <td className="text-muted small">
-                    {/* TODO -- description once additional metadata are added to pipelines */}
-                  </td>
-                  <td className="shrink-col text-right">
-                    {Boolean(rawFill) &&
-                      <Confirm
-                        id={`rawFill-${idx}-${name}`}
-                        onConfirmed={rawFill.variable(idx, name)}
-                        question={
-                          <FormattedMessage
-                            id="app.editExerciseConfigForm.rawFillVariable.yesNoQuestion"
-                            defaultMessage="Do you really wish to spread this value to every other test?"
-                          />
-                        }
-                      >
-                        <Button
-                          bsStyle="primary"
-                          bsSize="xs"
-                          disabled={Boolean(
-                            safeGet(testErrors, [idx, encodeId(name)])
-                          )}
-                        >
-                          <Icon icon="arrows-alt" gapRight />
-                          <FormattedMessage
-                            id="app.editExerciseConfigForm.rawFill"
-                            defaultMessage="Spread"
-                          />
-                        </Button>
-                      </Confirm>}
-                  </td>
-                </tr>
-              )}
-          </React.Fragment>
+              {variables
+                .sort((a, b) => a.name.localeCompare(b.name))
+                .map(({ name, type }) => (
+                  <tr key={name}>
+                    <td className="shrink-col text-nowrap">{name}</td>
+                    <td className="shrink-col text-nowrap">
+                      <code>{type}</code>
+                    </td>
+                    <td>
+                      {this.createField(
+                        `${test}[${idx}].${encodeId(name)}`,
+                        type
+                      )}
+                    </td>
+                    <td className="text-muted small">
+                      {/* TODO -- description once additional metadata are added to pipelines */}
+                    </td>
+                    <td className="shrink-col text-right">
+                      {Boolean(rawFill) && (
+                        <Confirm
+                          id={`rawFill-${idx}-${name}`}
+                          onConfirmed={rawFill.variable(idx, name)}
+                          question={
+                            <FormattedMessage
+                              id="app.editExerciseConfigForm.rawFillVariable.yesNoQuestion"
+                              defaultMessage="Do you really wish to spread this value to every other test?"
+                            />
+                          }>
+                          <Button
+                            bsStyle="primary"
+                            bsSize="xs"
+                            disabled={Boolean(
+                              safeGet(testErrors, [idx, encodeId(name)])
+                            )}>
+                            <Icon icon="arrows-alt" gapRight />
+                            <FormattedMessage
+                              id="app.editExerciseConfigForm.rawFill"
+                              defaultMessage="Spread"
+                            />
+                          </Button>
+                        </Confirm>
+                      )}
+                    </td>
+                  </tr>
+                ))}
+            </React.Fragment>
+          )
         )}
       </tbody>
     );
@@ -214,7 +215,7 @@ EditExerciseAdvancedConfigTest.propTypes = {
   pipelinesVariables: PropTypes.array,
   testErrors: PropTypes.array,
   rawFill: PropTypes.object,
-  intl: intlShape.isRequired
+  intl: intlShape.isRequired,
 };
 
 export default injectIntl(EditExerciseAdvancedConfigTest);

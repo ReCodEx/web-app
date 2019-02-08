@@ -6,7 +6,7 @@ import {
   FormattedMessage,
   defineMessages,
   intlShape,
-  injectIntl
+  injectIntl,
 } from 'react-intl';
 import { Row, Col, Alert } from 'react-bootstrap';
 import { formValueSelector } from 'redux-form';
@@ -19,7 +19,7 @@ import { NeedFixingIcon } from '../../components/icons';
 import ExerciseButtons from '../../components/Exercises/ExerciseButtons';
 import AssignmentsTable from '../../components/Assignments/Assignment/AssignmentsTable';
 import EditAssignmentForm, {
-  prepareInitialValues as prepareEditFormInitialValues
+  prepareInitialValues as prepareEditFormInitialValues,
 } from '../../components/forms/EditAssignmentForm';
 
 import { fetchExerciseIfNeeded } from '../../redux/modules/exercises';
@@ -27,18 +27,18 @@ import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironment
 import {
   create as assignExercise,
   editAssignment,
-  fetchExerciseAssignments
+  fetchExerciseAssignments,
 } from '../../redux/modules/assignments';
 import { exerciseSelector } from '../../redux/selectors/exercises';
 
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import {
   groupDataAccessorSelector,
-  groupsUserCanAssignToSelector
+  groupsUserCanAssignToSelector,
 } from '../../redux/selectors/groups';
 import {
   assignmentEnvironmentsSelector,
-  getExerciseAssignments
+  getExerciseAssignments,
 } from '../../redux/selectors/assignments';
 
 import { getLocalizedName } from '../../helpers/localizedData';
@@ -48,8 +48,8 @@ import withLinks from '../../helpers/withLinks';
 const messages = defineMessages({
   groupsBoxTitle: {
     id: 'app.exerciseAssignments.multiAssignBox',
-    defaultMessage: 'Assign to Groups'
-  }
+    defaultMessage: 'Assign to Groups',
+  },
 });
 
 const SUBMIT_BUTTON_MESSAGES = {
@@ -70,7 +70,7 @@ const SUBMIT_BUTTON_MESSAGES = {
       id="app.multiAssignForm.success"
       defaultMessage="Exercise was assigned."
     />
-  )
+  ),
 };
 
 const getAssignmentsGroups = defaultMemoize(assignments =>
@@ -84,7 +84,7 @@ class ExerciseAssignments extends Component {
     Promise.all([
       dispatch(fetchExerciseIfNeeded(exerciseId)),
       dispatch(fetchRuntimeEnvironments()),
-      dispatch(fetchExerciseAssignments(exerciseId))
+      dispatch(fetchExerciseAssignments(exerciseId)),
     ]);
 
   componentWillMount() {
@@ -118,7 +118,7 @@ class ExerciseAssignments extends Component {
       return prepareEditFormInitialValues({
         groups,
         runtimeEnvironmentIds: Object.keys(enabledRuntime),
-        enabledRuntime
+        enabledRuntime,
       });
     }
   );
@@ -128,13 +128,12 @@ class ExerciseAssignments extends Component {
 
     return Promise.all(
       formData.groups.map(groupId => {
-        return assignExercise(
-          groupId
-        ).then(({ value: { id, localizedTexts, version } }) =>
-          editAssignment(
-            id,
-            Object.assign({}, { localizedTexts, version }, formData)
-          )
+        return assignExercise(groupId).then(
+          ({ value: { id, localizedTexts, version } }) =>
+            editAssignment(
+              id,
+              Object.assign({}, { localizedTexts, version }, formData)
+            )
         );
       })
     );
@@ -153,7 +152,7 @@ class ExerciseAssignments extends Component {
       visibility,
       links: { EXERCISE_URI_FACTORY },
       intl: { formatMessage, locale },
-      params: { exerciseId }
+      params: { exerciseId },
     } = this.props;
 
     return (
@@ -175,13 +174,13 @@ class ExerciseAssignments extends Component {
                   id="app.exercise.breadcrumbTitle"
                   defaultMessage="Exercise {name}"
                   values={{
-                    name: exercise ? getLocalizedName(exercise, locale) : ''
+                    name: exercise ? getLocalizedName(exercise, locale) : '',
                   }}
                 />
               ),
               iconName: 'puzzle-piece',
-              link: EXERCISE_URI_FACTORY(exerciseId)
-            })
+              link: EXERCISE_URI_FACTORY(exerciseId),
+            }),
           },
           {
             text: (
@@ -190,13 +189,12 @@ class ExerciseAssignments extends Component {
                 defaultMessage="Exercise Assignments"
               />
             ),
-            iconName: 'tasks'
-          }
-        ]}
-      >
-        {exercise =>
+            iconName: 'tasks',
+          },
+        ]}>
+        {exercise => (
           <div>
-            {exercise.isBroken &&
+            {exercise.isBroken && (
               <Row>
                 <Col sm={12}>
                   <div className="callout callout-warning">
@@ -210,14 +208,15 @@ class ExerciseAssignments extends Component {
                     {exercise.validationError}
                   </div>
                 </Col>
-              </Row>}
+              </Row>
+            )}
             <Row>
               <Col sm={12}>
                 <ExerciseButtons {...exercise} />
               </Col>
             </Row>
 
-            {hasPermissions(exercise, 'viewAssignments') &&
+            {hasPermissions(exercise, 'viewAssignments') && (
               <Row>
                 <Col lg={12}>
                   <Box
@@ -228,8 +227,7 @@ class ExerciseAssignments extends Component {
                       />
                     }
                     noPadding
-                    unlimitedHeight
-                  >
+                    unlimitedHeight>
                     <AssignmentsTable
                       assignments={assignments.toList()}
                       assignmentEnvironmentsSelector={
@@ -243,74 +241,78 @@ class ExerciseAssignments extends Component {
                     />
                   </Box>
                 </Col>
-              </Row>}
+              </Row>
+            )}
 
             {!exercise.isBroken &&
               !exercise.isLocked &&
-              hasPermissions(exercise, 'viewDetail') &&
-              <Row>
-                <Col sm={12}>
-                  <Box
-                    title={formatMessage(messages.groupsBoxTitle)}
-                    description={
-                      <Alert bsStyle="info">
-                        <FormattedMessage
-                          id="app.exercise.assignToGroup"
-                          defaultMessage="You can assign this exercise to multiple groups you supervise. The exercise can also be assigned from within the groups individually. Please note that an exercise may be assigned multiple times and this form does not track existing assignments."
-                        />
-                      </Alert>
-                    }
-                    unlimitedHeight
-                  >
-                    <ResourceRenderer
-                      resource={assignableGroups.toArray()}
-                      returnAsArray
-                    >
-                      {assignableGroups =>
-                        <ResourceRenderer
-                          resource={assignments.toList()}
-                          returnAsArray
-                        >
-                          {assignments =>
-                            <EditAssignmentForm
-                              form="multiAssign"
-                              userId={userId}
-                              initialValues={this.multiAssignFormInitialValues(
-                                assignableGroups,
-                                exercise.runtimeEnvironments
-                              )}
-                              onSubmit={this.assignExercise}
-                              groups={assignableGroups}
-                              groupsAccessor={groupsAccessor}
-                              alreadyAssignedGroups={getAssignmentsGroups(
-                                assignments
-                              )}
-                              runtimeEnvironments={exercise.runtimeEnvironments}
-                              firstDeadline={firstDeadline}
-                              allowSecondDeadline={allowSecondDeadline}
-                              visibility={visibility}
-                              assignmentIsPublic={false}
-                              submitButtonMessages={SUBMIT_BUTTON_MESSAGES}
-                            />}
-                        </ResourceRenderer>}
-                    </ResourceRenderer>
-                  </Box>
-                </Col>
-              </Row>}
-          </div>}
+              hasPermissions(exercise, 'viewDetail') && (
+                <Row>
+                  <Col sm={12}>
+                    <Box
+                      title={formatMessage(messages.groupsBoxTitle)}
+                      description={
+                        <Alert bsStyle="info">
+                          <FormattedMessage
+                            id="app.exercise.assignToGroup"
+                            defaultMessage="You can assign this exercise to multiple groups you supervise. The exercise can also be assigned from within the groups individually. Please note that an exercise may be assigned multiple times and this form does not track existing assignments."
+                          />
+                        </Alert>
+                      }
+                      unlimitedHeight>
+                      <ResourceRenderer
+                        resource={assignableGroups.toArray()}
+                        returnAsArray>
+                        {assignableGroups => (
+                          <ResourceRenderer
+                            resource={assignments.toList()}
+                            returnAsArray>
+                            {assignments => (
+                              <EditAssignmentForm
+                                form="multiAssign"
+                                userId={userId}
+                                initialValues={this.multiAssignFormInitialValues(
+                                  assignableGroups,
+                                  exercise.runtimeEnvironments
+                                )}
+                                onSubmit={this.assignExercise}
+                                groups={assignableGroups}
+                                groupsAccessor={groupsAccessor}
+                                alreadyAssignedGroups={getAssignmentsGroups(
+                                  assignments
+                                )}
+                                runtimeEnvironments={
+                                  exercise.runtimeEnvironments
+                                }
+                                firstDeadline={firstDeadline}
+                                allowSecondDeadline={allowSecondDeadline}
+                                visibility={visibility}
+                                assignmentIsPublic={false}
+                                submitButtonMessages={SUBMIT_BUTTON_MESSAGES}
+                              />
+                            )}
+                          </ResourceRenderer>
+                        )}
+                      </ResourceRenderer>
+                    </Box>
+                  </Col>
+                </Row>
+              )}
+          </div>
+        )}
       </Page>
     );
   }
 }
 
 ExerciseAssignments.contextTypes = {
-  links: PropTypes.object
+  links: PropTypes.object,
 };
 
 ExerciseAssignments.propTypes = {
   userId: PropTypes.string.isRequired,
   params: PropTypes.shape({
-    exerciseId: PropTypes.string.isRequired
+    exerciseId: PropTypes.string.isRequired,
   }).isRequired,
   exercise: ImmutablePropTypes.map,
   assignments: ImmutablePropTypes.map,
@@ -320,7 +322,7 @@ ExerciseAssignments.propTypes = {
   firstDeadline: PropTypes.oneOfType([
     PropTypes.number,
     PropTypes.string,
-    PropTypes.object
+    PropTypes.object,
   ]),
   allowSecondDeadline: PropTypes.bool,
   visibility: PropTypes.string,
@@ -328,7 +330,7 @@ ExerciseAssignments.propTypes = {
   intl: intlShape.isRequired,
   loadAsync: PropTypes.func.isRequired,
   assignExercise: PropTypes.func.isRequired,
-  editAssignment: PropTypes.func.isRequired
+  editAssignment: PropTypes.func.isRequired,
 };
 
 const multiAssignFormSelector = formValueSelector('multiAssign');
@@ -349,13 +351,13 @@ export default withLinks(
           state,
           'allowSecondDeadline'
         ),
-        visibility: multiAssignFormSelector(state, 'visibility')
+        visibility: multiAssignFormSelector(state, 'visibility'),
       };
     },
     (dispatch, { params: { exerciseId } }) => ({
       loadAsync: () => ExerciseAssignments.loadAsync({ exerciseId }, dispatch),
       assignExercise: groupId => dispatch(assignExercise(groupId, exerciseId)),
-      editAssignment: (id, body) => dispatch(editAssignment(id, body))
+      editAssignment: (id, body) => dispatch(editAssignment(id, body)),
     })
   )(injectIntl(ExerciseAssignments))
 );

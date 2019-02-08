@@ -6,16 +6,20 @@ import {
   FormGroup,
   FormControl,
   ControlLabel,
-  HelpBlock
+  HelpBlock,
 } from 'react-bootstrap';
 
 import PipelineVisualEditor from '../../Pipelines/PipelineVisualEditor';
 
-const PipelineField = ({ input, meta: { touched, error }, label, ...props }) =>
+const PipelineField = ({
+  input,
+  meta: { touched, error },
+  label,
+  ...props
+}) => (
   <FormGroup
     controlId={input.name}
-    validationState={error ? (touched ? 'error' : 'warning') : undefined}
-  >
+    validationState={error ? (touched ? 'error' : 'warning') : undefined}>
     <ControlLabel>{label}</ControlLabel>
     <div className="hidden">
       <FormControl
@@ -27,30 +31,35 @@ const PipelineField = ({ input, meta: { touched, error }, label, ...props }) =>
       />
     </div>
     <PipelineVisualEditor source={input.value} onChange={input.onChange} />{' '}
-    {error &&
+    {error && (
       <HelpBlock>
-        {' '}{touched
-          ? error
-          : <FormattedMessage
-              defaultMessage="This field is required."
-              id="app.field.isRequired"
-            />}{' '}
-      </HelpBlock>}
-  </FormGroup>;
+        {' '}
+        {touched ? (
+          error
+        ) : (
+          <FormattedMessage
+            defaultMessage="This field is required."
+            id="app.field.isRequired"
+          />
+        )}{' '}
+      </HelpBlock>
+    )}
+  </FormGroup>
+);
 
 PipelineField.propTypes = {
   input: PropTypes.shape({
-    name: PropTypes.string.isRequired
+    name: PropTypes.string.isRequired,
   }).isRequired,
   label: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.element,
-    PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) })
+    PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) }),
   ]).isRequired,
   meta: PropTypes.shape({
     touched: PropTypes.bool,
-    error: PropTypes.oneOfType([PropTypes.string, FormattedMessage])
-  })
+    error: PropTypes.oneOfType([PropTypes.string, FormattedMessage]),
+  }),
 };
 
 export default PipelineField;

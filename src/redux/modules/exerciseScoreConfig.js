@@ -8,7 +8,7 @@ import factory, { initialState } from '../helpers/resourceManager';
 const resourceName = 'exerciseScoreConfig';
 const { actions, reduceActions } = factory({
   resourceName,
-  apiEndpointFactory: id => `/exercises/${id}/score-config`
+  apiEndpointFactory: id => `/exercises/${id}/score-config`,
 });
 
 export const fetchScoreConfig = actions.fetchResource;

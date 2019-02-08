@@ -40,7 +40,7 @@ class HeaderNotification extends Component {
       hide = null,
       time,
       count,
-      isNew = false
+      isNew = false,
     } = this.props;
 
     const { hovering, clickedCopy } = this.state;
@@ -50,9 +50,8 @@ class HeaderNotification extends Component {
       <li
         className={classnames({
           [styles.notification]: true,
-          [styles.newNotification]: isNew
-        })}
-      >
+          [styles.newNotification]: isNew,
+        })}>
         <OverlayTrigger
           placement="bottom"
           overlay={
@@ -63,32 +62,31 @@ class HeaderNotification extends Component {
                 {msg}
               </span>
             </Tooltip>
-          }
-        >
+          }>
           <a>
             <span
               className="fa"
               onMouseOver={() => this.setState({ hovering: true })}
-              onMouseOut={() => this.setState({ hovering: false })}
-            >
-              {deleteOnClick
-                ? <span
-                    className={styles.delete}
-                    href={hide ? '#' : undefined}
-                    onClick={e => {
-                      e.preventDefault();
-                      hide && hide(id);
-                    }}
-                  >
-                    <DeleteIcon
-                      className="fa text-red"
-                      smallGapRight
-                      fixedWidth
-                    />
-                  </span>
-                : successful
-                  ? <SuccessIcon smallGapRight fixedWidth />
-                  : <WarningIcon smallGapRight fixedWidth />}
+              onMouseOut={() => this.setState({ hovering: false })}>
+              {deleteOnClick ? (
+                <span
+                  className={styles.delete}
+                  href={hide ? '#' : undefined}
+                  onClick={e => {
+                    e.preventDefault();
+                    hide && hide(id);
+                  }}>
+                  <DeleteIcon
+                    className="fa text-red"
+                    smallGapRight
+                    fixedWidth
+                  />
+                </span>
+              ) : successful ? (
+                <SuccessIcon smallGapRight fixedWidth />
+              ) : (
+                <WarningIcon smallGapRight fixedWidth />
+              )}
             </span>
             <span className="fa">
               <span className={styles.copy} ref={copy => (this.copy = copy)}>
@@ -100,8 +98,7 @@ class HeaderNotification extends Component {
                 show={clickedCopy}
                 container={this}
                 target={() => this.copy}
-                placement="bottom"
-              >
+                placement="bottom">
                 <Tooltip id={`clicked-copy-${id}`}>
                   <FormattedMessage
                     id="app.headerNotification.copiedToClippboard"
@@ -110,15 +107,12 @@ class HeaderNotification extends Component {
                 </Tooltip>
               </Overlay>
             </span>
-            <span>
-              {msg}
-            </span>
-            {count > 1 &&
+            <span>{msg}</span>
+            {count > 1 && (
               <span className={styles.badgeContainer}>
-                <Badge>
-                  {count}
-                </Badge>
-              </span>}
+                <Badge>{count}</Badge>
+              </span>
+            )}
           </a>
         </OverlayTrigger>
       </li>
@@ -133,7 +127,7 @@ HeaderNotification.propTypes = {
   time: PropTypes.number.isRequired,
   count: PropTypes.number.isRequired,
   hide: PropTypes.func,
-  isNew: PropTypes.bool
+  isNew: PropTypes.bool,
 };
 
 export default HeaderNotification;

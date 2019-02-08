@@ -10,7 +10,7 @@ import { additionalActionTypes as additionalSolutionsActionTypes } from './solut
 const resourceName = 'stats';
 const { actions, reduceActions } = factory({
   resourceName,
-  apiEndpointFactory: groupId => `/groups/${groupId}/students/stats`
+  apiEndpointFactory: groupId => `/groups/${groupId}/students/stats`,
 });
 
 export const fetchGroupsStats = actions.fetchResource;
@@ -35,7 +35,7 @@ const reducer = handleActions(
         return stats
           .filter(userStats => userStats.get('userId') !== payload.userId)
           .push(fromJS(payload));
-      })
+      }),
   }),
   initialState
 );

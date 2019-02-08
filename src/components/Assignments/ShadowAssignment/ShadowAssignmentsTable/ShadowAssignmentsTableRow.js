@@ -11,7 +11,7 @@ import {
   EditIcon,
   MaybeBonusAssignmentIcon,
   VisibleIcon,
-  WarningIcon
+  WarningIcon,
 } from '../../../icons';
 import DeleteShadowAssignmentButtonContainer from '../../../../containers/DeleteShadowAssignmentButtonContainer';
 import Button from '../../../widgets/FlatButton';
@@ -39,19 +39,20 @@ const ShadowAssignmentsTableRow = ({
     isPublic,
     maxPoints,
     points,
-    permissionHints
+    permissionHints,
   },
   userId,
   isAdmin,
   links: {
     SHADOW_ASSIGNMENT_DETAIL_URI_FACTORY,
-    SHADOW_ASSIGNMENT_EDIT_URI_FACTORY
-  }
-}) =>
+    SHADOW_ASSIGNMENT_EDIT_URI_FACTORY,
+  },
+}) => (
   <tr>
     <td className="text-nowrap shrink-col">
-      {permissionHints.update &&
-        <VisibleIcon visible={isPublic} gapLeft gapRight />}
+      {permissionHints.update && (
+        <VisibleIcon visible={isPublic} gapLeft gapRight />
+      )}
       <MaybeBonusAssignmentIcon id={id} isBonus={isBonus} gapLeft gapRight />
     </td>
 
@@ -78,32 +79,34 @@ const ShadowAssignmentsTableRow = ({
 
     <td className="text-center">
       {!isAdmin && getUserPoints(points, userId)}
-      {maxPoints > 0
-        ? <span>
-            {!isAdmin && <span>/</span>}
-            <FormattedNumber value={maxPoints} />
-          </span>
-        : isAdmin && <span>&mdash;</span>}
+      {maxPoints > 0 ? (
+        <span>
+          {!isAdmin && <span>/</span>}
+          <FormattedNumber value={maxPoints} />
+        </span>
+      ) : (
+        isAdmin && <span>&mdash;</span>
+      )}
     </td>
 
-    {!isAdmin &&
-      <td>
-        {getUserPointsNote(points, userId)}
-      </td>}
+    {!isAdmin && <td>{getUserPointsNote(points, userId)}</td>}
 
     <td className="text-right shrink-col text-nowrap">
-      {permissionHints.update &&
+      {permissionHints.update && (
         <LinkContainer to={SHADOW_ASSIGNMENT_EDIT_URI_FACTORY(id)}>
           <Button bsSize="xs" bsStyle="warning">
             <EditIcon gapRight />
             <FormattedMessage id="generic.edit" defaultMessage="Edit" />
           </Button>
-        </LinkContainer>}
+        </LinkContainer>
+      )}
 
-      {permissionHints.remove &&
-        <DeleteShadowAssignmentButtonContainer id={id} bsSize="xs" />}
+      {permissionHints.remove && (
+        <DeleteShadowAssignmentButtonContainer id={id} bsSize="xs" />
+      )}
     </td>
-  </tr>;
+  </tr>
+);
 
 ShadowAssignmentsTableRow.propTypes = {
   item: PropTypes.shape({
@@ -114,11 +117,11 @@ ShadowAssignmentsTableRow.propTypes = {
     isPublic: PropTypes.bool,
     maxPoints: PropTypes.number,
     points: PropTypes.array,
-    permissionHints: PropTypes.object
+    permissionHints: PropTypes.object,
   }).isRequired,
   userId: PropTypes.string,
   links: PropTypes.object,
-  isAdmin: PropTypes.bool
+  isAdmin: PropTypes.bool,
 };
 
 export default withLinks(ShadowAssignmentsTableRow);

@@ -23,8 +23,8 @@ import './ForkExerciseForm.css';
 const messages = defineMessages({
   emptyOption: {
     id: 'app.forkExerciseForm.selectGroupFirst',
-    defaultMessage: '... select group of residence first ...'
-  }
+    defaultMessage: '... select group of residence first ...',
+  },
 });
 
 class ForkExerciseForm extends Component {
@@ -32,7 +32,7 @@ class ForkExerciseForm extends Component {
     const {
       forkedExerciseId: id,
       push,
-      links: { EXERCISE_URI_FACTORY }
+      links: { EXERCISE_URI_FACTORY },
     } = this.props;
 
     const url = EXERCISE_URI_FACTORY(id);
@@ -49,7 +49,7 @@ class ForkExerciseForm extends Component {
       invalid,
       groups,
       groupsAccessor,
-      intl: { locale, formatMessage }
+      intl: { locale, formatMessage },
     } = this.props;
 
     switch (forkStatus) {
@@ -71,8 +71,7 @@ class ForkExerciseForm extends Component {
                   <td className="text-right">
                     <Button
                       bsStyle="primary"
-                      onClick={() => this.viewForkedExercise()}
-                    >
+                      onClick={() => this.viewForkedExercise()}>
                       <FormattedMessage
                         id="app.forkExerciseForm.showForkedExerciseButton"
                         defaultMessage="Show the Forked Exercise"
@@ -88,17 +87,18 @@ class ForkExerciseForm extends Component {
       default:
         return (
           <div>
-            {submitFailed &&
+            {submitFailed && (
               <Alert bsStyle="danger">
                 <WarningIcon gapRight />
                 <FormattedMessage
                   id="generic.savingFailed"
                   defaultMessage="Saving failed. Please try again later."
                 />
-              </Alert>}
+              </Alert>
+            )}
             <Form inline className="forkForm">
               <ResourceRenderer resource={groups.toArray()} returnAsArray>
-                {groups =>
+                {groups => (
                   <React.Fragment>
                     <Field
                       name={'groupId'}
@@ -117,7 +117,7 @@ class ForkExerciseForm extends Component {
                             group,
                             groupsAccessor,
                             locale
-                          )
+                          ),
                         }))
                         .sort((a, b) => a.name.localeCompare(b.name, locale))}
                     />
@@ -148,10 +148,11 @@ class ForkExerciseForm extends Component {
                             id="app.forkExerciseForm.success"
                             defaultMessage="Exercise forked"
                           />
-                        )
+                        ),
                       }}
                     />
-                  </React.Fragment>}
+                  </React.Fragment>
+                )}
               </ResourceRenderer>
             </Form>
           </div>
@@ -174,7 +175,7 @@ ForkExerciseForm.propTypes = {
   links: PropTypes.object,
   groups: ImmutablePropTypes.map,
   groupsAccessor: PropTypes.func.isRequired,
-  intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired
+  intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired,
 };
 
 const mapStateToProps = (state, { exerciseId, forkId }) => {
@@ -182,12 +183,12 @@ const mapStateToProps = (state, { exerciseId, forkId }) => {
   return {
     forkStatus: fork ? fork.status : null,
     forkedExerciseId:
-      fork && fork.status === forkStatuses.FULFILLED ? fork.exerciseId : null
+      fork && fork.status === forkStatuses.FULFILLED ? fork.exerciseId : null,
   };
 };
 
 const mapDispatchToProps = (dispatch, { exerciseId, forkId }) => ({
-  push: url => dispatch(push(url))
+  push: url => dispatch(push(url)),
 });
 
 const validate = ({ groupId }) => {
@@ -204,10 +205,13 @@ const validate = ({ groupId }) => {
 };
 
 export default withLinks(
-  connect(mapStateToProps, mapDispatchToProps)(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(
     reduxForm({
       form: 'forkExercise',
-      validate
+      validate,
     })(injectIntl(ForkExerciseForm))
   )
 );

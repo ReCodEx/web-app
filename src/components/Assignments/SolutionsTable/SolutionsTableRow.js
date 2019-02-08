@@ -43,25 +43,20 @@ const SolutionsTableRow = ({
   permissionHints = null,
   noteMaxlen = null,
   compact = false,
-  links: { SOLUTION_DETAIL_URI_FACTORY }
+  links: { SOLUTION_DETAIL_URI_FACTORY },
 }) => {
   const trimmedNote = note && note.trim();
   const hasNote = Boolean(trimmedNote);
   const noteElement =
-    !hasNote || noteMaxlen === null || trimmedNote.length <= noteMaxlen
-      ? trimmedNote
-      : <OverlayTrigger
-          placement="left"
-          overlay={
-            <Tooltip id={id}>
-              {trimmedNote}
-            </Tooltip>
-          }
-        >
-          <span>
-            {trimmedNote.substr(0, noteMaxlen - 3).trim()}&hellip;
-          </span>
-        </OverlayTrigger>;
+    !hasNote || noteMaxlen === null || trimmedNote.length <= noteMaxlen ? (
+      trimmedNote
+    ) : (
+      <OverlayTrigger
+        placement="left"
+        overlay={<Tooltip id={id}>{trimmedNote}</Tooltip>}>
+        <span>{trimmedNote.substr(0, noteMaxlen - 3).trim()}&hellip;</span>
+      </OverlayTrigger>
+    );
   const splitOnTwoLines = hasNote && compact;
 
   return (
@@ -71,9 +66,8 @@ const SolutionsTableRow = ({
           rowSpan={splitOnTwoLines ? 2 : 1}
           className={classnames({
             'valign-middle': true,
-            'text-nowrap': !compact
-          })}
-        >
+            'text-nowrap': !compact,
+          })}>
           <AssignmentStatusIcon
             id={id}
             status={getStatusDesc(status, lastSubmission)}
@@ -95,77 +89,85 @@ const SolutionsTableRow = ({
         </td>
 
         <td className="text-center text-nowrap">
-          {showScoreAndPoints(status)
-            ? <strong className="text-success">
-                <FormattedNumber
-                  style="percent"
-                  value={lastSubmission.evaluation.score}
-                />
-              </strong>
-            : <span className="text-danger">-</span>}
-        </td>
-
-        <td className="text-center text-nowrap">
-          {showScoreAndPoints(status)
-            ? <strong className="text-success">
-                <Points
-                  points={actualPoints}
-                  bonusPoints={bonusPoints}
-                  maxPoints={maxPoints}
-                />
-              </strong>
-            : <span className="text-danger">-</span>}
-        </td>
-
-        <td className="text-center text-nowrap">
-          {runtimeEnvironment
-            ? <EnvironmentsListItem
-                runtimeEnvironment={runtimeEnvironment}
-                longNames={!compact}
+          {showScoreAndPoints(status) ? (
+            <strong className="text-success">
+              <FormattedNumber
+                style="percent"
+                value={lastSubmission.evaluation.score}
               />
-            : '-'}
+            </strong>
+          ) : (
+            <span className="text-danger">-</span>
+          )}
         </td>
 
-        {!compact &&
+        <td className="text-center text-nowrap">
+          {showScoreAndPoints(status) ? (
+            <strong className="text-success">
+              <Points
+                points={actualPoints}
+                bonusPoints={bonusPoints}
+                maxPoints={maxPoints}
+              />
+            </strong>
+          ) : (
+            <span className="text-danger">-</span>
+          )}
+        </td>
+
+        <td className="text-center text-nowrap">
+          {runtimeEnvironment ? (
+            <EnvironmentsListItem
+              runtimeEnvironment={runtimeEnvironment}
+              longNames={!compact}
+            />
+          ) : (
+            '-'
+          )}
+        </td>
+
+        {!compact && (
           <td className="small" width="100%">
             {noteElement}
-          </td>}
+          </td>
+        )}
 
         <td
           className={classnames({
             'text-right': true,
             'valign-middle': true,
-            'text-nowrap': !splitOnTwoLines
+            'text-nowrap': !splitOnTwoLines,
           })}
-          rowSpan={splitOnTwoLines ? 2 : 1}
-        >
-          {permissionHints &&
-            permissionHints.viewDetail &&
+          rowSpan={splitOnTwoLines ? 2 : 1}>
+          {permissionHints && permissionHints.viewDetail && (
             <Link
               to={SOLUTION_DETAIL_URI_FACTORY(assignmentId, id)}
-              className="btn btn-flat btn-default btn-xs"
-            >
+              className="btn btn-flat btn-default btn-xs">
               <SendIcon gapRight />
               <FormattedMessage id="generic.detail" defaultMessage="Detail" />
-            </Link>}
-          {permissionHints &&
-            permissionHints.delete &&
-            <DeleteSolutionButtonContainer id={id} bsSize="xs" />}
+            </Link>
+          )}
+          {permissionHints && permissionHints.delete && (
+            <DeleteSolutionButtonContainer id={id} bsSize="xs" />
+          )}
         </td>
       </tr>
 
-      {splitOnTwoLines &&
+      {splitOnTwoLines && (
         <tr>
           <td colSpan={4} className={styles.noteRow}>
             <b>
               <FormattedMessage
                 id="app.solutionsTable.note"
                 defaultMessage="Note"
-              />:
-            </b>&nbsp;
+              />
+              :
+            </b>
+            &nbsp;
             {noteElement}
           </td>
-        </tr>}
+        </tr>
+      )}
     </tbody>
   );
 };
@@ -181,11 +183,11 @@ SolutionsTableRow.propTypes = {
   lastSubmission: PropTypes.shape({
     evaluation: PropTypes.shape({
       score: PropTypes.number.isRequired,
-      points: PropTypes.number.isRequired
-    })
+      points: PropTypes.number.isRequired,
+    }),
   }),
   solution: PropTypes.shape({
-    createdAt: PropTypes.number.isRequired
+    createdAt: PropTypes.number.isRequired,
   }),
   accepted: PropTypes.bool,
   commentsStats: PropTypes.object,
@@ -193,7 +195,7 @@ SolutionsTableRow.propTypes = {
   permissionHints: PropTypes.object,
   noteMaxlen: PropTypes.number,
   compact: PropTypes.bool.isRequired,
-  links: PropTypes.object
+  links: PropTypes.object,
 };
 
 export default withLinks(SolutionsTableRow);

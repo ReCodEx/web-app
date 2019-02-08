@@ -21,30 +21,33 @@ export const referenceSolutionEvaluationSelector = evaluationId =>
   );
 
 export const getReferenceSolutionEvaluationsByIdsSelector = ids =>
-  createSelector(referenceSolutionEvaluationsSelector, evaluations =>
-    evaluations
-      .filter(isReady)
-      .filter(evaluation => ids.indexOf(evaluation.getIn(['data', 'id'])) >= 0)
+  createSelector(
+    referenceSolutionEvaluationsSelector,
+    evaluations =>
+      evaluations
+        .filter(isReady)
+        .filter(
+          evaluation => ids.indexOf(evaluation.getIn(['data', 'id'])) >= 0
+        )
   );
 
 export const evaluationsForReferenceSolutionSelector = solutionId =>
   createSelector(
     [getReferenceSolution(solutionId), referenceSolutionEvaluationsSelector],
     (solution, evaluations) =>
-      evaluations
-        .filter(isReady)
-        .filter(
-          evaluation =>
-            solution &&
-            solution.getIn(['data', 'submissions']) &&
-            solution
-              .get('data')
-              .get('submissions')
-              .indexOf(evaluation.getIn(['data', 'id'])) >= 0
-        )
+      evaluations.filter(isReady).filter(
+        evaluation =>
+          solution &&
+          solution.getIn(['data', 'submissions']) &&
+          solution
+            .get('data')
+            .get('submissions')
+            .indexOf(evaluation.getIn(['data', 'id'])) >= 0
+      )
   );
 
 export const fetchManyStatus = id =>
-  createSelector(getReferenceSolutionEvaluations, state =>
-    state.getIn(['fetchManyStatus', fetchManyEndpoint(id)])
+  createSelector(
+    getReferenceSolutionEvaluations,
+    state => state.getIn(['fetchManyStatus', fetchManyEndpoint(id)])
   );

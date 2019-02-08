@@ -12,7 +12,7 @@ const BrokerButtons = ({
   freezeBroker,
   unfreezeBroker,
   freezeActionStatus = null,
-  unfreezeActionStatus = null
+  unfreezeActionStatus = null,
 }) => {
   const pending =
     freezeActionStatus === resourceStatus.PENDING ||
@@ -37,8 +37,7 @@ const BrokerButtons = ({
                 defaultMessage="Are you sure you want to freeze broker? Broker will not longer accept evaluation requests!"
               />
             )
-          }
-        >
+          }>
           {freezeActionStatus === resourceStatus.PENDING ? (
             <LoadingIcon gapRight />
           ) : freezeActionStatus === resourceStatus.FAILED ? (
@@ -61,8 +60,7 @@ const BrokerButtons = ({
                 defaultMessage="Are you sure you want to unfreeze broker?"
               />
             )
-          }
-        >
+          }>
           {unfreezeActionStatus === resourceStatus.PENDING ? (
             <LoadingIcon gapRight />
           ) : unfreezeActionStatus === resourceStatus.FAILED ? (
@@ -86,7 +84,7 @@ BrokerButtons.propTypes = {
   freezeBroker: PropTypes.func.isRequired,
   unfreezeBroker: PropTypes.func.isRequired,
   freezeActionStatus: PropTypes.string,
-  unfreezeActionStatus: PropTypes.string
+  unfreezeActionStatus: PropTypes.string,
 };
 
 export default BrokerButtons;

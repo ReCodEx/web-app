@@ -7,7 +7,7 @@ export const actionTypes = {
   FETCH: 'recodex/exercisePipelinesVariables/FETCH',
   FETCH_PENDING: 'recodex/exercisePipelinesVariables/FETCH_PENDING',
   FETCH_FULFILLED: 'recodex/exercisePipelinesVariables/FETCH_FULFILLED',
-  FETCH_REJECTED: 'recodex/exercisePipelinesVariables/FETCH_REJECTED'
+  FETCH_REJECTED: 'recodex/exercisePipelinesVariables/FETCH_REJECTED',
 };
 
 export const fetchExercisePipelinesVariables = (
@@ -20,7 +20,7 @@ export const fetchExercisePipelinesVariables = (
     method: 'POST',
     endpoint: `/exercises/${exerciseId}/config/variables`,
     body: { runtimeEnvironmentId, pipelinesIds },
-    meta: { exerciseId }
+    meta: { exerciseId },
   });
 
 const initialState = Map();
@@ -41,7 +41,7 @@ const reducer = handleActions(
       ),
 
     [actionTypes.FETCH_REJECTED]: (state, { meta: { exerciseId } }) =>
-      state.set(exerciseId, createRecord({ state: resourceStatus.FAILED }))
+      state.set(exerciseId, createRecord({ state: resourceStatus.FAILED })),
   },
   initialState
 );

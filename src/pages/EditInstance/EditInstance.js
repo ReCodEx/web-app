@@ -11,7 +11,7 @@ import EditInstanceForm from '../../components/forms/EditInstanceForm';
 
 import {
   fetchInstanceIfNeeded,
-  editInstance
+  editInstance,
 } from '../../redux/modules/instances';
 import { instanceSelector } from '../../redux/selectors/instances';
 
@@ -31,7 +31,7 @@ class EditInstance extends Component {
 
   getInitialValues = ({ threshold, ...instance }) => ({
     ...instance,
-    threshold: threshold * 100
+    threshold: threshold * 100,
   });
 
   render() {
@@ -39,7 +39,7 @@ class EditInstance extends Component {
       params: { instanceId },
       links: { INSTANCE_URI_FACTORY },
       instance,
-      editInstance
+      editInstance,
     } = this.props;
 
     return (
@@ -61,7 +61,7 @@ class EditInstance extends Component {
               />
             ),
             iconName: 'university',
-            link: INSTANCE_URI_FACTORY(instanceId)
+            link: INSTANCE_URI_FACTORY(instanceId),
           },
           {
             text: (
@@ -70,15 +70,15 @@ class EditInstance extends Component {
                 defaultMessage="Edit instance"
               />
             ),
-            iconName: ['far', 'edit']
-          }
-        ]}
-      >
-        {instance =>
+            iconName: ['far', 'edit'],
+          },
+        ]}>
+        {instance => (
           <EditInstanceForm
             initialValues={this.getInitialValues(instance)}
             onSubmit={editInstance}
-          />}
+          />
+        )}
       </Page>
     );
   }
@@ -89,22 +89,22 @@ EditInstance.propTypes = {
   loadAsync: PropTypes.func.isRequired,
   reset: PropTypes.func.isRequired,
   params: PropTypes.shape({
-    instanceId: PropTypes.string.isRequired
+    instanceId: PropTypes.string.isRequired,
   }).isRequired,
   instance: ImmutablePropTypes.map,
-  editInstance: PropTypes.func.isRequired
+  editInstance: PropTypes.func.isRequired,
 };
 
 export default withLinks(
   connect(
     (state, { params: { instanceId } }) => ({
-      instance: instanceSelector(state, instanceId)
+      instance: instanceSelector(state, instanceId),
     }),
     (dispatch, { params: { instanceId } }) => ({
       push: url => dispatch(push(url)),
       reset: () => dispatch(reset('editInstance')),
       loadAsync: () => EditInstance.loadAsync({ instanceId }, dispatch),
-      editInstance: data => dispatch(editInstance(instanceId, data))
+      editInstance: data => dispatch(editInstance(instanceId, data)),
     })
   )(EditInstance)
 );

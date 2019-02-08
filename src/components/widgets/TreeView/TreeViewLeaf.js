@@ -18,33 +18,34 @@ const TreeViewLeaf = ({
   icon = ['far', 'square'],
   onClick,
   level,
-  actions
-}) =>
+  actions,
+}) => (
   <li
     onClick={onClick}
     style={{
       cursor: onClick ? 'pointer' : undefined,
-      padding: '10px 0px'
+      padding: '10px 0px',
     }}
-    className={archived ? 'text-muted' : undefined}
-  >
+    className={archived ? 'text-muted' : undefined}>
     <LevelGap level={level - 1} /> {/* root group is not displayed */}
     <span style={{ width: 30, textAlign: 'center', display: 'inline-block' }}>
       {loading ? <LoadingIcon gapRight /> : <Icon icon={icon} gapRight />}
     </span>
     {title}
-    {admins &&
-      admins.length > 0 &&
+    {admins && admins.length > 0 && (
       <span>
-        &nbsp;&nbsp; (<small>
+        &nbsp;&nbsp; (
+        <small>
           <em>
-            {admins.map(a =>
+            {admins.map(a => (
               <UsersNameContainer key={a} userId={a} isSimple />
-            )}
+            ))}
           </em>
-        </small>)
-      </span>}
-    {organizational &&
+        </small>
+        )
+      </span>
+    )}
+    {organizational && (
       <OverlayTrigger
         placement="bottom"
         overlay={
@@ -54,11 +55,11 @@ const TreeViewLeaf = ({
               defaultMessage="The group is organizational (it does not have any students or assignments)"
             />
           </Tooltip>
-        }
-      >
+        }>
         <GroupIcon organizational={true} className="text-muted" gapLeft />
-      </OverlayTrigger>}
-    {archived &&
+      </OverlayTrigger>
+    )}
+    {archived && (
       <OverlayTrigger
         placement="bottom"
         overlay={
@@ -68,11 +69,11 @@ const TreeViewLeaf = ({
               defaultMessage="The group is archived"
             />
           </Tooltip>
-        }
-      >
+        }>
         <GroupIcon archived={true} className="text-muted" gapLeft />
-      </OverlayTrigger>}
-    {isPublic &&
+      </OverlayTrigger>
+    )}
+    {isPublic && (
       <OverlayTrigger
         placement="bottom"
         overlay={
@@ -82,12 +83,13 @@ const TreeViewLeaf = ({
               defaultMessage="The group is public"
             />
           </Tooltip>
-        }
-      >
+        }>
         <Icon icon="eye" className="text-muted" gapLeft />
-      </OverlayTrigger>}
+      </OverlayTrigger>
+    )}
     <span className="pull-right">{actions}</span>
-  </li>;
+  </li>
+);
 
 TreeViewLeaf.propTypes = {
   id: PropTypes.string,
@@ -100,7 +102,7 @@ TreeViewLeaf.propTypes = {
   icon: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
   onClick: PropTypes.func,
   level: PropTypes.number.isRequired,
-  actions: PropTypes.element
+  actions: PropTypes.element,
 };
 
 export default TreeViewLeaf;

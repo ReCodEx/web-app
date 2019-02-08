@@ -10,38 +10,42 @@ import {
   isPosting,
   isDeleting,
   isDeleted,
-  getJsData
+  getJsData,
 } from '../../../redux/helpers/resourceManager';
 
-const defaultLoading = noIcons =>
+const defaultLoading = noIcons => (
   <span>
     {!noIcons && <LoadingIcon gapRight />}
     <FormattedMessage id="generic.loading" defaultMessage="Loading..." />
-  </span>;
+  </span>
+);
 
-const defaultLoadingBulky = noIcons =>
+const defaultLoadingBulky = noIcons => (
   <p className="text-center larger em-padding">
     {!noIcons && <LoadingIcon gapRight />}
     <FormattedMessage id="generic.loading" defaultMessage="Loading..." />
-  </p>;
+  </p>
+);
 
-const defaultFailed = noIcons =>
+const defaultFailed = noIcons => (
   <span>
     {!noIcons && <WarningIcon gapRight />}
     <FormattedMessage
       id="app.resourceRenderer.loadingFailed"
       defaultMessage="Loading failed."
     />
-  </span>;
+  </span>
+);
 
-const defaultFailedBulky = noIcons =>
+const defaultFailedBulky = noIcons => (
   <p className="text-center text-danger larger em-padding">
     {!noIcons && <WarningIcon gapRight />}
     <FormattedMessage
       id="app.resourceRenderer.loadingFailed"
       defaultMessage="Loading failed."
     />
-  </p>;
+  </p>
+);
 
 const shallowResourcesEqual = (oldResources, newResources) => {
   if (oldResources.length !== newResources.length) {
@@ -96,14 +100,13 @@ class ResourceRenderer extends Component {
         .filter(res => !isDeleting(res))
         .filter(res => !isDeleted(res))
         .filter(res => !isPosting(res))
-        .map(
-          (res, idx) =>
-            // If a particular resource did not change, re-use its old data
-            this.oldResources &&
-            this.oldResources[idx] === res &&
-            this.oldResources[idx].get('data') === res.get('data')
-              ? this.oldData[idx]
-              : getJsData(res)
+        .map((res, idx) =>
+          // If a particular resource did not change, re-use its old data
+          this.oldResources &&
+          this.oldResources[idx] === res &&
+          this.oldResources[idx].get('data') === res.get('data')
+            ? this.oldData[idx]
+            : getJsData(res)
         );
       this.oldResources = resources;
     }
@@ -122,12 +125,14 @@ class ResourceRenderer extends Component {
         : defaultFailed(noIcons),
       resource,
       hiddenUntilReady = false,
-      forceLoading = false
+      forceLoading = false,
     } = this.props;
 
     const resources = Array.isArray(resource)
       ? resource
-      : List.isList(resource) ? resource.toArray() : [resource];
+      : List.isList(resource)
+      ? resource.toArray()
+      : [resource];
     const stillLoading =
       !resource ||
       resources.find(res => !res) ||
@@ -135,10 +140,14 @@ class ResourceRenderer extends Component {
       forceLoading;
 
     return stillLoading
-      ? hiddenUntilReady ? null : loading
+      ? hiddenUntilReady
+        ? null
+        : loading
       : resources.some(hasFailed)
-        ? hiddenUntilReady ? null : failed
-        : this.renderReady(resources);
+      ? hiddenUntilReady
+        ? null
+        : failed
+      : this.renderReady(resources);
   }
 }
 
@@ -149,14 +158,14 @@ ResourceRenderer.propTypes = {
   resource: PropTypes.oneOfType([
     PropTypes.object,
     PropTypes.array,
-    ImmutablePropTypes.list
+    ImmutablePropTypes.list,
   ]),
   hiddenUntilReady: PropTypes.bool,
   forceLoading: PropTypes.bool,
   noIcons: PropTypes.bool,
   bulkyLoading: PropTypes.bool,
   returnAsArray: PropTypes.bool,
-  debug: PropTypes.bool
+  debug: PropTypes.bool,
 };
 
 export default ResourceRenderer;

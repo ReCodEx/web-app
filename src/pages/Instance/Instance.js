@@ -15,7 +15,7 @@ import Page from '../../components/layout/Page';
 import LicencesTableContainer from '../../containers/LicencesTableContainer';
 import AddLicenceFormContainer from '../../containers/AddLicenceFormContainer';
 import EditGroupForm, {
-  EDIT_GROUP_FORM_EMPTY_INITIAL_VALUES
+  EDIT_GROUP_FORM_EMPTY_INITIAL_VALUES,
 } from '../../components/forms/EditGroupForm';
 import { EditIcon } from '../../components/icons';
 
@@ -23,7 +23,7 @@ import { fetchUser } from '../../redux/modules/users';
 import { fetchInstanceIfNeeded } from '../../redux/modules/instances';
 import {
   instanceSelector,
-  isAdminOfInstance
+  isAdminOfInstance,
 } from '../../redux/selectors/instances';
 import { createGroup, fetchAllGroups } from '../../redux/modules/groups';
 import { notArchivedGroupsSelector } from '../../redux/selectors/groups';
@@ -57,7 +57,7 @@ class Instance extends Component {
       isAdmin,
       isSuperAdmin,
       hasThreshold,
-      links: { ADMIN_EDIT_INSTANCE_URI_FACTORY }
+      links: { ADMIN_EDIT_INSTANCE_URI_FACTORY },
     } = this.props;
 
     return (
@@ -73,19 +73,17 @@ class Instance extends Component {
         breadcrumbs={[
           {
             text: <FormattedMessage id="app.instance.description" />,
-            iconName: 'info-circle'
-          }
-        ]}
-      >
-        {data =>
+            iconName: 'info-circle',
+          },
+        ]}>
+        {data => (
           <div>
-            {isSuperAdmin &&
+            {isSuperAdmin && (
               <Row>
                 <Col sm={12} md={6}>
                   <p>
                     <LinkContainer
-                      to={ADMIN_EDIT_INSTANCE_URI_FACTORY(instanceId)}
-                    >
+                      to={ADMIN_EDIT_INSTANCE_URI_FACTORY(instanceId)}>
                       <Button bsStyle="warning">
                         <EditIcon gapRight />
                         <FormattedMessage
@@ -96,7 +94,8 @@ class Instance extends Component {
                     </LinkContainer>
                   </p>
                 </Col>
-              </Row>}
+              </Row>
+            )}
 
             <Row>
               <Col sm={12} md={6}>
@@ -106,16 +105,16 @@ class Instance extends Component {
                       id="app.instance.detailTitle"
                       defaultMessage="Instance Description"
                     />
-                  }
-                >
+                  }>
                   <Markdown source={data.description} />
                 </Box>
 
-                {(isSuperAdmin || isAdmin) &&
+                {(isSuperAdmin || isAdmin) && (
                   <React.Fragment>
                     <LicencesTableContainer instance={data} />
                     <AddLicenceFormContainer instanceId={data.id} />
-                  </React.Fragment>}
+                  </React.Fragment>
+                )}
               </Col>
               <Col sm={12} md={6}>
                 <Box
@@ -126,25 +125,26 @@ class Instance extends Component {
                     />
                   }
                   extraPadding
-                  unlimitedHeight
-                >
+                  unlimitedHeight>
                   <div>
-                    {data.rootGroupId !== null &&
+                    {data.rootGroupId !== null && (
                       <GroupTree
                         id={data.rootGroupId}
                         isAdmin={isSuperAdmin || isAdmin}
                         groups={groups}
-                      />}
+                      />
+                    )}
 
-                    {data.rootGroupId === null &&
+                    {data.rootGroupId === null && (
                       <FormattedMessage
                         id="app.instance.groups.noGroups"
                         defaultMessage="There are no groups in this ReCodEx instance."
-                      />}
+                      />
+                    )}
                   </div>
                 </Box>
 
-                {(isSuperAdmin || isAdmin) &&
+                {(isSuperAdmin || isAdmin) && (
                   <EditGroupForm
                     form="addGroup"
                     onSubmit={createGroup(userId)}
@@ -155,10 +155,12 @@ class Instance extends Component {
                     isOpen={false}
                     hasThreshold={hasThreshold}
                     isSuperAdmin={isSuperAdmin}
-                  />}
+                  />
+                )}
               </Col>
             </Row>
-          </div>}
+          </div>
+        )}
       </Page>
     );
   }
@@ -167,7 +169,7 @@ class Instance extends Component {
 Instance.propTypes = {
   loadAsync: PropTypes.func.isRequired,
   params: PropTypes.shape({
-    instanceId: PropTypes.string.isRequired
+    instanceId: PropTypes.string.isRequired,
   }).isRequired,
   userId: PropTypes.string.isRequired,
   instance: ImmutablePropTypes.map,
@@ -176,7 +178,7 @@ Instance.propTypes = {
   isAdmin: PropTypes.bool.isRequired,
   isSuperAdmin: PropTypes.bool.isRequired,
   links: PropTypes.object.isRequired,
-  hasThreshold: PropTypes.bool
+  hasThreshold: PropTypes.bool,
 };
 
 const addGroupFormSelector = formValueSelector('addGroup');
@@ -191,7 +193,7 @@ export default withLinks(
         groups: notArchivedGroupsSelector(state),
         isAdmin: isAdminOfInstance(userId, instanceId)(state),
         isSuperAdmin: isLoggedAsSuperAdmin(state),
-        hasThreshold: addGroupFormSelector(state, 'hasThreshold')
+        hasThreshold: addGroupFormSelector(state, 'hasThreshold'),
       };
     },
     (dispatch, { params: { instanceId } }) => ({
@@ -200,12 +202,12 @@ export default withLinks(
           createGroup({
             ...data,
             localizedTexts: transformLocalizedTextsFormData(localizedTexts),
-            instanceId
+            instanceId,
           })
         ).then(() =>
           Promise.all([dispatch(fetchAllGroups()), dispatch(fetchUser(userId))])
         ),
-      loadAsync: () => Instance.loadAsync({ instanceId }, dispatch)
+      loadAsync: () => Instance.loadAsync({ instanceId }, dispatch),
     })
   )(Instance)
 );

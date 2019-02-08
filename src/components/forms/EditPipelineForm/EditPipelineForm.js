@@ -10,7 +10,7 @@ import {
   TextField,
   MarkdownTextAreaField,
   PipelineField,
-  PipelineVariablesField
+  PipelineVariablesField,
 } from '../Fields';
 
 import FormBox from '../../widgets/FormBox';
@@ -43,7 +43,7 @@ class EditPipelineForm extends Component {
       variables = [],
       invalid,
       asyncValidating,
-      supplementaryFiles
+      supplementaryFiles,
     } = this.props;
     return (
       <FormBox
@@ -91,19 +91,19 @@ class EditPipelineForm extends Component {
                     id="generic.validating"
                     defaultMessage="Validating..."
                   />
-                )
+                ),
               }}
             />
           </div>
-        }
-      >
-        {submitFailed &&
+        }>
+        {submitFailed && (
           <Alert bsStyle="danger">
             <FormattedMessage
               id="generic.savingFailed"
               defaultMessage="Saving failed. Please try again later."
             />
-          </Alert>}
+          </Alert>
+        )}
 
         <Grid fluid>
           <Row>
@@ -181,7 +181,7 @@ EditPipelineForm.propTypes = {
   asyncValidating: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
   supplementaryFiles: ImmutablePropTypes.map,
   loadAsync: PropTypes.func.isRequired,
-  pipeline: PropTypes.object
+  pipeline: PropTypes.object,
 };
 
 const validate = ({ name, description }) => {
@@ -239,15 +239,15 @@ export default connect(
     ),
     supplementaryFiles: createGetPipelineFiles(pipeline.supplementaryFilesIds)(
       state
-    )
+    ),
   }),
   (dispatch, { pipeline }) => ({
-    loadAsync: () => EditPipelineForm.loadAsync({ pipeline }, dispatch)
+    loadAsync: () => EditPipelineForm.loadAsync({ pipeline }, dispatch),
   })
 )(
   reduxForm({
     form: 'editPipeline',
     validate,
-    asyncValidate
+    asyncValidate,
   })(EditPipelineForm)
 );

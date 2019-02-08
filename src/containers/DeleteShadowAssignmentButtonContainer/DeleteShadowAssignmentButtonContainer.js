@@ -11,26 +11,27 @@ const DeleteShadowAssignmentButtonContainer = ({
   deleteShadowAssignment,
   onDeleted,
   ...props
-}) =>
+}) => (
   <DeleteButton
     {...props}
     resource={shadowAssignment}
     deleteResource={deleteShadowAssignment}
-  />;
+  />
+);
 
 DeleteShadowAssignmentButtonContainer.propTypes = {
   id: PropTypes.string.isRequired,
   shadowAssignment: ImmutablePropTypes.map,
   deleteShadowAssignment: PropTypes.func.isRequired,
-  onDeleted: PropTypes.func
+  onDeleted: PropTypes.func,
 };
 
 export default connect(
   (state, { id }) => ({
-    shadowAssignment: getShadowAssignment(state)(id)
+    shadowAssignment: getShadowAssignment(state)(id),
   }),
   (dispatch, { id, onDeleted }) => ({
     deleteShadowAssignment: () =>
-      dispatch(deleteShadowAssignment(id)).then(() => onDeleted && onDeleted())
+      dispatch(deleteShadowAssignment(id)).then(() => onDeleted && onDeleted()),
   })
 )(DeleteShadowAssignmentButtonContainer);

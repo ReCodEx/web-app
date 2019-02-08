@@ -2,7 +2,7 @@ import {
   createApiCallPromise,
   getHeaders,
   isTwoHundredCode,
-  abortAllPendingRequests
+  abortAllPendingRequests,
 } from '../helpers/api/tools';
 import { actionTypes as authActionTypes } from '../modules/auth';
 
@@ -21,7 +21,7 @@ export const apiCall = (
     meta = undefined,
     wasSuccessful = isTwoHundredCode,
     doNotProcess = false,
-    uploadFiles = false
+    uploadFiles = false,
   },
   dispatch = undefined
 ) => ({
@@ -36,13 +36,13 @@ export const apiCall = (
         body,
         wasSuccessful,
         doNotProcess,
-        uploadFiles
+        uploadFiles,
       },
       dispatch
     ),
-    data: body
+    data: body,
   },
-  meta: { endpoint, ...meta }
+  meta: { endpoint, ...meta },
 });
 
 const middleware = ({ dispatch }) => next => action => {

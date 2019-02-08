@@ -25,23 +25,25 @@ const _validateBrackets = value => {
 
 const validateWildcard = value => {
   return !value ||
-  !value.match(/^[-a-zA-Z0-9_.,{}*?]+$/) ||
-  !_validateBrackets(value)
-    ? <FormattedMessage
-        id="app.editEnvironmentConfig.validateWildcard"
-        defaultMessage="This value is not a valid file name or wildcard."
-      />
-    : undefined;
+    !value.match(/^[-a-zA-Z0-9_.,{}*?]+$/) ||
+    !_validateBrackets(value) ? (
+    <FormattedMessage
+      id="app.editEnvironmentConfig.validateWildcard"
+      defaultMessage="This value is not a valid file name or wildcard."
+    />
+  ) : (
+    undefined
+  );
 };
 
 const VARIABLE_TYPES_OPTIONS = [
   { name: 'file', key: 'file' },
-  { name: 'file[]', key: 'file[]' }
+  { name: 'file[]', key: 'file[]' },
 ];
 
-const EditEnvironmentConfigVariables = ({ fields, noItems = null }) =>
+const EditEnvironmentConfigVariables = ({ fields, noItems = null }) => (
   <div>
-    {fields.length > 0 &&
+    {fields.length > 0 && (
       <table>
         <thead>
           <tr>
@@ -50,7 +52,8 @@ const EditEnvironmentConfigVariables = ({ fields, noItems = null }) =>
                 <FormattedMessage
                   id="app.editEnvironmentConfig.variableName"
                   defaultMessage="Source Files Variable"
-                />:
+                />
+                :
               </ControlLabel>
             </th>
             <th width="40%">
@@ -58,7 +61,8 @@ const EditEnvironmentConfigVariables = ({ fields, noItems = null }) =>
                 <FormattedMessage
                   id="app.editEnvironmentConfig.variableValue"
                   defaultMessage="Wildcard Pattern"
-                />:
+                />
+                :
               </ControlLabel>
             </th>
             <th width="20%">
@@ -66,14 +70,15 @@ const EditEnvironmentConfigVariables = ({ fields, noItems = null }) =>
                 <FormattedMessage
                   id="app.editEnvironmentConfig.variableType"
                   defaultMessage="Type"
-                />:
+                />
+                :
               </ControlLabel>
             </th>
             <th />
           </tr>
         </thead>
         <tbody>
-          {fields.map((field, index) =>
+          {fields.map((field, index) => (
             <tr key={index}>
               <td className="valign-top">
                 <Field
@@ -111,26 +116,28 @@ const EditEnvironmentConfigVariables = ({ fields, noItems = null }) =>
                         defaultMessage="Remove this variable."
                       />
                     </Tooltip>
-                  }
-                >
+                  }>
                   <FlatButton onClick={() => fields.remove(index)}>
                     <CloseIcon />
                   </FlatButton>
                 </OverlayTrigger>
               </td>
             </tr>
-          )}
+          ))}
         </tbody>
-      </table>}
+      </table>
+    )}
     <div className="text-center">
-      {fields.length === 0 &&
+      {fields.length === 0 && (
         <span style={{ paddingRight: '2em' }}>
-          {noItems ||
+          {noItems || (
             <FormattedMessage
               id="app.editEnvironmentConfig.noVariables"
               defaultMessage="There are no variables yet..."
-            />}
-        </span>}
+            />
+          )}
+        </span>
+      )}
       <OverlayTrigger
         placement="right"
         overlay={
@@ -140,14 +147,14 @@ const EditEnvironmentConfigVariables = ({ fields, noItems = null }) =>
               defaultMessage="Add another variable."
             />
           </Tooltip>
-        }
-      >
+        }>
         <FlatButton onClick={() => fields.push(EMPTY_VALUE)}>
           <AddIcon />
         </FlatButton>
       </OverlayTrigger>
     </div>
-  </div>;
+  </div>
+);
 
 EditEnvironmentConfigVariables.propTypes = {
   fields: PropTypes.object.isRequired,
@@ -155,13 +162,13 @@ EditEnvironmentConfigVariables.propTypes = {
     active: PropTypes.bool,
     dirty: PropTypes.bool,
     error: PropTypes.any,
-    warning: PropTypes.any
+    warning: PropTypes.any,
   }).isRequired,
   noItems: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.element,
-    PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) })
-  ])
+    PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) }),
+  ]),
 };
 
 export default EditEnvironmentConfigVariables;

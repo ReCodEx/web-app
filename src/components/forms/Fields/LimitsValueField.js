@@ -5,23 +5,22 @@ import { TextField } from '../Fields';
 
 import styles from './EditLimitsField.less';
 
-const LimitsValueField = ({ input, prettyPrint, ...props }) =>
+const LimitsValueField = ({ input, prettyPrint, ...props }) => (
   <tr>
     <td width="100%" rowSpan="2">
       <TextField {...props} input={input} />
     </td>
     <td className={styles.buttonsCol}>
-      <b>
-        {prettyPrint(input.value)}
-      </b>
+      <b>{prettyPrint(input.value)}</b>
     </td>
-  </tr>;
+  </tr>
+);
 
 LimitsValueField.propTypes = {
   input: PropTypes.shape({
-    value: PropTypes.any.isRequired
+    value: PropTypes.any.isRequired,
   }).isRequired,
-  prettyPrint: PropTypes.func.isRequired
+  prettyPrint: PropTypes.func.isRequired,
 };
 
 export default LimitsValueField;

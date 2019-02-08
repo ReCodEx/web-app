@@ -23,7 +23,7 @@ import {
   exerciseConfigFormSmartFillArgs,
   exerciseConfigFormSmartFillOutput,
   exerciseConfigFormSmartFillJudge,
-  exerciseConfigFormSmartFillCompilation
+  exerciseConfigFormSmartFillCompilation,
 } from '../../../redux/modules/exerciseConfigs';
 import { exerciseConfigFormErrors } from '../../../redux/selectors/exerciseConfigs';
 
@@ -46,12 +46,12 @@ class EditExerciseSimpleConfigForm extends Component {
       exercise,
       exerciseTests,
       smartFill,
-      intl: { locale }
+      intl: { locale },
     } = this.props;
 
     return (
       <div>
-        {dataOnly &&
+        {dataOnly && (
           <div className="callout callout-info">
             <p>
               <FormattedMessage
@@ -59,7 +59,8 @@ class EditExerciseSimpleConfigForm extends Component {
                 defaultMessage="The exercise is configured as data-only. It means there is no compilation, the student submits only data, and the data are verified using custom judge. The time and memory limits are applied on the judge itself."
               />
             </p>
-          </div>}
+          </div>
+        )}
         <FormBox
           title={
             <FormattedMessage
@@ -73,7 +74,7 @@ class EditExerciseSimpleConfigForm extends Component {
           dirty={dirty}
           footer={
             <div className="text-center">
-              {dirty &&
+              {dirty && (
                 <span>
                   <Button type="reset" onClick={reset} bsStyle="danger">
                     <RefreshIcon gapRight />
@@ -82,7 +83,8 @@ class EditExerciseSimpleConfigForm extends Component {
                       defaultMessage="Reset"
                     />
                   </Button>
-                </span>}
+                </span>
+              )}
 
               <SubmitButton
                 id="editExerciseSimpleConfig"
@@ -95,17 +97,17 @@ class EditExerciseSimpleConfigForm extends Component {
                 messages={SUBMIT_BUTTON_MESSAGES}
               />
             </div>
-          }
-        >
-          {submitFailed &&
+          }>
+          {submitFailed && (
             <Alert bsStyle="danger">
               <FormattedMessage
                 id="generic.savingFailed"
                 defaultMessage="Saving failed. Please try again later."
               />
-            </Alert>}
+            </Alert>
+          )}
           <ResourceRenderer resource={supplementaryFiles.toArray()}>
-            {(...files) =>
+            {(...files) => (
               <div>
                 {exerciseTests
                   .sort((a, b) => a.name.localeCompare(b.name, locale))
@@ -114,50 +116,53 @@ class EditExerciseSimpleConfigForm extends Component {
                       formValues &&
                       formValues.config &&
                       formValues.config[encodeNumId(test.id)];
-                    return dataOnly
-                      ? <EditExerciseSimpleConfigDataTest
-                          key={idx}
-                          environmentsWithEntryPoints={
-                            environmentsWithEntryPoints
-                          }
-                          supplementaryFiles={files}
-                          testName={test.name}
-                          test={'config.' + encodeNumId(test.id)}
-                          testErrors={
-                            formErrors && formErrors[encodeNumId(test.id)]
-                          }
-                          smartFill={
-                            idx === 0
-                              ? smartFill(test.id, exerciseTests, files)
-                              : undefined
-                          }
-                          change={change}
-                        />
-                      : <EditExerciseSimpleConfigTest
-                          key={idx}
-                          exercise={exercise}
-                          extraFiles={testData && testData['extra-files']}
-                          jarFiles={testData && testData['jar-files']}
-                          useOutFile={testData && testData.useOutFile}
-                          useCustomJudge={testData && testData.useCustomJudge}
-                          environmentsWithEntryPoints={
-                            environmentsWithEntryPoints
-                          }
-                          supplementaryFiles={files}
-                          testName={test.name}
-                          test={'config.' + encodeNumId(test.id)}
-                          testErrors={
-                            formErrors && formErrors[encodeNumId(test.id)]
-                          }
-                          smartFill={
-                            idx === 0 && exerciseTests.length > 1
-                              ? smartFill(test.id, exerciseTests, files)
-                              : undefined
-                          }
-                          change={change}
-                        />;
+                    return dataOnly ? (
+                      <EditExerciseSimpleConfigDataTest
+                        key={idx}
+                        environmentsWithEntryPoints={
+                          environmentsWithEntryPoints
+                        }
+                        supplementaryFiles={files}
+                        testName={test.name}
+                        test={'config.' + encodeNumId(test.id)}
+                        testErrors={
+                          formErrors && formErrors[encodeNumId(test.id)]
+                        }
+                        smartFill={
+                          idx === 0
+                            ? smartFill(test.id, exerciseTests, files)
+                            : undefined
+                        }
+                        change={change}
+                      />
+                    ) : (
+                      <EditExerciseSimpleConfigTest
+                        key={idx}
+                        exercise={exercise}
+                        extraFiles={testData && testData['extra-files']}
+                        jarFiles={testData && testData['jar-files']}
+                        useOutFile={testData && testData.useOutFile}
+                        useCustomJudge={testData && testData.useCustomJudge}
+                        environmentsWithEntryPoints={
+                          environmentsWithEntryPoints
+                        }
+                        supplementaryFiles={files}
+                        testName={test.name}
+                        test={'config.' + encodeNumId(test.id)}
+                        testErrors={
+                          formErrors && formErrors[encodeNumId(test.id)]
+                        }
+                        smartFill={
+                          idx === 0 && exerciseTests.length > 1
+                            ? smartFill(test.id, exerciseTests, files)
+                            : undefined
+                        }
+                        change={change}
+                      />
+                    );
                   })}
-              </div>}
+              </div>
+            )}
           </ResourceRenderer>
         </FormBox>
       </div>
@@ -185,7 +190,7 @@ EditExerciseSimpleConfigForm.propTypes = {
   exerciseTests: PropTypes.array,
   environmentsWithEntryPoints: PropTypes.array.isRequired,
   smartFill: PropTypes.func.isRequired,
-  intl: intlShape.isRequired
+  intl: intlShape.isRequired,
 };
 
 const validate = (formData, { dataOnly }) => {
@@ -332,7 +337,7 @@ export default connect(
     return {
       supplementaryFiles: getSupplementaryFilesForExercise(exercise.id)(state),
       formValues: getFormValues(FORM_NAME)(state),
-      formErrors: exerciseConfigFormErrors(state, FORM_NAME)
+      formErrors: exerciseConfigFormErrors(state, FORM_NAME),
     };
   },
   dispatch => ({
@@ -365,8 +370,8 @@ export default connect(
             tests,
             files
           )
-        )
-    })
+        ),
+    }),
   })
 )(
   reduxForm({
@@ -377,9 +382,9 @@ export default connect(
       'formValues',
       'supplementaryFiles',
       'exerciseTests',
-      'handleSubmit'
+      'handleSubmit',
     ],
     validate,
-    warn
+    warn,
   })(injectIntl(EditExerciseSimpleConfigForm))
 );

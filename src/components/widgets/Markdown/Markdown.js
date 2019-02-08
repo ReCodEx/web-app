@@ -5,15 +5,16 @@ const md = require('markdown-it')().use(
   require('@iktakahiro/markdown-it-katex')
 );
 
-const Markdown = ({ source }) =>
+const Markdown = ({ source }) => (
   <div
     dangerouslySetInnerHTML={{
-      __html: md.render(source)
+      __html: md.render(source),
     }}
-  />;
+  />
+);
 
 Markdown.propTypes = {
-  source: PropTypes.string.isRequired
+  source: PropTypes.string.isRequired,
 };
 
 export default Markdown;

@@ -20,7 +20,7 @@ class SisCreateGroupForm extends Component {
       submitSucceeded,
       groups,
       groupsAccessor,
-      intl: { locale }
+      intl: { locale },
     } = this.props;
 
     return (
@@ -61,19 +61,19 @@ class SisCreateGroupForm extends Component {
                     id="app.sisCreateGroupForm.success"
                     defaultMessage="The group was created."
                   />
-                )
+                ),
               }}
             />
           </div>
-        }
-      >
-        {submitFailed &&
+        }>
+        {submitFailed && (
           <Alert bsStyle="danger">
             <FormattedMessage
               id="app.sisCreateGroupForm.failed"
               defaultMessage="Creating group failed. Please try again later."
             />
-          </Alert>}
+          </Alert>
+        )}
 
         <Field
           name="parentGroupId"
@@ -92,7 +92,7 @@ class SisCreateGroupForm extends Component {
                 group,
                 groupsAccessor,
                 locale
-              )
+              ),
             }))
             .sort((a, b) => a.name.localeCompare(b.name, locale))}
           addEmptyOption
@@ -112,7 +112,7 @@ SisCreateGroupForm.propTypes = {
   submitFailed: PropTypes.bool,
   groups: PropTypes.array,
   groupsAccessor: PropTypes.func.isRequired,
-  intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired
+  intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired,
 };
 
 const validate = ({ parentGroupId }) => {
@@ -132,5 +132,5 @@ const validate = ({ parentGroupId }) => {
 
 export default reduxForm({
   form: 'sisCreateGroup',
-  validate
+  validate,
 })(injectIntl(SisCreateGroupForm));

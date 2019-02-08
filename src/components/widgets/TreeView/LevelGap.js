@@ -1,16 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const LevelGap = ({ level = 0 }) =>
+const LevelGap = ({ level = 0 }) => (
   <span
     style={{
       width: level * 20,
-      display: 'inline-block'
+      display: 'inline-block',
     }}
-  />;
+  />
+);
 
 LevelGap.propTypes = {
-  level: PropTypes.number
+  level: PropTypes.number,
 };
 
 export default LevelGap;

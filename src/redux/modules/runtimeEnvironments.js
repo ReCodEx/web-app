@@ -10,7 +10,7 @@ const { actions, reduceActions } = factory({ resourceName });
 
 export const fetchRuntimeEnvironments = () =>
   actions.fetchMany({
-    endpoint: '/runtime-environments'
+    endpoint: '/runtime-environments',
   });
 
 /**

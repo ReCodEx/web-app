@@ -13,17 +13,17 @@ export const getFailed = state => getProgress(state).get('failed');
 export const getCompletedPercent = createSelector(
   getCompleted,
   getExpectedTasksCount,
-  (completed, expected) => completed / expected * 100
+  (completed, expected) => (completed / expected) * 100
 );
 export const getSkippedPercent = createSelector(
   getSkipped,
   getExpectedTasksCount,
-  (skipped, expected) => skipped / expected * 100
+  (skipped, expected) => (skipped / expected) * 100
 );
 export const getFailedPercent = createSelector(
   getFailed,
   getExpectedTasksCount,
-  (failed, expected) => failed / expected * 100
+  (failed, expected) => (failed / expected) * 100
 );
 
 export const isFinished = state =>

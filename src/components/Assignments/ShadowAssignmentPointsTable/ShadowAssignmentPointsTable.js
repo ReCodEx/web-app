@@ -25,7 +25,7 @@ class ShadowAssignmentPointsTable extends Component {
     this.setState({
       dialogOpen: true,
       dialogStudentId: studentId,
-      dialogPointsId: pointsId
+      dialogPointsId: pointsId,
     });
 
   closeDialog = () => this.setState({ dialogOpen: false });
@@ -39,13 +39,13 @@ class ShadowAssignmentPointsTable extends Component {
           awardeeId,
           points: 0,
           awardedAt: moment().startOf('minute'),
-          note: ''
+          note: '',
         }
       : {
           pointsId,
           points: studentPoints.points,
           awardedAt: moment.unix(studentPoints.awardedAt),
-          note: studentPoints.note
+          note: studentPoints.note,
         };
   });
 
@@ -55,12 +55,12 @@ class ShadowAssignmentPointsTable extends Component {
       pointsId === null
         ? createPoints({
             awardedAt: moment(awardedAt).unix(),
-            ...formData
+            ...formData,
           })
         : updatePoints({
             pointsId,
             awardedAt: moment(awardedAt).unix(),
-            ...formData
+            ...formData,
           });
     return promise.then(this.closeDialog);
   };
@@ -76,7 +76,7 @@ class ShadowAssignmentPointsTable extends Component {
       points,
       permissionHints,
       maxPoints,
-      intl: { locale }
+      intl: { locale },
     } = this.props;
     const studentPoints = arrayToObject(points, ({ awardeeId }) => awardeeId);
     const nameComparator = createUserNameComparator(locale);
@@ -92,8 +92,7 @@ class ShadowAssignmentPointsTable extends Component {
         collapsable
         isOpen
         noPadding
-        unlimitedHeight
-      >
+        unlimitedHeight>
         <React.Fragment>
           <Table responsive hover>
             <thead>
@@ -154,62 +153,66 @@ class ShadowAssignmentPointsTable extends Component {
                       {points !== null ? points : <span>&mdash;</span>}
                     </td>
                     <td>
-                      {awardedAt &&
-                        <DateTime unixts={awardedAt} showRelative />}
+                      {awardedAt && (
+                        <DateTime unixts={awardedAt} showRelative />
+                      )}
                     </td>
                     <td>
                       {safeGet(studentPoints, [student.id, 'note'], null)}
                     </td>
-                    {points === null
-                      ? <td className="shrink-col text-nowrap text-right">
-                          {permissionHints.createPoints &&
-                            <Button
-                              bsStyle="success"
-                              onClick={() => this.openDialog(student.id)}
-                              bsSize="xs"
-                            >
-                              <Icon gapRight icon={['far', 'star']} />
-                              <FormattedMessage
-                                id="app.shadowAssignmentPointsTable.createPointsButton"
-                                defaultMessage="Award Points"
-                              />
-                            </Button>}
-                        </td>
-                      : <td className="shrink-col text-nowrap text-right">
-                          {permissionHints.updatePoints &&
-                            <Button
-                              bsStyle="warning"
-                              onClick={() =>
-                                this.openDialog(student.id, pointsId)}
-                              bsSize="xs"
-                            >
-                              <EditIcon gapRight />
-                              <FormattedMessage
-                                id="app.shadowAssignmentPointsTable.updatePointsButton"
-                                defaultMessage="Edit"
-                              />
-                            </Button>}
+                    {points === null ? (
+                      <td className="shrink-col text-nowrap text-right">
+                        {permissionHints.createPoints && (
+                          <Button
+                            bsStyle="success"
+                            onClick={() => this.openDialog(student.id)}
+                            bsSize="xs">
+                            <Icon gapRight icon={['far', 'star']} />
+                            <FormattedMessage
+                              id="app.shadowAssignmentPointsTable.createPointsButton"
+                              defaultMessage="Award Points"
+                            />
+                          </Button>
+                        )}
+                      </td>
+                    ) : (
+                      <td className="shrink-col text-nowrap text-right">
+                        {permissionHints.updatePoints && (
+                          <Button
+                            bsStyle="warning"
+                            onClick={() =>
+                              this.openDialog(student.id, pointsId)
+                            }
+                            bsSize="xs">
+                            <EditIcon gapRight />
+                            <FormattedMessage
+                              id="app.shadowAssignmentPointsTable.updatePointsButton"
+                              defaultMessage="Edit"
+                            />
+                          </Button>
+                        )}
 
-                          {permissionHints.removePoints &&
-                            <Confirm
-                              id={`remove-${pointsId}`}
-                              onConfirmed={() => this.removePoints(pointsId)}
-                              question={
-                                <FormattedMessage
-                                  id="app.shadowAssignmentPointsTable.removePointsButtonConfirmation"
-                                  defaultMessage="Do you really wish to remove awarded points?"
-                                />
-                              }
-                            >
-                              <Button bsStyle="danger" bsSize="xs">
-                                <DeleteIcon gapRight />
-                                <FormattedMessage
-                                  id="app.shadowAssignmentPointsTable.removePointsButton"
-                                  defaultMessage="Remove"
-                                />
-                              </Button>
-                            </Confirm>}
-                        </td>}
+                        {permissionHints.removePoints && (
+                          <Confirm
+                            id={`remove-${pointsId}`}
+                            onConfirmed={() => this.removePoints(pointsId)}
+                            question={
+                              <FormattedMessage
+                                id="app.shadowAssignmentPointsTable.removePointsButtonConfirmation"
+                                defaultMessage="Do you really wish to remove awarded points?"
+                              />
+                            }>
+                            <Button bsStyle="danger" bsSize="xs">
+                              <DeleteIcon gapRight />
+                              <FormattedMessage
+                                id="app.shadowAssignmentPointsTable.removePointsButton"
+                                defaultMessage="Remove"
+                              />
+                            </Button>
+                          </Confirm>
+                        )}
+                      </td>
+                    )}
                   </tr>
                 );
               })}
@@ -219,8 +222,7 @@ class ShadowAssignmentPointsTable extends Component {
             show={this.state.dialogOpen}
             backdrop="static"
             onHide={this.closeDialog}
-            bsSize="large"
-          >
+            bsSize="large">
             <Modal.Header closeButton>
               <Modal.Title>
                 <FormattedMessage
@@ -260,7 +262,7 @@ ShadowAssignmentPointsTable.propTypes = {
   createPoints: PropTypes.func.isRequired,
   updatePoints: PropTypes.func.isRequired,
   removePoints: PropTypes.func.isRequired,
-  intl: intlShape.isRequired
+  intl: intlShape.isRequired,
 };
 
 export default injectIntl(ShadowAssignmentPointsTable);

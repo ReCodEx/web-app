@@ -15,17 +15,18 @@ const FilterUsersListForm = ({
   submitFailed = false,
   submitSucceeded = false,
   invalid,
-  intl: { locale }
-}) =>
+  intl: { locale },
+}) => (
   <Form method="POST" onSubmit={onSubmit}>
     <Well bsSize="sm">
-      {submitFailed &&
+      {submitFailed && (
         <Alert bsStyle="danger">
           <FormattedMessage
             id="generic.operationFailed"
             defaultMessage="Operation failed. Please try again later."
           />
-        </Alert>}
+        </Alert>
+      )}
 
       <Grid fluid>
         <Row>
@@ -39,7 +40,8 @@ const FilterUsersListForm = ({
                   <FormattedMessage
                     id="app.filterUsersListForm.searchName"
                     defaultMessage="Search by name"
-                  />:
+                  />
+                  :
                 </span>
               }
             />
@@ -47,11 +49,10 @@ const FilterUsersListForm = ({
         </Row>
         <Row>
           <Col sm={9} md={10}>
-            {knownRoles.map(role =>
+            {knownRoles.map(role => (
               <span
                 key={`${role}-${locale}`}
-                className="text-nowrap pull-left em-padding-right"
-              >
+                className="text-nowrap pull-left em-padding-right">
                 <Field
                   name={`roles.${role}`}
                   component={CheckboxField}
@@ -59,7 +60,7 @@ const FilterUsersListForm = ({
                   label={roleLabelsPlural[role]}
                 />
               </span>
-            )}
+            ))}
           </Col>
 
           <Col sm={3} md={2}>
@@ -83,7 +84,7 @@ const FilterUsersListForm = ({
                       id="generic.filtersSet"
                       defaultMessage="Filters Set"
                     />
-                  )
+                  ),
                 }}
               />
             </div>
@@ -91,7 +92,8 @@ const FilterUsersListForm = ({
         </Row>
       </Grid>
     </Well>
-  </Form>;
+  </Form>
+);
 
 FilterUsersListForm.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
@@ -99,13 +101,13 @@ FilterUsersListForm.propTypes = {
   submitFailed: PropTypes.bool,
   submitSucceeded: PropTypes.bool,
   invalid: PropTypes.bool,
-  intl: intlShape.isRequired
+  intl: intlShape.isRequired,
 };
 
 export default injectIntl(
   reduxForm({
     form: 'filterUsersList',
     enableReinitialize: true,
-    keepDirtyOnReinitialize: false
+    keepDirtyOnReinitialize: false,
   })(FilterUsersListForm)
 );

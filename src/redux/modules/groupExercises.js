@@ -29,9 +29,9 @@ const reducer = handleActions(
 
       return {
         ...state,
-        [groupId]: Array.from(new Set(ids))
+        [groupId]: Array.from(new Set(ids)),
       };
-    }
+    },
   },
   initialState
 );

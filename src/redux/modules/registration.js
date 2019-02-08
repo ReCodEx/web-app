@@ -6,14 +6,14 @@ export const actionTypes = {
   CREATE_ACCOUNT: 'recodex/registration/CREATE_ACCOUNT',
   CREATE_ACCOUNT_PENDING: 'recodex/registration/CREATE_ACCOUNT_PENDING',
   CREATE_ACCOUNT_FULFILLED: 'recodex/registration/CREATE_ACCOUNT_FULFILLED',
-  CREATE_ACCOUNT_REJECTED: 'recodex/registration/CREATE_ACCOUNT_REJECTED'
+  CREATE_ACCOUNT_REJECTED: 'recodex/registration/CREATE_ACCOUNT_REJECTED',
 };
 
 export const statusTypes = {
   IDLE: 'IDLE',
   CREATING_ACCOUNT: 'CREATING_ACCOUNT',
   ACCOUNT_CREATING_FAILED: 'ACCOUNT_CREATING_FAILED',
-  ACCOUNT_CREATED: 'ACCOUNT_CREATED'
+  ACCOUNT_CREATED: 'ACCOUNT_CREATED',
 };
 
 /**
@@ -33,7 +33,7 @@ export const createAccount = (
     method: 'POST',
     endpoint: '/users',
     body: { firstName, lastName, email, password, passwordConfirm, instanceId },
-    meta: { instanceId }
+    meta: { instanceId },
   });
 
 export const createExternalAccount = (
@@ -47,11 +47,11 @@ export const createExternalAccount = (
     method: 'POST',
     endpoint: '/users/ext',
     body: { ...credentials, instanceId, serviceId, authType },
-    meta: { instanceId, service: serviceId }
+    meta: { instanceId, service: serviceId },
   });
 
 const initialState = fromJS({
-  status: statusTypes.IDLE
+  status: statusTypes.IDLE,
 });
 
 const reducer = handleActions(
@@ -63,7 +63,7 @@ const reducer = handleActions(
       state.set('status', statusTypes.ACCOUNT_CREATED),
 
     [actionTypes.CREATE_ACCOUNT_REJECTED]: (state, action) =>
-      state.set('status', statusTypes.ACCOUNT_CREATING_FAILED)
+      state.set('status', statusTypes.ACCOUNT_CREATING_FAILED),
   },
   initialState
 );

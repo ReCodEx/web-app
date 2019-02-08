@@ -9,8 +9,8 @@ const FakeAvatar = ({
   light = false,
   children,
   small = false,
-  altClassName = ''
-}) =>
+  altClassName = '',
+}) => (
   <span
     style={{
       display: 'inline-block',
@@ -25,12 +25,12 @@ const FakeAvatar = ({
       borderColor: !light ? 'transparent' : 'gray',
       borderRadius: Math.ceil(getSize(size, small) / 2),
       fontSize: Math.floor(Math.max(14, getSize(size, small) / 2)),
-      fontWeight: 'bolder'
+      fontWeight: 'bolder',
     }}
-    className={altClassName}
-  >
+    className={altClassName}>
     {children}
-  </span>;
+  </span>
+);
 
 FakeAvatar.propTypes = {
   size: PropTypes.number,
@@ -39,7 +39,7 @@ FakeAvatar.propTypes = {
   children: PropTypes.oneOfType([PropTypes.string, PropTypes.element])
     .isRequired,
   small: PropTypes.bool,
-  altClassName: PropTypes.string
+  altClassName: PropTypes.string,
 };
 
 export default FakeAvatar;

@@ -2,7 +2,7 @@ import { handleActions } from 'redux-actions';
 import factory, {
   initialState,
   createRecord,
-  resourceStatus
+  resourceStatus,
 } from '../helpers/resourceManager';
 import { createApiAction } from '../middleware/apiMiddleware';
 
@@ -19,12 +19,12 @@ export const actionTypes = {
   ADD_FILES_FULFILLED: 'recodex/pipelineFiles/ADD_FILES_FULFILLED',
   ADD_FILES_REJECTED: 'recodex/pipelineFiles/ADD_FILES_REJECTED',
   REMOVE_FILE: 'recodex/pipelineFiles/REMOVE_FILE',
-  REMOVE_FILE_FULFILLED: 'recodex/pipelineFiles/REMOVE_FILE_FULFILLED'
+  REMOVE_FILE_FULFILLED: 'recodex/pipelineFiles/REMOVE_FILE_FULFILLED',
 };
 
 export const fetchSupplementaryFilesForPipeline = pipelineId =>
   actions.fetchMany({
-    endpoint: `/pipelines/${pipelineId}/supplementary-files`
+    endpoint: `/pipelines/${pipelineId}/supplementary-files`,
   });
 
 export const addPipelineFiles = (pipelineId, files) =>
@@ -33,16 +33,16 @@ export const addPipelineFiles = (pipelineId, files) =>
     endpoint: `/pipelines/${pipelineId}/supplementary-files`,
     method: 'POST',
     body: {
-      files: files.map(uploaded => uploaded.file.id)
+      files: files.map(uploaded => uploaded.file.id),
     },
     meta: {
       pipelineId,
       files: files.map(uploaded => ({
         tmpId: Math.random().toString(),
-        file: uploaded.file
-      }))
+        file: uploaded.file,
+      })),
     },
-    uploadFiles: true
+    uploadFiles: true,
   });
 
 export const removePipelineFile = (pipelineId, fileId) =>
@@ -50,7 +50,7 @@ export const removePipelineFile = (pipelineId, fileId) =>
     type: actionTypes.REMOVE_FILE,
     endpoint: `/pipelines/${pipelineId}/supplementary-files/${fileId}`,
     method: 'DELETE',
-    meta: { pipelineId, fileId }
+    meta: { pipelineId, fileId },
   });
 
 /**
@@ -70,7 +70,7 @@ const reducer = handleActions(
       ),
 
     [actionTypes.REMOVE_FILE_FULFILLED]: (state, { meta: { fileId } }) =>
-      state.deleteIn(['resources', fileId])
+      state.deleteIn(['resources', fileId]),
   }),
   initialState
 );

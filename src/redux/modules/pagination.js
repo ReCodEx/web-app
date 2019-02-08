@@ -6,7 +6,7 @@ import {
   getPaginationOffset,
   getPaginationLimit,
   getPaginationOrderBy,
-  getPaginationFilters
+  getPaginationFilters,
 } from '../selectors/pagination';
 import { selectedInstanceId } from '../selectors/auth';
 
@@ -20,7 +20,7 @@ export const actionTypes = {
   FETCH_PAGINATED: 'recodex/pagination/FETCH_PAGINATED',
   FETCH_PAGINATED_PENDING: 'recodex/pagination/FETCH_PAGINATED_PENDING',
   FETCH_PAGINATED_FULFILLED: 'recodex/pagination/FETCH_PAGINATED_FULFILLED',
-  FETCH_PAGINATED_REJECTED: 'recodex/pagination/FETCH_PAGINATED_REJECTED'
+  FETCH_PAGINATED_REJECTED: 'recodex/pagination/FETCH_PAGINATED_REJECTED',
 };
 
 const paginationStructure = {
@@ -30,14 +30,14 @@ const paginationStructure = {
   filters: {}, // current combination of applied filters
   pending: null, // null if no operation was started, Date.now() when pending operation was started, or false if operation has concluded
   lastUpdate: null, // last update (needed for automated invalidation)
-  didInvalidate: false // just for the compatibility with regular resources
+  didInvalidate: false, // just for the compatibility with regular resources
 };
 const createPaginationStructure = init =>
   fromJS({
     offset: 0, // currently selected offset
     limit: 0, // currently selected amount of data per page
     ...paginationStructure,
-    ...init
+    ...init,
   });
 const initialState = Map();
 
@@ -110,9 +110,9 @@ export const fetchPaginated = (componentId, endpoint) => (
         offset,
         limit,
         started: Date.now(),
-        forceInvalidate
+        forceInvalidate,
       },
-      query
+      query,
     })
   );
 };
@@ -171,7 +171,7 @@ export default handleActions(
       state,
       {
         payload: { items, totalCount, orderBy, filters, offset },
-        meta: { componentId, started, forceInvalidate }
+        meta: { componentId, started, forceInvalidate },
       }
     ) => {
       if (!componentId || state.getIn([componentId, 'pending']) !== started) {
@@ -201,7 +201,7 @@ export default handleActions(
           totalCount,
           orderBy,
           filters: Array.isArray(filters) ? {} : filters,
-          pending: false
+          pending: false,
         })
         .mergeIn([componentId, 'data'], preprocessItems(items, offset));
     },
@@ -212,7 +212,7 @@ export default handleActions(
     ) =>
       componentId && state.getIn([componentId, 'pending']) === started
         ? state.setIn([componentId, 'pending'], false)
-        : state
+        : state,
   },
   initialState
 );

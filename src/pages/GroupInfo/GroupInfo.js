@@ -11,7 +11,7 @@ import { Row, Col } from 'react-bootstrap';
 import {
   createGroup,
   fetchGroupIfNeeded,
-  fetchAllGroups
+  fetchAllGroups,
 } from '../../redux/modules/groups';
 import { fetchSupervisors, fetchUser } from '../../redux/modules/users';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
@@ -20,26 +20,26 @@ import {
   isAdminOf,
   isLoggedAsSuperAdmin,
   supervisorsOfGroupSelector,
-  isStudentOf
+  isStudentOf,
 } from '../../redux/selectors/users';
 import { groupSelector, groupsSelector } from '../../redux/selectors/groups';
 
 import Page from '../../components/layout/Page';
 import GroupInfoTable, {
   LoadingGroupDetail,
-  FailedGroupDetail
+  FailedGroupDetail,
 } from '../../components/Groups/GroupDetail';
 import HierarchyLine from '../../components/Groups/HierarchyLine';
 import SupervisorsList from '../../components/Users/SupervisorsList';
 import {
   getLocalizedName,
-  transformLocalizedTextsFormData
+  transformLocalizedTextsFormData,
 } from '../../helpers/localizedData';
 import { isReady } from '../../redux/helpers/resourceManager/index';
 import Box from '../../components/widgets/Box';
 import GroupTree from '../../components/Groups/GroupTree/GroupTree';
 import EditGroupForm, {
-  EDIT_GROUP_FORM_EMPTY_INITIAL_VALUES
+  EDIT_GROUP_FORM_EMPTY_INITIAL_VALUES,
 } from '../../components/forms/EditGroupForm';
 import AddSupervisor from '../../components/Groups/AddSupervisor';
 import GroupTopButtons from '../../components/Groups/GroupTopButtons/GroupTopButtons';
@@ -54,7 +54,7 @@ class GroupInfo extends Component {
       .then(group =>
         Promise.all([
           dispatch(fetchSupervisors(groupId)),
-          group.archived ? dispatch(fetchAllGroups({ archived: true })) : null
+          group.archived ? dispatch(fetchAllGroups({ archived: true })) : null,
         ])
       );
 
@@ -64,7 +64,9 @@ class GroupInfo extends Component {
   }
 
   componentWillReceiveProps(newProps) {
-    const { params: { groupId } } = this.props;
+    const {
+      params: { groupId },
+    } = this.props;
 
     if (groupId !== newProps.params.groupId) {
       newProps.loadAsync();
@@ -81,7 +83,10 @@ class GroupInfo extends Component {
   }
 
   getBreadcrumbs = () => {
-    const { group, intl: { locale } } = this.props;
+    const {
+      group,
+      intl: { locale },
+    } = this.props;
     const breadcrumbs = [
       {
         resource: group,
@@ -89,16 +94,16 @@ class GroupInfo extends Component {
         breadcrumb: data => ({
           link: ({ INSTANCE_URI_FACTORY }) =>
             INSTANCE_URI_FACTORY(data.privateData.instanceId),
-          text: 'Instance'
-        })
+          text: 'Instance',
+        }),
       },
       {
         resource: group,
         iconName: 'users',
         breadcrumb: data => ({
-          text: getLocalizedName(data, locale)
-        })
-      }
+          text: getLocalizedName(data, locale),
+        }),
+      },
     ];
     return breadcrumbs;
   };
@@ -115,7 +120,7 @@ class GroupInfo extends Component {
       isStudent,
       addSubgroup,
       hasThreshold,
-      intl: { locale }
+      intl: { locale },
     } = this.props;
 
     return (
@@ -130,9 +135,8 @@ class GroupInfo extends Component {
         }
         breadcrumbs={this.getBreadcrumbs()}
         loading={<LoadingGroupDetail />}
-        failed={<FailedGroupDetail />}
-      >
-        {data =>
+        failed={<FailedGroupDetail />}>
+        {data => (
           <div>
             <HierarchyLine
               groupId={data.id}
@@ -152,7 +156,7 @@ class GroupInfo extends Component {
               directlyArchived={data.directlyArchived}
             />
 
-            {!hasPermissions(data, 'viewDetail') &&
+            {!hasPermissions(data, 'viewDetail') && (
               <Row>
                 <Col sm={12}>
                   <p className="callout callout-warning larger">
@@ -163,20 +167,22 @@ class GroupInfo extends Component {
                     />
                   </p>
                 </Col>
-              </Row>}
+              </Row>
+            )}
 
             <Row>
               <Col sm={6}>
-                {hasPermissions(data, 'viewDetail') &&
+                {hasPermissions(data, 'viewDetail') && (
                   <GroupInfoTable
                     group={data}
                     supervisors={supervisors}
                     isAdmin={isAdmin || isSuperAdmin}
                     groups={groups}
                     locale={locale}
-                  />}
+                  />
+                )}
 
-                {hasPermissions(data, 'viewSupervisors') &&
+                {hasPermissions(data, 'viewSupervisors') && (
                   <Box
                     noPadding
                     collapsable
@@ -189,14 +195,13 @@ class GroupInfo extends Component {
                           groupName: getLocalizedName(
                             {
                               name: data.name,
-                              localizedTexts: data.localizedTexts
+                              localizedTexts: data.localizedTexts,
                             },
                             locale
-                          )
+                          ),
                         }}
                       />
-                    }
-                  >
+                    }>
                     <SupervisorsList
                       groupId={data.id}
                       users={supervisors}
@@ -207,26 +212,26 @@ class GroupInfo extends Component {
                         data.privateData.supervisors.length
                       }
                     />
-                  </Box>}
+                  </Box>
+                )}
 
-                {hasPermissions(data, 'setAdmin') &&
-                  !data.archived &&
+                {hasPermissions(data, 'setAdmin') && !data.archived && (
                   <Box
                     title={
                       <FormattedMessage
                         id="app.group.adminsView.addSupervisor"
                         defaultMessage="Add Supervisor"
                       />
-                    }
-                  >
+                    }>
                     <AddSupervisor
                       instanceId={data.privateData.instanceId}
                       groupId={data.id}
                     />
-                  </Box>}
+                  </Box>
+                )}
               </Col>
               <Col sm={6}>
-                {hasPermissions(data, 'viewSubgroups') &&
+                {hasPermissions(data, 'viewSubgroups') && (
                   <Box
                     title={
                       <FormattedMessage
@@ -235,8 +240,7 @@ class GroupInfo extends Component {
                       />
                     }
                     unlimitedHeight
-                    extraPadding
-                  >
+                    extraPadding>
                     <GroupTree
                       id={data.id}
                       currentGroupId={data.id}
@@ -248,10 +252,10 @@ class GroupInfo extends Component {
                       level={1}
                       ancestralPath={data.parentGroupsIds.slice(1)}
                     />
-                  </Box>}
+                  </Box>
+                )}
 
-                {hasPermissions(data, 'addSubgroup') &&
-                  !data.archived &&
+                {hasPermissions(data, 'addSubgroup') && !data.archived && (
                   <EditGroupForm
                     form="addSubgroup"
                     onSubmit={addSubgroup(data.privateData.instanceId, userId)}
@@ -261,10 +265,12 @@ class GroupInfo extends Component {
                     isOpen={false}
                     hasThreshold={hasThreshold}
                     isSuperAdmin={isSuperAdmin}
-                  />}
+                  />
+                )}
               </Col>
             </Row>
-          </div>}
+          </div>
+        )}
       </Page>
     );
   }
@@ -287,7 +293,7 @@ GroupInfo.propTypes = {
   refetchSupervisors: PropTypes.func.isRequired,
   links: PropTypes.object,
   hasThreshold: PropTypes.bool,
-  intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired
+  intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired,
 };
 
 const addSubgroupFormSelector = formValueSelector('addSubgroup');
@@ -304,7 +310,7 @@ const mapStateToProps = (state, { params: { groupId } }) => {
     isAdmin: isAdminOf(userId, groupId)(state),
     isSuperAdmin: isLoggedAsSuperAdmin(state),
     isStudent: isStudentOf(userId, groupId)(state),
-    hasThreshold: addSubgroupFormSelector(state, 'hasThreshold')
+    hasThreshold: addSubgroupFormSelector(state, 'hasThreshold'),
   };
 };
 
@@ -315,16 +321,17 @@ const mapDispatchToProps = (dispatch, { params }) => ({
         ...data,
         localizedTexts: transformLocalizedTextsFormData(localizedTexts),
         instanceId,
-        parentGroupId: params.groupId
+        parentGroupId: params.groupId,
       })
     ).then(() =>
       Promise.all([dispatch(fetchAllGroups()), dispatch(fetchUser(userId))])
     ),
   loadAsync: () => GroupInfo.loadAsync(params, dispatch),
   push: url => dispatch(push(url)),
-  refetchSupervisors: () => dispatch(fetchSupervisors(params.groupId))
+  refetchSupervisors: () => dispatch(fetchSupervisors(params.groupId)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(
-  injectIntl(GroupInfo)
-);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(injectIntl(GroupInfo));

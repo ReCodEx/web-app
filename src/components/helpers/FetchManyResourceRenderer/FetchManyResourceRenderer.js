@@ -6,20 +6,22 @@ import { LoadingIcon, WarningIcon } from '../../icons';
 const isLoading = status => status === 'PENDING';
 const hasFailed = status => status === 'FAILED';
 
-const defaultLoading = noIcons =>
+const defaultLoading = noIcons => (
   <span>
     {!noIcons && <LoadingIcon gapRight />}
     <FormattedMessage id="generic.loading" defaultMessage="Loading..." />
-  </span>;
+  </span>
+);
 
-const defaultFailed = noIcons =>
+const defaultFailed = noIcons => (
   <span>
     {!noIcons && <WarningIcon gapRight />}
     <FormattedMessage
       id="app.resourceRenderer.loadingFailed"
       defaultMessage="Loading failed."
     />
-  </span>;
+  </span>
+);
 
 const FetchManyResourceRenderer = ({
   noIcons = false,
@@ -28,13 +30,19 @@ const FetchManyResourceRenderer = ({
   children: ready,
   fetchManyStatus,
   hiddenUntilReady = false,
-  forceLoading = false
+  forceLoading = false,
 }) => {
   const stillLoading =
     !fetchManyStatus || isLoading(fetchManyStatus) || forceLoading;
   return stillLoading
-    ? hiddenUntilReady ? null : loading
-    : hasFailed(fetchManyStatus) ? (hiddenUntilReady ? null : failed) : ready(); // display all ready items
+    ? hiddenUntilReady
+      ? null
+      : loading
+    : hasFailed(fetchManyStatus)
+    ? hiddenUntilReady
+      ? null
+      : failed
+    : ready(); // display all ready items
 };
 
 FetchManyResourceRenderer.propTypes = {
@@ -44,7 +52,7 @@ FetchManyResourceRenderer.propTypes = {
   fetchManyStatus: PropTypes.string,
   hiddenUntilReady: PropTypes.bool,
   forceLoading: PropTypes.bool,
-  noIcons: PropTypes.bool
+  noIcons: PropTypes.bool,
 };
 
 export default FetchManyResourceRenderer;

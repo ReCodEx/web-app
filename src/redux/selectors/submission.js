@@ -8,12 +8,14 @@ const { CREATING, VALIDATING, SENDING, FAILED } = submissionStatus;
 
 const getSubmission = state => state.submission;
 
-export const getNote = createSelector(getSubmission, state =>
-  state.get('note')
+export const getNote = createSelector(
+  getSubmission,
+  state => state.get('note')
 );
 
-export const getStatus = createSelector(getSubmission, state =>
-  state.get('status')
+export const getStatus = createSelector(
+  getSubmission,
+  state => state.get('status')
 );
 export const isProcessing = createSelector(
   getStatus,
@@ -31,20 +33,28 @@ export const isValidating = createSelector(
   getStatus,
   state => state === VALIDATING
 );
-export const isSending = createSelector(getStatus, state => state === SENDING);
-export const hasFailed = createSelector(getStatus, state => state === FAILED);
+export const isSending = createSelector(
+  getStatus,
+  state => state === SENDING
+);
+export const hasFailed = createSelector(
+  getStatus,
+  state => state === FAILED
+);
 
 export const getSubmittedSolutionId = createSelector(
   getSubmission,
   submission => submission.get('solutionId')
 );
 
-export const getMonitorParams = createSelector(getSubmission, submission =>
-  submission.get('monitor')
+export const getMonitorParams = createSelector(
+  getSubmission,
+  submission => submission.get('monitor')
 );
 
-export const getPresubmit = createSelector(getSubmission, submission =>
-  submission.get('presubmit')
+export const getPresubmit = createSelector(
+  getSubmission,
+  submission => submission.get('presubmit')
 );
 
 export const getPresubmitEnvironments = createSelector(
@@ -59,8 +69,10 @@ export const getPresubmitEnvironments = createSelector(
       : null
 );
 
-export const getPresubmitVariables = createSelector([getPresubmit], presubmit =>
-  ((presubmit && presubmit.get('submitVariables')) || EMPTY_LIST).toJS()
+export const getPresubmitVariables = createSelector(
+  [getPresubmit],
+  presubmit =>
+    ((presubmit && presubmit.get('submitVariables')) || EMPTY_LIST).toJS()
 );
 
 // Selector helper function for presubmit variables
@@ -70,6 +82,6 @@ export const hasEntryPoint = (vars, env) =>
       safeGet(vars, [
         v => v.runtimeEnvironmentId === env,
         'variables',
-        v => v.name === 'entry-point'
+        v => v.name === 'entry-point',
       ])
   );

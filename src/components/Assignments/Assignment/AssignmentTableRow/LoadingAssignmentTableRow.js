@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { LoadingIcon } from '../../../icons';
 import { FormattedMessage } from 'react-intl';
 
-const LoadingAssignmentTableRow = ({ colSpan = 1 }) =>
+const LoadingAssignmentTableRow = ({ colSpan = 1 }) => (
   <tr>
     <td className="text-center" colSpan={colSpan}>
       <LoadingIcon gapRight />
@@ -12,10 +12,11 @@ const LoadingAssignmentTableRow = ({ colSpan = 1 }) =>
         defaultMessage="Loading assignments..."
       />
     </td>
-  </tr>;
+  </tr>
+);
 
 LoadingAssignmentTableRow.propTypes = {
-  colSpan: PropTypes.number
+  colSpan: PropTypes.number,
 };
 
 export default LoadingAssignmentTableRow;

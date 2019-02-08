@@ -23,14 +23,14 @@ export const actionTypes = {
   LOGOUT: 'recodex/auth/LOGOUT',
   GENERATE_TOKEN: 'recodex/auth/GENERATE_TOKEN',
   GENERATE_TOKEN_FULFILLED: 'recodex/auth/GENERATE_TOKEN_FULFILLED',
-  SELECT_INSTANCE: 'recodex/auth/SELECT_INSTANCE'
+  SELECT_INSTANCE: 'recodex/auth/SELECT_INSTANCE',
 };
 
 export const statusTypes = {
   LOGGED_OUT: 'LOGGED_OUT',
   LOGGED_IN: 'LOGGED_IN',
   LOGGING_IN: 'LOGGING_IN',
-  LOGIN_FAILED: 'LOGIN_FAILED'
+  LOGIN_FAILED: 'LOGIN_FAILED',
 };
 
 const getUserId = token => token.get('sub');
@@ -44,7 +44,7 @@ export const logout = redirectUrl => dispatch => {
     dispatch(push(redirectUrl));
   }
   dispatch({
-    type: actionTypes.LOGOUT
+    type: actionTypes.LOGOUT,
   });
 };
 
@@ -55,7 +55,7 @@ export const takeOver = userId =>
     type: actionTypes.LOGIN,
     method: 'POST',
     endpoint: `/login/takeover/${userId}`,
-    meta: { service: LOCAL_LOGIN }
+    meta: { service: LOCAL_LOGIN },
   });
 
 export const login = (username, password) =>
@@ -64,7 +64,7 @@ export const login = (username, password) =>
     method: 'POST',
     endpoint: '/login',
     body: { username, password },
-    meta: { service: LOCAL_LOGIN }
+    meta: { service: LOCAL_LOGIN },
   });
 
 export const resetPassword = username =>
@@ -72,7 +72,7 @@ export const resetPassword = username =>
     type: actionTypes.RESET_PASSWORD,
     method: 'POST',
     endpoint: '/forgotten-password',
-    body: { username }
+    body: { username },
   });
 
 export const changePassword = (password, accessToken) =>
@@ -81,7 +81,7 @@ export const changePassword = (password, accessToken) =>
     method: 'POST',
     endpoint: '/forgotten-password/change',
     accessToken,
-    body: { password }
+    body: { password },
   });
 
 export const validatePasswordStrength = password =>
@@ -89,7 +89,7 @@ export const validatePasswordStrength = password =>
     type: 'VALIDATE_PASSWORD_STRENGTH',
     endpoint: '/forgotten-password/validate-password-strength',
     method: 'POST',
-    body: { password }
+    body: { password },
   });
 
 export const externalLogin = service => (credentials, popupWindow = null) =>
@@ -98,27 +98,27 @@ export const externalLogin = service => (credentials, popupWindow = null) =>
     method: 'POST',
     endpoint: `/login/${service}`,
     body: credentials,
-    meta: { service, popupWindow }
+    meta: { service, popupWindow },
   });
 
 export const externalLoginFailed = service => ({
   type: actionTypes.LOGIN_FAILIURE,
-  meta: { service }
+  meta: { service },
 });
 
 export const loginServices = {
   local: LOCAL_LOGIN,
   external: {
     CAS_UK: 'cas-uk',
-    CAS_UK_TICKET: 'cas-uk/cas'
-  }
+    CAS_UK_TICKET: 'cas-uk/cas',
+  },
 };
 
 export const refresh = () =>
   createApiAction({
     type: actionTypes.LOGIN,
     method: 'POST',
-    endpoint: '/login/refresh'
+    endpoint: '/login/refresh',
   });
 
 export const decodeAndValidateAccessToken = (token, now = Date.now()) => {
@@ -142,7 +142,7 @@ export const generateToken = (expiration, scopes) =>
     type: actionTypes.GENERATE_TOKEN,
     method: 'POST',
     endpoint: '/login/issue-restricted-token',
-    body: { expiration: Number(expiration), scopes }
+    body: { expiration: Number(expiration), scopes },
   });
 
 const closeAuthPopupWindow = popupWindow => {
@@ -165,7 +165,7 @@ const closeAuthPopupWindow = popupWindow => {
 export const selectInstance = createAction(
   actionTypes.SELECT_INSTANCE,
   instanceId => ({
-    instanceId
+    instanceId,
   })
 );
 
@@ -183,14 +183,14 @@ const auth = (accessToken, instanceId, now = Date.now()) => {
           jwt: accessToken,
           accessToken: decodedToken,
           userId: getUserId(decodedToken),
-          instanceId: instanceId
+          instanceId: instanceId,
         })
       : fromJS({
           status: {},
           jwt: null,
           accessToken: null,
           userId: null,
-          instanceId: null
+          instanceId: null,
         });
 
   return handleActions(
@@ -231,7 +231,7 @@ const auth = (accessToken, instanceId, now = Date.now()) => {
         state,
         {
           payload: { accessToken },
-          meta: { instanceId = null, service = LOCAL_LOGIN }
+          meta: { instanceId = null, service = LOCAL_LOGIN },
         }
       ) =>
         state
@@ -289,7 +289,7 @@ const auth = (accessToken, instanceId, now = Date.now()) => {
       ) => state.set('lastGeneratedToken', accessToken),
 
       [actionTypes.SELECT_INSTANCE]: (state, { payload: { instanceId } }) =>
-        state.set('instanceId', instanceId)
+        state.set('instanceId', instanceId),
     },
     initialState
   );

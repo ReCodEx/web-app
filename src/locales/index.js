@@ -12,8 +12,9 @@ export const localeData = { cs, en };
 
 export const getDefaultLang = () => {
   if (canUseDOM) {
-    const lang = (window.navigator.userLanguage || window.navigator.language)
-      .substr(0, 2);
+    const lang = (
+      window.navigator.userLanguage || window.navigator.language
+    ).substr(0, 2);
     if (messages[lang]) {
       return lang;
     }

@@ -4,21 +4,17 @@ import { FormattedMessage } from 'react-intl';
 
 import DateTime from '../../widgets/DateTime';
 
-const TermsListItem = ({ data, createActions }) =>
+const TermsListItem = ({ data, createActions }) => (
   <tr>
+    <td>{data.year}</td>
     <td>
-      {data.year}
-    </td>
-    <td>
-      {data.term === 1 &&
-        <FormattedMessage id="app.termsList.winter" defaultMessage="Winter" />}
-      {data.term === 2 &&
-        <FormattedMessage id="app.termsList.summer" defaultMessage="Summer" />}
-      {data.term !== 1 &&
-        data.term !== 2 &&
-        <span>
-          {data.term}
-        </span>}
+      {data.term === 1 && (
+        <FormattedMessage id="app.termsList.winter" defaultMessage="Winter" />
+      )}
+      {data.term === 2 && (
+        <FormattedMessage id="app.termsList.summer" defaultMessage="Summer" />
+      )}
+      {data.term !== 1 && data.term !== 2 && <span>{data.term}</span>}
     </td>
     <td>
       <DateTime unixts={data.beginning} showTime={false} />
@@ -32,7 +28,8 @@ const TermsListItem = ({ data, createActions }) =>
     <td className="text-right">
       {createActions && createActions(data.id, data)}
     </td>
-  </tr>;
+  </tr>
+);
 
 TermsListItem.propTypes = {
   data: PropTypes.shape({
@@ -41,9 +38,9 @@ TermsListItem.propTypes = {
     term: PropTypes.number.isRequired,
     beginning: PropTypes.number,
     end: PropTypes.number,
-    advertiseUntil: PropTypes.number
+    advertiseUntil: PropTypes.number,
   }),
-  createActions: PropTypes.func
+  createActions: PropTypes.func,
 };
 
 export default TermsListItem;

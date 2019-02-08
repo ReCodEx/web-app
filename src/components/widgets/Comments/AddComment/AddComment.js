@@ -5,14 +5,14 @@ import {
   FormattedHTMLMessage,
   injectIntl,
   intlShape,
-  defineMessages
+  defineMessages,
 } from 'react-intl';
 import {
   Form,
   FormGroup,
   FormControl,
   InputGroup,
-  HelpBlock
+  HelpBlock,
 } from 'react-bootstrap';
 
 import Button from '../../FlatButton';
@@ -21,8 +21,8 @@ import Icon from '../../../icons';
 const messages = defineMessages({
   placeholder: {
     id: 'app.comments.commentPlaceholder',
-    defaultMessage: 'Your comment...'
-  }
+    defaultMessage: 'Your comment...',
+  },
 });
 
 class AddComment extends Component {
@@ -41,7 +41,11 @@ class AddComment extends Component {
 
   render() {
     const { text, isPrivate } = this.state;
-    const { addComment, refresh, intl: { formatMessage } } = this.props;
+    const {
+      addComment,
+      refresh,
+      intl: { formatMessage },
+    } = this.props;
 
     return (
       <Form>
@@ -61,8 +65,7 @@ class AddComment extends Component {
                 type="submit"
                 bsStyle={isPrivate ? 'success' : 'primary'}
                 disabled={text.length === 0 || !addComment}
-                onClick={this.addComment}
-              >
+                onClick={this.addComment}>
                 <FormattedMessage
                   id="app.comments.addComment"
                   defaultMessage="Send"
@@ -80,22 +83,25 @@ class AddComment extends Component {
             <Button
               onClick={this.togglePrivate}
               bsSize="xs"
-              disabled={!addComment}
-            >
-              {isPrivate
-                ? <Icon icon="lock" className="text-success" />
-                : <Icon icon="unlock-alt" className="text-warning" />}
+              disabled={!addComment}>
+              {isPrivate ? (
+                <Icon icon="lock" className="text-success" />
+              ) : (
+                <Icon icon="unlock-alt" className="text-warning" />
+              )}
             </Button>{' '}
-            {isPrivate &&
+            {isPrivate && (
               <FormattedHTMLMessage
                 id="app.comments.warnings.isPrivate"
                 defaultMessage="<strong>Only you will see this comment.</strong>"
-              />}
-            {!isPrivate &&
+              />
+            )}
+            {!isPrivate && (
               <FormattedHTMLMessage
                 id="app.comments.warnings.isPublic"
                 defaultMessage="<strong>Everyone on this page will see this comment.</strong>"
-              />}
+              />
+            )}
           </HelpBlock>
         </FormGroup>
       </Form>
@@ -106,7 +112,7 @@ class AddComment extends Component {
 AddComment.propTypes = {
   addComment: PropTypes.func,
   refresh: PropTypes.func,
-  intl: intlShape.isRequired
+  intl: intlShape.isRequired,
 };
 
 export default injectIntl(AddComment);

@@ -7,8 +7,9 @@ const languageOptions = Object.values(
   objectMap(knownLocalesNames, (name, key) => ({ key, name }))
 );
 
-const LanguageSelectField = ({ ...props }) =>
-  <SelectField {...props} options={languageOptions} addEmptyOption={true} />;
+const LanguageSelectField = ({ ...props }) => (
+  <SelectField {...props} options={languageOptions} addEmptyOption={true} />
+);
 
 LanguageSelectField.propTypes = {};
 

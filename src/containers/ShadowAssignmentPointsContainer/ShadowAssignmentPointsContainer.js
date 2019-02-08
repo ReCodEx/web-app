@@ -8,7 +8,7 @@ import { fetchStudents } from '../../redux/modules/users';
 import {
   createShadowAssignmentPoints,
   updateShadowAssignmentPoints,
-  removeShadowAssignmentPoints
+  removeShadowAssignmentPoints,
 } from '../../redux/modules/shadowAssignments';
 import { studentsOfGroupSelector } from '../../redux/selectors/users';
 
@@ -31,7 +31,7 @@ class ShadowAssignmentPointsContainer extends Component {
       permissionHints,
       createPoints,
       updatePoints,
-      removePoints
+      removePoints,
     } = this.props;
     return (
       <ShadowAssignmentPointsTable
@@ -57,12 +57,12 @@ ShadowAssignmentPointsContainer.propTypes = {
   loadAsync: PropTypes.func.isRequired,
   createPoints: PropTypes.func.isRequired,
   updatePoints: PropTypes.func.isRequired,
-  removePoints: PropTypes.func.isRequired
+  removePoints: PropTypes.func.isRequired,
 };
 
 export default connect(
   (state, { groupId }) => ({
-    students: studentsOfGroupSelector(state, groupId)
+    students: studentsOfGroupSelector(state, groupId),
   }),
   (dispatch, { groupId, id }) => ({
     loadAsync: () =>
@@ -76,6 +76,6 @@ export default connect(
         updateShadowAssignmentPoints(id, pointsId, points, note, awardedAt)
       ),
     removePoints: pointsId =>
-      dispatch(removeShadowAssignmentPoints(id, pointsId))
+      dispatch(removeShadowAssignmentPoints(id, pointsId)),
   })
 )(ShadowAssignmentPointsContainer);

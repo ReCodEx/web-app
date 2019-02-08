@@ -2,7 +2,7 @@ import { handleActions } from 'redux-actions';
 import factory, {
   initialState,
   createRecord,
-  resourceStatus
+  resourceStatus,
 } from '../helpers/resourceManager';
 import { createApiAction } from '../middleware/apiMiddleware';
 import { fromJS } from 'immutable';
@@ -13,14 +13,14 @@ import { fromJS } from 'immutable';
 
 const resourceName = 'sisSubscribedGroups';
 const { reduceActions } = factory({
-  resourceName
+  resourceName,
 });
 
 export const actionTypes = {
   FETCH: 'recodex/sisSubscribedGroups/FETCH',
   FETCH_PENDING: 'recodex/sisSubscribedGroups/FETCH_PENDING',
   FETCH_REJECTED: 'recodex/sisSubscribedGroups/FETCH_REJECTED',
-  FETCH_FULFILLED: 'recodex/sisSubscribedGroups/FETCH_FULFILLED'
+  FETCH_FULFILLED: 'recodex/sisSubscribedGroups/FETCH_FULFILLED',
 };
 
 export const fetchSisSubscribedGroups = (userId, year, term) =>
@@ -28,7 +28,7 @@ export const fetchSisSubscribedGroups = (userId, year, term) =>
     type: actionTypes.FETCH,
     method: 'GET',
     endpoint: `/extensions/sis/users/${userId}/subscribed-groups/${year}/${term}/as-student`,
-    meta: { userId, year, term }
+    meta: { userId, year, term },
   });
 
 const reducer = handleActions(
@@ -49,7 +49,7 @@ const reducer = handleActions(
       state.setIn(
         ['resources', userId, `${year}-${term}`],
         createRecord({ state: resourceStatus.FULFILLED, data: fromJS(payload) })
-      )
+      ),
   }),
   initialState
 );

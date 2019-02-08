@@ -18,7 +18,7 @@ import { NeedFixingIcon } from '../../components/icons';
 
 import {
   fetchExerciseIfNeeded,
-  editExercise
+  editExercise,
 } from '../../redux/modules/exercises';
 import { getExercise } from '../../redux/selectors/exercises';
 import { isSubmitting } from '../../redux/selectors/submission';
@@ -28,14 +28,14 @@ import withLinks from '../../helpers/withLinks';
 import {
   getLocalizedName,
   getLocalizedTextsInitialValues,
-  transformLocalizedTextsFormData
+  transformLocalizedTextsFormData,
 } from '../../helpers/localizedData';
 
 const localizedTextDefaults = {
   name: '',
   text: '',
   link: '',
-  description: ''
+  description: '',
 };
 
 const prepareInitialValues = defaultMemoize(
@@ -48,7 +48,7 @@ const prepareInitialValues = defaultMemoize(
     ),
     difficulty,
     isPublic,
-    isLocked
+    isLocked,
   })
 );
 
@@ -69,7 +69,7 @@ class EditExercise extends Component {
     const { localizedTexts, ...data } = formData;
     return editExercise(exercise.getIn(['data', 'version']), {
       localizedTexts: transformLocalizedTextsFormData(localizedTexts),
-      ...data
+      ...data,
     });
   };
 
@@ -79,7 +79,7 @@ class EditExercise extends Component {
       params: { exerciseId },
       exercise,
       push,
-      intl: { locale }
+      intl: { locale },
     } = this.props;
 
     return (
@@ -101,13 +101,13 @@ class EditExercise extends Component {
                   id="app.exercise.breadcrumbTitle"
                   defaultMessage="Exercise {name}"
                   values={{
-                    name: exercise ? getLocalizedName(exercise, locale) : ''
+                    name: exercise ? getLocalizedName(exercise, locale) : '',
                   }}
                 />
               ),
               iconName: 'puzzle-piece',
-              link: EXERCISE_URI_FACTORY(exerciseId)
-            })
+              link: EXERCISE_URI_FACTORY(exerciseId),
+            }),
           },
           {
             text: (
@@ -116,82 +116,84 @@ class EditExercise extends Component {
                 defaultMessage="Edit exercise"
               />
             ),
-            iconName: ['far', 'edit']
-          }
-        ]}
-      >
+            iconName: ['far', 'edit'],
+          },
+        ]}>
         {exercise =>
-          exercise &&
-          <div>
-            {exercise.isBroken &&
+          exercise && (
+            <div>
+              {exercise.isBroken && (
+                <Row>
+                  <Col sm={12}>
+                    <div className="callout callout-warning">
+                      <h4>
+                        <NeedFixingIcon gapRight />
+                        <FormattedMessage
+                          id="app.exercise.isBroken"
+                          defaultMessage="Exercise configuration is incorrect and needs fixing"
+                        />
+                      </h4>
+                      {exercise.validationError}
+                    </div>
+                  </Col>
+                </Row>
+              )}
               <Row>
                 <Col sm={12}>
-                  <div className="callout callout-warning">
-                    <h4>
-                      <NeedFixingIcon gapRight />
-                      <FormattedMessage
-                        id="app.exercise.isBroken"
-                        defaultMessage="Exercise configuration is incorrect and needs fixing"
-                      />
-                    </h4>
-                    {exercise.validationError}
-                  </div>
+                  <ExerciseButtons {...exercise} />
                 </Col>
-              </Row>}
-            <Row>
-              <Col sm={12}>
-                <ExerciseButtons {...exercise} />
-              </Col>
-            </Row>
-            <Row>
-              <Col lg={6}>
-                <EditExerciseForm
-                  initialValues={prepareInitialValues(
-                    exercise.id,
-                    exercise.version,
-                    exercise.localizedTexts,
-                    exercise.difficulty,
-                    exercise.isPublic,
-                    exercise.isLocked
-                  )}
-                  onSubmit={this.editExerciseSubmitHandler}
-                />
-              </Col>
-              <Col lg={6}>
-                <AttachmentFilesTableContainer exercise={exercise} />
-              </Col>
-            </Row>
-            <br />
-            {exercise.permissionHints.remove &&
+              </Row>
               <Row>
-                <Col lg={12}>
-                  <Box
-                    type="danger"
-                    title={
-                      <FormattedMessage
-                        id="app.editExercise.deleteExercise"
-                        defaultMessage="Delete the exercise"
-                      />
-                    }
-                  >
-                    <div>
-                      <p>
-                        <FormattedMessage
-                          id="app.editExercise.deleteExerciseWarning"
-                          defaultMessage="Deleting an exercise will remove all the students submissions and all assignments."
-                        />
-                      </p>
-                      <p className="text-center">
-                        <DeleteExerciseButtonContainer
-                          id={exercise.id}
-                          onDeleted={() => push(EXERCISES_URI)}
-                        />
-                      </p>
-                    </div>
-                  </Box>
+                <Col lg={6}>
+                  <EditExerciseForm
+                    initialValues={prepareInitialValues(
+                      exercise.id,
+                      exercise.version,
+                      exercise.localizedTexts,
+                      exercise.difficulty,
+                      exercise.isPublic,
+                      exercise.isLocked
+                    )}
+                    onSubmit={this.editExerciseSubmitHandler}
+                  />
                 </Col>
-              </Row>}
-          </div>}
+                <Col lg={6}>
+                  <AttachmentFilesTableContainer exercise={exercise} />
+                </Col>
+              </Row>
+              <br />
+              {exercise.permissionHints.remove && (
+                <Row>
+                  <Col lg={12}>
+                    <Box
+                      type="danger"
+                      title={
+                        <FormattedMessage
+                          id="app.editExercise.deleteExercise"
+                          defaultMessage="Delete the exercise"
+                        />
+                      }>
+                      <div>
+                        <p>
+                          <FormattedMessage
+                            id="app.editExercise.deleteExerciseWarning"
+                            defaultMessage="Deleting an exercise will remove all the students submissions and all assignments."
+                          />
+                        </p>
+                        <p className="text-center">
+                          <DeleteExerciseButtonContainer
+                            id={exercise.id}
+                            onDeleted={() => push(EXERCISES_URI)}
+                          />
+                        </p>
+                      </div>
+                    </Box>
+                  </Col>
+                </Row>
+              )}
+            </div>
+          )
+        }
       </Page>
     );
   }
@@ -203,11 +205,11 @@ EditExercise.propTypes = {
   reset: PropTypes.func.isRequired,
   editExercise: PropTypes.func.isRequired,
   params: PropTypes.shape({
-    exerciseId: PropTypes.string.isRequired
+    exerciseId: PropTypes.string.isRequired,
   }).isRequired,
   links: PropTypes.object.isRequired,
   push: PropTypes.func.isRequired,
-  intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired
+  intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired,
 };
 
 export default withLinks(
@@ -216,7 +218,7 @@ export default withLinks(
       return {
         exercise: getExercise(exerciseId)(state),
         submitting: isSubmitting(state),
-        userId: loggedInUserIdSelector(state)
+        userId: loggedInUserIdSelector(state),
       };
     },
     (dispatch, { params: { exerciseId } }) => ({
@@ -224,7 +226,7 @@ export default withLinks(
       reset: () => dispatch(reset('editExercise')),
       loadAsync: () => EditExercise.loadAsync({ exerciseId }, dispatch),
       editExercise: (version, data) =>
-        dispatch(editExercise(exerciseId, { ...data, version }))
+        dispatch(editExercise(exerciseId, { ...data, version })),
     })
   )(injectIntl(EditExercise))
 );

@@ -12,7 +12,7 @@ import {
   skippedTask,
   failedTask,
   finish as finishEvaluationProgress,
-  dropObserver
+  dropObserver,
 } from '../../redux/modules/evaluationProgress';
 
 import {
@@ -21,7 +21,7 @@ import {
   getSkippedPercent,
   getFailedPercent,
   getMessages,
-  isFinished
+  isFinished,
 } from '../../redux/selectors/evaluationProgress';
 
 import { finishProcessing as finishSubmissionProcessing } from '../../redux/modules/submission';
@@ -72,18 +72,24 @@ class EvaluationProgressContainer extends Component {
   };
 
   onError = () => {
-    const { addMessage, intl: { formatMessage } } = this.props;
+    const {
+      addMessage,
+      intl: { formatMessage },
+    } = this.props;
     addMessage({
       wasSuccessful: false,
       status: 'SKIPPED',
-      text: formatMessage(extraMessages.error)
+      text: formatMessage(extraMessages.error),
     });
     this.closeSocket();
   };
 
   onMessage = msg => {
     const data = JSON.parse(msg.data);
-    const { addMessage, intl: { formatMessage } } = this.props;
+    const {
+      addMessage,
+      intl: { formatMessage },
+    } = this.props;
 
     switch (data.command) {
       case 'TASK':
@@ -95,7 +101,7 @@ class EvaluationProgressContainer extends Component {
         addMessage({
           wasSuccessful: true,
           status: 'OK',
-          text: formatMessage(extraMessages.last)
+          text: formatMessage(extraMessages.last),
         });
         break;
     }
@@ -104,11 +110,11 @@ class EvaluationProgressContainer extends Component {
   formatMessage = ({
     command,
     task_state = 'OK', // eslint-disable-line camelcase
-    text = null
+    text = null,
   }) => ({
     wasSuccessful: command !== 'TASK' || task_state === 'COMPLETED', // eslint-disable-line camelcase
     text: text || this.props.intl.formatMessage(this.getRandomMessage()),
-    status: task_state // eslint-disable-line camelcase
+    status: task_state, // eslint-disable-line camelcase
   });
 
   getRandomMessage = () => {
@@ -161,7 +167,7 @@ class EvaluationProgressContainer extends Component {
     const {
       finishSubmissionProcessing,
       dropObserver,
-      onUserClose
+      onUserClose,
     } = this.props;
     finishSubmissionProcessing();
     this.closeSocket();
@@ -174,40 +180,42 @@ class EvaluationProgressContainer extends Component {
     const now = new Date();
     const isAprilFoolsDay = now.getDate() === 1 && now.getMonth() === 3;
 
-    return this.state.realTimeProcessing === true
-      ? <EvaluationProgress
-          isOpen={isOpen}
-          messages={isAprilFoolsDay ? messages : null}
-          completed={progress.completed}
-          skipped={progress.skipped}
-          failed={progress.failed}
-          finished={isFinished}
-          showContinueButton={isFinished || !this.socket}
-          finishProcessing={this.finish}
-          onClose={this.userCloseAction}
-        />
-      : <EvaluationProgress
-          isOpen={isOpen}
-          completed={0}
-          skipped={100}
-          failed={0}
-          finished={false}
-          showContinueButton={true}
-          finishProcessing={this.finish}
-          onClose={this.userCloseAction}
-          messages={List([
-            this.formatMessage({
-              command: 'TASK',
-              task_state: 'SKIPPED',
-              text: (
-                <FormattedMessage
-                  id="app.evaluationProgress.noWebSockets"
-                  defaultMessage="Your browser does not support realtime progress monitoring or the connection to the server could not be estabelished or was lost. The evaluation has already started and you will be able to see the results soon."
-                />
-              )
-            })
-          ])}
-        />;
+    return this.state.realTimeProcessing === true ? (
+      <EvaluationProgress
+        isOpen={isOpen}
+        messages={isAprilFoolsDay ? messages : null}
+        completed={progress.completed}
+        skipped={progress.skipped}
+        failed={progress.failed}
+        finished={isFinished}
+        showContinueButton={isFinished || !this.socket}
+        finishProcessing={this.finish}
+        onClose={this.userCloseAction}
+      />
+    ) : (
+      <EvaluationProgress
+        isOpen={isOpen}
+        completed={0}
+        skipped={100}
+        failed={0}
+        finished={false}
+        showContinueButton={true}
+        finishProcessing={this.finish}
+        onClose={this.userCloseAction}
+        messages={List([
+          this.formatMessage({
+            command: 'TASK',
+            task_state: 'SKIPPED',
+            text: (
+              <FormattedMessage
+                id="app.evaluationProgress.noWebSockets"
+                defaultMessage="Your browser does not support realtime progress monitoring or the connection to the server could not be estabelished or was lost. The evaluation has already started and you will be able to see the results soon."
+              />
+            ),
+          }),
+        ])}
+      />
+    );
   };
 }
 
@@ -215,7 +223,7 @@ EvaluationProgressContainer.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   monitor: PropTypes.shape({
     id: PropTypes.string.isRequired,
-    url: PropTypes.string.isRequired
+    url: PropTypes.string.isRequired,
   }),
   isFinished: PropTypes.bool.isRequired,
   submissionId: PropTypes.string,
@@ -229,7 +237,7 @@ EvaluationProgressContainer.propTypes = {
   progress: PropTypes.shape({
     completed: PropTypes.number.isRequired,
     skipped: PropTypes.number.isRequired,
-    failed: PropTypes.number.isRequired
+    failed: PropTypes.number.isRequired,
   }),
   completedTask: PropTypes.func.isRequired,
   skippedTask: PropTypes.func.isRequired,
@@ -240,7 +248,7 @@ EvaluationProgressContainer.propTypes = {
   push: PropTypes.func.isRequired,
   dropObserver: PropTypes.func.isRequired,
   onUserClose: PropTypes.func,
-  onFinish: PropTypes.func
+  onFinish: PropTypes.func,
 };
 
 export default connect(
@@ -249,10 +257,10 @@ export default connect(
     progress: {
       completed: getCompletedPercent(state),
       skipped: getSkippedPercent(state),
-      failed: getFailedPercent(state)
+      failed: getFailedPercent(state),
     },
     isFinished: isFinished(state),
-    messages: getMessages(state)
+    messages: getMessages(state),
   }),
   {
     finishEvaluationProgress,
@@ -262,6 +270,6 @@ export default connect(
     failedTask,
     addMessage,
     push,
-    dropObserver
+    dropObserver,
   }
 )(injectIntl(EvaluationProgressContainer));

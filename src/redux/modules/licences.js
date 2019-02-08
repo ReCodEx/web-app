@@ -5,7 +5,7 @@ import factory, { initialState } from '../helpers/resourceManager';
 const resourceName = 'licences';
 const { actions, actionTypes, reduceActions } = factory({
   resourceName,
-  apiEndpointFactory: instanceId => `/instances/${instanceId}/licences`
+  apiEndpointFactory: instanceId => `/instances/${instanceId}/licences`,
 });
 
 /**
@@ -46,7 +46,7 @@ const reducer = handleActions(
         licences
           .filter(licence => licence.get('id') !== instanceId)
           .push(fromJS(payload))
-      )
+      ),
   }),
   initialState
 );

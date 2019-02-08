@@ -4,7 +4,7 @@ import { Table } from 'react-bootstrap';
 import { injectIntl, FormattedMessage } from 'react-intl';
 import TermsListItem from '../TermsListItem';
 
-const TermsList = ({ terms = [], createActions, intl, ...rest }) =>
+const TermsList = ({ terms = [], createActions, intl, ...rest }) => (
   <Table hover striped>
     <thead>
       <tr>
@@ -30,11 +30,11 @@ const TermsList = ({ terms = [], createActions, intl, ...rest }) =>
       </tr>
     </thead>
     <tbody>
-      {terms.map((term, i) =>
+      {terms.map((term, i) => (
         <TermsListItem key={i} data={term} createActions={createActions} />
-      )}
+      ))}
 
-      {terms.length === 0 &&
+      {terms.length === 0 && (
         <tr>
           <td className="text-center">
             <FormattedMessage
@@ -42,14 +42,16 @@ const TermsList = ({ terms = [], createActions, intl, ...rest }) =>
               defaultMessage="There are no SIS terms in this list."
             />
           </td>
-        </tr>}
+        </tr>
+      )}
     </tbody>
-  </Table>;
+  </Table>
+);
 
 TermsList.propTypes = {
   terms: PropTypes.array,
   createActions: PropTypes.func,
-  intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired
+  intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired,
 };
 
 export default injectIntl(TermsList);

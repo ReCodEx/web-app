@@ -10,20 +10,20 @@ const DownloadResultArchiveContainer = ({
   submissionId,
   downloadResultArchive,
   downloadRefResultArchive,
-  isReference = false
-}) =>
+  isReference = false,
+}) => (
   <a
     href="#"
-    onClick={isReference ? downloadRefResultArchive : downloadResultArchive}
-  >
+    onClick={isReference ? downloadRefResultArchive : downloadResultArchive}>
     <ResultArchiveInfoBox id={submissionId} />
-  </a>;
+  </a>
+);
 
 DownloadResultArchiveContainer.propTypes = {
   submissionId: PropTypes.string.isRequired,
   downloadResultArchive: PropTypes.func.isRequired,
   downloadRefResultArchive: PropTypes.func.isRequired,
-  isReference: PropTypes.bool
+  isReference: PropTypes.bool,
 };
 
 export default connect(
@@ -36,6 +36,6 @@ export default connect(
     downloadRefResultArchive: e => {
       e.preventDefault();
       dispatch(downloadRefEvaluationArchive(submissionId));
-    }
+    },
   })
 )(DownloadResultArchiveContainer);

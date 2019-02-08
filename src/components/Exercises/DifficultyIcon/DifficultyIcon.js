@@ -45,7 +45,7 @@ const DifficultyIcon = ({ difficulty }) => {
 };
 
 DifficultyIcon.propTypes = {
-  difficulty: PropTypes.string.isRequired
+  difficulty: PropTypes.string.isRequired,
 };
 
 export default DifficultyIcon;

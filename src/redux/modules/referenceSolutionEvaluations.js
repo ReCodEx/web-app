@@ -3,7 +3,7 @@ import { handleActions } from 'redux-actions';
 import factory, {
   initialState,
   createRecord,
-  resourceStatus
+  resourceStatus,
 } from '../helpers/resourceManager';
 import { downloadHelper } from '../helpers/api/download';
 import { actionTypes as additionalSubmissionActionTypes } from './submission';
@@ -13,7 +13,7 @@ const resourceName = 'referenceSolutionEvaluations';
 const { actionTypes, actions, reduceActions } = factory({
   resourceName,
   apiEndpointFactory: evaluationId =>
-    `/reference-solutions/evaluation/${evaluationId}`
+    `/reference-solutions/evaluation/${evaluationId}`,
 });
 
 /**
@@ -23,7 +23,7 @@ const { actionTypes, actions, reduceActions } = factory({
 export { actionTypes };
 export const additionalActionTypes = {
   DOWNLOAD_EVALUATION_ARCHIVE: 'recodex/files/DOWNLOAD_EVALUATION_ARCHIVE',
-  DOWNLOAD_SOLUTION_ARCHIVE: 'recodex/files/DOWNLOAD_SOLUTION_ARCHIVE'
+  DOWNLOAD_SOLUTION_ARCHIVE: 'recodex/files/DOWNLOAD_SOLUTION_ARCHIVE',
 };
 
 export const fetchReferenceSolutionEvaluation = actions.fetchResource;
@@ -39,7 +39,7 @@ export const fetchManyEndpoint = id => `/reference-solutions/${id}/evaluations`;
 
 export const fetchReferenceSolutionEvaluationsForSolution = solutionId =>
   actions.fetchMany({
-    endpoint: fetchManyEndpoint(solutionId)
+    endpoint: fetchManyEndpoint(solutionId),
   });
 
 export const downloadEvaluationArchive = downloadHelper({
@@ -47,7 +47,7 @@ export const downloadEvaluationArchive = downloadHelper({
   fetch: null,
   endpoint: id => `/reference-solutions/evaluation/${id}/download-result`,
   fileNameSelector: (id, state) => `${id}.zip`,
-  contentType: 'application/zip'
+  contentType: 'application/zip',
 });
 
 export const downloadSolutionArchive = downloadHelper({
@@ -55,7 +55,7 @@ export const downloadSolutionArchive = downloadHelper({
   fetch: null,
   endpoint: id => `/reference-solutions/${id}/download-solution`,
   fileNameSelector: (id, state) => `${id}.zip`,
-  contentType: 'application/zip'
+  contentType: 'application/zip',
 });
 
 /**
@@ -77,11 +77,11 @@ const reducer = handleActions(
               ({ submission }) =>
                 createRecord({
                   state: resourceStatus.FULFILLED,
-                  data: submission
+                  data: submission,
                 })
             )
           )
-        : state
+        : state,
   }),
   initialState
 );

@@ -23,22 +23,21 @@ class EditTestsForm extends Component {
       submitFailed,
       submitSucceeded,
       invalid,
-      formValues
+      formValues,
     } = this.props;
 
     return (
       <div>
-        {submitFailed &&
+        {submitFailed && (
           <Alert bsStyle="danger">
             <FormattedMessage
               id="generic.savingFailed"
               defaultMessage="Saving failed. Please try again later."
             />
-          </Alert>}
+          </Alert>
+        )}
 
-        {!readOnly &&
-          formValues &&
-          formValues.tests.length > 0 &&
+        {!readOnly && formValues && formValues.tests.length > 0 && (
           <Field
             name="isUniform"
             component={CheckboxField}
@@ -49,7 +48,8 @@ class EditTestsForm extends Component {
                 defaultMessage="Using uniform point distribution for all tests"
               />
             }
-          />}
+          />
+        )}
 
         <FieldArray
           name="tests"
@@ -58,10 +58,9 @@ class EditTestsForm extends Component {
           isUniform={formValues ? formValues.isUniform === true : true}
         />
 
-        {!readOnly &&
+        {!readOnly && (
           <div className="text-center">
-            {formValues &&
-              formValues.tests.length < 99 &&
+            {formValues && formValues.tests.length < 99 && (
               <Button
                 onClick={() =>
                   change('tests', [
@@ -72,32 +71,31 @@ class EditTestsForm extends Component {
                         (formValues.tests.length + 1)
                           .toString()
                           .padStart(2, '0'),
-                      weight: '100'
-                    }
-                  ])}
-                bsStyle={'primary'}
-              >
+                      weight: '100',
+                    },
+                  ])
+                }
+                bsStyle={'primary'}>
                 <AddIcon gapRight />
                 <FormattedMessage
                   id="app.editTestsTest.add"
                   defaultMessage="Add Test"
                 />
-              </Button>}
+              </Button>
+            )}
 
-            {dirty &&
-              !submitting &&
-              !submitSucceeded &&
+            {dirty && !submitting && !submitSucceeded && (
               <span>
                 <Button
                   type="reset"
                   onClick={reset}
                   bsStyle={'danger'}
-                  className="btn-flat"
-                >
+                  className="btn-flat">
                   <RefreshIcon gapRight />
                   <FormattedMessage id="generic.reset" defaultMessage="Reset" />
                 </Button>
-              </span>}
+              </span>
+            )}
 
             <SubmitButton
               id="editTests"
@@ -125,10 +123,11 @@ class EditTestsForm extends Component {
                     id="app.editTestsForm.success"
                     defaultMessage="Tests Saved."
                   />
-                )
+                ),
               }}
             />
-          </div>}
+          </div>
+        )}
       </div>
     );
   }
@@ -145,7 +144,7 @@ EditTestsForm.propTypes = {
   submitFailed: PropTypes.bool,
   submitSucceeded: PropTypes.bool,
   invalid: PropTypes.bool,
-  formValues: PropTypes.object
+  formValues: PropTypes.object,
 };
 
 const validate = ({ isUniform, tests }) => {
@@ -189,13 +188,13 @@ const validate = ({ isUniform, tests }) => {
 
 export default connect(state => {
   return {
-    formValues: getFormValues('editTests')(state)
+    formValues: getFormValues('editTests')(state),
   };
 })(
   reduxForm({
     form: 'editTests',
     enableReinitialize: true,
     keepDirtyOnReinitialize: false,
-    validate
+    validate,
   })(EditTestsForm)
 );

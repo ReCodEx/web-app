@@ -144,7 +144,7 @@ export const linksFactory = lang => {
     FAILURES_URI,
     SIS_INTEGRATION_URI,
     ARCHIVE_URI,
-    BROKER_URI
+    BROKER_URI,
   };
 };
 

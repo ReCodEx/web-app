@@ -20,27 +20,29 @@ export const isNonNegativeInteger = n =>
 /*
  * Deadline Validators
  */
-export const deadlineFutureLimit = moment().endOf('year').add(1, 'year');
+export const deadlineFutureLimit = moment()
+  .endOf('year')
+  .add(1, 'year');
 
 const messages = defineMessages({
   emptyDeadline: {
     id: 'app.deadlineValidation.emptyDeadline',
-    defaultMessage: 'Please fill the date and time of the deadline.'
+    defaultMessage: 'Please fill the date and time of the deadline.',
   },
   invalidDateTime: {
     id: 'app.deadlineValidation.invalidDateTime',
-    defaultMessage: 'Invalid date or time format.'
+    defaultMessage: 'Invalid date or time format.',
   },
   deadlineInFarFuture: {
     id: 'app.deadlineValidation.deadlineInFarFuture',
     defaultMessage:
-      'The deadline is too far in the future. At present, the furthest possible deadline is {deadlineFutureLimit, date} {deadlineFutureLimit, time, short}.'
+      'The deadline is too far in the future. At present, the furthest possible deadline is {deadlineFutureLimit, date} {deadlineFutureLimit, time, short}.',
   },
   secondDeadlineBeforeFirstDeadline: {
     id: 'app.deadlineValidation.secondDeadlineBeforeFirstDeadline',
     defaultMessage:
-      'The second deadline is before the first deadline. Please set the second deadline after {firstDeadline, date} {firstDeadline, time, short}.'
-  }
+      'The second deadline is before the first deadline. Please set the second deadline after {firstDeadline, date} {firstDeadline, time, short}.',
+  },
 });
 
 /**
@@ -62,7 +64,7 @@ export const validateDeadline = (
     errors[deadlineErrorKey] = formatMessage(messages.invalidDateTime);
   } else if (futureLimit && futureLimit.isSameOrBefore(deadline)) {
     errors[deadlineErrorKey] = formatMessage(messages.deadlineInFarFuture, {
-      futureLimit
+      futureLimit,
     });
   }
 };
@@ -101,11 +103,12 @@ export const validateTwoDeadlines = (
       !firstDeadline.isSameOrBefore(secondDeadline) &&
       !firstDeadline.isSameOrBefore(secondDeadline, 'hour')
     ) {
-      errors[
-        secondDeadlineErrorKey
-      ] = formatMessage(messages.secondDeadlineBeforeFirstDeadline, {
-        firstDeadline
-      });
+      errors[secondDeadlineErrorKey] = formatMessage(
+        messages.secondDeadlineBeforeFirstDeadline,
+        {
+          firstDeadline,
+        }
+      );
     }
   }
 };

@@ -4,7 +4,7 @@ import Box from '../../widgets/Box';
 import { FormattedMessage } from 'react-intl';
 import { Table } from 'react-bootstrap';
 
-const StatsList = ({ stats }) =>
+const StatsList = ({ stats }) => (
   <Box
     title={
       <FormattedMessage
@@ -12,30 +12,26 @@ const StatsList = ({ stats }) =>
         defaultMessage="Current Statistics"
       />
     }
-    noPadding
-  >
+    noPadding>
     <Table responsive condensed hover>
       <tbody>
-        {Object.keys(stats).map(name =>
+        {Object.keys(stats).map(name => (
           <tr key={name}>
             <td className="em-padding-left">
-              <b>
-                {name}
-              </b>
+              <b>{name}</b>
             </td>
             <td className="em-padding-left">
-              <code>
-                {String(stats[name])}
-              </code>
+              <code>{String(stats[name])}</code>
             </td>
           </tr>
-        )}
+        ))}
       </tbody>
     </Table>
-  </Box>;
+  </Box>
+);
 
 StatsList.propTypes = {
-  stats: PropTypes.object.isRequired
+  stats: PropTypes.object.isRequired,
 };
 
 export default StatsList;

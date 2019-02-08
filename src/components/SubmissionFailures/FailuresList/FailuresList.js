@@ -4,7 +4,7 @@ import { Table } from 'react-bootstrap';
 import { FormattedMessage } from 'react-intl';
 import FailuresListItem from '../FailuresListItem';
 
-const FailuresList = ({ failures, createActions }) =>
+const FailuresList = ({ failures, createActions }) => (
   <Table hover>
     <thead>
       <tr>
@@ -48,16 +48,16 @@ const FailuresList = ({ failures, createActions }) =>
       </tr>
     </thead>
     <tbody>
-      {failures.map((failure, i) =>
+      {failures.map((failure, i) => (
         <FailuresListItem
           id={failure.id}
           createActions={createActions}
           failure={failure}
           key={i}
         />
-      )}
+      ))}
 
-      {failures.length === 0 &&
+      {failures.length === 0 && (
         <tr>
           <td className="text-center">
             <FormattedMessage
@@ -65,14 +65,16 @@ const FailuresList = ({ failures, createActions }) =>
               defaultMessage="There are no failures in this list."
             />
           </td>
-        </tr>}
+        </tr>
+      )}
     </tbody>
-  </Table>;
+  </Table>
+);
 
 FailuresList.propTypes = {
   failures: PropTypes.array,
   createActions: PropTypes.func,
-  failure: PropTypes.object
+  failure: PropTypes.object,
 };
 
 export default FailuresList;

@@ -22,13 +22,13 @@ import {
   fetchAllTerms,
   create,
   deleteTerm,
-  editTerm
+  editTerm,
 } from '../../redux/modules/sisTerms';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import { getRole } from '../../redux/selectors/users';
 import {
   fetchManyStatus,
-  readySisTermsSelector
+  readySisTermsSelector,
 } from '../../redux/selectors/sisTerms';
 import { notArchivedGroupsSelector } from '../../redux/selectors/groups';
 import { loggedInSupervisorOfSelector } from '../../redux/selectors/usersGroups';
@@ -36,12 +36,12 @@ import { loggedInSupervisorOfSelector } from '../../redux/selectors/usersGroups'
 import {
   isStudentRole,
   isSupervisorRole,
-  isSuperadminRole
+  isSuperadminRole,
 } from '../../components/helpers/usersRoles';
 
 const ADD_SIS_TERM_INITIAL_VALUES = {
   year: new Date(new Date().getTime() - 86400000 * 180).getFullYear(), // actual year (shifted by 180 days back)
-  term: ''
+  term: '',
 };
 
 class SisIntegration extends Component {
@@ -70,7 +70,7 @@ class SisIntegration extends Component {
       createNewTerm,
       deleteTerm,
       editTerm,
-      sisTerms
+      sisTerms,
     } = this.props;
 
     return (
@@ -95,19 +95,19 @@ class SisIntegration extends Component {
                 defaultMessage="UK SIS Integration"
               />
             ),
-            iconName: 'id-badge'
-          }
-        ]}
-      >
+            iconName: 'id-badge',
+          },
+        ]}>
         <React.Fragment>
-          {isStudentRole(role) &&
+          {isStudentRole(role) && (
             <Row>
               <Col lg={12}>
                 <SisIntegrationContainer />
               </Col>
-            </Row>}
+            </Row>
+          )}
 
-          {isSupervisorRole(role) &&
+          {isSupervisorRole(role) && (
             <Row>
               <Col lg={12}>
                 <ResourceRenderer
@@ -116,18 +116,18 @@ class SisIntegration extends Component {
                       ? allGroups.toArray()
                       : supervisorOfGroups.toArray()
                   }
-                  returnAsArray={true}
-                >
+                  returnAsArray={true}>
                   {groups => <SisSupervisorGroupsContainer groups={groups} />}
                 </ResourceRenderer>
               </Col>
-            </Row>}
+            </Row>
+          )}
 
-          {isSuperadminRole(role) &&
+          {isSuperadminRole(role) && (
             <Row>
               <Col lg={8}>
                 <FetchManyResourceRenderer fetchManyStatus={fetchStatus}>
-                  {() =>
+                  {() => (
                     <Box
                       title={
                         <FormattedMessage
@@ -136,18 +136,16 @@ class SisIntegration extends Component {
                         />
                       }
                       noPadding
-                      unlimitedHeight
-                    >
+                      unlimitedHeight>
                       <TermsList
                         terms={sisTerms}
-                        createActions={(id, data) =>
+                        createActions={(id, data) => (
                           <div>
                             <Button
                               bsSize="xs"
                               className="btn-flat"
                               bsStyle="warning"
-                              onClick={() => this.setState({ openEdit: id })}
-                            >
+                              onClick={() => this.setState({ openEdit: id })}>
                               <EditIcon gapRight />
                               <FormattedMessage
                                 id="generic.edit"
@@ -162,13 +160,11 @@ class SisIntegration extends Component {
                                   id="app.sisIntegration.deleteConfirm"
                                   defaultMessage="Are you sure you want to delete the SIS term?"
                                 />
-                              }
-                            >
+                              }>
                               <Button
                                 bsSize="xs"
                                 className="btn-flat"
-                                bsStyle="danger"
-                              >
+                                bsStyle="danger">
                                 <DeleteIcon gapRight />
                                 <FormattedMessage
                                   id="generic.delete"
@@ -183,16 +179,19 @@ class SisIntegration extends Component {
                               onSubmit={data =>
                                 editTerm(this.state.openEdit, data).then(() =>
                                   this.setState({ openEdit: null })
-                                )}
+                                )
+                              }
                               initialValues={{
                                 beginning: data.beginning * 1000,
                                 end: data.end * 1000,
-                                advertiseUntil: data.advertiseUntil * 1000
+                                advertiseUntil: data.advertiseUntil * 1000,
                               }}
                             />
-                          </div>}
+                          </div>
+                        )}
                       />
-                    </Box>}
+                    </Box>
+                  )}
                 </FetchManyResourceRenderer>
               </Col>
               <Col lg={4}>
@@ -201,7 +200,8 @@ class SisIntegration extends Component {
                   initialValues={ADD_SIS_TERM_INITIAL_VALUES}
                 />
               </Col>
-            </Row>}
+            </Row>
+          )}
         </React.Fragment>
       </PageContent>
     );
@@ -217,7 +217,7 @@ SisIntegration.propTypes = {
   loadAsync: PropTypes.func.isRequired,
   createNewTerm: PropTypes.func,
   deleteTerm: PropTypes.func,
-  editTerm: PropTypes.func
+  editTerm: PropTypes.func,
 };
 
 const mapStateToProps = state => {
@@ -227,7 +227,7 @@ const mapStateToProps = state => {
     fetchStatus: fetchManyStatus(state),
     sisTerms: readySisTermsSelector(state),
     supervisorOfGroups: loggedInSupervisorOfSelector(state),
-    allGroups: notArchivedGroupsSelector(state)
+    allGroups: notArchivedGroupsSelector(state),
   };
 };
 
@@ -240,10 +240,13 @@ const mapDispatchToProps = (dispatch, { params }) => ({
     const processedData = Object.assign({}, data, {
       beginning: moment(data.beginning).unix(),
       end: moment(data.end).unix(),
-      advertiseUntil: moment(data.advertiseUntil).unix()
+      advertiseUntil: moment(data.advertiseUntil).unix(),
     });
     return dispatch(editTerm(id, processedData));
-  }
+  },
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(SisIntegration);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(SisIntegration);

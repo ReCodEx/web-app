@@ -40,8 +40,7 @@ const Page = ({
       }
       failed={
         <PageContent title={failedTitle} description={failedDescription} />
-      }
-    >
+      }>
       {(...resources) => (
         <PageContent
           {...props}
@@ -50,8 +49,7 @@ const Page = ({
             typeof description === 'function'
               ? description(...resources)
               : description
-          }
-        >
+          }>
           {typeof children === 'function' ? children(...resources) : children}
         </PageContent>
       )}
@@ -62,8 +60,7 @@ const Page = ({
       title={typeof title === 'function' ? title() : title}
       description={
         typeof description === 'function' ? description() : description
-      }
-    >
+      }>
       {typeof children === 'function' ? children() : children}
     </PageContent>
   );
@@ -71,8 +68,8 @@ const Page = ({
 const stringOrFormattedMessage = PropTypes.oneOfType([
   PropTypes.string,
   PropTypes.shape({
-    type: PropTypes.oneOf([FormattedMessage, ResourceRenderer])
-  })
+    type: PropTypes.oneOf([FormattedMessage, ResourceRenderer]),
+  }),
 ]);
 
 Page.propTypes = {
@@ -85,7 +82,7 @@ Page.propTypes = {
     .isRequired,
   description: PropTypes.oneOfType([PropTypes.func, stringOrFormattedMessage])
     .isRequired,
-  children: PropTypes.oneOfType([PropTypes.element, PropTypes.func])
+  children: PropTypes.oneOfType([PropTypes.element, PropTypes.func]),
 };
 
 export default Page;

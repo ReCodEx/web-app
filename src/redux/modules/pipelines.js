@@ -3,14 +3,14 @@ import { Map, List } from 'immutable';
 import factory, {
   initialState,
   createRecord,
-  resourceStatus
+  resourceStatus,
 } from '../helpers/resourceManager';
 import { createApiAction } from '../middleware/apiMiddleware';
 
 import { actionTypes as pipelineFilesActionTypes } from './pipelineFiles';
 import {
   actionTypes as paginationActionTypes,
-  fetchPaginated
+  fetchPaginated,
 } from './pagination';
 
 import { arrayToObject } from '../../helpers/common';
@@ -23,7 +23,7 @@ export const additionalActionTypes = {
   FORK_PIPELINE: 'recodex/pipelines/FORK_PIPELINE',
   FORK_PIPELINE_PENDING: 'recodex/pipelines/FORK_PIPELINE_PENDING',
   FORK_PIPELINE_REJECTED: 'recodex/pipelines/FORK_PIPELINE_REJECTED',
-  FORK_PIPELINE_FULFILLED: 'recodex/pipelines/FORK_PIPELINE_FULFILLED'
+  FORK_PIPELINE_FULFILLED: 'recodex/pipelines/FORK_PIPELINE_FULFILLED',
 };
 
 export const fetchPipeline = actions.fetchResource;
@@ -49,7 +49,7 @@ export const fetchExercisePipelines = exerciseId =>
 export const forkStatuses = {
   PENDING: 'PENDING',
   REJECTED: 'REJECTED',
-  FULFILLED: 'FULFILLED'
+  FULFILLED: 'FULFILLED',
 };
 
 export const forkPipeline = (id, forkId, formData = null) => {
@@ -57,7 +57,7 @@ export const forkPipeline = (id, forkId, formData = null) => {
     type: additionalActionTypes.FORK_PIPELINE,
     endpoint: `/pipelines/${id}/fork`,
     method: 'POST',
-    meta: { id, forkId }
+    meta: { id, forkId },
   };
   if (formData && formData.exerciseId) {
     actionData.body = { exerciseId: formData.exerciseId };
@@ -74,7 +74,7 @@ export const validatePipeline = (id, version) =>
     type: additionalActionTypes.VALIDATE_PIPELINE,
     endpoint: `/pipelines/${id}/validate`,
     method: 'POST',
-    body: { version }
+    body: { version },
   });
 
 const reducer = handleActions(
@@ -106,7 +106,7 @@ const reducer = handleActions(
       { meta: { id, forkId } }
     ) =>
       state.setIn(['resources', id, 'data', 'forks', forkId], {
-        status: forkStatuses.REJECTED
+        status: forkStatuses.REJECTED,
       }),
 
     [additionalActionTypes.FORK_PIPELINE_FULFILLED]: (
@@ -115,7 +115,7 @@ const reducer = handleActions(
     ) =>
       state.setIn(['resources', id, 'data', 'forks', forkId], {
         status: forkStatuses.FULFILLED,
-        pipelineId
+        pipelineId,
       }),
 
     // Pagination result needs to store entity data here whilst indices are stored in pagination module
@@ -134,11 +134,11 @@ const reducer = handleActions(
                   data,
                   state: resourceStatus.FULFILLED,
                   didInvalidate: false,
-                  lastUpdate: Date.now()
+                  lastUpdate: Date.now(),
                 })
             )
           )
-        : state
+        : state,
   }),
   initialState
 );

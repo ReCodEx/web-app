@@ -17,8 +17,8 @@ const EvaluationDetail = ({
   accepted,
   evaluationStatus,
   isDebug,
-  viewResumbissions = false
-}) =>
+  viewResumbissions = false,
+}) => (
   <Box
     title={
       <FormattedMessage
@@ -28,8 +28,7 @@ const EvaluationDetail = ({
     }
     noPadding={true}
     collapsable={true}
-    isOpen={true}
-  >
+    isOpen={true}>
     <Table>
       <tbody>
         <tr>
@@ -74,14 +73,14 @@ const EvaluationDetail = ({
             <FormattedMessage
               id="app.evaluationDetail.isCorrect"
               defaultMessage="Correctness"
-            />:
+            />
+            :
           </th>
           <td
             className={classnames({
               'text-danger': !isCorrect,
-              'text-success': isCorrect
-            })}
-          >
+              'text-success': isCorrect,
+            })}>
             <b>
               <FormattedNumber style="percent" value={evaluation.score} />
             </b>
@@ -96,14 +95,14 @@ const EvaluationDetail = ({
             <FormattedMessage
               id="app.evaluationDetail.scoredPoints"
               defaultMessage="Scored points"
-            />:
+            />
+            :
           </th>
           <td
             className={classnames({
               'text-danger': !isCorrect || evaluation.points <= 0,
-              'text-success': isCorrect && evaluation.points > 0
-            })}
-          >
+              'text-success': isCorrect && evaluation.points > 0,
+            })}>
             <b>
               {evaluation.points} / {maxPoints}
             </b>
@@ -124,40 +123,46 @@ const EvaluationDetail = ({
             <FormattedMessage
               id="app.submission.evaluationStatus"
               defaultMessage="Evaluation status"
-            />:
+            />
+            :
           </th>
           <td>
             <em>
-              {evaluationStatus === 'done' &&
+              {evaluationStatus === 'done' && (
                 <FormattedMessage
                   id="app.submission.evaluation.status.isCorrect"
                   defaultMessage="The solution is correct and meets all criteria."
-                />}
-              {evaluationStatus === 'work-in-progress' &&
+                />
+              )}
+              {evaluationStatus === 'work-in-progress' && (
                 <FormattedMessage
                   id="app.submission.evaluation.status.workInProgress"
                   defaultMessage="The solution has not been evaluated yet."
-                />}
-              {evaluationStatus === 'failed' &&
+                />
+              )}
+              {evaluationStatus === 'failed' && (
                 <FormattedMessage
                   id="app.submission.evaluation.status.failed"
                   defaultMessage="The solution does not meet the defined criteria."
-                />}
-              {evaluationStatus === 'evaluation-failed' &&
+                />
+              )}
+              {evaluationStatus === 'evaluation-failed' && (
                 <FormattedMessage
                   id="app.submission.evaluation.status.systemFailiure"
                   defaultMessage="Evaluation process failed and your submission could not have been evaluated. Please submit the solution once more. If you keep receiving errors please contact the administrator of this project."
-                />}
-              {evaluationStatus === 'missing-submission' &&
+                />
+              )}
+              {evaluationStatus === 'missing-submission' && (
                 <FormattedMessage
                   id="app.submission.evaluation.status.solutionMissingSubmission"
                   defaultMessage="The solution was not submitted for evaluation. This was probably caused by an error in the assignment configuration."
-                />}
+                />
+              )}
             </em>
           </td>
         </tr>
 
-        {viewResumbissions &&
+        {viewResumbissions && (
           <tr>
             <td className="text-center">
               <BugIcon />
@@ -166,15 +171,18 @@ const EvaluationDetail = ({
               <FormattedMessage
                 id="app.evaluationDetail.isDebug"
                 defaultMessage="Debug Mode"
-              />:
+              />
+              :
             </th>
             <td>
               <SuccessOrFailureIcon success={isDebug} />
             </td>
-          </tr>}
+          </tr>
+        )}
       </tbody>
     </Table>
-  </Box>;
+  </Box>
+);
 
 EvaluationDetail.propTypes = {
   isCorrect: PropTypes.bool.isRequired,
@@ -184,7 +192,7 @@ EvaluationDetail.propTypes = {
   accepted: PropTypes.bool,
   evaluationStatus: PropTypes.string.isRequired,
   isDebug: PropTypes.bool.isRequired,
-  viewResumbissions: PropTypes.bool
+  viewResumbissions: PropTypes.bool,
 };
 
 export default EvaluationDetail;

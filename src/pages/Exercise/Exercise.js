@@ -7,7 +7,7 @@ import {
   FormattedMessage,
   defineMessages,
   intlShape,
-  injectIntl
+  injectIntl,
 } from 'react-intl';
 import { Row, Col } from 'react-bootstrap';
 
@@ -30,36 +30,36 @@ import {
   fetchExerciseIfNeeded,
   forkExercise,
   attachExerciseToGroup,
-  detachExerciseFromGroup
+  detachExerciseFromGroup,
 } from '../../redux/modules/exercises';
 import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments';
 import { runtimeEnvironmentsSelector } from '../../redux/selectors/runtimeEnvironments';
 import {
   fetchReferenceSolutions,
-  deleteReferenceSolution
+  deleteReferenceSolution,
 } from '../../redux/modules/referenceSolutions';
 import {
   init,
   submitReferenceSolution,
-  presubmitReferenceSolution
+  presubmitReferenceSolution,
 } from '../../redux/modules/submission';
 import { fetchHardwareGroups } from '../../redux/modules/hwGroups';
 import {
   exerciseSelector,
   exerciseForkedFromSelector,
   getExerciseAttachingGroupId,
-  getExerciseDetachingGroupId
+  getExerciseDetachingGroupId,
 } from '../../redux/selectors/exercises';
 import { referenceSolutionsSelector } from '../../redux/selectors/referenceSolutions';
 
 import {
   loggedInUserIdSelector,
-  selectedInstanceId
+  selectedInstanceId,
 } from '../../redux/selectors/auth';
 import { instanceSelector } from '../../redux/selectors/instances';
 import {
   notArchivedGroupsSelector,
-  groupDataAccessorSelector
+  groupDataAccessorSelector,
 } from '../../redux/selectors/groups';
 
 import withLinks from '../../helpers/withLinks';
@@ -69,12 +69,12 @@ import { hasPermissions } from '../../helpers/common';
 const messages = defineMessages({
   referenceSolutionsBox: {
     id: 'app.exercise.referenceSolutionsBox',
-    defaultMessage: 'Reference Solutions'
-  }
+    defaultMessage: 'Reference Solutions',
+  },
 });
 
 export const FORK_EXERCISE_FORM_INITIAL_VALUES = {
-  groupId: ''
+  groupId: '',
 };
 
 class Exercise extends Component {
@@ -90,7 +90,7 @@ class Exercise extends Component {
       ),
       dispatch(fetchRuntimeEnvironments()),
       dispatch(fetchReferenceSolutions(exerciseId)),
-      dispatch(fetchHardwareGroups())
+      dispatch(fetchHardwareGroups()),
       //      dispatch(fetchExercisePipelines(exerciseId)), // TODO - awaiting modification (many-to-many relation with exercises)
     ]);
 
@@ -130,7 +130,7 @@ class Exercise extends Component {
       detachingGroupId,
       attachExerciseToGroup,
       detachExerciseFromGroup,
-      links: { EXERCISES_URI, EXERCISE_REFERENCE_SOLUTION_URI_FACTORY }
+      links: { EXERCISES_URI, EXERCISE_REFERENCE_SOLUTION_URI_FACTORY },
     } = this.props;
 
     const { forkId } = this.state;
@@ -154,7 +154,7 @@ class Exercise extends Component {
               />
             ),
             iconName: 'puzzle-piece',
-            link: EXERCISES_URI
+            link: EXERCISES_URI,
           },
           {
             text: (
@@ -163,13 +163,12 @@ class Exercise extends Component {
                 defaultMessage="Exercise overview"
               />
             ),
-            iconName: ['far', 'lightbulb']
-          }
-        ]}
-      >
-        {exercise =>
+            iconName: ['far', 'lightbulb'],
+          },
+        ]}>
+        {exercise => (
           <div>
-            {exercise.isBroken &&
+            {exercise.isBroken && (
               <Row>
                 <Col sm={12}>
                   <div className="callout callout-warning">
@@ -183,13 +182,14 @@ class Exercise extends Component {
                     {exercise.validationError}
                   </div>
                 </Col>
-              </Row>}
+              </Row>
+            )}
             <Row>
               <Col sm={12}>
                 <ExerciseButtons {...exercise} />
               </Col>
             </Row>
-            {hasPermissions(exercise, 'fork') &&
+            {hasPermissions(exercise, 'fork') && (
               <Row>
                 <Col sm={12} className="em-margin-bottom">
                   <ForkExerciseForm
@@ -201,12 +201,14 @@ class Exercise extends Component {
                     initialValues={FORK_EXERCISE_FORM_INITIAL_VALUES}
                   />
                 </Col>
-              </Row>}
+              </Row>
+            )}
             <Row>
               <Col lg={6}>
                 <div>
-                  {exercise.localizedTexts.length > 0 &&
-                    <LocalizedTexts locales={exercise.localizedTexts} />}
+                  {exercise.localizedTexts.length > 0 && (
+                    <LocalizedTexts locales={exercise.localizedTexts} />
+                  )}
                 </div>
               </Col>
               <Col lg={6}>
@@ -217,7 +219,7 @@ class Exercise extends Component {
                 />
 
                 <ResourceRenderer resource={instance}>
-                  {instance =>
+                  {instance => (
                     <ExerciseGroups
                       showButtons={hasPermissions(exercise, 'update')}
                       groupsIds={exercise.groupsIds}
@@ -227,102 +229,110 @@ class Exercise extends Component {
                       attachExerciseToGroup={attachExerciseToGroup}
                       detachExerciseFromGroup={detachExerciseFromGroup}
                       groups={groups}
-                    />}
+                    />
+                  )}
                 </ResourceRenderer>
 
                 <ResourceRenderer
                   resource={runtimeEnvironments.toArray()}
-                  returnAsArray={true}
-                >
-                  {runtimes =>
+                  returnAsArray={true}>
+                  {runtimes => (
                     <Box
                       title={formatMessage(messages.referenceSolutionsBox)}
                       noPadding
                       footer={
-                        hasPermissions(exercise, 'addReferenceSolution') &&
-                        <div className="text-center">
-                          <Button
-                            bsStyle={exercise.isBroken ? 'default' : 'success'}
-                            onClick={() => initCreateReferenceSolution(userId)}
-                            disabled={exercise.isBroken}
-                          >
-                            {exercise.isBroken
-                              ? <FormattedMessage
+                        hasPermissions(exercise, 'addReferenceSolution') && (
+                          <div className="text-center">
+                            <Button
+                              bsStyle={
+                                exercise.isBroken ? 'default' : 'success'
+                              }
+                              onClick={() =>
+                                initCreateReferenceSolution(userId)
+                              }
+                              disabled={exercise.isBroken}>
+                              {exercise.isBroken ? (
+                                <FormattedMessage
                                   id="app.exercise.isBrokenShort"
                                   defaultMessage="Exercise is broken..."
                                 />
-                              : <FormattedMessage
+                              ) : (
+                                <FormattedMessage
                                   id="app.exercise.submitReferenceSoution"
                                   defaultMessage="Submit New Reference Solution"
-                                />}
-                          </Button>
-                        </div>
-                      }
-                    >
+                                />
+                              )}
+                            </Button>
+                          </div>
+                        )
+                      }>
                       <div>
                         <ResourceRenderer
                           resource={referenceSolutions.toArray()}
-                          returnAsArray
-                        >
+                          returnAsArray>
                           {referenceSolutions =>
-                            referenceSolutions.length > 0
-                              ? <ReferenceSolutionsTable
-                                  referenceSolutions={referenceSolutions}
-                                  runtimeEnvironments={runtimes}
-                                  renderButtons={(
-                                    solutionId,
-                                    permissionHints
-                                  ) =>
-                                    <div>
-                                      <Button
-                                        bsSize="xs"
-                                        onClick={() =>
-                                          push(
-                                            EXERCISE_REFERENCE_SOLUTION_URI_FACTORY(
-                                              exercise.id,
-                                              solutionId
-                                            )
-                                          )}
-                                      >
-                                        <SendIcon gapRight />
-                                        <FormattedMessage
-                                          id="generic.detail"
-                                          defaultMessage="Detail"
-                                        />
-                                      </Button>
-                                      {permissionHints &&
-                                        permissionHints.delete !== false &&
+                            referenceSolutions.length > 0 ? (
+                              <ReferenceSolutionsTable
+                                referenceSolutions={referenceSolutions}
+                                runtimeEnvironments={runtimes}
+                                renderButtons={(
+                                  solutionId,
+                                  permissionHints
+                                ) => (
+                                  <div>
+                                    <Button
+                                      bsSize="xs"
+                                      onClick={() =>
+                                        push(
+                                          EXERCISE_REFERENCE_SOLUTION_URI_FACTORY(
+                                            exercise.id,
+                                            solutionId
+                                          )
+                                        )
+                                      }>
+                                      <SendIcon gapRight />
+                                      <FormattedMessage
+                                        id="generic.detail"
+                                        defaultMessage="Detail"
+                                      />
+                                    </Button>
+                                    {permissionHints &&
+                                      permissionHints.delete !== false && (
                                         <Confirm
                                           id={solutionId}
                                           onConfirmed={() =>
-                                            deleteReferenceSolution(solutionId)}
+                                            deleteReferenceSolution(solutionId)
+                                          }
                                           question={
                                             <FormattedMessage
                                               id="app.exercise.referenceSolution.deleteConfirm"
                                               defaultMessage="Are you sure you want to delete the reference solution? This cannot be undone."
                                             />
-                                          }
-                                        >
+                                          }>
                                           <Button
                                             bsSize="xs"
                                             className="btn-flat"
-                                            bsStyle="danger"
-                                          >
+                                            bsStyle="danger">
                                             <DeleteIcon gapRight />
                                             <FormattedMessage
                                               id="generic.delete"
                                               defaultMessage="Delete"
                                             />
                                           </Button>
-                                        </Confirm>}
-                                    </div>}
+                                        </Confirm>
+                                      )}
+                                  </div>
+                                )}
+                              />
+                            ) : (
+                              <p className="text-center em-padding text-muted">
+                                <FormattedMessage
+                                  id="app.exercise.noReferenceSolutions"
+                                  defaultMessage="There are no reference solutions for this exercise yet."
                                 />
-                              : <p className="text-center em-padding text-muted">
-                                  <FormattedMessage
-                                    id="app.exercise.noReferenceSolutions"
-                                    defaultMessage="There are no reference solutions for this exercise yet."
-                                  />
-                                </p>}
+                              </p>
+                            )
+                          }
                         </ResourceRenderer>
                         <SubmitSolutionContainer
                           userId={userId}
@@ -334,25 +344,27 @@ class Exercise extends Component {
                           isReferenceSolution={true}
                         />
                       </div>
-                    </Box>}
+                    </Box>
+                  )}
                 </ResourceRenderer>
               </Col>
             </Row>
-          </div>}
+          </div>
+        )}
       </Page>
     );
   }
 }
 
 Exercise.contextTypes = {
-  links: PropTypes.object
+  links: PropTypes.object,
 };
 
 Exercise.propTypes = {
   userId: PropTypes.string.isRequired,
   instance: ImmutablePropTypes.map,
   params: PropTypes.shape({
-    exerciseId: PropTypes.string.isRequired
+    exerciseId: PropTypes.string.isRequired,
   }).isRequired,
   loadAsync: PropTypes.func.isRequired,
   push: PropTypes.func.isRequired,
@@ -371,7 +383,7 @@ Exercise.propTypes = {
   attachingGroupId: PropTypes.string,
   detachingGroupId: PropTypes.string,
   attachExerciseToGroup: PropTypes.func.isRequired,
-  detachExerciseFromGroup: PropTypes.func.isRequired
+  detachExerciseFromGroup: PropTypes.func.isRequired,
 };
 
 export default withLinks(
@@ -390,7 +402,7 @@ export default withLinks(
         groups: notArchivedGroupsSelector(state),
         groupsAccessor: groupDataAccessorSelector(state),
         attachingGroupId: getExerciseAttachingGroupId(exerciseId)(state),
-        detachingGroupId: getExerciseDetachingGroupId(exerciseId)(state)
+        detachingGroupId: getExerciseDetachingGroupId(exerciseId)(state),
       };
     },
     (dispatch, { params: { exerciseId } }) => ({
@@ -405,7 +417,7 @@ export default withLinks(
       attachExerciseToGroup: groupId =>
         dispatch(attachExerciseToGroup(exerciseId, groupId)),
       detachExerciseFromGroup: groupId =>
-        dispatch(detachExerciseFromGroup(exerciseId, groupId))
+        dispatch(detachExerciseFromGroup(exerciseId, groupId)),
     })
   )(injectIntl(Exercise))
 );

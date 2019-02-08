@@ -1,5 +1,5 @@
 import LoginBox from './LoginBox';
 export default LoginBox;
 export {
-  default as AuthenticationButtonContainer
+  default as AuthenticationButtonContainer,
 } from './AuthenticationButtonContainer';

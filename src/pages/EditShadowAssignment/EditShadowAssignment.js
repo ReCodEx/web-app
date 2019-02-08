@@ -15,13 +15,13 @@ import Box from '../../components/widgets/Box';
 import HierarchyLineContainer from '../../containers/HierarchyLineContainer';
 import {
   getLocalizedTextsInitialValues,
-  transformLocalizedTextsFormData
+  transformLocalizedTextsFormData,
 } from '../../helpers/localizedData';
 
 import {
   fetchShadowAssignment,
   editShadowAssignment,
-  validateShadowAssignment
+  validateShadowAssignment,
 } from '../../redux/modules/shadowAssignments';
 import { getShadowAssignment } from '../../redux/selectors/shadowAssignments';
 import { isReady, getJsData } from '../../redux/helpers/resourceManager';
@@ -31,7 +31,7 @@ import withLinks from '../../helpers/withLinks';
 const localizedTextDefaults = {
   name: '',
   text: '',
-  link: ''
+  link: '',
 };
 
 class EditShadowAssignment extends Component {
@@ -59,7 +59,7 @@ class EditShadowAssignment extends Component {
       localizedTexts: getLocalizedTextsInitialValues(
         localizedTexts,
         localizedTextDefaults
-      )
+      ),
     })
   );
 
@@ -67,7 +67,7 @@ class EditShadowAssignment extends Component {
     const {
       shadowAssignment,
       editShadowAssignment,
-      validateShadowAssignment
+      validateShadowAssignment,
     } = this.props;
     const version = shadowAssignment.getIn(['data', 'version']);
 
@@ -82,7 +82,7 @@ class EditShadowAssignment extends Component {
                 id="app.editShadowAssignment.validation.versionDiffers"
                 defaultMessage="Somebody has changed the shadow assignment while you have been editing it. Please reload the page and apply your changes once more."
               />
-            )
+            ),
           });
         }
       })
@@ -94,7 +94,7 @@ class EditShadowAssignment extends Component {
           localizedTexts: transformLocalizedTextsFormData(
             formData.localizedTexts
           ),
-          version
+          version,
         });
       });
   };
@@ -105,7 +105,7 @@ class EditShadowAssignment extends Component {
       isPublic,
       params: { assignmentId },
       push,
-      links: { SHADOW_ASSIGNMENT_DETAIL_URI_FACTORY, GROUP_DETAIL_URI_FACTORY }
+      links: { SHADOW_ASSIGNMENT_DETAIL_URI_FACTORY, GROUP_DETAIL_URI_FACTORY },
     } = this.props;
 
     return (
@@ -127,7 +127,7 @@ class EditShadowAssignment extends Component {
           {
             text: <FormattedMessage id="app.shadowAssignment.title" />,
             iconName: 'user-secret',
-            link: SHADOW_ASSIGNMENT_DETAIL_URI_FACTORY(assignmentId)
+            link: SHADOW_ASSIGNMENT_DETAIL_URI_FACTORY(assignmentId),
           },
           {
             text: (
@@ -136,54 +136,58 @@ class EditShadowAssignment extends Component {
                 defaultMessage="Edit Shadow Assignment"
               />
             ),
-            iconName: ['far', 'edit']
-          }
-        ]}
-      >
+            iconName: ['far', 'edit'],
+          },
+        ]}>
         {shadowAssignment =>
-          shadowAssignment &&
-          <React.Fragment>
-            <Row>
-              <Col xs={12}>
-                <HierarchyLineContainer groupId={shadowAssignment.groupId} />
-              </Col>
-            </Row>
+          shadowAssignment && (
+            <React.Fragment>
+              <Row>
+                <Col xs={12}>
+                  <HierarchyLineContainer groupId={shadowAssignment.groupId} />
+                </Col>
+              </Row>
 
-            <EditShadowAssignmentForm
-              initialValues={
-                shadowAssignment ? this.getInitialValues(shadowAssignment) : {}
-              }
-              onSubmit={this.editShadowAssignmentSubmitHandler}
-              beingPublished={!shadowAssignment.isPublic && isPublic}
-            />
-
-            {shadowAssignment.permissionHints.remove &&
-              <Box
-                type="danger"
-                title={
-                  <FormattedMessage
-                    id="app.editShadowAssignment.deleteAssignment"
-                    defaultMessage="Delete the shadow assignment"
-                  />
+              <EditShadowAssignmentForm
+                initialValues={
+                  shadowAssignment
+                    ? this.getInitialValues(shadowAssignment)
+                    : {}
                 }
-              >
-                <div>
-                  <p>
+                onSubmit={this.editShadowAssignmentSubmitHandler}
+                beingPublished={!shadowAssignment.isPublic && isPublic}
+              />
+
+              {shadowAssignment.permissionHints.remove && (
+                <Box
+                  type="danger"
+                  title={
                     <FormattedMessage
-                      id="app.editShadowAssignment.deleteAssignmentWarning"
-                      defaultMessage="Deleting shadow assignment will remove all student points as well."
+                      id="app.editShadowAssignment.deleteAssignment"
+                      defaultMessage="Delete the shadow assignment"
                     />
-                  </p>
-                  <p className="text-center">
-                    <DeleteShadowAssignmentButtonContainer
-                      id={assignmentId}
-                      onDeleted={() =>
-                        push(GROUP_DETAIL_URI_FACTORY(this.groupId))}
-                    />
-                  </p>
-                </div>
-              </Box>}
-          </React.Fragment>}
+                  }>
+                  <div>
+                    <p>
+                      <FormattedMessage
+                        id="app.editShadowAssignment.deleteAssignmentWarning"
+                        defaultMessage="Deleting shadow assignment will remove all student points as well."
+                      />
+                    </p>
+                    <p className="text-center">
+                      <DeleteShadowAssignmentButtonContainer
+                        id={assignmentId}
+                        onDeleted={() =>
+                          push(GROUP_DETAIL_URI_FACTORY(this.groupId))
+                        }
+                      />
+                    </p>
+                  </div>
+                </Box>
+              )}
+            </React.Fragment>
+          )
+        }
       </Page>
     );
   }
@@ -194,13 +198,13 @@ EditShadowAssignment.propTypes = {
   reset: PropTypes.func.isRequired,
   push: PropTypes.func.isRequired,
   params: PropTypes.shape({
-    assignmentId: PropTypes.string.isRequired
+    assignmentId: PropTypes.string.isRequired,
   }).isRequired,
   shadowAssignment: ImmutablePropTypes.map,
   editShadowAssignment: PropTypes.func.isRequired,
   isPublic: PropTypes.bool,
   validateShadowAssignment: PropTypes.func.isRequired,
-  links: PropTypes.object
+  links: PropTypes.object,
 };
 
 const editAssignmentFormSelector = formValueSelector('editShadowAssignment');
@@ -210,7 +214,7 @@ export default connect(
     const shadowAssignment = getShadowAssignment(state)(assignmentId);
     return {
       shadowAssignment,
-      isPublic: editAssignmentFormSelector(state, 'isPublic')
+      isPublic: editAssignmentFormSelector(state, 'isPublic'),
     };
   },
   (dispatch, { params: { assignmentId } }) => ({
@@ -221,6 +225,6 @@ export default connect(
       return dispatch(editShadowAssignment(assignmentId, data));
     },
     validateShadowAssignment: version =>
-      dispatch(validateShadowAssignment(assignmentId, version))
+      dispatch(validateShadowAssignment(assignmentId, version)),
   })
 )(withLinks(EditShadowAssignment));

@@ -8,7 +8,7 @@ import { commentsSelector } from '../selectors/comments';
 const resourceName = 'comments';
 const { actions, actionTypes: resourceActionTypes, reduceActions } = factory({
   resourceName,
-  needsRefetching: () => true // always look for newer comments
+  needsRefetching: () => true, // always look for newer comments
 });
 
 /**
@@ -29,7 +29,7 @@ export const actionTypes = {
   DELETE_COMMENT: 'redux/comment/DELETE_COMMENT',
   DELETE_COMMENT_PENDING: 'redux/comment/DELETE_COMMENT_PENDING',
   DELETE_COMMENT_FULFILLED: 'redux/comment/DELETE_COMMENT_FULFILLED',
-  DELETE_COMMENT_REJECTED: 'redux/comment/DELETE_COMMENT_REJECTED'
+  DELETE_COMMENT_REJECTED: 'redux/comment/DELETE_COMMENT_REJECTED',
 };
 
 export const fetchThreadIfNeeded = actions.fetchOneIfNeeded;
@@ -38,7 +38,7 @@ export const updateThread = id =>
   createApiAction({
     type: actionTypes.UPDATE,
     endpoint: `/comments/${id}`,
-    meta: { id }
+    meta: { id },
   });
 
 export const postComment = (user, threadId, text, isPrivate) =>
@@ -47,7 +47,7 @@ export const postComment = (user, threadId, text, isPrivate) =>
     endpoint: `/comments/${threadId}`,
     method: 'POST',
     body: { text, isPrivate: isPrivate ? 'yes' : 'no' },
-    meta: { threadId, user, tmpId: Math.random().toString() }
+    meta: { threadId, user, tmpId: Math.random().toString() },
   });
 
 export const repostComment = (threadId, tmpId) => (dispatch, getState) => {
@@ -57,7 +57,7 @@ export const repostComment = (threadId, tmpId) => (dispatch, getState) => {
   if (comment) {
     dispatch({
       type: actionTypes.REMOVE_COMMENT,
-      payload: { threadId, id: tmpId }
+      payload: { threadId, id: tmpId },
     });
     dispatch(
       postComment(
@@ -75,7 +75,7 @@ export const togglePrivacy = (threadId, commentId) =>
     type: actionTypes.TOGGLE_PRIVACY,
     endpoint: `/comments/${threadId}/comment/${commentId}/toggle`,
     method: 'POST',
-    meta: { threadId, commentId }
+    meta: { threadId, commentId },
   });
 
 export const deleteComment = (threadId, commentId) =>
@@ -83,7 +83,7 @@ export const deleteComment = (threadId, commentId) =>
     type: actionTypes.DELETE_COMMENT,
     endpoint: `/comments/${threadId}/comment/${commentId}`,
     method: 'DELETE',
-    meta: { threadId, commentId }
+    meta: { threadId, commentId },
   });
 
 /**
@@ -100,14 +100,14 @@ const reducer = handleActions(
       { payload: { text, isPrivate }, meta: { tmpId, user, threadId } }
     ) => {
       const correctUserData = Object.assign({}, user, {
-        name: user.fullName || user.name
+        name: user.fullName || user.name,
       });
       const resource = fromJS({
         id: tmpId,
         status: 'pending',
         text,
         user: correctUserData,
-        isPrivate: isPrivate === 'yes'
+        isPrivate: isPrivate === 'yes',
       });
       return state.updateIn(
         ['resources', threadId, 'data', 'comments'],
@@ -122,8 +122,8 @@ const reducer = handleActions(
       return state.updateIn(
         ['resources', threadId, 'data', 'comments'],
         comments =>
-          comments.map(
-            comment => (comment.get('id') === tmpId ? fromJS(payload) : comment)
+          comments.map(comment =>
+            comment.get('id') === tmpId ? fromJS(payload) : comment
           )
       );
     },
@@ -135,11 +135,10 @@ const reducer = handleActions(
       return state.updateIn(
         ['resources', threadId, 'data', 'comments'],
         comments =>
-          comments.map(
-            comment =>
-              comment.get('id') === tmpId
-                ? comment.set('status', 'failed')
-                : comment
+          comments.map(comment =>
+            comment.get('id') === tmpId
+              ? comment.set('status', 'failed')
+              : comment
           )
       );
     },
@@ -151,11 +150,10 @@ const reducer = handleActions(
       return state.updateIn(
         ['resources', threadId, 'data', 'comments'],
         comments =>
-          comments.map(
-            comment =>
-              comment.get('id') === commentId
-                ? comment.set('isToggling', true)
-                : comment
+          comments.map(comment =>
+            comment.get('id') === commentId
+              ? comment.set('isToggling', true)
+              : comment
           )
       );
     },
@@ -167,9 +165,8 @@ const reducer = handleActions(
       return state.updateIn(
         ['resources', threadId, 'data', 'comments'],
         comments =>
-          comments.map(
-            comment =>
-              comment.get('id') === commentId ? fromJS(payload) : comment
+          comments.map(comment =>
+            comment.get('id') === commentId ? fromJS(payload) : comment
           )
       );
     },
@@ -181,11 +178,10 @@ const reducer = handleActions(
       return state.updateIn(
         ['resources', threadId, 'data', 'comments'],
         comments =>
-          comments.map(
-            comment =>
-              comment.get('id') === commentId
-                ? comment.set('isToggling', false)
-                : comment
+          comments.map(comment =>
+            comment.get('id') === commentId
+              ? comment.set('isToggling', false)
+              : comment
           )
       );
     },
@@ -198,7 +194,7 @@ const reducer = handleActions(
         ['resources', threadId, 'data', 'comments'],
         comments => comments.filter(cmt => cmt.get('id') !== commentId)
       );
-    }
+    },
   }),
   initialState
 );

@@ -7,7 +7,10 @@ import { selectedInstanceId } from './auth';
 const getInstances = state => state.instances;
 const getResources = instances => instances.get('resources');
 
-export const instancesSelector = createSelector(getInstances, getResources);
+export const instancesSelector = createSelector(
+  getInstances,
+  getResources
+);
 export const instanceSelector = createSelector(
   [instancesSelector, (state, id) => id],
   (instances, id) => instances.get(id)
@@ -25,7 +28,10 @@ export const publicInstancesSelector = createSelector(
 );
 
 export const instanceByIdSelector = instanceId =>
-  createSelector([instancesSelector], instances => instances.get(instanceId));
+  createSelector(
+    [instancesSelector],
+    instances => instances.get(instanceId)
+  );
 
 export const loggedInUserMemberOfInstances = createSelector(
   [loggedInUserSelector, instancesSelector],

@@ -6,7 +6,7 @@ import { extractLanguageFromUrl } from '../../links';
 import {
   isStudentRole,
   isSupervisorRole,
-  isSuperadminRole
+  isSuperadminRole,
 } from '../../components/helpers/usersRoles';
 
 import { fetchManyEndpoint } from '../modules/users';
@@ -15,7 +15,7 @@ import {
   groupSelectorCreator,
   studentsOfGroup,
   supervisorsOfGroup,
-  groupsSelector
+  groupsSelector,
 } from './groups';
 import { pipelineSelector } from './pipelines';
 
@@ -29,14 +29,21 @@ const getLang = state =>
 /**
  * Select users part of the state
  */
-export const usersSelector = createSelector(getUsers, getResources);
+export const usersSelector = createSelector(
+  getUsers,
+  getResources
+);
 
-export const fetchManyStatus = createSelector(getUsers, state =>
-  state.getIn(['fetchManyStatus', fetchManyEndpoint])
+export const fetchManyStatus = createSelector(
+  getUsers,
+  state => state.getIn(['fetchManyStatus', fetchManyEndpoint])
 );
 
 export const getUser = userId =>
-  createSelector(usersSelector, users => users.get(userId));
+  createSelector(
+    usersSelector,
+    users => users.get(userId)
+  );
 
 export const readyUsersDataSelector = createSelector(
   [usersSelector, getLang],
@@ -88,10 +95,16 @@ export const getRole = userId =>
   );
 
 export const isStudent = userId =>
-  createSelector(getRole(userId), role => isStudentRole(role));
+  createSelector(
+    getRole(userId),
+    role => isStudentRole(role)
+  );
 
 export const isSupervisor = userId =>
-  createSelector(getRole(userId), role => isSupervisorRole(role));
+  createSelector(
+    getRole(userId),
+    role => isSupervisorRole(role)
+  );
 
 export const getUserSettings = userId =>
   createSelector(
@@ -183,7 +196,7 @@ export const isMemberOf = (userId, groupId) =>
     [
       isStudentOf(userId, groupId),
       isSupervisorOf(userId, groupId),
-      isAdminOf(userId, groupId)
+      isAdminOf(userId, groupId),
     ],
     (student, supervisor, admin) => student || supervisor || admin
   );
@@ -214,19 +227,22 @@ export const notificationsSelector = createSelector(
               [group.id]:
                 group.stats.assignments.total -
                 group.stats.assignments.completed -
-                group.stats.assignments.missed
+                group.stats.assignments.missed,
             }),
           {}
         )
       : EMPTY_OBJ
 );
 
-export const userIsAllowed = createSelector(usersSelector, users => id => {
-  const user = users && users.get(id);
-  return user && isReady(user)
-    ? user.getIn(['data', 'privateData', 'isAllowed'], null)
-    : null;
-});
+export const userIsAllowed = createSelector(
+  usersSelector,
+  users => id => {
+    const user = users && users.get(id);
+    return user && isReady(user)
+      ? user.getIn(['data', 'privateData', 'isAllowed'], null)
+      : null;
+  }
+);
 
 export const userIsAllowedPending = createSelector(
   usersSelector,

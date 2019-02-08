@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Table } from 'react-bootstrap';
 import { FormattedMessage } from 'react-intl';
 import SupervisorsListItem, {
-  LoadingSupervisorsListItem
+  LoadingSupervisorsListItem,
 } from '../SupervisorsListItem';
 
 const SupervisorsList = ({
@@ -11,12 +11,12 @@ const SupervisorsList = ({
   users,
   isLoaded = true,
   isAdmin,
-  primaryAdminsIds
-}) =>
+  primaryAdminsIds,
+}) => (
   <Table hover>
     <tbody>
       {isLoaded &&
-        users.map(user =>
+        users.map(user => (
           <SupervisorsListItem
             key={user.id}
             {...user}
@@ -24,10 +24,9 @@ const SupervisorsList = ({
             isAdmin={isAdmin}
             primaryAdminsIds={primaryAdminsIds}
           />
-        )}
+        ))}
 
-      {users.length === 0 &&
-        isLoaded &&
+      {users.length === 0 && isLoaded && (
         <tr>
           <td className="text-center">
             <FormattedMessage
@@ -35,18 +34,20 @@ const SupervisorsList = ({
               defaultMessage="There are no supervisors on the list."
             />
           </td>
-        </tr>}
+        </tr>
+      )}
 
       {!isLoaded && <LoadingSupervisorsListItem isAdmin={isAdmin} />}
     </tbody>
-  </Table>;
+  </Table>
+);
 
 SupervisorsList.propTypes = {
   users: PropTypes.array.isRequired,
   groupId: PropTypes.string.isRequired,
   isLoaded: PropTypes.bool,
   isAdmin: PropTypes.bool,
-  primaryAdminsIds: PropTypes.array.isRequired
+  primaryAdminsIds: PropTypes.array.isRequired,
 };
 
 export default SupervisorsList;

@@ -26,13 +26,13 @@ export const getTestsInitValues = (exerciseTests, scoreConfig, locale) => {
     res.push({
       id: test.id,
       name: test.name,
-      weight: testWeight
+      weight: testWeight,
     });
   }
 
   return {
     isUniform: allWeightsSame,
-    tests: res
+    tests: res,
   };
 };
 
@@ -43,7 +43,7 @@ export const transformTestsValues = formData => {
   const uniformScore =
     formData.isUniform === true || formData.isUniform === 'true';
   let scoreConfigData = {
-    testWeights: {}
+    testWeights: {},
   };
   let tests = [];
 
@@ -55,16 +55,16 @@ export const transformTestsValues = formData => {
       test.id
         ? {
             id: test.id,
-            name: test.name
+            name: test.name,
           }
         : {
-            name: test.name
+            name: test.name,
           }
     );
   }
 
   return {
     tests,
-    scoreConfig: yaml.safeDump(scoreConfigData)
+    scoreConfig: yaml.safeDump(scoreConfigData),
   };
 };

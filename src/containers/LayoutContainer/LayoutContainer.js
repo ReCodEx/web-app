@@ -11,7 +11,7 @@ import {
   toggleSize,
   toggleVisibility,
   collapse,
-  unroll
+  unroll,
 } from '../../redux/modules/sidebar';
 import { isVisible, isCollapsed } from '../../redux/selectors/sidebar';
 import { messages, localeData, defaultLanguage } from '../../locales';
@@ -27,9 +27,9 @@ const ADDITIONAL_INTL_FORMATS = {
       hour12: false,
       hour: 'numeric',
       minute: 'numeric',
-      second: 'numeric'
-    }
-  }
+      second: 'numeric',
+    },
+  },
 };
 
 /**
@@ -95,7 +95,7 @@ class LayoutContainer extends Component {
     links: this.state.links,
     lang: this.state.lang,
     isActive: link =>
-      !isAbsolute(link) && this.context.router.isActive(link, true)
+      !isAbsolute(link) && this.context.router.isActive(link, true),
   });
 
   maybeHideSidebar = e => {
@@ -127,7 +127,7 @@ class LayoutContainer extends Component {
       toggleSize,
       toggleVisibility,
       isLoggedIn,
-      pendingFetchOperations
+      pendingFetchOperations,
     } = this.props;
 
     const { lang } = this.state;
@@ -138,8 +138,7 @@ class LayoutContainer extends Component {
       <IntlProvider
         locale={lang}
         messages={this.getMessages(lang)}
-        formats={ADDITIONAL_INTL_FORMATS}
-      >
+        formats={ADDITIONAL_INTL_FORMATS}>
         <Layout
           sidebar={sidebar}
           isLoggedIn={isLoggedIn}
@@ -149,8 +148,7 @@ class LayoutContainer extends Component {
           lang={lang}
           availableLangs={Object.keys(messages)}
           currentUrl={pathname}
-          pendingFetchOperations={pendingFetchOperations}
-        >
+          pendingFetchOperations={pendingFetchOperations}>
           {children}
         </Layout>
       </IntlProvider>
@@ -161,17 +159,17 @@ class LayoutContainer extends Component {
 LayoutContainer.childContextTypes = {
   lang: PropTypes.string,
   links: PropTypes.object,
-  isActive: PropTypes.func
+  isActive: PropTypes.func,
 };
 
 LayoutContainer.contextTypes = {
   router: PropTypes.object,
-  userSettings: PropTypes.object
+  userSettings: PropTypes.object,
 };
 
 LayoutContainer.propTypes = {
   params: PropTypes.shape({
-    lang: PropTypes.string
+    lang: PropTypes.string,
   }),
   toggleSize: PropTypes.func.isRequired,
   toggleVisibility: PropTypes.func.isRequired,
@@ -181,20 +179,23 @@ LayoutContainer.propTypes = {
   pendingFetchOperations: PropTypes.bool,
   sidebar: PropTypes.object,
   location: PropTypes.shape({
-    pathname: PropTypes.string.isRequired
+    pathname: PropTypes.string.isRequired,
   }).isRequired,
-  children: PropTypes.element
+  children: PropTypes.element,
 };
 
 const mapStateToProps = (state, props) => ({
   sidebar: {
     isOpen: isVisible(state),
-    isCollapsed: isCollapsed(state)
+    isCollapsed: isCollapsed(state),
   },
   isLoggedIn: !!loggedInUserIdSelector(state),
-  pendingFetchOperations: anyPendingFetchOperations(state)
+  pendingFetchOperations: anyPendingFetchOperations(state),
 });
 
 const mapDispatchToProps = { toggleVisibility, toggleSize, collapse, unroll };
 
-export default connect(mapStateToProps, mapDispatchToProps)(LayoutContainer);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(LayoutContainer);

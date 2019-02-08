@@ -9,8 +9,8 @@ import withLinks from '../../../helpers/withLinks';
 
 const Admin = ({
   currentUrl,
-  links: { ADMIN_INSTANCES_URI, USERS_URI, FAILURES_URI, BROKER_URI }
-}) =>
+  links: { ADMIN_INSTANCES_URI, USERS_URI, FAILURES_URI, BROKER_URI },
+}) => (
   <ul className="sidebar-menu">
     <MenuTitle
       title={
@@ -64,11 +64,12 @@ const Admin = ({
       currentPath={currentUrl}
       link={BROKER_URI}
     />
-  </ul>;
+  </ul>
+);
 
 Admin.propTypes = {
   currentUrl: PropTypes.string.isRequired,
-  links: PropTypes.object.isRequired
+  links: PropTypes.object.isRequired,
 };
 
 export default withLinks(Admin);

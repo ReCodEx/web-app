@@ -2,7 +2,7 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import PageContent from '../../components/layout/PageContent';
 
-const NotFound = () =>
+const NotFound = () => (
   <PageContent
     title={
       <FormattedMessage
@@ -15,12 +15,12 @@ const NotFound = () =>
         id="app.notFound.description"
         defaultMessage="Oops, this is probably not what you were looking for."
       />
-    }
-  >
+    }>
     <FormattedMessage
       id="app.notFound.text"
       defaultMessage="The URL is not a word of the language this website accepts."
     />
-  </PageContent>;
+  </PageContent>
+);
 
 export default NotFound;

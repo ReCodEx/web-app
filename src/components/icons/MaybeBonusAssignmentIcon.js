@@ -5,26 +5,26 @@ import { BonusIcon } from './index.js';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 
 const MaybeBonusAssignmentIcon = ({ id, isBonus, ...props }) =>
-  isBonus &&
-  <span>
-    <OverlayTrigger
-      placement="right"
-      overlay={
-        <Tooltip id={id}>
-          <FormattedMessage
-            id="app.maybeBonusAssignmentIcon.isBonus"
-            defaultMessage="Is Bonus"
-          />
-        </Tooltip>
-      }
-    >
-      <BonusIcon {...props} className="text-muted" />
-    </OverlayTrigger>
-  </span>;
+  isBonus && (
+    <span>
+      <OverlayTrigger
+        placement="right"
+        overlay={
+          <Tooltip id={id}>
+            <FormattedMessage
+              id="app.maybeBonusAssignmentIcon.isBonus"
+              defaultMessage="Is Bonus"
+            />
+          </Tooltip>
+        }>
+        <BonusIcon {...props} className="text-muted" />
+      </OverlayTrigger>
+    </span>
+  );
 
 MaybeBonusAssignmentIcon.propTypes = {
   id: PropTypes.any.isRequired,
-  isBonus: PropTypes.bool.isRequired
+  isBonus: PropTypes.bool.isRequired,
 };
 
 export default MaybeBonusAssignmentIcon;

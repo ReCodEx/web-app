@@ -18,7 +18,10 @@ class DatetimeField extends Component {
    * strict shoudComponentUpdate implementation of redux-form).
    */
   onFocus() {
-    const { disabled, input: { value, onChange } } = this.props;
+    const {
+      disabled,
+      input: { value, onChange },
+    } = this.props;
     if (!disabled) {
       onChange(value);
     }
@@ -39,12 +42,8 @@ class DatetimeField extends Component {
     return (
       <FormGroup
         controlId={input.name}
-        validationState={error ? 'error' : warning ? 'warning' : undefined}
-      >
-        {Boolean(label) &&
-          <ControlLabel>
-            {label}
-          </ControlLabel>}
+        validationState={error ? 'error' : warning ? 'warning' : undefined}>
+        {Boolean(label) && <ControlLabel>{label}</ControlLabel>}
         <Datetime
           {...input}
           {...props}
@@ -54,18 +53,11 @@ class DatetimeField extends Component {
           bsClass={classnames({
             'form-control': true,
             [styles.dirty]: dirty && !ignoreDirty && !error && !warning,
-            [styles.active]: active
+            [styles.active]: active,
           })}
         />{' '}
-        {error &&
-          <HelpBlock>
-            {' '}{error}{' '}
-          </HelpBlock>}
-        {!error &&
-          warning &&
-          <HelpBlock>
-            {' '}{warning}{' '}
-          </HelpBlock>}
+        {error && <HelpBlock> {error} </HelpBlock>}
+        {!error && warning && <HelpBlock> {warning} </HelpBlock>}
       </FormGroup>
     );
   }
@@ -77,24 +69,24 @@ DatetimeField.propTypes = {
   label: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.element,
-    PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) })
+    PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) }),
   ]),
   input: PropTypes.shape({
     name: PropTypes.string.isRequired,
     value: PropTypes.oneOfType([
       PropTypes.string,
       PropTypes.number,
-      PropTypes.object
-    ])
+      PropTypes.object,
+    ]),
   }).isRequired,
   meta: PropTypes.shape({
     active: PropTypes.bool,
     dirty: PropTypes.bool,
     error: PropTypes.any,
-    warning: PropTypes.any
+    warning: PropTypes.any,
   }).isRequired,
   disabled: PropTypes.bool,
-  ignoreDirty: PropTypes.bool
+  ignoreDirty: PropTypes.bool,
 };
 
 export default withLinks(DatetimeField);

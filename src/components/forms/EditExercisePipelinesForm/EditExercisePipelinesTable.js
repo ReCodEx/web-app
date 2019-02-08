@@ -15,15 +15,15 @@ class EditExercisePipelinesTable extends Component {
     const { fields } = this.props;
     return (
       <React.Fragment>
-        {idx > 0 &&
+        {idx > 0 && (
           <Button
             onClick={() => fields.swap(idx - 1, idx)}
             bsStyle="warning"
             bsSize="xs"
-            style={{ position: 'relative', top: '-20px', marginRight: '1em' }}
-          >
+            style={{ position: 'relative', top: '-20px', marginRight: '1em' }}>
             <TransferIcon rotation={90} />
-          </Button>}
+          </Button>
+        )}
         <Button onClick={() => fields.remove(idx)} bsStyle="danger" bsSize="xs">
           <DeleteIcon />
         </Button>
@@ -35,14 +35,14 @@ class EditExercisePipelinesTable extends Component {
     const { pipelines, readOnly = false } = this.props;
     const pipelineId = fields.get(idx);
     const pipeline = pipelines.find(({ id }) => id === pipelineId);
-    return pipeline
-      ? <PipelinesListItem
-          {...pipeline}
-          createActions={readOnly ? EMPTY_FNC : this.createActions(idx)}
-          fullWidthName
-          key={`${pipelineId}-${idx}`}
-        />
-      : null;
+    return pipeline ? (
+      <PipelinesListItem
+        {...pipeline}
+        createActions={readOnly ? EMPTY_FNC : this.createActions(idx)}
+        fullWidthName
+        key={`${pipelineId}-${idx}`}
+      />
+    ) : null;
   };
 
   render() {
@@ -50,7 +50,7 @@ class EditExercisePipelinesTable extends Component {
       fields,
       pipelines,
       readOnly = false,
-      intl: { locale }
+      intl: { locale },
     } = this.props;
 
     return (
@@ -58,29 +58,30 @@ class EditExercisePipelinesTable extends Component {
         <tbody>
           {fields.map(this.renderRow)}
 
-          {!readOnly &&
+          {!readOnly && (
             <tr>
               <td colSpan={4} className="full-width">
                 <ControlLabel>
                   <FormattedMessage
                     id="app.editExercisePipelines.availablePipelines"
                     defaultMessage="Available pipelines"
-                  />:
+                  />
+                  :
                 </ControlLabel>
                 <FormControl
                   componentClass="select"
                   onChange={e =>
-                    this.setState({ selectedPipeline: e.target.value })}
-                  value={this.state.selectedPipeline || ''}
-                >
+                    this.setState({ selectedPipeline: e.target.value })
+                  }
+                  value={this.state.selectedPipeline || ''}>
                   <option value={null} />
                   {pipelines
                     .sort((a, b) => a.name.localeCompare(b.name, locale))
-                    .map(({ id, name }) =>
+                    .map(({ id, name }) => (
                       <option value={id} key={id}>
                         {name}
                       </option>
-                    )}
+                    ))}
                 </FormControl>
               </td>
               <td className="valign-bottom">
@@ -92,8 +93,7 @@ class EditExercisePipelinesTable extends Component {
                     }
                   }}
                   bsStyle="primary"
-                  disabled={!this.state.selectedPipeline}
-                >
+                  disabled={!this.state.selectedPipeline}>
                   <AddIcon gapRight />
                   <FormattedMessage
                     id="app.editExercisePipelines.addPipeline"
@@ -101,7 +101,8 @@ class EditExercisePipelinesTable extends Component {
                   />
                 </Button>
               </td>
-            </tr>}
+            </tr>
+          )}
         </tbody>
       </Table>
     );
@@ -112,7 +113,7 @@ EditExercisePipelinesTable.propTypes = {
   readOnly: PropTypes.bool,
   fields: PropTypes.object.isRequired,
   pipelines: PropTypes.array,
-  intl: intlShape.isRequired
+  intl: intlShape.isRequired,
 };
 
 export default injectIntl(EditExercisePipelinesTable);

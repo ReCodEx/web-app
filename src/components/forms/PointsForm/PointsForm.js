@@ -18,8 +18,8 @@ const PointsForm = ({
   invalid,
   warning,
   scoredPoints = null,
-  maxPoints
-}) =>
+  maxPoints,
+}) => (
   <FormBox
     title={
       <FormattedMessage
@@ -52,19 +52,19 @@ const PointsForm = ({
             ),
             success: (
               <FormattedMessage id="generic.saved" defaultMessage="Saved" />
-            )
+            ),
           }}
         />
       </div>
-    }
-  >
-    {submitFailed &&
+    }>
+    {submitFailed && (
       <Alert bsStyle="danger">
         <FormattedMessage
           id="app.pointsForm.failed"
           defaultMessage="Cannot save the bonus points."
         />
-      </Alert>}
+      </Alert>
+    )}
 
     <Grid fluid>
       <Row>
@@ -74,8 +74,10 @@ const PointsForm = ({
               <FormattedMessage
                 id="app.pointsForm.scoredPoints"
                 defaultMessage="Scored points from last evaluation"
-              />:
-            </b>&nbsp;&nbsp;
+              />
+              :
+            </b>
+            &nbsp;&nbsp;
             {scoredPoints !== null ? scoredPoints : '-'} / {maxPoints}
           </p>
         </Col>
@@ -112,11 +114,9 @@ const PointsForm = ({
       </Row>
     </Grid>
 
-    {warning &&
-      <Alert bsStyle="warning">
-        {warning}
-      </Alert>}
-  </FormBox>;
+    {warning && <Alert bsStyle="warning">{warning}</Alert>}
+  </FormBox>
+);
 
 PointsForm.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
@@ -128,7 +128,7 @@ PointsForm.propTypes = {
   invalid: PropTypes.bool,
   warning: PropTypes.any,
   scoredPoints: PropTypes.number,
-  maxPoints: PropTypes.number.isRequired
+  maxPoints: PropTypes.number.isRequired,
 };
 
 const warn = ({ overriddenPoints }, { maxPoints }) => {
@@ -152,5 +152,5 @@ export default reduxForm({
   form: 'bonus-points',
   enableReinitialize: true,
   keepDirtyOnReinitialize: false,
-  warn
+  warn,
 })(PointsForm);

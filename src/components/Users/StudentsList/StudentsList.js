@@ -12,10 +12,10 @@ const StudentsList = ({
   stats,
   renderActions,
   ...rest
-}) =>
+}) => (
   <Table hover>
     <tbody>
-      {users.map((user, i) =>
+      {users.map((user, i) => (
         <StudentsListItem
           key={i}
           {...user}
@@ -26,10 +26,9 @@ const StudentsList = ({
               : null
           }
         />
-      )}
+      ))}
 
-      {users.length === 0 &&
-        isLoaded &&
+      {users.length === 0 && isLoaded && (
         <tr>
           <td className="text-center">
             <FormattedMessage
@@ -37,18 +36,21 @@ const StudentsList = ({
               defaultMessage="There are no students in this list."
             />
           </td>
-        </tr>}
+        </tr>
+      )}
 
-      {!isLoaded &&
-        <LoadingStudentsListItem withActions={Boolean(renderActions)} />}
+      {!isLoaded && (
+        <LoadingStudentsListItem withActions={Boolean(renderActions)} />
+      )}
     </tbody>
-  </Table>;
+  </Table>
+);
 
 StudentsList.propTypes = {
   users: PropTypes.array,
   isLoaded: PropTypes.bool,
   stats: PropTypes.object,
-  renderActions: PropTypes.func
+  renderActions: PropTypes.func,
 };
 
 export default StudentsList;

@@ -3,7 +3,7 @@ import { handleActions } from 'redux-actions';
 import factory, {
   initialState,
   resourceStatus,
-  createRecord
+  createRecord,
 } from '../helpers/resourceManager';
 import { downloadHelper } from '../helpers/api/download';
 import { actionTypes as additionalSubmissionActionTypes } from './submission';
@@ -12,7 +12,7 @@ const resourceName = 'submissionEvaluations';
 const { actionTypes, actions, reduceActions } = factory({
   resourceName,
   apiEndpointFactory: evaluationId =>
-    `/assignment-solutions/evaluation/${evaluationId}`
+    `/assignment-solutions/evaluation/${evaluationId}`,
 });
 
 /**
@@ -22,7 +22,7 @@ const { actionTypes, actions, reduceActions } = factory({
 export { actionTypes };
 export const additionalActionTypes = {
   DOWNLOAD_EVALUATION_ARCHIVE: 'recodex/files/DOWNLOAD_EVALUATION_ARCHIVE',
-  DOWNLOAD_SOLUTION_ARCHIVE: 'recodex/files/DOWNLOAD_SOLUTION_ARCHIVE'
+  DOWNLOAD_SOLUTION_ARCHIVE: 'recodex/files/DOWNLOAD_SOLUTION_ARCHIVE',
 };
 
 export const fetchSubmissionEvaluation = actions.fetchResource;
@@ -38,7 +38,7 @@ export const fetchManyEndpoint = id =>
 
 export const fetchSubmissionEvaluationsForSolution = solutionId =>
   actions.fetchMany({
-    endpoint: fetchManyEndpoint(solutionId)
+    endpoint: fetchManyEndpoint(solutionId),
   });
 
 export const downloadEvaluationArchive = downloadHelper({
@@ -46,7 +46,7 @@ export const downloadEvaluationArchive = downloadHelper({
   fetch: null,
   endpoint: id => `/assignment-solutions/evaluation/${id}/download-result`,
   fileNameSelector: (id, state) => `${id}.zip`,
-  contentType: 'application/zip'
+  contentType: 'application/zip',
 });
 
 export const downloadSolutionArchive = downloadHelper({
@@ -54,7 +54,7 @@ export const downloadSolutionArchive = downloadHelper({
   fetch: null,
   endpoint: id => `/assignment-solutions/${id}/download-solution`,
   fileNameSelector: (id, state) => `${id}.zip`,
-  contentType: 'application/zip'
+  contentType: 'application/zip',
 });
 
 /**
@@ -72,7 +72,7 @@ const reducer = handleActions(
             ['resources', submission.id],
             createRecord({
               state: resourceStatus.FULFILLED,
-              data: submission
+              data: submission,
             })
           )
         : state,
@@ -92,23 +92,16 @@ const reducer = handleActions(
       { meta: { id } }
     ) =>
       state.update('resources', resources =>
-        resources.map(
-          (item, itemId) =>
-            item.get('data') !== null
-              ? item.update(
-                  'data',
-                  data =>
-                    itemId === id
-                      ? data
-                          .set('accepted', true)
-                          .set('accepted-pending', false)
-                      : data
-                          .set('accepted', false)
-                          .set('accepted-pending', false)
-                )
-              : item
+        resources.map((item, itemId) =>
+          item.get('data') !== null
+            ? item.update('data', data =>
+                itemId === id
+                  ? data.set('accepted', true).set('accepted-pending', false)
+                  : data.set('accepted', false).set('accepted-pending', false)
+              )
+            : item
         )
-      )
+      ),
   }),
   initialState
 );

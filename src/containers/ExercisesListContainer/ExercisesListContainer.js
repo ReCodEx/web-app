@@ -8,7 +8,7 @@ import { defaultMemoize } from 'reselect';
 
 import PaginationContainer, {
   createSortingIcon,
-  showRangeInfo
+  showRangeInfo,
 } from '../PaginationContainer';
 import ExercisesList from '../../components/Exercises/ExercisesList';
 import FilterExercisesListForm from '../../components/forms/FilterExercisesListForm';
@@ -17,7 +17,7 @@ import {
   getAllExericsesAuthors,
   getAllExericsesAuthorsIsLoading,
   getExercisesAuthorsOfGroup,
-  getExercisesAuthorsOfGroupIsLoading
+  getExercisesAuthorsOfGroupIsLoading,
 } from '../../redux/selectors/exercisesAuthors';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import { create as assignExercise } from '../../redux/modules/assignments';
@@ -27,7 +27,7 @@ import withLinks from '../../helpers/withLinks';
 const filterInitialValues = defaultMemoize(
   ({ search = '', authorsIds = [] }) => ({
     search,
-    author: authorsIds.length > 0 ? authorsIds[0] : null
+    author: authorsIds.length > 0 ? authorsIds[0] : null,
   })
 );
 
@@ -76,7 +76,7 @@ class ExercisesListContainer extends Component {
     totalCount,
     orderByColumn,
     orderByDescending,
-    setOrderBy
+    setOrderBy,
   }) => {
     const { showGroups } = this.props;
     return (
@@ -100,13 +100,14 @@ class ExercisesListContainer extends Component {
             defaultMessage="Runtimes/Languages"
           />
         </th>
-        {showGroups &&
+        {showGroups && (
           <th>
             <FormattedMessage
               id="app.exercisesList.groups"
               defaultMessage="Groups"
             />
-          </th>}
+          </th>
+        )}
         <th>
           <FormattedMessage
             id="app.exercisesList.difficulty"
@@ -125,9 +126,7 @@ class ExercisesListContainer extends Component {
             setOrderBy
           )}
         </th>
-        <td>
-          {showRangeInfo(offset, limit, totalCount)}
-        </td>
+        <td>{showRangeInfo(offset, limit, totalCount)}</td>
       </tr>
     );
   };
@@ -153,7 +152,7 @@ class ExercisesListContainer extends Component {
     const {
       assignExercise,
       push,
-      links: { ASSIGNMENT_EDIT_URI_FACTORY }
+      links: { ASSIGNMENT_EDIT_URI_FACTORY },
     } = this.props;
     assignExercise(exerciseId).then(({ value: assigment }) =>
       push(ASSIGNMENT_EDIT_URI_FACTORY(assigment.id))
@@ -165,7 +164,7 @@ class ExercisesListContainer extends Component {
       id,
       showGroups = false,
       showAssignButton = false,
-      rootGroup = null
+      rootGroup = null,
     } = this.props;
     return (
       <PaginationContainer
@@ -173,8 +172,7 @@ class ExercisesListContainer extends Component {
         endpoint="exercises"
         defaultOrderBy="name"
         defaultFilters={this.defaultFilters}
-        filtersCreator={this.filtersCreator}
-      >
+        filtersCreator={this.filtersCreator}>
         {({
           data,
           offset,
@@ -183,8 +181,8 @@ class ExercisesListContainer extends Component {
           orderByColumn,
           orderByDescending,
           setOrderBy,
-          reload
-        }) =>
+          reload,
+        }) => (
           <ExercisesList
             exercises={data}
             showGroups={showGroups}
@@ -196,10 +194,11 @@ class ExercisesListContainer extends Component {
               totalCount,
               orderByColumn,
               orderByDescending,
-              setOrderBy
+              setOrderBy,
             })}
             reload={reload}
-          />}
+          />
+        )}
       </PaginationContainer>
     );
   }
@@ -217,7 +216,7 @@ ExercisesListContainer.propTypes = {
   assignExercise: PropTypes.func.isRequired,
   push: PropTypes.func.isRequired,
   intl: intlShape.isRequired,
-  links: PropTypes.object.isRequired
+  links: PropTypes.object.isRequired,
 };
 
 export default withLinks(
@@ -229,14 +228,14 @@ export default withLinks(
         : getAllExericsesAuthors(state),
       authorsLoading: rootGroup
         ? getExercisesAuthorsOfGroupIsLoading(rootGroup)(state)
-        : getAllExericsesAuthorsIsLoading(state)
+        : getAllExericsesAuthorsIsLoading(state),
     }),
     (dispatch, { rootGroup = null }) => ({
       fetchExercisesAuthorsIfNeeded: groupId =>
         dispatch(fetchExercisesAuthorsIfNeeded(groupId || null)),
       assignExercise: exerciseId =>
         dispatch(assignExercise(rootGroup, exerciseId)),
-      push: url => dispatch(push(url))
+      push: url => dispatch(push(url)),
     })
   )(injectIntl(ExercisesListContainer))
 );

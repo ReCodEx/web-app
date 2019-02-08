@@ -15,7 +15,7 @@ export const actionTypes = {
   BROKER_UNFREEZE: 'recodex/broker/UNFREEZE',
   BROKER_UNFREEZE_PENDING: 'recodex/broker/UNFREEZE_PENDING',
   BROKER_UNFREEZE_FULFILLED: 'recodex/broker/UNFREEZE_FULFILLED',
-  BROKER_UNFREEZE_REJECTED: 'recodex/broker/UNFREEZE_REJECTED'
+  BROKER_UNFREEZE_REJECTED: 'recodex/broker/UNFREEZE_REJECTED',
 };
 
 /**
@@ -26,21 +26,21 @@ export const fetchBrokerStats = () =>
   createApiAction({
     type: actionTypes.BROKER_STATS_FETCH,
     method: 'GET',
-    endpoint: '/broker/stats'
+    endpoint: '/broker/stats',
   });
 
 export const freezeBroker = () =>
   createApiAction({
     type: actionTypes.BROKER_FREEZE,
     method: 'POST',
-    endpoint: '/broker/freeze'
+    endpoint: '/broker/freeze',
   });
 
 export const unfreezeBroker = () =>
   createApiAction({
     type: actionTypes.BROKER_UNFREEZE,
     method: 'POST',
-    endpoint: '/broker/unfreeze'
+    endpoint: '/broker/unfreeze',
   });
 
 /**
@@ -79,13 +79,13 @@ const reducer = handleActions(
         state.set('unfreezeActionStatus', resourceStatus.FULFILLED),
 
       [actionTypes.BROKER_UNFREEZE_REJECTED]: state =>
-        state.set('unfreezeActionStatus', resourceStatus.FAILED)
+        state.set('unfreezeActionStatus', resourceStatus.FAILED),
     }
   ),
   fromJS({
     stats: null,
     freezeActionStatus: null,
-    unfreezeActionStatus: null
+    unfreezeActionStatus: null,
   })
 );
 

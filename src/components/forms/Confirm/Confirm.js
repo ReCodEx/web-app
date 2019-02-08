@@ -42,7 +42,7 @@ class Confirm extends Component {
           <FormattedMessage id="app.confirm.no" defaultMessage="No" />
         </span>
       ),
-      placement = 'bottom'
+      placement = 'bottom',
     } = this.props;
     const { target, showPopup } = this.state;
 
@@ -51,12 +51,8 @@ class Confirm extends Component {
         <Popover id={id} title={question}>
           <div className="text-center">
             <ButtonGroup bsSize="sm">
-              <Button onClick={e => this.confirm(e)}>
-                {yes}
-              </Button>
-              <Button onClick={e => this.dismiss(e)}>
-                {no}
-              </Button>
+              <Button onClick={e => this.confirm(e)}>{yes}</Button>
+              <Button onClick={e => this.dismiss(e)}>{no}</Button>
             </ButtonGroup>
           </div>
         </Popover>
@@ -69,10 +65,9 @@ class Confirm extends Component {
     return (
       <span
         style={{ display: 'inline-block', position: 'relative' }}
-        className={className}
-      >
+        className={className}>
         {React.cloneElement(children, {
-          onClick: e => this.askForConfirmation(e)
+          onClick: e => this.askForConfirmation(e),
         })}
         {this.renderQuestion()}
       </span>
@@ -83,7 +78,7 @@ class Confirm extends Component {
 const stringOrFormattedMessage = PropTypes.oneOfType([
   PropTypes.string,
   PropTypes.element,
-  FormattedMessage
+  FormattedMessage,
 ]);
 
 Confirm.propTypes = {
@@ -95,7 +90,7 @@ Confirm.propTypes = {
   no: stringOrFormattedMessage,
   placement: PropTypes.string,
   children: PropTypes.element.isRequired,
-  className: PropTypes.string
+  className: PropTypes.string,
 };
 
 export default Confirm;

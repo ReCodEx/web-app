@@ -7,7 +7,7 @@ import EnvironmentsListItem from './EnvironmentsListItem';
 const EnvironmentsList = ({
   runtimeEnvironments = null,
   longNames = false,
-  intl: { locale }
+  intl: { locale },
 }) => {
   const environments =
     runtimeEnvironments &&
@@ -20,23 +20,27 @@ const EnvironmentsList = ({
       );
   return (
     <span>
-      {environments !== null
-        ? environments.length > 0
-          ? environments.map(env =>
-              <EnvironmentsListItem
-                key={env.id}
-                runtimeEnvironment={env}
-                longNames={longNames}
-              />
-            )
-          : <i className="small text-muted">
-              <WarningIcon gapRight />
-              <FormattedMessage
-                id="app.environmentsList.noEnvironments"
-                defaultMessage="no runtime environments"
-              />
-            </i>
-        : <LoadingIcon />}
+      {environments !== null ? (
+        environments.length > 0 ? (
+          environments.map(env => (
+            <EnvironmentsListItem
+              key={env.id}
+              runtimeEnvironment={env}
+              longNames={longNames}
+            />
+          ))
+        ) : (
+          <i className="small text-muted">
+            <WarningIcon gapRight />
+            <FormattedMessage
+              id="app.environmentsList.noEnvironments"
+              defaultMessage="no runtime environments"
+            />
+          </i>
+        )
+      ) : (
+        <LoadingIcon />
+      )}
     </span>
   );
 };
@@ -44,7 +48,7 @@ const EnvironmentsList = ({
 EnvironmentsList.propTypes = {
   runtimeEnvironments: PropTypes.array,
   longNames: PropTypes.bool,
-  intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired
+  intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired,
 };
 
 export default injectIntl(EnvironmentsList);

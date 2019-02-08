@@ -4,7 +4,7 @@ import { FormattedMessage } from 'react-intl';
 import Box from '../../widgets/Box';
 import TestResultsTable from '../TestResultsTable';
 
-const TestResults = ({ evaluation, runtimeEnvironmentId, showJudgeLog }) =>
+const TestResults = ({ evaluation, runtimeEnvironmentId, showJudgeLog }) => (
   <Box
     title={
       <FormattedMessage
@@ -15,19 +15,19 @@ const TestResults = ({ evaluation, runtimeEnvironmentId, showJudgeLog }) =>
     noPadding={true}
     collapsable={true}
     isOpen={true}
-    unlimitedHeight
-  >
+    unlimitedHeight>
     <TestResultsTable
       results={evaluation.testResults}
       runtimeEnvironmentId={runtimeEnvironmentId}
       showJudgeLog={showJudgeLog}
     />
-  </Box>;
+  </Box>
+);
 
 TestResults.propTypes = {
   evaluation: PropTypes.object.isRequired,
   runtimeEnvironmentId: PropTypes.string,
-  showJudgeLog: PropTypes.bool
+  showJudgeLog: PropTypes.bool,
 };
 
 export default TestResults;

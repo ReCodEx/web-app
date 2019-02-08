@@ -8,11 +8,11 @@ import { EMPTY_LIST, EMPTY_OBJ, EMPTY_ARRAY } from '../../../../helpers/common';
 import {
   isReady,
   isLoading,
-  getJsData
+  getJsData,
 } from '../../../../redux/helpers/resourceManager';
 import AssignmentTableRow, {
   NoAssignmentTableRow,
-  LoadingAssignmentTableRow
+  LoadingAssignmentTableRow,
 } from '../AssignmentTableRow';
 import { compareAssignments } from '../../../helpers/assignments';
 
@@ -34,47 +34,49 @@ const AssignmentsTable = ({
   showNames = true,
   showGroups = false,
   groupsAccessor = null,
-  intl: { locale }
-}) =>
+  intl: { locale },
+}) => (
   <Table hover>
-    {assignments.size > 0 &&
+    {assignments.size > 0 && (
       <thead>
         <tr>
           <th className="shrink-col" />
 
-          {showNames &&
+          {showNames && (
             <th>
               <FormattedMessage
                 id="app.assignments.name"
                 defaultMessage="Assignment name"
               />
-            </th>}
+            </th>
+          )}
 
-          {showGroups &&
-            groupsAccessor &&
+          {showGroups && groupsAccessor && (
             <th>
               <FormattedMessage
                 id="app.assignments.group"
                 defaultMessage="Assigned in group"
               />
-            </th>}
+            </th>
+          )}
 
-          {assignmentEnvironmentsSelector &&
+          {assignmentEnvironmentsSelector && (
             <th>
               <FormattedMessage
                 id="generic.runtimesShort"
                 defaultMessage="Runtimes/Languages"
               />
-            </th>}
+            </th>
+          )}
 
-          {!isAdmin &&
-            Object.keys(stats).length !== 0 &&
+          {!isAdmin && Object.keys(stats).length !== 0 && (
             <th className="text-center text-nowrap">
               <FormattedMessage
                 id="app.assignments.points"
                 defaultMessage="Points"
               />
-            </th>}
+            </th>
+          )}
 
           <th className="text-nowrap shrink-col">
             <FormattedMessage
@@ -106,20 +108,22 @@ const AssignmentsTable = ({
 
           {isAdmin && <th />}
         </tr>
-      </thead>}
+      </thead>
+    )}
     <tbody>
       {assignments.size === 0 && <NoAssignmentTableRow />}
 
-      {assignments.some(isLoading) &&
+      {assignments.some(isLoading) && (
         <LoadingAssignmentTableRow
           colSpan={5 + (assignmentEnvironmentsSelector ? 1 : 0)}
-        />}
+        />
+      )}
 
       {assignments
         .filter(isReady)
         .map(getJsData)
         .sort(compareAssignments)
-        .map(assignment =>
+        .map(assignment => (
           <AssignmentTableRow
             key={assignment.id}
             item={assignment}
@@ -140,9 +144,10 @@ const AssignmentsTable = ({
             showGroups={showGroups}
             groupsAccessor={groupsAccessor}
           />
-        )}
+        ))}
     </tbody>
-  </Table>;
+  </Table>
+);
 
 AssignmentsTable.propTypes = {
   assignments: ImmutablePropTypes.list.isRequired,
@@ -154,7 +159,7 @@ AssignmentsTable.propTypes = {
   showNames: PropTypes.bool,
   showGroups: PropTypes.bool,
   groupsAccessor: PropTypes.func,
-  intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired
+  intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired,
 };
 
 export default injectIntl(AssignmentsTable);

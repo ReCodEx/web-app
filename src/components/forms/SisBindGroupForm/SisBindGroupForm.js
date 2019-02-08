@@ -19,8 +19,8 @@ const SisBindGroupForm = ({
   submitSucceeded,
   groups,
   groupsAccessor,
-  intl: { locale }
-}) =>
+  intl: { locale },
+}) => (
   <FormBox
     title={
       <FormattedMessage
@@ -58,19 +58,19 @@ const SisBindGroupForm = ({
                 id="app.sisBindGroupForm.success"
                 defaultMessage="The group was bound."
               />
-            )
+            ),
           }}
         />
       </div>
-    }
-  >
-    {submitFailed &&
+    }>
+    {submitFailed && (
       <Alert bsStyle="danger">
         <FormattedMessage
           id="app.sisBindGroupForm.failed"
           defaultMessage="Binding group failed. Please try again later."
         />
-      </Alert>}
+      </Alert>
+    )}
 
     <Field
       name="groupId"
@@ -85,12 +85,13 @@ const SisBindGroupForm = ({
       options={groups
         .map(group => ({
           key: group.id,
-          name: getGroupCanonicalLocalizedName(group, groupsAccessor, locale)
+          name: getGroupCanonicalLocalizedName(group, groupsAccessor, locale),
         }))
         .sort((a, b) => a.name.localeCompare(b.name, locale))}
       addEmptyOption
     />
-  </FormBox>;
+  </FormBox>
+);
 
 SisBindGroupForm.propTypes = {
   onSubmit: PropTypes.func.isRequired,
@@ -102,7 +103,7 @@ SisBindGroupForm.propTypes = {
   submitFailed: PropTypes.bool,
   groups: PropTypes.array,
   groupsAccessor: PropTypes.func.isRequired,
-  intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired
+  intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired,
 };
 
 const validate = ({ groupId }) => {
@@ -122,5 +123,5 @@ const validate = ({ groupId }) => {
 
 export default reduxForm({
   form: 'sisBindGroup',
-  validate
+  validate,
 })(injectIntl(SisBindGroupForm));

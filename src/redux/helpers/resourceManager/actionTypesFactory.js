@@ -13,10 +13,10 @@ export const getActionTypes = (prefix, actions, postfixes = ['']) =>
       ...postfixes.reduce(
         (acc, postfix) => ({
           ...acc,
-          [`${action}${postfix}`]: `${prefix}/${action}${postfix}`
+          [`${action}${postfix}`]: `${prefix}/${action}${postfix}`,
         }),
         {}
-      )
+      ),
     }),
     {}
   );
@@ -33,9 +33,9 @@ const actionTypesFactory = (
     '',
     '_PENDING',
     '_FULFILLED',
-    '_REJECTED'
+    '_REJECTED',
   ]),
-  ...getActionTypes(prefix, onePhaseActions)
+  ...getActionTypes(prefix, onePhaseActions),
 });
 
 export default actionTypesFactory;

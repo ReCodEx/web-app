@@ -15,7 +15,7 @@ export const getPipelines = defaultMemoize(config =>
  * @param {Object[]} config Exercise configuration object.
  */
 export const getPipelinesInitialValues = defaultMemoize(config => ({
-  pipelines: getPipelines(config)
+  pipelines: getPipelines(config),
 }));
 
 /**
@@ -38,7 +38,7 @@ const getConfigVariables = (
     'tests',
     ({ name }) => name === testId,
     'pipelines',
-    pipelineIdx
+    pipelineIdx,
   ]);
   return pipeline && pipeline.name === pipelineId ? pipeline.variables : null;
 };
@@ -79,7 +79,7 @@ const getConfigVariableValue = (
       [
         ({ name, type }) =>
           name === variableName && (!variableType || type === variableType),
-        'value'
+        'value',
       ],
       defaultValue
     )
@@ -137,12 +137,12 @@ export const assembleNewConfig = (
                 pipelineId
               ),
               variables
-            )
+            ),
           })
-        )
-      }))
-    }
-  ]
+        ),
+      })),
+    },
+  ],
 });
 
 /**
@@ -162,9 +162,7 @@ export const getAdvancedConfigInitValues = (
 
   if (runtimeId && tests && pipelinesVariables) {
     tests.forEach(({ id: testId }) => {
-      config[
-        encodeNumId(testId)
-      ] = pipelinesVariables.map(
+      config[encodeNumId(testId)] = pipelinesVariables.map(
         ({ id: pipelineId, variables }, pipelineIdx) => {
           const res = {};
           variables.forEach(({ name, type, value }) => {
@@ -214,12 +212,12 @@ export const transformAdvancedConfigValues = (
               value: safeGet(config, [
                 encodeNumId(testId),
                 pipelineIdx,
-                encodeId(name)
-              ])
-            }))
+                encodeId(name),
+              ]),
+            })),
           })
-        )
-      }))
-    }
-  ]
+        ),
+      })),
+    },
+  ],
 });

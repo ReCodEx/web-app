@@ -9,7 +9,7 @@ const LoadingInfoBox = ({
     <FormattedMessage id="generic.loading" defaultMessage="Loading..." />
   ),
   ...props
-}) =>
+}) => (
   <InfoBox
     icon="sync"
     spin
@@ -17,11 +17,12 @@ const LoadingInfoBox = ({
     description={description}
     color="gray"
     {...props}
-  />;
+  />
+);
 
 LoadingInfoBox.propTypes = {
   title: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
-  description: PropTypes.oneOfType([PropTypes.string, PropTypes.element])
+  description: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
 };
 
 export default LoadingInfoBox;

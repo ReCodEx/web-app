@@ -10,20 +10,22 @@ const DownloadResultArchiveContainer = ({
   solutionId,
   downloadSolutionArchive,
   downloadRefSolutionArchive,
-  isReference = false
-}) =>
+  isReference = false,
+}) => (
   <a
     href="#"
-    onClick={isReference ? downloadRefSolutionArchive : downloadSolutionArchive}
-  >
+    onClick={
+      isReference ? downloadRefSolutionArchive : downloadSolutionArchive
+    }>
     <SolutionArchiveInfoBox id={solutionId} />
-  </a>;
+  </a>
+);
 
 DownloadResultArchiveContainer.propTypes = {
   solutionId: PropTypes.string.isRequired,
   downloadSolutionArchive: PropTypes.func.isRequired,
   downloadRefSolutionArchive: PropTypes.func.isRequired,
-  isReference: PropTypes.bool
+  isReference: PropTypes.bool,
 };
 
 export default connect(
@@ -36,6 +38,6 @@ export default connect(
     downloadRefSolutionArchive: e => {
       e.preventDefault();
       dispatch(downloadRefSolutionArchive(solutionId));
-    }
+    },
   })
 )(DownloadResultArchiveContainer);

@@ -36,7 +36,7 @@ const EvaluationStatusText = ({ status }) => {
 };
 
 EvaluationStatusText.propTypes = {
-  status: PropTypes.string.isRequired
+  status: PropTypes.string.isRequired,
 };
 
 export default EvaluationStatusText;

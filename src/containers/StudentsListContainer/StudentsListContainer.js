@@ -24,13 +24,14 @@ class StudentsListContainer extends Component {
     const { group, students, stats, ...props } = this.props;
     return (
       <ResourceRenderer resource={group}>
-        {group =>
+        {group => (
           <StudentsList
             {...props}
             users={students}
             isLoaded={students.length === group.privateData.students.length}
             stats={stats}
-          />}
+          />
+        )}
       </ResourceRenderer>
     );
   }
@@ -41,7 +42,7 @@ StudentsListContainer.propTypes = {
   group: PropTypes.object.isRequired,
   students: PropTypes.array,
   stats: ImmutablePropTypes.map,
-  loadAsync: PropTypes.func.isRequired
+  loadAsync: PropTypes.func.isRequired,
 };
 
 export default connect(
@@ -54,14 +55,14 @@ export default connect(
     return {
       group,
       students,
-      stats: createGroupsStatsSelector(groupId)(state)
+      stats: createGroupsStatsSelector(groupId)(state),
     };
   },
   (dispatch, { groupId }) => ({
     loadAsync: () =>
       Promise.all([
         dispatch(fetchGroupIfNeeded(groupId)),
-        dispatch(fetchStudents(groupId))
-      ])
+        dispatch(fetchStudents(groupId)),
+      ]),
   })
 )(StudentsListContainer);

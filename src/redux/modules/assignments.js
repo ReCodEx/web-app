@@ -6,7 +6,7 @@ import { downloadHelper } from '../helpers/api/download';
 import factory, {
   initialState,
   createRecord,
-  resourceStatus
+  resourceStatus,
 } from '../helpers/resourceManager';
 import { arrayToObject } from '../../helpers/common';
 
@@ -16,7 +16,7 @@ import { actionTypes as submissionActionTypes } from './submission';
 const resourceName = 'assignments';
 const { actions, actionTypes, reduceActions } = factory({
   resourceName,
-  apiEndpointFactory: (id = '') => `/exercise-assignments/${id}`
+  apiEndpointFactory: (id = '') => `/exercise-assignments/${id}`,
 });
 
 export { actionTypes };
@@ -30,7 +30,7 @@ export const additionalActionTypes = {
     'recodex/assignment/DOWNLOAD_BEST_SOLUTIONS_ARCHIVE',
   LOAD_EXERCISE_ASSIGNMENTS: 'recodex/exercises/LOAD_EXERCISE_ASSIGNMENTS',
   LOAD_EXERCISE_ASSIGNMENTS_FULFILLED:
-    'recodex/exercises/LOAD_EXERCISE_ASSIGNMENTS_FULFILLED'
+    'recodex/exercises/LOAD_EXERCISE_ASSIGNMENTS_FULFILLED',
 };
 
 /**
@@ -43,7 +43,7 @@ export const fetchAssignmentIfNeeded = actions.fetchOneIfNeeded;
 
 export const fetchAssignmentsForGroup = groupId =>
   actions.fetchMany({
-    endpoint: `/groups/${groupId}/assignments`
+    endpoint: `/groups/${groupId}/assignments`,
   });
 
 export const create = (groupId, exerciseId) =>
@@ -56,7 +56,7 @@ export const validateAssignment = (id, version) =>
     type: additionalActionTypes.VALIDATE_ASSIGNMENT,
     endpoint: `/exercise-assignments/${id}/validate`,
     method: 'POST',
-    body: { version }
+    body: { version },
   });
 
 export const syncWithExercise = assignmentId =>
@@ -64,14 +64,14 @@ export const syncWithExercise = assignmentId =>
     type: additionalActionTypes.SYNC_ASSIGNMENT,
     endpoint: `/exercise-assignments/${assignmentId}/sync-exercise`,
     method: 'POST',
-    meta: { assignmentId }
+    meta: { assignmentId },
   });
 
 export const downloadBestSolutionsArchive = downloadHelper({
   actionType: additionalActionTypes.DOWNLOAD_BEST_SOLUTIONS_ARCHIVE,
   fetch: null,
   endpoint: id => `/exercise-assignments/${id}/download-best-solutions`,
-  contentType: 'application/zip'
+  contentType: 'application/zip',
 });
 
 export const fetchExerciseAssignments = exerciseId =>
@@ -79,7 +79,7 @@ export const fetchExerciseAssignments = exerciseId =>
     type: additionalActionTypes.LOAD_EXERCISE_ASSIGNMENTS,
     method: 'GET',
     endpoint: `/exercises/${exerciseId}/assignments`,
-    meta: { exerciseId }
+    meta: { exerciseId },
   });
 
 /**
@@ -122,14 +122,14 @@ const reducer = handleActions(
         !state.hasIn([
           'solutions',
           solution.exerciseAssignmentId,
-          solution.solution.userId
+          solution.solution.userId,
         ])
       ) {
         state = state.setIn(
           [
             'solutions',
             solution.exerciseAssignmentId,
-            solution.solution.userId
+            solution.solution.userId,
           ],
           List()
         );
@@ -203,7 +203,7 @@ const reducer = handleActions(
       state.setIn(
         ['resources', assignmentId, 'data', 'resubmit-all-pending'],
         false
-      )
+      ),
   }),
   initialState
 );

@@ -17,8 +17,8 @@ const GroupTopButtons = ({
   links: {
     GROUP_EDIT_URI_FACTORY,
     GROUP_DETAIL_URI_FACTORY,
-    GROUP_INFO_URI_FACTORY
-  }
+    GROUP_INFO_URI_FACTORY,
+  },
 }) => {
   const studentEmails =
     !group.organizational &&
@@ -34,7 +34,7 @@ const GroupTopButtons = ({
 
   return (
     <p>
-      {canEdit &&
+      {canEdit && (
         <LinkContainer to={GROUP_EDIT_URI_FACTORY(group.id)}>
           <Button bsStyle="warning">
             <EditIcon gapRight />
@@ -43,7 +43,8 @@ const GroupTopButtons = ({
               defaultMessage="Edit Group"
             />
           </Button>
-        </LinkContainer>}
+        </LinkContainer>
+      )}
 
       <LinkContainer to={GROUP_INFO_URI_FACTORY(group.id)}>
         <Button bsStyle="primary">
@@ -52,7 +53,7 @@ const GroupTopButtons = ({
         </Button>
       </LinkContainer>
 
-      {canSeeDetail &&
+      {canSeeDetail && (
         <LinkContainer to={GROUP_DETAIL_URI_FACTORY(group.id)}>
           <Button bsStyle="primary">
             <GroupIcon gapRight />
@@ -61,17 +62,18 @@ const GroupTopButtons = ({
               defaultMessage="Group Detail"
             />
           </Button>
-        </LinkContainer>}
+        </LinkContainer>
+      )}
 
-      {canLeaveJoin &&
-        !group.organizational &&
+      {canLeaveJoin && !group.organizational && (
         <LeaveJoinGroupButtonContainer
           userId={userId}
           groupId={group.id}
           bsSize={null}
-        />}
+        />
+      )}
 
-      {studentEmails &&
+      {studentEmails && (
         <a href={`mailto:?bcc=${studentEmails}`} className="pull-right">
           <Button bsStyle="default">
             <MailIcon gapRight />
@@ -80,7 +82,8 @@ const GroupTopButtons = ({
               defaultMessage="Mail to All Students"
             />
           </Button>
-        </a>}
+        </a>
+      )}
     </p>
   );
 };
@@ -90,7 +93,7 @@ GroupTopButtons.propTypes = {
   userId: PropTypes.string.isRequired,
   canLeaveJoin: PropTypes.bool,
   students: PropTypes.array,
-  links: PropTypes.object
+  links: PropTypes.object,
 };
 
 export default withLinks(GroupTopButtons);

@@ -18,7 +18,7 @@ export function eventAggregator(id, fnc, timeout) {
     }, timeout);
     pending[id] = {
       tid,
-      fnc
+      fnc,
     };
   }
 }

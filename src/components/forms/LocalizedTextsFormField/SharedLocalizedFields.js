@@ -4,7 +4,7 @@ import { FormattedMessage } from 'react-intl';
 import { Field } from 'redux-form';
 import { TextField, CheckboxField } from '../Fields';
 
-const SharedLocalizedFields = ({ prefix, enabled }) =>
+const SharedLocalizedFields = ({ prefix, enabled }) => (
   <React.Fragment>
     <Field
       name={`${prefix}._enabled`}
@@ -29,11 +29,12 @@ const SharedLocalizedFields = ({ prefix, enabled }) =>
         </span>
       }
     />
-  </React.Fragment>;
+  </React.Fragment>
+);
 
 SharedLocalizedFields.propTypes = {
   prefix: PropTypes.string.isRequired,
-  enabled: PropTypes.bool.isRequired
+  enabled: PropTypes.bool.isRequired,
 };
 
 export default SharedLocalizedFields;

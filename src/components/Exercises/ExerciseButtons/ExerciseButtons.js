@@ -15,9 +15,9 @@ const ExerciseButtons = ({
     EXERCISE_ASSIGNMENTS_URI_FACTORY,
     EXERCISE_EDIT_URI_FACTORY,
     EXERCISE_EDIT_CONFIG_URI_FACTORY,
-    EXERCISE_EDIT_LIMITS_URI_FACTORY
-  }
-}) =>
+    EXERCISE_EDIT_LIMITS_URI_FACTORY,
+  },
+}) => (
   <div className="em-margin-bottom em-margin-right">
     <ButtonGroup>
       <LinkContainer to={EXERCISE_ASSIGNMENTS_URI_FACTORY(exerciseId)}>
@@ -30,8 +30,7 @@ const ExerciseButtons = ({
         </Button>
       </LinkContainer>
 
-      {permissionHints &&
-        permissionHints.update &&
+      {permissionHints && permissionHints.update && (
         <LinkContainer to={EXERCISE_EDIT_URI_FACTORY(exerciseId)}>
           <Button bsStyle="warning" bsSize="sm">
             <EditIcon gapRight />
@@ -40,46 +39,47 @@ const ExerciseButtons = ({
               defaultMessage="Exercise Settings"
             />
           </Button>
-        </LinkContainer>}
+        </LinkContainer>
+      )}
 
       {permissionHints &&
         permissionHints.viewPipelines &&
-        permissionHints.viewScoreConfig &&
-        <LinkContainer to={EXERCISE_EDIT_CONFIG_URI_FACTORY(exerciseId)}>
-          <Button
-            bsStyle={permissionHints.setScoreConfig ? 'warning' : 'default'}
-            bsSize="sm"
-          >
-            <EditIcon gapRight />
-            <FormattedMessage
-              id="app.exercise.editConfig"
-              defaultMessage="Tests Configuration"
-            />
-          </Button>
-        </LinkContainer>}
+        permissionHints.viewScoreConfig && (
+          <LinkContainer to={EXERCISE_EDIT_CONFIG_URI_FACTORY(exerciseId)}>
+            <Button
+              bsStyle={permissionHints.setScoreConfig ? 'warning' : 'default'}
+              bsSize="sm">
+              <EditIcon gapRight />
+              <FormattedMessage
+                id="app.exercise.editConfig"
+                defaultMessage="Tests Configuration"
+              />
+            </Button>
+          </LinkContainer>
+        )}
 
-      {permissionHints &&
-        permissionHints.viewLimits &&
+      {permissionHints && permissionHints.viewLimits && (
         <LinkContainer to={EXERCISE_EDIT_LIMITS_URI_FACTORY(exerciseId)}>
           <Button
             bsStyle={permissionHints.setLimits ? 'warning' : 'default'}
-            bsSize="sm"
-          >
+            bsSize="sm">
             <EditIcon gapRight />
             <FormattedMessage
               id="app.exercise.editLimits"
               defaultMessage="Tests Limits"
             />
           </Button>
-        </LinkContainer>}
+        </LinkContainer>
+      )}
     </ButtonGroup>
-  </div>;
+  </div>
+);
 
 ExerciseButtons.propTypes = {
   id: PropTypes.string.isRequired,
   configurationType: PropTypes.string.isRequired,
   permissionHints: PropTypes.object,
-  links: PropTypes.object
+  links: PropTypes.object,
 };
 
 export default withLinks(ExerciseButtons);

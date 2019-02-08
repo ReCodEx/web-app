@@ -6,7 +6,7 @@ import { resendingStatusSelector } from '../../redux/selectors/emailVerification
 import ResendEmail, {
   EmailResent,
   ResendingFailed,
-  ResendingEmail
+  ResendingEmail,
 } from '../../components/buttons/ResendEmailVerification';
 
 const ResendVerificationEmailContainer = ({
@@ -30,17 +30,18 @@ const ResendVerificationEmailContainer = ({
 ResendVerificationEmailContainer.propTypes = {
   userId: PropTypes.string.isRequired,
   state: PropTypes.string,
-  resend: PropTypes.func.isRequired
+  resend: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state, { userId }) => ({
-  state: resendingStatusSelector(userId)(state)
+  state: resendingStatusSelector(userId)(state),
 });
 
 const mapDispatchToProps = (dispatch, { userId }) => ({
-  resend: () => dispatch(resendVerificationEmail(userId))
+  resend: () => dispatch(resendVerificationEmail(userId)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(
-  ResendVerificationEmailContainer
-);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(ResendVerificationEmailContainer);

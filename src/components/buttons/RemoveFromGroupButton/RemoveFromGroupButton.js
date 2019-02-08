@@ -5,7 +5,7 @@ import Button from '../../widgets/FlatButton';
 import Icon from '../../icons';
 import Confirm from '../../forms/Confirm';
 
-const RemoveFromGroupButton = ({ onClick, ...props }) =>
+const RemoveFromGroupButton = ({ onClick, ...props }) => (
   <Confirm
     id={'confirm'}
     onConfirmed={onClick}
@@ -14,8 +14,7 @@ const RemoveFromGroupButton = ({ onClick, ...props }) =>
         id="app.removeFromGroup.confirm"
         defaultMessage="Are you sure you want to remove the user from this group?"
       />
-    }
-  >
+    }>
     <Button {...props} bsStyle="warning" className="btn-flat">
       <Icon icon="user-times" gapRight />
       <FormattedMessage
@@ -23,10 +22,11 @@ const RemoveFromGroupButton = ({ onClick, ...props }) =>
         defaultMessage="Remove from group"
       />
     </Button>
-  </Confirm>;
+  </Confirm>
+);
 
 RemoveFromGroupButton.propTypes = {
-  onClick: PropTypes.func.isRequired
+  onClick: PropTypes.func.isRequired,
 };
 
 export default RemoveFromGroupButton;

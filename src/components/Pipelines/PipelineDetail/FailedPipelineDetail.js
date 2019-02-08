@@ -2,7 +2,7 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { WarningIcon } from '../../icons';
 
-const FailedPipelineDetail = () =>
+const FailedPipelineDetail = () => (
   <div>
     <p>
       <WarningIcon gapRight />
@@ -11,6 +11,7 @@ const FailedPipelineDetail = () =>
         defaultMessage="Loading the details of the pipeline failed. Please make sure you are connected to the Internet and try again later."
       />
     </p>
-  </div>;
+  </div>
+);
 
 export default FailedPipelineDetail;

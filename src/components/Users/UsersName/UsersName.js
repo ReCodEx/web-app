@@ -20,7 +20,7 @@ const UsersName = ({
   privateData = null,
   showEmail = null,
   links: { USER_URI_FACTORY },
-  currentUserId
+  currentUserId,
 }) => {
   const email =
     privateData &&
@@ -42,36 +42,26 @@ const UsersName = ({
         style={{
           lineHeight: `${size}px`,
           fontSize: large ? size / 2 : 'inherit',
-          marginLeft: large ? 10 : 5
-        }}
-      >
-        {!noLink &&
-          <Link to={USER_URI_FACTORY(id)}>
-            {fullName}
-          </Link>}
-        {noLink &&
-          <span>
-            {fullName}
-          </span>}
-        {privateData &&
-          privateData.email &&
-          showEmail === 'icon' &&
+          marginLeft: large ? 10 : 5,
+        }}>
+        {!noLink && <Link to={USER_URI_FACTORY(id)}>{fullName}</Link>}
+        {noLink && <span>{fullName}</span>}
+        {privateData && privateData.email && showEmail === 'icon' && (
           <a href={`mailto:${email}`}>
             <MailIcon gapLeft />
-          </a>}
-        {privateData &&
-          privateData.email &&
-          showEmail === 'full' &&
+          </a>
+        )}
+        {privateData && privateData.email && showEmail === 'full' && (
           <small>
             {' ('}
-            <a href={`mailto:${email}`}>
-              {privateData.email}
-            </a>
+            <a href={`mailto:${email}`}>{privateData.email}</a>
             {')'}
-          </small>}
+          </small>
+        )}
         <span className={styles.notVerified}>
-          {!isVerified &&
-            <NotVerified userId={id} currentUserId={currentUserId} />}
+          {!isVerified && (
+            <NotVerified userId={id} currentUserId={currentUserId} />
+          )}
         </span>
       </span>
     </span>
@@ -90,7 +80,7 @@ UsersName.propTypes = {
   noLink: PropTypes.bool,
   showEmail: PropTypes.string,
   currentUserId: PropTypes.string.isRequired,
-  links: PropTypes.object
+  links: PropTypes.object,
 };
 
 export default withLinks(UsersName);

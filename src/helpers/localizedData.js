@@ -3,7 +3,7 @@ import { FormattedMessage } from 'react-intl';
 
 export const knownLocalesNames = {
   cs: 'Čeština',
-  en: 'English'
+  en: 'English',
 };
 
 export const knownLocales = Object.keys(knownLocalesNames);
@@ -98,7 +98,7 @@ export const getLocalizedTextsInitialValues = (localizedTexts, defaults) => {
     const text = localizedTexts.find(t => t.locale === locale);
     const res = {
       locale,
-      _enabled: Boolean(text)
+      _enabled: Boolean(text),
     };
     Object.keys(defaults).forEach(
       prop => (res[prop] = (text && text[prop]) || defaults[prop])
@@ -146,13 +146,15 @@ export const validateLocalizedTextsFormData = (
   // Internally validate all enabled verisons...
   const localizedTextsErrors = [];
   let localizedTextsErrorsCount = 0;
-  formData.filter(({ _enabled }) => _enabled).forEach((data, i) => {
-    const localeErrors = internalValidation ? internalValidation(data) : {};
-    if (Object.keys(localeErrors).length > 0) {
-      localizedTextsErrors[i] = localeErrors;
-      localizedTextsErrorsCount++;
-    }
-  });
+  formData
+    .filter(({ _enabled }) => _enabled)
+    .forEach((data, i) => {
+      const localeErrors = internalValidation ? internalValidation(data) : {};
+      if (Object.keys(localeErrors).length > 0) {
+        localizedTextsErrors[i] = localeErrors;
+        localizedTextsErrorsCount++;
+      }
+    });
   if (localizedTextsErrorsCount > 0) {
     errors.localizedTexts = localizedTextsErrors;
   }

@@ -10,12 +10,12 @@ import LocalizedTextsFormField from '../LocalizedTextsFormField';
 import { TextField, CheckboxField, NumericTextField } from '../Fields';
 import {
   getLocalizedTextsInitialValues,
-  validateLocalizedTextsFormData
+  validateLocalizedTextsFormData,
 } from '../../../helpers/localizedData';
 
 export const EDIT_GROUP_FORM_LOCALIZED_TEXTS_DEFAULT = {
   name: '',
-  description: ''
+  description: '',
 };
 
 export const EDIT_GROUP_FORM_EMPTY_INITIAL_VALUES = {
@@ -26,7 +26,7 @@ export const EDIT_GROUP_FORM_EMPTY_INITIAL_VALUES = {
   localizedTexts: getLocalizedTextsInitialValues(
     [],
     EDIT_GROUP_FORM_LOCALIZED_TEXTS_DEFAULT
-  )
+  ),
 };
 
 const EditGroupForm = ({
@@ -44,19 +44,21 @@ const EditGroupForm = ({
   collapsable = false,
   isOpen = true,
   reset,
-  isSuperAdmin
-}) =>
+  isSuperAdmin,
+}) => (
   <FormBox
     title={
-      createNew
-        ? <FormattedMessage
-            id="app.editGroupForm.titleNew"
-            defaultMessage="Create Subgroup"
-          />
-        : <FormattedMessage
-            id="app.editGroupForm.titleEdit"
-            defaultMessage="Edit Group"
-          />
+      createNew ? (
+        <FormattedMessage
+          id="app.editGroupForm.titleNew"
+          defaultMessage="Create Subgroup"
+        />
+      ) : (
+        <FormattedMessage
+          id="app.editGroupForm.titleEdit"
+          defaultMessage="Edit Group"
+        />
+      )
     }
     type={submitSucceeded ? 'success' : undefined}
     footer={
@@ -70,15 +72,17 @@ const EditGroupForm = ({
           hasFailed={submitFailed}
           invalid={invalid}
           messages={{
-            submit: createNew
-              ? <FormattedMessage
-                  id="app.editGroupForm.createGroup"
-                  defaultMessage="Create Group"
-                />
-              : <FormattedMessage
-                  id="app.editGroupForm.saveGroup"
-                  defaultMessage="Save Group"
-                />,
+            submit: createNew ? (
+              <FormattedMessage
+                id="app.editGroupForm.createGroup"
+                defaultMessage="Create Group"
+              />
+            ) : (
+              <FormattedMessage
+                id="app.editGroupForm.saveGroup"
+                defaultMessage="Save Group"
+              />
+            ),
             submitting: (
               <FormattedMessage
                 id="generic.saving"
@@ -87,22 +91,22 @@ const EditGroupForm = ({
             ),
             success: (
               <FormattedMessage id="generic.saved" defaultMessage="Saved" />
-            )
+            ),
           }}
         />
       </div>
     }
     collapsable={collapsable}
     isOpen={isOpen}
-    unlimitedheight
-  >
-    {submitFailed &&
+    unlimitedheight>
+    {submitFailed && (
       <Alert bsStyle="danger">
         <FormattedMessage
           id="generic.savingFailed"
           defaultMessage="Saving failed. Please try again later."
         />
-      </Alert>}
+      </Alert>
+    )}
 
     <FieldArray
       name="localizedTexts"
@@ -110,7 +114,7 @@ const EditGroupForm = ({
       fieldType="group"
     />
 
-    {isSuperAdmin &&
+    {isSuperAdmin && (
       <Field
         name="externalId"
         tabIndex={2}
@@ -123,11 +127,12 @@ const EditGroupForm = ({
             defaultMessage="External ID of the group (e.g., ID of schedule event in the school IS):"
           />
         }
-      />}
+      />
+    )}
     <br />
     <Grid fluid>
       <Row>
-        {(isSuperAdmin || isPublic) && // any user can turn public flag off, but only superuser may turn it on :)
+        {(isSuperAdmin || isPublic) && ( // any user can turn public flag off, but only superuser may turn it on :)
           <Col lg={6}>
             <Field
               name="isPublic"
@@ -142,7 +147,8 @@ const EditGroupForm = ({
               }
               required
             />
-          </Col>}
+          </Col>
+        )}
         <Col lg={isSuperAdmin || isPublic ? 6 : 12}>
           <Field
             name="publicStats"
@@ -177,7 +183,7 @@ const EditGroupForm = ({
           />
         </Col>
         <Col lg={6}>
-          {hasThreshold &&
+          {hasThreshold && (
             <NumericTextField
               name="threshold"
               tabIndex={6}
@@ -190,17 +196,15 @@ const EditGroupForm = ({
                   defaultMessage="Minimum percent of the total points count needed to complete the course:"
                 />
               }
-            />}
+            />
+          )}
         </Col>
       </Row>
     </Grid>
 
-    {error &&
-      dirty &&
-      <Alert bsStyle="danger">
-        {error}
-      </Alert>}
-  </FormBox>;
+    {error && dirty && <Alert bsStyle="danger">{error}</Alert>}
+  </FormBox>
+);
 
 EditGroupForm.propTypes = {
   error: PropTypes.any,
@@ -217,7 +221,7 @@ EditGroupForm.propTypes = {
   collapsable: PropTypes.bool,
   isOpen: PropTypes.bool,
   reset: PropTypes.func,
-  isSuperAdmin: PropTypes.bool
+  isSuperAdmin: PropTypes.bool,
 };
 
 const validate = ({ localizedTexts }) => {
@@ -241,5 +245,5 @@ const validate = ({ localizedTexts }) => {
 export default reduxForm({
   enableReinitialize: true,
   keepDirtyOnReinitialize: false,
-  validate
+  validate,
 })(EditGroupForm);

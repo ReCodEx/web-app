@@ -10,37 +10,43 @@ const ArchiveGroupButton = ({
   disabled = false,
   setArchived,
   bsSize = undefined,
-  shortLabels = false
-}) =>
+  shortLabels = false,
+}) => (
   <Button
     bsStyle={disabled ? 'default' : 'info'}
     onClick={setArchived(!archived)}
     disabled={pending || disabled}
-    bsSize={bsSize}
-  >
-    {pending
-      ? <LoadingIcon gapRight />
-      : <ArchiveGroupIcon archived={archived} gapRight />}
-    {archived === true
-      ? shortLabels
-        ? <FormattedMessage
-            id="app.archiveGroupButton.unsetShort"
-            defaultMessage="Excavate"
-          />
-        : <FormattedMessage
-            id="app.archiveGroupButton.unset"
-            defaultMessage="Excavate from Archive"
-          />
-      : shortLabels
-        ? <FormattedMessage
-            id="app.archiveGroupButton.setShort"
-            defaultMessage="Archive"
-          />
-        : <FormattedMessage
-            id="app.archiveGroupButton.set"
-            defaultMessage="Archive this Group"
-          />}
-  </Button>;
+    bsSize={bsSize}>
+    {pending ? (
+      <LoadingIcon gapRight />
+    ) : (
+      <ArchiveGroupIcon archived={archived} gapRight />
+    )}
+    {archived === true ? (
+      shortLabels ? (
+        <FormattedMessage
+          id="app.archiveGroupButton.unsetShort"
+          defaultMessage="Excavate"
+        />
+      ) : (
+        <FormattedMessage
+          id="app.archiveGroupButton.unset"
+          defaultMessage="Excavate from Archive"
+        />
+      )
+    ) : shortLabels ? (
+      <FormattedMessage
+        id="app.archiveGroupButton.setShort"
+        defaultMessage="Archive"
+      />
+    ) : (
+      <FormattedMessage
+        id="app.archiveGroupButton.set"
+        defaultMessage="Archive this Group"
+      />
+    )}
+  </Button>
+);
 
 ArchiveGroupButton.propTypes = {
   archived: PropTypes.bool.isRequired,
@@ -48,7 +54,7 @@ ArchiveGroupButton.propTypes = {
   disabled: PropTypes.bool,
   setArchived: PropTypes.func.isRequired,
   bsSize: PropTypes.string,
-  shortLabels: PropTypes.bool
+  shortLabels: PropTypes.bool,
 };
 
 export default ArchiveGroupButton;

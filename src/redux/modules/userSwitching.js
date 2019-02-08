@@ -4,7 +4,7 @@ import { decode, isTokenValid } from '../helpers/token';
 import { addNotification } from './notifications';
 
 export const actionTypes = {
-  REMOVE_USER: 'recodex/userSwitching/REMOVE_USER'
+  REMOVE_USER: 'recodex/userSwitching/REMOVE_USER',
 };
 
 export const removeUser = createAction(actionTypes.REMOVE_USER);
@@ -16,7 +16,9 @@ export const switchUser = userId => (dispatch, getState) => {
   if (!accessToken || !isTokenValid(decodedToken)) {
     dispatch(
       addNotification(
-        `The token has already expired, you cannot switch to user ${user.fullName}. This account will be removed from the user switching panel.`,
+        `The token has already expired, you cannot switch to user ${
+          user.fullName
+        }. This account will be removed from the user switching panel.`,
         false
       )
     );
@@ -25,7 +27,7 @@ export const switchUser = userId => (dispatch, getState) => {
     dispatch({
       type: authActionTypes.LOGIN_SUCCESS,
       payload: { user, accessToken },
-      meta: { service: 'takeover' }
+      meta: { service: 'takeover' },
     });
 
     if (window && window.location && window.location.reload) {
@@ -43,12 +45,12 @@ const reducer = handleActions(
         ? state
         : {
             ...state,
-            [payload.user.id]: payload
+            [payload.user.id]: payload,
           },
     [actionTypes.REMOVE_USER]: (state, { payload: userId }) =>
       Object.keys(state)
         .filter(id => id !== userId)
-        .reduce((acc, id) => ({ ...acc, [id]: state[id] }), {})
+        .reduce((acc, id) => ({ ...acc, [id]: state[id] }), {}),
   },
   initialState
 );

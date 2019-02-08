@@ -1,5 +1,5 @@
 import ResubmitSolutionContainer from './ResubmitSolutionContainer';
 export default ResubmitSolutionContainer;
 export {
-  default as ResubmitAllSolutionsContainer
+  default as ResubmitAllSolutionsContainer,
 } from './ResubmitAllSolutionsContainer';

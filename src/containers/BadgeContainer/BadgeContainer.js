@@ -7,7 +7,7 @@ import UserSwitchingContainer from '../../containers/UserSwitchingContainer';
 
 import Badge, {
   LoadingBadge,
-  FailedBadge
+  FailedBadge,
 } from '../../components/widgets/Badge';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import { loggedInUserSelector } from '../../redux/selectors/users';
@@ -20,14 +20,13 @@ const BadgeContainer = ({
   expiration,
   logout,
   small = false,
-  links: { HOME_URI }
-}) =>
+  links: { HOME_URI },
+}) => (
   <ResourceRenderer
     loading={<LoadingBadge small={small} />}
     failed={<FailedBadge color="black" small={small} />}
-    resource={user}
-  >
-    {user =>
+    resource={user}>
+    {user => (
       <span>
         <Badge
           {...user}
@@ -36,22 +35,24 @@ const BadgeContainer = ({
           small={small}
         />
         <UserSwitchingContainer open={true} />
-      </span>}
-  </ResourceRenderer>;
+      </span>
+    )}
+  </ResourceRenderer>
+);
 
 BadgeContainer.propTypes = {
   user: PropTypes.object,
   expiration: PropTypes.number.isRequired,
   logout: PropTypes.func.isRequired,
   small: PropTypes.bool,
-  links: PropTypes.object
+  links: PropTypes.object,
 };
 
 export default withLinks(
   connect(
     state => ({
       user: loggedInUserSelector(state),
-      expiration: accessTokenExpiration(state)
+      expiration: accessTokenExpiration(state),
     }),
     { logout }
   )(BadgeContainer)

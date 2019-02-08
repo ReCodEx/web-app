@@ -54,7 +54,11 @@ class EmailVerification extends Component {
   };
 
   render() {
-    const { userId, links: { HOME_URI }, getVerificationStatus } = this.props;
+    const {
+      userId,
+      links: { HOME_URI },
+      getVerificationStatus,
+    } = this.props;
     const { decodedToken, token } = this.state;
 
     return (
@@ -75,19 +79,16 @@ class EmailVerification extends Component {
           {
             text: <FormattedMessage id="app.homepage.title" />,
             link: HOME_URI,
-            iconName: 'home'
+            iconName: 'home',
           },
           {
             text: <FormattedMessage id="app.emailVerification.title" />,
-            iconName: 'tick'
-          }
-        ]}
-      >
+            iconName: 'tick',
+          },
+        ]}>
         <Row>
           <Col sm={8} smOffset={2} md={6} mdOffset={3} lg={4} lgOffset={4}>
-            {canUseDOM &&
-              !token &&
-              !decodedToken &&
+            {canUseDOM && !token && !decodedToken && (
               <div>
                 <Alert bsStyle="warning">
                   <strong>
@@ -101,53 +102,58 @@ class EmailVerification extends Component {
                     defaultMessage="Please request (another) link with a unique token."
                   />
                 </Alert>
-                {userId !== null &&
+                {userId !== null && (
                   <p className="text-center">
                     <ResendVerificationEmailContainer
                       bsSize="sm"
                       userId={userId}
                     />
-                  </p>}
-              </div>}
+                  </p>
+                )}
+              </div>
+            )}
 
-            {decodedToken &&
+            {decodedToken && (
               <Box
                 title={
                   <FormattedMessage
                     id="app.emailVerification.progress"
                     defaultMessage="Email verification progress"
                   />
-                }
-              >
+                }>
                 <div>
-                  {getVerificationStatus(decodedToken.sub) === 'FULFILLED' &&
+                  {getVerificationStatus(decodedToken.sub) === 'FULFILLED' && (
                     <p>
                       <SuccessIcon gapRight />
                       <FormattedMessage
                         id="app.emailVerification.verified"
                         defaultMessage="The email address has been verified."
                       />
-                    </p>}
+                    </p>
+                  )}
 
-                  {getVerificationStatus(decodedToken.sub) === 'FAILED' &&
+                  {getVerificationStatus(decodedToken.sub) === 'FAILED' && (
                     <p>
                       <FailureIcon gapRight />
                       <FormattedMessage
                         id="app.emailVerification.failed"
                         defaultMessage="The email address cannot be verified."
                       />
-                    </p>}
+                    </p>
+                  )}
 
-                  {getVerificationStatus(decodedToken.sub) === 'PENDING' &&
+                  {getVerificationStatus(decodedToken.sub) === 'PENDING' && (
                     <p>
                       <LoadingIcon gapRight />
                       <FormattedMessage
                         id="app.emailVerification.waiting"
                         defaultMessage="The email address is being verified."
                       />
-                    </p>}
+                    </p>
+                  )}
                 </div>
-              </Box>}
+              </Box>
+            )}
           </Col>
         </Row>
       </PageContent>
@@ -160,18 +166,19 @@ EmailVerification.propTypes = {
   userId: PropTypes.string,
   verifyEmail: PropTypes.func.isRequired,
   push: PropTypes.func.isRequired,
-  links: PropTypes.object
+  links: PropTypes.object,
 };
 
 export default withLinks(
   connect(
     state => ({
       userId: loggedInUserIdSelector(state),
-      getVerificationStatus: userId => verificationStatusSelector(userId)(state)
+      getVerificationStatus: userId =>
+        verificationStatusSelector(userId)(state),
     }),
     dispatch => ({
       verifyEmail: (userId, token) => dispatch(verifyEmail(userId, token)),
-      push: url => dispatch(push(url))
+      push: url => dispatch(push(url)),
     })
   )(EmailVerification)
 );

@@ -17,12 +17,12 @@ import Box from '../../components/widgets/Box';
 import UsersList from '../../components/Users/UsersList';
 import PaginationContainer, {
   createSortingIcon,
-  showRangeInfo
+  showRangeInfo,
 } from '../../containers/PaginationContainer';
 import FilterUsersListForm from '../../components/forms/FilterUsersListForm';
 import {
   loggedInUserSelector,
-  isLoggedAsSuperAdmin
+  isLoggedAsSuperAdmin,
 } from '../../redux/selectors/users';
 import { takeOver } from '../../redux/modules/auth';
 import { selectedInstanceId } from '../../redux/selectors/auth';
@@ -31,7 +31,7 @@ import withLinks from '../../helpers/withLinks';
 import {
   knownRoles,
   isSupervisorRole,
-  isStudentRole
+  isStudentRole,
 } from '../../components/helpers/usersRoles.js';
 
 const filterInitialValues = defaultMemoize(({ search = '', roles = [] }) => {
@@ -45,7 +45,7 @@ const transformAndSetFilterData = defaultMemoize(
   setFilters => ({ search, roles }) => {
     const data = {
       search: search.trim(),
-      roles: Object.keys(roles).filter(role => roles[role])
+      roles: Object.keys(roles).filter(role => roles[role]),
     };
     if (!data.search) {
       delete data.search;
@@ -55,11 +55,12 @@ const transformAndSetFilterData = defaultMemoize(
 );
 
 class Users extends Component {
-  filtersCreator = (filters, setFilters) =>
+  filtersCreator = (filters, setFilters) => (
     <FilterUsersListForm
       onSubmit={setFilters ? transformAndSetFilterData(setFilters) : null}
       initialValues={filterInitialValues(filters)}
-    />;
+    />
+  );
 
   headingCreator = ({
     offset,
@@ -67,8 +68,8 @@ class Users extends Component {
     totalCount,
     orderByColumn,
     orderByDescending,
-    setOrderBy
-  }) =>
+    setOrderBy,
+  }) => (
     <tr>
       <th />
       <th>
@@ -101,50 +102,52 @@ class Users extends Component {
           setOrderBy
         )}
       </th>
-      <td>
-        {showRangeInfo(offset, limit, totalCount)}
-      </td>
-    </tr>;
+      <td>{showRangeInfo(offset, limit, totalCount)}</td>
+    </tr>
+  );
 
   createActions = defaultMemoize(reload => ({ id, privateData }) => {
     const {
       takeOver,
       isSuperAdmin,
-      links: { EDIT_USER_URI_FACTORY, DASHBOARD_URI }
+      links: { EDIT_USER_URI_FACTORY, DASHBOARD_URI },
     } = this.props;
     return (
-      isSuperAdmin &&
-      <div>
-        {privateData &&
-          privateData.isAllowed &&
-          <Button
+      isSuperAdmin && (
+        <div>
+          {privateData && privateData.isAllowed && (
+            <Button
+              bsSize="xs"
+              bsStyle="primary"
+              onClick={() => takeOver(id, DASHBOARD_URI)}>
+              <TransferIcon gapRight />
+              <FormattedMessage
+                id="app.users.takeOver"
+                defaultMessage="Login as"
+              />
+            </Button>
+          )}
+
+          <LinkContainer to={EDIT_USER_URI_FACTORY(id)}>
+            <Button bsSize="xs" bsStyle="warning">
+              <SettingsIcon gapRight />
+              <FormattedMessage
+                id="generic.settings"
+                defaultMessage="Settings"
+              />
+            </Button>
+          </LinkContainer>
+
+          <AllowUserButtonContainer id={id} bsSize="xs" />
+
+          <DeleteUserButtonContainer
+            id={id}
             bsSize="xs"
-            bsStyle="primary"
-            onClick={() => takeOver(id, DASHBOARD_URI)}
-          >
-            <TransferIcon gapRight />
-            <FormattedMessage
-              id="app.users.takeOver"
-              defaultMessage="Login as"
-            />
-          </Button>}
-
-        <LinkContainer to={EDIT_USER_URI_FACTORY(id)}>
-          <Button bsSize="xs" bsStyle="warning">
-            <SettingsIcon gapRight />
-            <FormattedMessage id="generic.settings" defaultMessage="Settings" />
-          </Button>
-        </LinkContainer>
-
-        <AllowUserButtonContainer id={id} bsSize="xs" />
-
-        <DeleteUserButtonContainer
-          id={id}
-          bsSize="xs"
-          resourceless={true}
-          onDeleted={reload}
-        />
-      </div>
+            resourceless={true}
+            onDeleted={reload}
+          />
+        </div>
+      )
     );
   });
 
@@ -168,14 +171,13 @@ class Users extends Component {
             text: (
               <FormattedMessage id="app.users.users" defaultMessage="Users" />
             ),
-            iconName: 'users'
-          }
-        ]}
-      >
-        {user =>
+            iconName: 'users',
+          },
+        ]}>
+        {user => (
           <div>
             {(!isSupervisorRole(user.privateData.role) ||
-              isStudentRole(user.privateData.role)) &&
+              isStudentRole(user.privateData.role)) && (
               <Row>
                 <Col sm={12}>
                   <p className="callout callout-warning larger">
@@ -186,55 +188,57 @@ class Users extends Component {
                     />
                   </p>
                 </Col>
-              </Row>}
+              </Row>
+            )}
 
             {isSupervisorRole(user.privateData.role) &&
-              !isStudentRole(user.privateData.role) &&
-              <Box
-                title={
-                  <FormattedMessage
-                    id="app.users.listTitle"
-                    defaultMessage="Users"
-                  />
-                }
-                unlimitedHeight
-              >
-                <div>
-                  <PaginationContainer
-                    id="users-all"
-                    endpoint="users"
-                    defaultOrderBy="name"
-                    filtersCreator={this.filtersCreator}
-                  >
-                    {({
-                      data,
-                      offset,
-                      limit,
-                      totalCount,
-                      orderByColumn,
-                      orderByDescending,
-                      setOrderBy,
-                      reload
-                    }) =>
-                      <UsersList
-                        users={data}
-                        loggedUserId={user.id}
-                        emailColumn
-                        createdAtColumn
-                        heading={this.headingCreator({
-                          offset,
-                          limit,
-                          totalCount,
-                          orderByColumn,
-                          orderByDescending,
-                          setOrderBy
-                        })}
-                        createActions={this.createActions(reload)}
-                      />}
-                  </PaginationContainer>
-                </div>
-              </Box>}
-          </div>}
+              !isStudentRole(user.privateData.role) && (
+                <Box
+                  title={
+                    <FormattedMessage
+                      id="app.users.listTitle"
+                      defaultMessage="Users"
+                    />
+                  }
+                  unlimitedHeight>
+                  <div>
+                    <PaginationContainer
+                      id="users-all"
+                      endpoint="users"
+                      defaultOrderBy="name"
+                      filtersCreator={this.filtersCreator}>
+                      {({
+                        data,
+                        offset,
+                        limit,
+                        totalCount,
+                        orderByColumn,
+                        orderByDescending,
+                        setOrderBy,
+                        reload,
+                      }) => (
+                        <UsersList
+                          users={data}
+                          loggedUserId={user.id}
+                          emailColumn
+                          createdAtColumn
+                          heading={this.headingCreator({
+                            offset,
+                            limit,
+                            totalCount,
+                            orderByColumn,
+                            orderByDescending,
+                            setOrderBy,
+                          })}
+                          createActions={this.createActions(reload)}
+                        />
+                      )}
+                    </PaginationContainer>
+                  </div>
+                </Box>
+              )}
+          </div>
+        )}
       </Page>
     );
   }
@@ -246,7 +250,7 @@ Users.propTypes = {
   links: PropTypes.object.isRequired,
   takeOver: PropTypes.func.isRequired,
   isSuperAdmin: PropTypes.bool,
-  user: ImmutablePropTypes.map.isRequired
+  user: ImmutablePropTypes.map.isRequired,
 };
 
 export default withLinks(
@@ -255,13 +259,13 @@ export default withLinks(
       return {
         instanceId: selectedInstanceId(state),
         isSuperAdmin: isLoggedAsSuperAdmin(state),
-        user: loggedInUserSelector(state)
+        user: loggedInUserSelector(state),
       };
     },
     dispatch => ({
       push: url => dispatch(push(url)),
       takeOver: (userId, redirectUrl) =>
-        dispatch(takeOver(userId)).then(() => dispatch(push(redirectUrl)))
+        dispatch(takeOver(userId)).then(() => dispatch(push(redirectUrl))),
     })
   )(Users)
 );

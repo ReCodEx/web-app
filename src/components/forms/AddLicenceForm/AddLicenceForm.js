@@ -16,8 +16,8 @@ const AddLicenceForm = ({
   submitFailed = false,
   submitSucceeded = false,
   asyncValidating,
-  invalid
-}) =>
+  invalid,
+}) => (
   <FormBox
     title={
       <FormattedMessage
@@ -57,19 +57,19 @@ const AddLicenceForm = ({
                 id="app.addLicence.success"
                 defaultMessage="Licence was added."
               />
-            )
+            ),
           }}
         />
       </div>
-    }
-  >
-    {submitFailed &&
+    }>
+    {submitFailed && (
       <Alert bsStyle="danger">
         <FormattedMessage
           id="app.addLicence.failed"
           defaultMessage="Cannot add the licence."
         />
-      </Alert>}
+      </Alert>
+    )}
 
     <Field
       name="note"
@@ -89,7 +89,8 @@ const AddLicenceForm = ({
         />
       }
     />
-  </FormBox>;
+  </FormBox>
+);
 
 AddLicenceForm.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
@@ -99,7 +100,7 @@ AddLicenceForm.propTypes = {
   submitSucceeded: PropTypes.bool,
   submitting: PropTypes.bool,
   invalid: PropTypes.bool,
-  asyncValidating: PropTypes.oneOfType([PropTypes.bool, PropTypes.string])
+  asyncValidating: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
 };
 
 const validate = ({ note, validUntil }) => {
@@ -135,5 +136,5 @@ const validate = ({ note, validUntil }) => {
 
 export default reduxForm({
   form: 'addLicence',
-  validate
+  validate,
 })(AddLicenceForm);

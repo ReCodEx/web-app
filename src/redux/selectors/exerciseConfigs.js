@@ -8,7 +8,10 @@ export const exerciseConfigsSelector = createSelector(
   getResources
 );
 export const exerciseConfigSelector = exerciseId =>
-  createSelector(exerciseConfigsSelector, configs => configs.get(exerciseId));
+  createSelector(
+    exerciseConfigsSelector,
+    configs => configs.get(exerciseId)
+  );
 
 export const exerciseConfigFormErrors = (state, formName) =>
   (state.form[formName] &&

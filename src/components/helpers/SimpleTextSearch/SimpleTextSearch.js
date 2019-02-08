@@ -6,7 +6,7 @@ import {
   FormGroup,
   ControlLabel,
   FormControl,
-  InputGroup
+  InputGroup,
 } from 'react-bootstrap';
 import { LoadingIcon, SearchIcon, WarningIcon } from '../../icons';
 
@@ -28,7 +28,7 @@ class SimpleTextSearch extends Component {
       id = 'simpleTextSearch',
       onSubmit,
       isLoading,
-      hasFailed
+      hasFailed,
     } = this.props;
 
     return (
@@ -51,8 +51,7 @@ class SimpleTextSearch extends Component {
                   e.preventDefault();
                   onSubmit(this.state.query);
                 }}
-                disabled={isLoading}
-              >
+                disabled={isLoading}>
                 {isLoading && <LoadingIcon />}
                 {hasFailed && <WarningIcon />}
                 {!isLoading && !hasFailed && <SearchIcon />}
@@ -70,7 +69,7 @@ SimpleTextSearch.propTypes = {
   query: PropTypes.string,
   onSubmit: PropTypes.func.isRequired,
   isLoading: PropTypes.bool,
-  hasFailed: PropTypes.bool
+  hasFailed: PropTypes.bool,
 };
 
 export default SimpleTextSearch;

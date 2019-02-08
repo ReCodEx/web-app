@@ -8,7 +8,7 @@ import factory, { initialState } from '../helpers/resourceManager';
 const resourceName = 'exerciseEnvironmentConfigs';
 const { actions, reduceActions } = factory({
   resourceName,
-  apiEndpointFactory: id => `/exercises/${id}/environment-configs`
+  apiEndpointFactory: id => `/exercises/${id}/environment-configs`,
 });
 
 export const fetchExerciseEnvironmentConfig = actions.fetchResource;

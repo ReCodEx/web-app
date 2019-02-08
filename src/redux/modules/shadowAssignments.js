@@ -7,7 +7,7 @@ import factory, { initialState } from '../helpers/resourceManager';
 const resourceName = 'shadowAssignments';
 const { actions, actionTypes, reduceActions } = factory({
   resourceName,
-  apiEndpointFactory: (id = '') => `/shadow-assignments/${id}`
+  apiEndpointFactory: (id = '') => `/shadow-assignments/${id}`,
 });
 
 export { actionTypes };
@@ -25,7 +25,7 @@ export const additionalActionTypes = {
   REMOVE_POINTS: 'recodex/shadow-assignments/REMOVE_POINTS',
   REMOVE_POINTS_PENDING: 'recodex/shadow-assignments/REMOVE_POINTS_PENDING',
   REMOVE_POINTS_FULFILLED: 'recodex/shadow-assignments/REMOVE_POINTS_FULFILLED',
-  REMOVE_POINTS_REJECTED: 'recodex/shadow-assignments/REMOVE_POINTS_REJECTED'
+  REMOVE_POINTS_REJECTED: 'recodex/shadow-assignments/REMOVE_POINTS_REJECTED',
 };
 
 /**
@@ -38,7 +38,7 @@ export const fetchShadowAssignmentIfNeeded = actions.fetchOneIfNeeded;
 
 export const fetchShadowAssignmentsForGroup = groupId =>
   actions.fetchMany({
-    endpoint: `/groups/${groupId}/shadow-assignments`
+    endpoint: `/groups/${groupId}/shadow-assignments`,
   });
 
 export const createShadowAssignment = groupId =>
@@ -51,7 +51,7 @@ export const validateShadowAssignment = (id, version) =>
     type: additionalActionTypes.VALIDATE,
     endpoint: `/shadow-assignments/${id}/validate`,
     method: 'POST',
-    body: { version }
+    body: { version },
   });
 
 export const createShadowAssignmentPoints = (
@@ -66,7 +66,7 @@ export const createShadowAssignmentPoints = (
     method: 'POST',
     endpoint: `/shadow-assignments/${shadowAssignmentId}/create-points`,
     meta: { shadowAssignmentId },
-    body: { userId: awardeeId, points, note, awardedAt }
+    body: { userId: awardeeId, points, note, awardedAt },
   });
 
 export const updateShadowAssignmentPoints = (
@@ -81,7 +81,7 @@ export const updateShadowAssignmentPoints = (
     method: 'POST',
     endpoint: `/shadow-assignments/points/${pointsId}`,
     meta: { shadowAssignmentId, pointsId },
-    body: { points, note, awardedAt }
+    body: { points, note, awardedAt },
   });
 
 export const removeShadowAssignmentPoints = (shadowAssignmentId, pointsId) =>
@@ -89,7 +89,7 @@ export const removeShadowAssignmentPoints = (shadowAssignmentId, pointsId) =>
     type: additionalActionTypes.REMOVE_POINTS,
     method: 'DELETE',
     endpoint: `/shadow-assignments/points/${pointsId}`,
-    meta: { shadowAssignmentId, pointsId }
+    meta: { shadowAssignmentId, pointsId },
   });
 
 /**
@@ -124,7 +124,7 @@ const reducer = handleActions(
       state.updateIn(
         ['resources', shadowAssignmentId, 'data', 'points'],
         points => points.filter(p => p.get('id') !== pointsId)
-      )
+      ),
   }),
   initialState
 );

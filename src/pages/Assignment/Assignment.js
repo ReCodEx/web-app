@@ -10,13 +10,13 @@ import { LinkContainer } from 'react-router-bootstrap';
 
 import {
   fetchAssignmentIfNeeded,
-  syncWithExercise
+  syncWithExercise,
 } from '../../redux/modules/assignments';
 import { canSubmit } from '../../redux/modules/canSubmit';
 import {
   init,
   submitAssignmentSolution as submitSolution,
-  presubmitAssignmentSolution as presubmitSolution
+  presubmitAssignmentSolution as presubmitSolution,
 } from '../../redux/modules/submission';
 import { fetchUsersSolutions } from '../../redux/modules/solutions';
 import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments';
@@ -24,7 +24,7 @@ import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironment
 import {
   getAssignment,
   assignmentEnvironmentsSelector,
-  getUserSolutions
+  getUserSolutions,
 } from '../../redux/selectors/assignments';
 import { canSubmitSolution } from '../../redux/selectors/canSubmit';
 import { isSubmitting } from '../../redux/selectors/submission';
@@ -32,7 +32,7 @@ import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import {
   isStudentOf,
   isSupervisorOf,
-  isAdminOf
+  isAdminOf,
 } from '../../redux/selectors/users';
 import { fetchManyUserSolutionsStatus } from '../../redux/selectors/solutions';
 
@@ -63,7 +63,7 @@ class Assignment extends Component {
       dispatch(fetchAssignmentIfNeeded(assignmentId)),
       dispatch(fetchRuntimeEnvironments()),
       dispatch(canSubmit(assignmentId)),
-      dispatch(fetchUsersSolutions(userId, assignmentId))
+      dispatch(fetchUsersSolutions(userId, assignmentId)),
     ]);
 
   componentWillMount() {
@@ -109,7 +109,7 @@ class Assignment extends Component {
       solutions,
       fetchManyStatus,
       links: { ASSIGNMENT_EDIT_URI_FACTORY, ASSIGNMENT_STATS_URI_FACTORY },
-      intl: { locale }
+      intl: { locale },
     } = this.props;
 
     return (
@@ -134,8 +134,8 @@ class Assignment extends Component {
                 />
               ),
               link: ({ GROUP_DETAIL_URI_FACTORY }) =>
-                GROUP_DETAIL_URI_FACTORY(assignment.groupId)
-            })
+                GROUP_DETAIL_URI_FACTORY(assignment.groupId),
+            }),
           },
           {
             resource: assignment,
@@ -151,8 +151,8 @@ class Assignment extends Component {
                 isAdminOf(assignment.groupId) ||
                 isSupervisorOf(assignment.groupId)
                   ? EXERCISE_URI_FACTORY(assignment.exerciseId)
-                  : '#'
-            })
+                  : '#',
+            }),
           },
           {
             text: (
@@ -161,26 +161,24 @@ class Assignment extends Component {
                 defaultMessage="Exercise Assignment"
               />
             ),
-            iconName: 'hourglass-start'
-          }
-        ]}
-      >
-        {assignment =>
+            iconName: 'hourglass-start',
+          },
+        ]}>
+        {assignment => (
           <div>
             <Row>
               <Col xs={12}>
                 <HierarchyLineContainer groupId={assignment.groupId} />
-                {userId &&
-                  userId !== loggedInUserId &&
+                {userId && userId !== loggedInUserId && (
                   <p>
                     <UsersNameContainer userId={userId} />
-                  </p>}
+                  </p>
+                )}
                 {(isSupervisorOf(assignment.groupId) ||
-                  isAdminOf(assignment.groupId)) && // includes superadmin
+                  isAdminOf(assignment.groupId)) && ( // includes superadmin
                   <p>
                     <LinkContainer
-                      to={ASSIGNMENT_EDIT_URI_FACTORY(assignment.id)}
-                    >
+                      to={ASSIGNMENT_EDIT_URI_FACTORY(assignment.id)}>
                       <Button bsStyle="warning">
                         <EditIcon gapRight />
                         <FormattedMessage
@@ -190,8 +188,7 @@ class Assignment extends Component {
                       </Button>
                     </LinkContainer>
                     <LinkContainer
-                      to={ASSIGNMENT_STATS_URI_FACTORY(assignment.id)}
-                    >
+                      to={ASSIGNMENT_STATS_URI_FACTORY(assignment.id)}>
                       <Button bsStyle="primary">
                         <ResultsIcon gapRight />
                         <FormattedMessage
@@ -203,25 +200,28 @@ class Assignment extends Component {
                     <ResubmitAllSolutionsContainer
                       assignmentId={assignment.id}
                     />
-                  </p>}
+                  </p>
+                )}
               </Col>
             </Row>
             {(isSupervisorOf(assignment.groupId) ||
-              isAdminOf(assignment.groupId)) && // includes superadmin
+              isAdminOf(assignment.groupId)) && ( // includes superadmin
               <AssignmentSync
                 syncInfo={assignment.exerciseSynchronizationInfo}
                 exerciseSync={exerciseSync}
-              />}
+              />
+            )}
 
             <Row>
               <Col lg={6}>
-                {assignment.localizedTexts.length > 0 &&
+                {assignment.localizedTexts.length > 0 && (
                   <div>
                     <LocalizedTexts locales={assignment.localizedTexts} />
-                  </div>}
+                  </div>
+                )}
               </Col>
               <ResourceRenderer resource={[canSubmit, ...runtimeEnvironments]}>
-                {(canSubmitObj, ...runtimes) =>
+                {(canSubmitObj, ...runtimes) => (
                   <Col lg={6}>
                     <AssignmentDetails
                       {...assignment}
@@ -236,18 +236,18 @@ class Assignment extends Component {
                       isStudent={isStudentOf(assignment.groupId)}
                     />
 
-                    {isStudentOf(assignment.groupId) &&
+                    {isStudentOf(assignment.groupId) && (
                       <div>
                         <p className="text-center">
                           <ResourceRenderer
                             loading={<SubmitSolutionButton disabled={true} />}
-                            resource={canSubmit}
-                          >
-                            {canSubmitObj =>
+                            resource={canSubmit}>
+                            {canSubmitObj => (
                               <SubmitSolutionButton
                                 onClick={init(assignment.id)}
                                 disabled={!canSubmitObj.canSubmit}
-                              />}
+                              />
+                            )}
                           </ResourceRenderer>
                         </p>
                         <SubmitSolutionContainer
@@ -258,20 +258,20 @@ class Assignment extends Component {
                           onReset={init}
                           isOpen={submitting}
                         />
-                      </div>}
+                      </div>
+                    )}
 
                     {(isStudentOf(assignment.groupId) ||
                       (userId &&
                         hasPermissions(
                           assignment,
                           'viewAssignmentSolutions'
-                        ))) && // includes superadmin
+                        ))) && ( // includes superadmin
                       <FetchManyResourceRenderer
                         fetchManyStatus={fetchManyStatus}
                         loading={<LoadingSolutionsTable />}
-                        failed={<FailedLoadingSolutionsTable />}
-                      >
-                        {() =>
+                        failed={<FailedLoadingSolutionsTable />}>
+                        {() => (
                           <SolutionsTable
                             title={
                               <FormattedMessage
@@ -286,12 +286,16 @@ class Assignment extends Component {
                             runtimeEnvironments={runtimes}
                             noteMaxlen={64}
                             compact
-                          />}
-                      </FetchManyResourceRenderer>}
-                  </Col>}
+                          />
+                        )}
+                      </FetchManyResourceRenderer>
+                    )}
+                  </Col>
+                )}
               </ResourceRenderer>
             </Row>
-          </div>}
+          </div>
+        )}
       </Page>
     );
   }
@@ -301,7 +305,7 @@ Assignment.propTypes = {
   userId: PropTypes.string,
   loggedInUserId: PropTypes.string,
   params: PropTypes.shape({
-    assignmentId: PropTypes.string.isRequired
+    assignmentId: PropTypes.string.isRequired,
   }),
   isStudentOf: PropTypes.func.isRequired,
   isSupervisorOf: PropTypes.func.isRequired,
@@ -315,7 +319,7 @@ Assignment.propTypes = {
   runtimeEnvironments: PropTypes.array,
   exerciseSync: PropTypes.func.isRequired,
   solutions: ImmutablePropTypes.list.isRequired,
-  intl: intlShape.isRequired
+  intl: intlShape.isRequired,
 };
 
 export default withLinks(
@@ -341,14 +345,14 @@ export default withLinks(
         fetchManyStatus: fetchManyUserSolutionsStatus(
           userId || loggedInUserId,
           assignmentId
-        )(state)
+        )(state),
       };
     },
     (dispatch, { params: { assignmentId } }) => ({
       init: userId => () => dispatch(init(userId, assignmentId)),
       loadAsync: userId =>
         Assignment.loadAsync({ assignmentId }, dispatch, { userId }),
-      exerciseSync: () => dispatch(syncWithExercise(assignmentId))
+      exerciseSync: () => dispatch(syncWithExercise(assignmentId)),
     })
   )(injectIntl(Assignment))
 );

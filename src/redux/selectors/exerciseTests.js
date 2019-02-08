@@ -8,5 +8,8 @@ export const exercisesTestsSelector = createSelector(
   getResources
 );
 export const exerciseTestsSelector = defaultMemoize(exerciseId =>
-  createSelector(exercisesTestsSelector, tests => tests.get(exerciseId))
+  createSelector(
+    exercisesTestsSelector,
+    tests => tests.get(exerciseId)
+  )
 );

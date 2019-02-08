@@ -32,15 +32,17 @@ export const safeSet = (obj, path, value) => {
 
   // Find the target entity, construct the path if necessary.
   let prevStep = null;
-  path.filter(step => step !== null).forEach(step => {
-    if (prevStep !== null) {
-      if (obj[prevStep] === undefined) {
-        obj[prevStep] = Number.isInteger(step) ? [] : {};
+  path
+    .filter(step => step !== null)
+    .forEach(step => {
+      if (prevStep !== null) {
+        if (obj[prevStep] === undefined) {
+          obj[prevStep] = Number.isInteger(step) ? [] : {};
+        }
+        obj = obj[prevStep];
       }
-      obj = obj[prevStep];
-    }
-    prevStep = step;
-  });
+      prevStep = step;
+    });
 
   // Prev step is the last step after the foreach.
   if (prevStep !== null) {

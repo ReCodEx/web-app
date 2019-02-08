@@ -7,15 +7,14 @@ import { SuccessOrFailureIcon } from '../../icons';
 import Box from '../../widgets/Box';
 import DateTime from '../../widgets/DateTime';
 
-const LicencesTable = ({ instance, licences }) =>
+const LicencesTable = ({ instance, licences }) => (
   <Box
     title={
       <FormattedMessage
         id="app.instance.licencesTitle"
         defaultMessage="Licences"
       />
-    }
-  >
+    }>
     <React.Fragment>
       <p>
         <FormattedMessage
@@ -52,14 +51,14 @@ const LicencesTable = ({ instance, licences }) =>
         <tbody>
           {licences
             .sort((a, b) => (a.validUntil < b.validUntil ? 1 : -1))
-            .map(({ id, validUntil, isValid, note }) =>
+            .map(({ id, validUntil, isValid, note }) => (
               <tr key={id}>
                 <td>
-                  {!isValid || validUntil * 1000 < Date.now()
-                    ? <strike>
-                        {note}
-                      </strike>
-                    : note}
+                  {!isValid || validUntil * 1000 < Date.now() ? (
+                    <strike>{note}</strike>
+                  ) : (
+                    note
+                  )}
                 </td>
                 <td className="text-center">
                   <SuccessOrFailureIcon success={isValid} />
@@ -73,9 +72,9 @@ const LicencesTable = ({ instance, licences }) =>
                   />
                 </td>
               </tr>
-            )}
+            ))}
 
-          {licences.length === 0 &&
+          {licences.length === 0 && (
             <tr>
               <td colSpan={3}>
                 <FormattedMessage
@@ -83,17 +82,19 @@ const LicencesTable = ({ instance, licences }) =>
                   defaultMessage="There are no licences."
                 />
               </td>
-            </tr>}
+            </tr>
+          )}
         </tbody>
       </Table>
     </React.Fragment>
-  </Box>;
+  </Box>
+);
 
 LicencesTable.propTypes = {
   instance: PropTypes.shape({
-    hasValidLicence: PropTypes.bool.isRequired
+    hasValidLicence: PropTypes.bool.isRequired,
   }).isRequired,
-  licences: PropTypes.array.isRequired
+  licences: PropTypes.array.isRequired,
 };
 
 export default LicencesTable;

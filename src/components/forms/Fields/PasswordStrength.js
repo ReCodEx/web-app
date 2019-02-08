@@ -74,32 +74,34 @@ const getTitle = level => {
 const PasswordStrength = ({
   input: { name, value: level },
   meta: { dirty },
-  label
-}) =>
+  label,
+}) => (
   <FormGroup controlId={name}>
-    {dirty &&
+    {dirty && (
       <ProgressBar
         bsStyle={getStyle(level)}
         now={getPercent(level)}
         label={getTitle(level)}
         striped={level === 0}
         active={level === 0}
-      />}
-  </FormGroup>;
+      />
+    )}
+  </FormGroup>
+);
 
 PasswordStrength.propTypes = {
   label: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.element,
-    PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) })
+    PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) }),
   ]).isRequired,
   input: PropTypes.shape({
     name: PropTypes.string.isRequired,
-    value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired
+    value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
   }).isRequired,
   meta: PropTypes.shape({
-    dirty: PropTypes.bool
-  }).isRequired
+    dirty: PropTypes.bool,
+  }).isRequired,
 };
 
 export default PasswordStrength;

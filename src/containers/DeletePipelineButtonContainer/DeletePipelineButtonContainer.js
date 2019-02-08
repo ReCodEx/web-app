@@ -14,30 +14,32 @@ const DeletePipelineButtonContainer = ({
   onDeleted,
   ...props
 }) =>
-  resourceless
-    ? <ConfirmDeleteButton {...props} onClick={deletePipeline} />
-    : <DeleteButton
-        {...props}
-        resource={pipeline}
-        deleteResource={deletePipeline}
-      />;
+  resourceless ? (
+    <ConfirmDeleteButton {...props} onClick={deletePipeline} />
+  ) : (
+    <DeleteButton
+      {...props}
+      resource={pipeline}
+      deleteResource={deletePipeline}
+    />
+  );
 
 DeletePipelineButtonContainer.propTypes = {
   id: PropTypes.string.isRequired,
   resourceless: PropTypes.bool,
   pipeline: ImmutablePropTypes.map,
   deletePipeline: PropTypes.func.isRequired,
-  onDeleted: PropTypes.func
+  onDeleted: PropTypes.func,
 };
 
 export default connect(
   (state, { id }) => ({
-    pipeline: getPipeline(id)(state)
+    pipeline: getPipeline(id)(state),
   }),
   (dispatch, { id, onDeleted }) => ({
     deletePipeline: () => {
       onDeleted && onDeleted();
       return dispatch(deletePipeline(id));
-    }
+    },
   })
 )(DeletePipelineButtonContainer);

@@ -22,11 +22,9 @@ const LocalizedTexts = (
     );
 
   if (localeTabs.length === 0) {
-    return noLocalesMessage
-      ? <div className="callout callout-info">
-          {noLocalesMessage}
-        </div>
-      : null;
+    return noLocalesMessage ? (
+      <div className="callout callout-info">{noLocalesMessage}</div>
+    ) : null;
   }
 
   return (
@@ -38,12 +36,10 @@ const LocalizedTexts = (
           : localeTabs[0].locale
       }
       className="nav-tabs-custom"
-      id="localized-texts"
-    >
-      {localeTabs.map(({ locale, text, link = '', studentHint = null }, i) =>
+      id="localized-texts">
+      {localeTabs.map(({ locale, text, link = '', studentHint = null }, i) => (
         <Tab key={i} eventKey={locale} title={locale}>
-          {link &&
-            link !== '' &&
+          {link && link !== '' && (
             <div>
               <Well>
                 <h4>
@@ -58,21 +54,21 @@ const LocalizedTexts = (
                 </a>
               </Well>
               <ExternalLinkPreview url={link} />
-            </div>}
+            </div>
+          )}
 
           {text.trim() !== '' && <Markdown source={text} />}
 
-          {!text.trim() &&
-            !link &&
+          {!text.trim() && !link && (
             <div className="callout callout-warning em-margin">
               <FormattedMessage
                 id="app.localizedTexts.noText"
                 defaultMessage="There is no text nor link for given localization. The exercise is not fully specified yet."
               />
-            </div>}
+            </div>
+          )}
 
-          {studentHint &&
-            studentHint !== '' &&
+          {studentHint && studentHint !== '' && (
             <div>
               <hr />
               <h4>
@@ -82,25 +78,26 @@ const LocalizedTexts = (
                 />
               </h4>
               <Markdown source={studentHint} />
-            </div>}
+            </div>
+          )}
         </Tab>
-      )}
+      ))}
     </Tabs>
   );
 };
 
 LocalizedTexts.contextTypes = {
-  lang: PropTypes.string
+  lang: PropTypes.string,
 };
 
 LocalizedTexts.propTypes = {
   locales: PropTypes.arrayOf(
     PropTypes.shape({
       locale: PropTypes.string.isRequried,
-      text: PropTypes.string.isRequried
+      text: PropTypes.string.isRequried,
     })
   ),
-  noLocalesMessage: PropTypes.any
+  noLocalesMessage: PropTypes.any,
 };
 
 export default LocalizedTexts;

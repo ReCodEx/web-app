@@ -7,7 +7,7 @@ import HeaderNotificationsDropdown from '../../components/widgets/HeaderNotifica
 import { hideNotification } from '../../redux/modules/notifications';
 import {
   newNotificationsSelector,
-  oldNotificationsSelector
+  oldNotificationsSelector,
 } from '../../redux/selectors/notifications';
 
 class HeaderNotificationsContainer extends Component {
@@ -102,16 +102,17 @@ class HeaderNotificationsContainer extends Component {
 HeaderNotificationsContainer.propTypes = {
   newNotifications: ImmutablePropTypes.list.isRequired,
   oldNotifications: ImmutablePropTypes.list.isRequired,
-  hideNotification: PropTypes.func.isRequired
+  hideNotification: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => ({
   newNotifications: newNotificationsSelector(state),
-  oldNotifications: oldNotificationsSelector(state)
+  oldNotifications: oldNotificationsSelector(state),
 });
 
 const mapDispatchToProps = { hideNotification };
 
-export default connect(mapStateToProps, mapDispatchToProps)(
-  HeaderNotificationsContainer
-);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(HeaderNotificationsContainer);

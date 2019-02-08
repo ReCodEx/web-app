@@ -9,7 +9,7 @@ import { defaultMemoize } from 'reselect';
 
 import PaginationContainer, {
   createSortingIcon,
-  showRangeInfo
+  showRangeInfo,
 } from '../../containers/PaginationContainer';
 import SimpleTextSearch from '../../components/helpers/SimpleTextSearch';
 import DeletePipelineButtonContainer from '../../containers/DeletePipelineButtonContainer';
@@ -38,8 +38,8 @@ class Pipelines extends Component {
     totalCount,
     orderByColumn,
     orderByDescending,
-    setOrderBy
-  }) =>
+    setOrderBy,
+  }) => (
     <tr>
       <th className="shrink-col" />
       <th className="shrink-col" />
@@ -65,16 +65,15 @@ class Pipelines extends Component {
           setOrderBy
         )}
       </th>
-      <td>
-        {showRangeInfo(offset, limit, totalCount)}
-      </td>
-    </tr>;
+      <td>{showRangeInfo(offset, limit, totalCount)}</td>
+    </tr>
+  );
 
   newPipeline = () => {
     const {
       createPipeline,
       push,
-      links: { PIPELINE_EDIT_URI_FACTORY }
+      links: { PIPELINE_EDIT_URI_FACTORY },
     } = this.props;
     createPipeline().then(({ value: pipeline }) =>
       push(PIPELINE_EDIT_URI_FACTORY(pipeline.id))
@@ -84,7 +83,7 @@ class Pipelines extends Component {
   render() {
     const {
       isAuthorOfPipeline,
-      links: { PIPELINE_EDIT_URI_FACTORY }
+      links: { PIPELINE_EDIT_URI_FACTORY },
     } = this.props;
 
     return (
@@ -109,10 +108,9 @@ class Pipelines extends Component {
                 defaultMessage="Pipeline list"
               />
             ),
-            iconName: 'random'
-          }
-        ]}
-      >
+            iconName: 'random',
+          },
+        ]}>
         <Box
           title={
             <FormattedMessage
@@ -128,8 +126,7 @@ class Pipelines extends Component {
                 bsSize="sm"
                 onClick={() => {
                   this.newPipeline();
-                }}
-              >
+                }}>
                 <AddIcon gapRight />
                 <FormattedMessage
                   id="app.pipelines.createNew"
@@ -138,19 +135,18 @@ class Pipelines extends Component {
               </Button>
             </p>
           }
-          unlimitedHeight
-        >
+          unlimitedHeight>
           <PaginationContainer
             id="pipelines-all"
             endpoint="pipelines"
             defaultOrderBy="name"
-            filtersCreator={(filters, setFilters) =>
+            filtersCreator={(filters, setFilters) => (
               <SimpleTextSearch
                 query={filters.search || ''}
                 isLoading={setFilters === null}
                 onSubmit={submitHandler(setFilters)}
-              />}
-          >
+              />
+            )}>
             {({
               data,
               offset,
@@ -159,8 +155,8 @@ class Pipelines extends Component {
               orderByColumn,
               orderByDescending,
               setOrderBy,
-              reload
-            }) =>
+              reload,
+            }) => (
               <PipelinesList
                 pipelines={data}
                 heading={this.headingCreator({
@@ -169,28 +165,31 @@ class Pipelines extends Component {
                   totalCount,
                   orderByColumn,
                   orderByDescending,
-                  setOrderBy
+                  setOrderBy,
                 })}
                 createActions={id =>
-                  isAuthorOfPipeline(id) &&
-                  <div>
-                    <LinkContainer to={PIPELINE_EDIT_URI_FACTORY(id)}>
-                      <Button bsSize="xs" bsStyle="warning">
-                        <EditIcon gapRight />
-                        <FormattedMessage
-                          id="generic.edit"
-                          defaultMessage="Edit"
-                        />
-                      </Button>
-                    </LinkContainer>
-                    <DeletePipelineButtonContainer
-                      id={id}
-                      bsSize="xs"
-                      resourceless={true}
-                      onDeleted={() => reload()}
-                    />
-                  </div>}
-              />}
+                  isAuthorOfPipeline(id) && (
+                    <div>
+                      <LinkContainer to={PIPELINE_EDIT_URI_FACTORY(id)}>
+                        <Button bsSize="xs" bsStyle="warning">
+                          <EditIcon gapRight />
+                          <FormattedMessage
+                            id="generic.edit"
+                            defaultMessage="Edit"
+                          />
+                        </Button>
+                      </LinkContainer>
+                      <DeletePipelineButtonContainer
+                        id={id}
+                        bsSize="xs"
+                        resourceless={true}
+                        onDeleted={() => reload()}
+                      />
+                    </div>
+                  )
+                }
+              />
+            )}
           </PaginationContainer>
         </Box>
       </PageContent>
@@ -202,7 +201,7 @@ Pipelines.propTypes = {
   createPipeline: PropTypes.func.isRequired,
   isAuthorOfPipeline: PropTypes.func.isRequired,
   push: PropTypes.func.isRequired,
-  links: PropTypes.object.isRequired
+  links: PropTypes.object.isRequired,
 };
 
 export default withLinks(
@@ -212,12 +211,12 @@ export default withLinks(
 
       return {
         isAuthorOfPipeline: pipelineId =>
-          canEditPipeline(userId, pipelineId)(state)
+          canEditPipeline(userId, pipelineId)(state),
       };
     },
     dispatch => ({
       push: url => dispatch(push(url)),
-      createPipeline: () => dispatch(createPipeline())
+      createPipeline: () => dispatch(createPipeline()),
     })
   )(Pipelines)
 );

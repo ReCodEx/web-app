@@ -4,7 +4,7 @@ import {
   FormattedMessage,
   defineMessages,
   intlShape,
-  injectIntl
+  injectIntl,
 } from 'react-intl';
 import { reduxForm, Field } from 'redux-form';
 import { Alert } from 'react-bootstrap';
@@ -15,12 +15,12 @@ import { SelectField, NumericTextField } from '../Fields';
 const messages = defineMessages({
   summerTerm: {
     id: 'app.addSisTermForm.summer',
-    defaultMessage: 'Summer term'
+    defaultMessage: 'Summer term',
   },
   winterTerm: {
     id: 'app.addSisTermForm.winter',
-    defaultMessage: 'Winter term'
-  }
+    defaultMessage: 'Winter term',
+  },
 });
 
 const AddSisTermForm = ({
@@ -30,8 +30,8 @@ const AddSisTermForm = ({
   submitFailed = false,
   submitSucceeded = false,
   invalid,
-  intl: { formatMessage }
-}) =>
+  intl: { formatMessage },
+}) => (
   <FormBox
     title={
       <FormattedMessage
@@ -70,19 +70,19 @@ const AddSisTermForm = ({
                 id="app.addSisTermForm.success"
                 defaultMessage="The term is saved."
               />
-            )
+            ),
           }}
         />
       </div>
-    }
-  >
-    {submitFailed &&
+    }>
+    {submitFailed && (
       <Alert bsStyle="danger">
         <FormattedMessage
           id="app.addSisTermForm.failed"
           defaultMessage="Cannot save the new SIS term."
         />
-      </Alert>}
+      </Alert>
+    )}
 
     <NumericTextField
       name="year"
@@ -101,11 +101,12 @@ const AddSisTermForm = ({
       }
       options={[
         { name: formatMessage(messages.winterTerm), key: 1 },
-        { name: formatMessage(messages.summerTerm), key: 2 }
+        { name: formatMessage(messages.summerTerm), key: 2 },
       ]}
       addEmptyOption
     />
-  </FormBox>;
+  </FormBox>
+);
 
 AddSisTermForm.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
@@ -115,11 +116,11 @@ AddSisTermForm.propTypes = {
   submitSucceeded: PropTypes.bool,
   submitting: PropTypes.bool,
   invalid: PropTypes.bool,
-  intl: intlShape.isRequired
+  intl: intlShape.isRequired,
 };
 
 export default injectIntl(
   reduxForm({
-    form: 'add-sis-term'
+    form: 'add-sis-term',
   })(AddSisTermForm)
 );

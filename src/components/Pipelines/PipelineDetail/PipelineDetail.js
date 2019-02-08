@@ -22,12 +22,12 @@ const PipelineDetail = ({
   updatedAt,
   version,
   runtimeEnvironments,
-  parameters
-}) =>
+  parameters,
+}) => (
   <Box title={name} noPadding unlimitedHeight>
     <Table responsive condensed>
       <tbody>
-        {Boolean(author) &&
+        {Boolean(author) && (
           <tr>
             <td className="text-center shrink-col em-padding-left em-padding-right">
               <UserIcon />
@@ -38,7 +38,8 @@ const PipelineDetail = ({
             <td>
               <UsersNameContainer userId={author} />
             </td>
-          </tr>}
+          </tr>
+        )}
 
         <tr>
           <td className="text-center shrink-col em-padding-left em-padding-right">
@@ -66,18 +67,20 @@ const PipelineDetail = ({
             />
           </th>
           <td>
-            {exercisesIds.length !== 0
-              ? exercisesIds.map(exerciseId =>
-                  <div key={exerciseId}>
-                    <ExercisesNameContainer exerciseId={exerciseId} />
-                  </div>
-                )
-              : <i>
-                  <FormattedMessage
-                    id="app.pipeline.publicExercise"
-                    defaultMessage="Public"
-                  />
-                </i>}
+            {exercisesIds.length !== 0 ? (
+              exercisesIds.map(exerciseId => (
+                <div key={exerciseId}>
+                  <ExercisesNameContainer exerciseId={exerciseId} />
+                </div>
+              ))
+            ) : (
+              <i>
+                <FormattedMessage
+                  id="app.pipeline.publicExercise"
+                  defaultMessage="Public"
+                />
+              </i>
+            )}
           </td>
         </tr>
 
@@ -89,7 +92,8 @@ const PipelineDetail = ({
             <FormattedMessage
               id="app.pipeline.runtimes"
               defaultMessage="Runtime environments"
-            />:
+            />
+            :
           </th>
           <td>
             <EnvironmentsList runtimeEnvironments={runtimeEnvironments} />
@@ -104,7 +108,8 @@ const PipelineDetail = ({
             <FormattedMessage
               id="app.pipeline.parameters"
               defaultMessage="Parameters"
-            />:
+            />
+            :
           </th>
           <td>
             <ParametersList parameters={parameters} />
@@ -119,7 +124,8 @@ const PipelineDetail = ({
             <FormattedMessage
               id="app.pipeline.createdAt"
               defaultMessage="Created at"
-            />:
+            />
+            :
           </th>
           <td>
             <DateTime unixts={createdAt} showRelative />
@@ -146,7 +152,8 @@ const PipelineDetail = ({
         </tr>
       </tbody>
     </Table>
-  </Box>;
+  </Box>
+);
 
 PipelineDetail.propTypes = {
   id: PropTypes.string.isRequired,
@@ -158,7 +165,7 @@ PipelineDetail.propTypes = {
   updatedAt: PropTypes.number.isRequired,
   version: PropTypes.number.isRequired,
   runtimeEnvironments: PropTypes.array.isRequired,
-  parameters: PropTypes.object.isRequired
+  parameters: PropTypes.object.isRequired,
 };
 
 export default PipelineDetail;

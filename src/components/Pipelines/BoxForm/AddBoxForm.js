@@ -7,7 +7,7 @@ import BoxForm from './BoxForm';
 import { getBoxTypes } from '../../../redux/selectors/boxes';
 import { createBoxFromFormInputs } from '../../../helpers/boxes';
 
-const AddBoxForm = ({ add, onHide, boxTypes, ...props }) =>
+const AddBoxForm = ({ add, onHide, boxTypes, ...props }) => (
   <BoxForm
     {...props}
     title={
@@ -21,7 +21,7 @@ const AddBoxForm = ({ add, onHide, boxTypes, ...props }) =>
         name,
         portsIn = {},
         portsOut = {},
-        type
+        type,
       } = createBoxFromFormInputs(data, boxTypes);
       add(name, portsIn, portsOut, type);
       onHide();
@@ -30,16 +30,17 @@ const AddBoxForm = ({ add, onHide, boxTypes, ...props }) =>
     onDelete={() => {
       onHide();
     }}
-  />;
+  />
+);
 
 AddBoxForm.propTypes = {
   add: PropTypes.func.isRequired,
   onHide: PropTypes.func.isRequired,
-  boxTypes: PropTypes.array.isRequired
+  boxTypes: PropTypes.array.isRequired,
 };
 
 const mapStateToProps = state => ({
-  boxTypes: getBoxTypes(state)
+  boxTypes: getBoxTypes(state),
 });
 
 export default connect(mapStateToProps)(AddBoxForm);

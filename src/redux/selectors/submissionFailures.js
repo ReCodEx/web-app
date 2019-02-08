@@ -10,13 +10,15 @@ export const submissionFailuresSelector = createSelector(
   getResources
 );
 
-export const fetchManyStatus = createSelector(getSubmissionFailures, state =>
-  state.getIn(['fetchManyStatus', fetchManyEndpoint])
+export const fetchManyStatus = createSelector(
+  getSubmissionFailures,
+  state => state.getIn(['fetchManyStatus', fetchManyEndpoint])
 );
 
 export const getSubmissionFailure = failureId =>
-  createSelector(submissionFailuresSelector, failures =>
-    failures.get(failureId)
+  createSelector(
+    submissionFailuresSelector,
+    failures => failures.get(failureId)
   );
 
 export const readySubmissionFailuresSelector = createSelector(

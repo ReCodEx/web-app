@@ -5,7 +5,7 @@ import {
   FormattedHTMLMessage,
   injectIntl,
   defineMessages,
-  intlShape
+  intlShape,
 } from 'react-intl';
 import { reduxForm, Field } from 'redux-form';
 import {
@@ -15,7 +15,7 @@ import {
   Tooltip,
   Grid,
   Row,
-  Col
+  Col,
 } from 'react-bootstrap';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 
@@ -31,16 +31,16 @@ import './GenerateTokenForm.css';
 const availableScopes = defineMessages({
   'read-all': {
     id: 'app.generateTokenForm.scope.readAll',
-    defaultMessage: 'Read-only'
+    defaultMessage: 'Read-only',
   },
   master: {
     id: 'app.generateTokenForm.scope.master',
-    defaultMessage: 'Read-write'
+    defaultMessage: 'Read-write',
   },
   refresh: {
     id: 'app.generateTokenForm.scope.refresh',
-    defaultMessage: 'Allow refreshing indefinitely'
-  }
+    defaultMessage: 'Allow refreshing indefinitely',
+  },
 });
 
 const HOUR_SEC = 3600;
@@ -52,24 +52,24 @@ const YEAR_SEC = 356 * DAY_SEC;
 const messages = defineMessages({
   [HOUR_SEC]: {
     id: 'app.generateTokenForm.hour',
-    defaultMessage: '1 Hour'
+    defaultMessage: '1 Hour',
   },
   [DAY_SEC]: {
     id: 'app.generateTokenForm.day',
-    defaultMessage: '1 Day'
+    defaultMessage: '1 Day',
   },
   [WEEK_SEC]: {
     id: 'app.generateTokenForm.week',
-    defaultMessage: '1 Week'
+    defaultMessage: '1 Week',
   },
   [MONTH_SEC]: {
     id: 'app.generateTokenForm.month',
-    defaultMessage: '1 Month'
+    defaultMessage: '1 Month',
   },
   [YEAR_SEC]: {
     id: 'app.generateTokenForm.year',
-    defaultMessage: '1 Year'
-  }
+    defaultMessage: '1 Year',
+  },
 });
 
 const GenerateTokenForm = ({
@@ -81,8 +81,8 @@ const GenerateTokenForm = ({
   submitSucceeded = false,
   invalid,
   lastToken,
-  intl: { formatMessage }
-}) =>
+  intl: { formatMessage },
+}) => (
   <FormBox
     title={
       <FormattedMessage
@@ -93,7 +93,7 @@ const GenerateTokenForm = ({
     type={submitSucceeded ? 'success' : undefined}
     footer={
       <div className="text-center">
-        {lastToken &&
+        {lastToken && (
           <CopyToClipboard text={lastToken}>
             <OverlayTrigger
               trigger="click"
@@ -106,8 +106,7 @@ const GenerateTokenForm = ({
                     defaultMessage="Copied!"
                   />
                 </Tooltip>
-              }
-            >
+              }>
               <Button bsStyle="info">
                 <CopyIcon gapRight fixedWidth />
                 <FormattedMessage
@@ -116,7 +115,8 @@ const GenerateTokenForm = ({
                 />
               </Button>
             </OverlayTrigger>
-          </CopyToClipboard>}
+          </CopyToClipboard>
+        )}
 
         <SubmitButton
           id="generateToken"
@@ -143,19 +143,19 @@ const GenerateTokenForm = ({
                 id="app.generateTokenForm.generated"
                 defaultMessage="Generated"
               />
-            )
+            ),
           }}
         />
       </div>
-    }
-  >
-    {submitFailed &&
+    }>
+    {submitFailed && (
       <Alert bsStyle="danger">
         <FormattedMessage
           id="generic.savingFailed"
           defaultMessage="Saving failed. Please try again later."
         />
-      </Alert>}
+      </Alert>
+    )}
 
     <h4>
       <FormattedMessage
@@ -166,7 +166,7 @@ const GenerateTokenForm = ({
     <Grid fluid>
       <Row>
         {Object.values(
-          objectMap(availableScopes, (message, scope) =>
+          objectMap(availableScopes, (message, scope) => (
             <Col sm={6} key={scope}>
               <Field
                 name={`scopes.${scope}`}
@@ -176,20 +176,14 @@ const GenerateTokenForm = ({
                 ignoreDirty
               />
             </Col>
-          )
+          ))
         )}
       </Row>
     </Grid>
 
-    {warning &&
-      <Alert bsStyle="warning">
-        {warning}
-      </Alert>}
+    {warning && <Alert bsStyle="warning">{warning}</Alert>}
 
-    {error &&
-      <Alert bsStyle="danger">
-        {error}
-      </Alert>}
+    {error && <Alert bsStyle="danger">{error}</Alert>}
 
     <hr />
 
@@ -210,7 +204,7 @@ const GenerateTokenForm = ({
       ignoreDirty
     />
 
-    {lastToken !== '' &&
+    {lastToken !== '' && (
       <div>
         <hr />
         <h4>
@@ -220,12 +214,12 @@ const GenerateTokenForm = ({
           />
         </h4>
         <Well className="tokenWell">
-          <code>
-            {lastToken}
-          </code>
+          <code>{lastToken}</code>
         </Well>
-      </div>}
-  </FormBox>;
+      </div>
+    )}
+  </FormBox>
+);
 
 GenerateTokenForm.propTypes = {
   warning: PropTypes.any,
@@ -237,7 +231,7 @@ GenerateTokenForm.propTypes = {
   submitting: PropTypes.bool,
   invalid: PropTypes.bool,
   lastToken: PropTypes.string,
-  intl: intlShape.isRequired
+  intl: intlShape.isRequired,
 };
 
 const validate = ({ scopes, expiration }) => {
@@ -279,6 +273,6 @@ export default injectIntl(
     enableReinitialize: true,
     keepDirtyOnReinitialize: false,
     validate,
-    warn
+    warn,
   })(GenerateTokenForm)
 );

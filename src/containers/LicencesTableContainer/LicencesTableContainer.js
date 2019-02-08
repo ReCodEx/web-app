@@ -33,15 +33,15 @@ class LicencesTableContainer extends Component {
 LicencesTableContainer.propTypes = {
   instance: PropTypes.object.isRequired,
   licences: ImmutablePropTypes.map,
-  loadAsync: PropTypes.func.isRequired
+  loadAsync: PropTypes.func.isRequired,
 };
 
 export default connect(
   (state, { instance }) => ({
-    licences: getLicencesOfInstance(instance.id)(state)
+    licences: getLicencesOfInstance(instance.id)(state),
   }),
   (dispatch, { instance }) => ({
     loadAsync: () =>
-      LicencesTableContainer.loadAsync({ instanceId: instance.id }, dispatch)
+      LicencesTableContainer.loadAsync({ instanceId: instance.id }, dispatch),
   })
 )(LicencesTableContainer);

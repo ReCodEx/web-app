@@ -6,12 +6,12 @@ import { defaultMemoize } from 'reselect';
 import ResubmitSolution from '../../components/buttons/ResubmitSolution';
 import {
   resubmitSolution,
-  fetchUsersSolutions
+  fetchUsersSolutions,
 } from '../../redux/modules/solutions';
 import {
   isProcessing,
   getMonitorParams,
-  getSubmittedSolutionId
+  getSubmittedSolutionId,
 } from '../../redux/selectors/submission';
 import EvaluationProgressContainer from '../EvaluationProgressContainer';
 import { fetchSubmissionEvaluationsForSolution } from '../../redux/modules/submissionEvaluations';
@@ -35,7 +35,7 @@ class ResubmitSolutionContainer extends Component {
       monitor,
       isProcessing,
       fetchSubmissions,
-      isDebug = true
+      isDebug = true,
     } = this.props;
 
     return (
@@ -66,14 +66,14 @@ ResubmitSolutionContainer.propTypes = {
   progressObserverId: PropTypes.string,
   isDebug: PropTypes.bool,
   userId: PropTypes.string,
-  fetchSubmissions: PropTypes.func
+  fetchSubmissions: PropTypes.func,
 };
 
 const mapStateToProps = state => ({
   isProcessing: isProcessing(state),
   monitor: getMonitorParams(state),
   newSubmissionId: getSubmittedSolutionId(state),
-  progressObserverId: getProgressObserverId(state)
+  progressObserverId: getProgressObserverId(state),
 });
 
 const mapDispatchToProps = (
@@ -85,10 +85,11 @@ const mapDispatchToProps = (
   fetchSubmissions: userId =>
     Promise.all([
       dispatch(fetchSubmissionEvaluationsForSolution(id)),
-      dispatch(fetchUsersSolutions(userId, assignmentId))
-    ])
+      dispatch(fetchUsersSolutions(userId, assignmentId)),
+    ]),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(
-  ResubmitSolutionContainer
-);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(ResubmitSolutionContainer);

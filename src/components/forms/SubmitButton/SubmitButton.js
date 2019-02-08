@@ -61,7 +61,7 @@ class SubmitButton extends Component {
           id="app.submitButton.invalid"
           defaultMessage="Some input is invalid."
         />
-      )
+      ),
     };
 
     Object.keys(messageDefaults).forEach(key => {
@@ -80,7 +80,7 @@ class SubmitButton extends Component {
       asyncValidating = false,
       noIcons = false,
       defaultIcon = null,
-      disabled = false
+      disabled = false,
     } = this.props;
     const { saved: hasSucceeded } = this.state;
 
@@ -89,7 +89,7 @@ class SubmitButton extends Component {
       success: successMsg,
       submitting: submittingMsg,
       validating: validatingMsg,
-      invalid: invalidMsg
+      invalid: invalidMsg,
     } = this.getMessages();
 
     return (
@@ -99,37 +99,44 @@ class SubmitButton extends Component {
         bsStyle={
           hasSucceeded
             ? 'success'
-            : hasFailed ? 'danger' : invalid ? 'warning' : 'success'
+            : hasFailed
+            ? 'danger'
+            : invalid
+            ? 'warning'
+            : 'success'
         }
         className="btn-flat"
         disabled={
           invalid || asyncValidating !== false || submitting || disabled
-        }
-      >
-        {!submitting
-          ? hasSucceeded
-            ? <span>
-                {!noIcons && <SuccessIcon gapRight />}
-                {successMsg}
-              </span>
-            : asyncValidating !== false
-              ? <span>
-                  {!noIcons && <LoadingIcon gapRight />}
-                  {validatingMsg}
-                </span>
-              : invalid
-                ? <span>
-                    {!noIcons && <WarningIcon gapRight />}
-                    {invalidMsg}
-                  </span>
-                : <span>
-                    {!noIcons && (defaultIcon || <SendIcon gapRight />)}
-                    {submitMsg}
-                  </span>
-          : <span>
+        }>
+        {!submitting ? (
+          hasSucceeded ? (
+            <span>
+              {!noIcons && <SuccessIcon gapRight />}
+              {successMsg}
+            </span>
+          ) : asyncValidating !== false ? (
+            <span>
               {!noIcons && <LoadingIcon gapRight />}
-              {submittingMsg}
-            </span>}
+              {validatingMsg}
+            </span>
+          ) : invalid ? (
+            <span>
+              {!noIcons && <WarningIcon gapRight />}
+              {invalidMsg}
+            </span>
+          ) : (
+            <span>
+              {!noIcons && (defaultIcon || <SendIcon gapRight />)}
+              {submitMsg}
+            </span>
+          )
+        ) : (
+          <span>
+            {!noIcons && <LoadingIcon gapRight />}
+            {submittingMsg}
+          </span>
+        )}
       </Button>
     );
   }
@@ -151,8 +158,8 @@ SubmitButton.propTypes = {
     submit: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
     success: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
     submitting: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
-    validating: PropTypes.oneOfType([PropTypes.string, PropTypes.element])
-  })
+    validating: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
+  }),
 };
 
 export default SubmitButton;

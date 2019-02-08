@@ -19,7 +19,7 @@ const PERSISTENT_TOKENS_KEY_PREFIX =
   getConfigVar('PERSISTENT_TOKENS_KEY_PREFIX') || 'recodex';
 
 const engine = filter(createEngine(`${PERSISTENT_TOKENS_KEY_PREFIX}/store`), [
-  'userSwitching'
+  'userSwitching',
 ]);
 
 const getMiddleware = history => [
@@ -34,9 +34,9 @@ const getMiddleware = history => [
     [
       authActionTypes.LOGIN_SUCCESS,
       authActionTypes.LOGOUT,
-      switchingActionTypes.REMOVE_USER
+      switchingActionTypes.REMOVE_USER,
     ]
-  )
+  ),
 ];
 
 const composeEnhancers =

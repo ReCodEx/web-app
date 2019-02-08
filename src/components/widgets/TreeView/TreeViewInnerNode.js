@@ -28,12 +28,12 @@ class TreeViewInnerNode extends Component {
           icon={
             this.props.forceOpen
               ? 'square'
-              : this.isOpen() ? 'minus-square' : 'plus-square'
+              : this.isOpen()
+              ? 'minus-square'
+              : 'plus-square'
           }
         />
-        <Collapse isOpened={this.isOpen()}>
-          {children}
-        </Collapse>
+        <Collapse isOpened={this.isOpen()}>{children}</Collapse>
       </ul>
     );
   }
@@ -43,7 +43,7 @@ TreeViewInnerNode.propTypes = {
   loading: PropTypes.bool,
   isOpen: PropTypes.bool,
   forceOpen: PropTypes.bool,
-  children: PropTypes.any
+  children: PropTypes.any,
 };
 
 export default TreeViewInnerNode;

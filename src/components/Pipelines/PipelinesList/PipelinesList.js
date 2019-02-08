@@ -10,30 +10,28 @@ const PipelinesList = ({
   pipelines = [],
   heading = null,
   createActions,
-  intl: { locale }
-}) =>
+  intl: { locale },
+}) => (
   <Table hover>
-    {Boolean(heading) &&
-      <thead>
-        {heading}
-      </thead>}
+    {Boolean(heading) && <thead>{heading}</thead>}
 
     <tbody>
       {pipelines
         .filter(identity)
         .map(
           (pipeline, idx) =>
-            pipeline &&
-            <PipelinesListItem
-              {...pipeline}
-              createActions={createActions}
-              showAuthor
-              showCreatedAt
-              key={pipeline ? pipeline.id : idx}
-            />
+            pipeline && (
+              <PipelinesListItem
+                {...pipeline}
+                createActions={createActions}
+                showAuthor
+                showCreatedAt
+                key={pipeline ? pipeline.id : idx}
+              />
+            )
         )}
 
-      {pipelines.length === 0 &&
+      {pipelines.length === 0 && (
         <tr>
           <td className="text-center" colSpan={7}>
             <FormattedMessage
@@ -41,15 +39,17 @@ const PipelinesList = ({
               defaultMessage="There are no pipelines in this list."
             />
           </td>
-        </tr>}
+        </tr>
+      )}
     </tbody>
-  </Table>;
+  </Table>
+);
 
 PipelinesList.propTypes = {
   pipelines: PropTypes.array,
   heading: PropTypes.any,
   createActions: PropTypes.func,
-  intl: intlShape.isRequired
+  intl: intlShape.isRequired,
 };
 
 export default injectIntl(PipelinesList);

@@ -2,7 +2,7 @@ import { handleActions } from 'redux-actions';
 import factory, {
   initialState,
   createRecord,
-  resourceStatus
+  resourceStatus,
 } from '../helpers/resourceManager';
 import { createApiAction } from '../middleware/apiMiddleware';
 import { fromJS } from 'immutable';
@@ -13,7 +13,7 @@ import { fromJS } from 'immutable';
 
 const resourceName = 'sisSupervisedCourses';
 const { reduceActions } = factory({
-  resourceName
+  resourceName,
 });
 
 export const actionTypes = {
@@ -24,7 +24,7 @@ export const actionTypes = {
   CREATE: 'recodex/sisSupervisedCourses/CREATE',
   CREATE_FULFILLED: 'recodex/sisSupervisedCourses/CREATE_FULFILLED',
   BIND: 'recodex/sisSupervisedCourses/BIND',
-  BIND_FULFILLED: 'recodex/sisSupervisedCourses/BIND_FULFILLED'
+  BIND_FULFILLED: 'recodex/sisSupervisedCourses/BIND_FULFILLED',
 };
 
 export const fetchSisSupervisedCourses = (userId, year, term) =>
@@ -32,7 +32,7 @@ export const fetchSisSupervisedCourses = (userId, year, term) =>
     type: actionTypes.FETCH,
     method: 'GET',
     endpoint: `/extensions/sis/users/${userId}/supervised-courses/${year}/${term}`,
-    meta: { userId, year, term }
+    meta: { userId, year, term },
   });
 
 export const sisCreateGroup = (courseId, data, userId, year, term) =>
@@ -41,7 +41,7 @@ export const sisCreateGroup = (courseId, data, userId, year, term) =>
     method: 'POST',
     endpoint: `/extensions/sis/remote-courses/${courseId}/create`,
     meta: { userId, courseId, year, term },
-    body: { ...data }
+    body: { ...data },
   });
 
 export const sisBindGroup = (courseId, data, userId, year, term) =>
@@ -50,7 +50,7 @@ export const sisBindGroup = (courseId, data, userId, year, term) =>
     method: 'POST',
     endpoint: `/extensions/sis/remote-courses/${courseId}/bind`,
     meta: { courseId, userId, year, term },
-    body: { ...data }
+    body: { ...data },
   });
 
 const reducer = handleActions(
@@ -95,9 +95,9 @@ const reducer = handleActions(
               map[p.course.code] = p;
               return map;
             }, {})
-          )
+          ),
         })
-      )
+      ),
   }),
   initialState
 );

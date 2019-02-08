@@ -32,7 +32,7 @@ class EditLimitsForm extends Component {
       submitSucceeded,
       invalid,
       error,
-      intl: { locale }
+      intl: { locale },
     } = this.props;
 
     return (
@@ -48,62 +48,61 @@ class EditLimitsForm extends Component {
         success={submitSucceeded}
         dirty={dirty}
         footer={
-          !readOnly
-            ? <div className="text-center">
-                {dirty &&
-                  <span>
-                    <Button
-                      type="reset"
-                      onClick={reset}
-                      bsStyle={'danger'}
-                      className="btn-flat"
-                    >
-                      <RefreshIcon gapRight />
-                      <FormattedMessage
-                        id="generic.reset"
-                        defaultMessage="Reset"
-                      />
-                    </Button>
-                  </span>}
-                <SubmitButton
-                  id="editLimits"
-                  invalid={invalid}
-                  submitting={submitting}
-                  dirty={dirty}
-                  hasSucceeded={submitSucceeded}
-                  hasFailed={submitFailed}
-                  handleSubmit={handleSubmit}
-                  messages={{
-                    submit: (
-                      <FormattedMessage
-                        id="app.editLimitsForm.submit"
-                        defaultMessage="Save Limits"
-                      />
-                    ),
-                    submitting: (
-                      <FormattedMessage
-                        id="app.editLimitsForm.submitting"
-                        defaultMessage="Saving Limits..."
-                      />
-                    ),
-                    success: (
-                      <FormattedMessage
-                        id="app.editLimitsForm.success"
-                        defaultMessage="Limits Saved"
-                      />
-                    ),
-                    validating: (
-                      <FormattedMessage
-                        id="generic.validating"
-                        defaultMessage="Validating..."
-                      />
-                    )
-                  }}
-                />
-              </div>
-            : null
-        }
-      >
+          !readOnly ? (
+            <div className="text-center">
+              {dirty && (
+                <span>
+                  <Button
+                    type="reset"
+                    onClick={reset}
+                    bsStyle={'danger'}
+                    className="btn-flat">
+                    <RefreshIcon gapRight />
+                    <FormattedMessage
+                      id="generic.reset"
+                      defaultMessage="Reset"
+                    />
+                  </Button>
+                </span>
+              )}
+              <SubmitButton
+                id="editLimits"
+                invalid={invalid}
+                submitting={submitting}
+                dirty={dirty}
+                hasSucceeded={submitSucceeded}
+                hasFailed={submitFailed}
+                handleSubmit={handleSubmit}
+                messages={{
+                  submit: (
+                    <FormattedMessage
+                      id="app.editLimitsForm.submit"
+                      defaultMessage="Save Limits"
+                    />
+                  ),
+                  submitting: (
+                    <FormattedMessage
+                      id="app.editLimitsForm.submitting"
+                      defaultMessage="Saving Limits..."
+                    />
+                  ),
+                  success: (
+                    <FormattedMessage
+                      id="app.editLimitsForm.success"
+                      defaultMessage="Limits Saved"
+                    />
+                  ),
+                  validating: (
+                    <FormattedMessage
+                      id="generic.validating"
+                      defaultMessage="Validating..."
+                    />
+                  ),
+                }}
+              />
+            </div>
+          ) : null
+        }>
         <Grid fluid>
           <Row>
             <Col lg={3}>
@@ -142,24 +141,21 @@ class EditLimitsForm extends Component {
           <thead>
             <tr>
               <th />
-              {environments.map(environment =>
+              {environments.map(environment => (
                 <th
                   key={`th-${environment.id}`}
-                  className={styles.limitsTableHeading}
-                >
+                  className={styles.limitsTableHeading}>
                   {environment.name}
                 </th>
-              )}
+              ))}
             </tr>
           </thead>
           <tbody>
             {tests
               .sort((a, b) => a.name.localeCompare(b.name, locale))
-              .map(test =>
+              .map(test => (
                 <tr key={test.name}>
-                  <th className={styles.limitsTableHeading}>
-                    {test.name}
-                  </th>
+                  <th className={styles.limitsTableHeading}>{test.name}</th>
 
                   {environments.map(environment => {
                     const id =
@@ -169,9 +165,8 @@ class EditLimitsForm extends Component {
                         key={`td.${id}`}
                         className={classnames({
                           [styles.colSeparator]: environments.length > 1,
-                          [styles.limitsCell]: true
-                        })}
-                      >
+                          [styles.limitsCell]: true,
+                        })}>
                         <EditLimitsField
                           prefix={`limits.${id}`}
                           id={id}
@@ -198,24 +193,24 @@ class EditLimitsForm extends Component {
                     );
                   })}
                 </tr>
-              )}
+              ))}
           </tbody>
         </Table>
 
-        {submitFailed &&
+        {submitFailed && (
           <Alert bsStyle="danger">
             <FormattedMessage
               id="app.editLimitsForm.failed"
               defaultMessage="Cannot save the exercise limits. Please try again later."
             />
-          </Alert>}
+          </Alert>
+        )}
 
-        {error &&
+        {error && (
           <div className="em-padding-horizontal">
-            <Alert bsStyle="danger">
-              {error}
-            </Alert>
-          </div>}
+            <Alert bsStyle="danger">{error}</Alert>
+          </div>
+        )}
       </FormBox>
     );
   }
@@ -238,7 +233,7 @@ EditLimitsForm.propTypes = {
   submitSucceeded: PropTypes.bool,
   invalid: PropTypes.bool,
   error: PropTypes.any,
-  intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired
+  intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired,
 };
 
 const validate = ({ limits }, { constraints, environments }) => {
@@ -258,7 +253,7 @@ const validate = ({ limits }, { constraints, environments }) => {
             .map(env => environments.find(({ id }) => encodeId(id) === env))
             .filter(identity)
             .map(env => env.name)
-            .join(', ')
+            .join(', '),
         }}
       />
     );
@@ -276,7 +271,7 @@ export default reduxForm({
     'cloneHorizontally',
     'cloneVertically',
     'cloneAll',
-    'handleSubmit'
+    'handleSubmit',
   ],
-  validate
+  validate,
 })(injectIntl(EditLimitsForm));

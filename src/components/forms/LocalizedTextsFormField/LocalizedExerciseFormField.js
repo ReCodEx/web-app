@@ -8,7 +8,7 @@ import SharedLocalizedFields from './SharedLocalizedFields';
 import SharedExerciseAssignmentLocalizedFields from './SharedExerciseAssignmentLocalizedFields';
 import { MarkdownTextAreaField } from '../Fields';
 
-const LocalizedExerciseFormField = ({ prefix, data: enabled }) =>
+const LocalizedExerciseFormField = ({ prefix, data: enabled }) => (
   <Well>
     <SharedLocalizedFields prefix={prefix} enabled={enabled} />
     <SharedExerciseAssignmentLocalizedFields
@@ -27,11 +27,12 @@ const LocalizedExerciseFormField = ({ prefix, data: enabled }) =>
         />
       }
     />
-  </Well>;
+  </Well>
+);
 
 LocalizedExerciseFormField.propTypes = {
   prefix: PropTypes.string.isRequired,
-  data: PropTypes.bool.isRequired
+  data: PropTypes.bool.isRequired,
 };
 
 export default LocalizedExerciseFormField;

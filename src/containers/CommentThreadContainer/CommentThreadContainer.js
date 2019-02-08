@@ -8,14 +8,14 @@ import {
   togglePrivacy,
   fetchThreadIfNeeded,
   updateThread,
-  deleteComment
+  deleteComment,
 } from '../../redux/modules/comments';
 import { loggedInUserSelector } from '../../redux/selectors/users';
 import { commentsThreadSelector } from '../../redux/selectors/comments';
 
 import CommentThread, {
   LoadingCommentThread,
-  FailedCommentThread
+  FailedCommentThread,
 } from '../../components/widgets/Comments/CommentThread';
 
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
@@ -48,16 +48,15 @@ class CommentThreadContainer extends Component {
       repostComment,
       togglePrivacy,
       refresh,
-      deleteComment
+      deleteComment,
     } = this.props;
 
     return (
       <ResourceRenderer
         resource={[thread, user]}
         loading={<LoadingCommentThread />}
-        failed={<FailedCommentThread />}
-      >
-        {(thread, user) =>
+        failed={<FailedCommentThread />}>
+        {(thread, user) => (
           <CommentThread
             comments={thread.comments.sort((a, b) => a.postedAt - b.postedAt)}
             currentUserId={user.id}
@@ -66,7 +65,8 @@ class CommentThreadContainer extends Component {
             repostComment={repostComment}
             refresh={refresh}
             deleteComment={deleteComment}
-          />}
+          />
+        )}
       </ResourceRenderer>
     );
   }
@@ -80,13 +80,13 @@ CommentThreadContainer.propTypes = {
   repostComment: PropTypes.func,
   togglePrivacy: PropTypes.func,
   refresh: PropTypes.func,
-  deleteComment: PropTypes.func
+  deleteComment: PropTypes.func,
 };
 
 export default connect(
   (state, { threadId }) => ({
     user: loggedInUserSelector(state),
-    thread: commentsThreadSelector(state, threadId)
+    thread: commentsThreadSelector(state, threadId),
   }),
   (dispatch, { threadId }) => ({
     addComment: (user, text, isPrivate) =>
@@ -95,6 +95,6 @@ export default connect(
     togglePrivacy: id => dispatch(togglePrivacy(threadId, id)),
     loadThreadIfNeeded: () => dispatch(fetchThreadIfNeeded(threadId)),
     refresh: () => dispatch(updateThread(threadId)),
-    deleteComment: id => dispatch(deleteComment(threadId, id))
+    deleteComment: id => dispatch(deleteComment(threadId, id)),
   })
 )(CommentThreadContainer);

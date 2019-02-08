@@ -2,7 +2,7 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { WarningIcon } from '../../icons';
 
-const FailedGroupDetail = () =>
+const FailedGroupDetail = () => (
   <div>
     <p>
       <WarningIcon gapRight />
@@ -11,6 +11,7 @@ const FailedGroupDetail = () =>
         defaultMessage="Cannot load group detail. Please try again later."
       />
     </p>
-  </div>;
+  </div>
+);
 
 export default FailedGroupDetail;

@@ -6,25 +6,27 @@ import { SimpleInfoBox } from '../../widgets/InfoBox';
 const messages = defineMessages({
   title: {
     id: 'app.solutionArchiveInfoBox.title',
-    defaultMessage: 'Solution archive'
+    defaultMessage: 'Solution archive',
   },
   description: {
     id: 'app.solutionArchiveInfoBox.description',
-    defaultMessage: 'All files in a ZIP archive'
-  }
+    defaultMessage: 'All files in a ZIP archive',
+  },
 });
 
-const SolutionArchiveInfoBox = ({ id, intl: { formatMessage } }) =>
+const SolutionArchiveInfoBox = ({ id, intl: { formatMessage } }) => (
   <SimpleInfoBox
     icon={['far', 'file-archive']}
     title={formatMessage(messages.title)}
     description={formatMessage(messages.description)}
     color="blue"
-  />;
+  />
+);
 
 SolutionArchiveInfoBox.propTypes = {
   id: PropTypes.string.isRequired,
-  intl: PropTypes.shape({ formatMessage: PropTypes.func.isRequired }).isRequired
+  intl: PropTypes.shape({ formatMessage: PropTypes.func.isRequired })
+    .isRequired,
 };
 
 export default injectIntl(SolutionArchiveInfoBox);

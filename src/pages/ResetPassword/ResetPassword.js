@@ -12,7 +12,7 @@ import { resetPassword } from '../../redux/modules/auth';
 import {
   isReseting,
   hasResetingFailed as hasFailed,
-  hasResetingSucceeded as hasSucceeded
+  hasResetingSucceeded as hasSucceeded,
 } from '../../redux/selectors/auth';
 
 import withLinks from '../../helpers/withLinks';
@@ -25,8 +25,8 @@ const ResetPassword = ({
   isReseting,
   hasFailed,
   hasSucceeded,
-  links: { HOME_URI }
-}) =>
+  links: { HOME_URI },
+}) => (
   <PageContent
     title={
       <FormattedMessage
@@ -44,14 +44,13 @@ const ResetPassword = ({
       {
         text: <FormattedMessage id="app.homepage.title" />,
         link: HOME_URI,
-        iconName: 'home'
+        iconName: 'home',
       },
       {
         text: <FormattedMessage id="app.resetPassword.title" />,
-        iconName: 'key'
-      }
-    ]}
-  >
+        iconName: 'key',
+      },
+    ]}>
     <Row>
       <Col md={6} mdOffset={3} sm={8} smOffset={2}>
         <ResetPasswordForm
@@ -62,14 +61,15 @@ const ResetPassword = ({
         />
       </Col>
     </Row>
-  </PageContent>;
+  </PageContent>
+);
 
 ResetPassword.propTypes = {
   resetPassword: PropTypes.func.isRequired,
   isReseting: PropTypes.bool.isRequired,
   hasFailed: PropTypes.bool.isRequired,
   hasSucceeded: PropTypes.bool.isRequired,
-  links: PropTypes.object.isRequired
+  links: PropTypes.object.isRequired,
 };
 
 export default withLinks(
@@ -77,11 +77,11 @@ export default withLinks(
     state => ({
       isReseting: isReseting(state),
       hasFailed: hasFailed(state),
-      hasSucceeded: hasSucceeded(state)
+      hasSucceeded: hasSucceeded(state),
     }),
     dispatch => ({
       resetPassword: ({ username }) => dispatch(resetPassword(username)),
-      push: url => dispatch(push(url))
+      push: url => dispatch(push(url)),
     })
   )(ResetPassword)
 );

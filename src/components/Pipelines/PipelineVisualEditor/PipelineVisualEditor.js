@@ -14,7 +14,7 @@ import {
   addNode,
   replaceNode,
   removeNode,
-  createGraphFromNodes
+  createGraphFromNodes,
 } from '../../../helpers/pipelineGraph';
 
 import './pipeline.css';
@@ -23,7 +23,7 @@ class PipelineVisualEditor extends Component {
   state = {
     graph: { dependencies: [], nodes: [] },
     addItem: false,
-    nodeToEdit: null
+    nodeToEdit: null,
   };
 
   componentWillMount = () => {
@@ -103,8 +103,7 @@ class PipelineVisualEditor extends Component {
       <div
         ref={el => {
           this.editorWrapper = el;
-        }}
-      >
+        }}>
         <Well className="pipeline">
           {graph.nodes.length > 0 && <PipelineVisualisation graph={graph} />}
           <p className="text-center">
@@ -136,7 +135,7 @@ class PipelineVisualEditor extends Component {
 
 PipelineVisualEditor.propTypes = {
   source: PropTypes.oneOfType([PropTypes.string, PropTypes.array]).isRequired,
-  onChange: PropTypes.func.isRequired
+  onChange: PropTypes.func.isRequired,
 };
 
 export default PipelineVisualEditor;

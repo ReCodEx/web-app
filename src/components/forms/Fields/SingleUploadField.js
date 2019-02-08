@@ -6,7 +6,7 @@ import {
   FormGroup,
   FormControl,
   ControlLabel,
-  HelpBlock
+  HelpBlock,
 } from 'react-bootstrap';
 
 const SingleUploadField = ({
@@ -14,37 +14,38 @@ const SingleUploadField = ({
   meta: { touched, error },
   label = null,
   ...props
-}) =>
+}) => (
   <FormGroup
     controlId={input.name}
-    validationState={error ? (touched ? 'error' : 'warning') : undefined}
-  >
-    {Boolean(label) &&
-      <ControlLabel>
-        {label}
-      </ControlLabel>}
+    validationState={error ? (touched ? 'error' : 'warning') : undefined}>
+    {Boolean(label) && <ControlLabel>{label}</ControlLabel>}
     <FormControl {...input} {...props} type="upload" />
-    {error &&
+    {error && (
       <HelpBlock>
-        {' '}{touched
-          ? error
-          : <FormattedMessage
-              defaultMessage="This field is required."
-              id="app.field.isRequired"
-            />}{' '}
-      </HelpBlock>}
-  </FormGroup>;
+        {' '}
+        {touched ? (
+          error
+        ) : (
+          <FormattedMessage
+            defaultMessage="This field is required."
+            id="app.field.isRequired"
+          />
+        )}{' '}
+      </HelpBlock>
+    )}
+  </FormGroup>
+);
 
 SingleUploadField.propTypes = {
   input: PropTypes.shape({
-    name: PropTypes.string.isRequired
+    name: PropTypes.string.isRequired,
   }).isRequired,
   meta: PropTypes.shape({ error: PropTypes.string, touched: PropTypes.bool }),
   label: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.element,
-    PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) })
-  ])
+    PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) }),
+  ]),
 };
 
 export default SingleUploadField;

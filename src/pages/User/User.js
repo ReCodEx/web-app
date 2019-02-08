@@ -29,11 +29,11 @@ import {
   getUser,
   studentOfGroupsIdsSelector,
   isStudent,
-  isLoggedAsSuperAdmin
+  isLoggedAsSuperAdmin,
 } from '../../redux/selectors/users';
 import {
   loggedInUserIdSelector,
-  selectedInstanceId
+  selectedInstanceId,
 } from '../../redux/selectors/auth';
 import { createGroupsStatsSelector } from '../../redux/selectors/stats';
 import {
@@ -41,7 +41,7 @@ import {
   groupsAssignmentsSelector,
   studentOfSelector2,
   supervisorOfSelector2,
-  adminOfSelector
+  adminOfSelector,
 } from '../../redux/selectors/groups';
 import { assignmentEnvironmentsSelector } from '../../redux/selectors/assignments';
 
@@ -94,13 +94,13 @@ class User extends Component {
                 .map(groupId =>
                   Promise.all([
                     dispatch(fetchAssignmentsForGroup(groupId)),
-                    dispatch(fetchGroupsStatsIfNeeded(groupId))
+                    dispatch(fetchGroupsStatsIfNeeded(groupId)),
                   ])
                 )
             )
           );
         })
-      )
+      ),
     ]);
 
   render() {
@@ -120,8 +120,8 @@ class User extends Component {
       links: {
         GROUP_DETAIL_URI_FACTORY,
         INSTANCE_URI_FACTORY,
-        EDIT_USER_URI_FACTORY
-      }
+        EDIT_USER_URI_FACTORY,
+      },
     } = this.props;
 
     return (
@@ -147,11 +147,10 @@ class User extends Component {
                 defaultMessage="User's profile"
               />
             ),
-            iconName: 'user'
-          }
-        ]}
-      >
-        {user =>
+            iconName: 'user',
+          },
+        ]}>
+        {user => (
           <div>
             <p>
               <UsersNameContainer
@@ -163,7 +162,7 @@ class User extends Component {
             </p>
 
             <p>
-              {(isAdmin || userId === loggedInUserId) &&
+              {(isAdmin || userId === loggedInUserId) && (
                 <LinkContainer to={EDIT_USER_URI_FACTORY(userId)}>
                   <Button bsStyle="warning" bsSize="sm">
                     <EditIcon />
@@ -173,26 +172,26 @@ class User extends Component {
                       defaultMessage="Edit user's profile"
                     />
                   </Button>
-                </LinkContainer>}
+                </LinkContainer>
+              )}
 
-              {isAdmin &&
-                userId !== loggedInUserId &&
+              {isAdmin && userId !== loggedInUserId && (
                 <Button
                   bsSize="sm"
                   bsStyle="primary"
-                  onClick={() => takeOver(userId)}
-                >
+                  onClick={() => takeOver(userId)}>
                   <TransferIcon gapRight />
                   <FormattedMessage
                     id="app.users.takeOver"
                     defaultMessage="Login as"
                   />
-                </Button>}
+                </Button>
+              )}
             </p>
 
-            {(commonGroups.length > 0 || isAdmin) &&
+            {(commonGroups.length > 0 || isAdmin) && (
               <div>
-                {commonGroups.map(group =>
+                {commonGroups.map(group => (
                   <div key={group.id}>
                     <ResourceRenderer
                       loading={
@@ -204,9 +203,8 @@ class User extends Component {
                           </Col>
                         </Row>
                       }
-                      resource={groupStatistics(group.id)}
-                    >
-                      {statistics =>
+                      resource={groupStatistics(group.id)}>
+                      {statistics => (
                         <Row>
                           <Col lg={4}>
                             <Link to={GROUP_DETAIL_URI_FACTORY(group.id)}>
@@ -226,8 +224,7 @@ class User extends Component {
                               footer={
                                 <p className="text-center">
                                   <LinkContainer
-                                    to={GROUP_DETAIL_URI_FACTORY(group.id)}
-                                  >
+                                    to={GROUP_DETAIL_URI_FACTORY(group.id)}>
                                     <Button bsSize="sm">
                                       <FormattedMessage
                                         id="app.group.detail"
@@ -236,8 +233,7 @@ class User extends Component {
                                     </Button>
                                   </LinkContainer>
                                 </p>
-                              }
-                            >
+                              }>
                               <AssignmentsTable
                                 userId={user.id}
                                 assignments={groupAssignments(group.id)}
@@ -250,65 +246,71 @@ class User extends Component {
                               />
                             </Box>
                           </Col>
-                        </Row>}
+                        </Row>
+                      )}
                     </ResourceRenderer>
                   </div>
-                )}
-              </div>}
+                ))}
+              </div>
+            )}
 
             {commonGroups.length === 0 &&
               !isAdmin &&
-              user.id !== loggedInUserId &&
-              <div className="callout callout-warning">
-                <h4>
-                  <InfoIcon gapRight />
+              user.id !== loggedInUserId && (
+                <div className="callout callout-warning">
+                  <h4>
+                    <InfoIcon gapRight />
+                    <FormattedMessage
+                      id="app.user.nothingInCommon.title"
+                      defaultMessage="{name} is not one of your students"
+                      values={{ name: user.fullName }}
+                    />
+                  </h4>
                   <FormattedMessage
-                    id="app.user.nothingInCommon.title"
-                    defaultMessage="{name} is not one of your students"
+                    id="app.user.noCommonGroups"
+                    defaultMessage="You are not a supervisor of any group of which is {name} a member and so you don't see any of his results."
                     values={{ name: user.fullName }}
                   />
-                </h4>
-                <FormattedMessage
-                  id="app.user.noCommonGroups"
-                  defaultMessage="You are not a supervisor of any group of which is {name} a member and so you don't see any of his results."
-                  values={{ name: user.fullName }}
-                />
-              </div>}
+                </div>
+              )}
 
             {student &&
               studentOfGroupsIds.length === 0 &&
-              user.id === loggedInUserId &&
-              <Row>
-                <Col sm={12}>
-                  <div className="callout callout-success">
-                    <h4>
-                      <InfoIcon gapRight />
-                      <FormattedMessage
-                        id="app.user.welcomeTitle"
-                        defaultMessage="Welcome to ReCodEx"
-                      />
-                    </h4>
-                    <p>
-                      <FormattedMessage
-                        id="app.user.newAccount"
-                        defaultMessage="Your account is ready, but you are not a member of any group yet. You should see the list of all the available groups and join some of them."
-                        values={{ name: user.fullName }}
-                      />
-                    </p>
-                    <p className="text-center">
-                      <LinkContainer to={INSTANCE_URI_FACTORY(user.instanceId)}>
-                        <Button bsStyle="success">
-                          <FormattedMessage
-                            id="app.user.examineGroupsInstance"
-                            defaultMessage="Find your groups"
-                          />
-                        </Button>
-                      </LinkContainer>
-                    </p>
-                  </div>
-                </Col>
-              </Row>}
-          </div>}
+              user.id === loggedInUserId && (
+                <Row>
+                  <Col sm={12}>
+                    <div className="callout callout-success">
+                      <h4>
+                        <InfoIcon gapRight />
+                        <FormattedMessage
+                          id="app.user.welcomeTitle"
+                          defaultMessage="Welcome to ReCodEx"
+                        />
+                      </h4>
+                      <p>
+                        <FormattedMessage
+                          id="app.user.newAccount"
+                          defaultMessage="Your account is ready, but you are not a member of any group yet. You should see the list of all the available groups and join some of them."
+                          values={{ name: user.fullName }}
+                        />
+                      </p>
+                      <p className="text-center">
+                        <LinkContainer
+                          to={INSTANCE_URI_FACTORY(user.instanceId)}>
+                          <Button bsStyle="success">
+                            <FormattedMessage
+                              id="app.user.examineGroupsInstance"
+                              defaultMessage="Find your groups"
+                            />
+                          </Button>
+                        </LinkContainer>
+                      </p>
+                    </div>
+                  </Col>
+                </Row>
+              )}
+          </div>
+        )}
       </Page>
     );
   }
@@ -330,7 +332,7 @@ User.propTypes = {
   groupStatistics: PropTypes.func.isRequired,
   usersStatistics: PropTypes.func.isRequired,
   takeOver: PropTypes.func.isRequired,
-  links: PropTypes.object
+  links: PropTypes.object,
 };
 
 export default withLinks(
@@ -343,7 +345,10 @@ export default withLinks(
         .toList()
         .toArray();
       const studentOf = new Set(
-        studentOfSelector2(userId)(state).toList().toJS().map(group => group.id)
+        studentOfSelector2(userId)(state)
+          .toList()
+          .toJS()
+          .map(group => group.id)
       );
       const supervisorOf = new Set(
         supervisorOfSelector2(loggedInUserId)(state)
@@ -381,12 +386,12 @@ export default withLinks(
         groupStatistics: groupId => createGroupsStatsSelector(groupId)(state),
         usersStatistics: statistics =>
           statistics.find(stat => stat.userId === userId) || {},
-        commonGroups
+        commonGroups,
       };
     },
     (dispatch, { params }) => ({
       loadAsync: () => User.loadAsync(params, dispatch),
-      takeOver: userId => dispatch(takeOver(userId))
+      takeOver: userId => dispatch(takeOver(userId)),
     })
   )(User)
 );

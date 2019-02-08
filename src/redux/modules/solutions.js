@@ -5,7 +5,7 @@ import factory, {
   initialState,
   defaultNeedsRefetching,
   createRecord,
-  resourceStatus
+  resourceStatus,
 } from '../helpers/resourceManager';
 import { actionTypes as submissionActionTypes } from './submission';
 import { actionTypes as submissionEvaluationActionTypes } from './submissionEvaluations';
@@ -18,7 +18,7 @@ const needsRefetching = item =>
 const { actions, actionTypes, reduceActions } = factory({
   resourceName,
   apiEndpointFactory: id => `/assignment-solutions/${id}`,
-  needsRefetching
+  needsRefetching,
 });
 
 /**
@@ -56,7 +56,7 @@ export const additionalActionTypes = {
   RESUBMIT_ALL_PENDING: 'recodex/solutions/RESUBMIT_ALL_PENDING',
   RESUBMIT_ALL_FULFILLED: 'recodex/solutions/RESUBMIT_ALL_FULFILLED',
   RESUBMIT_ALL_REJECTED: 'recodex/solutions/RESUBMIT_ALL_REJECTED',
-  DOWNLOAD_RESULT_ARCHIVE: 'recodex/files/DOWNLOAD_RESULT_ARCHIVE'
+  DOWNLOAD_RESULT_ARCHIVE: 'recodex/files/DOWNLOAD_RESULT_ARCHIVE',
 };
 
 export const fetchSolution = actions.fetchResource;
@@ -69,7 +69,7 @@ export const setPoints = (solutionId, overriddenPoints, bonusPoints) =>
     endpoint: `/assignment-solutions/${solutionId}/bonus-points`,
     method: 'POST',
     body: { overriddenPoints, bonusPoints },
-    meta: { solutionId, overriddenPoints, bonusPoints }
+    meta: { solutionId, overriddenPoints, bonusPoints },
   });
 
 export const acceptSolution = id =>
@@ -77,7 +77,7 @@ export const acceptSolution = id =>
     type: additionalActionTypes.ACCEPT,
     method: 'POST',
     endpoint: `/assignment-solutions/${id}/set-accepted`,
-    meta: { id }
+    meta: { id },
   });
 
 export const unacceptSolution = id =>
@@ -85,7 +85,7 @@ export const unacceptSolution = id =>
     type: additionalActionTypes.UNACCEPT,
     method: 'DELETE',
     endpoint: `/assignment-solutions/${id}/unset-accepted`,
-    meta: { id }
+    meta: { id },
   });
 
 export const resubmitSolution = (
@@ -99,7 +99,7 @@ export const resubmitSolution = (
     method: 'POST',
     endpoint: `/assignment-solutions/${id}/resubmit`,
     body: { private: isPrivate, debug: isDebug },
-    meta: { submissionType: 'assignmentSolution', progressObserverId }
+    meta: { submissionType: 'assignmentSolution', progressObserverId },
   });
 
 export const resubmitAllSolutions = assignmentId =>
@@ -107,7 +107,7 @@ export const resubmitAllSolutions = assignmentId =>
     type: additionalActionTypes.RESUBMIT_ALL,
     method: 'POST',
     endpoint: `/exercise-assignments/${assignmentId}/resubmit-all`,
-    meta: { assignmentId }
+    meta: { assignmentId },
   });
 
 export const fetchManyAssignmentSolutionsEndpoint = assignmentId =>
@@ -121,8 +121,8 @@ export const fetchAssignmentSolutions = assignmentId =>
     type: additionalActionTypes.LOAD_ASSIGNMENT_SOLUTIONS,
     endpoint: fetchManyAssignmentSolutionsEndpoint(assignmentId),
     meta: {
-      assignmentId
-    }
+      assignmentId,
+    },
   });
 
 export const fetchUsersSolutions = (userId, assignmentId) =>
@@ -131,8 +131,8 @@ export const fetchUsersSolutions = (userId, assignmentId) =>
     endpoint: fetchManyUserSolutionsEndpoint(userId, assignmentId),
     meta: {
       assignmentId,
-      userId
-    }
+      userId,
+    },
   });
 
 /**
@@ -150,7 +150,7 @@ const reducer = handleActions(
             ['resources', solution.id],
             createRecord({
               state: resourceStatus.FULFILLED,
-              data: solution
+              data: solution,
             })
           )
         : state,
@@ -191,21 +191,14 @@ const reducer = handleActions(
 
     [additionalActionTypes.ACCEPT_FULFILLED]: (state, { meta: { id } }) =>
       state.update('resources', resources =>
-        resources.map(
-          (item, itemId) =>
-            item.get('data') !== null
-              ? item.update(
-                  'data',
-                  data =>
-                    itemId === id
-                      ? data
-                          .set('accepted', true)
-                          .set('accepted-pending', false)
-                      : data
-                          .set('accepted', false)
-                          .set('accepted-pending', false)
-                )
-              : item
+        resources.map((item, itemId) =>
+          item.get('data') !== null
+            ? item.update('data', data =>
+                itemId === id
+                  ? data.set('accepted', true).set('accepted-pending', false)
+                  : data.set('accepted', false).set('accepted-pending', false)
+              )
+            : item
         )
       ),
 
@@ -217,21 +210,14 @@ const reducer = handleActions(
 
     [additionalActionTypes.UNACCEPT_FULFILLED]: (state, { meta: { id } }) =>
       state.update('resources', resources =>
-        resources.map(
-          (item, itemId) =>
-            item.get('data') !== null
-              ? item.update(
-                  'data',
-                  data =>
-                    itemId === id
-                      ? data
-                          .set('accepted', false)
-                          .set('accepted-pending', false)
-                      : data
-                          .set('accepted', true)
-                          .set('accepted-pending', false)
-                )
-              : item
+        resources.map((item, itemId) =>
+          item.get('data') !== null
+            ? item.update('data', data =>
+                itemId === id
+                  ? data.set('accepted', false).set('accepted-pending', false)
+                  : data.set('accepted', true).set('accepted-pending', false)
+              )
+            : item
         )
       ),
 
@@ -256,11 +242,11 @@ const reducer = handleActions(
         solutionId,
         'data',
         'lastSubmission',
-        'id'
+        'id',
       ]) === evaluationId
         ? newState.setIn(['resources', solutionId, 'didInvalidate'], true)
         : newState;
-    }
+    },
   }),
   initialState
 );

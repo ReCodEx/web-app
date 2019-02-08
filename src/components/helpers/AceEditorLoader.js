@@ -33,7 +33,7 @@ export const getAceModeFromExtension = ext => {
     lpr: 'pascal',
     py: 'python',
     php: 'php',
-    js: 'javascript'
+    js: 'javascript',
   };
 
   ext = ext.trim().toLowerCase();

@@ -9,7 +9,11 @@ import DateTime from '../../widgets/DateTime';
 import { BugIcon } from '../../icons';
 import './EvaluationTable.css';
 
-const EvaluationTable = ({ evaluations, renderButtons, selectedRowId = '' }) =>
+const EvaluationTable = ({
+  evaluations,
+  renderButtons,
+  selectedRowId = '',
+}) => (
   <Table>
     <thead>
       <tr>
@@ -40,7 +44,7 @@ const EvaluationTable = ({ evaluations, renderButtons, selectedRowId = '' }) =>
             ((a.evaluation && a.evaluation.evaluatedAt) || a.submittedAt)
           );
         })
-        .map((e, idx) =>
+        .map((e, idx) => (
           <tr key={e.id} className={selectedRowId === e.id ? 'activeRow' : ''}>
             <td>
               <AssignmentStatusIcon
@@ -48,7 +52,7 @@ const EvaluationTable = ({ evaluations, renderButtons, selectedRowId = '' }) =>
                 status={e.evaluationStatus}
                 accepted={false}
               />
-              {e.isDebug &&
+              {e.isDebug && (
                 <OverlayTrigger
                   placement="bottom"
                   overlay={
@@ -58,31 +62,32 @@ const EvaluationTable = ({ evaluations, renderButtons, selectedRowId = '' }) =>
                         defaultMessage="Evaluated in debug mode (complete logs and dumps)"
                       />
                     </Tooltip>
-                  }
-                >
+                  }>
                   <BugIcon gapLeft className="text-danger" />
-                </OverlayTrigger>}
+                </OverlayTrigger>
+              )}
             </td>
-            {e.evaluation &&
+            {e.evaluation && (
               <td>
                 <DateTime
                   unixts={e.evaluation.evaluatedAt}
                   showRelative
                   showSeconds
                 />
-              </td>}
-            {e.evaluation &&
+              </td>
+            )}
+            {e.evaluation && (
               <td
                 className={classnames({
                   'text-danger': !e.isCorrect,
-                  'text-success': e.isCorrect
-                })}
-              >
+                  'text-success': e.isCorrect,
+                })}>
                 <b>
                   <FormattedNumber style="percent" value={e.evaluation.score} />
                 </b>
-              </td>}
-            {!e.evaluation &&
+              </td>
+            )}
+            {!e.evaluation && (
               <td colSpan="2">
                 <i>
                   <FormattedMessage
@@ -90,12 +95,13 @@ const EvaluationTable = ({ evaluations, renderButtons, selectedRowId = '' }) =>
                     defaultMessage="Evaluation not available"
                   />
                 </i>
-              </td>}
+              </td>
+            )}
             {renderButtons && renderButtons(e.id, idx)}
           </tr>
-        )}
+        ))}
 
-      {evaluations.length === 0 &&
+      {evaluations.length === 0 && (
         <tr>
           <td className="text-center" colSpan={3}>
             <FormattedMessage
@@ -103,14 +109,16 @@ const EvaluationTable = ({ evaluations, renderButtons, selectedRowId = '' }) =>
               defaultMessage="There are no evaluations in this list."
             />
           </td>
-        </tr>}
+        </tr>
+      )}
     </tbody>
-  </Table>;
+  </Table>
+);
 
 EvaluationTable.propTypes = {
   evaluations: PropTypes.array.isRequired,
   renderButtons: PropTypes.func,
-  selectedRowId: PropTypes.string
+  selectedRowId: PropTypes.string,
 };
 
 export default EvaluationTable;

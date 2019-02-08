@@ -4,23 +4,23 @@ import classnames from 'classnames';
 import { FormattedMessage } from 'react-intl';
 import { LoadingIcon } from '../../../../icons';
 
-const Posting = ({ right }) =>
+const Posting = ({ right }) => (
   <span
     className={classnames({
       'direct-chat-timestamp': true,
       'pull-right': right,
-      'pull-left': !right
-    })}
-  >
+      'pull-left': !right,
+    })}>
     <LoadingIcon gapRight />
     <FormattedMessage
       id="app.comments.publishing"
       defaultMessage="Publishing..."
     />
-  </span>;
+  </span>
+);
 
 Posting.propTypes = {
-  right: PropTypes.bool.isRequired
+  right: PropTypes.bool.isRequired,
 };
 
 export default Posting;

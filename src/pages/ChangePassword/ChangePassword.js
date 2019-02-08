@@ -15,7 +15,7 @@ import { changePassword } from '../../redux/modules/auth';
 import {
   isChanging,
   hasChangingFailed as hasFailed,
-  hasChangingSucceeded as hasSucceeded
+  hasChangingSucceeded as hasSucceeded,
 } from '../../redux/selectors/auth';
 
 import withLinks from '../../helpers/withLinks';
@@ -42,7 +42,10 @@ class ChangePassword extends Component {
     if (canUseDOM) {
       const hash = window.location.hash;
       if (hash.length === 0) {
-        const { push, links: { RESET_PASSWORD_URI } } = this.props;
+        const {
+          push,
+          links: { RESET_PASSWORD_URI },
+        } = this.props;
         push(RESET_PASSWORD_URI); // no hash -> redirect to the reset form
       } else {
         let token = window.location.hash.substr(1);
@@ -72,7 +75,11 @@ class ChangePassword extends Component {
     const { hasSucceeded } = props;
     if (hasSucceeded) {
       this.timeout = setTimeout(() => {
-        const { push, reset, links: { DASHBOARD_URI } } = this.props;
+        const {
+          push,
+          reset,
+          links: { DASHBOARD_URI },
+        } = this.props;
         this.timeout = null;
         reset();
         push(DASHBOARD_URI);
@@ -92,7 +99,7 @@ class ChangePassword extends Component {
       changePassword,
       isChanging,
       hasFailed,
-      hasSucceeded
+      hasSucceeded,
     } = this.props;
     const { decodedToken, token } = this.state;
 
@@ -114,18 +121,16 @@ class ChangePassword extends Component {
           {
             text: <FormattedMessage id="app.homepage.title" />,
             link: HOME_URI,
-            iconName: 'home'
+            iconName: 'home',
           },
           {
             text: <FormattedMessage id="app.changePassword.title" />,
-            iconName: 'shield-alt'
-          }
-        ]}
-      >
+            iconName: 'shield-alt',
+          },
+        ]}>
         <Row>
           <Col md={6} mdOffset={3} sm={8} smOffset={2}>
-            {!token &&
-              !decodedToken &&
+            {!token && !decodedToken && (
               <Alert bsStyle="warning">
                 <strong>
                   <FormattedMessage
@@ -137,8 +142,9 @@ class ChangePassword extends Component {
                   id="app.changePassword.requestAnotherLink"
                   defaultMessage="Please request (another) link with an unique token."
                 />
-              </Alert>}
-            {decodedToken &&
+              </Alert>
+            )}
+            {decodedToken && (
               <div>
                 <ChangePasswordForm
                   onSubmit={({ password }) => changePassword(password, token)}
@@ -153,7 +159,8 @@ class ChangePassword extends Component {
                   />{' '}
                   <FormattedRelative value={decodedToken.exp * 1000} />
                 </p>
-              </div>}
+              </div>
+            )}
           </Col>
         </Row>
       </PageContent>
@@ -168,7 +175,7 @@ ChangePassword.propTypes = {
   reset: PropTypes.func.isRequired,
   hasFailed: PropTypes.bool.isRequired,
   hasSucceeded: PropTypes.bool.isRequired,
-  links: PropTypes.object
+  links: PropTypes.object,
 };
 
 export default withLinks(
@@ -176,13 +183,13 @@ export default withLinks(
     state => ({
       isChanging: isChanging(state),
       hasFailed: hasFailed(state),
-      hasSucceeded: hasSucceeded(state)
+      hasSucceeded: hasSucceeded(state),
     }),
     dispatch => ({
       changePassword: (password, accessToken) =>
         dispatch(changePassword(password, accessToken)),
       push: url => dispatch(push(url)),
-      reset: () => dispatch(reset('changePassword'))
+      reset: () => dispatch(reset('changePassword')),
     })
   )(ChangePassword)
 );

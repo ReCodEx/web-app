@@ -24,8 +24,7 @@ const Home = ({ links: { GITHUB_BUGS_URL } }) => (
         defaultMessage="ReCodEx - homepage"
         description="Homepage description"
       />
-    }
-  >
+    }>
     <div>
       <Row style={{ marginTop: '80px' }}>
         <Col sm={6}>
@@ -132,8 +131,7 @@ const Home = ({ links: { GITHUB_BUGS_URL } }) => (
               href={GITHUB_BUGS_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="btn btn-flat btn-default"
-            >
+              className="btn btn-flat btn-default">
               <Icon icon={['fab', 'github']} gapRight />
               <FormattedMessage
                 defaultMessage="ReCodEx Webapp Repository"
@@ -148,7 +146,7 @@ const Home = ({ links: { GITHUB_BUGS_URL } }) => (
 );
 
 Home.propTypes = {
-  links: PropTypes.object
+  links: PropTypes.object,
 };
 
 export default withLinks(Home);

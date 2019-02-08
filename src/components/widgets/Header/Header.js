@@ -27,24 +27,27 @@ class Header extends Component {
       currentLang,
       currentUrl = '',
       pendingFetchOperations,
-      links: { HOME_URI }
+      links: { HOME_URI },
     } = this.props;
 
     return (
       <header className="main-header fixed">
         <IndexLink to={HOME_URI} className="logo">
           <span className="logo-mini">
-            {pendingFetchOperations
-              ? <LoadingIcon gapRight />
-              : <React.Fragment>
-                  Re<b>C</b>
-                </React.Fragment>}
+            {pendingFetchOperations ? (
+              <LoadingIcon gapRight />
+            ) : (
+              <React.Fragment>
+                Re<b>C</b>
+              </React.Fragment>
+            )}
           </span>
           <span className="logo-lg">
-            {pendingFetchOperations &&
+            {pendingFetchOperations && (
               <span style={{ position: 'absolute', left: '1em' }}>
                 <LoadingIcon gapRight />
-              </span>}
+              </span>
+            )}
             Re<b>CodEx</b>
           </span>
         </IndexLink>
@@ -56,8 +59,7 @@ class Header extends Component {
                 href="#"
                 className="sidebar-toggle"
                 role="button"
-                onClick={this.toggleSidebarVisibility}
-              >
+                onClick={this.toggleSidebarVisibility}>
                 <span className="sr-only">
                   <FormattedMessage
                     id="app.header.toggleSidebar"
@@ -72,8 +74,7 @@ class Header extends Component {
                 className="sidebar-toggle"
                 role="button"
                 onClick={this.toggleSidebarSize}
-                style={{ fontFamily: 'sans' }}
-              >
+                style={{ fontFamily: 'sans' }}>
                 <span className="sr-only">
                   <FormattedMessage
                     id="app.header.toggleSidebarSize"
@@ -86,14 +87,14 @@ class Header extends Component {
           <div className="navbar-custom-menu">
             <ul className="nav navbar-nav">
               <HeaderNotificationsContainer />
-              {availableLangs.map(lang =>
+              {availableLangs.map(lang => (
                 <HeaderLanguageSwitching
                   lang={lang}
                   active={currentLang === lang}
                   key={lang}
                   currentUrl={currentUrl}
                 />
-              )}
+              ))}
             </ul>
           </div>
         </div>
@@ -109,7 +110,7 @@ Header.propTypes = {
   availableLangs: PropTypes.array,
   currentUrl: PropTypes.string,
   pendingFetchOperations: PropTypes.bool,
-  links: PropTypes.object
+  links: PropTypes.object,
 };
 
 export default withLinks(Header);

@@ -4,17 +4,16 @@ import { Field } from 'redux-form';
 import { PortField } from '../Fields';
 import { FormattedMessage } from 'react-intl';
 
-const PortsField = ({ label, prefix, ports }) =>
+const PortsField = ({ label, prefix, ports }) => (
   <div>
-    <h4>
-      {label}
-    </h4>
-    {ports.length === 0 &&
+    <h4>{label}</h4>
+    {ports.length === 0 && (
       <FormattedMessage
         id="app.portsField.empty"
         defaultMessage="There are no ports."
-      />}
-    {ports.map(({ name, type, value }) =>
+      />
+    )}
+    {ports.map(({ name, type, value }) => (
       <Field
         key={name}
         name={`${prefix}.${name}.value`}
@@ -22,17 +21,18 @@ const PortsField = ({ label, prefix, ports }) =>
         label={name}
         portType={type}
       />
-    )}
-  </div>;
+    ))}
+  </div>
+);
 
 PortsField.propTypes = {
   label: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.element,
-    PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) })
+    PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) }),
   ]).isRequired,
   prefix: PropTypes.string.isRequired,
-  ports: PropTypes.array
+  ports: PropTypes.array,
 };
 
 export default PortsField;

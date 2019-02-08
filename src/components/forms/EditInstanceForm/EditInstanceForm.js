@@ -14,8 +14,8 @@ const EditInstanceForm = ({
   anyTouched,
   submitFailed = false,
   submitSucceeded = false,
-  invalid
-}) =>
+  invalid,
+}) => (
   <FormBox
     title={
       <FormattedMessage
@@ -54,19 +54,19 @@ const EditInstanceForm = ({
                 id="app.editInstanceForm.success"
                 defaultMessage="Instance was updated."
               />
-            )
+            ),
           }}
         />
       </div>
-    }
-  >
-    {submitFailed &&
+    }>
+    {submitFailed && (
       <Alert bsStyle="danger">
         <FormattedMessage
           id="app.editInstanceForm.failed"
           defaultMessage="Cannot update instance."
         />
-      </Alert>}
+      </Alert>
+    )}
 
     <Field
       name="name"
@@ -98,7 +98,8 @@ const EditInstanceForm = ({
         />
       }
     />
-  </FormBox>;
+  </FormBox>
+);
 
 EditInstanceForm.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
@@ -107,7 +108,7 @@ EditInstanceForm.propTypes = {
   submitFailed: PropTypes.bool,
   submitSucceeded: PropTypes.bool,
   submitting: PropTypes.bool,
-  invalid: PropTypes.bool
+  invalid: PropTypes.bool,
 };
 
 const validate = ({ name }) => {
@@ -127,5 +128,5 @@ const validate = ({ name }) => {
 
 export default reduxForm({
   form: 'editInstance',
-  validate
+  validate,
 })(EditInstanceForm);
