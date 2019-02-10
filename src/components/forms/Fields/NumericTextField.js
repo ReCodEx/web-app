@@ -6,14 +6,32 @@ import isNumeric from 'validator/lib/isNumeric';
 
 import TextField from './TextField';
 
-const parseNumber = value => {
-  const num = Number(value);
-  return isNaN(num) || value === '' ? value : num;
-};
-
 class NumericTextField extends Component {
+  format = value => {
+    if (value === null) {
+      return '';
+    }
+    return String(value);
+  };
+
+  parse = value => {
+    if (value.trim() === '') {
+      return this.props.nullable ? null : value;
+    }
+    const num = Number(value);
+    return isNaN(num) ? value : num;
+  };
+
   validate = value => {
-    const { validateMin = null, validateMax = null } = this.props;
+    const {
+      validateMin = null,
+      validateMax = null,
+      nullable = false,
+    } = this.props;
+    if (value === null && nullable) {
+      return undefined;
+    }
+
     if (
       typeof value === 'undefined' ||
       (typeof value !== 'number' && !isNumeric(value))
@@ -25,6 +43,7 @@ class NumericTextField extends Component {
         />
       );
     }
+
     if (
       (validateMin !== null && validateMin > value) ||
       (validateMax !== null && value > validateMax)
@@ -48,9 +67,9 @@ class NumericTextField extends Component {
           values={{ validateMax }}
         />
       );
-    } else {
-      return undefined;
     }
+
+    return undefined;
   };
 
   render() {
@@ -59,13 +78,15 @@ class NumericTextField extends Component {
       maxLength = 11,
       validateMin = null,
       validateMax = null,
+      nullable,
       ...props
     } = this.props;
     return (
       <Field
         name={name}
         component={TextField}
-        parse={parseNumber}
+        format={this.format}
+        parse={this.parse}
         maxLength={maxLength}
         validate={
           validateMin !== null && validateMax !== null
@@ -83,6 +104,7 @@ NumericTextField.propTypes = {
   maxLength: PropTypes.number,
   validateMin: PropTypes.number,
   validateMax: PropTypes.number,
+  nullable: PropTypes.bool,
 };
 
 export default NumericTextField;

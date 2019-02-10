@@ -14,9 +14,8 @@ const PointsContainer = ({
   <PointsForm
     onSubmit={setPoints}
     initialValues={{
-      overriddenPoints:
-        overriddenPoints !== null ? String(overriddenPoints) : '',
-      bonusPoints: String(bonusPoints),
+      overriddenPoints,
+      bonusPoints,
     }}
     {...props}
   />
@@ -33,12 +32,8 @@ export default connect(
   (state, props) => ({}),
   (dispatch, { submissionId }) => ({
     setPoints: ({ overriddenPoints, bonusPoints }) =>
-      dispatch(
-        setPoints(
-          submissionId,
-          overriddenPoints.trim() !== '' ? overriddenPoints.trim() : null,
-          bonusPoints.trim()
-        )
-      ).then(() => dispatch(fetchSolution(submissionId))),
+      dispatch(setPoints(submissionId, overriddenPoints, bonusPoints)).then(
+        () => dispatch(fetchSolution(submissionId))
+      ),
   })
 )(PointsContainer);
