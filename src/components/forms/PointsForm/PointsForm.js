@@ -89,6 +89,7 @@ const PointsForm = ({
             validateMin={-10000}
             validateMax={10000}
             maxLength={6}
+            nullable
             label={
               <FormattedMessage
                 id="app.pointsForm.pointsOverride"
@@ -133,9 +134,8 @@ PointsForm.propTypes = {
 
 const warn = ({ overriddenPoints }, { maxPoints }) => {
   const warnings = {};
-  if (isInt(overriddenPoints.trim())) {
-    const p = Number(overriddenPoints);
-    if (p < 0 || p > maxPoints) {
+  if (typeof overriddenPoints === 'number') {
+    if (overriddenPoints < 0 || overriddenPoints > maxPoints) {
       warnings._warning = (
         <FormattedMessage
           id="app.pointsForm.validation.overrideOutOfRange"
