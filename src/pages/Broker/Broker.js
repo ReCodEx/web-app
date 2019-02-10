@@ -39,6 +39,7 @@ class Broker extends Component {
     } = this.props;
     return (
       <Page
+        noResource
         title={
           <FormattedMessage
             id="app.broker.title"
