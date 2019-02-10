@@ -53,7 +53,11 @@ const Comment = ({
       <AvatarContainer
         avatarUrl={user.avatarUrl}
         fullName={user.name}
-        firstName={user.avatarLetter}
+        firstName={
+          (user.firstName && user.firstName.substring(0, 1)) ||
+          user.avatarLetter ||
+          '?'
+        }
         size={40}
         altClassName="direct-chat-img"
       />
