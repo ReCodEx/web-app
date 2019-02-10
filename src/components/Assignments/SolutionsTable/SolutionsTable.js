@@ -7,6 +7,7 @@ import { Table } from 'react-bootstrap';
 import Box from '../../widgets/Box';
 import NoSolutionYetTableRow from './NoSolutionYetTableRow';
 import SolutionsTableRow from './SolutionsTableRow';
+import { LoadingIcon } from '../../icons';
 
 import styles from './SolutionsTable.less';
 
@@ -61,7 +62,19 @@ const SolutionsTable = ({
       {solutions.size === 0 ? (
         <NoSolutionYetTableRow />
       ) : (
-        solutions.map(data => {
+        solutions.map((data, idx) => {
+          if (!data) {
+            return (
+              <tbody key={idx}>
+                <tr>
+                  <td colSpan={compact ? 6 : 7} className="text-center">
+                    <LoadingIcon size="xs" />
+                  </td>
+                </tr>
+              </tbody>
+            );
+          }
+
           const id = data.id;
           const runtimeEnvironment =
             data.runtimeEnvironmentId &&

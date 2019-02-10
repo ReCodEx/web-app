@@ -7,7 +7,8 @@ import ResourceRenderer from '../../helpers/ResourceRenderer';
 const Page = ({
   title,
   description,
-  resource = null,
+  resource,
+  noResource = false,
   loadingTitle = (
     <FormattedMessage id="generic.loading" defaultMessage="Loading..." />
   ),
@@ -32,7 +33,7 @@ const Page = ({
   children,
   ...props
 }) =>
-  resource ? (
+  !noResource ? (
     <ResourceRenderer
       resource={resource}
       loading={
@@ -74,6 +75,7 @@ const stringOrFormattedMessage = PropTypes.oneOfType([
 
 Page.propTypes = {
   resource: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
+  noResource: PropTypes.bool,
   loadingTitle: stringOrFormattedMessage,
   loadingDescription: stringOrFormattedMessage,
   failedTitle: stringOrFormattedMessage,
