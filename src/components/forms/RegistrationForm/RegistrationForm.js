@@ -303,7 +303,7 @@ const validate = ({
   }
 
   if (!gdpr) {
-    errors._error = (
+    errors.gdpr = (
       <FormattedMessage
         id="app.externalRegistrationForm.validation.gdpr"
         defaultMessage="Your agreement is required prior to registration."
