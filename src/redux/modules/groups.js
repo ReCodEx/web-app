@@ -87,10 +87,12 @@ const prepareFetchGroupsParams = params => {
   return objectMap(res, val => (typeof val === 'boolean' ? Number(val) : val));
 };
 
+export const fetchAllGroupsEndpoint = '/groups';
+
 export const fetchAllGroups = params => (dispatch, getState) =>
   dispatch(
     actions.fetchMany({
-      endpoint: '/groups',
+      endpoint: fetchAllGroupsEndpoint,
       query: prepareFetchGroupsParams({
         instanceId: selectedInstanceId(getState()),
         ...params,

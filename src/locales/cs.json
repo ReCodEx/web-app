@@ -787,7 +787,7 @@
   "app.instance.description": "Přehled instance",
   "app.instance.detailTitle": "Popis instance",
   "app.instance.edit": "Úprava instance",
-  "app.instance.groups.noGroups": "Tato instance nemá žádné skupiny.",
+  "app.instance.groups.noGroups": "Žádné skupiny v této instanci pro vás nejsou viditelné.",
   "app.instance.groupsTitle": "Hierarchie skupin",
   "app.instance.hasValidLicence": "{name} má platnou licenci:",
   "app.instance.licencesTitle": "Licence",

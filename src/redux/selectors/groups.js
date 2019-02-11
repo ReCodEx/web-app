@@ -1,6 +1,7 @@
 import { createSelector } from 'reselect';
 import { EMPTY_LIST, EMPTY_MAP, EMPTY_ARRAY } from '../../helpers/common';
 
+import { fetchAllGroupsEndpoint } from '../modules/groups';
 import {
   studentOfGroupsIdsSelector,
   supervisorOfGroupsIdsSelector,
@@ -16,6 +17,7 @@ import { loggedInUserIdSelector } from './auth';
  */
 const getParam = (state, id) => id;
 
+const getGroups = state => state.groups;
 export const groupsSelector = state => state.groups.get('resources');
 
 export const notArchivedGroupsSelector = state =>
@@ -189,3 +191,8 @@ export const groupArchivedPendingChange = id =>
     groupsSelector,
     groups => groups && groups.getIn([id, 'pending-archived'], false)
   );
+
+export const fetchManyGroupsStatus = createSelector(
+  getGroups,
+  state => state.getIn(['fetchManyStatus', fetchAllGroupsEndpoint])
+);
