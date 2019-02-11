@@ -787,7 +787,7 @@
   "app.instance.description": "Instance overview",
   "app.instance.detailTitle": "Instance Description",
   "app.instance.edit": "Edit instance",
-  "app.instance.groups.noGroups": "There are no groups in this ReCodEx instance.",
+  "app.instance.groups.noGroups": "There are no groups in this ReCodEx instance currently visible to you",
   "app.instance.groupsTitle": "Groups Hierarchy",
   "app.instance.hasValidLicence": "{name} has a valid licence:",
   "app.instance.licencesTitle": "Licences",

@@ -18,6 +18,7 @@ import EditGroupForm, {
   EDIT_GROUP_FORM_EMPTY_INITIAL_VALUES,
 } from '../../components/forms/EditGroupForm';
 import { EditIcon } from '../../components/icons';
+import FetchManyResourceRenderer from '../../components/helpers/FetchManyResourceRenderer';
 
 import { fetchUser } from '../../redux/modules/users';
 import { fetchInstanceIfNeeded } from '../../redux/modules/instances';
@@ -26,7 +27,10 @@ import {
   isAdminOfInstance,
 } from '../../redux/selectors/instances';
 import { createGroup, fetchAllGroups } from '../../redux/modules/groups';
-import { notArchivedGroupsSelector } from '../../redux/selectors/groups';
+import {
+  notArchivedGroupsSelector,
+  fetchManyGroupsStatus,
+} from '../../redux/selectors/groups';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import { isLoggedAsSuperAdmin } from '../../redux/selectors/users';
 import { transformLocalizedTextsFormData } from '../../helpers/localizedData';
@@ -53,6 +57,7 @@ class Instance extends Component {
       userId,
       instance,
       groups,
+      fetchGroupsStatus,
       createGroup,
       isAdmin,
       isSuperAdmin,
@@ -128,17 +133,29 @@ class Instance extends Component {
                   unlimitedHeight>
                   <div>
                     {data.rootGroupId !== null && (
-                      <GroupTree
-                        id={data.rootGroupId}
-                        isAdmin={isSuperAdmin || isAdmin}
-                        groups={groups}
-                      />
+                      <FetchManyResourceRenderer
+                        fetchManyStatus={fetchGroupsStatus}>
+                        {() =>
+                          groups.size > 0 ? (
+                            <GroupTree
+                              id={data.rootGroupId}
+                              isAdmin={isSuperAdmin || isAdmin}
+                              groups={groups}
+                            />
+                          ) : (
+                            <FormattedMessage
+                              id="app.instance.groups.noGroups"
+                              defaultMessage="There are no groups in this ReCodEx instance currently visible to you."
+                            />
+                          )
+                        }
+                      </FetchManyResourceRenderer>
                     )}
 
                     {data.rootGroupId === null && (
                       <FormattedMessage
                         id="app.instance.groups.noGroups"
-                        defaultMessage="There are no groups in this ReCodEx instance."
+                        defaultMessage="There are no groups in this ReCodEx instance currently visible to you."
                       />
                     )}
                   </div>
@@ -174,6 +191,7 @@ Instance.propTypes = {
   userId: PropTypes.string.isRequired,
   instance: ImmutablePropTypes.map,
   groups: ImmutablePropTypes.map,
+  fetchGroupsStatus: PropTypes.string,
   createGroup: PropTypes.func.isRequired,
   isAdmin: PropTypes.bool.isRequired,
   isSuperAdmin: PropTypes.bool.isRequired,
@@ -191,6 +209,7 @@ export default withLinks(
         userId,
         instance: instanceSelector(state, instanceId),
         groups: notArchivedGroupsSelector(state),
+        fetchGroupsStatus: fetchManyGroupsStatus(state),
         isAdmin: isAdminOfInstance(userId, instanceId)(state),
         isSuperAdmin: isLoggedAsSuperAdmin(state),
         hasThreshold: addGroupFormSelector(state, 'hasThreshold'),

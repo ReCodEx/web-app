@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { reduxForm } from 'redux-form';
 import { Alert, Grid, Row, Col } from 'react-bootstrap';
-import isInt from 'validator/lib/isInt';
 import FormBox from '../../widgets/FormBox';
 import SubmitButton from '../SubmitButton';
 

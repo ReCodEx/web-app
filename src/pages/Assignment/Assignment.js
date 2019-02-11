@@ -319,6 +319,7 @@ Assignment.propTypes = {
   runtimeEnvironments: PropTypes.array,
   exerciseSync: PropTypes.func.isRequired,
   solutions: ImmutablePropTypes.list.isRequired,
+  fetchManyStatus: PropTypes.string,
   intl: intlShape.isRequired,
 };
 
