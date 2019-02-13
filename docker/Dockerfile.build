@@ -1,0 +1,18 @@
+FROM centos:7
+
+RUN yum install -y \
+	rpm-build \
+	redhat-rpm-config \
+	rpmdevtools \
+	yum-utils \
+	epel-release \
+	make \
+	gcc-c++ \
+	&& mkdir -p ~/rpmbuild/{BUILD,RPMS,SOURCES,SPECS,SRPMS} \
+	&& echo '%_topdir %(echo $HOME)/rpmbuild' > ~/.rpmmacros
+
+COPY recodex-web.spec .
+COPY docker/run.sh .
+
+ENTRYPOINT ["./run.sh"]
+

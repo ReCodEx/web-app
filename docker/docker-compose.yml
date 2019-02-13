@@ -1,0 +1,9 @@
+version: '3'
+services:
+  centos-rpmbuild:
+    build:
+        context: ..
+        dockerfile: docker/Dockerfile.build
+    volumes:
+        - .:/root/rpmbuild/RPMS/x86_64/
+
