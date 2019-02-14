@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { FormattedMessage, injectIntl } from 'react-intl';
-import { Grid, Row, Col } from 'react-bootstrap';
+import { Row, Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { defaultMemoize } from 'reselect';
 import { formValueSelector } from 'redux-form';
@@ -19,11 +19,12 @@ import {
   fetchExercise,
   fetchExerciseIfNeeded,
   setExerciseHardwareGroups,
+  invalidateExercise,
 } from '../../redux/modules/exercises';
 import {
-  fetchExerciseEnvironmentLimits,
-  fetchExerciseEnvironmentLimitsIfNeeded,
-  editEnvironmentLimits,
+  fetchExerciseLimits,
+  fetchExerciseLimitsIfNeeded,
+  setExerciseLimits,
   cloneHorizontally,
   cloneVertically,
   cloneAll,
@@ -44,7 +45,8 @@ import {
   getLimitsInitValues,
   transformLimitsValues,
   getLimitsConstraints,
-  validateLimitsSingleEnvironment,
+  validateLimitsConstraints,
+  saturateLimitsConstraints,
 } from '../../helpers/exercise/limits';
 
 class EditExerciseLimits extends Component {
@@ -59,27 +61,13 @@ class EditExerciseLimits extends Component {
   static loadAsync = ({ exerciseId }, dispatch) =>
     Promise.all([
       dispatch(fetchHardwareGroups()),
-      dispatch(fetchExerciseIfNeeded(exerciseId)).then(({ value: exercise }) =>
-        exercise.hardwareGroups && exercise.hardwareGroups.length === 1
-          ? Promise.all(
-              exercise.runtimeEnvironments.map(environment =>
-                dispatch(
-                  fetchExerciseEnvironmentLimitsIfNeeded(
-                    exerciseId,
-                    environment.id,
-                    exercise.hardwareGroups[0].id
-                  )
-                )
-              )
-            )
-          : Promise.resolve()
-      ),
+      dispatch(fetchExerciseIfNeeded(exerciseId)),
+      dispatch(fetchExerciseLimitsIfNeeded(exerciseId)),
       dispatch(fetchExerciseTestsIfNeeded(exerciseId)),
     ]);
 
   doesHardwareGroupChangeDropLimits = defaultMemoize(
     (
-      exerciseId,
       currentHwGroupId,
       limits,
       tests,
@@ -92,7 +80,6 @@ class EditExerciseLimits extends Component {
           limits,
           tests,
           exerciseRuntimeEnvironments,
-          exerciseId,
           currentHwGroupId
         );
 
@@ -109,87 +96,47 @@ class EditExerciseLimits extends Component {
           limitsData.preciseTime
         );
 
-        return !transformLimitsValues(
-          limitsData,
-          tests,
-          exerciseRuntimeEnvironments
-        ).reduce(
-          (acc, { id: envId, data }) =>
-            acc &&
-            validateLimitsSingleEnvironment(limitsData, envId, constraints),
-          true
-        );
+        return !validateLimitsConstraints(limitsData, constraints);
       };
     }
   );
 
-  transformAndSendHardwareGroups = defaultMemoize(
-    (exerciseId, hwGroupId, limits, tests, exerciseRuntimeEnvironments) => {
-      const {
-        setExerciseHardwareGroups,
-        editEnvironmentLimits,
-        fetchExerciseEnvironmentLimit,
-      } = this.props;
-      const limitsData =
-        hwGroupId &&
-        getLimitsInitValues(
-          limits,
-          tests,
-          exerciseRuntimeEnvironments,
-          exerciseId,
-          hwGroupId
-        );
-
-      return formData =>
-        setExerciseHardwareGroups(
-          formData.hardwareGroup ? [formData.hardwareGroup] : []
-        ).then(({ value: exercise }) =>
-          limitsData
-            ? Promise.all(
-                exercise.hardwareGroups.map(({ id: hwgId }, idx) => {
-                  const constraints = getLimitsConstraints(
-                    exercise.hardwareGroups,
-                    limitsData.preciseTime
-                  );
-                  return Promise.all(
-                    transformLimitsValues(
-                      limitsData,
-                      tests,
-                      exerciseRuntimeEnvironments
-                    ).map(({ id: envId, data }) =>
-                      validateLimitsSingleEnvironment(
-                        limitsData,
-                        envId,
-                        constraints
-                      )
-                        ? editEnvironmentLimits(hwgId, envId, data)
-                        : idx === 0
-                        ? fetchExerciseEnvironmentLimit(envId, hwgId)
-                        : Promise.resolve()
-                    )
-                  );
-                })
-              )
-            : Promise.resolve()
-        );
-    }
-  );
+  transformAndSendHardwareGroups = defaultMemoize((hwGroupId, limits) => {
+    const {
+      setExerciseHardwareGroups,
+      setExerciseLimits,
+      reloadExercise,
+      invalidateExercise,
+    } = this.props;
+    const limitsData = limits && limits[hwGroupId];
+    return formData =>
+      setExerciseHardwareGroups(
+        formData.hardwareGroup ? [formData.hardwareGroup] : []
+      )
+        .then(({ value: exercise }) => {
+          invalidateExercise(); // prevent UI from showing intermediate state of the transaction
+          return limitsData
+            ? setExerciseLimits({
+                [formData.hardwareGroup]: saturateLimitsConstraints(
+                  limitsData,
+                  exercise.hardwareGroups
+                ),
+              })
+            : Promise.resolve();
+        })
+        .then(reloadExercise);
+  });
 
   transformAndSendLimitsValues = defaultMemoize(
-    (tests, exerciseRuntimeEnvironments) => {
-      const { exercise, editEnvironmentLimits, reloadExercise } = this.props;
+    (hwGroupId, tests, exerciseRuntimeEnvironments) => {
+      const { setExerciseLimits, reloadExercise } = this.props;
       return formData =>
-        Promise.all(
+        setExerciseLimits(
           transformLimitsValues(
             formData,
-            tests,
-            exerciseRuntimeEnvironments
-          ).map(({ id, data }) =>
-            editEnvironmentLimits(
-              exercise.getIn(['data', 'hardwareGroups', 0, 'id']),
-              id,
-              data
-            )
+            hwGroupId,
+            exerciseRuntimeEnvironments,
+            tests
           )
         ).then(reloadExercise);
     }
@@ -214,7 +161,7 @@ class EditExerciseLimits extends Component {
 
     return (
       <Page
-        resource={[exercise, exerciseTests, ...limits.toArray()]}
+        resource={[exercise, exerciseTests, limits]}
         title={exercise => getLocalizedName(exercise, locale)}
         description={
           <FormattedMessage
@@ -249,8 +196,8 @@ class EditExerciseLimits extends Component {
             iconName: ['far', 'edit'],
           },
         ]}>
-        {(exercise, tests) => (
-          <Grid fluid>
+        {(exercise, tests, limits) => (
+          <div>
             {exercise.isBroken && (
               <Row>
                 <Col sm={12}>
@@ -318,7 +265,6 @@ class EditExerciseLimits extends Component {
                           exercise.hardwareGroups.length !== 1
                         }
                         warnDropLimits={this.doesHardwareGroupChangeDropLimits(
-                          exercise.id,
                           exercise.hardwareGroups.length > 0 &&
                             exercise.hardwareGroups[0].id,
                           limits,
@@ -327,7 +273,6 @@ class EditExerciseLimits extends Component {
                           hwgs
                         )}
                         onSubmit={this.transformAndSendHardwareGroups(
-                          exercise.id,
                           exercise.hardwareGroups.length > 0 &&
                             exercise.hardwareGroups[0].id,
                           limits,
@@ -351,9 +296,7 @@ class EditExerciseLimits extends Component {
                           targetHardwareGroup !== exercise.hardwareGroups[0].id)
                     ) && (
                       <div>
-                        <div
-                          className="text-center text-muted"
-                          style={{ marginBottom: '15px' }}>
+                        <div className="text-center text-muted em-margin-bottom">
                           &nbsp;
                           <Icon icon="arrow-down" />
                           &nbsp;
@@ -379,6 +322,7 @@ class EditExerciseLimits extends Component {
                 exercise.hardwareGroups.length > 0 ? (
                   <EditLimitsForm
                     onSubmit={this.transformAndSendLimitsValues(
+                      exercise.hardwareGroups[0].id,
                       tests,
                       exercise.runtimeEnvironments
                     )}
@@ -392,7 +336,6 @@ class EditExerciseLimits extends Component {
                       limits,
                       tests,
                       exercise.runtimeEnvironments,
-                      exercise.id,
                       exercise.hardwareGroups[0].id
                     )}
                     cloneVertically={cloneVertically}
@@ -417,7 +360,7 @@ class EditExerciseLimits extends Component {
                 )}
               </Col>
             </Row>
-          </Grid>
+          </div>
         )}
       </Page>
     );
@@ -430,11 +373,11 @@ EditExerciseLimits.propTypes = {
   params: PropTypes.shape({
     exerciseId: PropTypes.string.isRequired,
   }).isRequired,
-  editEnvironmentLimits: PropTypes.func.isRequired,
+  setExerciseLimits: PropTypes.func.isRequired,
   setExerciseHardwareGroups: PropTypes.func.isRequired,
-  fetchExerciseEnvironmentLimit: PropTypes.func.isRequired,
+  fetchExerciseLimits: PropTypes.func.isRequired,
   exerciseTests: PropTypes.object,
-  limits: PropTypes.object.isRequired,
+  limits: ImmutablePropTypes.map,
   hardwareGroups: ImmutablePropTypes.map,
   preciseTime: PropTypes.bool,
   targetHardwareGroup: PropTypes.string,
@@ -443,6 +386,7 @@ EditExerciseLimits.propTypes = {
   cloneVertically: PropTypes.func.isRequired,
   cloneAll: PropTypes.func.isRequired,
   reloadExercise: PropTypes.func.isRequired,
+  invalidateExercise: PropTypes.func.isRequired,
   links: PropTypes.object.isRequired,
   intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired,
 };
@@ -471,7 +415,7 @@ export default withLinks(
       return {
         exercise: getExercise(exerciseId)(state),
         userId: loggedInUserIdSelector(state),
-        limits: limitsSelector(state),
+        limits: limitsSelector(state, exerciseId),
         exerciseTests: exerciseTestsSelector(exerciseId)(state),
         hardwareGroups: hardwareGroupsSelector(state),
         preciseTime: editLimitsFormSelector(state, 'preciseTime'),
@@ -486,21 +430,15 @@ export default withLinks(
       loadAsync: () => EditExerciseLimits.loadAsync({ exerciseId }, dispatch),
       setExerciseHardwareGroups: hwGroups =>
         dispatch(setExerciseHardwareGroups(exerciseId, hwGroups)),
-      editEnvironmentLimits: (hwGroupId, runtimeEnvironmentId, data) =>
-        dispatch(
-          editEnvironmentLimits(
-            exerciseId,
-            runtimeEnvironmentId,
-            hwGroupId,
-            data
-          )
-        ),
+      setExerciseLimits: limits =>
+        dispatch(setExerciseLimits(exerciseId, { limits })),
       cloneVertically: cloneVerticallyWrapper(dispatch),
       cloneHorizontally: cloneHorizontallyWrapper(dispatch),
       cloneAll: cloneAllWrapper(dispatch),
-      fetchExerciseEnvironmentLimit: (envId, hwgId) =>
-        dispatch(fetchExerciseEnvironmentLimits(exerciseId, envId, hwgId)),
+      fetchExerciseLimits: envId =>
+        dispatch(fetchExerciseLimits(exerciseId, envId)),
       reloadExercise: () => dispatch(fetchExercise(exerciseId)),
+      invalidateExercise: () => dispatch(invalidateExercise(exerciseId)),
     })
   )(injectIntl(EditExerciseLimits))
 );

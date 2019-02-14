@@ -54,6 +54,7 @@ export const loadExercise = actions.pushResource;
 export const fetchExercisesIfNeeded = actions.fetchIfNeeded;
 export const fetchExercise = actions.fetchResource;
 export const fetchExerciseIfNeeded = actions.fetchOneIfNeeded;
+export const invalidateExercise = actions.invalidate;
 
 export const fetchGroupExercises = groupId =>
   actions.fetchMany({
