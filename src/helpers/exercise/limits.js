@@ -1,34 +1,23 @@
 import { defaultMemoize } from 'reselect';
 
 import { encodeId, encodeNumId, safeGet } from '../common';
-import { endpointDisguisedAsIdFactory } from '../../redux/modules/limits';
 
 /*
  * Memory and Time limits
  */
 export const getLimitsInitValues = defaultMemoize(
-  (limits, tests, environments, exerciseId, hwGroup) => {
+  (limits, tests, environments, hwGroup) => {
     let res = {};
     let wallTimeCount = 0;
     let cpuTimeCount = 0;
+    limits = limits && limits[hwGroup];
 
     tests.forEach(test => {
       const testEnc = encodeNumId(test.id);
       res[testEnc] = {};
       environments.forEach(environment => {
         const envId = encodeId(environment.id);
-        let lim = limits.getIn([
-          endpointDisguisedAsIdFactory({
-            exerciseId,
-            hwGroup,
-            runtimeEnvironmentId: environment.id,
-          }),
-          'data',
-          String(test.id),
-        ]);
-        if (lim) {
-          lim = lim.toJS();
-        }
+        let lim = safeGet(limits, [environment.id, String(test.id)]);
 
         // Prepare time object and aggregate data for heuristics ...
         const time = {};
@@ -83,20 +72,25 @@ const transformLimitsObject = ({ memory, time }, timeField = 'wall-time') => {
  * The data have to be re-assembled, since they use different format and keys are encoded.
  * The dispatching function is invoked for every environment and all promise is returned.
  */
-export const transformLimitsValues = (formData, tests, runtimeEnvironments) =>
-  runtimeEnvironments.map(environment => {
+export const transformLimitsValues = (
+  formData,
+  hwGroupId,
+  runtimeEnvironments,
+  tests
+) => {
+  const data = {};
+  runtimeEnvironments.forEach(environment => {
     const envId = encodeId(environment.id);
-    const data = {
-      limits: tests.reduce((acc, test) => {
-        acc[test.id] = transformLimitsObject(
-          formData.limits[encodeNumId(test.id)][envId],
-          formData.preciseTime ? 'cpu-time' : 'wall-time'
-        );
-        return acc;
-      }, {}),
-    };
-    return { id: environment.id, data };
+    data[environment.id] = tests.reduce((acc, test) => {
+      acc[test.id] = transformLimitsObject(
+        formData.limits[encodeNumId(test.id)][envId],
+        formData.preciseTime ? 'cpu-time' : 'wall-time'
+      );
+      return acc;
+    }, {});
   });
+  return { [hwGroupId]: data };
+};
 
 /**
  * Validation
@@ -194,34 +188,147 @@ export const validateLimitsTimeTotals = (limits, range) => {
   );
 };
 
-export const validateLimitsSingleEnvironment = (
-  { limits },
-  env,
-  constraints
-) => {
-  if (!limits || !env || !constraints) {
+/**
+ * Validate time limits form data against given hw group constraints.
+ * @param {*} formData
+ * @param {*} constraints
+ */
+export const validateLimitsConstraints = ({ limits }, constraints) => {
+  if (!limits || !constraints) {
     return false;
   }
-  const envEnc = encodeId(env);
 
   // Compute sum of times for each environment.
-  let sum = 0;
-  Object.keys(limits).forEach(test => {
-    const memory = validateLimitsField(
-      safeGet(limits, [test, envEnc, 'memory']),
-      constraints.memory
-    );
-    if (Number.isNaN(memory) || memory === false) {
-      return false;
-    }
+  let envTimeSums = {};
+  const fieldChecks = Object.keys(limits).every(test => {
+    return Object.keys(limits[test]).every(envEnc => {
+      const memory = validateLimitsField(
+        safeGet(limits, [test, envEnc, 'memory']),
+        constraints.memory
+      );
+      if (Number.isNaN(memory) || memory === false) {
+        return false;
+      }
 
-    const time = safeGet(limits, [test, envEnc, 'time']);
-    const val = validateLimitsField(time, constraints.time);
-    if (Number.isNaN(val) || val === false) {
-      return false;
-    }
-    sum += val;
+      const time = validateLimitsField(
+        safeGet(limits, [test, envEnc, 'time']),
+        constraints.time
+      );
+      if (Number.isNaN(time) || time === false) {
+        return false;
+      }
+
+      envTimeSums[envEnc] = (envTimeSums[envEnc] || 0) + time; // we don't need no initialization
+      return true;
+    });
   });
 
-  return sum >= constraints.totalTime.min && sum <= constraints.totalTime.max;
+  return (
+    fieldChecks &&
+    Object.values(envTimeSums).every(
+      sum =>
+        sum >= constraints.totalTime.min && sum <= constraints.totalTime.max
+    )
+  );
+};
+
+const saturateField = (
+  limits,
+  envId,
+  test,
+  fieldName,
+  max,
+  min = 0.1,
+  patchFactor = null
+) => {
+  let value = safeGet(limits, [envId, test, fieldName]);
+  if (value !== undefined) {
+    if (patchFactor) {
+      value = Math.floor(value * patchFactor * 10) / 10;
+    }
+    value = Math.max(value, min);
+    value = Math.min(value, max);
+    limits[envId][test][fieldName] = value;
+  }
+  return value || 0;
+};
+
+/**
+ * Saturate limits (in API format, single hwGroup) so they fit given constraints if possible.
+ * The saturation is rather complex as time constraints have both individual and total ranges.
+ * If the saturation fails for particular environment, its limits are nullified.
+ * @param {*} limits Limits of pargicular hwGroup to be saturated (inplace).
+ * @param {*} exerciseHwGroups HW group records (containing metadata with constraints).
+ */
+export const saturateLimitsConstraints = (limits, exerciseHwGroups) => {
+  const {
+    memory,
+    cpuTimePerTest,
+    wallTimePerTest,
+    cpuTimePerExercise,
+    wallTimePerExercise,
+  } = combineHardwareGroupLimitsConstraints(exerciseHwGroups);
+
+  Object.keys(limits).forEach(envId => {
+    // First round
+    let cpuSum = 0;
+    let wallSum = 0;
+    Object.keys(limits[envId]).forEach(test => {
+      saturateField(limits, envId, test, 'memory', memory, 128);
+      cpuSum += saturateField(limits, envId, test, 'cpu-time', cpuTimePerTest);
+      wallSum += saturateField(
+        limits,
+        envId,
+        test,
+        'wall-time',
+        wallTimePerTest
+      );
+    });
+
+    // Attempt to adjust for total limits if necessary...
+    if (cpuSum > cpuTimePerExercise) {
+      const newTimeSum = Math.min(cpuSum, cpuTimePerExercise);
+      const patchFactor = newTimeSum / cpuSum;
+
+      // Multiply all times by patch factor...
+      cpuSum = 0;
+      Object.keys(limits[envId]).forEach(test => {
+        cpuSum += saturateField(
+          limits,
+          envId,
+          test,
+          'cpu-time',
+          cpuTimePerTest,
+          0.1,
+          patchFactor
+        );
+      });
+    }
+
+    if (wallSum > wallTimePerExercise) {
+      const newTimeSum = Math.min(wallSum, wallTimePerExercise);
+      const patchFactor = newTimeSum / wallSum;
+
+      // Multiply all times by patch factor...
+      wallSum = 0;
+      Object.keys(limits[envId]).forEach(test => {
+        wallSum += saturateField(
+          limits,
+          envId,
+          test,
+          'wall-time',
+          wallTimePerTest,
+          0.1,
+          patchFactor
+        );
+      });
+    }
+
+    // Check whether we were successful
+    if (cpuSum > cpuTimePerExercise || wallSum > wallTimePerExercise) {
+      limits[envId] = null; // ok, we give up
+    }
+  });
+
+  return limits;
 };

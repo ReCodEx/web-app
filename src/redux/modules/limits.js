@@ -11,7 +11,7 @@ import factory, { initialState } from '../helpers/resourceManager';
 const resourceName = 'exerciseEnvironmentLimits';
 const { actions, reduceActions } = factory({
   resourceName,
-  apiEndpointFactory: id => id,
+  apiEndpointFactory: id => `/exercises/${id}/limits`,
 });
 
 export const additionalActionTypes = {
@@ -20,41 +20,9 @@ export const additionalActionTypes = {
   CLONE_ALL: 'recodex/limits/CLONE_ALL',
 };
 
-export const endpointDisguisedAsIdFactory = ({
-  exerciseId,
-  hwGroup,
-  runtimeEnvironmentId,
-}) =>
-  `/exercises/${exerciseId}/environment/${runtimeEnvironmentId}/hwgroup/${hwGroup}/limits`;
-
-export const fetchExerciseEnvironmentLimits = (
-  exerciseId,
-  runtimeEnvironmentId,
-  hwGroup
-) =>
-  actions.fetchResource(
-    endpointDisguisedAsIdFactory({ exerciseId, hwGroup, runtimeEnvironmentId })
-  );
-
-export const fetchExerciseEnvironmentLimitsIfNeeded = (
-  exerciseId,
-  runtimeEnvironmentId,
-  hwGroup
-) =>
-  actions.fetchOneIfNeeded(
-    endpointDisguisedAsIdFactory({ exerciseId, hwGroup, runtimeEnvironmentId })
-  );
-
-export const editEnvironmentLimits = (
-  exerciseId,
-  runtimeEnvironmentId,
-  hwGroup,
-  data
-) =>
-  actions.updateResource(
-    endpointDisguisedAsIdFactory({ exerciseId, hwGroup, runtimeEnvironmentId }),
-    data
-  );
+export const fetchExerciseLimits = actions.fetchResource;
+export const fetchExerciseLimitsIfNeeded = actions.fetchOneIfNeeded;
+export const setExerciseLimits = actions.updateResource;
 
 /*
  * Special functions for cloning buttons
