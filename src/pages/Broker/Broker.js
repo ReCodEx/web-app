@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { Row, Col } from 'react-bootstrap';
 import { FormattedMessage } from 'react-intl';
 
-import Page from '../../components/layout/Page';
+import PageContent from '../../components/layout/PageContent';
 import {
   fetchBrokerStats,
   freezeBroker,
@@ -38,8 +38,7 @@ class Broker extends Component {
       unfreezeActionStatus,
     } = this.props;
     return (
-      <Page
-        noResource
+      <PageContent
         title={
           <FormattedMessage
             id="app.broker.title"
@@ -70,7 +69,7 @@ class Broker extends Component {
             </Row>
           </React.Fragment>
         )}
-      </Page>
+      </PageContent>
     );
   }
 }

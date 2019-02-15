@@ -139,7 +139,7 @@ const warn = ({ hardwareGroup }, { warnDropLimits }) => {
     warnings.hardwareGroup = (
       <FormattedMessage
         id="app.editHardwareGroupForm.warnLimitsDrop"
-        defaultMessage="Limits of some environments do not meet the constraints of the selected hardware group. These limits will be removed when the hardware group is changed."
+        defaultMessage="Limits of some environments do not meet the constraints of the selected hardware group. These limits will be saturated or even removed when the hardware group is changed."
       />
     );
   }

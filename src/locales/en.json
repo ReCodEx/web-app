@@ -333,7 +333,7 @@
   "app.editHardwareGroupForm.hwGroupSelect": "Hardware Group:",
   "app.editHardwareGroupForm.title": "Select Hardware Group",
   "app.editHardwareGroupForm.validationFailed": "Hardware group must be selected.",
-  "app.editHardwareGroupForm.warnLimitsDrop": "Limits of some environments do not meet the constraints of the selected hardware group. These limits will be removed when the hardware group is changed.",
+  "app.editHardwareGroupForm.warnLimitsDrop": "Limits of some environments do not meet the constraints of the selected hardware group. These limits will be saturated or even removed when the hardware group is changed.",
   "app.editInstance.description": "Change instance settings",
   "app.editInstance.title": "Edit instance",
   "app.editInstanceForm.description": "Description:",

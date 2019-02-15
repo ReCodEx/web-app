@@ -333,7 +333,7 @@
   "app.editHardwareGroupForm.hwGroupSelect": "Hardwarová skupina:",
   "app.editHardwareGroupForm.title": "Výběr hardwarové skupiny",
   "app.editHardwareGroupForm.validationFailed": "Hardwarová skupina musí být vybrána.",
-  "app.editHardwareGroupForm.warnLimitsDrop": "Limity některých běhových prostředí neodpovídají omezením vybrané hardwarové skupiny. Tyto limity budou při změně skupiny odstraněny.",
+  "app.editHardwareGroupForm.warnLimitsDrop": "Limity některých běhových prostředí neodpovídají omezením vybrané hardwarové skupiny. Tyto limity budou při změně skupiny upraveny nebo dokonce odstraněny.",
   "app.editInstance.description": "Změnit nastavení instance",
   "app.editInstance.title": "Upravit instanci",
   "app.editInstanceForm.description": "Popis:",
