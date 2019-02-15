@@ -8,7 +8,6 @@ const Page = ({
   title,
   description,
   resource,
-  noResource = false,
   loadingTitle = (
     <FormattedMessage id="generic.loading" defaultMessage="Loading..." />
   ),
@@ -32,39 +31,29 @@ const Page = ({
   ),
   children,
   ...props
-}) =>
-  !noResource ? (
-    <ResourceRenderer
-      resource={resource}
-      loading={
-        <PageContent title={loadingTitle} description={loadingDescription} />
-      }
-      failed={
-        <PageContent title={failedTitle} description={failedDescription} />
-      }>
-      {(...resources) => (
-        <PageContent
-          {...props}
-          title={typeof title === 'function' ? title(...resources) : title}
-          description={
-            typeof description === 'function'
-              ? description(...resources)
-              : description
-          }>
-          {typeof children === 'function' ? children(...resources) : children}
-        </PageContent>
-      )}
-    </ResourceRenderer>
-  ) : (
-    <PageContent
-      {...props}
-      title={typeof title === 'function' ? title() : title}
-      description={
-        typeof description === 'function' ? description() : description
-      }>
-      {typeof children === 'function' ? children() : children}
-    </PageContent>
-  );
+}) => (
+  <ResourceRenderer
+    resource={resource}
+    loading={
+      <PageContent title={loadingTitle} description={loadingDescription} />
+    }
+    failed={
+      <PageContent title={failedTitle} description={failedDescription} />
+    }>
+    {(...resources) => (
+      <PageContent
+        {...props}
+        title={typeof title === 'function' ? title(...resources) : title}
+        description={
+          typeof description === 'function'
+            ? description(...resources)
+            : description
+        }>
+        {typeof children === 'function' ? children(...resources) : children}
+      </PageContent>
+    )}
+  </ResourceRenderer>
+);
 
 const stringOrFormattedMessage = PropTypes.oneOfType([
   PropTypes.string,
@@ -75,7 +64,6 @@ const stringOrFormattedMessage = PropTypes.oneOfType([
 
 Page.propTypes = {
   resource: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
-  noResource: PropTypes.bool,
   loadingTitle: stringOrFormattedMessage,
   loadingDescription: stringOrFormattedMessage,
   failedTitle: stringOrFormattedMessage,
